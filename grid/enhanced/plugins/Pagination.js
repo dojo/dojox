@@ -1,22 +1,21 @@
 dojo.provide("dojox.grid.enhanced.plugins.Pagination");
 
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dijit.dijit");
 dojo.require("dijit.Dialog");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.Button");
+dojo.require("dojox.grid.enhanced._Plugin");
 dojo.require("dojox.grid.enhanced.plugins.StoreLayer");
+
 dojo.requireLocalization("dojox.grid.enhanced", "Pagination");
 
 dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plugin, {
 	name: "pagination",
-	// The page size ot use for the store
-	// Default is 25.
+	// The page size used with the store, default = 25.
 	pageSize: 25,
 	
 	defaultRows: 25,
 	
-	//current page we are on
+	//current page we are at
 	_currentPage: 0,
 
 	//The currently obtained max # of rows to page through.
@@ -26,50 +25,44 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		this.grid = inGrid;
 		this.gh = null;
 		this.grid.rowsPerPage = this.pageSize = this.grid.rowsPerPage ? this.grid.rowsPerPage : this.pageSize;
+		this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Pagination");
 		
 		this._wrapStoreLayer();
-		this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Pagination");
-		// Reference to the query to send to the store
-		this.query = this.grid.query;
 		this._createPaginators(paginationArgs);
-		this._store = inGrid.store;
-		this._createConnections();
 		this._regApis();
 	},
 	
 	_createPaginators: function(paginationArgs){
 		// summary:
-		//		Function to create the pagination bar.
-		this.paginationArgs = paginationArgs;
+		//		Function to create the pagination control bar.
 		this.paginators = [];
-	 	if(paginationArgs.barPosition === "both"){
-			var args1 = dojo.clone(paginationArgs);
-			args1.barPosition = "bottom";
-			paginationArgs.barPosition = "top";
+		if(paginationArgs.barPosition === "both"){
 			this.paginators = [
-				new dojox.grid.enhanced.plugins._Paginator(this, args1),
-				new dojox.grid.enhanced.plugins._Paginator(this, paginationArgs)
+				new dojox.grid.enhanced.plugins._Paginator(dojo.mixin(paginationArgs, {barPosition: "bottom", plugin: this})),
+				new dojox.grid.enhanced.plugins._Paginator(dojo.mixin(paginationArgs, {barPosition: "top", plugin: this}))
 			];
 		}else{
-			this.paginators = [new dojox.grid.enhanced.plugins._Paginator(this, paginationArgs)];
+			this.paginators = [new dojox.grid.enhanced.plugins._Paginator(dojo.mixin(paginationArgs, {plugin: this}))];
 		}
 	},
 	 
 	_wrapStoreLayer: function(){
-		var g = this.grid;
-		this.forcePageStoreLayer = new dojox.grid.enhanced.plugins._ForcedPageStoreLayer(this);
-		dojox.grid.enhanced.plugins.wrap(g.store, this.forcePageStoreLayer);
-	},
-	
-	_createConnections: function(){
-		this.connect(this.grid, "setStore", this, function(store){
+		var g = this.grid,
+			ns = dojox.grid.enhanced.plugins;
+		this._store = g.store;
+		this.query = g.query;
+		
+		this.forcePageStoreLayer = new ns._ForcedPageStoreLayer(this);
+		ns.wrap(g.store, this.forcePageStoreLayer);
+		
+		this.connect(g, "setStore", function(store){
 			if(store !== this._store){
 				this._store.unwrap(this.forcePageStoreLayer.name());
-				this._wrapStore();
+				ns.wrap(g.store, this.forcePageStoreLayer);
 				this._store = store;
 			}
 		});
-		this.connect(this.grid, "setQuery", this, function(query){
+		this.connect(g, "setQuery", function(query){
 			if(query !== this.query){
 				this.query = query;
 			}
@@ -85,21 +78,6 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		g.gotoLastPage = dojo.hitch(this, this.gotoLastPage);
 		g.changePageSize = dojo.hitch(this, this.changePageSize);
 		g.showGotoPageButton = dojo.hitch(this, this.showGotoPageButton);
-	},
-	
-	connect: function(obj, event, context, method){
-		if(!this._connections){
-			this._connections = [];
-		}
-		var handler = dojo.connect(obj, event, context, method);
-		this._connections.push(handler);
-		return handler;
-	},
-	
-	disconnect: function(){
-		if(this._connections){
-			dojo.forEach(this._connections, dojo.disconnect);
-		}
 	},
 	
 	nextPage: function(){
@@ -147,16 +125,16 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	},
 	
 	destroy: function(){
+		this.inherited(arguments);
 		try{
-			this.disconnect();
-			dojo.forEach(this.paginators, function(f){
-				f.uninit();
-				f = null;
+			dojo.forEach(this.paginators, function(p){
+				p.destroy();
 			});
 			this._store.unwrap(this.forcePageStoreLayer.name());
-			this._store = null;
+			this.paginators = null;
+			this.nls = null;
 		}catch(e){
-			console.log(e);
+			console.error("Pagination destroy error: ", e);
 		}
 	},
 
@@ -181,8 +159,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 			this.gotoLastPage();
 		}else{
 			this._currentPage = Math.ceil(startIndex / this.pageSize) + 1;
-			 if(cp !== this._currentPage){
-			 	this.gotoPage(this._currentPage);
+			if(cp !== this._currentPage){
+				this.gotoPage(this._currentPage);
 			}else{
 				this.grid._refresh(true);
 			}
@@ -205,62 +183,35 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 	},
 	
 	_fetch: function(request){
-		var paginator = this._plugin.paginators[0];
-		if(this._plugin.showAll || (!paginator.showSizeSwitch && !paginator.showPageStepper && !paginator.showGotoButton)){
-			dojo.hitch(this, this._showAllFetch)(request);
-		}else{
-			this.updated = false;
-			dojo.hitch(this, this._pagingFetch)(request);
-		}
-	},
-	
-	_showAllFetch: function(request){
-		var self = this,
-			scope = request.scope || dojo.global,
-			onBegin = request.onBegin;
-		if(onBegin){
-			request.onBegin = function(size, req){
-				if(self.updated && dojo.some(self._plugin.paginators, function(f){
-					return f.pageSizeValue != null;
-				})){
-					self.updated = false;
-				}
-				if(!self.updated){
-					self._plugin._maxSize = size;
-					self.startIdx = 0;
-					self.endIdx = size - 1;
-					dojo.forEach(self._plugin.paginators, function(f){
-						f.update();
-					});
-					self.updated = true;
-				}
-				req.onBegin = onBegin;
-				req.onBegin.call(scope, size, req);
-			}
-		}
-		return dojo.hitch(this._store, this._originFetch)(request);
-	},
-	
-	_pagingFetch: function(request){
 		var self = this,
 			plugin = self._plugin,
 			grid = plugin.grid,
 			scope = request.scope || dojo.global,
 			onBegin = request.onBegin;
-			
-		grid.showMessage(grid.loadingMessage);
 		
 		request.start = plugin._currentPage * plugin.pageSize + request.start;
 		self.startIdx = request.start;
 		self.endIdx = request.start + plugin.pageSize - 1;
-		
-		if(onBegin){
+		if(onBegin && (plugin.showAll || dojo.every(plugin.paginators, function(p){
+			return !p.showSizeSwitch && !p.showPageStepper && !p.showGotoButton;
+		}))){
+			request.onBegin = function(size, req){
+				plugin._maxSize = size;
+				self.startIdx = 0;
+				self.endIdx = size - 1;
+				dojo.forEach(plugin.paginators, function(f){
+					f.update();
+				});
+				req.onBegin = onBegin;
+				req.onBegin.call(scope, size, req);
+			};
+		}else if(onBegin){
 			request.onBegin = function(size, req){
 				req.start = 0;
 				req.count = plugin.pageSize;
 				plugin._maxSize = size;
 				self.endIdx = self.endIdx > size ? (size - 1) : self.endIdx;
-				if(self.startIdx >= size && size != 0){
+				if(self.startIdx >= size && size !== 0){
 					grid._pending_requests[req.start] = false;
 					plugin.gotoFirstPage();
 				}
@@ -278,7 +229,7 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Templated], {
 	templatePath: dojo.moduleUrl("dojox.grid","enhanced/templates/Pagination.html"),
 		
-	// pagination bar position
+	// pagination bar position - "bottom"|"top"
 	barPosition: "bottom",
 	
 	// max data item size
@@ -289,21 +240,21 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	
 	// fast step page status params
 	showPageStepper: true,
+	
 	maxPageStep: 7,
 	
 	// items per page size switch params
 	showSizeSwitch: true,
+	
 	pageSizeArr: ["10", "25", "50", "100", "All"],
 	
 	showGotoButton: false,
 	
-	constructor: function(paginationPlugin, params){
-		this.plugin = paginationPlugin;
+	constructor: function(params){
+		dojo.mixin(this, params);
 		this.grid = this.plugin.grid;
-		this.itemTitle = this.plugin.nls["itemTitle"];
-		this.descTemplate = this.plugin.nls["descTemplate"];
-		dojo.mixin(this, params || {});
-		this._connections = [];
+		this.itemTitle = this.itemTitle ? this.itemTitle : this.plugin.nls.itemTitle;
+		this.descTemplate = this.descTemplate ? this.descTemplate : this.plugin.nls.descTemplate;
 	},
 	
 	postCreate: function(){
@@ -312,21 +263,17 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		this._placeSelf();
 	},
 	
-	uninit: function(){
+	destroy: function(){
+		this.inherited(arguments);
 		this.grid.focus.removeArea("pagination" + this.barPosition.toLowerCase());
-		dojo.forEach(this._connections, dojo.disconnect);
-		if(this._gotPageDialog){
-			this._gotPageDialog.destroy();
+		if(this._gotoPageDialog){
+			this._gotoPageDialog.destroy();
+			dojo.destroy(this.gotoPageTd);
+			delete this.gotoPageTd;
+			delete this._gotoPageDialog;
 		}
-		dojo.destroy(this.domNode);
 		this.grid._resize = this.gridResize;
-		
-		this.pageStepperDiv	= null;
-		this.pageStepperTd	= null;
-		this.sizeSwitchTd	= null;
-		this.descriptionDiv	= null;
-		this.descriptionTd	= null;
-		this.paginatorBar	= null;
+		this.pageSizeArr = null;
 	},
 	
 	update: function(){
@@ -346,7 +293,6 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	_regFocusMgr: function(position){
 		// summary:
 		//		Function to register pagination bar to focus manager.
-		var _this = this;
 		this.grid.focus.addArea({
 			name: "pagination" + position,
 			onFocus: dojo.hitch(this, this._onFocusPaginator),
@@ -386,12 +332,12 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	},
 	
 	_hackGridResize: function(){
-		var g = this.grid, rowCount = this.plugin.pageSize;
+		var g = this.grid;
 		this.gridResize = dojo.hitch(g, g._resize);
 		var resizeSelf = dojo.hitch(this, this._resetGridHeight);
-		var _this = this;
+		var self = this;
 		g._resize = function(changeSize, resultSize){
-			_this.gridResize(changeSize, resultSize);
+			self.gridResize(changeSize, resultSize);
 			resizeSelf(changeSize, resultSize);
 		};
 	},
@@ -400,7 +346,6 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		// summary:
 		//		Function of resize grid height to place this pagination bar.
 		//		This function will resize the grid viewsNode height, scorllboxNode height
-		//	changeSize&resultSize: for grid.resize(changeSize, resultSize)
 		var g = this.grid;
 		if(!g._autoHeight){
 			var padBorder = g._getPadBorder().h;
@@ -418,14 +363,13 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				ph = dojo.marginBox(this.domNode).h;
 			ph = this.plugin.paginators[1] ? ph * 2 : ph;
 			if(typeof g.autoHeight == "number"){
-				var padBorder = g._getPadBorder().h;
-				var cgh = gh + ph - g._getPadBorder().h;
+				var cgh = gh + ph - padBorder;
 				dojo.style(g.domNode, "height", cgh + "px");
 				dojo.style(g.viewsNode, "height", (cgh - ph - hh) + "px");
 				
 				this._styleMsgNode(hh, dojo.marginBox(g.viewsNode).w, cgh - ph - hh);
 			}else{
-				var h = gh - ph - hh - g._getPadBorder().h;;
+				var h = gh - ph - hh - padBorder;
 				dojo.style(g.viewsNode, "height", h + "px");
 				dojo.forEach(g.viewsNode.childNodes, function(c){
 					dojo.style(c, "height", h + "px");
@@ -442,12 +386,9 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	},
 	
 	_styleMsgNode: function(top, width, height){
-		var messagesNode = this.plugin.grid.messagesNode;
-		dojo.style(messagesNode, "position", "absolute");
-		dojo.style(messagesNode, "top", top + "px");
-		dojo.style(messagesNode, "width", width + "px");
-		dojo.style(messagesNode, "height", height + "px");
-		dojo.style(messagesNode, "z-Index", "100");
+		var messagesNode = this.grid.messagesNode;
+		dojo.style(messagesNode, {"position": "absolute", "top": top + "px",
+								  "width": width + "px", "height": height + "px", "z-Index": "100"});
 	},
 	
 	_updateDescription: function(){
@@ -455,11 +396,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		//		Update size information.
 		var s = this.plugin.forcePageStoreLayer;
 		if(this.showDescription && this.descriptionDiv){
-			if(this._maxItemSize > 0){
-				this.descriptionDiv.innerHTML = dojo.string.substitute(this.descTemplate, [this.itemTitle, this._maxItemSize, s.startIdx + 1, s.endIdx + 1]);
-			}else if(this._maxItemSize <= 0){
-				this.descriptionDiv.innerHTML = "0 " + this.itemTitle;
-			}
+			this.descriptionDiv.innerHTML = this._maxItemSize > 0 ? dojo.string.substitute(this.descTemplate, [this.itemTitle, this._maxItemSize, s.startIdx + 1, s.endIdx + 1]) : "0 " + this.itemTitle;
 		}
 	},
 	
@@ -469,15 +406,15 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(!this.sizeSwitchTd){
 			return;
 		}
-		if(!this.showSizeSwitch){
-			dojo.style(this.sizeSwitchTd, "width", "0");
-			return;
-		}
-		if(this._maxItemSize <= 0){
+		if(!this.showSizeSwitch || this._maxItemSize <= 0){
 			dojo.style(this.sizeSwitchTd, "display", "none");
 			return;
 		}else{
 			dojo.style(this.sizeSwitchTd, "display", "");
+		}
+		if(this.initializedSizeNode && !this.pageSizeValue){
+			// do not update page size if page size was not changed
+			return;
 		}
 		if(this.sizeSwitchTd.childNodes.length < 1){
 			this._createSizeSwitchNodes();
@@ -499,10 +436,10 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			size = dojo.trim(size);
 			node = dojo.create("span", {innerHTML: size, value: size, tabindex: 0}, this.sizeSwitchTd, "last");
 			// for accessibility
-			var labelValue = size.toLowerCase() == "all" ? this.plugin.nls["allItemsLabelTemplate"] : dojo.string.substitute(this.plugin.nls["pageSizeLabelTemplate"], [size]);
+			var labelValue = size.toLowerCase() == "all" ? this.plugin.nls.allItemsLabelTemplate : dojo.string.substitute(this.plugin.nls.pageSizeLabelTemplate, [size]);
 			dijit.setWaiState(node, "label", labelValue);
 			// connect event
-			this.plugin.connect(node, "onclick", this, "_onSwitchPageSize");
+			this.plugin.connect(node, "onclick", dojo.hitch(this, "_onSwitchPageSize"));
 			this.plugin.connect(node, "onmouseover", function(e){
 				dojo.addClass(e.target, "hover");
 			});
@@ -514,6 +451,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}, this);
 		// delete last separation node
 		dojo.destroy(node);
+		this.initializedSizeNode = true;
 	},
 	
 	_updateSwitchNodeClass: function(){
@@ -549,10 +487,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(!this.pageStepperTd){
 			return;
 		}
-		if(!this.showPageStepper){
-			return;
-		}
-		if(this._maxItemSize <= 0){
+		if(!this.showPageStepper || this._maxItemSize <= 0){
 			dojo.style(this.pageStepperTd, "display", "none");
 			return;
 		}else{
@@ -575,19 +510,17 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			stepSize = this._getStepPageSize(),
 			node = null;
 		for(var i = startPage; i < this.maxPageStep + 1; i++){
-			var tabIdx = i < startPage + stepSize ? 0 : -1;
-			var visible = i < startPage + stepSize ? "block" : "none";
-			node = dojo.create("div", {innerHTML: i, value: i, tabindex: tabIdx}, this.pageStepperDiv, "first");
-			dijit.setWaiState(node, "label", dojo.string.substitute(this.plugin.nls["pageStepLabelTemplate"], [i + ""]));
+			node = dojo.create("div", {innerHTML: i, value: i, tabindex: i < startPage + stepSize ? 0 : -1}, this.pageStepperDiv, "first");
+			dijit.setWaiState(node, "label", dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i + ""]));
 			// connect event
-			this.plugin.connect(node, "onclick", this, "_onPageStep");
+			this.plugin.connect(node, "onclick", dojo.hitch(this, "_onPageStep"));
 			this.plugin.connect(node, "onmouseover", function(e){
 				dojo.addClass(e.target, "hover");
 			});
 			this.plugin.connect(node, "onmouseout", function(e){
 				dojo.removeClass(e.target, "hover");
 			});
-			dojo.style(node, "display", visible);
+			dojo.style(node, "display", i < startPage + stepSize ? "block" : "none");
 		}
 	},
 	
@@ -595,16 +528,16 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		var self = this;
 		var createWardBtn = function(value, label, position){
 			var node = dojo.create("div", {value: value, title: label, tabindex: 1}, self.pageStepperDiv, position);
-			self._connections.push(dojo.connect(node, "onclick", self, "_onPageStep"));
+			self.plugin.connect(node, "onclick", dojo.hitch(self, "_onPageStep"));
 			dijit.setWaiState(node, "label", label);
 			// for high contrast
-			var highConrastNode = dojo.create("span", {value: value, title: label, innerHTML: "‹"}, node, position);
+			var highConrastNode = dojo.create("span", {value: value, title: label, innerHTML: "â€¹"}, node, position);
 			dojo.addClass(highConrastNode, "wardButtonInnerClass");
 		};
-		createWardBtn("prevPage", this.plugin.nls["prevTip"], "last");
-		createWardBtn("firstPage", this.plugin.nls["firstTip"], "last");
-		createWardBtn("nextPage", this.plugin.nls["nextTip"], "first");
-		createWardBtn("lastPage", this.plugin.nls["lastTip"], "first");
+		createWardBtn("prevPage", this.plugin.nls.prevTip, "last");
+		createWardBtn("firstPage", this.plugin.nls.firstTip, "last");
+		createWardBtn("nextPage", this.plugin.nls.nextTip, "first");
+		createWardBtn("lastPage", this.plugin.nls.lastTip, "first");
 	},
 	
 	_resetPageStpeNodes: function(){
@@ -618,7 +551,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				dojo.attr(node, "innerHTML", i);
 				dojo.attr(node, "value", i);
 				dojo.style(node, "display", "block");
-				dijit.setWaiState(node, "label", dojo.string.substitute(this.plugin.nls["pageStepLabelTemplate"], [i + ""]));
+				dijit.setWaiState(node, "label", dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i + ""]));
 			}else{
 				dojo.style(node, "display", "none");
 			}
@@ -663,45 +596,36 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	_updateGotoButton: function(){
 		if(!this.showGotoButton){
 			if(this.gotoPageTd){
-				if(this._gotPageDialog){
-					this._gotPageDialog.destroy();
+				if(this._gotoPageDialog){
+					this._gotoPageDialog.destroy();
 				}
+				dojo.destroy(this.gotoPageDiv);
 				dojo.destroy(this.gotoPageTd);
-				this.gotoPageTd = null;
+				delete this.gotoPageDiv;
+				delete this.gotoPageTd;
 			}
 			return;
 		}
 		if(!this.gotoPageTd){
 			this._createGotoNode();
 		}
-		this._updateGotoBtnClass();
+		dojo.toggleClass(this.gotoPageDiv, "paginatorGotoDivDisabled", this.plugin.pageSize >= this.plugin._maxSize);
 	},
 	
 	_createGotoNode: function(){
 		this.gotoPageTd = dojo.create("td", {}, dojo.query("tr", this.domNode)[0], "last");
 		dojo.addClass(this.gotoPageTd, "paginatorGotoTdClass");
-		this.gotoPageDiv = dojo.create("div", {tabindex: "0", title: this.plugin.nls["gotoButtonTitle"]}, this.gotoPageTd, "first");
+		this.gotoPageDiv = dojo.create("div", {tabindex: "0", title: this.plugin.nls.gotoButtonTitle}, this.gotoPageTd, "first");
 		dojo.addClass(this.gotoPageDiv, "paginatorGotoDivClass");
-		this.plugin.connect(this.gotoPageDiv, "onclick", this, "_openGotopageDialog");
+		this.plugin.connect(this.gotoPageDiv, "onclick", dojo.hitch(this, "_openGotopageDialog"));
 		// for high contrast
-		var highConrastNode = dojo.create("span", {title: this.plugin.nls["gotoButtonTitle"], innerHTML: "^"}, this.gotoPageDiv, "last");
+		var highConrastNode = dojo.create("span", {title: this.plugin.nls.gotoButtonTitle, innerHTML: "^"}, this.gotoPageDiv, "last");
 		dojo.addClass(highConrastNode, "wardButtonInnerClass");
 	},
 	
-	_updateGotoBtnClass: function(){
-		if(this.plugin.pageSize >= this.plugin._maxSize){
-			dojo.addClass(this.gotoPageDiv, "paginatorGotoDivDisabled");
-		}else{
-			dojo.removeClass(this.gotoPageDiv, "paginatorGotoDivDisabled");
-		}
-	},
-	
 	_openGotopageDialog: function(event){
-		if(this.plugin.pageSize >= this.plugin._maxSize){
-			return;
-		}
-		if(!this._gotPageDialog){
-			this._gotPageDialog = new dojox.grid.enhanced.plugins.filter._GotoPageDialog(this.plugin);
+		if(!this._gotoPageDialog){
+			this._gotoPageDialog = new dojox.grid.enhanced.plugins.filter._GotoPageDialog(this.plugin);
 		}
 		// focus
 		if(!this._currentFocusNode){
@@ -712,8 +636,8 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(this.focusArea != "pageStep"){
 			this.focusArea = "pageStep";
 		}
-		this._gotPageDialog.updatePageCount();
-		this._gotPageDialog.showDialog();
+		this._gotoPageDialog.updatePageCount();
+		this._gotoPageDialog.showDialog();
 	},
 	
 	// ===== focus handlers ===== //
@@ -723,12 +647,16 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				return this._onFocusPageSizeNode(event) ? true : this._onFocusPageStepNode(event);
 			}else if(step < 0){
 				return this._onFocusPageStepNode(event) ? true : this._onFocusPageSizeNode(event);
+			}else{
+				return false;
 			}
-		}else if(this._currentFocusNode){
+		}else{
 			if(step > 0){
 				return this.focusArea === "pageSize" ? this._onFocusPageStepNode(event) : false;
 			}else if(step < 0){
 				return this.focusArea === "pageStep" ? this._onFocusPageSizeNode(event) : false;
+			}else{
+				return false;
 			}
 		}
 	},
@@ -740,9 +668,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				dijit.focus(pageSizeNodes[0]);
 				this._currentFocusNode = pageSizeNodes[0];
 				this.focusArea = "pageSize";
-				try{
-					dojo.stopEvent(event);
-				}catch(e){return false;}
+				this._stopEvent(event);
 				return true;
 			}else{
 				return false;
@@ -751,6 +677,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(event && event.type == "click"){
 			if(dojo.indexOf(this._getPageSizeActivableNodes(), event.target) > -1){
 				this.focusArea = "pageSize";
+				this._stopEvent(event);
 				return true;
 			}
 		}
@@ -764,17 +691,13 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				dijit.focus(pageStepNodes[0]);
 				this._currentFocusNode = pageStepNodes[0];
 				this.focusArea = "pageStep";
-				try{
-					dojo.stopEvent(event);
-				}catch(e){return false;}
+				this._stopEvent(event);
 				return true;
 			}else if(this.gotoPageDiv){
 				dijit.focus(this.gotoPageDiv);
 				this._currentFocusNode = this.gotoPageDiv;
 				this.focusArea = "pageStep";
-				try{
-					dojo.stopEvent(event);
-				}catch(e){return false;}
+				this._stopEvent(event);
 				return true;
 			}else{
 				return false;
@@ -783,14 +706,13 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(event && event.type == "click"){
 			if(dojo.indexOf(this._getPageStepActivableNodes(), event.target) > -1){
 				this.focusArea = "pageStep";
+				this._stopEvent(event);
 				return true;
 			}else if(event.target == this.gotoPageDiv){
 				dijit.focus(this.gotoPageDiv);
 				this._currentFocusNode = this.gotoPageDiv;
 				this.focusArea = "pageStep";
-				try{
-					dojo.stopEvent(event);
-				} catch(e){return false;}
+				this._stopEvent(event);
 				return true;
 			}
 		}
@@ -805,9 +727,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			dijit.focus(this.gotoPageDiv);
 			this._currentFocusNode = this.gotoPageDiv;
 			this.focusArea = "gotoButton";
-			try{
-				dojo.stopEvent(event);
-			}catch(e){return false;}
+			this._stopEvent(event);
 			return true;
 		}
 		return true;
@@ -844,9 +764,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				this._openGotopageDialog(event);
 			}
 		}
-		try{
-			dojo.stopEvent(event);
-		}catch(e){}
+		this._stopEvent(event);
 	},
 	
 	_moveFocus: function(rowDelta, colDelta, evt){
@@ -868,9 +786,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			dijit.focus(nodes[focusIdx]);
 			this._currentFocusNode = nodes[focusIdx];
 		}
-		try{
-			dojo.stopEvent(evt)
-		}catch(e){}
+		this._stopEvent(evt);
 	},
 	
 	_getPageSizeActivableNodes: function(){
@@ -906,7 +822,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(nodeList.length < 2){
 			this.grid.focus.tab(1);
 		}
-		var nl = [];
+		var nl = [],
 			node = null,
 			index = 0;
 		dojo.forEach(nodeList, function(n){
@@ -927,6 +843,14 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		dijit.focus(node);
 		this._currentFocusNode = node;
 	},
+	
+	_stopEvent: function(event){
+		try{
+			dojo.stopEvent(event);
+		}catch(e){
+			console.error("Stop event error: ", e);
+		}
+	},
 
 	// ===== pagination events handlers ===== //
 	_onSwitchPageSize: function(/*Event*/e){
@@ -937,11 +861,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(dojo.trim(size.toLowerCase()) == "all"){
 			size = this._maxItemSize;
 		}
-		if(parseInt(size, 10) >= this._maxItemSize){
-			this.plugin.showAll = true;
-		}else{
-			this.plugin.showAll = false;
-		}
+		this.plugin.showAll = parseInt(size, 10) >= this._maxItemSize ? true : false;
 		
 		size = parseInt(size, 10);
 		if(isNaN(size) || size <= 0/* || size == this.currentPageSize*/){
@@ -959,8 +879,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	
 	_onPageStep: function(/*Event*/e){
 		var p = this.plugin,
-			value = e.target.value;
-		this.pageStepValue = value;
+			value = this.pageStepValue = e.target.value;
 		
 		if(!this._currentFocusNode){
 			this.grid.focus.focusArea("pagination" + this.barPosition, e);
@@ -1036,32 +955,32 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._GotoPageDialog", null, {
 		this.plugin = plugin;
 		this.pageCount = this.plugin.paginators[0]._getPageCount();
 		this._dialogNode = dojo.create("div", {}, dojo.body(), "last");
-		this._gotPageDialog = new dijit.Dialog({"title": this.plugin.nls["dialogTitle"]}, this._dialogNode);
+		this._gotoPageDialog = new dijit.Dialog({"title": this.plugin.nls.dialogTitle}, this._dialogNode);
 		this._createDialogContent();
-		this._gotPageDialog.startup();
+		this._gotoPageDialog.startup();
 	},
 	
 	_createDialogContent: function(){
-		this._specifyNode = dojo.create("div", {innerHTML: this.plugin.nls["dialogIndication"]}, this._gotPageDialog.containerNode, "last");
+		this._specifyNode = dojo.create("div", {innerHTML: this.plugin.nls.dialogIndication}, this._gotoPageDialog.containerNode, "last");
 		
-		this._pageInputDiv = dojo.create("div", {}, this._gotPageDialog.containerNode, "last");
+		this._pageInputDiv = dojo.create("div", {}, this._gotoPageDialog.containerNode, "last");
 		this._pageTextBox = new dijit.form.NumberTextBox();
 		this._pageTextBox.constraints = {fractional:false, min:1, max:this.pageCount};
-		this.plugin._connections.push(dojo.connect(this._pageTextBox.textbox, "onkeyup", this, "_setConfirmBtnState"));
+		this.plugin.connect(this._pageTextBox.textbox, "onkeyup", dojo.hitch(this, "_setConfirmBtnState"));
 		
 		this._pageInputDiv.appendChild(this._pageTextBox.domNode);
-		this._pageLabel = dojo.create("label", {innerHTML: dojo.string.substitute(this.plugin.nls["pageCountIndication"], [this.pageCount])}, this._pageInputDiv, "last");
+		this._pageLabel = dojo.create("label", {innerHTML: dojo.string.substitute(this.plugin.nls.pageCountIndication, [this.pageCount])}, this._pageInputDiv, "last");
 		
-		this._buttonDiv = dojo.create("div", {}, this._gotPageDialog.containerNode, "last");
-		this._confirmBtn = new dijit.form.Button({label: this.plugin.nls["dialogConfirm"], onClick: dojo.hitch(this, this._onConfirm)});
+		this._buttonDiv = dojo.create("div", {}, this._gotoPageDialog.containerNode, "last");
+		this._confirmBtn = new dijit.form.Button({label: this.plugin.nls.dialogConfirm, onClick: dojo.hitch(this, this._onConfirm)});
 		this._confirmBtn.set("disabled", true);
 		
-		this._cancelBtn = new dijit.form.Button({label: this.plugin.nls["dialogCancel"], onClick: dojo.hitch(this, this._onCancel)});
+		this._cancelBtn = new dijit.form.Button({label: this.plugin.nls.dialogCancel, onClick: dojo.hitch(this, this._onCancel)});
 		this._buttonDiv.appendChild(this._confirmBtn.domNode);
 		this._buttonDiv.appendChild(this._cancelBtn.domNode);
 		this._styleContent();
-		this._gotPageDialog.onCancel = dojo.hitch(this, this._onCancel);
-		this.plugin._connections.push(dojo.connect(this._gotPageDialog, "_onKey", this, "_onKeyDown"));
+		this._gotoPageDialog.onCancel = dojo.hitch(this, this._onCancel);
+		this.plugin.connect(this._gotoPageDialog, "_onKey", dojo.hitch(this, "_onKeyDown"));
 	},
 	
 	_styleContent: function(){
@@ -1074,17 +993,17 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._GotoPageDialog", null, {
 	updatePageCount: function(){
 		this.pageCount = this.plugin.paginators[0]._getPageCount();
 		this._pageTextBox.constraints = {fractional:false, min:1, max:this.pageCount};
-		dojo.attr(this._pageLabel, "innerHTML", dojo.string.substitute(this.plugin.nls["pageCountIndication"], [this.pageCount]));
+		dojo.attr(this._pageLabel, "innerHTML", dojo.string.substitute(this.plugin.nls.pageCountIndication, [this.pageCount]));
 	},
 	
 	showDialog: function(){
-		this._gotPageDialog.show();
+		this._gotoPageDialog.show();
 	},
 	
 	_onConfirm: function(event){
 		if(this._pageTextBox.isValid() && this._pageTextBox.getDisplayedValue() !== ""){
 			this.plugin.gotoPage(this._pageTextBox.getDisplayedValue());
-			this._gotPageDialog.hide();
+			this._gotoPageDialog.hide();
 			this._pageTextBox.reset();
 		}
 		this._stopEvent(event);
@@ -1092,7 +1011,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._GotoPageDialog", null, {
 	
 	_onCancel: function(event){
 		this._pageTextBox.reset();
-		this._gotPageDialog.hide();
+		this._gotoPageDialog.hide();
 		this._stopEvent(event);
 	},
 	
@@ -1116,18 +1035,22 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._GotoPageDialog", null, {
 	
 	_stopEvent: function(event){
 		try{
-			dojo.stopEvent(event)
-		}catch(e){}
+			dojo.stopEvent(event);
+		}catch(e){
+			console.warn("Stop event error: ", e);
+		}
 	},
 	
 	destroy: function(){
 		this._pageTextBox.destroy();
 		this._confirmBtn.destroy();
 		this._cancelBtn.destroy();
+		this._gotoPageDialog.destroy();
+		
 		dojo.destroy(this._specifyNode);
 		dojo.destroy(this._pageInputDiv);
+		dojo.destroy(this._pageLabel);
 		dojo.destroy(this._buttonDiv);
-		this._gotPageDialog.destroy();
 		dojo.destroy(this._dialogNode);
 	}
 });
