@@ -46,7 +46,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 	},
 	postCreate: function(){
 		this.inherited(arguments);
-		if(this.plugin.args.hideCloseFilterBarButton){
+		if(!this.plugin.args.closeFilterbarButton){
 			dojo.style(this.closeFilterBarButton.domNode, "display", "none");
 		}
 		var dn = this.domNode,
@@ -234,23 +234,27 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		this._isFocused = true;
 		dojo.addClass(this.domNode,_focusClass);
 		if(!highlightOnly){
-			var hasFilter = dojo.hasClass(this.clearFilterButton.domNode, _clearFilterBtnHiden);
+			var hasFilter = !dojo.hasClass(this.clearFilterButton.domNode, _clearFilterBtnHiden);
+			var hasCloseButton = dojo.style(this.closeFilterBarButton.domNode, "display") !== "none";
 			if(typeof this._focusPos == "undefined"){
 				if(step > 0){
 					this._focusPos = 0;
 				}else{
-					this._focusPos = hasFilter ? 1 : 2;
+					if(hasCloseButton){
+						this._focusPos = 1;
+					}else{
+						this._focusPos = 0;
+					}
+					if(hasFilter){
+						++this._focusPos;
+					}
 				}
 			}
 			if(this._focusPos == 0){
 				dijit.focus(this.defineFilterButton.focusNode);	
-			}else if(this._focusPos == 1){
-				if(hasFilter){
-					dijit.focus(this.closeFilterBarButton.focusNode);
-				}else{
-					dijit.focus(this.clearFilterButton.focusNode);
-				}
-			}else if(this._focusPos == 2){
+			}else if(this._focusPos == 1 && hasFilter){
+				dijit.focus(this.clearFilterButton.focusNode);
+			}else{
 				dijit.focus(this.closeFilterBarButton.focusNode);
 			}
 		}
@@ -266,18 +270,27 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		}
 		if(step){
 			var buttonCount = 3;
-			if(dojo.hasClass(this.clearFilterButton.domNode, _clearFilterBtnHiden)){
-				buttonCount = 2;
+			if(dojo.style(this.closeFilterBarButton.domNode, "display") === "none"){
+				--buttonCount;
 			}
-			var current = this._focusPos;
-			for(var next = current + step; next < 0; next += buttonCount){}
-			next %= buttonCount;
-			if((step > 0 && next < current) || (step < 0 && next > current)){
+			if(dojo.hasClass(this.clearFilterButton.domNode, _clearFilterBtnHiden)){
+				--buttonCount;
+			}
+			if(buttonCount == 1){
 				delete this._focusPos;
 				return true;
 			}else{
-				this._focusPos = next;
-				return false;
+				var current = this._focusPos;
+				for(var next = current + step; next < 0; next += buttonCount){}
+				next %= buttonCount;
+				console.log("blur filter bar", next, buttonCount,this._focusPos);
+				if((step > 0 && next < current) || (step < 0 && next > current)){
+					delete this._focusPos;
+					return true;
+				}else{
+					this._focusPos = next;
+					return false;
+				}
 			}
 		}
 	},
