@@ -1,5 +1,4 @@
-dojo.provide("dojox.testing.DocTest");
-dojo.require("dojo.string");
+define("dojox/testing/DocTest", ["dojo/string"], function() {
 
 dojo.declare(
 	"dojox.testing.DocTest",
@@ -275,3 +274,6 @@ dojo.declare(
 		}
 	}
 );
+
+return dojox.testing.DocTest;
+});
