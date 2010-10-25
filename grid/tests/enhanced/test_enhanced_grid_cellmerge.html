@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Test CellMerge plugin of dojox.grid.EnhancedGrid</title>
+		<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+			@import "../../../../dijit/tests/css/dijitTests.css";
+			@import "../../../../dijit/themes/claro/claro.css";		
+			@import "../../../../dijit/themes/tundra/tundra.css";
+			@import "../../enhanced/resources/claro/EnhancedGrid.css";
+			@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
+			@import "../../enhanced/resources/tundra/EnhancedGrid.css";
+			@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
+			
+			body {
+				font-size: 0.9em;
+				font-family: Geneva, Arial, Helvetica, sans-serif;
+				padding: 0.5em;
+			}
+			.title {
+				text-align:center;
+				margin:1em;
+			}
+			.container {
+				display: block;
+				border: 3px solid #ccc;
+				padding: 1em 3em; 
+				cursor: default;
+				radius: 8pt;
+				background: #fff;
+				-moz-border-radius: 8pt 8pt;
+				display:inline-block;
+			}
+			table.container th{
+				font-weight:bolder;
+				padding:10px;
+			}
+			table.container td{
+				text-align:center;
+			}
+			#grid{
+				margin-bottom: 30px;
+	 			width: 80em;
+				height: 30em;
+			}
+			.claro .dojoxGridCell{
+				border-stlye:dotted !important;
+				border-color: transparent #D5CDB5 #D5CDB5 transparent !important;
+			}			
+		</style>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+		<script type="text/javascript">
+			dojo.require("dojo.parser");
+			dojo.require("dojox.grid.EnhancedGrid");
+			dojo.require("dojox.grid.enhanced.plugins.CellMerge");
+			var startGridIndex = 0,
+				initialShowGrid = true,
+				hideCtrlPanel = true,
+				gridAttrs = {
+					plugins: {
+						cellMerge: {
+							"mergedCells": [
+								{row: 1, start: 0, end: 10, major: 8}
+							]
+						}
+					}
+				};
+		</script>
+		<script type="text/javascript" src="support/test_write_store_music.js"></script>
+		<script type="text/javascript" src="support/test_layout_music.js"></script>
+		<script type="text/javascript" src="support/test_repeat.js"></script>
+		<script type="text/javascript">
+			var mergedCellHandles = [];
+			var lastChild = null;
+			function updateMergedCells(){
+				mergedCellHandles = [];
+				var grid = dijit.byId("grid");
+				var res = ["<tbody>"];
+				var mergedCells = grid.getMergedCells();
+				dojo.forEach(mergedCells, function(item, i){
+					mergedCellHandles.push(item.handle);
+					res.push("<tr><td>", item.row + 1,
+						"</td><td>", item.start + 1,
+						"</td><td>", item.end + 1,
+						"</td><td>", item.major + 1,
+						//"</td><td><button onclick=\"unmergeCells(",i,")\">Unmerge</button>",
+						"</td></tr>"
+					);
+				});
+				res.push("</tbody>");
+				lastChild && dojo.byId("tblMergedCells").removeChild(lastChild);
+				lastChild = dojo._toDom(res.join(''));
+				dojo.byId("tblMergedCells").appendChild(lastChild);
+			};
+			function mergeCells(){
+				var rowIndex = parseInt(dojo.byId("inputRow").value, 10) - 1;
+				var start = parseInt(dojo.byId("inputStart").value, 10);
+				var end = parseInt(dojo.byId("inputEnd").value, 10);
+				var major = parseInt(dojo.byId("inputMajor").value, 10);
+				var grid = dijit.byId("grid");
+				grid.mergeCells(rowIndex, start, end, major);
+				updateMergedCells();
+			};
+			function unmergeCells(handleIdx){
+				dijit.byId("grid").unmergeCells(mergedCellHandles[handleIdx]);
+				updateMergedCells();
+			};
+			dojo.addOnLoad(updateMergedCells);
+		</script>
+	</head>
+	<body class="claro">
+		<h1 class="title" tabindex="0"
+			onfocus="console.log('focus a'),this.style.color='red';"
+			onblur="console.log('blur a'),this.style.color='black';">
+			dojox.grid.EnhancedGrid - Cell Merge</h1>
+		<div id="ctrlBtns"></div><br/>
+		<div id="gridContainer"></div><br/>
+		<div class="container">
+			<table>
+				<tr>
+					<td>At row</td>
+					<td><input id="inputRow" type="text" value="5" size="3"/></td>
+				</tr>
+				<tr>
+					<td>From column</td>
+					<td><select id="inputStart">
+						<option value="0">1</option>
+						<option value="1">2</option>
+						<option value="2" selected="true">3</option>
+						<option value="3">4</option>
+						<option value="4">5</option>
+						<option value="5">6</option>
+						<option value="6">7</option>
+						<option value="7">8</option>
+						<option value="8">9</option>
+						<option value="9">10</option>
+						<option value="10">11</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>To column</td>
+					<td><select id="inputEnd">
+						<option value="0">1</option>
+						<option value="1">2</option>
+						<option value="2">3</option>
+						<option value="3">4</option>
+						<option value="4">5</option>
+						<option value="5">6</option>
+						<option value="6">7</option>
+						<option value="7" selected="true">8</option>
+						<option value="8">9</option>
+						<option value="9">10</option>
+						<option value="10">11</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>Use data of column</td>
+					<td><select id="inputMajor">
+						<option value="0">1</option>
+						<option value="1">2</option>
+						<option value="2">3</option>
+						<option value="3" selected="true">4</option>
+						<option value="4">5</option>
+						<option value="5">6</option>
+						<option value="6">7</option>
+						<option value="7">8</option>
+						<option value="8">9</option>
+						<option value="9">10</option>
+						<option value="10">11</option>
+						<option value="">(Use Default)</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td colspan="2"><button onclick="mergeCells()">Merge Cells</button></td>
+				</tr>
+			</table>
+		</div>
+		<h3>The Merged Cells</h3>
+		<table id="tblMergedCells" class="container" cellpadding="5px" cellspacing="5px">
+			<thead><tr>
+				<th>
+					Row Index
+				</th>
+				<th>
+					Start Column Index
+				</th>
+				<th>
+					End Column Index
+				</th>
+				<th>
+					Major Column Index
+				</th>
+			</tr></thead>
+		</table>
+		<h3>Notes:</h3>
+		<ul>
+			<li>Cells can be merged at both design- and run-time.</li>
+			<li>Cell merging is done only in grid UI; the data store is not affected.</li>
+			<li>The column sorting and cell merging are incompatible, because sorting is store's job, while merging is grid's job, and after sorting, grid can not get the mapping between the new row order and the old one.)</li>
+			<li>To get currently merged cells, use grid.getMergedCells();</li>
+			<li>The merged cell will use as default the content of the cell at the leading edge, if major cell is not indicated.</li>
+		</ul>
+		<p><strong>Note:</strong> To see the tundra theme, just append <b style="color:blue;">?theme=tundra</b> to the URL.</p>
+	</body>
+</html>
