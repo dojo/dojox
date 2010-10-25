@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html dir="ltr">
+<head>
+	<title>Test Dnd plugin of dojox.grid.EnhancedGrid</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<style type="text/css">
+		@import "../../../../dojo/resources/dojo.css";
+		@import "../../../../dijit/tests/css/dijitTests.css";
+		@import "../../../../dijit/themes/claro/claro.css";		
+		@import "../../../../dijit/themes/tundra/tundra.css";
+		@import "../../enhanced/resources/claro/EnhancedGrid.css";
+		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
+		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
+		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
+		@import "/dojo/tests/dnd/dndDefault.css";
+		body {
+			font-size: 0.9em;
+			font-family: Geneva, Arial, Helvetica, sans-serif;
+			padding: 0.5em;
+		}
+		.title {
+			text-align:center;
+			margin:1em;
+		}
+		.container {
+			display: block;
+			border: 3px solid #ccc;
+			padding: 1em 3em; 
+			cursor: default;
+			radius: 8pt;
+			background: #fff;
+			-moz-border-radius: 8pt 8pt;
+		}
+		.myblock{
+			float: left;
+			margin: 10px;
+			margin-top: 0;
+		}
+		.cfgtable th,
+		.cfgtable td{
+			font-weight: bolder;
+			padding: 5px;
+		}
+		h3{
+			margin: 0;
+		}
+ 		#grid1, #grid2{
+			margin-bottom: 0px;
+ 			width: 50em;
+			height: 30em;
+		}
+
+	</style>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" 
+		djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript">
+		dojo.require("dojo.parser");
+		dojo.require("dojo.data.ItemFileWriteStore");
+		dojo.require("dojox.data.AtomReadStore");
+		dojo.require("dojox.data.XmlStore");
+		dojo.require("dojox.grid.EnhancedGrid");
+		dojo.require("dojox.grid.enhanced.plugins.Selector");
+		dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
+		dojo.require("dojox.grid.enhanced.plugins.AutoScroll");
+		dojo.require("dojox.grid.enhanced.plugins.DnD");
+		dojo.require("dojox.grid.enhanced.plugins.GridSource");
+		dojo.require("dojo.dnd.Source");
+		dojo.require("dijit.form.CheckBox");
+	</script>
+	<script type="text/javascript" src="support/test_write_store_dnd.js"></script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
+	<script type="text/javascript">
+		var layout1 = [{
+			defaultCell: {width: 5},
+			rows: [
+				{field: "A"},
+				{field: "B"},
+				{field: "C"},
+				{field: "D"},
+				{field: "E"},
+				{field: "F"},
+				{field: "G", hidden: true},
+				{field: "H", hidden: true},
+				{field: "I", hidden: true},
+				{field: "J"},
+				{field: "K"},
+				{field: "L"},
+				{field: "M"},
+				{field: "N"},
+				{field: "O"},
+				{field: "P"},
+				{field: "Q"},
+				{field: "R"},
+				{field: "S"},
+				{field: "T"},
+				{field: "U"},
+				{field: "V"},
+				{field: "W"},
+				{field: "X"},
+				{field: "Y"},
+				{field: "Z"}
+			]
+		}];
+		var layout2 = [
+		{//first view
+			rows:
+			[
+				{ field: "Genre", width: '6'},
+				{ field: "Artist", width: '5'},
+				{ field: "Year", width: '6'},
+				{ field: "Album", width: '12'},
+				{ field: "Name", width: '17', hidden: true},
+				{ field: "Length", width: '6'},
+				{ field: "Track", width: '6'},
+				{ field: "Composer", width: '15'},
+				{ field: "Download Date", width: '10'},
+				{ field: "Last Played", width: '10'}
+			]
+		}
+		];
+		var store_copy = new dojo.data.ItemFileWriteStore({
+			data: test_store_data[0]
+		});
+		var setIdentifierForNewItem = function(item, store, index){
+			console.log("setIdentifierForNewItem", index);
+			var attrs = store.getIdentityAttributes(item);
+			for(var i = attrs.length - 1; i >= 0; --i){
+				item[attrs[i]] = index + (new Date()).getTime();
+			}
+			return item;
+		};
+		var setDnDConfig = function(gridId, type, mode, selected){
+			var config = {};
+			config[type] = {};
+			config[type][mode] = selected;
+			dijit.byId(gridId).setupDnDConfig(config);
+		};
+		var setCopyOnly = function(gridId, selected){
+			dijit.byId(gridId).dndCopyOnly(selected);
+		};
+		dojo.addOnLoad(function(){
+			dojo.query("input.cfgbox").forEach(function(cb){
+				cb.checked = true;
+			});
+			dojo.query("input.copyonlyCBox").forEach(function(cb){
+				cb.checked = false;
+			});
+		});
+	</script>
+</head>
+<body class="claro">
+	<h1 class="title" tabindex="0"
+		onfocus="console.log('focus a'),this.style.color='red';"
+		onblur="console.log('blur a'),this.style.color='black';">
+		dojox.grid.EnhancedGrid - DnD</h1>
+	<div class="myblock">
+		<h3>Grid 1</h3>
+		<div id="grid1" dojoType="dojox.grid.EnhancedGrid" rowsPerPage="16"
+			canSort="false",
+			plugins='{
+				dnd: {
+					"setIdentifierForNewItem": setIdentifierForNewItem,
+					"dndConfig": {
+					}
+				}
+			}' store="test_store[0]" structure="layout1" rowSelector="20px">
+		</div>
+	</div>
+	<div class="myblock">
+		<h3>Grid 2</h3>
+		<div id="grid2" dojoType="dojox.grid.EnhancedGrid" rowsPerPage="16"
+			canSort="false",
+			plugins='{
+				dnd: {
+					"setIdentifierForNewItem": setIdentifierForNewItem,
+					"dndConfig": {
+					}
+				}
+			}' store="store_copy" structure="layout1" rowSelector="20px">
+		</div>
+	</div>
+	<div class="myblock">
+		<h3>Grid 1 Configuration</h3>
+		<label style="font-weight: bolder;">Copy Only</label><input class="copyonlyCBox" type="checkbox" onchange="setCopyOnly('grid1', this.checked)" />
+		<table class="cfgtable" border="1">
+			<thead>
+				<tr>
+					<th>Drag</th>
+					<th>Within</th>
+					<th>In</th>
+					<th>Out</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Rows</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'row', 'within', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'row', 'in', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'row', 'out', this.checked)"/></td>
+				</tr>
+				<tr>
+					<td>Columns</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'col', 'within', this.checked)"/></td>
+					<td>Not implemented</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'col', 'out', this.checked)"/></td>
+				</tr>
+				<tr>
+					<td>Cells</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'cell', 'within', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'cell', 'in', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid1', 'cell', 'out', this.checked)"/></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="myblock">
+		<h3>Grid 2 Configuration</h3>
+		<label style="font-weight: bolder;">Copy Only</label><input class="copyonlyCBox" type="checkbox" onchange="setCopyOnly('grid2', this.checked)" />
+		<table class="cfgtable" border="1">
+			<thead>
+				<tr>
+					<th>Drag</th>
+					<th>Within</th>
+					<th>In</th>
+					<th>Out</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Rows</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'row', 'within', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'row', 'in', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'row', 'out', this.checked)"/></td>
+				</tr>
+				<tr>
+					<td>Columns</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'col', 'within', this.checked)"/></td>
+					<td>Not implemented</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'col', 'out', this.checked)"/></td>
+				</tr>
+				<tr>
+					<td>Cells</td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'cell', 'within', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'cell', 'in', this.checked)"/></td>
+					<td><input type="checkbox" class="cfgbox" onchange="setDnDConfig('grid2', 'cell', 'out', this.checked)"/></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="myblock" style="clear: left;">
+		<h3>Ordinary Target (Can not accept grid contents)</h3>
+		<div dojoType="dojo.dnd.Source" class="container">
+			<div class="dojoDndItem">Item <strong>X</strong></div>
+			<div class="dojoDndItem">Item <strong>Y</strong></div>
+			<div class="dojoDndItem">Item <strong>Z</strong></div>
+		</div>
+	</div>
+	<div class="myblock">
+		<h3>Grid Acceptable Target</h3>
+		<div id="listsource" dojoType="dojox.grid.enhanced.plugins.GridSource" class="container">
+			<div class="dojoDndItem">Item 1</div>
+			<div class="dojoDndItem">Item 2</div>
+			<div class="dojoDndItem">Item 3</div>
+		</div>
+	</div>
+	<p style="clear: left;"><strong>Note:</strong> To see the tundra theme, just append <b style="color:blue;">?theme=tundra</b> to the URL.</p>
+</body>
+</html>

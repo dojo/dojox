@@ -1,0 +1,483 @@
+dojo.provide("dojox.grid.enhanced.plugins.Rearrange");
+
+dojo.require("dojox.grid.enhanced._Plugin");
+dojo.require("dojox.grid.enhanced.plugins.RowMapLayer");
+
+dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugin, {
+	// summary:
+	//		Provides a set of method to re-arrange the structure of grid.
+	
+	// name: String
+	//		plugin name
+	name: "rearrange",
+	
+	constructor: function(grid, args){
+		this.grid = grid;
+		this.setArgs(args);
+		var rowMapLayer = new dojox.grid.enhanced.plugins.RowMapLayer(grid);
+		dojox.grid.enhanced.plugins.wrap(grid.store, rowMapLayer);
+	},
+	setArgs: function(args){
+		this.args = dojo.mixin(this.args || {}, args || {});
+		this.args.setIdentifierForNewItem = this.args.setIdentifierForNewItem || function(v){return v;};
+	},
+	destroy: function(){
+		this.inherited(arguments);
+		this.grid.store.unwrap("rowmap");
+	},
+	onSetStore: function(store){
+		var rowMapLayer = new dojox.grid.enhanced.plugins.RowMapLayer(this.grid);
+		dojox.grid.enhanced.plugins.wrap(store, rowMapLayer);
+	},
+	moveColumns: function(colsToMove, targetPos){
+		// summary:
+		//		Move a set of columns to a given position.
+		// tag:
+		//		public
+		// colsToMove: Integer[]
+		//		Array of column indexes.
+		// targetPos: Integer
+		//		The target position
+		var g = this.grid,
+			layout = g.layout,
+			cells = layout.cells,
+			colIndex, i, delta = 0,
+			before = true, tmp = {}, mapping = {};
+		colsToMove.sort(function(a, b){
+			return a - b;
+		});
+		for(i = 0; i < colsToMove.length; ++i){
+			tmp[colsToMove[i]] = i;
+			if(colsToMove[i] < targetPos){
+				++delta;
+			}
+		}
+		var leftCount = 0;
+		var rightCount = 0;
+		var maxCol = Math.max(colsToMove[colsToMove.length - 1], targetPos);
+		if(maxCol == cells.length){
+			--maxCol;
+		}
+		for(i = colsToMove[0]; i <= maxCol; ++i){
+			var j = tmp[i];
+			if(j >= 0){
+				if(i != targetPos - delta + j){
+					mapping[i] = targetPos - delta + j;
+				}
+				leftCount = j + 1;
+				rightCount = colsToMove.length - j - 1;
+			}else if(i < targetPos && leftCount > 0){
+				mapping[i] = i - leftCount;
+			}else if(i >= targetPos && rightCount > 0){
+				mapping[i] = i + rightCount;
+			}
+		}
+		//console.log("mapping:", mapping, ", colsToMove:", colsToMove,", target:", targetPos);
+		delta = 0;
+		if(targetPos == cells.length){
+			--targetPos;
+			before = false;
+		}
+		for(i = 0; i < colsToMove.length; ++i){
+			colIndex = colsToMove[i];
+			if(colIndex < targetPos){
+				colIndex -= delta;
+			}
+			++delta;
+			if(colIndex != targetPos){
+				layout.moveColumn(cells[colIndex].view.idx, cells[targetPos].view.idx, colIndex, targetPos, before);
+				cells = layout.cells;
+			}
+			if(targetPos <= colIndex){
+				++targetPos;
+			}
+		}
+		dojo.publish("dojox/grid/rearrange/move/" + g.id, ["col", mapping]);
+	},
+	moveRows: function(rowsToMove, targetPos){
+		// summary:
+		//		Move a set of rows to a given position
+		// tag:
+		//		public
+		// rowsToMove: Integer[]
+		//		Array of row indexes.
+		// targetPos: Integer
+		//		The target position
+		var g = this.grid,
+			mapping = {},
+			preRowsToMove = [],
+			postRowsToMove = [],
+			len = rowsToMove.length, 
+			i, r, k, arr, rowMap, lastPos;
+			
+		for(i = 0; i < len; ++i){
+			r = rowsToMove[i];
+			if(r >= targetPos){
+				break;
+			}
+			preRowsToMove.push(r);
+		}
+		postRowsToMove = rowsToMove.slice(i);
+		
+		arr = preRowsToMove;
+		len = arr.length;
+		if(len){
+			rowMap = {};
+			dojo.forEach(arr, function(r){
+				rowMap[r] = true;
+			});
+			mapping[arr[0]] = targetPos - len;
+			for(k = 0, i = arr[k] + 1, lastPos = i - 1; i < targetPos; ++i){
+				if(!rowMap[i]){
+					mapping[i] = lastPos;
+					++lastPos;
+				}else{
+					++k;
+					mapping[i] = targetPos - len + k;
+				}
+			}
+		}
+		arr = postRowsToMove;
+		len = arr.length;
+		if(len){
+			rowMap = {};
+			dojo.forEach(arr, function(r){
+				rowMap[r] = true;
+			});
+			mapping[arr[len - 1]] = targetPos + len - 1;
+			for(k = len - 1, i = arr[k] - 1, lastPos = i + 1; i >= targetPos; --i){
+				if(!rowMap[i]){
+					mapping[i] = lastPos;
+					--lastPos;
+				}else{
+					--k;
+					mapping[i] = targetPos + k;
+				}
+			}
+		}
+		var tmpMapping = dojo.clone(mapping);
+		g.store.layer("rowmap").setMapping(mapping);
+		g.store.forEachLayer(function(layer){
+			if(layer.name() != "rowmap"){
+				layer.invalidate();
+				return true;
+			}else{
+				return false;
+			}
+		}, false);
+		g._refresh();
+		setTimeout(function(){
+			for(var r in tmpMapping){
+				g.updateRow(parseInt(r, 10));
+			}
+			dojo.publish("dojox/grid/rearrange/move/" + g.id, ["row", tmpMapping]);
+		}, 0);
+	},
+	moveCells: function(cellsToMove, target){
+		var g = this.grid,
+			s = g.store;
+		if(s.getFeatures()["dojo.data.api.Write"]){
+			if(cellsToMove.min.row == target.min.row && cellsToMove.min.col == target.min.col){
+				//Same position, no need to move
+				return;
+			}
+			var cells = g.layout.cells,
+				cnt = cellsToMove.max.row - cellsToMove.min.row + 1,
+				r, c, tr, tc,
+				sources = [], targets = [];
+			for(r = cellsToMove.min.row, tr = target.min.row; r <= cellsToMove.max.row; ++r, ++tr){
+				for(c = cellsToMove.min.col, tc = target.min.col; c <= cellsToMove.max.col; ++c, ++tc){
+					while(cells[c] && cells[c].hidden){
+						++c;
+					}
+					while(cells[tc] && cells[tc].hidden){
+						++tc;
+					}
+					sources.push({
+						"r": r,
+						"c": c
+					});
+					targets.push({
+						"r": tr,
+						"c": tc,
+						"v": cells[c].get(r, g._by_idx[r].item)
+					});
+				}
+			}
+			dojo.forEach(sources, function(point){
+				s.setValue(g._by_idx[point.r].item, cells[point.c].field, "");
+			});
+			dojo.forEach(targets, function(point){
+				s.setValue(g._by_idx[point.r].item, cells[point.c].field, point.v);
+			});
+			s.save({
+				onComplete: function(){
+					s.fetch({
+						start: cellsToMove.min.row,
+						count: cnt,
+						onComplete: function(items){
+							for(var i = 0; i < cnt; ++i){
+								g._addItem(items[i], i + cellsToMove.min.row);
+							}
+						}
+					});
+					s.fetch({
+						start: target.min.row,
+						count: cnt,
+						onComplete: function(items){
+							for(var i = 0; i < cnt; ++i){
+								g._addItem(items[i], i + target.min.row);
+							}
+							setTimeout(function(){
+								dojo.publish("dojox/grid/rearrange/move/" + g.id, ["cell", {
+									"from": cellsToMove,
+									"to": target
+								}]);	
+							}, 0);
+						}
+					});
+				}
+			});
+		}
+	},
+	copyCells: function(cellsToMove, target){
+		var g = this.grid,
+			s = g.store;
+		if(s.getFeatures()["dojo.data.api.Write"]){
+			if(cellsToMove.min.row == target.min.row && cellsToMove.min.col == target.min.col){
+				return;
+			}
+			var cells = g.layout.cells,
+				cnt = cellsToMove.max.row - cellsToMove.min.row + 1,
+				r, c, tr, tc,
+				targets = [];
+			for(r = cellsToMove.min.row, tr = target.min.row; r <= cellsToMove.max.row; ++r, ++tr){
+				for(c = cellsToMove.min.col, tc = target.min.col; c <= cellsToMove.max.col; ++c, ++tc){
+					while(cells[c] && cells[c].hidden){
+						++c;
+					}
+					while(cells[tc] && cells[tc].hidden){
+						++tc;
+					}
+					targets.push({
+						"r": tr,
+						"c": tc,
+						"v": cells[c].get(r, g._by_idx[r].item)
+					});
+				}
+			}
+			dojo.forEach(targets, function(point){
+				s.setValue(g._by_idx[point.r].item, cells[point.c].field, point.v);
+			});
+			s.save({
+				onComplete: function(){
+					s.fetch({
+						start: target.min.row,
+						count: cnt,
+						onComplete: function(items){
+							for(var i = 0; i < cnt; ++i){
+								g._addItem(items[i], i + target.min.row);
+							}
+							setTimeout(function(){
+								dojo.publish("dojox/grid/rearrange/copy/" + g.id, ["cell", {
+									"from": cellsToMove,
+									"to": target
+								}]);
+							}, 0);
+						}
+					});
+				}
+			});
+		}
+	},
+	changeCells: function(sourceGrid, cellsToMove, target){
+		var g = this.grid,
+			s = g.store;
+		if(s.getFeatures()["dojo.data.api.Write"]){
+			var srcg = sourceGrid,
+				cells = g.layout.cells,
+				srccells = srcg.layout.cells,
+				cnt = cellsToMove.max.row - cellsToMove.min.row + 1,
+				r, c, tr, tc, targets = [];
+			for(r = cellsToMove.min.row, tr = target.min.row; r <= cellsToMove.max.row; ++r, ++tr){
+				for(c = cellsToMove.min.col, tc = target.min.col; c <= cellsToMove.max.col; ++c, ++tc){
+					while(srccells[c] && srccells[c].hidden){
+						++c;
+					}
+					while(cells[tc] && cells[tc].hidden){
+						++tc;
+					}
+					targets.push({
+						"r": tr,
+						"c": tc,
+						"v": srccells[c].get(r, srcg._by_idx[r].item)
+					});
+				}
+			}
+			dojo.forEach(targets, function(point){
+				s.setValue(g._by_idx[point.r].item, cells[point.c].field, point.v);
+			});
+			s.save({
+				onComplete: function(){
+					s.fetch({
+						start: target.min.row,
+						count: cnt,
+						onComplete: function(items){
+							for(var i = 0; i < cnt; ++i){
+								g._addItem(items[i], i + target.min.row);
+							}
+							setTimeout(function(){
+								dojo.publish("dojox/grid/rearrange/change/" + g.id, ["cell", target]);
+							}, 0);
+						}
+					});
+				}
+			});
+		}
+	},
+	clearCells: function(cellsToClear){
+		var g = this.grid,
+			s = g.store;
+		if(s.getFeatures()["dojo.data.api.Write"]){
+			var cells = g.layout.cells,
+				cnt = cellsToClear.max.row - cellsToClear.min.row + 1,
+				r, c;
+			for(r = cellsToClear.min.row; r <= cellsToClear.max.row; ++r){
+				for(c = cellsToClear.min.col; c <= cellsToClear.max.col; ++c){
+					while(cells[c] && cells[c].hidden){
+						++c;
+					}
+					s.setValue(g._by_idx[r].item, cells[c].field, "");
+				}
+			}
+			s.save({
+				onComplete: function(){
+					s.fetch({
+						start: cellsToClear.min.row,
+						count: cnt,
+						onComplete: function(items){
+							for(var i = 0; i < cnt; ++i){
+								g._addItem(items[i], i + cellsToClear.min.row);
+							}
+							setTimeout(function(){
+								dojo.publish("dojox/grid/rearrange/change/" + g.id, ["cell", cellsToClear]);
+							}, 0);
+						}
+					});
+				}
+			});
+		}
+	},
+	insertRows: function(sourceGrid, rowsToMove, targetPos){
+		try{
+			var g = this.grid, s = g.store;
+			if(s.getFeatures()['dojo.data.api.Write']){
+				var srcg = sourceGrid,
+					srcs = srcg.store,
+					rowCnt = g.rowCount,
+					newRows = [],
+					mapping = {},
+					thisItem, i;
+				for(i = 0; !thisItem; ++i){
+					thisItem = g._by_idx[i];
+				}
+				var attrs = s.getAttributes(thisItem.item);
+				var _this = this;
+				var len = rowsToMove.length;
+				for(i = targetPos; i < g.rowCount; ++i){
+					mapping[i] = i + len;
+				}
+				var obj = {
+					idx: 0
+				};
+				var rowsToFetch = [];
+				dojo.forEach(rowsToMove, function(rowIndex, i){
+					var item = {};
+					var srcItem = srcg._by_idx[rowIndex];
+					if(srcItem){
+						dojo.forEach(attrs, function(attr){
+							item[attr] = srcs.getValue(srcItem.item, attr);
+						});
+						item = _this.args.setIdentifierForNewItem(item, s, rowCnt + obj.idx) || item;
+						newRows.push(targetPos + i);
+						mapping[rowCnt + obj.idx] = targetPos + i;
+						try{
+							s.newItem(item);
+						}catch(e){
+							console.log("insertRows newItem:",e,item);
+						}
+						++obj.idx;
+					}else{
+						rowsToFetch.push(rowIndex);
+					}
+				});
+				g.store.layer("rowmap").setMapping(mapping);
+				s.save({
+					onComplete: function(){
+						g._refresh();
+						setTimeout(function(){
+							dojo.publish("dojox/grid/rearrange/insert/" + g.id, ["row", newRows]);
+						}, 0);
+					}
+				});
+			}
+		}catch(e){
+			console.log("insertRows:",e);
+		}
+	},
+	removeRows: function(rowsToRemove){
+		var g = this.grid;
+		var s = g.store;
+		try{
+			dojo.forEach(dojo.map(rowsToRemove, function(rowIndex){
+				return g._by_idx[rowIndex];
+			}), function(row){
+				if(row){
+					s.deleteItem(row.item);
+				}
+			});
+			s.save({
+				onComplete: function(){
+					dojo.publish("dojox/grid/rearrange/remove/" + g.id, ["row", rowsToRemove]);
+				}
+			});
+		}catch(e){
+			console.log("removeRows:",e);
+		}
+	},
+	_getPageInfo: function(){
+		// summary:
+		//		Find pages that contain visible rows
+		// return: Object
+		//		{topPage: xx, bottomPage: xx, invalidPages: [xx,xx,...]}
+		var scroller = this.grid.scroller,
+			topPage = scroller.page, 
+			bottomPage = scroller.page,
+			firstVisibleRow = scroller.firstVisibleRow, 
+			lastVisibleRow = scroller.lastVisibleRow,
+			rowsPerPage = scroller.rowsPerPage,
+			renderedPages = scroller.pageNodes[0],
+			topRow, bottomRow, matched,
+			invalidPages = [];
+		
+		dojo.forEach(renderedPages, function(page, pageIndex){
+			if(!page){ return; }
+			matched = false;
+			topRow = pageIndex * rowsPerPage;
+			bottomRow = (pageIndex + 1) * rowsPerPage - 1;
+			if(firstVisibleRow >= topRow && firstVisibleRow <= bottomRow){
+				topPage = pageIndex;
+				matched = true;
+			}
+			if(lastVisibleRow >= topRow && lastVisibleRow <= bottomRow){
+				bottomPage = pageIndex;
+				matched = true;
+			}
+			if(!matched && (topRow > lastVisibleRow || bottomRow < firstVisibleRow)){
+				invalidPages.push(pageIndex);				
+			}
+		});
+		return {topPage: topPage, bottomPage: bottomPage, invalidPages: invalidPages};
+	}
+});
+dojox.grid.EnhancedGrid.registerPlugin('rearrange', dojox.grid.enhanced.plugins.Rearrange);
