@@ -163,11 +163,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 	//		The SWF. Mostly Internal.
 	flashMovie: null,
 	//
-	//	flashDiv: [readonly] HTMLNode
-	//		DEPRECATED for insideNode
-	//		The div that holds the SWF and form/fileInput
-	flashDiv: null,
-	//
 	//	insideNode: [readonly] HTMLNode
 	//		The div that holds the SWF and form/fileInput
 	insideNode: null,
@@ -548,7 +543,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 				this.insideNode.appendChild(document.createTextNode(this.fhtml.cn));
 			}
 		}
-		this.flashDiv = this.insideNode; //backwards compat - rem in 1.5
 		if(this._hiddenNode){
 			dojo.style(this._hiddenNode, "display", "none");
 		}
@@ -709,12 +703,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			dojo.destroy("file_"+name);
 		}
 	},
-	destroyAll: function(){
-		//	summary:
-		// 		Destroys button
-		console.warn("DEPRECATED for 1.5 - use destroy() instead");
-		this.destroy();
-	},
 
 	destroy: function(){
 		//	summary:
@@ -730,31 +718,14 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		}
 		if(this.uploaderType == "flash"){
 			this.flashObject.destroy();
-			dojo.destroy(this.flashDiv);
+			delete this.flashObject;
 		}else{
 			dojo.destroy(this._fileInput);
 			dojo.destroy(this._formNode);
 		}
 		this.inherited(arguments);
 	},
-	hide: function(){
-		//	summary:
-		//		Hides the upload button.
-		console.warn("DEPRECATED for 1.5 - use dojo.style(domNode, 'display', 'none' instead");
-		dojo.style(this.domNode, 'display', 'none');
-	},
 
-	show: function(){
-		//	summary:
-		//		Shows the upload button. This is called
-		//		when within a dialog.
-		console.warn("DEPRECATED for 1.5 - use dojo.style(domNode, 'display', '') instead");
-		dojo.style(this.domNode, 'display', '');
-	},
-	disable: function(/*Boolean*/disabled){
-		console.warn("DEPRECATED: FileUploader.disable() - will be removed in 1.5. Use set('disable', true) instead.")
-		this.set("disable", disabled);
-	},
 	/*************************
 	 *	   Private Events	 *
 	 *************************/
@@ -764,7 +735,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		//
 		if(display === true){
 			if(this.uploaderType == "flash"){
-				dojo.style(this.insideNode,"left", "-2500px");
+				dojo.style(this.insideNode,"top", "-2500px");
 			}else{
 				dojo.style(this.insideNode,"display", "none");
 			}
