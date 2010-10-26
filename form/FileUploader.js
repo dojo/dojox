@@ -732,7 +732,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			this.flashObject.destroy();
 			dojo.destroy(this.flashDiv);
 		}else{
-			dojo.destroy("dojoIoIframe");
 			dojo.destroy(this._fileInput);
 			dojo.destroy(this._formNode);
 		}
