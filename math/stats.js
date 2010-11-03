@@ -1,7 +1,10 @@
-dojo.provide("dojox.math.stats");
+define([
+	"dojo"
+], function (dojo) {
+	var dm = dojo.getObject("dojox.math", true);
 
-(function(){
-	var st = dojox.math.stats;
+	var st = dm.stats = dm.stats || {};
+
 	dojo.mixin(st, {
 		sd: function(/* Number[] */a){
 			//	summary:
@@ -187,4 +190,6 @@ dojo.provide("dojox.math.stats");
 			return result;	// Object
 		}
 	});
-})();
+
+	return dm.stats;
+});

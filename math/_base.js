@@ -1,8 +1,9 @@
-dojo.provide("dojox.math._base");
-
-(function(){
-	var m = dojox.math;
-	dojo.mixin(dojox.math, {
+define([
+	"dojo"
+], function (dojo) {
+	var m = dojo.getObject("dojox.math", true);
+	
+	return dojo.mixin(m, {
 		toRadians: function(/* Number */n){
 			//	summary:
 			//		Convert the passed number to radians.
@@ -156,4 +157,4 @@ dojo.provide("dojox.math._base");
 			return m;	//	Array
 		}
 	});
-})();
+});

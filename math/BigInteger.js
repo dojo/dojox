@@ -1,14 +1,17 @@
-dojo.provide("dojox.math.BigInteger");
-dojo.experimental("dojox.math.BigInteger");
-
-// Contributed under CLA by Tom Wu <tjw@cs.Stanford.EDU>
-// See http://www-cs-students.stanford.edu/~tjw/jsbn/ for details.
-
-// Basic JavaScript BN library - subset useful for RSA encryption.
-// The API for dojox.math.BigInteger closely resembles that of the java.math.BigInteger class in Java.
-
-(function(){
-
+define([
+	"dojo"
+], function (dojo) {
+	// export to DojoX
+	var dm = dojo.getObject("dojox.math", true);
+	
+	dojo.experimental("dojox.math.BigInteger");
+	
+	// Contributed under CLA by Tom Wu <tjw@cs.Stanford.EDU>
+	// See http://www-cs-students.stanford.edu/~tjw/jsbn/ for details.
+	
+	// Basic JavaScript BN library - subset useful for RSA encryption.
+	// The API for dojox.math.BigInteger closely resembles that of the java.math.BigInteger class in Java.
+	
 	// Bits per digit
 	var dbits;
 
@@ -581,6 +584,7 @@ dojo.experimental("dojox.math.BigInteger");
 		_Montgomery: Montgomery
 	});
 
-	// export to DojoX
-	dojox.math.BigInteger = BigInteger;
-})();
+	dm.BigInteger = BigInteger;
+	
+	return BigInteger;
+});
