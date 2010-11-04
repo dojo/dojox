@@ -1,7 +1,4 @@
-define([
-	"dojo",
-	"./_base"
-], function (dojo, dm) {
+define("dojox/math/curves", ["dojo", "dojox/math/_base"], function (dojo, dm) {
 	var curves = {
 		Line:function (start, end) {
 			this.start = start;
@@ -191,5 +188,6 @@ define([
 	};
 
 	// XXX: is a mixin needed?	the dependency on dojo can be removed if the mixin is not required
-	return dm.curves = dojo.mixin(dm.curves || {}, curves);
+	dm.curves = dojo.mixin(dm.curves || {}, curves);
+	return dm.curves;
 });

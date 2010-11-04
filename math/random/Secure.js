@@ -1,6 +1,4 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/random/Secure", ["dojo"], function (dojo) {
 	// XXX: remove the dependency on dojo if the global can be removed
 	var dmr = dojo.getObject("dojox.math.random", true);
 	

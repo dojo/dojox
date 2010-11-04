@@ -1,6 +1,4 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/matrix", ["dojo"], function (dojo) {
 	
 	var dm = dojo.getObject("dojox.math", true);
 	
@@ -294,5 +292,6 @@ define([
 	};
 	
 	// XXX: is a mixin needed?	the dependency on dojo can be removed if the mixin is not required
-	return dm.matrix = dojo.mixin(dm.matrix || {}, matrix);
+	dm.matrix = dojo.mixin(dm.matrix || {}, matrix);
+	return dm.matrix;
 });

@@ -1,6 +1,4 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/random/prng4", ["dojo"], function (dojo) {
 	// XXX: remove the dependency on dojo if the global can be removed
 	var dmr = dojo.getObject("dojox.math.random", true);
 	
@@ -45,7 +43,7 @@ define([
 			S[j] = t;
 			return S[(t + S[i]) & 255];
 		}
-	}
+	};
 	
 	var prng4 = function(){
 		return new Arcfour();

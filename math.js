@@ -1,2 +1,3 @@
-dojo.provide("dojox.math");
-dojo.require("dojox.math._base");
+define("dojox/math", ["dojox/math/_base"], function (dm) {
+	return dm;
+});

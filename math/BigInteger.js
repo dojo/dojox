@@ -1,6 +1,4 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/BigInteger", ["dojo"], function (dojo) {
 	// export to DojoX
 	var dm = dojo.getObject("dojox.math", true);
 	

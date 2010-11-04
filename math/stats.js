@@ -1,6 +1,4 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/stats", ["dojo"], function (dojo) {
 	var dm = dojo.getObject("dojox.math", true);
 
 	var st = dm.stats = dm.stats || {};

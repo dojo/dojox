@@ -1,6 +1,4 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/round", ["dojo"], function (dojo) {
 	// XXX: remove the dependency on dojo if the global can be removed
 	var dm = dojo.getObject("dojox.math");
 
@@ -53,7 +51,7 @@ define([
 	if((0.9).toFixed() == 0){
 		// (isIE) toFixed() bug workaround: Rounding fails on IE when most significant digit
 		// is just after the rounding place and is >=5
-		return dm.round = function(v, p, m){
+		dm.round = function(v, p, m){
 			var d = Math.pow(10, -p || 0), a = Math.abs(v);
 			if(!v || a >= d || a * Math.pow(10, p + 1) < 5){
 				d = 0;
@@ -62,5 +60,5 @@ define([
 		};
 	}
 
-	return round;
+	return dm.round;
 });

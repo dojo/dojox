@@ -1,7 +1,4 @@
-define([
-	"dojo",
-	"./BigInteger"
-], function (dojo, BigInteger) {
+define("dojox/math/BigInteger-ext", ["dojo", "dojox/math/BigInteger"], function (dojo, BigInteger) {
 	dojo.experimental("dojox.math.BigInteger-ext");
 	
 	// Contributed under CLA by Tom Wu

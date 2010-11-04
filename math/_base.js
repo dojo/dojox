@@ -1,9 +1,7 @@
-define([
-	"dojo"
-], function (dojo) {
+define("dojox/math/_base", ["dojo"], function (dojo) {
 	var m = dojo.getObject("dojox.math", true);
 	
-	return dojo.mixin(m, {
+	dojo.mixin(m, {
 		toRadians: function(/* Number */n){
 			//	summary:
 			//		Convert the passed number to radians.
@@ -157,4 +155,6 @@ define([
 			return m;	//	Array
 		}
 	});
+	
+	return m;
 });
