@@ -1,6 +1,4 @@
-dojo.provide("dojox.data.JsonQueryRestStore");
-dojo.require("dojox.data.JsonRestStore");
-dojo.require("dojox.data.util.JsonQuery");
+define("dojox/data/JsonQueryRestStore", ["dojo", "dojox", "dojox/data/JsonRestStore", "dojox/data/util/JsonQuery"], function(dojo, dojox) {
 
 dojo.requireIf(!!dojox.data.ClientFilter,"dojox.json.query"); // this is so we can perform queries locally 
 
@@ -12,4 +10,7 @@ dojo.declare("dojox.data.JsonQueryRestStore",[dojox.data.JsonRestStore,dojox.dat
 	matchesQuery: function(item,request){
 		return item.__id && (item.__id.indexOf("#") == -1) && this.inherited(arguments);
 	}
+});
+
+return dojox.data.JsonQueryRestStore;
 });

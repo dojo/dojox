@@ -1,7 +1,4 @@
-dojo.provide("dojox.data.SnapLogicStore");
-
-dojo.require("dojo.io.script");
-dojo.require("dojo.data.util.sorter");
+define("dojox/data/SnapLogicStore", ["dojo", "dojox", "dojo/io/script", "dojo/data/util/sorter"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.SnapLogicStore", null, {
 	Parts: {
@@ -324,5 +321,8 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 			
 		return request;			// Object
 	}
+});
+
+return dojox.data.SnapLogicStore;
 });
 
