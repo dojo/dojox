@@ -1,7 +1,6 @@
-dojo.provide("dojox.data.GoogleFeedStore");
-dojo.experimental("dojox.data.GoogleFeedStore");
+define("dojox/data/GoogleFeedStore", ["dojo", "dojox", "dojox/data/GoogleSearchStore"], function(dojo, dojox) {
 
-dojo.require("dojox.data.GoogleSearchStore");
+dojo.experimental("dojox.data.GoogleFeedStore");
 
 dojo.declare("dojox.data.GoogleFeedStore", dojox.data.GoogleSearchStore,{
 	// summary:
@@ -72,4 +71,7 @@ dojo.declare("dojox.data.GoogleFeedStore", dojox.data.GoogleSearchStore,{
 		cb.num = (request.count || 10) + (request.start || 0);
 		return cb;
 	}
+});
+
+return dojox.data.GoogleFeedStore;
 });
