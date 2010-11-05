@@ -1,9 +1,6 @@
-dojo.provide("dojox.data.XmlStore");
-dojo.provide("dojox.data.XmlItem");
+define("dojox/data/XmlStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/xml/parser"], function(dojo, dojox) {
 
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.data.util.filter");
-dojo.require("dojox.xml.parser");
+dojo.provide("dojox.data.XmlItem");
 
 dojo.declare("dojox.data.XmlStore", null, {
 	//	summary:
@@ -1515,3 +1512,6 @@ dojo.declare("dojox.data.XmlItem", null, {
 	}
 });
 dojo.extend(dojox.data.XmlStore,dojo.data.util.simpleFetch);
+
+return dojox.data.XmlStore;
+});

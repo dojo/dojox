@@ -1,5 +1,4 @@
-dojo.provide("dojox.data.CdfStore");
-dojo.require("dojo.data.util.sorter");
+define("dojox/data/CdfStore", ["dojo", "dojox", "dojo/data/util/sorter"], function(dojo, dojox) {
 
 dojox.data.ASYNC_MODE = 0;
 dojox.data.SYNC_MODE = 1;
@@ -593,5 +592,8 @@ dojo.declare("dojox.data.CdfStore", null, {
 		// stub. See fetchItemByIdentity
 	}
 	
+});
+
+return dojox.data.CdfStore;
 });
 

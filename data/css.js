@@ -1,6 +1,7 @@
-dojo.provide('dojox.data.css');
-dojo.provide('dojox.data.css.rules');
+define("dojox/data/css", ["dojo", "dojox"], function(dojo, dojox) {
 
+dojox.data.css.rules = {};
+		
 dojox.data.css.rules.forEach = function(fn,ctx,context){
 	if(context){
 		var _processSS = function(styleSheet){
@@ -93,3 +94,7 @@ dojox.data.css.determineContext = function(initialStylesheets){
 	dojo.forEach(initialStylesheets,_processSS);
 	return ret;
 };
+
+return dojox.data.css;
+
+});

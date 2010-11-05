@@ -1,8 +1,4 @@
-dojo.provide("dojox.data.CssRuleStore");
-
-dojo.require("dojo.data.util.filter");
-dojo.require("dojo.data.util.sorter");
-dojo.require("dojox.data.css");
+define("dojox/data/CssRuleStore", ["dojo", "dojox", "dojo.data.util.sorter", "dojo/data/util/filter", "dojox/data/css"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.CssRuleStore", null, {
 	//	summary:
@@ -460,4 +456,8 @@ dojo.declare("dojox.data.CssRuleStore", null, {
 			return false;
 		});
 	}
+});
+
+return dojox.data.CssRuleStore;
+
 });

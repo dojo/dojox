@@ -1,8 +1,4 @@
-dojo.provide("dojox.data.AndOrReadStore");
-
-dojo.require("dojo.data.util.filter");
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.date.stamp");
+define("dojox/data/AndOrReadStore", ["dojo", "dojox", "dojo/data/util/filter", "dojo/data/util/simpleFetch", "dojo/date/stamp"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.AndOrReadStore", null,{
 	//	summary:
@@ -1039,5 +1035,8 @@ dojo.declare("dojox.data.AndOrReadStore", null,{
 });
 //Mix in the simple fetch implementation to this class.
 dojo.extend(dojox.data.AndOrReadStore,dojo.data.util.simpleFetch);
+
+return dojox.data.AndOrReadStore;
+});
 
 

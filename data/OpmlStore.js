@@ -1,7 +1,4 @@
-dojo.provide("dojox.data.OpmlStore");
-
-dojo.require("dojo.data.util.filter");
-dojo.require("dojo.data.util.simpleFetch");
+define("dojox/data/OpmlStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.OpmlStore", null, {
 	/* summary:
@@ -520,4 +517,7 @@ dojo.declare("dojox.data.OpmlStore", null, {
 });
 //Mix in the simple fetch implementation to this class.
 dojo.extend(dojox.data.OpmlStore,dojo.data.util.simpleFetch);
+
+return dojox.data.OpmlStore;
+});
 	

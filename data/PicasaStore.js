@@ -1,8 +1,4 @@
-dojo.provide("dojox.data.PicasaStore");
-
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.io.script");
-dojo.require("dojo.date.stamp");
+define("dojox/data/PicasaStore", ["dojo", "dojox", "dojo/io/script", "dojo/data/util/simpleFetch", "dojo/date/stamp"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.PicasaStore", null, {
 	constructor: function(/*Object*/args){
@@ -270,3 +266,7 @@ dojo.declare("dojox.data.PicasaStore", null, {
 	}
 });
 dojo.extend(dojox.data.PicasaStore,dojo.data.util.simpleFetch);										  
+
+return dojox.data.PicasaStore;
+
+});

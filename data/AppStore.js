@@ -1,8 +1,4 @@
-dojo.provide("dojox.data.AppStore");
-
-dojo.require("dojox.atom.io.Connection");
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.data.util.filter");
+define("dojox/data/AppStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/atom/io/Connection"], function(dojo, dojox) {
 
 dojo.experimental("dojox.data.AppStore");
 
@@ -827,3 +823,6 @@ dojo.declare("dojox.data.AppStore",
 	}
 });
 dojo.extend(dojox.data.AppStore,dojo.data.util.simpleFetch);
+
+return dojox.data.AppStore;
+});

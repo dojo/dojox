@@ -1,8 +1,4 @@
-dojo.provide("dojox.data.HtmlStore");
-
-dojo.require("dojox.xml.parser");
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.data.util.filter");
+define("dojox/data/HtmlStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/xml/parser"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.HtmlStore", null, {
 	constructor: function(/*Object*/args){
@@ -556,3 +552,5 @@ dojo.declare("dojox.data.HtmlStore", null, {
 	}
 });
 dojo.extend(dojox.data.HtmlStore,dojo.data.util.simpleFetch);
+return dojox.data.HtmlStore;
+});

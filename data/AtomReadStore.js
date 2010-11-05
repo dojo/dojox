@@ -1,9 +1,4 @@
-dojo.provide("dojox.data.AtomReadStore");
-
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojo.data.util.filter");
-dojo.require("dojo.date.stamp");
-
+define("dojox/data/AtomReadStore", ["dojo", "dojox", "dojo/data/util/filter", "dojo/data/util/simpleFetch", "dojo/date/stamp"], function(dojo, dojox) {
 dojo.experimental("dojox.data.AtomReadStore");
 
 dojo.declare("dojox.data.AtomReadStore", null, {
@@ -550,3 +545,6 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 	}
 });
 dojo.extend(dojox.data.AtomReadStore,dojo.data.util.simpleFetch);
+
+return dojox.data.AtomReadStore;
+});

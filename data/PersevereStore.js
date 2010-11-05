@@ -1,6 +1,4 @@
-dojo.provide("dojox.data.PersevereStore");
-dojo.require("dojox.data.JsonQueryRestStore");
-dojo.require("dojox.rpc.Client"); // Persevere supports this and it improves reliability
+define("dojox/data/PersevereStore", ["dojo", "dojox", "dojox/data/JsonQueryRestStore", "dojox/rpc/Client"], function(dojo, dojox) {
 
 // PersevereStore is an extension of JsonRestStore to handle Persevere's special features
 
@@ -108,3 +106,7 @@ dojox.data.PersevereStore.addProxy = function(){
 	dojo.require("dojox.io.xhrPlugins"); // also not necessary, but we can register that Persevere supports proxying
 	dojox.io.xhrPlugins.addProxy("/proxy/");
 };
+
+return dojox.data.PersevereStore;
+
+});

@@ -1,7 +1,4 @@
-dojo.provide("dojox.data.KeyValueStore");
-
-dojo.require("dojo.data.util.filter");
-dojo.require("dojo.data.util.simpleFetch");
+define("dojox/data/KeyValueStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.KeyValueStore", null, {
 	//	summary:
@@ -389,3 +386,5 @@ dojo.declare("dojox.data.KeyValueStore", null, {
 });
 //Mix in the simple fetch implementation to this class.
 dojo.extend(dojox.data.KeyValueStore,dojo.data.util.simpleFetch);
+return dojox.data.KeyValueStore;
+});

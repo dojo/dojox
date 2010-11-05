@@ -1,4 +1,4 @@
-dojo.provide("dojox.data.FileStore");
+define("dojox/data/FileStore", ["dojo", "dojox"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.FileStore", null, {
 	constructor: function(/*Object*/args){
@@ -427,3 +427,5 @@ dojo.declare("dojox.data.FileStore", null, {
 	}
 });
 
+return dojox.data.FileStore;
+});

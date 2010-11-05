@@ -1,4 +1,5 @@
-dojo.provide("dojox.data.GoogleSearchStore");
+define("dojox/data/GoogleSearchStore", ["dojo", "dojox", "dojo/io/script"], function(dojo, dojox) {
+
 dojo.provide("dojox.data.GoogleWebSearchStore");
 dojo.provide("dojox.data.GoogleBlogSearchStore");
 dojo.provide("dojox.data.GoogleLocalSearchStore");
@@ -6,8 +7,6 @@ dojo.provide("dojox.data.GoogleVideoSearchStore");
 dojo.provide("dojox.data.GoogleNewsSearchStore");
 dojo.provide("dojox.data.GoogleBookSearchStore");
 dojo.provide("dojox.data.GoogleImageSearchStore");
-
-dojo.require("dojo.io.script");
 
 dojo.experimental("dojox.data.GoogleSearchStore");
 
@@ -648,4 +647,7 @@ dojo.declare("dojox.data.GoogleImageSearchStore", dojox.data.GoogleSearchStore,{
 			"originalContextUrl", "width", "height", "tbWidth", "tbHeight", 
 			"tbUrl", "content", "contentNoFormatting"],
 	_aggregatedAttributes: { }
+});
+
+return dojox.data.GoogleSearchStore;
 });

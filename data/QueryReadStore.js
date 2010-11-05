@@ -1,7 +1,4 @@
-dojo.provide("dojox.data.QueryReadStore");
-
-dojo.require("dojo.string");
-dojo.require("dojo.data.util.sorter");
+define("dojox/data/QueryReadStore", ["dojo", "dojox", "dojo.data.util.sorter", "dojo/string"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.QueryReadStore",
 	null,
@@ -513,3 +510,6 @@ dojo.declare("dojox.data.QueryReadStore",
 		}
 	}
 );
+
+return dojox.data.QueryReadStore;
+});

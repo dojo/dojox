@@ -1,7 +1,4 @@
-dojo.provide("dojox.data.CsvStore");
-
-dojo.require("dojo.data.util.filter");
-dojo.require("dojo.data.util.simpleFetch");
+define("dojox/data/CsvStore", ["dojo", "dojox", "dojo/data/util/filter", "dojo/data/util/simpleFetch"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.CsvStore", null, {
 	// summary:
@@ -723,3 +720,6 @@ dojo.declare("dojox.data.CsvStore", null, {
 });
 //Mix in the simple fetch implementation to this class.
 dojo.extend(dojox.data.CsvStore,dojo.data.util.simpleFetch);
+
+return dojox.data.CsvStore;
+});

@@ -1,5 +1,4 @@
-dojo.provide("dojox.data.AndOrWriteStore");
-dojo.require("dojox.data.AndOrReadStore");
+define("dojox/data/AndOrWriteStore", ["dojo", "dojox", "dojox/data/AndOrReadStore"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.AndOrWriteStore", dojox.data.AndOrReadStore, {
 	constructor: function(/* object */ keywordParameters){
@@ -804,4 +803,7 @@ dojo.declare("dojox.data.AndOrWriteStore", dojox.data.AndOrReadStore, {
 			}
 		}
 	}
+});
+
+return dojox.data.AndOrWriteStore;
 });

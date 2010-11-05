@@ -1,6 +1,4 @@
-dojo.provide("dojox.data.CssClassStore");
-
-dojo.require("dojox.data.CssRuleStore");
+define("dojox/data/CssClassStore", ["dojo", "dojox", "dojox.data.CssRuleStore"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 	//	summary:
@@ -155,4 +153,7 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 		}
 		return request;
 	}
+});
+
+return dojox.data.CssClassStore;
 });
