@@ -1,5 +1,4 @@
-dojo.provide("dojox.data.dom");
-dojo.require("dojox.xml.parser");
+define("dojox/data/dom", ["dojo", "dojox", "dojox/xml/parser"], function(dojo, dojox) {
 
 //DOM type to int value for reference.
 //Ints make for more compact code than full constant names.
@@ -92,4 +91,8 @@ dojox.data.dom.innerXML = function(/*Node*/node){
 	dojo.deprecated("dojox.data.dom.innerXML()", "Use dojox.xml.parser.innerXML() instead.", "2.0");
 	return dojox.xml.parser.innerXML(node); //string||null
 };
+
+return dojox.data.dom;
+
+});
 
