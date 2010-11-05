@@ -1,5 +1,5 @@
-dojo.provide("dojox.data.ClientFilter");
-dojo.require("dojo.data.util.filter"); 
+define("dojox/data/ClientFilter", ["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
+
 // This is an abstract data store module for adding updateable result set functionality to an existing data store class
 (function(){
 	var cf;
@@ -290,3 +290,6 @@ dojo.require("dojo.data.util.filter");
 	);
 	cf.onUpdate = function(){};
 })();
+
+return dojox.data.ClientFilter;
+});
