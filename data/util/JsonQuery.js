@@ -1,4 +1,5 @@
-dojo.provide("dojox.data.util.JsonQuery");
+define("dojox/data/util/JsonQuery", ["dojo", "dojox"], function(dojo, dojox) {
+
 // this is a mixin to convert object attribute queries to 
 // JSONQuery/JSONPath syntax to be sent to the server.
 dojo.declare("dojox.data.util.JsonQuery", null, {
@@ -91,4 +92,7 @@ dojo.declare("dojox.data.util.JsonQuery", null, {
 		return this.inherited(arguments);
 	}
 	
+});
+
+return dojox.data.util.JsonQuery;
 });
