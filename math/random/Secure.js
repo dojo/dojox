@@ -1,18 +1,18 @@
-define("dojox/math/random/Secure", ["dojo"], function (dojo) {
-	// XXX: remove the dependency on dojo if the global can be removed
-	var dmr = dojo.getObject("dojox.math.random", true);
-	
-	// Copyright (c) 2005  Tom Wu
-	// All Rights Reserved.
-	// See "LICENSE-BigInteger" for details.
-	
-	// Random number generator - requires a PRNG backend, e.g. prng4.js
-	
+// AMD-ID "dojox/math/random/Secure"
+define(["dojo"], function(dojo) {
+
+// Copyright (c) 2005  Tom Wu
+// All Rights Reserved.
+// See "LICENSE-BigInteger" for details.
+
+// Random number generator - requires a PRNG backend, e.g. prng4.js
+
+dojo.declare("dojox.math.random.Secure", null, {
 	// summary:
 	//	Super simple implementation of a random number generator,
 	//	which relies on Math.random().
-	
-	var Secure = dmr.Secure = function(prng, noEvents){
+
+	constructor: function(prng, noEvents){
 		// summary:
 		//	Intializes an instance of a secure random generator.
 		// prng: Function:
@@ -40,60 +40,59 @@ define("dojox/math/random/Secure", ["dojo"], function (dojo) {
 				dojo.connect(dojo.body(), "onkeypress", this, "seedTime")
 			];
 		}
-	};
-	
-	Secure.prototype = {
-		destroy: function(){
-			// summary:
-			//	Disconnects events, if any, preparing the object for GC.
-			if(this.h){
-				dojo.forEach(this.h, dojo.disconnect);
-			}
-		},
-	
-		nextBytes: function(/* Array */ byteArray){
-			// summary:
-			//	Fills in an array of bytes with random numbers
-			// byteArray: Array:
-			//	array to be filled in with random numbers, only existing
-			//	elements will be filled.
-	
-			var state = this.state;
-	
-			if(!state){
-				this.seedTime();
-				state = this.state = this.prng();
-				state.init(this.pool);
-				for(var p = this.pool, i = 0, len = p.length; i < len; p[i++] = 0);
-				this.pptr = 0;
-				//this.pool = null;
-			}
-	
-			for(var i = 0, len = byteArray.length; i < len; ++i){
-				byteArray[i] = state.next();
-			}
-		},
-	
-		seedTime: function() {
-			// summary:
-			//	Mix in the current time (w/milliseconds) into the pool
-			this._seed_int(new Date().getTime());
-		},
-	
-		_seed_int: function(x) {
-			// summary:
-			//	Mix in a 32-bit integer into the pool
-			var p = this.pool, i = this.pptr;
-			p[i++] ^= x & 255;
-			p[i++] ^= (x >> 8) & 255;
-			p[i++] ^= (x >> 16) & 255;
-			p[i++] ^= (x >> 24) & 255;
-			if(i >= this.prng.size){
-				i -= this.prng.size;
-			}
-			this.pptr = i;
+	},
+
+	destroy: function(){
+		// summary:
+		//	Disconnects events, if any, preparing the object for GC.
+		if(this.h){
+			dojo.forEach(this.h, dojo.disconnect);
 		}
-	};
-	
-	return Secure;
+	},
+
+	nextBytes: function(/* Array */ byteArray){
+		// summary:
+		//	Fills in an array of bytes with random numbers
+		// byteArray: Array:
+		//	array to be filled in with random numbers, only existing
+		//	elements will be filled.
+
+		var state = this.state;
+
+		if(!state){
+			this.seedTime();
+			state = this.state = this.prng();
+			state.init(this.pool);
+			for(var p = this.pool, i = 0, len = p.length; i < len; p[i++] = 0);
+			this.pptr = 0;
+			//this.pool = null;
+		}
+
+		for(var i = 0, len = byteArray.length; i < len; ++i){
+			byteArray[i] = state.next();
+		}
+	},
+
+	seedTime: function() {
+		// summary:
+		//	Mix in the current time (w/milliseconds) into the pool
+		this._seed_int(new Date().getTime());
+	},
+
+	_seed_int: function(x) {
+		// summary:
+		//	Mix in a 32-bit integer into the pool
+		var p = this.pool, i = this.pptr;
+		p[i++] ^= x & 255;
+		p[i++] ^= (x >> 8) & 255;
+		p[i++] ^= (x >> 16) & 255;
+		p[i++] ^= (x >> 24) & 255;
+		if(i >= this.prng.size){
+			i -= this.prng.size;
+		}
+		this.pptr = i;
+	}
+});
+
+return dojox.math.random.Secure;
 });

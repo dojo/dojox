@@ -1,14 +1,17 @@
-define("dojox/math/BigInteger-ext", ["dojo", "dojox/math/BigInteger"], function (dojo, BigInteger) {
-	dojo.experimental("dojox.math.BigInteger-ext");
-	
-	// Contributed under CLA by Tom Wu
-	
-	// Extended JavaScript BN functions, required for RSA private ops.
+// AMD-ID "dojox/math/BigInteger-ext"
+define(["dojo", "dojox", "dojox/math/BigInteger"], function(dojo, dojox) {
+dojo.experimental("dojox.math.BigInteger-ext");
 
-	var nbi = BigInteger._nbi, nbv = BigInteger._nbv,
+// Contributed under CLA by Tom Wu
+
+// Extended JavaScript BN functions, required for RSA private ops.
+
+(function(){
+	var BigInteger = dojox.math.BigInteger,
+		nbi = BigInteger._nbi, nbv = BigInteger._nbv,
 		nbits = BigInteger._nbits,
 		Montgomery = BigInteger._Montgomery;
-	
+
 	// (public)
 	function bnClone() { var r = nbi(); this._copyTo(r); return r; }
 
@@ -650,6 +653,8 @@ define("dojox/math/BigInteger-ext", ["dojo", "dojox/math/BigInteger"], function 
 	// int hashCode()
 	// long longValue()
 	// static BigInteger valueOf(long val)
-	
-	return BigInteger;
+
+})();
+
+return dojox.math.BigInteger;
 });

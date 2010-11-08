@@ -1,10 +1,12 @@
-define("dojox/math/random/prng4", ["dojo"], function (dojo) {
-	// XXX: remove the dependency on dojo if the global can be removed
-	var dmr = dojo.getObject("dojox.math.random", true);
-	
-	// Copyright (c) 2005  Tom Wu
-	// All Rights Reserved.
-	// See "LICENSE-BigInteger" for details.
+// AMD-ID "dojox/math/random/prng4"
+define(["dojo", "dojox"], function(dojo, dojox) {
+dojo.getObject("math.random.prng4", true, dojox);
+
+// Copyright (c) 2005  Tom Wu
+// All Rights Reserved.
+// See "LICENSE-BigInteger" for details.
+
+(function(){
 	// prng4.js - uses Arcfour as a PRNG
 
 	function Arcfour() {
@@ -13,7 +15,7 @@ define("dojox/math/random/prng4", ["dojo"], function (dojo) {
 		this.S = new Array(256);
 	}
 
-	Arcfour.prototype = {
+	dojo.extend(Arcfour, {
 		init: function(key){
 			// summary:
 			//	Initialize arcfour context
@@ -43,17 +45,16 @@ define("dojox/math/random/prng4", ["dojo"], function (dojo) {
 			S[j] = t;
 			return S[(t + S[i]) & 255];
 		}
-	};
-	
-	var prng4 = function(){
+	});
+
+	dojox.math.random.prng4 = function(){
 		return new Arcfour();
 	};
 
 	// Pool size must be a multiple of 4 and greater than 32.
 	// An array of bytes the size of the pool will be passed to init()
-	prng4.size = 256;
-	
-	dmr.prng4 = prng4;
-	
-	return prng4;
+	dojox.math.random.prng4.size = 256;
+})();
+
+return dojox.math.random.prng4;
 });
