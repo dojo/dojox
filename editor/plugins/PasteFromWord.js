@@ -1,13 +1,4 @@
-dojo.provide("dojox.editor.plugins.PasteFromWord");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.Dialog");
-dojo.require("dojo.i18n");
-dojo.require("dojo.string");
-dojo.require("dojox.html.format");
-
-dojo.requireLocalization("dojox.editor.plugins", "PasteFromWord");
+define("dojox/editor/plugins/PasteFromWord", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/Dialog", "dojo/i18n", "dojox/html/format", "i18n!dojox/editor/plugins/nls/PasteFromWord"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 	// summary:
@@ -209,4 +200,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			height: ("height" in o.args)?o.args.width:"300px"
 		});
 	}
+});
+
 });

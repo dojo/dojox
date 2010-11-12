@@ -1,19 +1,4 @@
-dojo.provide("dojox.editor.plugins.AutoSave");
-
-dojo.require("dojox.editor.plugins.Save");
-dojo.require("dojo.date.locale");
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.Menu");
-dojo.require("dijit.MenuItem");
-dojo.require("dijit.Dialog");
-dojo.require("dojo.i18n");
-dojo.require("dojo.string");
-
-dojo.requireLocalization("dojox.editor.plugins", "AutoSave");
+define("dojox/editor/plugins/AutoSave", ["dojo", "dijit", "dojox", "dojo/string", "dojo/date/locale", "dijit/Dialog", "dijit/MenuItem", "dijit.Menu", "dijit/form/Button", "dijit/form/ComboBox", "dijit/form/TextBox", "dijit/TooltipDialog", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "dojox/editor/plugins/Save", "i18n!dojox/editor/plugins/nls/AutoSave"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.AutoSave");
 
@@ -417,4 +402,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			interval: ("interval" in o.args) ? o.args.interval : 5
 		});
 	}
+});
+
 });
