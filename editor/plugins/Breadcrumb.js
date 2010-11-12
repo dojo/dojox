@@ -1,19 +1,6 @@
-dojo.provide("dojox.editor.plugins.Breadcrumb");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit._editor.range");
-dojo.require("dojo.i18n");
-dojo.require("dojo.string");
-dojo.require("dijit.Toolbar");
-dojo.require("dijit.form.Button");
-dojo.require("dijit._editor.selection");
-dojo.require("dijit.Menu");
-dojo.require("dijit.MenuItem");
-dojo.require("dijit.MenuSeparator");
+define("dojox/editor/plugins/Breadcrumb", ["dojo", "dijit", "dojox", "dojo/string", "dijit/Toolbar", "dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator", "dijit/_editor/range", "dijit/_editor/selection", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "i18n!dojox/editor/plugins/nls/Breadcrumb"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.Breadcrumb");
-
-dojo.requireLocalization("dojox.editor.plugins", "Breadcrumb");
 
 dojo.declare("dojox.editor.plugins._BreadcrumbMenuTitle",[dijit._Widget, dijit._Templated, dijit._Contained],{
 	// summary:
@@ -348,4 +335,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name === "breadcrumb"){
 		o.plugin = new dojox.editor.plugins.Breadcrumb({});
 	}
+});
+
 });

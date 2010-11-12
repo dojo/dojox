@@ -1,10 +1,4 @@
-dojo.provide("dojox.editor.plugins.Blockquote");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.form.Button");
-dojo.require("dojo.i18n");
-
-dojo.requireLocalization("dojox.editor.plugins", "Blockquote");
+define("dojox/editor/plugins/Blockquote", ["dojo", "dijit", "dojox", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "i18n!dojox/editor/plugins/nls/Blockquote"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.Blockquote",dijit._editor._Plugin,{
 	//	summary:
@@ -510,4 +504,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name === "blockquote"){
 		o.plugin = new dojox.editor.plugins.Blockquote({});
 	}
+});
+
 });
