@@ -1,7 +1,4 @@
-dojo.provide("dojox.editor.plugins.PrettyPrint");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dojox.html.format");
+define("dojox/editor/plugins/PrettyPrint", ["dojo", "dijit", "dojox", "dijit/_editor/_Plugin", "dojox/html/format"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.PrettyPrint",dijit._editor._Plugin,{
 	// summary:
@@ -97,4 +94,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			xhtml: ("xhtml" in o.args)?o.args.xhtml:false
 		});
 	}
+});
+
 });
