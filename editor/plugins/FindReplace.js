@@ -443,7 +443,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 			_tb.addChild(this._replaceField);
 
 			// Define the Find/Replace/ReplaceAll buttons.
-			_tb.addChild(new dojox.editor.plugins._ToolbarLineBreak());
+			_tb.addChild(new dojox.editor.plugins.ToolbarLineBreak());
 			
 			this._findButton = new dijit.form.Button({label: this._strings["findButton"], showLabel: true, 
 				iconClass: this.iconClassPrefix + " dijitEditorIconFind"});

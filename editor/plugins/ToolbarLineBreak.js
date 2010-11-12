@@ -1,10 +1,10 @@
-dojo.provide("dojox.editor.plugins.ToolbarLineBreak");
+define("dojox/editor/plugins/ToolbarLineBreak", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/_editor/_Plugin"], function(dojo, dijit, dojox) {
 
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dijit._editor._Plugin");
 
-dojo.declare("dojox.editor.plugins._ToolbarLineBreak",
+dojo.declare("dojox.editor.plugins.ToolbarLineBreak",
 	[ dijit._Widget, dijit._Templated ],
 	{
 	// summary:
@@ -28,10 +28,14 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	var name = o.args.name.toLowerCase();
 	if(name ===  "||" || name === "toolbarlinebreak"){
 		o.plugin = new dijit._editor._Plugin({
-			button: new dojox.editor.plugins._ToolbarLineBreak(),
+			button: new dojox.editor.plugins.ToolbarLineBreak(),
 			setEditor: function(editor){
 				this.editor = editor;
 			}
 		});
 	}
+});
+
+return dojox.editor.plugins.ToolbarLineBreak;
+
 });

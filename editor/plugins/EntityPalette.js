@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/EntityPalette", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/_editor/_PaletteMixin", "dojo/i18n", "i18n!dojox/editor/plugins/nls/latinEntities"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/EntityPalette", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/_PaletteMixin", "dojo/i18n", "i18n!dojox/editor/plugins/nls/latinEntities"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.EntityPalette");
 
