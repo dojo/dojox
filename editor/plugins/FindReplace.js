@@ -1,16 +1,4 @@
-dojo.provide("dojox.editor.plugins.FindReplace");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.Toolbar");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dojox.editor.plugins.ToolbarLineBreak");
-dojo.require("dojo.i18n");
-dojo.require("dojo.string");
-
-dojo.requireLocalization("dojox.editor.plugins", "FindReplace");
+define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.FindReplace");
 
@@ -831,4 +819,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name ===  "findreplace"){
 		o.plugin = new dojox.editor.plugins.FindReplace({});
 	}
+});
+
 });

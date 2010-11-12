@@ -1,17 +1,4 @@
-dojo.provide("dojox.editor.plugins.InsertAnchor");
-
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.ValidationTextBox");
-dojo.require("dijit.form.Select");
-dojo.require("dijit._editor.range");
-dojo.require("dojo.i18n");
-dojo.require("dojo.string");
-dojo.requireLocalization("dijit", "common");
-dojo.requireLocalization("dojox.editor.plugins", "InsertAnchor");
+define("dojox/editor/plugins/InsertAnchor", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_editor/range", "dijit/_Templated", "dijit/TooltipDialog", "dijit/form/ValidationTextBox", "dijit/form/Select", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/InsertAnchor", "i18n!dijit/nls/common"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 	// summary:
@@ -433,4 +420,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name === "insertanchor"){
 		o.plugin = new dojox.editor.plugins.InsertAnchor();
 	}
+});
+
 });

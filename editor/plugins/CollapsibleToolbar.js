@@ -1,10 +1,4 @@
-dojo.provide("dojox.editor.plugins.CollapsibleToolbar");
-
-dojo.require("dijit._Widget")
-dojo.require("dijit._Templated");
-dojo.require("dijit._editor._Plugin");
-
-dojo.requireLocalization("dojox.editor.plugins", "CollapsibleToolbar");
+define("dojox/editor/plugins/CollapsibleToolbar", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "i18n!dojox/editor/plugins/nls/CollapsibleToolbar"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins._CollapsibleToolbarButton", [dijit._Widget, dijit._Templated], {
 	// summary:
@@ -171,4 +165,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name === "collapsibletoolbar"){
 		o.plugin = new dojox.editor.plugins.CollapsibleToolbar({});
 	}
+});
+
 });
