@@ -1,11 +1,4 @@
-dojo.provide("dojox.editor.plugins.LocalImage");
-
-dojo.require("dijit._editor.plugins.LinkDialog");
-dojo.require("dojox.form.FileUploader");
-dojo.require("dojo.i18n");
-dojo.require("dojo.string");
-
-dojo.requireLocalization("dojox.editor.plugins", "LocalImage");
+define("dojox/editor/plugins/LocalImage", ["dojo", "dijit", "dojox", "dijit/_editor/plugins/LinkDialog", "dojox/form/FileUploader", "dojo/i18n", "i18n!dojox/editor/plugins/nls/LocalImage"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDialog, {
 	// summary:
@@ -306,4 +299,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			fileMask: ("fileMask" in o.args) ? o.args.fileMask : "*.jpg;*.jpeg;*.gif;*.png;*.bmp"
 		});
 	}
+});
+
+return dojox.editor.plugins.LocalImage;
+
 });
