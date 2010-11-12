@@ -171,4 +171,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	}
 });
 
+return dojox.editor.plugins.ShowBlockNodes;
+
 });

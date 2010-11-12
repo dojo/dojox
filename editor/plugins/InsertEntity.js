@@ -1,14 +1,4 @@
-dojo.provide("dojox.editor.plugins.InsertEntity");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dojox.editor.plugins.EntityPalette");
-dojo.require("dojox.html.entities");
-
-dojo.require("dojo.i18n");
-
-dojo.requireLocalization("dojox.editor.plugins", "InsertEntity");
+define("dojox/editor/plugins/InsertEntity", ["dojo", "dijit", "dojox", "dijit/TooltipDialog", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/html/entities", "dojox/editor/plugins/EntityPalette", "dojo/i18n", "i18n!dojox/editor/plugins/nls/InsertEntity"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 	// summary:
@@ -97,4 +87,7 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			showEntityName: ("showEntityName" in o.args)?o.args.showEntityName:false
 		});
 	}
+});
+
+return dojox.editor.plugins.InsertEntity;
 });

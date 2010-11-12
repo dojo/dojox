@@ -215,4 +215,6 @@ dojo.declare("dojox.editor.plugins.LatinEntity",
 		}
 });
 
+return dojox.editor.plugins.EntityPalette;
+
 });

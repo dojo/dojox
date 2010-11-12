@@ -133,4 +133,6 @@ dojox.editor.plugins.Emoticon.fromAscii = function(/*String*/str){
 	return null;
 };
 
+return dojox.editor.plugins._SmileyPalette;
+
 });
