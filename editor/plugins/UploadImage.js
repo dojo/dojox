@@ -1,6 +1,4 @@
-dojo.provide("dojox.editor.plugins.UploadImage");
-dojo.require("dijit._editor._Plugin");
-dojo.require("dojox.form.FileUploader");
+define("dojox/editor/plugins/UploadImage", ["dojo", "dijit", "dojox", "dojox/form/FileUploader", "dijit/_editor/_Plugin"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.UploadImage");
 
@@ -99,4 +97,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	case "uploadImage":
 		o.plugin = new dojox.editor.plugins.UploadImage({url: o.args.url});
 	}
+});
+
+return dojox.editor.plugins.UploadImage;
+
 });
