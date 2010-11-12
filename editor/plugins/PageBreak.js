@@ -1,9 +1,4 @@
-dojo.provide("dojox.editor.plugins.PageBreak");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dojo.i18n");
-
-dojo.requireLocalization("dojox.editor.plugins", "PageBreak");
+define("dojox/editor/plugins/PageBreak", ["dojo", "dijit", "dojox", "dijit/_editor/html", "dijit/_editor/_Plugin", "dojo/i18n", "i18n!dojox/editor/plugins/nls/PageBreak"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 	//	summary:
@@ -162,4 +157,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name === "pagebreak"){
 		o.plugin = new dojox.editor.plugins.PageBreak({});
 	}
+});
+
+return dojox.editor.plugins.PageBreak;
+
 });

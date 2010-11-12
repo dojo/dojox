@@ -1,9 +1,4 @@
-dojo.provide("dojox.editor.plugins.NormalizeStyle");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit._editor.html");
-
-dojo.experimental("dojox.editor.plugins.NormalizeStyle");
+define("dojox/editor/plugins/NormalizeStyle", ["dojo", "dijit", "dojox", "dijit/_editor/html", "dijit/_editor/_Plugin"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	// summary:
@@ -548,4 +543,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			condenseSpans: ("condenseSpans" in o.args)?o.args.condenseSpans:true
 		});
 	}
+});
+
+return dojox.editor.plugins.NormalizeStyle;
+
 });

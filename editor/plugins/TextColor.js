@@ -1,15 +1,6 @@
-dojo.provide("dojox.editor.plugins.TextColor");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit.form.Button");
-dojo.require("dojox.widget.ColorPicker");
-
-dojo.require("dojo.i18n");
-dojo.requireLocalization("dojox.editor.plugins", "TextColor");
+define("dojox/editor/plugins/TextColor", ["dojo", "dijit", "dojox", "dijit/TooltipDialog", "dijit/form/Button", "dijit/_editor/_Plugin", "dojox/widget/ColorPicker", "dojo/i18n", "i18n!dojox/editor/plugins/nls/TextColor"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.TextColor");
-
 dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._Templated], {
 	// summary:
 	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
@@ -194,4 +185,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin", null, function(o){
 				command: o.args.name
 			});
 	}
+});
+
+return dojox.editor.plugins.TextColor;
+
 });

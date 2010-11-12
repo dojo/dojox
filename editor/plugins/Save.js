@@ -1,10 +1,4 @@
-dojo.provide("dojox.editor.plugins.Save");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit.form.Button");
-dojo.require("dojo.i18n");
-
-dojo.requireLocalization("dojox.editor.plugins", "Save");
+define("dojox/editor/plugins/Save", ["dojo", "dijit", "dojox", "dijit/form/Button", "dijit/_editor/_Plugin", "dojo/i18n", "i18n!dojox/editor/plugins/nls/Save"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 	// summary:
@@ -133,4 +127,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			logResults: ("logResults" in o.args)?o.args.logResults:true
 		});
 	}
+});
+
+return dojox.editor.plugins.Save;
+
 });
