@@ -1,9 +1,4 @@
-dojo.provide("dojox.editor.plugins.NormalizeIndentOutdent");
-
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit._editor.selection");
-
-dojo.experimental("dojox.editor.plugins.NormalizeIndentOutdent");
+define("dojox/editor/plugins/NormalizeIndentOutdent", ["dojo", "dijit", "dojox", "dijit/_editor/selection", "dijit/_editor/_Plugin"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin,{
 	// summary:
@@ -870,4 +865,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 				"px"
 		});
 	}
+});
+
+return dojox.editor.plugins.NormalizeIndentOutdent;
+
 });
