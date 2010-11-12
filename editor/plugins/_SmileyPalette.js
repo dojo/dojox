@@ -1,12 +1,4 @@
-dojo.provide("dojox.editor.plugins._SmileyPalette");
-
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dojo.i18n");
-
-dojo.require("dijit._PaletteMixin");
-
-dojo.requireLocalization("dojox.editor.plugins", "Smiley");
+define("dojox/editor/plugins/_SmileyPalette", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit._PaletteMixin", "dojo/i18n", "i18n!dojox/editor/plugins/nls/Smiley"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins._SmileyPalette");
 
@@ -140,3 +132,5 @@ dojox.editor.plugins.Emoticon.fromAscii = function(/*String*/str){
 	}
 	return null;
 };
+
+});

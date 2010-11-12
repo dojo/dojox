@@ -1,6 +1,4 @@
-dojo.provide("dojox.editor.plugins.AutoUrlLink");
-
-dojo.require("dojo.string");
+define("dojox/editor/plugins/AutoUrlLink", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_editor/_Plugin", "dijit/form/Button"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 	//summary:
@@ -218,4 +216,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(name ===  "autourllink"){
 		o.plugin = new dojox.editor.plugins.AutoUrlLink();
 	}
+});
+
 });
