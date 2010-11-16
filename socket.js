@@ -55,6 +55,12 @@ dojox.socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 	//		http://dev.w3.org/html5/websockets/#websocket
 	//	args:
 	//		This uses the same arguments as the other I/O functions in Dojo, with this addition:
+	//	args.interval:
+	//		Indicates the amount of time (in milliseconds) after a response was received
+	//		before another request is made. By default, a request is made immediately
+	//		after getting a response. The interval can be increased to reduce load on the
+	//		server or to do simple time-based polling where the server always responds 
+	// 		immediately.
 	//	args.transport:
 	//		Provide an alternate transport like dojo.io.script.get
 	// returns:
@@ -69,6 +75,7 @@ dojox.socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 
 var cancelled = false,
 		first = true,
+		timeoutId,
 		connections = [];
 	
 	// create the socket object
@@ -76,9 +83,11 @@ var cancelled = false,
 		send: function(data){
 			// summary:
 			// 		Send some data using XHR or provided transport
-			args.postData = data;
-			var deferred = first ? (first = false) || socket.firstRequest(args) :
-				socket.transport(args);
+			var sendArgs = dojo.delegate(args);
+			sendArgs.rawBody = data;
+			clearTimeout(timeoutId);
+			var deferred = first ? (first = false) || socket.firstRequest(sendArgs) :
+				socket.transport(sendArgs);
 			connections.push(deferred);
 			deferred.then(function(response){
 				// got a response
@@ -88,7 +97,7 @@ var cancelled = false,
 				// reconnect to listen for the next message if there are no active connections, 
 				// we queue it up in case one of the onmessage handlers has a message to send
 				if(!connections.length){
-					setTimeout(connect);
+					timeoutId = setTimeout(connect, args.interval);
 				}
 				if(response){
 					// now send the message along to listeners
@@ -116,7 +125,7 @@ var cancelled = false,
 				connections[i].cancel();
 			}
 			socket.readyState = 3;
-			fire("close", {wasClean:true}, deferred);
+			fire("close", {wasClean:true});
 		},
 		transport: args.transport || dojo.xhrPost,
 		args: args,
@@ -170,6 +179,7 @@ var cancelled = false,
 			socket["on" + event](object);
 		}
 	}
+	// provide an alias for Dojo's connect method
 	socket.connect = socket.on;
 	// do the initial connection
 	setTimeout(connect);
