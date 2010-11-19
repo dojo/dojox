@@ -1,10 +1,4 @@
-dojo.provide("dojox.widget.Standby");
-
-dojo.require("dojo.window");
-dojo.require("dojo.fx");
-
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+define("dojox/widget/Standby", ["dojo", "dijit", "dojox", "dojo/window", "dojo/fx", "dijit/_Widget", "dijit/_Templated"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.widget.Standby");
 
@@ -734,3 +728,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		}
 	}
 });	
+
+return dojox.widget.Standby;
+
+});
