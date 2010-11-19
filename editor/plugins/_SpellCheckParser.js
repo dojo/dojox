@@ -1,4 +1,4 @@
-dojo.provide("dojox.editor.plugins._SpellCheckParser");
+define("dojox.editor.plugins._SpellCheckParser", ["dojo", "dojox"], function(dojo, dojox) {
 
 dojo.declare("dojox.editor.plugins._SpellCheckParser", null, {
 	lang: "english",
@@ -56,4 +56,8 @@ dojo.declare("dojox.editor.plugins._SpellCheckParser", null, {
 dojo.subscribe(dijit._scopeName + ".Editor.plugin.SpellCheck.getParser", null, function(sp){
 	if(sp.parser){ return; }
 	sp.parser = new dojox.editor.plugins._SpellCheckParser();
+});
+
+return dojox.editor.plugins._SpellCheckParser;
+
 });
