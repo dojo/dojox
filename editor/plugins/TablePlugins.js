@@ -1,9 +1,4 @@
-dojo.provide("dojox.editor.plugins.TablePlugins");
-dojo.require("dijit._editor._Plugin");
-dojo.require("dijit._editor.selection");
-dojo.require("dijit.Menu");
-dojo.require("dojo.i18n");
-dojo.requireLocalization("dojox.editor.plugins", "TableDialog");
+define("dojox/editor/plugins/TablePlugins", ["dojo", "dijit", "dojox", "dijit/form/Button", "dijit/Dialog", "dijit/form/TextBox", "dijit/form/FilteringSelect", "dijit/_editor/_Plugin", "dijit/_editor/selection", "dijit/Menu", "dijit/ColorPalette", "dojox/widget/ColorPicker", "dojo/i18n", "i18n!dojox/editor/plugins/nls/TableDialog"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.TablePlugins");
 
@@ -262,6 +257,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 		}
 		
 		this._tempAvailability(500);
+		
 		dojo.publish(this.editor.id + "_tablePlugins", [ this.currentlyAvailable ]);
 		return this.currentlyAvailable;
 	},
@@ -682,8 +678,11 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary:
 			//		Over-ride for button state control for disabled to work.
 			if(this.button){
-				this.button.set("disabled", this.get("disabled"));
-				this.onDisplayChanged(false);
+				if(this.available && !this.get("disabled")){
+					this.button.set("disabled",false);	
+				}else{
+					this.button.set("disabled",true);	
+				}
 			}
 		},
 
@@ -794,8 +793,6 @@ dojo.declare("dojox.editor.plugins.ModifyTable",
 			});
 		}	
 });
-
-dojo.require("dojox.widget.ColorPicker");
 
 dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._Templated], {
 	// summary:
@@ -952,12 +949,6 @@ dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePl
 		}
 });
 
-dojo.provide("dojox.editor.plugins.EditorTableDialog");
-dojo.require("dijit.Dialog");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.FilteringSelect");
-dojo.require("dijit.form.Button");
-
 dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 	// summary:
 	//		Dialog box with options for table creation
@@ -1029,10 +1020,6 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog], {
 		//stub
 	}
 });
-
-
-dojo.provide("dojox.editor.plugins.EditorModifyTableDialog");
-dojo.require("dijit.ColorPalette");
 
 dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog], {
 	
@@ -1204,4 +1191,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 				break;
 		}
 	}
+});
+
+return dojox.editor.plugins.TablePlugins;
+
 });
