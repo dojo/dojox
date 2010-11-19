@@ -96,6 +96,11 @@
 	background-image: url(compat/white-arrow.png);
 }
 
+/* dojox.mobile.TabBarButton */
+.dj_ie .mblTabBarButtonDiv {
+	left: auto;
+}
+
 /* Switch */
 .mblSwitchInner {
 	width: 100px;

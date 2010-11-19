@@ -3,35 +3,20 @@
 	height: 100%;
 }
 
-.mblSplitPane {
+.mblFixedSplitterPane {
 	position: absolute;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
-.mblSplitPaneH {
+.mblFixedSplitterPaneH {
+	position: absolute;
 	height: 100%;
 	top: 0px;
 }
 
-.mblSplitPaneV {
-	width: 100%;
-	left: 0px;
-}
-
-.mblSplitter {
-	-moz-user-select: none;
+.mblFixedSplitterPaneV {
 	position: absolute;
-	font-size: 1px;
-	background-color: black;
-}
-
-.mblSplitterV {
-	left: 0px;
 	width: 100%;
-	height: 1px;
-}
-
-.mblSplitterH {
-	top: 0px;
-	width: 1px;
-	height: 100%;
+	left: 0px;
 }

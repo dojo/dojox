@@ -159,7 +159,9 @@ dojo.declare(
 		var toNode;
 		if(moveTo){
 			if(typeof(moveTo) == "string"){
-				moveTo.match(/(\w+)/);
+				// removes a leading hash mark (#) and params if exists
+				// ex. "#bar&myParam=0003" -> "bar"
+				moveTo.match(/^#?([^&]+)/);
 				toNode = RegExp.$1;
 			}else{
 				toNode = moveTo;
@@ -316,7 +318,7 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
 		this.domNode.className = "mblHeading";
-		this._view = this.domNode.parentNode && dijit.byNode(this.domNode.parentNode); // parentNode is null if created programmatically
+		this._view = dijit.getEnclosingWidget(this.domNode.parentNode); // parentNode is null if created programmatically
 		if(this.label){
 			this.domNode.innerHTML = this.label;
 		}else{
@@ -472,6 +474,7 @@ dojo.declare(
 	clickable: false,
 	url: "",
 	transition: "",
+	transitionDir: 1,
 	callback: null,
 	sync: true,
 	label: "",
@@ -505,7 +508,7 @@ dojo.declare(
 		var w = this.findCurrentView(moveTo); // the current view widget
 		if(!w || moveTo && w === dijit.byId(moveTo)){ return; }
 		if(href){
-			w.performTransition(null, 1, this.transition, this, function(){location.href = href;});
+			w.performTransition(null, this.transitionDir, this.transition, this, function(){location.href = href;});
 			return;
 		}
 		if(url){
@@ -551,7 +554,7 @@ dojo.declare(
 			}
 			moveTo = id;
 		}
-		w.performTransition(moveTo, 1, this.transition, this.callback && this, this.callback);
+		w.performTransition(moveTo, this.transitionDir, this.transition, this.callback && this, this.callback);
 	},
 
 	_parse: function(text){
@@ -658,10 +661,7 @@ dojo.declare(
 		}
 		a.appendChild(box);
 		if(this.rightText){
-			var txt = dojo.create("DIV");
-			txt.className = "mblRightText";
-			txt.innerHTML = this.rightText;
-			a.appendChild(txt);
+			this._setRightTextAttr(this.rightText);
 		}
 
 		if(this.moveTo || this.href || this.url || this.clickable){
@@ -746,6 +746,14 @@ dojo.declare(
 	},
 
 	onAnchorLabelClicked: function(e){
+	},
+
+	_setRightTextAttr: function(/*String*/text){
+		this.rightText = text;
+		if(!this._rightTextNode){
+			this._rightTextNode = dojo.create("DIV", {className:"mblRightText"}, this.anchorNode);
+		}
+		this._rightTextNode.innerHTML = text;
 	}
 });
 
@@ -816,7 +824,7 @@ dojo.declare(
 		}
 		this.left.style.display = "block";
 		this.right.style.display = "block";
-		return false;
+		dojo.stopEvent(e);
 	},
 
 	onTouchMove: function(e){
@@ -834,13 +842,19 @@ dojo.declare(
 		if(pos >= -d){ pos = 0; }
 		this.inner.style.left = pos + "px";
 		this._moved = true;
-		return true;
 	},
 
 	onTouchEnd: function(e){
 		dojo.disconnect(this._conn1);
 		dojo.disconnect(this._conn2);
-		if(this.innerStartX == this.inner.offsetLeft){ return; }
+		if(this.innerStartX == this.inner.offsetLeft){
+			if(dojo.isWebKit){
+				var ev = dojo.doc.createEvent("MouseEvents");
+				ev.initEvent("click", true, true);
+				this.knob.dispatchEvent(ev);
+			}
+			return;
+		}
 		var newState = (this.inner.offsetLeft < -(this._width/2)) ? "off" : "on";
 		this._changeState(newState);
 		if(newState != this.value){
@@ -1186,12 +1200,14 @@ dojo.declare(
 	}
 });
 
+// Deprecated. Use dojox.mobile.TabBar instead.
 dojo.declare(
 	"dojox.mobile.TabContainer",
 	dijit._Widget,
 {
 	iconBase: "",
 	iconPos: "",
+	fixedHeader: false,
 
 	buildRendering: function(){
 		var node = this.domNode = this.srcNodeRef;
@@ -1206,7 +1222,19 @@ dojo.declare(
 
 		headerNode.className = "mblTabPanelHeader";
 		headerNode.align = "center";
-		node.appendChild(headerNode);
+		if(this.fixedHeader){
+			var view = dijit.getEnclosingWidget(this.domNode.parentNode); // parentNode is null if created programmatically
+			view.domNode.insertBefore(headerNode, view.domNode.firstChild);
+			dojo.style(headerNode, {
+				position: "absolute",
+				width: "100%",
+				top: "0px",
+				zIndex: "1"
+			});
+			view.fixedHeader = headerNode;
+		}else{
+			node.appendChild(headerNode);
+		}
 		paneNode.className = "mblTabPanelPane";
 		node.appendChild(paneNode);
 	},
@@ -1262,6 +1290,19 @@ dojo.declare(
 			var ref = tab.nextSibling;
 			tab.parentNode.insertBefore(tab.parentNode.removeChild(tab), ref);
 		}
+		var view = dijit.getEnclosingWidget(this.domNode.parentNode);
+		if(this.fixedHeader){
+			// This widget stacks multiple panes and controls their visibility.
+			// Each pane cannot have its own scroll position status, because
+			// the entire widget scrolls.
+			// When in the fixedHeader mode, the user can always select a tab
+			// even when the current pane is scrolled down to the bottom.
+			// Even in such cases, the next page should be shown from the top.
+			if(view && view.scrollTo){
+				view.scrollTo({y:0});
+			}
+		}
+		view.flashScrollBar && view.flashScrollBar();
 	},
 
 	onTabClick: function(e){
@@ -1389,6 +1430,17 @@ dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 	}
 };
 
+dojox.mobile.hideAddressBar = function(){
+	dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
+	setTimeout(function(){ scrollTo(0, 1); }, 100);
+	setTimeout(function(){ scrollTo(0, 1); }, 400);
+	setTimeout(function(){
+		scrollTo(0, 1);
+		// re-define the min-height with the actual height
+		dojo.body().style.minHeight = (window.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
+	}, 1000);
+};
+
 dojo._loaders.unshift(function(){
 	// avoid use of dojo.query
 	/*
@@ -1422,11 +1474,14 @@ dojo.addOnLoad(function(){
 	//	You can disable hiding the address bar with the following djConfig.
 	//	var djConfig = { mblHideAddressBar: false };
 	if(dojo.config["mblHideAddressBar"] !== false){
-		var hideAddressBar = function(){
-			setTimeout(function(){ scrollTo(0, 1); }, 100);
-		};
-		hideAddressBar();
-		//dojo.connect(dojo.global, "onorientationchange", hideAddressBar);
+		dojox.mobile.hideAddressBar();
+		if(dojo.config["mblAlwaysHideAddressBar"] == true){
+			if(window.onorientationchange !== undefined){
+				dojo.connect(dojo.global, "onorientationchange", dojox.mobile.hideAddressBar);
+			}else{
+				dojo.connect(dojo.global, "onresize", dojox.mobile.hideAddressBar);
+			}
+		}
 	}
 
 	// avoid use of dojo.query

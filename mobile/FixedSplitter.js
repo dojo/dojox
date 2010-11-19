@@ -7,14 +7,21 @@ dojo.require("dijit._Widget");
 // description:
 //		FixedSplitter is a very simple container widget that layouts its child
 //		dom nodes side by side either horizontally or vertically.
-//		The main purpose of this widget is to achieve the split view on iPad.
+//		An example usage of this widget would be to realize the split view on iPad.
 //		There is no visual splitter between the children, and there is no
 //		function to resize the child panes with drag-and-drop.
 //		If you need a visual splitter, you can specify a border of a child
 //		dom node with CSS.
-//		For mobile webkit browsers, touch events are handled so that the user
-//		can scroll a child pane without moving the entire page. You don't
-//		have to use the two-finger operation to scroll the child pane.
+//		A child of the widget can be a plain <div> or dojox.mobile.FixedSplitterPane.
+// example:
+// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
+// |		<div style="width:200px;border-right:1px solid black;">
+// |			pane #1 (width=200px)
+// |		</div>
+// |		<div>
+// |			pane #2
+// |		</div>
+// |	</div>
 
 dojo.declare(
 	"dojox.mobile.FixedSplitter",
@@ -32,12 +39,7 @@ dojo.declare(
 	startup: function(){
 		var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
 		dojo.forEach(children, function(node){
-			dojo.addClass(node, "mblSplitPane mblSplitPane"+this.orientation);
-			if(typeof dojo.body().ontouchstart != "undefined" && node.getAttribute("scrollable") != "false"){
-				this.connect(node, "touchstart", "onTouchStart");
-				this.connect(node, "touchend", "onTouchEnd");
-				this.connect(node, "touchmove", "onTouchMove");
-			}
+			dojo.addClass(node, "mblFixedSplitterPane"+this.orientation);
 		}, this);
 
 		dojo.forEach(this.getChildren(), function(child){if(child.startup){child.startup();}});
@@ -77,33 +79,15 @@ dojo.declare(
 		dojo.forEach(this.getChildren(), function(child){
 			if(child.resize){ child.resize(); }
 		});
-	},
+	}
+});
 
-	onTouchStart: function(e){
-		this.touchStartX = e.touches[0].pageX;
-		this.touchStartY = e.touches[0].pageY;
-		scrollTop = e.currentTarget.scrollTop;
-		if(e.target.nodeType != 1 || e.target.tagName != "SELECT"){
-			e.preventDefault();
-		}
-	},
-
-	onTouchMove: function(e){
-		e.currentTarget.scrollTop = this.touchStartY+scrollTop-e.touches[0].pageY;
-		e.preventDefault();
-	},
-
-	onTouchEnd: function(e){
-		this.touchEndX = e.changedTouches[0].pageX;
-		this.touchEndY = e.changedTouches[0].pageY;
-		if(Math.abs(this.touchStartX - this.touchEndX) <= 1 && Math.abs(this.touchStartY - this.touchEndY) <= 1){
-			var elem = e.target;
-			if(elem.nodeType != 1){
-				elem = elem.parentNode;
-			}
-			var ev = dojo.doc.createEvent("MouseEvents");
-			ev.initEvent('click', true, true);
-			elem.dispatchEvent(ev);
-		}
+dojo.declare(
+	"dojox.mobile.FixedSplitterPane",
+	dijit._Widget,
+{
+	buildRendering: function(){
+		this.inherited(arguments);
+		dojo.addClass(this.domNode, "mblFixedSplitterPane");
 	}
 });

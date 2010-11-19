@@ -13,7 +13,6 @@ html.mobile, .mobile body {
 	background-color: black;
 	font-family: Helvetica;
 	font-size: 17px;
-	min-height: 440px;
 }
 
 /* dojox.mobile.View */
@@ -26,7 +25,6 @@ html.mobile, .mobile body {
 }
 
 .mblView.out {
-	position: absolute;
 }
 
 .mblView.in {
@@ -186,6 +184,68 @@ html.mobile, .mobile body {
 	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
 }
 
+/* dojox.mobile.TabBar */
+/*TODO: not optimized for android yet*/
+.mblTabBar {
+	position: relative;
+	height: 48px;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #000000;
+	background: -webkit-gradient(linear, left top, left bottom, from(#2D2D2D), to(#000000), color-stop(0.5, #141414), color-stop(0.5, #000000));
+	border-top: 1px solid #000000;
+	color: white;
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.mblTabBar .mblTabBarButton {
+	position: relative;
+	list-style-type: none;
+	float: left;
+}
+
+/* dojox.mobile.TabBarButton */
+.mblTabBarButton {
+}
+.mblTabBarButtonAnchor {
+	display: block;
+	text-decoration: none;
+}
+.mblTabBarButtonDiv {
+	position: relative;
+	height: 34px;
+	width: 29px;
+	left: 50%;
+}
+.mblTabButton .mblTabBarButtonDiv {
+	height: 40px;
+}
+.mblTabBarButtonDivInner {
+	left: -50%;
+}
+.mblTabBarButtonIcon {
+	position: absolute;
+	left: 0px;
+	top: 2px;
+}
+.mblTabBar .mblTabBarButton.mblTabButtonSelected {
+	background-color: #404040;
+	background: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+.mblTabBarButtonTextBox {
+	color: #979797;
+	font-family: "Helvetica Neue", Helvetica;
+	font-size: 11px;
+}
+.mblTabButtonSelected .mblTabBarButtonTextBox {
+	color: white;
+}
+
 /* dojox.mobile.RoundRect */
 .mblRoundRect {
 	margin: 7px 9px 16px;
@@ -273,10 +333,10 @@ html.mobile, .mobile body {
 	background-color: #FFC700;
 	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
 }
-li .mblListItemTextBox {
+.mblListItemTextBox {
 	padding-right: 28px;
 }
-li .mblListItemTextBoxSelected {
+.mblListItemTextBoxSelected {
 	background-color: #048BF4;
 }
 .mblRoundRectList .mblListItem:first-child {
@@ -623,6 +683,7 @@ table.mblClose {
 .mblTabButton {
 	position: relative;
 	float: left;
+	list-style-type: none;
 	width: 78px;
 	text-align: center;
 	height: 61px;

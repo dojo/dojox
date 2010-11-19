@@ -13,7 +13,6 @@ html.mobile, .mobile body {
 	background-color: rgb(197,204,211);
 	font-family: Helvetica;
 	font-size: 17px;
-	min-height: 416px;
 }
 
 /* dojox.mobile.View */
@@ -25,7 +24,6 @@ html.mobile, .mobile body {
 }
 
 .mblView.out {
-	position: absolute;
 }
 
 .mblView.in {
@@ -132,6 +130,7 @@ html.mobile, .mobile body {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	z-index: 1;
 }
 
 /* Heading Arrow Button */
@@ -188,6 +187,67 @@ html.mobile, .mobile body {
 	background: -webkit-gradient(linear, left top, left bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
 }
 
+/* dojox.mobile.TabBar */
+.mblTabBar {
+	position: relative;
+	height: 48px;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #000000;
+	background: -webkit-gradient(linear, left top, left bottom, from(#2D2D2D), to(#000000), color-stop(0.5, #141414), color-stop(0.5, #000000));
+	border-top: 1px solid #000000;
+	color: white;
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.mblTabBar .mblTabBarButton {
+	position: relative;
+	list-style-type: none;
+	float: left;
+}
+
+/* dojox.mobile.TabBarButton */
+.mblTabBarButton {
+}
+.mblTabBarButtonAnchor {
+	display: block;
+	text-decoration: none;
+}
+.mblTabBarButtonDiv {
+	position: relative;
+	height: 34px;
+	width: 29px;
+	left: 50%;
+}
+.mblTabButton .mblTabBarButtonDiv {
+	display: none;
+}
+.mblTabBarButtonDivInner {
+	left: -50%;
+}
+.mblTabBarButtonIcon {
+	position: absolute;
+	left: 0px;
+	top: 2px;
+}
+.mblTabBar .mblTabBarButton.mblTabButtonSelected {
+	background-color: #404040;
+	background: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+.mblTabBarButtonTextBox {
+	color: #979797;
+	font-family: "Helvetica Neue", Helvetica;
+	font-size: 11px;
+}
+.mblTabButtonSelected .mblTabBarButtonTextBox {
+	color: white;
+}
+
 /* dojox.mobile.RoundRect */
 .mblRoundRect {
 	margin: 7px 9px 16px 9px;
@@ -211,6 +271,7 @@ html.mobile, .mobile body {
 	border-bottom: 1px solid #979DA3;
 	background: -webkit-gradient(linear, left top, left bottom, from(#8F9EA9), to(#B7C0C7));
 	font-family: Helvetica;
+	font-weight: bold;
 	font-size: 16px;
 	color: white;
 	line-height: 22px;
@@ -223,7 +284,8 @@ html.mobile, .mobile body {
 /* dojox.mobile.RoundRectCategory */
 .mblRoundRectCategory {
 	color: #4C566C;
-	margin: 18px 0px 0px 20px;
+	padding: 18px 0px 0px 20px;
+	margin: 0px;
 	text-shadow: rgba(255, 255, 255, 1) 0px 1px 0px;
 	font-family: Helvetica;
 	font-size: 16px;
@@ -276,10 +338,10 @@ html.mobile, .mobile body {
 	background-color: #048BF4;
 	background: -webkit-gradient(linear, left top, left bottom, from(#048BF4), to(#005CE5));
 }
-li .mblListItemTextBox {
+.mblListItemTextBox {
 	padding-right: 28px;
 }
-li .mblListItemTextBoxSelected {
+.mblListItemTextBoxSelected {
 	background-color: #048BF4;
 }
 .mblRoundRectList .mblListItem:first-child {
@@ -628,6 +690,7 @@ table.mblClose {
 
 .mblTabButton {
 	float: left;
+	list-style-type: none;
 	width: 100px;
 	text-align: center;
 	height: 28px;
@@ -658,7 +721,7 @@ table.mblClose {
 	-moz-border-radius-bottomright: 5px;
 	border-right-color: #9CACC0;
 }
-.mblTabButtonSelected.mblTabButton {
+.mblTabButtonSelected {
 	background-color: #5877A2;
 	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
 }

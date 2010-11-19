@@ -102,6 +102,11 @@
 	background-image: url(compat/white-arrow.png);
 }
 
+/* dojox.mobile.TabBarButton */
+.dj_ie .mblTabBarButtonDiv {
+	left: auto;
+}
+
 /* Switch */
 .mblSwitchInner {
 	width: 100px;
@@ -226,10 +231,10 @@
 .mblTabPanelHeader {
 	background-image: url(compat/heading-bg.png);
 }
-.mblTabButton {
+.mblTabContainer .mblTabButton {
 	background-image: url(compat/tab-button-bg.png);
 }
-.mblTabButtonSelected {
+.mblTabContainer .mblTabButtonSelected {
 	background-image: url(compat/tab-sel-button-bg.png);
 }
 *html .mblTabButton { /* IE6 hack */

@@ -316,6 +316,24 @@ dojo.mixin(dojox.mobile, {
 	}
 });
 
+if(dojox.mobile.ScrollableView){
+
+dojo.extend(dojox.mobile.ScrollableView, {
+	postCreate: function(){
+		// On IE, margin-top of the first child does not seem to be effective,
+		// probably because padding-top is specified for containerNode
+		// to make room for a fixed header. This dummy node is a workaround for that.
+		var dummy = dojo.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
+		dojo.style(dummy, {
+			position: "relative",
+			marginBottom: "-2px",
+			fontSize: "1px"
+		});
+	}
+});
+
+} // if(dojox.mobile.ScrollableView)
+
 } // if(dojo.isIE)
 
 if(dojo.isIE <= 6){
@@ -327,7 +345,17 @@ if(dojo.isIE <= 6){
 			var img = nodes[i];
 			var w = img.offsetWidth;
 			var h = img.offsetHeight;
-			if(w === 0 || h === 0){ return; }
+			if(w === 0 || h === 0){
+				// The reason why the image has no width/height may be because
+				// display is "none". If that is the case, let's change the
+				// display to "" temporarily and see if the image returns them.
+				if(dojo.style(img, "display") != "none"){ continue; }
+				img.style.display = "";
+				w = img.offsetWidth;
+				h = img.offsetHeight;
+				img.style.display = "none";
+				if(w === 0 || h === 0){ continue; }
+			}
 			var src = img.src;
 			if(src.indexOf("resources/blank.gif") != -1){ continue; }
 			img.src = blank;
@@ -418,6 +446,10 @@ dojox.mobile.loadCompatCssFiles = function(){
 			dojox.mobile.loadCss(compatCss);
 		}
 	}
+};
+
+dojox.mobile.hideAddressBar = function(){
+	// nop
 };
 
 dojo.addOnLoad(function(){
