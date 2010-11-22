@@ -135,7 +135,6 @@ dojo.declare("dojox.av.FLAudio", null, {
 		this._flashObject = new dojox.embed.Flash(args, this.domNode);
 		this._flashObject.onError = function(err){
 			console.warn("Flash Error:", err);
-			alert(err);
 		};
 		this._flashObject.onLoad = dojo.hitch(this, function(mov){
 			this.flashMedia = mov;
