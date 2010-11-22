@@ -481,21 +481,21 @@ dojox.color.Colorspace=new (function(){
 	};
 
 	this.matrix=function(/* String */to, /* Object */primary){
-		var wp=this.whitepoint(primary.whitepoint);
+		var p=primary, wp=this.whitepoint(p.whitepoint);
 		var Xr = p.xr/p.yr, Yr = 1, Zr = (1-p.xr-p.yr)/p.yr;
 		var Xg = p.xg/p.yg, Yg = 1, Zg = (1-p.xg-p.yg)/p.yg;
-		var Xb = p.xb/p.yb, Yb = 1, Zr = (1-p.xb-p.yb)/p.yb;
+		var Xb = p.xb/p.yb, Yb = 1, Zb = (1-p.xb-p.yb)/p.yb;
 
 		var m1 = [[ Xr, Yr, Zr ], [ Xg, Yg, Zg ], [ Xb, Yb, Zb ]];
 		var m2 = [[ wp.X, wp.Y, wp.Z ]];
-		var sm = dojox.math.matrix.multiply(m2, dojox.math.matrix.inverse(m1));
+		var sm = dxm.multiply(m2, dxm.inverse(m1));
 		var Sr = sm[0][0], Sg = sm[0][1], Sb = sm[0][2];
 		var result=[
 			[Sr*Xr, Sr*Yr, Sr*Zr],
 			[Sg*Xg, Sg*Yg, Sg*Zg],
 			[Sb*Xb, Sb*Yb, Sb*Zb]
 		];
-		if(to=="RGB"){ return dojox.math.inverse(result); }
+		if(to=="RGB"){ return dxm.inverse(result); }
 		return result;
 	};
 
@@ -508,7 +508,7 @@ dojox.color.Colorspace=new (function(){
 
 	this.convert=function(/* Object */color, /* string */from, /* string */to, /* Object? */kwArgs){
 		if(converters[from] && converters[from][to]){
-			return converters[from][to](obj, kwArgs);
+			return converters[from][to](color, kwArgs);
 		}
 		console.warn("dojox.color.Colorspace::convert: Can't convert ", color, " from ", from, " to ", to, ".");
 	};
@@ -520,7 +520,7 @@ dojo.mixin(dojox.color, {
 		kwArgs=kwArgs||{};
 		var p=dojox.color.Colorspace.primaries(kwArgs);
 		var m=dojox.color.Colorspace.matrix("RGB", p);
-		var rgb=dojox.math.matrix.mutliply([[ xyz.X, xyz.Y, xyz.Z ]], m);
+		var rgb=dojox.math.matrix.multiply([[ xyz.X, xyz.Y, xyz.Z ]], m);
 		var r=rgb[0][0], g=rgb[0][1], b=rgb[0][2];
 		if(p.profile=="sRGB"){
 			var R = (r>0.0031308)?(1.055*Math.pow(r, 1/2.4))-0.055: 12.92*r;
