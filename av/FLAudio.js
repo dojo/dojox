@@ -85,7 +85,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 		if(!this.id){ this.id = "flaudio_"+new Date().getTime(); }
 		this.domNode = dojo.doc.createElement("div");
 		dojo.style(this.domNode, {
-			postion:"relative",
+			position:"relative",
 			width:"1px",
 			height:"1px",
 			top:"1px",
