@@ -1,9 +1,7 @@
-dojo.provide("dojox.fx.flip");
-dojo.experimental("dojox.fx.flip");
-dojo.require("dojo.fx");
-(function(){
-	
-	// because ShrinkSafe will eat this up: 
+define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
+
+	dojo.experimental("dojox.fx.flip");
+	// because ShrinkSafe will eat this up:
 	var borderConst = "border",
 		widthConst = "Width",
 		heightConst = "Height",
@@ -500,4 +498,5 @@ dojo.require("dojo.fx");
 		});
 		return dojo.fx.combine(cAnims);
 	};
-})();
+	return dojox.fx.flip;
+});
