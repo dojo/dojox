@@ -1,20 +1,6 @@
-dojo.provide("dojox.calc.Grapher");
-dojo.experimental("dojox.calc.Grapher");
+define(["dojo", "dijit/_Templated", "dojox/math/_base", "dijit/dijit", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/Button", "dijit/form/ComboBox", "dijit/form/Select", "dijit/form/CheckBox", "dijit/ColorPalette", "dojox/charting/Chart2D", "dojox/charting/themes/Tufte", "dojo/colors"], function(dojo) {
 
-dojo.require("dijit._Templated");
-dojo.require("dojox.math._base");
-dojo.require("dijit.dijit");
-dojo.require("dijit.form.DropDownButton");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.Select");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.ColorPalette");
-dojo.require("dojox.charting.Chart2D");
-dojo.require("dojox.charting.themes.Tufte");
-dojo.require("dojo.colors");
+dojo.experimental("dojox.calc.Grapher");
 
 dojo.declare(
 	"dojox.calc.Grapher",
@@ -630,3 +616,7 @@ dojo.declare(
 		}
 	};
 })();
+
+
+return dojox.calc.Grapher;
+});

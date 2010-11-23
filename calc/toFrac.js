@@ -1,4 +1,4 @@
-dojo.provide("dojox.calc.toFrac");
+define(["dojo"], function(dojo) {
 
 (function(){
 
@@ -10,8 +10,6 @@ dojo.provide("dojox.calc.toFrac");
 	var i = -3;
 	var d = 2;
 	var epsilon = 1e-15 / 9;
-
-
 
 function _fracHashInit(searchNumber){
 	// summary
@@ -66,17 +64,10 @@ function _fracHashInit(searchNumber){
 function isInt(n){
 	return Math.floor(n) == n;
 }
-// quick and dirty _fracLookup for people who don't need advanced function
-// handles integer + 1/integer constructs
-function _fracLookup(number){
-	number = Math.abs(number);
-	var i = Math.floor(number);
-	number %= 1;
-	var inv = dojox.calc.approx(1 / number);
-	return isInt(inv) ? { m: 1, mt: 1, n: i * inv + 1, d: inv } : null;
-}
+
 // make the hash
 _fracHashInit();
+
 // advanced _fracLookup
 function _fracLookup(number){
 	function retryWhenInitialized(){
@@ -105,6 +96,7 @@ function _fracLookup(number){
 	}
 	return f;
 }
+
 // add toFrac to the calculator
 dojo.mixin(dojox.calc, {
 	toFrac: function(number){// get a string fraction for a decimal with a set range of numbers, based on the hash
@@ -139,3 +131,7 @@ function reduceError(number){
 }
 */
 })();
+
+
+return dojox.calc.toFrac;
+});

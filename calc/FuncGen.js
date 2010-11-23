@@ -1,14 +1,6 @@
-dojo.provide("dojox.calc.FuncGen");
+define(["dojo", "dijit/_Templated", "dojox/math/_base", "dijit/dijit", "dijit/form/ComboBox", "dijit/form/SimpleTextarea", "dijit/form/Button", "dojo/data/ItemFileWriteStore"], function(dojo) {
+
 dojo.experimental("dojox.calc.FuncGen");
-
-dojo.require("dijit._Templated");
-dojo.require("dojox.math._base");
-dojo.require("dijit.dijit");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.SimpleTextarea");
-dojo.require("dijit.form.Button");
-dojo.require("dojo.data.ItemFileWriteStore");
-
 
 dojo.declare(
 	"dojox.calc.FuncGen",
@@ -140,4 +132,8 @@ dojo.declare(
 			dojo.style(this.closeButton.domNode, "display", "none"); // hide the button
 		}
 	}
+});
+
+
+return dojox.calc.FuncGen;
 });

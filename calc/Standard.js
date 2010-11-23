@@ -1,15 +1,6 @@
-dojo.provide("dojox.calc.Standard");
-dojo.experimental("dojox.calc.Standard");
+define(["dojo", "dijit/_Templated", "dojox/math/_base", "dijit/dijit", "dijit/Menu", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/Button", "dojox/calc/_Executor"], function(dojo) {
 
-dojo.require("dijit._Templated");
-dojo.require("dojox.math._base");
-dojo.require("dijit.dijit");
-dojo.require("dijit.Menu");
-dojo.require("dijit.form.DropDownButton");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.Button");
-dojo.require("dojox.calc._Executor");
+dojo.experimental("dojox.calc.Standard");
 
 dojo.declare(
 	"dojox.calc.Standard",
@@ -352,4 +343,8 @@ dojo.declare(
 		//this.pi.set("onClick", dojo.hitch(this, "insertText", this.textboxWidget, '\u03C0'));
 		this.startup()
 	}
+});
+
+
+return dojox.calc.Standard;
 });

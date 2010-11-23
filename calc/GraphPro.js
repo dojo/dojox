@@ -1,17 +1,6 @@
-dojo.provide("dojox.calc.GraphPro");
-dojo.experimental("dojox.calc.GraphPro");
+define(["dojo", "dojox/calc/Standard", "dijit/dijit", "dijit/form/ComboBox", "dijit/form/Select", "dijit/form/CheckBox", "dijit/ColorPalette", "dojox/charting/Chart2D", "dojox/calc/Grapher", "dojox/layout/FloatingPane", "dojox/charting/themes/Tufte", "dojo/colors"], function(dojo) {
 
-dojo.require("dojox.calc.Standard");
-dojo.require("dijit.dijit");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.Select");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.ColorPalette");
-dojo.require("dojox.charting.Chart2D");
-dojo.require("dojox.calc.Grapher");
-dojo.require("dojox.layout.FloatingPane");
-dojo.require("dojox.charting.themes.Tufte");
-dojo.require("dojo.colors");
+dojo.experimental("dojox.calc.GraphPro");
 
 dojo.declare(
 	"dojox.calc.GraphPro",
@@ -140,4 +129,8 @@ dojo.declare(
 		this.aFloatingPane.startup();
 		this.aFloatingPane.bringToTop();
 	}
+});
+
+
+return dojox.calc.GraphPro;
 });

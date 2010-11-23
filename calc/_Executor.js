@@ -1,9 +1,6 @@
-dojo.provide("dojox.calc._Executor");
+define(["dojo", "dijit/_Templated", "dojox/math/_base"], function(dojo) {
+
 dojo.experimental("dojox.calc._Executor");
-
-dojo.require("dijit._Templated");
-dojo.require("dojox.math._base");
-
 
 (function(){
 var calcEnv; // private
@@ -143,3 +140,7 @@ dojo.declare(
 		}
 	});
 })();
+
+
+return dojox.calc._Executor;
+});
