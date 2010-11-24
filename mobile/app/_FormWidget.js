@@ -74,13 +74,6 @@ dojo.declare("dojox.mobile.app._FormWidget", dijit._Widget, {
 		if(this.valueNode){
 			dojo.attr(this.valueNode, 'disabled', value);
 		}
-
-		if(value){
-			// reset these, because after the domNode is disabled, we can no longer receive
-			// mouse related events, see #4200
-			this._hovering = false;
-			this._active = false;
-		}
 	},
 
 	_onFocus: function(e){
