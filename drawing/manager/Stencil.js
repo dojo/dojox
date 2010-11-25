@@ -38,6 +38,20 @@ dojo.provide("dojox.drawing.manager.Stencil");
 			_secondClick:false,
 			_isBusy:false,
 			
+			setRecentStencil: function(stencil){
+				// summary:
+				//		Keeps track of the most recent stencil interacted
+				//		with, whether created or selected.
+				this.recent = stencil;
+			},
+			
+			getRecentStencil: function(){
+				// summary:
+				//		Returns the stencil most recently interacted
+				//		with whether it's last created or last selected
+				return this.recent;
+			},
+			
 			register: function(/*Object*/stencil){
 				// summary:
 				//		Key method for adding Stencils. Stencils
@@ -55,6 +69,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				}
 				
 				this.stencils[stencil.id] = stencil;
+				this.setRecentStencil(stencil);
 				
 				if(stencil.execText){
 					if(stencil._text && !stencil.editMode){
@@ -384,6 +399,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				//
 				console.info(" >>> onStencilDown:", obj.id, this.keys.meta);
 				if(!this.stencils[obj.id]){ return; }
+				this.setRecentStencil(this.stencils[obj.id]);
 				this._isBusy = true;
 				
 				
