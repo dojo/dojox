@@ -109,7 +109,7 @@ dojo.mixin(dojox.calc, {
 	//	Computes base ^ exponent
 	//	Wrapper to Math.pow(base, exponent) to handle (-27) ^ (1/3)
 
-	if(isInt(exponent)){
+	if(base>0||isInt(exponent)){
 		return Math.pow(base, exponent);
 	}else{
 		var f = _fracLookup(exponent);

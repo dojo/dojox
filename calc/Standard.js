@@ -74,7 +74,13 @@ dojo.declare(
 		if(text!=""){
 			var ans = this.executor.eval(text);
 
-			if(!(typeof ans == "number" && isNaN(ans)) && ((typeof ans == "object" && "length" in ans) || typeof ans != "object") && typeof ans != "function" && ans != null){
+			if((typeof ans == "number" && isNaN(ans))){
+				if(this.commandList.length == 0 || this.commandList[this.commandList.length - 1] != text){
+					this.commandList.push(text);
+				}
+				this.print(text, false);
+				this.print("Not a Number", true);
+			}else if(((typeof ans == "object" && "length" in ans) || typeof ans != "object") && typeof ans != "function" && ans != null){
 				this.executor.eval("Ans="+ans);
 				// add it to the command list as well
 				if(this.commandList.length == 0 || this.commandList[this.commandList.length - 1] != text){

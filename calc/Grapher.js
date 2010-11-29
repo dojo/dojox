@@ -81,6 +81,7 @@ dojo.declare(
 		var name = "Series "+this.array[i][this.funcNumberIndex]+"_"+nameNum;
 		while(name in this.array[i][this.chartIndex].runs){
 			this.array[i][this.chartIndex].removeSeries(name);
+			nameNum++;
 			name = "Series "+this.array[i][this.funcNumberIndex]+"_"+nameNum;
 		}
 		this.array[i][this.chartIndex].render();
