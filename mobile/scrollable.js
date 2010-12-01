@@ -293,7 +293,7 @@ dojox.mobile.scrollable = function(){
 		if(clicked){ // clicked, not dragged or flicked
 			this.stopScrollBar();
 			this.removeCover();
-			if(dojo.isWebKit){
+			if(dojox.mobile.hasTouch){
 				var elem = e.target;
 				if(elem.nodeType != 1){
 					elem = elem.parentNode;
