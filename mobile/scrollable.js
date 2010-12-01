@@ -501,36 +501,38 @@ dojox.mobile.scrollable = function(){
 		if(this.scrollDir == "h" && dim.c.w <= dim.v.w){ return; }
 		if(this._v && this._h && dim.c.h <= dim.v.h && dim.c.w <= dim.v.w){ return; }
 
-		if(this._v){
+		var styles = {
+			opacity: 0.6,
+			position: "absolute",
+			backgroundColor: "#606060",
+			fontSize: "1px",
+			webkitBorderRadius: "2px",
+			mozBorderRadius: "2px",
+			webkitTransformOrigin: "0 0",
+			zIndex: 2147483647 // max of signed 32-bit integer
+		};
+		if(this._v && !this._scrollBarV){
 			if(!this._scrollBarNodeV){
 				this._scrollBarNodeV = dojo.create("div", null, this.domNode);
+				dojo.style(this._scrollBarNodeV, styles);
 				dojo.style(this._scrollBarNodeV, {
-					opacity: 0.6,
-					position: "absolute",
+					top: "0px",
 					right: "2px",
-					backgroundColor: "#606060",
-					width: "5px",
-					fontSize: "1px",
-					webkitBorderRadius: "2px",
-					mozBorderRadius: "2px"
+					width: "5px"
 				});
 			}
 			this._scrollBarV = this._scrollBarNodeV;
 			this._scrollBarV.className = "";
 			dojo.style(this._scrollBarV, {"opacity": 0.6});
 		}
-		if(this._h){
+		if(this._h && !this._scrollBarH){
 			if(!this._scrollBarNodeH){
 				this._scrollBarNodeH = dojo.create("div", null, this.domNode);
+				dojo.style(this._scrollBarNodeH, styles);
 				dojo.style(this._scrollBarNodeH, {
-					opacity: 0.6,
-					position: "absolute",
+					left: "0px",
 					bottom: (this.isLocalFooter ? this.fixedFooterHeight : 0) + 2 + "px",
-					backgroundColor: "#606060",
-					height: "5px",
-					fontSize: "1px",
-					webkitBorderRadius: "2px",
-					mozBorderRadius: "2px"
+					height: "5px"
 				});
 			}
 			this._scrollBarH = this._scrollBarNodeH;
@@ -602,8 +604,17 @@ dojox.mobile.scrollable = function(){
 			}else if(top + height > dim.d.h){ // above the screen area
 				height -= top + height - dim.d.h;
 			}
-			this._scrollBarV.style.top = top + this.fixedHeaderHeight + 4 + "px"; // +4 is for top margin
-			this._scrollBarV.style.height = height - 8 + "px"; // -8 is for top/bottom margin
+			var t = top + this.fixedHeaderHeight + 4; // +4 is for top margin
+			var h = Math.max(height - 8, 5); // -8 is for top/bottom margin
+			if(h != this._scrollBarV._h){
+				this._scrollBarV.style.height = h + "px";
+				this._scrollBarV._h = h;
+			}
+			if(dojo.isWebKit){
+				this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:t});
+			}else{
+				this._scrollBarV.style.top = t + "px";
+			}
 		}
 		if(this._h){
 			var cw = dim.c.w;
@@ -615,8 +626,17 @@ dojox.mobile.scrollable = function(){
 			}else if(left + width > dim.d.w){ // right of the screen area
 				width -= left + width - dim.d.w;
 			}
-			this._scrollBarH.style.left = left + 4 + "px"; // +4 is for left margin
-			this._scrollBarH.style.width = width - 8 + "px"; // -8 is for left/right margin
+			var l = left + 4; // +4 is for left margin
+			var w = Math.max(width - 8, 5); // -8 is for left/right margin
+			if(w != this._scrollBarH._w){
+				this._scrollBarH.style.width = w + "px";
+				this._scrollBarH._w = w;
+			}
+			if(dojo.isWebKit){
+				this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:l});
+			}else{
+				this._scrollBarH.style.left = l + "px";
+			}
 		}
 	};
 
@@ -644,7 +664,8 @@ dojox.mobile.scrollable = function(){
 					top: "0px",
 					left: "0px",
 					width: "100%",
-					height: "100%"
+					height: "100%",
+					zIndex: 2147483647 // max of signed 32-bit integer
 				});
 				this._ch.push(dojo.connect(this._cover,
 					dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchEnd"));
