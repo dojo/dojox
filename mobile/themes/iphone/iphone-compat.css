@@ -103,7 +103,7 @@
 }
 
 /* dojox.mobile.TabBarButton */
-.dj_ie .mblTabBarButtonDiv {
+.dj_ie6 .mblTabBarButtonDiv, .dj_ie7 .mblTabBarButtonDiv {
 	left: auto;
 }
 
