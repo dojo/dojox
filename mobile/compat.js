@@ -271,6 +271,8 @@ dojo.extend(dojox.mobile.EdgeToEdgeList, {
 	}
 });
 
+if(dojox.mobile.IconContainer){
+
 dojox.mobile.IconContainer._addChild = dojox.mobile.IconContainer.prototype.addChild;
 dojo.extend(dojox.mobile.IconContainer, {
 	addChild: function(widget){
@@ -280,6 +282,8 @@ dojo.extend(dojox.mobile.IconContainer, {
 		}
 	}
 });
+
+} // if(dojox.mobile.IconContainer)
 
 dojo.mixin(dojox.mobile, {
 	createRoundRect: function(_this, isList){
@@ -431,7 +435,7 @@ dojox.mobile.getCssPaths = function(){
 	return paths;
 };
 
-dojox.mobile.loadCompatPattern = /\/themes\/(buttons|iphone|android).*\.css$/;
+dojox.mobile.loadCompatPattern = /\/themes\/(domButtons|buttons|iphone|android).*\.css$/;
 
 dojox.mobile.loadCompatCssFiles = function(){
 	// summary:
