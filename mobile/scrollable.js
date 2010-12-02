@@ -117,6 +117,9 @@ dojox.mobile.scrollable = function(){
 			for(s in style){
 				if(style.hasOwnProperty(s)){
 					node.style[s] = style[s];
+					if(s == "opacity" && typeof(node.style.filter) != "undefined"){
+						node.style.filter = " progid:DXImageTransform.Microsoft.alpha(opacity="+ (style[s]*100) +")";
+					}
 				}
 			}
 		};
@@ -210,8 +213,8 @@ dojox.mobile.scrollable = function(){
 		}else{
 			this._aborted = false;
 		}
-		this.touchStartX = e.touches ? e.touches[0].pageX : e.pageX;
-		this.touchStartY = e.touches ? e.touches[0].pageY : e.pageY;
+		this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
+		this.touchStartY = e.touches ? e.touches[0].pageY : e.clientY;
 		this.startTime = (new Date()).getTime();
 		this.startPos = this.getPos();
 		this._dim = this.getDim();
@@ -229,8 +232,8 @@ dojox.mobile.scrollable = function(){
 	};
 
 	this.onTouchMove = function(e){
-		var x = e.touches ? e.touches[0].pageX : e.pageX;
-		var y = e.touches ? e.touches[0].pageY : e.pageY;
+		var x = e.touches ? e.touches[0].pageX : e.clientX;
+		var y = e.touches ? e.touches[0].pageY : e.clientY;
 		var dx = x - this.touchStartX;
 		var dy = y - this.touchStartY;
 		var to = {x:this.startPos.x + dx, y:this.startPos.y + dy};
