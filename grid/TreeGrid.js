@@ -650,11 +650,14 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 			cf = this.treeModel.childrenAttrs||[];
 		}
 		if(cf){
-			for(var i = 0; i < idx.length - 1 && itm; i++){
-				if(cf[i]){
-					itm = (s.getValues(itm, cf[i])||[])[idx[i + 1]];
-				}else{
-					itm = null;
+			for(var i=1, il=idx.length; i<il; i++) {
+				for(var j=0, jl=cf.length; j<jl; j++) {
+					if(cf[j]){
+						itm = (s.getValues(itm, cf[j])||[])[idx[i]];
+					}else{
+						itm = null;
+					}
+					if(itm){ break; }
 				}
 			}
 		}
