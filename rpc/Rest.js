@@ -1,4 +1,4 @@
-dojo.provide("dojox.rpc.Rest"); 
+define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
 // Note: This doesn't require dojox.rpc.Service, and if you want it you must require it 
 // yourself, and you must load it prior to dojox.rpc.Rest.
 
@@ -19,7 +19,6 @@ dojo.provide("dojox.rpc.Rest");
 //  	| services.myRestService.put("parameters","data to put in resource");
 //  	| services.myRestService.post("parameters","data to post to the resource");
 //  	| services.myRestService['delete']("parameters");
-(function(){
 	if(dojox.rpc && dojox.rpc.transportRegistry){
 		// register it as an RPC service if the registry is available
 		dojox.rpc.transportRegistry.register(
@@ -131,4 +130,6 @@ dojo.provide("dojox.rpc.Rest");
 		// this is called to actually do the get
 		return index(dojo.xhrGet(service._getRequest(id, args)), service, (args.start >= 0 || args.count >= 0), id);
 	};
-})();
+
+	return dojox.rpc.Rest;
+});

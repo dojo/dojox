@@ -1,10 +1,4 @@
-dojo.provide("dojox.rpc.JsonRest");
-
-dojo.require("dojox.json.ref"); // this provides json indexing
-dojo.require("dojox.rpc.Rest");
-// summary:
-// 		Provides JSON/REST utility functions
-(function(){
+define("dojox/rpc/Service", ["dojo", "dojox", "dojox.json.ref", "dojox.rpc.Rest"], function(dojo, dojox) {
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
 	var jr;
@@ -452,6 +446,7 @@ dojo.require("dojox.rpc.Rest");
 		}
 		
 	};
-})();
 
+	return dojox.rpc.JsonRest;
+});
 

@@ -1,6 +1,4 @@
-dojo.provide("dojox.rpc.Service");
-
-dojo.require("dojo.AdapterRegistry");
+define("dojox/rpc/Service", ["dojo", "dojox", "dojo.AdapterRegistry"], function(dojo, dojox) {
 
 dojo.declare("dojox.rpc.Service", null, {
 	constructor: function(smd, options){
@@ -317,3 +315,7 @@ dojo._contentHandlers.auto = function(xhr){
 		retContentType.match(/\/xml/) ? handlers.xml(xhr) : handlers.text(xhr);
 	return results;
 };
+
+return dojox.rpc.Service;
+
+});
