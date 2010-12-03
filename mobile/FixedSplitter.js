@@ -52,7 +52,11 @@ dojo.declare(
 
 		var parent = dijit.getEnclosingWidget(this.domNode.parentNode);
 		if(!parent){
-			this.connect(dojo.global, "onresize", "resize");
+			if(window.onorientationchange !== undefined){
+				this.connect(dojo.global, "onorientationchange", "resize");
+			}else{
+				this.connect(dojo.global, "onresize", "resize");
+			}
 		}
 	},
 
