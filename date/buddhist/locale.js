@@ -80,6 +80,25 @@ dojo.requireLocalization("dojo.cldr", "buddhist");
 				case 'S':
 					s = Math.round(dateObject.getMilliseconds() * Math.pow(10, l-3)); pad = true;
 					break;
+				case 'z':
+					// We only have one timezone to offer; the one from the browser
+					s = dojo.date.getTimezoneName(dateObject.toGregorian());
+					if(s){ break; }
+					l = 4;
+					// fallthrough... use GMT if tz not available
+				case 'Z':
+					var offset = dateObject.toGregorian().getTimezoneOffset();
+					var tz = [
+						(offset <= 0 ? "+" : "-"),
+						dojo.string.pad(Math.floor(Math.abs(offset) / 60), 2),
+						dojo.string.pad(Math.abs(offset) % 60, 2)
+					];
+					if(l == 4){
+						tz.splice(0, 0, "GMT");
+						tz.splice(3, 0, ":");
+					}
+					s = tz.join("");
+					break;
 				default:
 					throw new Error("dojox.date.buddhist.locale.formatPattern: invalid pattern char: "+pattern);
 			}
