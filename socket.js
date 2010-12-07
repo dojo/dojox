@@ -1,6 +1,9 @@
-dojo.provide("dojox.socket");
+define("dojox/socket", ["dojo", "dojo/cookie"], function(dojo) {
 
-dojox.socket = function(/*dojo.__XhrArgs*/ argsOrUrl){
+var WebSocket = window.WebSocket;
+
+dojox.socket = Socket;
+function Socket(/*dojo.__XhrArgs*/ argsOrUrl){
 	// summary:
 	//		Provides a simple socket connection using WebSocket, or alternate
 	// 		communication mechanisms in legacy browsers for comet-style communication. This is based
@@ -37,18 +40,43 @@ dojox.socket = function(/*dojo.__XhrArgs*/ argsOrUrl){
 	if(typeof argsOrUrl == "string"){
 		argsOrUrl = {url: argsOrUrl};
 	}
-	return window.WebSocket ? dojox.socket.WebSocket(argsOrUrl) : dojox.socket.LongPoll(argsOrUrl);
+	return WebSocket ? dojox.socket.WebSocket(argsOrUrl) : dojox.socket.LongPoll(argsOrUrl);
 };
 
-dojox.socket.WebSocket = function(args){
+Socket.WebSocket = function(args){
 	// summary:
 	//		A wrapper for WebSocket, than handles standard args and relative URLs 
 	var ws = new WebSocket(new dojo._Url(document.baseURI.replace(/^http/i,'ws'), args.url));
 	ws.on = ws.addEventListener;
+	var opened;
+	dojo.connect(ws, "onopen", function(event){
+		opened = true;
+	});
+	dojo.connect(ws, "onclose", function(event){
+		if(opened){
+			return;
+		}
+		WebSocket = null;
+		Socket.replace(ws, dojox.socket(args), true);
+	});
 	return ws;
 };
-
-dojox.socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
+Socket.replace = function(socket, newSocket, listenForOpen){
+	// make the original socket a proxy for the new socket 
+	socket.send = dojo.hitch(newSocket, "send");
+	socket.close = dojo.hitch(newSocket, "close");
+	if(listenForOpen){
+		proxyEvent("open");
+	}
+	// redirect the events as well
+	dojo.forEach(["message", "close", "error"], proxyEvent);
+	function proxyEvent(type){
+		(newSocket.addEventListener || newSocket.on).call(newSocket, type, function(event){
+			socket.dispatchEvent(event);
+		});
+	}
+};
+Socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 	// summary:
 	//		Provides a simple long-poll based comet-style socket/connection to a server and returns an
 	// 		object implementing the WebSocket interface:
@@ -172,11 +200,13 @@ var cancelled = false,
 			socket.send();
 		}
 	}
-	function fire(event, object, deferred){
-		if(socket["on" + event]){
-			object.type = event;
-			object.ioArgs = deferred && deferred.ioArgs;
-			socket["on" + event](object);
+	function fire(type, object, deferred){
+		if(socket["on" + type]){
+			var event = document.createEvent("HTMLEvents");
+			event.initEvent(type);
+			dojo.mixin(event, object);
+			event.ioArgs = deferred && deferred.ioArgs;
+			socket["on" + type](event);
 		}
 	}
 	// provide an alias for Dojo's connect method
@@ -185,3 +215,5 @@ var cancelled = false,
 	setTimeout(connect);
 	return socket;
 };
+return Socket;
+});

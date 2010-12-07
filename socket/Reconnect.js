@@ -21,18 +21,9 @@ dojox.socket.Reconnect = function(socket, options){
 		clearTimeout(checkForOpen);
 		if(!event.wasClean){
 			socket.disconnected(function(){
-				newSocket = socket.reconnect();
-				// make the original socket a proxy for the new socket 
-				socket.send = dojo.hitch(newSocket, "send");
-				socket.close = dojo.hitch(newSocket, "close");
-				// redirect the events as well
-				dojo.forEach(["message", "close", "error"], function(type){
-					(newSocket.addEventListener || newSocket.on).call(newSocket, type, function(event){
-						socket.dispatchEvent(event);
-					});
-				});
+				dojox.socket.replace(socket, socket.reconnect());
 			});
-	}
+		}
 	});
 	var checkForOpen, newSocket;
 	if(!socket.disconnected){
