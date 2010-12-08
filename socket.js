@@ -69,7 +69,7 @@ Socket.replace = function(socket, newSocket, listenForOpen){
 		proxyEvent("open");
 	}
 	// redirect the events as well
-	dojo.forEach(["message", "close", "error"], proxyEvent);
+	dojo.forEach(["message", "close", "error", "open"], proxyEvent);
 	function proxyEvent(type){
 		(newSocket.addEventListener || newSocket.on).call(newSocket, type, function(event){
 			socket.dispatchEvent(event);
