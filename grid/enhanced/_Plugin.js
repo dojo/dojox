@@ -2,14 +2,14 @@ dojo.provide("dojox.grid.enhanced._Plugin");
 
 dojo.require("dojox.grid.EnhancedGrid");
 dojo.declare("dojox.grid.enhanced._Plugin", null, {
-	//	summary:
+	// summary:
 	//		Base class for all plugins.
 	//
-	//	description:
+	// description:
 	//		Provides common plugin functionality and basic life cyle management.
 	//		
 	//		Each concrete plugin is responsible for registering itself to the global plugin registry
-	// 		e.g. for dnd plugin:
+	//		e.g. for dnd plugin:
 	// |		dojox.grid.EnhancedGrid.registerPlugin("dnd" /*plugin name*/, 
 	// |												dojox.grid.enhanced.plugins.DnD /*full class name of a plugin*/ 
 	// |												{"preInit": false, "dependency": ["nestedSorting"]} /*properties*/);	
@@ -21,7 +21,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	//		   Note: recursive cycle dependencies are not supported e.g. following dependency is invalid:
 	//		   pluginA -> pluginB -> pluginA
 	//
-	//  example:
+	// example:
 	//		1. Customize default DnD plugin
 	// |	dojo.declare("mygrid.MyDnD", dojox.grid.enhanced.plugins.DnD, {
 	// |		name:"dnd" //still reuse the plugin name
@@ -72,17 +72,21 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	privates: {},
 	
 	constructor: function(inGrid, option){
-		this.grid = inGrid, this.option = option;
-		this._connects = [], this._subscribes = [];
+		this.grid = inGrid;
+		this.option = option;
+		this._connects = [];
+		this._subscribes = [];
 		this.privates = dojo.mixin({},dojox.grid.enhanced._Plugin.prototype);
 		this.init();
 	},
 	
 	init: function(){},
 	
-	afterPreInit: function(){},
+	onPreInit: function(){},
 	
-	afterPostInit: function(){},
+	onPostInit: function(){},
+	
+	onStartUp: function(){},	
 	
 	connect: function(obj, event, method){
 		// summary:
@@ -97,7 +101,6 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		this._connects.push(conn);
 		return conn;
 	},
-	
 	disconnect: function(handle){
 		// summary:
 		//		Disconnects handle and removes it from connection list.
@@ -107,9 +110,9 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 				conns.splice(i, 1);
 				return true;
 			}
+			return false;
 		});
 	},
-	
 	subscribe: function(topic, method){
 		// summary:
 		//		Subscribes to the specified topic and calls the specified method
@@ -125,7 +128,6 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		this._subscribes.push(subscribe);
 		return subscribe;
 	},
-	
 	unsubscribe: function(handle){
 		// summary:
 		//		Un-subscribes handle and removes it from subscriptions list.
@@ -135,11 +137,15 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 				subscribes.splice(i, 1);
 				return true;
 			}
+			return false;
 		});
 	},
-	
+	onSetStore: function(store){
+		// summary:
+		//		Called when store is changed.
+	},
 	destroy: function(){
-		//summary:
+		// summary:
 		//		Destroy all resources.
 		dojo.forEach(this._connects, dojo.disconnect);
 		dojo.forEach(this._subscribes, dojo.unsubscribe);
@@ -152,6 +158,6 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 });
 
 //Each plugin is responsible for registering itself
-// e.g. for DnD plugin:
-// |	dojox.grid.EnhancedGrid.registerPlugin('dnd'/*name*/, dojox.grid.enhanced.plugins.DnD/*class*/,
+// e.g. for DnD plugin(name:'dnd'):
+// |	dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.DnD/*class*/,
 // |		{"dependency": ["nestedSorting"]}/*Optional - properties*/);
