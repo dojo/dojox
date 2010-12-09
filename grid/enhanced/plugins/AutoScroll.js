@@ -21,7 +21,7 @@ dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plug
 	
 	constructor: function(grid, args){
 		this.grid = grid;
-		this._readyForAutoScroll = false;
+		this.readyForAutoScroll = false;
 		this._scrolling = false;
 		args = dojo.isObject(args) ? args : {};
 		if("interval" in args){
@@ -36,45 +36,56 @@ dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plug
 	_initEvents: function(){
 		var g = this.grid;
 		this.connect(g, "onCellMouseDown", function(){
-			this._readyForAutoScroll = true;
+			this.readyForAutoScroll = true;
 		});
 		this.connect(g, "onHeaderCellMouseDown", function(){
-			this._readyForAutoScroll = true;
+			this.readyForAutoScroll = true;
 		});
 		this.connect(g, "onRowSelectorMouseDown", function(){
-			this._readyForAutoScroll = true;
+			this.readyForAutoScroll = true;
 		});
 		this.connect(dojo.doc, "onmouseup", function(evt){
 			this._manageAutoScroll(true);
-			this._readyForAutoScroll = false;
+			this.readyForAutoScroll = false;
 		});
 		this.connect(dojo.doc, "onmousemove", function(evt){
-			if(this._readyForAutoScroll){
+			if(this.readyForAutoScroll){
 				this._event = evt;
 				var gridPos = dojo.position(g.domNode),
-					headerHeight = g._getHeaderHeight(),
-					margin = this.autoScrollMargin;
-				if(evt.clientY < gridPos.y + headerHeight + margin && evt.clientY >= gridPos.y + headerHeight){
-					this._manageAutoScroll(false, true, false);
-				}else if(evt.clientY > gridPos.y + gridPos.h - margin && evt.clientY <= gridPos.y + gridPos.h){
-					this._manageAutoScroll(false, true, true);
-				}else if(!dojo.some(g.views.views, function(view, i){
-					if(view instanceof dojox.grid._RowSelector){
-						return false;
+					hh = g._getHeaderHeight(),
+					margin = this.autoScrollMargin,
+					ey = evt.clientY, ex = evt.clientX,
+					gy = gridPos.y, gx = gridPos.x, 
+					gh = gridPos.h, gw = gridPos.w;
+				if(ex >= gx && ex <= gx + gw){
+					if(ey >= gy + hh && ey < gy + hh + margin){
+						this._manageAutoScroll(false, true, false);
+						return;
+					}else if(ey > gy + gh - margin && ey <= gy + gh){
+						this._manageAutoScroll(false, true, true);
+						return;
+					}else if(ey >= gy && ey <= gy + gh){
+						var withinSomeview = dojo.some(g.views.views, function(view, i){
+							if(view instanceof dojox.grid._RowSelector){
+								return false;
+							}
+							var viewPos = dojo.position(view.domNode);
+							if(ex < viewPos.x + margin && ex >= viewPos.x){
+								this._manageAutoScroll(false, false, false, view);
+								return true;
+							}else if(ex > viewPos.x + viewPos.w - margin && ex < viewPos.x + viewPos.w){
+								this._manageAutoScroll(false, false, true, view);
+								return true;
+							}
+							return false;
+						}, this);
+						if(withinSomeview){
+							return;
+						}
 					}
-					var viewPos = dojo.position(view.domNode);
-					if(evt.clientX < viewPos.x + margin && evt.clientX >= viewPos.x){
-						this._manageAutoScroll(false, false, false, view);
-						return true;
-					}else if(evt.clientX > viewPos.x + viewPos.w - margin && evt.clientX < viewPos.x + viewPos.w){
-						this._manageAutoScroll(false, false, true, view);
-						return true;
-					}
-					return false;
-				}, this)){
-					//No need to scroll views, stop autoscroll.
-					this._manageAutoScroll(true);
 				}
+				//stop autoscroll.
+				this._manageAutoScroll(true);
 			}
 		});
 	},
@@ -157,4 +168,4 @@ dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plug
 		return target;
 	}
 });
-dojox.grid.EnhancedGrid.registerPlugin('autoScroll', dojox.grid.enhanced.plugins.AutoScroll);
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.AutoScroll/*name:'autoScroll'*/);

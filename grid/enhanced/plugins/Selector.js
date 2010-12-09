@@ -48,13 +48,8 @@ dojo.declare("__SelectColItem", __SelectItem,{
 });
 =====*/
 
-var DISABLED = 0,//const
-	SINGLE = 1,//const
-	MULTI = 2,//const
-	_theOther = {//const
-		"col": "row",
-		"row": "col"
-	},
+var DISABLED = 0, SINGLE = 1, MULTI = 2,
+	_theOther = { col: "row", row: "col" },
 	_inRange = function(type, value, start, end, halfClose){
 		if(type !== "cell"){
 			value = value[type];
@@ -71,19 +66,21 @@ var DISABLED = 0,//const
 	},
 	_isEqual = function(type, v1, v2){
 		try{
-			switch(type){
-				case "col": case "row":
-					return v1[type] == v2[type] && typeof v1[type] == "number" && 
-							!(_theOther[type] in v1) && !(_theOther[type] in v2);
-				case "cell":
-					return v1.col == v2.col && v1.row == v2.row && typeof v1.col == "number" && typeof v1.row == "number";
+			if(v1 && v2){
+				switch(type){
+					case "col": case "row":
+						return v1[type] == v2[type] && typeof v1[type] == "number" && 
+								!(_theOther[type] in v1) && !(_theOther[type] in v2);
+					case "cell":
+						return v1.col == v2.col && v1.row == v2.row && typeof v1.col == "number" && typeof v1.row == "number";
+				}	
 			}
 		}catch(e){}
 		return false;
 	},
 	_stopEvent = function(evt){
 		try{
-			if(evt instanceof Event){
+			if(evt && evt.preventDefault){
 				dojo.stopEvent(evt);
 			}
 		}catch(e){}
@@ -106,6 +103,7 @@ var DISABLED = 0,//const
 					"col": colIndex
 				};
 		}
+		return null;
 	};
 dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -121,7 +119,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	// name: String
 	//		plugin name
 	name: "selector",
-	
+/*
 	//	_config: null,
 	//	_enabled: true,
 	//	_selecting: {
@@ -150,7 +148,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	//	_lastType: null,
 	//	_usingKeyboard: false,
 	//	_toSelect: true,
-	
+*/
+
 	constructor: function(grid, args){
 		this.grid = grid;
 		this._config = {
@@ -159,6 +158,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			cell: MULTI
 		};
 		this.setupConfig(args);
+		if(grid.selectionMode === "single"){
+			this._config.row = SINGLE;
+		}
 		this._enabled = true;
 		this._selecting = {};
 		this._selected = {
@@ -179,6 +181,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this._lastSelectedEndPoint = {};
 		this._keyboardSelect = {};
 		this._lastType = null;
+		this._selectedRowModified = {};
 		this._hacks();
 		this._initEvents();
 		this._initAreas();
@@ -258,7 +261,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			this.toggleSelect(type, rowIndex, colIndex);
 		}
 	},
-	selectRange: function(type, start, end){
+	selectRange: function(type, start, end, toSelect){
 		// summary:
 		//		Select a continuous range (a block of cells, a set of continuous columns or rows)
 		// tag:
@@ -271,11 +274,13 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		// end: Integer | Object
 		//		If type is "row" or "col", this is the index of the ending row or column.
 		//		If type if "cell", this is the right-bottom cell of the range.
+		this.grid._isSelectingRange = true;
 		var startPoint = type == "cell" ? _createItem(type, start.row, start.col) : _createItem(type, start),
 			endPoint = type == "cell" ? _createItem(type, end.row, end.col) : _createItem(type, end);
-		this._startSelect(type, startPoint, false, false);
-		this._highlight(type, endPoint, true);
+		this._startSelect(type, startPoint, false, false, false, toSelect);
+		this._highlight(type, endPoint, toSelect === undefined ? true : toSelect);
 		this._endSelect(type);
+		this.grid._isSelectingRange = false;
 	},
 	clear: function(type){
 		// summary:
@@ -390,7 +395,6 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	_hacks: function(){
 		// summary:
 		//		Complete the event system of grid, hack some grid functions to prevent default behavior.
-		//		TODO: should move all these out.
 		var g = this.grid;
 		var doContentMouseUp = function(e){
 			if(e.cellNode){
@@ -415,6 +419,24 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//Disable default selection.
 		g.selection.clickSelect = function(){};
 		
+		this._oldDeselectAll = g.selection.deselectAll;
+		var _this = this;
+		g.selection.selectRange = function(from, to){
+			_this.selectRange("row", from, to, true);
+			dojo.publish(g.id + "_onSelectionChange");
+		};
+		g.selection.deselectRange = function(from, to){
+			_this.selectRange("row", from, to, false);
+			dojo.publish(g.id + "_onSelectionChange");
+		};
+		g.selection.deselectAll = function(){
+			g._isSelectingRange = true;
+			_this._oldDeselectAll.apply(g.selection, arguments);
+			_this._clearSelection("row");
+			g._isSelectingRange = false;
+			dojo.publish(g.id + "_onSelectionChange");
+		};
+		
 		var rowSelector = g.views.views[0];
 		//The default function re-write the whole className, so can not insert any other classes.
 		if(rowSelector instanceof dojox.grid._RowSelector){
@@ -426,10 +448,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				dojo.toggleClass(inRowNode, "dojoxGridRowbarSelected", !!g.selection.isSelected(inRowIndex));
 			};
 		}
-		
 		this.connect(g, "updateRow", function(rowIndex){
 			dojo.forEach(g.layout.cells, function(cell){
-				if(this.isSelected("cell", rowIndex, cell.index) && !cell.notselectable){
+				if(this.isSelected("cell", rowIndex, cell.index)){
 					this._highlightNode(cell.getNode(rowIndex), true);
 				}
 			}, this);
@@ -499,11 +520,24 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			}
 		});
 		
+		//When row order has changed in a unpredictable way (sorted or filtered), map the new rowindex.
+		//this.connect(g, "onSelectedById", "_onSelectedById");
+		
 		//When the grid refreshes, all those selected should still appear selected.
-		this.connect(g, "_onFetchComplete", dojo.hitch(this, "_refreshSelected", true));
+		this.connect(g, "_onFetchComplete", function(){
+			//console.debug("refresh after buildPage:", g._notRefreshSelection);
+			if(!g._notRefreshSelection){
+				this._refreshSelected(true);
+			}
+		});
 
 		//Small scroll might not refresh the grid.
-		this.connect(g.scroller, "buildPage", dojo.hitch(this, "_refreshSelected", true));
+		this.connect(g.scroller, "buildPage", function(){
+			//console.debug("refresh after buildPage:", g._notRefreshSelection);
+			if(!g._notRefreshSelection){
+				this._refreshSelected(true);
+			}
+		});
 		
 		//Whenever the mouse is up, end selecting.
 		this.connect(dojo.doc, "onmouseup", dp(ender, "all"));
@@ -533,22 +567,68 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this.connect(g, "onSelected", function(rowIndex){
 			if(this._selectedRowModified && this._isUsingRowSelector){
 				delete this._selectedRowModified;
-			}else{
+			}else if(!this.grid._isSelectingRange){
 				this.select("row", rowIndex);
 			}
 		});
 		this.connect(g, "onDeselected", function(rowIndex){
 			if(this._selectedRowModified && this._isUsingRowSelector){
 				delete this._selectedRowModified;
-			}else{
+			}else if(!this.grid._isSelectingRange){
 				this.deselect("row", rowIndex);
 			}
 		});
 	},
+	_onSelectedById: function(id, newIndex, isSelected){
+		if(this.grid._noInternalMapping){
+			return;
+		}
+		var pointSet = [this._lastAnchorPoint.row, this._lastEndPoint.row, 
+			this._lastSelectedAnchorPoint.row, this._lastSelectedEndPoint.row];
+		pointSet = pointSet.concat(this._selected.row);
+		var found = false;
+		dojo.forEach(pointSet, function(item){
+			if(item){
+				if(item.id === id){
+					found = true;
+					item.row = newIndex;
+				}else if(item.row === newIndex && item.id){
+					item.row = -1;
+				}
+			}
+		});
+		if(!found && isSelected){
+			dojo.some(this._selected.row, function(item){
+				if(item && !item.id && !item.except.length){
+					item.id = id;
+					item.row = newIndex;
+					return true;
+				}
+				return false;
+			});
+		}
+		found = false;
+		pointSet = [this._lastAnchorPoint.cell, this._lastEndPoint.cell, 
+			this._lastSelectedAnchorPoint.cell, this._lastSelectedEndPoint.cell];
+		pointSet = pointSet.concat(this._selected.cell);
+		dojo.forEach(pointSet, function(item){
+			if(item){
+				if(item.id === id){
+					found = true;
+					item.row = newIndex;
+				}else if(item.row === newIndex && item.id){
+					item.row = -1;
+				}
+			}
+		});
+	},
+	onSetStore: function(){
+		this._clearSelection("all");
+	},
 	_onInternalRearrange: function(type, mapping){
 		try{
 		//The column can not refresh it self!
-		this._subRefresh("col", false);
+		this._refresh("col", false);
 		
 		dojo.forEach(this._selected.row, function(item){
 			dojo.forEach(this.grid.layout.cells, function(cell){
@@ -614,33 +694,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		
 		dojo.forEach(pointSet, cleanUp);
 		
-		//must deselect all for default grid selection, because it will know the mapping.
-		if(type === "row"){
-			var g = this.grid;
-			var s = [];
-			for(var i = 0, len = g.selection.selected.length; i < len; ++i){
-				if(g.selection.selected[i]){
-					s.push(i);
-				}
-			}
-			//Must separate deselection and selection, or only one row will be selected.
-			dojo.forEach(s, function(r){
-				if(r in mapping){
-					g.selection.setSelected(r, false);
-				}
-			});
-			dojo.forEach(s, function(r){
-				if(r in mapping){
-					g.selection.setSelected(mapping[r], true);
-				}
-			});
-		}
-		
-		var _this = this;
-		setTimeout(function(){
-			_this._refreshSelected(true);
-			_this._focusPoint(type, _this._lastEndPoint);
-		},0);
+		this._refreshSelected(true);
+		this._focusPoint(type, this._lastEndPoint);
 		}catch(e){
 			console.log("_onInternalRearrange",e);
 		}
@@ -650,25 +705,21 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			end = type == "cell" ? target.max : target[target.length - 1];
 		this.selectRange(type, start, end);	
 	},
-	_subRefresh: function(type, toHighlight){
+	_refresh: function(type, toHighlight){
 		if(!this._keyboardSelect[type]){
 			dojo.forEach(this._selected[type], function(item){
-				this._highlightSingle(type, toHighlight, item);
+				this._highlightSingle(type, toHighlight, item, undefined, true);
 			}, this);
 		}
 	},
-	_refreshSelected: function(toHighlight){
-		this._subRefresh("col", toHighlight);
-		this._subRefresh("row", toHighlight);
-		this._subRefresh("cell", toHighlight);
+	_refreshSelected: function(){
+		this._refresh("col", true);
+		this._refresh("row", true);
+		this._refresh("cell", true);
 	},
 	_initAreas: function(){
-		var g = this.grid,
-			f = g.focus,
-			_this = this,
-			dk = dojo.keys,
-			keyboardSelectReady = 1,
-			duringKeyboardSelect = 2,
+		var g = this.grid, f = g.focus, _this = this, dk = dojo.keys,
+			keyboardSelectReady = 1, duringKeyboardSelect = 2,
 			onmove = function(type, createNewEnd, rowStep, colStep, evt){
 				//Keyboard swipe selection is SHIFT + Direction Keys.
 				var ks = _this._keyboardSelect;
@@ -689,7 +740,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				}
 			},
 			onkeydown = function(type, getTarget, evt, isBubble){
-				if(isBubble && _this.selectEnabled()){
+				if(isBubble && _this.selectEnabled() && _this._config[type] != DISABLED){
 					switch(evt.keyCode){
 						case dk.SPACE:
 							//Keyboard single point selection is SPACE.
@@ -726,18 +777,21 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 					}
 					//evt might not be real event, it may be a mock object instead.
 					if(evt && "rowIndex" in evt){
-						_this._lastFocusedRowBarIdx = evt.rowIndex;
+						if(evt.rowIndex >= 0){
+							_this._lastFocusedRowBarIdx = evt.rowIndex;
+						}else if(!_this._lastFocusedRowBarIdx){
+							_this._lastFocusedRowBarIdx = 0;
+						}	
 					}
 					rowBarNode = view.getCellNode(_this._lastFocusedRowBarIdx, 0);
-					//If we do not focus the whole grid here, the keyboard nav will not work.
-					dijit.focus(g.domNode);
 					dijit.focus(rowBarNode);
 					if(rowBarNode){
 						dojo.toggleClass(rowBarNode, f.focusClass, true);
 					}
-					_stopEvent(evt);	
+					_stopEvent(evt);
+					return true;
 				}
-				return true;
+				return false;
 			},
 			onBlur: function(evt, step){
 				var view = g.views.views[0];
@@ -836,6 +890,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			this._clearSelection("row", reservedItem);
 			return;
 		}
+		this._isUsingRowSelector = true;
 		dojo.forEach(this._selected[type], function(item){
 			if(!_isEqual(type, reservedItem, item)){
 				this._highlightSingle(type, false, item);
@@ -847,15 +902,16 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this._selected[type] = [];
 		
 		//Have to also deselect default grid selection.
-		if(type == "row"){
-			this.grid.selection.deselectAll();
+		if(type == "row" && !this.grid._isSelectingRange){
+			this._oldDeselectAll.call(this.grid.selection);
+			this.grid.selection._selectedById = {};
 		}
 		
 		//Fire events.
 		this.grid.onEndDeselect(type, null, null, this._selected);
 		this.grid.onSelectCleared(type);
 	},
-	_startSelect: function(type, start, extending, isRange, mandatarySelect){
+	_startSelect: function(type, start, extending, isRange, mandatarySelect, toSelect){
 		// summary:
 		//		Start selection, setup start point and current point, fire events.
 		// tag:
@@ -882,7 +938,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//If CTRL is not pressed or it's SINGLE mode, this is a brand new selection.
 		if(!extending || (!isSelected && this._config[type] == SINGLE)){
 			this._clearSelection("all", start);
-			this._toSelect = true;
+			this._toSelect = toSelect === undefined ? true : toSelect;
 		}
 		
 		this._selecting[type] = true;
@@ -946,176 +1002,45 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				break;
 		}
 	},
-	_calcToHighlight: function(type, target, toHighlight, toSelect, isRefresh){
+	_calcToHighlight: function(type, target, toHighlight, toSelect){
 		// summary:
 		//		Calculate what status should *target* have.
-		//		If *toSelect* and *isRefresh* are not provided, this is a no op. 
+		//		If *toSelect* is not provided, this is a no op. 
 		// This function is time-critical!!
-		if(typeof toSelect != "undefined"){
-			var sltd = this._isSelected(type, target),
-				last = this._isInLastRange(this._lastType, target);
-			if(last && !toHighlight && this._usingKeyboard){
-				//This 2 cases makes the keyboard swipe selection valid!
-				if(toSelect && sltd){
-					return false;
-				}
-				if(!toSelect && !sltd && this._isInLastRange(this._lastType, target, true)){
-					return true;
+		if(toSelect !== undefined){
+			var sltd;
+			if(this._usingKeyboard && !toHighlight){
+				var last = this._isInLastRange(this._lastType, target);
+				if(last){
+					sltd = this._isSelected(type, target);
+					//This 2 cases makes the keyboard swipe selection valid!
+					if(toSelect && sltd){
+						return false;
+					}
+					if(!toSelect && !sltd && this._isInLastRange(this._lastType, target, true)){
+						return true;
+					}
 				}
 			}
-			return toHighlight ? toSelect : sltd;
+			return toHighlight ? toSelect : (sltd || this._isSelected(type, target));
 		}
 		return toHighlight;
 	},
 	_highlightNode: function(node, toHighlight){
 		// summary:
 		//		Do the actual highlight work.
-		//var t1 = (new Date()).getTime();
 		if(node){
 			var selectCSSClass = "dojoxGridRowSelected";
 			var selectCellClass = "dojoxGridCellSelected";
-			var leftSelectBorder = dojo._isBodyLtr() ? "dojoxGridSelectedLeft" : "dojoxGridSelectedRight";
-			var rightSelectBorder = dojo._isBodyLtr() ? "dojoxGridSelectedRight" : "dojoxGridSelectedLeft";
-			var topSelectBorder = "dojoxGridSelectedTop";
-			var bottomSelectBorder = "dojoxGridSelectedBottom";
 			dojo.toggleClass(node, selectCSSClass, toHighlight);
 			dojo.toggleClass(node, selectCellClass, toHighlight);
-			var colIdx = node.getAttribute("idx"),
-				cells = this.grid.layout.cells,
-				leftSib = node.previousSibling,
-				rightSib = node.nextSibling,
-				upSib, downSib,
-				upRow = node.parentNode.parentNode.parentNode.parentNode.previousSibling,
-				downRow = node.parentNode.parentNode.parentNode.parentNode.nextSibling;
-			while(leftSib && cells[parseInt(leftSib.getAttribute("idx"), 10)].hidden){
-				leftSib = leftSib.previousSibling;
-			}
-			while(rightSib && cells[parseInt(rightSib.getAttribute("idx"), 10)].hidden){
-				rightSib = rightSib.nextSibling;
-			}
-			var page, contentNode, top;
-			if(!upRow){
-				//Try to find the previous page.
-				page = node.parentNode.parentNode.parentNode.parentNode.parentNode;
-				contentNode = page.parentNode;
-				top = parseFloat(dojo.style(page, "top")); 
-				var upPage;
-				dojo.query("> div", contentNode).some(function(p){
-					if(parseFloat(dojo.style(p, "top")) + dojo.contentBox(p).h == top){
-						upPage = p;
-						return true;
-					}
-				});
-				if(upPage){
-					upRow = upPage.lastChild;
-				}
-			}
-			if(!downRow){
-				//Try to find the next page.
-				page = node.parentNode.parentNode.parentNode.parentNode.parentNode;
-				contentNode = page.parentNode;
-				top = parseFloat(dojo.style(page, "top")) + dojo.contentBox(page).h;
-				var downPage;
-				dojo.query("> div", contentNode).some(function(p){
-					if(parseFloat(dojo.style(p, "top")) == top){
-						downPage = p;
-						return true;
-					}
-				});
-				if(downPage){
-					downRow = downPage.firstChild;
-				}
-			}
-			if(upRow){
-				upSib = dojo.query("> table > tbody > tr > td[idx='" + colIdx + "']", upRow)[0];
-			}
-			if(downRow){
-				downSib = dojo.query("> table > tbody > tr > td[idx='" + colIdx + "']", downRow)[0];
-			}
-			if(toHighlight){
-				if(leftSib && dojo.hasClass(leftSib, selectCSSClass)){
-					dojo.removeClass(leftSib, rightSelectBorder);
-				}else{
-					dojo.addClass(node, leftSelectBorder);
-				}
-				if(rightSib && dojo.hasClass(rightSib, selectCSSClass)){
-					dojo.removeClass(rightSib, leftSelectBorder);
-				}else{
-					dojo.addClass(node, rightSelectBorder);
-				}
-				if(upSib && dojo.hasClass(upSib, selectCSSClass)){
-					dojo.removeClass(upSib, bottomSelectBorder);
-				}else{
-					dojo.addClass(node, topSelectBorder);
-				}
-				if(downSib && dojo.hasClass(downSib, selectCSSClass)){
-					dojo.removeClass(downSib, topSelectBorder);
-				}else{
-					dojo.addClass(node, bottomSelectBorder);
-				}
-			}else{
-				//remove all css classes.
-				dojo.removeClass(node, leftSelectBorder);
-				dojo.removeClass(node, rightSelectBorder);
-				dojo.removeClass(node, topSelectBorder);
-				dojo.removeClass(node, bottomSelectBorder);
-				if(leftSib && dojo.hasClass(leftSib, selectCSSClass)){
-					dojo.addClass(leftSib, rightSelectBorder);
-				}
-				if(rightSib && dojo.hasClass(rightSib, selectCSSClass)){
-					dojo.addClass(rightSib, leftSelectBorder);
-				}
-				if(upSib && dojo.hasClass(upSib, selectCSSClass)){
-					dojo.addClass(upSib, bottomSelectBorder);
-				}
-				if(downSib && dojo.hasClass(downSib, selectCSSClass)){
-					dojo.addClass(downSib, topSelectBorder);
-				}
-			}
 		}
-		//console.log((new Date()).getTime() - t1);
 	},
 	_highlightHeader: function(colIdx, toHighlight){
-		//var t1 = (new Date()).getTime();
 		var cells = this.grid.layout.cells;
-		var cell = cells[colIdx];
-		var node = cell.getHeaderNode();
-		var leftCell = cells[colIdx - 1];
-		while(leftCell && leftCell.hidden){
-			leftCell = cells[leftCell.index - 1];
-		}
-		var leftNode = leftCell && leftCell.getHeaderNode();
-		var rightCell = cells[colIdx + 1];
-		while(rightCell && rightCell.hidden){
-			rightCell = cells[rightCell.index + 1];
-		}
-		var rightNode = rightCell && rightCell.getHeaderNode();
+		var node = cells[colIdx].getHeaderNode();
 		var selectedClass = "dojoxGridHeaderSelected";
-		var selectedLeft = dojo._isBodyLtr() ? "dojoxGridHeaderSelectedLeft" : "dojoxGridHeaderSelectedRight";
-		var selectedRight = dojo._isBodyLtr() ? "dojoxGridHeaderSelectedRight" : "dojoxGridHeaderSelectedLeft";
 		dojo.toggleClass(node, selectedClass, toHighlight);
-		if(toHighlight){
-			if(leftNode && dojo.hasClass(leftNode, selectedClass)){
-				dojo.removeClass(leftNode, selectedRight);
-			}else{
-				dojo.addClass(node, selectedLeft);
-			}
-			if(rightNode && dojo.hasClass(rightNode, selectedClass)){
-				dojo.removeClass(rightNode, selectedLeft);
-			}else{
-				dojo.addClass(node, selectedRight);
-			}
-		}else{
-			dojo.removeClass(node, selectedLeft);
-			dojo.removeClass(node, selectedRight);
-			if(leftNode && dojo.hasClass(leftNode, selectedClass)){
-				dojo.addClass(leftNode, selectedRight);
-			}
-			if(rightNode && dojo.hasClass(rightNode, selectedClass)){
-				dojo.addClass(rightNode, selectedLeft);
-			}
-		}
-		//console.log((new Date()).getTime() - t1);
 	},
 	_highlightRowSelector: function(rowIdx, toHighlight){
 		//var t1 = (new Date()).getTime();
@@ -1123,33 +1048,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		if(rowSelector instanceof dojox.grid._RowSelector){
 			var node = rowSelector.getRowNode(rowIdx);
 			if(node){
-				var upNode = rowSelector.getRowNode(rowIdx - 1);
-				var downNode = rowSelector.getRowNode(rowIdx + 1);
 				var selectedClass = "dojoxGridRowSelectorSelected";
-				var selectedUp = "dojoxGridRowSelectorSelectedUp";
-				var selectedDown = "dojoxGridRowSelectorSelectedDown";
 				dojo.toggleClass(node, selectedClass, toHighlight);
-				if(toHighlight){
-					if(upNode && dojo.hasClass(upNode, selectedClass)){
-						dojo.removeClass(upNode, selectedDown);
-					}else{
-						dojo.addClass(node, selectedUp);
-					}
-					if(downNode && dojo.hasClass(downNode, selectedClass)){
-						dojo.removeClass(downNode, selectedUp);
-					}else{
-						dojo.addClass(node, selectedDown);
-					}
-				}else{
-					dojo.removeClass(node, selectedUp);
-					dojo.removeClass(node, selectedDown);
-					if(upNode && dojo.hasClass(upNode, selectedClass)){
-						dojo.addClass(upNode, selectedDown);
-					}
-					if(downNode && dojo.hasClass(downNode, selectedClass)){
-						dojo.addClass(downNode, selectedUp);
-					}
-				}
 			}
 		}
 		//console.log((new Date()).getTime() - t1);
@@ -1158,44 +1058,45 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		// summary:
 		//		Highlight a single item.
 		// This function is time critical!!
-		var _this = this, toHL,
-			g = _this.grid,
-			cells = g.layout.cells;
+		var _this = this, toHL, g = _this.grid, cells = g.layout.cells;
 		switch(type){
 			case "cell":
-				toHL = this._calcToHighlight(type, target, toHighlight, toSelect, isRefresh);
-				if(!cells[target.col].hidden && !cells[target.col].notselectable){
-					this._highlightNode(target.node || cells[target.col].getNode(target.row), toHL, isRefresh);
+				toHL = this._calcToHighlight(type, target, toHighlight, toSelect);
+				var c = cells[target.col];
+				if(!c.hidden && !c.notselectable){
+					this._highlightNode(target.node || c.getNode(target.row), toHL);
 				}
 				break;
 			case "col":
+				toHL = this._calcToHighlight(type, target, toHighlight, toSelect);
+				this._highlightHeader(target.col, toHL);
 				dojo.query("td[idx='" + target.col + "']", g.domNode).forEach(function(cellNode){
 					var rowNode = cells[target.col].view.content.findRowTarget(cellNode);
 					if(rowNode){
 						var rowIndex = rowNode[dojox.grid.util.rowIndexTag];
-						_this._highlightSingle("cell", toHighlight, {
+						_this._highlightSingle("cell", toHL, {
 							"row": rowIndex,
 							"col": target.col,
 							"node": cellNode
-						}, toSelect, isRefresh);
+						});
 					}
 				});
-				toHL = this._calcToHighlight(type, target, toHighlight, toSelect, isRefresh);
-				this._highlightHeader(target.col, toHL);
 				break;
 			case "row":
+				toHL = this._calcToHighlight(type, target, toHighlight, toSelect);
+				this._highlightRowSelector(target.row, toHL);
 				dojo.forEach(cells, function(cell){
-					_this._highlightSingle("cell", toHighlight, {
+					_this._highlightSingle("cell", toHL, {
 						"row": target.row,
 						"col": cell.index,
 						"node": cell.getNode(target.row)
-					}, toSelect, isRefresh);
+					});
 				});
-				toHL = this._calcToHighlight(type, target, toHighlight, toSelect, isRefresh);
 				//To avoid dead lock
 				this._selectedRowModified = true;
-				g.selection.setSelected(target.row, toHL);
-				this._highlightRowSelector(target.row, toHL);
+				if(!isRefresh){
+					g.selection.setSelected(target.row, toHL);
+				}
 		}
 	},
 	_highlight: function(type, target, toSelect){
@@ -1234,7 +1135,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 					break;
 				case "cell":
 					if(current !== null){
-					if(_inRange("row", target, start, current, true) ||
+						if(_inRange("row", target, start, current, true) ||
 							_inRange("col", target, start, current, true) ||
 							_inRange("row", start, target, current, true) ||
 							_inRange("col", start, target, current, true)){
@@ -1285,12 +1186,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	_addToSelected: function(type){
 		// summary:
 		//		Record the selected items.
-		var toSelect = this._toSelect,
-			toAdd = [],
-			toRemove = [],
+		var toSelect = this._toSelect, _this = this,
+			toAdd = [], toRemove = [],
 			start = this._startPoint[type],
-			end = this._currentPoint[type],
-			_this = this;
+			end = this._currentPoint[type];
 		if(this._usingKeyboard){
 			//If using keyboard, selection will be ended after every move. But we have to remember the original selection status,
 			//so as to return to correct status when we shrink the selection region.
@@ -1315,7 +1214,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this._add(type, toAdd);	
 		this._remove(type, toRemove);
 		if(!this._usingKeyboard || toSelect){
-			this._backup = dojo.fromJson(dojo.toJson(this._selected));
+			setTimeout(function(){
+				_this._backup = dojo.clone(_this._selected);
+			}, 0);
 		}
 		if(this._usingKeyboard){
 			this._swapBuffer();
@@ -1387,6 +1288,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 					toRemove.push(v1);
 					return true;
 				}
+				return false;
 			});
 		});
 		this._remove("cell", toRemove);
@@ -1445,6 +1347,14 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				});
 			});
 		}
+		if(type != "col" && this.grid._hasIdentity){
+			dojo.forEach(items, function(item){
+				var record = this.grid._by_idx[item.row];
+				if(record){
+					item.id = record.idty;
+				}
+			}, this);
+		}
 		this._selected[type] = this._selected[type].concat(items);
 	},
 	_remove: function(type, items){
@@ -1482,7 +1392,13 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			}
 			return ret;
 		});
-		return (res || type !== "cell") ? res : (this._isCellNotInExcept("col", item) || this._isCellNotInExcept("row", item));	
+		if(!res && type === "cell"){
+			res = (this._isCellNotInExcept("col", item) || this._isCellNotInExcept("row", item));
+			if(type === "cell"){
+				res = res && !this.grid.layout.cells[item.col].notselectable;
+			}
+		}
+		return res;
 	},
 	_isInLastRange: function(type, item, isSelected){
 		// summary:
@@ -1497,8 +1413,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//		Check whether the item is a valid __SelectItem for the given type.
 		if(!item){ return false; }
 		try{
-			var g = this.grid,
-				index = item[type];
+			var g = this.grid, index = item[type];
 			switch(type){
 				case "col":
 					return index >= 0 && index < g.layout.cells.length && dojo.isArray(item.except) &&
@@ -1509,12 +1424,12 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 					return item.col >= 0 && item.col < g.layout.cells.length && 
 							item.row >= 0 && item.row < g.rowCount &&
 							(allowNotSelectable || !g.layout.cells[item.col].notselectable);
-			}	
+			}
 		}catch(e){}
 		return false;
 	}
 });
-dojox.grid.EnhancedGrid.registerPlugin('selector', dojox.grid.enhanced.plugins.Selector, {
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Selector/*name:'selector'*/, {
 	"dependency": ["autoScroll"]
 });
 })();
