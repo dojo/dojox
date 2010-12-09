@@ -18,14 +18,15 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 		var children = null;
 		return dojo.some(this.childrenAttrs, function(attr){
 				children = this.store.getValue(item, attr);
-				if(dojo.isArray(children)){
-					return children.length > 0;
-				}else if(dojo.isString(children)){
+				if(dojo.isString(children)){
 					return parseInt(children, 10) > 0 || children.toLowerCase() === "true" ? true : false;
 				}else if(typeof children == "number"){
 					return children > 0;
 				}else if(typeof children == "boolean"){
 					return children;
+				}else if(this.store.isItem(children)){
+					children = this.store.getValues(item, attr);
+					return dojo.isArray(children) ? children.length > 0 : false;
 				}else{
 					return false;
 				}
@@ -36,18 +37,20 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 		if(queryObj){
 			var start = queryObj.start || 0,
 				count = queryObj.count,
-				parentId = queryObj.parentId;
+				parentId = queryObj.parentId,
+				sort = queryObj.sort;
 			if(parentItem === this.root){
 				this.root.size = 0;
 				this.store.fetch({
 					start: start,
 					count: count,
+					sort: sort,
 					query: this.query,
 					onBegin: dojo.hitch(this, function(size){
 						this.root.size = size;
 					}),
 					onComplete: dojo.hitch(this, function(items){
-						onComplete(items, this.root.size);
+						onComplete(items, queryObj, this.root.size);
 					}),
 					onError: onError
 				});
@@ -69,12 +72,13 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 					this.store.fetch({
 						start: start,
 						count: count,
-						query: dojo.mixin(this.query || {}, {parentId: parentId}),
+						sort: sort,
+						query: dojo.mixin({parentId: parentId}, this.query || {}),
 						onBegin: dojo.hitch(this, function(size){
 							this.childrenSize = size;
 						}),
 						onComplete: dojo.hitch(this, function(items){
-							onComplete(items, this.childrenSize);
+							onComplete(items, queryObj, this.childrenSize);
 						}),
 						onError: onError
 					});
@@ -92,14 +96,10 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 		//		Check if all children of the given item have been loaded
 		var children = null;
 		return dojo.every(this.childrenAttrs, function(attr){
-			children = this.store.getValue(parentItem, attr);
-			if(dojo.isArray(children) && children.length > 0){
-				return dojo.every(children, function(c){
-					return this.store.isItemLoaded(c);
-				}, this);
-			}else{
-				return false;
-			}
+			children = this.store.getValues(parentItem, attr);
+			return dojo.every(children, function(c){
+				return this.store.isItemLoaded(c);
+			}, this);
 		}, this);
 	}
 });

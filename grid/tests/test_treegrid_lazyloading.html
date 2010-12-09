@@ -30,6 +30,7 @@
             dojo.require("dijit.tree.ForestStoreModel");
             dojo.require("dojo.data.ItemFileWriteStore");
             dojo.require("dojo.parser");
+			dojo.require("dijit.form.Button");
 
 			var rows = 5;
 			var continentItems = [
@@ -98,7 +99,30 @@
 			function deleteItem() {
 				var item = grid.getItem(3);
 				grid.store.deleteItem(item);
-				grid._refresh();
+			}
+			
+			var idx = 1000;
+			function addItem(){
+				var item = {id:'test_' + idx, name:'test_' + idx, type:'', population: '', area: ''};
+				grid.store.newItem(item);
+				idx++;
+			}
+			
+			function addChildItem(){
+				var item = {id:'test_child_' + idx, name:'test_child_' + idx, type:'', population: '', area: ''};
+				var parent = null;
+				var s = grid.store;
+				s.fetchItemByIdentity({identity: "Continent", onItem: function(item){
+					parent = item;
+				}});
+				if(parent){
+					s.newItem(item, {parent: parent, attribute: "children"});
+					idx++;
+				}
+			}
+			
+			function removeSelected(){
+				grid.removeSelectedRows();
 			}
 
         </script>
@@ -111,9 +135,11 @@
 
         <div dojoType="dijit.tree.ForestStoreModel" jsId="continentModel"
         	store="jsonStore" query="{type:'*'}" childrenAttrs="children"></div>
+		<div dojoType="dojox.grid.LazyTreeGridStoreModel" jsId="continentModel"
+        	store="jsonStore" query="{type:'*'}" childrenAttrs="children"></div>
 
-        <table jsid="grid" dojoType="dojox.grid.LazyTreeGrid" class="grid" defaultOpen=true rowsPerPage=20
-			   store="jsonStore" treeModel="continentModel" rowSelector="20px"  storeType=1>
+        <table jsid="grid" dojoType="dojox.grid.LazyTreeGrid" class="grid" defaultOpen=true rowsPerPage=5
+			   store="jsonStore" treeModel="continentModel" rowSelector="20px"  columnReordering=true>
             <thead>
                 <tr>
                     <th field="name" width="auto">Name</th>
@@ -124,5 +150,9 @@
             </thead>
         </table>
     </body>
+	
+	<button dojoType="dijit.form.Button" onClick="addItem()">Add Item</button>
+	<button dojoType="dijit.form.Button" onClick="addChildItem()">Add Child Item</button>
+	<button dojoType="dijit.form.Button" onClick="removeSelected()">Delete Selected</button>
 </html>
 
