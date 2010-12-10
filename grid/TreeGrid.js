@@ -643,21 +643,30 @@ dojo.declare("dojox.grid.TreeGrid", dojox.grid.DataGrid, {
 		}
 		var s = this.store;
 		var itm = dojox.grid.DataGrid.prototype.getItem.call(this, idx[0]);
-		var cf;
+		var cf, i, j;
 		if(this.aggregator){
 			cf = this.aggregator.childFields||[];
-		}else if(this.treeModel){
-			cf = this.treeModel.childrenAttrs||[];
-		}
-		if(cf){
-			for(var i=1, il=idx.length; i<il; i++) {
-				for(var j=0, jl=cf.length; j<jl; j++) {
-					if(cf[j]){
-						itm = (s.getValues(itm, cf[j])||[])[idx[i]];
+			if(cf){
+				for(i = 0; i < idx.length - 1 && itm; i++){
+					if(cf[i]){
+						itm = (s.getValues(itm, cf[i])||[])[idx[i + 1]];
 					}else{
 						itm = null;
 					}
-					if(itm){ break; }
+				}
+			}
+		}else if(this.treeModel){
+			cf = this.treeModel.childrenAttrs||[];
+			if(cf&&itm){
+				for(i=1, il=idx.length; (i<il) && itm; i++) {
+					for(j=0, jl=cf.length; j<jl; j++) {
+						if(cf[j]){
+							itm = (s.getValues(itm, cf[j])||[])[idx[i]];
+						}else{
+							itm = null;
+						}
+						if(itm){ break; }
+					}
 				}
 			}
 		}
