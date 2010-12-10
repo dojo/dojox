@@ -185,6 +185,10 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		// summary:
 		//		Function to display the blocking overlay and busy/status icon or text.
 		if(!this._displayed){
+			if(this._anim){
+				this._anim.stop();
+				delete this._anim;
+			}
 			this._displayed = true;
 			this._size();
 			this._disableOverflow();
@@ -196,6 +200,10 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		// summary:
 		//		Function to hide the blocking overlay and status icon or text.
 		if(this._displayed){
+			if(this._anim){
+				this._anim.stop();
+				delete this._anim;
+			}
 			this._size();
 			this._fadeOut();
 			this._displayed = false;
@@ -236,6 +244,10 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 		if(dojo.isIE == 7){
 			dojo.body().removeChild(this._ieFixNode);
 			delete this._ieFixNode;
+		}
+		if(this._anim){
+			this._anim.stop();
+			delete this._anim;
 		}
 		this.target = null;
 		this._imageNode = null;
@@ -522,10 +534,11 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 			properties: {opacity: {start: 0, end: 1}},
 			onEnd: function(){
 				self.onShow();
+				delete self._anim;
 			}
 		});
-		var anim = dojo.fx.combine([underlayNodeAnim,imageAnim]);
-		anim.play();
+		this._anim = dojo.fx.combine([underlayNodeAnim,imageAnim]);
+		this._anim.play();
 	},
 
 	_fadeOut: function(){
@@ -550,10 +563,11 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
 				dojo.style(this.node,{"display":"none", "zIndex": "-1000"});
 				self.onHide();
 				self._enableOverflow();
+				delete self._anim;
 			}
 		});
-		var anim = dojo.fx.combine([underlayNodeAnim,imageAnim]);
-		anim.play();
+		this._anim = dojo.fx.combine([underlayNodeAnim,imageAnim]);
+		this._anim.play();
 	},
 
 	_ignore: function(event){
