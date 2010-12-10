@@ -6,7 +6,7 @@ dojo.provide("dojox.secure.fromJson");
 
 
 
-dojox.secure.fromJson = 
+dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :  
 //	summary:
 //		Parses a string of well-formed JSON text.
 //	description:
