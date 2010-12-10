@@ -1,6 +1,6 @@
-dojo.provide("dojox.grid.enhanced.plugins.RowMapLayer");
+dojo.provide("dojox.grid.enhanced.plugins._RowMapLayer");
 
-dojo.require("dojox.grid.enhanced.plugins.StoreLayer");
+dojo.require("dojox.grid.enhanced.plugins._StoreLayer");
 
 (function(){
 var _devideToArrays = function(a){
@@ -21,7 +21,7 @@ hitchIfCan = function(scope, func){
 	return func ? dojo.hitch(scope || dojo.global, func) : function(){};
 };
 
-dojo.declare("dojox.grid.enhanced.plugins.RowMapLayer", dojox.grid.enhanced.plugins._StoreLayer, {
+dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plugins._StoreLayer, {
 	tags: ["reorder"],
 	constructor: function(grid){
 		this._map = {};
@@ -33,9 +33,15 @@ dojo.declare("dojox.grid.enhanced.plugins.RowMapLayer", dojox.grid.enhanced.plug
 			_this._onDelete(item);
 			_this._oldOnDelete.call(grid, item);
 		};
+		this._oldSort = grid.sort;
+		grid.sort = function(){
+			_this.clearMapping();
+			_this._oldSort.apply(grid, arguments);
+		};
 	},
 	uninitialize: function(){
 		this.grid._onDelete = this._oldOnDelete;
+		this.grid.sort = this._oldSort;
 	},
 	setMapping: function(mapping){
 		// summary: 
@@ -45,11 +51,10 @@ dojo.declare("dojox.grid.enhanced.plugins.RowMapLayer", dojox.grid.enhanced.plug
 		this._store.forEachLayer(function(layer){
 			if(layer.name() === "rowmap"){
 				return false;
-			}else{
-				if(layer.onRowMappingChange){
-					layer.onRowMappingChange(mapping);
-				}
+			}else if(layer.onRowMappingChange){
+				layer.onRowMappingChange(mapping);
 			}
+			return true;
 		}, false);
 		var from, to, origin, revmap = {};
 		for(from in mapping){
@@ -116,9 +121,6 @@ dojo.declare("dojox.grid.enhanced.plugins.RowMapLayer", dojox.grid.enhanced.plug
 		}
 	},
 	_fetch: function(userRequest){
-		if(userRequest.sort){
-			this.clearMapping();
-		}
 		var mapCount = 0, r;
 		var start = userRequest.start || 0;
 		for(r in this._revMap){

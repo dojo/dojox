@@ -16,7 +16,12 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 	//		A special source that can accept grid contents.
 	//		Only for non-grid widgets or domNodes.
 	accept: ["grid/cells", "grid/rows", "grid/cols", "text"],
-	insertNodesForGrid: true,
+	
+	// insertNodesForGrid:
+	//		If you'd like to insert some sort of nodes into your dnd source, turn this on, 
+	//		and override getNodeDataForGridCells/getNodeDataForGridRows/getNodeDataForGridColumns
+	//		to populate the dnd data in your desired format.
+	insertNodesForGrid: false,
 	
 	markupFactory: function(params, node){
 		return new dojox.grid.enhanced.plugins.GridSource(node, params);
@@ -56,17 +61,17 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 			try{
 				switch(type){
 					case "grid/cells":
-						nodes[0].innerHTML = this.getNodeDataForGridCells(grid, ranges[0].min, ranges[0].max);
+						nodes[0].innerHTML = this.getNodeDataForGridCells(grid, ranges[0].min, ranges[0].max) || "";
 						this.onDropGridCells(grid, ranges[0].min, ranges[0].max);
 						break;
 					case "grid/rows":
 						range = _joinToArray(ranges);
-						nodes[0].innerHTML = this.getNodeDataForGridRows(grid, range);
+						nodes[0].innerHTML = this.getNodeDataForGridRows(grid, range) || "";
 						this.onDropGridRows(grid, range);
 						break;
 					case "grid/cols":
 						range = _joinToArray(ranges);
-						nodes[0].innerHTML = this.getNodeDataForGridColumns(grid, range);
+						nodes[0].innerHTML = this.getNodeDataForGridColumns(grid, range) || "";
 						this.onDropGridColumns(grid, range);
 						break;
 				}
@@ -83,43 +88,52 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 		}
 	},
 	getNodeDataForGridCells: function(grid, leftTopCell, rightBottomCell){
-		var cells = grid.layout.cells;
-		var store = grid.store;
-		var cache = grid._by_idx;
-		var res = "Grid Cells from " + grid.id + ":<br/>";
-		for(var r = leftTopCell.row; r <= rightBottomCell.row; ++r){
-			for(var c = leftTopCell.col; c <= rightBottomCell.col; ++c){
-				res += store.getValue(cache[r].item, cells[c].field) + ", ";
-			}
-			res = res.substring(0, res.length - 2) + ";<br/>";
-		}
-		return res;
+		// summary:
+		//		Fill node innerHTML for dnd grid cells.
+		// sample code:
+		//		var cells = grid.layout.cells;
+		//		var store = grid.store;
+		//		var cache = grid._by_idx;
+		//		var res = "Grid Cells from " + grid.id + ":<br/>";
+		//		for(var r = leftTopCell.row; r <= rightBottomCell.row; ++r){
+		//			for(var c = leftTopCell.col; c <= rightBottomCell.col; ++c){
+		//				res += store.getValue(cache[r].item, cells[c].field) + ", ";
+		//			}
+		//			res = res.substring(0, res.length - 2) + ";<br/>";
+		//		}
+		//		return res;
 	},
 	getNodeDataForGridRows: function(grid, rowIndexes){
-		var cells = grid.layout.cells;
-		var store = grid.store;
-		var cache = grid._by_idx;
-		var res = "Grid Rows from " + grid.id + ":<br/>";
-		for(var i = 0; i < rowIndexes.length; ++i){
-			var r = rowIndexes[i];
-			res += "Row " + r + ": ";
-			for(var j = 0; j < cells.length; ++j){
-				if(!cells[j].hidden){
-					res += store.getValue(cache[r].item, cells[j].field) + ", ";
-				}
-			}
-			res = res.substring(0, res.length - 2) + ";<br/>";
-		}
-		return res;
+		// summary:
+		//		Fill node innerHTML for dnd grid rows.
+		// sample code:
+		//		var cells = grid.layout.cells;
+		//		var store = grid.store;
+		//		var cache = grid._by_idx;
+		//		var res = "Grid Rows from " + grid.id + ":<br/>";
+		//		for(var i = 0; i < rowIndexes.length; ++i){
+		//			var r = rowIndexes[i];
+		//			res += "Row " + r + ": ";
+		//			for(var j = 0; j < cells.length; ++j){
+		//				if(!cells[j].hidden){
+		//					res += store.getValue(cache[r].item, cells[j].field) + ", ";
+		//				}
+		//			}
+		//			res = res.substring(0, res.length - 2) + ";<br/>";
+		//		}
+		//		return res;
 	},
 	getNodeDataForGridColumns: function(grid, colIndexes){
-		var cells = grid.layout.cells;
-		var res = "Grid Columns from " + grid.id + ":";
-		for(var i = 0; i < colIndexes.length; ++i){
-			var c = colIndexes[i];
-			res += (cells[c].name || cells[c].field) + ", ";
-		}
-		return res.substring(0, res.length - 2);
+		// summary:
+		//		Fill node innerHTML for dnd grid columns.
+		// sample code:
+		//		var cells = grid.layout.cells;
+		//		var res = "Grid Columns from " + grid.id + ":";
+		//		for(var i = 0; i < colIndexes.length; ++i){
+		//			var c = colIndexes[i];
+		//			res += (cells[c].name || cells[c].field) + ", ";
+		//		}
+		//		return res.substring(0, res.length - 2);
 	},
 	onDropGridCells: function(grid, leftTopCell, rightBottomCell){
 		

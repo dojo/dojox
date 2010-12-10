@@ -5,7 +5,6 @@ dojo.require("dojox.grid.enhanced.plugins.Selector");
 dojo.require("dojox.grid.enhanced.plugins.Rearrange");
 dojo.require("dojo.dnd.move");
 dojo.require("dojo.dnd.Source");
-dojo.require("dojox.widget.Toaster");
 
 (function(){
 var _devideToArrays = function(a){
@@ -88,18 +87,10 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		});
 		this._container = dojo.query(".dojoxGridMasterView", this.grid.domNode)[0];
 		this._initEvents();
-		
-		//Dragging unloaded rows out of grid is not supported!
-		this._toaster = new dojox.widget.Toaster({
-			positionDirection: "br-left",
-			messageTopic: "warningMsg_" + grid.id
-		});
-		this._toaster.placeAt(dojo.body());
 	},
 	destroy: function(){
 		this.inherited(arguments);
 		this._clear();
-		this._toaster.destroyRecursive();
 		this._source.destroy();
 		this._elem.destroy();
 		this._container = null;
@@ -202,121 +193,112 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 	copyOnly: function(isCopyOnly){
 		// summary:
 		//		Setter/getter of this._copyOnly.
-		if(typeof isCopyOnly == "undefined"){
-			return this._copyOnly;
+		if(typeof isCopyOnly != "undefined"){
+			this._copyOnly = !!isCopyOnly;
 		}
-		this._copyOnly = !!isCopyOnly;
+		return this._copyOnly;
 	},
 	_isOutOfGrid: function(evt){
 		var gridPos = dojo.position(this.grid.domNode), x = evt.clientX, y = evt.clientY;
 		return y < gridPos.y || y > gridPos.y + gridPos.h || 
 			x < gridPos.x || x > gridPos.x + gridPos.w;
 	},
+	_onMouseMove: function(evt){
+		if(this._dndRegion && !this._dnding && !this._externalDnd){
+			this._dnding = true;
+			this._startDnd(evt);
+		}else{
+			if(this._isMouseDown && !this._dndRegion){
+				delete this._isMouseDown;
+				this._oldCursor = dojo.style(dojo.body(), "cursor");
+				dojo.style(dojo.body(), "cursor", "not-allowed");
+			}
+			//TODO: should implement as mouseenter/mouseleave
+			//But we have an avatar under mouse when dnd, and this will cause a lot of mouseenter in FF.
+			var isOut = this._isOutOfGrid(evt);
+			if(!this._alreadyOut && isOut){
+				this._alreadyOut = true;
+				if(this._dnding){
+					this._destroyDnDUI(true, false);
+				}
+				this._moveEvent = evt;
+				this._source.onOutEvent();
+			}else if(this._alreadyOut && !isOut){
+				this._alreadyOut = false;
+				if(this._dnding){
+					this._createDnDUI(evt, true);
+				}
+				this._moveEvent = evt;
+				this._source.onOverEvent();
+			}
+		}
+	},
+	_onMouseUp: function(){
+		if(!this._extDnding && !this._isSource){
+			var isInner = this._dnding && !this._alreadyOut;
+			if(isInner && this._config[this._dndRegion.type]["within"]){
+				this._rearrange();
+			}
+			this._endDnd(isInner);
+		}
+		dojo.style(dojo.body(), "cursor", this._oldCursor || "");
+		delete this._isMouseDown;
+	},
 	_initEvents: function(){
-		var g = this.grid,
-			s = this.selector,
-			_this = this;
-		this.connect(dojo.doc, "onmousemove", function(evt){
-			if(_this._dndRegion && !_this._dnding && !_this._externalDnd){
-				_this._dnding = true;
-				_this._startDnd(evt);
-			}else{
-				if(_this._isMouseDown && !_this._dndRegion){
-					delete _this._isMouseDown;
-					_this._oldCursor = dojo.style(dojo.body(), "cursor");
-					dojo.style(dojo.body(), "cursor", "not-allowed");
-				}
-				//TODO: should implement as mouseenter/mouseleave
-				//But we have an avatar under mouse when dnd, and this will cause a lot of mouseenter in FF.
-				var isOut = _this._isOutOfGrid(evt);
-				if(!_this._alreadyOut && isOut){
-					_this._alreadyOut = true;
-					if(_this._dnding){
-						_this._destroyDnDUI(true, false);
-					}
-					_this._moveEvent = evt;
-					_this._source.onOutEvent();
-				}else if(_this._alreadyOut && !isOut){
-					_this._alreadyOut = false;
-					if(_this._dnding){
-						_this._createDnDUI(evt, true);
-					}
-					_this._moveEvent = evt;
-					_this._source.onOverEvent();
-				}
-			}
-		});
-		this.connect(dojo.doc, "onmouseup", function(evt){
-			if(!_this._extDnding && !_this._isSource){
-				var isInner = _this._dnding && !_this._alreadyOut;
-				if(isInner && _this._config[_this._dndRegion.type]["within"]){
-					_this._rearrange();
-				}
-				_this._endDnd(isInner);
-			}
-			dojo.style(dojo.body(), "cursor", _this._oldCursor || "");
-			delete _this._isMouseDown;
-		});
+		var g = this.grid, s = this.selector;
+		this.connect(dojo.doc, "onmousemove", "_onMouseMove");
+		this.connect(dojo.doc, "onmouseup", "_onMouseUp");
+		
 		this.connect(g, "onCellMouseOver", function(evt){
-			if(!_this._dnding && !s.isSelecting() && !evt.ctrlKey){
-				_this._dndReady = s.isSelected("cell", evt.rowIndex, evt.cell.index);
-				s.selectEnabled(!_this._dndReady);
+			if(!this._dnding && !s.isSelecting() && !evt.ctrlKey){
+				this._dndReady = s.isSelected("cell", evt.rowIndex, evt.cell.index);
+				s.selectEnabled(!this._dndReady);
 			}
 		});
 		this.connect(g, "onHeaderCellMouseOver", function(evt){
-			if(_this._dndReady){
+			if(this._dndReady){
 				s.selectEnabled(true);
 			}
 		});
 		this.connect(g, "onRowMouseOver", function(evt){
-			if(_this._dndReady && !evt.cell){
+			if(this._dndReady && !evt.cell){
 				s.selectEnabled(true);
 			}
 		});
 		this.connect(g, "onCellMouseDown", function(evt){
-			if(!evt.ctrlKey && _this._dndReady){
-				_this._dndRegion = _this._getDnDRegion(evt.rowIndex, evt.cell.index);
-				_this._isMouseDown = true;
+			if(!evt.ctrlKey && this._dndReady){
+				this._dndRegion = this._getDnDRegion(evt.rowIndex, evt.cell.index);
+				this._isMouseDown = true;
 			}
 		});
 		this.connect(g, "onCellMouseUp", function(evt){
-			if(!_this._dndReady && !s.isSelecting() && evt.cell){
-				_this._dndReady = s.isSelected("cell", evt.rowIndex, evt.cell.index);
-				s.selectEnabled(!_this._dndReady);
+			if(!this._dndReady && !s.isSelecting() && evt.cell){
+				this._dndReady = s.isSelected("cell", evt.rowIndex, evt.cell.index);
+				s.selectEnabled(!this._dndReady);
 			}
 		});
 		this.connect(g, "onCellClick", function(evt){
-			if(_this._dndReady && !evt.ctrlKey && !evt.shiftKey){
+			if(this._dndReady && !evt.ctrlKey && !evt.shiftKey){
 				s.select("cell", evt.rowIndex, evt.cell.index);
 			}
 		});
-		g.focus.addArea({
-			name: "dnd",
-			onKeyDown: function(evt, isBubble){
-				if(!isBubble && evt.keyCode == dojo.keys.CTRL){
-					s.selectEnabled(true);
-					_this._isCopy = true;
-				}
-			},
-			onKeyUp: function(evt, isBubble){
-				if(!isBubble && evt.keyCode == dojo.keys.CTRL){
-					s.selectEnabled(!_this._dndReady);
-					_this._isCopy = false;
-				}
-			}
-		});
-		g.focus.placeArea("dnd","above","content");
-		g.focus.placeArea("dnd","above","header");
-		g.focus.placeArea("dnd","above","rowHeader");
-		
 		this.connect(g, "onEndAutoScroll", function(isVertical, isForward, view, target, evt){
-			if(_this._dnding){
-				_this._markTargetAnchor(evt);
+			if(this._dnding){
+				this._markTargetAnchor(evt);
 			}
 		});
 		this.connect(dojo.doc, "onkeydown", function(evt){
 			if(evt.keyCode == dojo.keys.ESCAPE){
-				_this._endDnd(false);
+				this._endDnd(false);
+			}else if(evt.keyCode == dojo.keys.CTRL){
+				s.selectEnabled(true);
+				this._isCopy = true;
+			}
+		});
+		this.connect(dojo.doc, "onkeyup", function(evt){
+			if(evt.keyCode == dojo.keys.CTRL){
+				s.selectEnabled(!this._dndReady);
+				this._isCopy = false;
 			}
 		});
 	},
@@ -489,10 +471,12 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			headers = this._getVisibleHeaders();
 		for(i = 0; i < headers.length; ++i){
 			headPos = dojo.position(headers[i].node);
-			if((i === 0 || ex >= headPos.x) && ex < headPos.x + headPos.w){
+			if(ltr ? ((i === 0 || ex >= headPos.x) && ex < headPos.x + headPos.w) :
+				((i === 0 || ex < headPos.x + headPos.w) && ex >= headPos.x)){
 				left = headPos.x + (ltr ? 0 : headPos.w);
 				break;
-			}else if(i == headers.length - 1 && ex >= headPos.x + headPos.w){
+			}else if(ltr ? (i === headers.length - 1 && ex >= headPos.x + headPos.w) :
+				(i === headers.length - 1 && ex < headPos.x)){
 				++i;
 				left = headPos.x + (ltr ? headPos.w : 0);
 				break;
@@ -661,11 +645,16 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		if(this._alreadyOut || (this._dnding && !this._config[t]["within"]) || (this._extDnding && !this._config[t]["in"])){
 			return;
 		}
-		var height, width, left, top,
-			targetAnchor = this._targetAnchor[t] = this._targetAnchor[t] || dojo.create("div", {
-				"class": (t == "cell") ? "dojoxGridCellBorderDIV" : "dojoxGridBorderDIV"
-			}),
+		var height, width, left, top, 
+			targetAnchor = this._targetAnchor[t],
 			pos = dojo.position(this._container);
+		if(!targetAnchor){
+			targetAnchor = this._targetAnchor[t] = dojo.create("div", {
+				"class": (t == "cell") ? "dojoxGridCellBorderDIV" : "dojoxGridBorderDIV"
+			});
+			dojo.style(targetAnchor, "display", "none");
+			this._container.appendChild(targetAnchor);
+		}
 		switch(t){
 			case "col":
 				height = pos.h;
@@ -693,7 +682,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 				"left": left + "px",
 				"top": top + "px"
 			});
-			this._container.appendChild(targetAnchor);
+			dojo.style(targetAnchor, "display", "");
 		}else{
 			this._target = null;
 		}
@@ -702,10 +691,11 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		}
 	},
 	_unmarkTargetAnchor: function(){
-		try{
-			this._container.removeChild(this._targetAnchor[this._dndRegion.type]);
-		}catch(e){
-			//console.log("unmark:",e);
+		if(this._dndRegion){
+			var targetAnchor = this._targetAnchor[this._dndRegion.type];
+			if(targetAnchor){
+				dojo.style(this._targetAnchor[this._dndRegion.type], "display", "none");
+			}
 		}
 	},
 	_getVisibleHeaders: function(){
@@ -740,6 +730,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 				this._dndRegion = this._mapRegion(sourcePlugin.grid, sourcePlugin._dndRegion);
 			}
 			this._createDnDUI(this._moveEvent,true);
+			this.grid.pluginMgr.getPlugin("autoScroll").readyForAutoScroll = true;
 		}
 	},
 	_mapRegion: function(srcGrid, dndRegion){
@@ -801,7 +792,9 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			success = true;
 		}
 		this._endDnd(true);
-		sourcePlugin.onDragOut(success && !isCopy);
+		if(sourcePlugin.onDragOut){
+			sourcePlugin.onDragOut(success && !isCopy);
+		}
 	},
 	onDragOut: function(isMove){
 		if(isMove && !this._copyOnly){
@@ -819,39 +812,34 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		this._endDnd(true);
 	},
 	_canAccept: function(sourcePlugin){
-		if(sourcePlugin){
-			var srcRegion = sourcePlugin._dndRegion;
-			var type = srcRegion.type;
-			if(!this._config[type]["in"] || !sourcePlugin._config[type]["out"]){
-				return false;
-			}
-			var g = this.grid;
-			var ranges = srcRegion.selected;
-			var colCnt = dojo.filter(g.layout.cells, function(cell){
-				return !cell.hidden;
-			}).length;
-			var rowCnt = g.rowCount;
-			var res = true;
-			switch(type){
-				case "cell":
-					ranges = ranges[0];
-					res = g.store.getFeatures()["dojo.data.api.Write"] && 
-						(ranges.max.row - ranges.min.row) <= rowCnt && 
-						dojo.filter(sourcePlugin.grid.layout.cells, function(cell){
-							return cell.index >= ranges.min.col && cell.index <= ranges.max.col && !cell.hidden;
-						}).length <= colCnt;
-					//intentional drop through - don't break
-				case "row":
-					if(sourcePlugin._allDnDItemsLoaded()){
-						return res;
-					}else{
-						dojo.publish("warningMsg_" + this.grid.id, [{
-							message: "<div style='font-weight:bolder; color: red;'>Warning: <br />Can NOT drag unloaded rows out of grid!</div>", 
-							type: "warning"
-						}]);
-						return false;
-					}
-			}
+		if(!sourcePlugin){
+			return false;
+		}
+		var srcRegion = sourcePlugin._dndRegion;
+		var type = srcRegion.type;
+		if(!this._config[type]["in"] || !sourcePlugin._config[type]["out"]){
+			return false;
+		}
+		var g = this.grid;
+		var ranges = srcRegion.selected;
+		var colCnt = dojo.filter(g.layout.cells, function(cell){
+			return !cell.hidden;
+		}).length;
+		var rowCnt = g.rowCount;
+		var res = true;
+		switch(type){
+			case "cell":
+				ranges = ranges[0];
+				res = g.store.getFeatures()["dojo.data.api.Write"] && 
+					(ranges.max.row - ranges.min.row) <= rowCnt && 
+					dojo.filter(sourcePlugin.grid.layout.cells, function(cell){
+						return cell.index >= ranges.min.col && cell.index <= ranges.max.col && !cell.hidden;
+					}).length <= colCnt;
+				//intentional drop through - don't break
+			case "row":
+				if(sourcePlugin._allDnDItemsLoaded()){
+					return res;
+				}
 		}
 		return false;
 	},
@@ -888,6 +876,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridDnDElement", null, {
 	},
 	destroy: function(){
 		this.plugin = null;
+		dojo.destroy(this.node);
 		this.node = null;
 		this._items = null;
 	},
@@ -903,8 +892,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridDnDElement", null, {
 				"dndPlugin": this.plugin
 			};
 			this.node.appendChild(dojo.create("div", {
-				"id": id,
-				"innerHTML": this._getInnerHTML(dndRegion.type, range)
+				"id": id
 			}));
 		}, this);
 	},
@@ -919,30 +907,6 @@ dojo.declare("dojox.grid.enhanced.plugins.GridDnDElement", null, {
 	},
 	getItem: function(nodeId){
 		return this._items[nodeId];
-	},
-	_getInnerHTML: function(type, range){
-		switch(type){
-			case "cell":
-				if(range.min.col == range.max.col && range.min.row == range.max.row){
-					return ["Cell (", range.min.col, " , ", range.min.row, ")"].join("");
-				}else{
-					return [
-						"From Cell (",
-						range.min.col," , ",range.min.row,
-						") to Cell (",
-						range.max.col," , ",range.max.row,
-						")"
-					].join('');
-				}
-				break;
-			case "row": case "col":
-				type = type == "row" ? "Row " : "Column ";
-				if(range.length == 1){
-					return type + range[0];
-				}else{
-					return ["From ", type, range[0], " to ", type, range[range.length - 1]].join('');
-				}
-		}
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.GridDnDSource",dojo.dnd.Source,{
@@ -966,15 +930,41 @@ dojo.declare("dojox.grid.enhanced.plugins.GridDnDSource",dojo.dnd.Source,{
 	checkAcceptance: function(source, nodes){
 		if(this != source && nodes[0]){
 			var item = source.getItem(nodes[0].id);
-			var type = item.type;
-			for(var j = 0; j < type.length; ++j){
-				if(type[j] in this.accept){
-					if(this.dndPlugin._canAccept(item.dndPlugin)){
-						this.sourcePlugin = item.dndPlugin;
-					}else{
-						return false;
+			if(item.dndPlugin){
+				var type = item.type;
+				for(var j = 0; j < type.length; ++j){
+					if(type[j] in this.accept){
+						if(this.dndPlugin._canAccept(item.dndPlugin)){
+							this.sourcePlugin = item.dndPlugin;
+						}else{
+							return false;
+						}
+						break;
 					}
-					break;
+				}
+			}else if("grid/rows" in this.accept){
+				var rows = [];
+				dojo.forEach(nodes, function(node){
+					var item = source.getItem(node.id);
+					if(item.data && dojo.indexOf(item.type, "grid/rows") >= 0){
+						var rowData = item.data;
+						if(typeof item.data == "string"){
+							rowData = dojo.fromJson(item.data);
+						}
+						if(rowData){
+							rows.push(rowData);
+						}
+					}
+				});
+				if(rows.length){
+					this.sourcePlugin = {
+						_dndRegion: {
+							type: "row",
+							selected: [rows]
+						}
+					};
+				}else{
+					return false;
 				}
 			}
 		}
@@ -1078,7 +1068,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridDnDAvatar", dojo.dnd.Avatar, {
 	}
 });
 
-dojox.grid.EnhancedGrid.registerPlugin('dnd', dojox.grid.enhanced.plugins.DnD, {
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.DnD/*name:'dnd'*/, {
 	"dependency": ["selector", "rearrange"]
 });
 })();
