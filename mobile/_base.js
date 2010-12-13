@@ -470,7 +470,9 @@ dojo.declare(
 	icon: "",
 	iconPos: "", // top,left,width,height (ex. "0,0,29,29")
 	href: "",
+	hrefTarget: "",
 	moveTo: "",
+	scene: "",
 	clickable: false,
 	url: "",
 	transition: "",
@@ -504,11 +506,18 @@ dojo.declare(
 		return w;
 	},
 
-	transitionTo: function(moveTo, href, url){
+	transitionTo: function(moveTo, href, url, scene){
 		var w = this.findCurrentView(moveTo); // the current view widget
 		if(!w || moveTo && w === dijit.byId(moveTo)){ return; }
 		if(href){
-			w.performTransition(null, this.transitionDir, this.transition, this, function(){location.href = href;});
+			if(this.hrefTarget){
+				dojox.mobile.openWindow(this.href, this.hrefTarget);
+			}else{
+				w.performTransition(null, this.transitionDir, this.transition, this, function(){location.href = href;});
+			}
+			return;
+		} else if(scene){
+			dojo.publish("/dojox/mobile/app/pushScene", [scene]);
 			return;
 		}
 		if(url){
@@ -535,7 +544,7 @@ dojo.declare(
 							prog.stop();
 							if(response){
 								this._text = response;
-								this.transitionTo(moveTo, href, url);
+								this.transitionTo(moveTo, href, url, scene);
 							}
 						}));
 						xhr.addErrback(function(error){
@@ -742,7 +751,7 @@ dojo.declare(
 			}, 1000);
 		}
 		dojo.addClass(li, "mblItemSelected");
-		this.transitionTo(this.moveTo, this.href, this.url);
+		this.transitionTo(this.moveTo, this.href, this.url, this.scene);
 	},
 
 	onAnchorLabelClicked: function(e){
@@ -770,7 +779,7 @@ dojo.declare(
 		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblSwitch";
 		this.domNode.innerHTML =
-			  '<div class="mblSwitchInner">'
+				'<div class="mblSwitchInner">'
 			+	'<div class="mblSwitchBg mblSwitchBgLeft">'
 			+		'<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
 			+	'</div>'
@@ -992,6 +1001,10 @@ dojox.mobile.hideAddressBar = function(){
 		// re-define the min-height with the actual height
 		dojo.body().style.minHeight = (window.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
 	}, 1000);
+};
+
+dojox.mobile.openWindow = function(url, target){
+	window.open(url, target || "_blank");
 };
 
 dojo._loaders.unshift(function(){

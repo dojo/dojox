@@ -98,8 +98,8 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 
 		// If the application info has been defined, as it should be,
 		// use it.
-		if(window["appInfo"]){
-			dojo.mixin(defaultInfo, window["appInfo"]);
+		if(dojo.global["appInfo"]){
+			dojo.mixin(defaultInfo, dojo.global["appInfo"]);
 		}
 		appInfo = dojox.mobile.app.info = defaultInfo;
 
@@ -111,7 +111,24 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 		}
 
 		stageController.pushScene(appInfo.initialScene);
-	}
+	};
+	
+	var initBackButton = function(){
+		var hasNativeBack = false;
+		if(dojo.global.BackButton){
+			// Android phonegap support
+			BackButton.override();
+			dojo.connect(document, 'backKeyDown', function(e) {
+			  dojo.publish("/dojox/mobile/app/goback");
+			});
+			hasNativeBack = true;
+		}else if(dojo.global.Mojo){
+			// TODO: add webOS support
+		}
+		if(hasNativeBack){
+			dojo.addClass(dojo.body(), "mblNativeBack");
+		}
+	};
 
 	dojo.mixin(dojox.mobile.app, {
 		init: function(node){
@@ -120,15 +137,16 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 	
 			rootNode = node || dojo.body();
 	
-//			loadingDependencies = dojo.clone(jsDependencies);
-//			loadResources(loadingDependencies, function(){dojox.mobile.app._pushFirstScene()});
-	
 			dojo.subscribe("/dojox/mobile/app/goback", function(){
 				stageController.popScene();
 			});
 	
 			dojo.subscribe("/dojox/mobile/app/alert", function(params){
 				dojox.mobile.app.getActiveSceneController().showAlertDialog(params);
+			});
+
+			dojo.subscribe("/dojox/mobile/app/pushScene", function(sceneName, params){
+				stageController.pushScene(sceneName, params || {});
 			});
 			
 			// Get the list of files to load per scene/view
@@ -162,7 +180,8 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 				},
 				error: pushFirstScene
 			});
-//			pushFirstScene();
+			
+			initBackButton();
 		},
 		
 		getActiveSceneController: function(){

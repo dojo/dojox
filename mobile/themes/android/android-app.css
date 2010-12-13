@@ -99,7 +99,7 @@
 	padding: 10px;
 	border-bottom: 1px solid #444;
 	position: relative;
-	background-color: white;
+	background-color: black;
 	z-index: 6; /* Must be greater than the .buttons z-index */
 }
 .list .row.mblListItem {
@@ -111,7 +111,7 @@
 }
 
 .list .row.hold {
-	background-color: #ddd;
+	background-color: #444;
 }
 
 .list .buttons {
