@@ -1,4 +1,4 @@
-define("dojox/data/CssClassStore", ["dojo", "dojox", "dojox.data.CssRuleStore"], function(dojo, dojox) {
+define("dojox/data/CssClassStore", ["dojo", "dojox", "dojox/data/CssRuleStore"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 	//	summary:

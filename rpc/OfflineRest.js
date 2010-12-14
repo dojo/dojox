@@ -1,4 +1,4 @@
-define("dojox/rpc/OfflineRest", ["dojo", "dojox", "dojox.data.ClientFilter", "dojox.rpc.Rest", "dojox.storage"], function(dojo, dojox) {
+define("dojox/rpc/OfflineRest", ["dojo", "dojox", "dojox/data/ClientFilter", "dojox/rpc/Rest", "dojox/storage"], function(dojo, dojox) {
 // summary:
 // 		Makes the REST service be able to store changes in local
 // 		storage so it can be used offline automatically.

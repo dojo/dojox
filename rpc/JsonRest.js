@@ -1,4 +1,4 @@
-define("dojox/rpc/Service", ["dojo", "dojox", "dojox.json.ref", "dojox.rpc.Rest"], function(dojo, dojox) {
+define("dojox/rpc/JsonRest", ["dojo", "dojox", "dojox/json/ref", "dojox/rpc/Rest"], function(dojo, dojox) {
 	var dirtyObjects = [];
 	var Rest = dojox.rpc.Rest;
 	var jr;

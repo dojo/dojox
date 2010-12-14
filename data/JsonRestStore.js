@@ -1,4 +1,4 @@
-define("dojox/data/JsonRestStore", ["dojo", "dojox", "dojox.rpc.JsonRest", "dojox/data/ServiceStore"], function(dojo, dojox) {
+define("dojox/data/JsonRestStore", ["dojo", "dojox", "dojox/rpc/JsonRest", "dojox/data/ServiceStore"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.JsonRestStore",
 	dojox.data.ServiceStore,
