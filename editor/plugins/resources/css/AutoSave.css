@@ -1,19 +1,20 @@
-.dijitEditorIconAutoSaveDefault,
-.dijitEditorIconAutoSaveSetting {
-	background-image: url(../icons/save.gif);
+.dijitEditorIconAutoSave {
+	background-image: url(../icons/autoSave.png);
 	background-repeat: no-repeat;
-	background-position: center center;
 	width: 18px;
 	height: 18px;
 }
 
-.dijitDisabled .dijitEditorIconAutoSaveDefault,
-.dijitDisabled .dijitEditorIconAutoSaveSetting {
-	background-image: url(../icons/saveDisabled.gif);
-	background-repeat: no-repeat;
-	background-position: center center;
-	width: 18px;
-	height: 18px;
+.dijitEditorIconAutoSaveDefault {
+	background-position: -18px 0px;
+}
+
+.dijitDisabled .dijitEditorIconAutoSaveDefault {
+	background-position: -54px 0px;
+}
+
+.dijitEditorIconAutoSaveSetting {
+	background-position: 0px 0px;
 }
 
 .dijitEditorAutoSaveSettingDialog {

@@ -227,11 +227,11 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 				style: "display: none"
 			}),
 			menuItemSave = new dijit.MenuItem({
-				iconClass: this._iconClassPrefix + "Default",
+				iconClass: this._iconClassPrefix + "Default " + this._iconClassPrefix,
 				label: this._strings["saveLabel"]
 			}),
 			menuItemAutoSave = this._menuItemAutoSave = new dijit.MenuItem({
-				iconClass: this._iconClassPrefix + "Setting",
+				iconClass: this._iconClassPrefix + "Setting " + this._iconClassPrefix,
 				label: this._strings["saveSettingLabelOn"]
 			});
 			
@@ -239,7 +239,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 		menu.addChild(menuItemAutoSave);
 		this.button = new dijit.form.ComboButton({
 			label: this._strings["saveLabel"],
-			iconClass: this._iconClassPrefix + "Default",
+			iconClass: this._iconClassPrefix + "Default " + this._iconClassPrefix,
 			showLabel: false,
 			dropDown: menu
 		});
@@ -273,7 +273,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 			this._menuItemAutoSave.set("label", this._strings["saveSettingLabelOff"]);
 			this._menuItemAutoSaveClickHandler = dojo.connect(this._menuItemAutoSave, "onClick", this, "_onStopClick");
 			// Change the icon of the main button to auto-save style
-			this.button.set("iconClass", this._iconClassPrefix + "Setting");
+			this.button.set("iconClass", this._iconClassPrefix + "Setting " + this._iconClassPrefix);
 		}
 	},
 	
@@ -289,7 +289,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 		this._menuItemAutoSave.set("label", this._strings["saveSettingLabelOn"]);
 		this._menuItemAutoSaveClickHandler = dojo.connect(this._menuItemAutoSave, "onClick", this, "_showAutSaveSettingDialog");
 		// Change the icon of the main button
-		this.button.set("iconClass", this._iconClassPrefix + "Default");
+		this.button.set("iconClass", this._iconClassPrefix + "Default " + this._iconClassPrefix);
 	},
 	
 	_setSaveInterval: function(/*Number*/ interval){
