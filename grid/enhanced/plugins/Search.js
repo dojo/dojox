@@ -9,7 +9,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, 
 	
 	// name: String
 	//		plugin name
-	name: "Search",
+	name: "search",
 	
 	constructor: function(grid, args){
 		this.grid = grid;
@@ -40,8 +40,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, 
 		this._search(searchArgs, 0, onSearched, isGlobal);
 	},
 	_search: function(/* Object|RegExp */searchArgs, /* Integer */start, /* function(Integer, item) */onSearched, /* Boolean */isGlobal){
-		var s = this.grid.store,
-			_this = this,
+		var _this = this,
 			cnt = this._cacheSize,
 			args = {
 				"start": start,
@@ -67,7 +66,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, 
 		if(cnt > 0){
 			args.count = cnt;
 		}
-		s.fetch(args);
+		this.grid._storeLayerFetch(args);
 	},
 	_checkRow: function(/* store item */item, /* Object|RegExp */searchArgs, /* Boolean */isGlobal){
 		var g = this.grid, s = g.store, i, field,
@@ -107,4 +106,4 @@ dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, 
 		}
 	}
 });
-dojox.grid.EnhancedGrid.registerPlugin('Search', dojox.grid.enhanced.plugins.Search);
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Search/*name:'search'*/);

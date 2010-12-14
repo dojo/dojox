@@ -58,18 +58,18 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 		//		then pass the exported text to a given function(onExported).
 		// tags:
 		//		public
-		// args: object
+		// type: string
+		//		A registered export format name
+		// args: object?
 		//		includes:
 		//		{
 		//			fetchArgs: object?
 		//				Any arguments for store.fetch
-		//			type: string
-		//				A registered export format name
 		//			writerArgs: object?
 		//				Arguments for the given format writer
-		//			onExported: function(string)
-		//				Call back function when export result is ready
 		//		}
+		// onExported: function(string)
+		//		Call back function when export result is ready
 		if(dojo.isFunction(args)){
 			onExported = args;
 			args = {};
@@ -90,7 +90,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 				onExported(_this._goThroughGridData(items, writer));
 			};
 			fetchArgs.sort = fetchArgs.sort || g.getSortProps();
-			g.store.fetch(fetchArgs);
+			g._storeLayerFetch(fetchArgs);
 		}else{
 			//Data is defined directly in the structure;
 			var start = fetchArgs.start || 0,
@@ -228,4 +228,4 @@ dojox.grid.enhanced.plugins.Exporter.registerWriter = function(/* string */fileT
 	expCls.writerNames = expCls.writerNames || {};
 	expCls.writerNames[fileType] = writerClsName;
 };
-dojox.grid.EnhancedGrid.registerPlugin('exporter', dojox.grid.enhanced.plugins.Exporter);
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Exporter/*name:'exporter'*/);

@@ -18,7 +18,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 	//		title: String
 	//			A title of the printed page can be specified. Optional.
 	//			If given, it's shown in an <h1> tag at the top of the page.
-	//		cssFiles: Array
+	//		cssFiles: Array | String
 	//			CSS file paths. Optional.
 	//			Every row and column is given CSS classes, including:
 	//				grid_row_{row-number}, grid_odd_row, grid_even_row, grid_header,
@@ -241,11 +241,13 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 	_formalizeArgs: function(args){
 		args = (args && dojo.isObject(args)) ? args : {};
 		args.title = String(args.title) || "";
-		args.cssFiles = dojo.isArray(args.cssFiles) ? args.cssFiles : [];
+		if(!dojo.isArray(args.cssFiles)){
+			args.cssFiles = [args.cssFiles];
+		}
 		args.titleInBody = args.title ? ['<h1>', args.title, '</h1>'].join('') : '';
 		return args;	//Object
 	}
 });
-dojox.grid.EnhancedGrid.registerPlugin('printer', dojox.grid.enhanced.plugins.Printer, {
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Printer/*name:'printer'*/, {
 	"dependency": ["exporter"]
 });

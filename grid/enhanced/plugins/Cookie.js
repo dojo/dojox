@@ -244,7 +244,7 @@ dojo.require("dojox.grid.cells._base");
 				this.removeCookie();
 			}
 		},
-		afterPreInit: function(){
+		onPreInit: function(){
 			var grid = this.grid,
 				chs = this._cookieHandlers,
 				cookieKey = _cookieKeyBuilder(grid),
@@ -300,15 +300,14 @@ dojo.require("dojox.grid.cells._base");
 			if(arguments.length == 2){
 				var chs = this._cookieHandlers;
 				for(var i = chs.length - 1; i >= 0; --i){
-					if(chs[i].name == cookieName){
-						return (chs[i].enabled = !!enabled);
+					if(chs[i].name === cookieName){
+						chs[i].enabled = !!enabled;
 					}
 				}
 			}else{
 				this._cookieEnabled = !!cookieName;
 				if(!this._cookieEnabled){ this.removeCookie(); }
 			}
-			return this._cookieEnabled;
 		},
 		getCookieEnabled: function(cookieName){
 			// summary:
@@ -320,11 +319,10 @@ dojo.require("dojox.grid.cells._base");
 				for(var i = chs.length - 1; i >= 0; --i){
 					if(chs[i].name == cookieName){ return chs[i].enabled; }
 				}
+				return false;
 			}
 			return this._cookieEnabled;
 		}
 	});
-	dojox.grid.EnhancedGrid.registerPlugin("cookie", dojox.grid.enhanced.plugins.Cookie, {
-		"preInit": true
-	});
+	dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Cookie/*name:'cookie'*/, {"preInit": true});
 })();

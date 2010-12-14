@@ -10,9 +10,8 @@
 		@import "../../../../dijit/themes/claro/claro.css";		
 		@import "../../../../dijit/themes/tundra/tundra.css";
 		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
 		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
+		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 
 		body {
 			font-size: 0.9em;
@@ -36,6 +35,7 @@
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojox.grid.EnhancedGrid");
+		dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
 		dojo.require("dojox.grid.enhanced.plugins.DnD");
 		dojo.require("dojox.grid.enhanced.plugins.Cookie");
 		var startGridIndex = 2,
@@ -44,6 +44,7 @@
 			gridAttrs = {
 				plugins: {
 					"cookie": true,
+					"nestedSorting": true,
 					"dnd": true
 				}
 			};

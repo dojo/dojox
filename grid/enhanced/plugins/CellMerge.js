@@ -2,7 +2,7 @@ dojo.provide("dojox.grid.enhanced.plugins.CellMerge");
 
 dojo.require("dojox.grid.enhanced._Plugin");
 
-dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin, {
+dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugin, {
 	// summary:
 	//		This plugin provides functions to merge(un-merge) adjacent cells within one row.
 	//		Acceptable plugin paramters:
@@ -54,9 +54,10 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin
 		//		The column index of the cell whose content should be used as the content of the merged cell.
 		//		It must be larger than or equal to the startColumnIndex, and less than or equal to the endColumnIndex.
 		//		If it is omitted, the content of the leading edge (left-most for ltr, right most for rtl) cell will be used.
-		// return: Object
+		// return: Object | null
 		//		A handler for the merged cells created by a call of this function. 
 		//		This handler can be used later to unmerge cells using the function unmergeCells
+		//		If the merge is not valid, returns null;
 		var item = this._createRecord({
 			"row": rowTester,
 			"start": startColumnIndex,
@@ -109,7 +110,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin
 		//		public
 		// return: Array
 		//		An array of records for merged-cells. See docs of getMergedCells.
-		return this._merged[i] || [];
+		return this._merged[rowIndex] || [];
 	},
 	
 	//----------------Private--------------------------
@@ -142,7 +143,8 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin
 			//Apply merge-cell requests one by one.
 			for(i = 0; i < len; ++i){
 				var item = this._records[i];
-				if(item.row(rowIndex) && item.view == viewIdx){
+				var storeItem = this.grid._by_idx[rowIndex];
+				if(item.view == viewIdx && item.row(rowIndex, storeItem && storeItem.item, this.grid.store)){
 					var res = {
 						record: item,
 						hiddenCells: [],
@@ -198,7 +200,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin
 				});
 			}, this);
 		}catch(e){
-			console.log("_onAfterRow: ", rowIndex, e);
+			console.debug("CellMerge._onAfterRow: ", rowIndex, e);
 		}
 	},
 	_createRecord: function(item){
@@ -216,6 +218,18 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin
 				var r = item.row;
 				item.row = function(rowIndex){ 
 					return rowIndex === r; 
+				};
+			}else if(typeof item.row == "string"){
+				var id = item.row;
+				item.row = function(rowIndex, storeItem, store){
+					try{
+						if(store && storeItem && store.getFeatures()['dojo.data.api.Identity']){
+							return store.getIdentity(storeItem) == id;
+						}	
+					}catch(e){
+						console.error(e);
+					}
+					return false;
 				};
 			}
 			if(dojo.isFunction(item.row)){
@@ -243,4 +257,4 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge",dojox.grid.enhanced._Plugin
 		}
 	}
 });
-dojox.grid.EnhancedGrid.registerPlugin('cellMerge', dojox.grid.enhanced.plugins.CellMerge);
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.CellMerge/*name:'cellMerge'*/);
