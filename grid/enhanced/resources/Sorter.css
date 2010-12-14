@@ -1,0 +1,120 @@
+/*
+Naming:
+
+.dojoxGrid
+    Sorted, SingleSorted | NestSorted
+.dojoxGridHeaderNode
+    Over, SortFocus, ShowIndex
+.dojoxGridSortNode
+    Asc | Desc, Main|Sub
+.dojoxGridSortBtn
+    :hover, Single|Nested
+*/
+.dojoxGrid .dojoxGridSortNode{
+	position: relative;
+	white-space:nowrap;
+}
+.dojoxGridSortBtn {
+	width: 10px;
+	height:15px;
+	visibility: hidden;
+	right:0;
+	top: 0px;
+	height: 100%;
+	display:block;
+	position: absolute;
+	color: #000;
+	background: transparent url(images/sprite_icons.png) no-repeat 100px 0;
+	text-decoration: none;
+	outline: none;
+}
+.dojoxGridSortBtnNested {
+	right: 13px;
+}
+.dojoxGridSortNode {
+	outline: none;
+}
+/*Control the title node width*/
+.dojoxGridCellOver .dojoxGridSortNode,
+.dojoxGridSingleSorted .dojoxGridHeader .dojoxGridCellOver .dojoxGridSortNodeMain {
+	margin-right: 5px;
+}
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNode {
+	margin-right: 23px;
+}
+.dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnSingle,
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle  {
+	right: -10px;
+}
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortBtnSingle,
+.dojoxGridNestSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle {
+	right: -28px;
+}
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortBtnNested {
+	right: -18px;
+}
+/*Control visibility*/
+.dojoxGrid .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnSingle,					/* single sort btn is always visible when mouseover*/
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnNested,				/* in a sorted grid, nest btn is always visible when mouseover (except 1)*/
+.dojoxGrid .dojoxGridHeaderNodeShowIndex .dojoxGridSortNode .dojoxGridSortBtnNested,		/* in a single sort grid, when mouseover other columns, show 1 on the main sort column*/
+.dojoxGrid .dojoxGridSortNodeSorted .dojoxGridSortBtn {										/* in a sorted column, single or nested sort btn are always visible (except 2)*/
+	visibility: visible;
+}
+.dojoxGridSingleSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnNested,	/*(1)in a single sorted grid, nest btn is hidden in sort column when mouseover*/
+.dojoxGridSingleSorted .dojoxGridSortNode .dojoxGridSortBtnNested {							/*(2)all nested btn is hidden in single sort grid without mouse over*/
+	visibility: hidden;
+}
+/*
+-100 desc
+-120 asc
+-140 do desc
+-160 do asc
+-180 no sort
+*/
+
+/*Control background image*/
+.dojoxGridSortNodeAsc .dojoxGridSortBtnSingle {
+	background-position: -120px 5px;
+	visibility: visible;
+}
+.dojoxGridSortNodeDesc .dojoxGridSortBtnSingle {
+	background-position: -100px  5px;
+	visibility: visible;
+}
+/*hover single sort*/
+.dojoxGridCellOver .dojoxGridSortBtnSingle,
+.dojoxGridCellSortFocus .dojoxGridSortBtnSingle {
+	background-position: -160px 5px;
+	border-left: 1px solid #999999;
+}
+.dojoxGridCellOver .dojoxGridSortNodeAsc .dojoxGridSortBtnSingle,
+.dojoxGridCellSortFocus .dojoxGridSortNodeAsc .dojoxGridSortBtnSingle {
+	background-position: -140px 5px;
+}
+.dojoxGridCellOver .dojoxGridSortNodeDesc .dojoxGridSortBtnSingle, 
+.dojoxGridCellSortFocus .dojoxGridSortNodeDesc .dojoxGridSortBtnSingle {
+	background-position: -180px 5px;
+}
+/*hover nested sort*/
+.dojoxGridCellOver .dojoxGridSortBtnNested,
+.dojoxGridCellSortFocus .dojoxGridSortBtnNested {
+	background-position: -150px 5px;
+	padding-right:8px;
+	border-left: 1px solid #999999;
+}
+.dojoxGridCellOver .dojoxGridSortNodeAsc .dojoxGridSortBtnNested,
+.dojoxGridCellSortFocus .dojoxGridSortNodeAsc .dojoxGridSortBtnNested {
+	background-position: -130px 5px;
+}
+.dojoxGridCellOver .dojoxGridSortNodeDesc .dojoxGridSortBtnNested,
+.dojoxGridCellSortFocus .dojoxGridSortNodeDesc .dojoxGridSortBtnNested {
+	background-position: -170px 5px;
+}
+.dojoxGridNestSorted .dojoxGridCellOver .dojoxGridSortBtnSingle,
+.dojoxGridNestSorted .dojoxGridCellSortFocus .dojoxGridSortBtnSingle {
+	background-position: -160px 5px;
+}
+.dojoxGridCellOver .dojoxGridSortBtnSingle:hover,
+.dojoxGridCellOver .dojoxGridSortBtnNested:hover {
+	background-color:#B7EAFF;
+}
