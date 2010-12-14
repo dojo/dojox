@@ -59,10 +59,15 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 	//		The prefix of the CSS style
 	_cssPrefix: "dijitEditorEilDialog",
 	
+	// _closable [private] Boolean
+	//		Indicate if the tooltip dialog can be closed. Used to workaround Safari 5 bug
+	//		where the file dialog doesn't pop up in modal until after the first click.
+	_closable: true,
+	
 	// linkDialogTemplate [protected] String
 	//		Over-ride for template since this is an enhanced image dialog.
 	linkDialogTemplate: [
-		"<hr/>",
+		"<div style='border-bottom: 1px solid black; padding-bottom: 2pt; margin-bottom: 4pt;'></div>", // <hr/> breaks the dialog in IE6
 		"<div class='dijitEditorEilDialogDescription'>${prePopuTextUrl}${prePopuTextBrowse}</div>",
 		"<table><tr><td colspan='2'>",
 		"<label for='${id}_urlInput' title='${prePopuTextUrl}${prePopuTextBrowse}'>${url}</label>",
@@ -97,12 +102,32 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		var dropDown = (this.dropDown = new dijit.TooltipDialog({
 			title: messages[this.command + "Title"],
 			onOpen: function(){
-				_this._initialFileUploader.apply(_this);
+				// Firefox, Chome and Safari have a strange behavior:
+				// When the File Upload dialog is open, the browse div (FileUploader) will lose its focus
+				// and triggers onBlur event. This event will cause the whole tooltip dialog
+				// to be closed when the File Upload dialog is open. The popup dialog should hang up
+				// the js executioin rather than triggering an event. IE does not have such a problem.
+				// Stop the default action!
+				if(!dojo.IE && !_this.blurHandler){
+					_this.blurHandler = dojo.connect(dojo.global, "blur", function(evt){
+						dojo.stopEvent(evt);
+						_this._urlInput.isReadyToValidate = true;
+						_this._urlInput.focus(); // Set the focus position
+					});
+				}
+				_this._initialFileUploader();
 				_this._onOpenDialog();
 				dijit.TooltipDialog.prototype.onOpen.apply(this, arguments);
-				// Auto-select the text if it is not empty
-				dijit.selectInputText(_this._urlInput.textbox);
-				setTimeout(function(){ _this._urlInput.isLoadComplete = true; }, 0);
+				setTimeout(function(){
+					// Auto-select the text if it is not empty
+					dijit.selectInputText(_this._urlInput.textbox);
+					_this._urlInput.isLoadComplete = true;
+				}, 0);
+			},
+			onClose: function(){
+				dojo.disconnect(_this.blurHandler);
+				_this.blurHandler = null;
+				this.onHide();
 			},
 			onCancel: function(){
 				setTimeout(dojo.hitch(_this, "_onCloseDialog"),0);
@@ -116,9 +141,28 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 					showLabel: false,
 					iconClass: className,
 					dropDown: this.dropDown,
-					tabIndex: "-1",
-					isFocusable: function(){ return false; } // So it won't get focused when it is clicked to show the Tooltip dialog
+					tabIndex: "-1"
 				}, this.params || {});
+		
+				
+		if(dojo.isSafari == 5){
+			// Workaround Safari 5 / windows bug:
+			// After the select-file dialog opens, the first time the user clicks anywhere (even on that dialog)
+			// it's treated like a plain click on the page, and the tooltip dialog closes
+			props.closeDropDown = function(/*Boolean*/ focus){
+				// Determine if the dialog can be closed
+				if(_this._closable){
+					if(this._opened){
+						dijit.popup.close(this.dropDown);
+						if(focus){ this.focus(); }
+						this._opened = false;
+						this.state = "";
+					}
+				}
+				setTimeout(function(){ _this._closable = true; }, 10);
+			};
+		}
+		
 		this.button = new dijit.form.DropDownButton(props);
 		
 		// Generate the RegExp of the ValidationTextBox from fileMask
@@ -155,7 +199,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 					if(this.isLoadComplete){
 						return pt.isValid.apply(this, arguments);
 					}else{
-						return true;
+						return this.get("value").length > 0;
 					}
 				},
 				reset: function(){
@@ -200,27 +244,21 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 				fup._resetHTML();
 			};
 			
-			// Firefox has a strange behavior:
-			// When the File Upload dialog is open, the browse div (FileUploader) will lose its focus
-			// and triggers onBlur event. This event will cause the whole tooltip dialog
-			// to be closed when the File Upload dialog is open. The popup dialog should hang up
-			// the js executioin rather than triggering an event. IE6+/Safari/Chrome do not have such a problem.
-			// Stop the event bubbling!
-			if(dojo.isMoz){
-				// dojo.byId(fUpId)[0] HACK! But useful. FileUploader contains a div and an file input
-				// that have the same id.
-				dojo.connect(dojo.byId(fUpId)[0], "onblur", function(evt){
-					urlInput.focus(); // Set the focus position
-					dojo.stopEvent(evt);
-				});
-			}
+			_this.connect(fup, "onClick", function(){
+				urlInput.isReadyToValidate = false;
+				urlInput.validate(false);
+				if(dojo.isSafari == 5){ // Need additional care to Safari 5 :(
+					_this._closable = false;
+				}
+			});
+
 			
-			dojo.connect(fup, "onChange", function(data){
+			_this.connect(fup, "onChange", function(data){
 				_this._isLocalFile = true;
 				urlInput.set("value", data[0].name); //Single selection
 			});
 			
-			dojo.connect(fup, "onComplete", function(data){
+			_this.connect(fup, "onComplete", function(data){
 				var urlPrefix = _this.baseImageUrl;
 				urlPrefix = urlPrefix && urlPrefix.charAt(urlPrefix.length - 1) == "/" ? urlPrefix : urlPrefix + "/";
 				urlInput.set("value", urlPrefix + data[0].file); //Single selection
@@ -229,7 +267,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 				_this.setValue(_this.dropDown.get("value"));
 			});
 			
-			dojo.connect(fup, "onError", function(evtObject){
+			_this.connect(fup, "onError", function(evtObject){
 				// summary:
 				//		Fires on errors
 				console.log("Error occurred when uploading image file!");
@@ -240,7 +278,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 	
 	_checkAndFixInput: function(){
 		// summray:
-		//		Over-ride the 
+		//		Over-ride the original method
 		this._setButton.set("disabled", !this._isValid());
 	},
 	
@@ -251,6 +289,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 	},
 	
 	_cancelFileUpload: function(){
+		this._fileUploader.reset();
 		this._isLocalFile = false;
 	},
 	
