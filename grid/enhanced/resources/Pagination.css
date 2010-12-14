@@ -1,4 +1,4 @@
-.paginatorClass {
+.dojoxGridPaginator {
 	border-top:1px #DBDBDB solid;
 	text-align:center;
 	width: 100%;
@@ -6,148 +6,128 @@
 	table-layout : fixed;
 	background-color: #EAEAEA;
 }
-
-.descriptionTdClass {
+.dojoxGridDescriptionTd {
 	text-align: left;
+	width: 30%;
 }
-
-.descriptionClass {
+.dojoxGridDescription {
 	text-align: left;
 	margin-left: 9px;
-	width: 200px!important;
 	overflow: hidden;
 }
-
-.paginatorSwitchClass {
+.dojoxGridPaginatorSwitch {
 	overflow: hidden;
 }
-
-.paginatorFastStepClass {
+.dojoxGridPaginatorFastStep {
 	text-align: right;
-	width: 280px!important;
+	width: 35%;
 	overflow: hidden;
 }
-
-.paginatorGotoTdClass {
+.dojoxGridPaginatorStep {
+	float: right;
+}
+.dojoxGridPaginatorGotoTd {
 	width: 20px!important;
 }
-
-.paginatorGotoDivClass {
+.dojoxGridPaginatorGotoDiv {
 	cursor: pointer;
 	width: 12px!important;
 	height: 16px!important;
 	margin: 0 6px 0 2px;
-	background: url("images/goto-page.png") center no-repeat;
+	background: url("images/sprite_icons.png") no-repeat -77px 4px;
 }
-
-.paginatorGotoDivDisabled {
-	background: url("images/goto-page-disabled.png") center no-repeat;
+.dojoxGridPaginatorGotoDivDisabled {
+	background: url("images/sprite_icons.png") no-repeat -77px -16px;
 }
-
-.wardButtonClass {
+.dojoxGridWardButton {
 	margin-top: 2px;
 	width: 12px!important;
 	height: 12px!important;
-	float: right;
+	float: left;
+	background: url("images/sprite_icons.png") no-repeat;
 }
-
-.wardButtonInnerClass {
+.dojoxGridWardButtonInner {
 	visibility: hidden;
 }
-
-.dijit_a11y .wardButtonInnerClass {
+.dijit_a11y .dojoxGridWardButtonInner {
 	visibility: visible;
 	margin-bottom: 8px;
 }
-
-.firstPageBtnClass {
+.dojoxGridfirstPageBtn {
 	cursor: pointer;
 	margin-left: 1px;
-	background: url("images/Go_to_first.gif") center no-repeat;
+	background-position: -57px 3px;
 }
-
-.firstPageBtnDisableClass {
+.dojoxGridfirstPageBtnDisable {
 	margin-left: 1px;
-	background: url("images/Go_to_first-disable.gif") center no-repeat;
+	background-position: -57px -17px;
 }
-
-.prevPageBtnClass {
+.dojoxGridprevPageBtn {
 	cursor: pointer;
-	margin: 2px 5px 0 9px;
-	background: url("images/Previous.gif") center no-repeat;
-}
-
-.prevPageBtnDisableClass {
 	margin: 2px 2px 0 9px;
-	background: url("images/Previous-disable.gif") center no-repeat;
+	background-position: 3px 3px;
 }
-
-.lastPageBtnClass {
+.dojoxGridprevPageBtnDisable {
+	margin: 2px 2px 0 9px;
+	background-position: 3px -17px;
+}
+.dojoxGridlastPageBtn {
 	cursor: pointer;
 	margin: 2px 9px 0 9px;
-	background: url("images/Go_to_last.gif") center no-repeat;
+	background-position: -37px 3px;
 }
-
-.lastPageBtnDisableClass {
+.dojoxGridlastPageBtnDisable {
 	margin: 2px 9px 0 9px;
-	background: url("images/Go_to_last-disable.gif") center no-repeat;
+	background-position: -37px -17px;
 }
 
-.nextPageBtnClass {
+.dojoxGridnextPageBtn {
 	cursor: pointer;
-	margin-left: 1px;
-	background: url("images/Next.gif") center no-repeat;
+	margin-left: 3px;
+	background-position: -17px 3px;
 }
-
-.nextPageBtnDisableClass {
-	margin-left: 1px;
-	background: url("images/Next-disable.gif") center no-repeat;
+.dojoxGridnextPageBtnDisable {
+	margin-left: 3px;
+	background-position: -17px -17px;
 }
-
-.inactiveClass {
+.dojoxGridInactived {
 	font-weight: normal;
 	color: #5D88AF;
 	cursor: pointer;
 	margin: 1px 6px 0 5px;
-	float: right;
+	float: left;
 	zoom: 1; /* for IE */
 }
-
-.activedClass {
+.dojoxGridActived {
 	font-weight: bold;
 	color: black;
 	margin: 1px 6px 0 5px;
-	float: right;
+	float: left;
 	text-decoration: none!important; 
 	zoom: 1; /* for IE */
 }
-
-.inactiveSwitchClass {
+.dojoxGridInactiveSwitch {
 	font-weight: normal;
 	color: #5D88AF;
 	cursor: pointer;
 	margin: 1px 7px 0 7px;
 	zoom: 1; /* for IE */
 }
-
-.activedSwitchClass {
+.dojoxGridActivedSwitch {
 	font-weight: bold;
 	color: black;
 	margin: 1px 7px 0 7px;
 	text-decoration: none!important; 
 	zoom: 1; /* for IE */
 }
-
-.hover {
+.dojoxGridPageTextHover {
 	text-decoration: underline;
 }
-
-.dialogMarginClass {
+.dojoxGridDialogMargin {
 	width: 220px!important;
 	margin-bottom: 10px;
 }
-
-.dialogButtonClass {
+.dojoxGridDialogButton {
 	width: 220px!important;
 	text-align: right;
 }

@@ -10,9 +10,8 @@
 		@import "../../../../dijit/themes/claro/claro.css";		
 		@import "../../../../dijit/themes/tundra/tundra.css";
 		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
 		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
+		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 
 		body {
 			font-size: 0.9em;
@@ -44,12 +43,12 @@
 					"pagination": {
 						pageSizeArr: ["10", "25", "50", "100", "All"],	// Array, custom the items per page button
 						// itemTitle: "entrys", 	// String, custom the item' title of description
-						showDescription: true,	// boolean, custom whether or not the description will be displayed
-						showSizeSwitch: true,	// boolean, custom whether or not the page size switch will be displayed
-						showPageStepper: true,	// boolean, custom whether or not the page step will be displayed
-						showGotoButton: true,	// boolean, custom whether or not the goto page button will be displayed
+						description: "30%",	// boolean, custom whether or not the description will be displayed
+						sizeSwitch: "260px",	// boolean, custom whether or not the page size switch will be displayed
+						pageStepper: "30em",	// boolean, custom whether or not the page step will be displayed
+						gotoButton: true,	// boolean, custom whether or not the goto page button will be displayed
 						maxPageStep: 7,		// Integer, custom how many page step will be displayed
-						barPosition: "bottom"	// String, custom the position of the pagination bar
+						position: "bottom"	// String, custom the position of the pagination bar
 												// there're three options: top, bottom, both
 						// ,descTemplate: "${1} ${0}" // A template of the current position description.
 					}
