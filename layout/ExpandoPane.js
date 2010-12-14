@@ -249,17 +249,16 @@ dojo.declare("dojox.layout.ExpandoPane",
 		
 	},
 	
-	resize: function(/* Object? */newSize, /*Object?*/ currentSize){
+	resize: function(/* Object? */newSize){
 		// summary:
 		//		we aren't a layout widget, but need to act like one:
 		// newSize: Object
 		//		The size object to resize to
-		// currentSize: Object
-		//		The size of my domNode that has already been set (by BorderContainer)
 
 		if(!this._hasSizes){ this._startupSizes(newSize); }
 		
 		// compute size of container (ie, size left over after title bar)
+		var currentSize = dojo.marginBox(this.domNode);
 		this._contentBox = {
 			w: newSize && "w" in newSize ? newSize.w : currentSize.w,
 			h: (newSize && "h" in newSize ? newSize.h : currentSize.h) - this._titleHeight
