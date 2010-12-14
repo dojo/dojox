@@ -1,7 +1,7 @@
 dojo.provide("dojox.grid.enhanced.plugins.filter._ConditionExpr");
 
 (function(){
-	var f_ns = dojox.grid.enhanced.plugins.filter;
+	var fns = dojox.grid.enhanced.plugins.filter;
 	
 dojo.declare("dojox.grid.enhanced.plugins.filter._ConditionExpr",null,{
 	// summary:
@@ -45,7 +45,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._ConditionExpr",null,{
 		return "expr";	//String
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr",f_ns._ConditionExpr,{
+dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr, {
 	// summary:
 	//		The most abstract class for all data expressions.
 	//		A _DataExpr is a condition expression for a single data value.
@@ -124,7 +124,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr",f_ns._ConditionExpr,
 		return "data";	//String
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter._OperatorExpr",f_ns._ConditionExpr,{
+dojo.declare("dojox.grid.enhanced.plugins.filter._OperatorExpr", fns._ConditionExpr, {
 	// summary:
 	//		The most abstract class for all operator expressions.
 	//		An operator expression is a _ConditionExpr that represents an operation.
@@ -158,7 +158,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._OperatorExpr",f_ns._ConditionE
 		return "operator";	//String
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter._UniOpExpr",f_ns._OperatorExpr,{
+dojo.declare("dojox.grid.enhanced.plugins.filter._UniOpExpr", fns._OperatorExpr, {
 	// summary:
 	//		The most abstract class for all uni-operator expressions.
 	//		A uni-operator expression is an _OperatorExpr that only allow one operand.
@@ -167,7 +167,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._UniOpExpr",f_ns._OperatorExpr,
 		//		Implement _ConditionExpr.applyRow.
 		//		Apply the restriction of "only one operand" and confirm the operand is a valid _ConditionExpr.
 		//		Then do the calculation of this operator.
-		if(!(this._operands[0] instanceof f_ns._ConditionExpr)){
+		if(!(this._operands[0] instanceof fns._ConditionExpr)){
 			throw new Error("_UniOpExpr: operand is not expression.");
 		}
 		return this._calculate(this._operands[0],datarow,getter);	//_ConditionExpr
@@ -191,7 +191,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._UniOpExpr",f_ns._OperatorExpr,
 		return "uniOperator";	//String
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter._BiOpExpr",f_ns._OperatorExpr,{
+dojo.declare("dojox.grid.enhanced.plugins.filter._BiOpExpr", fns._OperatorExpr, {
 	// summary:
 	//		The most abstract class for all bi-operator expressions.
 	//		A bi-operator expression is an _OperatorExpr that allow and only allow two operands.
@@ -199,9 +199,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._BiOpExpr",f_ns._OperatorExpr,{
 		// summary:
 		//		Implement _ConditionExpr.applyRow.
 		//		Apply the restriction of "two operands" and confirm operands are valid _ConditionExpr's.
-		if(!(this._operands[0] instanceof f_ns._ConditionExpr)){
+		if(!(this._operands[0] instanceof fns._ConditionExpr)){
 			throw new Error("_BiOpExpr: left operand is not expression.");
-		}else if(!(this._operands[1] instanceof f_ns._ConditionExpr)){
+		}else if(!(this._operands[1] instanceof fns._ConditionExpr)){
 			throw new Error("_BiOpExpr: right operand is not expression.");
 		}
 		return this._calculate(this._operands[0],this._operands[1],datarow,getter);

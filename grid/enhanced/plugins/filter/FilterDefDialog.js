@@ -2,6 +2,7 @@ dojo.provide("dojox.grid.enhanced.plugins.filter.FilterDefDialog");
 
 dojo.require("dijit.dijit");
 dojo.require("dijit.Tooltip");
+dojo.require("dojox.grid.enhanced.plugins.Dialog");
 dojo.require("dijit.form.ComboBox");
 dojo.require("dijit.form.Select");
 dojo.require("dijit.form.TextBox");
@@ -17,18 +18,17 @@ dojo.require("dojo.string");
 dojo.require("dojox.grid.enhanced.plugins.filter.FilterBuilder");
 dojo.require("dojox.grid.cells.dijit");
 dojo.require("dojox.html.ellipsis");
+dojo.require("dojox.html.metrics");
+dojo.require("dojo.window");
 
 (function(){
 var fns = dojox.grid.enhanced.plugins.filter,
-	_parseDecimal = function(v){
-		return parseInt(v, 10);
-	},
 	_tabIdxes = {
 		// summary:
 		//		Define tabindexes for elements in the filter definition dialog
 		relSelect: 60,
 		accordionTitle: 70,
-		removeCBoxBtn: 80,
+		removeCBoxBtn: -1,
 		colSelect: 90,
 		condSelect: 95,
 		valueBox: 10,
@@ -37,8 +37,7 @@ var fns = dojox.grid.enhanced.plugins.filter,
 		clearBtn: 40,
 		cancelBtn: 50
 	};
-
-dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
+dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 	// summary:
 	//		Create the filter definition UI.
 	curColIdx: -1,
@@ -55,24 +54,49 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		(this.filterDefPane = new fns.FilterDefPane({
 			"dlg": this
 		})).startup();
-		(this._defPane = new dijit.Dialog({
+		(this._defPane = new dojox.grid.enhanced.plugins.Dialog({
+			"refNode": this.plugin.grid.domNode,
 			"title": plugin.nls.filterDefDialogTitle,
 			"class": "dojoxGridFDTitlePane",
 			"iconClass": "dojoxGridFDPaneIcon",
 			"content": this.filterDefPane
 		})).startup();
 		
-		this._defPane.connect(plugin.grid.store.layer('filter'), "filterDef", dojo.hitch(this, "_onSetFilter"));
-		plugin.grid.setFilter = dojo.hitch(this, "setCriterias");
-		plugin.grid.onFilterDefined = function(){};
+		this._defPane.connect(plugin.grid.layer('filter'), "filterDef", dojo.hitch(this, "_onSetFilter"));
+		plugin.grid.setFilter = dojo.hitch(this, "setFilter");
+		plugin.grid.getFilter = dojo.hitch(this, "getFilter");
+		plugin.grid.getFilterRelation = dojo.hitch(this, function(){
+			return this._relOpCls;
+		});
+		
+		plugin.connect(plugin.grid.layout, "moveColumn", dojo.hitch(this, "onMoveColumn"));
+	},
+	onMoveColumn: function(sourceViewIndex, destViewIndex, cellIndex, targetIndex, before){
+		if(this._savedCriterias && cellIndex != targetIndex){
+			if(before){ --targetIndex; }
+			var min = cellIndex < targetIndex ? cellIndex : targetIndex;
+			var max = cellIndex < targetIndex ? targetIndex : cellIndex;
+			var dir = targetIndex > min ? 1 : -1;
+			dojo.forEach(this._savedCriterias, function(sc){
+				var idx = parseInt(sc.column, 10);
+				if(!isNaN(idx) && idx >= min && idx <= max){
+					sc.column = String(idx == cellIndex ? idx + (max - min) * dir : idx - dir);
+				}
+			});
+		}
 	},
 	destroy: function(){
 		this._defPane.destroyRecursive();
 		this._defPane = null;
 		this.filterDefPane = null;
-		this.plugin.grid.setFilter = null;
-		this.plugin.grid.onFilterDefined = null;
 		this.builder = null;
+		this._dataTypeMap = null;
+		this._cboxes = null;
+		var g = this.plugin.grid;
+		g.setFilter = null;
+		g.getFilter = null;
+		g.getFilterRelation = null;
+		this.plugin = null;
 	},
 	_setupData: function(){
 		var nls = this.plugin.nls;
@@ -95,7 +119,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 			"string":{
 				valueBoxCls: {
 					dft: dijit.form.TextBox,
-					ac: dijit.form.ComboBox		//For autoComplete
+					ac: fns.UniqueComboBox		//For autoComplete
 				},
 				conditions:[
 					{label: nls.conditionContains, value: "contains", selected: true},
@@ -140,12 +164,60 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 			}
 		};
 	},
+	setFilter: function(rules, ruleRelation){
+		rules = rules || [];
+		if(!dojo.isArray(rules)){
+			rules = [rules];
+		}
+		var func = function(){
+			if(rules.length){
+				this._savedCriterias = dojo.map(rules, function(rule){
+					var type = rule.type || this.defaultType;
+					return {
+						"type": type,
+						"column": String(rule.column),
+						"condition": rule.condition,
+						"value": rule.value,
+						"colTxt": this.getColumnLabelByValue(String(rule.column)),
+						"condTxt": this.getConditionLabelByValue(type, rule.condition),
+						"formattedVal": rule.formattedVal || rule.value
+					};
+				}, this);
+				this._criteriasChanged = true;
+				if(ruleRelation === "logicall" || ruleRelation === "logicany"){
+					this._relOpCls = ruleRelation;
+				} 
+				var exprs = dojo.map(rules, this.getExprForCriteria, this);
+				exprs = this.builder.buildExpression(exprs.length == 1 ? exprs[0] : {
+					"op": this._relOpCls,
+					"data": exprs
+				});
+				this.plugin.grid.layer("filter").filterDef(exprs);
+				this.plugin.filterBar.toggleClearFilterBtn(false);
+			}
+			this._closeDlgAndUpdateGrid();
+		};
+		if(this._savedCriterias){
+			this._clearWithoutRefresh = true;
+			var handle = dojo.connect(this, "clearFilter", this, function(){
+				dojo.disconnect(handle);
+				this._clearWithoutRefresh = false;
+				func.apply(this);
+			});
+			this.onClearFilter();
+		}else{
+			func.apply(this);
+		}
+	},
+	getFilter: function(){
+		return dojo.clone(this._savedCriterias) || [];
+	},
 	getColumnLabelByValue: function(v){
 		var nls = this.plugin.nls;
 		if(v.toLowerCase() == "anycolumn"){
 			return nls["anyColumnOption"];
 		}else{
-			var cell = this.plugin.grid.layout.cells[_parseDecimal(v)];
+			var cell = this.plugin.grid.layout.cells[parseInt(v, 10)];
 			return cell ? (cell.name || cell.field) : "";
 		}
 	},
@@ -169,67 +241,42 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		var cbs = this._cboxes,
 			cc = this.filterDefPane.cboxContainer,
 			total = this.plugin.args.ruleCount,
-			len = cbs.length,
-			h = 0, cbox, i;
+			len = cbs.length, cbox;
 		//If overflow, add to max rule count.
-		cnt = len + cnt > total ? total - len : cnt;
+		if(total > 0 && len + cnt > total){
+			cnt = total - len;
+		}
 		for(; cnt > 0; --cnt){
 			cbox = new fns.CriteriaBox({
 				dlg: this
 			});
-			cbox._pane = new dijit.layout.ContentPane({
-				content: cbox
-			});
 			cbs.push(cbox);
-			cc.addChild(cbox._pane);
+			cc.addChild(cbox);
 		}
 		//If there's no content box in it , AccordionContainer can not startup
-		if(len === 0){
-			cc.startup();
-			if(_parseDecimal(dojo.isIE) == 7){
-				//IE7 will fire a lot of "onresize" event during initialization.
-				dojo.some(cc._connects, function(cnnt){
-					if(cnnt[0][1] == "onresize"){
-						cc.disconnect(cnnt);
-						return true;
-					}
-				});
-			}
-		}
-		//Hacking
-		for(i = len; (cbox = cbs[i]); ++i){
-			dojo.style(cbox._pane.domNode, "overflow", "hidden");
-			cbox.setupTitleDom();
-			this._hackTabIdxOfAccordionBtn(cbox._pane);
-		}
+		cc.startup();
 		this._updatePane();
 		this._updateCBoxTitles();
-		if(!this._titleHeight){
-			for(i = cbs.length - 1; i >= 0; --i){
-				cbox = cbs[i];
-				if(cc.selectedChildWidget != cbox._pane){
-					this._titleHeight = dojo.marginBox(cbox._pane._buttonWidget.domNode.parentNode).h;
-					break;
-				}
+		cc.selectChild(cbs[cbs.length-1]);
+		//Asign an impossibly large scrollTop to scroll the criteria pane to the bottom.
+		this.filterDefPane.criteriaPane.scrollTop = 1000000;
+		if(cbs.length === 4){
+			if(dojo.isIE <= 6 && !this.__alreadyResizedForIE6){
+				var size = dojo.position(cc.domNode);
+				size.w -= dojox.html.metrics.getScrollbar().w;
+				cc.resize(size);
+				this.__alreadyResizedForIE6 = true;
+			}else{
+				cc.resize();
 			}
-		}
-		h = (cbs.length - len) * this._titleHeight;
-		this._hackAccordionContainerHeight(true, h);
-		//must hack before select
-		cc.selectChild(cbs[cbs.length-1]._pane);
-		for(i = len; (cbox = cbs[i]); ++i){
-			cbox._removeCBoxBtn.placeAt(cbox._pane._buttonWidget.iconNode, "before");
 		}
 	},
 	removeCriteriaBoxes: function(/* int|CriteriaBox|int[] */cnt,/* bool? */isIdx){
 		// summary:
 		//		Remove criteria boxes from the filter definition pane.
-		var cbs = this._cboxes,
-			cc = this.filterDefPane.cboxContainer,
-			len = cbs.length,
-			start = len - cnt,
-			end = len - 1,
-			h = 0, tmp, cbox,
+		var cbs = this._cboxes, cc = this.filterDefPane.cboxContainer,
+			len = cbs.length, start = len - cnt,
+			end = len - 1, cbox,
 			curIdx = dojo.indexOf(cbs, cc.selectedChildWidget.content);
 		if(dojo.isArray(cnt)){
 			var i, idxes = cnt;
@@ -237,22 +284,17 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 			cnt = idxes.length;
 			//find a rule that's not deleted.
 			//must find and focus the last one, or the hack will not work.
-			for(i = len - 1;i >= 0; --i){
-				if(dojo.indexOf(idxes,i) < 0){
-					break;
-				}
-			}
+			for(i = len - 1; i >= 0 && dojo.indexOf(idxes, i) >= 0; --i){}
 			if(i >= 0){
 				//must select before remove
 				if(i != curIdx){
-					cc.selectChild(cbs[i]._pane);
+					cc.selectChild(cbs[i]);
 				}
 				//idxes is sorted from small to large, 
 				//so travel reversely won't need change index after delete from array.
 				for(i = cnt-1; i >= 0; --i){
 					if(idxes[i] >= 0 && idxes[i] < len){
-						h += this._titleHeight;
-						cc.removeChild(cbs[idxes[i]]._pane);
+						cc.removeChild(cbs[idxes[i]]);
 						cbs.splice(idxes[i],1);
 					}
 				}
@@ -283,18 +325,19 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 			}
 			//must select before remove
 			if(curIdx >= start && curIdx <= end){
-				cc.selectChild(cbs[start ? start-1 : end+1]._pane);
+				cc.selectChild(cbs[start ? start-1 : end+1]);
 			}
 			for(; end >= start; --end){
-				h += this._titleHeight;
-				cc.removeChild(cbs[end]._pane);
+				cc.removeChild(cbs[end]);
 			}
 			cbs.splice(start, cnt);
 		} 
 		this._updatePane();
 		this._updateCBoxTitles();
-		//Hacking
-		this._hackAccordionContainerHeight(false, h);	
+		if(cbs.length === 3){
+			//In ie6, resize back to the normal width will cause the title button look strange.
+			cc.resize();
+		}
 	},
 	getCriteria: function(/* int */idx){
 		// summary:
@@ -308,50 +351,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 			},this._savedCriterias[idx]);
 		}
 		return null;
-	},
-	setCriterias: function(rules, noRefresh){
-		rules = rules || [];
-		if(!dojo.isArray(rules)){
-			rules = [rules];
-		}
-		var func = function(){
-			if(rules.length){
-				this._savedCriterias = dojo.map(rules, function(rule){
-					var type = rule.type || this.defaultType;
-					return {
-						"type": type,
-						"column": String(rule.column),
-						"condition": rule.condition,
-						"value": rule.value,
-						"colTxt": this.getColumnLabelByValue(String(rule.column)),
-						"condTxt": this.getConditionLabelByValue(type, rule.condition),
-						"formattedVal": rule.formattedVal || rule.value
-					};
-				}, this);
-				this._criteriasChanged = true;
-				var exprs = dojo.map(rules, this.getExprForCriteria, this);
-				exprs = this.builder.buildExpression(exprs.length == 1 ? exprs[0] : {
-					"op": this._relOpCls,
-					"data": exprs
-				});
-				this.plugin.grid.store.layer("filter").filterDef(exprs);
-				this.plugin.filterBar.toggleClearFilterBtn(false);
-			}
-			if(!noRefresh){
-				this._closeDlgAndUpdateGrid();
-			}
-		};
-		if(this._savedCriterias){
-			this._clearWithoutRefresh = true;
-			var handle = dojo.connect(this, "clearFilter", this, function(){
-				dojo.disconnect(handle);
-				this._clearWithoutRefresh = false;
-				func.apply(this);
-			});
-			this.onClearFilter();
-		}else{
-			func.apply(this);
-		}
 	},
 	getExprForCriteria: function(rule){
 		if(rule.column == "anycolumn"){
@@ -369,7 +368,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		}
 	},
 	getExprForColumn: function(value, colIdx, type, condition){
-		colIdx = _parseDecimal(colIdx);
+		colIdx = parseInt(colIdx, 10);
 		var cell = this.plugin.grid.layout.cells[colIdx],
 			colName = cell.field || cell.name,
 			obj = {
@@ -391,7 +390,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		};
 	},
 	getColumnType: function(/* int */colIndex){
-		var cell = this.plugin.grid.layout.cells[_parseDecimal(colIndex)];
+		var cell = this.plugin.grid.layout.cells[parseInt(colIndex, 10)];
 		if(!cell || !cell.datatype){
 			return this.defaultType;
 		}
@@ -402,15 +401,18 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 	clearFilter: function(noRefresh){
 		// summary:
 		//		Clear filter definition.
+		if(!this._savedCriterias){
+			return;
+		}
 		this._savedCriterias = null;
-		this.plugin.grid.store.layer("filter").filterDef(null);
+		this.plugin.grid.layer("filter").filterDef(null);
 		try{
 			this.plugin.filterBar.toggleClearFilterBtn(true);
 			this.filterDefPane._clearFilterBtn.set("disabled", true);
 			this.removeCriteriaBoxes(this._cboxes.length-1);
 			this._cboxes[0].load({});
 		}catch(e){
-			//console.log("clearFilter",e);
+			console.debug("clearFilter:",e);
 			//Any error means the filter is defined outside this plugin.
 		}
 		if(noRefresh){
@@ -422,34 +424,14 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 	showDialog: function(/* int */colIndex){
 		// summary:
 		//		Show the filter defintion dialog.
-		var p = this.plugin,
-			s = p.grid.store;
 		this._defPane.show();
-		p.filterStatusTip.closeDialog();
-		var len = s.layer();
-		this._layerStates = {};
-		for(var i = 0; i < len; ++i){
-			this._layerStates[i] = s.layer(i).enabled();
-			s.layer(i).enabled(false);
-		}
-		//For auto-complete, enable unique layer.
-		s.layer("unique").enabled(true);
-		s.layer("sort").enabled(true);
+		this.plugin.filterStatusTip.closeDialog();
 		this._prepareDialog(colIndex);
 	},
 	closeDialog: function(){
 		// summary:
 		//		Close the filter definition dialog.
 		this._defPane.hide();
-		if(this._layerStates){
-			var s = this.plugin.grid.store;
-			var len = s.layer();
-			for(var i = 0; i < len; ++i){
-				s.layer(i).enabled(this._layerStates[i]);
-			}
-			s.layer("sort").enabled(false);
-			s.layer("unique").enabled(false);
-		}
 	},
 	onFilter: function(e){
 		// summary:
@@ -475,13 +457,16 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		// summary:
 		//		Triggered when the "Cancel" buttton is clicked.
 		var sc = this._savedCriterias;
+		var cbs = this._cboxes;
 		if(sc){
-			var cbs = this._cboxes;
 			this.addCriteriaBoxes(sc.length - cbs.length);
 			this.removeCriteriaBoxes(cbs.length - sc.length);
 			dojo.forEach(sc, function(c, i){
 				cbs[i].load(c);
 			});
+		}else{
+			this.removeCriteriaBoxes(cbs.length - 1);
+			cbs[0].load({});
 		}
 		this.closeDialog();
 	},
@@ -509,16 +494,16 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 	},
 	_prepareDialog: function(/* int */colIndex){
 		var sc = this._savedCriterias,
-			cbs = this._cboxes,
+			cbs = this._cboxes, i, cbox,
 			columnChanged = this.curColIdx != colIndex;
 		this.curColIdx = colIndex;
 		if(!sc){
 			if(cbs.length === 0){
 				this.addCriteriaBoxes(1);
 			}else if(columnChanged){
-				dojo.forEach(cbs, function(cbox){
-					cbox.changeCurrentColumn();
-				});
+				for(i = 0; (cbox = cbs[i]); ++i){
+					cbox.changeCurrentColumn();	
+				}
 			}
 		}else if(this._criteriasChanged){
 			this._criteriasChanged = false;
@@ -536,9 +521,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 					});
 				}, this);
 			}else{
-				dojo.forEach(sc, function(c, i){
-					cbs[i].load(c);
-				});
+				for(i = 0; i < sc.length; ++i){
+					cbs[i].load(sc[i]);
+				}
 			}
 		}
 		//Since we're allowed to remove cboxes when the definition pane is not shown,
@@ -562,9 +547,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		};
 		exprs = this.builder.buildExpression(exprs);
 		
-		this.plugin.grid.store.layer("filter").filterDef(exprs);
+		this.plugin.grid.layer("filter").filterDef(exprs);
 		this.filterDefPane._clearFilterBtn.set("disabled", false);
-		this.plugin.grid.onFilterDefined(this._savedCriterias);
 	},
 	_updateCBoxTitles: function(){
 		for(var cbs = this._cboxes, i = cbs.length; i > 0; --i){
@@ -575,8 +559,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 	_updatePane: function(){
 		var cbs = this._cboxes,
 			defPane = this.filterDefPane;
-		cbs[0].toggleRemoveCBoxBtn(cbs.length == 1);
-		defPane.toggleAddCBoxBtn(cbs.length == this.plugin.args.ruleCount);
+		defPane._addCBoxBtn.set("disabled", cbs.length == this.plugin.args.ruleCount);
 		defPane._filterBtn.set("disabled", !this.canFilter());
 	},
 	canFilter: function(){
@@ -588,28 +571,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog",null,{
 		this.closeDialog();
 		var g = this.plugin.grid;
 		g.showMessage(g.loadingMessage);
-		setTimeout(dojo.hitch(g, g._refresh), 0);
-	},
-	_hackTabIdxOfAccordionBtn: function(/* int */cboxPane){
-		cboxPane._buttonWidget.connect(cboxPane._buttonWidget, "_setSelectedAttr", function(){
-			this.focusNode.setAttribute("tabIndex", this.selected ? _tabIdxes.accordionTitle : "-1");
-		});
-		this._cboxes.length == 1 && cboxPane._buttonWidget.set("selected", true);
-	},
-	_hackAccordionContainerHeight: function(/* bool */toGrow,/* int */heightDif){
-		var cbs = this._cboxes,
-			cc = this.filterDefPane.cboxContainer,
-			dn = cc.domNode,
-			h = dojo.style(dn, "height");
-		if(!toGrow){
-			dn.style.height = (h - heightDif) + 'px';
-		}else if(cbs.length > 1){
-			dn.style.height = (h + heightDif) + 'px';
-		}else{
-			//Only one rule, no need to do anything.
-			return;
-		}
-		cc.resize();
+		setTimeout(dojo.hitch(g, g._refresh), this._defPane.duration + 10);
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget,dijit._Templated],{
@@ -631,7 +593,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget,d
 	postCreate: function(){
 		this.inherited(arguments);
 		this.connect(this.domNode, "onkeypress", "_onKey");
-		(this.cboxContainer = new dijit.layout.AccordionContainer({})).placeAt(this.criteriaPane);
+		(this.cboxContainer = new fns.AccordionContainer({
+			nls: this.plugin.nls
+		})).placeAt(this.criteriaPane);
 		
 		this._relSelect.set("tabIndex", _tabIdxes.relSelect);
 		this._addCBoxBtn.set("tabIndex", _tabIdxes.addCBoxBtn);
@@ -645,6 +609,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget,d
 		dijit.setWaiState(this._cancelBtn.domNode, "label", nls.waiCancelButton);
 		dijit.setWaiState(this._clearFilterBtn.domNode, "label", nls.waiClearButton);
 		dijit.setWaiState(this._filterBtn.domNode, "label", nls.waiFilterButton);
+		
+		this._relSelect.set("value", this.dlg._relOpCls === "logicall" ? "0" : "1");
 	},
 	uninitialize: function(){
 		this.cboxContainer.destroyRecursive();
@@ -667,9 +633,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget,d
 	_onFilter: function(){
 		this.dlg.onFilter();
 	},
-	toggleAddCBoxBtn: function(/* bool */toHide){
-		this._addCBoxBtn.set("disabled", toHide);
-	},
 	_onKey: function(e){
 		if(e.keyCode == dojo.keys.ENTER){
 			this.dlg.onFilter();
@@ -682,7 +645,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	dlg: null,
 	postMixInProperties: function(){
 		this.plugin = this.dlg.plugin;
-		this._removeCBoxBtn = null;
 		this._curValueBox = null;
 		
 		var nls = this.plugin.nls;
@@ -692,23 +654,24 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		this._anyColumnOption = nls.anyColumnOption;
 	},
 	postCreate: function(){
-		var dlg = this.dlg;
-			g = this.plugin.grid;
-		//Remove Criteria Button
-		this._removeCBoxBtn = new dijit.form.Button({
-			label: this.plugin.nls.removeRuleButton,
-			showLabel: false,
-			iconClass: "dojoxGridFCBoxRemoveCBoxBtnIcon",
-			tabIndex: _tabIdxes.removeCBoxBtn,
-			onClick: dojo.hitch(dlg, "removeCriteriaBoxes", this)
-		});
+		var dlg = this.dlg, g = this.plugin.grid;
 		//Select Column
 		this._colSelect.set("tabIndex", _tabIdxes.colSelect);
-		var colIdx = dlg.curColIdx >= 0 ? String(dlg.curColIdx) : "anycolumn";
+		this._colOptions = this._getColumnOptions();
 		this._colSelect.addOption([
-			{label: this.plugin.nls.anyColumnOption, value: "anycolumn", selected: colIdx == "anycolumn"},
+			{label: this.plugin.nls.anyColumnOption, value: "anycolumn", selected: dlg.curColIdx < 0},
 			{value: ""}
-		].concat(dojo.map(dojo.filter(g.layout.cells, function(cell){
+		].concat(this._colOptions));
+		//Select Condition
+		this._condSelect.set("tabIndex", _tabIdxes.condSelect);
+		this._condSelect.addOption(this._getUsableConditions(dlg.getColumnType(dlg.curColIdx)));
+		this._showSelectOrLabel(this._condSelect, this._condSelectAlt);
+		
+		this.connect(g.layout, "moveColumn", "onMoveColumn");
+	},
+	_getColumnOptions: function(){
+		var colIdx = this.dlg.curColIdx >= 0 ? String(this.dlg.curColIdx) : "anycolumn";
+		return dojo.map(dojo.filter(this.plugin.grid.layout.cells, function(cell){
 			return !(cell.filterable === false || cell.hidden);
 		}), function(cell){
 			return {
@@ -716,15 +679,37 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 				value: String(cell.index),
 				selected: colIdx == String(cell.index)
 			};
-		})));
-		//Select Condition
-		this._condSelect.set("tabIndex", _tabIdxes.condSelect);
-		this._condSelect.addOption(this._getUsableConditions(dlg.getColumnType(dlg.curColIdx)));
-		this._showSelectOrLabel(this._condSelect, this._condSelectAlt);
+		});
+	},
+	onMoveColumn: function(){
+		var tmp = this._onChangeColumn;
+		this._onChangeColumn = function(){};
+		var option = this._colSelect.get("selectedOptions");
+		this._colSelect.removeOption(this._colOptions);
+		this._colOptions = this._getColumnOptions();
+		this._colSelect.addOption(this._colOptions);
+		var i = 0;
+		for(; i < this._colOptions.length; ++i){
+			if(this._colOptions[i].label == option.label){
+				break;
+			}
+		}
+		if(i < this._colOptions.length){
+			this._colSelect.set("value", this._colOptions[i].value);
+		}
+		var _this = this;
+		setTimeout(function(){
+			_this._onChangeColumn = tmp;
+		}, 0);
+	},
+	onRemove: function(){
+		this.dlg.removeCriteriaBoxes(this);
 	},
 	uninitialize: function(){
-		this._removeCBoxBtn.destroyRecursive();
-		this._removeCBoxBtn = null;
+		if(this._curValueBox){
+			this._curValueBox.destroyRecursive();
+			this._curValueBox = null;
+		}
 		this.plugin = null;
 		this.dlg = null;
 	},
@@ -740,17 +725,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		}
 	},
 	_onChangeColumn: function(val){
-		try{
-			var g = this.plugin.grid,
-				cell = g.layout.cells[_parseDecimal(val)],
-				fieldName = cell.field || cell.name;
-			g.store.layer("unique").uniqueColumns([fieldName]);
-			g.store.layer("sort").sortColumns([{
-				"attribute": fieldName
-			}]);
-		}catch(e){
-			//Any exception means 'anycolumn' is selected instead of a specific column;
-		}
 		this._checkValidCriteria();
 		var type = this.dlg.getColumnType(val);
 		this._setConditionsByType(type);
@@ -769,15 +743,12 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		//		Check whether the given criteria box is completed. If it is, mark it.
 		setTimeout(dojo.hitch(this, function(){
 			this.updateRuleTitle();
-			//this.updateToolTip();
 			this.dlg._updatePane();
 		}),0);
 	},
 	_createValueBox: function(/* widget constructor */cls,/* object */arg){
 		// summary:
 		//		Create a value input box with given class and arguments
-		//cls: widget constructor
-		//arg: object
 		var func = dojo.hitch(arg.cbox, "_checkValidCriteria");
 		return new cls(dojo.mixin(arg,{
 			tabIndex: _tabIdxes.valueBox,
@@ -789,11 +760,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	_createRangeBox: function(/* widget constructor */cls,/* object */arg){
 		// summary:
 		//		Create a DIV containing 2 input widgets, which represents a range, with the given class and arguments
-		//cls: widget constructor
-		//arg: object
-		var func = function(){
-			arg.cbox._checkValidCriteria();
-		};
+		var func = dojo.hitch(arg.cbox, "_checkValidCriteria");
 		dojo.mixin(arg,{
 			tabIndex: _tabIdxes.valueBox,
 			onKeyPress: func,
@@ -822,9 +789,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 			return s && e ? {start: s, end: e} : "";
 		};
 		return div;
-	},
-	toggleRemoveCBoxBtn: function(/* bool */toHide){
-		dojo.toggleClass(this._removeCBoxBtn.domNode, "dojoxGridFCBoxRemoveCBoxBtnHiden", toHide);
 	},
 	changeCurrentColumn: function(/* bool */selectCurCol){
 		var colIdx = this.dlg.curColIdx;
@@ -864,9 +828,15 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 			this._onChangeCondition
 		];
 		this._onChangeColumn = this._onChangeCondition = function(){};
-		obj.column && this._colSelect.set("value", obj.column);
-		obj.condition && this._condSelect.set("value", obj.condition);
-		obj.type && this._setValueBoxByType(obj.type);
+		if(obj.column){
+			this._colSelect.set("value", obj.column);
+		}
+		if(obj.condition){
+			this._condSelect.set("value", obj.condition);
+		}
+		if(obj.type){
+			this._setValueBoxByType(obj.type);
+		}
 		this._curValueBox.set("value", obj.value || "");
 		setTimeout(dojo.hitch(this, function(){
 			this._onChangeColumn = tmp[0];
@@ -888,10 +858,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	isEmpty: function(){
 		var v = this.curValue();
 		return v === "" || v === null || typeof v == "undefined" || (typeof v == "number" && isNaN(v)); 
-	},
-	setupTitleDom: function(){
-		var cb = dojo.contentBox(this._pane._buttonWidget.titleNode);
-		dojo.style(this._pane._buttonWidget.titleTextNode, "width", (cb.w - 16) + "px");
 	},
 	updateRuleTitle: function(isEmpty){
 		var node = this._pane._buttonWidget.titleTextNode;
@@ -932,17 +898,16 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		}
 	},
 	setAriaInfo: function(idx){
-		var dss = dojo.string.substitute,
-			nls = this.plugin.nls;
+		var dss = dojo.string.substitute, nls = this.plugin.nls;
 		dijit.setWaiState(this._colSelect.domNode,"label", dss(nls.waiColumnSelectTemplate, [idx]));
 		dijit.setWaiState(this._condSelect.domNode,"label", dss(nls.waiConditionSelectTemplate, [idx]));
-		dijit.setWaiState(this._removeCBoxBtn.domNode,"label", dss(nls.waiRemoveRuleButtonTemplate, [idx]));
+		dijit.setWaiState(this._pane._removeCBoxBtn.domNode,"label", dss(nls.waiRemoveRuleButtonTemplate, [idx]));
 		this._index = idx;
 	},
 	_getUsableConditions: function(type){
 		var conditions = this.dlg._dataTypeMap[type].conditions;
 		var typeDisabledConds = (this.plugin.args.disabledConditions || {})[type];
-		var colIdx = _parseDecimal(this._colSelect.get("value"));
+		var colIdx = parseInt(this._colSelect.get("value"), 10);
 		var colDisabledConds = isNaN(colIdx) ?
 			(this.plugin.args.disabledConditions || {})["anycolumn"] :
 			this.plugin.grid.layout.cells[colIdx].disabledConditions;
@@ -967,8 +932,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		return conditions;
 	},
 	_setConditionsByType: function(/* string */type){
-		var condSelect = this._condSelect,
-			preCond = this.curCondition();
+		var condSelect = this._condSelect;
 		condSelect.removeOption(condSelect.options);
 		condSelect.addOption(this._getUsableConditions(type));
 		this._showSelectOrLabel(this._condSelect, this._condSelectAlt);
@@ -986,46 +950,36 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 			vboxArg = this._getValueBoxArgByType(type);
 		this._curValueBox = this[this._isRange ? "_createRangeBox" : "_createValueBox"](vbcls, vboxArg);
 		this.valueNode.appendChild(this._curValueBox.domNode);
-		this._hackValueBox();
 		
 		//Can not move to setAriaInfo, 'cause the value box is created after the defpane is loaded.
 		dijit.setWaiState(this._curValueBox.domNode, "label", dojo.string.substitute(this.plugin.nls.waiValueBoxTemplate,[this._index]));
 		//Now our cbox is completely ready
 		this.dlg.onRendered(this);
 	},
-	_hackValueBox: function(){
-		if(this._curValueBox && this._curValueBox instanceof dijit.form.ComboBox){
-			var oldOnKey = this._curValueBox._onKey;
-			this._curValueBox._onKey = dojo.hitch(this, function(evt){
-				if(evt.charOrCode === dojo.keys.ENTER && this._curValueBox._opened){
-					dojo.stopEvent(evt);
-				}
-				oldOnKey.call(this._curValueBox, evt);
-			});
-		}
-	},
-	
 	//--------------------------UI Configuration--------------------------------------
 	_getValueBoxArgByType: function(/* string */type){
 		// summary:
 		//		Get the arguments for the value box construction.
 		var g = this.plugin.grid,
-			cell = g.layout.cells[_parseDecimal(this._colSelect.get("value"))],
+			cell = g.layout.cells[parseInt(this._colSelect.get("value"), 10)],
 			res = {
 				cbox: this
 			};
 		if(type == "string"){
-			if(cell && cell.autoComplete){
+			if(cell && (cell.suggestion || cell.autoComplete)){
 				dojo.mixin(res, {
 					store: g.store,
-					searchAttr: cell.field || cell.name
+					searchAttr: cell.field || cell.name,
+					fetchProperties: {
+						sort: [{"attribute": cell.field || cell.name}]
+					}
 				});
 			}
 		}else if(type == "boolean"){
 			dojo.mixin(res, this.dlg.builder.defaultArgs["boolean"]);
-			if(cell && cell.dataTypeArgs){
-				dojo.mixin(res, cell.dataTypeArgs);
-			}
+		}
+		if(cell && cell.dataTypeArgs){
+			dojo.mixin(res, cell.dataTypeArgs);
 		}
 		return res;
 	},
@@ -1047,33 +1001,189 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	_getValueBoxClsInfo: function(/* int|string */colIndex, /* string */type){
 		// summary:
 		//		Decide which value box to use given data type and column index. 
-		var cell = this.plugin.grid.layout.cells[_parseDecimal(colIndex)];
+		var cell = this.plugin.grid.layout.cells[parseInt(colIndex, 10)];
 		//Now we only need to handle string. But maybe we need to handle more types here in the future.
 		if(type == "string"){
-			return (cell && cell.autoComplete) ? "ac" : "dft";
+			return (cell && (cell.suggestion || cell.autoComplete)) ? "ac" : "dft";
 		}
 		return "dft";
+	}
+});
+dojo.declare("dojox.grid.enhanced.plugins.filter.AccordionContainer", dijit.layout.AccordionContainer, {
+	nls: null,
+	addChild: function(/*dijit._Widget*/ child, /*Integer?*/ insertIndex){
+		var pane = arguments[0] = child._pane = new dijit.layout.ContentPane({
+			content: child
+		});
+		this.inherited(arguments);
+		this._modifyChild(pane);
+	},
+	removeChild: function(child){
+		var pane = child, isRemoveByUser = false;
+		if(child._pane){
+			isRemoveByUser = true;
+			pane = arguments[0] = child._pane;
+		}
+		this.inherited(arguments);
+		if(isRemoveByUser){
+			this._hackHeight(false, this._titleHeight);
+			var children = this.getChildren();
+			if(children.length === 1){
+				dojo.style(children[0]._removeCBoxBtn.domNode, "display", "none");
+			}
+		}
+		pane.destroyRecursive();
+	},
+	selectChild: function(child){
+		if(child._pane){
+			arguments[0] = child._pane;
+		}
+		this.inherited(arguments);
+	},
+	resize: function(){
+		this.inherited(arguments);
+		dojo.forEach(this.getChildren(), this._setupTitleDom);
+	},
+	startup: function(){
+		if(this._started){
+			return;
+		}
+		this.inherited(arguments);
+		if(parseInt(dojo.isIE, 10) == 7){
+			//IE7 will fire a lot of "onresize" event during initialization.
+			dojo.some(this._connects, function(cnnt){
+				if(cnnt[0][1] == "onresize"){
+					this.disconnect(cnnt);
+					return true;
+				}
+			}, this);
+		}
+		this._modifyChild(this.selectedChildWidget);
+	},
+	_onKeyPress: function(/*Event*/ e, /*dijit._Widget*/ fromTitle){
+		// summary:
+		//		Overrides base class method, make left/right button do other things.
+		if(this.disabled || e.altKey || !(fromTitle || e.ctrlKey)){
+			return;
+		}
+		var k = dojo.keys, c = e.charOrCode, ltr = dojo._isBodyLtr(), toNext = null;
+		if((fromTitle && c == k.UP_ARROW) || (e.ctrlKey && c == k.PAGE_UP)){
+			toNext = false;
+		}else if((fromTitle && c == k.DOWN_ARROW) || (e.ctrlKey && (c == k.PAGE_DOWN || c == k.TAB))){
+			toNext = true;
+		}else if(c == (ltr ? k.LEFT_ARROW : k.RIGHT_ARROW)){
+			toNext = this._focusOnRemoveBtn ? null : false;	
+			this._focusOnRemoveBtn = !this._focusOnRemoveBtn;
+		}else if(c == (ltr ? k.RIGHT_ARROW : k.LEFT_ARROW)){
+			toNext = this._focusOnRemoveBtn ? true : null;
+			this._focusOnRemoveBtn = !this._focusOnRemoveBtn;
+		}else{
+			return;
+		}
+		if(toNext !== null){
+			this._adjacent(toNext)._buttonWidget._onTitleClick();
+		}
+		dojo.stopEvent(e);
+		dojo.window.scrollIntoView(this.selectedChildWidget._buttonWidget.domNode.parentNode);
+		if(dojo.isIE){
+			//IE will not show focus indicator if tabIndex is -1
+			this.selectedChildWidget._removeCBoxBtn.focusNode.setAttribute("tabIndex", this._focusOnRemoveBtn ? _tabIdxes.accordionTitle : -1);
+		}
+		dijit.focus(this.selectedChildWidget[this._focusOnRemoveBtn ? "_removeCBoxBtn" : "_buttonWidget"].focusNode);
+	},
+	_modifyChild: function(child){
+		if(!child || !this._started){
+			return;
+		}
+		dojo.style(child.domNode, "overflow", "hidden");
+		child._buttonWidget.connect(child._buttonWidget, "_setSelectedAttr", function(){
+			this.focusNode.setAttribute("tabIndex", this.selected ? _tabIdxes.accordionTitle : "-1");
+		});
+		var _this = this;
+		child._buttonWidget.connect(child._buttonWidget.domNode, "onclick", function(){
+			_this._focusOnRemoveBtn = false;
+		});
+		(child._removeCBoxBtn = new dijit.form.Button({
+			label: this.nls.removeRuleButton,
+			showLabel: false,
+			iconClass: "dojoxGridFCBoxRemoveCBoxBtnIcon",
+			tabIndex: _tabIdxes.removeCBoxBtn,
+			onClick: dojo.hitch(child.content, "onRemove"),
+			onKeyPress: function(e){
+				_this._onKeyPress(e, child._buttonWidget.contentWidget);
+			}
+		})).placeAt(child._buttonWidget.domNode);
+		var i, children = this.getChildren();
+		if(children.length === 1){
+			child._buttonWidget.set("selected", true);
+			dojo.style(child._removeCBoxBtn.domNode, "display", "none");
+		}else{
+			for(i = 0; i < children.length; ++i){
+				dojo.style(children[i]._removeCBoxBtn.domNode, "display", "");
+			}
+		}
+		this._setupTitleDom(child);
+		if(!this._titleHeight){
+			for(i = 0; i < children.length; ++i){
+				if(children[i] != this.selectedChildWidget){
+					this._titleHeight = dojo.marginBox(children[i]._buttonWidget.domNode.parentNode).h;
+					break;
+				}
+			}
+		}
+		this._hackHeight(true, this._titleHeight);
+	},
+	_hackHeight: function(/* bool */toGrow,/* int */heightDif){
+		var children = this.getChildren(),
+			dn = this.domNode, h = dojo.style(dn, "height");
+		if(!toGrow){
+			dn.style.height = (h - heightDif) + 'px';
+		}else if(children.length > 1){
+			dn.style.height = (h + heightDif) + 'px';
+		}else{
+			//Only one rule, no need to do anything.
+			return;
+		}
+		this.resize();
+	},
+	_setupTitleDom: function(child){
+		var w = dojo.contentBox(child._buttonWidget.titleNode).w;
+		if(dojo.isIE < 8){ w -= 8; }
+		dojo.style(child._buttonWidget.titleTextNode, "width", w + "px");
+	}
+});
+dojo.declare("dojox.grid.enhanced.plugins.filter.UniqueComboBox", dijit.form.ComboBox, {
+	_openResultList: function(results){
+		var cache = {}, s = this.store, colName = this.searchAttr;
+		arguments[0] = dojo.filter(results, function(item){
+			var key = s.getValue(item, colName), existed = cache[key];
+			cache[key] = true;
+			return !existed;
+		});
+		this.inherited(arguments);
+	},
+	_onKey: function(evt){
+		if(evt.charOrCode === dojo.keys.ENTER && this._opened){
+			dojo.stopEvent(evt);
+		}
+		this.inherited(arguments);
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanValueBox", [dijit._Widget, dijit._Templated], {
 	templateString: dojo.cache("dojox.grid","enhanced/templates/FilterBoolValueBox.html"),
 	widgetsInTemplate: true,
-	_baseId: "",
-	_lblTrue: "",
-	_lblFalse: "",
 	constructor: function(args){
 		var nls = args.cbox.plugin.nls;
 		this._baseId = args.cbox.id;
-		this._lblTrue = args.trueLabel || nls.trueLabel;
-		this._lblFalse = args.falseLabel || nls.falseLabel;
+		this._lblTrue = args.trueLabel || nls.trueLabel || "true";
+		this._lblFalse = args.falseLabel || nls.falseLabel || "false";
 		this.args = args;
 	},
 	postCreate: function(){
 		this.onChange();
 	},
-	onChange: function(){
-		
-	},
+	onChange: function(){},
+	
 	get: function(prop){
 		return this.rbTrue.get("checked");
 	},

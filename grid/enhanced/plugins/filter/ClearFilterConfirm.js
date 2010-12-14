@@ -10,8 +10,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm",[dijit._Wid
 	plugin: null,
 	postMixInProperties: function(){
 		var nls = this.plugin.nls;
-		this._clearBtnLabel = nls["clearButton"],
-		this._cancelBtnLabel = nls["cancelButton"],
+		this._clearBtnLabel = nls["clearButton"];
+		this._cancelBtnLabel = nls["cancelButton"];
 		this._clearFilterMsg = nls["clearFilterMsg"];
 	},
 	postCreate: function(){

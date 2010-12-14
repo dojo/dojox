@@ -8,18 +8,12 @@ dojo.require("dojo.string");
 dojo.require("dojo.date.locale");
 
 (function(){
-var gridCssCls = "",
-	headerCssCls = "",
-	cellCssCls = "",
-	rowCssCls = "",
+var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 	oddRowCssCls = "dojoxGridFStatusTipOddRow",
-	statusTipCls = "dojoxGridFStatusTip",
-	statusTipDetailCls = "dojoxGridFStatusTipDetail",
 	handleHolderCssCls = "dojoxGridFStatusTipHandle",
 	conditionCssCls = "dojoxGridFStatusTipCondition",
 	_removeRuleIconCls = "dojoxGridFStatusTipDelRuleBtnIcon",
-	_statusFooter = "</tbody></table>",
-	_filteredClass = "dojoxGridFStatusTipFiltered";
+	_statusFooter = "</tbody></table>";
 	
 	dojo.declare("dojox.grid.enhanced.plugins.filter.FilterStatusTip", null, {
 		// summary:
@@ -31,7 +25,7 @@ var gridCssCls = "",
 				headerCssCls, "'><th class='",
 				cellCssCls, "'><div>", plugin.nls["statusTipHeaderColumn"], "</div></th><th class='",
 				cellCssCls, " lastColumn'><div>", plugin.nls["statusTipHeaderCondition"], "</div></th></tr></thead><tbody>"
-			].join(''),
+			].join('');
 			this._removedCriterias = [];
 			this._rules = [];
 			(this.statusPane = new dojox.grid.enhanced.plugins.filter.FilterStatusPane()).startup();
@@ -55,7 +49,12 @@ var gridCssCls = "",
 			this._removedCriterias = [];
 			this._rules = [];
 			this._updateStatus(columnIdx);
-			dijit.popup.open({popup:this._dlg, parent:this.plugin.filterBar, x:pos_x -12, y:pos_y-3});
+			dijit.popup.open({
+				popup: this._dlg, 
+				parent: this.plugin.filterBar, 
+				x:pos_x - 12,
+				y:pos_y - 3
+			});
 		},
 		closeDialog: function(){
 			dijit.popup.close(this._dlg);
@@ -71,7 +70,7 @@ var gridCssCls = "",
 				nls = p.nls,
 				sp = this.statusPane,
 				fdg = p.filterDefDialog;
-			if(fdg.getCriteria() == 0){
+			if(fdg.getCriteria() === 0){
 				sp.statusTitle.innerHTML = nls["statusTipTitleNoFilter"];
 				sp.statusRel.innerHTML = sp.statusRelPre.innerHTML = sp.statusRelPost.innerHTML = "";
 				var cell = p.grid.layout.cells[columnIdx];
@@ -82,11 +81,13 @@ var gridCssCls = "",
 				sp.statusRelPre.innerHTML = nls["statusTipRelPre"] + "&nbsp;";
 				sp.statusRelPost.innerHTML = "&nbsp;" + nls["statusTipRelPost"];
 				sp.statusRel.innerHTML = fdg._relOpCls == "logicall" ? nls["all"] : nls["any"];
-				var c, i = 0;
+				
 				this._rules = [];
-				while(c = fdg.getCriteria(i++)){
-					c.index = i-1;
+				var i = 0, c = fdg.getCriteria(i++);
+				while(c){
+					c.index = i - 1;
 					this._rules.push(c);
+					c = fdg.getCriteria(i++);
 				}
 				res = this._createStatusDetail();
 			}

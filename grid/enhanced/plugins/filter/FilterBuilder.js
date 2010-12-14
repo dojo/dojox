@@ -32,11 +32,11 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBuilder", null, {
 		"lessthanorequalto": bdr("LessThanOrEqualTo"),
 		"largerthan": bdr("LargerThan"),
 		"largerthanorequalto": bdr("LargerThanOrEqualTo"),
-		"contains": bdr("ContainsIgnoreCase"),
+		"contains": bdr("Contains"),
 		"startswith": bdr("StartsWith"),
 		"endswith": bdr("EndsWith"),
 		"notequalto": bdr_not("EqualTo"),
-		"notcontains": bdr_not("ContainsIgnoreCase"),
+		"notcontains": bdr_not("Contains"),
 		"notstartswith": bdr_not("StartsWith"),
 		"notendswith": bdr_not("EndsWith"),
 		"range": function(operands){

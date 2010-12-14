@@ -1,84 +1,78 @@
 /* filter bar */
-.dojoxGridRtl .dojoxGridFBar .dojoxGridFBarBtn .dijitButtonNode{
-	padding-left: 2px;
-}
-.dojoxGridRtl .dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarStatus{
+.dojoxGridRtl .dojoxGridFBarStatus {
 	margin-left: 0;
 	margin-right: 9px;
 }
-.dojoxGridRtl .dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarClearFilterBtn{
+.dojoxGridRtl .dojoxGridFBarClearFilterBtn {
 	margin-left: 0;
 	margin-right: 10px;
 }
-.dojoxGridRtl .dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarCloseBtn{
-	right: auto;
-	left: 4px;
+.dojoxGridRtl .dojoxGridFBarCloseBtn {
+	margin: 0 0 0 4px;
+	float: left;
 }
-
+.dj_ie .dojoxGridRtl .dojoxGridFBarCloseBtn {
+	left: 2px;
+	right: auto;
+}
 /* filter def dialog */
-.dijitRtl .dojoxGridFDTitlePane .dijitDialogPaneContent .dojoxGridFDPaneRelation{
-	margin-right: 4px;
-	margin-left: 0;
+.dijitRtl .dojoxGridFDPaneRelation {
+	margin: 0 4px 3px 0;
 }  
-.dijitRtl .dojoxGridFDPane .dijitAccordionTitle .dijitButton{
+.dijitRtl .dojoxGridFDPane .dijitAccordionTitleFocus {
+	margin-right: 0;
+	margin-left: 14px;
+}
+.dijitRtl .dojoxGridFDPane .dijitAccordionTitle .dijitButton {
 	left: 3px;
 	right: auto;
 }
-.dijitRtl .dojoxGridFDPaneBtns{
+.dj_ie6 .dijitRtl .dojoxGridFDPane .dijitAccordionTitle .dijitButton{
+	left: -290px;
+}
+.dijitRtl .dojoxGridFDPaneBtns {
 	left: 0;
 	right: auto;
 }
-.dijitRtl .dojoxGridFDPaneBtns .dijitButton {
+.dijitRtl .dojoxGridFDPaneBtns .dijitButton,
+.dijitRtl .dojoxGridClearFilterBtns .dijitButton,
+.dijitRtl .dojoxGridFCBoxEndValue {
 	float: left;
+}
+.dijitRtl .dojoxGridFCBoxRangeValueTxt {
+	margin-left: 0;
+	margin-right: 4px;
 }
 
-/* criteria box */
-.dijitRtl .dojoxGridFCBoxValue .dojoxGridFCBoxValueBox .dojoxGridFCBoxStartValue{
-	float: right;	
-}
-.dijitRtl .dojoxGridFCBoxValue .dojoxGridFCBoxValueBox .dojoxGridFCBoxEndValue{
-	float: left;
-}
-.dijitRtl .dojoxGridFCBoxRangeValueTxt{
-	float: right;
-}
 /* status tip */
-.dijitRtl .dojoxGridFStatusTip .dojoxGridFStatusTipHead .dojoxGridFStatusTipTitle{
+.dijitRtl .dojoxGridFStatusTipTitle {
 	margin-left: 1em;
 	margin-right: 0;
 }
-.dijitRtl .dojoxGridFStatusTip .dojoxGridFStatusTipHandle{
+.dijitRtl .dojoxGridFStatusTipHandle {
 	padding-left: 16px;
 	padding-right: 0;
 }
-.dijitRtl .dojoxGridFStatusTip .dojoxGridFStatusTipDetail .dijitButton{
+.dijitRtl .dojoxGridFStatusTipDetail .dijitButton {
 	left: 0;
 	right: auto;
 }
 
-/* clear dlg */
-.dijitRtl .dojoxGridClearFilterBtns .dijitButton{
-	float: left;
-}
-
 /* bool value box */
-.dijitRtl .dojoxGridBoolValueBox .dojoxGridTrueBox{
+.dijitRtl .dojoxGridTrueBox,
+.dijitRtl .dojoxGridFalseBox {
 	float: right;
 }
-.dijitRtl .dojoxGridBoolValueBox .dojoxGridFalseBox{
-	float: right;
-}
-
 
 /* For Claro */
-.claro .dojoxGridRtl .dojoxGridFBar{
+.claro .dojoxGridRtl .dojoxGridFBar {
 	border-right: 1px solid white;
 }
 
-.claro .dijitRtl .dojoxGridFStatusTip th div{
+.claro .dijitRtl .dojoxGridFStatusTip th div {
 	border-left: 1px solid #BCBCBC;
 	border-right: 1px solid white;
 }
-.claro .dijitRtl .dojoxGridFStatusTip th.lastColumn div{
+.claro .dijitRtl .dojoxGridFStatusTip th.lastColumn div {
 	border-left: 1px solid #BCBCBC;
 }

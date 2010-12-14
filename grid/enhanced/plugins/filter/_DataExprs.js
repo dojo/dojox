@@ -4,9 +4,9 @@ dojo.require("dojox.grid.enhanced.plugins.filter._ConditionExpr");
 dojo.require("dojo.date.locale");
 
 (function(){
-	var f_ns = dojox.grid.enhanced.plugins.filter;
+	var fns = dojox.grid.enhanced.plugins.filter;
 
-	dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanExpr", f_ns._DataExpr, {
+	dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for boolean values
 		_convertData: function(/* anything */dataValue){
@@ -18,7 +18,7 @@ dojo.require("dojo.date.locale");
 			return "bool";	//String
 		}
 	});
-	dojo.declare("dojox.grid.enhanced.plugins.filter.StringExpr", f_ns._DataExpr, {
+	dojo.declare("dojox.grid.enhanced.plugins.filter.StringExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for string values
 		_convertData: function(/* anything */dataValue){
@@ -32,7 +32,7 @@ dojo.require("dojo.date.locale");
 			return "string";	//String
 		}
 	});
-	dojo.declare("dojox.grid.enhanced.plugins.filter.NumberExpr", f_ns._DataExpr, {
+	dojo.declare("dojox.grid.enhanced.plugins.filter.NumberExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for number values
 		_convertDataToExpr: function(/* anything */dataValue){
@@ -46,7 +46,7 @@ dojo.require("dojo.date.locale");
 			return "number";	//String
 		}
 	});
-	dojo.declare("dojox.grid.enhanced.plugins.filter.DateExpr", f_ns._DataExpr, {
+	dojo.declare("dojox.grid.enhanced.plugins.filter.DateExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for date values
 		_selector: "date",
@@ -84,7 +84,7 @@ dojo.require("dojo.date.locale");
 			return this._selector;	//String
 		}
 	});
-	dojo.declare("dojox.grid.enhanced.plugins.filter.TimeExpr", f_ns.DateExpr, {
+	dojo.declare("dojox.grid.enhanced.plugins.filter.TimeExpr", fns.DateExpr, {
 		// summary:
 		//		A condition expression wrapper for time values
 		_selector: "time"

@@ -71,17 +71,16 @@
 	
 	"filterBarDefButton": "Define filter",
 	"waiFilterBarDefButton": "Filter the table",
+	"a11yFilterBarDefButton": "Filter...",
 	"filterBarClearButton": "Clear filter",
 	"waiFilterBarClearButton": "Clear the filter",
+	"closeFilterBarBtn": "Close filter bar",
 	
 	"clearFilterMsg": "This will remove the filter and show all available records.",
 	"anyColumnOption": "Any Column",
 	
 	"trueLabelEditable": "Checked",
 	"trueLabel": "True",
-	"falseLabel": "False",
-	
-	"closeFilterBarBtn": "Close filter bar",
-	"statusTipRuleRelation": "Match rules"
+	"falseLabel": "False"
 })
 

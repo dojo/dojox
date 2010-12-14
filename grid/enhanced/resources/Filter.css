@@ -1,43 +1,42 @@
-/* Filter Plugin Begin */
-
 /* filter bar */
-/* define filter button */
-.dojoxGridFBar .dojoxGridFBarBtn{
+.dojoxGridFBar {
+	width: 100%;
+	cursor: pointer;
+}
+.dojoxGridFBar .dojoxGridFBarBtn {
 	margin: 0;
 }
-.dojoxGridFBar .dojoxGridFBarTD1{
+.dojoxGridFBarBtnTD {
 	width: 38px;
 }
-.dojoxGridFBar .dojoxGridFBarBtn .dijitButtonNode{
+.dojoxGridFBar .dojoxGridFBarBtn .dijitButtonNode {
 	-moz-border-radius: 1px;
 	-webkit-border-radius: 1px;
 	padding-top: 0;
 	padding-bottom: 0;
 	padding-right: 2px;
 }
-.dojoxGridFBar .dojoxGridFBarBtn .dojoxGridFBarDefFilterBtnIcon{
-	background: url("images/filter.gif") no-repeat left center;
+.dojoxGridFBarDefFilterBtnIcon {
+	background: url("images/sprite_icons.png") no-repeat;
+	background-position: -100px -18px;
 	width: 14px;
 	height: 14px;
 }
-/* filter message bar */
-.dojoxGridFBar .dojoxGridFBarInner{
-	height: 14px;
-	display:inline-block;
-	margin: 0;
+.dj_ie .dojoxGridFBarInner{
+	display: inline-block;
 	width: 100%;
-	position: relative;
 }
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarStatus{
+.dojoxGridFBarStatus {
 	margin-left: 9px;
 }
-/* clear filter button */
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarClearFilterBtn{
-	margin-left: 10px;
-	margin: 0;
+.dojoxGridFBarClearFilterBtn {
+	margin: 0 0 0 10px;
 	vertical-align: top;
 }
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarClearFilterBtn .dijitButtonNode{
+.dojoxGridFBarInfoTD .dojoxGridFBarClearFilterBtn .dijitButtonNode,
+.dojoxGridFBarInfoTD .dojoxGridFBarCloseBtn .dijitButtonNode,
+.dojoxGridFDPane .dijitAccordionTitle .dijitButtonNode,
+.dojoxGridFStatusTipDetail .dijitButton .dijitButtonNode {
 	-moz-border-radius: 0;
 	-moz-box-shadow: none;
 	-webkit-border-radius: 0;
@@ -48,267 +47,244 @@
 	padding: 0;
 	border: none;
 }
-
-/* close filter bar button */
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarCloseBtn{
+.dj_ie .dojoxGridFBarInner {
+	position: relative;
+}
+.dojoxGridFBarCloseBtn {
+	margin: 0 4px 0 0;
+	float: right;
+}
+.dj_ie .dojoxGridFBarCloseBtn {
+	float: none;
 	position: absolute;
-	margin: 0;
-	top: 0;
-	right: 4px;
+	right: 0;
 }
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarCloseBtn .dijitButtonNode{
-	-moz-border-radius: 0;
-	-moz-box-shadow: none;
-	-webkit-border-radius: 0;
-	-webkit-box-shadow: none;
-	background-image: none;
-	background-color: transparent;
-	margin: 0;
-	padding: 0;
-	border: none;
-}
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarCloseBtn .dojoxGridFBarCloseBtnIcon{
-	background-image: url("images/tabClose.png");
-	background-position: left;
+.dojoxGridFBarCloseBtnIcon {
+	background: url("images/sprite_icons.png") no-repeat;
+	background-position: -119px -20px;
 	width: 14px;
 	height: 14px;
 }
-.dojoxGridFBar .dojoxGridFBarInner .dijitButtonHover .dojoxGridFBarCloseBtnIcon{
-	background-position: 28px;
+.dijitButtonHover .dojoxGridFBarCloseBtnIcon {
+	background-position: -140px -20px;
 }
-.dojoxGridFBar .dojoxGridFBarInner .dijitButtonActive .dojoxGridFBarCloseBtnIcon{
-	background-position: 14px;
-}
-
-.dojoxGridFBar{
-	width: 100%;
-	cursor: pointer;
-	position: relative;
+.dijitButtonActive .dojoxGridFBarCloseBtnIcon {
+	background-position: -160px -20px;
 }
 
 /* filter def dialog */
-.dojoxGridFDTitlePane{
+.dojoxGridFDTitlePane {
 	width: 316px;
 	height: 330px;
 }
-.dojoxGridFDTitlePane .dijitDialogPaneContent{
+.dijit_a11y .dojoxGridFDTitlePane .dijitArrowButtonInner{
+	/* This should be fixed in dijit */
+	display:none !important;
+}
+.dojoxGridFDTitlePane .dijitDialogPaneContent {
 	padding: 7px 5px 9px 5px;
 	height: 290px !important;
 }
-.dojoxGridFDTitlePane .dijitDialogPaneContent .dojoxGridFDPaneRelation{
-	margin-left: 4px;
-	margin-bottom: 3px;
-}
-.dojoxGridFDTitlePane .dijitTitlePaneTitle{
+.dojoxGridFDTitlePane .dijitTitlePaneTitle {
 	cursor: move;
 }
-.dojoxGridFDPane{
+.dojoxGridFDPaneRelation {
+	margin: 0 0 3px 4px;
+}
+.dojoxGridFDPane {
 	width: 100%;
 	height: 100%;
 	position: relative;
 }
-.dojoxGridFDPane .dijitAccordionInnerContainer .dijitContentPane{
-	padding: 6px 9px;
-}  
-.dojoxGridFDPane .dijitAccordionTitle{
+.dojoxGridFDPaneRulePane {
+	height: 222px;
+	overflow: auto;
+	/* for ie6/7 only */
 	position: relative;
 }
-.dojoxGridFDPane .dijitAccordionTitle .dijitButton{
+.dj_ie6 .dojoxGridFDPaneRulePane {
+	width: 100%;
+}
+.dojoxGridFDPane .dijitAccordionContainer .dijitContentPane {
+	padding: 6px 9px;
+}
+.dojoxGridFDPane .dijitAccordionTitle {
+	position: relative;
+	/* for non-claro theme, this can ensure a correct height change when adding/removing child */
+	min-height: 17px;
+}
+.dojoxGridFDPane .dijitAccordionTitle .dijitButton {
 	position: absolute;
 	margin: 0;
 	right: 3px;
 	top: 4px;
 }
-.dojoxGridFDPane .dijitAccordionTitle .dijitAccordionText{
+.dj_ie6 .dojoxGridFDPane .dijitAccordionTitle .dijitButton {
+	top: 2px;
+}
+.dojoxGridFDPane .dijitAccordionTitleFocus {
+	margin-right: 14px;
+}
+.dojoxGridFDPane .dijitAccordionText {
 	display: inline-block;
 	position: relative;
 }
-.dojoxGridFDPane .dijitAccordionTitle .dijitButton .dijitButtonNode{
-	-moz-border-radius: 0;
-	-moz-box-shadow: none;
-	-webkit-border-radius: 0;
-	-webkit-box-shadow: none;
-	background-image: none;
-	background-color: transparent;
-	margin: 0;
-	padding: 0;
-	border: none;
-}
-.dojoxGridFDPane .dijitAccordionTitle .dijitButton .dojoxGridFCBoxRemoveCBoxBtnIcon{
-	background-image: url("images/Remove-disable.gif");
+.dojoxGridFCBoxRemoveCBoxBtnIcon {
+	background-image: url("images/sprite_icons.png");
+	background-position: -198px -18px;
 	width: 16px;
 	height: 16px;
 }
-.dojoxGridFDPane .dijitAccordionTitle .dijitButtonHover .dojoxGridFCBoxRemoveCBoxBtnIcon{
-	background-image: url("images/Remove.gif");
+.dijitButtonHover .dojoxGridFCBoxRemoveCBoxBtnIcon {
+	background-position: -198px 2px;
 }
-
-.dojoxGridRuleTitleCondition{
+.dojoxGridRuleTitleCondition {
 	font-style: italic;
 }
-.dojoxGridFDPaneModes .dijitSelect{
+.dojoxGridFDPaneModes .dijitSelect {
 	position: relative;
 }
-.dojoxGridFDPaneBtns{
+.dojoxGridFDPaneBtns {
 	position: absolute;
 	right: 0;
 	bottom: 0;
 }
-.dojoxGridFDPaneBtns .dijitButton {
-	float:right;
+.dj_ie7 .dojoxGridFDPaneBtns,
+.dj_ie6 .dojoxGridFDPaneBtns {
+	z-index: -1;
 }
-.dojoxGridFDPane .dojoxGridFDPaneAddCBoxBtn{
+.dojoxGridFDPaneBtns .dijitButton {
+	float: right;
+}
+.dojoxGridFDPaneAddCBoxBtn {
 	margin-top: 9px;
 }
-.dojoxGridFDPane .dojoxGridFDPaneAddCBoxBtn .dojoxGridFDPaneAddCBoxBtnIcon{
-	background-image: url("images/Add.gif");
+.dojoxGridFDPaneAddCBoxBtnIcon {
+	background-image: url("images/sprite_icons.png");
+	background-position: -218px 2px;
 	width: 16px;
 	height: 16px;
 }
-.dojoxGridFDPane .dijitButtonDisabled .dojoxGridFDPaneAddCBoxBtnIcon{
-	background-image: url("images/Add-disable.gif");
+.dijitButtonDisabled .dojoxGridFDPaneAddCBoxBtnIcon {
+	background-position: -218px -18px;
 }
 
 /* criteria box */
-.dojoxGridFCBox{
+.dojoxGridFCBox {
 	height: 125px;
 }
 .dojoxGridFCBoxSelCol, 
-.dojoxGridFCBoxCondition{
+.dojoxGridFCBoxCondition {
 	height: 40px;
 }
-.dojoxGridFCBoxSelCol .dojoxGridFCBoxColSelect, 
-.dojoxGridFCBoxCondition .dojoxGridFCBoxCondSelect, 
-.dojoxGridFCBoxValue .dojoxGridFCBoxValueBox{
+.dojoxGridFCBox .dojoxGridFCBoxColSelect, 
+.dojoxGridFCBox .dojoxGridFCBoxCondSelect, 
+.dojoxGridFCBox .dojoxGridFCBoxValueBox {
 	margin: 5px 0 0 0;
 	width: 100%;
 	/* inherited is inline-block this will cause width "error" in non IE for html tables */
 	display: inline-table;
 }
-.dojoxGridFCBoxCondSelectAlt{
+.dojoxGridFCBoxCondSelectAlt {
 	width: 100%;
 	padding: 5px 0 0 0;
 	font-weight: bold;
 }
-.dojoxGridFCBox .dijitSelect .dijitArrowButton{
+.dojoxGridFCBox .dijitSelect .dijitArrowButton {
 	width: 18px;
 }
-.dojoxGridFCBoxValue .dojoxGridFCBoxValueBox .dojoxGridFCBoxStartValue{
-	float:left;
-	width:45%;	
+.dojoxGridFCBoxStartValue {
+	width: 45%;	
 }
-.dojoxGridFCBoxValue .dojoxGridFCBoxValueBox .dojoxGridFCBoxEndValue{
-	float:right;
-	width:45%;
+.dojoxGridFCBoxEndValue {
+	float: right;
+	width: 45%;
 }
-.dojoxGridFCBoxRangeValueTxt{
-	float: left;
-	margin-left: 2px;
+.dojoxGridFCBoxRangeValueTxt {
+	margin-left: 4px;
 }
 
-.dojoxGridFBar .dojoxGridFBarInner .dojoxGridFBarClearFilterBtnHiden,
-.dojoxGridFDPane .dojoxGridFCBoxRemoveCBoxBtnHiden
-{
-	display: none;
-	width: 0;
-	height: 0;
-}
 /* status tip */
-.dojoxGridFStatusTipDialog .dijitTooltipContainer{
+.dojoxGridFStatusTipDialog .dijitTooltipContainer {
 	padding: 9px 5px;
 }
 .dojoxGridFStatusTip thead,
-.dojoxGridFStatusTip tr{
+.dojoxGridFStatusTip tr {
 	height: 19px;
 }
-.dojoxGridFStatusTip th{
+.dojoxGridFStatusTip th {
 	max-width: 150px;
 	width: expression(this.clientWidth > 150 ? "150px" : "auto");
 }
-.dojoxGridFStatusTip th div{
+.dojoxGridFStatusTip th div {
 	padding: 2px 5px;
 }
-.dojoxGridFStatusTip td{
+.dojoxGridFStatusTip td {
 	padding: 2px 6px;
 	max-width: 150px;
 	overflow: hidden;
 	width: expression(this.clientWidth > 150 ? "150px" : "auto");
 }
-.dojoxGridFStatusTip .dojoxGridFStatusTipHead{
+.dojoxGridFStatusTipHead {
 	margin-bottom: 9px;
 }
-.dojoxGridFStatusTip .dojoxGridFStatusTipHead .dojoxGridFStatusTipTitle{
+.dojoxGridFStatusTipTitle {
 	font-weight: bold;
 	margin-right: 1em;
 }
-.dojoxGridFStatusTip .dojoxGridFStatusTipHandle{
+.dojoxGridFStatusTipHandle {
 	position: relative;
 	padding-right: 16px;
 }
-.dojoxGridFStatusTip .dojoxGridFStatusTipDetail .dijitButton{
+.dojoxGridFStatusTipDetail .dijitButton {
 	position: absolute;
 	margin: 0;
 	padding: 0;
-	top:-1px;
+	top: -1px;
 	right:0;
 }
-.dojoxGridFStatusTip .dojoxGridFStatusTipDetail .dijitButton .dojoxGridFStatusTipDelRuleBtnIcon{
-	background-image: url("images/Remove-disable.gif");
+.dojoxGridFStatusTipDelRuleBtnIcon {
+	background-image: url("images/sprite_icons.png");
+	background-position: -198px -18px;
 	height: 16px;
 	width: 16px;
 }
-.dojoxGridFStatusTip .dojoxGridFStatusTipDetail .dijitButtonHover .dojoxGridFStatusTipDelRuleBtnIcon{
-	background-image: url("images/Remove.gif");
-}
-.dojoxGridFStatusTip .dojoxGridFStatusTipDetail .dijitButton .dijitButtonNode{
-	-moz-border-radius: 0;
-	-moz-box-shadow: none;
-	-webkit-border-radius: 0;
-	-webkit-box-shadow: none;
-	background-image: none;
-	background-color: transparent;
-	margin: 0;
-	padding: 0;
-	border: none;
+.dijitButtonHover .dojoxGridFStatusTipDelRuleBtnIcon {
+	background-position: -198px 2px;
 }
 
 /* clear dlg */
 .dj_ie7 .dojoxGridClearFilterConfirm,
-.dj_ie6 .dojoxGridClearFilterConfirm{
+.dj_ie6 .dojoxGridClearFilterConfirm {
 	width: 300px;
 }
 .dojoxGridClearFilterBtns{
 	padding: 10px;
 	height: 18px;
 }
-.dojoxGridClearFilterBtns .dijitButton{
+.dojoxGridClearFilterBtns .dijitButton {
 	float: right;
 }
 
 /* bool value box */
-.dojoxGridBoolValueBox{
-	
-}
-.dojoxGridBoolValueBox .dojoxGridTrueBox{
+.dojoxGridTrueBox {
 	float: left;
 	width: 49%;
 }
-.dojoxGridBoolValueBox .dojoxGridFalseBox{
+.dojoxGridFalseBox {
 	float: left;
 	width: 49%;
 }
-.dojoxGridBoolValueBox .dijitRadio{
+.dojoxGridBoolValueBox .dijitRadio {
 	vertical-align: middle;
 } 
-.dojoxGridBoolValueBox .dojoxGridTrueLabel,
-.dojoxGridBoolValueBox .dojoxGridFalseLabel{
+.dojoxGridTrueLabel,
+.dojoxGridFalseLabel {
 	width: 116px;
 	display:inline-block;
 	vertical-align: middle;
 }
-.dj_ie7 .dojoxGridBoolValueBox .dojoxGridTrueLabel,
-.dj_ie7 .dojoxGridBoolValueBox .dojoxGridFalseLabel{
+.dj_ie7 .dojoxGridTrueLabel,
+.dj_ie7 .dojoxGridFalseLabel {
 	display: inline;
 }
-
-/* Filter Plugin End */

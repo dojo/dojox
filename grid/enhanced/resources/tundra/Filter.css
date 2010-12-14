@@ -1,46 +1,38 @@
-/** filter plugin **/
-/* filter bar */
-.tundra .dojoxGridFBar{
+.tundra .dojoxGridFBar {
 	background-color: #eeeeee;
 	border: 1px solid #bfbfbf;
 }
-.tundra .dojoxGridFBarFiltered{
+.tundra .dojoxGridFBarFiltered {
 	background: #fafafa url(../../../../../dijit/themes/tundra/images/titleBar.png) repeat-x bottom left;
 }
-.tundra .dojoxGridFBarHover{
+.tundra .dojoxGridFBarHover {
 	background-color: #cccccc;
 	background-image: none;
 }
-
-.tundra .dojoxGridFStatusTip table{
+.tundra .dojoxGridFStatusTip table {
 	border: 1px solid #eeeeee;
 }
-
-.tundra .dojoxGridFStatusTip th{
+.tundra .dojoxGridFStatusTip th {
 	background: #fafafa url(../../../../../dijit/themes/tundra/images/titleBar.png) repeat-x bottom left;
 	border-bottom: 1px solid #eeeeee;
 }
-
-.tundra .dojoxGridFStatusTip th div{
+.tundra .dojoxGridFStatusTip th div {
 	border-left: 1px solid white;
 	border-right: 1px solid #eeeeee;
 	border-top: 1px solid white;
 	border-bottom: 1px solid white;
 }
-.tundra .dojoxGridFStatusTip th.lastColumn div{
+.tundra .dojoxGridFStatusTip th.lastColumn div {
 	border-right: 1px solid white;
 }
-.tundra .dojoxGridFStatusTip td{
+.tundra .dojoxGridFStatusTip td {
 	border-top: 1px solid white;
 	border-bottom: 1px solid white;
 }
-
-.tundra .dojoxGridFStatusTip .dojoxGridFStatusTipHead .dojoxGridFStatusTipRel{
+.tundra .dojoxGridFStatusTipRel,
+.tundra .dojoxGridFStatusTipCondition {
 	font-style: italic;
 }
-.tundra .dojoxGridFStatusTipCondition{
-	font-style: italic;
-}
-.tundra .dojoxGridFStatusTip .dojoxGridFStatusTipDetail .dojoxGridFStatusTipOddRow{
+.tundra .dojoxGridFStatusTipOddRow {
 	background-color: #f2f5f9;
 }

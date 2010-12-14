@@ -10,9 +10,8 @@
 		@import "../../../../dijit/themes/claro/claro.css";		
 		@import "../../../../dijit/themes/tundra/tundra.css";
 		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
 		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
+		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 
 		body {
 			font-size: 0.9em;
@@ -32,12 +31,13 @@
 	<script type="text/javascript" src="../../../../dojo/dojo.js" 
 		djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.Filter");
 		var startGridIndex = 0,
 			initialShowGrid = true,
-			hideCtrlPanel = true;
+			hideCtrlPanel = false;
 		var gridAttrs = {
 				rowSelector: "20px",
 				plugins: {
@@ -51,12 +51,25 @@
 //								}	
 //							}
 //						}
-						itemsName:'songs'
+						itemsName:'songs',
+						closeFilterbarButton: true,
+						ruleCount: 8
 					}
 				}
 			};
+		dojo.subscribe("test_repeat_grid_created", function(){
+			var g = dijit.byId("grid");
+			if(g){
+				dojo.connect(g, "onFilterDefined", function(rules, rel){
+					console.log("Filter defined: ", rules, rel);
+				});
+				dojo.connect(g, "onFilterCleared", function(){
+					console.log("Filter cleared");
+				});
+			}
+		});
 	</script>
-	<script type="text/javascript" src="support/test_write_store_music.js"></script>
+	
 	<script type="text/javascript" src="support/test_layout_music.js"></script>
 	<script type="text/javascript" src="support/test_repeat.js"></script>
 </head>

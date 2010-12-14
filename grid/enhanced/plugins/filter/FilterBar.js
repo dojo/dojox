@@ -7,10 +7,11 @@ dojo.require("dojo.fx");
 (function(){
 var _focusClass = "dojoxGridFBarHover",
 	_filteredClass = "dojoxGridFBarFiltered",
-	_clearFilterBtnHiden = "dojoxGridFBarClearFilterBtnHiden",
 	_stopEvent = function(evt){
 		try{
-			dojo.stopEvent(evt);
+			if(evt && evt.preventDefault){
+				dojo.stopEvent(evt);
+			}
 		}catch(e){}
 	};
 	
@@ -49,15 +50,19 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		if(!this.plugin.args.closeFilterbarButton){
 			dojo.style(this.closeFilterBarButton.domNode, "display", "none");
 		}
-		var dn = this.domNode,
+		var _this = this,
 			g = this.plugin.grid,
 			old_func = this.oldGetHeaderHeight = dojo.hitch(g,g._getHeaderHeight);
 		
-		this.placeAt(g.viewsHeaderNode,"after");
-		this.connect(this.plugin.filterDefDialog,"showDialog","_onShowFilterDefDialog");
-		this.connect(this.plugin.filterDefDialog,"closeDialog","_onCloseFilterDefDialog");
-		this.connect(g.store.layer("filter"),"onFiltered",this._onFiltered);
+		this.placeAt(g.viewsHeaderNode, "after");
+		this.connect(this.plugin.filterDefDialog, "showDialog", "_onShowFilterDefDialog");
+		this.connect(this.plugin.filterDefDialog, "closeDialog", "_onCloseFilterDefDialog");
+		this.connect(g.layer("filter"), "onFiltered", this._onFiltered);
 		
+		this.defineFilterButton.domNode.title = this.plugin.nls["filterBarDefButton"];
+		if(dojo.hasClass(dojo.body(), "dijit_a11y")){
+			this.defineFilterButton.set("label", this.plugin.nls["a11yFilterBarDefButton"]);
+		}
 		this.connect(this.defineFilterButton.domNode, "click", _stopEvent);
 		this.connect(this.clearFilterButton.domNode, "click", _stopEvent);
 		this.connect(this.closeFilterBarButton.domNode, "click", _stopEvent);
@@ -67,7 +72,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		
 		//Hack the header height to include filter bar height;
 		g._getHeaderHeight = function(){
-			return old_func() + dojo.marginBox(dn).h;
+			return old_func() + dojo.marginBox(_this.domNode).h;
 		};
 		//Define an area to make focusManager handle all the navigation stuff
 		g.focus.addArea({
@@ -146,7 +151,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		}
 	},
 	toggleClearFilterBtn: function(toHide){
-		dojo.toggleClass(this.clearFilterButton.domNode, _clearFilterBtnHiden, toHide);
+		dojo.style(this.clearFilterButton.domNode, "display", toHide ? "none" : "");
 	},
 	_closeFilterBar: function(e){
 		_stopEvent(e);
@@ -213,7 +218,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 			this._leavingBtn = false;
 		}
 		if(this._isFocused){
-			//this._clearStatusTipTimeout();
 			this._setStatusTipTimeout();
 			this._highlightHeader(this.getColumnIdx(e.clientX));
 			if(this._handle_statusTooltip){
@@ -231,10 +235,13 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		};
 	},
 	_onFocusFilterBar: function(highlightOnly, evt, step){
+		if(!this.isFilterBarShown()){
+			return false;
+		}
 		this._isFocused = true;
 		dojo.addClass(this.domNode,_focusClass);
 		if(!highlightOnly){
-			var hasFilter = !dojo.hasClass(this.clearFilterButton.domNode, _clearFilterBtnHiden);
+			var hasFilter = dojo.style(this.clearFilterButton.domNode, "display") !== "none";
 			var hasCloseButton = dojo.style(this.closeFilterBarButton.domNode, "display") !== "none";
 			if(typeof this._focusPos == "undefined"){
 				if(step > 0){
@@ -250,9 +257,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 					}
 				}
 			}
-			if(this._focusPos == 0){
+			if(this._focusPos === 0){
 				dijit.focus(this.defineFilterButton.focusNode);	
-			}else if(this._focusPos == 1 && hasFilter){
+			}else if(this._focusPos === 1 && hasFilter){
 				dijit.focus(this.clearFilterButton.focusNode);
 			}else{
 				dijit.focus(this.closeFilterBarButton.focusNode);
@@ -268,37 +275,36 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 			this._clearStatusTipTimeout();
 			this._clearHeaderHighlight();
 		}
+		var toBlur = true;
 		if(step){
 			var buttonCount = 3;
 			if(dojo.style(this.closeFilterBarButton.domNode, "display") === "none"){
 				--buttonCount;
 			}
-			if(dojo.hasClass(this.clearFilterButton.domNode, _clearFilterBtnHiden)){
+			if(dojo.style(this.clearFilterButton.domNode, "display") === "none"){
 				--buttonCount;
 			}
 			if(buttonCount == 1){
 				delete this._focusPos;
-				return true;
 			}else{
 				var current = this._focusPos;
 				for(var next = current + step; next < 0; next += buttonCount){}
 				next %= buttonCount;
-				console.log("blur filter bar", next, buttonCount,this._focusPos);
 				if((step > 0 && next < current) || (step < 0 && next > current)){
 					delete this._focusPos;
-					return true;
 				}else{
 					this._focusPos = next;
-					return false;
+					toBlur = false;
 				}
 			}
 		}
+		return toBlur;
 	},
 	_onFiltered: function(/* int */filteredSize,/* int */originSize){
 		var p = this.plugin,
 			itemsName = p.args.itemsName || p.nls["defaultItemsName"],
 			msg = "", g = p.grid,
-			filterLayer = g.store.layer("filter");
+			filterLayer = g.layer("filter");
 		if(filterLayer.filterDef()){
 			msg = dojo.string.substitute(p.nls["filterBarMsgHasFilterTemplate"], [filteredSize, originSize, itemsName]);
 			dojo.addClass(this.domNode, _filteredClass);
@@ -349,9 +355,11 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		if(typeof this._previousHeaderIdx != "undefined"){
 			var g = this.plugin.grid,
 			cell = g.getCell(this._previousHeaderIdx);
-			cell && g.onHeaderCellMouseOut({
-				cellNode: cell.getHeaderNode()
-			});
+			if(cell){
+				g.onHeaderCellMouseOut({
+					cellNode: cell.getHeaderNode()
+				});
+			}
 			delete this._previousHeaderIdx;
 		}
 	}

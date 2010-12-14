@@ -2,14 +2,12 @@ dojo.provide("dojox.grid.enhanced.plugins.Filter");
 
 dojo.requireLocalization("dojox.grid.enhanced", "Filter");
 dojo.require("dojox.grid.enhanced._Plugin");
+dojo.require("dojox.grid.enhanced.plugins.Dialog");
 dojo.require("dojox.grid.enhanced.plugins.filter.FilterLayer");
-dojo.require("dojox.grid.enhanced.plugins.filter.UniqueLayer");
-dojo.require("dojox.grid.enhanced.plugins.filter.SortLayer");
 dojo.require("dojox.grid.enhanced.plugins.filter.FilterBar");
 dojo.require("dojox.grid.enhanced.plugins.filter.FilterDefDialog");
 dojo.require("dojox.grid.enhanced.plugins.filter.FilterStatusTip");
 dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
-dojo.require("dijit.Dialog");
 
 (function(){
 	var ns = dojox.grid.enhanced.plugins,
@@ -79,17 +77,16 @@ dojo.require("dijit.Dialog");
 		
 		// name: String
 		//		plugin name
-		name: "gridFilter",
+		name: "filter",
 		
-		constructor: function(inGrid, args){
+		constructor: function(grid, args){
 			// summary: 
 			//		See constructor of dojox.grid.enhanced._Plugin.
-
-			this.grid = inGrid;
+			this.grid = grid;
 			this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Filter");
 			
 			args = this.args = dojo.isObject(args) ? args : {};
-			if(typeof args.ruleCount != 'number' || args.ruleCount <= 0){
+			if(typeof args.ruleCount != 'number' || args.ruleCount < 0){
 				args.ruleCount = 3;
 			}
 			
@@ -97,10 +94,9 @@ dojo.require("dijit.Dialog");
 			this._wrapStore();
 			
 			//Install UI components 
-			var obj = {
-				"plugin": this
-			};
-			this.clearFilterDialog = new dijit.Dialog({
+			var obj = { "plugin": this };
+			this.clearFilterDialog = new dojox.grid.enhanced.plugins.Dialog({
+				refNode: this.grid.domNode,
 				title: this.nls["clearFilterDialogTitle"],
 				content: new fns.ClearFilterConfirm(obj)
 			});
@@ -108,34 +104,33 @@ dojo.require("dijit.Dialog");
 			this.filterBar = new fns.FilterBar(obj);
 			this.filterStatusTip = new fns.FilterStatusTip(obj);
 			
-			this._store = inGrid.store;
-			this.connect(inGrid, "setStore", function(store){
-				if(store !== this._store){
-					ns.unwrap(this._store);
-					this._wrapStore();
-					this.connect(store.layer('filter'), "filterDef", dojo.hitch(this.filterDefDialog, "_onSetFilter"));
-					this.connect(store.layer("filter"),"onFiltered", dojo.hitch(this.filterBar, "_onFiltered"));
-					this.filterDefDialog.clearFilter(true);
-					this._store = store;
-				}
+			//Expose the layer event to grid.
+			grid.onFilterDefined = function(){};
+			this.connect(grid.layer("filter"), "onFilterDefined", function(filter){
+				grid.onFilterDefined(grid.getFilter(), grid.getFilterRelation());
+			});
+			//If some new row is added, clear the filter.
+			this.connect(grid, "_onNew", function(){
+				this.filterDefDialog.clearFilter();
 			});
 		},
 		destroy: function(){
 			this.inherited(arguments);
 			try{
+				this.grid.unwrap("filter");
 				this.filterBar.destroyRecursive();
 				this.filterBar = null;
 				this.clearFilterDialog.destroyRecursive();
 				this.clearFilterDialog = null;
-				this.filterStatusTip.destroy();	
+				this.filterStatusTip.destroy();
 				this.filterStatusTip = null;
 				this.filterDefDialog.destroy();
 				this.filterDefDialog = null;
-				this._store.unwrap("sort");
-				this._store.unwrap("unique");
-				this._store.unwrap("filter");
+				this.grid = null;
+				this.nls = null;
+				this.args = null;
 			}catch(e){
-				console.error("filter destroy:",e);
+				console.debug("filter destroy:",e);
 			}
 		},
 		_wrapStore: function(){
@@ -143,26 +138,27 @@ dojo.require("dijit.Dialog");
 			var args = this.args;
 			var filterLayer = args.isServerSide ? new fns.ServerSideFilterLayer(args) : 
 				new fns.ClientSideFilterLayer({
-					filterCacheSize: args.cacheSize,
-					fetchAllOnFirstFilter: args.fetchAll,
-					getter: dojo.hitch(g, function(/* data item */ datarow,/* cell */cell, /* int */rowIndex){
-						// summary:
-						//		Define the grid-specific way to get data from a row.
-						//		Argument "cell" is provided by FilterDefDialog when defining filter expressions.
-						//		Argument "rowIndex" is provided by FilterLayer when checking a row.
-						//		FilterLayer also provides a forth argument: "store", which is grid.store,
-						//		but we don't need it here.
-						return cell.get(rowIndex, datarow);
-					})
+					cacheSize: args.filterCacheSize,
+					fetchAll: args.fetchAllOnFirstFilter,
+					getter: this._clientFilterGetter
 				});
-			var uniqueLayer = new fns.UniqueLayer();
-			var sortLayer = new fns.SortLayer();
+			ns.wrap(g, "_storeLayerFetch", filterLayer);
 			
-			uniqueLayer.enabled(false);
-			sortLayer.enabled(false);
-			ns.wrap(ns.wrap(ns.wrap(g.store, filterLayer), uniqueLayer), sortLayer);
+			this.connect(g, "_onDelete", dojo.hitch(filterLayer, "invalidate"));
+		},
+		onSetStore: function(store){
+			this.filterDefDialog.clearFilter(true);
+		},
+		_clientFilterGetter: function(/* data item */ datarow,/* cell */cell, /* int */rowIndex){
+			// summary:
+			//		Define the grid-specific way to get data from a row.
+			//		Argument "cell" is provided by FilterDefDialog when defining filter expressions.
+			//		Argument "rowIndex" is provided by FilterLayer when checking a row.
+			//		FilterLayer also provides a forth argument: "store", which is grid.store,
+			//		but we don't need it here.
+			return cell.get(rowIndex, datarow);
 		}
 	});
 })();
 
-dojox.grid.EnhancedGrid.registerPlugin('filter', dojox.grid.enhanced.plugins.Filter);
+dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Filter/*name:'filter'*/);
