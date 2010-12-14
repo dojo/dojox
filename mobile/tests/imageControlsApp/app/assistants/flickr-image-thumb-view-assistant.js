@@ -2,29 +2,30 @@ dojo.provide("FlickrImageThumbViewAssistant");
 dojo.require("dojox.mobile.app.SceneAssistant");
 
 dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
-  
+
 	apiKey: "8c6803164dbc395fb7131c9d54843627",
-	
+
 	setup: function(){
-	
+
 		// Instantiate widgets in the template HTML.
 		this.controller.parse();
-		
+
 		this.handlePhotoLoad = dojo.hitch(this, this.handlePhotoLoad);
 		this.search = dojo.hitch(this, this.search);
 		this.resizeViewer = dojo.hitch(this, this.resizeViewer);
-		
+
 		this.textWidget = dijit.byId("searchTextThumbInput");
-		
+
 		var viewer = this.viewer = dijit.byId("flickrImageThumbView");
-		
-		console.log("widget flickrImageThumbView = ", viewer);
-		
+
+		// Set the parameter from which to retrieve the owner name
+		viewer.labelParam = "ownername";
+
 		var _this = this;
-		
+
 		this.connect(viewer, "onSelect", function(item, index){
 			console.log("selected ", item, index);
-			
+
 			_this.controller.stageController.pushScene("flickr-image-view",{
 				type: "data",
 				images: _this.urls,
@@ -37,7 +38,7 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 				_this.viewer.attr("items", []);
 				return;
 			}
-			
+
 			if(!_this.timer){
 				_this.timer = setTimeout(_this.search, 1000);
 			}
@@ -52,7 +53,7 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 		this.connect(dijit.byId("btnLarge"), "onClick", function(event){
 			_this.setThumbSize("large");
 		});
-		
+
 		var resizeTimer;
 		// Listen to the resize event on the window to make
 		// the thumbnails fill the horizontal space
@@ -65,13 +66,13 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 			resizeTimer = setTimeout(_this.resizeViewer, 300);
 		});
 	},
-  
+
 	activate: function(options){
-		
+
 		// If this is the first time this view is activated, then do the initial
 		// load of images
 		if (!this.dataType) {
-		
+
 			this.dataType = (options ? options.type : "interesting");
 
 			switch (this.dataType) {
@@ -95,32 +96,32 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 			}
 		}
 	},
-	
+
 	setThumbSize: function(cls){
 		dojo.removeClass(this.viewer.domNode, ["small", "medium", "large"]);
 		dojo.addClass(this.viewer.domNode, cls);
 		this.resizeViewer();
 	},
-	
+
 	resizeViewer: function(){
 		this.viewer.resize();
 	},
-	
+
 	search: function(){
 		if(this.timer){
 			clearTimeout(this.timer);
 			this.timer = null;
 		}
-		
+
 		var searchText = this.textWidget.attr("value");
-		
+
 		if(!searchText || dojo.trim(searchText).length < 1){
 			this.viewer.attr("items", []);
-			
+
 			console.log("NOT SEARCHING");
 			return;
 		}
-		
+
 		console.log("search", searchText);
 		switch(this.dataType){
 			case "text":
@@ -133,17 +134,17 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 				break;
 		}
 	},
-  
+
 	loadInteresting: function(){
 		console.log("loading interesting");
 		var _this = this;
-		
+
 		var url = "http://api.flickr.com/services/rest/?method=" +
 					"flickr.interestingness.getList";
 
 		var deferred = dojo.io.script.get({
 			url: url,
-			content: { 
+			content: {
 				api_key: this.apiKey,
 				format: "json",
 				per_page: 20
@@ -156,16 +157,17 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 	loadText: function(text){
 		console.log("loading text ", text);
 		var _this = this;
-		
+
 		var url = "http://api.flickr.com/services/rest/?method=" +
 					"flickr.photos.search";
 
 		var deferred = dojo.io.script.get({
 			url: url,
-			content: { 
+			content: {
 				api_key: this.apiKey,
 				format: "json",
 				text: text,
+				extras: "owner_name",
 				per_page: 20
 			},
 			jsonp: "jsoncallback"
@@ -176,13 +178,13 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 	loadTags: function(text){
 		console.log("loading tags ", text);
 		var _this = this;
-		
+
 		var url = "http://api.flickr.com/services/rest/?method=" +
 					"flickr.photos.search";
 
 		var deferred = dojo.io.script.get({
 			url: url,
-			content: { 
+			content: {
 				api_key: this.apiKey,
 				format: "json",
 				tags: text,
@@ -197,14 +199,14 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 		console.log("got photos", res);
 		if(res && res.photos && res.photos.photo){
 			var images = this.images = res.photos.photo;
-			
+
 			var urls = [];
-			
+
 			var baseUrl;
-			
+
 			for(var i = 0; i < images.length; i++){
-				baseUrl = "http://farm" 
-							+ images[i].farm 
+				baseUrl = "http://farm"
+							+ images[i].farm
 							+ ".static.flickr.com/"
 							+ images[i].server
 							+ "/"
@@ -215,18 +217,19 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 					large: baseUrl + ".jpg",
 					small: baseUrl + "_t.jpg",
 					thumb: baseUrl + "_s.jpg",
+					ownername: images[i].ownername,
 					title: images[i].title
 				});
 			}
 			this.urls = urls;
 			this.index = 0;
 			this.viewer.attr("selectedIndex", this.index);
-			
+
 			this.viewer.attr("items", urls);
 		}else{
 			this.viewer.attr("items", []);
 			console.log("didn't get photos");
 		}
 	}
-  
+
 });

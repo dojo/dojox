@@ -19,6 +19,8 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 	//		The paramter name used to retrieve an image url from a JSON object
 	urlParam: "url",
 
+	labelParam: null,
+
 	itemTemplate: '<div class="mblThumbInner">' +
 				'<div class="mblThumbOverlay"></div>' +
 				'<div class="mblThumbMask">' +
@@ -26,27 +28,35 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 				'</div>' +
 			'</div>',
 
-	minPadding: 5,
+	minPadding: 4,
 
 	maxPerRow: 3,
 
+	maxRows: -1,
+
 	baseClass: "mblImageThumbView",
-	
+
 	thumbSize: "medium",
+
+	animationEnabled: true,
 
 	selectedIndex: -1,
 
 	cache: null,
-	
+
+	cacheMustMatch: false,
+
 	clickEvent: "onclick",
-	
+
 	cacheBust: false,
-	
+
+	disableHide: false,
+
 	constructor: function(params, node){
 	},
 
 	postCreate: function(){
-		
+
 		this.inherited(arguments);
 		var _this = this;
 
@@ -54,24 +64,25 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 
 		this.addThumb = dojo.hitch(this, this.addThumb);
 		this.handleImgLoad = dojo.hitch(this, this.handleImgLoad);
+		this.hideCached = dojo.hitch(this, this.hideCached);
 
 		this._onLoadImages = {};
 
 		this.cache = [];
 		this.visibleImages = [];
-		
+
 		this._cacheCounter = 0;
 
 		this.connect(this.domNode, this.clickEvent, function(event){
 			var itemNode = _this._getItemNodeFromEvent(event);
 
-			if(itemNode){
+			if(itemNode && !itemNode._cached){
 				_this.onSelect(itemNode._item, itemNode._index, _this.items);
 				dojo.query(".selected", this.domNode).removeClass("selected");
 				dojo.addClass(itemNode, "selected");
 			}
 		});
-		
+
 		dojo.addClass(this.domNode, this.thumbSize);
 
 		this.resize();
@@ -83,8 +94,32 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		//		Dummy function that is triggered when an image is selected.
 	},
 
+	_setAnimationEnabledAttr: function(value){
+		this.animationEnabled = value;
+		dojo[value ? "addClass" : "removeClass"](this.domNode, "animated");
+	},
+
 	_setItemsAttr: function(items){
 		this.items = items || [];
+
+		var urls = {};
+		var i;
+		for(i = 0; i < this.items.length; i++){
+			urls[this.items[i][this.urlParam]] = 1;
+		}
+
+		var clearedUrls = [];
+		for(var url in this._onLoadImages){
+			if(!urls[url] && this._onLoadImages[url]._conn){
+				dojo.disconnect(this._onLoadImages[url]._conn);
+				this._onLoadImages[url].src = null;
+				clearedUrls.push(url);
+			}
+		}
+
+		for(i = 0; i < clearedUrls.length; i++){
+			delete this._onLoadImages[url];
+		}
 
 		this.render();
 	},
@@ -108,8 +143,21 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		this._thumbSize = null;
 
 		this._size = dojo.contentBox(this.domNode);
-		
+
+		this.disableHide = true;
 		this.render();
+		this.disableHide = false;
+	},
+
+	hideCached: function(){
+		// summary:
+		//		Hides all cached nodes, so that they're no invisible and overlaying
+		//		other screen elements.
+		for(var i = 0; i < this.cache.length; i++){
+			if (this.cache[i]) {
+				dojo.style(this.cache[i], "display", "none");
+			}
+		}
 	},
 
 	render: function(){
@@ -122,20 +170,29 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 			thumb = this.visibleImages.pop();
 			this.cache.push(thumb);
 
-			dojo.addClass(thumb, "hidden");
+			if (!this.disableHide) {
+				dojo.addClass(thumb, "hidden");
+			}
 			thumb._cached = true;
 		}
+
+		if(this.cache && this.cache.length > 0){
+			setTimeout(this.hideCached, 1000);
+		}
+
 		if(!this.items || this.items.length == 0){
-			//dojo.empty(this.domNode);
 			return;
 		}
-		
 
 		for(i = 0; i < this.items.length; i++){
 			item = this.items[i];
 			url = (dojo.isString(item) ? item : item[this.urlParam]);
 
 			this.addThumb(item, url, i);
+
+			if(this.maxRows > 0 && (i + 1) / this.maxPerRow >= this.maxRows){
+				break;
+			}
 		}
 
 		if(!this._thumbSize){
@@ -148,8 +205,11 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		var totalThumbWidth = this._thumbSize.w + (this.padding * 2);
 		var totalThumbHeight = this._thumbSize.h + (this.padding * 2);
 
+		var nodes = this.thumbNodes =
+			dojo.query(".mblThumb", this.domNode);
+
 		var pos = 0;
-		var nodes = this.visibleImages;
+		nodes = this.visibleImages;
 		for(i = 0; i < nodes.length; i++){
 			if(nodes[i]._cached){
 				continue;
@@ -178,48 +238,79 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		}
 
 		var numRows = Math.ceil(pos / this.maxPerRow);
-		
-		if(this._numRows != numRows){
-			this._numRows = numRows;
-			dojo.style(this.domNode, "height",
-					(numRows * (this._thumbSize.h + this.padding * 2)) + "px");
-		}
 
+		this._numRows = numRows;
+
+		this.setContainerHeight((numRows * (this._thumbSize.h + this.padding * 2)));
+	},
+
+	setContainerHeight: function(amount){
+		dojo.style(this.domNode, "height", amount + "px");
 	},
 
 	addThumb: function(item, url, index){
 
 		var thumbDiv;
+		var cacheHit = false;
 		if(this.cache.length > 0){
 			// Reuse a previously created node if possible
-			
+			var found = false;
 			// Search for an image with the same url first
 			for(var i = 0; i < this.cache.length; i++){
 				if(this.cache[i]._url == url){
 					thumbDiv = this.cache.splice(i, 1)[0];
+					found = true;
 					break
 				}
 			}
-			
+
 			// if no image with the same url is found, just take the last one
-			if(!thumbDiv){
-				thumbDiv = this.cache.pop();
+			if(!thumbDiv && !this.cacheMustMatch){
+            	thumbDiv = this.cache.pop();
+				dojo.removeClass(thumbDiv, "selected");
+			} else {
+				cacheHit = true;
 			}
-			dojo.removeClass(thumbDiv, "selected");
-		}else{
-			// Create a new thumb
-			thumbDiv = this.createThumb(url);
 		}
-		dojo.addClass(thumbDiv, "hidden");
-		var loader = dojo.create("img",{});
-		loader._thumbDiv = thumbDiv;
-		loader._conn = dojo.connect(loader, "onload", this.handleImgLoad);
-		loader._url = url;
-		thumbDiv._loading = true;
 
-		this._onLoadImages[url] = loader;
-		loader.src = url;
+		if(!thumbDiv){
 
+			// Create a new thumb
+			thumbDiv = dojo.create("div", {
+				"class": "mblThumb hidden",
+				innerHTML: dojo.string.substitute(this.itemTemplate, {
+					url: url
+				}, null, this)
+			}, this.domNode);
+		}
+
+		if(this.labelParam) {
+			var labelNode = dojo.query(".mblThumbLabel", thumbDiv)[0];
+			if(!labelNode) {
+				labelNode = dojo.create("div", {
+					"class": "mblThumbLabel"
+				}, thumbDiv);
+			}
+			labelNode.innerHTML = item[this.labelParam] || "";
+		}
+
+	    dojo.style(thumbDiv, "display", "");
+		if (!this.disableHide) {
+			dojo.addClass(thumbDiv, "hidden");
+		}
+
+		if (!cacheHit) {
+			var loader = dojo.create("img", {});
+			loader._thumbDiv = thumbDiv;
+			loader._conn = dojo.connect(loader, "onload", this.handleImgLoad);
+			loader._url = url;
+			thumbDiv._loading = true;
+
+			this._onLoadImages[url] = loader;
+			if (loader) {
+				loader.src = url;
+			}
+		}
 		this.visibleImages.push(thumbDiv);
 
 		thumbDiv._index = index;
@@ -228,28 +319,19 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		thumbDiv._cached = false;
 
 		if(!this._thumbSize){
-			this.calcSize();
+			this._thumbSize = dojo.marginBox(thumbDiv);
+
+			if(this._thumbSize.h == 0){
+				this._thumbSize.h = 100;
+				this._thumbSize.w = 100;
+			}
+
+			if(this.labelParam){
+				this._thumbSize.h += 8;
+			}
+
 			this.calcPadding();
 		}
-	},
-	
-	calcSize: function(){
-		if(!this.sizeThumb){
-			this.sizeThumb = this.createThumb("");
-			dojo.removeClass(this.sizeThumb, "mblAnimated");
-		}
-		dojo.place(this.sizeThumb, this.domNode);
-		this._thumbSize = dojo.marginBox(this.sizeThumb);
-		this.domNode.removeChild(this.sizeThumb);
-	},
-	
-	createThumb: function(url){
-		return dojo.create("div", {
-			"class": "mblThumb hidden mblAnimated",
-			innerHTML: dojo.string.substitute(this.itemTemplate, {
-				url: url
-			}, null, this)
-		}, this.domNode)		
 	},
 
 	handleImgLoad: function(event){
@@ -257,11 +339,12 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 		dojo.disconnect(img._conn);
 		dojo.removeClass(img._thumbDiv, "hidden");
 		img._thumbDiv._loading = false;
-		
+		img._conn = null;
+
 		var url = img._url;
 		if(this.cacheBust){
-			url += (url.indexOf("?") > -1 ? "&" : "?") 
-				+ "cacheBust=" + (new Date()).getTime() + "_" + (this._cacheCounter++); 
+			url += (url.indexOf("?") > -1 ? "&" : "?")
+				+ "cacheBust=" + (new Date()).getTime() + "_" + (this._cacheCounter++);
 		}
 
 		dojo.query(".mblThumbSrc", img._thumbDiv)
@@ -283,38 +366,24 @@ dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
 	},
 
 	place: function(node, x, y){
-		/*
-		// Use code to not overwrite other transform values if possible.
-		// TODO: Get this working
-		if(dojo.global["WebKitCSSMatrix"]){
-			var matrix = new WebKitCSSMatrix(node.style.webkitTransform);
-			var origX = x, origY = y;
-			if(node._x){
-				x = x - node._x;
-			}
-			if(node._y){
-				y = y - node._y;
-			}
-			node._x = origX;
-			node._y = origY;
-			
-			dojo.style(node, {
-				"-webkit-transform" : matrix.translate(x, y)
-			});
-		}else{
-			dojo.style(node, {
-				position: "absolute",
-				top: y + "px",
-				left: x + "px"
-			});
-		}*/
 		dojo.style(node, {
-			"-webkit-transform" : "translate(" + x + "px," + y + "px)"
+			"-webkit-transform" :"translate(" + x + "px," + y + "px)"
 		});
 	},
-	
-	_isTranslate: function(str){
-		return dojo.trim(str).indexOf("translate") != 0;
-	}
 
+	destroy: function(){
+		// Stop the loading of any more images
+
+		var img;
+		var counter = 0;
+		for (var url in this._onLoadImages){
+			img = this._onLoadImages[url];
+			if (img) {
+				img.src = null;
+				counter++;
+			}
+		}
+
+		this.inherited(arguments);
+	}
 });
