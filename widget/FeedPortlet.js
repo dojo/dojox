@@ -351,6 +351,10 @@ dojo.declare("dojox.widget.PortletFeedSettings",
 		this.inherited(arguments);
 	},
 
+	_setContentAttr: function(){
+
+	},
+
 	postCreate: function(){
 		console.log(this.id + " -> postCreate");
 		if(!this.text){
