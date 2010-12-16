@@ -96,7 +96,9 @@ define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
 				}
 			};
 			if(args && (args.start >= 0 || args.count >= 0)){
-				request.headers.Range = "items=" + (args.start || '0') + '-' + ((args.count && args.count != Infinity && (args.count + (args.start || 0) - 1)) || '');
+				request.headers.Range = "items=" + (args.start || '0') + '-' + 
+					(("count" in args && args.count != Infinity) ? 
+						(args.count + (args.start || 0) - 1) : '');
 			}
 			dojox.rpc._sync = false;
 			return request;
