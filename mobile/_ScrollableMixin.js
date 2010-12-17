@@ -32,4 +32,13 @@ dojo.declare(
 		this.inherited(arguments);
 	}
 });
-dojo.safeMixin(dojox.mobile._ScrollableMixin.prototype, new dojox.mobile.scrollable());
+(function(){
+	var obj = new dojox.mobile.scrollable();
+	dojo.extend(dojox.mobile._ScrollableMixin, obj);
+	if(dojo.version.major == 1 && dojo.version.minor == 4){
+		// dojo-1.4 had a problem in inheritance behavior. (#10709 and #10788)
+		// This is a workaround to avoid the problem.
+		// There is no such a problem in dojo-1.3 and dojo-1.5.
+		dojo.mixin(dojox.mobile._ScrollableMixin._meta.hidden, obj);
+	}
+})();
