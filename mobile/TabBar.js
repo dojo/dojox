@@ -22,7 +22,7 @@ dojo.declare(
 	},
 
 	postCreate: function(){
-		if(window.onorientationchange !== undefined){
+		if(dojo.global.onorientationchange !== undefined){
 			this.connect(dojo.global, "onorientationchange", "onResize");
 		}else{
 			this.connect(dojo.global, "onresize", "onResize");

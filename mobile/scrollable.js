@@ -79,7 +79,7 @@ dojox.mobile.scrollable = function(){
 	if(!dojo.version){ // seems running in a non-dojo environment
 		dojo.connect = function(node, eventName, scope, method){
 			var handler = function(e){
-				e = e || window.event;
+				e = e || dojo.global.event;
 				if(!e.target){
 					e.target = e.srcElement;
 					e.pageX = e.offsetX;
@@ -151,7 +151,7 @@ dojox.mobile.scrollable = function(){
 			this.containerNode.style.paddingBottom = this.fixedFooterHeight + "px";
 		}
 
-		if(window.onorientationchange !== undefined){
+		if(dojo.global.onorientationchange !== undefined){
 			this._ch.push(dojo.connect(dojo.global, "onorientationchange", this, "resizeView"));
 		}else{
 			this._ch.push(dojo.connect(dojo.global, "onresize", this, "resizeView"));
@@ -177,7 +177,7 @@ dojox.mobile.scrollable = function(){
 		var _this = this;
 		var id = setInterval(function() {
 			// adjust the height of this view a couple of times
-			_this.domNode.style.height = (window.innerHeight||dojo.doc.documentElement.clientHeight) - h + "px";
+			_this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - h + "px";
 			if(c++ >= 4) { clearInterval(id); }
 		}, 300);
 	};
@@ -679,8 +679,8 @@ dojox.mobile.scrollable = function(){
 //>>excludeEnd("webkitMobile");
 		this.setSelectable(this.domNode, false);
 		var sel;
-		if(window.getSelection){
-			sel = window.getSelection();
+		if(dojo.global.getSelection){
+			sel = dojo.global.getSelection();
 			sel.collapse(dojo.doc.body, 0);
 		}else{
 			sel = dojo.doc.selection.createRange();

@@ -183,14 +183,14 @@ dojo.declare(
 		if(toWidget){
 			// perform view transition keeping the scroll position
 			if(this.keepScrollPos && !dijit.getEnclosingWidget(this.domNode.parentNode)){
-				var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || window.pageYOffset || 0;
+				var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
 				if(dir == 1){
 					toNode.style.top = "0px";
 					if(scrollTop > 1){
 						fromNode.style.top = -scrollTop + "px";
 						if(dojo.config["mblHideAddressBar"] !== false){
 							setTimeout(function(){ // iPhone needs setTimeout
-								window.scrollTo(0, 1);
+								dojo.global.scrollTo(0, 1);
 							}, 0);
 						}
 					}
@@ -201,7 +201,7 @@ dojo.declare(
 						fromNode.style.top = toTop - scrollTop + "px";
 						if(dojo.config["mblHideAddressBar"] !== false && toTop > 0){
 							setTimeout(function(){ // iPhone needs setTimeout
-								window.scrollTo(0, toTop + 1);
+								dojo.global.scrollTo(0, toTop + 1);
 							}, 0);
 						}
 					}
@@ -999,12 +999,12 @@ dojox.mobile.hideAddressBar = function(){
 	setTimeout(function(){
 		scrollTo(0, 1);
 		// re-define the min-height with the actual height
-		dojo.body().style.minHeight = (window.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
+		dojo.body().style.minHeight = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
 	}, 1000);
 };
 
 dojox.mobile.openWindow = function(url, target){
-	window.open(url, target || "_blank");
+	dojo.global.open(url, target || "_blank");
 };
 
 dojo._loaders.unshift(function(){
@@ -1042,7 +1042,7 @@ dojo.addOnLoad(function(){
 	if(dojo.config["mblHideAddressBar"] !== false){
 		dojox.mobile.hideAddressBar();
 		if(dojo.config["mblAlwaysHideAddressBar"] == true){
-			if(window.onorientationchange !== undefined){
+			if(dojo.global.onorientationchange !== undefined){
 				dojo.connect(dojo.global, "onorientationchange", dojox.mobile.hideAddressBar);
 			}else{
 				dojo.connect(dojo.global, "onresize", dojox.mobile.hideAddressBar);
