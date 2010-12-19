@@ -12,6 +12,8 @@ dojo.require("dojox.mobile._base");
 
 		stageController: null,
 
+		keepScrollPos: false,
+
 		init: function(sceneName, params){
 			// summary:
 			//    Initializes the scene by loading the HTML template and code, if it has
@@ -23,10 +25,16 @@ dojo.require("dojox.mobile._base");
 
 			this._deferredInit = new dojo.Deferred();
 
-			dojo.xhrGet({
-				url: templateUrl,
-				handleAs: "text"
-			}).addCallback(dojo.hitch(this, this._setContents));
+			if(templates[sceneName]){
+				// If the template has been cached, do not load it again.
+				this._setContents(templates[sceneName]);
+			}else{
+				// Otherwise load the template
+				dojo.xhrGet({
+					url: templateUrl,
+					handleAs: "text"
+				}).addCallback(dojo.hitch(this, this._setContents));
+			}
 
 			return this._deferredInit;
 		},
