@@ -72,6 +72,8 @@ dojo.require("dijit._Widget");
 		//    The coordinates of where a mouseDown event was detected
 		_mouseDownPos: null,
 
+		baseClass: "list",
+
 		constructor: function(){
 			this._checkLoadComplete = dojo.hitch(this, this._checkLoadComplete);
 			this._replaceToken = dojo.hitch(this, this._replaceToken);
@@ -91,9 +93,6 @@ dojo.require("dijit._Widget");
 			if(this.dividerTemplate){
 				this._templateLoadCount++;
 			}
-
-			dojo.addClass(this.domNode, "list");
-			var msg;
 
 			this.connect(this.domNode, "onmousedown", function(event){
 				var touch = event;
@@ -118,8 +117,6 @@ dojo.require("dijit._Widget");
 						y: touch.pageY
 					};
 					_this._dragThreshold = null;
-				}else{
-					console.log("didnt get a node");
 				}
 			});
 
@@ -238,7 +235,6 @@ dojo.require("dijit._Widget");
 			if(this._deleting){
 				return;
 			}
-
 			dojo.removeClass(this._selectedRow, "hold");
 			this._selectedRow.style.left = 0;
 			this._mouseDownPos = null;
@@ -287,7 +283,6 @@ dojo.require("dijit._Widget");
 				this.connect(row, "webkitAnimationEnd", this._postDeleteAnim);
 
 			dojo.addClass(row, "collapsed");
-
 		},
 
 		_postDeleteAnim: function(event){
@@ -301,6 +296,16 @@ dojo.require("dijit._Widget");
 
 			var row = this._selectedRow;
 			var sibling = row.nextSibling;
+			var prevSibling = row.previousSibling;
+
+			// If the previous node is a divider and either this is
+			// the last element in the list, or the next node is
+			// also a divider, remove the divider for the deleted section.
+			if(prevSibling && prevSibling._isDivider){
+				if(!sibling || sibling._isDivider){
+					prevSibling.parentNode.removeChild(prevSibling);
+				}
+			}
 
 			row.parentNode.removeChild(row);
 			this.onDelete(row._data, row._idx, this.items);
@@ -355,8 +360,7 @@ dojo.require("dijit._Widget");
 				dojo.addClass(this.buttons[1].domNode, "cancelBtn");
 
 				this._handleButtonClick = dojo.hitch(this._handleButtonClick);
-					this.connect(this._deleteBtns, "onclick",
-									this._handleButtonClick);
+				this.connect(this._deleteBtns, "onclick", this._handleButtonClick);
 			}
 			dojo.removeClass(this._deleteBtns, "fade out fast");
 			dojo.style(this._deleteBtns, {
@@ -399,7 +403,7 @@ dojo.require("dijit._Widget");
 			//		Handles the click of one of the deletion buttons, either to
 			//		delete the row or to cancel the deletion.
 			if(event.touches && event.touches.length > 0){
-			event = event.touches[0];
+				event = event.touches[0];
 			}
 			var node = event.target;
 			if(dojo.hasClass(node, "deleteBtn")){
@@ -477,7 +481,7 @@ dojo.require("dijit._Widget");
 				}
 				fromNode = fromNode.parentNode;
 			}
-			return fromNode;
+			return fromNode == this.domNode ? null : fromNode;
 		},
 
 		applyTemplate: function(template, data){
@@ -492,51 +496,13 @@ dojo.require("dijit._Widget");
 			// Delete all existing nodes, except the deletion buttons.
 			dojo.query("> *:not(.buttons)", this.domNode).forEach(dojo.destroy);
 
-			var rows = [];
-			var row, i;
-
-			dojo.addClass(this.domNode, "list");
-
-			for(i = 0; i < this.items.length; i++){
-				// Create a document fragment containing the templated row
-				row = this.applyTemplate(this.itemTemplate, this.items[i]);
-				dojo.addClass(row, 'row');
-				row._data = this.items[i];
-				row._idx = i;
-				rows.push(row);
-			}
-			if(!this.dividerFunction || !this.dividerTemplate){
-				for(i = 0; i < this.items.length; i++){
-					rows[i]._data = this.items[i];
-					rows[i]._idx = i;
-					this.domNode.appendChild(rows[i]);
-				}
-			}else{
-				var prevDividerValue = null;
-				var dividerValue;
-				for(i = 0; i < this.items.length; i++){
-					rows[i]._data = this.items[i];
-					rows[i]._idx = i;
-
-					dividerValue = this.dividerFunction(this.items[i]);
-					if(dividerValue && dividerValue != prevDividerValue){
-						this.domNode.appendChild(this.applyTemplate(this.dividerTemplate, {
-							label: dividerValue,
-							item: this.items[i]
-						}));
-						prevDividerValue = dividerValue;
-					}
-					this.domNode.appendChild(rows[i]);
-				}
-
-			}
-
 			// If there is no data, and an empty template has been provided,
 			// render it.
 			if(this.items.length < 1 && this.emptyTemplate){
 				dojo.place(dojo._toDom(this.emptyTemplate), this.domNode, "first");
+			}else{
+				this.domNode.appendChild(this._renderRange(0, this.items.length));
 			}
-
 			if(dojo.hasClass(this.domNode.parentNode, "mblRoundRect")){
 				dojo.addClass(this.domNode.parentNode, "mblRoundRectList")
 			}
@@ -546,6 +512,52 @@ dojo.require("dijit._Widget");
 				dojo.addClass(divs[0], "first");
 				dojo.addClass(divs[divs.length - 1], "last");
 			}
+		},
+
+		_renderRange: function(startIdx, endIdx){
+
+			var rows = [];
+			var row, i;
+			var frag = document.createDocumentFragment();
+			startIdx = Math.max(0, startIdx);
+			endIdx = Math.min(endIdx, this.items.length);
+
+			for(i = startIdx; i < endIdx; i++){
+				// Create a document fragment containing the templated row
+				row = this.applyTemplate(this.itemTemplate, this.items[i]);
+				dojo.addClass(row, 'row');
+				row._data = this.items[i];
+				row._idx = i;
+				rows.push(row);
+			}
+			if(!this.dividerFunction || !this.dividerTemplate){
+				for(i = startIdx; i < endIdx; i++){
+					rows[i]._data = this.items[i];
+					rows[i]._idx = i;
+					frag.appendChild(rows[i]);
+				}
+			}else{
+				var prevDividerValue = null;
+				var dividerValue;
+				var divider;
+				for(i = startIdx; i < endIdx; i++){
+					rows[i]._data = this.items[i];
+					rows[i]._idx = i;
+
+					dividerValue = this.dividerFunction(this.items[i]);
+					if(dividerValue && dividerValue != prevDividerValue){
+						divider = this.applyTemplate(this.dividerTemplate, {
+							label: dividerValue,
+							item: this.items[i]
+						});
+						divider._isDivider = true;
+						frag.appendChild(divider);
+						prevDividerValue = dividerValue;
+					}
+					frag.appendChild(rows[i]);
+				}
+			}
+			return frag;
 		},
 
 		_replaceToken: function(value, key){
