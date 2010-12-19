@@ -133,6 +133,7 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 			//    Initializes the mobile app. Creates the
 
 			rootNode = node || dojo.body();
+			dojox.mobile.app.STAGE_CONTROLLER_ACTIVE = true;
 
 			dojo.subscribe("/dojox/mobile/app/goback", function(){
 				stageController.popScene();

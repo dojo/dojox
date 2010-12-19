@@ -381,7 +381,7 @@ dojo.declare(
 		if(href){
 			this._view.performTransition(null, -1, this.transition, this, function(){location.href = href;});
 		}else{
-			if(dojox.mobile.app){
+			if(dojox.mobile.app && dojox.mobile.app.STAGE_CONTROLLER_ACTIVE){
 				// If in a full mobile app, then use its mechanisms to move back a scene
 				dojo.publish("/dojox/mobile/app/goback");
 			}
