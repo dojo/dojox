@@ -33,7 +33,10 @@
 			durNode = dojo.byId("dur");
 			timeNode = dojo.byId("time");
 
-			w = new dojox.av.FLVideo({initialVolume:.1, mediaUrl:"video/Grog.flv", autoPlay:true, isDebug:false}, "vid");
+			// crossdomain test:
+			//var url = "http://video.bettervideo.com/video/ClubAJAX/Grog.flv";
+			var url = "video/Grog.flv";
+			w = new dojox.av.FLVideo({initialVolume:.1, mediaUrl:url, autoPlay:true, isDebug:false}, "vid");
 
 			toggle = function(){
 				if(w.isPlaying){
