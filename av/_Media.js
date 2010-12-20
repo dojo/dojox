@@ -76,7 +76,7 @@ dojo.declare("dojox.av._Media", null, {
 		//		Connect mediaStatus to the media.
 		//
 		this.status = "ready";
-		dojo.connect(this, "onPosition", this, "_figureStatus");
+		this._positionHandle = dojo.connect(this, "onPosition", this, "_figureStatus");
 
 	},
 

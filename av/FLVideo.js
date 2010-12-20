@@ -307,7 +307,13 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 			this._checkBuffer(time, dObj.buffer);
 		}
 		// FIXME: need to remove this on destroy
-		setTimeout(dojo.hitch(this, "_update"), this.updateTime);
+		this._updateHandle = setTimeout(dojo.hitch(this, "_update"), this.updateTime);
+	},
+
+	destroy: function(){
+		clearTimeout(this._updateHandle);
+		dojo.disconnect(this._positionHandle);
+		this.inherited(arguments);
 	}
 
 });
