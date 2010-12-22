@@ -9,6 +9,7 @@ dojo.declare(
 	iconBase: "",
 	iconPos: "",
 	barType: "tabBar", // "tabBar"(default) or "segmentedControl"
+	inHeading: false,
 
 	_fixedButtonWidth: 76,
 	_fixedButtonMargin: 17,
@@ -18,7 +19,6 @@ dojo.declare(
 		this._clsName = this.barType == "segmentedControl" ? "mblTabButton" : "mblTabBarButton";
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
 		this.domNode.className = this.barType == "segmentedControl" ? "mblTabPanelHeader" : "mblTabBar";
-		this._view = dijit.getEnclosingWidget(this.domNode.parentNode); // parentNode is null if created programmatically
 	},
 
 	postCreate: function(){
@@ -55,12 +55,23 @@ dojo.declare(
 		var margin;
 		if(this.barType == "segmentedControl"){
 			margin = w;
+			var totalW = 0; // total width of all the buttons
 			for(i = 0; i < arr.length; i++){
 				margin -= dojo.marginBox(arr[i]).w;
 				arr[i].style.marginTop = "3px";
+				totalW += arr[i].offsetWidth;
 			}
 			margin = Math.floor(margin/2);
-			this.containerNode.style.padding = "3px 0px 0px " + margin + "px";
+			var parent = dijit.getEnclosingWidget(this.domNode.parentNode);
+			var inHeading = this.inHeading || parent instanceof dojox.mobile.Heading;
+			this.containerNode.style.padding = "3px 0px 0px " + (inHeading ? 0 : margin) + "px";
+			if(inHeading){
+				dojo.style(this.domNode, {
+					background: "none",
+					border: "none",
+					width: totalW + 2 + "px"
+				});
+			}
 		}else{
 			margin = Math.floor((w - (bw + bm * 2) * arr.length) / 2);
 			if(w < this._largeScreenWidth || margin < 0){
@@ -94,6 +105,7 @@ dojo.declare(
 	selected: false,
 	transition: "none",
 	tag: "LI",
+	selectOne: true,
 
 	inheritParams: function(){
 		var parent = this.getParentWidget();
@@ -151,15 +163,19 @@ dojo.declare(
 		this.domNode = this.srcNodeRef || dojo.create(this.tag);
 		this.containerNode = this.domNode;
 		var _clsName = this.parent ? this.parent._clsName : "mblTabBarButton";
-		this.domNode.className = _clsName + (this.selected ? " mblTabButtonSelected" : "");
+		dojo.addClass(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
 		this.domNode.appendChild(a);
+
+		this.createDomButton(this.domNode, a);
 	},
 
 	startup: function(){
 		var parent = this.getParentWidget();
 		this.parent = parent;
 		if(parent && parent.barType == "segmentedControl"){
-			this.domNode.className = parent._clsName + (this.selected ? " mblTabButtonSelected" : "");
+			// proper className may not be set when created dynamically
+			dojo.removeClass(this.domNode, "mblTabBarButton");
+			dojo.addClass(this.domNode, parent._clsName);
 			this.box.className = "";
 		}
 	},
@@ -184,10 +200,6 @@ dojo.declare(
 	},
 
 	onClick: function(e){
-		var a = e.currentTarget;
-		var li = a.parentNode;
-		if(dojo.hasClass(li, "mblTabButtonSelected")){ return; } // already selected
-		this.select();
-		this.transitionTo(this.moveTo, this.href, this.url);
+		this.defaultClickAction();
 	}
 });

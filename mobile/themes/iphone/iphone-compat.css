@@ -6,8 +6,8 @@
 /* Heading Arrow Button */
 .mblArrowButtonHead {
 	position: absolute;
-	top: 5px;
-	left: 6px;
+	top: 6px;
+	left: 7px;
 	width: 19px;
 	height: 29px;
 	background-image: url(compat/arrow-button-head.png);

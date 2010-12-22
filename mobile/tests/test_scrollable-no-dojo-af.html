@@ -29,9 +29,6 @@
 
 		<script language="JavaScript" type="text/javascript">
 		function onLoad(){
-			if(navigator.userAgent.indexOf("WebKit") == -1){
-				alert("This demo works only on WebKit-based browsers.");
-			}
 			var scrollable = new dojox.mobile.scrollable();
 			scrollable.init({
 				domNode: document.getElementById("outer"),
@@ -50,21 +47,18 @@
 						<img class="mblListItemIcon" src="images/i-icon-1.png">
 						<a class="mblListItemAnchor">
 							<div class="mblListItemTextBox">Slide</div>
-							<div class="mblArrow"></div>
 						</a>
 					</li>
 					<li class="mblListItem">
 						<img class="mblListItemIcon" src="images/i-icon-2.png">
 						<a class="mblListItemAnchor">
 							<div class="mblListItemTextBox">Flip</div>
-							<div class="mblArrow"></div>
 						</a>
 					</li>
 					<li class="mblListItem">
 						<img class="mblListItemIcon" src="images/i-icon-3.png">
 						<a class="mblListItemAnchor">
 							<div class="mblListItemTextBox">Fade</div>
-							<div class="mblArrow"></div>
 						</a>
 					</li>
 				</ul>

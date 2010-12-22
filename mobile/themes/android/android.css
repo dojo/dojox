@@ -131,6 +131,12 @@ html.mobile, .mobile body {
 }
 
 /* Heading Arrow Button */
+.mblArrowButton {
+	position: relative;
+	float: left;
+	height: 25px;
+	margin-right: 6px;
+}
 .dj_webkit .mblArrowButtonHead {
 	position: absolute;
 	top: 5px;
@@ -182,6 +188,26 @@ html.mobile, .mobile body {
 .mblArrowButtonSelected .mblArrowButtonBody, .mblArrowButtonSelected .mblArrowButtonNeck {
 	background-color: #FFC700;
 	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
+}
+
+/* ToolBarButton */
+.mblToolbarButton {
+	float: left;
+	position: relative;
+	margin: 0px 3px;
+	padding: 0px 10px;
+	height: 23px;
+	border: 1px inset #3F3E3E;
+	font-family: Helvetica;
+	font-size: 13px;
+	font-weight: bold;
+	color: white;
+	line-height: 23px;
+	text-align: center;
+	cursor: pointer;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-tap-highlight-color: transparent;
 }
 
 /* dojox.mobile.TabBar */
@@ -797,4 +823,21 @@ table.mblClose {
 }
 .mblProg11 {
 	-webkit-transform: translate(14px,11px) rotate(240deg);
+}
+
+/* Button Colors */
+.mblColorBlue {
+	background-color: #366EDF;
+	background: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+}
+
+/* Default Button Colors */
+.mblColorDefault { /* Gray */
+	background-color: #ADADAD;
+	background: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
+}
+
+.mblColorDefaultSel { /* Orange */
+	background-color: #FFC700;
+	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
 }
