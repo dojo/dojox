@@ -148,7 +148,7 @@ dojo.declare("dojox.rpc.Service", null, {
 		return dojo.mixin(request, {
 			sync: dojox.rpc._sync,
 			contentType: contentType,
-			headers: {},
+			headers: method.headers || smd.headers || request.headers || {},
 			target: request.target || dojox.rpc.getTarget(smd, method),
 			transport: method.transport || smd.transport || request.transport,
 			envelope: method.envelope || smd.envelope || request.envelope,
