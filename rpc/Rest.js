@@ -33,6 +33,12 @@ define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
 						function(id, args){
 							var request = svc._getRequest(method,[id]);
 							request.url= request.target + (request.data ? '?'+  request.data : '');
+							if(args && (args.start >= 0 || args.count >= 0)){
+								request.headers = request.headers || {};
+								request.headers.Range = "items=" + (args.start || '0') + '-' + 
+									(("count" in args && args.count != Infinity) ? 
+										(args.count + (args.start || 0) - 1) : '');
+							}
 							return request;
 						}
 					);
