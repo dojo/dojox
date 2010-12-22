@@ -100,9 +100,11 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		return this.pluginMgr.getPlugin(name);
 	},
 	startup: function(){
-		if(this._initMenus){ this._initMenus(); }
 		this.inherited(arguments);
 		this.pluginMgr.startup();
+	},
+	createSelection: function(){
+		this.selection = new dojox.grid.enhanced.DataSelection(this);
 	},
 	canSort: function(colIndex, field){
 		// summary:
@@ -197,8 +199,37 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		//summary:
 		//		Destroy all resources
 		delete this._nls;
+		this.selection.destroy();
 		this.pluginMgr.destroy();
 		this.inherited(arguments);
+	}
+});
+
+dojo.provide("dojox.grid.enhanced.DataSelection");
+dojo.require("dojox.grid.enhanced.plugins._SelectionPreserver");//default loaded plugin
+
+dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
+	constructor: function(grid){
+		if(grid.keepSelection){
+			this.preserver = new dojox.grid.enhanced.plugins._SelectionPreserver(this);
+		}
+	},
+	_range: function(inFrom, inTo){
+		this.grid._selectingRange = true;
+		this.inherited(arguments);
+		this.grid._selectingRange = false;
+		this.onChanged();
+	},
+	deselectAll: function(inItemOrIndex){
+		this.grid._selectingRange = true;
+		this.inherited(arguments);
+		this.grid._selectingRange = false;
+		this.onChanged();
+	},	
+	destroy: function(){
+		if(this.preserver){
+			this.preserver.destroy();
+		}
 	}
 });
 

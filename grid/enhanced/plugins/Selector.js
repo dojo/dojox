@@ -274,13 +274,13 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		// end: Integer | Object
 		//		If type is "row" or "col", this is the index of the ending row or column.
 		//		If type if "cell", this is the right-bottom cell of the range.
-		this.grid._isSelectingRange = true;
+		this.grid._selectingRange = true;
 		var startPoint = type == "cell" ? _createItem(type, start.row, start.col) : _createItem(type, start),
 			endPoint = type == "cell" ? _createItem(type, end.row, end.col) : _createItem(type, end);
 		this._startSelect(type, startPoint, false, false, false, toSelect);
 		this._highlight(type, endPoint, toSelect === undefined ? true : toSelect);
 		this._endSelect(type);
-		this.grid._isSelectingRange = false;
+		this.grid._selectingRange = false;
 	},
 	clear: function(type){
 		// summary:
@@ -423,18 +423,18 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		var _this = this;
 		g.selection.selectRange = function(from, to){
 			_this.selectRange("row", from, to, true);
-			dojo.publish(g.id + "_onSelectionChange");
+			g.selection.onChanged();
 		};
 		g.selection.deselectRange = function(from, to){
 			_this.selectRange("row", from, to, false);
-			dojo.publish(g.id + "_onSelectionChange");
+			g.selection.onChanged();
 		};
 		g.selection.deselectAll = function(){
-			g._isSelectingRange = true;
+			g._selectingRange = true;
 			_this._oldDeselectAll.apply(g.selection, arguments);
 			_this._clearSelection("row");
-			g._isSelectingRange = false;
-			dojo.publish(g.id + "_onSelectionChange");
+			g._selectingRange = false;
+			g.selection.onChanged();
 		};
 		
 		var rowSelector = g.views.views[0];
@@ -567,14 +567,14 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this.connect(g, "onSelected", function(rowIndex){
 			if(this._selectedRowModified && this._isUsingRowSelector){
 				delete this._selectedRowModified;
-			}else if(!this.grid._isSelectingRange){
+			}else if(!this.grid._selectingRange){
 				this.select("row", rowIndex);
 			}
 		});
 		this.connect(g, "onDeselected", function(rowIndex){
 			if(this._selectedRowModified && this._isUsingRowSelector){
 				delete this._selectedRowModified;
-			}else if(!this.grid._isSelectingRange){
+			}else if(!this.grid._selectingRange){
 				this.deselect("row", rowIndex);
 			}
 		});
@@ -902,7 +902,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this._selected[type] = [];
 		
 		//Have to also deselect default grid selection.
-		if(type == "row" && !this.grid._isSelectingRange){
+		if(type == "row" && !this.grid._selectingRange){
 			this._oldDeselectAll.call(this.grid.selection);
 			this.grid.selection._selectedById = {};
 		}
