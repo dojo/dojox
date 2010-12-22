@@ -138,7 +138,6 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		if(!this.edit.isEditing() && this.menus){
 			this.showMenu(e);
 		}
-		//dojo.stopEvent(e);
 	},
 	onSelectedRegionContextMenu: function(e){
 		// summary:
