@@ -81,7 +81,8 @@
 
 .editorIconInsertTable{				
 	background-position:0px 0px;	}
-
+.dijitDisabled .editorIconInsertTable{				
+	background-position:-162px 0px;	}
 .editorIconInsertTableRowBefore{ 	
 	background-position:-36px 0px;	}
 .dijitDisabled .editorIconInsertTableRowBefore{ 	

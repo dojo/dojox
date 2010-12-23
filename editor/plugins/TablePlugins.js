@@ -678,7 +678,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			// summary:
 			//		Over-ride for button state control for disabled to work.
 			if(this.button){
-				if(this.available && !this.get("disabled")){
+				if((this.available || this.alwaysAvailable) && !this.get("disabled")){
 					this.button.set("disabled",false);	
 				}else{
 					this.button.set("disabled",true);	
