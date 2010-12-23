@@ -7,14 +7,14 @@ dojo.requireLocalization("dojox.grid.enhanced", "EnhancedGrid");
 dojo.experimental("dojox.grid.EnhancedGrid");
 
 dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
-	//	summary:
+	// summary:
 	//		Provides enhanced features based on DataGrid
 	//
-	//	description:
+	// description:
 	//		EnhancedGrid features are implemented as plugins that could be loaded on demand.
 	//		Explicit dojo.require() is needed to use these feature plugins.
 	//	
-	//  example:
+	// example:
 	//		A quick sample to use EnhancedGrid features:
 	//      
 	//	   Step 1. Load EnhancedGrid and required features
@@ -29,9 +29,9 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//		Step 2. Use EnhancedGrid
 	//		- Via HTML markup
 	// |	<div dojoType="dojox.grid.EnhancedGrid" ...
-	// |		 plugins="{nestedSorting: true, dnd: true, indirectSelection: true, 
-	// |		 menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",  
-    // |         selectedRegionMenu:"selectedRegionMenuId"}}">
+	// |		plugins="{nestedSorting: true, dnd: true, indirectSelection: true, 
+	// |		menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",  
+	// |		selectedRegionMenu:"selectedRegionMenuId"}}">
 	// |			...
 	// |	</div>
 	//
@@ -142,7 +142,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	_copyAttr: function(idx, attr){
 		// summary:
 		//		Overwritten, see DataGrid._copyAttr()
-		//		Fix cell TAB navigation for single click editting
+		//		Fix cell TAB navigation for single click editing
 		if(!attr){ return; }
 		return this.inherited(arguments);
 	},
@@ -154,7 +154,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		return dojo.marginBox(this.viewsHeaderNode).h;
 	},
 	_fetch: function(start, isRender){
-		//summary:
+		// summary:
 		//		Overwritten, see DataGrid._fetch()
 		if(this.items){
 			return this.inherited(arguments);
@@ -186,17 +186,41 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		return 0;
 	},
 	_storeLayerFetch: function(req){
-		//summary:
-		//		Extracted fetch specificaly for store layer use
+		// summary:
+		//		Extracted fetch specifically for store layer use
 		this.store.fetch(req);
 	},
 	getCellByField: function(field){
 		return dojo.filter(this.layout.cells, function(cell){
 			return cell.field == field;
 		})[0];
-	},	
+	},
+	createView: function(){
+		// summary
+		//		Overwrite: rewrite getCellX of view.header
+		var view = this.inherited(arguments);
+		if(dojo.isMoz){
+			var ascendDom = function(inNode, inWhile){
+				for(var n = inNode; n && inWhile(n); n = n.parentNode){}
+				return n;
+			};//copied from dojox.grid._Builder
+			var makeNotTagName = function(inTagName){
+				var name = inTagName.toUpperCase();
+				return function(node){ return node.tagName != name; };
+			};//copied from dojox.grid._Builder
+
+			var func = view.header.getCellX;
+			view.header.getCellX = function(e){
+				var x = func.call(view.header, e);			
+				var n = ascendDom(e.target, makeNotTagName("th"));
+				if(e.target == n.firstChild){ x += n.firstChild.offsetLeft; }
+				return x;
+			};
+		}
+		return view;
+	},
 	destroy: function(){
-		//summary:
+		// summary:
 		//		Destroy all resources
 		delete this._nls;
 		this.selection.destroy();
@@ -225,7 +249,7 @@ dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
 		this.inherited(arguments);
 		this.grid._selectingRange = false;
 		this.onChanged();
-	},	
+	},
 	destroy: function(){
 		if(this.preserver){
 			this.preserver.destroy();
