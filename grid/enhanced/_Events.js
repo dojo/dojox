@@ -108,7 +108,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//		Overwritten, see dojox.grid._Events.onCellClick()
 
 		//invoke dojox.grid._Events.onCellClick()
-		dojo.hitch(this, this._events.onCellClick)(e);
+		this._events.onCellClick.call(this, e);
 		//move mouse events to the focus manager.
 		this.focus.contentMouseEvent(e);//TODO
 	},
@@ -120,7 +120,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 			this._click[0] = this._click[1] = e;
 		}
 		//invoke dojox.grid._Events.onCellDblClick()
-		dojo.hitch(this, this._events.onCellDblClick)(e);
+		this._events.onCellDblClick.call(this, e);
 		//now focus.setFocusCell need isEditing info, so call it after that is set. 
 		this.focus.setFocusCell(e.cell, e.rowIndex);
 	},
@@ -184,7 +184,9 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//move focus to header.
 		this.focus.currentArea("header");
 		//invoke dojox.grid._Events.onHeaderCellClick()
-		dojo.hitch(this, this._events.onHeaderCellClick)(e);
+		if(!e.cell.isRowSelector){
+			this._events.onHeaderCellClick.call(this, e);
+		}
 		//move mouse events to the focus manager.
 		this.focus.headerMouseEvent(e);
 	},
