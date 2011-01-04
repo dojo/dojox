@@ -141,7 +141,7 @@ dojo.require("dojo.html");
 
 		//Update script tags nested in comments so that the script tag collector doesn't pick
 		//them up.
-		cont = cont.replace(/<[!][-][-](.|\s){5,}?[-][-]>/g,
+		cont = cont.replace(/<[!][-][-](.|\s)*?[-][-]>/g,
 			function(comment){
 				return comment.replace(/<(\/?)script\b/ig,"&lt;$1Script");
 			}
