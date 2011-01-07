@@ -88,7 +88,7 @@ dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
 		// summary:
 		//		Pre-filter for editor to convert strings like [:-)] into an <img> of the corresponding smiley
 		var emoticon = dojox.editor.plugins.Emoticon.fromAscii(ascii);
-		return emoticon ? emoticon.imgHtml(this.emoticonImageClass) : ascii;
+		return emoticon ? emoticon.imgHtml(this.emoticonImageClass) : str;
 	},
 
 	_encode: function(str){
