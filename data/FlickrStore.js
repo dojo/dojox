@@ -272,12 +272,12 @@ reg.register("default",
 	feedsUrl+"photos_public.gne"
 );
 
-return dojox.data.FlickrStore;
-
-});
-
 //We have to define this because of how the Flickr API works.  
 //This somewhat stinks, but what can you do?
 if(!jsonFlickrFeed){
 	var jsonFlickrFeed = function(data){};
 }
+
+return dojox.data.FlickrStore;
+
+});
