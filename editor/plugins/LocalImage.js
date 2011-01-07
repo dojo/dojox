@@ -45,6 +45,9 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 	//		The component to upload the local image file onto the server
 	_fileUploader: null,
 	
+	// _fileUploader [private] htmlFieldName
+	htmlFieldName:"uploadedfile",
+	
 	// _isLocalFile [private] Boolean
 	//		Indicate if a local file is to be uploaded to the server
 	//		If false, the text of _urlInput field is regarded as the
@@ -232,6 +235,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			fup = _this._fileUploader = new dojox.form.FileUploader({
 				force: "html", // Noticed that SWF may cause browsers to crash sometimes
 				uploadUrl: _this.uploadUrl, 
+				htmlFieldName: _this.htmlFieldName,
 				uploadOnChange: false, 
 				selectMultipleFiles: false,
 				showProgress: true
@@ -334,6 +338,7 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			command: "insertImage",
 			uploadable: ("uploadable" in o.args) ? o.args.uploadable : false,
 			uploadUrl: ("uploadable" in o.args && "uploadUrl" in o.args) ? o.args.uploadUrl : "",
+			htmlFieldName: ("uploadable" in o.args && "htmlFieldName" in o.args) ? o.args.htmlFieldName : "uploadedfile",
 			baseImageUrl: ("uploadable" in o.args && "baseImageUrl" in o.args) ? o.args.baseImageUrl : "",
 			fileMask: ("fileMask" in o.args) ? o.args.fileMask : "*.jpg;*.jpeg;*.gif;*.png;*.bmp"
 		});
