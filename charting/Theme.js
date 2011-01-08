@@ -89,6 +89,7 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|		fill:    "#ccc",							// fill, if appropriate
 	//	|		font:    "normal normal normal 8pt Tahoma",	// if there's a label
 	//	|		fontColor: "#000"							// color of labels
+	//	|		labelWiring: {width: 1, color: "#ccc"},		// connect marker and target data item(slice, column, bar...)
 	//	|	},
 	//	|	marker: {	// any markers on a series
 	//	|		symbol:  "m-3,3 l3,-6 3,6 z",				// symbol
@@ -295,7 +296,7 @@ dojo.declare("dojox.charting.Theme", null, {
 					dojo.setObject("series.fill", mixin.color, t);
 				}
 			}
-			dojo.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor"], function(name){
+			dojo.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor", "labelWiring"], function(name){
 				var markerName = "marker" + name.charAt(0).toUpperCase() + name.substr(1),
 					b = markerName in mixin;
 				if(name in mixin){
@@ -520,7 +521,8 @@ dojo.mixin(dojox.charting.Theme, {
 			shadow: null,								// no shadow
 			fill:    "#ccc",							// fill, if appropriate
 			font:    "normal normal normal 8pt Tahoma",	// if there's a label
-			fontColor: "#000"							// color of labels
+			fontColor: "#000",							// color of labels
+			labelWiring: {width: 1, color: "#ccc"}		// connect marker and target data item(slice, column, bar...)
 		},
 		marker: {	// any markers on a series
 			stroke:  {width: 1.5, color: "#333"},		// stroke
