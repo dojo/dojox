@@ -1,5 +1,7 @@
 dojo.provide("dojox.charting.axis2d.Default");
 
+dojo.require("dijit.Tooltip");
+
 dojo.require("dojox.charting.axis2d.Invisible");
 
 dojo.require("dojox.charting.scaler.linear");
@@ -183,6 +185,8 @@ dojo.require("dojox.lang.utils");
 								// ordered by values
 			labelFunc:		null, // function to compute label values
 			maxLabelSize:	0,	// size in px. For use with labelFunc
+			maxLabelCharCount:	0,	// size in word count.
+			trailingSymbol:	null,
 
 			// TODO: add support for minRange!
 			// minRange:		1,	// smallest distance from min allowed on the axis
@@ -237,24 +241,24 @@ dojo.require("dojox.lang.utils");
 				rotation = o.rotation % 360, leftBottom = o.leftBottom,
 				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
 				sinr = Math.abs(Math.sin(rotation * Math.PI / 180));
+			this.trailingSymbol = (o.trailingSymbol === undefined || o.trailingSymbol === null) ? this.trailingSymbol : o.trailingSymbol;
 			if(rotation < 0){
 				rotation += 360;
 			}
 
 			if(size){
 				// we need width of all labels
-				if(o.maxLabelSize){
-					labelWidth = o.maxLabelSize;
-				}else if(this.labels){
-					labelWidth = this._groupLabelWidth(this.labels, taFont);
+				if(this.labels){
+					labelWidth = this._groupLabelWidth(this.labels, taFont, o.maxLabelCharCount);
 				}else{
 					labelWidth = this._groupLabelWidth([
 						gl(ma.start, ma.prec, o),
 						gl(ma.start + ma.count * ma.tick, ma.prec, o),
 						gl(mi.start, mi.prec, o),
 						gl(mi.start + mi.count * mi.tick, mi.prec, o)
-					], taFont);
+					], taFont, o.maxLabelCharCount);
 				}
+				labelWidth = o.maxLabelSize ? Math.min(o.maxLabelSize, labelWidth) : labelWidth;
 				if(this.vertical){
 					var side = leftBottom ? "l" : "r";
 					switch(rotation){
@@ -579,17 +583,23 @@ dojo.require("dojox.lang.utils");
 							y2: y + dy
 						}).setStroke(taMajorTick);
 						if(tick.label){
+							var label = o.maxLabelCharCount ? this.getTextWithLimitCharCount(tick.label, taFont, o.maxLabelCharCount) : {
+								text: tick.label,
+								truncated: false
+							};
+							label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
 							elem = dc.axis2d.common.createText[labelType](
 								this.chart,
 								s,
 								x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
 								y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
 								labelAlign,
-								tick.label,
+								label.text,
 								taFont,
 								taFontColor
 								//this._cachedLabelWidth
 							);
+							label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
 							if(labelType == "html"){
 								this.htmlElements.push(elem);
 							}else if(rotation){
@@ -618,17 +628,23 @@ dojo.require("dojox.lang.utils");
 							y2: y + dy
 						}).setStroke(taMinorTick);
 						if(canLabel && tick.label){
+							var label = o.maxLabelCharCount ? this.getTextWithLimitCharCount(tick.label, taFont, o.maxLabelCharCount) : {
+								text: tick.label,
+								truncated: false
+							};
+							label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
 							elem = dc.axis2d.common.createText[labelType](
 								this.chart,
 								s,
 								x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
 								y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
 								labelAlign,
-								tick.label,
+								label.text,
 								taFont,
 								taFontColor
 								//this._cachedLabelWidth
 							);
+							label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
 							if(labelType == "html"){
 								this.htmlElements.push(elem);
 							}else if(rotation){
@@ -662,6 +678,53 @@ dojo.require("dojox.lang.utils");
 
 			this.dirty = false;
 			return this;	//	dojox.charting.axis2d.Default
+		},
+		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
+			var aroundRect = {type: "rect"}, position = ["above", "below"],
+				fontWidth = dojox.gfx._base._getTextBox(truncatedLabel, {font: font}).w || 0;
+				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
+			if(elemType == "html"){
+				dojo.mixin(aroundRect, dojo.coords(elem.firstChild, true));
+				aroundRect.width = Math.ceil(fontWidth);
+				aroundRect.height = Math.ceil(fontHeight);
+				this._events.push({
+					shape:  dojo,
+					handle: dojo.connect(elem.firstChild, "onmouseover", this, function(e){
+						dijit.showTooltip(label, aroundRect, position);
+					})
+				});
+				this._events.push({
+					shape:  dojo,
+					handle: dojo.connect(elem.firstChild, "onmouseout", this, function(e){
+						dijit.hideTooltip(aroundRect);
+					})
+				});
+			}else{
+				var shp = elem.getShape(),
+					lt = dojo.coords(chart.node, true);
+				aroundRect = dojo.mixin(aroundRect, {
+					x: shp.x - fontWidth / 2,
+					y: shp.y
+				});
+				aroundRect.x += lt.x;
+				aroundRect.y += lt.y;
+				aroundRect.x = Math.round(aroundRect.x);
+				aroundRect.y = Math.round(aroundRect.y);
+				aroundRect.width = Math.ceil(fontWidth);
+				aroundRect.height = Math.ceil(fontHeight);
+				this._events.push({
+					shape:  elem,
+					handle: elem.connect("onmouseenter", this, function(e){
+						dijit.showTooltip(label, aroundRect, position);
+					})
+				});
+				this._events.push({
+					shape:  elem,
+					handle: elem.connect("onmouseleave", this, function(e){
+						dijit.hideTooltip(aroundRect);
+					})
+				});
+			}
 		}
 	});
 })();
