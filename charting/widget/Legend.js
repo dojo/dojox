@@ -68,8 +68,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 		if(this.horizontal){
 			dojo.addClass(this.legendNode, "dojoxLegendHorizontal");
 			// make a container <tr>
-			this._tr = dojo.doc.createElement("tr");
-			this.legendBody.appendChild(this._tr);
+			this._tr = dojo.create("tr", null, this.legendBody);
 			this._inrow = 0;
 		}
 		
@@ -101,32 +100,29 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	},
 	_addLabel: function(dyn, label){
 		// create necessary elements
-		var icon = dojo.doc.createElement("td"),
-			text = dojo.doc.createElement("td"),
-			div  = dojo.doc.createElement("div");
-		dojo.addClass(icon, "dojoxLegendIcon");
-		dojo.addClass(text, "dojoxLegendText");
-		div.style.width  = this.swatchSize + "px";
-		div.style.height = this.swatchSize + "px";
-		icon.appendChild(div);
-		
+		var wrapper = dojo.create("td"),
+			icon = dojo.create("div", {className: "dojoxLegendIcon dijitInline"}, wrapper),
+			text = dojo.create("label", {className: "dojoxLegendText"}, wrapper),
+			div  = dojo.create("div", {
+				style: {
+					"width": this.swatchSize + "px",
+					"height":this.swatchSize + "px",
+					"float": "left"
+				}
+			}, icon);
 		// create a skeleton
 		if(this._tr){
 			// horizontal
-			this._tr.appendChild(icon);
-			this._tr.appendChild(text);
+			this._tr.appendChild(wrapper);
 			if(++this._inrow === this.horizontal){
 				// make a fresh container <tr>
-				this._tr = dojo.doc.createElement("tr");
-				this.legendBody.appendChild(this._tr);
+				this._tr = dojo.create("tr", null, this.legendBody);
 				this._inrow = 0;
 			}
 		}else{
 			// vertical
-			var tr = dojo.doc.createElement("tr");
-			this.legendBody.appendChild(tr);
-			tr.appendChild(icon);
-			tr.appendChild(text);
+			var tr = dojo.create("tr", null, this.legendBody);
+			tr.appendChild(wrapper);
 		}
 		
 		// populate the skeleton
