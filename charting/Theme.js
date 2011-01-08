@@ -482,7 +482,11 @@ dojo.mixin(dojox.charting.Theme, {
 		chart:{
 			stroke: null,
 			fill: "white",
-			pageStyle: null
+			pageStyle: null,
+			titleGap:		20,
+			titlePos:		"top",
+			titleFont:      "normal normal bold 14pt Tahoma",	// labels on axis
+			titleFontColor: "#333"	
 		},
 		plotarea:{
 			stroke: null,
@@ -498,7 +502,11 @@ dojo.mixin(dojox.charting.Theme, {
 				color:     "#666",
 				position:  "center",
 				font:      "normal normal normal 7pt Tahoma",	// labels on axis
-				fontColor: "#333"								// color of labels
+				fontColor: "#333",								// color of labels
+				titleGap:  15,
+				titleFont: "normal normal normal 11pt Tahoma",	// labels on axis
+				titleFontColor: "#333",							// color of labels
+				titleOrientation: "axis"						// "axis": facing the axis, "away": facing away
 			},
 			majorTick:	{ // major ticks on axis, and used for major gridlines
 				width:  1,

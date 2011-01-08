@@ -54,7 +54,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 }
  =====*/
 (function(){
-	var df = dojox.lang.functional, dc = dojox.charting,
+	var df = dojox.lang.functional, dc = dojox.charting, g = dojox.gfx,
 		clear = df.lambda("item.clear()"),
 		purge = df.lambda("item.purgeGroup()"),
 		destroy = df.lambda("item.destroy()"),
@@ -168,7 +168,13 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			this.stroke    = kwArgs.stroke;
 			this.fill      = kwArgs.fill;
 			this.delayInMs = kwArgs.delayInMs || 200;
-
+			this.title     = kwArgs.title;
+			this.titleGap  = kwArgs.titleGap;
+			this.titlePos  = kwArgs.titlePos;
+			this.titleFont = kwArgs.titleFont;
+			this.titleFontColor = kwArgs.titleFontColor;
+			this.chartTitle = null;
+			
 			// default initialization
 			this.theme = null;
 			this.axes = {};		// map of axes
@@ -182,7 +188,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			// create a surface
 			this.node = dojo.byId(node);
 			var box = dojo.marginBox(node);
-			this.surface = dojox.gfx.createSurface(this.node, box.w || 400, box.h || 300);
+			this.surface = g.createSurface(this.node, box.w || 400, box.h || 300);
 		},
 		destroy: function(){
 			//	summary:
@@ -191,6 +197,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			dojo.forEach(this.series, destroy);
 			dojo.forEach(this.stack,  destroy);
 			df.forIn(this.axes, destroy);
+			dojo.destroy(this.chartTitle);
 			this.surface.destroy();
 		},
 		getCoords: function(){
@@ -756,8 +763,8 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 
 			// 1st pass
 			var dim = this.dim = this.surface.getDimensions();
-			dim.width  = dojox.gfx.normalizedLength(dim.width);
-			dim.height = dojox.gfx.normalizedLength(dim.height);
+			dim.width  = g.normalizedLength(dim.width);
+			dim.height = g.normalizedLength(dim.height);
 			df.forIn(this.axes, clear);
 			calculateAxes(this.stack, dim);
 
@@ -766,6 +773,15 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			df.forIn(this.axes, function(axis){
 				df.forIn(axis.getOffsets(), function(o, i){ offsets[i] += o; });
 			});
+			// add title area
+			if(this.title){
+				this.titleGap = (this.titleGap==0) ? 0 : this.titleGap || this.theme.chart.titleGap || 20;
+				this.titlePos = this.titlePos || this.theme.chart.titlePos || "top";
+				this.titleFont = this.titleFont || this.theme.chart.titleFont;
+				this.titleFontColor = this.titleFontColor || this.theme.chart.titleFontColor || "black";
+				var tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
+				offsets[this.titlePos=="top" ? "t":"b"] += (tsize + this.titleGap);
+			}
 			// add margins
 			df.forIn(this.margins, function(o, i){ offsets[i] += o; });
 
@@ -829,6 +845,8 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			dojo.forEach(this.series, purge);
 			df.forIn(this.axes, purge);
 			dojo.forEach(this.stack,  purge);
+			//if it's HTML title
+			dojo.destroy(this.chartTitle);
 			this.surface.clear();
 
 			// generate shapes
@@ -896,6 +914,22 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 						height: offsets.b + 2
 					}).setFill(fill);
 				}
+			}
+			//create title: Whether to make chart title as a widget which extends dojox.charting.Element?
+			if(this.title){
+				var forceHtmlLabels = (g.renderer == "canvas"),
+					labelType = forceHtmlLabels || !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
+					tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
+				this.chartTitle = dc.axis2d.common.createText[labelType](
+					this,
+					this.surface,
+					dim.width/2,
+					this.titlePos=="top" ? tsize + this.margins.t : dim.height - this.margins.b, 
+					"middle",
+					this.title,
+					this.titleFont,
+					this.titleFontColor
+				);
 			}
 			if(stroke){
 				this.surface.createRect({
