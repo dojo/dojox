@@ -33,6 +33,7 @@ dojo.require("dojox.charting.plot2d.Pie");
 dojo.require("dojox.charting.plot2d.Bubble");
 dojo.require("dojox.charting.plot2d.Candlesticks");
 dojo.require("dojox.charting.plot2d.OHLC");
+dojo.require("dojox.charting.plot2d.Spider");
 
 /*=====
 dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
