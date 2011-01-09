@@ -327,6 +327,22 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 						plots[name] = idx - 1;
 					}
 				});
+                // remove all related series
+                var ns = dojo.filter(this.series, function(run){ return run.plot != name; });
+                if(ns.length < this.series.length){
+                    // kill all removed series
+                    dojo.forEach(this.series, function(run){
+                        if(run.plot == name){
+                            run.destroy();
+                        }
+                    });
+                    // rebuild all necessary data structures
+                    this.runs = {};
+                    dojo.forEach(ns, function(run, index){
+                        this.runs[run.plot] = index;
+                    }, this);
+                    this.series = ns;
+                }
 				// mark the chart as dirty
 				this.dirty = true;
 			}
@@ -448,8 +464,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		A reference to the current chart for functional chaining.
 			if(name in this.runs){
 				// get the index and remove the name
-				var index = this.runs[name],
-					plotName = this.series[index].plot;
+				var index = this.runs[name];
 				delete this.runs[name];
 				// destroy the run
 				this.series[index].destroy();
