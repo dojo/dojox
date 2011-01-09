@@ -94,8 +94,8 @@ dojo.require("dojox.lang.utils");
 			//		The chart the axis belongs to.
 			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
-			this.opt = dojo.delegate(this.defaultParams, kwArgs);
-			// du.updateWithObject(this.opt, kwArgs);
+			this.opt = dojo.clone(this.defaultParams);
+            du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 		},
 		dependOnData: function(){
