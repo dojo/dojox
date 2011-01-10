@@ -12,7 +12,7 @@
         <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true">
         </script>
         <script type="text/javascript">
-            dojo.require("dojox.charting.Chart2D");
+            dojo.require("dojox.charting.Chart");
             dojo.require("dojox.charting.plot2d.Pie");
             dojo.require("dojox.charting.action2d.Highlight");
             dojo.require("dojox.charting.action2d.MoveSlice");
@@ -24,7 +24,7 @@
 			var legend = null;
             dojo.addOnLoad(function(){
                 var dc = dojox.charting;
-                pieChart = new dc.Chart2D("pieChart");
+                pieChart = new dc.Chart("pieChart");
                 pieChart.setTheme(dc.themes.Tom).addPlot("default", {
                     type: "Pie",
                     font: "normal normal 10pt Tahoma",

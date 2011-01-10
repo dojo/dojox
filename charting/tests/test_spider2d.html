@@ -42,13 +42,13 @@
 </style>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <script type="text/javascript">
-	dojo.require("dojox.charting.Chart2D");
+    dojo.require("dojox.charting.Chart");
+    dojo.require("dojox.charting.plot2d.Spider");
 	dojo.require("dojox.charting.themes.PlotKit.blue");
 	dojo.require("dijit.form.CheckBox");
 	dojo.require("dijit.form.RadioButton");
 	dojo.require("dijit.form.Form");
 	dojo.require("dojo.fx.easing");
-	dojo.require("dojox.fx.easing");
 	dojo.require("dojox.gfx.fx");
 	
 	var dc = dojox.charting,
@@ -73,7 +73,7 @@
 	
 	var chart1, legend1;
 	makeObjects = function(){
-		chart1 = new dojox.charting.Chart2D("test1");
+		chart1 = new dojox.charting.Chart("test1");
 		chart1.setTheme(dojox.charting.themes.PlotKit.blue);
 		chart1.addPlot("default", {
 			type: "Spider",
@@ -99,9 +99,6 @@
 		
 		// prepare and enable controls
         populateSelect("dojo.fx.easing", "easing");
-        if(dojox.fx.easing !== dojo.fx.easing){
-            populateSelect("dojox.fx.easing", "easing");
-        }
 	};
 	
 	dojo.addOnLoad(makeObjects);

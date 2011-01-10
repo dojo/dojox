@@ -28,19 +28,26 @@
 			}
         </style>
 
-        <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true">
-        </script>
-		<script type="text/javascript" src="../../../dojox/charting/widget/Legend.js"></script>
-		<script type="text/javascript" src="../../../dojox/charting/widget/SelectableLegend.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
         <script type="text/javascript">
-        	dojo.require("dojox.charting.Chart2D");
+            dojo.require("dijit.dijit");
+            dojo.require("dojox.charting.Chart");
+            dojo.require("dojox.charting.axis2d.Default");
+            dojo.require("dojox.charting.plot2d.Lines");
+            dojo.require("dojox.charting.plot2d.StackedAreas");
+            dojo.require("dojox.charting.plot2d.Bars");
+            dojo.require("dojox.charting.plot2d.ClusteredBars");
+            dojo.require("dojox.charting.plot2d.StackedBars");
+            dojo.require("dojox.charting.plot2d.Columns");
+            dojo.require("dojox.charting.plot2d.ClusteredColumns");
+            dojo.require("dojox.charting.plot2d.StackedColumns");
+            dojo.require("dojox.charting.plot2d.Bubble");
+            dojo.require("dojox.charting.plot2d.Pie");
 			dojo.require("dojox.charting.themes.MiamiNice");
-			dojo.require("dijit.dijit");
-			dojo.require("dojox.charting.widget.Legend");
 			dojo.require("dojox.charting.widget.SelectableLegend");
 			dojo.require("dojox.charting.action2d.Highlight");
         	dojo.addOnLoad(function(){
-				var bars = new dojox.charting.Chart2D("bars").
+				var bars = new dojox.charting.Chart("bars").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default",{type: "Bars",gap:2}).
 					addAxis("x",{natural: true, includeZero: true}).
@@ -49,7 +56,7 @@
 					render();
 				var barsLegend = new dojox.charting.widget.SelectableLegend({chart: bars},"barsLegend");
 				
-				var clusteredBars = new dojox.charting.Chart2D("clusteredBars").
+				var clusteredBars = new dojox.charting.Chart("clusteredBars").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default",{type:"ClusteredBars",gap:2}).
 					addAxis("x",{natural: true, includeZero: true}).
@@ -61,7 +68,7 @@
 					clusteredBars.render();
 				var clusteredBarsLegend = new dojox.charting.widget.SelectableLegend({chart: clusteredBars},"clusteredBarsLegend");
 				
-				var stackedBars = new dojox.charting.Chart2D("stackedBars").
+				var stackedBars = new dojox.charting.Chart("stackedBars").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default", {type:"StackedBars",gap:2}).
 					addAxis("x",{natual: true, includeZero: true, majorTickStep:1}).
@@ -72,7 +79,7 @@
 					render();
 				var stackedBarsLegend = new dojox.charting.widget.SelectableLegend({chart: stackedBars},"stackedBarsLegend");
 				
-				var stackedArea = new dojox.charting.Chart2D("stackedArea").
+				var stackedArea = new dojox.charting.Chart("stackedArea").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default", {type:"StackedAreas",tension:4}).
 					addAxis("y",{natural: true, includeZero: true, vertical:true}).
@@ -83,7 +90,7 @@
 					render();
 				var stackedAreaLegend = new dojox.charting.widget.SelectableLegend({chart: stackedArea},"stackedAreaLegend");
 				
-				var columns = new dojox.charting.Chart2D("columns").
+				var columns = new dojox.charting.Chart("columns").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default",{type: "Columns",gap:2}).
 					addAxis("y",{natural: true, includeZero: true, vertical:true}).
@@ -92,7 +99,7 @@
 					render();
 				var columnsLegend = new dojox.charting.widget.SelectableLegend({chart: columns},"columnsLegend");
 				
-				var clusteredColumns = new dojox.charting.Chart2D("clusteredColumns").
+				var clusteredColumns = new dojox.charting.Chart("clusteredColumns").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default",{type:"ClusteredColumns",gap:2}).
 					addAxis("y",{natural: true, includeZero: true, vertical:true}).
@@ -103,7 +110,7 @@
 					render();
 				var clusteredColumnsLegend = new dojox.charting.widget.SelectableLegend({chart: clusteredColumns},"clusteredColumnsLegend");
 				
-				var stackedColumns = new dojox.charting.Chart2D("stackedColumns").
+				var stackedColumns = new dojox.charting.Chart("stackedColumns").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default", {type:"StackedColumns",gap:2}).
 					addAxis("y",{natual: true, includeZero: true, majorTickStep:1, vertical: true}).
@@ -114,7 +121,7 @@
 					render();
 				var stackedColumnsLegend = new dojox.charting.widget.SelectableLegend({chart: stackedColumns},"stackedColumnsLegend");	
 				
-				var linesColumns = new dojox.charting.Chart2D("linesColumns").
+				var linesColumns = new dojox.charting.Chart("linesColumns").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("lines",{type: "Lines",markers:true}).
 					addPlot("default",{type: "Columns",gap:2}).
@@ -125,7 +132,7 @@
 					render();
 				var linesColumnsLegend = new dojox.charting.widget.SelectableLegend({chart: linesColumns},"linesColumnsLegend");
 				
-				var pie = new dojox.charting.Chart2D("pie").
+				var pie = new dojox.charting.Chart("pie").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default",{type:"Pie",radius:100,font: "normal normal 10pt Tahoma",htmlLabels:true,labelOffset:-20}).
 					addSeries("A",[{
@@ -157,7 +164,7 @@
 				var ainm = new dojox.charting.action2d.Highlight(pie,"default");
 				var pieLegend = new dojox.charting.widget.SelectableLegend({chart: pie,horizontal:false, outline: true},"pieLegend");
 				
-				var bubble = new dojox.charting.Chart2D("bubble").
+				var bubble = new dojox.charting.Chart("bubble").
 					setTheme(dojox.charting.themes.MiamiNice).
 					addPlot("default",{type:"Bubble"}).
 					addAxis("x",{natual:true, includeZero: true, max:7}).

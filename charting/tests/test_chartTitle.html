@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,7 +16,10 @@ The next line should include Microsoft's Silverligth.js, if you plan to use the 
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
 <script type="text/javascript">
 
-dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.Chart");
+dojo.require("dojox.charting.axis2d.Default");
+dojo.require("dojox.charting.plot2d.Lines");
+dojo.require("dojox.charting.plot2d.Columns");
 dojo.require("dojox.charting.themes.PlotKit.blue");
 dojo.require("dojox.charting.themes.PlotKit.cyan");
 dojo.require("dojox.charting.themes.PlotKit.green");
@@ -34,7 +37,7 @@ updateTitleGap = function(){
 }
 
 makeObjects = function(){
-	chart1 = new dojox.charting.Chart2D("test1", {title: "Production(ton)"}).
+	chart1 = new dojox.charting.Chart("test1", {title: "Production(ton)"}).
 			addAxis("x", {
 				includeZero: true, natural: true, fixLower: "major", fixUpper: "major",
 				labels: [
@@ -50,7 +53,7 @@ makeObjects = function(){
 			addSeries("Series B", [2, 8, 8, 8, 6], {stroke: {color: "green"}, fill: "lightgreen"}).
 			render();
 
-	var chart2 = new dojox.charting.Chart2D("test2", {
+	var chart2 = new dojox.charting.Chart("test2", {
 				title: "Production(Quantity)", 
 				titlePos: "bottom", 
 				titleGap: 25,

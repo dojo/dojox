@@ -1,11 +1,14 @@
 dojo.provide("dojox.charting.plot2d.Spider");
 
+dojo.experimental("dojox.charting.plot2d.Spider");
+
 dojo.require("dijit.Tooltip");
 
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d._PlotEvents");
 dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.plot2d.common");
+dojo.require("dojox.charting.scaler.primitive");
 dojo.require("dojox.charting.widget.Legend");
 
 dojo.require("dojox.lang.functional");
@@ -13,7 +16,6 @@ dojo.require("dojox.lang.utils");
 dojo.require("dojox.gfx");
 dojo.require("dojo.fx");
 dojo.require("dojo.fx.easing");
-dojo.require("dojox.fx.easing");
 dojo.require("dojox.gfx.fx");
 dojo.require("dojo.number");
 

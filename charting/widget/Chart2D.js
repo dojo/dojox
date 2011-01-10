@@ -1,7 +1,7 @@
 dojo.provide("dojox.charting.widget.Chart2D");
 
 dojo.require("dijit._Widget");
-dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.Chart");
 dojo.require("dojox.lang.functional");
 
 // require all actions to support references by name
@@ -46,7 +46,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 			
 			// build the chart
 			n.innerHTML = "";
-			var c = this.chart = new dc.Chart2D(n, {
+			var c = this.chart = new dc.Chart(n, {
 				margins: this.margins, 
 				stroke:  this.stroke,
 				fill:    this.fill
@@ -179,7 +179,7 @@ dojo.require("dojox.charting.action2d.Tooltip");
 		if(!name){ return null; }
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
-			if(dc.plot2d[type]){
+			if(dc.plot2d && dc.plot2d[type]){
 				type = dojox._scopeName + ".charting.plot2d." + type;
 			}
 			var plot = eval("(" + type + ")");
