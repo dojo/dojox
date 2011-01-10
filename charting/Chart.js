@@ -172,7 +172,10 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			dojo.forEach(this.series, destroy);
 			dojo.forEach(this.stack,  destroy);
 			df.forIn(this.axes, destroy);
-			dojo.destroy(this.chartTitle);
+            if(this.chartTitle && this.chartTitle.tagName){
+                // destroy title if it is a DOM node
+			    dojo.destroy(this.chartTitle);
+            }
 			this.surface.destroy();
 		},
 		getCoords: function(){
@@ -840,9 +843,12 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			dojo.forEach(this.series, purge);
 			df.forIn(this.axes, purge);
 			dojo.forEach(this.stack,  purge);
-			//if it's HTML title
-			dojo.destroy(this.chartTitle);
+            if(this.chartTitle && this.chartTitle.tagName){
+                // destroy title if it is a DOM node
+			    dojo.destroy(this.chartTitle);
+            }
 			this.surface.clear();
+            this.chartTitle = null;
 
 			// generate shapes
 
