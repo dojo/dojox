@@ -101,6 +101,9 @@ dojo.require("dijit.Editor");
 		_finish: function(inRowIndex){
 			this.inherited(arguments);
 			dojox.grid.util.removeNode(this.widget.domNode);
+			if(dojo.isIE){
+				dojo.setSelectable(this.widget.domNode, true);
+			}
 		}
 	});
 	dgc._Widget.markupFactory = function(node, cell){
