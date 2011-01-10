@@ -93,7 +93,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 	//		works like a charm:
 	//		BrowserMatch Safari nokeepalive
 	//
-	swfPath: dojo.config.uploaderPath || dojo.moduleUrl("dojox.form", "resources/uploader.swf"),
+	swfPath: dojo.config.uploaderPath || dojo.moduleUrl("dojox.form", "resources/fileuploader.swf"),
 
 
 	templateString:'<div><div dojoAttachPoint="progNode"><div dojoAttachPoint="progTextNode"></div></div><div dojoAttachPoint="insideNode" class="uploaderInsideNode"></div></div>',
@@ -372,13 +372,15 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		if(!node){ return null; }
 		var hidden = null;
 		var p = node.parentNode;
-		while(p.tagName.toLowerCase() != "body"){
+		console.log("start", p)
+		while(p && p.tagName.toLowerCase() != "body"){
 			var d = dojo.style(p, "display");
 			if(d == "none"){
 				hidden = p;
 				break;
 			}
-			p = p.parentNode
+			p = p.parentNode;
+			console.log("loop", p, d)
 		}
 		return hidden;
 	},
