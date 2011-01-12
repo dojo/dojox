@@ -12,6 +12,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		this.cell = null;
 		this.rowIndex = -1;
 		this._connects = [];
+		this._headerConnects = [];
 		this.headerMenu = this.grid.headerMenu;
 		this._connects.push(dojo.connect(this.grid.domNode, "onfocus", this, "doFocus"));
 		this._connects.push(dojo.connect(this.grid.domNode, "onblur", this, "doBlur"));
@@ -23,6 +24,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	destroy: function(){
 		dojo.forEach(this._connects, dojo.disconnect);
+		dojo.forEach(this._headerConnects, dojo.disconnect);
 		delete this.grid;
 		delete this.cell;
 	},
@@ -118,10 +120,12 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		}
 	},
 	_initColumnHeaders: function(){
+		dojo.forEach(this._headerConnects, dojo.disconnect);
+		this._headerConnects = [];
 		var headers = this._findHeaderCells();
 		for(var i = 0; i < headers.length; i++){
-			this._connects.push(dojo.connect(headers[i], "onfocus", this, "doColHeaderFocus"));
-			this._connects.push(dojo.connect(headers[i], "onblur", this, "doColHeaderBlur"));
+			this._headerConnects.push(dojo.connect(headers[i], "onfocus", this, "doColHeaderFocus"));
+			this._headerConnects.push(dojo.connect(headers[i], "onblur", this, "doColHeaderBlur"));
 		}
 	},
 	_findHeaderCells: function(){

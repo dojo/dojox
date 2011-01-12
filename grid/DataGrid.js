@@ -216,10 +216,8 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	_setStore: function(store){
-		if(this.store&&this._store_connects){
-			dojo.forEach(this._store_connects,function(arr){
-				dojo.forEach(arr, dojo.disconnect);
-			});
+		if(this.store && this._store_connects){
+			dojo.forEach(this._store_connects, this.disconnect, this);
 		}
 		this.store = store;
 
