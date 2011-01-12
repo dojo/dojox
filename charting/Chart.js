@@ -212,7 +212,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
             var axis, axisType = kwArgs && kwArgs.type || "Default";
             if(typeof axisType == "string"){
                 if(!dc.axis2d || !dc.axis2d[axisType]){
-                    throw Error("Can't find axis: " + axisType + " - didn't you forget to dojo.require() it?");
+                    throw Error("Can't find axis: " + axisType + " - didn't you forget to dojo" + ".require() it?");
                 }
                 axis = new dc.axis2d[axisType](this, kwArgs);
             }else{
@@ -267,7 +267,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			var plot, plotType = kwArgs && kwArgs.type || "Default";
             if(typeof plotType == "string"){
                 if(!dc.plot2d || !dc.plot2d[plotType]){
-                    throw Error("Can't find plot: " + plotType + " - didn't you forget to dojo.require() it?");
+                    throw Error("Can't find plot: " + plotType + " - didn't you forget to dojo" + ".require() it?");
                 }
                 plot = new dc.plot2d[plotType](this, kwArgs);
             }else{
@@ -738,7 +738,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			dojo.forEach(this.series, function(run){
 				if(!(run.plot in this.plots)){
                     if(!dc.plot2d || !dc.plot2d.Default){
-                        throw Error("Can't find plot: Default - didn't you forget to dojo.require() it?");
+                        throw Error("Can't find plot: Default - didn't you forget to dojo" + ".require() it?");
                     }
 					var plot = new dc.plot2d.Default(this, {});
 					plot.name = run.plot;
