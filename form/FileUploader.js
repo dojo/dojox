@@ -7,7 +7,7 @@ dojo.require("dijit._Templated");
 dojo.require("dojox.embed.flashVars");
 dojo.require("dijit._Contained");
 
-console.warn("DEPRECATED: dojox.form.FileUploader is no longer supported and will be removed in 2.0. Suggested that you use dojox.form.Uploader instead.");
+dojo.experimental("dojox.form.FileUploader");
 
 	//	Usage Notes:
 	//		To center text vertically, use vertical-align:middle;
