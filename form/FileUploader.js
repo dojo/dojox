@@ -350,7 +350,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		if(!node){ return null; }
 		var hidden = null;
 		var p = node.parentNode;
-		while(p.tagName.toLowerCase() != "body"){
+		while(p && p.tagName.toLowerCase() != "body"){
 			var d = dojo.style(p, "display");
 			if(d == "none"){
 				hidden = p;
@@ -694,7 +694,8 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			this.flashObject.destroy();
 			dojo.destroy(this.flashDiv);
 		}else{
-			dojo.destroy("dojoIoIframe");
+			// destroying iframe prevents multiple uses in Dialog
+			// dojo.destroy("dojoIoIframe");
 			dojo.destroy(this._fileInput);
 			dojo.destroy(this._formNode);
 		}
