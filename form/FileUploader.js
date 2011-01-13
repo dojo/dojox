@@ -102,10 +102,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 	//		changed to absolute.
 	uploadUrl: "",
 	//
-	//	button: dijit.form.Button or a domNode
-	// 		DEPRECATED: The "fake" button that when clicked, launches the upload dialog
-	// button:"",
-	//
 	//	isDebug: Boolean
 	//		If true, outputs traces from the SWF to console. What exactly gets passed
 	//		is very relative, and depends upon what traces have been left in the DEFT SWF.
@@ -397,10 +393,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			dojo.style(this._hiddenNode, "display", "block");
 		}
 
-
-		if(this.button){
-			console.warn("DEPRECATED: FileUploader.button - will be removed in 1.5. FileUploader should be created as widget.");
-		}
 		if(!refNode && this.button && this.button.domNode){
 			// backwards compat for a Dijit button
 			var isDijitButton = true;
