@@ -711,7 +711,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		//
 		if(display === true){
 			if(this.uploaderType == "flash"){
-				dojo.style(this.insideNode,"left", "-2500px");
+				dojo.style(this.insideNode,"top", "-2500px");
 			}else{
 				dojo.style(this.insideNode,"display", "none");
 			}
