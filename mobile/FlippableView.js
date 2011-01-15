@@ -26,6 +26,18 @@ dojo.declare(
 		this.containerNode.style.position = "absolute";
 	},
 
+	onTouchStart: function(e){
+		var nextView = this._nextView(this.domNode);
+		if(nextView){
+			nextView.stopAnimation();
+		}
+		var prevView = this._previousView(this.domNode);
+		if(prevView){
+			prevView.stopAnimation();
+		}
+		this.inherited(arguments);
+	},
+
 	_nextView: function(node){
 		for(var n = node.nextSibling; n; n = n.nextSibling){
 			if(n.nodeType == 1){ return dijit.byNode(n); }
