@@ -62,19 +62,9 @@ dojo.declare(
 			c = this.domNode.parentNode.childNodes[i];
 			this._checkFixedBar(c, false);
 		}
-		if(this.isLocalHeader !== false && dojox.mobile.hasTouch && !dojox.mobile._magic){
-			// KLUGE: for some reason, iPhone scrolls smoothly with this.
-			dojox.mobile._magic = dojo.create("DIV", {className:"magic"}, dojo.body(), "first");
-			dojo.style(dojox.mobile._magic, {
-				position: "absolute",
-				top: "-1px",
-				height: "1px",
-				width: "100%"
-			});
-		}
 	},
 
-	_checkFixedBar: function(/*DomNode*/node, /*Boolean*/isLocal){
+	_checkFixedBar: function(/*DomNode*/node){
 		if(node.nodeType == 1){
 			var fixed = node.getAttribute("fixed");
 			if(fixed){
@@ -87,14 +77,9 @@ dojo.declare(
 			if(fixed == "top"){
 				node.style.top = "0px";
 				this.fixedHeader = node;
-				this.isLocalHeader = isLocal;
 				return fixed;
 			}else if(fixed == "bottom"){
-				if(isLocal){
-					node.style.bottom = "0px";
-				}
 				this.fixedFooter = node;
-				this.isLocalFooter = isLocal;
 				return fixed;
 			}
 		}

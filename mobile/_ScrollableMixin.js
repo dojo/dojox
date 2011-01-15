@@ -15,9 +15,11 @@ dojo.declare(
 	null,
 {
 	fixedHeader: "",
-	
+	fixedFooter: "",
+
 	destroy: function(){
 		this.cleanup();
+		this.inherited(arguments);
 	},
 
 	startup: function(){
@@ -26,7 +28,12 @@ dojo.declare(
 			params.fixedHeaderHeight = dojo.byId(this.fixedHeader).offsetHeight;
 		}
 		if(this.fixedFooter){
-			params.fixedFooterHeight = dojo.byId(this.fixedFooter).offsetHeight;
+			var node = dojo.byId(this.fixedFooter);
+			if(node.parentNode == this.domNode){ // local footer
+				this.isLocalFooter = true;
+				node.style.bottom = "0px";
+			}
+			params.fixedFooterHeight = node.offsetHeight;
 		}
 		this.init(params);
 		this.inherited(arguments);

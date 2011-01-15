@@ -114,7 +114,7 @@ dojox.mobile.scrollable = function(){
 			return false;
 		};
 		dojo.style = function(node, style){
-			for(s in style){
+			for(var s in style){
 				if(style.hasOwnProperty(s)){
 					node.style[s] = style[s];
 					if(s == "opacity" && typeof(node.style.filter) != "undefined"){
@@ -122,6 +122,17 @@ dojox.mobile.scrollable = function(){
 					}
 				}
 			}
+		};
+		dojo.hasClass = function(node, s){
+			return (node.className.indexOf(s) != -1);
+		};
+		dojo.addClass = function(node, s){
+			if(!dojo.hasClass(node, s)){
+				node.className += " " + s;
+			}
+		};
+		dojo.removeClass = function(node, s){
+			node.className = node.className.replace(" " + s, "");
 		};
 	}
 //>>excludeEnd("dojo");
@@ -139,6 +150,9 @@ dojox.mobile.scrollable = function(){
 		this._h = (this.scrollDir.indexOf("h") != -1); // horizontal scrolling
 		this._f = (this.scrollDir == "f"); // flipping views
 
+		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
+			this.fixedFooterHeight : 0;
+
 		this._ch = []; // connect handlers
 		this._ch.push(dojo.connect(this.containerNode,
 			dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchStart"));
@@ -147,9 +161,6 @@ dojox.mobile.scrollable = function(){
 			this._ch.push(dojo.connect(this.containerNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 		}
 		this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
-		if(this.isLocalFooter){
-			this.containerNode.style.paddingBottom = this.fixedFooterHeight + "px";
-		}
 
 		if(dojo.global.onorientationchange !== undefined){
 			this._ch.push(dojo.connect(dojo.global, "onorientationchange", this, "resizeView"));
@@ -173,11 +184,11 @@ dojox.mobile.scrollable = function(){
 	this.resizeView = function(e){
 		// has to wait a little for completion of hideAddressBar()
 		var c = 0;
-		var h = this.isLocalFooter ? 0 : this.fixedFooterHeight;
 		var _this = this;
 		var id = setInterval(function() {
 			// adjust the height of this view a couple of times
-			_this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - h + "px";
+			_this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - _this._appFooterHeight + "px";
+			_this.resetScrollBar();
 			if(c++ >= 4) { clearInterval(id); }
 		}, 300);
 	};
@@ -190,7 +201,7 @@ dojox.mobile.scrollable = function(){
 		if(e && e.srcElement){
 			dojo.stopEvent(e);
 		}
-		this.containerNode.className = this.containerNode.className.replace(/\s*mblScrollableScrollTo/, "");
+		this.stopAnimation();
 		if(this._bounce){
 			var _this = this;
 			var bounce = _this._bounce;
@@ -199,19 +210,24 @@ dojox.mobile.scrollable = function(){
 			}, 0);
 			_this._bounce = undefined;
 		}else{
-			this.stopScrollBar();
+			this.hideScrollBar();
 			this.removeCover();
 		}
 	};
 
 	this.onTouchStart = function(e){
-		if(this.containerNode.className.indexOf("mblScrollableScrollTo") != -1){
-			// stop the currently running animation
-			this.scrollTo(this.getPos());
-			this.containerNode.className = this.containerNode.className.replace(/\s*mblScrollableScrollTo/, "");
-			this._aborted = true;
-		}else{
-			this._aborted = false;
+		if(this._conn && (new Date()).getTime() - this.startTime < 500){
+			return; // ignore successive onTouchStart calls
+		}
+		if(!this._conn){
+			this._conn = [];
+			this._conn.push(dojo.connect(dojo.doc, dojox.mobile.hasTouch ? "touchmove" : "onmousemove", this, "onTouchMove"));
+			this._conn.push(dojo.connect(dojo.doc, dojox.mobile.hasTouch ? "touchend" : "onmouseup", this, "onTouchEnd"));
+		}
+
+		this._aborted = false;
+		if(dojo.hasClass(this.containerNode, "mblScrollableScrollTo2")){
+			this.abort();
 		}
 		this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 		this.touchStartY = e.touches ? e.touches[0].pageY : e.clientY;
@@ -221,10 +237,6 @@ dojox.mobile.scrollable = function(){
 		this._time = [0];
 		this._posX = [this.touchStartX];
 		this._posY = [this.touchStartY];
-
-		this._conn = [];
-		this._conn.push(dojo.connect(dojo.doc, dojox.mobile.hasTouch ? "touchmove" : "onmousemove", this, "onTouchMove"));
-		this._conn.push(dojo.connect(dojo.doc, dojox.mobile.hasTouch ? "touchend" : "onmouseup", this, "onTouchEnd"));
 
 		if(e.target.nodeType != 1 || (e.target.tagName != "SELECT" && e.target.tagName != "INPUT")){
 			dojo.stopEvent(e);
@@ -239,16 +251,17 @@ dojox.mobile.scrollable = function(){
 		var to = {x:this.startPos.x + dx, y:this.startPos.y + dy};
 		var dim = this._dim;
 
-		this.addCover();
-		this.showScrollBar();
-		this.updateScrollBar(to);
+		if(this._time.length == 1){ // the first TouchMove after TouchStart
+			this.addCover();
+			this.showScrollBar();
+		}
 
 		var weight = this.weight;
 		if(this._v){
 			if(to.y > 0){ // content is below the screen area
 				to.y = Math.round(to.y * weight);
 			}else if(to.y < -dim.o.h){ // content is above the screen area
-				if(dim.c.h < dim.v.h){ // content is shorter than view
+				if(dim.c.h < dim.d.h){ // content is shorter than display
 					to.y = Math.round(to.y * weight);
 				}else{
 					to.y = -dim.o.h - Math.round((-dim.o.h - to.y) * weight);
@@ -259,7 +272,7 @@ dojox.mobile.scrollable = function(){
 			if(to.x > 0){
 				to.x = Math.round(to.x * weight);
 			}else if(to.x < -dim.o.w){
-				if(dim.c.w < dim.v.w){
+				if(dim.c.w < dim.d.w){
 					to.x = Math.round(to.x * weight);
 				}else{
 					to.x = -dim.o.w - Math.round((-dim.o.w - to.x) * weight);
@@ -269,22 +282,44 @@ dojox.mobile.scrollable = function(){
 		this.scrollTo(to);
 
 		var max = 10;
-		if(this._time.length == max){ this._time.shift(); }
+		var n = this._time.length; // # of samples
+		if(n >= 2){
+			// Check the direction of the finger move.
+			// If the direction has been changed, discard the old data.
+			var d0, d1;
+			if(this._v && !this._h){
+				d0 = this._posY[n - 1] - this._posY[n - 2];
+				d1 = y - this._posY[n - 1];
+			}else if(!this._v && this._h){
+				d0 = this._posX[n - 1] - this._posX[n - 2];
+				d1 = x - this._posX[n - 1];
+			}
+			if(d0 * d1 < 0){ // direction changed
+				// leave only the latest data
+				this._time = [this._time[n - 1]];
+				this._posX = [this._posX[n - 1]];
+				this._posY = [this._posY[n - 1]];
+				n = 1;
+			}
+		}
+		if(n == max){
+			this._time.shift();
+			this._posX.shift();
+			this._posY.shift();
+		}
 		this._time.push((new Date()).getTime() - this.startTime);
-
-		if(this._posX.length == max){ this._posX.shift(); }
 		this._posX.push(x);
-
-		if(this._posY.length == max){ this._posY.shift(); }
 		this._posY.push(y);
 	};
 
 	this.onTouchEnd = function(e){
+		if(!this._conn){ return; } // if we get onTouchEnd without onTouchStart, ignore it.
 		for(var i = 0; i < this._conn.length; i++){
 			dojo.disconnect(this._conn[i]);
 		}
+		this._conn = null;
 
-		var n = !this._time ? 0 : this._time.length; // # of samples
+		var n = this._time.length; // # of samples
 		var clicked = false;
 		if(!this._aborted){
 			if(n <= 1){
@@ -294,7 +329,7 @@ dojox.mobile.scrollable = function(){
 			}
 		}
 		if(clicked){ // clicked, not dragged or flicked
-			this.stopScrollBar();
+			this.hideScrollBar();
 			this.removeCover();
 			if(dojox.mobile.hasTouch){
 				var elem = e.target;
@@ -308,12 +343,11 @@ dojox.mobile.scrollable = function(){
 			return;
 		}
 		var speed = {x:0, y:0};
-		if(n < 2 || (new Date()).getTime() - this.startTime - this._time[n - 1] > 500){
-			// holding the mouse or finger more than 0.5 sec, do not move.
-		}else{
-			var dy = this._posY[n - (n > 2 ? 2 : 1)] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
-			var dx = this._posX[n - (n > 2 ? 2 : 1)] - this._posX[(n - 6) >= 0 ? n - 6 : 0];
-			var dt = this._time[n - (n > 2 ? 2 : 1)] - this._time[(n - 6) >= 0 ? n - 6 : 0];
+		// if the user holds the mouse or finger more than 0.5 sec, do not move.
+		if(n >= 2 && (new Date()).getTime() - this.startTime - this._time[n - 1] < 500){
+			var dy = this._posY[n - (n > 3 ? 2 : 1)] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
+			var dx = this._posX[n - (n > 3 ? 2 : 1)] - this._posX[(n - 6) >= 0 ? n - 6 : 0];
+			var dt = this._time[n - (n > 3 ? 2 : 1)] - this._time[(n - 6) >= 0 ? n - 6 : 0];
 			speed.y = this.calcSpeed(dy, dt);
 			speed.x = this.calcSpeed(dx, dt);
 		}
@@ -329,13 +363,13 @@ dojox.mobile.scrollable = function(){
 			to.x = pos.x + speed.x;
 		}
 
-		if(this.scrollDir == "v" && dim.c.h <= dim.v.h){ // content is shorter than view
+		if(this.scrollDir == "v" && dim.c.h <= dim.d.h){ // content is shorter than display
 			this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
 			return;
-		}else if(this.scrollDir == "h" && dim.c.w <= dim.v.w){ // content is narrower than view
+		}else if(this.scrollDir == "h" && dim.c.w <= dim.d.w){ // content is narrower than display
 			this.slideTo({x:0}, 0.3, "ease-out"); // go back to the left
 			return;
-		}else if(this._v && this._h && dim.c.h <= dim.v.h && dim.c.w <= dim.v.w){
+		}else if(this._v && this._h && dim.c.h <= dim.d.h && dim.c.w <= dim.d.w){
 			this.slideTo({x:0, y:0}, 0.3, "ease-out"); // go back to the top-left
 			return;
 		}
@@ -355,7 +389,7 @@ dojox.mobile.scrollable = function(){
 			}else if(-speed.y > dim.o.h - (-pos.y)){ // going up. bounce back to the bottom.
 				if(pos.y < -dim.o.h){ // started from above the screen top. return quickly.
 					duration = 0.3;
-					to.y = dim.c.h <= dim.v.h ? 0 : -dim.o.h; // if shorter, move to 0
+					to.y = dim.c.h <= dim.d.h ? 0 : -dim.o.h; // if shorter, move to 0
 				}else{
 					to.y = Math.max(to.y, -dim.o.h - 20);
 					easing = "linear";
@@ -376,7 +410,7 @@ dojox.mobile.scrollable = function(){
 			}else if(-speed.x > dim.o.w - (-pos.x)){ // going left. bounce back to the right.
 				if(pos.x < -dim.o.w){ // started from left of the screen top. return quickly.
 					duration = 0.3;
-					to.x = dim.c.w <= dim.v.w ? 0 : -dim.o.w; // if narrower, move to 0
+					to.x = dim.c.w <= dim.d.w ? 0 : -dim.o.w; // if narrower, move to 0
 				}else{
 					to.x = Math.max(to.x, -dim.o.w - 20);
 					easing = "linear";
@@ -401,61 +435,49 @@ dojox.mobile.scrollable = function(){
 			duration = velocity !== 0 ? Math.abs(distance / velocity) : 0.01; // time = distance / velocity
 		}
 		this.slideTo(to, duration, easing);
-		this.startScrollBar();
+	};
+
+	this.abort = function(){
+		this.scrollTo(this.getPos());
+		this.stopAnimation();
+		this._aborted = true;
+	};
+
+	this.stopAnimation = function(){
+		// stop the currently running animation
+		dojo.removeClass(this.containerNode, "mblScrollableScrollTo2");
+		if(this._scrollBarV){
+			this._scrollBarV.className = "";
+		}
+		if(this._scrollBarH){
+			this._scrollBarH.className = "";
+		}
 	};
 
 	this.calcSpeed = function(/*Number*/d, /*Number*/t){
 		return Math.round(d / t * 100) * 4;
 	};
 
-	this.scrollTo = function(/*Object*/to){ // to: {x, y}
+	this.scrollTo = function(/*Object*/to, /*?Boolean*/doNotMoveScrollBar){ // to: {x, y}
+		var s = this.containerNode.style;
 		if(dojo.isWebKit){
-			this.containerNode.style.webkitTransform = this.makeTranslateStr(to);
+			s.webkitTransform = this.makeTranslateStr(to);
 		}else{
 			if(this._v){
-				this.containerNode.style.top = to.y + "px";
+				s.top = to.y + "px";
 			}
 			if(this._h || this._f){
-				this.containerNode.style.left = to.x + "px";
+				s.left = to.x + "px";
 			}
+		}
+		if(!doNotMoveScrollBar){
+			this.scrollScrollBarTo(this.calcScrollBarPos(to));
 		}
 	};
 
 	this.slideTo = function(/*Object*/to, /*Number*/duration, /*String*/easing){
-		if(dojo.isWebKit){
-			this.setKeyframes(this.getPos(), to);
-			this.containerNode.style.webkitAnimationDuration = duration + "s";
-			this.containerNode.style.webkitAnimationTimingFunction = easing;
-			this.containerNode.className += " mblScrollableScrollTo";
-			this.scrollTo(to);
-//>>excludeStart("webkitMobile", kwArgs.webkitMobile);
-		}else if(dojo.fx && dojo.fx.easing){
-			// If you want to support non-webkit browsers,
-			// your application needs to load necessary modules as follows:
-			//
-			// | dojo.require("dojo.fx");
-			// | dojo.require("dojo.fx.easing");
-			//
-			// This module itself does not make dependency on them.
-			var s = dojo.fx.slideTo({
-				node: this.containerNode,
-				duration: duration*1000,
-				left: to.x,
-				top: to.y,
-				easing: (easing == "ease-out") ? dojo.fx.easing.quadOut : dojo.fx.easing.linear
-			}).play();
-			dojo.connect(s, "onEnd", this, "onFlickAnimationEnd");
-		}else{
-			// directly jump to the destination without animation
-			if(typeof to.x == "number"){
-				this.containerNode.style.left = to.x + "px";
-			}
-			if(typeof to.y == "number"){
-				this.containerNode.style.top = to.y + "px";
-			}
-			this.onFlickAnimationEnd();
-//>>excludeEnd("webkitMobile");
-		}
+		this._runSlideAnimation(this.getPos(), to, duration, easing, this.containerNode, 2);
+		this.slideScrollBarTo(to, duration, easing);
 	};
 
 	this.makeTranslateStr = function(to){
@@ -483,16 +505,16 @@ dojox.mobile.scrollable = function(){
 	this.getDim = function(){
 		var d = {};
 		// content width/height
-		d.c = {h:this.containerNode.offsetHeight, w:this.containerNode.offsetWidth};
+		d.c = {h:this.containerNode.offsetHeight - this.fixedHeaderHeight, w:this.containerNode.offsetWidth};
 
 		// view width/height
-		d.v = {h:this.domNode.offsetHeight, w:this.domNode.offsetWidth};
+		d.v = {h:this.domNode.offsetHeight + this._appFooterHeight, w:this.domNode.offsetWidth};
 
 		// display width/height
-		d.d = {h:d.v.h - this.fixedHeaderHeight - (this.isLocalFooter?this.fixedFooterHeight:0), w:d.v.w};
+		d.d = {h:d.v.h - this.fixedHeaderHeight - this.fixedFooterHeight, w:d.v.w};
 
 		// overflowed width/height
-		d.o = {h:d.c.h - d.v.h, w:d.c.w - d.v.w};
+		d.o = {h:d.c.h - d.v.h + this.fixedHeaderHeight + this.fixedFooterHeight, w:d.c.w - d.v.w};
 		return d;
 	};
 
@@ -500,48 +522,49 @@ dojox.mobile.scrollable = function(){
 		if(!this.scrollBar){ return; }
 
 		var dim = this._dim;
-		if(this.scrollDir == "v" && dim.c.h <= dim.v.h){ return; }
-		if(this.scrollDir == "h" && dim.c.w <= dim.v.w){ return; }
-		if(this._v && this._h && dim.c.h <= dim.v.h && dim.c.w <= dim.v.w){ return; }
+		if(this.scrollDir == "v" && dim.c.h <= dim.d.h){ return; }
+		if(this.scrollDir == "h" && dim.c.w <= dim.d.w){ return; }
+		if(this._v && this._h && dim.c.h <= dim.d.h && dim.c.w <= dim.d.w){ return; }
 
-		var styles = {
-			opacity: 0.6,
-			position: "absolute",
-			backgroundColor: "#606060",
-			fontSize: "1px",
-			webkitBorderRadius: "2px",
-			mozBorderRadius: "2px",
-			webkitTransformOrigin: "0 0",
-			zIndex: 2147483647 // max of signed 32-bit integer
+		var createBar = function(self, dir){
+			var bar = self["_scrollBarNode" + dir];
+			if(!bar){
+				var wrapper = dojo.create("div", null, self.domNode);
+				var props = { position: "absolute", overflow: "hidden" };
+				if(dir == "V"){
+					props.right = "2px";
+					props.width = "5px";
+				}else{
+					props.bottom = (self.isLocalFooter ? self.fixedFooterHeight : 0) + 2 + "px";
+					props.height = "5px";
+				}
+				dojo.style(wrapper, props);
+				wrapper.className = "mblScrollBarWrapper";
+				self["_scrollBarWrapper"+dir] = wrapper;
+
+				bar = dojo.create("div", null, wrapper);
+				dojo.style(bar, {
+					opacity: 0.6,
+					position: "absolute",
+					backgroundColor: "#606060",
+					fontSize: "1px",
+					webkitBorderRadius: "2px",
+					MozBorderRadius: "2px",
+					webkitTransformOrigin: "0 0",
+					zIndex: 2147483647 // max of signed 32-bit integer
+				});
+				dojo.style(bar, dir == "V" ? {width: "5px"} : {height: "5px"});
+				self["_scrollBarNode" + dir] = bar;
+			}
+			return bar;
 		};
 		if(this._v && !this._scrollBarV){
-			if(!this._scrollBarNodeV){
-				this._scrollBarNodeV = dojo.create("div", null, this.domNode);
-				dojo.style(this._scrollBarNodeV, styles);
-				dojo.style(this._scrollBarNodeV, {
-					top: "0px",
-					right: "2px",
-					width: "5px"
-				});
-			}
-			this._scrollBarV = this._scrollBarNodeV;
-			this._scrollBarV.className = "";
-			dojo.style(this._scrollBarV, {"opacity": 0.6});
+			this._scrollBarV = createBar(this, "V");
 		}
 		if(this._h && !this._scrollBarH){
-			if(!this._scrollBarNodeH){
-				this._scrollBarNodeH = dojo.create("div", null, this.domNode);
-				dojo.style(this._scrollBarNodeH, styles);
-				dojo.style(this._scrollBarNodeH, {
-					left: "0px",
-					bottom: (this.isLocalFooter ? this.fixedFooterHeight : 0) + 2 + "px",
-					height: "5px"
-				});
-			}
-			this._scrollBarH = this._scrollBarNodeH;
-			this._scrollBarH.className = "";
-			dojo.style(this._scrollBarH, {"opacity": 0.6});
+			this._scrollBarH = createBar(this, "H");
 		}
+		this.resetScrollBar();
 	};
 
 	this.hideScrollBar = function(){
@@ -562,84 +585,172 @@ dojox.mobile.scrollable = function(){
 			fadeRule = dojox.mobile._fadeRule;
 		}
 		if(!this.scrollBar){ return; }
+		var f = function(bar){
+			dojo.style(bar, {
+				opacity: 0,
+				webkitAnimationDuration: ""
+			});
+			bar.className = "mblScrollableFadeOutScrollBar";
+		};
 		if(this._scrollBarV){
-			dojo.style(this._scrollBarV, {"opacity": 0});
-			this._scrollBarV.className = "mblScrollableFadeOutScrollBar";
+			f(this._scrollBarV);
 			this._scrollBarV = null;
 		}
 		if(this._scrollBarH){
-			dojo.style(this._scrollBarH, {"opacity": 0});
-			this._scrollBarH.className = "mblScrollableFadeOutScrollBar";
+			f(this._scrollBarH);
 			this._scrollBarH = null;
 		}
 	};
 
-	this.startScrollBar = function(){
-		if(!this.scrollBar){ return; }
-		if(!this._scrollBarV && !this._scrollBarH){ return; }
-		if(!this._scrollTimer){
-			var _this = this;
-			this._scrollTimer = setInterval(function(){
-				_this.updateScrollBar(_this.getPos());
-			}, 20);
-		}
-	};
-
-	this.stopScrollBar = function(){
-		if(!this.scrollBar){ return; }
-		if(!this._scrollBarV && !this._scrollBarH){ return; }
-		this.hideScrollBar();
-		clearInterval(this._scrollTimer);
-		this._scrollTimer = null;
-	};
-
-	this.updateScrollBar = function(/*Object*/to){
-		if(!this.scrollBar){ return; }
-		if(!this._scrollBarV && !this._scrollBarH){ return; }
+	this.calcScrollBarPos = function(/*Object*/to){ // to: {x, y}
+		var pos = {};
 		var dim = this._dim;
-		if(this._v){
-			var ch = dim.c.h - this.fixedHeaderHeight;
-			var height = Math.round(dim.d.h*dim.d.h/ch); // scroll bar height
-			var top = Math.round((dim.d.h-height)/(dim.d.h-ch)*to.y); // scroll bar top
-			if(top < 0){ // below the screen area
-				height += top;
-				top = 0;
-			}else if(top + height > dim.d.h){ // above the screen area
-				height -= top + height - dim.d.h;
+		var f = function(wrapperH, barH, t, d, c){
+			var y = Math.round((d - barH - 8) / (d - c) * t);
+			if(y < -barH + 5){
+				y = -barH + 5;
 			}
-			var t = top + this.fixedHeaderHeight + 4; // +4 is for top margin
-			var h = Math.max(height - 8, 5); // -8 is for top/bottom margin
-			if(h != this._scrollBarV._h){
-				this._scrollBarV.style.height = h + "px";
-				this._scrollBarV._h = h;
+			if(y > wrapperH - 5){
+				y = wrapperH - 5;
 			}
+			return y;
+		};
+		if(typeof to.y == "number" && this._scrollBarV){
+			pos.y = f(this._scrollBarWrapperV.offsetHeight, this._scrollBarV.offsetHeight, to.y, dim.d.h, dim.c.h);
+		}
+		if(typeof to.x == "number" && this._scrollBarH){
+			pos.x = f(this._scrollBarWrapperH.offsetWidth, this._scrollBarH.offsetWidth, to.x, dim.d.w, dim.c.w);
+		}
+		return pos;
+	};
+
+	this.scrollScrollBarTo = function(/*Object*/to){ // to: {x, y}
+		if(!this.scrollBar){ return; }
+		if(this._v && this._scrollBarV && typeof to.y == "number"){
 			if(dojo.isWebKit){
-				this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:t});
+				this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
 			}else{
-				this._scrollBarV.style.top = t + "px";
+				this._scrollBarV.style.top = to.y + "px";
 			}
 		}
-		if(this._h){
-			var cw = dim.c.w;
-			var width = Math.round(dim.d.w*dim.d.w/cw);
-			var left = Math.round((dim.d.w-width)/(dim.d.w-cw)*to.x);
-			if(left < 0){ // left of the screen area
-				width += left;
-				left = 0;
-			}else if(left + width > dim.d.w){ // right of the screen area
-				width -= left + width - dim.d.w;
-			}
-			var l = left + 4; // +4 is for left margin
-			var w = Math.max(width - 8, 5); // -8 is for left/right margin
-			if(w != this._scrollBarH._w){
-				this._scrollBarH.style.width = w + "px";
-				this._scrollBarH._w = w;
-			}
+		if(this._h && this._scrollBarH && typeof to.x == "number"){
 			if(dojo.isWebKit){
-				this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:l});
+				this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
 			}else{
-				this._scrollBarH.style.left = l + "px";
+				this._scrollBarH.style.left = to.x + "px";
 			}
+		}
+	};
+
+	this.slideScrollBarTo = function(/*Object*/to, /*Number*/duration, /*String*/easing){
+		if(!this.scrollBar){ return; }
+		var fromPos = this.calcScrollBarPos(this.getPos());
+		var toPos = this.calcScrollBarPos(to);
+		if(this._v && this._scrollBarV){
+			this._runSlideAnimation({y:fromPos.y}, {y:toPos.y}, duration, easing, this._scrollBarV, 0);
+		}
+		if(this._h && this._scrollBarH){
+			this._runSlideAnimation({x:fromPos.x}, {x:toPos.x}, duration, easing, this._scrollBarH, 1);
+		}
+	};
+
+	this._runSlideAnimation = function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, node, idx){
+		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
+		if(dojo.isWebKit){
+			this.setKeyframes(from, to, idx);
+			dojo.style(node, {
+				webkitAnimationDuration: duration + "s",
+				webkitAnimationTimingFunction: easing
+			});
+			dojo.addClass(node, "mblScrollableScrollTo"+idx);
+			if(idx == 2){
+				this.scrollTo(to, true);
+			}else{
+				this.scrollScrollBarTo(to);
+			}
+//>>excludeStart("webkitMobile", kwArgs.webkitMobile);
+		}else if(dojo.fx && dojo.fx.easing){
+			// If you want to support non-webkit browsers,
+			// your application needs to load necessary modules as follows:
+			//
+			// | dojo.require("dojo.fx");
+			// | dojo.require("dojo.fx.easing");
+			//
+			// This module itself does not make dependency on them.
+			var s = dojo.fx.slideTo({
+				node: node,
+				duration: duration*1000,
+				left: to.x,
+				top: to.y,
+				easing: (easing == "ease-out") ? dojo.fx.easing.quadOut : dojo.fx.easing.linear
+			}).play();
+			if(idx == 2){
+				dojo.connect(s, "onEnd", this, "onFlickAnimationEnd");
+			}
+		}else{
+			// directly jump to the destination without animation
+			if(idx == 2){
+				this.scrollTo(to);
+				this.onFlickAnimationEnd();
+			}else{
+				this.scrollScrollBarTo(to);
+			}
+//>>excludeEnd("webkitMobile");
+		}
+	};
+
+	this.resetScrollBar = function(){
+		//	summary:
+		//		Resets the scroll bar length, position, etc.
+		var f = function(wrapper, bar, d, c, hd, v){
+			if(!bar){ return; }
+			var props = {};
+			props[v ? "top" : "left"] = hd + 4 + "px"; // +4 is for top or left margin
+			props[v ? "height" : "width"] = d - 8 + "px";
+			dojo.style(wrapper, props);
+			var l = Math.round(d * d / c); // scroll bar length
+			l = Math.min(Math.max(l - 8, 5), d - 8); // -8 is for margin for both ends
+			bar.style[v ? "height" : "width"] = l + "px";
+			dojo.style(bar, {"opacity": 0.6});
+		};
+		var dim = this.getDim();
+		f(this._scrollBarWrapperV, this._scrollBarV, dim.d.h, dim.c.h, this.fixedHeaderHeight, true);
+		f(this._scrollBarWrapperH, this._scrollBarH, dim.d.w, dim.c.w, 0);
+		this.createMask();
+	};
+
+	this.createMask = function(){
+		//	summary:
+		//		Creates a mask for a scroll bar edge.
+		// description:
+		//		This function creates a mask that hides corners of one scroll
+		//		bar edge to make it round edge. The other side of the edge is
+		//		always visible and round shaped with the border-radius style.
+		if(!dojo.isWebKit){ return; }
+		var ctx;
+		if(this._scrollBarWrapperV){
+			var h = this._scrollBarWrapperV.offsetHeight;
+			ctx = dojo.doc.getCSSCanvasContext("2d", "scrollBarMaskV", 5, h);
+			ctx.fillStyle = "rgba(0,0,0,0.5)";
+			ctx.fillRect(1, 0, 3, 2);
+			ctx.fillRect(0, 1, 5, 1);
+			ctx.fillRect(0, h - 2, 5, 1);
+			ctx.fillRect(1, h - 1, 3, 2);
+			ctx.fillStyle = "rgb(0,0,0)";
+			ctx.fillRect(0, 2, 5, h - 4);
+			this._scrollBarWrapperV.style.webkitMaskImage = "-webkit-canvas(scrollBarMaskV)";
+		}
+		if(this._scrollBarWrapperH){
+			var w = this._scrollBarWrapperH.offsetWidth;
+			ctx = dojo.doc.getCSSCanvasContext("2d", "scrollBarMaskH", w, 5);
+			ctx.fillStyle = "rgba(0,0,0,0.5)";
+			ctx.fillRect(0, 1, 2, 3);
+			ctx.fillRect(1, 0, 1, 5);
+			ctx.fillRect(w - 2, 0, 1, 5);
+			ctx.fillRect(w - 1, 1, 2, 3);
+			ctx.fillStyle = "rgb(0,0,0)";
+			ctx.fillRect(2, 0, w - 4, 5);
+			this._scrollBarWrapperH.style.webkitMaskImage = "-webkit-canvas(scrollBarMaskH)";
 		}
 	};
 
@@ -648,11 +759,10 @@ dojox.mobile.scrollable = function(){
 		this._dim = this.getDim();
 		if(this._dim.d.h <= 0){ return; } // dom is not ready
 		this.showScrollBar();
-		this.updateScrollBar(this.getPos());
 		var _this = this;
 		setTimeout(function(){
 			_this.hideScrollBar();
-		}, 0);
+		}, 300);
 	};
 
 	this.addCover = function(){
@@ -698,15 +808,19 @@ dojox.mobile.scrollable = function(){
 		this.setSelectable(this.domNode, true);
 	};
 
-	this.setKeyframes = function(/*Object*/from, /*Object*/to){
+	this.setKeyframes = function(/*Object*/from, /*Object*/to, /*Number*/idx){
 		if(!dojox.mobile._rule){
+			dojox.mobile._rule = [];
+		}
+		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
+		if(!dojox.mobile._rule[idx]){
             var node = dojo.create("style", null, dojo.doc.getElementsByTagName("head")[0]);
             node.textContent =
-				".mblScrollableScrollTo{-webkit-animation-name: scrollableViewScroll;}"+
-				"@-webkit-keyframes scrollableViewScroll{}";
-			dojox.mobile._rule = node.sheet.cssRules[1];
+				".mblScrollableScrollTo"+idx+"{-webkit-animation-name: scrollableViewScroll"+idx+";}"+
+				"@-webkit-keyframes scrollableViewScroll"+idx+"{}";
+			dojox.mobile._rule[idx] = node.sheet.cssRules[1];
 		}
-		var rule = dojox.mobile._rule;
+		var rule = dojox.mobile._rule[idx];
 		if(rule){
 			if(from){
 				rule.deleteRule("from"); 
