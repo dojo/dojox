@@ -23,7 +23,6 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 		// summary:
 		//		See: dojox.form.Uploader.upload
 		//
-		console.log("UploaderIFrame.upload...", this.force)
 		if(!this.supports("multiple") || this.force =="iframe"){
 			this.uploadIFrame(data);
 			dojo.stopEvent(data);
@@ -48,7 +47,6 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 				console.error("HTML Upload Error:" + err.message);
 			}),
 			load: dojo.hitch(this, function(data, ioArgs, widgetRef){
-				console.info("upload complete", data);
 				this.onComplete(data);
 			})
 		});

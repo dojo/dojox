@@ -10,6 +10,8 @@ dojo.require("dijit.form.Button");
 	//		Doc and or test what can be extended.
 	//		Doc custom file events
 	//		Use new FileReader() for thumbnails
+	//		flashFieldName should default to Flash
+	//		get('value'); and set warning
 	//
 
 dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
@@ -94,13 +96,11 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	 *	   Public Events	 *
 	 *************************/
 
-	onChange: function(/* Array */dataArray){
+	onChange: function(/* Array */fileArray){
 		//	summary:
 		// 		stub to connect
 		// 		Fires when files are selected
 		// 		Event is an array of last files selected
-		console.log("onChange:", dataArray)
-
 	},
 
 	onBegin: function(/* Array */dataArray){
@@ -122,7 +122,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		//			Type of event (progress or load)
 		//		timeStamp: Number
 		//			Timestamp of when event occurred
-		//console.log("progress:", customEvent)
 	},
 
 	onComplete: function(/* Object */customEvent){
@@ -130,7 +129,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		// 		stub to connect
 		// 		Fires when all files have uploaded
 		// 		Event is an array of all files
-		console.log("complete:", customEvent);
 		this.reset();
 	},
 
@@ -139,14 +137,12 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		// 		Stub to connect
 		// 		Fires when dialog box has been closed
 		//		without a file selection
-		console.log("cancel")
 	},
 
 	onAbort: function(){
 		// summary:
 		// 		Stub to connect
 		// 		Fires when upload in progress was canceled
-		console.log("abort")
 	},
 
 	onError: function(/* Object or String */evtObject){
@@ -154,7 +150,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		//		Fires on errors
 		//
 		//FIXME: Unsure of a standard form of error events
-		console.error("error:", evtObject)
 	},
 
 	/*************************
@@ -181,7 +176,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		// 		TODO:
 		// 		Add this ability by effectively, not uploading them
 		//
-		console.log("reset");
 		this._disconnectButton();
 		dojo.forEach(this._inputs, dojo.destroy, dojo);
 		this._inputs = [];
@@ -189,16 +183,13 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		this._createInput();
 	},
 
-	getFileList: function(/* ? Dom Event*/evt){
+	getFileList: function(){
 		// summary:
 		// 		Returns a list of selected files.
 		//
 		var fileArray = [];
-		if(!evt){
-			return fileArray; //////////////// ???????????
-		}
 		if(this.supports("multiple")){
-			dojo.forEach(evt.target.files, function(f, i){
+			dojo.forEach(this.inputNode.files, function(f, i){
 				fileArray.push({
 					index:i,
 					name:f.name,
@@ -223,6 +214,16 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	/*********************************************
 	 *	   Private Property. Get off my lawn.	 *
 	 *********************************************/
+
+	_getValueAttr: function(){
+		// summary:
+		//		Internal. To get disabled use: uploader.get("disabled");
+		return this.getFileList();
+	},
+
+	_setValueAttr: function(disabled){
+		console.error("Uploader value is read only");
+	},
 
 	_getDisabledAttr: function(){
 		// summary:
@@ -264,7 +265,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	},
 
 	_setButtonStyle: function(){
-		//console.log("set button style - parentNode:", this.domNode.parentNode);
 		var hasParent = true;
 		if(!this.domNode.parentNode || !this.domNode.parentNode.tagName){
 			document.body.appendChild(this.domNode);
@@ -302,7 +302,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	_createInput: function(){
 
 		if(this._inputs.length){
-			//console.log("move old, make new")
 			dojo.style(this.inputNode, {
 				top:"500px"
 			});
@@ -318,7 +317,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 			// <=IE8
 			name = this.name + (this.multiple ? this._nameIndex : "");
 		}
-		console.log("name of field:", name);
 		this.inputNode = dojo.create("input", {type:"file", name:name, className:"dojoxInputNode"}, this.domNode, "first");
 		if(this.supports("multiple") && this.multiple){
 			dojo.attr(this.inputNode, "multiple", true);
@@ -331,7 +329,6 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		});
 		var size = dojo.marginBox(this.inputNode);
 
-		//console.log("this.inputNode:", size.w, size.h, this.domNode)
 		dojo.style(this.inputNode, {
 			position:"absolute",
 			top:"-2px",

@@ -115,7 +115,6 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	},
 
 	reset: function(){
-		console.log("Uploader.Flash.reset");
 		this.flashMovie.reset();
 		this._files = [];
 	},
@@ -129,7 +128,6 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		// 		Uploads selected files. Alias "upload()" should be used instead.
 		// tags:
 		//		private
-		console.log("onBegin:", this.getFileList())
 		this.onBegin(this.getFileList());
 		this.flashMovie.doUpload();
 	},
@@ -139,7 +137,6 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		// 		Uploads selected files with form data. Alias "submit()" should be used instead.
 		// tags:
 		//		private
-		console.log("onBegin:", this.getFileList())
 		this.onBegin(this.getFileList());
 		this.flashMovie.doUpload(formParams);
 	},
@@ -154,18 +151,13 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		}, this);
 		this.onChange(this._files);
 		this.onFileChange(fileArray);
-		console.log("UploaderFlash._onchange", this._fileMap);
 	},
 	_complete: function(fileArray){
-		console.log("UploaderFlash._complete", fileArray);
 		var o = this._getCustomEvent();
 		o.type = "load";
-		//this.onFileProgress(fileArray);
-		//this.onProgress(o);
 		this.onComplete(fileArray);
 	},
 	_progress: function(f){
-		console.log("UploaderFlash._progress", f);
 		this._fileMap[f.name+"_"+f.bytesTotal].bytesLoaded = f.bytesLoaded;
 		var o = this._getCustomEvent();
 		this.onFileProgress(f);
@@ -255,9 +247,6 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 				loc.pop();
 				loc = loc.join("/")+"/";
 				url = loc+url;
-				console.log("SWF Fixed - Relative loc:", loc, " abs loc:", url);
-			}else{
-				console.log("SWF URL unmodified:", url)
 			}
 		}else{
 			console.warn("Warning: no uploadUrl provided.");
@@ -302,7 +291,6 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 			}
 
 		};
-		//console.log("Flash URL:", args.path)
 
 		this.flashObject = new dojox.embed.Flash(args, this.inputNode);
 		this.flashObject.onError = dojo.hitch(function(msg){

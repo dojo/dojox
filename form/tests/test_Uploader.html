@@ -113,9 +113,6 @@
 		dojo.require("dojox.form.Uploader");
 		dojo.require("dojox.form.uploader.FileList");
 		dojo.require("dijit.form.Button");
-		dojo.require("dijit.layout.ContentPane");
-		dojo.require("dijit.layout.TabContainer");
-		dojo.require("dijit.Dialog");
 
 		// Dynamically determining which plugin to use, based off of the location search.
 		var plug = "Form"; // Default
@@ -184,7 +181,7 @@
 		When using this plugin, be sure your form use the attribute: <code>enctype="multipart/form-data"</code>
 	</p>
 	<p class="flash">
-		The Flash plugin will use a SWF to upload in IE. All other browsers will use the HTML5 plugin,
+		The Flash plugin will use a SWF to upload in non-HTML5 browsers. All other browsers will use the HTML5 plugin,
 		unless <code>force="flash"</code> is used, then Flash will be used in all browsers. <code>force="flash"</code>
 		is provided because Flash has some features that HTML5 does not yet have. But it is still not
 		recommended because of the many problems that Firefox and Webkit have with the Flash plugin.

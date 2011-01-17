@@ -31,11 +31,9 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		// summary:
 		// 		See: dojox.form.Uploader.upload
 		//
-		console.log("Uploader.HTML5.upload");
 		this.onBegin(this.getFileList());
 		if(this.supports("FormData")){
 			this.uploadWithFormData(formData);
-			console.log("Sent FormData");
 		}else if(this.supports("sendAsBinary")){
 			this.sendAsBinary(formData);
 		}
@@ -58,7 +56,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		// tags:
 		// 		private
 		//
-		//console.log("sendAsBinary");
 		if(!this.getUrl()){
 			console.error("No upload url found.", this); return;
 		}
@@ -73,7 +70,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		// finally send the request as binary data
 		// still accessed as $_FILES
 		var msg = this._buildRequestBody(data, boundary);
-		//console.log(msg.substring(0, 1000));
 		if(!msg){
 			this.onError(this.errMsg);
 		}else{
@@ -87,7 +83,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		// tags:
 		// 		private
 		//
-		//console.log("uploadWithFormData");
 		if(!this.getUrl()){
 			console.error("No upload url found.", this); return;
 		}
@@ -123,7 +118,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 				o.decimal = evt.loaded / evt.total;
 				o.percent = Math.ceil((evt.loaded / evt.total)*100)+"%";
 			}
-			console.log("   xhr progress:", o.percent, o.decimal);
 			this.onProgress(o);
 		}
 	},
@@ -143,7 +137,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		}), false);
         xhr.onreadystatechange = dojo.hitch(this, function() {
 			if (xhr.readyState === 4) {
-				console.info("FormData return:", xhr.responseText);
 				clearInterval(timer);
 				this.onComplete(dojo.eval(xhr.responseText));
 			}
@@ -151,11 +144,10 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
         xhr.open("POST", this.getUrl());
 
 		timer = setInterval(dojo.hitch(this, function(){
-			//console.log(xhr);
 			try{
 				if(typeof(xhr.statusText)){} // accessing this error throws an error. Awesomeness.
 			}catch(e){
-				//this.onError("Error uploading file.");
+				//this.onError("Error uploading file."); // not always an error. 
 				clearInterval(timer);
 			}
 		}),250);

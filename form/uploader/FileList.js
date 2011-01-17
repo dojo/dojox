@@ -130,7 +130,6 @@ dojo.declare("dojox.form.uploader.FileList", [dojox.form.uploader.Base], {
 	},
 
 	_progress: function(/* Object */ customEvent){
-		console.log("FileList Progress:", customEvent);
 		this.percentTextNode.innerHTML = customEvent.percent;
 		dojo.style(this.percentBarNode, "width", customEvent.percent);
 	},
@@ -161,7 +160,6 @@ dojo.declare("dojox.form.uploader.FileList", [dojox.form.uploader.Base], {
 	_onUploaderChange: function(fileArray){
 		this.reset();
 		dojo.forEach(fileArray, function(f, i){
-			//console.info("onUploaderChange", f);
 			this._addRow(i+1, this.getFileType(f.name), f.name, f.size);
 		}, this)
 	},
