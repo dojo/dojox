@@ -432,8 +432,8 @@ dojo.declare("dojox.layout.RotatorPager", [dijit._Widget, dijit._Templated, diji
 	_state: function(/*boolean*/playing){
 		// summary: Updates the display of the play/pause button
 		if(this.playPause && this.playPause.checked != playing){
-			this.playPause.attr("label", playing ? "Pause" : "Play");
-			this.playPause.attr("checked", playing);
+			this.playPause.set("label", playing ? "Pause" : "Play");
+			this.playPause.set("checked", playing);
 		}
 	},
 

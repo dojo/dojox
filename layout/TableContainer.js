@@ -58,11 +58,11 @@ dojo.declare("dojox.layout.TableContainer",
 		
 		// If the orientation, customClass or cols attributes are changed, 
 		// layout the widgets again.
-		dojo.connect(this, "attr", dojo.hitch(this, function(name, value){
+		this.connect(this, "set", function(name, value){
 			if(value && (name == "orientation" || name == "customClass" || name == "cols")) {
 				this.layout();
 			}
-		}))
+		})
 	},
 
 	startup: function() {
@@ -189,7 +189,7 @@ dojo.declare("dojox.layout.TableContainer",
 				else {
 					// Add the custom label class to the label cell
 					addCustomClass(labelCell, "labelCell");
-					var labelProps = {"for": child.attr("id")};
+					var labelProps = {"for": child.get("id")};
 					var label = dojo.create("label", labelProps, labelCell);
 
 					if(Number(this.labelWidth) > -1 ||
@@ -201,7 +201,7 @@ dojo.declare("dojox.layout.TableContainer",
 								? this.labelWidth + "px" : this.labelWidth);
 					}
 
-					label.innerHTML = child.attr("label") || child.attr("title");
+					label.innerHTML = child.get("label") || child.get("title");
 				}
 			}
 			var childCell;
