@@ -35,7 +35,7 @@ var ns = dojox.grid.enhanced.plugins,
 			//		undefined: it's getter
 			// returns:
 			//		A filter definition if it's getter.
-		}
+		},
 =====*/
 		tags: ["sizeChange"],
 		name: function(){

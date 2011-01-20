@@ -17,7 +17,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 	//		It carries context arguments that make sense when they are called.
 
 /*=====
-	argObj = {
+	argObj: {
 		// grid: EnhancedGrid
 		//		The grid object we are now handling.
 		grid: null,
@@ -77,7 +77,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		// usage:
 		//		var correctColIndex = argObj.cell.index + argObj.colOffset;
 		colOffset: 0
-	}
+	},
 =====*/
 
 	constructor: function(/* object? */writerArgs){

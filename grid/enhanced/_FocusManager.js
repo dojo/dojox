@@ -58,7 +58,7 @@ dojo.declare("dojox.grid.enhanced._FocusArea",null,{
 		
 		// onRegionBlur: function(event)
 		//		Connected to the onblur event of the defined regions (if any)
-		onRegionBlur: function(event){}
+		onRegionBlur: function(event){},
 =====*/
 	constructor: function(area, focusManager){
 		this._fm = focusManager;
