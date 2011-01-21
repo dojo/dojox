@@ -215,8 +215,6 @@ dojo.declare(
 			// setting the value here is needed since value="" in the template causes "undefined"
 			// and setting in the DOM (instead of the JS object) helps with form reset actions
 
-			console.log("postCreate of textinput");
-
 			this.textbox.setAttribute("value", this.textbox.value); // DOM and JS values shuld be the same
 			this.inherited(arguments);
 			if(dojo.isMoz || dojo.isOpera){
