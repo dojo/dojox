@@ -33,18 +33,18 @@ dojo.require("dijit.Editor");
 			return "<div></div>";
 		},
 		getValue: function(inRowIndex){
-			return this.widget.attr('value');
+			return this.widget.get('value');
 		},
 		setValue: function(inRowIndex, inValue){
-			if(this.widget&&this.widget.attr){
+			if(this.widget&&this.widget.set){
 				//Look for lazy-loading editor and handle it via its deferred.
 				if(this.widget.onLoadDeferred){
 					var self = this;
 					this.widget.onLoadDeferred.addCallback(function(){
-						self.widget.attr("value",inValue===null?"":inValue); 
+						self.widget.set("value",inValue===null?"":inValue); 
 					});
 				}else{
-					this.widget.attr("value", inValue); 
+					this.widget.set("value", inValue); 
 				}
 			}else{
 				this.inherited(arguments);
@@ -139,8 +139,8 @@ dojo.require("dijit.Editor");
 		getValue: function(){
 			var e = this.widget;
 			// make sure to apply the displayed value
-			e.attr('displayedValue', e.attr('displayedValue'));
-			return e.attr('value');
+			e.set('displayedValue', e.get('displayedValue'));
+			return e.get('value');
 		}
 	});
 	dgc.ComboBox.markupFactory = function(node, cell){
@@ -159,7 +159,7 @@ dojo.require("dijit.Editor");
 		widgetClass: dijit.form.DateTextBox,
 		setValue: function(inRowIndex, inValue){
 			if(this.widget){
-				this.widget.attr('value', new Date(inValue));
+				this.widget.set('value', new Date(inValue));
 			}else{
 				this.inherited(arguments);
 			}
@@ -181,7 +181,7 @@ dojo.require("dijit.Editor");
 		},
 		setValue: function(inRowIndex, inValue){
 			if(this.widget&&this.widget.attributeMap.checked){
-				this.widget.attr("checked", inValue);
+				this.widget.set("checked", inValue);
 			}else{
 				this.inherited(arguments);
 			}
@@ -220,7 +220,7 @@ dojo.require("dijit.Editor");
 			}
 		},
 		populateEditor: function(){
-			this.widget.attr('value', this.content);
+			this.widget.set('value', this.content);
 			this.widget.placeCursorAtEnd();
 		}
 	});

@@ -259,7 +259,7 @@ dojo.provide("dojox.grid._Scroller");
 			// Calculate the average row height and update the defaults (row and page).
 			var needPage = (!this._invalidating);
 			if(!needPage){
-				var ah = this.grid.attr("autoHeight");
+				var ah = this.grid.get("autoHeight");
 				if(typeof ah == "number" && ah <= Math.min(this.rowsPerPage, this.rowCount)){
 					needPage = true;
 				}
@@ -294,7 +294,7 @@ dojo.provide("dojox.grid._Scroller");
 				this.pageHeights[inPageIndex] = h;
 				if(oh != h){
 					this.updateContentHeight(h - oh);
-					var ah = this.grid.attr("autoHeight");
+					var ah = this.grid.get("autoHeight");
 					if((typeof ah == "number" && ah > this.rowCount)||(ah === true && !fromBuild)){
 						if(!fromAsynRendering){
 							this.grid.sizeChange();

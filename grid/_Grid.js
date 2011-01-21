@@ -527,7 +527,7 @@ dojo.requireLocalization("dijit", "loading");
 		_setStructureAttr: function(structure){
 			var s = structure;
 			if(s && dojo.isString(s)){
-				dojo.deprecated("dojox.grid._Grid.attr('structure', 'objVar')", "use dojox.grid._Grid.attr('structure', objVar) instead", "2.0");
+				dojo.deprecated("dojox.grid._Grid.set('structure', 'objVar')", "use dojox.grid._Grid.set('structure', objVar) instead", "2.0");
 				s=dojo.getObject(s);
 			}
 			this.structure = s;
@@ -548,7 +548,7 @@ dojo.requireLocalization("dijit", "loading");
 		setStructure: function(/* dojox.grid.__ViewDef|dojox.grid.__ViewDef[]|dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]] */ inStructure){
 			// summary:
 			//		Install a new structure and rebuild the grid.
-			dojo.deprecated("dojox.grid._Grid.setStructure(obj)", "use dojox.grid._Grid.attr('structure', obj) instead.", "2.0");
+			dojo.deprecated("dojox.grid._Grid.setStructure(obj)", "use dojox.grid._Grid.set('structure', obj) instead.", "2.0");
 			this._setStructureAttr(inStructure);
 		},
 		
@@ -575,14 +575,14 @@ dojo.requireLocalization("dijit", "loading");
 							}
 							checked = dojo.filter(self.layout.cells, function(c){
 								if(c.menuItems.length > 1){
-									dojo.forEach(c.menuItems, "item.attr('disabled', false);");
+									dojo.forEach(c.menuItems, "item.set('disabled', false);");
 								}else{
-									c.menuItems[0].attr('disabled', false);
+									c.menuItems[0].set('disabled', false);
 								}
 								return !c.hidden;
 							});
 							if(checked.length == 1){
-								dojo.forEach(checked[0].menuItems, "item.attr('disabled', true);");
+								dojo.forEach(checked[0].menuItems, "item.set('disabled', true);");
 							}
 						}
 					},
@@ -618,7 +618,7 @@ dojo.requireLocalization("dijit", "loading");
 		},
 
 		setHeaderMenu: function(/* dijit.Menu */ menu){
-			dojo.deprecated("dojox.grid._Grid.setHeaderMenu(obj)", "use dojox.grid._Grid.attr('headerMenu', obj) instead.", "2.0");
+			dojo.deprecated("dojox.grid._Grid.setHeaderMenu(obj)", "use dojox.grid._Grid.set('headerMenu', obj) instead.", "2.0");
 			this._setHeaderMenuAttr(menu);
 		},
 		
