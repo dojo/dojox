@@ -7,7 +7,7 @@ dojo.require("dojox.mobile.app._FormWidget");
 dojo.declare(
 	"dojox.mobile.app.TextBox", 
 	dojox.mobile.app._FormValueWidget, {
-	
+
 		// summary:
 		//		A base class for textbox form inputs
 
@@ -39,27 +39,27 @@ dojo.declare(
 		//		Defines a hint to help users fill out the input field (as defined in HTML 5).
 		//		This should only contain plain text (no html markup).
 		placeHolder: "",
-		
+
 		baseClass: "mblTextBox",
 
 		attributeMap: dojo.delegate(dojox.mobile.app._FormValueWidget.prototype.attributeMap, {
 			maxLength: "focusNode"
 		}),
-		
+
 		buildRendering: function(){
 			var node = this.srcNodeRef;
-	
+
 			// If an input is used as the source node, wrap it in a div
 			if(!node || node.tagName != "INPUT"){
 				node = dojo.create("input", {});
 			}
-			
+
 			dojo.attr(node, {
 				type: "text",
-				value: dojo.attr(this.srcNodeRef, "value") || "",
+				value: dojo.attr(node, "value") || "",
 				placeholder: this.placeHolder || null
 			});
-			
+
 			this.domNode = this.textbox = this.focusNode = node;
 		},
 
@@ -69,7 +69,7 @@ dojo.declare(
 				dojo.attr(this.textbox, "placeholder", v);
 			}
 		},
-		
+
 
 		_getValueAttr: function(){
 			// summary:
@@ -282,7 +282,7 @@ dojo.declare(
 			if(this.selectOnClick && dojo.isMoz){
 				this.textbox.selectionStart = this.textbox.selectionEnd = undefined; // clear selection so that the next mouse click doesn't reselect
 			}
-			
+
 		},
 
 		_onFocus: function(/*String*/ by){
@@ -306,7 +306,7 @@ dojo.declare(
 					}
 				});
 			}
-			
+
 			this._refreshState();
 			this.inherited(arguments);
 		},
