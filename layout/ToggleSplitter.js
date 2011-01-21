@@ -1,4 +1,5 @@
-dojo.provide("dojox.layout.ToggleSplitter");
+define("dojox/layout/ToggleSplitter", ["dojo", "dojox"], function(dojo, dojox) {
+
 dojo.experimental("dojox.layout.ToggleSplitter"); 
 
 dojo.require("dijit.layout.BorderContainer");
@@ -258,4 +259,6 @@ dojo.extend(dijit._Widget, {
 	// toggleSplitterClosedThreshold: String
 	// 		a css size value (e.g. "100px")
 	toggleSplitterOpenSize: ""
+});
+
 });
