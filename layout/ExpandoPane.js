@@ -18,6 +18,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 	//maxHeight: "",
 	//maxWidth: "",
 	//splitter: false,
+	attributeMap: dojo.delegate(dijit.layout.ContentPane.prototype.attributeMap, {
+	        title: { node: "titleNode", type: "innerHTML" }
+	}),
 	
 	templateString: dojo.cache("dojox.layout","resources/ExpandoPane.html"),
 
