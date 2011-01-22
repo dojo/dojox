@@ -346,7 +346,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		
 		if(field){			
 			var fragments = field.split(/[.\[\]]+/);
-			for(var frag in fragments){
+			for(var frag = 0, l = fragments.length; frag < l; frag++){
 				if(result){
 					result = result[fragments[frag]];
 				}
