@@ -61,7 +61,7 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
 			this.hasLoaded = false;
 		},
 		
-		loadContent: function(){
+		loadContent: function(node){
 			// summary:
 			//		Download contents of href via XHR and display
 			// description:
@@ -78,7 +78,7 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
 					load: function(response, ioArgs){
 						this.tooltipWidget.label = response;
 						this.tooltipWidget.close();
-						this.tooltipWidget.open();
+						this.tooltipWidget.open(node);
 					},
 					preventCache: this.preventCache
 				});
@@ -97,10 +97,10 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
  			// summary:
 			//		Display the tooltip; usually not called directly.
 			
-			target = target || this._connectNodes[0];
+			target = target || (this._connectNodes && this._connectNodes[0]);
 			if(!target){ return; }
 
-			this.loadContent();
+			this.loadContent(target);
 			this.inherited(arguments);
 		}
 	}
