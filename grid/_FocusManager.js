@@ -325,7 +325,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			}
 			if(this.grid.edit.isEditing()){ //when editing, only navigate to editable cells
 				var nextCell = this.grid.getCell(col);
-				if (!this.isLastFocusCell() && !nextCell.editable){
+				if (!this.isLastFocusCell() && (!nextCell.editable ||
+					this.grid.canEdit && !this.grid.canEdit(nextCell, row))){
 					this.cell=nextCell;
 					this.rowIndex=row;
 					this.next();
