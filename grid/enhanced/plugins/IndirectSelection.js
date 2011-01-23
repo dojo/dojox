@@ -1,5 +1,6 @@
 dojo.provide("dojox.grid.enhanced.plugins.IndirectSelection");
 
+dojo.require('dojo.string');
 dojo.require("dojox.grid.cells.dijit");
 dojo.require("dojox.grid.enhanced._Plugin");
 
@@ -151,7 +152,8 @@ dojo.declare("dojox.grid.cells.RowSelector", dojox.grid.cells._Widget, {
 		return ["<div tabindex = -1 ",
 				"id = '" + this.grid.id + "_rowSelector_" + rowIndex + "' ",
 				"name = '" + this.grid.id + "_rowSelector' class = '" + clazz + "' ",
-				"role = 'presentation' aria-pressed = '" + checked + "' aria-disabled = '" + disabled + "'>",
+				"role = 'presentation' aria-pressed = '" + checked + "' aria-disabled = '" + disabled +
+				"' aria-label = '" + dojo.string.substitute(this.grid._nls["indirectSelection" + this.inputType], [rowIndex + 1]) + "'>",
 				"<span class = '" + this.statusTextClass + "'>" + (checked ? this.checkedText : this.unCheckedText) + "</span>",
 				"</div>"].join("");
 	},
@@ -537,9 +539,13 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		var headerCellNode = this.view.getHeaderCellNode(this.index);
 		if(!headerCellNode){ return; }
 		dojo.empty(headerCellNode);
+		var g = this.grid;
 		var selector = headerCellNode.appendChild(dojo.create("div", { 
-			"tabindex": -1, "id": this.grid.id + "_rowSelector_-1", "class": this.baseClass, "role": "presentation",
-			"innerHTML": "<span class = '" + this.statusTextClass + "'/>"}));
+			"tabindex": -1, "id": g.id + "_rowSelector_-1", "class": this.baseClass, "role": "presentation",
+			"innerHTML": "<span class = '" + this.statusTextClass +
+				"'></span><span style='height: 0; width: 0; overflow: hidden; display: block;'>" + 
+				g._nls["selectAll"] + "</span>"
+		}));
 		this.map[-1] = selector;
 		if(this._headerSelectorConnectIdx !== undefined){
 			dojo.disconnect(this._connects[this._headerSelectorConnectIdx]);
@@ -563,7 +569,7 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		var grid = this.grid, headSelector = this.map[-1];
 		var allSelected = grid.rowCount > 0 && grid.rowCount == grid.selection.getSelectedCount();
 		dojo.toggleClass(headSelector, this.checkedClass, allSelected);
-		dijit.setWaiState(headSelector, 'pressed', allSelected);	
+		dijit.setWaiState(headSelector, 'pressed', allSelected);
 		if(this.inA11YMode){
 			dojo.attr(headSelector.firstChild, 'innerHTML', allSelected ? this.checkedText : this.unCheckedText);
 		}
