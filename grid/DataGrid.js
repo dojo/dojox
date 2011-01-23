@@ -476,6 +476,7 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	},
 
 	sort: function(){
+		this.edit.apply();
 		this._lastScrollTop = this.scrollTop;
 		this._refresh();
 	},
