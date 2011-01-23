@@ -1345,7 +1345,7 @@ dojo.requireLocalization("dijit", "loading");
 						cell.relWidth = window.parseInt(dojo.attr(th, "relWidth"), 10);
 					}
 					if(d.hasAttr(th, "hidden")){
-						cell.hidden = d.attr(th, "hidden") == "true";
+						cell.hidden = (d.attr(th, "hidden") == "true" || d.attr(th, "hidden") === true/*always boolean true in Chrome*/);
 					}
 
 					if(cellFunc){
