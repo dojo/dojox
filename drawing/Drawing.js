@@ -478,7 +478,7 @@ dojo.provide("dojox.drawing.Drawing");
 			if(!this.defaults.clickMode){ 
 				this.setTool(this.currentType);
 			}else{
-				if(this.defaults.clickMode){ this.defaults.clickable = true; }
+				this.defaults.clickable = true;
 			}
 		},
 		

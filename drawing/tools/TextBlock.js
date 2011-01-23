@@ -2,7 +2,6 @@ dojo.provide("dojox.drawing.tools.TextBlock");
 dojo.require("dojox.drawing.stencil.Text");
 
 (function(){
-	
 	var conEdit;
 	dojo.addOnLoad(function(){
 		//		In order to use VML in IE, it's necessary to remove the
@@ -12,6 +11,7 @@ dojo.require("dojox.drawing.stencil.Text");
 		//		that can be appended and removed as necessary:
 		//		<div id="conEdit" contenteditable="true"></div>
 		//
+		// console.log("Removing conedit");
 		conEdit = dojo.byId("conEdit");
 		if(!conEdit){
 			console.error("A contenteditable div is missing from the main document. See 'dojox.drawing.tools.TextBlock'")
