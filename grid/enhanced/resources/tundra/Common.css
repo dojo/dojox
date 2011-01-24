@@ -21,7 +21,8 @@
 .tundra .dojoxGridRowbarInner {
 	width:20px;
 }
-.tundra .dojoxGridCellOver .dojoxGridSortNode{
+.tundra .dojoxGridCellOver .dojoxGridSortNode,
+.tundra .dojoxGridCellSortFocus .dojoxGridSortNode {
 	cursor:pointer;
 	background: #f8fafd url("../../../../../dijit/themes/tundra/images/accordionItemHover.gif") bottom repeat-x;
 }

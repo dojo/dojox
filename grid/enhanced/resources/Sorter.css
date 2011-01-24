@@ -1,9 +1,7 @@
 /*
-Naming:
-
 .dojoxGrid
     Sorted, SingleSorted | NestSorted
-.dojoxGridHeaderNode
+.dojoxGridCell
     Over, SortFocus, ShowIndex
 .dojoxGridSortNode
     Asc | Desc, Main|Sub
@@ -13,108 +11,146 @@ Naming:
 .dojoxGrid .dojoxGridSortNode{
 	position: relative;
 	white-space:nowrap;
+	border: 1px solid transparent;
 }
 .dojoxGridSortBtn {
 	width: 10px;
-	height:15px;
+	height:100%;
 	visibility: hidden;
-	right:0;
-	top: 0px;
-	height: 100%;
+	top: 0;
 	display:block;
 	position: absolute;
 	color: #000;
 	background: transparent url(images/sprite_icons.png) no-repeat 100px 0;
 	text-decoration: none;
 	outline: none;
+	right: 0;
+	border: 1px solid transparent;
+	box-sizing: border-box; /* css3 rec */
+	-moz-box-sizing: border-box; /* ff */
+	-ms-box-sizing: border-box; /* ie8 */
+	-webkit-box-sizing: border-box; /* safari3 */
+	-khtml-box-sizing: border-box; /* konqueror */
 }
 .dojoxGridSortBtnNested {
-	right: 13px;
+	right: 10px;
+}
+.dojoxGridCellOver  .dojoxGridSortBtn,
+.dojoxGridCellSortFocus  .dojoxGridSortBtn {
+	border-left: 1px solid #999999;
+	background-color: #9dcfff;
+}
+.dojoxGridCellSortFocus  .dojoxGridSortBtn {
+	background-color: transparent;
 }
 .dojoxGridSortNode {
 	outline: none;
 }
 /*Control the title node width*/
 .dojoxGridCellOver .dojoxGridSortNode,
-.dojoxGridSingleSorted .dojoxGridHeader .dojoxGridCellOver .dojoxGridSortNodeMain {
+.dojoxGridCellSortFocus .dojoxGridSortNode,
+.dojoxGridSingleSorted .dojoxGridHeader .dojoxGridCellOver .dojoxGridSortNodeMain,
+.dojoxGridSingleSorted .dojoxGridHeader .dojoxGridCellSortFocus .dojoxGridSortNodeMain {
 	margin-right: 5px;
 }
-.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNode {
-	margin-right: 23px;
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNode,
+.dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortNode {
+	margin-right: 24px;
 }
+
 .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnSingle,
-.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle  {
+.dojoxGridCellSortFocus .dojoxGridSortNode .dojoxGridSortBtnSingle,
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle,
+.dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortNodeMain .dojoxGridSortBtnSingle  {
 	right: -10px;
 }
 .dojoxGridSorted .dojoxGridCellOver .dojoxGridSortBtnSingle,
-.dojoxGridNestSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle {
+.dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortBtnSingle,
+.dojoxGridNestSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle,
+.dojoxGridNestSorted .dojoxGridCellSortFocus .dojoxGridSortNodeMain .dojoxGridSortBtnSingle {
 	right: -28px;
 }
-.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortBtnNested {
-	right: -18px;
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortBtnNested,
+.dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortBtnNested {
+	right: -17px;
 }
+
+.dojoxGrid .dojoxGridHeader .dojoxGridRowTable .dojoxGridNoSort .dojoxGridSortNode {
+	margin:0!important;
+}
+
+/*Focus border*/
 /*Control visibility*/
 .dojoxGrid .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnSingle,					/* single sort btn is always visible when mouseover*/
+.dojoxGrid .dojoxGridCellSortFocus .dojoxGridSortNode .dojoxGridSortBtnSingle,
 .dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnNested,				/* in a sorted grid, nest btn is always visible when mouseover (except 1)*/
-.dojoxGrid .dojoxGridHeaderNodeShowIndex .dojoxGridSortNode .dojoxGridSortBtnNested,		/* in a single sort grid, when mouseover other columns, show 1 on the main sort column*/
+.dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortNode .dojoxGridSortBtnNested,
+.dojoxGrid .dojoxGridCellShowIndex .dojoxGridSortNode .dojoxGridSortBtnNested,		/* in a single sort grid, when mouseover other columns, show 1 on the main sort column*/
 .dojoxGrid .dojoxGridSortNodeSorted .dojoxGridSortBtn {										/* in a sorted column, single or nested sort btn are always visible (except 2)*/
 	visibility: visible;
 }
 .dojoxGridSingleSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnNested,	/*(1)in a single sorted grid, nest btn is hidden in sort column when mouseover*/
+.dojoxGridSingleSorted .dojoxGridCellSortFocus .dojoxGridSortNodeMain .dojoxGridSortBtnNested,
 .dojoxGridSingleSorted .dojoxGridSortNode .dojoxGridSortBtnNested {							/*(2)all nested btn is hidden in single sort grid without mouse over*/
 	visibility: hidden;
 }
-/*
--100 desc
--120 asc
--140 do desc
--160 do asc
--180 no sort
-*/
 
+/*
+-119 asc
+-99 desc
+-159 do asc
+-139 do desc
+-179 no sort
+*/
 /*Control background image*/
 .dojoxGridSortNodeAsc .dojoxGridSortBtnSingle {
-	background-position: -120px 5px;
+	background-position: -119px 5px;
 	visibility: visible;
 }
 .dojoxGridSortNodeDesc .dojoxGridSortBtnSingle {
-	background-position: -100px  5px;
+	background-position: -99px  5px;
 	visibility: visible;
 }
 /*hover single sort*/
 .dojoxGridCellOver .dojoxGridSortBtnSingle,
 .dojoxGridCellSortFocus .dojoxGridSortBtnSingle {
-	background-position: -160px 5px;
-	border-left: 1px solid #999999;
+	background-position: -159px 5px;
 }
 .dojoxGridCellOver .dojoxGridSortNodeAsc .dojoxGridSortBtnSingle,
-.dojoxGridCellSortFocus .dojoxGridSortNodeAsc .dojoxGridSortBtnSingle {
-	background-position: -140px 5px;
+.dojoxGridCellSortFocus .dojoxGridSortNodeAsc .dojoxGridSortBtnSingle,
+.dojoxGrid .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnAsc,
+.dojoxGrid .dojoxGridCellSortFocus .dojoxGridSortNode .dojoxGridSortBtnAsc {
+	background-position: -139px 5px;
 }
 .dojoxGridCellOver .dojoxGridSortNodeDesc .dojoxGridSortBtnSingle, 
-.dojoxGridCellSortFocus .dojoxGridSortNodeDesc .dojoxGridSortBtnSingle {
-	background-position: -180px 5px;
+.dojoxGridCellSortFocus .dojoxGridSortNodeDesc .dojoxGridSortBtnSingle, 
+.dojoxGrid .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnDesc, 
+.dojoxGrid .dojoxGridCellSortFocus .dojoxGridSortNode .dojoxGridSortBtnDesc {
+	background-position: -179px 5px;
 }
 /*hover nested sort*/
 .dojoxGridCellOver .dojoxGridSortBtnNested,
 .dojoxGridCellSortFocus .dojoxGridSortBtnNested {
-	background-position: -150px 5px;
-	padding-right:8px;
-	border-left: 1px solid #999999;
+	background-position: -149px 5px;
+	width: 19px;
 }
 .dojoxGridCellOver .dojoxGridSortNodeAsc .dojoxGridSortBtnNested,
 .dojoxGridCellSortFocus .dojoxGridSortNodeAsc .dojoxGridSortBtnNested {
-	background-position: -130px 5px;
+	background-position: -129px 5px;
 }
 .dojoxGridCellOver .dojoxGridSortNodeDesc .dojoxGridSortBtnNested,
 .dojoxGridCellSortFocus .dojoxGridSortNodeDesc .dojoxGridSortBtnNested {
-	background-position: -170px 5px;
+	background-position: -169px 5px;
 }
 .dojoxGridNestSorted .dojoxGridCellOver .dojoxGridSortBtnSingle,
 .dojoxGridNestSorted .dojoxGridCellSortFocus .dojoxGridSortBtnSingle {
-	background-position: -160px 5px;
+	background-position: -159px 5px;
 }
-.dojoxGridCellOver .dojoxGridSortBtnSingle:hover,
-.dojoxGridCellOver .dojoxGridSortBtnNested:hover {
+.dojoxGridCellOver .dojoxGridSortBtn:hover,
+.dojoxGridCellSortFocus .dojoxGridSortBtnFocus {
 	background-color:#B7EAFF;
+}
+.dojoxGridCellSortFocus .dojoxGridSortBtnFocus, 
+.dojoxGridSortNodeFocus{
+	border: 1px dashed #666;
 }
