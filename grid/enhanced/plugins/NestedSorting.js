@@ -28,6 +28,9 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	name: "nestedSorting",
 	
 	_currMainSort: 'none',//'none'|'asc'|'desc'
+	
+	_currRegionIdx: -1,
+	
 	_a11yText: {
 		'dojoxGridDescending'   : '&#9662;',
 		'dojoxGridAscending'    : '&#9652;',
@@ -89,7 +92,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		//		Overwritten, see DataGrid.getSortProps()
 		return this._sortDef;
 	},
-	_initSort: function(){
+	_initSort: function(postSort){
 		// summary:
 		//		Initiate sorting
 		var g = this.grid, n = g.domNode, len = this._sortDef.length;
@@ -108,7 +111,10 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			}
 		});
 		this._headerNodes.forEach(this._initHeaderNode, this);
-		this._focusRegions = [];
+		this._initFocus();
+		if(postSort){
+			this._focusHeader();
+		}
 	},
 	_initHeaderNode: function(node){
 		// summary:
@@ -135,9 +141,11 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_onHeaderCellClick: function(e){
 		// summary
 		//		See dojox.grid.enhanced._Events._onHeaderCellClick()		
+		this._focusRegion(e.target);
 		if(dojo.hasClass(e.target, 'dojoxGridSortBtn')){
 			this._onSortBtnClick(e);
 			dojo.stopEvent(e);
+			this._focusRegion(this._getCurrentRegion());
 		}
 	},
 	_onHeaderCellMouseOver: function(e){
@@ -157,8 +165,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}
 		if(!dojo.hasClass(dojo.body(), 'dijit_a11y')){ return; }
 		//a11y support
-		var i = e.cell.index;
-		var sortNode = dojo.query('.dojoxGridSortNode', node)[0];
+		var i = e.cell.index, node = e.cellNode;
 		var singleSortBtn = dojo.query('.dojoxGridSortBtnSingle', node)[0];
 		var nestedSortBtn = dojo.query('.dojoxGridSortBtnNested', node)[0];
 		
@@ -180,11 +187,11 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}else{
 			nestedSortBtn.innerHTML = nestedIndex + this._a11yText.dojoxGridAscending;
 		}		
-		if(this._currMainSort == 'none'){
+		if(this._currMainSort === 'none'){
 			singleSortBtn.innerHTML = this._a11yText.dojoxGridAscending;
-		}else if(this._currMainSort == 'asc'){
+		}else if(this._currMainSort === 'asc'){
 			singleSortBtn.innerHTML = this._a11yText.dojoxGridDescending;
-		}else if(this._currMainSort == 'desc'){
+		}else if(this._currMainSort === 'desc'){
 			singleSortBtn.innerHTML = this._a11yText.dojoxGridUnsortedTip;
 		}
 	},
@@ -207,17 +214,13 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		var cellIdx = e.cell.index;
 		if(dojo.hasClass(e.target, 'dojoxGridSortBtnSingle')){
 			this._prepareSingleSort(cellIdx);
-			this._currRegionClass = 'dojoxGridSortBtnSingle';
 		}else if(dojo.hasClass(e.target, 'dojoxGridSortBtnNested')){
 			this._prepareNestedSort(cellIdx);
-			this._currRegionClass = 'dojoxGridSortBtnNested';
 		}else{
 			return;
 		}
-		//this.focus._colHeadFocusIdx = cellIdx;
 		dojo.stopEvent(e);
 		this._doSort(cellIdx);
-		//console.debug('sorting definition: ', this._sortDef);
 	},
 	_doSort: function(cellIdx){
 		if(!this._sortData[cellIdx] || !this._sortData[cellIdx].order){
@@ -229,7 +232,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}
 		this._updateSortDef();
 		this.grid.sort();
-		this._initSort();
+		this._initSort(true);
 	},
 	setSortData: function(cellIdx, attr, value){
 		// summary:
@@ -386,87 +389,49 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	//focus & keyboard
 	_initFocus: function(){
 		var f = this.focus = this.grid.focus;
-		this._focusRegions = [];
-		this._currRegion = null;
-		this._currRegionClass = null;
-		var area = f.getArea('header');
-		area.onFocus = f.focusHeader = dojo.hitch(this, '_focusHeader');
-		area.onBlur = f.blurHeader = f._blurHeader = dojo.hitch(this, '_blurHeader');
-		area.onMove = dojo.hitch(this, '_onMove');
-		area.onKeyDown = dojo.hitch(this, '_onKeyDown');
-		area.getRegions = dojo.hitch(this, '_getRegions');
-		area.onRegionFocus = dojo.hitch(this, '_onRegionFocus');
-		area.onRegionBlur = dojo.hitch(this, '_onRegionBlur');
+		this._focusRegions = this._getRegions();
+		if(!this._headerArea){
+			var area = this._headerArea = f.getArea('header');
+			area.onFocus = f.focusHeader = dojo.hitch(this, '_focusHeader');
+			area.onBlur = f.blurHeader = f._blurHeader = dojo.hitch(this, '_blurHeader');
+			area.onMove = dojo.hitch(this, '_onMove');
+			area.onKeyDown = dojo.hitch(this, '_onKeyDown');
+			area._regions = [];
+			area.getRegions = null;
+		}
 	},
 	_focusHeader: function(evt){
 		// summary:
 		//		Overwritten, see _FocusManager.focusHeader()
 		//delayed: Boolean
 		//		If called from "this.focus._delayedHeaderFocus()"
-		var f = this.focus;
-		f.currentArea("header");
-		if(f._isHeaderHidden()){
-			f.findAndFocusGridCell();
-			return true;
+		if(this._currRegionIdx === -1){
+			this._onMove(0, 1, null);
+		}else{
+			this._focusRegion(this._getCurrentRegion());
 		}
-		var region = this._validRegion(this._currRegion) ? this._currRegion : undefined;
-		if(!region){
-			var colIdx = f._colHeadFocusIdx;
-			if(!colIdx){
-				colIdx = f.isNoFocusCell() ? 0 : f.cell.index;
-			}
-			while(colIdx >= 0 && colIdx < this._headerNodes.length && dojo.indexOf(this._excludedColIdx, colIdx) >= 0){
-				//jump over invalid columns
-				console.log('NestedSorting._focusHeader() - skip colIdx',colIdx);
-				f._colHeadFocusIdx = ++colIdx;
-			}
-			f._colHeadNode = this._headerNodes[colIdx];
-			if(f._colHeadNode){
-				var cls = this._currRegionClass;
-				if(!cls){
-					cls = this._singleSortTip(colIdx) ? 'dojoxGridSortBtnSingle' : 'dojoxGridSortBtnNested';
-				}
-				region = dojo.query('.' + cls, f._colHeadNode)[0];	
-			}
-		}
-		if(region && f._colHeadNode){
-			dojo.addClass(f._colHeadNode, 'dojoxGridCellSortFocus');
-			dojo.addClass(region, f.focusClass);
-			f._focusifyCellNode(false);
-			dijit.focus(region);
-			//dojo.stopEvent(evt);
-			return true;
-		}
-		f.findAndFocusGridCell();
-		return false;
+		return true;
 	},
 	_blurHeader: function(evt){
-		console.log("NestedSorting._blurHeader()");
-		dojo.removeAttr(this.grid.domNode, "aria-activedescendant");
-		//this._colHeadNode = this._colHeadFocusIdx = null;
+		this._blurRegion(this._getCurrentRegion());
 		return true;
 	},
 	_onMove: function(rowStep, colStep, evt){
-		if(!colStep){ return; }
-		
-		var currRegion = this._currRegion;		
-		if(this._singleSortTip(dojo.attr(currRegion, "colIdx")) && (dojo.hasClass(currRegion, 'dojoxGridSortNode') && colStep > 0 ||
-			dojo.hasClass(currRegion, 'dojoxGridSortBtnSingle') && colStep < 0)){		
-			colStep *= 2;//jump over nested sort
+		var curr = this._currRegionIdx || 0, regions = this._focusRegions;
+		var region = regions[curr + colStep];
+		if(!region){
+			return;
+		}else if(dojo.style(region, 'display') === 'none' || dojo.style(region, 'visibility') === 'hidden'){
+			//if the region is invisible, keep finding next
+			this._onMove(rowStep, colStep + (colStep > 0 ? 1 : -1), evt);
+			return;
 		}
+		this._focusRegion(region);
+		//keep grid body scrolled by header
+		var view = this._getRegionView(region);
+		view.scrollboxNode.scrollLeft = view.headerNode.scrollLeft;
 		
-		var regions = this._focusRegions;
-		var nextIdx = dojo.indexOf(regions, currRegion) + colStep;
-		if(nextIdx >= 0 && nextIdx < regions.length){
-			var newRegion = regions[nextIdx];
-			if(newRegion){
-				console.log('_onMove() - nextIdx = ', nextIdx);
-				dojo.addClass(newRegion, this.focus.focusClass);
-				dijit.focus(newRegion);
-				var focusNode = this._headerNodes[dojo.attr(newRegion, "colIdx")];
-				if(focusNode){ dojo.addClass(focusNode, 'dojoxGridCellSortFocus'); }
-			}
-		}
+		dojo.stopEvent(evt);
 	},
 	_onKeyDown: function(e, isBubble){
 		if(isBubble){
@@ -480,65 +445,72 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			}
 		}
 	},
+	_getRegionView: function(region){
+		var header = region;
+		while(header && !dojo.hasClass(header, 'dojoxGridHeader')){ header = header.parentNode; }
+		console.debug(header);
+		if(header){
+			return dojo.filter(this.grid.views.views, function(view){
+				return view.headerNode === header;
+			})[0] || null;
+		}
+		return null;
+	},
 	_getRegions: function(){
-		if(this._focusRegions.length <= 0){
-			var regions = this._focusRegions = [], excluded = this._excludedColIdx;
-			this._headerNodes.filter(function(n, i){
-				return dojo.indexOf(excluded, i) < 0;
-			}).forEach(function(n, i){
-				var idx = dojo.attr(n, 'idx');//column index
-				var sortNode = dojo.query('.dojoxGridSortNode', n)[0];
-				var nested = dojo.query('.dojoxGridSortBtnNested', n)[0];
-				var single = dojo.query('.dojoxGridSortBtnSingle', n)[0];
-				if(sortNode && nested && single){
-					dojo.attr(sortNode, 'tabindex', 0);
-					regions.push(dojo.attr(sortNode, 'colIdx', idx));
-					regions.push(dojo.attr(nested, 'colIdx', idx));
-					regions.push(dojo.attr(single, 'colIdx', idx));
-				}
+		var regions = [], cells = this.grid.layout.cells;
+		this._headerNodes.forEach(function(n, i){
+			if(dojo.style(n, 'display') === 'none'){return;}
+			if(cells[i]['noSort']){
+				regions.push(n);
+				return;
+			}
+			dojo.query('.dojoxGridSortNode,.dojoxGridSortBtnNested,.dojoxGridSortBtnSingle', n)
+				.forEach(function(node){
+					dojo.attr(node, 'tabindex', 0);
+					regions.push(node);
 			});
-		}
-		return this._focusRegions;
+		},this);
+		return regions;
 	},
-	_onRegionFocus: function(evt){
+	_focusRegion: function(region){
 		// summary
-		//		Overwrite behavior of this.focus.doColHeaderFocus()|_setActiveColHeader()
-		var region = evt.target;
-		console.log('_onRegionFocus() - region = ',dojo.indexOf(this._focusRegions, region));
-		if(!region){ return; }
-		
-		var f = this.focus, colIdx = dojo.attr(region, "colIdx");
-		var headerNode = this._headerNodes[colIdx];
-		
-		//update new focus column
-		if(headerNode && colIdx !== f._colHeadFocusIdx){
-			f.currentArea("header");
-			f._colHeadNode = headerNode;
-			f._colHeadFocusIdx = colIdx;
-			f._scrollHeader(colIdx);
-			dojo.addClass(f._colHeadNode, 'dojoxGridCellSortFocus');
-			dojo.addClass(region, f.focusClass);
-			dojo.attr(this.grid.domNode, "aria-activedescendant", dojo.attr(headerNode, 'id'));
+		//		Focus the given region
+		if(!region){return;}
+		var currRegion = this._getCurrentRegion();
+		if(currRegion && region !== currRegion){
+			this._blurRegion(currRegion);
 		}
-		this._currRegion = region;
-	},
-	_onRegionBlur: function(evt){
-		var region = evt.target, f = this.focus;
-		if(region){
-			dojo.removeClass(region, f.focusClass);
+		var header = this._getRegionHeader(region);
+		dojo.addClass(header, 'dojoxGridCellSortFocus');
+		if(dojo.hasClass(region, 'dojoxGridSortNode')){
+			dojo.addClass(region, 'dojoxGridSortNodeFocus');
+		}else if(dojo.hasClass(region, 'dojoxGridSortBtn')){
+			dojo.addClass(region, 'dojoxGridSortBtnFocus');
 		}
-		if(f._colHeadNode){
-			dojo.removeClass(f._colHeadNode, 'dojoxGridCellSortFocus');
+		region.focus();
+		this.focus.currentArea('header');
+		this._currRegionIdx = dojo.indexOf(this._focusRegions, region);
+	},
+	_blurRegion: function(region){
+		if(!region){return;}
+		var header = this._getRegionHeader(region);
+		dojo.removeClass(header, 'dojoxGridCellSortFocus');
+		if(dojo.hasClass(region, 'dojoxGridSortNode')){
+			dojo.removeClass(region, 'dojoxGridSortNodeFocus');
+		}else if(dojo.hasClass(region, 'dojoxGridSortBtn')){
+			dojo.removeClass(region, 'dojoxGridSortBtnFocus');
 		}
-		console.log('_onRegionBlur() - region = ', dojo.indexOf(this._focusRegions, region));
+		region.blur();
 	},
-	_validRegion: function(region){
-		return dojo.indexOf(this._focusRegions, region) >= 0;
+	_getCurrentRegion: function(){
+		return this._focusRegions[this._currRegionIdx];
 	},
-	_singleSortTip: function(/*Integer*/colIdx){
-		var def = this._sortDef, data = this._sortData[colIdx];
-		return (def.length === 0 || def.length === 1 && data && data.index === 0);
-	},
+	_getRegionHeader: function(region){
+		while(region && !dojo.hasClass(region, 'dojoxGridCell')){
+			region = region.parentNode;
+		}
+		return region;
+	},	
 	destroy: function(){
 		this._sortDef = this._sortData = null;
 		this._headerNodes = this._focusRegions = null;
