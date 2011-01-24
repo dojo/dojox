@@ -23,27 +23,27 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	// |		grid.setSortIndex([{attribute: 'col3', descending: true},...])
 	// |	</script>
 	
-	//name: String
+	// name: String
 	//		Plugin name
 	name: "nestedSorting",
+	
+	_currMainSort: 'none',//'none'|'asc'|'desc'
 	
 	constructor: function(){
 		this._sortDef = [];
 		this._sortData = {};
 		this._headerNodes = {};
-		//column index that are hidden, unsortable or indirect selection etc.
+		//column index that are hidden, un-sortable or indirect selection etc.
 		this._excludedColIdx = [];
+		this.nls = this.grid._nls;
+		this.grid.setSortInfo = function(){};
 		this.grid.setSortIndex = dojo.hitch(this, '_setGridSortIndex');
 		this.grid.getSortProps = dojo.hitch(this, 'getSortProps');
 		if(this.grid.sortFields){
-			this._setGridSortIndex(this.grid.sortFields, null ,true);
+			this._setGridSortIndex(this.grid.sortFields, null, true);
 		}
-		//grid re-renders at column resizing
-		this.connect(this.grid.views, 'render', '_initSort');
-		//this._initFocus();
-		this.nls = this.grid._nls;
+		this.connect(this.grid.views, 'render', '_initSort');//including column resize
 		this.initCookieHandler();
-		dojo.addClass(this.grid.domNode, 'dojoxGridWithNestedSorting');
 	},
 	onStartUp: function(){
 		//overwrite base Grid functions
@@ -53,13 +53,15 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		this.connect(this.grid, 'onHeaderCellMouseOut', '_onHeaderCellMouseOut');
 	},
 	_setGridSortIndex: function(inIndex, inAsc, noRefresh){
-		if(typeof(inIndex) == 'number'){
+		if(!isNaN(inIndex)){
 			if(inAsc === undefined){ return; }//header click from base DataGrid
 			this.setSortData(inIndex, 'order', inAsc ? 'asc' : 'desc');
-		}else if(typeof(inIndex) == 'object'){
-			for(var i = 0; i < inIndex.length; i++){
-				var d = inIndex[i];
-				var cell = this.grid.getCellByField(d.attribute);
+		}else if(dojo.isArray(inIndex)){
+			var i, d, cell;
+			this.clearSort();
+			for(i = 0; i < inIndex.length; i++){
+				d = inIndex[i];
+				cell = this.grid.getCellByField(d.attribute);
 				if(!cell){
 					console.warn('Cell not found for sorting: ', d.attribute);
 					continue;
@@ -72,7 +74,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}
 		this._updateSortDef();
 		if(!noRefresh){
-			this.grid._refresh();
+			this.grid.sort();
 		}
 	},
 	getSortProps: function(){
@@ -83,30 +85,31 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_initSort: function(){
 		// summary:
 		//		Initiate sorting
-		dojo.toggleClass(this.grid.domNode, 'dojoxGridSorted', !!this._sortDef.length);
-		dojo.toggleClass(this.grid.domNode, 'dojoxGridSingleSorted', this._sortDef.length == 1);
-		dojo.toggleClass(this.grid.domNode, 'dojoxGridNestSorted', this._sortDef.length > 1);
-		
-		var idx, g = this.grid, excluded = this._excludedColIdx = [];//reset it
-		//cache column index of hidden, unsortable or indirect selection
+		var g = this.grid, n = g.domNode, len = this._sortDef.length;
+		dojo.toggleClass(n, 'dojoxGridSorted', !!len);
+		dojo.toggleClass(n, 'dojoxGridSingleSorted', len === 1);
+		dojo.toggleClass(n, 'dojoxGridNestSorted', len > 1);
+		if(len > 0){
+			this._currMainSort = this._sortDef[0].descending ? 'desc' : 'asc';
+		}
+		var idx, excluded = this._excludedCoIdx = [];//reset it
+		//cache column index of hidden, un-sortable or indirect selection
 		this._headerNodes = dojo.query("th", g.viewsHeaderNode).forEach(function(n){
 			idx = parseInt(dojo.attr(n, 'idx'), 10);
-			if(dojo.style(n, 'display') === 'none' || g.layout.cells[idx]['noSort']){
+			if(dojo.style(n, 'display') === 'none' || g.layout.cells[idx]['noSort'] || (g.canSort && !g.canSort(idx, g.layout.cells[idx]['field']))){
 				excluded.push(idx);
 			}
 		});
 		this._headerNodes.forEach(this._initHeaderNode, this);
 		this._focusRegions = [];
 	},
-	_initHeaderNode: function(node ){
-		//Summary:
-		dojo.create('a', {
-			className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
-			href: 'javascript:void(0);',
-			onmousedown: dojo.stopEvent,
-			title: this.nls.singleSort
-		}, node.firstChild, 'last');
-		
+	_initHeaderNode: function(node){
+		// summary:
+		//		Initiate sort for each header cell node
+		if(dojo.indexOf(this._excludedCoIdx, dojo.attr(node,'idx')) >= 0){
+			dojo.addClass(node, 'dojoxGridNoSort');
+			return;
+		}
 		dojo.create('a', {
 			className: 'dojoxGridSortBtn dojoxGridSortBtnNested',
 			href: 'javascript:void(0);',
@@ -114,33 +117,46 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			title: this.nls.nestedSort,
 			innerHTML: '1'
 		}, node.firstChild, 'last');
-		
+		dojo.create('a', {
+			className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
+			href: 'javascript:void(0);',
+			onmousedown: dojo.stopEvent,
+			title: this.nls.singleSort
+		}, node.firstChild, 'last');
 		this._updateHeaderNodeUI(node);
 	},
 	_onHeaderCellClick: function(e){
+		// summary
+		//		See dojox.grid.enhanced._Events._onHeaderCellClick()		
 		if(dojo.hasClass(e.target, 'dojoxGridSortBtn')){
 			this._onSortBtnClick(e);
 			dojo.stopEvent(e);
 		}
 	},
 	_onHeaderCellMouseOver: function(e){
-		//summary
-		//	When user mouseover other column than sorted column in a single sorted grid, need to show 1 in the sorted column
+		// summary
+		//		See dojox.grid._Events._onHeaderCellMouseOver()
+		//		When user mouseover other columns than sorted column in a single sorted grid,
+		//		We need to show 1 in the sorted column
+		if(!e.cell){return; }
 		if(this._sortDef.length > 1){ return; }
 		if(this._sortData[e.cellIndex] && this._sortData[e.cellIndex].index === 0){ return; }
-		
-		for(var p in this._sortData){
+		var p;
+		for(p in this._sortData){
 			if(this._sortData[p].index === 0){
-				dojo.addClass(this._headerNodes[p], 'dojoxGridHeaderNodeShowIndex');
+				dojo.addClass(this._headerNodes[p], 'dojoxGridCellShowIndex');
 				break;
 			}
 		}
 		
 	},
 	_onHeaderCellMouseOut: function(e){
-		for(var p in this._sortData){
+		// summary
+		//		See dojox.grid.enhanced._Events._onHeaderCellMouseOut()
+		var p;	
+		for(p in this._sortData){
 			if(this._sortData[p].index === 0){
-				dojo.removeClass(this._headerNodes[p], 'dojoxGridHeaderNodeShowIndex');
+				dojo.removeClass(this._headerNodes[p], 'dojoxGridCellShowIndex');
 				break;
 			}
 		}
@@ -174,7 +190,8 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			this.removeSortData(cellIdx); //remove from sorting sequence
 		}
 		this._updateSortDef();
-		this.grid._refresh();
+		this.grid.sort();
+		this._initSort();
 	},
 	setSortData: function(cellIdx, attr, value){
 		// summary:
@@ -186,9 +203,9 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		sd[attr] = value;
 	},
 	removeSortData: function(cellIdx){
-		var d = this._sortData, i = d[cellIdx].index;
+		var d = this._sortData, i = d[cellIdx].index, p;
 		delete d[cellIdx];
-		for(var p in d){
+		for(p in d){
 			if(d[p].index > i){
 				d[p].index--;
 			}
@@ -196,35 +213,41 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	},
 	_prepareSingleSort: function(cellIdx){
 		// summary:
-		//		Prepare the single sort, also called main sort, this will clear any exsting sorting and just sort the grid by current column.
-		var d = this._sortData;
-		for(var p in d){
-			if(p != cellIdx || dojo.hasClass(this.grid.domNode, 'dojoxGridNestSorted')){
-				delete d[p];//clear sorting data except current index
-			}
+		//		Prepare the single sort, also called main sort, this will clear any existing sorting and just sort the grid by current column.
+		var d = this._sortData, p;
+		for(p in d){
+			delete d[p];
 		}
 		this.setSortData(cellIdx, 'index', 0);
+		this.setSortData(cellIdx, 'order', this._currMainSort === 'none' ? null : this._currMainSort);
+		if(!this._sortData[cellIdx] || !this._sortData[cellIdx].order){
+			this._currMainSort = 'asc';
+		}else if(this.isAsc(cellIdx)){
+			this._currMainSort = 'desc';
+		}else if(this.isDesc(cellIdx)){
+			this._currMainSort = 'none';
+		}
 	},
 	_prepareNestedSort: function(cellIdx){
-		//summary
-		//	Prepare the nested sorting, this will order the column on existing sorting result.
+		// summary
+		//		Prepare the nested sorting, this will order the column on existing sorting result.
 		var i = this._sortData[cellIdx] ? this._sortData[cellIdx].index : null;
 		if(i === 0 || !!i){ return; }
 		this.setSortData(cellIdx, 'index', this._sortDef.length);
 	},
 	_updateSortDef: function(){
 		this._sortDef.length = 0;
-		var d = this._sortData;
-		for(var p in d){
+		var d = this._sortData, p;
+		for(p in d){
 			this._sortDef[d[p].index] = {
 				attribute: this.grid.layout.cells[p].field,
-				descending: d[p].order == 'desc'
+				descending: d[p].order === 'desc'
 			};
 		}
 	},
 	_updateHeaderNodeUI: function(node){
 		// summary:
-		//		Update the column header ui on current sorting state.
+		//		Update the column header UI based on current sorting state.
 		//		Show indicator of the sorting order of the column, no order no indicator
 		var cell = this._getCellByNode(node);
 		var cellIdx = cell.index;
@@ -233,13 +256,16 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		var singleSortBtn = dojo.query('.dojoxGridSortBtnSingle', node)[0];
 		var nestedSortBtn = dojo.query('.dojoxGridSortBtnNested', node)[0];
 		
+		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnAsc', this._currMainSort === 'asc');
+		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnDesc', this._currMainSort === 'desc');
+		
 		function setWaiState(){
 			var columnInfo = 'Column ' + (cell.index + 1) + ' ' + cell.field;
 			var orderState = 'none';
 			var orderAction = 'ascending';
 			if(data){
-				orderState = data.order == 'asc' ? 'ascending' : 'descending';
-				orderAction = data.order == 'asc' ? 'descending' : 'none';
+				orderState = data.order === 'asc' ? 'ascending' : 'descending';
+				orderAction = data.order === 'asc' ? 'descending' : 'none';
 			}
 			var a11ySingleLabel = columnInfo + ' - is sorted by ' + orderState;
 			var a11yNestedLabel = columnInfo + ' - is nested sorted by ' + orderState;
@@ -280,14 +306,15 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		dojo.addClass(sortNode, (data.index === 0 ? 'dojoxGridSortNodeMain' : 'dojoxGridSortNodeSub'));
 	},
 	isAsc: function(cellIndex){
-		return this._sortData[cellIndex].order == 'asc';
+		return this._sortData[cellIndex].order === 'asc';
 	},
 	isDesc: function(cellIndex){
-		return this._sortData[cellIndex].order == 'desc';
+		return this._sortData[cellIndex].order === 'desc';
 	},
 	_getCellByNode: function(node){
-		for(var i = 0; i < this._headerNodes.length; i++){
-			if(this._headerNodes[i] == node){
+		var i;
+		for(i = 0; i < this._headerNodes.length; i++){
+			if(this._headerNodes[i] === node){
 				return this.grid.layout.cells[i];
 			}
 		}
@@ -408,7 +435,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 					if(dojo.hasClass(e.target, 'dojoxGridSortBtnSingle') ||
 						dojo.hasClass(e.target, 'dojoxGridSortBtnNested')){
 						this._onSortBtnClick(e);
-					}						
+					}
 			}
 		}
 	},
@@ -469,7 +496,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	},
 	_singleSortTip: function(/*Integer*/colIdx){
 		var def = this._sortDef, data = this._sortData[colIdx];
-		return (def.length === 0 || def.length == 1 && data && data.index === 0);
+		return (def.length === 0 || def.length === 1 && data && data.index === 0);
 	},
 	destroy: function(){
 		this._sortDef = this._sortData = null;
