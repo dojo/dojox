@@ -44,12 +44,9 @@ dojo.require("dojox.drawing.stencil.Text");
 			//
 			if(options.data){
 				var d = options.data;
-				var text = d.text;
-				var w = !d.width ? this.style.text.minWidth : d.width=="auto" ? "auto" : Math.max(d.width, this.style.text.minWidth)
+				var text = d.text ? this.typesetter(d.text) : d.text;
+				var w = !d.width ? this.style.text.minWidth : d.width=="auto" ? "auto" : Math.max(d.width, this.style.text.minWidth);
 				var h = this._lineHeight;
-				
-				// need to typeset before measuring width
-				text = this.typesetter(text);
 				
 				if(text && w=="auto"){
 					var o = this.measureText(this.cleanText(text, false), w);
@@ -88,6 +85,9 @@ dojo.require("dojox.drawing.stencil.Text");
 						this.editMode = false;	
 					}),100)
 					
+				}else{
+					// Why make it if it won't render...
+					this.render();
 				}
 				
 			}else{
