@@ -28,6 +28,17 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 	onSetStore: function(store){
 		this.grid.layer("rowmap").clearMapping();
 	},
+	_hasIdentity: function(points){
+		var g = this.grid, s = g.store, cells = g.layout.cells;
+		if(s.getFeatures()["dojo.data.api.Identity"]){
+			if(dojo.some(points, function(point){
+				return s.getIdentityAttributes(g._by_idx[point.r].item) == cells[point.c].field;
+			})){
+				return true;
+			}
+		}
+		return false;
+	},
 	moveColumns: function(colsToMove, targetPos){
 		// summary:
 		//		Move a set of columns to a given position.
@@ -205,6 +216,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 					});
 				}
 			}
+			if(this._hasIdentity(sources.concat(targets))){
+				console.warn("Can not write to identity!");
+				return;
+			}
 			dojo.forEach(sources, function(point){
 				s.setValue(g._by_idx[point.r].item, cells[point.c].field, "");
 			});
@@ -213,30 +228,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 			});
 			s.save({
 				onComplete: function(){
-					g._storeLayerFetch({
-						start: cellsToMove.min.row,
-						count: cnt,
-						onComplete: function(items){
-							for(var i = 0; i < cnt; ++i){
-								g._addItem(items[i], i + cellsToMove.min.row);
-							}
-						}
-					});
-					g._storeLayerFetch({
-						start: target.min.row,
-						count: cnt,
-						onComplete: function(items){
-							for(var i = 0; i < cnt; ++i){
-								g._addItem(items[i], i + target.min.row);
-							}
-							setTimeout(function(){
-								dojo.publish("dojox/grid/rearrange/move/" + g.id, ["cell", {
-									"from": cellsToMove,
-									"to": target
-								}]);	
-							}, 0);
-						}
-					});
+					dojo.publish("dojox/grid/rearrange/move/" + g.id, ["cell", {
+						"from": cellsToMove,
+						"to": target
+					}]);
 				}
 			});
 		}
@@ -267,26 +262,21 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 					});
 				}
 			}
+			if(this._hasIdentity(targets)){
+				console.warn("Can not write to identity!");
+				return;
+			}
 			dojo.forEach(targets, function(point){
 				s.setValue(g._by_idx[point.r].item, cells[point.c].field, point.v);
 			});
 			s.save({
 				onComplete: function(){
-					g._storeLayerFetch({
-						start: target.min.row,
-						count: cnt,
-						onComplete: function(items){
-							for(var i = 0; i < cnt; ++i){
-								g._addItem(items[i], i + target.min.row);
-							}
-							setTimeout(function(){
-								dojo.publish("dojox/grid/rearrange/copy/" + g.id, ["cell", {
-									"from": cellsToMove,
-									"to": target
-								}]);
-							}, 0);
-						}
-					});
+					setTimeout(function(){
+						dojo.publish("dojox/grid/rearrange/copy/" + g.id, ["cell", {
+							"from": cellsToMove,
+							"to": target
+						}]);
+					}, 0);
 				}
 			});
 		}
@@ -315,23 +305,16 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 					});
 				}
 			}
+			if(this._hasIdentity(targets)){
+				console.warn("Can not write to identity!");
+				return;
+			}
 			dojo.forEach(targets, function(point){
 				s.setValue(g._by_idx[point.r].item, cells[point.c].field, point.v);
 			});
 			s.save({
 				onComplete: function(){
-					g._storeLayerFetch({
-						start: target.min.row,
-						count: cnt,
-						onComplete: function(items){
-							for(var i = 0; i < cnt; ++i){
-								g._addItem(items[i], i + target.min.row);
-							}
-							setTimeout(function(){
-								dojo.publish("dojox/grid/rearrange/change/" + g.id, ["cell", target]);
-							}, 0);
-						}
-					});
+					dojo.publish("dojox/grid/rearrange/change/" + g.id, ["cell", target]);
 				}
 			});
 		}
@@ -342,29 +325,28 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 		if(s.getFeatures()["dojo.data.api.Write"]){
 			var cells = g.layout.cells,
 				cnt = cellsToClear.max.row - cellsToClear.min.row + 1,
-				r, c;
+				r, c, targets = [];
 			for(r = cellsToClear.min.row; r <= cellsToClear.max.row; ++r){
 				for(c = cellsToClear.min.col; c <= cellsToClear.max.col; ++c){
 					while(cells[c] && cells[c].hidden){
 						++c;
 					}
-					s.setValue(g._by_idx[r].item, cells[c].field, "");
+					targets.push({
+						"r": tr,
+						"c": tc
+					});
 				}
 			}
+			if(this._hasIdentity(targets)){
+				console.warn("Can not write to identity!");
+				return;
+			}
+			dojo.forEach(targets, function(point){
+				s.setValue(g._by_idx[point.r].item, cells[point.c].field, "");
+			});
 			s.save({
 				onComplete: function(){
-					g._storeLayerFetch({
-						start: cellsToClear.min.row,
-						count: cnt,
-						onComplete: function(items){
-							for(var i = 0; i < cnt; ++i){
-								g._addItem(items[i], i + cellsToClear.min.row);
-							}
-							setTimeout(function(){
-								dojo.publish("dojox/grid/rearrange/change/" + g.id, ["cell", cellsToClear]);
-							}, 0);
-						}
-					});
+					dojo.publish("dojox/grid/rearrange/change/" + g.id, ["cell", cellsToClear]);
 				}
 			});
 		}
