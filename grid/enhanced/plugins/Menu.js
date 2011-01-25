@@ -80,7 +80,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 		//		Fired from dojox.grid.enhanced._Events.onRowContextMenu, 'this' scope - Grid
 		//		TODO: test Shift-F10
 		var inSelectedRegion = (e.cellNode && dojo.hasClass(e.cellNode, 'dojoxGridRowSelected') || 
-			e.rowNode && dojo.hasClass(e.rowNode, 'dojoxGridRowSelected'));
+			e.rowNode && (dojo.hasClass(e.rowNode, 'dojoxGridRowSelected') || dojo.hasClass(e.rowNode, 'dojoxGridRowbarSelected')));
 		
 		if(inSelectedRegion && this.selectedRegionMenu){
 			this.onSelectedRegionContextMenu(e);
@@ -88,7 +88,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 		}
 		
 		var info = {target: e.target, coords: "pageX" in e ? {x: e.pageX, y: e.pageY } : null};
-		if(this.rowMenu && this.selection.isSelected(e.rowIndex)){
+		if(this.rowMenu && (this.selection.isSelected(e.rowIndex) || e.rowNode && dojo.hasClass(e.rowNode, 'dojoxGridRowbar'))){
 			this.rowMenu._openMyself(info);
 			dojo.stopEvent(e);
 			return;
