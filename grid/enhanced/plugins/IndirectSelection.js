@@ -31,12 +31,10 @@ dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhance
 			return;
 		}
 		var rowSelectCellAdded = false, inValidFields = ['get', 'formatter', 'field', 'fields'],
-		defaultCellDef = {type: dojox.grid.cells.MultipleRowSelector, name: '', width:'30px',
-					styles:'text-align: center;', notselectable: true, filterable: false, navigatable: true};
+		defaultCellDef = {type: dojox.grid.cells.MultipleRowSelector, name: '', width:'30px', styles:'text-align: center;'};
 		if(option.headerSelector){ option.name = ''; }//mutual conflicting attrs
 
 		if(this.grid.rowSelectCell){//remove the existed one
-			defaultCellDef.defaultValue = this.grid.rowSelectCell.defaultValue;
 			this.grid.rowSelectCell.destroy();
 		}
 		
@@ -50,7 +48,7 @@ dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhance
 					return;
 				}
 				var selectDef, cellType = this.grid.selectionMode == 'single' ? dojox.grid.cells.SingleRowSelector : dojox.grid.cells.MultipleRowSelector;
-				selectDef = dojo.mixin(defaultCellDef, option, {type: cellType, editable: false});
+				selectDef = dojo.mixin(defaultCellDef, option, {type: cellType, editable: false, notselectable: true, filterable: false, navigatable: true, noSort: true});
 				dojo.forEach(inValidFields, function(field){//remove invalid fields
 					if(field in selectDef){ delete selectDef[field]; }
 				});
@@ -471,7 +469,7 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		// rowOffset: Integer
 		//		Row offset, used for swipe selection via Shift + Cursor
 		//		-1 : Shift +  Up, 1 : Shift + Down
-		if(rowOffset === 0 || !e.shiftKey || e.cellIndex != this.index || 
+		if(!e || rowOffset === 0 || !e.shiftKey || e.cellIndex != this.index || 
 			this.grid.focus.rowIndex < 0){ //TBD - e.rowIndex == 0 && delta == -1
 			return; 
 		}
@@ -547,8 +545,10 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 				g._nls["selectAll"] + "</span>"
 		}));
 		this.map[-1] = selector;
-		if(this._headerSelectorConnectIdx !== undefined){
-			dojo.disconnect(this._connects[this._headerSelectorConnectIdx]);
+		var idx = this._headerSelectorConnectIdx;
+		if(idx !== undefined){
+			dojo.disconnect(this._connects[idx]);
+			this._connects.splice(idx, 1);
 		}
 		this._headerSelectorConnectIdx = this._connects.length;
 		this._connects.push(dojo.connect(selector, 'onclick', this, '_toggletHeader'));
@@ -558,7 +558,8 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		// summary:
 		//		Toggle state for head selector
 		this.grid._selectingRange = true;
-		this.toggleAllSelection(this.grid.rowCount != this.grid.selection.getSelectedCount());
+		var allSelected = this.grid.rowCount > 0 && this.grid.rowCount <= this.grid.selection.getSelectedCount();
+		this.toggleAllSelection(!allSelected);
 		this._onSelectionChanged();
 		this.grid._selectingRange = false;
 	},
@@ -567,7 +568,7 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		//		Update header selector anytime selection changed		
 		if(!this.map[-1] || this.grid._selectingRange){ return; }
 		var grid = this.grid, headSelector = this.map[-1];
-		var allSelected = grid.rowCount > 0 && grid.rowCount == grid.selection.getSelectedCount();
+		var allSelected = grid.rowCount > 0 && grid.rowCount <= grid.selection.getSelectedCount();
 		dojo.toggleClass(headSelector, this.checkedClass, allSelected);
 		dijit.setWaiState(headSelector, 'pressed', allSelected);
 		if(this.inA11YMode){
