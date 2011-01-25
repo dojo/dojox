@@ -51,6 +51,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		var focus = this.focus;
 		switch(e.keyCode){
 			case dk.TAB:
+				if(e.ctrlKey){ return; }
 				focus.tab(e.shiftKey ? -1:1,e);
 				break;
 			case dk.UP_ARROW:

@@ -229,8 +229,8 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		// return: Boolean
 		//		True - fixed| False - not fixed
 
-		//target cell can use Boolean attributes named "isRowSelector" or "positionFixed" to mark it's a fixed cell(column)
-		return cell && (cell.isRowSelector || cell.positionFixed);
+		//target cell can use Boolean attributes named "isRowSelector" or "fixedPos" to mark it's a fixed cell(column)
+		return cell && (cell.isRowSelector || cell.fixedPos);
 	},
 	destroy: function(){
 		// summary:

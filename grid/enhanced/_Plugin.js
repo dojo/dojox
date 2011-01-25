@@ -6,16 +6,16 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	//		Base class for all plugins.
 	//
 	// description:
-	//		Provides common plugin functionality and basic life cyle management.
+	//		Provides common plugin functionality and basic life cycle management.
 	//		
-	//		Each concrete plugin is responsible for registering itself to the global plugin registry
+	//		Each concrete plugin must have a name field and is responsible for registering itself to the global plugin registry
 	//		e.g. for dnd plugin:
 	// |		dojox.grid.EnhancedGrid.registerPlugin("dnd" /*plugin name*/, 
 	// |												dojox.grid.enhanced.plugins.DnD /*full class name of a plugin*/ 
 	// |												{"preInit": false, "dependency": ["nestedSorting"]} /*properties*/);	
 	//		
 	//		[Keywords] of plugin properties(case sensitive)
-	//		- "preInit": whether a plugin should be created before EnhancedGrid.postCreate(), 
+	//		- "preInit": boolean, whether a plugin should be created before EnhancedGrid.postCreate(), 
 	//		   false by default(plugins are created after EnhancedGrid.postCreate()).
 	//		- "dependency": array or string, plugin(s) indicated by "dependency" will be created before the current one.
 	//		   Note: recursive cycle dependencies are not supported e.g. following dependency is invalid:

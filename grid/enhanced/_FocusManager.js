@@ -649,6 +649,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 			}
 			return false;
 		}else if(this.grid.edit.isEditing() && this.cell){
+			if(!step || typeof step != "number"){ return false; }
 			var dir = step > 0 ? 1 : -1;
 			var cc = this.grid.layout.cellCount;
 			for(var cell, col = this.cell.index + dir; col >= 0 && col < cc; col += dir){
