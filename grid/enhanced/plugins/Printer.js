@@ -237,6 +237,11 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 				dojo.style(rowsPerView[v][i], "height", maxHeight + "px");
 			}
 		}
+		var left = 0;
+		for(v = 0; v < views.length; ++v){
+			dojo.style(views[v], "left", left + "px");
+			left += dojo.marginBox(views[v]).w;
+		}
 	},
 	_formalizeArgs: function(args){
 		args = (args && dojo.isObject(args)) ? args : {};

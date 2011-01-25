@@ -10,14 +10,16 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.CSVWriter",
 	// summary:
 	//		Export grid to CSV format.
 	_separator: ',',
+	_newline: "\r\n",
 	constructor: function(/* object? */writerArgs){
 		// summary:
 		//		CSV default separator is ','.
 		//		But we can also use our own.
 		// writerArgs: object?
 		//		{separator:'...'}
-		if(writerArgs && writerArgs.separator){
-			this._separator = writerArgs.separator;	
+		if(writerArgs){
+			this._separator = writerArgs.separator ? writerArgs.separator : this._separator;
+			this._newline = writerArgs.newline ? writerArgs.newline : this._newline;
 		}
 		this._headers = [];
 		this._dataRows = [];
@@ -36,7 +38,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.CSVWriter",
 			return '';
 		}
 		var result = String(cellValue).replace(/"/g, '""');
-		if(result.indexOf(this._separator) >= 0 || result.search(/[" \t\n]/) >= 0){
+		if(result.indexOf(this._separator) >= 0 || result.search(/[" \t\r\n]/) >= 0){
 			result = '"' + result + '"';
 		}
 		return result;	//String
@@ -68,11 +70,10 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.CSVWriter",
 	toString: function(){
 		// summary:
 		//		Overrided from _ExportWriter
-		var result = this._headers.join(this._separator),
-			endl = '\n';
+		var result = this._headers.join(this._separator);
 		for(var i = this._dataRows.length - 1; i >= 0; --i){
 			this._dataRows[i] = this._dataRows[i].join(this._separator);
 		}
-		return result + endl + this._dataRows.join(endl);	//String
+		return result + this._newline + this._dataRows.join(this._newline);	//String
 	}
 });
