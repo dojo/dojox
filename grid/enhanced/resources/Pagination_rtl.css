@@ -2,7 +2,7 @@
 	text-align: right;
 	margin-right: 9px;
 }
-.dojoxGridPaginatorStep {
+.dojoxGridRtl .dojoxGridPaginatorStep {
 	float: left;
 }
 .dojoxGridRtl .dojoxGridPaginatorGotoDiv {

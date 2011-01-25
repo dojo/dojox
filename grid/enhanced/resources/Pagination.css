@@ -8,14 +8,11 @@
 }
 .dojoxGridDescriptionTd {
 	text-align: left;
-	width: 30%;
+	width: 35%;
 }
 .dojoxGridDescription {
 	text-align: left;
 	margin-left: 9px;
-	overflow: hidden;
-}
-.dojoxGridPaginatorSwitch {
 	overflow: hidden;
 }
 .dojoxGridPaginatorFastStep {
@@ -109,6 +106,7 @@
 .dojoxGridInactiveSwitch {
 	font-weight: normal;
 	color: #5D88AF;
+	float: left;
 	cursor: pointer;
 	margin: 1px 7px 0 7px;
 	zoom: 1; /* for IE */
@@ -116,6 +114,7 @@
 .dojoxGridActivedSwitch {
 	font-weight: bold;
 	color: black;
+	float: left;
 	margin: 1px 7px 0 7px;
 	text-decoration: none!important; 
 	zoom: 1; /* for IE */
