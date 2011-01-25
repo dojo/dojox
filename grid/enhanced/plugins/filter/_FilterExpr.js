@@ -214,4 +214,15 @@ dojo.require("dojo.date");
 			return new fns.BooleanExpr(left_res.search(right_res) >= 0);	//_ConditionExpr
 		}
 	});
+	dojo.declare("dojox.grid.enhanced.plugins.filter.IsEmpty", fns._UniOpExpr, {
+		// summary:
+		//		Check empty
+		_name: "isEmpty",
+		_calculate: function(/* _ConditionExpr */operand,/* data item*/datarow,/* function(row,colIdx) */getter){
+			// summary:
+			//		Override from _BiOpExpr
+			var res = operand.applyRow(datarow, getter).getValue();
+			return new fns.BooleanExpr(res === "" || res == null);
+		}
+	});
 })();

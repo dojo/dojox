@@ -39,6 +39,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBuilder", null, {
 		"notcontains": bdr_not("Contains"),
 		"notstartswith": bdr_not("StartsWith"),
 		"notendswith": bdr_not("EndsWith"),
+		"isempty": bdr("IsEmpty"),
 		"range": function(operands){
 			return new fns.LogicALL(
 				new fns.LargerThanOrEqualTo(operands.slice(0,2)),

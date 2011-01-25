@@ -113,7 +113,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 					{label: nls.conditionLess, value: "lessthan"},
 					{label: nls.conditionLessEqual, value: "lessthanorequalto"},
 					{label: nls.conditionLarger, value: "largerthan"},
-					{label: nls.conditionLargerEqual, value: "largerthanorequalto"}
+					{label: nls.conditionLargerEqual, value: "largerthanorequalto"},
+					{label: nls.conditionIsEmpty, value: "isempty"}
 				]
 			},
 			"string":{
@@ -129,7 +130,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 					{label: nls.conditionNotContain, value: "notcontains"},
 					{label: nls.conditionIsNot, value: "notequalto"},
 					{label: nls.conditionNotStartWith, value: "notstartswith"},
-					{label: nls.conditionNotEndWith, value: "notendswith"}
+					{label: nls.conditionNotEndWith, value: "notendswith"},
+					{label: nls.conditionIsEmpty, value: "isempty"}
 				]
 			},
 			"date":{
@@ -140,7 +142,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 					{label: nls.conditionIs, value: "equalto", selected: true},
 					{label: nls.conditionBefore, value: "lessthan"},
 					{label: nls.conditionAfter, value: "largerthan"},
-					{label: nls.conditionRange, value: "range"}
+					{label: nls.conditionRange, value: "range"},
+					{label: nls.conditionIsEmpty, value: "isempty"}
 				]
 			},
 			"time":{
@@ -151,7 +154,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 					{label: nls.conditionIs, value: "equalto", selected: true},
 					{label: nls.conditionBefore, value: "lessthan"},
 					{label: nls.conditionAfter, value: "largerthan"},
-					{label: nls.conditionRange, value: "range"}
+					{label: nls.conditionRange, value: "range"},
+					{label: nls.conditionIsEmpty, value: "isempty"}
 				]
 			},
 			"boolean": {
@@ -159,7 +163,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 					dft: fns.BooleanValueBox
 				},
 				conditions: [
-					{label: nls.conditionIs, value: "equalto", selected: true}
+					{label: nls.conditionIs, value: "equalto", selected: true},
+					{label: nls.conditionIsEmpty, value: "isempty"}
 				]
 			}
 		};
@@ -381,7 +386,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 		if(condition == "range"){
 			operands.push(dojo.mixin({"data": value.start}, obj), 
 				dojo.mixin({"data": value.end}, obj));
-		}else{
+		}else if(condition != "isempty"){
 			operands.push(dojo.mixin({"data": value}, obj));
 		}
 		return {
@@ -412,7 +417,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 			this.removeCriteriaBoxes(this._cboxes.length-1);
 			this._cboxes[0].load({});
 		}catch(e){
-			console.debug("clearFilter:",e);
 			//Any error means the filter is defined outside this plugin.
 		}
 		if(noRefresh){
@@ -506,6 +510,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 				}
 			}
 		}else if(this._criteriasChanged){
+			this.filterDefPane._relSelect.set("value", this._relOpCls === "logicall" ? "0" : "1");
 			this._criteriasChanged = false;
 			var needNewCBox = sc.length > cbs.length;
 			this.addCriteriaBoxes(sc.length - cbs.length);
@@ -729,6 +734,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		var type = this.dlg.getColumnType(val);
 		this._setConditionsByType(type);
 		this._setValueBoxByType(type);
+		this._updateValueBox();
 	},
 	_onChangeCondition: function(val){
 		this._checkValidCriteria();
@@ -737,6 +743,10 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 			this._isRange = f;
 			this._setValueBoxByType(this.dlg.getColumnType(this._colSelect.get("value")));
 		}
+		this._updateValueBox();
+	},
+	_updateValueBox: function(cond){
+		this._curValueBox.set("disabled", this._condSelect.get("value") == "isempty");
 	},
 	_checkValidCriteria: function(){
 		// summary:
@@ -802,6 +812,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		return this._condSelect.getOptions(this._condSelect.get("value")).label;
 	},
 	curValue: function(){
+		var cond = this._condSelect.get("value");
+		if(cond == "isempty"){return "";}
 		return this._curValueBox ? this._curValueBox.get("value") : "";
 	},
 	save: function(){
@@ -836,8 +848,14 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		}
 		if(obj.type){
 			this._setValueBoxByType(obj.type);
+		}else{
+			obj.type = this.dlg.getColumnType(this._colSelect.get("value"));
 		}
-		this._curValueBox.set("value", obj.value || "");
+		var value = obj.value || "";
+		if(value || (obj.type != "date" && obj.type != "time")){
+			this._curValueBox.set("value", value);
+		}
+		this._updateValueBox();
 		setTimeout(dojo.hitch(this, function(){
 			this._onChangeColumn = tmp[0];
 			this._onChangeCondition = tmp[1];
@@ -856,6 +874,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		});
 	},
 	isEmpty: function(){
+		var cond = this._condSelect.get("value");
+		if(cond == "isempty"){return false;}
 		var v = this.curValue();
 		return v === "" || v === null || typeof v == "undefined" || (typeof v == "number" && isNaN(v)); 
 	},
@@ -986,6 +1006,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	formatValue: function(type, cond, v){
 		// summary:
 		//		Format the value to be shown in tooltip.
+		if(cond == "isempty"){return "";}
 		if(type == "date" || type == "time"){
 			var opt = {selector: type},
 				fmt = dojo.date.locale.format;
@@ -1058,7 +1079,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.AccordionContainer", dijit.layo
 				}
 			}, this);
 		}
-		this._modifyChild(this.selectedChildWidget);
+		dojo.forEach(this.getChildren(), function(child){
+			this._modifyChild(child, true);
+		}, this);
 	},
 	_onKeyPress: function(/*Event*/ e, /*dijit._Widget*/ fromTitle){
 		// summary:
@@ -1091,7 +1114,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.AccordionContainer", dijit.layo
 		}
 		dijit.focus(this.selectedChildWidget[this._focusOnRemoveBtn ? "_removeCBoxBtn" : "_buttonWidget"].focusNode);
 	},
-	_modifyChild: function(child){
+	_modifyChild: function(child, isFirst){
 		if(!child || !this._started){
 			return;
 		}
@@ -1119,7 +1142,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.AccordionContainer", dijit.layo
 			dojo.style(child._removeCBoxBtn.domNode, "display", "none");
 		}else{
 			for(i = 0; i < children.length; ++i){
-				dojo.style(children[i]._removeCBoxBtn.domNode, "display", "");
+				if(children[i]._removeCBoxBtn){
+					dojo.style(children[i]._removeCBoxBtn.domNode, "display", "");
+				}
 			}
 		}
 		this._setupTitleDom(child);
@@ -1131,7 +1156,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.AccordionContainer", dijit.layo
 				}
 			}
 		}
-		this._hackHeight(true, this._titleHeight);
+		if(!isFirst){
+			this._hackHeight(true, this._titleHeight);
+		}
 	},
 	_hackHeight: function(/* bool */toGrow,/* int */heightDif){
 		var children = this.getChildren(),
