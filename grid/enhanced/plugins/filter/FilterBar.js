@@ -94,6 +94,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 	showFilterBar: function(toShow, useAnim, animArgs){
 		var g = this.plugin.grid;
 		if(useAnim){
+			if(Boolean(toShow) == this.isFilterBarShown()){ return; }
 			animArgs = animArgs || {};
 			var anims = [], defaultDuration = 500;
 			anims.push(dojo.fx[toShow ? "wipeIn" : "wipeOut"](dojo.mixin({

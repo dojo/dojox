@@ -10,6 +10,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._ConditionExpr",null,{
 	//		and generate a result condition expression.
 	// tags:
 	//		abstract
+	
+	_name: "expr",
 	applyRow: function(/* data item */datarow,/* function(row,colArg) */getter){
 		// summary:
 		//		*Unimplemented Interface*
@@ -42,7 +44,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._ConditionExpr",null,{
 		//		public extension
 		// returns:
 		//		the name of this kind of expression
-		return "expr";	//String
+		return this._name;	//String
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr, {
@@ -56,6 +58,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr,
 	// private fields:
 	//		_value: anything
 	//		_colArg: anything
+	_name: "data",
 	constructor: function(/* anything */dataValue,/* bool */isColumn, /* object */convertArgs){
 		// summary:
 		//		If a _DataExpr is constructed with only one argument, this argument is regarded as a pure value.
@@ -117,17 +120,13 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr,
 			data: this._colArg === undefined ? this._value : this._colArg,
 			isCol: this._colArg !== undefined
 		};
-	},
-	getName: function(){
-		// summary:
-		//		Overrided from _ConditionExpr.getName.
-		return "data";	//String
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.filter._OperatorExpr", fns._ConditionExpr, {
 	// summary:
 	//		The most abstract class for all operator expressions.
 	//		An operator expression is a _ConditionExpr that represents an operation.
+	_name: "operator",
 	constructor: function(/* Array | operand1,operand2,... */){
 		// summary:
 		//		The arguments are operands (or an array of operands, if the first argument
@@ -151,17 +150,13 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._OperatorExpr", fns._ConditionE
 				return operand.toObject();
 			})
 		};
-	},
-	getName: function(){
-		// summary:
-		//		Overrided from _ConditionExpr.getName.
-		return "operator";	//String
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.filter._UniOpExpr", fns._OperatorExpr, {
 	// summary:
 	//		The most abstract class for all uni-operator expressions.
 	//		A uni-operator expression is an _OperatorExpr that only allow one operand.
+	_name: "uniOperator",
 	applyRow: function(/* data item */datarow,/* function(row,colArg) */getter){
 		// summary:
 		//		Implement _ConditionExpr.applyRow.
@@ -184,17 +179,13 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._UniOpExpr", fns._OperatorExpr,
 		// returns:
 		//		MUST return a _ConditionExpr object.
 		throw new Error("_UniOpExpr._calculate: unimplemented interface");
-	},
-	getName: function(){
-		// summary:
-		//		Overrided from _ConditionExpr.getName.
-		return "uniOperator";	//String
 	}
 });
 dojo.declare("dojox.grid.enhanced.plugins.filter._BiOpExpr", fns._OperatorExpr, {
 	// summary:
 	//		The most abstract class for all bi-operator expressions.
 	//		A bi-operator expression is an _OperatorExpr that allow and only allow two operands.
+	_name: "biOperator",
 	applyRow: function(/* data item */datarow,/* function(row,colArg) */getter){
 		// summary:
 		//		Implement _ConditionExpr.applyRow.
@@ -219,11 +210,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._BiOpExpr", fns._OperatorExpr, 
 		// returns:
 		//		MUST return a _ConditionExpr object.
 		throw new Error("_BiOpExpr._calculate: unimplemented interface");
-	},
-	getName: function(){
-		// summary:
-		//		Overrided from _ConditionExpr.getName.
-		return "biOperator";	//String
 	}
 });
 })();

@@ -109,10 +109,6 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 			this.connect(grid.layer("filter"), "onFilterDefined", function(filter){
 				grid.onFilterDefined(grid.getFilter(), grid.getFilterRelation());
 			});
-			//If some new row is added, clear the filter.
-			this.connect(grid, "_onNew", function(){
-				this.filterDefDialog.clearFilter();
-			});
 		},
 		destroy: function(){
 			this.inherited(arguments);

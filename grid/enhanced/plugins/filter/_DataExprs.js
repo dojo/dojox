@@ -9,47 +9,37 @@ dojo.require("dojo.date.locale");
 	dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for boolean values
+		_name: "bool",
 		_convertData: function(/* anything */dataValue){
 			// summary:
 			//		override from _DataExpr
 			return !!dataValue;	//Boolean
-		},
-		getName: function(){
-			return "bool";	//String
 		}
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.StringExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for string values
+		_name: "string",
 		_convertData: function(/* anything */dataValue){
 			// summary:
 			//		override from _DataExpr
 			return String(dataValue);	//String
-		},
-		getName: function(){
-			// summary:
-			//		override from _ConditionExpr
-			return "string";	//String
 		}
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.NumberExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for number values
+		_name: "number",
 		_convertDataToExpr: function(/* anything */dataValue){
 			// summary:
 			//		override from _DataExpr
 			return parseFloat(dataValue);	//Number
-		},
-		getName: function(){
-			// summary:
-			//		override from _ConditionExpr
-			return "number";	//String
 		}
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.DateExpr", fns._DataExpr, {
 		// summary:
 		//		A condition expression wrapper for date values
-		_selector: "date",
+		_name: "date",
 		_convertData: function(/* anything */dataValue){
 			// summary:
 			//		override from _DataExpr
@@ -58,7 +48,7 @@ dojo.require("dojo.date.locale");
 			}else if(typeof dataValue == "number"){
 				return new Date(dataValue);
 			}else{
-				var res = dojo.date.locale.parse(String(dataValue), dojo.mixin({selector: this._selector}, this._convertArgs));
+				var res = dojo.date.locale.parse(String(dataValue), dojo.mixin({selector: this._name}, this._convertArgs));
 				if(!res){
 					throw new Error("Datetime parse failed: " + dataValue);
 				}
@@ -77,17 +67,12 @@ dojo.require("dojo.date.locale");
 			}else{
 				return this.inherited(arguments);
 			}
-		},
-		getName: function(){
-			// summary:
-			//		override from _ConditionExpr
-			return this._selector;	//String
 		}
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.TimeExpr", fns.DateExpr, {
 		// summary:
 		//		A condition expression wrapper for time values
-		_selector: "time"
+		_name: "time"
 	});
 })();
 

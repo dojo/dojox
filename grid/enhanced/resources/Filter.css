@@ -28,10 +28,12 @@
 }
 .dojoxGridFBarStatus {
 	margin-left: 9px;
+	float: left;
 }
 .dojoxGridFBarClearFilterBtn {
 	margin: 0 0 0 10px;
 	vertical-align: top;
+	float: left;
 }
 .dojoxGridFBarInfoTD .dojoxGridFBarClearFilterBtn .dijitButtonNode,
 .dojoxGridFBarInfoTD .dojoxGridFBarCloseBtn .dijitButtonNode,
