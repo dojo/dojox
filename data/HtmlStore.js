@@ -67,12 +67,8 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			this.dataId = args.dataId;
 		}else{
 			if(args.dataId){
-				this._rootNode = dojo.byId(args.dataId);
-				this.dataId = this._rootNode.id;
-			}else{
-				this._rootNode = dojo.byId(this.dataId);
+				this.dataId = args.dataId;
 			}
-			this._indexItems();
 		}
 	},
 
@@ -107,14 +103,12 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			}
 			var i;
 			for(i=0; i<this._rootNode.rows.length; i++){
-				this._rootNode.rows[i].store = this;
 				this._rootNode.rows[i]._ident = i+1;
 			}
 		}else{//lists
 			var c=1;
 			for(i=0; i<this._rootNode.childNodes.length; i++){
 				if(this._rootNode.childNodes[i].nodeType === 1){
-					this._rootNode.childNodes[i].store = this;
 					this._rootNode.childNodes[i]._ident = c;
 					c++;
 				}
@@ -283,10 +277,7 @@ dojo.declare("dojox.data.HtmlStore", null, {
 	isItem: function(/* anything */ something){
 		//	summary: 
 		//		See dojo.data.api.Read.isItem()
-		if(something && something.store && something.store === this){
-			return true; //boolean
-		}
-		return false; //boolean
+		return something && dojo.isDescendant(something, this._rootNode);
 	},
 
 	isItemLoaded: function(/* anything */ something){
@@ -325,6 +316,8 @@ dojo.declare("dojox.data.HtmlStore", null, {
 		}else{
 			if(!this.url){
 				this._rootNode = dojo.byId(this.dataId);
+				this._indexItems();
+				this._finishFetchItems(request, fetchHandler, errorHandler);
 			}else{
 				var getArgs = {
 						url: this.url,
