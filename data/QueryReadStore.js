@@ -389,7 +389,10 @@ dojo.declare("dojox.data.QueryReadStore",
 				fetchHandler(this._items, request, this._numRows);
 			}else{
 				var xhrFunc = this.requestMethod.toLowerCase() == "post" ? dojo.xhrPost : dojo.xhrGet;
-				var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery});
+				var xhrHandler = xhrFunc({url:this.url, handleAs:"json-comment-optional", content:serverQuery, failOk: true});
+				request.abort = function(){
+					xhrHandler.cancel();
+				};
 				xhrHandler.addCallback(dojo.hitch(this, function(data){
 					this._xhrFetchHandler(data, request, fetchHandler, errorHandler);
 				}));
