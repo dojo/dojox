@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Clear Filter",
 	"filterDefDialogTitle": "Filter",
-	"incompleteRuleTip": "This rule is not complete.",
 	"ruleTitleTemplate": "Rule ${0}",
 	
 	"conditionEqual": "equal",
@@ -79,7 +78,6 @@
 	"clearFilterMsg": "This will remove the filter and show all available records.",
 	"anyColumnOption": "Any Column",
 	
-	"trueLabelEditable": "Checked",
 	"trueLabel": "True",
 	"falseLabel": "False"
 })
