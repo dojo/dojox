@@ -417,10 +417,16 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		var _this = this;
 		g.selection.selectRange = function(from, to){
 			_this.selectRange("row", from, to, true);
+			if(g.selection.preserver){
+				g.selection.preserver._updateMapping(true, true, false, from, to);
+			}			
 			g.selection.onChanged();
 		};
 		g.selection.deselectRange = function(from, to){
 			_this.selectRange("row", from, to, false);
+			if(g.selection.preserver){
+				g.selection.preserver._updateMapping(true, false, false, from, to);
+			}			
 			g.selection.onChanged();
 		};
 		g.selection.deselectAll = function(){
@@ -428,6 +434,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			_this._oldDeselectAll.apply(g.selection, arguments);
 			_this._clearSelection("row");
 			g._selectingRange = false;
+			if(g.selection.preserver){
+				g.selection.preserver._updateMapping(true, false, true);
+			}			
 			g.selection.onChanged();
 		};
 		

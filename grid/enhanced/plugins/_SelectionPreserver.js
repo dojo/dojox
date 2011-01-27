@@ -26,16 +26,17 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 		var oldClearData = grid._clearData;
 		var _this = this;
 		grid._clearData = function(){
-			_this._updateMapping(true);
+			_this._updateMapping(!grid._noInternalMapping);
 			_this._trustSelection = [];
 			oldClearData.apply(grid, arguments);
 		};
 		this.connect(grid, '_setStore', 'reset');
 		this.connect(grid, '_addItem', '_reSelectById');
 		this.connect(selection, 'addToSelection', dojo.hitch(this, '_selectById', true));
-		this.connect(selection, 'deselect', dojo.hitch(this, '_selectById', false)); 
-		this.connect(selection, '_range', dojo.hitch(this, '_updateMapping', true, false));
-		this.connect(selection, 'deselectAll', dojo.hitch(this, '_updateMapping', true, true));		
+		this.connect(selection, 'deselect', dojo.hitch(this, '_selectById', false));
+		this.connect(selection, 'selectRange', dojo.hitch(this, '_updateMapping', true, true, false));
+		this.connect(selection, 'deselectRange', dojo.hitch(this, '_updateMapping', true, false, false));
+		this.connect(selection, 'deselectAll', dojo.hitch(this, '_updateMapping', true, false, true));
 	},
 	destroy: function(){
 		this.reset();
@@ -91,7 +92,7 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 	},
 	onSelectedById: function(id, rowIndex, value){},
 	
-	_updateMapping: function(trustSelection, deselectAll){
+	_updateMapping: function(trustSelection, isSelect, isForAll, from, to){
 		// summary:
 		//		This function trys to keep the selection info updated when range selection is performed.
 		//		1. Calculate how many unloaded rows are there;
@@ -112,13 +113,15 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 		if(unloaded){
 			this._defaultSelected = flag > 0;
 		}
+		if(!isForAll && from !== undefined && to !== undefined){
+			isForAll = !g.usingPagination && Math.abs(to - from + 1) === g.rowCount; 
+		}
 		// When deselectAll, make sure every thing is deselected, even if it was selected but not loaded now.
 		// This occurs only when pagination's "All" is used.
-		if(deselectAll && !g.usingPagination){
+		if(isForAll && !g.usingPagination){
 			for(i = this._idMap.length; i >= 0; --i){
-				this._selectedById[this._idMap[i]] = false;
+				this._selectedById[this._idMap[i]] = isSelect;
 			}
 		}
-		//console.log("_defaultSelected:", flag, trustSelection, deselectAll);
 	}
 });
