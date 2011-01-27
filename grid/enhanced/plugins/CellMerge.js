@@ -251,7 +251,8 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 	},
 	_updateRows: function(item){
 		for(var i = 0, count = this.grid.rowCount; i < count; ++i){
-			if(item.row(i) && this.grid._by_idx[i]){
+			var storeItem = this.grid._by_idx[i];
+			if(storeItem && item.row(i, storeItem && storeItem.item, this.grid.store)){
 				this.grid.views.updateRow(i);
 			}
 		}
