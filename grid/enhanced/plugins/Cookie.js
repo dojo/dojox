@@ -279,6 +279,11 @@ dojo.require("dojox.grid.cells._base");
 				if(!("enabled" in args)){
 					args.enabled = true;
 				}
+				for(var i = this._cookieHandlers.length - 1; i >= 0; --i){
+					if(this._cookieHandlers[i].name == args.name){
+						this._cookieHandlers.splice(i, 1);
+					}
+				}
 				this._cookieHandlers.push(args);
 				if(this._cookieStartedup && args.name in this._cookie){
 					args.onLoad(this._cookie[args.name], this.grid);
