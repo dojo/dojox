@@ -297,7 +297,9 @@ dojo.require("dojox.fx");
 				widget._setPixelValue_ = dojo.hitch(widget, "_setPixelValue");
 				widget._isReversed_ = widget._isReversed();
 			}
-			var pixelValue = e[widget._mousePixelCoord] - abspos[widget._startingPixelCoord];
+			
+			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords 
+			var pixelValue = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord];
 			widget._setPixelValue_(widget._isReversed_ ? (abspos[widget._pixelCount]-pixelValue) : pixelValue, abspos[widget._pixelCount], false, true);
 		},
 	
@@ -327,12 +329,14 @@ dojo.require("dojox.fx");
 			if(!bar){
 				bar = widget._bar = dojo.coords(widget.progressBar, true);
 			}
+			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords 
 			
 			if(!mouseOffset){
-				mouseOffset = widget._mouseOffset = e[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - bar[widget._startingPixelCount];
+				mouseOffset = widget._mouseOffset = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - bar[widget._startingPixelCount];
 			}
 			
-			var pixelValueMin = e[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - mouseOffset,
+				
+			var pixelValueMin = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - mouseOffset,
 				pixelValueMax = pixelValueMin + bar[widget._pixelCount];
 				// we don't narrow the slider when it reaches the bumper!
 				// maybe there is a simpler way
