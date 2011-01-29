@@ -4,21 +4,13 @@
 <head>
 	<title>Test Menus plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
 			padding: 0.5em;
 		}
-		
  		#grid1, #grid2 {
 			width: 85.2em;
 			height: 50em;
@@ -31,6 +23,7 @@
 	<script type="text/javascript">
 		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.Menu");
+		dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
 		dojo.require("dojo.data.ItemFileWriteStore");
 		dojo.require("dojo.parser");
 	</script>
@@ -53,7 +46,9 @@
 				store: test_store,
 				structure: layout,
 				rowSelector: '20px',
-				plugins : {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"}}
+				plugins : {menus:{headerMenu:"headerMenu", rowMenu:"rowMenu", cellMenu:"cellMenu", selectedRegionMenu:"selectedRegionMenu"},
+				indirectSelection: {headerSelector:true, name: "Selection", width: "60px", styles: "text-align: center;"}
+				}
 			}, dojo.byId('gridDiv'));
 			grid.startup();
 		});

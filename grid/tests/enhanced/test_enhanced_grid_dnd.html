@@ -4,14 +4,8 @@
 <head>
 	<title>Test Dnd plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 		@import "/dojo/tests/dnd/dndDefault.css";
 		body {
 			font-size: 0.9em;
@@ -49,7 +43,13 @@
  			width: 50em;
 			height: 30em;
 		}
-
+		.claro .dojoxGridCell {
+			border-stlye:dotted !important;
+			border-color: transparent #D5CDB5 #D5CDB5 transparent !important;
+		}
+		.dj_ie6 .claro .dojoxGridCell{
+			border: 1px solid #F1F1F1 !important;
+		}		
 	</style>
 	<script type="text/javascript" src="../../../../dojo/dojo.js" 
 		djConfig="isDebug:true, parseOnLoad: true"></script>
@@ -138,6 +138,23 @@
 		var setCopyOnly = function(gridId, selected){
 			dijit.byId(gridId).dndCopyOnly(selected);
 		};
+		var getRowData = function(grid, rowIndexes){
+			var cells = grid.layout.cells;
+			var store = grid.store;
+			var cache = grid._by_idx;
+			var res = "Grid Rows from " + grid.id + ":<br/>";
+			for(var i = 0; i < rowIndexes.length; ++i){
+				var r = rowIndexes[i];
+				res += "Row " + r + ": ";
+				for(var j = 0; j < cells.length; ++j){
+					if(!cells[j].hidden){
+						res += store.getValue(cache[r].item, cells[j].field) + ", ";
+					}
+				}
+				res = res.substring(0, res.length - 2) + ";<br/>";
+			}
+			return res;
+		};
 		dojo.addOnLoad(function(){
 			dojo.query("input.cfgbox").forEach(function(cb){
 				cb.checked = true;
@@ -146,13 +163,13 @@
 				cb.checked = false;
 			});
 		});
+		var newItem1 = {A: "new a1", B: "new b1", C: "new c1", D: "new d1",E: "new e1",F: "new f1",G: "new g1",H: "new h1",I: "new i1",J: "new j1",K: "new k1",L: "new l1",M: "new m1",N: "new n1",O: "new o1",P: "new c1",Q: "new q1",R: "new r1",S: "new s1",T: "new t1",U: "new u1",V: "new v1",W: "new w1",X: "new x1",Y: "new y1",Z: "new z1"};
+		var newItem2 = {A: "new a2", B: "new b2", C: "new c2", D: "new d2",E: "new e2",F: "new f2",G: "new g2",H: "new h2",I: "new i2",J: "new j2",K: "new k2",L: "new l2",M: "new m2",N: "new n2",O: "new o2",P: "new c2",Q: "new q2",R: "new r2",S: "new s2",T: "new t2",U: "new u2",V: "new v2",W: "new w2",X: "new x2",Y: "new y2",Z: "new z2"};
+		var newItem3 = {A: "new a3", B: "new b3", C: "new c3", D: "new d3",E: "new e3",F: "new f3",G: "new g3",H: "new h3",I: "new i3",J: "new j3",K: "new k3",L: "new l3",M: "new m3",N: "new n3",O: "new o3",P: "new c3",Q: "new q3",R: "new r3",S: "new s3",T: "new t3",U: "new u3",V: "new v3",W: "new w3",X: "new x3",Y: "new y3",Z: "new z3"};
 	</script>
 </head>
 <body class="claro">
-	<h1 class="title" tabindex="0"
-		onfocus="console.log('focus a'),this.style.color='red';"
-		onblur="console.log('blur a'),this.style.color='black';">
-		dojox.grid.EnhancedGrid - DnD</h1>
+	<h1 class="title">dojox.grid.EnhancedGrid - DnD</h1>
 	<div class="myblock">
 		<h3>Grid 1</h3>
 		<div id="grid1" dojoType="dojox.grid.EnhancedGrid" rowsPerPage="16"
@@ -256,11 +273,20 @@
 		</div>
 	</div>
 	<div class="myblock">
-		<h3>Grid Acceptable Target</h3>
-		<div id="listsource" dojoType="dojox.grid.enhanced.plugins.GridSource" class="container">
+		<h3>Target that can accept Grid</h3>
+		<div dojoType="dojox.grid.enhanced.plugins.GridSource" class="container" 
+			insertNodesForGrid="true" getNodeDataForGridRows="getRowData">
 			<div class="dojoDndItem">Item 1</div>
 			<div class="dojoDndItem">Item 2</div>
 			<div class="dojoDndItem">Item 3</div>
+		</div>
+	</div>
+	<div class="myblock">
+		<h3>Grid Acceptable Source (Drag item to grid)</h3>
+		<div dojoType="dojo.dnd.Source" class="container">
+			<div class="dojoDndItem" dndType="grid/rows" dndData="newItem1">Item 1</div>
+			<div class="dojoDndItem" dndType="grid/rows" dndData="newItem2">Item 2</div>
+			<div class="dojoDndItem" dndType="grid/rows" dndData="newItem3">Item 3</div>
 		</div>
 	</div>
 	<p style="clear: left;"><strong>Note:</strong> To see the tundra theme, just append <b style="color:blue;">?theme=tundra</b> to the URL.</p>

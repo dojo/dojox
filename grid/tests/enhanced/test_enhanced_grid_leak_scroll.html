@@ -4,11 +4,8 @@
 	<head>
 		<title>Scorll Leak</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+		<link rel=stylesheet href="support/common.css"/>
 		<style type="text/css">
-			@import "../../../../dojo/resources/dojo.css";
-			@import "../../../../dijit/themes/tundra/tundra.css";
-			@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-			@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 			body {
 				font-size: 0.9em;
 				font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -17,7 +14,6 @@
 			.title {
 				text-align:center;
 			}
-			
 	 		#grid {
 	 			border: 1px solid #333;
 				width: 80em;
@@ -32,10 +28,19 @@
 			dojo.require("dojox.grid.EnhancedGrid");
 			dojo.require("dojo.data.ItemFileWriteStore");
 			dojo.require("dojo.parser");
-			dojo.require("dojox.grid.enhanced.plugins.DnD");
-			dojo.require("dojox.grid.enhanced.plugins.Menu");
-			dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
+			dojo.require("dojox.grid.enhanced.plugins.Filter");
+			dojo.require("dojox.grid.enhanced.plugins.exporter.CSVWriter");
+			dojo.require("dojox.grid.enhanced.plugins.Printer");
+			dojo.require("dojox.grid.enhanced.plugins.Cookie");
 			dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
+			dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
+			dojo.require("dojox.grid.enhanced.plugins.Selector");
+			dojo.require("dojox.grid.enhanced.plugins.Menu");
+			dojo.require("dojox.grid.enhanced.plugins.DnD");
+			dojo.require("dojox.grid.enhanced.plugins.Search");
+			dojo.require("dojox.grid.enhanced.plugins.CellMerge");
+			dojo.require("dojox.grid.enhanced.plugins.Pagination");
+			dojo.require("dojox.grid.enhanced.plugins.GridSource");
 		</script>
 		<script type="text/javascript" src="../support/test_data.js"></script>
 		<script type="text/javascript">
@@ -63,7 +68,54 @@
 			test_store = new dojo.data.ItemFileWriteStore({data: data});
 			
 			
-			var grid = null, delta = 3000, interval = 20000;
+			var grid = null, delta = 1000, interval = 6000;
+			var plugins = {
+				"nestedSorting": {},
+				"indirectSelection": {
+					headerSelector: true,
+					name: "Selection", 
+					width:"70px", 
+					styles:"text-align: center;"
+				},
+				"menus": {
+					headerMenu: "headerMenu", 
+					rowMenu: "rowMenu", 
+					cellMenu: "cellMenu", 
+					selectedRegionMenu: "selectedRegionMenu"
+				},
+				"exporter": {},
+				"printer": {},
+				"filter": {
+					closeFilterbarButton: true,
+					ruleCount: 0
+				},
+				"cookie": {},
+				"selector": {},
+				"dnd": {
+					copyOnly: false
+				},
+				"cellMerge": {
+					"mergedCells": [
+						{row: "3", start: 1, end: 10, major: 3}
+					]
+				},
+//				"pagination":
+//				{
+//					pageSizes: ["5", "10", "20", "50", "All"],	// Array, custom the items per page button
+//					// itemTitle: "entrys", 	// String, custom the item' title of description
+//					description: true,	// boolean, custom weather or not the discription will be displayed
+//					sizeSwitch: true,	// boolean, custom weather or not the page size switch will be displayed
+//					pageStepper: true,	// boolean, custom weather or not the page step will be displayed
+//					gotoButton: true,
+//					maxPageStep: 10,		// Integer, custom how many page step will be displayed
+//					position: "bottom"		// String, custom the position of the paginator bar
+//											// there're three options: top, bottom, both
+//					// ,descTemplate: "${1} ${0}" // A template of the current position description.
+//				},
+				"search": {}
+			};
+			var gridArgs = {
+			};
 			var layout = [[
 				{name: 'Column 1', field: 'col1'},
 				{name: 'Column 2', field: 'col2'},
@@ -76,14 +128,14 @@
 			]];
 			
 			dojo.addOnLoad(function() {
-				grid = new dojox.grid.EnhancedGrid({
+				grid = new dojox.grid.EnhancedGrid(dojo.mixin({
 					id: "grid",
 					store: test_store,
 					structure: layout,
 					rowsPerPage: 25,
 					keepRows: 75,
-					plugins : {nestedSorting: true, dnd: true, indirectSelection: {name: "Selection", width:"70px", styles:"text-align: center;"}}
-				});
+					plugins : plugins
+				}, gridArgs));
 
 				dojo.byId("gridContainer").appendChild(grid.domNode);
 				grid.startup();
@@ -91,9 +143,9 @@
 
 			function scrollGrid() {
 				setTimeout(function(){
-					grid.scrollToRow(100);
+					grid.scrollToRow(50);
 					setTimeout(function(){
-						grid.scrollToRow(200);
+						grid.scrollToRow(100);
 						setTimeout(function(){
 							grid.scrollToRow(300);
 							setTimeout(function(){
@@ -115,7 +167,7 @@
 			}
 		</script>
 	</head>
-	<body class="tundra">
+	<body class="claro">
 		<div class="heading">dojox.grid.EnhancedGrid Scorll Leak Test</div>
 		<button id="leakTest" onClick="leakTest();">EnhancedGrid Scorll Leak</button>
 		<div id="gridContainer"></div>

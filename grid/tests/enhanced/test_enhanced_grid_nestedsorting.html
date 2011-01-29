@@ -1,18 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 	"http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html dir="ltr">
 <head>
-	<title>Test IndirectSelection plugin of dojox.grid.EnhancedGrid</title>
+	<title>Test Nested sorting plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -21,12 +14,10 @@
 		.title {
 			text-align:center;
 		}
-		
  		#grid {
 			width: 85.2em;
 			height: 50em;
 		}
-
 	</style>
 	<script type="text/javascript" src="../../../../dojo/dojo.js" 
 		djConfig="isDebug:true, parseOnLoad: true"></script>
@@ -40,7 +31,7 @@
 	<script type="text/javascript">
 			var layout = [[
 				{name: 'Column A', field: 'id'},
-				{name: 'Column B', field: 'col2'},
+				{name: 'Column B', field: 'col2', noSort: true},
 				{name: 'Column C', field: 'col3'},
 				{name: 'Column D', field: 'col4', width: "150px"},
 				{name: 'Column E', field: 'col5'},
@@ -56,9 +47,9 @@
 					structure: layout,
 					rowSelector: "20px",
 					sortFields: [{attribute: 'col4', descending: false},{attribute: 'col7', descending: true}],//default sorting order
-					/*canSort: function(colIndex, field){
-						return colIndex != 3 && field != 'col5';//TODO
-					},*/
+					canSort: function(colIndex, field){
+						return colIndex != 0 && field != 'col6';
+					},
 					plugins: {nestedSorting: true}
 				});
 
@@ -67,7 +58,7 @@
 			});
 
 			function newSort(){
-				var sortFields = [{attribute: 'col2', descending: false},{attribute: 'col6', descending: true}];
+				var sortFields = [{attribute: 'col2', descending: true},{attribute: 'col6', descending: false}];
 				var g = dijit.byId('grid');
 				g.setSortIndex(sortFields);
 			}
@@ -78,7 +69,7 @@
 	<h1 class="title">dojox.grid.EnhancedGrid - NestedSorting</h1>
 	<p>
 		<div id="gridDiv"></div><br/>
-		<!--input type='button' value='Sample - Set new sort order - Column B desc, Column F asc' onclick='newSort()'/-->
+		<input type='button' value='Sample - set new sort order - Column B desc, Column F asc' onclick='newSort()'/>
 	</p>
 </body>
 </html>

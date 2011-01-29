@@ -4,14 +4,8 @@
 <head>
 	<title>Test all plugins of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -40,17 +34,24 @@
 		.tutor td:first-child{
 			font-weight: bolder;
 		}
- 		#grid{
+ 		#gridContainer{
 			width: 100em;
 			height: 35em;
+			border: 1px solid #D5CDB5;
 		}
+		.claro .dojoxGridCell{
+			border-stlye:dotted !important;
+			border-color: transparent #D5CDB5 #D5CDB5 transparent !important;
+		}
+		.dj_ie6 .claro .dojoxGridCell{
+			border: 1px solid #F1F1F1 !important;
+		}		
 	</style>
 	<script type="text/javascript" src="../../../../dojo/dojo.js" 
 		djConfig="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.form.CheckBox");
-		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.Filter");
 		dojo.require("dojox.grid.enhanced.plugins.exporter.CSVWriter");
 		dojo.require("dojox.grid.enhanced.plugins.Printer");
@@ -64,12 +65,17 @@
 		dojo.require("dojox.grid.enhanced.plugins.CellMerge");
 		dojo.require("dojox.grid.enhanced.plugins.Pagination");
 		dojo.require("dojox.grid.enhanced.plugins.GridSource");
+		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojo.parser");
 		var startGridIndex = 0,
 			initialShowGrid = false,
 			hideCtrlPanel = false,
+		 	repeatCount = 100000,
+			repeatInterval = 500;
 			gridAttrs = {
-				//rowsPerPage:5,
+				rowsPerPage: 5,
+				keepSelection: true,
+				//sortFields: [{attribute: "Genre"}],
 				plugins: {
 				}
 			};
@@ -97,23 +103,27 @@
 			},
 			"cookie": {},
 			"selector": {
-				//row: "disabled"
+				col: false
 			},
 			"dnd": {
 				copyOnly: false
 			},
-			"cellMerge": {},
+			"cellMerge": {
+				"mergedCells": [
+					{row: "3", start: 1, end: 10, major: 3}
+				]
+			},
 			"search": {},
 			"pagination":
 			{
-				pageSizeArr: ["5", "10", "25", "30", "40", "50", "100", "All"],	// Array, custom the items per page button
+				pageSizes: ["5", "10", "20", "50", "All"],	// Array, custom the items per page button
 				// itemTitle: "entrys", 	// String, custom the item' title of description
-				showDescription: true,	// boolean, custom weather or not the discription will be displayed
-				showSizeSwitch: true,	// boolean, custom weather or not the page size switch will be displayed
-				showPageStepper: true,	// boolean, custom weather or not the page step will be displayed
-				showGotoButton: true,
+				description: true,	// boolean, custom weather or not the discription will be displayed
+				sizeSwitch: true,	// boolean, custom weather or not the page size switch will be displayed
+				pageStepper: true,	// boolean, custom weather or not the page step will be displayed
+				gotoButton: true,
 				maxPageStep: 10,		// Integer, custom how many page step will be displayed
-				barPosition: "bottom"		// String, custom the position of the paginator bar
+				position: "bottom"		// String, custom the position of the paginator bar
 										// there're three options: top, bottom, both
 				// ,descTemplate: "${1} ${0}" // A template of the current position description.
 			}
@@ -121,7 +131,9 @@
 		var gridFeatures = {
 			"canSort": {
 				label: "disable canSort",
-				value: function(){return false;}
+				value: function(colIndex){
+					return false;
+				}
 			},
 			"rowSelector": {
 				value: "20px"
@@ -138,6 +150,9 @@
 			"selectionMode": {
 				label: "single selectionMode",
 				value: "single"
+			},
+			"columnReordering": {
+				value: true
 			}
 		};
 		function getTableString(){
@@ -151,7 +166,10 @@
 				);
 				sb.push("</tr>");
 			}
-			sb.push("<tr><td><hr/></td></tr>");
+			sb.push("<tr><td><hr/></td></tr>",
+				"<tr><td><button onclick='selectAll()'>Select All</button>",
+				"<button onclick='deselectAll()'>Deselect All</button></td></tr>"
+			);
 			for(var pluginName in plugins){
 				sb.push("<tr>");
 				sb.push("<td><input id='cbid", pluginName, 
@@ -255,8 +273,8 @@
 				var win = window.open();
 				win.document.open();
 				win.document.write(str);
-				win.document.close();
 				g.normalizePrintedGrid(win.document);
+				win.document.close();
 			});
 		}
 		function mergeCells(){
@@ -399,16 +417,16 @@
 			dojo.byId("repeatcounter").innerHTML = ++rpCnt;
 			setTimeout(testConnect, 100);
 		}
+		function scrollToRow(){
+			var g = dijit.byId("grid");
+			if(g){
+				var idx = parseInt(dojo.byId("inputScrollToRowIdx").value, 10);
+				console.log("scroll to ", idx);
+				g.scrollToRow(idx);
+			}
+		}
 		dojo.addOnLoad(function(){
-			var btns = dojo.byId("ctrlBtns");
-			btns.appendChild(dojo.create("button",{
-				"innerHTML": "Select All",
-				"onclick": selectAll
-			}));
-			btns.appendChild(dojo.create("button",{
-				"innerHTML": "Deselect All",
-				"onclick": deselectAll
-			}));
+			var btns = dojo.byId("ctrlBtns2");
 			btns.appendChild(dojo.create("button",{
 				"innerHTML": "Refresh",
 				"onclick": function(){
@@ -427,8 +445,11 @@
 				"innerHTML": "Set Store",
 				"onclick": function(){
 					var g = dijit.byId("grid");
+					var data = dojo.clone(test_store_data[0]);
+					data.items = data.items.slice(0, 50);
+					console.log(data);
 					g && g.setStore(new dojo.data.ItemFileWriteStore({
-						data: dojo.clone(test_store_data[0])
+						data: data
 					}));
 				}
 			}));
@@ -444,6 +465,30 @@
 				"onclick": function(){
 					var g = dijit.byId("grid");
 					g && g.addRow();
+				}
+			}));
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "Get Selected",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						var s1 = g.selection.selected,
+							s2 = g.selection.getSelected();
+						console.log(s1.length, s1);
+						console.log(s2.length, s2);
+					}
+				}
+			}));
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "resize",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						var cc = dojo.byId("gridContainer");
+						dojo.style(cc, "height", (dojo.contentBox(cc).h + 10) + "px");
+						dojo.style(cc, "width", (dojo.contentBox(cc).w - 10) + "px");
+						g.resize(dojo.contentBox(cc));
+					}
 				}
 			}));
 			var newID = 101;
@@ -467,6 +512,85 @@
 					});
 				}
 			}));
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "New item and scroll to",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						var item = g.store.newItem({
+							"id": newID++,
+							"Heard": true, 
+							"Checked": "True", 
+							"Genre":"Easy Listening",	
+							"Artist":"Bette Midler",	
+							"Year":2003,	
+							"Album":"Bette Midler Sings the Rosemary Clooney Songbook",	
+							"Name":"Hey There",	"Length":"03:31",	
+							"Track":4,	
+							"Composer":"Ross, Jerry 1926-1956 -w Adler, Richard 1921-",	
+							"Download Date":"1923/4/9",	
+							"Last Played":"04:32:49"
+						});
+						var rowCount = g.plugin('pagination') ? g.getTotalRowCount() : g.rowCount;
+						setTimeout(function(){g.scrollToRow(rowCount - 1);}, 600);
+						
+					}
+				}
+			}));
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "Select All",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						var t1 = (new Date()).getTime();
+						g.selection.selectRange(0, g.rowCount - 1);
+						console.log((new Date()).getTime() - t1);
+					}
+				}
+			}));
+			var toDisable = true;
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "Disable 4th row selector",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						var cell = g.layout.cells[0];
+						if(cell.setDisabled){
+							cell.setDisabled(3, toDisable);
+							toDisable = !toDisable;
+						}
+					}
+				}
+			}));
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "Select Unloaded",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					console.log(g);
+					if(g){
+						g.selection.selectRange(60, 100);
+					}
+				}
+			}));
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "clear sort",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						g.setSortIndex([]);
+					}
+				}
+			}));
+			
+			btns.appendChild(dojo.create("button",{
+				"innerHTML": "show filter bar",
+				"onclick": function(){
+					var g = dijit.byId("grid");
+					if(g){
+						g.showFilterBar(true, true);
+					}
+				}
+			}));
 			/*btns.appendChild(dojo.create("button",{
 				"innerHTML": "dialog",
 				"onclick": testDialog
@@ -488,29 +612,43 @@
 				dojo.byId("enableGridSortCookieCB").checked = false;
 				dojo.byId("enableGridNSortCookieCB").checked = false;
 				dojo.byId("enableGridCOrderCookieCB").checked = false;
+				/*if(g.setFilter){
+					g.setFilter([{
+						type: "string",
+						column: 2,
+						value: "Buddy",
+						condition: "contains"
+					},{
+						type: "string",
+						column: 2,
+						value: "King",
+						condition: "contains"
+					}], "logicany");
+				}*/
 			});
 			var formTarget = new dojox.grid.enhanced.plugins.GridSource(dojo.byId("songForm"),{
-		      isSource: false,
-		      insertNodesForGrid: false
+		    	isSource: false
 		    });
 		    dojo.connect(formTarget, "onDropGridRows", function(grid, rowIndexes){
-		      var s = grid.store,
-		          row = rowIndexes[0];
-		      dojo.attr(dojo.byId("inputName"), "value", s.getValue(grid.getItem(row), "Name"));
-		      dojo.attr(dojo.byId("inputAuthor"), "value", s.getValue(grid.getItem(row), "Artist"));
-		      dojo.attr(dojo.byId("inputAlbum"), "value", s.getValue(grid.getItem(row), "Album"));
+		    	try{
+					var s = grid.store, row = rowIndexes[0], item = grid.getItem(row);
+					console.log("item:", item);
+					dojo.attr(dojo.byId("inputName"), "value", s.getValue(item, "Name"));
+					dojo.attr(dojo.byId("inputAuthor"), "value", s.getValue(item, "Artist"));
+					dojo.attr(dojo.byId("inputAlbum"), "value", s.getValue(item, "Album"));
+		    	}catch(e){
+		    		console.log("-----",e);
+		    	}
 		    });
 		});
 	</script>
 </head>
 <body class="claro">
-	<h1 class="title" tabindex="0"
-		onfocus="console.log('focus a'),this.style.color='red';"
-		onblur="console.log('blur a'),this.style.color='black';">
-		dojox.grid.EnhancedGrid - plugins</h1>
+	<h1 class="title">dojox.grid.EnhancedGrid - plugins</h1>
 	<div id="ctrlBtns"></div><br/>
 	<div id="pluginList" dojoType="PluginTable" style="float:right;"></div>
 	<div id="gridContainer"></div><br/>
+	<div id="ctrlBtns2"></div><br/>
 	
 	<div id="menusSupport" style="display: none;">
 		<div dojoType="dijit.Menu" id="headerMenu"  style="display: none;">
@@ -690,6 +828,26 @@
 		    </tr>
 		  </table>
 		</form>
+	</div>
+	<div id="paginationSupport" class="supporter" style="display:none;">
+		<table>
+			<tr>
+				<td><input id="inputScrollToRowIdx" type="text" /></td>
+				<td><button onclick="scrollToRow()">Scroll to row</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
 	</div>
 	<div class="tutor">
 		<p>

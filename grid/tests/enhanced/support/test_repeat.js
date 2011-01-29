@@ -1,7 +1,7 @@
 (function(){
 var gridIndex = startGridIndex || 0;
-var totalCount = 1000;
-var timeInterval = 500;
+var totalCount = repeatCount || 1000;
+var timeInterval = repeatInterval || 500;
 function createGrid(step){
 	try{
 		var g = dijit.byId("grid");
@@ -10,6 +10,7 @@ function createGrid(step){
 		for(gridIndex += step; gridIndex < 0; gridIndex += layout.length){}
 		gridIndex %= layout.length;
 		console.log("grid plugin args:", gridAttrs.plugins, gridIndex);
+		var t1 = (new Date()).getTime();
 		g = new dojox.grid.EnhancedGrid(dojo.mixin({
 			"id": "grid",
 			"store": test_store[0],
@@ -18,7 +19,7 @@ function createGrid(step){
 		g.placeAt(dojo.byId("gridContainer"));
 		g.startup();
 		dojo.byId("num").value = gridIndex;
-		console.log(gridIndex + "---------------------------------------------------------------");
+		console.log(gridIndex + "---------------------------------------------------------------", (new Date()).getTime() - t1, "ms");
 		dojo.publish("test_repeat_grid_created");
 		return g;
 	}catch(e){
@@ -56,11 +57,11 @@ dojo.addOnLoad(function(){
 		dojo.style(btns, "display", "none");
 	}
 	btns.appendChild(dojo.create("button",{
-		"innerHTML": "Start",
+		"innerHTML": "Play",
 		"onclick": start
 	}));
 	btns.appendChild(dojo.create("button",{
-		"innerHTML": "End",
+		"innerHTML": "Stop",
 		"onclick": stop
 	}));
 	btns.appendChild(dojo.create("button",{

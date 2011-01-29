@@ -4,17 +4,8 @@
 <head>
 	<title>Test Search plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
-
-		
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -24,12 +15,10 @@
 			text-align:center;
 			margin:1em;
 		}
-		
  		#grid{
-			/*width: 90em;*/
+			width: 90em;
 			height: 30em;
 		}
-		
 		.outerdiv{
 			position: relative;
 			height: 300px;
@@ -54,22 +43,33 @@
 			background-color:yellow;
 		}
 	</style>
-	<script type="text/javascript" src="../../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.Search");
 		dojo.require("dojo.parser");
-		var startGridIndex = 0,
-			initialShowGrid = true,
-			hideCtrlPanel = false,
-			gridAttrs = {
-				rowSelector: "20px",
-				plugins: {
-					"search": true
-				}
-			};
+		
+		var layout = [{
+			cells: [
+				{ field: "id", name:"Identity", datatype:"number", width: 4, editable: false},
+				{ field: "Genre", name:"Genre", datatype:"string", width: 10},
+				{ field: "Artist", name:"Artist", datatype:"string", width: 10},
+				{ field: "Year", name:"Year", datatype:"string", width: 2.5},
+				{ field: "Album", name:"Album", datatype:"string", width: 10},
+				{ field: "Name", name:"Name", datatype:"string", width: 8},
+				{ field: "Length", name:"Length", datatype:"string", width: 4},
+				{ field: "Track", name:"Track", datatype:"number", width: 3},
+				{ field: "Composer", name:"Composer", datatype:"string", width: 12},
+				{ field: "Download Date", name:"Download Date", datatype:"date", width: 12},
+				{ field: "Last Played", name:"Last Played", datatype:"time", width: 6},
+				{ field: "Heard", name: "Checked", datatype:"boolean", width: 6}
+			]
+		}];
+		var plugins = {
+			search: true
+		};
 		var getInput = function(str){
 			var start = str.indexOf('/');
 			var end = str.lastIndexOf('/');
@@ -105,17 +105,15 @@
 			dijit.byId("grid").searchRow(getInput(input), dojo.partial(onSearched, "result1"));
 		};
 	</script>
-	<script type="text/javascript" src="support/test_write_store_music.js"></script>
-	<script type="text/javascript" src="support/test_layout_music.js"></script>
-	<script type="text/javascript" src="support/test_repeat.js"></script>
 </head>
 <body class="claro">
 	<h1 class="title" tabindex="0"
 		onfocus="console.log('focus a'),this.style.color='red';"
 		onblur="console.log('blur a'),this.style.color='black';">
 		dojox.grid.EnhancedGrid - Search</h1>
-	<div id="ctrlBtns"></div><br/>
-	<div id="gridContainer"></div><br/>
+	<div id="gridContainer">
+		<div id="grid" dojoType="dojox.grid.EnhancedGrid" store="test_store[0]" structure="layout" plugins="plugins"></div>
+	</div><br/>
 	<br />
 		Note: Use "/.../" for Regular Expressions. Wildcards (* and ?) are available when not using "/.../".
 	<hr />

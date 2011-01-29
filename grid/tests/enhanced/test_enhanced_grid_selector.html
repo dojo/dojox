@@ -4,15 +4,8 @@
 <head>
 	<title>Test Selector plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
-		
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -22,44 +15,54 @@
 			text-align:center;
 			margin:1em;
 		}
-		
  		#grid{
  			width: 100em;
 			height: 40em;
 		}
-		
 		.selectReport {
 			margin: 10px;
 			display: inline-block;
 		}
-
+		.claro .dojoxGridCell{
+			border-stlye:dotted !important;
+			border-color: transparent #D5CDB5 #D5CDB5 transparent !important;
+		}
+		.dj_ie6 .claro .dojoxGridCell{
+			border: 1px solid #F1F1F1 !important;
+		}		
 	</style>
-	<script type="text/javascript" src="../../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.Selector");
 		dojo.require("dojox.grid.enhanced.plugins.IndirectSelection");
-		var startGridIndex = 0,
-			initialShowGrid = true,
-			hideCtrlPanel = true,
-			gridAttrs = {
-				rowSelector: "20px",
-				canSort: function(){return false;},
-				plugins: {
-					indirectSelection: {
-						headerSelector: true
-					},
-					selector: {}
-				}
-			};
-	</script>
-	<script type="text/javascript" src="support/test_write_store_music.js"></script>
-	<script type="text/javascript" src="support/test_layout_music.js"></script>
-	<script type="text/javascript" src="support/test_repeat.js"></script>
-	<script type="text/javascript">
+		
+		var layout = [{
+			cells: [
+				{ field: "id", name:"Identity", datatype:"number", width: 4, editable: false},
+				{ field: "Genre", name:"Genre", datatype:"string", width: 10},
+				{ field: "Artist", name:"Artist", datatype:"string", width: 10},
+				{ field: "Year", name:"Year", datatype:"string", width: 2.5},
+				{ field: "Album", name:"Album", datatype:"string", width: 10},
+				{ field: "Name", name:"Name", datatype:"string", width: 8},
+				{ field: "Length", name:"Length", datatype:"string", width: 4},
+				{ field: "Track", name:"Track", datatype:"number", width: 3},
+				{ field: "Composer", name:"Composer", datatype:"string", width: 12},
+				{ field: "Download Date", name:"Download Date", datatype:"date", width: 12},
+				{ field: "Last Played", name:"Last Played", datatype:"time", width: 6},
+				{ field: "Heard", name: "Checked", datatype:"boolean", width: 6}
+			]
+		}];
+		var plugins = {
+			selector: {
+				//col: false,
+				//row: false,
+				//cell: false
+			}
+		}
 		dojo.addOnLoad(function(){
 			var grid = dijit.byId("grid");
 			func = function(type, start, end, selected){
@@ -101,8 +104,11 @@
 		onfocus="console.log('focus a'),this.style.color='red';"
 		onblur="console.log('blur a'),this.style.color='black';">
 		dojox.grid.EnhancedGrid - Selector</h1>
-	<div id="ctrlBtns"></div><br/>
-	<div id="gridContainer"></div><br/>
+	<div id="gridContainer">
+		<div id="grid" dojoType="dojox.grid.EnhancedGrid" store="test_store[0]" structure="layout" plugins="plugins"
+			rowSelector="20px"
+		></div>
+	</div><br/>
 	<div>
 		<div class="selectReport">
 			<h2>Selected Cells:&nbsp;&nbsp;&nbsp;

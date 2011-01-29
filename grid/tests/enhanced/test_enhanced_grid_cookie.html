@@ -4,15 +4,8 @@
 <head>
 	<title>Test Cookie plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/EnhancedGrid_rtl.css";
-
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -22,66 +15,74 @@
 			text-align:center;
 			margin:1em;
 		}
-		
  		#grid{
  			width: 100em;
 			height: 30em;
 		}
-
+		.claro .dojoxGridCell {
+			border-stlye:dotted !important;
+			border-color: transparent #D5CDB5 #D5CDB5 transparent !important;
+		}
+		.dj_ie6 .claro .dojoxGridCell{
+			border: 1px solid #F1F1F1 !important;
+		}		
 	</style>
-	<script type="text/javascript" src="../../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+	<script type="text/javascript" src="support/test_write_store_music.js"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojox.grid.EnhancedGrid");
 		dojo.require("dojox.grid.enhanced.plugins.NestedSorting");
 		dojo.require("dojox.grid.enhanced.plugins.DnD");
 		dojo.require("dojox.grid.enhanced.plugins.Cookie");
-		var startGridIndex = 2,
-			initialShowGrid = true,
-			hideCtrlPanel = true,
-			gridAttrs = {
-				plugins: {
-					"cookie": true,
-					"nestedSorting": true,
-					"dnd": true
-				}
-			};
+		
+		var layout = [
+			{//first view
+				defaultCell: {editable: true, type: dojox.grid.cells._Widget},
+				cells:
+				[
+					{ field: "id", width: 4},
+					{ field: "Genre", width: '5'},
+					{ field: "Artist", width: '5'},
+					{ field: "Year", width: '5'},
+					{ field: "Album", width: '5'}
+				]
+			},
+			{//second view
+				cells:
+				[
+					{ field: "Name", width: '17'},
+					{ field: "Length", width: '6'},
+					{ field: "Track", width: '6'},
+					{ field: "Composer", width: '15'}
+				]
+			}
+		];
+		var plugins = {
+			cookie: true,
+			nestedSorting: true,
+			dnd: true
+		};
 		function enableCookie(key, toEnable){
 			console.log(key,toEnable);
-			try{
-				if(key){
-					dijit.byId("grid").setCookieEnabled(key, toEnable);
-				}else{
-					dijit.byId("grid").setCookieEnabled(toEnable);
-				}
-			}catch(e){
-				console.log(e);
-			}
+			dijit.byId("grid").setCookieEnabled(key || toEnable, toEnable);
 		}
 		
 	</script>
-	<script type="text/javascript" src="support/test_write_store_music.js"></script>
-	<script type="text/javascript" src="support/test_layout_music.js"></script>
-	<script type="text/javascript" src="support/test_repeat.js"></script>
 </head>
 <body class="claro">
-	<h1 class="title" tabindex="0"
-		onfocus="console.log('focus a'),this.style.color='red';"
-		onblur="console.log('blur a'),this.style.color='black';">
-		dojox.grid.EnhancedGrid - Cookie</h1>
-	<div id="ctrlBtns"></div><br/>
-	<div id="gridContainer"></div><br/>
+	<h1 class="title">dojox.grid.EnhancedGrid - Cookie</h1>
 	<div style="margin:10px;">
-		<p>
-			When refreshing this page...
-		</p>
-		<input type="checkbox" onclick="enableCookie(null, !this.checked)">Do not persist anything<br />
-		<input type="checkbox" onclick="enableCookie('columnWidth',!this.checked)" />Do not persist column width<br />
-		<input type="checkbox" onclick="enableCookie('sortOrder',!this.checked)" />Do not persist sorting order<br />
-		<input type="checkbox" onclick="enableCookie('columnOrder',!this.checked)" />Do not persist column arrangement<br />
+		<h3>Options to persist preferences when refreshing the page:</h3><br/>
+		<input type="checkbox" onclick="enableCookie(null, !this.checked)"> Do not persist anything<br />
+		<input type="checkbox" onclick="enableCookie('columnWidth',!this.checked)" /> Do not persist column width<br />
+		<input type="checkbox" onclick="enableCookie('sortOrder',!this.checked)" /> Do not persist sorting order<br />
+		<input type="checkbox" onclick="enableCookie('columnOrder',!this.checked)" /> Do not persist column arrangement<br />
 	</div>
+	<div id="gridContainer">
+		<div id="grid" dojoType="dojox.grid.EnhancedGrid" store="test_store[0]" structure="layout" plugins="plugins"></div>
+	</div><br/>
 	<p><strong>Note:</strong> To see the tundra theme, just append <b style="color:blue;">?theme=tundra</b> to the URL.</p>
 </body>
 </html>

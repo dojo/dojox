@@ -4,15 +4,8 @@
 <head>
 	<title>Test IndirectSelection plugin of dojox.grid.EnhancedGrid</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+	<link rel=stylesheet href="support/common.css"/>
 	<style type="text/css">
-		@import "../../../../dojo/resources/dojo.css";
-		@import "../../../../dijit/tests/css/dijitTests.css";
-		@import "../../../../dijit/themes/claro/claro.css";		
-		@import "../../../../dijit/themes/tundra/tundra.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid.css";
-		@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-		@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
 		body {
 			font-size: 0.9em;
 			font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -21,12 +14,10 @@
 		.title {
 			text-align:center;
 		}
-		
- 		#grid1, #grid2, #grid3 {
+ 		#grid1, #grid2 {
 			width: 85.2em;
 			height: 50em;
 		}
-
 	</style>
 	<script type="text/javascript" src="../../../../dojo/dojo.js" 
 		djConfig="isDebug:true, parseOnLoad: true"></script>
@@ -83,10 +74,12 @@
 				dojo.byId("gridDiv").appendChild(grid.domNode);
 				grid.startup();
 			});
-
-		function testDisabled(id){
-			for(var i = 30; i < 60; i++){
-				dijit.byId(id).rowSelectCell.setDisabled(i, true);
+		
+		var disabled = false;
+		function toggleDisabled(id){
+			disabled = !disabled;
+			for(var i = 0; i < 30; i++){				
+				dijit.byId(id).rowSelectCell.setDisabled(i, disabled);
 			}
 		}
 	</script>
@@ -96,18 +89,15 @@
 	<p>
 		<b>Multiple selection mode:</b>
 		<div id="gridDiv"></div><br/>
-		<input type='button' value='Select All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(true)'/>
-		&nbsp;&nbsp;
-		<input type='button' value='Deselect All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(false)'/>
-		<input type='button' value='Test Set Disabled' onclick='testDisabled("grid1")'/>
-		<input type='button' value='TEST' onclick='test()'/>
-	</p>
+		<input type='button' value='Select All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(true)'/>&nbsp;&nbsp;
+		<input type='button' value='Deselect All' onclick='dijit.byId("grid1").rowSelectCell.toggleAllSelection(false)'/>&nbsp;&nbsp;
+		<input type='button' value='Set Disabled' onclick='toggleDisabled("grid1")'/><br/><br/>	</p>
 	<p>
 		<b>
 		    Single selection mode:
 		</b>
 		<div id="grid2" dojoType="dojox.grid.EnhancedGrid" rowsPerPage="30" selectionMode="single"
-			plugins='{indirectSelection: {name: "Selection", width:"60px", styles:"text-align: center;"}}'
+			plugins='{indirectSelection: {name: "Selection", width:"60px", styles:"text-align: left;"}}'
 			store="test_store" structure="layout" rowSelector="20px">
 		</div>
 	</p>

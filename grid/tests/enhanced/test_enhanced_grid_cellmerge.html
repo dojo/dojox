@@ -3,16 +3,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Test CellMerge plugin of dojox.grid.EnhancedGrid</title>
+		<link rel=stylesheet href="support/common.css"/>
 		<style type="text/css">
-			@import "../../../../dojo/resources/dojo.css";
-			@import "../../../../dijit/tests/css/dijitTests.css";
-			@import "../../../../dijit/themes/claro/claro.css";		
-			@import "../../../../dijit/themes/tundra/tundra.css";
-			@import "../../enhanced/resources/claro/EnhancedGrid.css";
-			@import "../../enhanced/resources/claro/EnhancedGrid_rtl.css";
-			@import "../../enhanced/resources/tundra/EnhancedGrid.css";
-			@import "../../enhanced/resources/tundra/EnhancedGrid_rtl.css";
-			
 			body {
 				font-size: 0.9em;
 				font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -32,11 +24,10 @@
 				-moz-border-radius: 8pt 8pt;
 				display:inline-block;
 			}
-			table.container th{
+			table.merged th{
 				font-weight:bolder;
-				padding:10px;
 			}
-			table.container td{
+			table.merged td{
 				text-align:center;
 			}
 			#grid{
@@ -47,31 +38,44 @@
 			.claro .dojoxGridCell{
 				border-stlye:dotted !important;
 				border-color: transparent #D5CDB5 #D5CDB5 transparent !important;
-			}			
+			}
+			.dj_ie6 .claro .dojoxGridCell{
+				border: 1px solid #F1F1F1 !important;
+			}		
 		</style>
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
 		<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
+		<script type="text/javascript" src="support/test_write_store_music.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
+			dojo.require("dijit.form.CheckBox");
 			dojo.require("dojox.grid.EnhancedGrid");
 			dojo.require("dojox.grid.enhanced.plugins.CellMerge");
-			var startGridIndex = 0,
-				initialShowGrid = true,
-				hideCtrlPanel = true,
-				gridAttrs = {
-					plugins: {
-						cellMerge: {
-							"mergedCells": [
-								{row: 1, start: 0, end: 10, major: 8}
-							]
-						}
-					}
-				};
-		</script>
-		<script type="text/javascript" src="support/test_write_store_music.js"></script>
-		<script type="text/javascript" src="support/test_layout_music.js"></script>
-		<script type="text/javascript" src="support/test_repeat.js"></script>
-		<script type="text/javascript">
+			
+			var layout = [{
+				cells: [
+					{ field: "id", name:"Identity", datatype:"number", width: 4, editable: false},
+					{ field: "Genre", name:"Genre", datatype:"string", width: 10},
+					{ field: "Artist", name:"Artist", datatype:"string", width: 10},
+					{ field: "Year", name:"Year", datatype:"string", width: 2.5},
+					{ field: "Album", name:"Album", datatype:"string", width: 10},
+					{ field: "Name", name:"Name", datatype:"string", width: 8},
+					{ field: "Length", name:"Length", datatype:"string", width: 4},
+					{ field: "Track", name:"Track", datatype:"number", width: 3},
+					{ field: "Composer", name:"Composer", datatype:"string", width: 12},
+					{ field: "Download Date", name:"Download Date", datatype:"date", width: 12},
+					{ field: "Last Played", name:"Last Played", datatype:"time", width: 6},
+					{ field: "Heard", name: "Checked", datatype:"boolean", width: 6}
+				]
+			}];
+			var plugins = {
+				cellMerge: {
+					"mergedCells": [
+						{row: 0, start: 0, end: 5, major: 2}
+					]
+				}
+			};
+			
 			var mergedCellHandles = [];
 			var lastChild = null;
 			function updateMergedCells(){
@@ -81,11 +85,11 @@
 				var mergedCells = grid.getMergedCells();
 				dojo.forEach(mergedCells, function(item, i){
 					mergedCellHandles.push(item.handle);
-					res.push("<tr><td>", item.row + 1,
+					res.push("<tr><td>", item.row,
 						"</td><td>", item.start + 1,
 						"</td><td>", item.end + 1,
 						"</td><td>", item.major + 1,
-						//"</td><td><button onclick=\"unmergeCells(",i,")\">Unmerge</button>",
+						"</td><td><button onclick=\"unmergeCells(",i,")\">Unmerge</button>",
 						"</td></tr>"
 					);
 				});
@@ -95,7 +99,7 @@
 				dojo.byId("tblMergedCells").appendChild(lastChild);
 			};
 			function mergeCells(){
-				var rowIndex = parseInt(dojo.byId("inputRow").value, 10) - 1;
+				var rowIndex = parseInt(dojo.byId("inputRow").value, 10);
 				var start = parseInt(dojo.byId("inputStart").value, 10);
 				var end = parseInt(dojo.byId("inputEnd").value, 10);
 				var major = parseInt(dojo.byId("inputMajor").value, 10);
@@ -107,20 +111,46 @@
 				dijit.byId("grid").unmergeCells(mergedCellHandles[handleIdx]);
 				updateMergedCells();
 			};
+			var mergeByIndexHandle;
+			function toggleMergeByIndex(){
+				var grid = dijit.byId("grid");
+				if(mergeByIndexHandle){
+					grid.unmergeCells(mergeByIndexHandle);
+					mergeByIndexHandle = null;
+				}else{
+					mergeByIndexHandle = grid.mergeCells(function(rowIndex){
+						return rowIndex % 2;
+					}, 1, 3, 2);
+				}
+			}
+			var mergeByIdHandle;
+			function toggleMergeById(){
+				var grid = dijit.byId("grid");
+				if(mergeByIdHandle){
+					grid.unmergeCells(mergeByIdHandle);
+					mergeByIdHandle = null;
+				}else{
+					mergeByIdHandle = grid.mergeCells(function(rowIndex, item, store){
+						if(item){
+							var id = parseInt(store.getIdentity(item), 10);
+							return !(id % 2);
+						}
+						return false;
+					}, 4, 6, 5);
+				}
+			}
 			dojo.addOnLoad(updateMergedCells);
 		</script>
 	</head>
 	<body class="claro">
-		<h1 class="title" tabindex="0"
-			onfocus="console.log('focus a'),this.style.color='red';"
-			onblur="console.log('blur a'),this.style.color='black';">
-			dojox.grid.EnhancedGrid - Cell Merge</h1>
-		<div id="ctrlBtns"></div><br/>
-		<div id="gridContainer"></div><br/>
+		<h1 class="title">dojox.grid.EnhancedGrid - Cell Merge</h1>
+		<div id="gridContainer">
+			<div id="grid" dojoType="dojox.grid.EnhancedGrid" store="test_store[0]" structure="layout" plugins="plugins"></div>
+		</div><br/>
 		<div class="container">
 			<table>
 				<tr>
-					<td>At row</td>
+					<td>At row (0 based)</td>
 					<td><input id="inputRow" type="text" value="5" size="3"/></td>
 				</tr>
 				<tr>
@@ -138,8 +168,6 @@
 						<option value="9">10</option>
 						<option value="10">11</option>
 					</select></td>
-				</tr>
-				<tr>
 					<td>To column</td>
 					<td><select id="inputEnd">
 						<option value="0">1</option>
@@ -173,32 +201,39 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="2"><button onclick="mergeCells()">Merge Cells</button></td>
+					<td colspan="2"><button onclick="mergeCells()">Merge Cells by Index</button></td>
 				</tr>
 			</table>
+			<h3>The Merged Cells</h3>
+			<table id="tblMergedCells" class="merged" cellpadding="1px" cellspacing="5px">
+				<thead><tr>
+					<th>
+						Row Index
+					</th>
+					<th>
+						Start Column
+					</th>
+					<th>
+						End Column
+					</th>
+					<th>
+						Major Column
+					</th>
+				</tr></thead>
+			</table>
 		</div>
-		<h3>The Merged Cells</h3>
-		<table id="tblMergedCells" class="container" cellpadding="5px" cellspacing="5px">
-			<thead><tr>
-				<th>
-					Row Index
-				</th>
-				<th>
-					Start Column Index
-				</th>
-				<th>
-					End Column Index
-				</th>
-				<th>
-					Major Column Index
-				</th>
-			</tr></thead>
-		</table>
+		<br />
+		<div class="container">
+			<div id="cb1" dojoType="dijit.form.CheckBox" onChange="toggleMergeByIndex()"></div><label for="cb1">Merge/Unmerge every second row by index</label><br />
+			<div id="cb2" dojoType="dijit.form.CheckBox" onChange="toggleMergeById()"></div><label for="cb2">Merge/Unmerge every second row by Identity</label>
+		</div>
+		
 		<h3>Notes:</h3>
 		<ul>
 			<li>Cells can be merged at both design- and run-time.</li>
 			<li>Cell merging is done only in grid UI; the data store is not affected.</li>
-			<li>The column sorting and cell merging are incompatible, because sorting is store's job, while merging is grid's job, and after sorting, grid can not get the mapping between the new row order and the old one.)</li>
+			<li>Column sorting and cell merging by index are incompatible, because sorting is store's job, while merging is grid's job, and after sorting, grid can not get the mapping between the new row order and the old one.)</li>
+			<li>Column sorting and merging by id are compatible.</li>
 			<li>To get currently merged cells, use grid.getMergedCells();</li>
 			<li>The merged cell will use as default the content of the cell at the leading edge, if major cell is not indicated.</li>
 		</ul>
