@@ -126,6 +126,9 @@
 	width: 220px!important;
 	margin-bottom: 10px;
 }
+.dj_ie6 .dojoxGridDialogMargin {
+	position: relative;
+}
 .dojoxGridDialogButton {
 	width: 220px!important;
 	text-align: right;

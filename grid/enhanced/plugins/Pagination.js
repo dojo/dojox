@@ -211,15 +211,12 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 			}
 		}, this);
 		var endIndex = startIndex + Math.min(this.pageSize, this._maxSize);
-		var cp = this._currentPage;
-		// this._updateSelected();
-		
 		if(endIndex > this._maxSize){
 			this.gotoLastPage();
 		}else{
-			this._currentPage = Math.ceil(startIndex / this.pageSize) + 1;
+			var cp = Math.ceil(startIndex / this.pageSize);
 			if(cp !== this._currentPage){
-				this.gotoPage(this._currentPage);
+				this.gotoPage(cp + 1);
 			}else{
 				this.grid._refresh(true);
 			}
