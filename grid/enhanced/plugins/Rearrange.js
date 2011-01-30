@@ -332,8 +332,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 						++c;
 					}
 					targets.push({
-						"r": tr,
-						"c": tc
+						"r": r,
+						"c": c
 					});
 				}
 			}
