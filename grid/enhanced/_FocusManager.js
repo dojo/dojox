@@ -517,7 +517,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 		return true;
 	},
 	_setActiveColHeader: function(){
-		// summray:
+		// summary:
 		//		Overwritten
 		this.inherited(arguments);
 		//EDG now will decorate event on header key events, if no focus, the cell will be wrong
@@ -525,7 +525,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	},
 	//---------------Content Area------------------------------------------
 	findAndFocusGridCell: function(){
-		// summray:
+		// summary:
 		//		Overwritten
 		this._focusContent();
 	},
@@ -564,6 +564,25 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 		if(evt){
 			dojo.stopEvent(evt);
 		}
+	},
+	move: function(inRowDelta, inColDelta){
+		// summary:
+		//		Overwritten
+		this.inherited(arguments);		
+		var cell = this.cell, row = this.rowIndex;
+		if(!this.isNavHeader() && cell){
+			if(inRowDelta !== 0){//jump over hidden rows
+				var node = cell.view.getRowNode(row);//row node
+				if(node && dojo.style(node, "display") === "none"){
+					this.move(inRowDelta > 0 ? 1 : -1, inColDelta);
+				}
+			}else if(inColDelta !== 0){//jump over hidden cells
+				var node = cell.getNode(row);//cell node
+				if(node && dojo.style(node, "display") === "none"){
+					this.move(inRowDelta, inColDelta > 0 ? 1 : -1);
+				}
+			}
+		}		
 	},
 	_onContentKeyDown: function(e, isBubble){
 		if(isBubble){
