@@ -9,7 +9,7 @@
 	tableWidth: "Table Width:",
 	backgroundColor: "Background Color:",
 	borderColor: "Border Color:",
-	borderThickness: "BorderThickness",
+	borderThickness: "Border Thickness:",
 	percent: "percent",
 	pixels: "pixels",
 	"default": "default",
