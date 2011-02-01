@@ -150,6 +150,10 @@ dojo.require("dojox.gfx.gradient");
 			fo.method = "any";
 			fo.type = "solid";
 			fo.opacity = this.fillStyle.a;
+			var alphaFilter = this.rawNode.filters["DXImageTransform.Microsoft.Alpha"];
+			if(alphaFilter){
+				alphaFilter.opacity = Math.round(this.fillStyle.a * 100);
+			}
 			this.rawNode.fillcolor = this.fillStyle.toHex();
 			this.rawNode.filled = true;
 			return this;	// self
