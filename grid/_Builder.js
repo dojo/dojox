@@ -503,7 +503,7 @@ dojo.require("dojo.dnd.Moveable");
 				var vw = (dojo.position||dojo._abs)(e.sourceView.headerNode, true);
 				var bodyContentBox = dojo.contentBox(e.sourceView.domNode);
 				//fix #11340
-				var l = e.clientX;
+				var l = e.pageX;
 				if(!dojo._isBodyLtr() && dojo.isIE < 8){
 					l -= dojox.html.metrics.getScrollbar().w;
 				}				
