@@ -37,8 +37,8 @@ dojo.require("dojox.lang.functional");
 		},
 
 		defaultStats: {
-			hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY,
-			vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY
+			vmin: Number.POSITIVE_INFINITY, vmax: Number.NEGATIVE_INFINITY,
+			hmin: Number.POSITIVE_INFINITY, hmax: Number.NEGATIVE_INFINITY
 		},
 
 		collectSimpleStats: function(series){
