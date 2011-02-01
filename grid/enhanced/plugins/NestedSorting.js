@@ -123,19 +123,27 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			dojo.addClass(node, 'dojoxGridNoSort');
 			return;
 		}
-		dojo.create('a', {
+		//clear any previous connects
+		this._connects = dojo.filter(this._connects, function(conn){
+			if(conn._sort){
+				dojo.disconnect(conn);
+				return false;
+			}
+			return true;
+		});
+		var n = dojo.create('a', {
 			className: 'dojoxGridSortBtn dojoxGridSortBtnNested',
-			href: 'javascript:void(0);',
-			onmousedown: dojo.stopEvent,
 			title: this.nls.nestedSort,
 			innerHTML: '1'
 		}, node.firstChild, 'last');
-		dojo.create('a', {
+		var h = this.connect(n, "onmousedown", dojo.stopEvent);
+		h._sort = true;
+		n = dojo.create('a', {
 			className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
-			href: 'javascript:void(0);',
-			onmousedown: dojo.stopEvent,
 			title: this.nls.singleSort
 		}, node.firstChild, 'last');
+		h = this.connect(n, "onmousedown", dojo.stopEvent);
+		h._sort = true;
 		this._updateHeaderNodeUI(node);
 	},
 	_onHeaderCellClick: function(e){
@@ -300,6 +308,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnAsc', this._currMainSort === 'asc');
 		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnDesc', this._currMainSort === 'desc');
 		
+		var _this = this;
 		function setWaiState(){
 			var columnInfo = 'Column ' + (cell.index + 1) + ' ' + cell.field;
 			var orderState = 'none';
@@ -316,18 +325,21 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			dijit.setWaiState(singleSortBtn, 'label', a11ySingleLabel);
 			dijit.setWaiState(nestedSortBtn, 'label', a11yNestedLabel);
 			
-			singleSortBtn.onmouseover = function(){
-				dijit.setWaiState(this, 'label', a11ySingleLabelHover);
-			};
-			singleSortBtn.onmouseout = function(){
-				dijit.setWaiState(this, 'label', a11ySingleLabel);
-			};
-			nestedSortBtn.onmouseover = function(){
-				dijit.setWaiState(this, 'label', a11yNestedLabelHover);
-			};
-			nestedSortBtn.onmouseout = function(){
-				dijit.setWaiState(this, 'label', a11yNestedLabel);
-			};
+			var handles = [
+				_this.connect(singleSortBtn, "onmouseover", function(){
+					dijit.setWaiState(singleSortBtn, 'label', a11ySingleLabelHover);
+				}),
+				_this.connect(singleSortBtn, "onmouseout", function(){
+					dijit.setWaiState(singleSortBtn, 'label', a11ySingleLabel);
+				}),
+				_this.connect(nestedSortBtn, "onmouseover", function(){
+					dijit.setWaiState(nestedSortBtn, 'label', a11yNestedLabelHover);
+				}),
+				_this.connect(nestedSortBtn, "onmouseout", function(){
+					dijit.setWaiState(nestedSortBtn, 'label', a11yNestedLabel);
+				})
+			];
+			dojo.forEach(handles, function(handle){ handle._sort = true; });
 		}
 		setWaiState();
 
@@ -430,8 +442,6 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		//keep grid body scrolled by header
 		var view = this._getRegionView(region);
 		view.scrollboxNode.scrollLeft = view.headerNode.scrollLeft;
-		
-		dojo.stopEvent(evt);
 	},
 	_onKeyDown: function(e, isBubble){
 		if(isBubble){
@@ -448,7 +458,6 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_getRegionView: function(region){
 		var header = region;
 		while(header && !dojo.hasClass(header, 'dojoxGridHeader')){ header = header.parentNode; }
-		console.debug(header);
 		if(header){
 			return dojo.filter(this.grid.views.views, function(view){
 				return view.headerNode === header;
@@ -460,7 +469,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		var regions = [], cells = this.grid.layout.cells;
 		this._headerNodes.forEach(function(n, i){
 			if(dojo.style(n, 'display') === 'none'){return;}
-			if(cells[i]['noSort']){
+			if(cells[i]['isRowSelector']){
 				regions.push(n);
 				return;
 			}
