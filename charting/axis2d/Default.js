@@ -515,8 +515,9 @@ dojo.require("dojox.lang.utils");
 					t = this.ticks,
 					canLabel,
 					f = lin.getTransformerFromModel(this.scaler),
-					forceHtmlLabels = (dojox.gfx.renderer == "canvas"),
-					labelType = forceHtmlLabels || !titleRotation && !rotation && this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
+					// GFX Canvas now supports labels, so let's _not_ fallback to HTML anymore on canvas, just use
+					// HTML labels if explicitly asked + no rotation + no IE + no Opera
+					labelType = !titleRotation && !rotation && this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
 					dx = tickVector.x * taMajorTick.length,
 					dy = tickVector.y * taMajorTick.length;
 
@@ -540,32 +541,9 @@ dojo.require("dojox.lang.utils");
 						taTitleFontColor
 					);
 					if(labelType == "html"){
-						//support rotated html labels by css3 transform when using canvas render
-						if(titleRotation){
-							var tpos = dojo.coords(axisTitle.firstChild, true),
-								tw = dojox.gfx._base._getTextBox(o.title, {font: taTitleFont}).w;
-							dojo.addClass(axisTitle.firstChild, "axisTitleRotation"+titleRotation);
-							titlePosOffset = {top: 0, left: 0};
-							switch(titleRotation){
-								case 90:
-									titlePosOffset.top = tsize/2 - tw/2, titlePosOffset.left = tw/2 + tsize/2;
-									break;
-								case 180:
-									titlePosOffset.top = tsize, titlePosOffset.left = tw;
-									break;
-								case 270:
-									titlePosOffset.top = tsize/2 + tw/2, titlePosOffset.left = tw/2 - tsize/2;
-									break;
-								default:
-									break;
-							}
-							dojo.style(axisTitle.firstChild, {
-								top: tpos.t + titlePosOffset.top + "px",
-								left: tpos.l + titlePosOffset.left + "px"
-							});
-						}
 						this.htmlElements.push(axisTitle);
 					}else{
+						//as soon as rotation is provided, labelType won't be "html"
 						//rotate gfx labels
 						axisTitle.setTransform(g.matrix.rotategAt(titleRotation, titlePos.x, titlePos.y));
 					}
