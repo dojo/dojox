@@ -24,7 +24,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	horizontal: true,
 	swatchSize: 18,
 	
-	templateString: "<table dojoAttachPoint='legendNode' class='dojoxLegendNode'><tbody dojoAttachPoint='legendBody'></tbody></table>",
+	templateString: "<table dojoAttachPoint='legendNode' class='dojoxLegendNode' role='group' aria-label='chart legend'><tbody dojoAttachPoint='legendBody'></tbody></table>",
 	
 	legendNode: null,
 	legendBody: null,
@@ -101,8 +101,8 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	_addLabel: function(dyn, label){
 		// create necessary elements
 		var wrapper = dojo.create("td"),
-			icon = dojo.create("div", {className: "dojoxLegendIcon dijitInline"}, wrapper),
-			text = dojo.create("label", {className: "dojoxLegendText"}, wrapper),
+			icon = dojo.create("div", null, wrapper),
+			text = dojo.create("label", null, wrapper),
 			div  = dojo.create("div", {
 				style: {
 					"width": this.swatchSize + "px",
@@ -110,6 +110,8 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 					"float": "left"
 				}
 			}, icon);
+		dojo.addClass(icon, "dojoxLegendIcon dijitInline");
+		dojo.addClass(text, "dojoxLegendText");
 		// create a skeleton
 		if(this._tr){
 			// horizontal
