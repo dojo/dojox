@@ -19,9 +19,9 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._Templated], {
 		// Summary
 		//		Function for expand/collapse row
 		this.setOpen(!this.view.grid.cache.getExpandoStatusByRowIndex(this.rowIdx));
-		if(event && event instanceof Event){
+		try{
 			dojo.stopEvent(event);
-		}
+		}catch(e){}
 	},
 	
 	setOpen: function(open){
@@ -235,15 +235,15 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 				if(!expando.setRowNode(inRowIndex, inRowNode, this)){
 					expando.domNode.parentNode.removeChild(expando.domNode);
 				}
-			}}, this
-		);
+			}
+		}, this);
 		this.inherited(arguments);
 	}
 	
 });
 
-dojox.grid.cells.TreeCell.formatAtLevel = 
-	function(inRowIndexes, inItem, level, summaryRow, toggleClass, cellClasses, inRowIndex){
+dojo.mixin(dojox.grid.cells.TreeCell, {
+	formatAtLevel: function(inRowIndexes, inItem, level, summaryRow, toggleClass, cellClasses, inRowIndex){
 		if(!inItem){
 			return this.formatIndexes(inRowIndex, inRowIndexes, inItem, level);
 		}
@@ -266,10 +266,9 @@ dojox.grid.cells.TreeCell.formatAtLevel =
 			cellClasses.push(this.grid.focus.focusClass);
 		}
 		return result;
-	};
+	},
 	
-dojox.grid.cells.TreeCell.formatIndexes = 
-	function(inRowIndex, inRowIndexes, inItem, level){
+	formatIndexes: function(inRowIndex, inRowIndexes, inItem, level){
 		var info = this.grid.edit.info, 
 			d = this.get ? this.get(inRowIndexes[0], inItem, inRowIndexes) : (this.value || this.defaultValue);
 		if(this.editable && (this.alwaysEditing || (info.rowIndex == inRowIndexes[0] && info.cell == this))){
@@ -277,7 +276,8 @@ dojox.grid.cells.TreeCell.formatIndexes =
 		}else{
 			return this._defaultFormat(d, [d, inRowIndex, level, this]);
 		}
-	};
+	}
+});
 
 dojo.declare("dojox.grid._LazyTreeLayout", dojox.grid._Layout, {
 	// summary: 
@@ -532,7 +532,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			var items = this.cache.items;
 			var treePath = (parseInt(items[items.length - 1].treePath.split("/")[0], 10) + 1) + "";
 			this.cache.insertItem(this.get('rowCount'), {item: item, treePath: treePath, expandoStatus: false});
-		}else if(info && info.expandoStatus && info.rowIdx){
+		}else if(info && info.expandoStatus && info.rowIdx >= 0){
 			this.expandoFetch(info.rowIdx, false);
 			this.expandoFetch(info.rowIdx, true);
 		}else if(info && info.rowIdx){
@@ -689,7 +689,11 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		if(this._lastScrollTop){
 			this.setScrollTop(this._lastScrollTop);
 		}
-		this.showMessage();
+		if(!this.cache.items.length){
+			this.showMessage(this.noDataMessage);
+		}else{
+			this.showMessage();
+		}
 	},
 	
 	expandoFetch: function(rowIndex, open){
@@ -782,9 +786,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			row.customClasses = base;
 		}
 		var i = row;
-		i.customClasses += (i.odd ? " dojoxGridRowOdd" : "") +
-							(i.selected ? " dojoxGridRowSelected" : "") +
-							(i.over ? " dojoxGridRowOver" : "");
+		i.customClasses += (i.odd ? " dojoxGridRowOdd" : "") + (i.selected ? " dojoxGridRowSelected" : "") + (i.over ? " dojoxGridRowOver" : "");
 		this.focus.styleRow(i);
 		this.edit.styleRow(i);
 	},
