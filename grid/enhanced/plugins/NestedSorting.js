@@ -90,7 +90,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	getSortProps: function(){
 		// summary:
 		//		Overwritten, see DataGrid.getSortProps()
-		return this._sortDef;
+		return this._sortDef.length ? this._sortDef : null;
 	},
 	_initSort: function(postSort){
 		// summary:
