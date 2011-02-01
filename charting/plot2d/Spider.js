@@ -363,6 +363,7 @@ dojo.require("dojo.number");
 						theme = t.next("spider", [o, serieEntry]), ts = serieEntry.group,
 						f = g.normalizeColor(theme.series.fill), sk = {color: theme.series.fill, width: seriesWidth};
 					f.a = o.seriesFillAlpha;
+					serieEntry.dyn = {fill: f, stroke: sk};
 					
 					var osps = this.oldSeriePoints[serieEntry.name];
 					var cs = this._createSeriesEntry(ts, (osps || innerPoints), seriePoints, f, sk, r, ro, ms, at);
@@ -509,8 +510,6 @@ dojo.require("dojo.number");
 					color:    {start: start, end: end}
 				});
 				a.anim.play();
-				//legend
-				dojo[o.type == "onmouseout" ? "removeClass" : "addClass"](this.chart.legend.selectedLegends[o.run.name], "dojoxLegendHover");
 			}else if(o.element == "spider_circle"){
 				var init, scale, defaultScale = 1.5;
 				if(o.type == "onmouseover"){
@@ -638,141 +637,4 @@ dojo.require("dojo.number");
 		color.a = 0.7;
 		return color;
 	};
-	
-	
-	dojo.declare("dojox.charting.plot2d.SpiderLegend", [dojox.charting.widget.Legend], {
-		// summary: A legend for spider chart for selectable feature. extend from dojox.charting.widget.Legend.
-		// you can turn on/off the feature by selectedLegends parameter.
-		
-		// selectedLegends: boolean
-		//		make the legend selectable.
-		selectedLegends: false,
-		
-		postCreate: function(){
-			this.chart.legend = this;
-			this.selectedLegends && (this.selectedLegends = {});
-			this.inherited(arguments);
-		},
-		refresh: function(){
-			// cleanup
-			if(this._surfaces){
-				dojo.forEach(this._surfaces, function(surface){
-					surface.destroy();
-				});
-			}
-			this._surfaces = [];
-			while(this.legendBody.lastChild){
-				dojo.destroy(this.legendBody.lastChild);
-			}
-	
-			if(this.horizontal){
-				dojo.addClass(this.legendNode, "dojoxLegendHorizontal");
-				// make a container <tr>
-				this._tr = dojo.doc.createElement("tr");
-				this.legendBody.appendChild(this._tr);
-				this._inrow = 0;
-			}
-			
-			var s = this.series;
-			if(s.length == 0){
-				return;
-			}
-			//refresh selected plot
-			dojo.forEach(this.series, function(p){
-				p.selected = false;
-			});
-			if(s[0].chart.stack[0].declaredClass == "dojox.charting.plot2d.Spider"){
-				dojo.forEach(s, function(x, i){
-					this._addSpiderLabel({fill: x.fill, stroke: x.stroke, marker: x.marker}, x.legend || x.name, x);
-				}, this);
-			}
-		},
-		_addSpiderLabel: function(dyn, label, x){
-			//	summary:
-			//		Add spider specific selectable legend, with series entry remove or add when selecting legend
-			//		instead of whole chart redraw action
-			var item = dojo.doc.createElement("td"),
-				text = dojo.doc.createElement("span"),
-				icon  = dojo.doc.createElement("span");
-			dojo.addClass(item, (!dojo._isBodyLtr()) ? "dojoxLegendItemRtl" : "dojoxLegendItem");
-			dojo.addClass(text, "dojoxLegendText");
-			dojo.addClass(icon, "dojoxLegendIcon");
-			icon.style.width  = this.swatchSize + "px";
-			icon.style.height = this.swatchSize + "px";
-			item.appendChild(icon);
-			//A11y support
-			dojo.attr(item, "tabIndex", 0);
-			dijit.setWaiState(item, "labelledby", label);
-			
-			// create a skeleton
-			if(this._tr){
-				// horizontal
-				this._tr.appendChild(item);
-				text.innerHTML = label;
-				item.appendChild(text);
-				this.selectedLegends && (this.selectedLegends[label] = item);
-				if(++this._inrow === this.horizontal){
-					// make a fresh container <tr>
-					this._tr = dojo.doc.createElement("tr");
-					this.legendBody.appendChild(this._tr);
-					this._inrow = 0;
-				}
-			}else{
-				// vertical
-				var tr = dojo.doc.createElement("tr");
-				this.legendBody.appendChild(tr);
-				tr.appendChild(item);
-				text.innerHTML = label;
-				item.appendChild(text);
-				this.selectedLegends && (this.selectedLegends[label] = item);
-			}
-			
-			// populate the skeleton
-			this._makeIcon(icon, dyn);
-			text.innerHTML = String(label);
-			
-			var	s = this.series, ss = this.chart.seriesShapes;
-			this.selectedLegends && dojo.forEach(["onmousedown", "onkeydown"], function(e){
-				this.selectedLegends && this.connect(this.selectedLegends[label], e, function(evt){
-					//A11y: selectable legend support for keyboard 
-					if(e == "onkeydown" && evt.keyCode != dojo.keys.ENTER){ return; }
-					x.selected = !(x.selected);
-					for(var j = 0; j < s.length; j++){
-						if(!s[j].selected){
-							//fill issue on IE when calling s[j].group.clear() instead
-							var shape = ss[s[j].name];
-							shape.group.remove(shape.poly);
-							for(var k = 0; k < shape.circles.length; k++){
-								shape.group.remove(shape.circles[k]);
-							}
-						}else{
-							var shape = ss[s[j].name];
-							shape.group.add(shape.poly);
-							for(var k = 0; k < shape.circles.length; k++){
-								shape.group.add(shape.circles[k]);
-							}
-						}
-						dojo.toggleClass(this.selectedLegends[s[j].name], "dojoxLegendActive", !!s[j].selected);
-					}
-				});
-			}, this);
-			this.selectedLegends && dojo.forEach(["onmouseenter", "onmouseleave", "onmouseup"], function(e){
-				var target = this.selectedLegends[label];
-				this.connect(target, e, function(){
-					dojo.toggleClass(target, "dojoxLegendHover", e == "onmouseenter");
-					var g = ss[label].group, p = ss[label].poly;
-					if(g && p){
-						!dojo.isIE && g.moveToFront();
-						if(e == "onmouseenter"){
-							p.polyOldColor = p.getFill();
-							p.setFill(transColor(p.polyOldColor));
-						}else if(e == "onmouseleave"){
-							p.setFill(p.polyOldColor);
-						}
-					}
-				});
-			}, this);
-		}
-	});
-	
 })();
