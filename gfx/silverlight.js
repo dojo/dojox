@@ -728,8 +728,17 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.shape.Creator);
 (function(){
 	var surfaces = dojox.gfx.silverlight.surfaces;
 	var mouseFix = function(s, a){
-		var ev = {target: s, currentTarget: s,
-			preventDefault: function(){}, stopPropagation: function(){}};
+
+		var ev = {target: s, currentTarget: s, preventDefault: function(){}, stopPropagation: function(){}};
+		try{
+			if(a.source){
+				// support silverlight 2.0
+				ev.target = a.source;
+			}
+		}catch(e){
+			// a.source does not exist in 1.0
+		}
+		
 		if(a){
 			try{
 				ev.ctrlKey = a.ctrl;
@@ -754,6 +763,14 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.shape.Creator);
 			ctrlKey:  a.ctrl,
 			shiftKey: a.shift
 		};
+		try{
+			if(a.source){
+				// source is defined from Silverlight 2+
+				ev.target = a.source;
+			}
+		}catch(e){
+			// a.source does not exist in 1.0
+		}
 		return ev;
 	};
 	var eventNames = {
