@@ -502,7 +502,7 @@ dojo.declare("dojox.gfx.Surface", dojox.gfx.shape.Surface, {
 	},
 	destroy: function(){
 		window[this._onLoadName] = dojox.gfx.silverlight.nullFunc;
-		delete dojox.gfx.silverlight.surfaces[this.rawNode.name];
+		delete dojox.gfx.silverlight.surfaces[this._nodeName];
 		this.inherited(arguments);
 	},
 	setDimensions: function(width, height){
@@ -549,13 +549,14 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 	var s = new dojox.gfx.Surface();
 	parentNode = dojo.byId(parentNode);
 	s._parent = parentNode;
+	s._nodeName = dojox.gfx._base._getUniqueId();
 
 	// create an empty canvas
 	var t = parentNode.ownerDocument.createElement("script");
 	t.type = "text/xaml";
 	t.id = dojox.gfx._base._getUniqueId();
 	t.text = "<?xml version='1.0'?><Canvas xmlns='http://schemas.microsoft.com/client/2007' Name='" +
-		dojox.gfx._base._getUniqueId() + "'/>";
+		s._nodeName + "'/>";
 	parentNode.parentNode.insertBefore(t, parentNode);
 	s._nodes.push(t);
 
@@ -568,7 +569,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		if(!s.rawNode){
 			s.rawNode = dojo.byId(pluginName).content.root;
 			// register the plugin with its parent node
-			dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
+			dojox.gfx.silverlight.surfaces[s._nodeName] = parentNode;
 			s.onLoad(s);
 			console.log("Silverlight: assigned");
 		}
@@ -601,7 +602,7 @@ dojox.gfx.createSurface = function(parentNode, width, height){
 		// the plugin was created synchronously
 		s.rawNode = pluginNode.content.root;
 		// register the plugin with its parent node
-		dojox.gfx.silverlight.surfaces[s.rawNode.name] = parentNode;
+		dojox.gfx.silverlight.surfaces[s._nodeName] = parentNode;
 	}else{
 		// the plugin is being created asynchronously
 		s.rawNode = null;
