@@ -1,7 +1,5 @@
 dojo.provide("dojox.charting.axis2d.Default");
 
-dojo.require("dijit.Tooltip");
-
 dojo.require("dojox.charting.axis2d.Invisible");
 
 dojo.require("dojox.charting.scaler.linear");
@@ -125,7 +123,7 @@ dojo.require("dojox.lang.utils");
 
 	dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Invisible, {
 		//	summary:
-		//		The default axis object used in dojox.charting.  See dojox.charting.Chart2D.addAxis for details.
+		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
 		//
 		//	defaultParams: Object
 		//		The default parameters used to define any axis.
@@ -680,6 +678,11 @@ dojo.require("dojox.lang.utils");
 			return this;	//	dojox.charting.axis2d.Default
 		},
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
+			// to avoid requiring dijit module for that feature, let's test that
+			// dynamically and return if we can't do it
+			if(!dijit || !dijit.Tooltip){
+				return;
+			}
 			var aroundRect = {type: "rect"}, position = ["above", "below"],
 				fontWidth = dojox.gfx._base._getTextBox(truncatedLabel, {font: font}).w || 0;
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
