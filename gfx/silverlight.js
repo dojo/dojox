@@ -401,8 +401,15 @@ dojo.declare("dojox.gfx.Text", dojox.gfx.shape.Text, {
 	},
 	_delayAlignment: function(){
 		// handle alignment
-		var r = this.rawNode, s = this.shape,
-			w = r.actualWidth, h = r.actualHeight, x = s.x, y = s.y - h * 0.75;
+		var r = this.rawNode, s = this.shape, w, h;
+		try{
+			w = r.actualWidth;
+			h = r.actualHeight;
+		}catch(e){
+			// bail out if the node is hidden
+			return;
+		}
+		var x = s.x, y = s.y - h * 0.75;
 		switch(s.align){
 			case "middle":
 				x -= w / 2;
@@ -774,7 +781,11 @@ dojo.extend(dojox.gfx.Surface, dojox.gfx.shape.Creator);
 			return {name: n.name, token: token};
 		},
 		disconnect: function(token){
-			this.getEventSource().removeEventListener(token.name, token.token);
+			try{
+				this.getEventSource().removeEventListener(token.name, token.token);
+			}catch(e){
+				// bail out if the node is hidden
+			}
 		}
 	};
 	dojo.extend(dojox.gfx.Shape, eventsProcessing);
