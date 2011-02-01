@@ -72,8 +72,12 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 			if(o.type === "onplotreset" || o.type === "onmouseout"){
                 dijit.hideTooltip(this.aroundRect);
 				this.aroundRect = null;
+				if(o.type === "onplotreset"){
+					delete this.angles;
+				}
 				return;
 			}
+			
 			
 			if(!o.shape || o.type !== "onmouseover"){ return; }
 			
