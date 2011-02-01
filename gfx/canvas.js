@@ -10,7 +10,8 @@ dojo.experimental("dojox.gfx.canvas");
 
 (function(){
 	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc,
-		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2;
+		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2,
+		pattrnbuffer = null;
 
 	d.extend(g.Shape, {
 		_render: function(/* Object */ ctx){
@@ -39,12 +40,32 @@ dojo.experimental("dojox.gfx.canvas");
 		},
 		_renderFill: function(/* Object */ ctx, /* Boolean */ apply){
 			if("canvasFill" in this){
+				var fs = this.fillStyle;
 				if("canvasFillImage" in this){
-					this.canvasFill = ctx.createPattern(this.canvasFillImage, "repeat");
+					var w = fs.width, h = fs.height,
+						iw = this.canvasFillImage.width, ih = this.canvasFillImage.height,
+						// let's match the svg default behavior wrt. aspect ratio: xMidYMid meet
+						sx = w == iw ? 1 : w / iw,
+						sy = h == ih ? 1 : h / ih,
+						s = Math.min(sx,sy), //meet->math.min , slice->math.max
+						dx = (w - s * iw)/2,
+						dy = (h - s * ih)/2;					
+					// the buffer used to scaled the image
+					pattrnbuffer.width = w; pattrnbuffer.height = h;
+					var copyctx = pattrnbuffer.getContext("2d");	
+					copyctx.clearRect(0, 0, w, h);
+					copyctx.drawImage(this.canvasFillImage, 0, 0, iw, ih, dx, dy, s*iw, s*ih);
+					this.canvasFill = ctx.createPattern(pattrnbuffer, "repeat");
 					delete this.canvasFillImage;
 				}
 				ctx.fillStyle = this.canvasFill;
-				if(apply){ ctx.fill(); }
+				if(apply){ 
+					// offset the pattern
+					if (fs.type==="pattern" && (fs.x !== 0 || fs.y !== 0)) {
+						ctx.translate(fs.x,fs.y);
+					}
+					ctx.fill(); 
+				}
 			}else{
 				ctx.fillStyle = "rgba(0,0,0,0.0)";
 			}
@@ -116,7 +137,13 @@ dojo.experimental("dojox.gfx.canvas");
 							});
 							break;
 						case "pattern":
-							var img = new Image(fs.width, fs.height);
+							if (!pattrnbuffer) {
+								pattrnbuffer = document.createElement("canvas");
+							}
+							// no need to scale the image since the canvas.createPattern uses 
+							// the original image data and not the scaled ones (see spec.)
+							// the scaling needs to be done at rendering time in a context buffer							
+							var img =new Image();  
 							this.surface.downloadImage(img, fs.src);
 							this.canvasFillImage = img;
 					}
