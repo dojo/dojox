@@ -939,9 +939,12 @@ dojo.declare("dojox.gfx3d.Viewport", dojox.gfx.Group, {
 		if(dim){
 			var w = dojo.isString(dim.width) ? parseInt(dim.width)  : dim.width;
 			var h = dojo.isString(dim.height) ? parseInt(dim.height) : dim.height;
-			var trs = this.rawNode.style;
-			trs.height = h;
-			trs.width = w;
+			// there is no rawNode in canvas GFX implementation
+			if(this.rawNode){
+				var trs = this.rawNode.style;
+				trs.height = h;
+				trs.width = w;
+			}
 			this.dimension = {
 				width:  w,
 				height: h
