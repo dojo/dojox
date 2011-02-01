@@ -52,20 +52,19 @@ dojo.provide("dojox.gfx._base");
 		}
 
 		//	set up the measuring node.
-		var div = dojo.doc.createElement("div");
-		var s = div.style;
-		s.position = "absolute";
-		s.left = "-100px";
-		s.top = "0px";
-		s.width = "30px";
-		s.height = "1000em";
-		s.borderWidth = "0px";
-		s.margin = "0px";
-		s.padding = "0px";
-		s.outline = "none";
-		s.lineHeight = "1";
-		s.overflow = "hidden";
-		dojo.body().appendChild(div);
+		var div = dojo.create("div", {style: {
+				position: "absolute",
+				left: "0",
+				top: "-100px",
+				width: "30px",
+				height: "1000em",
+				borderWidth: "0",
+				margin: "0",
+				padding: "0",
+				outline: "none",
+				lineHeight: "1",
+				overflow: "hidden"
+			}}, dojo.body());
 
 		//	do the measurements.
 		for(var p in heights){
@@ -74,7 +73,6 @@ dojo.provide("dojox.gfx._base");
 		}
 
 		dojo.body().removeChild(div);
-		div = null;
 		return heights; 	//	object
 	};
 
@@ -95,18 +93,16 @@ dojo.provide("dojox.gfx._base");
 								/*String?*/ className){
 		var m, s, al = arguments.length;
 		if(!measuringNode){
-			m = measuringNode = dojo.doc.createElement("div");
-			s = m.style;
-			s.position = "absolute";
-			s.left = "-10000px";
-			s.top = "0";
-			dojo.body().appendChild(m);
-		}else{
-			m = measuringNode;
-			s = m.style;
+			measuringNode = dojo.create("div", {style: {
+				position: "absolute",
+				top: "-10000px",
+				left: "0"
+			}}, dojo.body());
 		}
+		m = measuringNode;
 		// reset styles
 		m.className = "";
+		s = m.style;
 		s.borderWidth = "0";
 		s.margin = "0";
 		s.padding = "0";
