@@ -124,6 +124,29 @@ dojo.require("dojox.form.manager._Mixin");
 				}
 			}
 			return true;
+		},
+		validate: function () {
+			var isValid = true,
+				formWidgets = this.formWidgets,
+				didFocus = false, name;
+
+			for(name in formWidgets){
+				aa(function(_, widget){
+					// Need to set this so that "required" widgets get their
+					// state set.
+					widget._hasBeenBlurred = true;
+					var valid = widget.disabled || !widget.validate || widget.validate();
+					if(!valid && !didFocus){
+						// Set focus of the first non-valid widget
+						dojo.window.scrollIntoView(widget.containerNode || widget.domNode);
+						widget.focus();
+						didFocus = true;
+					}
+					isValid = isValid && valid;
+				}).call(this, null, formWidgets[name].widget);
+			}
+
+			return isValid;
 		}
 	});
 })();
