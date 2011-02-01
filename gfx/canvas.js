@@ -143,8 +143,6 @@ dojo.experimental("dojox.gfx.canvas");
 			// summary: render the group
 			ctx.save();
 			this._renderTransform(ctx);
-			this._renderFill(ctx);
-			this._renderStroke(ctx);
 			for(var i = 0; i < this.children.length; ++i){
 				this.children[i]._render(ctx);
 			}
