@@ -24,49 +24,75 @@ dojo.declare(
 	flippable: false,
 
 	buildRendering: function(){
-		var i, idx, len, c;
 		this.inherited(arguments);
 		dojo.addClass(this.domNode, "mblScrollableView");
 		this.domNode.style.overflow = "hidden";
 		this.domNode.style.top = "0px";
 		this.domNode.style.height = "100%";
-		this.containerNode = dojo.doc.createElement("DIV");
-		dojo.addClass(this.containerNode, "mblScrollableViewContainer");
+		this.containerNode = dojo.create("DIV",
+			{className:"mblScrollableViewContainer"}, this.domNode);
 		this.containerNode.style.position = "absolute";
-		if(this.scrollDir == "v" || this.flippable){
+		if(this.scrollDir === "v" || this.flippable){
 			this.containerNode.style.width = "100%";
 		}
+		this.reparent();
+		this.findAppBars();
+	},
 
+	addChild: function(widget){
+		var c = widget.domNode;
+		var fixed = this._checkFixedBar(c, true);
+		if(fixed){
+			this.domNode.appendChild(c);
+			if(fixed === "top"){
+				this.fixedHeaderHeight = c.offsetHeight;
+				this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
+			}else if(fixed === "bottom"){
+				this.fixedFooterHeight = c.offsetHeight;
+				this.isLocalFooter = true;
+				c.style.bottom = "0px";
+			}
+			this.resizeView();
+		}else{
+			this.containerNode.appendChild(c);
+		}
+	},
+
+	reparent: function(){
 		// move all the children, except header and footer, to containerNode.
-		for(i = 0, idx = 0, len = this.srcNodeRef.childNodes.length; i < len; i++){
-			c = this.srcNodeRef.childNodes[idx];
+		var i, idx, len, c;
+		for(i = 0, idx = 0, len = this.domNode.childNodes.length; i < len; i++){
+			c = this.domNode.childNodes[idx];
 			// search for view-specific header or footer
-			if(this._checkFixedBar(c, true)){
+			if(c === this.containerNode || this._checkFixedBar(c, true)){
 				idx++;
 				continue;
 			}
-			this.containerNode.appendChild(this.srcNodeRef.removeChild(c));
+			this.containerNode.appendChild(this.domNode.removeChild(c));
 		}
-		if(this.fixedFooter){
-			this.domNode.insertBefore(this.containerNode, this.fixedFooter);
-		}else{
-			this.domNode.appendChild(this.containerNode);
-		}
+	},
 
+	findAppBars: function(){
 		// search for application-specific header or footer
+		var i, len, c;
 		for(i = 0, len = dojo.body().childNodes.length; i < len; i++){
 			c = dojo.body().childNodes[i];
 			this._checkFixedBar(c, false);
 		}
-		for(i = 0, len = this.domNode.parentNode.childNodes.length; i < len; i++){
-			c = this.domNode.parentNode.childNodes[i];
-			this._checkFixedBar(c, false);
+		if(this.domNode.parentNode){
+			for(i = 0, len = this.domNode.parentNode.childNodes.length; i < len; i++){
+				c = this.domNode.parentNode.childNodes[i];
+				this._checkFixedBar(c, false);
+			}
 		}
+		this.fixedHeaderHeight = this.fixedHeader ? this.fixedHeader.offsetHeight : 0;
+		this.fixedFooterHeight = this.fixedFooter ? this.fixedFooter.offsetHeight : 0;
 	},
 
 	_checkFixedBar: function(/*DomNode*/node){
-		if(node.nodeType == 1){
-			var fixed = node.getAttribute("fixed");
+		if(node.nodeType === 1){
+			var fixed = node.getAttribute("fixed")
+				|| (dijit.byNode(node) && dijit.byNode(node).fixed);
 			if(fixed){
 				dojo.style(node, {
 					position: "absolute",
@@ -74,11 +100,11 @@ dojo.declare(
 					zIndex: 1
 				});
 			}
-			if(fixed == "top"){
+			if(fixed === "top"){
 				node.style.top = "0px";
 				this.fixedHeader = node;
 				return fixed;
-			}else if(fixed == "bottom"){
+			}else if(fixed === "bottom"){
 				this.fixedFooter = node;
 				return fixed;
 			}

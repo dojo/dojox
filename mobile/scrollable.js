@@ -150,9 +150,6 @@ dojox.mobile.scrollable = function(){
 		this._h = (this.scrollDir.indexOf("h") != -1); // horizontal scrolling
 		this._f = (this.scrollDir == "f"); // flipping views
 
-		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
-			this.fixedFooterHeight : 0;
-
 		this._ch = []; // connect handlers
 		this._ch.push(dojo.connect(this.containerNode,
 			dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchStart"));
@@ -160,7 +157,6 @@ dojox.mobile.scrollable = function(){
 			this._ch.push(dojo.connect(this.containerNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
 			this._ch.push(dojo.connect(this.containerNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 		}
-		this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
 
 		if(dojo.global.onorientationchange !== undefined){
 			this._ch.push(dojo.connect(dojo.global, "onorientationchange", this, "resizeView"));
@@ -182,6 +178,11 @@ dojox.mobile.scrollable = function(){
 	};
 
 	this.resizeView = function(e){
+		// moved from init() to support dynamically added fixed bars
+		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
+			this.fixedFooterHeight : 0;
+		this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
+
 		// has to wait a little for completion of hideAddressBar()
 		var c = 0;
 		var _this = this;
