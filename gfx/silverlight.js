@@ -563,13 +563,11 @@ dojo.experimental("dojox.gfx.silverlight");
 			onLoadName = "__" + g._base._getUniqueId() + "_onLoad";
 		s._onLoadName = onLoadName;
 		window[onLoadName] = function(sender){
-			console.log("Silverlight: loaded");
 			if(!s.rawNode){
 				s.rawNode = d.byId(pluginName).content.root;
 				// register the plugin with its parent node
 				surfaces[s._nodeName] = parentNode;
 				s.onLoad(s);
-				console.log("Silverlight: assigned");
 			}
 		};
 		if(d.isSafari){
@@ -636,7 +634,6 @@ dojo.experimental("dojox.gfx.silverlight");
 				}
 				break;
 		}
-		console.error(t);
 	};
 
 	// Extenders

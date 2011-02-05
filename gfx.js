@@ -4,25 +4,19 @@ dojo.require("dojox.gfx.matrix");
 dojo.require("dojox.gfx._base");
 
 dojo.loadInit(function(){
-	//Since loaderInit can be fired before any dojo.provide/require calls,
-	//make sure the dojox.gfx object exists and only run this logic if dojox.gfx.renderer
-	//has not been defined yet.
+	// Since loaderInit can be fired before any dojo.provide/require calls,
+	// make sure the dojox.gfx object exists and only run this logic if dojox.gfx.renderer
+	// has not been defined yet.
 	var gfx = dojo.getObject("dojox.gfx", true), sl, flag, match;
-	if(!gfx.renderer){
-		//Have a way to force a GFX renderer, if so desired.
-		//Useful for being able to serialize GFX data in a particular format.
+	while(!gfx.renderer){
+		// Have a way to force a GFX renderer, if so desired.
+		// Useful for being able to serialize GFX data in a particular format.
 		if(dojo.config.forceGfxRenderer){
 			dojox.gfx.renderer = dojo.config.forceGfxRenderer;
-			return;
+			break;
 		}
 		var renderers = (typeof dojo.config.gfxRenderer == "string" ?
 			dojo.config.gfxRenderer : "svg,vml,canvas,silverlight").split(",");
-
-		// mobile platform detection
-		// TODO: move to the base?
-
-		var ua = navigator.userAgent;
-
 		for(var i = 0; i < renderers.length; ++i){
 			switch(renderers[i]){
 				case "svg":
@@ -67,11 +61,13 @@ dojo.loadInit(function(){
 				break;
 			}
 		}
-		if(dojo.config.isDebug){
-			console.log("gfx renderer = " + gfx.renderer);
-		}
+		break;
 	}
 	
+	if(dojo.config.isDebug){
+		console.log("gfx renderer = " + gfx.renderer);
+	}
+
 	// load & initialize renderer
 	if(gfx[gfx.renderer]){
 		// already loaded
