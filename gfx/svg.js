@@ -463,7 +463,11 @@ else
 			// summary: forms a path using a shape (SVG)
 			// newShape: Object: an SVG path string or a path object (see dojox.gfx.defaultPath)
 			this.inherited(arguments);
-			this.rawNode.setAttribute("d", this.shape.path);
+			if(this.shape.path){ 
+				this.rawNode.setAttribute("d", this.shape.path); 
+			}else{ 
+				this.rawNode.removeAttribute("d"); 
+			}
 			return this;	// self
 		}
 	});
