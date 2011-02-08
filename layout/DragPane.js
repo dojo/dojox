@@ -25,6 +25,7 @@ dojo.declare("dojox.layout.DragPane", dijit._Widget, {
 	_down: function(e){
 		// summary: mousedown handler, start the dragging
 		var t = this.domNode;
+		e.preventDefault();
 		dojo.style(t, "cursor", "move");
 		this._x = e.pageX;
 		this._y = e.pageY;
