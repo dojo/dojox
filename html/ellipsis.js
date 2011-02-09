@@ -12,7 +12,8 @@ dojox.html.ellipsis = {
 =====*/
 
 (function(d){
-	if(d.isMoz){
+    try{
+	if(d.isMoz){ //TODO: feature detect text-overflow in computed style?
 		// The delay (in ms) to wait so that we don't keep querying when many 
 		// changes happen at once - set config "dojoxFFEllipsisDelay" if you
 		// want a different value
@@ -23,8 +24,9 @@ dojox.html.ellipsis = {
 				delay = 1;
 			}
 		}
-		
 		// Create our stub XUL elements for cloning later
+		// NOTE: this no longer works as of FF 4.0:
+		// https://developer.mozilla.org/En/Firefox_4_for_developers#Remote_XUL_support_removed
 		var sNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
 		var xml = document.createElementNS(sNS, 'window');
 		var label = document.createElementNS(sNS, 'description');
@@ -187,4 +189,5 @@ dojox.html.ellipsis = {
 			connFx();
 		});
 	}
+    }catch(e){/*squelch, rely on CSS*/}
 })(dojo);
