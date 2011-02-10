@@ -1,5 +1,5 @@
 define("dojox/html/entities", ["dojo", "dojox"], function(dojo, dojox) {
-return function(){
+(function(){
 	// dojox.html.entities.html [public] Array
 	//		Entity characters for HTML, represented as an array of 
 	//		character code, entity name (minus & and ; wrapping.
@@ -200,6 +200,6 @@ return function(){
 		}
 		return str;
 	};
-}();
+})();
 });
 
