@@ -4,7 +4,7 @@ dojo.require("dojox.mobile");
 
 dojo.declare(
 	"dojox.mobile.IconContainer",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	defaultIcon: "",
 	transition: "below", // slide, flip, or below

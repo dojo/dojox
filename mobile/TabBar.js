@@ -4,7 +4,7 @@ dojo.require("dojox.mobile");
 
 dojo.declare(
 	"dojox.mobile.TabBar",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	iconBase: "",
 	iconPos: "",

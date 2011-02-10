@@ -2,13 +2,13 @@ dojo.provide("dojox.mobile.app.List");
 dojo.experimental("dojox.mobile.app.List");
 
 dojo.require("dojo.string");
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 
 (function(){
 
 	var templateCache = {};
 
-	dojo.declare("dojox.mobile.app.List", dijit._Widget, {
+	dojo.declare("dojox.mobile.app.List", dijit._WidgetBase, {
 		// summary:
 		//		A templated list widget. Given a simple array of data objects
 		//		and a HTML template, it renders a list of elements, with

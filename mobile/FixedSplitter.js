@@ -1,6 +1,6 @@
 dojo.provide("dojox.mobile.FixedSplitter");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 
 // summary:
 //		A layout container that splits the window horizontally or vertically.
@@ -25,7 +25,7 @@ dojo.require("dijit._Widget");
 
 dojo.declare(
 	"dojox.mobile.FixedSplitter",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	orientation: "H", // "H" or "V"
 
@@ -88,7 +88,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.FixedSplitterPane",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	buildRendering: function(){
 		this.inherited(arguments);

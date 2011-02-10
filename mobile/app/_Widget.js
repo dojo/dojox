@@ -1,9 +1,9 @@
 dojo.provide("dojox.mobile.app._Widget");
 dojo.experimental("dojox.mobile.app._Widget");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 
-dojo.declare("dojox.mobile.app._Widget", dijit._Widget, {
+dojo.declare("dojox.mobile.app._Widget", dijit._WidgetBase, {
 	// summary:
 	//		The base mobile app widget.
 

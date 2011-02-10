@@ -129,7 +129,7 @@ dojo.require("dojox.mobile._base");
 
 			// Tell all widgets what their controller is.
 			for(var i = 0; i < widgets.length; i++){
-				widgets[i].attr("controller", this);
+				widgets[i].set("controller", this);
 			}
 		},
 

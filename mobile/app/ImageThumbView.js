@@ -1,10 +1,10 @@
 dojo.provide("dojox.mobile.app.ImageThumbView");
 dojo.experimental("dojox.mobile.app.ImageThumbView");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 dojo.require("dojo.string");
 
-dojo.declare("dojox.mobile.app.ImageThumbView", dijit._Widget, {
+dojo.declare("dojox.mobile.app.ImageThumbView", dijit._WidgetBase, {
 	// summary:
 	//		An image thumbnail gallery
 

@@ -1,6 +1,6 @@
 dojo.provide("dojox.mobile._base");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 // summary:
@@ -25,7 +25,7 @@ dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 dojo.declare(
 	"dojox.mobile.View",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	// summary:
 	//		A widget that represents a view that occupies the full screen
@@ -307,7 +307,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.Heading",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	back: "",
 	href: "",
@@ -389,7 +389,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.RoundRect",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	shadow: false,
 
@@ -401,7 +401,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.RoundRectCategory",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	label: "",
 
@@ -428,7 +428,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.RoundRectList",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	transition: "slide",
 	iconBase: "",
@@ -459,7 +459,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.AbstractItem",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	icon: "",
 	iconPos: "", // top,left,width,height (ex. "0,0,29,29")
@@ -795,7 +795,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.Switch",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	value: "on",
 	leftLabel: "ON",
@@ -905,7 +905,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.Button",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	btnClass: "mblBlueButton",
 	duration: 1000, // duration of selection, milliseconds

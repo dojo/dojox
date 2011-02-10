@@ -1,6 +1,6 @@
 dojo.provide("dojox.mobile._ScrollableMixin");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 dojo.require("dojox.mobile.scrollable");
 
 // summary:

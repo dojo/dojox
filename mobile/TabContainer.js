@@ -5,7 +5,7 @@ dojo.require("dojox.mobile");
 // Deprecated. Use dojox.mobile.TabBar instead.
 dojo.declare(
 	"dojox.mobile.TabContainer",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	iconBase: "",
 	iconPos: "",
@@ -123,7 +123,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.TabPane",
-	dijit._Widget,
+	dijit._WidgetBase,
 {
 	label: "",
 	icon: "",

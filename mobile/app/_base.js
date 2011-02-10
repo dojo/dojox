@@ -2,7 +2,7 @@ dojo.provide("dojox.mobile.app._base");
 dojo.experimental("dojox.mobile.app._base");
 
 dojo.require("dijit._base");
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 dojo.require("dojox.mobile");
 dojo.require("dojox.mobile.parser");
 

@@ -15,7 +15,7 @@ dojo.declare("FlickrSearchTextAssistant", dojox.mobile.app.SceneAssistant, {
 		this.listWidget = dijit.byId("searchList");
 		this.textWidget = dijit.byId("searchTextInput");
 		
-		this.listWidget.attr("items", []);
+		this.listWidget.set("items", []);
 		
 		var _this = this;
 		
@@ -29,7 +29,7 @@ dojo.declare("FlickrSearchTextAssistant", dojox.mobile.app.SceneAssistant, {
 		//		console.log("search value = ", value);
 			
 			if(!value || value.length == 0){
-				_this.listWidget.attr("items", []);
+				_this.listWidget.set("items", []);
 				return;
 			}
 			
@@ -78,10 +78,10 @@ dojo.declare("FlickrSearchTextAssistant", dojox.mobile.app.SceneAssistant, {
 			this.timer = null;
 		}
 		
-		var searchText = this.textWidget.attr("value");
+		var searchText = this.textWidget.set("value");
 		
 		if(!searchText || dojo.trim(searchText).length < 1){
-			this.listWidget.attr("items", []);
+			this.listWidget.set("items", []);
 			
 			console.log("NOT SEARCHING");
 			return;
@@ -113,7 +113,7 @@ dojo.declare("FlickrSearchTextAssistant", dojox.mobile.app.SceneAssistant, {
 		}else{
 			groups = [];
 		}
-		this.listWidget.attr("items", groups);
+		this.listWidget.set("items", groups);
 	}
   
 });

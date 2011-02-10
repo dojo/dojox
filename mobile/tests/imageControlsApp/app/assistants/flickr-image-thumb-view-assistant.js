@@ -35,7 +35,7 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 
 		this.connect(this.textWidget, "onChange", function(value){
 			if(!value || value.length == 0){
-				_this.viewer.attr("items", []);
+				_this.viewer.set("items", []);
 				return;
 			}
 
@@ -83,13 +83,13 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 					break;
 				case "text":
 					dojo.style(this.textWidget.domNode, "visibility", "visible");
-					this.loadText(this.textWidget.attr("value"));
+					this.loadText(this.textWidget.set("value"));
 					break;
 				case "tag":
 					// Another scene has passed in a list of images
 					// and an initial index
 					dojo.style(this.textWidget.domNode, "visibility", "visible");
-					this.loadTags(this.textWidget.attr("value"));
+					this.loadTags(this.textWidget.set("value"));
 					break;
 				default:
 					console.log("unknown type " + this.dataType, options);
@@ -113,10 +113,10 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 			this.timer = null;
 		}
 
-		var searchText = this.textWidget.attr("value");
+		var searchText = this.textWidget.set("value");
 
 		if(!searchText || dojo.trim(searchText).length < 1){
-			this.viewer.attr("items", []);
+			this.viewer.set("items", []);
 
 			console.log("NOT SEARCHING");
 			return;
@@ -223,11 +223,11 @@ dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {
 			}
 			this.urls = urls;
 			this.index = 0;
-			this.viewer.attr("selectedIndex", this.index);
+			this.viewer.set("selectedIndex", this.index);
 
-			this.viewer.attr("items", urls);
+			this.viewer.set("items", urls);
 		}else{
-			this.viewer.attr("items", []);
+			this.viewer.set("items", []);
 			console.log("didn't get photos");
 		}
 	}

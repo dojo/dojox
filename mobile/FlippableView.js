@@ -1,6 +1,6 @@
 dojo.provide("dojox.mobile.FlippableView");
 
-dojo.require("dijit._Widget");
+dojo.require("dijit._WidgetBase");
 dojo.require("dojox.mobile");
 dojo.require("dojox.mobile._ScrollableMixin");
 
