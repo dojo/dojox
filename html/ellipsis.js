@@ -191,6 +191,6 @@ dojox.html.ellipsis = {
 		});
 	}
     }catch(e){
-	console.warn("dojox.html.ellipsis does not work with Firefox > 4");
+	console.warn("dojox.html.ellipsis does not work with Firefox >= 4");
     }
 })(dojo);
