@@ -1,4 +1,5 @@
 dojo.provide("dojox.html.ellipsis");
+dojo.deprecated("dojox.html.ellipsis", "Does not work with Firefox>4.  There is no replacement.  Use text-overflow:ellipsis for other browsers.");
 
 /*=====
 dojox.html.ellipsis = {
@@ -189,5 +190,7 @@ dojox.html.ellipsis = {
 			connFx();
 		});
 	}
-    }catch(e){/*squelch, rely on CSS*/}
+    }catch(e){
+	console.warn("dojox.html.ellipsis does not work with Firefox > 4");
+    }
 })(dojo);
