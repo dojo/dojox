@@ -20,6 +20,7 @@
 	"conditionBefore": "before",
 	"conditionAfter": "after",
 	"conditionRange": "range",
+	"conditionIsEmpty": "is empty",
 	
 	"all": "all",
 	"any": "any",
