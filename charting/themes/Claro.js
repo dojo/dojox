@@ -10,11 +10,25 @@ dojo.require("dojox.charting.Theme");
 	
 	themes.Claro = new dc.Theme({
 		chart: {
-			fill:      "#efefef",
+			fill:	   { 
+				type: "linear", 
+				x1: 0, x2: 0, y1: 0, y2: 100, 
+				colors: [ 
+					{ offset: 0, color: "#dbdbdb" },
+					{ offset: 1, color: "#efefef" }
+				]
+			},
 			stroke:    {color: "#b5bcc7"}
 		},
 		plotarea: {
-			fill: "#efefef"
+			fill:	   { 
+				type: "linear", 
+				x1: 0, x2: 0, y1: 0, y2: 100, 
+				colors: [ 
+					{ offset: 0, color: "#dbdbdb" },
+					{ offset: 1, color: "#efefef" }
+				]
+			}
 		},
 		axis:{
 			stroke:	{ // the axis itself
