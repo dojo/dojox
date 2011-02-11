@@ -63,10 +63,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		this.connect(this.grid, 'onHeaderCellMouseOut', '_onHeaderCellMouseOut');
 	},
 	_setGridSortIndex: function(inIndex, inAsc, noRefresh){
-		if(!isNaN(inIndex)){
-			if(inAsc === undefined){ return; }//header click from base DataGrid
-			this.setSortData(inIndex, 'order', inAsc ? 'asc' : 'desc');
-		}else if(dojo.isArray(inIndex)){
+		if(dojo.isArray(inIndex)){
 			var i, d, cell;
 			this.clearSort();
 			for(i = 0; i < inIndex.length; i++){
@@ -79,6 +76,9 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 				this.setSortData(cell.index, 'index', i);
 				this.setSortData(cell.index, 'order', d.descending ? 'desc': 'asc');
 			}
+		}else if(!isNaN(inIndex)){
+			if(inAsc === undefined){ return; }//header click from base DataGrid
+			this.setSortData(inIndex, 'order', inAsc ? 'asc' : 'desc');
 		}else{
 			return;
 		}
