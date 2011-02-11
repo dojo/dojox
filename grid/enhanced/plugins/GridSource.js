@@ -81,7 +81,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 				}
 				item.dndPlugin.onDragOut(!copy);
 			}catch(e){
-				console.log("GridSource onDropExternal:",e);
+				console.warn("GridSource.onDropExternal() error:",e);
 			}
 		}else{
 			this.inherited(arguments);

@@ -200,7 +200,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 				});
 			}, this);
 		}catch(e){
-			console.debug("CellMerge._onAfterRow: ", rowIndex, e);
+			console.warn("CellMerge._onAfterRow() error: ", rowIndex, e);
 		}
 	},
 	_createRecord: function(item){

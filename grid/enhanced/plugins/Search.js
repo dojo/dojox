@@ -80,7 +80,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, 
 						return String(s.getValue(item, cell.field)).search(searchArgs) >= 0;
 					}
 				}catch(e){
-					console.log("Search._checkRow: ", e);
+					console.log("Search._checkRow() error: ", e);
 				}
 				return false;
 			});	

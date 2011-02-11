@@ -418,7 +418,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			this._oldCursor = dojo.style(dojo.body(), "cursor");
 			dojo.style(dojo.body(), "cursor", "default");
 		}catch(e){
-			console.log("_createDnDUI:", e);
+			console.warn("DnD._createDnDUI() error:", e);
 		}
 	},
 	_destroyDnDUI: function(isMovingOut, destroySource){
@@ -432,7 +432,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			}
 			dojo.style(dojo.body(), "cursor", this._oldCursor);
 		}catch(e){
-			console.log("_destroyDnDUI:", this.grid.id, e);
+			console.warn("DnD._destroyDnDUI() error:", this.grid.id, e);
 		}
 	},
 	_createSource: function(evt){
@@ -687,7 +687,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			this._target = null;
 		}
 		}catch(e){
-			console.log("_markTargetAnchor",e);
+			console.warn("DnD._markTargetAnchor() error:",e);
 		}
 	},
 	_unmarkTargetAnchor: function(){

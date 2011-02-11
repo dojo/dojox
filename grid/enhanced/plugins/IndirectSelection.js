@@ -58,7 +58,7 @@ dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhance
 						cell.index += 1;
 						//console.debug('cell '+ (cell.index - 1) +  ' is updated to index ' + cell.index);
 					}else{
-						console.debug('Error:IndirectSelection.addRowSelectCell()-  cell ' + i + ' has no index!');
+						console.warn('Error:IndirectSelection.addRowSelectCell()-  cell ' + i + ' has no index!');
 					}
 				});
 				var rowSelectCell = this.addCellDef(0, 0, selectDef);
@@ -303,7 +303,7 @@ dojo.declare("dojox.grid.cells.RowSelector", dojox.grid.cells._Widget, {
 		dojo.forEach(this._subscribes, dojo.unsubscribe);
 		delete this._connects;
 		delete this._subscribes;
-		console.log('Single(Multiple)RowSelector.destroy() executed!');
+		//console.log('Single(Multiple)RowSelector.destroy() executed!');
 	}
 });
 

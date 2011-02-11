@@ -153,7 +153,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		delete this._subscribes;
 		delete this.option;
 		delete this.privates;		
-		console.log('Plugin [', this.name, '].destroy() executed!');
+		//console.log('Plugin [', this.name, '].destroy() executed!');
 	}
 });
 

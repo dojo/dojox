@@ -141,7 +141,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 			this.paginators = null;
 			this.nls = null;
 		}catch(e){
-			console.error("Pagination destroy error: ", e);
+			console.warn("Pagination.destroy() error: ", e);
 		}
 	},
 	

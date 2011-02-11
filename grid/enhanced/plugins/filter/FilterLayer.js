@@ -323,7 +323,7 @@ var ns = dojox.grid.enhanced.plugins,
 					return g(item, arg, rowIndex, s);
 				}).getValue());	
 			}catch(e){
-				console.debug("_applyFilter: ", e);
+				console.warn("FilterLayer._applyFilter() error: ", e);
 				return false;
 			}
 		},

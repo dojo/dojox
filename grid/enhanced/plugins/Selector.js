@@ -711,7 +711,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this._refreshSelected(true);
 		this._focusPoint(type, this._lastEndPoint);
 		}catch(e){
-			console.log("_onInternalRearrange",e);
+			console.warn("Selector._onInternalRearrange() error",e);
 		}
 	},
 	_onExternalChange: function(type, target){

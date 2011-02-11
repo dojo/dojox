@@ -126,7 +126,7 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 				this.nls = null;
 				this.args = null;
 			}catch(e){
-				console.debug("filter destroy:",e);
+				console.warn("Filter.destroy() error:",e);
 			}
 		},
 		_wrapStore: function(){
