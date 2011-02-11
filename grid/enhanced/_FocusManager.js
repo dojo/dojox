@@ -648,7 +648,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 		try{
 			this.grid.edit.apply();
 		}catch(e){
-			console.error("_applyEditableCell:", e);
+			console.warn("_FocusManager._applyEditableCell() error:", e);
 		}
 	},
 	_blurEditableCell: function(evt,step){

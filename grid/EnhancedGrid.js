@@ -59,10 +59,6 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//pluginMgr: Object
 	//		Singleton plugin manager	
 	pluginMgr: null,
-	
-	//minRowHeight: Integer
-	//		Minimal row height	
-	minRowHeight: 10,	
 
 	//keepSelection: Boolean
 	//		Whether keep selection after sort, filter, pagination etc.
