@@ -104,6 +104,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 		//		Destroy all resources.
 		//		_Grid.destroy() will unbind headerMenu
 		var g = this.grid;
+		if(g.headerMenu){g.headerMenu.unBindDomNode(g.viewsHeaderNode);}
 		if(g.rowMenu){g.rowMenu.unBindDomNode(g.domNode);}
 		if(g.cellMenu){g.cellMenu.unBindDomNode(g.domNode);}
 		if(g.selectedRegionMenu){g.selectedRegionMenu.destroy();}
