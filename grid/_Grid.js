@@ -708,7 +708,6 @@ dojo.requireLocalization("dijit", "loading");
 			// grid height
 			if(this._autoHeight){
 				this.domNode.style.height = 'auto';
-				this.viewsNode.style.height = '';
 			}else if(typeof this.autoHeight == "number"){
 				h = hh = this._getHeaderHeight();
 				h += (this.scroller.averageRowHeight * this.autoHeight);
