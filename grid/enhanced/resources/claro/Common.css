@@ -24,6 +24,10 @@
 }
 .claro .dojoxGridCell {
 	padding: 3px 5px;
+	border-color: transparent #E5DAC8 #E5DAC8 transparent;
+}
+.dj_ie6 .claro .dojoxGridCell{
+	border-color:#F5F5F5;
 }
 .claro .dojoxGridHeader {
 	background: transparent;
@@ -66,6 +70,23 @@
 
 .claro .dojoxGridHeaderSelected .dojoxGridHeaderActive {
 	background-color:#91c9fe;
+}
+.claro td.dojoxGridRowSelected {
+	border-collapse:separate;
+	background:url("../../../resources/images/row_back.png") #E3F2FF repeat-x;
+}
+.claro .dojoxGridRowOver td.dojoxGridRowSelected {
+	border-top:1px solid #769DC0;
+	border-bottom:1px solid #769DC0;
+}
+.claro .dojoxGridRowActive td.dojoxGridRowSelected {
+	background-image:url("../../../resources/images/td_button_down.png");
+}
+.dj_ie6 .claro .dojoxGridRowOver .dojoxGridCell {
+	border-color: #ABD6FF;
+}
+.dj_ie6 .claro .dojoxGridRowActive .dojoxGridCell {
+	border-color: #7DBEFA;
 }
 
 /* Don't need any explicit outlines */
