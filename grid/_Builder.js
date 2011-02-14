@@ -612,6 +612,7 @@ dojo.require("dojo.dnd.Moveable");
 				};
 				// Only resize the columns when the drag has finished
 				this.doResizeNow(inDrag, data);
+				delete this.dragRecord;
 			}
 			
 			dojo.destroy(this.lineDiv);
