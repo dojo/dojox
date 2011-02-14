@@ -113,7 +113,9 @@ dojo.declare("dojox.av.FLVideo", [dijit._Widget, dojox.av._Media], {
 		// 		Pauses the video
 		this.isPlaying = false;
 		this.isStopped = false;
-		//this.onPause();
+		if(this.onPaused){
+			this.onPaused();
+		}
 		this.flashMedia.pause();
 	},
 
