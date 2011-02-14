@@ -514,6 +514,7 @@ dojo.requireLocalization("dijit", "loading");
 			this.viewsNode.appendChild(view.domNode);
 			this.viewsHeaderNode.appendChild(view.headerNode);
 			this.views.addView(view);
+			dojo.attr(this.domNode, "align", dojo._isBodyLtr() ? 'left' : 'right');
 			return view;
 		},
 
