@@ -66,7 +66,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 								var deferred = dojo.rawXhrPost({
 									url: this.__id,
 									// the JSON-RPC call
-									postData: dojo.toJson({
+									postData: dojox.json.ref.toJson({
 										method: methodName,
 										id: callId++,
 										params: dojo._toArray(arguments)
