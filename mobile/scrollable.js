@@ -239,7 +239,7 @@ dojox.mobile.scrollable = function(){
 		this._posX = [this.touchStartX];
 		this._posY = [this.touchStartY];
 
-		if(e.target.nodeType != 1 || (e.target.tagName != "SELECT" && e.target.tagName != "INPUT")){
+		if(e.target.nodeType != 1 || (e.target.tagName != "SELECT" && e.target.tagName != "INPUT" && e.target.tagName != "TEXTAREA")){
 			dojo.stopEvent(e);
 		}
 	};
