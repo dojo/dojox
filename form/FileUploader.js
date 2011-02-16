@@ -964,6 +964,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		if(this.showProgress){
 			this._animateProgress();
 		}
+		console.log("upload html.......", this.uploadUrl);
 		var dfd = dojo.io.iframe.send({
 			url: this.uploadUrl,
 			form: this._formNode,

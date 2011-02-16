@@ -20,6 +20,7 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 	force:"",
 
 	postMixInProperties: function(){
+		this.inherited(arguments);
 		if(!this.supports("multiple")){
 			this.uploadType = "iframe";
 		}
