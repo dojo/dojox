@@ -359,7 +359,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		if(!node){ return null; }
 		var hidden = null;
 		var p = node.parentNode;
-		console.log("start", p)
 		while(p && p.tagName.toLowerCase() != "body"){
 			var d = dojo.style(p, "display");
 			if(d == "none"){
@@ -367,7 +366,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 				break;
 			}
 			p = p.parentNode;
-			console.log("loop", p, d)
 		}
 		return hidden;
 	},
@@ -389,7 +387,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		var refNode = this.srcNodeRef;
 		this._hiddenNode = this.getHiddenNode(refNode);
 		if(this._hiddenNode){
-			console.info("Turning on hidden node")
 			dojo.style(this._hiddenNode, "display", "block");
 		}
 
@@ -964,9 +961,8 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		if(this.showProgress){
 			this._animateProgress();
 		}
-		console.log("upload html.......", this.uploadUrl);
 		var dfd = dojo.io.iframe.send({
-			url: this.uploadUrl,
+			url: this.uploadUrl.toString(),
 			form: this._formNode,
 			handleAs: "json",
 			error: dojo.hitch(this, function(err){
@@ -1132,7 +1128,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		});
 
 		dojo.addClass(this._fileInput, "dijitFileInputReal");
-		console.warn("BUILD FI")
 		this._formNode.appendChild(this._fileInput);
 		var real = dojo.marginBox(this._fileInput);
 		dojo.style(this._fileInput, {
@@ -1199,7 +1194,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 			for(var nm in this.postData){
 				o[nm] = this.postData[nm];
 			}
-			console.warn("this.postData:", o)
 			this.flashMovie.doUpload(o);
 
 		}catch(err){
@@ -1351,7 +1345,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 				// IE doesn't convert % to px. For god sakes.
 				var n = node;
 				while(n.tagName){
-					console.log(" P FONT:", dojo.style(node, "fontSize"))
 					if(dojo.style(n, "fontSize").indexOf("%") == -1){
 						o.fs = parseInt(dojo.style(n, "fontSize"), 10);
 						break;
