@@ -129,7 +129,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// summary:
 		//		Overwritten, see dojox.grid._Events.onRowClick()
 		this.edit.rowClick(e);
-		if(!e.cell.isRowSelector && (!this.rowSelectCell || !this.rowSelectCell.disabled(e.rowIndex))){
+		if(e.cell && !e.cell.isRowSelector && (!this.rowSelectCell || !this.rowSelectCell.disabled(e.rowIndex))){
 			this.selection.clickSelectEvent(e);
 		}
 	},

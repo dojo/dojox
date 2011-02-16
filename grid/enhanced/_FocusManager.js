@@ -593,7 +593,6 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 					var g = this.grid;
 						//if no focusView than only one view
 						//curView = this.focusView || g.views.views[0];
-					if(g.indirectSelection){ break; } //TODO - remove this dependency
 					g.selection.clickSelect(this.rowIndex, dojo.isCopyKey(e), e.shiftKey);
 					//console.log("content decoreate event");
 					//curView.content.decorateEvent(e);
