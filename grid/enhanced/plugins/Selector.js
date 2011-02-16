@@ -501,11 +501,12 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this.connect(g, "onRowSelectorMouseUp", dp(ender, "row"));
 		
 		this.connect(g, "onCellMouseDown", function(e){
+			if(e.cell && e.cell.isRowSelector){ return; }
 			if(g.singleClickEdit){
 				_this._singleClickEdit = true;
 				g.singleClickEdit = false;
 			}
-			starter("cell", e);
+			starter(_this._config["cell"] == DISABLED ? "row" : "cell", e);
 		});
 		this.connect(g, "onCellMouseUp", function(e){
 			if(_this._singleClickEdit){

@@ -180,9 +180,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 		g.selection.selected = [];
 		g._noInternalMapping = true;
 		g._refresh();
-		g._noInternalMapping = false;
 		setTimeout(function(){
 			dojo.publish("dojox/grid/rearrange/move/" + g.id, ["row", tmpMapping]);
+			g._noInternalMapping = false;
 		}, 0);
 	},
 	moveCells: function(cellsToMove, target){
