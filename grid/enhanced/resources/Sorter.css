@@ -10,8 +10,10 @@
 */
 .dojoxGrid .dojoxGridSortNode {
 	position: relative;
-	white-space:nowrap;
 	border: 1px solid transparent;
+}
+.dojoxGrid .dojoxGridSortNoWrap {
+	white-space:nowrap;
 }
 .dojoxGridSortBtn {
 	width: 10px;

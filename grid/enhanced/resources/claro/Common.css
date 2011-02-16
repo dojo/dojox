@@ -1,7 +1,4 @@
 /* overwrite claroGrid.css */
-.claro .dojoxGridColCaption {
-	overflow: auto;
-}
 .claro .dojoxGridMasterHeader .dojoxGridRowTable {
 	border-left: 1px solid #BCBCBC;
 	border-right: 1px solid white;

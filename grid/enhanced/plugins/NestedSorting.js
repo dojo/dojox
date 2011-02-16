@@ -119,6 +119,10 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_initHeaderNode: function(node){
 		// summary:
 		//		Initiate sort for each header cell node
+		var sortNode = dojo.query('.dojoxGridSortNode', node)[0];
+		if(sortNode){
+			dojo.toggleClass(sortNode, 'dojoxGridSortNoWrap', true);
+		}
 		if(dojo.indexOf(this._excludedCoIdx, dojo.attr(node,'idx')) >= 0){
 			dojo.addClass(node, 'dojoxGridNoSort');
 			return;
