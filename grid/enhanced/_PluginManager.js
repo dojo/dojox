@@ -61,9 +61,10 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		//		See EnhancedGrid.postCreate()
 		this._init(false);
 		
+		dojo.forEach(this.grid.views.views, this._initView, this);
+		this._connects.push(dojo.connect(this.grid.views, 'addView', dojo.hitch(this, this._initView)));
+			
 		if(this._plugins.length > 0){
-			dojo.forEach(this.grid.views.views, this._initView, this);
-			this._connects.push(dojo.connect(this.grid.views, 'addView', dojo.hitch(this, this._initView)));
 			var edit = this.grid.edit;
 			if(edit){ edit.styleRow = function(inRow){}; }
 		}
