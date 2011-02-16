@@ -101,6 +101,7 @@
 }
 .dojoxGridColCaption {
 	overflow:hidden;
+	position: absolute;
 }
 
 /* Need to explicitly define how to treat hovering over the arrow on IE */ 
