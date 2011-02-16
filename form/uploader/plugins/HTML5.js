@@ -15,6 +15,9 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 	//
 	errMsg:"Error uploading files. Try checking permissions",
 
+	// Overwrites "form" and could possibly be overwritten again by iframe or flash plugin.
+	uploadType:"html5",
+
 	postCreate: function(){
 		this.connectForm();
 		this.inherited(arguments);
@@ -137,6 +140,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		}), false);
         xhr.onreadystatechange = dojo.hitch(this, function() {
 			if (xhr.readyState === 4) {
+				console.info("COMPLETE")
 				clearInterval(timer);
 				this.onComplete(dojo.eval(xhr.responseText));
 			}
@@ -147,7 +151,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 			try{
 				if(typeof(xhr.statusText)){} // accessing this error throws an error. Awesomeness.
 			}catch(e){
-				//this.onError("Error uploading file."); // not always an error. 
+				//this.onError("Error uploading file."); // not always an error.
 				clearInterval(timer);
 			}
 		}),250);

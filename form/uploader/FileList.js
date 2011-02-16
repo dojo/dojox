@@ -85,18 +85,15 @@ dojo.declare("dojox.form.uploader.FileList", [dojox.form.uploader.Base], {
 		if(this.uploader){
 			this.connect(this.uploader, "onChange", "_onUploaderChange");
 			this.connect(this.uploader, "reset", "reset");
-
-			if(this.supports("multiple")){
-				this.connect(this.uploader, "onBegin", function(){
-					this.showProgress(true);
-				});
-				this.connect(this.uploader, "onProgress", "_progress");
-				this.connect(this.uploader, "onComplete", function(){
-					setTimeout(dojo.hitch(this, function(){
-						this.hideProgress(true);
-					}), 1250);
-				});
-			}
+			this.connect(this.uploader, "onBegin", function(){
+				this.showProgress(true);
+			});
+			this.connect(this.uploader, "onProgress", "_progress");
+			this.connect(this.uploader, "onComplete", function(){
+				setTimeout(dojo.hitch(this, function(){
+					this.hideProgress(true);
+				}), 1250);
+			});
 		}else{
 			this._upCheckCnt++;
 			setTimeout(dojo.hitch(this, "setUploader"), 250);

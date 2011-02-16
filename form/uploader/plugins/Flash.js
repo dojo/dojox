@@ -64,9 +64,12 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	postMixInProperties: function(){
 		if(!this.supports("multiple")){
 			// Flash will only be used in IE6-8 unless force="flash"
+			this.uploadType = "flash";
 			this._files = [];
 			this._fileMap = {};
 			this._createInput = this._createFlashUploader;
+			this.getFileList = this.getFlashFileList;
+			this.reset = this.flashReset;
 			this.upload = this.uploadFlash;
 			this.submit = this.submitFlash;
 			this.fieldname = "flashUploadFiles"; ///////////////////// this.name
@@ -108,13 +111,13 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	 *	   Public Methods	 *
 	 *************************/
 
-	getFileList: function(){
+	getFlashFileList: function(){
 		// summary:
 		//		Returns list of currently selected files
 		return this._files; // Array
 	},
 
-	reset: function(){
+	flashReset: function(){
 		this.flashMovie.reset();
 		this._files = [];
 	},
@@ -236,7 +239,7 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		// summary:
 		//		Internal. Creates Flash Uploader
 		//
-		url = this.getUrl();
+		var url = this.getUrl();
 		if(url){
 			if(url.toLowerCase().indexOf("http")<0 && url.indexOf("/")!=0){
 				// Appears to be a relative path. Attempt to

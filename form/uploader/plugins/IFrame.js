@@ -19,6 +19,12 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 
 	force:"",
 
+	postMixInProperties: function(){
+		if(!this.supports("multiple")){
+			this.uploadType = "iframe";
+		}
+	},
+
 	upload: function(/*Object ? */data){
 		// summary:
 		//		See: dojox.form.Uploader.upload
@@ -35,10 +41,7 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 		//		Internal. You could use this, but you should use upload() or submit();
 		//		which can also handle the post data.
 		//
-		url = this.getUrl();
-
-		console.log("url", url, "form", this.form);
-
+		var url = this.getUrl();
 		var dfd = dojo.io.iframe.send({
 			url: this.getUrl(),
 			form: this.form,

@@ -20,7 +20,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	//
 	// summary:
 	//		A widget that creates a stylable file-input button, with optional multi-file selection,
-	//		using only HTML elements, no Flash.
+	//		using only HTML elements. Non-HTML5 browsers have fallback options of Flash or an iframe.
 	//
 	//	description:
 	//		A bare-bones, stylable file-input button, with optional multi-file selection. The list
@@ -66,7 +66,13 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	//		If set, this will be the name of the field of the flash uploaded files that the server
 	//		is expecting. If not set, "Flash" is appended to the "name" property.
 	flashFieldName:"",
-
+	//
+	//	uploadType: String [readonly]
+	//		The type of uploader being used. As an alternative to determining the upload type on the
+	//		server based on the fieldName, this property could be sent to the server to help
+	//		determine what type of parsing should be used.
+	uploadType:"form",
+	//
 	_nameIndex:0,
 	widgetsInTemplate:true,
 	templateString:'<div class="dojoxFileInput"><div dojoType="dijit.form.Button" dojoAttachPoint="button">${label}</div></div>',

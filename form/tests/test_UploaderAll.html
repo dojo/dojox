@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
-    <title>Test dojox.form.Uploader</title>
+    <title>Test dojox.form.UploaderHTML5</title>
 	<link href="../../../dijit/themes/dijit.css" rel="stylesheet" />
 	<link href="../../../dijit/themes/claro/Common.css" rel="stylesheet" />
 	<link href="../../../dijit/themes/claro/form/Common.css" rel="stylesheet" />
@@ -113,10 +113,33 @@
 		dojo.require("dojox.form.Uploader");
 		dojo.require("dojox.form.uploader.FileList");
 		dojo.require("dijit.form.Button");
-		dojo.require("dojox.form.uploader.plugins.Flash");
 
+		// Dynamically determining which plugin to use, based off of the location search.
+		var plug = "Form"; // Default
+		switch(document.location.search){
+			case "?html5":
+				dojo.require("dojox.form.uploader.plugins.HTML5");
+				plug = "HTML5";
+				break;
+			case "?iframe":
+				dojo.require("dojox.form.uploader.plugins.IFrame");
+				plug = "IFrame";
+				break;
+			case "?flash":
+				dojo.require("dojox.form.uploader.plugins.Flash");
+				plug = "Flash";
+				break;
+		}
+
+		var title = "Test dojox.form.Uploader + " + plug;
+		document.title = title;
 		var handleUpload = function(upl, node){
-
+			if(plug == "Form"){
+				dojo.connect(upl, "onChange", function(){
+					node.appendChild(dojo.create('div', {innerHTML:"This Uploader does not work in Form mode."}));
+					//alert("This Uploader does not work in Form mode.")
+				});
+			}
 			dojo.connect(upl, "onComplete", function(dataArray){
 				dojo.forEach(dataArray, function(file){
 					console.log("display:", file)
@@ -129,18 +152,33 @@
 			});
 		}
 		dojo.addOnLoad(function(){
+			dojo.addClass(dojo.body(), plug);
+			dojo.query('h1')[0].innerHTML = title;
 			dojo.connect(dijit.byId("remBtn"), "onClick", dijit.byId("uploader"), "reset");
 			handleUpload(dijit.byId("uploader"), dojo.byId('colImages'));
 		});
 	</script>
 </head>
 <body class="claro">
-    <h1>Test dojox.form.Uploader</h1>
+    <h1>Test dojox.form.Uploader Flash</h1>
 	<p style="font-size:14px; border:2px solid #ff0000; padding:3px;">
 		<strong>NOTE:</strong> This test does upload,
 		but the server scripts are renamed to <code>tests/UploadFile.php.<strong>disabled</strong></code> and
 		<code>tests/cLOG.php.<strong>disabled</strong></code> to prevent security attacks on hosted servers.
 		You should rename these files (removing <code>.disabled</code>) in your local copy to conduct tests.
+	</p>
+	<p class="form">
+		The Uploader with no plugins is in "Form" mode. This mode <strong>will not do an Ajax upload</strong>.
+		Only form POSTs will work and they will navigate to the UploadFile.php page.
+	</p>
+	<p class="html5">
+		The HTML5 Uploder plugin does not support IE. HTML5 is more of a base class for IFrame or
+		Flash, or used in cases where IE is not a requirement. This test case is for development purposes.
+	</p>
+	<p class="iframe">
+		The IFrame plugin will use the IFrame to upload in IE. All other browsers will use the HTML5 plugin
+		unless force="iframe" is used.
+		When using this plugin, be sure your form use the attribute: <code>enctype="multipart/form-data"</code>
 	</p>
 	<p class="flash">
 		The Flash plugin will use a SWF to upload in non-HTML5 browsers. All other browsers will use the HTML5 plugin,
@@ -148,7 +186,12 @@
 		is provided because Flash has some features that HTML5 does not yet have. But it is still not
 		recommended because of the many problems that Firefox and Webkit have with the Flash plugin.
 	</p>
-
+	<p>
+		<a href="test_Uploader.html">Form</a>
+		<a href="test_Uploader.html?html5">HTML5</a>
+		<a href="test_Uploader.html?iframe">IFrame</a>
+		<a href="test_Uploader.html?flash">Flash</a>
+	</p>
 	<table class="pageTable">
 		<tr>
 			<td id="colForm">
