@@ -419,9 +419,9 @@ dojo.require("dojo.dnd.Moveable");
 			}
 
 			if(dojo._isBodyLtr()){
-				return (e.cellIndex>0) && (e.cellX < this.overResizeWidth) && this.prepareResize(e, -1);
+				return (e.cellIndex>0) && (e.cellX > 0 && e.cellX < this.overResizeWidth) && this.prepareResize(e, -1);
 			}
-			var t = e.cellNode && (e.cellX < this.overResizeWidth);
+			var t = e.cellNode && (e.cellX > 0 && e.cellX < this.overResizeWidth);
 			return t;
 		},
 
