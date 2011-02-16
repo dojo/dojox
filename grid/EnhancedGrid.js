@@ -209,7 +209,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 			view.header.getCellX = function(e){
 				var x = func.call(view.header, e);			
 				var n = ascendDom(e.target, makeNotTagName("th"));
-				if(n && e.target == n.firstChild){ x += n.firstChild.offsetLeft; }
+				if(n && n !== e.target && dojo.isDescendant(e.target, n)){ x += n.firstChild.offsetLeft; }
 				return x;
 			};
 		}

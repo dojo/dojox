@@ -127,27 +127,42 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			dojo.addClass(node, 'dojoxGridNoSort');
 			return;
 		}
-		//clear any previous connects
-		this._connects = dojo.filter(this._connects, function(conn){
-			if(conn._sort){
-				dojo.disconnect(conn);
-				return false;
-			}
-			return true;
-		});
-		var n = dojo.create('a', {
-			className: 'dojoxGridSortBtn dojoxGridSortBtnNested',
-			title: this.nls.nestedSort,
-			innerHTML: '1'
-		}, node.firstChild, 'last');
-		var h = this.connect(n, "onmousedown", dojo.stopEvent);
-		h._sort = true;
-		n = dojo.create('a', {
-			className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
-			title: this.nls.singleSort
-		}, node.firstChild, 'last');
-		h = this.connect(n, "onmousedown", dojo.stopEvent);
-		h._sort = true;
+		if(!dojo.query('.dojoxGridSortBtn', node).length){
+			//clear any previous connects
+			this._connects = dojo.filter(this._connects, function(conn){
+				if(conn._sort){
+					dojo.disconnect(conn);
+					return false;
+				}
+				return true;
+			});
+			var n = dojo.create('a', {
+				className: 'dojoxGridSortBtn dojoxGridSortBtnNested',
+				title: this.nls.nestedSort + ' - ' + this.nls.ascending,
+				innerHTML: '1'
+			}, node.firstChild, 'last');
+			var h = this.connect(n, "onmousedown", dojo.stopEvent);
+			h._sort = true;
+			n = dojo.create('a', {
+				className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
+				title: this.nls.singleSort + ' - ' + this.nls.ascending
+			}, node.firstChild, 'last');
+			h = this.connect(n, "onmousedown", dojo.stopEvent);
+			h._sort = true;
+		}else{
+			//deal with small height grid which doesn't re-render the grid after refresh
+			var a1 = dojo.query('.dojoxGridSortBtnSingle', node)[0];
+			var a2 = dojo.query('.dojoxGridSortBtnNested', node)[0];
+			a1.className = 'dojoxGridSortBtn dojoxGridSortBtnSingle';
+			a2.className = 'dojoxGridSortBtn dojoxGridSortBtnNested';
+			a2.innerHTML = '1';
+			dojo.removeClass(node, 'dojoxGridCellShowIndex');
+			dojo.removeClass(node.firstChild, 'dojoxGridSortNodeSorted');
+			dojo.removeClass(node.firstChild, 'dojoxGridSortNodeAsc');
+			dojo.removeClass(node.firstChild, 'dojoxGridSortNodeDesc');
+			dojo.removeClass(node.firstChild, 'dojoxGridSortNodeMain');
+			dojo.removeClass(node.firstChild, 'dojoxGridSortNodeSub');
+		}
 		this._updateHeaderNodeUI(node);
 	},
 	_onHeaderCellClick: function(e){
@@ -311,6 +326,13 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		
 		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnAsc', this._currMainSort === 'asc');
 		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnDesc', this._currMainSort === 'desc');
+		if(this._currMainSort === 'asc'){
+			singleSortBtn.title = this.nls.singleSort + ' - ' + this.nls.descending;
+		}else if(this._currMainSort === 'desc'){
+			singleSortBtn.title = this.nls.singleSort + ' - ' + this.nls.unsorted;
+		}else{
+			singleSortBtn.title = this.nls.singleSort + ' - ' + this.nls.ascending;
+		}
 		
 		var _this = this;
 		function setWaiState(){
@@ -358,9 +380,11 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		dojo.addClass(sortNode, 'dojoxGridSortNodeSorted');
 		if(this.isAsc(cellIdx)){
 			dojo.addClass(sortNode, 'dojoxGridSortNodeAsc');
+			nestedSortBtn.title = this.nls.nestedSort + ' - ' + this.nls.descending;
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridAscendingTip;}
 		}else if(this.isDesc(cellIdx)){
 			dojo.addClass(sortNode, 'dojoxGridSortNodeDesc');
+			nestedSortBtn.title = this.nls.nestedSort + ' - ' + this.nls.unsorted;
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridDescendingTip;}
 		}
 		dojo.addClass(sortNode, (data.index === 0 ? 'dojoxGridSortNodeMain' : 'dojoxGridSortNodeSub'));
@@ -426,6 +450,9 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}else{
 			this._focusRegion(this._getCurrentRegion());
 		}
+		try{
+			dojo.stopEvent(evt);
+		}catch(e){}
 		return true;
 	},
 	_blurHeader: function(evt){

@@ -11,6 +11,8 @@
 .dojoxGrid .dojoxGridSortNode {
 	position: relative;
 	border: 1px solid transparent;
+	overflow: hidden;
+	width:100%;	
 }
 .dojoxGrid .dojoxGridSortNoWrap {
 	white-space:nowrap;
@@ -27,6 +29,7 @@
 	text-decoration: none;
 	outline: none;
 	right: 0;
+	cursor: pointer;
 	border: 1px solid transparent;
 	box-sizing: border-box; /* css3 rec */
 	-moz-box-sizing: border-box; /* ff */
