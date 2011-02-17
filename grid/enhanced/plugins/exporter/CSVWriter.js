@@ -34,7 +34,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.CSVWriter",
 		//		The value in a cell.
 		// returns:
 		//		The formatted content of a cell
-		if(!cellValue){
+		if(cellValue === null || cellValue === undefined){
 			return '';
 		}
 		var result = String(cellValue).replace(/"/g, '""');
