@@ -11,6 +11,8 @@
 .dojoxGrid .dojoxGridSortNode {
 	position: relative;
 	border: 1px solid transparent;
+}
+.dj_ie6 .dojoxGrid .dojoxGridSortNode {
 	overflow: hidden;
 	width:100%;	
 }
