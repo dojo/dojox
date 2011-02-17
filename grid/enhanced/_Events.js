@@ -89,7 +89,6 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// e: Event
 		//		Decorated event object that contains reference to grid, cell, and rowIndex
 		this[e.rowIndex == -1 ? "onHeaderCellMouseUp" : "onCellMouseUp"](e);
-		dojo.stopEvent(e);
 	},
 	onCellMouseDown: function(e){
 		// summary:
