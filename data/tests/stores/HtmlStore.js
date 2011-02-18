@@ -8,6 +8,10 @@ dojox.data.tests.stores.HtmlStore.getBooks3Store = function(){
 	return new dojox.data.HtmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books3.html").toString(), dataId: "books3"});
 };
 
+dojox.data.tests.stores.HtmlStore.getBooks3StoreOnCreate = function(){
+	return new dojox.data.HtmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books3.html").toString(), dataId: "books3", fetchOnCreate: true});
+};
+
 dojox.data.tests.stores.HtmlStore.getBooks2Store = function(){
 	return new dojox.data.HtmlStore({url: dojo.moduleUrl("dojox.data.tests", "stores/books2.html").toString(), dataId: "books2"});
 };
@@ -124,6 +128,24 @@ doh.register("dojox.data.tests.stores.HtmlStore",
 			//	description:
 			//		Simple test of fetching one xml items through an XML element called isbn
 			var store = dojox.data.tests.stores.HtmlStore.getBooks3Store();
+
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{name:"A9B57C - Title of 1 - Author of 1"}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_one_list_oncreate(t){
+			//	summary: 
+			//		Simple test of fetching one xml items through an XML element called isbn
+			//	description:
+			//		Simple test of fetching one xml items through an XML element called isbn
+			var store = dojox.data.tests.stores.HtmlStore.getBooks3StoreOnCreate();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {

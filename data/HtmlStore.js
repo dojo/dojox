@@ -61,14 +61,21 @@ dojo.declare("dojox.data.HtmlStore", null, {
 			this.trimWhitespace = args.trimWhitespace?true:false;
 		}
 		if(args.url){
-			if(!args.dataId)
+			if(!args.dataId){
 				throw new Error("dojo.data.HtmlStore: Cannot instantiate using url without an id!");
+			}
 			this.url = args.url;
 			this.dataId = args.dataId;
 		}else{
 			if(args.dataId){
 				this.dataId = args.dataId;
 			}
+		}
+		if(args && "fetchOnCreate" in args){
+			this.fetchOnCreate = args.fetchOnCreate?true:false;
+		}		
+		if(this.fetchOnCreate && this.dataId){
+			this.fetch();
 		}
 	},
 
@@ -90,6 +97,12 @@ dojo.declare("dojox.data.HtmlStore", null, {
 	// urlPreventCache: [public] boolean
 	//		Flag to denote if peventCache should be used on xhrGet calls.
 	urlPreventCache: false,
+	
+	// fetchOnCreate: [public] boolean
+	// 		Flag to denote if it should try to load from a data id (nested in the page)
+	//		The moment the store is created, instead of waiting for first 
+	//		fetch call.
+	fetchOnCreate: false,
 	
 	_indexItems: function(){
 		// summary:
