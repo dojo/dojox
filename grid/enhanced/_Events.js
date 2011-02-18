@@ -64,6 +64,11 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 				if(dojo._isBodyLtr()){ offset *= -1; }
 				focus.currentArea().move(0, offset, e);
 				break;
+			case dk.F10:
+				if(this.menus && e.shiftKey){
+					this.onRowContextMenu(e);
+				}
+				break;
 			default:
 				focus.currentArea().keydown(e);
 				break;
@@ -149,7 +154,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		if(this.selectedRegionMenu){
 			this.selectedRegionMenu._openMyself({
 				target: e.target,
-				coords: "pageX" in e ? {
+				coords: e.keyCode !== dojo.keys.F10 && "pageX" in e ? {
 					x: e.pageX,
 					y: e.pageY
 				} : null

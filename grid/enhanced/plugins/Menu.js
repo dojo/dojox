@@ -37,7 +37,12 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 	_initMenu: function(/*String*/menuType, /*String | Widget(dijit.Menu)*/menu){
 		var g = this.grid;
 		if(!g[menuType]){//in case already created in _Grid.postCreate()
-			g.set(menuType, this._getMenuWidget(menu));
+			var m = this._getMenuWidget(menu);
+			if(!m){return;}
+			g.set(menuType, m);
+			if(menuType != "headerMenu"){
+				m._scheduleOpen = function(){return;};
+			}
 		}
 	},
 	_getMenuWidget: function(/*String|Widget(dijit.Menu)*/menu){
@@ -87,7 +92,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 			return;
 		}
 		
-		var info = {target: e.target, coords: "pageX" in e ? {x: e.pageX, y: e.pageY } : null};
+		var info = {target: e.target, coords: e.keyCode !== dojo.keys.F10 && "pageX" in e ? {x: e.pageX, y: e.pageY } : null};
 		if(this.rowMenu && (this.selection.isSelected(e.rowIndex) || e.rowNode && dojo.hasClass(e.rowNode, 'dojoxGridRowbar'))){
 			this.rowMenu._openMyself(info);
 			dojo.stopEvent(e);
