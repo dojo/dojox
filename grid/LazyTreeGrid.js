@@ -412,7 +412,7 @@ dojo.declare("dojox.grid.TreeGridItemCache", null, {
 
 dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 	// summary:
-	//		A enhanced TreeGrid widget which supports lazy-loading nested-level items
+	//		An enhanced TreeGrid widget which supports lazy-loading nested-level items
 	//
 	// description:
 	//		LazyTreeGrid inherits from dojo.grid.TreeGrid, and applies virtual scrolling mechanism 

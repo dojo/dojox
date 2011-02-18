@@ -250,11 +250,16 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 			!(typeof item.major == "number" && (item.major < item.start || item.major > item.end)));
 	},
 	_updateRows: function(item){
+		var min = null;
 		for(var i = 0, count = this.grid.rowCount; i < count; ++i){
 			var storeItem = this.grid._by_idx[i];
 			if(storeItem && item.row(i, storeItem && storeItem.item, this.grid.store)){
 				this.grid.views.updateRow(i);
+				if(min === null){ min = i; }
 			}
+		}
+		if(min >= 0){
+			this.grid.scroller.rowHeightChanged(min);
 		}
 	}
 });
