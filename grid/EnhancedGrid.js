@@ -191,6 +191,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 			return cell.field == field;
 		})[0];
 	},
+	onMouseUp: function(e){	},
 	createView: function(){
 		// summary
 		//		Overwrite: rewrite getCellX of view.header
