@@ -6,7 +6,7 @@ dojo.require("dojox.grid.enhanced._Plugin");
 
 dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhanced._Plugin, {
 	// summary:
-	//		Provides indirect selection feature - swipe selecting row(s)
+	//		A handy way for adding check boxe/radio button for rows, and selecting rows by swiping(or keyboard)
 
 	// description:
 	//		For better rendering performance, div(images) are used to simulate radio button|check boxes

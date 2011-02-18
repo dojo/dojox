@@ -9,6 +9,9 @@ dojo.require("dojox.grid.enhanced.plugins._StoreLayer");
 dojo.requireLocalization("dojox.grid.enhanced", "Pagination");
 
 dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plugin, {
+	// summary:
+	//		The typical pagination way as an alternative to deal with huge data set besides the default virtual scrolling way
+	
 	name: "pagination",
 	// The page size used with the store, default = 25.
 	pageSize: 25,

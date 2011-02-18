@@ -412,15 +412,17 @@ dojo.declare("dojox.grid.TreeGridItemCache", null, {
 
 dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 	// summary:
-	//		A TreeGrid widget which supports lazy-load nested-level items
+	//		A enhanced TreeGrid widget which supports lazy-loading nested-level items
 	//
 	// description:
-	//		LazyTreeGrid inherits from dojo.grid.TreeGrid.
+	//		LazyTreeGrid inherits from dojo.grid.TreeGrid, and applies virtual scrolling mechanism 
+	//		to nested children rows so that it's possible to deal with large data set specifically 
+	//		in tree structure with large number of children rows. It's also compatible with dijit.tree.ForestStoreModel
 	//
 	//		Most methods and properties pertaining to the dojox.grid.DataGrid 
 	//		and dojox.grid.TreeGrid also apply here
 	//
-	//		LazyTreeGrid would not support summary row/items aggregate for the
+	//		LazyTreeGrid does not support summary row/items aggregate for the
 	//		lazy-loading reason.
 	
 	treeModel: null,
