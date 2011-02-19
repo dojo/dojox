@@ -19,7 +19,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 	
 	// insertNodesForGrid:
 	//		If you'd like to insert some sort of nodes into your dnd source, turn this on, 
-	//		and override getNodeDataForGridCells/getNodeDataForGridRows/getNodeDataForGridColumns
+	//		and override getCellContent/getRowContent/getColumnContent
 	//		to populate the dnd data in your desired format.
 	insertNodesForGrid: false,
 	
@@ -61,17 +61,17 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 			try{
 				switch(type){
 					case "grid/cells":
-						nodes[0].innerHTML = this.getNodeDataForGridCells(grid, ranges[0].min, ranges[0].max) || "";
+						nodes[0].innerHTML = this.getCellContent(grid, ranges[0].min, ranges[0].max) || "";
 						this.onDropGridCells(grid, ranges[0].min, ranges[0].max);
 						break;
 					case "grid/rows":
 						range = _joinToArray(ranges);
-						nodes[0].innerHTML = this.getNodeDataForGridRows(grid, range) || "";
+						nodes[0].innerHTML = this.getRowContent(grid, range) || "";
 						this.onDropGridRows(grid, range);
 						break;
 					case "grid/cols":
 						range = _joinToArray(ranges);
-						nodes[0].innerHTML = this.getNodeDataForGridColumns(grid, range) || "";
+						nodes[0].innerHTML = this.getColumnContent(grid, range) || "";
 						this.onDropGridColumns(grid, range);
 						break;
 				}
@@ -87,7 +87,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 			this.inherited(arguments);
 		}
 	},
-	getNodeDataForGridCells: function(grid, leftTopCell, rightBottomCell){
+	getCellContent: function(grid, leftTopCell, rightBottomCell){
 		// summary:
 		//		Fill node innerHTML for dnd grid cells.
 		// sample code:
@@ -103,7 +103,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 		//		}
 		//		return res;
 	},
-	getNodeDataForGridRows: function(grid, rowIndexes){
+	getRowContent: function(grid, rowIndexes){
 		// summary:
 		//		Fill node innerHTML for dnd grid rows.
 		// sample code:
@@ -123,7 +123,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 		//		}
 		//		return res;
 	},
-	getNodeDataForGridColumns: function(grid, colIndexes){
+	getColumnContent: function(grid, colIndexes){
 		// summary:
 		//		Fill node innerHTML for dnd grid columns.
 		// sample code:

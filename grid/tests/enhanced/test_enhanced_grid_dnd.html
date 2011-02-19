@@ -176,7 +176,7 @@
 			canSort="false",
 			plugins='{
 				dnd: {
-					"setIdentifierForNewItem": setIdentifierForNewItem,
+					"setIdentifierForNewItem": setIdentifierForNewItem, copyOnly: true,
 					"dndConfig": {
 					}
 				}
@@ -275,7 +275,7 @@
 	<div class="myblock">
 		<h3>Target that can accept Grid</h3>
 		<div dojoType="dojox.grid.enhanced.plugins.GridSource" class="container" 
-			insertNodesForGrid="true" getNodeDataForGridRows="getRowData">
+			insertNodesForGrid="true" getRowContent="getRowData">
 			<div class="dojoDndItem">Item 1</div>
 			<div class="dojoDndItem">Item 2</div>
 			<div class="dojoDndItem">Item 3</div>
