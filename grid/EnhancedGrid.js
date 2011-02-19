@@ -67,20 +67,10 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//_pluginMgrClass: Object
 	//		Default plugin manager class	
 	_pluginMgrClass: dojox.grid.enhanced._PluginManager,
-		 
-	//rowMovedTopic: String
-	//		Topic fired when selected rows are moved.
-	rowMovedTopic: '',
-		
-	//colMovedTopic: String
-	//		Topic fired when selected columns are moved.
-	colMovedTopic: '',
 
 	postMixInProperties: function(){
 		//load nls bundle
 		this._nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "EnhancedGrid", this.lang);
-		this.rowMovedTopic = 'ROW_MOVED_' + this.id;
-		this.colMovedTopic = 'COLUMN_MOVED_' + this.id;
 		this.inherited(arguments);
 	},
 	postCreate: function(){

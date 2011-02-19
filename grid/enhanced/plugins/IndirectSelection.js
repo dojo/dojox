@@ -125,8 +125,6 @@ dojo.declare("dojox.grid.cells.RowSelector", dojox.grid.cells._Widget, {
 		this.checkedDisabledClass = " dijit" + this.inputType + "CheckedDisabled";
 		this.statusTextClass = " dojoxGridRowSelectorStatusText";//a11y use
 
-		//this._subscribes.push(dojo.subscribe(this.grid.rowSelectionChangedTopic, this, this._selectionChanged));
-		//this._subscribes.push(dojo.subscribe(this.grid.sortRowSelectionChangedTopic, this, this._selectionChanged));
 		this._connects.push(dojo.connect(this.grid, 'dokeyup', this, '_dokeyup'));
 		this._connects.push(dojo.connect(this.grid.selection, 'onSelected', this, '_onSelected'));
 		this._connects.push(dojo.connect(this.grid.selection, 'onDeselected', this, '_onDeselected'));

@@ -98,12 +98,14 @@ http://docs.dojocampus.org/dojox/grid/EnhancedGrid
 -------------------------------------------------------------------------------
 Installation instructions
 
-Same as dojox.grid, for detail sample usages, please refer to /dojox/grid/tests/enhanced/test_enhanced_grid.html
+Same as dojox.grid, for detail sample usages, please refer to /dojox/grid/tests/enhanced/*.html
 -------------------------------------------------------------------------------
 Known issues
 
- - Enhanced Grid features are not fully compatible with complicated layouts (e.g. multiple rows in column header) and TreeGrid(SubGrid).
+ - 'Claro' is the major supported theme for EnhancedGrid features
+ - EnhancedGrid features are not fully compatible with complicated layouts (e.g. multiple rows in column header) and TreeGrid(SubGrid).
  - Indirect Selection is not fully compatible with Advanced Selector(for selecting row/column/cells) and DnD
+ - RTL support is still in progress for Nested Sorting 
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
