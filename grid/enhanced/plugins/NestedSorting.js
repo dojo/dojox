@@ -445,6 +445,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			area.onKeyDown = dojo.hitch(this, '_onKeyDown');
 			area._regions = [];
 			area.getRegions = null;
+			this.connect(this.grid, 'onBlur', '_blurHeader');
 		}
 	},
 	_focusHeader: function(evt){
