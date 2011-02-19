@@ -28,15 +28,15 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 			].join('');
 			this._removedCriterias = [];
 			this._rules = [];
-			(this.statusPane = new dojox.grid.enhanced.plugins.filter.FilterStatusPane()).startup();
-			(this._dlg = new dijit.TooltipDialog({
+			this.statusPane = new dojox.grid.enhanced.plugins.filter.FilterStatusPane();
+			this._dlg = new dijit.TooltipDialog({
 				"class": "dojoxGridFStatusTipDialog",
-				content: this.statusPane.domNode,
+				content: this.statusPane,
 				autofocus: false,
 				onMouseLeave: dojo.hitch(this,function(){
 					this.closeDialog();
 				})
-			})).startup();
+			});
 			this._dlg.connect(this._dlg.domNode,"click", dojo.hitch(this, this._modifyFilter));
 		},
 		destroy: function(){
