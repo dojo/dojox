@@ -31,13 +31,13 @@
 	<script type="text/javascript">
 			var layout = [[
 				{name: 'Column A', field: 'id'},
-				{name: 'Column B', field: 'col2', noSort: true},
+				{name: 'Column B', field: 'col2', nosort: true},
 				{name: 'Column C', field: 'col3'},
 				{name: 'Column D', field: 'col4', width: "150px"},
 				{name: 'Column E', field: 'col5'},
 				{name: 'Column F', field: 'col6'},
 				{name: 'Column G', field: 'col7', width: "150px"},
-				{name: 'Column H', field: 'col5'}
+				{name: 'Column H', field: 'col1', width: "150px"}
 			]];
 			
 			dojo.addOnLoad(function(){
@@ -58,7 +58,7 @@
 			});
 
 			function newSort(){
-				var sortFields = [{attribute: 'col2', descending: true},{attribute: 'col6', descending: false}];
+				var sortFields = [{attribute: 'col3', descending: true},{attribute: 'col1', descending: false}];
 				var g = dijit.byId('grid');
 				g.setSortIndex(sortFields);
 			}
@@ -67,9 +67,8 @@
 </head>
 <body class="claro">
 	<h1 class="title">dojox.grid.EnhancedGrid - NestedSorting</h1>
-	<p>
-		<div id="gridDiv"></div><br/>
-		<input type='button' value='Sample - set new sort order - Column B desc, Column F asc' onclick='newSort()'/>
-	</p>
+	<p><h3>Column A, ColumnB Column F are unsortable</h3></p>
+	<p><div id="gridDiv"></div></p>
+	<p><h3>Set new sort order as:[Column C(desc), Column H(asc)]:</h3> <input type='button' value='Set new Sorting Order' onclick='newSort()'/></p>
 </body>
 </html>

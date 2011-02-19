@@ -59,7 +59,7 @@
 }
 
 /*Control the title node width*/
-.dojoxGridCellOver .dojoxGridSortNode,
+.dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNode,
 .dojoxGridCellSortFocus .dojoxGridSortNode,
 .dojoxGridSingleSorted .dojoxGridHeader .dojoxGridCellOver .dojoxGridSortNodeMain,
 .dojoxGridSingleSorted .dojoxGridHeader .dojoxGridCellSortFocus .dojoxGridSortNodeMain {

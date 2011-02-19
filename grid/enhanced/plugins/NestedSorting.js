@@ -65,17 +65,24 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_setGridSortIndex: function(inIndex, inAsc, noRefresh){
 		if(dojo.isArray(inIndex)){
 			var i, d, cell;
-			this.clearSort();
 			for(i = 0; i < inIndex.length; i++){
 				d = inIndex[i];
 				cell = this.grid.getCellByField(d.attribute);
 				if(!cell){
-					console.warn('Cell not found for sorting: ', d.attribute);
-					continue;
+					console.warn('Invalid sorting option, column ', d.attribute, ' not found.');
+					return;
 				}
+				if(cell['nosort'] || !this.grid.canSort(cell.index, cell.field)){
+					console.warn('Invalid sorting option, column ', d.attribute, ' is unsortable.');
+					return;
+				}
+			}
+			this.clearSort();
+			dojo.forEach(inIndex, function(d, i){
+				cell = this.grid.getCellByField(d.attribute);
 				this.setSortData(cell.index, 'index', i);
 				this.setSortData(cell.index, 'order', d.descending ? 'desc': 'asc');
-			}
+			}, this);
 		}else if(!isNaN(inIndex)){
 			if(inAsc === undefined){ return; }//header click from base DataGrid
 			this.setSortData(inIndex, 'order', inAsc ? 'asc' : 'desc');
@@ -106,7 +113,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		//cache column index of hidden, un-sortable or indirect selection
 		this._headerNodes = dojo.query("th", g.viewsHeaderNode).forEach(function(n){
 			idx = parseInt(dojo.attr(n, 'idx'), 10);
-			if(dojo.style(n, 'display') === 'none' || g.layout.cells[idx]['noSort'] || (g.canSort && !g.canSort(idx, g.layout.cells[idx]['field']))){
+			if(dojo.style(n, 'display') === 'none' || g.layout.cells[idx]['nosort'] || (g.canSort && !g.canSort(idx, g.layout.cells[idx]['field']))){
 				excluded.push(idx);
 			}
 		});

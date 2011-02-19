@@ -48,7 +48,7 @@ dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhance
 					return;
 				}
 				var selectDef, cellType = this.grid.selectionMode == 'single' ? dojox.grid.cells.SingleRowSelector : dojox.grid.cells.MultipleRowSelector;
-				selectDef = dojo.mixin(defaultCellDef, option, {type: cellType, editable: false, notselectable: true, filterable: false, navigatable: true, noSort: true});
+				selectDef = dojo.mixin(defaultCellDef, option, {type: cellType, editable: false, notselectable: true, filterable: false, navigatable: true, nosort: true});
 				dojo.forEach(inValidFields, function(field){//remove invalid fields
 					if(field in selectDef){ delete selectDef[field]; }
 				});
