@@ -140,7 +140,7 @@ html.mobile, .mobile body {
 	height: 42px;
 	margin-right: 6px;
 }
-.dj_webkit .mblArrowButtonHead {
+.mblArrowButtonHead {
 	position: absolute;
 	top: 11px;
 	left: 8px;
@@ -171,9 +171,6 @@ html.mobile, .mobile body {
 	background-color: #5877A2;
 	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
 	-webkit-tap-highlight-color: transparent;
-}
-.dj_ie .mblArrowButtonBody, .dj_ff3 .mblArrowButtonBody {
-	padding: 0px 10px 0px 10px;
 }
 .mblArrowButtonNeck {
 	position: absolute;

@@ -1,4 +1,5 @@
 dojo.provide("dojox.mobile.compat");
+dojo.require("dijit._base.sniff");
 dojo.require("dojo._base.fx");
 dojo.require("dojo.fx");
 dojo.require("dojox.fx.flip");
