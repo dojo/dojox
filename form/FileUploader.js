@@ -1084,17 +1084,33 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		// summary:
 		//		Build the form that holds the fileInput
 		//
+
 		if(this._formNode){ return; }
 
-		if(dojo.isIE){
+		/*
+		 Attempts to get this to work in IE9.....
+		 this._formNode = dojo.create('form', {
+			enctype:"multipart/form-data",
+			method:"post",
+			id:dijit.getUniqueId("FileUploaderForm")
+		}, this.domNode);
+		*/
+		if(dojo.isIE && dojo.isIE < 9){
 			this._formNode = document.createElement('<form enctype="multipart/form-data" method="post">');
 			this._formNode.encoding = "multipart/form-data";
+			this._formNode.id = dijit.getUniqueId("FileUploaderForm"); // needed for dynamic style
+			this.domNode.appendChild(this._formNode);
 		}else{
-			this._formNode = document.createElement('form');
-			this._formNode.setAttribute("enctype", "multipart/form-data");
+			this._formNode = dojo.create('form', {
+				enctype:"multipart/form-data",
+				method:"post",
+				id:dijit.getUniqueId("FileUploaderForm")
+			}, this.domNode);
+
+			//this._formNode = document.createElement('form');
+			//this._formNode.setAttribute("enctype", "multipart/form-data");
 		}
-		this._formNode.id = dijit.getUniqueId("FileUploaderForm"); // needed for dynamic style
-		this.domNode.appendChild(this._formNode);
+
 	},
 
 	_buildFileInput: function(){
