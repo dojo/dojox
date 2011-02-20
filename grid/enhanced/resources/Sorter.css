@@ -68,8 +68,10 @@
 .dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortNode {
 	margin-right: 24px;
 }
-
-html > body .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnSingle,
+/*html > body used for !dj_ie6, TBD - a better way*/
+html > body .dojoxGridCellOver .dojoxGridSortNode .dojoxGridSortBtnSingle {
+	right: -5px;
+}
 html > body .dojoxGridCellSortFocus .dojoxGridSortNode .dojoxGridSortBtnSingle,
 html > body .dojoxGridSorted .dojoxGridCellOver .dojoxGridSortNodeMain .dojoxGridSortBtnSingle,
 html > body .dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortNodeMain .dojoxGridSortBtnSingle {
