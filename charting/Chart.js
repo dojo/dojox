@@ -5,6 +5,7 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.functional.fold");
 dojo.require("dojox.lang.functional.reversed");
 
+dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.Theme");
 dojo.require("dojox.charting.Series");
 dojo.require("dojox.charting.axis2d.common");
@@ -840,7 +841,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 
 			// calculate geometry
 			this.fullGeometry();
-			var offsets = this.offsets, dim = this.dim;
+			var offsets = this.offsets, dim = this.dim, rect;
 
 			// get required colors
 			//var requiredColors = df.foldl(this.stack, "z + plot.getRequiredColors()", 0);
@@ -862,13 +863,15 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			// draw a plot background
 			var t = this.theme,
 				fill   = t.plotarea && t.plotarea.fill,
-				stroke = t.plotarea && t.plotarea.stroke;
-			if(fill){
-				this.surface.createRect({
+				stroke = t.plotarea && t.plotarea.stroke,
+				rect = {
 					x: offsets.l - 1, y: offsets.t - 1,
 					width:  dim.width  - offsets.l - offsets.r + 2,
 					height: dim.height - offsets.t - offsets.b + 2
-				}).setFill(fill);
+				};
+			if(fill){
+				fill = dc.Element.prototype._shapeFill(dc.Element.prototype._plotFill(fill, dim, offsets), rect);
+				this.surface.createRect(rect).setFill(fill);
 			}
 			if(stroke){
 				this.surface.createRect({
@@ -896,33 +899,45 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			}
 
 			if(fill){
+				fill = dc.Element.prototype._plotFill(fill, dim, offsets);
 				if(offsets.l){	// left
-					this.surface.createRect({
+					rect = {
 						width:  offsets.l,
 						height: dim.height + 1
-					}).setFill(fill);
+					};
+					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
 				}
 				if(offsets.r){	// right
-					this.surface.createRect({
+					rect = {
 						x: dim.width - offsets.r,
 						width:  offsets.r + 1,
 						height: dim.height + 2
-					}).setFill(fill);
+					};
+					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
 				}
 				if(offsets.t){	// top
-					this.surface.createRect({
+					rect = {
 						width:  dim.width + 1,
 						height: offsets.t
-					}).setFill(fill);
+					};
+					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
 				}
 				if(offsets.b){	// bottom
-					this.surface.createRect({
+					rect = {
 						y: dim.height - offsets.b,
 						width:  dim.width + 1,
 						height: offsets.b + 2
-					}).setFill(fill);
+					};
+					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
 				}
 			}
+			if(stroke){
+				this.surface.createRect({
+					width:  dim.width - 1,
+					height: dim.height - 1
+				}).setStroke(stroke);
+			}
+
 			//create title: Whether to make chart title as a widget which extends dojox.charting.Element?
 			if(this.title){
 				var forceHtmlLabels = (g.renderer == "canvas"),
@@ -938,12 +953,6 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 					this.titleFont,
 					this.titleFontColor
 				);
-			}
-			if(stroke){
-				this.surface.createRect({
-					width:  dim.width - 1,
-					height: dim.height - 1
-				}).setStroke(stroke);
 			}
 
 			// go over axes
