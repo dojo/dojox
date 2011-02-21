@@ -74,11 +74,23 @@ dojo.require("dojox.grid.cells._base");
 			});
 		})){
 			var oldFunc = grid._setStructureAttr;
+			var isCell = function(def){
+				return ("name" in def || "field" in def || "get" in def);
+			};
+			var isView = function(def){
+				return (def !== null && dojo.isObject(def) &&
+						("cells" in def || "rows" in def || ("type" in def && !isCell(def))));
+			};
 			grid._setStructureAttr = function(structure){
 				if(!grid._colOrderLoaded){
 					grid._colOrderLoaded = true;
 					grid._setStructureAttr = oldFunc;
 					structure = dojo.clone(structure);
+					if(dojo.isArray(structure) && !dojo.some(structure, isView)){
+						structure = [{ cells: structure }];
+					}else if(isView(structure)){
+						structure = [structure];
+					}
 					var cells = _getCellsFromStructure(structure);
 					dojo.forEach(dojo.isArray(structure) ? structure : [structure], function(viewDef, viewIdx){
 						var cellArray = viewDef;
