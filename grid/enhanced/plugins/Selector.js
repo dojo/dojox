@@ -206,7 +206,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 					this._config[type] = DISABLED;
 				}else if(config[type] == "single"){
 					this._config[type] = SINGLE;
-				}	
+				}else{
+					this._config[type] = MULTI;
+				}
 			}
 		}
 		
