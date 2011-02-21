@@ -39,22 +39,23 @@
 	-webkit-box-sizing: border-box; /* safari3 */
 	-khtml-box-sizing: border-box; /* konqueror */
 }
+.dj_ie6 .dojoxGridSortBtn,
+.dj_ie6 .dojoxGrid .dojoxGridSortNode {
+	border: none;
+}
 .dojoxGridSortBtnNested {
 	right: 10px;
 }
 .dojoxGridCellSortFocus  .dojoxGridSortBtn {
+	border-left: 1px solid #999999;
 	background-color: #DFEAF1;
 }
-.dojoxGridCellOver  .dojoxGridSortBtn {
+.dojoxGridCellOver .dojoxGridSortBtn {
 	border-left: 1px solid #999999;
 	background-color: #9dcfff;
 }
 .dojoxGridSortNode {
 	outline: none;
-}
-.dj_ie6 .dojoxGridSortBtn,
-.dj_ie6 .dojoxGrid .dojoxGridSortNode {
-	border: none;
 }
 
 /*Control the title node width*/
