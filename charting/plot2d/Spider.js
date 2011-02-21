@@ -17,7 +17,6 @@ dojo.require("dojox.gfx");
 dojo.require("dojo.fx");
 dojo.require("dojo.fx.easing");
 dojo.require("dojox.gfx.fx");
-dojo.require("dojo.number");
 
 (function(){
 	var df = dojox.lang.functional, du = dojox.lang.utils,
@@ -613,7 +612,7 @@ dojo.require("dojo.number");
 
 		// utilities
 		_getLabel: function(number){
-			return this.opt.fixed ? dojo.number.format(number, {places: this.opt.precision}) : number.toString();
+			return dc.getLabel(number, this.opt.fixed, this.opt.precision);
 		}
 	});
 	

@@ -9,8 +9,6 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
 dojo.require("dojox.gfx");
 
-dojo.require("dojo.number");
-
 /*=====
 dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
 	//	summary:
@@ -489,7 +487,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 		},
 		// utilities
 		_getLabel: function(number){
-			return this.opt.fixed ? dojo.number.format(number, {places: this.opt.precision}) : number.toString();
+			return dc.getLabel(number, this.opt.fixed, this.opt.precision);
 		}
 	});
 })();
