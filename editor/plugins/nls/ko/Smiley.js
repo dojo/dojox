@@ -4,7 +4,7 @@
 	emoticonLaughing: "하하",
 	emoticonWink: "윙크",
 	emoticonGrin: "씨익",
-	emoticonCool: "멋진데",
+	emoticonCool: "멋진",
 	emoticonAngry: "화남",  
 	emoticonHalf: "고민 중", 
 	emoticonEyebrow: "글쎄",
@@ -19,4 +19,3 @@
 	emoticonAngel: "천사",
 	emoticonCrying: "울음"
 })
-

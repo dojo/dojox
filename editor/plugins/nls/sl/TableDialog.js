@@ -4,8 +4,8 @@
 	rows: "Vrstice:",
 	columns: "Stolpci:",
 	align: "Poravnaj:",
-	cellPadding: "Odmik celic:",
-	cellSpacing: "Razmik med celicami:",
+	cellPadding: "Polnjenje celic:",
+	cellSpacing: "Razmik celic:",
 	tableWidth: "Širina tabele:",
 	backgroundColor: "Barva ozadja:",
 	borderColor: "Barva obrobe:",
@@ -18,6 +18,7 @@
 	right: "desno",
 	buttonSet: "Nastavi", // translated elsewhere?
 	buttonInsert: "Vstavi",
+	buttonCancel: "Prekliči",
 
 	selectTableLabel: "Izberi tabelo",
 	insertTableRowBeforeLabel: "Dodaj vrstico pred",
@@ -27,4 +28,5 @@
 	deleteTableRowLabel: "Izbriši vrstico",
 	deleteTableColumnLabel: "Izbriši stolpec"
 })
+	
 
