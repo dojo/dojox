@@ -10,9 +10,9 @@ dojo.require("dojox.charting.Series");
 dojo.require("dojox.charting.axis2d.common");
 
 /*=====
-dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
+dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 	//	summary:
-	//		The keyword arguments that can be passed in a Chart2D constructor.
+	//		The keyword arguments that can be passed in a Chart constructor.
 	//
 	//	margins: Object?
 	//		Optional margins for the chart, in the form of { l, t, r, b}.
@@ -43,17 +43,17 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 		//		chart based on dojox.gfx.
 		//
 		//	description:
-		//		dojox.charting.Chart2D is the primary object used for any kind of charts.  It
+		//		dojox.charting.Chart is the primary object used for any kind of charts.  It
 		//		is simple to create--just pass it a node reference, which is used as the
 		//		container for the chart--and a set of optional keyword arguments and go.
 		//
-		//		Note that like most of dojox.gfx, most of dojox.charting.Chart2D's methods are
+		//		Note that like most of dojox.gfx, most of dojox.charting.Chart's methods are
 		//		designed to return a reference to the chart itself, to allow for functional
 		//		chaining.  This makes defining everything on a Chart very easy to do.
 		//
 		//	example:
 		//		Create an area chart, with smoothing.
-		//	|	new dojox.charting.Chart2D(node))
+		//	|	new dojox.charting.Chart(node))
 		//	|		.addPlot("default", { type: "Areas", tension: "X" })
 		//	|		.setTheme(dojox.charting.themes.Shrooms)
 		//	|		.addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
@@ -66,7 +66,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 		//		an array of objects {x,y}, or something custom (as determined by the plot).
 		//		Here's an example of a Candlestick chart, which expects an object of
 		//		{ open, high, low, close }.
-		//	|	new dojox.charting.Chart2D(node))
+		//	|	new dojox.charting.Chart(node))
 		//	|		.addPlot("default", {type: "Candlesticks", gap: 1})
 		//	|		.addAxis("x", {fixLower: "major", fixUpper: "major", includeZero: true})
 		//	|		.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true})
@@ -131,10 +131,10 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 		//	coords: Object
 		//		The coordinates on a page of the containing node, as returned from dojo.coords.
 
-		constructor: function(/* DOMNode */node, /* dojox.charting.__Chart2DCtorArgs? */kwArgs){
+		constructor: function(/* DOMNode */node, /* dojox.charting.__ChartCtorArgs? */kwArgs){
 			//	summary:
-			//		The constructor for a new Chart2D.  Initializes all parameters used for a chart.
-			//	returns: dojox.charting.Chart2D
+			//		The constructor for a new Chart.  Initializes all parameters used for a chart.
+			//	returns: dojox.charting.Chart
 			//		The newly created chart.
 
 			// initialize parameters
@@ -194,11 +194,11 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		Set a theme of the chart.
 			//	theme: dojox.charting.Theme
 			//		The theme to be used for visual rendering.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			this.theme = theme.clone();
 			this.dirty = true;
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		addAxis: function(name, kwArgs){
 			//	summary:
@@ -207,7 +207,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		The name of the axis.
 			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
 			//		An optional keyword arguments object for use in defining details of an axis.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
             var axis, axisType = kwArgs && kwArgs.type || "Default";
             if(typeof axisType == "string"){
@@ -225,7 +225,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			}
 			this.axes[name] = axis;
 			this.dirty = true;
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		getAxis: function(name){
 			//	summary:
@@ -241,7 +241,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		Remove the axis that was defined using name.
 			//	name: String
 			//		The axis name, as defined in addAxis.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.axes){
 				// destroy the axis
@@ -250,7 +250,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				// mark the chart as dirty
 				this.dirty = true;
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		addPlot: function(name, kwArgs){
 			//	summary:
@@ -262,7 +262,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		The name of the plot to be added to the chart.  If you only plan on using one plot, call it "default".
 			//	kwArgs: dojox.charting.plot2d.__PlotCtorArgs
 			//		An object with optional parameters for the plot in question.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			var plot, plotType = kwArgs && kwArgs.type || "Default";
             if(typeof plotType == "string"){
@@ -283,14 +283,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				this.stack.push(plot);
 			}
 			this.dirty = true;
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		removePlot: function(name){
 			//	summary:
 			//		Remove the plot defined using name from the chart's plot stack.
 			//	name: String
 			//		The name of the plot as defined using addPlot.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.plots){
 				// get the index and remove the name
@@ -325,7 +325,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				// mark the chart as dirty
 				this.dirty = true;
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		getPlotOrder: function(){
 			//	summary:
@@ -340,7 +340,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		plots. Wrong names, or dups are ignored.
 			//	newOrder: Array:
 			//		Array of plot names compatible with getPlotOrder().
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			var names = {},
 				order = df.filter(newOrder, function(name){
@@ -366,14 +366,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			}, this);
 			this.stack = newStack;
 			this.dirty = true;
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		movePlotToFront: function(name){
 			//	summary:
 			//		Moves a given plot to front.
 			//	name: String:
 			//		Plot's name to move.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.plots){
 				var index = this.plots[name];
@@ -381,17 +381,17 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 					var newOrder = this.getPlotOrder();
 					newOrder.splice(index, 1);
 					newOrder.unshift(name);
-					return this.setPlotOrder(newOrder);	//	dojox.charting.Chart2D
+					return this.setPlotOrder(newOrder);	//	dojox.charting.Chart
 				}
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		movePlotToBack: function(name){
 			//	summary:
 			//		Moves a given plot to back.
 			//	name: String:
 			//		Plot's name to move.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.plots){
 				var index = this.plots[name];
@@ -399,10 +399,10 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 					var newOrder = this.getPlotOrder();
 					newOrder.splice(index, 1);
 					newOrder.push(name);
-					return this.setPlotOrder(newOrder);	//	dojox.charting.Chart2D
+					return this.setPlotOrder(newOrder);	//	dojox.charting.Chart
 				}
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		addSeries: function(name, data, kwArgs){
 			//	summary:
@@ -417,7 +417,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//	kwArgs: dojox.charting.__SeriesCtorArgs?:
 			//		An optional keyword arguments object that will be mixed into
 			//		the resultant series object.
-			//	returns: dojox.charting.Chart2D:
+			//	returns: dojox.charting.Chart:
 			//		A reference to the current chart for functional chaining.
 			var run = new dc.Series(this, data, kwArgs);
 			run.name = name;
@@ -432,14 +432,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			// fix min/max
 			if(!("ymin" in run) && "min" in run){ run.ymin = run.min; }
 			if(!("ymax" in run) && "max" in run){ run.ymax = run.max; }
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		removeSeries: function(name){
 			//	summary:
 			//		Remove the series defined by name from the chart.
 			//	name: String
 			//		The name of the series as defined by addSeries.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.runs){
 				// get the index and remove the name
@@ -457,7 +457,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				});
 				this.dirty = true;
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		updateSeries: function(name, data){
 			//	summary:
@@ -469,7 +469,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		represents the data to be drawn. Or it can be an object. In
 			//		the latter case, it should have a property "data" (an array),
 			//		destroy(), and setSeriesObject().
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.runs){
 				var run = this.series[this.runs[name]];
@@ -477,7 +477,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				this._invalidateDependentPlots(run.plot, false);
 				this._invalidateDependentPlots(run.plot, true);
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		getSeriesOrder: function(plotName){
 			//	summary:
@@ -497,7 +497,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//	newOrder: Array:
 			//		Array of series names compatible with getPlotOrder(). All
 			//		series should belong to the same plot.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			var plotName, names = {},
 				order = df.filter(newOrder, function(name){
@@ -531,14 +531,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				this.runs[run.name] = i;
 			}, this);
 			this.dirty = true;
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		moveSeriesToFront: function(name){
 			//	summary:
 			//		Moves a given series to front of a plot.
 			//	name: String:
 			//		Series' name to move.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.runs){
 				var index = this.runs[name],
@@ -546,17 +546,17 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				if(name != newOrder[0]){
 					newOrder.splice(index, 1);
 					newOrder.unshift(name);
-					return this.setSeriesOrder(newOrder);	//	dojox.charting.Chart2D
+					return this.setSeriesOrder(newOrder);	//	dojox.charting.Chart
 				}
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		moveSeriesToBack: function(name){
 			//	summary:
 			//		Moves a given series to back of a plot.
 			//	name: String:
 			//		Series' name to move.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(name in this.runs){
 				var index = this.runs[name],
@@ -564,37 +564,44 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				if(name != newOrder[newOrder.length - 1]){
 					newOrder.splice(index, 1);
 					newOrder.push(name);
-					return this.setSeriesOrder(newOrder);	//	dojox.charting.Chart2D
+					return this.setSeriesOrder(newOrder);	//	dojox.charting.Chart
 				}
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		resize: function(width, height){
 			//	summary:
 			//		Resize the chart to the dimensions of width and height.
+			//	description:
+			//		Resize the chart and its surface to the width and height dimensions.
+			//		If no width/height or box is provided, resize the surface to the marginBox of the chart. 
 			//	width: Number
 			//		The new width of the chart.
 			//	height: Number
 			//		The new height of the chart.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			var box;
 			switch(arguments.length){
-				case 0:
-					box = dojo.marginBox(this.node);
-					break;
+				// case 0, do not resize the div, just the surface
 				case 1:
-					box = width;
+					// argument, override node box
+					box = dojo.mixin({}, width);
+					dojo.marginBox(this.node, box);
 					break;
-				default:
-					box = { w: width, h: height };
+				case 2:
+					box = {w: width, h: height};
+					// argument, override node box
+					dojo.marginBox(this.node, box);
 					break;
 			}
-			dojo.marginBox(this.node, box);
+			// in all cases take back the computed box
+			box = dojo.marginBox(this.node);
+			// and set it on the surface
 			this.surface.setDimensions(box.w, box.h);
 			this.dirty = true;
 			this.coords = null;
-			return this.render();	//	dojox.charting.Chart2D
+			return this.render();	//	dojox.charting.Chart
 		},
 		getGeometry: function(){
 			//	summary:
@@ -627,7 +634,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//	zoom: Boolean|Object?
 			//		The chart zooming animation trigger.  This is null by default,
 			//		e.g. {duration: 1200}, or just set true.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			var axis = this.axes[name];
 			if(axis){
@@ -638,7 +645,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 					}
 				})
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		setWindow: function(sx, sy, dx, dy, zoom){
 			//	summary:
@@ -654,7 +661,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//	zoom: Boolean|Object?
 			//		The chart zooming animation trigger.  This is null by default,
 			//		e.g. {duration: 1200}, or just set true.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(!("plotArea" in this)){
 				this.calculateGeometry();
@@ -672,7 +679,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				axis.setWindow(scale, offset);
 			});
 			dojo.forEach(this.stack, function(plot){ plot.zoom = zoom; });
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		zoomIn:	function(name, range){
 			//	summary:
@@ -699,7 +706,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//	summary:
 			//		Calculate the geometry of the chart based on the defined axes of
 			//		a chart.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(this.dirty){
 				return this.fullGeometry();
@@ -713,14 +720,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				}, this);
 			calculateAxes(dirty, this.plotArea);
 
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		fullGeometry: function(){
 			//	summary:
 			//		Calculate the full geometry of the chart.  This includes passing
 			//		over all major elements of a chart (plots, axes, series, container)
 			//		in order to ensure proper rendering.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			this._makeDirty();
 
@@ -791,14 +798,14 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			df.forIn(this.axes, clear);
 			calculateAxes(this.stack, this.plotArea);
 
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		render: function(){
 			//	summary:
 			//		Render the chart according to the current information defined.  This should
 			//		be the last call made when defining/creating a chart, or if data within the
 			//		chart has been changed.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(this.theme){
 				this.theme.clear();
@@ -822,13 +829,13 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			if(this.surface.render){ this.surface.render(); };
 			// END FOR HTML CANVAS
 
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		fullRender: function(){
 			//	summary:
 			//		Force a full rendering of the chart, including full resets on the chart itself.
 			//		You should not call this method directly unless absolutely necessary.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 
 			// calculate geometry
@@ -948,13 +955,13 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			if(this.surface.render){ this.surface.render(); };
 			// END FOR HTML CANVAS
 
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		delayedRender: function(){
 			//	summary:
 			//		Delayed render, which is used to collect multiple updates
 			//		within a delayInMs time window.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 
 			if(!this._delayedRenderHandle){
@@ -968,7 +975,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 				);
 			}
 
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		connectToPlot: function(name, object, method){
 			//	summary:
@@ -992,7 +999,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		Event name to simulate: onmouseover, onmouseout, onclick.
 			//	index: Number:
 			//		Valid data value index for the event.
-			//	returns: dojox.charting.Chart2D
+			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			if(seriesName in this.runs){
 				var plotName = this.series[this.runs[seriesName]].plot;
@@ -1003,7 +1010,7 @@ dojox.charting.__Chart2DCtorArgs = function(margins, stroke, fill, delayInMs){
 					}
 				}
 			}
-			return this;	//	dojox.charting.Chart2D
+			return this;	//	dojox.charting.Chart
 		},
 		_makeClean: function(){
 			// reset dirty flags

@@ -111,11 +111,15 @@ dojo.require("dojox.lang.functional");
 			this.inherited(arguments);
 		},
 		resize: function(box){
-			// summary: resize the widget
-			if(box.w > 0 && box.h > 0){
-				dojo.marginBox(this.domNode, box);
-				this.chart.resize();
-			}
+			//	summary:
+			//		Resize the widget.
+			//	description:
+			//		Resize the domNode and the widget surface to the dimensions of a box of the following form:
+			//			`{ l: 50, t: 200, w: 300: h: 150 }`
+			//		If no box is provided, resize the surface to the marginBox of the domNode.
+			//	box:
+			//		If passed, denotes the new size of the widget.
+			this.chart.resize(box);
 		}
 	});
 	
