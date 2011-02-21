@@ -197,7 +197,7 @@ dojo.require("dojox.lang.utils");
 			tick:           {},	// stroke + length for a tick
 			font:			"",	// font for labels
 			fontColor:		"",	// color for labels as a string
-			title:		 		null,	// axis title
+			title:		 		"",	// axis title
 			titleGap:	 		0,		// gap between axis title and axis label
 			titleFont:	 		"",		// axis title font
 			titleFontColor:	 	"",		// axis title font color
