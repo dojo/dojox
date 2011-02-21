@@ -1,6 +1,6 @@
 ({
-	insertImageTitle: "Суретті кірістіру",
-	url: "Сурет",
+	insertImageTitle: "Сурет кірістіру",
+	url: "Кескін",
 	browse: "Шолу...",
 	text: "Сипаттама",
 	set: "Кірістіру",

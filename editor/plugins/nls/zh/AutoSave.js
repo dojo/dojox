@@ -8,6 +8,6 @@
 	"saveSettingdialogParamLabel": "分钟",
 	"saveSettingdialogButtonOk": "设置时间间隔",
 	"saveSettingdialogButtonCancel": "取消",
-	"saveMessageSuccess": "于 ${0} 保存",
-	"saveMessageFail": "于 ${0} 保存失败"
+	"saveMessageSuccess": "已保存到 ${0}",
+	"saveMessageFail": "未能保存到 ${0}"
 })

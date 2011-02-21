@@ -11,7 +11,7 @@
 	borderColor: "Жиек түсі:",
 	borderThickness: "Жиек қалыңдығы",
 	percent: "пайыз",
-	pixels: "нүкте",
+	pixels: "нүктелер",
 	"default": "әдепкі",
 	left: "сол жақ",
 	center: "ортасы",

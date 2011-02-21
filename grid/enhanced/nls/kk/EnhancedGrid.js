@@ -1,8 +1,8 @@
 ({
 	singleSort: "Бір рет сұрыптау",
 	nestedSort: "Кірістірілген сұрыптау",
-	ascending: "Артуы бойынша",
-	descending: "Кемуі бойынша",
+	ascending: "Өсу реті бойынша",
+	descending: "Кему",
 	unsorted: "Бұл бағанды сұрыптамау"
 })
 
