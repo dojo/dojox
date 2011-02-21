@@ -78,7 +78,6 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 				return;
 			}
 			
-			
 			if(!o.shape || o.type !== "onmouseover"){ return; }
 			
 			// calculate relative coordinates and the position
@@ -150,8 +149,11 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 			aroundRect.width = Math.ceil(aroundRect.width);
 			aroundRect.height = Math.ceil(aroundRect.height);
 			this.aroundRect = aroundRect;
-			
-            dijit.showTooltip(this.text(o), this.aroundRect, position);
+
+			var tooltip = this.text(o);
+			if(tooltip){
+                dijit.showTooltip(tooltip, this.aroundRect, position);
+			}
 		}
 	});
 })();
