@@ -2,14 +2,11 @@ dojo.provide("dojox.charting.plot2d.Spider");
 
 dojo.experimental("dojox.charting.plot2d.Spider");
 
-dojo.require("dijit.Tooltip");
-
 dojo.require("dojox.charting.Element");
 dojo.require("dojox.charting.plot2d._PlotEvents");
 dojo.require("dojox.charting.axis2d.common");
 dojo.require("dojox.charting.plot2d.common");
 dojo.require("dojox.charting.scaler.primitive");
-dojo.require("dojox.charting.widget.Legend");
 
 dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.utils");
@@ -528,12 +525,15 @@ dojo.require("dojox.gfx.fx");
 					aroundRect.height = Math.ceil(aroundRect.height);
 					this.aroundRect = aroundRect;
 					var position = ["after", "before"];
-					dijit.showTooltip(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
+					if(dijit && dijit.Tooltip){
+						dijit.showTooltip(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
+					}
 				}else{
 					init  = dojox.gfx.matrix.scaleAt(defaultScale, o.cx, o.cy);
 					scale = 1/defaultScale;
-					//hide tooltip
-					this.aroundRect && dijit.hideTooltip(this.aroundRect);
+					if(dijit && dijit.Tooltip){
+						this.aroundRect && dijit.hideTooltip(this.aroundRect);
+					}
 				}
 				var cs = o.shape.getShape(),
 					init = m.scaleAt(defaultScale, cs.cx, cs.cy),
