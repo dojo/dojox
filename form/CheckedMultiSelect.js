@@ -4,7 +4,7 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.Tooltip");
 dojo.require("dijit.form._FormSelectWidget");
 
-dojo.declare("dojox.form._CheckedMultiSelectItem", 
+dojo.declare("dojox.form._CheckedMultiSelectItem",
 	[dijit._Widget, dijit._Templated],
 	{
 	// summary:

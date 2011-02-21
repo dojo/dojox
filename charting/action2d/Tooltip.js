@@ -15,7 +15,7 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 	//		Additional arguments for tooltip actions.
 
 	//	text: Function?
-	//		The function that produces the text to be shown within a tooltip.  By default this will be 
+	//		The function that produces the text to be shown within a tooltip.  By default this will be
 	//		set by the plot in question, by returning the value of the element.
 	text: null
 });

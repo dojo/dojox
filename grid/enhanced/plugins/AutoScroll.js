@@ -16,7 +16,7 @@ dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plug
 	autoScrollInterval: 1000,
 	
 	// autoScrollMargin: Integer
-	//		The width (in pixel) of the margin area where autoscroll can be triggered. 
+	//		The width (in pixel) of the margin area where autoscroll can be triggered.
 	autoScrollMargin: 30,
 	
 	constructor: function(grid, args){
@@ -55,7 +55,7 @@ dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plug
 					hh = g._getHeaderHeight(),
 					margin = this.autoScrollMargin,
 					ey = evt.clientY, ex = evt.clientX,
-					gy = gridPos.y, gx = gridPos.x, 
+					gy = gridPos.y, gx = gridPos.x,
 					gh = gridPos.h, gw = gridPos.w;
 				if(ex >= gx && ex <= gx + gw){
 					if(ey >= gy + hh && ey < gy + hh + margin){

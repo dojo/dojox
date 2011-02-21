@@ -4,7 +4,7 @@ dojo.require("dijit.tree.ForestStoreModel");
 
 dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 
-	// There are different approaches to get children for client-side 
+	// There are different approaches to get children for client-side
 	// DataStore (e.g. dojo.data.ItemFileReadStore) or server-side DataStore
 	// (e.g. dojox.data.QueryReadStore), so we need to be sure what kind of
 	// DataStore is being used

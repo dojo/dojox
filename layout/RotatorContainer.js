@@ -7,7 +7,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dijit._Contained");
 
-dojo.declare("dojox.layout.RotatorContainer", 
+dojo.declare("dojox.layout.RotatorContainer",
 	[dijit.layout.StackContainer, dijit._Templated], {
 	// summary:
 	//		Extends a StackContainer to automatically transition between children
@@ -40,7 +40,7 @@ dojo.declare("dojox.layout.RotatorContainer",
 
 	// showTabs: Boolean
 	//		Sets the display of the tabs.  The tabs are actually a StackController.
-	//		The child's title is used for the tab's label. 
+	//		The child's title is used for the tab's label.
 	showTabs: true,
 
 	// transitionDelay: int

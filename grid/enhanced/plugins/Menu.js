@@ -6,8 +6,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 	// summary:
 	//		 Provides context menu support, including header menu, row menu, cell menu and selected region menu
 	// example:
-	//		<div dojoType="dojox.grid.EnhancedGrid" 
-	//			plugins="{menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId", 
+	//		<div dojoType="dojox.grid.EnhancedGrid"
+	//			plugins="{menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",
 	//							   selectedRegionMenu:"selectedRegionMenuId"}}" ...>
 	//		</div>
 	
@@ -71,7 +71,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 		var g = this.grid, n = g.domNode;
 		if(!menu || !(menu instanceof dijit.Menu)){
 			console.warn(menuType, " of Grid ", g.id, " is not existed!");
-			return; 
+			return;
 		}
 		if(g[menuType]){
 			g[menuType].unBindDomNode(n);
@@ -84,7 +84,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 		//		Show appropriate context menu
 		//		Fired from dojox.grid.enhanced._Events.onRowContextMenu, 'this' scope - Grid
 		//		TODO: test Shift-F10
-		var inSelectedRegion = (e.cellNode && dojo.hasClass(e.cellNode, 'dojoxGridRowSelected') || 
+		var inSelectedRegion = (e.cellNode && dojo.hasClass(e.cellNode, 'dojoxGridRowSelected') ||
 			e.rowNode && (dojo.hasClass(e.rowNode, 'dojoxGridRowSelected') || dojo.hasClass(e.rowNode, 'dojoxGridRowbarSelected')));
 		
 		if(inSelectedRegion && this.selectedRegionMenu){

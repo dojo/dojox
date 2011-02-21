@@ -147,7 +147,7 @@ EventObject: function(){
 				}
 			});
 			dojo.connect(this.keys, "onEsc", this, function(evt){
-				this._dragged = false;	
+				this._dragged = false;
 			});
 		},
 		
@@ -163,7 +163,7 @@ EventObject: function(){
 			// 	Gets scroll offset of canvas
 			return {
 				top:this.container.parentNode.scrollTop,
-				left:this.container.parentNode.scrollLeft		
+				left:this.container.parentNode.scrollLeft
 			}; // Object
 		},
 
@@ -212,7 +212,7 @@ EventObject: function(){
 			// 		Create on[xx]Down event and send to broadcaster.
 			//		Could be connected to.
 			//console.info("onDown:", this.eventName("down"))
-			this._broadcastEvent(this.eventName("down"), obj);			
+			this._broadcastEvent(this.eventName("down"), obj);
 		},
 		
 		onDrag: function(obj){
@@ -241,9 +241,9 @@ EventObject: function(){
 			var nm = obj.id.split(".");
 			evt = evt.charAt(0).toUpperCase() + evt.substring(1);
 			if(nm[0] == "dojox" && (dojox.drawing.defaults.clickable || !dojox.drawing.defaults.clickMode)){
-				return "onStencil"+evt;	
+				return "onStencil"+evt;
 			}else{
-				return "on"+evt;	
+				return "on"+evt;
 			}
 			
 		},
@@ -497,8 +497,8 @@ EventObject: function(){
 			// summary:
 			//		Sets the cursor for  a given node.  If no
 			//		node is specified the containing node is used.
-			if(!node){ 
-				dojo.style(this.container, "cursor", cursor); 
+			if(!node){
+				dojo.style(this.container, "cursor", cursor);
 			}else{
 				dojo.style(node, "cursor", cursor);
 			}

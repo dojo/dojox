@@ -5,8 +5,8 @@
 	emoticonWink: "piscadela",
 	emoticonGrin: "gargalhada",
 	emoticonCool: "com estilo",
-	emoticonAngry: "zangado",  
-	emoticonHalf: "céptico", 
+	emoticonAngry: "zangado",
+	emoticonHalf: "céptico",
 	emoticonEyebrow: "desconfiado",
 	emoticonFrown: "triste",
 	emoticonShy: "tímido",
@@ -15,7 +15,7 @@
 	emoticonTongue: "língua de fora",
 	emoticonIdea: "ideia",
 	emoticonYes: "sim",
-	emoticonNo: "não",	
+	emoticonNo: "não",
 	emoticonAngel: "anjo",
 	emoticonCrying: "a chorar"
 })

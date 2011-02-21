@@ -5,8 +5,8 @@
 	emoticonWink: "knipoog",
 	emoticonGrin: "grijns",
 	emoticonCool: "cool",
-	emoticonAngry: "kwaad",  
-	emoticonHalf: "half", 
+	emoticonAngry: "kwaad",
+	emoticonHalf: "half",
 	emoticonEyebrow: "verbaasd",
 	emoticonFrown: "frons",
 	emoticonShy: "verlegen",
@@ -15,7 +15,7 @@
 	emoticonTongue: "tong",
 	emoticonIdea: "idee",
 	emoticonYes: "ja",
-	emoticonNo: "nee",	
+	emoticonNo: "nee",
 	emoticonAngel: "engel",
 	emoticonCrying: "bedroefd"
 })

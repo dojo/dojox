@@ -5,8 +5,8 @@
 	emoticonWink: "ขยิบตา",
 	emoticonGrin: "ยิ้มกว้าง",
 	emoticonCool: "เจ๋ง",
-	emoticonAngry: "โกรธ",  
-	emoticonHalf: "ครึ่งซีก", 
+	emoticonAngry: "โกรธ",
+	emoticonHalf: "ครึ่งซีก",
 	emoticonEyebrow: "คิ้ว",
 	emoticonFrown: "หน้าบึ้ง",
 	emoticonShy: "อาย",
@@ -15,7 +15,7 @@
 	emoticonTongue: "แลบลิ้น",
 	emoticonIdea: "ความคิด",
 	emoticonYes: "ใช่",
-	emoticonNo: "ไม่ใช่",	
+	emoticonNo: "ไม่ใช่",
 	emoticonAngel: "โมโห",
 	emoticonCrying: "ร้องไห้"
 })

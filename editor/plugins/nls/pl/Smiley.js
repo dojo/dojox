@@ -5,8 +5,8 @@
 	emoticonWink: "mrugnięcie",
 	emoticonGrin: "szeroki uśmiech",
 	emoticonCool: "cwaniak",
-	emoticonAngry: "złość",  
-	emoticonHalf: "niesmak", 
+	emoticonAngry: "złość",
+	emoticonHalf: "niesmak",
 	emoticonEyebrow: "uniesienie brwi",
 	emoticonFrown: "niezadowolenie",
 	emoticonShy: "nieśmiałość",
@@ -15,7 +15,7 @@
 	emoticonTongue: "pokazywanie języka",
 	emoticonIdea: "pomysł",
 	emoticonYes: "Tak",
-	emoticonNo: "Nie",	
+	emoticonNo: "Nie",
 	emoticonAngel: "anioł",
 	emoticonCrying: "płacz"
 })

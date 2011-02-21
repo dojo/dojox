@@ -24,7 +24,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Dialog", dijit.Dialog, {
 			}
 			refPos.x = refPos.x + refPos.w / 2 - thisPos.w / 2;
 			refPos.y = refPos.y + refPos.h / 2 - thisPos.h / 2;
-			if(refPos.x >= 0 && refPos.x + thisPos.w <= viewPort.w && 
+			if(refPos.x >= 0 && refPos.x + thisPos.w <= viewPort.w &&
 				refPos.y >= 0 && refPos.y + thisPos.h <= viewPort.h){
 				this._relativePosition = refPos;
 			}

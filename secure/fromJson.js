@@ -6,32 +6,32 @@ dojo.provide("dojox.secure.fromJson");
 
 
 
-dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :  
+dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :
 //	summary:
 //		Parses a string of well-formed JSON text.
 //	description:
-//		Parses a string of well-formed JSON text. If the input is not well-formed, 
+//		Parses a string of well-formed JSON text. If the input is not well-formed,
 //		then behavior is undefined, but it is
 //		deterministic and is guaranteed not to modify any object other than its
 //		return value.
-//	
+//
 //		This does not use `eval` so is less likely to have obscure security bugs than
 //		json2.js.
 //		It is optimized for speed, so is much faster than json_parse.js.
-//	
+//
 //		This library should be used whenever security is a concern (when JSON may
 //		come from an untrusted source), speed is a concern, and erroring on malformed
 //		JSON is *not* a concern.
-//	
+//
 //		json2.js is very fast, but potentially insecure since it calls `eval` to
 //		parse JSON data, so an attacker might be able to supply strange JS that
 //		looks like JSON, but that executes arbitrary javascript.
-//	
-//		To configure dojox.secure.fromJson as the JSON parser for all Dojo 
+//
+//		To configure dojox.secure.fromJson as the JSON parser for all Dojo
 // 		JSON parsing, simply do:
 //		|	dojo.require("dojox.secure.fromJson");
 //		|	dojo.fromJson = dojox.secure.fromJson;
-//		or alternately you could configure dojox.secure.fromJson to only handle 
+//		or alternately you could configure dojox.secure.fromJson to only handle
 // 		XHR responses:
 //		|	dojo._contentHandlers.json = function(xhr){
 //		|		return dojox.secure.fromJson.fromJson(xhr.responseText);
@@ -39,7 +39,7 @@ dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :
 //
 //	json: String
 // 		per RFC 4627
-//	optReviver: Function (this:Object, string, *) 
+//	optReviver: Function (this:Object, string, *)
 // 		optional function
 //				that reworks JSON objects post-parse per Chapter 15.12 of EcmaScript3.1.
 //				If supplied, the function is called with a string key, and a value.

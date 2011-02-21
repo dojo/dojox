@@ -30,7 +30,7 @@
 //		When in dojo, of course those re-defined functions are not necessary.
 //		So, they are surrounded by the excludeStart and excludeEnd directives
 //		so that they will be excluded from the build.
-//		
+//
 //		If you use this module for non-dojo application, you need to explicitly
 //		assign your outer fixed node and inner scrollable node to this.domNode
 //		and this.containerNode respectively.
@@ -55,7 +55,7 @@
 //		| 		</div>
 //		| 	</div>
 //		| </body>
-//		
+//
 =====*/
 
 if(typeof dojo != "undefined" && dojo.provide){
@@ -824,16 +824,16 @@ dojox.mobile.scrollable = function(){
 		var rule = dojox.mobile._rule[idx];
 		if(rule){
 			if(from){
-				rule.deleteRule("from"); 
+				rule.deleteRule("from");
 				rule.insertRule("from { -webkit-transform: "+this.makeTranslateStr(from)+"; }");
 			}
 			if(to){
 				if(to.x === undefined){ to.x = from.x; }
 				if(to.y === undefined){ to.y = from.y; }
-				rule.deleteRule("to"); 
+				rule.deleteRule("to");
 				rule.insertRule("to { -webkit-transform: "+this.makeTranslateStr(to)+"; }");
 			}
-		} 
+		}
 	};
 
 	this.setSelectable = function(node, selectable){

@@ -49,7 +49,7 @@ dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
 		// summary:
 		//		Over-ride for button state control for disabled to work.
 		this.button.set("disabled", this.get("disabled"));
-	},	
+	},
 
 	setEditor: function(editor){
 		// summary:

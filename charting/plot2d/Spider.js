@@ -41,7 +41,7 @@ dojo.require("dojox.gfx.fx");
             spiderWidth:     0,			// spider web stroke width
             seriesWidth:     0,			// plot border with
             seriesFillAlpha: 0.2,		// plot fill alpha
-			spiderOrigin:	 0.16,		
+			spiderOrigin:	 0.16,
 			markerSize:  	 3,			// radius of plot vertex (px)
 			spiderType:		 "polygon", //"circle"
 			animationType:	 dojo.fx.easing.backOut,
@@ -203,7 +203,7 @@ dojo.require("dojox.gfx.fx");
 				seriesWidth = o.seriesWidth || (ta.stroke && ta.stroke.width) || 2,
 				asize = g.normalizedLength(g.splitFontString(axisFont).size),
 				startAngle = m._degToRad(o.startAngle),
-				start = startAngle, step, filteredRun, slices, labels, shift, labelR, 
+				start = startAngle, step, filteredRun, slices, labels, shift, labelR,
 				outerPoints, innerPoints, divisionPoints, divisionRadius, labelPoints,
 				ro = o.spiderOrigin, dv = o.divisions >= 3 ? o.divisions : 3, ms = o.markerSize,
 				spt = o.spiderType, at = o.animationType, lboffset = o.labelOffset < -10 ? o.labelOffset : -10,
@@ -291,7 +291,7 @@ dojo.require("dojox.gfx.fx");
 				var point = labelPoints[j],
 					fontWidth = dojox.gfx._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0,
 					render = this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx";
-					elem = da.createText[render](this.chart, labelGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y, 
+					elem = da.createText[render](this.chart, labelGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 							"middle", this.labelKey[j], axisFont, axisFontColor);
 				if (this.opt.htmlLabels) {
 					this.htmlElements.push(elem);
@@ -321,7 +321,7 @@ dojo.require("dojox.gfx.fx");
 			//text
 			var textGroup = s.createGroup(), len = this._getObjectLength(this.datas), k = 0;
 			for(var key in this.datas){
-				var data = this.datas[key], min = data.min, max = data.max, distance = max - min, 
+				var data = this.datas[key], min = data.min, max = data.max, distance = max - min,
 					end = start + 2 * Math.PI * k / len;
 				for (var i = 0; i < dv; i++) {
 					var text = min + distance*i/(dv-1), point = this._getCoordinate(circle, r*(ro + (1-ro)*i/(dv-1)), end);
@@ -330,7 +330,7 @@ dojo.require("dojox.gfx.fx");
 						render = this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx";
 					if (this.opt.htmlLabels) {
 						this.htmlElements.push(da.createText[render]
-							(this.chart, textGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y, 
+							(this.chart, textGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 								"start", text, axisTickFont, axisTickFontColor));
 					}
 				}
@@ -494,7 +494,7 @@ dojo.require("dojox.gfx.fx");
 						end:   transColor(color)
 					};
 				}
-				var start = a.color.start, end = a.color.end; 
+				var start = a.color.start, end = a.color.end;
 				if(o.type == "onmouseout"){
 					// swap colors
 					var t = start; start = end; end = t;
@@ -549,7 +549,7 @@ dojo.require("dojox.gfx.fx");
 				a.anim = dojox.gfx.fx.animateTransform(kwArgs);
 				a.anim.play();
 			}else if(o.element == "spider_plot"){
-				//dojo gfx function "moveToFront" not work in IE 
+				//dojo gfx function "moveToFront" not work in IE
 				if (o.type == "onmouseover" && !dojo.isIE) {
 					o.shape.moveToFront();
 				}

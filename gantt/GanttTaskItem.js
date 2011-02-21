@@ -129,7 +129,7 @@ dojo.declare("dojox.gantt.GanttTaskControl", null, {
 	showChildTasks: function(task, isOpen){
 		if(isOpen){
 			for(var i = 0; i < task.childTask.length; i++){
-				var cTask = task.childTask[i], 
+				var cTask = task.childTask[i],
 					cTaskItem0 = cTask.cTaskItem[0], cTaskName0 = cTask.cTaskNameItem[0],
 					cTaskItem1 = cTask.cTaskItem[1], cTaskName1 = cTask.cTaskNameItem[1],
 					cTaskItem2 = cTask.cTaskItem[2], cTaskName2 = cTask.cTaskNameItem[2];
@@ -1017,11 +1017,11 @@ dojo.declare("dojox.gantt.GanttTaskControl", null, {
 			if(this.taskItem.previousParentTask){
 				this.previousParentTask = this.project.getTaskById(this.taskItem.previousParentTask.id);
 				var lastChildTask = this.ganttChart.getLastChildTask(this.previousParentTask);
-				this.posY = parseInt(lastChildTask.cTaskItem[0].style.top) 
+				this.posY = parseInt(lastChildTask.cTaskItem[0].style.top)
 					+ this.ganttChart.heightTaskItem + this.ganttChart.heightTaskItemExtra;
 				this.previousParentTask.nextParentTask = this;
 			}else{
-				this.posY = parseInt(this.project.projectItem[0].style.top) 
+				this.posY = parseInt(this.project.projectItem[0].style.top)
 					+ this.ganttChart.heightTaskItem + this.ganttChart.heightTaskItemExtra;
 			}
 		}
@@ -1032,11 +1032,11 @@ dojo.declare("dojox.gantt.GanttTaskControl", null, {
 			if(this.taskItem.previousChildTask){
 				this.previousChildTask = this.project.getTaskById(this.taskItem.previousChildTask.id);
 				var lastChildTask = this.ganttChart.getLastChildTask(this.previousChildTask);
-				this.posY = dojo.style(lastChildTask.cTaskItem[0], "top") 
+				this.posY = dojo.style(lastChildTask.cTaskItem[0], "top")
 					+ this.ganttChart.heightTaskItem + this.ganttChart.heightTaskItemExtra;
 				this.previousChildTask.nextChildTask = this;
 			}else{
-				this.posY = dojo.style(task.cTaskItem[0], "top") 
+				this.posY = dojo.style(task.cTaskItem[0], "top")
 					+ this.ganttChart.heightTaskItem + this.ganttChart.heightTaskItemExtra;
 			}
 			task.childTask.push(this);
@@ -1163,9 +1163,9 @@ dojo.declare("dojox.gantt.GanttTaskControl", null, {
 			if(a1 && !a2 || !a1 && a2 || !a1 && !a2 && (predTask.parentTask.id != task.parentTask.id)){
 				return false;
 			}
-			//check time 
-			var startTime = task.startTime.getTime(), 
-				pest = predTask.startTime.getTime(), 
+			//check time
+			var startTime = task.startTime.getTime(),
+				pest = predTask.startTime.getTime(),
 				pdur = predTask.duration * 24 * 60 * 60 * 1000 / predTaskObj.ganttChart.hsPerDay;
 			if((pest+pdur) > startTime){
 				return false;

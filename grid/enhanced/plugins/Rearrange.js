@@ -119,7 +119,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 			mapping = {},
 			preRowsToMove = [],
 			postRowsToMove = [],
-			len = rowsToMove.length, 
+			len = rowsToMove.length,
 			i, r, k, arr, rowMap, lastPos;
 			
 		for(i = 0; i < len; ++i){
@@ -353,7 +353,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 	},
 	insertRows: function(sourceGrid, rowsToMove, targetPos){
 		try{
-			var g = this.grid, 
+			var g = this.grid,
 				s = g.store,
 				rowCnt = g.rowCount,
 				mapping = {},
@@ -449,9 +449,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 		// return: Object
 		//		{topPage: xx, bottomPage: xx, invalidPages: [xx,xx,...]}
 		var scroller = this.grid.scroller,
-			topPage = scroller.page, 
+			topPage = scroller.page,
 			bottomPage = scroller.page,
-			firstVisibleRow = scroller.firstVisibleRow, 
+			firstVisibleRow = scroller.firstVisibleRow,
 			lastVisibleRow = scroller.lastVisibleRow,
 			rowsPerPage = scroller.rowsPerPage,
 			renderedPages = scroller.pageNodes[0],
@@ -472,7 +472,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 				matched = true;
 			}
 			if(!matched && (topRow > lastVisibleRow || bottomRow < firstVisibleRow)){
-				invalidPages.push(pageIndex);				
+				invalidPages.push(pageIndex);
 			}
 		});
 		return {topPage: topPage, bottomPage: bottomPage, invalidPages: invalidPages};

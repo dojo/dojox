@@ -22,7 +22,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		//		The grid object we are now handling.
 		grid: null,
 		
-		// isHeader: bool		
+		// isHeader: bool
 		//		Indicating which context we're handling, header or content.
 		isHeader: true,
 		
@@ -32,7 +32,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		
 		// viewIdx: int
 		//		The index of the current _View object in the views array.
-		//		If the grid does not have any rowselector view, it conforms to the index 
+		//		If the grid does not have any rowselector view, it conforms to the index
 		//		in the _ViewManager.views.
 		viewIdx: -1,
 		
@@ -63,15 +63,15 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		rowIdx: -1,
 		
 		// spCols: Array<int>
-		//		An array of special column indexes(flat,not regarding structure). 
-		//		Special columns are typically attached to grid as a kind of UI facility 
-		//		by the grid widget, instead of some real data. 
+		//		An array of special column indexes(flat,not regarding structure).
+		//		Special columns are typically attached to grid as a kind of UI facility
+		//		by the grid widget, instead of some real data.
 		//		For example, indirect selectors and row indexers.
 		//		Users can choose to export it or not.
 		spCols: [],
 		
 		// colOffset: int
-		//		If the grid has a _RowSelector view or something else, this view will NOT be 
+		//		If the grid has a _RowSelector view or something else, this view will NOT be
 		//		passed to the user in argObj. So the column index (cell.index) will appear shifted
 		//		(start from 1 instead of 0). This colOffset is provided to remove this shift.
 		// usage:

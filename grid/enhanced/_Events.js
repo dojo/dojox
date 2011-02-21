@@ -3,9 +3,9 @@ dojo.provide("dojox.grid.enhanced._Events");
 dojo.declare("dojox.grid.enhanced._Events", null, {
 	// summary:
 	//		Overwrite some default events of DataGrid
-	//		
-	// description: 
-	//		Methods are copied or replaced for overwriting, this might be refined once 
+	//
+	// description:
+	//		Methods are copied or replaced for overwriting, this might be refined once
 	//		an overall plugin architecture is set up for DataGrid.
 
 	//_events: Object
@@ -22,7 +22,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	
 	// rowActiveClass: String
 	//		css class to apply to grid rows when activated(mouse down)
-	rowActiveClass: 'dojoxGridRowActive',		
+	rowActiveClass: 'dojoxGridRowActive',
 
 	constructor: function(inGrid){
 		//get the default Grid events
@@ -77,13 +77,13 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	//TODO - make the following events more reasonalble - e.g. more accurate conditions
 	//events for row selectors
 	domouseup: function(e){
-		if(e.cellNode){ 
-			this.onMouseUp(e); 
+		if(e.cellNode){
+			this.onMouseUp(e);
 		}else{
 			this.onRowSelectorMouseUp(e);
 		}
 	},
-	domousedown: function(e){		
+	domousedown: function(e){
 		if(!e.cellNode){
 			this.onRowSelectorMouseDown(e);
 		}
@@ -127,7 +127,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		}
 		//invoke dojox.grid._Events.onCellDblClick()
 		this._events.onCellDblClick.call(this, e);
-		//now focus.setFocusCell need isEditing info, so call it after that is set. 
+		//now focus.setFocusCell need isEditing info, so call it after that is set.
 		this.focus.setFocusCell(e.cell, e.rowIndex);
 	},
 	onRowClick: function(e){
@@ -149,7 +149,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		// summary:
 		//		New - Event fired when a selected region context menu is accessed via mouse right click.
 		// e: Event
-		//		Decorated event object which contains reference to grid and info of selected 
+		//		Decorated event object which contains reference to grid and info of selected
 		//		regions(selection type - row|column, selected index - [...])
 		if(this.selectedRegionMenu){
 			this.selectedRegionMenu._openMyself({
@@ -175,7 +175,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//		Overwritten, see dojox.grid._Events.onHeaderCellMouseDown()
 		if(e.cellNode){//TBD - apply to selection region for nested sorting?
 			dojo.addClass(e.cellNode, this.headerCellActiveClass);
-		} 
+		}
 	},
 	onHeaderCellMouseUp: function(e){
 		// summary:

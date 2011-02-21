@@ -5,8 +5,8 @@
 	emoticonWink: "blink",
 	emoticonGrin: "grin",
 	emoticonCool: "sej",
-	emoticonAngry: "vred",  
-	emoticonHalf: "halv", 
+	emoticonAngry: "vred",
+	emoticonHalf: "halv",
 	emoticonEyebrow: "øjenbryn",
 	emoticonFrown: "rynker panden",
 	emoticonShy: "genert",
@@ -15,7 +15,7 @@
 	emoticonTongue: "tungen ud",
 	emoticonIdea: "idé",
 	emoticonYes: "ja",
-	emoticonNo: "nej",	
+	emoticonNo: "nej",
 	emoticonAngel: "engel",
 	emoticonCrying: "græder"
 })

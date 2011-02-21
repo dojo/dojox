@@ -6,20 +6,20 @@ dojo.require("dojox.grid._RowSelector");
 dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin, {
 	// summary:
 	//		Provide functions to export the grid data into a given format.
-	//		
+	//
 	//		Acceptable plugin parameters:
-	//		1. exportFormatter: function(data, cell, rowIndex, item) 
+	//		1. exportFormatter: function(data, cell, rowIndex, item)
 	//				Provide a way to customize how data should look in exported string.
 	//				Note that usually the formatter of grid cell should not be used here (it can return HTML or even widget).
 	// example:
 	//	|	function onExported(exported_text){
 	//	|		//custom code here...
 	//	|	}
-	//	|	dijit.byId("my_grid_id").exportTo("csv",	//registered export format, mandatory 
+	//	|	dijit.byId("my_grid_id").exportTo("csv",	//registered export format, mandatory
 	//	|		{										//the whole object is optional.
-	//	|			fetchArgs: {start:0,count:1000},	//keywordArgs for fetch, optional         
+	//	|			fetchArgs: {start:0,count:1000},	//keywordArgs for fetch, optional
 	//	|			writerArgs: {separator:';'},		//export writer specific arguments, optional
-	//	|		}, 
+	//	|		},
 	//	|		function(str){
 	//	|			//call back function, mandatory
 	//	|	});
@@ -97,7 +97,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 				count = fetchArgs.count || -1,
 				items = [];
 			for(var i = start; i != start + count && i < g.rowCount; ++i){
-				items.push(g.getItem(i));	
+				items.push(g.getItem(i));
 			}
 			onExported(this._goThroughGridData(items, writer));
 		}
@@ -125,7 +125,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 		//		which is given in the context object(arg_obj).
 		// tags:
 		//		private
-		// returns: 
+		// returns:
 		//		undefined
 		var _this = this;
 		dojo.forEach(arg_obj._views, function(view, vIdx){
@@ -171,7 +171,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 		//go through header
 		if(writer.beforeHeader(grid)){
 			this._buildRow(arg_obj,writer);
-			writer.afterHeader();	
+			writer.afterHeader();
 		}
 		//go through content
 		arg_obj.isHeader = false;
@@ -198,7 +198,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 	_getExportWriter: function(/* string */ fileType, /* object? */ writerArgs){
 		// summary:
 		//		Use the given export format type(fileType)
-		//		and writer arguments(writerArgs) to create 
+		//		and writer arguments(writerArgs) to create
 		//		a ExportWriter and return it.
 		// tags:
 		//		private

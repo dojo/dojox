@@ -574,7 +574,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		Resize the chart to the dimensions of width and height.
 			//	description:
 			//		Resize the chart and its surface to the width and height dimensions.
-			//		If no width/height or box is provided, resize the surface to the marginBox of the chart. 
+			//		If no width/height or box is provided, resize the surface to the marginBox of the chart.
 			//	width: Number
 			//		The new width of the chart.
 			//	height: Number

@@ -5,8 +5,8 @@
 	emoticonWink: "göz kırpma",
 	emoticonGrin: "sırıtma",
 	emoticonCool: "havalı",
-	emoticonAngry: "kızgın",  
-	emoticonHalf: "kafası karışık ifade", 
+	emoticonAngry: "kızgın",
+	emoticonHalf: "kafası karışık ifade",
 	emoticonEyebrow: "kaşı kalkık ifade",
 	emoticonFrown: "kaşı çatık ifade",
 	emoticonShy: "utangaç",
@@ -15,7 +15,7 @@
 	emoticonTongue: "dil çıkaran ifade",
 	emoticonIdea: "aklına bir fikir gelmiş",
 	emoticonYes: "evet",
-	emoticonNo: "hayır",	
+	emoticonNo: "hayır",
 	emoticonAngel: "melek",
 	emoticonCrying: "ağlayan ifade"
 })

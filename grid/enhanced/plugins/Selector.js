@@ -59,7 +59,7 @@ var DISABLED = 0, SINGLE = 1, MULTI = 2,
 				return false;
 			}
 			return halfClose ? ((value >= start && value < end) || (value > end && value <= start))
-							: ((value >= start && value <= end) || (value >= end && value <= start));	
+							: ((value >= start && value <= end) || (value >= end && value <= start));
 		}else{
 			return _inRange("col", value, start, end, halfClose) && _inRange("row", value, start, end, halfClose);
 		}
@@ -69,11 +69,11 @@ var DISABLED = 0, SINGLE = 1, MULTI = 2,
 			if(v1 && v2){
 				switch(type){
 					case "col": case "row":
-						return v1[type] == v2[type] && typeof v1[type] == "number" && 
+						return v1[type] == v2[type] && typeof v1[type] == "number" &&
 								!(_theOther[type] in v1) && !(_theOther[type] in v2);
 					case "cell":
 						return v1.col == v2.col && v1.row == v2.row && typeof v1.col == "number" && typeof v1.row == "number";
-				}	
+				}
 			}
 		}catch(e){}
 		return false;
@@ -111,7 +111,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	//		Supports mouse/keyboard selection, multi-selection, and de-selection.
 	//		Acceptable plugin parameters:
 	//			The whole plugin parameter object is a config object passed to the setupConfig function.
-	//		
+	//
 	//		Acceptable cell parameters defined in layout:
 	//		1. notselectable: boolean
 	//			Whether this column is (and all the cells in it are) selectable.
@@ -192,12 +192,12 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//		An object with the following structure (all properties are optional):
 		//		{
 		//			//Default is "multi", all other values are same as "multi".
-		//			row: false|"disabled"|"single",	
+		//			row: false|"disabled"|"single",
 		//			col: false|"disabled"|"single",
 		//			cell: false|"disabled"|"single"
 		//		}
 		if(!config || !dojo.isObject(config)){
-			return; 
+			return;
 		}
 		var types = ["row", "col", "cell"];
 		for(var type in config){
@@ -218,7 +218,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	},
 	isSelected: function(type, rowIndex, colIndex){
 		// summary:
-		//		Check whether a location (a cell, a column or a row) is selected. 
+		//		Check whether a location (a cell, a column or a row) is selected.
 		// tag:
 		//		public
 		// type: String
@@ -239,7 +239,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	select: function(type, rowIndex, colIndex){
 		// summary:
 		//		Select a location (a cell, a column or a row).
-		// tag: 
+		// tag:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -325,7 +325,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//		"row" or "col" or "cell"
 		// includeExceptions: Boolean
 		//		Only meaningful for rows/columns. If true, all selected rows/cols, even they are partly selected, are all returned.
-		// return: __SelectItem[] 
+		// return: __SelectItem[]
 		switch(type){
 			case "cell":
 				return dojo.map(this._selected[type], function(item){ return item; });
@@ -380,10 +380,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//		public
 		// return: Object
 		//		{start: __SelectItem, end: __SelectItem}
-		//		return null if nothing is selected. 
+		//		return null if nothing is selected.
 		return this._lastAnchorPoint[type] ? {
 			"start": this._lastAnchorPoint[type],
-			"end": this._lastEndPoint[type] 
+			"end": this._lastEndPoint[type]
 		} : null;
 	},
 	
@@ -421,14 +421,14 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			_this.selectRange("row", from, to, true);
 			if(g.selection.preserver){
 				g.selection.preserver._updateMapping(true, true, false, from, to);
-			}			
+			}
 			g.selection.onChanged();
 		};
 		g.selection.deselectRange = function(from, to){
 			_this.selectRange("row", from, to, false);
 			if(g.selection.preserver){
 				g.selection.preserver._updateMapping(true, false, false, from, to);
-			}			
+			}
 			g.selection.onChanged();
 		};
 		g.selection.deselectAll = function(){
@@ -438,7 +438,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			g._selectingRange = false;
 			if(g.selection.preserver){
 				g.selection.preserver._updateMapping(true, false, true);
-			}			
+			}
 			g.selection.onChanged();
 		};
 		
@@ -600,7 +600,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		if(this.grid._noInternalMapping){
 			return;
 		}
-		var pointSet = [this._lastAnchorPoint.row, this._lastEndPoint.row, 
+		var pointSet = [this._lastAnchorPoint.row, this._lastEndPoint.row,
 			this._lastSelectedAnchorPoint.row, this._lastSelectedEndPoint.row];
 		pointSet = pointSet.concat(this._selected.row);
 		var found = false;
@@ -625,7 +625,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			});
 		}
 		found = false;
-		pointSet = [this._lastAnchorPoint.cell, this._lastEndPoint.cell, 
+		pointSet = [this._lastAnchorPoint.cell, this._lastEndPoint.cell,
 			this._lastSelectedAnchorPoint.cell, this._lastSelectedEndPoint.cell];
 		pointSet = pointSet.concat(this._selected.cell);
 		dojo.forEach(pointSet, function(item){
@@ -664,7 +664,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				delete item.converted;
 			}
 		},
-		pointSet = [this._lastAnchorPoint[type], this._lastEndPoint[type], 
+		pointSet = [this._lastAnchorPoint[type], this._lastEndPoint[type],
 			this._lastSelectedAnchorPoint[type], this._lastSelectedEndPoint[type]];
 		
 		if(type === "cell"){
@@ -720,7 +720,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	_onExternalChange: function(type, target){
 		var start = type == "cell" ? target.min : target[0],
 			end = type == "cell" ? target.max : target[target.length - 1];
-		this.selectRange(type, start, end);	
+		this.selectRange(type, start, end);
 	},
 	_refresh: function(type, toHighlight){
 		if(!this._keyboardSelect[type]){
@@ -769,7 +769,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 						case dk.SPACE:
 							//Keyboard single point selection is SPACE.
 							_this._startSelect(type, getTarget(), evt.ctrlKey, evt.shiftKey);
-							_this._endSelect(type);	
+							_this._endSelect(type);
 							break;
 						case dk.SHIFT:
 							//Keyboard swipe selection starts with SHIFT.
@@ -806,7 +806,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 								_this._lastFocusedRowBarIdx = evt.rowIndex;
 							}else if(!_this._lastFocusedRowBarIdx){
 								_this._lastFocusedRowBarIdx = 0;
-							}	
+							}
 						}
 						rowBarNode = view.getCellNode(_this._lastFocusedRowBarIdx, 0);
 						if(rowBarNode){
@@ -839,7 +839,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 							dojo.toggleClass(rowBarNode, f.focusClass, false);
 							//If the row is not fetched, fetch it.
 							var sc = g.scroller;
-							var lastPageRow = sc.getLastPageRow(sc.page); 
+							var lastPageRow = sc.getLastPageRow(sc.page);
 							var rc = g.rowCount - 1, row = Math.min(rc, next);
 							if(next > lastPageRow){
 								g.setScrollTop(g.scrollTop + sc.findScrollTop(row) - sc.findScrollTop(_this._lastFocusedRowBarIdx));
@@ -902,7 +902,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		f.placeArea("rowselect","below","rowHeader");
 	},
 	_clearSelection: function(type, reservedItem){
-		// summary: 
+		// summary:
 		//		Clear selection for given type and fire events, but retain the highlight for *reservedItem*,
 		//		thus avoid "flashing".
 		// tag:
@@ -1031,7 +1031,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	_calcToHighlight: function(type, target, toHighlight, toSelect){
 		// summary:
 		//		Calculate what status should *target* have.
-		//		If *toSelect* is not provided, this is a no op. 
+		//		If *toSelect* is not provided, this is a no op.
 		// This function is time-critical!!
 		if(toSelect !== undefined){
 			var sltd;
@@ -1168,7 +1168,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 							highlight(start, current, false);
 						}
 					}
-					highlight(start, target, true);	
+					highlight(start, target, true);
 			}
 			this._currentPoint[type] = target;
 			this._focusPoint(type, this._currentPoint);
@@ -1229,7 +1229,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				toRemove.push(item);
 			}
 		});
-		this._add(type, toAdd);	
+		this._add(type, toAdd);
 		this._remove(type, toRemove);
 		
 		// have to keep record in original grid selection
@@ -1246,7 +1246,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		//		Go through items from *start* point to *end* point.
 		// This function is time critical!!
 		if(!this._isValid(type, start, true) || !this._isValid(type, end, true)){
-			return;	
+			return;
 		}
 		switch(type){
 			case "col": case "row":
@@ -1308,7 +1308,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				if(pos >= 0){
 					v1.except.splice(pos, 1);
 				}
-			});	
+			});
 		});
 	},
 	_addException: function(type, items){
@@ -1340,7 +1340,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			var rowMakedup = this._makeupForExceptions("row", items);
 			//Step over hidden columns.
 			items = dojo.filter(items, function(item){
-				return dojo.indexOf(colMakedup, item) < 0 && dojo.indexOf(rowMakedup, item) < 0 && 
+				return dojo.indexOf(colMakedup, item) < 0 && dojo.indexOf(rowMakedup, item) < 0 &&
 					!cells[item.col].hidden && !cells[item.col].notselectable;
 			});
 		}else{
@@ -1431,7 +1431,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 				case "row":
 					return index >= 0 && index < g.rowCount && dojo.isArray(item.except);
 				case "cell":
-					return item.col >= 0 && item.col < g.layout.cells.length && 
+					return item.col >= 0 && item.col < g.layout.cells.length &&
 							item.row >= 0 && item.row < g.rowCount &&
 							(allowNotSelectable || !g.layout.cells[item.col].notselectable);
 			}

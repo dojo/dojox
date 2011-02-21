@@ -41,10 +41,10 @@ dojo.require("dijit.Editor");
 				if(this.widget.onLoadDeferred){
 					var self = this;
 					this.widget.onLoadDeferred.addCallback(function(){
-						self.widget.set("value",inValue===null?"":inValue); 
+						self.widget.set("value",inValue===null?"":inValue);
 					});
 				}else{
-					this.widget.set("value", inValue); 
+					this.widget.set("value", inValue);
 				}
 			}else{
 				this.inherited(arguments);
@@ -81,7 +81,7 @@ dojo.require("dijit.Editor");
 			}
 			this.sizeWidget.apply(this, arguments);
 			this.grid.views.renormalizeRow(inRowIndex);
-			this.grid.scroller.rowHeightChanged(inRowIndex, true/*fix #11101*/);			 
+			this.grid.scroller.rowHeightChanged(inRowIndex, true/*fix #11101*/);
 			this.focus();
 			return undefined;
 		},

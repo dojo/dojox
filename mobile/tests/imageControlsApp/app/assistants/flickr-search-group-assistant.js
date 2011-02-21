@@ -42,7 +42,7 @@ dojo.declare("FlickrSearchGroupAssistant", dojox.mobile.app.SceneAssistant, {
 			console.log("select", arguments);
 			
 			_this.controller.stageController.pushScene("flickr-image-view",
-				dojo.mixin({type: "group"}, item));	
+				dojo.mixin({type: "group"}, item));
 		});
 	},
   
@@ -95,7 +95,7 @@ dojo.declare("FlickrSearchGroupAssistant", dojox.mobile.app.SceneAssistant, {
 		
 		var deferred = dojo.io.script.get({
 			url: url,
-			content: { 
+			content: {
 				api_key: this.apiKey,
 				format: "json",
 				text: searchText,

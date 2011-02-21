@@ -148,7 +148,7 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 		//		The event.
 		// tags:
 		//		private
-		var target = evt.type == "click" ? evt.currentTarget : this._currentFocus,	
+		var target = evt.type == "click" ? evt.currentTarget : this._currentFocus,
 			value = this._getDye(target).getValue();
 
 		// First focus the clicked cell, and then send onChange() notification.
@@ -158,8 +158,8 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 		// Use setTimeout because IE doesn't like changing focus inside of an event handler.
 		this._setCurrent(target);
 		setTimeout(dojo.hitch(this, function(){
-			dijit.focus(target);		
-			this._setValueAttr(value, true);		
+			dijit.focus(target);
+			this._setValueAttr(value, true);
 		}));
 
 		// workaround bug where hover class is not removed on popup because the popup is

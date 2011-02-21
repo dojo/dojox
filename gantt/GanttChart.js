@@ -474,8 +474,8 @@ dojo.require("dojo.date.locale");
 			dojo.forEach(this.project, function(proj){
 				var project = {
 					id: proj.id,
-					name: proj.name, 
-					startdate: proj.startDate.getFullYear() + '-' + (proj.startDate.getMonth() + 1) + '-' + proj.startDate.getDate(), 
+					name: proj.name,
+					startdate: proj.startDate.getFullYear() + '-' + (proj.startDate.getMonth() + 1) + '-' + proj.startDate.getDate(),
 					tasks: []
 				};
 				jsonObj.items.push(project);
@@ -517,7 +517,7 @@ dojo.require("dojo.date.locale");
 			_this.dataFilePath = (fileName && dojo.trim(fileName).length > 0) ? fileName : this.dataFilePath;
 			try {
 				var td = dojo.xhrPost({
-					url: _this.saveProgramPath, 
+					url: _this.saveProgramPath,
 					content: {filename: _this.dataFilePath, data: dojo.toJson(_this.getJSONData())},
 					handle: function(res, ioArgs){
 						if((dojo._isDocumentOk(ioArgs.xhr))||
@@ -526,7 +526,7 @@ dojo.require("dojo.date.locale");
 							alert("Successfully! Saved data to " + _this.dataFilePath);
 						}else{
 							alert("Failed! Saved error");
-						}								
+						}
 					}
 				});
 			} catch (e){
@@ -730,7 +730,7 @@ dojo.require("dojo.date.locale");
 			}
 			this.addYearInPanelTime(newYearRow, ycount, newYear);
 			dojo.style(newYearRow, "display", "none");
-			//month	
+			//month
 			var newMonthRow = tblTime.insertRow(tblTime.rows.length), newMonth = oldMonth = new Date(this.startDate).getMonth(), mcount = 0, lastYear = 1970;
 			for(var i = 0; i < this.countDays; i++, mcount++){
 				var date = new Date(this.startDate);
@@ -772,7 +772,7 @@ dojo.require("dojo.date.locale");
 		},
 		adjustPanelTime: function(width){
 			var maxEndPos = dojo.map(this.arrProjects, function(project){
-				return (parseInt(project.projectItem[0].style.left) + parseInt(project.projectItem[0].firstChild.style.width) 
+				return (parseInt(project.projectItem[0].style.left) + parseInt(project.projectItem[0].firstChild.style.width)
 					+ project.descrProject.offsetWidth + this.panelTimeExpandDelta);
 			}, this).sort(function(a,b){return b-a})[0];
 			if(this.maxTaskEndPos != maxEndPos){
@@ -796,7 +796,7 @@ dojo.require("dojo.date.locale");
 					}
 				}
 				this.addYearInPanelTime(prows[0], ycount, newYear);
-				//month	
+				//month
 				var newMonth = oldMonth = new Date(this.startDate).getMonth(), mcount = 0, lastYear = 1970;
 				for(var i = 0; i < countDays; i++, mcount++){
 					var date = new Date(this.startDate);
@@ -810,7 +810,7 @@ dojo.require("dojo.date.locale");
 					}
 				}
 				this.addMonthInPanelTime(prows[1], mcount, newMonth, lastYear);
-				//week	
+				//week
 				var newWeek = oldWeek = dojo.date.locale._getWeekOfYear(new Date(this.startDate)), mcount = 0;
 				for(var i = 0; i < countDays; i++, mcount++){
 					var date = new Date(this.startDate);
@@ -1200,7 +1200,7 @@ dojo.require("dojo.date.locale");
 					}
 				})
 			);
-			//TODO: other event bindings 
+			//TODO: other event bindings
 		},
 		getStartDate: function(){
 			dojo.forEach(this.project, function(proj){

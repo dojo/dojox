@@ -5,17 +5,17 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	//		This plugin provides NormalizeStyle cabability to the editor.  It is
 	//		a headless plugin that tries to normalize how content is styled when
 	//		it comes out of th editor ('b' or css).   It also auto-converts
-	//		incoming content to the proper one expected by the browser as well so 
+	//		incoming content to the proper one expected by the browser as well so
 	//		that the native styling buttons work.
 
 	// mode [public] String
-	//		A String variable indicating if it should use semantic tags 'b', 'i', etc, or 
+	//		A String variable indicating if it should use semantic tags 'b', 'i', etc, or
 	//		CSS styling.  The default is semantic.
 	mode: "semantic",
 
 	// condenseSpans [public] Boolean
-	//		A boolean variable indicating if it should try to condense 
-	//		'span''span''span' styles  when in css mode 
+	//		A boolean variable indicating if it should try to condense
+	//		'span''span''span' styles  when in css mode
 	//		The default is true, it will try to combine where it can.
 	condenseSpans: true,
 
@@ -63,7 +63,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 
 	_convertToSemantic: function(node){
 		// summary:
-		//		A function to convert the HTML structure of 'node' into 
+		//		A function to convert the HTML structure of 'node' into
 		//		semantic tags where possible.
 		// node: DOMNode
 		//		The node to process.
@@ -131,7 +131,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 										case "underline":
 											sTag = dojo.withGlobal(w, "create", dojo, ["u", {}] );
 											break;
-										case "line-through": 
+										case "line-through":
 											sTag = dojo.withGlobal(w, "create", dojo, ["strike", {}] );
 											break;
 									}
@@ -157,7 +157,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 									"-webkit-xxx-large": 7
 								};
 
-								// Convert point or px size to size 
+								// Convert point or px size to size
 								// to something roughly mappable.
 								if(s.indexOf("pt") > 0){
 									s = s.substring(0,s.indexOf("pt"));
@@ -207,7 +207,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 							sTag = null;
 							if(bc && tag !== "font" && self._isInline(tag)){
 								// IE doesn't like non-font background color crud.
-								// Also, don't move it in if the background color is set on a block style node, 
+								// Also, don't move it in if the background color is set on a block style node,
 								// as it won't color properly once put on inline font.
 								bc = new dojo.Color(bc).toHex();
 								sTag = dojo.withGlobal(w, "create", dojo, ["font", {style: {backgroundColor: bc}}] );
@@ -238,7 +238,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	},
 	
 	_normalizeTags: function(node){
-		// summary: 
+		// summary:
 		//		A function to handle normalizing certain tag types contained under 'node'
 		// node:
 		//		The node to search from.
@@ -265,7 +265,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 								break;
 					}
 					if(tTag){
-						var nNode = dojo.withGlobal(w, "create", dojo, [tTag, null, n, "before"] );	 
+						var nNode = dojo.withGlobal(w, "create", dojo, [tTag, null, n, "before"] );
 						while(n.firstChild){
 							nNode.appendChild(n.firstChild);
 						}
@@ -279,7 +279,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 
 	_convertToCss: function(node){
 		// summary:
-		//		A function to convert the HTML structure of 'node' into 
+		//		A function to convert the HTML structure of 'node' into
 		//		css span styles around text instead of semantic tags.
 		//		Note:  It does not do compression of spans together.
 		// node: DOMNode
@@ -377,7 +377,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 		var compressSpans = function(node){
 			// Okay, span with no class or id and it has styles.
 			// So, merge the styles, then collapse.  Merge requires determining
-			// all the common/different styles and anything that overlaps the style, 
+			// all the common/different styles and anything that overlaps the style,
 			// but a different value can't be merged.
 			var genStyleMap = function(styleText){
 				var m;
@@ -434,7 +434,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 											combinedMap[i] = s1[i] + " " + s2[i];
 											delete s2[i];
 										}else{
-											combinedMap = null;	
+											combinedMap = null;
 										}
 										break;
 									}else{
@@ -475,7 +475,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	_isInline: function(tag){
 		// summary:
 		//		Function to determine if the current tag is an inline
-		//		element that does formatting, as we don't want to 
+		//		element that does formatting, as we don't want to
 		//		try to combine inlines with divs on styles.
 		// tag:
 		//		The tag to examine

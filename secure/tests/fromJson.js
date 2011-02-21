@@ -16,7 +16,7 @@ var smallDataSet = {
 		"Aliquam vitae enim. Duis scelerisque metus auctor est venenatis imperdiet." +
 		"Fusce dignissim porta augue. Nulla vestibulum. Integer lorem nunc," +
 		"ullamcorper a, commodo ac, malesuada sed, dolor. Aenean id mi in massa" +
-		"bibendum suscipit. Integer eros. Nullam suscipit mauris. In pellentesque." + 
+		"bibendum suscipit. Integer eros. Nullam suscipit mauris. In pellentesque." +
 		"Mauris ipsum est, pharetra semper, pharetra in, viverra quis, tellus. Etiam" +
 		"purus. Quisque egestas, tortor ac cursus lacinia, felis leo adipiscing" +
 		"nisi, et rhoncus elit dolor eget eros. Fusce ut quam. Suspendisse eleifend" +
@@ -62,13 +62,13 @@ for(i = 0; i < 100; i++){
 		"Aliquam vitae enim. Duis scelerisque metus auctor est venenatis imperdiet." +
 		"Fusce dignissim porta augue. Nulla vestibulum. Integer lorem nunc," +
 		"ullamcorper a, commodo ac, malesuada sed, dolor. Aenean id mi in massa" +
-		"bibendum suscipit. Integer eros. Nullam suscipit mauris. In pellentesque." 
+		"bibendum suscipit. Integer eros. Nullam suscipit mauris. In pellentesque."
 	});
 }
 var largeJson = dojo.toJson(largeDataSet);
 
 
-doh.register("dojox.secure.tests.fromJson", 
+doh.register("dojox.secure.tests.fromJson",
 	[
 		function small(){
 			for(var i = 0;i < 1000;i++){

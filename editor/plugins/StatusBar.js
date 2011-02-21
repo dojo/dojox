@@ -7,7 +7,7 @@ dojo.declare("dojox.editor.plugins._StatusBar", [dijit._Widget, dijit._Templated
 	//		bordering I wanted.  Would prefer not to use table, though.
 	templateString: '<div class="dojoxEditorStatusBar">' +
 		'<table><tbody><tr>'+
-		'<td class="dojoxEditorStatusBarText" tabindex="-1" aria-role="presentation" aria-live="aggressive"><span dojoAttachPoint="barContent">&nbsp;</span></td>' + 
+		'<td class="dojoxEditorStatusBarText" tabindex="-1" aria-role="presentation" aria-live="aggressive"><span dojoAttachPoint="barContent">&nbsp;</span></td>' +
 		'<td><span dojoAttachPoint="handle"></span></td>' +
 		'</tr></tbody><table>'+
 	'</div>',

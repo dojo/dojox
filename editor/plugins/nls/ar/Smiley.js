@@ -5,8 +5,8 @@
 	emoticonWink: "غمزة",
 	emoticonGrin: "تكشير",
 	emoticonCool: "حسنا",
-	emoticonAngry: "غضبان",  
-	emoticonHalf: "نصف", 
+	emoticonAngry: "غضبان",
+	emoticonHalf: "نصف",
 	emoticonEyebrow: "حاجب",
 	emoticonFrown: "عبوس",
 	emoticonShy: "خجول",
@@ -15,7 +15,7 @@
 	emoticonTongue: "لسان",
 	emoticonIdea: "فكرة",
 	emoticonYes: "نعم",
-	emoticonNo: "لا",	
+	emoticonNo: "لا",
 	emoticonAngel: "ملاك",
 	emoticonCrying: "يبكي"
 })

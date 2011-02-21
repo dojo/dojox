@@ -56,9 +56,9 @@ dojo.declare("dojox.widget.Wizard", [dijit.layout.StackContainer, dijit._Templat
 	},
 
 	startup: function(){
-		if(this._started){ 
-			//console.log('started'); 
-			return; 
+		if(this._started){
+			//console.log('started');
+			return;
 		}
 		this.inherited(arguments);
 		
@@ -107,7 +107,7 @@ dojo.declare("dojox.widget.Wizard", [dijit.layout.StackContainer, dijit._Templat
 	},
 
 	_setButtonClass: function(button){
-		button.domNode.style.display = (this.hideDisabled && button.disabled) ? "none" : "";	
+		button.domNode.style.display = (this.hideDisabled && button.disabled) ? "none" : "";
 	},
 
 	_forward: function(){
@@ -135,7 +135,7 @@ dojo.declare("dojox.widget.WizardPane", dijit.layout.ContentPane, {
 	// description:
 	//	An extended ContentPane with additional hooks for passing named
 	//	functions to prevent the pane from going either forward or
-	//	backwards. 
+	//	backwards.
 	//
 	// canGoBack: Boolean
 	//		If true, then can move back to a previous panel (by clicking the "Previous" button)

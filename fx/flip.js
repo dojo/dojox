@@ -13,7 +13,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 
 	dojox.fx.flip = function(/*Object*/ args){
 		// summary: Animate a node flipping following a specific direction
-		//	
+		//
 		// description:
 		//		Returns an animation that will flip the
 		//		node around a central axis:
@@ -23,7 +23,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		//		This effect is obtained using a border distorsion applied to a helper node.
 		//
 		//		The user can specify three background colors for the helper node:
-		//		darkColor: the darkest color reached during the animation 
+		//		darkColor: the darkest color reached during the animation
 		//		lightColor: the brightest color
 		//		endColor: the final backgroundColor for the node
         //
@@ -46,7 +46,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
         //          node translation, perpendicular to the rotation axis
 		//
 		//	example:
-		//	|	var anim = dojox.fx.flip({ 
+		//	|	var anim = dojox.fx.flip({
 		//	|		node: dojo.byId("nodeId"),
 		//	|		dir: "top",
 		//	|		darkColor: "#555555",
@@ -58,19 +58,19 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		//	|	  });
 
 		var helperNode = dojo.create("div"),
-			node = args.node = dojo.byId(args.node), 
+			node = args.node = dojo.byId(args.node),
 			s = node.style,
-			dims = null, 
-			hs = null, 
+			dims = null,
+			hs = null,
 			pn = null,
-			lightColor = args.lightColor || "#dddddd", 
+			lightColor = args.lightColor || "#dddddd",
 			darkColor = args.darkColor || "#555555",
-			bgColor = dojo.style(node, "backgroundColor"), 
+			bgColor = dojo.style(node, "backgroundColor"),
 			endColor = args.endColor || bgColor,
-			staticProps = {}, 
+			staticProps = {},
 			anims = [],
 			duration = args.duration ? args.duration / 2 : 250,
-			dir = args.dir || "left", 
+			dir = args.dir || "left",
 			pConst = .9,
 			transparentColor = "transparent",
 			whichAnim = args.whichAnim,
@@ -115,7 +115,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 			fontSize: "0",
 			visibility: "hidden"
 		};
-		var props = [ {}, 
+		var props = [ {},
 			{
 				top: dims["top"],
 				left: dims["left"]
@@ -125,7 +125,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 			left: [leftConst, rightConst, topConst, bottomConst, widthConst, heightConst, "end" + heightConst + "Min", leftConst, "end" + heightConst + "Max"],
 			right: [rightConst, leftConst, topConst, bottomConst, widthConst, heightConst, "end" + heightConst + "Min", leftConst, "end" + heightConst + "Max"],
 			top: [topConst, bottomConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst + "Min", topConst, "end" + widthConst + "Max"],
-			bottom: [bottomConst, topConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst + "Min", topConst, "end" + widthConst + "Max"] 
+			bottom: [bottomConst, topConst, leftConst, rightConst, heightConst, widthConst, "end" + widthConst + "Min", topConst, "end" + widthConst + "Max"]
 		};
 		// property names
 		pn = dynProperties[dir];
@@ -139,15 +139,15 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		}
 		var p0 = props[0];
 		for(var i = 4; i < 6; i++){
-			if(axis == "center" || axis == "cube"){ // find a better name for "cube" 
-				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst; 
-				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst; 
+			if(axis == "center" || axis == "cube"){ // find a better name for "cube"
+				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst;
+				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst;
 			}else if(axis == "shortside"){
 				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()];
-				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst; 
+				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()] / pConst;
 			}else if(axis == "longside"){
 				dims["end" + pn[i] + "Min"] = dims[pn[i].toLowerCase()] * pConst;
-				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()];  
+				dims["end" + pn[i] + "Max"] = dims[pn[i].toLowerCase()];
 			}
 		}
 		if(axis == "center"){
@@ -161,9 +161,9 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		staticProps[borderConst + pn[1] + widthConst] = dims[pn[4].toLowerCase()] + "px";
 		staticProps[borderConst + pn[1] + "Color"] = bgColor;
 
-		p0[borderConst + pn[1] + widthConst] = 0; 
-		p0[borderConst + pn[1] + "Color"] = darkColor; 
-		p0[borderConst + pn[2] + widthConst] = p0[borderConst + pn[3] + widthConst] = axis != "cube" 
+		p0[borderConst + pn[1] + widthConst] = 0;
+		p0[borderConst + pn[1] + "Color"] = darkColor;
+		p0[borderConst + pn[2] + widthConst] = p0[borderConst + pn[3] + widthConst] = axis != "cube"
 			? (dims["end" + pn[5] +  "Max"] - dims["end" + pn[5] + "Min"]) / 2
 			: dims[pn[6]] / 2
 		;
@@ -192,19 +192,19 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 			for(i in p0){
 				p0[i] = { start: p0[i] };
 			}
-			p0[borderConst + pn[1] + "Color"] = { start: darkColor, end: endColor }; 
+			p0[borderConst + pn[1] + "Color"] = { start: darkColor, end: endColor };
 			p1 = p0;
 		}
 		if(!whichAnim || whichAnim == "first"){
 			anims.push(dojo.animateProperty({
-				node: helperNode, 
+				node: helperNode,
 				duration: duration,
 				properties: p0
 			}));
 		}
 		if(!whichAnim || whichAnim == "last"){
 			anims.push(dojo.animateProperty({
-				node: helperNode, 
+				node: helperNode,
 				duration: duration,
 				properties: p1,
 				onEnd: finalize
@@ -214,7 +214,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		// hide the original node
 		dojo.connect(anims[0], "play", function(){
 			helperNode.style.visibility = "visible";
-			s.visibility = "hidden"; 
+			s.visibility = "hidden";
 		});
 
 		return dojo.fx.chain(anims); // dojo.Animation
@@ -225,8 +225,8 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		// summary: An extension to `dojox.fx.flip` providing a more 3d-like rotation
 		//
 		// description:
-		//		An extension to `dojox.fx.flip` providing a more 3d-like rotation. 
-		//		Behaves the same as `dojox.fx.flip`, using the same attributes and 
+		//		An extension to `dojox.fx.flip` providing a more 3d-like rotation.
+		//		Behaves the same as `dojox.fx.flip`, using the same attributes and
 		//		other standard `dojo.Animation` properties.
 		//
 		//	example:
@@ -301,7 +301,7 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 		var d = dims[args.dir || "left"],
 			p = d.args
 		;
-		args.duration = args.duration ? args.duration * 2 : 500; 
+		args.duration = args.duration ? args.duration * 2 : 500;
 		args.depth = .8;
 		args.axis = "cube";
 		for(var i = p.length - 1; i >= 0; i--){
@@ -327,9 +327,9 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 			y = coords.y,
 			w = coords.w,
 			h = coords.h,
-			bgColor = dojo.style(n, "backgroundColor"), 
+			bgColor = dojo.style(n, "backgroundColor"),
 			lightColor = args.lightColor || "#dddddd",
-			darkColor = args.darkColor, 
+			darkColor = args.darkColor,
 			helperNode = dojo.create("div"),
 			anims = [],
 			hn = [],
@@ -443,14 +443,14 @@ define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
 				height: nh + "px",
 				top: y + "px",
 				left: x + "px",
-				clip: "rect(" + i * h + "px," + nw + "px," + nh + "px,0)"	
+				clip: "rect(" + i * h + "px," + nw + "px," + nh + "px,0)"
 			});
 	     	dojo.body().appendChild(cn);
 			anims[i] = [];
 			for(var j = 0; j < cols; j++){
 				var hn = dojo.clone(helperNode),
 					l = r ? j : cols - (j + 1)
-				; 
+				;
 				var adjustClip = function(xn, yCounter, xCounter){
 					return function(){
 						if(!(yCounter % 2)){

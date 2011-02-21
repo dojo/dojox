@@ -152,7 +152,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		// summary:
 		//		Function to handle shifting to the next page in the list.
 		if(this._maxSize > ((this._currentPage + 1) * this.pageSize)){
-			//Current page is indexed at 0 and gotoPage expects 1-X.  So to go 
+			//Current page is indexed at 0 and gotoPage expects 1-X.  So to go
 			//up  one, pass current page + 2!
 			this.gotoPage(this._currentPage + 2);
 		}
@@ -162,7 +162,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		// summary:
 		//		Function to handle shifting to the previous page in the list.
 		if(this._currentPage > 0){
-			//Current page is indexed at 0 and gotoPage expects 1-X.  So to go 
+			//Current page is indexed at 0 and gotoPage expects 1-X.  So to go
 			//back one, pass current page!
 			this.gotoPage(this._currentPage);
 		}
@@ -239,7 +239,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	
 	scrollToRow: function(inRowIndex){
 		// summary:
-		//		Override the grid.scrollToRow(), could jump to the right page 
+		//		Override the grid.scrollToRow(), could jump to the right page
 		//		and scroll to the specific row
 		// inRowIndex: integer
 		//		The row index
@@ -366,7 +366,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			delete this.gotoPageTd;
 			delete this._gotoPageDialog;
 		}
-		this.grid.resize = this._originalResize; 
+		this.grid.resize = this._originalResize;
 		this.pageSizes = null;
 	},
 	
@@ -448,7 +448,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	_resetGridHeight: function(changeSize, resultSize){
 		// summary:
 		//		Function of resize grid height to place this pagination bar.
-		//		Since the grid would be able to add other element in its domNode, we have 
+		//		Since the grid would be able to add other element in its domNode, we have
 		//		change the grid view size to place the pagination bar.
 		//		This function will resize the grid viewsNode height, scorllboxNode height
 		var g = this.grid;
@@ -680,7 +680,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	
 	_resetPageStepNodes: function(){
 		// summary:
-		//		The page step nodes might be changed when fetch data, we need to 
+		//		The page step nodes might be changed when fetch data, we need to
 		//		update/reset them
 		var startPage = this._getStartPage(),
 			stepSize = this._getStepPageSize(),
@@ -701,7 +701,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	
 	_updatePageStepNodeClass: function(){
 		// summary:
-		//		Update the style of the page step nodes 
+		//		Update the style of the page step nodes
 		var value = null,
 			curPage = this._getCurrentPageNo(),
 			pageCount = this._getPageCount(),

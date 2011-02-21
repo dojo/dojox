@@ -15,7 +15,7 @@ dojox.html.ellipsis = {
 (function(d){
     try{
 	if(d.isMoz){ //TODO: feature detect text-overflow in computed style?
-		// The delay (in ms) to wait so that we don't keep querying when many 
+		// The delay (in ms) to wait so that we don't keep querying when many
 		// changes happen at once - set config "dojoxFFEllipsisDelay" if you
 		// want a different value
 		var delay = 1;

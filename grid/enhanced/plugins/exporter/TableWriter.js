@@ -11,9 +11,9 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 	//		Export grid to HTML table format. Primarily used by Printer plugin.
 	constructor: function(/* object? */writerArgs){
 		// summary:
-		//		The generated table only defines the col/rowspan, height and width of 
-		//		all the cells in the style attribute, no other attributes 
-		//		(like border, cellspacing, etc.) are used. 
+		//		The generated table only defines the col/rowspan, height and width of
+		//		all the cells in the style attribute, no other attributes
+		//		(like border, cellspacing, etc.) are used.
 		//		Users can define these attributes in the writerArgs object, like:
 		//		{table:"border='border'",thead:"cellspacing='3'"}
 		this._viewTables = [];
@@ -58,7 +58,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		//		Overrided from _ExportWriter
 		var viewIdx = arg_obj.viewIdx,
 			table = this._viewTables[viewIdx],
-			tagName, height, 
+			tagName, height,
 			width = dojo.marginBox(arg_obj.view.contentNode).w;
 		if(!table){
 			var left = 0;

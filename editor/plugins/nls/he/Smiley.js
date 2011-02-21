@@ -5,8 +5,8 @@
 	emoticonWink: "קריצה",
 	emoticonGrin: "גיחוך",
 	emoticonCool: "מגניב",
-	emoticonAngry: "כועס ",  
-	emoticonHalf: "חצי ", 
+	emoticonAngry: "כועס ",
+	emoticonHalf: "חצי ",
 	emoticonEyebrow: "גבה",
 	emoticonFrown: "קימוט מצח",
 	emoticonShy: "ביישן",
@@ -15,7 +15,7 @@
 	emoticonTongue: "לשון ",
 	emoticonIdea: "רעיון",
 	emoticonYes: "כן",
-	emoticonNo: "לא",	
+	emoticonNo: "לא",
 	emoticonAngel: "מלאך ",
 	emoticonCrying: "בוכה"
 })

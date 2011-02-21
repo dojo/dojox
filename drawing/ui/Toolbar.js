@@ -65,12 +65,12 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			var c = dojo.connect(this.toolDrawing, "onSurfaceReady", this, function(){
 				//console.log("TB built")
 				dojo.disconnect(c);
-				this.drawing = dojox.drawing.getRegistered("drawing", dojo.attr(node, "drawingId")); // 
+				this.drawing = dojox.drawing.getRegistered("drawing", dojo.attr(node, "drawingId")); //
 				this.makeButtons();
-				if(!this.strSelected && this.drawing.defaults.clickMode){ 
+				if(!this.strSelected && this.drawing.defaults.clickMode){
 					var c = dojo.connect(this.drawing, "onSurfaceReady", this, function(){
 					dojo.disconnect(c);
-					this.drawing.mouse.setCursor('default'); 
+					this.drawing.mouse.setCursor('default');
 					});
 				}
 			});
@@ -199,7 +199,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			dojo.forEach(plugAr, function(p){
 				var t = dojo.trim(p);
 				//console.log("   plugin:", p);
-				if(plugMap[p].button != false){  
+				if(plugMap[p].button != false){
 					var btn = this.toolDrawing.addUI("button", {data:{x:x, y:y, width:w, height:h, r:r}, toolType:t, icon:sym[t], shadow:s, scope:this, callback:"onPlugClick"});
 					dojox.drawing.register(btn, "button");
 					this.plugins.push(btn);
@@ -213,7 +213,7 @@ dojo.declare("dojox.drawing.ui.Toolbar", [], {
 				
 				var addPlug = {}
 				plugMap[p].button == false ? addPlug = {name:this.drawing.stencilTypeMap[p]} : addPlug = {name:this.drawing.stencilTypeMap[p], options:{button:btn}};
-				this.drawing.addPlugin(addPlug); 
+				this.drawing.addPlugin(addPlug);
 			}, this);
 		}
 		

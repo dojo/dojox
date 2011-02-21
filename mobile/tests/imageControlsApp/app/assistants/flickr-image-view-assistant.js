@@ -44,7 +44,7 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 				viewer.set("rightUrl", _this.urls[_this.index + 1]);
 			}
 			
-			reportDiv.innerHTML = 
+			reportDiv.innerHTML =
 				(_this.index + 1) + " of " + _this.urls.length
 				+ " " + _this.urls[_this.index].title;
 		});
@@ -95,7 +95,7 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 
 		var deferred = dojo.io.script.get({
 			url: url,
-			content: { 
+			content: {
 				api_key: this.apiKey,
 				format: "json"
 			},
@@ -113,14 +113,14 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 					
 //		"http://api.flickr.com/services/rest/?method=flickr.groups.pools.getPhotos"
 //      + "&api_key=" + lib.API_KEY
-//      + "&group_id=" + group.id 
-//      + "&extras=owner_name" 
+//      + "&group_id=" + group.id
+//      + "&extras=owner_name"
 //      + "&per_page=" + (perPage || 10)
 //      + "&format=json&nojsoncallback=1"
 
 		var deferred = dojo.io.script.get({
 			url: url,
-			content: { 
+			content: {
 				api_key: this.apiKey,
 				format: "json",
 				group_id: groupData.nsid,
@@ -143,8 +143,8 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 			var baseUrl;
 			
 			for(var i = 0; i < images.length; i++){
-				baseUrl = "http://farm" 
-							+ images[i].farm 
+				baseUrl = "http://farm"
+							+ images[i].farm
 							+ ".static.flickr.com/"
 							+ images[i].server
 							+ "/"

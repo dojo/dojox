@@ -152,16 +152,16 @@ dojo.declare("dojox.editor.plugins._AutoSaveSettingDialog", [dijit._Widget, diji
 dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 	// summary:
 	//		This plugin provides the auto save capability to the editor. The
-	//		plugin saves the content of the editor in interval. When 
-	//		the save action is performed, the document in the editor frame 
+	//		plugin saves the content of the editor in interval. When
+	//		the save action is performed, the document in the editor frame
 	//		will be posted to the URL provided, or none, if none provided.
 	
 	// url [public]	String
-	//		The URL to POST the content back to.  Used by the save function. 
+	//		The URL to POST the content back to.  Used by the save function.
 	url: "",
 
 	// logErrors [public] boolean
-	//		Boolean flag to indicate that the default action for save and 
+	//		Boolean flag to indicate that the default action for save and
 	//		error handlers is to just log to console.  Default is true.
 	logResults: true,
 	
@@ -320,7 +320,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 
 	onSuccess: function(resp, ioargs){
 		// summary:
-		//		User over-ridable save success function for editor content.  
+		//		User over-ridable save success function for editor content.
 		// resp:
 		//		The response from the server, if any, in text format.
 		// tags:
@@ -343,7 +343,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 
 	onError: function(error, ioargs){
 		// summary:
-		//		User over-ridable save success function for editor content.  
+		//		User over-ridable save success function for editor content.
 		// resp:
 		//		The response from the server, if any, in text format.
 		// tags:
@@ -374,7 +374,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 		if(this._promDialogTimeout){
 			clearTimeout(this._promDialogTimeout);
 			this._promDialogTimeout = null;
-			dijit.popup.close(this._promDialog);	
+			dijit.popup.close(this._promDialog);
 		}
 		
 		this._clearSaveInterval();

@@ -99,7 +99,7 @@ StencilPoints: [
 			// summary:
 			//		Getter for text.
 			//
-			return this._rawText || this._text;	
+			return this._rawText || this._text;
 		},
 		
 		dataToPoints: function(/*Object*/o){
@@ -148,7 +148,7 @@ StencilPoints: [
 			!this.annotation && this.renderHit && this._renderOutline();
 			if(text!=undefined){
 				this._text = text;
-				this._textArray = this._text.split("\n");	
+				this._textArray = this._text.split("\n");
 			}
 			
 			var d = this.pointsToData();
@@ -224,5 +224,5 @@ StencilPoints: [
 	}
 );
 dojox.drawing.register({
-	name:"dojox.drawing.stencil.Text"	
+	name:"dojox.drawing.stencil.Text"
 }, "stencil");

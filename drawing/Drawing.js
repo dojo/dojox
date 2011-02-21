@@ -28,7 +28,7 @@ dojo.provide("dojox.drawing.Drawing");
 		//			Like Drawing, Toolbar is a psudeo Dijit that does not need Dijit. It is
 		//			optional. It can be oriented horizontal or vertical by placing one of
 		//			those params in the class (at least one is required).  Plugins
-		//			can be added in markup. A drawingId is required to point toolbar to 
+		//			can be added in markup. A drawingId is required to point toolbar to
 		//			the drawing.
 		//		- defaults
 		//			Contains the default styles and dimensions for Stencils. An individual
@@ -67,7 +67,7 @@ dojo.provide("dojox.drawing.Drawing");
 		//
 		// example:
 		//		|	<div dojoType="dojox.drawing.Drawing" id="drawing" defaults="myCustom.defaults"
-		//		|		plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:100}}]">   
+		//		|		plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:100}}]">
 		//		|   </div>
 		//
 		//	example:
@@ -198,7 +198,7 @@ dojo.provide("dojox.drawing.Drawing");
 				height:box.h+"px"
 			});
 			if(!this.canvas){
-				this._createCanvas();		
+				this._createCanvas();
 			}else if(box){
 				this.canvas.resize(box.w, box.h);
 			}
@@ -214,7 +214,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//		a new Stencil. Mostly internal, but could be used.
 			//
 			var surface = data.stencilType;
-			var ui = this.mode=="ui" || mode=="ui"; 
+			var ui = this.mode=="ui" || mode=="ui";
 			return dojo.mixin({
 				container: ui && !surface ? this.canvas.overlay.createGroup() : this.canvas.surface.createGroup(),
 				util:this.util,
@@ -232,7 +232,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//		to be parsed
 			this.plugins.push(plugin);
 			if(this.canvas.surfaceReady){
-				this.initPlugins();		
+				this.initPlugins();
 			}
 		},
 		
@@ -298,7 +298,7 @@ dojo.provide("dojox.drawing.Drawing");
 				}
 			}
 			dojo.forEach(this.plugins, function(p){
-				p.onSurfaceReady && p.onSurfaceReady();	
+				p.onSurfaceReady && p.onSurfaceReady();
 			});
 		
 		},
@@ -420,7 +420,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//		to the drawing.
 			dojo.forEach(objects, function(m){
 				this.addStencil(m.type, m);
-			}, this);	
+			}, this);
 		},
 		
 		changeDefaults: function(/*Object*/newStyle,/*boolean*/value){
@@ -475,7 +475,7 @@ dojo.provide("dojox.drawing.Drawing");
 			
 			this.stencils.register(stencil);
 			this.unSetTool();
-			if(!this.defaults.clickMode){ 
+			if(!this.defaults.clickMode){
 				this.setTool(this.currentType);
 			}else{
 				this.defaults.clickable = true;
@@ -486,7 +486,7 @@ dojo.provide("dojox.drawing.Drawing");
 			// summary:
 			//		Event fired from a stencil that has destroyed itself
 			//	 	will also be called when it is removed by "removeStencil"
-			//	 	or stencils.onDelete. 
+			//	 	or stencils.onDelete.
 			//
 			this.stencils.unregister(stencil);
 		},
@@ -548,7 +548,7 @@ dojo.provide("dojox.drawing.Drawing");
 			// summary:
 			//		Destroys current tool
 			if(!this.currentStencil.created){
-				this.currentStencil.destroy();	
+				this.currentStencil.destroy();
 			}
 			
 		}

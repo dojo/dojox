@@ -10,7 +10,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 	//			An array of objects with structure:
 	//			{
 	//				row: function(Integer)|Integer
-	//					If it's a function, it's a predicate to decide which rows are to be merged. 
+	//					If it's a function, it's a predicate to decide which rows are to be merged.
 	//					It takes an integer (the row index), and should return true or false;
 	//				start: Integer
 	//					The column index of the left most cell that shall be merged.
@@ -44,7 +44,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 		// tags:
 		//		public
 		// rowTester: function(Integer)|Integer
-		//		If it's a function, it's a predicate to decide which rows are to be merged. 
+		//		If it's a function, it's a predicate to decide which rows are to be merged.
 		//		It takes an integer (the row index), and should return true or false;
 		// startColumnIndex: Integer
 		//		The column index of the left most cell that shall be merged.
@@ -55,7 +55,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 		//		It must be larger than or equal to the startColumnIndex, and less than or equal to the endColumnIndex.
 		//		If it is omitted, the content of the leading edge (left-most for ltr, right most for rtl) cell will be used.
 		// return: Object | null
-		//		A handler for the merged cells created by a call of this function. 
+		//		A handler for the merged cells created by a call of this function.
 		//		This handler can be used later to unmerge cells using the function unmergeCells
 		//		If the merge is not valid, returns null;
 		var item = this._createRecord({
@@ -95,8 +95,8 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 		//			"start": 2, //the start column index
 		//			"end": 4, //the end column index
 		//			"major": 3, //the major column index
-		//			"handle": someHandle, //The handler that covers this merge cell record. 
-		//		} 
+		//			"handle": someHandle, //The handler that covers this merge cell record.
+		//		}
 		var res = [];
 		for(var i in this._merged){
 			res = res.concat(this._merged[i]);
@@ -216,8 +216,8 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 			item.major = typeof item.major == "number" && !isNaN(item.major) ? item.major : item.start;
 			if(typeof item.row == "number"){
 				var r = item.row;
-				item.row = function(rowIndex){ 
-					return rowIndex === r; 
+				item.row = function(rowIndex){
+					return rowIndex === r;
 				};
 			}else if(typeof item.row == "string"){
 				var id = item.row;
@@ -225,7 +225,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 					try{
 						if(store && storeItem && store.getFeatures()['dojo.data.api.Identity']){
 							return store.getIdentity(storeItem) == id;
-						}	
+						}
 					}catch(e){
 						console.error(e);
 					}
@@ -242,7 +242,7 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 	_isValid: function(item){
 		var cells = this.grid.layout.cells,
 			colCount = cells.length;
-		return (dojo.isObject(item) && ("row" in item) && ("start" in item) && ("end" in item) && 
+		return (dojo.isObject(item) && ("row" in item) && ("start" in item) && ("end" in item) &&
 			item.start >= 0 && item.start < colCount &&
 			item.end > item.start && item.end < colCount &&
 			cells[item.start].view.index == cells[item.end].view.index &&

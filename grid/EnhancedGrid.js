@@ -13,10 +13,10 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	// description:
 	//		EnhancedGrid features are implemented as plugins that could be loaded on demand.
 	//		Explicit dojo.require() is needed to use these feature plugins.
-	//	
+	//
 	// example:
 	//		A quick sample to use EnhancedGrid features:
-	//      
+	//
 	//	   Step 1. Load EnhancedGrid and required features
 	// |   <script type="text/javascript">
 	// |		dojo.require("dojox.grid.EnhancedGrid");
@@ -29,15 +29,15 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//		Step 2. Use EnhancedGrid
 	//		- Via HTML markup
 	// |	<div dojoType="dojox.grid.EnhancedGrid" ...
-	// |		plugins="{nestedSorting: true, dnd: true, indirectSelection: true, 
-	// |		menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",  
+	// |		plugins="{nestedSorting: true, dnd: true, indirectSelection: true,
+	// |		menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",
 	// |		selectedRegionMenu:"selectedRegionMenuId"}}">
 	// |			...
 	// |	</div>
 	//
 	//		- Or via JavaScript
 	// |	<script type="text/javascript">
-	// |		var grid = new dojox.grid.EnhancedGrid({plugins : {nestedSorting: true, dnd: true, indirectSelection: true, 
+	// |		var grid = new dojox.grid.EnhancedGrid({plugins : {nestedSorting: true, dnd: true, indirectSelection: true,
 	// |	               menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",selectedRegionMenu:"selectedRegionMenuId"}},
 	// |			       ... }, dojo.byId('gridDiv'));
 	// |		grid.startup();
@@ -57,7 +57,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	plugins: null,
 
 	//pluginMgr: Object
-	//		Singleton plugin manager	
+	//		Singleton plugin manager
 	pluginMgr: null,
 
 	//keepSelection: Boolean
@@ -65,7 +65,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	keepSelection: false,
 	
 	//_pluginMgrClass: Object
-	//		Default plugin manager class	
+	//		Default plugin manager class
 	_pluginMgrClass: dojox.grid.enhanced._PluginManager,
 
 	postMixInProperties: function(){
@@ -117,7 +117,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	mixin: function(target, source){
 		var props = {};
 		for(var p in source){
-			if(p == '_inherited' || p == 'declaredClass' || p == 'constructor' || 
+			if(p == '_inherited' || p == 'declaredClass' || p == 'constructor' ||
 				source['privates'] && source['privates'][p]){
 				continue;
 			}
@@ -198,7 +198,7 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 
 			var func = view.header.getCellX;
 			view.header.getCellX = function(e){
-				var x = func.call(view.header, e);			
+				var x = func.call(view.header, e);
 				var n = ascendDom(e.target, makeNotTagName("th"));
 				if(n && n !== e.target && dojo.isDescendant(e.target, n)){ x += n.firstChild.offsetLeft; }
 				return x;
@@ -245,7 +245,7 @@ dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
 });
 
 dojox.grid.EnhancedGrid.markupFactory = function(props, node, ctor, cellFunc){
-	return dojox.grid._Grid.markupFactory(props, node, ctor, 
+	return dojox.grid._Grid.markupFactory(props, node, ctor,
 					dojo.partial(dojox.grid.DataGrid.cell_markupFactory, cellFunc));
 };
 

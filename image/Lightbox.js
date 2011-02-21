@@ -2,13 +2,13 @@ dojo.provide("dojox.image.Lightbox");
 dojo.experimental("dojox.image.Lightbox");
 
 dojo.require("dojo.window");
-dojo.require("dijit.Dialog"); 
+dojo.require("dijit.Dialog");
 dojo.require("dojox.fx._base");
 
 dojo.declare("dojox.image.Lightbox",
 	dijit._Widget, {
 	// summary:
-	//		A dojo-based Lightbox implementation. 
+	//		A dojo-based Lightbox implementation.
 	//
 	// description:
 	//	An Elegant, keyboard accessible, markup and store capable Lightbox widget to show images
@@ -19,15 +19,15 @@ dojo.declare("dojox.image.Lightbox",
 	//		ESC - close
 	//		Down Arrow / Rt Arrow / N - Next Image
 	//		Up Arrow / Lf Arrow / P - Previous Image
-	// 
+	//
 	// example:
 	// |	<a href="image1.jpg" dojoType="dojox.image.Lightbox">show lightbox</a>
 	//
-	// example: 
+	// example:
 	// |	<a href="image2.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
 	// |	<a href="image3.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
 	//
-	// example:	 
+	// example:
 	// |	not implemented fully yet, though works with basic datastore access. need to manually call
 	// |	widget._attachedDialog.addImage(item,"fromStore") for each item in a store result set.
 	// |	<div dojoType="dojox.image.Lightbox" group="fromStore" store="storeName"></div>
@@ -36,7 +36,7 @@ dojo.declare("dojox.image.Lightbox",
 	//		Grouping images in a page with similar tags will provide a 'slideshow' like grouping of images
 	group: "",
 
-	// title: String 
+	// title: String
 	//		A string of text to be shown in the Lightbox beneath the image (empty if using a store)
 	title: "",
 
@@ -45,8 +45,8 @@ dojo.declare("dojox.image.Lightbox",
 	href: "",
 
 	// duration: Integer
-	//		Generic time in MS to adjust the feel of widget. could possibly add various 
-	//		durations for the various actions (dialog fadein, sizeing, img fadein ...) 
+	//		Generic time in MS to adjust the feel of widget. could possibly add various
+	//		durations for the various actions (dialog fadein, sizeing, img fadein ...)
 	duration: 500,
 
 	// modal: Boolean
@@ -91,7 +91,7 @@ dojo.declare("dojox.image.Lightbox",
 	},
 
 	_handleClick: function(/* Event */e){
-		// summary: Handle the click on the link 
+		// summary: Handle the click on the link
 		if(!this._allowPassthru){ e.preventDefault(); }
 		else{ return; }
 		this.show();
@@ -115,7 +115,7 @@ dojo.declare("dojox.image.Lightbox",
 
 	enable: function(){
 		// summary: Enables the dialog (prevents default link)
-		this._allowPassthru = false; 
+		this._allowPassthru = false;
 	},
 	
 	onClick: function(){
@@ -137,30 +137,30 @@ dojo.declare("dojox.image.LightboxDialog",
 	//		for programatic manipulation.
 	//
 	// description:
-	//	
-	//		A widget that intercepts anchor links (typically around images)		
+	//
+	//		A widget that intercepts anchor links (typically around images)
 	//		and displays a modal Dialog. this is the actual Dialog, which you can
 	//		create and populate manually, though should use simple Lightbox's
 	//		unless you need the direct access.
 	//
 	//		There should only be one of these on a page, so all dojox.image.Lightbox's will us it
 	//		(the first instance of a Lightbox to be show()'n will create me If i do not exist)
-	//	
-	//	example: 
+	//
+	//	example:
 	//	|	// show a single image from a url
 	//	|	var url = "http://dojotoolkit.org/logo.png";
 	//	|	var dialog = new dojox.image.LightboxDialog().startup();
 	//	|	dialog.show({ href: url, title:"My Remote Image"});
-	//	
+	//
 	// title: String
-	//		The current title, read from object passed to show() 
+	//		The current title, read from object passed to show()
 	title: "",
 
 	// FIXME: implement titleTemplate
 
 	// inGroup: Array
 	//		Array of objects. this is populated by from the JSON object _groups, and
-	//		should not be populate manually. it is a placeholder for the currently 
+	//		should not be populate manually. it is a placeholder for the currently
 	//		showing group of images in this master dialog
 	inGroup: null,
 
@@ -184,7 +184,7 @@ dojo.declare("dojox.image.LightboxDialog",
 	//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
 	modal: false,
 
-/*===== 
+/*=====
 	// _groups: Object
 	//		an object of arrays, each array (of objects) being a unique 'group'
 	_groups: { XnoGroupX: [] },
@@ -231,8 +231,8 @@ dojo.declare("dojox.image.LightboxDialog",
 		this._lastGroup = groupData;
 		
 		// we only need to call dijit.Dialog.show() if we're not already open.
-		if(!_t.open){ 
-			_t.inherited(arguments); 
+		if(!_t.open){
+			_t.inherited(arguments);
 			_t._modalconnects.push(
 				dojo.connect(dojo.global, "onscroll", this, "_position"),
 				dojo.connect(dojo.global, "onresize", this, "_position"),
@@ -256,15 +256,15 @@ dojo.declare("dojox.image.LightboxDialog",
 			_t._wasStyled = false;
 		}
 		
-		dojo.style(_t.imgNode,"opacity","0"); 
+		dojo.style(_t.imgNode,"opacity","0");
 		dojo.style(_t.titleNode,"opacity","0");
 		
 		var src = groupData.href;
 		
-		if((groupData.group && groupData !== "XnoGroupX") || _t.inGroup){ 
-			if(!_t.inGroup){ 
+		if((groupData.group && groupData !== "XnoGroupX") || _t.inGroup){
+			if(!_t.inGroup){
 				_t.inGroup = _t._groups[(groupData.group)];
-				// determine where we were or are in the show 
+				// determine where we were or are in the show
 				dojo.forEach(_t.inGroup, function(g, i){
 					if(g.href == groupData.href){
 						_t._index = i;
@@ -275,7 +275,7 @@ dojo.declare("dojox.image.LightboxDialog",
 			}
 			if(!_t._index){
 				_t._index = 0;
-				var sr = _t.inGroup[_t._index]; 
+				var sr = _t.inGroup[_t._index];
 				src = (sr && sr.href) || _t.errorImg;
 			}
 			// FIXME: implement titleTemplate
@@ -294,7 +294,7 @@ dojo.declare("dojox.image.LightboxDialog",
 		_t._ready(src);
 	},
 	
-	_ready: function(src){	
+	_ready: function(src){
 		// summary: A function to trigger all 'real' showing of some src
 		
 		var _t = this;
@@ -316,8 +316,8 @@ dojo.declare("dojox.image.LightboxDialog",
 			});
 			// cleanup
 			dojo.disconnect(_t._imgConnect);
-			if(_t._imgError){ 
-				dojo.disconnect(_t._imgError); 
+			if(_t._imgError){
+				dojo.disconnect(_t._imgError);
 			}
 		});
 		
@@ -337,7 +337,7 @@ dojo.declare("dojox.image.LightboxDialog",
 
 	_prevImage: function(){
 		// summary: Load previous image in group
-		if(this.inGroup){ 
+		if(this.inGroup){
 			if(this._index == 0){
 				this._index = this.inGroup.length - 1;
 			}else{
@@ -348,18 +348,18 @@ dojo.declare("dojox.image.LightboxDialog",
 	},
 
 	_loadImage: function(){
-		// summary: Do the prep work before we can show another image 
+		// summary: Do the prep work before we can show another image
 		this._loadingAnim.play(1);
 	},
 
 	_prepNodes: function(){
 		// summary: A localized hook to accompany _loadImage
-		this._imageReady = false; 
+		this._imageReady = false;
 		if(this.inGroup && this.inGroup[this._index]){
 			this.show({
 				href: this.inGroup[this._index].href,
 				title: this.inGroup[this._index].title
-			}); 
+			});
 		}else{
 			this.show({
 				title: this.errorMessage,
@@ -377,14 +377,14 @@ dojo.declare("dojox.image.LightboxDialog",
 	resizeTo: function(/* Object */size, forceTitle){
 		// summary: Resize our dialog container, and fire _showImage
 		
-		var adjustSize = dojo.boxModel == "border-box" ? 
+		var adjustSize = dojo.boxModel == "border-box" ?
 			dojo._getBorderExtents(this.domNode).w : 0,
 			titleSize = forceTitle || this._calcTitleSize()
 		;
 		
 		this._lastTitleSize = titleSize;
 		
-		if(this.adjust && 
+		if(this.adjust &&
 			(size.h + titleSize.h + adjustSize + 80 > this._vp.h ||
 			 size.w + adjustSize + 60 > this._vp.w
 			)
@@ -394,7 +394,7 @@ dojo.declare("dojox.image.LightboxDialog",
 		}
 		this._currentSize = size;
 		
-		var _sizeAnim = dojox.fx.sizeTo({ 
+		var _sizeAnim = dojox.fx.sizeTo({
 			node: this.containerNode,
 			duration: size.duration||this.duration,
 			width: size.w + adjustSize,
@@ -484,9 +484,9 @@ dojo.declare("dojox.image.LightboxDialog",
 	hide: function(){
 		// summary: Hide the Master Lightbox
 		dojo.fadeOut({
-			node: this.titleNode, 
+			node: this.titleNode,
 			duration: 200,
-			// #5112 - if you _don't_ change the .src, safari will 
+			// #5112 - if you _don't_ change the .src, safari will
 			// _never_ fire onload for this image
 			onEnd: dojo.hitch(this, function(){
 				this.imgNode.src = this._blankGif;
@@ -511,11 +511,11 @@ dojo.declare("dojox.image.LightboxDialog",
 		//		attach to group of similar tag or null for individual image instance
 		var g = group;
 		if(!child.href){ return; }
-		if(g){	
+		if(g){
 			if(!this._groups[g]){
 				this._groups[g] = [];
 			}
-			this._groups[g].push(child); 
+			this._groups[g].push(child);
 		}else{ this._groups["XnoGroupX"].push(child); }
 	},
 
@@ -548,8 +548,8 @@ dojo.declare("dojox.image.LightboxDialog",
 		var dk = dojo.keys;
 		switch(e.charOrCode){
 			
-			case dk.ESCAPE: 
-				this.hide(); 
+			case dk.ESCAPE:
+				this.hide();
 				break;
 
 			case dk.DOWN_ARROW:
@@ -560,7 +560,7 @@ dojo.declare("dojox.image.LightboxDialog",
 
 			case dk.UP_ARROW:
 			case dk.LEFT_ARROW:
-			case 80: // key "p" 
+			case 80: // key "p"
 				this._prevImage();
 				break;
 		}

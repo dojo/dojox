@@ -469,8 +469,8 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 							case "name":
 								nameNode = child;
 								break;
-							case "uri": 
-								uriNode = child; 
+							case "uri":
+								uriNode = child;
 								break;
 						}
 					});
@@ -483,13 +483,13 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 					}
 					attribs[tagName] = author;
 					break;
-				case "id": 
-					attribs[tagName] = getNodeText(node); 
+				case "id":
+					attribs[tagName] = getNodeText(node);
 					break;
-				case "updated": 
+				case "updated":
 					attribs[tagName] = dojo.date.stamp.fromISOString(getNodeText(node) );
 					break;
-				case "published": 
+				case "published":
 					attribs[tagName] = dojo.date.stamp.fromISOString(getNodeText(node));
 					break;
 				case "category":

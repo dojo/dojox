@@ -18,7 +18,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 	accept: ["grid/cells", "grid/rows", "grid/cols", "text"],
 	
 	// insertNodesForGrid:
-	//		If you'd like to insert some sort of nodes into your dnd source, turn this on, 
+	//		If you'd like to insert some sort of nodes into your dnd source, turn this on,
 	//		and override getCellContent/getRowContent/getColumnContent
 	//		to populate the dnd data in your desired format.
 	insertNodesForGrid: false,
@@ -30,7 +30,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridSource", dojo.dnd.Source, {
 		if(source instanceof dojox.grid.enhanced.plugins.GridDnDSource){
 			if(nodes[0]){
 				var item = source.getItem(nodes[0].id);
-				if(item && (dojo.indexOf(item.type, "grid/rows") >= 0 || dojo.indexOf(item.type, "grid/cells") >= 0) && 
+				if(item && (dojo.indexOf(item.type, "grid/rows") >= 0 || dojo.indexOf(item.type, "grid/cells") >= 0) &&
 					!source.dndPlugin._allDnDItemsLoaded()){
 					return false;
 				}

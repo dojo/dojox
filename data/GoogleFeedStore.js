@@ -4,7 +4,7 @@ dojo.experimental("dojox.data.GoogleFeedStore");
 
 dojo.declare("dojox.data.GoogleFeedStore", dojox.data.GoogleSearchStore,{
 	// summary:
-	//	A data store for retrieving RSS and Atom feeds from Google. The 
+	//	A data store for retrieving RSS and Atom feeds from Google. The
 	//  feeds can come from any source, which is specified in the "url"
 	//  parameter of the query passed to the "fetch" function.
 	//	The following attributes are supported on each item:

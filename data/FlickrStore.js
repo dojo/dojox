@@ -3,12 +3,12 @@ define("dojox/data/FlickrStore", ["dojo", "dojox", "dojo/data/util/simpleFetch",
 dojo.declare("dojox.data.FlickrStore", null, {
 	constructor: function(/*Object*/args){
 		//	summary:
-		//		Initializer for the FlickrStore store.  
+		//		Initializer for the FlickrStore store.
 		//	description:
 		//		The FlickrStore is a Datastore interface to one of the basic services
 		//		of the Flickr service, the public photo feed.  This does not provide
 		//		access to all the services of Flickr.
-		//		This store cannot do * and ? filtering as the flickr service 
+		//		This store cannot do * and ? filtering as the flickr service
 		//		provides no interface for wildcards.
 		if(args && args.label){
 			this.label = args.label;
@@ -28,9 +28,9 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	_assertIsItem: function(/* item */ item){
 		//	summary:
 		//      This function tests whether the item passed in is indeed an item in the store.
-		//	item: 
+		//	item:
 		//		The item to test for being contained by the store.
-		if(!this.isItem(item)){ 
+		if(!this.isItem(item)){
 			throw new Error("dojox.data.FlickrStore: a function was passed an item argument that was not an item");
 		}
 	},
@@ -38,15 +38,15 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	_assertIsAttribute: function(/* attribute-name-string */ attribute){
 		//	summary:
 		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
-		//	attribute: 
+		//	attribute:
 		//		The attribute to test for being contained by the store.
-		if(typeof attribute !== "string"){ 
+		if(typeof attribute !== "string"){
 			throw new Error("dojox.data.FlickrStore: a function was passed an attribute argument that was not an attribute name string");
 		}
 	},
 
 	getFeatures: function(){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
@@ -54,7 +54,7 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 
 	getValue: function(item, attribute, defaultValue){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values && values.length > 0){
@@ -64,18 +64,18 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 
 	getAttributes: function(item){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getAttributes()
 		return [
-			"title", "description", "author", "datePublished", "dateTaken", 
+			"title", "description", "author", "datePublished", "dateTaken",
 			"imageUrl", "imageUrlSmall", "imageUrlMedium", "tags", "link"
-		]; 
+		];
 	},
 
 	hasAttribute: function(item, attribute){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.hasAttributes()
-		var v = this.getValue(item,attribute); 
+		var v = this.getValue(item,attribute);
 		if(v || v === "" || v === false){
 			return true;
 		}
@@ -83,30 +83,30 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 
 	isItemLoaded: function(item){
-		 //	summary: 
+		 //	summary:
 		 //      See dojo.data.api.Read.isItemLoaded()
 		 return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.loadItem()
 	},
 
 	getLabel: function(item){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getLabel()
 		return this.getValue(item,this.label);
 	},
 	
 	getLabelAttributes: function(item){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getLabelAttributes()
 		return [this.label];
 	},
 
 	containsValue: function(item, attribute, value){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.containsValue()
 		var values = this.getValues(item,attribute);
 		for(var i = 0; i < values.length; i++){
@@ -118,7 +118,7 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 
 	getValues: function(item, attribute){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.getValue()
 
 		this._assertIsItem(item);
@@ -152,7 +152,7 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 
 	isItem: function(item){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.isItem()
 		if(item && item[this._storeRef] === this){
 			return true;
@@ -161,7 +161,7 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 	
 	close: function(request){
-		//	summary: 
+		//	summary:
 		//      See dojo.data.api.Read.close()
 	},
 
@@ -236,23 +236,23 @@ dojo.declare("dojox.data.FlickrStore", null, {
 	},
 
 	_unescapeHtml: function(/*String*/ str){
-		// summary: 
+		// summary:
 		//		Utility function to un-escape XML special characters in an
 		//		HTML string.
 		//	str: String.
 		//		The string to un-escape
-		// returns: 
+		// returns:
 		//		HTML String converted back to the normal text (unescaped)
 		//		characters (<,>,&, ", etc,).
 
-		//TODO: 
+		//TODO:
 		//		Check to see if theres already compatible escape() in
 		//		dojo.string or dojo.html
 		return 	str.replace(/&amp;/gm, "&").
 					replace(/&lt;/gm, "<").
 					replace(/&gt;/gm, ">").
 					replace(/&quot;/gm, "\"").
-					replace(/&#39;/gm, "'"); 
+					replace(/&#39;/gm, "'");
 	}
 });
 
@@ -267,12 +267,12 @@ reg.register("group pool",
 	feedsUrl+"groups_pool.gne"
 );
 
-reg.register("default", 
+reg.register("default",
 	function(request){ return true; },
 	feedsUrl+"photos_public.gne"
 );
 
-//We have to define this because of how the Flickr API works.  
+//We have to define this because of how the Flickr API works.
 //This somewhat stinks, but what can you do?
 if(!jsonFlickrFeed){
 	var jsonFlickrFeed = function(data){};

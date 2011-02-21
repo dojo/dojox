@@ -1,19 +1,19 @@
 dojo.provide("dojox.grid.enhanced.plugins._StoreLayer");
 // summary:
-//		The dojo.data.api.Read API is powerful, but it's difficult to give the store some special commands before 
-//		fetch, so that the store content can be temporarily modified or transformed, and acts as another store. The 
+//		The dojo.data.api.Read API is powerful, but it's difficult to give the store some special commands before
+//		fetch, so that the store content can be temporarily modified or transformed, and acts as another store. The
 //		parameter *query* or *queryOptions* in keywordArgs for *fetch* is not enough because:
 //		1.	users do not have the opportunity to response to the store actions when these options or queries are applied,
 //			especially when the real store is at server side.
 //		2.	the store implementation must be changed to support any new options in 'query' or 'queryOptions', so it'll be
 //			difficult if this implementation is not able to or very hard to be changed, or some new options are required to
-//			be valid for all stores. 
+//			be valid for all stores.
 //		This *StoreLayer* framework is dedicated to provide a uniform way for configuring an existing store, so that
 //		it can be easily extended to have special behaviors or act like a totally different store.
-//		The major approach is to wrap the *fetch* function of store, layer by layer. Every layer treats the incoming 
+//		The major approach is to wrap the *fetch* function of store, layer by layer. Every layer treats the incoming
 //		store.fetch as a 'black box', thus maintaining the independence between layers.
 //		*fetch* is the most important data retriever in the Read API, almost all other functions are used for a single
-//		item, and require that this item is already retrieved (by and only by *fetch*). So once we've controlled this 
+//		item, and require that this item is already retrieved (by and only by *fetch*). So once we've controlled this
 //		*fetch* function, we've controlled almost the whole store. This fact simplifies our implementation of StoreLayer.
 // example:
 //		//ns is for namespace, i.e.:dojox.grid.enhanced.plugins
@@ -196,18 +196,18 @@ dojo.provide("dojox.grid.enhanced.plugins._StoreLayer");
 		},
 		initialize: function(store){
 			// summary:
-			//		
+			//
 		},
 		uninitialize: function(store){
 			// summary:
-			//		
+			//
 		},
 		invalidate: function(){
 			
 		},
 		_wrap: function(store, funcName, layerFuncName, nextLayer){
 			// summary:
-			//		Do the actual wrapping (or 'hacking' if you like) to the store. 
+			//		Do the actual wrapping (or 'hacking' if you like) to the store.
 			// tags:
 			//		internal
 			// store: Read-store
@@ -331,7 +331,7 @@ dojo.provide("dojox.grid.enhanced.plugins._StoreLayer");
 						this.originFetch(userRequest);
 					}),
 					error: dojo.hitch(this, this.onCommandError)
-				});		
+				});
 			}else{
 				//The user only wants to modify the request object.
 				this.onCommandLoad("", userRequest);

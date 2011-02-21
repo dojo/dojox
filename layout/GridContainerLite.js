@@ -54,7 +54,7 @@ dojo.declare(
 	// 	|	});
 	
 	//	autoRefresh: Boolean
-	//		Enable the refresh of registered areas on drag start. 
+	//		Enable the refresh of registered areas on drag start.
 	autoRefresh: true,
 
 
@@ -325,7 +325,7 @@ dojo.declare(
 		i = 0;
 		while(i < this.nbZones){
 			// Add the parameter accept in each zone used by AreaManager
-			// (see method dojox.mdnd.AreaManager:registerByNode)			
+			// (see method dojox.mdnd.AreaManager:registerByNode)
 			this._grid.push({
 				'node': dojo.create("td", {
 					'class': "gridContainerZone",
@@ -342,7 +342,7 @@ dojo.declare(
 	
 	_getZonesAttr: function(){
 		// summary:
-		//   return array of zone (domNode) 
+		//   return array of zone (domNode)
 		return dojo.query(".gridContainerZone",  this.containerNode);
 	},
 
@@ -501,7 +501,7 @@ dojo.declare(
 	_setColWidthsAttr: function(value){
 		this.colWidths = dojo.isString(value) ? value.split(",") : (dojo.isArray(value) ? value : [value]);
 		
-		if(this._started){ 
+		if(this._started){
 			this._updateColumnsWidth();
 		}
 	},

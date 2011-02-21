@@ -73,9 +73,9 @@ dojo.declare("dojox.grid._TreeGridContentBuilder", dojox.grid._ContentBuilder, {
 	generateHtml: function(inDataIndex, inRowIndex){
 		// summary:
 		//		create row innterHTML for flat data structure
-		var html = this.getTableArray(), 
-			grid = this.grid, 
-			v = this.view, 
+		var html = this.getTableArray(),
+			grid = this.grid,
+			v = this.view,
 			cells = v.structure.cells,
 			item = grid.getItem(inRowIndex),
 			level = 0,
@@ -177,7 +177,7 @@ dojo.declare("dojox.grid._TreeGridContentBuilder", dojox.grid._ContentBuilder, {
 			var nextNode = cells[colIndex + 1].getHeaderNode();
 			return dojo.position(nextNode).x - dojo.position(node).x;
 		}
-	}	
+	}
 });
 
 dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
@@ -269,7 +269,7 @@ dojo.mixin(dojox.grid.cells.TreeCell, {
 	},
 	
 	formatIndexes: function(inRowIndex, inRowIndexes, inItem, level){
-		var info = this.grid.edit.info, 
+		var info = this.grid.edit.info,
 			d = this.get ? this.get(inRowIndexes[0], inItem, inRowIndexes) : (this.value || this.defaultValue);
 		if(this.editable && (this.alwaysEditing || (info.rowIndex == inRowIndexes[0] && info.cell == this))){
 			return this.formatEditing(d, inRowIndex, inRowIndexes);
@@ -280,7 +280,7 @@ dojo.mixin(dojox.grid.cells.TreeCell, {
 });
 
 dojo.declare("dojox.grid._LazyTreeLayout", dojox.grid._Layout, {
-	// summary: 
+	// summary:
 	//		Override the dojox.grid._TreeLayout to modify the _TreeGridView and cell formatter
 	setStructure: function(inStructure){
 		var s = inStructure;
@@ -415,11 +415,11 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 	//		An enhanced TreeGrid widget which supports lazy-loading nested-level items
 	//
 	// description:
-	//		LazyTreeGrid inherits from dojo.grid.TreeGrid, and applies virtual scrolling mechanism 
-	//		to nested children rows so that it's possible to deal with large data set specifically 
+	//		LazyTreeGrid inherits from dojo.grid.TreeGrid, and applies virtual scrolling mechanism
+	//		to nested children rows so that it's possible to deal with large data set specifically
 	//		in tree structure with large number of children rows. It's also compatible with dijit.tree.ForestStoreModel
 	//
-	//		Most methods and properties pertaining to the dojox.grid.DataGrid 
+	//		Most methods and properties pertaining to the dojox.grid.DataGrid
 	//		and dojox.grid.TreeGrid also apply here
 	//
 	//		LazyTreeGrid does not support summary row/items aggregate for the
@@ -452,7 +452,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		this.inherited(arguments);
 		this.cache = new dojox.grid.TreeGridItemCache(this);
 		if(!this.treeModel || !(this.treeModel instanceof dijit.tree.ForestStoreModel)){
-			throw new Error("dojox.grid.LazyTreeGrid: must use a treeModel and treeModel must be an instance of dijit.tree.ForestStoreModel");			
+			throw new Error("dojox.grid.LazyTreeGrid: must use a treeModel and treeModel must be an instance of dijit.tree.ForestStoreModel");
 		}
 		dojo.addClass(this.domNode, "dojoxGridTreeModel");
 		dojo.setSelectable(this.domNode, this.selectable);
@@ -588,8 +588,8 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 				nextRowLevel = this.cache.getTreePathByRowIndex(i).split("/").length - 1;
 				if(level !== nextRowLevel){
 					this.reqQueue.push({
-						startTreePath: startTreePath, 
-						startRowIdx: startRowIdx, 
+						startTreePath: startTreePath,
+						startRowIdx: startRowIdx,
 						count: count + 1
 					});
 					count = 0;
@@ -601,7 +601,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			}
 			this.reqQueue.push({
 				startTreePath: startTreePath,
-				startRowIdx: startRowIdx, 
+				startRowIdx: startRowIdx,
 				count: count + 1
 			});
 			var len = this.reqQueue.length;

@@ -68,7 +68,7 @@ var ns = dojox.grid.enhanced.plugins,
 				this._filter = filter;
 				var obj = filter.toObject();
 				//Stateless implementation will need to parse the filter object.
-				this.command(cmdSetFilter, this._isStateful ? dojo.toJson(obj) : obj);	
+				this.command(cmdSetFilter, this._isStateful ? dojo.toJson(obj) : obj);
 				this.command(cmdClearFilter, null);
 				this.useCommands(true);
 				this.onFilterDefined(filter);
@@ -220,8 +220,8 @@ var ns = dojox.grid.enhanced.plugins,
 			// tags:
 			//		private callback
 			// filterRequest: dojo.data.api.Request
-			//		The actual request used in store.fetch. 
-			//		This function is called recursively to fill the result store items 
+			//		The actual request used in store.fetch.
+			//		This function is called recursively to fill the result store items
 			//		until the user specified item count is reached. Only in recursive calls,
 			//		this parameter is valid.
 			if(!this._filter){
@@ -244,7 +244,7 @@ var ns = dojox.grid.enhanced.plugins,
 					this._result = [];
 					this._resultStartIdx = start;
 					var sortStr;
-					if(dojo.isArray(userRequest.sort) && userRequest.sort.length > 0 && 
+					if(dojo.isArray(userRequest.sort) && userRequest.sort.length > 0 &&
 						//Sort info will stay here in every re-fetch, so remember it!
 						(sortStr = dojo.toJson(userRequest.sort)) != this._lastSortInfo){
 						//If we should sort data, all the old caches are no longer valid.
@@ -267,7 +267,7 @@ var ns = dojox.grid.enhanced.plugins,
 					//We already have had enough items, or we have to stop fetching because there's nothing more to fetch.
 					this._completeQuery(userRequest);
 				}else{
-					//User's request hasn't been finished yet. Fetch more. 
+					//User's request hasn't been finished yet. Fetch more.
 					if(!filterRequest){
 						//Initially, we've got to create a new request object.
 						filterRequest = shallowClone(userRequest);
@@ -321,7 +321,7 @@ var ns = dojox.grid.enhanced.plugins,
 			try{
 				return !!(this._filter.applyRow(datarow, function(item, arg){
 					return g(item, arg, rowIndex, s);
-				}).getValue());	
+				}).getValue());
 			}catch(e){
 				console.warn("FilterLayer._applyFilter() error: ", e);
 				return false;

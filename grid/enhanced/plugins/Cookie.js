@@ -111,7 +111,7 @@ dojo.require("dojox.grid.cells._base");
 								}
 								if(i < cells.length){
 									cellArray.push(cell);
-								}	
+								}
 							});
 						});
 					});
@@ -146,7 +146,7 @@ dojo.require("dojox.grid.cells._base");
 				grid.setSortIndex(sortOrder.idx, sortOrder.asc);
 			}
 		}catch(e){
-			//setSortIndex will finally call _fetch, some exceptions will be throw 
+			//setSortIndex will finally call _fetch, some exceptions will be throw
 			//'cause the grid hasn't be fully loaded now. Just ignore them.
 		}
 	};
@@ -159,8 +159,8 @@ dojo.require("dojox.grid.cells._base");
 	};
 	
 	if(!dojo.isIE){
-		// Now in non-IE, widgets are no longer destroyed on page unload, 
-		// so we have to destroy it manually to trigger saving cookie. 
+		// Now in non-IE, widgets are no longer destroyed on page unload,
+		// so we have to destroy it manually to trigger saving cookie.
 		dojo.addOnWindowUnload(function(){
 			dojo.forEach(dijit.findWidgets(dojo.body()), function(widget){
 				if(widget instanceof dojox.grid.EnhancedGrid && !widget._destroyed){
@@ -176,8 +176,8 @@ dojo.require("dojox.grid.cells._base");
 		//		Default persistable features are:
 		//		column width:	"columnWidth" (handler name)
 		//		column order:	"columnOrder"
-		//		sorting order:	"sortOrder"	
-		//		
+		//		sorting order:	"sortOrder"
+		//
 		//		Grid users can define new persistable features
 		//		by calling the following before grid is initialized (that is, during "preInit");
 		//		|	grid.addCookieHandler({
@@ -218,7 +218,7 @@ dojo.require("dojox.grid.cells._base");
 				name: "sortOrder",
 				onLoad: _loadSortOrder,
 				onSave: _saveSortOrder
-			});			
+			});
 			
 			dojo.forEach(this._cookieHandlers, function(handler){
 				if(args[handler.name] === false){
@@ -251,7 +251,7 @@ dojo.require("dojox.grid.cells._base");
 					}
 				}
 				cookieProps = dojo.isObject(this.cookieProps) ? this.cookieProps : {};
-				dojo.cookie(cookieKey, dojo.toJson(cookie), cookieProps);	
+				dojo.cookie(cookieKey, dojo.toJson(cookie), cookieProps);
 			}else{
 				this.removeCookie();
 			}

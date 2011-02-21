@@ -407,12 +407,12 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 					//draw label and wiring
 					dojo.forEach(labeledSlices, function(slice, i){
 						if (!slice.omit) {
-							var leftColumn = circle.cx - circle.r * 2, 
-								rightColumn = circle.cx + circle.r * 2, 
-								labelWidth = dojox.gfx._base._getTextBox(labels[i], {font: taFont}).w, 
-								x = circle.cx + slice.labelR * Math.cos(slice.angle), 
+							var leftColumn = circle.cx - circle.r * 2,
+								rightColumn = circle.cx + circle.r * 2,
+								labelWidth = dojox.gfx._base._getTextBox(labels[i], {font: taFont}).w,
+								x = circle.cx + slice.labelR * Math.cos(slice.angle),
 								y = circle.cy + slice.labelR * Math.sin(slice.angle),
-								jointX = (slice.left) ? (leftColumn + labelWidth) : (rightColumn - labelWidth), 
+								jointX = (slice.left) ? (leftColumn + labelWidth) : (rightColumn - labelWidth),
 								labelX = (slice.left) ? leftColumn : jointX;
 							var wiring = s.createPath().moveTo(circle.cx + circle.r * Math.cos(slice.angle), circle.cy + circle.r * Math.sin(slice.angle))
 							if (Math.abs(slice.labelR * Math.cos(slice.angle)) < circle.r * 2 - labelWidth) {
@@ -472,7 +472,7 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 				}
 				i++;
 			}
-			i = firstSlice.index,j = (i == 0)?length-1 : i - 1; 
+			i = firstSlice.index,j = (i == 0)?length-1 : i - 1;
 			while(!(slices[i].left ^ slices[j].left)){
 				if (!slices[j].omit) {
 					var nextLabelR = (Math.sin(slices[i].angle) * currentLabelR + ((slices[i].left) ? labelHeight : (-labelHeight))) /

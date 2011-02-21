@@ -2,7 +2,7 @@ define("dojox/editor/plugins/Preview", ["dojo", "dijit", "dojox", "dijit/form/Bu
 
 dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 	//	summary:
-	//		This plugin provides Preview cabability to the editor.  When 
+	//		This plugin provides Preview cabability to the editor.  When
 	//		clicked, the document in the editor frame will displayed in a separate
 	//		window/tab
 

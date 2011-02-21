@@ -9,7 +9,7 @@ dojo.declare("dojox.editor.plugins.ResizeTableColumn",	dojox.editor.plugins.Tabl
 			//		Because IE will ignore the cursor style when the editMode of the document is on,
 			//		we need to create a div within the outer document to mimic the behavior of drag&drop
 			this.isLtr = this.dir ? (this.dir == "ltr") : dojo._isBodyLtr();
-			this.ruleDiv = dojo.create("div", 
+			this.ruleDiv = dojo.create("div",
 				{style: "top: -10000px; z-index: 10001"},
 				dojo.body(), "last");
 		},
@@ -118,7 +118,7 @@ dojo.declare("dojox.editor.plugins.ResizeTableColumn",	dojox.editor.plugins.Tabl
 						editorCoords = dojo.coords(editor.iframe), ex = editorCoords.x,
 						table = getTable(activeCell), tableCoords = dojo.coords(table),
 						cs = table.getAttribute("cellspacing"),
-						cx = evt.clientX, 
+						cx = evt.clientX,
 						headerCell = getHeaderCell(activeCell), headerSibling,
 						newWidth, newSiblingWidth;
 					
@@ -162,7 +162,7 @@ dojo.declare("dojox.editor.plugins.ResizeTableColumn",	dojox.editor.plugins.Tabl
 					// Do it again to consolidate the result,
 					// because maybe the cell cannot be so narrow as you specified.
 					marginBox(headerCell, dojo.coords(activeCell).w);
-					if(sibling){ 
+					if(sibling){
 						marginBox(headerSibling, dojo.coords(sibling).w);
 					}
 					dojo.style(editor.editNode, {cursor: "auto"});

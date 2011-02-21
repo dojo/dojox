@@ -167,7 +167,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 			area._connects = null;
 			if(area.uninitialize){
 				area.uninitialize();
-			} 
+			}
 		}
 		this.inherited(arguments);
 	},
@@ -242,12 +242,12 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 			if(cai != idx){
 				this.tabbingOut = false;
 				if(toBlurOld && cai >= 0 && cai < this._areaQueue.length){
-					this._areas[this._areaQueue[cai]].onBlur();	
+					this._areas[this._areaQueue[cai]].onBlur();
 				}
 				this._currentAreaIdx = idx;
 			}
 		}else{
-			return (cai < 0 || cai >= this._areaQueue.length) ? 
+			return (cai < 0 || cai >= this._areaQueue.length) ?
 				new dojox.grid.enhanced._FocusArea({}, this) :
 				this._areas[this._areaQueue[this._currentAreaIdx]];
 		}
@@ -385,7 +385,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 		//		Overwritten
 		//		Check whether currently navigating among column headers.
 		// return:
-		//		true - focus is on a certain column header | false otherwise	
+		//		true - focus is on a certain column header | false otherwise
 		return this._areaQueue[this._currentAreaIdx] == "header";
 	},
 	previousKey: function(e){
@@ -400,7 +400,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	},
 	setFocusCell: function(/* Object */inCell, /* Integer */inRowIndex){
 		// summary:
-		//		Overwritten - focuses the given grid cell	
+		//		Overwritten - focuses the given grid cell
 		if(inCell){
 			this.currentArea(this.grid.edit.isEditing() ? "editableCell" : "content", true);
 			//This is very slow when selecting cells!
@@ -415,8 +415,8 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	doFocus: function(e){
 		// summary:
 		//		Overwritten
-		//		trap focus only for grid dom node 
-		//		do not focus for scrolling if grid is about to blur			
+		//		trap focus only for grid dom node
+		//		do not focus for scrolling if grid is about to blur
 		if(e && e.target == e.currentTarget && !this.tabbingOut){
 			if(this._gridBlured){
 				this._gridBlured = false;
@@ -538,7 +538,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 			this.setFocusIndex(0, cell ? i : 0);
 		}else if(this.cell && !isEmpty){
 			if(this.focusView && !this.focusView.rowNodes[this.rowIndex]){
-				// if rowNode for current index is undefined (likely as a result of a sort and because of #7304) 
+				// if rowNode for current index is undefined (likely as a result of a sort and because of #7304)
 				// scroll to that row
 				this.grid.scrollToRow(this.rowIndex);
 				this.focusGrid();
@@ -568,7 +568,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	move: function(inRowDelta, inColDelta){
 		// summary:
 		//		Overwritten
-		this.inherited(arguments);		
+		this.inherited(arguments);
 		var cell = this.cell, row = this.rowIndex;
 		if(!this.isNavHeader() && cell){
 			if(inRowDelta !== 0){//jump over hidden rows
@@ -582,7 +582,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 					this.move(inRowDelta, inColDelta > 0 ? 1 : -1);
 				}
 			}
-		}		
+		}
 	},
 	_onContentKeyDown: function(e, isBubble){
 		if(isBubble){
@@ -656,7 +656,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 				var firstElem = elems.lowest || elems.first;
 				var lastElem = elems.last || elems.highest || firstElem;
 				var target = dojo.isIE ? evt.srcElement : evt.target;
-				toBlur = target == (step > 0 ? lastElem : firstElem);	
+				toBlur = target == (step > 0 ? lastElem : firstElem);
 			}
 			if(toBlur){
 				this._isNavigating = false;
@@ -751,7 +751,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	},
 	_onEditableCellMouseEvent: function(evt){
 		if(evt.type == "click"){
-			var cell = this.cell || evt.cell; 
+			var cell = this.cell || evt.cell;
 			if(cell && !cell.editable && cell.navigatable){
 				this._initNavigatableElems();
 				if(this._navElems.lowest || this._navElems.first){

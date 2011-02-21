@@ -234,9 +234,9 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		if(_this.uploadable && !_this._fileUploader){
 			fup = _this._fileUploader = new dojox.form.FileUploader({
 				force: "html", // Noticed that SWF may cause browsers to crash sometimes
-				uploadUrl: _this.uploadUrl, 
+				uploadUrl: _this.uploadUrl,
 				htmlFieldName: _this.htmlFieldName,
-				uploadOnChange: false, 
+				uploadOnChange: false,
 				selectMultipleFiles: false,
 				showProgress: true
 			}, fUpId);

@@ -19,7 +19,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 	// |	picker.startup();
 
 	//		The template of this widget.
-	templateString: 
+	templateString:
 		'<table class="dijitInline dijitEditorSmileyPalette dijitPaletteTable"' +
 		' cellSpacing=0 cellPadding=0><tbody dojoAttachPoint="gridNode"></tbody></table>',
 
@@ -46,7 +46,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 		var emoticonI18n = {};
 		for(var name in i18n){
 			if(name.substr(0,8) == "emoticon"){
-				emoticonI18n[name.substr(8).toLowerCase()] = i18n[name]; 
+				emoticonI18n[name.substr(8).toLowerCase()] = i18n[name];
 			}
 		}
         this._preparePalette(

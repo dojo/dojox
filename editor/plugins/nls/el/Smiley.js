@@ -5,8 +5,8 @@
 	emoticonWink: "Κλείσιμο ματιού",
 	emoticonGrin: "Πλατύ χαμόγελο",
 	emoticonCool: "Άνετος",
-	emoticonAngry: "Θυμωμένος",  
-	emoticonHalf: "Μισό", 
+	emoticonAngry: "Θυμωμένος",
+	emoticonHalf: "Μισό",
 	emoticonEyebrow: "Σηκωμένο φρύδι",
 	emoticonFrown: "Συνοφρυωμένος",
 	emoticonShy: "Ντροπαλός",
@@ -15,7 +15,7 @@
 	emoticonTongue: "Κοροϊδία",
 	emoticonIdea: "Ιδέα",
 	emoticonYes: "Ναι",
-	emoticonNo: "Όχι",	
+	emoticonNo: "Όχι",
 	emoticonAngel: "Αγγελούδι",
 	emoticonCrying: "Κλάμα"
 })

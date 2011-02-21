@@ -2,7 +2,7 @@ define("dojox/editor/plugins/InsertEntity", ["dojo", "dijit", "dojox", "dijit/To
 
 dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 	// summary:
-	//		This plugin allows the user to select from standard Symbols (HTML Entities) 
+	//		This plugin allows the user to select from standard Symbols (HTML Entities)
 	//		to insert at the current cursor position.  It binds to the key pattern:
 	//		ctrl-shift-s for opening the insert symbol dropdown.
 	//
@@ -68,8 +68,8 @@ dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 
 	_postFilterEntities: function(s/*String content passed in*/){
 		// summary:
-		//		A function to filter out entity characters into encoded form so they 
-		//		are properly displayed in the editor.  It gets registered with the 
+		//		A function to filter out entity characters into encoded form so they
+		//		are properly displayed in the editor.  It gets registered with the
 		//		postFilters of the editor.
 		// tags:
 		//		private.

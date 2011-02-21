@@ -130,7 +130,7 @@ dojo.declare("dojox.grid._Layout", null, {
 		var cell_type = inDef.type || inDef.cellType || this._defaultCellProps.type || this._defaultCellProps.cellType || dojox.grid.cells.Cell;
 
 		props.unitWidth = getCellWidth(inDef);
-		return new cell_type(dojo.mixin({}, this._defaultCellProps, inDef, props));	
+		return new cell_type(dojo.mixin({}, this._defaultCellProps, inDef, props));
 	},
 	
 	addRowDef: function(inRowIndex, inDef){
@@ -149,7 +149,7 @@ dojo.declare("dojox.grid._Layout", null, {
 					pctSum += window.parseInt(w, 10);
 				}else if(w == "auto"){
 					// relative widths doesn't play nice with auto - since we
-					// don't have a way of knowing how much space the auto is 
+					// don't have a way of knowing how much space the auto is
 					// supposed to take up.
 					doRel = false;
 				}
@@ -178,7 +178,7 @@ dojo.declare("dojox.grid._Layout", null, {
 				result.push(this.addRowDef(0, inDef));
 			}
 		}
-		return result;	
+		return result;
 	},
 	
 	addViewDef: function(inDef){

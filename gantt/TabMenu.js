@@ -197,8 +197,8 @@ dojo.require("dojo.parser");
 				visibility: "visible"
 			});
 			//make sure menu box inside gantt's bounding box
-			var menuBox = dojo.position(this.menuPanel, true), 
-				bBox = dojo.position(this.ganttChart.content, true), 
+			var menuBox = dojo.position(this.menuPanel, true),
+				bBox = dojo.position(this.ganttChart.content, true),
 				pos = dojo.coords(elem, true);
 			if((pos.y + menuBox.h) > (bBox.y + bBox.h + 50)){
 				this.menuPanel.style.top = pos.y - menuBox.h + pos.h + "px";
@@ -362,13 +362,13 @@ dojo.require("dojo.parser");
 			if(!this.preValueValidation(this.arrItems)){
 				return;
 			}
-			var id = this.arrItems[0].control.textbox.value, 
-				name = this.arrItems[1].control.textbox.value, 
-				startTime = this.decodeDate(this.arrItems[2].control.textbox.value), 
-				duration = this.arrItems[3].control.textbox.value, 
-				pc = this.arrItems[4].control.textbox.value, 
-				owner = this.arrItems[5].control.textbox.value, 
-				parentTaskId = this.arrItems[6].control.textbox.value, 
+			var id = this.arrItems[0].control.textbox.value,
+				name = this.arrItems[1].control.textbox.value,
+				startTime = this.decodeDate(this.arrItems[2].control.textbox.value),
+				duration = this.arrItems[3].control.textbox.value,
+				pc = this.arrItems[4].control.textbox.value,
+				owner = this.arrItems[5].control.textbox.value,
+				parentTaskId = this.arrItems[6].control.textbox.value,
 				predTaskId = this.arrItems[7].control.textbox.value;
 			if(dojo.trim(id).length <= 0){
 				return;
@@ -385,12 +385,12 @@ dojo.require("dojo.parser");
 			if(!this.preValueValidation(this.arrItems)){
 				return;
 			}
-			var pr = this.object.project, 
-				id = this.arrItems[0].control.textbox.value, 
-				name = this.arrItems[1].control.textbox.value, 
-				startTime = this.decodeDate(this.arrItems[2].control.textbox.value), 
-				duration = this.arrItems[3].control.textbox.value, 
-				pc = this.arrItems[4].control.textbox.value, 
+			var pr = this.object.project,
+				id = this.arrItems[0].control.textbox.value,
+				name = this.arrItems[1].control.textbox.value,
+				startTime = this.decodeDate(this.arrItems[2].control.textbox.value),
+				duration = this.arrItems[3].control.textbox.value,
+				pc = this.arrItems[4].control.textbox.value,
 				owner = this.arrItems[5].control.textbox.value;
 			if(dojo.trim(id).length <= 0){
 				return;
@@ -409,14 +409,14 @@ dojo.require("dojo.parser");
 			if(!this.preValueValidation(this.arrItems)){
 				return;
 			}
-			var pr = this.object.project, 
-				id = this.arrItems[0].control.textbox.value, 
-				name = this.arrItems[1].control.textbox.value, 
-				startTime = this.decodeDate(this.arrItems[2].control.textbox.value), 
-				duration = this.arrItems[3].control.textbox.value, 
-				pc = this.arrItems[4].control.textbox.value, 
-				owner = this.arrItems[5].control.textbox.value, 
-				parentTaskId = this.object.taskItem.id, 
+			var pr = this.object.project,
+				id = this.arrItems[0].control.textbox.value,
+				name = this.arrItems[1].control.textbox.value,
+				startTime = this.decodeDate(this.arrItems[2].control.textbox.value),
+				duration = this.arrItems[3].control.textbox.value,
+				pc = this.arrItems[4].control.textbox.value,
+				owner = this.arrItems[5].control.textbox.value,
+				parentTaskId = this.object.taskItem.id,
 				predTaskId = "";
 			if(dojo.trim(id).length <= 0){
 				return;
@@ -433,8 +433,8 @@ dojo.require("dojo.parser");
 			if(!this.preValueValidation(this.arrItems)){
 				return;
 			}
-			var id = this.arrItems[0].control.textbox.value, 
-			namePr = this.arrItems[1].control.textbox.value, 
+			var id = this.arrItems[0].control.textbox.value,
+			namePr = this.arrItems[1].control.textbox.value,
 			startDatePr = this.decodeDate(this.arrItems[2].control.textbox.value);
 			if(dojo.trim(id).length <= 0 || dojo.trim(namePr).length <= 0){
 				return;
@@ -524,7 +524,7 @@ dojo.require("dojo.parser");
 				dojo.addClass(cellValue, "ganttMenuDialogInputCellValue");
 				cell.innerHTML = item.name;
 				cellValue.appendChild(item.control.domNode);
-				//initialize default value	
+				//initialize default value
 				if(this.withDefaultValue && this.object){
 					if(this.object.constructor == dojox.gantt.GanttTaskControl){
 						if(item.key == "startTime"){

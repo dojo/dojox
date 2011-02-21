@@ -32,7 +32,7 @@ var layout = [
 //				}
 			},
 			{ field: "Composer", name:"Composer", datatype:"string", width: 12},
-			{ field: "Download Date", name:"Download Date", datatype:"date", width: 12, 
+			{ field: "Download Date", name:"Download Date", datatype:"date", width: 12,
 				navigatable: true, editable: false,
 				//formatter: formatDate,
 				dataTypeArgs: {

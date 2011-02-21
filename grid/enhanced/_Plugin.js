@@ -7,15 +7,15 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	//
 	// description:
 	//		Provides common plugin functionality and basic life cycle management.
-	//		
+	//
 	//		Each concrete plugin must have a name field and is responsible for registering itself to the global plugin registry
 	//		e.g. for dnd plugin:
-	// |		dojox.grid.EnhancedGrid.registerPlugin("dnd" /*plugin name*/, 
-	// |												dojox.grid.enhanced.plugins.DnD /*full class name of a plugin*/ 
-	// |												{"preInit": false, "dependency": ["nestedSorting"]} /*properties*/);	
-	//		
+	// |		dojox.grid.EnhancedGrid.registerPlugin("dnd" /*plugin name*/,
+	// |												dojox.grid.enhanced.plugins.DnD /*full class name of a plugin*/
+	// |												{"preInit": false, "dependency": ["nestedSorting"]} /*properties*/);
+	//
 	//		[Keywords] of plugin properties(case sensitive)
-	//		- "preInit": boolean, whether a plugin should be created before EnhancedGrid.postCreate(), 
+	//		- "preInit": boolean, whether a plugin should be created before EnhancedGrid.postCreate(),
 	//		   false by default(plugins are created after EnhancedGrid.postCreate()).
 	//		- "dependency": array or string, plugin(s) indicated by "dependency" will be created before the current one.
 	//		   Note: recursive cycle dependencies are not supported e.g. following dependency is invalid:
@@ -35,7 +35,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	// |		constructor: function(inGrid, option){ ... }
 	// |	});
 	// |	dojox.grid.EnhancedGrid.registerPlugin("pA",mygrid.PluginA);
-	//     
+	//
 	//		3. Use plugins
 	// |	dojo.require("mygrid.MyDnD");
 	// |	dojo.require("mygrid.PluginA");
@@ -47,7 +47,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	// |	</script>
 
 	//name: String
-	//		Plugin name, e.g. 'nestedSorting', 'dnd'... 
+	//		Plugin name, e.g. 'nestedSorting', 'dnd'...
 	name: 'plugin',
 	
 	//grid: Object
@@ -86,14 +86,14 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	
 	onPostInit: function(){},
 	
-	onStartUp: function(){},	
+	onStartUp: function(){},
 	
 	connect: function(obj, event, method){
 		// summary:
 		//		Connects specified obj/event to specified method of this object.
 		// example:
 		//	|	var plugin = new dojox.grid.enhanced._Plugin(grid,"myPlugin",{...});
-		//	|	// when foo.bar() is called, call the listener in the scope of plugin		
+		//	|	// when foo.bar() is called, call the listener in the scope of plugin
 		//	|	plugin.connect(foo, "bar", function(){
 		//	|		console.debug(this.xxx());//"this" - plugin scope
 		//	|	});
@@ -120,7 +120,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		// example:
 		//	|	var plugin = new dojox.grid.enhanced._Plugin(grid,"myPlugin",{...});
 		//	|	// when /my/topic is published, call the subscriber in the scope of plugin
-		//	|	// with passed parameter - "v"		
+		//	|	// with passed parameter - "v"
 		//	|	plugin.subscribe("/my/topic", function(v){
 		//	|		console.debug(this.xxx(v));//"this" - plugin scope
 		//	|	});
@@ -152,7 +152,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 		delete this._connects;
 		delete this._subscribes;
 		delete this.option;
-		delete this.privates;		
+		delete this.privates;
 		//console.log('Plugin [', this.name, '].destroy() executed!');
 	}
 });

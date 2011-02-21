@@ -26,7 +26,7 @@ dojo.provide("dojox.gfx._base");
 		var cls = node.getAttribute("className");
 		if(cls){
 			node.setAttribute(
-				"className", 
+				"className",
 				cls.replace(new RegExp('(^|\\s+)' + classStr + '(\\s+|$)'), "$1$2")
 			);
 		}
@@ -179,7 +179,7 @@ dojo.mixin(dojox.gfx, {
 
 	// default geometric attributes
 	defaultStroke: {
-		type: "stroke", color: "black", style: "solid", width: 1, 
+		type: "stroke", color: "black", style: "solid", width: 1,
 		cap: "butt", join: 4
 	},
 	defaultLinearGradient: {
@@ -198,7 +198,7 @@ dojo.mixin(dojox.gfx, {
 		type: "pattern", x: 0, y: 0, width: 0, height: 0, src: ""
 	},
 	defaultFont: {
-		type: "font", style: "normal", variant: "normal", 
+		type: "font", style: "normal", variant: "normal",
 		weight: "normal", size: "10pt", family: "serif"
 	},
 

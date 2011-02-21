@@ -15,7 +15,7 @@ dojo.require("dojo.date");
 							/* data item*/datarow,/* function(row,colIdx) */getter){
 			// summary:
 			//		Override from _BiOpExpr
-			var res = left_operand.applyRow(datarow, getter).getValue() && 
+			var res = left_operand.applyRow(datarow, getter).getValue() &&
 				right_operand.applyRow(datarow, getter).getValue();
 			return new fns.BooleanExpr(res);	//_ConditionExpr
 		}
@@ -28,7 +28,7 @@ dojo.require("dojo.date");
 							/* data item*/datarow,/* function(row,colIdx) */getter){
 			// summary:
 			//		Override from _BiOpExpr
-			var res = left_operand.applyRow(datarow, getter).getValue() || 
+			var res = left_operand.applyRow(datarow, getter).getValue() ||
 				right_operand.applyRow(datarow, getter).getValue();
 			return new fns.BooleanExpr(res);	//_ConditionExpr
 		}
@@ -113,7 +113,7 @@ dojo.require("dojo.date");
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.LessThan", fns._BiOpExpr, {
 		// summary:
-		//		A "less than" condition expression.		
+		//		A "less than" condition expression.
 		_name: "less",
 		_calculate: function(/* _ConditionExpr */left_operand,/* _ConditionExpr */right_operand,
 							/* data item*/datarow,/* function(row,colIdx) */getter){
@@ -125,7 +125,7 @@ dojo.require("dojo.date");
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.LessThanOrEqualTo", fns._BiOpExpr, {
 		// summary:
-		//		A "less than or equal to" condition expression.	
+		//		A "less than or equal to" condition expression.
 		_name: "lessEqual",
 		_calculate: function(/* _ConditionExpr */left_operand,/* _ConditionExpr */right_operand,
 							/* data item*/datarow,/* function(row,colIdx) */getter){
@@ -137,7 +137,7 @@ dojo.require("dojo.date");
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.LargerThan", fns._BiOpExpr, {
 		// summary:
-		//		A "larger than" condition expression.	
+		//		A "larger than" condition expression.
 		_name: "larger",
 		_calculate: function(/* _ConditionExpr */left_operand,/* _ConditionExpr */right_operand,
 							/* data item*/datarow,/* function(row,colIdx) */getter){
@@ -149,7 +149,7 @@ dojo.require("dojo.date");
 	});
 	dojo.declare("dojox.grid.enhanced.plugins.filter.LargerThanOrEqualTo", fns._BiOpExpr, {
 		// summary:
-		//		A "larger than or equal to" condition expression.	
+		//		A "larger than or equal to" condition expression.
 		_name: "largerEqual",
 		_calculate: function(/* _ConditionExpr */left_operand,/* _ConditionExpr */right_operand,
 							/* data item*/datarow,/* function(row,colIdx) */getter){

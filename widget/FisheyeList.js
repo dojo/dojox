@@ -336,7 +336,7 @@ dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit
 	},
 
 	_onScroll: function(){
-		this._calcHitGrid();	
+		this._calcHitGrid();
 	},
 
 	onResized: function(){
@@ -361,7 +361,7 @@ dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit
 		var pos = this.isHorizontal ? x : y;
 		var prx = this.isHorizontal ? this.proximityLeft : this.proximityTop;
 		var siz = this.isHorizontal ? this.itemWidth : this.itemHeight;
-		var sim = this.isHorizontal ? 
+		var sim = this.isHorizontal ?
 			(1.0-this.timerScale)*this.itemWidth + this.timerScale*this.itemMaxWidth :
 			(1.0-this.timerScale)*this.itemHeight + this.timerScale*this.itemMaxHeight ;
 
@@ -604,7 +604,7 @@ dojo.declare("dojox.widget.FisheyeList", [dijit._Widget, dijit._Templated, dijit
 		dojo.disconnect(this._onMouseMoveHandle);
 		dojo.disconnect(this._addChildHandle);
 		if(this.isFixed){ dojo.disconnect(this._onScrollHandle); }
-		dojo.disconnect(this._onResizeHandle); 
+		dojo.disconnect(this._onResizeHandle);
 		this.inherited("destroyRecursive",arguments);
 	}
 });

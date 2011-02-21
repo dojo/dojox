@@ -40,7 +40,7 @@ dojo.require("dojox.lang.functional");
 			// build the chart
 			n.innerHTML = "";
 			var c = this.chart = new dc.Chart(n, {
-				margins: this.margins, 
+				margins: this.margins,
 				stroke:  this.stroke,
 				fill:    this.fill
 			});
@@ -68,15 +68,15 @@ dojo.require("dojox.lang.functional");
 					c.addSeries(series.name, [0], series.kwArgs);
 					var kw = {};
 					du.updateWithPattern(
-						kw, 
-						series.kwArgs, 
+						kw,
+						series.kwArgs,
 						{
-							"query": "", 
-							"queryOptions": null, 
-							"start": 0, 
-							"count": 1 //, 
+							"query": "",
+							"queryOptions": null,
+							"start": 0,
+							"count": 1 //,
 							// "sort": []
-						}, 
+						},
 						true
 					);
 					if(series.kwArgs.sort){
@@ -150,7 +150,7 @@ dojo.require("dojox.lang.functional");
 				type = dojox._scopeName + ".charting.axis2d." + type;
 			}
 			var axis = eval("(" + type + ")");
-			if(axis){ kw.type = axis; } 
+			if(axis){ kw.type = axis; }
 		}else{
 			type = dojox._scopeName + ".charting.axis2d.Default";
 		}
@@ -180,7 +180,7 @@ dojo.require("dojox.lang.functional");
 				type = dojox._scopeName + ".charting.plot2d." + type;
 			}
 			var plot = eval("(" + type + ")");
-			if(plot){ kw.type = plot; } 
+			if(plot){ kw.type = plot; }
 		}else{
 			type = dojox._scopeName + ".charting.plot2d.Default";
 		}

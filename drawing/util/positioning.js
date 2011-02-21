@@ -1,4 +1,4 @@
-dojo.provide("dojox.drawing.util.positioning");	
+dojo.provide("dojox.drawing.util.positioning");
 
 (function(){
 	

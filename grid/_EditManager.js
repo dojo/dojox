@@ -143,7 +143,7 @@ dojo.declare("dojox.grid._EditManager", null, {
 		}
 		if(inEditing){
 			this.info = { cell: inCell, rowIndex: inRowIndex };
-			this.grid.doStartEdit(inCell, inRowIndex); 
+			this.grid.doStartEdit(inCell, inRowIndex);
 			this.grid.updateRow(inRowIndex);
 		}else{
 			this.info = {};

@@ -71,10 +71,10 @@ tests.register("dojox.date.tests.islamic.Date",
 			runTest: function(t) {
 
 				var dateTable = [
-					[1430, 1, 29], 
-					[1420, 1, 29], 
-					[1422, 5, 29], 
-					[1431, 5, 29], 
+					[1430, 1, 29],
+					[1420, 1, 29],
+					[1422, 5, 29],
+					[1431, 5, 29],
 					[1430, 2, 30],
 					[1431, 2, 30]
 				];
@@ -226,6 +226,6 @@ tests.register("dojox.date.tests.islamic.Date",
 				str = dojox.date.islamic.locale.format(dateIslamic, options);
 				t.is(str, "3:3:59");
 			}
-		}	
+		}
 	]
 );

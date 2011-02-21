@@ -9,13 +9,13 @@ dojo.require("dijit.TitlePane");
 		lookup = function(){
 			// generic handler function for click and keypress
 			var parent = this._dxfindParent && this._dxfindParent();
-			parent && parent.selectChild(this);			
+			parent && parent.selectChild(this);
 		}
 	;
 	
-	// this might hide this uberprivate function from the docparser. 
+	// this might hide this uberprivate function from the docparser.
 	tp._dxfindParent = function(){
-		// summary: TitlePane's MUST be first-children of a TitleGroup. only used by 
+		// summary: TitlePane's MUST be first-children of a TitleGroup. only used by
 		//		`dojox.widget.TitleGroup`. Find a possible parent TitleGroup of a TitlePane
 		var n = this.domNode.parentNode;
 		if(n){
@@ -26,7 +26,7 @@ dojo.require("dijit.TitlePane");
 	};
 
 	// if we click our own title, hide everyone
-	d.connect(tp, "_onTitleClick", lookup); 
+	d.connect(tp, "_onTitleClick", lookup);
 	d.connect(tp, "_onTitleKey", function(e){
 		// if we're tabbing through the items in a group, don't do toggles.
 		// if we hit enter, let it happen.
@@ -41,7 +41,7 @@ dojo.require("dijit.TitlePane");
 		//
 		// description:
 		//		A container which controls a series of `dijit.TitlePane`s,
-		//		allowing one to be visible and hiding siblings. Behaves similarly 
+		//		allowing one to be visible and hiding siblings. Behaves similarly
 		//		to a `dijit.layout.AccordionContainer` in that the children
 		//		are all stacked, though merges the TitlePane behavior of
 		//		variable height
@@ -77,7 +77,7 @@ dojo.require("dijit.TitlePane");
 			// the one the we pass to select
 			widget && dojo.query("> .dijitTitlePane", this.domNode).forEach(function(n){
 				var tp = dijit.getEnclosingWidget(n);
-				tp && tp !== widget && tp.open && tp.set("open", false); 
+				tp && tp !== widget && tp.open && tp.set("open", false);
 			});
 			return widget; // dijit.TitlePane
 		}

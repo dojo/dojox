@@ -5,8 +5,8 @@
 	emoticonWink: "blinkar med ena ögat",
 	emoticonGrin: "ler stort",
 	emoticonCool: "cool",
-	emoticonAngry: "arg",  
-	emoticonHalf: "halvt leende", 
+	emoticonAngry: "arg",
+	emoticonHalf: "halvt leende",
 	emoticonEyebrow: "lyfter på ena ögonbrynet",
 	emoticonFrown: "rynkar pannan",
 	emoticonShy: "blyg",
@@ -15,7 +15,7 @@
 	emoticonTongue: "räcker ut tungan",
 	emoticonIdea: "idé",
 	emoticonYes: "ja",
-	emoticonNo: "nej",	
+	emoticonNo: "nej",
 	emoticonAngel: "ängel",
 	emoticonCrying: "gråter"
 })

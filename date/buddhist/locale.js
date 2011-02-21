@@ -105,7 +105,7 @@ dojo.requireLocalization("dojo.cldr", "buddhist");
 			if(pad){ s = dojo.string.pad(s, l); }
 			return s;
 		});
-	}	
+	}
 	
 dojox.date.buddhist.locale.format = function(/*buddhist.Date*/dateObject, /*object?*/options){
 	// based on and similar to dojo.date.locale.format
@@ -134,10 +134,10 @@ dojox.date.buddhist.locale.format = function(/*buddhist.Date*/dateObject, /*obje
 	var result = str.join(" "); //TODO: use locale-specific pattern to assemble date + time
 
 	return result; // String
-};	
+};
 
 dojox.date.buddhist.locale.regexp = function(/*object?*/options){
-	//	based on and similar to dojo.date.locale.regexp	
+	//	based on and similar to dojo.date.locale.regexp
 	// summary:
 	//		Builds the regular needed to parse a buddhist.Date
 	return dojox.date.buddhist.locale._parseInfo(options).regexp; // String
@@ -173,7 +173,7 @@ dojox.date.buddhist.locale._parseInfo = function(/*oblect?*/options){
 
 dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 	// based on and similar to dojo.date.locale.parse
-	// summary: This function parse string date value according to options	
+	// summary: This function parse string date value according to options
 	value =  value.replace(/[\u200E\u200F\u202A-\u202E]/g, ""); //remove special chars
 	
 	if(!options){options={};}
@@ -184,9 +184,9 @@ dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 	
 	var match = re.exec(value);
 
-	var locale = dojo.i18n.normalizeLocale(options.locale); 
+	var locale = dojo.i18n.normalizeLocale(options.locale);
 
-	if(!match){ 
+	if(!match){
 		console.debug("dojox.date.buddhist.locale.parse: value  "+value+" doesn't match pattern   " + re);
 		return null;
 	} // null
@@ -220,7 +220,7 @@ dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 					}
 					mLength = l;
 				}else{
-					v--;				
+					v--;
 				}
 				result[1] = Number(v);
 				break;
@@ -261,7 +261,7 @@ dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 				break;
 			case 's': //seconds
 				result[5] = Number(v);
-				break; 
+				break;
 			case 'S': //milliseconds
 				result[6] = Number(v);
 		}
@@ -288,9 +288,9 @@ function _processPattern(pattern, applyPattern, applyLiteral, applyAll){
 	applyLiteral = applyLiteral || identity;
 	applyAll = applyAll || identity;
 
-	//split on single quotes (which escape literals in date format strings) 
+	//split on single quotes (which escape literals in date format strings)
 	//but preserve escaped single quotes (e.g., o''clock)
-	var chunks = pattern.match(/(''|[^'])+/g); 
+	var chunks = pattern.match(/(''|[^'])+/g);
 	var literal = pattern.charAt(0) == "'";
 
 	dojo.forEach(chunks, function(chunk, i){
@@ -305,10 +305,10 @@ function _processPattern(pattern, applyPattern, applyLiteral, applyAll){
 }
 
 function _buildDateTimeRE  (tokens, bundle, options, pattern){
-		// based on and similar to dojo.date.locale._buildDateTimeRE 
+		// based on and similar to dojo.date.locale._buildDateTimeRE
 		//
 	
-	pattern = dojo.regexp.escapeString(pattern); 
+	pattern = dojo.regexp.escapeString(pattern);
 	var locale = dojo.i18n.normalizeLocale(options.locale);
 	
 	return pattern.replace(/([a-z])\1*/ig, function(match){
@@ -369,7 +369,7 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 					break;
 				default:
 					s = ".*";
-			}	 
+			}
 			if(tokens){ tokens.push(match); }
 			return "(" + s + ")"; // add capture
 		}).replace(/[\xa0 ]/g, "[\\s\\xa0]"); // normalize whitespace.  Need explicit handling of \xa0 for IE. */

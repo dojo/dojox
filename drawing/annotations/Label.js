@@ -18,14 +18,14 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 		this.master = options.stencil;
 		this.labelPosition = options.labelPosition || "BR"; // TL, TR, BR, BL, or function
 		if(dojo.isFunction(this.labelPosition)){
-			this.setLabel = this.setLabelCustom;	
+			this.setLabel = this.setLabelCustom;
 		}
 		this.setLabel(options.text || "");
 		this.connect(this.master, "onTransform", this, "setLabel");
 		this.connect(this.master, "destroy", this, "destroy");
 		
 		if(this.style.labelSameColor){
-			this.connect(this.master, "attr", this, "beforeAttr");		
+			this.connect(this.master, "attr", this, "beforeAttr");
 		}
 	},{
 		_align:"start",
@@ -97,7 +97,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 		beforeAttr: function(key, value){
 			if(value!==undefined){
 				// make it an object
-				var k = key; key = {}; key[k] = value;	
+				var k = key; key = {}; key[k] = value;
 			}
 			delete key.x;
 			delete key.y;

@@ -1,5 +1,5 @@
 define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
-// Note: This doesn't require dojox.rpc.Service, and if you want it you must require it 
+// Note: This doesn't require dojox.rpc.Service, and if you want it you must require it
 // yourself, and you must load it prior to dojox.rpc.Rest.
 
 // summary:
@@ -35,8 +35,8 @@ define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
 							request.url= request.target + (request.data ? '?'+  request.data : '');
 							if(args && (args.start >= 0 || args.count >= 0)){
 								request.headers = request.headers || {};
-								request.headers.Range = "items=" + (args.start || '0') + '-' + 
-									(("count" in args && args.count != Infinity) ? 
+								request.headers.Range = "items=" + (args.start || '0') + '-' +
+									(("count" in args && args.count != Infinity) ?
 										(args.count + (args.start || 0) - 1) : '');
 							}
 							return request;
@@ -88,13 +88,13 @@ define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
 				id += (id ? "&" : "?") + "sort("
 				for(var i = 0; i<args.sort.length; i++){
 					var sort = args.sort[i];
-					id += (i > 0 ? "," : "") + (sort.descending ? '-' : '+') + encodeURIComponent(sort.attribute); 
+					id += (i > 0 ? "," : "") + (sort.descending ? '-' : '+') + encodeURIComponent(sort.attribute);
 				}
 				id += ")";
 			}
 			var request = {
 				url: path + (id == null ? "" : id),
-				handleAs: isJson ? 'json' : 'text', 
+				handleAs: isJson ? 'json' : 'text',
 				contentType: isJson ? 'application/json' : 'text/plain',
 				sync: dojox.rpc._sync,
 				headers: {
@@ -102,8 +102,8 @@ define("dojox/rpc/Rest", ["dojo", "dojox"], function(dojo, dojox) {
 				}
 			};
 			if(args && (args.start >= 0 || args.count >= 0)){
-				request.headers.Range = "items=" + (args.start || '0') + '-' + 
-					(("count" in args && args.count != Infinity) ? 
+				request.headers.Range = "items=" + (args.start || '0') + '-' +
+					(("count" in args && args.count != Infinity) ?
 						(args.count + (args.start || 0) - 1) : '');
 			}
 			dojox.rpc._sync = false;

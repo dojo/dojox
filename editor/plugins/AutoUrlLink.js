@@ -2,8 +2,8 @@ define("dojox/editor/plugins/AutoUrlLink", ["dojo", "dijit", "dojox", "dojo/stri
 
 dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 	//summary:
-	//		This plugin can recognize a URL like string 
-	//		(such as http://www.website.com) and turn it into 
+	//		This plugin can recognize a URL like string
+	//		(such as http://www.website.com) and turn it into
 	//		a hyperlink that points to that URL.
 	
 	// _template [private] String
@@ -50,7 +50,7 @@ dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 				this._recognize({enter: true});
 			}), 0);
 		}else{
-			// _saved: The previous dom node when the cursor is at a new dom node. 
+			// _saved: The previous dom node when the cursor is at a new dom node.
 			// When we click elsewhere, the previous dom node
 			// should be examed to see if there is any URL need to be activated
 			this._saved = this.editor.window.getSelection().anchorNode;
@@ -67,7 +67,7 @@ dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 			ed = this.editor,
 			selection = ed.window.getSelection();
 			if(selection){
-				var node = isEnter ? this._findLastEditingNode(selection.anchorNode) : 
+				var node = isEnter ? this._findLastEditingNode(selection.anchorNode) :
 								(this._saved || selection.anchorNode),
 				bm = this._saved = selection.anchorNode,
 				bmOff = selection.anchorOffset;
@@ -91,7 +91,7 @@ dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 				}
 				
 				// If bm and node are the some dom node, caculate the actual bookmark offset
-				// If the position of the cursor is modified (turned into a link, etc.), no 
+				// If the position of the cursor is modified (turned into a link, etc.), no
 				// need to recover the cursor position
 				if(isSameNode && (bmOff = bmOff - cost) <= 0){ return; }
 	
@@ -179,7 +179,7 @@ dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 		//		Find the occurrace of the URL strings.
 		//		FF, Chrome && Safri have a behavior that when insertHTML is executed,
 		//		the orignal referrence to the text node will be the text node next to
-		//		the inserted anchor automatically. So we have to re-caculate the index of 
+		//		the inserted anchor automatically. So we have to re-caculate the index of
 		//		the following URL occurrence.
 		// value:
 		//		A text to be scanned.
@@ -192,7 +192,7 @@ dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
 		if(node === bm && bmOff < value.length){
 			// Break the text so that it may not grab extra words.
 			// Such as if you type:
-			// foo http://foo.com|bar (And | is where you press enter). 
+			// foo http://foo.com|bar (And | is where you press enter).
 			// It will grab the bar word as part of the link. That's annoying/bad.
 			// Also it prevents recognizing the text after the cursor.
 			value = value.substr(0, bmOff);

@@ -5,8 +5,8 @@
 	emoticonWink: "smeško pomežikne",
 	emoticonGrin: "smeško se nasmehne do ušes",
 	emoticonCool: "smeško je frajer",
-	emoticonAngry: "smeško je jezen",  
-	emoticonHalf: "smeško se mršči", 
+	emoticonAngry: "smeško je jezen",
+	emoticonHalf: "smeško se mršči",
 	emoticonEyebrow: "smeško dviga obrv",
 	emoticonFrown: "smeško ni zadovoljen",
 	emoticonShy: "smeško je v zadregi",
@@ -15,7 +15,7 @@
 	emoticonTongue: "smeško kaže jezik",
 	emoticonIdea: "ideja",
 	emoticonYes: "smeško prikimava",
-	emoticonNo: "smeško odkimava",	
+	emoticonNo: "smeško odkimava",
 	emoticonAngel: "smeško je angelček",
 	emoticonCrying: "smeško joka"
 })

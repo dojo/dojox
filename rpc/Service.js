@@ -20,7 +20,7 @@ dojo.declare("dojox.rpc.Service", null, {
 		//	description:
 		//		dojox.rpc.Service must be loaded prior to any plugin services like dojox.rpc.Rest
 		// 		dojox.rpc.JsonRpc in order for them to register themselves, otherwise you get
-		// 		a "No match found" error.  
+		// 		a "No match found" error.
 		var url;
 		var self = this;
 		function processSmd(smd){

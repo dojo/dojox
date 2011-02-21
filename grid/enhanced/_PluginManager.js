@@ -5,10 +5,10 @@ dojo.require("dojox.grid.enhanced._FocusManager");
 
 dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 	// summary:
-	//		Singleton plugin manager 
+	//		Singleton plugin manager
 	//
 	// description:
-	//		Plugin manager is responsible for 
+	//		Plugin manager is responsible for
 	//		1. Loading required plugins
 	//		2. Handling collaboration and dependencies among plugins
 	//
@@ -47,7 +47,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 	},
 	preInit: function(){
 		// summary:
-		//		Load appropriate plugins before DataGrid.postCreate(). 
+		//		Load appropriate plugins before DataGrid.postCreate().
 		//		See EnhancedGrid.postCreate()
 		this.grid.focus.destroy();
 		this.grid.focus = new dojox.grid.enhanced._FocusManager(this.grid);
@@ -57,7 +57,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 	},
 	postInit: function(){
 		// summary:
-		//		Load plugins after DataGrid.postCreate() - the default phase when plugins are created 
+		//		Load plugins after DataGrid.postCreate() - the default phase when plugins are created
 		//		See EnhancedGrid.postCreate()
 		this._init(false);
 		
@@ -83,7 +83,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		//		Plugin properties defined by user
 		if(!plugins){ return; }
 		
-		var p, loading = {}, options = this._options, grid = this.grid; 
+		var p, loading = {}, options = this._options, grid = this.grid;
 		var registry = dojox.grid.enhanced._PluginManager.registry;//global plugin registry
 		for(p in plugins){
 			if(plugins[p]){//filter out boolean false e.g. {p:false}
@@ -104,11 +104,11 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		// p: String
 		//		Plugin name
 		// plugins: Object
-		//		Plugin properties set by user		
+		//		Plugin properties set by user
 		// registry: Object
 		//		The global plugin registry
 		// loading: Object
-		//		Map for checking process state		
+		//		Map for checking process state
 		if(!registry[p]){ throw new Error('Plugin ' + p + ' is required.');}
 		
 		if(loading[p]){ throw new Error('Recursive cycle dependency is not supported.'); }
@@ -127,7 +127,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 			}
 			dojo.forEach(dependencies, function(dependency){
 				if(!this._normalize(dependency, plugins, registry, loading)){
-					throw new Error('Plugin ' + dependency + ' is required.');	
+					throw new Error('Plugin ' + dependency + ' is required.');
 				}
 			}, this);
 		}
@@ -204,7 +204,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 			}
 		}
 		return null;
-	},	
+	},
 	getPluginClazz: function(clazz){
 		// summary:
 		//		Load target plugin which must be already required (dojo.require(..))

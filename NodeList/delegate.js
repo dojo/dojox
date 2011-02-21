@@ -49,7 +49,7 @@ dojo.extend(dojo.NodeList, {
 			var closest = dojo.query(evt.target).closest(selector, this);
 			if(closest.length){
 				fn.call(closest[0], evt);
-			}						
+			}
 		}); //dojo.NodeList
 	}
 });

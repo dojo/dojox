@@ -15,7 +15,7 @@ var _devideToArrays = function(a){
 			arr[++j] = [a[i]];
 		}
 	}
-	return arr; 
+	return arr;
 },
 hitchIfCan = function(scope, func){
 	return func ? dojo.hitch(scope || dojo.global, func) : function(){};
@@ -28,7 +28,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 		this._revMap = {};
 		this.grid = grid;
 		this._oldOnDelete = grid._onDelete;
-		var _this = this; 
+		var _this = this;
 		grid._onDelete = function(item){
 			_this._onDelete(item);
 			_this._oldOnDelete.call(grid, item);
@@ -44,7 +44,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 		this.grid.sort = this._oldSort;
 	},
 	setMapping: function(mapping){
-		// summary: 
+		// summary:
 		//		Remember the row mapping.
 		// mapping: Object
 		//		keys are original rowIndexes, values are new rowIndexes.
@@ -72,7 +72,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 					revmap[to] = "eq";
 				}else{
 					this._map[origin] = to;
-					revmap[to] = origin;	
+					revmap[to] = origin;
 				}
 			}
 		}
@@ -139,7 +139,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 					r = r in this._revMap ? this._revMap[r] : r;
 					map[r] = i;
 					rows.push(r);
-				}	
+				}
 			}else{
 				//We don't have a count, must create our own.
 				for(i = 0;; ++i){
@@ -182,7 +182,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 					userRequest.start = start;
 					userRequest.count = count;
 					userRequest.onComplete = oldOnComplete;
-					hitchIfCan(userRequest.scope, oldOnComplete)(result, userRequest);	
+					hitchIfCan(userRequest.scope, oldOnComplete)(result, userRequest);
 				}else{
 					userRequest.start = userRequest.start + items.length;
 					delete userRequest.count;
@@ -190,7 +190,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 						result = result.concat(items);
 						userRequest.start = start;
 						userRequest.onComplete = oldOnComplete;
-						hitchIfCan(userRequest.scope, oldOnComplete)(result, userRequest);	
+						hitchIfCan(userRequest.scope, oldOnComplete)(result, userRequest);
 					};
 					_this.originFetch(userRequest);
 				}

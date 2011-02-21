@@ -8,15 +8,15 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 	// html: String
 	//		The string of HTML to try and generate a 'pretty' formatting.
 	// indentBy:  Integer
-	//		Optional input for the number of spaces to use when indenting.  
-	//		If not defined, zero, negative, or greater than 10, will just use tab 
+	//		Optional input for the number of spaces to use when indenting.
+	//		If not defined, zero, negative, or greater than 10, will just use tab
 	//		as the indent.
 	// maxLineLength: Integer
-	//		Optional input for the number of characters a text line should use in 
+	//		Optional input for the number of characters a text line should use in
 	//		the document, including the indent if possible.
 	// map:	Array
-	//		Optional array of entity mapping characters to use when processing the 
-	//		HTML Text content.  By default it uses the default set used by the 
+	//		Optional array of entity mapping characters to use when processing the
+	//		HTML Text content.  By default it uses the default set used by the
 	//		dojox.html.entities.encode function.
 	// xhtml: boolean
 	//		Optional parameter that declares that the returned HTML should try to be 'xhtml' compatible.
@@ -43,7 +43,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 		}
 	}
 
-	//Build the content outside of the editor so we can walk 
+	//Build the content outside of the editor so we can walk
 	//via DOM and build a 'pretty' output.
 	var contentDiv = dojo.doc.createElement("div");
 	contentDiv.innerHTML = html;
@@ -57,7 +57,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 	var isInlineFormat = function(tag){
 		// summary:
 		//		Function to determine if the current tag is an inline
-		//		element that does formatting, as we don't want to 
+		//		element that does formatting, as we don't want to
 		//		break/indent around it, as it can screw up text.
 		// tag:
 		//		The tag to examine
@@ -219,7 +219,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 	var formatScript = function(txt){
 		// summary:
 		//		Function to rudimentary formatting of script text.
-		//		Not perfect, but it helps get some level of organization 
+		//		Not perfect, but it helps get some level of organization
 		//		in there.
 		// txt:
 		//		The script text to try to format a bit.
@@ -242,7 +242,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 							indent++;
 						}else if(ch === "}"){
 							indent--;
-							// We want to back up a bit before the 
+							// We want to back up a bit before the
 							// line is written.
 							iLevel = indent;
 						}
@@ -253,14 +253,14 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 					}
 					newLines.push(_iTxt + line + "\n");
 				}else if(hasNewlines && i === 0){
-					// Just insert a newline for blank lines as 
-					// long as it's not the first newline (we 
+					// Just insert a newline for blank lines as
+					// long as it's not the first newline (we
 					// already inserted that in the openTag handler)
 					newLines.push("\n");
 				}
 
 			}
-			// Okay, create the script text, hopefully reasonably 
+			// Okay, create the script text, hopefully reasonably
 			// formatted.
 			txt = newLines.join("");
 		}
@@ -275,7 +275,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 		var nText = dojo.trim(outerHTML(node));
 		var tag = nText.substring(0, nText.indexOf(">") + 1);
 
-		// Also thanks to IE, we need to check for quotes around 
+		// Also thanks to IE, we need to check for quotes around
 		// attributes and insert if missing.
 		tag = tag.replace(rgxp_fixIEAttrs,'="$1"$2');
 
@@ -325,7 +325,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 			 tag += " " + attrs.join(" ");
 		}
 
-		// Determine closure status.  If xhtml, 
+		// Determine closure status.  If xhtml,
 		// then close the tag properly as needed.
 		if(nText.indexOf("</") != -1){
 			closeTags.push(name);
@@ -340,9 +340,9 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 		}
 
 		var inline = isInlineFormat(name);
-		inlineStyle.push(inline); 
+		inlineStyle.push(inline);
 		if(textContent && !inline){
-			// Process any text content we have that occurred 
+			// Process any text content we have that occurred
 			// before the open tag of a non-inline.
 			content.push(formatText(textContent));
 			textContent = "";
@@ -365,7 +365,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 		//		Function to close out a tag if necessary.
 		var inline = inlineStyle.pop();
 		if(textContent && !inline){
-			// Process any text content we have that occurred 
+			// Process any text content we have that occurred
 			// before the close tag.
 			content.push(formatText(textContent));
 			textContent = "";
@@ -382,7 +382,7 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 				textContent += ct;
 			}
 		}else{
-			indentDepth--;	
+			indentDepth--;
 		}
 	};
 
@@ -416,11 +416,11 @@ dojox.html.format.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, 
 				if(n.nodeType === 1){
 					var tg = dojo.trim(n.tagName.toLowerCase());
 					if(dojo.isIE && n.parentNode != node){
-						// IE is broken.  DOMs are supposed to be a tree.  
+						// IE is broken.  DOMs are supposed to be a tree.
 						// But in the case of malformed HTML, IE generates a graph
-						// meaning one node ends up with multiple references 
+						// meaning one node ends up with multiple references
 						// (multiple parents).  This is totally wrong and invalid, but
-						// such is what it is.  We have to keep track and check for 
+						// such is what it is.  We have to keep track and check for
 						// this because otherwise the source output HTML will have dups.
 						continue;
 					}

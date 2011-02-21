@@ -90,7 +90,7 @@ dojo.declare("highlight.Code",[dijit._Widget, dijit._Templated],{
 	},
 	
 	_loadError: function(error){
-		// summary: a generic error handler for the url="" 
+		// summary: a generic error handler for the url=""
 		console.warn("loading: ", this.url, " FAILED", error);
 	}
 });

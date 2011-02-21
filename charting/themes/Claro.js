@@ -10,10 +10,10 @@ dojo.require("dojox.charting.Theme");
 	
 	themes.Claro = new dc.Theme({
 		chart: {
-			fill:	   { 
-				type: "linear", 
-				x1: 0, x2: 0, y1: 0, y2: 100, 
-				colors: [ 
+			fill:	   {
+				type: "linear",
+				x1: 0, x2: 0, y1: 0, y2: 100,
+				colors: [
 					{ offset: 0, color: "#dbdbdb" },
 					{ offset: 1, color: "#efefef" }
 				]
@@ -21,10 +21,10 @@ dojo.require("dojox.charting.Theme");
 			stroke:    {color: "#b5bcc7"}
 		},
 		plotarea: {
-			fill:	   { 
-				type: "linear", 
-				x1: 0, x2: 0, y1: 0, y2: 100, 
-				colors: [ 
+			fill:	   {
+				type: "linear",
+				x1: 0, x2: 0, y1: 0, y2: 100,
+				colors: [
 					{ offset: 0, color: "#dbdbdb" },
 					{ offset: 1, color: "#efefef" }
 				]
@@ -50,23 +50,23 @@ dojo.require("dojox.charting.Theme");
 		},
 		marker: {
 			stroke:  {width: 1.25, color: "#131313"},
-			outline: {width: 1.25, color: "#131313"}, 
+			outline: {width: 1.25, color: "#131313"},
 			font: "normal normal normal 8pt Verdana, Arial, sans-serif",
 			fontColor: "#131313"
 		},
 		seriesThemes: [
 			{fill: g(defaultFill, "#2a6ead", "#3a99f2")},
-			{fill: g(defaultFill, "#613e04", "#996106")},	
-			{fill: g(defaultFill, "#0e3961", "#155896")},	
+			{fill: g(defaultFill, "#613e04", "#996106")},
+			{fill: g(defaultFill, "#0e3961", "#155896")},
 			{fill: g(defaultFill, "#55aafa", "#3f7fba")},
-			{fill: g(defaultFill, "#ad7b2a", "#db9b35")}	
+			{fill: g(defaultFill, "#ad7b2a", "#db9b35")}
 		],
 		markerThemes: [
-			{fill: "#2a6ead", stroke: {color: "#fff"}},	
+			{fill: "#2a6ead", stroke: {color: "#fff"}},
 			{fill: "#613e04", stroke: {color: "#fff"}},
-			{fill: "#0e3961", stroke: {color: "#fff"}},	
-			{fill: "#55aafa", stroke: {color: "#fff"}},	
-			{fill: "#ad7b2a", stroke: {color: "#fff"}}	
+			{fill: "#0e3961", stroke: {color: "#fff"}},
+			{fill: "#55aafa", stroke: {color: "#fff"}},
+			{fill: "#ad7b2a", stroke: {color: "#fff"}}
 		]
 	});
 	

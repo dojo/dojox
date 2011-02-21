@@ -48,7 +48,7 @@ dojo.require("dojox.fx");
 		destroy: function(){
 			this.inherited(arguments);
 			this._movableMax.destroy();
-			this._movableBar.destroy(); 
+			this._movableBar.destroy();
 		},
 	
 		_onKeyPress: function(/*Event*/ e){
@@ -133,12 +133,12 @@ dojo.require("dojox.fx");
 			var value = dojo.isArray(signedChange) ? [
 					this._getBumpValue(signedChange[0].change, signedChange[0].useMaxValue),
 					this._getBumpValue(signedChange[1].change, signedChange[1].useMaxValue)
-				] 
+				]
 				: this._getBumpValue(signedChange, useMaxValue)
 
-			this._setValueAttr(value, true, 
+			this._setValueAttr(value, true,
 				// conditional passed the valueAttr
-				!dojo.isArray(signedChange) && 
+				!dojo.isArray(signedChange) &&
 				((signedChange > 0 && !useMaxValue) || (useMaxValue && signedChange < 0))
 			);
 		},
@@ -171,7 +171,7 @@ dojo.require("dojox.fx");
 				// (but don't do on IE because it causes a flicker on mouse up (due to blur then focus)
 				dijit.focus(this.progressBar);
 			}
-			dojo.stopEvent(e);	
+			dojo.stopEvent(e);
 		},
 	
 		_onRemainingBarClick: function(e){
@@ -273,8 +273,8 @@ dojo.require("dojox.fx");
 				propsHandleMax[this._handleOffsetCoord] = { start: this.sliderHandleMax.style[this._handleOffsetCoord], end: sliderHandleMaxVal, units:"%"};
 				propsBar[this._handleOffsetCoord] = { start: this.progressBar.style[this._handleOffsetCoord], end: progressBarVal, units:"%"};
 				propsBar[this._progressPixelSize] = { start: this.progressBar.style[this._progressPixelSize], end: (percentMax - percentMin) * 100, units:"%"};
-				var animHandle = dojo.animateProperty({node: this.sliderHandle,duration: duration, properties: propsHandle}); 
-				var animHandleMax = dojo.animateProperty({node: this.sliderHandleMax,duration: duration, properties: propsHandleMax}); 
+				var animHandle = dojo.animateProperty({node: this.sliderHandle,duration: duration, properties: propsHandle});
+				var animHandleMax = dojo.animateProperty({node: this.sliderHandleMax,duration: duration, properties: propsHandleMax});
 				var animBar = dojo.animateProperty({node: this.progressBar,duration: duration, properties: propsBar});
 				var animCombine = dojo.fx.combine([animHandle, animHandleMax, animBar]);
 				animCombine.play();
@@ -287,7 +287,7 @@ dojo.require("dojox.fx");
 		}
 	});
 
-	dojo.declare("dijit.form._SliderMoverMax", dijit.form._SliderMover, {	
+	dojo.declare("dijit.form._SliderMoverMax", dijit.form._SliderMover, {
 
 		onMouseMove: function(e){
 			var widget = this.widget;
@@ -298,7 +298,7 @@ dojo.require("dojox.fx");
 				widget._isReversed_ = widget._isReversed();
 			}
 			
-			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords 
+			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords
 			var pixelValue = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord];
 			widget._setPixelValue_(widget._isReversed_ ? (abspos[widget._pixelCount]-pixelValue) : pixelValue, abspos[widget._pixelCount], false, true);
 		},
@@ -329,7 +329,7 @@ dojo.require("dojox.fx");
 			if(!bar){
 				bar = widget._bar = dojo.coords(widget.progressBar, true);
 			}
-			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords 
+			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords
 			
 			if(!mouseOffset){
 				mouseOffset = widget._mouseOffset = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - bar[widget._startingPixelCount];
@@ -355,7 +355,7 @@ dojo.require("dojox.fx");
 			}
 			// getting the real values by pixel
 			var myValues = [
-				widget._getValueByPixelValue(widget._isReversed_ ? (abspos[widget._pixelCount] - pixelValues[0]) : pixelValues[0], abspos[widget._pixelCount]), 
+				widget._getValueByPixelValue(widget._isReversed_ ? (abspos[widget._pixelCount] - pixelValues[0]) : pixelValues[0], abspos[widget._pixelCount]),
 				widget._getValueByPixelValue(widget._isReversed_ ? (abspos[widget._pixelCount] - pixelValues[1]) : pixelValues[1], abspos[widget._pixelCount])
 			];
 			// and setting the value of the widget

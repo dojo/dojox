@@ -8,14 +8,14 @@ dojo.experimental("dojox.widget.AnalogGauge");
 dojo.declare("dojox.widget.gauge.AnalogLineIndicator",[dojox.widget.gauge._Indicator],{
 	_getShapes: function(){
 		// summary:
-		//		Private function for generating the shapes for this indicator. An indicator that behaves the 
+		//		Private function for generating the shapes for this indicator. An indicator that behaves the
 		//		same might override this one and simply replace the shapes (such as ArrowIndicator).
 		return [this._gauge.surface.createLine({x1: 0, y1: -this.offset,
 													x2: 0, y2: -this.length-this.offset})
 					.setStroke({color: this.color, width: this.width})];
 	},
 	draw: function(/*Boolean?*/ dontAnimate){
-		// summary: 
+		// summary:
 		//		Override of dojox.widget.gauge._Indicator.draw
 		// dontAnimate: Boolean
 		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
@@ -68,7 +68,7 @@ dojo.declare("dojox.widget.gauge.AnalogLineIndicator",[dojox.widget.gauge._Indic
 		}
 	},
 	_move: function(/*Boolean?*/ dontAnimate){
-		// summary: 
+		// summary:
 		//		Moves this indicator (since it's already been drawn once)
 		// dontAnimate: Boolean
 		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)
@@ -106,7 +106,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 	//
 	// description:
 	//		using dojo.gfx (and thus either SVG or VML based on what is supported), this widget
-	//		builds a gauge component, used to display numerical data in a familiar format 
+	//		builds a gauge component, used to display numerical data in a familiar format
 	//
 	// usage:
 	//		<script type="text/javascript">
@@ -236,7 +236,7 @@ dojo.declare("dojox.widget.AnalogGauge",dojox.widget.gauge._Gauge,{
 		// summary:
 		//		This function is used to draw (or redraw) a range
 		// description:
-		//		Draws a range (colored area on the background of the gauge) 
+		//		Draws a range (colored area on the background of the gauge)
 		//		based on the given arguments.
 		// range:
 		//		A range is a dojox.widget.gauge.Range or an object

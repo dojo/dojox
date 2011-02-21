@@ -24,7 +24,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._ConditionExpr",null,{
 		//		A user defined function that extract cell data from *datarow*.
 		//		*colArg* is an argument that provides a kind of column information.
 		//		It is defined by user in the constructor of a _DataExpr object.
-		// returns: 
+		// returns:
 		//		MUST return a _ConditionExpr object
 		throw new Error("_ConditionExpr.applyRow: unimplemented interface");
 	},
@@ -53,7 +53,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr,
 	//		A _DataExpr is a condition expression for a single data value.
 	//		If the data value to be represent is a pure value (literal value, like string/number/Date/...)
 	//		this _DataExpr is nothing more than a simple wrapper.
-	//		If the data value to be represent is in a store, then _DataExpr is responsible to extract it 
+	//		If the data value to be represent is in a store, then _DataExpr is responsible to extract it
 	//		from the store when this condition is applied to a data row.
 	// private fields:
 	//		_value: anything
@@ -62,8 +62,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr,
 	constructor: function(/* anything */dataValue,/* bool */isColumn, /* object */convertArgs){
 		// summary:
 		//		If a _DataExpr is constructed with only one argument, this argument is regarded as a pure value.
-		//		If the second argument is exactly a boolean true (no implict type transformation, 
-		//		so as to allow derived classes accept more arguments while retain *isColumn* to be optional), 
+		//		If the second argument is exactly a boolean true (no implict type transformation,
+		//		so as to allow derived classes accept more arguments while retain *isColumn* to be optional),
 		//		then this _DataExpr represents a column, and it's applyRow method is not a no-op.
 		// dataValue: anything
 		//		If *isColumn* is a boolean true, then it should be a kind of column information, like field name
@@ -97,19 +97,19 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._DataExpr", fns._ConditionExpr,
 		//		If this is a pure value, simply return self.
 		//		Otherwise, extract the cell data from datarow using the given getter function,
 		//		and then convert this cell data to a _DataExpr and return the expression.
-		return typeof this._colArg == "undefined" ? this :			//_ConditionExpr 
+		return typeof this._colArg == "undefined" ? this :			//_ConditionExpr
 			new (dojo.getObject(this.declaredClass))(
 				this._convertData(getter(datarow, this._colArg), this._convertArgs)
 			);
 	},
 	_convertData: function(/* anything */dataValue){
 		// summary:
-		//		
+		//
 		// tags:
 		//		protected extension
 		// dataValue: anything
 		//		This argument should come from a store.
-		// returns: 
+		// returns:
 		return dataValue;
 	},
 	toObject: function(){

@@ -19,7 +19,7 @@ var _devideToArrays = function(a){
 				arr[++j] = [a[i]];
 			}
 		}
-		return arr; 
+		return arr;
 	},
 	_joinToArray = function(arrays){
 		var a = arrays[0];
@@ -38,13 +38,13 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 	//			Support moving within grid, moving/copying out of grid to any DnD target.
 	//		DnD selected cells (in rectangle shape only):
 	//			Support moving/copying within grid, moving/copying out of grid to any DnD target.
-	//		
+	//
 	
 	// name: String,
 	//		plugin name;
 	name: "dnd",
 	
-	_targetAnchorBorderWidth: 2, 
+	_targetAnchorBorderWidth: 2,
 	_copyOnly: false,
 	_config: {
 		"row":{
@@ -108,41 +108,41 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 	setupConfig: function(config){
 		// summary:
 		//		Configure which DnD functionalities are needed.
-		//		Combination of any item from type set ("row", "col", "cell") 
+		//		Combination of any item from type set ("row", "col", "cell")
 		//		and any item from mode set("within", "in", "out") is configurable.
-		//		
+		//
 		//		"row", "col", "cell" are straitforward, while the other 3 are explained below:
 		//		"within": DnD within grid, that is, column/row reordering and cell moving/copying.
 		//		"in": Whether allowed to accept rows/cells (currently not support columns) from another grid.
 		//		"out": Whether allowed to drag out of grid, to another grid or even to any other DnD target.
-		//		
+		//
 		//		If not provided in the config, will use the default.
 		//		When declared together, Mode set has higher priority than type set.
 		// config: Object
 		//		DnD configuration object.
 		//		See the examples below.
 		// example:
-		//		The following code disables row DnD within grid, 
+		//		The following code disables row DnD within grid,
 		//		but still can drag rows out of grid or drag rows from other gird.
 		//	|	setUpConfig({
 		//	|		"row": {
 		//	|			"within": false
 		//	|		}
 		//	|	});
-		//		
+		//
 		//		The opposite way is also okay:
 		//	|	setUpConfig({
 		//	|		"within": {
 		//	|			"row": false
 		//	|		}
 		//	|	});
-		//		
+		//
 		//		And if you'd like to disable/enable a whole set, here's a shortcut:
 		//	|	setUpConfig({
 		//	|		"cell", true,
 		//	|		"out": false
 		//	|	});
-		//		
+		//
 		//		Because mode has higher priority than type, the following will disable row dnd within grid:
 		//	|	setUpConfig({
 		//	|		"within", {
@@ -169,7 +169,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 						dojo.forEach(secondLevel, function(mode){
 							cfg[type][mode] = !!t;
 						});
-					}	
+					}
 				}
 			});
 			dojo.forEach(secondLevel, function(mode){
@@ -200,7 +200,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 	},
 	_isOutOfGrid: function(evt){
 		var gridPos = dojo.position(this.grid.domNode), x = evt.clientX, y = evt.clientY;
-		return y < gridPos.y || y > gridPos.y + gridPos.h || 
+		return y < gridPos.y || y > gridPos.y + gridPos.h ||
 			x < gridPos.x || x > gridPos.x + gridPos.w;
 	},
 	_onMouseMove: function(evt){
@@ -335,7 +335,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 						return (range.max.row - range.min.row + 1) * (range.max.col - range.min.col + 1 - hiddenColCnt);
 					},
 					inRange = function(item, range){
-						return item.row >= range.min.row && item.row <= range.max.row && 
+						return item.row >= range.min.row && item.row <= range.max.row &&
 							item.col >= range.min.col && item.col <= range.max.col;
 					},
 					range = {
@@ -451,7 +451,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 	},
 	_destroySource: function(){
 		dojo.publish("/dnd/cancel");
-		this._elem.destroyDnDNodes();	
+		this._elem.destroyDnDNodes();
 	},
 	_createMoveable: function(evt){
 		if(!this._markTagetAnchorHandler){
@@ -529,7 +529,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			}
 			top = nodePos.y;
 		}else{
-			top = nodePos.y + nodePos.h; 
+			top = nodePos.y + nodePos.h;
 		}
 		this._target = rowIndex;
 		return top - containerPos.y;
@@ -574,7 +574,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 			headPos = dojo.position(headers[i].node);
 			if((evt.clientX >= headPos.x && evt.clientX < headPos.x + headPos.w) || //within in this column
 				//prior to this column, but within range
-				(i == preSpan && (ltr ? evt.clientX < headPos.x : evt.clientX >= headPos.x + headPos.w)) || 
+				(i == preSpan && (ltr ? evt.clientX < headPos.x : evt.clientX >= headPos.x + headPos.w)) ||
 				//post to this column, but within range
 				(i == headers.length - postSpan - 1 && (ltr ? evt.clientX >= headPos.x + headPos.w : evt < headPos.x))){
 					minCol = headers[i - preSpan];
@@ -614,7 +614,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		this._target = {
 			"min":{
 				"row": minRow,
-				"col": minCol	
+				"col": minCol
 			},
 			"max":{
 				"row": maxRow,
@@ -645,7 +645,7 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		if(this._alreadyOut || (this._dnding && !this._config[t]["within"]) || (this._extDnding && !this._config[t]["in"])){
 			return;
 		}
-		var height, width, left, top, 
+		var height, width, left, top,
 			targetAnchor = this._targetAnchor[t],
 			pos = dojo.position(this._container);
 		if(!targetAnchor){
@@ -830,8 +830,8 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		switch(type){
 			case "cell":
 				ranges = ranges[0];
-				res = g.store.getFeatures()["dojo.data.api.Write"] && 
-					(ranges.max.row - ranges.min.row) <= rowCnt && 
+				res = g.store.getFeatures()["dojo.data.api.Write"] &&
+					(ranges.max.row - ranges.min.row) <= rowCnt &&
 					dojo.filter(sourcePlugin.grid.layout.cells, function(cell){
 						return cell.index >= ranges.min.col && cell.index <= ranges.max.col && !cell.hidden;
 					}).length <= colCnt;
@@ -1062,7 +1062,7 @@ dojo.declare("dojox.grid.enhanced.plugins.GridDnDAvatar", dojo.dnd.Avatar, {
 		}[this._itemType][this._itemCount == 1 ? 0 : 1];
 	},
 	_generateText: function(){
-		// summary: 
+		// summary:
 		//		generates a proper text to reflect copying or moving of items
 		return "(" + this._itemCount + ")";
 	}

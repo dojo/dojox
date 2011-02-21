@@ -10,9 +10,9 @@ function Socket(/*dojo.__XhrArgs*/ argsOrUrl){
 	//		on the WebSocket API and returns an object that implements the WebSocket interface:
 	//		http://dev.w3.org/html5/websockets/#websocket
 	//	description:
-	//		Provides socket connections. This can be used with virtually any Comet protocol. 
+	//		Provides socket connections. This can be used with virtually any Comet protocol.
 	//	argsOrUrl:
-	//		This uses the same arguments as the other I/O functions in Dojo, or a 
+	//		This uses the same arguments as the other I/O functions in Dojo, or a
 	// 		URL to connect to. The URL should be a relative URL in order to properly
 	//		work with WebSockets (it can still be host relative, like //other-site.org/endpoint)
 	// returns:
@@ -45,7 +45,7 @@ function Socket(/*dojo.__XhrArgs*/ argsOrUrl){
 
 Socket.WebSocket = function(args){
 	// summary:
-	//		A wrapper for WebSocket, than handles standard args and relative URLs 
+	//		A wrapper for WebSocket, than handles standard args and relative URLs
 	var ws = new WebSocket(new dojo._Url(document.baseURI.replace(/^http/i,'ws'), args.url));
 	ws.on = ws.addEventListener;
 	var opened;
@@ -62,7 +62,7 @@ Socket.WebSocket = function(args){
 	return ws;
 };
 Socket.replace = function(socket, newSocket, listenForOpen){
-	// make the original socket a proxy for the new socket 
+	// make the original socket a proxy for the new socket
 	socket.send = dojo.hitch(newSocket, "send");
 	socket.close = dojo.hitch(newSocket, "close");
 	if(listenForOpen){
@@ -87,7 +87,7 @@ Socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
 	//		Indicates the amount of time (in milliseconds) after a response was received
 	//		before another request is made. By default, a request is made immediately
 	//		after getting a response. The interval can be increased to reduce load on the
-	//		server or to do simple time-based polling where the server always responds 
+	//		server or to do simple time-based polling where the server always responds
 	// 		immediately.
 	//	args.transport:
 	//		Provide an alternate transport like dojo.io.script.get
@@ -122,7 +122,7 @@ var cancelled = false,
 				socket.readyState = 1;
 				// remove the current connection
 				connections.splice(dojo.indexOf(connections, deferred), 1);
-				// reconnect to listen for the next message if there are no active connections, 
+				// reconnect to listen for the next message if there are no active connections,
 				// we queue it up in case one of the onmessage handlers has a message to send
 				if(!connections.length){
 					timeoutId = setTimeout(connect, args.interval);
@@ -173,8 +173,8 @@ var cancelled = false,
 			// summary:
 			// 		This allows for special handling for the first request. This is useful for
 			//		providing information to disambiguate between the first request and
-			//		subsequent long-poll requests so the server can properly setup a 
-			// 		connection on the first connection or reject a request for an expired 
+			//		subsequent long-poll requests so the server can properly setup a
+			// 		connection on the first connection or reject a request for an expired
 			// 		connection if the request is not expecting to be the first for a connection.
 			//		This method can be overriden. The default behavior is to include a Pragma
 			//		header with a value of "start-long-poll"

@@ -8,13 +8,13 @@ dojo.require("dojox.charting.action2d.Highlight");
 	var df = dojox.lang.functional;
 	
 	dojo.declare("dojox.charting.widget.SelectableLegend", [dojox.charting.widget.Legend], {
-		//	summary: 
+		//	summary:
 		//		An enhanced chart legend supporting interactive events on data series
 		
 		//	theme component
 		outline:			false,	//	outline of vanished data series
-		transitionFill:		null,	//	fill of deselected data series 
-		transitionStroke:	null,	//	stroke of deselected data series 
+		transitionFill:		null,	//	fill of deselected data series
+		transitionStroke:	null,	//	stroke of deselected data series
 		
 		postCreate: function(){
 			this.legends = [];
@@ -40,8 +40,8 @@ dojo.require("dojox.charting.action2d.Highlight");
 			dojo.attr(label, "for", checkbox.id);
 		},
 		_applyEvents: function(){
-			// summary: 
-			//		Apply click-event on checkbox and hover-event on legend icon, 
+			// summary:
+			//		Apply click-event on checkbox and hover-event on legend icon,
 			//		highlight data series or toggle it.
 			
 			dojo.forEach(this.legends, function(legend, i){
@@ -81,7 +81,7 @@ dojo.require("dojox.charting.action2d.Highlight");
 		},
 		_toggle: function(shapes, index, isOff, dyn, seriesName, plotName){
 			dojo.forEach(shapes, function(shape, i){
-				var startFill = dyn.fills[i], 
+				var startFill = dyn.fills[i],
 					endFill = this._getTransitionFill(plotName),
 					startStroke = dyn.strokes[i],
 					endStroke = this.transitionStroke;
@@ -108,7 +108,7 @@ dojo.require("dojox.charting.action2d.Highlight");
 				var anim = this._getAnim(plotName),
 					isPie = this._isPie(),
 					type = formatEventType(e.type);
-				//	highlight the label icon, 
+				//	highlight the label icon,
 				var label = {
 					shape: iconShape,
 					index: isPie ? "legend" + index : "legend",
@@ -164,12 +164,12 @@ dojo.require("dojox.charting.action2d.Highlight");
 	}
 	dojo.declare("dojox.charting.widget._FocusManager", null, {
 		//	summary:
-		//		It will take legend as a tab stop, and using 
+		//		It will take legend as a tab stop, and using
 		//		cursor keys to navigate labels within the legend.
 		constructor: function(legend){
 			this.legend = legend;
 			this.index = 0;
-			this.horizontalLength = this._getHrizontalLength(); 
+			this.horizontalLength = this._getHrizontalLength();
 			dojo.forEach(legend.legends, function(item, i){
 				if(i > 0){
 					dojo.query("input", item).attr("tabindex", -1);

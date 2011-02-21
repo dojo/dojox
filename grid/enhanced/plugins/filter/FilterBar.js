@@ -111,7 +111,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 							if(dojo.isFF){
 								barHeight -= 2;
 							}
-							return toShow ? (curHeight - barHeight) : (curHeight + barHeight); 
+							return toShow ? (curHeight - barHeight) : (curHeight + barHeight);
 						})
 					}
 				}
@@ -259,7 +259,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 				}
 			}
 			if(this._focusPos === 0){
-				dijit.focus(this.defineFilterButton.focusNode);	
+				dijit.focus(this.defineFilterButton.focusNode);
 			}else if(this._focusPos === 1 && hasFilter){
 				dijit.focus(this.clearFilterButton.focusNode);
 			}else{
@@ -349,7 +349,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 			if(cell){
 				dojo.addClass(cell.getHeaderNode(), "dojoxGridCellOver");
 			}
-			this._previousHeaderIdx = colIdx;	
+			this._previousHeaderIdx = colIdx;
 		}
 	},
 	_clearHeaderHighlight: function(){

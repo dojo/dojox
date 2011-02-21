@@ -10,7 +10,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	//		A flexible way to control multiple column sorting, including
 	//		1. Set default sorting order
 	//		2. Disable sorting for certain columns
-	//		3. Set sorting order dynamically with JS API	
+	//		3. Set sorting order dynamically with JS API
 	//
 	// example:
 	// |	<script type="text/javascript">
@@ -34,7 +34,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_a11yText: {
 		'dojoxGridDescending'   : '&#9662;',
 		'dojoxGridAscending'    : '&#9652;',
-		'dojoxGridAscendingTip' : '&#1784;',	
+		'dojoxGridAscendingTip' : '&#1784;',
 		'dojoxGridDescendingTip': '&#1783;',
 		'dojoxGridUnsortedTip'  : 'x' //'&#10006;'
 	},
@@ -174,7 +174,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	},
 	_onHeaderCellClick: function(e){
 		// summary
-		//		See dojox.grid.enhanced._Events._onHeaderCellClick()		
+		//		See dojox.grid.enhanced._Events._onHeaderCellClick()
 		this._focusRegion(e.target);
 		if(dojo.hasClass(e.target, 'dojoxGridSortBtn')){
 			this._onSortBtnClick(e);
@@ -220,7 +220,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			nestedSortBtn.innerHTML = nestedIndex + this._a11yText.dojoxGridUnsortedTip;
 		}else{
 			nestedSortBtn.innerHTML = nestedIndex + this._a11yText.dojoxGridAscending;
-		}		
+		}
 		if(this._currMainSort === 'none'){
 			singleSortBtn.innerHTML = this._a11yText.dojoxGridAscending;
 		}else if(this._currMainSort === 'asc'){
@@ -232,7 +232,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 	_onHeaderCellMouseOut: function(e){
 		// summary
 		//		See dojox.grid.enhanced._Events._onHeaderCellMouseOut()
-		var p;	
+		var p;
 		for(p in this._sortData){
 			if(this._sortData[p].index === 0){
 				dojo.removeClass(this._headerNodes[p], 'dojoxGridCellShowIndex');
@@ -410,7 +410,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			}
 		}
 		return null;
-	},	
+	},
 	clearSort: function(){
 		this._sortData = {};
 		this._sortDef.length = 0;
@@ -423,7 +423,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 				name: "sortOrder",
 				onLoad: dojo.hitch(this, '_loadNestedSortingProps'),
 				onSave: dojo.hitch(this, '_saveNestedSortingProps')
-			});	
+			});
 		}
 	},
 	_loadNestedSortingProps: function(sortInfo, grid){
@@ -558,7 +558,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			region = region.parentNode;
 		}
 		return region;
-	},	
+	},
 	destroy: function(){
 		this._sortDef = this._sortData = null;
 		this._headerNodes = this._focusRegions = null;

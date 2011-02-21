@@ -12,7 +12,7 @@ define("dojox/image/LightboxNano", ["dojo", "dojo/fx"], function(dojo, fx) {
 
 	dojo.declare("dojox.image.LightboxNano", null, {
 		//	summary:
-		//		A simple "nano" version of the lightbox. 
+		//		A simple "nano" version of the lightbox.
 		//
 		//	description:
 		//		Very lightweight lightbox which only displays a larger image.  There is
@@ -82,12 +82,12 @@ define("dojox/image/LightboxNano", ["dojo", "dojo/fx"], function(dojo, fx) {
 		_createDiv: function(/*String*/cssClass, /*DomNode*/refNode, /*boolean*/display){
 			// summary: Creates a div for the enlarge icon and loading indicator layers
 			return dojo.create("div", { // DomNode
-				"class": cssClass, 
-				style: { 
-					position: abs, 
-					display: display ? "" : "none" 
-				} 
-			}, refNode); 
+				"class": cssClass,
+				style: {
+					position: abs,
+					display: display ? "" : "none"
+				}
+			}, refNode);
 		},
 
 		_load: function(/*Event*/e){
@@ -229,7 +229,7 @@ define("dojox/image/LightboxNano", ["dojo", "dojo/fx"], function(dojo, fx) {
 				top:	{ start: s.y, end: e.y },
 				width:	{ start: s.w, end: e.w },
 				height:	{ start: s.h, end: e.h }
-			}; 
+			};
 		},
 
 		_hide: function(){
@@ -259,25 +259,25 @@ define("dojox/image/LightboxNano", ["dojo", "dojo/fx"], function(dojo, fx) {
 				duration: this.duration,
 				properties: args,
 				onEnd: onEnd ? dojo.hitch(this, onEnd) : null
-			}); 
+			});
 		},
 		
 		show: function(/*Object?*/args){
-			// summary: 
-			//		Shows this LightboxNano programatically. Allows passing a new href and 
+			// summary:
+			//		Shows this LightboxNano programatically. Allows passing a new href and
 			//		a programatic origin.
 			//
 			// args: Object?
 			//		An object with optional members of `href` and `origin`.
-			//		`origin` can be be a String|Id of a DomNode to use when 
+			//		`origin` can be be a String|Id of a DomNode to use when
 			//		animating the openeing of the image (the 'box' effect starts
 			//		from this origin point. eg: { origin: e.target })
 			//		If there's no origin, it will use the center of the viewport.
-			//		The `href` member is a string URL for the image to be 
+			//		The `href` member is a string URL for the image to be
 			//		displayed. Omiting either of these members will revert to
 			//		the default href (which could be absent in some cases) and
 			//		the original srcNodeRef for the widget.
-			args = args || {}; 
+			args = args || {};
 			this.href = args.href || this.href;
 
 			var n = dojo.byId(args.origin),

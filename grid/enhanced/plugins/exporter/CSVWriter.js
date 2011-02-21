@@ -52,7 +52,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.CSVWriter",
 			//We are not interested in indirect selectors and row indexes.
 			if(!cell.hidden && dojo.indexOf(arg_obj.spCols,cell.index) < 0){
 				//We only need data here, not html
-				row.push(func(this._getExportDataForCell(arg_obj.rowIndex, arg_obj.row, cell, arg_obj.grid)));	
+				row.push(func(this._getExportDataForCell(arg_obj.rowIndex, arg_obj.row, cell, arg_obj.grid)));
 			}
 		}, this);
 		this._dataRows.push(row);

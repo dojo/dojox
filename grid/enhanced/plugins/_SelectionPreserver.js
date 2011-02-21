@@ -114,7 +114,7 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 			this._defaultSelected = flag > 0;
 		}
 		if(!isForAll && from !== undefined && to !== undefined){
-			isForAll = !g.usingPagination && Math.abs(to - from + 1) === g.rowCount; 
+			isForAll = !g.usingPagination && Math.abs(to - from + 1) === g.rowCount;
 		}
 		// When deselectAll, make sure every thing is deselected, even if it was selected but not loaded now.
 		// This occurs only when pagination's "All" is used.

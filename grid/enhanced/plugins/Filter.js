@@ -18,11 +18,11 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 		//		Provide filter functionality for grid.
 		//
 		//		Acceptable plugin parameters:
-		//		1. itemsName: string	
+		//		1. itemsName: string
 		//			the name shown on the filter bar.
-		//		2. statusTipTimeout: number 
+		//		2. statusTipTimeout: number
 		//			when does the status tip show.
-		//		3. ruleCount: number 
+		//		3. ruleCount: number
 		//			default to 3, should not change to more. The Claro theme limits it.
 		//		4. disabledConditions: object
 		//			If you don't need all of the conditions provided for a data type,
@@ -39,7 +39,7 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 		//		1. filterable: boolean
 		//			The column is not filterable only when this is set to false explicitly.
 		//		2. datatype: string
-		//			The data type of this column. Can be "string", "number", "date", "time", "boolean". 
+		//			The data type of this column. Can be "string", "number", "date", "time", "boolean".
 		//			Default to "string".
 		//		3. autoComplete: boolean
 		//			If need auto-complete in the ComboBox for String type, set this to true.
@@ -65,9 +65,9 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 		//	|	var layout = [
 		//	|		...
 		//	|		//define a column to be un-filterable in layout/structure
-		//	|		{field: "Genre", filterable: false, ...} 
+		//	|		{field: "Genre", filterable: false, ...}
 		//	|		//define a column of type string and supports autoComplete when you type in filter conditions.
-		//	|		{field: "Writer", datatype: "string", autoCommplete: true, ...} 
+		//	|		{field: "Writer", datatype: "string", autoCommplete: true, ...}
 		//	|		//define a column of type date and the data in store has format: "yyyy/M/d"
 		//	|		{field: "Publish Date", datatype: "date", dataTypeArgs: {datePattern: "yyyy/M/d"}, ...}
 		//	|		//disable some conditions for a column
@@ -80,7 +80,7 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 		name: "filter",
 		
 		constructor: function(grid, args){
-			// summary: 
+			// summary:
 			//		See constructor of dojox.grid.enhanced._Plugin.
 			this.grid = grid;
 			this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Filter");
@@ -93,7 +93,7 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 			//Install filter layer
 			this._wrapStore();
 			
-			//Install UI components 
+			//Install UI components
 			var obj = { "plugin": this };
 			this.clearFilterDialog = new dojox.grid.enhanced.plugins.Dialog({
 				refNode: this.grid.domNode,
@@ -132,7 +132,7 @@ dojo.require("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
 		_wrapStore: function(){
 			var g = this.grid;
 			var args = this.args;
-			var filterLayer = args.isServerSide ? new fns.ServerSideFilterLayer(args) : 
+			var filterLayer = args.isServerSide ? new fns.ServerSideFilterLayer(args) :
 				new fns.ClientSideFilterLayer({
 					cacheSize: args.filterCacheSize,
 					fetchAll: args.fetchAllOnFirstFilter,

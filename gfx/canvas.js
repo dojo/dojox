@@ -49,22 +49,22 @@ dojo.experimental("dojox.gfx.canvas");
 						sy = h == ih ? 1 : h / ih,
 						s = Math.min(sx,sy), //meet->math.min , slice->math.max
 						dx = (w - s * iw)/2,
-						dy = (h - s * ih)/2;					
+						dy = (h - s * ih)/2;
 					// the buffer used to scaled the image
 					pattrnbuffer.width = w; pattrnbuffer.height = h;
-					var copyctx = pattrnbuffer.getContext("2d");	
+					var copyctx = pattrnbuffer.getContext("2d");
 					copyctx.clearRect(0, 0, w, h);
 					copyctx.drawImage(this.canvasFillImage, 0, 0, iw, ih, dx, dy, s*iw, s*ih);
 					this.canvasFill = ctx.createPattern(pattrnbuffer, "repeat");
 					delete this.canvasFillImage;
 				}
 				ctx.fillStyle = this.canvasFill;
-				if(apply){ 
+				if(apply){
 					// offset the pattern
 					if (fs.type==="pattern" && (fs.x !== 0 || fs.y !== 0)) {
 						ctx.translate(fs.x,fs.y);
 					}
-					ctx.fill(); 
+					ctx.fill();
 				}
 			}else{
 				ctx.fillStyle = "rgba(0,0,0,0.0)";
@@ -140,10 +140,10 @@ dojo.experimental("dojox.gfx.canvas");
 							if (!pattrnbuffer) {
 								pattrnbuffer = document.createElement("canvas");
 							}
-							// no need to scale the image since the canvas.createPattern uses 
+							// no need to scale the image since the canvas.createPattern uses
 							// the original image data and not the scaled ones (see spec.)
-							// the scaling needs to be done at rendering time in a context buffer							
-							var img =new Image();  
+							// the scaling needs to be done at rendering time in a context buffer
+							var img =new Image();
 							this.surface.downloadImage(img, fs.src);
 							this.canvasFillImage = img;
 					}

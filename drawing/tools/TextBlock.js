@@ -82,7 +82,7 @@ dojo.require("dojox.drawing.stencil.Text");
 						this.render(text);
 					}
 					setTimeout(dojo.hitch(this, function(){
-						this.editMode = false;	
+						this.editMode = false;
 					}),100)
 					
 				}else{
@@ -124,7 +124,7 @@ StencilData: {
 			
 			// selectOnExec: Boolean
 			//		Whether the Stencil is selected when the text field
-			//		is executed or not	
+			//		is executed or not
 			selectOnExec:true,
 			//
 			// showEmpty: Boolean
@@ -155,7 +155,7 @@ StencilData: {
 				
 				var c = dojo.connect(this, "render", this, function(){
 					dojo.disconnect(c);
-					this.onRender(this);	
+					this.onRender(this);
 					
 				});
 				this.editMode = true;
@@ -271,7 +271,7 @@ StencilData: {
 				kc2 = dojo.connect(conEdit, "keydown", this, function(evt){
 					if(evt.keyCode==13 || evt.keyCode==27){ // TODO: make escape an option
 						dojo.stopEvent(evt);
-					}	
+					}
 					//	if backslash, user is inputting a special character
 					//	This gives popup help.
 					if(evt.keyCode==220){
@@ -326,7 +326,7 @@ StencilData: {
 						dojo.stopEvent(evt);
 						exec();
 					}else if(evt.target.id == "conEdit" && conEdit.innerHTML == ""){
-						// wonky stuff happens when you click on the 
+						// wonky stuff happens when you click on the
 						// field when its empty.
 						conEdit.blur();
 						setTimeout(function(){
@@ -361,7 +361,7 @@ StencilData: {
 							exec();
 							self.onUp = function(){}
 						}
-					}	
+					}
 				}), 500);
 			},
 			
@@ -486,7 +486,7 @@ StencilData: {
 				// arguments:
 				//		str: String
 				//			The text to display and measure.
-				//		width: [optional] Number 
+				//		width: [optional] Number
 				//			If the width is not provided, it will be assumed
 				//			that the text is one line and the width will be
 				//			measured and the _lineHeight used for th height.
@@ -533,7 +533,7 @@ StencilData: {
 					
 					dojo.forEach(strAr, function(ar, i){
 						strAr[i] = ar.join(" ");
-					});	
+					});
 					txt = strAr.join("\n");
 					
 					// get the resultant height
@@ -656,7 +656,7 @@ StencilData: {
 			},
 			
 			getSavedCaret: function(){
-				return {start: this._caretStart, end: this._caretEnd}	
+				return {start: this._caretStart, end: this._caretEnd}
 			},
 			
 			insertText: function(node,val){

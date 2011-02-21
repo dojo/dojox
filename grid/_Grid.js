@@ -207,7 +207,7 @@ dojo.requireLocalization("dijit", "loading");
 		// initialWidth: String
 		//		A css string to use to set our initial width (only used if autoWidth
 		//		is true).  The first rendering of the grid will be this width, any
-		//		resizing of columns, etc will result in the grid switching to 
+		//		resizing of columns, etc will result in the grid switching to
 		//		autoWidth mode.  Note, this width will override any styling in a
 		//		stylesheet or directly on the node.
 		initialWidth: "",
@@ -223,7 +223,7 @@ dojo.requireLocalization("dijit", "loading");
 		//		If rowHeight is set to a positive number, it will define the height of the rows
 		//		in pixels. This can provide a significant performance advantage, since it
 		//		eliminates the need to measure row sizes during rendering, which is one
-		// 		the primary bottlenecks in the DataGrid's performance. 
+		// 		the primary bottlenecks in the DataGrid's performance.
 		rowHeight: 0,
 		
 		// autoRender: Boolean
@@ -290,21 +290,21 @@ dojo.requireLocalization("dijit", "loading");
 		errorMessage: "<span class='dojoxGridError'>${errorState}</span>",
 
 		// noDataMessage: String
-		//  Message that shows if the grid has no data - wrap it in a 
+		//  Message that shows if the grid has no data - wrap it in a
 		//  span with class 'dojoxGridNoData' if you want it to be
 		//  styled similar to the loading and error messages
 		noDataMessage: "",
 		
 		// escapeHTMLInData: Boolean
-		//		This will escape HTML brackets from the data to prevent HTML from 
-		// 		user-inputted data being rendered with may contain JavaScript and result in 
-		// 		XSS attacks. This is true by default, and it is recommended that it remain 
-		// 		true. Setting this to false will allow data to be displayed in the grid without 
-		// 		filtering, and should be only used if it is known that the data won't contain 
-		// 		malicious scripts. If HTML is needed in grid cells, it is recommended that 
-		// 		you use the formatter function to generate the HTML (the output of 
+		//		This will escape HTML brackets from the data to prevent HTML from
+		// 		user-inputted data being rendered with may contain JavaScript and result in
+		// 		XSS attacks. This is true by default, and it is recommended that it remain
+		// 		true. Setting this to false will allow data to be displayed in the grid without
+		// 		filtering, and should be only used if it is known that the data won't contain
+		// 		malicious scripts. If HTML is needed in grid cells, it is recommended that
+		// 		you use the formatter function to generate the HTML (the output of
 		// 		formatter functions is not filtered, even with escapeHTMLInData set to true).
-		escapeHTMLInData: true,	
+		escapeHTMLInData: true,
 		
 		// formatterScope: Object
 		//		An object to execute format functions within.  If not set, the
@@ -314,7 +314,7 @@ dojo.requireLocalization("dijit", "loading");
 		
 		// editable: boolean
 		// indicates if the grid contains editable cells, default is false
-		// set to true if editable cell encountered during rendering 
+		// set to true if editable cell encountered during rendering
 		editable: false,
 		
 		// private
@@ -426,7 +426,7 @@ dojo.requireLocalization("dijit", "loading");
 					ah = false;
 				}
 				// Autoheight must be at least 1, if it's a number.  If it's
-				// less than 0, we'll take that to mean "all" rows (same as 
+				// less than 0, we'll take that to mean "all" rows (same as
 				// autoHeight=true - if it is equal to zero, we'll take that
 				// to mean autoHeight=false
 				if(ah < 0){
@@ -669,7 +669,7 @@ dojo.requireLocalization("dijit", "loading");
 			//		Update the grid's rendering dimensions and resize it
 			
 			// Calling sizeChange calls update() which calls _resize...so let's
-			// save our input values, if any, and use them there when it gets 
+			// save our input values, if any, and use them there when it gets
 			// called.  This saves us an extra call to _resize(), which can
 			// get kind of heavy.
 			this._pendingChangeSize = changeSize;
@@ -969,7 +969,7 @@ dojo.requireLocalization("dijit", "loading");
 				if(this.layout.cells.length){
 					this.scroller.updateRowCount(inRowCount);
 				}
-				this._resize();				
+				this._resize();
 				if(this.layout.cells.length){
 					this.setScrollTop(this.scrollTop);
 				}

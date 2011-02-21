@@ -8,7 +8,7 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
 	{
 		// summary:
 		//		Extention of dijit.Tooltip providing content set via XHR
-		//		request via href param	
+		//		request via href param
 
 		// hasLoaded: Boolean
 		//		false if the contents are yet to be loaded from the HTTP request
@@ -33,7 +33,7 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
 		
 		_setLoadingLabel: function(){
 			// summary:
-			//		Changes the tooltip label / contents to loading message, only if 
+			//		Changes the tooltip label / contents to loading message, only if
 			//		there's an href param, otherwise acts as normal tooltip
 
 			if(this.href){

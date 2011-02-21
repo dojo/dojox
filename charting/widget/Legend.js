@@ -7,7 +7,7 @@ dojo.require("dojox.lang.functional.array");
 dojo.require("dojox.lang.functional.fold");
 
 dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], {
-	// summary: A legend for a chart. A legend contains summary labels for 
+	// summary: A legend for a chart. A legend contains summary labels for
 	// each series of data contained in the chart.
 	//
 	// Set the horizontal attribute to boolean false to layout legend labels vertically.

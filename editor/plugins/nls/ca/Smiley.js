@@ -5,8 +5,8 @@
 	emoticonWink: "ullet",
 	emoticonGrin: "gran somriure",
 	emoticonCool: "guai",
-	emoticonAngry: "enfadat",  
-	emoticonHalf: "meitat", 
+	emoticonAngry: "enfadat",
+	emoticonHalf: "meitat",
 	emoticonEyebrow: "cella",
 	emoticonFrown: "espantat",
 	emoticonShy: "avergonyit",
@@ -15,7 +15,7 @@
 	emoticonTongue: "llengua",
 	emoticonIdea: "idea",
 	emoticonYes: "sí",
-	emoticonNo: "no",	
+	emoticonNo: "no",
 	emoticonAngel: "àngel",
 	emoticonCrying: "plorant"
 })

@@ -6,7 +6,7 @@ dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functi
 
 dojo.declare("dojox.data.PersevereStore",dojox.data.JsonQueryRestStore,{
 	useFullIdInQueries: true, // in JSONQuerys use the full id
-	jsonQueryPagination: false // use the Range headers instead	
+	jsonQueryPagination: false // use the Range headers instead
 });
 	
 dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync){
@@ -57,7 +57,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 			if(methodsDefinitions && methodsTarget){
 				for(var j in methodsDefinitions){
 					var methodDef = methodsDefinitions[j];
-					// if any method definitions indicate that the method should run on the server, than add 
+					// if any method definitions indicate that the method should run on the server, than add
 					// it to the prototype as a JSON-RPC method
 					if(methodDef.runAt != "client" && !methodsTarget[j]){
 						methodsTarget[j] = (function(methodName){
@@ -81,7 +81,7 @@ dojox.data.PersevereStore.getStores = function(/*String?*/path,/*Boolean?*/sync)
 								});
 								return deferred;
 							}
-						})(j);	
+						})(j);
 					}
 				}
 			}

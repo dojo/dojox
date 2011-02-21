@@ -38,7 +38,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 	name: "printer",
 	
 	constructor: function(grid){
-		// summary: 
+		// summary:
 		//		only newed by _Plugin
 		// inGrid: EnhancedGrid
 		//		The grid to plug in to.
@@ -132,7 +132,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 			return;
 		}else if(dojo.isChrome || dojo.isOpera){
 			//referred from dijit._editor.plugins.Print._print()
-			//In opera and chrome the iframe.contentWindow.print 
+			//In opera and chrome the iframe.contentWindow.print
 			//will also print the outside window. So we must create a
 			//stand-alone new window.
 			win = window.open("javascript: ''", "", "status=0,menubar=0,location=0,toolbar=0,width=1,height=1,resizable=0,scrollbars=0");
@@ -197,7 +197,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 					'<html><head><title>', title,
 					'</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>'];
 		for(var i = 0; i < cssFiles.length; ++i){
-			html.push('<link rel="stylesheet" type="text/css" href="' + cssFiles[i] + '" />');	
+			html.push('<link rel="stylesheet" type="text/css" href="' + cssFiles[i] + '" />');
 		}
 		html.push('</head>');
 		if(body_content.search(/^\s*<body/i) < 0){

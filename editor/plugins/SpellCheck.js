@@ -311,8 +311,8 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	// label [public] String
 	//		The leading label of the JSON response. The service will return the result like this:
 	//		{response: [
-	//				{ 
-	//					text: "teest", 
+	//				{
+	//					text: "teest",
 	//					suggestion: ["test","treat"]
 	//				}
 	//			]}
@@ -378,7 +378,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 						r = len;
 					}else{
 						// If there is no delimiter (emplty string), leave the right boundary where it is.
-						// Else extend the right boundary to the first occurance of the delimiter if 
+						// Else extend the right boundary to the first occurance of the delimiter if
 						// it doesn't meet the end of the content.
 						while(dt && content.charAt(r) != dt && r <= len){
 							r++;
@@ -395,8 +395,8 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 						action: action,
 						timeout: timeout,
 						callbackParamName: callbackParamName,
-						handle: function(response, ioArgs){								
-							if(++_this._counter <= this.size && !(response instanceof Error) && 
+						handle: function(response, ioArgs){
+							if(++_this._counter <= this.size && !(response instanceof Error) &&
 								response[label] && dojo.isArray(response[label])){
 								// Collect the results
 								var offset = this.offset;
@@ -416,7 +416,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 							}
 						}
 					};
-					jsonpArgs.content = comms ? dojo.mixin(comms, {action: action, content: content.substring(item.l - 1, item.r)}): 
+					jsonpArgs.content = comms ? dojo.mixin(comms, {action: action, content: content.substring(item.l - 1, item.r)}):
 													{action: action, content: content.substring(item.l - 1, item.r)};
 					jsonpArgs.size = plannedSize;
 					jsonpArgs.number = index; // The index of the current package
@@ -508,7 +508,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 	
 	// _incorrectWordsSpan [private] String
 	//		The wrapper that marks the incorrect words
-	_incorrectWordsSpan: 
+	_incorrectWordsSpan:
 		"<span class='incorrectWordPlaceHolder'>${text}</span>",
 		
 	// _ignoredIncorrectStyle [private] Object
@@ -1208,7 +1208,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 									this._scheduleOpen(evt.target, iframe);	// no coords - open near target node
 								}
 							})
-						];	
+						];
 					});
 					binding.connects = cn ? doConnects(cn) : [];
 			
@@ -1349,7 +1349,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 				var doc = ed.document;
 				if(doc.selection){
 					/* IE */
-					// Focus to restore position/selection, 
+					// Focus to restore position/selection,
 					// then shift to search from current position.
 					this._editor.focus();
 					var txtRg = doc.body.createTextRange();

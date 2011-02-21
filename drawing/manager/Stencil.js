@@ -163,7 +163,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				if(this._throttle){ return; }
 				this._throttle = true;
 				
-				this.saveMoveState();					
+				this.saveMoveState();
 				
 			},
 			unDelete: function(/*Array*/stencils){
@@ -424,7 +424,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 					// clicking on same selected item(s)
 					// RESET OFFSETS
 					var mx = this.group.getTransform();
-					this._offx = obj.x - mx.dx; 
+					this._offx = obj.x - mx.dx;
 					this._offy = obj.y - mx.dy;
 					return;
 				
@@ -442,7 +442,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 				this.selectItem(obj.id);
 				
 				mx = this.group.getTransform();
-				this._offx = obj.x - mx.dx; 
+				this._offx = obj.x - mx.dx;
 				this._offy = obj.y - mx.dx;
 				
 				this.orgx = obj.x;
@@ -486,7 +486,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 			onStencilDrag: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on every mousemove of a stencil drag
-				//	
+				//
 				if(!this._dragBegun){
 					// bug, in FF anyway - first mouse move shows x=0
 					// the 'else' fixes it

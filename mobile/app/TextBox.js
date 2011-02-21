@@ -5,7 +5,7 @@ dojo.require("dojox.mobile.app._Widget");
 dojo.require("dojox.mobile.app._FormWidget");
 
 dojo.declare(
-	"dojox.mobile.app.TextBox", 
+	"dojox.mobile.app.TextBox",
 	dojox.mobile.app._FormValueWidget, {
 
 		// summary:
@@ -110,14 +110,14 @@ dojo.declare(
 				// I added a comment to the filter() definition about this, but it should be changed.
 				filteredValue = this.filter(value);
 				if(typeof formattedValue != "string"){
-					if(filteredValue !== null 
+					if(filteredValue !== null
 							&& ((typeof filteredValue != "number") || !isNaN(filteredValue))){
 						formattedValue = this.filter(this.format(filteredValue, this.constraints));
 					}else{ formattedValue = ''; }
 				}
 			}
-			if(formattedValue != null && formattedValue != undefined 
-					&& ((typeof formattedValue) != "number" || !isNaN(formattedValue)) 
+			if(formattedValue != null && formattedValue != undefined
+					&& ((typeof formattedValue) != "number" || !isNaN(formattedValue))
 					&& this.textbox.value != formattedValue){
 				this.textbox.value = formattedValue;
 			}

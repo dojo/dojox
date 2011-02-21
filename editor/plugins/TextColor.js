@@ -13,8 +13,8 @@ dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._T
 	templateString: "<div style='display: none; position: absolute; top: -10000; z-index: -10000'>" +
 		"<div dojoType='dijit.TooltipDialog' dojoAttachPoint='dialog' class='dojoxEditorColorPicker'>" +
 			"<div dojoType='dojox.widget.ColorPicker' dojoAttachPoint='_colorPicker'></div>" +
-			"<br>" + 
-			"<center>" + 
+			"<br>" +
+			"<center>" +
 				"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_setButton'>${setButtonText}</button>" +
 				"&nbsp;" +
 				"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_cancelButton'>${cancelButtonText}</button>" +
@@ -147,7 +147,7 @@ dojo.declare("dojox.editor.plugins.TextColor", dijit._editor._Plugin, {
 		}
 
 		if(typeof value == "string"){
-			//if RGB value, convert to hex value	
+			//if RGB value, convert to hex value
 			if(value.indexOf("rgb")> -1){
 				value = dojo.colorFromRgb(value).toHex();
 			}
@@ -172,7 +172,7 @@ dojo.declare("dojox.editor.plugins.TextColor", dijit._editor._Plugin, {
 	}
 });
 
-// Register this plugin.  Uses the same name as the dijit one, so you 
+// Register this plugin.  Uses the same name as the dijit one, so you
 // use one or the other, not both.
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin", null, function(o){
 	if(o.plugin){

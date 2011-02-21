@@ -22,18 +22,18 @@ dojo.declare(
 		return chart.addAxis("x", {
 			max: parseInt(this.graphMaxX.get("value")),
 			min: parseInt(this.graphMinX.get("value")),
-			majorLabels: true, 
-			minorLabels: true, 
-			//includeZero: true, 
-			minorTicks: false, 
+			majorLabels: true,
+			minorLabels: true,
+			//includeZero: true,
+			minorTicks: false,
 			microTicks: false,
 			//majorTickStep: 1,
-			htmlLabels: true,                                                                    
+			htmlLabels: true,
 			labelFunc: function(value){
 				return value;
 			},
 			maxLabelSize: 30,
-			fixUpper: "major", fixLower: "major",                                                
+			fixUpper: "major", fixLower: "major",
 			majorTick: { length: 3 }
 		}).
 		addAxis("y", {
@@ -46,7 +46,7 @@ dojo.declare(
 			vertical: true,
 			// htmlLabels: false,
 			microTicks: false,
-			minorTicks: true, 
+			minorTicks: true,
 			majorTick: { stroke: "black", length: 3 }
 		});
 	},

@@ -8,16 +8,16 @@ dojo.declare("dojox.editor.plugins.ToolbarLineBreak",
 	[ dijit._Widget, dijit._Templated ],
 	{
 	// summary:
-	//		A 'line break' between two `dijit.Toolbar` items so that very 
+	//		A 'line break' between two `dijit.Toolbar` items so that very
 	//		long toolbars can be organized a bit.
 	templateString: "<span class='dijit dijitReset'><br></span>",
 	postCreate: function(){ dojo.setSelectable(this.domNode, false); },
-	isFocusable: function(){ 
+	isFocusable: function(){
 		// summary:
 		//		This widget isn't focusable, so pass along that fact.
 		// tags:
 		//		protected
-		return false; 
+		return false;
 	}
 });
 

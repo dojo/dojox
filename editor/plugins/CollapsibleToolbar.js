@@ -55,7 +55,7 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 	_constructContainer: function(){
 		// summary:
 		//		Internal function to construct a wrapper for the toolbar/header that allows
-		//		it to expand and collapse.  It effectively builds a containing table, 
+		//		it to expand and collapse.  It effectively builds a containing table,
 		//		which handles the layout nicely and gets BIDI support by default.
 		// tags:
 		//		private

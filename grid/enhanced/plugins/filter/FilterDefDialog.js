@@ -191,7 +191,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 				this._criteriasChanged = true;
 				if(ruleRelation === "logicall" || ruleRelation === "logicany"){
 					this._relOpCls = ruleRelation;
-				} 
+				}
 				var exprs = dojo.map(rules, this.getExprForCriteria, this);
 				exprs = this.builder.buildExpression(exprs.length == 1 ? exprs[0] : {
 					"op": this._relOpCls,
@@ -239,7 +239,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 	addCriteriaBoxes: function(/* int */cnt){
 		// summary:
 		//		Add *cnt* criteria boxes to the filter definition pane.
-		//		Check overflow if necessary. 
+		//		Check overflow if necessary.
 		if(typeof cnt != "number" || cnt <= 0){
 			return;
 		}
@@ -295,7 +295,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 				if(i != curIdx){
 					cc.selectChild(cbs[i]);
 				}
-				//idxes is sorted from small to large, 
+				//idxes is sorted from small to large,
 				//so travel reversely won't need change index after delete from array.
 				for(i = cnt-1; i >= 0; --i){
 					if(idxes[i] >= 0 && idxes[i] < len){
@@ -336,7 +336,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 				cc.removeChild(cbs[end]);
 			}
 			cbs.splice(start, cnt);
-		} 
+		}
 		this._updatePane();
 		this._updateCBoxTitles();
 		if(cbs.length === 3){
@@ -384,7 +384,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 			operands = [dojo.mixin({"data": this.plugin.args.isServerSide ? colName : cell}, obj)];
 		obj.isColumn = false;
 		if(condition == "range"){
-			operands.push(dojo.mixin({"data": value.start}, obj), 
+			operands.push(dojo.mixin({"data": value.start}, obj),
 				dojo.mixin({"data": value.end}, obj));
 		}else if(condition != "isempty"){
 			operands.push(dojo.mixin({"data": value}, obj));
@@ -443,7 +443,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 		if(this.canFilter()){
 			this._defineFilter();
 			this._closeDlgAndUpdateGrid();
-			this.plugin.filterBar.toggleClearFilterBtn(false);	
+			this.plugin.filterBar.toggleClearFilterBtn(false);
 		}
 	},
 	onClearFilter: function(e){
@@ -506,7 +506,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 				this.addCriteriaBoxes(1);
 			}else if(columnChanged){
 				for(i = 0; (cbox = cbs[i]); ++i){
-					cbox.changeCurrentColumn();	
+					cbox.changeCurrentColumn();
 				}
 			}
 		}else if(this._criteriasChanged){
@@ -877,7 +877,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		var cond = this._condSelect.get("value");
 		if(cond == "isempty"){return false;}
 		var v = this.curValue();
-		return v === "" || v === null || typeof v == "undefined" || (typeof v == "number" && isNaN(v)); 
+		return v === "" || v === null || typeof v == "undefined" || (typeof v == "number" && isNaN(v));
 	},
 	updateRuleTitle: function(isEmpty){
 		var node = this._pane._buttonWidget.titleTextNode;
@@ -943,7 +943,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 			dojo.forEach(arr, function(c){
 				if(dojo.isString(c)){
 					disabledConds[c.toLowerCase()] = true;
-				} 
+				}
 			});
 			return dojo.filter(conditions, function(condOption){
 				return !(condOption.value in disabledConds);
@@ -1021,7 +1021,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	},
 	_getValueBoxClsInfo: function(/* int|string */colIndex, /* string */type){
 		// summary:
-		//		Decide which value box to use given data type and column index. 
+		//		Decide which value box to use given data type and column index.
 		var cell = this.plugin.grid.layout.cells[parseInt(colIndex, 10)];
 		//Now we only need to handle string. But maybe we need to handle more types here in the future.
 		if(type == "string"){
@@ -1095,7 +1095,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.AccordionContainer", dijit.layo
 		}else if((fromTitle && c == k.DOWN_ARROW) || (e.ctrlKey && (c == k.PAGE_DOWN || c == k.TAB))){
 			toNext = true;
 		}else if(c == (ltr ? k.LEFT_ARROW : k.RIGHT_ARROW)){
-			toNext = this._focusOnRemoveBtn ? null : false;	
+			toNext = this._focusOnRemoveBtn ? null : false;
 			this._focusOnRemoveBtn = !this._focusOnRemoveBtn;
 		}else if(c == (ltr ? k.RIGHT_ARROW : k.LEFT_ARROW)){
 			toNext = this._focusOnRemoveBtn ? true : null;
