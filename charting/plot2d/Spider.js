@@ -33,22 +33,22 @@ dojo.require("dojox.gfx.fx");
 			labelOffset:	-10,
 			labelStyle:		"default",	// default/rows/auto
 			htmlLabels:		true,		// use HTML to draw labels
-			startAngle:     -90,		// start angle for slices in degrees
-            divisions:       3,			// radius tick count
-            axisColor:       "",		// spider axis color
-            axisWidth:       0,			// spider axis stroke width
-            spiderColor:     "",		// spider web color
-            spiderWidth:     0,			// spider web stroke width
-            seriesWidth:     0,			// plot border with
-            seriesFillAlpha: 0.2,		// plot fill alpha
+			startAngle:		-90,		// start angle for slices in degrees
+			divisions:		 3,			// radius tick count
+			axisColor:		 "",		// spider axis color
+			axisWidth:		 0,			// spider axis stroke width
+			spiderColor:	 "",		// spider web color
+			spiderWidth:	 0,			// spider web stroke width
+			seriesWidth:	 0,			// plot border with
+			seriesFillAlpha: 0.2,		// plot fill alpha
 			spiderOrigin:	 0.16,
-			markerSize:  	 3,			// radius of plot vertex (px)
+			markerSize:		 3,			// radius of plot vertex (px)
 			spiderType:		 "polygon", //"circle"
 			animationType:	 dojo.fx.easing.backOut,
-			axisTickFont:	 	"",
+			axisTickFont:		"",
 			axisTickFontColor:	"",
-			axisFont:		 	"",
-			axisFontColor:	 	""
+			axisFont:			"",
+			axisFontColor:		""
 		},
 		optionalParams: {
 			radius:		0,
@@ -189,7 +189,7 @@ dojo.require("dojox.gfx.fx");
 
 			// calculate the geometry
 			var o = this.opt, ta = t.axis,
-				rx = (dim.width  - offsets.l - offsets.r) / 2,
+				rx = (dim.width	 - offsets.l - offsets.r) / 2,
 				ry = (dim.height - offsets.t - offsets.b) / 2,
 				r  = Math.min(rx, ry),
 				axisTickFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font) || "normal normal normal 7pt Tahoma",
@@ -368,28 +368,28 @@ dojo.require("dojox.gfx.fx");
 					
 					var po = {
 						element: "spider_poly",
-						index:   i,
-						id:	 	 "spider_poly_"+serieEntry.name,
-						run:     serieEntry,
-						plot:    this,
-						shape:   cs.poly,
+						index:	 i,
+						id:		 "spider_poly_"+serieEntry.name,
+						run:	 serieEntry,
+						plot:	 this,
+						shape:	 cs.poly,
 						parent:	 ts,
 						brect:	 polygonBoundRect,
-						cx:      circle.cx,
-						cy:      circle.cy,
-						cr:      r,
+						cx:		 circle.cx,
+						cy:		 circle.cy,
+						cr:		 r,
 						f:		 f,
-						s: 		 s
+						s:		 s
 					};
 					this._connectEvents(po);
 					
 					var so = {
 						element: "spider_plot",
-						index:   i,
-						id:	 	 "spider_plot_"+serieEntry.name,
-						run:     serieEntry,
-						plot:    this,
-						shape:   serieEntry.group
+						index:	 i,
+						id:		 "spider_plot_"+serieEntry.name,
+						run:	 serieEntry,
+						plot:	 this,
+						shape:	 serieEntry.group
 					};
 					this._connectEvents(so);
 					
@@ -397,15 +397,15 @@ dojo.require("dojox.gfx.fx");
 						var shape = c.getShape(),
 							co = {
 								element: "spider_circle",
-								index:   i,
-								id:	 	 "spider_circle_"+serieEntry.name+i,
-								run:     serieEntry,
-								plot:    this,
-								shape:   c,
+								index:	 i,
+								id:		 "spider_circle_"+serieEntry.name+i,
+								run:	 serieEntry,
+								plot:	 this,
+								shape:	 c,
 								parent:	 ts,
 								tdata:	 tipData[i],
-								cx:      seriePoints[i].x,
-								cy:      seriePoints[i].y,
+								cx:		 seriePoints[i].x,
+								cy:		 seriePoints[i].y,
 								f:		 f,
 								s:		 s
 							};
@@ -425,49 +425,49 @@ dojo.require("dojox.gfx.fx");
 			}
 			
 			var anims = dojo.map(sps, function(np, j){
-                // create animation
+				// create animation
 				var sp = osps[j],
-                	anim = new dojo._Animation({
-                    duration: 1000,
-                    easing:   at,
-                    curve:    [sp.y, np.y]
-                });
+					anim = new dojo._Animation({
+					duration: 1000,
+					easing:	  at,
+					curve:	  [sp.y, np.y]
+				});
 				var spl = spoly, sc = scircle[j];
-                dojo.connect(anim, "onAnimate", function(y){
-                    //apply poly
+				dojo.connect(anim, "onAnimate", function(y){
+					//apply poly
 					var pshape = spl.getShape();
 					pshape.points[j].y = y;
-                    spl.setShape(pshape);
+					spl.setShape(pshape);
 					//apply circle
 					var cshape = sc.getShape();
 					cshape.cy = y;
 					sc.setShape(cshape);
-                });
+				});
 				return anim;
-            });
+			});
 			
 			var anims1 = dojo.map(sps, function(np, j){
-                // create animation
+				// create animation
 				var sp = osps[j],
-                	anim = new dojo._Animation({
-                    duration: 1000,
-                    easing:   at,
-                    curve:    [sp.x, np.x]
-                });
+					anim = new dojo._Animation({
+					duration: 1000,
+					easing:	  at,
+					curve:	  [sp.x, np.x]
+				});
 				var spl = spoly, sc = scircle[j];
-                dojo.connect(anim, "onAnimate", function(x){
-                    //apply poly
+				dojo.connect(anim, "onAnimate", function(x){
+					//apply poly
 					var pshape = spl.getShape();
 					pshape.points[j].x = x;
-                    spl.setShape(pshape);
+					spl.setShape(pshape);
 					//apply circle
 					var cshape = sc.getShape();
 					cshape.cx = x;
 					sc.setShape(cshape);
-                });
+				});
 				return anim;
-            });
-            var masterAnimation = dojo.fx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
+			});
+			var masterAnimation = dojo.fx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
 			masterAnimation.play();
 			return {group :ts, poly: spoly, circles: scircle};
 		},
@@ -500,10 +500,10 @@ dojo.require("dojox.gfx.fx");
 					var t = start; start = end; end = t;
 				}
 				a.anim = dojox.gfx.fx.animateFill({
-					shape:    o.shape,
+					shape:	  o.shape,
 					duration: 800,
-					easing:   dojo.fx.easing.backOut,
-					color:    {start: start, end: end}
+					easing:	  dojo.fx.easing.backOut,
+					color:	  {start: start, end: end}
 				});
 				a.anim.play();
 			}else if(o.element == "spider_circle"){
@@ -540,7 +540,7 @@ dojo.require("dojox.gfx.fx");
 					kwArgs = {
 						shape: o.shape,
 						duration: 200,
-						easing:   dojo.fx.easing.backOut,
+						easing:	  dojo.fx.easing.backOut,
 						transform: [
 							{name: "scaleAt", start: [1, cs.cx, cs.cy], end: [scale, cs.cx, cs.cy]},
 							init
@@ -635,5 +635,6 @@ dojo.require("dojox.gfx.fx");
 		var color = dojox.color.fromHsl(x);
 		color.a = 0.7;
 		return color;
-	};
+	}
+	
 })();
