@@ -11,7 +11,7 @@
 }
 
 /* Heading Arrow Button */
-.dj_webkit .mblArrowButtonHead {
+.mblArrowButtonHead {
 	border-color: #4D4E50;
 	background: -webkit-gradient(linear, left top, right bottom, from(#B1B5BB), to(#6A727D));
 }
