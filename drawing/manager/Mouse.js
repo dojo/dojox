@@ -31,6 +31,13 @@ dojox.drawing.manager.Mouse = dojox.drawing.util.oo.declare(
 		//		register as for onDoubleClick
 		doublClickSpeed:400,
 		
+		
+		// rightClickMenu: boolean
+		//		If true, right clicks bubble up so that context menus
+		//		can be attached to them or the default can be shown.
+		//		Otherwise right click is interpreted the same as a left click.
+		rightClickMenu: false,
+		
 		// private properties
 		
 		_lastx:0,
@@ -351,9 +358,6 @@ EventObject: function(){
 			// summary:
 			//		Internal. Create onDown event
 			//
-			evt.preventDefault();
-			dojo.stopEvent(evt);
-			
 			this._downOnCanvas = true;
 			var sc = this.scrollOffset();
 			var dim = this._getXY(evt);
@@ -376,6 +380,13 @@ EventObject: function(){
 			var id = this._getId(evt);
 			//console.log("DOWN:", this.id, id, withinCanvas);
 			//console.log("this.drawingType:", this.drawingType);
+			
+			if(this.rightClickMenu && (evt.button == dojo.mouseButtons.RIGHT) && this.id == "mse"){
+				// Allow event to bubble for right click, for menus
+			}else{
+				evt.preventDefault();
+				dojo.stopEvent(evt);
+			}
 			this.onDown({
 				mid:this.id,
 				x:x,
