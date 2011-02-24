@@ -208,11 +208,10 @@ dojo.require("dojox.lang.functional");
 		
 		getLabel: function(/*Number*/number, /*Boolean*/fixed, /*Number*/precision){
 			if(dojo.number){
-				return fixed ? dojo.number.format(number, {places : precision}) :
-					dojo.number.format(number);
-			}else{
-				return fixed ? number.toFixed(precision) : number.toString();
+				return (fixed ? dojo.number.format(number, {places : precision}) :
+					dojo.number.format(number)) || "";
 			}
+			return fixed ? number.toFixed(precision) : number.toString();
 		}
 	});
 })();
