@@ -135,7 +135,7 @@ dojo.declare("dojox.charting.Theme", null, {
 		if(kwArgs.markerThemes && kwArgs.markerThemes.length){
 			this.markerThemes = kwArgs.markerThemes.slice(0);
 		}
-		this.markers = dojo.delegate(dojox.charting.Theme.defaultMarkers, kwArgs.markers);
+		this.markers = kwArgs.markers ? dojo.clone(kwArgs.markers) : dojo.delegate(dojox.charting.Theme.defaultMarkers);
 
 		// set flags
 		this.noGradConv = kwArgs.noGradConv;
