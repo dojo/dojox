@@ -17,8 +17,8 @@ dojo.provide("dojox.charting.scaler.common");
 		getNumericLabel: function(/*Number*/ number, /*Number*/ precision, /*Object*/ kwArgs){
 			var def = "";
 			if(dojo.number){
-				def = kwArgs.fixed ? dojo.number.format(number, {places : precision < 0 ? -precision : 0}) :
-					dojo.number.format(number);
+				def = (kwArgs.fixed ? dojo.number.format(number, {places : precision < 0 ? -precision : 0}) :
+					dojo.number.format(number)) || "";
 			}else{
 				def = kwArgs.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
 			}
