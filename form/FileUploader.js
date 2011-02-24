@@ -1087,7 +1087,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 
 		if(this._formNode){ return; }
 
-		if(dojo.isIE && dojo.isIE < 9){
+		if(dojo.isIE < 9 || (dojo.isIE && dojo.isQuirks)){
 			this._formNode = document.createElement('<form enctype="multipart/form-data" method="post">');
 			this._formNode.encoding = "multipart/form-data";
 			this._formNode.id = dijit.getUniqueId("FileUploaderForm"); // needed for dynamic style

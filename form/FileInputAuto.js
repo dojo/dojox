@@ -102,7 +102,7 @@ dojo.declare("dojox.form.FileInputAuto",
 		dojo.fadeIn({ node: this.overlay, duration:this.duration }).play();
 
 		var _newForm;
-		if(dojo.isIE){
+		if(dojo.isIE < 9 || (dojo.isIE && dojo.isQuirks)){
 			// just to reiterate, IE is a steaming pile of code.
 			_newForm = document.createElement('<form enctype="multipart/form-data" method="post">');
 			_newForm.encoding = "multipart/form-data";
