@@ -70,7 +70,7 @@
 }
 .claro td.dojoxGridRowSelected {
 	border-collapse:separate;
-	background:url("../../../resources/images/row_back.png") #E3F2FF repeat-x;
+	background:url("../../../resources/images/row_back.png") #CEE6FA repeat-x;
 }
 .claro .dojoxGridRowOver td.dojoxGridRowSelected {
 	border-top:1px solid #769DC0;

@@ -122,10 +122,10 @@
 	background:url("images/row_back.png") #fff repeat-x;
 }
 .claro .dojoxGridRowOdd .dojoxGridRowTable tr {
-	background-color:#f4f9fd;
+	background-color:#f7fcff;
 }
 .claro .dojoxGridRowSelected .dojoxGridRowTable tr {
-	background-color:#d3e9fb;
+	background-color:#cee6fa;
 }
 
 /* cells */
@@ -157,7 +157,7 @@
 
 /*  Single Affordance Hover Effect */
 .claro .dojoxGridRowOver .dojoxGridCell {
-	background:url("images/row_back.png") #ABD6FF;
+	background:url("images/row_back.png") #ABD6FF no-repeat;
 	border-top:1px solid #769DC0;
 	border-bottom:1px solid #769DC0;
 }
@@ -194,7 +194,7 @@
 /* editing */
 .claro .dojoxGridRowEditing td {
 	/* background-color: #F4FFF4; */
-	background-color: #60a1ea; 
+	background-color: #cee6fa; 
 	/* padding: 0px 3px 0px 3px; */
 }
 .claro .dojoxGridRow-inserting td {
@@ -279,5 +279,5 @@
 	background-color:#fff;
 }
 .claro .dojoxGridRow .dojoxGridRowTable tr.dojoxGridRowSelected {
-	background-color:#d3e9fb;
+	background-color:#cee6fa;
 }

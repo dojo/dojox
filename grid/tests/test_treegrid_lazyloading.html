@@ -109,16 +109,12 @@
 			}
 			
 			function addChildItem(){
-				var item = {id:'test_child_' + idx, name:'test_child_' + idx, type:'', population: '', area: ''};
-				var parent = null;
+				var addedItem = {id:'test_child_' + idx, name:'test_child_' + idx, type:'', population: '', area: ''};
 				var s = grid.store;
 				s.fetchItemByIdentity({identity: "Continent", onItem: function(item){
-					parent = item;
-				}});
-				if(parent){
-					s.newItem(item, {parent: parent, attribute: "children"});
+					s.newItem(addedItem, {parent: item, attribute: "children"});
 					idx++;
-				}
+				}});
 			}
 			
 			function removeSelected(){
