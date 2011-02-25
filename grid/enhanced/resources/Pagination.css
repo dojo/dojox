@@ -119,6 +119,9 @@
 	text-decoration: none!important; 
 	zoom: 1; /* for IE */
 }
+.dojoxGridSeparator {
+	float: left;
+}
 .dojoxGridPageTextHover {
 	text-decoration: underline;
 }

@@ -41,3 +41,12 @@
 	float: left;
 	margin-bottom: 10px;
 }
+.dijitRtl .dojoxGridInactiveSwitch {
+	float: right;
+}
+.dijitRtl .dojoxGridActivedSwitch {
+	float: right;
+}
+.dijitRtl .dojoxGridSeparator {
+	float: right;
+}

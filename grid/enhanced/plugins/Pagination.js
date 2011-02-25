@@ -74,7 +74,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	
 	_onNew: function(item, parentInfo){
 		var totalPages = Math.ceil(this._maxSize / this.pageSize);
-		if((this._currentPage + 1 === totalPages && this.grid.rowCount < this.pageSize) || this.showAll){
+		if(((this._currentPage + 1 === totalPages || totalPages === 0) && this.grid.rowCount < this.pageSize) || this.showAll){
 			dojo.hitch(this.grid, this._originalOnNew)(item, parentInfo);
 			this.forcePageStoreLayer.endIdx++;
 		}
@@ -96,11 +96,15 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		this._originalRemove();
 		this._multiRemoving = false;
 		this.grid.resize();
+		this.grid._refresh();
 	},
 	
 	_onDelete: function(){
 		if(!this._multiRemoving){
 			this.grid.resize();
+			if(this.showAll){
+				this.grid._refresh();
+			}
 		}
 		if(this.grid.get('rowCount') === 0){
 			this.prevPage();
@@ -568,7 +572,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			});
 			// create a separation node
 			node = dojo.create("span", {innerHTML: "|"}, this.sizeSwitchTd, "last");
-			dojo.style(node, "float", "left");
+			dojo.addClass(node, "dojoxGridSeparator");
 		}, this);
 		// delete last separation node
 		dojo.destroy(node);
@@ -1028,7 +1032,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}
 		
 		if(!this._currentFocusNode){
-			this.grid.focus.focusArea("pagination" + this.position, e);
+			this.grid.focus.currentArea("pagination" + this.position);
 		}
 		if(this.focusArea != "pageSize"){
 			this.focusArea = "pageSize";
@@ -1043,7 +1047,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			value = this.pageStepValue = e.target.value;
 		
 		if(!this._currentFocusNode){
-			this.grid.focus.focusArea("pagination" + this.position, e);
+			this.grid.focus.currentArea("pagination" + this.position);
 		}
 		if(this.focusArea != "pageStep"){
 			this.focusArea = "pageStep";

@@ -763,6 +763,9 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 						return false;
 					}
 				}
+			}else if(this.grid.singleClickEdit){
+				this.currentArea("editableCell");
+				return false;
 			}
 		}
 		return true;
