@@ -1,4 +1,4 @@
-define(["dojo", "dijit/_Templated", "dojox/math/_base", "dijit/dijit", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/Button", "dijit/form/ComboBox", "dijit/form/Select", "dijit/form/CheckBox", "dijit/ColorPalette", "dojox/charting/Chart2D", "dojox/charting/themes/Tufte", "dojo/colors"], function(dojo) {
+define("dojox/calc/Grapher", ["dojo", "dijit/_Templated", "dojox/math/_base", "dijit/dijit", "dijit/form/DropDownButton", "dijit/TooltipDialog", "dijit/form/TextBox", "dijit/form/Button", "dijit/form/ComboBox", "dijit/form/Select", "dijit/form/CheckBox", "dijit/ColorPalette", "dojox/charting/Chart2D", "dojox/charting/themes/Tufte", "dojo/colors"], function(dojo) {
 
 dojo.experimental("dojox.calc.Grapher");
 

@@ -1,4 +1,4 @@
-define(["dojo"], function(dojo) {
+define("dojox/calc/toFrac", ["dojo"], function(dojo) {
 
 (function(){
 

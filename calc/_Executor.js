@@ -1,4 +1,4 @@
-define(["dojo", "dijit/_Templated", "dojox/math/_base"], function(dojo) {
+define("dojox/calc/_Executor", ["dojo", "dijit/_Templated", "dojox/math/_base"], function(dojo) {
 
 dojo.experimental("dojox.calc._Executor");
 
