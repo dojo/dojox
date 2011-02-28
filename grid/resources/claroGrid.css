@@ -157,7 +157,7 @@
 
 /*  Single Affordance Hover Effect */
 .claro .dojoxGridRowOver .dojoxGridCell {
-	background:url("images/row_back.png") #ABD6FF no-repeat;
+	background:url("images/row_back.png") #ABD6FF repeat-x;
 	border-top:1px solid #769DC0;
 	border-bottom:1px solid #769DC0;
 }
