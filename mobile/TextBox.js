@@ -10,7 +10,7 @@ dojo.declare(
 		baseClass: "mblTextBox",
 
 		// Map widget attributes to DOMNode attributes.
-		_mapPlaceHolderAttr: "textbox",
+		_setPlaceHolderAttr: "textbox",
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
