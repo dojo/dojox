@@ -1,7 +1,9 @@
 dojo.provide("dojox.form.Uploader");
-dojo.experimental("dojox.form.Uploader");
 dojo.require("dojox.form.uploader.Base");
 dojo.require("dijit.form.Button");
+
+
+dojo.experimental("dojox.form.Uploader");
 
 	//
 	// TODO:
@@ -12,6 +14,7 @@ dojo.require("dijit.form.Button");
 	//		Use new FileReader() for thumbnails
 	//		flashFieldName should default to Flash
 	//		get('value'); and set warning
+	//		Make it so URL can change (current set to Flash on build)
 	//
 
 dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
