@@ -544,6 +544,13 @@ dojo.provide("dojox.drawing.Drawing");
 			}
 		},
 		
+		set: function(name, value){
+			// summary:
+			//		Drawing registers as a widget and needs to support
+			//		widget's api.
+			console.info("Attempting to set ",name," to: ",value,". Set currently not fully supported in Drawing");
+		},
+		
 		unSetTool: function(){
 			// summary:
 			//		Destroys current tool
