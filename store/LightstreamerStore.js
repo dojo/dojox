@@ -107,7 +107,9 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 				if(!self._index[id]){
 					newObject = true;
 					self._index[id] = obj;
-					resultsArray.push(obj);
+					if(!snapshotReceived){
+						resultsArray.push(obj);
+					}
 				}
 				table[snapshotReceived?"onPostSnapShot":"onPreSnapShot"](obj, newObject);
 			};
