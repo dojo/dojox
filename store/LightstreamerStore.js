@@ -73,11 +73,17 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 			//		customized with an "observe" method and a "close" method; observe is the
 			//		main hook into the constant data stream returned by Lightstreamer, and
 			//		the close method will stop the query/stream.
+			//
+			//	example:
+			//		Query a server:
+			//	|	var results = myLSStore.query("MERGE", { dataAdapter: "QUOTE_ADAPTER", snapshotRequired: true });
+			//	|	results.observe(function(obj){
+			//	|		//	do something with obj
+			//	|	});
 
 			options = options || {};
 			var results = new dojo.Deferred(),
 				snapshotReceived,
-				resultsArray = [],
 				self = this,
 				id = "store-" + nextId++,
 				pushPage = this.pushPage,
@@ -90,43 +96,57 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 			for(var prop in options) {
 				var setter = "set" + prop.charAt(0).toUpperCase() + prop.slice(1);
 				if(setter in table && dojo.isFunction(table[setter])){
-					table[setter][(dojo.isArray(options[prop])?"apply":"call")](options[prop]);
+					table[setter][(dojo.isArray(options[prop])?"apply":"call")](table, options[prop]);
 				}
 			}
         
 			table.onItemUpdate = function(id, updateInfo){
 				var obj = translate(id, updateInfo, self.schema, self._index[id]);
-				var newObject;
-				if(!self._index[id]){
-					newObject = true;
-					self._index[id] = obj;
-					resultsArray.push(obj);
-				}
-				table[snapshotReceived?"onPostSnapShot":"onPreSnapShot"](obj, newObject);
+				self._index[id] = self._index[id] || obj;
+				table[snapshotReceived?"onPreSnapShot":"onPostSnapShot"](obj);
 			};
 
+			/*
 			if(query == "MERGE" || options.snapshotRequired === false){
 				snapshotReceived = true;
-				results.resolve(resultsArray);
+				results.resolve();
 			} else { // eventually properly handle other subscription modes
 				table.onEndOfSnapshot = function(){
 					snapshotReceived = true;
-					results.resolve(resultsArray);
+					results.resolve();
 				};
 			}
+			*/
 
-			table.onPreSnapShot = table.onPostSnapShot = function(){};
+			//	note that these need to be two separate function objects.
+			table.onPreSnapShot = function(){};
+			table.onPostSnapShot = function(){};
 
+			//	modify the deferred
 			results = dojo.store.util.QueryResults(results);
+
+			//	set up the two main ways of working with results
+			var foreachHandler;
+			results.forEach = function(callback){
+				foreachHandler = dojo.connect(table, "onPreSnapShot", callback);
+			};
+
+			var observeHandler;
 			results.observe = function(listener){
-				dojo.connect(table, "onPostSnapShot", function(object, newObject){
-					listener.call(results, object, newObject ? true : undefined);
+				observeHandler = dojo.connect(table, "onPostSnapShot", function(){
+					listener.apply(results, arguments);
 				});
 			};
+
+			//	set up the way to stop the stream
 			results.close = function(){
+				if(foreachHandler){ dojo.disconnect(foreachHandler); }
+				if(observeHandler){ dojo.disconnect(observeHandler); }
 				pushPage.removeTable(id);
 				table = null;
 			};
+
+			//	start up the stream
 			pushPage.addTable(table, id);
 			return results;
 		},
@@ -141,7 +161,7 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 
 	return dojox.store.LightstreamerStore;
 /*=====
-LightstreamerStore.__queryOptionsArgs = function(dataAdapter, itemsRange, requestedBufferSize, requestedMaxFrequency, selector, snapshotRequired, commandLogic){
+dojox.store.LightstreamerStore.__queryOptionsArgs = function(dataAdapter, itemsRange, requestedBufferSize, requestedMaxFrequency, selector, snapshotRequired, commandLogic){
 	//	dataAdapter: String?
 	//		The data adapter to be used for a query.
 	//	itemsRange: Array?
