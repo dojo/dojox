@@ -103,7 +103,12 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 			table.onItemUpdate = function(id, updateInfo){
 				var obj = translate(id, updateInfo, self.schema, self._index[id]);
 				self._index[id] = self._index[id] || obj;
-				table[snapshotReceived?"onPreSnapShot":"onPostSnapShot"](obj);
+				table[snapshotReceived?"onPostSnapShot":"onPreSnapShot"](obj);
+			};
+
+			table.onEndOfSnapshot = function(){
+				snapshotReceived = true;
+				results.resolve();
 			};
 
 			/*
@@ -128,12 +133,12 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 			//	set up the two main ways of working with results
 			var foreachHandler;
 			results.forEach = function(callback){
-				foreachHandler = dojo.connect(table, "onPreSnapShot", callback);
+				foreachHandler = dojo.connect(table, "onPostSnapShot", callback);
 			};
 
 			var observeHandler;
 			results.observe = function(listener){
-				observeHandler = dojo.connect(table, "onPostSnapShot", function(){
+				observeHandler = dojo.connect(table, "onPreSnapShot", function(){
 					listener.apply(results, arguments);
 				});
 			};
