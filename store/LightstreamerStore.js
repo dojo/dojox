@@ -84,6 +84,7 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 			options = options || {};
 			var results = new dojo.Deferred(),
 				snapshotReceived,
+				resultsArray = [],
 				self = this,
 				id = "store-" + nextId++,
 				pushPage = this.pushPage,
@@ -102,26 +103,24 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
         
 			table.onItemUpdate = function(id, updateInfo){
 				var obj = translate(id, updateInfo, self.schema, self._index[id]);
-				self._index[id] = self._index[id] || obj;
-				table[snapshotReceived?"onPostSnapShot":"onPreSnapShot"](obj);
+				var newObject;
+				if(!self._index[id]){
+					newObject = true;
+					self._index[id] = obj;
+					resultsArray.push(obj);
+				}
+				table[snapshotReceived?"onPostSnapShot":"onPreSnapShot"](obj, newObject);
 			};
 
-			table.onEndOfSnapshot = function(){
-				snapshotReceived = true;
-				results.resolve();
-			};
-
-			/*
 			if(query == "MERGE" || options.snapshotRequired === false){
 				snapshotReceived = true;
-				results.resolve();
+				results.resolve(resultsArray);
 			} else { // eventually properly handle other subscription modes
 				table.onEndOfSnapshot = function(){
 					snapshotReceived = true;
-					results.resolve();
+					results.resolve(resultsArray);
 				};
-			}
-			*/
+			}			
 
 			//	note that these need to be two separate function objects.
 			table.onPreSnapShot = function(){};
@@ -133,13 +132,13 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 			//	set up the two main ways of working with results
 			var foreachHandler;
 			results.forEach = function(callback){
-				foreachHandler = dojo.connect(table, "onPostSnapShot", callback);
+				foreachHandler = dojo.connect(table, "onPreSnapShot", callback);
 			};
 
 			var observeHandler;
 			results.observe = function(listener){
-				observeHandler = dojo.connect(table, "onPreSnapShot", function(){
-					listener.apply(results, arguments);
+				observeHandler = dojo.connect(table, "onPostSnapShot", function(object, newObject){
+					listener.call(results, object, newObject ? -1 : undefined);
 				});
 			};
 
