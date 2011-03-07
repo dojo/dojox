@@ -13,6 +13,33 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 		return o;
 	}
 
+/*=====
+dojox.store.LightstreamerStore.__queryOptionsArgs = function(dataAdapter, itemsRange, requestedBufferSize, requestedMaxFrequency, selector, snapshotRequired, commandLogic){
+	//	dataAdapter: String?
+	//		The data adapter to be used for a query.
+	//	itemsRange: Array?
+	//		The range of items in the form of [ start, end ] to receive back from Lightstreamer.
+	//	requestedBufferSize: Number?
+	//		The length of the internal queuing buffers to be used by the server.
+	//	requestedMaxFrequency: Number?
+	//		The maximum update frequency (updates per second) to be used by Lightstreamer.
+	//	selector: String?
+	//		The name of a selector, to be recognized by the Metadata Adapter in Lightstreamer.
+	//	snapshotRequired: Boolean?
+	//		Whether or not to request snapshot delivery.
+	//	commandLogic: Array?
+	//		An array of arguments in the following form: [ flag, commandPos, keyPos, underSchema, underDataAdapter ]
+
+	this.dataAdapter = dataAdapter;
+	this.itemsRange = itemsRange;
+	this.requestedBufferSize = requestedBufferSize;
+	this.requestedMaxFrequency = requestedMaxFrequency;
+	this.selector = selector;
+	this.snapshotRequired = snapshotRequired;
+	this.commandLogic = commandLogic;
+}
+=====*/
+
 	dojo.declare("dojox.store.LightstreamerStore", [], {
 		_index: {},	//	a cache for data objects returned
 
@@ -166,30 +193,4 @@ define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/Quer
 	});
 
 	return dojox.store.LightstreamerStore;
-/*=====
-dojox.store.LightstreamerStore.__queryOptionsArgs = function(dataAdapter, itemsRange, requestedBufferSize, requestedMaxFrequency, selector, snapshotRequired, commandLogic){
-	//	dataAdapter: String?
-	//		The data adapter to be used for a query.
-	//	itemsRange: Array?
-	//		The range of items in the form of [ start, end ] to receive back from Lightstreamer.
-	//	requestedBufferSize: Number?
-	//		The length of the internal queuing buffers to be used by the server.
-	//	requestedMaxFrequency: Number?
-	//		The maximum update frequency (updates per second) to be used by Lightstreamer.
-	//	selector: String?
-	//		The name of a selector, to be recognized by the Metadata Adapter in Lightstreamer.
-	//	snapshotRequired: Boolean?
-	//		Whether or not to request snapshot delivery.
-	//	commandLogic: Array?
-	//		An array of arguments in the following form: [ flag, commandPos, keyPos, underSchema, underDataAdapter ]
-
-	this.dataAdapter = dataAdapter;
-	this.itemsRange = itemsRange;
-	this.requestedBufferSize = requestedBufferSize;
-	this.requestedMaxFrequency = requestedMaxFrequency;
-	this.selector = selector;
-	this.snapshotRequired = snapshotRequired;
-	this.commandLogic = commandLogic;
-}
-=====*/
 });
