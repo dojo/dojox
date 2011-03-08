@@ -1,6 +1,7 @@
 dojo.provide("dojox.mobile._base");
 
 dojo.require("dijit._WidgetBase");
+dojo.require("dojox.mobile.Button");
 dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 // summary:
@@ -900,36 +901,6 @@ dojo.declare(
 	},
 
 	onStateChanged: function(/*String*/newState){
-	}
-});
-
-dojo.declare(
-	"dojox.mobile.Button",
-	dijit._WidgetBase,
-{
-	btnClass: "mblBlueButton",
-	duration: 1000, // duration of selection, milliseconds
-
-	label: null,
-
-	buildRendering: function(){
-		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("BUTTON");
-		this.domNode.className = "mblButton "+this.btnClass;
-
-		if(this.label){
-			this.domNode.innerHTML = this.label;
-		}
-
-		this.connect(this.domNode, "onclick", "onClick");
-	},
-
-	onClick: function(e){
-		var button = this.domNode;
-		var c = "mblButtonSelected "+this.btnClass+"Selected";
-		dojo.addClass(button, c);
-		setTimeout(function(){
-			dojo.removeClass(button, c);
-		}, this.duration);
 	}
 });
 
