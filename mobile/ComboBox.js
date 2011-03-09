@@ -2,7 +2,7 @@ define("dojox/mobile/ComboBox", ["dojo", "dijit", "dojox.mobile.TextBox", "dojox
 
 dojo.declare(
 	"dojox.mobile.ComboBox",
-	[dojox.mobile.TextBox, dijit.form._AutoCompleterMixin, dijit.form._ComboBoxValueMixin],
+	[dojox.mobile.TextBox, dijit.form._AutoCompleterMixin],
 	{
 		// summary:
 		//		A non-templated auto-completing text box widget
