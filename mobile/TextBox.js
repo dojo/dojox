@@ -9,9 +9,6 @@ dojo.declare(
 	[dijit._WidgetBase, dijit.form._FormValueMixin, dijit.form._TextBoxMixin], {
 		baseClass: "mblTextBox",
 
-		// Map widget attributes to DOMNode attributes.
-		_setPlaceHolderAttr: "textbox",
-
 		buildRendering: function(){
 			if(!this.srcNodeRef){
 				this.srcNodeRef = dojo.create("input", {});

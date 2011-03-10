@@ -15,18 +15,6 @@ dojo.declare(
 
 		baseClass: "mblTextArea",
 
-		// Map widget attributes to DOMNode attributes.
-		_setRowsAttr: "textbox",
-		_setColsAttr: "textbox",
-
-		// rows: Number
-		//              The number of rows of text.
-		rows: "",
-
-		// rows: Number
-		//              The number of characters per line.
-		cols: "",
-
 		postMixInProperties: function(){
 			 // Copy value from srcNodeRef, unless user specified a value explicitly (or there is no srcNodeRef)
 			// TODO: parser will handle this in 2.0
