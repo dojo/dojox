@@ -242,7 +242,7 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 	
 });
 
-dojo.mixin(dojox.grid.cells.TreeCell, {
+dojox.grid.cells.LazyTreeCell = dojo.mixin(dojo.clone(dojox.grid.cells.TreeCell), {
 	formatAtLevel: function(inRowIndexes, inItem, level, summaryRow, toggleClass, cellClasses, inRowIndex){
 		if(!inItem){
 			return this.formatIndexes(inRowIndex, inRowIndexes, inItem, level);
@@ -300,7 +300,7 @@ dojo.declare("dojox.grid._LazyTreeLayout", dojox.grid._Layout, {
 	
 	addCellDef: function(inRowIndex, inCellIndex, inDef){
 		var obj = this.inherited(arguments);
-		return dojo.mixin(obj, dojox.grid.cells.TreeCell);
+		return dojo.mixin(obj, dojox.grid.cells.LazyTreeCell);
 	}
 });
 
