@@ -28,13 +28,13 @@ dojo.declare("dojox.form.Manager", [
 	//		See dojox.form.manager._Mixin for more info.
 
 	buildRendering: function(){
-		var node = this.domNode = this.srcNodeRef;
+		var node = (this.domNode = this.srcNodeRef);
 		if(!this.containerNode){
 			// all widgets with descendants must set containerNode
 				this.containerNode = node;
 		}
 		this._attachPoints = [];
-		dijit._Templated.prototype._attachTemplateNodes.call(this, node);
+		dijit._Templated.prototype._attachTemplateNodes.call(this, node, function(n,p){ return n.getAttribute(p); });
 	},
 	
 	destroyRendering: function(){
