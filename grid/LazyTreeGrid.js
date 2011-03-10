@@ -651,7 +651,12 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		size = this.cache.items.length;
 		this.inherited(arguments);
 	},
-	
+
+    filter: function(query, reRender){
+    	this.cache.emptyCache();
+        this.inherited(arguments);
+    },
+
 	_onFetchComplete: function(items, request, size){
 		var treePath = "",
 			startRowIdx, count, start;
