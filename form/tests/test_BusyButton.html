@@ -21,6 +21,7 @@
 			djConfig="parseOnLoad: true, isDebug: true"></script>
 		<script type="text/javascript" src="../BusyButton.js"></script>
 		<script type="text/javascript">
+			dojo.require("dojo.parser");
 			dojo.require("dijit.Menu");
 			dojo.addOnLoad(function(){
 				dojo.connect(dijit.byId("buttonCancel"), "onClick", function(){
