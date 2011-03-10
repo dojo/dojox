@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/InsertEntity", ["dojo", "dijit", "dojox", "dijit/TooltipDialog", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/html/entities", "dojox/editor/plugins/EntityPalette", "dojo/i18n", "i18n!dojox/editor/plugins/nls/InsertEntity"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/InsertEntity", ["dojo", "dijit", "dojox", "dijit/TooltipDialog", "dijit/_editor/_Plugin", "dijit/form/DropDownButton", "dojox/html/entities", "dojox/editor/plugins/EntityPalette", "dojo/i18n", "i18n!dojox/editor/plugins/nls/InsertEntity"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.InsertEntity",dijit._editor._Plugin,{
 	// summary:

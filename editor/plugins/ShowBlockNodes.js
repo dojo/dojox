@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/ShowBlockNodes", ["dojo", "dijit", "dojox", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "i18n!dojox/editor/plugins/nls/ShowBlockNodes"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/ShowBlockNodes", ["dojo", "dijit", "dojox", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/ToggleButton", "dojo/i18n", "i18n!dojox/editor/plugins/nls/ShowBlockNodes"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 	// summary:

@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/LocalImage", ["dojo", "dijit", "dojox", "dijit/_editor/plugins/LinkDialog", "dojox/form/FileUploader", "dojo/i18n", "i18n!dojox/editor/plugins/nls/LocalImage"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/LocalImage", ["dojo", "dijit", "dojox", "dijit/_editor/plugins/LinkDialog", "dijit/form/Button", "dijit/form/DropDownButton", "dojox/form/FileUploader", "dojo/i18n", "i18n!dojox/editor/plugins/nls/LocalImage"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDialog, {
 	// summary:
@@ -99,7 +99,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		// tags:
 		//		protected
 		var _this = this,
-			messages = this._messages = dojo.i18n.getLocalization("dojox.editor.plugins", "LocalImage");
+			messages = (this._messages = dojo.i18n.getLocalization("dojox.editor.plugins", "LocalImage"));
 		
 		this.tag = "img";
 		var dropDown = (this.dropDown = new dijit.TooltipDialog({
@@ -189,7 +189,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			dojo.string.substitute(this.linkDialogTemplate, messages));
 		dropDown.startup();
 		
-		var urlInput = this._urlInput = dijit.byId(this._uniqueId + "_urlInput");
+		var urlInput = (this._urlInput = dijit.byId(this._uniqueId + "_urlInput"));
 		this._textInput = dijit.byId(this._uniqueId + "_textInput");
 		this._setButton = dijit.byId(this._uniqueId + "_setButton");
 		

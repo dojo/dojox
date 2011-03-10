@@ -1,6 +1,8 @@
 dojo.provide("dojox.form.BusyButton");
 
 dojo.require("dijit.form.Button");
+dojo.require("dijit.form.DropDownButton");
+dojo.require("dijit.form.ComboButton");
 
 dojo.requireLocalization("dijit", "loading");
 

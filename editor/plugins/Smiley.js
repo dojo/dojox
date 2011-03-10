@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/Smiley", ["dojo", "dijit", "dojox", "dijit/_editor/_Plugin", "dijit/form/ToggleButton", "dijit/form/DropDownButton", "dojox/editor/plugins/_SmileyPalette", "dojo/i18n", "dojox/html/format", "i18n!dojox/editor/plugins/nls/Smiley"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/Smiley", ["dojo", "dijit", "dojox", "dijit/_editor/_Plugin", "dijit/form/DropDownButton", "dojox/editor/plugins/_SmileyPalette", "dojo/i18n", "dojox/html/format", "i18n!dojox/editor/plugins/nls/Smiley"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.Smiley");
 

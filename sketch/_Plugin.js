@@ -1,6 +1,6 @@
 dojo.provide("dojox.sketch._Plugin");
 //dojo.require("dojox.sketch");
-dojo.require("dijit.form.Button");
+dojo.require("dijit.form.ToggleButton");
 
 dojo.declare("dojox.sketch._Plugin", null, {
 	// summary

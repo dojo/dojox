@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_Templated", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_Templated", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/DropDownButton", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.FindReplace");
 
