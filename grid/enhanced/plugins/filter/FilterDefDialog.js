@@ -6,7 +6,7 @@ dojo.require("dojox.grid.enhanced.plugins.Dialog");
 dojo.require("dijit.form.ComboBox");
 dojo.require("dijit.form.Select");
 dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.RadioButton");
 dojo.require("dijit.form.NumberTextBox");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.TimeTextBox");
