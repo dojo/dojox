@@ -3,7 +3,6 @@ dojo.provide("dojox.image.SlideShow");
 // dojox.image.SlideShow courtesy Shane O Sullivan, licensed under a Dojo CLA
 // For a sample usage, see http://www.skynet.ie/~sos/photos.php
 //
-// @author  Copyright 2007 Shane O Sullivan (shaneosullivan1@gmail.com)
 //
 //	TODO: more cleanups
 //

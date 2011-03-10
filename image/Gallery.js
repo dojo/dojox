@@ -2,7 +2,6 @@ dojo.provide("dojox.image.Gallery");
 dojo.experimental("dojox.image.Gallery");
 //
 // dojox.image.Gallery courtesy Shane O Sullivan, licensed under a Dojo CLA
-// @author  Copyright 2007 Shane O Sullivan (shaneosullivan1@gmail.com)
 //
 // For a sample usage, see http://www.skynet.ie/~sos/photos.php
 //
