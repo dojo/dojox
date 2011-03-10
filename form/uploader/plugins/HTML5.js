@@ -92,7 +92,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 
 		var fd = new FormData();
 		dojo.forEach(this.inputNode.files, function(f, i){
-			fd.append("uploadedfiles[]", f);
+			fd.append(this.name+"s[]", f);
 		});
 
 		if(data){
@@ -166,7 +166,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 
 		var filesInError = [];
 		dojo.forEach(this.inputNode.files, function(f, i){
-			var fieldName = "uploadedfiles[]";//+i;
+			var fieldName = this.name+"s[]";//+i;
 			var fileName  = this.inputNode.files[i].fileName;
 			var binary;
 
