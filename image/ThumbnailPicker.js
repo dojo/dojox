@@ -2,7 +2,6 @@ dojo.provide("dojox.image.ThumbnailPicker");
 dojo.experimental("dojox.image.ThumbnailPicker");
 //
 // dojox.image.ThumbnailPicker courtesy Shane O Sullivan, licensed under a Dojo CLA
-// @author  Copyright 2007 Shane O Sullivan (shaneosullivan1@gmail.com)
 //
 // For a sample usage, see http://www.skynet.ie/~sos/photos.php
 //
