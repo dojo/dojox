@@ -1,5 +1,7 @@
 dojo.provide("dojox.editor.plugins.SpellCheck");
 
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
 dojo.require("dijit.form.TextBox");
 dojo.require("dijit.form.DropDownButton");
 dojo.require("dijit.TooltipDialog");
@@ -571,8 +573,8 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		// tags:
 		//		private
 		var _this = this,
-			strings = this._strings = dojo.i18n.getLocalization("dojox.editor.plugins", "SpellCheck"),
-			dialogPane = this._dialog = new dijit.TooltipDialog();
+			strings = (this._strings = dojo.i18n.getLocalization("dojox.editor.plugins", "SpellCheck")),
+			dialogPane = (this._dialog = new dijit.TooltipDialog());
 		
 		dialogPane.set("content", (this._dialogContent = new dojox.editor.plugins._spellCheckControl({
 			unfound: strings["unfound"],
@@ -625,7 +627,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var comms = this.exArgs;
 		
 		if(!this._service){
-			var service = this._service = new dojox.editor.plugins._SpellCheckScriptMultiPart();
+			var service = (this._service = new dojox.editor.plugins._SpellCheckScriptMultiPart());
 			service.serviceEndPoint = this.url;
 			service.maxBufferLength = this.bufferLength;
 			service.setWaitingTime(this.timeout);

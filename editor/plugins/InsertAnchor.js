@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/InsertAnchor", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_editor/range", "dijit/_Templated", "dijit/TooltipDialog", "dijit/form/ValidationTextBox", "dijit/form/Select", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/InsertAnchor", "i18n!dijit/nls/common"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/InsertAnchor", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_editor/range", "dijit/TooltipDialog", "dijit/form/ValidationTextBox", "dijit/form/Select", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/InsertAnchor", "i18n!dijit/nls/common"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 	// summary:

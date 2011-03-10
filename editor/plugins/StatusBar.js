@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/StatusBar", ["dojo", "dijit", "dojox", "dijit/Toolbar", "dijit/_editor/_Plugin", "dojox/layout/ResizeHandle", "dojo/i18n", "i18n!dojox/editor/plugins/nls/StatusBar"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/StatusBar", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/Toolbar", "dijit/_editor/_Plugin", "dojox/layout/ResizeHandle", "dojo/i18n", "i18n!dojox/editor/plugins/nls/StatusBar"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.StatusBar");
 dojo.declare("dojox.editor.plugins._StatusBar", [dijit._Widget, dijit._Templated],{

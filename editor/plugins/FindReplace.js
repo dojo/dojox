@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_Templated", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.FindReplace");
 
@@ -422,7 +422,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[dijit._editor._Plugin],{
 		//		public
 		this.inherited(arguments);
 		if(!dojo.isOpera){
-			var _tb = this._frToolbar = new dojox.editor.plugins._FindReplaceToolbar();
+			var _tb = (this._frToolbar = new dojox.editor.plugins._FindReplaceToolbar());
 			dojo.style(_tb.domNode, "display", "none");
 			dojo.place(_tb.domNode, toolbar.domNode, "after");
 			_tb.startup();

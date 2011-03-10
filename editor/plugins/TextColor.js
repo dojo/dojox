@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/TextColor", ["dojo", "dijit", "dojox", "dijit/TooltipDialog", "dijit/form/Button", "dijit/_editor/_Plugin", "dojox/widget/ColorPicker", "dojo/i18n", "i18n!dojox/editor/plugins/nls/TextColor"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/TextColor", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/TooltipDialog", "dijit/form/Button", "dijit/_editor/_Plugin", "dojox/widget/ColorPicker", "dojo/i18n", "i18n!dojox/editor/plugins/nls/TextColor"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.TextColor");
 dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._Templated], {

@@ -1,9 +1,5 @@
 define("dojox/editor/plugins/ToolbarLineBreak", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/_editor/_Plugin"], function(dojo, dijit, dojox) {
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dijit._editor._Plugin");
-
 dojo.declare("dojox.editor.plugins.ToolbarLineBreak",
 	[ dijit._Widget, dijit._Templated ],
 	{

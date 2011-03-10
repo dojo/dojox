@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/AutoSave", ["dojo", "dijit", "dojox", "dojo/string", "dojo/date/locale", "dijit/Dialog", "dijit/MenuItem", "dijit.Menu", "dijit/form/Button", "dijit/form/ComboBox", "dijit/form/TextBox", "dijit/TooltipDialog", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "dojox/editor/plugins/Save", "i18n!dojox/editor/plugins/nls/AutoSave"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/AutoSave", ["dojo", "dijit", "dojox", "dojo/string", "dojo/date/locale", "dijit/_Widget", "dijit/_Templated", "dijit/Dialog", "dijit/MenuItem", "dijit.Menu", "dijit/form/Button", "dijit/form/ComboBox", "dijit/form/TextBox", "dijit/TooltipDialog", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "dojox/editor/plugins/Save", "i18n!dojox/editor/plugins/nls/AutoSave"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.AutoSave");
 
@@ -217,7 +217,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 		});
 		this.connect(this._saveSettingDialog, "onOk", "_onDialogOk");
 		
-		var pd = this._promDialog = new dijit.TooltipDialog();
+		var pd = (this._promDialog = new dijit.TooltipDialog());
 		pd.startup();
 		pd.set("content", "");
 	},
@@ -230,10 +230,10 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 				iconClass: this._iconClassPrefix + "Default " + this._iconClassPrefix,
 				label: this._strings["saveLabel"]
 			}),
-			menuItemAutoSave = this._menuItemAutoSave = new dijit.MenuItem({
+			menuItemAutoSave = (this._menuItemAutoSave = new dijit.MenuItem({
 				iconClass: this._iconClassPrefix + "Setting " + this._iconClassPrefix,
 				label: this._strings["saveSettingLabelOn"]
-			});
+			}));
 			
 		menu.addChild(menuItemSave);
 		menu.addChild(menuItemAutoSave);
@@ -264,7 +264,7 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 		//		If the interval is set (larger than 0), enable auto-save.
 		// tags:
 		//		private
-		var interval = this.interval = this._saveSettingDialog.get("value") * this._MIN;
+		var interval = (this.interval = this._saveSettingDialog.get("value") * this._MIN);
 		if(interval > 0){
 			this._setSaveInterval(interval);
 			// Change the menu "Set Auto-Save Interval..." to "Turn off Auto-Save"
