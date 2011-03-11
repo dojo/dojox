@@ -1,13 +1,15 @@
-dojo.provide("dojox.mobile.TextBox");
-dojo.experimental("dojox.mobile.TextBox");
-
-dojo.require("dijit.form._TextBoxMixin");
-dojo.require("dijit.form._FormWidgetMixin");
+define("dojox/mobile/TextBox", ["dojo", "dijit", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_TextBoxMixin"], function(dojo, dijit) {
 
 dojo.declare(
 	"dojox.mobile.TextBox", 
 	[dijit._WidgetBase, dijit.form._FormValueMixin, dijit.form._TextBoxMixin], {
+		// summary:
+		//		A non-templated base class for textbox form inputs
+
 		baseClass: "mblTextBox",
+
+		// Map widget attributes to DOMNode attributes.
+		_setPlaceHolderAttr: "textbox",
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
@@ -24,3 +26,6 @@ dojo.declare(
 		}
 	}
 );
+
+return dojox.mobile.TextBox;
+});
