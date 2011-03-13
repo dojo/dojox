@@ -129,6 +129,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 		this._currentAreaIdx = -1;
 		this._gridBlured = true;
 		this._connects.push(dojo.connect(grid, "onBlur", this, "_doBlur"));
+		this._connects.push(dojo.connect(grid.scroller, "renderPage", this, "_delayedCellFocus"));
 		
 		this.addArea({
 			name: "header",
@@ -453,9 +454,8 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	_delayedCellFocus: function(){
 		// summary:
 		//		Overwritten
-		if(this.currentArea().name == "content"){
-			this.focusArea(this._currentAreaIdx);
-		}
+		this.currentArea("header", true);
+		this.focusArea(this._currentAreaIdx);
 	},
 	_changeMenuBindNode: function(oldBindNode, newBindNode){
 		var hm = this.grid.headerMenu;
