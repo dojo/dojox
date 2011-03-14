@@ -21,6 +21,7 @@
 	"conditionBefore": "לפני ",
 	"conditionAfter": "אחרי ",
 	"conditionRange": "טווח ",
+	"conditionIsEmpty": "ריק",
 	
 	"all": "הכל",
 	"any": "כלשהו",

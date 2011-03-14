@@ -21,6 +21,7 @@
 	"conditionBefore": "次の値より前",
 	"conditionAfter": "次の値より後",
 	"conditionRange": "次の範囲",
+	"conditionIsEmpty": "空である",
 	
 	"all": "すべて",
 	"any": "任意",

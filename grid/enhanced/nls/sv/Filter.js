@@ -21,6 +21,7 @@
 	"conditionBefore": "före",
 	"conditionAfter": "efter",
 	"conditionRange": "intervall",
+	"conditionIsEmpty": "är tom",
 	
 	"all": "alla",
 	"any": "någon",

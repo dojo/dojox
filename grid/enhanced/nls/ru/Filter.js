@@ -21,6 +21,7 @@
 	"conditionBefore": "до",
 	"conditionAfter": "после",
 	"conditionRange": "диапазон",
+	"conditionIsEmpty": "пусто",
 	
 	"all": "все",
 	"any": "любое",

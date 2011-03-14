@@ -21,6 +21,7 @@
 	"conditionBefore": "przed",
 	"conditionAfter": "po",
 	"conditionRange": "zakres",
+	"conditionIsEmpty": "jest pusty",
 	
 	"all": "wszystkie",
 	"any": "dowolne",

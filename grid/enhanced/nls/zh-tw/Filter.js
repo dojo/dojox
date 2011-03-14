@@ -21,6 +21,7 @@
 	"conditionBefore": "之前",
 	"conditionAfter": "之後",
 	"conditionRange": "範圍",
+	"conditionIsEmpty": "為空",
 	
 	"all": "全部",
 	"any": "任何",

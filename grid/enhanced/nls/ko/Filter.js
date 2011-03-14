@@ -21,6 +21,7 @@
 	"conditionBefore": "이전",
 	"conditionAfter": "이후",
 	"conditionRange": "범위",
+	"conditionIsEmpty": "다음이 비어있음",
 	
 	"all": "모두",
 	"any": "임의",

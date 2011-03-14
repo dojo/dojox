@@ -21,6 +21,7 @@
 	"conditionBefore": "avant",
 	"conditionAfter": "après",
 	"conditionRange": "plage",
+	"conditionIsEmpty": "est vide",
 	
 	"all": "tout",
 	"any": "n'importe lequel",

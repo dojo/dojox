@@ -21,6 +21,7 @@
 	"conditionBefore": "antes",
 	"conditionAfter": "después",
 	"conditionRange": "rango",
+	"conditionIsEmpty": "está vacío",
 	
 	"all": "todas",
 	"any": "cualquiera",

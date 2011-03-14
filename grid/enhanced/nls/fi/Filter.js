@@ -21,6 +21,7 @@
 	"conditionBefore": "ennen",
 	"conditionAfter": "jälkeen",
 	"conditionRange": "sallittu alue",
+	"conditionIsEmpty": "on tyhjä",
 	
 	"all": "kaikki",
 	"any": "mikä tahansa",

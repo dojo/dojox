@@ -21,6 +21,7 @@
 	"conditionBefore": "før",
 	"conditionAfter": "etter",
 	"conditionRange": "område",
+	"conditionIsEmpty": "er tom",
 	
 	"all": "alle",
 	"any": "minst en",

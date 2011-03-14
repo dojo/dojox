@@ -21,6 +21,7 @@
 	"conditionBefore": "vor",
 	"conditionAfter": "nach",
 	"conditionRange": "Bereich",
+	"conditionIsEmpty": "ist leer",
 	
 	"all": "alle",
 	"any": "ein(e/r)",

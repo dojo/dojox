@@ -21,6 +21,7 @@
 	"conditionBefore": "قبل",
 	"conditionAfter": "بعد",
 	"conditionRange": "مدى",
+	"conditionIsEmpty": "خالي",
 	
 	"all": "كل",
 	"any": "أي",
@@ -31,7 +32,7 @@
 	"relationMsgFront": "مطابقة",
 	"relationMsgTail": "",
 	"and": "and",
-	"or": "أو",
+	"or": "or",
 	
 	"addRuleButton": "اضافة قاعدة",
 	"waiAddRuleButton": "اضافة قاعدة جديدة",
