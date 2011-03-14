@@ -1,6 +1,6 @@
 // AMD-ID "dojox/encoding/digests/_base"
 define(["dojo", "dojox"], function(dojo, dojox) {
-dojo.getObject("encodoing.digests", true, dojox);
+dojo.getObject("encoding.digests", true, dojox);
 
 (function(){
 	//TODO: see if it makes sense to meld this into one with the
