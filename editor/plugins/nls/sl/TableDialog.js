@@ -5,7 +5,7 @@
 	columns: "Stolpci:",
 	align: "Poravnaj:",
 	cellPadding: "Polnjenje celic:",
-	cellSpacing: "Razmik celic:",
+	cellSpacing: "Razmik med celicami:",
 	tableWidth: "Širina tabele:",
 	backgroundColor: "Barva ozadja:",
 	borderColor: "Barva obrobe:",
