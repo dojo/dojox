@@ -21,6 +21,7 @@
 	"conditionBefore": "voor",
 	"conditionAfter": "na",
 	"conditionRange": "bereik",
+	"conditionIsEmpty": "is leeg",
 	
 	"all": "alle",
 	"any": "elke",

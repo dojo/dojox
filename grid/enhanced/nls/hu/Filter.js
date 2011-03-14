@@ -21,6 +21,7 @@
 	"conditionBefore": "előtte",
 	"conditionAfter": "utána",
 	"conditionRange": "tartomány",
+	"conditionIsEmpty": "üres",
 	
 	"all": "mind",
 	"any": "bármely",

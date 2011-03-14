@@ -21,6 +21,7 @@
 	"conditionBefore": "před",
 	"conditionAfter": "po",
 	"conditionRange": "rozsah",
+	"conditionIsEmpty": "je prázdné",
 	
 	"all": "vše",
 	"any": "libovolné",

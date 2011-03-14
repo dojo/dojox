@@ -21,6 +21,7 @@
 	"conditionBefore": "önce",
 	"conditionAfter": "sonra",
 	"conditionRange": "aralık",
+	"conditionIsEmpty": "boş",
 	
 	"all": "tümü",
 	"any": "herhangi biri",

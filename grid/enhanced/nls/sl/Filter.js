@@ -21,6 +21,7 @@
 	"conditionBefore": "pred ",
 	"conditionAfter": "za ",
 	"conditionRange": "obseg",
+	"conditionIsEmpty": "je prazno",
 	
 	"all": "vse",
 	"any": "karkoli",
