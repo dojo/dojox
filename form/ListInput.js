@@ -2,6 +2,8 @@ dojo.experimental("dojox.form.ListInput");
 
 dojo.provide("dojox.form.ListInput");
 
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
 dojo.require("dijit.form._FormWidget");
 dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit.InlineEditBox");
