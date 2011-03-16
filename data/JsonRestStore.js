@@ -360,7 +360,7 @@ dojo.declare("dojox.data.JsonRestStore",
 		isDirty: function(item){
 			// summary
 			//		returns true if the item is marked as dirty.
-			return dojox.rpc.JsonRest.isDirty(item);
+			return dojox.rpc.JsonRest.isDirty(item, this);
 		},
 		isItem: function(item, anyStore){
 			//	summary:
