@@ -244,6 +244,25 @@ dojo.declare("dojox.data.JsonRestStore",
 			//		revert.
 			dojox.rpc.JsonRest.changing(item,_deleting);
 		},
+		cancelChanging : function(object){
+			//	summary:
+			// 		Removes an object from the list of dirty objects
+			//		This will prevent that object from being saved to the server on the next save
+			//	object:
+			//		The item to cancel changes on
+			if(!object.__id){
+				return;
+			}
+			dirtyObjects = dirty=dojox.rpc.JsonRest.getDirtyObjects();
+			for(var i=0; i<dirtyObjects.length; i++){
+				var dirty = dirtyObjects[i];
+				if(object==dirty.object){
+					dirtyObjects.splice(i, 1);
+					return;
+				}
+			}
+	
+		},
 
 		setValue: function(item, attribute, value){
 			// summary:
