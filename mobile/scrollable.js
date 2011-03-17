@@ -74,6 +74,7 @@ dojox.mobile.scrollable = function(){
 	this.weight = 0.6; // frictional drag
 	this.fadeScrollBar = true;
 	this.disableFlashScrollBar = false;
+	this.threshold = 0; // drag threshold value in pixels
 
 //>>excludeStart("dojo", true);
 	if(!dojo.version){ // seems running in a non-dojo environment
@@ -253,6 +254,7 @@ dojox.mobile.scrollable = function(){
 		var dim = this._dim;
 
 		if(this._time.length == 1){ // the first TouchMove after TouchStart
+			if(dx < this.threshold && dy < this.threshold){ return; }
 			this.addCover();
 			this.showScrollBar();
 		}
