@@ -154,8 +154,8 @@ dojox.mobile.scrollable = function(){
 		this._ch.push(dojo.connect(this.containerNode,
 			dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchStart"));
 		if(dojo.isWebKit){
-			this._ch.push(dojo.connect(this.containerNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
-			this._ch.push(dojo.connect(this.containerNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
+			this._ch.push(dojo.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
+			this._ch.push(dojo.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 		}
 
 		if(dojo.global.onorientationchange !== undefined){
