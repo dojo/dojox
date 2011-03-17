@@ -397,7 +397,6 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	errorHandler:
 		//		A function to call on error
 		var url = this._getFetchUrl(request);
-		console.log("XmlStore._fetchItems(): url=" + url);
 		if(!url){
 			errorHandler(new Error("No URL specified."));
 			return;
@@ -413,7 +412,6 @@ dojo.declare("dojox.data.XmlStore", null, {
 		var getHandler = dojo.xhrGet(getArgs);
 		getHandler.addCallback(function(data){
 			var items = self._getItems(data, localRequest);
-			console.log("XmlStore._fetchItems(): length=" + (items ? items.length : 0));
 			if(items && items.length > 0){
 				fetchHandler(items, request);
 			}else{
@@ -624,7 +622,6 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		An object containing initial attributes
 		//	returns:
 		//		An XML element
-		console.log("XmlStore.newItem()");
 		keywordArgs = (keywordArgs || {});
 		var tagName = keywordArgs.tagName;
 		if(!tagName){
@@ -697,7 +694,6 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		An XML element to delete
 		//	returns:
 		//		True
-		console.log("XmlStore.deleteItem()");
 		var element = item.element;
 		if(element.parentNode){
 			this._backupItem(item);
@@ -957,9 +953,6 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//	Invalidate changes (new and/or modified elements)
 		// returns:
 		//	True
-		console.log("XmlStore.revert() _newItems=" + this._newItems.length);
-		console.log("XmlStore.revert() _deletedItems=" + this._deletedItems.length);
-		console.log("XmlStore.revert() _modifiedItems=" + this._modifiedItems.length);
 		this._newItems = [];
 		this._restoreItems(this._deletedItems);
 		this._deletedItems = [];
