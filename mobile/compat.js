@@ -206,7 +206,7 @@ dojo.extend(dojox.mobile.Switch, {
 	}
 });
 
-if(dojo.isIE || dojo.isBB){
+if(dojo.isIE){
 
 dojo.extend(dojox.mobile.RoundRect, {
 	buildRendering: function(){
@@ -436,7 +436,7 @@ dojox.mobile.getCssPaths = function(){
 	return paths;
 };
 
-dojox.mobile.loadCompatPattern = /\/themes\/(domButtons|buttons|iphone|android).*\.css$/;
+dojox.mobile.loadCompatPattern = /\/themes\/(domButtons|buttons|iphone|android|blackberry).*\.css$/;
 
 dojox.mobile.loadCompatCssFiles = function(){
 	// summary:
