@@ -93,7 +93,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 		}
 		
 		var info = {target: e.target, coords: e.keyCode !== dojo.keys.F10 && "pageX" in e ? {x: e.pageX, y: e.pageY } : null};
-		if(this.rowMenu && (this.selection.isSelected(e.rowIndex) || e.rowNode && dojo.hasClass(e.rowNode, 'dojoxGridRowbar'))){
+		if(this.rowMenu && (!this.cellMenu || this.selection.isSelected(e.rowIndex) || e.rowNode && dojo.hasClass(e.rowNode, 'dojoxGridRowbar'))){
 			this.rowMenu._openMyself(info);
 			dojo.stopEvent(e);
 			return;
