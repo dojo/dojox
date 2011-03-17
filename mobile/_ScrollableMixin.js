@@ -23,6 +23,7 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
 		var params = {};
 		if(this.fixedHeader){
 			params.fixedHeaderHeight = dojo.byId(this.fixedHeader).offsetHeight;

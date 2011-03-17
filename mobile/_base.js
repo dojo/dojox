@@ -1,6 +1,8 @@
 dojo.provide("dojox.mobile._base");
 
 dojo.require("dijit._WidgetBase");
+dojo.require("dijit._Container");
+dojo.require("dijit._Contained");
 dojo.require("dojox.mobile.Button");
 dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
@@ -26,7 +28,7 @@ dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 dojo.declare(
 	"dojox.mobile.View",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	// summary:
 	//		A widget that represents a view that occupies the full screen
@@ -77,7 +79,7 @@ dojo.declare(
 			}
 			_this.domNode.style.visibility = "visible";
 		}, dojo.isIE?100:0); // give IE a little time to complete drawing
-		this._started = true;
+		this.inherited(arguments);
 	},
 
 	onStartView: function(){
@@ -183,7 +185,7 @@ dojo.declare(
 		var toWidget = dijit.byNode(toNode);
 		if(toWidget){
 			// perform view transition keeping the scroll position
-			if(this.keepScrollPos && !dijit.getEnclosingWidget(this.domNode.parentNode)){
+			if(this.keepScrollPos && !this.getParent()){
 				var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
 				if(dir == 1){
 					toNode.style.top = "0px";
@@ -308,7 +310,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.Heading",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	back: "",
 	href: "",
@@ -320,7 +322,7 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
 		this.domNode.className = "mblHeading";
-		this._view = dijit.getEnclosingWidget(this.domNode.parentNode); // parentNode is null if created programmatically
+		this._view = this.getParent();
 		if(this.label){
 			this.domNode.appendChild(document.createTextNode(this.label));
 		}else{
@@ -347,9 +349,11 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
 		if(this._btn){
 			this._btn.style.width = this._body.offsetWidth + this._head.offsetWidth + "px";
 		}
+		this.inherited(arguments);
 	},
 
 	onClick: function(e){
@@ -370,7 +374,7 @@ dojo.declare(
 
 	goTo: function(moveTo, href){
 		if(!this._view){
-			this._view = dijit.byNode(this.domNode.parentNode);
+			this._view = this.getParent();
 		}
 		if(!this._view){ return; }
 		if(href){
@@ -390,7 +394,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.RoundRect",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	shadow: false,
 
@@ -402,7 +406,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.RoundRectCategory",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Contained],
 {
 	label: "",
 
@@ -429,7 +433,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.RoundRectList",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	transition: "slide",
 	iconBase: "",
@@ -441,7 +445,7 @@ dojo.declare(
 	},
 
 	addChild: function(widget){
-		this.containerNode.appendChild(widget.domNode);
+		this.inherited(arguments);
 		widget.inheritParams();
 		widget.setIcon();
 	}
@@ -460,7 +464,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.AbstractItem",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	icon: "",
 	iconPos: "", // top,left,width,height (ex. "0,0,29,29")
@@ -494,12 +498,11 @@ dojo.declare(
 			w = dijit.byId(moveTo);
 			if(w){ return w.getShowingView(); }
 		}
-		var n = this.domNode.parentNode;
+		w = this;
 		while(true){
-			w = dijit.getEnclosingWidget(n);
+			w = w.getParent();
 			if(!w){ return null; }
-			if(w.performTransition){ break; }
-			n = w.domNode.parentNode;
+			if(w instanceof dojox.mobile.View){ break; }
 		}
 		return w;
 	},
@@ -804,7 +807,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.Switch",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Contained],
 {
 	value: "on",
 	leftLabel: "ON",

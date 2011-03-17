@@ -1,6 +1,8 @@
 dojo.provide("dojox.mobile.FixedSplitter");
 
 dojo.require("dijit._WidgetBase");
+dojo.require("dijit._Container");
+dojo.require("dijit._Contained");
 
 // summary:
 //		A layout container that splits the window horizontally or vertically.
@@ -25,7 +27,7 @@ dojo.require("dijit._WidgetBase");
 
 dojo.declare(
 	"dojox.mobile.FixedSplitter",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	orientation: "H", // "H" or "V"
 
@@ -37,21 +39,20 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
 		var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
 		dojo.forEach(children, function(node){
 			dojo.addClass(node, "mblFixedSplitterPane"+this.orientation);
 		}, this);
-
-		dojo.forEach(this.getChildren(), function(child){if(child.startup){child.startup();}});
-		this._started = true;
+		this.inherited(arguments);
 
 		var _this = this;
 		setTimeout(function(){
 			_this.resize();
 		}, 0);
 
-		var parent = dijit.getEnclosingWidget(this.domNode.parentNode);
-		if(!parent){
+		var parent = this.getParent();
+		if(!parent || !parent.resize){
 			if(dojo.global.onorientationchange !== undefined){
 				this.connect(dojo.global, "onorientationchange", "resize");
 			}else{
@@ -88,7 +89,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.FixedSplitterPane",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	buildRendering: function(){
 		this.inherited(arguments);

@@ -4,7 +4,7 @@ dojo.require("dojox.mobile");
 
 dojo.declare(
 	"dojox.mobile.IconContainer",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	defaultIcon: "",
 	transition: "below", // slide, flip, or below
@@ -38,6 +38,7 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
 		var ul, i, len, child, w;
 		if(this.transition == "below"){
 			this._setupSubNodes(this.domNode);
@@ -58,6 +59,7 @@ dojo.declare(
 			dojo.doc.body.appendChild(view.domNode);
 			heading.startup();
 		}
+		this.inherited(arguments);
 	},
 
 	closeAll: function(){

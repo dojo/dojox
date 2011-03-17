@@ -4,7 +4,7 @@ dojo.require("dojox.mobile");
 
 dojo.declare(
 	"dojox.mobile.TabBar",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	iconBase: "",
 	iconPos: "",
@@ -30,10 +30,12 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
 		var _this = this;
 		setTimeout(function(){ // to get proper dimension
 			_this.onResize();
 		}, 0);
+		this.inherited(arguments);
 	},
 
 	onResize: function(){
@@ -62,7 +64,7 @@ dojo.declare(
 				totalW += arr[i].offsetWidth;
 			}
 			margin = Math.floor(margin/2);
-			var parent = dijit.getEnclosingWidget(this.domNode.parentNode);
+			var parent = this.getParent();
 			var inHeading = this.inHeading || parent instanceof dojox.mobile.Heading;
 			this.containerNode.style.padding = "3px 0px 0px " + (inHeading ? 0 : margin) + "px";
 			if(inHeading){
@@ -170,6 +172,7 @@ dojo.declare(
 	},
 
 	startup: function(){
+		if(this._started){ return; }
 		var parent = this.getParentWidget();
 		this.parent = parent;
 		if(parent && parent.barType == "segmentedControl"){
@@ -178,6 +181,7 @@ dojo.declare(
 			dojo.addClass(this.domNode, parent._clsName);
 			this.box.className = "";
 		}
+		this.inherited(arguments);
 	},
 
 	select: function(deselect){
