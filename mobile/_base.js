@@ -469,6 +469,7 @@ dojo.declare(
 	scene: "",
 	clickable: false,
 	url: "",
+	urlTarget: "", // node id under which a new view is created
 	transition: "",
 	transitionDir: 1,
 	callback: null,
@@ -558,6 +559,7 @@ dojo.declare(
 				dojox.mobile._viewMap[url] = id;
 			}
 			moveTo = id;
+			w = this.findCurrentView(moveTo) || w; // the current view widget
 		}
 		w.performTransition(moveTo, this.transitionDir, this.transition, this.callback && this, this.callback);
 	},
@@ -565,6 +567,11 @@ dojo.declare(
 	_parse: function(text){
 		var container = dojo.create("DIV");
 		var view;
+		var id = this.urlTarget;
+		var target = dijit.byId(id) && dijit.byId(id).containerNode ||
+			dojo.byId(id) ||
+			dojox.mobile.currentView && dojox.mobile.currentView.domNode.parentNode ||
+			dojo.body();
 		if(text.charAt(0) == "<"){ // html markup
 			container.innerHTML = text;
 			view = container.firstChild; // <div dojoType="dojox.mobile.View">
@@ -574,10 +581,11 @@ dojo.declare(
 			}
 			view.setAttribute("_started", "true"); // to avoid startup() is called
 			view.style.visibility = "hidden";
-			dojo.body().appendChild(container);
+			target.appendChild(container);
 			(dojox.mobile.parser || dojo.parser).parse(container);
+			target.appendChild(target.removeChild(container).firstChild); // reparent
 		}else if(text.charAt(0) == "{"){ // json
-			dojo.body().appendChild(container);
+			target.appendChild(container);
 			this._ws = [];
 			view = this._instantiate(eval('('+text+')'), container);
 			for(var i = 0; i < this._ws.length; i++){
