@@ -371,6 +371,25 @@ if(dojo.isIE <= 6){
 	};
 } // if(dojo.isIE <= 6)
 
+// override deviceTheme.js
+dojox.mobile.loadCssFile = function(/*String*/file){
+	if(dojo.doc.createStyleSheet){
+		// for some reason, IE hangs when you try to load
+		// multiple css files almost at once.
+		setTimeout(function(file){
+			return function(){
+				dojo.doc.createStyleSheet(file);
+			};
+		}(file), 0);
+	}else{
+		dojo.create("LINK", {
+			href: file,
+			type: "text/css",
+			rel: "stylesheet"
+		}, dojo.doc.getElementsByTagName('head')[0]);
+	}
+};
+
 dojox.mobile.loadCss = function(/*String|Array*/files){
 	// summary:
 	//		Function to load and register CSS files with the page
@@ -390,22 +409,7 @@ dojox.mobile.loadCss = function(/*String|Array*/files){
 		var file = files[i];
 		if(!dojo.global._loadedCss[file]){
 			dojo.global._loadedCss[file] = true;
-			if(dojo.doc.createStyleSheet){
-				// for some reason, IE hangs when you try to load
-				// multiple css files almost at once.
-				setTimeout(function(file){
-					return function(){
-						dojo.doc.createStyleSheet(file);
-					};
-				}(file), 0);
-			}else{
-				var link = dojo.doc.createElement("link");
-				link.href = file;
-				link.type = "text/css";
-				link.rel = "stylesheet";
-				var head = dojo.doc.getElementsByTagName('head')[0];
-				head.appendChild(link);
-			}
+			dojox.mobile.loadCssFile(file);
 		}
 	}
 };
@@ -417,6 +421,7 @@ dojox.mobile.getCssPaths = function(){
 	// find @import
 	var s = dojo.doc.styleSheets;
 	for(i = 0; i < s.length; i++){
+		if(s[i].href){ continue; }
 		var r = s[i].cssRules || s[i].imports;
 		if(!r){ continue; }
 		for(j = 0; j < r.length; j++){
@@ -459,7 +464,9 @@ dojox.mobile.hideAddressBar = function(){
 
 dojo.addOnLoad(function(){
 	if(dojo.config["mblLoadCompatCssFiles"] !== false){
-		dojox.mobile.loadCompatCssFiles();
+		setTimeout(function(){ // IE needs setTimeout
+			dojox.mobile.loadCompatCssFiles();
+		}, 0);
 	}
 	if(dojox.mobile.applyPngFilter){
 		dojox.mobile.applyPngFilter();
