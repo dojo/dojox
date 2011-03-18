@@ -635,8 +635,10 @@ dojo.require("dojo.dnd.Moveable");
 			var i, s, sw, f, fl;
 			for(i=0; (s=inDrag.spanners[i]); i++){
 				sw = s.width + data.deltaX;
-				s.node.style.width = sw + 'px';
-				inDrag.view.setColWidth(s.index, sw);
+				if(sw > 0){
+					s.node.style.width = sw + 'px';
+					inDrag.view.setColWidth(s.index, sw);
+				}
 			}
 			if(dojo._isBodyLtr() || !dojo.isIE){//fix #11339
 				for(i=0; (f=inDrag.followers[i]); i++){
