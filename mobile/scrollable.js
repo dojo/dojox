@@ -788,27 +788,20 @@ dojox.mobile.scrollable = function(){
 			}else{
 				this._cover.style.display = "";
 			}
+			this.setSelectable(this._cover, false);
+			this.setSelectable(this.domNode, false);
 		}
 //>>excludeEnd("webkitMobile");
-		this.setSelectable(this.domNode, false);
-		var sel;
-		if(dojo.global.getSelection){
-			sel = dojo.global.getSelection();
-			sel.collapse(dojo.doc.body, 0);
-		}else{
-			sel = dojo.doc.selection.createRange();
-			sel.setEndPoint("EndToStart", sel);
-			sel.select();
-		}
 	};
 
 	this.removeCover = function(){
 //>>excludeStart("webkitMobile", kwArgs.webkitMobile);
 		if(!dojox.mobile.hasTouch && this._cover){
 			this._cover.style.display = "none";
+			this.setSelectable(this._cover, true);
+			this.setSelectable(this.domNode, true);
 		}
 //>>excludeEnd("webkitMobile");
-		this.setSelectable(this.domNode, true);
 	};
 
 	this.setKeyframes = function(/*Object*/from, /*Object*/to, /*Number*/idx){
