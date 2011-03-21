@@ -45,8 +45,6 @@ dojo.declare(
 	//		If true, the scroll position is kept between views.
 	keepScrollPos: true,
 
-	_started: false,
-
 	constructor: function(params, node){
 		if(node){
 			dojo.byId(node).style.visibility = "hidden";
@@ -583,11 +581,11 @@ dojo.declare(
 				alert("dojox.mobile.AbstractItem#transitionTo: invalid view content");
 				return;
 			}
-			view.setAttribute("_started", "true"); // to avoid startup() is called
 			view.style.visibility = "hidden";
 			target.appendChild(container);
 			(dojox.mobile.parser || dojo.parser).parse(container);
 			target.appendChild(target.removeChild(container).firstChild); // reparent
+			dijit.byNode(view)._visible = true;
 		}else if(text.charAt(0) == "{"){ // json
 			target.appendChild(container);
 			this._ws = [];
