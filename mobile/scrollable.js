@@ -75,6 +75,8 @@ dojox.mobile.scrollable = function(){
 	this.fadeScrollBar = true;
 	this.disableFlashScrollBar = false;
 	this.threshold = 4; // drag threshold value in pixels
+	this.constraint = true; // bounce back to the content area
+	this.touchNode = null; // a node that will have touch event handlers
 
 //>>excludeStart("dojo", true);
 	if(!dojo.version){ // seems running in a non-dojo environment
@@ -147,12 +149,13 @@ dojox.mobile.scrollable = function(){
 				}
 			}
 		}
+		this.touchNode = this.touchNode || this.containerNode;
 		this._v = (this.scrollDir.indexOf("v") != -1); // vertical scrolling
 		this._h = (this.scrollDir.indexOf("h") != -1); // horizontal scrolling
 		this._f = (this.scrollDir == "f"); // flipping views
 
 		this._ch = []; // connect handlers
-		this._ch.push(dojo.connect(this.containerNode,
+		this._ch.push(dojo.connect(this.touchNode,
 			dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchStart"));
 		if(dojo.isWebKit){
 			this._ch.push(dojo.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
@@ -260,7 +263,7 @@ dojox.mobile.scrollable = function(){
 		}
 
 		var weight = this.weight;
-		if(this._v){
+		if(this._v && this.constraint){
 			if(to.y > 0){ // content is below the screen area
 				to.y = Math.round(to.y * weight);
 			}else if(to.y < -dim.o.h){ // content is above the screen area
@@ -271,7 +274,7 @@ dojox.mobile.scrollable = function(){
 				}
 			}
 		}
-		if(this._h || this._f){
+		if((this._h || this._f) && this.constraint){
 			if(to.x > 0){
 				to.x = Math.round(to.x * weight);
 			}else if(to.x < -dim.o.w){
@@ -316,48 +319,52 @@ dojox.mobile.scrollable = function(){
 	};
 
 	this.onTouchEnd = function(e){
-		if(!this._conn){ return; } // if we get onTouchEnd without onTouchStart, ignore it.
-		for(var i = 0; i < this._conn.length; i++){
-			dojo.disconnect(this._conn[i]);
-		}
-		this._conn = null;
-
-		var n = this._time.length; // # of samples
-		var clicked = false;
-		if(!this._aborted){
-			if(n <= 1){
-				clicked = true;
-			}else if(n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4){
-				clicked = true;
-			}
-		}
-		if(clicked){ // clicked, not dragged or flicked
-			this.hideScrollBar();
-			this.removeCover();
-			if(dojox.mobile.hasTouch){
-				var elem = e.target;
-				if(elem.nodeType != 1){
-					elem = elem.parentNode;
-				}
-				var ev = dojo.doc.createEvent("MouseEvents");
-				ev.initEvent("click", true, true);
-				elem.dispatchEvent(ev);
-			}
-			return;
-		}
 		var speed = {x:0, y:0};
-		// if the user holds the mouse or finger more than 0.5 sec, do not move.
-		if(n >= 2 && (new Date()).getTime() - this.startTime - this._time[n - 1] < 500){
-			var dy = this._posY[n - (n > 3 ? 2 : 1)] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
-			var dx = this._posX[n - (n > 3 ? 2 : 1)] - this._posX[(n - 6) >= 0 ? n - 6 : 0];
-			var dt = this._time[n - (n > 3 ? 2 : 1)] - this._time[(n - 6) >= 0 ? n - 6 : 0];
-			speed.y = this.calcSpeed(dy, dt);
-			speed.x = this.calcSpeed(dx, dt);
-		}
-
+		var dim = this._dim;
 		var pos = this.getPos();
 		var to = {}; // destination
-		var dim = this._dim;
+		if(e){
+			if(!this._conn){ return; } // if we get onTouchEnd without onTouchStart, ignore it.
+			for(var i = 0; i < this._conn.length; i++){
+				dojo.disconnect(this._conn[i]);
+			}
+			this._conn = null;
+	
+			var n = this._time.length; // # of samples
+			var clicked = false;
+			if(!this._aborted){
+				if(n <= 1){
+					clicked = true;
+				}else if(n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4){
+					clicked = true;
+				}
+			}
+			if(clicked){ // clicked, not dragged or flicked
+				this.hideScrollBar();
+				this.removeCover();
+				if(dojox.mobile.hasTouch){
+					var elem = e.target;
+					if(elem.nodeType != 1){
+						elem = elem.parentNode;
+					}
+					var ev = dojo.doc.createEvent("MouseEvents");
+					ev.initEvent("click", true, true);
+					elem.dispatchEvent(ev);
+				}
+				return;
+			}
+			// if the user holds the mouse or finger more than 0.5 sec, do not move.
+			if(n >= 2 && (new Date()).getTime() - this.startTime - this._time[n - 1] < 500){
+				var dy = this._posY[n - (n > 3 ? 2 : 1)] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
+				var dx = this._posX[n - (n > 3 ? 2 : 1)] - this._posX[(n - 6) >= 0 ? n - 6 : 0];
+				var dt = this._time[n - (n > 3 ? 2 : 1)] - this._time[(n - 6) >= 0 ? n - 6 : 0];
+				speed.y = this.calcSpeed(dy, dt);
+				speed.x = this.calcSpeed(dx, dt);
+			}
+		}else{
+			if(pos.x == 0 && pos.y == 0){ return; } // initializing
+			dim = this.getDim();
+		}
 
 		if(this._v){
 			to.y = pos.y + speed.y;
@@ -366,20 +373,22 @@ dojox.mobile.scrollable = function(){
 			to.x = pos.x + speed.x;
 		}
 
-		if(this.scrollDir == "v" && dim.c.h <= dim.d.h){ // content is shorter than display
+		this.adjustDestination(to, pos);
+
+		if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
 			this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
 			return;
-		}else if(this.scrollDir == "h" && dim.c.w <= dim.d.w){ // content is narrower than display
+		}else if(this.scrollDir == "h" && dim.c.w < dim.d.w){ // content is narrower than display
 			this.slideTo({x:0}, 0.3, "ease-out"); // go back to the left
 			return;
-		}else if(this._v && this._h && dim.c.h <= dim.d.h && dim.c.w <= dim.d.w){
+		}else if(this._v && this._h && dim.c.h < dim.d.h && dim.c.w < dim.d.w){
 			this.slideTo({x:0, y:0}, 0.3, "ease-out"); // go back to the top-left
 			return;
 		}
 
 		var duration, easing = "ease-out";
 		var bounce = {};
-		if(this._v){
+		if(this._v && this.constraint){
 			if(to.y > 0){ // going down. bounce back to the top.
 				if(pos.y > 0){ // started from below the screen area. return quickly.
 					duration = 0.3;
@@ -400,7 +409,7 @@ dojox.mobile.scrollable = function(){
 				}
 			}
 		}
-		if(this._h || this._f){
+		if((this._h || this._f) && this.constraint){
 			if(to.x > 0){ // going right. bounce back to the left.
 				if(pos.x > 0){ // started from right of the screen area. return quickly.
 					duration = 0.3;
@@ -440,6 +449,10 @@ dojox.mobile.scrollable = function(){
 		this.slideTo(to, duration, easing);
 	};
 
+	this.adjustDestination = function(to, pos){
+		// subclass may want to implement
+	};
+
 	this.abort = function(){
 		this.scrollTo(this.getPos());
 		this.stopAnimation();
@@ -461,8 +474,8 @@ dojox.mobile.scrollable = function(){
 		return Math.round(d / t * 100) * 4;
 	};
 
-	this.scrollTo = function(/*Object*/to, /*?Boolean*/doNotMoveScrollBar){ // to: {x, y}
-		var s = this.containerNode.style;
+	this.scrollTo = function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node){ // to: {x, y}
+		var s = (node || this.containerNode).style;
 		if(dojo.isWebKit){
 			s.webkitTransform = this.makeTranslateStr(to);
 		}else{
@@ -667,12 +680,12 @@ dojox.mobile.scrollable = function(){
 			});
 			dojo.addClass(node, "mblScrollableScrollTo"+idx);
 			if(idx == 2){
-				this.scrollTo(to, true);
+				this.scrollTo(to, true, node);
 			}else{
 				this.scrollScrollBarTo(to);
 			}
 //>>excludeStart("webkitMobile", kwArgs.webkitMobile);
-		}else if(dojo.fx && dojo.fx.easing){
+		}else if(dojo.fx && dojo.fx.easing && duration){
 			// If you want to support non-webkit browsers,
 			// your application needs to load necessary modules as follows:
 			//
@@ -693,7 +706,7 @@ dojox.mobile.scrollable = function(){
 		}else{
 			// directly jump to the destination without animation
 			if(idx == 2){
-				this.scrollTo(to);
+				this.scrollTo(to, false, node);
 				this.onFlickAnimationEnd();
 			}else{
 				this.scrollScrollBarTo(to);

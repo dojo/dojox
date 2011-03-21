@@ -441,7 +441,7 @@ dojox.mobile.getCssPaths = function(){
 	return paths;
 };
 
-dojox.mobile.loadCompatPattern = /\/themes\/(domButtons|buttons|iphone|android|blackberry).*\.css$/;
+dojox.mobile.loadCompatPattern = /\/mobile\/themes\/.*\.css$/;
 
 dojox.mobile.loadCompatCssFiles = function(){
 	// summary:
@@ -451,7 +451,7 @@ dojox.mobile.loadCompatCssFiles = function(){
 	var paths = dojox.mobile.getCssPaths();
 	for(var i = 0; i < paths.length; i++){
 		var href = paths[i];
-		if(href.match(dojox.mobile.loadCompatPattern) && href.indexOf("-compat.css") == -1){
+		if((href.match(dojox.mobile.loadCompatPattern) || location.href.indexOf("mobile/tests/")) && href.indexOf("-compat.css") == -1){
 			var compatCss = href.substring(0, href.length-4)+"-compat.css";
 			dojox.mobile.loadCss(compatCss);
 		}
