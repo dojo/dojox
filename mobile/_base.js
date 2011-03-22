@@ -3,7 +3,6 @@ dojo.provide("dojox.mobile._base");
 dojo.require("dijit._WidgetBase");
 dojo.require("dijit._Container");
 dojo.require("dijit._Contained");
-dojo.require("dojox.mobile.Button");
 dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 // summary:

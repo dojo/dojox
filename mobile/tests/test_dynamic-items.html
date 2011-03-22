@@ -13,6 +13,7 @@
 			dojo.require("dojo.hash");
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile.Button");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 
 			var counter = 4;
@@ -90,7 +91,7 @@
 					Document 0003
 				</li>
 			</ul>
-			<button id="btn1" dojoType="dojox.mobile.Button" style="width:80px;margin-left:10px">More...</button>
+			<button id="btn1" dojoType="dojox.mobile.Button" class="mblBlueButton" style="width:80px;margin-left:10px">More...</button>
 		</div>
 
 		<div id="bar" dojoType="dojox.mobile.ViewEx"></div>

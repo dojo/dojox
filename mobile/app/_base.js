@@ -5,6 +5,7 @@ dojo.require("dijit._base");
 dojo.require("dijit._WidgetBase");
 dojo.require("dojox.mobile");
 dojo.require("dojox.mobile.parser");
+dojo.require("dojox.mobile.Button");
 
 dojo.require("dojox.mobile.app._event");
 dojo.require("dojox.mobile.app._Widget");

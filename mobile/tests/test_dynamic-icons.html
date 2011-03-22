@@ -25,6 +25,7 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.require("dojox.mobile.IconContainer");
+			dojo.require("dojox.mobile.Button");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 
 			dojo.addOnLoad(function(){
@@ -48,7 +49,7 @@
 			<ul id="ic1" dojoType="dojox.mobile.IconContainer" type="slide">
 				<li dojoType="dojox.mobile.IconItem" label="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
 			</ul>
-			<button id="btn1" dojoType="dojox.mobile.Button" style="width:80px;margin-left:10px">More...</button>
+			<button id="btn1" dojoType="dojox.mobile.Button" class="mblBlueButton" style="width:80px;margin-left:10px">More...</button>
 		</div>
 	</body>
 </html>
