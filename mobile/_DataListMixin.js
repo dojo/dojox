@@ -25,18 +25,23 @@ dojo.declare(
 	buildRendering: function(){
 		this.inherited(arguments);
 		if(!this.store){ return; }
-		this.setStore(this.store, this.query, this.queryOptions);
+		var store = this.store;
+		this.store = null;
+		this.setStore(store, this.query, this.queryOptions);
 	},
 
 	setStore: function(store, query, queryOptions){
+		if(store === this.store){ return; }
 		this.store = store;
 		this.query = query;
 		this.queryOptions = queryOptions;
-		if(this.store.onNew){
-			this.connect(this.store, "onNew", "onNew");
-		}
-		if(this.store.onDelete){
-			this.connect(this.store, "onDelete", "onDelete");
+		if(store && store.getFeatures()["dojo.data.api.Notification"]){
+			dojo.forEach(this._conn || [], dojo.disconnect);
+			this._conn = [
+				dojo.connect(store, "onSet", this, "onSet"),
+				dojo.connect(store, "onNew", this, "onNew"),
+				dojo.connect(store, "onDelete", this, "onDelete")
+			];
 		}
 		this.refresh();
 	},
@@ -74,6 +79,12 @@ dojo.declare(
 
 	onError: function(errText){
 		console.error(this.declaredClass + ": " + errText);
+	},
+
+	onSet: function(/* item */ item,
+					/* attribute-name-string */ attribute,
+					/* object | array */ oldValue,
+					/* object | array */ newValue){
 	},
 
 	onNew: function(/* item */ newItem, /*object?*/ parentInfo){

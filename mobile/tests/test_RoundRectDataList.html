@@ -31,7 +31,7 @@
 			var store1 = new dojo.data.ItemFileWriteStore({url: "settings.json", clearOnClose: true});
 			var store2 = new dojo.data.ItemFileWriteStore({data: dojo.clone(static_data)});
 			var store = store1;
-			var newItems = [];
+			var newItems = [[],[]];
 
 			// switch to the selected store
 			function switchTo(store){
@@ -41,11 +41,11 @@
 			// add a new item
 			function add1(){
 				var item = store.newItem({label: "New Item", moveTo: "dummy"});
-				this.newItems.push(item);
+				this.newItems[(store == store1) ? 1 : 0].push(item);
 			}
 			// delete the added item
 			function delete1(){
-				var item = this.newItems.pop();
+				var item = this.newItems[(store == store1) ? 1 : 0].pop();
 				if(item){
 					store.deleteItem(item);
 				}
