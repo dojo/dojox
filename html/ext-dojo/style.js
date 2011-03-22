@@ -56,7 +56,7 @@ dojo.mixin(dojox.html["ext-dojo"].style, {
 			}
 		};
 		// prefixes and property names
-		for(var i = 0, tPrefix = ["WebkitT", "MozT", "OT", "t"]; i < tPrefix.length; i++){
+		for(var i = 0, tPrefix = ["WebkitT", "MozT", "OT", "msT", "t"]; i < tPrefix.length; i++){
 			if(typeof docStyle[tPrefix[i] + "ransform"] !== "undefined"){
 				this.tPropertyName = tPrefix[i] + "ransform";
 			}
