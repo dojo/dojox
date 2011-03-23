@@ -140,12 +140,17 @@ EventObject: function(){
 			
 			dojo.connect(this.container, "mousedown", this, function(evt){
 				this.down(evt);
-				_isDown = true;
-				c = dojo.connect(document, "mousemove", this, "drag");
+				// Right click shouldn't trigger drag
+				if(evt.button != dojo.mouseButtons.RIGHT){
+					_isDown = true;
+					c = dojo.connect(document, "mousemove", this, "drag");
+				}
 			});
 			dojo.connect(document, "mouseup", this, function(evt){
-				dojo.disconnect(c);
-				_isDown = false;
+				if(evt.button != dojo.mouseButtons.RIGHT){
+					dojo.disconnect(c);
+					_isDown = false;
+				}
 				this.up(evt);
 			});
 			dojo.connect(document, "mousemove", this, function(evt){
