@@ -382,9 +382,24 @@ dojo.declare(
 				dojo.publish("/dojox/mobile/app/goback");
 			}
 			else{
-				this._view.performTransition(moveTo, -1, this.transition);
+				// Basically transition should be performed between two
+				// siblings that share the same parent.
+				// However, when views are nested and transition occurs from
+				// an inner view, search for an ancestor view that is a sibling
+				// of the target view, and use it as a source view.
+				var view = this._view;
+				var parent = dijit.byId(moveTo).getParent();
+				while(view){
+					var myParent = view.getParent();
+					if (parent == myParent){
+						break;
+					}
+					view = myParent;
+				}
+				if(view){
+					view.performTransition(moveTo, -1, this.transition);
+				}
 			}
-
 		}
 	}
 });
