@@ -2,58 +2,53 @@ dojo.provide("dojox.mobile.parser");
 dojo.provide("dojo.parser"); // not to load dojo.parser unexpectedly
 
 dojox.mobile.parser = new function(){
-	this.instantiate = function(list, defaultParams){
+	this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
 		// summary:
 		//		Function for instantiating a list of widget nodes.
-		// list:
+		// nodes:
 		//		The list of DOMNodes to walk and instantiate widgets on.
-		var ws = [];
-		if(list){
-			var i, len;
-			len = list.length;
-			for(i = 0; i < len; i++){
-				var node = list[i];
-				var cls = dojo.getObject(dojo.attr(node, "dojoType"));
+		mixin = mixin || {};
+		args = args || {};
+		var i, ws = [];
+		if(nodes){
+			for(i = 0; i < nodes.length; i++){
+				var n = nodes[i];
+				var cls = dojo.getObject(n.getAttribute("dojoType"));
 				var proto = cls.prototype;
-				var params = {};
-
-				if(defaultParams){
-					for(var name in defaultParams){
-						params[name] = defaultParams[name];
+				var params = {}, prop, v;
+				dojo._mixin(params, args.defaults);
+				dojo._mixin(params, mixin);
+				for(prop in proto){
+					v = n.getAttribute(prop);
+					if(!v){ continue; }
+					if(typeof proto[prop] === "string"){
+						params[prop] = v;
+					}else if(typeof proto[prop] === "number"){
+						params[prop] = v - 0;
+					}else if(typeof proto[prop] === "boolean"){
+						params[prop] = (v !== "false");
+					}else if(typeof proto[prop] === "object"){
+						params[prop] = eval("(" + v + ")");
 					}
 				}
-				for(var prop in proto){
-					var val = dojo.attr(node, prop);
-					if(!val){ continue; }
-					if(typeof proto[prop] == "string"){
-						params[prop] = val;
-					}else if(typeof proto[prop] == "number"){
-						params[prop] = val - 0;
-					}else if(typeof proto[prop] == "boolean"){
-						params[prop] = (val != "false");
-					}else if(typeof proto[prop] == "object"){
-						params[prop] = eval("(" + val + ")");
-					}
-				}
-				params["class"] = node.className;
-				params["style"] = node.style && node.style.cssText;
-				var instance = new cls(params, node);
+				params["class"] = n.className;
+				params.style = n.style && n.style.cssText;
+				var instance = new cls(params, n);
 				ws.push(instance);
-				var jsId = node.getAttribute("jsId");
+				var jsId = n.getAttribute("jsId");
 				if(jsId){
 					dojo.setObject(jsId, instance);
 				}
 			}
-			len = ws.length;
-			for(i = 0; i < len; i++){
+			for(i = 0; i < ws.length; i++){
 				var w = ws[i];
-				w.startup && !w._started && (!w.getParent || !w.getParent()) && w.startup();
+				!args.noStart && w.startup && !w._started && (!w.getParent || !w.getParent()) && w.startup();
 			}
 		}
 		return ws;
 	};
 
-	this.parse = function(rootNode, defaultParams){
+	this.parse = function(rootNode, args){
 		// summary:
 		//		Function to handle parsing for widgets in the current document.
 		//		It is not as powerful as the full dojo parser, but it will handle basic
@@ -62,19 +57,22 @@ dojox.mobile.parser = new function(){
 		//		The root node in the document to parse from
 		if(!rootNode){
 			rootNode = dojo.body();
-		}else if(!defaultParams && rootNode.rootNode){
+		}else if(!args && rootNode.rootNode){
 			// Case where 'rootNode' is really a params object.
+			args = rootNode;
 			rootNode = rootNode.rootNode;
- 		}
+		}
 
 		var nodes = rootNode.getElementsByTagName("*");
-		var list = [];
-		for(var i = 0, len = nodes.length; i < len; i++){
-			if(nodes[i].getAttribute("dojoType")){
-				list.push(nodes[i]);
+		var i, list = [];
+		for(i = 0; i < nodes.length; i++){
+			var n = nodes[i];
+			if(n.getAttribute("dojoType")){
+				list.push(n);
 			}
 		}
-		return this.instantiate(list, defaultParams);
+		var mixin = args && args.template ? {template: true} : null;
+		return this.instantiate(list, mixin, args);
 	};
 }();
 dojo._loaders.unshift(function(){
@@ -82,4 +80,4 @@ dojo._loaders.unshift(function(){
 		dojox.mobile.parser.parse();
 	}
 });
-
+dojo.parser = dojox.mobile.parser; // in case user app calls dojo.parser

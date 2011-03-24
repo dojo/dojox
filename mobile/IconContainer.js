@@ -206,7 +206,7 @@ dojo.declare(
 		}
 
 		if(len > 0){
-			(dojox.mobile.parser || dojo.parser).parse(this.containerNode);
+			dojo.parser.parse(this.containerNode);
 		}
 		this.lazy = false;
 	},

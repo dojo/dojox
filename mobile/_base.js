@@ -597,7 +597,7 @@ dojo.declare(
 			}
 			view.style.visibility = "hidden";
 			target.appendChild(container);
-			(dojox.mobile.parser || dojo.parser).parse(container);
+			dojo.parser.parse(container);
 			target.appendChild(target.removeChild(container).firstChild); // reparent
 			dijit.byNode(view)._visible = true;
 		}else if(text.charAt(0) == "{"){ // json
