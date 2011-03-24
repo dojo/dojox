@@ -13,9 +13,10 @@ dojox.mobile.parser = new function(){
 		if(nodes){
 			for(i = 0; i < nodes.length; i++){
 				var n = nodes[i];
-				var cls = dojo.getObject(n.getAttribute("dojoType"));
+				var cls = dojo.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
 				var proto = cls.prototype;
 				var params = {}, prop, v;
+				dojo._mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
 				dojo._mixin(params, args.defaults);
 				dojo._mixin(params, mixin);
 				for(prop in proto){
@@ -33,9 +34,13 @@ dojox.mobile.parser = new function(){
 				}
 				params["class"] = n.className;
 				params.style = n.style && n.style.cssText;
+				v = n.getAttribute("data-dojo-attach-point");
+				if(v){ params.dojoAttachPoint = v; }
+				v = n.getAttribute("data-dojo-attach-event");
+				if(v){ params.dojoAttachEvent = v; }
 				var instance = new cls(params, n);
 				ws.push(instance);
-				var jsId = n.getAttribute("jsId");
+				var jsId = n.getAttribute("jsId") || n.getAttribute("data-dojo-id");
 				if(jsId){
 					dojo.setObject(jsId, instance);
 				}
@@ -67,7 +72,7 @@ dojox.mobile.parser = new function(){
 		var i, list = [];
 		for(i = 0; i < nodes.length; i++){
 			var n = nodes[i];
-			if(n.getAttribute("dojoType")){
+			if(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type")){
 				list.push(n);
 			}
 		}
