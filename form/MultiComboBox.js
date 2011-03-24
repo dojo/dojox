@@ -5,12 +5,13 @@ dojo.require("dijit.form.ValidationTextBox");
 
 dojo.declare("dojox.form.MultiComboBox",
 	[dijit.form.ValidationTextBox, dijit.form.ComboBoxMixin],{
-	//
-	// summary: A ComboBox that accpets multiple inputs on a single line?
-	//
+	// summary:
+	//		A ComboBox that accepts multiple inputs on a single line
+
 	// delimiter: String
-	// 	The character to use to separate items in the ComboBox input
+	//		The character to use to separate items in the ComboBox input
 	delimiter: ",",
+
 	_previousMatches: false,
 
 	_setValueAttr: function(value){
