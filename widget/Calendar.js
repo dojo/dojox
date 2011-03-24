@@ -1,7 +1,8 @@
 dojo.provide("dojox.widget.Calendar");
 dojo.experimental("dojox.widget.Calendar");
 
-dojo.require("dijit.Calendar");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 
 dojo.declare("dojox.widget._CalendarBase", [dijit._Widget, dijit._Templated, dijit._Container], {

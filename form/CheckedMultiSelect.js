@@ -1,8 +1,10 @@
 dojo.provide("dojox.form.CheckedMultiSelect");
 
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.Tooltip");
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
 dojo.require("dijit.form._FormSelectWidget");
+dojo.require("dijit.form.CheckBox");	// used from _CheckedMultiSelectItem template
+dojo.require("dijit.Tooltip");			// for dijit.showTooltip(), hideTooltip()
 
 dojo.declare("dojox.form._CheckedMultiSelectItem",
 	[dijit._Widget, dijit._Templated],
