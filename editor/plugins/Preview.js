@@ -57,7 +57,7 @@ dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 		//		private
 		try{
 			var content = this.editor.get("value");
-			var head = "\t\t<meta http-equiv='Content-Type' content='text/html; charset='UTF-8'>\n";
+			var head = "\t\t<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>\n";
 			var i;
 			// Apply the stylesheets, then apply the styles.
 			if(this.stylesheets){
