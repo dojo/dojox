@@ -1002,23 +1002,30 @@ dojo.declare(
 	constructor: function(){
 		this.domNode = dojo.create("DIV");
 		this.domNode.className = "mblProgContainer";
-		for(var i = 0; i < 12; i++){
-			var div = dojo.create("DIV");
-			div.className = "mblProg mblProg"+i;
-			this.domNode.appendChild(div);
+		this.spinnerNode = dojo.create("DIV", null, this.domNode);
+		for(var i = 0; i < this.colors.length; i++){
+			var div = dojo.create("DIV", {className:"mblProg mblProg"+i}, this.spinnerNode);
 			this._bars.push(div);
 		}
 	},
 
 	start: function(){
+		if(this.imageNode){
+			var img = this.imageNode;
+			var l = Math.round((this.domNode.offsetWidth - img.offsetWidth) / 2);
+			var t = Math.round((this.domNode.offsetHeight - img.offsetHeight) / 2);
+			img.style.margin = t+"px "+l+"px";
+			return;
+		}
 		var cntr = 0;
 		var _this = this;
+		var n = this.colors.length;
 		this.timer = setInterval(function(){
 			cntr--;
-			cntr = cntr < 0 ? 11 : cntr;
+			cntr = cntr < 0 ? n - 1 : cntr;
 			var c = _this.colors;
-			for(var i = 0; i < 12; i++){
-				var idx = (cntr + i) % 12;
+			for(var i = 0; i < n; i++){
+				var idx = (cntr + i) % n;
 				_this._bars[i].style.backgroundColor = c[idx];
 			}
 		}, this.interval);
@@ -1031,6 +1038,22 @@ dojo.declare(
 		this.timer = null;
 		if(this.domNode.parentNode){
 			this.domNode.parentNode.removeChild(this.domNode);
+		}
+	},
+
+	setImage: function(/*String*/file){
+		// summary:
+		//		Set an indicator icon image file (typically animated GIF).
+		//		If null is specified, restores the default spinner.
+		if(file){
+			this.imageNode = dojo.create("IMG", {src:file}, this.domNode);
+			this.spinnerNode.style.display = "none";
+		}else{
+			if(this.imageNode){
+				this.domNode.removeChild(this.imageNode);
+				this.imageNode = null;
+			}
+			this.spinnerNode.style.display = "";
 		}
 	}
 });

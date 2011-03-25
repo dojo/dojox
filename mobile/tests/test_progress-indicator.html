@@ -15,6 +15,11 @@
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 
+			// Use animated GIF icon as a progress indicator.
+//			dojo.addOnLoad(function(){
+//				var prog = dojox.mobile.ProgressIndicator.getInstance();
+//				prog.setImage("progress-anim.gif"); // prepare your own image
+//			});
 			function loadPage(moveTo){
 				if(!(moveTo.match(/#(\w+)/))){ return; }
 				moveTo.match(/#(\w+)(.*)/);
