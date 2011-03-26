@@ -1,6 +1,7 @@
 @import url("../transitions/slide.css");
 @import url("../transitions/flip.css");
 @import url("../transitions/fade.css");
+@import url("../common/switch.css");
 
 body {
 	visibility: hidden;
@@ -390,94 +391,22 @@ html.mobile, .mobile body {
 }
 
 /* Switch */
-.mblSwitch {
-	position: relative;
-	width: 94px;
-	height: 27px;
-	overflow: hidden;
-}
 .mblItemSwitch {
-	position: absolute;
 	top: 14px;
-	right: 12px;
-}
-.mblSwitchInner {
-	position: absolute;
-	top: 0px;
-	height: 27px;
-}
-.mblSwitchAnimation .mblSwitchInner {
-	-webkit-transition-property: left;
-	-webkit-transition-duration: .15s;
-}
-.mblSwitchOn .mblSwitchInner {
-	left: 0px;
-}
-.mblSwitchOff .mblSwitchInner {
-	left: -53px;
 }
 .mblSwitchBg {
-	position: absolute;
-	top: 0px;
-	height: 27px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #B5BABD #949A9C #6B7173 #A5A2A5;
-	font-family: Helvetica;
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 28px;
 	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-tap-highlight-color: transparent;
 }
 .mblSwitchBgLeft {
-	left: 0px;
-	width: 94px;
-	color: white;
-	background-color: #0869C6;
 	background: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
 }
 .mblSwitchBgRight {
-	left: 53px;
-	width: 94px;
 	color: #7B7D48;
-	background-color: #EEEEEE;
 	background: -webkit-gradient(linear, left top, left bottom, from(#F7F3F7), to(#CEC5D6), color-stop(0.5, #CED3CE));
 }
 .mblSwitchKnob {
-	position: absolute;
-	top: 0px;
-	left: 53px;
-	width: 41px;
-	height: 27px;
-	font-size: 1px;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #B5BABD #949A9C #6B7173 #A5A2A5;
-	line-height: 29px;
-	background-color: #CED3CE;
-	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECDD6), color-stop(0.5, #CED3CE));
+	background: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#999999), color-stop(0.5, #BBBBBB));
 	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-}
-.mblSwitchText {
-	position: relative;
-	top: 0px;
-	width: 53px;
-	height: 27px;
-	padding: 0px;
-	text-align: center;
-}
-.mblSwitchTextLeft {
-	left: 0px;
-}
-.mblSwitchTextRight {
-	left: 40px;
 }
 
 /* Icon Container */

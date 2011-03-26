@@ -819,6 +819,7 @@ dojo.declare(
 
 	buildRendering: function(){
 		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
+		this._swClass = (this.domNode.className || "").replace(/ .*/,"");
 		this.domNode.className = "mblSwitch";
 		this.domNode.innerHTML =
 			  '<div class="mblSwitchInner">'
@@ -840,9 +841,9 @@ dojo.declare(
 	},
 
 	postCreate: function(){
-		this.connect(this.knob, "onclick", "onClick");
-		this.connect(this.knob, "touchstart", "onTouchStart");
-		this.connect(this.knob, "mousedown", "onTouchStart");
+		this.connect(this.domNode, "onclick", "onClick");
+		this.connect(this.domNode, "touchstart", "onTouchStart");
+		this.connect(this.domNode, "mousedown", "onTouchStart");
 	},
 
 	_changeState: function(/*String*/state){
@@ -856,6 +857,32 @@ dojo.declare(
 			_this[state == "off" ? "left" : "right"].style.display = "none";
 			dojo.removeClass(_this.domNode, "mblSwitchAnimation");
 		}, 300);
+	},
+
+	startup: function(){
+		if(this._swClass.indexOf("Round") != -1){
+			var r = Math.round(this.domNode.offsetHeight / 2);
+			this.createRoundMask(this._swClass, r, this.domNode.offsetWidth);
+		}
+	},
+
+	createRoundMask: function(className, r, w){
+		if(!dojo.isWebKit || !className){ return; }
+		if(!this._createdMasks){ this._createdMasks = []; }
+		if(this._createdMasks[className]){ return; }
+		this._createdMasks[className] = 1;
+
+		var ctx = dojo.doc.getCSSCanvasContext("2d", className+"Mask", w, 100);
+		ctx.fillStyle = "#000000";
+		ctx.beginPath();
+		ctx.moveTo(r, 0);
+		ctx.arcTo(0, 0, 0, 2*r, r);
+		ctx.arcTo(0, 2*r, r, 2*r, r);
+		ctx.lineTo(w - r, 2*r);
+		ctx.arcTo(w, 2*r, w, r, r);
+		ctx.arcTo(w, 0, w - r, 0, r);
+		ctx.closePath();
+		ctx.fill();
 	},
 
 	onClick: function(e){

@@ -103,111 +103,75 @@
 	left: auto;
 }
 
-/* Switch */
-.mblSwitchInner {
-	width: 100px;
-}
+/* Switch - default */
 .mblSwitchBg {
 	border: none;
 }
 .mblSwitchBgLeft {
-	width: 89px;
 	background: none;
+	background-image: url(compat/switch-default-l.gif);
+	background-repeat: no-repeat;
 }
 .mblSwitchBgRight {
-	width: 89px;
-	left: 58px;
 	background: none;
-}
-.mblSwitchKnobContainer {
-	position: relative;
-	left: 53px;
-	width: 41px;
-	height: 26px;
+	background-image: url(compat/switch-default-r.gif);
+	background-repeat: no-repeat;
 }
 .mblSwitchKnob {
-	position: relative;
 	top: 0px;
-	left: 0px;
-	width: auto;
-	height: 21px;
-	background-image: url(compat/switch-knob-bg.png);
-	border-width: 0px 1px;
-	-moz-border-radius: 0px;
+	height: 27px;
+	background: none;
+	background-image: url(compat/switch-default-k.gif);
+	background-repeat: no-repeat;
+	border: none;
 }
-.mblSwitchCorner {
-	position: relative;
-	height: 1px;
-	font-size: 1px;
-	overflow: hidden;
-	border-style: solid;
-	border-color: #878787;
+/* Switch - Round Shape1 */
+.mblSwRoundShape1 .mblSwitchBgLeft {
+	background-image: url(compat/switch-round-l.gif);
 }
-.mblSwitchCorner1T {
-	background-color: #848684;
-	margin: 0px 1px;
-	border-width: 0px;
+.mblSwRoundShape1 .mblSwitchBgRight {
+	background-image: url(compat/switch-round-r.gif);
 }
-.mblSwitchCorner2T {
-	background-color: #C0C0C0;
-	margin: 0px 0px;
-	border-width: 0px 1px;
+.mblSwRoundShape1 .mblSwitchKnob {
+	top: 1px;
+	height: 26px;
+	background-image: url(compat/switch-round1-k.gif);
 }
-.mblSwitchCorner3T {
-	background-color: #C6C7C6;
-	margin: 0px 0px;
-	border-width: 0px 1px;
+/* Switch - Round Shape2 */
+.mblSwRoundShape2 .mblSwitchBgLeft {
+	background-image: url(compat/switch-round-l.gif);
 }
-
-.mblSwitchCorner1B {
-	background-color: #FBFBFB;
-	margin: 0px 0px;
-	border-width: 0px 1px;
+.mblSwRoundShape2 .mblSwitchBgRight {
+	background-image: url(compat/switch-round-r.gif);
 }
-.mblSwitchCorner2B {
-	background-color: #FBFBFB;
-	margin: 0px 0px;
-	border-width: 0px 1px;
+.mblSwRoundShape2 .mblSwitchKnob {
+	top: 1px;
+	height: 26px;
+	background-image: url(compat/switch-round2-k.gif);
 }
-.mblSwitchCorner3B {
-	background-color: #878787;
-	margin: 0px 1px;
-	border-width: 0px;
+/* Switch - Arc Shape1 */
+.mblSwArcShape1 .mblSwitchBgLeft {
+	background-image: url(compat/switch-arc-l.gif);
 }
-
-.mblSwitchBgLeft .mblSwitchCorner1T {
-	border-width: 0px 2px;
-	background-color: #00A600;
+.mblSwArcShape1 .mblSwitchBgRight {
+	background-image: url(compat/switch-arc-r.gif);
 }
-.mblSwitchBgLeft .mblSwitchCorner2T {
-	background-color: #00A600;
+.mblSwArcShape1 .mblSwitchKnob {
+	top: 1px;
+	height: 26px;
+	background-image: url(compat/switch-arc1-k.gif);
 }
-.mblSwitchBgLeft .mblSwitchCorner3T {
-	background-color: #00A600;
+/* Switch - Arc Shape2 */
+.mblSwArcShape2 .mblSwitchBgLeft {
+	background-image: url(compat/switch-arc-l.gif);
 }
-
-.mblSwitchBgLeft .mblSwitchCorner1B {
-	background-color: #00D700;
+.mblSwArcShape2 .mblSwitchBgRight {
+	background-image: url(compat/switch-arc-r.gif);
 }
-.mblSwitchBgLeft .mblSwitchCorner2B {
-	background-color: #00D700;
-}
-.mblSwitchBgLeft .mblSwitchCorner3B {
-	background-color: #00D700;
-}
-
-.mblSwitchText {
-	height: 21px;
-	line-height: 21px;
-}
-.mblSwitchTextLeft {
-	background-image: url(compat/switch-green-bg.png);
-	border-left: 1px solid #848684;
-}
-.mblSwitchTextRight {
-	background-image: url(compat/switch-gray-bg.png);
-	left: 35px;
-	border-right: 1px solid #848684;
+.mblSwArcShape2 .mblSwitchKnob {
+	top: 1px;
+	height: 26px;
+	background-image: url(compat/switch-arc2-k.gif);
 }
 
 /* Icon Content Heading */

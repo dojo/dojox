@@ -153,58 +153,11 @@ dojo.extend(dojox.mobile.View, {
 });
 
 dojo.extend(dojox.mobile.Switch, {
-	buildRendering: function(){
-		// summary:
-		//		Function to simulate the mobile device style switches on
-		//		browsers such as IE and FireFox.
-		// tags:
-		//		protected
-		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
-		this.domNode.className = "mblSwitch";
-		this.domNode.innerHTML =
-			  '<div class="mblSwitchInner">'
-			+	'<div class="mblSwitchBg mblSwitchBgLeft">'
-			+		'<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
-			+		'<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
-			+	'</div>'
-			+	'<div class="mblSwitchBg mblSwitchBgRight">'
-			+		'<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
-			+		'<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
-			+	'</div>'
-			+	'<div class="mblSwitchKnobContainer">'
-			+		'<div class="mblSwitchCorner mblSwitchCorner1T"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner2T"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner3T"></div>'
-			+		'<div class="mblSwitchKnob"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner1B"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner2B"></div>'
-			+		'<div class="mblSwitchCorner mblSwitchCorner3B"></div>'
-			+	'</div>'
-			+ '</div>';
-		var n = this.inner = this.domNode.firstChild;
-		this.left = n.childNodes[0];
-		this.right = n.childNodes[1];
-		this.knob = n.childNodes[2];
-
-		dojo.addClass(this.domNode, (this.value == "on") ? "mblSwitchOn" : "mblSwitchOff");
-		this[this.value == "off" ? "left" : "right"].style.display = "none";
-	},
-
 	_changeState: function(/*String*/state){
 		// summary:
 		//		Function to toggle the switch state on the switch
 		// state:
-		//		Thhe state to toggle, switch 'on' or 'off'
+		//		The state to toggle, switch 'on' or 'off'
 		// tags:
 		//		private
 		if(!this.inner.parentNode || !this.inner.parentNode.tagName){
@@ -214,7 +167,7 @@ dojo.extend(dojox.mobile.Switch, {
 		var pos;
 		if(this.inner.offsetLeft == 0){ // currently ON
 			if(state == "on"){ return; }
-			pos = -53;
+			pos = -this.inner.firstChild.firstChild.offsetWidth;
 		}else{ // currently OFF
 			if(state == "off"){ return; }
 			pos = 0;
