@@ -1,3 +1,7 @@
+@import url("../transitions/slide.css");
+@import url("../transitions/flip.css");
+@import url("../transitions/fade.css");
+
 body {
 	visibility: hidden;
 }
@@ -29,84 +33,6 @@ html.mobile, .mobile body {
 
 .mblView.in {
 	position: absolute;
-}
-
-.slide.out {
-	-webkit-animation-duration: .4s;
-	-webkit-animation-name: slideOut;
-	-webkit-animation-timing-function: linear;
-	-webkit-transform: translateX(-100%);
-}
-.slide.in {
-	-webkit-animation-duration: .4s;
-	-webkit-animation-name: slideIn;
-	-webkit-animation-timing-function: linear;
-	-webkit-transform: translateX(0px);
-}
-.slide.out.reverse {
-	-webkit-animation-name: slideOutReverse;
-}
-.slide.in.reverse {
-	-webkit-animation-name: slideInReverse;
-}
-@-webkit-keyframes slideOut {
-	from { -webkit-transform: translateX(0px); }
-	to { -webkit-transform: translateX(-100%); }
-}
-@-webkit-keyframes slideIn {
-	from { -webkit-transform: translateX(100%); }
-	to { -webkit-transform: translateX(0px); }
-}
-@-webkit-keyframes slideOutReverse {
-	from { -webkit-transform: translateX(0px); }
-	to { -webkit-transform: translateX(100%); }
-}
-@-webkit-keyframes slideInReverse {
-	from { -webkit-transform: translateX(-100%); }
-	to { -webkit-transform: translateX(0px); }
-}
-
-.flip.out {
-	-webkit-animation-duration: .6s;
-	-webkit-animation-name: flipOut;
-	-webkit-animation-timing-function: ease-in;
-	-webkit-transform: rotateY(90deg);
-}
-.flip.in {
-	-webkit-animation-duration: .6s;
-	-webkit-animation-name: flipIn;
-	-webkit-animation-timing-function: ease-out;
-}
-@-webkit-keyframes flipOut {
-	0% { -webkit-transform: rotateY(0deg) scale(1); }
-	50% { -webkit-transform: rotateY(90deg) scale(.8); }
-	100% { -webkit-transform: rotateY(90deg) scale(.8); }
-}
-
-@-webkit-keyframes flipIn {
-	0% { -webkit-transform: rotateY(90deg) scale(.8); }
-	50% { -webkit-transform: rotateY(90deg) scale(.8); }
-	100% { -webkit-transform: rotateY(0deg) scale(1); }
-}
-
-.fade.out {
-	-webkit-animation-duration: 1s;
-	-webkit-animation-name: fadeOut;
-	-webkit-animation-timing-function: ease-in;
-}
-.fade.in {
-	-webkit-animation-duration: 1s;
-	-webkit-animation-name: fadeIn;
-	-webkit-animation-timing-function: ease-out;
-}
-@-webkit-keyframes fadeOut {
-	from { opacity: 1; }
-	to { opacity: 0; }
-}
-
-@-webkit-keyframes fadeIn {
-	from { opacity: 0; }
-	to { opacity: 1; }
 }
 
 /* dojox.mobile.Heading */

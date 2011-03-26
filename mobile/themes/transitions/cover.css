@@ -1,0 +1,27 @@
+.cover.out {
+	z-index: -100;
+	-webkit-animation-duration: .4s;
+	-webkit-animation-name: coverOut;
+	-webkit-animation-timing-function: linear;
+}
+.cover.in {
+	z-index: 0;
+	-webkit-animation-duration: .4s;
+	-webkit-animation-name: coverIn;
+	-webkit-animation-timing-function: linear;
+}
+.cover.in.reverse {
+	-webkit-animation-name: coverInReverse;
+}
+@-webkit-keyframes coverOut {
+	from {}
+	to {}
+}
+@-webkit-keyframes coverIn {
+	from { -webkit-transform: translateX(100%); }
+	to { -webkit-transform: translateX(0px); }
+}
+@-webkit-keyframes coverInReverse {
+	from { -webkit-transform: translateX(-100%); }
+	to { -webkit-transform: translateX(0px); }
+}

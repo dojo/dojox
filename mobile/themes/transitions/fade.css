@@ -1,0 +1,23 @@
+.fade.out {
+	z-index: -100;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-name: fadeOut;
+	-webkit-animation-timing-function: ease-in;
+}
+.fade.out.fast {
+	-webkit-animation-duration: 0.3s;
+}
+.fade.in {
+	z-index: 0;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-name: fadeIn;
+	-webkit-animation-timing-function: ease-out;
+}
+@-webkit-keyframes fadeOut {
+	from {}
+	to {}
+}
+@-webkit-keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}

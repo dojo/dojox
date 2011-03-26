@@ -74,7 +74,9 @@ dojo.declare(
 				dojox.mobile.currentView = _this;
 				_this.onStartView();
 			}
-			_this.domNode.style.visibility = "visible";
+			if(_this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
+				_this.domNode.style.visibility = "visible";
+			}
 		}, dojo.isIE?100:0); // give IE a little time to complete drawing
 		this.inherited(arguments);
 	},
@@ -184,26 +186,15 @@ dojo.declare(
 			// perform view transition keeping the scroll position
 			if(this.keepScrollPos && !this.getParent()){
 				var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
-				if(dir == 1){
-					toNode.style.top = "0px";
-					if(scrollTop > 1){
-						fromNode.style.top = -scrollTop + "px";
-						if(dojo.config["mblHideAddressBar"] !== false){
-							setTimeout(function(){ // iPhone needs setTimeout
-								dojo.global.scrollTo(0, 1);
-							}, 0);
-						}
-					}
-				}else{
-					if(scrollTop > 1 || toNode.offsetTop !== 0){
-						var toTop = -toNode.offsetTop;
-						toNode.style.top = "0px";
-						fromNode.style.top = toTop - scrollTop + "px";
-						if(dojo.config["mblHideAddressBar"] !== false && toTop > 0){
-							setTimeout(function(){ // iPhone needs setTimeout
-								dojo.global.scrollTo(0, toTop + 1);
-							}, 0);
-						}
+				fromNode._scrollTop = scrollTop;
+				var toTop = (dir == 1) ? 0 : (toNode._scrollTop || 0);
+				toNode.style.top = "0px";
+				if(scrollTop > 1 || toTop !== 0){
+					fromNode.style.top = toTop - scrollTop + "px";
+					if(dojo.config["mblHideAddressBar"] !== false){
+						setTimeout(function(){ // iPhone needs setTimeout
+							dojo.global.scrollTo(0, (toTop || 1));
+						}, 0);
 					}
 				}
 			}else{

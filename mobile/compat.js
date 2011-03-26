@@ -37,18 +37,19 @@ dojo.extend(dojox.mobile.View, {
 			fromNode.style.display = "none";
 			toNode.style.left = "0px";
 			this.invokeCallback();
-		}else if(transition == "slide"){
+		}else if(transition == "slide" || transition == "cover" || transition == "reveal"){
 			var w = fromNode.offsetWidth;
 			var s1 = dojo.fx.slideTo({
 				node: fromNode,
 				duration: 400,
 				left: -w*dir,
-				top: fromNode.offsetTop
+				top: dojo.style(fromNode, "top")
 			});
 			var s2 = dojo.fx.slideTo({
 				node: toNode,
 				duration: 400,
-				left: 0
+				left: 0,
+				top: dojo.style(toNode, "top")
 			});
 			toNode.style.position = "absolute";
 			toNode.style.left = w*dir + "px";
@@ -60,7 +61,32 @@ dojo.extend(dojox.mobile.View, {
 				this.invokeCallback();
 			});
 			anim.play();
-		}else if(transition == "flip"){
+		}else if(transition == "slidev" || transition == "coverv"){
+			var h = fromNode.offsetHeight;
+			var s1 = dojo.fx.slideTo({
+				node: fromNode,
+				duration: 400,
+				left: 0,
+				top: -h*dir
+			});
+			var s2 = dojo.fx.slideTo({
+				node: toNode,
+				duration: 400,
+				left: 0,
+				top: 0
+			});
+			toNode.style.position = "absolute";
+			toNode.style.top = h*dir + "px";
+			toNode.style.left = "0px";
+			toNode.style.display = "";
+			anim = dojo.fx.combine([s1,s2]);
+			dojo.connect(anim, "onEnd", this, function(){
+				fromNode.style.display = "none";
+				toNode.style.position = "relative";
+				this.invokeCallback();
+			});
+			anim.play();
+		}else if(transition == "flip" || transition == "flip2"){
 			anim = dojox.fx.flip({
 				node: fromNode,
 				dir: "right",
@@ -76,7 +102,8 @@ dojo.extend(dojox.mobile.View, {
 				this.invokeCallback();
 			});
 			anim.play();
-		}else if(transition == "fade"){
+		}else {
+			// other transitions - "fade", "dissolve", "swirl"
 			anim = dojo.fx.chain([
 				dojo.fadeOut({
 					node: fromNode,

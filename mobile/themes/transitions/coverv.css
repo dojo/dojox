@@ -1,0 +1,28 @@
+.coverv.out {
+	z-index: -100;
+	-webkit-animation-duration: .6s;
+	-webkit-animation-name: coverVOut;
+	-webkit-animation-timing-function: ease-out;
+}
+.coverv.in {
+	z-index: 0;
+	-webkit-animation-duration: .6s;
+	-webkit-animation-name: coverVIn;
+	-webkit-animation-timing-function: ease-out;
+}
+.coverv.in.reverse {
+	-webkit-animation-name: coverVInReverse;
+	-webkit-animation-timing-function: ease-in;
+}
+@-webkit-keyframes coverVOut {
+	from {}
+	to {}
+}
+@-webkit-keyframes coverVIn {
+	from { -webkit-transform: translateY(100%); }
+	to { -webkit-transform: translateY(0px); }
+}
+@-webkit-keyframes coverVInReverse {
+	from { -webkit-transform: translateY(-100%); }
+	to { -webkit-transform: translateY(0px); }
+}

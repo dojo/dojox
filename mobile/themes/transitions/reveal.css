@@ -1,0 +1,27 @@
+.reveal.out {
+	z-index: 0;
+	-webkit-animation-duration: .4s;
+	-webkit-animation-name: revealOut;
+	-webkit-animation-timing-function: linear;
+}
+.reveal.in {
+	z-index: -100;
+	-webkit-animation-duration: .4s;
+	-webkit-animation-name: revealIn;
+	-webkit-animation-timing-function: linear;
+}
+.reveal.out.reverse {
+	-webkit-animation-name: revealOutReverse;
+}
+@-webkit-keyframes revealOut {
+	from { -webkit-transform: translateX(0px); }
+	to { -webkit-transform: translateX(-100%); }
+}
+@-webkit-keyframes revealIn {
+	from {}
+	to {}
+}
+@-webkit-keyframes revealOutReverse {
+	from { -webkit-transform: translateX(0px); }
+	to { -webkit-transform: translateX(100%); }
+}

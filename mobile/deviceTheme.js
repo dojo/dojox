@@ -54,6 +54,4 @@ dojox.mobile.loadDeviceTheme = function(){
 	}
 };
 
-dojo.addOnLoad(function(){
-	dojox.mobile.loadDeviceTheme();
-});
+dojox.mobile.loadDeviceTheme();
