@@ -128,7 +128,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//invoke dojox.grid._Events.onCellDblClick()
 		this._events.onCellDblClick.call(this, e);
 		//now focus.setFocusCell need isEditing info, so call it after that is set.
-		this.focus.setFocusCell(e.cell, e.rowIndex);
+		//this.focus.setFocusCell(e.cell, e.rowIndex);
 	},
 	onRowClick: function(e){
 		// summary:
