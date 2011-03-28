@@ -1,7 +1,7 @@
 @import url("../transitions/slide.css");
 @import url("../transitions/flip.css");
 @import url("../transitions/fade.css");
-@import url("../common/switch.css");
+@import url("../common/Switch.css");
 
 body {
 	visibility: hidden;
