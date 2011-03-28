@@ -43,8 +43,9 @@ dojox.mobile.themeMap = [
 dojox.mobile.loadDeviceTheme = function(){
 	var m = dojox.mobile.themeMap;
 	for(var i = 0; i < m.length; i++){
-		var re = new RegExp(m[i][0]);
-		if(navigator.userAgent.match(re)){
+		var re1 = new RegExp("theme="+m[i][0]);
+		var re2 = new RegExp(m[i][0]);
+		if(location.search.match(re1) || navigator.userAgent.match(re2)){
 			var files = m[i][1];
 			for(var j = 0; j < files.length; j++){
 				dojox.mobile.loadCssFile(files[j]);
