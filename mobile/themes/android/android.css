@@ -39,6 +39,7 @@ html.mobile, .mobile body {
 /* dojox.mobile.Heading */
 .mblHeading {
 	position: relative;
+	width: 100%;
 	height: 25px;
 	margin: 0px;
 	padding: 0px 0px 0px 4px;

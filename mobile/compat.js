@@ -439,7 +439,7 @@ dojox.mobile.loadCompatCssFiles = function(){
 };
 
 dojox.mobile.hideAddressBar = function(){
-	// nop
+	dojox.mobile.resizeAll();
 };
 
 dojo.addOnLoad(function(){

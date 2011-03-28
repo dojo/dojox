@@ -12,6 +12,7 @@
 			visibility: visible;
 		}
 		.domNode {
+			position: relative;
 			height: 100%;
 			overflow: hidden;
 		}
@@ -20,7 +21,7 @@
 			width: 100%;
 		}
 		#header1 {
-			position: absolute;
+			position: relative;
 			width: 100%;
 		}
 		</style>
@@ -31,8 +32,7 @@
 			var scrollable = new dojox.mobile.scrollable();
 			scrollable.init({
 				domNode: document.getElementById("outer"),
-				containerNode: document.getElementById("inner"),
-				fixedHeaderHeight: document.getElementById("header1").offsetHeight
+				containerNode: document.getElementById("inner")
 			});
 		}
 		</script>

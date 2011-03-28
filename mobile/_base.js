@@ -77,8 +77,15 @@ dojo.declare(
 			if(_this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
 				_this.domNode.style.visibility = "visible";
 			}
+			_this.resize();
 		}, dojo.isIE?100:0); // give IE a little time to complete drawing
 		this.inherited(arguments);
+	},
+
+	resize: function(){
+		dojo.forEach(this.getChildren(), function(child){
+			child.resize && child.resize();
+		});
 	},
 
 	onStartView: function(){
@@ -176,12 +183,22 @@ dojo.declare(
 			toNode = this._dummyNode;
 		}
 		var fromNode = this.domNode;
+		var fromTop = fromNode.offsetTop;
 		toNode = this.toNode = dojo.byId(toNode);
 		if(!toNode){ alert("dojox.mobile.View#performTransition: destination view not found: "+toNode); }
 		toNode.style.visibility = "hidden";
 		toNode.style.display = "";
-		this.onBeforeTransitionOut.apply(this, arguments);
 		var toWidget = dijit.byNode(toNode);
+
+		// Now that the target view became visible, it's time to run resize()
+		toWidget.resize();
+
+		if(transition && transition != "none"){
+			// Temporarily add padding to align with the fromNode while transition
+			toWidget.containerNode.style.paddingTop = fromTop + "px";
+		}
+
+		this.onBeforeTransitionOut.apply(this, arguments);
 		if(toWidget){
 			// perform view transition keeping the scroll position
 			if(this.keepScrollPos && !this.getParent()){
@@ -230,6 +247,9 @@ dojo.declare(
 			dojo.forEach([this._transition,"in","out","reverse"], function(s){
 				dojo.removeClass(this.domNode, s);
 			}, this);
+		}else{
+			// Reset the temporary padding
+			this.containerNode.style.paddingTop = "";
 		}
 		if(e.animationName.indexOf("shrink") === 0){
 			var li = e.target;
@@ -1113,6 +1133,7 @@ dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 	}
 };
 
+dojox.mobile.hideAddressBarWait = 1000; // [ms]
 dojox.mobile.hideAddressBar = function(){
 	dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
 	setTimeout(function(){ scrollTo(0, 1); }, 100);
@@ -1121,7 +1142,17 @@ dojox.mobile.hideAddressBar = function(){
 		scrollTo(0, 1);
 		// re-define the min-height with the actual height
 		dojo.body().style.minHeight = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
-	}, 1000);
+		dojox.mobile.resizeAll();
+	}, dojox.mobile.hideAddressBarWait);
+};
+
+dojox.mobile.resizeAll = function(){
+	dijit.registry.forEach(function(w){
+		var parent = w.getParent && w.getParent();
+		if((!parent || !parent.resize) && w.resize){ // top level widget
+			w.resize();
+		}
+	});
 };
 
 dojox.mobile.openWindow = function(url, target){
@@ -1160,16 +1191,15 @@ dojo.addOnLoad(function(){
 
 	//	You can disable hiding the address bar with the following djConfig.
 	//	var djConfig = { mblHideAddressBar: false };
+	var f = dojox.mobile.resizeAll;
 	if(dojo.config["mblHideAddressBar"] !== false){
 		dojox.mobile.hideAddressBar();
-		if(dojo.config["mblAlwaysHideAddressBar"] == true){
-			if(dojo.global.onorientationchange !== undefined){
-				dojo.connect(dojo.global, "onorientationchange", dojox.mobile.hideAddressBar);
-			}else{
-				dojo.connect(dojo.global, "onresize", dojox.mobile.hideAddressBar);
-			}
+		if(dojo.config["mblAlwaysHideAddressBar"] === true){
+			f = dojox.mobile.hideAddressBar;
 		}
 	}
+	dojo.connect(null, (dojo.global.onorientationchange !== undefined)
+		? "onorientationchange" : "onresize", null, f);
 
 	// avoid use of dojo.query
 	/*

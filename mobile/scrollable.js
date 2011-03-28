@@ -35,27 +35,28 @@
 //		assign your outer fixed node and inner scrollable node to this.domNode
 //		and this.containerNode respectively.
 //
+//		Non-dojo application should capture the onorientationchange or
+//		the onresize event and call resize() in the event handler.
+//
 // example:
 //		Use this module from a non-dojo applicatoin:
 //		| function onLoad(){
 //		| 	var scrollable = new dojox.mobile.scrollable();
 //		| 	scrollable.init({
 //		| 		domNode: "outer", // id or node
-//		| 		containerNode: "inner", // id or node
-//		| 		fixedHeaderHeight: document.getElementById("hd1").offsetHeight
+//		| 		containerNode: "inner" // id or node
 //		| 	});
 //		| }
 //		| <body onload="onLoad()">
-//		| 	<h1 id="hd1" style="position:absolute;width:100%;z-index:1;">
+//		| 	<h1 id="hd1" style="position:relative;width:100%;z-index:1;">
 //		| 		Fixed Header
 //		| 	</h1>
-//		| 	<div id="outer" style="height:100%;overflow:hidden;">
+//		| 	<div id="outer" style="position:relative;height:100%;overflow:hidden;">
 //		| 		<div id="inner" style="position:absolute;width:100%;">
 //		| 			... content ...
 //		| 		</div>
 //		| 	</div>
 //		| </body>
-//
 =====*/
 
 if(typeof dojo != "undefined" && dojo.provide){
@@ -65,7 +66,7 @@ if(typeof dojo != "undefined" && dojo.provide){
 	dojox = {mobile:{}};
 }
 
-dojox.mobile.scrollable = function(){
+dojox.mobile.scrollable = function(dojo, dojox){
 	this.fixedHeaderHeight = 0; // height of a fixed header
 	this.fixedFooterHeight = 0; // height of a fixed footer
 	this.isLocalFooter = false; // footer is view-local (as opposed to application-wide)
@@ -79,6 +80,10 @@ dojox.mobile.scrollable = function(){
 	this.touchNode = null; // a node that will have touch event handlers
 
 //>>excludeStart("dojo", true);
+	if(!dojo){ // namespace objects are not passed
+		dojo = window.dojo;
+		dojox = window.dojox;
+	}
 	if(!dojo.version){ // seems running in a non-dojo environment
 		dojo.connect = function(node, eventName, scope, method){
 			var handler = function(e){
@@ -162,12 +167,7 @@ dojox.mobile.scrollable = function(){
 			this._ch.push(dojo.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 		}
 
-		if(dojo.global.onorientationchange !== undefined){
-			this._ch.push(dojo.connect(dojo.global, "onorientationchange", this, "resizeView"));
-		}else{
-			this._ch.push(dojo.connect(dojo.global, "onresize", this, "resizeView"));
-		}
-		this.resizeView();
+		this.resize();
 		var _this = this;
 		setTimeout(function(){
 			_this.flashScrollBar();
@@ -181,21 +181,34 @@ dojox.mobile.scrollable = function(){
 		this._ch = null;
 	};
 
-	this.resizeView = function(e){
+	this.resize = function(e){
 		// moved from init() to support dynamically added fixed bars
 		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
 			this.fixedFooterHeight : 0;
-		this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
+		if(this.isLocalHeader){
+			this.containerNode.style.marginTop = this.fixedHeaderHeight + "px";
+		}
 
-		// has to wait a little for completion of hideAddressBar()
-		var c = 0;
-		var _this = this;
-		var id = setInterval(function() {
-			// adjust the height of this view a couple of times
-			_this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - _this._appFooterHeight + "px";
-			_this.resetScrollBar();
-			if(c++ >= 4) { clearInterval(id); }
-		}, 300);
+		var node = this.domNode;
+		// Find the currently displayed node from my sibling nodes.
+		var nodes = node.parentNode.childNodes;
+		for(var i = 0; i < nodes.length; i++){
+			var n = nodes[i];
+			if(n.nodeType == 1 && dojo.hasClass(n, "mblView") && dojo.style(n, "display") != "none"){
+				node = n;
+				break;
+			}
+		}
+
+		// Get the top position. Same as dojo.position(node, true).y
+		var top = 0;
+		for(var n = node; n.tagName != "BODY"; n = n.parentNode){
+			top += n.offsetTop;
+		}
+
+		// adjust the height of this view
+		this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight)
+			- top - this._appFooterHeight + "px";
 	};
 
 	this.onFlickAnimationStart = function(e){
@@ -514,14 +527,16 @@ dojox.mobile.scrollable = function(){
 			}
 			return {x:0, y:0};
 		}else{
-			return {y:this.containerNode.offsetTop, x:this.containerNode.offsetLeft};
+			// this.containerNode.offsetTop does not work here,
+			// because it adds the height of the top margin.
+			return {y:dojo.style(this.containerNode, "top"), x:this.containerNode.offsetLeft};
 		}
 	};
 
 	this.getDim = function(){
 		var d = {};
 		// content width/height
-		d.c = {h:this.containerNode.offsetHeight - this.fixedHeaderHeight, w:this.containerNode.offsetWidth};
+		d.c = {h:this.containerNode.offsetHeight, w:this.containerNode.offsetWidth};
 
 		// view width/height
 		d.v = {h:this.domNode.offsetHeight + this._appFooterHeight, w:this.domNode.offsetWidth};

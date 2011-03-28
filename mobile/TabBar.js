@@ -21,24 +21,16 @@ dojo.declare(
 		this.domNode.className = this.barType == "segmentedControl" ? "mblTabPanelHeader" : "mblTabBar";
 	},
 
-	postCreate: function(){
-		if(dojo.global.onorientationchange !== undefined){
-			this.connect(dojo.global, "onorientationchange", "onResize");
-		}else{
-			this.connect(dojo.global, "onresize", "onResize");
-		}
-	},
-
 	startup: function(){
 		if(this._started){ return; }
 		var _this = this;
 		setTimeout(function(){ // to get proper dimension
-			_this.onResize();
+			_this.resize();
 		}, 0);
 		this.inherited(arguments);
 	},
 
-	onResize: function(){
+	resize: function(){
 		var i;
 		var w = dojo.marginBox(this.domNode.parentNode).w;
 		var bw = this._fixedButtonWidth;

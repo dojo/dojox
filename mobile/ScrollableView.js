@@ -28,10 +28,10 @@ dojo.declare(
 		dojo.addClass(this.domNode, "mblScrollableView");
 		this.domNode.style.overflow = "hidden";
 		this.domNode.style.top = "0px";
-		this.domNode.style.height = "100%";
 		this.containerNode = dojo.create("DIV",
 			{className:"mblScrollableViewContainer"}, this.domNode);
 		this.containerNode.style.position = "absolute";
+		this.containerNode.style.top = "0px"; // view bar is relative
 		if(this.scrollDir === "v" || this.flippable){
 			this.containerNode.style.width = "100%";
 		}
@@ -46,6 +46,7 @@ dojo.declare(
 			this.domNode.appendChild(c);
 			if(fixed === "top"){
 				this.fixedHeaderHeight = c.offsetHeight;
+				this.isLocalHeader = true;
 				this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
 			}else if(fixed === "bottom"){
 				this.fixedFooterHeight = c.offsetHeight;
@@ -85,26 +86,21 @@ dojo.declare(
 				this._checkFixedBar(c, false);
 			}
 		}
-		this.fixedHeaderHeight = this.fixedHeader ? this.fixedHeader.offsetHeight : 0;
 		this.fixedFooterHeight = this.fixedFooter ? this.fixedFooter.offsetHeight : 0;
 	},
 
-	_checkFixedBar: function(/*DomNode*/node){
+	_checkFixedBar: function(/*DomNode*/node, /*Boolean*/local){
 		if(node.nodeType === 1){
 			var fixed = node.getAttribute("fixed")
 				|| (dijit.byNode(node) && dijit.byNode(node).fixed);
-			if(fixed){
-				dojo.style(node, {
-					position: "absolute",
-					width: "100%",
-					zIndex: 1
-				});
-			}
 			if(fixed === "top"){
-				node.style.top = "0px";
-				this.fixedHeader = node;
+				if(local){
+					node.style.top = "0px";
+					this.fixedHeader = node;
+				}
 				return fixed;
 			}else if(fixed === "bottom"){
+				node.style.position = "absolute";
 				this.fixedFooter = node;
 				return fixed;
 			}

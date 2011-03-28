@@ -26,7 +26,11 @@ dojo.declare(
 		if(this._started){ return; }
 		var params = {};
 		if(this.fixedHeader){
-			params.fixedHeaderHeight = dojo.byId(this.fixedHeader).offsetHeight;
+			var node = dojo.byId(this.fixedHeader);
+			if(node.parentNode == this.domNode){ // local footer
+				this.isLocalHeader = true;
+			}
+			params.fixedHeaderHeight = node.offsetHeight;
 		}
 		if(this.fixedFooter){
 			var node = dojo.byId(this.fixedFooter);
@@ -41,7 +45,7 @@ dojo.declare(
 	}
 });
 (function(){
-	var obj = new dojox.mobile.scrollable();
+	var obj = new dojox.mobile.scrollable(dojo, dojox);
 	dojo.extend(dojox.mobile._ScrollableMixin, obj);
 	if(dojo.version.major == 1 && dojo.version.minor == 4){
 		// dojo-1.4 had a problem in inheritance behavior. (#10709 and #10788)

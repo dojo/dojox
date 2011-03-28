@@ -13,11 +13,12 @@
 			padding: 0px;
 		}
 		#foo {
+			position: relative;
 			height: 100%;
 			overflow: hidden;
 		}
 		#header1 {
-			position: absolute;
+			position: relative;
 			margin: 0px;
 			width: 100%;
 			top: 0px;
@@ -62,7 +63,7 @@ dojo.declare(
 	</head>
 	<body>
 		<h1 id="header1">Fixed Header</h1>
-		<div id="foo" dojoType="dojox.mobile.ScrollablePane" fixedHeader="header1">
+		<div id="foo" dojoType="dojox.mobile.ScrollablePane">
 			<ol>
 				<li>Item</li>
 				<li>Item</li>

@@ -50,18 +50,9 @@ dojo.declare(
 		setTimeout(function(){
 			_this.resize();
 		}, 0);
-
-		var parent = this.getParent();
-		if(!parent || !parent.resize){
-			if(dojo.global.onorientationchange !== undefined){
-				this.connect(dojo.global, "onorientationchange", "resize");
-			}else{
-				this.connect(dojo.global, "onresize", "resize");
-			}
-		}
 	},
 
-	resize: function(changeSize, resultSize){
+	resize: function(){
 		this.layout();
 	},
 
@@ -94,5 +85,11 @@ dojo.declare(
 	buildRendering: function(){
 		this.inherited(arguments);
 		dojo.addClass(this.domNode, "mblFixedSplitterPane");
+	},
+
+	resize: function(){
+		dojo.forEach(this.getChildren(), function(child){
+			child.resize && child.resize();
+		});
 	}
 });
