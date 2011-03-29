@@ -131,6 +131,16 @@ dojo.declare(
 		}
 	},
 
+	convertToId: function(moveTo){
+		if(typeof(moveTo) == "string"){
+			// removes a leading hash mark (#) and params if exists
+			// ex. "#bar&myParam=0003" -> "bar"
+			moveTo.match(/^#?([^&]+)/);
+			return RegExp.$1;
+		}
+		return moveTo;
+	},
+
 	performTransition: function(/*String*/moveTo, /*Number*/dir, /*String*/transition,
 								/*Object|null*/context, /*String|Function*/method /*optional args*/){
 		// summary:
@@ -167,14 +177,7 @@ dojo.declare(
 		this._saveState.apply(this, arguments);
 		var toNode;
 		if(moveTo){
-			if(typeof(moveTo) == "string"){
-				// removes a leading hash mark (#) and params if exists
-				// ex. "#bar&myParam=0003" -> "bar"
-				moveTo.match(/^#?([^&]+)/);
-				toNode = RegExp.$1;
-			}else{
-				toNode = moveTo;
-			}
+			toNode = this.convertToId(moveTo);
 		}else{
 			if(!this._dummyNode){
 				this._dummyNode = dojo.doc.createElement("DIV");
@@ -189,13 +192,14 @@ dojo.declare(
 		toNode.style.visibility = "hidden";
 		toNode.style.display = "";
 		var toWidget = dijit.byNode(toNode);
+		if(toWidget){
+			// Now that the target view became visible, it's time to run resize()
+			toWidget.resize();
 
-		// Now that the target view became visible, it's time to run resize()
-		toWidget.resize();
-
-		if(transition && transition != "none"){
-			// Temporarily add padding to align with the fromNode while transition
-			toWidget.containerNode.style.paddingTop = fromTop + "px";
+			if(transition && transition != "none"){
+				// Temporarily add padding to align with the fromNode while transition
+				toWidget.containerNode.style.paddingTop = fromTop + "px";
+			}
 		}
 
 		this.onBeforeTransitionOut.apply(this, arguments);
@@ -399,13 +403,16 @@ dojo.declare(
 				// an inner view, search for an ancestor view that is a sibling
 				// of the target view, and use it as a source view.
 				var view = this._view;
-				var parent = dijit.byId(moveTo).getParent();
-				while(view){
-					var myParent = view.getParent();
-					if (parent == myParent){
-						break;
+				var node = dijit.byId(view.convertToId(moveTo));
+				if(node){
+					var parent = node.getParent();
+					while(view){
+						var myParent = view.getParent();
+						if (parent === myParent){
+							break;
+						}
+						view = myParent;
 					}
-					view = myParent;
 				}
 				if(view){
 					view.performTransition(moveTo, -1, this.transition);
