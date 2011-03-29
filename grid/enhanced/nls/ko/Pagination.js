@@ -1,18 +1,18 @@
 ({
-	"descTemplate": "${2} - ${1} ${0} 중 ${3}",
-	"firstTip": "첫 페이지",
-	"lastTip": "마지막 페이지",
-	"nextTip": "다음 페이지",
-	"prevTip": "이전 페이지",
-	"itemTitle": "항목",
-	"pageStepLabelTemplate": "${0}페이지",
-	"pageSizeLabelTemplate": "페이지당 ${0}개 항목",
-	"allItemsLabelTemplate": "모든 항목",
-	"gotoButtonTitle": "특정 페이지 찾아가기",
-	"dialogTitle": "페이지 찾아가기",
-	"dialogIndication": "페이지 번호 지정",
-	"pageCountIndication": "(${0}페이지)",
-	"dialogConfirm": "이동",
-	"dialogCancel": "취소"
+	"descTemplate": "${2} - ${3}/${1} ${0}",
+	"firstTip": "Ã¬Â²Â« Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬",
+	"lastTip": "Ã«Â§Ë†Ã¬Â§â‚¬Ã«Â§â€° Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬",
+	"nextTip": "Ã«â€¹Â¤Ã¬ï¿½Å’ Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬",
+	"prevTip": "Ã¬ï¿½Â´Ã¬Â â€ž Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬",
+	"itemTitle": "Ã­â€¢Â­Ã«ÂªÂ©",
+	"pageStepLabelTemplate": "${0} Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬",
+	"pageSizeLabelTemplate": "Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬Ã«â€¹Â¹ ${0} Ã­â€¢Â­Ã«ÂªÂ©",
+	"allItemsLabelTemplate": "Ã«ÂªÂ¨Ã«â€œÂ  Ã­â€¢Â­Ã«ÂªÂ©",
+	"gotoButtonTitle": "Ã­Å Â¹Ã¬Â â€¢ Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬Ã«Â¡Å“ Ã¬ï¿½Â´Ã«ï¿½â„¢",
+	"dialogTitle": "Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬ Ã¬ï¿½Â´Ã«ï¿½â„¢",
+	"dialogIndication": "Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬ Ã«Â²Ë†Ã­ËœÂ¸ Ã¬Â§â‚¬Ã¬Â â€¢",
+	"pageCountIndication": " (${0}Ã­Å½ËœÃ¬ï¿½Â´Ã¬Â§â‚¬)",
+	"dialogConfirm": "Ã¬ï¿½Â´Ã«ï¿½â„¢",
+	"dialogCancel": "Ã¬Â·Â¨Ã¬â€ Å’"
 })
 

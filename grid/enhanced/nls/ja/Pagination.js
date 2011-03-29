@@ -1,17 +1,17 @@
 ({
-	"descTemplate": "合計 ${1} ${0} 件の結果のうち、${2} から ${3} 件目を表示しています",
+	"descTemplate": "${2} - ${3}/${1} ${0}",
 	"firstTip": "最初のページ",
 	"lastTip": "最後のページ",
 	"nextTip": "次のページ",
 	"prevTip": "前のページ",
 	"itemTitle": "項目",
 	"pageStepLabelTemplate": "ページ ${0}",
-	"pageSizeLabelTemplate": "${0} 個の項目をページに表示",
+	"pageSizeLabelTemplate": "ページ当たり ${0} 項目",
 	"allItemsLabelTemplate": "すべての項目",
 	"gotoButtonTitle": "特定のページに移動",
-	"dialogTitle": "ページに移動",
-	"dialogIndication": "ページ番号の指定",
+	"dialogTitle": "ページの移動",
+	"dialogIndication": "ページ番号を指定してください",
 	"pageCountIndication": " (${0} ページ)",
-	"dialogConfirm": "実行",
+	"dialogConfirm": "移動",
 	"dialogCancel": "キャンセル"
 })

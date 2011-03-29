@@ -10,8 +10,9 @@
 	"allItemsLabelTemplate": "Alle elementer",
 	"gotoButtonTitle": "Gå til en bestemt side",
 	"dialogTitle": "Gå til side",
-	"dialogIndication": "Angi sidetall",
+	"dialogIndication": "Oppgi sidetallet",
 	"pageCountIndication": " (${0} sider)",
-	"dialogConfirm": "OK",
+	"dialogConfirm": "Utfør",
 	"dialogCancel": "Avbryt"
 })
+

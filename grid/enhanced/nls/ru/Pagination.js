@@ -8,11 +8,11 @@
 	"pageStepLabelTemplate": "Страница ${0}",
 	"pageSizeLabelTemplate": "${0} элементов на странице",
 	"allItemsLabelTemplate": "Все элементы",
-	"gotoButtonTitle": "Перейти на указанную страницу",
+	"gotoButtonTitle": "Перейти на конкретную страницу",
 	"dialogTitle": "Перейти на страницу",
 	"dialogIndication": "Укажите номер страницы",
 	"pageCountIndication": " (${0} страниц)",
 	"dialogConfirm": "Перейти",
-	"dialogCancel": "Отменить"
+	"dialogCancel": "Отмена"
 })
 

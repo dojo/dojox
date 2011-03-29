@@ -1,18 +1,18 @@
 ({
-	"descTemplate": "Od ${2} do ${3} z ${1} ${0}",
+	"descTemplate": "${2} - ${3} z ${1} ${0}",
 	"firstTip": "Pierwsza strona",
 	"lastTip": "Ostatnia strona",
 	"nextTip": "Następna strona",
 	"prevTip": "Poprzednia strona",
 	"itemTitle": "elementy",
 	"pageStepLabelTemplate": "Strona ${0}",
-	"pageSizeLabelTemplate": "Liczba elementów na stronę: ${0}",
+	"pageSizeLabelTemplate": "${0} elementów na stronę",
 	"allItemsLabelTemplate": "Wszystkie elementy",
-	"gotoButtonTitle": "Przejdź do konkretnej strony",
-	"dialogTitle": "Przechodzenie do strony",
-	"dialogIndication": "Określ numer strony",
-	"pageCountIndication": " (liczba stron: ${0})",
-	"dialogConfirm": "Przejdź",
+	"gotoButtonTitle": "Idź do określonej strony",
+	"dialogTitle": "Idź do strony",
+	"dialogIndication": "Podaj numer strony",
+	"pageCountIndication": " (${0} stron)",
+	"dialogConfirm": "Idź",
 	"dialogCancel": "Anuluj"
 })
 

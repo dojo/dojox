@@ -5,14 +5,14 @@
 	"nextTip": "Nästa sida",
 	"prevTip": "Föregående sida",
 	"itemTitle": "objekt",
-	"pageStepLabelTemplate": "Sidan ${0}",
+	"pageStepLabelTemplate": "Sida ${0}",
 	"pageSizeLabelTemplate": "${0} objekt per sida",
 	"allItemsLabelTemplate": "Alla objekt",
 	"gotoButtonTitle": "Gå till en viss sida",
-	"dialogTitle": "Gå till sida",
-	"dialogIndication": "Ange sidnumret",
+	"dialogTitle": "Gå till sidan",
+	"dialogIndication": "Ange sidnummer",
 	"pageCountIndication": " (${0} sidor)",
-	"dialogConfirm": "OK",
+	"dialogConfirm": "Gå",
 	"dialogCancel": "Avbryt"
 })
 

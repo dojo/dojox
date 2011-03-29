@@ -8,9 +8,9 @@
 	"pageStepLabelTemplate": "Seite ${0}",
 	"pageSizeLabelTemplate": "${0} Elemente pro Seite",
 	"allItemsLabelTemplate": "Alle Elemente",
-	"gotoButtonTitle": "Zu einer bestimmten Seite wechseln",
-	"dialogTitle": "Zur Seite wechseln",
-	"dialogIndication": "Seitenzahl angeben",
+	"gotoButtonTitle": "Eine bestimmte Seite aufrufen",
+	"dialogTitle": "Zu Seite",
+	"dialogIndication": "Geben Sie die Seitenzahl an.",
 	"pageCountIndication": " (${0} Seiten)",
 	"dialogConfirm": "Start",
 	"dialogCancel": "Abbrechen"

@@ -9,7 +9,7 @@
 	"pageSizeLabelTemplate": "${0} elementos por página",
 	"allItemsLabelTemplate": "Todos los elementos",
 	"gotoButtonTitle": "Ir a una página específica",
-	"dialogTitle": "Ir a la página",
+	"dialogTitle": "Ir a página",
 	"dialogIndication": "Especifique el número de página",
 	"pageCountIndication": " (${0} páginas)",
 	"dialogConfirm": "Ir",
