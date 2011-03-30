@@ -12,7 +12,8 @@
 	position: relative;
 	border: 1px solid transparent;
 }
-.dj_ie6 .dojoxGrid .dojoxGridSortNode {
+.dj_ie6 .dojoxGrid .dojoxGridSortNode,
+.dj_ie7 .dojoxGrid .dojoxGridSortNode {
 	overflow: hidden;
 	width:100%;	
 }
@@ -90,7 +91,14 @@ html > body .dojoxGridSorted .dojoxGridCellSortFocus .dojoxGridSortBtnNested {
 }
 
 .dojoxGrid .dojoxGridHeader .dojoxGridRowTable .dojoxGridNoSort .dojoxGridSortNode {
-	margin:0!important;
+	margin: 0!important;
+}
+
+.dj_ie7 .dojoxGridSortBtn {
+	right: 0!important;
+}
+.dj_ie7 .dojoxGridSortBtnNested {
+	right: 10px!important;
 }
 
 /*Focus border*/
