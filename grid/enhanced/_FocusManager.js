@@ -705,6 +705,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 				if(isBubble && edit.isEditing()){
 					this._applyEditableCell();
 					editApplied = true;
+					dojo.stopEvent(e);
 				}
 				//intentional drop through
 			case dk.SPACE:

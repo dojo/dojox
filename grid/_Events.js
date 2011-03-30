@@ -77,6 +77,7 @@ dojo.declare("dojox.grid._Events", null, {
 					var curView = this.focus.focusView || this.views.views[0];  //if no focusView than only one view
 					curView.content.decorateEvent(e);
 					this.onRowClick(e);
+					dojo.stopEvent(e);
 				}
 				break;
 			case dk.SPACE:
