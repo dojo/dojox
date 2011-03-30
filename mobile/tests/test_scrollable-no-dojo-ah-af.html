@@ -40,6 +40,8 @@
 				containerNode: document.getElementById("inner"),
 				fixedFooterHeight: document.getElementById("footer1").offsetHeight
 			});
+			dojo.connect(dojo.global, (dojo.global.onorientationchange !== undefined)
+				? "onorientationchange" : "onresize", scrollable, "resize");
 		}
 		</script>
 	</head>

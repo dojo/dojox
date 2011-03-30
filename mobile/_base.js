@@ -77,7 +77,10 @@ dojo.declare(
 			if(_this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
 				_this.domNode.style.visibility = "visible";
 			}
-			_this.resize();
+			var parent = _this.getParent && _this.getParent();
+			if(!parent || !parent.resize){ // top level widget
+				_this.resize();
+			}
 		}, dojo.isIE?100:0); // give IE a little time to complete drawing
 		this.inherited(arguments);
 	},

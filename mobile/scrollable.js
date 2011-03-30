@@ -125,7 +125,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			for(var s in style){
 				if(style.hasOwnProperty(s)){
 					node.style[s] = style[s];
-					if(s == "opacity" && typeof(node.style.filter) != "undefined"){
+					if(s === "opacity" && typeof(node.style.filter) !== "undefined"){
 						node.style.filter = " progid:DXImageTransform.Microsoft.alpha(opacity="+ (style[s]*100) +")";
 					}
 				}
@@ -167,11 +167,18 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			this._ch.push(dojo.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 		}
 
-		this.resize();
+		if(this.isTopLevel()){
+			this.resize();
+		}
 		var _this = this;
 		setTimeout(function(){
 			_this.flashScrollBar();
 		}, 600);
+	};
+
+	this.isTopLevel = function(){
+		// subclass may want to override
+		return true;
 	};
 
 	this.cleanup = function(){
@@ -179,6 +186,18 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			dojo.disconnect(this._ch[i]);
 		}
 		this._ch = null;
+	};
+
+	this.findDisp = function(/*DomNode*/node){
+		// Find the currently displayed view node from my sibling nodes.
+		var nodes = node.parentNode.childNodes;
+		for(var i = 0; i < nodes.length; i++){
+			var n = nodes[i];
+			if(n.nodeType === 1 && dojo.hasClass(n, "mblView") && n.style.display !== "none"){
+				return n;
+			}
+		}
+		return node;
 	};
 
 	this.resize = function(e){
@@ -189,26 +208,20 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			this.containerNode.style.marginTop = this.fixedHeaderHeight + "px";
 		}
 
-		var node = this.domNode;
-		// Find the currently displayed node from my sibling nodes.
-		var nodes = node.parentNode.childNodes;
-		for(var i = 0; i < nodes.length; i++){
-			var n = nodes[i];
-			if(n.nodeType == 1 && dojo.hasClass(n, "mblView") && dojo.style(n, "display") != "none"){
-				node = n;
-				break;
-			}
-		}
-
 		// Get the top position. Same as dojo.position(node, true).y
 		var top = 0;
-		for(var n = node; n.tagName != "BODY"; n = n.parentNode){
+		for(var n = this.domNode; n.tagName != "BODY"; n = n.parentNode){
+			n = this.findDisp(n); // find the first displayed view node
+			if(!n){ break; }
 			top += n.offsetTop;
 		}
 
 		// adjust the height of this view
 		this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight)
 			- top - this._appFooterHeight + "px";
+
+		// to ensure that the view is within a scrolling area when resized.
+		this.onTouchEnd();
 	};
 
 	this.onFlickAnimationStart = function(e){
@@ -529,7 +542,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}else{
 			// this.containerNode.offsetTop does not work here,
 			// because it adds the height of the top margin.
-			return {y:dojo.style(this.containerNode, "top"), x:this.containerNode.offsetLeft};
+			var y = parseInt(this.containerNode.style.top) || 0;
+			return {y:y, x:this.containerNode.offsetLeft};
 		}
 	};
 

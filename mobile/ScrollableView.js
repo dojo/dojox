@@ -39,6 +39,12 @@ dojo.declare(
 		this.findAppBars();
 	},
 
+	// override dojox.mobile.scrollable
+	isTopLevel: function(e){
+		var parent = this.getParent && this.getParent();
+		return (!parent || !parent.resize); // top level widget
+	},
+
 	addChild: function(widget){
 		var c = widget.domNode;
 		var fixed = this._checkFixedBar(c, true);
@@ -53,7 +59,7 @@ dojo.declare(
 				this.isLocalFooter = true;
 				c.style.bottom = "0px";
 			}
-			this.resizeView();
+			this.resize();
 		}else{
 			this.containerNode.appendChild(c);
 		}

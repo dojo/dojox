@@ -48,7 +48,10 @@ dojo.declare(
 
 		var _this = this;
 		setTimeout(function(){
-			_this.resize();
+			var parent = _this.getParent && _this.getParent();
+			if(!parent || !parent.resize){ // top level widget
+				_this.resize();
+			}
 		}, 0);
 	},
 

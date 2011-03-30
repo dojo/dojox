@@ -36,6 +36,8 @@
 				domNode: document.getElementById("outer"),
 				containerNode: document.getElementById("inner")
 			});
+			dojo.connect(dojo.global, (dojo.global.onorientationchange !== undefined)
+				? "onorientationchange" : "onresize", scrollable, "resize");
 		}
 		</script>
 	</head>

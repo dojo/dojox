@@ -48,7 +48,7 @@ dojo.declare(
 		postCreate: function(){
 			this.inherited(arguments);
 			var scrollable = this.scrollable = new dojox.mobile.scrollable();
-			scrollable.resizeView = dojo.hitch(this, "onClose", null); // resizeView changes the height rudely
+			scrollable.resize = dojo.hitch(this, "onClose", null); // resize changes the height rudely
 			scrollable.init({
 				domNode: this.domNode,
 				containerNode: this.domNode.firstChild
