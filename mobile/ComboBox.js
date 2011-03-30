@@ -17,10 +17,20 @@ dojo.declare(
 		selectOnClick: false,
 		autoComplete: false,
 
+		_onFocus: function(){
+			this.inherited(arguments);
+			if(!this._opened){
+				this._startSearchAll(); // show dropdown if user is selecting Next/Previous from virtual keyboard
+			}
+		},
+
 		openDropDown: function(){
-			var ret = this.inherited(arguments);
-			if(ret.aroundCorner.charAt(0) == 'B'){ // is popup below?
-				this.domNode.scrollIntoView(true); // scroll to top
+			var ret = null;
+			if(!this._opened){
+				ret = this.inherited(arguments);
+				if(ret.aroundCorner.charAt(0) == 'B'){ // is popup below?
+					this.domNode.scrollIntoView(true); // scroll to top
+				}
 			}
 			return ret;
 		}
