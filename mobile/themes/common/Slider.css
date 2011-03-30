@@ -1,0 +1,65 @@
+.mblSlider {
+	background-color:gray;
+	border: 1px solid black;
+	border-radius: 10px;
+	-webkit-user-select: none; /* prevent selection (older Android) */
+	user-select: none; /* prevent selection */
+	box-sizing: content-box; /* make width and height consistent with a DIV */
+}
+
+.mblSliderH {
+	width:200px;
+	height: 4px;
+	margin: 0 8px; /* 1/2 handle width for hanging off the ends of the bar */
+}
+
+.mblSliderV {
+	height:200px;
+	width: 4px;
+	margin: 8px 0; /* 1/2 handle height for hanging off the ends of the bar */
+}
+
+.mblSliderProgressBar {
+	background-color:blue;
+	border-radius: 4px;
+}
+
+.mblSliderH .mblSliderProgressBar {
+	height:100%;
+}
+
+.mblSliderV .mblSliderProgressBar {
+	width:100%;
+}
+
+.mblSliderHandle {
+	margin:-8px 0 0 -8px;
+	width:16px;
+	height:16px;
+	border-radius:16px;
+	background-color:red;
+}
+
+.mblSliderH .mblSliderHandle {
+	top:50%;
+}
+
+.mblSliderV .mblSliderHandle {
+	left:50%;
+}
+
+.mblSliderTransition {
+	-webkit-transition-duration: 400ms;
+	transition-duration: 400ms;
+}
+
+.mblSliderTouchBox {
+	left:-8pt;
+	top:-8pt;
+	padding:8pt;
+	border:0 none;
+	margin:0;
+	width:100%;
+	height:100%;
+	backgroundColor:transparent;
+}
