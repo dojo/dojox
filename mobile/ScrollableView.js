@@ -39,6 +39,13 @@ dojo.declare(
 		this.findAppBars();
 	},
 
+	resize: function(){
+		this.inherited(arguments);
+		dojo.forEach(this.getChildren(), function(child){
+			child.resize && child.resize();
+		});
+	},
+
 	// override dojox.mobile.scrollable
 	isTopLevel: function(e){
 		var parent = this.getParent && this.getParent();
