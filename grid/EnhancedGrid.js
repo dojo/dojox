@@ -100,9 +100,11 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	doKeyEvent: function(e){
 		// summary:
 		//		Overwritten, see _Grid.doKeyEvent()
-		var view = this.focus.focusView;
-		view.content.decorateEvent(e);
-		if(!e.cell){ view.header.decorateEvent(e); }
+		try{
+			var view = this.focus.focusView;
+			view.content.decorateEvent(e);
+			if(!e.cell){ view.header.decorateEvent(e); }
+		}catch(e){}
 		this.inherited(arguments);
 	},
 	doApplyCellEdit: function(inValue, inRowIndex, inAttrName){
