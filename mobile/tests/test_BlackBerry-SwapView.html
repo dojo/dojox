@@ -3,7 +3,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<title>FlippableView</title>
+		<title>SwapView</title>
 		<link href="../themes/blackberry/blackberry.css" rel="stylesheet">
 		<style>
 		.lnk {
@@ -30,14 +30,14 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.require("dojox.mobile.IconContainer");
-			dojo.require("dojox.mobile.FlippableView");
+			dojo.require("dojox.mobile.SwapView");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 			dojo.requireIf(!dojo.isWebKit, "dojo.fx");
 			dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 		</script>
 	</head>
 	<body>
-		<div id="foo" dojoType="dojox.mobile.FlippableView" selected="true">
+		<div id="foo" dojoType="dojox.mobile.SwapView" selected="true">
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Page flipping demo</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" style="font-size:10px">
@@ -47,7 +47,7 @@
 			</ul>
 		</div>
 
-		<div id="icon1" dojoType="dojox.mobile.FlippableView">
+		<div id="icon1" dojoType="dojox.mobile.SwapView">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container 1</h1>
 			<ul dojoType="dojox.mobile.IconContainer">
 				<li dojoType="dojox.mobile.IconItem" label="Messages" icon="images/b-app-icon-1.png" moveTo="about" transition="fade"></li>
@@ -65,7 +65,7 @@
 			</ul>
 		</div>
 
-		<div id="icon2" dojoType="dojox.mobile.FlippableView">
+		<div id="icon2" dojoType="dojox.mobile.SwapView">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container 2</h1>
 			<ul dojoType="dojox.mobile.IconContainer">
 				<li dojoType="dojox.mobile.IconItem" label="Media" icon="images/b-app-icon-5.png" moveTo="about" transition="fade"></li>
@@ -79,7 +79,7 @@
 			</ul>
 		</div>
 
-		<div id="icon3" dojoType="dojox.mobile.FlippableView">
+		<div id="icon3" dojoType="dojox.mobile.SwapView">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container 3</h1>
 			<ul dojoType="dojox.mobile.IconContainer">
 				<li dojoType="dojox.mobile.IconItem" label="App World" icon="images/b-app-icon-1.png" moveTo="about" transition="fade"></li>

@@ -21,8 +21,6 @@ dojo.declare(
 	"dojox.mobile.ScrollableView",
 	[dojox.mobile.View, dojox.mobile._ScrollableMixin],
 {
-	flippable: false,
-
 	buildRendering: function(){
 		this.inherited(arguments);
 		dojo.addClass(this.domNode, "mblScrollableView");
@@ -32,7 +30,7 @@ dojo.declare(
 			{className:"mblScrollableViewContainer"}, this.domNode);
 		this.containerNode.style.position = "absolute";
 		this.containerNode.style.top = "0px"; // view bar is relative
-		if(this.scrollDir === "v" || this.flippable){
+		if(this.scrollDir === "v"){
 			this.containerNode.style.width = "100%";
 		}
 		this.reparent();

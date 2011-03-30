@@ -3,7 +3,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<title>FlippableView</title>
+		<title>SwapView</title>
 		<link href="../themes/iphone/iphone.css" rel="stylesheet">
 		<style>
 		.lnk {
@@ -23,14 +23,14 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.require("dojox.mobile.IconContainer");
-			dojo.require("dojox.mobile.FlippableView");
+			dojo.require("dojox.mobile.SwapView");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 			dojo.requireIf(!dojo.isWebKit, "dojo.fx");
 			dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 		</script>
 	</head>
 	<body>
-		<div id="foo" dojoType="dojox.mobile.FlippableView" selected="true">
+		<div id="foo" dojoType="dojox.mobile.SwapView" selected="true">
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Page flipping demo</h2>
 
 			<div dojoType="dojox.mobile.RoundRect">
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div id="bar" dojoType="dojox.mobile.FlippableView">
+		<div id="bar" dojoType="dojox.mobile.SwapView">
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" style="font-size:10px">
 					1. <a href="#" class="lnk">Dojo: Traditional Karate-do Spirit</a><br>
@@ -58,7 +58,7 @@
 			</ul>
 		</div>
 
-		<div id="icon1" dojoType="dojox.mobile.FlippableView">
+		<div id="icon1" dojoType="dojox.mobile.SwapView">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container 1</h1>
 			<ul dojoType="dojox.mobile.IconContainer">
 				<li dojoType="dojox.mobile.IconItem" label="app1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
@@ -70,7 +70,7 @@
 			</ul>
 		</div>
 
-		<div id="icon2" dojoType="dojox.mobile.FlippableView">
+		<div id="icon2" dojoType="dojox.mobile.SwapView">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container 2</h1>
 			<ul dojoType="dojox.mobile.IconContainer">
 				<li dojoType="dojox.mobile.IconItem" label="test1" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
