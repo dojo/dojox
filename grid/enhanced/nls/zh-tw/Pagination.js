@@ -11,7 +11,8 @@
 	"gotoButtonTitle": "跳至特定的頁面",
 	"dialogTitle": "跳至頁面",
 	"dialogIndication": "指定頁碼",
-	"pageCountIndication": " （${0} 個頁面）",
+	"pageCountIndication": " （${0} 頁）",
 	"dialogConfirm": "執行",
 	"dialogCancel": "取消"
 })
+

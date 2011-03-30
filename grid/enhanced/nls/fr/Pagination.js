@@ -1,5 +1,5 @@
 ({
-	"descTemplate": "${2} - ${3} sur ${1} ${0}",
+	"descTemplate": "${2} à ${3} sur ${1} ${0}",
 	"firstTip": "Première page",
 	"lastTip": "Dernière page",
 	"nextTip": "Page suivante",
@@ -8,9 +8,9 @@
 	"pageStepLabelTemplate": "Page ${0}",
 	"pageSizeLabelTemplate": "${0} éléments par page",
 	"allItemsLabelTemplate": "Tous les éléments",
-	"gotoButtonTitle": "Aller à une page spécifique",
+	"gotoButtonTitle": "Aller à une page donnée",
 	"dialogTitle": "Aller à la page",
-	"dialogIndication": "Spécifiez le numéro de page",
+	"dialogIndication": "Indiquer le numéro de page",
 	"pageCountIndication": " (${0} pages)",
 	"dialogConfirm": "Aller",
 	"dialogCancel": "Annuler"

@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Tøm filter",
 	"filterDefDialogTitle": "Filter",
-	"incompleteRuleTip": "Denne regelen er ikke fullstendig.",
 	"ruleTitleTemplate": "Regel ${0}",
 	
 	"conditionEqual": "er lik",
@@ -12,11 +11,11 @@
 	"conditionLargerEqual": "større enn eller lik",
 	"conditionContains": "inneholder",
 	"conditionIs": "er",
-	"conditionStartsWith": "begynner med",
+	"conditionStartsWith": "starter med",
 	"conditionEndWith": "slutter med",
 	"conditionNotContain": "inneholder ikke",
 	"conditionIsNot": "er ikke",
-	"conditionNotStartWith": "begynner ikke med",
+	"conditionNotStartWith": "starter ikke med",
 	"conditionNotEndWith": "slutter ikke med",
 	"conditionBefore": "før",
 	"conditionAfter": "etter",
@@ -26,10 +25,10 @@
 	"all": "alle",
 	"any": "minst en",
 	"relationAll": "alle regler",
-	"waiRelAll": "Samsvar med alle følgende regler:",
+	"waiRelAll": "Samsvar med alle disse reglene:",
 	"relationAny": "minst en regel",
-	"waiRelAny": "Samsvar med minst en av følgende regler:",
-	"relationMsgFront": "Samsvar",
+	"waiRelAny": "Samsvar med minst en av disse reglene:",
+	"relationMsgFront": "Samsvar med",
 	"relationMsgTail": "",
 	"and": "og",
 	"or": "eller",
@@ -43,7 +42,7 @@
 	"waiCancelButton": "Avbryt denne dialogboksen",
 	"clearButton": "Tøm",
 	"waiClearButton": "Tøm filteret",
-	"filterButton": "Filter",
+	"filterButton": "Filtrer",
 	"waiFilterButton": "Send filteret",
 	
 	"columnSelectLabel": "Kolonne",
@@ -51,7 +50,7 @@
 	"conditionSelectLabel": "Betingelse",
 	"waiConditionSelectTemplate": "Betingelse for regel ${0}",
 	"valueBoxLabel": "Verdi",
-	"waiValueBoxTemplate": "Angi verdi som skal filtreres for regel ${0}",
+	"waiValueBoxTemplate": "Oppgi verdi som skal filtreres for regel ${0}",
 	
 	"rangeTo": "til",
 	"rangeTemplate": "fra ${0} til ${1}",
@@ -59,29 +58,30 @@
 	"statusTipHeaderColumn": "Kolonne",
 	"statusTipHeaderCondition": "Regler",
 	"statusTipTitle": "Filterlinje",
-	"statusTipMsg": "Klikk på filterlinjen her for å filtrere på verdier i ${0}.",
+	"statusTipMsg": "Klikk på filterlinjen her for å filtrere på verdiene i ${0}.",
 	"anycolumn": "enhver kolonne",
 	"statusTipTitleNoFilter": "Filterlinje",
 	"statusTipTitleHasFilter": "Filter",
-	"statusTipRelPre": "Samsvar",
+	"statusTipRelPre": "Samsvar med",
 	"statusTipRelPost": "regler.",
 	
 	"defaultItemsName": "elementer",
 	"filterBarMsgHasFilterTemplate": "${0} av ${1} ${2} vist.",
-	"filterBarMsgNoFilterTemplate": "Det er ikke brukt filter",
+	"filterBarMsgNoFilterTemplate": "Ikke brukt filter",
 	
 	"filterBarDefButton": "Definer filter",
 	"waiFilterBarDefButton": "Filtrer tabellen",
 	"a11yFilterBarDefButton": "Filtrer...",
 	"filterBarClearButton": "Tøm filter",
 	"waiFilterBarClearButton": "Tøm filteret",
-	"closeFilterBarBtn": "Lukk filterlinje",
+	"closeFilterBarBtn": "Lukk filterlinjen",
 	
-	"clearFilterMsg": "Dette fjerner filteret og viser alle tilgjengelig poster.",
-	"anyColumnOption": "Enhver kolonne",
+	"clearFilterMsg": "Dette fjerner filteret og viser alle tilgjengelige poster.",
+	"anyColumnOption": "Minst en kolonne",
 	
-	"trueLabelEditable": "Valgt",
 	"trueLabel": "Sann",
 	"falseLabel": "Usann"
 })
+
+
 
