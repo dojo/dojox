@@ -1203,11 +1203,11 @@ dojo.addOnLoad(function(){
 	//	var djConfig = { mblHideAddressBar: false };
 	var f = dojox.mobile.resizeAll;
 	if(dojo.config["mblHideAddressBar"] !== false){
-		dojox.mobile.hideAddressBar();
 		if(dojo.config["mblAlwaysHideAddressBar"] === true){
 			f = dojox.mobile.hideAddressBar;
 		}
 	}
+	f(); // call resizeAll() or hideAddressBar()
 	dojo.connect(null, (dojo.global.onorientationchange !== undefined)
 		? "onorientationchange" : "onresize", null, f);
 
