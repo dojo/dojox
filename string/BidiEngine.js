@@ -167,9 +167,9 @@ dojo.declare("dojox.string.BidiEngine", null, {
 		var stage1_text = doBidiReorder(text, os_in + orientIn, os_out + orientOut, formatIn.charAt(2) + formatOut.charAt(2))
 			, isRtl = false;
 
-		if(formatIn.charAt(1) == 'R'){
+		if(formatOut.charAt(1) == 'R'){
 			isRtl = true;
-		}else if(formatIn.charAt(1) == 'C' || formatIn.charAt(1) == 'D'){
+		}else if(formatOut.charAt(1) == 'C' || formatOut.charAt(1) == 'D'){
 			isRtl = this.checkContextual(stage1_text);
 		}
 		if(formatIn.charAt(3) == formatOut.charAt(3)){
