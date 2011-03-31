@@ -415,6 +415,19 @@ dojo.declare("dojox.grid._FocusManager", null, {
 					// don't change col if would move to hidden
 					col = i;
 				}
+				//skip hidden row|cell
+				var n = cell.getNode(row);
+				if(!n && inRowDelta){
+					if((row + inRowDelta) >= 0 && (row + inRowDelta) <= rc){
+						this.move(inRowDelta > 0 ? ++inRowDelta : --inRowDelta, inColDelta);
+					}
+					return;
+				}else if((!n || dojo.style(n, "display") === "none") && inColDelta){
+					if((col + inRowDelta) >= 0 && (col + inRowDelta) <= cc){
+						this.move(inRowDelta, inColDelta > 0 ? ++inColDelta : --inColDelta);
+					}
+					return;
+				}
 				this.setFocusIndex(row, col);
 				if(inRowDelta){
 					this.grid.updateRow(r);

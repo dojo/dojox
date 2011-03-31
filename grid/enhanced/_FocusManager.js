@@ -565,25 +565,6 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 			dojo.stopEvent(evt);
 		}
 	},
-	move: function(inRowDelta, inColDelta){
-		// summary:
-		//		Overwritten
-		this.inherited(arguments);
-		var cell = this.cell, row = this.rowIndex;
-		if(!this.isNavHeader() && cell){
-			if(inRowDelta !== 0){//jump over hidden rows
-				var node = cell.view.getRowNode(row);//row node
-				if(node && dojo.style(node, "display") === "none"){
-					this.move(inRowDelta > 0 ? 1 : -1, inColDelta);
-				}
-			}else if(inColDelta !== 0){//jump over hidden cells
-				var node = cell.getNode(row);//cell node
-				if(node && dojo.style(node, "display") === "none"){
-					this.move(inRowDelta, inColDelta > 0 ? 1 : -1);
-				}
-			}
-		}
-	},
 	_onContentKeyDown: function(e, isBubble){
 		if(isBubble){
 			var dk = dojo.keys, s = this.grid.scroller;
