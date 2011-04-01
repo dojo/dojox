@@ -1,0 +1,77 @@
+define("dojox/mobile/ContentPane", ["dojo", "dijit", "dijit/_WidgetBase", "dojo/_base/xhr"], function(dojo, dijit) {
+
+// summary:
+//		A very simple content pane to embed an HTML fragment.
+// description:
+//		This widget embeds an HTML fragment and run the parser.
+//		onLoad() is called when parsing is done and the content is ready.
+//		"dojo/_base/xhr" is in the dependency list. Usually this is not
+//		necessary, but there is a case where dojox.mobile custom build does not
+//		contain dojo._base.xhr.
+
+dojo.declare(
+	"dojox.mobile.ContentPane",
+	dijit._WidgetBase,
+{
+	href: "",
+	content: "",
+	parseOnLoad: true,
+	prog: true, // show progress indicator
+
+	startup: function(){
+		if(this.prog){
+			this._p = dojox.mobile.ProgressIndicator.getInstance();
+		}
+		if(this.href){
+			this.set("href", this.href);
+		}else if(this.content){
+			this.set("content", this.content);
+		}
+	},
+
+	loadHandler: function(/*String*/response){
+		this.set("content", response);
+	},
+
+	errorHandler: function(err){
+		if(p){ p.stop(); }
+	},
+
+	onLoad: function(){
+		// Stub method to allow the application to connect to.
+		// Called when parsing is done and the content is ready.
+	},
+
+	_setHrefAttr: function(/*String*/href){
+		var p = this._p;
+		if(p){
+			dojo.body().appendChild(p.domNode);
+			p.start();
+		}
+		this.href = href;
+		dojo.xhrGet({
+			url: href,
+			handleAs: "text",
+			load: dojo.hitch(this, "loadHandler"),
+			error: dojo.hitch(this, "errorHandler")
+		});
+	},
+
+	_setContentAttr: function(/*String|DomNode*/data){
+		this.destroyDescendants();
+		if(typeof data === "object"){
+			this.domNode.appendChild(data);
+		}else{
+			this.domNode.innerHTML = data;
+		}
+		if(this.parseOnLoad){
+			dojo.parser.parse(this.domNode);
+		}
+		if(this._p){ this._p.stop(); }
+		this.onLoad();
+	}
+});
+
+
+return dojox.mobile.ContentPane;
+});
