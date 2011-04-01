@@ -151,6 +151,7 @@ dojo.declare(
 		// moveTo: String
 		//		The destination view id to transition the current view to.
 		//		If null, transitions to a blank view.
+		//		If "#", returns immediately without transition.
 		// dir: Number
 		//		The transition direction. If 1, transition forward. If -1, transition backward.
 		//		For example, the slide transition slides the view from right to left when dir == 1,
@@ -167,6 +168,7 @@ dojo.declare(
 		// example:
 		//		Transitions to the blank view, and then opens another page.
 		//	|	performTransition(null, 1, "slide", null, function(){location.href = href;});
+		if(moveTo === "#"){ return; }
 		if(dojo.hash){
 			if(typeof(moveTo) == "string" && moveTo.charAt(0) == '#' && !dojox.mobile._params){
 				dojox.mobile._params = [];
