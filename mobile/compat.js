@@ -438,8 +438,8 @@ dojox.mobile.loadCompatCssFiles = function(){
 	}
 };
 
-dojox.mobile.hideAddressBar = function(){
-	dojox.mobile.resizeAll();
+dojox.mobile.hideAddressBar = function(/*Boolean*/doResize){
+	if(doResize !== false){ dojox.mobile.resizeAll(); }
 };
 
 dojo.addOnLoad(function(){

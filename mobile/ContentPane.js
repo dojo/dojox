@@ -1,4 +1,4 @@
-define("dojox/mobile/ContentPane", ["dojo", "dijit", "dijit/_WidgetBase", "dojo/_base/xhr"], function(dojo, dijit) {
+define("dojox/mobile/ContentPane", ["dojo", "dijit", "dijit/_WidgetBase", "dijit._Container", "dijit._Contained", "dojo/_base/xhr"], function(dojo, dijit) {
 
 // summary:
 //		A very simple content pane to embed an HTML fragment.
@@ -11,7 +11,7 @@ define("dojox/mobile/ContentPane", ["dojo", "dijit", "dijit/_WidgetBase", "dojo/
 
 dojo.declare(
 	"dojox.mobile.ContentPane",
-	dijit._WidgetBase,
+	[dijit._WidgetBase, dijit._Container, dijit._Contained],
 {
 	href: "",
 	content: "",
@@ -19,6 +19,7 @@ dojo.declare(
 	prog: true, // show progress indicator
 
 	startup: function(){
+		if(this._started){ return; }
 		if(this.prog){
 			this._p = dojox.mobile.ProgressIndicator.getInstance();
 		}
@@ -27,6 +28,13 @@ dojo.declare(
 		}else if(this.content){
 			this.set("content", this.content);
 		}
+		this.inherited(arguments);
+	},
+
+	resize: function(){
+		dojo.forEach(this.getChildren(), function(child){
+			child.resize && child.resize();
+		});
 	},
 
 	loadHandler: function(/*String*/response){

@@ -367,10 +367,20 @@ dojo.declare(
 
 	startup: function(){
 		if(this._started){ return; }
+		var parent = this.getParent && this.getParent();
+		if(!parent || !parent.resize){ // top level widget
+			this.resize();
+		}
+		this.inherited(arguments);
+	},
+
+	resize: function(){
 		if(this._btn){
 			this._btn.style.width = this._body.offsetWidth + this._head.offsetWidth + "px";
 		}
-		this.inherited(arguments);
+		dojo.forEach(this.getChildren(), function(child){
+			if(child.resize){ child.resize(); }
+		});
 	},
 
 	onClick: function(e){
@@ -1146,7 +1156,7 @@ dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 };
 
 dojox.mobile.hideAddressBarWait = 1000; // [ms]
-dojox.mobile.hideAddressBar = function(){
+dojox.mobile.hideAddressBar = function(/*Boolean*/doResize){
 	dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
 	setTimeout(function(){ scrollTo(0, 1); }, 100);
 	setTimeout(function(){ scrollTo(0, 1); }, 400);
@@ -1154,7 +1164,7 @@ dojox.mobile.hideAddressBar = function(){
 		scrollTo(0, 1);
 		// re-define the min-height with the actual height
 		dojo.body().style.minHeight = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
-		dojox.mobile.resizeAll();
+		if(doResize !== false){ dojox.mobile.resizeAll(); }
 	}, dojox.mobile.hideAddressBarWait);
 };
 
@@ -1204,12 +1214,14 @@ dojo.addOnLoad(function(){
 	//	You can disable hiding the address bar with the following djConfig.
 	//	var djConfig = { mblHideAddressBar: false };
 	var f = dojox.mobile.resizeAll;
-	if(dojo.config["mblHideAddressBar"] !== false){
+	if(dojo.config["mblHideAddressBar"] !== false &&
+		navigator.appVersion.indexOf("Mobile") != -1 ||
+		dojo.config["mblForceHideAddressBar"] === true){
+		dojox.mobile.hideAddressBar();
 		if(dojo.config["mblAlwaysHideAddressBar"] === true){
 			f = dojox.mobile.hideAddressBar;
 		}
 	}
-	f(); // call resizeAll() or hideAddressBar()
 	dojo.connect(null, (dojo.global.onorientationchange !== undefined)
 		? "onorientationchange" : "onresize", null, f);
 
