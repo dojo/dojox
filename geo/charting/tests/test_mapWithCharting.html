@@ -53,7 +53,7 @@
 				var map = new dojox.geo.charting.Map("map", "../resources/data/USStates.json");
 				map.setMarkerData("../resources/markers/USStates.json");
 				map.onFeatureClick = function(feature){
-					if (!feature._isFocused) {
+					if (!feature._isSelected) {
 						chart.setStore(chartStore, {
 							product: "*"
 						}, feature.id);

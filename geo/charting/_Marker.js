@@ -1,20 +1,29 @@
 dojo.provide("dojox.geo.charting._Marker");
 
 dojo.declare("dojox.geo.charting._Marker", null, {
+	
+	_needTooltipRefresh: null,
+	
 	constructor: function(markerData, map){
 		var mapObj = map.mapObj;
 		this.features = mapObj.features;
 		this.markerData = markerData;
+		_needTooltipRefresh = false;
 	},
 
 	show: function(featureId){
-		this.markerText = this.features[featureId].markerText || this.markerData[featureId] || featureId;
 		this.currentFeature = this.features[featureId];
-		dojox.geo.charting.showTooltip(this.markerText, this.currentFeature.shape, "before");
+		if (this.currentFeature) {
+			this.markerText = this.currentFeature.markerText || this.markerData[featureId] || featureId;
+			dojox.geo.charting.showTooltip(this.markerText, this.currentFeature.shape, "before");
+		}
+		this._needTooltipRefresh = false;
 	},
 
 	hide: function(){
-		dojox.geo.charting.hideTooltip(this.currentFeature.shape);
+		if (this.currentFeature)
+			dojox.geo.charting.hideTooltip(this.currentFeature.shape);
+		this._needTooltipRefresh = false;
 	},
 
 	_getGroupBoundingBox: function(group){

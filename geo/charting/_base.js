@@ -21,7 +21,7 @@ dojo.require("dijit.Tooltip");
 		//get the real screen coords for gfx object
 		var realMatrix = gfxObject._getRealMatrix() || {xx:1,xy:0,yx:0,yy:1,dx:0,dy:0};
 		var point = dojox.gfx.matrix.multiplyPoint(realMatrix, bbox.x, bbox.y);
-		var gfxDomContainer = dojo.coords(dgc._getGfxContainer(gfxObject));
+		var gfxDomContainer = dgc._getGfxContainer(gfxObject);
 		gfxObject.x = dojo.coords(gfxDomContainer,true).x + point.x,
 		gfxObject.y = dojo.coords(gfxDomContainer,true).y + point.y,
 		gfxObject.width = bbox.width * realMatrix.xx,
