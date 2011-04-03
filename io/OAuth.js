@@ -20,7 +20,7 @@ dojox.io.OAuth = new (function(){
 	//		This object was developed against the Netflix API (OAuth-based service); see
 	//		http://developer.netflix.com for more details.
 	var encode = this.encode = function(s){
-		if(!s){ return ""; }
+		if(!("" + s).length){ return ""; }
 		return encodeURIComponent(s)
 			.replace(/\!/g, "%21")
 			.replace(/\*/g, "%2A")
@@ -196,7 +196,7 @@ dojox.io.OAuth = new (function(){
 
 		//	encode.
 		var s = dojo.map(a, function(item){
-			return encode(item[0]) + "=" + encode(item[1]||"");
+			return encode(item[0]) + "=" + encode((""+item[1]).length ? item[1] : "");
 		}).join("&");
 
 		var baseString = method.toUpperCase()
