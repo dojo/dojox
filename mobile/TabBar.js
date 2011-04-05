@@ -105,7 +105,7 @@ dojo.declare(
 	selectOne: true,
 
 	inheritParams: function(){
-		var parent = this.getParentWidget();
+		var parent = this.getParent();
 		this.parent = parent;
 		if(parent){
 			if(!this.transition){ this.transition = parent.transition; }
@@ -168,7 +168,7 @@ dojo.declare(
 
 	startup: function(){
 		if(this._started){ return; }
-		var parent = this.getParentWidget();
+		var parent = this.getParent();
 		this.parent = parent;
 		if(parent && parent.barType == "segmentedControl"){
 			// proper className may not be set when created dynamically

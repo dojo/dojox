@@ -318,10 +318,6 @@ dojo.declare(
 		fs.display = "none";
 		ts.display = "";
 		dojox.mobile.currentView = this;
-	},
-
-	addChild: function(widget){
-		this.containerNode.appendChild(widget.domNode);
 	}
 });
 
@@ -487,12 +483,6 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
 		this.domNode.className = "mblRoundRectList";
-	},
-
-	addChild: function(widget){
-		this.inherited(arguments);
-		widget.inheritParams();
-		widget.setIcon();
 	}
 });
 
@@ -529,7 +519,7 @@ dojo.declare(
 	_duration: 800, // duration of selection, milliseconds
 
 	inheritParams: function(){
-		var parent = this.getParentWidget();
+		var parent = this.getParent();
 		if(parent){
 			if(!this.transition){ this.transition = parent.transition; }
 			if(!this.icon){ this.icon = parent.iconBase; }
@@ -718,7 +708,9 @@ dojo.declare(
 		}
 	},
 
-	getParentWidget: function(){
+	getParent: function(){
+		// almost equivalent to _Contained#getParent, but this method does not
+		// cause a script error even if this widget has no parent yet.
 		var ref = this.srcNodeRef || this.domNode;
 		return ref && ref.parentNode ? dijit.getEnclosingWidget(ref.parentNode) : null;
 	}
@@ -735,7 +727,6 @@ dojo.declare(
 	selected: false,
 
 	buildRendering: function(){
-		this.inheritParams();
 		var a = this.anchorNode = dojo.create("A");
 		a.className = "mblListItemAnchor";
 		var box = dojo.create("DIV");
@@ -757,15 +748,7 @@ dojo.declare(
 			this._setRightTextAttr(this.rightText);
 		}
 
-		if(this.moveTo || this.href || this.url || this.clickable){
-			var parent = this.getParentWidget();
-			if(!this.noArrow && !(parent && parent.stateful)){
-				var arrow = dojo.create("DIV");
-				arrow.className = "mblArrow";
-				a.appendChild(arrow);
-			}
-			this.connect(a, "onclick", "onClick");
-		}else if(this.btnClass){
+		if(this.btnClass){
 			var div = this.btnNode = dojo.create("DIV");
 			div.className = this.btnClass+" mblRightButton";
 			div.appendChild(dojo.create("DIV"));
@@ -791,7 +774,22 @@ dojo.declare(
 		var li = this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("LI");
 		li.className = "mblListItem" + (this.selected ? " mblItemSelected" : "");
 		li.appendChild(a);
+	},
+
+	startup: function(){
+		if(this._started){ return; }
+		this.inheritParams();
+		var parent = this.getParent();
+		if(this.moveTo || this.href || this.url || this.clickable){
+			if(!this.noArrow && !(parent && parent.stateful)){
+				var arrow = dojo.create("DIV");
+				arrow.className = "mblArrow";
+				this.anchorNode.appendChild(arrow);
+			}
+			this.connect(this.anchorNode, "onclick", "onClick");
+		}
 		this.setIcon();
+		this.inherited(arguments);
 	},
 
 	setIcon: function(){
@@ -825,7 +823,7 @@ dojo.declare(
 				}
 			}
 		}
-		if(this.getParentWidget().stateful){
+		if(this.getParent().stateful){
 			for(var i = 0, c = li.parentNode.childNodes; i < c.length; i++){
 				dojo.removeClass(c[i], "mblItemSelected");
 			}
@@ -1007,8 +1005,8 @@ dojo.declare(
 	_selColor: "mblColorDefaultSel",
 
 	buildRendering: function(){
-		this.inheritParams();
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("div");
+		this.inheritParams();
 		dojo.addClass(this.domNode, "mblToolbarButton mblArrowButtonText");
 		var color;
 		if(this.selected){

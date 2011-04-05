@@ -216,7 +216,7 @@ dojo.declare(
 	},
 
 	onMouseDownIcon: function (e){
-		this.setOpacity(this.iconNode, this.getParentWidget().pressedIconOpacity);
+		this.setOpacity(this.iconNode, this.getParent().pressedIconOpacity);
 	},
 
 	iconClicked: function(e){
@@ -243,11 +243,11 @@ dojo.declare(
 	},
 
 	open: function(){
-		var parent = this.getParentWidget(); // IconContainer
+		var parent = this.getParent(); // IconContainer
 		if(this.transition == "below"){
 			if(parent.single){
 				parent.closeAll();
-				this.setOpacity(this.iconNode, this.getParentWidget().pressedIconOpacity);
+				this.setOpacity(this.iconNode, this.getParent().pressedIconOpacity);
 			}
 			this._open_1();
 		}else{
@@ -304,6 +304,6 @@ dojo.declare(
 	},
 
 	onError: function(){
-		this.iconNode.src = this.getParentWidget().defaultIcon;
+		this.iconNode.src = this.getParent().defaultIcon;
 	}
 });

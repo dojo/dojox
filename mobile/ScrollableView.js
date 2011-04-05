@@ -68,6 +68,9 @@ dojo.declare(
 		}else{
 			this.containerNode.appendChild(c);
 		}
+		if(this._started && !widget._started){
+			widget.startup();
+		}
 	},
 
 	reparent: function(){
