@@ -153,36 +153,47 @@ dojo.extend(dojox.mobile.View, {
 });
 
 dojo.extend(dojox.mobile.Switch, {
-	_changeState: function(/*String*/state){
+	_changeState: function(/*String*/state, /*Boolean*/anim){
 		// summary:
 		//		Function to toggle the switch state on the switch
 		// state:
 		//		The state to toggle, switch 'on' or 'off'
+		// anim:
+		//		Whether to use animation or not
 		// tags:
 		//		private
-		if(!this.inner.parentNode || !this.inner.parentNode.tagName){
-			dojo.addClass(this.domNode, (state == "on") ? "mblSwitchOn" : "mblSwitchOff");
-			return;
-		}
+		var on = (state === "on");
+
 		var pos;
 		if(this.inner.offsetLeft == 0){ // currently ON
-			if(state == "on"){ return; }
 			pos = -this.inner.firstChild.firstChild.offsetWidth;
 		}else{ // currently OFF
-			if(state == "off"){ return; }
 			pos = 0;
 		}
 
-		var a = dojo.fx.slideTo({
-			node: this.inner,
-			duration: 500,
-			left: pos
-		});
+		this.left.style.display = "";
+		this.right.style.display = "";
+		this.inner.style.left = "";
+
 		var _this = this;
-		dojo.connect(a, "onEnd", function(){
-			_this[state == "off" ? "left" : "right"].style.display = "none";
-		});
-		a.play();
+		var f = function(){
+			dojo.removeClass(_this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
+			dojo.addClass(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
+			_this.left.style.display = on ? "" : "none";
+			_this.right.style.display = !on ? "" : "none";
+		};
+
+		if(anim){
+			var a = dojo.fx.slideTo({
+				node: this.inner,
+				duration: 300,
+				left: pos,
+				onEnd: f
+			});
+			a.play();
+		}else{
+			f();
+		}
 	}
 });
 

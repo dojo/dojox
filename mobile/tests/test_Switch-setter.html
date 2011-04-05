@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>Switch setter/getter</title>
+		<style>
+			#sw {
+				margin: 20px;
+			}
+			INPUT {
+				margin: 10px;
+			}
+		</style>
+
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+
+		<script language="JavaScript" type="text/javascript">
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
+			dojo.require("dojox.mobile.parser");
+			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile.deviceTheme");
+			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+			function swOn(){
+				var w = dijit.byId("sw");
+				w.set("value", "on");
+			}
+			function swOff(){
+				var w = dijit.byId("sw");
+				w.set("value", "off");
+			}
+			dojo.addOnLoad(function(){
+				var w = dijit.byId("sw");
+				dojo.connect(w, "onStateChanged", null, function(){
+					var span = dojo.byId("msgArea");
+					span.innerHTML = "onStateChanged: "+w.get("value");
+					setTimeout(function(){
+						span.innerHTML = "";
+					}, 1000);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div dojoType="dojox.mobile.View" selected="true">
+			<div id="sw" dojoType="dojox.mobile.Switch" value="off"></div>
+			<input type="button" onclick="swOn()" value="on">
+			<input type="button" onclick="swOff()" value="off">
+			<span id="msgArea"></span>
+		</div>
+	</body>
+</html>

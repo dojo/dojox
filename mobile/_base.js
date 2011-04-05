@@ -877,28 +877,30 @@ dojo.declare(
 		this.left = n.childNodes[0];
 		this.right = n.childNodes[1];
 		this.knob = n.childNodes[2];
-
-		dojo.addClass(this.domNode, (this.value == "on") ? "mblSwitchOn" : "mblSwitchOff");
-		this[this.value == "off" ? "left" : "right"].style.display = "none";
 	},
 
 	postCreate: function(){
 		this.connect(this.domNode, "onclick", "onClick");
-		this.connect(this.domNode, "touchstart", "onTouchStart");
-		this.connect(this.domNode, "mousedown", "onTouchStart");
+		this.connect(this.domNode, dojox.mobile.hasTouch ? "touchstart" : "onmousedown", "onTouchStart");
 	},
 
-	_changeState: function(/*String*/state){
+	_changeState: function(/*String*/state, /*Boolean*/anim){
+		var on = (state === "on");
+		this.left.style.display = "";
+		this.right.style.display = "";
 		this.inner.style.left = "";
-		dojo.addClass(this.domNode, "mblSwitchAnimation");
-		dojo.removeClass(this.domNode, (state == "on") ? "mblSwitchOff" : "mblSwitchOn");
-		dojo.addClass(this.domNode, (state == "on") ? "mblSwitchOn" : "mblSwitchOff");
+		if(anim){
+			dojo.addClass(this.domNode, "mblSwitchAnimation");
+		}
+		dojo.removeClass(this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
+		dojo.addClass(this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
 
 		var _this = this;
 		setTimeout(function(){
-			_this[state == "off" ? "left" : "right"].style.display = "none";
+			_this.left.style.display = on ? "" : "none";
+			_this.right.style.display = !on ? "" : "none";
 			dojo.removeClass(_this.domNode, "mblSwitchAnimation");
-		}, 300);
+		}, anim ? 300 : 0);
 	},
 
 	startup: function(){
@@ -930,20 +932,21 @@ dojo.declare(
 	onClick: function(e){
 		if(this._moved){ return; }
 		this.value = (this.value == "on") ? "off" : "on";
-		this._changeState(this.value);
+		this._changeState(this.value, true);
 		this.onStateChanged(this.value);
 	},
 
 	onTouchStart: function(e){
 		this._moved = false;
 		this.innerStartX = this.inner.offsetLeft;
-		if(e.targetTouches){
-			this.touchStartX = e.targetTouches[0].clientX;
-			this._conn1 = dojo.connect(this.inner, "touchmove", this, "onTouchMove");
-			this._conn2 = dojo.connect(this.inner, "touchend", this, "onTouchEnd");
+		if(!this._conn){
+			this._conn = [];
+			this._conn.push(dojo.connect(this.inner, dojox.mobile.hasTouch ? "touchmove" : "onmousemove", this, "onTouchMove"));
+			this._conn.push(dojo.connect(this.inner, dojox.mobile.hasTouch ? "touchend" : "onmouseup", this, "onTouchEnd"));
 		}
-		this.left.style.display = "block";
-		this.right.style.display = "block";
+		this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
+		this.left.style.display = "";
+		this.right.style.display = "";
 		dojo.stopEvent(e);
 	},
 
@@ -965,25 +968,33 @@ dojo.declare(
 	},
 
 	onTouchEnd: function(e){
-		dojo.disconnect(this._conn1);
-		dojo.disconnect(this._conn2);
+		dojo.forEach(this._conn, dojo.disconnect);
+		this._conn = null;
 		if(this.innerStartX == this.inner.offsetLeft){
-			if(dojo.isWebKit){
+			if(dojox.mobile.hasTouch){
 				var ev = dojo.doc.createEvent("MouseEvents");
 				ev.initEvent("click", true, true);
-				this.knob.dispatchEvent(ev);
+				this.inner.dispatchEvent(ev);
 			}
 			return;
 		}
 		var newState = (this.inner.offsetLeft < -(this._width/2)) ? "off" : "on";
-		this._changeState(newState);
+		this._changeState(newState, true);
 		if(newState != this.value){
 			this.value = newState;
-			this.onStateChanged(this.value);
+			this.onStateChanged(newState);
 		}
 	},
 
 	onStateChanged: function(/*String*/newState){
+	},
+
+	_setValueAttr: function(/*String*/value){
+		this._changeState(value, false);
+		if(this.value != value){
+			this.onStateChanged(value);
+		}
+		this.value = value;
 	}
 });
 
@@ -1291,3 +1302,11 @@ dijit.getEnclosingWidget = function(node){
 	}
 	return null;
 };
+
+(function(){
+	// feature detection
+	if(dojo.isWebKit){
+		dojox.mobile.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
+			navigator.appVersion.indexOf("Mobile") != -1);
+	}
+})();
