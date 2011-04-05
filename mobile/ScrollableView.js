@@ -121,5 +121,18 @@ dojo.declare(
 
 	onAfterTransitionIn: function(moveTo, dir, transition, context, method){
 		this.flashScrollBar();
+	},
+
+	// override _WidgetBase#getChildren to add local fixed bars, which are not
+	// under containerNode, to the children array.
+	getChildren: function(){
+		var children = this.inherited(arguments);
+		if(this.fixedHeader && this.fixedHeader.parentNode === this.domNode){
+			children.push(dijit.byNode(this.fixedHeader));
+		}
+		if(this.fixedFooter && this.fixedFooter.parentNode === this.domNode){
+			children.push(dijit.byNode(this.fixedFooter));
+		}
+		return children;
 	}
 });

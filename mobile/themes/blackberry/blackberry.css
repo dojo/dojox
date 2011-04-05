@@ -626,6 +626,7 @@ table.mblClose {
 
 .mblTabPanelHeader {
 	position: relative;
+	width: 100%;
 	height: 64px;
 	margin: 0px;
 	padding: 0px 0px 0px 0px;
