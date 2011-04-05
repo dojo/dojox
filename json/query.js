@@ -198,7 +198,7 @@ dojo.provide("dojox.json.query");
 			throw new Error("Unsafe function call");
 		});
 		
-		query = query.replace(/([^=]=)([^=])/g,"$1=$2"). // change the equals to comparisons
+		query = query.replace(/([^<>=]=)([^=])/g,"$1=$2"). // change the equals to comparisons except operators ==, <=, >=
 			replace(/@|(\.\s*)?[a-zA-Z\$_]+(\s*:)?/g,function(t){
 				return t.charAt(0) == '.' ? t : // leave .prop alone
 					t == '@' ? "$obj" :// the reference to the current object
