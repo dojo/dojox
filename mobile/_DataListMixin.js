@@ -60,8 +60,14 @@ dojo.declare(
 
 	createListItem: function(item) {
 		var attr = {};
+		var arr = this.store.getLabelAttributes(item);
+		var labelAttr = arr ? arr[0] : null;
 		dojo.forEach(this.store.getAttributes(item), function(name){
-			attr[name] = this.store.getValue(item, name);
+			if(name === labelAttr){
+				attr["label"] = this.store.getLabel(item);
+			}else{
+				attr[name] = this.store.getValue(item, name);
+			}
 		}, this);
 		var w = new dojox.mobile.ListItem(attr);
 		item._widgetId = w.id;
