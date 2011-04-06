@@ -853,14 +853,16 @@ dojo.declare(
 	[dijit._WidgetBase, dijit._Contained],
 {
 	value: "on",
+	name: "",
 	leftLabel: "ON",
 	rightLabel: "OFF",
 	_width: 53,
 
 	buildRendering: function(){
-		this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
+		this.domNode = dojo.doc.createElement("DIV");
 		this._swClass = (this.domNode.className || "").replace(/ .*/,"");
 		this.domNode.className = "mblSwitch";
+		var nameAttr = this.name ? " name=\"" + this.name + "\"" : "";
 		this.domNode.innerHTML =
 			  '<div class="mblSwitchInner">'
 			+	'<div class="mblSwitchBg mblSwitchBgLeft">'
@@ -870,11 +872,13 @@ dojo.declare(
 			+		'<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
 			+	'</div>'
 			+	'<div class="mblSwitchKnob"></div>'
+			+	'<input type="hidden"'+nameAttr+'></div>'
 			+ '</div>';
 		var n = this.inner = this.domNode.firstChild;
 		this.left = n.childNodes[0];
 		this.right = n.childNodes[1];
 		this.knob = n.childNodes[2];
+		this.input = n.childNodes[3];
 	},
 
 	postCreate: function(){
@@ -929,7 +933,7 @@ dojo.declare(
 
 	onClick: function(e){
 		if(this._moved){ return; }
-		this.value = (this.value == "on") ? "off" : "on";
+		this.value = this.input.value = (this.value == "on") ? "off" : "on";
 		this._changeState(this.value, true);
 		this.onStateChanged(this.value);
 	},
@@ -979,7 +983,7 @@ dojo.declare(
 		var newState = (this.inner.offsetLeft < -(this._width/2)) ? "off" : "on";
 		this._changeState(newState, true);
 		if(newState != this.value){
-			this.value = newState;
+			this.value = this.input.value = newState;
 			this.onStateChanged(newState);
 		}
 	},
@@ -992,7 +996,7 @@ dojo.declare(
 		if(this.value != value){
 			this.onStateChanged(value);
 		}
-		this.value = value;
+		this.value = this.input.value = value;
 	}
 });
 
