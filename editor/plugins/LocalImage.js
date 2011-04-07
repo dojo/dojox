@@ -105,19 +105,6 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		var dropDown = (this.dropDown = new dijit.TooltipDialog({
 			title: messages[this.command + "Title"],
 			onOpen: function(){
-				// Firefox, Chome and Safari have a strange behavior:
-				// When the File Upload dialog is open, the browse div (FileUploader) will lose its focus
-				// and triggers onBlur event. This event will cause the whole tooltip dialog
-				// to be closed when the File Upload dialog is open. The popup dialog should hang up
-				// the js executioin rather than triggering an event. IE does not have such a problem.
-				// Stop the default action!
-				if(!dojo.IE && !_this.blurHandler){
-					_this.blurHandler = dojo.connect(dojo.global, "blur", function(evt){
-						dojo.stopEvent(evt);
-						_this._urlInput.isReadyToValidate = true;
-						_this._urlInput.focus(); // Set the focus position
-					});
-				}
 				_this._initialFileUploader();
 				_this._onOpenDialog();
 				dijit.TooltipDialog.prototype.onOpen.apply(this, arguments);
@@ -138,7 +125,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		}));
 		
 		var label = this.getLabel(this.command),
-			className = this.iconClassPrefix+" "+this.iconClassPrefix + this.command.charAt(0).toUpperCase() + this.command.substr(1),
+			className = this.iconClassPrefix + " " + this.iconClassPrefix + this.command.charAt(0).toUpperCase() + this.command.substr(1),
 			props = dojo.mixin({
 					label: label,
 					showLabel: false,
@@ -147,13 +134,12 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 					tabIndex: "-1"
 				}, this.params || {});
 		
-				
-		if(dojo.isSafari == 5){
-			// Workaround Safari 5 / windows bug:
-			// After the select-file dialog opens, the first time the user clicks anywhere (even on that dialog)
+		if(!dojo.isIE && (!dojo.isFF || dojo.isFF < 4)){
+			// Workaround for Non-IE problem:
+			// Safari 5: After the select-file dialog opens, the first time the user clicks anywhere (even on that dialog)
 			// it's treated like a plain click on the page, and the tooltip dialog closes
+			// FF & Chrome: the select-file dialog does not block the execution of JS
 			props.closeDropDown = function(/*Boolean*/ focus){
-				// Determine if the dialog can be closed
 				if(_this._closable){
 					if(this._opened){
 						dijit.popup.close(this.dropDown);
@@ -249,9 +235,13 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			};
 			
 			_this.connect(fup, "onClick", function(){
-				urlInput.isReadyToValidate = false;
 				urlInput.validate(false);
-				if(dojo.isSafari == 5){ // Need additional care to Safari 5 :(
+				if(!dojo.isIE && (!dojo.isFF || dojo.isFF < 4)){
+					// Firefox (below v4), Chome and Safari have a strange behavior:
+					// When the File Upload dialog is open, the browse div (FileUploader) will lose its focus
+					// and triggers onBlur event. This event will cause the whole tooltip dialog
+					// to be closed when the File Upload dialog is open. The popup dialog should hang up
+					// the js executioin rather than triggering an event. IE does not have such a problem.
 					_this._closable = false;
 				}
 			});
@@ -260,6 +250,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			_this.connect(fup, "onChange", function(data){
 				_this._isLocalFile = true;
 				urlInput.set("value", data[0].name); //Single selection
+				urlInput.focus();
 			});
 			
 			_this.connect(fup, "onComplete", function(data){
