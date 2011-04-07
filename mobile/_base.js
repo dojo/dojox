@@ -337,11 +337,14 @@ dojo.declare(
 		this.domNode.className = "mblHeading";
 		this._view = this.getParent();
 		if(this.label){
-			this.domNode.appendChild(document.createTextNode(this.label));
+			this.domNode.appendChild(document.createTextNode(this._cv(this.label)));
 		}else{
 			this.label = "";
 			dojo.forEach(this.domNode.childNodes, function(n){
-				if(n.nodeType == 3){ this.label += n.nodeValue; }
+				if(n.nodeType == 3){
+					this.label += n.nodeValue;
+					n.nodeValue = this._cv(n.nodeValue);
+				}
 			}, this);
 			this.label = dojo.trim(this.label);
 		}
@@ -353,7 +356,7 @@ dojo.declare(
 			this._body = body;
 			this._head = head;
 			this._btn = btn;
-			body.innerHTML = this.back;
+			body.innerHTML = this._cv(this.back);
 			this.connect(body, "onclick", "onClick");
 			var neck = dojo.create("DIV", {className:"mblArrowButtonNeck"}, btn);
 			btn.style.width = body.offsetWidth + head.offsetWidth + "px";
@@ -454,11 +457,10 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H2");
 		this.domNode.className = "mblRoundRectCategory";
-		if(this.label){
-			this.domNode.innerHTML = this.label;
-		}else{
+		if(!this.label){
 			this.label = this.domNode.innerHTML;
 		}
+		this.domNode.innerHTML = this._cv(this.label);
 	}
 });
 
@@ -737,16 +739,20 @@ dojo.declare(
 		var r = this.srcNodeRef;
 		if(r){
 			for(var i = 0, len = r.childNodes.length; i < len; i++){
-				box.appendChild(r.removeChild(r.firstChild));
+				var n = r.firstChild;
+				if(n.nodeType === 3 && dojo.trim(n.nodeValue) !== ""){
+					n.nodeValue = this._cv(n.nodeValue);
+					this.labelNode = dojo.create("SPAN");
+					this.labelNode.appendChild(n);
+					n = this.labelNode;
+				}
+				box.appendChild(n);
 			}
 		}
 		if(this.label){
-			box.appendChild(dojo.doc.createTextNode(this.label));
+			this.labelNode = dojo.create("SPAN", {innerHTML:this._cv(this.label)}, box);
 		}
 		a.appendChild(box);
-		if(this.rightText){
-			this._setRightTextAttr(this.rightText);
-		}
 
 		if(this.btnClass){
 			var div = this.btnNode = dojo.create("DIV");
@@ -844,7 +850,11 @@ dojo.declare(
 		if(!this._rightTextNode){
 			this._rightTextNode = dojo.create("DIV", {className:"mblRightText"}, this.anchorNode);
 		}
-		this._rightTextNode.innerHTML = text;
+		this._rightTextNode.innerHTML = this._cv(text);
+	},
+
+	_setLabelAttr: function(/*String*/text){
+		this.labelNode.innerHTML = this._cv(text);
 	}
 });
 
@@ -866,10 +876,10 @@ dojo.declare(
 		this.domNode.innerHTML =
 			  '<div class="mblSwitchInner">'
 			+	'<div class="mblSwitchBg mblSwitchBgLeft">'
-			+		'<div class="mblSwitchText mblSwitchTextLeft">'+this.leftLabel+'</div>'
+			+		'<div class="mblSwitchText mblSwitchTextLeft">'+this._cv(this.leftLabel)+'</div>'
 			+	'</div>'
 			+	'<div class="mblSwitchBg mblSwitchBgRight">'
-			+		'<div class="mblSwitchText mblSwitchTextRight">'+this.rightLabel+'</div>'
+			+		'<div class="mblSwitchText mblSwitchTextRight">'+this._cv(this.rightLabel)+'</div>'
 			+	'</div>'
 			+	'<div class="mblSwitchKnob"></div>'
 			+	'<input type="hidden"'+nameAttr+'></div>'
@@ -1020,11 +1030,10 @@ dojo.declare(
 		}
 		dojo.addClass(this.domNode, color);
 
-		if(this.label){
-			this.domNode.innerHTML = this.label;
-		}else{
+		if(!this.label){
 			this.label = this.domNode.innerHTML;
 		}
+		this.domNode.innerHTML = this._cv(this.label);
 
 		if(this.icon && this.icon != "none"){
 			var img;
@@ -1304,6 +1313,10 @@ dijit.getEnclosingWidget = function(node){
 	}
 	return null;
 };
+
+dojo.extend(dijit._WidgetBase, {
+	_cv: function(s){ return s; } // convert the given string
+});
 
 (function(){
 	// feature detection

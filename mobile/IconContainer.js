@@ -49,7 +49,11 @@ dojo.declare(
 				_this._opening._open_1();
 			};
 			view.domNode.style.visibility = "hidden";
-			var heading = view._heading = new dojox.mobile.Heading({back:this.back, label:this.label, moveTo:this.domNode.parentNode.id, transition:this.transition});
+			var heading = view._heading
+				= new dojox.mobile.Heading({back: this._cv(this.back),
+											label: this._cv(this.label),
+											moveTo: this.domNode.parentNode.id,
+											transition: this.transition});
 			view.addChild(heading);
 			ul = dojo.doc.createElement("UL");
 			ul.className = "mblIconContainer";
@@ -89,8 +93,6 @@ dojo.declare(
 	"dojox.mobile.IconItem",
 	dojox.mobile.AbstractItem,
 {
-	// description:
-	//		Dynamic creation is not supported.
 	lazy: false,
 	requires: "",
 	timeout: 10,
@@ -110,7 +112,8 @@ dojo.declare(
 	createTemplate: function(s){
 		dojo.forEach(["lazy","icon","label"], function(v){
 			while(s.indexOf("${"+v+"}") != -1){
-				s = s.replace("${"+v+"}", this[v]);
+				var val = v === "label" ? this._cv(this[v]) : this[v];
+				s = s.replace("${"+v+"}", val);
 			}
 		}, this);
 		var div = dojo.doc.createElement("DIV");

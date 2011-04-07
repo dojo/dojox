@@ -35,7 +35,7 @@ dojo.declare(
 
 	resize: function(){
 		var i;
-		var w = dojo.marginBox(this.domNode.parentNode).w;
+		var w = dojo.contentBox(this.domNode).w;
 		var bw = this._fixedButtonWidth;
 		var bm = this._fixedButtonMargin;
 
@@ -150,11 +150,15 @@ dojo.declare(
 		var r = this.srcNodeRef;
 		if(r){
 			for(var i = 0, len = r.childNodes.length; i < len; i++){
-				box.appendChild(r.firstChild);
+				var n = r.firstChild;
+				if(n.nodeType === 3){
+					n.nodeValue = this._cv(n.nodeValue);
+				}
+				box.appendChild(n);
 			}
 		}
 		if(this.label){
-			box.appendChild(dojo.doc.createTextNode(this.label));
+			box.appendChild(dojo.doc.createTextNode(this._cv(this.label)));
 		}
 
 		this.domNode = this.srcNodeRef || dojo.create(this.tag);
