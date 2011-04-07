@@ -217,6 +217,7 @@ dojo.declare("dojox.layout.FloatingPane",
 			})
 		}).play();
 		this.resize(dojo.coords(this.domNode));
+		this._onShow(); // lazy load trigger
 	},
 
 	minimize: function(){
@@ -396,7 +397,6 @@ dojo.declare("dojox.layout._DockNode",
 		// summary: remove this dock item from parent dock, and call show() on reffed floatingpane
 		this.paneRef.show();
 		this.paneRef.bringToTop();
-		if(!this.paneRef.isLoaded){ this.paneRef.refresh(); }
 		this.destroy();
 	}
 
