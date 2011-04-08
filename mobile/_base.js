@@ -983,7 +983,9 @@ dojo.declare(
 		if(pos <= -(this._width-d)){ pos = -this._width; }
 		if(pos >= -d){ pos = 0; }
 		this.inner.style.left = pos + "px";
-		this._moved = true;
+		if(Math.abs(dx) > d){
+			this._moved = true;
+		}
 	},
 
 	onTouchEnd: function(e){
