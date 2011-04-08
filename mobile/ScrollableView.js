@@ -38,9 +38,9 @@ dojo.declare(
 	},
 
 	resize: function(){
-		this.inherited(arguments);
+		this.inherited(arguments); // scrollable#resize() will be called
 		dojo.forEach(this.getChildren(), function(child){
-			child.resize && child.resize();
+			if(child.resize){ child.resize(); }
 		});
 	},
 

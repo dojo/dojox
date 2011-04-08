@@ -449,7 +449,7 @@ dojox.mobile.loadCompatCssFiles = function(){
 	}
 };
 
-dojox.mobile.hideAddressBar = function(/*Boolean*/doResize){
+dojox.mobile.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
 	if(doResize !== false){ dojox.mobile.resizeAll(); }
 };
 

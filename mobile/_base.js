@@ -87,7 +87,7 @@ dojo.declare(
 
 	resize: function(){
 		dojo.forEach(this.getChildren(), function(child){
-			child.resize && child.resize();
+			if(child.resize){ child.resize(); }
 		});
 	},
 
@@ -199,7 +199,7 @@ dojo.declare(
 		var toWidget = dijit.byNode(toNode);
 		if(toWidget){
 			// Now that the target view became visible, it's time to run resize()
-			toWidget.resize();
+			dojox.mobile.resizeAll(null, toWidget);
 
 			if(transition && transition != "none"){
 				// Temporarily add padding to align with the fromNode while transition
@@ -445,6 +445,12 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = this.shadow ? "mblRoundRect mblShadow" : "mblRoundRect";
+	},
+
+	resize: function(){
+		dojo.forEach(this.getChildren(), function(child){
+			if(child.resize){ child.resize(); }
+		});
 	}
 });
 
@@ -1178,7 +1184,7 @@ dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 };
 
 dojox.mobile.hideAddressBarWait = 1000; // [ms]
-dojox.mobile.hideAddressBar = function(/*Boolean*/doResize){
+dojox.mobile.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
 	dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
 	setTimeout(function(){ scrollTo(0, 1); }, 100);
 	setTimeout(function(){ scrollTo(0, 1); }, 400);
@@ -1190,13 +1196,40 @@ dojox.mobile.hideAddressBar = function(/*Boolean*/doResize){
 	}, dojox.mobile.hideAddressBarWait);
 };
 
-dojox.mobile.resizeAll = function(){
-	dijit.registry.forEach(function(w){
+dojox.mobile.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
+	// summary:
+	//		Call the resize() method of all the top level resizable widgets.
+	// description:
+	//		Find all widgets that do not have a parent or the parent does not
+	//		have the resize() method, and call resize() for them.
+	//		If a widget has a parent that has resize(), call of the widget's
+	//		resize() is its parent's responsibility.
+	// evt:
+	//		Native event object
+	// root:
+	//		If specified, search the specified widget recursively for top level
+	//		resizable widgets.
+	//		root.resize() is always called regardless of whether root is a
+	//		top level widget or not.
+	//		If omitted, search the entire page.
+	var isTopLevel = function(w){
 		var parent = w.getParent && w.getParent();
-		if((!parent || !parent.resize) && w.resize){ // top level widget
+		return !!((!parent || !parent.resize) && w.resize);
+	};
+	var resizeRecursively = function(w){
+		dojo.forEach(w.getChildren(), function(child){
+			if(isTopLevel(child)){ child.resize(); }
+			resizeRecursively(child);
+		});
+	};
+	if(root){
+		if(root.resize){ root.resize(); }
+		resizeRecursively(root);
+	}else{
+		dijit.registry.filter(isTopLevel).forEach(function(w){
 			w.resize();
-		}
-	});
+		});
+	}
 };
 
 dojox.mobile.openWindow = function(url, target){

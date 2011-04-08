@@ -92,7 +92,7 @@ dojo.declare(
 
 	resize: function(){
 		dojo.forEach(this.getChildren(), function(child){
-			child.resize && child.resize();
+			if(child.resize){ child.resize(); }
 		});
 	}
 });

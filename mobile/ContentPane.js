@@ -28,12 +28,16 @@ dojo.declare(
 		}else if(this.content){
 			this.set("content", this.content);
 		}
+		var parent = this.getParent && this.getParent();
+		if(!parent || !parent.resize){ // top level widget
+			this.resize();
+		}
 		this.inherited(arguments);
 	},
 
 	resize: function(){
 		dojo.forEach(this.getChildren(), function(child){
-			child.resize && child.resize();
+			if(child.resize){ child.resize(); }
 		});
 	},
 

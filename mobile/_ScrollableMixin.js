@@ -24,7 +24,7 @@ dojo.declare(
 
 	startup: function(){
 		if(this._started){ return; }
-		var params = {};
+		var params = {noResize: true};
 		if(this.fixedHeader){
 			var node = dojo.byId(this.fixedHeader);
 			if(node.parentNode == this.domNode){ // local footer

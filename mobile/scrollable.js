@@ -167,7 +167,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			this._ch.push(dojo.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 		}
 
-		if(this.isTopLevel()){
+		if(this.isTopLevel() && !this.noResize){
 			this.resize();
 		}
 		var _this = this;
