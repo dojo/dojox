@@ -876,7 +876,7 @@ dojo.declare(
 
 	buildRendering: function(){
 		this.domNode = dojo.doc.createElement("DIV");
-		var c = this.srcNodeRef ? this.srcNodeRef.className : this.class;
+		var c = this.srcNodeRef ? this.srcNodeRef.className : this.className;
 		this._swClass = (c || "").replace(/ .*/,"");
 		this.domNode.className = "mblSwitch";
 		var nameAttr = this.name ? " name=\"" + this.name + "\"" : "";
