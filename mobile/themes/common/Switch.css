@@ -4,6 +4,7 @@
 	width: 94px;
 	height: 27px;
 	overflow: hidden;
+	text-align: left;
 }
 .mblItemSwitch {
 	position: absolute;
