@@ -93,7 +93,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		var fd = new FormData();
 		dojo.forEach(this.inputNode.files, function(f, i){
 			fd.append(this.name+"s[]", f);
-		});
+		}, this);
 
 		if(data){
 			for(var nm in data){
