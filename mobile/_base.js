@@ -249,6 +249,7 @@ dojo.declare(
 	},
 
 	onAnimationEnd: function(e){
+		if(e.animationName.indexOf("Out") === -1 && e.animationName.indexOf("In") === -1){ return; }
 		var isOut = false;
 		if(dojo.hasClass(this.domNode, "out")){
 			isOut = true;
@@ -551,6 +552,7 @@ dojo.declare(
 	},
 
 	transitionTo: function(moveTo, href, url, scene){
+		if(!moveTo && !href && !url && !scene){ return; }
 		var w = this.findCurrentView(moveTo); // the current view widget
 		if(!w || moveTo && w === dijit.byId(moveTo)){ return; }
 		if(href){

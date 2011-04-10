@@ -229,6 +229,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.onFlickAnimationEnd = function(e){
+		if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
+		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
+		if(e.animationName.indexOf("scrollableViewScroll") === -1){ return; }
 		if(e && e.srcElement){
 			dojo.stopEvent(e);
 		}
@@ -618,10 +621,10 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			if(!dojox.mobile._fadeRule){
 				var node = dojo.create("style", null, dojo.doc.getElementsByTagName("head")[0]);
 				node.textContent =
-					".mblScrollableFadeOutScrollBar{"+
+					".mblScrollableFadeScrollBar{"+
 					"  -webkit-animation-duration: 1s;"+
-					"  -webkit-animation-name: scrollableViewFadeOutScrollBar;}"+
-					"@-webkit-keyframes scrollableViewFadeOutScrollBar{"+
+					"  -webkit-animation-name: scrollableViewFadeScrollBar;}"+
+					"@-webkit-keyframes scrollableViewFadeScrollBar{"+
 					"  from { opacity: 0.6; }"+
 					"  50% { opacity: 0.6; }"+
 					"  to { opacity: 0; }}";
@@ -635,7 +638,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 				opacity: 0,
 				webkitAnimationDuration: ""
 			});
-			bar.className = "mblScrollableFadeOutScrollBar";
+			bar.className = "mblScrollableFadeScrollBar";
 		};
 		if(this._scrollBarV){
 			f(this._scrollBarV);
