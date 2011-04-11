@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Сүзгіні тазалау",
 	"filterDefDialogTitle": "Сүзгі",
-	"incompleteRuleTip": "Бұл ереже толық емес.",
 	"ruleTitleTemplate": "${0} ережесі",
 	
 	"conditionEqual": "тең",
@@ -21,6 +20,7 @@
 	"conditionBefore": "алдында",
 	"conditionAfter": "артында",
 	"conditionRange": "ауқым",
+	"conditionIsEmpty": "– бос",
 	
 	"all": "барлығы",
 	"any": "кез келген",
@@ -28,7 +28,7 @@
 	"waiRelAll": "Барлық мына ережелерге сәйкес:",
 	"relationAny": "кез келген ереже",
 	"waiRelAny": "Мына ережелерге сәйкес:",
-	"relationMsgFront": "Сәйкес келу",
+	"relationMsgFront": "Сәйкес",
 	"relationMsgTail": "",
 	"and": "және",
 	"or": "немесе",
@@ -40,7 +40,7 @@
 	
 	"cancelButton": "Болдырмау",
 	"waiCancelButton": "Осы тілқатысу терезесін болдырмау",
-	"clearButton": "Тазалау ",
+	"clearButton": "Тазалау",
 	"waiClearButton": "Сүзгіні тазалау",
 	"filterButton": "Сүзгі",
 	"waiFilterButton": "Сүзгіні жіберу",
@@ -62,7 +62,7 @@
 	"anycolumn": "кез келген баған",
 	"statusTipTitleNoFilter": "Сүзгі тақтасы",
 	"statusTipTitleHasFilter": "Сүзгі",
-	"statusTipRelPre": "Сәйкес келу",
+	"statusTipRelPre": "Сәйкес",
 	"statusTipRelPost": "ережелер.",
 	
 	"defaultItemsName": "элементтер",
@@ -79,7 +79,6 @@
 	"clearFilterMsg": "Бұл сүзгіні жояды және барлық қол жетімді жазбаларды көрсетеді.",
 	"anyColumnOption": "Кез келген баған",
 	
-	"trueLabelEditable": "Белгіленген",
 	"trueLabel": "Шын",
 	"falseLabel": "Жалған"
 })

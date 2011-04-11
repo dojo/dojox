@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Εκκαθάριση φίλτρου",
 	"filterDefDialogTitle": "Φίλτρο",
-	"incompleteRuleTip": "Αυτός ο κανόνας δεν είναι πλήρης.",
 	"ruleTitleTemplate": "Κανόνας ${0}",
 	
 	"conditionEqual": "ίσο",
@@ -21,6 +20,7 @@
 	"conditionBefore": "πριν",
 	"conditionAfter": "μετά",
 	"conditionRange": "εύρος",
+	"conditionIsEmpty": "είναι κενό",
 	
 	"all": "όλα",
 	"any": "οποιοδήποτε",
@@ -79,7 +79,6 @@
 	"clearFilterMsg": "Με την επιλογή αυτή θα αφαιρεθεί το φίλτρο και θα εμφανιστούν όλες οι διαθέσιμες εγγραφές.",
 	"anyColumnOption": "Οποιαδήποτε στήλη",
 	
-	"trueLabelEditable": "Επιλεγμένο",
 	"trueLabel": "Αληθές",
 	"falseLabel": "Ψευδές"
 })

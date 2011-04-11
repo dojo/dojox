@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Limpar filtro",
 	"filterDefDialogTitle": "Filtro",
-	"incompleteRuleTip": "Esta regra não está completa.",
 	"ruleTitleTemplate": "Regra ${0}",
 	
 	"conditionEqual": "igual",
@@ -21,6 +20,7 @@
 	"conditionBefore": "antes",
 	"conditionAfter": "após",
 	"conditionRange": "intervalo",
+	"conditionIsEmpty": "está vazio",
 	
 	"all": "tudo",
 	"any": "qualquer",
@@ -62,7 +62,7 @@
 	"anycolumn": "qualquer coluna",
 	"statusTipTitleNoFilter": "Barra do filtro",
 	"statusTipTitleHasFilter": "Filtro",
-	"statusTipRelPre": "Correspondência",
+	"statusTipRelPre": "Corresponder",
 	"statusTipRelPost": "regras.",
 	
 	"defaultItemsName": "itens",
@@ -79,7 +79,6 @@
 	"clearFilterMsg": "Este procedimento irá remover o filtro e apresentar todos os registos disponíveis.",
 	"anyColumnOption": "Qualquer coluna",
 	
-	"trueLabelEditable": "Verificado",
 	"trueLabel": "True",
 	"falseLabel": "False"
 })

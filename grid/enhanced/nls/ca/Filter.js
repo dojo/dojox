@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Netejar el filtre",
 	"filterDefDialogTitle": "Filtre",
-	"incompleteRuleTip": "Aquesta regla no està completa",
 	"ruleTitleTemplate": "Regla ${0}",
 	
 	"conditionEqual": "igual que",
@@ -21,6 +20,7 @@
 	"conditionBefore": "abans",
 	"conditionAfter": "després",
 	"conditionRange": "interval",
+	"conditionIsEmpty": "és buida",
 	
 	"all": "tot",
 	"any": "qualsevol",
@@ -79,7 +79,6 @@
 	"clearFilterMsg": "Això eliminarà el filtre i mostrarà tots els registres disponibles.",
 	"anyColumnOption": "Qualsevol columna",
 	
-	"trueLabelEditable": "Seleccionat",
 	"trueLabel": "Cert",
 	"falseLabel": "Fals"
 })
