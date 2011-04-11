@@ -233,7 +233,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		return this._isSelected(type, _createItem(type, rowIndex, colIndex));
 	},
 	toggleSelect: function(type, rowIndex, colIndex){
-		this._startSelect(type, _createItem(type, rowIndex, colIndex), this._config[type] === MULTI, false);
+		this._startSelect(type, _createItem(type, rowIndex, colIndex), this._config[type] === MULTI, false, false, !this.isSelected(type, rowIndex, colIndex));
 		this._endSelect(type);
 	},
 	select: function(type, rowIndex, colIndex){
