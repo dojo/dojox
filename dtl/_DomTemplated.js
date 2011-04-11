@@ -64,14 +64,16 @@ dojox.dtl._DomTemplated.prototype = {
 		if(!this._templates){
 			this._templates = {};
 		}
-		var key = templateString || templatePath.toString();
+		if(!templateString){
+			templateString = dojo.cache(templatePath, {sanitize: true});
+		}
+		var key = templateString;
 		var tmplts = this._templates;
 		if(tmplts[key]){
 			return tmplts[key];
 		}
 		return (tmplts[key] = new dojox.dtl.DomTemplate(
-			dijit._Templated.getCachedTemplate(
-				templatePath,
+			dijit._TemplatedMixin.getCachedTemplate(
 				templateString,
 				true
 			)
