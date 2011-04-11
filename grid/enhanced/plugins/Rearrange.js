@@ -104,7 +104,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 			}
 		}
 		delete g._notRefreshSelection;
-		dojo.publish("dojox/grid/rearrange/move/" + g.id, ["col", mapping]);
+		dojo.publish("dojox/grid/rearrange/move/" + g.id, ["col", mapping, colsToMove]);
 	},
 	moveRows: function(rowsToMove, targetPos){
 		// summary:
@@ -181,7 +181,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 		g._noInternalMapping = true;
 		g._refresh();
 		setTimeout(function(){
-			dojo.publish("dojox/grid/rearrange/move/" + g.id, ["row", tmpMapping]);
+			dojo.publish("dojox/grid/rearrange/move/" + g.id, ["row", tmpMapping, rowsToMove]);
 			g._noInternalMapping = false;
 		}, 0);
 	},
