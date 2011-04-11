@@ -823,7 +823,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 					var view = g.views.views[0];
 					if(view instanceof dojox.grid._RowSelector){
 						var rowBarNode = view.getCellNode(_this._lastFocusedRowBarIdx, 0);
-						dojo.toggleClass(rowBarNode, f.focusClass, false);
+						if(rowBarNode){
+							dojo.toggleClass(rowBarNode, f.focusClass, false);
+						}
 						_stopEvent(evt);
 					}
 					return true;
