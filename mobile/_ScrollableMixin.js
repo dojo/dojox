@@ -16,6 +16,7 @@ dojo.declare(
 {
 	fixedHeader: "",
 	fixedFooter: "",
+	scrollableParams: {},
 
 	destroy: function(){
 		this.cleanup();
@@ -24,7 +25,7 @@ dojo.declare(
 
 	startup: function(){
 		if(this._started){ return; }
-		var params = {noResize: true};
+		var params = this.scrollableParams;
 		if(this.fixedHeader){
 			var node = dojo.byId(this.fixedHeader);
 			if(node.parentNode == this.domNode){ // local footer

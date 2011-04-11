@@ -21,6 +21,8 @@ dojo.declare(
 	"dojox.mobile.ScrollableView",
 	[dojox.mobile.View, dojox.mobile._ScrollableMixin],
 {
+	scrollableParams: {noResize: true},
+
 	buildRendering: function(){
 		this.inherited(arguments);
 		dojo.addClass(this.domNode, "mblScrollableView");
