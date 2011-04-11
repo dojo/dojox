@@ -1,8 +1,10 @@
 /* Switch - default */
 .mblSwitch {
+	margin: 0;
 	position: relative;
 	width: 94px;
 	height: 27px;
+	line-height: 29px;
 	overflow: hidden;
 	text-align: left;
 }

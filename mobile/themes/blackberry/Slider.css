@@ -1,0 +1,15 @@
+@import url("../common/Slider.css");
+
+/* dojox.mobile.Slider */
+.mblSlider {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F7F3F7), to(#CEC5D6), color-stop(0.5, #CED3CE));
+	-webkit-border-radius: 6px;
+}
+.mblSliderProgressBar {
+	background: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+	-webkit-border-radius: 6px;
+}
+.mblSliderHandle {
+	background: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#999999), color-stop(0.5, #BBBBBB));
+	-webkit-border-radius: 6px;
+}

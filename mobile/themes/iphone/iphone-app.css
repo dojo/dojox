@@ -1,4 +1,5 @@
 @import url("iphone.css");
+@import url("form/Button.css");
 
 .alertDialog {
 	width: 100%;

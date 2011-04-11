@@ -1,0 +1,25 @@
+@import url("../common/CheckBox.css");
+
+/* dojox.mobile.CheckBox */
+.mblCheckBox {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+	-webkit-border-radius: 3px;
+	-webkit-transform: translateY(0.4em);
+}
+.mblCheckBoxChecked,
+.mblCheckBox:checked {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+}
+.mblCheckBoxChecked::after,
+.mblCheckBox:checked::after {
+	border-color: #0851AD;
+}
+.mblCheckBoxSelected,
+.mblCheckBoxChecked.mblCheckBoxSelected {
+	border-color: #9CACC0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+}
+.mblCheckBoxChecked.mblCheckBoxSelected::after {
+	border-color: white;
+}
+	

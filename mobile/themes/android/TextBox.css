@@ -1,0 +1,6 @@
+@import url("../common/TextBox.css");
+
+/* dojox.mobile.TextBox */
+.mblTextBox {
+	-webkit-border-radius: 3px;
+}

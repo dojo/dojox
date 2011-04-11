@@ -1,0 +1,6 @@
+@import url("../common/TextArea.css");
+
+/* dojox.mobile.TextArea */
+.mblTextArea {
+	-webkit-border-radius: 6px;
+}

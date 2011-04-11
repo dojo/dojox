@@ -1,0 +1,15 @@
+@import url("../common/ToggleButton.css");
+
+/* dojox.mobile.ToggleButton */
+.mblToggleButton {
+	-webkit-border-radius: 3px;
+}
+.mblToggleButton.mblToggleButtonChecked {
+	color: white;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00A200), to(#00D300), color-stop(0.2, #00BA00), color-stop(0.2, #00BA00));
+}
+.mblToggleButton.mblToggleButtonSelected,
+.mblToggleButton.mblToggleButtonChecked.mblToggleButtonSelected {
+	color: white;
+	background: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
+}

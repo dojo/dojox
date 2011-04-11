@@ -1,0 +1,18 @@
+@import url("../common/ComboBox.css");
+
+/* dojox.mobile.ComboBox */
+.dijitPopup {
+	-webkit-box-shadow: none;	
+	-webkit-border-radius: 12px;
+}
+.mblComboBoxMenu {
+	-webkit-border-radius: 12px;
+	background-color: black;
+}
+.mblComboBoxMenuItemSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+}
+.mblComboBoxMenuItem {
+	border-color: black;
+	color: white;
+}

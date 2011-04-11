@@ -1,0 +1,41 @@
+/* dojox.mobile.CheckBox */
+.mblCheckBox {
+	margin: -0.5em 3px 0.3em 4px;
+	width: 1em;
+	height: 1em;
+	border: #9CACC0 1px outset;
+	background: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE), color-stop(0.5, #F8F8F8), color-stop(0.5, #EEEEEE));
+	font: inherit;
+	cursor: pointer;
+	outline: none;
+	position: relative;
+	-webkit-border-radius: 5px;
+	-webkit-appearance: none;
+	-webkit-transform: translateY(0.45em);
+	-webkit-tap-highlight-color: transparent;
+}
+.mblCheckBoxSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F0F0F0), to(#BFBFBF), color-stop(0.5, #EBEBEB), color-stop(0.5, #DEDEDE));
+}
+.mblCheckBoxChecked,
+.mblCheckBox:checked {
+	border-color: #9CACC0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+}
+.mblCheckBoxChecked::after,
+.mblCheckBox:checked::after {
+	content: "";
+	width: 0.3em;
+	height: 0.6em;
+	position: absolute;
+	top: 0;
+	left: 0.3em;
+	border-color: white;
+	border-width: 0.15em;
+	border-style: none solid solid none;
+	-webkit-transform: rotate(45deg);
+	-webkit-transform-origin: 50% 50%;
+}
+.mblCheckBoxChecked.mblCheckBoxSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+}

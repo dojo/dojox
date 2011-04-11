@@ -1,0 +1,24 @@
+@import url("../common/RadioButton.css");
+
+/* dojox.mobile.RadioButton */
+.mblRadioButton {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+	-webkit-border-radius: 0.5em;
+	-webkit-transform: translateY(0.4em);
+}
+.mblRadioButtonChecked,
+.mblRadioButton:checked {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+}
+.mblRadioButtonChecked::after,
+.mblRadioButton:checked::after {
+	border-color: #0851AD;
+}
+.mblRadioButtonChecked.mblRadioButtonSelected {
+	border-color: #9CACC0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+}
+.mblRadioButtonChecked.mblRadioButtonSelected::after {
+	border-color: white;
+}
+	

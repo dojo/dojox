@@ -1,3 +1,4 @@
+/* dojox.mobile.ComboBox */
 /*
 	Essential styles that themes can inherit.
 	In other words, works but doesn't look great.
@@ -8,28 +9,30 @@
  * with the real popup inside, and maybe an iframe too
  */
 .dijitPopup {
-	position: absolute;
-	background-color: transparent;
 	margin: 0;
-	border: 0;
 	padding: 0;
+	position: absolute;
+	border: 0;
+	background-color: transparent;
+	-webkit-box-shadow: 0px 0px 50px black;
 }
 
 /* Use this style to null out padding, margin, border in your template elements
 	so that page specific styles don't break them.
 */
 .mblReset {
-	margin:0;
-	border:0;
-	padding:0;
-	line-height:normal;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	line-height: normal;
 	font: inherit;
 	color: inherit;
 }
 
 .mblComboBoxMenu {
-	border:1px solid black;
-	background-color:white;
+	border: 1px solid black;
+	background-color: white;
+	overflow-y: hidden !important;
 }
 
 .mblComboBoxMenuItemSelected {
@@ -40,14 +43,15 @@
 	 * and denotes that the menu item has focus or that focus is on a child
 	 * menu
 	 */
-	background-color:black;
-	color:white;
+	background-color: black;
+	background: -webkit-gradient(linear, left top, left bottom, from(#048BF4), to(#005CE5));
+	color: white;
 }
 
 .mblComboBoxMenuItem {
 	text-align: left;
 	white-space: nowrap;
-	padding:.1em .2em;
+	padding: .1em .2em;
 	border-width: 1px 0 1px 0;
 	border-style: solid;
 	border-color: #ffffff;

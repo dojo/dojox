@@ -1,0 +1,43 @@
+/* dojox.mobile.Button */
+.mblButton {
+	padding: 0px 10px;
+	height: 29px;
+	border: #9CACC0 1px outset;
+	color: black;
+	font-family: Helvetica;
+	font-size: 13px;
+	line-height: 29px;
+	cursor: pointer;
+	outline: none;
+	background: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE), color-stop(0.5, #F8F8F8), color-stop(0.5, #EEEEEE));
+	-webkit-border-radius: 5px;
+	-webkit-tap-highlight-color: transparent;
+}
+.mblButtonSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#F0F0F0), to(#BFBFBF), color-stop(0.5, #EBEBEB), color-stop(0.5, #DEDEDE));
+}
+.mblButtonDisabled,
+.mblButton:disabled {
+	border-color: grey;
+	color: grey;
+	cursor: default;
+	background: transparent;
+}
+.mblButton.mblBlueButton {
+	border-color: #9CACC0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+	color: white;
+	-webkit-tap-highlight-color: transparent;
+}
+.mblButton.mblBlueButtonSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+}
+.mblButton.mblRedButton {
+	border-color: #9CACC0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#FA9D58), to(#EE4115), color-stop(0.5, #FF4D25), color-stop(0.5, #ED4D15));
+	color: white;
+	-webkit-tap-highlight-color: transparent;
+}
+.mblButton.mblRedButtonSelected {
+	background: -webkit-gradient(linear, left top, left bottom, from(#C1A48E), to(#9B6C4A), color-stop(0.5, #A27758), color-stop(0.5, #996947));
+}
