@@ -498,13 +498,13 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 	},
 	_prepareDialog: function(/* int */colIndex){
 		var sc = this._savedCriterias,
-			cbs = this._cboxes, i, cbox,
-			columnChanged = this.curColIdx != colIndex;
+			cbs = this._cboxes, i, cbox;
 		this.curColIdx = colIndex;
 		if(!sc){
 			if(cbs.length === 0){
 				this.addCriteriaBoxes(1);
-			}else if(columnChanged){
+			}else{
+				//Re-populate columns anyway, because we don't know when the column is set to hidden.
 				for(i = 0; (cbox = cbs[i]); ++i){
 					cbox.changeCurrentColumn();
 				}
@@ -802,6 +802,10 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 	},
 	changeCurrentColumn: function(/* bool */selectCurCol){
 		var colIdx = this.dlg.curColIdx;
+		//Re-populate the columns in case some of them are set to hidden.
+		this._colSelect.removeOption(this._colOptions);
+		this._colOptions = this._getColumnOptions();
+		this._colSelect.addOption(this._colOptions);
 		this._colSelect.set('value', colIdx >= 0 ? String(colIdx) : "anycolumn");
 		this.updateRuleTitle(true);
 	},
