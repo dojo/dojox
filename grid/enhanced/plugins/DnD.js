@@ -451,7 +451,6 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 	},
 	_destroySource: function(){
 		dojo.publish("/dnd/cancel");
-		this._elem.destroyDnDNodes();
 	},
 	_createMoveable: function(evt){
 		if(!this._markTagetAnchorHandler){
