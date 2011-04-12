@@ -11,24 +11,6 @@
 .dojoxGridRtl .dojoxGridWardButton {
 	float: right;
 }
-.dojoxGridRtl .dojoxGridfirstPageBtn {
-	margin-right: 1px;
-}
-.dojoxGridRtl .dojoxGridfirstPageBtnDisable {
-	margin-left: 1px;
-}
-.dojoxGridRtl .dojoxGridprevPageBtn {
-	margin: 2px 9px 0 5px;
-}
-.dojoxGridRtl .dojoxGridprevPageBtnDisable {
-	margin: 2px 9px 0 5px;
-}
-.dojoxGridRtl .dojoxGridnextPageBtn {
-	margin-right: 3px;
-}
-.dojoxGridRtl .dojoxGridnextPageBtnDisable {
-	margin-right: 3px;
-}
 .dojoxGridRtl .dojoxGridInactived {
 	margin: 1px 5px 0 6px;
 	float: right;
@@ -49,4 +31,38 @@
 }
 .dijitRtl .dojoxGridSeparator {
 	float: right;
+}
+.dijitRtl .dojoxGridfirstPageBtn {
+	cursor: pointer;
+	margin: 2px 1px 0 0;
+	background-position: -37px 3px;
+}
+.dijitRtl .dojoxGridfirstPageBtnDisable {
+	margin: 2px 1px 0 0;
+	background-position: -37px -17px;
+}
+.dijitRtl .dojoxGridprevPageBtn {
+	cursor: pointer;
+	margin: 2px 9px 0 5px;
+	background-position: -17px 3px;
+}
+.dijitRtl .dojoxGridprevPageBtnDisable {
+	margin: 2px 9px 0 5px;
+	background-position: -17px -17px;
+}
+.dijitRtl .dojoxGridlastPageBtn {
+	cursor: pointer;
+	background-position: -57px 3px;
+}
+.dijitRtl .dojoxGridlastPageBtnDisable {
+	background-position: -57px -17px;
+}
+.dijitRtl .dojoxGridnextPageBtn {
+	cursor: pointer;
+	margin: 2px 3px 0 0;
+	background-position: 3px 3px;
+}
+.dijitRtl .dojoxGridnextPageBtnDisable {
+	margin: 2px 3px 0 0;
+	background-position: 3px -17px;
 }
