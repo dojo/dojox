@@ -2,10 +2,12 @@
 .dojoxGridRtl .dojoxGridFBarStatus {
 	margin-left: 0;
 	margin-right: 9px;
+	float: right;
 }
 .dojoxGridRtl .dojoxGridFBarClearFilterBtn {
 	margin-left: 0;
 	margin-right: 10px;
+	float: right;
 }
 .dojoxGridRtl .dojoxGridFBarCloseBtn {
 	margin: 0 0 0 4px;
