@@ -54,6 +54,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}
 		this.connect(this.grid.views, 'render', '_initSort');//including column resize
 		this.initCookieHandler();
+		dojo.subscribe("dojox/grid/rearrange/move/" + this.grid.id, dojo.hitch(this, '_onColumnDnD'));
 	},
 	onStartUp: function(){
 		//overwrite base Grid functions
@@ -61,6 +62,30 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		this.connect(this.grid, 'onHeaderCellClick', '_onHeaderCellClick');
 		this.connect(this.grid, 'onHeaderCellMouseOver', '_onHeaderCellMouseOver');
 		this.connect(this.grid, 'onHeaderCellMouseOut', '_onHeaderCellMouseOut');
+	},
+	_onColumnDnD: function(type, mapping){
+		// summary:
+		//		Update nested sorting after column moved		
+		if(type !== 'col'){return;}
+		var m = mapping, obj = {}, d = this._sortData, p;
+		var cr = this._getCurrentRegion();
+		this._blurRegion(cr);
+		var idx = dojo.attr(this._getRegionHeader(cr), 'idx');
+		for(p in m){
+			if(d[p]){
+				obj[m[p]] = d[p];
+				delete d[p];
+			}
+			if(p === idx){
+				idx = m[p];
+			}
+		}
+		for(p in obj){
+			d[p] = obj[p];
+		}
+		var c = this._headerNodes[idx];
+		this._currRegionIdx = dojo.indexOf(this._getRegions(), c.firstChild);
+		this._initSort(false);
 	},
 	_setGridSortIndex: function(inIndex, inAsc, noRefresh){
 		if(dojo.isArray(inIndex)){
@@ -148,14 +173,12 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 				title: this.nls.nestedSort + ' - ' + this.nls.ascending,
 				innerHTML: '1'
 			}, node.firstChild, 'last');
-			var h = this.connect(n, "onmousedown", dojo.stopEvent);
-			h._sort = true;
+			n.onmousedown = dojo.stopEvent;
 			n = dojo.create('a', {
 				className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
 				title: this.nls.singleSort + ' - ' + this.nls.ascending
 			}, node.firstChild, 'last');
-			h = this.connect(n, "onmousedown", dojo.stopEvent);
-			h._sort = true;
+			n.onmousedown = dojo.stopEvent;
 		}else{
 			//deal with small height grid which doesn't re-render the grid after refresh
 			var a1 = dojo.query('.dojoxGridSortBtnSingle', node)[0];
@@ -192,7 +215,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		if(this._sortData[e.cellIndex] && this._sortData[e.cellIndex].index === 0){ return; }
 		var p;
 		for(p in this._sortData){
-			if(this._sortData[p].index === 0){
+			if(this._sortData[p] && this._sortData[p].index === 0){
 				dojo.addClass(this._headerNodes[p], 'dojoxGridCellShowIndex');
 				break;
 			}
@@ -234,7 +257,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		//		See dojox.grid.enhanced._Events._onHeaderCellMouseOut()
 		var p;
 		for(p in this._sortData){
-			if(this._sortData[p].index === 0){
+			if(this._sortData[p] && this._sortData[p].index === 0){
 				dojo.removeClass(this._headerNodes[p], 'dojoxGridCellShowIndex');
 				break;
 			}
