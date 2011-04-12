@@ -299,7 +299,7 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 				req.start = 0;
 				req.count = plugin.pageSize;
 				plugin._maxSize = size;
-				self.endIdx = self.endIdx > size ? (size - 1) : self.endIdx;
+				self.endIdx = self.endIdx >= size ? (size - 1) : self.endIdx;
 				if(self.startIdx > size && size !== 0){
 					grid._pending_requests[req.start] = false;
 					plugin.gotoFirstPage();
@@ -1022,8 +1022,8 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}
 		if(dojo.trim(size.toLowerCase()) == "all"){
 			size = this._maxItemSize;
+			showAll = true;
 		}
-		this.plugin.showAll = parseInt(size, 10) >= this._maxItemSize ? true : false;
 		this.plugin.grid.usingPagination = !this.plugin.showAll;
 		
 		size = parseInt(size, 10);
@@ -1174,7 +1174,7 @@ dojo.declare("dojox.grid.enhanced.plugins.pagination._GotoPageDialog", null, {
 		// summary:
 		//		Jump to the given page
 		if(this._pageTextBox.isValid() && this._pageTextBox.getDisplayedValue() !== ""){
-			this.plugin.gotoPage(this._pageTextBox.getDisplayedValue());
+			this.plugin.gotoPage(this._pageTextBox.parse(this._pageTextBox.getDisplayedValue()));
 			this._gotoPageDialog.hide();
 			this._pageTextBox.reset();
 		}
