@@ -58,6 +58,11 @@ dojo.extend(dojox.mobile.View, {
 			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
 				toNode.style.position = "relative";
+				toWidget = dijit.byNode(toNode);
+				if(!dojo.hasClass(toWidget.domNode, "out")){
+					// Reset the temporary padding
+					toWidget.containerNode.style.paddingTop = "";
+				}
 				this.invokeCallback();
 			});
 			anim.play();
@@ -165,15 +170,14 @@ dojo.extend(dojox.mobile.Switch, {
 		var on = (state === "on");
 
 		var pos;
-		if(this.inner.offsetLeft == 0){ // currently ON
+		if(!on){
 			pos = -this.inner.firstChild.firstChild.offsetWidth;
-		}else{ // currently OFF
+		}else{
 			pos = 0;
 		}
 
 		this.left.style.display = "";
 		this.right.style.display = "";
-		this.inner.style.left = "";
 
 		var _this = this;
 		var f = function(){
