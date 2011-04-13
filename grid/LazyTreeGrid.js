@@ -48,6 +48,7 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._Templated], {
 			var state = grid.cache.getExpandoStatusByRowIndex(this.rowIdx);
 			this.expandoInner.innerHTML = state ? "-" : "+";
 			dojo.toggleClass(this.domNode, "dojoxGridExpandoOpened", state);
+			dijit.setWaiState(this.domNode.parentNode, "expanded", state);
 		}
 	},
 	
@@ -506,7 +507,9 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 	
 	setSortIndex: function(inIndex, inAsc){
 		// Need to clean up the cache before sorting
-		this._cleanup();
+		if(this.canSort(inIndex + 1)){
+			this._cleanup();
+		}
 		this.inherited(arguments);
 	},
 	
@@ -760,6 +763,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		}
 		for(i = 0; i < Math.min(size, this.keepRows); i++){
 			this._addItem(childItems[i], this.expandoRowIndex + 1 + i, false);
+			this.updateRow(this.expandoRowIndex + 1 + i);
 		}
 		
 		this.toggleLoadingClass(false);
