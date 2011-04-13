@@ -31,7 +31,7 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._Templated], {
 			g.stateChangeNode = null;
 			return;
 		}
-		if(item){
+		if(item && !g._loading){
 			g.stateChangeNode = this.domNode;
 			g.cache.updateCache(this.rowIdx, {"expandoStatus": open});
 			g.expandoFetch(this.rowIdx, open);
@@ -560,7 +560,6 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		//		scroll the TreeGrid
 		start = start || 0;
 		this.reqQueue = [];
-		this.showMessage(this.loadingMessage);
 		// Check cache, do not need to fetch data if there are required data in cache
 		var i = 0, fetchedItems = [];
 		var count = Math.min(this.rowsPerPage, this.cache.items.length - start);
@@ -615,6 +614,10 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 	},
 	
 	_fetchItems: function(idx, onBegin, onComplete, onError){
+		if(!this._loading){
+			this._loading = true;
+			this.showMessage(this.loadingMessage);
+		}
 		var level = this.reqQueue[idx].startTreePath.split("/").length - 1;
 		this._pending_requests[this.reqQueue[idx].startRowIdx] = true;
 		if(level === 0){
@@ -699,16 +702,22 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		if(this._lastScrollTop){
 			this.setScrollTop(this._lastScrollTop);
 		}
-		if(!this.cache.items.length){
-			this.showMessage(this.noDataMessage);
-		}else{
-			this.showMessage();
+		if(this._loading){
+			this._loading = false;
+			if(!this.cache.items.length){
+				this.showMessage(this.noDataMessage);
+			}else{
+				this.showMessage();
+			}
 		}
+		
 	},
 	
 	expandoFetch: function(rowIndex, open){
 		// summary:
 		//		Function for fetch children of a given row
+		if(this._loading){return;}
+		this._loading = true;
 		this.toggleLoadingClass(true);
 		var item = this.cache.getItemByRowIndex(rowIndex);
 		this.expandoRowIndex = rowIndex;
@@ -768,6 +777,9 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		
 		this.toggleLoadingClass(false);
 		this.stateChangeNode = null;
+		if(this._loading){
+			this._loading = false;
+		}
 		if(size < this.keepRows && this.cache.getTreePathByRowIndex(this.expandoRowIndex + 1 + size)){
 			this._fetch(this.expandoRowIndex + 1 + size);
 		}
