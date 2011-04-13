@@ -84,7 +84,6 @@ dojo.declare(
 	}, 
 
 	onError: function(errText){
-		console.error(this.declaredClass + ": " + errText);
 	},
 
 	onSet: function(/* item */ item,
