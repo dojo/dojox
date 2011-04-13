@@ -1340,7 +1340,7 @@ dojo.addOnLoad(function(){
 			f = dojox.mobile.hideAddressBar;
 		}
 	}
-	dojo.connect(null, (dojo.global.onorientationchange !== undefined)
+	dojo.connect(null, (dojo.global.onorientationchange !== undefined && navigator.userAgent.indexOf("Android") === -1)
 		? "onorientationchange" : "onresize", null, f);
 
 	// avoid use of dojo.query
