@@ -96,6 +96,7 @@ dojo.declare(
 	lazy: false,
 	requires: "",
 	timeout: 10,
+	closeBtnClass: "mblDomButtonBlueMinus",
 
 	templateString: '<li class="mblIconItem">'+
 						'<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
@@ -104,13 +105,13 @@ dojo.declare(
 					'</li>',
 	templateStringSub: '<li class="mblIconItemSub" lazy="${lazy}" style="display:none;" dojoAttachPoint="contentNode">'+
 						'<h2 class="mblIconContentHeading" dojoAttachPoint="closeNode">'+
-							'<div class="mblBlueMinusButton" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"><div></div></div>${label}'+
+							'<div class="${closeBtnClass}" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"></div>${label}'+
 						'</h2>'+
 						'<div class="mblContent" dojoAttachPoint="containerNode"></div>'+
 					'</li>',
 
 	createTemplate: function(s){
-		dojo.forEach(["lazy","icon","label"], function(v){
+		dojo.forEach(["lazy","icon","label","closeBtnClass"], function(v){
 			while(s.indexOf("${"+v+"}") != -1){
 				var val = v === "label" ? this._cv(this[v]) : this[v];
 				s = s.replace("${"+v+"}", val);
@@ -162,6 +163,10 @@ dojo.declare(
 	},
 
 	postCreate: function(){
+		dojox.mobile.createDomButton(this.closeIconNode, {
+			top: "-2px",
+			left: "1px"
+		});
 		this.connect(this.iconNode, "onmousedown", "onMouseDownIcon");
 		this.connect(this.iconNode, "onclick", "iconClicked");
 		this.connect(this.closeIconNode, "onclick", "closeIconClicked");

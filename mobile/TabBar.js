@@ -10,6 +10,7 @@ dojo.declare(
 	iconPos: "",
 	barType: "tabBar", // "tabBar"(default) or "segmentedControl"
 	inHeading: false,
+	tag: "UL",
 
 	_fixedButtonWidth: 76,
 	_fixedButtonMargin: 17,
@@ -17,7 +18,7 @@ dojo.declare(
 
 	buildRendering: function(){
 		this._clsName = this.barType == "segmentedControl" ? "mblTabButton" : "mblTabBarButton";
-		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
+		this.domNode = this.containerNode = this.srcNodeRef || dojo.create(this.tag);
 		this.domNode.className = this.barType == "segmentedControl" ? "mblTabPanelHeader" : "mblTabBar";
 	},
 
@@ -166,8 +167,11 @@ dojo.declare(
 		var _clsName = this.parent ? this.parent._clsName : "mblTabBarButton";
 		dojo.addClass(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
 		this.domNode.appendChild(a);
-
-		this.createDomButton(this.domNode, a);
+		if(this.domNode.className.indexOf("mblDomButton") != -1){
+			var domBtn = dojo.create("DIV", null, a);
+			dojox.mobile.createDomButton(this.domNode, null, domBtn);
+			dojo.addClass(this.domNode, "mblTabButtonDomButton");
+		}
 	},
 
 	startup: function(){
