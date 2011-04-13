@@ -249,7 +249,9 @@ dojo.declare(
 	},
 
 	onAnimationEnd: function(e){
-		if(e.animationName.indexOf("Out") === -1 && e.animationName.indexOf("In") === -1){ return; }
+		if(e.animationName.indexOf("Out") === -1 &&
+		   e.animationName.indexOf("In") === -1 &&
+		   e.animationName.indexOf("shrink") === -1){ return; }
 		var isOut = false;
 		if(dojo.hasClass(this.domNode, "out")){
 			isOut = true;
