@@ -1241,6 +1241,34 @@ dojox.mobile.openWindow = function(url, target){
 	dojo.global.open(url, target || "_blank");
 };
 
+dojox.mobile.createDomButton = function(/*DomNode*/refNode, /*Object?*/style, /*DomNode?*/toNode){
+	var s = refNode.className;
+	var node = toNode || refNode;
+	if(s.match(/(mblDomButton\w+)/) && s.indexOf("/") === -1){
+		var btnClass = RegExp.$1;
+		var nDiv = 4;
+		if(s.match(/(mblDomButton\w+_(\d+))/)){
+			nDiv = RegExp.$2 - 0;
+		}
+		for(var i = 0, p = node; i < nDiv; i++){
+			p = p.firstChild || dojo.create("DIV", null, p);
+		}
+		if(toNode){
+			setTimeout(function(){
+				dojo.removeClass(refNode, btnClass);
+			}, 0);
+			dojo.addClass(toNode, btnClass);
+		}
+	}else if(s.indexOf(".") !== -1){ // file name
+		dojo.create("IMG", {src:s}, node);
+	}else{
+		return null;
+	}
+	dojo.addClass(node, "mblDomButton");
+	dojo.style(node, style);
+	return node;
+};
+
 dojo._loaders.unshift(function(){
 	// avoid use of dojo.query
 	/*

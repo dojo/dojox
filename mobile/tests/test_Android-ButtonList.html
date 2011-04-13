@@ -7,7 +7,8 @@
 
 		<title>Button List</title>
 		<link href="../themes/android/base.css" rel="stylesheet"></link>
-		<link href="../themes/common/buttons.css" rel="stylesheet"></link>
+		<link href="../themes/common/domButtons/DomButtonCheckboxOn.css" rel="stylesheet"></link>
+		<link href="../themes/common/domButtons/DomButtonCheckboxOff.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -16,28 +17,22 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
 			dojo.addOnLoad(function(){
 				var ul = dojo.byId("list");
-					for(var i = 0, len = ul.childNodes.length; i < len; i++){
-						var li = ul.childNodes[i];
-						if(li.nodeType != 1 || li.tagName != "LI"){ continue; }
-						var w = dijit.byNode(li);
-						dojo.connect(w.btnNode, "onclick", btnClicked);
+				for(var i = 0, len = ul.childNodes.length; i < len; i++){
+					var li = ul.childNodes[i];
+					if(li.nodeType != 1 || li.tagName != "LI"){ continue; }
+					var w = dijit.byNode(li);
+					dojo.connect(w.rightIconNode, "onclick", btnClicked);
 				}
 			});
-	
 			function btnClicked(e){
-				var btnDiv = e.currentTarget;
-				if(dojo.hasClass(btnDiv, "mblCheckOffButton")){
-					dojo.removeClass(btnDiv, "mblCheckOffButton");
-					dojo.addClass(btnDiv, "mblCheckOnButton");
-				}else if(dojo.hasClass(btnDiv, "mblCheckOnButton")){
-					dojo.removeClass(btnDiv, "mblCheckOnButton");
-					dojo.addClass(btnDiv, "mblCheckOffButton");
-				}
-				if(dojo.isBB){
-					btnDiv.parentNode.appendChild(btnDiv.parentNode.removeChild(btnDiv));
+				var listItem = dijit.getEnclosingWidget(e.currentTarget);
+				var btnDiv = listItem.rightIconNode;
+				if(dojo.hasClass(btnDiv, "mblDomButtonCheckboxOn")){
+					listItem.set("btnClass", "mblDomButtonCheckboxOff");
+				}else if(dojo.hasClass(btnDiv, "mblDomButtonCheckboxOff")){
+					listItem.set("btnClass", "mblDomButtonCheckboxOn");
 				}
 			}
 		</script>
@@ -47,13 +42,13 @@
 		    <h1 dojoType="dojox.mobile.Heading">Location &amp; security settings</h1>
 		    <h2 class="mblHeading">My Location</h2>
 		    <ul id="list" dojoType="dojox.mobile.EdgeToEdgeList">
-			    <li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" btnClass="mblCheckOffButton">
+			    <li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" btnClass="mblDomButtonCheckboxOff">
 				    Use wireless networks
 				    <div class="mblListItemSubText">
 					    See location in applications (such as Maps) using wireless networks
 				    </div>
 			    </li>
-			    <li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" btnClass="mblCheckOnButton">
+			    <li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" btnClass="mblDomButtonCheckboxOn">
 				    Use GPS satellites
 				    <div class="mblListItemSubText">
 					    When locating, accurate to street level (uncheck to conserve battery)

@@ -2,6 +2,8 @@
 @import url("../common/transitions/flip.css");
 @import url("../common/transitions/fade.css");
 @import url("../common/Switch.css");
+@import url("../common/domButtons/DomButtonGrayArrow.css");
+@import url("../common/domButtons/DomButtonDarkBlueCheck.css");
 
 body {
 	visibility: hidden;
@@ -133,6 +135,9 @@ html.mobile, .mobile body {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-tap-highlight-color: transparent;
+}
+div.mblToolbarButtonDomButton {
+	width: 11px;
 }
 
 /* dojox.mobile.TabBar */
@@ -328,24 +333,15 @@ html.mobile, .mobile body {
 	padding-right: 40px;
 }
 
-.mblListItem .mblArrow {
+.mblListItem .mblDomButton {
 	position: absolute;
-	top: 18px;
-	right: 12px;
-	width: 6px;
-	height: 6px;
-	font-size: 1px;
-	-webkit-transform: rotate(45deg);
-	border-width: 3px 3px 0px 0px;
-	border-style: solid;
-	border-color: #808080;
-}
-.mblItemSelected .mblArrow {
-	border-color: white;
-}
-.mblVariableHeight div.mblArrow {
 	top: 50%;
-	margin-top: -4px;
+	right: 7px;
+	margin-top: -15px;
+	line-height: normal;
+}
+.mblItemSelected .mblDomButton DIV {
+	border-color: white;
 }
 
 .mblRightText {
@@ -363,6 +359,9 @@ html.mobile, .mobile body {
 .mblListItem .mblRightButton {
 	position: absolute;
 	top: -50%;
+}
+.mblItemChecked {
+	color: #314E84;
 }
 
 /* Switch */
@@ -590,6 +589,12 @@ table.mblClose {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+.mblTabPanelHeader .mblTabButtonDomButton {
+	width: 43px;
+}
+.mblTabPanelHeader .mblDomButton {
+	left: 8px;
 }
 
 .mblTabPanelPane {

@@ -1,3 +1,6 @@
+@import url("../common/domButtons/DomButtonGrayArrow-compat.css");
+@import url("../common/domButtons/DomButtonDarkBlueCheck-compat.css");
+
 /* mbl.widget.Heading */
 .mblHeading {
 	background-image: url(compat/heading-bg.png);
@@ -218,6 +221,9 @@
 			el.style.behavior = "none";
 		})(this)
 	);
+}
+.dj_ie6 .mblTabPanelHeader .mblDomButton {
+	left: 0px;
 }
 .mblTabButton IMG {
 	position: absolute;
