@@ -211,7 +211,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 		// Get the top position. Same as dojo.position(node, true).y
 		var top = 0;
-		for(var n = this.domNode; n.tagName != "BODY"; n = n.offsetParent){
+		for(var n = this.domNode; n && n.tagName != "BODY"; n = n.offsetParent){
 			n = this.findDisp(n); // find the first displayed view node
 			if(!n){ break; }
 			top += n.offsetTop;
@@ -232,7 +232,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.onFlickAnimationEnd = function(e){
 		if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
 		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
-		if(e.animationName.indexOf("scrollableViewScroll") === -1){ return; }
+		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll") === -1){ return; }
 		if(e && e.srcElement){
 			dojo.stopEvent(e);
 		}
