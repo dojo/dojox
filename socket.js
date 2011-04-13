@@ -203,7 +203,7 @@ var cancelled = false,
 	function fire(type, object, deferred){
 		if(socket["on" + type]){
 			var event = document.createEvent("HTMLEvents");
-			event.initEvent(type);
+			event.initEvent(type, false, false);
 			dojo.mixin(event, object);
 			event.ioArgs = deferred && deferred.ioArgs;
 			socket["on" + type](event);
