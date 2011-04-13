@@ -4,8 +4,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Heading</title>
-		<link href="../../themes/android/base.css" rel="stylesheet"></link>
-		<link href="../../themes/common/domButtons.css" rel="stylesheet"></link>
+		<link href="../../themes/android/android.css" rel="stylesheet"></link>
+		<link href="../../themes/domButtons.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -17,23 +17,30 @@
 
 	        dojo.require("doh.runner");
 			dojo.addOnLoad(function(){
-				doh.register("dojox.mobile.test.doh.Heading", [
-					function test_Heading_Verification(){
-						var demoWidget = dijit.byId("dojox_mobile_Heading_0");
-						doh.assertEqual('mblHeading', demoWidget.domNode.className);
-						doh.assertEqual('General', demoWidget.domNode.childNodes[1].nodeValue);
+				doh.register("dojox.mobile.test.doh.Heading1", [
+					{
+						name: "Heading Verification",
+						timeout: 4000,
+						runTest: function(){
+							var d = new doh.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								var demoWidget = dijit.byId("dojox_mobile_Heading_0");
+								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+								doh.assertEqual('General', demoWidget.domNode.childNodes[1].nodeValue);
 
-						demoWidget = dijit.byId("dojox_mobile_Heading_1");
-						doh.assertEqual('mblHeading', demoWidget.domNode.className);
-						doh.assertEqual('Very Very Long Title May Not Be Displayed in the Narrow Space', demoWidget.domNode.childNodes[1].nodeValue);
-						
-						demoWidget = dijit.byId("dojox_mobile_Heading_2");
-						doh.assertEqual('mblHeading', demoWidget.domNode.className);
-						doh.assertEqual('World Clock', demoWidget.domNode.childNodes[0].nodeValue);
+								demoWidget = dijit.byId("dojox_mobile_Heading_1");
+								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+								doh.assertEqual('Very Very Long Title May Not Be Displayed in the Narrow Space', demoWidget.domNode.childNodes[1].nodeValue);
+								
+								demoWidget = dijit.byId("dojox_mobile_Heading_2");
+								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+								doh.assertEqual('World Clock', demoWidget.domNode.childNodes[0].nodeValue);
 
-						demoWidget = dijit.byId("dojox_mobile_Heading_3");
-						doh.assertEqual('mblHeading', demoWidget.domNode.className);
-//						doh.assertEqual('Alarm Clock', demoWidget.domNode.childNodes[4].nodeValue);
+								demoWidget = dijit.byId("dojox_mobile_Heading_3");
+								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+							}));
+							return d;
+						}
 					}
 				]);
 				doh.run();

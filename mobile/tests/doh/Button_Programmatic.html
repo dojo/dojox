@@ -28,12 +28,20 @@
 	        dojo.require("doh.runner");
 
 			dojo.addOnLoad(function(){
+				var demoWidget = new dojox.mobile.Button({class:"mblBlueButton", style:"width:120px", label:"Default Button"});
+				dojo.doc.body.appendChild(demoWidget.domNode);
+
+				child = dojo.create("P", null, dojo.doc.body);
+
+				demoWidget = new dojox.mobile.Button({class:"redButton", style:"width:120px", label:"Custom Button"});
+				dojo.doc.body.appendChild(demoWidget.domNode);
+
 				doh.register("dojox.mobile.test.doh.Button", [
 					function test_Button_Verification(){
-						var demoWidget = dijit.byId("btn1");
+						var demoWidget = dijit.byId("dojox_mobile_Button_0");
 						doh.assertEqual('mblButton mblBlueButton', demoWidget.domNode.className);
 						doh.assertEqual('Default Button', demoWidget.domNode.childNodes[0].nodeValue);
-						demoWidget = dijit.byId("btn2");
+						demoWidget = dijit.byId("dojox_mobile_Button_1");
 						doh.assertEqual('mblButton redButton', demoWidget.domNode.className);
 						doh.assertEqual('Custom Button', demoWidget.domNode.childNodes[0].nodeValue);
 					}
@@ -43,8 +51,5 @@
 		</script>
 	</head>
 	<body style="padding: 20px;visibility:visible">
-		<button id="btn1" dojoType="dojox.mobile.Button" class="mblBlueButton" style="width:120px">Default Button</button>
-		<p></p>
-		<button id="btn2" dojoType="dojox.mobile.Button" class="redButton" style="width:120px">Custom Button</button>
 	</body>
 </html>

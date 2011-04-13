@@ -84,37 +84,51 @@
 
         dojo.require("doh.runner");
 		dojo.addOnLoad(function(){
+			var view = new dojox.mobile.View({id:"group1", selected:"true", innerHTML:"aaa"});
+			dojo.doc.body.appendChild(view.domNode);
+			var roundRectList = new dojox.mobile.RoundRectList();
+			view.addChild(roundRectList);
+			var demoWidget = new dojox.mobile.ListItem({moveTo:"dojox_mobile_ScrollableView_0"});
+			roundRectList.addChild(demoWidget);
+			view.startup();
+			
+			view = new dojox.mobile.ScrollableView();
+			demoWidget = new dojox.mobile.Heading({fixed:"top", label:"Categories", back:"Back To", moveTo:"group1"});
+			dojo.doc.body.appendChild(view.domNode);
+			view.addChild(demoWidget);
+			view.domNode.appendChild(dojo.doc.createTextNode("bbbb"));
+			roundRectList = new dojox.mobile.EdgeToEdgeList();
+			view.addChild(roundRectList);
+			for(var i = 0;i<20;i++){
+				demoWidget = new dojox.mobile.ListItem({label:"Test" + i});
+				roundRectList.addChild(demoWidget)
+			}
+
+			view.startup();
 			doh.register("dojox.mobile.test.doh.View", [
 				{
 					name: "test View Verification",
-					timeout: 3000,
-					runtest: function (){
-						var demoWidget = dijit.byId("group1");
-						doh.assertEqual('mblView', demoWidget.domNode.className);
-						doh.assertEqual('visible', demoWidget.domNode.style.visibility);
+					timeout: 4000,
+					runTest: function(){
+						var d = new doh.Deferred();
+						setTimeout(d.getTestCallback(function(){
+							var demoWidget = dijit.byId("group1");
+							doh.assertEqual('mblView', demoWidget.domNode.className);
+							doh.assertEqual('visible', demoWidget.domNode.style.visibility);
 
-						demoWidget = dijit.byId("categ");
-						doh.assertEqual('mblView mblScrollableView', demoWidget.domNode.className);
-						doh.assertEqual('none', demoWidget.domNode.style.display);
+							demoWidget = dijit.byId("dojox_mobile_ScrollableView_0");
+							doh.assertEqual('mblView mblScrollableView', demoWidget.domNode.className);
+							doh.assertEqual('none', demoWidget.domNode.style.display);
+						}));
+						return d;
 					}
 				}
 			]);
-			setTimeout(function(){ // to get the correct dimension
-				doh.run();
-			}, 0);
+			doh.run();
 		});
 	</script>
 </head>
 <body>
-	<div id="group1" dojoType="dojox.mobile.View" selected="true">
-	aaa
-
-	</div>
-
-	<div id="categ" dojoType="dojox.mobile.ScrollableView">
-		<h1 dojoType="dojox.mobile.Heading" fixed="top">Categories</h1>
-		bbb
-	</div>
 
 
 </body>

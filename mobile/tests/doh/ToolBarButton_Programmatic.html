@@ -18,6 +18,22 @@
 
 	        dojo.require("doh.runner");
 			dojo.addOnLoad(function(){
+
+				var view = dijit.byId("general");
+				var demoWidget = new dojox.mobile.Heading({label:"World Clock"});
+				view.addChild(demoWidget);
+				var childWidget = new dojox.mobile.ToolBarButton({id:"btn1", label:"Edit", style:{padding:"0px 14px"}});
+				demoWidget.addChild(childWidget);
+				childWidget = new dojox.mobile.ToolBarButton({class:"mblDomButton mblDomButtonPlus_2", style:"float:right;", onclick:"alert('+ was clicked')"});
+				demoWidget.addChild(childWidget);
+
+				demoWidget = new dojox.mobile.Heading({label:"Alarm Clock"});
+				view.addChild(demoWidget);
+				childWidget = new dojox.mobile.ToolBarButton({label:"Edit", style:{padding:"0px 14px"}});
+				demoWidget.addChild(childWidget);
+				childWidget = new dojox.mobile.ToolBarButton({class:"mblDomButton mblDomButtonPlus_2", style:{float:"right"}});
+				demoWidget.addChild(childWidget);
+
 				doh.register("dojox.mobile.test.ToolBarButton", [
 					function test_Heading_Verification(){
 						var demoWidget = dijit.byId("btn1");
@@ -117,69 +133,8 @@
 		</script>
 	</head>
 	<body>
-		<h1 dojoType="dojox.mobile.Heading" label="World Clock">
-			<div id="btn1" dojoType="dojox.mobile.ToolBarButton" style="padding: 0px 14px">Edit</div>
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonPlus_2" style="float:right;" onclick="alert('+ was clicked')"></div>
+		<div id="general" dojoType="dojox.mobile.View" selected="true">
+		</div>
 
-		</h1><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading">
-			<div dojoType="dojox.mobile.ToolBarButton" style="padding: 0px 14px">Edit</div>
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonPlus_2" style="float:right;"></div>
-			Alarm Clock
-		</h1><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading" label="Voice Memos">
-			<div dojoType="dojox.mobile.ToolBarButton" label="Speaker"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="width:45px;float:right;"></div>
-		</h1><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading" label="Updates">
-			<!-- dummy hidden button to center the label -->
-			<div dojoType="dojox.mobile.ToolBarButton" label="Update All" style="visibility:hidden;"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" label="Update All" style="float:right;"></div>
-		</h1><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading" label="News" back="Bookmarks" moveTo="bookmarks">
-			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="width:45px;float:right;"></div>
-		</h1><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading">
-			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" label="New Folder" style="float:right;"></div>
-		</h1><br>
-
-
-		<div dojoType="dojox.mobile.Heading">
-			<div dojoType="dojox.mobile.ToolBarButton" toggle="true">New</div>
-			<div dojoType="dojox.mobile.ToolBarButton" toggle="true">Toggle</div>
-			<div dojoType="dojox.mobile.ToolBarButton" icon="../images/a-icon-12.png" moveTo="view3"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" icon="../images/tab-icons.png" iconPos="29,0,29,29" moveTo="view3"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonPlus_2" moveTo="view3" style="float:right;"></div>
-		</div><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading">
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonSearch_2" style="float:right;"></div>
-		</h1><br>
-
-
-		<h1 dojoType="dojox.mobile.Heading" align="center">
-		  <table cellpadding="0" cellspacing="0" style="width:100%;"><tr>
-			<td><div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonPlus_2"></div></td>
-			<td align="right"><div dojoType="dojox.mobile.ToolBarButton" icon="../images/tab-icon-15h.png" style="float:right;"></div></td>
-		  </tr></table>
-		</h1><br>
-
-		<h1 dojoType="dojox.mobile.Heading" back="Top" label="Inbox(32)">
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonSearch_2" style="float:right;"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonUpArrow_2" style="float:right;"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton mblDomButtonDownArrow_2" style="float:right;"></div>
-		</h1><br>
 	</body>
 </html>

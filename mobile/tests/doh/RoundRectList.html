@@ -3,7 +3,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<title>Edge To Edge List</title>
+		<title>Round Rect List</title>
 		<link href="../../themes/iphone/iphone.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -17,20 +17,20 @@
 	        dojo.require("doh.runner");
 
 			dojo.addOnLoad(function(){
-				doh.register("dojox.mobile.test.doh.EdgeToEdgeList", [
+				doh.register("dojox.mobile.test.doh.RoundRectList", [
 					{
-						name: "EdgeToEdgeList Verification",
+						name: "RoundRectList Verification",
 						timeout: 4000,
 						runTest: function(){
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("Category");
-								doh.assertEqual('mblEdgeToEdgeCategory', demoWidget.domNode.className);
+								doh.assertEqual('mblRoundRectCategory', demoWidget.domNode.className);
 								doh.assertEqual('Spaces', demoWidget.domNode.innerHTML);
 
 
-								demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
-								doh.assertEqual('mblEdgeToEdgeList', demoWidget.domNode.className);
+								demoWidget = dijit.byId("dojox_mobile_RoundRectList_0");
+								doh.assertEqual('mblRoundRectList', demoWidget.domNode.className);
 
 								demoWidget = dijit.byId("item1");
 								childNodes = demoWidget.domNode.childNodes;
@@ -78,33 +78,33 @@
 						}
 					},
 					{
-						name: "EdgeToEdgeList Verification2",
+						name: "RoundRectList Verification2",
 						timeout: 1000,
 						runTest: function(){
 							var d = new doh.Deferred();
-							var demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
+							var demoWidget = dijit.byId("dojox_mobile_RoundRectList_0");
 							demoWidget.set({transition :"flip"});
 							doh.assertEqual("flip", demoWidget.get("transition"));
 							demoWidget.set({transition :"fade"});
 							doh.assertEqual("fade", demoWidget.get("transition"));
 
-							var e = document.createEvent('Events');
+							demoWidget = dijit.byId("item3");
 							if(dojo.isIE)
 							{
 								demoWidget.anchorNode.fireEvent( "onclick" );
 							} else {
+								var e = document.createEvent('Events');
 								e.initEvent('click', true, true);
-								demoWidget = dijit.byId("item3");
 								demoWidget.anchorNode.dispatchEvent(e);
 							}
 							setTimeout(d.getTestCallback(function(){
 
-								var demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeCategory_0");
-								doh.assertEqual('mblEdgeToEdgeCategory', demoWidget.domNode.className);
+								var demoWidget = dijit.byId("dojox_mobile_RoundRectCategory_0");
+								doh.assertEqual('mblRoundRectCategory', demoWidget.domNode.className);
 								doh.assertEqual('Applications', demoWidget.domNode.innerHTML);
 
-								demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_1");
-								doh.assertEqual('mblEdgeToEdgeList', demoWidget.domNode.className);
+								demoWidget = dijit.byId("dojox_mobile_RoundRectList_1");
+								doh.assertEqual('mblRoundRectList', demoWidget.domNode.className);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_0");
 								childNodes = demoWidget.domNode.childNodes;
@@ -144,14 +144,14 @@
 						}
 					},
 					{
-						name: "EdgeToEdgeCategory getLabel",
+						name: "RoundRectCategory getLabel",
 						timeout: 1000,
 						runTest: function(){
 							doh.assertEqual("Spaces", dijit.byId("Category").get("label")); 
 						}
 					},
 					{
-						name: "EdgeToEdgeCategory setLabel",
+						name: "RoundRectCategory setLabel",
 						timeout: 1000,
 						runTest: function(){
 							var demoWidget = dijit.byId("Category");
@@ -168,8 +168,8 @@
 	<body>
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Mobile Mashup</h1>
-			<h2 id="Category" dojoType="dojox.mobile.EdgeToEdgeCategory">Spaces</h2>
-			<ul dojoType="dojox.mobile.EdgeToEdgeList">
+			<h2 id="Category" dojoType="dojox.mobile.RoundRectCategory">Spaces</h2>
+			<ul dojoType="dojox.mobile.RoundRectList">
 				<li id="item1" dojoType="dojox.mobile.ListItem" icon="../images/i-icon-1.png" rightText="Off" moveTo="bar">u1space</li>
 				<li id="item2" dojoType="dojox.mobile.ListItem" icon="../images/i-icon-2.png" rightText="On" moveTo="bar">u2space</li>
 				<li id="item3" dojoType="dojox.mobile.ListItem" rightText="Off" moveTo="bar">Wi-Fi</li>
@@ -178,9 +178,9 @@
 
 		<div id="bar" dojoType="dojox.mobile.View">
 			<h1 dojoType="dojox.mobile.Heading" back="Spaces" moveTo="foo">u1space</h1>
-			<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">Applications</h2>
-			<ul dojoType="dojox.mobile.EdgeToEdgeList">
-				<li dojoType="dojox.mobile.ListItem" rightText="Off">Video</li>
+			<h2 dojoType="dojox.mobile.RoundRectCategory">Applications</h2>
+			<ul dojoType="dojox.mobile.RoundRectList" transition="fade">
+				<li dojoType="dojox.mobile.ListItem" rightText="Off" moveTo="foo">Video</li>
 				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-1.png" rightText="VPN">Maps</li>
 				<li dojoType="dojox.mobile.ListItem" rightText="Off">Phone Number</li>
 			</ul>

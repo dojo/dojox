@@ -43,6 +43,14 @@
 	        dojo.require("doh.runner");
 
 			dojo.addOnLoad(function(){
+				var roundRect = dijit.byId("dojox_mobile_RoundRect_0");
+				var demoWidget = new dojox.mobile.Switch({value:"off"});
+				dojo.addClass(demoWidget.domNode, "float");
+				roundRect.addChild(demoWidget);
+				demoWidget = new dojox.mobile.Switch({value:"on", leftLabel:"Start", rightLabel:"Stop"});
+				roundRect.addChild(demoWidget);
+
+			
 				doh.register("dojox.mobile.test.doh.Switch", [
 					{
 						name: "Switch Verification",
@@ -109,33 +117,8 @@
 		<div dojoType="dojox.mobile.View" selected="true">
 			<div dojoType="dojox.mobile.RoundRect" shadow="true">
 				<span class="bold">Default Shape</span><br>
-				<div class="float" dojoType="dojox.mobile.Switch" value="off"></div>
-				<div dojoType="dojox.mobile.Switch" value="on" leftLabel="Start" rightLabel="Stop"></div>
 			</div>
 
-			<div dojoType="dojox.mobile.RoundRect" shadow="true">
-				<span class="bold">Round Shape 1</span><br>
-				<div class="mblSwRoundShape1 float" dojoType="dojox.mobile.Switch" value="off"></div>
-				<div class="mblSwRoundShape1 color1" dojoType="dojox.mobile.Switch" value="on" leftLabel="Start" rightLabel="Stop"></div>
-			</div>
-
-			<div dojoType="dojox.mobile.RoundRect" shadow="true">
-				<span class="bold">Round Shape 2</span><br>
-				<div class="mblSwRoundShape2 float" dojoType="dojox.mobile.Switch" value="off"></div>
-				<div class="mblSwRoundShape2 color2" dojoType="dojox.mobile.Switch" value="on" leftLabel="Start" rightLabel="Stop"></div>
-			</div>
-
-			<div dojoType="dojox.mobile.RoundRect" shadow="true">
-				<span class="bold">Arc Shape 1</span><br>
-				<div class="mblSwArcShape1 float" dojoType="dojox.mobile.Switch" value="off"></div>
-				<div class="mblSwArcShape1 color1" dojoType="dojox.mobile.Switch" value="on" leftLabel="Start" rightLabel="Stop"></div>
-			</div>
-
-			<div dojoType="dojox.mobile.RoundRect" shadow="true">
-				<span class="bold">Arc Shape 2</span><br>
-				<div class="mblSwArcShape2 float" dojoType="dojox.mobile.Switch" value="off"></div>
-				<div class="mblSwArcShape2 color2" dojoType="dojox.mobile.Switch" value="on" leftLabel="Start" rightLabel="Stop"></div>
-			</div>
 		</div>
 	</body>
 </html>

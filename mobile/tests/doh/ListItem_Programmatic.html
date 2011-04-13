@@ -17,6 +17,55 @@
 	        dojo.require("doh.runner");
 
 			dojo.addOnLoad(function(){
+				var list = dijit.byId("dojox_mobile_RoundRectList_0");
+				var demoWidget = new dojox.mobile.ListItem({icon:"../images/i-icon-1.png", transition:"slide", url:"../view1.html", label:"External View #1 (sync)"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({icon:"../images/i-icon-2.png", transition:"flip", url:"../view2.html", sync:false, label:"External View #2 (async)"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({icon:"../images/i-icon-3.png", transition:"fade", url:"../view3.html", label:"External View #3 (sync)"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({rightText:"Off", label:"Video"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({icon:"../images/i-icon-1.png", rightText:"VPN", label:"Maps"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({label:"Jack Coleman"});
+				list.addChild(demoWidget);
+
+				list = dijit.byId("dojox_mobile_RoundRectList_1");
+				demoWidget = new dojox.mobile.ListItem({iconPos:"0,87,29,29", moveTo:"general", label:"Sounds"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({iconPos:"0,116,29,29", moveTo:"general", label:"Brightness"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({iconPos:"29,0,29,29", moveTo:"general", label:"Wallpaper"});
+				list.addChild(demoWidget);
+
+				list = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
+				demoWidget = new dojox.mobile.ListItem({icon:"../images/i-icon-1.png", btnClass:"mblBluePlusButton", label:"XX Widget"});
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({icon:"../images/i-icon-2.png", btnClass:"mblRedMinusButton", label:"YY Widget"});
+				list.addChild(demoWidget);
+
+				list = dijit.byId("dojox_mobile_EdgeToEdgeList_1");
+				demoWidget = new dojox.mobile.ListItem({btnClass:"mblCheckOffButton", label:"Use wireless networks", class:"mblVariableHeight"});
+				var child = dojo.create("DIV", {className:"mblListItemSubText"}, demoWidget.domNode.childNodes[0].childNodes[0]);
+				child.appendChild(dojo.doc.createTextNode("See location in applications (such as Maps) using wireless networks"));
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({btnClass:"mblCheckOnButton", label:"Use GPS satellites", class:"mblVariableHeight"});
+				child = dojo.create("DIV", {className:"mblListItemSubText", innerHTML:"When locating, accurate to street level (uncheck to conserve battery)"}, demoWidget.domNode.childNodes[0].childNodes[0]);
+				list.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.ListItem({label:" Set unlock pattern", class:"mblVariableHeight"});
+				list.addChild(demoWidget);
+
 				doh.register("dojox.mobile.test.doh.ListItem", [
 					{
 						name: "ListItem Verification",
@@ -133,7 +182,8 @@
 						timeout: 1000,
 						runTest: function(){
 							var demoWidget = dijit.byId("dojox_mobile_ListItem_0");
-							demoWidget.set({transition :"flip", url:"../view2.html", noArrow:true, selected:true, anchorLabel:true, rightText:"Value Changed"});
+							demoWidget.set({transition :"flip", url:"../view2.html", noArrow:true, selected:true, anchorLabel:true, rightText:"Value Changed"});							var demoWidget = dijit.byId("dojox_mobile_ListItem_0");
+
 							doh.assertEqual("flip", demoWidget.get("transition"));
 							doh.assertEqual("../view2.html", demoWidget.get("url"));
 							doh.assertTrue(demoWidget.get("noArrow"));
@@ -247,38 +297,12 @@
 	<body>
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-1.png" transition="slide" url="../view1.html">External View #1 (sync)</li>
-				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-2.png" transition="flip" url="../view2.html" sync="false">External View #2 (async)</li>
-				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-3.png" transition="fade" url="../view3.html">External View #3 (sync)</li>
-				<li dojoType="dojox.mobile.ListItem" rightText="Off">Video</li>
-				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-1.png" rightText="VPN">Maps</li>
-				<li dojoType="dojox.mobile.ListItem">Jack Coleman</li>
 			</ul>
 			<ul dojoType="dojox.mobile.RoundRectList" iconBase="../images/i-icon-all.png">
-				<li dojoType="dojox.mobile.ListItem" iconPos="0,87,29,29" moveTo="general">Sounds</li>
-				<li dojoType="dojox.mobile.ListItem" iconPos="0,116,29,29" moveTo="general">Brightness</li>
-				<li dojoType="dojox.mobile.ListItem" iconPos="29,0,29,29" moveTo="general">Wallpaper</li>
 			</ul>
-			<ul id="list1" dojoType="dojox.mobile.EdgeToEdgeList">
-				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-1.png" btnClass="mblBluePlusButton">XX Widget</li>
-				<li dojoType="dojox.mobile.ListItem" icon="../images/i-icon-2.png" btnClass="mblRedMinusButton">YY Widget</li>
+			<ul dojoType="dojox.mobile.EdgeToEdgeList">
 			</ul>
-		    <ul id="list2" dojoType="dojox.mobile.EdgeToEdgeList">
-			    <li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" btnClass="mblCheckOffButton">
-				    Use wireless networks
-				    <div class="mblListItemSubText">
-					    See location in applications (such as Maps) using wireless networks
-				    </div>
-			    </li>
-			    <li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" btnClass="mblCheckOnButton">
-				    Use GPS satellites
-				    <div class="mblListItemSubText">
-					    When locating, accurate to street level (uncheck to conserve battery)
-				    </div>
-			    </li>
-			    <li dojoType="dojox.mobile.ListItem">
-			       Set unlock pattern
-			    </li>
+		    <ul dojoType="dojox.mobile.EdgeToEdgeList">
 		    </ul>
 		</div>
 	</body>

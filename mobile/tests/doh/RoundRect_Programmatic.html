@@ -16,6 +16,15 @@
 
 	        dojo.require("doh.runner");
 			dojo.addOnLoad(function(){
+				var view = dijit.byId("foo");
+				var demoWidget = new dojox.mobile.RoundRect({shadow:"true"});
+				demoWidget.domNode.appendChild(dojo.doc.createTextNode("This module provides some widgets that can be used to build web-based applications for mobile devices such as iPhone or Android."));
+				view.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.RoundRect();
+				demoWidget.domNode.appendChild(dojo.doc.createTextNode("This module provides some widgets that can be used to build web-based applications for mobile devices such as iPhone or Android."));
+				view.addChild(demoWidget);
+
 				doh.register("dojox.mobile.test.doh.RoundRect", [
 					{
 						name: "RoundRect Verification",
@@ -52,14 +61,6 @@
 	<body>
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Round Rectangle</h2>
-			<div dojoType="dojox.mobile.RoundRect" shadow="true">
-				This module provides some widgets that can be used to build web-based
-				applications for mobile devices such as iPhone or Android.
-			</div>
-			<div dojoType="dojox.mobile.RoundRect">
-				This module provides some widgets that can be used to build web-based
-				applications for mobile devices such as iPhone or Android.
-			</div>
 		</div>
 	</body>
 </html>
