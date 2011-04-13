@@ -1,6 +1,8 @@
 /* DOM Buttons */
-@import url("domButtons/Common.css");
-@import url("domButtons/DomButtonPlus.css");
-@import url("domButtons/DomButtonUpArrow.css");
-@import url("domButtons/DomButtonDownArrow.css");
-@import url("domButtons/DomButtonSearch.css");
+@import url("domButtons/DomButtonWhitePlus.css");
+@import url("domButtons/DomButtonWhiteUpArrow.css");
+@import url("domButtons/DomButtonWhiteDownArrow.css");
+@import url("domButtons/DomButtonWhiteSearch.css");
+@import url("domButtons/DomButtonColorButtons.css");
+@import url("domButtons/DomButtonCheckboxOn.css");
+@import url("domButtons/DomButtonCheckboxOff.css");

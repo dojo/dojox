@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>domButtons</title>
+		<link href="../themes/common/domButtons.css" rel="stylesheet"></link>
+		<link href="../themes/common/domButtons/DomButtonGrayArrow.css" rel="stylesheet"></link>
+		<link href="../themes/common/domButtons/DomButtonWhiteArrow.css" rel="stylesheet"></link>
+		<link href="../themes/common/domButtons/DomButtonDarkBlueCheck.css" rel="stylesheet"></link>
+		<link href="../themes/common/domButtons/DomButtonWhiteCheck.css" rel="stylesheet"></link>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+
+		<script language="JavaScript" type="text/javascript">
+			//dojo.require("dojo.parser"); // Use the lightweight parser.
+			dojo.require("dojox.mobile.parser");
+			dojo.require("dojox.mobile");
+
+			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+			dojo.addOnLoad(function(){
+				var nodes = dojo.doc.getElementsByTagName("div");
+				for(var i = 0; i < nodes.length; i++){
+					var div = nodes[i];
+					if(div.nodeType != 1 || div.className.indexOf("mblDomButton") == -1){ continue; }
+					div.style.border = "1px solid red";
+					dojox.mobile.createDomButton(div);
+				}
+			});
+		</script>
+	</head>
+	<body style="background-color:#C5CCD3;font-family:Helvetica;font-size:12px;">
+		<table border="0">
+			<tr><td><div class="mblDomButtonWhiteUpArrow"></div></td><td>mblDomButtonWhiteUpArrow</td></tr>
+			<tr><td><div class="mblDomButtonWhiteDownArrow"></div></td><td>mblDomButtonWhiteDownArrow</td></tr>
+			<tr><td><div class="mblDomButtonWhitePlus"></div></td><td>mblDomButtonWhitePlus</td></tr>
+			<tr><td><div class="mblDomButtonWhiteSearch"></div></td><td>mblDomButtonWhiteSearch</td></tr>
+			<tr><td><div class="mblDomButtonDarkBlueCheck"></div></td><td>mblDomButtonDarkBlueCheck</td></tr>
+			<tr><td><div class="mblDomButtonWhiteCheck"></div></td><td>mblDomButtonWhiteCheck</td></tr>
+			<tr><td><div class="mblDomButtonGrayArrow"></div></td><td>mblDomButtonGrayArrow</td></tr>
+			<tr><td><div class="mblDomButtonWhiteArrow"></div></td><td>mblDomButtonWhiteArrow</td></tr>
+			<tr><td><div class="mblDomButtonBlueMinus"></div></td><td>mblDomButtonBlueMinus</td></tr>
+			<tr><td><div class="mblDomButtonBluePlus"></div></td><td>mblDomButtonBluePlus</td></tr>
+			<tr><td><div class="mblDomButtonDarkBlueMinus"></div></td><td>mblDomButtonDarkBlueMinus</td></tr>
+			<tr><td><div class="mblDomButtonDarkBluePlus"></div></td><td>mblDomButtonDarkBluePlus</td></tr>
+			<tr><td><div class="mblDomButtonRedMinus"></div></td><td>mblDomButtonRedMinus</td></tr>
+			<tr><td><div class="mblDomButtonRedPlus"></div></td><td>mblDomButtonRedPlus</td></tr>
+			<tr><td><div class="mblDomButtonCheckboxOn"></div></td><td>mblDomButtonCheckboxOn</td></tr>
+			<tr><td><div class="mblDomButtonCheckboxOff"></div></td><td>mblDomButtonCheckboxOff</td></tr>
+		</table>
+	</body>
+</html>
