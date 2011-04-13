@@ -193,7 +193,7 @@ dojo.declare(
 		var fromNode = this.domNode;
 		var fromTop = fromNode.offsetTop;
 		toNode = this.toNode = dojo.byId(toNode);
-		if(!toNode){ alert("dojox.mobile.View#performTransition: destination view not found: "+toNode); }
+		if(!toNode){ alert("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
 		toNode.style.visibility = "hidden";
 		toNode.style.display = "";
 		var toWidget = dijit.byNode(toNode);
@@ -490,10 +490,15 @@ dojo.declare(
 	transition: "slide",
 	iconBase: "",
 	iconPos: "",
+	select: "", // "single", "multiple", or ""
 
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
 		this.domNode.className = "mblRoundRectList";
+	},
+
+	onCheckStateChanged: function(/*Widget*/listItem, /*String*/newState){
+		// Stub function to connect to from your application.
 	}
 });
 
@@ -689,16 +694,6 @@ dojo.declare(
 		return widget && widget.domNode;
 	},
 
-	createDomButton: function(/*DomNode*/refNode, /*DomNode?*/toNode){
-		var s = refNode.className;
-		if(s.match(/mblDomButton\w+_(\d+)/)){
-			var nDiv = RegExp.$1 - 0;
-			for(var i = 0, p = (toNode||refNode); i < nDiv; i++){
-				p = dojo.create("DIV", null, p);
-			}
-		}
-	},
-
 	select: function(/*Boolean?*/deselect){
 		// subclass must implement
 	},
@@ -737,6 +732,10 @@ dojo.declare(
 	anchorLabel: false,
 	noArrow: false,
 	selected: false,
+	checked: false,
+	rightIconClass: "",
+	arrowClass: "mblDomButtonArrow",
+	checkClass: "mblDomButtonCheck",
 
 	buildRendering: function(){
 		var a = this.anchorNode = dojo.create("A");
@@ -763,27 +762,6 @@ dojo.declare(
 			this.labelNode = dojo.create("SPAN", {innerHTML:this._cv(this.label)}, box);
 		}
 		a.appendChild(box);
-
-		if(this.btnClass){
-			var div = this.btnNode = dojo.create("DIV");
-			div.className = this.btnClass+" mblRightButton";
-			div.appendChild(dojo.create("DIV"));
-			div.appendChild(dojo.create("P"));
-
-			var dummyDiv = dojo.create("DIV");
-			dummyDiv.className = "mblRightButtonContainer";
-			dummyDiv.appendChild(div);
-			a.appendChild(dummyDiv);
-			dojo.addClass(a, "mblListItemAnchorHasRightButton");
-			setTimeout(function(){
-				dummyDiv.style.width = div.offsetWidth + "px";
-				dummyDiv.style.height = div.offsetHeight + "px";
-				if(dojo.isIE){
-					// IE seems to ignore the height of LI without this..
-					a.parentNode.style.height = a.parentNode.offsetHeight + "px";
-				}
-			}, 0);
-		}
 		if(this.anchorLabel){
 			box.style.display = "inline"; // to narrow the text region
 		}
@@ -798,10 +776,11 @@ dojo.declare(
 		var parent = this.getParent();
 		if(this.moveTo || this.href || this.url || this.clickable){
 			if(!this.noArrow && !(parent && parent.stateful)){
-				var arrow = dojo.create("DIV");
-				arrow.className = "mblArrow";
-				this.anchorNode.appendChild(arrow);
+				this._setBtnClassAttr(this.arrowClass);
 			}
+			this.connect(this.anchorNode, "onclick", "onClick");
+		}
+		if(parent && parent.select){
 			this.connect(this.anchorNode, "onclick", "onClick");
 		}
 		this.setIcon();
@@ -839,7 +818,8 @@ dojo.declare(
 				}
 			}
 		}
-		if(this.getParent().stateful){
+		var parent = this.getParent();
+		if(parent.stateful){
 			for(var i = 0, c = li.parentNode.childNodes; i < c.length; i++){
 				dojo.removeClass(c[i], "mblItemSelected");
 			}
@@ -848,11 +828,56 @@ dojo.declare(
 				dojo.removeClass(li, "mblItemSelected");
 			}, 1000);
 		}
+		if(parent.select){
+			if(parent.select === "single"){
+				if(!this.checked){
+					this.set("checked", true);
+				}
+			}else if(parent.select === "multiple"){
+				this.set("checked", !this.checked);
+			}
+		}
 		dojo.addClass(li, "mblItemSelected");
 		this.transitionTo(this.moveTo, this.href, this.url, this.scene);
 	},
 
 	onAnchorLabelClicked: function(e){
+		// Stub function to connect to from your application.
+	},
+
+	_setBtnClassAttr: function(/*String*/rightIconClass){
+		var div;
+		if(this.rightIconNode){
+			if(this.rightIconNode.className.match(/(mblDomButton\w+)/)){
+				dojo.removeClass(this.rightIconNode, RegExp.$1);
+			}
+			dojo.addClass(this.rightIconNode, rightIconClass);
+			div = this.rightIconNode;
+		}else{
+			div = dojo.create("DIV", {className:rightIconClass}, this.anchorNode);
+		}
+		dojox.mobile.createDomButton(div);
+		this.rightIconNode = div;
+		this.rightIconClass = rightIconClass;
+	},
+
+	_setCheckedAttr: function(/*Boolean*/checked){
+		var parent = this.getParent();
+		if(parent.select === "single" && !this.checked && checked){
+			dojo.forEach(parent.getChildren(), function(child){
+				child.set("checked", false);
+			});
+		}
+		if(!this.checkNode){
+			this._setBtnClassAttr(this.checkClass);
+			this.checkNode = this.rightIconNode;
+		}
+		this.checkNode.style.display = checked ? "" : "none";
+		dojo.toggleClass(this.domNode, "mblItemChecked", checked);
+		if(this.checked !== checked){
+			this.getParent().onCheckStateChanged(this, checked);
+		}
+		this.checked = checked;
 	},
 
 	_setRightTextAttr: function(/*String*/text){
@@ -1066,8 +1091,11 @@ dojo.declare(
 			img.src = this.icon;
 			dojox.mobile.setupIcon(img, this.iconPos);
 			this.iconNode = img;
+		}else{
+			if(dojox.mobile.createDomButton(this.domNode)){
+				dojo.addClass(this.domNode, "mblToolbarButtonDomButton");
+			}
 		}
-		this.createDomButton(this.domNode);
 		this.connect(this.domNode, "onclick", "onClick");
 	},
 
