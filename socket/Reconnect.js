@@ -21,7 +21,7 @@ dojox.socket.Reconnect = function(socket, options){
 		clearTimeout(checkForOpen);
 		if(!event.wasClean){
 			socket.disconnected(function(){
-				dojox.socket.replace(socket, socket.reconnect());
+				dojox.socket.replace(socket, newSocket = socket.reconnect());
 			});
 		}
 	});
