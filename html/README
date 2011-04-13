@@ -24,7 +24,7 @@ measurement routines aren't used by the majority of developers, but are complex
 enough to not be duplicated.
 Styles adds the ability to create and remove dynamic cssRules, as well as 
 manipulate document style sheets.
-Ellipsis (deprecated) adds support to match text-overflow: ellipsis for Firefox, but no longer works as of Firefox 4.0.  There is no replacement.
+Ellipsis adds support to match text-overflow: ellipsis for Firefox.
 -------------------------------------------------------------------------------
 Dependencies:
 
