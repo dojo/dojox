@@ -3,7 +3,6 @@ dojo.provide("dojox.mobile._base");
 dojo.require("dijit._WidgetBase");
 dojo.require("dijit._Container");
 dojo.require("dijit._Contained");
-dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 // summary:
 //		Mobile Widgets
@@ -24,6 +23,26 @@ dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 //
 //		Note that use of dijit._Container, dijit._Contained, dijit._Templated,
 //		and dojo.query is intentionally avoided to reduce download code size.
+
+(function(){
+	var d = dojo;
+	var ua = navigator.userAgent;
+
+	// BlackBerry (OS 6 or later only)
+	d.isBB = ua.indexOf("BlackBerry") >= 0 && parseFloat(ua.split("Version/")[1]) || undefined;
+
+	// Android
+	d.isAndroid = parseFloat(ua.split("Android ")[1]) || undefined;
+
+	// iPhone, iPod, or iPad
+	// If iPod or iPad is detected, in addition to dojo.isIPod or dojo.isIPad,
+	// dojo.isIPhone will also have iOS version number.
+	if(ua.match(/(iPhone|iPod|iPad)/)){
+		var p = "is" + RegExp.$1.replace(/i/, 'I');
+		var v = ua.match(/OS ([\d_]+)/) ? RegExp.$1 : "1";
+		d.isIPhone = d[p] = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
+	}
+})();
 
 dojo.declare(
 	"dojox.mobile.View",
@@ -1340,7 +1359,7 @@ dojo.addOnLoad(function(){
 			f = dojox.mobile.hideAddressBar;
 		}
 	}
-	dojo.connect(null, (dojo.global.onorientationchange !== undefined && navigator.userAgent.indexOf("Android") === -1)
+	dojo.connect(null, (dojo.global.onorientationchange !== undefined && !dojo.isAndroid)
 		? "onorientationchange" : "onresize", null, f);
 
 	// avoid use of dojo.query
