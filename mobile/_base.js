@@ -665,7 +665,12 @@ dojo.declare(
 			}
 			view.style.visibility = "hidden";
 			target.appendChild(container);
-			dojo.parser.parse(container);
+			var ws = dojo.parser.parse(container);
+			dojo.forEach(ws, function(w){
+				if(w && !w._started && w.startup){
+					w.startup();
+				}
+			});
 			target.appendChild(target.removeChild(container).firstChild); // reparent
 			dijit.byNode(view)._visible = true;
 		}else if(text.charAt(0) == "{"){ // json
