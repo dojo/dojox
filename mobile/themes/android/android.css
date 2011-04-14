@@ -5,8 +5,10 @@
 @import url("Button.css");
 @import url("CheckBox.css");
 @import url("ComboBox.css");
+@import url("IconContainer.css");
 @import url("RadioButton.css");
 @import url("Slider.css");
+@import url("TabBar.css");
 @import url("TextArea.css");
 @import url("TextBox.css");
 @import url("ToggleButton.css");

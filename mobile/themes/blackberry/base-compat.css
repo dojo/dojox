@@ -25,13 +25,6 @@
 	background-image: url(compat/arrow-button-bg.png);
 }
 
-/* dojox.mobile.TabBarButton */
-.mblTabBarButtonIcon {
-	position: absolute;
-	top: 2px;
-	left: 0px;
-}
-
 /* Round Corner */
 .mblRoundCorner {
 	background-color: white;
@@ -116,11 +109,6 @@
 	background-image: url(compat/white-arrow.png);
 }
 
-/* dojox.mobile.TabBarButton */
-.dj_ie6 .mblTabBarButtonDiv, .dj_ie7 .mblTabBarButtonDiv {
-	left: auto;
-}
-
 /* Switch - default */
 .mblSwitchBg {
 	border: none;
@@ -190,46 +178,6 @@
 	top: 1px;
 	height: 26px;
 	background-image: url(compat/switch-arc2-k.gif);
-}
-
-/* Icon Container */
-.mblIconArea IMG {
-	position: absolute;
-	top: 17px;
-	left: 23px;
-}
-
-/* Icon Content Heading */
-.mblIconContentHeading {
-	background-image: url(compat/icon-content-heading-bg.png);
-}
-
-/* Tab Container */
-.mblTabPanelHeader {
-}
-.mblTabButton {
-	background-image: url(compat/tab-button-bg.png);
-}
-.mblTabButtonSelected {
-	background-image: url(compat/tab-sel-button-bg.png);
-}
-*html .mblTabButton { /* IE6 hack */
-	behavior: expression(
-		(function(el){
-			if(!el.previousSibling)
-				el.style.borderWidth = "1px";
-			el.style.behavior = "none";
-		})(this)
-	);
-}
-.dj_ie6 .mblTabPanelHeader .mblDomButton {
-	left: 0px;
-}
-.mblTabButton IMG {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	margin-top: 8px;
 }
 
 /* Progress Indicator */

@@ -1,0 +1,6 @@
+@import url("../common/domButtons/DomButtonColorButtons-compat.css");
+
+/* Icon Content Heading */
+.mblIconContentHeading {
+	background-image: url(compat/icon-content-heading-bg.png);
+}

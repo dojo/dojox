@@ -1,0 +1,13 @@
+@import url("../common/domButtons/DomButtonColorButtons-compat.css");
+
+/* Icon Container */
+.mblIconArea IMG {
+	position: absolute;
+	top: 17px;
+	left: 23px;
+}
+
+/* Icon Content Heading */
+.mblIconContentHeading {
+	background-image: url(compat/icon-content-heading-bg.png);
+}

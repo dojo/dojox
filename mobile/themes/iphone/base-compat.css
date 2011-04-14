@@ -107,11 +107,6 @@
 	background-image: url(compat/white-arrow.png);
 }
 
-/* dojox.mobile.TabBarButton */
-.dj_ie6 .mblTabBarButtonDiv, .dj_ie7 .mblTabBarButtonDiv {
-	left: auto;
-}
-
 /* Switch - default */
 .mblSwitchBg {
 	border: none;
@@ -181,34 +176,6 @@
 	top: 1px;
 	height: 26px;
 	background-image: url(compat/switch-arc2-k.gif);
-}
-
-/* Icon Content Heading */
-.mblIconContentHeading {
-	background-image: url(compat/icon-content-heading-bg.png);
-}
-
-/* Tab Container */
-.mblTabPanelHeader {
-	background-image: url(compat/heading-bg.png);
-}
-.mblTabContainer .mblTabButton {
-	background-image: url(compat/tab-button-bg.png);
-}
-.mblTabContainer .mblTabButtonSelected {
-	background-image: url(compat/tab-sel-button-bg.png);
-}
-*html .mblTabButton { /* IE6 hack */
-	behavior: expression(
-		(function(el){
-			if(!el.previousSibling)
-				el.style.borderWidth = "1px";
-			el.style.behavior = "none";
-		})(this)
-	);
-}
-.dj_ie6 .mblTabPanelHeader .mblDomButton {
-	left: 0px;
 }
 
 /* Progress Indicator */
