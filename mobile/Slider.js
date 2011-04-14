@@ -108,7 +108,9 @@ dojo.declare(
 				var isMouse = e.type == "mousedown";
 				var box = dojo.position(node, false); // can't use true since the added docScroll and the returned x are body-zoom incompatibile
 				var bodyZoom = dojo.style(dojo.body(), "zoom") || 1;
+				if(isNaN(bodyZoom)){ bodyZoom = 1; }
 				var nodeZoom = dojo.style(node, "zoom") || 1;
+				if(isNaN(nodeZoom)){ nodeZoom = 1; }
 				var startPixel = box[this._attrs.x] * nodeZoom * bodyZoom + dojo._docScroll()[this._attrs.x];
 				var maxPixels = box[this._attrs.w] * nodeZoom * bodyZoom;
 				dojo.hitch(this, getEventData)(e);
