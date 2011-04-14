@@ -42,6 +42,15 @@ dojo.require("dijit._Contained");
 		var v = ua.match(/OS ([\d_]+)/) ? RegExp.$1 : "1";
 		d.isIPhone = d[p] = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
 	}
+
+	var html = d.doc.documentElement;
+	html.className += d.trim([
+		d.isBB ? "dj_bb" : "",
+		d.isAndroid ? "dj_android" : "",
+		d.isIPhone ? "dj_iphone" : "",
+		d.isIPod ? "dj_ipod" : "",
+		d.isIPad ? "dj_ipad" : ""
+	].join(" ").replace(/ +/g," "));
 })();
 
 dojo.declare(
