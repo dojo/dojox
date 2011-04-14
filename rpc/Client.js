@@ -1,4 +1,7 @@
-define("dojox/rpc/Client", ["dojo"], function(dojo) {
+define("dojox/rpc/Client", ["dojo", "dojox"], function(dojo, dojox) {
+
+dojo.getObject("rpc.Client", true, dojox);
+
 // Provide extra headers for robust client and server communication
 (function() {
 	dojo._defaultXhr = dojo.xhr;

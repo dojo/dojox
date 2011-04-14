@@ -18,7 +18,7 @@ define("dojox/data/ServiceStore", ["dojo", "dojox"], function(dojo, dojox) {
 dojo.declare("dojox.data.ServiceStore",
 	// ClientFilter is intentionally not required, ServiceStore does not need it, and is more
 	// lightweight without it, but if it is provided, the ServiceStore will use it.
-	dojox.data.ClientFilter||null,{
+	dojo.getObject("data.ClientFilter", 0, dojox)||null,{
 		service: null,
 		constructor: function(options){
 			//summary:
