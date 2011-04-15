@@ -1,4 +1,4 @@
-define("dojox/mobile/ContentPane", ["dojo", "dijit", "dijit/_WidgetBase", "dijit._Container", "dijit._Contained", "dojo/_base/xhr"], function(dojo, dijit) {
+define("dojox/mobile/ContentPane", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit._Container", "dijit._Contained", "dojo/_base/xhr"], function(dojo, dijit, dojox) {
 
 // summary:
 //		A very simple content pane to embed an HTML fragment.

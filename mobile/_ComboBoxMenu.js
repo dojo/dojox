@@ -1,4 +1,4 @@
-define("dojox/mobile/_ComboBoxMenu", ["dojo", "dijit", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase", "dojox/mobile/_ListTouchMixin", "dojox/mobile/scrollable"], function(dojo, dijit) {
+define("dojox/mobile/_ComboBoxMenu", ["dojo", "dijit", "dojox", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase", "dojox/mobile/_ListTouchMixin", "dojox/mobile/scrollable"], function(dojo, dijit, dojox) {
 
 dojo.declare(
 	"dojox.mobile._ComboBoxMenu",

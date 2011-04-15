@@ -1,4 +1,4 @@
-define("dojox/mobile/ComboBox", ["dojo", "dijit", "dojox.mobile.TextBox", "dojox/mobile/_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], function(dojo, dijit) {
+define("dojox/mobile/ComboBox", ["dojo", "dijit", "dojox", "dojox/mobile/TextBox", "dojox/mobile/_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], function(dojo, dijit, dojox) {
 
 dojo.declare(
 	"dojox.mobile.ComboBox",

@@ -1,4 +1,4 @@
-define("dojox/mobile/Slider", ["dojo", "dijit", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin"], function(dojo, dijit) {
+define("dojox/mobile/Slider", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin"], function(dojo, dijit, dojox) {
 dojo.experimental("dojox.mobile.Slider");
 
 dojo.declare(

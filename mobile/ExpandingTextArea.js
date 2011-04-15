@@ -1,4 +1,4 @@
-define("dojox/mobile/ExpandingTextArea", ["dojo", "dijit", "dojox/mobile/TextArea", "dijit/form/_ExpandingTextAreaMixin"], function(dojo, dijit){
+define("dojox/mobile/ExpandingTextArea", ["dojo", "dijit", "dojox", "dojox/mobile/TextArea", "dijit/form/_ExpandingTextAreaMixin"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.mobile.ExpandingTextArea", [dojox.mobile.TextArea, dijit.form._ExpandingTextAreaMixin], {
 		// summary:

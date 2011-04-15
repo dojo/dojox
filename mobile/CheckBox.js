@@ -1,4 +1,4 @@
-define("dojox/mobile/CheckBox", ["dojo", "dijit", "dojox/mobile/ToggleButton", "dijit/form/_CheckBoxMixin"], function(dojo, dijit) {
+define("dojox/mobile/CheckBox", ["dojo", "dijit", "dojox", "dojox/mobile/ToggleButton", "dijit/form/_CheckBoxMixin"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.mobile.CheckBox", [dojox.mobile.ToggleButton, dijit.form._CheckBoxMixin], {
 	// summary:

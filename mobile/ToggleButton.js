@@ -1,4 +1,4 @@
-define("dojox/mobile/ToggleButton", ["dojo", "dijit", "dojox/mobile/Button", "dijit/form/_ToggleButtonMixin"], function(dojo, dijit) {
+define("dojox/mobile/ToggleButton", ["dojo", "dijit", "dojox", "dojox/mobile/Button", "dijit/form/_ToggleButtonMixin"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.mobile.ToggleButton", [dojox.mobile.Button, dijit.form._ToggleButtonMixin], {
 	// summary:

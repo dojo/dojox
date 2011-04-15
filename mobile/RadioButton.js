@@ -1,4 +1,4 @@
-define("dojox/mobile/RadioButton", ["dojo", "dijit", "dojox/mobile/CheckBox", "dijit/form/_RadioButtonMixin"], function(dojo, dijit) {
+define("dojox/mobile/RadioButton", ["dojo", "dijit", "dojox", "dojox/mobile/CheckBox", "dijit/form/_RadioButtonMixin"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.mobile.RadioButton", [dojox.mobile.CheckBox, dijit.form._RadioButtonMixin], {
 	// summary:

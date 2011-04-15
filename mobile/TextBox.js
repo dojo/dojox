@@ -1,4 +1,4 @@
-define("dojox/mobile/TextBox", ["dojo", "dijit", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_TextBoxMixin"], function(dojo, dijit) {
+define("dojox/mobile/TextBox", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_TextBoxMixin"], function(dojo, dijit, dojox) {
 
 dojo.declare(
 	"dojox.mobile.TextBox", 

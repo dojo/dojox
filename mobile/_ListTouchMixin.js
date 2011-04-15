@@ -1,4 +1,4 @@
-define("dojox/mobile/_ListTouchMixin", ["dojo", "dijit", "dijit/form/_ListBase"], function(dojo, dijit) {
+define("dojox/mobile/_ListTouchMixin", ["dojo", "dijit", "dojox", "dijit/form/_ListBase"], function(dojo, dijit, dojox) {
 
 dojo.declare( "dojox.mobile._ListTouchMixin", dijit.form._ListBase, {
 	// summary:

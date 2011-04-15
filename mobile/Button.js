@@ -1,4 +1,4 @@
-define("dojox/mobile/Button", ["dojo", "dijit", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_ButtonMixin"], function(dojo, dijit){
+define("dojox/mobile/Button", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_ButtonMixin"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.mobile.Button", [dijit._WidgetBase, dijit.form._FormWidgetMixin, dijit.form._ButtonMixin], {
 		// summary:
