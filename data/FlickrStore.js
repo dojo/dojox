@@ -123,8 +123,8 @@ dojo.declare("dojox.data.FlickrStore", null, {
 
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
-		var u = d.hitch(this, "_unescapeHtml");
-		var s = d.hitch(d.date.stamp, "fromISOString");
+		var u = dojo.hitch(this, "_unescapeHtml");
+		var s = dojo.hitch(dojo.date.stamp, "fromISOString");
 		switch(attribute){
 			case "title":
 				return [ u(item.title) ];
@@ -183,7 +183,7 @@ dojo.declare("dojox.data.FlickrStore", null, {
 			tagmode:"any"
 		};
 
-		d.forEach(
+		dojo.forEach(
 			[ "tags", "tagmode", "lang", "id", "ids" ],
 			function(i){
 				if(rq[i]){ content[i] = rq[i]; }
@@ -203,21 +203,21 @@ dojo.declare("dojox.data.FlickrStore", null, {
 			preventCache: this.urlPreventCache,
 			content: content
 		};
-		var myHandler = d.hitch(this, function(data){
+		var myHandler = dojo.hitch(this, function(data){
 			if(!!handle){
-				d.disconnect(handle);
+				dojo.disconnect(handle);
 			}
 
 			//Process the items...
 			fetchHandler(this._processFlickrData(data), request);
 		});
-		handle = d.connect("jsonFlickrFeed", myHandler);
-		var deferred = d.io.script.get(getArgs);
+		handle = dojo.connect("jsonFlickrFeed", myHandler);
+		var deferred = dojo.io.script.get(getArgs);
 		
 		//We only set up the errback, because the callback isn't ever really used because we have
 		//to link to the jsonFlickrFeed function....
 		deferred.addErrback(function(error){
-			d.disconnect(handle);
+			dojo.disconnect(handle);
 			errorHandler(error, request);
 		});
 	},
@@ -260,7 +260,7 @@ dojo.extend(dojox.data.FlickrStore, dojo.data.util.simpleFetch);
 
 var feedsUrl = "http://api.flickr.com/services/feeds/";
 
-var reg = dojox.data.FlickrStore.urlRegistry = new d.AdapterRegistry(true);
+var reg = dojox.data.FlickrStore.urlRegistry = new dojo.AdapterRegistry(true);
 
 reg.register("group pool",
 	function(request){ return !!request.query["groupid"]; },
