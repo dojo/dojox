@@ -547,6 +547,7 @@ dojo.declare(
 {
 	icon: "",
 	iconPos: "", // top,left,width,height (ex. "0,0,29,29")
+	alt: "",
 	href: "",
 	hrefTarget: "",
 	moveTo: "",
@@ -824,9 +825,11 @@ dojo.declare(
 		if(this.iconNode){ return; }
 		var a = this.anchorNode;
 		if(this.icon && this.icon != "none"){
-			var img = this.iconNode = dojo.create("IMG");
-			img.className = "mblListItemIcon";
-			img.src = this.icon;
+			var img = this.iconNode = dojo.create("IMG", {
+				className: "mblListItemIcon",
+				src: this.icon,
+				alt: this.alt
+			});
 			this.domNode.insertBefore(img, a);
 			dojox.mobile.setupIcon(this.iconNode, this.iconPos);
 			dojo.removeClass(a, "mblListItemAnchorNoIcon");
@@ -1122,6 +1125,7 @@ dojo.declare(
 				img = dojo.create("IMG", null, this.domNode);
 			}
 			img.src = this.icon;
+			img.alt = this.alt;
 			dojox.mobile.setupIcon(img, this.iconPos);
 			this.iconNode = img;
 		}else{

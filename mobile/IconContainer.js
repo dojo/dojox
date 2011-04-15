@@ -159,6 +159,7 @@ dojo.declare(
 
 	setIcon: function(){
 		this.iconNode.src = this.icon;
+		this.iconNode.alt = this.alt;
 		dojox.mobile.setupIcon(this.iconNode, this.iconPos);
 	},
 

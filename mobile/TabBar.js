@@ -127,7 +127,7 @@ dojo.declare(
 		var div = dojo.create("DIV", {className:"mblTabBarButtonDiv"}, a);
 		var divInner = dojo.create("DIV", {className:"mblTabBarButtonDiv mblTabBarButtonDivInner"}, div);
 
-		this.img1 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon1}, divInner);
+		this.img1 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon1, alt:this.alt}, divInner);
 		this.img1.style.visibility = this.selected ? "hidden" : "";
 		dojox.mobile.setupIcon(this.img1, this.iconPos1);
 		this.img1.onload = function(){
@@ -138,7 +138,7 @@ dojo.declare(
 			this.style.height = this.height + "px";
 		};
 
-		this.img2 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon2}, divInner);
+		this.img2 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon2, alt:this.alt}, divInner);
 		this.img2.style.visibility = this.selected ? "" : "hidden";
 		dojox.mobile.setupIcon(this.img2, this.iconPos2);
 		this.img2.onload = function(){
