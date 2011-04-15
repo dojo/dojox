@@ -1,4 +1,6 @@
-define("dojox/fx/flip", ["dojo", "dojo/fx"], function(dojo) {
+define("dojox/fx/flip", ["dojo", "dojox", "dojo/fx"], function(dojo, dojox) {
+
+	dojo.getObject("fx.flip", true, dojox);
 
 	dojo.experimental("dojox.fx.flip");
 	// because ShrinkSafe will eat this up:
