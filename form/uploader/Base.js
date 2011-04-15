@@ -44,19 +44,17 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._Templated], {
 
 
 	connectForm: function(){
-		//console.log("connectForm...", this.url, !!this.uploadUrl, !!this.getForm())
-
+		// summary:
+		//		Internal. Connects to form if there is one.
+		//		
 		this.url = this.getUrl();
-
 		if(!this._fcon && !!this.getForm()){
 			this._fcon = true;
 			this.connect(this.form, "onsubmit", function(evt){
 				dojo.stopEvent(evt);
 				this.submit(dojo.formToObject(this.form));
 			});
-			//console.log("----------------form connected:", this.url)
 		}
-		//console.log("form:", this.form, this.url);
 	},
 
 	supports: function(what){
