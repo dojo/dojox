@@ -80,9 +80,7 @@ dojox.mobile.parser = new function(){
 		return this.instantiate(list, mixin, args);
 	};
 }();
-dojo._loaders.unshift(function(){
-	if(dojo.config.parseOnLoad){
-		dojox.mobile.parser.parse();
-	}
-});
+if(dojo.config.parseOnLoad){
+	dojo.ready(100, dojox.mobile.parser, "parse");
+}
 dojo.parser = dojox.mobile.parser; // in case user app calls dojo.parser

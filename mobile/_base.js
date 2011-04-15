@@ -1332,29 +1332,31 @@ dojox.mobile.createDomButton = function(/*DomNode*/refNode, /*Object?*/style, /*
 	return node;
 };
 
-dojo._loaders.unshift(function(){
-	// avoid use of dojo.query
-	/*
-	var list = dojo.query('[lazy=true] [dojoType]', null);
-	list.forEach(function(node, index, nodeList){
-		node.setAttribute("__dojoType", node.getAttribute("dojoType"));
-		node.removeAttribute("dojoType");
-	});
-	*/
-
-	var nodes = dojo.body().getElementsByTagName("*");
-	var i, len, s;
-	len = nodes.length;
-	for(i = 0; i < len; i++){
-		s = nodes[i].getAttribute("dojoType");
-		if(s){
-			if(nodes[i].parentNode.getAttribute("lazy") == "true"){
-				nodes[i].setAttribute("__dojoType", s);
-				nodes[i].removeAttribute("dojoType");
+if(dojo.config.parseOnLoad){
+	dojo.ready(90, function(){
+		// avoid use of dojo.query
+		/*
+		var list = dojo.query('[lazy=true] [dojoType]', null);
+		list.forEach(function(node, index, nodeList){
+			node.setAttribute("__dojoType", node.getAttribute("dojoType"));
+			node.removeAttribute("dojoType");
+		});
+		*/
+	
+		var nodes = dojo.body().getElementsByTagName("*");
+		var i, len, s;
+		len = nodes.length;
+		for(i = 0; i < len; i++){
+			s = nodes[i].getAttribute("dojoType");
+			if(s){
+				if(nodes[i].parentNode.getAttribute("lazy") == "true"){
+					nodes[i].setAttribute("__dojoType", s);
+					nodes[i].removeAttribute("dojoType");
+				}
 			}
 		}
-	}
-});
+	});
+}
 
 dojo.addOnLoad(function(){
 	dojox.mobile.addClass();
