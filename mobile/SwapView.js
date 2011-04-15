@@ -111,7 +111,9 @@ dojo.declare(
 				if(newX === 0){ // moving to another view
 					dojox.mobile.currentView = newView;
 				}
+				newView.domNode._isShowing = (newView && newX === 0);
 			}
+			this.domNode._isShowing = !(newView && newX === 0);
 		}
 		this.inherited(arguments);
 	},
@@ -123,7 +125,7 @@ dojo.declare(
 		var children = this.domNode.parentNode.childNodes;
 		for(var i = 0; i < children.length; i++){
 			var c = children[i];
-			if(c.nodeType == 1 && c != dojox.mobile.currentView.domNode){
+			if(c.nodeType == 1 && !c._isShowing){
 				c.style.display = "none";
 			}
 		}
