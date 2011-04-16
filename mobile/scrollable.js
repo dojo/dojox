@@ -250,6 +250,12 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 	};
 
+	this.isFormElement = function(node){
+		if(node.nodeType !== 1){ return false; }
+		var t = node.tagName;
+		return (t === "SELECT" || t === "INPUT" || t === "TEXTAREA" || t === "BUTTON");
+	};
+
 	this.onTouchStart = function(e){
 		if(this._conn && (new Date()).getTime() - this.startTime < 500){
 			return; // ignore successive onTouchStart calls
@@ -273,7 +279,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		this._posX = [this.touchStartX];
 		this._posY = [this.touchStartY];
 
-		if(e.target.nodeType != 1 || (e.target.tagName != "SELECT" && e.target.tagName != "INPUT" && e.target.tagName != "TEXTAREA")){
+		if(!this.isFormElement(e.target)){
 			dojo.stopEvent(e);
 		}
 	};
@@ -369,7 +375,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					clicked = true;
 				}
 			}
-			if(clicked){ // clicked, not dragged or flicked
+			if(clicked && !this.isFormElement(e.target)){ // clicked, not dragged or flicked
 				this.hideScrollBar();
 				this.removeCover();
 				if(dojox.mobile.hasTouch){
