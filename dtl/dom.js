@@ -23,9 +23,9 @@ dojo.require("dojox.dtl.Context");
 			if(typeof this._commentable == "undefined"){
 				// Check to see if the browser can handle comments
 				this._commentable = false;
-				var div = document.createElement("div");
-				div.innerHTML = "<!--Test comment handling, and long comments, using comments whenever possible.-->";
-				if(div.childNodes.length && div.childNodes[0].nodeType == 8 && div.childNodes[0].data == "comment"){
+				var div = document.createElement("div"), comment = "Test comment handling, and long comments, using comments whenever possible.";
+				div.innerHTML = "<!--" + comment + "-->";
+				if(div.childNodes.length && div.firstChild.nodeType == 8 && div.firstChild.data == comment){
 					this._commentable = true;
 				}
 			}
