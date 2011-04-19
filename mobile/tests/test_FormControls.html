@@ -143,7 +143,7 @@
 							<table>
 								<tr>
 									<td>0</td>
-									<td><input id="sh" name="sh" dojoType="dojox.mobile.Slider" value="0" min="0" max="20" step="0.1" type="range" style="width:150px;" /></td>
+									<td><input id="sh" name="sh" dojoType="dojox.mobile.Slider" value="0" min="0" max="20" step="0.1" type="range" style="width:150px;"></td>
 									<td>20</td>
 								</tr>
 							</table>
@@ -155,12 +155,14 @@
 				<table width="100%">
 					<tr>
 						<td><span class="bold">ComboBox</span></td>
-						<td align="right"><input type=text" dojoType="dojox.mobile.ComboBox" data-dojo-props='value:"", list:"states"'></td>
+						<td align="right"><input type="text" dojoType="dojox.mobile.ComboBox" data-dojo-props='value:"", list:"states"'></td>
 					</tr>
 					<tr>
 						<td valign="top"><span class="bold">TextArea</span></td>
-						<td align="right"><textarea dojoType="dojox.mobile.TextArea" rows="3" cols="20">TextArea</textarea>
-							<textarea dojoType="dojox.mobile.ExpandingTextArea" rows="3" cols="20">ExpandingTextArea</textarea></td>
+						<td align="right">
+							<textarea dojoType="dojox.mobile.TextArea" rows="3" cols="20">TextArea</textarea><br>
+							<textarea dojoType="dojox.mobile.ExpandingTextArea" rows="3" cols="20">ExpandingTextArea</textarea>
+						</td>
 					</tr>
 					<tr>
 						<td valign="top"><span class="bold">TextBox</span></td>
@@ -168,7 +170,6 @@
 					</tr>
 				</table>
 			</div>
-
 		</div>
 	</body>
 </html>
