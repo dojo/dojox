@@ -20,7 +20,8 @@ dojox.mobile.parser = new function(){
 				dojo._mixin(params, args.defaults);
 				dojo._mixin(params, mixin);
 				for(prop in proto){
-					v = n.getAttribute(prop);
+					var v = n.getAttributeNode(prop);
+					v = v && v.nodeValue;
 					if(!v){ continue; }
 					if(typeof proto[prop] === "string"){
 						params[prop] = v;
