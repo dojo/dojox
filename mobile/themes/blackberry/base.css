@@ -243,9 +243,18 @@ div.mblToolbarButtonDomButton {
 }
 .mblListItemTextBox {
 	padding-right: 28px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.mblListItemTextBox2 {
+	padding-right: 58px;
 }
 .mblListItemTextBoxSelected {
 	background-color: #0869C6;
+}
+.mblVariableHeight .mblListItemTextBox {
+	white-space: normal;
 }
 .mblRoundRectList .mblListItem:first-child {
 	border-top-width: 0px;
@@ -277,14 +286,21 @@ div.mblToolbarButtonDomButton {
 	padding-right: 50px;
 }
 
-.mblListItem .mblDomButton {
+.mblListItem .mblLeftButton {
+	position: absolute;
+	top: 50%;
+	margin-top: -15px;
+	line-height: normal;
+}
+.mblListItem .mblRightButton {
 	position: absolute;
 	top: 50%;
 	right: 7px;
 	margin-top: -15px;
+	line-height: normal;
 }
-.mblListItem .mblDomButton DIV {
-	border-color: black;
+.mblListItem .mblRightButton2 {
+	right: 36px;
 }
 .mblItemSelected .mblDomButton DIV {
 	border-color: white;
@@ -296,15 +312,6 @@ div.mblToolbarButtonDomButton {
 	right: 30px;
 	color: black;
 	line-height: normal;
-}
-.mblListItem .mblRightButtonContainer {
-	position: absolute;
-	top: 50%;
-	right: 12px;
-}
-.mblListItem .mblRightButton {
-	position: absolute;
-	top: -50%;
 }
 .mblListItemSubText {
 	font-size: 14px;

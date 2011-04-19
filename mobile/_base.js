@@ -814,6 +814,7 @@ dojo.declare(
 {
 	rightText: "",
 	btnClass: "",
+	btnClass2: "",
 	anchorLabel: false,
 	noArrow: false,
 	selected: false,
@@ -825,7 +826,7 @@ dojo.declare(
 	buildRendering: function(){
 		var a = this.anchorNode = dojo.create("A");
 		a.className = "mblListItemAnchor";
-		var box = dojo.create("DIV");
+		var box = this.box = dojo.create("DIV");
 		box.className = "mblListItemTextBox";
 		if(this.anchorLabel){
 			box.style.cursor = "pointer";
@@ -875,7 +876,13 @@ dojo.declare(
 	setIcon: function(){
 		if(this.iconNode){ return; }
 		var a = this.anchorNode;
-		if(this.icon && this.icon != "none"){
+		if(this.icon && this.icon.indexOf("mblDomButton") === 0){
+			var div = this.iconNode = dojo.create("DIV", {className:this.icon + " mblLeftButton"});
+			this.domNode.insertBefore(div, a);
+			dojox.mobile.createDomButton(div);
+			dojo.removeClass(a, "mblListItemAnchorNoIcon");
+			a.style.paddingLeft = (div.offsetWidth + 11) + "px";
+		}else if(this.icon && this.icon != "none"){
 			var img = this.iconNode = dojo.create("IMG", {
 				className: "mblListItemIcon",
 				src: this.icon,
@@ -933,20 +940,28 @@ dojo.declare(
 		// Stub function to connect to from your application.
 	},
 
-	_setBtnClassAttr: function(/*String*/rightIconClass){
+	_setBtnClass: function(/*String*/btnClass, /*DomNode*/node, /*String*/className){
 		var div;
-		if(this.rightIconNode){
-			if(this.rightIconNode.className.match(/(mblDomButton\w+)/)){
-				dojo.removeClass(this.rightIconNode, RegExp.$1);
+		if(node){
+			if(node.className.match(/(mblDomButton\w+)/)){
+				dojo.removeClass(node, RegExp.$1);
 			}
-			dojo.addClass(this.rightIconNode, rightIconClass);
-			div = this.rightIconNode;
+			dojo.addClass(node, btnClass);
+			div = node;
 		}else{
-			div = dojo.create("DIV", {className:rightIconClass}, this.anchorNode);
+			div = dojo.create("DIV", {className:btnClass+" "+className}, this.anchorNode);
 		}
 		dojox.mobile.createDomButton(div);
-		this.rightIconNode = div;
-		this.rightIconClass = rightIconClass;
+		return div;
+	},
+
+	_setBtnClassAttr: function(/*String*/rightIconClass){
+		this.rightIconNode = this._setBtnClass(rightIconClass, this.rightIconNode, "mblRightButton");
+	},
+
+	_setBtnClass2Attr: function(/*String*/rightIconClass){
+		this.rightIconNode2 = this._setBtnClass(rightIconClass, this.rightIconNode2, "mblRightButton mblRightButton2");
+		dojo.addClass(this.box, "mblListItemTextBox2");
 	},
 
 	_setCheckedAttr: function(/*Boolean*/checked){
