@@ -1,0 +1,20 @@
+.scaleIn.out {
+	z-index: -100;
+	-webkit-animation-duration: .5s;
+	-webkit-animation-name: scaleInOut;
+	-webkit-animation-timing-function: ease-out;
+}
+.scaleIn.in {
+	z-index: 0;
+	-webkit-animation-duration: .5s;
+	-webkit-animation-name: scaleInIn;
+	-webkit-animation-timing-function: ease-out;
+}
+@-webkit-keyframes scaleInOut {
+	from {}
+	to {}
+}
+@-webkit-keyframes scaleInIn {
+	from { -webkit-transform: scale(0.0); }
+	to { -webkit-transform: scale(1.0); }
+}
