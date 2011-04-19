@@ -47,7 +47,7 @@ dojox.socket.Reconnect = function(socket, options){
 		socket.reconnect = function(){
 			return socket.args ?
 				dojox.socket.LongPoll(socket.args) :
-				dojox.socket(socket.URL);
+				dojox.socket.WebSocket({url: socket.URL || socket.url}); // different cases for different impls
 		};
 	}
 	return socket;
