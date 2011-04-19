@@ -2,7 +2,6 @@ define("dojox/socket", ["dojo", "dojo/cookie"], function(dojo) {
 
 var WebSocket = window.WebSocket;
 
-dojox.socket = Socket;
 function Socket(/*dojo.__XhrArgs*/ argsOrUrl){
 	// summary:
 	//		Provides a simple socket connection using WebSocket, or alternate
@@ -40,14 +39,17 @@ function Socket(/*dojo.__XhrArgs*/ argsOrUrl){
 	if(typeof argsOrUrl == "string"){
 		argsOrUrl = {url: argsOrUrl};
 	}
-	return WebSocket ? dojox.socket.WebSocket(argsOrUrl) : dojox.socket.LongPoll(argsOrUrl);
+	return WebSocket ? dojox.socket.WebSocket(argsOrUrl, true) : dojox.socket.LongPoll(argsOrUrl);
 };
+dojox.socket = Socket;
 
-Socket.WebSocket = function(args){
+Socket.WebSocket = function(args, fallback){
 	// summary:
 	//		A wrapper for WebSocket, than handles standard args and relative URLs
 	var ws = new WebSocket(new dojo._Url(document.baseURI.replace(/^http/i,'ws'), args.url));
-	ws.on = ws.addEventListener;
+	ws.on = function(type, listener){
+		ws.addEventListener(type, listener, true);
+	};
 	var opened;
 	dojo.connect(ws, "onopen", function(event){
 		opened = true;
@@ -56,8 +58,9 @@ Socket.WebSocket = function(args){
 		if(opened){
 			return;
 		}
-		WebSocket = null;
-		Socket.replace(ws, dojox.socket(args), true);
+		if(fallback){
+			Socket.replace(ws, dojox.socket.LongPoll(args), true);
+		}
 	});
 	return ws;
 };
@@ -72,8 +75,10 @@ Socket.replace = function(socket, newSocket, listenForOpen){
 	dojo.forEach(["message", "close", "error"], proxyEvent);
 	function proxyEvent(type){
 		(newSocket.addEventListener || newSocket.on).call(newSocket, type, function(event){
-			socket.dispatchEvent(event);
-		});
+			var newEvent = document.createEvent("MessageEvent");
+			newEvent.initMessageEvent(event.type, false, false, event.data, event.origin, event.lastEventId, event.source);
+			socket.dispatchEvent(newEvent);
+		}, true);
 	}
 };
 Socket.LongPoll = function(/*dojo.__XhrArgs*/ args){
