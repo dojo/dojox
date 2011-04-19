@@ -97,10 +97,9 @@ dojox.mobile.loadDeviceTheme = function(){
 	if(!dojo.isArray(t)){ alert("loadDeviceTheme: array is expected but found: "+t); }
 	var i, j;
 	var m = dojox.mobile.themeMap;
+	var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;
 	for(i = 0; i < m.length; i++){
-		var re1 = new RegExp("theme="+m[i][0]);
-		var re2 = new RegExp(m[i][0]);
-		if(location.search.match(re1) || navigator.userAgent.match(re2)){
+		if(ua.match(new RegExp(m[i][0]))){
 			var theme = m[i][1];
 			var files = m[i][2];
 			for(j = t.length - 1; j >= 0; j--){
