@@ -3,7 +3,6 @@
 	-webkit-animation-duration: .5s;
 	-webkit-animation-name: swirlOut;
 	-webkit-animation-timing-function: ease-in;
-	-webkit-transform-origin: 50% 50%;
 }
 .swirl.in {
 	z-index: -100;

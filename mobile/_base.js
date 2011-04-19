@@ -270,6 +270,33 @@ dojo.declare(
 		}else{
 			dojo.addClass(fromNode, transition + " out" + rev);
 			dojo.addClass(toNode, transition + " in" + rev);
+			// set transform origin
+			var fromOrigin = "50% 50%";
+			var toOrigin = "50% 50%";
+			var scrollTop, posX, posY;
+			if(transition.indexOf("swirl") != -1 || transition.indexOf("zoom") != -1){
+				if(this.keepScrollPos && !this.getParent()){
+					scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
+				}else{
+					scrollTop = -dojo.position(fromNode, true).y;
+				}
+				posY = dojo.global.innerHeight / 2 + scrollTop;
+				fromOrigin = "50% " + posY + "px";
+				toOrigin = "50% " + posY + "px";
+			}else if(transition.indexOf("scale") != -1){
+				var viewPos = dojo.position(fromNode, true);
+				posX = ((this.clickedPosX !== undefined) ? this.clickedPosX : dojo.global.innerWidth / 2) - viewPos.x;
+				if(this.keepScrollPos && !this.getParent()){
+					scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
+				}else{
+					scrollTop = -viewPos.y;
+				}
+				posY = ((this.clickedPosY !== undefined) ? this.clickedPosY : dojo.global.innerHeight / 2) + scrollTop;
+				fromOrigin = posX + "px " + posY + "px";
+				toOrigin = posX + "px " + posY + "px";
+			}
+			dojo.style(fromNode, {webkitTransformOrigin:fromOrigin});
+			dojo.style(toNode, {webkitTransformOrigin:toOrigin});
 		}
 	},
 
@@ -302,6 +329,9 @@ dojo.declare(
 		// this.domNode may be destroyed as a result of invoking the callback,
 		// so check for that before accessing it.
 		this.domNode && (this.domNode.className = "mblView");
+
+		// clear the clicked position
+		this.clickedPosX = this.clickedPosY = undefined;
 	},
 
 	invokeCallback: function(){
@@ -366,7 +396,6 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
 		this.domNode.className = "mblHeading";
-		this._view = this.getParent();
 		if(this.label){
 			this.domNode.appendChild(document.createTextNode(this._cv(this.label)));
 		}else{
@@ -413,12 +442,30 @@ dojo.declare(
 		});
 	},
 
+	findCurrentView: function(){
+		var w = this;
+		while(true){
+			w = w.getParent();
+			if(!w){ return null; }
+			if(w instanceof dojox.mobile.View){ break; }
+		}
+		return w;
+	},
+
 	onClick: function(e){
 		var h1 = this.domNode;
 		dojo.addClass(h1, "mblArrowButtonSelected");
 		setTimeout(function(){
 			dojo.removeClass(h1, "mblArrowButtonSelected");
 		}, 1000);
+
+		// keep the clicked position for transition animations
+		var view = this.findCurrentView();
+		if(view){
+			view.clickedPosX = e.clientX;
+			view.clickedPosY = e.clientY;
+		}
+
 		this.goTo(this.moveTo, this.href);
 	},
 
@@ -430,24 +477,20 @@ dojo.declare(
 	},
 
 	goTo: function(moveTo, href){
-		if(!this._view){
-			this._view = this.getParent();
-		}
-		if(!this._view){ return; }
+		var view = this.findCurrentView();
+		if(!view){ return; }
 		if(href){
-			this._view.performTransition(null, -1, this.transition, this, function(){location.href = href;});
+			view.performTransition(null, -1, this.transition, this, function(){location.href = href;});
 		}else{
 			if(dojox.mobile.app && dojox.mobile.app.STAGE_CONTROLLER_ACTIVE){
 				// If in a full mobile app, then use its mechanisms to move back a scene
 				dojo.publish("/dojox/mobile/app/goback");
-			}
-			else{
+			}else{
 				// Basically transition should be performed between two
 				// siblings that share the same parent.
 				// However, when views are nested and transition occurs from
 				// an inner view, search for an ancestor view that is a sibling
 				// of the target view, and use it as a source view.
-				var view = this._view;
 				var node = dijit.byId(view.convertToId(moveTo));
 				if(node){
 					var parent = node.getParent();
@@ -585,6 +628,14 @@ dojo.declare(
 			if(w instanceof dojox.mobile.View){ break; }
 		}
 		return w;
+	},
+
+	setTransitionPos: function(e){
+		var w = this.findCurrentView(null); // the current view widget
+		if(w){
+			w.clickedPosX = e.clientX;
+			w.clickedPosY = e.clientY;
+		}
 	},
 
 	transitionTo: function(moveTo, href, url, scene){
@@ -874,6 +925,7 @@ dojo.declare(
 			}
 		}
 		dojo.addClass(li, "mblItemSelected");
+		this.setTransitionPos(e);
 		this.transitionTo(this.moveTo, this.href, this.url, this.scene);
 	},
 
@@ -1142,6 +1194,7 @@ dojo.declare(
 	},
 
 	onClick: function(e){
+		this.setTransitionPos(e);
 		this.defaultClickAction();
 	}
 });

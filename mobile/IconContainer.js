@@ -230,6 +230,7 @@ dojo.declare(
 
 	iconClicked: function(e){
 		if(e){
+			this.setTransitionPos(e);
 			setTimeout(dojo.hitch(this, function(d){ this.iconClicked(); }), 0);
 			return;
 		}
