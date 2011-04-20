@@ -2,14 +2,14 @@ dojo.provide("dojox.drawing.plugins.drawing.GreekPalette");
 
 dojo.require("dojox.drawing.library.greek");
 dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+dojo.require("dijit._TemplatedMixin");
 dojo.require("dijit._PaletteMixin");
 dojo.require("dojo.i18n");
 
 dojo.requireLocalization("dojox.editor.plugins", "latinEntities");
 
 dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
-	[dijit._Widget, dijit._Templated, dijit._PaletteMixin],
+	[dijit._Widget, dijit._TemplatedMixin, dijit._PaletteMixin],
 	{
 	// summary:
 	//		This plugin uses the palette dijit in order to give
@@ -127,7 +127,7 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 			this.connect(cellNode, "onmouseenter", "_onCellMouseEnter");
 		}, this);
 	},
-        
+	
         _onCellMouseEnter: function(e){
 		// summary:
 		//		Simple function to handle updating the display at the bottom of
@@ -294,32 +294,37 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 	}
 });
 
+dojox.drawing.register({
+	name:"dojox.drawing.plugins.drawing.GreekPalette",
+	button: false
+}, "plugin");
+
 dojo.declare("dojox.drawing.plugins.Greeks",
         null,
-	{
+{
+	// summary:
+	//		Represents a character.
+	//		Initialized using an alias for the character (like cent) rather
+	//		than with the character itself.
+
+	constructor: function(/*String*/ alias){
 		// summary:
-		//		Represents a character.
-		//		Initialized using an alias for the character (like cent) rather
-		//		than with the character itself.
+		//	 Construct JS object representing an entity (associated w/a cell
+		//		in the palette)
+		// value: String
+		//		alias name: 'cent', 'pound' ..
+		this._alias = alias;
+	},
 
- 		constructor: function(/*String*/ alias){
-			// summary:
-			//	 Construct JS object representing an entity (associated w/a cell
-			//		in the palette)
-			// value: String
-			//		alias name: 'cent', 'pound' ..
-			this._alias = alias;
-		},
+	getValue: function(){
+		// summary:
+		//   Returns HTML representing the character, like &amp;
+		//
+		return this._alias;
+	},
 
-		getValue: function(){
-			// summary:
-			//   Returns HTML representing the character, like &amp;
-			//
-			return this._alias;
-		},
-
-		fillCell: function(/*DOMNode*/ cell){
-			// Deal with entities that have keys which are reserved words.
-			cell.innerHTML = "&"+this._alias+";";
-                }
+	fillCell: function(/*DOMNode*/ cell){
+		// Deal with entities that have keys which are reserved words.
+		cell.innerHTML = "&"+this._alias+";";
+	}
 });
