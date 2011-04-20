@@ -22,9 +22,11 @@ dojo.require("dojox.lang.functional");
 		// margins for the chart: {l: 10, r: 10, t: 10, b: 10}
 		margins: null,
 		
-		// chart area
-		stroke: null,
-		fill:   null,
+		// chart area, define them as undefined to:
+		// allow the parser to take them into account
+		// but make sure they have no defined value to not override theme
+		stroke: undefined,
+		fill:   undefined,
 		
 		// methods
 		
