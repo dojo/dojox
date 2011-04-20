@@ -134,16 +134,19 @@ dojo.declare(
 			// iPhone and Windows Safari sometimes fail to draw icon images.
 			// For some reason, this code solves the problem.
 			// Other browsers, including Chrome, do not have this problem.
-			this.style.width = this.width + "px";
-			this.style.height = this.height + "px";
+			// Same issue is fixed again a few lines below inside img2.onload()
+		    var originDisplay = this.style.display;
+			this.style.display = "none";
+			this.style.display = originDisplay;
 		};
 
 		this.img2 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon2, alt:this.alt}, divInner);
 		this.img2.style.visibility = this.selected ? "" : "hidden";
 		dojox.mobile.setupIcon(this.img2, this.iconPos2);
 		this.img2.onload = function(){
-			this.style.width = this.width + "px";
-			this.style.height = this.height + "px";
+		    var originDisplay = this.style.display;
+			this.style.display = "none";
+			this.style.display = originDisplay;
 		};
 
 		this.box = dojo.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
