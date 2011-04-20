@@ -15,6 +15,12 @@
 	to {}
 }
 @-webkit-keyframes zoomInIn {
-	from { -webkit-transform: scale(0.0); }
-	to { -webkit-transform: scale(1.0); }
+	from {
+		-webkit-transform: scale(0.0);
+		opacity: 0;
+	}
+	to {
+		-webkit-transform: scale(1.0);
+		opacity: 1;
+	}
 }
