@@ -1,10 +1,13 @@
 @import url("../common/domButtons/DomButtonColorButtons-compat.css");
 
 /* Icon Container */
+.mblIconArea DIV {
+	line-height: 88px;
+}
 .mblIconArea IMG {
-	position: absolute;
-	top: 17px;
-	left: 23px;
+	position: relative;
+	top: 0;
+	left: 0;
 }
 
 /* Icon Content Heading */

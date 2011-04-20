@@ -1,0 +1,52 @@
+/* dojox.mobile.ToggleButton */
+.mblToggleButton {
+	padding: 0px 10px 0px 25px;
+	height: 29px;
+	border-width: 1px 1px 1px 1px;
+	border-style: outset;
+	border-color: #9CACC0;
+	color: black;
+	font-family: Helvetica;
+	font-size: @togglebutton-font-size;
+	line-height: 29px;
+	cursor: pointer;
+	outline: none;
+	background-image: @togglebutton-background-image;
+	position: relative;
+	-webkit-border-radius: @togglebutton-border-radius;
+	-webkit-tap-highlight-color: transparent;
+}
+.mblToggleButton.mblToggleButtonSelected {
+	background-image: @togglebutton-selected-background-image;
+	color: @togglebutton-selected-color;
+}
+.mblToggleButton.mblToggleButtonChecked {
+	color: @togglebutton-checked-color;
+	background-image: @togglebutton-checked-background-image;
+}
+.mblToggleButton.mblToggleButtonChecked::after {
+	content: "";
+	width: 5px;
+	height: 10px;
+	position: absolute;
+	top: 6px;
+	left: 7px;
+	border-color: @togglebutton-checked-after-border-color;
+	border-width: 2px;
+	border-style: none solid solid none;
+	-webkit-transform: rotate(45deg) skew(10deg);
+	-webkit-transform-origin: 50% 50%;
+}
+.mblToggleButton.mblToggleButtonChecked.mblToggleButtonSelected {
+	background-image: @togglebutton-checked-selected-background-image;
+	color: @togglebutton-checked-selected-color;
+}
+.mblToggleButton.mblToggleButtonChecked.mblToggleButtonSelected::after {
+	border-color: @togglebutton-checked-selected-after-border-color;
+}
+.mblToggleButton:disabled {
+	border-color: grey;
+	color: grey;
+	cursor: default;
+	background-image: none;
+}

@@ -1,0 +1,263 @@
+@body-background-color: rgb(197,204,211);
+@body-font-size: 17px;
+
+@view-color: inherit; // default
+
+@heading-height: 42px;
+@heading-padding: 0px;
+@heading-background-color: #889BB3;
+@heading-background-image: -webkit-gradient(linear, left top, left bottom, from(#B0BCCD), to(#6D84A2), color-stop(0.5, #889BB3), color-stop(0.5, #8195AF));
+@heading-border-top: 1px solid #CDD5DF;
+@heading-border-bottom: 1px solid #2D3642;
+@heading-font-size: 20px;
+@heading-font-weight: bold;
+@heading-line-height: 44px;
+@heading-text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+@heading-z-index: 1;
+
+@arrowbutton-height: 42px;
+@arrowbutton-margin: 0px 0px 0px 6px;
+@arrowbutton-head-top: 11px;
+@arrowbutton-head-left: 8px;
+@arrowbutton-head-height: 19px;
+@arrowbutton-head-border-color: #3A4655;
+@arrowbutton-head-background-image: -webkit-gradient(linear, left top, right bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@arrowbutton-body-top: 6px;
+@arrowbutton-body-padding: 0px 10px 0px 3px;
+@arrowbutton-body-height: 29px;
+@arrowbutton-body-border-color: #9CACC0;
+@arrowbutton-body-font-size: 13px;
+@arrowbutton-body-font-weight: inherit; // default
+@arrowbutton-body-color: white;
+@arrowbutton-body-line-height: 29px;
+@arrowbutton-body-border-radius: 5px;
+@arrowbutton-body-background-color: #5877A2;
+@arrowbutton-body-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@arrowbutton-neck-top: 6px;
+@arrowbutton-neck-width: 4px;
+@arrowbutton-neck-height: 29px;
+@arrowbutton-neck-border-width: 1px 0px 1px 0px;
+@arrowbutton-neck-border-color: #9CACC0;
+@arrowbutton-neck-background-color: transparent; // default
+@arrowbutton-neck-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@arrowbutton-selected-head-background-image: -webkit-gradient(linear, left top, right bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
+@arrowbutton-selected-neck-background-color: transparent; // default
+@arrowbutton-selected-neck-background-image: -webkit-gradient(linear, left top, left bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
+
+@toolbarbutton-margin: 6px;
+@toolbarbutton-height: 29px;
+@toolbarbutton-border: 1px inset #9CACC0;
+@toolbarbutton-font-size: 13px;
+@toolbarbutton-line-height: 29px;
+@toolbarbutton-border-radius: 5px;
+
+@roundrect-margin: 7px 9px 16px 9px;
+@roundrect-border: 1px solid #ADAAAD;
+@roundrect-border-radius: 8px;
+@roundrect-color: inherit; // default
+@roundrect-background-color: white;
+@roundrect-shadow-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+
+@edgetoedgecategory-height: 22px;
+@edgetoedgecategory-border-top: 1px solid #A4B0B9;
+@edgetoedgecategory-border-bottom: 1px solid #979DA3;
+@edgetoedgecategory-background-color: transparent; // default
+@edgetoedgecategory-background-image: -webkit-gradient(linear, left top, left bottom, from(#8F9EA9), to(#B7C0C7));
+@edgetoedgecategory-font-weight: bold;
+@edgetoedgecategory-color: white;
+@edgetoedgecategory-line-height: 22px;
+@edgetoedgecategory-text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+
+@roundrectcategory-color: #4C566C;
+@roundrectcategory-padding: 18px 0px 0px 20px;
+@roundrectcategory-margin: 0px;
+@roundrectcategory-height: auto; // default
+@roundrectcategory-text-shadow: rgba(255, 255, 255, 1) 0px 1px 0px;
+@roundrectcategory-line-height: inherit; // default
+@roundrectcategory-background-color: transparent; // default
+@roundrectcategory-border: none; // default
+@roundrectcategory-border-bottom-width: 0px; // default
+@roundrectcategory-border-top-left-radius: 0px; // default
+@roundrectcategory-border-top-right-radius: 0px; // default
+
+@roundrectlist-margin: 7px 9px 16px 9px;
+@roundrectlist-border-radius: 8px;
+@roundrectlist-bottom-left-radius: 8px; // default
+@roundrectlist-bottom-right-radius: 8px; // default
+
+@edgetoedgelist-background-color: white;
+
+@listitem-height: 43px;
+@listitem-border-bottom: 1px solid #ADAAAD;
+@listitem-line-height: 43px;
+@listitem-font-size: inherit; // default
+@listitem-font-weight: bold;
+@listitem-color: black;
+@listitem-background-color: transparent; // default
+@listitem-vertical-align: bottom; // To avoid IE6 LI bug
+@listitem-padding: 0px 0px 0px 8px;
+@listitem-selected-background-color: #048BF4;
+@listitem-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#048BF4), to(#005CE5));
+@listitem-textbox-selected-background-color: #048BF4;
+@roundrectlist-listitem-first-border-top-width: 0px; // default
+@roundrectlist-listitem-first-border-top-left-radius: 8px;
+@roundrectlist-listitem-first-border-top-right-radius: 8px;
+@roundrectlist-listitem-last-border-bottom-left-radius: 8px;
+@roundrectlist-listitem-last-border-bottom-right-radius: 8px;
+@edgetoedgelist-listitem-last-border-bottom-color: #707C84;
+@edgetoedgelist-listitem-last-border-bottom-width: 1px; // default
+@listitem-anchor-background-position: 9px 7px;
+@listitem-anchor-padding-left: 40px;
+@listitem-anchor-noicon-padding-left: 10px;
+@listitem-selected-anchor-color: white;
+@listitem-anchor-rightbutton-padding-right: 40px;
+@listitem-dombutton-border-color: transparent; // default
+@listitem-righttext-top: 12px;
+@listitem-righttext-color: #324F85;
+@listitem-checked-color: #314E84;
+@listitem-subtext-font-size: inherit; // default
+@listitem-subtext-color: inherit; // default
+@listitem-selected-subtext-color: inherit; // default
+
+@switch-item-top: 8px;
+@switch-bg-border-radius: 5px;
+@switch-bg-left-background-image: -webkit-gradient(linear, left top, left bottom, from(#2859B1), to(#75ACFB), color-stop(0.5, #3F84EB), color-stop(0.5, #4C8EEE));
+@switch-bg-right-color: inherit; // default
+@switch-bg-right-background-image: -webkit-gradient(linear, left top, left bottom, from(#CECECE), to(#FDFDFD), color-stop(0.5, #EEEEEE), color-stop(0.5, #F8F8F8));
+@switch-knob-background-image: -webkit-gradient(linear, left top, left bottom, from(#CCCCCC), to(#FAFAFA));
+@switch-knob-border-radius: 5px;
+ 
+@color-blue-color: inherit; // default
+@color-blue-background-color: #366EDF;
+@color-blue-background-image: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+@color-default-color: inherit; // default
+@color-default-background-color: #5877A2;
+@color-default-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@color-default-sel-color: inherit; // default
+@color-default-sel-background-color: #394D77;
+@color-default-sel-background-image: -webkit-gradient(linear, left top, left bottom, from(#7C87A4), to(#263E6C), color-stop(0.5, #394D77), color-stop(0.5, #243B69));
+
+@button-font-size: 13px;
+@button-background-image: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE), color-stop(0.5, #F8F8F8), color-stop(0.5, #EEEEEE));
+@button-border-radius: 5px;
+@button-selected-color: black;
+@button-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#F0F0F0), to(#BFBFBF), color-stop(0.5, #EBEBEB), color-stop(0.5, #DEDEDE));
+@button-blue-selected-color: white;
+@button-blue-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@button-red-selected-color: white;
+@button-red-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#C1A48E), to(#9B6C4A), color-stop(0.5, #A27758), color-stop(0.5, #996947));
+@button-disabled-background-image: transparent;
+
+@checkbox-background-image: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE), color-stop(0.5, #F8F8F8), color-stop(0.5, #EEEEEE));
+@checkbox-border-radius: 5px;
+@checkbox-transform: translateY(0.45em);
+@checkbox-checked-background-image: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+@checkbox-checked-after-border-color: white;
+@checkbox-selected-border-color: #9CACC0;
+@checkbox-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#F0F0F0), to(#BFBFBF), color-stop(0.5, #EBEBEB), color-stop(0.5, #DEDEDE));
+@checkbox-checked-selected-border-color: #9CACC0;
+@checkbox-checked-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@checkbox-checked-selected-after-border-color: #9CACC0;
+
+@combobox-popup-box-shadow: 0px 0px 50px black;
+@combobox-popup-border-radius: 0px;
+@combobox-menu-border-radius: 0px;
+@combobox-menu-background-color: white;
+@combobox-menuitem-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#048BF4), to(#005CE5));
+@combobox-menuitem-border-color: #ffffff;
+@combobox-menuitem-color: inherit;
+
+@iconcontainer-padding: 0px 0px 40px 0px;
+@iconcontainer-margin: 20px 0px 0px 10px;
+@iconcontainer-background-color: transparent; // default
+@iconcontainer-terminator-height: 20px;
+@iconitem-sub-color: inherit; // default
+@iconitem-area-width: 74px;
+@iconitem-area-margin-bottom: 10px;
+@iconitem-area-color: inherit; // default
+@iconitem-heading-height: 25px;
+@iconitem-heading-font-size: 14px;
+@iconitem-heading-line-height: 26px;
+
+@radiobutton-background-image: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE), color-stop(0.5, #F8F8F8), color-stop(0.5, #EEEEEE));
+@radiobutton-border-radius: 0.5em;
+@radiobutton-transform: translateY(0.45em);
+@radiobutton-checked-background-image: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+@radiobutton-checked-after-border-color: white;
+@radiobutton-checked-selected-border-color: #9CACC0;
+@radiobutton-checked-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@radiobutton-checked-selected-after-border-color: white;
+
+@slider-background-image: -webkit-gradient(linear, left top, left bottom, from(#ABABAB), to(#FEFEFE));
+@slider-border-radius: 8px;
+@slider-progressbar-background-image: -webkit-gradient(linear, left top, left bottom, from(#0D48A8), to(#68A6F8));
+@slider-progressbar-border-radius: 8px;
+@slider-handle-background-image: -webkit-gradient(linear, left top, left bottom, from(#A6A6A6), to(#FCFCFC));
+@slider-handle-border-radius: 10px;
+
+@tabbar-background-color: #000000;
+@tabbar-background-image: -webkit-gradient(linear, left top, left bottom, from(#2D2D2D), to(#000000), color-stop(0.5, #141414), color-stop(0.5, #000000));
+
+@tabbarbutton-anchor-height: 28px;
+@tabbarbutton-div-display: none;
+@tabbarbutton-div-height: auto; // default
+@tabbarbutton-icon-left: 0px;
+@tabbarbutton-icon-top: 2px;
+@tabbarbutton-icon-transform: none; // default
+@tabbarbutton-width: 100px;
+@tabbarbutton-height: 28px;
+@tabbarbutton-margin-right: 0px; // default
+@tabbarbutton-border-width: 1px 1px 1px 0px;
+@tabbarbutton-border-style: inset;
+@tabbarbutton-border-color: #9CACC0;
+@tabbarbutton-border-right-color: #5E708A;
+@tabbarbutton-cursor: pointer;
+@tabbarbutton-line-height: 29px;
+@tabbarbutton-background-color: transparent; // default
+@tabbarbutton-background-image: -webkit-gradient(linear, left top, left bottom, from(#ABB9CA), to(#788DA9), color-stop(0.5, #8297AF), color-stop(0.5, #768BA7));
+@tabbarbutton-first-border-top-left-radius: 5px;
+@tabbarbutton-first-border-bottom-left-radius: 5px;
+@tabbarbutton-first-border-left-width: 1px;
+@tabbarbutton-last-border-top-right-radius: 5px;
+@tabbarbutton-last-border-bottom-right-radius: 5px;
+@tabbarbutton-last-border-right-color: #9CACC0;
+@tabbarbutton-selected-background-color: transparent; // default
+@tabbarbutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#ABB9CA), to(#788DA9), color-stop(0.5, #8297AF), color-stop(0.5, #768BA7)); // default
+@tabbarbutton-highlighted-background-color: transparent; // default
+@tabbarbutton-highlighted-background-image: -webkit-gradient(linear, left top, left bottom, from(#ABB9CA), to(#788DA9), color-stop(0.5, #8297AF), color-stop(0.5, #768BA7)); // default
+@tabpanelheader-tabbarbutton-border-top-left-radius: 0px; // default
+@tabpanelheader-tabbarbutton-border-top-right-radius: 0px; // default
+@tabpanelheader-tabbarbutton-selected-background-color: #5877A2;
+@tabpanelheader-tabbarbutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@tabbarbutton-imgdiv-display: none;
+@tabbarbutton-imgdiv-position: static; // default
+@tabbarbutton-imgdiv-margin-left: 0px; // default
+@tabbarbutton-imgdiv-height: auto; // default
+@tabbarbutton-img-position: static; // default
+@tabbarbutton-img-left: 0px; // default
+@tabbarbutton-img-top: 0px; // default 
+@tabbarbutton-img-margin-top: 0px; // default
+@tabbarbutton-img-transform: none; // default
+@tabpanelheader-height: 39px;
+@tabpanelheader-padding: 3px 0px 0px 0px;
+@tabpanelheader-background-color: #889BB3;
+@tabpanelheader-background-image: -webkit-gradient(linear, left top, left bottom, from(#B0BCCD), to(#6D84A2), color-stop(0.5, #889BB3), color-stop(0.5, #8195AF));
+@tabpanelheader-border-bottom: 1px solid #2D3642;
+@tabpanelheader-line-height: 44px;
+@tabpanelheader-text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+
+@textarea-border-radius: 5px;
+
+@textbox-border-radius: 5px;
+
+@togglebutton-font-size: 13px;
+@togglebutton-background-image: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE), color-stop(0.5, #F8F8F8), color-stop(0.5, #EEEEEE));
+@togglebutton-border-radius: 5px;
+@togglebutton-checked-color: white;
+@togglebutton-checked-background-image: -webkit-gradient(linear, left top, left bottom, from(#7A9DE9), to(#2362DD), color-stop(0.5, #366EDF), color-stop(0.5, #215FDC));
+@togglebutton-checked-after-border-color: white;
+@togglebutton-selected-color: black;
+@togglebutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#F0F0F0), to(#BFBFBF), color-stop(0.5, #EBEBEB), color-stop(0.5, #DEDEDE));
+@togglebutton-checked-selected-color: white;
+@togglebutton-checked-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
+@togglebutton-checked-selected-after-border-color: white;

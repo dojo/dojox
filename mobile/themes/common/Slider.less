@@ -2,9 +2,9 @@
 .mblSlider {
 	margin: 15px; /* 1/2 handle width for hanging off the ends of the bar */
 	border: #B0B0B0 1px inset;
-	background: -webkit-gradient(linear, left top, left bottom, from(#ABABAB), to(#FEFEFE));
+	background-image: @slider-background-image;
 	outline: none;
-	-webkit-border-radius: 8px;
+	-webkit-border-radius: @slider-border-radius;
 	-webkit-user-select: none; /* prevent selection */
 	-webkit-box-sizing: content-box; /* make width and height consistent with a DIV */
 }
@@ -17,8 +17,8 @@
 	width: 8px;
 }
 .mblSliderProgressBar {
-	background: -webkit-gradient(linear, left top, left bottom, from(#0D48A8), to(#68A6F8));
-	-webkit-border-radius: 8px;
+	background-image: @slider-progressbar-background-image;
+	-webkit-border-radius: @slider-progressbar-border-radius;
 }
 .mblSliderH .mblSliderProgressBar {
 	height: 100%;
@@ -31,8 +31,8 @@
 	width: 18px;
 	height: 18px;
 	border: #9D9D9D 1px outset;
-	background: -webkit-gradient(linear, left top, left bottom, from(#A6A6A6), to(#FCFCFC));
-	-webkit-border-radius: 10px;
+	background-image: @slider-handle-background-image;
+	-webkit-border-radius: @slider-handle-border-radius;
 }
 .mblSliderH .mblSliderHandle {
 	top: 50%;

@@ -96,6 +96,9 @@
 	height: 0;
 }
 
+.mblListItemIcon {
+	top: 7px;
+}
 .mblListItem .mblArrow {
 	border-style: none;
 	top: 16px;

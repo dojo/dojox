@@ -46,7 +46,6 @@
 	width: 94px;
 	color: white;
 	background-color: #3F84EB;
-	background: -webkit-gradient(linear, left top, left bottom, from(#2859B1), to(#75ACFB), color-stop(0.5, #3F84EB), color-stop(0.5, #4C8EEE));
 }
 .mblSwitchBgRight {
 	left: 53px;

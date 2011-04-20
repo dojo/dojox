@@ -1,6 +1,5 @@
 /* mbl.widget.Heading */
 @import url("android-compat.css");
-@import url("form/Button-compat.css");
 
 .alertTitle {
 	background-image: url(compat/heading-bg.png);

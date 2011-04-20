@@ -1,25 +1,52 @@
-@import url("../common/ToggleButton.css");
-
 /* dojox.mobile.ToggleButton */
 .mblToggleButton {
-	font-size: 16px;
-	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
-	-webkit-border-radius: 6px;
+  padding: 0px 10px 0px 25px;
+  height: 29px;
+  border-width: 1px 1px 1px 1px;
+  border-style: outset;
+  border-color: #9CACC0;
+  color: black;
+  font-family: Helvetica;
+  font-size: 16px;
+  line-height: 29px;
+  cursor: pointer;
+  outline: none;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7fbf7), to(#cecfd6), color-stop(0.5, #ced3ce));
+  position: relative;
+  -webkit-border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+}
+.mblToggleButton.mblToggleButtonSelected {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#088eef), to(#0851ad), color-stop(0.5, #0869c6));
+  color: white;
 }
 .mblToggleButton.mblToggleButtonChecked {
-	color: black;
-	background: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+  color: black;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7fbf7), to(#cecfd6), color-stop(0.5, #ced3ce));
 }
-.mblToggleButton.mblToggleButtonChecked::after,
 .mblToggleButton.mblToggleButtonChecked::after {
-	border-color: #0851AD;
+  content: "";
+  width: 5px;
+  height: 10px;
+  position: absolute;
+  top: 6px;
+  left: 7px;
+  border-color: #0851ad;
+  border-width: 2px;
+  border-style: none solid solid none;
+  -webkit-transform: rotate(45deg) skew(10deg);
+  -webkit-transform-origin: 50% 50%;
 }
-.mblToggleButton.mblToggleButtonSelected,
 .mblToggleButton.mblToggleButtonChecked.mblToggleButtonSelected {
-	color: white;
-	background: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#088eef), to(#0851ad), color-stop(0.5, #0869c6));
+  color: white;
 }
 .mblToggleButton.mblToggleButtonChecked.mblToggleButtonSelected::after {
-	border-color: white;
+  border-color: white;
 }
-
+.mblToggleButton:disabled {
+  border-color: grey;
+  color: grey;
+  cursor: default;
+  background-image: none;
+}

@@ -4,22 +4,22 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<title>Mobile Slider unit tests</title>
 	<style>
-		@import "../themes/common/Slider.css";
-/* test overrides */
-.mblSlider {
-	zoom: 1.1; /* for testing, to make it easier to touch the handle */
-}
-.mblSliderV {
-	width: 10px;
-	border: 0px none;
-}
-.mblSliderH .mblSliderProgressBar {
-	background:transparent url(progressBarAnim.gif) repeat;
-}
-.mblSliderV .mblSliderHandle {
-	background:transparent url(sliderVthumb.png) no-repeat;
-	border-radius:0;
-}
+		@import "../themes/iphone/Slider.css";
+		/* test overrides */
+		.mblSlider {
+			zoom: 1.1; /* for testing, to make it easier to touch the handle */
+		}
+		.mblSliderV {
+			width: 10px;
+			border: 0px none;
+		}
+		.mblSliderH .mblSliderProgressBar {
+			background:transparent url(progressBarAnim.gif) repeat;
+		}
+		.mblSliderV .mblSliderHandle {
+			background:transparent url(sliderVthumb.png) no-repeat;
+			border-radius:0;
+		}
 	</style>
 
 	<script src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>

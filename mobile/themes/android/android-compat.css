@@ -1,5 +1,10 @@
 @import url("base-compat.css");
 
+/* common styles */
+@import url("../common/domButtons-compat.css");
+@import url("../common/SpinWheel-compat.css");
+
+/* widget styles */
 @import url("Button-compat.css");
 @import url("CheckBox-compat.css");
 @import url("ComboBox-compat.css");

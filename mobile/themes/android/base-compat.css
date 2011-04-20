@@ -91,6 +91,9 @@
 	height: 0;
 }
 
+.mblListItemIcon {
+	top: 18px;
+}
 .mblListItem .mblArrow {
 	border-style: none;
 	width: 9px;
