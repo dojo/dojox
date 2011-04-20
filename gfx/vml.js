@@ -362,7 +362,7 @@ dojo.require("dojox.gfx.gradient");
 			style.left   = shape.x.toFixed();
 			style.top    = shape.y.toFixed();
 			style.width  = (typeof shape.width == "string" && shape.width.indexOf("%") >= 0)  ? shape.width  : shape.width.toFixed();
-			style.height = (typeof shape.width == "string" && shape.height.indexOf("%") >= 0) ? shape.height : shape.height.toFixed();
+			style.height = (typeof shape.height == "string" && shape.height.indexOf("%") >= 0) ? shape.height : shape.height.toFixed();
 			// set all necessary styles, which are lost by VML (yes, it's a VML's bug)
 			return this.setTransform(this.matrix).setFill(this.fillStyle).setStroke(this.strokeStyle);	// self
 		}
