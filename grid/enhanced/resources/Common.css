@@ -1,15 +1,3 @@
-.dojoxGrid {
-	border:1px solid #DBDBDB;
-}
-.dojoxGridCellContent {
-	padding:3px;
-}
-.dojoxGridSortNode {
-	padding:3px;
-}
-.dojoxGridInProgress {
-	cursor:progress;
-}
 /* Indirect Selection */
 .dojoxGridRowSelectorStatusText{
 	visibility:hidden;
