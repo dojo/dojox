@@ -53,7 +53,7 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 			if (resource.source) {
 				url = resource.source;
 			}else if (resource.module) {
-				url = dojo.baseUrl + dojo._getModuleSymbols(resource.module).join("/") + '.js';
+				url= dojo.moduleUrl(resource.module)+".js";
 			}else {
 				alert("Error: invalid JavaScript resource " + dojo.toJson(resource));
 				return;
