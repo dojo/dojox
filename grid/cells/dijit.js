@@ -35,8 +35,13 @@ dojo.require("dijit.Editor");
 		getValue: function(inRowIndex){
 			return this.widget.get('value');
 		},
+		_unescapeHTML: function(value){
+			return (value && value.replace && this.grid.escapeHTMLInData) ? 
+					value.replace(/&lt;/g, '<').replace(/&amp;/g, '&') : value;
+		},
 		setValue: function(inRowIndex, inValue){
 			if(this.widget&&this.widget.set){
+				inValue = this._unescapeHTML(inValue);
 				//Look for lazy-loading editor and handle it via its deferred.
 				if(this.widget.onLoadDeferred){
 					var self = this;
@@ -59,7 +64,7 @@ dojo.require("dijit.Editor");
 				this.widgetProps||{},
 				{
 					constraints: dojo.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
-					value: inDatum
+					value: this._unescapeHTML(inDatum)
 				}
 			);
 		},
