@@ -1,0 +1,34 @@
+body {
+	visibility: hidden;
+}
+
+html.mobile, .mobile body {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+.mobile body {
+	overflow-x: hidden;
+	-webkit-text-size-adjust: none;
+	.mobile-body-styles;
+}
+
+/* Button Colors */
+.mblColorBlue {
+	color: @color-blue-color;
+	background-color: @color-blue-background-color;
+	background-image: @color-blue-background-image;
+}
+
+/* Default Button Colors */
+.mblColorDefault {
+	color: @color-default-color;
+	background-color: @color-default-background-color;
+	background-image: @color-default-background-image;
+}
+
+.mblColorDefaultSel {
+	color: @color-default-sel-color;
+	background-color: @color-default-sel-background-color;
+	background-image: @color-default-sel-background-image;
+}

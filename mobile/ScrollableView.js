@@ -1,21 +1,23 @@
-dojo.provide("dojox.mobile.ScrollableView");
-
-dojo.require("dijit._WidgetBase");
-dojo.require("dojox.mobile");
-dojo.require("dojox.mobile._ScrollableMixin");
-
-// summary:
-//		A container that has a touch scrolling capability.
-// description:
-//		ScrollableView is a subclass of View (=dojox.mobile.View).
-//		Unlike the base View class, ScrollableView's domNode always stays
-//		at the top of the screen and its height is "100%" of the screen.
-//		In this fixed domNode, containerNode scrolls. Browser's default
-//		scrolling behavior is disabled, and the scrolling machinery is
-//		re-implemented with JavaScript. Thus the user does not need to use the
-//		two-finger operation to scroll an inner DIV (containerNode).
-//		The main purpose of this widget is to realize fixed-positioned header
-//		and/or footer bars.
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dojox/mobile/View",
+  "dojox/mobile/_ScrollableMixin"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/ScrollableView
+	// summary:
+	//		A container that has a touch scrolling capability.
+	// description:
+	//		ScrollableView is a subclass of View (=dojox.mobile.View).
+	//		Unlike the base View class, ScrollableView's domNode always stays
+	//		at the top of the screen and its height is "100%" of the screen.
+	//		In this fixed domNode, containerNode scrolls. Browser's default
+	//		scrolling behavior is disabled, and the scrolling machinery is
+	//		re-implemented with JavaScript. Thus the user does not need to use the
+	//		two-finger operation to scroll an inner DIV (containerNode).
+	//		The main purpose of this widget is to realize fixed-positioned header
+	//		and/or footer bars.
 
 dojo.declare(
 	"dojox.mobile.ScrollableView",
@@ -140,4 +142,7 @@ dojo.declare(
 		}
 		return children;
 	}
+});
+
+return dojox.mobile.ScrollableView;
 });

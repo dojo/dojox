@@ -1,0 +1,22 @@
+/* dojox.mobile.ToolBarButton */
+.mblToolbarButton {
+  float: left;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  margin: 4px 3px;
+  padding: 0px 10px;
+  height: 28px;
+  border: 1px inset #39454A;
+  font-family: Helvetica;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  line-height: 30px;
+  text-align: center;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+}
+div.mblToolbarButtonDomButton {
+  width: 11px;
+}

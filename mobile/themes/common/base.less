@@ -10,9 +10,7 @@ html.mobile, .mobile body {
 .mobile body {
 	overflow-x: hidden;
 	-webkit-text-size-adjust: none;
-	background-color: @body-background-color;
-	font-family: Helvetica;
-	font-size: @body-font-size;
+	.mobile-body-styles;
 }
 
 /* dojox.mobile.View */
@@ -21,118 +19,61 @@ html.mobile, .mobile body {
 	top: 0px;
 	left: 0px;
 	width: 100%;
-	color: @view-color;
-}
-
-.mblView.out {
-}
-
-.mblView.in {
-	position: absolute;
+	.mblView-styles;
+	&.out {
+	}
+	&.in {
+		position: absolute;
+	}
 }
 
 /* dojox.mobile.Heading */
 .mblHeading {
 	position: relative;
-	width: 100%;
-	height: @heading-height;
 	margin: 0px;
-	padding: @heading-padding;
-	background-color: @heading-background-color;
-	background-image: @heading-background-image;
-	border-top: @heading-border-top;
-	border-bottom: @heading-border-bottom;
-	font-family: Helvetica;
-	font-size: @heading-font-size;
-	font-weight: @heading-font-weight;
-	color: white;
-	text-align: center;
-	line-height: @heading-line-height;
-	text-shadow: @heading-text-shadow;
+	width: 100%;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	z-index: @heading-z-index;
+	.mblHeading-styles;
 }
 
 /* Heading Arrow Button */
 .mblArrowButton {
 	position: relative;
 	float: left;
-	height: @arrowbutton-height;
-	margin: @arrowbutton-margin;
+	.mblArrowButton-styles;
 }
 .mblArrowButtonHead {
 	position: absolute;
-	top: @arrowbutton-head-top;
-	left: @arrowbutton-head-left;
-	width: 19px;
-	height: @arrowbutton-head-height;
-	border-width: 1px;
-	border-style: solid;
-	border-color: @arrowbutton-head-border-color;
-	-webkit-transform: scale(.8,1) rotate(45deg);
-	background-image: @arrowbutton-head-background-image;
+	.mblArrowButtonHead-styles;
 }
 .mblArrowButtonBody {
 	position: absolute;
-	top: @arrowbutton-body-top;
-	left: 19px;
-	padding: @arrowbutton-body-padding;
-	height: @arrowbutton-body-height;
-	border-width: 1px 1px 1px 0px;
-	border-style: inset;
-	border-color: @arrowbutton-body-border-color;
-	font-family: Helvetica;
-	font-size: @arrowbutton-body-font-size;
-	font-weight: @arrowbutton-body-font-weight;
-	color: @arrowbutton-body-color;
-	line-height: @arrowbutton-body-line-height;
 	cursor: pointer;
-	-webkit-border-radius: @arrowbutton-body-border-radius;
-	-moz-border-radius: @arrowbutton-body-border-radius;
-	background-color: @arrowbutton-body-background-color;
-	background-image: @arrowbutton-body-background-image;
 	-webkit-tap-highlight-color: transparent;
+	.mblArrowButtonBody-styles;
 }
 .mblArrowButtonNeck {
 	position: absolute;
-	top: @arrowbutton-neck-top;
-	left: 19px;
-	width: @arrowbutton-neck-width;
-	height: @arrowbutton-neck-height;
-	border-width: @arrowbutton-neck-border-width;
-	border-style: inset;
-	border-color: @arrowbutton-neck-border-color;
-	background-color: @arrowbutton-neck-background-color;
-	background-image: @arrowbutton-neck-background-image;
+	.mblArrowButtonNeck-styles;
 }
-.mblArrowButtonSelected .mblArrowButtonHead {
-	background-image: @arrowbutton-selected-head-background-image;
-}
-.mblArrowButtonSelected .mblArrowButtonBody, .mblArrowButtonSelected .mblArrowButtonNeck {
-	background-color: @arrowbutton-selected-neck-background-color;
-	background-image: @arrowbutton-selected-neck-background-image;
+.mblArrowButtonSelected {
+	.mblArrowButtonHead {
+		.mblArrowButtonSelected-styles;
+	}
+	.mblArrowButtonBody, .mblArrowButtonNeck {
+		.mblArrowButtonSelected-styles;
+	}
 }
 
 /* ToolBarButton */
 .mblToolbarButton {
 	float: left;
 	position: relative;
-	margin: @toolbarbutton-margin;
-	padding: 0px 10px;
-	height: @toolbarbutton-height;
-	border: @toolbarbutton-border;
-	font-family: Helvetica;
-	font-size: @toolbarbutton-font-size;
-	font-weight: bold;
-	color: white;
-	line-height: @toolbarbutton-line-height;
-	text-align: center;
 	cursor: pointer;
-	-webkit-border-radius: @toolbarbutton-border-radius;
-	-moz-border-radius: @toolbarbutton-border-radius;
 	-webkit-tap-highlight-color: transparent;
+	.mblToolbarButton-styles;
 }
 div.mblToolbarButtonDomButton {
 	width: 11px;
@@ -140,109 +81,114 @@ div.mblToolbarButtonDomButton {
 
 /* dojox.mobile.RoundRect */
 .mblRoundRect {
-	margin: @roundrect-margin;
-	padding: 8px;
-	border: @roundrect-border;
-	-webkit-border-radius: @roundrect-border-radius;
-	-moz-border-radius: @roundrect-border-radius;
-	color: @roundrect-color;
-	background-color: @roundrect-background-color;
-}
-.mblRoundRect.mblShadow {
-	-webkit-box-shadow: @roundrect-shadow-box-shadow;
+	.mblRoundRect-styles;
+	&.mblShadow {
+		.mblRoundRectShadowBox-styles;
+	}
 }
 
 /* dojox.mobile.EdgeToEdgeCategory */
 .mblEdgeToEdgeCategory {
 	position: relative;
-	height: @edgetoedgecategory-height;
-	margin: 0px;
-	padding: 0px 10px;
-	border-top: @edgetoedgecategory-border-top;
-	border-bottom: @edgetoedgecategory-border-bottom;
-	background-color: @edgetoedgecategory-background-color;
-	background-image: @edgetoedgecategory-background-image;
-	font-family: Helvetica;
-	font-weight: @edgetoedgecategory-font-weight;
-	font-size: 16px;
-	color: @edgetoedgecategory-color;
-	line-height: @edgetoedgecategory-line-height;
-	text-shadow: @edgetoedgecategory-text-shadow;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	.mblEdgeToEdgeCategory-styles;
 }
 
 /* dojox.mobile.RoundRectCategory */
 .mblRoundRectCategory {
-	color: @roundrectcategory-color;
-	padding: @roundrectcategory-padding;
-	margin: @roundrectcategory-margin;
-	height: @roundrectcategory-height;
-	text-shadow: @roundrectcategory-text-shadow;
-	font-family: Helvetica;
-	font-size: 16px;
-	line-height: @roundrectcategory-line-height;
-	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	background-color: @roundrectcategory-background-color;
-	border: @roundrectcategory-border;
-	border-bottom-width: @roundrectcategory-border-bottom-width;
-	-webkit-border-top-left-radius: @roundrectcategory-border-top-left-radius;
-	-webkit-border-top-right-radius: @roundrectcategory-border-top-right-radius;
+	overflow: hidden;
+	.mblRoundRectCategory-styles;
 }
 
 /* dojox.mobile.RoundRectList */
 .mblRoundRectList {
-	margin: @roundrectlist-margin;
-	padding: 0px;
-	border: 1px solid #ADAAAD;
-	-webkit-border-radius: @roundrectlist-border-radius;
-	-moz-border-radius: @roundrectlist-border-radius;
-	-webkit-border-bottom-left-radius: @roundrectlist-bottom-left-radius;
-	-webkit-border-bottom-right-radius: @roundrectlist-bottom-right-radius;
-	-moz-border-radius-bottomleft: @roundrectlist-bottom-left-radius;
-	-moz-border-radius-bottomright: @roundrectlist-bottom-right-radius;
-	background-color: white;
 	position: relative; /* IE needs this */
+	.mblRoundRectList-styles;
+	.mblListItem:first-child {
+		.mblRoundRectList-FirstListItem-styles;
+	}
+	.mblListItem:last-child {
+		.mblRoundRectList-LastListItem-styles;
+	}
 }
 
 /* dojox.mobile.EdgeToEdgeList */
 .mblEdgeToEdgeList {
-	padding: 0px;
-	background-color: @edgetoedgelist-background-color;
 	position: relative; /* IE needs this */
-	margin: 0px; /* IE needs this */
+	.mblEdgeToEdgeList-styles;
+	.mblListItem:last-child {
+		.mblEdgeToEdgeList-LastListItem-styles;
+	}
 }
 
 /* dojox.mobile.ListItem */
 .mblListItem {
-	list-style-type: none;
-	height: @listitem-height;
-	border-bottom: @listitem-border-bottom;
-	line-height: @listitem-line-height;
-	font-size: @listitem-font-size;
-	font-weight: @listitem-font-weight;
 	position: relative;
-	color: @listitem-color;
-	background-color: @listitem-background-color;
-	vertical-align: @listitem-vertical-align; /* To avoid IE6 LI bug */
-	padding: @listitem-padding;
+	list-style-type: none;
+	vertical-align: bottom; /* To avoid IE6 LI bug */
+	.mblListItem-styles;
+	&.mblVariableHeight {
+		line-height: normal;
+		height: auto;
+		padding: 11px 6px 10px 6px;
+	}
+	a {
+		&.mblListItemAnchor {
+			background-position: @listitem-anchor-background-position;
+			display: block;
+			padding-left: @listitem-anchor-padding-left;
+			text-decoration: none;
+			-webkit-tap-highlight-color: transparent;
+		}
+		&.mblListItemAnchorNoIcon {
+			padding-left: @listitem-anchor-noicon-padding-left;
+		}
+		&.mblListItemAnchorHasRightButton {
+			padding-right: @listitem-anchor-rightbutton-padding-right;
+		}
+	}
+	.mblLeftButton {
+		position: absolute;
+		top: 50%;
+		margin-top: -15px;
+		line-height: normal;
+	}
+	.mblRightButton {
+		position: absolute;
+		top: 50%;
+		right: 7px;
+		margin-top: -15px;
+		line-height: normal;
+	}
+	.mblRightButton2 {
+		right: 36px;
+	}
 }
 .mblListItemIcon {
 	position: absolute;
 	top: 50%;
 	-webkit-transform: translate(0,-50%);
 }
-.mblListItem.mblVariableHeight {
-	line-height: normal;
-	height: auto;
-	padding: 11px 6px 10px 6px;
-}
 .mblItemSelected {
 	background-color: @listitem-selected-background-color;
 	background-image: @listitem-selected-background-image;
+	a {
+		&.mblListItemAnchor {
+			color: @listitem-selected-anchor-color;
+		}
+	}
+	.mblDomButton {
+		DIV {
+			border-color: @listitem-selected-dombutton-border-color;
+		}
+	}
+	.mblListItemSubText {
+		color: @listitem-selected-subtext-color;
+	}
 }
 .mblListItemTextBox {
 	padding-right: 28px;
@@ -259,64 +205,6 @@ div.mblToolbarButtonDomButton {
 .mblVariableHeight .mblListItemTextBox {
 	white-space: normal;
 }
-.mblRoundRectList .mblListItem:first-child {
-	border-top-width: @roundrectlist-listitem-first-border-top-width;
-	-webkit-border-top-left-radius: @roundrectlist-listitem-first-border-top-left-radius;
-	-webkit-border-top-right-radius: @roundrectlist-listitem-first-border-top-right-radius;
-	-moz-border-radius-topleft: @roundrectlist-listitem-first-border-top-left-radius;
-	-moz-border-radius-topright: @roundrectlist-listitem-first-border-top-right-radius;
-}
-.mblRoundRectList .mblListItem:last-child {
-	border-bottom-width: 0px;
-	-webkit-border-bottom-left-radius: @roundrectlist-listitem-last-border-bottom-left-radius;
-	-webkit-border-bottom-right-radius: @roundrectlist-listitem-last-border-bottom-right-radius;
-	-moz-border-radius-bottomleft: @roundrectlist-listitem-last-border-bottom-left-radius;
-	-moz-border-radius-bottomright: @roundrectlist-listitem-last-border-bottom-right-radius;
-}
-.mblEdgeToEdgeList .mblListItem:last-child {
-	border-bottom-color: @edgetoedgelist-listitem-last-border-bottom-color;
-	border-bottom-width: @edgetoedgelist-listitem-last-border-bottom-width;
-}
-.mblListItem a.mblListItemAnchor {
-	background-position: @listitem-anchor-background-position;
-	display: block;
-	padding-left: @listitem-anchor-padding-left;
-	text-decoration: none;
-	-webkit-tap-highlight-color: transparent;
-}
-.mblListItem a.mblListItemAnchorNoIcon {
-	padding-left: @listitem-anchor-noicon-padding-left;
-}
-.mblItemSelected a.mblListItemAnchor {
-	color: @listitem-selected-anchor-color;
-}
-.mblListItem a.mblListItemAnchorHasRightButton {
-	padding-right: @listitem-anchor-rightbutton-padding-right;
-}
-
-.mblListItem .mblLeftButton {
-	position: absolute;
-	top: 50%;
-	margin-top: -15px;
-	line-height: normal;
-}
-.mblListItem .mblRightButton {
-	position: absolute;
-	top: 50%;
-	right: 7px;
-	margin-top: -15px;
-	line-height: normal;
-}
-.mblListItem .mblRightButton2 {
-	right: 36px;
-}
-.mblListItem .mblDomButton DIV {
-	border-color: @listitem-dombutton-border-color;
-}
-.mblItemSelected .mblDomButton DIV {
-	border-color: white;
-}
-
 .mblRightText {
 	position: absolute;
 	top: @listitem-righttext-top;
@@ -331,9 +219,6 @@ div.mblToolbarButtonDomButton {
 	font-size: @listitem-subtext-font-size;
 	color: @listitem-subtext-color;
 }
-.mblItemSelected .mblListItemSubText {
-	color: @listitem-selected-subtext-color;
-}
 
 /* Switch */
 .mblItemSwitch {
@@ -346,7 +231,6 @@ div.mblToolbarButtonDomButton {
 	background-image: @switch-bg-left-background-image;
 }
 .mblSwitchBgRight {
-	color: @switch-bg-right-color;
 	background-image: @switch-bg-right-background-image;
 }
 .mblSwitchKnob {

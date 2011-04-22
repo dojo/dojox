@@ -1,6 +1,17 @@
-dojo.provide("dojox.mobile.TabBar");
-
-dojo.require("dojox.mobile");
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "./common",
+  "dijit/_WidgetBase",
+  "dijit/_Container",
+  "dijit/_Contained",
+  "dojox/mobile/Heading",
+  "dojox/mobile/_ItemBase"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/TabBar
+	// summary:
+	//		TODOC
 
 dojo.declare(
 	"dojox.mobile.TabBar",
@@ -94,7 +105,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.TabBarButton",
-	dojox.mobile.AbstractItem,
+	dojox.mobile._ItemBase,
 {
 	icon1: "", // unselected (dark) icon
 	icon2: "", // selected (highlight) icon
@@ -212,4 +223,7 @@ dojo.declare(
 	onClick: function(e){
 		this.defaultClickAction();
 	}
+});
+
+return dojox.mobile.TabBar;
 });

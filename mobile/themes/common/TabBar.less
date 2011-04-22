@@ -12,12 +12,17 @@
 	text-align: center;
 	overflow: hidden;
 	white-space: nowrap;
-}
-
-.mblTabBar .mblTabBarButton {
-	position: relative;
-	list-style-type: none;
-	float: left;
+	.mblTabBarButton {
+		position: relative;
+		list-style-type: none;
+		float: left;
+		&.mblTabButtonSelected {
+			background-color: #404040;
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+		}	
+	}	
 }
 
 /* dojox.mobile.TabBarButton */
@@ -27,18 +32,11 @@
 	display: block;
 	text-decoration: none;
 }
-.mblTabButton .mblTabBarButtonAnchor {
-	height: @tabbarbutton-anchor-height;
-}
 .mblTabBarButtonDiv {
 	position: relative;
 	height: 34px;
 	width: 29px;
 	left: 50%;
-}
-.mblTabButton .mblTabBarButtonDiv {
-	display: @tabbarbutton-div-display;
-	height: @tabbarbutton-div-height;
 }
 .mblTabBarButtonDivInner {
 	left: -50%;
@@ -49,19 +47,10 @@
 	top: @tabbarbutton-icon-top;
 	-webkit-transform: @tabbarbutton-icon-transform;
 }
-.mblTabBar .mblTabBarButton.mblTabButtonSelected {
-	background-color: #404040;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-}
 .mblTabBarButtonTextBox {
 	color: #979797;
 	font-family: "Helvetica Neue", Helvetica;
 	font-size: 11px;
-}
-.mblTabButtonSelected .mblTabBarButtonTextBox {
-	color: white;
 }
 
 .mblTabButton {
@@ -84,37 +73,50 @@
 	background-color: @tabbarbutton-background-color;
 	background-image: @tabbarbutton-background-image;
 	-webkit-tap-highlight-color: transparent;
-}
-.mblTabButton:first-child {
-	-webkit-border-top-left-radius: @tabbarbutton-first-border-top-left-radius;
-	-webkit-border-bottom-left-radius: @tabbarbutton-first-border-bottom-left-radius;
-	-moz-border-radius-topleft: @tabbarbutton-first-border-top-left-radius;
-	-moz-border-radius-bottomleft: @tabbarbutton-first-border-bottom-left-radius;
-	border-left-width: @tabbarbutton-first-border-left-width;
-}
-.mblTabButton:last-child {
-	-webkit-border-top-right-radius: @tabbarbutton-last-border-top-right-radius;
-	-webkit-border-bottom-right-radius: @tabbarbutton-last-border-bottom-right-radius;
-	-moz-border-radius-topright: @tabbarbutton-last-border-top-right-radius;
-	-moz-border-radius-bottomright: @tabbarbutton-last-border-bottom-right-radius;
-	border-right-color: @tabbarbutton-last-border-right-color;
-}
-.mblTabButtonSelected.mblTabButton {
-	background-color: @tabbarbutton-selected-background-color;
-	background-image: @tabbarbutton-selected-background-image;
-}
-.mblTabButtonHighlighted.mblTabButton {
-	background-color: @tabbarbutton-highlighted-background-color;
-	background-image: @tabbarbutton-highlighted-background-image;
-}
 
-.mblTabPanelHeader .mblTabButton {
-	-webkit-border-top-left-radius: @tabpanelheader-tabbarbutton-border-top-left-radius;
-	-webkit-border-top-right-radius: @tabpanelheader-tabbarbutton-border-top-right-radius;
+	.mblTabBarButtonAnchor {
+		height: @tabbarbutton-anchor-height;
+	}
+	.mblTabBarButtonDiv {
+		display: @tabbarbutton-div-display;
+		height: @tabbarbutton-div-height;
+	}
+	&:first-child {
+		-webkit-border-top-left-radius: @tabbarbutton-first-border-top-left-radius;
+		-webkit-border-bottom-left-radius: @tabbarbutton-first-border-bottom-left-radius;
+		-moz-border-radius-topleft: @tabbarbutton-first-border-top-left-radius;
+		-moz-border-radius-bottomleft: @tabbarbutton-first-border-bottom-left-radius;
+		border-left-width: @tabbarbutton-first-border-left-width;
+	}
+	&:last-child {
+		-webkit-border-top-right-radius: @tabbarbutton-last-border-top-right-radius;
+		-webkit-border-bottom-right-radius: @tabbarbutton-last-border-bottom-right-radius;
+		-moz-border-radius-topright: @tabbarbutton-last-border-top-right-radius;
+		-moz-border-radius-bottomright: @tabbarbutton-last-border-bottom-right-radius;
+		border-right-color: @tabbarbutton-last-border-right-color;
+	}
+	IMG {
+		position: @tabbarbutton-img-position;
+		left: @tabbarbutton-img-left;
+		top: @tabbarbutton-img-top;
+		margin-top: @tabbarbutton-img-margin-top;
+		-webkit-transform: @tabbarbutton-img-transform;
+	}
 }
-.mblTabPanelHeader .mblTabButton.mblTabButtonSelected {
-	background-color: @tabpanelheader-tabbarbutton-selected-background-color;
-	background-image: @tabpanelheader-tabbarbutton-selected-background-image;
+.mblTabButtonSelected {
+	.mblTabBarButtonTextBox {
+		color: white;
+	}
+	&.mblTabButton {
+		background-color: @tabbarbutton-selected-background-color;
+		background-image: @tabbarbutton-selected-background-image;
+	}
+}
+.mblTabButtonHighlighted {
+	&.mblTabButton {
+		background-color: @tabbarbutton-highlighted-background-color;
+		background-image: @tabbarbutton-highlighted-background-image;
+	}
 }
 
 .mblTabButtonImgDiv {
@@ -122,13 +124,6 @@
 	position: @tabbarbutton-imgdiv-position;
 	margin-left: @tabbarbutton-imgdiv-margin-left;
 	height: @tabbarbutton-imgdiv-height;
-}
-.mblTabButton IMG {
-	position: @tabbarbutton-img-position;
-	left: @tabbarbutton-img-left;
-	top: @tabbarbutton-img-top;
-	margin-top: @tabbarbutton-img-margin-top;
-	-webkit-transform: @tabbarbutton-img-transform;
 }
 
 .mblTabPanelHeader {
@@ -150,10 +145,17 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-}
-.mblTabPanelHeader .mblTabButtonDomButton {
-	width: 43px;
-}
-.mblTabPanelHeader .mblDomButton {
-	left: 8px;
+	.mblTabButton {
+		.mblTabPanelHeader-TabButton-styles;
+		&.mblTabButtonSelected {
+			background-color: @tabpanelheader-tabbarbutton-selected-background-color;
+			background-image: @tabpanelheader-tabbarbutton-selected-background-image;
+		}	
+	}
+	.mblTabButtonDomButton {
+		width: 43px;
+	}
+	.mblDomButton {
+		left: 8px;
+	}
 }

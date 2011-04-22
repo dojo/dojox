@@ -1,53 +1,57 @@
-dojo.provide("dojox.mobile.deviceTheme");
-
-// summary:
-//		Automatic Theme Loader
-// description:
-//		Detects the User Agent of the browser and loads appropriate theme files.
-//		Simply dojo.require this module to enable the automatic theme loading.
-//
-//		By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
-//		loaded. The all-in-one theme files contain style sheets for all the
-//		dojox.mobile widgets regardless of whether they are used in your
-//		application or not.
-//		If you want to choose what theme files to load, you can specify them
-//		via djConfig as shown in the following example:
-//
-//	|	djConfig="parseOnLoad:true, mblThemeFiles:['base','Button']"
-//
-//		Or you may want to use dojox.mobile.themeFiles as follows to get the
-//		same result. Note that the assignment has to be done before loading
-//		deviceTheme.js.
-//
-//	|	dojo.require("dojox.mobile");
-//	|	dojox.mobile.themeFiles = ['base','Button'];
-//	|	dojo.require("dojox.mobile.deviceTheme");
-//
-//		In the case of this example, if iphone is detected, for example, the
-//		following files will be loaded:
-//
-//	|	dojox/mobile/themes/iphone/base.css
-//	|	dojox/mobile/themes/iphone/Button.css
-//
-//		If you want to load style sheets for your own custom widgets, you can
-//		specify a package name along with a theme file name in an array.
-//
-//	|	['base',['com.acme','MyWidget']]
-//
-//		In this case, the following files will be loaded.
-//
-//	|	dojox/mobile/themes/iphone/base.css
-//	|	com/acme/themes/iphone/MyWidget.css
-//
-//		If you specify '@theme' as a theme file name, it will be replaced with
-//		the theme folder name. For example,
-//
-//	|	['@theme',['com.acme','MyWidget']]
-//
-//		will load the following files.
-//
-//	|	dojox/mobile/themes/iphone/iphone.css
-//	|	com/acme/themes/iphone/MyWidget.css
+define([
+  "dojo",
+  "dijit",
+  "dojox"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/deviceTheme
+	// summary:
+	//		Automatic Theme Loader
+	// description:
+	//		Detects the User Agent of the browser and loads appropriate theme files.
+	//		Simply dojo.require this module to enable the automatic theme loading.
+	//
+	//		By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
+	//		loaded. The all-in-one theme files contain style sheets for all the
+	//		dojox.mobile widgets regardless of whether they are used in your
+	//		application or not.
+	//		If you want to choose what theme files to load, you can specify them
+	//		via djConfig as shown in the following example:
+	//
+	//	|	djConfig="parseOnLoad:true, mblThemeFiles:['base','Button']"
+	//
+	//		Or you may want to use dojox.mobile.themeFiles as follows to get the
+	//		same result. Note that the assignment has to be done before loading
+	//		deviceTheme.js.
+	//
+	//	|	dojo.require("dojox.mobile");
+	//	|	dojox.mobile.themeFiles = ['base','Button'];
+	//	|	dojo.require("dojox.mobile.deviceTheme");
+	//
+	//		In the case of this example, if iphone is detected, for example, the
+	//		following files will be loaded:
+	//
+	//	|	dojox/mobile/themes/iphone/base.css
+	//	|	dojox/mobile/themes/iphone/Button.css
+	//
+	//		If you want to load style sheets for your own custom widgets, you can
+	//		specify a package name along with a theme file name in an array.
+	//
+	//	|	['base',['com.acme','MyWidget']]
+	//
+	//		In this case, the following files will be loaded.
+	//
+	//	|	dojox/mobile/themes/iphone/base.css
+	//	|	com/acme/themes/iphone/MyWidget.css
+	//
+	//		If you specify '@theme' as a theme file name, it will be replaced with
+	//		the theme folder name. For example,
+	//
+	//	|	['@theme',['com.acme','MyWidget']]
+	//
+	//		will load the following files.
+	//
+	//	|	dojox/mobile/themes/iphone/iphone.css
+	//	|	com/acme/themes/iphone/MyWidget.css
 
 dojox.mobile.loadCssFile = function(/*String*/file){
 	dojo.create("LINK", {
@@ -118,3 +122,6 @@ dojox.mobile.loadDeviceTheme = function(){
 };
 
 dojox.mobile.loadDeviceTheme();
+
+return dojox.mobile.deviceTheme;
+});

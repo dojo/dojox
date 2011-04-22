@@ -1,10 +1,15 @@
-dojo.provide("dojox.mobile.SpinWheel");
-
-dojo.require("dijit._WidgetBase");
-dojo.require("dijit._Container");
-dojo.require("dijit._Contained");
-dojo.require("dojox.mobile");
-dojo.require("dojox.mobile._ScrollableMixin");
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dijit/_WidgetBase",
+  "dijit/_Container",
+  "dijit/_Contained",
+  "dojox/mobile/_ScrollableMixin"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/SpinWheel
+	// summary:
+	//		TODOC
 
 dojo.declare(
 	"dojox.mobile.SpinWheel",
@@ -283,4 +288,7 @@ dojo.declare(
 		}
 		this.inherited(arguments);
 	}
+});
+
+return dojox.mobile.SpinWheel;
 });

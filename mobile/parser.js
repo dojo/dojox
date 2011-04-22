@@ -1,5 +1,6 @@
-dojo.provide("dojox.mobile.parser");
-dojo.provide("dojo.parser"); // not to load dojo.parser unexpectedly
+define(["dojo", "dojox"], function(dojo, dojox){
+
+dojo.getObject("mobile", true, dojox);
 
 dojox.mobile.parser = new function(){
 	this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
@@ -20,7 +21,7 @@ dojox.mobile.parser = new function(){
 				dojo._mixin(params, args.defaults);
 				dojo._mixin(params, mixin);
 				for(prop in proto){
-					var v = n.getAttributeNode(prop);
+					v = n.getAttributeNode(prop);
 					v = v && v.nodeValue;
 					if(!v){ continue; }
 					if(typeof proto[prop] === "string"){
@@ -85,3 +86,6 @@ if(dojo.config.parseOnLoad){
 	dojo.ready(100, dojox.mobile.parser, "parse");
 }
 dojo.parser = dojox.mobile.parser; // in case user app calls dojo.parser
+
+return dojox.mobile.parser;
+});

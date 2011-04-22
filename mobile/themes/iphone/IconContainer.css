@@ -37,9 +37,8 @@
 }
 .mblIconArea IMG {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
+  top: 0px;
+  left: 6px;
 }
 .mblContent {
   clear: both;

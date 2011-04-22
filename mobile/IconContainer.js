@@ -1,6 +1,18 @@
-dojo.provide("dojox.mobile.IconContainer");
-
-dojo.require("dojox.mobile");
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "./common",
+  "dijit/_WidgetBase",
+  "dijit/_Container",
+  "dijit/_Contained",
+  "dojox/mobile/View",
+  "dojox/mobile/Heading",
+  "dojox/mobile/_ItemBase"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/IconContainer
+	// summary:
+	//		TODOC
 
 dojo.declare(
 	"dojox.mobile.IconContainer",
@@ -91,7 +103,7 @@ dojo.declare(
 
 dojo.declare(
 	"dojox.mobile.IconItem",
-	dojox.mobile.AbstractItem,
+	dojox.mobile._ItemBase,
 {
 	lazy: false,
 	requires: "",
@@ -316,4 +328,7 @@ dojo.declare(
 	onError: function(){
 		this.iconNode.src = this.getParent().defaultIcon;
 	}
+});
+
+return dojox.mobile.IconContainer;
 });

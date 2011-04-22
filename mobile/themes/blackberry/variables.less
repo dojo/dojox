@@ -1,117 +1,183 @@
-@body-background-color: #DEDFDE;
-@body-font-size: 18px;
+.mobile-body-styles () {
+	background-color: #DEDFDE;
+	font-family: Helvetica;
+	font-size: 18px;
+}
 
-@view-color: black;
+.mblView-styles () {
+	color: black;
+}
 
-@heading-height: 38px;
-@heading-padding: 0px;
-@heading-background-color: #424142;
-@heading-background-image: -webkit-gradient(linear, left top, left bottom, from(#4A4D52), to(#292C31));
-@heading-border-top: 1px solid #63696B;
-@heading-border-bottom: 1px solid #292C31;
-@heading-font-size: 18px;
-@heading-font-weight: normal;
-@heading-line-height: 40px;
-@heading-text-shadow: none; // default
-@heading-z-index: auto; // default
+.mblHeading-styles () {
+	padding: 0px;
+	height: 38px;
+	background-color: #424142;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#4A4D52), to(#292C31));
+	border-top: 1px solid #63696B;
+	border-bottom: 1px solid #292C31;
+	color: white;
+	font-family: Helvetica;
+	font-size: 18px;
+	font-weight: normal;
+	text-align: center;
+	line-height: 40px;
+}
+.mblArrowButton-styles () {
+	height: 28px;
+	margin: 4px 3px;
+}
+.mblArrowButtonHead-styles () {
+	top: 4px;
+	left: 8px;
+	width: 19px;
+	height: 19px;
+	border: 1px solid #39454A;
+	-webkit-transform: scale(.8,1) rotate(45deg);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+}
+.mblArrowButtonBody-styles () {
+	top: 0px;
+	left: 19px;
+	padding: 0px 10px 0px 5px;
+	height: 28px;
+	border-width: 1px 1px 1px 0px;
+	border-style: inset;
+	border-color: #39454A;
+	font-family: Helvetica;
+	font-size: 16px;
+	font-weight: bold;
+	color: black;
+	line-height: 30px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	background-color: #CED3CE;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+}
+.mblArrowButtonNeck-styles () {
+	top: 0px;
+	left: 19px;
+	width: 6px;
+	height: 28px;
+	border-width: 1px 0px;
+	border-style: inset;
+	border-color: #39454A;
+	background-color: #CED3CE;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
+}
+.mblArrowButtonSelected-styles () {
+	color: white;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+}
 
-@arrowbutton-height: 28px;
-@arrowbutton-margin: 4px 3px;
-@arrowbutton-head-top: 4px;
-@arrowbutton-head-left: 8px;
-@arrowbutton-head-height: 19px;
-@arrowbutton-head-border-color: #39454A;
-@arrowbutton-head-background-image: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
-@arrowbutton-body-top: 0px;
-@arrowbutton-body-padding: 0px 10px 0px 5px;
-@arrowbutton-body-height: 28px;
-@arrowbutton-body-border-color: #39454A;
-@arrowbutton-body-font-size: 16px;
-@arrowbutton-body-font-weight: bold;
-@arrowbutton-body-color: black;
-@arrowbutton-body-line-height: 30px;
-@arrowbutton-body-border-radius: 6px;
-@arrowbutton-body-background-color: #CED3CE;
-@arrowbutton-body-background-image: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
-@arrowbutton-neck-top: 0px;
-@arrowbutton-neck-width: 6px;
-@arrowbutton-neck-height: 28px;
-@arrowbutton-neck-border-width: 1px 0px;
-@arrowbutton-neck-border-color: #39454A;
-@arrowbutton-neck-background-color: #CED3CE;
-@arrowbutton-neck-background-image: -webkit-gradient(linear, left top, left bottom, from(#F7FBF7), to(#CECFD6), color-stop(0.5, #CED3CE));
-@arrowbutton-selected-head-background-image: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
-@arrowbutton-selected-neck-background-color: white;
-@arrowbutton-selected-neck-background-image: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+.mblToolbarButton-styles () {
+	margin: 4px 3px;
+	padding: 0px 10px;
+	height: 28px;
+	border: 1px inset #39454A;
+	font-family: Helvetica;
+	font-size: 16px;
+	font-weight: bold;
+	color: white;
+	line-height: 30px;
+	text-align: center;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+}
 
-@toolbarbutton-margin: 4px 3px;
-@toolbarbutton-height: 28px;
-@toolbarbutton-border: 1px inset #39454A;
-@toolbarbutton-font-size: 16px;
-@toolbarbutton-line-height: 30px;
-@toolbarbutton-border-radius: 6px;
+.mblRoundRect-styles () {
+	margin: 2px 3px 4px;
+	padding: 8px;
+	border: 1px solid #C6C7C6;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	color: black;
+	background-color: white;
+}
+.mblRoundRectShadowBox-styles () {
+	-webkit-box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.35);
+}
 
-@roundrect-margin: 2px 3px 4px;
-@roundrect-border: 1px solid #C6C7C6;
-@roundrect-border-radius: 6px;
-@roundrect-color: black;
-@roundrect-background-color: white;
-@roundrect-shadow-box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.35);
+.mblEdgeToEdgeCategory-styles () {
+	margin: 0px;
+	padding: 0px 10px;
+	height: 29px;
+	border-top: 1px solid #313439;
+	border-bottom: 1px solid #ADAAAD;
+	background-color: white;
+	font-family: Helvetica;
+	font-size: 16px;
+	font-weight: bold;
+	color: #7B7D84;
+	line-height: 29px;
+}
 
-@edgetoedgecategory-height: 29px;
-@edgetoedgecategory-border-top: 1px solid #313439;
-@edgetoedgecategory-border-bottom: 1px solid #ADAAAD;
-@edgetoedgecategory-background-color: white;
-@edgetoedgecategory-background-image: none; // default
-@edgetoedgecategory-font-weight: bold;
-@edgetoedgecategory-color: #7B7D84;
-@edgetoedgecategory-line-height: 29px;
-@edgetoedgecategory-text-shadow: none; // default
+.mblRoundRectCategory-styles () {
+	padding: 0px 6px;
+	margin: 3px 9px 0px;
+	height: 29px;
+	font-family: Helvetica;
+	font-size: 16px;
+	color: #7B7D84;
+	line-height: 29px;
+	background-color: white;
+	border: 1px solid #ADAAAD;
+	border-bottom-width: 0px;
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-top-right-radius: 6px;
+}
 
-@roundrectcategory-color: #7B7D84;
-@roundrectcategory-padding: 0px 6px;
-@roundrectcategory-margin: 3px 9px 0px;
-@roundrectcategory-height: 29px;
-@roundrectcategory-text-shadow: none; // default
-@roundrectcategory-line-height: 29px;
-@roundrectcategory-background-color: white;
-@roundrectcategory-border: 1px solid #ADAAAD;
-@roundrectcategory-border-bottom-width: 0px;
-@roundrectcategory-border-top-left-radius: 6px;
-@roundrectcategory-border-top-right-radius: 6px;
+.mblRoundRectList-styles () {
+	margin: 0px 9px 3px;
+	padding: 0px;
+	border: 1px solid #ADAAAD;
+	-webkit-border-bottom-left-radius: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	-moz-border-radius-bottomright: 6px;
+	background-color: white;
+}
+.mblRoundRectList-FirstListItem-styles () {
+	border-top-width: 0px;
+	-webkit-border-top-left-radius: 0px;
+	-webkit-border-top-right-radius: 0px;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+}
+.mblRoundRectList-LastListItem-styles () {
+	border-bottom-width: 0px;
+	-webkit-border-bottom-left-radius: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	-moz-border-radius-bottomright: 6px;
+}
 
-@roundrectlist-margin: 0px 9px 3px;
-@roundrectlist-border-radius: 0px; // default
-@roundrectlist-bottom-left-radius: 6px;
-@roundrectlist-bottom-right-radius: 6px;
+.mblEdgeToEdgeList-styles () {
+	margin: 0px;
+	padding: 0px;
+	background-color: white;
+}
+.mblEdgeToEdgeList-LastListItem-styles () {
+	border-bottom-width: 0px;
+}
 
-@edgetoedgelist-background-color: white;
-
-@listitem-height: 43px;
-@listitem-border-bottom: solid 1px #DEDFDE;
-@listitem-line-height: 43px;
-@listitem-font-size: 18px;
-@listitem-font-weight: inherit; // default
-@listitem-color: black;
-@listitem-background-color: transparent; // default
-@listitem-vertical-align: bottom; // To avoid IE6 LI bug
-@listitem-padding: 6px;
-@listitem-selected-background-color: #0869C6;
-@listitem-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
-@listitem-textbox-selected-background-color: #0869C6;
-@roundrectlist-listitem-first-border-top-width: 0px;
-@roundrectlist-listitem-first-border-top-left-radius: 0px;
-@roundrectlist-listitem-first-border-top-right-radius: 0px;
-@roundrectlist-listitem-last-border-bottom-left-radius: 6px;
-@roundrectlist-listitem-last-border-bottom-right-radius: 6px;
-@edgetoedgelist-listitem-last-border-bottom-color: transparent; // default
-@edgetoedgelist-listitem-last-border-bottom-width: 0px;
+.mblListItem-styles () {
+	padding: 6px;
+	height: 43px;
+	border-bottom: solid 1px #DEDFDE;
+	font-size: 18px;
+	color: black;
+	line-height: 43px;
+}
+@listitem-icon-top: 15px;
 @listitem-anchor-background-position: 14px 17px;
 @listitem-anchor-padding-left: 40px;
 @listitem-anchor-noicon-padding-left: 10px;
-@listitem-selected-anchor-color: white;
 @listitem-anchor-rightbutton-padding-right: 50px;
-@listitem-dombutton-border-color: black;
+@listitem-selected-background-color: #0869C6;
+@listitem-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
+@listitem-selected-anchor-color: white;
+@listitem-selected-dombutton-border-color: white;
+@listitem-textbox-selected-background-color: #0869C6;
 @listitem-righttext-top: 17px;
 @listitem-righttext-color: black;
 @listitem-checked-color: inherit; // default
@@ -122,7 +188,6 @@
 @switch-item-top: 14px;
 @switch-bg-border-radius: 6px;
 @switch-bg-left-background-image: -webkit-gradient(linear, left top, left bottom, from(#088EEF), to(#0851AD), color-stop(0.5, #0869C6));
-@switch-bg-right-color: #7B7D48;
 @switch-bg-right-background-image: -webkit-gradient(linear, left top, left bottom, from(#F7F3F7), to(#CEC5D6), color-stop(0.5, #CED3CE));
 @switch-knob-background-image: -webkit-gradient(linear, left top, left bottom, from(#FAFAFA), to(#999999), color-stop(0.5, #BBBBBB));
 @switch-knob-border-radius: 6px;
@@ -175,6 +240,8 @@
 @iconitem-area-width: 88px;
 @iconitem-area-margin-bottom: 5px;
 @iconitem-area-color: white;
+@iconitem-area-img-top: 18px;
+@iconitem-area-img-left: 29px;
 @iconitem-heading-height: 30px;
 @iconitem-heading-font-size: 16px;
 @iconitem-heading-line-height: 32px;
@@ -225,8 +292,10 @@
 @tabbarbutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#A59EA5), to(#848284));
 @tabbarbutton-highlighted-background-color: #FFB600;
 @tabbarbutton-highlighted-background-image: -webkit-gradient(linear, left top, left bottom, from(#FFCB00), to(#FF9A00));
-@tabpanelheader-tabbarbutton-border-top-left-radius: 6px;
-@tabpanelheader-tabbarbutton-border-top-right-radius: 6px;
+.mblTabPanelHeader-TabButton-styles () {
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-top-right-radius: 6px;
+}
 @tabpanelheader-tabbarbutton-selected-background-color: #404040;
 @tabpanelheader-tabbarbutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
 @tabbarbutton-imgdiv-display: block; // default

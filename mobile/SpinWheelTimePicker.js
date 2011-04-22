@@ -1,6 +1,14 @@
-dojo.provide("dojox.mobile.SpinWheelTimePicker");
-
-dojo.require("dojox.mobile.SpinWheel");
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dojo/date",
+  "dojo/date/locale",
+  "dojox/mobile/SpinWheel"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/SpinWheelTimePicker
+	// summary:
+	//		TODOC
 
 dojo.declare(
 	"dojox.mobile.SpinWheelTimePicker",
@@ -34,4 +42,7 @@ dojo.declare(
 		slots[1].setValue(now.getMinutes());
 		slots[1].setColor(now.getMinutes());
 	}
+});
+
+return dojox.mobile.SpinWheelTimePicker;
 });

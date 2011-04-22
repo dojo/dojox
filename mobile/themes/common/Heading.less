@@ -1,0 +1,39 @@
+/* dojox.mobile.Heading */
+.mblHeading {
+	position: relative;
+	margin: 0px;
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	.mblHeading-styles;
+}
+
+/* Heading Arrow Button */
+.mblArrowButton {
+	position: relative;
+	float: left;
+	.mblArrowButton-styles;
+}
+.mblArrowButtonHead {
+	position: absolute;
+	.mblArrowButtonHead-styles;
+}
+.mblArrowButtonBody {
+	position: absolute;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	.mblArrowButtonBody-styles;
+}
+.mblArrowButtonNeck {
+	position: absolute;
+	.mblArrowButtonNeck-styles;
+}
+.mblArrowButtonSelected {
+	.mblArrowButtonHead {
+		.mblArrowButtonSelected-styles;
+	}
+	.mblArrowButtonBody, .mblArrowButtonNeck {
+		.mblArrowButtonSelected-styles;
+	}
+}

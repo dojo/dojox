@@ -1,12 +1,17 @@
-dojo.provide("dojox.mobile._DataListMixin");
-
-// summary:
-//		Mixin for widgets to generate the list items corresponding to the data
-//		provider object.
-// description:
-//		By mixing this class into the widgets, the list item nodes are generated
-//		as the child nodes of the widget and automatically re-generated
-//		whenever the corresponding data items are modified.
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dojox/mobile/ListItem"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/_DataListMixin
+	// summary:
+	//		Mixin for widgets to generate the list items corresponding to the data
+	//		provider object.
+	// description:
+	//		By mixing this class into the widgets, the list item nodes are generated
+	//		as the child nodes of the widget and automatically re-generated
+	//		whenever the corresponding data items are modified.
 
 dojo.declare(
 	"dojox.mobile._DataListMixin",
@@ -99,4 +104,7 @@ dojo.declare(
 	onDelete: function(/* item */ deletedItem){
 		dijit.byId(deletedItem._widgetId).destroyRecursive();
 	}
+});
+
+return dojox.mobile._DataListMixin;
 });

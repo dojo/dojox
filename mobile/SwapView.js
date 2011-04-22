@@ -1,16 +1,18 @@
-dojo.provide("dojox.mobile.SwapView");
-
-dojo.require("dijit._WidgetBase");
-dojo.require("dojox.mobile");
-dojo.require("dojox.mobile._ScrollableMixin");
-
-// summary:
-//		A container that can be flipped horizontally.
-// description:
-//		SwapView allows the user to swipe the screen left or right to
-//		flip between the views.
-//		When SwapView is flipped, it finds an adjacent SwapView,
-//		and opens it.
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dojox/mobile/View",
+  "dojox/mobile/_ScrollableMixin"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/SwapView
+	// summary:
+	//		A container that can be flipped horizontally.
+	// description:
+	//		SwapView allows the user to swipe the screen left or right to
+	//		flip between the views.
+	//		When SwapView is flipped, it finds an adjacent SwapView,
+	//		and opens it.
 
 dojo.declare(
 	"dojox.mobile.SwapView",
@@ -131,4 +133,7 @@ dojo.declare(
 		}
 		this.inherited(arguments);
 	}
+});
+
+return dojox.mobile.SwapView;
 });

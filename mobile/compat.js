@@ -1,33 +1,39 @@
-dojo.provide("dojox.mobile.compat");
-dojo.require("dijit._base.sniff");
-dojo.require("dojo._base.fx");
-dojo.require("dojo.fx");
-dojo.require("dojox.fx.flip");
-
-// summary:
-//		CSS3 compatibility module
-// description:
-//		This module provides support for some of the CSS3 features to dojox.mobile
-//		for non-CSS3 browsers, such as IE or Firefox.
-//		If you load this module, it directly replaces some of the methods of
-//		dojox.mobile instead of subclassing. This way, html pages remains the same
-//		regardless of whether this compatibility module is used or not.
-//		Recommended usage is as follows. the code below loads dojox.mobile.compat
-//		only when isWebKit is true.
-//
-//		dojo.require("dojox.mobile");
-//		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-//
-//		This module also loads compatibility CSS files, which has -compat.css
-//		suffix. You can use either the <link> tag or @import to load theme
-//		CSS files. Then, this module searches for the loaded CSS files and loads
-//		compatibility CSS files. For example, if you load iphone.css in a page,
-//		this module automatically loads iphone-compat.css.
-//		If you explicitly load iphone-compat.css with <link> or @import,
-//		this module will not load the already loaded file.
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "./common",
+  "dijit/_base/sniff",
+  "dojo/_base/fx",
+  "dojo/fx",
+  "dojox/fx/flip"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/compat
+	// summary:
+	//		CSS3 compatibility module
+	// description:
+	//		This module provides support for some of the CSS3 features to dojox.mobile
+	//		for non-CSS3 browsers, such as IE or Firefox.
+	//		If you load this module, it directly replaces some of the methods of
+	//		dojox.mobile instead of subclassing. This way, html pages remains the same
+	//		regardless of whether this compatibility module is used or not.
+	//		Recommended usage is as follows. the code below loads dojox.mobile.compat
+	//		only when isWebKit is true.
+	//
+	//		dojo.require("dojox.mobile");
+	//		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+	//
+	//		This module also loads compatibility CSS files, which has -compat.css
+	//		suffix. You can use either the <link> tag or @import to load theme
+	//		CSS files. Then, this module searches for the loaded CSS files and loads
+	//		compatibility CSS files. For example, if you load iphone.css in a page,
+	//		this module automatically loads iphone-compat.css.
+	//		If you explicitly load iphone-compat.css with <link> or @import,
+	//		this module will not load the already loaded file.
 
 if(!dojo.isWebKit){
 
+if(dojox.mobile.View){
 dojo.extend(dojox.mobile.View, {
 	_doTransition: function(fromNode, toNode, transition, dir){
 		var anim;
@@ -59,7 +65,7 @@ dojo.extend(dojox.mobile.View, {
 				fromNode.style.display = "none";
 				toNode.style.position = "relative";
 				toWidget = dijit.byNode(toNode);
-				if(!dojo.hasClass(toWidget.domNode, "out")){
+				if(toWidget && !dojo.hasClass(toWidget.domNode, "out")){
 					// Reset the temporary padding
 					toWidget.containerNode.style.paddingTop = "";
 				}
@@ -155,8 +161,9 @@ dojo.extend(dojox.mobile.View, {
 			node.style.display = disp;
 		}
 	}
-});
+});}
 
+if(dojox.mobile.Switch){
 dojo.extend(dojox.mobile.Switch, {
 	_changeState: function(/*String*/state, /*Boolean*/anim){
 		// summary:
@@ -199,10 +206,11 @@ dojo.extend(dojox.mobile.Switch, {
 			f();
 		}
 	}
-});
+});}
 
 if(dojo.isIE){
 
+if(dojox.mobile.RoundRect){
 dojo.extend(dojox.mobile.RoundRect, {
 	buildRendering: function(){
 		// summary:
@@ -213,8 +221,9 @@ dojo.extend(dojox.mobile.RoundRect, {
 		dojox.mobile.createRoundRect(this);
 		this.domNode.className = "mblRoundRect";
 	}
-});
+});}
 
+if(dojox.mobile.RoundRectList){
 dojox.mobile.RoundRectList._addChild = dojox.mobile.RoundRectList.prototype.addChild;
 dojo.extend(dojox.mobile.RoundRectList, {
 	buildRendering: function(){
@@ -258,17 +267,17 @@ dojo.extend(dojox.mobile.RoundRectList, {
 			}
 		}
 	}
-});
+});}
 
+if(dojox.mobile.EdgeToEdgeList){
 dojo.extend(dojox.mobile.EdgeToEdgeList, {
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
 		this.domNode.className = "mblEdgeToEdgeList";
 	}
-});
+});}
 
 if(dojox.mobile.IconContainer){
-
 dojox.mobile.IconContainer._addChild = dojox.mobile.IconContainer.prototype.addChild;
 dojo.extend(dojox.mobile.IconContainer, {
 	addChild: function(widget){
@@ -277,9 +286,7 @@ dojo.extend(dojox.mobile.IconContainer, {
 			dojox.mobile.applyPngFilter(widget.domNode);
 		}
 	}
-});
-
-} // if(dojox.mobile.IconContainer)
+});}
 
 dojo.mixin(dojox.mobile, {
 	createRoundRect: function(_this, isList){
@@ -317,7 +324,6 @@ dojo.mixin(dojox.mobile, {
 });
 
 if(dojox.mobile.ScrollableView){
-
 dojo.extend(dojox.mobile.ScrollableView, {
 	postCreate: function(){
 		// On IE, margin-top of the first child does not seem to be effective,
@@ -330,9 +336,7 @@ dojo.extend(dojox.mobile.ScrollableView, {
 			fontSize: "1px"
 		});
 	}
-});
-
-} // if(dojox.mobile.ScrollableView)
+});}
 
 } // if(dojo.isIE)
 
@@ -469,3 +473,6 @@ dojo.addOnLoad(function(){
 });
 
 } // end of if(!dojo.isWebKit){
+
+return dojox.mobile.compat;
+});

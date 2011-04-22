@@ -1,14 +1,18 @@
-dojo.provide("dojox.mobile._ScrollableMixin");
-
-dojo.require("dijit._WidgetBase");
-dojo.require("dojox.mobile.scrollable");
-
-// summary:
-//		Mixin for widgets to have a touch scrolling capability.
-// description:
-//		Actual implementation is in scrollable.js.
-//		scrollable.js is not a dojo class, but just a collection
-//		of functions. This module makes scrollable.js a dojo class.
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "./common",
+  "dijit/_WidgetBase",
+  "dojox/mobile/scrollable"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/_ScrollableMixin
+	// summary:
+	//		Mixin for widgets to have a touch scrolling capability.
+	// description:
+	//		Actual implementation is in scrollable.js.
+	//		scrollable.js is not a dojo class, but just a collection
+	//		of functions. This module makes scrollable.js a dojo class.
 
 dojo.declare(
 	"dojox.mobile._ScrollableMixin",
@@ -55,3 +59,6 @@ dojo.declare(
 		dojo.mixin(dojox.mobile._ScrollableMixin._meta.hidden, obj);
 	}
 })();
+
+return dojox.mobile._ScrollableMixin;
+});

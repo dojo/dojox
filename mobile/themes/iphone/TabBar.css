@@ -18,23 +18,22 @@
   list-style-type: none;
   float: left;
 }
+.mblTabBar .mblTabBarButton.mblTabButtonSelected {
+  background-color: #404040;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
 /* dojox.mobile.TabBarButton */
 .mblTabBarButtonAnchor {
   display: block;
   text-decoration: none;
-}
-.mblTabButton .mblTabBarButtonAnchor {
-  height: 28px;
 }
 .mblTabBarButtonDiv {
   position: relative;
   height: 34px;
   width: 29px;
   left: 50%;
-}
-.mblTabButton .mblTabBarButtonDiv {
-  display: none;
-  height: auto;
 }
 .mblTabBarButtonDivInner {
   left: -50%;
@@ -45,19 +44,10 @@
   top: 2px;
   -webkit-transform: none;
 }
-.mblTabBar .mblTabBarButton.mblTabButtonSelected {
-  background-color: #404040;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424), color-stop(0.5, #353535), color-stop(0.5, #242424));
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-}
 .mblTabBarButtonTextBox {
   color: #979797;
   font-family: "Helvetica Neue", Helvetica;
   font-size: 11px;
-}
-.mblTabButtonSelected .mblTabBarButtonTextBox {
-  color: white;
 }
 .mblTabButton {
   float: left;
@@ -80,6 +70,13 @@
   background-image: -webkit-gradient(linear, left top, left bottom, from(#abb9ca), to(#788da9), color-stop(0.5, #8297af), color-stop(0.5, #768ba7));
   -webkit-tap-highlight-color: transparent;
 }
+.mblTabButton .mblTabBarButtonAnchor {
+  height: 28px;
+}
+.mblTabButton .mblTabBarButtonDiv {
+  display: none;
+  height: auto;
+}
 .mblTabButton:first-child {
   -webkit-border-top-left-radius: 5px;
   -webkit-border-bottom-left-radius: 5px;
@@ -94,6 +91,16 @@
   -moz-border-radius-bottomright: 5px;
   border-right-color: #9cacc0;
 }
+.mblTabButton IMG {
+  position: static;
+  left: 0px;
+  top: 0px;
+  margin-top: 0px;
+  -webkit-transform: none;
+}
+.mblTabButtonSelected .mblTabBarButtonTextBox {
+  color: white;
+}
 .mblTabButtonSelected.mblTabButton {
   background-color: transparent;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#abb9ca), to(#788da9), color-stop(0.5, #8297af), color-stop(0.5, #768ba7));
@@ -102,26 +109,11 @@
   background-color: transparent;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#abb9ca), to(#788da9), color-stop(0.5, #8297af), color-stop(0.5, #768ba7));
 }
-.mblTabPanelHeader .mblTabButton {
-  -webkit-border-top-left-radius: 0px;
-  -webkit-border-top-right-radius: 0px;
-}
-.mblTabPanelHeader .mblTabButton.mblTabButtonSelected {
-  background-color: #5877a2;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#8ea4c1), to(#4a6c9b), color-stop(0.5, #5877a2), color-stop(0.5, #476999));
-}
 .mblTabButtonImgDiv {
   display: none;
   position: static;
   margin-left: 0px;
   height: auto;
-}
-.mblTabButton IMG {
-  position: static;
-  left: 0px;
-  top: 0px;
-  margin-top: 0px;
-  -webkit-transform: none;
 }
 .mblTabPanelHeader {
   position: relative;
@@ -142,6 +134,10 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.mblTabPanelHeader .mblTabButton.mblTabButtonSelected {
+  background-color: #5877a2;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#8ea4c1), to(#4a6c9b), color-stop(0.5, #5877a2), color-stop(0.5, #476999));
 }
 .mblTabPanelHeader .mblTabButtonDomButton {
   width: 43px;

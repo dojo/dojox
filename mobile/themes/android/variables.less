@@ -1,117 +1,173 @@
-@body-background-color: black;
-@body-font-size: 17px;
+.mobile-body-styles () {
+	background-color: black;
+	font-family: Helvetica;
+	font-size: 17px;
+}
 
-@view-color: white;
+.mblView-styles () {
+	color: white;
+}
 
-@heading-height: 25px;
-@heading-padding: 0px 0px 0px 4px;
-@heading-background-color: #8C8A8C;
-@heading-background-image: -webkit-gradient(linear, left top, left bottom, from(#9C9E9C), to(#848284));
-@heading-border-top: 1px solid #CDD5DF;
-@heading-border-bottom: 1px solid #2D3642;
-@heading-font-size: 14px;
-@heading-font-weight: bold;
-@heading-line-height: 23px;
-@heading-text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
-@heading-z-index: auto; // default
+.mblHeading-styles () {
+	padding: 0px 0px 0px 4px;
+	height: 25px;
+	background-color: #8C8A8C;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#9C9E9C), to(#848284));
+	border-top: 1px solid #CDD5DF;
+	border-bottom: 1px solid #2D3642;
+	color: white;
+	font-family: Helvetica;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 23px;
+	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+}
+.mblArrowButton-styles () {
+	height: 25px;
+	margin: 0px 0px 0px 6px;
+}
+.mblArrowButtonHead-styles () {
+	top: 5px;
+	left: 9px;
+	width: 19px;
+	height: 16px;
+	border: 1px solid #3F3E3E;
+	-webkit-transform: scale(.8,1) rotate(45deg);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
+}
+.mblArrowButtonBody-styles () {
+	top: 0px;
+	left: 19px;
+	padding: 0px 10px 0px 3px;
+	height: 23px;
+	border-width: 1px 1px 1px 0px;
+	border-style: inset;
+	border-color: #3F3E3E;
+	font-family: Helvetica;
+	font-size: 13px;
+	color: white;
+	line-height: 23px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	background-color: #ADADAD;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
+}
+.mblArrowButtonNeck-styles () {
+	top: 0px;
+	left: 19px;
+	width: 4px;
+	height: 23px;
+	border-width: 1px 0px 1px 0px;
+	border-style: inset;
+	border-color: #3F3E3E;
+	background-color: #ADADAD;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
+}
+.mblArrowButtonSelected-styles () {
+	background-color: #FFC700;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
+}
 
-@arrowbutton-height: 25px;
-@arrowbutton-margin: 0px 0px 0px 6px;
-@arrowbutton-head-top: 5px;
-@arrowbutton-head-left: 9px;
-@arrowbutton-head-height: 16px;
-@arrowbutton-head-border-color: #3F3E3E;
-@arrowbutton-head-background-image: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
-@arrowbutton-body-top: 0px;
-@arrowbutton-body-padding: 0px 10px 0px 3px;
-@arrowbutton-body-height: 23px;
-@arrowbutton-body-border-color: #3F3E3E;
-@arrowbutton-body-font-size: 13px;
-@arrowbutton-body-font-weight: inherit; // default
-@arrowbutton-body-color: white;
-@arrowbutton-body-line-height: 23px;
-@arrowbutton-body-border-radius: 5px;
-@arrowbutton-body-background-color: #ADADAD;
-@arrowbutton-body-background-image: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
-@arrowbutton-neck-top: 0px;
-@arrowbutton-neck-width: 4px;
-@arrowbutton-neck-height: 23px;
-@arrowbutton-neck-border-width: 1px 0px 1px 0px;
-@arrowbutton-neck-border-color: #3F3E3E;
-@arrowbutton-neck-background-color: transparent; // default
-@arrowbutton-neck-background-image: -webkit-gradient(linear, left top, left bottom, from(#E5E5E5), to(#7F7F7F), color-stop(0.5, #ADADAD), color-stop(0.5, #909090));
-@arrowbutton-selected-head-background-image: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
-@arrowbutton-selected-neck-background-color: #FFC700;
-@arrowbutton-selected-neck-background-image: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
+.mblToolbarButton-styles () {
+	margin: 0px 3px;
+	padding: 0px 10px;
+	height: 23px;
+	border: 1px inset #3F3E3E;
+	font-family: Helvetica;
+	font-size: 13px;
+	font-weight: bold;
+	color: white;
+	line-height: 23px;
+	text-align: center;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
 
-@toolbarbutton-margin: 0px 3px;
-@toolbarbutton-height: 23px;
-@toolbarbutton-border: 1px inset #3F3E3E;
-@toolbarbutton-font-size: 13px;
-@toolbarbutton-line-height: 23px;
-@toolbarbutton-border-radius: 5px;
+.mblRoundRect-styles () {
+	margin: 7px 9px 16px;
+	padding: 8px;
+	border: 1px solid #ADAAAD;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	color: white;
+	background-color: black;
+}
+.mblRoundRectShadowBox-styles () {
+	-webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
 
-@roundrect-margin: 7px 9px 16px;
-@roundrect-border: 1px solid #ADAAAD;
-@roundrect-border-radius: 8px;
-@roundrect-color: white;
-@roundrect-background-color: black;
-@roundrect-shadow-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+.mblEdgeToEdgeCategory-styles () {
+	margin: 0px;
+	padding: 0px 10px;
+	height: 22px;
+	border-bottom: 1px solid #393439;
+	background-color: #212021;
+	font-family: Helvetica;
+	font-size: 16px;
+	font-weight: bold;
+	color: white;
+	line-height: 22px;
+	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+}
 
-@edgetoedgecategory-height: 22px;
-@edgetoedgecategory-border-top: none; // default
-@edgetoedgecategory-border-bottom: 1px solid #393439;
-@edgetoedgecategory-background-color: #212021;
-@edgetoedgecategory-background-image: none; // default
-@edgetoedgecategory-font-weight: bold;
-@edgetoedgecategory-color: white;
-@edgetoedgecategory-line-height: 22px;
-@edgetoedgecategory-text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+.mblRoundRectCategory-styles () {
+	margin: 18px 0px 0px 20px;
+	font-family: Helvetica;
+	font-size: 16px;
+	color: white;
+}
 
-@roundrectcategory-color: white;
-@roundrectcategory-padding: 0px; // default
-@roundrectcategory-margin: 18px 0px 0px 20px;
-@roundrectcategory-height: auto; // default
-@roundrectcategory-text-shadow: none; // default
-@roundrectcategory-line-height: inherit; // default
-@roundrectcategory-background-color: transparent; // default
-@roundrectcategory-border: none; // default
-@roundrectcategory-border-bottom-width: 0px; // default
-@roundrectcategory-border-top-left-radius: 0px; // default
-@roundrectcategory-border-top-right-radius: 0px; // default
+.mblRoundRectList-styles () {
+	margin: 7px 9px 16px;
+	padding: 0px;
+	border: 1px solid #ADAAAD;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	background-color: white;
+}
+.mblRoundRectList-FirstListItem-styles () {
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-topright: 8px;
+}
+.mblRoundRectList-LastListItem-styles () {
+	border-bottom-width: 0px;
+	-webkit-border-bottom-left-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-moz-border-radius-bottomright: 8px;
+}
 
-@roundrectlist-margin: 7px 9px 16px;
-@roundrectlist-border-radius: 8px;
-@roundrectlist-bottom-left-radius: 8px; // default
-@roundrectlist-bottom-right-radius: 8px; // default
+.mblEdgeToEdgeList-styles () {
+	margin: 0px;
+	padding: 0px;
+	background-color: black;
+}
+.mblEdgeToEdgeList-LastListItem-styles () {
+	border-bottom-color: #313431;
+}
 
-@edgetoedgelist-background-color: black;
-
-@listitem-height: 64px;
-@listitem-border-bottom: solid 1px #313431;
-@listitem-line-height: 64px;
-@listitem-font-size: 21px;
-@listitem-font-weight: inherit; // default
-@listitem-color: white;
-@listitem-background-color: black;
-@listitem-vertical-align: bottom; // To avoid IE6 LI bug
-@listitem-padding: 0px 0px 0px 7px;
-@listitem-selected-background-color: #FFC700;
-@listitem-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
-@listitem-textbox-selected-background-color: #048BF4;
-@roundrectlist-listitem-first-border-top-width: 0px; // default
-@roundrectlist-listitem-first-border-top-left-radius: 8px;
-@roundrectlist-listitem-first-border-top-right-radius: 8px;
-@roundrectlist-listitem-last-border-bottom-left-radius: 8px;
-@roundrectlist-listitem-last-border-bottom-right-radius: 8px;
-@edgetoedgelist-listitem-last-border-bottom-color: #313431;
-@edgetoedgelist-listitem-last-border-bottom-width: 1px; // default
+.mblListItem-styles () {
+	padding: 0px 0px 0px 7px;
+	height: 64px;
+	border-bottom: solid 1px #313431;
+	background-color: black;
+	font-size: 21px;
+	color: white;
+	line-height: 64px;
+}
+@listitem-icon-top: 18px;
 @listitem-anchor-background-position: 14px 17px;
 @listitem-anchor-padding-left: 53px;
 @listitem-anchor-noicon-padding-left: 14px;
-@listitem-selected-anchor-color: black;
 @listitem-anchor-rightbutton-padding-right: 50px;
-@listitem-dombutton-border-color: transparent; // default
+@listitem-selected-background-color: #FFC700;
+@listitem-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#AD7500), to(#FFAA00), color-stop(0.06, #FFB200), color-stop(0.5, #FFC700));
+@listitem-selected-anchor-color: black;
+@listitem-selected-dombutton-border-color: white;
+@listitem-textbox-selected-background-color: #048BF4;
 @listitem-righttext-top: 20px;
 @listitem-righttext-color: white;
 @listitem-checked-color: inherit; // default
@@ -122,7 +178,6 @@
 @switch-item-top: 18px;
 @switch-bg-border-radius: 2px;
 @switch-bg-left-background-image: -webkit-gradient(linear, left top, left bottom, from(#00A200), to(#00D300), color-stop(0.2, #00BA00), color-stop(0.2, #00BA00));
-@switch-bg-right-color: inherit; // default
 @switch-bg-right-background-image: -webkit-gradient(linear, left top, left bottom, from(#BDBEBD), to(#F7F3F7));
 @switch-knob-background-image: -webkit-gradient(linear, left top, left bottom, from(#9C9A9C), to(#848284));
 @switch-knob-border-radius: 2px;
@@ -175,6 +230,8 @@
 @iconitem-area-width: 74px;
 @iconitem-area-margin-bottom: 10px;
 @iconitem-area-color: white;
+@iconitem-area-img-top: 13px;
+@iconitem-area-img-left: 18px;
 @iconitem-heading-height: 25px;
 @iconitem-heading-font-size: 14px;
 @iconitem-heading-line-height: 26px;
@@ -225,8 +282,8 @@
 @tabbarbutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#A59EA5), to(#848284));
 @tabbarbutton-highlighted-background-color: #FFB600;
 @tabbarbutton-highlighted-background-image: -webkit-gradient(linear, left top, left bottom, from(#FFCB00), to(#FF9A00));
-@tabpanelheader-tabbarbutton-border-top-left-radius: 0px; // default
-@tabpanelheader-tabbarbutton-border-top-right-radius: 0px; // default 
+.mblTabPanelHeader-TabButton-styles () {
+}
 @tabpanelheader-tabbarbutton-selected-background-color: #8C8E8C; // default
 @tabpanelheader-tabbarbutton-selected-background-image: -webkit-gradient(linear, left top, left bottom, from(#A59EA5), to(#848284)); // default
 @tabbarbutton-imgdiv-display: block; // default

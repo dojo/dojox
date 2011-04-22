@@ -21,7 +21,7 @@
   border-color: grey;
   color: grey;
   cursor: default;
-  background-image: transparent;
+  background-image: none;
 }
 .mblButton.mblBlueButton {
   border-color: #9CACC0;

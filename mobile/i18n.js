@@ -1,11 +1,22 @@
-dojo.provide("dojox.mobile.i18n");
-dojo.require("dojo.i18n");
-dojo.require("dojox.mobile");
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dojo/i18n"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/i18n
+	// summary:
+	//		TODOC
 
-dojox.mobile.i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale, /*String?*/availableFlatLocales){
-	dojo.requireLocalization(packageName, bundleName, locale, availableFlatLocales);
+dojo.getObject("mobile.i18n", true, dojox);
+
+dojox.mobile.i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
+	return dojox.mobile.i18n.registerBundle(dojo.i18n.getLocalization(packageName, bundleName, locale));
+};
+
+dojox.mobile.i18n.registerBundle = function(/*Array*/bundle){
 	if(!dojox.mobile.i18n.bundle){ dojox.mobile.i18n.bundle = []; }
-	return dojo.mixin(dojox.mobile.i18n.bundle, dojo.i18n.getLocalization(packageName, bundleName, locale));
+	return dojo.mixin(dojox.mobile.i18n.bundle, bundle);
 };
 
 dojo.extend(dijit._WidgetBase, {
@@ -14,4 +25,7 @@ dojo.extend(dijit._WidgetBase, {
 		if(this.mblNoConv || !dojox.mobile.i18n.bundle){ return s; }
 		return dojox.mobile.i18n.bundle[dojo.trim(s)] || s;
 	}
+});
+
+return dojox.mobile.i18n;
 });

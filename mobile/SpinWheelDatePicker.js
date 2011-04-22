@@ -1,8 +1,14 @@
-dojo.provide("dojox.mobile.SpinWheelDatePicker");
-
-dojo.require("dojo.date");
-dojo.require("dojo.date.locale");
-dojo.require("dojox.mobile.SpinWheel");
+define([
+  "dojo",
+  "dijit",
+  "dojox",
+  "dojo/date",
+  "dojo/date/locale",
+  "dojox/mobile/SpinWheel"], function(dojo, dijit, dojox){
+	// module:
+	//		dojox/mobile/SpinWheelDatePicker
+	// summary:
+	//		TODOC
 
 dojo.declare(
 	"dojox.mobile.SpinWheelDatePicker",
@@ -100,4 +106,7 @@ dojo.declare(
 	"dojox.mobile.SpinWheelDaySlot",
 	dojox.mobile.SpinWheelSlot,
 {
+});
+
+return dojox.mobile.SpinWheelDatePicker;
 });

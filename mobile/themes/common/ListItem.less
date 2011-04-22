@@ -1,0 +1,93 @@
+/* dojox.mobile.ListItem */
+.mblListItem {
+	position: relative;
+	list-style-type: none;
+	vertical-align: bottom; /* To avoid IE6 LI bug */
+	.mblListItem-styles;
+	&.mblVariableHeight {
+		line-height: normal;
+		height: auto;
+		padding: 11px 6px 10px 6px;
+	}
+	a {
+		&.mblListItemAnchor {
+			background-position: @listitem-anchor-background-position;
+			display: block;
+			padding-left: @listitem-anchor-padding-left;
+			text-decoration: none;
+			-webkit-tap-highlight-color: transparent;
+		}
+		&.mblListItemAnchorNoIcon {
+			padding-left: @listitem-anchor-noicon-padding-left;
+		}
+		&.mblListItemAnchorHasRightButton {
+			padding-right: @listitem-anchor-rightbutton-padding-right;
+		}
+	}
+	.mblLeftButton {
+		position: absolute;
+		top: 50%;
+		margin-top: -15px;
+		line-height: normal;
+	}
+	.mblRightButton {
+		position: absolute;
+		top: 50%;
+		right: 7px;
+		margin-top: -15px;
+		line-height: normal;
+	}
+	.mblRightButton2 {
+		right: 36px;
+	}
+}
+.mblListItemIcon {
+	position: absolute;
+	top: @listitem-icon-top;
+}
+.mblItemSelected {
+	background-color: @listitem-selected-background-color;
+	background-image: @listitem-selected-background-image;
+	a {
+		&.mblListItemAnchor {
+			color: @listitem-selected-anchor-color;
+		}
+	}
+	.mblDomButton {
+		DIV {
+			border-color: @listitem-selected-dombutton-border-color;
+		}
+	}
+	.mblListItemSubText {
+		color: @listitem-selected-subtext-color;
+	}
+}
+.mblListItemTextBox {
+	padding-right: 28px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.mblListItemTextBox2 {
+	padding-right: 58px;
+}
+.mblListItemTextBoxSelected {
+	background-color: @listitem-textbox-selected-background-color;
+}
+.mblVariableHeight .mblListItemTextBox {
+	white-space: normal;
+}
+.mblRightText {
+	position: absolute;
+	top: @listitem-righttext-top;
+	right: 30px;
+	color: @listitem-righttext-color;
+	line-height: normal;
+}
+.mblItemChecked {
+	color: @listitem-checked-color;
+}
+.mblListItemSubText {
+	font-size: @listitem-subtext-font-size;
+	color: @listitem-subtext-color;
+}
