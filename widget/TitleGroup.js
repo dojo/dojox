@@ -76,8 +76,8 @@ dojo.require("dijit.TitlePane");
 			// summary: close all found titlePanes within this group, excluding
 			// the one the we pass to select
 			widget && dojo.query("> .dijitTitlePane", this.domNode).forEach(function(n){
-				var tp = dijit.getEnclosingWidget(n);
-				tp && tp !== widget && tp.open && tp.set("open", false);
+				var tp = dijit.byNode(n);
+				tp && tp !== widget && tp.open && tp.toggle(); // could race if open is set onEnd of slide
 			});
 			return widget; // dijit.TitlePane
 		}
