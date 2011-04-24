@@ -142,6 +142,7 @@ dojo.declare("dojox.image.SlideShow",
 		
 		this._loadImage(0, dojo.hitch(this, "showImage", 0));
 		this._calcNavDimensions();
+		dojo._setOpacity(this.navNode, 0);
 	},
 
 	setDataStore: function(dataStore, request, /*optional*/paramNames){
@@ -541,14 +542,11 @@ dojo.declare("dojox.image.SlideShow",
 		//Place the navigation controls far off screen
 		dojo.style(this.navNode, "top", "-10000px");
 		
-		//Make the navigation controls visible
-		dojo._setOpacity(this.navNode, 1);
+		dojo.style(this.navPlay, 'marginLeft', 0);
 		
 		this.navPlay._size = dojo.marginBox(this.navPlay);
 		this.navPrev._size = dojo.marginBox(this.navPrev);
 		this.navNext._size = dojo.marginBox(this.navNext);
-		
-		dojo._setOpacity(this.navNode, 0);
 		
 		dojo.style(this.navNode, {"position": "", top: ""});
 	},
@@ -605,9 +603,13 @@ dojo.declare("dojox.image.SlideShow",
 		//		If true, the navigation controls are repositioned even if they are
 		//		currently visible.
 		if(this._navShowing && !force){return;}
+		this._calcNavDimensions();
 		dojo.style(this.navNode, "marginTop", "0px");
 		
+		
 		var navPlayPos = dojo.style(this.navNode, "width")/2 - this.navPlay._size.w/2 - this.navPrev._size.w;
+		console.log('navPlayPos = ' + dojo.style(this.navNode, "width")/2 + ' - ' + this.navPlay._size.w + '/2 - '
+				+ this.navPrev._size.w);
 		
 		dojo.style(this.navPlay, "marginLeft", navPlayPos + "px");
 		var wrapperSize = dojo.marginBox(this.outerNode);
