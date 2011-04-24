@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.exporter.CSVWriter");
-
-dojo.require("dojox.grid.enhanced.plugins.exporter._ExportWriter");
+define(["dojo", "dojox", "./_ExportWriter"], function(dojo, dojox){
 
 dojox.grid.enhanced.plugins.Exporter.registerWriter("csv",
 	"dojox.grid.enhanced.plugins.exporter.CSVWriter");
@@ -76,4 +74,8 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.CSVWriter",
 		}
 		return result + this._newline + this._dataRows.join(this._newline);	//String
 	}
+});
+
+return dojox.grid.enhanced.plugins.exporter.CSVWriter;
+
 });

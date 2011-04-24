@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	singleSort: "Бір рет сұрыптау",
 	nestedSort: "Кірістірілген сұрыптау",
@@ -9,4 +11,6 @@
 	indirectSelectionCheckBox: "${0}-жол, бірнеше элементті таңдау, құсбелгі",
 	selectAll: "Барлығын таңдау"
 })
+//end v1.x content
+);
 

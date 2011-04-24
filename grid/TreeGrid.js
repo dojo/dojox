@@ -1,11 +1,13 @@
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"./DataGrid",
+	"./_TreeView",
+	"./cells/tree",
+	"./TreeSelection"], function(dojo, dijit, dojox){
+		
 dojo.experimental("dojox.grid.TreeGrid");
-
-dojo.provide("dojox.grid.TreeGrid");
-
-dojo.require("dojox.grid.DataGrid");
-dojo.require("dojox.grid._TreeView");
-dojo.require("dojox.grid.cells.tree");
-dojo.require("dojox.grid.TreeSelection");
 
 dojo.declare("dojox.grid._TreeAggregator", null, {
 	cells: [],
@@ -949,3 +951,7 @@ dojox.grid.TreeGrid.markupFactory = function(props, node, ctor, cellFunc){
 	}
 	return dojox.grid.DataGrid.markupFactory(props, node, ctor, cellFunc);
 };
+
+return dojox.grid.TreeGrid;
+
+});

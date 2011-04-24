@@ -1,8 +1,4 @@
-dojo.provide("dojox.grid._TreeView");
-
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dojox.grid._View");
+define(["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "./_View"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
 	open: false,
@@ -440,4 +436,8 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 			return this.content.getCellNode(row, inCellIndex);
 		}
 	}
+});
+
+return dojox.grid._TreeView;
+
 });

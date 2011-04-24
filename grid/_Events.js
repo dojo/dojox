@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid._Events");
+define(["dojo", "dojox"], function(dojo, dojox){
 
 dojo.declare("dojox.grid._Events", null, {
 	// summary:
@@ -490,4 +490,8 @@ dojo.declare("dojox.grid._Events", null, {
 
 	onSelectionChanged: function(){
 	}
+});
+
+return dojox.grid._Events;
+
 });

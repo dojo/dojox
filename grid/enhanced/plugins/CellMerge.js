@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.CellMerge");
-
-dojo.require("dojox.grid.enhanced._Plugin");
+define(["dojo", "dojox", "../_Plugin"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -263,4 +261,9 @@ dojo.declare("dojox.grid.enhanced.plugins.CellMerge", dojox.grid.enhanced._Plugi
 		}
 	}
 });
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.CellMerge/*name:'cellMerge'*/);
+
+return dojox.grid.enhanced.plugins.CellMerge;
+
+});

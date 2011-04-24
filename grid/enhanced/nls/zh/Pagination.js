@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${1} ${0} 的 ${3}",
 	"firstTip": "第一页",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "确定",
 	"dialogCancel": "取消"
 })
+//end v1.x content
+);
 

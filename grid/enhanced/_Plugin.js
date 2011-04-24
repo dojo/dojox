@@ -1,6 +1,5 @@
-dojo.provide("dojox.grid.enhanced._Plugin");
-
-dojo.require("dojox.grid.EnhancedGrid");
+define(["dojo", "dojox", "../EnhancedGrid"], function(dojo, dojox){
+	
 dojo.declare("dojox.grid.enhanced._Plugin", null, {
 	// summary:
 	//		Base class for all plugins.
@@ -161,3 +160,7 @@ dojo.declare("dojox.grid.enhanced._Plugin", null, {
 // e.g. for DnD plugin(name:'dnd'):
 // |	dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.DnD/*class*/,
 // |		{"dependency": ["nestedSorting"]}/*Optional - properties*/);
+
+return dojox.grid.enhanced._Plugin;
+
+});

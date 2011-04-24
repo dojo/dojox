@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${1} ${0} элементтің ${2} - ${3} элементі",
 	"firstTip": "Бірінші бет",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "Өту",
 	"dialogCancel": "Болдырмау"
 })
+//end v1.x content
+);
 

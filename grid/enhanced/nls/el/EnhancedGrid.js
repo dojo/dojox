@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	singleSort: "Απλή ταξινόμηση",
 	nestedSort: "Ένθετη ταξινόμηση",
@@ -9,4 +11,6 @@
 	indirectSelectionCheckBox: "Γραμμή ${0}, πολλαπλές επιλογές, τετραγωνίδιο επιλογής",
 	selectAll: "Επιλογή όλων"
 })
+//end v1.x content
+);
 

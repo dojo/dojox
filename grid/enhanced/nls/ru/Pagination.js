@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} из ${1} ${0}",
 	"firstTip": "Первая страница",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "Перейти",
 	"dialogCancel": "Отмена"
 })
+//end v1.x content
+);
 

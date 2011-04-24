@@ -1,22 +1,23 @@
-dojo.provide("dojox.grid.cells.dijit");
-
-dojo.require("dojox.grid.cells");
-
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"../cells",
+	"dojo/data/ItemFileReadStore",
+	"dijit/form/DateTextBox",
+	"dijit/form/TimeTextBox",
+	"dijit/form/ComboBox",
+	"dijit/form/CheckBox",
+	"dijit/form/TextBox",
+	"dijit/form/NumberSpinner",
+	"dijit/form/NumberTextBox",
+	"dijit/form/CurrencyTextBox",
+	"dijit/form/HorizontalSlider",
+	"dijit/Editor"], function(dojo, dijit, dojox){
+		
 // TODO: shouldn't it be the test file's job to require these modules,
 // if it is using them?  Most of these modules aren't referenced by this file.
-
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.TimeTextBox");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dojo.data.ItemFileReadStore");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.NumberSpinner");
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.CurrencyTextBox");
-dojo.require("dijit.form.HorizontalSlider");
-dojo.require("dijit.Editor");
-
+	
 (function(){
 	var dgc = dojox.grid.cells;
 	dojo.declare("dojox.grid.cells._Widget", dgc._Base, {
@@ -241,3 +242,7 @@ dojo.require("dijit.Editor");
 		}
 	};
 })();
+
+return dojox.grid.cells.dijit;
+
+});

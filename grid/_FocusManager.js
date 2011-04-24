@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid._FocusManager");
-
-dojo.require("dojox.grid.util");
+define(["dojo", "dojox", "./util"], function(dojo, dojox){
 
 // focus management
 dojo.declare("dojox.grid._FocusManager", null, {
@@ -611,4 +609,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	doColHeaderBlur: function(e){
 		dojo.toggleClass(e.target, this.focusClass, false);
 	}
+});
+
+return dojox.grid._FocusManager;
+
 });

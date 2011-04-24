@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid.enhanced._FocusManager");
+define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced._FocusArea",null,{
 	// summary:
@@ -752,4 +752,8 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 		}
 		return true;
 	}
+});
+
+return dojox.grid.enhanced._FocusManager;
+
 });

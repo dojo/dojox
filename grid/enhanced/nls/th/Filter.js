@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"clearFilterDialogTitle": "ลบตัวกรอง",
 	"filterDefDialogTitle": "ตัวกรอง",
@@ -82,6 +84,8 @@
 	"trueLabel": "จริง",
 	"falseLabel": "เท็จ"
 })
+//end v1.x content
+);
 
 
 

@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	singleSort: "Jednoduché triedenie",
 	nestedSort: "Vnorené triedenie",
@@ -9,4 +11,6 @@
 	indirectSelectionCheckBox: "Riadok ${0}, viacnásobný výber, začiarkavacie políčko",
 	selectAll: "Vybrať všetko"
 })
+//end v1.x content
+);
 

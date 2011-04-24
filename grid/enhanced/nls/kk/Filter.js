@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Сүзгіні тазалау",
 	"filterDefDialogTitle": "Сүзгі",
@@ -82,6 +84,8 @@
 	"trueLabel": "Шын",
 	"falseLabel": "Жалған"
 })
+//end v1.x content
+);
 
 
 

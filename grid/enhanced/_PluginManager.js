@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced._PluginManager");
-
-dojo.require("dojox.grid.enhanced._Events");
-dojo.require("dojox.grid.enhanced._FocusManager");
+define(["dojo", "dojox", "./_Events", "./_FocusManager"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 	// summary:
@@ -262,3 +259,7 @@ dojox.grid.enhanced._PluginManager.registerPlugin = function(clazz, props){
 	cls.registry = cls.registry || {};
 	cls.registry[clazz.prototype.name]/*plugin name*/ = dojo.mixin({"class": clazz}, (props ? props : {}));
 };
+
+return dojox.grid.enhanced._PluginManager;
+
+});

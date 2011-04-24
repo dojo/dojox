@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid._ViewManager");
+define(["dojo", "dojox", "./_View"], function(dojo, dojox){
 
 dojo.declare('dojox.grid._ViewManager', null, {
 	// summary:
@@ -299,4 +299,8 @@ dojo.declare('dojox.grid._ViewManager', null, {
 		return null;
 	}
 	
+});
+
+return dojox.grid._ViewManager;
+
 });

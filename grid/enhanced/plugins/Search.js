@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.Search");
-
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojo.data.util.filter");
+define(["dojo", "dojox", "../_Plugin", "dojo/data/util/filter"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -106,4 +103,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Search", dojox.grid.enhanced._Plugin, 
 		}
 	}
 });
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Search/*name:'search'*/);
+
+return dojox.grid.enhanced.plugins.Search;
+
+});

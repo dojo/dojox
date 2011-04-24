@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.cells.tree");
-
-dojo.require("dojox.grid.cells");
+define(["dojo", "dojox", "../cells"], function(dojo, dojox){
 
 dojox.grid.cells.TreeCell = {
 	formatAggregate: function(inItem, level, inRowIndexes){
@@ -65,3 +63,7 @@ dojox.grid.cells.TreeCell = {
 		return result;
 	}
 };
+
+return dojox.grid.cells.tree;
+
+});

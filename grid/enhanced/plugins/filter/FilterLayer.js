@@ -1,10 +1,7 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter.FilterLayer");
-
-dojo.require("dojox.grid.enhanced.plugins.filter._FilterExpr");
-dojo.require("dojox.grid.enhanced.plugins._StoreLayer");
+define(["dojo", "dojox", "./_FilterExpr", "../_StoreLayer"], function(dojo, dojox){
 
 (function(){
-var ns = dojox.grid.enhanced.plugins,
+var ns = dojo.getObject("grid.enhanced.plugins", true, dojox);
 	cmdSetFilter = "filter",
 	cmdClearFilter = "clear",
 	hitchIfCan = function(scope, func){
@@ -402,3 +399,7 @@ var ns = dojox.grid.enhanced.plugins,
 		}
 	});
 })();
+
+return dojox.grid.enhanced.plugins.filter.FilterLayer;
+
+});

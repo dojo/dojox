@@ -1,10 +1,11 @@
-dojo.provide("dojox.grid.enhanced.plugins.DnD");
-
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojox.grid.enhanced.plugins.Selector");
-dojo.require("dojox.grid.enhanced.plugins.Rearrange");
-dojo.require("dojo.dnd.move");
-dojo.require("dojo.dnd.Source");
+define([
+	"dojo",
+	"dojox",
+	"dojo/dnd/move",
+	"dojo/dnd/Source",
+	"../_Plugin",
+	"./Selector",
+	"./Rearrange"], function(dojo, dojox){
 
 (function(){
 var _devideToArrays = function(a){
@@ -1071,3 +1072,8 @@ dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.DnD/*name:'dn
 	"dependency": ["selector", "rearrange"]
 });
 })();
+
+
+return dojox.grid.enhanced.plugins.DnD;
+
+});

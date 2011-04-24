@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins._SelectionPreserver");
+define(["dojo", "dojox"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 	// summary:
@@ -124,4 +124,8 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 			}
 		}
 	}
+});
+
+return dojox.grid.enhanced.plugins._SelectionPreserver;
+
 });

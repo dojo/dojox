@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid._Scroller");
+define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 
 (function(){
 	var indexInParent = function(inNode){
@@ -502,3 +502,7 @@ dojo.provide("dojox.grid._Scroller");
 		dummy: 0
 	});
 })();
+
+return dojox.grid._Scroller;
+
+});

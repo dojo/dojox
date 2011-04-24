@@ -1,4 +1,4 @@
-dojo.provide('dojox.grid.Selection');
+define(["dojo", "dojox"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.Selection", null, {
 	// summary:
@@ -257,4 +257,8 @@ dojo.declare("dojox.grid.Selection", null, {
 		this.deselectAll();
 		this._endUpdate();
 	}
+});
+
+return dojox.grid.Selection;
+
 });

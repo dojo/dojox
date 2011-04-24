@@ -1,11 +1,8 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter._FilterExpr");
+define(["dojo", "dojox", "dojo/date", "./_DataExprs"], function(dojo, dojox){
 //This is the main file that should be 'required' if filter expression facility is necessary.
 
-dojo.require("dojox.grid.enhanced.plugins.filter._DataExprs");
-dojo.require("dojo.date");
-
 (function(){
-	var fns = dojox.grid.enhanced.plugins.filter;
+	var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
 	/* Logic Operations */
 	dojo.declare("dojox.grid.enhanced.plugins.filter.LogicAND", fns._BiOpExpr, {
 		// summary:
@@ -226,3 +223,7 @@ dojo.require("dojo.date");
 		}
 	});
 })();
+
+return dojox.grid.enhanced.plugins.filter._FilterExpr;
+
+});

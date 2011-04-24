@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.TreeSelection");
-
-dojo.require("dojox.grid.DataSelection");
+define(["dojo", "dojox", "./DataSelection"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 	setMode: function(mode){
@@ -205,4 +203,8 @@ dojo.declare("dojox.grid.TreeSelection", dojox.grid.DataSelection, {
 		// select/deselect the last
 		func(inToStr);
 	}
+});
+
+return dojox.grid.TreeSelection;
+
 });

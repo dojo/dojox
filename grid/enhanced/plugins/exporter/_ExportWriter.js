@@ -1,8 +1,6 @@
-dojo.provide("dojox.grid.enhanced.plugins.exporter._ExportWriter");
-
+define(["dojo", "dojox", "../Exporter"], function(dojo, dojox){
 //require Exporter here, so the implementations only need to require this file,
 //and the users only need to require the implementation file.
-dojo.require("dojox.grid.enhanced.plugins.Exporter");
 
 dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 	// summary:
@@ -264,4 +262,8 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		//		The exported result string.
 		return '';	//String
 	}
+});
+
+return dojox.grid.enhanced.plugins.exporter._ExportWriter;
+
 });

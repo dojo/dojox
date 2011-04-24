@@ -1,8 +1,8 @@
-dojo.provide("dojox.grid.util");
+define(["dojo", "dojox"], function(dojo, dojox){
 
 // summary: grid utility library
 (function(){
-	var dgu = dojox.grid.util;
+	var dgu = dojo.getObject("grid.util", true, dojox);
 
 	dgu.na = '...';
 	dgu.rowIndexTag = "gridRowIndex";
@@ -66,3 +66,7 @@ dojo.provide("dojox.grid.util");
 		inArray[inJ] = cache;
 	};
 })();
+
+return dojox.grid.util;
+
+});

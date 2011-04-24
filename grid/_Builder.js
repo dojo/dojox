@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid._Builder");
-
-dojo.require("dojox.grid.util");
-dojo.require("dojo.dnd.Moveable");
+define(["dojo", "dojox", "dojo/dnd/Moveable", "./util"], function(dojo, dojox){
 
 (function(){
 	var dg = dojox.grid;
@@ -742,3 +739,7 @@ dojo.require("dojo.dnd.Moveable");
 		}
 	});
 })();
+
+return dojox.grid._Builder;
+
+});

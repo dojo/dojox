@@ -1,12 +1,13 @@
-dojo.provide("dojox.grid.enhanced.plugins.Pagination");
-
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.Button");
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojox.grid.enhanced.plugins.Dialog");
-dojo.require("dojox.grid.enhanced.plugins._StoreLayer");
-
-dojo.requireLocalization("dojox.grid.enhanced", "Pagination");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"./Dialog",
+	"./_StoreLayer",
+	"../_Plugin",
+	"dijit/form/Button",
+	"dijit/form/NumberTextBox",
+	"dojo/i18n!../nls/Pagination"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -1222,3 +1223,7 @@ dojo.declare("dojox.grid.enhanced.plugins.pagination._GotoPageDialog", null, {
 });
 
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Pagination/*name:'pagination'*/);
+
+return dojox.grid.enhanced.plugins.Pagination;
+
+});

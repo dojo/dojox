@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} จาก ${1} ${0}",
 	"firstTip": "หน้าแรก",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "ไปที่",
 	"dialogCancel": "ยกเลิก"
 })
+//end v1.x content
+);
 

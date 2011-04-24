@@ -1,8 +1,6 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm");
+define(["dojo", "dijit", "dojox", "dijit/form/Button"], function(dojo, dijit, dojox){
 
-dojo.require("dijit.form.Button");
-
-dojo.declare("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm",[dijit._Widget,dijit._Templated],{
+dojo.declare("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm",[dijit._Widget, dijit._Templated], {
 	// summary:
 	//		The UI for user to confirm the operation of clearing filter.
 	templateString: dojo.cache("dojox.grid", "enhanced/templates/ClearFilterConfirmPane.html"),
@@ -31,3 +29,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm",[dijit._Wid
 	}
 });
 
+return dojox.grid.enhanced.plugins.filter.ClearFilterConfirm;
+
+});

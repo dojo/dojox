@@ -1,9 +1,11 @@
-dojo.provide("dojox.grid.LazyTreeGrid");
-
-dojo.require("dojox.grid._View");
-dojo.require("dojox.grid.TreeGrid");
-dojo.require("dojox.grid.cells.tree");
-dojo.require("dojox.grid.LazyTreeGridStoreModel");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"./_View",
+	"./TreeGrid",
+	"./cells/tree",
+	"./LazyTreeGridStoreModel"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._Templated], {
 	itemId: "",
@@ -831,3 +833,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 dojox.grid.LazyTreeGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return dojox.grid.TreeGrid.markupFactory(props, node, ctor, cellFunc);
 };
+
+return dojox.grid.LazyTreeGrid;
+
+});

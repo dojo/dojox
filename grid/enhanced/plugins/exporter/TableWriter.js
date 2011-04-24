@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.exporter.TableWriter");
-
-dojo.require("dojox.grid.enhanced.plugins.exporter._ExportWriter");
+define(["dojo", "dojox", "./_ExportWriter"], function(dojo, dojox){
 
 dojox.grid.enhanced.plugins.Exporter.registerWriter("table",
 	"dojox.grid.enhanced.plugins.exporter.TableWriter");
@@ -142,4 +140,8 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		}).join('');
 		return ['<div style="position: relative;">', viewsHTML, '</div>'].join('');
 	}
+});
+
+return dojox.grid.enhanced.plugins.exporter.TableWriter;
+
 });

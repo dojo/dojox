@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.NestedSorting");
-
-dojo.require("dojox.grid.enhanced._Plugin");
+define(["dojo", "dijit", "dojox", "../_Plugin"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -574,7 +572,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		region.blur();
 	},
 	_getCurrentRegion: function(){
-		return this._focusRegions[this._currRegionIdx];
+		return this._focusRegions ? this._focusRegions[this._currRegionIdx] : null;
 	},
 	_getRegionHeader: function(region){
 		while(region && !dojo.hasClass(region, 'dojoxGridCell')){
@@ -588,4 +586,9 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		this.inherited(arguments);
 	}
 });
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.NestedSorting);
+
+return dojox.grid.enhanced.plugins.NestedSorting;
+
+});

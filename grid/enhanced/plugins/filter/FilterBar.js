@@ -1,8 +1,10 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter.FilterBar");
-
-dojo.require("dijit.form.Button");
-dojo.require("dojo.string");
-dojo.require("dojo.fx");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/fx",
+	"dojo/string",
+	"dijit/form/Button"], function(dojo, dijit, dojox){
 
 (function(){
 var _focusClass = "dojoxGridFBarHover",
@@ -367,3 +369,6 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 });
 })();
 
+return dojox.grid.enhanced.plugins.filter.FilterBar;
+
+});

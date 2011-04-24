@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid._EditManager");
-
-dojo.require("dojox.grid.util");
+define(["dojo", "dojox", "./util"], function(dojo, dojox){
 
 dojo.declare("dojox.grid._EditManager", null, {
 	// summary:
@@ -236,4 +234,8 @@ dojo.declare("dojox.grid._EditManager", null, {
 			c.restore(c, this.info.rowIndex);
 		}
 	}
+});
+
+return dojox.grid._EditManager;
+
 });

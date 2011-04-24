@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} / ${1} ${0}",
 	"firstTip": "İlk Sayfa",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "Git",
 	"dialogCancel": "İptal"
 })
+//end v1.x content
+);
 

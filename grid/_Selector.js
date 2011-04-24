@@ -1,9 +1,5 @@
-dojo.provide("dojox.grid._Selector");
-
-dojo.require("dojox.grid.Selection");
-dojo.require("dojox.grid._View");
-dojo.require("dojox.grid._Builder");
-
+define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo, dojox){
+	
 (function(){
 	dojox.grid._InputSelectorHeaderBuilder = dojo.extend(function(view){
 		dojox.grid._HeaderBuilder.call(this, view);
@@ -214,3 +210,7 @@ dojo.require("dojox.grid._Builder");
 		}
 	});
 })();
+
+return dojox.grid._Selector;
+
+});

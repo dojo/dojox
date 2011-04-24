@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${1} ${0} 之 ${3}",
 	"firstTip": "首頁",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "執行",
 	"dialogCancel": "取消"
 })
+//end v1.x content
+);
 

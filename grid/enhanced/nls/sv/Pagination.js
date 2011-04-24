@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} av ${1} ${0}",
 	"firstTip": "Första sidan",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "Gå",
 	"dialogCancel": "Avbryt"
 })
+//end v1.x content
+);
 

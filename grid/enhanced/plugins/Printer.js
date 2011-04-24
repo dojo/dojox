@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.Printer");
-
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojox.grid.enhanced.plugins.exporter.TableWriter");
+define(["dojo", "dijit", "dojox", "../_Plugin", "./exporter/TableWriter"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -253,6 +250,11 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		return args;	//Object
 	}
 });
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Printer/*name:'printer'*/, {
 	"dependency": ["exporter"]
+});
+
+return dojox.grid.enhanced.plugins.Printer;
+
 });

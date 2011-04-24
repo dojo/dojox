@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	singleSort: "Ordre únic",
 	nestedSort: "Ordre imbricat",
@@ -9,4 +11,6 @@
 	indirectSelectionCheckBox: "Fila ${0}, selecció múltiple, quadre de selecció",
 	selectAll: "Seleccionar-ho tot"
 })
+//end v1.x content
+);
 

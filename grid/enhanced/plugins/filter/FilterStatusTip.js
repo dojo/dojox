@@ -1,11 +1,13 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter.FilterStatusTip");
-
-dojo.requireLocalization("dojox.grid.enhanced", "Filter");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit._base.popup");
-dojo.require("dijit.form.Button");
-dojo.require("dojo.string");
-dojo.require("dojo.date.locale");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/string",
+	"dojo/date/locale",
+	"dijit/TooltipDialog",
+	"dijit/_base/popup",
+	"dijit/form/Button",
+	"dojo/i18n!../../nls/Filter"], function(dojo, dijit, dojox){
 
 (function(){
 var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
@@ -137,3 +139,7 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 		templateString: dojo.cache("dojox.grid", "enhanced/templates/FilterStatusPane.html")
 	});
 })();
+
+return dojox.grid.enhanced.plugins.filter.FilterStatusTip;
+
+});

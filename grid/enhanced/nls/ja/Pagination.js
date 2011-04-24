@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3}/${1} ${0}",
 	"firstTip": "最初のページ",
@@ -15,3 +17,5 @@
 	"dialogConfirm": "移動",
 	"dialogCancel": "キャンセル"
 })
+//end v1.x content
+);

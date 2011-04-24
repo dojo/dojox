@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3}/${1} ${0}",
 	"firstTip": "첫 페이지",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "이동",
 	"dialogCancel": "취소"
 })
+//end v1.x content
+);
 

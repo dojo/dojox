@@ -1,23 +1,22 @@
-dojo.provide("dojox.grid._Grid");
-
-dojo.require("dijit.dijit");
-dojo.require("dijit.Menu");
-
-dojo.require("dojox.html.metrics");
-dojo.require("dojox.grid.util");
-dojo.require("dojox.grid._Scroller");
-dojo.require("dojox.grid._Layout");
-dojo.require("dojox.grid._View");
-dojo.require("dojox.grid._ViewManager");
-dojo.require("dojox.grid._RowManager");
-dojo.require("dojox.grid._FocusManager");
-dojo.require("dojox.grid._EditManager");
-dojo.require("dojox.grid.Selection");
-dojo.require("dojox.grid._RowSelector");
-dojo.require("dojox.grid._Events");
-
-
-dojo.requireLocalization("dijit", "loading");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/i18n!dijit/nls/loading",
+	"dijit/dijit",
+	"dijit/Menu",
+	"dojox/html/metrics",
+	"./util",
+	"./_Scroller",
+	"./_Layout",
+	"./_View",
+	"./_ViewManager",
+	"./_RowManager",
+	"./_FocusManager",
+	"./_EditManager",
+	"./Selection",
+	"./_RowSelector",
+	"./_Events"], function(dojo, dijit, dojox){
 
 (function(){
 	// NOTE: this is for backwards compatibility with Dojo 1.3
@@ -1370,3 +1369,7 @@ dojo.requireLocalization("dijit", "loading");
 		return new ctor(props, node);
 	};
 })();
+
+return dojox.grid._Grid;
+
+});

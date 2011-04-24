@@ -1,5 +1,4 @@
-dojo.provide("dojox.grid._RowSelector");
-dojo.require("dojox.grid._View");
+define(["dojo", "dojox", "./_View"], function(dojo, dojox){
 
 dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 	// summary:
@@ -52,4 +51,8 @@ dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 			this.grid.onMouseOutRow(e);
 		}
 	}
+});
+
+return dojox.grid._RowSelector;
+
 });

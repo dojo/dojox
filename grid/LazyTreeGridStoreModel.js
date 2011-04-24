@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.LazyTreeGridStoreModel");
-
-dojo.require("dijit.tree.ForestStoreModel");
+define(["dojo", "dijit", "dojox", "dijit/tree/ForestStoreModel"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 
@@ -102,4 +100,8 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 			}, this);
 		}, this);
 	}
+});
+
+return dojox.grid.LazyTreeGridStoreModel;
+
 });

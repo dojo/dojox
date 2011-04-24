@@ -1,8 +1,10 @@
-dojo.provide("dojox.grid.enhanced.plugins.IndirectSelection");
-
-dojo.require('dojo.string');
-dojo.require("dojox.grid.cells.dijit");
-dojo.require("dojox.grid.enhanced._Plugin");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/string",
+	"../_Plugin",
+	"../../cells/dijit"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.IndirectSelection", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -603,3 +605,7 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 });
 
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.IndirectSelection/*name:'indirectSelection'*/, {"preInit": true});
+
+return dojox.grid.enhanced.plugins.IndirectSelection;
+
+});

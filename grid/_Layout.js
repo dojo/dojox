@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid._Layout");
-dojo.require("dojox.grid.cells");
-dojo.require("dojox.grid._RowSelector");
+define(["dojo", "dojox", "./cells", "./_RowSelector" ], function(dojo, dojox){
 
 dojo.declare("dojox.grid._Layout", null, {
 	// summary:
@@ -261,4 +259,8 @@ dojo.declare("dojox.grid._Layout", null, {
 		this.cellCount = this.cells.length;
 		this.grid.setupHeaderMenu();
 	}
+});
+
+return dojox.grid._Layout;
+
 });

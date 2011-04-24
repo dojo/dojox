@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.Menu");
-
-dojo.require("dojox.grid.enhanced._Plugin");
+define(["dojo", "dijit", "dojox", "../_Plugin"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -118,3 +116,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 });
 
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Menu/*name:'menus'*/);
+
+return dojox.grid.enhanced.plugins.Menu;
+
+});

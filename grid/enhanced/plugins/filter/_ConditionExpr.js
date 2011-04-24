@@ -1,7 +1,7 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter._ConditionExpr");
-
+define(["dojo", "dojox"], function(dojo, dojox){
+	
 (function(){
-	var fns = dojox.grid.enhanced.plugins.filter;
+	var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
 	
 dojo.declare("dojox.grid.enhanced.plugins.filter._ConditionExpr",null,{
 	// summary:
@@ -213,3 +213,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter._BiOpExpr", fns._OperatorExpr, 
 	}
 });
 })();
+
+return dojox.grid.enhanced.plugins.filter._ConditionExpr;
+
+});

@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid.enhanced._Events");
+define(["dojo", "dojox"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced._Events", null, {
 	// summary:
@@ -209,4 +209,8 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		}
 	},
 	onRowMouseUp: function(e){}
+});
+
+return dojox.grid.enhanced._Events;
+
 });

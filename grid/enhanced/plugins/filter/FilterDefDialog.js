@@ -1,28 +1,29 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter.FilterDefDialog");
-
-dojo.require("dijit.dijit");
-dojo.require("dijit.Tooltip");
-dojo.require("dojox.grid.enhanced.plugins.Dialog");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.Select");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.RadioButton");
-dojo.require("dijit.form.NumberTextBox");
-dojo.require("dijit.form.DateTextBox");
-dojo.require("dijit.form.TimeTextBox");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.layout.AccordionContainer");
-dojo.require("dijit.layout.ContentPane");
-dojo.require("dojo.date.locale");
-dojo.require("dojo.string");
-dojo.require("dojox.grid.enhanced.plugins.filter.FilterBuilder");
-dojo.require("dojox.grid.cells.dijit");
-dojo.require("dojox.html.ellipsis");
-dojo.require("dojox.html.metrics");
-dojo.require("dojo.window");
-
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/string",
+	"dojo/window",
+	"dojo/date/locale",		
+	"dijit/Tooltip",
+	"dijit/form/ComboBox",
+	"dijit/form/Select",
+	"dijit/form/TextBox",
+	"dijit/form/RadioButton",
+	"dijit/form/NumberTextBox",
+	"dijit/form/DateTextBox",
+	"dijit/form/TimeTextBox",
+	"dijit/form/Button",
+	"dijit/layout/AccordionContainer",
+	"dijit/layout/ContentPane",
+	"dojox/html/ellipsis",
+	"dojox/html/metrics",
+	"./FilterBuilder",
+	"../Dialog",
+	"../../../cells/dijit"], function(dojo, dijit, dojox){
+		
 (function(){
-var fns = dojox.grid.enhanced.plugins.filter,
+var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
 	_tabIdxes = {
 		// summary:
 		//		Define tabindexes for elements in the filter definition dialog
@@ -1227,3 +1228,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanValueBox", [dijit._Widge
 	}
 });
 })();
+
+return dojox.grid.enhanced.plugins.filter.FilterDefDialog;
+
+});

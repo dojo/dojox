@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.cells._base");
-
-dojo.require("dojox.grid.util");
-dojo.require("dijit._Widget");
+define(["dojo", "dijit", "dojox", "../util", "dijit/_Widget"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 	deferred: null,
@@ -30,7 +27,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 		setTimeout(dojo.hitch.apply(dojo, arguments), 0);
 	};
 
-	var dgc = dojox.grid.cells;
+	var dgc = dojo.getObject("grid.cells", true, dojox);
 
 	dojo.declare("dojox.grid.cells._Base", null, {
 		// summary:
@@ -451,3 +448,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 		dgc.AlwaysEdit.markupFactory(node, cell);
 	};
 })();
+
+return dojox.grid.cells._base;
+
+});

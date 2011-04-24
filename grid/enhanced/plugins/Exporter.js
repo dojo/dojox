@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.Exporter");
-
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojox.grid._RowSelector");
+define(["dojo", "dojox", "../_Plugin", "../../_RowSelector"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -218,6 +215,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Exporter", dojox.grid.enhanced._Plugin
 		throw new Error('The writer for "' + fileType + '" has not been registered.');
 	}
 });
+
 dojox.grid.enhanced.plugins.Exporter.registerWriter = function(/* string */fileType,/* string */writerClsName){
 	// summary:
 	//		Register a writer(writerClsName) to a export format type(fileType).
@@ -228,4 +226,9 @@ dojox.grid.enhanced.plugins.Exporter.registerWriter = function(/* string */fileT
 	expCls.writerNames = expCls.writerNames || {};
 	expCls.writerNames[fileType] = writerClsName;
 };
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Exporter/*name:'exporter'*/);
+
+return dojox.grid.enhanced.plugins.Exporter;
+
+});

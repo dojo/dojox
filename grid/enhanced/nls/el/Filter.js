@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Εκκαθάριση φίλτρου",
 	"filterDefDialogTitle": "Φίλτρο",
@@ -82,6 +84,8 @@
 	"trueLabel": "Αληθές",
 	"falseLabel": "Ψευδές"
 })
+//end v1.x content
+);
 
 
 

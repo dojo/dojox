@@ -1,13 +1,14 @@
-dojo.provide("dojox.grid._View");
-
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dojox.grid._Builder");
-dojo.require("dojox.html.metrics");
-dojo.require("dojox.grid.util");
-
-dojo.require("dojo.dnd.Source");
-dojo.require("dojo.dnd.Manager");
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/dnd/Source",
+	"dojo/dnd/Manager",	
+	"dijit/_Templated",
+	"dijit/_Widget",
+	"dojox/html/metrics",
+	"./_Builder",
+	"./util"], function(dojo, dijit, dojox){
 
 (function(){
 	// a private function
@@ -831,3 +832,7 @@ dojo.require("dojo.dnd.Manager");
 		return oldMakeAvatar.call(dojo.dnd.manager());
 	};
 })();
+
+return dojox.grid._View;
+
+});

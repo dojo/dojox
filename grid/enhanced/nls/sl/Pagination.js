@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} od ${1} ${0}",
 	"firstTip": "Prva stran",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "Pojdi",
 	"dialogCancel": "Prekliči"
 })
+//end v1.x content
+);
 

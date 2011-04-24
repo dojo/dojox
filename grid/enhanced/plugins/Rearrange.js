@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.Rearrange");
-
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojox.grid.enhanced.plugins._RowMapLayer");
+define(["dojo", "dojox", "../_Plugin", "./_RowMapLayer"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -478,4 +475,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 		return {topPage: topPage, bottomPage: bottomPage, invalidPages: invalidPages};
 	}
 });
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Rearrange/*name:'rearrange'*/);
+
+return dojox.grid.enhanced.plugins.Rearrange;
+
+});

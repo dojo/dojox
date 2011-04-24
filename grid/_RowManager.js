@@ -1,4 +1,4 @@
-dojo.provide("dojox.grid._RowManager");
+define(["dojo", "dojox"], function(dojo, dojox){
 
 (function(){
 	var setStyleText = function(inNode, inStyleText){
@@ -58,3 +58,7 @@ dojo.provide("dojox.grid._RowManager");
 		}
 	});
 })();
+
+return dojox.grid._RowManager;
+
+});

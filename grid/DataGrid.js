@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.DataGrid");
-
-dojo.require("dojox.grid._Grid");
-dojo.require("dojox.grid.DataSelection");
+define(["dojo", "dojox", "./_Grid", "./DataSelection"], function(dojo, dojox){
 
 /*=====
 dojo.declare("dojox.grid.__DataCellDef", dojox.grid.__CellDef, {
@@ -624,3 +621,7 @@ dojox.grid.DataGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return dojox.grid._Grid.markupFactory(props, node, ctor,
 					dojo.partial(dojox.grid.DataGrid.cell_markupFactory, cellFunc));
 };
+
+return dojox.grid.DataGrid;
+
+});

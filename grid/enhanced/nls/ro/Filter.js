@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Ştergere filtru",
 	"filterDefDialogTitle": "Filtru",
@@ -82,6 +84,8 @@
 	"trueLabel": "Adevărat",
 	"falseLabel": "Fals"
 })
+//end v1.x content
+);
 
 
 

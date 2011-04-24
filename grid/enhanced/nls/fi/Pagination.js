@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} / ${1} ${0}",
 	"firstTip": "Ensimmäinen sivu",
@@ -15,4 +17,6 @@
 	"dialogConfirm": "Siirry",
 	"dialogCancel": "Peruuta"
 })
+//end v1.x content
+);
 

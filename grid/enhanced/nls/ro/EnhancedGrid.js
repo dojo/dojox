@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	singleSort: "Sortare singulară",
 	nestedSort: "Sortare imbricată",
@@ -9,4 +11,6 @@
 	indirectSelectionCheckBox: "Rândul ${0}, selecţie multiplă, casetă de bifare",
 	selectAll: "Selectare tot"
 })
+//end v1.x content
+);
 

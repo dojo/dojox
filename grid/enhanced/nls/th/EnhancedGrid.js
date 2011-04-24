@@ -1,3 +1,5 @@
+define(
+//begin v1.x content
 ({
 	singleSort: "เรียงลำดับแบบเดี่ยว",
 	nestedSort: "เรียงลำดับที่ซับซ้อน",
@@ -9,4 +11,6 @@
 	indirectSelectionCheckBox: "แถว ${0}, การเลือกจำนวนมาก, เช็กบ็อกซ์",
 	selectAll: "เลือกทั้งหมด"
 })
+//end v1.x content
+);
 

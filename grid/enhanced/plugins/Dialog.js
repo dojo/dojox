@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.Dialog");
-
-dojo.require("dijit.Dialog");
-dojo.require("dojo.window");
+define(["dojo", "dijit", "dojox", "dojo/window", "dijit/Dialog"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.Dialog", dijit.Dialog, {
 	refNode: null,
@@ -31,4 +28,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Dialog", dijit.Dialog, {
 		}
 		this.inherited(arguments);
 	}
+});
+
+return dojox.grid.enhanced.plugins.Dialog;
+
 });

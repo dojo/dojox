@@ -1,6 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins._RowMapLayer");
-
-dojo.require("dojox.grid.enhanced.plugins._StoreLayer");
+define(["dojo", "dojox", "./_StoreLayer"], function(dojo, dojox){
 
 (function(){
 var _devideToArrays = function(a){
@@ -202,3 +200,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 	}
 });
 })();
+
+return dojox.grid.enhanced.plugins._RowMapLayer;
+
+});

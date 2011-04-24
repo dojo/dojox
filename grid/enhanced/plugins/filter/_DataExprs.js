@@ -1,10 +1,7 @@
-dojo.provide("dojox.grid.enhanced.plugins.filter._DataExprs");
-
-dojo.require("dojox.grid.enhanced.plugins.filter._ConditionExpr");
-dojo.require("dojo.date.locale");
+define(["dojo", "dojox", "dojo/date/locale", "./_ConditionExpr"], function(dojo, dojox){
 
 (function(){
-	var fns = dojox.grid.enhanced.plugins.filter;
+	var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
 
 	dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanExpr", fns._DataExpr, {
 		// summary:
@@ -76,3 +73,6 @@ dojo.require("dojo.date.locale");
 	});
 })();
 
+return dojox.grid.enhanced.plugins.filter._DataExprs;
+
+});

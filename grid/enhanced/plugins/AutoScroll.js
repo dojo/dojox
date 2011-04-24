@@ -1,7 +1,4 @@
-dojo.provide("dojox.grid.enhanced.plugins.AutoScroll");
-
-dojo.require("dojox.grid.enhanced._Plugin");
-dojo.require("dojox.grid._RowSelector");
+define(["dojo", "dojox", "../_Plugin", "../../_RowSelector"], function(dojo, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -168,4 +165,9 @@ dojo.declare("dojox.grid.enhanced.plugins.AutoScroll", dojox.grid.enhanced._Plug
 		return target;
 	}
 });
+
 dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.AutoScroll/*name:'autoScroll'*/);
+
+return dojox.grid.enhanced.plugins.AutoScroll;
+
+});
