@@ -76,7 +76,8 @@ dojo.declare(
 				}
 			}
 
-			this._btn.style.position = !hasBtn && (dim.l + dim.w < this.labelNode.offsetLeft) ? "absolute" : "relative";
+			this._btn.style.position = !hasBtn && this.labelNode &&
+				(dim.l + dim.w < this.labelNode.offsetLeft) ? "absolute" : "relative";
 		}
 		dojo.forEach(this.getChildren(), function(child){
 			if(child.resize){ child.resize(); }
