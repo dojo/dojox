@@ -316,7 +316,7 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 	}
 });
 
-dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Templated], {
+dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._TemplatedMixin], {
 	templatePath: dojo.moduleUrl("dojox.grid","enhanced/templates/Pagination.html"),
 		
 	// pagination bar position - "bottom"|"top"

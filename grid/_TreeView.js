@@ -1,6 +1,6 @@
-define(["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "./_View"], function(dojo, dijit, dojox){
+define(["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_TemplatedMixin", "./_View"], function(dojo, dijit, dojox){
 
-dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._Templated ], {
+dojo.declare("dojox.grid._Expando", [ dijit._Widget, dijit._TemplatedMixin ], {
 	open: false,
 	toggleClass: "",
 	itemId: "",

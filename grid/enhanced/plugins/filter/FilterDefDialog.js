@@ -16,6 +16,7 @@ define([
 	"dijit/form/Button",
 	"dijit/layout/AccordionContainer",
 	"dijit/layout/ContentPane",
+	"dijit/_WidgetsInTemplateMixin",
 	"dojox/html/ellipsis",
 	"dojox/html/metrics",
 	"./FilterBuilder",
@@ -580,7 +581,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 		setTimeout(dojo.hitch(g, g._refresh), this._defPane.duration + 10);
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget,dijit._Templated],{
+dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin],{
 	templateString: dojo.cache("dojox.grid","enhanced/templates/FilterDefPane.html"),
 	widgetsInTemplate: true,
 	dlg: null,
@@ -645,7 +646,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[dijit._Widget,d
 		}
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dijit._Templated],{
+dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin],{
 	templateString: dojo.cache("dojox.grid","enhanced/templates/CriteriaBox.html"),
 	widgetsInTemplate: true,
 	dlg: null,
@@ -1201,7 +1202,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.UniqueComboBox", dijit.form.Com
 		this.inherited(arguments);
 	}
 });
-dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanValueBox", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanValueBox", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	templateString: dojo.cache("dojox.grid","enhanced/templates/FilterBoolValueBox.html"),
 	widgetsInTemplate: true,
 	constructor: function(args){

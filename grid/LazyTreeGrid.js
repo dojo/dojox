@@ -7,7 +7,7 @@ define([
 	"./cells/tree",
 	"./LazyTreeGridStoreModel"], function(dojo, dijit, dojox){
 
-dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._TemplatedMixin], {
 	itemId: "",
 	cellIdx: -1,
 	view: null,

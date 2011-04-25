@@ -135,7 +135,7 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 			p.filterDefDialog.showDialog(p.filterBar.getColumnIdx(this._pos.x));
 		}
 	});
-	dojo.declare("dojox.grid.enhanced.plugins.filter.FilterStatusPane", [dijit._Widget, dijit._Templated], {
+	dojo.declare("dojox.grid.enhanced.plugins.filter.FilterStatusPane", [dijit._Widget, dijit._TemplatedMixin], {
 		templateString: dojo.cache("dojox.grid", "enhanced/templates/FilterStatusPane.html")
 	});
 })();

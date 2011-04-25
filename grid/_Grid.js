@@ -141,7 +141,7 @@ define([
 	=====*/
 
 	dojo.declare('dojox.grid._Grid',
-		[ dijit._Widget, dijit._Templated, dojox.grid._Events ],
+		[ dijit._Widget, dijit._TemplatedMixin, dojox.grid._Events ],
 		{
 		// summary:
 		// 		A grid widget with virtual scrolling, cell editing, complex rows,

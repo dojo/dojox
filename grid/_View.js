@@ -4,7 +4,7 @@ define([
 	"dojox",
 	"dojo/dnd/Source",
 	"dojo/dnd/Manager",	
-	"dijit/_Templated",
+	"dijit/_TemplatedMixin",
 	"dijit/_Widget",
 	"dojox/html/metrics",
 	"./_Builder",
@@ -17,7 +17,7 @@ define([
 	};
 
 	// some public functions
-	dojo.declare('dojox.grid._View', [dijit._Widget, dijit._Templated], {
+	dojo.declare('dojox.grid._View', [dijit._Widget, dijit._TemplatedMixin], {
 		// summary:
 		//		A collection of grid columns. A grid is comprised of a set of views that stack horizontally.
 		//		Grid creates views automatically based on grid's layout structure.
