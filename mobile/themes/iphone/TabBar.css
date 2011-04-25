@@ -23,6 +23,12 @@
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
 }
+.mblTabBarNoIcons {
+  height: 34px;
+}
+.mblTabBarNoText {
+  height: 34px;
+}
 /* dojox.mobile.TabBarButton */
 .mblTabBarButtonAnchor {
   display: block;
@@ -47,6 +53,13 @@
   color: #979797;
   font-family: "Helvetica Neue", Helvetica;
   font-size: 11px;
+}
+.mblTabBarNoIcons .mblTabBarButtonDiv {
+  display: none;
+}
+.mblTabBarNoIcons .mblTabBarButtonTextBox {
+  line-height: 34px;
+  font-size: 20px;
 }
 .mblTabButton {
   float: left;

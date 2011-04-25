@@ -99,6 +99,12 @@ dojo.declare(
 				this.containerNode.style.padding = "0px 0px 0px " + margin + "px";
 			}
 		}
+		if(!dojo.some(this.getChildren(), function(child){ return child.iconNode1; })){
+			dojo.addClass(this.domNode, "mblTabBarNoIcons");
+		}
+		if(!dojo.some(this.getChildren(), function(child){ return child.label; })){
+			dojo.addClass(this.domNode, "mblTabBarNoText");
+		}
 	}
 });
 
@@ -135,11 +141,13 @@ dojo.declare(
 
 		this.box = dojo.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
 		var box = this.box;
+		var label = "";
 		var r = this.srcNodeRef;
 		if(r){
 			for(var i = 0, len = r.childNodes.length; i < len; i++){
 				var n = r.firstChild;
 				if(n.nodeType === 3){
+					label += dojo.trim(n.nodeValue);
 					n.nodeValue = this._cv(n.nodeValue);
 				}
 				box.appendChild(n);
@@ -147,6 +155,8 @@ dojo.declare(
 		}
 		if(this.label){
 			box.appendChild(dojo.doc.createTextNode(this._cv(this.label)));
+		}else{
+			this.label = label;
 		}
 
 		this.domNode = this.srcNodeRef || dojo.create(this.tag);
@@ -192,8 +202,12 @@ dojo.declare(
 				}
 			}
 		}
-		this.iconNode1.style.visibility = this.selected ? "hidden" : "";
-		this.iconNode2.style.visibility = this.selected ? "" : "hidden";
+		if(this.iconNode1){
+			this.iconNode1.style.visibility = this.selected ? "hidden" : "";
+		}
+		if(this.iconNode2){
+			this.iconNode2.style.visibility = this.selected ? "" : "hidden";
+		}
 	},
 
 	onClick: function(e){
