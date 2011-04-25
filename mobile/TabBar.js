@@ -46,7 +46,7 @@ dojo.declare(
 
 	resize: function(){
 		var i;
-		var w = dojo.contentBox(this.domNode).w;
+		var w = dojo.marginBox(this.domNode).w;
 		var bw = this._fixedButtonWidth;
 		var bm = this._fixedButtonMargin;
 
