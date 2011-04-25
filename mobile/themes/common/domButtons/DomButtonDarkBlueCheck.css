@@ -1,12 +1,12 @@
 /* === Check Button ==*/
 .mblDomButtonDarkBlueCheck, .mblDomButtonCheck {
 	position: relative;
-	width: 29px;
+	width: 20px;
 	height: 29px;
 }
 .mblDomButtonDarkBlueCheck > DIV, .mblDomButtonCheck > DIV {
 	position: absolute;
-	left: 8px;
+	left: 0px;
 	top: 8px;
 	width: 16px;
 	height: 6px;

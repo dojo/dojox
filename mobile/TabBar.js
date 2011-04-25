@@ -37,10 +37,9 @@ dojo.declare(
 		if(this._started){ return; }
 		var _this = this;
 		setTimeout(function(){ // to get proper dimension
-			var parent = _this.getParent && _this.getParent();
-			if(!parent || !parent.resize){ // top level widget
-				_this.resize();
-			}
+			// resize() has to be called regardless of whether this is top-level or not
+			// to ensure that TabBarButton#startup() has been called before resize().
+			_this.resize();
 		}, 0);
 		this.inherited(arguments);
 	},
@@ -118,7 +117,6 @@ dojo.declare(
 
 	inheritParams: function(){
 		var parent = this.getParent();
-		this.parent = parent;
 		if(parent){
 			if(!this.transition){ this.transition = parent.transition; }
 			if(!this.icon1){ this.icon1 = parent.iconBase; }
@@ -129,36 +127,11 @@ dojo.declare(
 	},
 
 	buildRendering: function(){
-		this.inheritParams();
-
-		this.anchorNode = dojo.create("A", {className:"mblTabBarButtonAnchor"});
-		var a = this.anchorNode;
+		var a = this.anchorNode = dojo.create("A", {className:"mblTabBarButtonAnchor"});
 		this.connect(a, "onclick", "onClick");
 
 		var div = dojo.create("DIV", {className:"mblTabBarButtonDiv"}, a);
-		var divInner = dojo.create("DIV", {className:"mblTabBarButtonDiv mblTabBarButtonDivInner"}, div);
-
-		this.img1 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon1, alt:this.alt}, divInner);
-		this.img1.style.visibility = this.selected ? "hidden" : "";
-		dojox.mobile.setupIcon(this.img1, this.iconPos1);
-		this.img1.onload = function(){
-			// iPhone and Windows Safari sometimes fail to draw icon images.
-			// For some reason, this code solves the problem.
-			// Other browsers, including Chrome, do not have this problem.
-			// Same issue is fixed again a few lines below inside img2.onload()
-		    var originDisplay = this.style.display;
-			this.style.display = "none";
-			this.style.display = originDisplay;
-		};
-
-		this.img2 = dojo.create("IMG", {className:"mblTabBarButtonIcon", src:this.icon2, alt:this.alt}, divInner);
-		this.img2.style.visibility = this.selected ? "" : "hidden";
-		dojox.mobile.setupIcon(this.img2, this.iconPos2);
-		this.img2.onload = function(){
-		    var originDisplay = this.style.display;
-			this.style.display = "none";
-			this.style.display = originDisplay;
-		};
+		var divInner = this.innerDivNode = dojo.create("DIV", {className:"mblTabBarButtonDiv mblTabBarButtonDivInner"}, div);
 
 		this.box = dojo.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
 		var box = this.box;
@@ -178,8 +151,6 @@ dojo.declare(
 
 		this.domNode = this.srcNodeRef || dojo.create(this.tag);
 		this.containerNode = this.domNode;
-		var _clsName = this.parent ? this.parent._clsName : "mblTabBarButton";
-		dojo.addClass(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
 		this.domNode.appendChild(a);
 		if(this.domNode.className.indexOf("mblDomButton") != -1){
 			var domBtn = dojo.create("DIV", null, a);
@@ -190,14 +161,19 @@ dojo.declare(
 
 	startup: function(){
 		if(this._started){ return; }
+		this.inheritParams();
 		var parent = this.getParent();
-		this.parent = parent;
+
+		var _clsName = parent ? parent._clsName : "mblTabBarButton";
+		dojo.addClass(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
+
 		if(parent && parent.barType == "segmentedControl"){
 			// proper className may not be set when created dynamically
 			dojo.removeClass(this.domNode, "mblTabBarButton");
 			dojo.addClass(this.domNode, parent._clsName);
 			this.box.className = "";
 		}
+		this.set({icon1:this.icon1, icon2:this.icon2});
 		this.inherited(arguments);
 	},
 
@@ -216,12 +192,67 @@ dojo.declare(
 				}
 			}
 		}
-		this.img1.style.visibility = this.selected ? "hidden" : "";
-		this.img2.style.visibility = this.selected ? "" : "hidden";
+		this.iconNode1.style.visibility = this.selected ? "hidden" : "";
+		this.iconNode2.style.visibility = this.selected ? "" : "hidden";
 	},
 
 	onClick: function(e){
 		this.defaultClickAction();
+	},
+
+	_setIcon: function(icon, pos, num, sel){
+		var i = "icon" + num, n = "iconNode" + num, p = "iconPos" + num;
+		if(icon){ this[i] = icon; }
+		if(pos){
+			if(this[p] === pos){ return; }
+			this[p] = pos;
+		}
+		var div = this.innerDivNode;
+		if(icon && icon.indexOf("mblDomButton") === 0){
+			if(!this[n]){
+				this[n] = dojo.create("DIV", null, div);
+			}
+			this[n].className = icon + " mblTabBarButtonIcon";
+			dojox.mobile.createDomButton(this[n]);
+			dojo.removeClass(div, "mblTabBarButtonNoIcon");
+		}else if(icon && icon != "none"){
+			if(!this[n]){
+				this[n] = dojo.create("IMG", {
+					className: "mblTabBarButtonIcon",
+					alt: this.alt
+				}, div);
+			}
+			this[n].src = icon;
+			this[n].style.visibility = sel ? "hidden" : "";
+			dojox.mobile.setupIcon(this[n], this[p]);
+			this[n].onload = function(){
+				// iPhone and Windows Safari sometimes fail to draw icon images.
+				// For some reason, this code solves the problem.
+				// Other browsers, including Chrome, do not have this problem.
+				// Same issue is fixed again a few lines below inside icon2Node.onload()
+				var originDisplay = this.style.display;
+				this.style.display = "none";
+				this.style.display = originDisplay;
+			};
+		}else{
+			dojo.addClass(div, "mblTabBarButtonNoIcon");
+		}
+	},
+
+	_setIcon1Attr: function(icon){
+		this._setIcon(icon, null, 1, this.selected);
+	},
+
+	_setIcon2Attr: function(icon){
+		this._setIcon(icon, null, 2, !this.selected);
+	},
+
+	_setIconPos1Attr: function(pos){
+		this._setIcon(null, pos, 1, this.selected);
+	},
+
+	_setIconPos2Attr: function(pos){
+		this._setIcon(null, pos, 2, !this.selected);
 	}
 });
 

@@ -32,7 +32,8 @@ dojo.declare(
 			box.style.cursor = "pointer";
 		}
 		var r = this.srcNodeRef;
-		if(r){
+		if(r && !this.label){
+			this.label = "";
 			for(var i = 0, len = r.childNodes.length; i < len; i++){
 				var n = r.firstChild;
 				if(n.nodeType === 3 && dojo.trim(n.nodeValue) !== ""){
@@ -45,7 +46,7 @@ dojo.declare(
 			}
 		}
 		if(this.label){
-			this.labelNode = dojo.create("SPAN", {innerHTML:this._cv(this.label)}, box);
+			this.labelNode = dojo.create("SPAN", null, box);
 		}
 		a.appendChild(box);
 		if(this.anchorLabel){
@@ -69,31 +70,8 @@ dojo.declare(
 		if(parent && parent.select){
 			this.connect(this.anchorNode, "onclick", "onClick");
 		}
-		this.setIcon();
+		this.set("icon", this.icon);
 		this.inherited(arguments);
-	},
-
-	setIcon: function(){
-		if(this.iconNode){ return; }
-		var a = this.anchorNode;
-		if(this.icon && this.icon.indexOf("mblDomButton") === 0){
-			var div = this.iconNode = dojo.create("DIV", {className:this.icon + " mblLeftButton"});
-			this.domNode.insertBefore(div, a);
-			dojox.mobile.createDomButton(div);
-			dojo.removeClass(a, "mblListItemAnchorNoIcon");
-			a.style.paddingLeft = (div.offsetWidth + 11) + "px";
-		}else if(this.icon && this.icon != "none"){
-			var img = this.iconNode = dojo.create("IMG", {
-				className: "mblListItemIcon",
-				src: this.icon,
-				alt: this.alt
-			});
-			this.domNode.insertBefore(img, a);
-			dojox.mobile.setupIcon(this.iconNode, this.iconPos);
-			dojo.removeClass(a, "mblListItemAnchorNoIcon");
-		}else{
-			dojo.addClass(a, "mblListItemAnchorNoIcon");
-		}
 	},
 
 	onClick: function(e){
@@ -140,6 +118,34 @@ dojo.declare(
 		// Stub function to connect to from your application.
 	},
 
+	_setIconAttr: function(icon){
+		this.icon = icon;
+		var a = this.anchorNode;
+		if(this.icon && this.icon.indexOf("mblDomButton") === 0){
+			if(!this.iconNode){
+				this.iconNode = dojo.create("DIV");
+				this.domNode.insertBefore(this.iconNode, a);
+			}
+			this.iconNode.className = this.icon + " mblLeftButton";
+			dojox.mobile.createDomButton(this.iconNode);
+			dojo.removeClass(a, "mblListItemAnchorNoIcon");
+			a.style.paddingLeft = (this.iconNode.offsetWidth + 11) + "px";
+		}else if(this.icon && this.icon != "none"){
+			if(!this.iconNode){
+				this.iconNode = dojo.create("IMG", {
+					className: "mblListItemIcon",
+					alt: this.alt
+				});
+				this.domNode.insertBefore(this.iconNode, a);
+			}
+			this.iconNode.src = this.icon;
+			dojox.mobile.setupIcon(this.iconNode, this.iconPos);
+			dojo.removeClass(a, "mblListItemAnchorNoIcon");
+		}else{
+			dojo.addClass(a, "mblListItemAnchorNoIcon");
+		}
+	},
+
 	_setBtnClass: function(/*String*/btnClass, /*DomNode*/node, /*String*/className){
 		var div;
 		if(node){
@@ -157,11 +163,13 @@ dojo.declare(
 
 	_setBtnClassAttr: function(/*String*/rightIconClass){
 		this.rightIconNode = this._setBtnClass(rightIconClass, this.rightIconNode, "mblRightButton");
+		this._layoutRightText();
 	},
 
 	_setBtnClass2Attr: function(/*String*/rightIconClass){
 		this.rightIconNode2 = this._setBtnClass(rightIconClass, this.rightIconNode2, "mblRightButton mblRightButton2");
 		dojo.addClass(this.box, "mblListItemTextBox2");
+		this._layoutRightText();
 	},
 
 	_setCheckedAttr: function(/*Boolean*/checked){
@@ -181,6 +189,7 @@ dojo.declare(
 			this.getParent().onCheckStateChanged(this, checked);
 		}
 		this.checked = checked;
+		this._layoutRightText();
 	},
 
 	_setRightTextAttr: function(/*String*/text){
@@ -189,10 +198,20 @@ dojo.declare(
 			this._rightTextNode = dojo.create("DIV", {className:"mblRightText"}, this.anchorNode);
 		}
 		this._rightTextNode.innerHTML = this._cv(text);
+		this._layoutRightText();
 	},
 
 	_setLabelAttr: function(/*String*/text){
+		this.label = text;
 		this.labelNode.innerHTML = this._cv(text);
+	},
+
+	_layoutRightText: function(){
+		if(this._rightTextNode){
+			var w = (this.rightIconNode ? this.rightIconNode.offsetWidth : 0) +
+				(this.rightIconNode2 ? this.rightIconNode2.offsetWidth : 0);
+			this._rightTextNode.style.right = w + 11 + "px";
+		}
 	}
 });
 

@@ -97,7 +97,7 @@ dojo.declare(
 			this.domNode.appendChild(widget.subNode);
 		}
 		widget.inheritParams();
-		widget.setIcon();
+		widget._setIconAttr(widget.icon);
 	}
 });
 
@@ -112,21 +112,20 @@ dojo.declare(
 
 	templateString: '<li class="mblIconItem">'+
 						'<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
-							'<div><img src="${icon}" dojoAttachPoint="iconNode"></div>${label}'+
+							'<div><img src="${icon}" dojoAttachPoint="iconNode"></div><span dojoAttachPoint="labelNode1"></span>'+
 						'</div>'+
 					'</li>',
 	templateStringSub: '<li class="mblIconItemSub" lazy="${lazy}" style="display:none;" dojoAttachPoint="contentNode">'+
 						'<h2 class="mblIconContentHeading" dojoAttachPoint="closeNode">'+
-							'<div class="${closeBtnClass}" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"></div>${label}'+
+							'<div class="${closeBtnClass}" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"></div><span dojoAttachPoint="labelNode2"></span>'+
 						'</h2>'+
 						'<div class="mblContent" dojoAttachPoint="containerNode"></div>'+
 					'</li>',
 
 	createTemplate: function(s){
-		dojo.forEach(["lazy","icon","label","closeBtnClass"], function(v){
+		dojo.forEach(["lazy","icon","closeBtnClass"], function(v){
 			while(s.indexOf("${"+v+"}") != -1){
-				var val = v === "label" ? this._cv(this[v]) : this[v];
-				s = s.replace("${"+v+"}", val);
+				s = s.replace("${"+v+"}", this[v]);
 			}
 		}, this);
 		var div = dojo.doc.createElement("DIV");
@@ -166,13 +165,6 @@ dojo.declare(
 			this.srcNodeRef.parentNode.replaceChild(this.domNode, this.srcNodeRef);
 			this.srcNodeRef = null;
 		}
-		this.setIcon();
-	},
-
-	setIcon: function(){
-		this.iconNode.src = this.icon;
-		this.iconNode.alt = this.alt;
-		dojox.mobile.setupIcon(this.iconNode, this.iconPos);
 	},
 
 	postCreate: function(){
@@ -277,7 +269,7 @@ dojo.declare(
 			if(parent.single){
 				parent.closeAll();
 				var view = dijit.byId(parent.id+"_mblApplView");
-				view._heading.setLabel(this.label);
+				view._heading._setLabelAttr(this.label);
 			}
 			this.transitionTo(parent.id+"_mblApplView");
 		}
@@ -327,6 +319,20 @@ dojo.declare(
 
 	onError: function(){
 		this.iconNode.src = this.getParent().defaultIcon;
+	},
+
+	_setIconAttr: function(icon){
+		this.icon = icon;
+		this.iconNode.src = icon;
+		this.iconNode.alt = this.alt;
+		dojox.mobile.setupIcon(this.iconNode, this.iconPos);
+	},
+
+	_setLabelAttr: function(/*String*/text){
+		this.label = text;
+		var s = this._cv(text);
+		this.labelNode1.innerHTML = s
+		this.labelNode2.innerHTML = s
 	}
 });
 

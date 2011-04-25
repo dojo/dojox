@@ -29,10 +29,10 @@ dojo.declare(
 		this.domNode.innerHTML =
 			  '<div class="mblSwitchInner">'
 			+	'<div class="mblSwitchBg mblSwitchBgLeft">'
-			+		'<div class="mblSwitchText mblSwitchTextLeft">'+this._cv(this.leftLabel)+'</div>'
+			+		'<div class="mblSwitchText mblSwitchTextLeft"></div>'
 			+	'</div>'
 			+	'<div class="mblSwitchBg mblSwitchBgRight">'
-			+		'<div class="mblSwitchText mblSwitchTextRight">'+this._cv(this.rightLabel)+'</div>'
+			+		'<div class="mblSwitchText mblSwitchTextRight"></div>'
 			+	'</div>'
 			+	'<div class="mblSwitchKnob"></div>'
 			+	'<input type="hidden"'+nameAttr+'></div>'
@@ -162,6 +162,16 @@ dojo.declare(
 			this.onStateChanged(value);
 		}
 		this.value = this.input.value = value;
+	},
+
+	_setLeftLabelAttr: function(/*String*/label){
+		this.leftLabel = label;
+		this.left.firstChild.innerHTML = this._cv(label);
+	},
+
+	_setRightLabelAttr: function(/*String*/label){
+		this.rightLabel = label;
+		this.right.firstChild.innerHTML = this._cv(label);
 	}
 });
 

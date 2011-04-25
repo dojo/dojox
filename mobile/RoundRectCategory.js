@@ -21,7 +21,11 @@ dojo.declare(
 		if(!this.label){
 			this.label = this.domNode.innerHTML;
 		}
-		this.domNode.innerHTML = this._cv(this.label);
+	},
+
+	_setLabelAttr: function(/*String*/label){
+		this.label = label;
+		this.domNode.innerHTML = this._cv(label);
 	}
 });
 

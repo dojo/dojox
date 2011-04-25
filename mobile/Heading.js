@@ -26,16 +26,17 @@ dojo.declare(
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
 		this.domNode.className = "mblHeading";
 		if(this.label){
-			this.domNode.appendChild(document.createTextNode(this._cv(this.label)));
+			this.labelNode = dojo.create("SPAN", null, this.domNode);
 		}else{
-			this.label = "";
 			dojo.forEach(this.domNode.childNodes, function(n){
 				if(n.nodeType == 3){
-					this.label += n.nodeValue;
-					n.nodeValue = this._cv(n.nodeValue);
+					var v = dojo.trim(n.nodeValue);
+					if(v){
+						this.label = v;
+						this.labelNode = dojo.create("SPAN", {innerHTML:v}, n, "replace");
+					}
 				}
 			}, this);
-			this.label = dojo.trim(this.label);
 		}
 		if(this.back){
 			var btn = dojo.create("DIV", {className:"mblArrowButton"}, this.domNode, "first");
@@ -45,11 +46,8 @@ dojo.declare(
 			this._body = body;
 			this._head = head;
 			this._btn = btn;
-			body.innerHTML = this._cv(this.back);
 			this.connect(body, "onclick", "onClick");
 			var neck = dojo.create("DIV", {className:"mblArrowButtonNeck"}, btn);
-			btn.style.width = body.offsetWidth + head.offsetWidth + "px";
-			this.setLabel(this.label);
 		}
 	},
 
@@ -65,10 +63,35 @@ dojo.declare(
 	resize: function(){
 		if(this._btn){
 			this._btn.style.width = this._body.offsetWidth + this._head.offsetWidth + "px";
+			this._btn.style.position = "absolute";
+			var dim = dojo.marginBox(this._btn);
+
+			var hasBtn = false;
+			var children = this.containerNode.childNodes;
+			for(i = 0; i < children.length; i++){
+				var c = children[i];
+				if(c.nodeType === 1 && dojo.hasClass(c, "mblToolbarButton")){
+					hasBtn = true;
+					break;
+				}
+			}
+
+			this._btn.style.position = !hasBtn && (dim.l + dim.w < this.labelNode.offsetLeft) ? "absolute" : "relative";
 		}
 		dojo.forEach(this.getChildren(), function(child){
 			if(child.resize){ child.resize(); }
 		});
+	},
+
+	_setBackAttr: function(/*String*/back){
+		this.back = back;
+		this._body.innerHTML = this._cv(this.back);
+		this.resize();
+	},
+
+	_setLabelAttr: function(/*String*/label){
+		this.label = label;
+		this.labelNode.innerHTML = this._cv(label);
 	},
 
 	findCurrentView: function(){
@@ -96,13 +119,6 @@ dojo.declare(
 		}
 
 		this.goTo(this.moveTo, this.href);
-	},
-
-	setLabel: function(label){
-		if(label != this.label){
-			this.label = label;
-			this.domNode.firstChild.nodeValue = label;
-		}
 	},
 
 	goTo: function(moveTo, href){
