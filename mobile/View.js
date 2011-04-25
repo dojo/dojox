@@ -256,6 +256,7 @@ dojo.declare(
 			dojo.style(fromNode, {webkitTransformOrigin:fromOrigin});
 			dojo.style(toNode, {webkitTransformOrigin:toOrigin});
 		}
+		dojox.mobile.currentView = dijit.byNode(toNode);
 	},
 
 	onAnimationStart: function(e){
@@ -298,8 +299,6 @@ dojo.declare(
 		if(toWidget){
 			toWidget.onAfterTransitionIn.apply(toWidget, this._arguments);
 		}
-
-		dojox.mobile.currentView = toWidget;
 
 		var c = this._context, m = this._method;
 		if(!c && !m){ return; }
