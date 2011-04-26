@@ -109,6 +109,7 @@ dojo.declare(
 	requires: "",
 	timeout: 10,
 	closeBtnClass: "mblDomButtonBlueMinus",
+	closeBtnProp: null,
 
 	templateString: '<li class="mblIconItem">'+
 						'<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
@@ -145,6 +146,9 @@ dojo.declare(
 			if(s1){
 				this[s1] = nodes[i];
 			}
+		}
+		if(this.closeIconNode && this.closeBtnProp) {
+			dojo.attr(this.closeIconNode, this.closeBtnProp);
 		}
 		var domNode = div.removeChild(div.firstChild);
 		div = null;

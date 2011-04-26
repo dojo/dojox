@@ -21,6 +21,7 @@ dojo.declare(
 	transition: "slide",
 	label: "",
 	iconBase: "",
+	backProp: {className: "mblArrowButton"},
 
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
@@ -39,7 +40,7 @@ dojo.declare(
 			}, this);
 		}
 		if(this.back){
-			var btn = dojo.create("DIV", {className:"mblArrowButton"}, this.domNode, "first");
+			var btn = dojo.create("DIV", this.backProp, this.domNode, "first");
 			var head = dojo.create("DIV", {className:"mblArrowButtonHead"}, btn);
 			var body = dojo.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
 
