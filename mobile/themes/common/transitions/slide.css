@@ -1,4 +1,5 @@
 .slide.out {
+	-webkit-transform: translateX(-100%); /* to avoid screen flicker */
 	-webkit-animation-duration: .4s;
 	-webkit-animation-name: slideOut;
 	-webkit-animation-timing-function: linear;
