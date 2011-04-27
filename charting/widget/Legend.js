@@ -1,12 +1,11 @@
 dojo.provide("dojox.charting.widget.Legend");
 
 dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
 
 dojo.require("dojox.lang.functional.array");
 dojo.require("dojox.lang.functional.fold");
 
-dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 	// summary: A legend for a chart. A legend contains summary labels for
 	// each series of data contained in the chart.
 	//
@@ -24,9 +23,6 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 	horizontal: true,
 	swatchSize: 18,
 	
-	templateString: "<table dojoAttachPoint='legendNode' class='dojoxLegendNode' role='group' aria-label='chart legend'><tbody dojoAttachPoint='legendBody'></tbody></table>",
-	
-	legendNode: null,
 	legendBody: null,
 	
 	postCreate: function(){
@@ -49,6 +45,12 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 		
 		this.refresh();
 	},
+	buildRendering: function(){
+		this.domNode = dojo.create("table", 
+				{role: "group", "aria-label": "chart legend", "class": "dojoxLegendNode"});
+		this.legendBody = dojo.create("tbody", this.domNode);
+		this.inherited(arguments);
+	},
 	refresh: function(){
 		// summary: regenerates the legend to reflect changes to the chart
 		
@@ -66,7 +68,7 @@ dojo.declare("dojox.charting.widget.Legend", [dijit._Widget, dijit._Templated], 
 		}
 
 		if(this.horizontal){
-			dojo.addClass(this.legendNode, "dojoxLegendHorizontal");
+			dojo.addClass(this.domNode, "dojoxLegendHorizontal");
 			// make a container <tr>
 			this._tr = dojo.create("tr", null, this.legendBody);
 			this._inrow = 0;

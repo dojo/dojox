@@ -177,7 +177,7 @@ dojo.require("dojox.charting.action2d.Highlight");
 			});
 			this.firstLabel = dojo.query("input", legend.legends[0])[0];
 			dojo.connect(this.firstLabel, "focus", this, function(){this.legend.active = true;});
-			dojo.connect(this.legend.legendNode, "keydown", this, "_onKeyEvent");
+			dojo.connect(this.legend.domNode, "keydown", this, "_onKeyEvent");
 		},
 		_getHrizontalLength: function(){
 			var horizontal = this.legend.horizontal;
