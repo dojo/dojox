@@ -62,6 +62,7 @@ dojo.declare(
 			}else{
 				dojox.mobile.currentView = _this;
 				_this.onStartView();
+				dojo.publish("/dojox/mobile/startView", [_this]);
 			}
 			if(_this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
 				_this.domNode.style.visibility = "visible";
@@ -104,17 +105,13 @@ dojo.declare(
 	_saveState: function(moveTo, dir, transition, context, method){
 		this._context = context;
 		this._method = method;
-		if(transition == "none" || !dojo.isWebKit){
+		if(transition == "none"){
 			transition = null;
 		}
 		this._moveTo = moveTo;
 		this._dir = dir;
 		this._transition = transition;
-		this._arguments = [];
-		var i;
-		for(i = 0; i < arguments.length; i++){
-			this._arguments.push(arguments[i]);
-		}
+		this._arguments = dojo._toArray(arguments);
 		this._args = [];
 		if(context || method){
 			for(i = 5; i < arguments.length; i++){
@@ -197,6 +194,7 @@ dojo.declare(
 		}
 
 		this.onBeforeTransitionOut.apply(this, arguments);
+		dojo.publish("/dojox/mobile/beforeTransitionOut", [this].concat(dojo._toArray(arguments)));
 		if(toWidget){
 			// perform view transition keeping the scroll position
 			if(this.keepScrollPos && !this.getParent()){
@@ -216,6 +214,7 @@ dojo.declare(
 				toNode.style.top = "0px";
 			}
 			toWidget.onBeforeTransitionIn.apply(toWidget, arguments);
+			dojo.publish("/dojox/mobile/beforeTransitionIn", [toWidget].concat(dojo._toArray(arguments)));
 		}
 		toNode.style.display = "none";
 		toNode.style.visibility = "visible";
@@ -298,9 +297,11 @@ dojo.declare(
 
 	invokeCallback: function(){
 		this.onAfterTransitionOut.apply(this, this._arguments);
+		dojo.publish("/dojox/mobile/afterTransitionOut", [this].concat(this._arguments));
 		var toWidget = dijit.byNode(this.toNode);
 		if(toWidget){
 			toWidget.onAfterTransitionIn.apply(toWidget, this._arguments);
+			dojo.publish("/dojox/mobile/afterTransitionIn", [toWidget].concat(this._arguments));
 		}
 
 		var c = this._context, m = this._method;
@@ -329,15 +330,17 @@ dojo.declare(
 				return dijit.byNode(nodes[i]);
 			}
 		}
+		return null;
 	},
 
 	show: function(){
 		// summary:
 		//		Shows this view without a transition animation.
-		var fs = this.getShowingView().domNode.style; // from-style
-		var ts = this.domNode.style; // to-style
-		fs.display = "none";
-		ts.display = "";
+		var view = this.getShowingView();
+		if(view){
+			view.domNode.style.display = "none"; // from-style
+		}
+		this.domNode.style.display = ""; // to-style
 		dojox.mobile.currentView = this;
 	}
 });
