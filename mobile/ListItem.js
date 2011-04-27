@@ -62,11 +62,9 @@ dojo.declare(
 		this.inheritParams();
 		var parent = this.getParent();
 		if(this.moveTo || this.href || this.url || this.clickable){
-			if(!this.noArrow && !(parent && parent.stateful)){
-				this._setBtnClassAttr(this.arrowClass);
-			}
 			this.connect(this.anchorNode, "onclick", "onClick");
 		}
+		this.setArrow();
 		if(parent && parent.select){
 			this.connect(this.anchorNode, "onclick", "onClick");
 		}
@@ -91,15 +89,6 @@ dojo.declare(
 			}
 		}
 		var parent = this.getParent();
-		if(parent.stateful){
-			for(var i = 0, c = li.parentNode.childNodes; i < c.length; i++){
-				dojo.removeClass(c[i], "mblItemSelected");
-			}
-		}else{
-			setTimeout(function(){
-				dojo.removeClass(li, "mblItemSelected");
-			}, 1000);
-		}
 		if(parent.select){
 			if(parent.select === "single"){
 				if(!this.checked){
@@ -109,13 +98,42 @@ dojo.declare(
 				this.set("checked", !this.checked);
 			}
 		}
-		dojo.addClass(li, "mblItemSelected");
+		this.select();
 		this.setTransitionPos(e);
 		this.transitionTo(this.moveTo, this.href, this.url, this.scene);
 	},
 
+	deselect: function(){
+		dojo.removeClass(this.domNode, "mblItemSelected");
+	},
+
+	select: function(){
+		var parent = this.getParent();
+		if(parent.stateful){
+			parent.deselectAll();
+		}else{
+			var _this = this;
+			setTimeout(function(){
+				_this.deselect();
+			}, 1000);
+		}
+		dojo.addClass(this.domNode, "mblItemSelected");
+	},
+
 	onAnchorLabelClicked: function(e){
 		// Stub function to connect to from your application.
+	},
+
+	setArrow: function(){
+		if(this.checked){ return; }
+		var c = "";
+		var parent = this.getParent();
+		if(this.moveTo || this.href || this.url || this.clickable){
+			if(!this.noArrow && !(parent && parent.stateful)){
+				c = this.arrowClass;
+			}
+		}
+		this._setBtnClassAttr(c);
 	},
 
 	_setIconAttr: function(icon){
@@ -174,7 +192,7 @@ dojo.declare(
 
 	_setCheckedAttr: function(/*Boolean*/checked){
 		var parent = this.getParent();
-		if(parent.select === "single" && !this.checked && checked){
+		if(parent.select === "single" && checked){
 			dojo.forEach(parent.getChildren(), function(child){
 				child.set("checked", false);
 			});
