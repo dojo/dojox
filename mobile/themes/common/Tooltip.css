@@ -1,0 +1,137 @@
+/* dojox.mobile.Tooltip */
+.mblTooltip {
+	border: #B0B0B0 2px solid;
+	padding: 8px;
+	position: absolute;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ABABAB), to(#FEFEFE));
+	-webkit-border-radius: 8px;
+	display: block;
+	margin: 0px;
+}
+.mblTooltipBubble {
+	background: #f9f7ba;
+	padding: 3px;
+	overflow: visible;
+}
+.mblTooltipBubble.mblTooltipAbove .mblTooltipInnerArrow {
+	border-bottom-color: #f9f7ba;
+}
+.mblTooltipBubble.mblTooltipBelow .mblTooltipInnerArrow {
+	border-top-color: #f9f7ba;
+}
+.mblTooltipBubble.mblTooltipAfter .mblTooltipInnerArrow {
+	border-left-color: #f9f7ba;
+}
+.mblTooltipBubble.mblTooltipBefore .mblTooltipInnerArrow {
+	border-right-color: #f9f7ba;
+}
+.mblTooltipAfter {
+	margin-left:-7px;
+}
+.mblTooltipBefore {
+	margin-left:7px;
+}
+.mblTooltipAbove {
+	margin-top:7px;
+}
+.mblTooltipBelow {
+	margin-top:-7px;
+}
+.mblTooltipAnchor {
+	background-color:transparent;
+	width:1px;
+	height:1px;
+	line-height:0px;
+	font-size:0px;
+	position:absolute;
+}
+.mblTooltipBefore .mblTooltipAnchor {
+	left:-1px;
+}
+.mblTooltipAfter .mblTooltipAnchor {
+	right:-1px;
+}
+.mblTooltipAbove .mblTooltipAnchor {
+	top:-1px;
+}
+.mblTooltipBelow .mblTooltipAnchor {
+	bottom:-1px;
+}
+.mblTooltipArrow {
+	position: absolute;
+	width: 0;
+	height: 0;
+	line-height: 0px;
+	border: 7px solid transparent;
+}
+.mblTooltipBefore .mblTooltipArrow {
+	left: auto;
+	right: 1px;
+	_right: 0px; /* IE 7 quirks */
+	top: 0px;
+	bottom: auto;
+	border-left-width: 0;
+	border-right-color: #B0B0B0;
+}
+.mblTooltipAfter .mblTooltipArrow {
+	left: 1px;
+	right: auto;
+	top: 0px;
+	bottom: auto;
+	border-right-width: 0;
+	border-left-color: #B0B0B0;
+}
+.mblTooltipAbove .mblTooltipArrow {
+	top: auto;
+	bottom: 1px;
+	_bottom: 0px; /* IE 7 quirks */
+	left: auto;
+	right: auto;
+	border-top-width: 0;
+	border-bottom-color: #B0B0B0;
+}
+.mblTooltipBelow .mblTooltipArrow {
+	top: 1px;
+	bottom: auto;
+	left: auto;
+	right: auto;
+	border-bottom-width: 0;
+	border-top-color: #B0B0B0;
+}
+.mblTooltipInnerArrow {
+	position: absolute;
+	width: 0px;
+	height: 0px;
+	line-height: 0px;
+	border: 6px solid transparent;
+}
+.mblTooltipBefore .mblTooltipInnerArrow {
+	right: 0;
+	_right: -1px; /* IE 7 quirks */
+	top: 0;
+	border-left-width: 0;
+	border-right-color: #B0B0B0;
+}
+.mblTooltipAfter .mblTooltipInnerArrow {
+	left: 0;
+	top: 0;
+	border-right-width: 0;
+	border-left-color: #B0B0B0;
+}
+.mblTooltipAbove .mblTooltipInnerArrow {
+	bottom: 0;
+	_bottom: -1px; /* IE 7 quirks */
+	left: 0;
+	border-top-width: 0;
+	border-bottom-color: #B0B0B0;
+}
+.mblTooltipBelow .mblTooltipInnerArrow {
+	top: 0;
+	left: 0;
+	border-bottom-width: 0;
+	border-top-color: #B0B0B0;
+}
+.mblTooltipHidden {
+	top: -9999px !important;
+	visibility: hidden !important;
+}
