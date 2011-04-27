@@ -51,23 +51,43 @@ define(["dojo", "dijit", "dojox", "dijit/_WidgetBase"], function(dojo, dijit, do
 	].join(" ").replace(/ +/g," "));
 })();
 
-dojox.mobile.addClass = function(){
-	// summary:
-	//		Adds a theme class name to <body>.
-	// description:
-	//		Finds the currently applied theme name, such as 'iphone' or 'android'
-	//		from link elements, and adds it as a class name for the body element.
-	var elems = document.getElementsByTagName("link");
-	for(var i = 0, len = elems.length; i < len; i++){
-		if(elems[i].href.match(/dojox\/mobile\/themes\/(\w+)\//)){
-			dojox.mobile.theme = RegExp.$1;
-			dojo.addClass(dojo.body(), dojox.mobile.theme);
-			break;
-		}
-	}
+var dm = dojox.mobile;
+
+dm.getScreenSize = function(){
+	return {
+		h: dojo.global.innerHeight || dojo.doc.documentElement.clientHeight,
+		w: dojo.global.innerWidth || dojo.doc.documentElement.clientWidth
+	};
 };
 
-dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
+dm.updateOrient = function(){
+	var dim = dm.getScreenSize();
+	dojo.replaceClass(dojo.doc.documentElement,
+					  dim.h > dim.w ? "dj_portrait" : "dj_landscape",
+					  dim.h > dim.w ? "dj_landscape" : "dj_portrait");
+};
+dm.updateOrient();
+
+dm.tabletSize = 500;
+dm.detectScreenSize = function(){
+	var dim = dm.getScreenSize();
+	var sz = Math.min(dim.w, dim.h);
+	var from, to;
+	if(sz >= dm.tabletSize && (!this._sz || this._sz < dm.tabletSize)){
+		from = "phone";
+		to = "tablet";
+	}else if(sz < dm.tabletSize && (!this._sz || this._sz >= dm.tabletSize)){
+		from = "tablet";
+		to = "phone";
+	}
+	if(to){
+		dojo.replaceClass(dojo.doc.documentElement, "dj_"+to, "dj_"+from);
+		dojo.publish("/dojox/mobile/screenSize/"+to, [dim]);
+	}
+	this._sz = sz;
+};
+
+dm.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 	if(iconNode && iconPos){
 		var arr = dojo.map(iconPos.split(/[ ,]/),
 								function(item){ return item - 0; });
@@ -81,20 +101,20 @@ dojox.mobile.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 	}
 };
 
-dojox.mobile.hideAddressBarWait = 1000; // [ms]
-dojox.mobile.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
+dm.hideAddressBarWait = 1000; // [ms]
+dm.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
 	dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
 	setTimeout(function(){ scrollTo(0, 1); }, 100);
 	setTimeout(function(){ scrollTo(0, 1); }, 400);
 	setTimeout(function(){
 		scrollTo(0, 1);
 		// re-define the min-height with the actual height
-		dojo.body().style.minHeight = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) + "px";
-		if(doResize !== false){ dojox.mobile.resizeAll(); }
-	}, dojox.mobile.hideAddressBarWait);
+		dojo.body().style.minHeight = dm.getScreenSize().h + "px";
+		if(doResize !== false){ dm.resizeAll(); }
+	}, dm.hideAddressBarWait);
 };
 
-dojox.mobile.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
+dm.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
 	// summary:
 	//		Call the resize() method of all the top level resizable widgets.
 	// description:
@@ -110,6 +130,9 @@ dojox.mobile.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
 	//		root.resize() is always called regardless of whether root is a
 	//		top level widget or not.
 	//		If omitted, search the entire page.
+	dojo.publish("/dojox/mobile/resizeAll", [evt, root]);
+	dm.updateOrient();
+	dm.detectScreenSize();
 	var isTopLevel = function(w){
 		var parent = w.getParent && w.getParent();
 		return !!((!parent || !parent.resize) && w.resize);
@@ -130,11 +153,11 @@ dojox.mobile.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
 	}
 };
 
-dojox.mobile.openWindow = function(url, target){
+dm.openWindow = function(url, target){
 	dojo.global.open(url, target || "_blank");
 };
 
-dojox.mobile.createDomButton = function(/*DomNode*/refNode, /*Object?*/style, /*DomNode?*/toNode){
+dm.createDomButton = function(/*DomNode*/refNode, /*Object?*/style, /*DomNode?*/toNode){
 	var s = refNode.className;
 	var node = toNode || refNode;
 	if(s.match(/(mblDomButton\w+)/) && s.indexOf("/") === -1){
@@ -189,7 +212,7 @@ if(dojo.config.parseOnLoad){
 }
 
 dojo.addOnLoad(function(){
-	dojox.mobile.addClass();
+	dm.detectScreenSize();
 	if(dojo.config["mblApplyPageStyles"] !== false){
 		dojo.addClass(dojo.doc.documentElement, "mobile");
 		if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
@@ -199,13 +222,13 @@ dojo.addOnLoad(function(){
 
 	//	You can disable hiding the address bar with the following djConfig.
 	//	var djConfig = { mblHideAddressBar: false };
-	var f = dojox.mobile.resizeAll;
+	var f = dm.resizeAll;
 	if(dojo.config["mblHideAddressBar"] !== false &&
 		navigator.appVersion.indexOf("Mobile") != -1 ||
 		dojo.config["mblForceHideAddressBar"] === true){
-		dojox.mobile.hideAddressBar();
+		dm.hideAddressBar();
 		if(dojo.config["mblAlwaysHideAddressBar"] === true){
-			f = dojox.mobile.hideAddressBar;
+			f = dm.hideAddressBar;
 		}
 	}
 	dojo.connect(null, (dojo.global.onorientationchange !== undefined && !dojo.isAndroid)
@@ -242,11 +265,11 @@ dojo.addOnLoad(function(){
 			return arr;
 		};
 		dojo.subscribe("/dojo/hashchange", null, function(value){
-			var view = dojox.mobile.currentView;
+			var view = dm.currentView;
 			if(!view){ return; }
-			var params = dojox.mobile._params;
+			var params = dm._params;
 			if(!params){ // browser back/forward button was pressed
-				var moveTo = value ? value : dojox.mobile._defaultView.id;
+				var moveTo = value ? value : dm._defaultView.id;
 				var widgets = findWidgets(view.domNode);
 				var dir = 1, transition = "slide";
 				for(i = 0; i < widgets.length; i++){
@@ -254,14 +277,14 @@ dojo.addOnLoad(function(){
 					if("#"+moveTo == w.moveTo){
 						// found a widget that has the given moveTo
 						transition = w.transition;
-						dir = (w instanceof dojox.mobile.Heading) ? -1 : 1;
+						dir = (w instanceof dm.Heading) ? -1 : 1;
 						break;
 					}
 				}
 				params = [ moveTo, dir, transition ];
 			}
 			view.performTransition.apply(view, params);
-			dojox.mobile._params = null;
+			dm._params = null;
 		});
 	}
 
@@ -285,10 +308,10 @@ dojo.extend(dijit._WidgetBase, {
 (function(){
 	// feature detection
 	if(dojo.isWebKit){
-		dojox.mobile.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
+		dm.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
 			navigator.appVersion.indexOf("Mobile") != -1);
 	}
 })();
 
-return dojox.mobile.common;
+return dm.common;
 });

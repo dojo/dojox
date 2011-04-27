@@ -1,12 +1,12 @@
 /* mbl.widget.Heading */
-.mblHeading {
+.dj_tablet .mblHeading {
 	background-image: url(compat/ipad-heading-bg.png);
 }
 
 /* Heading Arrow Button */
-.mblArrowButtonHead {
+.dj_tablet .mblArrowButtonHead {
 	background-image: url(compat/ipad-arrow-button-head.png);
 }
-.mblArrowButtonBody {
+.dj_tablet .mblArrowButtonBody, .dj_tablet .mblArrowButtonNeck {
 	background-image: url(compat/ipad-arrow-button-bg.png);
 }

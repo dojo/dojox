@@ -1,7 +1,7 @@
 /* dojox.mobile.View */
 
 /* dojox.mobile.Heading */
-.mblHeading {
+.dj_tablet .mblHeading {
 	background-color: #889BB3;
 	background: -webkit-gradient(linear, left top, left bottom, from(#F3F4F6), to(#A7ABB8));
 	border-top: 1px solid #FEFEFE;
@@ -11,47 +11,50 @@
 }
 
 /* Heading Arrow Button */
-.mblArrowButtonHead {
+.dj_tablet .mblArrowButtonHead {
 	border-color: #4D4E50;
 	background: -webkit-gradient(linear, left top, right bottom, from(#B1B5BB), to(#6A727D));
 }
-.mblArrowButtonBody {
+.dj_tablet .mblArrowButtonBody {
 	border-color: #C0C0C0;
 	background-color: #5877A2;
 	background: -webkit-gradient(linear, left top, left bottom, from(#B1B5BB), to(#6A727D));
 	-webkit-tap-highlight-color: transparent;
 	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 }
-.mblArrowButtonNeck {
+.dj_tablet .mblArrowButtonNeck {
 	border-color: #C0C0C0;
 	background: -webkit-gradient(linear, left top, left bottom, from(#B1B5BB), to(#6A727D));
 }
-.mblArrowButtonSelected .mblArrowButtonHead {
+.dj_tablet .mblArrowButtonSelected .mblArrowButtonHead {
 	background: -webkit-gradient(linear, left top, right bottom, from(#9DA0A3), to(#43484F));
 }
-.mblArrowButtonSelected .mblArrowButtonBody, .mblArrowButtonSelected .mblArrowButtonNeck {
+.dj_tablet .mblArrowButtonSelected .mblArrowButtonBody, .dj_tablet .mblArrowButtonSelected .mblArrowButtonNeck {
 	background: -webkit-gradient(linear, left top, left bottom, from(#9DA0A3), to(#43484F));
 }
 
 /* dojox.mobile.RoundRect */
-.mblRoundRect {
+.dj_tablet .mblRoundRect {
 	margin: 7px 30px 30px 30px;
 }
-.mblHeading + .mblRoundRect {
+.dj_tablet .mblHeading + .mblRoundRect {
 	margin-top: 30px;
 }
 
 /* dojox.mobile.EdgeToEdgeCategory */
 /* dojox.mobile.RoundRectCategory */
-.mblRoundRectCategory {
+.dj_tablet .mblRoundRectCategory {
 	margin: 18px 0px 0px 41px;
 }
 
 /* dojox.mobile.RoundRectList */
-.mblRoundRectList {
+.dj_tablet .mblRoundRectList {
 	margin: 7px 30px 30px 30px;
 }
-.mblHeading + .mblRoundRectList {
+.dj_tablet .mblRoundRectList:first-child {
+	margin-top: 25px;
+}
+.dj_tablet .mblHeading + .mblRoundRectList {
 	margin-top: 30px;
 }
 

@@ -63,6 +63,7 @@ dojo.extend(dojox.mobile.View, {
 			anim = dojo.fx.combine([s1,s2]);
 			dojo.connect(anim, "onEnd", this, function(){
 				fromNode.style.display = "none";
+				fromNode.style.left = "0px";
 				toNode.style.position = "relative";
 				toWidget = dijit.byNode(toNode);
 				if(toWidget && !dojo.hasClass(toWidget.domNode, "out")){
