@@ -864,10 +864,15 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			var t = this.theme,
 				fill   = t.plotarea && t.plotarea.fill,
 				stroke = t.plotarea && t.plotarea.stroke,
+				// size might be neg if offsets are bigger that chart size this happens quite often at 
+				// initialization time if the chart widget is used in a BorderContainer
+				// this will fail on IE/VML
+				w = Math.max(0, dim.width  - offsets.l - offsets.r),
+				h = Math.max(0, dim.height - offsets.t - offsets.b),
 				rect = {
 					x: offsets.l - 1, y: offsets.t - 1,
-					width:  dim.width  - offsets.l - offsets.r + 2,
-					height: dim.height - offsets.t - offsets.b + 2
+					width:  w + 2,
+					height: h + 2
 				};
 			if(fill){
 				fill = dc.Element.prototype._shapeFill(dc.Element.prototype._plotFill(fill, dim, offsets), rect);
@@ -876,8 +881,8 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			if(stroke){
 				this.surface.createRect({
 					x: offsets.l, y: offsets.t,
-					width:  dim.width  - offsets.l - offsets.r + 1,
-					height: dim.height - offsets.t - offsets.b + 1
+					width:  w + 1,
+					height: h + 1
 				}).setStroke(stroke);
 			}
 
