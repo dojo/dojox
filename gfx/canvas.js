@@ -654,9 +654,17 @@ dojo.experimental("dojox.gfx.canvas");
 			this.width  = g.normalizedLength(width);	// in pixels
 			this.height = g.normalizedLength(height);	// in pixels
 			if(!this.rawNode) return this;
-			this.rawNode.width = width;
-			this.rawNode.height = height;
-			this.makeDirty();
+			var dirty = false;
+			if (this.rawNode.width != this.width){
+				this.rawNode.width = this.width;
+				dirty = true;
+			}
+			if (this.rawNode.height != this.height){
+				this.rawNode.height = this.height;
+				dirty = true;
+			}
+			if (dirty)
+				this.makeDirty();
 			return this;	// self
 		},
 		getDimensions: function(){
