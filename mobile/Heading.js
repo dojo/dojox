@@ -47,6 +47,7 @@ dojo.declare(
 			this._body = body;
 			this._head = head;
 			this._btn = btn;
+			this.backBtnNode = btn;
 			this.connect(body, "onclick", "onClick");
 			var neck = dojo.create("DIV", {className:"mblArrowButtonNeck"}, btn);
 		}
