@@ -1022,7 +1022,9 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}
 		if(dojo.trim(size.toLowerCase()) == "all"){
 			size = this._maxItemSize;
-			showAll = true;
+			this.plugin.showAll = true;
+		}else{
+			this.plugin.showAll = false;
 		}
 		this.plugin.grid.usingPagination = !this.plugin.showAll;
 		
