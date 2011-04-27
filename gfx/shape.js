@@ -389,6 +389,12 @@ dojox.gfx.shape.Container = {
 	},
 	clear: function(){
 		// summary: removes all shapes from a group/surface
+        var shape;
+		for(var i = 0; i < this.children.length;++i){
+			shape = this.children[i];
+			shape.parent = null;
+			shape.parentMatrix = null;
+		}
 		this.children = [];
 		return this;	// self
 	},
