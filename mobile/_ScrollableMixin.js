@@ -8,7 +8,7 @@ define(["dojo/_base/lang","./common","dijit/_WidgetBase","./scrollable"], functi
 	//		scrollable.js is not a dojo class, but just a collection
 	//		of functions. This module makes scrollable.js a dojo class.
 
-	return dojo.declare("dojox.mobile._ScrollableMixin", null, {
+	dojo.declare("dojox.mobile._ScrollableMixin", null, {
 		fixedHeader: "",
 		fixedFooter: "",
 		scrollableParams: {},
@@ -20,16 +20,17 @@ define(["dojo/_base/lang","./common","dijit/_WidgetBase","./scrollable"], functi
 
 		startup: function(){
 			if(this._started){ return; }
+			var node;
 			var params = this.scrollableParams;
 			if(this.fixedHeader){
-				var node = dojo.byId(this.fixedHeader);
+				node = dojo.byId(this.fixedHeader);
 				if(node.parentNode == this.domNode){ // local footer
 					this.isLocalHeader = true;
 				}
 				params.fixedHeaderHeight = node.offsetHeight;
 			}
 			if(this.fixedFooter){
-				var node = dojo.byId(this.fixedFooter);
+				node = dojo.byId(this.fixedFooter);
 				if(node.parentNode == this.domNode){ // local footer
 					this.isLocalFooter = true;
 					node.style.bottom = "0px";

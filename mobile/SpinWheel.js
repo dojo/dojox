@@ -16,7 +16,7 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 
 			this.slots = [];
 			for(var i = 0; i < this.slotClasses.length; i++){
-				this.slots.push(typeof this.slotClasses[i] =='string' ? dojo.getObject(this.slotClasses[i])(this.slotProps[i]):this.slotClasses[i]);
+				this.slots.push(((typeof this.slotClasses[i] =='string') ? dojo.getObject(this.slotClasses[i]) : this.slotClasses[i])(this.slotProps[i]));
 				this.addChild(this.slots[i]);
 			}
 			dojo.create("DIV", {className: "mblSpinWheelBar"}, this.domNode);

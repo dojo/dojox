@@ -65,7 +65,7 @@ if(typeof dojo === "undefined"){
 if(typeof define === "undefined"){
 	define = function(deps, def){ def.apply(); };
 }
-define(["dojo","dojox"], function(_dojo, _dojox){
+define(function(_dojo, _dojox){
 
 dojox.mobile.scrollable = function(dojo, dojox){
 	this.fixedHeaderHeight = 0; // height of a fixed header
@@ -909,4 +909,5 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	}
 })();
 
+return dojox.mobile.scrollable;
 });
