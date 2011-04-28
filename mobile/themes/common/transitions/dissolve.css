@@ -1,20 +1,20 @@
-.dissolve.out {
+.mblDissolve.mblOut {
 	z-index: -100;
 	-webkit-animation-duration: 1s;
-	-webkit-animation-name: dissolveOut;
+	-webkit-animation-name: mblDissolveOut;
 	-webkit-animation-timing-function: ease-in;
 }
-.dissolve.in {
+.mblDissolve.mblIn {
 	z-index: 0;
 	-webkit-animation-duration: 1s;
-	-webkit-animation-name: dissolveIn;
+	-webkit-animation-name: mblDissolveIn;
 	-webkit-animation-timing-function: ease-out;
 }
-@-webkit-keyframes dissolveOut {
+@-webkit-keyframes mblDissolveOut {
 	from { opacity: 1; }
 	to { opacity: 0; }
 }
-@-webkit-keyframes dissolveIn {
+@-webkit-keyframes mblDissolveIn {
 	from { opacity: 0; }
 	to { opacity: 1; }
 }

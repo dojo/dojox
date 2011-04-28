@@ -73,7 +73,7 @@ dojo.extend(dojox.mobile.View, {
 				this.invokeCallback();
 			});
 			anim.play();
-		}else if(transition == "slidev" || transition == "coverv"){
+		}else if(transition == "slidev" || transition == "coverv" || transition == "revealv"){
 			var h = fromNode.offsetHeight;
 			var s1 = dojo.fx.slideTo({
 				node: fromNode,

@@ -1,20 +1,20 @@
-.flip.out {
+.mblFlip.mblOut {
 	-webkit-animation-duration: .6s;
-	-webkit-animation-name: flipOut;
+	-webkit-animation-name: mblFlipOut;
 	-webkit-animation-timing-function: ease-in;
 }
-.flip.in {
+.mblFlip.mblIn {
 	-webkit-animation-duration: .6s;
-	-webkit-animation-name: flipIn;
+	-webkit-animation-name: mblFlipIn;
 	-webkit-animation-timing-function: ease-out;
 }
-@-webkit-keyframes flipOut {
+@-webkit-keyframes mblFlipOut {
 	0% { -webkit-transform: rotateY(0deg) scale(1); }
 	50% { -webkit-transform: rotateY(90deg) scale(.8); }
 	100% { -webkit-transform: rotateY(90deg) scale(.8); }
 }
 
-@-webkit-keyframes flipIn {
+@-webkit-keyframes mblFlipIn {
 	0% { -webkit-transform: rotateY(90deg) scale(.8); }
 	50% { -webkit-transform: rotateY(90deg) scale(.8); }
 	100% { -webkit-transform: rotateY(0deg) scale(1); }

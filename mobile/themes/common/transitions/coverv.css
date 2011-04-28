@@ -1,28 +1,28 @@
-.coverv.out {
+.mblCoverv.mblOut {
 	z-index: -100;
 	-webkit-animation-duration: .6s;
-	-webkit-animation-name: coverVOut;
+	-webkit-animation-name: mblCoverVOut;
 	-webkit-animation-timing-function: ease-out;
 }
-.coverv.in {
+.mblCoverv.mblIn {
 	z-index: 0;
 	-webkit-animation-duration: .6s;
-	-webkit-animation-name: coverVIn;
+	-webkit-animation-name: mblCoverVIn;
 	-webkit-animation-timing-function: ease-out;
 }
-.coverv.in.reverse {
-	-webkit-animation-name: coverVInReverse;
+.mblCoverv.mblIn.mblReverse {
+	-webkit-animation-name: mblCoverVInReverse;
 	-webkit-animation-timing-function: ease-in;
 }
-@-webkit-keyframes coverVOut {
+@-webkit-keyframes mblCoverVOut {
 	from {}
 	to {}
 }
-@-webkit-keyframes coverVIn {
+@-webkit-keyframes mblCoverVIn {
 	from { -webkit-transform: translateY(100%); }
 	to { -webkit-transform: translateY(0px); }
 }
-@-webkit-keyframes coverVInReverse {
+@-webkit-keyframes mblCoverVInReverse {
 	from { -webkit-transform: translateY(-100%); }
 	to { -webkit-transform: translateY(0px); }
 }

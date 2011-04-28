@@ -1,20 +1,20 @@
-.zoomIn.out {
+.mblZoomIn.mblOut {
 	z-index: -100;
 	-webkit-animation-duration: .5s;
-	-webkit-animation-name: zoomInOut;
+	-webkit-animation-name: mblZoomInOut;
 	-webkit-animation-timing-function: ease-out;
 }
-.zoomIn.in {
+.mblZoomIn.mblIn {
 	z-index: 0;
 	-webkit-animation-duration: .5s;
-	-webkit-animation-name: zoomInIn;
+	-webkit-animation-name: mblZoomInIn;
 	-webkit-animation-timing-function: ease-out;
 }
-@-webkit-keyframes zoomInOut {
+@-webkit-keyframes mblZoomInOut {
 	from {}
 	to {}
 }
-@-webkit-keyframes zoomInIn {
+@-webkit-keyframes mblZoomInIn {
 	from {
 		-webkit-transform: scale(0.0);
 		opacity: 0;

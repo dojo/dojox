@@ -59,20 +59,20 @@ table.mblClose {
 .mblCloseContent {
   -webkit-animation-duration: .3s;
   -webkit-animation-timing-function: ease-in-out;
-  -webkit-animation-name: shrink;
+  -webkit-animation-name: mblShrink;
   -webkit-transform: scale(0.01);
 }
 .mblCloseContent.mblShrink0 {
-  -webkit-animation-name: shrink0;
+  -webkit-animation-name: mblShrink0;
 }
 .mblCloseContent.mblShrink1 {
-  -webkit-animation-name: shrink1;
+  -webkit-animation-name: mblShrink1;
 }
 .mblCloseContent.mblShrink2 {
-  -webkit-animation-name: shrink2;
+  -webkit-animation-name: mblShrink2;
 }
 .mblCloseContent.mblShrink3 {
-  -webkit-animation-name: shrink3;
+  -webkit-animation-name: mblShrink3;
 }
 /* Icon Content Heading */
 .mblIconContentHeading {

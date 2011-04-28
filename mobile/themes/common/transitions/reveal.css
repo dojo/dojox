@@ -1,27 +1,27 @@
-.reveal.out {
+.mblReveal.mblOut {
 	z-index: 0;
 	-webkit-animation-duration: .4s;
-	-webkit-animation-name: revealOut;
+	-webkit-animation-name: mblRevealOut;
 	-webkit-animation-timing-function: linear;
 }
-.reveal.in {
+.mblReveal.mblIn {
 	z-index: -100;
 	-webkit-animation-duration: .4s;
-	-webkit-animation-name: revealIn;
+	-webkit-animation-name: mblRevealIn;
 	-webkit-animation-timing-function: linear;
 }
-.reveal.out.reverse {
-	-webkit-animation-name: revealOutReverse;
+.mblReveal.mblOut.mblReverse {
+	-webkit-animation-name: mblRevealOutReverse;
 }
-@-webkit-keyframes revealOut {
+@-webkit-keyframes mblRevealOut {
 	from { -webkit-transform: translateX(0px); }
 	to { -webkit-transform: translateX(-100%); }
 }
-@-webkit-keyframes revealIn {
+@-webkit-keyframes mblRevealIn {
 	from {}
 	to {}
 }
-@-webkit-keyframes revealOutReverse {
+@-webkit-keyframes mblRevealOutReverse {
 	from { -webkit-transform: translateX(0px); }
 	to { -webkit-transform: translateX(100%); }
 }

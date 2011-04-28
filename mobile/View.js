@@ -221,15 +221,23 @@ dojo.declare(
 		this._doTransition(fromNode, toNode, transition, dir);
 	},
 
+	_toCls: function(s){
+		// convert from transition name to corresponding class name
+		// ex. "slide" -> "mblSlide"
+		return "mbl"+s.charAt(0).toUpperCase() + s.substring(1);
+	},
+
 	_doTransition: function(fromNode, toNode, transition, dir){
-		var rev = (dir == -1) ? " reverse" : "";
+		var rev = (dir == -1) ? " mblReverse" : "";
 		toNode.style.display = "";
 		if(!transition || transition == "none"){
 			this.domNode.style.display = "none";
 			this.invokeCallback();
 		}else{
-			dojo.addClass(fromNode, transition + " out" + rev);
-			dojo.addClass(toNode, transition + " in" + rev);
+			// ex. "slide" -> "mblSlide"
+			var s = this._toCls(transition);
+			dojo.addClass(fromNode, s + " mblOut" + rev);
+			dojo.addClass(toNode, s + " mblIn" + rev);
 			// set transform origin
 			var fromOrigin = "50% 50%";
 			var toOrigin = "50% 50%";
@@ -267,19 +275,17 @@ dojo.declare(
 	onAnimationEnd: function(e){
 		if(e.animationName.indexOf("Out") === -1 &&
 		   e.animationName.indexOf("In") === -1 &&
-		   e.animationName.indexOf("shrink") === -1){ return; }
+		   e.animationName.indexOf("Shrink") === -1){ return; }
 		var isOut = false;
-		if(dojo.hasClass(this.domNode, "out")){
+		if(dojo.hasClass(this.domNode, "mblOut")){
 			isOut = true;
 			this.domNode.style.display = "none";
-			dojo.forEach([this._transition,"in","out","reverse"], function(s){
-				dojo.removeClass(this.domNode, s);
-			}, this);
+			dojo.removeClass(this.domNode, [this._toCls(this._transition), "mblIn", "mblOut", "mblReverse"]);
 		}else{
 			// Reset the temporary padding
 			this.containerNode.style.paddingTop = "";
 		}
-		if(e.animationName.indexOf("shrink") === 0){
+		if(e.animationName.indexOf("Shrink") !== -1){
 			var li = e.target;
 			li.style.display = "none";
 			dojo.removeClass(li, "mblCloseContent");

@@ -1,33 +1,33 @@
-.slide.out {
+.mblSlide.mblOut {
 	-webkit-transform: translateX(-100%); /* to avoid screen flicker */
 	-webkit-animation-duration: .4s;
-	-webkit-animation-name: slideOut;
+	-webkit-animation-name: mblSlideOut;
 	-webkit-animation-timing-function: linear;
 }
-.slide.in {
+.mblSlide.mblIn {
 	-webkit-animation-duration: .4s;
-	-webkit-animation-name: slideIn;
+	-webkit-animation-name: mblSlideIn;
 	-webkit-animation-timing-function: linear;
 }
-.slide.out.reverse {
-	-webkit-animation-name: slideOutReverse;
+.mblSlide.mblOut.mblReverse {
+	-webkit-animation-name: mblSlideOutReverse;
 }
-.slide.in.reverse {
-	-webkit-animation-name: slideInReverse;
+.mblSlide.mblIn.mblReverse {
+	-webkit-animation-name: mblSlideInReverse;
 }
-@-webkit-keyframes slideOut {
+@-webkit-keyframes mblSlideOut {
 	from { -webkit-transform: translateX(0px); }
 	to { -webkit-transform: translateX(-100%); }
 }
-@-webkit-keyframes slideIn {
+@-webkit-keyframes mblSlideIn {
 	from { -webkit-transform: translateX(100%); }
 	to { -webkit-transform: translateX(0px); }
 }
-@-webkit-keyframes slideOutReverse {
+@-webkit-keyframes mblSlideOutReverse {
 	from { -webkit-transform: translateX(0px); }
 	to { -webkit-transform: translateX(100%); }
 }
-@-webkit-keyframes slideInReverse {
+@-webkit-keyframes mblSlideInReverse {
 	from { -webkit-transform: translateX(-100%); }
 	to { -webkit-transform: translateX(0px); }
 }

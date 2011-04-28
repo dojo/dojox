@@ -1,27 +1,27 @@
-.swirl.out {
+.mblSwirl.mblOut {
 	z-index: 0;
 	-webkit-animation-duration: .5s;
-	-webkit-animation-name: swirlOut;
+	-webkit-animation-name: mblSwirlOut;
 	-webkit-animation-timing-function: ease-in;
 }
-.swirl.in {
+.mblSwirl.mblIn {
 	z-index: -100;
 	-webkit-animation-duration: .5s;
-	-webkit-animation-name: swirlIn;
+	-webkit-animation-name: mblSwirlIn;
 	-webkit-animation-timing-function: ease-in;
 }
-.swirl.out.reverse {
-	-webkit-animation-name: swirlOutReverse;
+.mblSwirl.mblOut.mblReverse {
+	-webkit-animation-name: mblSwirlOutReverse;
 }
-@-webkit-keyframes swirlOut {
+@-webkit-keyframes mblSwirlOut {
 	from { -webkit-transform: rotate(0deg) scale(1.0); }
 	to { -webkit-transform: rotate(-360deg) scale(0.0); }
 }
-@-webkit-keyframes swirlOutReverse {
+@-webkit-keyframes mblSwirlOutReverse {
 	from { -webkit-transform: rotate(0deg) scale(1.0); }
 	to { -webkit-transform: rotate(360deg) scale(0.0); }
 }
-@-webkit-keyframes swirlIn {
+@-webkit-keyframes mblSwirlIn {
 	from {}
 	to {}
 }
