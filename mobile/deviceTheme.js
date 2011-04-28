@@ -61,7 +61,8 @@ dojox.mobile.loadCssFile = function(/*String*/file){
 	}, dojo.doc.getElementsByTagName('head')[0]);
 };
 
-dojox.mobile.themeMap = [
+dojox.mobile.themeMap = dojox.mobile.themeMap ||
+[
 	// summary:
 	//		A map of user-agents to theme files.
 	// description:
@@ -121,6 +122,9 @@ dojox.mobile.loadDeviceTheme = function(){
 	}
 };
 
+if(dojox.mobile.configDeviceTheme){
+	dojox.mobile.configDeviceTheme();
+}
 dojox.mobile.loadDeviceTheme();
 
 return dojox.mobile.deviceTheme;
