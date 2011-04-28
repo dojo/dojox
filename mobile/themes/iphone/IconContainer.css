@@ -53,7 +53,7 @@ table.mblClose {
   -webkit-animation-duration: .5s;
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: 20;
-  -webkit-animation-name: vibrate;
+  -webkit-animation-name: .mblVibrate;
   -webkit-transform: rotate(0deg);
 }
 .mblCloseContent {
