@@ -215,9 +215,10 @@ dojo.addOnLoad(function(){
 	dm.detectScreenSize();
 	if(dojo.config["mblApplyPageStyles"] !== false){
 		dojo.addClass(dojo.doc.documentElement, "mobile");
-		if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
-			dojo.doc.documentElement.style.webkitBackfaceVisibility = "hidden";
-		}
+	}
+
+	if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
+		dojo.doc.documentElement.style.webkitBackfaceVisibility = "hidden";
 	}
 
 	//	You can disable hiding the address bar with the following djConfig.
