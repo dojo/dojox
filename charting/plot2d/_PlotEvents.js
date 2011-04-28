@@ -51,14 +51,7 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 		//		Find out if any event handlers have been connected to our plotEvent.
 		//	returns: Boolean
 		//		A flag indicating that there are handlers attached.
-		var ls = this.plotEvent._listeners;
-		if(!ls || !ls.length){ return false; }
-		for(var i in ls){
-			if(!(i in Array.prototype)){
-				return true;
-			}
-		}
-		return false;
+		return !!this.plotEvent.after;
 	},
 	resetEvents: function(){
 		//	summary:
