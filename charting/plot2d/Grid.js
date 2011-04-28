@@ -32,7 +32,12 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 
 	//	vStripes: String?
 	//		Whether or not to show stripes (alternating fills) along the vertical axis. Default is "none".
-	vStripes: "none"
+	vStripes: "none",
+	
+	//	enableCache: Boolean?
+	//		Whether the grid lines are cached from one rendering to another. This improves the rendering performance of
+	//		successive rendering but penalize the first rendering.  Default false.
+	enableCache: false
 });
 =====*/
 (function(){
@@ -51,7 +56,8 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 			vMinorLines: false,	// draw vertical minor lines
 			hStripes: "none",	// TBD
 			vStripes: "none",	// TBD
-			animate: null   // animate bars into place
+			animate: null,   // animate bars into place
+			enableCache: false
 		},
 		optionalParams: {},	// no optional parameters
 
@@ -71,6 +77,10 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 			this.zoom = null,
 			this.zoomQueue = [];	// zooming action task queue
 			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
+			if(this.opt.enableCache){
+				this._lineFreePool = [];
+				this._lineUsePool = [];
+			}
 		},
 		clear: function(){
 			//	summary:
@@ -179,6 +189,28 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 			//		Returns 0, since there are no series associated with this plot type.
 			return 0;	//	Number
 		},
+		cleanGroup: function(){
+			this.inherited(arguments);
+			if(this.opt.enableCache){
+				this._lineFreePool = this._lineFreePool.concat(this._lineUsePool);
+				this._lineUsePool = [];
+			}
+		},
+		createLine: function(creator, params){
+			var line;
+			if(this.opt.enableCache && this._lineFreePool.length > 0){
+				line = this._lineFreePool.shift();
+				line.setShape(params);
+				// was cleared, add it back
+				creator.add(line);
+			}else{
+				line = creator.createLine(params);
+			}
+			if(this.opt.enableCache){
+				this._lineUsePool.push(line);
+			}
+			return line;
+		},
 		render: function(dim, offsets){
 			//	summary:
 			//		Render the plot on the chart.
@@ -203,7 +235,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 				if(this.opt.hMinorLines){
 					dojo.forEach(ticks.minor, function(tick){
 						var y = dim.height - offsets.b - vt(tick.value);
-						var hMinorLine = s.createLine({
+						var hMinorLine = this.createLine(s, {
 							x1: offsets.l,
 							y1: y,
 							x2: dim.width - offsets.r,
@@ -217,7 +249,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 				if(this.opt.hMajorLines){
 					dojo.forEach(ticks.major, function(tick){
 						var y = dim.height - offsets.b - vt(tick.value);
-						var hMajorLine = s.createLine({
+						var hMajorLine = this.createLine(s, {
 							x1: offsets.l,
 							y1: y,
 							x2: dim.width - offsets.r,
@@ -239,7 +271,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 				if(ticks && this.opt.vMinorLines){
 					dojo.forEach(ticks.minor, function(tick){
 						var x = offsets.l + ht(tick.value);
-						var vMinorLine = s.createLine({
+						var vMinorLine = this.createLine(s, {
 							x1: x,
 							y1: offsets.t,
 							x2: x,
@@ -253,7 +285,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 				if(ticks && this.opt.vMajorLines){
 					dojo.forEach(ticks.major, function(tick){
 						var x = offsets.l + ht(tick.value);
-						var vMajorLine = s.createLine({
+						var vMajorLine = this.createLine(s, {
 							x1: x,
 							y1: offsets.t,
 							x2: x,

@@ -18,7 +18,12 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 
 	//	maxBarSize: Number?
 	//		The maximum size for a bar in pixels.  Default is 1.
-	maxBarSize: 1
+	maxBarSize: 1,
+	
+	//	enableCache: Boolean?
+	//		Whether the bars rect are cached from one rendering to another. This improves the rendering performance of
+	//		successive rendering but penalize the first rendering.  Default false.
+	enableCache: false
 });
 =====*/
 (function(){
@@ -33,7 +38,8 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
 			gap:	0,		// gap between columns in pixels
-			animate: null   // animate bars into place
+			animate: null,   // animate bars into place
+			enableCache: false
 		},
 		optionalParams: {
 			minBarSize:	1,	// minimal bar width in pixels
@@ -75,6 +81,22 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 			t = stats.hmax, stats.hmax = stats.vmax, stats.vmax = t;
 			return stats;
 		},
+		
+		createRect: function(run, creator, params){
+			var rect;
+			if(this.opt.enableCache && run._rectFreePool.length > 0){
+				rect = run._rectFreePool.shift();
+				rect.setShape(params);
+				// was cleared, add it back
+				creator.add(rect);
+			}else{
+				rect = creator.createRect(params);
+			}
+			if(this.opt.enableCache){
+				run._rectUsePool.push(rect);
+			}
+			return rect;
+		},
 
 		render: function(dim, offsets){
 			//	summary:
@@ -114,6 +136,10 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 					continue;
 				}
 				run.cleanGroup();
+				if(this.opt.enableCache){
+					run._rectFreePool = (run._rectFreePool?run._rectFreePool:[]).concat(run._rectUsePool?run._rectUsePool:[]);
+					run._rectUsePool = [];
+				}
 				var theme = t.next("bar", [this.opt, run]), s = run.group,
 					eventSeries = new Array(run.data.length);
 				for(var j = 0; j < run.data.length; ++j){
@@ -134,7 +160,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 							};
 							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 							specialFill = this._shapeFill(specialFill, rect);
-							var shape = s.createRect(rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
+							var shape = this.createRect(run, s, rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
 							run.dyn.fill   = shape.getFill();
 							run.dyn.stroke = shape.getStroke();
 							if(events){

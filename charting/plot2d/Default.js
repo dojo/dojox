@@ -91,6 +91,11 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 	//	markerFontColor: String|dojo.Color?
 	//		An optional color to use for any marker text on the plot.
 	markerFontColor:	""
+	
+	//	enableCache: Boolean?
+	//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
+	//		successive rendering but penalize the first rendering.  Default false.
+	enableCache: false
 });
 =====*/
 (function(){
@@ -108,7 +113,8 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			areas:   false,	// draw areas
 			markers: false,	// draw markers
 			tension: "",	// draw curved lines (tension is "X", "x", or "S")
-			animate: false	// animate chart to place
+			animate: false, // animate chart to place
+			enableCache: false 
 		},
 		optionalParams: {
 			// theme component
@@ -142,6 +148,22 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 
 			// animation properties
 			this.animate = this.opt.animate;
+		},
+		
+		createPath: function(run, creator, params){
+			var path;
+			if(this.opt.enableCache && run._pathFreePool.length > 0){
+				path = run._pathFreePool.shift();
+				path.setShape(params);
+				// was cleared, add it back
+				creator.add(path);
+			}else{
+				path = creator.createPath(params);
+			}
+			if(this.opt.enableCache){
+				run._pathUsePool.push(path);
+			}
+			return path;
 		},
 
 		render: function(dim, offsets){
@@ -179,6 +201,10 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 					continue;
 				}
 				run.cleanGroup();
+				if(this.opt.enableCache){
+					run._pathFreePool = (run._pathFreePool?run._pathFreePool:[]).concat(run._pathUsePool?run._pathUsePool:[]);
+					run._pathUsePool = [];
+				}
 				if(!run.data.length){
 					run.dirty = false;
 					t.skip();
@@ -190,14 +216,19 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 					eventSeries = this._eventSeries[run.name] = new Array(run.data.length);
+				
+				// optim works only for index based case
+				var indexed = typeof run.data[0] == "number";
+				var min = indexed?Math.max(0, Math.floor(this._hScaler.bounds.from - 1)):0, 
+						max = indexed?Math.min(run.data.length, Math.ceil(this._hScaler.bounds.to)):run.data.length;
 
                 // split the run data into dense segments (each containing no nulls)
-                for(var j = 0; j < run.data.length; j++){
+                for(var j = min; j < max; j++){
                     if(run.data[j] != null){
                         if(!rseg){
                             rseg = [];
                             startindexes.push(j);
-                            rsegments.push(rseg)
+                            rsegments.push(rseg);
                         }
                         rseg.push(run.data[j]);
                     }else{
@@ -266,7 +297,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 						if(this.opt.markers && theme.marker.shadow){
 							shadow = theme.marker.shadow;
 							shadowMarkers = dojo.map(spoly, function(c){
-								return s.createPath("M" + c.x + " " + c.y + " " + theme.symbol).
+								return this.createPath(run, s, "M" + c.x + " " + c.y + " " + theme.symbol).
 									setStroke(shadow).setFill(shadow.color);
 							}, this);
 						}
@@ -296,9 +327,9 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 						dojo.forEach(lpoly, function(c, i){
 							var path = "M" + c.x + " " + c.y + " " + theme.symbol;
 							if(outline){
-								outlineMarkers[i] = s.createPath(path).setStroke(outline);
+								outlineMarkers[i] = this.createPath(run, s, path).setStroke(outline);
 							}
-							frontMarkers[i] = s.createPath(path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
+							frontMarkers[i] = this.createPath(run, s, path).setStroke(theme.marker.stroke).setFill(theme.marker.fill);
 						}, this);
 						run.dyn.markerFill = theme.marker.fill;
 						run.dyn.markerStroke = theme.marker.stroke;
