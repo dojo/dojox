@@ -81,6 +81,9 @@ dojo.require("dojox.lang.utils");
 	//		An optional font definition (as used in the CSS font property) for labels.
 	//	fontColor: String|dojo.Color?
 	//		An optional color to be used in drawing labels.
+	//	enableCache: Boolean?
+	//		Whether the ticks and labels are cached from one rendering to another. This improves the rendering performance of
+	//		successive rendering but penalize the first rendering.  Default false.
 
 	this.vertical = vertical;
 	this.fixUpper = fixUpper;
@@ -111,6 +114,7 @@ dojo.require("dojox.lang.utils");
 	this.tick = tick;
 	this.font = font;
 	this.fontColor = fontColor;
+	this.enableCache = enableCache;
 }
 =====*/
 (function(){
@@ -168,7 +172,8 @@ dojo.require("dojox.lang.utils");
 			minorLabels: true,		// draw minor labels
 			microTicks:  false,		// draw micro ticks
 			rotation:    0,			// label rotation angle in degrees
-			htmlLabels:  true		// use HTML to draw labels
+			htmlLabels:  true,		// use HTML to draw labels
+			enableCache: false		// whether we cache or not
 		},
 		optionalParams: {
 			min:			0,	// minimal value on this axis
@@ -214,6 +219,12 @@ dojo.require("dojox.lang.utils");
 			this.opt = dojo.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
+			if(this.opt.enableCache){
+				this._textFreePool = [];
+				this._lineFreePool = [];
+				this._textUsePool = [];
+				this._lineUsePool = [];
+			}
 		},
 		getOffsets: function(){
 			//	summary:
@@ -327,6 +338,67 @@ dojo.require("dojox.lang.utils");
 				this._cachedLabelWidth = labelWidth;
 			}
 			return offsets;	//	Object
+		},
+		cleanGroup: function(creator){
+			if(this.opt.enableCache && this.group){
+				this._lineFreePool = this._lineFreePool.concat(this._lineUsePool);
+				this._lineUsePool = [];
+				this._textFreePool = this._textFreePool.concat(this._textUsePool);
+				this._textUsePool = [];
+			}
+			this.inherited(arguments);
+		},
+		createText: function(labelType, creator, x, y, align, textContent, font, fontColor, labelWidth){
+			if(!this.opt.enableCache || labelType=="html"){
+				return dc.axis2d.common.createText[labelType](
+						this.chart,
+						creator,
+						x,
+						y,
+						align,
+						textContent,
+						font,
+						fontColor,
+						labelWidth
+					);
+			}
+			var text;
+			if (this._textFreePool.length > 0){
+				text = this._textFreePool.pop();
+				text.setShape({x: x, y: y, text: textContent, align: align});
+				// For now all items share the same font, no need to re-set it
+				//.setFont(font).setFill(fontColor);
+				// was cleared, add it back
+				creator.add(text);
+			}else{
+				text = dc.axis2d.common.createText[labelType](
+						this.chart,
+						creator,
+						x,
+						y,
+						align,
+						textContent,
+						font,
+						fontColor,
+						labelWidth
+					);			}
+			this._textUsePool.push(text);
+			return text;
+		},
+		createLine: function(creator, params){
+			var line;
+			if(this.opt.enableCache && this._lineFreePool.length > 0){
+				line = this._lineFreePool.pop();
+				line.setShape(params);
+				// was cleared, add it back
+				creator.add(line);
+			}else{
+				line = creator.createLine(params);
+			}
+			if(this.opt.enableCache){
+				this._lineUsePool.push(line);
+			}
+			return line;
 		},
 		render: function(dim, offsets){
 			//	summary:
@@ -548,12 +620,18 @@ dojo.require("dojox.lang.utils");
 						axisTitle.setTransform(g.matrix.rotategAt(titleRotation, titlePos.x, titlePos.y));
 					}
 				}
+				
+				// go out nicely instead of try/catch
+				if(t==null){
+					this.diry = false;
+					return;
+				}
 
 				dojo.forEach(t.major, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
-						s.createLine({
+						this.createLine(s, {
 							x1: x, y1: y,
 							x2: x + dx,
 							y2: y + dy
@@ -564,8 +642,7 @@ dojo.require("dojox.lang.utils");
 								truncated: false
 							};
 							label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
-							elem = dc.axis2d.common.createText[labelType](
-								this.chart,
+							elem = this.createText(labelType,
 								s,
 								x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
 								y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
@@ -598,7 +675,7 @@ dojo.require("dojox.lang.utils");
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
-						s.createLine({
+						this.createLine(s, {
 							x1: x, y1: y,
 							x2: x + dx,
 							y2: y + dy
@@ -609,8 +686,7 @@ dojo.require("dojox.lang.utils");
 								truncated: false
 							};
 							label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
-							elem = dc.axis2d.common.createText[labelType](
-								this.chart,
+							elem = this.createText(labelType,
 								s,
 								x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
 								y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
@@ -642,7 +718,7 @@ dojo.require("dojox.lang.utils");
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
-						s.createLine({
+						this.createLine(s, {
 							x1: x, y1: y,
 							x2: x + dx,
 							y2: y + dy
