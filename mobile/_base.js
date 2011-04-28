@@ -1,7 +1,4 @@
 define([
-  "dojo",
-  "dijit",
-  "dojox",
   "./common",
   "./View",
   "./Heading",

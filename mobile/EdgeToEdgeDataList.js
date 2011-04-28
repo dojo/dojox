@@ -1,19 +1,7 @@
-define([
-  "dojo",
-  "dijit",
-  "dojox",
-  "dojox/mobile/EdgeToEdgeList",
-  "dojox/mobile/_DataListMixin"], function(dojo, dijit, dojox){
+define(["./EdgeToEdgeList", "./_DataListMixin"], function(EdgeToEdgeList,DataListMixin){
 	// module:
 	//		dojox/mobile/EdgeToEdgeDataList
 	// summary:
 	//		TODOC
-
-dojo.declare(
-	"dojox.mobile.EdgeToEdgeDataList",
-	[dojox.mobile.EdgeToEdgeList, dojox.mobile._DataListMixin],
-{
-});
-
-return dojox.mobile.EdgeToEdgeDataList;
+	return dojo.declare("dojox.mobile.EdgeToEdgeDataList", [EdgeToEdgeList,DataListMixin],{});
 });

@@ -1,8 +1,8 @@
-define("dojox/mobile/Button", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_ButtonMixin"], function(dojo, dijit, dojox){
+define(["dojo/_base/array", "dojo/_base/html","dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_ButtonMixin"], function(darray, html, WidgetBase,FormWidgetMixin,ButtonMixin){
 
-dojo.declare("dojox.mobile.Button", [dijit._WidgetBase, dijit.form._FormWidgetMixin, dijit.form._ButtonMixin], {
+	return dojo.declare("dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
 		// summary:
-		//		Non-templated BUTTON widget with a thin API wrapper for click events and setting the label
+		//	Non-templated BUTTON widget with a thin API wrapper for click events and setting the label
 		//
 		// description:
 		//              Buttons can display a label, an icon, or both.
@@ -43,7 +43,6 @@ dojo.declare("dojox.mobile.Button", [dijit._WidgetBase, dijit.form._FormWidgetMi
 			this.inherited(arguments);
 			this.connect(this.domNode, "onclick", "_onClick");
 		}
-});
+	});
 
-return dojox.mobile.Button;
 });

@@ -1,10 +1,6 @@
-define("dojox/mobile/Slider", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin"], function(dojo, dijit, dojox) {
-dojo.experimental("dojox.mobile.Slider");
+define(["dojo/_base/html","dojo/_base/array", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin"], function(dhtml,darray, WidgetBase,FormValueMixin) {
 
-dojo.declare(
-	"dojox.mobile.Slider", 
-	[dijit._WidgetBase, dijit.form._FormValueMixin],
-	{
+	return dojo.declare("dojox.mobile.Slider", [WidgetBase,FormValueMixin],{
 		// summary:
 		//		A non-templated Slider widget similar to the HTML5 INPUT type=range.
 		//
@@ -146,8 +142,5 @@ dojo.declare(
 			this.startup();
 			this.set('value', this.value);
 		}
-	}
-);
-
-return dojox.mobile.Slider;
+	});
 });

@@ -1,8 +1,6 @@
-define("dojox/mobile/TextBox", ["dojo", "dijit", "dojox", "dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_TextBoxMixin"], function(dojo, dijit, dojox) {
+define(["dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_TextBoxMixin"], function(WidgetBase,FormWidgetMixin,TextBoxMixin) {
 
-dojo.declare(
-	"dojox.mobile.TextBox", 
-	[dijit._WidgetBase, dijit.form._FormValueMixin, dijit.form._TextBoxMixin], {
+	return dojo.declare("dojox.mobile.TextBox",[WidgetBase,FormWidgetMixin,TextBoxMixin],{
 		// summary:
 		//		A non-templated base class for textbox form inputs
 
@@ -24,8 +22,5 @@ dojo.declare(
 			this.connect(this.textbox, "onfocus", "_onFocus");
 			this.connect(this.textbox, "onblur", "_onBlur");
 		}
-	}
-);
-
-return dojox.mobile.TextBox;
+	});
 });

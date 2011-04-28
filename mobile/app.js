@@ -1,3 +1,3 @@
-dojo.provide("dojox.mobile.app");
-
-dojo.require("dojox.mobile.app._base");
+define(["./app/_base"], function(appBase){
+	return appBase;
+});

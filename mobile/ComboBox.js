@@ -1,9 +1,6 @@
-define("dojox/mobile/ComboBox", ["dojo", "dijit", "dojox", "dojox/mobile/TextBox", "dojox/mobile/_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], function(dojo, dijit, dojox) {
+define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], function(TextBox,ComboBoxMenu,AutoCompleterMixin) {
 
-dojo.declare(
-	"dojox.mobile.ComboBox",
-	[dojox.mobile.TextBox, dijit.form._AutoCompleterMixin],
-	{
+	return dojo.declare("dojox.mobile.ComboBox",[TextBox, AutoCompleterMixin],{
 		// summary:
 		//		A non-templated auto-completing text box widget
 		//
@@ -11,7 +8,9 @@ dojo.declare(
 		// dropDownClass: [protected extension] String
 		//		Name of the dropdown widget class used to select a date/time.
 		//		Subclasses should specify this.
-		dropDownClass: "dojox.mobile._ComboBoxMenu",
+		//
+		//dropDownClass: "dojox.mobile._ComboBoxMenu",
+		dropDownClass: ComboBoxMenu,
 
 		// initially disable selection since iphone displays selection handles that makes it hard to pick from the list
 		selectOnClick: false,
@@ -34,8 +33,5 @@ dojo.declare(
 			}
 			return ret;
 		}
-	}
-);
-
-return dojox.mobile.ComboBox;
+	});
 });

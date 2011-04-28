@@ -1,7 +1,4 @@
-define([
-  "dojo",
-  "dijit",
-  "dojox"], function(dojo, dijit, dojox){
+define(["dojo/_base/array", "./_base"], function(darray,mbase){
 	// module:
 	//		dojox/mobile/deviceTheme
 	// summary:
@@ -53,79 +50,78 @@ define([
 	//	|	dojox/mobile/themes/iphone/iphone.css
 	//	|	com/acme/themes/iphone/MyWidget.css
 
-dojox.mobile.loadCssFile = function(/*String*/file){
-	dojo.create("LINK", {
-		href: file,
-		type: "text/css",
-		rel: "stylesheet"
-	}, dojo.doc.getElementsByTagName('head')[0]);
-};
+	dojox.mobile.loadCssFile = function(/*String*/file){
+		dojo.create("LINK", {
+			href: file,
+			type: "text/css",
+			rel: "stylesheet"
+		}, dojo.doc.getElementsByTagName('head')[0]);
+	};
 
-dojox.mobile.themeMap = dojox.mobile.themeMap ||
-[
-	// summary:
-	//		A map of user-agents to theme files.
-	// description:
-	//		The first array element is a regexp pattern that matches the
-	//		userAgent string.
-	//
-	//		The second array element is a theme folder name.
-	//
-	//		The third array element is an array of css file paths to load.
-	//
-	//		The matching is performed in the array order, and stops after the
-	//		first match.
-	[
-		"Android",
-		"android",
-		[]
-	],
-	[
-		"BlackBerry",
-		"blackberry",
-		[]
-	],
-	[
-		"iPad",
-		"iphone",
-		[dojo.moduleUrl("dojox.mobile", "themes/iphone/ipad.css")]
-	],
-	[
-		".*",
-		"iphone",
-		[]
-	]
-];
+	dojox.mobile.themeMap = dojox.mobile.themeMap || [
+		// summary:
+		//		A map of user-agents to theme files.
+		// description:
+		//		The first array element is a regexp pattern that matches the
+		//		userAgent string.
+		//
+		//		The second array element is a theme folder name.
+		//
+		//		The third array element is an array of css file paths to load.
+		//
+		//		The matching is performed in the array order, and stops after the
+		//		first match.
+		[
+			"Android",
+			"android",
+			[]
+		],
+		[
+			"BlackBerry",
+			"blackberry",
+			[]
+		],
+		[
+			"iPad",
+			"iphone",
+			[dojo.moduleUrl("dojox.mobile", "themes/iphone/ipad.css")]
+		],
+		[
+			".*",
+			"iphone",
+			[]
+		]
+	];
 
-dojox.mobile.loadDeviceTheme = function(){
-	var t = dojo.config["mblThemeFiles"] || dojox.mobile.themeFiles || ["@theme"];
-	if(!dojo.isArray(t)){ alert("loadDeviceTheme: array is expected but found: "+t); }
-	var i, j;
-	var m = dojox.mobile.themeMap;
-	var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;
-	for(i = 0; i < m.length; i++){
-		if(ua.match(new RegExp(m[i][0]))){
-			var theme = m[i][1];
-			var files = m[i][2];
-			for(j = t.length - 1; j >= 0; j--){
-				var pkg = dojo.isArray(t[j]) ? t[j][0] : "dojox.mobile";
-				var name = dojo.isArray(t[j]) ? t[j][1] : t[j];
-				var f = "themes/" + theme + "/" +
-					(name === "@theme" ? theme : name) + ".css";
-				files.unshift(dojo.moduleUrl(pkg, f));
+	dojox.mobile.loadDeviceTheme = function(){
+		var t = dojo.config["mblThemeFiles"] || dojox.mobile.themeFiles || ["@theme"];
+		if(!dojo.isArray(t)){ alert("loadDeviceTheme: array is expected but found: "+t); }
+		var i, j;
+		var m = dojox.mobile.themeMap;
+		var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;
+		for(i = 0; i < m.length; i++){
+			if(ua.match(new RegExp(m[i][0]))){
+				var theme = m[i][1];
+				var files = m[i][2];
+				for(j = t.length - 1; j >= 0; j--){
+					var pkg = dojo.isArray(t[j]) ? t[j][0] : "dojox.mobile";
+					var name = dojo.isArray(t[j]) ? t[j][1] : t[j];
+					var f = "themes/" + theme + "/" +
+						(name === "@theme" ? theme : name) + ".css";
+					files.unshift(dojo.moduleUrl(pkg, f));
+				}
+				for(j = 0; j < files.length; j++){
+					dojox.mobile.loadCssFile(files[j]);
+				}
+				break;
 			}
-			for(j = 0; j < files.length; j++){
-				dojox.mobile.loadCssFile(files[j]);
-			}
-			break;
 		}
+	};
+	
+	if(dojox.mobile.configDeviceTheme){
+		dojox.mobile.configDeviceTheme();
 	}
-};
+	dojox.mobile.loadDeviceTheme();
 
-if(dojox.mobile.configDeviceTheme){
-	dojox.mobile.configDeviceTheme();
-}
-dojox.mobile.loadDeviceTheme();
-
-return dojox.mobile.deviceTheme;
+	return dojox.mobile.deviceTheme;
 });

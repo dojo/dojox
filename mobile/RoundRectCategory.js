@@ -1,33 +1,24 @@
-define([
-  "dojo",
-  "dijit",
-  "dojox",
-  "dijit/_WidgetBase",
-  "dijit/_Contained"], function(dojo, dijit, dojox){
+define(["dijit/_WidgetBase","dijit/_Contained"], function(WidgetBase,Contained){
 	// module:
 	//		dojox/mobile/RoundRectCategory
 	// summary:
 	//		TODOC
 
-dojo.declare(
-	"dojox.mobile.RoundRectCategory",
-	[dijit._WidgetBase, dijit._Contained],
-{
-	label: "",
+	return dojo.declare("dojox.mobile.RoundRectCategory", [WidgetBase, Contained],{
+		label: "",
 
-	buildRendering: function(){
-		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H2");
-		this.domNode.className = "mblRoundRectCategory";
-		if(!this.label){
-			this.label = this.domNode.innerHTML;
+		buildRendering: function(){
+			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H2");
+			this.domNode.className = "mblRoundRectCategory";
+			if(!this.label){
+				this.label = this.domNode.innerHTML;
+			}
+		},
+
+		_setLabelAttr: function(/*String*/label){
+			this.label = label;
+			this.domNode.innerHTML = this._cv(label);
 		}
-	},
+	});
 
-	_setLabelAttr: function(/*String*/label){
-		this.label = label;
-		this.domNode.innerHTML = this._cv(label);
-	}
-});
-
-return dojox.mobile.RoundRectCategory;
 });

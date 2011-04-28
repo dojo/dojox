@@ -58,7 +58,6 @@
 //		| 	</div>
 //		| </body>
 =====*/
-
 if(typeof dojo === "undefined"){
 	dojo = {doc:document, global:window, isWebKit:navigator.userAgent.indexOf("WebKit") != -1};
 	dojox = {mobile:{}};
@@ -66,7 +65,7 @@ if(typeof dojo === "undefined"){
 if(typeof define === "undefined"){
 	define = function(deps, def){ def.apply(); };
 }
-define(["dojo", "dojox"], function(_dojo, _dojox){
+define(["dojo","dojox"], function(_dojo, _dojox){
 
 dojox.mobile.scrollable = function(dojo, dojox){
 	this.fixedHeaderHeight = 0; // height of a fixed header
@@ -910,5 +909,4 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	}
 })();
 
-return dojox.mobile.scrollable;
 });

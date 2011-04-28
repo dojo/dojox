@@ -1,8 +1,6 @@
-define("dojox/mobile/TextArea", ["dojo", "dijit", "dojox/mobile/TextBox"], function(dojo, dijit){
+define(["dojo/_base/html","./TextBox"], function(dhtml,TextBox){
 
-dojo.declare(
-	"dojox.mobile.TextArea", 
-	dojox.mobile.TextBox, {
+	return dojo.declare("dojox.mobile.TextArea",TextBox,{
 		// summary:
 		//		Non-templated TEXTAREA widget.
 		//
@@ -30,8 +28,5 @@ dojo.declare(
 			}
 			this.inherited(arguments);
 		}
-	}
-);
-
-return dojox.mobile.TextArea;
+	});
 });

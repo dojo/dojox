@@ -1,10 +1,6 @@
-define("dojox/mobile/Tooltip", ["dojo", "dijit", "dojox", "dijit/place", "dijit/_WidgetBase"], function(dojo, dijit, dojox, place) {
-dojo.experimental("dojox.mobile.Tooltip");
+define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, place,WidgetBase) {
 
-dojo.declare(
-	"dojox.mobile.Tooltip", 
-	[dijit._WidgetBase],
-	{
+	return dojo.declare("dojox.mobile.Tooltip", WidgetBase, {
 		// summary:
 		//		A non-templated popup bubble widget
 		//
@@ -62,8 +58,5 @@ dojo.declare(
 			if(this.anchor){ this.hide(); }
 			this.inherited(arguments);
 		}
-	}
-);
-
-return dojox.mobile.Tooltip;
+	});
 });

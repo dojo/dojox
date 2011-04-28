@@ -1,10 +1,4 @@
-define([
-  "dojo",
-  "dijit",
-  "dojox",
-  "dijit/_WidgetBase",
-  "dijit/_Container",
-  "dijit/_Contained"], function(dojo, dijit, dojox){
+define(["dojo/_base/html","dojo/_base/lang",  "dojo/_base/array", "dijit/_WidgetBase","dijit/_Container","dijit/_Contained"],function(dhtml,dlang,darray,WidgetBase,Container,Contained){
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:
@@ -28,77 +22,56 @@ define([
 	// |		</div>
 	// |	</div>
 
-dojo.declare(
-	"dojox.mobile.FixedSplitter",
-	[dijit._WidgetBase, dijit._Container, dijit._Contained],
-{
-	orientation: "H", // "H" or "V"
+	return dojo.declare("dojox.mobile.FixedSplitter", [WidgetBase,Container,Contained], {
+		orientation: "H", // "H" or "V"
 
-	isContainer: true,
+		isContainer: true,
 
-	buildRendering: function(){
-		this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : dojo.doc.createElement("DIV");
-		dojo.addClass(this.domNode, "mblFixedSpliter");
-	},
+		buildRendering: function(){
+			this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : dojo.doc.createElement("DIV");
+			dojo.addClass(this.domNode, "mblFixedSpliter");
+		},
 
-	startup: function(){
-		if(this._started){ return; }
-		var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
-		dojo.forEach(children, function(node){
-			dojo.addClass(node, "mblFixedSplitterPane"+this.orientation);
-		}, this);
-		this.inherited(arguments);
+		startup: function(){
+			if(this._started){ return; }
+			var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
+			dojo.forEach(children, function(node){
+				dojo.addClass(node, "mblFixedSplitterPane"+this.orientation);
+			}, this);
+			this.inherited(arguments);
+	
+			var _this = this;
+			setTimeout(function(){
+				var parent = _this.getParent && _this.getParent();
+				if(!parent || !parent.resize){ // top level widget
+					_this.resize();
+				}
+			}, 0);
+		},
+	
+		resize: function(){
+			this.layout();
+		},
 
-		var _this = this;
-		setTimeout(function(){
-			var parent = _this.getParent && _this.getParent();
-			if(!parent || !parent.resize){ // top level widget
-				_this.resize();
+		layout: function(){
+			var sz = this.orientation == "H" ? "w" : "h";
+			var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
+			var offset = 0;
+			for(var i = 0; i < children.length; i++){
+				dojo.marginBox(children[i], this.orientation == "H" ? {l:offset} : {t:offset});
+				if(i < children.length - 1){
+					offset += dojo.marginBox(children[i])[sz];
+				}
 			}
-		}, 0);
-	},
-
-	resize: function(){
-		this.layout();
-	},
-
-	layout: function(){
-		var sz = this.orientation == "H" ? "w" : "h";
-		var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
-		var offset = 0;
-		for(var i = 0; i < children.length; i++){
-			dojo.marginBox(children[i], this.orientation == "H" ? {l:offset} : {t:offset});
-			if(i < children.length - 1){
-				offset += dojo.marginBox(children[i])[sz];
-			}
+	
+			var l = dojo.marginBox(this.domNode)[sz] - offset;
+			var props = {};
+			props[sz] = l;
+			dojo.marginBox(children[children.length - 1], props);
+	
+			dojo.forEach(this.getChildren(), function(child){
+				if(child.resize){ child.resize(); }
+			});
 		}
-
-		var l = dojo.marginBox(this.domNode)[sz] - offset;
-		var props = {};
-		props[sz] = l;
-		dojo.marginBox(children[children.length - 1], props);
-
-		dojo.forEach(this.getChildren(), function(child){
-			if(child.resize){ child.resize(); }
-		});
-	}
-});
-
-dojo.declare(
-	"dojox.mobile.FixedSplitterPane",
-	[dijit._WidgetBase, dijit._Container, dijit._Contained],
-{
-	buildRendering: function(){
-		this.inherited(arguments);
-		dojo.addClass(this.domNode, "mblFixedSplitterPane");
-	},
-
-	resize: function(){
-		dojo.forEach(this.getChildren(), function(child){
-			if(child.resize){ child.resize(); }
-		});
-	}
-});
-
-return dojox.mobile.FixedSplitter;
+	});
 });
