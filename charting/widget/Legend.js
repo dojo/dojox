@@ -48,7 +48,7 @@ dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 	buildRendering: function(){
 		this.domNode = dojo.create("table", 
 				{role: "group", "aria-label": "chart legend", "class": "dojoxLegendNode"});
-		this.legendBody = dojo.create("tbody", this.domNode);
+		this.legendBody = dojo.create("tbody", null, this.domNode);
 		this.inherited(arguments);
 	},
 	refresh: function(){
