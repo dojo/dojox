@@ -259,21 +259,22 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 	
 		onAnimationStart: function(e){
 		},
-	
+
+
 		onAnimationEnd: function(e){
 			if(e.animationName.indexOf("Out") === -1 &&
-			   e.animationName.indexOf("In") === -1 &&
-			   e.animationName.indexOf("Shrink") === -1){ return; }
+				e.animationName.indexOf("In") === -1 &&
+				e.animationName.indexOf("Shrink") === -1){ return; }
 			var isOut = false;
 			if(dojo.hasClass(this.domNode, "mblOut")){
 				isOut = true;
 				this.domNode.style.display = "none";
-				dojo.removeClass(this.domNode, [this._toCls(this._transition), "mblIn", "mblOut", "mblReverse"]); 
+				dojo.removeClass(this.domNode, [this._toCls(this._transition), "mblIn", "mblOut", "mblReverse"]);
 			}else{
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
 			}
-			if(e.animationName.indexOf("Shrink") === -1){
+			if(e.animationName.indexOf("Shrink") !== -1){
 				var li = e.target;
 				li.style.display = "none";
 				dojo.removeClass(li, "mblCloseContent");
@@ -284,11 +285,11 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 			// this.domNode may be destroyed as a result of invoking the callback,
 			// so check for that before accessing it.
 			this.domNode && (this.domNode.className = "mblView");
-	
+
 			// clear the clicked position
 			this.clickedPosX = this.clickedPosY = undefined;
 		},
-	
+
 		invokeCallback: function(){
 			this.onAfterTransitionOut.apply(this, this._arguments);
 			dojo.publish("/dojox/mobile/afterTransitionOut", [this].concat(this._arguments));
