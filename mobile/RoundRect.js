@@ -1,32 +1,22 @@
-define([
-  "dojo",
-  "dijit",
-  "dojox",
-  "dijit/_WidgetBase",
-  "dijit/_Container",
-  "dijit/_Contained"], function(dojo, dijit, dojox){
+define(["dijit/_WidgetBase", "dijit/_Contained","dijit/_Container"], function(WidgetBase,Contained,Container){
 	// module:
 	//		dojox/mobile/RoundRect
 	// summary:
 	//		TODOC
 
-dojo.declare(
-	"dojox.mobile.RoundRect",
-	[dijit._WidgetBase, dijit._Container, dijit._Contained],
-{
-	shadow: false,
+	return dojo.declare("dojox.mobile.RoundRect", [WidgetBase, Container,Contained], {
 
-	buildRendering: function(){
-		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
-		this.domNode.className = this.shadow ? "mblRoundRect mblShadow" : "mblRoundRect";
-	},
+		shadow: false,
 
-	resize: function(){
-		dojo.forEach(this.getChildren(), function(child){
-			if(child.resize){ child.resize(); }
-		});
-	}
-});
+		buildRendering: function(){
+			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
+			this.domNode.className = this.shadow ? "mblRoundRect mblShadow" : "mblRoundRect";
+		},
 
-return dojox.mobile.RoundRect;
+		resize: function(){
+			dojo.forEach(this.getChildren(), function(child){
+				if(child.resize){ child.resize(); }
+			});
+		}
+	});
 });

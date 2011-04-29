@@ -1,4 +1,4 @@
-define(["dojo/_base/html", "dojo/date","dojox/date/locale","./SpinWheel","./SpinWheelSlot"],function(dhtml,ddate,dlocale,SpinWheel,SpinWheelSlot){
+define(["dojo/_base/html", "dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function(dhtml,ddate,dlocale,SpinWheel,SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:

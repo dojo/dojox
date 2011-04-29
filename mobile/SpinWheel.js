@@ -1,4 +1,4 @@
-define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"],function(darray,dbase,WidgetBase,Container,Contained,ScrollableMixin){
+define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./SpinWheelSlot"],function(darray,dbase,WidgetBase,Container,Contained,ScrollableMixin,SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheel
 	// summary:

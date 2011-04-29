@@ -1,4 +1,4 @@
-define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./Heading","./_ItemBase"],function(darray,dhtml, mcommon,WidgetBase,Container,Contained,Heading,ItemBase){
+define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./Heading","./_ItemBase","./TabBarButton"],function(darray,dhtml, mcommon,WidgetBase,Container,Contained,Heading,ItemBase){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:

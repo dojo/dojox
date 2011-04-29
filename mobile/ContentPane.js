@@ -1,4 +1,4 @@
-define(["dijit/_WidgetBase", "dijit._Container", "dijit._Contained", "dojo/_base/xhr","./ProgressIndicator"], function(WidgetBase,Container,Contained,xhr,ProgressIndicator) {
+define(["dijit/_WidgetBase", "dijit/_Container", "dijit/_Contained", "dojo/_base/xhr","./ProgressIndicator"], function(WidgetBase,Container,Contained,xhr,ProgressIndicator) {
 
 	// summary:
 	//		A very simple content pane to embed an HTML fragment.

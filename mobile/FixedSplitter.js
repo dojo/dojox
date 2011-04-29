@@ -1,4 +1,4 @@
-define(["dojo/_base/html","dojo/_base/lang",  "dojo/_base/array", "dijit/_WidgetBase","dijit/_Container","dijit/_Contained"],function(dhtml,dlang,darray,WidgetBase,Container,Contained){
+define(["dojo/_base/html","dojo/_base/lang",  "dojo/_base/array", "dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./FixedSplitterPane"],function(dhtml,dlang,darray,WidgetBase,Container,Contained){
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:
