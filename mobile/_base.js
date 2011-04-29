@@ -1,35 +1,7 @@
 dojo.provide("dojox.mobile._base");
 
 dojo.require("dijit._WidgetBase");
-
-(function(){
-	var d = dojo;
-	var ua = navigator.userAgent;
-
-	// BlackBerry (OS 6 or later only)
-	d.isBB = ua.indexOf("BlackBerry") >= 0 && parseFloat(ua.split("Version/")[1]) || undefined;
-
-	// Android
-	d.isAndroid = parseFloat(ua.split("Android ")[1]) || undefined;
-
-	// iPhone, iPod, or iPad
-	// If iPod or iPad is detected, in addition to dojo.isIPod or dojo.isIPad,
-	// dojo.isIPhone will also have iOS version number.
-	if(ua.match(/(iPhone|iPod|iPad)/)){
-		var p = "is" + RegExp.$1.replace(/i/, 'I');
-		var v = ua.match(/OS ([\d_]+)/) ? RegExp.$1 : "1";
-		d.isIPhone = d[p] = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
-	}
-
-	var html = d.doc.documentElement;
-	html.className += d.trim([
-		d.isBB ? "dj_bb" : "",
-		d.isAndroid ? "dj_android" : "",
-		d.isIPhone ? "dj_iphone" : "",
-		d.isIPod ? "dj_ipod" : "",
-		d.isIPad ? "dj_ipad" : ""
-	].join(" ").replace(/ +/g," "));
-})();
+dojo.isBB = (navigator.userAgent.indexOf("BlackBerry") != -1) && !dojo.isWebKit;
 
 // summary:
 //		Mobile Widgets
@@ -81,9 +53,6 @@ dojo.declare(
 	buildRendering: function(){
 		this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 		this.domNode.className = "mblView";
-		if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
-			this.domNode.style.webkitBackfaceVisibility = "hidden";
-		}
 		this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 		this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 		var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
@@ -1160,10 +1129,6 @@ dojo.addOnLoad(function(){
 	dojox.mobile.addClass();
 	if(dojo.config["mblApplyPageStyles"] !== false){
 		dojo.addClass(dojo.doc.documentElement, "mobile");
-	}
-
-	if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
-		dojo.doc.documentElement.style.webkitBackfaceVisibility = "hidden";
 	}
 
 	//	You can disable hiding the address bar with the following djConfig.
