@@ -2,7 +2,7 @@ dojo.provide("dojox.charting.action2d.Tooltip");
 
 dojo.require("dijit.Tooltip");
 
-dojo.require("dojox.charting.action2d.Base");
+dojo.require("dojox.charting.action2d.PlotAction");
 dojo.require("dojox.gfx.matrix");
 
 dojo.require("dojox.lang.functional");
@@ -10,7 +10,7 @@ dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.fold");
 
 /*=====
-dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
 	//	summary:
 	//		Additional arguments for tooltip actions.
 
@@ -40,7 +40,7 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 
 	var df = dojox.lang.functional, m = dojox.gfx.matrix, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
-	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.Base, {
+	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create an action on a plot where a tooltip is shown when hovering over an element.
 
@@ -141,7 +141,7 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 			}
 			
 			// adjust relative coordinates to absolute, and remove fractions
-			var lt = dojo.coords(this.chart.node, true);
+			var lt = this.chart.getCoords();
 			aroundRect.x += lt.x;
 			aroundRect.y += lt.y;
 			aroundRect.x = Math.round(aroundRect.x);

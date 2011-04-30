@@ -1,11 +1,11 @@
 dojo.provide("dojox.charting.action2d.Shake");
 
-dojo.require("dojox.charting.action2d.Base");
+dojo.require("dojox.charting.action2d.PlotAction");
 dojo.require("dojox.gfx.matrix");
 dojo.require("dojo.fx");
 
 /*=====
-dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
 	//	summary:
 	//		Additional arguments for highlighting actions.
 
@@ -19,7 +19,7 @@ dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.
 		m = dojox.gfx.matrix,
 		gf = dojox.gfx.fx;
 
-	dojo.declare("dojox.charting.action2d.Shake", dojox.charting.action2d.Base, {
+	dojo.declare("dojox.charting.action2d.Shake", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create a shaking action for use on an element in a chart.
 

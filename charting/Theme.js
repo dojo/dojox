@@ -12,7 +12,7 @@ dojo.declare("dojox.charting.Theme", null, {
 	//
 	//	description:
 	//		While you can set up style definitions on a chart directly (usually through the various add methods
-	//		on a dojox.charting.Chart2D object), a Theme simplifies this manual setup by allowing you to
+	//		on a dojox.charting.Chart object), a Theme simplifies this manual setup by allowing you to
 	//		pre-define all of the various visual parameters of each element in a chart.
 	//
 	//		Most of the properties of a Theme are straight-forward; if something is line-based (such as
@@ -99,6 +99,23 @@ dojo.declare("dojox.charting.Theme", null, {
 	//	|		fill:    "#ccc",							// fill if needed
 	//	|		font:    "normal normal normal 8pt Tahoma",	// label
 	//	|		fontColor: "#000"
+	//	|	},
+	//	|   indicator: {
+	//	|		lineStroke:  {width: 1.5, color: "#333"},		// line
+	//	|		lineOutline: {width: 0.1, color: "#ccc"},		// line outline
+	//	|		lineShadow: null,								// no line shadow
+	//	|		stroke:  {width: 1.5, color: "#333"},			// label background stroke
+	//	|		outline: {width: 0.1, color: "#ccc"},			// label background outline
+	//	|		shadow: null,									// no label background shadow
+	//	|		fill:  "#ccc",									// label background fill
+	//	|		radius: 3,										// radius of the label background
+	//	|		font:    "normal normal normal 10pt Tahoma",	// label font
+	//	|		fontColor: "#000"								// label color
+	//	|		markerFill:    "#ccc",							// marker fill
+	//	|		markerSymbol:  "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",	// marker symbol
+	//	|		markerStroke:  {width: 1.5, color: "#333"},		// marker stroke
+	//	|		markerOutline: {width: 0.1, color: "#ccc"},		// marker outline
+	//	|		markerShadow: null,								// no marker shadow
 	//	|	}
 	//
 	//	example:
@@ -119,7 +136,7 @@ dojo.declare("dojox.charting.Theme", null, {
 
 		// populate theme with defaults updating them if needed
 		var def = dojox.charting.Theme.defaultTheme;
-		dojo.forEach(["chart", "plotarea", "axis", "series", "marker"], function(name){
+		dojo.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
 			this[name] = dojo.delegate(def[name], kwArgs[name]);
 		}, this);
 
@@ -164,6 +181,7 @@ dojo.declare("dojox.charting.Theme", null, {
 			// individual arrays
 			colors: this.colors,
 			markers: this.markers,
+			indicator: this.indicator,
 			seriesThemes: this.seriesThemes,
 			markerThemes: this.markerThemes,
 			// flags
@@ -384,7 +402,7 @@ dojo.declare("dojox.charting.Theme", null, {
 	},
 
 	inspectObjects: function(f){
-		dojo.forEach(["chart", "plotarea", "axis", "series", "marker"], function(name){
+		dojo.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
 			f(this[name]);
 		}, this);
 		if(this.seriesThemes){
@@ -540,6 +558,23 @@ dojo.mixin(dojox.charting.Theme, {
 			fill:    "#ccc",							// fill if needed
 			font:    "normal normal normal 8pt Tahoma",	// label
 			fontColor: "#000"
+		},
+		indicator: {
+			lineStroke:  {width: 1.5, color: "#333"},		
+			lineOutline: {width: 0.1, color: "#ccc"},		
+			lineShadow: null,
+			stroke:  {width: 1.5, color: "#333"},		
+			outline: {width: 0.1, color: "#ccc"},		
+			shadow: null,								
+			fill : "#ccc",
+			radius: 3,
+			font:    "normal normal normal 10pt Tahoma",	
+			fontColor: "#000",							
+			markerFill:    "#ccc",							
+			markerSymbol:  "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",			
+			markerStroke:  {width: 1.5, color: "#333"},		
+			markerOutline: {width: 0.1, color: "#ccc"},		
+			markerShadow: null								
 		}
 	},
 

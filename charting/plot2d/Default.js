@@ -149,11 +149,11 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			// animation properties
 			this.animate = this.opt.animate;
 		},
-		
+
 		createPath: function(run, creator, params){
 			var path;
 			if(this.opt.enableCache && run._pathFreePool.length > 0){
-				path = run._pathFreePool.shift();
+				path = run._pathFreePool.pop();
 				path.setShape(params);
 				// was cleared, add it back
 				creator.add(path);

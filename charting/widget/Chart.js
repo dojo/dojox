@@ -31,7 +31,9 @@ dojo.require("dojox.lang.functional");
 		// methods
 		
 		buildRendering: function(){
-			var n = this.domNode = this.srcNodeRef;
+			this.inherited(arguments);
+			
+			n = this.domNode;
 			
 			// collect chart parameters
 			var axes    = d.query("> .axis", n).map(collectAxisParams).filter(notNull),
@@ -59,7 +61,7 @@ dojo.require("dojox.lang.functional");
 			});
 			
 			this.actions = actions.map(function(action){
-				return new action.action(c, action.plot, action.kwArgs)
+				return new action.action(c, action.plot, action.kwArgs);
 			});
 			
 			var render = df.foldl(series, function(render, series){

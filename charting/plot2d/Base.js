@@ -49,6 +49,58 @@ dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charti
 		}
 		return this;	//	dojox.charting.plot2d.Base
 	},
+	toPage: function(coord){
+		//	summary:
+		//		Compute page coordinates from plot axis data coordinates.
+		//	coord: Object?
+		//		The coordinates in plot axis data coordinate space. For cartesian charts that is of the following form:
+		//			`{ hAxisName: 50, vAxisName: 200 }`
+		//		If not provided return the tranform method instead of the result of the transformation.
+		//	returns: Object
+		//		The resulting page pixel coordinates. That is of the following form:
+		//			`{ x: 50, y: 200 }`
+		var ah = this._hAxis, av = this._vAxis, 
+			sh = ah.getScaler(), sv = av.getScaler(),  
+			th = sh.scaler.getTransformerFromModel(sh),
+			tv = sv.scaler.getTransformerFromModel(sv),
+			c = this.chart.getCoords(),
+			o = this.chart.offsets, dim = this.chart.dim;
+		var t = function(coord){
+			var r = {};
+			r.x = th(coord[ah.name]) + c.x + o.l;
+			r.y = c.y + dim.height - o.b - tv(coord[av.name]);
+			return r;
+		};
+		// if no coord return the function so that we can capture the current transforms
+		// and reuse them later on
+		return coord?t(coord):t;
+	},
+	toData: function(coord){
+		//	summary:
+		//		Compute plot axis data coordinates from page coordinates.
+		//	coord: Object
+		//		The pixel coordinate in page coordinate space. That is of the following form:
+		//			`{ x: 50, y: 200 }`
+		//		If not provided return the tranform method instead of the result of the transformation.
+		//	returns: Object
+		//		The resulting plot axis data coordinates. For cartesian charts that is of the following form:
+		//			`{ hAxisName: 50, vAxisName: 200 }`
+		var ah = this._hAxis, av = this._vAxis, 
+			sh = ah.getScaler(), sv = av.getScaler(),  
+			th = sh.scaler.getTransformerFromPlot(sh),
+			tv = sv.scaler.getTransformerFromPlot(sv),
+			c = this.chart.getCoords(),
+			o = this.chart.offsets, dim = this.chart.dim;
+		var t = function(coord){
+			var r = {};
+			r[ah.name] = th(coord.x - c.x - o.l);
+			r[av.name] = tv(c.y + dim.height - coord.y  - o.b);
+			return r;
+		};
+		// if no coord return the function so that we can capture the current transforms
+		// and reuse them later on
+		return coord?t(coord):t;
+	},
 	addSeries: function(run){
 		//	summary:
 		//		Add a data series to this plot.

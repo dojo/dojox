@@ -85,7 +85,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 		createRect: function(run, creator, params){
 			var rect;
 			if(this.opt.enableCache && run._rectFreePool.length > 0){
-				rect = run._rectFreePool.shift();
+				rect = run._rectFreePool.pop();
 				rect.setShape(params);
 				// was cleared, add it back
 				creator.add(rect);

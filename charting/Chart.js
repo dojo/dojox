@@ -286,6 +286,15 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			this.dirty = true;
 			return this;	//	dojox.charting.Chart
 		},
+		getPlot: function(name){
+			//	summary:
+			//		Get the given plot, by name.
+			//	name: String
+			//		The name the plot was defined by.
+			//	returns: dojox.charting.plot2d.Base
+			//		The plot.
+			return this.stack[this.plots[name]];
+		},
 		removePlot: function(name){
 			//	summary:
 			//		Remove the plot defined using name from the chart's plot stack.
@@ -434,6 +443,15 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			if(!("ymin" in run) && "min" in run){ run.ymin = run.min; }
 			if(!("ymax" in run) && "max" in run){ run.ymax = run.max; }
 			return this;	//	dojox.charting.Chart
+		},
+		getSeries: function(name){
+			//	summary:
+			//		Get the given series, by name.
+			//	name: String
+			//		The name the series was defined by.
+			//	returns: dojox.charting.Series
+			//		The series.
+			return this.series[this.runs[name]];
 		},
 		removeSeries: function(name){
 			//	summary:
@@ -598,11 +616,16 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			}
 			// in all cases take back the computed box
 			box = dojo.marginBox(this.node);
-			// and set it on the surface
-			this.surface.setDimensions(box.w, box.h);
-			this.dirty = true;
-			this.coords = null;
-			return this.render();	//	dojox.charting.Chart
+			var d = this.surface.getDimensions();
+			if(d.width != box.w || d.height != box.h){
+				// and set it on the surface
+				this.surface.setDimensions(box.w, box.h);
+				this.dirty = true;
+				this.coords = null;
+				return this.render();	//	dojox.charting.Chart				
+			}else{
+				return this;
+			}
 		},
 		getGeometry: function(){
 			//	summary:
@@ -644,7 +667,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 					if(plot.hAxis == name || plot.vAxis == name){
 						plot.zoom = zoom;
 					}
-				})
+				});
 			}
 			return this;	//	dojox.charting.Chart
 		},

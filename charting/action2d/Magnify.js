@@ -1,11 +1,11 @@
 dojo.provide("dojox.charting.action2d.Magnify");
 
-dojo.require("dojox.charting.action2d.Base");
+dojo.require("dojox.charting.action2d.PlotAction");
 dojo.require("dojox.gfx.matrix");
 dojo.require("dojo.fx");
 
 /*=====
-dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
 	//	summary:
 	//		Additional arguments for highlighting actions.
 
@@ -19,7 +19,7 @@ dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2
 		m = dojox.gfx.matrix,
 		gf = dojox.gfx.fx;
 
-	dojo.declare("dojox.charting.action2d.Magnify", dojox.charting.action2d.Base, {
+	dojo.declare("dojox.charting.action2d.Magnify", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create an action that magnifies the object the action is applied to.
 

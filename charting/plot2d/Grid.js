@@ -199,7 +199,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 		createLine: function(creator, params){
 			var line;
 			if(this.opt.enableCache && this._lineFreePool.length > 0){
-				line = this._lineFreePool.shift();
+				line = this._lineFreePool.pop();
 				line.setShape(params);
 				// was cleared, add it back
 				creator.add(line);

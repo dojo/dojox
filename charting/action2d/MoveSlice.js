@@ -1,6 +1,6 @@
 dojo.provide("dojox.charting.action2d.MoveSlice");
 
-dojo.require("dojox.charting.action2d.Base");
+dojo.require("dojox.charting.action2d.PlotAction");
 dojo.require("dojox.gfx.matrix");
 
 dojo.require("dojox.lang.functional");
@@ -8,7 +8,7 @@ dojo.require("dojox.lang.functional.scan");
 dojo.require("dojox.lang.functional.fold");
 
 /*=====
-dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
 	//	summary:
 	//		Additional arguments for highlighting actions.
 
@@ -28,7 +28,7 @@ dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.actio
 		gf = dojox.gfx.fx,
 		df = dojox.lang.functional;
 
-	dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.Base, {
+	dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create an action for a pie chart that moves and scales a pie slice.
 

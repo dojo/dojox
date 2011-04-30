@@ -65,7 +65,7 @@ dojo.require("dojox.lang.functional.reversed");
 		createRect: function(run, creator, params){
 			var rect;
 			if(this.opt.enableCache && run._rectFreePool.length > 0){
-				rect = run._rectFreePool.shift();
+				rect = run._rectFreePool.pop();
 				rect.setShape(params);
 				// was cleared, add it back
 				creator.add(rect);

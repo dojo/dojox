@@ -1,10 +1,10 @@
 dojo.provide("dojox.charting.action2d.Highlight");
 
-dojo.require("dojox.charting.action2d.Base");
+dojo.require("dojox.charting.action2d.PlotAction");
 dojo.require("dojox.color");
 
 /*=====
-dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__BaseCtorArgs, {
+dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
 	//	summary:
 	//		Additional arguments for highlighting actions.
 
@@ -43,7 +43,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 			return c.fromHsl(x);
 		};
 
-	dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.Base, {
+	dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Creates a highlighting action on a plot, where an element on that plot
 		//		has a highlight on it.
