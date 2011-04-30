@@ -247,8 +247,8 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 			return true;
 		}
 		
-		// Only return avalable if the editor is focused.
-		this.currentlyAvailable = this.editor._focused ? this.editor.hasAncestorElement("table") : false;
+		// Only return available if the editor is focused.
+		this.currentlyAvailable = this.editor.focused ? this.editor.hasAncestorElement("table") : false;
 		
 		if(this.currentlyAvailable){
 			this.connectTableKeys();

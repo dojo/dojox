@@ -96,7 +96,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		}
 	},
 	_delayedCellFocus: function(){
-		if(this.isNavHeader()||!this.grid._focused){
+		if(this.isNavHeader()||!this.grid.focused){
 				return;
 		}
 		var n = this.cell && this.cell.getNode(this.rowIndex);

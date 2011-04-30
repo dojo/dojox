@@ -198,7 +198,7 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	_refreshState: function(){
 		// summary:
 		//		Validate if selection changes.
-		this.validate(this._focused);
+		this.validate(this.focused);
 	},
 
 	onChange: function(newValue){

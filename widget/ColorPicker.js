@@ -545,7 +545,7 @@ dojo.require("dojo.i18n");
 		focus: function(){
 			// summary:
 			//		Put focus on this widget, only if focus isn't set on it already.
-			if(!this._focused){
+			if(!this.focused){
 				dijit.focus(this.focusNode);
 			}
 		},
