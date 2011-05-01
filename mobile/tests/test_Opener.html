@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html style="overflow:hidden;">
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<title>test Opener</title>
+	<link href="../themes/common/SpinWheel.css" rel="stylesheet">
+	<link href="../themes/common/Opener.css" rel="stylesheet">
+	<style>
+		.mblTooltip.mblOpener DIV[label='Cancel'] {
+			display: none;
+		}
+	</style>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+
+	<script language="JavaScript" type="text/javascript">
+		//dojo.require("dojo.parser"); // Use the lightweight parser.
+		dojo.require("dojox.mobile.parser");
+		dojo.require("dojox.mobile");
+		dojo.require("dojox.mobile.deviceTheme");
+		dojo.require("dojox.mobile.SpinWheelDatePicker");
+		dojo.require("dojox.mobile.Opener");
+		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
+		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
+
+		function getDate(node, v){
+			if(v === true){ // Done clicked
+				var w = dijit.byId("spin1");
+				var date = w.getValue().join('-');
+				node.value = date;
+			}
+		}
+		function setDate(node){
+			var v = node.value.split(/-/);
+			if(v.length == 3){
+				var w = dijit.byId("spin1");
+				w.setValue(v);
+			}
+		}
+	</script>
+</head>
+<body>
+	<br>
+	<center style="width:100%;">
+		<label for="date1">Enter a date:&nbsp;</label>
+		<input id="date1" readOnly value=""
+			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
+	</center>
+	<center style="position:fixed;bottom:0;width:100%;">
+		<label for="date2">Enter another date:&nbsp;</label>
+		<input id="date2" readOnly value=""
+			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
+	</center>
+
+	<div id="datePicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getDate, onShow:setDate">
+ 		<h1 dojoType="dojox.mobile.Heading" label="Date Picker">
+			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('datePicker').hide(true)"></div>
+			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('datePicker').hide(false)"></div>
+		</h1>
+		<div id="spin1" dojoType="dojox.mobile.SpinWheelDatePicker"></div>
+	</div>
+</body>
+</html>

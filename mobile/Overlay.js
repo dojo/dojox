@@ -1,54 +1,64 @@
-define("dojox/mobile/Overlay", ["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(dojo, dijit, dojox) {
-dojo.experimental("dojox.mobile.Overlay");
+define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(dojo, dijit, dojox, win, WidgetBase) {
 
-dojo.declare(
-	"dojox.mobile.Overlay", 
-	[dijit._WidgetBase],
-	{
+	return dojo.declare("dojox.mobile.Overlay", WidgetBase, {
 		// summary:
 		//		A non-templated widget that animates up from the bottom, overlaying the current content
 		//
 
 		baseClass: "mblOverlay mblOverlayHidden",
 
-		reposition: function(){
-			var p = dojo.byId("customPicker");
-			var vp = dojo.window.getBox();
-			var innerHeight = dojo.global.innerHeight || vp.h;
-			var bot = vp.t + innerHeight - vp.h;
-			dojo.removeClass(this.domNode, "mblOverlayTransition");
-			dojo.style(this.domNode, { bottom: -bot + "px" });
-		},
-
-		show: function(){
-			this.reposition();
-			dojo.replaceClass(this.domNode, ["mblOverlayTransition", "mblOverlayVisible"], "mblOverlayHidden");
-			dojo.style(this.domNode, { maxHeight: this.domNode.scrollHeight + "px" });
+		show: function(/*DomNode?*/aroundNode){
+			// summary:
+			//		Scroll the overlay up into view
+			var vp, innerHeight, bot;
+			var reposition = dojo.hitch(this, function(){
+				vp = dojo.window.getBox();
+				innerHeight = dojo.global.innerHeight || vp.h;
+				bot = vp.t + innerHeight - vp.h;
+				dojo.style(this.domNode, { bottom: -bot + "px" });
+			});
+			reposition();
+			if(aroundNode){
+				var popupPos = dojo.position(this.domNode);
+				var aroundPos = dojo.position(aroundNode);
+				if(popupPos.y < aroundPos.y){ // if the aroundNode is under the popup, try to scroll it up
+					dojo.global.scrollBy(0, aroundPos.y + aroundPos.h - popupPos.y);
+					reposition();
+				}
+			}
+			dojo.replaceClass(this.domNode, ["mblCoverv", "mblIn"], ["mblOverlayHidden", "mblRevealv", "mblOut", "mblReverse"]);
 			var timeoutHandler = null;
 			this._moveHandle = this.connect(dojo.doc.documentElement, "ontouchmove", function(){
 				if(timeoutHandler){
 					clearTimeout(timeoutHandler);
 				}
-				timeoutHandler = setTimeout(dojo.hitch(this, function(){
-					this.reposition();
+				timeoutHandler = setTimeout(function(){
+					reposition();
 					timeoutHandler = null;
-				}), 0);
+				}, 0);
 			});
 		},
 
 		hide: function(){
+			// summary:
+			//		Scroll the overlay down and then make it invisible
 			if(this._moveHandle){
 				this.disconnect(this._moveHandle);
 				this._moveHandle = null;
 			}
-			dojo.removeClass(this.domNode, "mblOverlayTransition");
-			dojo.style(this.domNode, { maxHeight: this.domNode.offsetHeight + "px" }); // set to actual size so that the transition is smoother
-			dojo.addClass(this.domNode, "mblOverlayTransition");
-			dojo.style(this.domNode, { maxHeight: "0px" });
-			dojo.replaceClass(this.domNode, "mblOverlayHidden", "mblOverlayVisible");
-		}
-	}
-);
+			if(dojo.isWebKit){
+				var handler = this.connect(this.domNode, "webkitAnimationEnd", function(){
+					this.disconnect(handler);
+					dojo.addClass(this.domNode, "mblOverlayHidden");
+				});
+			}else{
+				dojo.addClass(this.domNode, "mblOverlayHidden");
+			}
+			dojo.replaceClass(this.domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn"]);
+		},
 
-return dojox.mobile.Overlay;
+		onBlur: function(/*Event*/e){
+			return false; // touching outside the overlay area does not call hide()
+		}
+	});
 });

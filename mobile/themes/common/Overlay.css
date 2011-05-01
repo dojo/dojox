@@ -1,18 +1,17 @@
 /* dojox.mobile.Overlay */
+@import url("transitions/coverv.css");
+@import url("transitions/revealv.css");
 .mblOverlay {
 	position: fixed;
 	#position: absolute;
 	left: 0;
 	bottom: 0;
 	margin: 0;
-	max-height: 0px;
-	overflow: hidden;
 	width: 100%;
+	text-align: center;
+	text-align: -webkit-center;
 	background: -webkit-gradient(linear, left top, left bottom, from(#ABABAB), to(#FEFEFE));
 }
-.mblOverlayTransition {
-	-webkit-transition-duration: 600ms;
-}
 .mblOverlayHidden {
-	#height: 0;
+	visibility: hidden;
 }

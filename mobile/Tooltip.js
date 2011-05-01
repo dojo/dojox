@@ -1,4 +1,4 @@
-define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, place,WidgetBase) {
+define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, place, WidgetBase) {
 
 	return dojo.declare("dojox.mobile.Tooltip", WidgetBase, {
 		// summary:
@@ -8,6 +8,8 @@ define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, 
 		baseClass: "mblTooltip mblTooltipHidden",
 
 		show: function(/*DomNode*/ aroundNode, positions){
+			// summary:
+			//		Pop up the tooltip and point to aroundNode using the best position
 			var connectorClasses = {
 				"MRM": "mblTooltipAfter",
 				"MLM": "mblTooltipBefore",
@@ -45,6 +47,8 @@ define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, 
 		},
 
 		hide: function(){
+			// summary:
+			//		Pop down the tooltip
 			if(this.anchor){
 				this.anchor.removeChild(this.innerArrow);
 				this.anchor.removeChild(this.arrow);
@@ -52,6 +56,10 @@ define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, 
 				this.anchor = this.arrow = this.innerArrow = undefined;
 			}
 			dojo.replaceClass(this.domNode, "mblTooltipHidden", "mblTooltipVisible");
+		},
+
+		onBlur: function(/*Event*/e){
+			return true; // touching outside the overlay area does call hide() by default
 		},
 
 		destroy: function(){

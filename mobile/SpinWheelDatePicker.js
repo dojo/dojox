@@ -62,12 +62,7 @@ define(["dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function
 			var slots = this.slots;
 			var now = new Date();
 			var monthStr = dojo.date.locale.format(now, {datePattern:"MMM", selector:"date"});
-			slots[0].setValue(now.getFullYear());
-			slots[0].setColor(now.getFullYear());
-			slots[1].setValue(monthStr);
-			slots[1].setColor(monthStr);
-			slots[2].setValue(now.getDate());
-			slots[2].setColor(now.getDate());
+			this.setValue([now.getFullYear(), monthStr, now.getDate()]);
 		},
 
 		onMonthSet: function(){

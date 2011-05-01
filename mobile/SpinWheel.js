@@ -30,6 +30,29 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 			}, 0);
 		},
 
+		getValue: function(){
+			// return array of slot values
+			var a = [];
+			dojo.forEach(this.getChildren(), function(w){
+				if(w instanceof dojox.mobile.SpinWheelSlot){
+					a.push(w.getValue());
+				}
+			}, this);
+			return a;
+		},
+
+		setValue: function(a){
+			// set slot values from array
+			var i = 0;
+			dojo.forEach(this.getChildren(), function(w){
+				if(w instanceof dojox.mobile.SpinWheelSlot){
+					w.setValue(a[i]);
+					w.setColor(a[i]);
+					i++;
+				}
+			}, this);
+		},
+
 		reset: function(){
 			dojo.forEach(this.getChildren(), function(w){
 				if(w instanceof dojox.mobile.SpinWheelSlot){
