@@ -6,9 +6,18 @@
 	<title>test Opener</title>
 	<link href="../themes/common/SpinWheel.css" rel="stylesheet">
 	<link href="../themes/common/Opener.css" rel="stylesheet">
+	<link href="../themes/iphone/base.css" rel="stylesheet"></link>
+	<link href="../themes/iphone/IconContainer.css" rel="stylesheet"></link>
+	<link href="mblDijit.css" rel="stylesheet"></link>
 	<style>
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
+		}
+		#cal>thead {
+			display: table-header-group;
+			vertical-align: middle;
+			border-color: inherit;
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), to(#CCCCD1));
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -20,6 +29,8 @@
 		dojo.require("dojox.mobile.deviceTheme");
 		dojo.require("dojox.mobile.SpinWheelDatePicker");
 		dojo.require("dojox.mobile.Opener");
+		dojo.require("dijit.Calendar");
+		dojo.require("dijit.ColorPalette");
 		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
@@ -38,17 +49,49 @@
 				w.setValue(v);
 			}
 		}
+
+		function getDate2(node, v){
+			if(v === true){ // Done clicked
+				var w = dijit.byId("cal");
+				var date = w.get("value");
+				node.value = date;
+			}
+		}
+		function setDate2(node){
+			var v = node.value.split(/-/);
+			if(v.length == 3){
+				var w = dijit.byId("cal");
+				w.setValue(v);
+			}
+		}
+		function getColor(node, v){
+			if(v === true){ // Done clicked
+				var w = dijit.byId("colorPalette");
+				var color = w.get("value");
+				node.value = color;
+			}
+		}
+		function setColor(node){
+			//var w = dijit.byId("colorPalette");
+			//w.setValue(node.value);
+		}
 	</script>
 </head>
 <body>
 	<br>
 	<center style="width:100%;">
-		<label for="date1">Enter a date:&nbsp;</label>
+		<label for="date1">Date (SpinWheel):&nbsp;</label>
 		<input id="date1" readOnly value=""
 			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
+		<label for="date3">Date (Calendar):&nbsp;</label>
+		<input id="date3" readOnly value=""
+			onclick="dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before'])">
+		<label for="color1">Color:&nbsp;</label>
+		<input id="color1" readOnly value=""
+			onclick="dijit.byId('colorPicker').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
 	<center style="position:fixed;bottom:0;width:100%;">
-		<label for="date2">Enter another date:&nbsp;</label>
+		<label for="date2">Date (SpinWheel above):&nbsp;</label>
 		<input id="date2" readOnly value=""
 			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
@@ -62,5 +105,26 @@
 		</h1>
 		<div id="spin1" dojoType="dojox.mobile.SpinWheelDatePicker"></div>
 	</div>
+
+	<div id="calPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getDate2, onShow:setDate2">
+ 		<h1 dojoType="dojox.mobile.Heading" label="Select a Date">
+			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('calPicker').hide(true)"></div>
+			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('calPicker').hide(false)"></div>
+		</h1>
+		<div id="cal" dojoType='dijit.Calendar'></div>
+	</div>
+
+	<div id="colorPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor, onShow:setColor">
+ 		<h1 dojoType="dojox.mobile.Heading" label="Select a Color">
+			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('colorPicker').hide(true)"></div>
+			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('colorPicker').hide(false)"></div>
+		</h1>
+		<div id="colorPalette" dojoType='dijit.ColorPalette'></div>
+	</div>
+
 </body>
 </html>

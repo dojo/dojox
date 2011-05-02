@@ -75,13 +75,6 @@
 	text-shadow: rgba(247,247,247,0.6) 0px 1px 0px;
 }
 
-#cal>thead {
-	display: table-header-group;
-	vertical-align: middle;
-	border-color: inherit;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), to(#CCCCD1));
-}
-
 .dijitCalendarHoveredDate .dijitCalendarDateLabel {
 	background-color: #ABD6FF;
 	border: solid 1px #769DC0;
