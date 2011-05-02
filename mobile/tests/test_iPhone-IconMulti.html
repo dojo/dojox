@@ -6,27 +6,8 @@
 		<title>Icon Container (Multi Apps)</title>
 		<link href="../themes/iphone/base.css" rel="stylesheet"></link>
 		<link href="../themes/iphone/IconContainer.css" rel="stylesheet"></link>
-		<link href="../../../dijit/themes/claro/claro.css" rel="stylesheet"></link>
-		<style>
-			/*Modify the color pallette for mobile*/
-			.claro .dijitColorPalette {
-				border: 0 solid #B5BCC7;
-				outline: 0;
-				background: none;
-			}
-			.dijitColorPalette .dijitColorPaletteSwatch {
-				width: 25px;
-				height: 25px;
-				border-radius: 4px;
-				-moz-border-radius: 4px;
-			}
-			
-			.claro .dijitColorPalette .dijitPaletteImg {
-				border: 1px solid lightGrey;
-				border-radius: 4px;
-				-moz-border-radius: 4px;
-			}
-		</style>
+		<!-- mblDijit stylesheet linked in for styled dijit widgets used in the Icon Items-->
+		<link href="mblDijit.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -36,18 +17,18 @@
 			dojo.require("dojox.mobile");
 			dojo.require("dojox.mobile.IconContainer");
 			dojo.require("dojox.mobile.IconItem");
-			dojo.require("dijit._Calendar");
+			dojo.require("dijit.Calendar");
 			dojo.require("dijit.ColorPalette");
 			dojo.require("dijit.ProgressBar");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		</script>
 	</head>
-	<body class="claro" style="background-color:white">
+	<body style="background-color:white">
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container (Multi Apps)</h1>
 			<ul dojoType="dojox.mobile.IconContainer" transition="flip">
-				<li dojoType="dojox.mobile.IconItem" label="Calendar" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo._base.query">
-					<div dojoType='dijit._Calendar'></div>
+				<li dojoType="dojox.mobile.IconItem" label="Calendar" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo.query">
+					<div id="cal" dojoType='dijit.Calendar'></div>
 				</li>
 				<li dojoType="dojox.mobile.IconItem" label="Color Palette" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo._base.Color">
 					<div dojoType='dijit.ColorPalette'></div>
