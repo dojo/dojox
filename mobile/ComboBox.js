@@ -8,9 +8,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], funct
 		// dropDownClass: [protected extension] String
 		//		Name of the dropdown widget class used to select a date/time.
 		//		Subclasses should specify this.
-		//
-		//dropDownClass: "dojox.mobile._ComboBoxMenu",
-		dropDownClass: ComboBoxMenu,
+		dropDownClass: "dojox.mobile._ComboBoxMenu",
 
 		// initially disable selection since iphone displays selection handles that makes it hard to pick from the list
 		selectOnClick: false,
