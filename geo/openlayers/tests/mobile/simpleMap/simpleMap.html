@@ -1,0 +1,87 @@
+<html>
+<head profile="http://www.w3.org/2002/12/namespace">
+<link rel="stylesheet" type="text/css" href="../../../../../../dijit/themes/dijit.css">
+<link rel="stylesheet" type="text/css" href="../../../../../../dijit/themes/tundra/tundra.css">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<title>Simple Map</title>
+<link href="../../../../../../dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+<link href="../../../../../../dojox/mobile/themes/buttons.css" rel="stylesheet"></link>
+<link href="../../../../../../dojox/mobile/themes/buttons-compat.css" rel="stylesheet"></link>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<!--  OpenLayers
+<script type="text/javascript" src="../../../../openlayers_current/lib/OpenLayers.js"></script>
+-->
+
+<!-- hosted version -->
+<script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
+
+<script type="text/javascript">
+	var djConfig = {
+		debugAtAllCosts : true,
+		isDebug : true,
+		locale : 'en',
+		parseOnLoad : true
+	};
+</script>
+
+<script type="text/javascript" src="../../../../../../dojo/dojo.js"></script>
+
+<script type="text/javascript">
+	dojo.connect(window, "onresize", updateMap);
+
+	dojo.require("dojox.geo.openlayers.widget.Map");
+	dojo.require("dojox.mobile.parser");
+	dojo.require("dojox.mobile");
+	dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+	dojo.require("dojox.geo.openlayers.tests.mobile.simpleMap.NavigationControl");
+
+	var map;
+
+	dojo.addOnLoad(function(){
+		var options = {
+			baseLayerName : "TheMap",
+			touchHandler : true,
+            baseLayerType : dojox.geo.openlayers.ARCGIS
+		};
+
+		map = new dojox.geo.openlayers.widget.Map(options);
+		dojo.place(map.domNode, "map");
+		map.startup();
+		map.map.fitTo([ -150, 70, 150, -70 ]);
+
+		var olMap = map.map.getOLMap();
+		var ctrl = new dojox.geo.openlayers.tests.mobile.simpleMap.NavigationControl({
+			dojoMap : map
+		});
+		olMap.addControl(ctrl);
+		
+        // FIXME
+		if (dojo.isWebKit)
+			setTimeout(updateMap, 1000);
+	});
+
+	function updateMap(){
+		var olm = map.map.getOLMap();
+
+		var center = olm.getCenter();
+
+		if (center != null) {
+			var zoom = olm.getZoom();
+			olm.zoom = null;
+			olm.setCenter(center, zoom);
+		}
+	}
+</script>
+
+</head>
+<body class="tundra">
+
+<div id="map" style="background-color: #b5d0d0;"></div>
+
+</body>
+</html>
+
