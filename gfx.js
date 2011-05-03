@@ -63,6 +63,8 @@ dojo.loadInit(function(){
 		}
 		break;
 	}
+	if (dojox.gfx.renderer === 'canvas' && dojo.config.canvasEvent !== false)
+		dojox.gfx.renderer = "canvasWithEvents";
 	
 	if(dojo.config.isDebug){
 		console.log("gfx renderer = " + gfx.renderer);
