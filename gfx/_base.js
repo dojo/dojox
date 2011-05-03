@@ -216,7 +216,7 @@ dojo.mixin(dojox.gfx, {
 		}
 	})(),
 
-	normalizeColor: function(/*Color*/ color){
+	normalizeColor: function(/*dojo.Color|Array|string|Object*/ color){
 		//	summary:
 		// 		converts any legal color representation to normalized
 		// 		dojo.Color object

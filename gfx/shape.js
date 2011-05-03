@@ -104,7 +104,7 @@ dojo.declare("dojox.gfx.shape.Shape", null, {
 		if(!b){
 			return null;	// null
 		}
-		var m = this._getRealMatrix();
+		var m = this._getRealMatrix(),
 			gm = dojox.gfx.matrix;
 		return [	// Array
 				gm.multiplyPoint(m, b.x, b.y),
@@ -468,10 +468,7 @@ dojo.declare("dojox.gfx.shape.Surface", null, {
 		// asynchronously, used only when isLoaded is false, required
 		// only for Silverlight.
 	},
-	whenLoaded: function(
-		/*Object?*/ context,
-		/*Function|String*/ method
-	){
+	whenLoaded: function(/*Object|Null*/ context, /*Function|String*/ method){
 		var f = dojo.hitch(context, method);
 		if(this.isLoaded){
 			f(this);
