@@ -2,6 +2,45 @@ dojo.provide("dojox.gfx.shape");
 
 dojo.require("dojox.gfx._base");
 
+(function(){
+	// a set of ids (keys=type)
+	var _ids = {};
+	// a simple set impl to map shape<->id
+	var registry = {};
+	
+	dojox.gfx.shape.register = function(/*dojox.gfx.shape.Shape*/shape){
+		// summary: 
+		//		Register the specified shape into the gfx registry.
+		// shape: dojox.gfx.Shape
+		//		The shape to register.
+		// returns:
+		//		The unique id associated with this shape.
+		// the id pattern : type+number (ex: Rect0,Rect1,etc)
+		var t = shape.declaredClass.split('.').pop();
+		var i = t in _ids ? ++_ids[t] : ((_ids[t] = 0));
+		var uid = t+i;
+		registry[uid] = shape;
+		return uid;
+	};
+	
+	dojox.gfx.shape.byId = function(/*String*/id){
+		// summary: 
+		//		Returns the shape that matches the specified id.
+		// id: String
+		//		The unique identifier.
+		return registry[id]; //dojox.gfx.shape.Shape
+	};
+	
+	dojox.gfx.shape.dispose = function(/*dojox.gfx.shape.Shape*/shape){
+		// summary: 
+		//		Removes the specified shape from the registry.
+		// shape: dojox.gfx.shape.Shape
+		//		The shape to unregister.
+		delete registry[shape.getUID()];
+	};
+	
+})();
+
 dojo.declare("dojox.gfx.shape.Shape", null, {
 	// summary: a Shape object, which knows how to apply
 	// graphical attributes and transformations
@@ -49,7 +88,12 @@ dojo.declare("dojox.gfx.shape.Shape", null, {
 		// parentMatrix: dojox.gfx.Matrix2D
 		//	a transformation matrix inherited from the parent
 		this.parentMatrix = null;
-	},
+		
+		var uid = dojox.gfx.shape.register(this);
+		this.getUID = function(){
+			return uid;
+		}
+	},	
 
 	// trivial getters
 
@@ -325,10 +369,10 @@ dojox.gfx.shape._eventsProcessing = {
 		// summary: connects a handler to an event on this shape
 
 		// COULD BE RE-IMPLEMENTED BY THE RENDERER!
-
-		return arguments.length > 2 ?	// Object
-			dojo.connect(this.getEventSource(), name, object, method) :
-			dojo.connect(this.getEventSource(), name, object);
+		// redirect to fixCallback to normalize events and add the gfxTarget to the event. The latter
+		// is done by dojox.gfx.fixTarget which is defined by each renderer
+		return dojo.connect(this.getEventSource(), name, dojox.gfx.shape.fixCallback(this, dojox.gfx.fixTarget, object, method));
+		
 	},
 	disconnect: function(token){
 		// summary: connects a handler by token from an event on this shape
@@ -339,6 +383,40 @@ dojox.gfx.shape._eventsProcessing = {
 	}
 };
 
+dojox.gfx.shape.fixCallback = function(gfxElement, fixFunction, scope, method){
+	//  summary:
+	//      Wraps the callback to allow for tests and event normalization
+	//      before it gets invoked. This is where "fixTarget" is invoked.
+	//  gfxElement: Object
+	//      The GFX object that triggers the action (ex.: 
+	//      dojox.gfx.Surface and dojox.gfx.Shape). A new event property
+	//      "gfxTarget" is added to the event to reference this object.
+	//      for easy manipulation of GFX objects by the event handlers.
+	//  fixFunction: Function
+	//      The function that implements the logic to set the "gfxTarget"
+	//      property to the event. It should be "dojox.gfx.fixTarget" for
+	//      most of the cases
+	//  scope: Object
+	//      Optional. The scope to be used when invoking "method". If
+	//      omitted, a global scope is used.
+	//  method: Function or String
+	//      The original callback to be invoked.
+	if(!method){
+		method = scope;
+		scope = null;
+	}
+	if(dojo.isString(method)){
+		scope = scope || dojo.global;
+		if(!scope[method]){ throw(['dojox.gfx.shape.fixCallback: scope["', method, '"] is null (scope="', scope, '")'].join('')); }
+		return function(e){  
+			return fixFunction(e,gfxElement) ? scope[method].apply(scope, arguments || []) : undefined; }; // Function
+	}
+	return !scope 
+		? function(e){ 
+			return fixFunction(e,gfxElement) ? method.apply(scope, arguments) : undefined; } 
+		: function(e){ 
+			return fixFunction(e,gfxElement) ? method.apply(scope, arguments || []) : undefined; }; // Function
+};
 dojo.extend(dojox.gfx.shape.Shape, dojox.gfx.shape._eventsProcessing);
 
 dojox.gfx.shape.Container = {

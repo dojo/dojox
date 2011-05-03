@@ -260,6 +260,7 @@ dojo.require("dojox.gfx.gradient");
 			rawNode.stroked = "f";
 			rawNode.filled  = "f";
 			this.rawNode = rawNode;
+			this.rawNode.__gfxObject__ = this.getUID();
 		},
 
 		// move family
@@ -348,6 +349,7 @@ dojo.require("dojox.gfx.gradient");
 				node.arcsize = r;
 				node.style.display = "inline-block";
 				this.rawNode = node;
+				this.rawNode.__gfxObject__ = this.getUID();						
 			}else{
 				this.rawNode.arcsize = r;
 			}
@@ -1201,6 +1203,21 @@ dojo.require("dojox.gfx.gradient");
 	d.extend(vml.Surface, gs.Creator);
 	d.extend(vml.Surface, Creator);
 
+	// Mouse/Touch event
+	vml.fixTarget = function(event, gfxElement){
+		// summary: 
+		//     Adds the gfxElement to event.gfxTarget if none exists. This new 
+		//     property will carry the GFX element associated with this event.
+		// event: Object 
+		//     The current input event (MouseEvent or TouchEvent)
+		// gfxElement: Object
+		//     The GFX target element
+		if (!event.gfxTarget) {
+			event.gfxTarget = dojox.gfx.shape.byId(event.target.__gfxObject__);
+		}
+		return true;
+	};
+	
 	// see if we are required to initilize
 	if(g.loadAndSwitch === "vml"){
 		g.switchTo("vml");

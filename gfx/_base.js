@@ -369,7 +369,7 @@ dojo.mixin(dojox.gfx, {
 		if(ns){
 			dojo.forEach(["Group", "Rect", "Ellipse", "Circle", "Line",
 					"Polyline", "Image", "Text", "Path", "TextPath",
-					"Surface", "createSurface"], function(name){
+					"Surface", "createSurface", "fixTarget"], function(name){
 				dojox.gfx[name] = ns[name];
 			});
 		}

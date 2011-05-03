@@ -799,6 +799,11 @@ dojo.experimental("dojox.gfx.canvas");
 	d.extend(canvas.Surface, gs.Creator);
 	d.extend(canvas.Surface, Creator);
 	
+	// no event support -> nothing to fix. 
+	dojox.gfx.canvas.fixTarget = function(event, gfxElement){
+		return true;
+	}
+	 
 	// see if we are required to initilize
 	if(g.loadAndSwitch === "canvas"){
 		g.switchTo("canvas");
