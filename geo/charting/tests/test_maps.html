@@ -36,6 +36,7 @@
 			dojo.require("dojox.geo.charting.Map");
 			dojo.requireIf(isTouchDevice,"dojox.geo.charting.TouchInteractionSupport");
 			dojo.requireIf(!isTouchDevice,"dojox.geo.charting.MouseInteractionSupport");
+			dojo.require("dojox.geo.charting.KeyboardInteractionSupport");
 			
 			dojo.addOnLoad(function(){
 				var map = new dojox.geo.charting.Map("USStates", "../resources/data/USStates.json");
@@ -47,12 +48,15 @@
 					var touchInteraction = new dojox.geo.charting.TouchInteractionSupport(map,{});
 					touchInteraction.connect();
 				}
+				var keyboardInteraction = new dojox.geo.charting.KeyboardInteractionSupport(map, {enableZoom: true});
+        keyboardInteraction.connect();
 				dojo.connect(window,"onresize",this,function(){map.resize(true,true);});
 				
 			});
 		</script>
 	</head>
 	<body class="tundra">
+	  <p>Keyboard Tips: Use <b>TAB</b> to focus the map, then use <b>up/down/left/right</b> to go around the map, zoom in by <b>SPACE</b> and zoom out by <b>ESC</b>.</p>
 		<div class="mapContainer" style="display:block;" id="USStates"></div>
 	</body>
 </html>

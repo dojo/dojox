@@ -141,9 +141,9 @@ dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		// mouseEvent: the mouse event
 		// tags:
 		//   private
-		dojo.stopEvent(mouseEvent);
+		//dojo.stopEvent(mouseEvent);
 		
-
+		this._map.focused = true;
 		// set various status parameters
 		this._cancelMouseClick = false;
 		this._screenClickLocation.x =  mouseEvent.pageX;

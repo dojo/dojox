@@ -315,13 +315,13 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		// onAnimationEnd: function
 		//   a callback function to be executed when the animation completes (if animate set to true).
 		
-		if (!pixelMargin) {
-			var pixelMargin = 0;
+		if(!pixelMargin){
+			pixelMargin = 0;
 		}
-		var width = mapArea.w;
-		var height = mapArea.h;
-		var containerBounds = this._getContainerBounds();
-		var scale = Math.min((containerBounds.w - 2 * pixelMargin) / width,
+		var width = mapArea.w,
+			height = mapArea.h,
+			containerBounds = this._getContainerBounds(),
+			scale = Math.min((containerBounds.w - 2 * pixelMargin) / width,
 							(containerBounds.h - 2 * pixelMargin) / height);
 		
 		this.setMapCenterAndScale(mapArea.x + mapArea.w / 2,mapArea.y + mapArea.h / 2,scale,animate,onAnimationEnd);
@@ -340,7 +340,6 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		//transform map to fit container
 		var bbox = this.mapObj.boundBox;
 		this.fitToMapArea(bbox,pixelMargin,animate,onAnimationEnd);
-		
 	},
 	
 	setMapCenter: function(centerX,centerY,animate,/* callback function */onAnimationEnd) {
@@ -531,7 +530,15 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		var mapPoint = dojox.gfx.matrix.multiplyPoint(invMatrix, screenX, screenY);
 		return mapPoint;
 	},
-	
+	deselectAll: function(){
+		// summary:
+		//   deselect all features of map
+		for(var name in this.mapObj.features){
+			this.mapObj.features[name].select(false);
+		}
+		this.selectedFeature = null;
+		this.focused = false;
+	},
 	
 	_init: function(shapeData){
 		

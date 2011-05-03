@@ -6,9 +6,9 @@ dojo.require("dijit.Tooltip");
 
 (function(){
 	var dgc = dojox.geo.charting;
-	dgc.showTooltip = function(/*String*/innerHTML, /*dojox.gfx.shape*/ gfxObject, /*String[]?*/ position){
+	dgc.showTooltip = function(/*String*/innerHTML, /*dojox.gfx.shape*/ gfxObject, /*String[]?*/ positions){
 		var arroundNode = dgc._normalizeArround(gfxObject);
-		return dijit.showTooltip(innerHTML, arroundNode, position);
+		return dijit.showTooltip(innerHTML, arroundNode, positions);
 	};
 
 	dgc.hideTooltip = function( /*dojox.gfx.shape*/gfxObject){
@@ -37,7 +37,7 @@ dojo.require("dijit.Tooltip");
 		var bboxObject = gfxObject.getBoundingBox();
 		if(!bboxObject){//the gfx object is group
 			var shapes = gfxObject.children;
-			var bboxObject = dojo.clone(dgc._getRealBBox(shapes[0]));
+			bboxObject = dojo.clone(dgc._getRealBBox(shapes[0]));
 			dojo.forEach(shapes, function(item){
 				var nextBBox = dgc._getRealBBox(item);
 				bboxObject.x = Math.min(bboxObject.x, nextBBox.x);

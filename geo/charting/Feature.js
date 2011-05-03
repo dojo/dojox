@@ -20,6 +20,7 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 		this.parent = parent;
 		this.mapObj = parent.mapObj;
 		this._bbox = shapeData.bbox;
+		this._center = shapeData.center;
 		//TODO: fill color would be defined by charting data and legend
 //		this._highlightFill = ["#FFCE52", "#CE6342", "#63A584"][Math.floor(Math.random() * 3)];
 		this._defaultFill = parent.defaultColor;
@@ -64,8 +65,7 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 	_setFillWith: function(color){
 		var borders = (dojo.isArray(this.shape.children)) ? this.shape.children : [this.shape.children];
 		dojo.forEach(borders, dojo.hitch(this,function(item){
-			
-			if (this.parent.colorAnimationDuration > 0) {
+			if(this.parent.colorAnimationDuration > 0){
 				var anim1 = dojox.gfx.fx.animateFill({
 					shape: item,
 					color: {
@@ -75,7 +75,7 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 					duration: this.parent.colorAnimationDuration
 				});
 				anim1.play();
-			} else {
+			}else{
 				item.setFill(color);
 			}
 		}));
@@ -100,23 +100,22 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 		this.mapObj.marker.show(this.id);
 	},
 	_onmouseoutHandler: function(){
-		
 		this._setFillWith(this._defaultFill);
 		this.mapObj.marker.hide();
 		dojo.style("mapZoomCursor", "display", "none");
 	},
 	_onmousemoveHandler: function(evt){
-		if (this.mapObj.marker._needTooltipRefresh)
+		if(this.mapObj.marker._needTooltipRefresh){
 			this.mapObj.marker.show(this.id);
+		}
 		if(this.isSelected){
-			
 			if (parent.enableFeatureZoom) {
-				var evt = dojo.fixEvent(evt || window.event);
+				evt = dojo.fixEvent(evt || window.event);
 				dojo.style("mapZoomCursor", "left", evt.pageX + 12 + "px");
 				dojo.style("mapZoomCursor", "top", evt.pageY + "px");
-				dojo.byId("mapZoomCursor").className = (this._isZoomIn)?"mapZoomOut":"mapZoomIn";
+				dojo.byId("mapZoomCursor").className = this._isZoomIn ? "mapZoomOut":"mapZoomIn";
 				dojo.style("mapZoomCursor", "display", "block");
-			} else {
+			}else{
 				dojo.style("mapZoomCursor", "display", "none");
 			}
 		}
@@ -124,30 +123,26 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 	_onclickHandler: function(evt){
 		this.parent.onFeatureClick(this);
 		if(!this.isSelected){
-			for (var name in this.mapObj.features){
-				this.mapObj.features[name].select(false);
-			}
+			this.parent.deselectAll();
 			this.select(true);
 			this._onmousemoveHandler(evt);
-		} else if (parent.enableFeatureZoom) {
-			if (this._isZoomIn){
+		}else if(parent.enableFeatureZoom){
+			if(this._isZoomIn){
 				this._zoomOut();
-			}
-			else {
+			}else{
 				this._zoomIn();
 			}
 		}
-		
-
 	},
 	
 	select: function(selected) {
-		if (selected) {
+		if(selected){
 			this.shape.moveToFront();
 			this._setStrokeWith({color:"black",width:this._normalizeStrokeWeight(2)});
 			this._setFillWith(this._highlightFill);
 			this.isSelected = true;
-		} else {
+			this.parent.selectedFeature = this;
+		}else{
 			this._setStrokeWith(this._defaultStroke);
 			this._setFillWith(this._defaultFill);
 			this.isSelected = false;

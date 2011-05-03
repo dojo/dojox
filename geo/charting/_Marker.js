@@ -17,7 +17,7 @@ dojo.declare("dojox.geo.charting._Marker", null, {
 		this.currentFeature = this.features[featureId];
 		if (this._map.showTooltips && this.currentFeature) {
 			this.markerText = this.currentFeature.markerText || this.markerData[featureId] || featureId;
-			dojox.geo.charting.showTooltip(this.markerText, this.currentFeature.shape, "before");
+			dojox.geo.charting.showTooltip(this.markerText, this.currentFeature.shape, ["before"]);
 		}
 		this._needTooltipRefresh = false;
 	},

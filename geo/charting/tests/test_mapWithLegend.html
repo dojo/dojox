@@ -17,6 +17,7 @@
 			dojo.require("dijit.layout.BorderContainer");
 			dojo.require("dijit.layout.ContentPane");
 			dojo.require("dojox.geo.charting.MouseInteractionSupport");
+			dojo.require("dojox.geo.charting.KeyboardInteractionSupport");
 			
 			dojo.addOnLoad(function(){
 				//create new map
@@ -27,7 +28,8 @@
 				// install mouse navigation
 				var mouseInteraction = new dojox.geo.charting.MouseInteractionSupport(map,{enablePan:true,enableZoom:true});
 				mouseInteraction.connect();
-				
+				var keyboardInteraction = new dojox.geo.charting.KeyboardInteractionSupport(map, {enableZoom: true});
+        keyboardInteraction.connect();
 				
 				//set data store to map
 				var dataStore = new dojo.data.ItemFileWriteStore({
@@ -99,7 +101,7 @@
 	</head>
 	<body class="tundra" >
 		<h1>Map with series, data, legend</h1>
-		
+		<p>Keyboard Tips: Use <b>TAB</b> to focus the map, then use <b>up/down/left/right</b> to go around the map, zoom in by <b>SPACE</b> and zoom out by <b>ESC</b>.</p>
 		<div id="USStates" style="width:900px;height:500px;border:1px solid;">
 		</div>
 		 <table id="productChoice" cellspacing="10" style="border: 1px">

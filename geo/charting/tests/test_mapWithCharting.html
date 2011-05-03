@@ -26,10 +26,11 @@
 			dojo.require("dojox.geo.charting.Map");
 			dojo.require("dojox.charting.Chart");
 			dojo.require("dojox.charting.axis2d.Default");
-        	dojo.require("dojox.charting.plot2d.ClusteredBars");
+      dojo.require("dojox.charting.plot2d.ClusteredBars");
 			dojo.require("dojox.charting.plot2d.Grid");
 			dojo.require("dojo.data.ItemFileReadStore");
 			dojo.require("dojox.geo.charting.MouseInteractionSupport");
+			dojo.require("dojox.geo.charting.KeyboardInteractionSupport");
 			dojo.require("dojox.charting.themes.PlotKit.blue");
 			var chartStore = new dojo.data.ItemFileReadStore({
 				url: "datastore/dataStore.json"
@@ -67,6 +68,8 @@
 				// install mouse navigation
 				var mouseInteraction = new dojox.geo.charting.MouseInteractionSupport(map,{enablePan:true,enableZoom:true});
 				mouseInteraction.connect();
+				var keyboardInteraction = new dojox.geo.charting.KeyboardInteractionSupport(map, {enableZoom: true});
+				keyboardInteraction.connect();
 			
 				map.onFeatureClick = function(feature){
 					
@@ -94,6 +97,7 @@
 	</head>
 	<body class="tundra">
 		<h1>Map connect with DataChart(Click on map)</h1>
+		<p>Keyboard Tips: Use <b>TAB</b> to focus the map, then use <b>up/down/left/right</b> to go around the map, zoom in by <b>SPACE</b> and zoom out by <b>ESC</b>.</p>
 		<div style="width:610px;height:400px;border:solid 1px;background:#f5f5f5;" id="map">
 		</div>
 		<div id="chartDiv" style="width: 400px; height: 150px;">
