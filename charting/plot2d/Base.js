@@ -159,7 +159,7 @@ dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charti
 			hBounds = this._hScaler.bounds,
 			xOffset = (hBounds.from - hBounds.lower) * hBounds.scale,
 			vBounds = this._vScaler.bounds,
-			yOffset = (vBounds.from - vBounds.lower) * vBounds.scale;
+			yOffset = (vBounds.from - vBounds.lower) * vBounds.scale,
 			// get incremental zooming various
 			rVScale = vs / this.lastWindow.vscale,
 			rHScale = hs / this.lastWindow.hscale,

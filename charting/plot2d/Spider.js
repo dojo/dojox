@@ -290,7 +290,7 @@ dojo.require("dojox.gfx.fx");
 			for (var j = labelPoints.length - 1; j >= 0; --j) {
 				var point = labelPoints[j],
 					fontWidth = dojox.gfx._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0,
-					render = this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx";
+					render = this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx",
 					elem = da.createText[render](this.chart, labelGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 							"middle", this.labelKey[j], axisFont, axisFontColor);
 				if (this.opt.htmlLabels) {

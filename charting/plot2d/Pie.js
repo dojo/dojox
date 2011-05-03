@@ -457,10 +457,10 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 				}
 			}
 			leftCenterSlice.labelR = rightCenterSlice.labelR = minRidius;
-			this._caculateLabelR(leftCenterSlice,slices,labelHeight);
-			this._caculateLabelR(rightCenterSlice,slices,labelHeight);
+			this._calculateLabelR(leftCenterSlice,slices,labelHeight);
+			this._calculateLabelR(rightCenterSlice,slices,labelHeight);
 		},
-		_caculateLabelR: function(firstSlice,slices,labelHeight){
+		_calculateLabelR: function(firstSlice,slices,labelHeight){
 			var i = firstSlice.index,length = slices.length,
 				currentLabelR = firstSlice.labelR;
 			while(!(slices[i%length].left ^ slices[(i+1)%length].left)){
@@ -472,7 +472,8 @@ dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__Defa
 				}
 				i++;
 			}
-			i = firstSlice.index,j = (i == 0)?length-1 : i - 1;
+			i = firstSlice.index;
+			var j = (i == 0)?length-1 : i - 1;
 			while(!(slices[i].left ^ slices[j].left)){
 				if (!slices[j].omit) {
 					var nextLabelR = (Math.sin(slices[i].angle) * currentLabelR + ((slices[i].left) ? labelHeight : (-labelHeight))) /

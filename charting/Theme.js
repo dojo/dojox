@@ -380,7 +380,7 @@ dojo.declare("dojox.charting.Theme", null, {
 		//		Tick name, can be "major", "minor", or "micro".
 		//	mixin: Object?
 		//		Optional object to mix in to the tick.
-		var tick = this.axis.tick, tickName = name + "Tick";
+		var tick = this.axis.tick, tickName = name + "Tick",
 			merge = dojox.lang.utils.merge;
 		if(tick){
 			if(this.axis[tickName]){
@@ -601,10 +601,10 @@ dojo.mixin(dojox.charting.Theme, {
 		//	|		high: 80
 		//	|	});
 		kwArgs = kwArgs || {};
-		var c = [], n = kwArgs.num || 5;	// the number of colors to generate
+		var l, c = [], n = kwArgs.num || 5;	// the number of colors to generate
 		if(kwArgs.colors){
 			// we have an array of colors predefined, so fix for the number of series.
-			var l = kwArgs.colors.length;
+			l = kwArgs.colors.length;
 			for(var i = 0; i < n; i++){
 				c.push(kwArgs.colors[i % l]);
 			}
@@ -612,11 +612,11 @@ dojo.mixin(dojox.charting.Theme, {
 		}
 		if(kwArgs.hue){
 			// single hue, generate a set based on brightness
-			var s = kwArgs.saturation || 100;	// saturation
-			var st = kwArgs.low || 30;
-			var end = kwArgs.high || 90;
+			var s = kwArgs.saturation || 100,	// saturation
+				st = kwArgs.low || 30,
+				end = kwArgs.high || 90;
 			// we'd like it to be a little on the darker side.
-			var l = (end + st) / 2;
+			l = (end + st) / 2;
 			// alternately, use "shades"
 			return dojox.color.Palette.generate(
 				dojox.color.fromHsv(kwArgs.hue, s, l), "monochromatic"

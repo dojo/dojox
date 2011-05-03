@@ -738,7 +738,7 @@ dojo.require("dojox.lang.utils");
 				return;
 			}
 			var aroundRect = {type: "rect"}, position = ["above", "below"],
-				fontWidth = dojox.gfx._base._getTextBox(truncatedLabel, {font: font}).w || 0;
+				fontWidth = dojox.gfx._base._getTextBox(truncatedLabel, {font: font}).w || 0,
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
 			if(elemType == "html"){
 				dojo.mixin(aroundRect, dojo.coords(elem.firstChild, true));

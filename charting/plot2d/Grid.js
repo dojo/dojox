@@ -145,7 +145,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 				hBounds = this._hAxis.getScaler().bounds,
 				xOffset = (hBounds.from - hBounds.lower) * hBounds.scale,
 				vBounds = this._vAxis.getScaler().bounds,
-				yOffset = (vBounds.from - vBounds.lower) * vBounds.scale;
+				yOffset = (vBounds.from - vBounds.lower) * vBounds.scale,
 				// get incremental zooming various
 				rVScale = vs / this.lastWindow.vscale,
 				rHScale = hs / this.lastWindow.hscale,

@@ -165,7 +165,7 @@ dojo.require("dojox.lang.functional.reversed");
 							var hl = {x1: width/2, x2: width/2, y1: y - high, y2: y - low},
 								op = {x1: 0, x2: ((width/2) + ((finalTheme.series.stroke.width||1)/2)), y1: y-open, y2: y-open},
 								cl = {x1: ((width/2) - ((finalTheme.series.stroke.width||1)/2)), x2: width, y1: y-close, y2: y-close};
-							shape = s.createGroup();
+							var shape = s.createGroup();
 							shape.setTransform({dx: x, dy: 0});
 							var inner = shape.createGroup();
 							inner.createLine(hl).setStroke(finalTheme.series.stroke);

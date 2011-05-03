@@ -172,7 +172,7 @@ dojo.require("dojox.lang.functional.reversed");
 									x: 0, y: y-Math.max(open, close),
 									width: width, height: Math.max(doFill ? open-close : close-open, 1)
 								};
-							shape = s.createGroup();
+							var shape = s.createGroup();
 							shape.setTransform({dx: x, dy: 0 });
 							var inner = shape.createGroup();
 							inner.createLine(line).setStroke(finalTheme.series.stroke);
