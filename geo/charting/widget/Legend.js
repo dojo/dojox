@@ -1,22 +1,30 @@
 dojo.provide("dojox.geo.charting.widget.Legend");
 
 dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
 dojo.require("dojox.lang.functional.array");
 dojo.require("dojox.lang.functional.fold");
 
-dojo.declare("dojox.geo.charting.widget.Legend",[dijit._Widget, dijit._Templated], {
-	templateString: "<table dojoAttachPoint='legendNode' class='dojoxLegendNode'><tbody dojoAttachPoint='legendBody'></tbody></table>",
+dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
 	horizontal:true,
-	legendNode:null,
 	legendBody:null,
 	swatchSize:18,
+	map:null,
 	postCreate: function(){
 		if(!this.map){return;}
 		this.series = this.map.series;
-		dojo.byId(this.map.container).appendChild(this.domNode);
+		if (!this.domNode.parentNode) {
+			// compatibility with older version : add to map domNode if not already attached to a parentNode.
+			dojo.byId(this.map.container).appendChild(this.domNode);
+		}
 		this.refresh();
 	},
+	buildRendering: function(){  
+		this.domNode = dojo.create("table",   
+					{role: "group", "class": "dojoxLegendNode"});  
+		this.legendBody = dojo.create("tbody", null, this.domNode);  
+		this.inherited(arguments);  
+ 	},  
+
 	refresh:function(){
 		// cleanup
 		while(this.legendBody.lastChild){
@@ -24,7 +32,7 @@ dojo.declare("dojox.geo.charting.widget.Legend",[dijit._Widget, dijit._Templated
 		}
 		
 		if(this.horizontal){
-			dojo.addClass(this.legendNode,"dojoxLegendHorizontal");
+			dojo.addClass(this.domNode,"dojoxLegendHorizontal");
 			this._tr = dojo.doc.createElement("tr");
 			this.legendBody.appendChild(this._tr);
 		}

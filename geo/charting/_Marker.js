@@ -3,8 +3,10 @@ dojo.provide("dojox.geo.charting._Marker");
 dojo.declare("dojox.geo.charting._Marker", null, {
 	
 	_needTooltipRefresh: null,
+	_map: null,
 	
 	constructor: function(markerData, map){
+		this._map = map;
 		var mapObj = map.mapObj;
 		this.features = mapObj.features;
 		this.markerData = markerData;
@@ -13,7 +15,7 @@ dojo.declare("dojox.geo.charting._Marker", null, {
 
 	show: function(featureId){
 		this.currentFeature = this.features[featureId];
-		if (this.currentFeature) {
+		if (this._map.showTooltips && this.currentFeature) {
 			this.markerText = this.currentFeature.markerText || this.markerData[featureId] || featureId;
 			dojox.geo.charting.showTooltip(this.markerText, this.currentFeature.shape, "before");
 		}
@@ -21,7 +23,7 @@ dojo.declare("dojox.geo.charting._Marker", null, {
 	},
 
 	hide: function(){
-		if (this.currentFeature)
+		if (this._map.showTooltips && this.currentFeature)
 			dojox.geo.charting.hideTooltip(this.currentFeature.shape);
 		this._needTooltipRefresh = false;
 	},

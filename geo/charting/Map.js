@@ -2,10 +2,9 @@ dojo.provide("dojox.geo.charting.Map");
 
 dojo.require("dojox.gfx");
 dojo.require("dojox.geo.charting._base");
-dojo.require("dojox.geo.charting._Feature");
+dojo.require("dojox.geo.charting.Feature");
 dojo.require("dojox.geo.charting._Marker");
-dojo.require("dojox.geo.charting._MouseInteractionSupport");
-dojo.require("dojox.geo.charting._TouchInteractionSupport");
+dojo.require("dojo.number");
 
 dojo.declare("dojox.geo.charting.Map", null, {
 	//	summary:
@@ -26,12 +25,21 @@ dojo.declare("dojox.geo.charting.Map", null, {
 	//	series: Array
 	//		stack to data range, e.g: [{name:'label 1', min:20, max:70, color:'#DDDDDD'},{...},...]
 	series:[],
+	dataBindingAttribute:null,
+	dataBindingValueFunction:null,
+	dataStore:null,
+	showTooltips: true,
+	enableFeatureZoom: true,
+	colorAnimationDuration:0,
+	_idAttributes:null,
+	_onSetListener:null,
+	_onNewListener:null,
+	_onDeleteListener:null,
 	constructor: function(/*HTML Node*/container, /*String*/shapeFile){
 		//	container:
 		//		map container html node/id
 		//	shapeFile:
 		//		map shape data url, handled as json style
-		//		data format:
 		
 		dojo.style(container, "display", "block");
 		
@@ -51,15 +59,6 @@ dojo.declare("dojox.geo.charting.Map", null, {
 			sync:true,
 			load: dojo.hitch(this, "_init")
 		});
-		
-		if (this._isMobileDevice()) {
-			// install touch support
-			this._touchInteractionSupport = new dojox.geo.charting._TouchInteractionSupport(this);
-		} else {
-			// install mouse support
-			this._mouseInteractionSupport = new dojox.geo.charting._MouseInteractionSupport(this);
-		}
-
 	},
 	
 	_getContainerBounds: function() {
@@ -72,12 +71,57 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		var marginBox = dojo.marginBox(this.container);
 		// use contentBox for correct width and height - surface spans outside border otherwise
 		var contentBox = dojo.contentBox(this.container);
-		return {
-			x: coords.x,
-			y:coords.y,
-			w: contentBox.w || 100,
-			h: contentBox.h || 100
-		};
+		this._storedContainerBounds = {
+				x: coords.x,
+				y: coords.y,
+				w: contentBox.w || 100,
+				h: contentBox.h || 100
+			};
+		return this._storedContainerBounds;
+	},
+	
+	resize: function(/**boolean**/ adjustMapCenter/**boolean**/,adjustMapScale,/**boolean**/ animate) {
+		// summary: 
+		//   resize the underlying GFX surface to accommodate to parent DOM Node size change
+		// adjustMapCenter: boolean
+		//   keeps the center of the map when resizing the surface
+		// adjustMapScale: boolean
+		//   adjusts the map scale to keep the visible portion of the map as much as possible 
+		
+		var oldBounds = this._storedContainerBounds; 
+		var newBounds = this._getContainerBounds();
+		
+		if ((oldBounds.w == newBounds.w) && (oldBounds.h == newBounds.h)) {
+			return;
+		}
+		
+		// set surface dimensions
+		this.surface.setDimensions(newBounds.w,newBounds.h);
+		
+		this.mapObj.marker.hide();
+		this.mapObj.marker._needTooltipRefresh = true;
+		
+		if (adjustMapCenter) {
+			
+			var mapScale = this.getMapScale();
+			var newScale = mapScale;
+			
+			if (adjustMapScale) {
+				var bbox = this.mapObj.boundBox;
+				var widthFactor = newBounds.w / oldBounds.w;
+				var heightFactor = newBounds.h / oldBounds.h;
+				newScale = mapScale * Math.sqrt(widthFactor * heightFactor);
+			}
+			
+			//	current map center
+			var invariantMapPoint = this.screenCoordsToMapCoords(oldBounds.w/2,oldBounds.h/2);
+
+			//	apply new parameters
+			this.setMapCenterAndScale(invariantMapPoint.x,invariantMapPoint.y,newScale,animate);
+		}
+
+		
+		
 	},
 	
 	_isMobileDevice: function() {
@@ -106,27 +150,125 @@ dojo.declare("dojox.geo.charting.Map", null, {
 			handle: dojo.hitch(this, "_appendMarker")
 		});
 	},
-	setDataStore: function(/*ItemFileReadStore*/ dataStore, /*Object*/ query){
+	
+	setDataBindingAttribute: function(/*String*/prop) {
+		//  summary:
+		//		sets the property name of the dataStore items to use as value (see Feature.setValue function)
+		//	prop:
+		//		the property
+		this.dataBindingAttribute = prop;
+		
+		// refresh data
+		if (this.dataStore) {
+			this._queryDataStore();
+		}
+	},
+	
+	setDataBindingValueFunction: function(/* function */valueFunction) {
+	//  summary:
+		//		sets the function that extracts values from dataStore items,to use as Feature values (see Feature.setValue function)
+		//	prop:
+		//		the function
+		this.dataBindingValueFunction = valueFunction;
+		
+		// refresh data
+		if (this.dataStore) {
+			this._queryDataStore();
+		}
+	},
+	
+	
+	
+	_queryDataStore: function() {
+		if (!this.dataBindingAttribute || (this.dataBindingAttribute.length == 0))
+			return;
+		
+		var mapInstance = this;
+		this.dataStore.fetch({
+			scope: this,
+			onComplete: function(items){
+				this._idAttributes = mapInstance.dataStore.getIdentityAttributes({});
+				dojo.forEach(items, function(item) {
+					var id = mapInstance.dataStore.getValue(item, this._idAttributes[0]);
+					if(mapInstance.mapObj.features[id]){
+						var val = null;
+						var itemVal = mapInstance.dataStore.getValue(item, mapInstance.dataBindingAttribute);
+						if (itemVal) {
+							if (this.dataBindingValueFunction) {
+								val = this.dataBindingValueFunction(itemVal);
+							} else {
+								if (isNaN(val)) {
+									// regular parse
+									val=dojo.number.parse(itemVal);
+								} else {
+									val = itemVal;
+								}
+							}
+						}
+						if (val)
+							mapInstance.mapObj.features[id].setValue(val);
+					}
+				},this);						
+			}
+		});
+	},
+	
+	_onSet:function(item,attribute,oldValue,newValue){
+		// look for matching feature
+		var id = this.dataStore.getValue(item, this._idAttributes[0]);
+		var feature = this.mapObj.features[id];
+		if (feature && (attribute == this.dataBindingAttribute)) {
+			if (newValue)
+				feature.setValue(newValue);
+			else
+				feature.unsetValue();
+		}
+	},
+
+	_onNew:function(newItem,  parentItem){
+		var id = this.dataStore.getValue(item, this._idAttributes[0]);
+		var feature = this.mapObj.features[id];
+		if (feature && (attribute == this.dataBindingAttribute)) {
+			feature.setValue(newValue);
+		}
+	},
+	
+	_onDelete:function(item){
+		var id = item[this._idAttributes[0]];
+		var feature = this.mapObj.features[id];
+		if (feature) {
+			feature.unsetValue();
+		}
+	},
+	
+	setDataStore: function(/*ItemFileReadStore*/ dataStore, /*String*/ dataBindingProp){
 		//	summary:
 		//		populate data for each map feature from fetched data store
 		//  dataStore:
 		//      the dataStore to fetch the information from
-		//  query:
-		//      query the query executed when fetching data from the dataStore
-		this.dataStore = dataStore;
-		var self = this;
-		this.dataStore.fetch({
-			query: query,
-			onComplete: function(items){
-				var item = items[0];
-				var attributes = self.dataStore.getAttributes(item);
-				dojo.forEach(attributes, function(name){
-					if(self.mapObj.features[name]){
-						self.mapObj.features[name].setValue(self.dataStore.getValue(item, name));
-					}
-				});
+		//  dataBindingProp:
+		//      sets the property name of the dataStore items to use as value
+		if (this.dataStore != dataStore) {
+			// disconnect previous listener if any
+			if (this._onSetListener) {
+				dojo.disconnect(this._onSetListener);
+				dojo.disconnect(this._onNewListener);
+				dojo.disconnect(this._onDeleteListener);
 			}
-		});
+			
+			// set new dataStore
+			this.dataStore = dataStore;
+			
+			// install listener on new dataStore
+			if (dataStore) {
+				_onSetListener = dojo.connect(this.dataStore,"onSet",this,this._onSet);
+				_onNewListener = dojo.connect(this.dataStore,"onNew",this,this._onNew);
+				_onDeleteListener = dojo.connect(this.dataStore,"onDelete",this,this._onDelete);
+			}
+		}
+		if (dataBindingProp)
+			this.setDataBindingAttribute(dataBindingProp);
+
 	},
 	
 	
@@ -136,6 +278,29 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		// series:
 		//   array of range objects such as : [{name:'label 1', min:20, max:70, color:'#DDDDDD'},{...},...]
 		this.series = series;
+		
+		// refresh color scheme
+		for (var item in this.mapObj.features) {
+			var feature = this.mapObj.features[item];
+			feature.setValue(feature.value);
+		}
+		
+	},
+	
+	setSeriesFile: function(/** file url **/seriesFile) {
+		// summary: 
+		//   sets the url of the json file containing value ranges (see addSeries).
+		// seriesFile:
+		//   url
+		dojo.xhrGet({
+			url: seriesFile,
+			handleAs: "json",
+			sync:true,
+			load: dojo.hitch(this, function(data) {
+				if (data.series)
+					this.addSeries(data.series);
+			})
+		});
 	},
 	
 	fitToMapArea: function(/*bbox: {x,y,w,h}*/mapArea,pixelMargin,animate,/* callback function */onAnimationEnd){
@@ -205,27 +370,36 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		//   the end transormation (when animation ends)
 		// onAnimationEnd: function
 		//   callback function to be executed when the animation completes.
+		var fromDx = fromTransform.dx?fromTransform.dx:0;
+		var fromDy = fromTransform.dy?fromTransform.dy:0;
+		var toDx = toTransform.dx?toTransform.dx:0;
+		var toDy = toTransform.dy?toTransform.dy:0;
+		var fromScale = fromTransform.xx?fromTransform.xx:1.0;
+		var toScale = toTransform.xx?toTransform.xx:1.0;
+		
 		var anim = dojox.gfx.fx.animateTransform({
 			duration: 1000,
 			shape: onShape,
 			transform: [{
 				name: "translate",
-				start: [fromTransform.dx,fromTransform.dy],
-				end: [toTransform.dx, toTransform.dy]
+				start: [fromDx,fromDy],
+				end: [toDx,toDy]
 			},
 			{
 				name: "scale",
-				start: [fromTransform.xx],
-				end: [toTransform.xx]
+				start: [fromScale],
+				end: [toScale]
 			}
 			]
 		});
-		
+
 		//install callback
-		var listener = dojo.connect(anim,"onEnd",this,function(event){
-			onAnimationEnd(event);
-			dojo.disconnect(listener);
-		});
+		if (onAnimationEnd) {
+			var listener = dojo.connect(anim,"onEnd",this,function(event){
+				onAnimationEnd(event);
+				dojo.disconnect(listener);
+			});
+		}
 		
 		return anim;
 	},
@@ -287,7 +461,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		
 		// default invariant is map center
 		var containerBounds = this._getContainerBounds();
-		invariantMapPoint = this.screenCoordsToMapCoords(containerBounds.w/2,containerBounds.h/2);
+		var invariantMapPoint = this.screenCoordsToMapCoords(containerBounds.w/2,containerBounds.h/2);
 		this.setMapScaleAt(scale,invariantMapPoint.x,invariantMapPoint.y,animate,onAnimationEnd);
 	},
 	
@@ -379,7 +553,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 			featureShape.bbox.y = featureShape.bbox[1];
 			featureShape.bbox.w = featureShape.bbox[2];
 			featureShape.bbox.h = featureShape.bbox[3];
-			var feature = new dojox.geo.charting._Feature(this, item, featureShape);
+			var feature = new dojox.geo.charting.Feature(this, item, featureShape);
 			feature.init();
 			this.mapObj.features[item] = feature;
 		}, this);
