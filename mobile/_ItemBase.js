@@ -82,7 +82,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 						if(this.sync){
 							text = dojo.trim(dojo._getText(url));
 						}else{
-							require(["dojo/_base/xhr"], function(xhr){	
+							require(["dojo/_base/xhr"], dojo.hitch(this, function(xhr){	
 								var prog = dojox.mobile.ProgressIndicator.getInstance();
 								dojo.body().appendChild(prog.domNode);
 								prog.start();
@@ -101,7 +101,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 									prog.stop();
 									alert("Failed to load "+url+"\n"+(error.description||error));
 								});
-							});
+							}));
 							return;
 						}
 					}
