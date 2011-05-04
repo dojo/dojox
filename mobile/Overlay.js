@@ -10,16 +10,15 @@ define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(
 		show: function(/*DomNode?*/aroundNode){
 			// summary:
 			//		Scroll the overlay up into view
-			var vp, innerHeight, bot;
+			var vp, popupPos;
 			var reposition = dojo.hitch(this, function(){
+				popupPos = dojo.position(this.domNode);
 				vp = dojo.window.getBox();
-				innerHeight = dojo.global.innerHeight || vp.h;
-				bot = vp.t + innerHeight - vp.h;
-				dojo.style(this.domNode, { bottom: -bot + "px" });
+				popupPos.y = vp.t + vp.h - popupPos.h;
+				dojo.style(this.domNode, { top: popupPos.y + "px" });
 			});
 			reposition();
 			if(aroundNode){
-				var popupPos = dojo.position(this.domNode);
 				var aroundPos = dojo.position(aroundNode);
 				if(popupPos.y < aroundPos.y){ // if the aroundNode is under the popup, try to scroll it up
 					dojo.global.scrollBy(0, aroundPos.y + aroundPos.h - popupPos.y);

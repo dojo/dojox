@@ -27,16 +27,16 @@
 	border-right-color: #f9f7ba;
 }
 .mblTooltip.mblTooltipAfter {
-	margin-left:-7px;
+	margin-left:-11px;
 }
 .mblTooltip.mblTooltipBefore {
-	margin-left:7px;
+	margin-left:11px;
 }
 .mblTooltip.mblTooltipAbove {
-	margin-top:7px;
+	margin-top:11px;
 }
 .mblTooltip.mblTooltipBelow {
-	margin-top:-7px;
+	margin-top:-11px;
 }
 .mblTooltipAnchor {
 	background-color:transparent;
@@ -63,7 +63,7 @@
 	width: 0;
 	height: 0;
 	line-height: 0px;
-	border: 7px solid transparent;
+	border: 11px solid transparent;
 }
 .mblTooltipBefore .mblTooltipArrow {
 	left: auto;
@@ -104,7 +104,7 @@
 	width: 0px;
 	height: 0px;
 	line-height: 0px;
-	border: 6px solid transparent;
+	border: 10px solid transparent;
 }
 .mblTooltipBefore .mblTooltipInnerArrow {
 	right: 0;
@@ -133,19 +133,15 @@
 	border-top-color: #172035;
 }
 .mblTooltipHidden {
-	top: -9999px !important;
 	visibility: hidden !important;
 }
 /*Headings and Button styles are overridden in Tooltips*/
 .mblTooltip .mblHeading { 
 	position: relative;
 	margin: 0px;
-	width: 100%;
-	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	padding: 0px;
-	height: 42px;
+	padding: 9px;
 	background-color: #889BB3;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#5E6167), to(#1A1D24), color-stop(0.5, #2E322B));
 	border-top: 3px solid #4F5055;
@@ -155,18 +151,22 @@
 	font-size: 20px;
 	font-weight: normal;
 	text-align: center;
-	line-height: 44px;
 	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
 	z-index: 1;
 	border-left: 1px solid #2A2D47;
 	-webkit-border-radius: 3px 3px 0 0;
+	/* unset hasLayout on IE */
+	width: auto;
+	height: auto;
+	overflow: visible;
+	line-height: normal;
 }
 .mblTooltip .mblHeading .mblToolbarButton {
 	float: left;
 	position: relative;
 	cursor: pointer;
 	-webkit-tap-highlight-color: transparent;
-	margin: 6px;
+	margin: auto 6px;
 	padding: 0px 10px;
 	height: 29px;
 	border: 1px inset #434450;
