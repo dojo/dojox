@@ -9,11 +9,12 @@
 	<link href="../themes/iphone/base.css" rel="stylesheet"></link>
 	<link href="../themes/iphone/IconContainer.css" rel="stylesheet"></link>
 	<link href="mblDijit.css" rel="stylesheet"></link>
+    <link href="../../widget/ColorPicker/ColorPicker.css" rel="stylesheet"></link>
 	<style>
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
 		}
-		#cal>thead {
+		#cal>thead {// TODO: Find a better way to style this
 			display: table-header-group;
 			vertical-align: middle;
 			border-color: inherit;
@@ -31,6 +32,7 @@
 		dojo.require("dojox.mobile.Opener");
 		dojo.require("dijit.Calendar");
 		dojo.require("dijit.ColorPalette");
+        dojo.require("dojox.widget.ColorPicker");
 		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
@@ -75,6 +77,17 @@
 			//var w = dijit.byId("colorPalette");
 			//w.setValue(node.value);
 		}
+		function getColor2(node, v){
+			if(v === true){ // Done clicked
+				var w = dijit.byId("colorPicker");
+				var color = w.get("value");
+				node.value = color;
+			}
+		}
+		function setColor2(node){
+			//var w = dijit.byId("colorPicker");
+			//w.setValue(node.value);
+		}
 	</script>
 </head>
 <body>
@@ -83,12 +96,21 @@
 		<label for="date1">Date (SpinWheel):&nbsp;</label>
 		<input id="date1" readOnly value=""
 			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
+	</center>
+	<center style="width:100%;">
 		<label for="date3">Date (Calendar):&nbsp;</label>
 		<input id="date3" readOnly value=""
 			onclick="dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before'])">
-		<label for="color1">Color:&nbsp;</label>
+	</center>
+	<center style="width:100%;">
+		<label for="color1">Color (Palette):&nbsp;</label>
 		<input id="color1" readOnly value=""
-			onclick="dijit.byId('colorPicker').show(this, ['above-centered','below-centered','after','before'])">
+			onclick="dijit.byId('colorPicker1').show(this, ['above-centered','below-centered','after','before'])">
+	</center>
+	<center style="width:100%;">
+		<label for="color2">Color (Picker):&nbsp;</label>
+		<input id="color2" readOnly value=""
+			onclick="dijit.byId('colorPicker2').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
 	<center style="position:fixed;bottom:0;width:100%;">
 		<label for="date2">Date (SpinWheel above):&nbsp;</label>
@@ -116,14 +138,24 @@
 		<div id="cal" dojoType='dijit.Calendar'></div>
 	</div>
 
-	<div id="colorPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor, onShow:setColor">
+	<div id="colorPicker1" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor, onShow:setColor">
  		<h1 dojoType="dojox.mobile.Heading" label="Select a Color">
 			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
-				onclick="dijit.byId('colorPicker').hide(true)"></div>
+				onclick="dijit.byId('colorPicker1').hide(true)"></div>
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
-				onclick="dijit.byId('colorPicker').hide(false)"></div>
+				onclick="dijit.byId('colorPicker1').hide(false)"></div>
 		</h1>
 		<div id="colorPalette" dojoType='dijit.ColorPalette'></div>
+	</div>
+
+	<div id="colorPicker2" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor2, onShow:setColor2">
+ 		<h1 dojoType="dojox.mobile.Heading" label="Select a Color">
+			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('colorPicker2').hide(true)"></div>
+			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('colorPicker2').hide(false)"></div>
+		</h1>
+		<div id="colorPicker" dojoType='dojox.widget.ColorPicker'></div>
 	</div>
 
 </body>
