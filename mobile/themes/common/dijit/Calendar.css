@@ -14,7 +14,11 @@
 	-moz-border-radius: 0px;
 	border-radius: 0px;
 }
-
+.dijitCalendar thead {
+	vertical-align: middle;
+	border-color: inherit;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), to(#CCCCD1));
+}
 .dijitCalendarMonthLabel {
 	color: #545454;
 	font-size: 22px;
