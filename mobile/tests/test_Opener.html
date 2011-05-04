@@ -8,18 +8,19 @@
 	<link href="../themes/common/Opener.css" rel="stylesheet">
 	<link href="../themes/iphone/base.css" rel="stylesheet">
 	<link href="../themes/iphone/IconContainer.css" rel="stylesheet">
-	<link href="mblDijit.css" rel="stylesheet">
-    <link href="../../widget/ColorPicker/ColorPicker.css" rel="stylesheet">
+	<link href="../themes/common/dijit/dijit.css" rel="stylesheet">
 	<style>
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
 		}
+/*
 		#cal>thead {// TODO: Find a better way to style this
 			display: table-header-group;
 			vertical-align: middle;
 			border-color: inherit;
 			background-image: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), to(#CCCCD1));
 		}
+*/
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -30,7 +31,7 @@
 		dojo.require("dojox.mobile.deviceTheme");
 		dojo.require("dojox.mobile.SpinWheelDatePicker");
 		dojo.require("dojox.mobile.Opener");
-		dojo.require("dijit.CalendarLite");
+		dojo.require("dijit.Calendar");
 		dojo.require("dijit.ColorPalette");
         dojo.require("dojox.widget.ColorPicker");
 		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
@@ -55,7 +56,12 @@
 		function getDate2(node, v){
 			if(v === true){ // Done clicked
 				var w = dijit.byId("cal");
-				var date = w.get("value");
+				var date;
+				try {
+					date = w.get("value");
+				} catch (e) {
+					return;
+				}
 				node.value = date;
 			}
 		}
@@ -98,7 +104,7 @@
 			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
 	<center style="width:100%;">
-		<label for="date3">Date (CalendarLite):&nbsp;</label>
+		<label for="date3">Date (Calendar):&nbsp;</label>
 		<input id="date3" readOnly value=""
 			onclick="dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
@@ -135,7 +141,7 @@
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('calPicker').hide(false)"></div>
 		</h1>
-		<div id="cal" dojoType='dijit.CalendarLite'></div>
+		<div id="cal" dojoType='dijit.Calendar'></div>
 	</div>
 
 	<div id="colorPicker1" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor, onShow:setColor">
@@ -155,7 +161,9 @@
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('colorPicker2').hide(false)"></div>
 		</h1>
-		<div id="colorPicker" dojoType='dojox.widget.ColorPicker'></div>
+		<div>
+			<div id="colorPicker" dojoType='dojox.widget.ColorPicker'></div>
+		</div>
 	</div>
 
 </body>
