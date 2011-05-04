@@ -26,16 +26,16 @@
 .mblTooltipBubble.mblTooltipBefore .mblTooltipInnerArrow {
 	border-right-color: #f9f7ba;
 }
-.mblTooltipAfter {
+.mblTooltip.mblTooltipAfter {
 	margin-left:-7px;
 }
-.mblTooltipBefore {
+.mblTooltip.mblTooltipBefore {
 	margin-left:7px;
 }
-.mblTooltipAbove {
+.mblTooltip.mblTooltipAbove {
 	margin-top:7px;
 }
-.mblTooltipBelow {
+.mblTooltip.mblTooltipBelow {
 	margin-top:-7px;
 }
 .mblTooltipAnchor {

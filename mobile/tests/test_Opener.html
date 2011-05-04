@@ -13,13 +13,6 @@
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
 		}
-/*
-		#cal>thead {// TODO: Find a better way to style this
-			display: table-header-group;
-			vertical-align: middle;
-			border-color: inherit;
-			background-image: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), to(#CCCCD1));
-		}
 */
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -33,7 +26,7 @@
 		dojo.require("dojox.mobile.Opener");
 		dojo.require("dijit.Calendar");
 		dojo.require("dijit.ColorPalette");
-        dojo.require("dojox.widget.ColorPicker");
+		dojo.require("dojox.widget.ColorPicker");
 		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
@@ -72,52 +65,53 @@
 				w.setValue(v);
 			}
 		}
-		function getColor(node, v){
+		function getColor1(node, v){
 			if(v === true){ // Done clicked
 				var w = dijit.byId("colorPalette");
 				var color = w.get("value");
 				node.value = color;
+				node.style.backgroundColor = color;
+				node.style.color =  "#" + (255-parseInt(color.substr(1,2), 16)).toString(16)
+							+ (255-parseInt(color.substr(3,2), 16)).toString(16)
+							+ (255-parseInt(color.substr(5,2), 16)).toString(16);
 			}
-		}
-		function setColor(node){
-			//var w = dijit.byId("colorPalette");
-			//w.setValue(node.value);
 		}
 		function getColor2(node, v){
 			if(v === true){ // Done clicked
 				var w = dijit.byId("colorPicker");
 				var color = w.get("value");
 				node.value = color;
+				node.style.backgroundColor = color;
+				node.style.color =  "#" + (255-parseInt(color.substr(1,2), 16)).toString(16)
+							+ (255-parseInt(color.substr(3,2), 16)).toString(16)
+							+ (255-parseInt(color.substr(5,2), 16)).toString(16);
 			}
-		}
-		function setColor2(node){
-			//var w = dijit.byId("colorPicker");
-			//w.setValue(node.value);
 		}
 	</script>
 </head>
 <body>
-	<br>
-	<center style="width:100%;">
-		<label for="date1">Date (SpinWheel):&nbsp;</label>
-		<input id="date1" readOnly value=""
-			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
-	</center>
-	<center style="width:100%;">
-		<label for="date3">Date (Calendar):&nbsp;</label>
-		<input id="date3" readOnly value=""
-			onclick="dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before'])">
-	</center>
-	<center style="width:100%;">
-		<label for="color1">Color (Palette):&nbsp;</label>
-		<input id="color1" readOnly value=""
-			onclick="dijit.byId('colorPicker1').show(this, ['above-centered','below-centered','after','before'])">
-	</center>
-	<center style="width:100%;">
-		<label for="color2">Color (Picker):&nbsp;</label>
-		<input id="color2" readOnly value=""
-			onclick="dijit.byId('colorPicker2').show(this, ['above-centered','below-centered','after','before'])">
-	</center>
+	<table cellspacing="20">
+	<tr>
+		<td style="text-align:right;">Date (SpinWheel)</td>
+		<td><input id="date1" readOnly value=""
+			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])"></td>
+	</tr>
+	<tr>
+		<td style="text-align:right;">Date (Calendar)</td>
+		<td><input id="date3" readOnly value=""
+			onclick="dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before'])"></td>
+	</tr>
+	<tr>
+		<td style="text-align:right;">Color (Palette)</td>
+		<td><input id="color1" readOnly value="transparent" style="background-color:transparent;"
+			onclick="dijit.byId('colorPicker1').show(this, ['above-centered','below-centered','after','before'])"></td>
+	</tr>
+	<tr>
+		<td style="text-align:right;">Color (Picker)</td>
+		<td><input id="color2" readOnly value="transparent" style="background-color:transparent;"
+			onclick="dijit.byId('colorPicker2').show(this, ['above-centered','below-centered','after','before'])"></td>
+	</tr>
+	</table>
 	<center style="position:fixed;bottom:0;width:100%;">
 		<label for="date2">Date (SpinWheel above):&nbsp;</label>
 		<input id="date2" readOnly value=""
@@ -144,7 +138,7 @@
 		<div id="cal" dojoType='dijit.Calendar'></div>
 	</div>
 
-	<div id="colorPicker1" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor, onShow:setColor">
+	<div id="colorPicker1" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor1">
  		<h1 dojoType="dojox.mobile.Heading" label="Select a Color">
 			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
 				onclick="dijit.byId('colorPicker1').hide(true)"></div>
@@ -154,7 +148,7 @@
 		<div id="colorPalette" dojoType='dijit.ColorPalette'></div>
 	</div>
 
-	<div id="colorPicker2" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor2, onShow:setColor2">
+	<div id="colorPicker2" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor2">
  		<h1 dojoType="dojox.mobile.Heading" label="Select a Color">
 			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
 				onclick="dijit.byId('colorPicker2').hide(true)"></div>

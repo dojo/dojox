@@ -13,8 +13,7 @@ define(["dojox/mobile/Tooltip", "dojox/mobile/Overlay", "dojox/mobile/common"], 
 			this.onShow(node);
 			if(!this.cover){
 				this.cover = dojo.create('div', {style: {position:'absolute', top:'0px', left:'0px', width:'100%', height:'100%', opacity:'0' }}, this.domNode, 'before');
-				this.connect(this.cover, "ontouchstart", "_onBlur");
-				this.connect(this.cover, "onmousedown", "_onBlur");
+				this.connect(this.cover, "onclick", "_onBlur");
 			}
 			dojo.style(this.cover, "visibility", "visible");
 			return this.inherited(arguments);

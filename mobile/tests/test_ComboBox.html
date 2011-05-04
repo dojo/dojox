@@ -20,6 +20,7 @@
 			padding: 2px;
 			font-size: 100%;
 			margin: 0px;
+			text-align: right;
 		}
 	</style>
 
@@ -38,15 +39,15 @@
 				{
 					name: "mobile",
 					runTest: function(){
-						var mobile_attributes = dijit.byId('mobile_attributes');
-						doh.is("", mobile_attributes.textbox.value, "mobile original value");
-						doh.is("", mobile_attributes.get('value'), "mobile original get('value')");
-						doh.is(Infinity, mobile_attributes.get('pageSize'), "mobile original get('pageSize')");
-						mobile_attributes.set('pageSize', 9);
-						mobile_attributes.set('value', "test");
-						doh.is("test", mobile_attributes.textbox.value, "mobile value");
-						doh.is("test", mobile_attributes.get('value'), "mobile get('value')");
-						doh.is(9, mobile_attributes.get('pageSize'), "mobile get('pageSize')");
+						var widget = dijit.byId('mobile_attributes');
+						doh.is("", widget.textbox.value, "mobile original value");
+						doh.is("", widget.get('value'), "mobile original get('value')");
+						doh.is(Infinity, widget.get('pageSize'), "mobile original get('pageSize')");
+						widget.set('pageSize', 9);
+						widget.set('value', "test");
+						doh.is("test", widget.textbox.value, "mobile value");
+						doh.is("test", widget.get('value'), "mobile get('value')");
+						doh.is(9, widget.get('pageSize'), "mobile get('pageSize')");
 					}
 	 			}
 			]);
@@ -58,30 +59,30 @@
 					runTest: function(){
 						var
 							d = new doh.Deferred(),
-							mobile_events = dijit.byId('mobile_events'),
+							widget = dijit.byId('mobile_events'),
 							focusHandle, blurhandle,
 							nop = function(){ return false; };
 
 						function onFocus(){
-							mobile_events.disconnect(focusHandle);
-							mobile_events.set('displayedValue', "Focus");
-							blurhandle = mobile_events.connect(mobile_events.textbox, 'onblur', onBlur);
+							widget.disconnect(focusHandle);
+							widget.set('displayedValue', "Focus");
+							blurhandle = widget.connect(widget.textbox, 'onblur', onBlur);
 							dojo.byId('blurry').focus();
 						}
 						function onBlur(){
-							mobile_events.disconnect(blurhandle);
-							mobile_events.set('onChange', onChange);
-							mobile_events.set('displayedValue', mobile_events.get('displayedValue')+"Blur");
+							widget.disconnect(blurhandle);
+							widget.set('onChange', onChange);
+							widget.set('displayedValue', widget.get('displayedValue')+"Blur");
 						}
 						function onChange(){
-							mobile_events.set('onChange', nop);
+							widget.set('onChange', nop);
 							d.getTestCallback(function(){
-								doh.is("FocusBlur", mobile_events.textbox.value);
+								doh.is("FocusBlur", widget.textbox.value);
 							})();
 						}
-						doh.is(nop.toString(), mobile_events.get('onChange').toString(), "get('onChange')");
-						focusHandle = mobile_events.connect(mobile_events.textbox, 'onfocus', onFocus);
-						setTimeout(dojo.hitch(mobile_events, "focus"), 0);
+						doh.is(nop.toString(), widget.get('onChange').toString(), "get('onChange')");
+						focusHandle = widget.connect(widget.textbox, 'onfocus', onFocus);
+						setTimeout(dojo.hitch(widget, "focus"), 0);
 
 						return d;
 					}
@@ -91,27 +92,37 @@
 			doh.register("programmatic", [
 				{
 					name: "mobile",
-					timeout: 2000,
+					timeout: 5000,
 					runTest: function(){
-						new dojox.mobile.ComboBox({id:"mobile_programmatic", list:"states"}).placeAt("mobile_programmatic_container", "first");
-						var mobile_programmatic = dijit.byId('mobile_programmatic');
-						var focushandle = mobile_programmatic.connect(mobile_programmatic.textbox, 'onfocus',
+						var widget = new dojox.mobile.ComboBox({id:"mobile_programmatic", list:"states"});
+						widget.placeAt("mobile_programmatic_container", "first");
+						var focushandle = widget.connect(widget, 'openDropDown',
 							function(){
 								d.getTestCallback(function(){
-									mobile_programmatic.disconnect(focushandle);
-									var pos = dojo.position(mobile_programmatic.domNode, true);
+									widget.disconnect(focushandle);
+									var pos = dojo.position(widget.domNode, true);
 									doh.t(pos.w > 0 && pos.h > 0 && pos.x > 0 && pos.y > 0, 'mobile position');
-									doh.is("Alabama", mobile_programmatic.textbox.value, 'mobile textbox value');
-									doh.is("Alabama", mobile_programmatic.get('value'), 'mobile widget value');
+									doh.is("Alabama", widget.textbox.value, 'mobile textbox value');
+									doh.is("Alabama", widget.get('value'), 'mobile widget value');
 								})();
 							}
 						);
 						var d = new doh.Deferred();
-						setTimeout(dojo.hitch(mobile_programmatic, "focus"), 0);
+						setTimeout(dojo.hitch(widget, "focus"), 0);
+
 						return d;
+					},
+					tearDown: function(){
+						var widget = dijit.byId('mobile_programmatic');
+						setTimeout(function(){ widget.closeDropDown(); }, 0);
 					}
 	 			}
 			]);
+
+			doh.register("log", function(){
+				dojo.byId('failures').innerHTML = doh._failureCount;
+				dojo.byId('errors').innerHTML = doh._errorCount;
+			});
 
 			doh.run();
 		});
@@ -184,20 +195,22 @@
 		<option value="WY">Wyoming</option>
 	</select>
 	</datalist>
-	<table id="table">
+	<table id="table" cellspacing="20">
 		<tr>
 			<td class="layout">attributes</td>
 			<td class="layout"><input id="mobile_attributes" data-dojo-type="dojox.mobile.ComboBox" data-dojo-props='value:"", list:"states"'></td>
 		</tr>
 		<tr>
-			<td class="layout">Events</td>
+			<td class="layout">events</td>
 			<td class="layout"><input id="mobile_events" data-dojo-type="dojox.mobile.ComboBox" data-dojo-props='value:"", list:"states", onChange:function(){ return false; }'></td>
 		</tr>
 		<tr>
-			<td class="layout">Programmatic</td>
+			<td class="layout">programmatic</td>
 			<td class="layout" id="mobile_programmatic_container"></td>
 		</tr>
 	</table>
-	<input tyle="checkbox" id="blurry" style="opacity:0;"/>
+	<input tyle="checkbox" id="blurry" style="opacity:0;border:0px none;"/>
+	<br>Errors:&nbsp;<span id="errors">?</span>
+	<br>Failures:&nbsp;<span id="failures">?</span>
 </body>
 </html>

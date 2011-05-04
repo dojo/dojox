@@ -1,6 +1,7 @@
-define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], function(TextBox,ComboBoxMenu,AutoCompleterMixin) {
+define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./common"], function(TextBox, ComboBoxMenu, AutoCompleterMixin) {
+	dojo.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
-	return dojo.declare("dojox.mobile.ComboBox",[TextBox, AutoCompleterMixin],{
+	return dojo.declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
 		// summary:
 		//		A non-templated auto-completing text box widget
 		//
@@ -21,13 +22,36 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin"], funct
 			}
 		},
 
+		closeDropDown: function(){
+			var wasOpened = this._opened;
+			var ret = this.inherited(arguments);
+			if(wasOpened && !this._opened){
+				if(this.startHandler){
+					this.disconnect(this.startHandler);
+					this.startHandler = null;
+					if(this.moveHandler){ this.disconnect(this.moveHandler); }
+					if(this.endHandler){ this.disconnect(this.endHandler); }
+				}
+			}
+			return ret;
+		},
+
 		openDropDown: function(){
-			var ret = null;
-			if(!this._opened){
-				ret = this.inherited(arguments);
+			var wasClosed = !this._opened;
+			var ret = this.inherited(arguments);
+			if(wasClosed && this._opened){
 				if(ret.aroundCorner.charAt(0) == 'B'){ // is popup below?
 					this.domNode.scrollIntoView(true); // scroll to top
 				}
+				// monitor blurring touches (ie. touchstart and touchend w/o intervening touchmove)
+				// can't use onclick since they don't get reported always
+				this.startHandler = this.connect(dojo.doc.documentElement, "ontouchstart",
+					dojo.hitch(this, function(){
+						var isMove = false;
+						this.moveHandler = this.connect(dojo.doc.documentElement, "ontouchmove", function(){ isMove = true; });
+						this.endHandler = this.connect(dojo.doc.documentElement, "ontouchend", function(){ if(!isMove){ this.closeDropDown(); } });
+					})
+				);
 			}
 			return ret;
 		}
