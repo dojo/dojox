@@ -6,10 +6,10 @@
 	<title>test Opener</title>
 	<link href="../themes/common/SpinWheel.css" rel="stylesheet">
 	<link href="../themes/common/Opener.css" rel="stylesheet">
-	<link href="../themes/iphone/base.css" rel="stylesheet"></link>
-	<link href="../themes/iphone/IconContainer.css" rel="stylesheet"></link>
-	<link href="mblDijit.css" rel="stylesheet"></link>
-    <link href="../../widget/ColorPicker/ColorPicker.css" rel="stylesheet"></link>
+	<link href="../themes/iphone/base.css" rel="stylesheet">
+	<link href="../themes/iphone/IconContainer.css" rel="stylesheet">
+	<link href="mblDijit.css" rel="stylesheet">
+    <link href="../../widget/ColorPicker/ColorPicker.css" rel="stylesheet">
 	<style>
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
@@ -30,7 +30,7 @@
 		dojo.require("dojox.mobile.deviceTheme");
 		dojo.require("dojox.mobile.SpinWheelDatePicker");
 		dojo.require("dojox.mobile.Opener");
-		dojo.require("dijit.Calendar");
+		dojo.require("dijit.CalendarLite");
 		dojo.require("dijit.ColorPalette");
         dojo.require("dojox.widget.ColorPicker");
 		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
@@ -98,7 +98,7 @@
 			onclick="dijit.byId('datePicker').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
 	<center style="width:100%;">
-		<label for="date3">Date (Calendar):&nbsp;</label>
+		<label for="date3">Date (CalendarLite):&nbsp;</label>
 		<input id="date3" readOnly value=""
 			onclick="dijit.byId('calPicker').show(this, ['above-centered','below-centered','after','before'])">
 	</center>
@@ -135,7 +135,7 @@
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('calPicker').hide(false)"></div>
 		</h1>
-		<div id="cal" dojoType='dijit.Calendar'></div>
+		<div id="cal" dojoType='dijit.CalendarLite'></div>
 	</div>
 
 	<div id="colorPicker1" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor, onShow:setColor">
