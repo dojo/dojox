@@ -1,4 +1,4 @@
-define("dojox/data/CssRuleStore", ["dojo", "dojox", "dojo.data.util.sorter", "dojo/data/util/filter", "dojox/data/css"], function(dojo, dojox) {
+define("dojox/data/CssRuleStore", ["dojo", "dojox", "dojo/data/util/sorter", "dojo/data/util/filter", "dojox/data/css"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.CssRuleStore", null, {
 	//	summary:
