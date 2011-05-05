@@ -12,13 +12,12 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 		label: "",
 		iconBase: "",
 		backProp: {className: "mblArrowButton"},
+		tag: "H1",
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("H1");
+			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement(this.tag);
 			this.domNode.className = "mblHeading";
-			if(this.label){
-				this.labelNode = dojo.create("SPAN", null, this.domNode);
-			}else{
+			if(!this.label){
 				dojo.forEach(this.domNode.childNodes, function(n){
 					if(n.nodeType == 3){
 						var v = dojo.trim(n.nodeValue);
@@ -29,17 +28,8 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 					}
 				}, this);
 			}
-			if(this.back){
-				var btn = dojo.create("DIV", this.backProp, this.domNode, "first");
-				var head = dojo.create("DIV", {className:"mblArrowButtonHead"}, btn);
-				var body = dojo.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
-	
-				this._body = body;
-				this._head = head;
-				this._btn = btn;
-				this.backBtnNode = btn;
-				this.connect(body, "onclick", "onClick");
-				var neck = dojo.create("DIV", {className:"mblArrowButtonNeck"}, btn);
+			if(!this.labelNode){
+				this.labelNode = dojo.create("SPAN", null, this.domNode);
 			}
 		},
 
@@ -77,6 +67,18 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 		},
 
 		_setBackAttr: function(/*String*/back){
+			if(!this._btn){
+				var btn = dojo.create("DIV", this.backProp, this.domNode, "first");
+				var head = dojo.create("DIV", {className:"mblArrowButtonHead"}, btn);
+				var body = dojo.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
+
+				this._body = body;
+				this._head = head;
+				this._btn = btn;
+				this.backBtnNode = btn;
+				this.connect(body, "onclick", "onClick");
+				var neck = dojo.create("DIV", {className:"mblArrowButtonNeck"}, btn);
+			}
 			this.back = back;
 			this._body.innerHTML = this._cv(this.back);
 			this.resize();
