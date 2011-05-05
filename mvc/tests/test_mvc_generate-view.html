@@ -10,7 +10,7 @@
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
-			@import "../../../dijit/themes/claro/claro.css";            
+			@import "../../../dijit/themes/claro/claro.css";			
 		</style>
 		<script type="text/javascript" >
 			dojo.require("dojox.mvc");
@@ -43,35 +43,35 @@
 					<textarea class="cell" data-dojo-type="dijit.form.Textarea" id="modelArea" data-dojo-props="onBlur: updateView">
 	{
 	"Serial" : "360324",
-	"First"  : "John",
-	"Last"   : "Doe",
-	"Email"  : "jdoe@example.com",
+	"First"	 : "John",
+	"Last"	 : "Doe",
+	"Email"	 : "jdoe@example.com",
 	"Address": {
 	"Street" : "123 Valley Rd",
-	"City"   : "Katonah",
-	"State"  : "NY",
-	"Zip"    : "10536"
+	"City"	 : "Katonah",
+	"State"	 : "NY",
+	"Zip"	 : "10536"
 	},
 	"Phones" : [
 	  {
 		"Areacode" : "111",
-		"Local"    : "111-1111"
+		"Local"	   : "111-1111"
 	  },
 	  {
 		"Areacode" : "222",
-		"Local"    : "222-2222"
+		"Local"	   : "222-2222"
 	  }
 	],
 	"Member" : {
-	"Since"  : "2010",
-	"Type"   : "Gold"
+	"Since"	 : "2010",
+	"Type"	 : "Gold"
 	}
 	}
 					</textarea>
 					</div>
 					<h3>Generated View</h3>
 					<div id="view" data-dojo-type="dojox.mvc.Generate" data-dojo-props="idNameMapping:{'String' : 'view_t'}"></div>
-		  		</div>
+				</div>
 			</div>
 		</div>
 	</body>

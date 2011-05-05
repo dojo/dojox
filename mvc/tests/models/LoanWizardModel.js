@@ -10,61 +10,61 @@ dojo.declare("mvc.models.LoanWizardModel", dojox.mvc.StatefulModel, {
 		"hierarchical" : false,
 		"identifier"   : "id",
 		"items" : [
-			{ "id" : "mortgage", "x"  : 1, "y"  : 0 },
-			{ "id" : "taxes", "x"  : 2, "y"  : 0 },
-			{ "id" : "otherhousing", "x"  : 3, "y"  : 0 }
+			{ "id" : "mortgage", "x"  : 1, "y"	: 0 },
+			{ "id" : "taxes", "x"  : 2, "y"	 : 0 },
+			{ "id" : "otherhousing", "x"  : 3, "y"	: 0 }
 		]
 	}}),
 
 	constructor: function (args) {
 		this.inherited(arguments);
 
-		// try to precompute address fields from the zipcode and country...  
+		// try to precompute address fields from the zipcode and country...	 
 		dojox.mvc.bindInputs([this.Zip, this.Country], dojo.hitch(this, this._lookupAddrs));
 		// simple dependence of percentages on input values and total
 		dojox.mvc.bindInputs([this.Mortgage, this.Taxes, this.OtherHousing, this.BaseIncome, this.BonusIncome], dojo.hitch(this, this._recomputeTotalAndPercentages));
 		
-        dojox.mvc.bind(this.HousingPercent, "value", this.HousingPercent, "valid", dojo.hitch(this, this._isHousingLessThanOrEqualToThirtyThreePercent), true);
+		dojox.mvc.bind(this.HousingPercent, "value", this.HousingPercent, "valid", dojo.hitch(this, this._isHousingLessThanOrEqualToThirtyThreePercent), true);
 			
-        dojox.mvc.bind(this.HousingPercent, "value", this.HousingPercent, "relevant", dojo.hitch(this, this._nonZeroRelevance), true);
-        dojox.mvc.bind(this.TotalHousing, "value", this.TotalHousing, "relevant", dojo.hitch(this, this._nonZeroRelevance), true);
+		dojox.mvc.bind(this.HousingPercent, "value", this.HousingPercent, "relevant", dojo.hitch(this, this._nonZeroRelevance), true);
+		dojox.mvc.bind(this.TotalHousing, "value", this.TotalHousing, "relevant", dojo.hitch(this, this._nonZeroRelevance), true);
 			
 		this._recomputeTotalAndPercentages();  // get things going first time...
 	},
 
 	_lookupItem: function( dataSource, identity ) {
-	    var found_item;
-	    dataSource.fetchItemByIdentity( { "identity": identity, 
-	    	"onItem": function (item) { found_item = item; } } );
-	    return found_item;
+		var found_item;
+		dataSource.fetchItemByIdentity( { "identity": identity, 
+			"onItem": function (item) { found_item = item; } } );
+		return found_item;
 	},
 
 	_lookupAddrs: function() {
-	    if ( this.Zip.get("value") == null || isNaN(this.Zip.get("value"))) return;
-	    var pThis = this;
-	    var query = { "postalcode": this.Zip.get("value"), "country": this.Country.get("value") };	    
+		if ( this.Zip.get("value") == null || isNaN(this.Zip.get("value"))) return;
+		var pThis = this;
+		var query = { "postalcode": this.Zip.get("value"), "country": this.Country.get("value") };		
 		var xhrArgs = {
-	    	url: "zips/"+this.Zip.get("value")+".json",
-	    	sync: true,
-	    	content: query,
-	    	preventCache: true,
-	        handleAs: "json",
-	        load: function(data, io) {
-	        	pThis.City.set("value", data.postalcodes[0].placeName );
-	        	pThis.County.set("value", data.postalcodes[0].adminName2 );
-	        	pThis.State.set("value", data.postalcodes[0].adminCode1 );
-	        	pThis.Zip.set("valid", true ); 
-	        },
-	        error: function (data) {
-	        	// we couldn't find this country/zip combination...clear the fields and set validity=false
-	        	pThis.City.set("value", "" );
-	        	pThis.County.set("value", "" );
-	        	pThis.State.set("value", "" );
-	        	pThis.Zip.set("valid", false );
-		    }
-	    };
-	    //Call the synchronous xhrGet
-	    var deferred = dojo.xhrGet(xhrArgs);	
+			url: "zips/"+this.Zip.get("value")+".json",
+			sync: true,
+			content: query,
+			preventCache: true,
+			handleAs: "json",
+			load: function(data, io) {
+				pThis.City.set("value", data.postalcodes[0].placeName );
+				pThis.County.set("value", data.postalcodes[0].adminName2 );
+				pThis.State.set("value", data.postalcodes[0].adminCode1 );
+				pThis.Zip.set("valid", true ); 
+			},
+			error: function (data) {
+				// we couldn't find this country/zip combination...clear the fields and set validity=false
+				pThis.City.set("value", "" );
+				pThis.County.set("value", "" );
+				pThis.State.set("value", "" );
+				pThis.Zip.set("valid", false );
+			}
+		};
+		//Call the synchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);	
 	},
 
 	_recomputeTotalAndPercentages: function() {

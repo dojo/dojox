@@ -10,7 +10,7 @@
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
-			@import "../../../dijit/themes/claro/claro.css";            
+			@import "../../../dijit/themes/claro/claro.css";			
 		</style>
 		<script type="text/javascript" >
 			dojo.require("dojox.mvc");
@@ -41,31 +41,31 @@
 
 			dojo.addOnLoad(setup);
 		</script>
-    </head>
-    <body class="claro">
-        <div id="wrapper">
-        <div id="header">
-          <div id="navigation">
-          </div>
-          <div id="headerInsert">
-            <h1>View generation example</h1>
-            <h2>Data Binding - Generate Container, with a store, commit and reset.</h2>
-          </div>
-        </div>
-        <div id="main">
-          <div id="leftNav">
-          </div>
-            <div id="mainContent">
-                <h3>Generated View</h3>
-                <div id="view" data-dojo-type="dojox.mvc.Generate">
-                </div>
-                <div class="row">
-                    <div class="spacer"></div>
-                    <button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model.commit();}">Commit</button>
-                    <button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model.reset();}">Reset</button>
-                </div>
-            </div>
-        </div>
-        </div>
-    </body>
+	</head>
+	<body class="claro">
+		<div id="wrapper">
+		<div id="header">
+		  <div id="navigation">
+		  </div>
+		  <div id="headerInsert">
+			<h1>View generation example</h1>
+			<h2>Data Binding - Generate Container, with a store, commit and reset.</h2>
+		  </div>
+		</div>
+		<div id="main">
+		  <div id="leftNav">
+		  </div>
+			<div id="mainContent">
+				<h3>Generated View</h3>
+				<div id="view" data-dojo-type="dojox.mvc.Generate">
+				</div>
+				<div class="row">
+					<div class="spacer"></div>
+					<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model.commit();}">Commit</button>
+					<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model.reset();}">Reset</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	</body>
 </html>

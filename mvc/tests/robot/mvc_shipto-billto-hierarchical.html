@@ -20,14 +20,13 @@
 			dojo.addOnLoad(function(){
 				doh.robot.initRobot('../test_mvc_shipto-billto-hierarchical.html');
 
-				doh.register("test_MVC_SimpleDataBoundField", [				                                               
-					{
+				doh.register("test_MVC_SimpleDataBoundField", [
+				{
 						name: "initial conditions",
 						timeout: 9000,
 						runTest: function(){
 							var d = new doh.Deferred();
-                            console.debug("dojo.version() is "+dojo.version);
-																
+							console.debug("dojo.version() is "+dojo.version);
 							doh.robot.sequence(d.getTestCallback(function(){
 								doh.is("ShipTo", dijit.byId("addrLabel").get('value'));
 								doh.is("123 Valley Rd", dijit.byId("streetInput").get('value'),"streetInput should be set");
@@ -35,7 +34,7 @@
 							return d;
 						}
 					 },
-                     {						
+					 {
 						name: "billto",
 						timeout: 9000,
 						runTest: function(){
@@ -55,17 +54,16 @@
 						timeout: 9000,
 						runTest: function(){
 							var d = new doh.Deferred();
-														
 							doh.robot.mouseMoveAt("dijit_form_Button_0", 500, 0);
 							doh.robot.mouseClick({left:true}, 500);
-                            doh.robot.mouseClick({left:true}, 500);
+							doh.robot.mouseClick({left:true}, 500);
 							
 							doh.robot.sequence(d.getTestCallback(function(){
 								doh.is("ShipTo", dijit.byId("addrLabel").get('value'),"addrLabel should be set");
 							}), 1000);
 							return d;
 						}
-					},					
+					},
 					{
 						name: "changeShipToAddress",
 						timeout: 9000,
@@ -78,11 +76,11 @@
 							doh.robot.mouseMoveAt("addrLabel", 500, 0);
 							doh.robot.mouseClick({left:true}, 500);
 
-							doh.robot.keyPress(dojo.keys.TAB, 500, {});							
-                            doh.robot.keyPress(dojo.keys.TAB, 500, {});                         
-							doh.robot.keyPress(dojo.keys.DELETE, 500, {});							
+							doh.robot.keyPress(dojo.keys.TAB, 500, {});
+							doh.robot.keyPress(dojo.keys.TAB, 500, {});
+							doh.robot.keyPress(dojo.keys.DELETE, 500, {});
 							
-							doh.robot.typeKeys("456 Mountain Rd", 500, 1000);							
+							doh.robot.typeKeys("456 Mountain Rd", 500, 1000);
 							
 							doh.robot.mouseMoveAt("dijit_form_Button_1_label", 500, 0);
 							doh.robot.mouseClick({left:true}, 500);

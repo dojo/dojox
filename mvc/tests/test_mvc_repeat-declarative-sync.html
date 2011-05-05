@@ -20,108 +20,108 @@
 			dojo.require("dijit.form.Button");
 			dojo.require("dojo.parser");
 			
-          // Raw records for the master detail
-          var search_results_init =
-            {
-                "Results" : [
-                    {
-                        "First"   : "Anne",
-                        "Last"    : "Ackerman",
-                        "Location": "NY",
-                        "Office"  : "1S76",
-                        "Email"   : "a.a@test.com",
-                        "Tel"     : "123-764-8237",
-                        "Fax"     : "123-764-8228"
-                    },
-                    {
-                        "First"   : "Ben",
-                        "Last"    : "Beckham",
-                        "Location": "NY",
-                        "Office"  : "5N47",
-                        "Email"   : "b.b@test.com",
-                        "Tel"     : "123-764-8599",
-                        "Fax"     : "123-764-8600"
-                    },
-                    {
-                        "First"   : "Chad",
-                        "Last"    : "Chapman",
-                        "Location": "CA",
-                        "Office"  : "1278",
-                        "Email"   : "c.c@test.com",
-                        "Tel"     : "408-764-8237",
-                        "Fax"     : "408-764-8228"
-                    },
-                    {
-                        "First"   : "David",
-                        "Last"    : "Durham",
-                        "Location": "NJ",
-                        "Office"  : "C12",
-                        "Email"   : "d.d@test.com",
-                        "Tel"     : "514-764-8237",
-                        "Fax"     : "514-764-8228"
-                    },
-                    {
-                        "First"   : "Emma",
-                        "Last"    : "Eklof",
-                        "Location": "NY",
-                        "Office"  : "4N76",
-                        "Email"   : "e.e@test.com",
-                        "Tel"     : "123-764-1234",
-                        "Fax"     : "123-764-4321"
-                    },
-                    {
-                        "First"   : "Fred",
-                        "Last"    : "Fisher",
-                        "Location": "NJ",
-                        "Office"  : "V89",
-                        "Email"   : "f.f@test.com",
-                        "Tel"     : "514-764-8567",
-                        "Fax"     : "514-764-8000"
-                    },
-                    {
-                        "First"   : "George",
-                        "Last"    : "Garnett",
-                        "Location": "NY",
-                        "Office"  : "7S11",
-                        "Email"   : "gig@test.com",
-                        "Tel"     : "123-999-8599",
-                        "Fax"     : "123-999-8600"
-                    },
-                    {
-                        "First"   : "Hunter",
-                        "Last"    : "Huffman",
-                        "Location": "CA",
-                        "Office"  : "6532",
-                        "Email"   : "h.h@test.com",
-                        "Tel"     : "408-874-8237",
-                        "Fax"     : "408-874-8228"
-                    },
-                    {
-                        "First"   : "Irene",
-                        "Last"    : "Ira",
-                        "Location": "NJ",
-                        "Office"  : "F09",
-                        "Email"   : "i.i@test.com",
-                        "Tel"     : "514-764-6532",
-                        "Fax"     : "514-764-7300"
-                    },
-                    {
-                        "First"   : "John",
-                        "Last"    : "Jacklin",
-                        "Location": "CA",
-                        "Office"  : "6701",
-                        "Email"   : "j.j@test.com",
-                        "Tel"     : "408-764-1234",
-                        "Fax"     : "408-764-4321"
-                    }
-                ]
-            };
+		  // Raw records for the master detail
+		  var search_results_init =
+			{
+				"Results" : [
+					{
+						"First"	  : "Anne",
+						"Last"	  : "Ackerman",
+						"Location": "NY",
+						"Office"  : "1S76",
+						"Email"	  : "a.a@test.com",
+						"Tel"	  : "123-764-8237",
+						"Fax"	  : "123-764-8228"
+					},
+					{
+						"First"	  : "Ben",
+						"Last"	  : "Beckham",
+						"Location": "NY",
+						"Office"  : "5N47",
+						"Email"	  : "b.b@test.com",
+						"Tel"	  : "123-764-8599",
+						"Fax"	  : "123-764-8600"
+					},
+					{
+						"First"	  : "Chad",
+						"Last"	  : "Chapman",
+						"Location": "CA",
+						"Office"  : "1278",
+						"Email"	  : "c.c@test.com",
+						"Tel"	  : "408-764-8237",
+						"Fax"	  : "408-764-8228"
+					},
+					{
+						"First"	  : "David",
+						"Last"	  : "Durham",
+						"Location": "NJ",
+						"Office"  : "C12",
+						"Email"	  : "d.d@test.com",
+						"Tel"	  : "514-764-8237",
+						"Fax"	  : "514-764-8228"
+					},
+					{
+						"First"	  : "Emma",
+						"Last"	  : "Eklof",
+						"Location": "NY",
+						"Office"  : "4N76",
+						"Email"	  : "e.e@test.com",
+						"Tel"	  : "123-764-1234",
+						"Fax"	  : "123-764-4321"
+					},
+					{
+						"First"	  : "Fred",
+						"Last"	  : "Fisher",
+						"Location": "NJ",
+						"Office"  : "V89",
+						"Email"	  : "f.f@test.com",
+						"Tel"	  : "514-764-8567",
+						"Fax"	  : "514-764-8000"
+					},
+					{
+						"First"	  : "George",
+						"Last"	  : "Garnett",
+						"Location": "NY",
+						"Office"  : "7S11",
+						"Email"	  : "gig@test.com",
+						"Tel"	  : "123-999-8599",
+						"Fax"	  : "123-999-8600"
+					},
+					{
+						"First"	  : "Hunter",
+						"Last"	  : "Huffman",
+						"Location": "CA",
+						"Office"  : "6532",
+						"Email"	  : "h.h@test.com",
+						"Tel"	  : "408-874-8237",
+						"Fax"	  : "408-874-8228"
+					},
+					{
+						"First"	  : "Irene",
+						"Last"	  : "Ira",
+						"Location": "NJ",
+						"Office"  : "F09",
+						"Email"	  : "i.i@test.com",
+						"Tel"	  : "514-764-6532",
+						"Fax"	  : "514-764-7300"
+					},
+					{
+						"First"	  : "John",
+						"Last"	  : "Jacklin",
+						"Location": "CA",
+						"Office"  : "6701",
+						"Email"	  : "j.j@test.com",
+						"Tel"	  : "408-764-1234",
+						"Fax"	  : "408-764-4321"
+					}
+				]
+			};
 
 			var selectedIndex = 0;
 		</script>
 	</head>
 	<body class="claro" style="background-image: url(images/master_detail.png)">
-        <div data-dojo-id="results" data-dojo-type="dojox.mvc.StatefulModel" data="search_results_init" ></div>
+		<div data-dojo-id="results" data-dojo-type="dojox.mvc.StatefulModel" data="search_results_init" ></div>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation">
@@ -134,7 +134,7 @@
 				<div id="leftNav">
 				</div>
 				<div id="mainContent">
-					<div id="searchBanner">Search Results for term: </div>         
+					<div id="searchBanner">Search Results for term: </div>		   
 					<!--
 						The repeat container denotes a templated UI that operates over a collection
 						of data records.
@@ -184,22 +184,22 @@
 							</div>
 							<div class="row">
 							<div class="spacer"></div>
-								<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){console.log(results.Results[selectedIndex].toPlainObject());results.Results[selectedIndex].commit();}">Save Item</button>        
-								<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){console.log(results.Results.toPlainObject());results.Results.commit();;}">Commit All</button>        
-								<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){results.Results.reset();}">Reset to last saved</button>        
+								<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){console.log(results.Results[selectedIndex].toPlainObject());results.Results[selectedIndex].commit();}">Save Item</button>		   
+								<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){console.log(results.Results.toPlainObject());results.Results.commit();;}">Commit All</button>		   
+								<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){results.Results.reset();}">Reset to last saved</button>		 
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-        </div>
-        <script type="text/javascript">
+		</div>
+		<script type="text/javascript">
 			// called to change the selected item
 			function setDetailsContext(index) {
 				selectedIndex = index;
 				var widget = dijit.byId("detailsGroup");
 				widget.set("ref", index);
 			};
-        </script>
-    </body>
+		</script>
+	</body>
 </html>

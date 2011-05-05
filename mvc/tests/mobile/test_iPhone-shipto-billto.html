@@ -4,14 +4,14 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>iPhone Shipto-Billto</title>
-        <link href="../../../../dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
-        <link href="../css/iphone-format.css" rel="stylesheet"></link>
+		<link href="../../../../dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../css/iphone-format.css" rel="stylesheet"></link>
 
-    <!-- use links below for android theme        
-        <link href="../../../../dojox/mobile/themes/android/android.css" rel="stylesheet">
-        <link href="../../../../dojox/mobile/themes/buttons.css" rel="stylesheet"></link>
-        <link href="../css/android-format.css" rel="stylesheet">
-    -->
+	<!-- use links below for android theme		  
+		<link href="../../../../dojox/mobile/themes/android/android.css" rel="stylesheet">
+		<link href="../../../../dojox/mobile/themes/buttons.css" rel="stylesheet"></link>
+		<link href="../css/android-format.css" rel="stylesheet">
+	-->
 	
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
 
@@ -30,20 +30,20 @@
 			// Initial data
 			var names = {
 				"Serial" : "360324",
-				"First"  : "John",
-				"Last"   : "Doe",
-				"Email"  : "jdoe@us.ibm.com",
+				"First"	 : "John",
+				"Last"	 : "Doe",
+				"Email"	 : "jdoe@us.ibm.com",
 				"ShipTo" : {
 					"Street" : "123 Valley Rd",
-					"City"   : "Katonah",
-					"State"  : "NY",
-					"Zip"    : "10536"
+					"City"	 : "Katonah",
+					"State"	 : "NY",
+					"Zip"	 : "10536"
 				},
 				"BillTo" : {
 					"Street" : "17 Skyline Dr",
-					"City"   : "Hawthorne",
-					"State"  : "NY",
-					"Zip"    : "10532"
+					"City"	 : "Hawthorne",
+					"State"	 : "NY",
+					"Zip"	 : "10532"
 				}
 			};
 
@@ -53,71 +53,71 @@
 	</head>
 	<body>
 		<h1 dojoType="dojox.mobile.Heading">iPhone Data Binding Ex.</h1>
-        <div class="row" dojoType="dojox.mvc.Group" ref="model">
-            <div>
-                <label for="serialInput">Order #:</label>
-            </div>
-            <div>
-                <input  class="cell" id="serialInput" dojoType="dojox.mobile.TextBox"
-                        ref="'rel:Serial'"></input>
-            </div>
-            <div>
-                <label for="lastnameInput">Last:</label>
-            </div>
-            <div>
-                <input id="lastnameInput" dojoType="dojox.mobile.TextBox"
-                       ref="'rel:Last'"></input>
-            </div>
-            <div>
-                <label for="emailInput">Email:</label>
-            </div>
-            <div>
-                <input id="emailInput" dojoType="dojox.mobile.TextBox"
-                       ref="'rel:Email'"></input>
-            </div>
-        </div>
+		<div class="row" dojoType="dojox.mvc.Group" ref="model">
+			<div>
+				<label for="serialInput">Order #:</label>
+			</div>
+			<div>
+				<input	class="cell" id="serialInput" dojoType="dojox.mobile.TextBox"
+						ref="'rel:Serial'"></input>
+			</div>
+			<div>
+				<label for="lastnameInput">Last:</label>
+			</div>
+			<div>
+				<input id="lastnameInput" dojoType="dojox.mobile.TextBox"
+					   ref="'rel:Last'"></input>
+			</div>
+			<div>
+				<label for="emailInput">Email:</label>
+			</div>
+			<div>
+				<input id="emailInput" dojoType="dojox.mobile.TextBox"
+					   ref="'rel:Email'"></input>
+			</div>
+		</div>
 		<div class="spacer"></div>
-        <button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.ShipTo)">Ship To</button>
-        <button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.BillTo)">Bill To</button>		
-        <br/>
-        <div class="row" id="addrGroup" dojoType="dojox.mvc.Group" ref="model.ShipTo">
-            <div>
-                <label for="streetInput">Street:</label>
-            </div>
-            <div>
-                <input  id="streetInput" dojoType="dojox.mobile.TextBox"
-                        placeHolder="Street" ref="'rel:Street'"></input>
-            </div>
-            <div>
-                <label for="cityInput">City:</label>
-            </div>
-            <div>
-                <input id="cityInput" dojoType="dojox.mobile.TextBox"
-                       placeHolder="City" ref="'rel:City'"></input>
-            </div>
-            <div>
-                <label for="stateInput">State:</label>
-            </div>
-            <div>
-                <input id="stateInput" dojoType="dojox.mobile.TextBox"
-                       placeHolder="State" ref="'rel:State'"></input>
-            </div>
-            <div>
-                <label for="zipInput">ZIP Code:</label>
-            </div>
-            <div>
-                <input id="zipInput" dojoType="dojox.mobile.TextBox"
-                       placeHolder="ZIP Code" ref="'rel:Zip'"></input>
-            </div>
-        </div>
+		<button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.ShipTo)">Ship To</button>
+		<button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.BillTo)">Bill To</button>		
+		<br/>
+		<div class="row" id="addrGroup" dojoType="dojox.mvc.Group" ref="model.ShipTo">
+			<div>
+				<label for="streetInput">Street:</label>
+			</div>
+			<div>
+				<input	id="streetInput" dojoType="dojox.mobile.TextBox"
+						placeHolder="Street" ref="'rel:Street'"></input>
+			</div>
+			<div>
+				<label for="cityInput">City:</label>
+			</div>
+			<div>
+				<input id="cityInput" dojoType="dojox.mobile.TextBox"
+					   placeHolder="City" ref="'rel:City'"></input>
+			</div>
+			<div>
+				<label for="stateInput">State:</label>
+			</div>
+			<div>
+				<input id="stateInput" dojoType="dojox.mobile.TextBox"
+					   placeHolder="State" ref="'rel:State'"></input>
+			</div>
+			<div>
+				<label for="zipInput">ZIP Code:</label>
+			</div>
+			<div>
+				<input id="zipInput" dojoType="dojox.mobile.TextBox"
+					   placeHolder="ZIP Code" ref="'rel:Zip'"></input>
+			</div>
+		</div>
 		<div class="spacer"></div>
-        <button id="reset" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="model.reset()">Reset</button>
-        <script type="text/javascript">
-            function setRef(id, addrRef) {
-                var widget = dijit.byId(id);
-                widget.set("ref", addrRef);
-            }
-        </script>                
-        </div></div></div>
+		<button id="reset" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="model.reset()">Reset</button>
+		<script type="text/javascript">
+			function setRef(id, addrRef) {
+				var widget = dijit.byId(id);
+				widget.set("ref", addrRef);
+			}
+		</script>				 
+		</div></div></div>
 	</body>
 </html>

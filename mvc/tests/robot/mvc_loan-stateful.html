@@ -21,22 +21,22 @@
 				doh.robot.initRobot('../test_mvc_loan-stateful.html');
 
 				doh.register("on_test_MVC_LoanStateful", [
-				     {
-				   		name: "initial conditions",
-				   		timeout: 9000,
-				   		runTest: function(){
-				   		var d = new doh.Deferred();
-                        console.debug("dojo.version() is "+dojo.version);
-				   		
-				   		doh.robot.sequence(d.getTestCallback(function(){
+					 {
+						name: "initial conditions",
+						timeout: 9000,
+						runTest: function(){
+						var d = new doh.Deferred();
+						console.debug("dojo.version() is "+dojo.version);
+						
+						doh.robot.sequence(d.getTestCallback(function(){
 							doh.is("5", dijit.byId("percentHousing").get('value'),"percentHousing should be 5");
 							doh.is(true, dijit.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
-				            doh.is("1000", dijit.byId("housing").get('value'),"housing should be 1000");
-				            doh.is("2700", dijit.byId("totalHousing").get('value'),"totalHousing should be 2700");
-				   		}), 1000);
-				   		return d;
-				   		}
-				     },
+							doh.is("1000", dijit.byId("housing").get('value'),"housing should be 1000");
+							doh.is("2700", dijit.byId("totalHousing").get('value'),"totalHousing should be 2700");
+						}), 1000);
+						return d;
+						}
+					 },
 					{
 						name: "setzipgood1",
 						timeout: 9000,
@@ -117,8 +117,8 @@
 							doh.robot.keyPress(dojo.keys.TAB, 500, {});							
 
 							doh.robot.sequence(d.getTestCallback(function(){
-					            doh.is("10000", dijit.byId("housing").get('value'),"housing should be 10000");
-					            doh.is("11700", dijit.byId("totalHousing").get('value'),"totalHousing should be 11700");								
+								doh.is("10000", dijit.byId("housing").get('value'),"housing should be 10000");
+								doh.is("11700", dijit.byId("totalHousing").get('value'),"totalHousing should be 11700");								
 								doh.is("20", dijit.byId("percentHousing").get('value'),"percentHousing should be 20");
 								doh.is(true, dijit.byId("percentHousing").isValid(),"percentHousing should be valid");
 								
@@ -146,8 +146,8 @@
 							doh.robot.keyPress(dojo.keys.TAB, 500, {});							
 
 							doh.robot.sequence(d.getTestCallback(function(){
-					            doh.is("20000", dijit.byId("housing").get('value'),"housing should be 20000");
-					            doh.is("21700", dijit.byId("totalHousing").get('value'),"totalHousing should be 21700");								
+								doh.is("20000", dijit.byId("housing").get('value'),"housing should be 20000");
+								doh.is("21700", dijit.byId("totalHousing").get('value'),"totalHousing should be 21700");								
 								doh.is("36", dijit.byId("percentHousing").get('value'),"percentHousing should be 36");
 								doh.is(false, dijit.byId("percentHousing").isValid(),"percentHousing should be invalid");
 							}), 1000);
