@@ -1,6 +1,5 @@
 define(["dojox/mobile/Tooltip", "dojox/mobile/Overlay", "dojox/mobile/common"], function(Tooltip, Overlay) {
 
-	if(dojox.mobile.hasTouch){ dojox.mobile.detectScreenSize(); } // this should have been done in common.js
 	var cls = dojo.declare("dojox.mobile.Opener",
 		dojo.hasClass(dojo.doc.documentElement, "dj_phone") ? Overlay : Tooltip, {
 		// summary:

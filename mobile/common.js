@@ -84,6 +84,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		}
 		this._sz = sz;
 	};
+	dm.detectScreenSize();
 
 	dm.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
 		if(iconNode && iconPos){
