@@ -140,7 +140,7 @@ dojo.declare("dojox.gauges.AnalogIndicatorBase",[dojox.gauges._Indicator],{
         var dif;
         if (labelPlacement == "inside"){
             for (var it = 0; it < intersections.length; it++){
-                ip = intersections[it];
+                var ip = intersections[it];
                 dif = this._distance(ip.x, ip.y, ox, oy) - lrad;
                 if (dif >= 0){
                     // Place reference intersection point on reference circle
@@ -152,7 +152,7 @@ dojo.declare("dojox.gauges.AnalogIndicatorBase",[dojox.gauges._Indicator],{
         }
         else // "outside" placement
         {
-            for (var it = 0; it < intersections.length; it++){
+            for (it = 0; it < intersections.length; it++){
                 ip = intersections[it];
                 dif = this._distance(ip.x, ip.y, ox, oy) - lrad;
                 if (dif <= 0){
@@ -344,8 +344,7 @@ dojo.declare("dojox.gauges.AnalogGauge",dojox.gauges._Gauge,{
         }
         else {
             var range = Math.abs(this.max - this.min);
-            var startAngle = this._mod360(this.startAngle);
-            var relativeAngle = this._mod360(this.orientation == 'clockwise' ? 
+            var relativeAngle = this._mod360(this.orientation == 'clockwise' ?
 			   (angle - startAngle) : (-angle + startAngle));
             return this.min + range * relativeAngle / this._getAngleRange();
         }
