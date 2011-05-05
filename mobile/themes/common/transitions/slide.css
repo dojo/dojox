@@ -1,13 +1,14 @@
 .mblSlide.mblOut {
-	-webkit-transform: translateX(-100%); /* to avoid screen flicker */
 	-webkit-animation-duration: .4s;
 	-webkit-animation-name: mblSlideOut;
 	-webkit-animation-timing-function: linear;
+	-webkit-transform: translateX(-100%);
 }
 .mblSlide.mblIn {
 	-webkit-animation-duration: .4s;
 	-webkit-animation-name: mblSlideIn;
 	-webkit-animation-timing-function: linear;
+	-webkit-transform: translateX(0px);
 }
 .mblSlide.mblOut.mblReverse {
 	-webkit-animation-name: mblSlideOutReverse;

@@ -2,11 +2,13 @@
 	-webkit-animation-duration: .6s;
 	-webkit-animation-name: mblSlideVOut;
 	-webkit-animation-timing-function: ease-out;
+	-webkit-transform: translateY(-100%);
 }
 .mblSlidev.mblIn {
 	-webkit-animation-duration: .6s;
 	-webkit-animation-name: mblSlideVIn;
 	-webkit-animation-timing-function: ease-out;
+	-webkit-transform: translateY(0px);
 }
 .mblSlidev.mblOut.mblReverse {
 	-webkit-animation-name: mblSlideVOutReverse;
