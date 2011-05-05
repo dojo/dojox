@@ -45,9 +45,25 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 
 		startup: function(){
 			if(this._started){ return; }
+			var siblings = [];
+			var children = this.domNode.parentNode.childNodes;
+			var visible = false;
+			// check if a visible view exists
+			for(var i = 0; i < children.length; i++){
+				var c = children[i];
+				if(c.nodeType === 1 && dojo.hasClass(c, "mblView")){
+					siblings.push(c);
+					visible = visible || dijit.byNode(c)._visible;
+				}
+			}
+			var _visible = this._visible;
+			// if no visible view exists, make the first view visible
+			if(siblings.length === 1 || (!visible && siblings[0] === this)){
+				_visible = true;
+			}
 			var _this = this;
 			setTimeout(function(){
-				if(!_this._visible){
+				if(!_visible){
 					_this.domNode.style.display = "none";
 				}else{
 					dojox.mobile.currentView = _this;
