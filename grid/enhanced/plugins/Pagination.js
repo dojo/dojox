@@ -694,8 +694,11 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		for(var i = startPage, j = 2; j < stepNodes.length - 2; j++, i++){
 			node = stepNodes[j];
 			if(i < startPage + stepSize){
-				dojo.attr(node, "innerHTML", i);
-				dojo.attr(node, "value", i);
+				dojo.attr(node, {
+					"innerHTML": i,
+					"title": i,
+					"value": i
+				})
 				dojo.style(node, "display", "block");
 				dijit.setWaiState(node, "label", dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i + ""]));
 			}else{
