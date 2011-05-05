@@ -48,7 +48,7 @@ define(["dojo/_base/array","dojo/_base/html","./View","./_ScrollableMixin"], fun
 
 		addChild: function(widget){
 			var c = widget.domNode;
-			var fixed = this._checkFixedBar(c, true);
+			var fixed = this.checkFixedBar(c, true);
 			if(fixed){
 				this.domNode.appendChild(c);
 				if(fixed === "top"){
@@ -75,7 +75,7 @@ define(["dojo/_base/array","dojo/_base/html","./View","./_ScrollableMixin"], fun
 			for(i = 0, idx = 0, len = this.domNode.childNodes.length; i < len; i++){
 				c = this.domNode.childNodes[idx];
 				// search for view-specific header or footer
-				if(c === this.containerNode || this._checkFixedBar(c, true)){
+				if(c === this.containerNode || this.checkFixedBar(c, true)){
 					idx++;
 					continue;
 				}
@@ -83,41 +83,6 @@ define(["dojo/_base/array","dojo/_base/html","./View","./_ScrollableMixin"], fun
 			}
 		},
 
-		findAppBars: function(){
-			// search for application-specific header or footer
-			var i, len, c;
-			for(i = 0, len = dojo.body().childNodes.length; i < len; i++){
-				c = dojo.body().childNodes[i];
-				this._checkFixedBar(c, false);
-			}
-			if(this.domNode.parentNode){
-				for(i = 0, len = this.domNode.parentNode.childNodes.length; i < len; i++){
-					c = this.domNode.parentNode.childNodes[i];
-					this._checkFixedBar(c, false);
-				}
-			}
-			this.fixedFooterHeight = this.fixedFooter ? this.fixedFooter.offsetHeight : 0;
-		},
-	
-		_checkFixedBar: function(/*DomNode*/node, /*Boolean*/local){
-			if(node.nodeType === 1){
-				var fixed = node.getAttribute("fixed")
-					|| (dijit.byNode(node) && dijit.byNode(node).fixed);
-				if(fixed === "top"){
-					if(local){
-						node.style.top = "0px";
-						this.fixedHeader = node;
-					}
-					return fixed;
-				}else if(fixed === "bottom"){
-					node.style.position = "absolute";
-					this.fixedFooter = node;
-					return fixed;
-				}
-			}
-			return null;
-		},
-	
 		onAfterTransitionIn: function(moveTo, dir, transition, context, method){
 			this.flashScrollBar();
 		},

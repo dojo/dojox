@@ -64,7 +64,15 @@ define(["dojo/_base/html","dojo/_base/lang",  "dojo/_base/array", "dijit/_Widget
 				}
 			}
 	
-			var l = dojo.marginBox(this.domNode)[sz] - offset;
+			var h;
+			if(this.orientation == "V"){
+				if(this.domNode.parentNode.tagName == "BODY"){
+					if(dojo.filter(dojo.body().childNodes, function(node){ return node.nodeType == 1; }).length == 1){
+						h = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight);
+					}
+				}
+			}
+			var l = (h || dojo.marginBox(this.domNode)[sz]) - offset;
 			var props = {};
 			props[sz] = l;
 			dojo.marginBox(children[children.length - 1], props);

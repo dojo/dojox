@@ -126,7 +126,9 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase"], function(darray,d
 					c = this.arrowClass;
 				}
 			}
-			this._setBtnClassAttr(c);
+			if(c){
+				this._setBtnClassAttr(c);
+			}
 		},
 	
 		_setIconAttr: function(icon){

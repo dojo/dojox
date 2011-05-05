@@ -63,7 +63,7 @@ if(typeof dojo === "undefined"){
 	dojox = {mobile:{}};
 }
 if(typeof define === "undefined"){
-	define = function(deps, def){ def.apply(); };
+	define = function(def){ def.apply(); };
 }
 define(function(_dojo, _dojox){
 
@@ -79,6 +79,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.threshold = 4; // drag threshold value in pixels
 	this.constraint = true; // bounce back to the content area
 	this.touchNode = null; // a node that will have touch event handlers
+	this.isNested = false; // this scrollable's parent is also a scrollable
+	this.dirLock = false; // disable the move handler if scroll starts in the unexpected direction
+	this.height = ""; // explicitly specified height of this widget (ex. "300px")
 
 //>>excludeStart("dojo", true);
 	if(!dojo){ // namespace objects are not passed
@@ -219,8 +222,18 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 
 		// adjust the height of this view
-		this.domNode.style.height = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight)
-			- top - this._appFooterHeight + "px";
+		var h;
+		if(this.height === "inherit"){
+			if(this.domNode.offsetParent){
+				h = this.domNode.offsetParent.offsetHeight + "px";
+			}
+		}else if(this.height){
+			h = this.height;
+		}
+		if(!h){
+			h = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - top - this._appFooterHeight + "px";
+		}
+		this.domNode.style.height = h;
 
 		// to ensure that the view is within a scrolling area when resized.
 		this.onTouchEnd();
@@ -279,13 +292,15 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		this._time = [0];
 		this._posX = [this.touchStartX];
 		this._posY = [this.touchStartY];
+		this._locked = false;
 
-		if(!this.isFormElement(e.target)){
+		if(!this.isFormElement(e.target) && !this.isNested){
 			dojo.stopEvent(e);
 		}
 	};
 
 	this.onTouchMove = function(e){
+		if(this._locked){ return; }
 		var x = e.touches ? e.touches[0].pageX : e.clientX;
 		var y = e.touches ? e.touches[0].pageY : e.clientY;
 		var dx = x - this.touchStartX;
@@ -293,8 +308,18 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		var to = {x:this.startPos.x + dx, y:this.startPos.y + dy};
 		var dim = this._dim;
 
+		dx = Math.abs(dx);
+		dy = Math.abs(dy);
 		if(this._time.length == 1){ // the first TouchMove after TouchStart
-			if(Math.abs(dx) < this.threshold && Math.abs(dy) < this.threshold){ return; }
+			if(this._v && dx >= this.threshold && dx >= dy ||
+				(this._h || this._f) && dy >= this.threshold && dy >= dx){
+				this._locked = true;
+				return;
+			}
+			if(this._v && Math.abs(dy) < this.threshold ||
+				(this._h || this._f) && Math.abs(dx) < this.threshold){
+				return;
+			}
 			this.addCover();
 			this.showScrollBar();
 		}
@@ -356,6 +381,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.onTouchEnd = function(e){
+		if(this._locked){ return; }
 		var speed = {x:0, y:0};
 		var dim = this._dim;
 		var pos = this.getPos();

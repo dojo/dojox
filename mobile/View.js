@@ -58,11 +58,13 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 			}
 			var _visible = this._visible;
 			// if no visible view exists, make the first view visible
-			if(siblings.length === 1 || (!visible && siblings[0] === this)){
+			if(siblings.length === 1 || (!visible && siblings[0] === this.domNode)){
 				_visible = true;
 			}
 			var _this = this;
-			setTimeout(function(){
+			// Note: setTimeout was necessary earlier for some reason, but may not be necessary now.
+			// Let's remove setTimeout here and see what happens...
+//			setTimeout(function(){
 				if(!_visible){
 					_this.domNode.style.display = "none";
 				}else{
@@ -77,7 +79,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 				if(!parent || !parent.resize){ // top level widget
 					_this.resize();
 				}
-			}, dojo.isIE?100:0); // give IE a little time to complete drawing
+//			}, dojo.isIE?100:0); // give IE a little time to complete drawing
 			this.inherited(arguments);
 		},
 	
