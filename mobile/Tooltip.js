@@ -38,6 +38,7 @@ define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, 
 				"BRB": "mblTooltipAfter",
 				"BLB": "mblTooltipBefore"
 			};
+			dojo.removeClass(this.domNode, ["mblTooltipAfter","mblTooltipBefore","mblTooltipBelow","mblTooltipAbove"]);
 			var best = place.around(this.domNode, aroundNode, positions || ['below-centered', 'above-centered', 'after', 'before'], this.isLeftToRight());
 			var connectorClass = connectorClasses[best.corner + best.aroundCorner.charAt(0)] || '';
 			dojo.addClass(this.domNode, connectorClass);
@@ -55,7 +56,7 @@ define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, 
 			// summary:
 			//		Pop down the tooltip
 			this.resize = undefined;
-			dojo.replaceClass(this.domNode, "mblTooltipHidden", ["mblTooltipAfter","mblTooltipBefore","mblTooltipBelow","mblTooltipAbove","mblTooltipVisible"]);
+			dojo.replaceClass(this.domNode, "mblTooltipHidden", "mblTooltipVisible");
 		},
 
 		onBlur: function(/*Event*/e){
