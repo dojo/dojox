@@ -4,7 +4,7 @@ define(["dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function
 	// summary:
 	//		TODOC
 
-	var SpinWheelYearSlot = dojo.declare(SpinWheelSlot, {
+	var SpinWheelYearSlot = dojo.declare(dojox.mobile.SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
 			if(this.labelFrom !== this.labelTo){
@@ -20,7 +20,7 @@ define(["dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function
 		}
 	});
 
-	var SpinWheelMonthSlot = dojo.declare(SpinWheelSlot, {
+	var SpinWheelMonthSlot = dojo.declare(dojox.mobile.SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
 			var dtA = new Date(2000, 0, 1);
@@ -34,11 +34,11 @@ define(["dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function
 		}
 	});
 
-	var SpinWheelDaySlot = dojo.declare(SpinWheelSlot, {});
+	var SpinWheelDaySlot = dojo.declare(dojox.mobile.SpinWheelSlot, {});
 
 
 
-	return dojo.declare("dojox.mobile.SpinWheelDatePicker", SpinWheel, {
+	return dojo.declare("dojox.mobile.SpinWheelDatePicker", dojox.mobile.SpinWheel, {
 		slotClasses: [
 			SpinWheelYearSlot,
 			SpinWheelMonthSlot,

@@ -4,7 +4,7 @@ define(["dijit/_WidgetBase", "dijit/_Contained","dijit/_Container"], function(Wi
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.RoundRect", [WidgetBase, Container,Contained], {
+	return dojo.declare("dojox.mobile.RoundRect", [dijit._WidgetBase, dijit._Container,dijit._Contained], {
 
 		shadow: false,
 

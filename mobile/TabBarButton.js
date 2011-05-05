@@ -4,7 +4,7 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.TabBarButton", [ItemBase],{
+	return dojo.declare("dojox.mobile.TabBarButton", [dojox.mobile._ItemBase],{
 		icon1: "", // unselected (dark) icon
 		icon2: "", // selected (highlight) icon
 		iconPos1: "", // unselected (dark) icon position

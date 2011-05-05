@@ -1,6 +1,6 @@
 define(["./TextArea", "dijit/form/_ExpandingTextAreaMixin"], function(TextArea,ExpandingTextAreaMixin){
 
-	return dojo.declare("dojox.mobile.ExpandingTextArea", [TextArea, ExpandingTextAreaMixin], {
+	return dojo.declare("dojox.mobile.ExpandingTextArea", [dojox.mobile.TextArea, dijit.form._ExpandingTextAreaMixin], {
 		// summary:
 		//		Non-templated TEXTAREA widget with the capability to adjust it's height according to the amount of data.
 		//

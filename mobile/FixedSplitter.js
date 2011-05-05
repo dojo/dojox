@@ -22,7 +22,7 @@ define(["dojo/_base/html","dojo/_base/lang",  "dojo/_base/array", "dijit/_Widget
 	// |		</div>
 	// |	</div>
 
-	return dojo.declare("dojox.mobile.FixedSplitter", [WidgetBase,Container,Contained], {
+	return dojo.declare("dojox.mobile.FixedSplitter", [dijit._WidgetBase,dijit._Container,dijit._Contained], {
 		orientation: "H", // "H" or "V"
 
 		isContainer: true,

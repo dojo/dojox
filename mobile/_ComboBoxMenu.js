@@ -1,6 +1,6 @@
 define(["dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase", "./_ListTouchMixin", "./scrollable"], function(dhtml, ComboBoxMenuMixin,WidgetBase,ListTouchMixin,Scrollable) {
 
-	return dojo.declare("dojox.mobile._ComboBoxMenu", [WidgetBase,ListTouchMixin,ComboBoxMenuMixin], {
+	return dojo.declare("dojox.mobile._ComboBoxMenu", [dijit._WidgetBase,dojox.mobile._ListTouchMixin,dojox.mobile._ComboBoxMenuMixin], {
 		// summary:
 		//		Focus-less menu for internal use in `dijit.form.ComboBox`
 		//		Abstract methods that must be defined externally:

@@ -4,7 +4,7 @@ define(["dojo/_base/html", "dojo/date","dojo/date/locale","./SpinWheel","./SpinW
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.SpinWheelTimePicker", SpinWheel, {
+	return dojo.declare("dojox.mobile.SpinWheelTimePicker", dojox.mobile.SpinWheel, {
 		slotClasses: [
 			SpinWheelSlot,
 			SpinWheelSlot

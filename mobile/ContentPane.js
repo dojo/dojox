@@ -9,7 +9,7 @@ define(["dijit/_WidgetBase", "dijit/_Container", "dijit/_Contained", "dojo/_base
 	//		necessary, but there is a case where dojox.mobile custom build does not
 	//		contain dojo._base.xhr.
 
-	return dojo.declare("dojox.mobile.ContentPane", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile.ContentPane", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		href: "",
 		content: "",
 		parseOnLoad: true,

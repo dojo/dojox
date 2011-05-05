@@ -4,7 +4,7 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.TabBar", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile.TabBar", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		iconBase: "",
 		iconPos: "",
 		barType: "tabBar", // "tabBar"(default) or "segmentedControl"

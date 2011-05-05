@@ -4,7 +4,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Contained"], function(mcommon,Wid
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.Switch", [WidgetBase,Contained],{
+	return dojo.declare("dojox.mobile.Switch", [dijit._WidgetBase,dijit._Contained],{
 		value: "on",
 		name: "",
 		leftLabel: "ON",

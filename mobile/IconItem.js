@@ -1,9 +1,9 @@
-define(["dojo/_base/html", "dojo/_base/array", "./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./View","./Heading","./_ItemBase"],function(dhtml, darray,mcommon,WidgetBase,Container,Contained,View,Heading,ItemBase){
+define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase"],function(dhtml, darray,mcommon,ItemBase){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
 	//		TODOC
-	return dojo.declare("dojox.mobile.IconItem", ItemBase, { 
+	return dojo.declare("dojox.mobile.IconItem", dojox.mobile._ItemBase, { 
 		lazy: false,
 		requires: "",
 		timeout: 10,

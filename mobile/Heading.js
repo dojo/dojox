@@ -4,7 +4,7 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.Heading", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile.Heading", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		back: "",
 		href: "",
 		moveTo: "",

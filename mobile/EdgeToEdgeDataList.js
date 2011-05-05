@@ -3,5 +3,5 @@ define(["./EdgeToEdgeList", "./_DataListMixin"], function(EdgeToEdgeList,DataLis
 	//		dojox/mobile/EdgeToEdgeDataList
 	// summary:
 	//		TODOC
-	return dojo.declare("dojox.mobile.EdgeToEdgeDataList", [EdgeToEdgeList,DataListMixin],{});
+	return dojo.declare("dojox.mobile.EdgeToEdgeDataList", [dojox.mobile.EdgeToEdgeList,dojox.mobile.DataListMixin],{});
 });

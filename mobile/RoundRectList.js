@@ -4,7 +4,7 @@ define(["dijit/_WidgetBase", "dijit/_Container", "dijit/_Contained"], function(W
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.RoundRectList", [WidgetBase,Container,Contained], {
+	return dojo.declare("dojox.mobile.RoundRectList", [dijit._WidgetBase,dijit._Container,dijit._Contained], {
 		transition: "slide",
 		iconBase: "",
 		iconPos: "",

@@ -4,7 +4,7 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.SpinWheelSlot", [WidgetBase,Contained,ScrollableMixin], {
+	return dojo.declare("dojox.mobile.SpinWheelSlot", [dijit._WidgetBase,dijit._Contained,dojox.mobile._ScrollableMixin], {
 		items: [], // Ex. [[0,"Jan"],...]
 		labels: [], // Ex. ["Jan","Feb",...]
 		labelFrom: 0,

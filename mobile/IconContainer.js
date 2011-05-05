@@ -4,7 +4,7 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.IconContainer", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile.IconContainer", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		defaultIcon: "",
 		transition: "below", // slide, flip, or below
 		pressedIconOpacity: 0.4,

@@ -1,6 +1,6 @@
 define(["dijit/form/_ListBase"], function(ListBase) {
 
-	return dojo.declare( "dojox.mobile._ListTouchMixin", ListBase, {
+	return dojo.declare( "dojox.mobile._ListTouchMixin", dojox.mobile._ListBase, {
 		// summary:
 		//		Focus-less menu to handle touch events consistently
 		//		Abstract methods that must be defined externally:

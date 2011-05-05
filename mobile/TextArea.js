@@ -1,6 +1,6 @@
 define(["dojo/_base/html","./TextBox"], function(dhtml,TextBox){
 
-	return dojo.declare("dojox.mobile.TextArea",TextBox,{
+	return dojo.declare("dojox.mobile.TextArea",dojox.mobile.TextBox,{
 		// summary:
 		//		Non-templated TEXTAREA widget.
 		//

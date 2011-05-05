@@ -4,7 +4,7 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.SpinWheel", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile.SpinWheel", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		slotClasses: [],
 		slotProps: [],
 		centerPos: 0,

@@ -4,5 +4,5 @@ define(["./RoundRectList", "./_DataListMixin"], function(RoundRectList,DataListM
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.RoundRectDataList", [RoundRectList,DataListMixin], {});
+	return dojo.declare("dojox.mobile.RoundRectDataList", [dojox.mobile.RoundRectList,dojox.mobile._DataListMixin], {});
 });

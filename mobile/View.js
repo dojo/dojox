@@ -4,7 +4,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.View", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile.View", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		// summary:
 		//		A widget that represents a view that occupies the full screen
 		// description:

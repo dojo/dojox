@@ -4,7 +4,7 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase"], function(darray,d
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.ListItem", ItemBase, {
+	return dojo.declare("dojox.mobile.ListItem", dojox.mobile._ItemBase, {
 		rightText: "",
 		btnClass: "",
 		btnClass2: "",

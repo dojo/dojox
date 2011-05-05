@@ -1,6 +1,6 @@
 define(["dojo/_base/html", "dojo/_base/array", "./Button", "dijit/form/_ToggleButtonMixin"], function(dhtml,darray,Button,ToggleButtonMixin) {
 
-	return dojo.declare("dojox.mobile.ToggleButton", [Button, ToggleButtonMixin], {
+	return dojo.declare("dojox.mobile.ToggleButton", [dojox.mobile.Button, dijit.form._ToggleButtonMixin], {
 		// summary:
 		//		A non-templated button widget that can be in two states (checked or not).
 		//		Can be base class for things like tabs or checkbox or radio buttons

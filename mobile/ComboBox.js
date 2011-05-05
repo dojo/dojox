@@ -1,7 +1,7 @@
 define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./common"], function(TextBox, ComboBoxMenu, AutoCompleterMixin) {
 	dojo.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
-	return dojo.declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
+	return dojo.declare("dojox.mobile.ComboBox", [dojox.mobile.TextBox, dijit.form._AutoCompleterMixin], {
 		// summary:
 		//		A non-templated auto-completing text box widget
 		//

@@ -1,6 +1,6 @@
 define(["dojo/_base/array", "dojo/_base/html","dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_ButtonMixin"], function(darray, html, WidgetBase,FormWidgetMixin,ButtonMixin){
 
-	return dojo.declare("dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
+	return dojo.declare("dojox.mobile.Button", [dijit._WidgetBase, dijit.form._FormWidgetMixin, dijit.form._ButtonMixin], {
 		// summary:
 		//	Non-templated BUTTON widget with a thin API wrapper for click events and setting the label
 		//

@@ -1,6 +1,6 @@
 define(["dojo/_base/html", "dijit/place", "dijit/_WidgetBase"], function(dhtml, place, WidgetBase) {
 
-	return dojo.declare("dojox.mobile.Tooltip", WidgetBase, {
+	return dojo.declare("dojox.mobile.Tooltip", dijit._WidgetBase, {
 		// summary:
 		//		A non-templated popup bubble widget
 		//

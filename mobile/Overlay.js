@@ -1,6 +1,6 @@
 define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(dojo, dijit, dojox, win, WidgetBase) {
 
-	return dojo.declare("dojox.mobile.Overlay", WidgetBase, {
+	return dojo.declare("dojox.mobile.Overlay", dijit._WidgetBase, {
 		// summary:
 		//		A non-templated widget that animates up from the bottom, overlaying the current content
 		//

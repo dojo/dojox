@@ -4,7 +4,7 @@ define(["dojo/_base/array","dojo/_base/html", "./_ItemBase"],function(darray,dht
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.ToolBarButton", ItemBase, {
+	return dojo.declare("dojox.mobile.ToolBarButton", dojox.mobile._ItemBase, {
 		selected: false,
 		_defaultColor: "mblColorDefault",
 		_selColor: "mblColorDefaultSel",

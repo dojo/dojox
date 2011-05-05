@@ -4,7 +4,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile._ItemBase", [WidgetBase,Container,Contained],{
+	return dojo.declare("dojox.mobile._ItemBase", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
 		icon: "",
 		iconPos: "", // top,left,width,height (ex. "0,0,29,29")
 		alt: "",
