@@ -14,6 +14,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 		// initially disable selection since iphone displays selection handles that makes it hard to pick from the list
 		selectOnClick: false,
 		autoComplete: false,
+		_focusManager: null,
 
 		_onFocus: function(){
 			this.inherited(arguments);
@@ -32,6 +33,9 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 					if(this.moveHandler){ this.disconnect(this.moveHandler); }
 					if(this.endHandler){ this.disconnect(this.endHandler); }
 				}
+				if(this.clickHandler){
+					this.disconnect(this.mouseHandler);
+				}
 			}
 			return ret;
 		},
@@ -43,8 +47,10 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 				if(ret.aroundCorner.charAt(0) == 'B'){ // is popup below?
 					this.domNode.scrollIntoView(true); // scroll to top
 				}
+				this.clickHandler = this.connect(dojo.doc.documentElement, "onclick",
+					function(){ this.closeDropDown(); });
 				// monitor blurring touches (ie. touchstart and touchend w/o intervening touchmove)
-				// can't use onclick since they don't get reported always
+				// can't reliably only use onclick since they don't get reported always
 				this.startHandler = this.connect(dojo.doc.documentElement, "ontouchstart",
 					dojo.hitch(this, function(){
 						var isMove = false;

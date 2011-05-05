@@ -15,9 +15,12 @@
 
 	<script type="text/javascript">
 		dojo.require("doh.runner");
-		dojo.require("dojo.parser");
+		dojo.require("dojox.mobile.parser");
 		dojo.require("dijit.form.DataList");
 		dojo.require("dojox.mobile.ComboBox");
+		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
+		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 
 		dojo.addOnLoad(function(){
 
