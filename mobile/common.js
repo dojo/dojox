@@ -312,5 +312,5 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		}
 	})();
 
-	return dm.common;
+	return dm;
 });
