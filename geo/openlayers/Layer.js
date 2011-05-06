@@ -1,6 +1,5 @@
 // dojo.provide allows pages to use all of the types declared in this resource.
 dojo.provide("dojox.geo.openlayers.Layer");
-dojo.experimental("dojox.geo.openlayers.Layer");
 dojo.declare("dojox.geo.openlayers.Layer", null, {
 	// summary: 
 	//   Base layer class for dojox.geo.openlayers.Map specific layers extending OpenLayers.Layer class.

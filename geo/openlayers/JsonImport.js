@@ -1,5 +1,4 @@
 dojo.provide("dojox.geo.openlayers.JsonImport");
-dojo.experimental("dojox.geo.openlayers.JsonImport");
 dojo.require("dojox.geo.openlayers.LineString");
 dojo.require("dojox.geo.openlayers.Collection");
 dojo.require("dojo.data.ItemFileReadStore");

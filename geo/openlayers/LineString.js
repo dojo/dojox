@@ -1,6 +1,5 @@
 // dojo.provide allows pages to use all of the types declared in this resource.
 dojo.provide("dojox.geo.openlayers.LineString");
-dojo.experimental("dojox.geo.openlayers.LineString");
 dojo.require("dojox.geo.openlayers.Geometry");
 
 dojo.declare("dojox.geo.openlayers.LineString", dojox.geo.openlayers.Geometry, {

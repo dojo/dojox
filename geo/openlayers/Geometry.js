@@ -1,6 +1,5 @@
 // dojo.provide allows pages to use all of the types declared in this resource.
 dojo.provide("dojox.geo.openlayers.Geometry");
-dojo.experimental("dojox.geo.openlayers.Geometry");
 dojo.declare("dojox.geo.openlayers.Geometry", null, {
 	// summary:
 	//   A Geometry handles description of shapes to be rendered in a GfxLayer

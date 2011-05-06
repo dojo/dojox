@@ -1,6 +1,5 @@
 // dojo.provide allows pages to use all of the types declared in this resource.
 dojo.provide("dojox.geo.openlayers.WidgetFeature");
-dojo.experimental("dojox.geo.openlayers.WidgetFeature");
 dojo.require("dojox.geo.openlayers.Feature");
 
 dojo.declare("dojox.geo.openlayers.WidgetFeature", dojox.geo.openlayers.Feature, {

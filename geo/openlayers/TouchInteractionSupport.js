@@ -1,5 +1,4 @@
 dojo.provide("dojox.geo.openlayers.TouchInteractionSupport");
-dojo.experimental("dojox.geo.openlayers.TouchInteractionSupport");
 dojo.declare("dojox.geo.openlayers.TouchInteractionSupport", null, {
 	// summary: 
 	//   class to handle touch interactions on a OpenLayers.Map widget

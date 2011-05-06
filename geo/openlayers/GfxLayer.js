@@ -1,6 +1,5 @@
 // dojo.provide allows pages to use all of the types declared in this resource.
 dojo.provide("dojox.geo.openlayers.GfxLayer");
-dojo.experimental("dojox.geo.openlayers.GfxLayer");
 dojo.require("dojox.gfx");
 dojo.require("dojox.geo.openlayers.Feature");
 dojo.require("dojox.geo.openlayers.Layer");

@@ -1,6 +1,5 @@
 // dojo.provide allows pages to use all of the types declared in this resource.
 dojo.provide("dojox.geo.openlayers.GreatCircle");
-dojo.experimental("dojox.geo.openlayers.GreatCircle");
 dojo.require("dojox.geo.openlayers.GeometryFeature");
     
 (function(){
