@@ -62,9 +62,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 				_visible = true;
 			}
 			var _this = this;
-			// Note: setTimeout was necessary earlier for some reason, but may not be necessary now.
-			// Let's remove setTimeout here and see what happens...
-//			setTimeout(function(){
+			setTimeout(function(){ // necessary to render the view correctly
 				if(!_visible){
 					_this.domNode.style.display = "none";
 				}else{
@@ -79,7 +77,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], f
 				if(!parent || !parent.resize){ // top level widget
 					_this.resize();
 				}
-//			}, dojo.isIE?100:0); // give IE a little time to complete drawing
+			}, dojo.isIE?100:0); // give IE a little time to complete drawing
 			this.inherited(arguments);
 		},
 	

@@ -4,7 +4,7 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "dijit/_Widget
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.PageIndicator", [WidgetBase,Contained],{
+	return dojo.declare("dojox.mobile.PageIndicator", [dijit._WidgetBase, dijit._Contained],{
 		refId: "",
 
 		buildRendering: function(){
