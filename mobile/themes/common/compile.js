@@ -4,7 +4,7 @@ var path = require("path");
 var less = require("less");
 
 // collect files
-var folders = ["../android", "../blackberry", "../iphone"]; 
+var folders = ["../android", "../blackberry", "../iphone", "../custom"]; 
 var files = [];
 folders.forEach(function(folder){
 	files = files.concat(fs.readdirSync(folder).map(function(file){

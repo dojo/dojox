@@ -1,0 +1,20 @@
+/* dojox.mobile.TabBar */
+.mblTabBar {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+  height: 50px;
+  background-color: #abd6ff;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.8)), color-stop(1, rgba(255, 255, 255, 0.5)));
+  border-bottom: 1px solid #769dc0;
+  color: #131313;
+  text-align: center;
+}
+.mblTabBarNoIcons {
+  height: 34px;
+}
+.mblTabBarNoText {
+  height: 34px;
+}
