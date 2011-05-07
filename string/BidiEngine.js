@@ -1,6 +1,5 @@
-dojo.provide("dojox.string.BidiEngine");
-
-(function(){
+define(["dojo/_base/lang"], function(dojo){
+dojo.getObject("string", true, dojox);
 
 dojo.declare("dojox.string.BidiEngine", null, {
 	// summary:
@@ -1502,4 +1501,5 @@ delete LRO;
 delete RLO;
 delete BN;
 
-})();
+return dojox.string.BidiEngine;
+});

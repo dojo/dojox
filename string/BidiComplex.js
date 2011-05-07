@@ -1,13 +1,12 @@
-dojo.provide("dojox.string.BidiComplex");
-dojo.experimental("dojox.string.BidiComplex");
-
 // summary:
 //		BiDiComplex module handles complex expression issues known when using BiDi characters
 //		in File Paths, URLs, E-mail Address, XPATH, etc.
 //		this module adds property listeners to the text fields to correct the text representation
 //		in both static text and dynamic text during user input.
 
-(function(){
+define(["dojo/_base/lang"], function(dojo){
+	dojo.experimental("dojox.string.BidiComplex");
+	dojo.getObject("string.BidiComplex", true, dojox);
 
 	var _str0 = []; //FIXME: shared reference here among various functions means the functions can't be reused
 
@@ -310,4 +309,5 @@ dojo.experimental("dojox.string.BidiComplex");
 		}
 		return segmentsPointers;
 	};
-})();
+	return dojox.string.BidiComplex;
+});
