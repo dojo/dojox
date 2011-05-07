@@ -61,7 +61,7 @@
 					dojo.byId("leftPane").appendChild(dojo.byId("settings"));
 				}
 			}
-			function showSettingsView(){
+			function showLeftView(){
 				dijit.byId("settings").show();
 			}
 			function selectItem(id){
@@ -88,7 +88,7 @@
 				showBackButton(false);
 				setTransition("none");
 				moveList("left");
-				showSettingsView();
+				showLeftView();
 				selectItem(showRightView().id);
 			});
 
@@ -97,7 +97,7 @@
 				showBackButton(true);
 				setTransition("slide");
 				moveList("right");
-				showSettingsView();
+				showLeftView();
 				selectItem(null);
 			});
 
