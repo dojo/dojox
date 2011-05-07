@@ -67,14 +67,14 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 	dm.updateOrient();
 
 	dm.tabletSize = 500;
-	dm.detectScreenSize = function(){
+	dm.detectScreenSize = function(/*Boolean?*/force){
 		var dim = dm.getScreenSize();
 		var sz = Math.min(dim.w, dim.h);
 		var from, to;
-		if(sz >= dm.tabletSize && (!this._sz || this._sz < dm.tabletSize)){
+		if(sz >= dm.tabletSize && (force || (!this._sz || this._sz < dm.tabletSize))){
 			from = "phone";
 			to = "tablet";
-		}else if(sz < dm.tabletSize && (!this._sz || this._sz >= dm.tabletSize)){
+		}else if(sz < dm.tabletSize && (force || (!this._sz || this._sz >= dm.tabletSize))){
 			from = "tablet";
 			to = "phone";
 		}
@@ -210,7 +210,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 	}
 	
 	dojo.addOnLoad(function(){
-		dm.detectScreenSize();
+		dm.detectScreenSize(true);
 		if(dojo.config["mblApplyPageStyles"] !== false){
 			dojo.addClass(dojo.doc.documentElement, "mobile");
 		}
