@@ -16,16 +16,16 @@
   line-height: 43px;
 }
 .mblListItem.mblVariableHeight {
-  line-height: normal;
   height: auto;
   padding: 11px 6px 10px 6px;
+  line-height: normal;
 }
 .mblListItem a.mblListItemAnchor {
-  background-position: 14px 17px;
   display: block;
+  -webkit-tap-highlight-color: transparent;
+  background-position: 14px 17px;
   padding-left: 40px;
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
 }
 .mblListItem a.mblListItemAnchorNoIcon {
   padding-left: 10px;
@@ -54,7 +54,7 @@
   top: 15px;
 }
 .mblItemSelected {
-  background-color: #0869c6;
+  background-color: #0869C6;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#088eef), to(#0851ad), color-stop(0.5, #0869c6));
 }
 .mblItemSelected a.mblListItemAnchor {
@@ -67,16 +67,16 @@
   color: white;
 }
 .mblListItemTextBox {
-  padding-right: 28px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  padding-right: 28px;
 }
 .mblListItemTextBox2 {
   padding-right: 58px;
 }
 .mblListItemTextBoxSelected {
-  background-color: #0869c6;
+  background-color: #0869C6;
 }
 .mblVariableHeight .mblListItemTextBox {
   white-space: normal;
@@ -88,10 +88,7 @@
   color: black;
   line-height: normal;
 }
-.mblItemChecked {
-  color: inherit;
-}
 .mblListItemSubText {
   font-size: 14px;
-  color: #7b7d48;
+  color: #7B7D48;
 }

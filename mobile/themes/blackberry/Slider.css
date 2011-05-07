@@ -1,50 +1,50 @@
 /* dojox.mobile.Slider */
 .mblSlider {
-  margin: 15px;
-  /* 1/2 handle width for hanging off the ends of the bar */
-
-  border: #B0B0B0 1px inset;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f3f7), to(#cec5d6), color-stop(0.5, #ced3ce));
   outline: none;
-  -webkit-border-radius: 6px;
   -webkit-user-select: none;
   /* prevent selection */
 
   -webkit-box-sizing: content-box;
   /* make width and height consistent with a DIV */
 
+  margin: 15px;
+  /* 1/2 handle width for hanging off the ends of the bar */
+
+  border: #B0B0B0 1px inset;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f3f7), to(#cec5d6), color-stop(0.5, #ced3ce));
+  -webkit-border-radius: 6px;
 }
 .mblSliderH {
   width: 200px;
   height: 8px;
 }
+.mblSliderH .mblSliderProgressBar {
+  height: 100%;
+}
+.mblSliderH .mblSliderHandle {
+  top: 50%;
+}
 .mblSliderV {
   height: 200px;
   width: 8px;
 }
+.mblSliderV .mblSliderProgressBar {
+  width: 100%;
+}
+.mblSliderV .mblSliderHandle {
+  left: 50%;
+}
 .mblSliderProgressBar {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#088eef), to(#0851ad), color-stop(0.5, #0869c6));
   -webkit-border-radius: 6px;
-}
-.mblSliderH .mblSliderProgressBar {
-  height: 100%;
-}
-.mblSliderV .mblSliderProgressBar {
-  width: 100%;
 }
 .mblSliderHandle {
   margin: -10px 0 0 -10px;
   width: 18px;
   height: 18px;
   border: #9D9D9D 1px outset;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#999999), color-stop(0.5, #bbbbbb));
   -webkit-border-radius: 6px;
-}
-.mblSliderH .mblSliderHandle {
-  top: 50%;
-}
-.mblSliderV .mblSliderHandle {
-  left: 50%;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#999999), color-stop(0.5, #bbbbbb));
 }
 .mblSliderTransition {
   -webkit-transition-duration: 400ms;

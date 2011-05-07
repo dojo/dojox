@@ -5,89 +5,76 @@
 	vertical-align: bottom; /* To avoid IE6 LI bug */
 	.mblListItem-styles;
 	&.mblVariableHeight {
-		line-height: normal;
 		height: auto;
-		padding: 11px 6px 10px 6px;
+		.mblListItem-mblVariableHeight-styles;
 	}
 	a {
 		&.mblListItemAnchor {
-			background-position: @listitem-anchor-background-position;
 			display: block;
-			padding-left: @listitem-anchor-padding-left;
-			text-decoration: none;
 			-webkit-tap-highlight-color: transparent;
+			.mblListItem-mblListItemAnchor-styles;
 		}
 		&.mblListItemAnchorNoIcon {
-			padding-left: @listitem-anchor-noicon-padding-left;
+			.mblListItem-mblListItemAnchorNoIcon-styles;
 		}
 		&.mblListItemAnchorHasRightButton {
-			padding-right: @listitem-anchor-rightbutton-padding-right;
+			.mblListItem-mblListItemAnchorHasRightButton-styles;
 		}
 	}
 	.mblLeftButton {
 		position: absolute;
-		top: 50%;
-		margin-top: -15px;
-		line-height: normal;
+		.mblListItem-mblLeftButton-styles;
 	}
 	.mblRightButton {
 		position: absolute;
-		top: 50%;
-		right: 7px;
-		margin-top: -15px;
-		line-height: normal;
+		.mblListItem-mblRightButton-styles;
 	}
 	.mblRightButton2 {
-		right: 36px;
+		.mblListItem-mblRightButton2-styles;
 	}
 }
 .mblListItemIcon {
 	position: absolute;
-	top: @listitem-icon-top;
+	.mblListItemIcon-styles;
 }
 .mblItemSelected {
-	background-color: @listitem-selected-background-color;
-	background-image: @listitem-selected-background-image;
+	.mblItemSelected-styles;
 	a {
 		&.mblListItemAnchor {
-			color: @listitem-selected-anchor-color;
+			.mblItemSelected-mblListItemAnchor-styles;
 		}
 	}
 	.mblDomButton {
 		DIV {
-			border-color: @listitem-selected-dombutton-border-color;
+			.mblItemSelected-mblDomButton-Div-styles;
 		}
 	}
 	.mblListItemSubText {
-		color: @listitem-selected-subtext-color;
+		.mblItemSelected-mblListItemSubText-styles;
 	}
 }
 .mblListItemTextBox {
-	padding-right: 28px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	.mblListItemTextBox-styles;
 }
 .mblListItemTextBox2 {
-	padding-right: 58px;
+	.mblListItemTextBox2-styles;
 }
 .mblListItemTextBoxSelected {
-	background-color: @listitem-textbox-selected-background-color;
+	.mblListItemTextBoxSelected-styles;
 }
 .mblVariableHeight .mblListItemTextBox {
 	white-space: normal;
 }
 .mblRightText {
 	position: absolute;
-	top: @listitem-righttext-top;
-	right: 30px;
-	color: @listitem-righttext-color;
-	line-height: normal;
+	.mblRightText-styles;
 }
 .mblItemChecked {
-	color: @listitem-checked-color;
+	.mblItemChecked-styles;
 }
 .mblListItemSubText {
-	font-size: @listitem-subtext-font-size;
-	color: @listitem-subtext-color;
+	.mblListItemSubText-styles;
 }

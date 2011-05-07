@@ -1,43 +1,23 @@
 /* dojox.mobile.RadioButton */
 .mblRadioButton {
-	margin: -0.5em 3px 0.3em 4px;
-	width: 1em;
-	height: 1em;
-	border: #9CACC0 1px outset;
-	background-image: @radiobutton-background-image;
-	font: inherit;
+	position: relative;
 	cursor: pointer;
 	outline: none;
-	position: relative;
-	-webkit-border-radius: @radiobutton-border-radius;
 	-webkit-appearance: none;
-	-webkit-transform: @radiobutton-transform;
 	-webkit-tap-highlight-color: transparent;
+	.mblRadioButton-styles;
 }
 .mblRadioButtonChecked,
 .mblRadioButton:checked {
-	border-color: #9CACC0;
-	background-image: @radiobutton-checked-background-image;
-}
-.mblRadioButtonChecked::after,
-.mblRadioButton:checked::after {
-	content: "";
-	width: 0.3em;
-	height: 0.6em;
-	position: absolute;
-	top: 0;
-	left: 0.25em;
-	border-color: white;
-	border-width: 0.15em;
-	border-style: none solid solid none;
-	-webkit-transform: rotate(45deg);
-	-webkit-transform-origin: 50% 50%;
-	border-color: @radiobutton-checked-after-border-color;
-}
-.mblRadioButtonChecked.mblRadioButtonSelected {
-	border-color: @radiobutton-checked-selected-border-color;
-	background-image: @radiobutton-checked-selected-background-image;
-}
-.mblRadioButtonChecked.mblRadioButtonSelected::after {
-	border-color: @radiobutton-checked-selected-after-border-color;
+	.mblRadioButtonChecked-styles;
+	&::after {
+		position: absolute;
+		.mblRadioButtonChecked-after-styles;
+	}
+	&.mblRadioButtonSelected {
+		.mblRadioButtonChecked-Selected-styles;
+		&::after {
+			.mblRadioButtonChecked-Selected-after-styles;
+		}
+	}	
 }

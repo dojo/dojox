@@ -1,56 +1,41 @@
-/* Icon Container */
+/* dojox.mobile.IconContainer */
 .mblIconContainer {
-	padding: @iconcontainer-padding;
-	margin: @iconcontainer-margin;
-	background-color: @iconcontainer-background-color;
+	.mblIconContainer-styles;
 }
+
+/* dojox.mobile.IconItem */
 .mblIconItem {
 	list-style-type: none;
 	float: left;
 }
 .mblIconItemTerminator {
 	list-style-type: none;
-	height: @iconcontainer-terminator-height;
 	clear: both;
+	.mblIconItemTerminator-styles;
 }
 .mblIconItemSub {
 	list-style-type: none;
-	margin-left: -10px;
-	background-color: white;
-	color: @iconitem-sub-color;
+	.mblIconItemSub-styles;
 }
-
 .mblIconArea {
-	font-family: Helvetica;
-	font-size: 12px;
-	height: 78px;
-	width: @iconitem-area-width;
-	text-align: center;
-	margin-bottom: @iconitem-area-margin-bottom;
-	color: @iconitem-area-color;
+	.mblIconArea-styles;
+	DIV {
+		position: relative;
+		.mblIconArea-div-styles;
+	}
+	IMG {
+		position: absolute;
+		.mblIconArea-img-styles;
+	}
 }
-
-.mblIconArea DIV {
-	position: relative;
-	height: 65px;
-}
-
-.mblIconArea IMG {
-	position: absolute;
-	top: @iconitem-area-img-top;
-	left: @iconitem-area-img-left;
-}
-
 .mblContent {
 	clear: both;
-	padding-bottom: 20px;
+	.mblContent-styles;
 }
-
 table.mblClose {
 	clear: both;
 	cursor: pointer;
 }
-
 .mblVibrate{
 	position: relative;
 	-webkit-animation-duration: .5s;
@@ -59,42 +44,31 @@ table.mblClose {
 	-webkit-animation-name: mblVibrate;
 	-webkit-transform: rotate(0deg);
 }
-
 .mblCloseContent{
 	-webkit-animation-duration: .3s;
 	-webkit-animation-timing-function: ease-in-out;
 	-webkit-animation-name: mblShrink;
 	-webkit-transform: scale(0.01);
-}
-.mblCloseContent.mblShrink0{
-	-webkit-animation-name: mblShrink0;
-}
-.mblCloseContent.mblShrink1{
-	-webkit-animation-name: mblShrink1;
-}
-.mblCloseContent.mblShrink2{
-	-webkit-animation-name: mblShrink2;
-}
-.mblCloseContent.mblShrink3{
-	-webkit-animation-name: mblShrink3;
+	&.mblShrink0{
+		-webkit-animation-name: mblShrink0;
+	}
+	&.mblShrink1{
+		-webkit-animation-name: mblShrink1;
+	}
+	&.mblShrink2{
+		-webkit-animation-name: mblShrink2;
+	}
+	&.mblShrink3{
+		-webkit-animation-name: mblShrink3;
+	}
 }
 
 /* Icon Content Heading */
 .mblIconContentHeading {
 	position: relative;
 	clear: both;
-	height: @iconitem-heading-height;
-	padding-left: 40px;
-	margin-top: 0px;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#E0E4E7), to(#B4BEC6), color-stop(0.5, #C4CCD2), color-stop(0.5, #BFC8CE));
-	border-top: 1px solid #F1F3F4;
-	border-bottom: 1px solid #717D85;
-	font-family: Helvetica;
-	font-size: @iconitem-heading-font-size;
-	color: white;
-	line-height: @iconitem-heading-line-height;
-	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	.mblIconContentHeading-styles;
 }

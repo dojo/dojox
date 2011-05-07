@@ -17,16 +17,16 @@
   line-height: 64px;
 }
 .mblListItem.mblVariableHeight {
-  line-height: normal;
   height: auto;
   padding: 11px 6px 10px 6px;
+  line-height: normal;
 }
 .mblListItem a.mblListItemAnchor {
-  background-position: 14px 17px;
   display: block;
+  -webkit-tap-highlight-color: transparent;
+  background-position: 14px 17px;
   padding-left: 53px;
   text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
 }
 .mblListItem a.mblListItemAnchorNoIcon {
   padding-left: 14px;
@@ -55,7 +55,7 @@
   top: 18px;
 }
 .mblItemSelected {
-  background-color: #ffc700;
+  background-color: #FFC700;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ad7500), to(#ffaa00), color-stop(0.06, #ffb200), color-stop(0.5, #ffc700));
 }
 .mblItemSelected a.mblListItemAnchor {
@@ -64,20 +64,17 @@
 .mblItemSelected .mblDomButton DIV {
   border-color: white;
 }
-.mblItemSelected .mblListItemSubText {
-  color: inherit;
-}
 .mblListItemTextBox {
-  padding-right: 28px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  padding-right: 28px;
 }
 .mblListItemTextBox2 {
   padding-right: 58px;
 }
 .mblListItemTextBoxSelected {
-  background-color: #048bf4;
+  background-color: #048BF4;
 }
 .mblVariableHeight .mblListItemTextBox {
   white-space: normal;
@@ -88,9 +85,6 @@
   right: 30px;
   color: white;
   line-height: normal;
-}
-.mblItemChecked {
-  color: inherit;
 }
 .mblListItemSubText {
   font-size: 14px;

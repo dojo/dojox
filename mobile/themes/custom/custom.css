@@ -9,14 +9,14 @@
 
 /* widget styles */
 @import url("Button.css");
+@import url("Carousel.css");
 @import url("CheckBox.css");
 @import url("ComboBox.css");
 @import url("IconContainer.css");
-@import url("IconItem.css");
+@import url("PageIndicator.css");
 @import url("RadioButton.css");
 @import url("Slider.css");
 @import url("TabBar.css");
-@import url("TabBarButton.css");
 @import url("TextArea.css");
 @import url("TextBox.css");
 @import url("ToggleButton.css");

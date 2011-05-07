@@ -4,9 +4,9 @@
   border-color: #9CACC0;
   border-width: 1px;
   border-style: inset;
+  -webkit-border-radius: 6px;
   font-family: Helvetica;
   font-size: 13px;
-  -webkit-border-radius: 6px;
 }
 /* dojox.mobile.ExpandingTextArea */
 .mblExpandingTextArea {

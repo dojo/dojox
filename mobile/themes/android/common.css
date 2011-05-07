@@ -15,18 +15,15 @@ html.mobile, .mobile body {
 }
 /* Button Colors */
 .mblColorBlue {
-  color: inherit;
-  background-color: #366edf;
+  background-color: #366EDF;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#7a9de9), to(#2362dd), color-stop(0.5, #366edf), color-stop(0.5, #215fdc));
 }
 /* Default Button Colors */
 .mblColorDefault {
-  color: inherit;
-  background-color: #adadad;
+  background-color: #ADADAD;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#e5e5e5), to(#7f7f7f), color-stop(0.5, #adadad), color-stop(0.5, #909090));
 }
 .mblColorDefaultSel {
-  color: inherit;
-  background-color: #ffc700;
+  background-color: #FFC700;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ad7500), to(#ffaa00), color-stop(0.06, #ffb200), color-stop(0.5, #ffc700));
 }

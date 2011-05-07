@@ -1,20 +1,20 @@
 @import url("../common/domButtons/DomButtonColorButtons.css");
 
-@import url("../common/IconContainer_keyframes.css");
-/* Icon Container */
+@import url("../common/IconContaine_keyframes.css");
+/* dojox.mobile.IconContainer */
 .mblIconContainer {
-  padding: 0px 0px 40px 0px;
   margin: 20px 0px 0px 10px;
-  background-color: transparent;
+  padding: 0px 0px 40px 0px;
 }
+/* dojox.mobile.IconItem */
 .mblIconItem {
   list-style-type: none;
   float: left;
 }
 .mblIconItemTerminator {
   list-style-type: none;
-  height: 20px;
   clear: both;
+  height: 20px;
 }
 .mblIconItemSub {
   list-style-type: none;
@@ -23,13 +23,13 @@
   color: black;
 }
 .mblIconArea {
-  font-family: Helvetica;
-  font-size: 12px;
+  margin-bottom: 10px;
   height: 78px;
   width: 74px;
-  text-align: center;
-  margin-bottom: 10px;
+  font-family: Helvetica;
+  font-size: 12px;
   color: white;
+  text-align: center;
 }
 .mblIconArea DIV {
   position: relative;
@@ -78,18 +78,18 @@ table.mblClose {
 .mblIconContentHeading {
   position: relative;
   clear: both;
-  height: 25px;
-  padding-left: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin-top: 0px;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#e0e4e7), to(#b4bec6), color-stop(0.5, #c4ccd2), color-stop(0.5, #bfc8ce));
+  padding-left: 40px;
+  height: 25px;
   border-top: 1px solid #F1F3F4;
   border-bottom: 1px solid #717D85;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#e0e4e7), to(#b4bec6), color-stop(0.5, #c4ccd2), color-stop(0.5, #bfc8ce));
   font-family: Helvetica;
   font-size: 14px;
   color: white;
   line-height: 26px;
   text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }

@@ -1,26 +1,14 @@
 /* dojox.mobile.ComboBox */
-/*
-	Essential styles that themes can inherit.
-	In other words, works but doesn't look great.
-*/
-
-/*
- * Popup items have a wrapper div (dijitPopup)
- * with the real popup inside, and maybe an iframe too
- */
 .dijitPopup {
+	// Popup items have a wrapper div (dijitPopup)
+	// with the real popup inside, and maybe an iframe too
 	margin: 0;
 	padding: 0;
 	position: absolute;
 	border: 0;
 	background-color: transparent;
-	-webkit-box-shadow: @combobox-popup-box-shadow;
-	-webkit-border-radius: @combobox-popup-border-radius;
+	.dijitPopup-styles;
 }
-
-/* Use this style to null out padding, margin, border in your template elements
-	so that page specific styles don't break them.
-*/
 .mblReset {
 	margin: 0;
 	padding: 0;
@@ -29,38 +17,22 @@
 	font: inherit;
 	color: inherit;
 }
-
 .mblComboBoxMenu {
-	border: 1px solid black;
-	background-color: @combobox-menu-background-color;
 	overflow-y: hidden !important;
-	-webkit-border-radius: @combobox-menu-border-radius;
+	.mblComboBoxMenu-styles;
 }
-
-.mblComboBoxMenuItemSelected {
-	/*
-	 * dijitMenuItemHover refers to actual mouse over
-	 * dijitMenuItemSelected is used after a menu has been "activated" by
-	 * clicking it, tabbing into it, or being opened from a parent menu,
-	 * and denotes that the menu item has focus or that focus is on a child
-	 * menu
-	 */
-	background-color: black;
-	background-image: @combobox-menuitem-selected-background-image;
-	color: white;
-}
-
 .mblComboBoxMenuItem {
-	text-align: left;
 	white-space: nowrap;
-	padding: .1em .2em;
-	border-width: 1px 0 1px 0;
-	border-style: solid;
-	border-color: @combobox-menuitem-border-color;
-	color: @combobox-menuitem-color;
+	.mblComboBoxMenuItem-styles;
 }
-
+.mblComboBoxMenuItemSelected {
+	// dijitMenuItemHover refers to actual mouse over
+	// dijitMenuItemSelected is used after a menu has been "activated" by
+	// clicking it, tabbing into it, or being opened from a parent menu,
+	// and denotes that the menu item has focus or that focus is on a child menu
+	.mblComboBoxMenuItemSelected-styles;
+}
 .mblComboBoxMenuPreviousButton,
 .mblComboBoxMenuNextButton {
-	font-style: italic;
+	.mblComboBoxMenuPreviousButton-styles;
 }
