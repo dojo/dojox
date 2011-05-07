@@ -1,7 +1,5 @@
-dojo.provide("dojox.color.Palette");
-dojo.require("dojox.color");
+define(["dojo/_base/lang", "./_base"], function(dojo, dxc){
 
-(function(){
 	var dxc = dojox.color;
 	/***************************************************************
 	*	dojox.color.Palette
@@ -479,4 +477,6 @@ dojox.color.Palette.__splitComplementaryArgs = function(base, da){
 			throw new Error("dojox.color.Palette.generate: the specified generator ('" + type + "') does not exist.");
 		}
 	});
-})();
+	
+	return dxc.Palette;
+});

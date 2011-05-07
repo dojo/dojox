@@ -1,8 +1,9 @@
-dojo.provide("dojox.color._base");
-dojo.require("dojo.colors");
+define(["dojo/_base/lang", "dojo/_base/Color", "dojo/colors"], function(dojo, Color, colors){
+
+dojo.getObject("color", true, dojox);
 
 //	alias all the dojo.Color mechanisms
-dojox.color.Color=dojo.Color;
+dojox.color.Color=Color;
 dojox.color.blend=dojo.blendColors;
 dojox.color.fromRgb=dojo.colorFromRgb;
 dojox.color.fromHex=dojo.colorFromHex;
@@ -10,7 +11,7 @@ dojox.color.fromArray=dojo.colorFromArray;
 dojox.color.fromString=dojo.colorFromString;
 
 //	alias the dojo.colors mechanisms
-dojox.color.greyscale=dojo.colors.makeGrey;
+dojox.color.greyscale=colors.makeGrey;
 
 //	static methods
 dojo.mixin(dojox.color, {
@@ -190,4 +191,7 @@ dojo.extend(dojox.color.Color, {
 		}
 		return { h:h, s:Math.round(s*100), v:Math.round(max*100) };	//	Object
 	}
+});
+
+return dojox.color;
 });
