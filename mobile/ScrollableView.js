@@ -54,7 +54,6 @@ define(["dojo/_base/array","dojo/_base/html","./View","./_ScrollableMixin"], fun
 				if(fixed === "top"){
 					this.fixedHeaderHeight = c.offsetHeight;
 					this.isLocalHeader = true;
-					this.containerNode.style.paddingTop = this.fixedHeaderHeight + "px";
 				}else if(fixed === "bottom"){
 					this.fixedFooterHeight = c.offsetHeight;
 					this.isLocalFooter = true;
