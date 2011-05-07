@@ -10,7 +10,7 @@ dojo.require("dojox.mdnd.AutoScroll");
 
 dojo.declare(
 	"dojox.layout.GridContainerLite",
-	[dijit.layout._LayoutWidget, dijit._Templated],
+	[dijit.layout._LayoutWidget, dijit._TemplatedMixin],
 {
 	// summary:
 	// 		The GridContainerLite is a container of child elements that are placed in a kind of grid.
