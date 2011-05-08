@@ -24,7 +24,8 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 		},
 
 		_setupSubNodes: function(ul){
-			var len = this.domNode.childNodes.length - 1; // -1 for terminator
+			var len = this.domNode.childNodes.length - 1, // -1 for terminator
+				i, child, w;
 			for(i = 0; i < len; i++){
 				child = this.domNode.childNodes[i];
 				if(child.nodeType != 1){ continue; }
@@ -38,7 +39,7 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 
 		startup: function(){
 			if(this._started){ return; }
-			var ul, i, len, child, w;
+			var ul;
 			if(this.transition == "below"){
 				this._setupSubNodes(this.domNode);
 			}else{
