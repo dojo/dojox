@@ -1,7 +1,5 @@
-dojo.provide("dojox.html.metrics");
-
-(function(){
-	var dhm = dojox.html.metrics;
+define(["dojo/_base/lang","dojo/_base/window"],function(dojo,window){
+	var dhm = dojo.getObject("html.metrics",true,dojox);
 
 	//	derived from Morris John's emResized measurer
 	dhm.getFontMeasurements = function(){
@@ -173,4 +171,5 @@ dojo.provide("dojox.html.metrics");
 			dhm.initOnFontResize();
 		}
 	});
-})();
+	return dhm;
+});
