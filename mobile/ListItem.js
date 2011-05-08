@@ -1,4 +1,4 @@
-define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase"], function(darray,dhtml, ItemBase){
+define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent"], function(darray,dhtml, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:
@@ -61,6 +61,7 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase"], function(darray,d
 			if(parent && parent.select){
 				this.connect(this.anchorNode, "onclick", "onClick");
 			}
+
 			this.set("icon", this.icon);
 			this.inherited(arguments);
 		},
@@ -92,8 +93,7 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase"], function(darray,d
 				}
 			}
 			this.select();
-			this.setTransitionPos(e);
-			this.transitionTo(this.moveTo, this.href, this.url, this.scene);
+			new TransitionEvent({target: this.domNode, transition: this.transition,transitionDir: this.transitionDir, moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, detail: e}).dispatch(); 
 		},
 	
 		deselect: function(){

@@ -1,4 +1,4 @@
-define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained"], function(mcommon,WidgetBase,Container,Contained){
+define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./ViewController"], function(mcommon,WidgetBase,Container,Contained){
 	// module:
 	//		dojox/mobile/View
 	// summary:
