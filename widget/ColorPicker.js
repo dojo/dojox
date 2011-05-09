@@ -1,24 +1,17 @@
-dojo.provide("dojox.widget.ColorPicker");
-dojo.experimental("dojox.widget.ColorPicker"); // level: beta //TODO: which?
+define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
+		"dijit/form/_FormWidget",
+		"dojox/color",
+		"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number"],
+			function(d,connect,fx,move,formwidget,color,i18n,bundle1,bundle2){
 
-dojo.requireLocalization("dojox.widget","ColorPicker");
-dojo.requireLocalization("dojo.cldr","number");
-
-dojo.require("dijit.form._FormWidget");
-dojo.require("dojo.dnd.move");
-dojo.require("dojo.fx");
-dojo.require("dojox.color");
-dojo.require("dojo.i18n");
-
-(function(d){
+	d.experimental("dojox.widget.ColorPicker"); 
 	
 	var webSafeFromHex = function(hex){
 		// stub, this is planned later:
 		return hex;
 	};
 	
-	dojo.declare("dojox.widget.ColorPicker",
-		dijit.form._FormWidget,
+	return d.declare("dojox.widget.ColorPicker", dijit.form._FormWidget,
 		{
 		// summary: a HSV color picker - similar to Photoshop picker
 		//
@@ -113,16 +106,16 @@ dojo.require("dojo.i18n");
 		_huePickerPointerAlly: d.moduleUrl("dojox.widget","ColorPicker/images/hueHandleA11y.png"),
 
 		// don't change to d.moduleUrl, build won't intern it.
-		templateString: dojo.cache("dojox.widget","ColorPicker/ColorPicker.html"),
+		templateString: d.cache("dojox.widget","ColorPicker/ColorPicker.html"),
 
 		postMixInProperties: function(){
-			if(dojo.hasClass(dojo.body(), "dijit_a11y")){
+			if(d.hasClass(d.body(), "dijit_a11y")){
 				// Use the pointer that will show up in high contrast.
 				this._huePickerPointer = this._huePickerPointerAlly;
 			}
 			this._uId = dijit.getUniqueId(this.id);
-			dojo.mixin(this, dojo.i18n.getLocalization("dojox.widget", "ColorPicker"));
-			dojo.mixin(this, dojo.i18n.getLocalization("dojo.cldr", "number"));
+			d.mixin(this, i18n.getLocalization("dojox.widget", "ColorPicker"));
+			d.mixin(this, i18n.getLocalization("dojo.cldr", "number"));
 			this.inherited(arguments);
 		},
 
@@ -175,47 +168,47 @@ dojo.require("dojo.i18n");
 			// Bind to up, down, left and right  arrows on the hue and saturation nodes.
 			this._keyListeners = [];
 			this._connects.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
-				charOrCode: dojo.keys.UP_ARROW,
+				charOrCode: d.keys.UP_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateHueCursorNode), 25, 25));
+			}, this, d.hitch(this, this._updateHueCursorNode), 25, 25));
 			this._connects.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
-				charOrCode: dojo.keys.DOWN_ARROW,
+				charOrCode: d.keys.DOWN_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateHueCursorNode), 25, 25));
+			}, this, d.hitch(this, this._updateHueCursorNode), 25, 25));
 			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.UP_ARROW,
+				charOrCode: d.keys.UP_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
+			}, this, d.hitch(this, this._updateCursorNode), 25, 25));
 			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.DOWN_ARROW,
+				charOrCode: d.keys.DOWN_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
+			}, this, d.hitch(this, this._updateCursorNode), 25, 25));
 			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.LEFT_ARROW,
+				charOrCode: d.keys.LEFT_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
+			}, this, d.hitch(this, this._updateCursorNode), 25, 25));
 			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.RIGHT_ARROW,
+				charOrCode: d.keys.RIGHT_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
+			}, this, d.hitch(this, this._updateCursorNode), 25, 25));
 		},
 		
 		_setValueAttr: function(value){
@@ -267,18 +260,18 @@ dojo.require("dojo.i18n");
 			// e:
 			//		The event.
 			if(count !== -1){
-				var y = dojo.style(this.hueCursorNode, "top");
+				var y = d.style(this.hueCursorNode, "top");
 				var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
 
 				// Account for our offset
 				y += selCenter;
 				var update = false;
-				if(e.charOrCode == dojo.keys.UP_ARROW){
+				if(e.charOrCode == d.keys.UP_ARROW){
 					if(y > 0){
 						y -= 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.DOWN_ARROW){
+				}else if(e.charOrCode == d.keys.DOWN_ARROW){
 					if(y < this.PICKER_HUE_H){
 						y += 1;
 						update = true;
@@ -286,7 +279,7 @@ dojo.require("dojo.i18n");
 				}
 				y -= selCenter;
 				if(update){
-					dojo.style(this.hueCursorNode, "top", y + "px");
+					d.style(this.hueCursorNode, "top", y + "px");
 				}
 			}else{
 				this._updateColor(true);
@@ -307,30 +300,30 @@ dojo.require("dojo.i18n");
 			var selCenterW = this.PICKER_SAT_SELECTOR_W/2;
 
 			if(count !== -1){
-				var y = dojo.style(this.cursorNode, "top");
-				var x = dojo.style(this.cursorNode, "left");
+				var y = d.style(this.cursorNode, "top");
+				var x = d.style(this.cursorNode, "left");
 				
 				// Account for our offsets to center
 				y += selCenterH;
 				x += selCenterW;
 
 				var update = false;
-				if(e.charOrCode == dojo.keys.UP_ARROW){
+				if(e.charOrCode == d.keys.UP_ARROW){
 					if(y > 0){
 						y -= 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.DOWN_ARROW){
+				}else if(e.charOrCode == d.keys.DOWN_ARROW){
 					if(y < this.PICKER_SAT_VAL_H){
 						y += 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.LEFT_ARROW){
+				}else if(e.charOrCode == d.keys.LEFT_ARROW){
 					if(x > 0){
 						x -= 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.RIGHT_ARROW){
+				}else if(e.charOrCode == d.keys.RIGHT_ARROW){
 					if(x < this.PICKER_SAT_VAL_W){
 						x += 1;
 						update = true;
@@ -340,8 +333,8 @@ dojo.require("dojo.i18n");
 					// Account for our offsets to center
 					y -= selCenterH;
 					x -= selCenterW;
-					dojo.style(this.cursorNode, "top", y + "px");
-					dojo.style(this.cursorNode, "left", x + "px");
+					d.style(this.cursorNode, "top", y + "px");
+					d.style(this.cursorNode, "left", x + "px");
 				}
 			}else{
 				this._updateColor(true);
@@ -555,17 +548,17 @@ dojo.require("dojo.i18n");
 			//		Function to hald the mouse down default
 			//		to disable draggong of images out of the color
 			//		picker.
-			dojo.stopEvent(e);
+			d.stopEvent(e);
 		},
 
 		destroy: function(){
 			// summary:
 			//		Over-ride to clean up subscriptions, etc.
 			this.inherited(arguments);
-			dojo.forEach(this._subs, function(sub){
-				dojo.unsubscribe(sub);
+			d.forEach(this._subs, function(sub){
+				d.unsubscribe(sub);
 			});
 			delete this._subs;
 		}
 	});
-})(dojo);
+});
