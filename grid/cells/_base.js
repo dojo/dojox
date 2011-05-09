@@ -165,7 +165,9 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 			if(this._formatPending){
 				this._formatPending = false;
 				// make cell selectable
-				dojo.setSelectable(this.grid.domNode, true);
+				if(!dojo.isIE){
+					dojo.setSelectable(this.grid.domNode, true);
+				}
 				this.formatNode(this.getEditNode(inRowIndex), inDatum, inRowIndex);
 			}
 		},
