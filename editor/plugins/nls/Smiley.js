@@ -17,5 +17,6 @@
 	emoticonYes: "yes",
 	emoticonNo: "no",
 	emoticonAngel: "angel",
-	emoticonCrying: "crying"
+	emoticonCrying: "crying",
+	emoticonHappy: "happy"
 })
