@@ -26,8 +26,7 @@
 				require.trace.set("loader-define", 1);
 				*/
 				require([
-					"dojo/_base/kernel",
-					"dojo/_base/window",
+					"dojo/_base/sniff",
 					"dojox/mobile/parser",
 					"dojox/mobile",
 					"dojox/mobile/FixedSplitter",
@@ -36,22 +35,17 @@
 					"dojox/mobile/EdgeToEdgeCategory",
 					"dojox/mobile/Heading",
 					"dojox/mobile/FixedSplitterPane"
-				], function(dojo,parser){
-				/*
-					console.log("done loading; turn tracing all off");
-					require.trace.set({"loader-define":0});
-					dojo.ready(function(){
-						console.log("DONE!");
-					});
-				*/
+				], function(sniff){
+					if(!sniff.isWebKit){
+						require([
+							"dojox/mobile/compat",
+							"dojo/fx",
+							"dojo/fx/easing"
+						], function(){});
+					}
 				});
 			});
-		// TODO: How to load conditionally based on browser?
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-/*			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
-			*/
+
 		</script>
 	</head>
 	<body>
