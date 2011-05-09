@@ -1,4 +1,4 @@
-define(["dojo/_base/lang"], function(dlang){
+define(["dojo/_base/load"], function(dlang){
 
 	dojo.getObject("mobile", true, dojox);
 
