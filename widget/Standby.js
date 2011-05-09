@@ -178,7 +178,8 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._TemplatedMixin],{
 				});
 				dojo.body().appendChild(this._ieFixNode);
 			}
-		}
+			this.inherited(arguments);
+		}		
 	},
 
 	show: function(){
