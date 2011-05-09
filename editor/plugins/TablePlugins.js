@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/TablePlugins", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/_WidgetsInTemplateMixin", "dijit/form/Button", "dijit/form/DropDownButton", "dijit/Dialog", "dijit/form/TextBox", "dijit/form/FilteringSelect", "dijit/_editor/_Plugin", "dijit/_editor/selection", "dijit/Menu", "dijit/ColorPalette", "dojox/widget/ColorPicker", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/TableDialog"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/TablePlugins", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dijit/form/Button", "dijit/form/DropDownButton", "dijit/Dialog", "dijit/form/TextBox", "dijit/form/FilteringSelect", "dijit/_editor/_Plugin", "dijit/_editor/selection", "dijit/Menu", "dijit/ColorPalette", "dojox/widget/ColorPicker", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/TableDialog"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.TablePlugins");
 
@@ -794,7 +794,7 @@ dojo.declare("dojox.editor.plugins.ModifyTable",
 		}
 });
 
-dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	// summary:
 	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
 	//		passthroughs to the value of the color picker and convenient hook points.
@@ -949,7 +949,7 @@ dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePl
 		}
 });
 
-dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog, dijit._WidgetsInTemplateMixin], {
+dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	// summary:
 	//		Dialog box with options for table creation
 
@@ -1020,7 +1020,7 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog, dijit._Wid
 	}
 });
 
-dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog, dijit._WidgetsInTemplateMixin], {
+dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	
 	// summary:
 	//		Dialog box with options for editing a table

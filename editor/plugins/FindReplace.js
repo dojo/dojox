@@ -137,7 +137,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceTextBox",
 
 
 dojo.declare("dojox.editor.plugins._FindReplaceCheckBox",
-	[dijit._Widget, dijit._Templated],{
+	[dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin],{
 	// summary:
 	//		Base class for widgets that contains a label (like "Match case: ")
 	//		and a checkbox to indicate if it is checked or not.
