@@ -105,6 +105,11 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 			setTimeout(function(){
 				dojo.removeClass(h1, "mblArrowButtonSelected");
 			}, 1000);
+
+			if (this.back && !this.moveTo && !this.href && history){
+				history.back();	
+				return;
+			}	
 	
 			// keep the clicked position for transition animations
 			var view = this.findCurrentView();
@@ -112,7 +117,6 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 				view.clickedPosX = e.clientX;
 				view.clickedPosY = e.clientY;
 			}
-	
 			this.goTo(this.moveTo, this.href);
 		},
 	

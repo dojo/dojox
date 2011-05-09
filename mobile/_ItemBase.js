@@ -17,6 +17,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 		urlTarget: "", // node id under which a new view is created
 		transition: "",
 		transitionDir: 1,
+		transitionOptions: null,
 		callback: null,
 		sync: true,
 		label: "",
@@ -49,7 +50,11 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 				}
 				if(this.moveTo || this.href || this.url || this.scene){
 					new TransitionEvent({target: this.domNode, moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, detail: e}).dispatch(); 
+				}else if (this.transitionOptions){
+					return new TransitionEvent(dojo.mixin({target: this.domNode},this.transitionOptions)).dispatch();
 				}
+
+
 			}
 		},
 	

@@ -32,9 +32,14 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 			this.inherited(arguments);
 		},
 
-		resize: function(){
-			var i;
-			var w = dojo.marginBox(this.domNode).w;
+		resize: function(size){
+			var i,w;
+			if (size && size.w){
+				dojo.marginBox(this.domNode, size);
+				w=size.w;
+			}else{
+				w=dojo.marginBox(this.domNode).w;
+			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
 	

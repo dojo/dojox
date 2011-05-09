@@ -29,7 +29,6 @@ define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,l
 
 		endTransition: function(){
 			listen.dispatch(this.target, "endTransition" , dojo.mixin({cancelable:true, bubbles:true}, this));
-			console.log('end transition');	
 		}
 	});
 });

@@ -140,9 +140,10 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 				setTimeout(dojo.hitch(this, function(d){ this.iconClicked(); }), 0);
 				return;
 			}
-			if(this.moveTo || this.href || this.url){
+			if (this.transitionOptions){
+				return new TransitionEvent(dojo.mixin({target: this.domNode, detail: e},this.transitionOptions)).dispatch();
+			}else if(this.moveTo || this.href || this.url){
 				new TransitionEvent({target: this.domNode, transition: this.transition,transitionDir: this.transitionDir, moveTo: this.moveTo, href: this.href, url: this.url, detail: e}).dispatch(); 
-			console.log('body()', dojo.body());
 				setTimeout(dojo.hitch(this, function(d){
 					this.setOpacity(this.iconNode, 1);
 				}), 1500);
@@ -174,6 +175,7 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 					var view = dijit.byId(parent.id+"_mblApplView");
 					view._heading._setLabelAttr(this.label);
 				}
+					
 				new TransitionEvent({target: this.domNode, transition: this.transition,transitionDir: this.transitionDir, moveTo: parent.id+"_mblApplView", detail: e||null}).dispatch(); 
 			}
 		},
