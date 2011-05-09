@@ -363,6 +363,9 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 					// IE doesn't like focus changes in event handles.
 					this.button.set("disabled", false);
 					this.button.openDropDown();
+					if(this.button.dropDown.focus){
+						this.button.dropDown.focus();
+					}
 				}), 10);
 			}
 		}
