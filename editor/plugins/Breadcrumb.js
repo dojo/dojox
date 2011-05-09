@@ -1,8 +1,8 @@
-define("dojox/editor/plugins/Breadcrumb", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_Templated", "dijit/Toolbar", "dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator", "dijit/_editor/range", "dijit/_editor/selection", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/ComboButton", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/Breadcrumb"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/Breadcrumb", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/Toolbar", "dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator", "dijit/_editor/range", "dijit/_editor/selection", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/ComboButton", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/Breadcrumb"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.Breadcrumb");
 
-dojo.declare("dojox.editor.plugins._BreadcrumbMenuTitle",[dijit._Widget, dijit._Templated, dijit._Contained],{
+dojo.declare("dojox.editor.plugins._BreadcrumbMenuTitle",[dijit._Widget, dijit._TemplatedMixin, dijit._Contained],{
 	// summary:
 	//		SImple internal, non-clickable, menu entry to act as a menu title bar.
 	templateString: "<tr><td dojoAttachPoint=\"title\" colspan=\"4\" class=\"dijitToolbar\" style=\"font-weight: bold; padding: 3px;\"></td></tr>",
