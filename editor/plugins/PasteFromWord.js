@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/PasteFromWord", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/Dialog", "dojo/i18n", "dojox/html/format", "i18n!dojox/editor/plugins/nls/PasteFromWord"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/PasteFromWord", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/Dialog", "dojo/i18n", "dojox/html/format", "dojo/i18n!dojox/editor/plugins/nls/PasteFromWord"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 	// summary:

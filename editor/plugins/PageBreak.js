@@ -1,4 +1,4 @@
-define("dojox/editor/plugins/PageBreak", ["dojo", "dijit", "dojox", "dijit/_editor/html", "dijit/_editor/_Plugin", "dojo/i18n", "i18n!dojox/editor/plugins/nls/PageBreak"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/PageBreak", ["dojo", "dijit", "dojox", "dijit/_editor/html", "dijit/_editor/_Plugin", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/PageBreak"], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 	//	summary:
