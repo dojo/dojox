@@ -49,6 +49,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		if(e.altKey || e.metaKey){ return; }
 		var dk = dojo.keys;
 		var focus = this.focus;
+		var editing = this.edit.isEditing();
 		switch(e.keyCode){
 			case dk.TAB:
 				if(e.ctrlKey){ return; }
@@ -56,10 +57,12 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 				break;
 			case dk.UP_ARROW:
 			case dk.DOWN_ARROW:
+				if(editing){ return; }
 				focus.currentArea().move(e.keyCode == dk.UP_ARROW ? -1 : 1, 0, e);
 				break;
 			case dk.LEFT_ARROW:
 			case dk.RIGHT_ARROW:
+				if(editing){ return; }
 				var offset = (e.keyCode == dk.LEFT_ARROW) ? 1 : -1;
 				if(dojo._isBodyLtr()){ offset *= -1; }
 				focus.currentArea().move(0, offset, e);
@@ -128,7 +131,7 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 		//invoke dojox.grid._Events.onCellDblClick()
 		this._events.onCellDblClick.call(this, e);
 		//now focus.setFocusCell need isEditing info, so call it after that is set.
-		//this.focus.setFocusCell(e.cell, e.rowIndex);
+		this.focus.setFocusCell(e.cell, e.rowIndex);
 	},
 	onRowClick: function(e){
 		// summary:
