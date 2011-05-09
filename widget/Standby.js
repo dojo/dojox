@@ -1,8 +1,8 @@
-define("dojox/widget/Standby", ["dojo", "dijit", "dojox", "dojo/window", "dojo/fx", "dijit/_Widget", "dijit/_Templated"], function(dojo, dijit, dojox) {
+define("dojox/widget/Standby", ["dojo", "dijit", "dojox", "dojo/window", "dojo/fx", "dijit/_Widget", "dijit/_TemplatedMixin"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.widget.Standby");
 
-dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._Templated],{
+dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._TemplatedMixin],{
 	// summary:
 	//		A widget designed to act as a Standby/Busy/Disable/Blocking widget to indicate a
 	//		particular DOM node is processing and cannot be clicked on at this time.
