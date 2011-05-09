@@ -1,7 +1,7 @@
-define("dojox/editor/plugins/TextColor", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_Templated", "dijit/TooltipDialog", "dijit/form/Button", "dijit/form/DropDownButton", "dijit/_editor/_Plugin", "dojox/widget/ColorPicker", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/TextColor"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/TextColor", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dijit/TooltipDialog", "dijit/form/Button", "dijit/form/DropDownButton", "dijit/_editor/_Plugin", "dojox/widget/ColorPicker", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/TextColor"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.TextColor");
-dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.editor.plugins._TextColorDropDown", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	// summary:
 	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
 	//		passthroughs to the value of the color picker and convenient hook points.

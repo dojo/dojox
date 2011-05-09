@@ -32,7 +32,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceCloseBox", [dijit._Widget, dijit.
 
 
 dojo.declare("dojox.editor.plugins._FindReplaceTextBox",
-	[dijit._Widget, dijit._Templated],{
+	[dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin],{
 	// summary:
 	//		Base class for widgets that contains a label (like "Font:")
 	//		and a TextBox to pick a value.
