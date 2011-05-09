@@ -1,8 +1,8 @@
-define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_Templated", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/DropDownButton", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
+define("dojox/editor/plugins/FindReplace", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/_WidgetsInTemplateMixin", "dijit/TooltipDialog", "dijit/Toolbar", "dijit/form/CheckBox", "dijit/form/TextBox", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/DropDownButton", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/FindReplace"], function(dojo, dijit, dojox) {
 
 dojo.experimental("dojox.editor.plugins.FindReplace");
 
-dojo.declare("dojox.editor.plugins._FindReplaceCloseBox", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.editor.plugins._FindReplaceCloseBox", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	// summary:
 	//		Base class for widgets that contains a button labeled X
 	//		to close the tool bar.
