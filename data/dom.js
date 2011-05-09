@@ -1,5 +1,7 @@
 define("dojox/data/dom", ["dojo", "dojox", "dojox/xml/parser"], function(dojo, dojox) {
 
+		
+		
 //DOM type to int value for reference.
 //Ints make for more compact code than full constant names.
 //ELEMENT_NODE                  = 1;
@@ -18,6 +20,9 @@ define("dojox/data/dom", ["dojo", "dojox", "dojox/xml/parser"], function(dojo, d
 //This file contains internal/helper APIs as holders for people who used them.  They have been migrated to
 //a better project, dojox.xml and experimental has been removed there.  Please update usage to the new package.
 dojo.deprecated("dojox.data.dom", "Use dojox.xml.parser instead.", "2.0");
+
+if(!dojox.data) { dojox.data = {}; }
+if(!dojox.data.dom) { dojox.data.dom = {}; }
 
 dojox.data.dom.createDocument = function(/*string?*/ str, /*string?*/ mimetype){
 	//	summary:

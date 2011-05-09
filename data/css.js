@@ -1,5 +1,8 @@
 define("dojox/data/css", ["dojo", "dojox"], function(dojo, dojox) {
 
+if(!dojox.data) { dojox.data = {}; }
+if(!dojox.data.css) { dojox.data.css = {}; }
+		
 dojox.data.css.rules = {};
 		
 dojox.data.css.rules.forEach = function(fn,ctx,context){
