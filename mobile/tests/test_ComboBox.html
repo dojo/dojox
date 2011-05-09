@@ -41,25 +41,25 @@
 	 			}
 			]);
 
+			var d, focusHandle, blurHandle, widget, nop = function(){ return false; };
 			doh.register("events", [
 				{
 					name: "mobile",
 					timeout: 2000,
 					runTest: function(){
-						var
-							d = new doh.Deferred(),
-							widget = dijit.byId('mobile_events'),
-							focusHandle, blurhandle,
-							nop = function(){ return false; };
+						d = new doh.Deferred();
+						widget = dijit.byId('mobile_events');
 
 						function onFocus(){
 							widget.disconnect(focusHandle);
+							focusHandle = null;
 							widget.set('displayedValue', "Focus");
-							blurhandle = widget.connect(widget.textbox, 'onblur', onBlur);
+							blurHandle = widget.connect(widget.textbox, 'onblur', onBlur);
 							dojo.byId('blurry').focus();
 						}
 						function onBlur(){
-							widget.disconnect(blurhandle);
+							widget.disconnect(blurHandle);
+							blurHandle = null;
 							widget.set('onChange', onChange);
 							widget.set('displayedValue', widget.get('displayedValue')+"Blur");
 						}
@@ -70,10 +70,16 @@
 							})();
 						}
 						doh.is(nop.toString(), widget.get('onChange').toString(), "get('onChange')");
-						focusHandle = widget.connect(widget.textbox, 'onfocus', onFocus);
+						focusHandle = widget.connect(widget, 'openDropDown', onFocus);
 						setTimeout(dojo.hitch(widget, "focus"), 0);
 
 						return d;
+					},
+					tearDown: function(){
+						d.cancel();
+						if(blurHandle){ widget.disconnect(blurHandle); }
+						if(focusHandle){ widget.disconnect(focusHandle); }
+						widget.closeDropDown();
 					}
 	 			}
 			]);
@@ -81,14 +87,15 @@
 			doh.register("programmatic", [
 				{
 					name: "mobile",
-					timeout: 5000,
+					timeout: 4000,
 					runTest: function(){
-						var widget = new dojox.mobile.ComboBox({id:"mobile_programmatic", list:"states"});
+						widget = new dojox.mobile.ComboBox({id:"mobile_programmatic", list:"states"});
 						widget.placeAt("mobile_programmatic_container", "first");
-						var focushandle = widget.connect(widget, 'openDropDown',
+						focusHandle = widget.connect(widget, 'openDropDown',
 							function(){
 								d.getTestCallback(function(){
-									widget.disconnect(focushandle);
+									widget.disconnect(focusHandle);
+									focusHandle = null;
 									var pos = dojo.position(widget.domNode, true);
 									doh.t(pos.w > 0 && pos.h > 0 && pos.x > 0 && pos.y > 0, 'mobile position');
 									doh.is("Alabama", widget.textbox.value, 'mobile textbox value');
@@ -96,14 +103,15 @@
 								})();
 							}
 						);
-						var d = new doh.Deferred();
+						d = new doh.Deferred();
 						setTimeout(dojo.hitch(widget, "focus"), 0);
 
 						return d;
 					},
 					tearDown: function(){
-						var widget = dijit.byId('mobile_programmatic');
-						setTimeout(function(){ widget.closeDropDown(); }, 0);
+						d.cancel();
+						if(focusHandle){ widget.disconnect(focusHandle); }
+						widget.closeDropDown();
 					}
 	 			}
 			]);

@@ -21,6 +21,8 @@
   border: 1px solid black;
   background-color: #eff1f3;
   -webkit-border-radius: 5px;
+  overflow: hidden;
+  position: relative;
 }
 .mblComboBoxMenuItem {
   white-space: nowrap;
@@ -38,4 +40,5 @@
 }
 .mblComboBoxMenuPreviousButton, .mblComboBoxMenuNextButton {
   font-style: italic;
+  overflow: hidden;
 }

@@ -1,6 +1,6 @@
-define(["dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase", "./_ListTouchMixin", "./scrollable"], function(dhtml, ComboBoxMenuMixin,WidgetBase,ListTouchMixin,Scrollable) {
+define(["dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase", "dojox/mobile/_ListTouchMixin", "./scrollable"], function(dhtml, ComboBoxMenuMixin,WidgetBase,ListTouchMixin,Scrollable) {
 
-	return dojo.declare("dojox.mobile._ComboBoxMenu", [dijit._WidgetBase,dojox.mobile._ListTouchMixin,dojox.mobile._ComboBoxMenuMixin], {
+	return dojo.declare("dojox.mobile._ComboBoxMenu", [dijit._WidgetBase,dojox.mobile._ListTouchMixin,dijit.form._ComboBoxMenuMixin], {
 		// summary:
 		//		Focus-less menu for internal use in `dijit.form.ComboBox`
 		//		Abstract methods that must be defined externally:
@@ -10,12 +10,13 @@ define(["dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase",
 		//		private
 
 		baseClass: "mblComboBoxMenu",
+		bgIframe: true, // so it's not created for IE and FF
 
 		buildRendering: function(){
-			this.focusNode = this.domNode = dojo.create("div", { style:{ overflow:"hidden" }, "class":"mblReset" });
-			this.containerNode = dojo.create("div", {}, this.domNode, "last"); // needed for scrollable
-			this.previousButton = dojo.create("div", { "class":"mblComboBoxMenuItem mblComboBoxMenuPreviousButton", role:"option" }, this.containerNode, "last");
-			this.nextButton = dojo.create("div", { "class":"mblComboBoxMenuItem mblComboBoxMenuNextButton", role:"option" }, this.containerNode, "last");
+			this.domNode = this.focusNode = dojo.create("div", { "class":"mblReset" });
+			this.containerNode = dojo.create("div", { style: { position:"absolute", top:0, left:0 } }, this.domNode); // needed for scrollable
+			this.previousButton = dojo.create("div", { "class":"mblReset mblComboBoxMenuItem mblComboBoxMenuPreviousButton", role:"option" }, this.containerNode);
+			this.nextButton = dojo.create("div", { "class":"mblReset mblComboBoxMenuItem mblComboBoxMenuNextButton", role:"option" }, this.containerNode);
 			this.inherited(arguments);
 		},
 
@@ -41,15 +42,24 @@ define(["dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase",
 		onOpen: function(){
 			this.scrollable.init({
 				domNode: this.domNode,
-				containerNode: this.domNode.firstChild
+				containerNode: this.containerNode
 			});
 			this.scrollable.scrollTo({x:0, y:0});
+		},
+
+		onClose: function(){
+			this.scrollable.cleanup();
+		},
+
+		destroyRendering: function(){
+			this.bgIframe = false; // no iframe to destroy
+			this.inherited(arguments);
 		},
 
 		postCreate: function(){
 			this.inherited(arguments);
 			this.scrollable = new dojox.mobile.scrollable();
-			this.scrollable.resize = dojo.hitch(this, "onClose", null); // resize changes the height rudely
+			this.scrollable.resize = function(){}; // resize changes the height rudely
 		}
 	});
 });
