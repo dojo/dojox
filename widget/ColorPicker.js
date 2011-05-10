@@ -1,8 +1,9 @@
 define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
 		"dijit/form/_FormWidget",
 		"dojox/color",
-		"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number"],
-			function(d,connect,fx,move,formwidget,color,i18n,bundle1,bundle2){
+		"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
+        "dojo/text!./ColorPicker/ColorPicker.html"],
+			function(d,connect,fx,move,formwidget,color,i18n,bundle1,bundle2,template){
 
 	d.experimental("dojox.widget.ColorPicker"); 
 	
@@ -105,8 +106,7 @@ define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
 
 		_huePickerPointerAlly: d.moduleUrl("dojox.widget","ColorPicker/images/hueHandleA11y.png"),
 
-		// don't change to d.moduleUrl, build won't intern it.
-		templateString: d.cache("dojox.widget","ColorPicker/ColorPicker.html"),
+		templateString: template,
 
 		postMixInProperties: function(){
 			if(d.hasClass(d.body(), "dijit_a11y")){
