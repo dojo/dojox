@@ -16,21 +16,22 @@ define(["dojo/_base/load"], function(dlang){
 					var n = nodes[i];
 					var cls = dojo.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
 					var proto = cls.prototype;
-					var params = {}, prop, v;
+					var params = {}, prop, v, t;
 					dojo._mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
 					dojo._mixin(params, args.defaults);
 					dojo._mixin(params, mixin);
 					for(prop in proto){
 						v = n.getAttributeNode(prop);
 						v = v && v.nodeValue;
-						if(!v){ continue; }
-						if(typeof proto[prop] === "string"){
+						t = typeof proto[prop];
+						if(!v && (t !== "boolean" || v !== "")){ continue; }
+						if(t === "string"){
 							params[prop] = v;
-						}else if(typeof proto[prop] === "number"){
+						}else if(t === "number"){
 							params[prop] = v - 0;
-						}else if(typeof proto[prop] === "boolean"){
+						}else if(t === "boolean"){
 							params[prop] = (v !== "false");
-						}else if(typeof proto[prop] === "object"){
+						}else if(t === "object"){
 							params[prop] = eval("(" + v + ")");
 						}
 					}

@@ -9,14 +9,8 @@ define(["dojo/_base/html", "dojo/_base/array", "./Button", "dijit/form/_ToggleBu
 
 		_setCheckedAttr: function(){
 			this.inherited(arguments);
-			var button = this.focusNode || this.domNode;
-			var newStateClasses = (this.baseClass+' '+this["class"]).split(" ");
-			newStateClasses = dojo.map(newStateClasses, function(c){ return c+"Checked"; });
-			if(this.checked){
-				dojo.addClass(button, newStateClasses);
-			}else{
-				dojo.removeClass(button, newStateClasses);
-			}
+			var newStateClasses = (this.baseClass+' '+this["class"]).replace(/(\S+)\s*/g, "$1Checked ").split(" ");
+			dojo[this.checked ? "addClass" : "removeClass"](this.focusNode || this.domNode, newStateClasses);
 		}
 	});
 });
