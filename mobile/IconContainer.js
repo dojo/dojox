@@ -67,7 +67,7 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 		},
 
 		closeAll: function(){
-			var len = this.domNode.childNodes.length;
+			var len = this.domNode.childNodes.length, child, w;
 			for(var i = 0; i < len; i++){
 				child = this.domNode.childNodes[i];
 				if(child.nodeType != 1){ continue; }
