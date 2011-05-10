@@ -28,11 +28,13 @@ var Controller = dojo.declare(null, {
 		},
 
 		onStartTransition: function(evt){
+			//console.log("onStartTransition:", evt.detail, evt.detail.moveTo, evt.detail.href, evt.detail.scene, evt);
 			evt.preventDefault();
-			if(!evt.detail || (!evt.detail.moveTo && !evt.detail.href && !evt.detail.url && !evt.detail.scene)){ return; }
-			var w = this.findCurrentView(evt.detail.moveTo, dijit.byId(evt.srcElement.id)); // the current view widget
-			if(!w || evt.detail.moveTo && w === dijit.byId(evt.detail.moveTo)){ return; }
+			if(!evt.detail || (evt.detail && !evt.detail.moveTo && !evt.detail.href && !evt.detail.url && !evt.detail.scene)){ return; }
 
+			var w = this.findCurrentView(evt.detail.moveTo, (evt.srcElement && evt.srcElement.id)?dijit.byId(evt.srcElement.id):dijit.byId(evt.target)); // the current view widget
+			if(!w || (evt.detail && evt.detail.moveTo && w === dijit.byId(evt.detail.moveTo))){ return; }
+		
 			if(evt.detail.href){
 				if(dijit.byId(evt.srcElement.id).hrefTarget){
 					dojox.mobile.openWindow(evt.detail.href, evt.srcElement.hrefTarget);
