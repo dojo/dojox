@@ -65,6 +65,20 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			// cause a script error even if this widget has no parent yet.
 			var ref = this.srcNodeRef || this.domNode;
 			return ref && ref.parentNode ? dijit.getEnclosingWidget(ref.parentNode) : null;
+		},
+		
+		transitionTo: function(moveTo,href,url,scene){
+			// deprecated
+			if(dojo.config.isDebug){
+				var alreadyCalledHash = arguments.callee._ach || (arguments.callee._ach = {}),
+					caller = (arguments.callee.caller || "unknown caller").toString();
+				if(!alreadyCalledHash[caller]){
+					dojo.deprecated(this.declaredClass + "::transitionTo() is deprecated." +
+					caller, "", "2.0");
+					alreadyCalledHash[caller] = true;
+				}
+			}
+			new TransitionEvent(this.domNode, {moveTo: moveTo, href: href, url: url, scene: scene}).dispatch();
 		}
 	});
 });
