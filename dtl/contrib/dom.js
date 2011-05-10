@@ -1,9 +1,6 @@
-dojo.provide("dojox.dtl.contrib.dom");
+define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,dd){
+	dojo.getObject("dtl.contrib.dom", true, dojox);
 
-dojo.require("dojox.dtl.dom");
-
-(function(){
-	var dd = dojox.dtl;
 	var ddch = dd.contrib.dom;
 
 	var simple = {render: function(){ return this.contents; }};
@@ -166,4 +163,5 @@ dojo.require("dojox.dtl.dom");
 	dd.register.tags("dojox.dtl.contrib", {
 		"dom": ["html", "attr:style", "buffer"]
 	});
-})();
+	return dojox.dtl.contrib.dom;
+});

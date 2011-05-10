@@ -1,10 +1,7 @@
-dojo.provide("dojox.dtl.contrib.data");
-dojo.require("dojox.dtl._base");
+define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
+	dojo.getObject("dtl.contrib.data", true, dojox);
 
-(function(){
-	var dd = dojox.dtl;
 	var ddcd = dd.contrib.data;
-
 	var first = true;
 
 	ddcd._BoundItem = dojo.extend(function(item, store){
@@ -155,4 +152,5 @@ dojo.require("dojox.dtl._base");
 	dd.register.tags("dojox.dtl.contrib", {
 		"data": ["bind_data", "bind_query"]
 	});
-})();
+	return dojox.dtl.contrib.data;
+});

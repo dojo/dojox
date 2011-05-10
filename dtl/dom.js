@@ -1,10 +1,4 @@
-dojo.provide("dojox.dtl.dom");
-
-dojo.require("dojox.dtl._base");
-dojo.require("dojox.dtl.Context");
-
-(function(){
-	var dd = dojox.dtl;
+define(["dojo/_base/lang","./_base","dojox/string/tokenize","./Context","dojo/_base/html"], function(dojo,dd,dxst){
 
 	dd.BOOLS = {checked: 1, disabled: 1, readonly: 1};
 	dd.TOKEN_CHANGE = -11;
@@ -65,7 +59,7 @@ dojo.require("dojox.dtl.Context");
 							innerRe.push("<" + inner + "(?:.|\n)*?>(?:.|\n)*?</" + inner + ">");
 						}
 						var tags = [];
-						var tokens = dojox.string.tokenize(match[1], new RegExp("(" + innerRe.join("|") + ")", "ig"), function(data){
+						var tokens = dxst(match[1], new RegExp("(" + innerRe.join("|") + ")", "ig"), function(data){
 							var tag = /<(\w+)/.exec(data)[1];
 							if(!tags[tag]){
 								tags[tag] = true;
@@ -1027,5 +1021,5 @@ dojo.require("dojox.dtl.Context");
 			return new dd.DomTemplate(ddh.getTemplate(loc));
 		}
 	});
-
-})();
+	return dojox.dtl.dom;
+});

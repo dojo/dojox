@@ -1,8 +1,6 @@
-dojo.provide("dojox.dtl.tag.misc");
-dojo.require("dojox.dtl._base");
+define(["dojo/_base/lang","../_base","dojo/_base/array","dojo/_base/connect"], function(dojo,dd){
+	dojo.getObject("dtl.tag.misc", true, dojox);
 
-(function(){
-	var dd = dojox.dtl;
 	var ddtm = dd.tag.misc;
 
 	ddtm.DebugNode = dojo.extend(function(text){
@@ -283,4 +281,5 @@ dojo.require("dojox.dtl._base");
 			return new ddtm.WithNode(parts[1], parts[3], nodelist);
 		}
 	});
-})();
+	return dojox.dtl.tag.misc;
+});

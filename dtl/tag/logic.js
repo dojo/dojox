@@ -1,9 +1,6 @@
-dojo.provide("dojox.dtl.tag.logic");
+define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
+	dojo.getObject("dtl.tag.logic", true, dojox);
 
-dojo.require("dojox.dtl._base");
-
-(function(){
-	var dd = dojox.dtl;
 	var ddt = dd.text;
 	var ddtl = dd.tag.logic;
 
@@ -273,4 +270,5 @@ dojo.require("dojox.dtl._base");
 			return new ddtl.ForNode(loopvars, parts[parts.length + index + 1], reversed, nodelist);
 		}
 	});
-})();
+	return dojox.dtl.tag.logic;
+});

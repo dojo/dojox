@@ -1,12 +1,7 @@
-dojo.provide("dojox.dtl.contrib.dijit");
+define(["dojo/_base/lang","../_base","../dom","dojo/parser"], function(dojo,dd){
+	dojo.getObject("dtl.contrib.dijit", true, dojox);
 
-dojo.require("dojox.dtl.dom");
-dojo.require("dojo.parser");
-
-(function(){
-	var dd = dojox.dtl;
 	var ddcd = dd.contrib.dijit;
-
 	ddcd.AttachNode = dojo.extend(function(keys, object){
 		this._keys = keys;
 		this._object = object;
@@ -217,4 +212,5 @@ dojo.require("dojo.parser");
 	dd.register.tags("dojox.dtl.contrib", {
 		"dijit": ["attr:dojoType", "attr:dojoAttachPoint", ["attr:attach", "dojoAttachPoint"], "attr:dojoAttachEvent", [/(attr:)?on(click|key(up))/i, "on"]]
 	});
-})();
+	return dojox.dtl.contrib.dijit;
+});

@@ -1,9 +1,6 @@
-dojo.provide("dojox.dtl.tag.loader");
+define(["dojo/_base/lang","../_base","dojo/_base/array","dojo/_base/connect"], function(dojo,dd){
+	dojo.getObject("dtl.tag.loader", true, dojox);
 
-dojo.require("dojox.dtl._base");
-
-(function(){
-	var dd = dojox.dtl;
 	var ddtl = dd.tag.loader;
 
 	ddtl.BlockNode = dojo.extend(function(name, nodelist){
@@ -294,4 +291,5 @@ dojo.require("dojox.dtl._base");
 			return node;
 		}
 	});
-})();
+	return dojox.dtl.tag.loader;
+});

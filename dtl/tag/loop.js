@@ -1,10 +1,6 @@
-dojo.provide("dojox.dtl.tag.loop");
+define(["dojo/_base/lang","../_base","dojox/string/tokenize","dojo/_base/array"], function(dojo,dd,dxst){
+	dojo.getObject("dtl.tag.loop", true, dojox);
 
-dojo.require("dojox.dtl._base");
-dojo.require("dojox.string.tokenize");
-
-(function(){
-	var dd = dojox.dtl;
 	var ddtl = dd.tag.loop;
 
 	ddtl.CycleNode = dojo.extend(function(cyclevars, name, text, shared){
@@ -154,7 +150,7 @@ dojo.require("dojox.string.tokenize");
 					throw new Error("Named cycle '" + name + "' does not exist");
 				}
 
-		        return parser._namedCycleNodes[name];
+				return parser._namedCycleNodes[name];
 			}
 
 			if(args.length > 4 && args[args.length - 2] == "as"){
@@ -179,7 +175,7 @@ dojo.require("dojox.string.tokenize");
 			return new ddtl.IfChangedNode(nodes, parts.slice(1));
 		},
 		regroup: function(parser, token){
-			var tokens = dojox.string.tokenize(token.contents, /(\s+)/g, function(spaces){
+			var tokens = dxst(token.contents, /(\s+)/g, function(spaces){
 				return spaces;
 			});
 			if(tokens.length < 11 || tokens[tokens.length - 3] != "as" || tokens[tokens.length - 7] != "by"){
@@ -191,4 +187,5 @@ dojo.require("dojox.string.tokenize");
 			return new ddtl.RegroupNode(expression, key, alias);
 		}
 	});
-})();
+	return dojox.dtl.tag.loop;
+});
