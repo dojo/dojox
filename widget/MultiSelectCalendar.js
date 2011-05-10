@@ -1,5 +1,5 @@
 define("dojox/widget/MultiSelectCalendar", [
-    "dojo", "dijit", 
+    "dojo/main", "dijit", 
     "dojo/text!./MultiSelectCalendar/MultiSelectCalendar.html", 
     "dojo/cldr/supplemental", 
     "dojo/date", 
