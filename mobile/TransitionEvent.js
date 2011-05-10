@@ -1,25 +1,18 @@
 define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,listen, transition){
 
 	return declare("dojox.mobile.TransitionEvent", null, {
-		target: null,
-		currentTarget:null,
-		relatedTarget: null,
-		detail: null,
-		cancelable: true,
-		bubbles: true,
-	
-		constructor: function(params){
-			dojo.mixin(this,params);
-			if (this.detail){
-				this.detail.clientX;
-				this.detail.clientY;
-			}
+		constructor: function(target, transitionOptions, triggerEvent){
+			this.transitionOptions=transitionOptions;	
+			this.target = target;
+			this.triggerEvent=triggerEvent||null;	
 		},
 
 		dispatch: function(){
-				
-			var evt = listen.dispatch(this.target,"startTransition", this);
+			var opts = {bubbles:true, cancelable:true, detail: this.transitionOptions, triggerEvent: this.triggerEvent};	
+			//console.log("Target: ", this.target, " opts: ", opts);
 
+			var evt = listen.dispatch(this.target,"startTransition", opts);
+			//console.log('evt: ', evt);
 			if (evt){
 				dojo.when(transition.call(this, evt), dojo.hitch(this, function(results){
 					this.endTransition(results);
@@ -27,8 +20,8 @@ define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,l
 			}
 		},
 
-		endTransition: function(){
-			listen.dispatch(this.target, "endTransition" , dojo.mixin({cancelable:true, bubbles:true}, this));
+		endTransition: function(results){
+			listen.dispatch(this.target, "endTransition" , {detail: results.transitionOptions});
 		}
 	});
 });

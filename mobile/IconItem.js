@@ -140,15 +140,18 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 				setTimeout(dojo.hitch(this, function(d){ this.iconClicked(); }), 0);
 				return;
 			}
-			if (this.transitionOptions){
-				return new TransitionEvent(dojo.mixin({target: this.domNode, detail: e},this.transitionOptions)).dispatch();
-			}else if(this.moveTo || this.href || this.url){
-				new TransitionEvent({target: this.domNode, transition: this.transition,transitionDir: this.transitionDir, moveTo: this.moveTo, href: this.href, url: this.url, detail: e}).dispatch(); 
-				setTimeout(dojo.hitch(this, function(d){
-					this.setOpacity(this.iconNode, 1);
-				}), 1500);
+
+			var transOpts;
+			if (this.moveTo || this.href || this.url || this.scene){
+				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transitionDir: this.transitionDir, transition: this.transition};
+			}else if (this.transitionOptions){
+				transOpts = this.transitionOptions;
 			}else{
-				this.open(e);
+				return this.open(e);
+			}
+	
+			if (transOpts){
+				return new TransitionEvent(this.domNode,transOpts,e).dispatch();
 			}
 		},
 	
@@ -175,8 +178,8 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 					var view = dijit.byId(parent.id+"_mblApplView");
 					view._heading._setLabelAttr(this.label);
 				}
-					
-				new TransitionEvent({target: this.domNode, transition: this.transition,transitionDir: this.transitionDir, moveTo: parent.id+"_mblApplView", detail: e||null}).dispatch(); 
+				var transOpts = this.transitionOptions || {transition: this.transition, transitionDir: this.transitionDir, moveTo: parent.id + "_mblApplView"};		
+				new TransitionEvent(this.domNode, transOpts, e).dispatch(); 
 			}
 		},
 	

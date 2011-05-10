@@ -59,7 +59,6 @@ define(["dojo/_base/array","dojo/_base/html", "./_ItemBase"],function(darray,dht
 		},
 	
 		onClick: function(e){
-			this.setTransitionPos(e);
 			this.defaultClickAction();
 		}
 	});

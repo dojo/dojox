@@ -93,11 +93,18 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent
 				}
 			}
 			this.select();
-			if (this.transitionOptions){
-				return new TransitionEvent(dojo.mixin({target: this.domNode},this.transitionOptions)).dispatch();
-			}else if (this.moveTo || this.href || this.url || this.scene) {
-				new TransitionEvent({target: this.domNode, transition: this.transition,transitionDir: this.transitionDir, moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, detail: e}).dispatch(); 
+
+			var transOpts;
+			if (this.moveTo || this.href || this.url || this.scene){
+				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transition: this.transition, transitionDir: this.transitionDir};
+			}else if (this.transitionOptions){
+				transOpts = this.transitionOptions;
+			}	
+
+			if (transOpts){
+				return new TransitionEvent(this.domNode,transOpts,e).dispatch();
 			}
+
 		},
 	
 		deselect: function(){

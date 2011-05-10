@@ -29,26 +29,26 @@ var Controller = dojo.declare(null, {
 
 		onStartTransition: function(evt){
 			evt.preventDefault();
-			if(!evt.moveTo && !evt.href && !evt.url && !evt.scene){ return; }
-			var w = this.findCurrentView(moveTo, dijit.byId(evt.srcElement.id)); // the current view widget
-			if(!w || moveTo && w === dijit.byId(moveTo)){ return; }
+			if(!evt.detail || (!evt.detail.moveTo && !evt.detail.href && !evt.detail.url && !evt.detail.scene)){ return; }
+			var w = this.findCurrentView(evt.detail.moveTo, dijit.byId(evt.srcElement.id)); // the current view widget
+			if(!w || evt.detail.moveTo && w === dijit.byId(evt.detail.moveTo)){ return; }
 
-			if(evt.href){
+			if(evt.detail.href){
 				if(dijit.byId(evt.srcElement.id).hrefTarget){
-					dojox.mobile.openWindow(evt.href, evt.srcElement.hrefTarget);
+					dojox.mobile.openWindow(evt.detail.href, evt.srcElement.hrefTarget);
 				}else{
-					w.performTransition(null, evt.transitionDir, evt.transition, evt.target, function(){location.href = evt.href;});
+					w.performTransition(null, evt.detail.transitionDir, evt.detail.transition, evt.target, function(){location.href = evt.detail.href;});
 				}
 				return;
-			} else if(evt.scene){
-				dojo.publish("/dojox/mobile/app/pushScene", [evt.scene]);
+			} else if(evt.detail.scene){
+				dojo.publish("/dojox/mobile/app/pushScene", [evt.detail.scene]);
 				return;
 			}
-			if(evt.url){
+			if(evt.detail.url){
 				var id;
-				if(dojox.mobile._viewMap && dojox.mobile._viewMap[evt.url]){
+				if(dojox.mobile._viewMap && dojox.mobile._viewMap[evt.detail.url]){
 					// external view has already been loaded
-					id = dojox.mobile._viewMap[evt.url];
+					id = dojox.mobile._viewMap[evt.detail.url];
 				}else{
 					// get the specified external view and append it to the <body>
 					var text = this._text;
@@ -68,8 +68,8 @@ var Controller = dojo.declare(null, {
 									prog.stop();
 									if(response){
 										this._text = response;
-
-										new TransitionEvent({target: evt.domNode, transition: evt.transition,transitionDir: this.transitionDir, moveTo: evt.moveTo, href: evt.href, url: evt.url, scene: evt.scene, detail: evt.detail}).dispatch(); 
+												
+										new TransitionEvent(evt.domNode, {transition: evt.detail.transition,transitionDir: evt.detail.transitionDir, moveTo: evt.detail.moveTo, href: evt.detail.href, url: evt.detail.url, scene: evt.detail.scene}, evt.detail).dispatch(); 
 									}
 								}));
 								xhr.addErrback(function(error){
@@ -90,7 +90,7 @@ var Controller = dojo.declare(null, {
 				moveTo = id;
 				w = this.findCurrentView(moveTo,dijit.byId(evt.srcElement.id)) || w; // the current view widget
 			}
-			w.performTransition(evt.moveTo, evt.transitionDir, evt.transition, null, null);
+			w.performTransition(evt.detail.moveTo, evt.detail.transitionDir, evt.detail.transition, null, null);
 		},
 
                 _parse: function(text,id){
