@@ -1,5 +1,14 @@
-define("dojox/widget/MultiSelectCalendar", ["dojo", "dijit", "dojox", "dojo/text!dojox/widget/MultiSelectCalendar/MultiSelectCalendar.html", "dojo/cldr/supplemental", "dojo/date", "dojo/date/locale", "dijit/_Widget", "dijit/_Templated", "dijit/_CssStateMixin", "dijit/form/DropDownButton"], function(dojo, dijit) {
+define("dojox/widget/MultiSelectCalendar", [
+    "dojo", "dijit", 
+    "dojo/text!./MultiSelectCalendar/MultiSelectCalendar.html", 
+    "dojo/cldr/supplemental", 
+    "dojo/date", 
+    "dojo/date/locale", 
+    "dijit/_Widget", "dijit/_Templated", "dijit/_CssStateMixin", "dijit/form/DropDownButton"], 
+    function(dojo, dijit, template) {
+
 dojo.experimental("dojox.widget.MultiSelectCalendar");
+
 dojo.declare(
 	"dojox.widget.MultiSelectCalendar",
 	[dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin, dijit._CssStateMixin],
@@ -19,7 +28,7 @@ dojo.declare(
 		// example:
 		//	|	<div dojoType="dojox.widget.MultiSelectCalendar"></div>
 
-		templateString: dojo.cache("dojox", "widget/MultiSelectCalendar/MultiSelectCalendar.html"),
+		templateString: template,
 		widgetsInTemplate: true,
 
 		// value: Date
