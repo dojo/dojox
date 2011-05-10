@@ -1,8 +1,8 @@
-define(["dojo/_base/html","./dom","./contrib/dijit","./render/dom","dojo/cache","dijit/_Templated"], 
-function(dojo,ddd,ddcd,ddrd){
+define(["dojo/_base/html",".","./contrib/dijit","./render/dom","dojo/cache","dijit/_Templated"], 
+function(dojo,dtl,ddcd,ddrd){
 
-	ddd._DomTemplated = function(){};
-	ddd._DomTemplated.prototype = {
+	dtl._DomTemplated = function(){};
+	dtl._DomTemplated.prototype = {
 		_dijitTemplateCompat: false,
 		buildRendering: function(){
 			//	summary:
