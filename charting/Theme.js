@@ -1,11 +1,7 @@
-dojo.provide("dojox.charting.Theme");
-
-dojo.require("dojox.color");
-dojo.require("dojox.color.Palette");
-dojo.require("dojox.lang.utils");
-dojo.require("dojox.gfx.gradutils");
-
-dojo.declare("dojox.charting.Theme", null, {
+define(["dojo/_base/lang", "dojo/_base/declare", "dojox/color/_base", "dojox/color/Palette", "dojox/lang/utils", "dojox/gfx/gradutils"], 
+	function(dojo, declare, dcolor, Palette, dlu, dgg){ 
+	
+	dojo.declare("dojox.charting.Theme", null, {
 	//	summary:
 	//		A Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
 	//		style a chart.
@@ -218,7 +214,7 @@ dojo.declare("dojox.charting.Theme", null, {
 		//		A flag to post-process the results.
 		//	returns: Object
 		//		An object of the structure { series, marker, symbol }
-		var merge = dojox.lang.utils.merge, series, marker;
+		var merge = dlu.merge, series, marker;
 		if(this.colors){
 			series = dojo.delegate(this.series);
 			marker = dojo.delegate(this.marker);
@@ -330,7 +326,7 @@ dojo.declare("dojox.charting.Theme", null, {
 			if("marker" in mixin){
 				t.symbol = mixin.marker;
 			}
-			theme = dojox.lang.utils.merge(theme, t);
+			theme = dlu.merge(theme, t);
 		}
 		if(doPost){
 			theme = this.post(theme, elementType);
@@ -367,7 +363,7 @@ dojo.declare("dojox.charting.Theme", null, {
 				};
 			}
 			if(t){
-				return dojox.lang.utils.merge(theme, {series: {fill: t}});
+				return dlu.merge(theme, {series: {fill: t}});
 			}
 		}
 		return theme;	//	dojox.charting.Theme
@@ -381,7 +377,7 @@ dojo.declare("dojox.charting.Theme", null, {
 		//	mixin: Object?
 		//		Optional object to mix in to the tick.
 		var tick = this.axis.tick, tickName = name + "Tick",
-			merge = dojox.lang.utils.merge;
+			merge = dlu.merge;
 		if(tick){
 			if(this.axis[tickName]){
 				tick = merge(tick, this.axis[tickName]);
@@ -416,7 +412,7 @@ dojo.declare("dojox.charting.Theme", null, {
 	reverseFills: function(){
 		this.inspectObjects(function(o){
 			if(o && o.fill){
-				o.fill = dojox.gfx.gradutils.reverse(o.fill);
+				o.fill = dgg.reverse(o.fill);
 			}
 		});
 	},
@@ -618,13 +614,13 @@ dojo.mixin(dojox.charting.Theme, {
 			// we'd like it to be a little on the darker side.
 			l = (end + st) / 2;
 			// alternately, use "shades"
-			return dojox.color.Palette.generate(
-				dojox.color.fromHsv(kwArgs.hue, s, l), "monochromatic"
+			return dcolor.Palette.generate(
+				dcolor.fromHsv(kwArgs.hue, s, l), "monochromatic"
 			).colors;
 		}
 		if(kwArgs.generator){
 			//	pass a base color and the name of a generator
-			return dojox.color.Palette.generate(kwArgs.base, kwArgs.generator).colors;
+			return dcolor.Palette.generate(kwArgs.base, kwArgs.generator).colors;
 		}
 		return c;	//	dojo.Color[]
 	},
@@ -639,19 +635,22 @@ dojo.mixin(dojox.charting.Theme, {
 	},
 	
 	generateHslColor: function(color, luminance){
-		color = new dojox.color.Color(color);
+		color = new dojo.Color(color);
 		var hsl    = color.toHsl(),
-			result = dojox.color.fromHsl(hsl.h, hsl.s, luminance);
+			result = dcolor.fromHsl(hsl.h, hsl.s, luminance);
 		result.a = color.a;	// add missing opacity
 		return result;
 	},
 
 	generateHslGradient: function(color, fillPattern, lumFrom, lumTo){
-		color = new dojox.color.Color(color);
+		color = new dojo.Color(color);
 		var hsl       = color.toHsl(),
-			colorFrom = dojox.color.fromHsl(hsl.h, hsl.s, lumFrom),
-			colorTo   = dojox.color.fromHsl(hsl.h, hsl.s, lumTo);
+			colorFrom = dcolor.fromHsl(hsl.h, hsl.s, lumFrom),
+			colorTo   = dcolor.fromHsl(hsl.h, hsl.s, lumTo);
 		colorFrom.a = colorTo.a = color.a;	// add missing opacity
 		return dojox.charting.Theme.generateGradient(fillPattern, colorFrom, colorTo);	// Object
 	}
+});
+
+return dojox.charting.Theme;
 });

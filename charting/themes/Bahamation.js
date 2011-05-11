@@ -1,9 +1,6 @@
-dojo.provide("dojox.charting.themes.Bahamation");
-dojo.require("dojox.charting.Theme");
+define(["../Theme", "./common"], function(Theme){
 
-(function(){
-	var dxc=dojox.charting;
-	dxc.themes.Bahamation=new dxc.Theme({
+	dojox.charting.themes.Bahamation=new Theme({
 		colors: [
 			"#3f9998",
 			"#3fc0c3",
@@ -12,4 +9,6 @@ dojo.require("dojox.charting.Theme");
 			"#c663a6"
 		]
 	});
-})();
+	
+	return dojox.charting.themes.Bahamation;
+});

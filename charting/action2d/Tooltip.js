@@ -1,26 +1,19 @@
-dojo.provide("dojox.charting.action2d.Tooltip");
+define(["dojo/_base/lang", "dojo/_base/declare", "./PlotAction", "dijit/Tooltip", 
+	"dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
+	function(dojo, declare, PlotAction, Tooltip, m, df){
+	
+	/*=====
+	dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
+		//	summary:
+		//		Additional arguments for tooltip actions.
+	
+		//	text: Function?
+		//		The function that produces the text to be shown within a tooltip.  By default this will be
+		//		set by the plot in question, by returning the value of the element.
+		text: null
+	});
+	=====*/
 
-dojo.require("dijit.Tooltip");
-
-dojo.require("dojox.charting.action2d.PlotAction");
-dojo.require("dojox.gfx.matrix");
-
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.scan");
-dojo.require("dojox.lang.functional.fold");
-
-/*=====
-dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
-	//	summary:
-	//		Additional arguments for tooltip actions.
-
-	//	text: Function?
-	//		The function that produces the text to be shown within a tooltip.  By default this will be
-	//		set by the plot in question, by returning the value of the element.
-	text: null
-});
-=====*/
-(function(){
 	var DEFAULT_TEXT = function(o){
 		var t = o.run && o.run.data && o.run.data[o.index];
 		if(t && typeof t != "number" && (t.tooltip || t.text)){
@@ -38,9 +31,9 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 		return o.element == "bar" ? o.x : o.y;
 	};
 
-	var df = dojox.lang.functional, m = dojox.gfx.matrix, pi4 = Math.PI / 4, pi2 = Math.PI / 2;
+	var pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
-	dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.PlotAction, {
+	return dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create an action on a plot where a tooltip is shown when hovering over an element.
 
@@ -53,7 +46,7 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 		constructor: function(chart, plot, kwArgs){
 			//	summary:
 			//		Create the tooltip action and connect it to the plot.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this action belongs to.
 			//	plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
@@ -156,4 +149,4 @@ dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2
 			}
 		}
 	});
-})();
+});

@@ -1,13 +1,8 @@
-dojo.provide("dojox.charting.widget.SelectableLegend");
-
-dojo.require("dojox.charting.widget.Legend");
-dojo.require("dijit.form.CheckBox");
-dojo.require("dojox.charting.action2d.Highlight");
-
-(function(){
-	var df = dojox.lang.functional;
+define(["dojo/_base/array", "dojo/_base/declare", "dojo/query", "dojo/_base/html", "dojo/_base/connect", "dojo/_base/Color",
+	"./Legend", "dijit/form/CheckBox", "../action2d/Highlight", "dojox/lang/functional"], 
+	function(dojo, declare, dquery, dhtml, dconnect, dcolor, Legend, CheckBox, Highlight, df){
 	
-	dojo.declare("dojox.charting.widget.SelectableLegend", [dojox.charting.widget.Legend], {
+	dojo.declare("dojox.charting.widget.SelectableLegend", dojox.charting.widget.Legend, {
 		//	summary:
 		//		An enhanced chart legend supporting interactive events on data series
 		
@@ -33,7 +28,7 @@ dojo.require("dojox.charting.action2d.Highlight");
 			var legendNodes = dojo.query("td", this.legendBody);
 			var currentLegendNode = legendNodes[legendNodes.length - 1];
 			this.legends.push(currentLegendNode);
-			var checkbox = new dijit.form.CheckBox({checked: true});
+			var checkbox = new CheckBox({checked: true});
 			dojo.place(checkbox.domNode, currentLegendNode, "first");
 			// connect checkbox and existed label
 			var label = dojo.query("label", currentLegendNode)[0];
@@ -43,7 +38,10 @@ dojo.require("dojox.charting.action2d.Highlight");
 			// summary:
 			//		Apply click-event on checkbox and hover-event on legend icon,
 			//		highlight data series or toggle it.
-			
+			// if the chart has not yet been refreshed it will crash here (targetData.group == null)
+			if(this.chart.dirty){
+				return;
+			}
 			dojo.forEach(this.legends, function(legend, i){
 				var targetData, shapes = [], plotName, seriesName;
 				if(this._isPie()){
@@ -132,7 +130,7 @@ dojo.require("dojox.charting.action2d.Highlight");
 		},
 		_getAnim: function(plotName){
 			if(!this.legendAnim[plotName]){
-				this.legendAnim[plotName] = new dojox.charting.action2d.Highlight(this.chart, plotName);
+				this.legendAnim[plotName] = new Highlight(this.chart, plotName);
 			}
 			return this.legendAnim[plotName];
 		},
@@ -157,11 +155,13 @@ dojo.require("dojox.charting.action2d.Highlight");
 			return this.chart.stack[0].declaredClass == "dojox.charting.plot2d.Pie";
 		}
 	});
+	
 	function formatEventType(type){
 		if(type == "mouseenter")return "onmouseover";
 		if(type == "mouseleave")return "onmouseout";
 		return "on" + type;
 	}
+	
 	dojo.declare("dojox.charting.widget._FocusManager", null, {
 		//	summary:
 		//		It will take legend as a tab stop, and using
@@ -234,4 +234,6 @@ dojo.require("dojox.charting.action2d.Highlight");
 			dojo.query("input", this.legend.legends[this.index])[0].focus();
 		}
 	});
-})();
+	
+	return dojox.charting.widget.SelectableLegend;
+});

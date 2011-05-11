@@ -1,10 +1,7 @@
-dojo.provide("dojox.charting.axis2d.common");
-
-dojo.require("dojox.gfx");
-
-(function(){
-	var g = dojox.gfx;
-
+define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/window", "dojox/gfx"], function(dojo, dhtml, dwindow, g){
+	
+	var common = dojo.getObject("common", true, dojox.charting.axis2);
+	
 	var clearNode = function(s){
 		s.marginLeft   = "0px";
 		s.marginTop    = "0px";
@@ -30,7 +27,7 @@ dojo.require("dojox.gfx");
 		}
 	};
 
-	dojo.mixin(dojox.charting.axis2d.common, {
+	return dojo.mixin(common, {
 		//	summary:
 		//		Common methods to be used by any axis.  This is considered "static".
 		createText: {
@@ -151,4 +148,4 @@ dojo.require("dojox.gfx");
 			}
 		}
 	});
-})();
+});

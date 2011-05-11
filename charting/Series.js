@@ -1,6 +1,5 @@
-dojo.provide("dojox.charting.Series");
-
-dojo.require("dojox.charting.Element");
+define(["dojo/_base/kernel", "dojo/_base/declare", "./Element"], 
+	function(dojo, declare, Element){ 
 /*=====
 dojox.charting.__SeriesCtorArgs = function(plot){
 	//	summary:
@@ -10,13 +9,13 @@ dojox.charting.__SeriesCtorArgs = function(plot){
 	this.plot = plot;
 }
 =====*/
-dojo.declare("dojox.charting.Series", dojox.charting.Element, {
+return dojo.declare("dojox.charting.Series", dojox.charting.Element, {
 	//	summary:
 	//		An object representing a series of data for plotting on a chart.
 	constructor: function(chart, data, kwArgs){
 		//	summary:
 		//		Create a new data series object for use within charting.
-		//	chart: dojox.charting.Chart2D
+		//	chart: dojox.charting.Chart
 		//		The chart that this series belongs to.
 		//	data: Array|Object:
 		//		The array of data points (either numbers or objects) that
@@ -56,4 +55,6 @@ dojo.declare("dojox.charting.Series", dojox.charting.Element, {
 		this.dirty = true;
 		this.clear();
 	}
+});
+
 });

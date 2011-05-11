@@ -1,8 +1,6 @@
-dojo.provide("dojox.charting.action2d.TouchZoomAndPan");
-
-dojo.require("dojox.charting.action2d.ChartAction");
-dojo.require("dojox.charting.Element");
-dojo.require("dojox.charting.plot2d.common");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", 
+	"./ChartAction", "../Element", "dojo/gesture/tap", "../plot2d/common"], 
+	function(dojo, declare, devent, ChartAction, Element, tap, common){
 
 dojo.declare("dojox.charting.action2d._GlassViewElement", dojox.charting.Element, {
 	constructor: function(chart){
@@ -41,7 +39,7 @@ dojo.declare("dojox.charting.action2d._GlassViewElement", dojox.charting.Element
 		//		Returns default stats (irrelevant for this type of plot).
 		//	returns: Object
 		//		{hmin, hmax, vmin, vmax} min/max in both directions.
-		return dojo.delegate(dojox.charting.plot2d.common.defaultStats);
+		return dojo.delegate(common.defaultStats);
 	},
 	initializeScalers: function(){
 		//	summary:
@@ -75,7 +73,7 @@ dojo.declare("dojox.charting.action2d.__TouchZoomAndPanCtorArgs", null, {
 });
 =====*/
 
-dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.ChartAction, {
+return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.ChartAction, {
 	//	summary:
 	//		Create a touch zoom and pan action. 
 	//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture. 
@@ -100,7 +98,8 @@ dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.
 		//		Optional arguments for the action.
 		this._listeners = [{eventName: "ontouchstart", methodName: "onTouchStart"},
 		                   {eventName: "ontouchmove", methodName: "onTouchMove"},
-		                   {eventName: "ontouchend", methodName: "onTouchEnd"}];
+		                   {eventName: "ontouchend", methodName: "onTouchEnd"},
+						   {eventName: tap.doubletap, methodName: "onDoubleTap"}];
 		if(!kwArgs){ kwArgs = {}; }
 		this.axis = kwArgs.axis ? kwArgs.axis : "x";
 		this.scaleFactor = kwArgs.scaleFactor ? kwArgs.scaleFactor : 1.2;
@@ -199,15 +198,7 @@ dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.
 	onTouchEnd: function(event){
 		//		Called when touch is ended on the chart.
 		var chart = this.chart, axis = chart.getAxis(this.axis);
-		if(event.touches.length == 0){
-			if(this._lastUp && ((new Date().getTime() - this._lastUp) < 250)){
-				var scale = 1 / this.scaleFactor;
-				this._onDoubleTap(chart, axis, this.axis, scale, event);
-				this._lastUp = null;
-			}else{
-				this._lastUp = new Date().getTime();
-			}   
-		}else if(event.touches.length == 1 && this.enableScroll){
+		if(event.touches.length == 1 && this.enableScroll){
 			// still one touch available, let's start back from here for
 			// potential pan
 			this._startPageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
@@ -224,20 +215,23 @@ dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.
 		this._lastFactor = bounds.span / (bounds.upper - bounds.lower); 
 	},
 
-	_onDoubleTap: function(chart, axis, name, scale, event){
-		// we got a double tap
+	onDoubleTap: function(event){
+		//		Called when double tap is performed on the chart.
+		var chart = this.chart, axis = chart.getAxis(this.axis);
+		var scale = 1 / this.scaleFactor;
 		// are we fit?
 		if(axis.getWindowScale()==1){
 			// fit => zoom
 			var scaler = axis.getScaler(), start = scaler.bounds.from, end = scaler.bounds.to, 
-			oldMiddle = (start + end) / 2, newMiddle = this.plot.toData(this._startPageCoord)[name], 
+			oldMiddle = (start + end) / 2, newMiddle = this.plot.toData(this._startPageCoord)[this.axis], 
 			newStart = scale * (start - oldMiddle) + newMiddle, newEnd = scale * (end - oldMiddle) + newMiddle;
-			chart.zoomIn(name, [newStart, newEnd]);
+			chart.zoomIn(this.axis, [newStart, newEnd]);
 		}else{
 			// non fit => fit
-			chart.setAxisWindow(name, 1, 0);
+			chart.setAxisWindow(this.axis, 1, 0);
 			chart.render();
 		}
 		dojo.stopEvent(event);
 	}
+	});
 });		

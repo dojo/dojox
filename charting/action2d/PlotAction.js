@@ -1,29 +1,24 @@
-dojo.provide("dojox.charting.action2d.PlotAction");
+define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional", "dojox/lang/functional/object"], 
+	function(dojo, connect, declare, Base, dfe, df, dlfo){
+	
+	/*=====
+	dojox.charting.action2d.__PlotActionCtorArgs = function(duration, easing){
+	 	//	summary:
+		//		The base keyword arguments object for creating an action2d.
+		//	duration: Number?
+		//		The amount of time in milliseconds for an animation to last.  Default is 400.
+		//	easing: dojo.fx.easing.*?
+		//		An easing object (see dojo.fx.easing) for use in an animation.  The
+		//		default is dojo.fx.easing.backOut.
+		this.duration = duration;
+		this.easing = easing;
+	}
+	=====*/
 
-dojo.require("dojox.charting.action2d.Base");
-dojo.require("dojo.fx.easing");
-dojo.require("dojox.lang.functional.object");
-dojo.require("dojox.gfx.fx");
-
-/*=====
-dojox.charting.action2d.__PlotActionCtorArgs = function(duration, easing){
- 	//	summary:
-	//		The base keyword arguments object for creating an action2d.
-	//	duration: Number?
-	//		The amount of time in milliseconds for an animation to last.  Default is 400.
-	//	easing: dojo.fx.easing.*?
-	//		An easing object (see dojo.fx.easing) for use in an animation.  The
-	//		default is dojo.fx.easing.backOut.
-	this.duration = duration;
-	this.easing = easing;
-}
-=====*/
-(function(){
 	var DEFAULT_DURATION = 400,	// ms
-		DEFAULT_EASING   = dojo.fx.easing.backOut,
-		df = dojox.lang.functional;
+		DEFAULT_EASING   = dfe.backOut;
 
-	dojo.declare("dojox.charting.action2d.PlotAction", dojox.charting.action2d.Base, {
+	return dojo.declare("dojox.charting.action2d.PlotAction", dojox.charting.action2d.Base, {
 
 		overOutEvents: {onmouseover: 1, onmouseout: 1},
 
@@ -67,7 +62,7 @@ dojox.charting.action2d.__PlotActionCtorArgs = function(duration, easing){
 		destroy: function(){
 			//	summary:
 			//		Do any cleanup needed when destroying parent elements.
-			this.disconnect();
+			this.inherited(arguments);
 			df.forIn(this.anim, function(o){
 				df.forIn(o, function(anim){
 					anim.action.stop(true);
@@ -76,4 +71,4 @@ dojox.charting.action2d.__PlotActionCtorArgs = function(duration, easing){
 			this.anim = {};
 		}
 	});
-})();
+});

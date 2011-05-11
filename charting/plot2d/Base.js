@@ -1,9 +1,7 @@
-dojo.provide("dojox.charting.plot2d.Base");
-
-dojo.require("dojox.charting.scaler.primitive");
-dojo.require("dojox.charting.Element");
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d._PlotEvents");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", 
+	"../Element", "./_PlotEvents", 
+	"../scaler/primitive", "./common", "dojox/gfx/fx"],
+	function(dojo, declare, dconnect, Element, PlotEvents, primitive, common, fx){
 
 /*=====
 dojox.charting.plot2d.__PlotCtorArgs = function(){
@@ -14,11 +12,11 @@ dojox.charting.plot2d.__PlotCtorArgs = function(){
 	//		details).
 }
 =====*/
-dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+return dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
 	constructor: function(chart, kwArgs){
 		//	summary:
 		//		Create a base plot for charting.
-		//	chart: dojox.chart.Chart2D
+		//	chart: dojox.chart.Chart
 		//		The chart this plot belongs to.
 		//	kwArgs: dojox.charting.plot2d.__PlotCtorArgs?
 		//		An optional arguments object to help define the plot.
@@ -116,7 +114,7 @@ dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charti
 		//		Calculate the min/max on all attached series in both directions.
 		//	returns: Object
 		//		{hmin, hmax, vmin, vmax} min/max in both directions.
-		return dojox.charting.plot2d.common.collectSimpleStats(this.series);
+		return common.collectSimpleStats(this.series);
 	},
 	calculateAxes: function(dim){
 		//	summary:
@@ -169,7 +167,7 @@ dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charti
 				((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
 
 			shape = this.group,
-			anim = dojox.gfx.fx.animateTransform(dojo.delegate({
+			anim = fx.animateTransform(dojo.delegate({
 				shape: shape,
 				duration: 1200,
 				transform:[
@@ -229,7 +227,7 @@ dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charti
 			}
 			this._hScaler = this._hAxis.getScaler();
 		}else{
-			this._hScaler = dojox.charting.scaler.primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
+			this._hScaler = primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
 		}
 		if(this._vAxis){
 			if(!this._vAxis.initialized()){
@@ -237,8 +235,9 @@ dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charti
 			}
 			this._vScaler = this._vAxis.getScaler();
 		}else{
-			this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
+			this._vScaler = primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
 		}
 		return this;	//	dojox.charting.plot2d.Base
 	}
+});
 });

@@ -1,11 +1,7 @@
-dojo.provide("dojox.charting.widget.Legend");
+define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/array", "dojox/lang/functional/fold"], 
+	function(dojo, declare, Widget, gfx, df){
 
-dojo.require("dijit._Widget");
-
-dojo.require("dojox.lang.functional.array");
-dojo.require("dojox.lang.functional.fold");
-
-dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
+return dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 	// summary: A legend for a chart. A legend contains summary labels for
 	// each series of data contained in the chart.
 	//
@@ -54,8 +50,6 @@ dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 	refresh: function(){
 		// summary: regenerates the legend to reflect changes to the chart
 		
-		var df = dojox.lang.functional;
-
 		// cleanup
 		if(this._surfaces){
 			dojo.forEach(this._surfaces, function(surface){
@@ -135,7 +129,7 @@ dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 	},
 	_makeIcon: function(div, dyn){
 		var mb = { h: this.swatchSize, w: this.swatchSize };
-		var surface = dojox.gfx.createSurface(div, mb.w, mb.h);
+		var surface = gfx.createSurface(div, mb.w, mb.h);
 		this._surfaces.push(surface);
 		if(dyn.fill){
 			// regions
@@ -166,4 +160,6 @@ dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 			surface.createLine({x1: 2, y1: mb.h - 2, x2: mb.w - 2, y2: 2}).setStroke("black");
 		}
 	}
+});
+
 });

@@ -1,9 +1,6 @@
-dojo.provide("dojox.charting.themes.Dollar");
-dojo.require("dojox.charting.Theme");
-
-(function(){
-	var dxc=dojox.charting;
-	dxc.themes.Dollar=new dxc.Theme({
+define(["../Theme", "./common"], function(Theme){
+	
+	dojox.charting.themes.Dollar=new Theme({
 		colors: [
 			"#A4CE67",
             "#739363",
@@ -12,4 +9,6 @@ dojo.require("dojox.charting.Theme");
             "#636563"
 		]
 	});
-})();
+	
+	return dojox.charting.themes.Dollar;
+});

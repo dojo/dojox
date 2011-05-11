@@ -1,12 +1,13 @@
-dojo.provide("dojox.charting.scaler.common");
+define(["dojo/_base/lang"], function(dojo){
 
-(function(){
 	var eq = function(/*Number*/ a, /*Number*/ b){
 		// summary: compare two FP numbers for equality
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
 	};
 	
-	dojo.mixin(dojox.charting.scaler.common, {
+	var common = dojo.getObject("charting.scaler.common", true, dojox);
+	
+	return dojo.mixin(common, {
 		findString: function(/*String*/ val, /*Array*/ text){
 			val = val.toLowerCase();
 			for(var i = 0; i < text.length; ++i){
@@ -16,7 +17,7 @@ dojo.provide("dojox.charting.scaler.common");
 		},
 		getNumericLabel: function(/*Number*/ number, /*Number*/ precision, /*Object*/ kwArgs){
 			var def = "";
-			if(dojo.number){
+			if(dojo && dojo.number){
 				def = (kwArgs.fixed ? dojo.number.format(number, {places : precision < 0 ? -precision : 0}) :
 					dojo.number.format(number)) || "";
 			}else{
@@ -55,4 +56,4 @@ dojo.provide("dojox.charting.scaler.common");
 			return def;
 		}
 	});
-})();
+});

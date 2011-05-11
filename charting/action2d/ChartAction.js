@@ -1,8 +1,6 @@
-dojo.provide("dojox.charting.action2d.ChartAction");
+define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base"], function(dojo, connect, declare, Base){
 
-dojo.require("dojox.charting.action2d.Base");
-
-dojo.declare("dojox.charting.action2d.ChartAction", dojox.charting.action2d.Base, {
+return dojo.declare("dojox.charting.action2d.ChartAction", dojox.charting.action2d.Base, {
 
 	constructor: function(chart, plot){
 		//	summary:
@@ -17,7 +15,7 @@ dojo.declare("dojox.charting.action2d.ChartAction", dojox.charting.action2d.Base
 		//	summary:
 		//		Connect this action to the chart.
 		for(var i = 0; i < this._listeners.length; ++i){
-			this._listeners[i].handle = dojo.connect(this.chart.node, this._listeners[i].eventName, 
+			this._listeners[i].handle = connect(this.chart.node, this._listeners[i].eventName, 
 					this, this._listeners[i].methodName);
 		}
 	},
@@ -30,4 +28,6 @@ dojo.declare("dojox.charting.action2d.ChartAction", dojox.charting.action2d.Base
 			delete this._listeners[i].handle;
 		}
 	}
+});
+
 });

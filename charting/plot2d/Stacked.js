@@ -1,17 +1,10 @@
-dojo.provide("dojox.charting.plot2d.Stacked");
+define(["dojo/_base/lang", "dojo/_base/declare", "./Default", "./common", 
+	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
+	function(dojo, declare, Default, dc, df, dfr, dfs){
 
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Default");
+	var purgeGroup = df.lambda("item.purgeGroup()");
 
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.sequence");
-dojo.require("dojox.lang.functional.reversed");
-
-(function(){
-	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
-
-	dojo.declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
+	return dojo.declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
 		//	summary:
 		//		Like the default plot, Stacked sets up lines, areas and markers
 		//		in a stacked fashion (values on the y axis added to each other)
@@ -198,4 +191,4 @@ dojo.require("dojox.lang.functional.reversed");
 			return this;	//	dojox.charting.plot2d.Stacked
 		}
 	});
-})();
+});

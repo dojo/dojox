@@ -1,6 +1,7 @@
-dojo.provide("dojox.charting.StoreSeries");
+define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"], 
+	function(dojo){
 
-dojo.declare("dojox.charting.StoreSeries", null, {
+return dojo.declare("dojox.charting.StoreSeries", null, {
 	constructor: function(store, kwArgs, value){
 		//	summary:
 		//		Series adapter for dojo object stores (dojo.store).
@@ -95,4 +96,5 @@ dojo.declare("dojox.charting.StoreSeries", null, {
 		}
 	}
 
+});
 });

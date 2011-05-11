@@ -1,17 +1,10 @@
-dojo.provide("dojox.charting.plot2d.StackedBars");
+define(["dojo/_base/array", "dojo/_base/declare", "./Bars", "./common", 
+	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
+	function(dojo, declare, Bars, dc, df, dfr, dfs){
 
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Bars");
+	var	purgeGroup = df.lambda("item.purgeGroup()");
 
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.reversed");
-dojo.require("dojox.lang.functional.sequence");
-
-(function(){
-	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
-
-	dojo.declare("dojox.charting.plot2d.StackedBars", dojox.charting.plot2d.Bars, {
+	return dojo.declare("dojox.charting.plot2d.StackedBars", dojox.charting.plot2d.Bars, {
 		//	summary:
 		//		The plot object representing a stacked bar chart (horizontal bars).
 		getSeriesStats: function(){
@@ -136,4 +129,4 @@ dojo.require("dojox.lang.functional.sequence");
 			return this;	//	dojox.charting.plot2d.StackedBars
 		}
 	});
-})();
+});

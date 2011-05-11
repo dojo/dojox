@@ -1,8 +1,7 @@
-dojo.provide("dojox.charting.plot2d.StackedLines");
+define(["dojo/_base/declare", "./Stacked"], 
+	function(declare, Stacked){
 
-dojo.require("dojox.charting.plot2d.Stacked");
-
-dojo.declare("dojox.charting.plot2d.StackedLines", dojox.charting.plot2d.Stacked, {
+return dojo.declare("dojox.charting.plot2d.StackedLines", dojox.charting.plot2d.Stacked, {
 	//	summary:
 	//		A convenience object to create a stacked line chart.
 	constructor: function(){
@@ -10,4 +9,5 @@ dojo.declare("dojox.charting.plot2d.StackedLines", dojox.charting.plot2d.Stacked
 		//		Force our Stacked base to be lines only.
 		this.opt.lines = true;
 	}
+});
 });

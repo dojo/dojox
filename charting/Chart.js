@@ -1,36 +1,27 @@
-dojo.provide("dojox.charting.Chart");
-
-dojo.require("dojox.gfx");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.fold");
-dojo.require("dojox.lang.functional.reversed");
-
-dojo.require("dojox.charting.Element");
-dojo.require("dojox.charting.Theme");
-dojo.require("dojox.charting.Series");
-dojo.require("dojox.charting.axis2d.common");
-
-/*=====
-dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
-	//	summary:
-	//		The keyword arguments that can be passed in a Chart constructor.
-	//
-	//	margins: Object?
-	//		Optional margins for the chart, in the form of { l, t, r, b}.
-	//	stroke: dojox.gfx.Stroke?
-	//		An optional outline/stroke for the chart.
-	//	fill: dojox.gfx.Fill?
-	//		An optional fill for the chart.
-	//	delayInMs: Number
-	//		Delay in ms for delayedRender(). Default: 200.
-	this.margins = margins;
-	this.stroke = stroke;
-	this.fill = fill;
-	this.delayInMs = delayInMs;
-}
- =====*/
-(function(){
-	var df = dojox.lang.functional, dc = dojox.charting, g = dojox.gfx,
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_base/Color",  
+	"./Element", "./Theme", "./Series", "./axis2d/common",
+	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
+	function(dojo, declare, dhtml, dcolor, Element, Theme, Series, common, g, df){
+	/*=====
+	dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
+		//	summary:
+		//		The keyword arguments that can be passed in a Chart constructor.
+		//
+		//	margins: Object?
+		//		Optional margins for the chart, in the form of { l, t, r, b}.
+		//	stroke: dojox.gfx.Stroke?
+		//		An optional outline/stroke for the chart.
+		//	fill: dojox.gfx.Fill?
+		//		An optional fill for the chart.
+		//	delayInMs: Number
+		//		Delay in ms for delayedRender(). Default: 200.
+		this.margins = margins;
+		this.stroke = stroke;
+		this.fill = fill;
+		this.delayInMs = delayInMs;
+	}
+	 =====*/
+	var dc = dojox.charting,
 		clear = df.lambda("item.clear()"),
 		purge = df.lambda("item.purgeGroup()"),
 		destroy = df.lambda("item.destroy()"),
@@ -429,7 +420,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			//		the resultant series object.
 			//	returns: dojox.charting.Chart:
 			//		A reference to the current chart for functional chaining.
-			var run = new dc.Series(this, data, kwArgs);
+			var run = new Series(this, data, kwArgs);
 			run.name = name;
 			if(name in this.runs){
 				this.series[this.runs[name]].destroy();
@@ -898,7 +889,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 					height: h + 2
 				};
 			if(fill){
-				fill = dc.Element.prototype._shapeFill(dc.Element.prototype._plotFill(fill, dim, offsets), rect);
+				fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim, offsets), rect);
 				this.surface.createRect(rect).setFill(fill);
 			}
 			if(stroke){
@@ -927,13 +918,13 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			}
 
 			if(fill){
-				fill = dc.Element.prototype._plotFill(fill, dim, offsets);
+				fill = Element.prototype._plotFill(fill, dim, offsets);
 				if(offsets.l){	// left
 					rect = {
 						width:  offsets.l,
 						height: dim.height + 1
 					};
-					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
+					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
 				}
 				if(offsets.r){	// right
 					rect = {
@@ -941,14 +932,14 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 						width:  offsets.r + 1,
 						height: dim.height + 2
 					};
-					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
+					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
 				}
 				if(offsets.t){	// top
 					rect = {
 						width:  dim.width + 1,
 						height: offsets.t
 					};
-					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
+					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
 				}
 				if(offsets.b){	// bottom
 					rect = {
@@ -956,7 +947,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 						width:  dim.width + 1,
 						height: offsets.b + 2
 					};
-					this.surface.createRect(rect).setFill(dc.Element.prototype._shapeFill(fill, rect));
+					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
 				}
 			}
 			if(stroke){
@@ -971,7 +962,7 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 				var forceHtmlLabels = (g.renderer == "canvas"),
 					labelType = forceHtmlLabels || !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
 					tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
-				this.chartTitle = dc.axis2d.common.createText[labelType](
+				this.chartTitle = common.createText[labelType](
 					this,
 					this.surface,
 					dim.width/2,
@@ -1133,4 +1124,6 @@ dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
 			plot.initializeScalers(plotArea, stats);
 		});
 	}
-})();
+	
+	return dojox.charting.Chart;
+});

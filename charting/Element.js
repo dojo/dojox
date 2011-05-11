@@ -1,8 +1,7 @@
-dojo.provide("dojox.charting.Element");
-
-dojo.require("dojox.gfx");
-
-dojo.declare("dojox.charting.Element", null, {
+define(["dojo/_base/array", "dojo/_base/declare", "dojox/gfx"], 
+	function(dojo, declare, gfx){ 
+	
+return dojo.declare("dojox.charting.Element", null, {
 	//	summary:
 	//		A base class that is used to build other elements of a chart, such as
 	//		a series.
@@ -23,7 +22,7 @@ dojo.declare("dojox.charting.Element", null, {
 	constructor: function(chart){
 		//	summary:
 		//		Creates a new charting element.
-		//	chart: dojox.charting.Chart2D
+		//	chart: dojox.charting.Chart
 		//		The chart that this element belongs to.
 		this.chart = chart;
 		this.group = null;
@@ -97,7 +96,7 @@ dojo.declare("dojox.charting.Element", null, {
 	},
 	//text utilities
 	getTextWidth: function(s, font){
-		return dojox.gfx._base._getTextBox(s, {font: font}).w || 0;
+		return gfx._base._getTextBox(s, {font: font}).w || 0;
 	},
 	getTextWithLimitLength: function(s, font, limitWidth, truncated){
 		//	summary:
@@ -213,7 +212,7 @@ dojo.declare("dojox.charting.Element", null, {
 			case "linear":
 				if(space === "plot" || space === "shapeX" || space === "shapeY"){
 					// clone a fill so we can modify properly directly
-					fill = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					fill = gfx.makeParameters(gfx.defaultLinearGradient, fill);
 					fill.space = space;
 					// process dimensions
 					if(space === "plot" || space === "shapeX"){
@@ -234,7 +233,7 @@ dojo.declare("dojox.charting.Element", null, {
 				if(space === "plot"){
 					// this one is used exclusively for scatter charts
 					// clone a fill so we can modify properly directly
-					fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					fill = gfx.makeParameters(gfx.defaultRadialGradient, fill);
 					fill.space = space;
 					// process both dimensions
 					var spanX = dim.width  - offsets.l - offsets.r,
@@ -247,7 +246,7 @@ dojo.declare("dojox.charting.Element", null, {
 			case "pattern":
 				if(space === "plot" || space === "shapeX" || space === "shapeY"){
 					// clone a fill so we can modify properly directly
-					fill = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					fill = gfx.makeParameters(gfx.defaultPattern, fill);
 					fill.space = space;
 					// process dimensions
 					if(space === "plot" || space === "shapeX"){
@@ -277,7 +276,7 @@ dojo.declare("dojox.charting.Element", null, {
 			case "linear":
 				if(space === "shape" || space === "shapeX" || space === "shapeY"){
 					// clone a fill so we can modify properly directly
-					fill = dojox.gfx.makeParameters(dojox.gfx.defaultLinearGradient, fill);
+					fill = gfx.makeParameters(gfx.defaultLinearGradient, fill);
 					fill.space = space;
 					// process dimensions
 					if(space === "shape" || space === "shapeX"){
@@ -298,7 +297,7 @@ dojo.declare("dojox.charting.Element", null, {
 				if(space === "shape"){
 					// this one is used exclusively for bubble charts and pie charts
 					// clone a fill so we can modify properly directly
-					fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+					fill = gfx.makeParameters(gfx.defaultRadialGradient, fill);
 					fill.space = space;
 					// process both dimensions
 					fill.cx = bbox.x + bbox.width  / 2;
@@ -309,7 +308,7 @@ dojo.declare("dojox.charting.Element", null, {
 			case "pattern":
 				if(space === "shape" || space === "shapeX" || space === "shapeY"){
 					// clone a fill so we can modify properly directly
-					fill = dojox.gfx.makeParameters(dojox.gfx.defaultPattern, fill);
+					fill = gfx.makeParameters(gfx.defaultPattern, fill);
 					fill.space = space;
 					// process dimensions
 					if(space === "shape" || space === "shapeX"){
@@ -336,7 +335,7 @@ dojo.declare("dojox.charting.Element", null, {
 		}
 		// clone and normalize fill
 		var space = fill.space;
-		fill = dojox.gfx.makeParameters(dojox.gfx.defaultRadialGradient, fill);
+		fill = gfx.makeParameters(gfx.defaultRadialGradient, fill);
 		fill.space = space;
 		if(arguments.length < 4){
 			// process both dimensions
@@ -357,4 +356,5 @@ dojo.declare("dojox.charting.Element", null, {
 		};
 		return fill;
 	}
+});
 });

@@ -1,15 +1,13 @@
-dojo.provide("dojox.charting.Chart3D");
+define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojox/gfx", "dojox/gfx3d"], 
+	function(dojo, declare, dhtml, gfx, gfx3d){
 
-dojo.require("dojox.gfx3d");
+	var observerVector = {x: 0, y: 0, z: 1}, v = gfx3d.vector, n = gfx.normalizedLength;
 
-(function(){
-	var observerVector = {x: 0, y: 0, z: 1}, v = dojox.gfx3d.vector, n = dojox.gfx.normalizedLength;
-
-	dojo.declare("dojox.charting.Chart3D", null, {
+	return dojo.declare("dojox.charting.Chart3D", null, {
 		constructor: function(node, lights, camera, theme){
 			// setup a view
 			this.node = dojo.byId(node);
-			this.surface = dojox.gfx.createSurface(this.node, n(this.node.style.width), n(this.node.style.height));
+			this.surface = gfx.createSurface(this.node, n(this.node.style.width), n(this.node.style.height));
 			this.view = this.surface.createViewport();
 			this.view.setLights(lights.lights, lights.ambient, lights.specular);
 			this.view.setCameraTransform(camera);
@@ -66,7 +64,7 @@ dojo.require("dojox.gfx3d");
 			return this;
 		},
 		_generatePlots: function(){
-			var depth = 0, m = dojox.gfx3d.matrix, i = 0;
+			var depth = 0, m = gfx3d.matrix, i = 0;
 			for(; i < this.plots.length; ++i){
 				depth += this.plots[i].getDepth();
 			}
@@ -79,4 +77,4 @@ dojo.require("dojox.gfx3d");
 			return this;
 		}
 	});
-})();
+});

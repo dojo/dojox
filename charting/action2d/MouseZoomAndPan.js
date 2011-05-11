@@ -1,30 +1,29 @@
-dojo.provide("dojox.charting.action2d.MouseZoomAndPan");
+define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/html", 
+	"dojo/_base/connect", "dojo/_base/sniff", "./ChartAction"], 
+	function(dojo, declare, ddwindow, dhtml, dconnect, dsniff, ChartAction){
 
-dojo.require("dojox.charting.action2d.ChartAction");
+	/*=====
+	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
+		//	summary:
+		//		Additional arguments for mouse zoom and pan actions.
+	
+		//	axis: String?
+		//		Target axis name for this action.  Default is "x".
+		//	scaleFactor: Number?
+		//		The scale factor applied on mouse wheel zoom.  Default is 1.2.
+		//	maxScale: Number?
+		//		The max scale factor accepted by this chart action.  Default is 100.
+		//	enableScroll: Boolean?
+		//		Whether mouse drag gesture should scroll the chart.  Default is true.
+		//	enableDoubleClickZoom: Boolean?
+		//		Whether a double click gesture should toggle between fit and zoom on the chart.  Default is true.
+		//	enableKeyZoom: Boolean?
+		//		Whether a keyZoomModifier + + or keyZoomModifier + - key press should zoom in our out on the chart.  Default is true.
+		//	keyZoomModifier: Boolean?
+		//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
+	});
+	=====*/
 
-/*=====
-dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
-	//	summary:
-	//		Additional arguments for mouse zoom and pan actions.
-
-	//	axis: String?
-	//		Target axis name for this action.  Default is "x".
-	//	scaleFactor: Number?
-	//		The scale factor applied on mouse wheel zoom.  Default is 1.2.
-	//	maxScale: Number?
-	//		The max scale factor accepted by this chart action.  Default is 100.
-	//	enableScroll: Boolean?
-	//		Whether mouse drag gesture should scroll the chart.  Default is true.
-	//	enableDoubleClickZoom: Boolean?
-	//		Whether a double click gesture should toggle between fit and zoom on the chart.  Default is true.
-	//	enableKeyZoom: Boolean?
-	//		Whether a keyZoomModifier + + or keyZoomModifier + - key press should zoom in our out on the chart.  Default is true.
-	//	keyZoomModifier: Boolean?
-	//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
-});
-=====*/
-
-(function(){
 	var sUnit = dojo.isMozilla ? -3 : 120;
 	var keyTests = {
 		none: function(event){
@@ -38,9 +37,10 @@ dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
 		},
 		shift: function(event){
 			return !event.ctrlKey && !event.altKey && event.shiftKey;
-		},
-	}
-	dojo.declare("dojox.charting.action2d.MouseZoomAndPan", dojox.charting.action2d.ChartAction, {
+		}
+	};
+
+	return dojo.declare("dojox.charting.action2d.MouseZoomAndPan", dojox.charting.action2d.ChartAction, {
 		//	summary:
 		//		Create an mouse zoom and pan action.
 		//		You can zoom in or out the data window with mouse wheel. You can scroll using mouse drag gesture. 
@@ -226,4 +226,4 @@ dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
 			dojo.stopEvent(event);
 		}
 	});		
-})();
+});

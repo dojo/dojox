@@ -1,15 +1,8 @@
-dojo.provide("dojox.charting.themes.ThreeD");
+define(["dojo/_base/array", "../Theme", "./gradientGenerator", "./PrimaryColors", "dojo/colors" /* for sanitize */, "./common"], 
+	function(dojo, Theme, gradientGenerator, PrimaryColors){
 
-dojo.require("dojo.colors"); // for dojo.Color.sanitize()
-dojo.require("dojox.charting.Theme");
-dojo.require("dojox.charting.themes.gradientGenerator");
-
-dojo.require("dojox.charting.themes.PrimaryColors"); // as a baseline theme
-
-(function(){
-	var dc = dojox.charting, themes = dc.themes, Theme = dc.Theme,
-		gi = themes.gradientGenerator.generateGradientByIntensity,
-		colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f"],	// the same is in PrimaryColors
+	var themes = dojox.charting.themes, 
+		colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f", "./common"],	// the same is in PrimaryColors
 		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 100, y2: 0},
 		// 3D cylinder map is calculated using dojox.gfx3d
 		cyl3dMap = [
@@ -20,7 +13,7 @@ dojo.require("dojox.charting.themes.PrimaryColors"); // as a baseline theme
 		hiliteIndex = 2, hiliteIntensity = 100, lumStroke = 50,
 		cyl3dFills = dojo.map(colors, function(c){
 			var fill = dojo.delegate(defaultFill),
-				colors = fill.colors = themes.gradientGenerator.generateGradientByIntensity(c, cyl3dMap),
+				colors = fill.colors = gradientGenerator.generateGradientByIntensity(c, cyl3dMap),
 				hilite = colors[hiliteIndex].color;
 			// add highlight
 			hilite.r += hiliteIntensity;
@@ -30,7 +23,7 @@ dojo.require("dojox.charting.themes.PrimaryColors"); // as a baseline theme
 			return fill;
 		});
 
-	themes.ThreeD = themes.PrimaryColors.clone();
+	themes.ThreeD = PrimaryColors.clone();
 	themes.ThreeD.series.shadow = {dx: 1, dy: 1, width: 3, color: [0, 0, 0, 0.15]};
 
 	themes.ThreeD.next = function(elementType, mixin, doPost){
@@ -46,4 +39,6 @@ dojo.require("dojox.charting.themes.PrimaryColors"); // as a baseline theme
 		}
 		return Theme.prototype.next.apply(this, arguments);
 	};
-})();
+	
+	return themes.ThreeD;
+});

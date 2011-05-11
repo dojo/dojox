@@ -1,111 +1,102 @@
-dojo.provide("dojox.charting.plot2d.Default");
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
+	function(dojo, declare, Base, dc, df, dfr, du, fx){
 
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Base");
-
-dojo.require("dojox.lang.utils");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.reversed");
-dojo.require("dojox.gfx.fx");
-
-/*=====
-dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
-	//	summary:
-	//		The arguments used for any/most plots.
-
-	//	hAxis: String?
-	//		The horizontal axis name.
-	hAxis: "x",
-
-	//	vAxis: String?
-	//		The vertical axis name
-	vAxis: "y",
-
-	//	lines: Boolean?
-	//		Whether or not to draw lines on this plot.  Defaults to true.
-	lines:   true,
-
-	//	areas: Boolean?
-	//		Whether or not to draw areas on this plot. Defaults to false.
-	areas:   false,
-
-	//	markers: Boolean?
-	//		Whether or not to draw markers at data points on this plot. Default is false.
-	markers: false,
-
-	//	tension: Number|String?
-	//		Whether or not to apply 'tensioning' to the lines on this chart.
-	//		Options include a number, "X", "x", or "S"; if a number is used, the
-	//		simpler bezier curve calculations are used to draw the lines.  If X, x or S
-	//		is used, the more accurate smoothing algorithm is used.
-	tension: "",
-
-	//	animate: Boolean?
-	//		Whether or not to animate the chart to place.
-	animate: false,
-
-	//	stroke: dojox.gfx.Stroke?
-	//		An optional stroke to use for any series on the plot.
-	stroke:		{},
-
-	//	outline: dojox.gfx.Stroke?
-	//		An optional stroke used to outline any series on the plot.
-	outline:	{},
-
-	//	shadow: dojox.gfx.Stroke?
-	//		An optional stroke to use to draw any shadows for a series on a plot.
-	shadow:		{},
-
-	//	fill: dojox.gfx.Fill?
-	//		Any fill to be used for elements on the plot (such as areas).
-	fill:		{},
-
-	//	font: String?
-	//		A font definition to be used for labels and other text-based elements on the plot.
-	font:		"",
-
-	//	fontColor: String|dojo.Color?
-	//		The color to be used for any text-based elements on the plot.
-	fontColor:	"",
-
-	//	markerStroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for any markers on the plot.
-	markerStroke:		{},
-
-	//	markerOutline: dojo.gfx.Stroke?
-	//		An optional outline to use for any markers on the plot.
-	markerOutline:		{},
-
-	//	markerShadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for any markers on the plot.
-	markerShadow:		{},
-
-	//	markerFill: dojo.gfx.Fill?
-	//		An optional fill to use for any markers on the plot.
-	markerFill:			{},
-
-	//	markerFont: String?
-	//		An optional font definition to use for any markers on the plot.
-	markerFont:			"",
-
-	//	markerFontColor: String|dojo.Color?
-	//		An optional color to use for any marker text on the plot.
-	markerFontColor:	""
+	/*=====
+	dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
+		//	summary:
+		//		The arguments used for any/most plots.
 	
-	//	enableCache: Boolean?
-	//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
-	//		successive rendering but penalize the first rendering.  Default false.
-	enableCache: false
-});
-=====*/
-(function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
+		//	hAxis: String?
+		//		The horizontal axis name.
+		hAxis: "x",
+	
+		//	vAxis: String?
+		//		The vertical axis name
+		vAxis: "y",
+	
+		//	lines: Boolean?
+		//		Whether or not to draw lines on this plot.  Defaults to true.
+		lines:   true,
+	
+		//	areas: Boolean?
+		//		Whether or not to draw areas on this plot. Defaults to false.
+		areas:   false,
+	
+		//	markers: Boolean?
+		//		Whether or not to draw markers at data points on this plot. Default is false.
+		markers: false,
+	
+		//	tension: Number|String?
+		//		Whether or not to apply 'tensioning' to the lines on this chart.
+		//		Options include a number, "X", "x", or "S"; if a number is used, the
+		//		simpler bezier curve calculations are used to draw the lines.  If X, x or S
+		//		is used, the more accurate smoothing algorithm is used.
+		tension: "",
+	
+		//	animate: Boolean?
+		//		Whether or not to animate the chart to place.
+		animate: false,
+	
+		//	stroke: dojox.gfx.Stroke?
+		//		An optional stroke to use for any series on the plot.
+		stroke:		{},
+	
+		//	outline: dojox.gfx.Stroke?
+		//		An optional stroke used to outline any series on the plot.
+		outline:	{},
+	
+		//	shadow: dojox.gfx.Stroke?
+		//		An optional stroke to use to draw any shadows for a series on a plot.
+		shadow:		{},
+	
+		//	fill: dojox.gfx.Fill?
+		//		Any fill to be used for elements on the plot (such as areas).
+		fill:		{},
+	
+		//	font: String?
+		//		A font definition to be used for labels and other text-based elements on the plot.
+		font:		"",
+	
+		//	fontColor: String|dojo.Color?
+		//		The color to be used for any text-based elements on the plot.
+		fontColor:	"",
+	
+		//	markerStroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for any markers on the plot.
+		markerStroke:		{},
+	
+		//	markerOutline: dojo.gfx.Stroke?
+		//		An optional outline to use for any markers on the plot.
+		markerOutline:		{},
+	
+		//	markerShadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for any markers on the plot.
+		markerShadow:		{},
+	
+		//	markerFill: dojo.gfx.Fill?
+		//		An optional fill to use for any markers on the plot.
+		markerFill:			{},
+	
+		//	markerFont: String?
+		//		An optional font definition to use for any markers on the plot.
+		markerFont:			"",
+	
+		//	markerFontColor: String|dojo.Color?
+		//		An optional color to use for any marker text on the plot.
+		markerFontColor:	"",
+		
+		//	enableCache: Boolean?
+		//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
+		//		successive rendering but penalize the first rendering.  Default false.
+		enableCache: false
+	});
+	=====*/
+
+	var purgeGroup = df.lambda("item.purgeGroup()");
 
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
-	dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
+	return dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
@@ -135,7 +126,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Return a new plot.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional arguments object to help define this plot.
@@ -365,7 +356,7 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			if(this.animate){
 				// grow from the bottom
 				var plotGroup = this.group;
-				dojox.gfx.fx.animateTransform(dojo.delegate({
+				fx.animateTransform(dojo.delegate({
 					shape: plotGroup,
 					duration: DEFAULT_ANIMATION_LENGTH,
 					transform:[
@@ -379,4 +370,4 @@ dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__
 			return this;	//	dojox.charting.plot2d.Default
 		}
 	});
-})();
+});

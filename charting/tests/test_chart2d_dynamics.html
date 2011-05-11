@@ -35,6 +35,8 @@ dojo.require("dojox.charting.widget.Legend");
 
 dojo.require("dojox.lang.functional.sequence");
 
+dojo.require("dojo.parser");
+
 var chart, legend, size = 10, magnitude = 30;
 
 var getData = function(){
@@ -148,6 +150,8 @@ addSeries = function(n){
 </head>
 <body class="tundra">
 <h1>Chart 2D: dynamics</h1>
+		<button id="reset1" type="reset" dojoType="dijit.form.Button">Reset with no onClick handler should reset</button>
+
 <table>
 	<tr>
 		<td>Plot:</td>

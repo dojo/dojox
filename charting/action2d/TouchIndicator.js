@@ -1,107 +1,103 @@
-dojo.provide("dojox.charting.action2d.TouchIndicator");
-
-dojo.require("dojox.charting.action2d.ChartAction");
-dojo.require("dojox.charting.action2d._IndicatorElement");
-
-/*=====
-dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
-	//	summary:
-	//		Additional arguments for Touch indicator.
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
+	function(dojo, declare, devent, ChartAction, _IndicatorElement, du){ 
 	
-	//	series: String
-	//		Target series name for this chart action.
+	/*=====
+	dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
+		//	summary:
+		//		Additional arguments for Touch indicator.
+		
+		//	series: String
+		//		Target series name for this chart action.
+		
+		//	dualIndicator: Boolean? 
+		//		Whether a double touch on the chart creates a dual indicator showing data trend betwee the two touch points. Default is false.
+		dualIndicator:		false,
+		
+		//	autoScroll: Boolean? 
+		//		Whether when moving indicator the chart is automatically scrolled. Default is true.
+		autoScroll:		true,
 	
-	//	dualIndicator: Boolean? 
-	//		Whether a double touch on the chart creates a dual indicator showing data trend betwee the two touch points. Default is false.
-	dualIndicator:		false,
+		//	vertical: Boolean? 
+		//		Whether the indicator is vertical or not. Default is true.
+		vertical:		true,
+		
+		//	fixed: Boolean?
+		//		Whether a fixed precision must be applied to data values for display. Default is true.
+		fixed:			true,
 	
-	//	autoScroll: Boolean? 
-	//		Whether when moving indicator the chart is automatically scrolled. Default is true.
-	autoScroll:		true,
-
-	//	vertical: Boolean? 
-	//		Whether the indicator is vertical or not. Default is true.
-	vertical:		true,
+		//	precision: Number?
+		//		The precision at which to round data values for display. Default is 1.
+		precision:		0,
+		
+		//	lineStroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for indicator line.
+		lineStroke:		{},
 	
-	//	fixed: Boolean?
-	//		Whether a fixed precision must be applied to data values for display. Default is true.
-	fixed:			true,
-
-	//	precision: Number?
-	//		The precision at which to round data values for display. Default is 1.
-	precision:		0,
+		//	lineOutline: dojo.gfx.Stroke?
+		//		An optional outline to use for indicator line.
+		lineOutline:		{},
 	
-	//	lineStroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for indicator line.
-	lineStroke:		{},
-
-	//	lineOutline: dojo.gfx.Stroke?
-	//		An optional outline to use for indicator line.
-	lineOutline:		{},
-
-	//	lineShadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for indicator line.
-	lineShadow:		{},
+		//	lineShadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for indicator line.
+		lineShadow:		{},
+		
+		//	stroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for indicator label background.
+		stroke:		{},
 	
-	//	stroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for indicator label background.
-	stroke:		{},
-
-	//	outline: dojo.gfx.Stroke?
-	//		An optional outline to use for indicator label background.
-	outline:		{},
-
-	//	shadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for indicator label background.
-	shadow:		{},
-
-	//	fill: dojo.gfx.Fill?
-	//		An optional fill to use for indicator label background.
-	fill:			{},
+		//	outline: dojo.gfx.Stroke?
+		//		An optional outline to use for indicator label background.
+		outline:		{},
 	
-	//	fillFunc: Function?
-	//		An optional function to use to compute label background fill. It takes precedence over
-	//		fill property when available.
-	fillFunc:		null,
+		//	shadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for indicator label background.
+		shadow:		{},
 	
-	//	labelFunc: Function?
-	//		An optional function to use to compute label text. It takes precedence over
-	//		the default text when available.
-	labelFunc:		{},
-
-	//	font: String?
-	//		A font definition to use for indicator label background.
-	font:		"",
-
-	//	fontColor: String|dojo.Color?
-	//		The color to use for indicator label background.
-	fontColor:	"",
-
-	//	markerStroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for indicator marker.
-	markerStroke:		{},
-
-	//	markerOutline: dojo.gfx.Stroke?
-	//		An optional outline to use for indicator marker.
-	markerOutline:		{},
-
-	//	markerShadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for indicator marker.
-	markerShadow:		{},
-
-	//	markerFill: dojo.gfx.Fill?
-	//		An optional fill to use for indicator marker.
-	markerFill:			{},
+		//	fill: dojo.gfx.Fill?
+		//		An optional fill to use for indicator label background.
+		fill:			{},
+		
+		//	fillFunc: Function?
+		//		An optional function to use to compute label background fill. It takes precedence over
+		//		fill property when available.
+		fillFunc:		null,
+		
+		//	labelFunc: Function?
+		//		An optional function to use to compute label text. It takes precedence over
+		//		the default text when available.
+		labelFunc:		{},
 	
-	//	markerSymbol: String?
-	//		An optional symbol string to use for indicator marker.
-	markerFill:			{}	
-});
-=====*/
+		//	font: String?
+		//		A font definition to use for indicator label background.
+		font:		"",
+	
+		//	fontColor: String|dojo.Color?
+		//		The color to use for indicator label background.
+		fontColor:	"",
+	
+		//	markerStroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for indicator marker.
+		markerStroke:		{},
+	
+		//	markerOutline: dojo.gfx.Stroke?
+		//		An optional outline to use for indicator marker.
+		markerOutline:		{},
+	
+		//	markerShadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for indicator marker.
+		markerShadow:		{},
+	
+		//	markerFill: dojo.gfx.Fill?
+		//		An optional fill to use for indicator marker.
+		markerFill:			{},
+		
+		//	markerSymbol: String?
+		//		An optional symbol string to use for indicator marker.
+		markerFill:			{}	
+	});
+	=====*/
 
-(function(){
-	var du = dojox.lang.utils;
-	dojo.declare("dojox.charting.action2d.TouchIndicator", dojox.charting.action2d.ChartAction, {
+	return dojo.declare("dojox.charting.action2d.TouchIndicator", dojox.charting.action2d.ChartAction, {
 		//	summary:
 		//		Create a touch indicator action. You can touch over the chart to display a data indicator.
 
@@ -221,4 +217,4 @@ dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
 			this.chart.render();
 		}
 	});
-})();
+});

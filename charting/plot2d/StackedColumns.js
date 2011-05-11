@@ -1,17 +1,10 @@
-dojo.provide("dojox.charting.plot2d.StackedColumns");
+define(["dojo/_base/array", "dojo/_base/declare", "./Columns", "./common", 
+	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
+	function(dojo, declare, Columns, dc, df, dfr, dfs){
 
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Columns");
+	var	purgeGroup = df.lambda("item.purgeGroup()");
 
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.reversed");
-dojo.require("dojox.lang.functional.sequence");
-
-(function(){
-	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
-
-	dojo.declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
+	return dojo.declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
 		//	summary:
 		//		The plot object representing a stacked column chart (vertical bars).
 		getSeriesStats: function(){
@@ -134,4 +127,4 @@ dojo.require("dojox.lang.functional.sequence");
 			return this;	//	dojox.charting.plot2d.StackedColumns
 		}
 	});
-})();
+});

@@ -1,19 +1,9 @@
-dojo.provide("dojox.charting.plot2d.Columns");
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
+	function(dojo, declare, Base, dc, df, dfr, du, fx){
 
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Base");
-dojo.require("dojox.gfx.fx");
+	var purgeGroup = df.lambda("item.purgeGroup()");
 
-dojo.require("dojox.lang.utils");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.reversed");
-
-(function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
-
-	dojo.declare("dojox.charting.plot2d.Columns", dojox.charting.plot2d.Base, {
+	return dojo.declare("dojox.charting.plot2d.Columns", dojox.charting.plot2d.Base, {
 		//	summary:
 		//		The plot object representing a column chart (vertical bars).
 		defaultParams: {
@@ -38,7 +28,7 @@ dojo.require("dojox.lang.functional.reversed");
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		The constructor for a columns chart.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__BarCtorArgs?
 			//		An optional keyword arguments object to help define the plot.
@@ -171,7 +161,7 @@ dojo.require("dojox.lang.functional.reversed");
 			return this;	//	dojox.charting.plot2d.Columns
 		},
 		_animateColumn: function(shape, voffset, vsize){
-			dojox.gfx.fx.animateTransform(dojo.delegate({
+			fx.animateTransform(dojo.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [
@@ -182,4 +172,4 @@ dojo.require("dojox.lang.functional.reversed");
 			}, this.animate)).play();
 		}
 	});
-})();
+});

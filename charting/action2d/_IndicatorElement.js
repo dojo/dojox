@@ -1,11 +1,6 @@
-dojo.provide("dojox.charting.action2d._IndicatorElement");
+define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", "../axis2d/common", "dojox/gfx"], 
+	function(dojo, declare, Element, dcpc, dcac, gfx){ 
 
-dojo.require("dojox.charting.Element");
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.axis2d.common");
-
-(function(){
-	var dc = dojox.charting, dcpc = dojox.charting.plot2d.common;
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
 	var getBoundingBox = function(shape){
 		return getTextBBox(shape, shape.getShape().text);
@@ -23,8 +18,8 @@ dojo.require("dojox.charting.axis2d.common");
 		}else if(c.indexOf("vml")!=-1){
 			var rawNode = s.rawNode, _display = rawNode.style.display;
 			rawNode.style.display = "inline";
-			var w = dojox.gfx.pt2px(parseFloat(rawNode.currentStyle.width));
-			var h = dojox.gfx.pt2px(parseFloat(rawNode.currentStyle.height));
+			var w = gfx.pt2px(parseFloat(rawNode.currentStyle.width));
+			var h = gfx.pt2px(parseFloat(rawNode.currentStyle.height));
 			var sz = {x: 0, y: 0, width: w, height: h};
 			// in VML, the width/height we get are in view coordinates
 			// in our case we don't zoom the view so that is ok
@@ -41,8 +36,8 @@ dojo.require("dojox.charting.axis2d.common");
 			// canvas
 			var w = s.getTextWidth();
 			var font = s.getFont();
-			var fz = font ? font.size : dojox.gfx.defaultFont.size;
-			var h = dojox.gfx.normalizedLength(fz);
+			var fz = font ? font.size : gfx.defaultFont.size;
+			var h = gfx.normalizedLength(fz);
 			sz = {width: w, height: h};
 			computeLocation(s, sz,0.75);
 			return sz;
@@ -67,7 +62,7 @@ dojo.require("dojox.charting.axis2d.common");
 		return sz;
 	};
 
-	dojo.declare("dojox.charting.action2d._IndicatorElement", dojox.charting.Element, {
+	return dojo.declare("dojox.charting.action2d._IndicatorElement", Element, {
 		constructor: function(chart, kwArgs){
 			if(!kwArgs){ kwArgs = {}; }
 			this.inter = kwArgs.inter;
@@ -252,7 +247,7 @@ dojo.require("dojox.charting.axis2d.common");
 			
 		},
 		_renderText: function(text, inter, t, x, y, c1, c2){
-			var label = dc.axis2d.common.createText.gfx(
+			var label = dcac.createText.gfx(
 					this.chart,
 					this.group,
 					x, y,
@@ -356,4 +351,4 @@ dojo.require("dojox.charting.axis2d.common");
 			return !this._noDirty && (this.dirty || this.inter.plot.isDirty());
 		}
 	});
-})();
+});

@@ -1,12 +1,9 @@
-dojo.provide("dojox.charting.themes.PlotKit.base");
+define(["dojo/_base/kernel", "../../Theme", "../common"], function(dojo, Theme){
 
-dojo.require("dojox.charting.Theme");
+	// the baseline theme for all PlotKIt themes
+	var pk = dojo.getObject("PlotKit", true, dojox.charting.themes);
 
-// the baseline theme for all PlotKIt themes
-(function(){
-	var dc = dojox.charting, pk = dc.themes.PlotKit;
-
-	pk.base = new dc.Theme({
+	pk.base = new Theme({
 		chart:{
 			stroke: null,
 			fill:   "yellow"
@@ -38,7 +35,7 @@ dojo.require("dojox.charting.Theme");
 	});
 
 	pk.base.next = function(elementType, mixin, doPost){
-		var theme = dc.Theme.prototype.next.apply(this, arguments);
+		var theme = Theme.prototype.next.apply(this, arguments);
 		if(elementType == "line"){
 			theme.marker.outline = {width: 2, color: "#fff"};
 			theme.series.stroke.width = 3.5;
@@ -50,4 +47,6 @@ dojo.require("dojox.charting.Theme");
 		}
 		return theme;
 	};
-})();
+	
+	return pk;
+});

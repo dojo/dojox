@@ -1,49 +1,43 @@
-dojo.provide("dojox.charting.plot2d.Grid");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Element", "./common", "dojox/lang/utils", "dojox/gfx/fx"], 
+	function(dojo, declare, dconnect, Element, dc, du, fx){
 
-dojo.require("dojox.charting.Element");
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.utils");
-
-/*=====
-dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
-	//	summary:
-	//		A special keyword arguments object that is specific to a grid "plot".
-
-	//	hMajorLines: Boolean?
-	//		Whether to show lines at the major ticks along the horizontal axis. Default is true.
-	hMajorLines: true,
-
-	//	hMinorLines: Boolean?
-	//		Whether to show lines at the minor ticks along the horizontal axis. Default is false.
-	hMinorLines: false,
-
-	//	vMajorLines: Boolean?
-	//		Whether to show lines at the major ticks along the vertical axis. Default is true.
-	vMajorLines: true,
-
-	//	vMinorLines: Boolean?
-	//		Whether to show lines at the major ticks along the vertical axis. Default is false.
-	vMinorLines: false,
-
-	//	hStripes: String?
-	//		Whether or not to show stripes (alternating fills) along the horizontal axis. Default is "none".
-	hStripes: "none",
-
-	//	vStripes: String?
-	//		Whether or not to show stripes (alternating fills) along the vertical axis. Default is "none".
-	vStripes: "none",
+	/*=====
+	dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
+		//	summary:
+		//		A special keyword arguments object that is specific to a grid "plot".
 	
-	//	enableCache: Boolean?
-	//		Whether the grid lines are cached from one rendering to another. This improves the rendering performance of
-	//		successive rendering but penalize the first rendering.  Default false.
-	enableCache: false
-});
-=====*/
-(function(){
-	var du = dojox.lang.utils, dc = dojox.charting.plot2d.common;
+		//	hMajorLines: Boolean?
+		//		Whether to show lines at the major ticks along the horizontal axis. Default is true.
+		hMajorLines: true,
+	
+		//	hMinorLines: Boolean?
+		//		Whether to show lines at the minor ticks along the horizontal axis. Default is false.
+		hMinorLines: false,
+	
+		//	vMajorLines: Boolean?
+		//		Whether to show lines at the major ticks along the vertical axis. Default is true.
+		vMajorLines: true,
+	
+		//	vMinorLines: Boolean?
+		//		Whether to show lines at the major ticks along the vertical axis. Default is false.
+		vMinorLines: false,
+	
+		//	hStripes: String?
+		//		Whether or not to show stripes (alternating fills) along the horizontal axis. Default is "none".
+		hStripes: "none",
+	
+		//	vStripes: String?
+		//		Whether or not to show stripes (alternating fills) along the vertical axis. Default is "none".
+		vStripes: "none",
+		
+		//	enableCache: Boolean?
+		//		Whether the grid lines are cached from one rendering to another. This improves the rendering performance of
+		//		successive rendering but penalize the first rendering.  Default false.
+		enableCache: false
+	});
+	=====*/
 
-	dojo.declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
+	return dojo.declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
 		//	summary:
 		//		A "faux" plot that can be placed behind other plots to represent
 		//		a grid against which other plots can be easily measured.
@@ -155,7 +149,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 					((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
 
 				shape = this.group,
-				anim = dojox.gfx.fx.animateTransform(dojo.delegate({
+				anim = fx.animateTransform(dojo.delegate({
 					shape: shape,
 					duration: 1200,
 					transform:[
@@ -305,7 +299,7 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 		_animateGrid: function(shape, type, offset, size){
 			var transStart = type == "h" ? [offset, 0] : [0, offset];
 			var scaleStart = type == "h" ? [1/size, 1] : [1, 1/size];
-			dojox.gfx.fx.animateTransform(dojo.delegate({
+			fx.animateTransform(dojo.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [
@@ -316,4 +310,4 @@ dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__Def
 			}, this.animate)).play();
 		}
 	});
-})();
+});

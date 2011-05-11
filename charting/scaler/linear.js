@@ -1,11 +1,9 @@
-dojo.provide("dojox.charting.scaler.linear");
-dojo.require("dojox.charting.scaler.common");
-
-(function(){
+define(["dojo/_base/lang", "./common"], function(dojo, common){
+	var linear = dojo.getObject("charting.scaler.linear", true, dojox);
+	
 	var deltaLimit = 3,	// pixels
-		dc = dojox.charting, dcs = dc.scaler, dcsc = dcs.common,
-		findString = dcsc.findString,
-		getLabel = dcsc.getNumericLabel;
+		findString = common.findString,
+		getLabel = common.getNumericLabel;
 	
 	var calcTicks = function(min, max, kwArgs, majorTick, minorTick, microTick, span){
 		kwArgs = dojo.delegate(kwArgs);
@@ -88,11 +86,11 @@ dojo.require("dojox.charting.scaler.common");
 			},
 			minorPerMajor:	minorPerMajor,
 			microPerMinor:	microPerMinor,
-			scaler:			dcs.linear
+			scaler:			linear
 		};
 	};
 	
-	dojo.mixin(dojox.charting.scaler.linear, {
+	return dojo.mixin(linear, {
 		buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs){
 			var h = {fixUpper: "none", fixLower: "none", natural: false};
 			if(kwArgs){
@@ -248,4 +246,4 @@ dojo.require("dojox.charting.scaler.common");
 			return function(x){ return x / scale + offset; };	// Function
 		}
 	});
-})();
+});

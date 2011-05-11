@@ -1,37 +1,29 @@
-dojo.provide("dojox.charting.plot2d.Bars");
-
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Base");
-dojo.require("dojox.gfx.fx");
-
-dojo.require("dojox.lang.utils");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.reversed");
-/*=====
-dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
-	//	summary:
-	//		Additional keyword arguments for bar charts.
-
-	//	minBarSize: Number?
-	//		The minimum size for a bar in pixels.  Default is 1.
-	minBarSize: 1,
-
-	//	maxBarSize: Number?
-	//		The maximum size for a bar in pixels.  Default is 1.
-	maxBarSize: 1,
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", 
+	"dojox/gfx/fx", "dojox/lang/utils", "dojox/lang/functional", "dojox/lang/functional/reversed"], 
+	function(dojo, declare, Base, dc, fx, du, df, dfr){
+		
+	/*=====
+	dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
+		//	summary:
+		//		Additional keyword arguments for bar charts.
 	
-	//	enableCache: Boolean?
-	//		Whether the bars rect are cached from one rendering to another. This improves the rendering performance of
-	//		successive rendering but penalize the first rendering.  Default false.
-	enableCache: false
-});
-=====*/
-(function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
+		//	minBarSize: Number?
+		//		The minimum size for a bar in pixels.  Default is 1.
+		minBarSize: 1,
+	
+		//	maxBarSize: Number?
+		//		The maximum size for a bar in pixels.  Default is 1.
+		maxBarSize: 1,
+		
+		//	enableCache: Boolean?
+		//		Whether the bars rect are cached from one rendering to another. This improves the rendering performance of
+		//		successive rendering but penalize the first rendering.  Default false.
+		enableCache: false
+	});
+	=====*/
+	var purgeGroup = df.lambda("item.purgeGroup()");
 
-	dojo.declare("dojox.charting.plot2d.Bars", dojox.charting.plot2d.Base, {
+	return dojo.declare("dojox.charting.plot2d.Bars", dojox.charting.plot2d.Base, {
 		//	summary:
 		//		The plot object representing a bar chart (horizontal bars).
 		defaultParams: {
@@ -56,7 +48,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		The constructor for a bar chart.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__BarCtorArgs?
 			//		An optional keyword arguments object to help define the plot.
@@ -188,7 +180,7 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 			return this;	//	dojox.charting.plot2d.Bars
 		},
 		_animateBar: function(shape, hoffset, hsize){
-			dojox.gfx.fx.animateTransform(dojo.delegate({
+			fx.animateTransform(dojo.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [
@@ -199,4 +191,4 @@ dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__Defa
 			}, this.animate)).play();
 		}
 	});
-})();
+});

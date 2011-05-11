@@ -46,6 +46,8 @@ dojo.require("dojox.charting.action2d.Tooltip");
 
 dojo.require("dojox.lang.functional.sequence");
 
+dojo.require("dojo.parser");
+
 var chart, legend, size = 10, magnitude = 30, none = "<em>none</em>";
 
 
@@ -88,7 +90,7 @@ function getZeroes(){
 var actions = [];
 
 function addActions(chart){
-	dojox.lang.functional.forEach(actions, ".destroy()");
+	dojox.lang.functional.forEach(actions, ".disconnect()");
 	actions = [
 		new dojox.charting.action2d.Highlight(chart),
 		new dojox.charting.action2d.Magnify(chart),

@@ -1,14 +1,9 @@
-dojo.provide("dojox.charting.plot2d.Bubble");
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
+	function(dojo, declare, Base, dc, df, dfr, du, fx){
 
-dojo.require("dojox.charting.plot2d.Base");
-dojo.require("dojox.lang.functional");
+	var purgeGroup = df.lambda("item.purgeGroup()");
 
-(function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
-
-	dojo.declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Base, {
+	return dojo.declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Base, {
 		//	summary:
 		//		A plot representing bubbles.  Note that data for Bubbles requires 3 parameters,
 		//		in the form of:  { x, y, size }, where size determines the size of the bubble.
@@ -30,7 +25,7 @@ dojo.require("dojox.lang.functional");
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Create a plot of bubbles.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		Optional keyword arguments object to help define plot parameters.
@@ -204,7 +199,7 @@ dojo.require("dojox.lang.functional");
 			return this;	//	dojox.charting.plot2d.Bubble
 		},
 		_animateBubble: function(shape, offset, size){
-			dojox.gfx.fx.animateTransform(dojo.delegate({
+			fx.animateTransform(dojo.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [
@@ -215,4 +210,4 @@ dojo.require("dojox.lang.functional");
 			}, this.animate)).play();
 		}
 	});
-})();
+});

@@ -1,8 +1,6 @@
-dojo.provide("dojox.charting.plot2d.Markers");
+define(["dojo/_base/declare", "./Default"], function(declare, Default){
 
-dojo.require("dojox.charting.plot2d.Default");
-
-dojo.declare("dojox.charting.plot2d.Markers", dojox.charting.plot2d.Default, {
+return dojo.declare("dojox.charting.plot2d.Markers", dojox.charting.plot2d.Default, {
 	//	summary:
 	//		A convenience plot to draw a line chart with markers.
 	constructor: function(){
@@ -10,4 +8,5 @@ dojo.declare("dojox.charting.plot2d.Markers", dojox.charting.plot2d.Default, {
 		//		Set up the plot for lines and markers.
 		this.opt.markers = true;
 	}
+});
 });

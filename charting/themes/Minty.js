@@ -1,9 +1,6 @@
-dojo.provide("dojox.charting.themes.Minty");
-dojo.require("dojox.charting.Theme");
-
-(function(){
-	var dxc=dojox.charting;
-	dxc.themes.Minty=new dxc.Theme({
+define(["../Theme", "./common"], function(Theme){
+	
+	dojox.charting.themes.Minty=new Theme({
 		colors: [
 			"#80ccbb",
 			"#539e8b",
@@ -12,4 +9,6 @@ dojo.require("dojox.charting.Theme");
 			"#68c5ad"
 		]
 	});
-})();
+	
+	return dojox.charting.themes.Minty;
+});

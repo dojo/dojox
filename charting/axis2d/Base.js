@@ -1,8 +1,6 @@
-dojo.provide("dojox.charting.axis2d.Base");
+define(["dojo/_base/declare", "../Element"], function(declare, Element){
 
-dojo.require("dojox.charting.Element");
-
-dojo.declare("dojox.charting.axis2d.Base", dojox.charting.Element, {
+return dojo.declare("dojox.charting.axis2d.Base", dojox.charting.Element, {
 	//	summary:
 	//		The base class for any axis.  This is more of an interface/API
 	//		definition than anything else; see dojox.charting.axis2d.Default
@@ -66,4 +64,5 @@ dojo.declare("dojox.charting.axis2d.Base", dojox.charting.Element, {
 		this.dirty = false;
 		return this;	//	dojox.charting.axis2d.Base
 	}
+});
 });

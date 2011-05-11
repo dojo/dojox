@@ -1,8 +1,6 @@
-dojo.provide("dojox.charting.plot3d.Base");
+define(["dojo/_base/declare"], function(declare) {
 
-dojo.require("dojox.charting.Chart3D");
-
-dojo.declare("dojox.charting.plot3d.Base", null, {
+return dojo.declare("dojox.charting.plot3d.Base", null, {
 	constructor: function(width, height, kwArgs){
 		this.width  = width;
 		this.height = height;
@@ -16,5 +14,6 @@ dojo.declare("dojox.charting.plot3d.Base", null, {
 	},
 	generate: function(chart, creator){
 	}
+});
 });
 

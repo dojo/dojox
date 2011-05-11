@@ -1,26 +1,10 @@
-dojo.provide("dojox.charting.plot2d.Spider");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", 
+	"./common", "../axis2d/common", "../scaler/primitive", 
+	"dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/utils",
+	"dojo/fx", "dojo/fx/easing"],
+	function(dojo, declare, dconnect, dhtml, Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, g, m, gfxfx, df, du, fx, easing){
 
-dojo.experimental("dojox.charting.plot2d.Spider");
-
-dojo.require("dojox.charting.Element");
-dojo.require("dojox.charting.plot2d._PlotEvents");
-dojo.require("dojox.charting.axis2d.common");
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.scaler.primitive");
-
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.utils");
-dojo.require("dojox.gfx");
-dojo.require("dojo.fx");
-dojo.require("dojo.fx.easing");
-dojo.require("dojox.gfx.fx");
-
-(function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		dc = dojox.charting.plot2d.common,
-		da = dojox.charting.axis2d.common,
-		g = dojox.gfx, m = g.matrix,
-		FUDGE_FACTOR = 0.2; // use to overlap fans
+	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
 	dojo.declare("dojox.charting.plot2d.Spider", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
 		//	summary:
@@ -44,7 +28,7 @@ dojo.require("dojox.gfx.fx");
 			spiderOrigin:	 0.16,
 			markerSize:		 3,			// radius of plot vertex (px)
 			spiderType:		 "polygon", //"circle"
-			animationType:	 dojo.fx.easing.backOut,
+			animationType:	 easing.backOut,
 			axisTickFont:		"",
 			axisTickFontColor:	"",
 			axisFont:			"",
@@ -122,7 +106,7 @@ dojo.require("dojox.gfx.fx");
 			//		Calculate the min/max on all attached series in both directions.
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dojox.charting.plot2d.common.collectSimpleStats(this.series);
+			return dc.collectSimpleStats(this.series);
 		},
 		calculateAxes: function(dim){
 			//	summary:
@@ -156,7 +140,7 @@ dojo.require("dojox.gfx.fx");
 				}
 				this._hScaler = this._hAxis.getScaler();
 			}else{
-				this._hScaler = dojox.charting.scaler.primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
+				this._hScaler = primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
 			}
 			if(this._vAxis){
 				if(!this._vAxis.initialized()){
@@ -164,7 +148,7 @@ dojo.require("dojox.gfx.fx");
 				}
 				this._vScaler = this._vAxis.getScaler();
 			}else{
-				this._vScaler = dojox.charting.scaler.primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
+				this._vScaler = primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
 			}
 			return this;	//	dojox.charting.plot2d.Base
 		},
@@ -215,7 +199,7 @@ dojo.require("dojox.gfx.fx");
 				}, this);
 				shift = df.foldl1(df.map(labels, function(label, i){
 					var font = t.series.font;
-					return dojox.gfx._base._getTextBox(label, {
+					return g._base._getTextBox(label, {
 						font: font
 					}).w;
 				}, this), "Math.max(a, b)") / 2;
@@ -289,8 +273,8 @@ dojo.require("dojox.gfx.fx");
 			var labelGroup = s.createGroup();
 			for (var j = labelPoints.length - 1; j >= 0; --j) {
 				var point = labelPoints[j],
-					fontWidth = dojox.gfx._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0,
-					render = this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx",
+					fontWidth = g._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0,
+					render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx",
 					elem = da.createText[render](this.chart, labelGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 							"middle", this.labelKey[j], axisFont, axisFontColor);
 				if (this.opt.htmlLabels) {
@@ -326,8 +310,8 @@ dojo.require("dojox.gfx.fx");
 				for (var i = 0; i < dv; i++) {
 					var text = min + distance*i/(dv-1), point = this._getCoordinate(circle, r*(ro + (1-ro)*i/(dv-1)), end);
 					text = this._getLabel(text);
-					var fontWidth = dojox.gfx._base._getTextBox(text, {font: axisTickFont}).w || 0,
-						render = this.opt.htmlLabels && dojox.gfx.renderer != "vml" ? "html" : "gfx";
+					var fontWidth = g._base._getTextBox(text, {font: axisTickFont}).w || 0,
+						render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx";
 					if (this.opt.htmlLabels) {
 						this.htmlElements.push(da.createText[render]
 							(this.chart, textGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
@@ -467,7 +451,7 @@ dojo.require("dojox.gfx.fx");
 				});
 				return anim;
 			});
-			var masterAnimation = dojo.fx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
+			var masterAnimation = fx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
 			masterAnimation.play();
 			return {group :ts, poly: spoly, circles: scircle};
 		},
@@ -499,17 +483,17 @@ dojo.require("dojox.gfx.fx");
 					// swap colors
 					var t = start; start = end; end = t;
 				}
-				a.anim = dojox.gfx.fx.animateFill({
+				a.anim = gfxfx.animateFill({
 					shape:	  o.shape,
 					duration: 800,
-					easing:	  dojo.fx.easing.backOut,
+					easing:	  fx.easing.backOut,
 					color:	  {start: start, end: end}
 				});
 				a.anim.play();
 			}else if(o.element == "spider_circle"){
 				var init, scale, defaultScale = 1.5;
 				if(o.type == "onmouseover"){
-					init  = dojox.gfx.matrix.identity;
+					init  = m.identity;
 					scale = defaultScale;
 					//show tooltip
 					var aroundRect = {type: "rect"};
@@ -529,7 +513,7 @@ dojo.require("dojox.gfx.fx");
 						dijit.showTooltip(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
 					}
 				}else{
-					init  = dojox.gfx.matrix.scaleAt(defaultScale, o.cx, o.cy);
+					init  = m.scaleAt(defaultScale, o.cx, o.cy);
 					scale = 1/defaultScale;
 					if(dijit && dijit.Tooltip){
 						this.aroundRect && dijit.hideTooltip(this.aroundRect);
@@ -540,13 +524,13 @@ dojo.require("dojox.gfx.fx");
 					kwArgs = {
 						shape: o.shape,
 						duration: 200,
-						easing:	  dojo.fx.easing.backOut,
+						easing:	  easing.backOut,
 						transform: [
 							{name: "scaleAt", start: [1, cs.cx, cs.cy], end: [scale, cs.cx, cs.cy]},
 							init
 						]
 					};
-				a.anim = dojox.gfx.fx.animateTransform(kwArgs);
+				a.anim = gfxfx.animateTransform(kwArgs);
 				a.anim.play();
 			}else if(o.element == "spider_plot"){
 				//dojo gfx function "moveToFront" not work in IE
@@ -617,7 +601,7 @@ dojo.require("dojox.gfx.fx");
 	});
 	
 	function transColor(color){
-		var a = new dojox.color.Color(color),
+		var a = new dxcolor.Color(color),
 			x = a.toHsl();
 		if(x.s == 0){
 			x.l = x.l < 50 ? 100 : 0;
@@ -632,9 +616,10 @@ dojo.require("dojox.gfx.fx");
 					50 : 75;
 			}
 		}
-		var color = dojox.color.fromHsl(x);
+		var color = dxcolor.fromHsl(x);
 		color.a = 0.7;
 		return color;
 	}
 	
-})();
+	return dojox.charting.plot2d.Spider;
+});

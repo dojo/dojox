@@ -1,6 +1,8 @@
-dojo.provide("dojox.charting.scaler.primitive");
+define(["dojo/_base/kernel"], function(dojo){
 
-dojox.charting.scaler.primitive = {
+var primitive = dojo.getObject("charting.scaler.primitive", true, dojox);
+
+return dojo.mixin(primitive, {
 	buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs){
 		if(min == max){
 			// artificially extend bounds
@@ -17,7 +19,7 @@ dojox.charting.scaler.primitive = {
 				scale: span / (max - min),
 				span:  span
 			},
-			scaler: dojox.charting.scaler.primitive
+			scaler: primitive
 		};
 	},
 	buildTicks: function(/*Object*/ scaler, /*Object*/ kwArgs){
@@ -31,4 +33,5 @@ dojox.charting.scaler.primitive = {
 		var offset = scaler.bounds.from, scale = scaler.bounds.scale;
 		return function(x){ return x / scale + offset; };	// Function
 	}
-};
+});
+});

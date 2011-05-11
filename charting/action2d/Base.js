@@ -1,6 +1,6 @@
-dojo.provide("dojox.charting.action2d.Base");
+define(["dojo/_base/lang", "dojo/_base/declare"], function(dojo){
 
-dojo.declare("dojox.charting.action2d.Base", null, {
+return dojo.declare("dojox.charting.action2d.Base", null, {
 
 	constructor: function(chart, plot){
 		//	summary:
@@ -21,5 +21,13 @@ dojo.declare("dojox.charting.action2d.Base", null, {
 	disconnect: function(){
 		//	summary:
 		//		Disconnect this action from the plot or the chart.
+	},
+	
+	destroy: function(){
+		//	summary:
+		//		Do any cleanup needed when destroying parent elements.
+		this.disconnect();
 	}
+});
+
 });

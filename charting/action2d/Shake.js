@@ -1,32 +1,28 @@
-dojo.provide("dojox.charting.action2d.Shake");
+define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./PlotAction", 
+	"dojo/fx", "dojo/fx/easing", "dojox/gfx/matrix", "dojox/gfx/fx"], 
+	function(dojo, connect, declare, PlotAction, df, dfe, m, gf){
 
-dojo.require("dojox.charting.action2d.PlotAction");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojo.fx");
+	/*=====
+	dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
+		//	summary:
+		//		Additional arguments for highlighting actions.
+	
+		//	shift: Number?
+		//		The amount in pixels to shift the pie slice.  Default is 3.
+		shift: 3
+	});
+	=====*/
 
-/*=====
-dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
-	//	summary:
-	//		Additional arguments for highlighting actions.
+	var DEFAULT_SHIFT = 3;
 
-	//	shift: Number?
-	//		The amount in pixels to shift the pie slice.  Default is 3.
-	shift: 3
-});
-=====*/
-(function(){
-	var DEFAULT_SHIFT = 3,
-		m = dojox.gfx.matrix,
-		gf = dojox.gfx.fx;
-
-	dojo.declare("dojox.charting.action2d.Shake", dojox.charting.action2d.PlotAction, {
+	return dojo.declare("dojox.charting.action2d.Shake", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create a shaking action for use on an element in a chart.
 
 		// the data description block for the widget parser
 		defaultParams: {
 			duration: 400,	// duration of the action in ms
-			easing:   dojo.fx.easing.backOut,	// easing for the action
+			easing:   dfe.backOut,	// easing for the action
 			shiftX:   DEFAULT_SHIFT,	// shift of the element along the X axis
 			shiftY:   DEFAULT_SHIFT		// shift of the element along the Y axis
 		},
@@ -35,7 +31,7 @@ dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.
 		constructor: function(chart, plot, kwArgs){
 			//	summary:
 			//		Create the shaking action and connect it to the plot.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this action belongs to.
 			//	plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
@@ -97,7 +93,7 @@ dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.
 				return;
 			}
 
-			anim.action = dojo.fx.combine(vector);
+			anim.action = df.combine(vector);
 			if(o.type == "onmouseout"){
 				dojo.connect(anim.action, "onEnd", this, function(){
 					if(this.anim[runName]){
@@ -108,4 +104,4 @@ dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.
 			anim.action.play();
 		}
 	});
-})();
+});

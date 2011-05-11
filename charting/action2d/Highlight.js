@@ -1,25 +1,21 @@
-dojo.provide("dojox.charting.action2d.Highlight");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/color/_base", 
+		"./PlotAction", "dojo/fx/easing", "dojox/gfx/fx"], 
+	function(dojo, declare, connect, c, PlotAction, dfe, dgf){
 
-dojo.require("dojox.charting.action2d.PlotAction");
-dojo.require("dojox.color");
-
-/*=====
-dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
-	//	summary:
-	//		Additional arguments for highlighting actions.
-
-	//	highlight: String|dojo.Color|Function?
-	//		Either a color or a function that creates a color when highlighting happens.
-	highlight: null
-});
-=====*/
-(function(){
+	/*=====
+	dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
+		//	summary:
+		//		Additional arguments for highlighting actions.
+	
+		//	highlight: String|dojo.Color|Function?
+		//		Either a color or a function that creates a color when highlighting happens.
+		highlight: null
+	});
+	=====*/
+	
 	var DEFAULT_SATURATION  = 100,	// %
 		DEFAULT_LUMINOSITY1 = 75,	// %
 		DEFAULT_LUMINOSITY2 = 50,	// %
-
-		c = dojox.color,
-
 		cc = function(color){
 			return function(){ return color; };
 		},
@@ -43,7 +39,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 			return c.fromHsl(x);
 		};
 
-	dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
+	return dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Creates a highlighting action on a plot, where an element on that plot
 		//		has a highlight on it.
@@ -51,7 +47,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 		// the data description block for the widget parser
 		defaultParams: {
 			duration: 400,	// duration of the action in ms
-			easing:   dojo.fx.easing.backOut	// easing for the action
+			easing:   dfe.backOut	// easing for the action
 		},
 		optionalParams: {
 			highlight: "red"	// name for the highlight color
@@ -61,7 +57,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 		constructor: function(chart, plot, kwArgs){
 			//	summary:
 			//		Create the highlighting action and connect it to the plot.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this action belongs to.
 			//	plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
@@ -109,7 +105,7 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 				end = t;
 			}
 
-			anim.action = dojox.gfx.fx.animateFill({
+			anim.action = dgf.animateFill({
 				shape:    o.shape,
 				duration: this.duration,
 				easing:   this.easing,
@@ -125,4 +121,5 @@ dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.actio
 			anim.action.play();
 		}
 	});
-})();
+	
+});

@@ -1,21 +1,10 @@
-dojo.provide("dojox.charting.plot2d.Scatter");
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", 
+	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx", "dojox/gfx/gradutils"],
+	function(dojo, declare, Base, dc, df, dfr, du, fx, gradutils){
 
-dojo.require("dojox.charting.plot2d.common");
-dojo.require("dojox.charting.plot2d.Base");
+	var purgeGroup = df.lambda("item.purgeGroup()");
 
-dojo.require("dojox.lang.utils");
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.reversed");
-
-dojo.require("dojox.gfx.gradutils");
-
-
-(function(){
-	var df = dojox.lang.functional, du = dojox.lang.utils,
-		dc = dojox.charting.plot2d.common,
-		purgeGroup = df.lambda("item.purgeGroup()");
-
-	dojo.declare("dojox.charting.plot2d.Scatter", dojox.charting.plot2d.Base, {
+	return dojo.declare("dojox.charting.plot2d.Scatter", dojox.charting.plot2d.Base, {
 		//	summary:
 		//		A plot object representing a typical scatter chart.
 		defaultParams: {
@@ -37,7 +26,7 @@ dojo.require("dojox.gfx.gradutils");
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Create the scatter plot.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional keyword arguments object to help define this plot's parameters.
@@ -133,7 +122,7 @@ dojo.require("dojox.gfx.gradutils");
 					var stroke = dc.makeStroke(finalTheme.marker.stroke),
 						fill = this._plotFill(finalTheme.marker.fill, dim, offsets);
 					if(fill && (fill.type === "linear" || fill.type == "radial")){
-						var color = dojox.gfx.gradutils.getColor(fill, {x: c.x, y: c.y});
+						var color = gradutils.getColor(fill, {x: c.x, y: c.y});
 						if(stroke){
 							stroke.color = color;
 						}
@@ -183,7 +172,7 @@ dojo.require("dojox.gfx.gradutils");
 			return this;	//	dojox.charting.plot2d.Scatter
 		},
 		_animateScatter: function(shape, offset){
-			dojox.gfx.fx.animateTransform(dojo.delegate({
+			fx.animateTransform(dojo.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [
@@ -194,4 +183,4 @@ dojo.require("dojox.gfx.gradutils");
 			}, this.animate)).play();
 		}
 	});
-})();
+});

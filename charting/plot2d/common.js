@@ -1,13 +1,9 @@
-dojo.provide("dojox.charting.plot2d.common");
-
-dojo.require("dojo.colors");
-dojo.require("dojox.gfx");
-dojo.require("dojox.lang.functional");
-
-(function(){
-	var df = dojox.lang.functional, dc = dojox.charting.plot2d.common;
-
-	dojo.mixin(dojox.charting.plot2d.common, {
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "dojox/gfx", "dojox/lang/functional"], 
+	function(dojo, darray, dcolor, g, df){
+	
+	var common = dojo.getObject("common", true, dojox.charting.plot2d);
+	
+	return dojo.mixin(common, {	
 		makeStroke: function(stroke){
 			if(!stroke){ return stroke; }
 			if(typeof stroke == "string" || stroke instanceof dojo.Color){
@@ -22,16 +18,16 @@ dojo.require("dojox.lang.functional");
 			return c;
 		},
 		augmentStroke: function(stroke, color){
-			var s = dc.makeStroke(stroke);
+			var s = common.makeStroke(stroke);
 			if(s){
-				s.color = dc.augmentColor(s.color, color);
+				s.color = common.augmentColor(s.color, color);
 			}
 			return s;
 		},
 		augmentFill: function(fill, color){
 			var fc, c = new dojo.Color(color);
 			if(typeof fill == "string" || fill instanceof dojo.Color){
-				return dc.augmentColor(fill, color);
+				return common.augmentColor(fill, color);
 			}
 			return fill;
 		},
@@ -42,7 +38,7 @@ dojo.require("dojox.lang.functional");
 		},
 
 		collectSimpleStats: function(series){
-			var stats = dojo.delegate(dc.defaultStats);
+			var stats = dojo.delegate(common.defaultStats);
 			for(var i = 0; i < series.length; ++i){
 				var run = series[i];
 				for(var j = 0; j < run.data.length; j++){
@@ -112,7 +108,7 @@ dojo.require("dojox.lang.functional");
 
 		collectStackedStats: function(series){
 			// collect statistics
-			var stats = dojo.clone(dc.defaultStats);
+			var stats = dojo.clone(common.defaultStats);
 			if(series.length){
 				// 1st pass: find the maximal length of runs
 				stats.hmin = Math.min(stats.hmin, 1);
@@ -214,4 +210,4 @@ dojo.require("dojox.lang.functional");
 			return fixed ? number.toFixed(precision) : number.toString();
 		}
 	});
-})();
+});

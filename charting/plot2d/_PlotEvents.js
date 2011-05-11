@@ -1,6 +1,6 @@
-dojo.provide("dojox.charting.plot2d._PlotEvents");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect"], function(dojo){
 
-dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
+return dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 	constructor: function(){
 		this._shapeEvents = [];
 		this._eventSeries = {};
@@ -115,4 +115,5 @@ dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
 			o.event = null;
 		}
 	}
+});
 });

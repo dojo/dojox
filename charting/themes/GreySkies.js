@@ -1,7 +1,6 @@
-dojo.provide("dojox.charting.themes.GreySkies");
-dojo.require("dojox.charting.Theme");
-
-(function(){
-	var dxc=dojox.charting;
-	dxc.themes.GreySkies=new dxc.Theme(dxc.Theme._def);
-})();
+define(["../Theme", "./common"], function(Theme){
+	
+	dojox.charting.themes.GreySkies=new Theme(Theme._def);
+	
+	return dojox.charting.themes.GreySkies;
+});

@@ -1,96 +1,93 @@
-dojo.provide("dojox.charting.action2d.MouseIndicator");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", 
+	"./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
+	function(dojo, declare, dconnect, dwindow, ChartAction, _IndicatorElement, du){ 
 
-dojo.require("dojox.charting.action2d.ChartAction");
-dojo.require("dojox.charting.action2d._IndicatorElement");
-
-/*=====
-dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
-	//	summary:
-	//		Additional arguments for mouse indicator.
+	/*=====
+	dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
+		//	summary:
+		//		Additional arguments for mouse indicator.
+		
+		//	series: String
+		//		Target series name for this action.
+		series: null,
+		
+		//	autoScroll: Boolean? 
+		//		Whether when moving indicator the chart is automatically scrolled. Default is true.
+		autoScroll:		true,
 	
-	//	series: String
-	//		Target series name for this action.
-	series: null,
+		//	vertical: Boolean? 
+		//		Whether the indicator is vertical or not. Default is true.
+		vertical:		true,
+		
+		//	lineStroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for indicator line.
+		lineStroke:		{},
 	
-	//	autoScroll: Boolean? 
-	//		Whether when moving indicator the chart is automatically scrolled. Default is true.
-	autoScroll:		true,
-
-	//	vertical: Boolean? 
-	//		Whether the indicator is vertical or not. Default is true.
-	vertical:		true,
+		//	lineOutline: dojo.gfx.Stroke?
+		//		An optional outline to use for indicator line.
+		lineOutline:		{},
 	
-	//	lineStroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for indicator line.
-	lineStroke:		{},
-
-	//	lineOutline: dojo.gfx.Stroke?
-	//		An optional outline to use for indicator line.
-	lineOutline:		{},
-
-	//	lineShadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for indicator line.
-	lineShadow:		{},
+		//	lineShadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for indicator line.
+		lineShadow:		{},
+		
+		//	stroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for indicator label background.
+		stroke:		{},
 	
-	//	stroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for indicator label background.
-	stroke:		{},
-
-	//	outline: dojo.gfx.Stroke?
-	//		An optional outline to use for indicator label background.
-	outline:		{},
-
-	//	shadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for indicator label background.
-	shadow:		{},
-
-	//	fill: dojo.gfx.Fill?
-	//		An optional fill to use for indicator label background.
-	fill:			{},
+		//	outline: dojo.gfx.Stroke?
+		//		An optional outline to use for indicator label background.
+		outline:		{},
 	
-	//	fillFunc: Function?
-	//		An optional function to use to compute label background fill. It takes precedence over
-	//		fill property when available.
-	fillFunc:		null,
+		//	shadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for indicator label background.
+		shadow:		{},
 	
-	//	labelFunc: Function?
-	//		An optional function to use to compute label text. It takes precedence over
-	//		the default text when available.
-	labelFunc:		{},
-
-	//	font: String?
-	//		A font definition to use for indicator label background.
-	font:		"",
-
-	//	fontColor: String|dojo.Color?
-	//		The color to use for indicator label background.
-	fontColor:	"",
-
-	//	markerStroke: dojo.gfx.Stroke?
-	//		An optional stroke to use for indicator marker.
-	markerStroke:		{},
-
-	//	markerOutline: dojo.gfx.Stroke?
-	//		An optional outline to use for indicator marker.
-	markerOutline:		{},
-
-	//	markerShadow: dojo.gfx.Stroke?
-	//		An optional shadow to use for indicator marker.
-	markerShadow:		{},
-
-	//	markerFill: dojo.gfx.Fill?
-	//		An optional fill to use for indicator marker.
-	markerFill:			{},
+		//	fill: dojo.gfx.Fill?
+		//		An optional fill to use for indicator label background.
+		fill:			{},
+		
+		//	fillFunc: Function?
+		//		An optional function to use to compute label background fill. It takes precedence over
+		//		fill property when available.
+		fillFunc:		null,
+		
+		//	labelFunc: Function?
+		//		An optional function to use to compute label text. It takes precedence over
+		//		the default text when available.
+		labelFunc:		{},
 	
-	//	markerSymbol: String?
-	//		An optional symbol string to use for indicator marker.
-	markerFill:			{}	
-});
-=====*/
+		//	font: String?
+		//		A font definition to use for indicator label background.
+		font:		"",
+	
+		//	fontColor: String|dojo.Color?
+		//		The color to use for indicator label background.
+		fontColor:	"",
+	
+		//	markerStroke: dojo.gfx.Stroke?
+		//		An optional stroke to use for indicator marker.
+		markerStroke:		{},
+	
+		//	markerOutline: dojo.gfx.Stroke?
+		//		An optional outline to use for indicator marker.
+		markerOutline:		{},
+	
+		//	markerShadow: dojo.gfx.Stroke?
+		//		An optional shadow to use for indicator marker.
+		markerShadow:		{},
+	
+		//	markerFill: dojo.gfx.Fill?
+		//		An optional fill to use for indicator marker.
+		markerFill:			{},
+		
+		//	markerSymbol: String?
+		//		An optional symbol string to use for indicator marker.
+		markerFill:			{}	
+	});
+	=====*/
 
-(function(){
-	var du = dojox.lang.utils;
-	dojo.declare("dojox.charting.action2d.MouseIndicator", dojox.charting.action2d.ChartAction, {
+	return dojo.declare("dojox.charting.action2d.MouseIndicator", dojox.charting.action2d.ChartAction, {
 		//	summary:
 		//		Create a mouse indicator action. You can drag mouse over the chart to display a data indicator.
 
@@ -149,7 +146,7 @@ dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
 			//		to the chart that's why Chart.render() must be called after connect.
 			this.inherited(arguments);
 			// add plot with unique name
-			this.chart.addPlot(this.uName, {type: dojox.charting.action2d._IndicatorElement, inter: this});
+			this.chart.addPlot(this.uName, {type: _IndicatorElement, inter: this});
 		},
 
 		disconnect: function(){
@@ -209,4 +206,4 @@ dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
 			this.chart.render();
 		}
 	});
-})();
+});

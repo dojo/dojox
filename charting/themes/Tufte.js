@@ -1,5 +1,4 @@
-dojo.provide("dojox.charting.themes.Tufte");
-dojo.require("dojox.charting.Theme");
+define(["../Theme", "dojo/_base/Color", "./common"], function(Theme){
 
 /*
 	A charting theme based on the principles championed by
@@ -50,5 +49,7 @@ dojox.charting.themes.Tufte = new dojox.charting.Theme({
 		dojo.colorFromHex("#3b444b"),
 		dojo.colorFromHex("#2e2d30"),
 		dojo.colorFromHex("#000000")
-	]
+	]	
+});
+return dojox.charting.themes.Tufte;
 });

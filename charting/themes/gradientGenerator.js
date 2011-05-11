@@ -1,8 +1,7 @@
-dojo.provide("dojox.charting.themes.gradientGenerator");
-dojo.require("dojox.charting.Theme");
-
-(function(){
-	var gg = dojox.charting.themes.gradientGenerator;
+define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/Color", "../Theme", "dojox/color/_base", "./common"], 
+	function(dojo, darray, dcolor, Theme, dxcolor){
+	
+	var gg = dojo.getObject("gradientGenerator", true, dojox.charting.themes);
 
 	gg.generateFills = function(colors, fillPattern, lumFrom, lumTo){
 		//	summary:
@@ -15,7 +14,6 @@ dojo.require("dojox.charting.Theme");
 		//		Initial luminance value (0-100).
 		//	lumTo: Number:
 		//		Final luminance value (0-100).
-		var Theme = dojox.charting.Theme;
 		return dojo.map(colors, function(c){	// Array
 			return Theme.generateHslGradient(c, fillPattern, lumFrom, lumTo);
 		});
@@ -32,7 +30,6 @@ dojo.require("dojox.charting.Theme");
 		//		Initial luminance value (0-100).
 		//	lumTo: Number:
 		//		Final luminance value (0-100).
-		var Theme = dojox.charting.Theme;
 		dojo.forEach(themes, function(t){
 			if(t.fill && !t.fill.type){
 				t.fill = Theme.generateHslGradient(t.fill, fillPattern, lumFrom, lumTo);
@@ -53,9 +50,8 @@ dojo.require("dojox.charting.Theme");
 		//		Final luminance value (0-100).
 		//	lumStroke: Number:
 		//		Stroke luminance value (0-100).
-		var Theme = dojox.charting.Theme;
 		return dojo.map(colors, function(c){	// Array
-			c = new dojox.color.Color(c);
+			c = new dxcolor.Color(c);
 			return {
 				fill:   Theme.generateHslGradient(c, fillPattern, lumFrom, lumTo),
 				stroke: {color: Theme.generateHslColor(c, lumStroke)}
@@ -80,4 +76,6 @@ dojo.require("dojox.charting.Theme");
 			};
 		});
 	}
-})();
+	
+	return gg;
+});

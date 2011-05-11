@@ -1,8 +1,7 @@
-dojo.provide("dojox.charting.DataSeries");
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/lang/functional"], 
+	function(dojo, declare, dconnect, df){
 
-dojo.require("dojox.lang.functional");
-
-dojo.declare("dojox.charting.DataSeries", null, {
+return dojo.declare("dojox.charting.DataSeries", null, {
 	constructor: function(store, kwArgs, value){
 		//	summary:
 		//		Series adapter for dojo.data stores.
@@ -26,7 +25,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 				this.value = value;
 			}else if(dojo.isObject(value)){
 				this.value = dojo.hitch(this, "_dictValue",
-					dojox.lang.functional.keys(value), value);
+					df.keys(value), value);
 			}else{
 				this.value = dojo.hitch(this, "_fieldValue", value);
 			}
@@ -141,7 +140,7 @@ dojo.declare("dojox.charting.DataSeries", null, {
 		// we cannot do anything with deleted item, the only way is to compare
 		// items for equality
 		if(this.items){
-			var flag = dojo.some(this.items, function(it, index){
+			var flag = dojo.xsome(this.items, function(it, index){
 				if(it === item){
 					this.items.splice(index, 1);
 					this._buildItemMap();
@@ -180,4 +179,5 @@ dojo.declare("dojox.charting.DataSeries", null, {
 			}
 		}
 	}
+});
 });

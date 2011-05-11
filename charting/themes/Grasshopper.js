@@ -1,9 +1,6 @@
-dojo.provide("dojox.charting.themes.Grasshopper");
-dojo.require("dojox.charting.Theme");
-
-(function(){
-	var dxc=dojox.charting;
-	dxc.themes.Grasshopper=new dxc.Theme({
+define(["../Theme", "./common"], function(Theme){
+	
+	dojox.charting.themes.Grasshopper=new Theme({
 		colors: [
 			"#208040",
 			"#40b657",
@@ -12,4 +9,6 @@ dojo.require("dojox.charting.Theme");
 			"#64bd5f"
 		]
 	});
-})();
+	
+	return dojox.charting.themes.Grasshoper;
+});
