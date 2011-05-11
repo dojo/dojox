@@ -1,9 +1,8 @@
-dojo.provide('dojox.gauges.BarCircleIndicator');
-dojo.require('dojox.gauges.BarGauge');
+define(["dojo/_base/kernel","dojo/_base/declare","dojox/gfx","./BarLineIndicator"],function(dojo,ddeclare,gfx,BarLineIndicator) { 
 
 dojo.experimental("dojox.gauges.BarCircleIndicator");
 
-dojo.declare("dojox.gauges.BarCircleIndicator", [dojox.gauges.BarLineIndicator], {
+return dojo.declare("dojox.gauges.BarCircleIndicator", [BarLineIndicator], {
 	// summary:
 	//		An indicator for the BarGauge that draws a circle.
 	//
@@ -36,7 +35,8 @@ dojo.declare("dojox.gauges.BarCircleIndicator", [dojox.gauges.BarLineIndicator],
 			r: this.length / 2
 		}).setFill(color).setStroke(stroke)];
 		
-		shapes[0].setTransform(dojox.gfx.matrix.translate(pos, 0));
+		shapes[0].setTransform(gfx.matrix.translate(pos, 0));
 		return shapes;
 	}
+});
 });

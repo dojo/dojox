@@ -1,9 +1,8 @@
-dojo.provide('dojox.gauges.TextIndicator');
-dojo.require('dojox.gauges._Gauge');
+define(["dojo/_base/kernel","dojo/_base/declare","./_Indicator"],function(dojo,ddeclare,_Indicator) { 
 
 dojo.experimental("dojox.gauges.TextIndicator");
 
-dojo.declare("dojox.gauges.TextIndicator", [dojox.gauges._Indicator], {
+return dojo.declare("dojox.gauges.TextIndicator", [_Indicator], {
 	// summary:
 	//		A gauge indicator the simply draws its value as text.
 	
@@ -71,4 +70,5 @@ dojo.declare("dojox.gauges.TextIndicator", [dojox.gauges._Indicator], {
 		
 	}
 	
+});
 });

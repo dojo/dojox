@@ -1,10 +1,7 @@
-dojo.provide("dojox.gauges.GlossyCircularGaugeNeedle");
-
-dojo.require("dojox.gfx");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gauges.AnalogGauge");
-
-dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [dojox.gauges.AnalogIndicatorBase], {
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color" ,"./AnalogIndicatorBase"],
+function(dojo,ddeclare,dcolor,AnalogIndicatorBase) {
+ 
+return dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBase], {
 	// summary:
 	//		The needle for the dojox.gauges.GlossyCircularGauge and
 	//      dojox.gauges.GlossySemiCircularGauge.
@@ -55,4 +52,5 @@ dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [dojox.gauges.AnalogIndic
 		});
 		return shapes;
 	}
+});
 });

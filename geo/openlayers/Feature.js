@@ -1,80 +1,79 @@
-// dojo.provide allows pages to use all of the types declared in this resource.
-dojo.provide("dojox.geo.openlayers.Feature");
-dojo.require("dojox.geo.openlayers.Map");
 
-dojo.declare("dojox.geo.openlayers.Feature", null, {
-  // summary:
-  //   A Feature encapsulates an item so that it can be added to a Layer.
-  //   This class is not attended to be used as it, but serve as a base class
-  //   for specific features such as GeometryFeature which can display georeferenced 
-  //   geometries and WidgetFeature which can display georeferenced widgets. 
-  constructor : function(){
-    // summary:
-    //   Construct a new Feature
-    this._layer = null;
-    this._coordSys = dojox.geo.openlayers.Map.EPSG4326;
-  },
+define([ "dojox/geo/openlayers/Map" ], function(mapArg){
 
-  getCoordinateSystem : function(){
-    // summary:
-    //   Returns the coordinate system in which coordinates of this feature are expressed.
-    // returns: OpenLayers.Projection
-    //   The coordinate system in which coordinates of this feature are expressed.
-    return this._coordSys;
-  },
+	return dojo.declare("dojox.geo.openlayers.Feature", null, {
+		// summary:
+		//   A Feature encapsulates an item so that it can be added to a Layer.
+		//   This class is not attended to be used as it, but serve as a base class
+		//   for specific features such as GeometryFeature which can display georeferenced 
+		//   geometries and WidgetFeature which can display georeferenced widgets. 
+		constructor : function(){
+			// summary:
+			//   Construct a new Feature
+			this._layer = null;
+			this._coordSys = dojox.geo.openlayers.Map.EPSG4326;
+		},
 
-  setCoordinateSystem : function(/* OpenLayers.Projection */cs){
-    // summary:
-    //   Set the coordinate system in which coordinates of this feature are expressed.
-    // cs: OpenLayers.Projection
-    //   The coordinate system in which coordinates of this feature are expressed.
-    this._coordSys = cs;
-  },
+		getCoordinateSystem : function(){
+			// summary:
+			//   Returns the coordinate system in which coordinates of this feature are expressed.
+			// returns: OpenLayers.Projection
+			//   The coordinate system in which coordinates of this feature are expressed.
+			return this._coordSys;
+		},
 
-  getLayer : function(){
-    // summary:
-    //   Returns the Layer to which this feature belongs.
-  	// returns: dojox.geo.openlayers.Layer
-  	//   The layer to which this feature belongs.
-    return this._layer;
-  },
+		setCoordinateSystem : function(/* OpenLayers.Projection */cs){
+			// summary:
+			//   Set the coordinate system in which coordinates of this feature are expressed.
+			// cs: OpenLayers.Projection
+			//   The coordinate system in which coordinates of this feature are expressed.
+			this._coordSys = cs;
+		},
 
-  _setLayer : function(/* dojox.geo.openlayers.Layer */l){
-    // summary:
-    //   Sets the layer to which this Feature belongs
-    // description:
-    //    Called when the feature is added to the Layer.
-    // tags:
-    //   private
-    this._layer = l;
-  },
+		getLayer : function(){
+			// summary:
+			//   Returns the Layer to which this feature belongs.
+			// returns: dojox.geo.openlayers.Layer
+			//   The layer to which this feature belongs.
+			return this._layer;
+		},
 
-  render : function(){
-  // summary:
-  //   subclasses implements drawing specific behavior.
-  },
+		_setLayer : function(/* dojox.geo.openlayers.Layer */l){
+			// summary:
+			//   Sets the layer to which this Feature belongs
+			// description:
+			//    Called when the feature is added to the Layer.
+			// tags:
+			//   private
+			this._layer = l;
+		},
 
-  remove : function(){
-  // summary:
-  //   Subclasses implements specific behavior.
-  //   Called when removed from the layer.
-  },
+		render : function(){
+		// summary:
+		//   subclasses implements drawing specific behavior.
+		},
 
-  _getLocalXY : function(p){
-    // summary:
-    //   From projected coordinates to screen coordinates
-    // p: Object 
-    //   Object with x and y fields
-    // tags:
-    //   private
-    var x = p.x;
-    var y = p.y;
-    var layer = this.getLayer();
-    var resolution = layer.olLayer.map.getResolution();
-    var extent = layer.olLayer.getExtent();
-    var rx = (x / resolution + (-extent.left / resolution));
-    var ry = ((extent.top / resolution) - y / resolution);
-    return [ rx, ry ];
-  }
+		remove : function(){
+		// summary:
+		//   Subclasses implements specific behavior.
+		//   Called when removed from the layer.
+		},
 
+		_getLocalXY : function(p){
+			// summary:
+			//   From projected coordinates to screen coordinates
+			// p: Object 
+			//   Object with x and y fields
+			// tags:
+			//   private
+			var x = p.x;
+			var y = p.y;
+			var layer = this.getLayer();
+			var resolution = layer.olLayer.map.getResolution();
+			var extent = layer.olLayer.getExtent();
+			var rx = (x / resolution + (-extent.left / resolution));
+			var ry = ((extent.top / resolution) - y / resolution);
+			return [ rx, ry ];
+		}
+	});
 });

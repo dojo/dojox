@@ -1,14 +1,5 @@
-dojo.provide("dojox.gauges.GlossyCircularGauge");
-
-dojo.require("dojox.gfx");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gauges.AnalogGauge");
-dojo.require("dojox.gauges.AnalogCircleIndicator");
-dojo.require("dojox.gauges.TextIndicator");
-dojo.require("dojox.gauges.GlossyCircularGaugeBase");
-dojo.require("dojox.gauges.GlossyCircularGaugeNeedle");
-
-dojo.declare("dojox.gauges.GlossyCircularGauge", [dojox.gauges.GlossyCircularGaugeBase], {
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],function(dojo,ddeclare, dcolor,GlossyCircularGaugeBase) {
+return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a circular gauge with a glossy appearance.
 	// example:
@@ -226,4 +217,5 @@ dojo.declare("dojox.gauges.GlossyCircularGauge", [dojox.gauges.GlossyCircularGau
 
 	}
 
+});
 });

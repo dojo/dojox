@@ -1,14 +1,6 @@
-dojo.provide("dojox.gauges.GlossySemiCircularGauge");
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],function(dojo,ddeclare,dcolor,GlossyCircularGaugeBase) {
 
-dojo.require("dojox.gfx");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gauges.AnalogGauge");
-dojo.require("dojox.gauges.AnalogCircleIndicator");
-dojo.require("dojox.gauges.TextIndicator");
-dojo.require("dojox.gauges.GlossyCircularGaugeNeedle");
-dojo.require("dojox.gauges.GlossyCircularGaugeBase");
-
-dojo.declare("dojox.gauges.GlossySemiCircularGauge", [dojox.gauges.GlossyCircularGaugeBase], {
+return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a semi circular gauge with a glossy appearance.
 	// example:
@@ -236,4 +228,4 @@ dojo.declare("dojox.gauges.GlossySemiCircularGauge", [dojox.gauges.GlossyCircula
 	
 	
 });
-
+});

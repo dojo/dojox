@@ -16,7 +16,7 @@
 
 <!-- hosted version -->
 <script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
-
+ 
 <script type="text/javascript">
 	var djConfig = {
 		debugAtAllCosts : true,
@@ -77,18 +77,23 @@
           <option value="data/ecr2.json">Some Points</option>
           <option value="data/ecr3.json">More Points and Lines</option>
           <option value="data/mapDataFixed.json">Lot of Points and Lines</option>
-      </select></td>
+      </select>
+      </td>
 
       <td class="menuItem">
 
-        <button id="clearEcr" onClick="_ecr.clearEcr('clearEcr')">Clear</button></td>
+        <button id="clearEcr" onClick="_ecr.clearEcr('clearEcr')">Clear</button>
+      </td>
 
       <td class="menuItem">
-        <button id="clearEcr" onClick="_ecr.portChange('portChooser')">Go To:</button> <select id="portChooser" onChange="_ecr.portChange('portChooser')" /></td>
+        <button id="clearEcr" onClick="_ecr.portChange('portChooser')">Go To:</button> <select id="portChooser" onChange="_ecr.portChange('portChooser')" />
+      </td>
 
-      <td class="menuItem">Show<input type="checkbox" id="ports" checked onChange="_ecr.toggleLayerVisibility('ports')"> Ports </input></td>
+      <td class="menuItem">Show<input type="checkbox" id="ports" checked onChange="_ecr.toggleLayerVisibility('ports')"> Ports </input>
+      </td>
 
-      <td class="menuItem">Show<input type="checkbox" id="legs" checked onChange="_ecr.toggleLayerVisibility('legs')">Legs </input></td>
+      <td class="menuItem">Show<input type="checkbox" id="legs" checked onChange="_ecr.toggleLayerVisibility('legs')">Legs </input>
+      </td>
 
     </tr>
   </table>

@@ -1,9 +1,9 @@
-dojo.provide('dojox.gauges.AnalogArcIndicator');
-dojo.require('dojox.gauges.AnalogGauge');
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/kernel","dojo/_base/connect","dojo/_base/fx","./AnalogIndicatorBase"],
+function(dojo,ddeclare,dkernel,dconnect,dfx,AnalogIndicatorBase) { 
 
 dojo.experimental("dojox.gauges.AnalogArcIndicator");
 
-dojo.declare("dojox.gauges.AnalogArcIndicator",[dojox.gauges.AnalogIndicatorBase],{
+return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 	_createArc: function(val){
 		// Creating the Arc Path string manually.  This is instead of creating new dojox.gfx.Path object
 		// each time since we really just need the Path string (to use with setShape) and we don't want to
@@ -79,4 +79,6 @@ dojo.declare("dojox.gauges.AnalogArcIndicator",[dojox.gauges.AnalogIndicatorBase
 
 		}
 	}
+});
+
 });

@@ -1,124 +1,7 @@
-dojo.provide("dojox.gauges.GlossyHorizontalGauge");
-dojo.require('dojox.gauges.BarCircleIndicator');
-dojo.require("dojox.gfx");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gauges.BarGauge");
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/Color","dojox/gfx","./BarGauge","./BarCircleIndicator","./GlossyHorizontalGaugeMarker"],
+function(dojo,ddeclare,dconnect,dlang,dcolor,gfx,BarGauge,BarCircleIndicator,GlossyHorizontalGaugeMarker) {
 
-dojo.declare("dojox.gauges.GlossyHorizontalGaugeMarker", [dojox.gauges.BarLineIndicator], {
-	// summary:
-	//		The marker for the dojox.gauges.GlossyHorizontalGauge.
-	// description:
-	//		This object defines the marker for the dojox.gauges.GlossyHorizontalGauge.
-	//		Since the needle is created by the gauges class, you do not have to use this class directly.
-	
-	
-	interactionMode: "gauge",
-	
-	color: 'black',
-	
-	_getShapes: function(group){
-		// summary:
-		//		Overrides BarLineIndicator._getShapes
-		
-		if (!this._gauge){
-			return null;
-		}
-		var v = this.value;
-		if (v < this._gauge.min){
-			v = this._gauge.min;
-		}
-		if (v > this._gauge.max){
-			v = this._gauge.max;
-		}
-		
-		var pos = this._gauge._getPosition(v);
-		var shapes = [];
-		
-		var color = new dojo.Color(this.color);
-		color.a = .67;
-		
-		var lighterColor = dojo.blendColors(color, new dojo.Color('white'), 0.4);
-		
-		var top = shapes[0] = group.createGroup();
-		var scale = this._gauge.height / 100;
-		scale = Math.max(scale, .5);
-		scale = Math.min(scale, 1);
-		
-		top.setTransform({
-			xx: 1,
-			xy: 0,
-			yx: 0,
-			yy: 1,
-			dx: pos,
-			dy: 0
-		});
-		var marker = top.createGroup().setTransform({
-			xx: 1,
-			xy: 0,
-			yx: 0,
-			yy: 1,
-			dx: -scale * 10,
-			dy: this._gauge.dataY + this.offset
-		});
-		var rescale = marker.createGroup().setTransform({
-			xx: scale,
-			xy: 0,
-			yx: 0,
-			yy: scale,
-			dx: 0,
-			dy: 0
-		});
-		
-		rescale.createRect({
-			x: .5,
-			y: .0,
-			width: 20,
-			height: 47,
-			r: 6
-		}).setFill(color).setStroke(lighterColor);
-		rescale.createPath({
-			path: 'M 10.106 41 L 10.106 6 C 10.106 2.687 7.419 0 4.106 0 L 0.372 0 C -0.738 6.567 1.022 15.113 1.022 23.917 C 1.022 32.721 2.022 40.667 0.372 47 L 4.106 47 C 7.419 47 10.106 44.314 10.106 41 Z'
-		}).setFill(lighterColor).setTransform({
-			xx: 1,
-			xy: 0,
-			yx: 0,
-			yy: 1,
-			dx: 10.306,
-			dy: 0.009
-		});
-		rescale.createRect({
-			x: 9.5,
-			y: 1.5,
-			width: 2,
-			height: 34,
-			r: 0.833717
-		}).setFill(color).setStroke(this.color);
-		rescale.createRect({
-			x: 9,
-			y: 0,
-			width: 3,
-			height: 34,
-			r: 6
-		}).setFill({
-			type: "linear",
-			x1: 9,
-			y1: 0,
-			x2: 9,
-			y2: 34,
-			colors: [{
-				offset: 0,
-				color: 'white'
-			}, {
-				offset: 1,
-				color: this.color
-			}]
-		});
-		return shapes;
-	}
-	
-});
-
-dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
+return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	// summary:
 	//		Represents an horizontal bar gauge with a glossy appearance.
 	// example:
@@ -144,7 +27,7 @@ dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
 	
 	
 	// the type of default indicator to create
-	_defaultIndicator: dojox.gauges.BarCircleIndicator,
+	_defaultIndicator: BarCircleIndicator,
 	
 	// color: String
 	// The main color of the gauge.
@@ -225,7 +108,7 @@ dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
 		
 		// computing scale height
 		
-		var th = dojox.gfx.normalizedLength(font.size);
+		var th = gfx.normalizedLength(font.size);
 		var scaleHeight = th + this._tickLabelOffset + Math.max(this._majorTicksLength, this._minorTicksLength);
 		// indicator in the middle of the gauge
 		var yOffset = Math.max(0, (this.height - scaleHeight) / 2);
@@ -256,7 +139,7 @@ dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
 			color: this.minorTicksColor
 		
 		});
-		this._needle = new dojox.gauges.GlossyHorizontalGaugeMarker({
+		this._needle = new GlossyHorizontalGaugeMarker({
 			hideValue: true,
 			title: this.title,
 			noChange: this.noChange,
@@ -281,7 +164,7 @@ dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
 		
 		var font = this._font;
 		this._computeDataRectangle();
-		var th = dojox.gfx.normalizedLength(font.size);
+		var th = gfx.normalizedLength(font.size);
 		var scaleHeight = th + this._tickLabelOffset + Math.max(this._majorTicksLength, this._minorTicksLength);
 		// indicator in the middle of the gauge
 		var yOffset = Math.max(0, (this.height - scaleHeight) / 2);
@@ -340,8 +223,8 @@ dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
 	},
 	
 	_getTextWidth: function(s, font){
-		return dojox.gfx._base._getTextBox(s, {
-			font: dojox.gfx.makeFontString(dojox.gfx.makeParameters(dojox.gfx.defaultFont, font))
+		return gfx._base._getTextBox(s, {
+			font: gfx.makeFontString(gfx.makeParameters(gfx.defaultFont, font))
 		}).w ||
 		0;
 	},
@@ -664,8 +547,9 @@ dojo.declare("dojox.gauges.GlossyHorizontalGauge", [dojox.gauges.BarGauge], {
 		// 
 		
 		this.font = font;
-		this._font = dojox.gfx.splitFontString(font);
+		this._font = gfx.splitFontString(font);
 		this._layoutGauge();
 	}
+});
 });
 

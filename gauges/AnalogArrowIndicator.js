@@ -1,9 +1,7 @@
-dojo.provide('dojox.gauges.AnalogArrowIndicator');
-dojo.require('dojox.gauges.AnalogGauge');
-
+define(["dojo/_base/kernel","dojo/_base/declare","./AnalogIndicatorBase"],function(dojo,ddeclare,AnalogIndicatorBase) { 
 dojo.experimental("dojox.gauges.AnalogArrowIndicator");
 
-dojo.declare("dojox.gauges.AnalogArrowIndicator",[dojox.gauges.AnalogIndicatorBase],{
+return dojo.declare("dojox.gauges.AnalogArrowIndicator",[AnalogIndicatorBase],{
 	_getShapes: function(group){
 		// summary:
 		//		Override of dojox.gauges.AnalogLineIndicator._getShapes
@@ -41,4 +39,5 @@ dojo.declare("dojox.gauges.AnalogArrowIndicator",[dojox.gauges.AnalogIndicatorBa
 					.setFill(color);
 		return shapes;
 	}
+});
 });

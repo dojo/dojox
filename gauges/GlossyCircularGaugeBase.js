@@ -1,21 +1,14 @@
-dojo.provide("dojox.gauges.GlossyCircularGaugeBase");
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojox/gfx","./AnalogGauge","./AnalogCircleIndicator","./TextIndicator","./GlossyCircularGaugeNeedle"],
+function(dojo,ddeclare,dlang,dconnect,gfx,AnalogGauge,AnalogCircleIndicator,TextIndicator,GlossyCircularGaugeNeedle) {
 
-dojo.require("dojox.gfx");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gauges.AnalogGauge");
-dojo.require("dojox.gauges.AnalogCircleIndicator");
-dojo.require("dojox.gauges.TextIndicator");
-dojo.require("dojox.gauges.GlossyCircularGaugeNeedle");
-
-
-dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [dojox.gauges.AnalogGauge], {
+return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	// summary:
 	//	The base class for GlossyCircularGauge and GlossySemiCircularGauge.
 	
 	
 	
 	// the type of default indicator to create
-	_defaultIndicator: dojox.gauges.AnalogCircleIndicator,
+	_defaultIndicator: AnalogCircleIndicator,
 	
 	// _needle: dojox.gauges.GlossyCircularGaugeNeedle
 	// the needle of this circular gauge
@@ -160,7 +153,7 @@ dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [dojox.gauges.AnalogGauge],
 		});
 		
 		// creates and adds the needle
-		this._needle = new dojox.gauges.GlossyCircularGaugeNeedle({
+		this._needle = new GlossyCircularGaugeNeedle({
 			hideValue: true,
 			title: this.title,
 			noChange: this.noChange,
@@ -170,7 +163,7 @@ dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [dojox.gauges.AnalogGauge],
 		this.addIndicator(this._needle);
 		
 		// creates and add the text indicator
-		this._textIndicator = new dojox.gauges.TextIndicator({
+		this._textIndicator = new TextIndicator({
 			x: scale * this._designTextIndicatorX + (this.width - scale * this._designWidth) / 2,
 			y: scale * this._designTextIndicatorY + (this.height - scale * this._designHeight) / 2,
 			fixedPrecision: true,
@@ -255,7 +248,7 @@ dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [dojox.gauges.AnalogGauge],
 		//
 		
 		this.textIndicatorFont = font;
-		this._textIndicatorFont = dojox.gfx.splitFontString(font);
+		this._textIndicatorFont = gfx.splitFontString(font);
 		if (this._textIndicator){
 			this._textIndicator.font = this._textIndicatorFont;
 			this.draw();
@@ -531,10 +524,11 @@ dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [dojox.gauges.AnalogGauge],
 		//
 		
 		this.font = font;
-		this._font = dojox.gfx.splitFontString(font);
+		this._font = gfx.splitFontString(font);
 		this._setMajorTicksProperty({
 			'font': this._font
 		});
 	}
 	
+});
 });

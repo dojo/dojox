@@ -1,9 +1,7 @@
-dojo.provide('dojox.gauges.AnalogCircleIndicator');
-dojo.require('dojox.gauges.AnalogGauge');
-
+define(["dojo/_base/kernel","dojo/_base/declare","./AnalogIndicatorBase"],function(dojo,ddeclare,AnalogIndicatorBase) { 
 dojo.experimental("dojox.gauges.AnalogCircleIndicator");
 
-dojo.declare("dojox.gauges.AnalogCircleIndicator", [dojox.gauges.AnalogIndicatorBase], {
+return dojo.declare("dojox.gauges.AnalogCircleIndicator", [AnalogIndicatorBase], {
 	// summary:
 	//		an indicator for the AnalogGauge that draws a circle.
 	//
@@ -27,4 +25,5 @@ dojo.declare("dojox.gauges.AnalogCircleIndicator", [dojox.gauges.AnalogIndicator
 			r: this.length
 		}).setFill(color).setStroke(stroke)];
 	}
+});
 });

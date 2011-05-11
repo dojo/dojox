@@ -1,9 +1,9 @@
-dojo.provide('dojox.gauges.BarIndicator');
-dojo.require('dojox.gauges.BarGauge');
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang","./BarLineIndicator"],
+function(dojo,ddeclare,dfx,dconnect,lang,BarLineIndicator) { 
 
 dojo.experimental("dojox.gauges.BarIndicator");
 
-dojo.declare("dojox.gauges.BarIndicator",[dojox.gauges.BarLineIndicator],{
+return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
 	_getShapes: function(group){
 		// summary:
 		//		Override of dojox.gauges.BarLineIndicator._getShapes
@@ -69,4 +69,5 @@ dojo.declare("dojox.gauges.BarIndicator",[dojox.gauges.BarLineIndicator],{
 			}
 		}
 	}
+});
 });
