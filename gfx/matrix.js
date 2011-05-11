@@ -438,7 +438,7 @@ define(["."],function(){
 	});
 	// propagate Matrix2D up
 	dojox.gfx.Matrix2D = dojox.gfx.matrix.Matrix2D;
-	return dojox.gfx.Matrix2D;
+	return dojox.gfx.matrix;
 });
 
 

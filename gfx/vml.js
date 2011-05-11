@@ -1216,20 +1216,6 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 		g.switchTo("vml");
 		delete g.loadAndSwitch;
 	}
-	return { // our hash of newly defined api
-		Shape: vml.Shape,
-		Container: vml.Container,
-		Group: vml.Group,
-		Surface: vml.Surface,
-		Point: vml.Point,
-		Rectangle: vml.Rectangle,
-		Rect: vml.Rect,
-		Ellipse: vml.Ellipse,
-		Circle: vml.Circle,
-		Line: vml.Line,
-		PolyLine: vml.PolyLine,
-		Image: vml.Image,
-		Text: vml.Text
-	};	
+	return vml;	
 
 });

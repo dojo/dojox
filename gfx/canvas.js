@@ -802,21 +802,5 @@ define(["./_base","./shape","./path","./arc","./decompose"],function(){
 		g.switchTo("canvas");
 		delete g.loadAndSwitch;
 	}
-	return { // our hash of newly defined api
-		fixTarget: dojox.gfx.canvas.fixTarget, 
-		Creator: Creator,
-		Shape: dojox.gfx.canvas.Shape,
-		Container: dojox.gfx.canvas.Container,
-		Group: dojox.gfx.canvas.Group,
-		Surface: dojox.gfx.canvas.Surface,
-		Point: dojox.gfx.canvas.Point,
-		Rectangle: dojox.gfx.canvas.Rectangle,
-		Rect: dojox.gfx.canvas.Rect,
-		Ellipse: dojox.gfx.canvas.Ellipse,
-		Circle: dojox.gfx.canvas.Circle,
-		Line: dojox.gfx.canvas.Line,
-		PolyLine: dojox.gfx.canvas.PolyLine,
-		Image: dojox.gfx.canvas.Image,
-		Text: dojox.gfx.canvas.Text
-	};
+	return dojox.gfx.canvas;
 });

@@ -1,4 +1,4 @@
-define(["."], function (dxgfx){
+define(["."], function (){
 	var gfx = dojo.getObject("dojox.gfx", true), sl, flag, match;
 	while(!gfx.renderer){
 		// Have a way to force a GFX renderer, if so desired.
@@ -77,5 +77,5 @@ define(["."], function (dxgfx){
 			}
 		});
 	}
-	return dxgfx;
+	return gfx;
 });

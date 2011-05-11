@@ -811,20 +811,6 @@ define(["./_base","./shape","./path"],function (){
 		delete g.loadAndSwitch;
 	}
 	
-	return { // our hash of newly defined api
-		Shape: sl.Shape,
-		Container: sl.Container,
-		Group: sl.Group,
-		Surface: sl.Surface,
-		Point: sl.Point,
-		Rectangle: sl.Rectangle,
-		Rect: sl.Rect,
-		Ellipse: sl.Ellipse,
-		Circle: sl.Circle,
-		Line: sl.Line,
-		PolyLine: sl.PolyLine,
-		Image: sl.Image,
-		Text: sl.Text
-	};	
+	return sl;	
 });
 
