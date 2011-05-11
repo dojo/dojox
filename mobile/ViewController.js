@@ -1,4 +1,5 @@
-define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList"], function(declare,listen,darra,DeferredList){
+define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList","./TransitionEvent","./ProgressIndicator"],
+	function(declare,listen,darra,DeferredList,TransitionEvent,ProgressIndicator){
 
 	var Controller = dojo.declare(null, {
 		constructor: function(){
@@ -54,27 +55,34 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 					var text = this._text;
 					if(!text){
 						if(this.sync){
-							text = dojo.trim(dojo._getText(url));
+							text = dojo.trim(dojo._getText(evt.detail.url));
 						}else{
 							require(["dojo/_base/xhr"], dojo.hitch(this, function(xhr){ 
-								var prog = dojox.mobile.ProgressIndicator.getInstance();
+								var prog = ProgressIndicator.getInstance();
 								dojo.body().appendChild(prog.domNode);
 								prog.start();
 								var xhr = dojo.xhrGet({
-									url: url,
+									url: evt.detail.url,
 									handleAs: "text"
 								});
 								xhr.addCallback(dojo.hitch(this, function(response, ioArgs){
 									prog.stop();
 									if(response){
 										this._text = response;
-												
-										new TransitionEvent(evt.domNode, {transition: evt.detail.transition,transitionDir: evt.detail.transitionDir, moveTo: evt.detail.moveTo, href: evt.detail.href, url: evt.detail.url, scene: evt.detail.scene}, evt.detail).dispatch(); 
+										new TransitionEvent(evt.domNode, {
+												transition: evt.detail.transition,
+											 	transitionDir: evt.detail.transitionDir, 
+											 	moveTo: evt.detail.moveTo, 
+											 	href: evt.detail.href, 
+											 	url: evt.detail.url, 
+											 	scene: evt.detail.scene}, 
+											 		evt.detail)
+											 			.dispatch(); 
 									}
 								}));
 								xhr.addErrback(function(error){
 									prog.stop();
-									alert("Failed to load "+url+"\n"+(error.description||error));
+									alert("Failed to load "+evt.detail.url+"\n"+(error.description||error));
 								});
 							}));
 							return;
@@ -85,7 +93,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 					if(!dojox.mobile._viewMap){
 						dojox.mobile._viewMap = [];
 					}
-					dojox.mobile._viewMap[url] = id;
+					dojox.mobile._viewMap[evt.detail.url] = id;
 				}
 				moveTo = id;
 				w = this.findCurrentView(moveTo,dijit.byId(evt.srcElement.id)) || w; // the current view widget
@@ -96,7 +104,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 		_parse: function(text,id){
 			var container = dojo.create("DIV");
 			var view;
-			var currentView	 = this.getView();
+			var currentView	 = this.findCurrentView();
 			var target = dijit.byId(id) && dijit.byId(id).containerNode 
 						|| dojo.byId(id) 
 						|| currentView && currentView.domNode.parentNode 
