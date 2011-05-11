@@ -69,7 +69,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 									prog.stop();
 									if(response){
 										this._text = response;
-										new TransitionEvent(evt.domNode, {
+										new TransitionEvent(evt.target, {
 												transition: evt.detail.transition,
 											 	transitionDir: evt.detail.transitionDir, 
 											 	moveTo: evt.detail.moveTo, 
