@@ -1,9 +1,6 @@
-dojo.provide("dojox.gfx3d.gradient");
+define(["dojo/_base/kernel","dojox","./matrix","./vector"],function(dojo,dojox) { 
+    dojo.getObject("gfx3d",true,dojox);
 
-dojo.require("dojox.gfx3d.vector");
-dojo.require("dojox.gfx3d.matrix");
-
-(function(){
 	var dist = function(a, b){ return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)); };
 	var N = 32;
 
@@ -16,7 +13,7 @@ dojo.require("dojox.gfx3d.matrix");
 		// from: Number: from position in radians
 		// to: Number: from position in radians
 		// matrix: dojox.gfx3d.Matrix3D: the cumulative transformation matrix
-		// tolerance: Number: tolerable diffirence in colors between gradient steps
+		// tolerance: Number: tolerable difference in colors between gradient steps
 
 		var m = dojox.gfx3d.matrix, v = dojox.gfx3d.vector, mx = m.normalize(matrix),
 			f = m.multiplyPoint(mx, radius * Math.cos(from) + center.x, radius * Math.sin(from) + center.y, center.z),
@@ -34,4 +31,6 @@ dojo.require("dojox.gfx3d.matrix");
 
 		return {type: "linear", x1: 0, y1: -r, x2: 0, y2: r, colors: colors};
 	};
-})();
+
+	return dojox.gfx3d.gradient;
+});

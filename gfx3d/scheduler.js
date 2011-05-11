@@ -1,8 +1,8 @@
-dojo.provide("dojox.gfx3d.scheduler");
-dojo.provide("dojox.gfx3d.drawer");
-dojo.require("dojox.gfx3d.vector");
+define(["dojo/_base/kernel","dojox","./vector","dojo/_base/array"],function(dojo,dojox) { 
 
-dojo.mixin(dojox.gfx3d.scheduler, {
+dojo.getObject("gfx3d",true,dojox);
+
+dojox.gfx3d.scheduler = {
 	zOrder: function(buffer, order){
 		order = order ? order : dojox.gfx3d.scheduler.order;
 		buffer.sort(function(a, b){
@@ -28,7 +28,7 @@ dojo.mixin(dojox.gfx3d.scheduler, {
 		return it.getOutline();
 	}
 
-});
+};
 
 dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 	constructor: function(obj, outline){
@@ -118,7 +118,7 @@ dojo.declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 
 });
 
-dojo.mixin(dojox.gfx3d.drawer, {
+dojox.gfx3d.drawer = {
 	conservative: function(todos, objects, viewport){
 		// console.debug('conservative draw');
 		dojo.forEach(this.objects, function(item){
@@ -139,4 +139,6 @@ dojo.mixin(dojox.gfx3d.drawer, {
 	}
 	// More aggrasive optimization may re-order the DOM nodes using the order
 	// of objects, and only elements of todos call setShape.
+};
+
 });

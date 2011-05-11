@@ -1,6 +1,9 @@
-dojo.provide("dojox.gfx3d.vector");
+define(["dojo/_base/kernel","dojox","dojo/_base/array"],function(dojo,dojox) { 
 
-dojo.mixin(dojox.gfx3d.vector, {
+dojo.getObject("gfx3d",true,dojox);
+
+dojox.gfx3d.vector =  {
+	
 	sum: function(){
 		// summary: sum of the vectors
 		var v = {x: 0, y: 0, z:0};
@@ -103,4 +106,6 @@ dojo.mixin(dojox.gfx3d.vector, {
 		var v = dojox.gfx3d.vector.substract(n, l);
 		return dojox.gfx3d.vector.crossProduct(u, v);
 	}
+};
+	return dojox.gfx3d.vector;
 });

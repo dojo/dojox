@@ -1,11 +1,6 @@
-dojo.provide("dojox.gfx3d.object");
-
-dojo.require("dojox.gfx");
-dojo.require("dojox.gfx3d.lighting");
-dojo.require("dojox.gfx3d.scheduler");
-dojo.require("dojox.gfx3d.vector");
-dojo.require("dojox.gfx3d.gradient");
-
+define(["dojo/_base/lang","dojo/_base/array","dojox/gfx","./scheduler","./gradient","./vector","./matrix","./lighting"],
+function() {
+	
 // FIXME: why the global "out" var here?
 var out = function(o, x){
 	if(arguments.length > 1){
@@ -1093,4 +1088,7 @@ dojo.extend(dojox.gfx.Surface, {
 		viewport.setDimensions(this.getDimensions());
 		return viewport;
 	}
+});
+
+	return dojox.gfx3d.Object;
 });
