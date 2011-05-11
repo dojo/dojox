@@ -1,10 +1,8 @@
-// dojo.provide allows pages to use all of the types declared in this resource.
-dojo.provide("dojox.geo.charting.widget.Map");
 
-dojo.require("dojox.geo.charting.Map");
-dojo.require("dijit._Widget");
+define(["dojo/_base/lang", "dojo/_base/declare","dojo/_base/html", "dijit/_Widget","dojox/geo/charting/Map"],
+							function(dojo, declare, dhtml, Widget, Map) {
 
-dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
+return dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 	// summary:
 	//   A map viewer widget based on the dojox.geo.charting.Map component
 	//
@@ -46,12 +44,14 @@ dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 	enableTouchSupport: false,
 	enableMouseZoom: false,
 	enableMousePan: false,
+	enableKeyboardSupport: false,
 	showTooltips: false,
 	enableFeatureZoom: true,
 	colorAnimationDuration: 0,
 	mouseClickThreshold: 2,
 	_mouseInteractionSupport:null,
 	_touchInteractionSupport:null,
+	_keyboardInteractionSupport:null,
 	constructor : function(/* Object */options, /* HtmlNode */div){
 		// summary: 
 		//   Constructs a new Map widget
@@ -86,7 +86,7 @@ dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 		//		protected
 		this.inherited(arguments);
 		if (this.shapeFile && (this.shapeFile.length > 0)) {
-			this.map = new dojox.geo.charting.Map(this.domNode, this.shapeFile);
+			this.map = new Map(this.domNode, this.shapeFile);
 			if (this.markerData && (this.markerData.length > 0))
 				this.map.setMarkerData(this.markerData);
 			
@@ -125,6 +125,13 @@ dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 				}
 				this._touchInteractionSupport = new dojox.geo.charting.TouchInteractionSupport(this.map,{});
 				this._touchInteractionSupport.connect(); 
+			}
+			if (this.enableKeyboardSupport) {
+				if (!dojox.geo.charting.KeyboardInteractionSupport) {
+					throw Error("Can't find dojox.geo.charting.KeyboardInteractionSupport. Didn't you forget to dojo" + ".require() it?");
+				}
+				this._keyboardInteractionSupport = new dojox.geo.charting.KeyboardInteractionSupport(this.map,{});
+				this._keyboardInteractionSupport.connect(); 
 			}
 			this.map.showTooltips = this.showTooltips;
 			this.map.enableFeatureZoom = this.enableFeatureZoom;
@@ -168,4 +175,5 @@ dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 			this.map.resize(this.adjustMapCenterOnResize,this.adjustMapScaleOnResize,this.animateOnResize);
 		}
 	}
+});
 });

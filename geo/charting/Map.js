@@ -1,12 +1,10 @@
-dojo.provide("dojox.geo.charting.Map");
 
-dojo.require("dojox.gfx");
-dojo.require("dojox.geo.charting._base");
-dojo.require("dojox.geo.charting.Feature");
-dojo.require("dojox.geo.charting._Marker");
-dojo.require("dojo.number");
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr","dojo/_base/connect",
+		"dojo/_base/window", "dojox/gfx", "dojox/geo/charting/_base", "dojox/geo/charting/Feature",
+		"dojox/geo/charting/_Marker","dojo/number"],
+				function(dojo, declare, dhtml, xhr, connect, window, gfx, base, Feature, Marker, number) {
 
-dojo.declare("dojox.geo.charting.Map", null, {
+	return dojo.declare("dojox.geo.charting.Map", null, {
 	//	summary:
 	//		Map widget interacted with charting.
 	//	description:
@@ -46,7 +44,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		this.container = container;
 		var containerBounds = this._getContainerBounds();
 		// get map container coords
-		this.surface = dojox.gfx.createSurface(container, containerBounds.w, containerBounds.h);
+		this.surface = gfx.createSurface(container, containerBounds.w, containerBounds.h);
 		
 		this._createZoomingCursor();
 		
@@ -199,7 +197,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 							} else {
 								if (isNaN(val)) {
 									// regular parse
-									val=dojo.number.parse(itemVal);
+									val=number.parse(itemVal);
 								} else {
 									val = itemVal;
 								}
@@ -376,7 +374,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		var fromScale = fromTransform.xx?fromTransform.xx:1.0;
 		var toScale = toTransform.xx?toTransform.xx:1.0;
 		
-		var anim = dojox.gfx.fx.animateTransform({
+		var anim = gfx.fx.animateTransform({
 			duration: 1000,
 			shape: onShape,
 			transform: [{
@@ -426,7 +424,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		var containerBounds = this._getContainerBounds();
 		var offsetX = containerBounds.w/2 - scale * (centerX - bbox.x);
 		var offsetY = containerBounds.h/2 - scale * (centerY - bbox.y);
-		var newTransform = new dojox.gfx.matrix.Matrix2D({xx: scale, yy: scale, dx:offsetX, dy:offsetY});
+		var newTransform = new gfx.matrix.Matrix2D({xx: scale, yy: scale, dx:offsetX, dy:offsetY});
 		
 		
 		var currentTransform = this.mapObj.getTransform();
@@ -488,7 +486,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		var bbox = this.mapObj.boundBox;
 		var offsetX = invariantScreenPoint.x - scale * (invariantMapPoint.x - bbox.x);
 		var offsetY = invariantScreenPoint.y - scale * (invariantMapPoint.y - bbox.y);
-		var newTransform = new dojox.gfx.matrix.Matrix2D({xx: scale, yy: scale, dx:offsetX, dy:offsetY});
+		var newTransform = new gfx.matrix.Matrix2D({xx: scale, yy: scale, dx:offsetX, dy:offsetY});
 
 		var currentTransform = this.mapObj.getTransform();
 
@@ -517,7 +515,7 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		// returns: {x:,y:}
 		//   the screen coordinates correspondig to the specified map coordinates.
 		var matrix = this.mapObj.getTransform();
-		var screenPoint = dojox.gfx.matrix.multiplyPoint(matrix, mapX, mapY);
+		var screenPoint = gfx.matrix.multiplyPoint(matrix, mapX, mapY);
 		return screenPoint;
 	},
 	
@@ -526,8 +524,8 @@ dojo.declare("dojox.geo.charting.Map", null, {
 		//   converts screen coordinates to map coordinates given the current transform of this Map component
 		// returns: {x:,y:}
 		//   the map coordinates corresponding to the specified screen coordinates.
-		var invMatrix = dojox.gfx.matrix.invert(this.mapObj.getTransform());
-		var mapPoint = dojox.gfx.matrix.multiplyPoint(invMatrix, screenX, screenY);
+		var invMatrix = gfx.matrix.invert(this.mapObj.getTransform());
+		var mapPoint = gfx.matrix.multiplyPoint(invMatrix, screenX, screenY);
 		return mapPoint;
 	},
 	deselectAll: function(){
@@ -560,17 +558,17 @@ dojo.declare("dojox.geo.charting.Map", null, {
 			featureShape.bbox.y = featureShape.bbox[1];
 			featureShape.bbox.w = featureShape.bbox[2];
 			featureShape.bbox.h = featureShape.bbox[3];
-			var feature = new dojox.geo.charting.Feature(this, item, featureShape);
+			var feature = new Feature(this, item, featureShape);
 			feature.init();
 			this.mapObj.features[item] = feature;
 		}, this);
 		
 
 		//	set up a marker.
-		this.mapObj.marker = new dojox.geo.charting._Marker({}, this);
+		this.mapObj.marker = new Marker({}, this);
 	},
 	_appendMarker: function(markerData){
-		this.mapObj.marker = new dojox.geo.charting._Marker(markerData, this);
+		this.mapObj.marker = new Marker(markerData, this);
 	},
 	_createZoomingCursor: function(){
 		if(!dojo.byId("mapZoomCursor")){
@@ -587,4 +585,5 @@ dojo.declare("dojox.geo.charting.Map", null, {
 	},
 	onZoomEnd:function(feature){
 	}
+});
 });

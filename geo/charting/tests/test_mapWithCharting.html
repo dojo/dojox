@@ -21,7 +21,7 @@
 				border: solid 1px;
 			}
 		</style>
-		<script type="text/javascript" djConfig="parseOnLoad:true,gfxRenderer:'svg,vml,silverlight'" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript" djConfig="parseOnLoad:true,isDebug:true,gfxRenderer:'svg,vml,silverlight'" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			dojo.require("dojox.geo.charting.Map");
 			dojo.require("dojox.charting.Chart");
@@ -86,12 +86,10 @@
 								};
 								chart.updateSeries("productSeries",productSeries);
 								chart.render();
-			            	},
+			            	}
 			        	});
 					}
 				};
-				var mouseInteraction = new dojox.geo.charting.MouseInteractionSupport(map,{});
-				mouseInteraction.connect();
 			});
 		</script>
 	</head>

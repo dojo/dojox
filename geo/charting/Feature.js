@@ -1,9 +1,9 @@
-dojo.provide("dojox.geo.charting.Feature");
-dojo.require("dojox.gfx.fx");
-dojo.require("dojox.color");
+
+define(["dojo/_base/lang", "dojo/_base/declare","dojo/_base/html","dojo/_base/event", "dojox/gfx/fx", "dojox/color"], 
+			function(dojo, declare, dhtml, event, fx,color) {
 
 
-dojo.declare("dojox.geo.charting.Feature", null, {
+return dojo.declare("dojox.geo.charting.Feature", null, {
 	// summary: 
 	//   class to encapsulate a map element.
 	// tags:
@@ -42,9 +42,9 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 //		var color = new dojox.color.Color(this.parent.defaultColor);
 //		color.a = 0.7;
 //		this._highlightFill = color;
-		var color = new dojox.color.Color(this.parent.defaultColor).toHsl();
-		color.l = 1.2 * color.l;
-		this._highlightFill = dojox.color.fromHsl(color);
+		var col = new color.Color(this.parent.defaultColor).toHsl();
+		col.l = 1.2 * col.l;
+		this._highlightFill = color.fromHsl(col);
 		this._setFillWith(this._defaultFill);
 	},
 	setValue:function(value){
@@ -55,9 +55,9 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 				if((value>=range.min)&&(value<range.max)){
 					this._setFillWith(range.color);
 					this._defaultFill = range.color;
-					var color = new dojox.color.Color(range.color).toHsv();
-					color.v = (color.v + 20);
-					this._highlightFill = dojox.color.fromHsv(color);
+					var col = new color.Color(range.color).toHsv();
+					col.v = (col.v + 20);
+					this._highlightFill = color.fromHsv(col);
 				}
 			}
 		}
@@ -66,7 +66,7 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 		var borders = (dojo.isArray(this.shape.children)) ? this.shape.children : [this.shape.children];
 		dojo.forEach(borders, dojo.hitch(this,function(item){
 			if(this.parent.colorAnimationDuration > 0){
-				var anim1 = dojox.gfx.fx.animateFill({
+				var anim1 = fx.animateFill({
 					shape: item,
 					color: {
 						start: item.getFill(),
@@ -177,4 +177,5 @@ dojo.declare("dojox.geo.charting.Feature", null, {
 		this.shape.id = this.id;
 		this.tooltip = null;
 	}
+});
 });

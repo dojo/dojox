@@ -1,11 +1,10 @@
-dojo.provide("dojox.geo.charting._base");
 
-dojo.require("dojo.NodeList-traverse");
-dojo.require("dojox.gfx.matrix");
-dojo.require("dijit.Tooltip");
+define(["dojo/_base/lang","dojo/_base/kernel", "dojo/_base/html", "dojox/gfx/matrix","dijit/Tooltip","dojo/NodeList-traverse"],
+						
 
-(function(){
-	var dgc = dojox.geo.charting;
+function(dojo, kernel, dhtml, matrix, Tooltip, NodeListTraverse) {
+	var dgc = dojo.getObject("geo.charting", true, dojox); 
+
 	dgc.showTooltip = function(/*String*/innerHTML, /*dojox.gfx.shape*/ gfxObject, /*String[]?*/ positions){
 		var arroundNode = dgc._normalizeArround(gfxObject);
 		return dijit.showTooltip(innerHTML, arroundNode, positions);
@@ -20,7 +19,7 @@ dojo.require("dijit.Tooltip");
 		//var bbox = gfxObject.getBoundingBox();
 		//get the real screen coords for gfx object
 		var realMatrix = gfxObject._getRealMatrix() || {xx:1,xy:0,yx:0,yy:1,dx:0,dy:0};
-		var point = dojox.gfx.matrix.multiplyPoint(realMatrix, bbox.x, bbox.y);
+		var point = matrix.multiplyPoint(realMatrix, bbox.x, bbox.y);
 		var gfxDomContainer = dgc._getGfxContainer(gfxObject);
 		gfxObject.x = dojo.coords(gfxDomContainer,true).x + point.x,
 		gfxObject.y = dojo.coords(gfxDomContainer,true).y + point.y,
@@ -50,4 +49,4 @@ dojo.require("dijit.Tooltip");
 		}
 		return bboxObject;
 	};
-})();
+});

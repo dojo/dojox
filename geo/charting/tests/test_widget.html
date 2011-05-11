@@ -9,7 +9,7 @@
 <script type="text/javascript">
 	var djConfig = {
 		parseOnLoad : true,
-		//gfxRenderer: 'canvas,svg,vml,silverlight'
+		gfxRenderer: 'canvas,svg,vml,silverlight'
 	};
 </script>
 
@@ -23,6 +23,7 @@
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dojox.geo.charting.MouseInteractionSupport");
 	dojo.require("dojox.geo.charting.TouchInteractionSupport");
+	dojo.require("dojox.geo.charting.KeyboardInteractionSupport");
 	
 	dojo.addOnLoad(function(){
 	
@@ -55,7 +56,7 @@
 adjustMapCenterOnResize="true" adjustMapScaleOnResize="true" markerData="../resources/markers/USStates.json"
  dataStore="dataStore" dataBindingAttribute="productA" series="../resources/data/series.json" 
  onFeatureOver="onFeatureOver"  onFeatureClick="onFeatureClick" enableMouseSupport="true" enableMousePan="true" enableMouseZoom="true"
- showTooltips="true" enableFeatureZoom="false" enableTouchSupport="true"
+ showTooltips="true" enableFeatureZoom="false" enableTouchSupport="true" enableKeyboardSupport="true"
 	style="height: 100%; width: 100%;">
 </div>
 </div>

@@ -1,6 +1,8 @@
-dojo.provide("dojox.geo.charting._Marker");
 
-dojo.declare("dojox.geo.charting._Marker", null, {
+define(["dojo/_base/lang", "dojo/_base/declare"], 
+				function(dojo,declare) {
+
+return dojo.declare("dojox.geo.charting._Marker", null, {
 	
 	_needTooltipRefresh: null,
 	_map: null,
@@ -60,4 +62,5 @@ dojo.declare("dojox.geo.charting._Marker", null, {
 		arround.x += arround.width / 6;
 		arround.y += arround.height / 4;
 	}
+});
 });

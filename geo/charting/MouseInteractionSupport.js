@@ -1,6 +1,9 @@
-dojo.provide("dojox.geo.charting.MouseInteractionSupport");
 
-dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
+define(["dojo/_base/lang","dojo/_base/declare", "dojo/_base/connect","dojo/_base/window","dojo/_base/html"],
+											function(dojo, declare, connect, window, dhtml) {
+
+
+return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 	// summary: 
 	//   class to handle mouse interactions on a dojox.geo.charting.Map widget
 	// tags:
@@ -158,19 +161,16 @@ dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this._mapClickLocation.y = mapPoint.y;
 		
 		// install drag listener if pan is enabled
-		
 		if (!dojo.isIE) {
 			this._mouseDragListener = dojo.connect(dojo.doc,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
 			this._mouseUpListener = dojo.connect(dojo.doc,"onmouseup",this, this._mouseUpHandler);
 			
 		} else {
-			var node = dojo.byId(this._map.container);
 			this._mouseDragListener = dojo.connect(node,"onmousemove",this,this._mouseDragHandler);
-			node.setCapture();
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
-			this._mouseUpListener = dojo.connect(node,"onmouseup",this, this._mouseUpHandler);
-
+			this._mouseUpListener = this._map.surface.connect("onmouseup", this, this._mouseUpHandler);
+			this._map.surface.rawNode.setCapture();
 		}
 
 	},
@@ -193,7 +193,9 @@ dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		// mouseEvent: the mouse event
 		// tags:
 		//   private
+		
 		dojo.stopEvent(mouseEvent);
+		
 		this._map.mapObj.marker._needTooltipRefresh = true;
 		
 		// disconnect listeners
@@ -211,7 +213,7 @@ dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		}
 		
 		if (dojo.isIE) {
-			dojo.byId(this._map.container).releaseCapture();
+			this._map.surface.rawNode.releaseCapture();
 		}
 	},
 	
@@ -332,4 +334,5 @@ dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this._map.mapObj.marker._needTooltipRefresh = true;
 		
 	}
+});
 });

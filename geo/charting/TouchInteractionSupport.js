@@ -1,6 +1,8 @@
-dojo.provide("dojox.geo.charting.TouchInteractionSupport");
 
-dojo.declare("dojox.geo.charting.TouchInteractionSupport", [], {
+define(["dojo/_base/lang","dojo/_base/declare", "dojo/_base/connect","dojo/_base/window"],
+				function(dojo,declare,connect,window) {
+
+return dojo.declare("dojox.geo.charting.TouchInteractionSupport", [], {
 	// summary: 
 	//   class to handle touch interactions on a dojox.geo.charting.Map widget
 	// tags:
@@ -22,7 +24,6 @@ dojo.declare("dojox.geo.charting.TouchInteractionSupport", [], {
 	_tapCancel:false,
 	
 	
-
 	constructor : function(/* dojox.geo.charting.Map */map,options) {
 		// summary: 
 		//   Constructs a new _TouchInteractionSupport instance
@@ -342,4 +343,5 @@ dojo.declare("dojox.geo.charting.TouchInteractionSupport", [], {
 		
 	}
 	
+});
 });

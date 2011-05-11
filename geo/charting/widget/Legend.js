@@ -1,10 +1,8 @@
-dojo.provide("dojox.geo.charting.widget.Legend");
 
-dojo.require("dijit._Widget");
-dojo.require("dojox.lang.functional.array");
-dojo.require("dojox.lang.functional.fold");
+define(["dojo/_base/lang", "dojo/_base/declare","dojo/_base/html", "dojo/_base/window", "dijit/_Widget"],
+							function(dojo,declare, dhtml, window, Widget) {
 
-dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
+return dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
 	horizontal:true,
 	legendBody:null,
 	swatchSize:18,
@@ -67,4 +65,5 @@ dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
 		div.style.background = color;
 		text.innerHTML = String(label);
 	}
+});
 });
