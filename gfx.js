@@ -1,12 +1,4 @@
-dojo.provide("dojox.gfx");
-
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gfx._base");
-
-dojo.loadInit(function(){
-	// Since loaderInit can be fired before any dojo.provide/require calls,
-	// make sure the dojox.gfx object exists and only run this logic if dojox.gfx.renderer
-	// has not been defined yet.
+define(["."], function (dxgfx){
 	var gfx = dojo.getObject("dojox.gfx", true), sl, flag, match;
 	while(!gfx.renderer){
 		// Have a way to force a GFX renderer, if so desired.
@@ -15,9 +7,10 @@ dojo.loadInit(function(){
 			dojox.gfx.renderer = dojo.config.forceGfxRenderer;
 			break;
 		}
-		var renderers = (typeof dojo.config.gfxRenderer == "string" ?
+		var renderers = (typeof dojo.config.gfxRenderer === "string" ?
 			dojo.config.gfxRenderer : "svg,vml,canvas,silverlight").split(",");
-		for(var i = 0; i < renderers.length; ++i){
+		var i = 0;
+		for(i = 0; i < renderers.length; ++i){
 			switch(renderers[i]){
 				case "svg":
 					// the next test is from https://github.com/phiggins42/has.js
@@ -63,11 +56,12 @@ dojo.loadInit(function(){
 		}
 		break;
 	}
-	if (dojox.gfx.renderer === 'canvas' && dojo.config.canvasEvent !== false)
+	if (dojox.gfx.renderer === 'canvas' && dojo.config.canvasEvent !== false){
 		dojox.gfx.renderer = "canvasWithEvents";
+	}
 	
 	if(dojo.config.isDebug){
-		console.log("gfx renderer = " + gfx.renderer);
+		console.debug("gfxRenderer to load: " + gfx.renderer);
 	}
 
 	// load & initialize renderer
@@ -77,6 +71,11 @@ dojo.loadInit(function(){
 	}else{
 		// load
 		gfx.loadAndSwitch = gfx.renderer;
-		dojo["require"]("dojox.gfx." + gfx.renderer);
+		require(["dojox/gfx/"+gfx.renderer], function(renderer){
+			if (dojo.config.isDebug){
+				console.debug("loaded gfx renderer:",renderer);
+			}
+		});
 	}
+	return dxgfx;
 });
