@@ -220,9 +220,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "./_PlotEvents", 
 			// draw slices
 			var eventSeries = new Array(slices.length);
 			dojo.some(slices, function(slice, i){
-				if(slice <= 0){
+				if(slice < 0){
 					// degenerated slice
 					return false;	// continue
+				}
+				if(slice == 0){
+				  this.dyn.push({fill: null, stroke: null});
+				  return false;
 				}
 				var v = run[i], theme = themes[i], specialFill;
 				if(slice >= 1){
