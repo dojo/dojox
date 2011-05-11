@@ -126,6 +126,7 @@ return dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
 		// populate the skeleton
 		this._makeIcon(div, dyn);
 		text.innerHTML = String(label);
+		text.dir = this.getTextDir(label, text.dir);
 	},
 	_makeIcon: function(div, dyn){
 		var mb = { h: this.swatchSize, w: this.swatchSize };

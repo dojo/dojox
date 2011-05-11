@@ -82,6 +82,10 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/window", "dojox/gfx"],
 
 				// setup the text node
 				var p = dojo.doc.createElement("div"), s = p.style, boxWidth;
+				// bidi support, if this function exists the module was loaded 
+				if(chart.getTextDir){
+					p.dir = chart.getTextDir(text);
+				}
 				clearNode(s);
 				s.font = font;
 				p.innerHTML = String(text).replace(/\s/g, "&nbsp;");
@@ -95,6 +99,11 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/window", "dojox/gfx"],
 				// do we need to calculate the label width?
 				if(!labelWidth){
 					boxWidth = getBoxWidth(p);
+				}
+				// when the textDir is rtl, but the UI ltr needs
+				// to recalculate the starting point
+				if(p.dir == "rtl"){
+					x += labelWidth ? labelWidth : boxWidth;
 				}
 
 				// new settings for the text node

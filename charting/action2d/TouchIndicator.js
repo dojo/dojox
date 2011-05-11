@@ -10,7 +10,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		//		Target series name for this chart action.
 		
 		//	dualIndicator: Boolean? 
-		//		Whether a double touch on the chart creates a dual indicator showing data trend betwee the two touch points. Default is false.
+		//		Whether a double touch on the chart creates a dual indicator showing data trend between the two touch points. Default is false.
 		dualIndicator:		false,
 		
 		//	autoScroll: Boolean? 

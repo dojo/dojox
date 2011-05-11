@@ -144,8 +144,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./PlotAction", "dijit/Tooltip"
 			this.aroundRect = aroundRect;
 
 			var tooltip = this.text(o);
+			if(this.chart.getTextDir){
+				var isChartDirectionRtl = (dojo.style(this.chart.node,"direction") == "rtl");
+				var isBaseTextDirRtl = (this.chart.getTextDir(tooltip) == "rtl");
+			}
 			if(tooltip){
-                dijit.showTooltip(tooltip, this.aroundRect, position);
+				if(isBaseTextDirRtl && !isChartDirectionRtl){
+					dijit.showTooltip("<span dir = 'rtl'>" + tooltip +"</span>", this.aroundRect, position);
+				}
+				else if(!isBaseTextDirRtl && isChartDirectionRtl){
+					dijit.showTooltip("<span dir = 'ltr'>" + tooltip +"</span>", this.aroundRect, position);
+				}else{
+					dijit.showTooltip(tooltip, this.aroundRect, position);
+				}
 			}
 		}
 	});

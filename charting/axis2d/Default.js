@@ -641,6 +641,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 								taFontColor
 								//this._cachedLabelWidth
 							);
+							
+							// if bidi support was required, the textDir is "auto" and truncation
+							// took place, we need to update the dir of the element for cases as: 
+							// Fool label: 111111W (W for bidi character)
+							// truncated label: 11... 
+							// in this case for auto textDir the dir will be "ltr" which is wrong.
+							if(this.chart.truncateBidi  && label.truncated){
+								this.chart.truncateBidi(elem, tick.label, labelType);
+							}
 							label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
 							if(labelType == "html"){
 								this.htmlElements.push(elem);
@@ -685,6 +694,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 								taFontColor
 								//this._cachedLabelWidth
 							);
+							// if bidi support was required, the textDir is "auto" and truncation
+							// took place, we need to update the dir of the element for cases as: 
+							// Fool label: 111111W (W for bidi character)
+							// truncated label: 11... 
+							// in this case for auto textDir the dir will be "ltr" which is wrong.
+							if(this.chart.getTextDir && label.truncated){
+								this.chart.truncateBidi(elem, tick.label, labelType);
+							}
 							label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
 							if(labelType == "html"){
 								this.htmlElements.push(elem);

@@ -40,7 +40,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/query", "dijit/_Widget", 
 			var c = this.chart = new Chart(n, {
 				margins: this.margins,
 				stroke:  this.stroke,
-				fill:    this.fill
+				fill:    this.fill,
+				textDir: this.textDir
 			});
 			
 			// add collected parameters

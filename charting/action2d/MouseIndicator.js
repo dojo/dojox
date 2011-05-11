@@ -19,6 +19,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		Whether the indicator is vertical or not. Default is true.
 		vertical:		true,
 		
+		//	fixed: Boolean?
+		//		Whether a fixed precision must be applied to data values for display. Default is true.
+		fixed:			true,
+
+		//	precision: Number?
+		//		The precision at which to round data values for display. Default is 1.
+		precision:		0,
+		
 		//	lineStroke: dojo.gfx.Stroke?
 		//		An optional stroke to use for indicator line.
 		lineStroke:		{},
@@ -95,7 +103,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		defaultParams: {
 			series: null,
 			vertical: true,
-			autoScroll: true
+			autoScroll: true,
+			fixed: true,
+			precision: 0
 		},
 		optionalParams: {
 			lineStroke: {},
