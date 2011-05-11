@@ -1,6 +1,6 @@
-dojo.provide("dojox.gfx._base");
+define(["."],function(){
+	dojo.getObject("dojox.gfx._base", true);
 
-(function(){
 	var g = dojox.gfx, b = g._base;
 
 	// candidates for dojox.style (work on VML and SVG nodes)
@@ -44,6 +44,7 @@ dojo.provide("dojox.gfx._base");
 			'x-small': 0, 'small': 0, 'medium': 0, 'large': 0, 'x-large': 0,
 			'xx-large': 0
 		};
+		var p;
 
 		if(dojo.isIE){
 			//	we do a font-size fix if and only if one isn't applied already.
@@ -67,13 +68,13 @@ dojo.provide("dojox.gfx._base");
 			}}, dojo.body());
 
 		//	do the measurements.
-		for(var p in heights){
+		for(p in heights){
 			div.style.fontSize = p;
 			heights[p] = Math.round(div.offsetHeight * 12/16) * 16/12 / 1000;
 		}
 
 		dojo.body().removeChild(div);
-		return heights; 	//	object
+		return heights; //object
 	};
 
 	var fontMeasurements = null;
@@ -92,6 +93,7 @@ dojo.provide("dojox.gfx._base");
 								/*Object*/ style,
 								/*String?*/ className){
 		var m, s, al = arguments.length;
+		var i;
 		if(!measuringNode){
 			measuringNode = dojo.create("div", {style: {
 				position: "absolute",
@@ -109,7 +111,7 @@ dojo.provide("dojox.gfx._base");
 		s.outline = "0";
 		// set new style
 		if(al > 1 && style){
-			for(var i in style){
+			for(i in style){
 				if(i in empty){ continue; }
 				s[i] = style[i];
 			}
@@ -140,11 +142,10 @@ dojo.provide("dojox.gfx._base");
 		}while(dojo.byId(id));
 		return id;
 	};
-})();
 
 dojo.mixin(dojox.gfx, {
 	//	summary:
-	// 		defines constants, prototypes, and utility functions
+	//		defines constants, prototypes, and utility functions
 
 	// default shapes, which are used to fill in missing parameters
 	defaultPath: {
@@ -210,7 +211,7 @@ dojo.mixin(dojox.gfx, {
 			if(t){
 				return new t();
 			}
-			t = typeCtorCache[type] = new Function;
+			t = typeCtorCache[type] = new Function();
 			t.prototype = dojox.gfx[ "default" + type ];
 			return new t();
 		}
@@ -218,22 +219,23 @@ dojo.mixin(dojox.gfx, {
 
 	normalizeColor: function(/*dojo.Color|Array|string|Object*/ color){
 		//	summary:
-		// 		converts any legal color representation to normalized
-		// 		dojo.Color object
+		//		converts any legal color representation to normalized
+		//		dojo.Color object
 		return (color instanceof dojo.Color) ? color : new dojo.Color(color); // dojo.Color
 	},
 	normalizeParameters: function(existed, update){
 		//	summary:
-		// 		updates an existing object with properties from an "update"
-		// 		object
+		//		updates an existing object with properties from an "update"
+		//		object
 		//	existed: Object
 		//		the "target" object to be updated
 		//	update:  Object
 		//		the "update" object, whose properties will be used to update
 		//		the existed object
+		var x;
 		if(update){
 			var empty = {};
-			for(var x in existed){
+			for(x in existed){
 				if(x in update && !(x in empty)){
 					existed[x] = update[x];
 				}
@@ -243,18 +245,19 @@ dojo.mixin(dojox.gfx, {
 	},
 	makeParameters: function(defaults, update){
 		//	summary:
-		// 		copies the original object, and all copied properties from the
-		// 		"update" object
+		//		copies the original object, and all copied properties from the
+		//		"update" object
 		//	defaults: Object
 		//		the object to be cloned before updating
 		//	update:   Object
 		//		the object, which properties are to be cloned during updating
+		var i = null;
 		if(!update){
 			// return dojo.clone(defaults);
 			return dojo.delegate(defaults);
 		}
 		var result = {};
-		for(var i in defaults){
+		for(i in defaults){
 			if(!(i in result)){
 				result[i] = dojo.clone((i in update) ? update[i] : defaults[i]);
 			}
@@ -339,7 +342,7 @@ dojo.mixin(dojox.gfx, {
 	normalizedLength: function(len) {
 		// summary: converts any length value to pixels
 		// len: String: a length, e.g., "12pc"
-		if(len.length == 0) return 0;
+		if(len.length === 0){ return 0; }
 		if(len.length > 2){
 			var px_in_pt = dojox.gfx.px_in_pt();
 			var val = parseFloat(len);
@@ -361,7 +364,7 @@ dojo.mixin(dojox.gfx, {
 
 	equalSources: function(a, b){
 		// summary: compares event sources, returns true if they are equal
-		return a && b && a == b;
+		return a && b && a === b;
 	},
 	
 	switchTo: function(renderer){
@@ -374,4 +377,6 @@ dojo.mixin(dojox.gfx, {
 			});
 		}
 	}
+});
+return dojox.gfx._base; // return this module's api
 });

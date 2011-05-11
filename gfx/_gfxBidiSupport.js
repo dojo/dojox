@@ -1,10 +1,5 @@
-dojo.provide("dojox.gfx._gfxBidiSupport");
-
-dojo.require("dojox.gfx.utils");
-dojo.require("dojox.gfx.shape");
-dojo.require("dojox.string.BidiEngine");
-
-(function(){
+define(["./utils","./shape","dojox/string/BidiEngine"],function (){
+	dojo.getObject("dojox.gfx._gfxBidiSupport", true);
 	var g = dojox.gfx;
 
 	switch (g.renderer){
@@ -402,6 +397,6 @@ dojo.require("dojox.string.BidiEngine");
 		}
 		return textDir;
 	};
-	
-})();
+	return g; // return gfx api augmented with bidi support	
+});
 

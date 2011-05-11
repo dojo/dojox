@@ -1,14 +1,7 @@
-dojo.provide("dojox.gfx.canvas");
 
-dojo.require("dojox.gfx._base");
-dojo.require("dojox.gfx.shape");
-dojo.require("dojox.gfx.path");
-dojo.require("dojox.gfx.arc");
-dojo.require("dojox.gfx.decompose");
-
-dojo.experimental("dojox.gfx.canvas");
-
-(function(){
+define(["./_base","./shape","./path","./arc","./decompose"],function(){
+	dojo.getObject("dojox.gfx.canvas", true);
+	dojo.experimental("dojox.gfx.canvas");
 	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas,
 		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2,
 		pattrnbuffer = null;
@@ -809,4 +802,21 @@ dojo.experimental("dojox.gfx.canvas");
 		g.switchTo("canvas");
 		delete g.loadAndSwitch;
 	}
-})();
+	return { // our hash of newly defined api
+		fixTarget: dojox.gfx.canvas.fixTarget, 
+		Creator: Creator,
+		Shape: dojox.gfx.canvas.Shape,
+		Container: dojox.gfx.canvas.Container,
+		Group: dojox.gfx.canvas.Group,
+		Surface: dojox.gfx.canvas.Surface,
+		Point: dojox.gfx.canvas.Point,
+		Rectangle: dojox.gfx.canvas.Rectangle,
+		Rect: dojox.gfx.canvas.Rect,
+		Ellipse: dojox.gfx.canvas.Ellipse,
+		Circle: dojox.gfx.canvas.Circle,
+		Line: dojox.gfx.canvas.Line,
+		PolyLine: dojox.gfx.canvas.PolyLine,
+		Image: dojox.gfx.canvas.Image,
+		Text: dojox.gfx.canvas.Text
+	};
+});

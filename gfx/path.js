@@ -1,7 +1,4 @@
-dojo.provide("dojox.gfx.path");
-
-dojo.require("dojox.gfx.matrix");
-dojo.require("dojox.gfx.shape");
+define(["./matrix","./shape"],function(matrix,shape){
 
 dojo.declare("dojox.gfx.path.Path", dojox.gfx.shape.Shape, {
 	// summary: a generalized path shape
@@ -416,4 +413,8 @@ dojo.declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
 		this._setFont();
 		return this;	// self
 	}
+});
+return { // our hash of newly defined objects
+	Path: dojox.gfx.path.Path, 
+	TextPath: dojox.gfx.path.TextPath};
 });

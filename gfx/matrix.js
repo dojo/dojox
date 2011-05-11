@@ -1,6 +1,5 @@
-dojo.provide("dojox.gfx.matrix");
-
-(function(){
+define(["."],function(){
+	dojo.getObject("dojox.gfx.matrix", true);
 	var m = dojox.gfx.matrix;
 
 	// candidates for dojox.math:
@@ -437,7 +436,9 @@ dojo.provide("dojox.gfx.matrix");
 		//TODO: rect-to-rect mapping, scale-to-fit (isotropic and anisotropic versions)
 
 	});
-})();
+	// propagate Matrix2D up
+	dojox.gfx.Matrix2D = dojox.gfx.matrix.Matrix2D;
+	return dojox.gfx.Matrix2D;
+});
 
-// propagate Matrix2D up
-dojox.gfx.Matrix2D = dojox.gfx.matrix.Matrix2D;
+

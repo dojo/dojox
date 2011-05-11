@@ -1,4 +1,1 @@
-dojo.provide("dojox.gfx.move");
-
-dojo.require("dojox.gfx.Mover");
-dojo.require("dojox.gfx.Moveable");
+define(["./Mover","./Moveable"],function(){return dojo.getObject("dojox.gfx.move", true);});

@@ -1,8 +1,5 @@
-dojo.provide("dojox.gfx.shape");
-
-dojo.require("dojox.gfx._base");
-
-(function(){
+define(["./matrix"],function(){
+	dojo.getObject("dojox.gfx.shape", true);
 	// a set of ids (keys=type)
 	var _ids = {};
 	// a simple set impl to map shape<->id
@@ -39,8 +36,6 @@ dojo.require("dojox.gfx._base");
 		delete registry[shape.getUID()];
 	};
 	
-})();
-
 dojo.declare("dojox.gfx.shape.Shape", null, {
 	// summary: a Shape object, which knows how to apply
 	// graphical attributes and transformations
@@ -829,3 +824,24 @@ dojox.gfx.shape.Creator = {
 		return null;	// dojox.gfx.Shape
 	}
 };
+
+return { // our hash of newly defined api
+	register: dojox.gfx.shape.register, 
+	byId: dojox.gfx.shape.byId,
+	dispose: dojox.gfx.shape.dispose,
+	Creator: dojox.gfx.shape.Creator,
+	Shape: dojox.gfx.shape.Shape,
+	Container: dojox.gfx.shape.Container,
+	Surface: dojox.gfx.shape.Surface,
+	Point: dojox.gfx.shape.Point,
+	Rectangle: dojox.gfx.shape.Rectangle,
+	Rect: dojox.gfx.shape.Rect,
+	Ellipse: dojox.gfx.shape.Ellipse,
+	Circle: dojox.gfx.shape.Circle,
+	Line: dojox.gfx.shape.Line,
+	PolyLine: dojox.gfx.shape.PolyLine,
+	Image: dojox.gfx.shape.Image,
+	Text: dojox.gfx.shape.Text
+	};
+});
+

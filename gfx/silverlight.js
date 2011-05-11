@@ -1,12 +1,6 @@
-dojo.provide("dojox.gfx.silverlight");
-
-dojo.require("dojox.gfx._base");
-dojo.require("dojox.gfx.shape");
-dojo.require("dojox.gfx.path");
-
-dojo.experimental("dojox.gfx.silverlight");
-
-(function(){
+define(["./_base","./shape","./path"],function (){
+	dojo.getObject("dojox.gfx.silverlight", true);
+	dojo.experimental("dojox.gfx.silverlight");
 	var d = dojo, g = dojox.gfx, gs = g.shape, sl = g.silverlight;
 
 	var dasharray = {
@@ -816,5 +810,21 @@ dojo.experimental("dojox.gfx.silverlight");
 		g.switchTo("silverlight");
 		delete g.loadAndSwitch;
 	}
-})();
+	
+	return { // our hash of newly defined api
+		Shape: sl.Shape,
+		Container: sl.Container,
+		Group: sl.Group,
+		Surface: sl.Surface,
+		Point: sl.Point,
+		Rectangle: sl.Rectangle,
+		Rect: sl.Rect,
+		Ellipse: sl.Ellipse,
+		Circle: sl.Circle,
+		Line: sl.Line,
+		PolyLine: sl.PolyLine,
+		Image: sl.Image,
+		Text: sl.Text
+	};	
+});
 

@@ -1,8 +1,5 @@
-dojo.provide("dojox.gfx.utils");
-
-dojo.require("dojox.gfx");
-
-(function(){
+define(["dojox/gfx"],function (){
+	dojo.getObject("dojox.gfx.utils", true);
 	var d = dojo, g = dojox.gfx, gu = g.utils;
 
 	dojo.mixin(gu, {
@@ -274,4 +271,5 @@ dojo.require("dojox.gfx");
 			return svg;  //Cleaned SVG text.
 		}
 	});
-})();
+	return gu;
+});

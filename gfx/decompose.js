@@ -1,10 +1,5 @@
-dojo.provide("dojox.gfx.decompose");
-
-dojo.require("dojox.gfx.matrix");
-
-(function(){
+define(["./matrix"],function(){
 	var m = dojox.gfx.matrix;
-
 	function eq(/* Number */ a, /* Number */ b){
 		// summary: compare two FP numbers for equality
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
@@ -96,7 +91,7 @@ dojo.require("dojox.gfx.matrix");
 		return result;	// Object
 	}
 
-	dojox.gfx.decompose = function(matrix){
+	return dojox.gfx.decompose = function(matrix){
 		// summary: decompose a 2D matrix into translation, scaling, and rotation components
 		// description: this function decompose a matrix into four logical components:
 		//	translation, rotation, scaling, and one more rotation using SVD.
@@ -132,4 +127,4 @@ dojo.require("dojox.gfx.matrix");
 		S.yy *= result.sy;
 		return dojo.mixin(result, {sx: S.xx, sy: S.yy});	// Object
 	};
-})();
+});

@@ -1,10 +1,5 @@
-dojo.provide("dojox.gfx.svg");
-
-dojo.require("dojox.gfx._base");
-dojo.require("dojox.gfx.shape");
-dojo.require("dojox.gfx.path");
-
-(function(){
+define(["./_base","./path"], function(){
+	dojo.getObject("dojox.gfx.svg", true);
 	var d = dojo, g = dojox.gfx, gs = g.shape, svg = g.svg;
 	svg.useSvgWeb = (typeof window.svgweb != "undefined");
 	
@@ -825,4 +820,6 @@ else
 		g.switchTo("svg");
 		delete g.loadAndSwitch;
 	}
-})();
+	
+	return svg;
+});

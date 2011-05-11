@@ -1,8 +1,5 @@
-dojo.provide("dojox.gfx.fx");
-
-dojo.require("dojox.gfx.matrix");
-
-(function(){
+define(["./matrix"],function(){
+	dojo.getObject("dojox.gfx.fx", true);
 	var d = dojo, g = dojox.gfx, m = g.matrix;
 
 	// Generic interpolators. Should they be moved to dojox.fx?
@@ -262,4 +259,6 @@ dojo.require("dojox.gfx.matrix");
 		d.connect(anim, "onAnimate", shape, "setTransform");
 		return anim; // dojo.Animation
 	};
-})();
+	
+	return g.fx;
+});

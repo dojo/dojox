@@ -1,8 +1,5 @@
-dojo.provide("dojox.gfx.arc");
-
-dojo.require("dojox.gfx.matrix");
-
-(function(){
+define(["./matrix"],function(matrix){
+	dojo.getObject("dojox.gfx.arc", true);
 	var m = dojox.gfx.matrix,
 		twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,
 		pi48 = pi4 + pi8, curvePI4 = unitArcAsBezier(pi8);
@@ -116,4 +113,5 @@ dojo.require("dojox.gfx.matrix");
 			return result;	// Array
 		}
 	};
-})();
+	return dojox.gfx.arc;
+});

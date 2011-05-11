@@ -1,10 +1,7 @@
-dojo.provide("dojox.gfx.gradutils");
-
-dojo.require("dojox.gfx.matrix");
-
 // Various generic utilities to deal with a linear gradient
 
-(function(){
+define(["./matrix"],function(){
+	dojo.getObject("dojox.gfx.gradutils", true);
 	var d = dojo, m = dojox.gfx.matrix, C = d.Color;
 	
 	function findColor(o, c){
@@ -88,4 +85,5 @@ dojo.require("dojox.gfx.matrix");
 		}
 		return fill;	// Object
 	};
-})();
+	return dojox.gfx.gradutils;
+});

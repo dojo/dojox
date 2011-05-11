@@ -1,10 +1,6 @@
-dojo.provide('dojox.gfx.canvasWithEvents');
-
-dojo.require('dojox.gfx.canvas');
-
-dojo.experimental("dojox.gfx.canvasWithEvents");
-
-(function(){
+define(["./canvas"],function(){
+	dojo.getObject("dojox.gfx.canvasWithEvents", true);
+	dojo.experimental("dojox.gfx.canvasWithEvents");
 	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas, canvasevent=g.canvasWithEvents,m = g.matrix;
 	
 	d.declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
@@ -632,4 +628,5 @@ dojo.experimental("dojox.gfx.canvasWithEvents");
 		delete g.loadAndSwitch;
 	}
 	
-})();
+	return dojox.gfx.canvasWithEvents;
+});

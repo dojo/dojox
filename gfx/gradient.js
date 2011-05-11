@@ -1,10 +1,6 @@
-dojo.provide("dojox.gfx.gradient");
-
-dojo.require("dojox.gfx.matrix");
-
+define(["./matrix"],function(){
 // Various utilities to deal with a linear gradient (mostly VML-specific)
-
-(function(){
+	dojo.getObject("dojox.gfx.gradient", true);
 	var d = dojo, m = dojox.gfx.matrix, C = d.Color;
 	
 	dojox.gfx.gradient.rescale = function(stops, from, to){
@@ -157,4 +153,6 @@ dojo.require("dojox.gfx.matrix");
 			angle: angle
 		};
 	};
-})();
+	
+	return dojox.gfx.gradient;
+});

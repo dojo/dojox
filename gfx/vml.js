@@ -1,12 +1,5 @@
-dojo.provide("dojox.gfx.vml");
-
-dojo.require("dojox.gfx._base");
-dojo.require("dojox.gfx.shape");
-dojo.require("dojox.gfx.path");
-dojo.require("dojox.gfx.arc");
-dojo.require("dojox.gfx.gradient");
-
-(function(){
+define(["./_base","./shape","./path","./arc","./gradient"],function(){
+	dojo.getObject("dojox.gfx.vml", true);
 	var d = dojo, g = dojox.gfx, m = g.matrix, gs = g.shape, vml = g.vml;
 
 	// dojox.gfx.vml.xmlns: String: a VML's namespace
@@ -1223,4 +1216,20 @@ dojo.require("dojox.gfx.gradient");
 		g.switchTo("vml");
 		delete g.loadAndSwitch;
 	}
-})();
+	return { // our hash of newly defined api
+		Shape: vml.Shape,
+		Container: vml.Container,
+		Group: vml.Group,
+		Surface: vml.Surface,
+		Point: vml.Point,
+		Rectangle: vml.Rectangle,
+		Rect: vml.Rect,
+		Ellipse: vml.Ellipse,
+		Circle: vml.Circle,
+		Line: vml.Line,
+		PolyLine: vml.PolyLine,
+		Image: vml.Image,
+		Text: vml.Text
+	};	
+
+});

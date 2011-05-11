@@ -1,9 +1,4 @@
-dojo.provide("dojox.gfx.VectorText");
-dojo.require("dojox.gfx");
-dojo.require("dojox.xml.DomParser");
-dojo.require("dojox.html.metrics");
-
-(function(){
+define(["dojox/gfx","dojox/xml/DomParser","dojox/html/metrics"],function (){
 	/*
 		dojox.gfx.VectorText
 		An implementation of the SVG Font 1.1 spec, using dojox.gfx.
@@ -32,6 +27,7 @@ dojo.require("dojox.html.metrics");
 
 		Note that this will only render IF and WHEN you set the font.
 	 */
+	dojo.getObject("dojox.gfx.VectorText", true);
 	dojo.mixin(dojox.gfx, {
 		vectorFontFitting: {
 			NONE: 0,	//	render text according to passed size.
@@ -56,7 +52,7 @@ dojo.require("dojox.html.metrics");
 		}
 	});
 
-	dojo.declare("dojox.gfx.VectorFont", null, {
+	return dojo.declare("dojox.gfx.VectorFont", null, {  // EARLY RETURN
 		_entityRe: /&(quot|apos|lt|gt|amp|#x[^;]+|#\d+);/g,
 		_decodeEntitySequence: function(str){
 			//	unescape the unicode sequences
@@ -774,4 +770,4 @@ dojo.require("dojox.html.metrics");
 		return this.createObject(dojox.gfx.VectorText, text);
 	}
 */
-})();
+});

@@ -1,10 +1,10 @@
-dojo.provide("dojox.gfx.canvas_attach");
+define(["dojox/gfx/canvas"],function(){
+	dojo.getObject("dojox.gfx.canvas_attach", true);
 
-dojo.require("dojox.gfx.canvas");
+	dojo.experimental("dojox.gfx.canvas_attach");
 
-dojo.experimental("dojox.gfx.canvas_attach");
-
-// not implemented
-dojox.gfx.canvas.attachSurface = dojox.gfx.canvas.attachNode = function(){
-	return null;	// for now
-};
+	// not implemented
+	return dojox.gfx.canvas.attachSurface = dojox.gfx.canvas.attachNode = function(){
+		return null;	// for now
+	}
+});
