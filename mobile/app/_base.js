@@ -55,7 +55,7 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 			}else if (resource.module) {
 				url= dojo.moduleUrl(resource.module)+".js";
 			}else {
-				alert("Error: invalid JavaScript resource " + dojo.toJson(resource));
+				console.log("Error: invalid JavaScript resource " + dojo.toJson(resource));
 				return;
 			}
 		}while (resources.length > 0 && loadedResources[url]);
@@ -79,7 +79,7 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 			}
 		},
 		function(){
-			alert("Failed to load resource " + url);
+			console.log("Failed to load resource " + url);
 		});
 	}
 

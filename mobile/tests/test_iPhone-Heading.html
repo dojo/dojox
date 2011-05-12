@@ -20,7 +20,7 @@
 			dojo.addOnLoad(function(){
 				var btn1 = dijit.byId("btn1");
 				btn1.connect(btn1.domNode, "onclick", function(){
-					alert(this.label + " button was clicked");
+					console.log(this.label + " button was clicked");
 				});
 			});
 		</script>
@@ -35,7 +35,7 @@
 
 		<h1 dojoType="dojox.mobile.Heading" label="World Clock">
 			<div id="btn1" dojoType="dojox.mobile.ToolBarButton" style="padding: 0px 14px">Edit</div>
-			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" style="float:right;" onclick="alert('+ was clicked')"></div>
+			<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" style="float:right;" onclick="console.log('+ was clicked')"></div>
 
 		</h1><br>
 

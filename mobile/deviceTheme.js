@@ -95,7 +95,7 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 
 	dojox.mobile.loadDeviceTheme = function(){
 		var t = dojo.config["mblThemeFiles"] || dojox.mobile.themeFiles || ["@theme"];
-		if(!dojo.isArray(t)){ alert("loadDeviceTheme: array is expected but found: "+t); }
+		if(!dojo.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
 		var i, j;
 		var m = dojox.mobile.themeMap;
 		var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;

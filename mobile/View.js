@@ -185,7 +185,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			var fromNode = this.domNode;
 			var fromTop = fromNode.offsetTop;
 			toNode = this.toNode = dojo.byId(toNode);
-			if(!toNode){ alert("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
+			if(!toNode){ console.log("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
 			toNode.style.visibility = "hidden";
 			toNode.style.display = "";
 			var toWidget = dijit.byNode(toNode);

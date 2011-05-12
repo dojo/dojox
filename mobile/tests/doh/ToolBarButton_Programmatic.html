@@ -24,7 +24,7 @@
 				view.addChild(demoWidget);
 				var childWidget = new dojox.mobile.ToolBarButton({id:"btn1", label:"Edit", style:{padding:"0px 14px"}});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({class:"mblDomButton mblDomButtonPlus_2", style:"float:right;", onclick:"alert('+ was clicked')"});
+				childWidget = new dojox.mobile.ToolBarButton({class:"mblDomButton mblDomButtonPlus_2", style:"float:right;", onclick:"console.log('+ was clicked')"});
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading({label:"Alarm Clock"});

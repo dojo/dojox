@@ -28,13 +28,13 @@
 				setIconValue("item42", "3");
 				dojo.forEach(dijit.byId("list1").getChildren(), function(w){
 					dojo.connect(w.iconNode, "onclick", w, function(e){
-						alert(this);
+						console.log(this);
 						dijit.byId("list1").removeChild(this);
 					});
 				});
 				dojo.forEach(dijit.byId("list5").getChildren(), function(w){
 					dojo.connect(w.iconNode, "onclick", w, function(e){
-						alert(this);
+						console.log(this);
 						dijit.byId("list5").removeChild(this);
 					});
 				});

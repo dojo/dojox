@@ -84,7 +84,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 								}));
 								xhr.addErrback(function(error){
 									prog.stop();
-									alert("Failed to load "+evt.detail.url+"\n"+(error.description||error));
+									console.log("Failed to load "+evt.detail.url+"\n"+(error.description||error));
 								});
 							}));
 							return;
@@ -116,7 +116,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 			var container = dojo.create("DIV",{innerHTML: text});
 				view = container.firstChild; // <div dojoType="dojox.mobile.View">
 				if(!view && view.nodeType != 1){
-					alert("dojox.mobile._ItemBase#transitionTo: invalid view content");
+					console.log("dojox.mobile._ItemBase#transitionTo: invalid view content");
 					return;
 				}
 				view.style.visibility = "hidden";
