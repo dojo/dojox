@@ -311,8 +311,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		dx = Math.abs(dx);
 		dy = Math.abs(dy);
 		if(this._time.length == 1){ // the first TouchMove after TouchStart
-			if(this._v && dx >= this.threshold && dx >= dy ||
-				(this._h || this._f) && dy >= this.threshold && dy >= dx){
+			if(this._v && !this._h && dx >= this.threshold && dx >= dy ||
+				(this._h || this._f) && !this._v && dy >= this.threshold && dy >= dx){
 				this._locked = true;
 				return;
 			}
