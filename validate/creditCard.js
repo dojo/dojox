@@ -1,4 +1,4 @@
-dojo.provide("dojox.validate.creditCard");
+define(["dojo/_base/lang", "./_base"], function(dojo, validate){
 /*=====
 
 	dojox.validate.creditCard = {
@@ -8,7 +8,6 @@ dojo.provide("dojox.validate.creditCard");
 	};
 	
 =====*/
-dojo.require("dojox.validate._base");
 
 dojox.validate._cardInfo = {
 	// summary: A dictionary list of credit card abbreviations
@@ -43,7 +42,7 @@ dojox.validate._cardInfo = {
 	'di':'6011[0-9]{12}',
 	'jcb':'(?:3[0-9]{15}|(2131|1800)[0-9]{11})',
 	'er':'2(?:014|149)[0-9]{11}'
-}
+};
 
 dojox.validate.isValidCreditCard = function(value, ccType){
 	// summary: Validate a credit card number by type with Luhn checking.
@@ -64,9 +63,9 @@ dojox.validate.isValidCreditCard = function(value, ccType){
 	// |		console.log('inconceivable');
 	// |	}
 	
-	return ((ccType.toLowerCase() == 'er' || dojox.validate.isValidLuhn(value)) &&
-			dojox.validate.isValidCreditCardNumber(value, ccType.toLowerCase())); // Boolean
-}
+	return ((ccType.toLowerCase() == 'er' || validate.isValidLuhn(value)) &&
+			validate.isValidCreditCardNumber(value, ccType.toLowerCase())); // Boolean
+};
 
 dojox.validate.isValidCreditCardNumber = function(value, ccType){
 	// summary:
@@ -82,7 +81,7 @@ dojox.validate.isValidCreditCardNumber = function(value, ccType){
 
 	value = String(value).replace(/[- ]/g,''); //ignore dashes and whitespaces
 
-	var cardinfo = dojox.validate._cardInfo, results = [];
+	var cardinfo = validate._cardInfo, results = [];
 	if(ccType){
 		var expr = '^' + cardinfo[ccType.toLowerCase()] + '$';
 		return expr ? !!value.match(expr) : false; // boolean
@@ -94,7 +93,7 @@ dojox.validate.isValidCreditCardNumber = function(value, ccType){
 		}
 	}
 	return results.length ? results.join('|') : false; // String | boolean
-}
+};
 
 dojox.validate.isValidCvv = function(/* String|Int */value, /* String */ccType) {
 	// summary:
@@ -120,5 +119,8 @@ dojox.validate.isValidCvv = function(/* String|Int */value, /* String */ccType) 
 			break;
 	}
 	
-	return !!format && value.length && dojox.validate.isNumberFormat(value, { format: format }); // Boolean
-}
+	return !!format && value.length && validate.isNumberFormat(value, { format: format }); // Boolean
+};
+
+return dojox.validate;
+});

@@ -1,9 +1,12 @@
-dojo.provide("dojox.validate._base");
-dojo.experimental("dojox.validate");
+// AMD-ID "dojox/validate/_base"
+define([
+	"dojo/_base/lang",
+	"dojo/regexp", // dojo core expressions
+	"dojo/number", // dojo number expressions
+	"./regexp" // additional expressions
+], function(dojo, regexp, number, xregexp) {
 
-dojo.require("dojo.regexp");		// dojo core expressions
-dojo.require("dojo.number");		// dojo number expressions
-dojo.require("dojox.validate.regexp"); 	// additional expressions
+dojo.getObject("validate", true, dojox);
 
 dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
 	// summary:
@@ -28,7 +31,7 @@ dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
 	
 	return true; // Boolean
 
-}
+};
 
 dojox.validate._isInRangeCache = {};
 dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
@@ -42,7 +45,7 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	//    flags.min  A number, which the value must be greater than or equal to for the validation to be true.
 	//    flags.decimal  The character used for the decimal point.  Default is ".".
 	
-	value = dojo.number.parse(value, flags);
+	value = number.parse(value, flags);
 	if(isNaN(value)){
 		return false; // Boolean
 	}
@@ -63,7 +66,7 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	cache[cacheIdx] = !(value < min || value > max);
 	return cache[cacheIdx]; // Boolean
 
-}
+};
 
 dojox.validate.isNumberFormat = function(/* String */value, /* Object? */flags){
 	// summary: Validates any sort of number based format
@@ -103,9 +106,9 @@ dojox.validate.isNumberFormat = function(/* String */value, /* Object? */flags){
 	// |	});
 	//
 
-	var re = new RegExp("^" + dojox.validate.regexp.numberFormat(flags) + "$", "i");
+	var re = new RegExp("^" + xregexp.numberFormat(flags) + "$", "i");
 	return re.test(value); // Boolean
-}
+};
 
 dojox.validate.isValidLuhn = function(/* String */value){
 	// summary: Validate a String value against the Luhn algorithm.
@@ -131,5 +134,8 @@ dojox.validate.isValidLuhn = function(/* String */value){
 		sum += curDigit;
 	}
 	return !(sum % 10); // Boolean
-}
+};
 
+return dojox.validate;
+
+});

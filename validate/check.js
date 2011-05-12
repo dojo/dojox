@@ -1,6 +1,5 @@
-dojo.provide("dojox.validate.check");
-dojo.experimental
-dojo.require("dojox.validate._base");
+define(["dojo/_base/lang", "./_base"], function(dojo, validate){
+dojo.experimental("dojox.validate.check");
 
 /**
 	FIXME: How much does this overlap with dojox.form.Manager and friends?
@@ -69,7 +68,7 @@ dojo.require("dojox.validate._base");
 
 */
 
-dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
+validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 	// summary: validates user input of an HTML form based on input profile
 	//
 	// description:
@@ -257,13 +256,13 @@ dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 				// handle nested arrays for multiple constraints
 				if(dojo.isArray(profile.constraints[name][0])){
 					for (var i=0; i<profile.constraints[name].length; i++){
-						isValid = dojox.validate.evaluateConstraint(profile, profile.constraints[name][i], name, elem);
+						isValid = validate.evaluateConstraint(profile, profile.constraints[name][i], name, elem);
 						if(!isValid){ break; }
 					}
 				}else{
 					// case 2: constraint value is array, first elem is function,
 					// tail is parameters
-					isValid = dojox.validate.evaluateConstraint(profile, profile.constraints[name], name, elem);
+					isValid = validate.evaluateConstraint(profile, profile.constraints[name], name, elem);
 				}
 			}
 			
@@ -293,7 +292,7 @@ dojox.validate.check = function(/*HTMLFormElement*/form, /*Object*/profile){
 };
 
 //TODO: evaluateConstraint doesn't use profile or fieldName args?
-dojox.validate.evaluateConstraint=function(profile, /*Array*/constraint, fieldName, elem){
+validate.evaluateConstraint=function(profile, /*Array*/constraint, fieldName, elem){
 	// summary:
 	//	Evaluates dojo.validate.check() constraints that are specified as array
 	//	arguments
@@ -321,4 +320,7 @@ dojox.validate.evaluateConstraint=function(profile, /*Array*/constraint, fieldNa
 		return isValidSomething.apply(null, params);
 	}
 	return false; // Boolean
-}
+};
+
+return validate.check;
+});

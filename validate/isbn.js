@@ -1,4 +1,4 @@
-dojo.provide("dojox.validate.isbn");
+define(["dojo/_base/lang", "./_base"], function(dojo, validate){
 // summary: Provides ISBN validation functions in `dojox.validate`
 //
 dojox.validate.isValidIsbn = function(/* String */value) {
@@ -35,4 +35,7 @@ dojox.validate.isValidIsbn = function(/* String */value) {
 			break;
 	}
 	return false;
-}
+};
+
+return dojox.validate.isValidIsbn;
+});
