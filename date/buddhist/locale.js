@@ -1,12 +1,8 @@
-dojo.provide("dojox.date.buddhist.locale");
-dojo.experimental("dojox.date.buddhist.locale");
+define(["dojo/_base/kernel", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "dojo/i18n!dojo/cldr/nls/buddhist"],
+	function(d, dd, i18n, regexp, string, buddhistDate){
 
-dojo.require("dojox.date.buddhist.Date");
-dojo.require("dojo.regexp");
-dojo.require("dojo.string");
-dojo.require("dojo.i18n");
-
-dojo.requireLocalization("dojo.cldr", "buddhist");
+	dojo.getObject("date.buddhist.locale", true, dojox);
+	dojo.experimental("dojox.date.buddhist.locale");
 
 (function(){
 	// Format a pattern without literals
@@ -90,8 +86,8 @@ dojo.requireLocalization("dojo.cldr", "buddhist");
 					var offset = dateObject.toGregorian().getTimezoneOffset();
 					var tz = [
 						(offset <= 0 ? "+" : "-"),
-						dojo.string.pad(Math.floor(Math.abs(offset) / 60), 2),
-						dojo.string.pad(Math.abs(offset) % 60, 2)
+						string.pad(Math.floor(Math.abs(offset) / 60), 2),
+						string.pad(Math.abs(offset) % 60, 2)
 					];
 					if(l == 4){
 						tz.splice(0, 0, "GMT");
@@ -102,7 +98,7 @@ dojo.requireLocalization("dojo.cldr", "buddhist");
 				default:
 					throw new Error("dojox.date.buddhist.locale.formatPattern: invalid pattern char: "+pattern);
 			}
-			if(pad){ s = dojo.string.pad(s, l); }
+			if(pad){ s = string.pad(s, l); }
 			return s;
 		});
 	}
@@ -113,7 +109,7 @@ dojox.date.buddhist.locale.format = function(/*buddhist.Date*/dateObject, /*obje
 	//		Format a Date object as a String, using  settings.
 	options = options || {};
 
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 	var formatLength = options.formatLength || 'short';
 	var bundle = dojox.date.buddhist.locale._getBuddhistBundle(locale);
 	var str = [];
@@ -147,7 +143,7 @@ dojox.date.buddhist.locale._parseInfo = function(/*oblect?*/options){
 /* based on and similar to dojo.date.locale._parseInfo */
 
 	options = options || {};
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 	var bundle = dojox.date.buddhist.locale._getBuddhistBundle(locale);
 	var formatLength = options.formatLength || 'short';
 	var datePattern = options.datePattern || bundle["dateFormat-" + formatLength];
@@ -184,7 +180,7 @@ dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 	
 	var match = re.exec(value);
 
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 
 	if(!match){
 		console.debug("dojox.date.buddhist.locale.parse: value  "+value+" doesn't match pattern   " + re);
@@ -274,7 +270,7 @@ dojox.date.buddhist.locale.parse= function(/*String*/value, /*object?*/options){
 	}else if(amPm === 'a' && hours == 12){
 		result[3] = 0; //12am -> 0
 	}
-	var dateObject = new dojox.date.buddhist.Date(result[0], result[1], result[2], result[3], result[4], result[5], result[6]);
+	var dateObject = new buddhistDate(result[0], result[1], result[2], result[3], result[4], result[5], result[6]);
 	return dateObject;
 };
 
@@ -308,8 +304,8 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 		// based on and similar to dojo.date.locale._buildDateTimeRE
 		//
 	
-	pattern = dojo.regexp.escapeString(pattern);
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	pattern = regexp.escapeString(pattern);
+	var locale = i18n.normalizeLocale(options.locale);
 	
 	return pattern.replace(/([a-z])\1*/ig, function(match){
 
@@ -390,7 +386,7 @@ dojox.date.buddhist.locale.addCustomFormats = function(/*String*/packageName, /*
 dojox.date.buddhist.locale._getBuddhistBundle = function(/*String*/locale){
 	var buddhist = {};
 	dojo.forEach(_customFormats, function(desc){
-		var bundle = dojo.i18n.getLocalization(desc.pkg, desc.name, locale);
+		var bundle = i18n.getLocalization(desc.pkg, desc.name, locale);
 		buddhist = dojo.mixin(buddhist, bundle);
 	}, this);
 	return buddhist; /*Object*/
@@ -416,3 +412,4 @@ dojox.date.buddhist.locale.getNames = function(/*String*/item, /*String*/type, /
 	// return by copy so changes won't be made accidentally to the in-memory model
 	return (label || lookup[props.join('-')]).concat(); /*Array*/
 };
+});

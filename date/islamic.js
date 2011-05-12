@@ -1,8 +1,7 @@
-dojo.provide("dojox.date.islamic");
+define(["dojo/_base/kernel", "dojo/date", "./islamic/Date"], function(d, dd, islamicDate){
+	dojo.getObject("date.islamic", true, dojox);
+	dojo.experimental("dojox.date.islamic");
 
-dojo.require("dojox.date.islamic.Date");
-dojo.require("dojo.date"); // for compare
-	
 // Utility methods to do arithmetic calculations with islamic.Dates
 
 	// added for compat to date
@@ -26,14 +25,14 @@ dojox.date.islamic.compare = function(/*islamic.Date*/date1, /*islamic.Date*/dat
 	//		Compares both "date" and "time" by default.  One of the following:
 	//		"date", "time", "datetime"
 
-	if(date1 instanceof dojox.date.islamic.Date){
+	if(date1 instanceof islamicDate){
 		date1 = date1.toGregorian();
 	}
-	if(date2 instanceof dojox.date.islamic.Date){
+	if(date2 instanceof islamicDate){
 		date2 = date2.toGregorian();
 	}
 	
-	return dojo.date.compare.apply(null, arguments);
+	return dd.compare.apply(null, arguments);
 };
 
 dojox.date.islamic.add = function(/*dojox.date.islamic.Date*/date, /*String*/interval, /*int*/amount){
@@ -49,7 +48,7 @@ dojox.date.islamic.add = function(/*dojox.date.islamic.Date*/date, /*String*/int
 	//	amount:
 	//		How much to add to the date.
 
-	var newIslamDate = new dojox.date.islamic.Date(date);
+	var newIslamDate = new islamicDate(date);
 
 	switch(interval){
 		case "day":
@@ -118,7 +117,7 @@ dojox.date.islamic.difference = function(/*dojox.date.islamic.Date*/date1, /*doj
 	//			"millisecond",  "week", "weekday"
 	//		Defaults to "day".
 
-	date2 = date2 || new dojox.date.islamic.Date();
+	date2 = date2 || new islamicDate();
 	interval = interval || "day";
 	var yearDiff = date1.getFullYear() - date2.getFullYear();
 	var delta = 1; // Integer return value
@@ -141,7 +140,7 @@ dojox.date.islamic.difference = function(/*dojox.date.islamic.Date*/date1, /*doj
 				mod = days % 7;
 				// Mark the date advanced by the number of
 				// round weeks (may be zero)
-				var dtMark = new dojox.date.islamic.Date(date2);
+				var dtMark = new islamicDate(date2);
 				dtMark.setDate(dtMark.getDate()+(weeks*7));
 				var dayMark = dtMark.getDay();
 	
@@ -245,3 +244,5 @@ dojox.date.islamic.difference = function(/*dojox.date.islamic.Date*/date1, /*doj
 	// Round for fractional values and DST leaps
 	return Math.round(delta); // Number (integer)
 };
+return dojox.date.islamic;
+});

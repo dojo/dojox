@@ -1,6 +1,7 @@
-dojo.provide("dojox.date.islamic.Date");
+define(["dojo/_base/kernel", "dojo/date"], function(dojo, dd){
+	dojo.getObject("date.buddhist.Date", true, dojox);
+	dojo.experimental("dojox.date.buddhist.Date");
 
-dojo.require("dojo.date");
 dojo.requireLocalization("dojo.cldr", "islamic");
 
 dojo.declare("dojox.date.islamic.Date", null, {
@@ -354,15 +355,15 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		
 		var tjd = (this._GREGORIAN_EPOCH - 1) + (365 * (year - 1)) + Math.floor((year - 1) / 4)
 				-( Math.floor((year - 1) / 100)) + Math.floor((year - 1) / 400) + Math.floor( (739 / 12)
-				+ ( (dojo.date.isLeapYear(new Date(year,3,1)) ? -1 : -2)) + 1);
+				+ ( (dd.isLeapYear(new Date(year,3,1)) ? -1 : -2)) + 1);
 			
-		var leapadj = ((wjd < tjd ) ? 0 : (dojo.date.isLeapYear(new Date(year,3,1)) ? 1 : 2));
+		var leapadj = ((wjd < tjd ) ? 0 : (dd.isLeapYear(new Date(year,3,1)) ? 1 : 2));
 					
 		var month = Math.floor((((yearday + leapadj) * 12) + 373) / 367);
 		var tjd2 = (this._GREGORIAN_EPOCH - 1) + (365 * (year - 1))
 					+ Math.floor((year - 1) / 4) - (Math.floor((year - 1) / 100))
 					+ Math.floor((year - 1) / 400) + Math.floor((((367 * month) - 362) / 12)
-					+ ((month <= 2) ? 0 : (dojo.date.isLeapYear(new Date(year,month,1)) ? -1 : -2)) + 1);
+					+ ((month <= 2) ? 0 : (dd.isLeapYear(new Date(year,month,1)) ? -1 : -2)) + 1);
 					
 		var day = (wjd - tjd2) + 1;
 
@@ -388,7 +389,7 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		var julianDay = (this._GREGORIAN_EPOCH - 1) + (365 * (gYear - 1)) + Math.floor((gYear - 1) / 4)
 					+ (-Math.floor((gYear - 1) / 100)) + Math.floor((gYear - 1) / 400)
 					+ Math.floor((((367 * (gMonth+1)) - 362) / 12)
-					+ (((gMonth+1) <= 2) ? 0 : (dojo.date.isLeapYear(date) ? -1 : -2)) + gDay);
+					+ (((gMonth+1) <= 2) ? 0 : (dd.isLeapYear(date) ? -1 : -2)) + gDay);
 		julianDay = Math.floor(julianDay) + 0.5;
 
 		var days = julianDay - this._ISLAMIC_EPOCH;
@@ -454,3 +455,5 @@ dojo.declare("dojox.date.islamic.Date", null, {
 dojox.date.islamic.Date.getDaysInIslamicMonth = function(/*dojox.date.islamic.Date*/month){
 	return new dojox.date.islamic.Date().getDaysInIslamicMonth(month.getMonth(),month.getFullYear()); // dojox.date.islamic.Date
 };
+return dojox.date.islamic.Date;
+});

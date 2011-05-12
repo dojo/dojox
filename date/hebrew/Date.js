@@ -1,6 +1,6 @@
-dojo.provide("dojox.date.hebrew.Date");
-
-dojo.require("dojox.date.hebrew.numerals");
+define(["dojo/_base/kernel", "./numerals"], function(dojo, numerals){
+	dojo.getObject("date.hebrew.Date", true, dojox);
+	dojo.experimental("dojox.date.hebrew.Date");
 
 dojo.declare("dojox.date.hebrew.Date", null, {
 	// summary: A Date-like object which implements the Hebrew calendar
@@ -210,7 +210,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		console.log(date1.getDate());
 
 		return (locale || dojo.locale).match(/^he(?:-.+)?$/) ?
-			dojox.date.hebrew.numerals.getDayHebrewLetters(this._date) : this.getDate();
+			numerals.getDayHebrewLetters(this._date) : this.getDate();
 	},
 
 	getMonth: function(){
@@ -700,3 +700,5 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 dojox.date.hebrew.Date.prototype.valueOf = function(){
 	return this.toGregorian().valueOf();
 };
+return dojox.date.hebrew.Date;
+});

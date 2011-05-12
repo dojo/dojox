@@ -1,9 +1,10 @@
-dojo.provide("dojox.date.buddhist.Date");
-dojo.experimental("dojox.date.buddhist.Date");
+define(["dojo/_base/kernel", "dojo/date"], function(dojo, dd){
+	dojo.getObject("date.buddhist.Date", true, dojox);
+	dojo.experimental("dojox.date.buddhist.Date");
 
 dojo.declare("dojox.date.buddhist.Date", null, {
 
-    _date: 0,
+	_date: 0,
 	_month: 0,
 	_year: 0,
 	_hours: 0,
@@ -277,7 +278,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 
 //FIXME: remove this and replace usage with dojox.date.buddhist.getDaysInMonth?
 	_getDaysInMonth: function(/*number*/month, /*number*/ year){
-		return dojo.date.getDaysInMonth(new Date(year-543, month));
+		return dd.getDaysInMonth(new Date(year-543, month));
 	},
 
 	fromGregorian: function(/*Date*/gdate){
@@ -308,3 +309,6 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 dojox.date.buddhist.Date.prototype.valueOf = function(){
 	return this.toGregorian().valueOf();
 };
+
+return dojox.date.buddhist.Date;
+});

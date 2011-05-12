@@ -1,7 +1,6 @@
-dojo.provide("dojox.date.hebrew");
-
-dojo.require("dojox.date.hebrew.Date");
-dojo.require("dojo.date"); // for compare
+define(["dojo/_base/kernel", "dojo/date", "./hebrew/Date"], function(d, dd, hebrewDate){
+	dojo.getObject("date.hebrew", true, dojox);
+	dojo.experimental("dojox.date.hebrew");
 	
 // Utility methods to do arithmetic calculations with hebrew.Dates
 
@@ -26,14 +25,14 @@ dojox.date.hebrew.compare = function(/*hebrew.Date*/dateheb1, /*hebrew.Date*/dat
 	//		Compares both "date" and "time" by default.  One of the following:
 	//		"date", "time", "datetime"
 
-	if(dateheb1 instanceof dojox.date.hebrew.Date){
+	if(dateheb1 instanceof hebrewDate){
 		dateheb1 = dateheb1.toGregorian();
 	}
-	if(dateheb2 instanceof dojox.date.hebrew.Date){
+	if(dateheb2 instanceof hebrewDate){
 		dateheb2 = dateheb2.toGregorian();
 	}
 	
-	return dojo.date.compare.apply(null, arguments);
+	return dd.compare.apply(null, arguments);
 };
 
 
@@ -50,7 +49,7 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 	//	amount:
 	//		How much to add to the date.
 
-	var newHebrDate = new dojox.date.hebrew.Date(date);
+	var newHebrDate = new hebrewDate(date);
 
 	switch(interval){
 		case "day":
@@ -117,7 +116,7 @@ dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox
 	//			"millisecond",  "week", "weekday"
 	//		Defaults to "day".
 
-	date2 = date2 || new dojox.date.hebrew.Date();
+	date2 = date2 || new hebrewDate();
 	interval = interval || "day";
 	var yearDiff = date1.getFullYear() - date2.getFullYear();
 	var delta = 1; // Integer return value
@@ -140,7 +139,7 @@ dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox
 				mod = days % 7;
 				// Mark the date advanced by the number of
 				// round weeks (may be zero)
-				var dtMark = new dojox.date.hebrew.Date(date2);
+				var dtMark = new hebrewDate(date2);
 				dtMark.setDate(dtMark.getDate()+(weeks*7));
 				var dayMark = dtMark.getDay();
 	
@@ -245,3 +244,5 @@ dojox.date.hebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox
 	// Round for fractional values and DST leaps
 	return Math.round(delta); // Number (integer)
 };
+return dojox.date.hebrew;
+});

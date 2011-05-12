@@ -3,6 +3,7 @@ dojo.require("dojox.date.islamic.Date");
 dojo.require("dojox.date.islamic.locale");
 dojo.require("dojox.date.islamic");
 dojo.require("dojo.date");
+dojo.require("dojo.date.locale");
 
 dojo.requireLocalization("dojo.cldr", "gregorian");
 dojo.requireLocalization("dojo.cldr", "islamic");
@@ -14,7 +15,7 @@ tests.register("dojox.date.tests.islamic.Date",
 			// NOTE: we can't set djConfig.extraLocale before bootstrapping unit tests, so directly
 			// load resources here for specific locales:
 
-			name: "date.locale",
+			name: "setup",
 			setUp: function() {
 				var partLocaleList = ["ar","en"];
 
@@ -27,7 +28,7 @@ tests.register("dojox.date.tests.islamic.Date",
 			tearDown: function() {
 				//Clean up bundles that should not exist if
 				//the test is re-run.
-				delete dojo.cldr.nls.islamic;
+			//				delete dojo.cldr.nls.islamic;
 			}
 		},
 		{

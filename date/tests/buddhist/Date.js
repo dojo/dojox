@@ -2,21 +2,22 @@ dojo.provide("dojox.date.tests.buddhist.Date");
 dojo.require("dojox.date.buddhist");
 dojo.require("dojox.date.buddhist.Date");
 dojo.require("dojox.date.buddhist.locale");
+dojo.require("dojo.date.locale");
 
-dojo.requireLocalization("dojo.cldr", "greg");
-dojo.requireLocalization("dojo.cldr", "buddhist");
+//dojo.requireLocalization("dojo.cldr", "gregorian");
+//dojo.requireLocalization("dojo.cldr", "buddhist");
 
 tests.register("dojox.date.tests.buddhist.Date",
 	[
 		{
 			// see tests for dojo.date.locale for setup info
 
-			name: "dojox.date.tests.posix",
+			name: "setup",
 			setUp: function(){
 				var partLocaleList = ["th"];
 
 				dojo.forEach(partLocaleList, function(locale){
-					dojo.requireLocalization("dojo.cldr", "greg", locale);
+					dojo.requireLocalization("dojo.cldr", "gregorian", locale);
 					dojo.requireLocalization("dojo.cldr", "buddhist", locale);
 				});
 			},
@@ -25,8 +26,8 @@ tests.register("dojox.date.tests.buddhist.Date",
 			tearDown: function(){
 				//Clean up bundles that should not exist if
 				//the test is re-run.
-				delete dojo.cldr.nls.greg;
-				delete dojo.cldr.nls.buddhist;
+			//				delete dojo.cldr.nls.greg;
+			//				delete dojo.cldr.nls.buddhist;
 			}
 		},
 		{

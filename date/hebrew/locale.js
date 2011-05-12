@@ -1,12 +1,8 @@
-dojo.provide("dojox.date.hebrew.locale");
+define(["dojo/_base/kernel", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "./numerals", "dojo/i18n!dojo/cldr/nls/hebrew"],
+       function(d, dd, i18n, regexp, string, hebrewDate, numerals){
 
-
-dojo.require("dojox.date.hebrew.Date");
-dojo.require("dojox.date.hebrew.numerals");
-dojo.require("dojo.regexp");
-dojo.require("dojo.string");
-dojo.require("dojo.i18n");
-
+	dojo.getObject("date.hebrew.locale", true, dojox);
+	dojo.experimental("dojox.date.hebrew.locale");
 
 //Load the bundles containing localization information for
 // names and formats
@@ -25,7 +21,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 			switch(c){
 				case 'y':
 					if(locale.match(/^he(?:-.+)?$/)){
-						s = dojox.date.hebrew.numerals.getYearHebrewLetters(dateObject.getFullYear());
+						s = numerals.getYearHebrewLetters(dateObject.getFullYear());
 					}else{
 						s = String(dateObject.getFullYear());
 					}
@@ -35,7 +31,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 					if(l<3){
 						if(!dateObject.isLeapYear(dateObject.getFullYear()) && m>5){m--;}
 						if(locale.match(/^he(?:-.+)?$/)){
-							s = dojox.date.hebrew.numerals.getMonthHebrewLetters(m);
+							s = numerals.getMonthHebrewLetters(m);
 						}else{
 							s = m+1; pad = true;
 						}
@@ -101,7 +97,7 @@ dojo.requireLocalization("dojo.cldr", "hebrew");
 				default:
 					throw new Error("dojox.date.hebrew.locale.formatPattern: invalid pattern char: "+pattern);
 			}
-			if(pad){ s = dojo.string.pad(s, l); }
+			if(pad){ s = string.pad(s, l); }
 			return s;
 		});
 	}
@@ -123,7 +119,7 @@ dojox.date.hebrew.locale.format = function(/*hebrew.Date*/dateObject, /*object?*
 
 	options = options || {};
 
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 	var formatLength = options.formatLength || 'short';
 	var bundle = dojox.date.hebrew.locale._getHebrewBundle(locale);
 	var str = [];
@@ -132,7 +128,7 @@ dojox.date.hebrew.locale.format = function(/*hebrew.Date*/dateObject, /*object?*
 	if(options.selector == "year"){
 		var year = dateObject.getFullYear();
 		return locale.match(/^he(?:-.+)?$/) ?
-			dojox.date.hebrew.numerals.getYearHebrewLetters(year) : year;
+			numerals.getYearHebrewLetters(year) : year;
 	}
 	if(options.selector != "time"){
 		var datePattern = options.datePattern || bundle["dateFormat-"+formatLength];
@@ -159,7 +155,7 @@ dojox.date.hebrew.locale._parseInfo = function(/*oblect?*/options){
 /* based on and similar to dojo.date.locale._parseInfo */
 
 	options = options || {};
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 	var bundle = dojox.date.hebrew.locale._getHebrewBundle(locale);
 
 	var formatLength = options.formatLength || 'short';
@@ -212,7 +208,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 	
 	var match = re.exec(value);
 
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 
 	if(!match){
 		console.debug("dojox.date.hebrew.locale.parse: value  "+value+" doesn't match pattern   " + re);
@@ -233,7 +229,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 		switch(token.charAt(0)){
 			case 'y':
 				if(locale.match(/^he(?:-.+)?$/)){
-					result[0] = dojox.date.hebrew.numerals.parseYearHebrewLetters(v);
+					result[0] = numerals.parseYearHebrewLetters(v);
 				}else{
 					result[0] = Number(v);
 				}
@@ -242,8 +238,8 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 				//if  it is short format, month is one letter or two letter with "geresh"
 				if(l>2){
 					//we do not know here if the year is leap or not
-					var months = dojox.date.hebrew.locale.getNames('months', widthList[l-3], 'format', locale, new dojox.date.hebrew.Date(5769, 1, 1)),
-						leapmonths = dojox.date.hebrew.locale.getNames('months', widthList[l-3], 'format', locale, new dojox.date.hebrew.Date(5768, 1, 1));
+					var months = dojox.date.hebrew.locale.getNames('months', widthList[l-3], 'format', locale, new hebrewDate(5769, 1, 1)),
+						leapmonths = dojox.date.hebrew.locale.getNames('months', widthList[l-3], 'format', locale, new hebrewDate(5768, 1, 1));
 					if(!options.strict){
 						//Tolerate abbreviating period in month part
 						//Case-insensitive comparison
@@ -263,7 +259,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 					mLength = l;
 				}else{
 					if(locale.match(/^he(?:-.+)?$/)){
-						v = dojox.date.hebrew.numerals.parseMonthHebrewLetters(v);
+						v = numerals.parseMonthHebrewLetters(v);
 					}else{
 						v--;
 					}
@@ -275,7 +271,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 				// fallthrough...
 			case 'd':
 				if(locale.match(/^he(?:-.+)?$/)){
-					result[2] = dojox.date.hebrew.numerals.parseDayHebrewLetters(v);
+					result[2] = numerals.parseDayHebrewLetters(v);
 				}else{
 					result[2] = Number(v);
 				}
@@ -324,7 +320,7 @@ dojox.date.hebrew.locale.parse= function(/*String*/value, /*object?*/options){
 	}else if(amPm === 'a' && hours == 12){
 		result[3] = 0; //12am -> 0
 	}
-	var dateObject = new dojox.date.hebrew.Date(result[0], result[1], result[2], result[3], result[4], result[5], result[6]); // hebrew.Date
+	var dateObject = new hebrewDate(result[0], result[1], result[2], result[3], result[4], result[5], result[6]); // hebrew.Date
 	//for non leap year, the index of the short month start from adar should be increased by 1
 	if(mLength < 3 && result[1] >= 5 && !dateObject.isLeapYear(dateObject.getFullYear())){
 		dateObject.setMonth(result[1]+1);
@@ -362,8 +358,8 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 		// based on and similar to dojo.date.locale._buildDateTimeRE
 		//
 	
-	pattern = dojo.regexp.escapeString(pattern);
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	pattern = regexp.escapeString(pattern);
+	var locale = i18n.normalizeLocale(options.locale);
 	
 	return pattern.replace(/([a-z])\1*/ig, function(match){
 
@@ -464,7 +460,7 @@ dojox.date.hebrew.locale.addCustomFormats = function(/*String*/packageName, /*St
 dojox.date.hebrew.locale._getHebrewBundle = function(/*String*/locale){
 	var hebrew = {};
 	dojo.forEach(_customFormats, function(desc){
-		var bundle = dojo.i18n.getLocalization(desc.pkg, desc.name, locale);
+		var bundle = i18n.getLocalization(desc.pkg, desc.name, locale);
 		hebrew = dojo.mixin(hebrew, bundle);
 	}, this);
 	return hebrew; /*Object*/
@@ -488,7 +484,7 @@ dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*S
 	// date:
 	//	required for item=months to determine leap month name
 	//
-	// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he', new dojox.date.hebrew.Date(5768, 2, 12));
+	// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he', new hebrewDate(5768, 2, 12));
 
 	var label,
 		lookup = dojox.date.hebrew.locale._getHebrewBundle(locale),
@@ -518,3 +514,6 @@ dojox.date.hebrew.locale.getNames = function(/*String*/item, /*String*/type, /*S
 
 	return result; /*Array*/
 };
+
+return dojox.date.hebrew.locale;
+});

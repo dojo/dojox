@@ -1,10 +1,8 @@
-dojo.provide("dojox.date.islamic.locale");
+define(["dojo/_base/kernel", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "dojo/i18n!dojo/cldr/nls/islamic"],
+	function(d, dd, i18n, regexp, string, islamicDate){
 
-dojo.require("dojox.date.islamic.Date");
-dojo.require("dojo.regexp");
-dojo.require("dojo.string");
-dojo.require("dojo.i18n");
-dojo.require("dojo.date");
+	dojo.getObject("date.islamic.locale", true, dojox);
+	dojo.experimental("dojox.date.islamic.locale");
 
 dojo.requireLocalization("dojo.cldr", "islamic");
 
@@ -82,7 +80,7 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 					break;
 				case 'z':
 					// We only have one timezone to offer; the one from the browser
-					s = dojo.date.getTimezoneName(dateObject.toGregorian());
+					s = dd.getTimezoneName(dateObject.toGregorian());
 					if(s){ break; }
 					l = 4;
 					// fallthrough... use GMT if tz not available
@@ -90,8 +88,8 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 					var offset = dateObject.toGregorian().getTimezoneOffset();
 					var tz = [
 						(offset <= 0 ? "+" : "-"),
-						dojo.string.pad(Math.floor(Math.abs(offset) / 60), 2),
-						dojo.string.pad(Math.abs(offset) % 60, 2)
+						string.pad(Math.floor(Math.abs(offset) / 60), 2),
+						string.pad(Math.abs(offset) % 60, 2)
 					];
 					if(l == 4){
 						tz.splice(0, 0, "GMT");
@@ -102,7 +100,7 @@ dojo.requireLocalization("dojo.cldr", "islamic");
 				default:
 					throw new Error("dojox.date.islamic.locale.formatPattern: invalid pattern char: "+pattern);
 			}
-			if(pad){ s = dojo.string.pad(s, l); }
+			if(pad){ s = string.pad(s, l); }
 			return s;
 		});
 	}
@@ -113,7 +111,7 @@ dojox.date.islamic.locale.format = function(/*islamic.Date*/dateObject, /*Object
 	//		Format a Date object as a String, using  settings.
 	options = options || {};
 
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 	var formatLength = options.formatLength || 'short';
 	var bundle = dojox.date.islamic.locale._getIslamicBundle(locale);
 	var str = [];
@@ -147,7 +145,7 @@ dojox.date.islamic.locale._parseInfo = function(/*oblect?*/options){
 /* based on and similar to dojo.date.locale._parseInfo */
 
 	options = options || {};
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 	var bundle = dojox.date.islamic.locale._getIslamicBundle(locale);
 	var formatLength = options.formatLength || 'short';
 	var datePattern = options.datePattern || bundle["dateFormat-" + formatLength];
@@ -186,7 +184,7 @@ dojox.date.islamic.locale.parse= function(/*String*/value, /*Object?*/options){
 
 	var match = re.exec(value);
 
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	var locale = i18n.normalizeLocale(options.locale);
 
 	if(!match){
 		console.debug("dojox.date.islamic.locale.parse: value  "+value+" doesn't match pattern   " + re);
@@ -276,7 +274,7 @@ dojox.date.islamic.locale.parse= function(/*String*/value, /*Object?*/options){
 	}else if(amPm === 'a' && hours == 12){
 		result[3] = 0; //12am -> 0
 	}
-	var dateObject = new dojox.date.islamic.Date(result[0], result[1], result[2], result[3], result[4], result[5], result[6]);
+	var dateObject = new islamicDate(result[0], result[1], result[2], result[3], result[4], result[5], result[6]);
 	return dateObject;
 };
 
@@ -310,8 +308,8 @@ function _buildDateTimeRE  (tokens, bundle, options, pattern){
 		// based on and similar to dojo.date.locale._buildDateTimeRE
 		//
 	
-	pattern = dojo.regexp.escapeString(pattern);
-	var locale = dojo.i18n.normalizeLocale(options.locale);
+	pattern = regexp.escapeString(pattern);
+	var locale = i18n.normalizeLocale(options.locale);
 	
 	return pattern.replace(/([a-z])\1*/ig, function(match){
 
@@ -392,7 +390,7 @@ dojox.date.islamic.locale.addCustomFormats = function(/*String*/packageName, /*S
 dojox.date.islamic.locale._getIslamicBundle = function(/*String*/locale){
 	var islamic = {};
 	dojo.forEach(_customFormats, function(desc){
-		var bundle = dojo.i18n.getLocalization(desc.pkg, desc.name, locale);
+		var bundle = i18n.getLocalization(desc.pkg, desc.name, locale);
 		islamic = dojo.mixin(islamic, bundle);
 	}, this);
 	return islamic; /*Object*/
@@ -423,3 +421,6 @@ dojox.date.islamic.locale.getNames = function(/*String*/item, /*String*/type, /*
 dojox.date.islamic.locale.weekDays = dojox.date.islamic.locale.getNames('days', 'wide', 'format');
 
 dojox.date.islamic.locale.months = dojox.date.islamic.locale.getNames('months', 'wide', 'format');
+
+return dojox.date.islamic.locale;
+});
