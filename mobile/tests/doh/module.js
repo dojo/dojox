@@ -34,6 +34,7 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.View", dojo.moduleUrl("dojox.mobile", "tests/doh/View_Programmatic.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.View", dojo.moduleUrl("dojox.mobile", "tests/doh/View2_Programmatic.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.View", dojo.moduleUrl("dojox.mobile", "tests/doh/View3_Programmatic.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.View", dojo.moduleUrl("dojox.mobile", "tests/doh/View-demo.html"),999999);
 }catch(e){
 	doh.debug(e);
 }

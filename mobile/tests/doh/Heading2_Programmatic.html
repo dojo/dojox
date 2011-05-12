@@ -5,7 +5,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Heading</title>
 		<link href="../../themes/android/android.css" rel="stylesheet"></link>
-		<link href="../../themes/domButtons.css" rel="stylesheet"></link>
+		<link href="../../themes/common/domButtons.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -41,23 +41,23 @@
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("dojox_mobile_Heading_0");
 								doh.assertEqual('mblHeading', demoWidget.domNode.className);
-								doh.assertEqual('General', demoWidget.domNode.childNodes[1].nodeValue);
+								doh.assertEqual('General', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Settings', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_1");
 								doh.assertEqual('mblHeading', demoWidget.domNode.className);
-								doh.assertEqual('Test', demoWidget.domNode.childNodes[1].nodeValue);
+								doh.assertEqual('Test', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Go To', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_2");
 								doh.assertEqual('mblHeading', demoWidget.domNode.className);
-								doh.assertEqual('Test', demoWidget.domNode.childNodes[1].nodeValue);
+								doh.assertEqual('Test', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Settings', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_3");
 								doh.assertEqual('mblHeading', demoWidget.domNode.className);
 								doh.assertEqual('2', demoWidget.domNode.childNodes.length);
-								doh.assertEqual('Very Very Long Title May Not Be Displayed in the Narrow Space', demoWidget.domNode.childNodes[1].nodeValue);
+								doh.assertEqual('Very Very Long Title May Not Be Displayed in the Narrow Space', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Long Button', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 							}));
 							return d;
@@ -73,12 +73,12 @@
 							doh.assertEqual("Value Changed", demoWidget.get("back"));
 							doh.assertEqual("bar", demoWidget.get("moveTo"));
 							doh.assertEqual("flip", demoWidget.get("transition"));
-							doh.assertEqual('Value Changed', demoWidget.domNode.childNodes[1].nodeValue);
+							doh.assertEqual('Value Changed', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 							doh.assertEqual('Value Changed', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 							demoWidget = dijit.byId("dojox_mobile_Heading_5");
 							demoWidget.set({transition:"fade"});
-							doh.assertEqual("fade", demoWidget.get("fade"));
+							doh.assertEqual("fade", demoWidget.get("transition"));
 						}
 					},
 					{

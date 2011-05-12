@@ -35,8 +35,8 @@
 							doh.robot.mouseClick({left: true}, 500);
 
 							doh.robot.sequence(d.getTestCallback(function(){
-								doh.assertEqual("mblRightButton mblCheckOnButton", dojo.query(".mblRightButton", dijit.byId("dojox_mobile_ListItem_0").domNode)[0].className);
-								doh.assertEqual("mblRightButton mblCheckOffButton", dojo.query(".mblRightButton", dijit.byId("dojox_mobile_ListItem_1").domNode)[0].className);
+								doh.assertEqual("mblRightButton mblDomButton mblDomButtonCheckboxOn", dojo.query(".mblRightButton", dijit.byId("dojox_mobile_ListItem_0").domNode)[0].className);
+								doh.assertEqual("mblRightButton mblDomButton mblDomButtonCheckboxOff", dojo.query(".mblRightButton", dijit.byId("dojox_mobile_ListItem_1").domNode)[0].className);
 							}), 500);
 							return d;
 						}

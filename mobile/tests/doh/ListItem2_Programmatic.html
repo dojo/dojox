@@ -29,10 +29,10 @@
 				list.addChild(demoWidget);
 
 				list = new dojox.mobile.EdgeToEdgeList({iconBase:"../images/i-icon-all.png"});
-				demoWidget = new dojox.mobile.ListItem({iconPos:"0,87,29,29", btnClass:"mblBluePlusButton", label:"XX Widget"});
+				demoWidget = new dojox.mobile.ListItem({iconPos:"0,87,29,29", btnClass:"mblDomButtonBluePlus", label:"XX Widget"});
 				list.addChild(demoWidget);
 
-				demoWidget = new dojox.mobile.ListItem({iconPos:"0,116,29,29", btnClass:"mblRedMinusButton", label:"YY Widget"});
+				demoWidget = new dojox.mobile.ListItem({iconPos:"0,116,29,29", btnClass:"mblDomButtonRedMinus", label:"YY Widget"});
 				list.addChild(demoWidget);
 
 				view.addChild(list);
@@ -45,13 +45,12 @@
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 
-
 							demoWidget = dijit.byId("dojox_mobile_ListItem_0");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('mblArrow', demoWidget.domNode.childNodes[1].childNodes[1].className);
+							doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
 							doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-79px', demoWidget.domNode.childNodes[0].style.left);
@@ -62,7 +61,7 @@
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('mblArrow', demoWidget.domNode.childNodes[1].childNodes[1].className);
+							doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
 							doh.assertEqual('rect(0px 145px 29px 116px)', demoWidget.domNode.childNodes[0].style.clip);
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-108px', demoWidget.domNode.childNodes[0].style.left);
@@ -71,25 +70,23 @@
 							demoWidget = dijit.byId("dojox_mobile_ListItem_2");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
-							doh.assertEqual('mblListItemAnchor mblListItemAnchorHasRightButton', demoWidget.domNode.childNodes[1].className);
+							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('mblRightButtonContainer', demoWidget.domNode.childNodes[1].childNodes[1].className);
 							doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-79px', demoWidget.domNode.childNodes[0].style.left);
-							doh.assertEqual('mblBluePlusButton mblRightButton', demoWidget.domNode.childNodes[1].childNodes[1].childNodes[0].className);
+							doh.assertEqual('mblDomButtonBluePlus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
 							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_3");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
-							doh.assertEqual('mblListItemAnchor mblListItemAnchorHasRightButton', demoWidget.domNode.childNodes[1].className);
+							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('mblRightButtonContainer', demoWidget.domNode.childNodes[1].childNodes[1].className);
 							doh.assertEqual('rect(0px 145px 29px 116px)', demoWidget.domNode.childNodes[0].style.clip);
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-108px', demoWidget.domNode.childNodes[0].style.left);
-							doh.assertEqual('mblRedMinusButton mblRightButton', demoWidget.domNode.childNodes[1].childNodes[1].childNodes[0].className);
+							doh.assertEqual('mblDomButtonRedMinus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
 							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
 							}));
 							return d;
@@ -102,7 +99,6 @@
 							var demoWidget = dijit.byId("dojox_mobile_RoundRectList_0");
 							demoWidget.set({iconBase :""});
 							doh.assertEqual("", demoWidget.get("iconBase"));
-
 							demoWidget = dijit.byId("dojox_mobile_ListItem_0");
 
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
@@ -114,8 +110,8 @@
 							
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('mblArrow', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) == -1);
+							doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
+							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
 
 							demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
 							demoWidget.set({iconBase :""});
@@ -132,8 +128,8 @@
 							
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('mblArrow', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) == -1);
+							doh.assertEqual('mblDomButtonBluePlus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
+							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
 						}
 					}
 				]);

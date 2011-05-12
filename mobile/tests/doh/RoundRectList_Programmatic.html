@@ -64,9 +64,9 @@
 								childNodes = childNodes[1].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('mblArrow', childNodes[2].className);
+								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
 								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('u1space', childNodes[0].innerHTML);
+								doh.assertEqual('<span>u1space</span>', childNodes[0].innerHTML);
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("item2");
@@ -78,9 +78,9 @@
 								childNodes = childNodes[1].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('mblArrow', childNodes[2].className);
+								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
 								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('u2space', childNodes[0].innerHTML);
+								doh.assertEqual('<span>u2space</span>', childNodes[0].innerHTML);
 								doh.assertEqual('On', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("item3");
@@ -91,10 +91,11 @@
 								childNodes = childNodes[0].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('mblArrow', childNodes[2].className);
-								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('Wi-Fi', childNodes[0].innerHTML);
+								doh.assertEqual('<span>Wi-Fi</span>', childNodes[0].innerHTML);
 								doh.assertEqual('Off', childNodes[1].innerHTML);
+								doh.assertTrue(childNodes[2]);
+								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
+								doh.assertEqual('DIV', childNodes[2].tagName);
 								
 							}));
 							return d;
@@ -126,7 +127,7 @@
 								childNodes = childNodes[0].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('Video', childNodes[0].innerHTML);
+								doh.assertEqual('<span>Video</span>', childNodes[0].innerHTML);
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_1");
@@ -138,7 +139,7 @@
 								childNodes = childNodes[1].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('Maps', childNodes[0].innerHTML);
+								doh.assertEqual('<span>Maps</span>', childNodes[0].innerHTML);
 								doh.assertEqual('VPN', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_2");
@@ -149,7 +150,7 @@
 								childNodes = childNodes[0].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('Phone Number', childNodes[0].innerHTML);
+								doh.assertEqual('<span>Phone Number</span>', childNodes[0].innerHTML);
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 							}));
 							return d;

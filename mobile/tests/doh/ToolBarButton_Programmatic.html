@@ -42,14 +42,14 @@
 						doh.assertEqual('Edit', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_0");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
 						
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_1");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
 						doh.assertEqual('Edit', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_2");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_3");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
@@ -91,7 +91,7 @@
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_12");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
 						if(!dojo.isIE)
-							doh.assertEqual('<img src="../images/a-icon-12.png">', demoWidget.domNode.innerHTML);
+							doh.assertEqual('<img src="../images/a-icon-12.png" alt="">', demoWidget.domNode.innerHTML);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_13");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
@@ -104,27 +104,27 @@
 						doh.assertEqual('0px', demoWidget.domNode.childNodes[0].childNodes[0].style.left);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_14");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_15");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonSearch_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonSearch_2', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_16");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonPlus_2', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_17");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
 						if(!dojo.isIE)
-							doh.assertEqual('<img src="../images/tab-icon-15h.png">', demoWidget.domNode.innerHTML);
+							doh.assertEqual('<img src="../images/tab-icon-15h.png" alt="">', demoWidget.domNode.innerHTML);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_18");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonSearch_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonSearch_2', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_19");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonUpArrow_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonUpArrow_2', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_20");
-						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonDownArrow_2', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblToolbarButtonDomButton mblDomButton mblDomButtonDownArrow_2', demoWidget.domNode.className);
 					}
 				]);
 				doh.run();

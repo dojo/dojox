@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Progress Indicator</title>
-		<link href="../themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../themes/iphone/base.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -27,7 +27,7 @@
 					function test_RoundRectList_Verification(){
 						var demoWidget = dijit.byId("home");
 						doh.assertEqual('mblProgContainer', demoWidget.containerNode.childNodes[0].className);
-						doh.assertEqual(12, demoWidget.containerNode.childNodes[0].childNodes.length);
+						doh.assertEqual(12, demoWidget.containerNode.childNodes[0].childNodes[0].childNodes.length);
 
 					}
 				]);

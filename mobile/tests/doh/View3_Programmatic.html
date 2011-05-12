@@ -121,10 +121,9 @@
 					runTest: function(){
 						var d = new doh.Deferred();
 						setTimeout(d.getTestCallback(function(){
-							demoWidget = dijit.byId("dojox_mobile_ScrollableView_0");
-							demoWidget.set({scrollDir:"hv"});
-							doh.assertEqual('hv', demoWidget.get("scrollDir"));
-							doh.assertEqual('mblView mblScrollableView', demoWidget.domNode.className);
+							demoWidget = dijit.byId("foo");
+							doh.assertEqual('f', demoWidget.get("scrollDir"));
+							doh.assertEqual('mblView mblSwapView', demoWidget.domNode.className);
 							doh.assertEqual('', demoWidget.domNode.style.display);
 						}));
 						return d;
