@@ -5,7 +5,6 @@
 @import url("../common/FixedSplitter.css");
 @import url("../common/SpinWheel.css");
 @import url("../common/transitions.css");
-@import url("../common/Opener.css");
 
 /* widget styles */
 @import url("Button.css");
@@ -13,6 +12,7 @@
 @import url("CheckBox.css");
 @import url("ComboBox.css");
 @import url("IconContainer.css");
+@import url("Opener.css");
 @import url("PageIndicator.css");
 @import url("RadioButton.css");
 @import url("Slider.css");

@@ -32,8 +32,8 @@
   position: absolute;
   top: 11px;
   left: 8px;
-  width: 19px;
-  height: 19px;
+  width: 20px;
+  height: 20px;
   border: 1px solid #3A4655;
   -webkit-transform: scale(0.8, 1) rotate(45deg);
   background-image: -webkit-gradient(linear, left top, right bottom, from(#8ea4c1), to(#4a6c9b), color-stop(0.5, #5877a2), color-stop(0.5, #476999));
@@ -44,7 +44,7 @@
   -webkit-tap-highlight-color: transparent;
   top: 6px;
   left: 19px;
-  padding: 0px 10px 0px 3px;
+  padding: 0px 10px 0px 4px;
   height: 29px;
   border-width: 1px 1px 1px 0px;
   border-style: inset;
@@ -62,11 +62,11 @@
   position: absolute;
   top: 6px;
   left: 19px;
-  width: 4px;
+  width: 3px;
   height: 29px;
-  border-width: 1px 0px 1px 0px;
+  border-width: 1px 1px 1px 0px;
   border-style: inset;
-  border-color: #9CACC0;
+  border-color: #9CACC0 transparent;
   background-color: #5877A2;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#8ea4c1), to(#4a6c9b), color-stop(0.5, #5877a2), color-stop(0.5, #476999));
 }

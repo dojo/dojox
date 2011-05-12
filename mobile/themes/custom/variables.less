@@ -842,3 +842,74 @@
 	border-color: grey;
 	background-color: @theme-ui-widget-disabled-background-color;
 }
+
+// Overlay.less
+.mblOverlay-styles () {
+	background-color: @theme-default-background-color;
+	._background-image-gradient-mask-ui-widget;
+}
+
+// Tooltip.less
+.mblTooltip-styles () {
+	padding: @theme-default-padding;
+	border: @theme-heading-border-color 1px solid;
+	background-color: @theme-heading-background-color;
+	._background-image-gradient-mask-ui-widget;
+	-webkit-border-radius: @theme-default-border-radius;
+	opacity: .97;
+}
+.mblTooltipBubble-styles () {
+	background-color: @theme-heading-background-color;
+	background-image: none;
+}
+.mblTooltipInnerArrow-Bubble-Above-styles () {
+	border-bottom-color: @theme-heading-background-color;
+}
+.mblTooltipInnerArrow-Bubble-Below-styles () {
+	border-top-color: @theme-heading-background-color;
+}
+.mblTooltipInnerArrow-Bubble-After-styles () {
+	border-left-color: @theme-heading-background-color;
+}
+.mblTooltipInnerArrow-Bubble-Before-styles () {
+	border-right-color: @theme-heading-background-color;
+}
+.mblTooltipArrow-styles () {
+	border: 11px solid transparent;
+}
+.mblTooltipArrow-Before-styles () {
+	border-left-width: 0;
+	border-right-color: @theme-heading-border-color;
+}
+.mblTooltipArrow-After-styles () {
+	border-right-width: 0;
+	border-left-color: @theme-heading-border-color;
+}
+.mblTooltipArrow-Above-styles () {
+	border-top-width: 0;
+	border-bottom-color: @theme-heading-border-color;
+}
+.mblTooltipArrow-Below-styles () {
+	border-bottom-width: 0;
+	border-top-color: @theme-heading-border-color;
+}
+.mblTooltipInnerArrow-Before-styles () {
+	border-left-width: 0;
+	border-right-color: @theme-heading-background-color * 0.2 + #ffffff * 0.8;
+}
+.mblTooltipInnerArrow-After-styles () {
+	border-right-width: 0;
+	border-left-color: @theme-heading-background-color * 0.2 + #ffffff * 0.8;
+}
+.mblTooltipInnerArrow-Above-styles () {
+	border-top-width: 0;
+	border-bottom-color: @theme-heading-background-color * 0.0 + #ffffff * 1.0;
+}
+.mblTooltipInnerArrow-Below-styles () {
+	border-bottom-width: 0;
+	border-top-color: @theme-heading-background-color * 0.5 + #ffffff * 0.5;
+}
+.mblTooltip-Heading-styles () {
+}
+.mblTooltip-Heading-ToolbarButton-styles () {
+}

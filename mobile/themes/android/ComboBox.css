@@ -23,6 +23,7 @@
   border: 1px solid black;
   -webkit-border-radius: 0px;
   background-color: white;
+  color: black;
 }
 .mblComboBoxMenuItem {
   white-space: nowrap;

@@ -12,6 +12,7 @@ html.mobile, .mobile body {
   background-color: black;
   font-family: Helvetica;
   font-size: 17px;
+  color: white;
 }
 /* Button Colors */
 .mblColorBlue {

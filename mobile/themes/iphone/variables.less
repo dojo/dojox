@@ -45,8 +45,8 @@
 .mblArrowButtonHead-styles () {
 	top: 11px;
 	left: 8px;
-	width: 19px;
-	height: 19px;
+	width: 20px;
+	height: 20px;
 	border: 1px solid #3A4655;
 	-webkit-transform: scale(.8,1) rotate(45deg);
 	background-image: -webkit-gradient(linear, left top, right bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
@@ -54,7 +54,7 @@
 .mblArrowButtonBody-styles () {
 	top: 6px;
 	left: 19px;
-	padding: 0px 10px 0px 3px;
+	padding: 0px 10px 0px 4px;
 	height: 29px;
 	border-width: 1px 1px 1px 0px;
 	border-style: inset;
@@ -71,11 +71,11 @@
 .mblArrowButtonNeck-styles () {
 	top: 6px;
 	left: 19px;
-	width: 4px;
+	width: 3px;
 	height: 29px;
-	border-width: 1px 0px 1px 0px;
+	border-width: 1px 1px 1px 0px;
 	border-style: inset;
-	border-color: #9CACC0;
+	border-color: #9CACC0 transparent;
 	background-color: #5877A2;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#8EA4C1), to(#4A6C9B), color-stop(0.5, #5877A2), color-stop(0.5, #476999));
 }
@@ -650,3 +650,74 @@
 	background-image: none;
 	color: grey;
 }
+
+// Overlay.less
+.mblOverlay-styles () {
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#CECECE));
+}
+
+// Tooltip.less
+.mblTooltip-styles () {
+	padding: 5px;
+	border: #ADAAAD 1px solid;
+	background-color: #889BB3;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#b0bccd), to(#6d84a2), color-stop(0.1, #889bb3), color-stop(0.1, #8195af));
+	-webkit-border-radius: 8px;
+	opacity: .97;
+}
+.mblTooltipBubble-styles () {
+	background-color: #f9f7ba;
+	background-image: none;
+}
+.mblTooltipInnerArrow-Bubble-Above-styles () {
+	border-bottom-color: #f9f7ba;
+}
+.mblTooltipInnerArrow-Bubble-Below-styles () {
+	border-top-color: #f9f7ba;
+}
+.mblTooltipInnerArrow-Bubble-After-styles () {
+	border-left-color: #f9f7ba;
+}
+.mblTooltipInnerArrow-Bubble-Before-styles () {
+	border-right-color: #f9f7ba;
+}
+.mblTooltipArrow-styles () {
+	border: 11px solid transparent;
+}
+.mblTooltipArrow-Before-styles () {
+	border-left-width: 0;
+	border-right-color: #ADAAAD;
+}
+.mblTooltipArrow-After-styles () {
+	border-right-width: 0;
+	border-left-color: #ADAAAD;
+}
+.mblTooltipArrow-Above-styles () {
+	border-top-width: 0;
+	border-bottom-color: #ADAAAD;
+}
+.mblTooltipArrow-Below-styles () {
+	border-bottom-width: 0;
+	border-top-color: #ADAAAD;
+}
+.mblTooltipInnerArrow-Before-styles () {
+	border-left-width: 0;
+	border-right-color: #6d84a2;
+}
+.mblTooltipInnerArrow-After-styles () {
+	border-right-width: 0;
+	border-left-color: #6d84a2;
+}
+.mblTooltipInnerArrow-Above-styles () {
+	border-top-width: 0;
+	border-bottom-color: #b0bccd;
+}
+.mblTooltipInnerArrow-Below-styles () {
+	border-bottom-width: 0;
+	border-top-color: #6d84a2;
+}
+.mblTooltip-Heading-styles () {
+}
+.mblTooltip-Heading-ToolbarButton-styles () {
+}
+
