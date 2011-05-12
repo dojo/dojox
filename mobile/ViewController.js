@@ -32,11 +32,12 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 			//console.log("onStartTransition:", evt.detail, evt.detail.moveTo, evt.detail.href, evt.detail.scene, evt);
 			evt.preventDefault();
 			if(!evt.detail || (evt.detail && !evt.detail.moveTo && !evt.detail.href && !evt.detail.url && !evt.detail.scene)){ return; }
-			var w = this.findCurrentView(evt.detail.moveTo, (evt.srcElement && evt.srcElement.id)?dijit.byId(evt.srcElement.id):dijit.byId(evt.target)); // the current view widget
+			var w = this.findCurrentView(evt.detail.moveTo, (evt.target && evt.target.id)?dijit.byId(evt.target.id):dijit.byId(evt.target)); // the current view widget
 			if(!w || (evt.detail && evt.detail.moveTo && w === dijit.byId(evt.detail.moveTo))){ return; }
 			if(evt.detail.href){
-				if(dijit.byId(evt.srcElement.id).hrefTarget){
-					dojox.mobile.openWindow(evt.detail.href, evt.srcElement.hrefTarget);
+				var t = dijit.byId(evt.target.id).hrefTarget;
+				if(t){
+					dojox.mobile.openWindow(evt.detail.href, t);
 				}else{
 					w.performTransition(null, evt.detail.transitionDir, evt.detail.transition, evt.target, function(){location.href = evt.detail.href;});
 				}
@@ -96,7 +97,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 					dojox.mobile._viewMap[evt.detail.url] = id;
 				}
 				moveTo = id;
-				w = this.findCurrentView(moveTo,dijit.byId(evt.srcElement.id)) || w; // the current view widget
+				w = this.findCurrentView(moveTo,dijit.byId(evt.target.id)) || w; // the current view widget
 			}
 			w.performTransition(evt.detail.moveTo, evt.detail.transitionDir, evt.detail.transition, null, null);
 		},
