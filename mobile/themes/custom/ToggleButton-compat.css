@@ -1,16 +1,10 @@
 /* dojox.mobile.ToggleButton */
 .mblToggleButton {
-	background-image: url(compat/button-bg.png);
+	background-image: url(compat/ui-widget-bg.png);
 	-moz-border-radius: 5px;
 	-o-border-radius: 5px;
 	-ms-border-radius: 5px;
 	border-radius: 5px;
-}
-.mblToggleButtonSelected {
-	background-image: url(compat/button-sel-bg.png);
-}
-.mblToggleButtonChecked {
-	background-image: url(compat/blue-button-bg.png);
 }
 .mblToggleButton.mblToggleButtonChecked::after,
 .mblToggleButton.mblToggleButtonChecked::after {
@@ -22,7 +16,4 @@
 	-o-transform-origin: 50% 50%;
 	-ms-transform-origin: 50% 50%;
 	transform-origin: 50% 50%;
-}
-.mblToggleButtonChecked.mblToggleButtonSelected {
-	background-image: url(compat/blue-button-sel-bg.png);
 }

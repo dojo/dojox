@@ -18,11 +18,11 @@
 }
 .mblComboBoxMenu {
   overflow-y: hidden !important;
+  position: relative;
+  overflow: hidden;
   border: 1px solid black;
   -webkit-border-radius: 0px;
   background-color: white;
-  overflow: hidden;
-  position: relative;
 }
 .mblComboBoxMenuItem {
   white-space: nowrap;

@@ -1,3 +1,30 @@
+/* dojox.mobile.RoundRectList */
+.mblRoundRectList {
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	border-radius: 5px;
+}
+.mblRoundRectList .mblListItem:first-child {
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-o-border-top-left-radius: 5px;
+	-o-border-top-right-radius: 5px;
+	-ms-border-top-left-radius: 5px;
+	-ms-border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.mblRoundRectList .mblListItem:last-child {
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-o-border-bottom-left-radius: 5px;
+	-o-border-bottom-right-radius: 5px;
+	-ms-border-bottom-left-radius: 5px;
+	-ms-border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
 /* Round Corner */
 .mblRoundCorner {
 	background-color: white;

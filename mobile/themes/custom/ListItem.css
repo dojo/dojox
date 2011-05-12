@@ -15,7 +15,7 @@
   font-family: Helvetica;
   font-weight: normal;
   text-shadow: none;
-  color: theme-list-item-color;
+  color: #131313;
   line-height: 50px;
 }
 .mblListItem.mblVariableHeight {
