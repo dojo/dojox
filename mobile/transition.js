@@ -1,6 +1,6 @@
 define(["dojo/_base/array","dojo/_base/html","dojo/DeferredList"], function(darray, dhtml,DeferredList){
 	return function(from, to, options){
-		var rev = (options && options.reverse) ? " reverse" : "";
+		var rev = (options && options.reverse) ? " mblReverse" : "";
 		if(!options || !options.transition){
 			dojo.style(from,"display","none");
 			dojo.style(to, "display", "");
