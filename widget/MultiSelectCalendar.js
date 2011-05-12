@@ -113,6 +113,7 @@ dojo.declare(
 						this.value[element] = 1;
 					}else{
 						//We have a slash somewhere in the string so this is an ISO date range
+						//TODO: use dojo.date.stamp.fromISOString?
 						var dateA=new this.dateClassObj(element.substr(0,4),parseInt(element.substr(5,2))-1,element.substr(8,2));
 						var dateB=new this.dateClassObj(element.substr(11,4),parseInt(element.substr(16,2))-1,element.substr(19,2));
 						var firstDate, lastDate;
@@ -856,14 +857,14 @@ dojo.declare(
 		var returnDates = [];
 		if(selectedDates.length > 1){
 			//initialisation
-			var weHaveRange = false;
-			var rangeCount = 0;
-			var startRange = null;
-			var lastDayRange = null;
-			var previousDate = new Date(selectedDates[0]+"T00:00:00");
+			var weHaveRange = false,
+				rangeCount = 0,
+				startRange = null,
+				lastDayRange = null,
+				previousDate = dojo.date.stamp.fromISOString(selectedDates[0]);
 			
 			for(var i = 1; i < selectedDates.length+1; i++){
-				currentDate = new Date(selectedDates[i]+"T00:00:00");
+				currentDate = dojo.date.stamp.fromISOString(selectedDates[i]);
 				if(weHaveRange){
 				//We are in the middle of a range				
 					difference = Math.abs(dojo.date.difference(previousDate, currentDate, "day"));
@@ -897,7 +898,7 @@ dojo.declare(
 			//If there's only one selected date we return only it
 				return selectedDates;
 			}
-		},			
+		}
 	}	
 );
 
