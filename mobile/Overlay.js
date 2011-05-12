@@ -12,10 +12,11 @@ define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(
 			//		Scroll the overlay up into view
 			var vp, popupPos;
 			var reposition = dojo.hitch(this, function(){
+				dojo.style(this.domNode, { top: "auto", bottom: "0px" });
 				popupPos = dojo.position(this.domNode);
 				vp = dojo.window.getBox();
 				popupPos.y = vp.t + vp.h - popupPos.h;
-				dojo.style(this.domNode, { top: popupPos.y + "px" });
+				dojo.style(this.domNode, { top: popupPos.y + "px", bottom: "auto" });
 			});
 			reposition();
 			if(aroundNode){
