@@ -143,6 +143,7 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent
 		},
 	
 		_setIconAttr: function(icon){
+			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
 			this.icon = icon;
 			var a = this.anchorNode;
 			if(this.icon && this.icon.indexOf("mblDomButton") === 0){

@@ -230,6 +230,7 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 		},
 	
 		_setIconAttr: function(icon){
+			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
 			this.icon = icon;
 			this.iconNode.src = icon;
 			this.iconNode.alt = this.alt;

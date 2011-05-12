@@ -18,8 +18,16 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 			var parent = this.getParent();
 			if(parent){
 				if(!this.transition){ this.transition = parent.transition; }
+				if(this.icon1 && parent.iconBase &&
+					parent.iconBase.charAt(parent.iconBase.length - 1) === '/'){
+					this.icon1 = parent.iconBase + this.icon1;
+				}
 				if(!this.icon1){ this.icon1 = parent.iconBase; }
 				if(!this.iconPos1){ this.iconPos1 = parent.iconPos; }
+				if(this.icon2 && parent.iconBase &&
+					parent.iconBase.charAt(parent.iconBase.length - 1) === '/'){
+					this.icon2 = parent.iconBase + this.icon2;
+				}
 				if(!this.icon2){ this.icon2 = parent.iconBase || this.icon1; }
 				if(!this.iconPos2){ this.iconPos2 = parent.iconPos || this.iconPos1; }
 			}

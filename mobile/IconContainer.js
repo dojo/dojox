@@ -24,23 +24,17 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 		},
 
 		_setupSubNodes: function(ul){
-			var len = this.domNode.childNodes.length - 1, // -1 for terminator
-				i, child, w;
-			for(i = 0; i < len; i++){
-				child = this.domNode.childNodes[i];
-				if(child.nodeType != 1){ continue; }
-				w = dijit.byNode(child);
+			dojo.forEach(this.getChildren(), function(w){
 				if(this.single){
 					w.subNode.firstChild.style.display = "none";
 				}
 				ul.appendChild(w.subNode);
-			}
+			});
 		},
 
 		startup: function(){
 			if(this._started){ return; }
-			var ul;
-			if(this.transition == "below"){
+			if(this.transition === "below"){
 				this._setupSubNodes(this.domNode);
 			}else{
 				var view = new dojox.mobile.View({id:this.id+"_mblApplView"});
@@ -55,7 +49,7 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 									moveTo: this.domNode.parentNode.id,
 									transition: this.transition});
 				view.addChild(heading);
-				ul = dojo.doc.createElement("UL");
+				var ul = dojo.doc.createElement("UL");
 				ul.className = "mblIconContainer";
 				ul.style.marginTop = "0px";
 				this._setupSubNodes(ul);
@@ -69,19 +63,19 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 		closeAll: function(){
 			var len = this.domNode.childNodes.length, child, w;
 			for(var i = 0; i < len; i++){
-				child = this.domNode.childNodes[i];
-				if(child.nodeType != 1){ continue; }
-				if(child == this._terminator){ break; }
-				w = dijit.byNode(child);
+				var child = this.domNode.childNodes[i];
+				if(child.nodeType !== 1){ continue; }
+				if(child === this._terminator){ break; }
+				var w = dijit.byNode(child);
 				w.containerNode.parentNode.style.display = "none";
 				w.setOpacity(w.iconNode, 1);
 			}
 		},
-	
+
 		addChild: function(widget){
 			this.domNode.insertBefore(widget.domNode, this._terminator);
 			widget.transition = this.transition;
-			if(this.transition == "below"){
+			if(this.transition === "below"){
 				this.domNode.appendChild(widget.subNode);
 			}
 			widget.inheritParams();

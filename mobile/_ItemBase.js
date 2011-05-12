@@ -28,6 +28,10 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			var parent = this.getParent();
 			if(parent){
 				if(!this.transition){ this.transition = parent.transition; }
+				if(this.icon && parent.iconBase &&
+					parent.iconBase.charAt(parent.iconBase.length - 1) === '/'){
+					this.icon = parent.iconBase + this.icon;
+				}
 				if(!this.icon){ this.icon = parent.iconBase; }
 				if(!this.iconPos){ this.iconPos = parent.iconPos; }
 			}
