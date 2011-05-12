@@ -36,9 +36,12 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 			var i,w;
 			if (size && size.w){
 				dojo.marginBox(this.domNode, size);
-				w=size.w;
+				w = size.w;
 			}else{
-				w=dojo.marginBox(this.domNode).w;
+				// Calculation of the bar width varies according to its "position" value.
+				// When the widget is used as a fixed bar, its position would be "absolute".
+				w = dojo.style(this.domNode, "position") === "absolute" ?
+					dojo.contentBox(this.domNode).w : dojo.marginBox(this.domNode).w;
 			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
