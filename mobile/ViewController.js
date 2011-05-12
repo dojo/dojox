@@ -46,6 +46,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 				dojo.publish("/dojox/mobile/app/pushScene", [evt.detail.scene]);
 				return;
 			}
+			var moveTo = evt.detail.moveTo;
 			if(evt.detail.url){
 				var id;
 				if(dojox.mobile._viewMap && dojox.mobile._viewMap[evt.detail.url]){
@@ -55,7 +56,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 					// get the specified external view and append it to the <body>
 					var text = this._text;
 					if(!text){
-						if(this.sync){
+						if(dijit.byId(evt.target.id).sync){
 							text = dojo.trim(dojo._getText(evt.detail.url));
 						}else{
 							require(["dojo/_base/xhr"], dojo.hitch(this, function(xhr){ 
@@ -73,7 +74,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 										new TransitionEvent(evt.target, {
 												transition: evt.detail.transition,
 											 	transitionDir: evt.detail.transitionDir, 
-											 	moveTo: evt.detail.moveTo, 
+											 	moveTo: moveTo, 
 											 	href: evt.detail.href, 
 											 	url: evt.detail.url, 
 											 	scene: evt.detail.scene}, 
@@ -99,7 +100,7 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 				moveTo = id;
 				w = this.findCurrentView(moveTo,dijit.byId(evt.target.id)) || w; // the current view widget
 			}
-			w.performTransition(evt.detail.moveTo, evt.detail.transitionDir, evt.detail.transition, null, null);
+			w.performTransition(moveTo, evt.detail.transitionDir, evt.detail.transition, null, null);
 		},
 
 		_parse: function(text,id){

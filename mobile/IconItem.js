@@ -146,6 +146,11 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transitionDir: this.transitionDir, transition: this.transition};
 			}else if (this.transitionOptions){
 				transOpts = this.transitionOptions;
+			}
+			if(transOpts){
+				setTimeout(dojo.hitch(this, function(d){
+					this.setOpacity(this.iconNode, 1);
+				}), 1500);
 			}else{
 				return this.open(e);
 			}
