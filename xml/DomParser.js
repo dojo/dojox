@@ -1,5 +1,5 @@
-dojo.provide("dojox.xml.DomParser");
-
+define(["dojo/_base/lang"], function(dojo){
+dojo.getObject("xml", true, dojox);
 dojox.xml.DomParser=new (function(){
 	/**********************************************************
 	 *	The DomParser is a close-to (but not entirely)
@@ -387,3 +387,5 @@ dojox.xml.DomParser=new (function(){
 		return root;
 	};
 })();
+return dojox.xml.DomParser;
+});
