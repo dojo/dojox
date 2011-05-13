@@ -1,4 +1,4 @@
-dojo.provide("dojox.uuid.generateTimeBasedUuid");
+define(['dojo/_base/kernel', './_base'], function(dojo){
 
 dojox.uuid.generateTimeBasedUuid = function(/*String?*/ node){
 	// summary:
@@ -284,3 +284,7 @@ dojox.uuid.generateTimeBasedUuid._generator = new function(){
 	}
 
 }();
+
+return dojox.uuid.generateTimeBasedUuid;
+
+});
