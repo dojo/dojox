@@ -82,7 +82,8 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 					alreadyCalledHash[caller] = true;
 				}
 			}
-			new TransitionEvent(this.domNode, {moveTo: moveTo, href: href, url: url, scene: scene}).dispatch();
+			new TransitionEvent(this.domNode, {moveTo: moveTo, href: href, url: url, scene: scene,
+						transition: this.transition, transitionDir: this.transitionDir}).dispatch();
 		}
 	});
 });
