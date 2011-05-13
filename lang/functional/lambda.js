@@ -1,4 +1,5 @@
-dojo.provide("dojox.lang.functional.lambda");
+define(["../..", "dojo/_base/kernel", "dojo/_base/array"], function(dojox, dojo){
+	var df = dojo.getObject("lang.functional", true, dojox);
 
 // This module adds high-level functions and related constructs:
 //	- anonymous functions built from the string
@@ -17,8 +18,7 @@ dojo.provide("dojox.lang.functional.lambda");
 //	- converts strings to functions
 //	- converts arrays to a functional composition
 
-(function(){
-	var df = dojox.lang.functional, lcache = {};
+	var lcache = {};
 
 	// split() is augmented on IE6 to ensure the uniform behavior
 	var split = "ab".split(/a*/).length > 1 ? String.prototype.split :
@@ -127,4 +127,6 @@ dojo.provide("dojox.lang.functional.lambda");
 			lcache = {};
 		}
 	});
-})();
+	
+	return df;
+});

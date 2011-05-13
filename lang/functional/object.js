@@ -1,6 +1,4 @@
-dojo.provide("dojox.lang.functional.object");
-
-dojo.require("dojox.lang.functional.lambda");
+define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
 
 // This module adds high-level functions and related constructs:
 //	- object/dictionary helpers
@@ -10,8 +8,7 @@ dojo.require("dojox.lang.functional.lambda");
 //	- skip all attributes that are present in the empty object
 //		(IE and/or 3rd-party libraries).
 
-(function(){
-	var d = dojo, df = dojox.lang.functional, empty = {};
+	var d = dojo, empty = {};
 
 	d.mixin(df, {
 		// object helpers
@@ -71,4 +68,6 @@ dojo.require("dojox.lang.functional.lambda");
 			return t;	// Object
 		}
 	});
-})();
+	
+	return df;
+});

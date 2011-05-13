@@ -1,6 +1,4 @@
-dojo.provide("dojox.lang.functional.fold");
-
-dojo.require("dojox.lang.functional.lambda");
+define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, darray, df){
 
 // This module adds high-level functions and related constructs:
 //	- "fold" family of functions
@@ -18,8 +16,7 @@ dojo.require("dojox.lang.functional.lambda");
 //	- take a string as the array argument
 //	- take an iterator objects as the array argument (only foldl, foldl1, and reduce)
 
-(function(){
-	var d = dojo, df = dojox.lang.functional, empty = {};
+	var d = dojo, empty = {};
 
 	d.mixin(df, {
 		// classic reduce-class functions
@@ -117,4 +114,4 @@ dojo.require("dojox.lang.functional.lambda");
 			return t;	// Array
 		}
 	});
-})();
+});

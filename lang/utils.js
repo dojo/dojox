@@ -1,7 +1,7 @@
-dojo.provide("dojox.lang.utils");
-
-(function(){
-	var empty = {}, du = dojox.lang.utils, opts = Object.prototype.toString;
+define(["..", "dojo/_base/lang"], function(dojox, dojo){
+	var du = dojo.getObject("lang.utils", true, dojox);
+	
+	var empty = {}, opts = Object.prototype.toString;
 
 	var clone = function(o){
 		if(o){
@@ -100,4 +100,6 @@ dojo.provide("dojox.lang.utils");
 			return mixin;
 		}
 	});
-})();
+	
+	return du;
+});

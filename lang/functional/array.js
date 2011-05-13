@@ -1,6 +1,4 @@
-dojo.provide("dojox.lang.functional.array");
-
-dojo.require("dojox.lang.functional.lambda");
+define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, darray, df){
 
 // This module adds high-level functions and related constructs:
 //	- array-processing functions similar to standard JS functions
@@ -15,8 +13,7 @@ dojo.require("dojox.lang.functional.lambda");
 //	- take a string as the array argument
 //	- take an iterator objects as the array argument
 
-(function(){
-	var d = dojo, df = dojox.lang.functional, empty = {};
+	var d = dojo, empty = {};
 
 	d.mixin(df, {
 		// JS 1.6 standard array functions, which can take a lambda as a parameter.
@@ -161,4 +158,6 @@ dojo.require("dojox.lang.functional.lambda");
 			return false;	// Boolean
 		}
 	});
-})();
+	
+	return df;
+});

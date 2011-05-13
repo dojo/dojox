@@ -1,7 +1,4 @@
-dojo.provide("dojox.lang.functional.reversed");
-
-dojo.require("dojox.lang.functional.lambda");
-
+define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
 // This module adds high-level functions and related constructs:
 //	- reversed versions of array-processing functions similar to standard JS functions
 
@@ -14,8 +11,7 @@ dojo.require("dojox.lang.functional.lambda");
 //	- operate on dense arrays
 //	- take a string as the array argument
 
-(function(){
-	var d = dojo, df = dojox.lang.functional;
+	var d = dojo, df;
 
 	d.mixin(df, {
 		// JS 1.6 standard array functions, which can take a lambda as a parameter.
@@ -72,4 +68,6 @@ dojo.require("dojox.lang.functional.lambda");
 			return false;	// Boolean
 		}
 	});
-})();
+	
+	return df;
+});
