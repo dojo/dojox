@@ -12,15 +12,13 @@
 				margin: 10px;
 			}
 		</style>
-
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, mblThemeFiles: ['base']"></script>
-
 		<script language="JavaScript" type="text/javascript">
 			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.deviceTheme");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 			function swOn(){
 				var w = dijit.byId("sw");
 				w.set("value", "on");
@@ -29,7 +27,7 @@
 				var w = dijit.byId("sw");
 				w.set("value", "off");
 			}
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				var w = dijit.byId("sw");
 				dojo.connect(w, "onStateChanged", null, function(){
 					var span = dojo.byId("msgArea");

@@ -11,17 +11,14 @@
 
 		<script language="JavaScript" type="text/javascript">
 			dojo.require("dojo.data.ItemFileReadStore");
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.Carousel");
 			dojo.require("dojox.mobile.ScrollableView");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 
 			var store1 = new dojo.data.ItemFileReadStore({url: "carousel-categ.json"});
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				dojo.subscribe("/dojox/mobile/carouselSelect", function(w, img, item, idx){
 					if(w.id == "carousel1"){
 						var store2 = new dojo.data.ItemFileReadStore({url: "carousel-"+item.value+".json"});

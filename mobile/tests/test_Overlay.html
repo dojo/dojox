@@ -27,24 +27,19 @@
 		</style>
 
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.Overlay");
-			dojo.require("dojo.window");
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.deviceTheme");
+			dojo.require("dojox.mobile.Overlay");
 			dojo.require("dojox.mobile.SpinWheel");
 			dojo.require("dojox.mobile.SpinWheelSlot");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 		</script>
 	</head>
 	<body>
 		<br>
 		<button onclick="dijit.byId('customPicker').show()">pop up</button>
 		<button onclick="dijit.byId('customPicker').hide()">pop down</button>
-
 		<div id="customPicker" dojoType="dojox.mobile.Overlay">
 			<h1 dojoType="dojox.mobile.Heading" label="Custom Picker">
 				<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="width:45px;float:right;" onClick="dijit.byId('customPicker').hide()"></div>

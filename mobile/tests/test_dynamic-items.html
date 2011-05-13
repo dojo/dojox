@@ -11,13 +11,13 @@
 		<script language="JavaScript" type="text/javascript">
 			//dojo.require("dojo.parser"); // Use the lightweight parser.
 			dojo.require("dojo.hash");
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.Button");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 
 			var counter = 4;
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				var btnWidget = dijit.byId("btn1");
 				dojo.connect(btnWidget.domNode, "onclick", onBtnClicked);
 				function onBtnClicked(e){
@@ -45,28 +45,13 @@
 				var prog = dojox.mobile.ProgressIndicator.getInstance();
 				container.appendChild(prog.domNode);
 				prog.start();
-				/*
-				var url = "http://..." + param;
-				dojo.xhrGet({
-					url: url,
-					handleAs: "text",
-					load: function(response, ioArgs){
-						prog.stop();
-						container.innerHTML = response;
-						dojox.mobile.parser.parse(container);
-					}
-				});
-				*/
 				setTimeout(function(){ // network latency simulation
 					prog.stop();
 					container.innerHTML = '<h1 dojoType="dojox.mobile.Heading" back="Home" moveTo="#home">'+param+'</h1>\n'+param;
 					dojox.mobile.parser.parse(container);
 				}, 5000);
 			}
-			dojo.declare(
-				"dojox.mobile.ViewEx",
-				dojox.mobile.View,
-			{
+			dojo.declare("dojox.mobile.ViewEx",dojox.mobile.View,{
 				onStartView: function(){
 					loadPage(location.hash);
 				},

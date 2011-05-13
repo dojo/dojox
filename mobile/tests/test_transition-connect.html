@@ -6,14 +6,11 @@
 		<title>Transition Listener (dojo.connect)</title>
 		<link href="../themes/iphone/base.css" rel="stylesheet"></link>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
-
 		<script language="JavaScript" type="text/javascript">
 			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
-
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			var print = function(name, view, moveTo, dir, transition, context, method){
 				console.log(name +
 							": view=" + view +
@@ -23,8 +20,7 @@
 							", context=" + context +
 							", method=" + method);
 			}
-
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				var view1 = dijit.byId("view1");
 				dojo.connect(view1, "onStartView", null, function(){
 					console.log("startView: view="+this);

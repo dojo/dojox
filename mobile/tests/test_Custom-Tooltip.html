@@ -34,16 +34,13 @@
 		</style>
 
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.SpinWheel");
 			dojo.require("dojox.mobile.SpinWheelSlot");
 			dojo.require("dojox.mobile.Tooltip");
 			dojo.require("dojox.mobile.common");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx");
-			dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 			dojo.addOnLoad(function(){
 				dojo.byId('bot').scrollIntoView(false);
 			});

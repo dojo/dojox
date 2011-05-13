@@ -18,7 +18,7 @@
 		<script language="JavaScript" type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("dojox.mobile.FixedSplitter");
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 					var w = new dojox.mobile.FixedSplitter({orientation:"H"}, dojo.byId("container"));
 					dojo.create("div", {
 						style: "background-color:yellow;width:200px;",

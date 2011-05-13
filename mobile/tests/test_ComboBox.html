@@ -15,14 +15,13 @@
 
 	<script type="text/javascript">
 		dojo.require("doh.runner");
-		dojo.require("dojox.mobile.parser");
+		dojo.require("dojox.mobile");			// This is a mobile app.
+		dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+		dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 		dojo.require("dijit.form.DataList");
 		dojo.require("dojox.mobile.ComboBox");
-		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
-		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
 
-		dojo.addOnLoad(function(){
+		dojo.ready(function(){
 
 			doh.register("attributes", [
 				{

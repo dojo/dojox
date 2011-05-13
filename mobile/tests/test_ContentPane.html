@@ -8,14 +8,12 @@
 
 		<script language="JavaScript" type="text/javascript">
 			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.deviceTheme");
 			dojo.require("dojox.mobile.ContentPane");
-
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				dijit.byId("pane3").set("content", "<div dojoType='dojox.mobile.RoundRect' shadow='true'>Thank you!</div>");
 				dijit.byId("pane4").set("href", "fragment1.html");
 				var dom = dojo.create("DIV", {

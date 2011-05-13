@@ -13,18 +13,17 @@
 		<script language="JavaScript" type="text/javascript">
 			var lang = location.search.match(/lang=(\w*)/) ? RegExp.$1 : null;
 
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.i18n");
 			dojo.require("dojox.mobile.TabBar");
 			dojo.require("dojox.mobile.IconContainer");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 			var bundle = dojox.mobile.i18n.load("dojox.mobile.tests", "sample", lang);
 			function changeLocale(){
 				document.forms[0].submit();
 			}
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				document.getElementById("sel").value = lang;
 				dijit.byId("item1").set("label", bundle["MINUTES"].replace("%1", "30"));
 			});

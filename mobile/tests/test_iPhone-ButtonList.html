@@ -9,11 +9,10 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-			dojo.addOnLoad(function(){
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
+			dojo.ready(function(){
 				var ul = dojo.byId("list");
 				for(var i = 0, len = ul.childNodes.length; i < len; i++){
 					var li = ul.childNodes[i];

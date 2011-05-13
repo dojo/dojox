@@ -6,26 +6,19 @@
 		<title>Transition To A Dynamic View</title>
 		<link href="../themes/iphone/base.css" rel="stylesheet"></link>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
-
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 
-			dojo.declare(
-				"dojox.mobile.ListItemEx",
-				dojox.mobile.ListItem,
-			{
+			dojo.declare("dojox.mobile.ListItemEx",dojox.mobile.ListItem,{
 				_parse: function(text){
 					var obj = dojo.fromJson(text);
 					if(!obj.items){ return; }
 					var items = obj.items;
-
 					var container = dojo.create("div", {}, dojo.body());
 					var view1 = new dojox.mobile.View({selected:true}, container);
 					view1.startup();
-
 					var heading1 = new dojox.mobile.Heading({
 						label: "New Dynamic View",
 						back: "Home",
@@ -33,15 +26,12 @@
 					});
 					view1.addChild(heading1);
 					heading1.startup();
-
 					var categ1 = new dojox.mobile.RoundRectCategory({
 						label: "Documents"
 					});
 					view1.addChild(categ1);
-
 					var list1 = new dojox.mobile.RoundRectList();
 					view1.addChild(list1);
-
 					for(var i = 0; i < items.length; i++){
 						var item1 = new dojox.mobile.ListItem({
 							icon: "images/i-icon-"+(i+1)+".png",

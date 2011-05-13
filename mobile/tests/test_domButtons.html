@@ -12,16 +12,14 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
-
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			function setIconValue(id, val){
 				var txt = dojo.doc.createTextNode(val);
 				dojo.byId(id).firstChild.appendChild(txt);
 			}
-			dojo.addOnLoad(function(){
+			dojo.ready(function(){
 				var nodes = dojo.doc.getElementsByTagName("div");
 				for(var i = 0; i < nodes.length; i++){
 					var div = nodes[i];

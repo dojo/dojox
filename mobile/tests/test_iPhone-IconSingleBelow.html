@@ -11,17 +11,15 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
-			//dojo.require("dojo.parser"); // Use the lightweight parser.
-			dojo.require("dojox.mobile.parser");
-			dojo.require("dojox.mobile");
+			dojo.require("dojox.mobile");			// This is a mobile app.
+			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
+			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.Heading");
 			dojo.require("dojox.mobile.IconContainer");
-                        dojo.require("dojox.mobile.IconItem");
-                        dojo.require("dijit._Calendar");
-                        dojo.require("dijit.ColorPalette");
-                        dojo.require("dijit.ProgressBar");
-
-			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+			dojo.require("dojox.mobile.IconItem");
+			dojo.require("dijit.CalendarLite");
+			dojo.require("dijit.ColorPalette");
+			dojo.require("dijit.ProgressBar");
 		</script>
 	</head>
 	<body class="tundra" style="background-color:white">
@@ -29,7 +27,7 @@
 			<h1 dojoType="dojox.mobile.Heading">Icon Container (Single App)</h1>
 			<ul dojoType="dojox.mobile.IconContainer" transition="below" single="true">
 				<li dojoType="dojox.mobile.IconItem" label="Calendar" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo._base.query">
-					<div dojoType='dijit._Calendar'></div>
+					<div dojoType='dijit.CalendarLite'></div>
 				</li>
 				<li dojoType="dojox.mobile.IconItem" label="Color Palette" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo._base.Color">
 					<div dojoType='dijit.ColorPalette'></div>
