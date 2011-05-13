@@ -216,7 +216,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		}
 
 		if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
-			dojo.doc.documentElement.style.webkitBackfaceVisibility = "hidden";
+			dojo.style(dojo.doc.documentElement, "webkitPerspective", 1000);
+			dojo.style(dojo.doc.documentElement, "webkitBackfaceVisibility", "hidden");
 		}
 	
 		//	You can disable hiding the address bar with the following djConfig.
