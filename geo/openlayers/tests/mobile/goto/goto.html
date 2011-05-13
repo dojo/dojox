@@ -26,11 +26,16 @@
 <script type="text/javascript" src="../../../../../../dojo/dojo.js"></script>
 
 <script type="text/javascript">
-	dojo.require("dojox.geo.openlayers.widget.Map");
-	dojo.require("dojox.mobile.parser");
-	dojo.require("dojox.mobile");
-	dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-	dojo.require("dojox.geo.openlayers.tests.mobile.goto.NavigationControl");
+
+//	dojo.require("dojox.geo.openlayers.widget.Map");
+//	dojo.require("dojox.mobile.parser");
+//	dojo.require("dojox.mobile");
+//	dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+//	dojo.require("dojox.geo.openlayers.tests.mobile.goto.NavigationControl");
+
+require(["dojox/mobile", "dojox/mobile/parser", "dojox/geo/openlayers/widget/Map",
+ "dojox/geo/openlayers/tests/mobile/goto/NavigationControl"], 
+  function(mobileArg, parserArg, mapArg, controlArg){
 
 	var map;
     var currentLocation;
@@ -48,7 +53,7 @@
 		map.startup();
 
 		var olMap = map.map.getOLMap();
-		var ctrl = new dojox.geo.openlayers.tests.mobile.goto.NavigationControl({
+		var ctrl = new controlArg({
 			dojoMap : map
 		});
 		olMap.addControl(ctrl);
@@ -111,6 +116,8 @@
 		olm.setCenter(center, zoom);
 	  }
 	}
+  });
+  
 </script>
 
 </head>

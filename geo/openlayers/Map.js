@@ -1,11 +1,13 @@
-
 dojo.experimental("dojox.geo.openlayers.Map");
 
 define(
 		[ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/json",
 				"dojox/geo/openlayers/TouchInteractionSupport", "dojox/geo/openlayers/Layer" ],
 		function(langArg, arrayArg, jsonArg, tiArg, layerArg){
-
+			
+			var gom = dojo.getObject("geo.openlayers.Map", true, dojox);
+			gom.EPSG4326 = new OpenLayers.Projection("EPSG:4326");
+		  
 			var mapClass = dojo
 					.declare(
 							"dojox.geo.openlayers.Map",
@@ -150,7 +152,7 @@ define(
 											var old = olm.baseLayer;
 											if (old != null) {
 												var l = this._getLayer(old);
-												this.removeLayer(l);												
+												this.removeLayer(l);
 											}
 											if (bl != null)
 												this.addLayer(bl);
@@ -225,7 +227,7 @@ define(
 										case dojox.geo.openlayers.BaseLayerType.OSM:
 											options.transitionEffect = "resize";
 											//				base = new OpenLayers.Layer.OSM(name, url, options);
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.OSM(name, url, options)
 											});
 											break;
@@ -235,7 +237,7 @@ define(
 												if (!options.layers)
 													options.layers = "basic";
 											}
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.WMS(name, url, options, {
 													transitionEffect : "resize"
 												})
@@ -243,19 +245,19 @@ define(
 											break;
 										case dojox.geo.openlayers.BaseLayerType.GOOGLE:
 											//				base = new OpenLayers.Layer.Google(name, options);
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.Google(name, options)
 											});
 											break;
 										case dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH:
 											//				base = new OpenLayers.Layer.VirtualEarth(name);
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.VirtualEarth(name, options)
 											});
 											break;
 										case dojox.geo.openlayers.BaseLayerType.YAHOO:
 											//				base = new OpenLayers.Layer.Yahoo(name);
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.Yahoo(name, options)
 											});
 											break;
@@ -265,7 +267,7 @@ define(
 											//				if (!options.layers)
 											//					options.layers = "0,1,2";
 											//				base = new OpenLayers.Layer.ArcGIS93Rest(name, url, options, {});
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.ArcGIS93Rest(name, url, options, {})
 											});
 
@@ -279,7 +281,7 @@ define(
 											//base = new OpenLayers.Layer.OSM(name, url, options);
 											options.transitionEffect = "resize";
 											//				base = new OpenLayers.Layer.OSM(name, url, options);
-											base = new dojox.geo.openlayers.Layer(name, {
+											base = new layerArg(name, {
 												olLayer : new OpenLayers.Layer.OSM(name, url, options)
 											});
 											this.baseLayerType = dojox.geo.openlayers.BaseLayerType.OSM;
@@ -487,40 +489,40 @@ define(
 
 							});
 
-			dojox.geo.openlayers.Map.EPSG4326 = new OpenLayers.Projection("EPSG:4326");
+			
 
-			(function(){
-				var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
-				dojox.geo.openlayers.Map.parseDMS = function(v, toDecimal){
-					// summary: 
-					//   Parses the specified string and returns degree minute second or decimal degree.
-					// description: 
-					//   Parses the specified string and returns degree minute second or decimal degree.
-					// v: String
-					//   The string to parse
-					// toDecimal: Boolean
-					//   Specifies if the result should be returned in decimal degrees or in an array
-					// containg the degrees, minutes, seconds values.
-					// returns: Float | Array
-					//   the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
+			//			(function(){
+			var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
+			dojox.geo.openlayers.Map.parseDMS = function(v, toDecimal){
+				// summary: 
+				//   Parses the specified string and returns degree minute second or decimal degree.
+				// description: 
+				//   Parses the specified string and returns degree minute second or decimal degree.
+				// v: String
+				//   The string to parse
+				// toDecimal: Boolean
+				//   Specifies if the result should be returned in decimal degrees or in an array
+				// containg the degrees, minutes, seconds values.
+				// returns: Float | Array
+				//   the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
 
-					var res = re.exec(v);
-					if (res == null || res.length < 5)
-						return parseFloat(v);
-					var d = parseFloat(res[1]);
-					var m = parseFloat(res[2]);
-					var s = parseFloat(res[3]);
-					var nsew = res[5];
-					if (toDecimal) {
-						var lc = nsew.toLowerCase();
-						var dd = d + (m + s / 60) / 60;
-						if (lc == "w" || lc == "s")
-							dd = -dd;
-						return dd;
-					}
-					return [ d, m, s, nsew ];
-				};
-			})();
+				var res = re.exec(v);
+				if (res == null || res.length < 5)
+					return parseFloat(v);
+				var d = parseFloat(res[1]);
+				var m = parseFloat(res[2]);
+				var s = parseFloat(res[3]);
+				var nsew = res[5];
+				if (toDecimal) {
+					var lc = nsew.toLowerCase();
+					var dd = d + (m + s / 60) / 60;
+					if (lc == "w" || lc == "s")
+						dd = -dd;
+					return dd;
+				}
+				return [ d, m, s, nsew ];
+			};
+			//			})();
 
 			dojox.geo.openlayers.BaseLayerType = {
 				// summary:
@@ -551,6 +553,7 @@ define(
 				//   The ESRI ARCGis base layer selector.
 				ARCGIS : "ArcGIS"
 			};
+			
 			return mapClass;
 
 		});
