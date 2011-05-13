@@ -1,4 +1,5 @@
-define(["dojo/_base/window", "dojo/_base/declare", "dojo/_base/Color", "./Base"], function(dojo, declare, dcolor, Base) {
+define(["dojox/gfx3d", "dojo/_base/window", "dojo/_base/declare", "dojo/_base/Color", "./Base"], 
+	function(gfx3d, dojo, declare, dcolor, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){

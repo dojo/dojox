@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel"], function(dojo){
+define(["../..", "dojo/_base/kernel"], function(dojox, dojo){
 
 var primitive = dojo.getObject("charting.scaler.primitive", true, dojox);
 

@@ -1,4 +1,4 @@
-define(["dojo/_base/lang"], function(dojo){
+define(["../..", "dojo/_base/lang"], function(dojox, dojo){
 
 	var eq = function(/*Number*/ a, /*Number*/ b){
 		// summary: compare two FP numbers for equality

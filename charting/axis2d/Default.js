@@ -110,8 +110,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	}
 	=====*/
 
-	var dc = dojox.charting,
-		labelGap = 4,			// in pixels
+	var labelGap = 4,			// in pixels
 		centerAnchorLimit = 45;	// in degrees
 
 	return dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Invisible, {

@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "../../Theme", "../common"], function(dojo, Theme){
+define(["dojo/_base/kernel", "../../Theme", "../common"], function(dojo, Theme, themes){
 
 	// the baseline theme for all PlotKIt themes
-	var pk = dojo.getObject("PlotKit", true, dojox.charting.themes);
+	var pk = dojo.getObject("PlotKit", true, themes);
 
 	pk.base = new Theme({
 		chart:{

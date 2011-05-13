@@ -110,7 +110,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		optionalParams: {
 			lineStroke: {},
 			outlineStroke: {},
-			shadowStroek: {},
+			shadowStroke: {},
 			stroke:		{},
 			outline:	{},
 			shadow:		{},

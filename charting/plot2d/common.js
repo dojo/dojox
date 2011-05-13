@@ -1,7 +1,7 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "dojox/gfx", "dojox/lang/functional"], 
-	function(dojo, darray, dcolor, g, df){
+define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "dojox/gfx", "dojox/lang/functional"], 
+	function(dojox, dojo, darray, dcolor, g, df){
 	
-	var common = dojo.getObject("common", true, dojox.charting.plot2d);
+	var common = dojo.getObject("charting.plot2.common", true, dojox);
 	
 	return dojo.mixin(common, {	
 		makeStroke: function(stroke){
@@ -9,7 +9,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "dojox/gfx", 
 			if(typeof stroke == "string" || stroke instanceof dojo.Color){
 				stroke = {color: stroke};
 			}
-			return dojox.gfx.makeParameters(dojox.gfx.defaultStroke, stroke);
+			return g.makeParameters(g.defaultStroke, stroke);
 		},
 		augmentColor: function(target, color){
 			var t = new dojo.Color(target),
