@@ -1,5 +1,5 @@
 // AMD-ID "dojox/encoding/bits"
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo/_base/kernel"], function(dojo) {
 dojo.getObject("encoding.bits", true, dojox);
 
 dojox.encoding.bits.OutputStream = function(){

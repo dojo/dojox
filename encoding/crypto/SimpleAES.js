@@ -1,5 +1,5 @@
 // AMD-ID "dojox/encoding/crypto/SimpleAES"
-define(["dojo", "dojox", "dojox/encoding/base64", "dojox/encoding/crypto/_base"], function(dojo, dojox) {
+define(["dojo/_base/kernel", "dojox/encoding/base64", "dojox/encoding/crypto/_base"], function(dojo, base64, crypto){
 dojo.getObject("encoding.crypto.SimpleAES", true, dojox);
 
 (function(){

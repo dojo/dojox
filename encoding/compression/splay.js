@@ -1,5 +1,5 @@
 // AMD-ID "dojox/encoding/compression/splay"
-define(["dojo", "dojox", "dojox/encoding/bits"], function(dojo, dojox) {
+define(["dojo/_base/kernel", "dojox/encoding/bits"], function(dojo) {
 dojo.getObject("encoding.compression.splay", true, dojox);
 
 dojox.encoding.compression.Splay = function(n){
@@ -61,5 +61,5 @@ dojo.extend(dojox.encoding.compression.Splay, {
 });
 
 
-return dojox.encoding.compression.splay;
+return dojox.encoding.compression.Splay;
 });

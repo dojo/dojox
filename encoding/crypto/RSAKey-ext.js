@@ -1,12 +1,10 @@
 // AMD-ID "dojox/encoding/crypto/RSAKey-ext"
-define(["dojo", "dojox", "dojox/encoding/crypto/RSAKey", "dojox/math/BigInteger-ext"], function(dojo, dojox) {
+define(["dojo/_base/kernel", "dojox/encoding/crypto/RSAKey", "dojox/math/BigInteger-ext"], function(dojo, RSAKey, BigInteger) {
 
 dojo.experimental("dojox.encoding.crypto.RSAKey-ext");
 
 
 (function(){
-	var BigInteger = dojox.math.BigInteger;
-
 	// Undo PKCS#1 (type 2, random) padding and, if valid, return the plaintext
 	function pkcs1unpad2(d, n){
 		var b = d.toByteArray();
@@ -26,7 +24,7 @@ dojo.experimental("dojox.encoding.crypto.RSAKey-ext");
 		return ret;
 	}
 
-	dojo.extend(dojox.encoding.crypto.RSAKey, {
+	dojo.extend(RSAKey, {
 		setPrivate: function(N, E, D){
 			// summary:
 			//	Set the private key fields N, e, d and CRT params from hex strings
@@ -120,5 +118,5 @@ dojo.experimental("dojox.encoding.crypto.RSAKey-ext");
 })();
 
 
-return dojox.encoding.crypto.RSAKey;
+return RSAKey;
 });

@@ -1,5 +1,5 @@
 // AMD-ID "dojox/encoding/crypto/_base"
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo/_base/kernel"], function(dojo) {
 dojo.getObject("encoding.crypto", true, dojox);
 
 (function(){

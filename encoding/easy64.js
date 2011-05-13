@@ -1,5 +1,5 @@
 // AMD-ID "dojox/encoding/easy64"
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo/_base/kernel"], function(dojo) {
 dojo.getObject("encoding.easy64", true, dojox);
 
 (function(){

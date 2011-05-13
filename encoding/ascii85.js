@@ -1,5 +1,5 @@
 // AMD-ID "dojox/encoding/ascii85"
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo/_base/kernel"], function(dojo) {
 dojo.getObject("encoding.ascii85", true, dojox);
 
 (function(){
