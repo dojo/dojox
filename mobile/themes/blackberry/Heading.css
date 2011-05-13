@@ -18,6 +18,7 @@
   font-weight: normal;
   text-align: center;
   line-height: 40px;
+  z-index: 1;
 }
 /* Heading Arrow Button */
 .mblArrowButton {

@@ -78,7 +78,7 @@
 @theme-icon-item-height: 65px;
 @theme-icon-item-width: 65px;
 @theme-ui-widget-height: 30px;
-@theme-ui-widget-width: 100px;
+@theme-ui-widget-width: 90px;
 
 @theme-ui-widget-border-radius: 2px;	// square style
 //@theme-ui-widget-border-radius: @theme-default-border-radius;	// round style
@@ -366,7 +366,7 @@
 	._background-image-gradient-mask-ui-widget;
 }
 .mblItemSelected-mblListItemAnchor-styles () {
-	color: white;
+	color: @theme-highlight-color;
 }
 .mblItemSelected-mblDomButton-Div-styles () {
 	border-color: white;
@@ -407,6 +407,7 @@
 }
 .mblSwitchBgLeft-styles () {
 	background-color: @theme-ui-widget-checked-background-color;
+	color: @theme-ui-widget-color;
 }
 .mblSwitchBgRight-styles () {
 	background-color: @theme-ui-widget-disabled-background-color;
@@ -669,7 +670,7 @@
 // TabBarButton.less
 //----------------------------------------------------------------
 .mblTabBar-TabBarButton-styles () {
-	padding: (@theme-tabbar-height - @mbl-dom-button-size - @theme-tabbar-font-size) * 0.5;
+	padding: ((@theme-tabbar-height - @mbl-dom-button-size - @theme-tabbar-font-size) * 0.5) 0;
 }
 .mblTabBar-TabBarButton-Selected-styles () {
 	border-color: @theme-ui-widget-selected-border-color;
