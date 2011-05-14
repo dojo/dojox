@@ -11,7 +11,7 @@
 	vertical-align: bottom;
 }
 .mblCarouselImgSelected {
-	border: 1px dashed pink;
+	border: 1px dashed #C0C0C0;
 	-webkit-box-shadow: none;
 }
 .mblCarouselImgHeaderText {
@@ -26,6 +26,7 @@
 	background-color: #3A3A3B;
 	color: #B1B1B1;
 	font: bold 16px arial,helvetica,clean,sans-serif;
+	padding: 1px;
 }
 .mblCarouselBtnContainer {
 	float: right;
@@ -37,14 +38,19 @@
 	color: gray;
 	padding-top: 0px;
 	margin: 0px 2px;
+	border-width: 1px; /* workaround for android problem */
 }
 .mblCarouselTitle {
 	margin: 2px 0px 2px 4px;
 }
-.mblCarouselPI {
+.mblCarouselHeaderBar .mblPageIndicator {
 	float: right;
-	width: auto !important;
+	width: auto;
 	padding: 0px 20px;
+}
+.mblCarouselHeaderBar .mblPageIndicatorContainer {
+	margin-left: 0px;
+	margin-right: 0px;
 }
 .mblCarouselPages {
 	position: relative;

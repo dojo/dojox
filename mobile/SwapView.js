@@ -147,7 +147,7 @@ define(["./View","./_ScrollableMixin"], function(View,ScrollableMixin){
 		},
 	
 		onFlickAnimationEnd: function(e){
-			if(e.animationName && e.animationName !== "scrollableViewScroll2"){ return; }
+			if(e && e.animationName && e.animationName !== "scrollableViewScroll2"){ return; }
 			// Hide all the views other than the currently showing one.
 			// Otherwise, when the orientation is changed, other views
 			// may appear unexpectedly.

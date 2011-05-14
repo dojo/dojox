@@ -30,9 +30,6 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 			this.domNode.style.height = h;
 			dojo.setSelectable(this.domNode, false);
 			this.headerNode = dojo.create("DIV", {className:"mblCarouselHeaderBar"}, this.domNode);
-			this.titleNode = dojo.create("SPAN", {
-				className: "mblCarouselTitle"
-			}, this.headerNode);
 
 			if(this.navButton){
 				this.btnContainerNode = dojo.create("DIV", {
@@ -57,9 +54,12 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 					this.title = "&nbsp;";
 				}
 				this.piw = new dojox.mobile.PageIndicator();
-				dojo.addClass(this.piw.domNode, "mblCarouselPI");
 				this.headerNode.appendChild(this.piw.domNode);
 			}
+
+			this.titleNode = dojo.create("DIV", {
+				className: "mblCarouselTitle"
+			}, this.headerNode);
 
 			this.containerNode = dojo.create("DIV", {className:"mblCarouselPages"}, this.domNode);
 			dojo.subscribe("/dojox/mobile/viewChanged", this, "handleViewChanged");
@@ -140,13 +140,16 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 				this.loadImages(this.swapViews[1]); // pre-fetch the next view images
 			}
 			this.currentView = this.swapViews[0];
-			this.piw.reset();
+			if(this.piw){
+				this.piw.reset();
+			}
 		},
 
 		createBox: function(item, h){
 			var width = item.width || (90/this.numVisible + "%");
 			var height = item.height || h + "px";
-			var margin = item.margin || (10/this.numVisible/2 + "%");
+			var m = dojo.isIE ? 5/this.numVisible-1 : 5/this.numVisible
+			var margin = item.margin || (m + "%");
 			var box = dojo.create("DIV", {
 				className: "mblCarouselBox"
 			});
@@ -177,6 +180,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 			if(item.height !== "1px"){
 				this.connect(img, "onclick", "onClick");
 				this.connect(img, "onkeydown", "onClick");
+				dojo.connect(img, "ondragstart", dojo.stopEvent);
 			}else{
 				img.style.visibility = "hidden";
 			}
