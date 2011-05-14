@@ -1,6 +1,5 @@
-define(["dijit/_WidgetBase"], function(_WidgetBase){
-
-	dojo.declare("dojox.mvc._DataBindingMixin", null, {
+define(["dojo/Stateful"], function(Stateful){
+	return dojo.declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:
 		//		Provides the ability for dijits or custom view components to become
 		//		data binding aware.
@@ -51,7 +50,15 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 		//		existing datamodel and may be a relative reference based on the
 		//		parent / container data binding (dot-separated string).
 		ref: null,
-	
+
+/*=====
+		// binding: [readOnly] dojox.mvc.StatefulModel
+		//		The read only value of the resolved data binding for this widget.
+		//		This may be a result of resolving various relative refs along
+		//		the parent axis.
+		binding: null,
+=====*/
+
 		//////////////////////// PUBLIC METHODS ////////////////////////
 	
 		isValid: function(){
@@ -74,17 +81,18 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 			//		failing the test as invalid.
 			return this.get("binding") ? this.get("binding").get("valid") : true;
 		},
-	
+
 		//////////////////////// LIFECYCLE METHODS ////////////////////////
-	
-		startup: function(){
+
+		_dbstartup: function(){
 			// summary:
 			//		Tie data binding initialization into the widget lifecycle, at
 			//		widget startup.
+			// tags:
+			//		private
 			if(this._databound){
 				return;
 			}
-			this._beingBound = true;
 			this._unwatchArray(this._viewWatchHandles);
 			// add 2 new view watches, active only after widget has started up
 			this._viewWatchHandles = [
@@ -104,14 +112,14 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 					}
 				})
 			];
+			this._beingBound = true;
 			this._setupBinding();
-			this._beingBound = false;
+			delete this._beingBound;
 			this._databound = true;
-			this._started = true;
 		},
-	
+
 		//////////////////////// PRIVATE METHODS ////////////////////////
-	
+
 		_setupBinding: function(parentBinding){
 			// summary:
 			//		Calculate and set the dojo.Stateful data binding for the
@@ -203,7 +211,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 				}
 			}
 		},
-	
+
 		_updateBinding: function(name, old, current){
 			// summary:
 			//		Set the data binding to the supplied value, which must be a
@@ -257,6 +265,10 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 						pThis._updateProperty(name, old, current, false, "disabled", !current);
 					})
 				];
+				var val = binding.get("value");
+				if(val != null){
+					this.set("value", val);
+				}
 			}
 			this._updateChildBindings();
 		},
@@ -294,7 +306,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 				this.set(setPropName, setPropValue);
 			}
 		},
-	
+
 		_updateChildBindings: function(){
 			// summary:
 			//		Update this widget's value based on the current binding and
@@ -303,11 +315,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 			// tags:
 			//		private
 			var binding = this.get("binding");
-			if(binding){
-				var val = binding.get("value");
-				if(val != null){
-					this.set("value", val);
-				}
+			if(binding && !this._beingBound){
 				dojo.forEach(dijit.findWidgets(this.domNode), function(widget){
 					if(widget._setupBinding){
 						widget._setupBinding(binding);
@@ -315,7 +323,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 				});
 			}
 		},
-	
+
 		_getParentBindingFromDOM: function(){
 			// summary:
 			//		Get the parent binding by traversing the DOM ancestors to find
@@ -337,7 +345,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 			}
 			return pb;
 		},
-	
+
 		_unwatchArray: function(watchHandles){
 			// summary:
 			//		Given an array of watch handles, unwatch all.
@@ -348,9 +356,4 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 			dojo.forEach(watchHandles, function(h){ h.unwatch(); });
 		}
 	});
-	
-	//Apply the data binding mixin to all dijits, see class description
-	dojo.extend(dijit._WidgetBase, new dojox.mvc._DataBindingMixin());
-	
-	return dojox.mvc._DataBindingMixin;
 });

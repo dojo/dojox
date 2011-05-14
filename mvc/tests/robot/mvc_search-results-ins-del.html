@@ -27,6 +27,8 @@
 						runTest: function(){
 						var d = new doh.Deferred();
 						console.debug("dojo.version() is "+dojo.version);
+						doh.robot.mouseMoveAt("firstInput", 500, 0);
+						doh.robot.mouseClick({left:true}, 500);
 						
 						doh.robot.sequence(d.getTestCallback(function(){
 							doh.is("Anne", dijit.byId("nameInput0").get('value'),"nameInput0 should be Anne");
@@ -246,7 +248,8 @@
 							}), 1000);
 							return d;
 						}
-					}				]);
+					}
+				]);
 				doh.run();
 			});
 		</script>

@@ -1,5 +1,5 @@
 define(["dijit/_WidgetBase"], function(_WidgetBase){
-	return dojo.declare("dojox.mvc.Output", dijit._WidgetBase, {
+	return dojo.declare("dojox.mvc.Output", [dijit._WidgetBase], {
 		// summary:
 		//		A simple widget that displays templated output, parts of which may
 		//		be data-bound.

@@ -1,5 +1,5 @@
 define(["dijit/_WidgetBase"], function(_WidgetBase){
-	return dojo.declare("dojox.mvc._Container", dijit._WidgetBase, {
+	return dojo.declare("dojox.mvc._Container", [dijit._WidgetBase], {
 	
 		// stopParser: [private] Boolean
 		//		Flag to parser to not try and parse widgets declared inside the container.

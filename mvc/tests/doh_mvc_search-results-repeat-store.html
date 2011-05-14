@@ -54,7 +54,7 @@
 				{
 					name: "initial",
 					runTest: function(){
-						var name1, bind1, addr1; 
+						var name1, bind1, firstInput; 
 						name1 = dijit.byId("nameInput0");
 						if (name1) {
 							bind1 = name1.get("binding");
@@ -138,7 +138,7 @@
 
 			doh.register("test Commit and Reset", [
 				{
-					name: "testJohn",
+					name: "testC&R",
 					runTest: function(){
 						setDetailsContext(8); //select Irene 
 						var name8, bind8, firstInput, lastInput; 
@@ -172,7 +172,7 @@
 								doh.is("Ira",lastInput.value,"lastInput lastInput.value is wrong");
 							}
 						}
-					}					
+					}
 				}
 			]);
 			

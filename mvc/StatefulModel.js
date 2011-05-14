@@ -1,4 +1,4 @@
-define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/Stateful"], function(dojo, darray, Stateful){
 
 	dojo.declare("dojox.mvc.StatefulModel", [dojo.Stateful], {
 		// summary:
@@ -108,7 +108,8 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 		//		widget examples:
 		//
 		//		|	<script>
-		//		|		dojo.require("dojox.mvc.StatefulModel");
+		//		|		dojo.require("dojox.mvc");
+		//		|		dojo.require("dojo.parser");
 		//		|		var model;
 		//		|		dojo.addOnLoad(function(){
 		//		|			model = dojox.mvc.newStatefulModel({ data : {
@@ -125,7 +126,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 		//
 		//		|	<script>
 		//		|		var model;
-		//		|		require(["dijit", "dojox/mvc/StatefulModel", "dojo/parser"], function(dijit, StatefulModel, parser){
+		//		|		require(["dojox/mvc", "dojo/parser"], function(dxmvc, parser){
 		//		|			model = dojox.mvc.newStatefulModel({ data : {
 		//		|				hello : "Hello World"
 		//		|			}});
@@ -152,7 +153,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 		//		state.
 		//		Either data or store property must be provided.
 		data: null,
-	
+
 		// store: dojo.store.DataStore
 		//		The data store from where to retrieve initial data for this model.
 		//		An optional query may also be provided along with this store.
@@ -162,14 +163,14 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 		// valid: boolean
 		//		Whether this model deems the associated data to be valid.
 		valid: true,
-	
+
 		// value: Object
 		//		The associated value (if this is a leaf node). The value of
 		//		intermediate nodes in the model is not defined.
 		value: "",
-	
+
 		//////////////////////// PUBLIC METHODS / API ////////////////////////
-	
+
 		reset: function(){
 			// summary:
 			//		Resets this data model values to its original state.
@@ -185,7 +186,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 				this.set("value", this.data);
 			}
 		},
-	
+
 		commit: function(/*"dojo.store.DataStore?"*/ store){
 			// summary:
 			//		Commits this data model:
@@ -204,7 +205,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 				this._saveToStore(ds);
 			}
 		},
-	
+
 		toPlainObject: function(){
 			// summary:
 			//		Produces a plain JavaScript object representation of the data
@@ -217,7 +218,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 			var nested = false;
 			for(var p in this){
 				if(this[p] && dojo.isFunction(this[p].toPlainObject)){
-					if(!nested && p == 0){
+					if(!nested && typeof this.get("length") === "number"){
 						ret = [];
 					}
 					nested = true;
@@ -229,7 +230,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 			}
 			return ret;
 		},
-	
+
 		add: function(/*String*/ name, /*dojo.Stateful*/ stateful){
 			// summary:
 			//		Adds a dojo.Stateful tree represented by the given
@@ -244,7 +245,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 			//		as Strings. An addition of such a dojo.Stateful node
 			//		results in right-shifting any trailing sibling nodes.
 			var n, n1, elem, elem1, save = new dojox.mvc.StatefulModel({ data : "" });
-			if(/^[0-9]+$/.test(name.toString())){
+			if(typeof this.get("length") === "number" && /^[0-9]+$/.test(name.toString())){
 				n = name;
 				if(!this.get(n)){
 					n1 = n-1;
@@ -269,11 +270,12 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 						this.set(n1, elem);
 					}
 				}
+				this.set("length", this.get("length") + 1);
 			}else{
 				this.set(name, stateful);
 			}
 		},
-	
+
 		remove: function(/*String*/ name){
 			// summary:
 			//		Removes the dojo.Stateful tree at the given property name.
@@ -284,7 +286,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 			//		as Strings. A removal of such a dojo.Stateful node
 			//		results in left-shifting any trailing sibling nodes.
 			var n, elem, elem1;
-			if(/^[0-9]+$/.test(name.toString())){
+			if(typeof this.get("length") === "number" && /^[0-9]+$/.test(name.toString())){
 				n = name;
 				elem = this.get(n);
 				if(!elem){
@@ -306,6 +308,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 						this.set(n1-1, undefined);
 						delete this[n1-1];
 					}
+					this.set("length", this.get("length") - 1);
 				}
 			}else{
 				elem = this.get(name);
@@ -319,9 +322,9 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 				}
 			}
 		},
-	
+
 		//////////////////////// PRIVATE INITIALIZATION METHOD ////////////////////////
-	
+
 		constructor: function(/*Object*/ args){
 			// summary:
 			//		Instantiates a new data model that view components may bind to.
@@ -340,9 +343,9 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 				this._createModel(args.data);
 			}
 		},
-	
+
 		//////////////////////// PRIVATE METHODS ////////////////////////
-	
+
 		_createModel: function(/*Object*/ obj){
 			// summary:
 			//		Create this data model from provided input data.
@@ -355,11 +358,14 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 					var newProp = new dojox.mvc.StatefulModel({ data : obj[x] });
 					this.set(x, newProp);
 				}
+				if(dojo.isArray(obj)){
+					this.set("length", obj.length);
+				}
 			}else{
 				this.set("value", obj);
 			}
 		},
-	
+
 		_commit: function(){
 			// summary:
 			//		Commits this data model, saves the current state into data to become the saved state, 
@@ -373,8 +379,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 			}
 			this.data = this.toPlainObject();
 		},
-	
-	
+
 		_saveToStore: function(/*"dojo.store.DataStore"*/ store){
 			// summary:
 			//		Commit the current values to the data store:
@@ -399,7 +404,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 				store.put(dataToCommit);
 			}
 		},
-	
+
 		_copyStatefulProperties: function(/*dojo.Stateful*/ src, /*dojo.Stateful*/ dest){
 			// summary:
 			//		Copy only the dojo.Stateful properties from src to dest (uses
@@ -418,7 +423,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 			}
 		}
 	});
-	
+
 	// Factory method for dojox.mvc.StatefulModel instances
 	dojox.mvc.newStatefulModel = function(args){
 		// summary:
@@ -454,14 +459,12 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 					return model;
 				}));
 			}else{
-				return (function(result){
-					model = new dojox.mvc.StatefulModel({ data : result });
-					model.store = args.store;
-					return model;
-				});
+				model = new dojox.mvc.StatefulModel({ data : result });
+				model.store = args.store;
+				return model;
 			}
 		}
 	};
-	
+
 	return dojox.mvc.StatefulModel;
 });

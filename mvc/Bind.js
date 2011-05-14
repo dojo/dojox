@@ -51,8 +51,7 @@ define(["dojo", "dojo/Stateful"], function(dojo, Stateful){
 				watchHandles.push(h.watch("value", func));
 			});
 			return watchHandles;
-		},
-	
+		}
 	});
 	
 	return dojox.mvc;

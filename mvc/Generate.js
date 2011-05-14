@@ -1,5 +1,5 @@
 define(["dojox/mvc/_Container", "dojox/mvc/Group", "dijit/form/TextBox"], function(){
-	return dojo.declare("dojox.mvc.Generate", dojox.mvc._Container, {
+	return dojo.declare("dojox.mvc.Generate", [dojox.mvc._Container], {
 		// summary:
 		//		A container that generates a view based on the data model its bound to.
 		//
