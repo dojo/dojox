@@ -1,5 +1,6 @@
-define(["dojo/_base/lang"], function(dojo){
+define(['dojo/_base/array'], function(dojo){
 dojo.getObject("xml", true, dojox);
+
 dojox.xml.DomParser=new (function(){
 	/**********************************************************
 	 *	The DomParser is a close-to (but not entirely)

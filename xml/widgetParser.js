@@ -1,13 +1,12 @@
+define(['dojo/_base/window', 'dojo/query', 'dojox/xml/parser', 'dojo/parser', 'dojo/_base/sniff'], function(dojo, query, dxparser, parser){
+
+dojo.getObject("xml.widgetParser", true, dojox);
+
 /**
 Take some sort of xml block
 * like <dojo.button caption="blah"/> and turn
 * it into a widget..
 */
-
-dojo.provide("dojox.xml.widgetParser");
-dojo.require("dojox.xml.parser");
-dojo.require("dojo.parser");
-
 
 	/**
 	 * We want to support something like:
@@ -68,7 +67,7 @@ dojox.xml.widgetParser = new function(){
 		//small as possible
 		var ret = d.query('[dojoType]', htmlNode);
 		//remove the script tag and replace with new HTML block
-		dojo.query(">", htmlNode).place(script, "before")
+		query(">", htmlNode).place(script, "before")
 		script.parentNode.removeChild(script);
 		return ret;
 	};
@@ -167,3 +166,6 @@ dojox.xml.widgetParser = new function(){
 	
 }();
 
+return dojox.xml.widgetParser;
+
+});
