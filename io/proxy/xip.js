@@ -1,7 +1,5 @@
-dojo.provide("dojox.io.proxy.xip");
-
-dojo.require("dojo.io.iframe");
-dojo.require("dojox.data.dom");
+define(['dojo/_base/lang', 'dojo/io/iframe', 'dojox/data/dom', 'dojo/_base/xhr', 'dojo/_base/url'], function(dojo, iframe, dom){
+	dojo.getObject("io.proxy.xip", true, dojox);
 
 dojox.io.proxy.xip = {
 	//summary: Object that implements the iframe handling for XMLHttpRequest
@@ -41,7 +39,7 @@ dojox.io.proxy.xip = {
 	together.
 	*/
 
-	xipClientUrl: ((dojo.config || djConfig)["xipClientUrl"]) || dojo.moduleUrl("dojox.io.proxy", "xip_client.html"),
+	xipClientUrl: ((dojo.config || djConfig)["xipClientUrl"]) || dojo.moduleUrl("dojox.io.proxy", "xip_client.html").toString(),
 
 
 	//MSIE has the lowest limit for URLs with fragment identifiers,
@@ -101,7 +99,7 @@ dojox.io.proxy.xip = {
 		this._state[stateId] = {
 			facade: facade,
 			stateId: stateId,
-			clientFrame: dojo.io.iframe.create(stateId, "", frameUrl),
+			clientFrame: iframe.create(stateId, "", frameUrl),
 			isSending: false,
 			serverUrl: facade._ifpServerUrl,
 			requestData: null,
@@ -151,7 +149,7 @@ dojox.io.proxy.xip = {
 			if(contentType){
 				var mimeType = contentType.split(";")[0];
 				if(mimeType.indexOf("application/xml") == 0 || mimeType.indexOf("text/xml") == 0){
-					facade.responseXML = dojox.data.dom.createDocument(response.responseText, contentType);
+					facade.responseXML = dom.createDocument(response.responseText, contentType);
 				}
 			}
 		}
@@ -434,4 +432,8 @@ dojo.extend(dojox.io.proxy.xip.XhrIframeFacade, {
 			}
 		}
 	}
+});
+
+return dojox.io.proxy.xip;
+
 });

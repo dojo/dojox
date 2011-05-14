@@ -1,5 +1,5 @@
-dojo.provide("dojox.io.OAuth");
-dojo.require("dojox.encoding.digests.SHA1");
+define(["dojo/_base/array", "dojo/_base/xhr", "dojox/encoding/digests/SHA1"], function(dojo, xhr, SHA1){
+dojo.getObject("io.OAuth", true, dojox);
 
 dojox.io.OAuth = new (function(){
 	//	summary:
@@ -101,7 +101,7 @@ dojox.io.OAuth = new (function(){
 			return key;
 		} else {
 			//	assume SHA1 HMAC
-			return dojox.encoding.digests.SHA1._hmac(data, key);
+			return SHA1._hmac(data, key);
 		}
 	}
 
@@ -277,7 +277,7 @@ dojox.io.OAuth = new (function(){
 		 *	|	});
 		 */
 		sign(method, args, oaa);
-		return dojo.xhr(method, args, hasBody);
+		return xhr(method, args, hasBody);
 	};
 
 	this.xhrGet = function(/* dojo.__XhrArgs */args, /* dojox.io.OAuth.__OAuthArgs*/ oaa){
@@ -293,3 +293,7 @@ dojox.io.OAuth = new (function(){
 		return this.xhr("DELETE", args, oaa);
 	};
 })();
+
+return dojox.io.OAuth;
+
+});

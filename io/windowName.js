@@ -1,4 +1,5 @@
-dojo.provide("dojox.io.windowName");
+define(["dojo/_base/window", "dojo/_base/xhr", "dojo/_base/sniff", "dojo/_base/url", "domReady!"], function(dojo){
+dojo.getObject("io.windowName", true, dojox);
 // Implements the window.name transport
 
 dojox.io.windowName = {
@@ -78,16 +79,7 @@ dojox.io.windowName = {
 				args.timeout
 			);
 		}
-		var self = dojox.io.windowName;
-		if(dojo.body()){
-			// the DOM is ready
-			self._send(dfd, method, authElement, args.onAuthLoad);
-		}else{
-			// we will wait for the DOM to be ready to proceed
-			dojo.addOnLoad(function(){
-				self._send(dfd, method, authElement, args.onAuthLoad);
-			});
-		}
+		dojox.io.windowName._send(dfd, method, authElement, args.onAuthLoad);
 		return dfd;
 	},
 	_send: function(dfd, method, authTarget, onAuthLoad){
@@ -224,4 +216,8 @@ dojox.io.windowName = {
 	},
 	_frameNum: 0
 	
-}
+};
+
+return dojox.io.windowName;
+
+});
