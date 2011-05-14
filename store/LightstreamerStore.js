@@ -1,4 +1,12 @@
-define("dojox/store/LightstreamerStore", ["dojo", "dojox", "dojo/store/util/QueryResults"], function(dojo, dojox){
+define([
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/declare",
+	"dojo/_base/Deferred",
+	"dojo/store/util/QueryResults"
+], function(dojo){
+	dojo.getObject("store", true, dojox);
+	
 	//	NOTE: The usual Lightstreamer web client MUST be loaded to use this store,
 	//	and will not be wrapped as an AMD module for now.
 	var nextId = 0;
