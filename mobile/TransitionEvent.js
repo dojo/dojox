@@ -11,7 +11,7 @@ define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,l
 			var opts = {bubbles:true, cancelable:true, detail: this.transitionOptions, triggerEvent: this.triggerEvent};	
 			//console.log("Target: ", this.target, " opts: ", opts);
 
-			var evt = listen.dispatch(this.target,"startTransition", opts);
+			var evt = listen.emit(this.target,"startTransition", opts);
 			//console.log('evt: ', evt);
 			if (evt){
 				dojo.when(transition.call(this, evt), dojo.hitch(this, function(results){
@@ -21,7 +21,7 @@ define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,l
 		},
 
 		endTransition: function(results){
-			listen.dispatch(this.target, "endTransition" , {detail: results.transitionOptions});
+			listen.emit(this.target, "endTransition" , {detail: results.transitionOptions});
 		}
 	});
 });
