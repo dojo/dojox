@@ -309,7 +309,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		// feature detection
 		if(dojo.isWebKit){
 			dm.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
-				navigator.appVersion.indexOf("Mobile") != -1);
+				navigator.appVersion.indexOf("Mobile") != -1) || !!d.isAndroid;
 		}
 	})();
 

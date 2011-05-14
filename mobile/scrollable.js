@@ -931,7 +931,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		dojo.doc.documentElement.removeChild(elem);
 	
 		dojox.mobile.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
-			navigator.appVersion.indexOf("Mobile") != -1);
+			navigator.appVersion.indexOf("Mobile") != -1) || !!dojo.isAndroid;
 	}
 })();
 
