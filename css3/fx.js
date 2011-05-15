@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/ext-dojo/complex"], function(dojo){
 	var css3fx = dojo.getObject("css3.fx", true, dojox);
-	dojo.mixin(css3fx, {
+	return dojo.mixin(css3fx, {
 		puff: function(args){
 			// summary:
 			//		Returns an animation that will do a "puff" effect on the given node

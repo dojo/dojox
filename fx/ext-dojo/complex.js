@@ -70,7 +70,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		}
 	})();
 
-	dojo.declare("dojox.fx._Complex", null, {
+	return dojo.declare("dojox.fx._Complex", null, {
 		// summary:
 		//		A class that takes a complex property such as
 		//		clip style: rect(10px 30px 10px 50px), and breaks it

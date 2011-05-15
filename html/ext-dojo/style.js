@@ -459,4 +459,5 @@ define(["dojo/_base/kernel", "dojo/_base/html"], function(dojo){
 	});
 
 	dojox.html["ext-dojo"].style.init();
+	return dojo.style;
 });
