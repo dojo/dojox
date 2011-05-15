@@ -171,7 +171,8 @@ define(["dojo/_base/declare","dojo/listen","dojo/_base/array","dojo/DeferredList
 						}
 					}
 					widget = new cls(params, node);
-					if(!node){ // not to call View's startup()
+					if(node){ // to call View's startup()
+						widget._visible = true;
 						this._ws.push(widget);
 					}
 					if(parent && parent.addChild){
