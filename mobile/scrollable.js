@@ -660,7 +660,6 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					"  -webkit-animation-name: scrollableViewFadeScrollBar;}"+
 					"@-webkit-keyframes scrollableViewFadeScrollBar{"+
 					"  from { opacity: 0.6; }"+
-					"  50% { opacity: 0.6; }"+
 					"  to { opacity: 0; }}";
 				dojox.mobile._fadeRule = node.sheet.cssRules[1];
 			}
