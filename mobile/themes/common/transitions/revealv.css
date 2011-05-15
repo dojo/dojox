@@ -12,6 +12,7 @@
 }
 .mblRevealv.mblOut.mblReverse {
 	-webkit-animation-name: mblRevealVOutReverse;
+	-webkit-animation-fill-mode: forwards;
 }
 @-webkit-keyframes mblRevealVOut {
 	from { -webkit-transform: translateY(0px); }
