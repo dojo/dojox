@@ -15,23 +15,19 @@
 			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
 			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.IconContainer");
-			dojo.require("dojox.mobile.IconItem");
-			dojo.require("dijit.CalendarLite");
-			dojo.require("dijit.ColorPalette");
-			dojo.require("dijit.ProgressBar");
 		</script>
 	</head>
 	<body class="tundra" style="background-color:white">
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container (Single App)</h1>
 			<ul dojoType="dojox.mobile.IconContainer" transition="flip" single="true">
-				<li dojoType="dojox.mobile.IconItem" label="Calendar" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo._base.query">
+				<li dojoType="dojox.mobile.IconItem" label="Calendar" icon="images/icon-1.png" lazy="true">
 					<div dojoType='dijit.CalendarLite'></div>
 				</li>
-				<li dojoType="dojox.mobile.IconItem" label="Color Palette" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai,dijit._base.typematic,dojo._base.Color">
+				<li dojoType="dojox.mobile.IconItem" label="Color Palette" icon="images/icon-1.png" lazy="true">
 					<div dojoType='dijit.ColorPalette'></div>
 				</li>
-				<li dojoType="dojox.mobile.IconItem" label="Progress Bar" icon="images/icon-1.png" lazy="true" requires="dijit._base.wai">
+				<li dojoType="dojox.mobile.IconItem" label="Progress Bar" icon="images/icon-1.png" lazy="true">
 					<div dojoType='dijit.ProgressBar'></div>
 				</li>
 			</ul>
