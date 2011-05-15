@@ -31,13 +31,21 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 			if(!this.labelNode){
 				this.labelNode = dojo.create("SPAN", null, this.domNode);
 			}
+			this.labelNode.className = "mblHeadingSpanTitle";
+			this.labelDivNode = dojo.create("DIV", {
+				className: "mblHeadingDivTitle",
+				innerHTML: this.labelNode.innerHTML
+			}, this.domNode);
 		},
 
 		startup: function(){
 			if(this._started){ return; }
 			var parent = this.getParent && this.getParent();
 			if(!parent || !parent.resize){ // top level widget
-				this.resize();
+				var _this = this;
+				setTimeout(function(){ // necessary to render correctly
+					_this.resize();
+				}, 0);
 			}
 			this.inherited(arguments);
 		},
@@ -45,21 +53,31 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 		resize: function(){
 			if(this._btn){
 				this._btn.style.width = this._body.offsetWidth + this._head.offsetWidth + "px";
-				this._btn.style.position = "absolute";
-				var dim = dojo.marginBox(this._btn);
-	
-				var hasBtn = false;
+			}
+			if(this.labelNode){
+				// find the rightmost left button (B), and leftmost right button (C)
+				// +-----------------------------+
+				// | |A| |B|             |C| |D| |
+				// +-----------------------------+
+				var leftBtn, rightBtn;
 				var children = this.containerNode.childNodes;
-				for(i = 0; i < children.length; i++){
+				for(i = children.length - 1; i >= 0; i--){
 					var c = children[i];
-					if(c.nodeType === 1 && dojo.hasClass(c, "mblToolbarButton")){
-						hasBtn = true;
-						break;
+					if(c.nodeType === 1){
+						if(!rightBtn && dojo.hasClass(c, "mblToolbarButton") && dojo.style(c, "float") === "right"){
+							rightBtn = c;
+						}
+						if(!leftBtn && (dojo.hasClass(c, "mblToolbarButton") && dojo.style(c, "float") === "left" || c === this._btn)){
+							leftBtn = c;
+						}
 					}
 				}
-	
-				this._btn.style.position = !hasBtn && this.labelNode &&
-					(dim.l + dim.w < this.labelNode.offsetLeft) ? "absolute" : "relative";
+
+				var bw = this.domNode.offsetWidth; // bar width
+				var rw = rightBtn ? bw - rightBtn.offsetLeft + 5 : 0; // rightBtn width
+				var lw = leftBtn ? leftBtn.offsetLeft + leftBtn.offsetWidth + 5 : 0; // leftBtn width
+				var tw = this.labelNodeLen || 0; // title width
+				dojo[bw - Math.max(rw,lw)*2 > tw ? "addClass" : "removeClass"](this.domNode, "mblHeadingCenterTitle");
 			}
 			dojo.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
@@ -86,7 +104,10 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 	
 		_setLabelAttr: function(/*String*/label){
 			this.label = label;
-			this.labelNode.innerHTML = this._cv(label);
+			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv(label);
+			this.labelNode.style.display = "inline";
+			this.labelNodeLen = this.labelNode.offsetWidth;
+			this.labelNode.style.display = "";
 		},
 	
 		findCurrentView: function(){

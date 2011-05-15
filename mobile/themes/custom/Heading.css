@@ -20,6 +20,18 @@
   line-height: 42px;
   z-index: 1;
 }
+.mblHeadingDivTitle {
+  position: absolute;
+  width: 100%;
+  display: none;
+  z-index: -1;
+}
+.mblHeadingCenterTitle .mblHeadingDivTitle {
+  display: block;
+}
+.mblHeadingCenterTitle .mblHeadingSpanTitle {
+  display: none;
+}
 /* Heading Arrow Button */
 .mblArrowButton {
   position: relative;

@@ -68,7 +68,7 @@
 	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 }
 .dj_tablet .mblArrowButtonNeck {
-	border-color: #C0C0C0;
+	border-color: #C0C0C0 transparent;
 	background: -webkit-gradient(linear, left top, left bottom, from(#B1B5BB), to(#6A727D));
 }
 .dj_tablet .mblArrowButtonSelected .mblArrowButtonHead {
