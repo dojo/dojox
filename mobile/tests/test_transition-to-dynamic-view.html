@@ -12,7 +12,8 @@
 			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 
 			dojo.declare("dojox.mobile.ListItemEx",dojox.mobile.ListItem,{
-				_parse: function(text){
+				onClick: function(e){
+					var text = dojo.trim(dojo._getText(this.url));
 					var obj = dojo.fromJson(text);
 					if(!obj.items){ return; }
 					var items = obj.items;
@@ -41,7 +42,9 @@
 						list1.addChild(item1);
 					}
 					var id = view1.id;
-					return dojo.hash ? "#" + id : id;
+					this.url = "";
+					this.moveTo = dojo.hash ? "#" + id : id;
+					this.inherited(arguments);
 				}
 			});
 		</script>
