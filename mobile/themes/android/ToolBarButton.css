@@ -4,7 +4,7 @@
   position: relative;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  margin: 0px 3px;
+  margin: 0px 6px;
   padding: 0px 10px;
   height: 23px;
   border: 1px inset #3F3E3E;
@@ -19,4 +19,5 @@
 }
 div.mblToolbarButtonDomButton {
   width: 11px;
+  height: 23px;
 }
