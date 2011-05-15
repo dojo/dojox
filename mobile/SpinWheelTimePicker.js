@@ -10,7 +10,7 @@ define(["dojo/_base/html", "dojo/date","dojo/date/locale","./SpinWheel","./SpinW
 			SpinWheelSlot
 		],
 		slotProps: [
-			{labelFrom:0, labelTo:24},
+			{labelFrom:0, labelTo:23},
 			{labels:["00","01","02","03","04","05","06","07","08","09",
 					 "10","11","12","13","14","15","16","17","18","19",
 					 "20","21","22","23","24","25","26","27","28","29",
