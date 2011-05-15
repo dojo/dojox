@@ -20,4 +20,5 @@
 }
 .mblArrowButtonNeck {
 	background-image: url(compat/arrow-button-bg.png);
+	border-width: 1px 0px 1px 0px;
 }
