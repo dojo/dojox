@@ -1,4 +1,4 @@
-define(["./matrix"],function(matrix){
+define(["./matrix"], function(matrix){
 	dojo.getObject("dojox.gfx.arc", true);
 	var m = dojox.gfx.matrix,
 		twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,
@@ -95,8 +95,7 @@ define(["./matrix"],function(matrix){
 					step  = sweep ? alpha : -alpha;
 					angle = 0;	// stop the loop
 				}
-				var c1, c2, e,
-					M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
+				var c2, e, M = m.normalize([elliptic_transform, m.rotate(startAngle + step)]);
 				if(sweep){
 					c1 = m.multiplyPoint(M, curve.c1);
 					c2 = m.multiplyPoint(M, curve.c2);
@@ -113,5 +112,6 @@ define(["./matrix"],function(matrix){
 			return result;	// Array
 		}
 	};
+
 	return dojox.gfx.arc;
 });

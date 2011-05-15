@@ -1,7 +1,7 @@
-define(["./_base","./shape","./path"],function (){
-	dojo.getObject("dojox.gfx.silverlight", true);
+define(["./_base","./shape","./path"], function(){
+	var sl = dojo.getObject("dojox.gfx.silverlight", true);
 	dojo.experimental("dojox.gfx.silverlight");
-	var d = dojo, g = dojox.gfx, gs = g.shape, sl = g.silverlight;
+	var d = dojo, g = dojox.gfx, gs = g.shape;
 
 	var dasharray = {
 			solid:				"none",
@@ -805,12 +805,6 @@ define(["./_base","./shape","./path"],function (){
 		return a && b && a.equals(b);
 	};
 	
-	// see if we are required to initilize
-	if(g.loadAndSwitch === "silverlight"){
-		g.switchTo("silverlight");
-		delete g.loadAndSwitch;
-	}
-	
-	return sl;	
+	return sl;
 });
 

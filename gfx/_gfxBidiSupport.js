@@ -1,4 +1,4 @@
-define(["./utils","./shape","dojox/string/BidiEngine"],function (){
+define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	dojo.getObject("dojox.gfx._gfxBidiSupport", true);
 	var g = dojox.gfx;
 
@@ -18,7 +18,7 @@ define(["./utils","./shape","dojox/string/BidiEngine"],function (){
 		case 'canvas':
 			g.isCanvas = true;
 			break;
-	};
+	}
 
 	var bidi_const = {
 		LRM : '\u200E',
@@ -385,7 +385,7 @@ define(["./utils","./shape","dojox/string/BidiEngine"],function (){
 			}, obj);
 		}
 		return obj;
-	};
+	}
 
 	function validateTextDir(textDir){
 		var validValues = ["ltr","rtl","auto"]; 
@@ -396,7 +396,8 @@ define(["./utils","./shape","dojox/string/BidiEngine"],function (){
 			}
 		}
 		return textDir;
-	};
+	}
+
 	return g; // return gfx api augmented with bidi support	
 });
 

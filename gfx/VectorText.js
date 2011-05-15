@@ -1,4 +1,4 @@
-define(["dojox/gfx","dojox/xml/DomParser","dojox/html/metrics"],function (){
+define(["dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],function (){
 	/*
 		dojox.gfx.VectorText
 		An implementation of the SVG Font 1.1 spec, using dojox.gfx.

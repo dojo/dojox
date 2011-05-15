@@ -1,5 +1,5 @@
-define(["."],function(){
-	dojo.declare("dojox.gfx.Mover", null, {
+define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/connect"], function(dojo){
+	return dojo.declare("dojox.gfx.Mover", null, {
 		constructor: function(shape, e, host){
 			// summary: an object, which makes a shape follow the mouse,
 			//	used as a default mover, and as a base class for custom movers

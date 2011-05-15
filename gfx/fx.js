@@ -1,6 +1,6 @@
-define(["./matrix"],function(){
+define(["./matrix"], function(m){
 	dojo.getObject("dojox.gfx.fx", true);
-	var d = dojo, g = dojox.gfx, m = g.matrix;
+	var d = dojo, g = dojox.gfx;
 
 	// Generic interpolators. Should they be moved to dojox.fx?
 

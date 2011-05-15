@@ -1,4 +1,4 @@
-define(["./Mover"],function(){
+define(["./Mover"], function(){
 	return dojo.declare("dojox.gfx.Moveable", null, {
 		constructor: function(shape, params){
 			// summary: an object, which makes a shape moveable

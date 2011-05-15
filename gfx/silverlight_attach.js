@@ -1,4 +1,4 @@
-define(["./silverlight"],function(){
+define(["./silverlight"], function(){
 	dojo.getObject("dojox.gfx.silverlight_attach", true);
 	dojo.experimental("dojox.gfx.silverlight_attach");
 	var g = dojox.gfx, sl = g.silverlight;
@@ -15,5 +15,5 @@ define(["./silverlight"],function(){
 		return null;	// dojox.gfx.Surface
 	};
 	
-	return sl; //return augmented silverlight api
+	return sl; // return augmented silverlight api
 });

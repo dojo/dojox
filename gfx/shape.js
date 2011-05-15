@@ -1,5 +1,5 @@
-define(["./matrix"],function(){
-	dojo.getObject("dojox.gfx.shape", true);
+define(["dojo/_base/html", "./matrix", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color"], function(dojo){
+	dojo.getObject("gfx.shape", true, dojox);
 	// a set of ids (keys=type)
 	var _ids = {};
 	// a simple set impl to map shape<->id

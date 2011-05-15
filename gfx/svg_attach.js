@@ -1,6 +1,6 @@
-define(["./svg"],function(){
-	dojo.experimental("dojox.gfx.svg_attach");
+define(["./svg"], function(){
 	dojo.getObject("dojox.gfx.svg_attach", true);
+	dojo.experimental("dojox.gfx.svg_attach");
 	var g = dojox.gfx, svg = g.svg;
 	
 	svg.attachNode = function(node){
@@ -223,5 +223,6 @@ define(["./svg"],function(){
 		shape.kerning = r.getAttribute("kerning") == "auto";
 		shape.text = r.firstChild.nodeValue;
 	}
+
 	return svg; // return augmented svg api
 });

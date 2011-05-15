@@ -1,7 +1,7 @@
-define(["./canvas"],function(){
-	dojo.getObject("dojox.gfx.canvasWithEvents", true);
+define(["./canvas"], function(){
+	var canvasEvent = dojo.getObject("dojox.gfx.canvasWithEvents", true);
 	dojo.experimental("dojox.gfx.canvasWithEvents");
-	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas, canvasevent=g.canvasWithEvents,m = g.matrix;
+	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas, m = g.matrix;
 	
 	d.declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
 		
@@ -38,7 +38,6 @@ define(["./canvas"],function(){
 				input.target = ctx.getImageData(0, 0, 1, 1).data[0] ? this : null;
 				ctx.restore();
 			}
-			return;
 		},
 		_hitTestGeometry: function(ctx, x, y){
 			return ctx.isPointInPath(x, y) ? this : null;
@@ -99,61 +98,41 @@ define(["./canvas"],function(){
 			dojo.disconnect(token);
 		},
 		// connect hook
-		oncontextmenu: function(e){
-		}, // empty
-		onclick: function(e){
-		}, // empty
-		ondblclick: function(e){
-		}, // empty
-		onmouseenter: function(e){
-		}, // empty
-		onmouseleave: function(e){
-		}, // empty
-		onmouseout: function(e){
-		}, // empty
-		onmousedown: function(e){
-		}, // empty
-		ontouchstart: function(e){
-		}, // empty
-		touchstart: function(e){
-		}, // empty
-		onmouseup: function(e){
-		}, // empty
-		ontouchend: function(e){
-		}, // empty
-		touchend: function(e){
-		}, // empty
-		onmouseover: function(e){
-		}, // empty
-		onmousemove: function(e){
-		}, // empty
-		ontouchmove: function(e){
-		}, // empty
-		touchmove: function(e){
-		}, // empty
-		onkeydown: function(e){
-		}, // empty
-		onkeyup: function(e){
-		} // empty		
+		oncontextmenu:  function(){},
+		onclick:        function(){},
+		ondblclick:     function(){},
+		onmouseenter:   function(){},
+		onmouseleave:   function(){},
+		onmouseout:     function(){},
+		onmousedown:    function(){},
+		ontouchstart:   function(){},
+		touchstart:     function(){},
+		onmouseup:      function(){},
+		ontouchend:     function(){},
+		touchend:       function(){},
+		onmouseover:    function(){},
+		onmousemove:    function(){},
+		ontouchmove:    function(){},
+		touchmove:      function(){},
+		onkeydown:      function(){},
+		onkeyup:        function(){}
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Group", [canvasevent.Shape, canvas.Group], {
-	
+	d.declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
 		_testInputs: function(/*Object*/ctx, /*Array*/ pos){
-			var children = this.children, t = this.getTransform();
-			if (children.length == 0) {
+			var children = this.children, t = this.getTransform(), i, j;
+			if(children.length == 0){
 				return;
 			}
 			var posbk = [];
-			for (var i = 0; i < pos.length; ++i) {
+			for(i = 0; i < pos.length; ++i){
 				var input = pos[i];
 				// backup position before transform applied
 				posbk[i] = {
 					x: input.x,
 					y: input.y
 				};
-				if (input.target) 
-					continue;
+				if(input.target) continue;
 				var x = input.x, y = input.y;
 				var p = t ? dojox.gfx.matrix.multiplyPoint(dojox.gfx.matrix.invert(t), x, y) : {
 					x: x,
@@ -162,28 +141,28 @@ define(["./canvas"],function(){
 				input.x = p.x;
 				input.y = p.y;
 			}
-			for (var i = children.length - 1; i >= 0; --i) {
+			for(i = children.length - 1; i >= 0; --i){
 				children[i]._testInputs(ctx, pos);
 				// does it need more hit tests ?
 				var allFound = true;
-				for (var j = 0; j < pos.length; ++j) {
-					if (pos[j].target == null) {
+				for(j = 0; j < pos.length; ++j){
+					if(pos[j].target == null){
 						allFound = false;
 						break;
 					}
 				}
-				if (allFound) {
+				if(allFound){
 					break;
 				}
 			}
-			for (var i = 0; i < pos.length; ++i) {
+			for(i = 0; i < pos.length; ++i){
 				pos[i].x = posbk[i].x;
 				pos[i].y = posbk[i].y;
 			}	
 		}	
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Image", [canvasevent.Shape, canvas.Image], {
+	d.declare("dojox.gfx.canvasWithEvents.Image", [canvasEvent.Shape, canvas.Image], {
 		_renderShape: function(/* Object */ ctx){
 			// summary:
 			//		render image
@@ -204,20 +183,20 @@ define(["./canvas"],function(){
 		}
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Text", [canvasevent.Shape, canvas.Text], {
+	d.declare("dojox.gfx.canvasWithEvents.Text", [canvasEvent.Shape, canvas.Text], {
 		_testInputs: function(ctx, pos){
 			return this._hitTestPixel(ctx, pos);
 		}
 	});
 
 
-	d.declare("dojox.gfx.canvasWithEvents.Rect", [canvasevent.Shape, canvas.Rect], {});
-	d.declare("dojox.gfx.canvasWithEvents.Circle", [canvasevent.Shape, canvas.Circle], {});
-	d.declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasevent.Shape, canvas.Ellipse],{});
-	d.declare("dojox.gfx.canvasWithEvents.Line", [canvasevent.Shape, canvas.Line],{});
-	d.declare("dojox.gfx.canvasWithEvents.Polyline", [canvasevent.Shape, canvas.Polyline],{});
-	d.declare("dojox.gfx.canvasWithEvents.Path", [canvasevent.Shape, canvas.Path],{});
-	d.declare("dojox.gfx.canvasWithEvents.TextPath", [canvasevent.Shape, canvas.TextPath],{});
+	d.declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
+	d.declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
+	d.declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasEvent.Shape, canvas.Ellipse],{});
+	d.declare("dojox.gfx.canvasWithEvents.Line", [canvasEvent.Shape, canvas.Line],{});
+	d.declare("dojox.gfx.canvasWithEvents.Polyline", [canvasEvent.Shape, canvas.Polyline],{});
+	d.declare("dojox.gfx.canvasWithEvents.Path", [canvasEvent.Shape, canvas.Path],{});
+	d.declare("dojox.gfx.canvasWithEvents.TextPath", [canvasEvent.Shape, canvas.TextPath],{});
 
 	
 	// a map that redirects shape-specific events to the canvas event handler that deals with these events
@@ -267,16 +246,15 @@ define(["./canvas"],function(){
 				return dojo.connect(this, name, object, method);
 			} else {
 				this._initMirrorCanvas();
-				return dojo.connect(this.getEventSource(), name, null, dojox.gfx.shape.fixCallback(this, g.fixTarget, object, method));
+				return dojo.connect(this.getEventSource(), name, null,
+							dojox.gfx.shape.fixCallback(this, g.fixTarget, object, method));
 			}	
 		},
+
 		// connection hooks for touch events connect
-		_ontouchstartImpl_:function(e){			
-		},
-		_ontouchendImpl_:function(e){			
-		},
-		_ontouchmoveImpl_:function(e){			
-		},
+		_ontouchstartImpl_: function(){},
+		_ontouchendImpl_:   function(){},
+		_ontouchmoveImpl_:  function(){},
 		
 		_initMirrorCanvas: function(){
 			if (!this.mirrorCanvas) {
@@ -307,13 +285,16 @@ define(["./canvas"],function(){
 			if (!this._eventsH)
 				this._eventsH = {};
 			// register event hooks if not done yet
-			this._eventsH[eventName] = dojo.connect(this.getEventSource(),eventName,dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_"+eventName));	
+			this._eventsH[eventName] = dojo.connect(this.getEventSource(), eventName,
+					dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_" + eventName));
 			if (eventName === 'onclick' || eventName==='ondblclick') {
-				if (!this._eventsH['onmousedown']){
-					this._eventsH['onmousedown'] = dojo.connect(this.getEventSource(),'onmousedown',dojox.gfx.shape.fixCallback(this,g.fixTarget,this,"_"+'onmousedown'));
+				if(!this._eventsH['onmousedown']){
+					this._eventsH['onmousedown'] = dojo.connect(this.getEventSource(),
+							'onmousedown', dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_onmousedown"));
 				}
-			 	if (!this._eventsH['onmouseup']){
-					this._eventsH['onmouseup'] = dojo.connect(this.getEventSource(),'onmouseup',dojox.gfx.shape.fixCallback(this,g.fixTarget,this,"_"+'onmouseup'));
+			 	if(!this._eventsH['onmouseup']){
+					this._eventsH['onmouseup'] = dojo.connect(this.getEventSource(),
+							'onmouseup', dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_onmouseup"));
 				}
 			} 			
 		},
@@ -323,35 +304,36 @@ define(["./canvas"],function(){
 			dojox.gfx.canvas.Surface.destroy.apply(this);
 			
 			// destroy events and objects
-			for(var i in this._eventsH)
+			for(var i in this._eventsH){
 				dojo.disconnect(this._eventsH[i]);
+			}
 			this._eventsH = this.mirrorCanvas = null;
 		},	
 		
-
 		// events
 		getEventSource: function(){
 			// summary: returns the canvas DOM node for surface-level events
 			return this.rawNode;
 		},
+
 		// internal handlers used to implement shape-level event notification
-		_invokeHandler: function(base,method,event){
+		_invokeHandler: function(base, method, event){
 			// Invokes handler function
 			var handler = base[method];
-			if (handler && handler.after) {
+			if(handler && handler.after){
 				handler.apply(base, [event]);
-			} else if (method in _eventsShortNameMap) {
+			}else if (method in _eventsShortNameMap){
 				// there may be a synonym event name (touchstart -> ontouchstart)
 				handler = base[_eventsShortNameMap[method]];
-				if (handler && handler.after) {
+				if(handler && handler.after){
 					handler.apply(base, [event]);
 				}
 			}
-			if (!handler && method.indexOf('touch') !== -1){
+			if(!handler && method.indexOf('touch') !== -1){
 				// special case for surface touch handlers
-				method = "_"+method+"Impl_";
+				method = "_" + method + "Impl_";
 				handler = base[method];
-				if (handler){
+				if(handler){
 					handler.apply(base, [event]);
 				}
 			}
@@ -361,33 +343,33 @@ define(["./canvas"],function(){
 				this._invokeHandler(base.parent, method, event);
 			}
 		},
-		_oncontextmenu:		function(e){
+		_oncontextmenu: function(e){
 			// summary: triggers onclick
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
-				this._invokeHandler(this._pick.curr,'oncontextmenu',e);
+				this._invokeHandler(this._pick.curr, 'oncontextmenu', e);
 			}
 		},
-		_ondblclick:		function(e){
+		_ondblclick: function(e){
 			// summary: triggers onclick
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pickOfMouseUp){
-				this._invokeHandler(this._pickOfMouseUp,'ondblclick',e);
+				this._invokeHandler(this._pickOfMouseUp, 'ondblclick', e);
 			}
 		},
-		_onclick:		function(e){
+		_onclick: function(e){
 			// summary: triggers onclick
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pickOfMouseUp && this._pickOfMouseUp == this._pickOfMouseDown){
-				this._invokeHandler(this._pickOfMouseUp,'onclick',e);
+				this._invokeHandler(this._pickOfMouseUp, 'onclick', e);
 			}
 		},
-		_onmousedown:	function(e){
+		_onmousedown: function(e){
 			// summary: triggers onmousedown
 			this._pickOfMouseDown = this._pick.curr;
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
-				this._invokeHandler(this._pick.curr,'onmousedown',e);
+				this._invokeHandler(this._pick.curr, 'onmousedown', e);
 			}
 		},
 		_ontouchstart: function(e){
@@ -398,39 +380,39 @@ define(["./canvas"],function(){
 			}
 			
 		},
-		_onmouseup:		function(e){
+		_onmouseup: function(e){
 			// summary: triggers onmouseup
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			this._pickOfMouseUp = this._pick.curr;
 			if(this._pick.curr){
-				this._invokeHandler(this._pick.curr,'onmouseup',e);
+				this._invokeHandler(this._pick.curr, 'onmouseup', e);
 			}
 		},
-		_ontouchend:	function(e){
+		_ontouchend: function(e){
 			// summary: triggers ontouchend
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
-				for (var i = 0; i < this._pick.curr.length; ++i) {
-					if (this._pick.curr[i].target) {
+				for(var i = 0; i < this._pick.curr.length; ++i){
+					if(this._pick.curr[i].target){
 						e.gfxTarget = this._pick.curr[i].target;
 						this._invokeHandler(this._pick.curr[i].target, 'ontouchend', e);
 					}
 				}
 			}
 		},
-		_onmousemove:	function(e){
+		_onmousemove: function(e){
 			// summary: triggers onmousemove, onmouseenter, onmouseleave
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.last && this._pick.last != this._pick.curr){
-				this._invokeHandler(this._pick.last,'onmouseleave',e);
-				this._invokeHandler(this._pick.last,'onmouseout',e);
+				this._invokeHandler(this._pick.last, 'onmouseleave', e);
+				this._invokeHandler(this._pick.last, 'onmouseout', e);
 			}
 			if(this._pick.curr){
 				if(this._pick.last == this._pick.curr){
-					this._invokeHandler(this._pick.curr,'onmousemove',e);
+					this._invokeHandler(this._pick.curr, 'onmousemove', e);
 				}else{
-					this._invokeHandler(this._pick.curr,'onmouseenter',e);
-					this._invokeHandler(this._pick.curr,'onmouseover',e);
+					this._invokeHandler(this._pick.curr, 'onmouseenter', e);
+					this._invokeHandler(this._pick.curr, 'onmouseover', e);
 				}
 			}
 		},
@@ -447,37 +429,35 @@ define(["./canvas"],function(){
 			// for each positive picking:
 			// .group all pickings by target
 			// .collect all touches for the picking target 
-			for (var i = 0; i < this._pick.curr.length; ++i) {
+			for(var i = 0; i < this._pick.curr.length; ++i){
 				var pick = this._pick.curr[i];
-				if (pick.target) {
+				if(pick.target){
 					// touches for this target
 					var gfxtt = pick.target.__gfxtt;
-					if (!gfxtt) {
+					if(!gfxtt){
 						gfxtt = [];
 						pick.target.__gfxtt = gfxtt;
 					}
 					// store the touch that yielded to this picking
 					gfxtt.push(pick.t);
 					// if the target has not been added yet, add it
-					if (!pick.target.__inToFire){
+					if(!pick.target.__inToFire){
 						toFire.push(pick.target);
 						pick.target.__inToFire=true;
 					}
 				}
 			}
-			if (toFire.length === 0) {
+			if(toFire.length === 0){
 				// no target, invokes the surface handler
 				this._invokeHandler(this, 'on' + e.type, e);
-			} else {
-				for (i = 0; i < toFire.length; ++i) {
+			}else{
+				for(i = 0; i < toFire.length; ++i){
 					(function(){
 						var targetTouches = toFire[i].__gfxtt;
 						// fires the original event BUT with our own targetTouches array.
 						// Note for iOS:
-						var evt = dojo.delegate(e, {
-							gfxTarget: toFire[i]
-						});
-						if (isiOS) {
+						var evt = dojo.delegate(e, {gfxTarget: toFire[i]});
+						if(isiOS){
 							// must use the original preventDefault function or iOS will throw a TypeError
 							evt.preventDefault = function(){e.preventDefault();};
 							evt.stopPropagation = function(){e.stopPropagation();};
@@ -493,8 +473,9 @@ define(["./canvas"],function(){
 				}
 			}
 		},
-		_onkeydown:		function(e){},	// needed?
-		_onkeyup:		function(e){},	// needed?
+		_onkeydown: function(){},	// needed?
+		_onkeyup:   function(){},	// needed?
+
 		_whatsUnderEvent: function(evt){
 			// summary:	returns the shape under the mouse event
 			// evt:		mouse event
@@ -504,22 +485,22 @@ define(["./canvas"],function(){
 				inputs = [], changedTouches = evt.changedTouches, touches = evt.touches;
 			// collect input events targets
 			if(changedTouches){
-				for (i = 0; i < changedTouches.length; ++i) {
+				for(i = 0; i < changedTouches.length; ++i){
 					inputs.push({
 						t: changedTouches[i],
 						x: changedTouches[i].pageX - pos.x,
 						y: changedTouches[i].pageY - pos.y
 					});
 				}
-			} else if(touches){
-				for (i = 0; i < touches.length; ++i) {
+			}else if(touches){
+				for(i = 0; i < touches.length; ++i){
 					inputs.push({
 						t: touches[i],
 						x: touches[i].pageX - pos.x,
 						y: touches[i].pageY - pos.y
 					});
 				}
-			} else {
+			}else{
 				inputs.push({
 					x : evt.pageX - pos.x,
 					y : evt.pageY - pos.y
@@ -537,17 +518,17 @@ define(["./canvas"],function(){
 			ctx.pickingMode = true;
 			var pick = null;
 			// process the inputs to find the target.
-			for(var i = children.length-1; i >= 0; i--){
+			for(i = children.length-1; i >= 0; i--){
 				children[i]._testInputs(ctx, inputs);
 				// does it need more hit tests ?
 				var allFound = true;
-				for (var j=0; j<inputs.length;++j){
-					if (inputs[j].target == null) {
+				for(j = 0; j < inputs.length; ++j){
+					if(inputs[j].target == null){
 						allFound = false;
 						break;
 					}
 				}
-				if (allFound){
+				if(allFound){
 					break;
 				}
 			}
@@ -557,7 +538,7 @@ define(["./canvas"],function(){
 		}		
 	});
 	
-	dojox.gfx.canvasWithEvents.createSurface = function(parentNode, width, height){
+	canvasEvent.createSurface = function(parentNode, width, height){
 		// summary: creates a surface (Canvas)
 		// parentNode: Node: a parent node
 		// width: String: width of surface, e.g., "100px"
@@ -575,7 +556,7 @@ define(["./canvas"],function(){
 			height = height + "px";
 		}
 
-		var s = new dojox.gfx.canvasWithEvents.Surface(),
+		var s = new canvasEvent.Surface(),
 			p = d.byId(parentNode),
 			c = p.ownerDocument.createElement("canvas");
 
@@ -596,13 +577,13 @@ define(["./canvas"],function(){
 		//    queries whether an event has been stopped or not
 		// evt: Event
 		//    The event object.
-		if (evt.cancelBubble !== undefined) {
+		if(evt.cancelBubble !== undefined){
 			return evt.cancelBubble;
 		}
 		return false;
 	};
 	
-	dojox.gfx.canvasWithEvents.fixTarget = function(event, gfxElement){
+	canvasEvent.fixTarget = function(event, gfxElement){
 		// summary: 
 		//     Adds the gfxElement to event.gfxTarget if none exists. This new 
 		//     property will carry the GFX element associated with this event.
@@ -622,11 +603,5 @@ define(["./canvas"],function(){
 		return true;
 	};
 
-	// see if we are required to initilize
-	if(g.loadAndSwitch === "canvasWithEvents"){
-		g.switchTo("canvasWithEvents");
-		delete g.loadAndSwitch;
-	}
-	
-	return dojox.gfx.canvasWithEvents;
+	return canvasEvent;
 });

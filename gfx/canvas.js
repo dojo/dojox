@@ -1,10 +1,8 @@
-
-define(["./_base","./shape","./path","./arc","./decompose"],function(){
-	dojo.getObject("dojox.gfx.canvas", true);
+define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
+	var canvas = dojo.getObject("dojox.gfx.canvas", true);
 	dojo.experimental("dojox.gfx.canvas");
-	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas,
-		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2,
-		pattrnbuffer = null;
+	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, pattrnbuffer = null,
+		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2;
 
 	d.declare("dojox.gfx.canvas.Shape", gs.Shape, {
 		_render: function(/* Object */ ctx){
@@ -793,14 +791,9 @@ define(["./_base","./shape","./path","./arc","./decompose"],function(){
 	d.extend(canvas.Surface, Creator);
 	
 	// no event support -> nothing to fix. 
-	dojox.gfx.canvas.fixTarget = function(event, gfxElement){
+	canvas.fixTarget = function(event, gfxElement){
 		return true;
-	}
+	};
 	 
-	// see if we are required to initilize
-	if(g.loadAndSwitch === "canvas"){
-		g.switchTo("canvas");
-		delete g.loadAndSwitch;
-	}
-	return dojox.gfx.canvas;
+	return canvas;
 });

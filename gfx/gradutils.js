@@ -1,8 +1,8 @@
 // Various generic utilities to deal with a linear gradient
 
-define(["./matrix"],function(){
+define(["./matrix"], function(m){
 	dojo.getObject("dojox.gfx.gradutils", true);
-	var d = dojo, m = dojox.gfx.matrix, C = d.Color;
+	var d = dojo, C = d.Color;
 	
 	function findColor(o, c){
 		if(o <= 0){
@@ -44,12 +44,12 @@ define(["./matrix"],function(){
 						p = m.multiplyPoint(projection, pt),
 						pf1 = m.multiplyPoint(projection, fill.x1, fill.y1),
 						pf2 = m.multiplyPoint(projection, fill.x2, fill.y2),
-						scale = m.multiplyPoint(rotation, pf2.x - pf1.x, pf2.y - pf1.y).x,
-						o = m.multiplyPoint(rotation, p.x - pf1.x, p.y - pf1.y).x / scale;
+						scale = m.multiplyPoint(rotation, pf2.x - pf1.x, pf2.y - pf1.y).x;
+					o = m.multiplyPoint(rotation, p.x - pf1.x, p.y - pf1.y).x / scale;
 					break;
 				case "radial":
-					var dx = pt.x - fill.cx, dy = pt.y - fill.cy,
-						o = Math.sqrt(dx * dx + dy * dy) / fill.r;
+					var dx = pt.x - fill.cx, dy = pt.y - fill.cy;
+					o = Math.sqrt(dx * dx + dy * dy) / fill.r;
 					break;
 			}
 			return findColor(o, fill.colors);	// dojo.Color
@@ -85,5 +85,6 @@ define(["./matrix"],function(){
 		}
 		return fill;	// Object
 	};
+
 	return dojox.gfx.gradutils;
 });

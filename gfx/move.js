@@ -1,1 +1,1 @@
-define(["./Mover","./Moveable"],function(){return dojo.getObject("dojox.gfx.move", true);});
+define(["./Mover", "./Moveable"], function(){ return dojo.getObject("dojox.gfx.move", true); });

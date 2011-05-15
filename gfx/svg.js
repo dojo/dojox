@@ -1,6 +1,6 @@
 define(["./_base","./path"], function(){
-	dojo.getObject("dojox.gfx.svg", true);
-	var d = dojo, g = dojox.gfx, gs = g.shape, svg = g.svg;
+	var svg = dojo.getObject("gfx.svg", true, dojox),
+		d = dojo, g = dojox.gfx, gs = g.shape;
 	svg.useSvgWeb = (typeof window.svgweb != "undefined");
 	
 	// Need to detect iOS in order to workaround bug when
@@ -815,11 +815,5 @@ else
 		dojo.extend(svg.Surface, _eventsProcessing);
 	}
 
-	// see if we are required to initilize
-	if(g.loadAndSwitch === "svg"){
-		g.switchTo("svg");
-		delete g.loadAndSwitch;
-	}
-	
 	return svg;
 });

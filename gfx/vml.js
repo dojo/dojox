@@ -1,6 +1,6 @@
 define(["./_base","./shape","./path","./arc","./gradient"],function(){
-	dojo.getObject("dojox.gfx.vml", true);
-	var d = dojo, g = dojox.gfx, m = g.matrix, gs = g.shape, vml = g.vml;
+	var vml = dojo.getObject("dojox.gfx.vml", true),
+		d = dojo, g = dojox.gfx, m = g.matrix, gs = g.shape;
 
 	// dojox.gfx.vml.xmlns: String: a VML's namespace
 	vml.xmlns = "urn:schemas-microsoft-com:vml";
@@ -1211,11 +1211,5 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 		return true;
 	};
 	
-	// see if we are required to initilize
-	if(g.loadAndSwitch === "vml"){
-		g.switchTo("vml");
-		delete g.loadAndSwitch;
-	}
-	return vml;	
-
+	return vml;
 });

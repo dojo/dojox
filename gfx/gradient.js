@@ -1,7 +1,7 @@
-define(["./matrix"],function(){
+define(["./matrix"], function(m){
 // Various utilities to deal with a linear gradient (mostly VML-specific)
 	dojo.getObject("dojox.gfx.gradient", true);
-	var d = dojo, m = dojox.gfx.matrix, C = d.Color;
+	var d = dojo, C = d.Color;
 	
 	dojox.gfx.gradient.rescale = function(stops, from, to){
 		// summary:

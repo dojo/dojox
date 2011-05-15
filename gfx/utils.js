@@ -1,6 +1,6 @@
-define(["dojox/gfx"],function (){
-	dojo.getObject("dojox.gfx.utils", true);
-	var d = dojo, g = dojox.gfx, gu = g.utils;
+define(["dojox/gfx"], function(){
+	var gu = dojo.getObject("dojox.gfx.utils", true);
+	var d = dojo, g = dojox.gfx;
 
 	dojo.mixin(gu, {
 		forEach: function(
@@ -271,5 +271,6 @@ define(["dojox/gfx"],function (){
 			return svg;  //Cleaned SVG text.
 		}
 	});
+
 	return gu;
 });

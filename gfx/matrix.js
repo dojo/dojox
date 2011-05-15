@@ -1,6 +1,5 @@
-define(["."],function(){
-	dojo.getObject("dojox.gfx.matrix", true);
-	var m = dojox.gfx.matrix;
+define(["dojo/_base/kernel"], function(){
+	var m = dojo.getObject("gfx.matrix", true, dojox);
 
 	// candidates for dojox.math:
 	var _degToRadCache = {};
@@ -437,8 +436,9 @@ define(["."],function(){
 
 	});
 	// propagate Matrix2D up
-	dojox.gfx.Matrix2D = dojox.gfx.matrix.Matrix2D;
-	return dojox.gfx.matrix;
+	dojox.gfx.Matrix2D = m.Matrix2D;
+
+	return m;
 });
 
 
