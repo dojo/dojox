@@ -231,7 +231,7 @@ define(["dojox/gfx"], function(){
 				}
 				//We have to load the GFX SVG proxy frame.  Default is to use the one packaged in dojox.
 				var uri = (dojo.config["dojoxGfxSvgProxyFrameUrl"]||dojo.moduleUrl("dojox", "gfx/resources/gfxSvgProxyFrame.html"));
-				f.setAttribute("src", uri);
+				f.setAttribute("src", uri.toString());
 				dojo.body().appendChild(f);
 			}
 		},
