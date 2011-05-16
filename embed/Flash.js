@@ -1,6 +1,5 @@
-dojo.provide("dojox.embed.Flash");
+define(["dojo/_base"], function(dojo) {
 
-(function(){
 	/*******************************************************
 		dojox.embed.Flash
 
@@ -10,6 +9,9 @@ dojo.provide("dojox.embed.Flash");
 		Usage:
 		var movie=new dojox.embed.Flash({ args }, containerNode);
 	 ******************************************************/
+
+	dojo.getObject("embed", true, dojox);
+
 	var fMarkup, fVersion;
 	var minimumVersion = 9; // anything below this will throw an error (may overwrite)
 	var keyBase = "dojox-embed-flash-", keyCount=0;
@@ -25,7 +27,6 @@ dojo.provide("dojox.embed.Flash");
 	};
 
 	function prep(kwArgs){
-		// console.warn("KWARGS:", kwArgs)
 		kwArgs = dojo.delegate(_baseKwArgs, kwArgs);
 
 		if(!("path" in kwArgs)){
@@ -54,7 +55,6 @@ dojo.provide("dojox.embed.Flash");
 				kwArgs.params.FlashVars = a.join("&");
 				delete kwArgs.vars;
 			}
-			// FIXME: really? +'s?
 			var s = '<object id="' + kwArgs.id + '" '
 				+ 'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" '
 				+ 'width="' + kwArgs.width + '" '
@@ -106,16 +106,6 @@ dojo.provide("dojox.embed.Flash");
 				});
 		});
 
-		//	TODO: ...and double check this fix; is IE really firing onbeforeunload with any kind of href="#" link?
-		/*
-		var beforeUnloadHandle = dojo.connect(dojo.global, "onbeforeunload", function(){
-			try{
-				if(__flash_unloadHandler){ __flash_unloadHandler=function(){ }; }
-				if(__flash_savedUnloadHandler){ __flash_savedUnloadHandler=function(){ }; }
-			} catch(e){ }
-			dojo.disconnect(beforeUnloadHandle);
-		});
-		*/
 	} else {
 		//	*** Sane browsers branch ******************************************************************
 		fMarkup = function(kwArgs){
@@ -260,7 +250,6 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 		//	minimumVersion: Number
 		//		The minimum version of Flash required to run this movie.
 		this.minimumVersion = kwArgs.minimumVersion || minimumVersion;
-		//console.log("AVAILABLE:", this);
 
 		//	id: String
 		//		The id of the DOMNode to be used for this movie.  Can be used with dojo.byId to get a reference.
@@ -297,13 +286,11 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 
 	dojo.extend(dojox.embed.Flash, {
 		onReady: function(/*HTMLObject*/ movie){
-			console.warn("embed.Flash.movie.onReady:", movie)
 			//	summary:
 			//		Stub function for you to attach to when the movie reference is first
 			//		pushed into the document.
 		},
 		onLoad: function(/*HTMLObject*/ movie){
-			console.warn("embed.Flash.movie.onLoad:", movie)
 			//	summary:
 			//		Stub function for you to attach to when the movie has finished downloading
 			//		and is ready to be manipulated.
@@ -321,7 +308,6 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 			this.onLoad(this.movie);
 		},
 		init: function(/*dojox.embed.__flashArgs*/ kwArgs, /*DOMNode?*/ node){
-			console.log("embed.Flash.movie.init")
 			//	summary
 			//		Initialize (i.e. place and load) the movie based on kwArgs.
 			this.destroy();		//	ensure we are clean first.
@@ -347,8 +333,7 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 						try{
 							p = this.movie.PercentLoaded();
 						}catch(e){
-							/* squelch */
-							console.warn("this.movie.PercentLoaded() failed");
+							console.warn("this.movie.PercentLoaded() failed", e, this.movie);
 						}
 
 						if(p == 100){
@@ -357,7 +342,6 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 
 						}else if(p==0 && this._pollCount++ > this._pollMax){
 							// after several attempts, we're not past zero.
-							// FIXME: What if we get stuck on 33% or something?
 							clearInterval(this._poller);
 							throw new Error("Building SWF failed.");
 						}
@@ -508,34 +492,22 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 			}, obj);
 		}
 	});
+	
+	dojox.embed.Flash.place = function(kwArgs, node){
+		var o = fMarkup(kwArgs);
+		node = dojo.byId(node);
+		if(!node){
+			node = dojo.doc.createElement("div");
+			node.id = o.id+"-container";
+			dojo.body().appendChild(node);
+		}
+		if(o){
+			node.innerHTML = o.markup;
+			return o.id;
+		}
+		return null;
+	}
+	dojox.embed.Flash.onInitialize();
 
-	/*if(dojo.isIE){
-		//	Ugh!
-		if(dojo._initFired){
-			var e = document.createElement("script");
-			e.type = "text/javascript";
-			e.src = dojo.moduleUrl("dojox", "embed/IE/flash.js");
-			document.getElementsByTagName("head")[0].appendChild(e);
-		}else{
-			//	we can use document.write.  What a kludge.
-			document.write('<scr'+'ipt type="text/javascript" src="' + dojo.moduleUrl("dojox", "embed/IE/flash.js") + '">'
-				+ '</scr'+'ipt>');
-		}
-	}else{*/
-		dojox.embed.Flash.place = function(kwArgs, node){
-			var o = fMarkup(kwArgs);
-			node = dojo.byId(node);
-			if(!node){
-				node = dojo.doc.createElement("div");
-				node.id = o.id+"-container";
-				dojo.body().appendChild(node);
-			}
-			if(o){
-				node.innerHTML = o.markup;
-				return o.id;
-			}
-			return null;
-		}
-		dojox.embed.Flash.onInitialize();
-	//}
-})();
+	return dojox.embed.Flash;
+});
