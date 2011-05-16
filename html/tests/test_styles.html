@@ -17,13 +17,10 @@
 
 <script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async:1, isDebug: true, fontSizeWatch: true" ></script>
 <script type="text/javascript">
-	require(["dojo"], function(dojo){
-			dojo.require("dojox.html.styles");
-			require.ready(function(){
-				onDomReady();
-			});
-		});
 
+	require.ready(["dojo", "dojox/html/styles"], function(dojo){
+		onDomReady();
+	});
 
 	getSelectedStyleSheet = function(){
 		if(dojo.byId("ssDefault").checked) return false;

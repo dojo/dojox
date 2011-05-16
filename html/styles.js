@@ -74,11 +74,11 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 			if(index>-1) { break; }
 		}
 		if(!ss){
-			console.log("No dynamic style sheet has been created from which to remove a rule.");
+			console.warn("No dynamic style sheet has been created from which to remove a rule.");
 			return false;
 		}
 		if(index===-1){
-			console.log("The css rule was not found and could not be removed.");
+			console.warn("The css rule was not found and could not be removed.");
 			return false;
 		}
 		ss._indicies.splice(index, 1);
@@ -213,7 +213,6 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 			//console.log("sheets:", sheets);
 			d.forEach(sheets, function(s){
 				s.disabled = (s.title === title) ? false : true;
-				//console.log("SWITCHED:", s.title, s.disabled, s.id);
 			});
 		}else{
 			for(i=0;i<sheets.length;i++){
@@ -249,7 +248,6 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 			var sObjects = dh.getStyleSheets();
 			for(nm in sObjects){
 				if(sObjects[nm].title){
-					//console.log("TITLE:", sObjects[nm].title, sObjects[nm])
 					titledSheets.push(sObjects[nm]);
 				}
 			}
@@ -270,7 +268,6 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		//
 		if(pageStyleSheets.collected) {return pageStyleSheets;}
 		var sheets = d.doc.styleSheets;
-		//console.log("styleSheets:", sheets);
 		d.forEach(sheets, function(n){
 			var s = (n.sheet) ? n.sheet : n;
 			var name = s.title || s.href;
