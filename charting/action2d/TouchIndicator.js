@@ -181,6 +181,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		},
 
 		onTouchMove: function(event){
+			//	summary:
 			//		Called when touch is moved on the chart.
 			if(event.touches.length==1){
 				this._onTouchSingle(event);

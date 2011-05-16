@@ -190,6 +190,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 
 		onMouseMove: function(event){
+			//	summary:
 			//		Called when the mouse is moved on the chart.
 			if(this._isMouseDown){
 				this._onMouseSingle(event);

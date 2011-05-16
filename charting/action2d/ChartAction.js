@@ -1,4 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base"], function(dojo, connect, declare, Base){
+define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base"], 
+	function(dojo, connect, declare, Base){
 
 return dojo.declare("dojox.charting.action2d.ChartAction", dojox.charting.action2d.Base, {
 

@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare"], function(dojo){
+define(["../..", "dojo/_base/lang", "dojo/_base/declare"], function(dojox, dojo){
 
 return dojo.declare("dojox.charting.action2d.Base", null, {
 

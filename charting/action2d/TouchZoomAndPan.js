@@ -163,6 +163,7 @@ return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.ac
 	},
 
 	onTouchMove: function(event){
+		//	summary:
 		//		Called when touch is moved on the chart.
 		var chart = this.chart, axis = chart.getAxis(this.axis);
 		var length = event.touches.length;
@@ -196,6 +197,7 @@ return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.ac
 	},
 
 	onTouchEnd: function(event){
+		//	summary:
 		//		Called when touch is ended on the chart.
 		var chart = this.chart, axis = chart.getAxis(this.axis);
 		if(event.touches.length == 1 && this.enableScroll){
@@ -216,6 +218,7 @@ return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.ac
 	},
 
 	onDoubleTap: function(event){
+		//	summary:
 		//		Called when double tap is performed on the chart.
 		var chart = this.chart, axis = chart.getAxis(this.axis);
 		var scale = 1 / this.scaleFactor;
