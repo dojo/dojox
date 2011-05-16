@@ -1,4 +1,7 @@
-dojo.provide("dojox.av._Media");
+define(['dojo'],function(dojo){
+
+dojo.getObject("dojox.av", true);
+dojo.experimental("dojox.av.FLVideo");
 
 dojo.declare("dojox.av._Media", null, {
 	// summary:
@@ -345,4 +348,6 @@ dojo.declare("dojox.av._Media", null, {
 		//dojo._destroyElement(this.flashDiv);
 
 	}
+});
+return dojox.av._Media;
 });
