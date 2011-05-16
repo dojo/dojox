@@ -96,7 +96,10 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	
 	startup: function(){
 		this.inherited(arguments);
-		this._started = true;
+		
+		if (this._gaugeStarted) return;
+		
+		this._gaugeStarted = true;
 		
 		var scale = this.height / this._designHeight;
 		
@@ -159,7 +162,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		// summary: 
 		//		Layout the gauge elements depending on the various parameters (size, font, tick length..)
 		
-		if (!this._started) 
+		if (!this._gaugeStarted) 
 			return;
 		
 		var font = this._font;
@@ -207,7 +210,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		//		Computes the rectangle that defines the data area of the gauge.
 		
 		
-		if (!this._started) 
+		if (!this._gaugeStarted) 
 			return;
 		
 		var font = this._font;

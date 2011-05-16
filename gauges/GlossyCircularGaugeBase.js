@@ -117,6 +117,10 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 		// summary:
 		//		Overrides AnalogGauge.startup
 		this.inherited(arguments);
+		
+		if (this._needle) return; //just in case someone calls the startup twice.
+
+		
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		this.cx = scale * this._designCx + (this.width - scale * this._designWidth) / 2;
 		this.cy = scale * this._designCy + (this.height - scale * this._designHeight) / 2;
