@@ -1,9 +1,5 @@
-dojo.provide("dojox.fx.text");
-
-// dojo.require("dojox.fx._split");
-dojo.require("dojo.fx");
-dojo.require("dojo.fx.easing");
-
+define(["./_base","dojo/fx","dojo/fx/easing"],function(){
+dojo.getObject("fx.text", true, dojox);
 dojox.fx.text._split = function(/*Object*/ args){
 	// summary: Split a block of text into words or letters
 	//
@@ -461,3 +457,5 @@ dojox.fx.text.type = function(/*Object*/ args){
 	args.unhide = true;
 	return dojox.fx.text.backspace(args);
 };
+return dojox.fx.text;
+});

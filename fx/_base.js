@@ -1,7 +1,7 @@
-dojo.provide("dojox.fx._base");
+define(["dojo/_base/kernel","dojo/_base/array","dojo/_base/lang","dojo/_base/fx","dojo/fx"],function(){
 // summary: Experimental and extended Animations beyond Dojo Core / Base functionality.
 //	Provides advanced Lines, Animations, and convenience aliases.
-dojo.require("dojo.fx");
+dojo.getObject("fx", true, dojox);
 
 dojo.mixin(dojox.fx, {
 
@@ -311,3 +311,5 @@ dojox.fx.wipeTo = function(/*Object*/ args){
 	var anim = dojo.animateProperty(dojo.mixin({ properties: props }, args));
 	return anim; // dojo.Animation
 };
+return dojox.fx;
+});

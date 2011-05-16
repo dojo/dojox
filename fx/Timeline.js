@@ -1,5 +1,4 @@
-dojo.provide("dojox.fx.Timeline");
-dojo.require("dojo.fx.easing");
+define(["dojo/fx/easing","dojox/fx"],function(){
 
 dojox.fx.animateTimeline = function(/* Object */options, /* DomNode|String */node){
 	// options: Object
@@ -207,4 +206,5 @@ dojox.fx._Timeline.prototype.getValue = function(/*float*/ p){
 	return o; // Object
 };
 
-
+return dojox.fx;
+});

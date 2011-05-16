@@ -1,5 +1,4 @@
-dojo.provide("dojox.fx._arg");
-
+define(["."],function(){
 dojox.fx._arg.StyleArgs = function(/*Object*/ args){
 	// summary:
 	//		The node and CSS class to use for style manipulations.
@@ -21,3 +20,9 @@ dojox.fx._arg.ShadowResizeArgs = function(/*Object*/ args){
 	this.x = args.x;
 	this.y = args.y;
 }
+
+return {
+	StyleArgs: dojox.fx._arg.StyleArgs,
+	ShadowResizeArgs: dojox.fx._arg.ShadowResizeArgs};
+
+});

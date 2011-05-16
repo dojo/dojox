@@ -1,7 +1,4 @@
-dojo.provide("dojox.fx.split");
-
-dojo.require("dojo.fx");
-dojo.require("dojo.fx.easing");
+define(["./_base","dojo/fx","dojo/fx/easing"],function(djfx,djfxease){
 
 dojo.mixin(dojox.fx,{
 	_split: function(/*Object*/ args){
@@ -658,5 +655,6 @@ dojo.mixin(dojox.fx,{
 		args.unhide = true;
 		return dojox.fx.blockFadeOut(args); // dojo.Animation
 	}
-
+});
+return dojox.fx;
 });

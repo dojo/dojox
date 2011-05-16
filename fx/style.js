@@ -1,5 +1,5 @@
-dojo.provide("dojox.fx.style");
-dojo.experimental("dojox.fx.style");
+define(["dojox/fx/_base"],function(){
+	dojo.experimental("dojox.fx.style");
 //
 // summary:
 //		dojox.fx CSS Class Animations:
@@ -10,9 +10,6 @@ dojo.experimental("dojox.fx.style");
 //
 //	provides: addClass, removeClass, and toggleClass
 //
-dojo.require("dojo.fx");
-
-(function(){
 		
 	var d = dojo;
 
@@ -233,7 +230,6 @@ dojo.require("dojo.fx");
 			"letterSpacing",
 			"fontSize"
 		]
-	
 	});
-
-})();
+	return dojox.fx;
+});

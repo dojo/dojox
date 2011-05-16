@@ -1,5 +1,4 @@
-dojo.provide("dojox.fx.ext-dojo.NodeList-style");
-dojo.experimental("dojox.fx.ext-dojo.NodeList-style");
+define(["dojo/_base/NodeList","dojo/NodeList-fx","../style"],function(){
 // summary:
 //		Core extensions to `dojo.NodeList` providing addtional fx to `dojo.NodeList-fx`
 // 		from `dojox.fx.style`
@@ -8,8 +7,6 @@ dojo.experimental("dojox.fx.ext-dojo.NodeList-style");
 //		A Package to extend dojo base NodeList with fx provided by the `dojox.fx` project.
 //		These are experimental animations, in an experimental
 
-dojo.require("dojo.NodeList-fx");
-dojo.require("dojox.fx.style");
 
 dojo.extend(dojo.NodeList, {
 
@@ -58,5 +55,6 @@ dojo.extend(dojo.NodeList, {
 			return dojox.fx.toggleClass(n, cssClass, force, args);
 		}));
 	}
-
+});
+return dojo.NodeList;
 });

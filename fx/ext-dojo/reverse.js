@@ -1,8 +1,4 @@
-dojo.provide("dojox.fx.ext-dojo.reverse");
-dojo.require("dojo.fx.easing");
-dojo.require("dojo.fx");
-
-			
+define(["dojo/_base/lang","dojo/fx","dojo/fx/easing","dojox/fx"],function(){
 dojo.extend(dojo.Animation, {
 	// summary:
 	//		A dojo.Animation extension that enables an easy reversal.
@@ -95,4 +91,6 @@ dojo.extend(dojo.Animation, {
 		
 		return this;
 	}
+});
+return dojo.Animation;
 });

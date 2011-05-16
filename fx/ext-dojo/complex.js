@@ -1,74 +1,72 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/_base/fx"], function(dojo){
 	dojo.getObject("fx.ext-dojo.complex", true, dojox);
 	
-	(function(){
-		var da = dojo.animateProperty;
-		dojo.animateProperty = function(options){
-			// summary:
-			//		An extension of dojo.animateProperty which adds functionality
-			//		that animates a "complex property". The primary example is the
-			//		clip style: rect(10px 30px 10px 50px).
-			//		Note this can also be used with (and is actually intended for)
-			//		CSS3 properties, such as transform:
-			//		transform: rotate(10deg) translateX(0px)
-			//
-			//	description:
-			//		The standard animation doesn't know what to do with something like
-			//		rect(...). This class identifies complex properties by they being a
-			//		string and having parenthesis. If so, that property is made into a
-			//		dojox.fx._Complex object and the getValue() is obtained from
-			//		there.
-			//
-			//	example:
-			//		|	var ani = dojo.animateProperty({
-			//		|		node:dojo.byId("myDiv"),
-			//		|		duration:600,
-			//		|		properties:{
-			//		|			clip:{start:'rect(0px 50px 50px 0px)', end:'rect(10px 30px 30px 10px)'}
-			//		|		}
-			//		|	}).play();
-			//
-			var d = dojo;
-			var ani = da(options);
+	var da = dojo.animateProperty;
+	dojo.animateProperty = function(options){
+		// summary:
+		//		An extension of dojo.animateProperty which adds functionality
+		//		that animates a "complex property". The primary example is the
+		//		clip style: rect(10px 30px 10px 50px).
+		//		Note this can also be used with (and is actually intended for)
+		//		CSS3 properties, such as transform:
+		//		transform: rotate(10deg) translateX(0px)
+		//
+		//	description:
+		//		The standard animation doesn't know what to do with something like
+		//		rect(...). This class identifies complex properties by they being a
+		//		string and having parenthesis. If so, that property is made into a
+		//		dojox.fx._Complex object and the getValue() is obtained from
+		//		there.
+		//
+		//	example:
+		//		|	var ani = dojo.animateProperty({
+		//		|		node:dojo.byId("myDiv"),
+		//		|		duration:600,
+		//		|		properties:{
+		//		|			clip:{start:'rect(0px 50px 50px 0px)', end:'rect(10px 30px 30px 10px)'}
+		//		|		}
+		//		|	}).play();
+		//
+		var d = dojo;
+		var ani = da(options);
 
-			dojo.connect(ani, "beforeBegin", function(){
-				// dojo.Animate original still invokes and still
-				// works. We're appending this functionality to
-				// modify targeted properties.
-				ani.curve.getValue = function(r){
-					// Overwriting dojo.Animate's curve.getValue
-					// This is mostly duplicate code, except it looks
-					// for an instance of dojox.fx._Complex.
-					var ret = {};
-					for(var p in this._properties){
-						var prop = this._properties[p],
-							start = prop.start;
-						if(start instanceof d.Color){
-							ret[p] = d.blendColors(start, prop.end, r, prop.tempColor).toCss();
-						}else if(start instanceof dojox.fx._Complex){
-							ret[p] = start.getValue(r);
-						}else if(!d.isArray(start)){
-							ret[p] = ((prop.end - start) * r) + start + (p != "opacity" ? prop.units || "px" : 0);
-						}
-					}
-					return ret;
-				};
-
-				// this.properties has already been set, as has this.curve._properties.
-				// We're fixing the props in curve which will have NaN attributes from
-				// our string property.
-				var pm = {};
-				for(var p in this.properties){
-					var o = this.properties[p];
-					if(typeof(o.start) == "string" && /\(/.test(o.start)){
-						this.curve._properties[p].start = new dojox.fx._Complex(o);
+		dojo.connect(ani, "beforeBegin", function(){
+			// dojo.Animate original still invokes and still
+			// works. We're appending this functionality to
+			// modify targeted properties.
+			ani.curve.getValue = function(r){
+				// Overwriting dojo.Animate's curve.getValue
+				// This is mostly duplicate code, except it looks
+				// for an instance of dojox.fx._Complex.
+				var ret = {};
+				for(var p in this._properties){
+					var prop = this._properties[p],
+						start = prop.start;
+					if(start instanceof d.Color){
+						ret[p] = d.blendColors(start, prop.end, r, prop.tempColor).toCss();
+					}else if(start instanceof dojox.fx._Complex){
+						ret[p] = start.getValue(r);
+					}else if(!d.isArray(start)){
+						ret[p] = ((prop.end - start) * r) + start + (p != "opacity" ? prop.units || "px" : 0);
 					}
 				}
+				return ret;
+			};
 
-			});
-			return ani; // dojo.Animation
-		}
-	})();
+			// this.properties has already been set, as has this.curve._properties.
+			// We're fixing the props in curve which will have NaN attributes from
+			// our string property.
+			var pm = {};
+			for(var p in this.properties){
+				var o = this.properties[p];
+				if(typeof(o.start) == "string" && /\(/.test(o.start)){
+					this.curve._properties[p].start = new dojox.fx._Complex(o);
+				}
+			}
+
+		});
+		return ani; // dojo.Animation
+	}
 
 	return dojo.declare("dojox.fx._Complex", null, {
 		// summary:
@@ -166,4 +164,5 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return o; // Object
 		}
 	});
+	return dojox.fx;
 });

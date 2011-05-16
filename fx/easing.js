@@ -1,6 +1,5 @@
-dojo.provide("dojox.fx.easing");
-dojo.deprecated("dojox.fx.easing","Upgraded to Core, use dojo.fx.easing instead","2.0");
-dojo.require("dojo.fx.easing");
+define(["."],function(){
+	dojo.deprecated("dojox.fx.easing","Upgraded to Core, use dojo.fx.easing instead","2.0");
 /*=====
 	dojox.fx.easing = {
 		// summary:
@@ -8,3 +7,5 @@ dojo.require("dojo.fx.easing");
 	};
 =====*/
 dojox.fx.easing = dojo.fx.easing;
+return dojox.fx.easing;
+});
