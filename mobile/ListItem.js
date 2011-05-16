@@ -102,9 +102,9 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent
 			}	
 
 			if (transOpts){
+				this.setTransitionPos(e);
 				return new TransitionEvent(this.domNode,transOpts,e).dispatch();
 			}
-
 		},
 	
 		deselect: function(){

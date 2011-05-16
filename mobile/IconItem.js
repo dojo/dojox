@@ -137,6 +137,7 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 	
 		iconClicked: function(e){
 			if(e){
+				this.setTransitionPos(e);
 				setTimeout(dojo.hitch(this, function(d){ this.iconClicked(); }), 0);
 				return;
 			}

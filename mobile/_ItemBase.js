@@ -70,7 +70,19 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			var ref = this.srcNodeRef || this.domNode;
 			return ref && ref.parentNode ? dijit.getEnclosingWidget(ref.parentNode) : null;
 		},
-		
+
+		setTransitionPos: function(e){
+			var w = this;
+			while(true){
+				w = w.getParent();
+				if(!w || w instanceof dojox.mobile.View){ break; }
+			}
+			if(w){
+				w.clickedPosX = e.clientX;
+				w.clickedPosY = e.clientY;
+			}
+		},
+
 		transitionTo: function(moveTo,href,url,scene){
 			// deprecated
 			if(dojo.config.isDebug){
