@@ -11,7 +11,7 @@ define([ "dojox/geo/openlayers/Map" ], function(mapArg){
 			// summary:
 			//   Construct a new Feature
 			this._layer = null;
-			this._coordSys = dojox.geo.openlayers.Map.EPSG4326;
+			this._coordSys = dojox.geo.openlayers.EPSG4326;
 		},
 
 		getCoordinateSystem : function(){

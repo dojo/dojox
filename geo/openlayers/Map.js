@@ -1,14 +1,46 @@
-dojo.experimental("dojox.geo.openlayers.Map");
 
 define(
 		[ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/json",
 				"dojox/geo/openlayers/TouchInteractionSupport", "dojox/geo/openlayers/Layer" ],
 		function(langArg, arrayArg, jsonArg, tiArg, layerArg){
 			
-			var gom = dojo.getObject("geo.openlayers.Map", true, dojox);
-			gom.EPSG4326 = new OpenLayers.Projection("EPSG:4326");
-		  
-			var mapClass = dojo
+			dojo.experimental("dojox.geo.openlayers.Map");
+			
+		  var gob = dojo.getObject("geo.openlayers.BaseLayerType", true, dojox);		  
+			dojox.geo.openlayers.BaseLayerType = {
+				// summary:
+				//   Defines the base layer types to be used at Map construction time or
+				//   with the setBaseLayerType function.
+				// description:
+				//   This object defines the base layer types to be used at Map construction
+				//   time or with the setBaseLayerType function.
+				// OSM: String
+				//   The Open Street Map base layer type selector.
+				OSM : "OSM",
+				// WMS: String
+				//   The Web Map Server base layer type selector.
+				WMS : "WMS",
+				// GOOGLE: String
+				//   The Google base layer type selector.
+				GOOGLE : "Google",
+				// VIRTUAL_EARTH: String
+				//   The Virtual Earth base layer type selector.
+				VIRTUAL_EARTH : "VirtualEarth",
+				// BING: String
+				//   Same as Virtual Earth
+				BING : "VirtualEarth",
+				// YAHOO: String
+				//   The Yahoo base layer type selector.
+				YAHOO : "Yahoo",
+				// ARCGIS: String
+				//   The ESRI ARCGis base layer selector.
+				ARCGIS : "ArcGIS"
+			};
+
+			var gom = dojo.getObject("geo.openlayers", true, dojox);
+			dojox.geo.openlayers.EPSG4326 = new OpenLayers.Projection("EPSG:4326");
+
+			return dojo
 					.declare(
 							"dojox.geo.openlayers.Map",
 							null,
@@ -147,7 +179,7 @@ define(
 											if (recenter) {
 												var proj = olm.getProjectionObject();
 												if (proj != null)
-													oc = oc.transform(proj, dojox.geo.openlayers.Map.EPSG4326);
+													oc = oc.transform(proj, dojox.geo.openlayers.EPSG4326);
 											}
 											var old = olm.baseLayer;
 											if (old != null) {
@@ -159,7 +191,7 @@ define(
 											if (recenter) {
 												proj = olm.getProjectionObject();
 												if (proj != null)
-													oc = oc.transform(dojox.geo.openlayers.Map.EPSG4326, proj);
+													oc = oc.transform(dojox.geo.openlayers.EPSG4326, proj);
 												olm.setCenter(oc, ob);
 											}
 										}
@@ -384,7 +416,7 @@ define(
 									// the specified center position.
 
 									var map = this.olMap;
-									var from = dojox.geo.openlayers.Map.EPSG4326;
+									var from = dojox.geo.openlayers.EPSG4326;
 
 									if (o == null) {
 										var c = this.transformXY(0, 0, from);
@@ -480,7 +512,7 @@ define(
 									tp.x = x;
 									tp.y = y;
 									if (!from)
-										from = dojox.geo.openlayers.Map.EPSG4326;
+										from = dojox.geo.openlayers.EPSG4326;
 									if (!to)
 										to = this.olMap.getProjectionObject();
 									tp = OpenLayers.Projection.transform(tp, from, to);
@@ -493,7 +525,7 @@ define(
 
 			//			(function(){
 			var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
-			dojox.geo.openlayers.Map.parseDMS = function(v, toDecimal){
+			dojox.geo.openlayers.parseDMS = function(v, toDecimal){
 				// summary: 
 				//   Parses the specified string and returns degree minute second or decimal degree.
 				// description: 
@@ -523,37 +555,5 @@ define(
 				return [ d, m, s, nsew ];
 			};
 			//			})();
-
-			dojox.geo.openlayers.BaseLayerType = {
-				// summary:
-				//   Defines the base layer types to be used at Map construction time or
-				//   with the setBaseLayerType function.
-				// description:
-				//   This object defines the base layer types to be used at Map construction
-				//   time or with the setBaseLayerType function.
-				// OSM: String
-				//   The Open Street Map base layer type selector.
-				OSM : "OSM",
-				// WMS: String
-				//   The Web Map Server base layer type selector.
-				WMS : "WMS",
-				// GOOGLE: String
-				//   The Google base layer type selector.
-				GOOGLE : "Google",
-				// VIRTUAL_EARTH: String
-				//   The Virtual Earth base layer type selector.
-				VIRTUAL_EARTH : "VirtualEarth",
-				// BING: String
-				//   Same as Virtual Earth
-				BING : "VirtualEarth",
-				// YAHOO: String
-				//   The Yahoo base layer type selector.
-				YAHOO : "Yahoo",
-				// ARCGIS: String
-				//   The ESRI ARCGis base layer selector.
-				ARCGIS : "ArcGIS"
-			};
-			
-			return mapClass;
 
 		});

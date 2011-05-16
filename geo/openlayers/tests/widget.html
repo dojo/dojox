@@ -56,8 +56,8 @@
 		var gfx = map.map.getLayer("name", "aGfxLayer")[0];
 		var cannes = [ '7 1\' 0" E', '43 33\' 0" N' ];
 		var p = {
-			x : dojox.geo.openlayers.Map.parseDMS(cannes[0], true),
-			y : dojox.geo.openlayers.Map.parseDMS(cannes[1], true)
+			x : dojox.geo.openlayers.parseDMS(cannes[0], true),
+			y : dojox.geo.openlayers.parseDMS(cannes[1], true)
 		};
 		var pg = new dojox.geo.openlayers.Point(p);
 

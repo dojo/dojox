@@ -43,14 +43,14 @@
 			y : b.top
 		};
 		var proj = map.map.olMap.getProjectionObject();
-		p1 = map.map.transform(p1, proj, dojox.geo.openlayers.Map.EPSG4326);
+		p1 = map.map.transform(p1, proj, dojox.geo.openlayers.EPSG4326);
 		p1 = dojo.mixin({}, p1);
 
 		var p2 = {
 			x : b.right,
 			y : b.bottom
 		};
-		p2 = map.map.transform(p2, proj, dojox.geo.openlayers.Map.EPSG4326);
+		p2 = map.map.transform(p2, proj, dojox.geo.openlayers.EPSG4326);
 		p2 = dojo.mixin({}, p2);
 
 		var numPoints = 100;

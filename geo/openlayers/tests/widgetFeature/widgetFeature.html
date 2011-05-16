@@ -237,13 +237,13 @@
 		if (loc.hasOwnProperty('x'))
 			lng = loc.x;
 		if (loc.hasOwnProperty('lng'))
-			lng = dojox.geo.openlayers.Map.parseDMS(loc.lng, true);
+			lng = dojox.geo.openlayers.parseDMS(loc.lng, true);
 
 		var lat = 0;
 		if (loc.hasOwnProperty('y'))
 			lat = loc.y;
 		if (loc.hasOwnProperty('lat'))
-			lat = dojox.geo.openlayers.Map.parseDMS(loc.lat, true);
+			lat = dojox.geo.openlayers.parseDMS(loc.lat, true);
 		return [ lng, lat ];
 	}
 
