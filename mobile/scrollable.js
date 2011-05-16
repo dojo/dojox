@@ -525,6 +525,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.stopAnimation = function(){
 		// stop the currently running animation
 		dojo.removeClass(this.containerNode, "mblScrollableScrollTo2");
+		dojo.style(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
 		if(this._scrollBarV){
 			this._scrollBarV.className = "";
 		}
@@ -669,7 +670,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		var f = function(bar){
 			dojo.style(bar, {
 				opacity: 0,
-				webkitAnimationDuration: ""
+				webkitAnimationDuration: "0s" // workaround for android screen flicker problem
 			});
 			bar.className = "mblScrollableFadeScrollBar";
 		};

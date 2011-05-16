@@ -29,10 +29,6 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 			this.domNode.className = "mblView";
-			if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
-				dojo.style(this.domNode, "webkitPerspective", 1000);
-				dojo.style(this.domNode, "webkitBackfaceVisibility", "hidden");
-			}
 			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 			this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 			var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;

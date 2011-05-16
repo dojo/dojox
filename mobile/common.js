@@ -215,9 +215,15 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 			dojo.addClass(dojo.doc.documentElement, "mobile");
 		}
 
-		if(dojo.isAndroid >= 2.2){ // workaround for android screen flicker problem
-			dojo.style(dojo.doc.documentElement, "webkitPerspective", 1000);
-			dojo.style(dojo.doc.documentElement, "webkitBackfaceVisibility", "hidden");
+		if(dojo.config["mblDisableAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
+			dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
+			// workaround for auto-scroll issue when focusing input fields
+			dojo.connect(null, "onfocus", null, function(e){
+				dojo.style(dojo.doc.documentElement, "webkitTransform", "");
+			});
+			dojo.connect(null, "onblur", null, function(e){
+				dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
+			});
 		}
 	
 		//	You can disable hiding the address bar with the following djConfig.
