@@ -246,18 +246,18 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",
 	if(dojox.charting.axis2d && dojox.charting.axis2d.Default){
 		extendMethod(dojox.charting.axis2d.Default,"labelTooltip",true, labelPreprocess, null);
 		//extendMethod(dijit,"showTooltip",false, labelPreprocess, null);
-	};
+	}
 
 	function htmlCreateText(r, agumentsArr){
 		// function to register HTML elements that created by html.createText, this array
 		// needed for allowing to change textDir dynamically.
 		agumentsArr[0].htmlElementsRegistry.push([r, agumentsArr[2], agumentsArr[3], agumentsArr[4], agumentsArr[5], agumentsArr[6], agumentsArr[7]]);
-	};
+	}
 
 	extendMethod(da.createText,"html", false, null, htmlCreateText);
 
 	function validateTextDir(textDir){
 		return /^(ltr|rtl|auto)$/.test(textDir) ? textDir : null;
-	};
+	}
 		
 });

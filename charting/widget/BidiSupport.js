@@ -87,6 +87,6 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/c
 
 	function validateTextDir(textDir){
 		return /^(ltr|rtl|auto)$/.test(textDir) ? textDir : null;
-	};
+	}
 		
 });
