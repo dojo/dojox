@@ -7,6 +7,7 @@
 	line-height: 29px;
 	overflow: hidden;
 	text-align: left;
+	-webkit-tap-highlight-color: rgba(255,255,255,0);
 }
 .mblItemSwitch {
 	position: absolute;
@@ -39,7 +40,6 @@
 	font-weight: bold;
 	line-height: 29px;
 	-webkit-box-sizing: border-box;
-	-webkit-tap-highlight-color: transparent;
 }
 .mblSwitchBgLeft {
 	left: 0px;

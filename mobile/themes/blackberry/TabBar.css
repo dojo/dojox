@@ -19,6 +19,10 @@
   height: 34px;
 }
 /* dojox.mobile.TabBarButton */
+.mblTabBarButton {
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
 .mblTabBar .mblTabBarButton {
   position: relative;
   list-style-type: none;
@@ -65,7 +69,7 @@
   float: left;
   list-style-type: none;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   margin-right: 2px;
   width: 78px;
   height: 61px;

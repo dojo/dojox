@@ -39,7 +39,7 @@
 	float: left;
 	position: relative;
 	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
+	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	margin: 6px;
 	padding: 0px 10px;
 	height: 29px;
@@ -64,7 +64,7 @@
 	border-color: #C0C0C0;
 	background-color: #5877A2;
 	background: -webkit-gradient(linear, left top, left bottom, from(#B1B5BB), to(#6A727D));
-	-webkit-tap-highlight-color: transparent;
+	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 }
 .dj_tablet .mblArrowButtonNeck {
