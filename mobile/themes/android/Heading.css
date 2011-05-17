@@ -32,7 +32,7 @@
   display: block;
 }
 .mblHeadingCenterTitle .mblHeadingSpanTitle {
-  visibility: hidden;
+  display: none;
 }
 /* Heading Arrow Button */
 .mblArrowButton {
