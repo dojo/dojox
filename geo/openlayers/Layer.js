@@ -2,18 +2,18 @@
 define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(langArg, arrayArg){
 
 	return dojo.declare("dojox.geo.openlayers.Layer", null, {
-		// summary: 
-		//   Base layer class for dojox.geo.openlayers.Map specific layers extending OpenLayers.Layer class.
-		//   This layer class accepts Features which encapsulates graphic objects to be added to the map.
-		//   This layer class encapsulates an OpenLayers.Layer.
-		//   This class provides Feature management such as add, remove and feature access.
+		//	summary: 
+		//		Base layer class for dojox.geo.openlayers.Map specific layers extending OpenLayers.Layer class.
+		//		This layer class accepts Features which encapsulates graphic objects to be added to the map.
+		//		This layer class encapsulates an OpenLayers.Layer.
+		//		This class provides Feature management such as add, remove and feature access.
 		constructor : function(name, options){
-			// summary:
-			//  Constructs a new Layer.
-			// name: String
-			//  The name of the layer.
-			// options: Object
-			//  Options passed to the underlying OpenLayers.Layer object.
+			//	summary:
+			//		Constructs a new Layer.
+			//	name: String
+			//		The name of the layer.
+			//	options: Object
+			//		Options passed to the underlying OpenLayers.Layer object.
 
 			var ol = options ? options.olLayer : null;
 
@@ -26,10 +26,10 @@ define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(la
 		},
 
 		renderFeature : function(/* Feature */f){
-			// summary:
-			//   Called when rendering a feature is necessary.
-			// f : Feature
-			//   The feature to draw.
+			//	summary:
+			//		Called when rendering a feature is necessary.
+			//	f : Feature
+			//		The feature to draw.
 			f.render();
 		},
 
@@ -38,10 +38,10 @@ define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(la
 		},
 
 		addFeature : function(/* Feature | Array */f){
-			// summary:
-			//   Add a feature or an array of features to the layer.
-			// f : Feature or Array
-			//   The Feature or array of features to add.
+			//	summary:
+			//		Add a feature or an array of features to the layer.
+			//	f : Feature or Array
+			//		The Feature or array of features to add.
 			if (dojo.isArray(f)) {
 				dojo.forEach(f, function(item){
 					this.addFeature(item);
@@ -55,10 +55,10 @@ define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(la
 		},
 
 		removeFeature : function(/* Feature | Array */f){
-			// summary :
-			//   Removes a feature or an array of features from the layer.
-			// f : Feature or Array
-			//   The Feature or array of features to remove.
+			//	summary :
+			//		Removes a feature or an array of features from the layer.
+			//	f : Feature or Array
+			//		The Feature or array of features to remove.
 			var ft = this._features;
 			if (ft == null)
 				return;
@@ -77,43 +77,47 @@ define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(la
 		},
 
 		getFeatures : function(){
-			// summary:
-			//   Retrieves the feature hold by this layer.
-			// returns: Array
-			//   The untouched array of features hold by this layer.
+			//	summary:
+			//		Retrieves the feature hold by this layer.
+			//	returns: Array
+			//		The untouched array of features hold by this layer.
 			return this._features;
 		},
 
 		getFeatureAt : function(i){
-			// summary:
-			//   Returns the i-th feature of this layer.
-			// i : int
-			//   The index of the feature to return.
-			// returns : ibm_maps.maps.Layer
-			//   The i-th feature of this layer.
+			//	summary:
+			//		Returns the i-th feature of this layer.
+			//	i : int
+			//		The index of the feature to return.
+			//	returns : ibm_maps.maps.Layer
+			//		The i-th feature of this layer.
 			if (this._features == null)
 				return undefined;
 			return this._features[i];
 		},
 
 		getFeatureCount : function(){
-			// summary:
-			//   Returns the number of the features contained by this layer.
-			// returns: int
-			//   The number of the features contained by this layer.
+			//	summary:
+			//		Returns the number of the features contained by this layer.
+			//	returns: int
+			//		The number of the features contained by this layer.
 			if (this._features == null)
 				return 0;
 			return this._features.length;
 		},
 
 		clear : function(){
-			// summary:
-			//   Removes all the features from this layer.
+			//	summary:
+			//		Removes all the features from this layer.
 			var fa = this.getFeatures();
 			this.removeFeature(fa);
 		},
 
 		moveTo : function(event){
+			//	summary:
+			//		Called when the layer is panned or zoomed.
+			//	event: Object
+			//		The event
 			if (event.zoomChanged) {
 				if (this._features == null)
 					return;
@@ -124,6 +128,8 @@ define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(la
 		},
 
 		redraw : function(){
+			//	summary:
+			//		Redraws this layer			
 			if (dojo.isIE)
 				setTimeout(dojo.hitch(this, function(){
 					this.olLayer.redraw();
@@ -133,8 +139,8 @@ define([ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], function(la
 		},
 
 		added : function(){
-		// summary:
-		//   Called when the layer is added to the map
+		//	summary:
+		//		Called when the layer is added to the map
 		}
 
 	});

@@ -8,32 +8,32 @@ define(
 			
 		  var gob = dojo.getObject("geo.openlayers.BaseLayerType", true, dojox);		  
 			dojox.geo.openlayers.BaseLayerType = {
-				// summary:
-				//   Defines the base layer types to be used at Map construction time or
-				//   with the setBaseLayerType function.
-				// description:
-				//   This object defines the base layer types to be used at Map construction
-				//   time or with the setBaseLayerType function.
-				// OSM: String
-				//   The Open Street Map base layer type selector.
+				//	summary:
+				//		Defines the base layer types to be used at Map construction time or
+				//		with the setBaseLayerType function.
+				//	description:
+				//		This object defines the base layer types to be used at Map construction
+				//		time or with the setBaseLayerType function.
+				//	OSM: String
+				//		The Open Street Map base layer type selector.
 				OSM : "OSM",
-				// WMS: String
-				//   The Web Map Server base layer type selector.
+				//	WMS: String
+				//		The Web Map Server base layer type selector.
 				WMS : "WMS",
-				// GOOGLE: String
-				//   The Google base layer type selector.
+				//	GOOGLE: String
+				//		The Google base layer type selector.
 				GOOGLE : "Google",
-				// VIRTUAL_EARTH: String
-				//   The Virtual Earth base layer type selector.
+				//	VIRTUAL_EARTH: String
+				//		The Virtual Earth base layer type selector.
 				VIRTUAL_EARTH : "VirtualEarth",
-				// BING: String
-				//   Same as Virtual Earth
+				//	BING: String
+				//		Same as Virtual Earth
 				BING : "VirtualEarth",
-				// YAHOO: String
-				//   The Yahoo base layer type selector.
+				//	YAHOO: String
+				//		The Yahoo base layer type selector.
 				YAHOO : "Yahoo",
-				// ARCGIS: String
-				//   The ESRI ARCGis base layer selector.
+				//	ARCGIS: String
+				//		The ESRI ARCGis base layer selector.
 				ARCGIS : "ArcGIS"
 			};
 
@@ -45,53 +45,53 @@ define(
 							"dojox.geo.openlayers.Map",
 							null,
 							{
-								// summary:
-								//   A map viewer based on the OpenLayers library.
+								//	summary:
+								//		A map viewer based on the OpenLayers library.
 								//
-								// description:
-								//   The `dojox.geo.openlayers.Map` object allows to view maps from various map providers. 
-								//   It encapsulates  an `OpenLayers.Map` object on which most operations are delegated.
-								//   GFX layers can be added to display GFX georeferenced shapes as well as Dojo widgets.
-								//   Parameters can be passed as argument at construction time to define the base layer
-								//   type and the base layer parameters such as url or options depending on the type
-								//   specified. These parameters can be any of :
-								// <br />
-								// _baseLayerType_: type of the base layer. Can be any of
-								// 
-								// * `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
-								// * `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
-								// * `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
-								// * `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
-								// * `dojox.geo.openlayers.BaseLayerType.BING`: Bing layer
-								// * `dojox.geo.openlayers.BaseLayerType.YAHOO`: Yahoo layer
-								// * `dojox.geo.openlayers.BaseLayerType.ARCGIS`: ESRI ArgGIS layer
-								// 
-								// Note that access to commercial server such as Google, Virtual Earth or Yahoo may need specific licencing.
-								// 
-								//   The parameters value also include :
-								// 
-								// * `baseLayerName`: The name of the base layer.
-								// * `baseLayerUrl`: Some layer may need an url such as Web Map Server
-								// * `baseLayerOptions`: Addtional specific options passed to OpensLayers layer,  
-								// such as The list of layer to display, for Web Map Server layer.
+								//	description:
+								//		The `dojox.geo.openlayers.Map` object allows to view maps from various map providers. 
+								//		It encapsulates  an `OpenLayers.Map` object on which most operations are delegated.
+								//		GFX layers can be added to display GFX georeferenced shapes as well as Dojo widgets.
+								//		Parameters can be passed as argument at construction time to define the base layer
+								//		type and the base layer parameters such as url or options depending on the type
+								//		specified. These parameters can be any of :
+								//	<br />
+								//	_baseLayerType_: type of the base layer. Can be any of
+								//	
+								//	* `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
+								//	* `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
+								//	* `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
+								//	* `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
+								//	* `dojox.geo.openlayers.BaseLayerType.BING`: Bing layer
+								//	* `dojox.geo.openlayers.BaseLayerType.YAHOO`: Yahoo layer
+								//	* `dojox.geo.openlayers.BaseLayerType.ARCGIS`: ESRI ArgGIS layer
 								//
-								// example:
+								//	Note that access to commercial server such as Google, Virtual Earth or Yahoo may need specific licencing.
 								// 
-								// |	var map = new dojox.geo.openlayers.widget.Map(div, {
-								// |		baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
-								// |		baseLayerName : 'Open Street Map Layer'
-								// |	});
+								//	The parameters value also include :
+								// 
+								//	* `baseLayerName`: The name of the base layer.
+								//	* `baseLayerUrl`: Some layer may need an url such as Web Map Server
+								//	* `baseLayerOptions`: Addtional specific options passed to OpensLayers layer,  
+								//	such as The list of layer to display, for Web Map Server layer.
+								//
+								//	example:
+								// 
+								//	|	var map = new dojox.geo.openlayers.widget.Map(div, {
+								//	|		baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
+								//	|		baseLayerName : 'Open Street Map Layer'
+								//	|	});
 
-								// summary:
-								//   The underlying OpenLayers.Map object.
-								//    Should be accessed on read only.
+								//	summary:
+								//		The underlying OpenLayers.Map object.
+								//		Should be accessed on read mode only.
 								olMap : null,
 
 								_tp : null,
 
 								constructor : function(div, options){
-									// summary: 
-									//   Constructs a new Map object
+									//	summary: 
+									//		Constructs a new Map object
 
 									div = dojo.byId(div);
 
@@ -147,12 +147,12 @@ define(
 								},
 
 								setBaseLayerType : function(/* dojox.geo.openlayers.Map.BaseLayerType */type){
-									// summary: 
-									//   Set the base layer type, replacing the existing base layer
-									// type: dojox.geo.openlayers.BaseLayerType
-									//   base layer type
-									// returns: OpenLayers.Layer
-									//   The newly created layer.
+									//	summary: 
+									//		Set the base layer type, replacing the existing base layer
+									//	type: dojox.geo.openlayers.BaseLayerType
+									//		base layer type
+									//	returns: OpenLayers.Layer
+									//		The newly created layer.
 									if (type == this.baseLayerType)
 										return;
 
@@ -200,22 +200,22 @@ define(
 								},
 
 								getBaseLayerType : function(){
-									// summary:
-									//   Retrieves the base layer type.
-									// returns: dojox.geo.openlayers.BaseLayerType
-									//   The current base layer type.
+									//	summary:
+									//		Retrieves the base layer type.
+									//	returns: dojox.geo.openlayers.BaseLayerType
+									//		The current base layer type.
 									return this.baseLayerType;
 								},
 
 								getScale : function(geodesic){
-									// summary: 
-									//  Returns the current scale
-									// geodesic:
-									//  Tell if geodesic calculation should be performed. If set to
-									//  true, the scale will be calculated based on the horizontal size of the
-									//  pixel in the center of the map viewport.
-									// returns:
-									//  The current scale.
+									//	summary: 
+									//		Returns the current scale
+									//	geodesic:
+									//		Tell if geodesic calculation should be performed. If set to
+									//		true, the scale will be calculated based on the horizontal size of the
+									//		pixel in the center of the map viewport.
+									//	returns:
+									//		The current scale.
 									var scale;
 									var om = this.olMap;
 									if (geodesic) {
@@ -233,18 +233,18 @@ define(
 								},
 
 								getOLMap : function(){
-									// summary:
-									//  gets the underlying OpenLayers map object.
-									// returns : OpenLayers.Map
-									// The underlying OpenLayers map object.
+									//	summary:
+									//		gets the underlying OpenLayers map object.
+									//	returns : OpenLayers.Map
+									//		The underlying OpenLayers map object.
 									return this.olMap;
 								},
 
 								_createBaseLayer : function(params){
-									// summary:
-									//  Creates the base layer.
-									// tags:
-									//   private
+									//	summary:
+									//		Creates the base layer.
+									//	tags:
+									//		private
 									var base = null;
 									var type = params.baseLayerType;
 									var url = params.baseLayerUrl;
@@ -324,20 +324,20 @@ define(
 								},
 
 								removeLayer : function(/* dojox.geo.openlayers.Layer */layer){
-									// summary: 
-									//   Remove the specified layer from the map.
-									// layer: 
-									//   The layer to remove from the map.
+									//	summary: 
+									//		Remove the specified layer from the map.
+									//	layer: 
+									//		The layer to remove from the map.
 									var om = this.olMap;
 									var oll = layer.olLayer;
 									om.removeLayer(oll, false);
 								},
 
 								addLayer : function(/* dojox.geo.openlayers.Layer */layer){
-									// summary: 
-									//   Add the specified layer to the map.
-									// layer: dojox.geo.openlayer.Layer
-									//   The layer to add to the map.
+									//	summary: 
+									//		Add the specified layer to the map.
+									//	layer: dojox.geo.openlayer.Layer
+									//		The layer to add to the map.
 									layer.dojoMap = this;
 									var om = this.olMap;
 									var ol = layer.olLayer;
@@ -348,10 +348,10 @@ define(
 								},
 
 								_getLayer : function(/*OpenLayer.Layer */ol){
-									// summary:
-									//   Retrieve the dojox.geo.openlayer.Layer from the OpenLayer.Layer
-									// tags:
-									//   private
+									//	summary:
+									//		Retrieve the dojox.geo.openlayer.Layer from the OpenLayer.Layer
+									//	tags:
+									//		private
 									var i = dojo.indexOf(this._layerDictionary.olLayers, ol);
 									if (i != -1)
 										return this._layerDictionary.layers[i];
@@ -359,17 +359,17 @@ define(
 								},
 
 								getLayer : function(property, value){
-									// summary: 
-									//   Returns the layer whose property matches the value.
-									// property: String
-									//   The property to check
-									// value: Object
-									//   The value to match
-									// returns: dojox.geo.openlayer.Layer | Array
-									//   The layer(s) matching the property's value. If multiple layers
-									// match the property's value an array is returned. 
-									// example: 
-									//   map.getLayer("name", "Layer Name");
+									//	summary: 
+									//		Returns the layer whose property matches the value.
+									//	property: String
+									//		The property to check
+									//	value: Object
+									//		The value to match
+									//	returns: dojox.geo.openlayer.Layer | Array
+									//		The layer(s) matching the property's value. If multiple layers
+									//		match the property's value an array is returned. 
+									//	example: 
+									//		map.getLayer("name", "Layer Name");
 									var om = this.olMap;
 									var ols = om.getBy("layers", property, value);
 									var ret = [];
@@ -380,10 +380,10 @@ define(
 								},
 
 								getLayerCount : function(){
-									// summary: 
-									//   Returns the count of layers of this map.
-									// returns: int 
-									// The number of layers of this map. 
+									//	summary: 
+									//		Returns the count of layers of this map.
+									//	returns: int 
+									//		The number of layers of this map. 
 									var om = this.olMap;
 									if (om.layers == null)
 										return 0;
@@ -391,29 +391,29 @@ define(
 								},
 
 								fitTo : function(o){
-									// summary: 
-									//   Fits the map on a point,or an area
-									// description: 
-									//   Fits the map on the point or extent specified as parameter. 
-									// o: Object
-									//   Object with key values fit parameters or a JSON string.
-									// example:
-									// Examples of arguments passed to the fitTo function :
-									// |	null
-									//    The map is fit on full extent
+									//	summary: 
+									//		Fits the map on a point,or an area
+									//	description: 
+									//		Fits the map on the point or extent specified as parameter. 
+									//	o: Object
+									//		Object with key values fit parameters or a JSON string.
+									//	example:
+									//		Examples of arguments passed to the fitTo function :
+									//	|	null
+									//		The map is fit on full extent
+									//
+									//	|	{
+									//	|	bounds : [ulx, uly, lrx, lry]
+									//	|	}
+									//		The map is fit on the specified bounds expressed as decimal degrees latitude and longitude.
+									//		The bounds are defined with their upper left and lower right corners coordinates.
 									// 
-									// |	{
-									// |	bounds : [ulx, uly, lrx, lry]
-									// |	}
-									//   The map is fit on the specified bounds expressed as decimal degrees latitude and longitude.
-									//   The bounds are defined with their upper left and lower right corners coordinates.
-									// 
-									// |	{
-									// |	position : [longitude, latitude],
-									// |	extent : degrees
-									// |	}
-									// The map is fit on the specified position showing the extent <extent> around
-									// the specified center position.
+									//	|	{
+									//	|	position : [longitude, latitude],
+									//	|	extent : degrees
+									//	|	}
+									//		The map is fit on the specified position showing the extent <extent> around
+									//		the specified center position.
 
 									var map = this.olMap;
 									var from = dojox.geo.openlayers.EPSG4326;
@@ -481,32 +481,32 @@ define(
 								},
 
 								transform : function(p, from, to){
-									// summary
-									//  Transforms the point passed as argument, expressed in the <em>from</em> 
-									//   coordinate system to the map coordinate system.
-									// description:
-									//  Transforms the point passed as argument without modifying it. The point is supposed to be expressed
-									//  in the <em>from</em> coordinate system and is transformed to the map coordinate system.
-									// p : Object {x, y}
-									//   The point to transform
-									// from: OpenLayers.Projection
-									//    The projection in which the point is expressed.
+									//	summary:
+									//		Transforms the point passed as argument, expressed in the <em>from</em> 
+									//		coordinate system to the map coordinate system.
+									//	description:
+									//		Transforms the point passed as argument without modifying it. The point is supposed to be expressed
+									//		in the <em>from</em> coordinate system and is transformed to the map coordinate system.
+									//	p : Object {x, y}
+									//		The point to transform
+									//		from: OpenLayers.Projection
+									//		The projection in which the point is expressed.
 									return this.transformXY(p.x, p.y, from, to);
 								},
 
 								transformXY : function(x, y, from, to){
-									// summary
-									//  Transforms the coordinates passed as argument, expressed in the <em>from</em> 
-									//   coordinate system to the map coordinate system.
-									// description:
-									//  Transforms the coordinates passed as argument. The coordinate are supposed to be expressed
-									//  in the <em>from</em> coordinate system and are transformed to the map coordinate system.
-									// x : Number 
-									//   The longitude coordinate to transform.
-									// y : Number
-									//   The latitude coordinate to transform.
-									// from: OpenLayers.Projection
-									//    The projection in which the point is expressed.
+									//	summary
+									//		Transforms the coordinates passed as argument, expressed in the <em>from</em> 
+									//		coordinate system to the map coordinate system.
+									//	description:
+									//		Transforms the coordinates passed as argument. The coordinate are supposed to be expressed
+									//		in the <em>from</em> coordinate system and are transformed to the map coordinate system.
+									//	x : Number 
+									//		The longitude coordinate to transform.
+									//	y : Number
+									//		The latitude coordinate to transform.
+									//	from: OpenLayers.Projection
+									//		The projection in which the point is expressed.
 
 									var tp = this._tp;
 									tp.x = x;
@@ -526,17 +526,17 @@ define(
 			//			(function(){
 			var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
 			dojox.geo.openlayers.parseDMS = function(v, toDecimal){
-				// summary: 
-				//   Parses the specified string and returns degree minute second or decimal degree.
-				// description: 
-				//   Parses the specified string and returns degree minute second or decimal degree.
-				// v: String
-				//   The string to parse
-				// toDecimal: Boolean
-				//   Specifies if the result should be returned in decimal degrees or in an array
-				// containg the degrees, minutes, seconds values.
-				// returns: Float | Array
-				//   the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
+				//	summary: 
+				//		Parses the specified string and returns degree minute second or decimal degree.
+				//	description: 
+				//		Parses the specified string and returns degree minute second or decimal degree.
+				//	v: String
+				//		The string to parse
+				//	toDecimal: Boolean
+				//		Specifies if the result should be returned in decimal degrees or in an array
+				//		containg the degrees, minutes, seconds values.
+				//	returns: Float | Array
+				//		the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
 
 				var res = re.exec(v);
 				if (res == null || res.length < 5)
