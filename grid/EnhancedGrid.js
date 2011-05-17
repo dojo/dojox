@@ -219,7 +219,6 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	}
 });
 
-dojo.provide("dojox.grid.enhanced.DataSelection");
 dojo.require("dojox.grid.enhanced.plugins._SelectionPreserver");//default loaded plugin
 
 dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
