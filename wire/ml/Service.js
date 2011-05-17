@@ -1,7 +1,4 @@
 dojo.provide("dojox.wire.ml.Service");
-dojo.provide("dojox.wire.ml.RestHandler");
-dojo.provide("dojox.wire.ml.XmlHandler");
-dojo.provide("dojox.wire.ml.JsonHandler");
 
 dojo.require("dijit._Widget");
 dojo.require("dojox.xml.parser");
