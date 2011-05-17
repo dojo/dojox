@@ -1,7 +1,5 @@
 define("dojox/data/XmlStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/xml/parser"], function(dojo, dojox) {
 
-dojo.provide("dojox.data.XmlItem");
-
 dojo.declare("dojox.data.XmlStore", null, {
 	//	summary:
 	//		A data store for XML based services or documents
