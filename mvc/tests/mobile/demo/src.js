@@ -1,4 +1,4 @@
-dojo.provide("demos.mobileMvc.src");
+dojo.provide("dojox.mvc.tests.mobile.demo.src");
 
 //dojo.require("dojo.parser"); // no longer needed for repeat demo
 dojo.require("dojox.mobile.parser");

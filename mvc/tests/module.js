@@ -1,4 +1,4 @@
-dojo.provide("dijit.tests.mvc.module");
+dojo.provide("dojox.mvc.tests.module");
 
 try{
 	var userArgs = window.location.search.replace(/[\?&](dojoUrl|testUrl|testModule)=[^&]*/g,"").replace(/^&/,"?");

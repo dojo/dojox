@@ -1,9 +1,10 @@
-dojo.provide("mvc.models.LoanWizardModel");
+dojo.provide("dojox.mvc.tests.models.LoanWizardModel");
+
 dojo.require("dojox.mvc");
 dojo.require("dojox.mvc.StatefulModel");
 dojo.require("dojo.data.ItemFileWriteStore");
 
-dojo.declare("mvc.models.LoanWizardModel", dojox.mvc.StatefulModel, {
+dojo.declare("dojox.mvc.tests.models.LoanWizardModel", dojox.mvc.StatefulModel, {
 
 	// data store for pie chart
 	chartStore: new dojo.data.ItemFileWriteStore({ data: {
