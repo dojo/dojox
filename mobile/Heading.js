@@ -17,6 +17,8 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement(this.tag);
 			this.domNode.className = "mblHeading";
+			var span = dojo.create("SPAN", {innerHTML:"&nbsp;"}, this.domNode); // to prevent the heading collapsing
+			dojo.style(span, "width", "0px");
 			if(!this.label){
 				dojo.forEach(this.domNode.childNodes, function(n){
 					if(n.nodeType == 3){
