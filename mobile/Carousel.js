@@ -35,6 +35,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 				this.btnContainerNode = dojo.create("DIV", {
 					className: "mblCarouselBtnContainer"
 				}, this.headerNode);
+				dojo.style(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
 				this.prevBtnNode = dojo.create("BUTTON", {
 					className: "mblCarouselBtn",
 					title: "Previous",
@@ -54,6 +55,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 					this.title = "&nbsp;";
 				}
 				this.piw = new dojox.mobile.PageIndicator();
+				dojo.style(this.piw, "float", "right"); // workaround for webkit rendering problem
 				this.headerNode.appendChild(this.piw.domNode);
 			}
 
@@ -148,7 +150,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 		createBox: function(item, h){
 			var width = item.width || (90/this.numVisible + "%");
 			var height = item.height || h + "px";
-			var m = dojo.isIE ? 5/this.numVisible-1 : 5/this.numVisible
+			var m = dojo.isIE ? 5/this.numVisible-1 : 5/this.numVisible;
 			var margin = item.margin || (m + "%");
 			var box = dojo.create("DIV", {
 				className: "mblCarouselBox"
