@@ -1,4 +1,3 @@
-dojo.provide("FlickrImageThumbViewAssistant");
 dojo.require("dojox.mobile.app.SceneAssistant");
 
 dojo.declare("FlickrImageThumbViewAssistant", dojox.mobile.app.SceneAssistant, {

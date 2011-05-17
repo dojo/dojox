@@ -1,4 +1,3 @@
-dojo.provide("FlickrImageViewAssistant");
 dojo.require("dojox.mobile.app.SceneAssistant");
 
 dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
