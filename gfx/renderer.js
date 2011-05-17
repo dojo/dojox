@@ -1,6 +1,6 @@
 // dojox/renderer! plugin
 
-define(["dojo"], function(dojo){
+define(["dojo/_base/lang", "dojo/_base/sniff"], function(dojo){
 	var currentRenderer = null;
 	return {
 		load: function(id, require, load){
@@ -63,12 +63,19 @@ define(["dojo"], function(dojo){
 				console.log("gfx renderer = " + renderer);
 			}
 
-			require(["dojox/gfx/" + renderer], function(renderer){
-				// memorize the renderer module
-				currentRenderer = renderer;
-				// now load it
-				load(renderer);
-			});
+			function loadRenderer(){
+				require(["dojox/gfx/" + renderer], function(module){
+					// memorize the renderer module
+					currentRenderer = module;
+					// now load it
+					load(module);
+				});
+			}
+			if(renderer == "svg" && typeof window.svgweb != "undefined"){
+				window.svgweb.addOnLoad(loadRenderer);
+			}else{
+				loadRenderer();
+			}
 		}
 	};
 });
