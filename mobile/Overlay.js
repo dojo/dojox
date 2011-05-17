@@ -12,11 +12,13 @@ define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(
 			//		Scroll the overlay up into view
 			var vp, popupPos;
 			var reposition = dojo.hitch(this, function(){
-				dojo.style(this.domNode, { top: "auto", bottom: "0px" });
+				dojo.style(this.domNode, { position: "", top: "auto", bottom: "0px" });
 				popupPos = dojo.position(this.domNode);
 				vp = dojo.window.getBox();
-				popupPos.y = vp.t + vp.h - popupPos.h;
-				dojo.style(this.domNode, { top: popupPos.y + "px", bottom: "auto" });
+				if((popupPos.y+popupPos.h) != vp.h){ // TODO: should be a has() test for position:fixed not scrolling
+					popupPos.y = vp.t + vp.h - popupPos.h;
+					dojo.style(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });
+				}
 			});
 			reposition();
 			if(aroundNode){
@@ -49,12 +51,12 @@ define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(
 			if(dojo.isWebKit){
 				var handler = this.connect(this.domNode, "webkitAnimationEnd", function(){
 					this.disconnect(handler);
-					dojo.addClass(this.domNode, "mblOverlayHidden");
+					dojo.replaceClass(this.domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse"]);
 				});
+				dojo.replaceClass(this.domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn"]);
 			}else{
-				dojo.addClass(this.domNode, "mblOverlayHidden");
+				dojo.replaceClass(this.domNode, ["mblOverlayHidden"], ["mblCoverv", "mblIn", "mblRevealv", "mblOut", "mblReverse"]);
 			}
-			dojo.replaceClass(this.domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn"]);
 		},
 
 		onBlur: function(/*Event*/e){
