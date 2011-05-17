@@ -1,4 +1,4 @@
-define(['dojo/_base/array', 'dojo/_base/window', 'dojo/_base/sniff'], function(dojo){
+define(['dojo/_base/kernel', 'dojo/_base/lang', 'dojo/_base/array', 'dojo/_base/window', 'dojo/_base/sniff'], function(dojo){
 
 dojo.getObject("xml.parser", true, dojox);
 
