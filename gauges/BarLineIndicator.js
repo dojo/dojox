@@ -109,8 +109,8 @@ return dojo.declare("dojox.gauges.BarLineIndicator",[_Indicator],{
 		var c = this._gauge._getPosition(this.currentValue);
 		this.currentValue = v;
 		v = this._gauge._getPosition(v);
-
-		if(dontAnimate){
+ 
+		if(dontAnimate || (c==v)){
 			this.shape.setTransform(gfx.matrix.translate(v,0));
 		}else{
 			var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});

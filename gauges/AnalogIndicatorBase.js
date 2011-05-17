@@ -180,7 +180,7 @@ return dojo.declare("dojox.gauges.AnalogIndicatorBase",[_Indicator],{
 		if(dontAnimate){
 			var angle = this._gauge._getAngle(v);
 			this.shape.setTransform([{dx:this._gauge.cx,dy:this._gauge.cy}, gfx.matrix.rotateg(angle)]);
-			
+			this.currentValue = v;
 		}else{
 			if(c!=v){
 				var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
