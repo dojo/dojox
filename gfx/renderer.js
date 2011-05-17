@@ -65,6 +65,7 @@ define(["dojo/_base/lang", "dojo/_base/sniff"], function(dojo){
 
 			function loadRenderer(){
 				require(["dojox/gfx/" + renderer], function(module){
+					dojox.gfx.renderer = renderer;
 					// memorize the renderer module
 					currentRenderer = module;
 					// now load it
