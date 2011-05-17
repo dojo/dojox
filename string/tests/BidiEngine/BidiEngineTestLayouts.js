@@ -1,4 +1,4 @@
-dojo.provide("dojox.string.tests.BidiEngine.BidiEngineTestLayout");
+dojo.provide("dojox.string.tests.BidiEngine.BidiEngineTestLayouts");
 dojo.require("dojox.string.BidiEngine");
 dojo.addOnLoad(function(){
 			
