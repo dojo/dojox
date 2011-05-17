@@ -29,7 +29,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
 			this.domNode.className = "mblView";
-			if(dojo.config["mblDisableAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
+			if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
 				dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 			}
 			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");

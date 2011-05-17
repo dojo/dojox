@@ -215,7 +215,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 			dojo.addClass(dojo.doc.documentElement, "mobile");
 		}
 
-		if(dojo.config["mblDisableAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
+		if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
 			dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
 			// workaround for auto-scroll issue when focusing input fields
 			dojo.connect(null, "onfocus", null, function(e){
