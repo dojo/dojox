@@ -1,7 +1,7 @@
 dojo.provide("dojox.form.Manager");
 
 dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+dojo.require("dijit._TemplatedMixin");
 
 dojo.require("dojox.form.manager._Mixin");
 dojo.require("dojox.form.manager._NodeMixin");
@@ -33,11 +33,20 @@ dojo.declare("dojox.form.Manager", [
 			// all widgets with descendants must set containerNode
 				this.containerNode = node;
 		}
+		this.inherited(arguments);
 		this._attachPoints = [];
-		dijit._Templated.prototype._attachTemplateNodes.call(this, node, function(n,p){ return n.getAttribute(p); });
+		this._attachEvents = [];
+		dijit._TemplatedMixin.prototype._attachTemplateNodes.call(this, node, function(n, p){ return n.getAttribute(p); });
 	},
 	
-	destroyRendering: function(){
-		dijit._Templated.prototype.destroyRendering.call(this);
+	destroyRendering: function(preserveDom){
+		// ctm: calling _TemplatedMixin
+		if(!this.__ctm){
+			// avoid recursive call from _TemplatedMixin
+			this.__ctm = true;
+			dijit._TemplatedMixin.prototype.destroyRendering.apply(this, arguments);
+			delete this.__ctm;
+			this.inherited(arguments);
+		}
 	}
 });
