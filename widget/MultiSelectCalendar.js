@@ -89,7 +89,7 @@ dojo.declare(
 				return this._sort();
 			}
 		},
-
+		
 		_setValueAttr: function(/*Date|Number|array*/ value, /*Boolean*/ priorityChange){
 			// summary:
 			//		Support set("value", ...)
@@ -113,12 +113,10 @@ dojo.declare(
 						this.value[element] = 1;
 					}else{
 						//We have a slash somewhere in the string so this is an ISO date range
-						//TODO: use dojo.date.stamp.fromISOString?
-						var dateA=new this.dateClassObj(element.substr(0,4),parseInt(element.substr(5,2))-1,element.substr(8,2));
-						var dateB=new this.dateClassObj(element.substr(11,4),parseInt(element.substr(16,2))-1,element.substr(19,2));
-						var firstDate, lastDate;
+						var dateA=new dojo.date.stamp.fromISOString(element.substr(0,10));
+						var dateB=new dojo.date.stamp.fromISOString(element.substr(11,10));
 						
-						this._toggleDate(dateA,[],[]);
+						this.toggleDate(dateA,[],[]);
 						if((dateA - dateB) > 0){
 							//We select the first date then the rest is handled as if we had selected a range
 							this._addToRangeRTL(dateA, dateB, [], []);	
@@ -128,6 +126,7 @@ dojo.declare(
 						}
 					}
 				},this);
+			this.focusOnLastDate(value[value.length-1]);			
 			}else{
 				if(value){
 					// convert from Number to Date, or make copy of Date object so that setHours() call below
@@ -155,6 +154,25 @@ dojo.declare(
 				}
 			}
 			this._populateGrid();
+		},
+		focusOnLastDate : function(lastElement){
+			//We put the focus on the last date so that when the user re-clicks on the calendar it will be 
+			//on the proper month
+			var slashPositionLastDate = lastElement.indexOf("/");
+			var dateA,dateB;
+			if(slashPositionLastDate == -1){
+				//This is a singleDate
+				lastDate = lastElement;
+			}else{
+				dateA=new dojo.date.stamp.fromISOString(lastElement.substr(0,10));
+				dateB=new dojo.date.stamp.fromISOString(lastElement.substr(11,10));
+				if((dateA - dateB) > 0){
+					lastDate = dateA;
+				}else{
+					lastDate = dateB;
+				}
+			}
+			this.set("currentFocus", lastDate);		
 		},
 		_isValidDate: function(/*Date*/ value){
 			// summary:
@@ -417,27 +435,42 @@ dojo.declare(
 			this._populateGrid();
 		},
 		
-		_toggleDate : function(/*date*/ dateToToggle, /*array of dates*/ selectedDates, /*array of dates*/ unselectedDates){
-		
-			var node = this._getNodeByDate(dateToToggle);
+		toggleDate : function(/*date*/ dateToToggle, /*array of dates*/ selectedDates, /*array of dates*/ unselectedDates){
 			
 			//Obtain CSS class before toggling if necessary
-			var clazz = node.className;
 			var dateIndex = dojo.date.stamp.toISOString(dateToToggle).substring(0,10);			 
 			//If previously selected we unselect and vice-versa
 			if(this.value[dateIndex]){
-				delete(this.value[dateIndex]);
-				clazz = clazz.replace("dijitCalendarSelectedDate ","");
-				unselectedDates.push(dateIndex);
+				this.unselectDate(dateToToggle, unselectedDates);			
 			}else{
-				this.value[dateIndex] = 1;
-				clazz = "dijitCalendarSelectedDate " + clazz;
-				selectedDates.push(dateIndex);
+				this.selectDate(dateToToggle, selectedDates);
 			}		
+		},
+		
+		selectDate : function(/*date*/ dateToSelect, /*array of dates*/ selectedDates){
+			//Selects the passed iso date, changes its class and records it in the selected dates array
+			var node = this._getNodeByDate(dateToSelect);
+			var clazz = node.className;
+			var dateIndex = dojo.date.stamp.toISOString(dateToSelect).substring(0,10);
+			this.value[dateIndex] = 1;
+			selectedDates.push(dateIndex);			
+			clazz = "dijitCalendarSelectedDate " + clazz;
 			//We update CSS class
 			node.className = clazz;
 		},
 		
+		unselectDate : function(/*date*/ dateToUnselect, /*array of dates*/ unselectedDates){
+			//Unselects the passed iso date, changes its class and records it in the unselected dates array
+			var node = this._getNodeByDate(dateToUnselect);
+			var clazz = node.className;
+			var dateIndex = dojo.date.stamp.toISOString(dateToUnselect).substring(0,10);
+			delete(this.value[dateIndex]);
+			unselectedDates.push(dateIndex);
+			clazz = clazz.replace("dijitCalendarSelectedDate ","");
+			//We update CSS class
+			node.className = clazz;
+		},
+
 		_getNodeByDate : function(/*ISO date*/ dateNode){
 			//return the node that corresponds to the passed ISO date
 			var firstDate = new this.dateClassObj(this.listOfNodes[0].dijitDateValue);
@@ -459,7 +492,7 @@ dojo.declare(
 				if(node && !dojo.hasClass(node, "dijitCalendarDisabledDate")){
 					value = new this.dateClassObj(node.dijitDateValue);
 					if(!this.rangeJustSelected){
-						this._toggleDate(value,[],[]);
+						this.toggleDate(value,[],[]);
 						//To record the date that was selected prior to the one currently selected
 						//needed in the event we are selecting a range of dates
 						this.previouslySelectedDay = value;
@@ -612,7 +645,7 @@ dojo.declare(
 						this._selectRange();
 					}else{
 						this.selectingRange = false;				
-						this._toggleDate(newValue,[],[]);
+						this.toggleDate(newValue,[],[]);
 						//We record the selected date as the previous one 
 						//In case we are selecting the first date of a range
 						this.previouslySelectedDay = newValue;
@@ -648,7 +681,7 @@ dojo.declare(
 			difference = Math.abs(dojo.date.difference(beginning, end, "day"));
 			for(var i = 0; i <= difference; i++){
 				var nextDay = dojo.date.add(beginning, 'day',i);
-				this._toggleDate(nextDay, selectedDates, unselectedDates);
+				this.toggleDate(nextDay, selectedDates, unselectedDates);
 			}
 			if(this.previousRangeEnd == null){
 				//necessary to keep track of the previous range's end date
@@ -673,7 +706,7 @@ dojo.declare(
 			difference = Math.abs(dojo.date.difference(beginning, end, "day"));
 			for(var i = 0; i <= difference; i++){
 				var nextDay = dojo.date.add(beginning, 'day',-i);
-				this._toggleDate(nextDay, selectedDates, unselectedDates);
+				this.toggleDate(nextDay, selectedDates, unselectedDates);
 			}
 			if(this.previousRangeEnd == null){
 				this.previousRangeEnd = end;
@@ -698,7 +731,7 @@ dojo.declare(
 			//we are going to start from the end and move backward 
 			for(var i = 1; i <= difference; i++){
 				var nextDay = dojo.date.add(beginning, 'day',-i);
-				this._toggleDate(nextDay, selectedDates, unselectedDates);
+				this.toggleDate(nextDay, selectedDates, unselectedDates);
 			}
 	
 			if(this.previousRangeStart == null){
@@ -723,7 +756,7 @@ dojo.declare(
 			difference = Math.abs(dojo.date.difference(beginning, end, "day"));
 			for(var i = 1; i <= difference; i++){
 				var nextDay = dojo.date.add(beginning, 'day',i);
-				this._toggleDate(nextDay, selectedDates, unselectedDates);
+				this.toggleDate(nextDay, selectedDates, unselectedDates);
 			}
 			if(this.previousRangeStart == null){
 				this.previousRangeStart = beginning;
