@@ -28,12 +28,12 @@
 	        dojo.require("doh.runner");
 
 			dojo.addOnLoad(function(){
-				var demoWidget = new dojox.mobile.Button({class:"mblBlueButton", style:"width:120px", label:"Default Button"});
+				var demoWidget = new dojox.mobile.Button({"class":"mblBlueButton", style:"width:120px", label:"Default Button"});
 				dojo.doc.body.appendChild(demoWidget.domNode);
 
 				child = dojo.create("P", null, dojo.doc.body);
 
-				demoWidget = new dojox.mobile.Button({class:"redButton", style:"width:120px", label:"Custom Button"});
+				demoWidget = new dojox.mobile.Button({"class":"redButton", style:"width:120px", label:"Custom Button"});
 				dojo.doc.body.appendChild(demoWidget.domNode);
 
 				doh.register("dojox.mobile.test.doh.Button", [
