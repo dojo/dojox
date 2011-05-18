@@ -1,4 +1,4 @@
-dojo.provide("dojox.form.uploader.plugins.HTML5");
+define(['dojo'],function(dojo){
 
 dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 	//
@@ -213,3 +213,8 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 
 });
 dojox.form.addUploaderPlugin(dojox.form.uploader.plugins.HTML5);
+
+
+
+return dojox.form.uploader.plugins.HTML5;
+});

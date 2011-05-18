@@ -1,7 +1,5 @@
-dojo.provide("dojox.form.uploader.plugins.IFrame");
-
-dojo.require("dojox.form.uploader.plugins.HTML5");
-dojo.require("dojo.io.iframe");
+define(['dojo', 'dojo/io/iframe', 'dojox/form/uploader/plugins/HTML5'],function(dojo){
+	
 
 dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 	//
@@ -71,3 +69,6 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 });
 
 dojox.form.addUploaderPlugin(dojox.form.uploader.plugins.IFrame);
+
+return dojox.form.uploader.plugins.IFrame;
+});

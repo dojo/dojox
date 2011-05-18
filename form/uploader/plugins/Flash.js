@@ -1,8 +1,5 @@
-dojo.provide("dojox.form.uploader.plugins.Flash");
-
-dojo.require("dojox.form.uploader.plugins.HTML5");
-dojo.require("dojox.embed.flashVars");
-dojo.require("dojox.embed.Flash");
+define(['dojo', 'dojox/form/uploader/plugins/HTML5', 'dojox/embed/Flash', 'dojox/embed/flashVars'],function(dojo){
+	
 
 dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	//
@@ -312,3 +309,7 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	}
 });
 dojox.form.addUploaderPlugin(dojox.form.uploader.plugins.Flash);
+
+
+return dojox.form.uploader.plugins.Flash;
+});

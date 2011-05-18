@@ -1,7 +1,5 @@
-dojo.provide("dojox.form.uploader.Base");
+define(['dojo', 'dijit', 'dijit/_Widget', 'dijit/_Templated'],function(dojo, dijit){
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
 
 dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._Templated], {
 	//
@@ -46,7 +44,7 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._Templated], {
 	connectForm: function(){
 		// summary:
 		//		Internal. Connects to form if there is one.
-		//		
+		//
 		this.url = this.getUrl();
 		if(!this._fcon && !!this.getForm()){
 			this._fcon = true;
@@ -118,4 +116,6 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._Templated], {
 			value: value
 		}; // Object
 	}
+});
+return dojox.form.uploader.Base;
 });

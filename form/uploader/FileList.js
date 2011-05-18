@@ -1,6 +1,4 @@
-dojo.provide("dojox.form.uploader.FileList");
-
-dojo.require("dojox.form.uploader.Base");
+define(['dojo', 'dijit', 'dojox/form/uploader/Base'],function(dojo, dijit){
 
 dojo.declare("dojox.form.uploader.FileList", [dojox.form.uploader.Base], {
 	//
@@ -181,4 +179,6 @@ dojo.declare("dojox.form.uploader.FileList", [dojox.form.uploader.Base], {
 
 		this.rowAmt++;
 	}
+});
+return dojox.form.uploader.FileList;
 });

@@ -1,6 +1,4 @@
-dojo.provide("dojox.form.Uploader");
-dojo.require("dojox.form.uploader.Base");
-dojo.require("dijit.form.Button");
+define(['dojo', 'dijit', 'dojox/form/uploader/Base', 'dijit/form/Button'],function(dojo, dijit){
 
 
 dojo.experimental("dojox.form.Uploader");
@@ -392,3 +390,5 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		dojo.declare("dojox.form.Uploader", extensions, {});
 	}
 })();
+return dojox.form.Uploader;
+});
