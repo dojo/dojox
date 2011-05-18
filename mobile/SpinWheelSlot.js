@@ -9,8 +9,8 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 		labels: [], // Ex. ["Jan","Feb",...]
 		labelFrom: 0,
 		labelTo: 0,
-		maxSpeed: 200,
-		minItems: 100,
+		maxSpeed: 500,
+		minItems: 15,
 		centerPos: 0,
 		value: "", // initial value
 	
@@ -178,17 +178,23 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 			}
 			var to = this.getPos();
 			to.y += m * this._itemHeight;
-			this.slideTo(to);
+			this.slideTo(to, 1);
 		},
 	
 		// override scrollable.js
-		calcSpeed: function(/*Number*/d, /*Number*/t){
-			this._speed = 0;
-			var n = this._time.length; // # of samples
+		getSpeed: function(){
+			var y = 0, n = this._time.length;
 			var delta = (new Date()).getTime() - this.startTime - this._time[n - 1];
-			if(delta > 50){
-				return 0;
+			if(n >= 2 && delta < 200){
+				var dy = this._posY[n - 1] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
+				var dt = this._time[n - 1] - this._time[(n - 6) >= 0 ? n - 6 : 0];
+				y = this.calcSpeed(dy, dt);
 			}
+			return {x:0, y:y};
+		},
+
+		// override scrollable.js
+		calcSpeed: function(/*Number*/d, /*Number*/t){
 			var speed = this.inherited(arguments);
 			if(!speed){ return 0; }
 			var v = Math.abs(speed);
@@ -196,7 +202,6 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 			if(v > this.maxSpeed){
 				ret = this.maxSpeed*(speed/v);
 			}
-			this._speed = ret;
 			return ret;
 		},
 	
@@ -235,7 +240,7 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 					this.panelNodes[2] = t;
 				}
 			}
-			if(Math.abs(this._speed) < 40){
+			if(Math.abs(this._speed.y) < 40){
 				duration = 0.2;
 			}
 			this.inherited(arguments);

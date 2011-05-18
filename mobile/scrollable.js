@@ -382,7 +382,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.onTouchEnd = function(e){
 		if(this._locked){ return; }
-		var speed = {x:0, y:0};
+		var speed = this._speed = {x:0, y:0};
 		var dim = this._dim;
 		var pos = this.getPos();
 		var to = {}; // destination
@@ -416,14 +416,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 				}
 				return;
 			}
-			// if the user holds the mouse or finger more than 0.5 sec, do not move.
-			if(n >= 2 && (new Date()).getTime() - this.startTime - this._time[n - 1] < 500){
-				var dy = this._posY[n - (n > 3 ? 2 : 1)] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
-				var dx = this._posX[n - (n > 3 ? 2 : 1)] - this._posX[(n - 6) >= 0 ? n - 6 : 0];
-				var dt = this._time[n - (n > 3 ? 2 : 1)] - this._time[(n - 6) >= 0 ? n - 6 : 0];
-				speed.y = this.calcSpeed(dy, dt);
-				speed.x = this.calcSpeed(dx, dt);
-			}
+			speed = this._speed = this.getSpeed();
 		}else{
 			if(pos.x == 0 && pos.y == 0){ return; } // initializing
 			dim = this.getDim();
@@ -532,6 +525,19 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(this._scrollBarH){
 			this._scrollBarH.className = "";
 		}
+	};
+
+	this.getSpeed = function(){
+		var x = 0, y = 0, n = this._time.length;
+		// if the user holds the mouse or finger more than 0.5 sec, do not move.
+		if(n >= 2 && (new Date()).getTime() - this.startTime - this._time[n - 1] < 500){
+			var dy = this._posY[n - (n > 3 ? 2 : 1)] - this._posY[(n - 6) >= 0 ? n - 6 : 0];
+			var dx = this._posX[n - (n > 3 ? 2 : 1)] - this._posX[(n - 6) >= 0 ? n - 6 : 0];
+			var dt = this._time[n - (n > 3 ? 2 : 1)] - this._time[(n - 6) >= 0 ? n - 6 : 0];
+			y = this.calcSpeed(dy, dt);
+			x = this.calcSpeed(dx, dt);
+		}
+		return {x:x, y:y};
 	};
 
 	this.calcSpeed = function(/*Number*/d, /*Number*/t){

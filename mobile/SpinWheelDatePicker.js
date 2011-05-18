@@ -45,7 +45,7 @@ define(["dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function
 			SpinWheelDaySlot
 		],
 		slotProps: [
-			{labelFrom:1900, labelTo:2100},
+			{labelFrom:1970, labelTo:2038},
 			{},
 			{labelFrom:1, labelTo:31}
 		],
