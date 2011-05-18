@@ -111,7 +111,7 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 					files.unshift(dojo.moduleUrl(pkg, f));
 				}
 				for(j = 0; j < files.length; j++){
-					dojox.mobile.loadCssFile(files[j]);
+					dojox.mobile.loadCssFile(files[j].toString());
 				}
 				break;
 			}
