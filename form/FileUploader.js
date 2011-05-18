@@ -327,26 +327,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		dojo.addOnUnload(this, this.destroy);
 	},
 
-	getHiddenWidget: function(){
-		// summary:
-		//		Internal.
-		//		If a parent widget has an onShow event, it is assumed
-		//		that it is hidden and the parsing of the uploader is
-		//		delayed until onShow fires. Note that the widget must
-		//		fire onShow even if it is defaulted to showing/selected.
-		//		this seems to work for Tabs (the primary fix).
-		//
-		var node = this.domNode.parentNode;
-		while(node){
-			var id = node.getAttribute && node.getAttribute("widgetId");
-			if(id && dijit.byId(id).onShow){
-				return dijit.byId(id);
-			}
-			node = node.parentNode;
-		}
-		return null;
-	},
-
 	getHiddenNode: function(/*DomNode*/ node){
 		// summary:
 		//		Internal.
@@ -725,7 +705,7 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		}else if(display === false){
 			dojo.style(this.insideNode,{
 				display: "",
-				left: "0px"
+				top: "0"
 			});
 			dojo.style(this.progNode,"display","none");
 		}else{
