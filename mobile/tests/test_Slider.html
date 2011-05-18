@@ -26,9 +26,13 @@
 	<script src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>
 	<script type="text/javascript">
 		dojo.require("doh.runner");
-		dojo.require("dojox.mobile.parser");
+		dojo.require("dojox.mobile");		// This is a mobile app.
+		dojo.require("dojox.mobile.parser");	// This mobile app uses declarative programming with fast mobile parser
+		dojo.require("dojox.mobile.compat");	// This mobile app supports running on desktop browsers
+		dojo.require("dojox.mobile.deviceTheme");
 		dojo.require("dojox.mobile.Slider");
 		dojo.addOnLoad(function(){
+			var hasTouch = !!dojox.mobile.hasTouch;
 			function fireTouchEvent(type, widget, x, y, delay){
 				function doit(){
 					var node = widget.domNode;
@@ -50,8 +54,17 @@
 						target = handle;
 					}
 					var e = document.createEvent('Events');
+					if(!hasTouch){
+						switch(type){
+							case 'touchstart': type = 'mousedown'; break;;
+							case 'touchmove': type = 'mousemove'; break;;
+							case 'touchend': type = 'mouseup'; break;;
+						}
+					}
 					e.initEvent(type, true, true);
 					e.touches = [ { pageX: touchX, pageY: touchY } ];
+					e.pageX = touchX;
+					e.pageY = touchY;
 					e.changedTouches = e.touches;
 					target.dispatchEvent(e);
 				}
@@ -405,8 +418,8 @@
 				}
 			]);
 
-			doh.register("animation", [
-				{
+			if(dojo.isWebKit){
+				doh.register("animation", {
 					name: "horizontal 100%",
 					timeout: 2000,
 					runTest: function(){
@@ -433,8 +446,8 @@
 						dojo.style(sh.handle, "WebkitTransitionDuration", "");
 						dojo.style(sv.handle, "WebkitTransitionDuration", "");
 					}
-				}
-			]);
+				})
+			};
 
 			doh.register("log", function(){
 				dojo.byId('failures').innerHTML = doh._failureCount;
