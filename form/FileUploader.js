@@ -1,4 +1,4 @@
-define(['dojo', 'dijit', 'dojo/io/iframe', 'dijit/_Widget', 'dijit/_Templated', 'dijit/_Contained', 'dojox/embed/Flash', 'dojox/embed/flashVars', 'dojox/html/styles'],function(dojo, dijit){
+define(['dojo', 'dijit', 'dojo/io/iframe', 'dijit/_Widget', 'dijit/_TemplatedMixin', 'dijit/_Contained', 'dojox/embed/Flash', 'dojox/embed/flashVars', 'dojox/html/styles'],function(dojo, dijit){
 
 dojo.deprecated("dojox.form.FileUploader", "Use dojox.form.Uploader", "2.0");
 
@@ -8,7 +8,7 @@ dojo.deprecated("dojox.form.FileUploader", "Use dojox.form.Uploader", "2.0");
 	//			can cause height problems in IE6
 
 
-dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit._Contained], {
+dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._TemplatedMixin, dijit._Contained], {
 	// version:
 	//		1.5 (deprecated)
 	// summary:

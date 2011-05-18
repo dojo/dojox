@@ -1,5 +1,5 @@
-define(['dojo', 'dojox/form/uploader/plugins/HTML5', 'dojox/embed/Flash', 'dojox/embed/flashVars'],function(dojo){
-	
+define(['dojo', 'dojox/form/uploader/plugins/HTML5', 'dojox/embed/Flash'],function(dojo){
+
 
 dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	//

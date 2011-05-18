@@ -1,7 +1,7 @@
-define(['dojo', 'dijit', 'dijit/_Widget', 'dijit/_Templated'],function(dojo, dijit){
+define(['dojo', 'dijit', 'dijit/_Widget', 'dijit/_TemplatedMixin', 'dijit/_WidgetsInTemplateMixin'],function(dojo, dijit){
 
 
-dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._Templated], {
+dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	//
 	// Version: 1.6
 	//
