@@ -1,11 +1,4 @@
-dojo.provide("dojox.form.FileUploader");
-dojo.require("dojox.embed.Flash");
-dojo.require("dojo.io.iframe");
-dojo.require("dojox.html.styles");
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dojox.embed.flashVars");
-dojo.require("dijit._Contained");
+define(['dojo', 'dijit', 'dojo/io/iframe', 'dijit/_Widget', 'dijit/_Templated', 'dijit/_Contained', 'dojox/embed/Flash', 'dojox/embed/flashVars', 'dojox/html/styles'],function(dojo, dijit){
 
 dojo.deprecated("dojox.form.FileUploader", "Use dojox.form.Uploader", "2.0");
 
@@ -1418,4 +1411,6 @@ dojo.declare("dojox.form.FileUploader", [dijit._Widget, dijit._Templated, dijit.
 		dojo.destroy(temp);
 		return style;
 	}
+});
+return dojox.form.FileUploader;
 });
