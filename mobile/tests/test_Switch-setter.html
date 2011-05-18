@@ -4,14 +4,6 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Switch setter/getter</title>
-		<style>
-			#sw {
-				margin: 20px;
-			}
-			INPUT {
-				margin: 10px;
-			}
-		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, mblThemeFiles: ['base']"></script>
 		<script language="JavaScript" type="text/javascript">
 			//dojo.require("dojo.parser"); // Use the lightweight parser.
@@ -40,8 +32,9 @@
 		</script>
 	</head>
 	<body>
-		<div dojoType="dojox.mobile.View" selected="true">
-			<input type="checkbox" id="sw" name="swName" dojoType="dojox.mobile.Switch" value="off">
+		<div dojoType="dojox.mobile.View" selected="true" style="padding:10px">
+			<br>
+			<input type="checkbox" id="sw" name="swName" dojoType="dojox.mobile.Switch" value="off"><br>
 			<input type="button" onclick="swOn()" value="on">
 			<input type="button" onclick="swOff()" value="off">
 			<span id="msgArea"></span>

@@ -196,6 +196,9 @@ define(["dojo/_base/lang", "./common","dijit/_base/sniff","dojo/_base/fx","dojox
 						});
 						a.play();
 					}else{
+						if(on || pos){
+							this.inner.style.left = pos + "px";
+						}
 						f();
 					}
 				}
