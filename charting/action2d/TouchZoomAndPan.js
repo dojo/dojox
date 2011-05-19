@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event",
 	"./ChartAction", "../Element", "dojo/gesture/tap", "../plot2d/common"], 
 	function(dojo, declare, devent, ChartAction, Element, tap, common){
 
-dojo.declare("dojox.charting.action2d._GlassViewElement", dojox.charting.Element, {
+var GlassView = dojo.declare(Element, {
 	constructor: function(chart){
 	},
 	render: function(){
@@ -119,7 +119,7 @@ return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.ac
 		// started above a item that is removed during the touch action will stop
 		// dispatching touch events!
 		if(dojo.isSafari && this.chart.surface.declaredClass.indexOf("svg")!=-1){
-			this.chart.addPlot(this.uName, {type: dojox.charting.action2d._GlassViewElement});
+			this.chart.addPlot(this.uName, {type: GlassView});
 		}
 	},
 	
@@ -139,7 +139,7 @@ return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.ac
 		var chart = this.chart, axis = chart.getAxis(this.axis);
 		var length = event.touches.length;
 		this._startPageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
-		if(chart._delayedRenderHandle){
+		if((this.enableZoom || this.enableScroll) && chart._delayedRenderHandle){
 			// we have pending rendering from a scroll, let's sync
 			clearTimeout(chart._delayedRenderHandle);
 			chart._delayedRenderHandle = null;
