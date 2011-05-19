@@ -30,7 +30,7 @@
 	        dojo.require("doh.runner");
 			dojo.addOnLoad(function(){
 
-				dojo.create("div", {class:"label", innerHTML:"Segmented Control"}, dojo.doc.body);
+				dojo.create("div", {className:"label", innerHTML:"Segmented Control"}, dojo.doc.body);
 				var tabBar = new dojox.mobile.TabBar({barType:"segmentedControl"});
 				dojo.doc.body.appendChild(tabBar.domNode);
 				tabBar.startup();
@@ -41,7 +41,7 @@
 				tabBarButton = new dojox.mobile.TabBarButton({icon1:"../images/tab-icon-10.png", icon2:"../images/tab-icon-10h.png", moveTo:"view3", label:"Genius"});
 				tabBar.addChild(tabBarButton);
 
-				dojo.create("div", {class:"label", innerHTML:"Tab Bar"}, dojo.doc.body);
+				dojo.create("div", {className:"label", innerHTML:"Tab Bar"}, dojo.doc.body);
 				tabBar = new dojox.mobile.TabBar();
 				tabBarButton = new dojox.mobile.TabBarButton({icon1:"../images/tab-icon-16.png", icon2:"../images/tab-icon-16h.png", moveTo:"view1", selected:"true", label:"New"});
 				tabBar.addChild(tabBarButton);
@@ -52,7 +52,7 @@
 				dojo.doc.body.appendChild(tabBar.domNode);
 				tabBar.startup();
 
-				dojo.create("div", {class:"label", innerHTML:"Tab Bar (CSS Sprite)"}, dojo.doc.body);
+				dojo.create("div", {className:"label", innerHTML:"Tab Bar (CSS Sprite)"}, dojo.doc.body);
 				tabBar = new dojox.mobile.TabBar({iconBase:"../images/tab-icons.png"});
 				dojo.doc.body.appendChild(tabBar.domNode);
 				tabBar.startup();

@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Heading</title>
-		<link href="../../themes/android/android.css" rel="stylesheet"></link>
+		<link href="../../themes/android/base.css" rel="stylesheet"></link>
 		<link href="../../themes/common/domButtons.css" rel="stylesheet"></link>
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -34,7 +34,7 @@
 				var childWidget = new dojox.mobile.ToolBarButton({lable:"Edit"});
 				childWidget.domNode.style.padding = "0px 14px";
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({class:"mblDomButton mblDomButtonPlus_2"});
+				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhitePlus"});
 				childWidget.domNode.style.float = "right";
 				demoWidget.addChild(childWidget);
 				demoWidget.domNode.appendChild(dojo.doc.createTextNode("Alarm Clock"));

@@ -4,8 +4,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Switch</title>
-		<link href="../../themes/iphone/iphone.css" rel="stylesheet"></link>
-		<link href="../../themes/buttons.css" rel="stylesheet"></link>
+		<link href="../../themes/iphone/base.css" rel="stylesheet"></link>
+		<link href="../../themes/common/domButtons.css" rel="stylesheet"></link>
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
@@ -54,16 +54,16 @@
 				list.addChild(demoWidget);
 
 				list = dijit.byId("dojox_mobile_EdgeToEdgeList_1");
-				demoWidget = new dojox.mobile.ListItem({btnClass:"mblDomButtonCheckboxOff", label:"Use wireless networks", class:"mblVariableHeight"});
+				demoWidget = new dojox.mobile.ListItem({btnClass:"mblDomButtonCheckboxOff", label:"Use wireless networks", className:"mblVariableHeight"});
 				var child = dojo.create("DIV", {className:"mblListItemSubText"}, demoWidget.domNode.childNodes[0].childNodes[0]);
 				child.appendChild(dojo.doc.createTextNode("See location in applications (such as Maps) using wireless networks"));
 				list.addChild(demoWidget);
 
-				demoWidget = new dojox.mobile.ListItem({btnClass:"mblCheckOnButton", label:"Use GPS satellites", class:"mblVariableHeight"});
+				demoWidget = new dojox.mobile.ListItem({btnClass:"mblCheckOnButton", label:"Use GPS satellites", className:"mblVariableHeight"});
 				child = dojo.create("DIV", {className:"mblListItemSubText", innerHTML:"When locating, accurate to street level (uncheck to conserve battery)"}, demoWidget.domNode.childNodes[0].childNodes[0]);
 				list.addChild(demoWidget);
 
-				demoWidget = new dojox.mobile.ListItem({label:" Set unlock pattern", class:"mblVariableHeight"});
+				demoWidget = new dojox.mobile.ListItem({label:" Set unlock pattern", className:"mblVariableHeight"});
 				list.addChild(demoWidget);
 
 				doh.register("dojox.mobile.test.doh.ListItem", [
@@ -150,21 +150,21 @@
 							doh.assertEqual('mblDomButtonRedMinus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_11");
-							doh.assertEqual('mblListItem mblVariableHeight', demoWidget.domNode.className);
+							doh.assertEqual('mblVariableHeight', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('A', demoWidget.domNode.childNodes[0].nodeName);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[0].className);
 							doh.assertEqual('mblDomButtonCheckboxOff mblRightButton mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].className);
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_12");
-							doh.assertEqual('mblListItem mblVariableHeight', demoWidget.domNode.className);
+							doh.assertEqual('mblVariableHeight', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('A', demoWidget.domNode.childNodes[0].nodeName);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[0].className);
 							doh.assertEqual('mblCheckOnButton mblRightButton', demoWidget.domNode.childNodes[0].childNodes[1].className);
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_13");
-							doh.assertEqual('mblListItem mblVariableHeight', demoWidget.domNode.className);
+							doh.assertEqual('mblVariableHeight', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('A', demoWidget.domNode.childNodes[0].nodeName);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[0].className);
@@ -192,11 +192,11 @@
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
 							if(dojo.isIE)
-								doh.assertEqual('External View #1 (sync) ', demoWidget.domNode.childNodes[1].childNodes[0].innerHTML.replace(/\r\n/g,""));
+								doh.assertEqual('External View #1 (sync) ', demoWidget.domNode.childNodes[1].childNodes[0].childNodes[0].innerHTML.replace(/\r\n/g,""));
 							else
-								doh.assertEqual('External View #1 (sync)', demoWidget.domNode.childNodes[1].childNodes[0].innerHTML.replace(/\r\n/g,""));
-							doh.assertEqual('mblRightText', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertEqual('Value Changed', demoWidget.domNode.childNodes[1].childNodes[1].innerHTML);
+								doh.assertEqual('External View #1 (sync)', demoWidget.domNode.childNodes[1].childNodes[0].childNodes[0].innerHTML.replace(/\r\n/g,""));
+							doh.assertEqual('mblRightText', demoWidget.domNode.childNodes[1].childNodes[2].className);
+							doh.assertEqual('Value Changed', demoWidget.domNode.childNodes[1].childNodes[2].innerHTML);
 						}
 					},
 					{
