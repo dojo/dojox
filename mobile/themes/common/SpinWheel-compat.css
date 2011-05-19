@@ -15,3 +15,6 @@
 *html .mblSpinWheelBar {
 	z-index: -1;
 }
+.mblSpinWheelSlotTouch, .mblSpinWheelSlotPanel {
+	left: 0px;
+}
