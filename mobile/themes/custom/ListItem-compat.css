@@ -8,3 +8,6 @@
 .mblItemSelected {
 	background-image: url(compat/ui-widget-bg.png);
 }
+*html .mblListItemTextBox { /* IE6 hack */
+	height: 100%;
+}

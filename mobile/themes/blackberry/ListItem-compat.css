@@ -18,3 +18,6 @@
 .mblItemSelected .mblArrow {
 	background-image: url(compat/white-arrow.png);
 }
+*html .mblListItemTextBox { /* IE6 hack */
+	height: 100%;
+}
