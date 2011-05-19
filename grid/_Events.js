@@ -252,13 +252,17 @@ dojo.declare("dojox.grid._Events", null, {
 		//		Event fired when a cell is double-clicked.
 		// e: Event
 		//		Decorated event object contains reference to grid, cell, and rowIndex
+		var event;
 		if(this._click.length > 1 && dojo.isIE){
-			this.edit.setEditCell(this._click[1].cell, this._click[1].rowIndex);
+			event = this._click[1];
 		}else if(this._click.length > 1 && this._click[0].rowIndex != this._click[1].rowIndex){
-			this.edit.setEditCell(this._click[0].cell, this._click[0].rowIndex);
+			event = this._click[0];
 		}else{
-			this.edit.setEditCell(e.cell, e.rowIndex);
+			event = e;
 		}
+		this.focus.setFocusCell(event.cell, event.rowIndex);
+		this.onRowClick(event);
+		this.edit.setEditCell(event.cell, event.rowIndex);
 		this.onRowDblClick(e);
 	},
 
