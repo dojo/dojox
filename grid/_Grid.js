@@ -4,6 +4,7 @@ define([
 	"dojox",
 	"dojo/i18n!dijit/nls/loading",
 	"dijit/dijit",
+	"dijit/CheckedMenuItem",
 	"dijit/Menu",
 	"dojox/html/metrics",
 	"./util",
