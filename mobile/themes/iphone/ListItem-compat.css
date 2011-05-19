@@ -22,3 +22,6 @@
 *html .mblListItemTextBox { /* IE6 hack */
 	height: 100%;
 }
+*html li.mblListItem.mblVariableHeight .mblListItemTextBox { /* IE6 hack */
+	height: auto;
+}
