@@ -1,6 +1,5 @@
-
-define([ "dojo/_base/kernel", "dojo/_base/html", "dojox/geo/openlayers/Feature" ], function(
-		dojo, htmlArg, featureArg){
+define([ "dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html",
+		"dojox/geo/openlayers/Feature" ], function(dojo, declare, htmlArg, featureArg){
 
 	return dojo.declare("dojox.geo.openlayers.WidgetFeature", dojox.geo.openlayers.Feature, {
 		//	summary:

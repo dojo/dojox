@@ -1,6 +1,6 @@
 
-define(["dojo/_base/kernel",  "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], 
-		function(dojo, langArg, arrayArg){
+define(["dojo/_base/kernel",  "dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"], 
+		function(dojo, declare, langArg, arrayArg){
 
 	return dojo.declare("dojox.geo.openlayers.Layer", null, {
 		//	summary: 

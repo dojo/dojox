@@ -1,7 +1,8 @@
 define(
-		[ "dojo/_base/kernel", "dojox/main", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/json",
-				"dojox/geo/openlayers/TouchInteractionSupport", "dojox/geo/openlayers/Layer" ],
-		function(dojo, dojox, langArg, arrayArg, jsonArg, tiArg, layerArg){
+		[ "dojo/_base/kernel", "dojo/_base/declare", "dojox/main", "dojo/_base/lang",
+				"dojo/_base/array", "dojo/_base/json", "dojox/geo/openlayers/TouchInteractionSupport",
+				"dojox/geo/openlayers/Layer" ],
+		function(dojo, declare, dojox, langArg, arrayArg, jsonArg, tiArg, layerArg){
 
 			dojo.experimental("dojox.geo.openlayers.Map");
 
