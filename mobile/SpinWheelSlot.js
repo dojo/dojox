@@ -56,6 +56,7 @@ define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contain
 			}
 			this.domNode.appendChild(this.containerNode);
 			this.touchNode = dojo.create("DIV", {className:"mblSpinWheelSlotTouch"}, this.domNode);
+			this.setSelectable(this.domNode, false);
 		},
 	
 		startup: function(){

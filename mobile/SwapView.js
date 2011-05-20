@@ -16,7 +16,7 @@ define(["./View","./_ScrollableMixin"], function(View,ScrollableMixin){
 		buildRendering: function(){
 			this.inherited(arguments);
 			dojo.addClass(this.domNode, "mblSwapView");
-			dojo.setSelectable(this.domNode, false)
+			this.setSelectable(this.domNode, false);
 			this.containerNode = this.domNode;
 			dojo.subscribe("/dojox/mobile/nextPage", this, "handleNextPage");
 			dojo.subscribe("/dojox/mobile/prevPage", this, "handlePrevPage");

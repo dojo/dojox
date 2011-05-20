@@ -923,9 +923,13 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		node.style.KhtmlUserSelect = selectable ? "auto" : "none";
 		node.style.MozUserSelect = selectable ? "" : "none";
 		node.onselectstart = selectable ? null : function(){return false;};
-		node.unselectable = selectable ? "" : "on";
+		if(dojo.isIE){
+			node.unselectable = selectable ? "" : "on";
+			dojo.forEach(node.getElementsByTagName("*"), function(n){
+				n.unselectable = selectable ? "" : "on";
+			});
+		}
 	};
-
 };
 
 (function(){

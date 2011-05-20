@@ -28,7 +28,6 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 				h = this.height;
 			}
 			this.domNode.style.height = h;
-			dojo.setSelectable(this.domNode, false);
 			this.headerNode = dojo.create("DIV", {className:"mblCarouselHeaderBar"}, this.domNode);
 
 			if(this.navButton){
