@@ -216,6 +216,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		}
 
 		if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
+			if(dojo.config["mblAndroidWorkaroundButtonStyle"] !== false){
+				// workaround to avoid buttons disappear due to the side-effect of the webkitTransform workaroud below
+				dojo.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, dojo.doc.head, "first");
+			}
 			dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
 			// workaround for auto-scroll issue when focusing input fields
 			dojo.connect(null, "onfocus", null, function(e){
