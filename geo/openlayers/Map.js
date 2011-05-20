@@ -1,12 +1,11 @@
-
 define(
-		[ "dojo/_base/lang", "dojo/_base/array", "dojo/_base/json",
+		[ "dojo/_base/kernel", "dojox/main", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/json",
 				"dojox/geo/openlayers/TouchInteractionSupport", "dojox/geo/openlayers/Layer" ],
-		function(langArg, arrayArg, jsonArg, tiArg, layerArg){
-			
+		function(dojo, dojox, langArg, arrayArg, jsonArg, tiArg, layerArg){
+
 			dojo.experimental("dojox.geo.openlayers.Map");
-			
-		  var gob = dojo.getObject("geo.openlayers.BaseLayerType", true, dojox);		  
+
+			var gob = dojo.getObject("geo.openlayers.BaseLayerType", true, dojox);
 			dojox.geo.openlayers.BaseLayerType = {
 				//	summary:
 				//		Defines the base layer types to be used at Map construction time or
@@ -521,9 +520,6 @@ define(
 
 							});
 
-			
-
-			//			(function(){
 			var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
 			dojox.geo.openlayers.parseDMS = function(v, toDecimal){
 				//	summary: 
@@ -554,6 +550,5 @@ define(
 				}
 				return [ d, m, s, nsew ];
 			};
-			//			})();
 
 		});

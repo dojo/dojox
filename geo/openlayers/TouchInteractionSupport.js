@@ -1,6 +1,6 @@
 
-define([ "dojo/_base/connect", "dojo/_base/html", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/window" ],
-		function(connectArg, htmlArg, langArg, eventArg, windowArg){
+define(["dojo/_base/kernel",  "dojo/_base/connect", "dojo/_base/html", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/window" ],
+		function(dojo, connectArg, htmlArg, langArg, eventArg, windowArg){
 
 			return dojo.declare("dojox.geo.openlayers.TouchInteractionSupport", null, {
 				//	summary: 
