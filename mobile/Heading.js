@@ -73,6 +73,12 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 					}
 				}
 
+				if(!this.labelNodeLen && this.label){
+					this.labelNode.style.display = "inline";
+					this.labelNodeLen = this.labelNode.offsetWidth;
+					this.labelNode.style.display = "";
+				}
+
 				var bw = this.domNode.offsetWidth; // bar width
 				var rw = rightBtn ? bw - rightBtn.offsetLeft + 5 : 0; // rightBtn width
 				var lw = leftBtn ? leftBtn.offsetLeft + leftBtn.offsetWidth + 5 : 0; // leftBtn width
@@ -105,9 +111,6 @@ define(["dojo/_base/html", "dojo/_base/array", "dojo/_base/lang", "./common","di
 		_setLabelAttr: function(/*String*/label){
 			this.label = label;
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv(label);
-			this.labelNode.style.display = "inline";
-			this.labelNodeLen = this.labelNode.offsetWidth;
-			this.labelNode.style.display = "";
 		},
 	
 		findCurrentView: function(){
