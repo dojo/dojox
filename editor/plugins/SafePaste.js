@@ -11,6 +11,9 @@ dojo.declare("dojox.editor.plugins.SafePaste", [dojox.editor.plugins.PasteFromWo
 	_initButton: function(){
 		// summary:
 		//		Over-ride the editor paste controls
+
+		// Create instance local copy.
+		this._filters = this._filters.slice(0); 
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "SafePaste");
 
 		this._uId = dijit.getUniqueId(this.editor.id);
