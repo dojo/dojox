@@ -1,6 +1,6 @@
-define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/html", 
-	"dojo/_base/connect", "dojo/_base/sniff", "./ChartAction"], 
-	function(dojo, declare, ddwindow, dhtml, dconnect, dsniff, ChartAction){
+define(["dojo/_base/kernel", "dojo/_base/html", "dojo/_base/declare", "dojo/_base/window",  
+	"dojo/_base/connect", "./ChartAction"], 
+	function(dojo, html, declare, window, connect, ChartAction){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
@@ -173,6 +173,9 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 			//	summary:
 			//		Called when mouse wheel is used on the chart.
 			var scroll = event[(dojo.isMozilla ? "detail" : "wheelDelta")] / sUnit;
+			if(dojo.isMozilla){
+				scroll *=-1;
+			}
  			this._onZoom(scroll, event);
 		},
 		
