@@ -315,8 +315,6 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 				dojo.publish("/dojox/mobile/afterTransitionIn", [toWidget].concat(this._arguments));
 			}
 
-			dojox.mobile.currentView = toWidget;
-
 			var c = this._context, m = this._method;
 			if(!c && !m){ return; }
 			if(!m){

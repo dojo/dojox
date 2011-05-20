@@ -129,6 +129,7 @@ define(["dojo/_base/lang", "./common","dijit/_base/sniff","dojo/_base/fx","dojox
 						});
 						anim.play();
 					}
+					dojox.mobile.currentView = dijit.byNode(toNode);
 				},
 			
 				wakeUp: function(node){
