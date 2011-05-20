@@ -45,16 +45,23 @@
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 
+
 							demoWidget = dijit.byId("dojox_mobile_ListItem_0");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
 							doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							if(dojo.isFF){
+								doh.assertEqual('rect(0px, 116px, 29px, 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}else{
+								doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-79px', demoWidget.domNode.childNodes[0].style.left);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							if(!dojo.isIE) {
+								doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							}
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_1");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
@@ -62,32 +69,50 @@
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
 							doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertEqual('rect(0px 145px 29px 116px)', demoWidget.domNode.childNodes[0].style.clip);
+							if(dojo.isFF){
+								doh.assertEqual('rect(0px, 145px, 29px, 116px)', demoWidget.domNode.childNodes[0].style.clip);
+							}else{
+								doh.assertEqual('rect(0px 145px 29px 116px)', demoWidget.domNode.childNodes[0].style.clip);
+							}
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-108px', demoWidget.domNode.childNodes[0].style.left);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							if(!dojo.isIE) {
+								doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							}
 								
 							demoWidget = dijit.byId("dojox_mobile_ListItem_2");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							if(dojo.isFF){
+								doh.assertEqual('rect(0px, 116px, 29px, 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}else{
+								doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-79px', demoWidget.domNode.childNodes[0].style.left);
 							doh.assertEqual('mblDomButtonBluePlus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							if(!dojo.isIE) {
+								doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							}
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_3");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
-							doh.assertEqual('rect(0px 145px 29px 116px)', demoWidget.domNode.childNodes[0].style.clip);
+							if(dojo.isFF){
+								doh.assertEqual('rect(0px, 145px, 29px, 116px)', demoWidget.domNode.childNodes[0].style.clip);
+							}else{
+								doh.assertEqual('rect(0px 145px 29px 116px)', demoWidget.domNode.childNodes[0].style.clip);
+							}
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-108px', demoWidget.domNode.childNodes[0].style.left);
 							doh.assertEqual('mblDomButtonRedMinus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							if(!dojo.isIE) {
+								doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							}
 							}));
 							return d;
 						}
@@ -104,14 +129,20 @@
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							
-							doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							if(dojo.isFF){
+								doh.assertEqual('rect(0px, 116px, 29px, 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}else{
+								doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-79px', demoWidget.domNode.childNodes[0].style.left);
 							
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
 							doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							if(!dojo.isIE) {
+								doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							}
 
 							demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
 							demoWidget.set({iconBase :""});
@@ -122,14 +153,20 @@
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
 							doh.assertEqual('mblListItemIcon', demoWidget.domNode.childNodes[0].className);
 							
-							doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							if(dojo.isFF){
+								doh.assertEqual('rect(0px, 116px, 29px, 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}else{
+								doh.assertEqual('rect(0px 116px 29px 87px)', demoWidget.domNode.childNodes[0].style.clip);
+							}
 							doh.assertEqual('7px', demoWidget.domNode.childNodes[0].style.top);
 							doh.assertEqual('-79px', demoWidget.domNode.childNodes[0].style.left);
 							
 							doh.assertEqual('mblListItemAnchor', demoWidget.domNode.childNodes[1].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[1].childNodes[0].className);
 							doh.assertEqual('mblDomButtonBluePlus mblRightButton mblDomButton', demoWidget.domNode.childNodes[1].childNodes[1].className);
-							doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							if(!dojo.isIE) {
+								doh.assertTrue(demoWidget.domNode.childNodes[0].src.search(/i-icon-all.png/i) != -1);
+							}
 						}
 					}
 				]);

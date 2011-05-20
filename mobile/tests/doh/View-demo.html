@@ -121,13 +121,13 @@
 							demoWidget = dijit.byId("dojox_mobile_TabBar_1");
 							doh.assertEqual('', demoWidget.domNode.style.display);
 
-						}));
+						}),500);
 						return d;
 					}
 				},
 				{
 					name: "View Verification2",
-					timeout: 1000,
+					timeout: 2000,
 					runTest: function(){
 						var d = new doh.Deferred();
 						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_1");
@@ -167,13 +167,13 @@
 
 							demoWidget = dijit.byId("dojox_mobile_TabBar_1");
 							doh.assertEqual('', demoWidget.domNode.style.display);
-						}),500);
+						}),1000);
 						return d;
 					}
 				},
 				{
 					name: "View Verification3",
-					timeout: 10000,
+					timeout: 20000,
 					runTest: function(){
 						var d = new doh.Deferred();
 						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_2");
@@ -259,7 +259,7 @@
 
 							demoWidget = dijit.byId("dojox_mobile_TabBar_1");
 							doh.assertEqual('', demoWidget.domNode.style.display);
-						}),500);
+						}),1000);
 						return d;
 					}
 				},

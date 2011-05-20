@@ -43,7 +43,13 @@
 								doh.assertEqual('mblRightText', childNodes[1].className);
 								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
 								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('<span>u1space</span>', childNodes[0].innerHTML);
+								if(dojo.isIE)
+								{
+									doh.assertEqual('<SPAN>u1space </SPAN>', childNodes[0].innerHTML);
+								} else {
+									doh.assertEqual('<span>u1space</span>', childNodes[0].innerHTML);
+								}
+								
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("item2");
@@ -57,7 +63,12 @@
 								doh.assertEqual('mblRightText', childNodes[1].className);
 								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
 								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('<span>u2space</span>', childNodes[0].innerHTML);
+								if(dojo.isIE)
+								{
+									doh.assertEqual('<SPAN>u2space </SPAN>', childNodes[0].innerHTML);
+								} else {
+									doh.assertEqual('<span>u2space</span>', childNodes[0].innerHTML);
+								}
 								doh.assertEqual('On', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("item3");
@@ -70,7 +81,12 @@
 								doh.assertEqual('mblRightText', childNodes[1].className);
 								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
 								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('<span>Wi-Fi</span>', childNodes[0].innerHTML);
+								if(dojo.isIE)
+								{
+									doh.assertEqual('<SPAN>Wi-Fi </SPAN>', childNodes[0].innerHTML);
+								} else {
+									doh.assertEqual('<span>Wi-Fi</span>', childNodes[0].innerHTML);
+								}
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 								
 							}));
@@ -101,7 +117,7 @@
 
 								var demoWidget = dijit.byId("dojox_mobile_RoundRectCategory_0");
 								doh.assertEqual('mblRoundRectCategory', demoWidget.domNode.className);
-								doh.assertEqual('Applications', demoWidget.domNode.innerHTML);
+								doh.assertEqual('Applications', dojo.trim(demoWidget.domNode.innerHTML));
 
 								demoWidget = dijit.byId("dojox_mobile_RoundRectList_1");
 								doh.assertEqual('mblRoundRectList', demoWidget.domNode.className);
@@ -114,7 +130,12 @@
 								childNodes = childNodes[0].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('<span>Video</span>', childNodes[0].innerHTML);
+								if(dojo.isIE)
+								{
+									doh.assertEqual('<SPAN>Video </SPAN>', childNodes[0].innerHTML);
+								} else {
+									doh.assertEqual('<span>Video</span>', childNodes[0].innerHTML);
+								}
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_1");
@@ -126,7 +147,12 @@
 								childNodes = childNodes[1].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('<span>Maps</span>', childNodes[0].innerHTML);
+								if(dojo.isIE)
+								{
+									doh.assertEqual('<SPAN>Maps </SPAN>', childNodes[0].innerHTML);
+								} else {
+									doh.assertEqual('<span>Maps</span>', childNodes[0].innerHTML);
+								}
 								doh.assertEqual('VPN', childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_2");
@@ -137,7 +163,12 @@
 								childNodes = childNodes[0].childNodes;
 								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
 								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('<span>Phone Number</span>', childNodes[0].innerHTML);
+								if(dojo.isIE)
+								{
+									doh.assertEqual('<SPAN>Phone Number </SPAN>', childNodes[0].innerHTML);
+								} else {
+									doh.assertEqual('<span>Phone Number</span>', childNodes[0].innerHTML);
+								}
 								doh.assertEqual('Off', childNodes[1].innerHTML);
 							}),500);
 							return d;

@@ -90,18 +90,24 @@
 
 							var demoWidget = dijit.byId("dojox_mobile_IconItem_1");
 							doh.assertEqual('none', demoWidget.contentNode.style.display);
+							demoWidget = dijit.byId("dojox_mobile_IconItem_0");
 							if(dojo.isIE)
 							{
 								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].fireEvent( "onclick" );
 							} else {
 								e.initEvent('click', true, true);
-								var demoWidget = dijit.byId("dojox_mobile_IconItem_0");
 								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].dispatchEvent(e);
 							}
 
+							var t = 500;
+							if(dojo.isIE) {
+								t=2000;
+							}
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("dojox_mobile_IconItem_0");
-								doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/icon-1.png/i) != -1);
+								if(!dojo.isIE) {
+									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/icon-1.png/i) != -1);
+								}
 								doh.assertEqual('app1', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('', demoWidget.contentNode.style.display);
 								doh.assertEqual('mblIconContentHeading', demoWidget.contentNode.childNodes[0].className);
@@ -109,14 +115,16 @@
 								doh.assertEqual('app1', demoWidget.contentNode.childNodes[0].childNodes[1].childNodes[0].nodeValue);
 
 								demoWidget = dijit.byId("dojox_mobile_IconItem_1");
-								doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/icon-1.png/i) != -1);
+								if(!dojo.isIE) {
+									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/icon-1.png/i) != -1);
+								}
 								doh.assertEqual('app2', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('none', demoWidget.contentNode.style.display);
 								doh.assertEqual('mblIconContentHeading', demoWidget.contentNode.childNodes[0].className);
 								doh.assertEqual('mblDomButtonBlueMinus mblDomButton', demoWidget.contentNode.childNodes[0].childNodes[0].className);
 								doh.assertEqual('app2', demoWidget.contentNode.childNodes[0].childNodes[1].childNodes[0].nodeValue);
 								
-							}));
+							}),t);
 							return d;
 						}
 					}
