@@ -1,4 +1,4 @@
-define(["dojo/_base/html", "dojo/_base/Color"], function(dojo){
+define(["dojo/_base/kernel", "dojo/_base/html", "dojo/_base/Color"], function(dojo){
 	dojo.getObject("gfx._base", true, dojox);
 
 	var g = dojox.gfx, b = g._base;
