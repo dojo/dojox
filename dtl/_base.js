@@ -1,4 +1,4 @@
-define(["dojo/_base/lang","dojox/string/tokenize","dojox/string/Builder","dojo/_base/json","dojo/_base/html"], function(dojo,dxst){
+define(["dojo/_base/lang","dojox/string/tokenize","dojo/_base/json","dojo/_base/html","dojox/string/Builder"], function(dojo,dxst){
 	dojo.experimental("dojox.dtl");
 	dojo.getObject("dtl", true, dojox);
 
@@ -245,7 +245,6 @@ define(["dojo/_base/lang","dojox/string/tokenize","dojox/string/Builder","dojo/_
 				return this.nodelist.render(context, buffer) + "";
 			},
 			getBuffer: function(){
-				dojo.require("dojox.string.Builder");
 				return new dojox.string.Builder();
 			}
 		});
