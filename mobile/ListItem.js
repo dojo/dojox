@@ -177,7 +177,7 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent
 				if(node.className.match(/(mblDomButton\w+)/)){
 					dojo.removeClass(node, RegExp.$1);
 				}
-			dojo.addClass(node, btnClass);
+				dojo.addClass(node, btnClass);
 				div = node;
 			}else{
 				div = dojo.create("DIV", {className:btnClass+" "+className}, this.anchorNode);
@@ -228,6 +228,9 @@ define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent
 	
 		_setLabelAttr: function(/*String*/text){
 			this.label = text;
+			if(!this.labelNode){
+				this.labelNode = dojo.create("SPAN", null, box);
+			}
 			this.labelNode.innerHTML = this._cv(text);
 		},
 	

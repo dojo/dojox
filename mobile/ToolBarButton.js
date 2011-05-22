@@ -6,6 +6,7 @@ define(["dojo/_base/array","dojo/_base/html", "./_ItemBase"],function(darray,dht
 
 	return dojo.declare("dojox.mobile.ToolBarButton", dojox.mobile._ItemBase, {
 		selected: false,
+		btnClass: "",
 		_defaultColor: "mblColorDefault",
 		_selColor: "mblColorDefaultSel",
 
@@ -61,6 +62,17 @@ define(["dojo/_base/array","dojo/_base/html", "./_ItemBase"],function(darray,dht
 		onClick: function(e){
 			this.setTransitionPos(e);
 			this.defaultClickAction();
+		},
+	
+		_setBtnClassAttr: function(/*String*/btnClass){
+			var node = this.domNode;
+			if(node.className.match(/(mblDomButton\w+)/)){
+				dojo.removeClass(node, RegExp.$1);
+			}
+			dojo.addClass(node, btnClass);
+			if(dojox.mobile.createDomButton(this.domNode)){
+				dojo.addClass(this.domNode, "mblToolbarButtonDomButton");
+			}
 		}
 	});
 });
