@@ -246,8 +246,8 @@ define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./Trans
 		_setLabelAttr: function(/*String*/text){
 			this.label = text;
 			var s = this._cv(text);
-			this.labelNode1.innerHTML = s
-			this.labelNode2.innerHTML = s
+			this.labelNode1.innerHTML = s;
+			this.labelNode2.innerHTML = s;
 		}
 	});
 });
