@@ -1,6 +1,8 @@
-dojo.provide("dojox.drawing.ui.Tooltip");
-dojo.require("dojox.drawing.plugins._Plugin");
-
+define([
+	"dojo",
+	"../util/oo",
+	"../manager/_registry",
+	"../plugins/_Plugin"], function(dojo){
 
 (function(){
 	
@@ -113,3 +115,6 @@ dojo.require("dojox.drawing.plugins._Plugin");
 		name:"dojox.drawing.ui.Tooltip"
 	}, "stencil");
 })();
+
+return dojox.drawing.ui.Tooltip;
+});

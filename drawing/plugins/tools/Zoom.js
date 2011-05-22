@@ -1,5 +1,8 @@
-dojo.provide("dojox.drawing.plugins.tools.Zoom");
-dojo.require("dojox.drawing.plugins._Plugin");
+define([
+	"dojo",
+	"../../util/oo",
+	"../_Plugin",
+	"../../manager/_registry"], function(dojo){
 
 (function(){
 	//
@@ -123,3 +126,5 @@ dojo.require("dojox.drawing.plugins._Plugin");
 	dojox.drawing.register(dt.ZoomOut.setup, "plugin");
 
 })();
+
+});

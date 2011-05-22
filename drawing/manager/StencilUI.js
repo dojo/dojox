@@ -1,4 +1,6 @@
-dojo.provide("dojox.drawing.manager.StencilUI");
+define([
+	"../util/oo",
+	"./Stencil"],function(){
 
 (function(){
 	var surface, surfaceNode;
@@ -63,3 +65,6 @@ dojo.provide("dojox.drawing.manager.StencilUI");
 	);
 	
 })();
+
+return dojox.drawing.manager.StencilUI;
+});

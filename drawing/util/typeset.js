@@ -1,5 +1,5 @@
-dojo.provide("dojox.drawing.util.typeset");
-dojo.require("dojox.drawing.library.greek");
+define(["../library/greek","./common"],function(greeks){
+
 // Summary:
 //		Singleton used for converting characters and typsetting.  Required by _base.
 //
@@ -11,10 +11,8 @@ dojo.require("dojox.drawing.library.greek");
 
 (function(){
 	
-	var greeks = dojox.drawing.library.greek;
-	
 	dojox.drawing.util.typeset = {
-
+		
 		convertHTML: function(inText){
 			if(inText){
 				return inText.replace(/&([^;]+);/g,function(match,code){
@@ -65,3 +63,6 @@ dojo.require("dojox.drawing.library.greek");
 	};
 
 })();
+
+return dojox.drawing.util.typeset;
+});

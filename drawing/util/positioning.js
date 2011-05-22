@@ -1,11 +1,11 @@
-dojo.provide("dojox.drawing.util.positioning");
+define(["dojo","./common"], function(dojo){
 
 (function(){
 	
 	var textOffset = 4;  // distance from line to text box
 	var textYOffset = 20;  // height of text box
 	
-	
+	dojox.drawing.util.positioning = {};
 	dojox.drawing.util.positioning.label = function(/*Object*/start, /*Object*/end){
 		// summary:
 		//		Returns the optimal text positions for annotations.Label.
@@ -60,5 +60,6 @@ dojo.provide("dojox.drawing.util.positioning");
 	
 })();
 
-
+return dojox.drawing.util.positioning;
+});
 

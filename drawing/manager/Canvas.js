@@ -1,7 +1,9 @@
-dojo.provide("dojox.drawing.manager.Canvas");
-
-(function(){
+define([
+	"dojo",
+	"../util/oo",
+	"./Stencil"], function(dojo){
 	
+(function(){
 	dojox.drawing.manager.Canvas = dojox.drawing.util.oo.declare(
 		// summary:
 		//		Creates a dojox.gfx.surface to be used for Drawing. Note that
@@ -159,3 +161,6 @@ dojo.provide("dojox.drawing.manager.Canvas");
 	);
 	
 })();
+
+return dojox.drawing.manager.Canvas;
+});
