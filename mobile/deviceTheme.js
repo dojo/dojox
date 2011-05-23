@@ -87,6 +87,11 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 			[dojo.moduleUrl("dojox.mobile", "themes/iphone/ipad.css")]
 		],
 		[
+			"Custom",
+			"custom",
+			[]
+		],
+		[
 			".*",
 			"iphone",
 			[]
