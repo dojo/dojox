@@ -237,9 +237,7 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 			//	restore editor state
 			// inRowIndex: int
 			// grid row index
-			if(this.value){
-				this.setValue(inRowIndex, this.value);
-			}
+			this.setValue(inRowIndex, this.value);
 			//console.log("restore", this.value, inCell.index, inRowIndex);
 		},
 		//protected

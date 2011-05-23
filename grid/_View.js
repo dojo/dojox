@@ -585,7 +585,7 @@ define([
 		renderRow: function(inRowIndex){
 			var rowNode = this.createRowNode(inRowIndex);
 			this.buildRow(inRowIndex, rowNode);
-			this.grid.edit.restore(this, inRowIndex);
+			//this.grid.edit.restore(this, inRowIndex);
 			return rowNode;
 		},
 
