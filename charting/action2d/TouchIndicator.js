@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(dojo, declare, devent, ChartAction, IndicatorElement, du){ 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
+	function(dojo, lang, declare, devent, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
 	dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {

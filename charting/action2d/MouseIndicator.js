@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", 
 	"./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(dojo, declare, dconnect, dwindow, ChartAction, IndicatorElement, du){ 
+	function(dojo, lang, declare, dconnect, dwindow, ChartAction, IndicatorElement, du){ 
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
