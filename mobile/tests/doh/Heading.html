@@ -37,7 +37,7 @@
 								doh.assertEqual('World Clock', demoWidget.domNode.childNodes[0].childNodes[0].nodeValue);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_3");
-								doh.assertEqual('mblHeading mblHeadingCenterTitle', demoWidget.domNode.className);
+								doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
 							}));
 							return d;
 						}
