@@ -23,7 +23,7 @@
 			});
 			function btnClicked(e){
 				var listItem = dijit.getEnclosingWidget(e.currentTarget);
-				var btnDiv = listItem.rightIconNode;
+				var btnDiv = listItem.rightIconNode.firstChild;
 				if(dojo.hasClass(btnDiv, "mblDomButtonBluePlus")){
 					listItem.set("btnClass", "mblDomButtonRedMinus");
 				}else if(dojo.hasClass(btnDiv, "mblDomButtonRedMinus")){

@@ -93,9 +93,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 			var r = arr[1] + arr[2]; // right
 			var b = arr[0] + arr[3]; // bottom
 			var l = arr[1]; // left
-			iconNode.style.clip = "rect("+t+"px "+r+"px "+b+"px "+l+"px)";
-			iconNode.style.top = dojo.style(iconNode, "top") - t + "px";
-			iconNode.style.left = dojo.style(iconNode.parentNode, "paddingLeft") - l + "px";
+			var offset = iconNode.parentNode ? dojo.style(iconNode.parentNode, "paddingLeft") : 8;
+			dojo.style(iconNode, {
+				clip: "rect("+t+"px "+r+"px "+b+"px "+l+"px)",
+				top: (iconNode.parentNode ? dojo.style(iconNode, "top") : 0) - t + "px",
+				left: offset - l + "px"
+			});
 		}
 	};
 
@@ -183,6 +186,46 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		return node;
 	};
 	
+	dm.createIcon = function(/*String*/icon, /*String*/iconPos, /*DomNode*/node, /*String?*/title, /*DomNode?*/parent){
+		// summary:
+		//		Create or update a ListItem icon node
+		// description:
+		//		If node exists, update the existing node. Otherwise, create a new one.
+		// icon:
+		//		Path for an image, or DOM button class name.
+		if(icon && icon.indexOf("mblDomButton") === 0){
+			// DOM button
+			if(node && node.className.match(/(mblDomButton\w+)/)){
+				dojo.removeClass(node, RegExp.$1);
+			}else{
+				node = dojo.create("DIV");
+			}
+			node.title = title;
+			dojo.addClass(node, icon);
+			dm.createDomButton(node);
+		}else if(icon && icon !== "none"){
+			// Image
+			if(!node || node.nodeName !== "IMG"){
+				node = dojo.create("IMG", {
+					alt: title
+				});
+			}
+			node.src = icon;
+			dm.setupIcon(node, iconPos);
+			if(parent && iconPos){
+				var arr = iconPos.split(/[ ,]/);
+				dojo.style(parent, {
+					width: arr[2] + "px",
+					height: arr[3] + "px"
+				});
+			}
+		}
+		if(parent){
+			parent.appendChild(node);
+		}
+		return node;
+	};
+
 	if(dojo.config.parseOnLoad){
 		dojo.ready(90, function(){
 			// avoid use of dojo.query
