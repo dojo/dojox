@@ -244,6 +244,10 @@ dojo.declare("dojox.grid._Events", null, {
 		if(!this.edit.isEditCell(e.rowIndex, e.cellIndex)){
 			this.focus.setFocusCell(e.cell, e.rowIndex);
 		}
+		// in some cases click[0] is null which causes false doubeClicks. Fixes #100703
+		if(this._click.length > 1 && this._click[0] == null){
+			this._click.shift();
+		}
 		this.onRowClick(e);
 	},
 
