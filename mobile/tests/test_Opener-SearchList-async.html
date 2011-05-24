@@ -12,7 +12,9 @@
 			height: 24px;
 			width: 300px;
 		}
-
+		#scrolllist {
+			height: 400px;
+		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -46,10 +48,11 @@
 	</table>
 
 	<div id="listPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getSelectedContact, onShow:setSearch">
-		<div id="viewport">
+		<div id="viewport" dojoType="dojox.mobile.View">
 			<h1 dojoType="dojox.mobile.Heading">
 				<input id="search1" type="search" results="5" autosave="myrecentcontactsearches" name="searchContacts" placeholdertext="Search"></input>
 			</h1>
+			<div id="scrolllist" dojoType="dojox.mobile.ScrollableView" >
 			<ul id="list1" dojoType="dojox.mobile.EdgeToEdgeList" select="single">
 			<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">A</h2>
 				<li id="item1" dojoType="dojox.mobile.ListItem" checked="true">
@@ -57,6 +60,29 @@
 				</li>
 				<li dojoType="dojox.mobile.ListItem">
 					Adam Peller
+				</li>
+			<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">B</h2>
+				<li dojoType="dojox.mobile.ListItem">
+					Barney Stiller
+				</li>
+				<li dojoType="dojox.mobile.ListItem">
+					Ben Frank
+				</li>
+				<li dojoType="dojox.mobile.ListItem">
+					Brad James
+				</li>
+				<li dojoType="dojox.mobile.ListItem">
+					Brian Simmons
+				</li>
+				<li dojoType="dojox.mobile.ListItem">
+					Bryant Luk
+				</li>
+			<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">C</h2>
+				<li dojoType="dojox.mobile.ListItem">
+					Chris Mitchell
+				</li>
+				<li dojoType="dojox.mobile.ListItem">
+					Christophe Jolif
 				</li>
 			<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">J</h2>
 				<li dojoType="dojox.mobile.ListItem">
@@ -79,7 +105,7 @@
 					Kevin Rivera
 				</li>
 			</ul>
-		<div id="viewport">
+		</div>
 	</div>
 </body>
 </html>
