@@ -12,6 +12,10 @@ define(["dojo/_base/html"],function(dhtml){
 		constructor: function(){
 			this.domNode = dojo.create("DIV");
 			this.domNode.className = "mblProgContainer";
+			if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){
+				// workaround to avoid the side effects of the fixes for android screen flicker problem
+				dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+			}
 			this.spinnerNode = dojo.create("DIV", null, this.domNode);
 			for(var i = 0; i < this.colors.length; i++){
 				var div = dojo.create("DIV", {className:"mblProg mblProg"+i}, this.spinnerNode);
