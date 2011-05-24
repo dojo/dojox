@@ -25,21 +25,22 @@
 				view.addChild(demoWidget);
 				var childWidget = new dojox.mobile.ToolBarButton({id:"btn1", label:"Edit", style:{padding:"0px 14px"}});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButton mblDomButtonWhitePlus", style:"float:right;", onclick:"console.log('+ was clicked')"});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButton mblDomButtonWhitePlus", style:"float:right;", onclick:"console.log('+ was clicked')"});
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading({label:"Alarm Clock"});
 				view.addChild(demoWidget);
 				childWidget = new dojox.mobile.ToolBarButton({label:"Edit", style:{padding:"0px 14px"}});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({classNameclass:"mblDomButtonWhitePlus", style:{float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhitePlus", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading({label:"Voice Memos"});
 				view.addChild(demoWidget);
 				childWidget = new dojox.mobile.ToolBarButton({label:"Speaker"});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({label:"Done", className:"mblColorBlue", style:{width:"45px", float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({label:"Done", btnClass:"mblColorBlue", style:{width:"45px", float:"right"}});
+				dojo.removeClass(childWidget.domNode, "mblColorDefault ")
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading({label:"Updatess"});
@@ -49,12 +50,14 @@
 
 				demoWidget = new dojox.mobile.Heading({label:"News", back:"Bookmarks", moveTo:"bookmarks"});
 				view.addChild(demoWidget);
-				childWidget = new dojox.mobile.ToolBarButton({label:"Done", className:"mblColorBlue", style:{width:"45px", float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({label:"Done", btnClass:"mblColorBlue", style:{width:"45px", float:"right"}});
+				dojo.removeClass(childWidget.domNode, "mblColorDefault ")
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading();
 				view.addChild(demoWidget);
-				childWidget = new dojox.mobile.ToolBarButton({label:"Done", className:"mblColorBlue"});
+				childWidget = new dojox.mobile.ToolBarButton({label:"Done", btnClass:"mblColorBlue"});
+				dojo.removeClass(childWidget.domNode, "mblColorDefault ")
 				demoWidget.addChild(childWidget);
 				childWidget = new dojox.mobile.ToolBarButton({label:"New Folder", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
@@ -69,28 +72,28 @@
 				demoWidget.addChild(childWidget);
 				childWidget = new dojox.mobile.ToolBarButton({icon:"../images/tab-icons.png", iconPos:"29,0,29,29", moveTo:"view3"});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhitePlus", iconPos:"29,0,29,29", style:{float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhitePlus", iconPos:"29,0,29,29", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading();
 				view.addChild(demoWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhiteSearch", style:{float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhiteSearch", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading({align:"center"});
 				view.addChild(demoWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhitePlus"});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhitePlus"});
 				demoWidget.addChild(childWidget);
 				childWidget = new dojox.mobile.ToolBarButton({icon:"../images/tab-icon-15h.png", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
 
 				demoWidget = new dojox.mobile.Heading({label:"Inbox(32)", back:"Top"});
 				view.addChild(demoWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhiteSearch", style:{float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhiteSearch", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhiteUpArrow", style:{float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhiteUpArrow", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
-				childWidget = new dojox.mobile.ToolBarButton({className:"mblDomButtonWhiteDownArrow", style:{float:"right"}});
+				childWidget = new dojox.mobile.ToolBarButton({btnClass:"mblDomButtonWhiteDownArrow", style:{float:"right"}});
 				demoWidget.addChild(childWidget);
 
 				doh.register("dojox.mobile.test.ToolBarButton", [
@@ -101,21 +104,21 @@
 						doh.assertEqual('Edit', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_0");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhitePlus', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblDomButtonWhitePlus mblToolbarButtonDomButton', demoWidget.domNode.className);
 						
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_1");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
 						doh.assertEqual('Edit', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_2");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhitePlus', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhitePlus mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_3");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
 						doh.assertEqual('Speaker', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_4");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorBlue', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorBlue', demoWidget.domNode.className);
 						doh.assertEqual('Done', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_5");
@@ -123,11 +126,11 @@
 						doh.assertEqual('Update All', demoWidget.domNode.childNodes[0].nodeValue);
 						
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_6");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorBlue', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorBlue', demoWidget.domNode.className);
 						doh.assertEqual('Done', demoWidget.domNode.childNodes[0].nodeValue);
 						
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_7");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorBlue', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorBlue', demoWidget.domNode.className);
 						doh.assertEqual('Done', demoWidget.domNode.childNodes[0].nodeValue);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_8");
@@ -161,13 +164,13 @@
 						doh.assertEqual('0px', demoWidget.domNode.childNodes[0].childNodes[0].style.left);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_13");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhitePlus', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhitePlus mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_14");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhiteSearch', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhiteSearch mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_15");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhitePlus', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhitePlus mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_16");
 						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault', demoWidget.domNode.className);
@@ -178,13 +181,13 @@
 						}
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_17");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhiteSearch', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhiteSearch mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_18");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhiteUpArrow', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhiteUpArrow mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 
 						demoWidget = dijit.byId("dojox_mobile_ToolBarButton_19");
-//						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButton mblToolbarButtonDomButton mblDomButtonWhiteDownArrow', demoWidget.domNode.className);
+						doh.assertEqual('mblToolbarButton mblArrowButtonText mblColorDefault mblDomButtonWhiteDownArrow mblDomButton mblToolbarButtonDomButton', demoWidget.domNode.className);
 					}
 				]);
 				doh.run();
