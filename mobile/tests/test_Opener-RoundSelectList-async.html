@@ -11,6 +11,14 @@
 		#header1 {
 			width: 300px;
 		}
+		#viewport {
+			height: 500px;
+			
+			/*overflow: auto;*/
+		}
+		#scrolllist {
+			height:500px;
+		}
 
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -47,6 +55,7 @@
 	<div id="listPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getSelectedRingtone, onShow:setSelectedRingtone">
 		<div id="viewport" data-dojo-type="dojox.mobile.View">
 			<h1 id="header1" dojoType="dojox.mobile.Heading">Ringtone</h1>
+			<div id="scrolllist" dojoType="dojox.mobile.ScrollableView">
 			<ul id="list1" dojoType="dojox.mobile.RoundRectList" select="single">
 				<li id="item1" dojoType="dojox.mobile.ListItem" checked="true">
 					Marimba
@@ -124,7 +133,8 @@
 					Xylophone
 				</li>
 			</ul>
-		<div id="viewport">
+			</div>
+		</div>
 	</div>
 </body>
 </html>
