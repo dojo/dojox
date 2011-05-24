@@ -1,4 +1,5 @@
-define(["dojo/_base/lang","dojox/string/tokenize","dojo/_base/json","dojo/_base/html","dojox/string/Builder"], function(dojo,dxst){
+define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_base/json","dojo/_base/html","dojox/string/Builder"], 
+	function(dojo, lang, dxst){
 	dojo.experimental("dojox.dtl");
 	dojo.getObject("dtl", true, dojox);
 

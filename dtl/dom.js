@@ -1,4 +1,4 @@
-define(["dojo/_base/lang","./_base","dojox/string/tokenize","./Context","dojo/_base/html"], function(dojo,dd,dxst){
+define(["dojo/_base/kernel","dojo/_base/lang","./_base","dojox/string/tokenize","./Context","dojo/_base/html"], function(dojo,lang,dd,dxst){
 
 	dd.BOOLS = {checked: 1, disabled: 1, readonly: 1};
 	dd.TOKEN_CHANGE = -11;
