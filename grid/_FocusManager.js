@@ -106,7 +106,9 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			try{
 				if(!this.grid.edit.isEditing()){
 					dojo.toggleClass(n, this.focusClass, true);
-					this.blurHeader();
+					if(this._colHeadNode){
+						this.blurHeader();
+					}
 					dojox.grid.util.fire(n, "focus");
 				}
 			}
