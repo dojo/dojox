@@ -213,6 +213,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 			f.currentPageSize = this.grid.rowsPerPage = this.pageSize = size;
 			if(size >= this._maxSize){
 				this.grid.rowsPerPage = this.defaultRows;
+				this.showAll = true;
 				this.grid.usingPagination = false;
 			}else{
 				this.grid.usingPagination = true;
