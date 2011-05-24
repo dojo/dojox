@@ -62,13 +62,12 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 				var totalW = 0; // total width of all the buttons
 				for(i = 0; i < arr.length; i++){
 					margin -= dojo.marginBox(arr[i]).w;
-					arr[i].style.marginTop = "3px";
 					totalW += arr[i].offsetWidth;
 				}
 				margin = Math.floor(margin/2);
 				var parent = this.getParent();
 				var inHeading = this.inHeading || parent instanceof dojox.mobile.Heading;
-				this.containerNode.style.padding = "3px 0px 0px " + (inHeading ? 0 : margin) + "px";
+				this.containerNode.style.padding = (inHeading ? 0 : 3) + "px 0px 0px " + (inHeading ? 0 : margin) + "px";
 				if(inHeading){
 					dojo.style(this.domNode, {
 						background: "none",
