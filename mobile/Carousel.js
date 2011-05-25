@@ -227,20 +227,11 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 					dojo.removeClass(this.images[i], "mblCarouselImgSelected");
 				}
 			}
-			this.setOpacity(img, 0.4);
-			var _this = this;
+			dojo.style(img, "opacity", 0.4);
 			setTimeout(function(){
-				_this.setOpacity(img, 1);
+				dojo.style(img, "opacity", 1);
 			}, 1000);
 			dojo.publish("/dojox/mobile/carouselSelect", [this, img, this.items[img._idx], img._idx]);
-		},
-
-		setOpacity: function(node, val){
-			// dojo._setOpacity unfortunately requires dojo.query...
-			node.style.opacity = val;
-			node.style.mozOpacity = val;
-			node.style.khtmlOpacity = val;
-			node.style.webkitOpacity = val;
 		},
 
 		loadImages: function(view){

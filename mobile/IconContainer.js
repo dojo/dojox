@@ -68,7 +68,7 @@ define(["dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","di
 				if(child === this._terminator){ break; }
 				var w = dijit.byNode(child);
 				w.containerNode.parentNode.style.display = "none";
-				w.setOpacity(w.iconNode, 1);
+				dojo.style(w.iconNode, "opacity", 1);
 			}
 		},
 
