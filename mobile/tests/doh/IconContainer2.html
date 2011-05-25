@@ -60,9 +60,9 @@
 							}
 							demoWidget = dijit.byId("dojox_mobile_IconItem_1");
 							doh.assertEqual('none', demoWidget.contentNode.style.display);
-							var t = 500;
-							if(dojo.isIE) {
-								t=2000;
+							var t = 1000;
+							if(dojo.isIE || dojo.isAndroid || dojo.isIPhone || dojo.isBB) {
+								t=2500;
 							}
 
 							setTimeout(d.getTestCallback(function(){
