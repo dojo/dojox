@@ -39,12 +39,14 @@ fi
 if [ "$1" == "single" ]; then
   dir=release-mobile-single
 fi
-if [ "$2" == "webkit" ]; then
+shift 1
+if [ "$1" == "webkit" ]; then
   webkit=webkitMobile=true
+  shift 1
 fi
 
 cd ../../../util/buildscripts
 
-./build.sh profile=$profile action=release customDijitBase=true optimize=$optimize layerOptimize=$optimize cssOptimize=comments releaseDir=../../$dir/ $webkit
+./build.sh profile=$profile action=release customDijitBase=true optimize=$optimize layerOptimize=$optimize cssOptimize=comments releaseDir=../../$dir/ $webkit $*
 
 cd ../../dojox/mobile/build

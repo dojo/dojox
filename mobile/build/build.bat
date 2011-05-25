@@ -36,11 +36,15 @@ set dir=release-mobile-separate
 set webkit=
 if "%1"=="single" set profile=mobile-all
 if "%1"=="single" set dir=release-mobile-single
-if "%2"=="webkit" set webkit=webkitMobile=true
+shift
+if not "%1"=="webkit" goto skip1
+set webkit=webkitMobile=true
+shift
+:skip1
 
 cd ..\..\..\util\buildscripts
 
-call build profile=%profile% action=release customDijitBase=true optimize=%optimize% layerOptimize=%optimize% cssOptimize=comments releaseDir=../../%dir%/ %webkit%
+call build profile=%profile% action=release customDijitBase=true optimize=%optimize% layerOptimize=%optimize% cssOptimize=comments releaseDir=../../%dir%/ %webkit% %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 cd ..\..\dojox\mobile\build
 
