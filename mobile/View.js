@@ -31,6 +31,13 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			this.domNode.className = "mblView";
 			if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
 				dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+				// workaround for auto-scroll issue when focusing input fields
+				this.connect(null, "onfocus", function(e){
+					dojo.style(this.domNode, "webkitTransform", "");
+				});
+				this.connect(null, "onblur", function(e){
+					dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+				});
 			}
 			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 			this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
