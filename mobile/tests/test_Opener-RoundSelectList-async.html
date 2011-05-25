@@ -3,21 +3,13 @@
 <head>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<title>test Opener</title>
+	<title>Opener-RoundSelectList</title>
 	<style>
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
 		}
 		#header1 {
 			width: 300px;
-		}
-		#viewport {
-			height: 500px;
-			
-			/*overflow: auto;*/
-		}
-		#scrolllist {
-			height:500px;
 		}
 
 	</style>
@@ -35,11 +27,20 @@
 			]);
 		});
 
-		function getSelectedRingtone(node){
-		// NOOP
+		function getSelectedRingtone(node, accept){
+			if(accept === true){
+				dojo.byId('ringtone').value = checkedItem || '';
+			}
 		}
 		function setSelectedRingtone(node){
 		// NOOP
+		}
+		function onCheck(item, checked){
+			setTimeout(function(){
+				if(checked){
+					checkedItem = item.labelNode.innerText || item.labelNode.textContent || '';
+				}
+			}, 500);
 		}
 	</script>
 </head>
@@ -47,16 +48,21 @@
 	<table cellspacing="20">
 	<tr>
 		<td style="text-align:right;font-weight:bold">Ringtone</td>
-		<td><input id="contact1" readOnly value=""
-			onclick="dijit.byId('listPicker').show(this, ['above-centered','below-centered','after','before'])"></td>
+		<td><input id="ringtone" readOnly value="" placeholder="Select a ringtone"
+			onclick="dijit.byId('listPicker').show(this, ['above-centered','below-centered','after','before'])" /></td>
 	</tr>
 	</table>
 
 	<div id="listPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getSelectedRingtone, onShow:setSelectedRingtone">
 		<div id="viewport" data-dojo-type="dojox.mobile.View">
-			<h1 id="header1" dojoType="dojox.mobile.Heading">Ringtone</h1>
-			<div id="scrolllist" dojoType="dojox.mobile.ScrollableView">
-			<ul id="list1" dojoType="dojox.mobile.RoundRectList" select="single">
+		    <h1 id="header1" dojoType="dojox.mobile.Heading" label="Ringtone">
+			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('listPicker').hide(true)"></div>
+			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('listPicker').hide(false)"></div>
+		    </h1>
+		    <div dojoType="dojox.mobile.ScrollableView" selected="true">
+			<ul id="list1" dojoType="dojox.mobile.RoundRectList" select="single" data-dojo-props="onCheckStateChanged:onCheck">
 				<li id="item1" dojoType="dojox.mobile.ListItem" checked="true">
 					Marimba
 				</li>
@@ -133,7 +139,7 @@
 					Xylophone
 				</li>
 			</ul>
-			</div>
+		    </div>
 		</div>
 	</div>
 </body>
