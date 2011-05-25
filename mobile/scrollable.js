@@ -231,9 +231,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			h = this.height;
 		}
 		if(!h){
-			h = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - top - this._appFooterHeight;// + "px";
-			if(this.containerNode.scrollHeight){
-				h = Math.min(this.containerNode.scrollHeight, h); // content could be smaller than entire screen height
+			h = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - top - this._appFooterHeight;
+			if(this.domNode.scrollHeight){
+				h = Math.min(this.domNode.scrollHeight, h); // content could be smaller than entire screen height
 			}
 			h = h + "px";
 		}

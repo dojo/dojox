@@ -13,7 +13,9 @@
 			height: 24px;
 			width: 300px;
 		}
-
+		.mblOverlay #search1 {
+			margin: 0 80px;
+		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -65,7 +67,7 @@
 				onclick="dijit.byId('listPicker').hide(true)"></div>
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('listPicker').hide(false)"></div>
-			<input id="search1" type="search" results="5" autosave="myrecentcontactsearches" name="searchContacts" placeholder="Search" style="width:14em;margin:0 80px;" />
+			<input id="search1" type="search" results="5" autosave="myrecentcontactsearches" name="searchContacts" placeholder="Search" />
 		    </h1>
 		    <div dojoType="dojox.mobile.ScrollableView" selected="true">
 			<ul id="list1" dojoType="dojox.mobile.EdgeToEdgeList" select="single" data-dojo-props="onCheckStateChanged:onCheck">
