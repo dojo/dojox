@@ -41,7 +41,7 @@
 // example:
 //		Use this module from a non-dojo applicatoin:
 //		| function onLoad(){
-//		| 	var scrollable = new dojox.mobile.scrollable();
+//		| 	var scrollable = new dojox.mobile.scrollable(dojo, dojox);
 //		| 	scrollable.init({
 //		| 		domNode: "outer", // id or node
 //		| 		containerNode: "inner" // id or node

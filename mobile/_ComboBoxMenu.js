@@ -58,7 +58,7 @@ define(["dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase",
 
 		postCreate: function(){
 			this.inherited(arguments);
-			this.scrollable = new dojox.mobile.scrollable();
+			this.scrollable = new dojox.mobile.scrollable(dojo, dojox);
 			this.scrollable.resize = function(){}; // resize changes the height rudely
 		}
 	});
