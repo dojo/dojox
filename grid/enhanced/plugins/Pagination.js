@@ -2,12 +2,13 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
+	"dojo/text!../templates/Pagination.html",
 	"./Dialog",
 	"./_StoreLayer",
 	"../_Plugin",
 	"dijit/form/Button",
 	"dijit/form/NumberTextBox",
-	"dojo/i18n!../nls/Pagination"], function(dojo, dijit, dojox){
+	"dojo/i18n!../nls/Pagination"], function(dojo, dijit, dojox, template){
 
 dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -318,7 +319,7 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 });
 
 dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._TemplatedMixin], {
-	templatePath: dojo.moduleUrl("dojox.grid","enhanced/templates/Pagination.html"),
+	templateString: template,
 		
 	// pagination bar position - "bottom"|"top"
 	position: "bottom",

@@ -2,10 +2,11 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
+	"dojo/text!./resources/Expando.html",
 	"./_View",
 	"./TreeGrid",
 	"./cells/tree",
-	"./LazyTreeGridStoreModel"], function(dojo, dijit, dojox){
+	"./LazyTreeGridStoreModel"], function(dojo, dijit, dojox, template){
 
 dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._TemplatedMixin], {
 	itemId: "",
@@ -15,7 +16,7 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._TemplatedMixin], 
 	expandoCell: null,
 	level: 0,
 	open: false,
-	templatePath: dojo.moduleUrl("dojox.grid", "resources/Expando.html"),
+	templateString: template,
 	
 	onToggle: function(event){
 		// Summary

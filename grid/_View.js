@@ -2,13 +2,14 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
+	"dojo/text!./resources/View.html",
 	"dojo/dnd/Source",
 	"dojo/dnd/Manager",	
 	"dijit/_TemplatedMixin",
 	"dijit/_Widget",
 	"dojox/html/metrics",
 	"./_Builder",
-	"./util"], function(dojo, dijit, dojox){
+	"./util"], function(dojo, dijit, dojox, template){
 
 (function(){
 	// a private function
@@ -31,7 +32,7 @@ define([
 		// 		Width for the view, in valid css unit
 		viewWidth: "",
 
-		templatePath: dojo.moduleUrl("dojox.grid","resources/View.html"),
+		templateString: template,
 		
 		themeable: false,
 		classTag: 'dojoxGrid',

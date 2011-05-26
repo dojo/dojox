@@ -2,6 +2,7 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
+	"dojo/text!./resources/_Grid.html",
 	"dojo/i18n!dijit/nls/loading",
 	"dijit/dijit",
 	"dijit/CheckedMenuItem",
@@ -17,7 +18,7 @@ define([
 	"./_EditManager",
 	"./Selection",
 	"./_RowSelector",
-	"./_Events"], function(dojo, dijit, dojox){
+	"./_Events"], function(dojo, dijit, dojox, template){
 
 (function(){
 	// NOTE: this is for backwards compatibility with Dojo 1.3
@@ -181,7 +182,7 @@ define([
 		//	|		structure="structure"
 		//	|		dojoType="dojox.grid._Grid"></div>
 
-		templatePath: dojo.moduleUrl("dojox.grid","resources/_Grid.html"),
+		templateString: template,
 
 		// classTag: String
 		// 		CSS class applied to the grid's domNode
