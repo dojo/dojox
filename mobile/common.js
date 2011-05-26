@@ -258,19 +258,28 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 			dojo.addClass(dojo.doc.documentElement, "mobile");
 		}
 
-		if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){ // workaround for android screen flicker problem
+		if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3.1){ // workaround for android screen flicker problem
 			if(dojo.config["mblAndroidWorkaroundButtonStyle"] !== false){
 				// workaround to avoid buttons disappear due to the side-effect of the webkitTransform workaroud below
 				dojo.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, dojo.doc.head, "first");
 			}
-			dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
-			// workaround for auto-scroll issue when focusing input fields
-			dojo.connect(null, "onfocus", null, function(e){
-				dojo.style(dojo.doc.documentElement, "webkitTransform", "");
-			});
-			dojo.connect(null, "onblur", null, function(e){
+			if(dojo.isAndroid < 3){ // for Android 2.2.x and 2.3.x
 				dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
-			});
+				// workaround for auto-scroll issue when focusing input fields
+				dojo.connect(null, "onfocus", null, function(e){
+					dojo.style(dojo.doc.documentElement, "webkitTransform", "");
+				});
+				dojo.connect(null, "onblur", null, function(e){
+					dojo.style(dojo.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
+				});
+			}else{ // for Android 3.0.x
+				if(dojo.config["mblAndroid3Workaround"] !== false){
+					dojo.style(dojo.doc.documentElement, {
+						webkitBackfaceVisibility: "hidden",
+						webkitPerspective: 8000
+					});
+				}
+			}
 		}
 	
 		//	You can disable hiding the address bar with the following djConfig.
