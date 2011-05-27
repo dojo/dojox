@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>Testing arc</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+	@import "../../../dojo/resources/dojo.css";
+	@import "../../../dijit/tests/css/dijitTests.css";
+</style>
+<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
+<script type="text/javascript">
+dojo.require("dojox.gfx");
+dojo.require("dojox.gfx.shape");
+dojo.require("dojox.gfx.path");
+dojo.require("dojox.gfx.arc");
+
+createSurface = function(){
+	var surface = dojox.gfx.createSurface("test", 200, 200);
+	surface.whenLoaded(makeShapes);
+};
+
+makeShapes = function(surface){
+	surface.createRect({width:200,height:200}).setStroke('black');
+	surface.createRect({x:150,y:10,width:300,height:300}).setFill('red');
+};
+
+dojo.addOnLoad(createSurface);
+
+</script>
+</head>
+<body>
+<h1>Testing arc</h1>
+<!--<p><button onclick="createSurface();">Go</button></p>-->
+<div id="test"></div>
+<p>That's all Folks!</p>
+</body>
+</html>
