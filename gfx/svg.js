@@ -596,7 +596,7 @@ else
 
 		var s = new svg.Surface();
 		s.rawNode = _createElementNS(svg.xmlns.svg, "svg");
-		s.rawNode.setAttribute("overflow",  'hidden');
+		s.rawNode.setAttribute("overflow", "hidden");
 		if(width){
 			s.rawNode.setAttribute("width",  width);
 		}
