@@ -408,12 +408,12 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 						expando.cellIdx = -1;
 					}
 				}else{
-					expando = dojo.parser.parse(n.parentNode)[0];
 					if(idty){
+						expando = dojo.parser.parse(n.parentNode)[0];
 						this._expandos[idty][tc] = expando;
 					}
 				}
-				if(!expando.setRowNode(inRowIndex, inRowNode, this)){
+				if(expando && !expando.setRowNode(inRowIndex, inRowNode, this)){
 					expando.domNode.parentNode.removeChild(expando.domNode);
 				}
 			}
@@ -439,5 +439,9 @@ dojo.declare("dojox.grid._TreeView", [dojox.grid._View], {
 		if(row){
 			return this.content.getCellNode(row, inCellIndex);
 		}
+	},
+	destroy: function(){
+		this._cleanupExpandoCache();
+		this.inherited(arguments);
 	}
 });

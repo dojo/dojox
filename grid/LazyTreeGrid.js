@@ -236,6 +236,7 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 				if(!expando.setRowNode(inRowIndex, inRowNode, this)){
 					expando.domNode.parentNode.removeChild(expando.domNode);
 				}
+				dojo.destroy(n);
 			}
 		}, this);
 		this.inherited(arguments);
