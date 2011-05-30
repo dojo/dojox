@@ -2,13 +2,13 @@ dojo.provide("dojox.layout.GridContainerLite");
 
 define(["dojo/_base/kernel",
 	"dojo/text!./resources/GridContainer.html",
-	"dojo/_base/load",
+	"dojo/ready",
 	"dojo/_base/array","dojo/_base/lang",
 	"dojo/_base/declare","dojo/text","dojo/_base/sniff","dojo/_base/html",
 	"dojox/mdnd/AreaManager","dojox/mdnd/DropIndicator",
 	"dojox/mdnd/dropMode/OverDropMode","dojox/mdnd/AutoScroll","dijit/_Templated",
 	"dijit/layout/_LayoutWidget"],function(dojo,template){
-	
+
 	var gcl = dojo.declare(
 		"dojox.layout.GridContainerLite",
 		[dijit.layout._LayoutWidget, dijit._TemplatedMixin],
@@ -53,66 +53,66 @@ define(["dojo/_base/kernel",
 		// 	|		widget.addChild(cpane3, 2, 1);
 		// 	|		widget.startup();
 		// 	|	});
-		
+
 		//	autoRefresh: Boolean
 		//		Enable the refresh of registered areas on drag start.
 		autoRefresh: true,
-	
-	
+
+
 		// templateString: String
 		//		template of gridContainer.
 		templateString: template,
-	
+
 		// dragHandleClass: Array :
 		//		CSS class enabling a drag handle on a child.
 		dragHandleClass: "dojoxDragHandle",
-	
+
 		// nbZones: Integer
 		//		The number of dropped zones, by default 1.
 		nbZones: 1,
-	
+
 		// doLayout: Boolean
 		//		If true, change the size of my currently displayed child to match my size.
 		doLayout: true,
-	
+
 		// isAutoOrganized: Boolean
 		//		If true, widgets are organized automatically,
 		//		else the attribute colum of child will define the right column.
 		isAutoOrganized: true,
-	
+
 		// acceptTypes: Array
 		//		The GridContainer will only accept the children that fit to the types.
 		acceptTypes: [],
-		
+
 		// colWidths: String
 		//		A comma separated list of column widths. If the column widths do not add up
 		//		to 100, the remaining columns split the rest of the width evenly
 		//		between them.
 		colWidths: "",
-	
+
 		constructor: function(/*Object*/props, /*DOMNode*/node){
 			this.acceptTypes = (props || {}).acceptTypes || ["text"];
 			this._disabled = true;
 		},
-	
+
 		postCreate: function(){
 			//console.log("dojox.layout.GridContainerLite ::: postCreate");
 			this.inherited(arguments);
 			this._grid = [];
-	
+
 			this._createCells();
-	
+
 			// need to resize dragged child when it's dropped.
 			this.subscribe("/dojox/mdnd/drop", "resizeChildAfterDrop");
 			this.subscribe("/dojox/mdnd/drag/start", "resizeChildAfterDragStart");
-	
+
 			this._dragManager = dojox.mdnd.areaManager();
 			// console.info("autorefresh ::: ", this.autoRefresh);
 			this._dragManager.autoRefresh = this.autoRefresh;
-	
+
 			//	Add specific dragHandleClass to the manager.
 			this._dragManager.dragHandleClass = this.dragHandleClass;
-	
+
 			if(this.doLayout){
 				this._border = {
 					'h':(dojo.isIE) ? dojo._getBorderExtents(this.gridContainerTable).h : 0,
@@ -125,31 +125,31 @@ define(["dojo/_base/kernel",
 			}
 			// Call postCreate of dijit.layout._LayoutWidget.
 			this.inherited(arguments);
-	
+
 		},
-	
+
 		startup: function(){
 			//console.log("dojox.layout.GridContainerLite ::: startup");
 			if(this._started){ return; }
-	
+
 			if(this.isAutoOrganized){
 				this._organizeChildren();
 			}
 			else{
 				this._organizeChildrenManually();
 			}
-	
+
 			// Need to call getChildren because getChildren return null
 			// The children are not direct children because of _organizeChildren method
 			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
-	
+
 			// Need to enable the Drag And Drop only if the GridContainer is visible.
 			if(this._isShown()){
 				this.enableDnd();
 			}
 			this.inherited(arguments);
 		},
-	
+
 		resizeChildAfterDrop: function(/*Node*/node, /*Object*/targetArea, /*Integer*/indexChild){
 			// summary:
 			//		Resize the GridContainerLite inner table and the dropped widget.
@@ -165,7 +165,7 @@ define(["dojo/_base/kernel",
 			// 		Index where the dropped widget has been placed
 			// returns:
 			//		True if resized.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: resizeChildAfterDrop");
 			if(this._disabled){
 				return false;
@@ -175,10 +175,10 @@ define(["dojo/_base/kernel",
 				if(widget.resize && dojo.isFunction(widget.resize)){
 					widget.resize();
 				}
-	
+
 				// Update the column of the widget
 				widget.set("column", node.parentNode.cellIndex);
-				
+
 				if(this.doLayout){
 					var domNodeHeight = this._contentBox.h,
 						divHeight = dojo.contentBox(this.gridContainerDiv).h;
@@ -191,7 +191,7 @@ define(["dojo/_base/kernel",
 			}
 			return false;
 		},
-	
+
 		resizeChildAfterDragStart: function(/*Node*/node, /*Object*/sourceArea, /*Integer*/indexChild){
 			// summary:
 			//		Resize the GridContainerLite inner table only if the drag source
@@ -202,7 +202,7 @@ define(["dojo/_base/kernel",
 			//		AreaManager Object containing information of sourceArea
 			// indexChild:
 			// 		Index where the dragged widget has been placed
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: resizeChildAfterDragStart");
 			if(this._disabled){
 				return false;
@@ -218,7 +218,7 @@ define(["dojo/_base/kernel",
 			}
 			return false;
 		},
-	
+
 		getChildren: function(){
 			// summary:
 			//		A specific method which returns children after they were placed in zones.
@@ -226,7 +226,7 @@ define(["dojo/_base/kernel",
 			//		An array containing all children (widgets).
 			// tags:
 			//		protected
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _getChildren");
 			var children = [];
 			dojo.forEach(this._grid, function(dropZone){
@@ -234,7 +234,7 @@ define(["dojo/_base/kernel",
 			});
 			return children;	// Array
 		},
-	
+
 		_isShown: function(){
 			// summary:
 			//		Check if the domNode is visible or not.
@@ -242,7 +242,7 @@ define(["dojo/_base/kernel",
 			//		true if the content is currently shown
 			// tags:
 			//		protected
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _isShown");
 			if("open" in this){		// for TitlePane, etc.
 				return this.open;		// Boolean
@@ -252,11 +252,11 @@ define(["dojo/_base/kernel",
 				return (node.style.display != 'none') && (node.style.visibility != 'hidden') && !dojo.hasClass(node, "dijitHidden"); // Boolean
 			}
 		},
-	
+
 		layout: function(){
 			// summary:
 			//		Resize of each child
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: layout");
 			if(this.doLayout){
 				var contentBox = this._contentBox;
@@ -273,43 +273,43 @@ define(["dojo/_base/kernel",
 				}
 			});
 		},
-	
+
 		onShow: function(){
 			// summary:
 			//		Enabled the Drag And Drop if it's necessary.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: onShow");
 			if(this._disabled){
 				this.enableDnd();
 			}
 		},
-	
+
 		onHide: function(){
 			// summary:
 			//		Disabled the Drag And Drop if it's necessary.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: onHide");
 			if(!this._disabled){
 				this.disableDnd();
 			}
 		},
-	
+
 		_createCells: function(){
 			// summary:
 			//		Create the columns of the GridContainer.
 			// tags:
 			//		protected
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _createCells");
 			if(this.nbZones === 0){ this.nbZones = 1; }
 			var accept = this.acceptTypes.join(","),
 				i = 0;
-				
+
 			var origWidths = this.colWidths || [];
 			var widths = [];
 			var colWidth;
 			var widthSum = 0;
-			
+
 			// Calculate the widths of each column.
 			for(i = 0; i < this.nbZones; i++){
 				if(widths.length < origWidths.length){
@@ -322,7 +322,7 @@ define(["dojo/_base/kernel",
 					widths.push(colWidth);
 				}
 			}
-	
+
 			i = 0;
 			while(i < this.nbZones){
 				// Add the parameter accept in each zone used by AreaManager
@@ -340,17 +340,17 @@ define(["dojo/_base/kernel",
 				i++;
 			}
 		},
-		
+
 		_getZonesAttr: function(){
 			// summary:
 			//   return array of zone (domNode)
 			return dojo.query(".gridContainerZone",  this.containerNode);
 		},
-	
+
 		enableDnd: function(){
 			// summary:
 			//		Enable the Drag And Drop for children of GridContainer.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: enableDnd");
 			var m = this._dragManager;
 			dojo.forEach(this._grid, function(dropZone){
@@ -359,11 +359,11 @@ define(["dojo/_base/kernel",
 			m._dropMode.updateAreas(m._areaList);
 			this._disabled = false;
 		},
-	
+
 		disableDnd: function(){
 			// summary:
 			//		Disable the Drag And Drop for children of GridContainer.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: disableDnd");
 			var m = this._dragManager;
 			dojo.forEach(this._grid, function(dropZone){
@@ -372,11 +372,11 @@ define(["dojo/_base/kernel",
 			m._dropMode.updateAreas(m._areaList);
 			this._disabled = true;
 		},
-	
+
 		_organizeChildren: function(){
 			// summary:
 			//		List all zones and insert child into columns.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _organizeChildren");
 			var children = dojox.layout.GridContainerLite.superclass.getChildren.call(this);
 			var numZones = this.nbZones,
@@ -404,11 +404,11 @@ define(["dojo/_base/kernel",
 				}
 			}
 		},
-	
+
 		_organizeChildrenManually: function (){
 			// summary:
 			//		Organize children by column property of widget.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _organizeChildrenManually");
 			var children = dojox.layout.GridContainerLite.superclass.getChildren.call(this),
 				length = children.length,
@@ -423,7 +423,7 @@ define(["dojo/_base/kernel",
 				}
 			}
 		},
-	
+
 		_insertChild: function(/*Widget*/child, /*Integer*/column, /*Integer?*/p){
 			// summary:
 			//		Insert a child in a specific column of the GridContainer widget.
@@ -433,7 +433,7 @@ define(["dojo/_base/kernel",
 			//		Place in the zone (0 - first)
 			// returns:
 			//		The widget inserted
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _insertChild", child, column, p);
 			var zone = this._grid[column].node,
 				length = zone.childNodes.length;
@@ -456,7 +456,7 @@ define(["dojo/_base/kernel",
 			child.set("column", column);
 			return child; // Widget
 		},
-	
+
 		removeChild: function(/*Widget*/ widget){
 			//console.log("dojox.layout.GridContainerLite ::: removeChild");
 			if(this._disabled){
@@ -466,13 +466,13 @@ define(["dojo/_base/kernel",
 				this._dragManager.removeDragItem(widget.domNode.parentNode, widget.domNode);
 			}
 		},
-	
+
 		addService: function(/*Object*/child, /*Integer?*/column, /*Integer?*/p){
 			//console.log("dojox.layout.GridContainerLite ::: addService");
 			dojo.deprecated("addService is deprecated.", "Please use  instead.", "Future");
 			this.addChild(child, column, p);
 		},
-	
+
 		addChild: function(/*Object*/child, /*Integer?*/column, /*Integer?*/p){
 			// summary:
 			//		Add a child in a specific column of the GridContainer widget.
@@ -484,7 +484,7 @@ define(["dojo/_base/kernel",
 			//		place in the zone (first = 0)
 			// returns:
 			//		The widget inserted
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: addChild");
 			child.domNode.id = child.id;
 			dojox.layout.GridContainerLite.superclass.addChild.call(this, child, 0);
@@ -498,15 +498,15 @@ define(["dojo/_base/kernel",
 			}
 			return null; 	// Widget
 		},
-		
+
 		_setColWidthsAttr: function(value){
 			this.colWidths = dojo.isString(value) ? value.split(",") : (dojo.isArray(value) ? value : [value]);
-			
+
 			if(this._started){
 				this._updateColumnsWidth();
 			}
 		},
-		
+
 		_updateColumnsWidth: function(/*Object*/ manager){
 			// summary:
 			//		Update the columns width.
@@ -514,16 +514,16 @@ define(["dojo/_base/kernel",
 			//		dojox.mdnd.AreaManager singleton
 			// tags:
 			//		private
-	
+
 			//console.log("dojox.layout.GridContainer ::: _updateColumnsWidth");
 			var length = this._grid.length;
-	
+
 			var origWidths = this.colWidths || [];
 			var widths = [];
 			var colWidth;
 			var widthSum = 0;
 			var i;
-	
+
 			// Calculate the widths of each column.
 			for(i = 0; i < length; i++){
 				if(widths.length < origWidths.length){
@@ -532,7 +532,7 @@ define(["dojo/_base/kernel",
 				}else{
 					if(!colWidth){
 						colWidth = (100 - widthSum)/(this.nbZones - i);
-						
+
 						// If the numbers don't work out, make the remaining columns
 						// an even width and let the code below average
 						// out the differences.
@@ -544,7 +544,7 @@ define(["dojo/_base/kernel",
 					widthSum += colWidth * 1;
 				}
 			}
-	
+
 			// If the numbers are wrong, divide them all so they add up to 100
 			if(widthSum > 100){
 				var divisor = 100 / widthSum;
@@ -552,13 +552,13 @@ define(["dojo/_base/kernel",
 					widths[i] *= divisor;
 				}
 			}
-	
+
 			// Set the widths of each node
 			for(i = 0; i < length; i++){
 				this._grid[i].node.style.width = widths[i] + "%";
 			}
 		},
-	
+
 		_selectFocus: function(/*Event*/event){
 			// summary:
 			//		Enable keyboard accessibility into the GridContainer.
@@ -566,7 +566,7 @@ define(["dojo/_base/kernel",
 			//		Possibility to move focus into the GridContainer (TAB, LEFT ARROW, RIGHT ARROW, UP ARROW, DOWN ARROW).
 			//		Possibility to move GridContainer's children (Drag and Drop) with keyboard. (SHIFT +  ARROW).
 			//		If the type of widget is not draggable, a popup is displayed.
-	
+
 			//console.log("dojox.layout.GridContainerLite ::: _selectFocus");
 			if(this._disabled){ return; }
 			var key = event.keyCode,
@@ -667,7 +667,7 @@ define(["dojo/_base/kernel",
 									}
 								}
 								if(dojo.isMoz || dojo.isWebKit){ i-- };
-	
+
 								widget = dijit.byNode(focusNode);
 								if(!widget.dragRestriction){
 									r = m.removeDragItem(parent, focusNode);
@@ -798,7 +798,7 @@ define(["dojo/_base/kernel",
 				}
 			}
 		},
-	
+
 		destroy: function(){
 			//console.log("dojox.layout.GridContainerLite ::: destroy");
 			var m = this._dragManager;
@@ -808,14 +808,14 @@ define(["dojo/_base/kernel",
 			this.inherited(arguments);
 		}
 	});
-	
+
 	dojo.extend(dijit._Widget, {
-	
+
 		// column: String
 		//		Column of the grid to place the widget.
 		//		Defined only if dojo.require("dojox.layout.GridContainerLite") is done.
 		column : "1",
-	
+
 		// dragRestriction: Boolean
 		//		If true, the widget can not be draggable.
 		//		Defined only if dojo.require("dojox.layout.GridContainerLite") is done.

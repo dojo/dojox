@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html","dojo/_base/window",
+define(["dojo/_base/kernel","dojo/ready","dojo/_base/lang","dojo/_base/html","dojo/_base/window",
 	"dojo/_base/connect","dojo/_base/array","dojox/layout/GridContainerLite"],function(){
 	return dojo.declare(
 		"dojox.layout.GridContainer",
@@ -34,42 +34,42 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 		// 	|		widget.addChild(cpane3, 2, 1);
 		// 	|		widget.startup();
 		// 	|	});
-	
+
 		// hasResizableColumns: Boolean
 		//		Allow or not resizing of columns by a grip handle.
 		hasResizableColumns: true,
-	
+
 		// liveResizeColumns: Boolean
 		//		Specifies whether columns resize as you drag (true) or only upon mouseup (false)
 		liveResizeColumns : false,
-	
+
 		// minColWidth: Integer
 		//		Minimum column width in percentage.
 		minColWidth: 20,
-	
+
 		// minChildWidth: Integer
 		// 		Minimum children width in pixel (only used for IE6 which doesn't handle min-width css property)
 		minChildWidth: 150,
-	
+
 		// mode: String
 		//		Location to add/remove columns, must be set to 'left' or 'right' (default).
 		mode: "right",
-	
+
 		// isRightFixed: Boolean
 		//		Define if the last right column is fixed.
 		//		Used when you add or remove columns by calling setColumns method.
 		isRightFixed: false,
-	
+
 		// isLeftFixed: Boolean
 		//		Define if the last left column is fixed.
 		//		Used when you add or remove columns by calling setColumns method.
 		isLeftFixed: false,
-	
+
 		startup: function(){
 			// summary:
 			//		Call the startup of GridContainerLite and place grips
 			//		if user has chosen the hasResizableColumns attribute to true.
-	
+
 			//console.log("dojox.layout.GridContainer ::: startup");
 			this.inherited(arguments);
 			if(this.hasResizableColumns){
@@ -87,7 +87,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				}
 			}
 		},
-	
+
 		resizeChildAfterDrop : function(/*Node*/node, /*Object*/targetArea, /*Integer*/indexChild){
 			// summary:
 			//		Call when a child is dropped.
@@ -99,28 +99,28 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			//		AreaManager Object containing information of targetArea
 			// indexChild:
 			// 		Index where the dropped widget has been placed
-	
+
 			if(this.inherited(arguments)){
 				this._placeGrips();
 			}
 		},
-	
+
 		onShow: function(){
 			// summary:
 			//		Place grips in the right place when the GridContainer becomes visible.
-	
+
 			//console.log("dojox.layout.GridContainer ::: onShow");
 			this.inherited(arguments);
 			this._placeGrips();
 		},
-	
+
 		resize: function(){
 			// summary:
 			//		Resize the GridContainer widget and columns.
 			//		Replace grips if it's necessary.
 			// tags:
 			//		callback
-	
+
 			//console.log("dojox.layout.GridContainer ::: resize");
 			this.inherited(arguments);
 			// Fix IE6 :
@@ -132,7 +132,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				this._placeGrips();
 			}
 		},
-	
+
 		_createGrip: function(/*Integer*/ index){
 			// summary:
 			//		Create a grip for a specific zone.
@@ -140,7 +140,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			//		index where the grip has to be created.
 			// tags:
 			//		protected
-	
+
 			//console.log("dojox.layout.GridContainer ::: _createGrip");
 			var dropZone = this._grid[index],
 				grip = dojo.create("div", { 'class': "gridContainerGrip" }, this.domNode);
@@ -169,26 +169,26 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				this.connect(grip, "ondblclick", "_onGripDbClick")[0]
 			];
 		},
-	
+
 		_placeGrips: function(){
 			// summary:
 			//		Define the position of a grip and place it on page.
 			// tags:
 			//		protected
-	
+
 			//console.log("dojox.layout.GridContainer ::: _placeGrips");
 			var gripWidth, height, left = 0, grip;
 			var scroll = this.domNode.style.overflowY;
-	
+
 			dojo.forEach(this._grid, function(dropZone){
 				if(dropZone.grip){
 					grip = dropZone.grip;
 					if(!gripWidth){
 						gripWidth = grip.offsetWidth / 2;
 					}
-	
+
 					left += dojo.marginBox(dropZone.node).w;
-	
+
 					dojo.style(grip, "left", (left - gripWidth) + "px");
 					//if(dojo.isIE == 6){ do it fot all navigators
 					if(!height){
@@ -201,19 +201,19 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				}
 			}, this);
 		},
-	
+
 		_onGripDbClick: function(){
 			// summary:
 			//		Called when a double click is catch. Resize all columns with the same width.
 			//		The method resize of children have to be called.
 			// tags:
 			//		callback protected
-	
+
 			//console.log("dojox.layout.GridContainer ::: _onGripDbClick");
 			this._updateColumnsWidth(this._dragManager);
 			this.resize();
 		},
-	
+
 		_resizeColumnOn: function(/*Event*/e){
 			// summary:
 			//		Connect events to listen the resize action.
@@ -221,26 +221,26 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			//		Calculate the minwidth according to the children.
 			// tags:
 			//		callback
-	
+
 			//console.log("dojox.layout.GridContainer ::: _resizeColumnOn", e);
 			this._activeGrip = e.target;
 			this._initX = e.pageX;
 			e.preventDefault();
-	
+
 			dojo.body().style.cursor = "ew-resize";
-	
+
 			this._isResized = true;
-	
+
 			var tabSize = [];
 			var grid;
 			var i;
-	
+
 			for(i = 0; i < this._grid.length; i++){
 				tabSize[i] = dojo.contentBox(this._grid[i].node).w;
 			}
-	
+
 			this._oldTabSize = tabSize;
-	
+
 			for(i = 0; i < this._grid.length; i++){
 				grid = this._grid[i];
 				if(this._activeGrip == grid.grip){
@@ -251,21 +251,21 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				}
 				grid.node.style.width = tabSize[i] + "px";
 			}
-	
+
 			// calculate the minWidh of all children for current and next column
 			var calculateChildMinWidth = function(childNodes, minChild){
 				var width = 0;
 				var childMinWidth = 0;
-	
+
 				dojo.forEach(childNodes, function(child){
 					if(child.nodeType == 1){
 						var objectStyle = dojo.getComputedStyle(child);
 						var minWidth = (dojo.isIE) ? minChild : parseInt(objectStyle.minWidth);
-	
+
 						childMinWidth = minWidth +
 									parseInt(objectStyle.marginLeft) +
 									parseInt(objectStyle.marginRight);
-	
+
 						if(width < childMinWidth){
 							width = childMinWidth;
 						}
@@ -274,14 +274,14 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				return width;
 			}
 			var currentColumnMinWidth = calculateChildMinWidth(this._currentColumn.childNodes, this.minChildWidth);
-	
+
 			var nextColumnMinWidth = calculateChildMinWidth(this._nextColumn.childNodes, this.minChildWidth);
-	
+
 			var minPix = Math.round((dojo.marginBox(this.gridContainerTable).w * this.minColWidth) / 100);
-	
+
 			this._currentMinCol = currentColumnMinWidth;
 			this._nextMinCol = nextColumnMinWidth;
-	
+
 			if(minPix > this._currentMinCol){
 				this._currentMinCol = minPix;
 			}
@@ -291,35 +291,35 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			this._connectResizeColumnMove = dojo.connect(dojo.doc, "onmousemove", this, "_resizeColumnMove");
 			this._connectOnGripMouseUp = dojo.connect(dojo.doc, "onmouseup", this, "_onGripMouseUp");
 		},
-	
+
 		_onGripMouseUp: function(){
 			// summary:
 			//		Call on the onMouseUp only if the reiszeColumnMove was not called.
 			// tags:
 			//		callback
-	
+
 			//console.log(dojox.layout.GridContainer ::: _onGripMouseUp");
 			dojo.body().style.cursor = "default";
-	
+
 			dojo.disconnect(this._connectResizeColumnMove);
 			dojo.disconnect(this._connectOnGripMouseUp);
-	
+
 			this._connectOnGripMouseUp = this._connectResizeColumnMove = null;
-	
+
 			if(this._activeGrip){
 				dojo.removeClass(this._activeGrip, "gridContainerGripShow");
 				dojo.addClass(this._activeGrip, "gridContainerGrip");
 			}
-	
+
 			this._isResized = false;
 		},
-	
+
 		_resizeColumnMove: function(/*Event*/e){
 			// summary:
 			//		Change columns size.
 			// tags:
 			//		callback
-	
+
 			//console.log("dojox.layout.GridContainer ::: _resizeColumnMove");
 			e.preventDefault();
 			if(!this._connectResizeColumnOff){
@@ -327,18 +327,18 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				this._connectOnGripMouseUp = null;
 				this._connectResizeColumnOff = dojo.connect(dojo.doc, "onmouseup", this, "_resizeColumnOff");
 			}
-	
+
 			var d = e.pageX - this._initX;
 			if(d == 0){ return; }
-	
+
 			if(!(this._currentColumnWidth + d < this._currentMinCol ||
 					this._nextColumnWidth - d < this._nextMinCol)){
-	
+
 				this._currentColumnWidth += d;
 				this._nextColumnWidth -= d;
 				this._initX = e.pageX;
 				this._activeGrip.style.left = parseInt(this._activeGrip.style.left) + d + "px";
-	
+
 				if(this.liveResizeColumns){
 					this._currentColumn.style["width"] = this._currentColumnWidth + "px";
 					this._nextColumn.style["width"] = this._nextColumnWidth + "px";
@@ -346,35 +346,35 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				}
 			}
 		},
-	
+
 		_resizeColumnOff: function(/*Event*/e){
 			// summary:
 			//		Disconnect resize events.
 			//		Change the type of width columns (px to %).
 			// tags:
 			//		callback
-	
+
 			//console.log("dojox.layout.GridContainer ::: _resizeColumnOff");
 			dojo.body().style.cursor = "default";
-	
+
 			dojo.disconnect(this._connectResizeColumnMove);
 			dojo.disconnect(this._connectResizeColumnOff);
-	
+
 			this._connectResizeColumnOff = this._connectResizeColumnMove = null;
-	
+
 			if(!this.liveResizeColumns){
 				this._currentColumn.style["width"] = this._currentColumnWidth + "px";
 				this._nextColumn.style["width"] = this._nextColumnWidth + "px";
 				//this.resize();
 			}
-	
+
 			var tabSize = [],
 				testSize = [],
 				tabWidth = this.gridContainerTable.clientWidth,
 				node,
 				update = false,
 				i;
-	
+
 			for(i = 0; i < this._grid.length; i++){
 				node = this._grid[i].node;
 				if(dojo.isIE){
@@ -386,14 +386,14 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 					testSize = tabSize;
 				}
 			}
-	
+
 			for(i = 0; i < testSize.length; i++){
 				if(testSize[i] != this._oldTabSize[i]){
 					update = true;
 					break;
 				}
 			}
-	
+
 			if(update){
 				var mul = dojo.isIE ? 100 : 10000;
 				for(i = 0; i < this._grid.length; i++){
@@ -401,21 +401,21 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				}
 				this.resize();
 			}
-	
+
 			if(this._activeGrip){
 				dojo.removeClass(this._activeGrip, "gridContainerGripShow");
 				dojo.addClass(this._activeGrip, "gridContainerGrip");
 			}
-	
+
 			this._isResized = false;
 		},
-	
+
 		setColumns: function(/*Integer*/nbColumns){
 			// summary:
 			//		Set the number of columns.
 			// nbColumns:
 			//		Number of columns
-	
+
 			//console.log("dojox.layout.GridContainer ::: setColumns");
 			var z, j;
 			if(nbColumns > 0){
@@ -477,7 +477,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				if(this.hasResizableColumns){ this._placeGrips(); }
 			}
 		},
-	
+
 		_addColumn: function(/*Integer*/nbColumns){
 			// summary:
 			//		Add some columns.
@@ -485,7 +485,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			//		Number of column to added
 			// tags:
 			//		private
-	
+
 			//console.log("dojox.layout.GridContainer ::: _addColumn");
 			var grid = this._grid,
 				dropZone,
@@ -495,13 +495,13 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				isRightMode = (this.mode == "right"),
 				accept = this.acceptTypes.join(","),
 				m = this._dragManager;
-	
+
 			//Add a grip to the last column
 			if(this.hasResizableColumns && ((!this.isRightFixed && isRightMode)
 				|| (this.isLeftFixed && !isRightMode && this.nbZones == 1) )){
 				this._createGrip(grid.length - 1);
 			}
-	
+
 			for(var i = 0; i < nbColumns; i++){
 				// Fix CODEX defect #53025 :
 				//		Apply acceptType attribute on each new column.
@@ -510,9 +510,9 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 					'accept': accept,
 					'id': this.id + "_dz" + this.nbZones
 				});
-	
+
 				length = grid.length;
-	
+
 				if(isRightMode){
 					if(this.isRightFixed){
 						index = length - 1;
@@ -555,7 +555,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			}
 			this._updateColumnsWidth(m);
 		},
-	
+
 		_deleteColumn: function(/*Array*/indices){
 			// summary:
 			//		Remove some columns with indices passed as an array.
@@ -563,7 +563,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			//		Column index array
 			// tags:
 			//		private
-	
+
 			//console.log("dojox.layout.GridContainer ::: _deleteColumn");
 			var child, grid, index,
 				nbDelZones = 0,
@@ -572,7 +572,7 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			for(var i = 0; i < length; i++){
 				index = (this.mode == "right") ? indices[i] : indices[i] - nbDelZones;
 				grid = this._grid[index];
-	
+
 				if(this.hasResizableColumns && grid.grip){
 					dojo.forEach(grid.gripHandler, function(handler){
 						dojo.disconnect(handler);
@@ -580,14 +580,14 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 					dojo.destroy(this.domNode.removeChild(grid.grip));
 					grid.grip = null;
 				}
-	
+
 				m.unregister(grid.node);
 				dojo.destroy(this.gridNode.removeChild(grid.node));
 				this._grid.splice(index, 1);
 				this.nbZones--;
 				nbDelZones++;
 			}
-	
+
 			// last grip
 			var lastGrid = this._grid[this.nbZones-1];
 			if(lastGrid.grip){
@@ -595,10 +595,10 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 				dojo.destroy(this.domNode.removeChild(lastGrid.grip));
 				lastGrid.grip = null;
 			}
-	
+
 			this._updateColumnsWidth(m);
 		},
-	
+
 		_updateColumnsWidth: function(/*Object*/ manager){
 			// summary:
 			//		Update the columns width.
@@ -606,12 +606,12 @@ define(["dojo/_base/kernel","dojo/_base/load","dojo/_base/lang","dojo/_base/html
 			//		dojox.mdnd.AreaManager singleton
 			// tags:
 			//		private
-	
+
 			//console.log("dojox.layout.GridContainer ::: _updateColumnsWidth");
 			this.inherited(arguments);
 			manager._dropMode.updateAreas(manager._areaList);
 		},
-	
+
 		destroy: function(){
 			dojo.unsubscribe(this._dropHandler);
 			this.inherited(arguments);
