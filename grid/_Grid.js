@@ -728,7 +728,7 @@ define([
 			if(resultSize){
 				changeSize = resultSize;
 			}
-			if(changeSize){
+			if(!this._autoHeight && changeSize){
 				dojo.marginBox(this.domNode, changeSize);
 				this.height = this.domNode.style.height;
 				delete this.fitTo;
