@@ -1,4 +1,4 @@
-define("dojox/socket", ["dojo", "dojo/on", "dojo/cookie"], function(dojo, on) {
+define("dojox/socket", ["dojo", "dojo/on", "dojo/cookie", "dojo/_base/url"], function(dojo, on) {
 
 var WebSocket = window.WebSocket;
 
@@ -110,7 +110,7 @@ var cancelled = false,
 		first = true,
 		timeoutId,
 		connections = [];
-	
+
 	// create the socket object
 	var socket = {
 		send: function(data){
