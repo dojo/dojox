@@ -223,19 +223,20 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 		// adjust the height of this view
 		var h;
+		var dh = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) -
+					top - this._appFooterHeight; // default height
 		if(this.height === "inherit"){
 			if(this.domNode.offsetParent){
 				h = this.domNode.offsetParent.offsetHeight + "px";
 			}
+		}else if(this.height === "auto"){
+			// content could be smaller than entire screen height
+			h = (this.domNode.scrollHeight ? Math.min(this.domNode.scrollHeight, dh) : dh) + "px";
 		}else if(this.height){
 			h = this.height;
 		}
 		if(!h){
-			h = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) - top - this._appFooterHeight;
-			if(this.domNode.scrollHeight){
-				h = Math.min(this.domNode.scrollHeight, h); // content could be smaller than entire screen height
-			}
-			h = h + "px";
+			h = dh + "px";
 		}
 		this.domNode.style.height = h;
 
