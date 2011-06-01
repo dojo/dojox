@@ -249,17 +249,15 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.onFlickAnimationEnd = function(e){
-		var _this = this;
-		setTimeout(function(){
-			if(_this._scrollBarNodeV){ _this._scrollBarNodeV.className = ""; }
-			if(_this._scrollBarNodeH){ _this._scrollBarNodeH.className = ""; }
-		}, 1000);
+		if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
+		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
 		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll") === -1){ return; }
 		if(e && e.srcElement){
 			dojo.stopEvent(e);
 		}
 		this.stopAnimation();
 		if(this._bounce){
+			var _this = this;
 			var bounce = _this._bounce;
 			setTimeout(function(){
 				_this.slideTo(bounce, 0.3, "ease-out");
