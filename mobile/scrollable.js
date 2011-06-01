@@ -231,7 +231,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			}
 		}else if(this.height === "auto"){
 			// content could be smaller than entire screen height
-			h = (this.domNode.scrollHeight ? Math.min(this.domNode.scrollHeight, dh) : dh) + "px";
+			var contentHeight = Math.max(this.domNode.scrollHeight, this.containerNode.scrollHeight);
+			h = (contentHeight ? Math.min(contentHeight, dh) : dh) + "px";
 		}else if(this.height){
 			h = this.height;
 		}

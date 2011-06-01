@@ -55,14 +55,13 @@
 	</table>
 
 	<div id="listPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getSelectedRingtone, onShow:setSelectedRingtone">
-		<div id="viewport" data-dojo-type="dojox.mobile.View">
-		    <h1 id="header1" dojoType="dojox.mobile.Heading" label="Ringtone">
+		<h1 id="header1" dojoType="dojox.mobile.Heading" label="Ringtone">
 			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
 				onclick="dijit.byId('listPicker').hide(true)"></div>
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('listPicker').hide(false)"></div>
-		    </h1>
-		    <div dojoType="dojox.mobile.ScrollableView" selected="true">
+		</h1>
+		<div dojoType="dojox.mobile.ScrollableView" selected="true" height="auto">
 			<ul id="list1" dojoType="dojox.mobile.RoundRectList" select="single" data-dojo-props="onCheckStateChanged:onCheck">
 				<li id="item1" dojoType="dojox.mobile.ListItem" checked="true">
 					Marimba
@@ -140,7 +139,6 @@
 					Xylophone
 				</li>
 			</ul>
-		    </div>
 		</div>
 	</div>
 </body>
