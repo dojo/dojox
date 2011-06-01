@@ -249,15 +249,17 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.onFlickAnimationEnd = function(e){
-		if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
-		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
+		var _this = this;
+		setTimeout(function(){
+			if(_this._scrollBarNodeV){ _this._scrollBarNodeV.className = ""; }
+			if(_this._scrollBarNodeH){ _this._scrollBarNodeH.className = ""; }
+		}, 1000);
 		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll") === -1){ return; }
 		if(e && e.srcElement){
 			dojo.stopEvent(e);
 		}
 		this.stopAnimation();
 		if(this._bounce){
-			var _this = this;
 			var bounce = _this._bounce;
 			setTimeout(function(){
 				_this.slideTo(bounce, 0.3, "ease-out");
@@ -525,7 +527,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.stopAnimation = function(){
 		// stop the currently running animation
 		dojo.removeClass(this.containerNode, "mblScrollableScrollTo2");
-		dojo.style(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
+		if(dojo.isAndroid){
+			dojo.style(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
+		}
 		if(this._scrollBarV){
 			this._scrollBarV.className = "";
 		}
@@ -683,7 +687,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		var f = function(bar){
 			dojo.style(bar, {
 				opacity: 0,
-				webkitAnimationDuration: "0s" // workaround for android screen flicker problem
+				webkitAnimationDuration: dojo.isAndroid ? "0s" : "" // workaround for android screen flicker problem
 			});
 			bar.className = "mblScrollableFadeScrollBar";
 		};
