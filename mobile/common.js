@@ -1,4 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_WidgetBase"], function(dlang,darray, dhtml, WidgetBase){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_WidgetBase"],
+	function(dojo, dlang, darray, dhtml, WidgetBase){
 
 	dojo.getObject("mobile", true, dojox);
 
@@ -22,14 +23,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 //		Note that use of dijit._Templated and dojo.query was intentionally
 //		avoided to reduce download code size.
 
-	var d = dojo;
 	var ua = navigator.userAgent;
 
 	// BlackBerry (OS 6 or later only)
-	d.isBB = ua.indexOf("BlackBerry") >= 0 && parseFloat(ua.split("Version/")[1]) || undefined;
+	dojo.isBB = ua.indexOf("BlackBerry") >= 0 && parseFloat(ua.split("Version/")[1]) || undefined;
 
 	// Android
-	d.isAndroid = parseFloat(ua.split("Android ")[1]) || undefined;
+	dojo.isAndroid = parseFloat(ua.split("Android ")[1]) || undefined;
 
 	// iPhone, iPod, or iPad
 	// If iPod or iPad is detected, in addition to dojo.isIPod or dojo.isIPad,
@@ -37,16 +37,16 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 	if(ua.match(/(iPhone|iPod|iPad)/)){
 		var p = "is" + RegExp.$1.replace(/i/, 'I');
 		var v = ua.match(/OS ([\d_]+)/) ? RegExp.$1 : "1";
-		d.isIPhone = d[p] = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
+		dojo.isIPhone = dojo[p] = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
 	}
 
-	var html = d.doc.documentElement;
-	html.className += d.trim([
-		d.isBB ? "dj_bb" : "",
-		d.isAndroid ? "dj_android" : "",
-		d.isIPhone ? "dj_iphone" : "",
-		d.isIPod ? "dj_ipod" : "",
-		d.isIPad ? "dj_ipad" : ""
+	var html = dojo.doc.documentElement;
+	html.className += dojo.trim([
+		dojo.isBB ? "dj_bb" : "",
+		dojo.isAndroid ? "dj_android" : "",
+		dojo.isIPhone ? "dj_iphone" : "",
+		dojo.isIPod ? "dj_ipod" : "",
+		dojo.isIPad ? "dj_ipad" : ""
 	].join(" ").replace(/ +/g," "));
 
 	var dm = dojox.mobile;
@@ -371,7 +371,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_Widget
 		// feature detection
 		if(dojo.isWebKit){
 			dm.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
-				navigator.appVersion.indexOf("Mobile") != -1) || !!d.isAndroid;
+				navigator.appVersion.indexOf("Mobile") != -1) || !!dojo.isAndroid;
 		}
 	})();
 

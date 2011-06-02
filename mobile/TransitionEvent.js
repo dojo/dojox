@@ -1,6 +1,7 @@
-define(["dojo/_base/declare", "dojo/on", "./transition"], function(declare, on, transition){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/on", "./transition"],
+	function(dojo, declare, on, transition){
 
-	return declare("dojox.mobile.TransitionEvent", null, {
+	return dojo.declare("dojox.mobile.TransitionEvent", null, {
 		constructor: function(target, transitionOptions, triggerEvent){
 			this.transitionOptions=transitionOptions;	
 			this.target = target;

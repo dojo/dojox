@@ -1,4 +1,5 @@
-define(["dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./TransitionEvent"],function(dhtml, darray,mcommon,ItemBase,TransitionEvent){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./TransitionEvent"],
+	function(dojo, declare, dhtml, darray, mcommon, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:

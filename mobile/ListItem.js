@@ -1,4 +1,5 @@
-define(["dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent"], function(darray,dhtml, ItemBase, TransitionEvent){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent"],
+	function(dojo, declare, darray, dhtml, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:

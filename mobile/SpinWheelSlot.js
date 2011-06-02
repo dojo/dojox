@@ -1,4 +1,5 @@
-define(["dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contained","./_ScrollableMixin"],function(darray,dbase,WidgetBase,Contained,ScrollableMixin){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Contained","./_ScrollableMixin"],
+	function(dojo, declare, darray, dbase, WidgetBase, Contained, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SpinWheelSlot
 	// summary:

@@ -1,4 +1,5 @@
-define(["dojo/_base/array","dojo/_base/html", "./_ItemBase"],function(darray,dhtml, ItemBase){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html", "./_ItemBase"],
+	function(dojo, declare, darray, dhtml, ItemBase){
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:
