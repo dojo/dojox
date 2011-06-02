@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "./_patches", "./Bind", "./StatefulModel", "./_DataBindingMixin"], function(dojo, patches, bind, model, dbmixin){
+define(["dojo/_base/kernel", "..", "./_patches", "./Bind", "./StatefulModel", "./_DataBindingMixin"], function(dojo, dojox, patches, bind, model, dbmixin){
 	// module:
 	//		dojox/mvc/_base
 	// summary:

@@ -1,4 +1,4 @@
-define(["dijit/_WidgetBase", "./_DataBindingMixin", "dijit/form/ValidationTextBox", "dijit/form/NumberTextBox"], function(wb, dbm, vtb, ntb){
+define(["dojo", "dijit", "dijit/_WidgetBase", "./_DataBindingMixin", "dijit/form/ValidationTextBox", "dijit/form/NumberTextBox"], function(dojo, dijit, wb, dbm, vtb, ntb){
 
 	dojo.getObject("mvc", true, dojox);
 
