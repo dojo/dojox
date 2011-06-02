@@ -78,7 +78,7 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
 							doh.assertEqual('Video', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
-							doh.assertEqual('Off', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
+							doh.assertEqual('Off', dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[3].childNodes[0].innerHTML : demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_4");
 							doh.assertEqual('mblListItem', demoWidget.domNode.className);
@@ -90,7 +90,7 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
 							doh.assertEqual('Maps', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
-							doh.assertEqual('VPN', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
+							doh.assertEqual('VPN', dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[3].childNodes[0].innerHTML : demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 
 
 							demoWidget = dijit.byId("dojox_mobile_ListItem_5");
@@ -232,7 +232,7 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
 							doh.assertEqual('External View #1 (sync)', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
-							doh.assertEqual('Value Changed', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
+							doh.assertEqual('Value Changed', dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[3].childNodes[0].innerHTML : demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 						}
 					},
 					{
@@ -258,7 +258,7 @@
 							doh.assertEqual('mblListItemRightText', demoWidget.domNode.childNodes[0].childNodes[3].className);
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('Value Changed', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							doh.assertEqual('Value Changed', dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML : demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 							doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/i-icon-4.png/i) != -1);
 						}

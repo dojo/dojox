@@ -52,7 +52,7 @@
 									doh.assertEqual('<span class="mblListItemLabel">u1space</span>', childNodes[4].innerHTML);
 								}
 								
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("item2");
 								childNodes = demoWidget.domNode.childNodes;
@@ -73,7 +73,7 @@
 								} else {
 									doh.assertEqual('<span class="mblListItemLabel">u2space</span>', childNodes[4].innerHTML);
 								}
-								doh.assertEqual('On', childNodes[3].innerHTML);
+								doh.assertEqual('On', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("item3");
 								childNodes = demoWidget.domNode.childNodes;
@@ -94,7 +94,7 @@
 								} else {
 									doh.assertEqual('<span class="mblListItemLabel">Wi-Fi</span>', childNodes[4].innerHTML);
 								}
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 								
 							}));
 							return d;
@@ -147,7 +147,7 @@
 								} else {
 									doh.assertEqual('<span class="mblListItemLabel">Video</span>', childNodes[4].innerHTML);
 								}
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_1");
 								childNodes = demoWidget.domNode.childNodes;
@@ -166,7 +166,7 @@
 								} else {
 									doh.assertEqual('<span class="mblListItemLabel">Maps</span>', childNodes[4].innerHTML);
 								}
-								doh.assertEqual('VPN', childNodes[3].innerHTML);
+								doh.assertEqual('VPN', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_2");
 								childNodes = demoWidget.domNode.childNodes;
@@ -185,7 +185,7 @@
 								} else {
 									doh.assertEqual('<span class="mblListItemLabel">Phone Number</span>', childNodes[4].innerHTML);
 								}
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 							}),500);
 							return d;
 						}

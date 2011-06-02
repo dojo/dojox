@@ -56,7 +56,8 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('Sounds', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							var value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+							doh.assertEqual('Sounds', value);
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 
 							if(dojo.isFF){
@@ -80,7 +81,8 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('Brightness', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+							doh.assertEqual('Brightness', value);
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 							if(dojo.isFF){
 								doh.assertEqual('rect(0px, 145px, 29px, 116px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
@@ -103,7 +105,8 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('mblDomButtonBluePlus mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('XX Widget', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+							doh.assertEqual('XX Widget', value);
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 							if(dojo.isFF){
 								doh.assertEqual('rect(0px, 116px, 29px, 87px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
@@ -126,7 +129,8 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('mblDomButtonRedMinus mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('YY Widget', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+							doh.assertEqual('YY Widget', value);
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 							if(dojo.isFF){
 								doh.assertEqual('rect(0px, 145px, 29px, 116px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
@@ -160,7 +164,8 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('Sounds', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							var value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+							doh.assertEqual('Sounds', value);
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 							
 							if(dojo.isFF){
@@ -190,7 +195,8 @@
 							doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 							doh.assertEqual('mblDomButtonBluePlus mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 							doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-							doh.assertEqual('XX Widget', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+							value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+							doh.assertEqual('XX Widget', value);
 							doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 							
 							if(dojo.isFF){

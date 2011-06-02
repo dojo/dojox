@@ -46,7 +46,7 @@
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', childNodes[4].tagName);
 								doh.assertEqual('u1space', dojo.trim(childNodes[4].childNodes[0].innerHTML));
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("item2");
 								childNodes = demoWidget.domNode.childNodes;
@@ -62,7 +62,7 @@
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', childNodes[4].tagName);
 								doh.assertEqual('u2space', dojo.trim(childNodes[4].childNodes[0].innerHTML));
-								doh.assertEqual('On', childNodes[3].innerHTML);
+								doh.assertEqual('On', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("item3");
 								childNodes = demoWidget.domNode.childNodes;
@@ -78,7 +78,7 @@
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', childNodes[4].tagName);
 								doh.assertEqual('Wi-Fi', dojo.trim(childNodes[4].childNodes[0].innerHTML));
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 								
 							}));
 							return d;
@@ -125,7 +125,7 @@
 								doh.assertEqual('mblListItemRightText', childNodes[3].className);
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('Video', dojo.trim(childNodes[4].childNodes[0].innerHTML));
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_1");
 								childNodes = demoWidget.domNode.childNodes;
@@ -139,7 +139,7 @@
 								doh.assertEqual('mblListItemRightText', childNodes[3].className);
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('Maps', dojo.trim(childNodes[4].childNodes[0].innerHTML));
-								doh.assertEqual('VPN', childNodes[3].innerHTML);
+								doh.assertEqual('VPN', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_2");
 								childNodes = demoWidget.domNode.childNodes;
@@ -153,7 +153,7 @@
 								doh.assertEqual('mblListItemRightText', childNodes[3].className);
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('Phone Number', dojo.trim(childNodes[4].childNodes[0].innerHTML));
-								doh.assertEqual('Off', childNodes[3].innerHTML);
+								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 							}),500);
 							return d;
 						}

@@ -71,7 +71,8 @@
 								doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-								doh.assertEqual('Wi-Fi', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+								var value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+								doh.assertEqual('Wi-Fi', value);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 								if(!dojo.isIE) {
 									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/i-icon-1.png/i) != -1);
@@ -87,7 +88,8 @@
 								doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-								doh.assertEqual('General', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+								value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+								doh.assertEqual('General', value);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 								if(!dojo.isIE) {
 									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/i-icon-4.png/i) != -1);
@@ -117,7 +119,8 @@
 								doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-								doh.assertEqual('New Item', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+								var value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+								doh.assertEqual('New Item', value);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 
 								delete1();
@@ -134,7 +137,8 @@
 								doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-								doh.assertEqual('New Item', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+								value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+								doh.assertEqual('New Item', value);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 
 							}),1500);
@@ -159,7 +163,8 @@
 								doh.assertEqual('mblListItemTextBox', demoWidget.domNode.childNodes[0].childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', demoWidget.domNode.childNodes[0].childNodes[4].tagName);
-								doh.assertEqual('Apple', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML));
+								var value = dojo.trim(dojo.isFF ==3.6 ? demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].childNodes[0].innerHTML:demoWidget.domNode.childNodes[0].childNodes[4].childNodes[0].innerHTML);
+								doh.assertEqual('Apple', value);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[3].innerHTML);
 
 							}),2500);
