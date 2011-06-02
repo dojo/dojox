@@ -1,9 +1,5 @@
-define([
-	"../util/common",
-	"./Stencil"], function(){
+define(["dojo","../util/common","./Stencil"], function(dojo){
 
-(function(){
-	
 	// Ref: isEdit allows events to happen in Drawing, like TextBlocks
 	var isEdit = false;
 	
@@ -262,8 +258,8 @@ define([
 			});
 		}
 	};
+	
 	dojo.addOnLoad(dojox.drawing.manager.keys, "init");
-})();
 
-return dojox.drawing.manager.keys;
+	return dojox.drawing.manager.keys;
 });

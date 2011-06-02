@@ -1,6 +1,4 @@
 define(["dojo","./common"], function(dojo){
-
-(function(){
 	
 	var textOffset = 4;  // distance from line to text box
 	var textYOffset = 20;  // height of text box
@@ -57,9 +55,6 @@ define(["dojo","./common"], function(dojo){
 		
 		return { x:x, y:y, align:align}; // Object
 	}
-	
-})();
 
-return dojox.drawing.util.positioning;
+	return dojox.drawing.util.positioning;
 });
-

@@ -26,10 +26,8 @@ define([
 	"./annotations/BoxShadow",
 	"./annotations/Label"], function(dojo, dojox){
 
-dojo.experimental("dojox.drawing");
+	dojo.experimental("dojox.drawing");
 
-(function(){
-	
 	var _plugsInitialized = false;
 	
 	dojo.declare("dojox.drawing.Drawing", [], {
@@ -587,7 +585,5 @@ dojo.experimental("dojox.drawing");
 		}
 	});
 	
-})();
-
-return dojox.drawing.Drawing;
+	return dojox.drawing.Drawing;
 });

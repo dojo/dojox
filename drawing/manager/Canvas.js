@@ -1,9 +1,5 @@
-define([
-	"dojo",
-	"../util/oo",
-	"./Stencil"], function(dojo){
+define(["dojo","../util/oo","./Stencil"], function(dojo){
 	
-(function(){
 	dojox.drawing.manager.Canvas = dojox.drawing.util.oo.declare(
 		// summary:
 		//		Creates a dojox.gfx.surface to be used for Drawing. Note that
@@ -159,8 +155,6 @@ define([
 			}
 		}
 	);
-	
-})();
 
-return dojox.drawing.manager.Canvas;
+	return dojox.drawing.manager.Canvas;
 });

@@ -1,9 +1,5 @@
-define([
-	"dojo",
-	"../..",
-	"dojox/math/round"], function(dojo, dojox){
+define(["dojo","../..","dojox/math/round"], function(dojo, dojox){
 
-(function(){
 	dojo.getObject("drawing.util", true, dojox);
 	var uidMap = {};
 	var start = 0;
@@ -279,7 +275,5 @@ define([
 		}
 	};
 	
-})();
-
-return dojox.drawing.util.common;
+	return dojox.drawing.util.common;
 });

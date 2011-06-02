@@ -1,11 +1,5 @@
-define([
-	"dojo",
-	"../../util/oo",
-	"../_Plugin",
-	"../../manager/_registry"], function(dojo){
+define(["dojo","../../util/oo","../_Plugin","../../manager/_registry"], function(dojo){
 
-(function(){
-	//
 	// 	zoomInc: Float
 	//		The amount of zoom that will occur upon each click.
 	var zoomInc = Math.pow(2.0,0.25),
@@ -36,7 +30,6 @@ define([
 		},
 		{}
 	);
-	
 	
 	dt.ZoomIn = dojox.drawing.util.oo.declare(
 		// summary:
@@ -124,7 +117,5 @@ define([
 		tooltip:"Zoom In"
 	};
 	dojox.drawing.register(dt.ZoomOut.setup, "plugin");
-
-})();
 
 });

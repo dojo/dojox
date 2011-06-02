@@ -1,8 +1,5 @@
-define([
-	"../util/oo",
-	"./Stencil"],function(){
+define(["dojo","../util/oo","./Stencil"], function(dojo){
 
-(function(){
 	var surface, surfaceNode;
 	dojox.drawing.manager.StencilUI = dojox.drawing.util.oo.declare(
 		// summary:
@@ -64,7 +61,5 @@ define([
 		}
 	);
 	
-})();
-
-return dojox.drawing.manager.StencilUI;
+	return dojox.drawing.manager.StencilUI;
 });

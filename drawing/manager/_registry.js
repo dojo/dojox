@@ -1,6 +1,7 @@
 define(["dojo","../../drawing"],function(dojo){
 	
-(function(){
+	// TODOC: pubilc APIs
+	
 	dojo.getObject("drawing.stencil", true, dojox);
 	var _registered = {
 		tool:{},
@@ -27,5 +28,4 @@ define(["dojo","../../drawing"],function(dojo){
 		return id ? _registered[type][id] : _registered[type];
 	}
 	
-})();
 });
