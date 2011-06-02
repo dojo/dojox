@@ -309,7 +309,6 @@ dojo.declare(
 	}
 });
 
-(function(){
 	// summary
 	//	provide static functions for Grapher
 	var
@@ -616,8 +615,6 @@ dojo.declare(
 			return (p2[y] - p1[y]) / (p2[x] - p1[x]);
 		}
 	};
-})();
-
 
 return dojox.calc.Grapher;
 });
