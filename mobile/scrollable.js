@@ -28,8 +28,8 @@
 //		several dojo APIs used in this module, such as dojo.connect,
 //		dojo.create, etc., are re-defined so that the code works without dojo.
 //		When in dojo, of course those re-defined functions are not necessary.
-//		So, they are surrounded by the excludeStart and excludeEnd directives
-//		so that they will be excluded from the build.
+//		So, they are surrounded by the includeStart and includeEnd directives
+//		so that they can be excluded from the build.
 //
 //		If you use this module for non-dojo application, you need to explicitly
 //		assign your outer fixed node and inner scrollable node to this.domNode
@@ -83,7 +83,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.dirLock = false; // disable the move handler if scroll starts in the unexpected direction
 	this.height = ""; // explicitly specified height of this widget (ex. "300px")
 
-//>>excludeStart("dojo", true);
+//>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
 	if(!dojo){ // namespace objects are not passed
 		dojo = window.dojo;
 		dojox = window.dojox;
@@ -147,7 +147,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			node.className = node.className.replace(" " + s, "");
 		};
 	}
-//>>excludeEnd("dojo");
+//>>includeEnd("standaloneScrollable");
 
 	this.init = function(/*Object?*/params){
 		if (params){
@@ -938,9 +938,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			});
 		}
 	};
-};
 
-(function(){
 	// feature detection
 	if(dojo.isWebKit){
 		var elem = dojo.doc.createElement("div");
@@ -953,7 +951,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		dojox.mobile.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
 			navigator.appVersion.indexOf("Mobile") != -1) || !!dojo.isAndroid;
 	}
-})();
+};
 
 return dojox.mobile.scrollable;
 });
