@@ -20,7 +20,6 @@ define([
 	"./_RowSelector",
 	"./_Events"], function(dojo, dijit, dojox, template){
 
-(function(){
 	// NOTE: this is for backwards compatibility with Dojo 1.3
 	if(!dojo.isCopyKey){
 		dojo.isCopyKey = dojo.dnd.getCopyKeyState;
@@ -1370,8 +1369,7 @@ define([
 
 		return new ctor(props, node);
 	};
-})();
 
-return dojox.grid._Grid;
+	return dojox.grid._Grid;
 
 });

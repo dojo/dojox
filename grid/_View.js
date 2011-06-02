@@ -11,7 +11,6 @@ define([
 	"./_Builder",
 	"./util"], function(dojo, dijit, dojox, template){
 
-(function(){
 	// a private function
 	var getStyleText = function(inNode, inStyleText){
 		return inNode.style.cssText == undefined ? inNode.getAttribute("style") : inNode.style.cssText;
@@ -832,8 +831,7 @@ define([
 		}
 		return oldMakeAvatar.call(dojo.dnd.manager());
 	};
-})();
 
-return dojox.grid._View;
+	return dojox.grid._View;
 
 });

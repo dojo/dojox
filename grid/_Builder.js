@@ -1,6 +1,5 @@
 define(["dojo", "dojox", "dojo/dnd/Moveable", "./util"], function(dojo, dojox){
 
-(function(){
 	var dg = dojox.grid;
 
 	var getTdIndex = function(td){
@@ -742,8 +741,7 @@ define(["dojo", "dojox", "dojo/dnd/Moveable", "./util"], function(dojo, dojox){
 			return this._findOverlappingNodes(findTable(inNode), getTrIndex(inNode.parentNode), getTdIndex(inNode));
 		}
 	});
-})();
 
-return dojox.grid._Builder;
+	return dojox.grid._Builder;
 
 });

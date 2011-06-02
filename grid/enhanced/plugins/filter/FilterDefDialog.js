@@ -23,7 +23,6 @@ define([
 	"../Dialog",
 	"../../../cells/dijit"], function(dojo, dijit, dojox){
 		
-(function(){
 var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
 	_tabIdxes = {
 		// summary:
@@ -1228,8 +1227,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.BooleanValueBox", [dijit._Widge
 		}
 	}
 });
-})();
 
-return dojox.grid.enhanced.plugins.filter.FilterDefDialog;
+	return dojox.grid.enhanced.plugins.filter.FilterDefDialog;
 
 });

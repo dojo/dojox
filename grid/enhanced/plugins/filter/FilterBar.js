@@ -7,7 +7,6 @@ define([
 	"dijit/form/Button",
 	"dijit/_WidgetsInTemplateMixin"], function(dojo, dijit, dojox){
 
-(function(){
 var _focusClass = "dojoxGridFBarHover",
 	_filteredClass = "dojoxGridFBarFiltered",
 	_stopEvent = function(evt){
@@ -368,8 +367,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		}
 	}
 });
-})();
 
-return dojox.grid.enhanced.plugins.filter.FilterBar;
+	return dojox.grid.enhanced.plugins.filter.FilterBar;
 
 });
