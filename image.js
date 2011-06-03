@@ -1,2 +1,1 @@
-dojo.provide("dojox.image");
-dojo.require("dojox.image._base");
+define(["dojox/image/_base"], function(){});
