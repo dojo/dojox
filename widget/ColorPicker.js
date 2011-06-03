@@ -1,9 +1,11 @@
 define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
-		"dijit/form/_FormWidget", "dijit/typematic",
+		"dijit/form/_FormWidget",
+		"dijit/focus",		// dijit.focus()
+		"dijit/typematic",
 		"dojox/color",
 		"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
 		"dojo/text!./ColorPicker/ColorPicker.html"],
-			function(dojo,connect,fx,move,formwidget,typematic,color,i18n,bundle1,bundle2,template){
+			function(dojo,connect,fx,move,formwidget,focus,typematic,color,i18n,bundle1,bundle2,template){
 
 	dojo.experimental("dojox.widget.ColorPicker");
 	
