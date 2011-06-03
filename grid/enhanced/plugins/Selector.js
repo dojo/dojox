@@ -1,4 +1,4 @@
-define(["dojo", "dijit", "dojox", "../../cells/_base", "../_Plugin", "./AutoScroll"], function(dojo, dijit, dojox){
+define(["dojo", "dijit", "dojox", "dijit/focus", "../../cells/_base", "../_Plugin", "./AutoScroll"], function(dojo, dijit, dojox){
 
 /*=====
 dojo.declare("__SelectItem", null,{

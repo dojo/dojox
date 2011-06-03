@@ -17,6 +17,7 @@ define([
 	"dijit/layout/AccordionContainer",
 	"dijit/layout/ContentPane",
 	"dijit/_WidgetsInTemplateMixin",
+	"dijit/focus",		// dijit.focus()
 	"dojox/html/ellipsis",
 	"dojox/html/metrics",
 	"./FilterBuilder",

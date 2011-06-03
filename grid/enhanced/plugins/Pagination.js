@@ -8,6 +8,7 @@ define([
 	"../_Plugin",
 	"dijit/form/Button",
 	"dijit/form/NumberTextBox",
+	"dijit/focus",		// dijit.focus()
 	"dojo/i18n!../nls/Pagination"], function(dojo, dijit, dojox, template){
 
 dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plugin, {

@@ -5,7 +5,9 @@ define([
 	"dojo/fx",
 	"dojo/string",
 	"dijit/form/Button",
-	"dijit/_WidgetsInTemplateMixin"], function(dojo, dijit, dojox){
+	"dijit/_WidgetsInTemplateMixin",
+	"dijit/focus"	// dijit.focus()
+], function(dojo, dijit, dojox){
 
 var _focusClass = "dojoxGridFBarHover",
 	_filteredClass = "dojoxGridFBarFiltered",

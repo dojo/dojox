@@ -1,5 +1,3 @@
-dojo.provide("dojox.layout.GridContainerLite");
-
 define(["dojo/_base/kernel",
 	"dojo/text!./resources/GridContainer.html",
 	"dojo/ready",
@@ -7,7 +5,10 @@ define(["dojo/_base/kernel",
 	"dojo/_base/declare","dojo/text","dojo/_base/sniff","dojo/_base/html",
 	"dojox/mdnd/AreaManager","dojox/mdnd/DropIndicator",
 	"dojox/mdnd/dropMode/OverDropMode","dojox/mdnd/AutoScroll","dijit/_Templated",
-	"dijit/layout/_LayoutWidget"],function(dojo,template){
+	"dijit/layout/_LayoutWidget",
+	"dijit/focus",			// dijit.focus()
+	"dijit/_base/focus"		// dijit.getFocus()
+],function(dojo,template){
 
 	var gcl = dojo.declare(
 		"dojox.layout.GridContainerLite",

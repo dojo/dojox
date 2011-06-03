@@ -1,6 +1,7 @@
 dojo.provide("dojox.form.RangeSlider");
 dojo.require("dijit.form.HorizontalSlider");
 dojo.require("dijit.form.VerticalSlider");
+dojo.require("dijit.focus");		// dijit.focus()
 dojo.require("dojox.fx");
 
 (function(){

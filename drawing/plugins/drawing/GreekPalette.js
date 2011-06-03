@@ -1,6 +1,7 @@
 define([
 	"dojo",
 	"dijit",
+	"dijit/focus",		// dijit.focus()
 	"dijit/_base/popup",
 	"../../library/greek",
 	"dijit/_Widget",
