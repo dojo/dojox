@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "./common","dijit/_base/sniff","dojo/_base/fx","dojox/fx","dojox/fx/flip"],
-	function(dojo, dlang, common, sniff, fxbase, fx, flip){
+define(["dojo/_base/kernel", "./common","dojo/_base/fx","dojo/fx","dojo/fx/easing","dojox/fx","dojox/fx/flip"],
+	function(dojo, common, fxbase, fx, easing, xfx, flip){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
