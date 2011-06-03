@@ -29,15 +29,15 @@
 			text-align: center;
 		}
 		</style>
-		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, mblAlwaysHideAddressBar: true"></script>
+		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, async: true, mblAlwaysHideAddressBar: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
 		require([
-			"dojox/mobile",			// This is a mobile app.
-			"dojox/mobile/compat", 	// This mobile app supports running on desktop browsers
 			"dojox/mobile/parser", 	// This mobile app uses declarative programming with fast mobile parser
+			"dojox/mobile",			// This is a mobile app.
 			"dojox/mobile/SwapView",
-			"dojox/mobile/PageIndicator"
+			"dojox/mobile/PageIndicator",
+			"dojox/mobile/compat" 	// This mobile app supports running on desktop browsers
 			// "domReady!" // Enable if user code placed in the callback here that needs DOMReady
 		]);
 		</script>
