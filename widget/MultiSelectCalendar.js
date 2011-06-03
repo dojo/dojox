@@ -4,7 +4,7 @@ define("dojox/widget/MultiSelectCalendar", [
     "dojo/cldr/supplemental", 
     "dojo/date", 
     "dojo/date/locale", 
-    "dijit/_Widget", "dijit/_Templated", "dijit/_CssStateMixin", "dijit/form/DropDownButton"], 
+    "dijit/_Widget", "dijit/_Templated", "dijit/_CssStateMixin", "dijit/form/DropDownButton", "dijit/typematic"],
     function(dojo, dijit, template) {
 
 dojo.experimental("dojox.widget.MultiSelectCalendar");
