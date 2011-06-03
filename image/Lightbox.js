@@ -1,4 +1,4 @@
-define(["dojo", "dijit", "dojox", "dijit/Dialog", "dojox/fx/_base"], function(dojo, dijit, dojox){
+define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/Dialog", "dojox/fx/_base"], function(dojo, dijit, dojox, template){
 
 	dojo.experimental("dojox.image.Lightbox");
 	dojo.getObject("image", true, dojox);
@@ -192,7 +192,8 @@ define(["dojo", "dijit", "dojox", "dijit/Dialog", "dojox/fx/_base"], function(do
 		//		Path to the image used when a 404 is encountered
 		errorImg: dojo.moduleUrl("dojox.image","resources/images/warning.png"),
 
-		templateString: dojo.cache("dojox.image","resources/Lightbox.html"),
+		templateString: template, 
+		
 		constructor: function(args){
 			this._groups = this._groups || (args && args._groups) || { XnoGroupX:[] };
 		},
