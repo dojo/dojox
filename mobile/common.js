@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dijit/_WidgetBase"],
-	function(dojo, dlang, darray, dhtml, WidgetBase){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dojo/ready", "dijit/_WidgetBase"],
+	function(dojo, dlang, darray, dhtml, ready, WidgetBase){
 
 	dojo.getObject("mobile", true, dojox);
 
