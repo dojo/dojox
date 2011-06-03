@@ -1,5 +1,6 @@
 dojo.provide("dojox.editor.plugins.SpellCheck");
 
+dojo.require("dijit._base.popup");
 dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 dojo.require("dijit.form.TextBox");
