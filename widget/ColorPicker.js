@@ -2,9 +2,10 @@ define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
 		"dijit/form/_FormWidget",
 		"dojox/color",
 		"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
-        "dojo/text!./ColorPicker/ColorPicker.html"],
-			function(d,connect,fx,move,formwidget,color,i18n,bundle1,bundle2,template){
+		"dojo/text!./ColorPicker/ColorPicker.html"],
+			function(dojo,connect,fx,move,formwidget,color,i18n,bundle1,bundle2,template){
 
+	var d = dojo;
 	d.experimental("dojox.widget.ColorPicker"); 
 	
 	var webSafeFromHex = function(hex){
@@ -12,8 +13,7 @@ define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
 		return hex;
 	};
 	
-	return d.declare("dojox.widget.ColorPicker", dijit.form._FormWidget,
-		{
+	return d.declare("dojox.widget.ColorPicker", dijit.form._FormWidget, {
 		// summary: a HSV color picker - similar to Photoshop picker
 		//
 		// description:
@@ -561,4 +561,5 @@ define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
 			delete this._subs;
 		}
 	});
+
 });
