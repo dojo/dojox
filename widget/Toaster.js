@@ -1,4 +1,4 @@
-define(["dojo", "dijit", "dojox/main", "dijit/_Widget", "dijit/_Templated", "dojo/fx", "dojo/window"], function(dojo, dijit, dojox){
+define(["dojo", "dijit", "dojox/main", "dijit/_Widget", "dijit/_Templated", "dijit/BackgroundIframe", "dojo/fx", "dojo/window"], function(dojo, dijit, dojox){
 
 	dojo.getObject("widget", true, dojox);
 	
