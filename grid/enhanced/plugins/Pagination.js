@@ -57,16 +57,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		var g = this.grid,
 			ns = dojox.grid.enhanced.plugins;
 		this._store = g.store;
-		this.query = g.query;
 		
 		this.forcePageStoreLayer = new ns._ForcedPageStoreLayer(this);
 		ns.wrap(g, "_storeLayerFetch", this.forcePageStoreLayer);
-		
-		this.connect(g, "setQuery", function(query){
-			if(query !== this.query){
-				this.query = query;
-			}
-		});
 	},
 	
 	_stopEvent: function(event){
@@ -185,7 +178,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		if(page < totalPages && page >= 0 && this._currentPage !== page){
 			this._currentPage = page;
 			// this._updateSelected();
-			this.grid.setQuery(this.query);
+			this.grid._refresh(true);
 			this.grid.resize();
 		}
 	},
