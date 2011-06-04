@@ -642,7 +642,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			label = "",
 			node = null;
 		for(var i = startPage; i < this.maxPageStep + 1; i++){
-			label = dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i + ""]);
+			label = dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i]);
 			node = dojo.create("div", {innerHTML: i, value: i, title: label, tabindex: i < startPage + stepSize ? 0 : -1}, this.pageStepperDiv, "last");
 			dijit.setWaiState(node, "label", label);
 			// connect event
@@ -686,17 +686,18 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		var startPage = this._getStartPage(),
 			stepSize = this._getStepPageSize(),
 			stepNodes = this.pageStepperDiv.childNodes,
-			node = null;
-		for(var i = startPage, j = 2; j < stepNodes.length - 2; j++, i++){
+			node = null, i = startPage, j = 2, tip;
+		for(; j < stepNodes.length - 2; j++, i++){
 			node = stepNodes[j];
 			if(i < startPage + stepSize){
+				tip = dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i]);
 				dojo.attr(node, {
 					"innerHTML": i,
-					"title": i,
+					"title": tip,
 					"value": i
-				})
+				});
 				dojo.style(node, "display", "block");
-				dijit.setWaiState(node, "label", dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i + ""]));
+				dijit.setWaiState(node, "label", tip);
 			}else{
 				dojo.style(node, "display", "none");
 			}
