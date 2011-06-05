@@ -19,7 +19,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	// The page size used with the store, default = 25.
 	pageSize: 25,
 	
-	defaultRows: 25,
+	_defaultRowsPerPage: 25,
 	
 	//current page we are at
 	_currentPage: 0,
@@ -207,7 +207,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		dojo.forEach(this.paginators, function(f){
 			f.currentPageSize = this.grid.rowsPerPage = this.pageSize = size;
 			if(size >= this._maxSize){
-				this.grid.rowsPerPage = this.defaultRows;
+				this.grid.rowsPerPage = this._defaultRowsPerPage;
 				this.showAll = true;
 				this.grid.usingPagination = false;
 			}else{
