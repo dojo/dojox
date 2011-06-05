@@ -51,7 +51,7 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._TemplatedMixin], 
 			var state = grid.cache.getExpandoStatusByRowIndex(this.rowIdx);
 			this.expandoInner.innerHTML = state ? "-" : "+";
 			dojo.toggleClass(this.domNode, "dojoxGridExpandoOpened", state);
-			dijit.setWaiState(this.domNode.parentNode, "expanded", state);
+			this.domNode.parentNode.setAttribute("aria-expanded", state);
 		}
 	},
 	

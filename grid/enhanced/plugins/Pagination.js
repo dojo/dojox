@@ -558,7 +558,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			var labelValue = size.toLowerCase() == "all" ? this.plugin.nls.allItemsLabelTemplate : dojo.string.substitute(this.plugin.nls.pageSizeLabelTemplate, [size]);
 			node = dojo.create("span", {innerHTML: size, title: labelValue, value: size, tabindex: 0}, this.sizeSwitchTd, "last");
 			// for accessibility
-			dijit.setWaiState(node, "label", labelValue);
+			node.setAttribute("aria-label", labelValue);
 			// connect event
 			this.plugin.connect(node, "onclick", dojo.hitch(this, "_onSwitchPageSize"));
 			this.plugin.connect(node, "onmouseover", function(e){
@@ -644,7 +644,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		for(var i = startPage; i < this.maxPageStep + 1; i++){
 			label = dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i]);
 			node = dojo.create("div", {innerHTML: i, value: i, title: label, tabindex: i < startPage + stepSize ? 0 : -1}, this.pageStepperDiv, "last");
-			dijit.setWaiState(node, "label", label);
+			node.setAttribute("aria-label", label);
 			// connect event
 			this.plugin.connect(node, "onclick", dojo.hitch(this, "_onPageStep"));
 			this.plugin.connect(node, "onmouseover", function(e){
@@ -668,7 +668,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		var createWardBtn = function(value, label, position){
 			var node = dojo.create("div", {value: value, title: label, tabindex: 1}, self.pageStepperDiv, position);
 			self.plugin.connect(node, "onclick", dojo.hitch(self, "_onPageStep"));
-			dijit.setWaiState(node, "label", label);
+			node.setAttribute("aria-label", label);
 			// for high contrast
 			var highConrastNode = dojo.create("span", {value: value, title: label, innerHTML: highContrastLabel[value]}, node, position);
 			dojo.addClass(highConrastNode, "dojoxGridWardButtonInner");
@@ -697,7 +697,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 					"value": i
 				});
 				dojo.style(node, "display", "block");
-				dijit.setWaiState(node, "label", tip);
+				node.setAttribute("aria-label", tip);
 			}else{
 				dojo.style(node, "display", "none");
 			}

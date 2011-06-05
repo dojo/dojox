@@ -617,7 +617,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		});
 		_this._dialogContent.isOpen = false;
 		
-		dijit.setWaiState(dialogPane.domNode, "label", this._strings["widgetLabel"]);
+		dialogPane.domNode.setAttribute("aria-label", this._strings["widgetLabel"]);
 	},
 	
 	_setNetwork: function(){

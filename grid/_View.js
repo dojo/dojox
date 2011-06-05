@@ -597,7 +597,7 @@ define([
 			}else{
 				dojo.attr(node,"role","row");
 				if (this.grid.selectionMode != "none") {
-					dojo.attr(node, "aria-selected", "false"); //rows can be selected so add aria-selected prop
+					node.setAttribute("aria-selected", "false"); //rows can be selected so add aria-selected prop
 				}
 			}
 			node[dojox.grid.util.gridViewTag] = this.id;

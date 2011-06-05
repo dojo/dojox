@@ -321,8 +321,8 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterBar",[dijit._Widget, diji
 		this._focusPos = 0;
 	},
 	_initAriaInfo: function(){
-		dijit.setWaiState(this.defineFilterButton.domNode, "label", this.plugin.nls["waiFilterBarDefButton"]);
-		dijit.setWaiState(this.clearFilterButton.domNode,"label", this.plugin.nls["waiFilterBarClearButton"]);
+		this.defineFilterButton.domNode.setAttribute("aria-label", this.plugin.nls["waiFilterBarDefButton"]);
+		this.clearFilterButton.domNode.setAttribute("aria-label", this.plugin.nls["waiFilterBarClearButton"]);
 	},
 	_isInColumn: function(/* int */mousePos_x, /* domNode */headerNode, /* int */colIndex){
 		var coord = dojo.coords(headerNode);
