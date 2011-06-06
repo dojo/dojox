@@ -62,7 +62,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_bas
 				// +-----------------------------+
 				var leftBtn, rightBtn;
 				var children = this.containerNode.childNodes;
-				for(i = children.length - 1; i >= 0; i--){
+				for(var i = children.length - 1; i >= 0; i--){
 					var c = children[i];
 					if(c.nodeType === 1){
 						if(!rightBtn && dojo.hasClass(c, "mblToolbarButton") && dojo.style(c, "float") === "right"){

@@ -40,7 +40,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 			this.containerNode.style.height
 				= (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) * 2 + "px"; // must bigger than the screen
 			this.panelNodes = [];
-			for(k = 0; k < 3; k++){
+			for(var k = 0; k < 3; k++){
 				this.panelNodes[k] = dojo.create("DIV", {className:"mblSpinWheelSlotPanel"});
 				var len = this.items.length;
 				var n = Math.ceil(this.minItems / len);

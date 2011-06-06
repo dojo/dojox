@@ -13,7 +13,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 
 		findCurrentView: function(moveTo,src){
 			if(moveTo){
-				w = dijit.byId(moveTo);
+				var w = dijit.byId(moveTo);
 				if(w && w.getShowingView){ return w.getShowingView(); }
 			}
 			if (dojox.mobile.currentView) {

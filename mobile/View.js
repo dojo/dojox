@@ -136,7 +136,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			this._arguments = dojo._toArray(arguments);
 			this._args = [];
 			if(context || method){
-				for(i = 5; i < arguments.length; i++){
+				for(var i = 5; i < arguments.length; i++){
 					this._args.push(arguments[i]);
 				}
 			}

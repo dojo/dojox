@@ -57,7 +57,7 @@ define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","
 							fromNode.style.display = "none";
 							fromNode.style.left = "0px";
 							toNode.style.position = "relative";
-							toWidget = dijit.byNode(toNode);
+							var toWidget = dijit.byNode(toNode);
 							if(toWidget && !dojo.hasClass(toWidget.domNode, "out")){
 								// Reset the temporary padding
 								toWidget.containerNode.style.paddingTop = "";
@@ -297,7 +297,7 @@ define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","
 					//		Deals with IE's lack of borderRadius support
 					// tags:
 					//		public
-					var i;
+					var i, len;
 					_this.domNode = dojo.doc.createElement("DIV");
 					_this.domNode.style.padding = "0px";
 					_this.domNode.style.backgroundColor = "transparent";
@@ -418,7 +418,7 @@ define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","
 
 		dojox.mobile.getCssPaths = function(){
 			var paths = [];
-			var i, j;
+			var i, j, len;
 
 			// find @import
 			var s = dojo.doc.styleSheets;
