@@ -4,8 +4,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Icon</title>
-		<link href="../../themes/iphone/base.css" rel="stylesheet"></link>
-		<link href="../../themes/iphone/IconContainer.css" rel="stylesheet"></link>
+		<link href="../../themes/iphone/base.css" rel="stylesheet">
+		<link href="../../themes/iphone/IconContainer.css" rel="stylesheet">
 
 		<style>
 			.box {
@@ -49,23 +49,22 @@
 						runTest: function(){
 							var d = new doh.Deferred();
 							var demoWidget = dijit.byId("dojox_mobile_IconItem_0");
+							var e;
 							doh.assertEqual('none', demoWidget.contentNode.style.display);
-							if(dojo.isIE)
-							{
+							if(dojo.isIE){
 								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].fireEvent( "onclick" );
-							} else {
-								var e = document.createEvent('Events');
+							}else{
+								e = document.createEvent('Events');
 								e.initEvent('click', true, true);
 								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].dispatchEvent(e);
 							}
 
-							var demoWidget = dijit.byId("dojox_mobile_IconItem_1");
+							demoWidget = dijit.byId("dojox_mobile_IconItem_1");
 							doh.assertEqual('none', demoWidget.contentNode.style.display);
-							if(dojo.isIE)
-							{
+							if(dojo.isIE){
 								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].fireEvent( "onclick" );
-							} else {
-								var e = document.createEvent('Events');
+							}else{
+								e = document.createEvent('Events');
 								e.initEvent('click', true, true);
 								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].dispatchEvent(e);
 							}

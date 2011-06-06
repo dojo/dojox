@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Edge To Edge List</title>
-		<link href="../../themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../../themes/iphone/iphone.css" rel="stylesheet">
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -33,7 +33,7 @@
 								doh.assertEqual('mblEdgeToEdgeList', demoWidget.domNode.className);
 
 								demoWidget = dijit.byId("item1");
-								childNodes = demoWidget.domNode.childNodes;
+								var childNodes = demoWidget.domNode.childNodes;
 								doh.assertEqual('mblListItemAnchor', childNodes[0].className);
 								doh.assertEqual('A', childNodes[0].tagName);
 								
@@ -96,10 +96,9 @@
 							doh.assertEqual("fade", demoWidget.get("transition"));
 
 							demoWidget = dijit.byId("item3");
-							if(dojo.isIE)
-							{
+							if(dojo.isIE){
 								demoWidget.anchorNode.fireEvent( "onclick" );
-							} else {
+							}else{
 								var e = document.createEvent('Events');
 								e.initEvent('click', true, true);
 								demoWidget.anchorNode.dispatchEvent(e);
@@ -114,7 +113,7 @@
 								doh.assertEqual('mblEdgeToEdgeList', demoWidget.domNode.className);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_0");
-								childNodes = demoWidget.domNode.childNodes;
+								var childNodes = demoWidget.domNode.childNodes;
 								doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', childNodes[0].className);
 								doh.assertEqual('A', childNodes[0].tagName);
 								
