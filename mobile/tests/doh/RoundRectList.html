@@ -45,11 +45,8 @@
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', childNodes[4].tagName);
-								if(dojo.isIE){
-									doh.assertEqual('<SPAN class=mblListItemLabel>u1space </SPAN>', childNodes[4].innerHTML);
-								}else{
-									doh.assertEqual('<span class="mblListItemLabel">u1space</span>', childNodes[4].innerHTML);
-								}
+								doh.assertEqual('mblListItemLabel', dojo.trim(childNodes[4].className));
+								doh.assertEqual('u1space', dojo.trim(childNodes[4].childNodes[0].innerHTML));
 								
 								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
@@ -66,11 +63,8 @@
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', childNodes[4].tagName);
-								if(dojo.isIE){
-									doh.assertEqual('<SPAN class=mblListItemLabel>u2space </SPAN>', childNodes[4].innerHTML);
-								}else{
-									doh.assertEqual('<span class="mblListItemLabel">u2space</span>', childNodes[4].innerHTML);
-								}
+								doh.assertEqual('mblListItemLabel', dojo.trim(childNodes[4].className));
+								doh.assertEqual('u2space', dojo.trim(childNodes[4].childNodes[0].innerHTML));
 								doh.assertEqual('On', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("item3");
@@ -86,11 +80,8 @@
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
 								doh.assertEqual('DIV', childNodes[4].tagName);
-								if(dojo.isIE){
-									doh.assertEqual('<SPAN class=mblListItemLabel>Wi-Fi </SPAN>', childNodes[4].innerHTML);
-								}else{
-									doh.assertEqual('<span class="mblListItemLabel">Wi-Fi</span>', childNodes[4].innerHTML);
-								}
+								doh.assertEqual('mblListItemLabel', dojo.trim(childNodes[4].className));
+								doh.assertEqual('Wi-Fi', dojo.trim(childNodes[4].childNodes[0].innerHTML));
 								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 								
 							}));
@@ -137,11 +128,8 @@
 								doh.assertEqual('mblListItemRightText', childNodes[3].className);
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
 								doh.assertEqual('mblDomButtonArrow mblDomButton', childNodes[1].childNodes[0].className);
-								if(dojo.isIE){
-									doh.assertEqual('<SPAN class=mblListItemLabel>Video </SPAN>', childNodes[4].innerHTML);
-								}else{
-									doh.assertEqual('<span class="mblListItemLabel">Video</span>', childNodes[4].innerHTML);
-								}
+								doh.assertEqual('mblListItemLabel', dojo.trim(childNodes[4].className));
+								doh.assertEqual('Video', dojo.trim(childNodes[4].childNodes[0].innerHTML));
 								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_1");
@@ -155,11 +143,8 @@
 								doh.assertEqual('mblListItemRightIcon2', childNodes[2].className);
 								doh.assertEqual('mblListItemRightText', childNodes[3].className);
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
-								if(dojo.isIE){
-									doh.assertEqual('<SPAN class=mblListItemLabel>Maps </SPAN>', childNodes[4].innerHTML);
-								}else{
-									doh.assertEqual('<span class="mblListItemLabel">Maps</span>', childNodes[4].innerHTML);
-								}
+								doh.assertEqual('mblListItemLabel', dojo.trim(childNodes[4].className));
+								doh.assertEqual('Maps', dojo.trim(childNodes[4].childNodes[0].innerHTML));
 								doh.assertEqual('VPN', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_ListItem_2");
@@ -173,11 +158,8 @@
 								doh.assertEqual('mblListItemRightIcon2', childNodes[2].className);
 								doh.assertEqual('mblListItemRightText', childNodes[3].className);
 								doh.assertEqual('mblListItemTextBox', childNodes[4].className);
-								if(dojo.isIE){
-									doh.assertEqual('<SPAN class=mblListItemLabel>Phone Number </SPAN>', childNodes[4].innerHTML);
-								}else{
-									doh.assertEqual('<span class="mblListItemLabel">Phone Number</span>', childNodes[4].innerHTML);
-								}
+								doh.assertEqual('mblListItemLabel', dojo.trim(childNodes[4].className));
+								doh.assertEqual('Phone Number', dojo.trim(childNodes[4].childNodes[0].innerHTML));
 								doh.assertEqual('Off', dojo.isFF ==3.6 ? childNodes[3].childNodes[0].innerHTML : childNodes[3].innerHTML);
 							}),500);
 							return d;

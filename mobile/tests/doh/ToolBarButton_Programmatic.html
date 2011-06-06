@@ -159,7 +159,11 @@
 						if(dojo.isMoz)
 							doh.assertEqual('rect(29px, 29px, 58px, 0px)', demoWidget.domNode.childNodes[0].childNodes[0].style.clip);
 						else
-							doh.assertEqual('rect(29px 29px 58px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].style.clip);
+							try{
+								doh.assertEqual('rect(29px 29px 58px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].style.clip);
+							} catch (e) {
+								doh.assertEqual('rect(29px,29px,58px,0px)', demoWidget.domNode.childNodes[0].childNodes[0].style.clip);
+							}
 						doh.assertEqual('-29px', demoWidget.domNode.childNodes[0].childNodes[0].style.top);
 						doh.assertEqual('0px', demoWidget.domNode.childNodes[0].childNodes[0].style.left);
 

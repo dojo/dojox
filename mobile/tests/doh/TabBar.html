@@ -89,7 +89,11 @@
 								if(dojo.isFF){
 									doh.assertEqual('rect(0px, 29px, 29px, 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
 								}else{
-									doh.assertEqual('rect(0px 29px 29px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
+									try{
+										doh.assertEqual('rect(0px 29px 29px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
+									} catch (e) {
+										doh.assertEqual('rect(0px,29px,29px,0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
+									}
 								}
 								if(!dojo.isIE) {
 									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].src.search(/tab-icons.png/i) != -1);
@@ -98,7 +102,11 @@
 								if(dojo.isFF){
 									doh.assertEqual('rect(0px, 29px, 29px, 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
 								}else{
-									doh.assertEqual('rect(0px 29px 29px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
+									try{
+										doh.assertEqual('rect(0px 29px 29px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
+									} catch (e) {
+										doh.assertEqual('rect(0px,29px,29px,0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
+									}
 								}
 								doh.assertEqual('Featured', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[1].innerHTML));
 							}),500);

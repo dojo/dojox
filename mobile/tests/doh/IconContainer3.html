@@ -81,7 +81,11 @@
 								if(dojo.isFF){
 									doh.assertEqual('rect(0px, 58px, 58px, 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
 								}else{
-									doh.assertEqual('rect(0px 58px 58px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
+									try{
+										doh.assertEqual('rect(0px 58px 58px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
+									} catch (e) {
+										doh.assertEqual('rect(0px,58px,58px,0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
+									}
 								}
 								doh.assertEqual('app1', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('none', demoWidget.contentNode.style.display);
