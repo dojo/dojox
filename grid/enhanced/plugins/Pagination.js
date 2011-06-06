@@ -779,6 +779,9 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	_openGotopageDialog: function(event){
 		// summary:
 		//		Show the goto page dialog
+		if(this._getPageCount() <= 1){
+			return;
+		}
 		if(!this._gotoPageDialog){
 			this._gotoPageDialog = new dojox.grid.enhanced.plugins.pagination._GotoPageDialog(this.plugin);
 		}
