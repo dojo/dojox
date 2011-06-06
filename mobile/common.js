@@ -102,7 +102,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		}
 	};
 
-	dm.hideAddressBarWait = dojo.config["mblHideAddressBarWait"] || 2000; // [ms]
+	dm.hideAddressBarWait = typeof(dojo.config["mblHideAddressBarWait"]) === "number" ?
+		dojo.config["mblHideAddressBarWait"] : 2000; // [ms]
 	dm.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
 		dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
 		setTimeout(function(){ scrollTo(0, 1); }, 200);
