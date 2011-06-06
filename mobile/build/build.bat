@@ -11,7 +11,8 @@ echo   webkit    Enable webkitMobile=true option (Loses PC browser support)
 goto end
 :ok
 
-set optimize=shrinksafe
+rem set optimize=shrinksafe
+set optimize=closure
 set profile=mobile
 set dir=release-mobile-separate
 set webkit=
