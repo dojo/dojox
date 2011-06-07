@@ -10,7 +10,8 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-optimize=shrinksafe
+#optimize=shrinksafe
+optimize=closure
 profile=mobile
 dir=release-mobile-separate
 webkit=
@@ -29,6 +30,6 @@ fi
 
 cd ../../../util/buildscripts
 
-./build.sh profile=$profile action=release customDijitBase=true optimize=$optimize layerOptimize=$optimize cssOptimize=comments releaseDir=../../$dir/ $webkit $standalone $*
+./build.sh profile=$profile action=release optimize=$optimize layerOptimize=$optimize cssOptimize=comments releaseDir=../../$dir/ $webkit $standalone $*
 
 cd ../../dojox/mobile/build

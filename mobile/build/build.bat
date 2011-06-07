@@ -27,7 +27,7 @@ shift
 
 cd ..\..\..\util\buildscripts
 
-call build profile=%profile% action=release customDijitBase=true optimize=%optimize% layerOptimize=%optimize% cssOptimize=comments releaseDir=../../%dir%/ %webkit% %standalone% %~1 %~2 %~3 %~4 %~5 %~6 %~7 %~8 %~9
+call build profile=%profile% action=release optimize=%optimize% layerOptimize=%optimize% cssOptimize=comments releaseDir=../../%dir%/ %webkit% %standalone% %~1 %~2 %~3 %~4 %~5 %~6 %~7 %~8 %~9
 
 cd ..\..\dojox\mobile\build
 
