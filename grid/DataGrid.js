@@ -276,6 +276,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 			}else if(this._lastScrollTop){
 				this.setScrollTop(this._lastScrollTop);
 			}
+			if(dojo.isIE){
+				dojo.setSelectable(this.domNode, this.selectable);
+			}	
 		}
 		delete this._lastScrollTop;
 		if(!this._isLoaded){
