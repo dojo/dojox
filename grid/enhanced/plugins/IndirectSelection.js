@@ -134,25 +134,26 @@ dojo.declare("dojox.grid.cells.RowSelector", dojox.grid.cells._Widget, {
 		this._connects.push(dojo.connect(this.grid, 'onCellClick', this, '_onClick'));
 		this._connects.push(dojo.connect(this.grid, 'updateRow', this, '_onUpdateRow'));
 	},
-	formatter: function(data, rowIndex){
+	formatter: function(data, rowIndex, scope){
 		// summary:
 		//		Overwritten, see dojox.grid.cells._Widget
-		var clazz = this.baseClass;
-		var checked = this.getValue(rowIndex);
-		var disabled = !!this.disabledMap[rowIndex];//normalize 'undefined'
+		var _this = scope;
+		var clazz = _this.baseClass;
+		var checked = _this.getValue(rowIndex);
+		var disabled = !!_this.disabledMap[rowIndex];//normalize 'undefined'
 		
 		if(checked){
-			clazz += this.checkedClass;
-			if(disabled){ clazz += this.checkedDisabledClass; }
+			clazz += _this.checkedClass;
+			if(disabled){ clazz += _this.checkedDisabledClass; }
 		}else if(disabled){
-			clazz += this.disabledClass;
+			clazz += _this.disabledClass;
 		}
 		return ["<div tabindex = -1 ",
-				"id = '" + this.grid.id + "_rowSelector_" + rowIndex + "' ",
-				"name = '" + this.grid.id + "_rowSelector' class = '" + clazz + "' ",
+				"id = '" + _this.grid.id + "_rowSelector_" + rowIndex + "' ",
+				"name = '" + _this.grid.id + "_rowSelector' class = '" + clazz + "' ",
 				"role = 'presentation' aria-pressed = '" + checked + "' aria-disabled = '" + disabled +
-				"' aria-label = '" + dojo.string.substitute(this.grid._nls["indirectSelection" + this.inputType], [rowIndex + 1]) + "'>",
-				"<span class = '" + this.statusTextClass + "'>" + (checked ? this.checkedText : this.unCheckedText) + "</span>",
+				"' aria-label = '" + dojo.string.substitute(_this.grid._nls["indirectSelection" + _this.inputType], [rowIndex + 1]) + "'>",
+				"<span class = '" + _this.statusTextClass + "'>" + (checked ? _this.checkedText : _this.unCheckedText) + "</span>",
 				"</div>"].join("");
 	},
 	setValue: function(rowIndex, inValue){
