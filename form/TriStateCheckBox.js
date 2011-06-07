@@ -1,8 +1,8 @@
 define([
 				"dojo",
 				"dijit",
-				"dijit/form/ToggleButton",
-				"dojo/text!./resources/TriStateCheckBox.html"], function(dojo, dijit) {
+				"dojo/text!./resources/TriStateCheckBox.html",
+				"dijit/form/ToggleButton"], function(dojo, dijit, template) {
 				//	module:
 				//		dojox/form/TriStateCheckBox
 				//	summary:
@@ -15,7 +15,7 @@ dojo.declare("dojox.form.TriStateCheckBox",
 		// summary:
 		//		Checkbox with three states
 
-		templateString: dojo.cache("dojox.form", "resources/TriStateCheckBox.html"),
+		templateString: template,
 
 		baseClass: "dojoxTriStateCheckBox",
 
@@ -84,6 +84,9 @@ dojo.declare("dojox.form.TriStateCheckBox",
 				"Mixed": "mixed"
 			};
 		},
+		
+		// Override behavior from Button, since we don't have an iconNode
+		_setIconClassAttr: null,
 		
 		_setCheckedAttr: function(/*String|Boolean*/ checked, /*Boolean?*/ priorityChange){
 			// summary:
