@@ -400,6 +400,8 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		var a11y = dojo.hasClass(dojo.body(), "dijit_a11y");
 		if(!data){
 			nestedSortBtn.innerHTML = this._sortDef.length + 1;
+			nestedSortBtn.title = this.nls.nestedSort + ' - ' + this.nls.ascending;
+			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridUnsortedTip;}
 			return;
 		}
 		if(data.index || (data.index === 0 && this._sortDef.length > 1)){
