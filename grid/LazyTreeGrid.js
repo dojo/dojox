@@ -52,6 +52,8 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._TemplatedMixin], 
 			this.expandoInner.innerHTML = state ? "-" : "+";
 			dojo.toggleClass(this.domNode, "dojoxGridExpandoOpened", state);
 			this.domNode.parentNode.setAttribute("aria-expanded", state);
+		}else{
+			dojo.removeClass(this.domNode, "dojoxGridExpandoOpened");
 		}
 	},
 	
