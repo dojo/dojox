@@ -49,6 +49,8 @@ dojo.declare("dojox.grid._LazyExpando", [dijit._Widget, dijit._Templated], {
 			this.expandoInner.innerHTML = state ? "-" : "+";
 			dojo.toggleClass(this.domNode, "dojoxGridExpandoOpened", state);
 			dijit.setWaiState(this.domNode.parentNode, "expanded", state);
+		}else{
+			dojo.removeClass(this.domNode, "dojoxGridExpandoOpened");
 		}
 	},
 	
