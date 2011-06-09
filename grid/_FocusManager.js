@@ -207,6 +207,7 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		var info = null;
 		if(this._colHeadNode){
 			var cell = this.grid.getCell(currentIdx);
+			if(!cell){ return; }
 			info = this._scrollInfo(cell, cell.getNode(0));
 		}
 		if(info && info.s && info.sr && info.n){
