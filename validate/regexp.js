@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/regexp"], function(dojo, regexp){
+define(["dojo/_base/kernel", "dojo/regexp", "dojox/main"], function(dojo, regexp, dojox){
 
 var dxregexp = dojo.getObject("validate.regexp", true, dojox);
-dxregexp = {
+dxregexp = dojox.validate.regexp = {
 	
 	ipAddress: function(/*Object?*/flags){
 		// summary: Builds a RE that matches an IP Address
@@ -225,54 +225,54 @@ dxregexp = {
 
 		// build RE for multiple number formats
 		return regexp.buildGroupRE(flags.format, digitRE); //String
-	}
-	
-};
-
-dxregexp.ca = {
-	
-	postalCode: function(){
-		// summary: String regular Express to match Canadain Postal Codes
-		return "([A-Z][0-9][A-Z] [0-9][A-Z][0-9])";
 	},
-
-	province: function(){
-		// summary: a regular expression to match Canadian Province Abbreviations
-		return "(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)";
-	}
 	
-};
+	ca: {
 
-dxregexp.us = {
+		postalCode: function(){
+			// summary: String regular Express to match Canadain Postal Codes
+			return "([A-Z][0-9][A-Z] [0-9][A-Z][0-9])";
+		},
+
+		province: function(){
+			// summary: a regular expression to match Canadian Province Abbreviations
+			return "(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)";
+		}
+
+	},
 	
-	state: function(/*Object?*/flags){
-		// summary: A regular expression to match US state and territory abbreviations
-		//
-		// flags  An object.
-		//    flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
-		//    flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
+	us:{
 
-		// assign default values to missing paramters
-		flags = (typeof flags == "object") ? flags : {};
-		if(typeof flags.allowTerritories != "boolean"){ flags.allowTerritories = true; }
-		if(typeof flags.allowMilitary != "boolean"){ flags.allowMilitary = true; }
+		state: function(/*Object?*/flags){
+			// summary: A regular expression to match US state and territory abbreviations
+			//
+			// flags  An object.
+			//    flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
+			//    flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
 
-		// state RE
-		var statesRE =
-			"AL|AK|AZ|AR|CA|CO|CT|DE|DC|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|" +
-			"NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY";
+			// assign default values to missing paramters
+			flags = (typeof flags == "object") ? flags : {};
+			if(typeof flags.allowTerritories != "boolean"){ flags.allowTerritories = true; }
+			if(typeof flags.allowMilitary != "boolean"){ flags.allowMilitary = true; }
 
-		// territories RE
-		var territoriesRE = "AS|FM|GU|MH|MP|PW|PR|VI";
+			// state RE
+			var statesRE =
+				"AL|AK|AZ|AR|CA|CO|CT|DE|DC|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|" +
+				"NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY";
 
-		// military states RE
-		var militaryRE = "AA|AE|AP";
+			// territories RE
+			var territoriesRE = "AS|FM|GU|MH|MP|PW|PR|VI";
 
-		// Build states and territories RE
-		if(flags.allowTerritories){ statesRE += "|" + territoriesRE; }
-		if(flags.allowMilitary){ statesRE += "|" + militaryRE; }
+			// military states RE
+			var militaryRE = "AA|AE|AP";
 
-		return "(" + statesRE + ")"; // String
+			// Build states and territories RE
+			if(flags.allowTerritories){ statesRE += "|" + territoriesRE; }
+			if(flags.allowMilitary){ statesRE += "|" + militaryRE; }
+
+			return "(" + statesRE + ")"; // String
+		}
+
 	}
 	
 };
