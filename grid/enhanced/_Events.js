@@ -25,14 +25,8 @@ dojo.declare("dojox.grid.enhanced._Events", null, {
 	rowActiveClass: 'dojoxGridRowActive',
 
 	constructor: function(inGrid){
-		//get the default Grid events
+		//TODO - extend dojox.grid._Events rather than mixin for 1.8
 		this._events = new dojox.grid._Events();
-		//for methods that won't be overwritten, copy them to "this" scope
-		for(var p in this._events){
-			if(!this[p]){
-				this.p = this._events.p;
-			}
-		}
 		//mixin "this" to Grid
 		inGrid.mixin(inGrid, this);
 	},
