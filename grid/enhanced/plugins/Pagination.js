@@ -531,10 +531,6 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}else{
 			dojo.style(this.sizeSwitchTd, "display", "");
 		}
-		if(this.initializedSizeNode && !this.pageSizeValue){
-			// do not update page size if page size was not changed
-			return;
-		}
 		if(this.sizeSwitchTd.childNodes.length < 1){
 			this._createSizeSwitchNodes();
 		}
@@ -542,7 +538,6 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		
 		// move focus to next activable node
 		this._moveToNextActivableNode(this._getAllPageSizeNodes(), this.pageSizeValue);
-		this.pageSizeValue = null;
 	},
 	
 	_createSizeSwitchNodes: function(){
@@ -598,8 +593,8 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			if(node.value){
 				size = node.value;
 				dojo.removeClass(node);
-				if(this.pageSizeValue){
-					styleNode(node, size === this.pageSizeValue && !hasActivedNode);
+				if(this.plugin._pageSizeValue){
+					styleNode(node, size === this.plugin._pageSizeValue && !hasActivedNode);
 				}else{
 					if(size.toLowerCase() == "all"){
 						size = this._maxItemSize;
@@ -761,6 +756,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			this._createGotoNode();
 		}
 		dojo.toggleClass(this.gotoPageDiv, "dojoxGridPaginatorGotoDivDisabled", this.plugin.pageSize >= this.plugin._maxSize);
+		dojo.attr(this.gotoPageDiv, "tabindex", "-1");
 	},
 	
 	_createGotoNode: function(){
@@ -1020,7 +1016,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	_onSwitchPageSize: function(/*Event*/e){
 		// summary:
 		//		The handler of switch the page size
-		var size = this.pageSizeValue = e.target.value;
+		var size = this.plugin._pageSizeValue = this.pageSizeValue = e.target.value;
 		if(!size){
 			return;
 		}
