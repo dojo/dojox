@@ -400,7 +400,7 @@ dojo.declare("dojox.grid.TreeGridItemCache", null, {
 	cleanChildren: function(rowIdx){
 		var treePath = this.getTreePathByRowIndex(rowIdx);
 		for(var i = this.items.length - 1; i >= 0; i--){
-			if(this.items[i].treePath.indexOf(treePath) === 0 && this.items[i].treePath !== treePath){
+			if(this.items[i].treePath.indexOf(treePath + '/') === 0 && this.items[i].treePath !== treePath){
 				this.items.splice(i, 1);
 			}
 		}
