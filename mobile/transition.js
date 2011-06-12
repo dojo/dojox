@@ -3,13 +3,20 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 	return function(from, to, options){
 		var rev = (options && options.reverse) ? " mblReverse" : "";
 		if(!options || !options.transition){
-			dojo.style(from,"display","none");
-			dojo.style(to, "display", "");
+			console.log("from: ", from, "to: ", to);
+			if (from && from.tagname) {
+				dojo.style(from,"display","none");
+			}
+			if (to){
+				dojo.style(to, "display", "");
+			}
 		}else{
 			var defs=[];
-			dojo.style(from, "display", ""); 
-			dojo.style(to, "display", "");
+			if(to){
+				dojo.style(to, "display", "");
+			}
 			if (from){
+				dojo.style(from, "display", ""); 
 				var fromDef = new dojo.Deferred();
 				var fromHandle = dojo.connect(from, "webkitAnimationEnd", function(){
 					dojo.style(from,"display","none");
