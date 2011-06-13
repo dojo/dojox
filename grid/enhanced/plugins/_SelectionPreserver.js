@@ -15,7 +15,7 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 	
 	//_connects: Array
 	//		List of all connections.
-	_connects: [],
+	_connects: null,
 	
 	constructor: function(selection){
 		this.selection = selection;
@@ -30,6 +30,7 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", null, {
 			_this._trustSelection = [];
 			oldClearData.apply(grid, arguments);
 		};
+		this._connects = [];
 		this.connect(grid, '_setStore', 'reset');
 		this.connect(grid, '_addItem', '_reSelectById');
 		this.connect(selection, 'addToSelection', dojo.hitch(this, '_selectById', true));
