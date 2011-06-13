@@ -1,11 +1,11 @@
-define(["dojox/main", "../_base"], function(dojox){
+define(["dojox/main", "../_base", "./html"], function(dojox, dh, html){
 	
-	var dh = dojox.highlight, dhc = dh.constants, dhl = dh.languages;
-	dhl.css = {
+	var dhc = dh.constants;
+	return dh.languages.css = {
 		// summary: CSS Language definition file. 
 		defaultMode: {
 			contains: ['id', 'class', 'attr_selector', 'rules', 'comment'],
-			keywords: dhl.html.HTML_TAGS,
+			keywords: html.HTML_TAGS,
 			lexems: [dhc.IDENT_RE],
 			illegal: '='
 		},
@@ -86,7 +86,4 @@ define(["dojox/main", "../_base"], function(dojox){
 			}
 		]
 	};
-	
-	return dhl.css;
-
 });
