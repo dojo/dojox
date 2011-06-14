@@ -59,24 +59,22 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 				++delta;
 			}
 		}
-		var leftCount = 0;
-		var rightCount = 0;
+		var leftCount = 0, rightCount = 0;
 		var maxCol = Math.max(colsToMove[colsToMove.length - 1], targetPos);
 		if(maxCol == cells.length){
 			--maxCol;
 		}
-		for(i = colsToMove[0]; i <= maxCol; ++i){
+		var minCol = Math.min(colsToMove[0], targetPos);
+		for(i = minCol; i <= maxCol; ++i){
 			var j = tmp[i];
 			if(j >= 0){
-				if(i != targetPos - delta + j){
-					mapping[i] = targetPos - delta + j;
-				}
-				leftCount = j + 1;
-				rightCount = colsToMove.length - j - 1;
-			}else if(i < targetPos && leftCount > 0){
-				mapping[i] = i - leftCount;
-			}else if(i >= targetPos && rightCount > 0){
-				mapping[i] = i + rightCount;
+				mapping[i] = targetPos - delta + j;
+			}else if(i < targetPos){
+				mapping[i] = minCol + leftCount;
+				++leftCount;
+			}else if(i >= targetPos){
+				mapping[i] = targetPos + colsToMove.length - delta + rightCount;
+				++rightCount;
 			}
 		}
 		//console.log("mapping:", mapping, ", colsToMove:", colsToMove,", target:", targetPos);
