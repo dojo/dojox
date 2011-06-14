@@ -265,8 +265,9 @@ define(["dojox/gfx"], function(){
 					svg = "<svg xmlns=\"http://www.w3.org/2000/svg\"" + svg;
 				}
 				//Do some other cleanup, like stripping out the
-				//dojoGfx attributes.
+				//dojoGfx attributes and quoting ids.
 				svg = svg.replace(/\bdojoGfx\w*\s*=\s*(['"])\w*\1/g, "");
+				svg = svg.replace(/[=]([^"']+?)(\s|>)/g,'="$1"$2');
 			}
 			return svg;  //Cleaned SVG text.
 		}

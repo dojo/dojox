@@ -36,9 +36,12 @@ transformImage = function(){
 	}else if(radio[2].checked){
         image.setTransform(m.rotateg(15));
 	}else if(radio[3].checked){
-        image.setTransform([{dx: 70, dy: 90}, {xx: 1.5, yy: 0.5}]);
+        image.setTransform([{xx: 1.5, yy: 0.5}]);
 	}else if(radio[4].checked){
-        image.setTransform([m.rotateg(15), m.skewXg(30)]);
+        //image.setTransform([m.rotateg(15), m.skewXg(30)]);
+        //image.setTransform([m.rotate(0), m.skewYg(15)]);
+        image.setTransform([m.translate(20, 20), m.rotateg(-30), m.scale(2), m.translate(-20, -20)]);
+
 	}
 	var shift = document.getElementsByName("shift");
 	if(shift[0].checked){
