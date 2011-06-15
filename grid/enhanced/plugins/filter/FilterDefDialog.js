@@ -997,7 +997,9 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 					store: g.store,
 					searchAttr: cell.field || cell.name,
 					fetchProperties: {
-						sort: [{"attribute": cell.field || cell.name}]
+						sort: [{"attribute": cell.field || cell.name}],
+						query: g.query,
+						queryOptions: g.queryOptions
 					}
 				});
 			}
