@@ -200,7 +200,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		// summary:
 		//		Change size of items per page.
 		//		This function will only be called by _Paginator
-		if(typeof size == "string"){
+		if(typeof size === "string"){
 			size = parseInt(size, 10);
 		}
 		var startIndex = this.pageSize * this._currentPage;
@@ -279,7 +279,8 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 		self.startIdx = request.start;
 		self.endIdx = request.start + plugin.pageSize - 1;
 		if(onBegin && (plugin.showAll || dojo.every(plugin.paginators, function(p){
-			return plugin.showAll = !p.sizeSwitch && !p.pageStepper && !p.gotoButton;
+			plugin.showAll = !p.sizeSwitch && !p.pageStepper && !p.gotoButton;
+			return plugin.showAll;
 		}))){
 			request.onBegin = function(size, req){
 				plugin._maxSize = plugin.pageSize = size;
@@ -393,7 +394,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		};
 		dojo.forEach(type, function(t){
 			var width, flag = this[t];
-			if(flag === undefined || typeof flag == "boolean"){
+			if(flag === undefined || typeof flag === "boolean"){
 				return;
 			}
 			if(dojo.isString(flag)){
@@ -474,7 +475,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			hh = g._getHeaderHeight(),
 			ph = dojo.marginBox(this.domNode).h;
 		ph = this.plugin.paginators[1] ? ph * 2 : ph;
-		if(typeof g.autoHeight == "number"){
+		if(typeof g.autoHeight === "number"){
 			var cgh = gh + ph - padBorder;
 			dojo.style(g.domNode, "height", cgh + "px");
 			dojo.style(g.viewsNode, "height", (cgh - ph - hh) + "px");
@@ -486,10 +487,10 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			var hasHScroller = dojo.some(g.views.views, function(v){
 				return v.hasHScrollbar();
 			});
-			dojo.forEach(g.viewsNode.childNodes, function(c, idx){
+			dojo.forEach(g.viewsNode.childNodes, function(c){
 				dojo.style(c, "height", h + "px");
 			});
-			dojo.forEach(g.views.views, function(v, idx){
+			dojo.forEach(g.views.views, function(v){
 				if(v.scrollboxNode){
 					if(!v.hasHScrollbar() && hasHScroller){
 						dojo.style(v.scrollboxNode, "height", (h - dojox.html.metrics.getScrollbar().h) + "px");
@@ -538,6 +539,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		
 		// move focus to next activable node
 		this._moveToNextActivableNode(this._getAllPageSizeNodes(), this.pageSizeValue);
+		this.pageSizeValue = null;
 	},
 	
 	_createSizeSwitchNodes: function(){
@@ -568,7 +570,6 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}, this);
 		// delete last separation node
 		dojo.destroy(node);
-		this.initializedSizeNode = true;
 		if(this.sizeSwitchWidth){
 			dojo.style(this.sizeSwitchTd, "width", this.sizeSwitchWidth);
 		}
@@ -635,8 +636,9 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		var startPage = this._getStartPage(),
 			stepSize = this._getStepPageSize(),
 			label = "",
-			node = null;
-		for(var i = startPage; i < this.maxPageStep + 1; i++){
+			node = null,
+			i = startPage;
+		for(; i < this.maxPageStep + 1; i++){
 			label = dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i]);
 			node = dojo.create("div", {innerHTML: i, value: i, title: label, tabindex: i < startPage + stepSize ? 0 : -1}, this.pageStepperDiv, "last");
 			node.setAttribute("aria-label", label);
@@ -704,8 +706,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		//		Update the style of the page step nodes
 		var value = null,
 			curPage = this._getCurrentPageNo(),
-			pageCount = this._getPageCount(),
-			visibleNodeLen = 0;
+			pageCount = this._getPageCount();
 			
 		var updateClass = function(node, isWardBtn, status){
 			var value = node.value,
@@ -724,7 +725,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			if(isNaN(parseInt(node.value, 10))){
 				dojo.addClass(node, "dojoxGridWardButton");
 				var disablePageNum = node.value == "prevPage" || node.value == "firstPage" ? 1 : pageCount;
-				updateClass(node, true, (curPage == disablePageNum));
+				updateClass(node, true, (curPage === disablePageNum));
 			}else{
 				value = parseInt(node.value, 10);
 				updateClass(node, false, (value === curPage || dojo.style(node, "display") === "none"));
@@ -868,7 +869,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 				this.focusArea = "pageStep";
 				this.plugin._stopEvent(event);
 				return true;
-			}else if(event.target == this.gotoPageDiv){
+			}else if(event.target === this.gotoPageDiv){
 				dijit.focus(this.gotoPageDiv);
 				this._currentFocusNode = this.gotoPageDiv;
 				this.focusArea = "pageStep";
@@ -974,8 +975,9 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	},
 	
 	_getAllPageStepNodes: function(){
-		var nodeList = [];
-		for(var i = 0, len = this.pageStepperDiv.childNodes.length; i < len; i++){
+		var nodeList = [],
+			i = 0, len = this.pageStepperDiv.childNodes.length;
+		for(; i < len; i++){
 			nodeList.push(this.pageStepperDiv.childNodes[i]);
 		}
 		return nodeList;
@@ -994,10 +996,10 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			node = null,
 			index = 0;
 		dojo.forEach(nodeList, function(n){
-			if(n.value == curNodeValue){
+			if(n.value === curNodeValue){
 				nl.push(n);
 				node = n;
-			}else if(dojo.attr(n, "tabindex") == "0"){
+			}else if(dojo.attr(n, "tabindex") === "0"){
 				nl.push(n);
 			}
 		});
@@ -1005,7 +1007,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			this.grid.focus.tab(1);
 		}
 		index = dojo.indexOf(nl, node);
-		if(dojo.attr(node, "tabindex") != "0"){
+		if(dojo.attr(node, "tabindex") !== "0"){
 			node = nl[index + 1] ? nl[index + 1] : nl[index - 1];
 		}
 		dijit.focus(node);
@@ -1029,7 +1031,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		this.plugin.grid.usingPagination = !this.plugin.showAll;
 		
 		size = parseInt(size, 10);
-		if(isNaN(size) || size <= 0/* || size == this.currentPageSize*/){
+		if(isNaN(size) || size <= 0){
 			return;
 		}
 		
