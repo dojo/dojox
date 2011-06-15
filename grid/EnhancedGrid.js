@@ -3,6 +3,7 @@ define([
 	"dojox",
 	"./DataGrid",
 	"./enhanced/_PluginManager",
+	"./enhanced/plugins/_SelectionPreserver",//default loaded plugin
 	"dojo/i18n!./enhanced/nls/EnhancedGrid"], function(dojo, dojox){
 
 dojo.experimental("dojox.grid.EnhancedGrid");
@@ -218,8 +219,6 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		this.inherited(arguments);
 	}
 });
-
-dojo.require("dojox.grid.enhanced.plugins._SelectionPreserver");//default loaded plugin
 
 dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
 	constructor: function(grid){
