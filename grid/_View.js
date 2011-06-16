@@ -433,6 +433,9 @@ define([
 		// note: not called in 'view' context
 		_getHeaderContent: function(inCell){
 			var n = inCell.name || inCell.grid.getCellName(inCell);
+			if(/^\s+$/.test(n)){
+				n = '&nbsp;'//otherwise arrow styles will be messed up
+			}
 			var ret = [ '<div class="dojoxGridSortNode' ];
 			
 			if(inCell.index != inCell.grid.getSortIndex()){
