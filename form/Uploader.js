@@ -1,4 +1,4 @@
-define(['dojo', 'dijit', 'dojox/form/uploader/Base', 'dijit/form/Button'],function(dojo, dijit){
+define(['dojo', 'dijit', 'dojox/form/uploader/Base', 'dijit/form/Button', 'dojo/i18n!./nls/Uploader'],function(dojo, dijit, uploader, button, res){
 	
 	dojo.experimental("dojox.form.Uploader");
 	//
@@ -48,7 +48,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	//
 	//	label: String
 	//		The text used in the button that when clicked, opens a system Browse Dialog.
-	label:"Upload...",
+	label:res.label,
 	//
 	// url: String
 	//		The url targeted for upload. An absolute URL is preferred. Relative URLs are
@@ -322,7 +322,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 			// <=IE8
 			name = this.name + (this.multiple ? this._nameIndex : "");
 		}
-		this.inputNode = dojo.create("input", {type:"file", name:name, className:"dojoxInputNode"}, this.domNode, "first");
+		this.inputNode = dojo.create("input", {type:"file", name:name}, this.domNode, "first");
 		if(this.supports("multiple") && this.multiple){
 			dojo.attr(this.inputNode, "multiple", true);
 		}
