@@ -74,7 +74,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	//
 	_nameIndex:0,
 	widgetsInTemplate:true,
-	templateString:'<div class="dojoxFileInput"><div dojoType="dijit.form.Button" dojoAttachPoint="button">${label}</div></div>',
+	templateString:'<div><div dojoType="dijit.form.Button" dojoAttachPoint="button">${label}</div></div>',
 
 	postMixInProperties: function(){
 		this._inputs = [];
