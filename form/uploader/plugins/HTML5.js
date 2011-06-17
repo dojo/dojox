@@ -141,9 +141,9 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		}), false);
         xhr.onreadystatechange = dojo.hitch(this, function() {
 			if (xhr.readyState === 4) {
-				console.info("COMPLETE")
+//				console.info("COMPLETE")
 				clearInterval(timer);
-				this.onComplete(dojo.eval(xhr.responseText));
+				this.onComplete(JSON.parse(xhr.responseText));
 			}
 		});
         xhr.open("POST", this.getUrl());
