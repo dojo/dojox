@@ -419,8 +419,10 @@ dojox.mobile.scrollable = function(dojo, dojox){
 						elem = elem.parentNode;
 					}
 					var ev = dojo.doc.createEvent("MouseEvents");
-					ev.initEvent("click", true, true);
-					elem.dispatchEvent(ev);
+					ev.initMouseEvent("click", true, true, dojo.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
+					setTimeout(function(){
+						elem.dispatchEvent(ev);
+					}, 0);
 				}
 				return;
 			}
@@ -508,6 +510,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 				velocity = speed.x;
 				distance = to.x - pos.x;
 			}
+			if(distance === 0 && !e){ return; } // #13154
 			duration = velocity !== 0 ? Math.abs(distance / velocity) : 0.01; // time = distance / velocity
 		}
 		this.slideTo(to, duration, easing);

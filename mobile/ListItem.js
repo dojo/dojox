@@ -120,7 +120,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_ba
 						dojo.addClass(p, "mblListItemTextBoxSelected");
 						setTimeout(function(){
 							dojo.removeClass(p, "mblListItemTextBoxSelected");
-						}, 1000);
+						}, dojo.isAndroid ? 300 : 1000);
 						this.onAnchorLabelClicked(e);
 						return;
 					}
@@ -163,7 +163,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_ba
 				var _this = this;
 				setTimeout(function(){
 					_this.deselect();
-				}, 1000);
+				}, dojo.isAndroid ? 300 : 1000);
 			}
 			dojo.addClass(this.domNode, "mblItemSelected");
 		},
