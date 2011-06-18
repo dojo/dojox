@@ -59,7 +59,8 @@
 //		| </body>
 =====*/
 if(typeof dojo === "undefined"){
-	dojo = {doc:document, global:window, isWebKit:navigator.userAgent.indexOf("WebKit") != -1};
+	dojo = {doc:document, global:window, isWebKit:navigator.userAgent.indexOf("WebKit") != -1,
+			isAndroid:parseFloat(navigator.userAgent.split("Android ")[1]) || undefined};
 	dojox = {mobile:{}};
 }
 if(typeof define === "undefined"){
@@ -82,6 +83,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.isNested = false; // this scrollable's parent is also a scrollable
 	this.dirLock = false; // disable the move handler if scroll starts in the unexpected direction
 	this.height = ""; // explicitly specified height of this widget (ex. "300px")
+	this.androidWorkaroud = true; // workaround input field jumping issue
 
 //>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
 	if(!dojo){ // namespace objects are not passed
@@ -125,7 +127,12 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			}
 			return false;
 		};
-		dojo.style = function(node, style){
+		dojo.style = function(node, style, value){
+			if(typeof style === "string"){
+				var obj = {};
+				obj[style] = value;
+				style = obj;
+			}
 			for(var s in style){
 				if(style.hasOwnProperty(s)){
 					node.style[s] = style[s];
@@ -169,6 +176,19 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(dojo.isWebKit){
 			this._ch.push(dojo.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
 			this._ch.push(dojo.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
+
+			this._aw = this.androidWorkaroud &&
+				dojo.isAndroid >= 2.2 && dojo.isAndroid < 3;
+			if(this._aw){
+				this._ch.push(dojo.connect(dojo.global, "onresize", this, "onScreenSizeChanged"));
+				this._ch.push(dojo.connect(dojo.global, "onfocus", this, function(e){
+					if(this.containerNode.style.webkitTransform){
+						this.stopAnimation();
+						this.toTopLeft();
+					}
+				}));
+				this._sz = this.getScreenSize();
+			}
 		}
 
 		this._appFooterHeight = 0;
@@ -205,6 +225,98 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		return node;
 	};
 
+	this.getScreenSize = function(){
+		return {
+			h: dojo.global.innerHeight||dojo.doc.documentElement.clientHeight,
+			w: dojo.global.innerWidth||dojo.doc.documentElement.clientWidth
+		};
+	};
+
+	this.isKeyboardShown = function(e){
+		// indirectly detects whether a virtual keyboard is shown or not
+		// by examining the screen size.
+		// TODO: need more reliable detection logic
+		if(!this._sz){ return false; }
+		var sz = this.getScreenSize();
+		return (sz.w * sz.h) / (this._sz.w * this._sz.h) < 0.8;
+	};
+
+	this.disableScroll = function(/*Boolean*/v){
+		if(this.disableTouchScroll === v || dojo.style(this.domNode, "display") === "none"){ return; }
+		this.disableTouchScroll = v;
+		this.scrollBar = !v;
+		dojox.mobile.disableHideAddressBar = dojox.mobile.disableResizeAll = v;
+		var of = v ? "visible" : "hidden";
+		dojo.style(this.domNode, "overflow", of);
+		dojo.style(dojo.doc.documentElement, "overflow", of);
+		dojo.style(dojo.body(), "overflow", of);
+		var c = this.containerNode;
+		if(v){
+			if(!c.style.webkitTransform){
+				// stop animation when soft keyborad is shown before animation ends.
+				// TODO there might be the better way to wait for animation ending.
+				this.stopAnimation();
+				this.toTopLeft();
+			}
+			var mt = parseInt(c.style.marginTop) || 0;
+			var h = c.offsetHeight + mt + this.fixedFooterHeight - this._appFooterHeight;
+			dojo.style(this.domNode, "height", h + "px");
+			
+			this._cPos = { // store containerNode's position
+				x: parseInt(c.style.left) || 0,
+				y: parseInt(c.style.top) || 0
+			};
+			dojo.style(c, {
+				top: "0px",
+				left: "0px"
+			});
+			dojo.body().scrollTop = Math.max(Math.abs(this._cPos.y) + mt, 1); // scrolling to original position
+		}else{
+			if(this._cPos){ // restore containerNode's position
+				dojo.style(c, {
+					top: this._cPos.y + "px",
+					left: this._cPos.x + "px"
+				});
+				this._cPos = null;
+			}
+			var tags = this.domNode.getElementsByTagName("*");
+			for(var i = 0; i < tags.length; i++){
+				tags[i].blur && tags[i].blur();
+			}
+		}
+	};
+
+	this.onScreenSizeChanged = function(e){
+		var sz = this.getScreenSize();
+		if(sz.w * sz.h > this._sz.w * this._sz.h){
+			this._sz = sz; // update the screen size
+		}
+		this.disableScroll(this.isKeyboardShown());
+	};
+
+	this.toTransform = function(e){
+		var c = this.containerNode;
+		if(c.offsetTop === 0 && c.offsetLeft === 0 || !c._webkitTransform){ return; }
+		dojo.style(c, {
+			webkitTransform: c._webkitTransform,
+			top: "0px",
+			left: "0px"
+		});
+		c._webkitTransform = null;
+	};
+
+	this.toTopLeft = function(){
+		var c = this.containerNode;
+		if(!c.style.webkitTransform){ return; } // already converted to top/left
+		c._webkitTransform = c.style.webkitTransform;
+		var pos = this.getPos();
+		dojo.style(c, {
+			webkitTransform: "",
+			top: pos.y + "px",
+			left: pos.x + "px"
+		});
+	};
+	
 	this.resize = function(e){
 		// moved from init() to support dynamically added fixed bars
 		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
@@ -252,7 +364,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.onFlickAnimationEnd = function(e){
 		if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
 		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
-		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll") === -1){ return; }
+		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll2") === -1){ return; }
 		if(e && e.srcElement){
 			dojo.stopEvent(e);
 		}
@@ -267,6 +379,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}else{
 			this.hideScrollBar();
 			this.removeCover();
+			if(this._aw){ this.toTopLeft(); } // android workaround
 		}
 	};
 
@@ -277,6 +390,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.onTouchStart = function(e){
+		if(this.disableTouchScroll){ return; }
 		if(this._conn && (new Date()).getTime() - this.startTime < 500){
 			return; // ignore successive onTouchStart calls
 		}
@@ -290,6 +404,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(dojo.hasClass(this.containerNode, "mblScrollableScrollTo2")){
 			this.abort();
 		}
+		if(this._aw){ this.toTransform(e); } // android workaround
 		this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 		this.touchStartY = e.touches ? e.touches[0].pageY : e.clientY;
 		this.startTime = (new Date()).getTime();
@@ -686,19 +801,23 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			fadeRule = dojox.mobile._fadeRule;
 		}
 		if(!this.scrollBar){ return; }
-		var f = function(bar){
+		var f = function(bar, self){
 			dojo.style(bar, {
 				opacity: 0,
-				webkitAnimationDuration: dojo.isAndroid ? "0s" : "" // workaround for android screen flicker problem
+				webkitAnimationDuration: ""
 			});
-			bar.className = "mblScrollableFadeScrollBar";
+			if(self._aw){ // android workaround
+				bar.style.webkitTransform = "";
+			}else{
+				bar.className = "mblScrollableFadeScrollBar";
+			}
 		};
 		if(this._scrollBarV){
-			f(this._scrollBarV);
+			f(this._scrollBarV, this);
 			this._scrollBarV = null;
 		}
 		if(this._scrollBarH){
-			f(this._scrollBarH);
+			f(this._scrollBarH, this);
 			this._scrollBarH = null;
 		}
 	};

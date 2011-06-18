@@ -103,17 +103,41 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	};
 
 	dm.hideAddressBarWait = typeof(dojo.config["mblHideAddressBarWait"]) === "number" ?
-		dojo.config["mblHideAddressBarWait"] : 2000; // [ms]
-	dm.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
-		dojo.body().style.minHeight = "1000px"; // to ensure enough height for scrollTo to work
-		setTimeout(function(){ scrollTo(0, 1); }, 200);
-		setTimeout(function(){ scrollTo(0, 1); }, 800);
+		dojo.config["mblHideAddressBarWait"] : 1500; // [ms] value must be larger than 800
+	dm.hide_1 = function(force){
+		scrollTo(0, 1);
+		var h = dm.getScreenSize().h + "px";
+		if(dojo.isAndroid){
+			if(force)
+				dojo.body().style.minHeight = h;
+			dm.resizeAll();
+		}else{
+			if(force || dm._h === h && h !== dojo.body().style.minHeight){
+				dojo.body().style.minHeight = h;
+				dm.resizeAll();
+			}
+		}
+		dm._h = h;
+	};
+	dm.hide_fs = function(){
+		// for fail-safe, in case of failure to complete the address bar hiding in time
+		var t = dojo.body().style.minHeight;
+		dojo.body().style.minHeight = (dm.getScreenSize().h * 2) + "px"; // to ensure enough height for scrollTo to work
+		scrollTo(0, 1);
 		setTimeout(function(){
-			scrollTo(0, 1);
-			// re-define the min-height with the actual height
-			dojo.body().style.minHeight = dm.getScreenSize().h + "px";
-			if(doResize !== false){ dm.resizeAll(); }
-		}, dm.hideAddressBarWait);
+			dm.hide_1(1);
+			dm._hiding = false;
+		}, 1000);
+	};
+	dm.hideAddressBar = function(/*Event?*/evt){
+		if(dm.disableHideAddressBar || dm._hiding){ return; }
+		dm._hiding = true;
+		dm._h = 0;
+		dojo.body().style.minHeight = (dm.getScreenSize().h * 2) + "px"; // to ensure enough height for scrollTo to work
+		setTimeout(dm.hide_1, 0);
+		setTimeout(dm.hide_1, 200);
+		setTimeout(dm.hide_1, 800);
+		setTimeout(dm.hide_fs, dm.hideAddressBarWait);
 	};
 
 	dm.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
@@ -132,6 +156,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//		root.resize() is always called regardless of whether root is a
 		//		top level widget or not.
 		//		If omitted, search the entire page.
+		if(dm.disableResizeAll){ return; }
 		dojo.publish("/dojox/mobile/resizeAll", [evt, root]);
 		dm.updateOrient();
 		dm.detectScreenSize();
