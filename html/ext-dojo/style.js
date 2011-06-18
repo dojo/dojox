@@ -37,22 +37,23 @@ define(["dojo/_base/kernel", "dojo/_base/html"], function(dojo){
 					to = (style == "transformOrigin"),
 					args = arguments.length
 				;
-				if(args == 3){
-					if(tr){
-						extStyle.setTransform(n, value, true);
-					}else if(to){
-						extStyle.setTransformOrigin(n, value);
-					}else{
-						ds(node, style, value);
-					}
-				}
-				if(args == 2){
+				if(args == 1){
+					return ds(node);
+				}else if(args == 2){
 					if(tr){
 						return extStyle.getTransform(node);
 					}else if(to){
 						return extStyle.getTransformOrigin(node);
 					}else{
 						return ds(node, style);
+					}
+				}else if(args == 3){
+					if(tr){
+						extStyle.setTransform(n, value, true);
+					}else if(to){
+						extStyle.setTransformOrigin(n, value);
+					}else{
+						ds(node, style, value);
 					}
 				}
 			};
