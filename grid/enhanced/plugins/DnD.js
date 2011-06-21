@@ -508,7 +508,14 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		while(cells[i].hidden){ ++i; }
 		var cell = g.layout.cells[i],
 			rowIndex = g.scroller.firstVisibleRow,
-			nodePos = dojo.position(cell.getNode(rowIndex));
+			cellNode = cell.getNode(rowIndex);
+		if(!cellNode){
+			//if the target grid is empty, set to -1 
+			//which will be processed in Rearrange
+		    this._target = -1;
+		    return 0; //position of the insert bar
+		}
+		var nodePos = dojo.position(cellNode);
 		while(nodePos.y + nodePos.h < evt.clientY){
 			if(++rowIndex >= g.rowCount){
 				break;
@@ -714,9 +721,9 @@ dojo.declare("dojox.grid.enhanced.plugins.DnD", dojox.grid.enhanced._Plugin, {
 		var t = this._dndRegion.type;
 		var ranges = this._dndRegion.selected;
 		if(t === "cell"){
-			this.rearranger[(this._isCopy || this._copyOnly) ? "copyCells" : "moveCells"](ranges[0], this._target);
+			this.rearranger[(this._isCopy || this._copyOnly) ? "copyCells" : "moveCells"](ranges[0], this._target === -1 ? null : this._target);
 		}else{
-			this.rearranger[t == "col" ? "moveColumns" : "moveRows"](_joinToArray(ranges), this._target);
+			this.rearranger[t == "col" ? "moveColumns" : "moveRows"](_joinToArray(ranges), this._target === -1 ? null: this._target);
 		}
 		this._target = null;
 	},

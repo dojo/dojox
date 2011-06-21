@@ -354,20 +354,35 @@ dojo.declare("dojox.grid.enhanced.plugins.Rearrange", dojox.grid.enhanced._Plugi
 				mapping = {},
 				obj = {idx: 0},
 				newRows = [], i,
+				emptyTarget = targetPos < 0;
 				_this = this;
 			var len = rowsToMove.length;
-			for(i = targetPos; i < g.rowCount; ++i){
-				mapping[i] = i + len;
+			if(emptyTarget){
+				targetPos = 0;
+			}else{
+				for(i = targetPos; i < g.rowCount; ++i){
+					mapping[i] = i + len;
+				}
 			}
 			if(s.getFeatures()['dojo.data.api.Write']){
 				if(sourceGrid){
 					var srcg = sourceGrid,
 						srcs = srcg.store,
-						thisItem;
-					for(i = 0; !thisItem; ++i){
-						thisItem = g._by_idx[i];
+						thisItem, attrs;
+					if(!emptyTarget){
+						for(i = 0; !thisItem; ++i){
+							thisItem = g._by_idx[i];
+						}
+						attrs = s.getAttributes(thisItem.item);
+					}else{
+						//If the target grid is empty, there is no way to retrieve attributes.
+						//So try to get attrs from grid.layout.cells[], but this might not be right
+						//since some fields may be missed(e.g ID fields), please use "setIdentifierForNewItem()" 
+						//to add those missed fields
+						attrs = dojo.map(g.layout.cells, function(cell){
+							return cell.field;
+						});
 					}
-					var attrs = s.getAttributes(thisItem.item);
 					var rowsToFetch = [];
 					dojo.forEach(rowsToMove, function(rowIndex, i){
 						var item = {};
