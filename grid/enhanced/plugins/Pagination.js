@@ -30,7 +30,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	init: function(){
 		this.gh = null;
 		this._defaultRowsPerPage = this.grid.rowsPerPage;
-		this.grid.rowsPerPage = this._pageSize = this.grid.rowsPerPage ? this.grid.rowsPerPage : this._pageSize;
+		var size = this.option.defaultPageSize > 0 ? this.option.defaultPageSize :
+				(this.grid.rowsPerPage ? this.grid.rowsPerPage : this._pageSize);
+		this.grid.rowsPerPage = this._pageSize = size;
 		this._currentPage = this.option.defaultPage > 0 ? this.option.defaultPage - 1 : 0;
 		this.grid.usingPagination = true;
 		this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Pagination");
