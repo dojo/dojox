@@ -17,7 +17,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	
 	name: "pagination",
 	// The page size used with the store, default = 25.
-	pageSize: 25,
+	_pageSize: 25,
 	
 	_defaultRowsPerPage: 25,
 	
@@ -29,7 +29,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	
 	init: function(){
 		this.gh = null;
-		this.grid.rowsPerPage = this.pageSize = this.grid.rowsPerPage ? this.grid.rowsPerPage : this.pageSize;
+		this._defaultRowsPerPage = this.grid.rowsPerPage;
+		this.grid.rowsPerPage = this._pageSize = this.grid.rowsPerPage ? this.grid.rowsPerPage : this._pageSize;
 		this.grid.usingPagination = true;
 		this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Pagination");
 		
@@ -69,14 +70,14 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	},
 	
 	_onNew: function(item, parentInfo){
-		var totalPages = Math.ceil(this._maxSize / this.pageSize);
-		if(((this._currentPage + 1 === totalPages || totalPages === 0) && this.grid.rowCount < this.pageSize) || this.showAll){
+		var totalPages = Math.ceil(this._maxSize / this._pageSize);
+		if(((this._currentPage + 1 === totalPages || totalPages === 0) && this.grid.rowCount < this._pageSize) || this.showAll){
 			dojo.hitch(this.grid, this._originalOnNew)(item, parentInfo);
 			this.forcePageStoreLayer.endIdx++;
 		}
 		this._maxSize++;
 		if(this.showAll){
-			this.pageSize++;
+			this._pageSize++;
 		}
 		if(this.showAll && this.grid.autoHeight){
 			this.grid._refresh();
@@ -151,7 +152,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	nextPage: function(){
 		// summary:
 		//		Function to handle shifting to the next page in the list.
-		if(this._maxSize > ((this._currentPage + 1) * this.pageSize)){
+		if(this._maxSize > ((this._currentPage + 1) * this._pageSize)){
 			//Current page is indexed at 0 and gotoPage expects 1-X.  So to go
 			//up  one, pass current page + 2!
 			this.gotoPage(this._currentPage + 2);
@@ -173,7 +174,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		//		Function to handle shifting to an arbirtary page in the list.
 		//	page:
 		//		The page to go to, starting at 1.
-		var totalPages = Math.ceil(this._maxSize / this.pageSize);
+		var totalPages = Math.ceil(this._maxSize / this._pageSize);
 		page--;
 		if(page < totalPages && page >= 0 && this._currentPage !== page){
 			this._currentPage = page;
@@ -192,7 +193,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 	gotoLastPage: function(){
 		// summary:
 		//		Go to the last page
-		var totalPages = Math.ceil(this._maxSize / this.pageSize);
+		var totalPages = Math.ceil(this._maxSize / this._pageSize);
 		this.gotoPage(totalPages);
 	},
 	
@@ -203,9 +204,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		if(typeof size === "string"){
 			size = parseInt(size, 10);
 		}
-		var startIndex = this.pageSize * this._currentPage;
+		var startIndex = this._pageSize * this._currentPage;
 		dojo.forEach(this.paginators, function(f){
-			f.currentPageSize = this.grid.rowsPerPage = this.pageSize = size;
+			f.currentPageSize = this.grid.rowsPerPage = this._pageSize = size;
 			if(size >= this._maxSize){
 				this.grid.rowsPerPage = this._defaultRowsPerPage;
 				this.showAll = true;
@@ -214,11 +215,11 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 				this.grid.usingPagination = true;
 			}
 		}, this);
-		var endIndex = startIndex + Math.min(this.pageSize, this._maxSize);
+		var endIndex = startIndex + Math.min(this._pageSize, this._maxSize);
 		if(endIndex > this._maxSize){
 			this.gotoLastPage();
 		}else{
-			var cp = Math.ceil(startIndex / this.pageSize);
+			var cp = Math.ceil(startIndex / this._pageSize);
 			if(cp !== this._currentPage){
 				this.gotoPage(cp + 1);
 			}else{
@@ -244,13 +245,13 @@ dojo.declare("dojox.grid.enhanced.plugins.Pagination", dojox.grid.enhanced._Plug
 		//		and scroll to the specific row
 		// inRowIndex: integer
 		//		The row index
-		var page = parseInt(inRowIndex / this.pageSize, 10),
-			totalPages = Math.ceil(this._maxSize / this.pageSize);
+		var page = parseInt(inRowIndex / this._pageSize, 10),
+			totalPages = Math.ceil(this._maxSize / this._pageSize);
 		if(page > totalPages){
 			return;
 		}
 		this.gotoPage(page + 1);
-		var rowIdx = inRowIndex % this.pageSize;
+		var rowIdx = inRowIndex % this._pageSize;
 		this.grid.setScrollTop(this.grid.scroller.findScrollTop(rowIdx) + 1);
 	},
 	
@@ -275,15 +276,15 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 			scope = request.scope || dojo.global,
 			onBegin = request.onBegin;
 		
-		request.start = plugin._currentPage * plugin.pageSize + request.start;
+		request.start = plugin._currentPage * plugin._pageSize + request.start;
 		self.startIdx = request.start;
-		self.endIdx = request.start + plugin.pageSize - 1;
+		self.endIdx = request.start + plugin._pageSize - 1;
 		if(onBegin && (plugin.showAll || dojo.every(plugin.paginators, function(p){
 			plugin.showAll = !p.sizeSwitch && !p.pageStepper && !p.gotoButton;
 			return plugin.showAll;
 		}))){
 			request.onBegin = function(size, req){
-				plugin._maxSize = plugin.pageSize = size;
+				plugin._maxSize = plugin._pageSize = size;
 				self.startIdx = 0;
 				self.endIdx = size - 1;
 				dojo.forEach(plugin.paginators, function(f){
@@ -295,7 +296,7 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 		}else if(onBegin){
 			request.onBegin = function(size, req){
 				req.start = 0;
-				req.count = plugin.pageSize;
+				req.count = plugin._pageSize;
 				plugin._maxSize = size;
 				self.endIdx = self.endIdx >= size ? (size - 1) : self.endIdx;
 				if(self.startIdx > size && size !== 0){
@@ -306,7 +307,7 @@ dojo.declare("dojox.grid.enhanced.plugins._ForcedPageStoreLayer", dojox.grid.enh
 					f.update();
 				});
 				req.onBegin = onBegin;
-				req.onBegin.call(scope, Math.min(plugin.pageSize, (size - self.startIdx)), req);
+				req.onBegin.call(scope, Math.min(plugin._pageSize, (size - self.startIdx)), req);
 			};
 		}
 		return dojo.hitch(this._store, this._originFetch)(request);
@@ -376,7 +377,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		// summary:
 		//		Function to update paging information and update
 		//		pagination bar display.
-		this.currentPageSize = this.plugin.pageSize;
+		this.currentPageSize = this.plugin._pageSize;
 		this._maxItemSize = this.plugin._maxSize;
 		
 		// update pagination bar display information
@@ -551,8 +552,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		}
 		dojo.forEach(this.pageSizes, function(size){
 			// create page size switch node
-			size = dojo.trim(size);
-			var labelValue = size.toLowerCase() == "all" ? this.plugin.nls.allItemsLabelTemplate : dojo.string.substitute(this.plugin.nls.pageSizeLabelTemplate, [size]);
+			var labelValue = size.toLowerCase() === "all" ? this.plugin.nls.allItemsLabelTemplate : dojo.string.substitute(this.plugin.nls.pageSizeLabelTemplate, [size]);
 			node = dojo.create("span", {innerHTML: size, title: labelValue, value: size, tabindex: 0}, this.sizeSwitchTd, "last");
 			// for accessibility
 			node.setAttribute("aria-label", labelValue);
@@ -638,7 +638,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 			label = "",
 			node = null,
 			i = startPage;
-		for(; i < this.maxPageStep + 1; i++){
+		for(; i < startPage + this.maxPageStep + 1; i++){
 			label = dojo.string.substitute(this.plugin.nls.pageStepLabelTemplate, [i]);
 			node = dojo.create("div", {innerHTML: i, value: i, title: label, tabindex: i < startPage + stepSize ? 0 : -1}, this.pageStepperDiv, "last");
 			node.setAttribute("aria-label", label);
@@ -756,7 +756,7 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		if(!this.gotoPageTd){
 			this._createGotoNode();
 		}
-		dojo.toggleClass(this.gotoPageDiv, "dojoxGridPaginatorGotoDivDisabled", this.plugin.pageSize >= this.plugin._maxSize);
+		dojo.toggleClass(this.gotoPageDiv, "dojoxGridPaginatorGotoDivDisabled", this.plugin._pageSize >= this.plugin._maxSize);
 		dojo.attr(this.gotoPageDiv, "tabindex", "-1");
 	},
 	
