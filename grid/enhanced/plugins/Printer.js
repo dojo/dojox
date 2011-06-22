@@ -91,7 +91,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		args = this._formalizeArgs(args);
 		var _this = this;
 		this.grid.exportGrid("table", args, function(str){
-			_this._wrapHTML(args.title, args.cssFiles, args.titleInBody + str).then(onExported);			
+			_this._wrapHTML(args.title, args.cssFiles, args.titleInBody + str).then(onExported);
 		});
 	},
 	exportSelectedToHTML: function(args, onExported){
@@ -125,7 +125,6 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		});
 		return dojo.DeferredList.prototype.gatherResults(dl);
 	},
-
 	_print: function(/* string */htmlStr){
 		// summary:
 		//		Do the print job.
