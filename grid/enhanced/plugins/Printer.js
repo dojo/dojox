@@ -1,5 +1,6 @@
 dojo.provide("dojox.grid.enhanced.plugins.Printer");
 
+dojo.require("dojo.DeferredList");
 dojo.require("dojox.grid.enhanced._Plugin");
 dojo.require("dojox.grid.enhanced.plugins.exporter.TableWriter");
 
@@ -78,7 +79,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		//		public
 		// args: __printArgs?
 		//		Arguments for print.
-		this._print(this.exportSelectedToHTML(args));
+		this.exportSelectedToHTML(args, dojo.hitch(this, this._print));
 	},
 	exportToHTML: function(args, onExported){
 		// summary:
@@ -94,10 +95,10 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		args = this._formalizeArgs(args);
 		var _this = this;
 		this.grid.exportGrid("table", args, function(str){
-			onExported(_this._wrapHTML(args.title, args.cssFiles, args.titleInBody + str));
+			_this._wrapHTML(args.title, args.cssFiles, args.titleInBody + str).then(onExported);
 		});
 	},
-	exportSelectedToHTML: function(args){
+	exportSelectedToHTML: function(args, onExported){
 		// summary:
 		//		Export selected rows to HTML string, but do NOT print.
 		//		Users can use this to implement print preview.
@@ -107,8 +108,26 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		// args: __printArgs?
 		//		Arguments for print.
 		args = this._formalizeArgs(args);
-		var str = this.grid.exportSelected("table", args.writerArgs);
-		return this._wrapHTML(args.title, args.cssFiles, args.titleInBody + str);	//String
+		var _this = this;
+		this.grid.exportSelected("table", args.writerArgs, function(str){
+			_this._wrapHTML(args.title, args.cssFiles, args.titleInBody + str).then(onExported);
+		});
+	},
+
+	_loadCSSFiles: function(cssFiles){
+		var dl = dojo.map(cssFiles, function(cssFile){
+			cssFile = dojo.trim(cssFile);
+			if(cssFile.substring(cssFile.length - 4).toLowerCase() === '.css'){
+				return dojo.xhrGet({
+					url: cssFile
+				});
+			}else{
+				var d = new dojo.Deferred();
+				d.callback(cssFile);
+				return d;
+			}
+		});
+		return dojo.DeferredList.prototype.gatherResults(dl);
 	},
 	_print: function(/* string */htmlStr){
 		// summary:
@@ -121,7 +140,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		//		undefined
 		var win, _this = this,
 			fillDoc = function(w){
-				var doc = win.document;
+				var doc = w.document;
 				doc.open();
 				doc.write(htmlStr);
 				doc.close();
@@ -159,7 +178,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 						height: "1px",
 						position: "absolute",
 						right: 0,
-						bottoom: 0,
+						bottom: 0,
 						border: "none",
 						overflow: "hidden"
 					});
@@ -173,10 +192,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 			}
 			win = fn.contentWindow;
 			fillDoc(win);
-			// IE requires the frame to be focused for
-			// print to work, but since this is okay for all
-			// no special casing.
-			dijit.focus(fn);
+			//IE requires the frame to be focused for print to work, and it's harmless for FF.
+			win.focus();
 			win.print();
 		}
 	},
@@ -193,26 +210,28 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 		//		Content to print, not including <head></head> part and <html> tags
 		// returns:
 		//		the wrapped HTML string ready for print
-		var html = ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
-					'<html><head><title>', title,
+		return this._loadCSSFiles(cssFiles).then(function(cssStrs){
+			var i, html = ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
+					'<html ', dojo._isBodyLtr() ? '' : 'dir="rtl"', '><head><title>', title,
 					'</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>'];
-		for(var i = 0; i < cssFiles.length; ++i){
-			html.push('<link rel="stylesheet" type="text/css" href="' + cssFiles[i] + '" />');
-		}
-		html.push('</head>');
-		if(body_content.search(/^\s*<body/i) < 0){
-			body_content = '<body>' + body_content + '</body>';
-		}
-		html.push(body_content);
-		return html.join('\n');	//String
+			for(i = 0; i < cssStrs.length; ++i){
+				html.push('<style type="text/css">', cssStrs[i], '</style>');
+			}
+			html.push('</head>');
+			if(body_content.search(/^\s*<body/i) < 0){
+				body_content = '<body>' + body_content + '</body>';
+			}
+			html.push(body_content, '</html>');
+			return html.join('');
+		});
 	},
 	normalizeRowHeight: function(doc){
-		var views = dojo.query("table.grid_view", doc.body);
+		var views = dojo.query(".grid_view", doc.body);
 		var headPerView = dojo.map(views, function(view){
-			return dojo.query("thead.grid_header", view)[0];
+			return dojo.query(".grid_header", view)[0];
 		});
 		var rowsPerView = dojo.map(views, function(view){
-			return dojo.query("tbody.grid_row", view);
+			return dojo.query(".grid_row", view);
 		});
 		var rowCount = rowsPerView[0].length;
 		var i, v, h, maxHeight = 0;
@@ -237,9 +256,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Printer", dojox.grid.enhanced._Plugin,
 				dojo.style(rowsPerView[v][i], "height", maxHeight + "px");
 			}
 		}
-		var left = 0;
+		var left = 0, ltr = dojo._isBodyLtr();
 		for(v = 0; v < views.length; ++v){
-			dojo.style(views[v], "left", left + "px");
+			dojo.style(views[v], ltr ? "left" : "right", left + "px");
 			left += dojo.marginBox(views[v]).w;
 		}
 	},
