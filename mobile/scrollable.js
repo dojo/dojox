@@ -384,7 +384,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.isFormElement = function(node){
-		if(node.nodeType !== 1){ return false; }
+		if(node && node.nodeType !== 1){ node = node.parentNode; }
+		if(!node || node.nodeType !== 1){ return false; }
 		var t = node.tagName;
 		return (t === "SELECT" || t === "INPUT" || t === "TEXTAREA" || t === "BUTTON");
 	};
