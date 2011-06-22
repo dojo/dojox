@@ -48,6 +48,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		
 		this._createZoomingCursor();
 		
+		// add transparent background for event capture
+		this.mapBackground = this.surface.createRect({x: 0, y: 0, width: containerBounds.w, height: containerBounds.w}).setFill("rgba(0,0,0,0)");
+		
 		this.mapObj = this.surface.createGroup();
 		this.mapObj.features = {};
 		
@@ -72,13 +75,13 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		//	tags:
 		//		private
 		
-		var coords = dojo.coords(this.container,true);
+		var position = dojo.position(this.container,true);
 		var marginBox = dojo.marginBox(this.container);
 		// use contentBox for correct width and height - surface spans outside border otherwise
 		var contentBox = dojo.contentBox(this.container);
 		this._storedContainerBounds = {
-				x: coords.x,
-				y: coords.y,
+				x: position.x,
+				y: position.y,
 				w: contentBox.w || 100,
 				h: contentBox.h || 100
 			};
@@ -100,7 +103,8 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 			return;
 		}
 		
-		// set surface dimensions
+		// set surface dimensions, and background
+		this.mapBackground.setShape({width:newBounds.w, height:newBounds.h});
 		this.surface.setDimensions(newBounds.w,newBounds.h);
 		
 		this.mapObj.marker.hide();
@@ -284,7 +288,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		if (typeof series == "object") {
 			this._addSeriesImpl(series);
 		} else {
-	        // load map shape file
+	        // load series file
 			if (typeof series == "string" && series.length > 0) {
 				dojo.xhrGet({
 					url: series,

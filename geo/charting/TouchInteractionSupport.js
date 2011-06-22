@@ -138,7 +138,6 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			this._map.fitToMapArea(feature._bbox, 15, true);
 		} else {
 			// perform a basic 2x zoom on touch
-			console.log("default x2 zoom");
 			var touches = touchEvent.touches;
 			var containerBounds = this._map._getContainerBounds();
 			var offX = touches[0].pageX - containerBounds.x;
@@ -159,8 +158,6 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	tags:
 		//		private
 		var feature = null;
-		//console.log("touchEvent.gfxTarget " + touchEvent.gfxTarget);
-		//console.log(" touchEvent.gfxTarget.getParent " + touchEvent.gfxTarget.getParent);
 		if (touchEvent.gfxTarget && touchEvent.gfxTarget.getParent) {
 			feature = this._map.mapObj.features[touchEvent.gfxTarget.getParent().id];
 		}

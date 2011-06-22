@@ -156,7 +156,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 
 		// store map location where mouse down occurred
 		var containerBounds = this._map._getContainerBounds();
-		var offX = mouseEvent.pageX - containerBounds.x,
+		var offX = mouseEvent.pageX	- containerBounds.x,
 			offY = mouseEvent.pageY - containerBounds.y;
 		var mapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 		this._mapClickLocation.x = mapPoint.x;
@@ -169,6 +169,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			this._mouseUpListener = dojo.connect(dojo.doc,"onmouseup",this, this._mouseUpHandler);
 			
 		} else {
+			var node = dojo.byId(this._map.container);
 			this._mouseDragListener = dojo.connect(node,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
 			this._mouseUpListener = this._map.surface.connect("onmouseup", this, this._mouseUpHandler);

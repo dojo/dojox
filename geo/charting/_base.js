@@ -21,8 +21,8 @@ function(dojo, lang, dojox, dhtml, matrix, Tooltip, NodeListTraverse) {
 		var realMatrix = gfxObject._getRealMatrix() || {xx:1,xy:0,yx:0,yy:1,dx:0,dy:0};
 		var point = matrix.multiplyPoint(realMatrix, bbox.x, bbox.y);
 		var gfxDomContainer = dgc._getGfxContainer(gfxObject);
-		gfxObject.x = dojo.coords(gfxDomContainer,true).x + point.x,
-		gfxObject.y = dojo.coords(gfxDomContainer,true).y + point.y,
+		gfxObject.x = dojo.position(gfxDomContainer,true).x + point.x,
+		gfxObject.y = dojo.position(gfxDomContainer,true).y + point.y,
 		gfxObject.width = bbox.width * realMatrix.xx,
 		gfxObject.height = bbox.height * realMatrix.yy
 		return gfxObject;
