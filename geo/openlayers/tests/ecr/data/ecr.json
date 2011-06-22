@@ -23,9 +23,9 @@
 		"stops": [{
 			"name": "port1",
 			"port": {
-				"_reference": "Kabul",
+				"_reference": "Kabul"
 				},
-			"date": "2010-10-08",
+
 			"capacity": "12"
 		},
 		{
@@ -33,7 +33,7 @@
 			"port": {
 				"_reference": "Buenos Aires"
 			},
-			"date": "2010-11-08",
+
 			"capacity": "20"
 		}]
 	}]

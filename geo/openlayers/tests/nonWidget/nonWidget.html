@@ -4,7 +4,8 @@
 <link rel="stylesheet" type="text/css" href="../../../../../dijit/themes/tundra/tundra.css">
 <title>Dojo Base Layers</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="GENERATOR" content="Rational® Application Developer Standard Edition for WebSphere® Software">
+<meta name="GENERATOR"
+	content="Rational® Application Developer Standard Edition for WebSphere® Software">
 <meta name="viewport" content="user-scalable=no, width=device-width" />
 
 <!--  Google API -->
@@ -16,26 +17,13 @@
 <!-- Yahoo -->
 <script src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=euzuro-openlayers"></script>
 
-<!--  OpenLayers
-<script type="text/javascript" src="../../../openlayers_current/lib/OpenLayers.js"></script>
- -->
-
 <!-- hosted version -->
 <script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
-
-<script type="text/javascript">
-	var djConfig = {
-		debugAtAllCosts : true,
-		isDebug : true,
-		locale : 'en',
-		parseOnLoad : true
-	};
-</script>
 
 <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 
 <script type="text/javascript">
-  dojo.require("dojox.geo.openlayers.Map");
+	dojo.require("dojox.geo.openlayers.Map");
 	dojo.require("dojo.parser");
 
 	var map;
@@ -50,10 +38,9 @@
 
 		var div = dojo.byId("map");
 		map = new dojox.geo.openlayers.Map(div, options);
-		map.fitTo([ -160, 70, 160, -70 ]);
+		map.fitTo([-160, 70, 160, -70]);
 
 	});
-
 </script>
 
 <style type="text/css">

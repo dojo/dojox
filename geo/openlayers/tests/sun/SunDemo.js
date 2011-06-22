@@ -1,10 +1,17 @@
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/date",
+				"dojox/geo/openlayers/tests/sun/Sun",
+				"dojox/geo/openlayers/widget/Map",
+				"dojox/timing/_base",
+				"dojox/geo/openlayers/GfxLayer",
+				"dojox/geo/openlayers/GeometryFeature",
+				"dojox/geo/openlayers/LineString",
+				"dojox/geo/openlayers/Point",
+				"dojox/geo/openlayers/JsonImport"], function(dojo, declare){
 
-define([ "dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/tests/sun/Sun",
-		"dojox/geo/openlayers/widget/Map", "dojox/geo/openlayers/GfxLayer",
-		"dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/LineString",
-		"dojox/geo/openlayers/Point", "dojox/geo/openlayers/JsonImport" ], function(dojo, declare){
-
-	return dojo.declare("dojox.geo.openlayers.tests.sun.SunDemo", [], {
+	return dojo.declare("dojox.geo.openlayers.tests.sun.SunDemo", null, {
+		now : true,
 
 		constructor : function(div){
 
@@ -13,39 +20,107 @@ define([ "dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/tests/
 				touchHandler : true
 			};
 
-			var map = new dojox.geo.openlayers.widget.Map();
+			var map = new dojox.geo.openlayers.widget.Map(options);
 			dojo.place(map.domNode, div);
 			map.startup();
-			map.map.fitTo([ -160, 70, 160, -70 ]);
+			map.map.fitTo([-160, 70, 160, -70]);
 			this.map = map;
 
 			this.sun = new dojox.geo.openlayers.tests.sun.Sun();
 			var layer = new dojox.geo.openlayers.GfxLayer();
+			this.layer = layer;
+			this.map.map.addLayer(layer);
 
+			this.updateFeatures();
+
+		},
+
+		updateFeatures : function(){
+			var l = this.layer;
+			l.removeFeature(l.getFeatures());
 			var f = this.twilightZone({
 				x1 : -180,
 				y1 : 85,
 				x2 : 180,
 				y2 : -85
 			});
-			layer.addFeature(f);
+			l.addFeature(f);
 
 			f = this.createStar();
-			layer.addFeature(f);
+			l.addFeature(f);
 
 			f = this.createSun();
-			layer.addFeature(f);
+			l.addFeature(f);
 
-			this.map.map.addLayer(layer);
+			l.redraw();
+		},
 
+		getHour : function(date){
+			if (!date)
+				date = this.sun.getDate();
+			return date.getHours() + date.getMinutes() / 60 + date.getSeconds() / 3600;
+		},
+
+		getDay : function(date){
+			if (!date)
+				date = this.sun.getDate();
+			var start = new Date(date.getFullYear(), 0, 1);
+			var oneDay = 1000 * 60 * 60 * 24;
+			var day = Math.floor((date.getTime() - start.getTime()) / oneDay);
+			return day;
+		},
+
+		setDay : function(day){
+			var now = this.sun.getDate();
+			var year = now.getFullYear();
+			var hours = now.getHours();
+			var minutes = now.getMinutes();
+			var seconds = now.getSeconds();
+			var milliSeconds = now.getMilliseconds();
+			var start = new Date(year, 0, 1, hours, minutes, seconds, milliSeconds);
+			start = dojo.date.add(start, "day", day);
+			this.setDate(start);
+		},
+
+		setTime : function(t){
+			var date = this.sun.getDate();
+
+			var year = date.getFullYear();
+			var month = date.getMonth();
+			var day = date.getDate();
+			var hours = Math.floor(t);
+			t = 60 * (t - hours);
+			var minutes = Math.floor(t);
+			t = 60 * (t - minutes);
+			var seconds = Math.floor(t);
+			date = new Date(year, month, day, hours, minutes, seconds, 0);
+
+			this.setDate(date);
+		},
+
+		setDate : function(date){
+			this.now = !date;
+			this.sun.setDate(date);
+			this.updateFeatures();
+		},
+
+		advance : function(ms){
+			var date = this.sun.getDate();
+			date = dojo.date.add(date, "millisecond", ms);
+			this.setDate(date);
+		},
+
+		getTZone : function(){
+			return this.tZone;
 		},
 
 		twilightZone : function(clip){
 			var tz = this.sun.twilightZone(clip);
 			var g = new dojox.geo.openlayers.LineString(tz);
 			var gf = new dojox.geo.openlayers.GeometryFeature(g);
-			gf.setStroke([ 248, 236, 56 ]);
-			gf.setFill([ 252, 251, 45, 0.3 ]);
+			gf.setStroke([248, 236, 56]);
+			gf.setFill([252, 251, 45, 0.3]);
+			this.tZone = gf;
 			return gf;
 		},
 
@@ -88,7 +163,7 @@ define([ "dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/tests/
 				path.setShape({
 					path : star
 				});
-				path.setStroke([ 0, 100, 0 ]);
+				path.setStroke([0, 100, 0]);
 				g.add(path);
 				return g;
 			});
@@ -127,15 +202,44 @@ define([ "dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/tests/
 			gf.setFill({
 				type : "radial",
 				r : 15,
-				colors : [ {
+				colors : [{
 					offset : 0,
-					color : [ 248, 236, 100 ]
+					color : [248, 236, 100]
 				}, {
 					offset : 1,
-					color : [ 255, 255, 255, 0.4 ]
-				} ]
+					color : [255, 255, 255, 0.4]
+				}]
 			});
+
 			return gf;
+		},
+
+		_timer : null,
+
+		startTimer : function(checked, time){
+			var t = this._timer;
+			if (!this._timer) {
+				if (!time)
+					time = 1000;
+
+				t = this._timer = new dojox.timing.Timer(time);
+				t.onTick = dojo.hitch(this, function(){
+					if (this.now)
+						this.setDate();
+					else
+						this.advance(time);
+				});
+				t.onStart = function(){
+
+				};
+				t.onStop = function(){
+
+				};
+			}
+			if (checked)
+				t.start();
+			else
+				t.stop();
 		}
 	});
 

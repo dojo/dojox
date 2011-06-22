@@ -1,7 +1,10 @@
-
-define([ "dojo/_base/kernel", "dojo/_base/declare", "dojo/query", "dojo/_base/array",  "dijit/_Widget",
-		"dojox/geo/openlayers/Map", "dojox/geo/openlayers/GfxLayer" ], function(dojo, declare, queryArg, arrayArg,
-		widgetArg, mapArg, gfxLayerArg){
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/query",
+				"dojo/_base/array",
+				"dijit/_Widget",
+				"dojox/geo/openlayers/Map",
+				"dojox/geo/openlayers/GfxLayer"], function(dojo, declare, queryArg, arrayArg, widgetArg, mapArg, gfxLayerArg){
 
 	return dojo.declare("dojox.geo.openlayers.widget.Map", dijit._Widget, {
 		//	summary: 
@@ -130,12 +133,12 @@ define([ "dojo/_base/kernel", "dojo/_base/declare", "dojo/query", "dojo/_base/ar
 			switch (arguments.length) {
 				case 0:
 					// case 0, do not resize the div, just the surface
-					break;
+				break;
 				case 1:
 					// argument, override node box
 					box = dojo.mixin({}, b);
 					dojo.marginBox(olm.div, box);
-					break;
+				break;
 				case 2:
 					// two argument, width, height
 					box = {
@@ -143,7 +146,7 @@ define([ "dojo/_base/kernel", "dojo/_base/declare", "dojo/query", "dojo/_base/ar
 						h : arguments[1]
 					};
 					dojo.marginBox(olm.div, box);
-					break;
+				break;
 			}
 			olm.updateSize();
 		}

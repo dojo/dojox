@@ -28,7 +28,7 @@
 	dojo.require("dijit.layout.BorderContainer");
 	dojo.require("dojo.parser");
 
-	var maps = [ "osm", "google", "yahoo", "arcGis", "virtualEarth" ];
+	var maps = ["osm", "google", "yahoo", "arcGis", "virtualEarth"];
 
 	dojo.addOnLoad(function(){
 		dojo.forEach(maps, function(map){
@@ -74,40 +74,45 @@
 
 </head>
 <body class="claro">
-  <div dojoType="dijit.layout.BorderContainer" design="headline" style="height: 100%; width: 100%;">
+	<div dojoType="dijit.layout.BorderContainer" design="headline" style="height: 100%; width: 100%;">
 
-    <div dojoType="dijit.layout.ContentPane" region="top" style="height: 200px;" splitter="true">
-      <div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="OSM" initialLocation="{
+		<div dojoType="dijit.layout.ContentPane" region="top" style="height: 200px;" splitter="true">
+			<div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="OSM"
+				initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.2 }" id="osm"></div>
 
-    </div>
+		</div>
 
-    <div dojoType="dijit.layout.ContentPane" region="center">
-      <div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="Google" initialLocation="{
+		<div dojoType="dijit.layout.ContentPane" region="center">
+			<div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="Google"
+				initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.2 }" id="google"></div>
-    </div>
+		</div>
 
-    <div dojoType="dijit.layout.ContentPane" region="bottom" style="height: 200px;" splitter="true">
-      <div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="Yahoo" initialLocation="{
+		<div dojoType="dijit.layout.ContentPane" region="bottom" style="height: 200px;" splitter="true">
+			<div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="Yahoo"
+				initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.2 }" id="yahoo"></div>
-    </div>
+		</div>
 
-    <div dojoType="dijit.layout.ContentPane" region="left" style="width: 200px;" splitter="true">
-      <div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="ArcGIS" initialLocation="{
+		<div dojoType="dijit.layout.ContentPane" region="left" style="width: 200px;" splitter="true">
+			<div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="ArcGIS"
+				initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.2 }" id="arcGis"></div>
-    </div>
+		</div>
 
-    <div dojoType="dijit.layout.ContentPane" region="right" style="width: 200px;" splitter="true">
-      <div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="VirtualEarth" initialLocation="{
+		<div dojoType="dijit.layout.ContentPane" region="right" style="width: 200px;" splitter="true">
+			<div dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="VirtualEarth"
+				initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.2 }" id="virtualEarth"></div>
-    </div>
+		</div>
 
-  </div>
+	</div>
 </body>
 </html>
 

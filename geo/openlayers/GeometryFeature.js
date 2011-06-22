@@ -1,8 +1,12 @@
-
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojox/geo/openlayers/Point",
-		"dojox/geo/openlayers/LineString", "dojox/geo/openlayers/Collection",
-		"dojox/geo/openlayers/Feature" ], function(dojo, declare, arrayArg, langArg, pointArg,
-		lineStringArg, collectionArg, featureArg){
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/array",
+				"dojo/_base/lang",
+				"dojox/geo/openlayers/Point",
+				"dojox/geo/openlayers/LineString",
+				"dojox/geo/openlayers/Collection",
+				"dojox/geo/openlayers/Feature"], function(dojo, declare, arrayArg, langArg, pointArg, lineStringArg,
+																									collectionArg, featureArg){
 
 	return dojo.declare("dojox.geo.openlayers.GeometryFeature", dojox.geo.openlayers.Feature, {
 		//	summary:
@@ -131,9 +135,9 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_ba
 				g = this._geometry;
 
 			var shape = null;
-			if (g instanceof dojox.geo.openlayers.Point)
+			if (g instanceof dojox.geo.openlayers.Point) {
 				shape = s.createCircle();
-			else if (g instanceof dojox.geo.openlayers.LineString) {
+			} else if (g instanceof dojox.geo.openlayers.LineString) {
 				shape = s.createPolyline();
 			} else if (g instanceof dojox.geo.openlayers.Collection) {
 				var grp = s.createGroup();
@@ -360,7 +364,8 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_ba
 			var g = this._geometry;
 			var shp = g.shape;
 			g.shape = null;
-			shp.removeShape();
+			if (shp)
+				shp.removeShape();
 			if (g instanceof dojox.geo.openlayers.Collection) {
 				dojo.forEach(g.coordinates, function(i){
 					this.remove(i);

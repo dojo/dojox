@@ -4,7 +4,8 @@
 <link rel="stylesheet" type="text/css" href="../../../../dijit/themes/tundra/tundra.css">
 <title>Dojo OpenLayers Benchmarks</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="GENERATOR" content="Rational® Application Developer Standard Edition for WebSphere® Software">
+<meta name="GENERATOR"
+	content="Rational® Application Developer Standard Edition for WebSphere® Software">
 <meta name="viewport" content="user-scalable=no, width=device-width" />
 
 <!-- hosted version -->
@@ -12,9 +13,7 @@
 
 <script type="text/javascript">
 	var djConfig = {
-		debugAtAllCosts : true,
 		isDebug : true,
-		locale : 'en',
 		parseOnLoad : true
 	};
 </script>
@@ -124,13 +123,13 @@
 				Cookies.erase(cumulativeTimeString);
 				benchPoints();
         benchLines();
-//        showLayers();
+        showLayers();
 			}
 		}
 	}
   
   var pointLayer = null;
-	var numPoints = 1000;
+	var numPoints = dojo.isIE ? 10 : 1000;
 	function benchPoints(){
 		var layer = new dojox.geo.openlayers.GfxLayer();
 		map.addLayer(layer);
@@ -258,6 +257,7 @@ var lineLayer = null;
     var d = dojo.create("div", {
     }, msgDiv);
     d.textContent = msg;
+    d.innerText = msg;
   }
 </script>
 

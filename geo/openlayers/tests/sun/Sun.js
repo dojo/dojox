@@ -1,8 +1,6 @@
-// dojo.provide allows pages to use all of the types declared in this resource.
-//dojo.provide("dojox.geo.openlayers.tests.sun.Sun");
-
-define(["dojo/_base/kernel",  "dojo/_base/declare"], function(dojo, declare){
+define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo, declare){
 	return dojo.declare("dojox.geo.openlayers.tests.sun.Sun", null, {
+		_now : false,
 
 		constructor : function(date){
 			if (!date)
@@ -23,6 +21,10 @@ define(["dojo/_base/kernel",  "dojo/_base/declare"], function(dojo, declare){
 			if (!date)
 				date = new Date();
 			this._date = date;
+		},
+
+		isNow : function(){
+			return this._now;
 		},
 
 		clip : function(p, c){
@@ -73,7 +75,7 @@ define(["dojo/_base/kernel",  "dojo/_base/declare"], function(dojo, declare){
 					eLat = c.y1;
 			}
 			var dt = this.getDate();
-			var LT = dt.getUTCHours() + dt.getUTCMinutes() / 60;
+			var LT = dt.getUTCHours() + dt.getUTCMinutes() / 60 + dt.getUTCSeconds() / 3600;
 			var tau = 15 * (LT - 12);
 			var o = this.sunDecRa();
 			var dec = o.dec;
@@ -124,9 +126,9 @@ define(["dojo/_base/kernel",  "dojo/_base/declare"], function(dojo, declare){
 			var o = this.sunDecRa();
 			var dec = o.dec;
 			var dt = this.getDate();
-			var LT = dt.getUTCHours() + dt.getUTCMinutes() / 60;
+			var LT = dt.getUTCHours() + dt.getUTCMinutes() / 60 + dt.getUTCSeconds() / 3600;
 			var tau = 15 * (LT - 12);
-			var et = this.et(dt) / 60;
+			var et = 0; // this.et(dt) / 60;
 			var p = {
 				x : -tau + et,
 				y : dec
@@ -193,7 +195,7 @@ define(["dojo/_base/kernel",  "dojo/_base/declare"], function(dojo, declare){
 		},
 
 		et : function(date){
-			if (date == null)
+			if (!date)
 				date = this.getDate();
 			var year = date.getUTCFullYear();
 			var month = date.getUTCMonth() + 1;

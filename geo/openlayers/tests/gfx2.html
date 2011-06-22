@@ -11,10 +11,7 @@
 
 <script type="text/javascript">
 	var djConfig = {
-		debugAtAllCosts : true,
-		isDebug : true,
 		parseOnLoad : true
-	//    ,gfxRenderer : 'canvas'
 	};
 </script>
 
@@ -27,8 +24,8 @@
 	dojo.require("dojox.geo.openlayers.GeometryFeature");
 	dojo.require("dojox.gfx");
 	dojo.require("dojox.gfx.move");
-  dojo.require("dojox.gfx.fx");
-  dojo.require("dojo.fx");
+	dojo.require("dojox.gfx.fx");
+	dojo.require("dojo.fx");
 	dojo.require("dojo.colors");
 	dojo.require("dojo.parser");
 
@@ -70,7 +67,7 @@
 				var status = null;
 				function createText(surface, x, y, text){
 					var t = surface.createText({});
-					t.moveToFront().setFill(new dojo.Color([ 0, 0, 0, 1 ])).setFont({
+					t.moveToFront().setFill(new dojo.Color([0, 0, 0, 1])).setFont({
 						family : "serif",
 						//      variant : "small-caps",
 						weight : "normal",
@@ -83,7 +80,7 @@
 					});
 					t.setFill("red");
 					t.setStroke({
-						color : [ 0, 0, 0, 0 ],
+						color : [0, 0, 0, 0],
 						weight : 0.5
 					});
 					var anim = dojox.gfx.fx.animateFill({
@@ -101,8 +98,8 @@
 				}
 
 				function showStatus(event, surface, star, text){
-        var mx = event.pageX;
-        var my = event.pageY;
+					var mx = event.pageX;
+					var my = event.pageY;
 					if (dojo.isArray(text)) {
 						var x = mx + 10;
 						var y = my + 10;
@@ -139,7 +136,10 @@
 				path.setShape({
 					path : star
 				});
-				var msg = [ "star r1:" + r1 + " r2:" + r2, "branches: " + branches, "longitude: " + x.toFixed(4), "latitude: " + y.toFixed(4) ];
+				var msg = [	"star r1:" + r1 + " r2:" + r2,
+										"branches: " + branches,
+										"longitude: " + x.toFixed(4),
+										"latitude: " + y.toFixed(4)];
 				path.connect("onmouseenter", function(event){
 
 				});
@@ -156,13 +156,13 @@
 			var g = Math.floor(Math.random() * 255);
 			var b = Math.floor(Math.random() * 255);
 			var t = 1;
-			var c1 = [ r, g, b, t ];
+			var c1 = [r, g, b, t];
 			pf.setStroke(c1);
 			r = Math.floor(Math.random() * 255);
 			g = Math.floor(Math.random() * 255);
 			b = Math.floor(Math.random() * 255);
 			t = Math.random() * 0.75 + 0.25;
-			var c2 = [ r, g, b, t ];
+			var c2 = [r, g, b, t];
 			pf.setFill(c2);
 			layer.addFeature(pf);
 		}
@@ -203,12 +203,11 @@
 <body class="tundra">
 </head>
 
-<div id="map" dojoType="dojox.geo.openlayers.widget.Map" 
-    baseLayerType="ArcGIS" initialLocation="{
+<div id="map" dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="ArcGIS"
+	initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.002 }"
-  style="background-color: #b5d0d0; width: 100%; height: 100%;"
-></div>
+	style="background-color: #b5d0d0; width: 100%; height: 100%;"></div>
 
 </body>
 </html>

@@ -4,7 +4,8 @@
 <link rel="stylesheet" type="text/css" href="../../../../dijit/themes/tundra/tundra.css">
 <title>GFX Layer</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="GENERATOR" content="Rational Application Developer Standard Edition for WebSphere Software">
+<meta name="GENERATOR"
+	content="Rational Application Developer Standard Edition for WebSphere Software">
 <meta name="viewport" content="user-scalable=no, width=device-width" />
 
 <!-- hosted version -->
@@ -12,7 +13,6 @@
 
 <script type="text/javascript">
 	var djConfig = {
-		debugAtAllCosts : true,
 		isDebug : true,
 		parseOnLoad : true
 	};
@@ -45,7 +45,7 @@
 		};
 		var pg2 = new dojox.geo.openlayers.Point(p2);
 
-		var grp = new dojox.geo.openlayers.Collection([ pg1, pg2 ]);
+		var grp = new dojox.geo.openlayers.Collection([pg1, pg2]);
 
 		var gf = new dojox.geo.openlayers.GeometryFeature(grp);
 		gf.setStroke("red");
@@ -58,7 +58,7 @@
 		var cy = 43.651;
 		var ex = 0.001;
 
-		var a1 = [ {
+		var a1 = [{
 			x : cx - ex,
 			y : cy + ex
 		}, {
@@ -73,10 +73,10 @@
 		}, {
 			x : cx - ex,
 			y : cy + ex
-		} ];
+		}];
 
 		ex = 0.00018;
-		var a2 = [ {
+		var a2 = [{
 			x : cx - ex,
 			y : cy + ex
 		}, {
@@ -91,15 +91,15 @@
 		}, {
 			x : cx - ex,
 			y : cy + ex
-		} ];
+		}];
 
 		var f1 = new dojox.geo.openlayers.LineString(a1);
 		var f2 = new dojox.geo.openlayers.LineString(a2);
 
-		grp = new dojox.geo.openlayers.Collection([ f1, f2 ]);
+		grp = new dojox.geo.openlayers.Collection([f1, f2]);
 		gf = new dojox.geo.openlayers.GeometryFeature(grp);
 		gf.setStroke("blue");
-		gf.setFill([ 0, 0, 0, 0.2 ]);
+		gf.setFill([0, 0, 0, 0.2]);
 		layer.addFeature(gf);
 		dojo.forEach(a2, function(p){
 			var pg = new dojox.geo.openlayers.Point(p);
@@ -116,9 +116,10 @@
 				return path;
 			});
 			gf.setStroke("aqua");
-			gf.setFill({
-				color : [ 255, 100, 0 ]
-			});
+			//      gf.setFill({
+			//        color : [ 255, 100, 0 ]
+			//      });
+			gf.setFill([255, 100, 0]);
 			layer.addFeature(gf);
 		});
 		layer.redraw();
@@ -152,11 +153,11 @@
 <body class="tundra">
 </head>
 
-<div id="map" dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="'OSM'" initialLocation="{
+<div id="map" dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="'OSM'"
+	initialLocation="{
     position : [7.154126, 43.651748],
     extent : 0.002 }"
-  style="background-color: #b5d0d0; width: 100%; height: 100%;"
-></div>
+	style="background-color: #b5d0d0; width: 100%; height: 100%;"></div>
 
 </body>
 </html>

@@ -19,7 +19,7 @@
 	},
 	{
 		"type": "port",
-		"name": "São Paulo",
+		"name": "Sao Paulo",
 		"longitude": "-46.63611111",
 		"latitude": "-23.5475",
 		"offer": "11",
@@ -83,7 +83,7 @@
 	},
 	{
 		"type": "port",
-		"name": "Bogotá",
+		"name": "Bogota",
 		"longitude": "-74.0833333",
 		"latitude": "4.6",
 		"offer": "12",
@@ -264,7 +264,7 @@
 		"latitude": "25.0391667",
 		"offer": "22",
 		"demand": "27"
-	},
+		},
 	{
 		"type": "port",
 		"name": "New York City",

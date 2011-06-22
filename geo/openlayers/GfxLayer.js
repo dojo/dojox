@@ -1,8 +1,14 @@
-
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "dojox/gfx", "dojox/gfx/_base",
-		"dojox/gfx/shape", "dojox/gfx/path", "dojox/geo/openlayers/Feature",
-		"dojox/geo/openlayers/Layer" ], function(dojo, declare, connectArg, htmlArg, gfxArg, gbaseArg, shapeArg,
-		pathArg, featureArg, layerArg){
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/connect",
+				"dojo/_base/html",
+				"dojox/gfx",
+				"dojox/gfx/_base",
+				"dojox/gfx/shape",
+				"dojox/gfx/path",
+				"dojox/geo/openlayers/Feature",
+				"dojox/geo/openlayers/Layer"], function(dojo, declare, connectArg, htmlArg, gfxArg, gbaseArg, shapeArg,
+																								pathArg, featureArg, layerArg){
 
 	return dojo.declare("dojox.geo.openlayers.GfxLayer", dojox.geo.openlayers.Layer, {
 		//	summary: 
@@ -20,10 +26,12 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/connect", "dojo/_
 			//		Constructs a new GFX layer.
 			var s = dojox.gfx.createSurface(this.olLayer.div, 100, 100);
 			this._surface = s;
+			var vp;
 			if (options && options.viewport)
-				this._viewport = options.viewport;
+				vp = options.viewport;
 			else
-				this._viewport = s.createGroup();
+				vp = s.createGroup();
+			this.setViewport(vp);
 			dojo.connect(this.olLayer, "onMapResize", this, "onMapResize");
 			this.olLayer.getDataExtent = this.getDataExtent;
 		},
@@ -73,6 +81,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/connect", "dojo/_
 			var ret = this._surface.getDimensions();;
 			return ret;
 		},
+
 		getSurface : function(){
 			//	summary:
 			//		Get the underlying dojox.gfx.Surface
@@ -101,6 +110,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/connect", "dojo/_
 
 			if (event.zoomChanged || left || top) {
 				var d = this.olLayer.div;
+
 				dojo.style(d, {
 					left : -left + "px",
 					top : -top + "px"
@@ -114,11 +124,6 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/connect", "dojo/_
 
 				this.inherited(arguments);
 
-				//			if (event.zoomChanged) {
-				//				dojo.forEach(this._features, function(f){
-				//					this.renderFeature(f);
-				//				}, this);
-				//			}
 			}
 		},
 

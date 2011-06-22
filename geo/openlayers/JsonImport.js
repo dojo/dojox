@@ -1,8 +1,12 @@
-
-define(["dojo/_base/kernel",  "dojo/_base/declare", "dojo/_base/xhr", "dojo/_base/lang", "dojox/geo/openlayers/LineString",
-		"dojox/geo/openlayers/Collection", "dojo/data/ItemFileReadStore",
-		"dojox/geo/openlayers/GeometryFeature" ], function(dojo, declare, xhrArg, langArg, lineStringArg,
-		collectionArg, fileReadStoreArg, geometryFeatureArg){
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/xhr",
+				"dojo/_base/lang",
+				"dojox/geo/openlayers/LineString",
+				"dojox/geo/openlayers/Collection",
+				"dojo/data/ItemFileReadStore",
+				"dojox/geo/openlayers/GeometryFeature"], function(dojo, declare, xhrArg, langArg, lineStringArg, collectionArg,
+																													fileReadStoreArg, geometryFeatureArg){
 
 	return dojo.declare("dojox.geo.openlayers.JsonImport", null, {
 		//	summary:
@@ -94,7 +98,7 @@ define(["dojo/_base/kernel",  "dojo/_base/declare", "dojo/_base/xhr", "dojo/_bas
 		},
 
 		_makeGeometry : function(/* Array */s, /* Float */ulx, /* Float */uly, /* Float */lrx, /* Float */
-				lry, /* Float */ulxLL, /* Float */ulyLL, /* Float */lrxLL, /* Float */lryLL){
+		lry, /* Float */ulxLL, /* Float */ulyLL, /* Float */lrxLL, /* Float */lryLL){
 			//	summary:
 			//		Make a geometry with the specified points.
 			//	tags:
@@ -122,7 +126,7 @@ define(["dojo/_base/kernel",  "dojo/_base/declare", "dojo/_base/xhr", "dojo/_bas
 		},
 
 		_makeFeature : function(/* Array */s, /* Float */ulx, /* Float */uly, /* Float */lrx, /* Float */
-				lry, /* Float */ulxLL, /* Float */ulyLL, /* Float */lrxLL, /* Float */lryLL){
+		lry, /* Float */ulxLL, /* Float */ulyLL, /* Float */lrxLL, /* Float */lryLL){
 			//	summary:
 			//		Make a GeometryFeature with the specified points.
 			//	tags:

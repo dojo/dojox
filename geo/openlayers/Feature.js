@@ -1,5 +1,4 @@
-define([ "dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Map" ], function(dojo,
-		declare, mapArg){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Map"], function(dojo, declare, mapArg){
 
 	return dojo.declare("dojox.geo.openlayers.Feature", null, {
 		//	summary:
@@ -73,7 +72,7 @@ define([ "dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Map" ]
 			var extent = layer.olLayer.getExtent();
 			var rx = (x / resolution + (-extent.left / resolution));
 			var ry = ((extent.top / resolution) - y / resolution);
-			return [ rx, ry ];
+			return [rx, ry];
 		}
 	});
 });
