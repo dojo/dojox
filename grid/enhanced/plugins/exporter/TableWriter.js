@@ -40,9 +40,11 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		//		Get CSS class string for a row
 		// tags:
 		//		private
-		return arg_obj.isHeader ? " grid_header"//String
-				: [" grid_row grid_row_", arg_obj.rowIdx + 1,
-				arg_obj.rowIdx % 2 ? " grid_even_row" : " grid_odd_row"].join('');
+		return arg_obj.isHeader ? " grid_header" : [//String
+			" grid_row grid_row_",
+			arg_obj.rowIdx + 1,
+			arg_obj.rowIdx % 2 ? " grid_even_row" : " grid_odd_row"
+		].join('');
 	},
 	_getColumnClass: function(/* object */arg_obj){
 		// summary:
@@ -50,7 +52,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		// tags:
 		//		private
 		var col_idx = arg_obj.cell.index + arg_obj.colOffset + 1;
-		return [" grid_column_", col_idx,//String
+		return [" grid_column grid_column_", col_idx,//String
 				col_idx % 2 ? " grid_odd_column" : " grid_even_column"].join('');
 	},
 	beforeView: function(/* object */arg_obj){
@@ -58,22 +60,20 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		//		Overrided from _ExportWriter
 		var viewIdx = arg_obj.viewIdx,
 			table = this._viewTables[viewIdx],
-			tagName, height,
-			width = dojo.marginBox(arg_obj.view.contentNode).w;
+			height, width = dojo.marginBox(arg_obj.view.contentNode).w;
 		if(!table){
 			var left = 0;
 			for(var i = 0; i < viewIdx; ++i){
 				left += this._viewTables[i]._width;
 			}
-			table = this._viewTables[viewIdx] = ['<table class="grid_view" style="position: absolute; top: 0; left:', left,
-				'px;"', this._getTableAttrs("table"), '>'];
+			table = this._viewTables[viewIdx] = ['<div class="grid_view" style="position: absolute; top: 0; ',
+				dojo._isBodyLtr() ? 'left' : 'right', ':', left,
+				'px;">'];
 		}
 		table._width = width;
 		if(arg_obj.isHeader){
-			tagName = 'thead';
 			height = dojo.contentBox(arg_obj.view.headerContentNode).h;
 		}else{
-			tagName = 'tbody';
 			var rowNode = arg_obj.grid.getRowNode(arg_obj.rowIdx);
 			if(rowNode){
 				height = dojo.contentBox(rowNode).h;
@@ -82,16 +82,17 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 				height = arg_obj.grid.scroller.averageRowHeight;
 			}
 		}
-		table.push('<',tagName,
-					' style="height:', height, 'px; width:', width, 'px;"',
-					' class="', this._getRowClass(arg_obj), '"',
-					this._getTableAttrs(tagName), '>');
+		table.push('<table class="', this._getRowClass(arg_obj), 
+			'" style="table-layout:fixed; height:', height, 'px; width:', width, 'px;" ', 
+			'border="0" cellspacing="0" cellpadding="0" ',
+			this._getTableAttrs("table"),
+			'><tbody ', this._getTableAttrs('tbody'), '>');
 		return true;	//Boolean
 	},
 	afterView: function(/* object */arg_obj){
 		// summary:
 		//		Overrided from _ExportWriter
-		this._viewTables[arg_obj.viewIdx].push(arg_obj.isHeader ? '</thead>' : '</tbody>');
+		this._viewTables[arg_obj.viewIdx].push('</tbody></table>');
 	},
 	beforeSubrow: function(/* object */arg_obj){
 		// summary:
@@ -131,7 +132,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		// summary:
 		//		Overrided from _ExportWriter
 		dojo.forEach(this._viewTables, function(table){
-			table.push('</table>');
+			table.push('</div>');
 		});
 	},
 	toString: function(){
