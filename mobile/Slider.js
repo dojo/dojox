@@ -44,7 +44,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html","dojo/_base
 
 		buildRendering: function(){
 			this.focusNode = this.domNode = dojo.create("div", {});
-			this.valueNode = dojo.create("input", (this.srcNodeRef && this.srcNodeRef.name) ? { type: "hidden", name: this.srcNodeRef.name } : {}, this.domNode, "last");
+			this.valueNode = dojo.create("input", (this.srcNodeRef && this.srcNodeRef.name) ? { type: "hidden", name: this.srcNodeRef.name } : { type: "hidden" }, this.domNode, "last");
 			var relativeParent = dojo.create("div", { style: { position:"relative", height:"100%", width:"100%" } }, this.domNode, "last");
 			this.progressBar = dojo.create("div", { style:{ position:"absolute" }, "class":"mblSliderProgressBar" }, relativeParent, "last");
 			this.touchBox = dojo.create("div", { style:{ position:"absolute" }, "class":"mblSliderTouchBox" }, relativeParent, "last");
