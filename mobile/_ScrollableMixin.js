@@ -13,6 +13,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang","./common",
 		fixedHeader: "",
 		fixedFooter: "",
 		scrollableParams: {},
+		allowNestedScrolls: true, // e.g. Allow ScrollableView in a SwapView
 
 		destroy: function(){
 			this.cleanup();
@@ -39,12 +40,14 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang","./common",
 				params.fixedFooterHeight = node.offsetHeight;
 			}
 			this.init(params);
-			for(var p = this.getParent(); p; p = p.getParent()){
-				if(p && p.scrollableParams){
-					this.isNested = true;
-					this.dirLock = true;
-					p.dirLock = true;
-					break;
+			if(this.allowNestedScrolls){
+				for(var p = this.getParent(); p; p = p.getParent()){
+					if(p && p.scrollableParams){
+						this.isNested = true;
+						this.dirLock = true;
+						p.dirLock = true;
+						break;
+					}
 				}
 			}
 			this.inherited(arguments);

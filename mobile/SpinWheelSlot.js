@@ -17,6 +17,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 	
 		scrollBar: false,
 		constraint: false,
+		allowNestedScrolls: false,
 
 		buildRendering: function(){
 			this.inherited(arguments);
