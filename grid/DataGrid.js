@@ -67,6 +67,10 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 	_isLoaded: false,
 	_isLoading: false,
 	
+	//keepSelection: Boolean
+	//		Whether keep selection after sort, filter etc.
+	keepSelection: false,	
+	
 	postCreate: function(){
 		this._pages = [];
 		this._store_connects = [];
@@ -76,6 +80,11 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._pending_requests = {};
 
 		this._setStore(this.store);
+		this.inherited(arguments);
+	},
+	
+	destroy: function(){
+		this.selection.destroy();
 		this.inherited(arguments);
 	},
 
@@ -371,6 +380,9 @@ dojo.declare("dojox.grid.DataGrid", dojox.grid._Grid, {
 		this._bop = this._eop = -1;
 		this._isLoaded = false;
 		this._isLoading = false;
+		if(!this.allItemsSelected){
+			this.selection.selected = [];
+		}
 	},
 
 	getItem: function(idx){

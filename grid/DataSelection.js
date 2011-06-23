@@ -1,6 +1,17 @@
-define(["dojo", "dojox", "./Selection"], function(dojo, dojox){
-
+define(["dojo", "dojox", "./_SelectionPreserver", "./Selection"], function(dojo, dojox, SelectionPreserver){
 dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
+	constructor: function(grid){
+		if(grid.keepSelection){
+			this.preserver = new SelectionPreserver(this);
+		}
+	},
+	
+	destroy: function(){
+		if(this.preserver){
+			this.preserver.destroy();
+		}
+	},
+	
 	getFirstSelected: function(){
 		var idx = dojox.grid.Selection.prototype.getFirstSelected.call(this);
 
