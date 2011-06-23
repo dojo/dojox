@@ -256,7 +256,8 @@ define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","
 				
 						// Remove a border of the last ListItem.
 						// This is for browsers that do not support the last-child CSS pseudo-class.
-				
+
+						if(this instanceof dojox.mobile.EdgeToEdgeList){ return; }
 						var lastChildFound = false;
 						for(var i = this.containerNode.childNodes.length - 1; i >= 0; i--){
 							var c = this.containerNode.childNodes[i];
