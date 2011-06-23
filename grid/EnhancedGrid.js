@@ -62,10 +62,6 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 	//		Singleton plugin manager
 	pluginMgr: null,
 
-	//keepSelection: Boolean
-	//		Whether keep selection after sort, filter, pagination etc.
-	keepSelection: false,
-	
 	//_pluginMgrClass: Object
 	//		Default plugin manager class
 	_pluginMgrClass: dojox.grid.enhanced._PluginManager,
@@ -214,7 +210,6 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 		// summary:
 		//		Destroy all resources
 		delete this._nls;
-		this.selection.destroy();
 		this.pluginMgr.destroy();
 		this.inherited(arguments);
 	}
@@ -223,6 +218,9 @@ dojo.declare("dojox.grid.EnhancedGrid", dojox.grid.DataGrid, {
 dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
 	constructor: function(grid){
 		if(grid.keepSelection){
+			if(this.preserver){
+				this.preserver.destroy();
+			}
 			this.preserver = new dojox.grid.enhanced.plugins._SelectionPreserver(this);
 		}
 	},
@@ -237,11 +235,6 @@ dojo.declare("dojox.grid.enhanced.DataSelection", dojox.grid.DataSelection, {
 		this.inherited(arguments);
 		this.grid._selectingRange = false;
 		this.onChanged();
-	},
-	destroy: function(){
-		if(this.preserver){
-			this.preserver.destroy();
-		}
 	}
 });
 
