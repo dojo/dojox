@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/array", "./_base"], function(dojo){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "./_base"], function(dojo){
 	dojo.experimental("dojox.timing.Sequence");
 	dojo.declare("dojox.timing.Sequence", null, {
 		// summary:
