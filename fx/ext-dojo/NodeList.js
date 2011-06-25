@@ -1,4 +1,4 @@
-define(["dojox/fx","dojo/_base/NodeList","dojo/NodeList-fx"],function(){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojox/fx","dojo/_base/NodeList","dojo/NodeList-fx"],function(dojo){
 dojo.experimental("dojox.fx.ext-dojo.NodeList");
 // summary: Core extensions to dojo.NodeList providing addtional fx to dojo.NodeList-fx
 // description:

@@ -1,4 +1,4 @@
-define(["dojo/_base/lang","dojo/fx","dojo/fx/easing","dojox/fx"],function(){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/fx", "dojo/fx","dojo/fx/easing","dojox/fx"],function(dojo){
 dojo.extend(dojo.Animation, {
 	// summary:
 	//		A dojo.Animation extension that enables an easy reversal.

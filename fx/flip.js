@@ -1,4 +1,15 @@
-define(["dojo/_base/html", "dojo/_base/connect","dojo/_base/Color", "dojo/fx","./_base"], function() {
+define([
+	"dojo/_base/kernel",
+	"dojox",
+	"dojo/_base/html",
+	"dojo/_base/connect",
+	"dojo/_base/Color",
+	"dojo/_base/sniff",
+	"dojo/_base/lang",
+	"dojo/_base/fx",
+	"dojo/fx",
+	"./_base"
+], function(dojo, dojox) {
 //kernel,lang->(sniff,array,has),sniff,unload,window
 
 	dojo.getObject("fx.flip", true, dojox);
