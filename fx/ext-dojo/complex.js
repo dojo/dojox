@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/_base/fx"], function(dojo){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/_base/fx"], function(dojo){
 	dojo.getObject("fx.ext-dojo.complex", true, dojox);
 	
 	var da = dojo.animateProperty;
