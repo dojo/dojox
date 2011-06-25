@@ -1,4 +1,4 @@
-define([".","dojo/_base/array"],function(fx_core, dojo){
+define(["dojox","dojo/_base/array"],function(fx_core, dojo){
 	dojox.fx._Line = function(start, end){
 		// summary: a custom _Line to accomodate multi-dimensional values
 		//
