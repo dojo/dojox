@@ -1,4 +1,4 @@
-define("dojox/data/ClientFilter", ["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 
 // This is an abstract data store module for adding updateable result set functionality to an existing data store class
 	var cf;

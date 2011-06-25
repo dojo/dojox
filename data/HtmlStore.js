@@ -1,4 +1,4 @@
-define("dojox/data/HtmlStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/xml/parser"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/xml/parser"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.HtmlStore", null, {
 	constructor: function(/*Object*/args){

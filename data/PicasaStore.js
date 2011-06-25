@@ -1,4 +1,4 @@
-define("dojox/data/PicasaStore", ["dojo", "dojox", "dojo/io/script", "dojo/data/util/simpleFetch", "dojo/date/stamp"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/io/script", "dojo/data/util/simpleFetch", "dojo/date/stamp"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.PicasaStore", null, {
 	constructor: function(/*Object*/args){

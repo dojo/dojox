@@ -1,4 +1,4 @@
-define("dojox/data/FileStore", ["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo", "dojox"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.FileStore", null, {
 	constructor: function(/*Object*/args){

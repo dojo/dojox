@@ -1,4 +1,4 @@
-define("dojox/data/FlickrRestStore", ["dojo", "dojox", "dojox/data/FlickrStore"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojox/data/FlickrStore"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.FlickrRestStore",
 	dojox.data.FlickrStore, {

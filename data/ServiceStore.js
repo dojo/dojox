@@ -1,4 +1,4 @@
-define("dojox/data/ServiceStore", ["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo", "dojox"], function(dojo, dojox) {
 
 // note that dojox.rpc.Service is not required, you can create your own services
 

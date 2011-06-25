@@ -1,4 +1,4 @@
-define("dojox/data/css", ["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo", "dojox"], function(dojo, dojox) {
 
 if(!dojox.data) { dojox.data = {}; }
 if(!dojox.data.css) { dojox.data.css = {}; }

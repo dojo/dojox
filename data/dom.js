@@ -1,4 +1,4 @@
-define("dojox/data/dom", ["dojo", "dojox", "dojox/xml/parser"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojox/xml/parser"], function(dojo, dojox) {
 
 		
 		

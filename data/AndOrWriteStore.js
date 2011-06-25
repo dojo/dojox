@@ -1,4 +1,4 @@
-define("dojox/data/AndOrWriteStore", ["dojo", "dojox", "dojox/data/AndOrReadStore"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojox/data/AndOrReadStore"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.AndOrWriteStore", dojox.data.AndOrReadStore, {
 	constructor: function(/* object */ keywordParameters){

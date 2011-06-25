@@ -1,4 +1,4 @@
-define("dojox/data/WikipediaStore", ["dojo", "dojox", "dojo/io/script", "dojox/rpc/Service", "dojox/data/ServiceStore"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/io/script", "dojox/rpc/Service", "dojox/data/ServiceStore"], function(dojo, dojox) {
 
 dojo.experimental("dojox.data.WikipediaStore");
 

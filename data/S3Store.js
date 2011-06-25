@@ -1,4 +1,4 @@
-define("dojox/data/S3Store", ["dojo", "dojox", "dojox/data/JsonRestStore", "dojox/rpc/ProxiedPath"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojox/data/JsonRestStore", "dojox/rpc/ProxiedPath"], function(dojo, dojox) {
 
 // S3JsonRestStore is an extension of JsonRestStore to handle
 // Amazon's S3 service using JSON data

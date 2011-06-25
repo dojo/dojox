@@ -1,4 +1,4 @@
-define("dojox/data/FlickrStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/io/script", "dojo/date/stamp", "dojo/AdapterRegistry"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/io/script", "dojo/date/stamp", "dojo/AdapterRegistry"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.FlickrStore", null, {
 	constructor: function(/*Object*/args){

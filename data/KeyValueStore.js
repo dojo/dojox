@@ -1,4 +1,4 @@
-define("dojox/data/KeyValueStore", ["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/data/util/simpleFetch", "dojo/data/util/filter"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.KeyValueStore", null, {
 	//	summary:

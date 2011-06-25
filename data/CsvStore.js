@@ -1,4 +1,4 @@
-define("dojox/data/CsvStore", ["dojo", "dojox", "dojo/data/util/filter", "dojo/data/util/simpleFetch"], function(dojo, dojox) {
+define(["dojo", "dojox", "dojo/data/util/filter", "dojo/data/util/simpleFetch"], function(dojo, dojox) {
 
 dojo.declare("dojox.data.CsvStore", null, {
 	// summary:
