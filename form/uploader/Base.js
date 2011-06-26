@@ -69,9 +69,6 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		}
 		switch(what){
 			case "FormData":
-				// works around ticket:
-				//		http://trac.dojotoolkit.org/ticket/12674
-				if(dojo.isFF && this.uploadOnSelect) { return false; }
 				return !!window.FormData;
 			case "sendAsBinary":
 				return !!this._hascache.xhr.sendAsBinary;

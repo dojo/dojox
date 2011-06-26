@@ -97,6 +97,10 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		this.inherited(arguments);
 	},
 
+	testPrivated: function(){
+		privated();
+	},
+
 	/*************************
 	 *	   Public Events	 *
 	 *************************/

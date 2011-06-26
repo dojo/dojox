@@ -22,7 +22,9 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		this.connectForm();
 		this.inherited(arguments);
 		if(this.uploadOnSelect){
-			this.connect(this, "onChange", "upload");
+			this.connect(this, "onChange", function(data){
+				this.upload(data[0]);
+			});
 		}
 	},
 
@@ -34,7 +36,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		// summary:
 		// 		See: dojox.form.Uploader.upload
 		//
-		console.log("upload html5")
 		this.onBegin(this.getFileList());
 		if(this.supports("FormData")){
 			this.uploadWithFormData(formData);
@@ -49,7 +50,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		//
 		form = !!form ? form.tagName ? form : this.getForm() : this.getForm();
 		var data = dojo.formToObject(form);
-		console.log("form data:", data);
 		this.upload(data);
 	},
 
@@ -77,6 +77,9 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		if(!msg){
 			this.onError(this.errMsg);
 		}else{
+			console.log("msg:", msg)
+		console.log("xhr:", xhr)
+
 			xhr.sendAsBinary(msg);
 		}
 	},
@@ -90,7 +93,6 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		if(!this.getUrl()){
 			console.error("No upload url found.", this); return;
 		}
-
 		var fd = new FormData();
 		dojo.forEach(this.inputNode.files, function(f, i){
 			fd.append(this.name+"s[]", f);
