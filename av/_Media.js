@@ -137,6 +137,7 @@ dojo.declare("dojox.av._Media", null, {
 		//				could only be obtained with Flash Media Server.
 		// 		NOTE: 	Older FLVs can still return width and height
 		//				and will do so on a second event call
+		console.warn("onMeta", data)
 		this.duration = data.duration;
 	},
 
