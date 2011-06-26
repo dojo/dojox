@@ -1,4 +1,4 @@
-define(["dijit/_Widget","dojo/NodeList-fx"], function(Widget,NodeList){
+define(["dojo", "dijit/_Widget","dojo/NodeList-fx"], function(dojo, Widget, NodeList){
 dojo.experimental("dojox.fx.Shadow");
 dojo.declare("dojox.fx.Shadow",
 		dijit._Widget,{
@@ -120,7 +120,7 @@ dojo.declare("dojox.fx.Shadow",
 			var x; var y;
 			if(args){ x = args.x; y = args.y;
 			}else{
-				var co = dojo._getBorderBox(this.node);
+				var co = dojo.position(this.node);
 				x = co.w; y = co.h;
 			}
 			var sideHeight = y - (this.shadowOffset+this.shadowThickness);

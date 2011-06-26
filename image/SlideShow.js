@@ -142,7 +142,7 @@ dojo.declare("dojox.image.SlideShow",
 		
 		this._loadImage(0, dojo.hitch(this, "showImage", 0));
 		this._calcNavDimensions();
-		dojo._setOpacity(this.navNode, 0);
+		dojo.style(this.navNode, "opacity", 0);
 	},
 
 	setDataStore: function(dataStore, request, /*optional*/paramNames){
@@ -664,13 +664,11 @@ dojo.declare("dojox.image.SlideShow",
 		if(typeof(dojo) == "undefined"){ return false; }
 		element = dojo.byId(element);
 		var m = { x: e.pageX, y: e.pageY };
-		var bb = dojo._getBorderBox(element);
-		var absl = dojo.coords(element, true);
-		var left = absl.x;
+		var bb = dojo.position(element, true);
 
-		return (m.x >= left
-			&& m.x <= (left + bb.w)
-			&& m.y >= absl.y
+		return (m.x >= bb.x
+			&& m.x <= (bb.x + bb.w)
+			&& m.y >= bb.y
 			&& m.y <= (top + bb.h)
 		);	//	boolean
 	}
