@@ -270,7 +270,18 @@ dojox.mobile.scrollable = function(dojo, dojox){
 				top: "0px",
 				left: "0px"
 			});
-			dojo.body().scrollTop = Math.max(Math.abs(this._cPos.y) + mt, 1); // scrolling to original position
+			
+			var a = dojo.doc.activeElement; // focused input field
+			if(a){ // scrolling to show focused input field
+				var at = 0; // top position of focused input field
+				for(var n = a; n.tagName != "BODY"; n = n.offsetParent){
+					at += n.offsetTop;
+				}
+				var st = at + a.clientHeight + 10 - this.getScreenSize().h; // top postion of browser scroll bar
+				if(st > 0){
+					dojo.body().scrollTop = st;
+				}
+			}	
 		}else{
 			if(this._cPos){ // restore containerNode's position
 				dojo.style(c, {
@@ -526,7 +537,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					clicked = true;
 				}
 			}
-			if(clicked && !this.isFormElement(e.target)){ // clicked, not dragged or flicked
+			var isFormElem = this.isFormElement(e.target);
+			if(clicked && !isFormElem){ // clicked, not dragged or flicked
 				this.hideScrollBar();
 				this.removeCover();
 				if(dojox.mobile.hasTouch){
@@ -540,6 +552,10 @@ dojox.mobile.scrollable = function(dojo, dojox){
 						elem.dispatchEvent(ev);
 					}, 0);
 				}
+				return;
+			}else if(this._aw && clicked && isFormElem){ // clicked input fields
+				this.hideScrollBar();
+				this.toTopLeft();
 				return;
 			}
 			speed = this._speed = this.getSpeed();
