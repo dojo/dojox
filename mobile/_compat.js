@@ -454,7 +454,7 @@ define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","
 			var paths = dojox.mobile.getCssPaths();
 			for(var i = 0; i < paths.length; i++){
 				var href = paths[i];
-				if((href.match(dojox.mobile.loadCompatPattern) || location.href.indexOf("mobile/tests/")) && href.indexOf("-compat.css") == -1){
+				if((href.match(dojox.mobile.loadCompatPattern) || location.href.indexOf("mobile/tests/") !== -1) && href.indexOf("-compat.css") === -1){
 					var compatCss = href.substring(0, href.length-4)+"-compat.css";
 					dojox.mobile.loadCss(compatCss);
 				}
@@ -462,7 +462,7 @@ define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","
 		};
 	
 		dojox.mobile.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
-		if(doResize !== false){ dojox.mobile.resizeAll(); }
+			if(doResize !== false){ dojox.mobile.resizeAll(); }
 		};
 
 		dojo.addOnLoad(function(){
