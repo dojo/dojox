@@ -8,6 +8,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		
 		//	series: String
 		//		Target series name for this chart action.
+		series:	"",
 		
 		//	dualIndicator: Boolean? 
 		//		Whether a double touch on the chart creates a dual indicator showing data trend between the two touch points. Default is false.
@@ -103,7 +104,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 		// the data description block for the widget parser
 		defaultParams: {
-			series: null,
+			series: "",
 			dualIndicator: false,
 			vertical: true,
 			autoScroll: true,
@@ -143,8 +144,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.opt = dojo.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.uName = "touchIndicator"+this.opt.series;
-			this._handles = [];
+			this._uName = "touchIndicator"+this.opt.series;
 			this.connect();
 		},
 		
@@ -154,18 +154,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		to the chart that's why Chart.render() must be called after connect.
 			this.inherited(arguments);
 			// add plot with unique name
-			this.chart.addPlot(this.uName, {type: IndicatorElement, inter: this});
+			this.chart.addPlot(this._uName, {type: IndicatorElement, inter: this});
 		},
 
 		disconnect: function(){
 			//	summary:
 			//		Disconnect this action from the chart.
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			if(plot.pageCoord){
 				// we might still have something drawn on the screen
 				this.onTouchEnd();
 			}
-			this.chart.removePlot(this.uName);
+			this.chart.removePlot(this._uName);
 			this.inherited(arguments);
 		},
 
@@ -197,7 +197,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				this.chart._delayedRenderHandle = null;
 				this.chart.render();
 			}
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.pageCoord  = {x: event.touches[0].pageX, y: event.touches[0].pageY};
 			plot.dirty = true;
 			if(delayed){
@@ -209,7 +209,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		},
 		
 		_onTouchDual: function(event){
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.pageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
 			plot.secondCoord = {x: event.touches[1].pageX, y: event.touches[1].pageY};
 			plot.dirty = true;
@@ -220,7 +220,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		onTouchEnd: function(event){
 			//	summary:
 			//		Called when touch is ended or canceled on the chart.
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.stopTrack();
 			plot.pageCoord = null;
 			plot.secondCoord = null;

@@ -108,7 +108,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.maxScale = kwArgs.maxScale ? kwArgs.maxScale : 100;
 			this.enableScroll = kwArgs.enableScroll != undefined ? kwArgs.enableScroll : true;
 			this.enableZoom = kwArgs.enableScroll != undefined ? kwArgs.enableZoom : true;
-			this.uName = "touchZoomPan"+this.axis;
+			this._uName = "touchZoomPan"+this.axis;
 			this.connect();
 		},
 		
@@ -121,7 +121,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// started above a item that is removed during the touch action will stop
 			// dispatching touch events!
 			if(dojo.isSafari && this.chart.surface.declaredClass.indexOf("svg")!=-1){
-				this.chart.addPlot(this.uName, {type: GlassView});
+				this.chart.addPlot(this._uName, {type: GlassView});
 			}
 		},
 		
@@ -129,7 +129,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//	summary:
 			//		Disconnect this action from the chart. 
 			if(dojo.isSafari && this.chart.surface.declaredClass.indexOf("svg")!=-1){
-				this.chart.removePlot(this.uName);
+				this.chart.removePlot(this._uName);
 			}
 			this.inherited(arguments);
 		},
