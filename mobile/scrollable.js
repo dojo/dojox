@@ -227,8 +227,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.getScreenSize = function(){
 		return {
-			h: dojo.global.innerHeight||dojo.doc.documentElement.clientHeight,
-			w: dojo.global.innerWidth||dojo.doc.documentElement.clientWidth
+			h: dojo.global.innerHeight||dojo.doc.documentElement.clientHeight||dojo.doc.documentElement.offsetHeight,
+			w: dojo.global.innerWidth||dojo.doc.documentElement.clientWidth||dojo.doc.documentElement.offsetWidth
 		};
 	};
 
@@ -346,8 +346,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 		// adjust the height of this view
 		var h;
-		var dh = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) -
-					top - this._appFooterHeight; // default height
+		var dh = this.getScreenSize().h - top - this._appFooterHeight; // default height
 		if(this.height === "inherit"){
 			if(this.domNode.offsetParent){
 				h = this.domNode.offsetParent.offsetHeight + "px";
@@ -362,7 +361,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(!h){
 			h = dh + "px";
 		}
-		this.domNode.style.height = h;
+		if(h.charAt(0) !== "-"){ // to ensure that h is not negative (e.g. "-10px")
+			this.domNode.style.height = h;
+		}
 
 		// to ensure that the view is within a scrolling area when resized.
 		this.onTouchEnd();
