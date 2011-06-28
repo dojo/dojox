@@ -24,13 +24,8 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 
 		startup: function(){
 			if(this._started){ return; }
-			var _this = this;
-			setTimeout(function(){ // to get proper dimension
-				// resize() has to be called regardless of whether this is top-level or not
-				// to ensure that TabBarButton#startup() has been called before resize().
-				_this.resize();
-			}, 0);
 			this.inherited(arguments);
+			this.resize();
 		},
 
 		resize: function(size){
@@ -95,11 +90,17 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 					this.containerNode.style.padding = "0px 0px 0px " + margin + "px";
 				}
 			}
+
 			if(!dojo.some(this.getChildren(), function(child){ return child.iconNode1; })){
 				dojo.addClass(this.domNode, "mblTabBarNoIcons");
+			}else{
+				dojo.removeClass(this.domNode, "mblTabBarNoIcons");
 			}
+
 			if(!dojo.some(this.getChildren(), function(child){ return child.label; })){
 				dojo.addClass(this.domNode, "mblTabBarNoText");
+			}else{
+				dojo.removeClass(this.domNode, "mblTabBarNoText");
 			}
 		}
 	});
