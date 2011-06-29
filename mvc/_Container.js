@@ -14,6 +14,10 @@ define([
 		// stopParser: [private] Boolean
 		//		Flag to parser to not try and parse widgets declared inside the container.
 		stopParser: true,
+
+		// exprchar:  Character
+		//		Character to use for a substitution expression, for a substitution string like ${this.index}
+		exprchar: '$',
 	
 		// templateString: [private] String
 		//		The template or content for this container. It is usually obtained from the
@@ -62,7 +66,7 @@ define([
 		},
 	
 		////////////////////// PRIVATE METHODS ////////////////////////
-	
+
 		_exprRepl: function(tmpl){
 			// summary:
 			//		Does substitution of ${foo+bar} type expressions in template string.
@@ -72,10 +76,10 @@ define([
 				if(!value){return "";}
 				var exp = value.substr(2);
 				exp = exp.substr(0, exp.length - 1);
-				return eval(exp, pThis);
+				with (pThis) {return eval(exp);};
 			};
 			transform = lang.hitch(this, transform);
-			return tmpl.replace(/\$\{.*?\}/g,
+			return tmpl.replace(new RegExp(dojo.regexp.escapeString(this.exprchar)+"(\{.*?\})","g"),
 				function(match, key, format){
 					return transform(match, key).toString();
 				});

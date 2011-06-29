@@ -10,6 +10,7 @@ try{
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_ref-set-repeat", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_ref-set-repeat.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_billto-hierarchical", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_shipto-billto-hierarchical.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_async_mvc_input-output-simple", dojo.moduleUrl("dojox.mvc","tests/doh_async_mvc_input-output-simple.html"+userArgs), 999999);
+	doh.registerUrl("dojox.mvc.tests.doh_mvc_template_repeat_exprchar", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_template_repeat_exprchar.html"+userArgs), 999999);
 	// Robot
 	doh.registerUrl("dojox.mvc.tests.robot.mvc_shipto-billto-simple", dojo.moduleUrl("dojox.mvc","tests/robot/mvc_shipto-billto-simple.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.robot.mvc_generate-view", dojo.moduleUrl("dojox.mvc","tests/robot/mvc_generate-view.html"+userArgs), 999999);
