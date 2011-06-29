@@ -165,6 +165,9 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_bas
 	
 		open: function(e){
 			var parent = this.getParent(); // IconContainer
+			if(parent.single && this.closeNode){
+				this.closeNode.style.display = "none";
+			}
 			if(this.transition == "below"){
 				if(parent.single){
 					parent.closeAll();
