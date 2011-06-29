@@ -165,9 +165,6 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_bas
 	
 		open: function(e){
 			var parent = this.getParent(); // IconContainer
-			if(parent.single && this.closeNode){
-				this.closeNode.style.display = "none";
-			}
 			if(this.transition == "below"){
 				if(parent.single){
 					parent.closeAll();
@@ -177,6 +174,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_bas
 			}else{
 				parent._opening = this;
 				if(parent.single){
+					this.closeNode.style.display = "none";
 					parent.closeAll();
 					var view = dijit.byId(parent.id+"_mblApplView");
 					view._heading._setLabelAttr(this.label);
