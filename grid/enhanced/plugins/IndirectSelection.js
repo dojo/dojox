@@ -588,7 +588,8 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		//		Update header selector anytime selection changed
 		var g = this.grid;
 		if(!this.map[-1] || g._selectingRange){ return; }
-		this._toggleCheckedStyle(-1, this.getValue(-1));
+		g.allItemsSelected = this.getValue(-1);
+		this._toggleCheckedStyle(-1, g.allItemsSelected);
 	},
 	_toggleDisabledStyle: function(index, disabled){
 		// summary:
