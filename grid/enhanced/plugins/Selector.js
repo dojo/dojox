@@ -151,6 +151,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			col: MULTI,
 			cell: MULTI
 		};
+		this.noClear = args && args.noClear;
 		this.setupConfig(args);
 		if(grid.selectionMode === "single"){
 			this._config.row = SINGLE;
@@ -429,7 +430,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		g.selection.deselectAll = function(){
 			g._selectingRange = true;
 			_this._oldDeselectAll.apply(g.selection, arguments);
-			_this._clearSelection("row");
+			_this._clearSelection("all");
 			g._selectingRange = false;
 			if(g.selection.preserver){
 				g.selection.preserver._updateMapping(true, false, true);
@@ -956,11 +957,15 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		var lastIsSelected = this._isSelected(type, this._lastEndPoint[type]),
 			isSelected = this._isSelected(type, start);
 		
-		//If we are modifying the selection using keyboard, retain the old status.
-		this._toSelect = mandatarySelect ? isSelected : !isSelected;
+		if(this.noClear && !extending){
+			this._toSelect = toSelect === undefined ? true : toSelect;
+		}else{
+			//If we are modifying the selection using keyboard, retain the old status.
+			this._toSelect = mandatarySelect ? isSelected : !isSelected;
+		}
 		
 		//If CTRL is not pressed or it's SINGLE mode, this is a brand new selection.
-		if(!extending || (!isSelected && this._config[type] == SINGLE)){
+		if(!this.noClear && (!extending || (!isSelected && this._config[type] == SINGLE))){
 			this._clearSelection("all", start);
 			this._toSelect = toSelect === undefined ? true : toSelect;
 		}
@@ -1108,13 +1113,15 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			case "row":
 				toHL = this._calcToHighlight(type, target, toHighlight, toSelect);
 				this._highlightRowSelector(target.row, toHL);
-				dojo.forEach(cells, function(cell){
-					_this._highlightSingle("cell", toHL, {
-						"row": target.row,
-						"col": cell.index,
-						"node": cell.getNode(target.row)
+				if(this._config.cell){
+					dojo.forEach(cells, function(cell){
+						_this._highlightSingle("cell", toHL, {
+							"row": target.row,
+							"col": cell.index,
+							"node": cell.getNode(target.row)
+						});
 					});
-				});
+				}
 				//To avoid dead lock
 				this._selectedRowModified = true;
 				if(!isRefresh){
@@ -1376,7 +1383,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		if(type == "cell"){
 			this._addCellException("col", items);
 			this._addCellException("row", items);
-		}else{
+		}else if(this._config.cell){
 			this._addException(_theOther[type], items);
 		}
 	},
