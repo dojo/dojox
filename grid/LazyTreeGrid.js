@@ -246,6 +246,17 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 			}
 		}, this);
 		this.inherited(arguments);
+	},
+	
+	updateRow: function(inRowIndex){
+		this.inherited(arguments);
+		var grid = this.grid;
+		if(grid.keepSelection){
+			var item = grid.getItem(inRowIndex);
+			if(item){
+				grid.selection.preserver._reSelectById(item, inRowIndex);
+			}
+		}
 	}
 	
 });
