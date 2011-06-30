@@ -77,7 +77,7 @@ define([
 				if(!value){return "";}
 				var exp = value.substr(2);
 				exp = exp.substr(0, exp.length - 1);
-				return eval(exp, pThis) || "";
+				with (pThis) {return eval(exp) || "";};
 			};
 			transform = lang.hitch(this, transform);
 			return tmpl.replace(/\$\{.*?\}/g,
