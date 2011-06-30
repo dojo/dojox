@@ -9,7 +9,7 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 	serverStore: false, // server side store
 	
 	constructor: function(/* Object */ args){
-		this.serverStore = args.serverStore === true ? true : false;
+		this.serverStore = !!args.serverStore;
 	},
 
 	mayHaveChildren: function(/*dojo.data.Item*/ item){
@@ -99,7 +99,12 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 				return this.store.isItemLoaded(c);
 			}, this);
 		}, this);
-	}
+	},
+	
+	//overwritten
+	onNewItem: function(item, parentInfo){ },
+	
+	onDeleteItem: function(item){ }
 });
 
 return dojox.grid.LazyTreeGridStoreModel;
