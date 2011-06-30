@@ -641,6 +641,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 			}
 			if(toBlur){
 				this._isNavigating = false;
+				dojo.setSelectable(this.cell.getNode(this.rowIndex), false);
 				return "content";
 			}
 			return false;
@@ -700,6 +701,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 						var toFocus = this._navElems.lowest || this._navElems.first;
 						if(toFocus){
 							this._isNavigating = true;
+							dojo.setSelectable(this.cell.getNode(this.rowIndex), true);
 							dijit.focus(toFocus);
 							dojo.stopEvent(e);
 							this.currentArea("editableCell", true);
@@ -741,6 +743,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 					if(target != cell.getNode(evt.rowIndex)){
 						this._isNavigating = true;
 						this.focusArea("editableCell", evt);
+						dojo.setSelectable(cell.getNode(evt.rowIndex), true);
 						dijit.focus(target);
 						return false;
 					}
