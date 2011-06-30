@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "./Annotation", "./Anchor"], function(dojo){
+define(["dojo/_base/kernel", "dojo/_base/lang", "./Annotation", "./Anchor"], function(dojo){
 	dojo.getObject("sketch", true, dojox);
 	var ta=dojox.sketch;
 	console.log(ta);
