@@ -346,6 +346,13 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		this.grid = this.plugin.grid;
 		this.itemTitle = this.itemTitle ? this.itemTitle : this.plugin.nls.itemTitle;
 		this.descTemplate = this.descTemplate ? this.descTemplate : this.plugin.nls.descTemplate;
+		dojo.forEach(this.pageSizes, function(size, idx){
+			size = parseInt(size, 10);
+			if(isNaN(size) || size <= 0){
+				size = "All";
+			}
+			this.pageSizes[idx] = String(size);
+		}, this);
 	},
 	
 	postCreate: function(){
