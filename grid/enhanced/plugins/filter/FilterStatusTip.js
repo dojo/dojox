@@ -9,13 +9,12 @@ define([
 	"dijit/form/Button",
 	"dojo/i18n!../../nls/Filter"], function(dojo, dijit, dojox){
 
-	var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
-		oddRowCssCls = "dojoxGridFStatusTipOddRow",
-		handleHolderCssCls = "dojoxGridFStatusTipHandle",
-		conditionCssCls = "dojoxGridFStatusTipCondition",
-		_removeRuleIconCls = "dojoxGridFStatusTipDelRuleBtnIcon",
-		_statusFooter = "</tbody></table>"
-	;
+var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
+	oddRowCssCls = "dojoxGridFStatusTipOddRow",
+	handleHolderCssCls = "dojoxGridFStatusTipHandle",
+	conditionCssCls = "dojoxGridFStatusTipCondition",
+	_removeRuleIconCls = "dojoxGridFStatusTipDelRuleBtnIcon",
+	_statusFooter = "</tbody></table>";
 	
 	dojo.declare("dojox.grid.enhanced.plugins.filter.FilterStatusTip", null, {
 		// summary:
@@ -34,12 +33,10 @@ define([
 			this._dlg = new dijit.TooltipDialog({
 				"class": "dojoxGridFStatusTipDialog",
 				content: this.statusPane,
-				autofocus: false,
-				onMouseLeave: dojo.hitch(this,function(){
-					this.closeDialog();
-				})
+				autofocus: false
 			});
-			this._dlg.connect(this._dlg.domNode,"click", dojo.hitch(this, this._modifyFilter));
+			this._dlg.connect(this._dlg.domNode, 'onmouseleave', dojo.hitch(this, this.closeDialog));
+			this._dlg.connect(this._dlg.domNode, 'click', dojo.hitch(this, this._modifyFilter));
 		},
 		destroy: function(){
 			this._dlg.destroyRecursive();
@@ -54,6 +51,7 @@ define([
 			dijit.popup.open({
 				popup: this._dlg,
 				parent: this.plugin.filterBar,
+				onCancel: function(){},
 				x:pos_x - 12,
 				y:pos_y - 3
 			});

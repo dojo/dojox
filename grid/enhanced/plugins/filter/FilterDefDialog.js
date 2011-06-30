@@ -24,7 +24,7 @@ define([
 	"../Dialog",
 	"../../../cells/dijit"], function(dojo, dijit, dojox){
 		
-var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
+var fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox),
 	_tabIdxes = {
 		// summary:
 		//		Define tabindexes for elements in the filter definition dialog
@@ -452,7 +452,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.FilterDefDialog", null, {
 		// summary:
 		//		Triggered when the "Clear" button is clicked.
 		if(this._savedCriterias){
-			if(this._savedCriterias.length > 1){
+			if(this._savedCriterias.length >= this.plugin.ruleCountToConfirmClearFilter){
 				this.plugin.clearFilterDialog.show();
 			}else{
 				this.clearFilter(this._clearWithoutRefresh);
@@ -931,7 +931,7 @@ dojo.declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[dijit._Widget,dij
 		this._index = idx;
 	},
 	_getUsableConditions: function(type){
-		var conditions = this.dlg._dataTypeMap[type].conditions;
+		var conditions = dojo.clone(this.dlg._dataTypeMap[type].conditions);
 		var typeDisabledConds = (this.plugin.args.disabledConditions || {})[type];
 		var colIdx = parseInt(this._colSelect.get("value"), 10);
 		var colDisabledConds = isNaN(colIdx) ?

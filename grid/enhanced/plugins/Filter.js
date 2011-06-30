@@ -34,6 +34,11 @@ define([
 		//			If isServerSide is true, set the server side filter to be stateful or not. default to false.
 		//		7. url: string
 		//			If using stateful, this is the url to send commands. default to store.url.
+		//		8. ruleCountToConfirmClearFilter: Integer | null |Infinity
+		//			If the filter rule count is larger than or equal to this value, then a confirm dialog will show when clearing filter.
+		//			If set to less than 1 or null, then always show the confirm dialog.
+		//			If set to Infinity, then never show the confirm dialog.
+		//			Default value is 2.
 		//
 		//		Acceptable cell parameters defined in layout:
 		//		1. filterable: boolean
@@ -88,6 +93,10 @@ define([
 			args = this.args = dojo.isObject(args) ? args : {};
 			if(typeof args.ruleCount != 'number' || args.ruleCount < 0){
 				args.ruleCount = 3;
+			}
+			var rc = this.ruleCountToConfirmClearFilter = args.ruleCountToConfirmClearFilter;
+			if(rc === undefined){
+				this.ruleCountToConfirmClearFilter = 2;
 			}
 			
 			//Install filter layer
