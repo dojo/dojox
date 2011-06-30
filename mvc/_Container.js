@@ -2,8 +2,9 @@ define([
 	"dojo/_base/declare",
 	"dojo/parser",
 	"dojo/_base/lang",
-	"dijit/_WidgetBase"
-], function(declare, parser, lang, _WidgetBase){
+	"dijit/_WidgetBase",
+	"dojo/regexp"
+], function(declare, parser, lang, _WidgetBase, regexp){
 	/*=====
 		declare = dojo.declare;
 		_WidgetBase = dijit._WidgetBase;
@@ -79,7 +80,7 @@ define([
 				with (pThis) {return eval(exp);};
 			};
 			transform = lang.hitch(this, transform);
-			return tmpl.replace(new RegExp(dojo.regexp.escapeString(this.exprchar)+"(\{.*?\})","g"),
+			return tmpl.replace(new RegExp(regexp.escapeString(this.exprchar)+"(\{.*?\})","g"),
 				function(match, key, format){
 					return transform(match, key).toString();
 				});
