@@ -1,9 +1,13 @@
-dojo.provide("dojox.layout.ExpandoPane");
-dojo.experimental("dojox.layout.ExpandoPane"); // just to show it can be done?
+define([
+	"dojo/_base/kernel",
+	"dojo/text!./resources/ExpandoPane.html",
+	"dijit/layout/ContentPane",
+	"dijit/_TemplatedMixin",
+	"dijit/_Contained",
+	"dijit/_Container"
+], function(dojo,template) {
 
-dojo.require("dijit.layout.ContentPane");
-dojo.require("dijit._Templated");
-dojo.require("dijit._Contained");
+dojo.experimental("dojox.layout.ExpandoPane"); // just to show it can be done?
 
 dojo.declare("dojox.layout.ExpandoPane",
 	[dijit.layout.ContentPane, dijit._TemplatedMixin, dijit._Contained, dijit._Container],
@@ -19,10 +23,10 @@ dojo.declare("dojox.layout.ExpandoPane",
 	//maxWidth: "",
 	//splitter: false,
 	attributeMap: dojo.delegate(dijit.layout.ContentPane.prototype.attributeMap, {
-	        title: { node: "titleNode", type: "innerHTML" }
+		title: { node: "titleNode", type: "innerHTML" }
 	}),
 	
-	templateString: dojo.cache("dojox.layout","resources/ExpandoPane.html"),
+	templateString: template,
 
 	// easeOut: String|Function
 	//		easing function used to hide pane
@@ -279,5 +283,9 @@ dojo.declare("dojox.layout.ExpandoPane",
 		// summary: Trap stray events
 		dojo.stopEvent(e);
 	}
+
+});
+
+return dojox.layout.ExpandoPane;
 
 });
