@@ -678,7 +678,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 				this.setValues(parentInfo.parent, parentInfo.attribute, tempValues);
 				pInfo.newValue = this.getValues(parentInfo.parent, parentInfo.attribute);
 			}else{
-				this.setValues(parentInfo.parent, parentInfo.attribute, item);
+				this.setValue(parentInfo.parent, parentInfo.attribute, item);
 				pInfo.newValue = item;
 			}
 		}
