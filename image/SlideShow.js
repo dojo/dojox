@@ -514,6 +514,7 @@ dojo.declare("dojox.image.SlideShow",
 	_prev: function(){
 		// summary:
 		//		Show the previous image.
+
 		// FIXME: either pull code from showNext/prev, or call it here
 		if(this.imageIndex < 1){ return; }
 		this.showImage(this.imageIndex - 1);
