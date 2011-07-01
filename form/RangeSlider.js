@@ -1,15 +1,19 @@
-dojo.provide("dojox.form.RangeSlider");
-dojo.require("dijit.form.HorizontalSlider");
-dojo.require("dijit.form.VerticalSlider");
-dojo.require("dijit.focus");		// dijit.focus()
-dojo.require("dojox.fx");
-
-(function(){
+define([
+	"dojo", "dijit", "dojox",
+	"dojo/text!./resources/HorizontalRangeSlider.html",
+	"dojo/text!./resources/VerticalRangeSlider.html",
+	"dijit/form/HorizontalSlider",
+	"dijit/form/VerticalSlider",
+	"dijit/focus",
+	"dojox/fx"
+], function(dojo, dijit, dojox, hTemplate, vTemplate){
 
 	// make these functions once:
 	var sortReversed = function(a, b){ return b - a; },
 		sortForward = function(a, b){ return a - b; }
 	;
+	
+	dojo.getObject("form", true, dojox);
 
 	dojo.declare("dojox.form._RangeSliderMixin", null, {
 
@@ -27,22 +31,22 @@ dojo.require("dojox.fx");
 
 			// define a custom constructor for a SliderMoverMax that points back to me
 			var _self = this;
-            var mover = dojo.declare(dijit.form._SliderMoverMax, {
-                constructor: function(){
-                    this.widget = _self;
-                }
-            });
+			var mover = dojo.declare(dijit.form._SliderMoverMax, {
+				constructor: function(){
+					this.widget = _self;
+				}
+			});
 
 			this._movableMax = new dojo.dnd.Moveable(this.sliderHandleMax,{ mover: mover });
 			this.focusNodeMax.setAttribute("aria-valuemin", this.minimum);
 			this.focusNodeMax.setAttribute("aria-valuemax", this.maximum);
 		
 			// a dnd for the bar!
-            var barMover = dojo.declare(dijit.form._SliderBarMover, {
-                constructor: function(){
-                    this.widget = _self;
-                }
-            });
+			var barMover = dojo.declare(dijit.form._SliderBarMover, {
+				constructor: function(){
+					this.widget = _self;
+				}
+			});
 			this._movableBar = new dojo.dnd.Moveable(this.progressBar,{ mover: barMover });
 		},
 	
@@ -184,8 +188,8 @@ dojo.require("dojox.fx");
 			}
 
 			// now we set the min/max-value of the slider!
-			var abspos = dojo.coords(this.sliderBarContainer, true),
-				bar = dojo.coords(this.progressBar, true),
+			var abspos = dojo.position(this.sliderBarContainer, true),
+				bar = dojo.position(this.progressBar, true),
 				relMousePos = e[this._mousePixelCoord] - abspos[this._startingPixelCoord],
 				leftPos = bar[this._startingPixelCount],
 				rightPos = leftPos + bar[this._pixelCount],
@@ -294,7 +298,7 @@ dojo.require("dojox.fx");
 			var widget = this.widget;
 			var abspos = widget._abspos;
 			if(!abspos){
-				abspos = widget._abspos = dojo.coords(widget.sliderBarContainer, true);
+				abspos = widget._abspos = dojo.position(widget.sliderBarContainer, true);
 				widget._setPixelValue_ = dojo.hitch(widget, "_setPixelValue");
 				widget._isReversed_ = widget._isReversed();
 			}
@@ -321,14 +325,14 @@ dojo.require("dojox.fx");
 			var bar = widget._bar;
 			var mouseOffset = widget._mouseOffset;
 			if(!abspos){
-				abspos = widget._abspos = dojo.coords(widget.sliderBarContainer, true);
+				abspos = widget._abspos = dojo.position(widget.sliderBarContainer, true);
 				widget._setPixelValue_ = dojo.hitch(widget, "_setPixelValue");
 				widget._getValueByPixelValue_ = dojo.hitch(widget, "_getValueByPixelValue");
 				widget._isReversed_ = widget._isReversed();
 			}
 			
 			if(!bar){
-				bar = widget._bar = dojo.coords(widget.progressBar, true);
+				bar = widget._bar = dojo.position(widget.progressBar, true);
 			}
 			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords
 			
@@ -373,22 +377,18 @@ dojo.require("dojox.fx");
 		}
 	});
 
-	dojo.declare("dojox.form.HorizontalRangeSlider",
-		[dijit.form.HorizontalSlider, dojox.form._RangeSliderMixin],
-		{
-			// summary:
-			// 	A form widget that allows one to select a range with two horizontally draggable images
-			templateString: dojo.cache('dojox.form','resources/HorizontalRangeSlider.html')
-		}
-	);
+	dojo.declare("dojox.form.HorizontalRangeSlider", [dijit.form.HorizontalSlider, dojox.form._RangeSliderMixin], {
+		// summary:
+		//	A form widget that allows one to select a range with two horizontally draggable images
+		templateString: hTemplate
+	});
 
-	dojo.declare("dojox.form.VerticalRangeSlider",
-		[dijit.form.VerticalSlider, dojox.form._RangeSliderMixin],
-		{
-			// summary:
-			// 	A form widget that allows one to select a range with two vertically draggable images
-			templateString: dojo.cache('dojox.form','resources/VerticalRangeSlider.html')
-		}
-	);
+	dojo.declare("dojox.form.VerticalRangeSlider", [dijit.form.VerticalSlider, dojox.form._RangeSliderMixin], {
+		// summary:
+		//	A form widget that allows one to select a range with two vertically draggable images
+		templateString: vTemplate
+	});
 
-})();
+	return dojox.form._RangeSliderMixin;
+	
+});
