@@ -227,7 +227,10 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_bas
 		},
 	
 		onError: function(){
-			this.iconNode.src = this.getParent().defaultIcon;
+			var icon = this.getParent().defaultIcon;
+			if(icon){
+				this.iconNode.src = icon;
+			}
 		},
 	
 		_setIconAttr: function(icon){
