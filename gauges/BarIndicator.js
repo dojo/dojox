@@ -4,6 +4,10 @@ function(dojo,ddeclare,dfx,dconnect,lang,BarLineIndicator) {
 dojo.experimental("dojox.gauges.BarIndicator");
 
 return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
+	
+	// summary:
+	//		An indicator for the BarGauge that draws a bar corresponding to the indicator value.	
+	
 	_getShapes: function(group){
 		// summary:
 		//		Override of dojox.gauges.BarLineIndicator._getShapes

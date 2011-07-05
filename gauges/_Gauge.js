@@ -64,7 +64,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	// The font parameter is ignored if provided since minor tick marks have no text label.
 	minorTicks: null,
 
-	// _defaultIndicator: Objection
+	// _defaultIndicator: Object
 	// Should be overridden by any extending classes and used to indicate what the 'default' indicator is.
 	// This object is used as the indicator when creating tick marks or when an anonymous object is passed into 
 	// addIndicator.
@@ -175,7 +175,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	buildRendering: function(){
 		// summary: 
 		//		Overrides _Widget.buildRendering
-		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef : dojo.create("div");
+		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: dojo.create("div");
 		this.gaugeContent = dojo.create("div", {
 			className: "dojoxGaugeContent"
 		});
@@ -220,9 +220,9 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 				if (dojo.number){ // use internationalization if loaded
 					t.label = (newTicks.fixedPrecision && newTicks.precision) ? dojo.number.format(i, {
 						places: newTicks.precision
-					}) : dojo.number.format(i);
+					}): dojo.number.format(i);
 				}else{
-					t.label = (newTicks.fixedPrecision && newTicks.precision) ? i.toFixed(newTicks.precision) : i.toString();
+					t.label = (newTicks.fixedPrecision && newTicks.precision) ? i.toFixed(newTicks.precision): i.toString();
 				}
 			}
 			newTicks._ticks.push(this._addScaleTick(t, major));
@@ -331,7 +331,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	},
 
 
-	drawBackground :function(group){
+	drawBackground:function(group){
 		// summary:
 		//		This function is used to draw (or redraw) the background of the gauge.
 		// description:
@@ -339,7 +339,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		
 	},
 	
-	drawForeground :function(group){
+	drawForeground:function(group){
 		// summary:
 		//		This function is used to draw (or redraw) the foreground of the gauge.
 		// description:
@@ -534,7 +534,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//			{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
 
 		var t = group.createText({x: x, y: y, text: txt, align: align});
-		t.setFill(color ? color : 'black');
+		t.setFill(color ? color: 'black');
 		if (font) t.setFont(font);
 		return t;
 	},
@@ -672,11 +672,11 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		dojo.stopEvent(event);
 	},
 	
-	_handleMouseDownIndicator : function (indicator, event){
+	_handleMouseDownIndicator: function (indicator, event){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// indicator : _Indicator 
+		// indicator: _Indicator 
 		//           The indicator object
 		// event:	Object
 		//			The event object
@@ -693,11 +693,11 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		}
 	},
 	
-	_handleMouseOverIndicator : function (indicator, event){
+	_handleMouseOverIndicator: function (indicator, event){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// indicator : _Indicator 
+		// indicator: _Indicator 
 		//           The indicator object
 		// event:	Object
 		//			The event object
@@ -717,11 +717,11 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		}
 	},
 	
-	_handleMouseOutIndicator : function (indicator, event){
+	_handleMouseOutIndicator: function (indicator, event){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// indicator : _Indicator 
+		// indicator: _Indicator 
 		//           The indicator object
 		// event:	Object
 		//			The event object
@@ -732,13 +732,13 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		
 	},
 	
-	_handleMouseOutRange : function ( range, event){
+	_handleMouseOutRange: function ( range, event){
 		if (dijit.Tooltip && this.useTooltip && this.mouseNode){
 			dijit.hideTooltip(this.mouseNode);
 		}
 	},
 	
-	_handleMouseOverRange : function (range, event){
+	_handleMouseOverRange: function (range, event){
 		if (dijit.Tooltip && this.useTooltip && !this._drag){
 			if (range.hover){
 				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
@@ -754,7 +754,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		touch events to drag an indicator to modify it's value
-		// indicator : _Indicator 
+		// indicator: _Indicator 
 		//           The indicator object
 		// event:	Object
 		//			The event object

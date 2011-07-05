@@ -107,13 +107,13 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 	// a static target indicator.  Default is false (that the value can be changed).
 	noChange: false,
 
-	// interactionMode : String
-	// The interactionMode can have two values : "indicator" (the default) or "gauge".
+	// interactionMode: String
+	// The interactionMode can have two values: "indicator" (the default) or "gauge".
 	// When the value is "indicator", the user must click on the indicator to change the value.
 	// When the value is "gauge", the user can click on the gauge to change the indicator value.
 	// If a gauge contains several indicators with the indicatorMode property set to "gauge", then
 	// only the first indicator will be moved when clicking the gauge.
-	interactionMode : "indicator",
+	interactionMode: "indicator",
 	
 	_gauge: null,
 	
@@ -143,7 +143,7 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 		// summary: 
 		//		Overrides _Widget.buildRendering
 		
-		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef : dojo.create("div");
+		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: dojo.create("div");
 		dojo.addClass(n, "dojoxGaugeIndicatorDiv");
 		var title = dojo.create("label");
 		if (this.title) title.innerHTML = this.title + ":";
@@ -158,7 +158,7 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 		dojo.connect(this.valueNode, "onchange", this, this._update);
 	},
 	
-	_update : function(){
+	_update: function(){
 		// summary:
 		//		A private function, handling the updating of the gauge
 
@@ -176,7 +176,7 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 			this.hover = this.title+': '+value;
 		}
 		if(this._gauge){
-			this.draw(this._gauge._indicatorsGroup, animate || animate==undefined ? false : true);
+			this.draw(this._gauge._indicatorsGroup, animate || animate==undefined ? false: true);
 			this.valueNode.value = this.value;
 			if((this.title == 'Target' || this.front) && this._gauge.moveIndicator){
 				// if re-drawing value, make sure target is still on top
@@ -208,14 +208,14 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 		this._gauge._handleMouseOverIndicator(this, e);
 	},
 	
-	handleMouseOut : function(e){
+	handleMouseOut: function(e){
 		// summary:
 		//		Handles mouse-out events in the indicator.
 		this._gauge._handleMouseOutIndicator(this,e);
 		this._gauge.gaugeContent.style.cursor = '';
 	},
 	
-	handleMouseDown : function(e){
+	handleMouseDown: function(e){
 		// summary:
 		//		Handles mouse-down events in the indicator.
 		this._gauge._handleMouseDownIndicator(this,e);

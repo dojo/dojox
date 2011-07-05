@@ -4,6 +4,12 @@ function(dojo,ddeclare,dlang,dconnect,dfx,AnalogIndicatorBase) {
 dojo.experimental("dojox.gauges.AnalogArcIndicator");
 
 return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
+	
+	// summary:
+	//		An indicator for the AnalogGauge that draws a segment of arc.
+	// The segment of arc starts at the start angle of the gauge and ends at the
+	// angle that corresponds to the value of the indicator.
+	
 	_createArc: function(val){
 		// Creating the Arc Path string manually.  This is instead of creating new dojox.gfx.Path object
 		// each time since we really just need the Path string (to use with setShape) and we don't want to

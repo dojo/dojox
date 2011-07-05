@@ -37,6 +37,8 @@ return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGauge
 	_designTextIndicatorX: 190.6675,
 	_designTextIndicatorY: 145.87665,
 	
+	// summary: 
+	//		Creates a new GlossySemiCircularGauge
 	constructor: function(){
 		this.min = 0;
 		this.max = 100;
@@ -47,6 +49,8 @@ return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGauge
 	drawBackground: function(group){
 		// summary: 
 		//		Draws the background of the gauge
+		// group: dojox.gfx.Group
+		//		The GFX group where the background must be drawn
 		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4);
 		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8);
 		
@@ -140,6 +144,8 @@ return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGauge
 	drawForeground: function(group){
 		// summary: 
 		//		Draws the foreground of the gauge
+		// group: dojox.gfx.Group
+		//		The GFX group where the foreground must be drawn
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		var transform = {
 			xx: scale,

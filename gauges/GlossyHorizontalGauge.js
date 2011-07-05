@@ -57,7 +57,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	// Minor tick size, at design
 	_minorTicksLength: 6,
 	
-	// minorTicksColor : Color
+	// minorTicksColor: Color
 	// Color of minor tick marks
 	minorTicksColor: '#c4c4c4',
 	
@@ -241,6 +241,8 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	drawBackground: function(group){
 		// summary: 
 		//		Draws the background of the gauge
+		// group: dojox.gfx.Group
+		//		The GFX group where the background must be drawn
 		if (this._gaugeBackground){
 			return this._gaugeBackground;
 		}
@@ -366,7 +368,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	_setColorAttr: function(color){
 		// summary: 
 		//		Sets the main color of the gauge
-		// color : String
+		// color: String
 		//      The color		
 		this.color = color ? color : 'black';
 		if (this._gaugeBackground && this._gaugeBackground.parent) 
@@ -379,7 +381,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	_setMarkerColorAttr: function(color){
 		// summary: 
 		//		Sets the main color of the marker
-		// color : String
+		// color: String
 		//      The color
 		this.markerColor = color;
 		if (this._needle){

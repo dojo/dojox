@@ -10,8 +10,11 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBa
 	//      dojox.gauges.GlossySemiCircularGauge.
 	//		Since the needle is created by the gauges class, you do not have to use this class directly.
 	
+	
 	interactionMode: "gauge",
 	
+	// color: String
+	// The color of the indicator.
 	color: '#c4c4c4',
 	
 	_getShapes: function(group){

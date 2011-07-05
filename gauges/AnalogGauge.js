@@ -131,12 +131,12 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
         else {
             var range = Math.abs(this.max - this.min);
             var relativeAngle = this._mod360(this.orientation == 'clockwise' ?
-			   (angle - startAngle) : (-angle + startAngle));
+			   (angle - startAngle): (-angle + startAngle));
             return this.min + range * relativeAngle / this._getAngleRange();
         }
 	},
 
-    _getAngleRange : function(){
+    _getAngleRange: function(){
 		// summary:
 		//		This is a helper function that returns the angle range
 		//      from startAngle to endAngle according to orientation.
@@ -160,7 +160,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		return range;
 	},
 	
-    _angleInRange : function(value){
+    _angleInRange: function(value){
 		// summary:
 		//		Test if the angle value is in the startAngle/endAngle range
         var startAngle = this._mod360(this.startAngle);
@@ -188,7 +188,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
         return (this._mod360(this.startAngle) == this._mod360(this.endAngle));
 	},
 	
-    _mod360 :function(v){
+    _mod360:function(v){
 		// summary:
 		//     returns the angle between 0 and 360;
 		while (v>360) v = v - 360;

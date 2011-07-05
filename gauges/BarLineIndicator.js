@@ -2,6 +2,10 @@ define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/fx","dojo/_base/con
 function(dojo,ddeclare,dfx,dconnect,dlang, gfx, _Indicator) { 
 dojo.experimental("dojox.gauges.BarIndicator");
 return dojo.declare("dojox.gauges.BarLineIndicator",[_Indicator],{
+	
+	// summary:
+	//		An indicator for the BarGauge that draws a segment a line corresponding to the indicator value.	
+	
 	width: 1,
 	_getShapes: function(/*dojox.gfx.Group*/ group){
 		// summary:

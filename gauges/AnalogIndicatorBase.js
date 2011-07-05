@@ -9,7 +9,7 @@ return dojo.declare("dojox.gauges.AnalogIndicatorBase",[_Indicator],{
 	draw: function(/*dojox.gfx.Group*/ group, /*Boolean?*/ dontAnimate){
 		// summary: 
 		//		Override of dojox.gauges._Indicator.draw
-	    // group : dojox.gfx.Group
+	    // group: dojox.gfx.Group
 		//      The GFX group when the indicator must be drawn
 		// dontAnimate: Boolean
 		//		Indicates if the drawing should not be animated (vs. the default of doing an animation)

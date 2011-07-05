@@ -35,6 +35,8 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 	_designTextIndicatorX :	187.19173,
 	_designTextIndicatorY :	267.81589,	
 	
+	// summary:
+	//		Creates a new GlossyCircularGauge.
 	constructor: function(){
 		this.startAngle= -135;
 		this.endAngle= 135;
@@ -45,6 +47,9 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 	drawBackground: function(group){
 		// summary:
 		//		Draws the background of the gauge.
+		// group: dojox.gfx.Group
+		//		The GFX group where the background must be drawn
+
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		var transform = {
 				xx: scale,
@@ -136,6 +141,9 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 	drawForeground: function(group){
 		// summary:
 		//		Draws the foreground of the gauge.
+		// group: dojox.gfx.Group
+		//		The GFX group where the foreground must be drawn
+
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		var transform = {
 				xx: scale,

@@ -68,6 +68,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	// Placement of major tick labels
 	majorTicksLabelPlacement: 'inside',
 	
+	// _minorTicksOffset: Number
 	// Distance, at design, from gauge's center to minor ticks
 	_minorTicksOffset: 130,
 	
@@ -79,7 +80,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	// Minor tick size, at design
 	_minorTicksLength: 3,
 	
-	// minorTicksColor : Color
+	// minorTicksColor: Color
 	// Color of minor tick marks
 	minorTicksColor: '#c4c4c4',
 	
@@ -206,7 +207,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	_setColorAttr: function(color){
 		// summary: 
 		//		Sets the main color of the gauge
-		// color : String
+		// color: String
 		//      The color		
 		this.color = color ? color : 'black';
 		if (this._gaugeBackground && this._gaugeBackground.parent) 
@@ -221,7 +222,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	_setNeedleColorAttr: function(color){
 		// summary: 
 		//		Sets the main color of the needle
-		// color : String
+		// color: String
 		//      The color
 		this.needleColor = color;
 		if (this._needle){
@@ -235,7 +236,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	_setTextIndicatorColorAttr: function(color){
 		// summary: 
 		//		Sets the color of text indicator display the gauge's value
-		// color : String
+		// color: String
 		//      The color		
 		this.textIndicatorColor = color;
 		if (this._textIndicator){
@@ -312,7 +313,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	_setMajorTicksLabelPlacementAttr: function(placement){
 		// summary: 
 		//		Sets the placement of labels relatively to major ticks.
-		// inside: String
+		// placement: String
 		//		'inside' or 'outside'
 		this.majorTicksLabelPlacement = placement;
 		this._setMajorTicksProperty({
