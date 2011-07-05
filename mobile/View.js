@@ -353,8 +353,9 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			//		If the page consists of a splitter, there are multiple showing views.
 			var nodes = this.domNode.parentNode.childNodes;
 			for(var i = 0; i < nodes.length; i++){
-				if(dojo.hasClass(nodes[i], "mblView") && dojo.style(nodes[i], "display") != "none"){
-					return dijit.byNode(nodes[i]);
+				var n = nodes[i];
+				if(n.nodeType === 1 && dojo.hasClass(n, "mblView") && dojo.style(n, "display") !== "none"){
+					return dijit.byNode(n);
 				}
 			}
 			return null;
