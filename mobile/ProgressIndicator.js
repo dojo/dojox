@@ -8,9 +8,8 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html"],
 			"#A4A5A4", "#9A9A9A", "#8E8E8E", "#838383"
 		],
 
-		_bars: [],
-
 		constructor: function(){
+			this._bars = [];
 			this.domNode = dojo.create("DIV");
 			this.domNode.className = "mblProgContainer";
 			if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){
