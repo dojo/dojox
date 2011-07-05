@@ -34,24 +34,6 @@
 		var map = dijit.byId("map");
 		var ol = map.map.getOLMap();
 
-		var layer = map.map.getLayer("name", "aLayer")[0];
-		var o = {
-			createWidget : function(){
-				var b = new dijit.form.Button();
-				b.set("label", "A Button at <br/> longitude 7.15 &deg; <br/> latitude 43.65 &deg;");
-				dojo.style(b.domNode, {
-					width : 200 + "px",
-					height : 100 + "px"
-				});
-				return b;
-			},
-			longitude : 7.154126,
-			latitude : 43.651748
-		};
-		var widgetFeature = new dojox.geo.openlayers.WidgetFeature(o);
-		layer.addFeature(widgetFeature);
-		layer.redraw();
-
 		var gfx = map.map.getLayer("name", "aGfxLayer")[0];
 		var cannes = ['7 1\' 0" E', '43 33\' 0" N'];
 		var p = {
@@ -70,6 +52,25 @@
 		});
 		gfx.addFeature(gf);
 		gfx.redraw();
+
+		var layer = map.map.getLayer("name", "aLayer")[0];
+		var o = {
+			createWidget : function(){
+				var b = new dijit.form.Button();
+				b.set("label", "A Button at <br/> longitude 7.15 &deg; <br/> latitude 43.65 &deg;");
+				dojo.style(b.domNode, {
+					width : 200 + "px",
+					height : 100 + "px"
+				});
+				return b;
+			},
+			longitude : 7.154126,
+			latitude : 43.651748
+		};
+		var widgetFeature = new dojox.geo.openlayers.WidgetFeature(o);
+		layer.addFeature(widgetFeature);
+		layer.redraw();
+
 	});
 </script>
 
@@ -89,8 +90,9 @@
     extent : 0.2 }"
 	style="background-color: #b5d0d0; width: 100%; height: 100%;">
 
-	<div class="layer" id="aLayer" name="aLayer" type="Layer"></div>
 	<div class="layer" id="aGfxLayer" name="aGfxLayer" type="GfxLayer"></div>
+
+	<div class="layer" id="aLayer" name="aLayer" type="Layer"></div>
 
 </div>
 

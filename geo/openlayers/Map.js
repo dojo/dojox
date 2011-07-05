@@ -76,6 +76,8 @@ define(["dojo/_base/kernel",
 		return [d, m, s, nsew];
 	};
 
+	dojox.geo.openlayers.Patch.patchGFX();
+	
 	return dojo.declare("dojox.geo.openlayers.Map", null, {
 		//	summary:
 		//		A map viewer based on the OpenLayers library.
@@ -126,9 +128,7 @@ define(["dojo/_base/kernel",
 			//		Constructs a new Map object
 			if (!options)
 				options = {};
-			if (options.patchOpenLayers)
-				dojox.geo.openlayers.Patch.patchOpenLayers();
-
+			
 			div = dojo.byId(div);
 
 			this._tp = {
@@ -156,8 +156,8 @@ define(["dojo/_base/kernel",
 				baseLayerType = dojox.geo.openlayers.BaseLayerType.OSM;
 
 			dojo.style(div, {
-				width : "100%",
-				height : "100%",
+			  width : "100%",
+			  height : "100%",
 				dir : "ltr"
 			});
 

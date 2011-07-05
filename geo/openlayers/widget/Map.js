@@ -68,7 +68,7 @@ define(["dojo/_base/kernel",
 		//		on mobile applications.
 		touchHandler : false,
 
-		//	summary
+		//	summary:
 		//		The underlying `dojox.geo.openlayers.Map` object.
 		//		This is s readonly member.
 		map : null,

@@ -22,13 +22,14 @@ define(["dojo/_base/kernel",
 			this.minPop = Math.pow(2, 30);
 			this.maxPop = 0;
 			this.readCSV("c.csv", dojo.hitch(this, this.loaded));
+			this._circle = true;
 		},
 
 		loaded : function(res){
 			var layer = new dojox.geo.openlayers.GfxLayer();
 			var map = this.sunDemo.map;
 			map.map.addLayer(layer);
-			//			map.map.layerIndex(layer, -1);
+			
 			dojo.forEach(res, function(o){
 				var p = {
 					x : parseFloat(o.longitude),
@@ -44,17 +45,21 @@ define(["dojo/_base/kernel",
 					r = (r - this.minPop + 100) * 20 / dp;
 				else
 					r = 20;
-				//        f.setShapeProperties({
-				//          r : r
-				//        });
-				f.setShapeProperties({
-					x : -r / 2,
-					y : -r / 2,
-					width : r,
-					height : r,
-					r : 0
-				});
+				if (this._circle)
+					f.setShapeProperties({
+						r : r
+					});
+				else
+					f.setShapeProperties({
+						x : -r / 2,
+						y : -r / 2,
+						width : r,
+						height : r,
+						r : 0
+					});
 				layer.addFeature(f);
+				f.getShape();
+				this.connectTooltip(pg, o.asciiname, r);
 			}, this);
 			this.layer = layer;
 			layer.redraw();
@@ -155,7 +160,7 @@ define(["dojo/_base/kernel",
 			var start = 0;
 
 			var eol = s.indexOf(nl, start);
-			var line = s.substring(start, eol - 1);
+			var line = s.substring(start, eol);
 
 			var head = line.split(sep);
 			var re = /^\"(.*)\"$/;
@@ -192,12 +197,50 @@ define(["dojo/_base/kernel",
 		setCreateShape : function(feature, object){
 
 			var createShape = dojo.hitch(this, function(/* Surface */surface){
-				//        var shape = surface.createCircle();
-				var shape = surface.createRect();
+				var shape;
+				if (this._circle)
+					shape = surface.createCircle();
+				else
+					shape = surface.createRect();
+				
 				return shape;
 			});
 
 			feature.createShape = createShape;
+		},
+
+		connectTooltip : function(g, content, size){
+			var map = this.sunDemo.map.map;
+
+			var localXY = function(p){
+				var x = p.x;
+				var y = p.y;
+				var layer = map.olMap.baseLayer;
+				var resolution = map.olMap.getResolution();
+				var extent = layer.getExtent();
+				var rx = (x / resolution + (-extent.left / resolution));
+				var ry = ((extent.top / resolution) - y / resolution);
+				return [rx, ry];
+			};
+			
+			g.shape.connect("onmouseover", function(){
+				var p = dojo.mixin({}, g.coordinates);
+				p = map.transform(p);
+				var a = localXY(p);
+				var r = {
+					x : a[0],
+					y : a[1],
+					w : size,
+					h : size
+				};
+				var s = g.shape;
+				dojo.mixin(s, r);
+				dijit.showTooltip(content, s, ["after"]);
+			});
+
+			g.shape.connect("onmouseout", function(){
+				dijit.hideTooltip(g.shape);
+			});
 		}
 	});
 });

@@ -151,6 +151,20 @@ define(["dojo/_base/kernel",
 			return shape;
 		},
 
+		getShape : function() {
+			//	summary:
+			//		Retrieves the shape rendering the geometry
+			//	return: Shape
+			//		the shape used to render the geometry.
+			var g = this._geometry;
+			if(!g)
+				return null;
+			if(g.shape)
+				return g.shape;
+			this.render();
+			return g.shape;
+		},
+		
 		_createPoint : function(/* dojox.geo.openlayer.Geometry */g){
 			//	summary:
 			//		Create a point shape

@@ -1,143 +1,81 @@
-define(["dojo/_base/kernel"], function(dojo){
+define(["dojo/_base/kernel", "dojox/gfx", "dojox/gfx/shape"], function(dojo){
 
 	dojox.geo.openlayers.Patch = {
 
-		destroyMap : function(){
-			// if unloadDestroy is null, we've already been destroyed
-			if (!this.unloadDestroy) {
-				return false;
-			}
-
-			// make sure panning doesn't continue after destruction
-			if (this.panTween) {
-				this.panTween.stop();
-				this.panTween = null;
-			}
-
-			// map has been destroyed. dont do it again!
-			OpenLayers.Event.stopObserving(window, 'unload', this.unloadDestroy);
-			this.unloadDestroy = null;
-
-			if (this.updateSizeDestroy) {
-				OpenLayers.Event.stopObserving(window, 'resize', this.updateSizeDestroy);
-			} else {
-				this.events.unregister("resize", this, this.updateSize);
-			}
-
-			this.paddingForPopups = null;
-
-			if (this.controls != null) {
-				for ( var i = this.controls.length - 1; i >= 0; --i) {
-					this.controls[i].destroy();
-				}
-				this.controls = null;
-			}
-			if (this.layers != null) {
-				for ( var i = this.layers.length - 1; i >= 0; --i) {
-					// pass 'false' to destroy so that map wont try to set a new
-					// baselayer after each baselayer is removed
-					this.layers[i].destroy(false);
-				}
-				this.layers = null;
-			}
-			if (this.viewPortDiv) {
-				var cond = this.div == this.viewPortDiv.parentNode;
-				if (cond)
-					this.div.removeChild(this.viewPortDiv);
-				//        else {
-				//          console.log("Patched remove child " + this.div + " "
-				//              + this.viewPortDiv.parentNode);
-				//        }
-			}
-			this.viewPortDiv = null;
-
-			if (this.eventListeners) {
-				this.events.un(this.eventListeners);
-				this.eventListeners = null;
-			}
-			this.events.destroy();
-			this.events = null;
-
+		patchMethod : function(/*Object*/type, /*String*/method, /*Function*/execBefore, /*Function*/
+		execAfter){
+			//	summary:
+			//		Patches the specified method of the given type so that the 'execBefore' (resp. 'execAfter') function is 
+			//		called before (resp. after) invoking the legacy implementation.
+			//	description:
+			//		The execBefore function is invoked with the following parameter:
+			//		execBefore(method, arguments) where 'method' is the patched method name and 'arguments' the arguments received
+			//		by the legacy implementation.
+			//		The execAfter function is invoked with the following parameter:
+			//		execBefore(method, returnValue, arguments) where 'method' is the patched method name, 'returnValue' the value
+			//		returned by the legacy implementation and 'arguments' the arguments received by the legacy implementation.
+			//	type: Object: the type to patch.
+			//	method: String: the method name.
+			//	execBefore: Function: the function to execute before the legacy implementation. 
+			//	execAfter: Function: the function to execute after the legacy implementation.
+			//	tags:
+			//		private
+			var old = type.prototype[method];
+			type.prototype[method] = function(){
+				var callee = method;
+				if (execBefore)
+					execBefore.call(this, callee, arguments);
+				var ret = old.apply(this, arguments);
+				if (execAfter)
+					ret = execAfter.call(this, callee, ret, arguments) || ret;
+				return ret;
+			};
 		},
 
-		removeLayerMap : function(layer, setNewBaseLayer){
-			if (setNewBaseLayer == null) {
-				setNewBaseLayer = true;
+		patchGFX : function(){
+
+			var vmlFixRawNodePath = function(){
+				if (!this.rawNode.path)
+					this.rawNode.path = {};
+			};
+
+			var vmlFixFillColors = function() {
+				if(this.rawNode.fill && !this.rawNode.fill.colors)
+					this.rawNode.fill.colors = {};
+			};
+			
+			if (dojo.isIE <= 8) {
+				
+				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.Line, "setShape", vmlFixRawNodePath, null);
+				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.Polyline, "setShape", vmlFixRawNodePath, null);
+				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.Path, "setShape", vmlFixRawNodePath, null);
+				
+				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.shape.Shape, "setFill", vmlFixFillColors, null);
 			}
-
-			var cond;
-			if (layer.isFixed) {
-				cond = this.viewPortDiv == layer.div.parentNode;
-				if (cond)
-					this.viewPortDiv.removeChild(layer.div);
-			} else {
-				cond = this.layerContainerDiv == layer.div.parentNode;
-				if (cond)
-					this.layerContainerDiv.removeChild(layer.div);
-				//        else {
-				//          console.log("remove child " + this.layerContainerDiv + " " + layer.div.parentNode);
-				//        }
-			}
-			OpenLayers.Util.removeItem(this.layers, layer);
-			layer.removeMap(this);
-			layer.map = null;
-
-			// if we removed the base layer, need to set a new one
-			if (this.baseLayer == layer) {
-				this.baseLayer = null;
-				if (setNewBaseLayer) {
-					for ( var i = 0, len = this.layers.length; i < len; i++) {
-						var iLayer = this.layers[i];
-						if (iLayer.isBaseLayer || this.allOverlays) {
-							this.setBaseLayer(iLayer);
-							break;
-						}
-					}
-				}
-			}
-
-			this.resetLayersZIndex();
-
-			this.events.triggerEvent("removelayer", {
-				layer : layer
-			});
+		}
+/*		,
+		OpenLayersMapRemoveLayer : function() {
 		},
-
-		controlPanzoomRemoveButton : function(btn){
-			OpenLayers.Event.stopObservingElement(btn);
-			btn.map = null;
-			btn.getSlideFactor = null;
-			var cond = this.div == btn.parentNode;
-			if (cond)
-				this.div.removeChild(btn);
-			//      else
-			//        console.log("Patched removebutton " + this.div + " " + btn.parentNode);
-			OpenLayers.Util.removeItem(this.buttons, btn);
+		OpenLayersMapDestroyMap : function() {
 		},
-
-		layerGetResolution : function(){
-			console.log("My getResolution");
-			if (!this.map)
-				return;
-			var zoom = this.map.getZoom();
-			return this.getResolutionForZoom(zoom);
+		OpenLayersControlPanZoom_removeButton : function() {
 		},
-
-		patchOpenLayers : function(){
-
-			if (dojo.isIE)
+		OpenLayersLayerGetResolution : function() {
+		},
+		patchOpenLayers : function() {
+		if (dojo.isIE)
 				dojo.extend(OpenLayers.Map, {
-					removeLayer : this.removeLayerMap,
-					destroy : this.destroyMap
+					removeLayer : this.OpenLayersMapRemoveLayer,
+					destroy : this.OpenLayersMapDestroyMap
 				});
 			if (dojo.isIE)
 				dojo.extend(OpenLayers.Control.PanZoom, {
-					_removeButton : this.controlPanzoomRemoveButton
+					_removeButton : this.OpenLayersControlPanZoom_removeButton
 				});
 			dojo.extend(OpenLayers.Layer, {
-				getResolution : this.layerGetResolution
+				getResolution : this.OpenLayersLayerGetResolution
 			});
-
 		}
+*/		
 	};
 });

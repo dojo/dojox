@@ -134,16 +134,13 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 				var x = a[0] - width / 2;
 				var y = a[1] - height / 2;
 				var dom = widget.domNode;
-
-				// var p = layer._surface._parent;
-				// var p = layer._surface.rawNode.parentNode;
+				
 				var p = layer.olLayer.div;
 				if (dom.parentNode != p) {
 					if (dom.parentNode)
 						dom.parentNode.removeChild(dom);
 					p.appendChild(dom);
 				}
-
 				this._updateWidgetPosition({
 					x : x,
 					y : y,
@@ -158,6 +155,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 				//	tags:
 				//		private
 				//	var box = this._params;
+
 				var w = this._widget;
 				var dom = w.domNode;
 

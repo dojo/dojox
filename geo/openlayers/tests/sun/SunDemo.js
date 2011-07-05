@@ -8,7 +8,8 @@ define(["dojo/_base/kernel",
 				"dojox/geo/openlayers/GeometryFeature",
 				"dojox/geo/openlayers/LineString",
 				"dojox/geo/openlayers/Point",
-				"dojox/geo/openlayers/JsonImport"], function(dojo, declare){
+				"dojox/geo/openlayers/JsonImport",
+				"dijit/Tooltip"], function(dojo, declare){
 
 	return dojo.declare("dojox.geo.openlayers.tests.sun.SunDemo", null, {
 		now : true,
@@ -241,6 +242,7 @@ define(["dojo/_base/kernel",
 			else
 				t.stop();
 		}
+
 	});
 
 });

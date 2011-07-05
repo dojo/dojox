@@ -61,10 +61,10 @@
 		map = new dojox.geo.openlayers.widget.Map({}, "map");
 		map.startup();
 
-		createCharts();
-
 		var loc = '{"position" : [2.940673, 47.179259], "extent" : "5"}';
 		map.map.fitTo(loc);
+
+		createCharts();
 
 	});
 
@@ -218,15 +218,40 @@
 		y : 48.840
 	}];
 
+	var locsIE = [{
+		name : "Nice",
+		x : 7.262,
+		y : 43.706
+	}, {
+		name : "Saint-Etienne",
+		x : 4.390,
+		y : 45.441
+	}, {
+		name : "Strasbourg",
+		x : 7.756,
+		y : 48.584
+	}, {
+		name : "Boulogne-Billancourt",
+		x : 2.242,
+		y : 48.840
+	}];
+
 	function createCharts(){
 		var layer = new dojox.geo.openlayers.Layer();
-		var feature;
-
-		dojo.forEach(locs, function(l){
-			feature = createChart(l, {});
+		map.map.addLayer(layer);
+		var lo;
+		if (dojo.isIE)
+			lo = locsIE;
+		else
+			lo = locs;
+		dojo.forEach(lo, function(l){
+			var feature = createChart(l, {});
 			layer.addFeature(feature);
 		});
-		map.map.addLayer(layer);
+
+		setTimeout(function(){
+			layer.redraw();
+		}, 500);
 	}
 
 	function getCoords(loc){

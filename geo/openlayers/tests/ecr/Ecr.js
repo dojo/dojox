@@ -13,8 +13,9 @@ define(["dojo/_base/kernel",
 		constructor : function(){
 
 			var map = new dojox.geo.openlayers.Map("map");
-			map.fitTo([-160, 70, 160, -70]);
 
+			map.fitTo([-160, 70, 160, -70]);
+			
 			this._map = map;
 
 			layer = new dojox.geo.openlayers.GfxLayer("legs");
@@ -26,7 +27,6 @@ define(["dojo/_base/kernel",
 			map.addLayer(layer);
 
 			this.loadData("data/ecr.json");
-
 		},
 
 		fitTo : function(where){
@@ -57,6 +57,7 @@ define(["dojo/_base/kernel",
 			this.clearLayer(layer);
 
 			this.loadData(ds);
+			
 		},
 
 		log : function(o){
@@ -109,6 +110,8 @@ define(["dojo/_base/kernel",
 
 			this.fillPortChooser(items);
 
+			this.portChange('portChooser');
+			
 			layer.redraw();
 		},
 
