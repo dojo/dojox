@@ -1,8 +1,4 @@
-define([
-	"./Line",
-	"../annotations/Arrow",
-	"../manager/_registry"],function(){
-//dojo.provide("dojox.drawing.tools.Arrow");
+dojo.provide("dojox.drawing.tools.Arrow");
 
 dojox.drawing.tools.Arrow = dojox.drawing.util.oo.declare(
 	// summary:
@@ -85,6 +81,3 @@ dojox.drawing.tools.Arrow.setup = {
 };
 
 dojox.drawing.register(dojox.drawing.tools.Arrow.setup, "tool");
-
-return dojox.drawing.tools.Arrow;
-});

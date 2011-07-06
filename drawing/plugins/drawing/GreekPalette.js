@@ -1,15 +1,12 @@
-define([
-	"dojo",
-	"dijit",
-	"dijit/focus",		// dijit.focus()
-	"dijit/_base/popup",
-	"../../library/greek",
-	"dijit/_Widget",
-	"dijit/_TemplatedMixin",
-	"dijit/_PaletteMixin",
-	"dojo/i18n"], function(dojo, dijit){
+dojo.provide("dojox.drawing.plugins.drawing.GreekPalette");
 
-dojo.getObject("drawing.plugins.drawing",true,dojox);
+dojo.require("dojox.drawing.library.greek");
+dojo.require("dijit.focus");
+dojo.require("dijit._Widget");
+dojo.require("dijit._TemplatedMixin");
+dojo.require("dijit._PaletteMixin");
+dojo.require("dojo.i18n");
+
 dojo.requireLocalization("dojox.editor.plugins", "latinEntities");
 
 dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
@@ -336,7 +333,4 @@ dojo.declare("dojox.drawing.plugins.Greeks",
 		// Deal with entities that have keys which are reserved words.
 		cell.innerHTML = "&"+this._alias+";";
 	}
-});
-
-return dojox.drawing.plugins.drawing.GreekPalette;
 });

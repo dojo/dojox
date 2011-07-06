@@ -1,8 +1,5 @@
-define([
-	"dojo",
-	"./_Base",
-	"../util/oo",
-	"../manager/_registry"], function(dojo){
+dojo.provide("dojox.drawing.stencil.Rect");
+
 
 dojox.drawing.stencil.Rect = dojox.drawing.util.oo.declare(
 	// summary:
@@ -83,6 +80,3 @@ dojox.drawing.stencil.Rect = dojox.drawing.util.oo.declare(
 dojox.drawing.register({
 	name:"dojox.drawing.stencil.Rect"
 }, "stencil");
-
-return dojox.drawing.stencil.Rect;
-});

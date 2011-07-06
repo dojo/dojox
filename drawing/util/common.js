@@ -1,9 +1,11 @@
-define(["dojo","../..","dojox/math/round"], function(dojo, dojox){
+dojo.provide("dojox.drawing.util.common");
+dojo.require("dojox.math.round");
 
-	dojo.getObject("drawing.util", true, dojox);
+(function(){
+	
 	var uidMap = {};
 	var start = 0;
-	dojox.drawing.util.common = {
+	dojox.drawing.util.common	= {
 		// summary:
 		//		A collection of common methods used for DojoX Drawing.
 		//		This singleton is accessible in most Drawing classes
@@ -275,5 +277,4 @@ define(["dojo","../..","dojox/math/round"], function(dojo, dojox){
 		}
 	};
 	
-	return dojox.drawing.util.common;
-});
+})();

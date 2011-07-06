@@ -1,7 +1,4 @@
-define([
-	"dojo",
-	"../util/oo",
-	"./Stencil"], function(dojo){
+dojo.provide("dojox.drawing.manager.Undo");
 
 dojox.drawing.manager.Undo = dojox.drawing.util.oo.declare(
 	// summary
@@ -58,6 +55,3 @@ dojox.drawing.manager.Undo = dojox.drawing.util.oo.declare(
 		}
 	}
 );
-
-return dojox.drawing.manager.Undo;
-});

@@ -1,7 +1,4 @@
-define([
-	"../stencil/Rect",
-	"../util/oo",
-	"../manager/_registry"],function(){
+dojo.provide("dojox.drawing.tools.Rect");
 
 dojox.drawing.tools.Rect = dojox.drawing.util.oo.declare(
 	// summary:
@@ -80,6 +77,3 @@ dojox.drawing.tools.Rect.setup = {
 	iconClass:"iconRect"
 };
 dojox.drawing.register(dojox.drawing.tools.Rect.setup, "tool");
-
-return dojox.drawing.tools.Rect;
-});

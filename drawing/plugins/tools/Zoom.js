@@ -1,5 +1,8 @@
-define(["dojo","../../util/oo","../_Plugin","../../manager/_registry"], function(dojo){
+dojo.provide("dojox.drawing.plugins.tools.Zoom");
+dojo.require("dojox.drawing.plugins._Plugin");
 
+(function(){
+	//
 	// 	zoomInc: Float
 	//		The amount of zoom that will occur upon each click.
 	var zoomInc = Math.pow(2.0,0.25),
@@ -30,6 +33,7 @@ define(["dojo","../../util/oo","../_Plugin","../../manager/_registry"], function
 		},
 		{}
 	);
+	
 	
 	dt.ZoomIn = dojox.drawing.util.oo.declare(
 		// summary:
@@ -118,4 +122,4 @@ define(["dojo","../../util/oo","../_Plugin","../../manager/_registry"], function
 	};
 	dojox.drawing.register(dt.ZoomOut.setup, "plugin");
 
-});
+})();

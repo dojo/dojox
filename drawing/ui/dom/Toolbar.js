@@ -1,5 +1,7 @@
-define(["dojo"],function(dojo){
-dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 1.4 release.", 1.4); // FIXME: uhhh
+dojo.provide("dojox.drawing.ui.dom.Toolbar");
+dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 1.4 release.", 1.4);
+
+(function(){
 	
 	dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		// NOTE:
@@ -202,5 +204,4 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 		}
 	});
 	
-	return dojox.drawing.ui.dom.Toolbar;
-});
+})();

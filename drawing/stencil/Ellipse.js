@@ -1,8 +1,4 @@
-define([
-	"dojo",
-	"./_Base",
-	"../util/oo",
-	"../manager/_registry"], function(dojo){
+dojo.provide("dojox.drawing.stencil.Ellipse");
 
 /*=====
 __StencilData = {
@@ -102,6 +98,3 @@ dojox.drawing.stencil.Ellipse = dojox.drawing.util.oo.declare(
 dojox.drawing.register({
 	name:"dojox.drawing.stencil.Ellipse"
 }, "stencil");
-
-return dojox.drawing.stencil.Ellipse;
-});

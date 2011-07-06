@@ -1,8 +1,4 @@
-define([
-	"dojo",
-	"./_Base",
-	"../util/oo",
-	"../manager/_registry"], function(dojo){
+dojo.provide("dojox.drawing.stencil.Line");
 
 dojox.drawing.stencil.Line = dojox.drawing.util.oo.declare(
 	// summary:
@@ -120,6 +116,3 @@ StencilPoints: [
 dojox.drawing.register({
 	name:"dojox.drawing.stencil.Line"
 }, "stencil");
-
-return dojox.drawing.stencil.Line;
-});

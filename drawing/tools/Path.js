@@ -1,7 +1,4 @@
-define([
-	"../stencil/Path",
-	"../util/oo",
-	"../manager/_registry"], function(){
+dojo.provide("dojox.drawing.tools.Path");
 
 dojox.drawing.tools.Path = dojox.drawing.util.oo.declare(
 	// summary:
@@ -204,6 +201,3 @@ dojox.drawing.tools.Path.setup = {
 };
 
 dojox.drawing.register(dojox.drawing.tools.Path.setup, "tool");
-
-return dojox.drawing.tools.Path;
-});

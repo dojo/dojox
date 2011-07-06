@@ -1,33 +1,7 @@
-define([
-	"dojo",
-	"../",
-	"./manager/_registry",
-	"../gfx",
-	"./util/oo",
-	"./util/common",
-	"./util/typeset",
-	"./defaults",
-	"./manager/Anchors",
-	"./manager/Canvas",
-	"./manager/keys",
-	"./manager/Mouse",
-	"./manager/Stencil",
-	"./manager/StencilUI",
-	"./manager/Undo",
-	"./stencil/_Base",
-	"./stencil/Ellipse",
-	"./stencil/Image",
-	"./stencil/Line",
-	"./stencil/Path",
-	"./stencil/Rect",
-	"./stencil/Text",
-	"./annotations/Angle",
-	"./annotations/Arrow",
-	"./annotations/BoxShadow",
-	"./annotations/Label"], function(dojo, dojox){
+dojo.provide("dojox.drawing.Drawing");
 
-	dojo.experimental("dojox.drawing");
-
+(function(){
+	
 	var _plugsInitialized = false;
 	
 	dojo.declare("dojox.drawing.Drawing", [], {
@@ -291,7 +265,7 @@ define([
 					console.error("Failed to initilaize plugin:	" +p.name + ". Did you require it?");
 				}
 			}, this);
-			
+			this.plugins = [];
 			_plugsInitialized = true;
 			// In IE, because the timing is different we have to get the
 			// canvas position after everything has drawn. *sigh*
@@ -585,5 +559,4 @@ define([
 		}
 	});
 	
-	return dojox.drawing.Drawing;
-});
+})();

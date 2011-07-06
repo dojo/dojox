@@ -1,11 +1,6 @@
-define([
-	"dojo",
-	"../util/oo",
-	"../stencil/Path",
-	"./Angle"], function(dojo){
+dojo.provide("dojox.drawing.annotations.Arrow");
+dojo.require("dojox.drawing.stencil.Path");
 
-//dojo.provide("dojox.drawing.annotations.Arrow");
-//dojo.require("dojox.drawing.stencil.Path");
 dojox.drawing.annotations.Arrow = dojox.drawing.util.oo.declare(
 	// summary:
 	//	An annotation called internally to put an arrowhead
@@ -74,6 +69,3 @@ dojox.drawing.annotations.Arrow = dojox.drawing.util.oo.declare(
 		
 	}
 );
-
-return dojox.drawing.annotations.Arrow;
-});

@@ -1,7 +1,4 @@
-define([
-	"dojo",
-	"../util/oo",
-	"./Angle"], function(dojo){
+dojo.provide("dojox.drawing.annotations.BoxShadow");
 
 dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 	// summary:
@@ -308,6 +305,3 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 		}
 	}
 );
-
-return dojox.drawing.annotations.BoxShadow;
-});

@@ -1,8 +1,7 @@
-define(["dojo","../../drawing"],function(dojo){
+dojo.provide("dojox.drawing.manager._registry");
+
+(function(){
 	
-	// TODOC: pubilc APIs
-	
-	dojo.getObject("drawing.stencil", true, dojox);
 	var _registered = {
 		tool:{},
 		stencil:{},
@@ -10,6 +9,7 @@ define(["dojo","../../drawing"],function(dojo){
 		plugin:{},
 		button:{}
 	};
+	
 	dojox.drawing.register = function(item, type){
 		if(type=="drawing"){
 			_registered.drawing[item.id] = item;
@@ -28,4 +28,4 @@ define(["dojo","../../drawing"],function(dojo){
 		return id ? _registered[type][id] : _registered[type];
 	}
 	
-});
+})();

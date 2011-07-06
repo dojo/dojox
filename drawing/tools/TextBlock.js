@@ -1,5 +1,7 @@
-define(["dojo","../stencil/Text","../util/oo","../manager/_registry"], function(dojo){
+dojo.provide("dojox.drawing.tools.TextBlock");
+dojo.require("dojox.drawing.stencil.Text");
 
+(function(){
 	var conEdit;
 	dojo.addOnLoad(function(){
 		//		In order to use VML in IE, it's necessary to remove the
@@ -798,5 +800,4 @@ StencilData: {
 	};
 	dojox.drawing.register(dojox.drawing.tools.TextBlock.setup, "tool");
 	
-	return dojox.drawing.tools.TextBlock;
-});
+})();

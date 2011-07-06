@@ -1,7 +1,5 @@
-define([
-	"dojo",
-	"../../util/oo",
-	"../../plugins/_Plugin"],function(dojo){
+dojo.provide("dojox.drawing.ui.dom.Pan");
+dojo.require("dojox.drawing.plugins._Plugin");
 dojo.deprecated("dojox.drawing.ui.dom.Pan", "It may not even make it to the 1.4 release.", 1.4);
 
 dojox.drawing.ui.dom.Pan = dojox.drawing.util.oo.declare(
@@ -209,6 +207,3 @@ dojox.drawing.ui.dom.Pan.setup = {
 };
 
 dojox.drawing.register(dojox.drawing.ui.dom.Pan.setup, "plugin");
-
-return dojox.drawing.ui.dom.Pan;
-});

@@ -1,7 +1,6 @@
-define([
-	"dojo",
-	"../../annotations/Label",
-	"./Vector"],function(dojo){
+dojo.provide("dojox.drawing.tools.custom.Axes");
+dojo.require("dojox.drawing.stencil.Path");
+
 
 dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 	// summary:
@@ -18,7 +17,6 @@ dojox.drawing.tools.custom.Axes = dojox.drawing.util.oo.declare(
 
 		this.xArrow = new dojox.drawing.annotations.Arrow({stencil:this, idx1:0, idx2:1});
 		this.yArrow = new dojox.drawing.annotations.Arrow({stencil:this, idx1:2, idx2:1});
-		console.log("x and y: ",this.xArrow, " : ",this.yArrow);
 		if(options.data){
 			//Allows import of z-axis in non-enabled canvas and xy-axis in
 			//enabled canvas
@@ -573,6 +571,3 @@ dojox.drawing.tools.custom.Axes.setup = {
 	iconClass:"iconAxes"
 };
 dojox.drawing.register(dojox.drawing.tools.custom.Axes.setup, "tool");
-
-return dojox.drawing.tools.custom.Axes;
-});

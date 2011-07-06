@@ -1,9 +1,5 @@
-define([
-	"dojo",
-	"../_Plugin",
-	"../../util/oo"], function(dojo){
+dojo.provide("dojox.drawing.plugins.drawing.Silverlight");
 
-dojo.getObject("drawing.plugins.drawing",true,dojox);
 dojox.drawing.plugins.drawing.Silverlight = dojox.drawing.util.oo.declare(
 	// summary:
 	// 	"Plugin" to allow the Silverlight plugin to work
@@ -195,6 +191,3 @@ dojox.drawing.plugins.drawing.Silverlight = dojox.drawing.util.oo.declare(
 		
 	}
 );
-
-return dojox.drawing.plugins.drawing.Silverlight;
-});

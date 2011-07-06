@@ -1,7 +1,6 @@
-define([
-	"dojo",
-	"../Arrow",
-	"../../util/positioning"],function(dojo){
+dojo.provide("dojox.drawing.tools.custom.Vector");
+dojo.require("dojox.drawing.tools.Arrow");
+dojo.require("dojox.drawing.util.positioning");
 
 dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 	// summary:
@@ -387,6 +386,3 @@ if(dojox.drawing.defaults.zAxisEnabled){
 	};
 }
 dojox.drawing.register(dojox.drawing.tools.custom.Vector.setup, "tool");
-
-return dojox.drawing.tools.custom.Vector;
-});

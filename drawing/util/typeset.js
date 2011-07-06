@@ -1,16 +1,20 @@
-define(["../library/greek","./common"],function(greeks){
+dojo.provide("dojox.drawing.util.typeset");
+dojo.require("dojox.drawing.library.greek");
+// Summary:
+//		Singleton used for converting characters and typsetting.  Required by _base.
+//
+// Description:
+//		Eventually, this is supposed to turn input strings of mathematical
+//		expressions into typeset expressions that can be displayed on the
+//		canvas.  For now, we just generate Greek letters based on LaTeX style
+//		entity codes.
 
+(function(){
+	
+	var greeks = dojox.drawing.library.greek;
+	
 	dojox.drawing.util.typeset = {
-		// Summary:
-		//		Singleton used for converting characters and typsetting.  Required by _base.
-		//
-		// Description:
-		//		Eventually, this is supposed to turn input strings of mathematical
-		//		expressions into typeset expressions that can be displayed on the
-		//		canvas.  For now, we just generate Greek letters based on LaTeX style
-		//		entity codes.
 
-		
 		convertHTML: function(inText){
 			if(inText){
 				return inText.replace(/&([^;]+);/g,function(match,code){
@@ -60,5 +64,4 @@ define(["../library/greek","./common"],function(greeks){
 
 	};
 
-	return dojox.drawing.util.typeset;
-});
+})();
