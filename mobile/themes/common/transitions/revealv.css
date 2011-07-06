@@ -1,12 +1,12 @@
 .mblRevealv.mblOut {
 	z-index: 0;
-	-webkit-animation-duration: .4s;
+	-webkit-animation-duration: .6s;
 	-webkit-animation-name: mblRevealVOut;
 	-webkit-animation-timing-function: linear;
 }
 .mblRevealv.mblIn {
 	z-index: -100;
-	-webkit-animation-duration: .4s;
+	-webkit-animation-duration: .6s;
 	-webkit-animation-name: mblRevealVIn;
 	-webkit-animation-timing-function: linear;
 }

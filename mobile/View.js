@@ -24,6 +24,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			if(node){
 				dojo.byId(node).style.visibility = "hidden";
 			}
+			this._aw = dojo.isAndroid >= 2.2 && dojo.isAndroid < 3; // flag for android animation workaround
 		},
 	
 		buildRendering: function(){
@@ -202,7 +203,7 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			var fromTop = fromNode.offsetTop;
 			toNode = this.toNode = dojo.byId(toNode);
 			if(!toNode){ console.log("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
-			toNode.style.visibility = "hidden";
+			toNode.style.visibility = this._aw ? "visible" : "hidden";
 			toNode.style.display = "";
 			var toWidget = dijit.byNode(toNode);
 			if(toWidget){
@@ -238,8 +239,10 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 				toWidget.onBeforeTransitionIn.apply(toWidget, arguments);
 				dojo.publish("/dojox/mobile/beforeTransitionIn", [toWidget].concat(dojo._toArray(arguments)));
 			}
-			toNode.style.display = "none";
-			toNode.style.visibility = "visible";
+			if(!this._aw){
+				toNode.style.display = "none";
+				toNode.style.visibility = "visible";
+			}
 			this._doTransition(fromNode, toNode, transition, dir);
 		},
 		_toCls: function(s){
@@ -250,7 +253,9 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 	
 		_doTransition: function(fromNode, toNode, transition, dir){
 			var rev = (dir == -1) ? " mblReverse" : "";
-			toNode.style.display = "";
+			if(!this._aw){
+				toNode.style.display = "";
+			}
 			if(!transition || transition == "none"){
 				this.domNode.style.display = "none";
 				this.invokeCallback();
