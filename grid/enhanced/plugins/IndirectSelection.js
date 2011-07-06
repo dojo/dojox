@@ -110,7 +110,7 @@ dojo.declare("dojox.grid.cells.RowSelector", dojox.grid.cells._Widget, {
 
 	//checkedText: String
 	//		Checked character for high contrast mode
-	checkedText: '&#8730;',
+	checkedText: '&#10003;',
 
 	//unCheckedText: String
 	//		Unchecked character for high contrast mode
