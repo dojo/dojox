@@ -92,7 +92,7 @@ define(["dojo/_base/kernel", "dojo/_base/html", "dojo/_base/declare", "dijit/_Wi
 				}
 			}else{
 				if(this._isReversal()){
-					s = s.reverse();
+					s = s.slice(0).reverse();
 				}
 				dojo.forEach(s, function(x){
 					this._addLabel(x.dyn, x.legend || x.name);
