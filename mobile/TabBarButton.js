@@ -89,18 +89,18 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 			this.inherited(arguments);
 		},
 	
-		select: function(deselect){
-			if(deselect){
+		select: function(){
+			if(arguments[0]){ // deselect
 				this.selected = false;
 				dojo.removeClass(this.domNode, "mblTabButtonSelected");
-			}else{
+			}else{ // select
 				this.selected = true;
 				dojo.addClass(this.domNode, "mblTabButtonSelected");
 				for(var i = 0, c = this.domNode.parentNode.childNodes; i < c.length; i++){
 					if(c[i].nodeType != 1){ continue; }
 					var w = dijit.byNode(c[i]); // sibling widget
 					if(w && w != this){
-						w.select(true);
+						w.deselect();
 					}
 				}
 			}
@@ -110,6 +110,10 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 			if(this.iconNode2){
 				this.iconNode2.style.visibility = this.selected ? "" : "hidden";
 			}
+		},
+		
+		deselect: function(){
+			this.select(true);
 		},
 	
 		onClick: function(e){

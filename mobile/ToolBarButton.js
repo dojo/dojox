@@ -55,9 +55,13 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 			this.connect(this.domNode, "onclick", "onClick");
 		},
 	
-		select: function(/*Boolean?*/deselect){
-			dojo.toggleClass(this.domNode, this._selColor, !deselect);
-			this.selected = !deselect;
+		select: function(){
+			dojo.toggleClass(this.domNode, this._selColor, !arguments[0]);
+			this.selected = !arguments[0];
+		},
+		
+		deselect: function(){
+			this.select(true);
 		},
 	
 		onClick: function(e){

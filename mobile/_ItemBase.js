@@ -37,19 +37,27 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 			}
 		},
 	
-		select: function(/*Boolean?*/deselect){
+		select: function(){
+			// subclass must implement
+		},
+	
+		deselect: function(){
 			// subclass must implement
 		},
 	
 		defaultClickAction: function(e){
 			if(this.toggle){
-				this.select(this.selected);
+				if(this.selected){
+					this.select();
+				}else{
+					this.deselect();
+				}
 			}else if(!this.selected){
 				this.select();
 				if(!this.selectOne){
 					var _this = this;
 					setTimeout(function(){
-						_this.select(true);
+						_this.deselect();
 					}, this._duration);
 				}
 				var transOpts;
