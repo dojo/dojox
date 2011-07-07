@@ -56,7 +56,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "./Column
 							finalTheme = typeof value != "number" ?
 								t.addMixin(theme, "column", value, true) :
 								t.post(theme, "column");
-						if(width >= 1 && h >= 1){
+						if(width >= 1 && h >= 0){
 							var rect = {
 								x: offsets.l + ht(j + 0.5) + gap + shift,
 								y: dim.height - offsets.b - (v > baseline ? vv : baselineHeight),

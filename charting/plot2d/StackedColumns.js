@@ -82,7 +82,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "./Column
 							finalTheme = typeof value != "number" ?
 								t.addMixin(theme, "column", value, true) :
 								t.post(theme, "column");
-						if(width >= 1 && height >= 1){
+						if(width >= 1 && height >= 0){
 							var rect = {
 								x: offsets.l + ht(j + 0.5) + gap,
 								y: dim.height - offsets.b - vt(v),

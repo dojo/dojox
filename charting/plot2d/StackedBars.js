@@ -84,7 +84,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "./Bars",
 							finalTheme = typeof value != "number" ?
 								t.addMixin(theme, "bar", value, true) :
 								t.post(theme, "bar");
-						if(width >= 1 && height >= 1){
+						if(width >= 0 && height >= 1){
 							var rect = {
 								x: offsets.l,
 								y: dim.height - offsets.b - vt(j + 1.5) + gap,
