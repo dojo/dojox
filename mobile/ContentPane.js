@@ -21,11 +21,6 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dijit/_WidgetBase", "dijit/_
 			if(this.prog){
 				this._p = dojox.mobile.ProgressIndicator.getInstance();
 			}
-			if(this.href){
-				this.set("href", this.href);
-			}else if(this.content){
-				this.set("content", this.content);
-			}
 			var parent = this.getParent && this.getParent();
 			if(!parent || !parent.resize){ // top level widget
 				this.resize();
