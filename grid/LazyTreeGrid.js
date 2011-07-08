@@ -249,7 +249,6 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 	},
 	
 	updateRow: function(inRowIndex){
-		this.inherited(arguments);
 		var grid = this.grid;
 		if(grid.keepSelection){
 			var item = grid.getItem(inRowIndex);
@@ -257,6 +256,7 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 				grid.selection.preserver._reSelectById(item, inRowIndex);
 			}
 		}
+		this.inherited(arguments);
 	}
 	
 });
