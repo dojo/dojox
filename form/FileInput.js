@@ -1,8 +1,6 @@
-dojo.provide("dojox.form.FileInput");
+define(['dojo', 'dojo/text!./resources/FileInput.html', 'dijit/form/_FormWidget', 'dijit/_Templated'], 
+function(dojo, template){
 dojo.experimental("dojox.form.FileInput");
-
-dojo.require("dijit.form._FormWidget");
-dojo.require("dijit._Templated");
 
 dojo.declare("dojox.form.FileInput",
 	dijit.form._FormWidget,
@@ -25,7 +23,7 @@ dojo.declare("dojox.form.FileInput",
 	//	ugh, this should be pulled from this.domNode
 	name: "uploadFile",
 
-	templateString: dojo.cache("dojox.form","resources/FileInput.html"),
+	templateString: template,
 	
 	startup: function(){
 		// summary: listen for changes on our real file input
@@ -77,4 +75,7 @@ dojo.declare("dojox.form.FileInput",
 		this.inputNode.value = "";
 	}
 
+});
+
+return dojox.form.FileInput;
 });

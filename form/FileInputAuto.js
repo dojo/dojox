@@ -1,7 +1,5 @@
-dojo.provide("dojox.form.FileInputAuto");
-
-dojo.require("dojox.form.FileInput");
-dojo.require("dojo.io.iframe");
+define(['dojo','dojo/text!./resources/FileInputAuto.html','dojox/form/FileInput', 'dojo/io/iframe'], 
+function(dojo, template){
 
 dojo.declare("dojox.form.FileInputAuto",
 	dojox.form.FileInput,
@@ -47,7 +45,7 @@ dojo.declare("dojox.form.FileInputAuto",
 	_sent: false,
 	
 	// small template changes, new attachpoint: overlay
-	templateString: dojo.cache("dojox.form","resources/FileInputAuto.html"),
+	templateString: template,
 	
 	onBeforeSend: function(){
 		// summary: Called immediately before a FileInput sends it's file via io.iframe.send.
@@ -206,4 +204,7 @@ dojo.declare("dojox.form.FileInputBlind",
 		this.inherited(arguments);
 		this._fixPosition();
 	}
+});
+
+return dojox.form.FileInputAuto;
 });
