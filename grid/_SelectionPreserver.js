@@ -24,7 +24,8 @@ dojo.declare("dojox.grid._SelectionPreserver", null, {
 			dojo.connect(grid, '_setStore', this, 'reset'),
 			dojo.connect(grid, '_addItem', this, '_reSelectById'),
 			dojo.connect(selection, 'addToSelection', dojo.hitch(this, '_selectById', true)),
-			dojo.connect(selection, 'deselect', dojo.hitch(this, '_selectById', false))
+			dojo.connect(selection, 'deselect', dojo.hitch(this, '_selectById', false)),
+			dojo.connect(selection, 'deselectAll', this, 'reset')
 		];
 	},
 	destroy: function(){
