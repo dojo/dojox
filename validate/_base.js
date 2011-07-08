@@ -1,6 +1,6 @@
 // AMD-ID "dojox/validate/_base"
 define([
-	"dojo/_base/lang",
+	"dojo/_base/kernel",
 	"dojo/regexp", // dojo core expressions
 	"dojo/number", // dojo number expressions
 	"./regexp" // additional expressions
