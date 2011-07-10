@@ -251,6 +251,7 @@ define([
 					// 1. value - no default
 					binding.watch("value", function (name, old, current){
 						if(old === current){return;}
+						if(pThis.get('value') === current){return;}
 						pThis.set("value", current);
 					}),
 					// 2. valid - default "true"
