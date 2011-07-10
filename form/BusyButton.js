@@ -24,7 +24,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	
 	postCreate: function(){
 		// summary:
-		//	stores initial label and timeout for reference
+		//		stores initial label and timeout for reference
 		this.inherited(arguments);
 		this._label = this.containerNode.innerHTML;
 		this._initTimeout = this.timeout;
@@ -37,7 +37,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	
 	makeBusy: function(){
 		// summary:
-		//	sets state from idle to busy
+		//		sets state from idle to busy
 		this.isBusy = true;
 		this.set("disabled", true);
 			
@@ -46,8 +46,8 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	
 	cancel: function(){
 		// summary:
-		//	if no timeout is set or for other reason the user can put the button back
-		//  to being idle
+		//		if no timeout is set or for other reason the user can put the button back
+		//  	to being idle
 		this.set("disabled", false);
 		this.isBusy = false;
 		this.setLabel(this._label);
@@ -57,7 +57,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	
 	resetTimeout: function(/*Int*/ timeout){
 		// summary:
-		//	to reset existing timeout and setting a new timeout
+		//		to reset existing timeout and setting a new timeout
 		if(this._timeout){
 			clearTimeout(this._timeout);
 		}
@@ -74,7 +74,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	
 	setLabel: function(/*String*/ content, /*Int*/ timeout){
 		// summary:
-		//	setting a label and optional timeout of the labels state
+		//		setting a label and optional timeout of the labels state
 		
 		// this.inherited(arguments); FIXME: throws an Unknown runtime error
 		
@@ -111,10 +111,11 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	
 	_onClick: function(e){
 		// summary:
-		//	on button click the button state gets changed
+		//		on button click the button state gets changed
 		
 		// only do something if button is not busy
 		if(!this.isBusy){
+			this.inherited(arguments);	// calls onClick()
 			this.makeBusy();
 		}
 	}
