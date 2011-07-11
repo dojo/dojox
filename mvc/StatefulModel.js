@@ -349,8 +349,9 @@ define([
 			//		the data structure.
 			// tags:
 			//		private
-			if(args.data){
-				this._createModel(args.data);
+			var data = (args && args.data) || this.data;
+			if(data){
+				this._createModel(data);
 			}
 		},
 
