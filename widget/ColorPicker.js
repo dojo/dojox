@@ -13,9 +13,11 @@ define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
 		// stub, this is planned later:
 		return hex;
 	};
-	
+
+	// TODO: shouldn't this extend _FormValueWidget?
 	return dojo.declare("dojox.widget.ColorPicker", dijit.form._FormWidget, {
-		// summary: a HSV color picker - similar to Photoshop picker
+		// summary:
+		//		a HSV color picker - similar to Photoshop picker
 		//
 		// description:
 		//		Provides an interactive HSV ColorPicker similar to
