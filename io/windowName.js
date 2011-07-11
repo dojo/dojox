@@ -1,4 +1,4 @@
-define(["dojo/_base/window", "dojo/_base/xhr", "dojo/_base/sniff", "dojo/_base/url", "domReady!"], function(dojo){
+define(["dojo/_base/window", "dojo/_base/xhr", "dojo/_base/sniff", "dojo/_base/url", "dojo/domReady!"], function(dojo){
 dojo.getObject("io.windowName", true, dojox);
 // Implements the window.name transport
 
@@ -104,7 +104,7 @@ dojox.io.windowName = {
 				outerFrame.style.display='none';
 			}
 			frameContainer.appendChild(outerFrame);
-			
+
 			var firstWindow = outerFrame.contentWindow;
 			doc = firstWindow.document;
 			doc.write("<html><body margin='0px'><iframe style='width:100%;height:100%;border:0px' name='protectedFrame'></iframe></body></html>");
@@ -172,7 +172,7 @@ dojox.io.windowName = {
 			}
 			catch(e){
 			}
-			
+
 		};
 		frame.name = frameName;
 		if(method.match(/GET/i)){
@@ -204,7 +204,7 @@ dojox.io.windowName = {
 			form.method = 'POST';
 			form.action = ioArgs.url;
 			form.target = frameName;// connect the form to the iframe
-			
+
 			form.submit();
 			form.parentNode.removeChild(form);
 		}else{
@@ -215,7 +215,7 @@ dojox.io.windowName = {
 		}
 	},
 	_frameNum: 0
-	
+
 };
 
 return dojox.io.windowName;
