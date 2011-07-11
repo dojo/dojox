@@ -91,7 +91,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 						}
 					}
 					this._text = null;
-					id = this._parse(text);
+					id = this._parse(text, dijit.byId(evt.target.id).urlTarget);
 					if(!dojox.mobile._viewMap){
 						dojox.mobile._viewMap = [];
 					}
