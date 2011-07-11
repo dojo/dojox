@@ -226,33 +226,35 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				var vScaler = this._vAxis.getScaler(),
 					vt = vScaler.scaler.getTransformerFromModel(vScaler),
 					ticks = this._vAxis.getTicks();
-				if(this.opt.hMinorLines){
-					dojo.forEach(ticks.minor, function(tick){
-						var y = dim.height - offsets.b - vt(tick.value);
-						var hMinorLine = this.createLine(s, {
-							x1: offsets.l,
-							y1: y,
-							x2: dim.width - offsets.r,
-							y2: y
-						}).setStroke(ta.minorTick);
-						if(this.animate){
-							this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
-						}
-					}, this);
-				}
-				if(this.opt.hMajorLines){
-					dojo.forEach(ticks.major, function(tick){
-						var y = dim.height - offsets.b - vt(tick.value);
-						var hMajorLine = this.createLine(s, {
-							x1: offsets.l,
-							y1: y,
-							x2: dim.width - offsets.r,
-							y2: y
-						}).setStroke(ta.majorTick);
-						if(this.animate){
-							this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
-						}
-					}, this);
+				if(ticks != null){
+					if(this.opt.hMinorLines){
+						dojo.forEach(ticks.minor, function(tick){
+							var y = dim.height - offsets.b - vt(tick.value);
+							var hMinorLine = this.createLine(s, {
+								x1: offsets.l,
+								y1: y,
+								x2: dim.width - offsets.r,
+								y2: y
+							}).setStroke(ta.minorTick);
+							if(this.animate){
+								this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
+							}
+						}, this);
+					}
+					if(this.opt.hMajorLines){
+						dojo.forEach(ticks.major, function(tick){
+							var y = dim.height - offsets.b - vt(tick.value);
+							var hMajorLine = this.createLine(s, {
+								x1: offsets.l,
+								y1: y,
+								x2: dim.width - offsets.r,
+								y2: y
+							}).setStroke(ta.majorTick);
+							if(this.animate){
+								this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
+							}
+						}, this);
+					}
 				}
 			}catch(e){
 				// squelch
@@ -262,33 +264,35 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				var hScaler = this._hAxis.getScaler(),
 					ht = hScaler.scaler.getTransformerFromModel(hScaler),
 					ticks = this._hAxis.getTicks();
-				if(ticks && this.opt.vMinorLines){
-					dojo.forEach(ticks.minor, function(tick){
-						var x = offsets.l + ht(tick.value);
-						var vMinorLine = this.createLine(s, {
-							x1: x,
-							y1: offsets.t,
-							x2: x,
-							y2: dim.height - offsets.b
-						}).setStroke(ta.minorTick);
-						if(this.animate){
-							this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
-						}
-					}, this);
-				}
-				if(ticks && this.opt.vMajorLines){
-					dojo.forEach(ticks.major, function(tick){
-						var x = offsets.l + ht(tick.value);
-						var vMajorLine = this.createLine(s, {
-							x1: x,
-							y1: offsets.t,
-							x2: x,
-							y2: dim.height - offsets.b
-						}).setStroke(ta.majorTick);
-						if(this.animate){
-							this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
-						}
-					}, this);
+				if(this != null){
+					if(ticks && this.opt.vMinorLines){
+						dojo.forEach(ticks.minor, function(tick){
+							var x = offsets.l + ht(tick.value);
+							var vMinorLine = this.createLine(s, {
+								x1: x,
+								y1: offsets.t,
+								x2: x,
+								y2: dim.height - offsets.b
+							}).setStroke(ta.minorTick);
+							if(this.animate){
+								this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
+							}
+						}, this);
+					}
+					if(ticks && this.opt.vMajorLines){
+						dojo.forEach(ticks.major, function(tick){
+							var x = offsets.l + ht(tick.value);
+							var vMajorLine = this.createLine(s, {
+								x1: x,
+								y1: offsets.t,
+								x2: x,
+								y2: dim.height - offsets.b
+							}).setStroke(ta.majorTick);
+							if(this.animate){
+								this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
+							}
+						}, this);
+					}
 				}
 			}catch(e){
 				// squelch
