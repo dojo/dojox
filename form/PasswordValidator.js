@@ -140,11 +140,11 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 	//		A password validation widget that simplifies the "old/new/verify"
 	//		style of requesting passwords.  You will probably want to override
 	//		this class and implement your own pwCheck function.
-	//
+
 	// required: boolean
 	//		Whether or not it is required for form submission
 	required: true,
-	
+
 	// inputWidgets: TextBox[]
 	//		An array of text boxes that are our components
 	_inputWidgets: null,
@@ -290,8 +290,8 @@ dojo.declare("dojox.form.PasswordValidator", dijit.form._FormValueWidget, {
 	},
 	
 	_getValueAttr: function(){
-		// Make sure we don't return undefined....
-		return this.inherited(arguments)||"";
+		// Make sure we don't return undefined.... maybe should do conversion in _setValueAttr() instead?
+		return this.value||"";
 	},
 	
 	focus: function(){
