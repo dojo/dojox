@@ -108,8 +108,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		scrollTo(0, 1);
 		var h = dm.getScreenSize().h + "px";
 		if(dojo.isAndroid){
-			if(force)
+			if(force){
 				dojo.body().style.minHeight = h;
+			}
 			dm.resizeAll();
 		}else{
 			if(force || dm._h === h && h !== dojo.body().style.minHeight){
@@ -344,8 +345,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		if(dojo.hash){
 			// find widgets under root recursively
 			var findWidgets = function(root){
-				var arr;
-				arr = dijit.findWidgets(root);
+				if(!root){ return []; }
+				var arr = dijit.findWidgets(root);
 				var widgets = arr;
 				for(var i = 0; i < widgets.length; i++){
 					arr = arr.concat(findWidgets(widgets[i].containerNode));
@@ -365,7 +366,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 						if("#"+moveTo == w.moveTo){
 							// found a widget that has the given moveTo
 							transition = w.transition;
-								dir = (w instanceof dm.Heading) ? -1 : 1;
+							dir = (w instanceof dm.Heading) ? -1 : 1;
 							break;
 						}
 					}
