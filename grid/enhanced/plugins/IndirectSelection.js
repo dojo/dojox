@@ -373,6 +373,7 @@ dojo.declare("dojox.grid.cells.MultipleRowSelector", dojox.grid.cells.RowSelecto
 		this._connects.push(dojo.connect(this.grid, 'onCellMouseDown', this, '_onMouseDown'));
 		if(this.headerSelector){//option set by user to add a select-all checkbox in column header
 			this._connects.push(dojo.connect(this.grid.views, 'render', this, '_addHeaderSelector'));
+			this._connects.push(dojo.connect(this.grid, '_onFetchComplete', this, '_addHeaderSelector'));
 			this._connects.push(dojo.connect(this.grid, 'onSelectionChanged', this, '_onSelectionChanged'));
 			this._connects.push(dojo.connect(this.grid, 'onKeyDown', this, function(e){
 				if(e.rowIndex == -1 && e.cellIndex == this.index && e.keyCode == dojo.keys.SPACE){
