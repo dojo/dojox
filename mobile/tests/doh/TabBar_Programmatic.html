@@ -86,7 +86,7 @@
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("dojox_mobile_TabBar_0");
-								doh.assertEqual('mblTabPanelHeader', demoWidget.domNode.className);
+								doh.assertTrue(dojo.hasClass(demoWidget.domNode, 'mblTabPanelHeader'));
 
 								demoWidget = dijit.byId("dojox_mobile_TabBarButton_0");
 								doh.assertEqual('mblTabButton mblTabButtonSelected', demoWidget.domNode.className);
@@ -123,7 +123,7 @@
 								doh.assertEqual('New', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[1].innerHTML));
 
 								demoWidget = dijit.byId("dojox_mobile_TabBar_2");
-								doh.assertEqual('mblTabBar', demoWidget.domNode.className);
+								doh.assertTrue(dojo.hasClass(demoWidget.domNode, 'mblTabBar'));
 
 								demoWidget = dijit.byId("dojox_mobile_TabBarButton_6");
 								doh.assertEqual('mblTabBarButton mblTabButtonSelected', demoWidget.domNode.className);
