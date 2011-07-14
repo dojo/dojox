@@ -344,7 +344,12 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 	constructor: function(params){
 		dojo.mixin(this, params);
 		this.grid = this.plugin.grid;
+		this.singularItemTitle = this.itemTitle ? this.itemTitle : this.plugin.nls.singularItemTitle;
 		this.itemTitle = this.itemTitle ? this.itemTitle : this.plugin.nls.itemTitle;
+		if(!this.singularItemTitle){
+			//just for safe in case missed in some locales
+			this.singularItemTitle = this.itemTitle;
+		}
 		this.descTemplate = this.descTemplate ? this.descTemplate : this.plugin.nls.descTemplate;
 		dojo.forEach(this.pageSizes, function(size, idx){
 			size = parseInt(size, 10);
@@ -523,8 +528,10 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		// summary:
 		//		Update size information.
 		var s = this.plugin.forcePageStoreLayer;
+		var title = this[this._maxItemSize > 1 ? 'itemTitle' : 'singularItemTitle'];
 		if(this.description && this.descriptionDiv){
-			this.descriptionDiv.innerHTML = this._maxItemSize > 0 ? dojo.string.substitute(this.descTemplate, [this.itemTitle, this._maxItemSize, s.startIdx + 1, s.endIdx + 1]) : "0 " + this.itemTitle;
+			this.descriptionDiv.innerHTML = this._maxItemSize > 0 ?
+				dojo.string.substitute(this.descTemplate, [title, this._maxItemSize, s.startIdx + 1, s.endIdx + 1]) : "0 " + title;
 		}
 		if(this.descriptionWidth){
 			dojo.style(this.descriptionTd, "width", this.descriptionWidth);
