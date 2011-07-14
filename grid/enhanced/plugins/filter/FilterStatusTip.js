@@ -72,15 +72,14 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 				fdg = p.filterDefDialog;
 			if(fdg.getCriteria() === 0){
 				sp.statusTitle.innerHTML = nls["statusTipTitleNoFilter"];
-				sp.statusRel.innerHTML = sp.statusRelPre.innerHTML = sp.statusRelPost.innerHTML = "";
+				sp.statusRel.innerHTML = "";
 				var cell = p.grid.layout.cells[columnIdx];
 				var colName = cell ? "'" + (cell.name || cell.field) + "'" : nls["anycolumn"];
 				res = dojo.string.substitute(nls["statusTipMsg"], [colName]);
 			}else{
 				sp.statusTitle.innerHTML = nls["statusTipTitleHasFilter"];
-				sp.statusRelPre.innerHTML = nls["statusTipRelPre"] + "&nbsp;";
-				sp.statusRelPost.innerHTML = "&nbsp;" + nls["statusTipRelPost"];
-				sp.statusRel.innerHTML = fdg._relOpCls == "logicall" ? nls["all"] : nls["any"];
+				sp.statusRel.innerHTML = dojo.string.substitute(
+						fdg._relOpCls == "logicall" ? nls["statusTipRelAll"] : nls["statusTipRelAny"]);
 				
 				this._rules = [];
 				var i = 0, c = fdg.getCriteria(i++);
