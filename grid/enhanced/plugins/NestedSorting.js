@@ -1,4 +1,4 @@
-define(["dojo", "dijit", "dojox", "../_Plugin"], function(dojo, dijit, dojox){
+define(["dojo", "dijit", "dojox", "../_Plugin", "dojo/string"], function(dojo, dijit, dojox){
 
 dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._Plugin, {
 	// summary:
@@ -44,6 +44,8 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		//column index that are hidden, un-sortable or indirect selection etc.
 		this._excludedColIdx = [];
 		this.nls = this.grid._nls;
+		this.ascendingTip = dojo.string.substitute(this.nls.sortAction, [this.nls.ascending]);
+		this.descendingTip =  dojo.string.substitute(this.nls.sortAction, [this.nls.descending]);
 		this.grid.setSortInfo = function(){};
 		this.grid.setSortIndex = dojo.hitch(this, '_setGridSortIndex');
 		this.grid.getSortProps = dojo.hitch(this, 'getSortProps');
@@ -168,13 +170,13 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 			});
 			var n = dojo.create('a', {
 				className: 'dojoxGridSortBtn dojoxGridSortBtnNested',
-				title: this.nls.nestedSort + ' - ' + this.nls.ascending,
+				title: dojo.string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.ascendingTip]),
 				innerHTML: '1'
 			}, node.firstChild, 'last');
 			n.onmousedown = dojo.stopEvent;
 			n = dojo.create('a', {
 				className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
-				title: this.nls.singleSort + ' - ' + this.nls.ascending
+				title: dojo.string.substitute(this.nls.sortingState, [this.nls.singleSort, this.ascendingTip])
 			}, node.firstChild, 'last');
 			n.onmousedown = dojo.stopEvent;
 		}else{
@@ -355,11 +357,11 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnAsc', this._currMainSort === 'asc');
 		dojo.toggleClass(singleSortBtn, 'dojoxGridSortBtnDesc', this._currMainSort === 'desc');
 		if(this._currMainSort === 'asc'){
-			singleSortBtn.title = this.nls.singleSort + ' - ' + this.nls.descending;
+			singleSortBtn.title = dojo.string.substitute(this.nls.sortingState, [this.nls.singleSort, this.descendingTip]);
 		}else if(this._currMainSort === 'desc'){
-			singleSortBtn.title = this.nls.singleSort + ' - ' + this.nls.unsorted;
+			singleSortBtn.title = dojo.string.substitute(this.nls.sortingState, [this.nls.singleSort, this.nls.unsorted]);
 		}else{
-			singleSortBtn.title = this.nls.singleSort + ' - ' + this.nls.ascending;
+			singleSortBtn.title = dojo.string.substitute(this.nls.sortingState, [this.nls.singleSort, this.ascendingTip]);
 		}
 		
 		var _this = this;
@@ -400,7 +402,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		var a11y = dojo.hasClass(dojo.body(), "dijit_a11y");
 		if(!data){
 			nestedSortBtn.innerHTML = this._sortDef.length + 1;
-			nestedSortBtn.title = this.nls.nestedSort + ' - ' + this.nls.ascending;
+			nestedSortBtn.title = dojo.string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.ascendingTip]);
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridUnsortedTip;}
 			return;
 		}
@@ -410,11 +412,11 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		dojo.addClass(sortNode, 'dojoxGridSortNodeSorted');
 		if(this.isAsc(cellIdx)){
 			dojo.addClass(sortNode, 'dojoxGridSortNodeAsc');
-			nestedSortBtn.title = this.nls.nestedSort + ' - ' + this.nls.descending;
+			nestedSortBtn.title = dojo.string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.descendingTip]);
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridAscendingTip;}
 		}else if(this.isDesc(cellIdx)){
 			dojo.addClass(sortNode, 'dojoxGridSortNodeDesc');
-			nestedSortBtn.title = this.nls.nestedSort + ' - ' + this.nls.unsorted;
+			nestedSortBtn.title = dojo.string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.nls.unsorted]);
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridDescendingTip;}
 		}
 		dojo.addClass(sortNode, (data.index === 0 ? 'dojoxGridSortNodeMain' : 'dojoxGridSortNodeSub'));
