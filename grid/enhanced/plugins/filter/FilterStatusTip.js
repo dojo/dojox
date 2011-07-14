@@ -78,9 +78,7 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 				res = dojo.string.substitute(nls["statusTipMsg"], [colName]);
 			}else{
 				sp.statusTitle.innerHTML = nls["statusTipTitleHasFilter"];
-				sp.statusRel.innerHTML = dojo.string.substitute(
-						fdg._relOpCls == "logicall" ? nls["statusTipRelAll"] : nls["statusTipRelAny"]);
-				
+				sp.statusRel.innerHTML = fdg._relOpCls == "logicall" ? nls["statusTipRelAll"] : nls["statusTipRelAny"];
 				this._rules = [];
 				var i = 0, c = fdg.getCriteria(i++);
 				while(c){
