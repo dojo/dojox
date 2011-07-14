@@ -103,34 +103,44 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 			w.performTransition(moveTo, evt.detail.transitionDir, evt.detail.transition, null, null);
 		},
 
-		_parse: function(text,id){
-			var container = dojo.create("DIV");
-			var view;
+		_parse: function(text, id){
+			var container, view;
 			var currentView	 = this.findCurrentView();
 			var target = dijit.byId(id) && dijit.byId(id).containerNode 
 						|| dojo.byId(id) 
 						|| currentView && currentView.domNode.parentNode 
 						|| dojo.body();
+			// if a fixed bottom bar exists, a new view should be placed before it.
+			var refNode = null;
+			for(var j = target.childNodes.length - 1; j >= 0; j--){
+				var c = target.childNodes[j];
+				if(c.nodeType === 1){
+					if(c.getAttribute("fixed") === "bottom"){
+						refNode = c;
+					}
+					break;
+				}
+			}
 			if(text.charAt(0) == "<"){ // html markup
-			//container.innerHTML = text;
-			var container = dojo.create("DIV",{innerHTML: text});
+				container = dojo.create("DIV", {innerHTML: text});
 				view = container.firstChild; // <div dojoType="dojox.mobile.View">
 				if(!view && view.nodeType != 1){
 					console.log("dojox.mobile._ItemBase#transitionTo: invalid view content");
 					return;
 				}
 				view.style.visibility = "hidden";
-				target.appendChild(container);
+				target.insertBefore(container, refNode);
 				var ws = dojo.parser.parse(container);
 				dojo.forEach(ws, function(w){
 					if(w && !w._started && w.startup){
 						w.startup();
 					}
 				});
-				target.appendChild(target.removeChild(container).firstChild); // reparent
+				target.replaceChild(container.firstChild, container); // reparent
 				dijit.byNode(view)._visible = true;
 			}else if(text.charAt(0) == "{"){ // json
-				target.appendChild(container);
+				container = dojo.create("DIV");
+				target.insertBefore(container, refNode);
 				this._ws = [];
 				view = this._instantiate(eval('('+text+')'), container);
 				for(var i = 0; i < this._ws.length; i++){
@@ -141,8 +151,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 			}
 			view.style.display = "none";
 			view.style.visibility = "visible";
-			var id = view.id;
-			return dojo.hash ? "#" + id : id;
+			return dojo.hash ? "#" + view.id : view.id;
 		},
 
 		_instantiate: function(/*Object*/obj, /*DomNode*/node, /*Widget*/parent){
