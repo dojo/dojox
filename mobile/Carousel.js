@@ -254,7 +254,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 
 		_setTitleAttr: function(/*String*/title){
 			this.title = title;
-			this.titleNode.innerHTML = title;
+			this.titleNode.innerHTML = this._cv(title);
 		}
 	});
 });
