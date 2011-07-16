@@ -199,7 +199,7 @@ define([
 			}else{ // defaults: outermost refs are expressions, nested are relative to parents
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = parentBinding.get(ref);
+					binding = dojo.getObject(ref, false, parentBinding);
 				}else{
 					try{
 						binding = dojo.getObject(ref);
