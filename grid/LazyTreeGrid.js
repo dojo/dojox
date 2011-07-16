@@ -747,7 +747,6 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 					}
 				}
 			}
-			this._pending_requests[startRowIdx] = false;
 			// Add items when all request complete
 			if(!this.scroller){
 				return;
@@ -763,6 +762,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		}else{
 			this.showMessage();
 		}
+		this._pending_requests[startRowIdx] = false;
 		this._reqQueueLen--;
 		if(this._loading && this._reqQueueLen === 0){
 			this._loading = false;
