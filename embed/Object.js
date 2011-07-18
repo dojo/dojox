@@ -1,11 +1,13 @@
-dojo.provide("dojox.embed.Object");
+define([
+	"dojo/_base/kernel",
+	"dojo/dom-geometry",
+	"dijit/_Widget",
+	"./Flash",
+	"./Quicktime"
+], function (dojo, domGeometry, _Widget, Flash, Quicktime) {
 dojo.experimental("dojox.embed.Object");
 
-dojo.require("dijit._Widget");
-dojo.require("dojox.embed.Flash");
-dojo.require("dojox.embed.Quicktime");
-
-dojo.declare("dojox.embed.Object", dijit._Widget, {
+return dojo.declare("dojox.embed.Object", _Widget, {
 	//	summary:
 	//		A widget you can use to embed either a Flash or Quicktime
 	//		movie.
@@ -55,16 +57,16 @@ dojo.declare("dojox.embed.Object", dijit._Widget, {
 		//		Constructs the movie and places it in the document.
 		if(!this.width || !this.height){
 			//	get the width and height from the domNode
-			var box=dojo.marginBox(this.domNode);
+			var box=domGeometry.marginBox(this.domNode);
 			this.width=box.w, this.height=box.h;
 		}
 
 		//	the default embed constructor.
-		var em=dojox.embed.Flash;
+		var em=Flash;
 
 		//	figure out what kind of movie this is.
 		if(this.src.match(this.reQtMovie) || this.src.match(this.reQtAudio)){
-			em=dojox.embed.Quicktime;
+			em=Quicktime;
 		}
 
 		//	loop through any attributes and set up our params object.
@@ -102,4 +104,5 @@ dojo.declare("dojox.embed.Object", dijit._Widget, {
 		//	set up the movie.
 		this.movie=new (em)(kwArgs, this.domNode);
 	}
+});
 });
