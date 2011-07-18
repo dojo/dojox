@@ -1,10 +1,10 @@
-define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
+define(["dojo/main", "./_base", "./shape", "./path", "./arc", "./decompose"], function(dojo){
 	var canvas = dojo.getObject("dojox.gfx.canvas", true);
 	dojo.experimental("dojox.gfx.canvas");
-	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, pattrnbuffer = null,
+	var g = dojox.gfx, gs = g.shape, ga = g.arc, pattrnbuffer = null,
 		m = g.matrix, mp = m.multiplyPoint, pi = Math.PI, twoPI = 2 * pi, halfPI = pi /2;
 
-	d.declare("dojox.gfx.canvas.Shape", gs.Shape, {
+	dojo.declare("dojox.gfx.canvas.Shape", gs.Shape, {
 		_render: function(/* Object */ ctx){
 			// summary: render the shape
 			ctx.save();
@@ -123,7 +123,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 							f = fs.type == "linear" ?
 								ctx.createLinearGradient(fs.x1, fs.y1, fs.x2, fs.y2) :
 								ctx.createRadialGradient(fs.cx, fs.cy, 0, fs.cx, fs.cy, fs.r);
-							d.forEach(fs.colors, function(step){
+							dojo.forEach(fs.colors, function(step){
 								f.addColorStop(step.offset, g.normalizeColor(step.color).toString());
 							});
 							break;
@@ -402,7 +402,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 			return this.inherited(arguments);
 		},
 		_updateWithSegment: function(segment){
-			var last = d.clone(this.last);
+			var last = dojo.clone(this.last);
 			this[pathRenderers[segment.action]](this.canvasPath, segment.action, segment.args);
 			this.last = last;
 			this.inherited(arguments);
@@ -599,7 +599,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 					args[i + 3] ? 1 : 0, args[i + 4] ? 1 : 0,
 					x1, y1
 				);
-				d.forEach(arcs, function(p){
+				dojo.forEach(arcs, function(p){
 					result.push("bezierCurveTo", p);
 				});
 				this.last.x = x1;
@@ -612,7 +612,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 			this.lastControl = {};
 		}
 	});
-	d.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo",
+	dojo.forEach(["moveTo", "lineTo", "hLineTo", "vLineTo", "curveTo",
 		"smoothCurveTo", "qCurveTo", "qSmoothCurveTo", "arcTo", "closePath"],
 		function(method){ modifyMethod(canvas.Path, method); }
 	);
@@ -680,7 +680,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 		makeDirty: function(){
 			// summary: internal method, which is called when we may need to redraw
 			if(!this.pendingImagesCount && !("pendingRender" in this)){
-				this.pendingRender = setTimeout(d.hitch(this, this._render), 0);
+				this.pendingRender = setTimeout(dojo.hitch(this, this._render), 0);
 			}
 		},
 		downloadImage: function(img, url){
@@ -690,7 +690,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 			//		the image object
 			// url: String:
 			//		the url of the image
-			var handler = d.hitch(this, this.onImageLoad);
+			var handler = dojo.hitch(this, this.onImageLoad);
 			if(!this.pendingImageCount++ && "pendingRender" in this){
 				clearTimeout(this.pendingRender);
 				delete this.pendingRender;
@@ -717,7 +717,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 		// height: String: height of surface, e.g., "100px"
 
 		if(!width && !height){
-			var pos = d.position(parentNode);
+			var pos = dojo.position(parentNode);
 			width  = width  || pos.w;
 			height = height || pos.h;
 		}
@@ -729,7 +729,7 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 		}
 
 		var s = new canvas.Surface(),
-			p = d.byId(parentNode),
+			p = dojo.byId(parentNode),
 			c = p.ownerDocument.createElement("canvas");
 
 		c.width  = g.normalizedLength(width);	// in pixels
@@ -782,13 +782,13 @@ define(["./_base", "./shape", "./path", "./arc", "./decompose"], function(){
 		}
 	};
 
-	d.extend(canvas.Group, Container);
-	d.extend(canvas.Group, gs.Creator);
-	d.extend(canvas.Group, Creator);
+	dojo.extend(canvas.Group, Container);
+	dojo.extend(canvas.Group, gs.Creator);
+	dojo.extend(canvas.Group, Creator);
 
-	d.extend(canvas.Surface, Container);
-	d.extend(canvas.Surface, gs.Creator);
-	d.extend(canvas.Surface, Creator);
+	dojo.extend(canvas.Surface, Container);
+	dojo.extend(canvas.Surface, gs.Creator);
+	dojo.extend(canvas.Surface, Creator);
 	
 	// no event support -> nothing to fix. 
 	canvas.fixTarget = function(event, gfxElement){

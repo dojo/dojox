@@ -1,4 +1,4 @@
-define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
+define(["dojo/main", "./utils", "./shape", "dojox/string/BidiEngine"], function(dojo){
 	dojo.getObject("dojox.gfx._gfxBidiSupport", true);
 	var g = dojox.gfx;
 

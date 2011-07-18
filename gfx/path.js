@@ -1,4 +1,4 @@
-define(["./matrix", "./shape"], function(matrix, shape){
+define(["dojo/main", "./matrix", "./shape"], function(dojo, matrix, shape){
 
 	dojo.declare("dojox.gfx.path.Path", dojox.gfx.shape.Shape, {
 		// summary: a generalized path shape

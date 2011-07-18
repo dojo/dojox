@@ -1,4 +1,4 @@
-define(["./svg"], function(){
+define(["dojo/main", "./svg"], function(dojo){
 	dojo.getObject("dojox.gfx.svg_attach", true);
 	dojo.experimental("dojox.gfx.svg_attach");
 	var g = dojox.gfx, svg = g.svg;

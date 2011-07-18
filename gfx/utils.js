@@ -1,16 +1,15 @@
-define(["dojox/gfx"], function(){
+define(["dojo", "dojox/gfx"], function(dojo, gfx){
 	var gu = dojo.getObject("dojox.gfx.utils", true);
-	var d = dojo, g = dojox.gfx;
 
 	dojo.mixin(gu, {
 		forEach: function(
 			/* dojox.gfx.Surface || dojox.gfx.Shape */ object,
 			/*Function|String|Array*/ f, /*Object?*/ o
 		){
-			o = o || d.global;
+			o = o || dojo.global;
 			f.call(o, object);
-			if(object instanceof g.Surface || object instanceof g.Group){
-				d.forEach(object.children, function(shape){
+			if(object instanceof gfx.Surface || object instanceof gfx.Group){
+				dojo.forEach(object.children, function(shape){
 					gu.forEach(shape, f, o);
 				});
 			}
@@ -19,9 +18,9 @@ define(["dojox/gfx"], function(){
 		serialize: function(
 			/* dojox.gfx.Surface || dojox.gfx.Shape */ object
 		){
-			var t = {}, v, isSurface = object instanceof g.Surface;
-			if(isSurface || object instanceof g.Group){
-				t.children = d.map(object.children, gu.serialize);
+			var t = {}, v, isSurface = object instanceof gfx.Surface;
+			if(isSurface || object instanceof gfx.Group){
+				t.children = dojo.map(object.children, gu.serialize);
 				if(isSurface){
 					return t.children;	// Array
 				}
@@ -51,7 +50,7 @@ define(["dojox/gfx"], function(){
 			/* dojox.gfx.Surface || dojox.gfx.Shape */ object,
 			/* Boolean? */ prettyPrint
 		){
-			return d.toJson(gu.serialize(object), prettyPrint);	// String
+			return dojo.toJson(gu.serialize(object), prettyPrint);	// String
 		},
 
 		deserialize: function(
@@ -59,7 +58,7 @@ define(["dojox/gfx"], function(){
 			/* dojox.gfx.Shape || Array */ object
 		){
 			if(object instanceof Array){
-				return d.map(object, d.hitch(null, gu.deserialize, parent));	// Array
+				return dojo.map(object, dojo.hitch(null, gu.deserialize, parent));	// Array
 			}
 			var shape = ("shape" in object) ? parent.createShape(object.shape) : parent.createGroup();
 			if("transform" in object){
@@ -75,7 +74,7 @@ define(["dojox/gfx"], function(){
 				shape.setFont(object.font);
 			}
 			if("children" in object){
-				d.forEach(object.children, d.hitch(null, gu.deserialize, shape));
+				dojo.forEach(object.children, dojo.hitch(null, gu.deserialize, shape));
 			}
 			return shape;	// dojox.gfx.Shape
 		},
@@ -83,7 +82,7 @@ define(["dojox/gfx"], function(){
 		fromJson: function(
 			/* dojox.gfx.Surface || dojox.gfx.Shape */ parent,
 			/* String */ json){
-			return gu.deserialize(parent, d.fromJson(json));	// Array || dojox.gfx.Shape
+			return gu.deserialize(parent, dojo.fromJson(json));	// Array || dojox.gfx.Shape
 		},
 
 		toSvg: function(/*GFX object*/surface){

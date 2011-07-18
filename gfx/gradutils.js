@@ -1,9 +1,9 @@
 // Various generic utilities to deal with a linear gradient
 
-define(["./matrix"], function(m){
+define(["dojo/main", "./matrix"], function(dojo, m){
 	dojo.getObject("dojox.gfx.gradutils", true);
-	var d = dojo, C = d.Color;
-	
+	var  C = dojo.Color;
+
 	function findColor(o, c){
 		if(o <= 0){
 			return c[0].color;
@@ -18,7 +18,7 @@ define(["./matrix"], function(m){
 			if(stop.offset >= o){
 				if(i){
 					var prev = c[i - 1];
-					return d.blendColors(new C(prev.color), new C(stop.color),
+					return dojo.blendColors(new C(prev.color), new C(stop.color),
 						(o - prev.offset) / (stop.offset - prev.offset));
 				}
 				return stop.color;

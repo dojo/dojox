@@ -1,4 +1,4 @@
-define(["./vml"],function (){
+define(["dojo/main", "./vml"],function (dojo){
 	dojo.getObject("dojox.gfx.vml_attach", true);
 	dojo.experimental("dojox.gfx.vml_attach");
 	var g = dojox.gfx, m = g.matrix, vml = g.vml;

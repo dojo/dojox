@@ -1,7 +1,7 @@
-define(["./matrix"], function(m){
+define(["dojo/main", "./matrix"], function(dojo, m){
 // Various utilities to deal with a linear gradient (mostly VML-specific)
 	dojo.getObject("dojox.gfx.gradient", true);
-	var d = dojo, C = d.Color;
+	var C = dojo.Color;
 	
 	dojox.gfx.gradient.rescale = function(stops, from, to){
 		// summary:
@@ -60,7 +60,7 @@ define(["./matrix"], function(m){
 				prev = stops[i - 1];
 				newStops.push({
 					offset: 0,
-					color: d.blendColors(new C(prev.color), new C(stop.color), (from - prev.offset) / (stop.offset - prev.offset))
+					color: dojo.blendColors(new C(prev.color), new C(stop.color), (from - prev.offset) / (stop.offset - prev.offset))
 				});
 			}else{
 				newStops.push({offset: 0, color: new C(stop.color)});
@@ -76,7 +76,7 @@ define(["./matrix"], function(m){
 				prev = stops[i - 1];
 				newStops.push({
 					offset: 1,
-					color: d.blendColors(new C(prev.color), new C(stop.color), (to - prev.offset) / (stop.offset - prev.offset))
+					color: dojo.blendColors(new C(prev.color), new C(stop.color), (to - prev.offset) / (stop.offset - prev.offset))
 				});
 			}else{
 				newStops.push({offset: 1, color: new C(stops[len - 1].color)});

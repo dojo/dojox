@@ -1,4 +1,4 @@
-define(["./matrix"], function(matrix){
+define(["dojo/main", "./matrix"], function(dojo, matrix){
 	dojo.getObject("dojox.gfx.arc", true);
 	var m = dojox.gfx.matrix,
 		twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,

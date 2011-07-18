@@ -1,4 +1,4 @@
-define(["./silverlight"], function(){
+define(["dojo/_base/kernel", "./silverlight"], function(dojo){
 	dojo.getObject("dojox.gfx.silverlight_attach", true);
 	dojo.experimental("dojox.gfx.silverlight_attach");
 	var g = dojox.gfx, sl = g.silverlight;

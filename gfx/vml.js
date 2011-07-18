@@ -1,6 +1,6 @@
-define(["./_base","./shape","./path","./arc","./gradient"],function(){
+define(["dojo/main","./_base","./shape","./path","./arc","./gradient"],function(dojo){
 	var vml = dojo.getObject("dojox.gfx.vml", true),
-		d = dojo, g = dojox.gfx, m = g.matrix, gs = g.shape;
+		g = dojox.gfx, m = g.matrix, gs = g.shape;
 
 	// dojox.gfx.vml.xmlns: String: a VML's namespace
 	vml.xmlns = "urn:schemas-microsoft-com:vml";
@@ -16,7 +16,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 
 	vml._bool = {"t": 1, "true": 1};
 
-	d.declare("dojox.gfx.vml.Shape", gs.Shape, {
+	dojo.declare("dojox.gfx.vml.Shape", gs.Shape, {
 		// summary: VML-specific implementation of dojox.gfx.Shape methods
 
 		setFill: function(fill){
@@ -80,7 +80,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 							a.push({offset: 1, color: g.normalizeColor(f.colors[0].color)});
 						}
 						// massage colors
-						d.forEach(f.colors, function(v, i){
+						dojo.forEach(f.colors, function(v, i){
 							a.push({offset: 1 - v.offset * c, color: g.normalizeColor(v.color)});
 						});
 						i = a.length - 1;
@@ -88,7 +88,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 						if(i < a.length - 1){
 							// correct excessive colors
 							var q = a[i], p = a[i + 1];
-							p.color = d.blendColors(q.color, p.color, q.offset / (q.offset - p.offset));
+							p.color = dojo.blendColors(q.color, p.color, q.offset / (q.offset - p.offset));
 							p.offset = 0;
 							while(a.length - i > 2) a.pop();
 						}
@@ -164,7 +164,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 				return this;
 			}
 			// normalize the stroke
-			if(typeof stroke == "string" || d.isArray(stroke) || stroke instanceof d.Color){
+			if(typeof stroke == "string" || dojo.isArray(stroke) || stroke instanceof dojo.Color){
 				stroke = {color: stroke};
 			}
 			var s = this.strokeStyle = g.makeParameters(g.defaultStroke, stroke);
@@ -337,7 +337,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 				}
 				parent.removeChild(this.rawNode);
 			}
-			if(d.isIE > 7){
+			if(dojo.isIE > 7){
 				var node = this.rawNode.ownerDocument.createElement("v:roundrect");
 				node.arcsize = r;
 				node.style.display = "inline-block";
@@ -622,7 +622,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 		_updateWithSegment: function(segment){
 			// summary: updates the bounding box of path with new segment
 			// segment: Object: a segment
-			var last = d.clone(this.last);
+			var last = dojo.clone(this.last);
 			this.inherited(arguments);
 			if(arguments.length > 1){ return; } // skip transfomed bbox calculations
 			// add a VML path segment
@@ -870,10 +870,10 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 			if(rawNode){rawNode.setAttribute("dojoGfxType", "textpath");}
 			this.fontStyle = null;
 			if(!("text" in this)){
-				this.text = d.clone(g.defaultTextPath);
+				this.text = dojo.clone(g.defaultTextPath);
 			}
 			if(!("fontStyle" in this)){
-				this.fontStyle = d.clone(g.defaultFont);
+				this.fontStyle = dojo.clone(g.defaultFont);
 			}
 		},
 		setText: function(newText){
@@ -987,7 +987,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 		// height: String: height of surface, e.g., "100px"
 
 		if(!width && !height){
-			var pos = d.position(parentNode);
+			var pos = dojo.position(parentNode);
 			width  = width  || pos.w;
 			height = height || pos.h;
 		}
@@ -998,12 +998,12 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 			height = height + "px";
 		}
 
-		var s = new vml.Surface(), p = d.byId(parentNode),
+		var s = new vml.Surface(), p = dojo.byId(parentNode),
 			c = s.clipNode = p.ownerDocument.createElement("div"),
 			r = s.rawNode = p.ownerDocument.createElement("v:group"),
 			cs = c.style, rs = r.style;
 
-		if(d.isIE > 7){
+		if(dojo.isIE > 7){
 			rs.display = "inline-block";
 		}
 
@@ -1045,10 +1045,10 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 	
 	// copied from dojox.gfx.utils
 	function forEach(object, f, o){
-		o = o || d.global;
+		o = o || dojo.global;
 		f.call(o, object);
 		if(object instanceof g.Surface || object instanceof g.Group){
-			d.forEach(object.children, function(shape){
+			dojo.forEach(object.children, function(shape){
 				forEach(shape, f, o);
 			});
 		}
@@ -1147,7 +1147,7 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 			if(!this.rawNode) return null;
 			var shape = new vml.Rect,
 				node = this.rawNode.ownerDocument.createElement("v:roundrect");
-			if(d.isIE > 7){
+			if(dojo.isIE > 7){
 				node.style.display = "inline-block";
 			}
 			shape.setRawNode(node);
@@ -1188,13 +1188,13 @@ define(["./_base","./shape","./path","./arc","./gradient"],function(){
 		}
 	};
 
-	d.extend(vml.Group, Container);
-	d.extend(vml.Group, gs.Creator);
-	d.extend(vml.Group, Creator);
+	dojo.extend(vml.Group, Container);
+	dojo.extend(vml.Group, gs.Creator);
+	dojo.extend(vml.Group, Creator);
 
-	d.extend(vml.Surface, Container);
-	d.extend(vml.Surface, gs.Creator);
-	d.extend(vml.Surface, Creator);
+	dojo.extend(vml.Surface, Container);
+	dojo.extend(vml.Surface, gs.Creator);
+	dojo.extend(vml.Surface, Creator);
 
 	// Mouse/Touch event
 	vml.fixTarget = function(event, gfxElement){

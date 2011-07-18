@@ -1,9 +1,9 @@
-define(["./canvas"], function(){
+define(["dojo/main", "./canvas"], function(dojo){
 	var canvasEvent = dojo.getObject("dojox.gfx.canvasWithEvents", true);
 	dojo.experimental("dojox.gfx.canvasWithEvents");
-	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas, m = g.matrix;
+	var g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas, m = g.matrix;
 	
-	d.declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
+	dojo.declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
 		
 		_testInputs: function(/* Object */ctx, /* Array */ pos){
 			if (!this.canvasFill && this.strokeStyle) {
@@ -118,7 +118,7 @@ define(["./canvas"], function(){
 		onkeyup:        function(){}
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
+	dojo.declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
 		_testInputs: function(/*Object*/ctx, /*Array*/ pos){
 			var children = this.children, t = this.getTransform(), i, j;
 			if(children.length == 0){
@@ -162,7 +162,7 @@ define(["./canvas"], function(){
 		}	
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Image", [canvasEvent.Shape, canvas.Image], {
+	dojo.declare("dojox.gfx.canvasWithEvents.Image", [canvasEvent.Shape, canvas.Image], {
 		_renderShape: function(/* Object */ ctx){
 			// summary:
 			//		render image
@@ -183,20 +183,20 @@ define(["./canvas"], function(){
 		}
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Text", [canvasEvent.Shape, canvas.Text], {
+	dojo.declare("dojox.gfx.canvasWithEvents.Text", [canvasEvent.Shape, canvas.Text], {
 		_testInputs: function(ctx, pos){
 			return this._hitTestPixel(ctx, pos);
 		}
 	});
 
 
-	d.declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
-	d.declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
-	d.declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasEvent.Shape, canvas.Ellipse],{});
-	d.declare("dojox.gfx.canvasWithEvents.Line", [canvasEvent.Shape, canvas.Line],{});
-	d.declare("dojox.gfx.canvasWithEvents.Polyline", [canvasEvent.Shape, canvas.Polyline],{});
-	d.declare("dojox.gfx.canvasWithEvents.Path", [canvasEvent.Shape, canvas.Path],{});
-	d.declare("dojox.gfx.canvasWithEvents.TextPath", [canvasEvent.Shape, canvas.TextPath],{});
+	dojo.declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
+	dojo.declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
+	dojo.declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasEvent.Shape, canvas.Ellipse],{});
+	dojo.declare("dojox.gfx.canvasWithEvents.Line", [canvasEvent.Shape, canvas.Line],{});
+	dojo.declare("dojox.gfx.canvasWithEvents.Polyline", [canvasEvent.Shape, canvas.Polyline],{});
+	dojo.declare("dojox.gfx.canvasWithEvents.Path", [canvasEvent.Shape, canvas.Path],{});
+	dojo.declare("dojox.gfx.canvasWithEvents.TextPath", [canvasEvent.Shape, canvas.TextPath],{});
 
 	
 	// a map that redirects shape-specific events to the canvas event handler that deals with these events
@@ -545,7 +545,7 @@ define(["./canvas"], function(){
 		// height: String: height of surface, e.g., "100px"
 
 		if(!width && !height){
-			var pos = d.position(parentNode);
+			var pos = dojo.position(parentNode);
 			width  = width  || pos.w;
 			height = height || pos.h;
 		}
@@ -557,7 +557,7 @@ define(["./canvas"], function(){
 		}
 
 		var s = new canvasEvent.Surface(),
-			p = d.byId(parentNode),
+			p = dojo.byId(parentNode),
 			c = p.ownerDocument.createElement("canvas");
 
 		c.width  = g.normalizedLength(width);	// in pixels

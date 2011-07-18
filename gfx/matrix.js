@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel"], function(){
+define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 	var m = dojo.getObject("gfx.matrix", true, dojox);
 
 	// candidates for dojox.math:

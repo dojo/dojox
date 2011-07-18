@@ -1,4 +1,4 @@
-define(["dojox/gfx/canvas"], function(){
+define(["dojo/main", "dojox/gfx/canvas"], function(dojo){
 	dojo.getObject("dojox.gfx.canvas_attach", true);
 	dojo.experimental("dojox.gfx.canvas_attach");
 

@@ -1,6 +1,6 @@
-define(["./matrix"], function(m){
+define(["dojo/main", "./matrix"], function(dojo, m){
 	dojo.getObject("dojox.gfx.fx", true);
-	var d = dojo, g = dojox.gfx;
+	var g = dojox.gfx;
 
 	// Generic interpolators. Should they be moved to dojox.fx?
 
@@ -24,7 +24,7 @@ define(["./matrix"], function(m){
 		this.temp = new dojo.Color();
 	}
 	InterpolColor.prototype.getValue = function(r){
-		return d.blendColors(this.start, this.end, r, this.temp);
+		return dojo.blendColors(this.start, this.end, r, this.temp);
 	};
 
 	function InterpolValues(values){
@@ -80,7 +80,7 @@ define(["./matrix"], function(m){
 		return ret;
 	};
 
-	var transparent = new d.Color(0, 0, 0, 0);
+	var transparent = new dojo.Color(0, 0, 0, 0);
 
 	function getColorInterpol(prop, obj, name, def){
 		if(prop.values){
@@ -135,9 +135,9 @@ define(["./matrix"], function(m){
 		//	|		width: {end: 15},
 		//	|		join:  {values: ["miter", "bevel", "round"]}
 		//	|	}).play();
-		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d.Animation(args), shape = args.shape, stroke;
-		d.connect(anim, "beforeBegin", anim, function(){
+		if(!args.easing){ args.easing = dojo._defaultEasing; }
+		var anim = new dojo.Animation(args), shape = args.shape, stroke;
+		dojo.connect(anim, "beforeBegin", anim, function(){
 			stroke = shape.getStroke();
 			var prop = args.color, values = {}, value, start, end;
 			if(prop){
@@ -169,7 +169,7 @@ define(["./matrix"], function(m){
 			}
 			this.curve = new InterpolObject(values, stroke);
 		});
-		d.connect(anim, "onAnimate", shape, "setStroke");
+		dojo.connect(anim, "onAnimate", shape, "setStroke");
 		return anim; // dojo.Animation
 	};
 
@@ -183,16 +183,16 @@ define(["./matrix"], function(m){
 		//	|		duration: 500,
 		//	|		color: {start: "red", end: "green"}
 		//	|	}).play();
-		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d.Animation(args), shape = args.shape, fill;
-		d.connect(anim, "beforeBegin", anim, function(){
+		if(!args.easing){ args.easing = dojo._defaultEasing; }
+		var anim = new dojo.Animation(args), shape = args.shape, fill;
+		dojo.connect(anim, "beforeBegin", anim, function(){
 			fill = shape.getFill();
 			var prop = args.color, values = {};
 			if(prop){
 				this.curve = getColorInterpol(prop, fill, "", transparent);
 			}
 		});
-		d.connect(anim, "onAnimate", shape, "setFill");
+		dojo.connect(anim, "onAnimate", shape, "setFill");
 		return anim; // dojo.Animation
 	};
 
@@ -206,9 +206,9 @@ define(["./matrix"], function(m){
 		//	|		variant: {values: ["normal", "small-caps"]},
 		//	|		size:  {end: 10, units: "pt"}
 		//	|	}).play();
-		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d.Animation(args), shape = args.shape, font;
-		d.connect(anim, "beforeBegin", anim, function(){
+		if(!args.easing){ args.easing = dojo._defaultEasing; }
+		var anim = new dojo.Animation(args), shape = args.shape, font;
+		dojo.connect(anim, "beforeBegin", anim, function(){
 			font = shape.getFont();
 			var prop = args.style, values = {}, value, start, end;
 			if(prop && prop.values){
@@ -234,7 +234,7 @@ define(["./matrix"], function(m){
 			}
 			this.curve = new InterpolObject(values, font);
 		});
-		d.connect(anim, "onAnimate", shape, "setFont");
+		dojo.connect(anim, "onAnimate", shape, "setFont");
 		return anim; // dojo.Animation
 	};
 
@@ -250,13 +250,13 @@ define(["./matrix"], function(m){
 		//	|			{name: "original"}
 		//	|		]
 		//	|	}).play();
-		if(!args.easing){ args.easing = d._defaultEasing; }
-		var anim = new d.Animation(args), shape = args.shape, original;
-		d.connect(anim, "beforeBegin", anim, function(){
+		if(!args.easing){ args.easing = dojo._defaultEasing; }
+		var anim = new dojo.Animation(args), shape = args.shape, original;
+		dojo.connect(anim, "beforeBegin", anim, function(){
 			original = shape.getTransform();
 			this.curve = new InterpolTransform(args.transform, original);
 		});
-		d.connect(anim, "onAnimate", shape, "setTransform");
+		dojo.connect(anim, "onAnimate", shape, "setTransform");
 		return anim; // dojo.Animation
 	};
 	
