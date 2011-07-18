@@ -185,7 +185,7 @@ define([
 				ref = ref.replace(/^\s*rel\s*:\s*/, "");
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = dojo.getObject(ref, false, parentBinding);
+					binding = dojo.getObject("" + ref, false, parentBinding);
 				}
 			}else if(/^\s*widget\s*:\s*/.test(ref)){ // declarative: refs relative to another dijits binding, dot-separated
 				ref = ref.replace(/^\s*widget\s*:\s*/, "");
@@ -199,7 +199,7 @@ define([
 			}else{ // defaults: outermost refs are expressions, nested are relative to parents
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = dojo.getObject(ref, false, parentBinding);
+					binding = dojo.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
 						binding = dojo.getObject(ref);
