@@ -15,7 +15,7 @@ return dojo.declare("dojox.geo.charting._Marker", null, {
 		_needTooltipRefresh = false;
 	},
 
-	show: function(featureId){
+	show: function(featureId,evt){
 		this.currentFeature = this.features[featureId];
 		if (this._map.showTooltips && this.currentFeature) {
 			this.markerText = this.currentFeature.markerText || this.markerData[featureId] || featureId;

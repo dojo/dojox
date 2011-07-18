@@ -45,6 +45,9 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 		//		clears the numeric value on this Feature object (removes color).
 		
 		this.value = null;
+		this.unsetColor();
+	},
+	unsetColor:function(){
 		this._defaultFill = this.parent.defaultColor;
 //		var color = new dojox.color.Color(this.parent.defaultColor);
 //		color.a = 0.7;
@@ -60,16 +63,23 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 		//	value:
 		//		a number
 		this.value = value;
-		if(this.parent.series.length != 0){
-			for(var i = 0;i < this.parent.series.length;i++){
-				var range = this.parent.series[i];
-				if((value>=range.min)&&(value<range.max)){
-					this._setFillWith(range.color);
-					this._defaultFill = range.color;
-					var col = new color.Color(range.color).toHsv();
-					col.v = (col.v + 20);
-					this._highlightFill = color.fromHsv(col);
+		if (value == null) {
+			this.unsetValue();
+		} else {
+			if (this.parent.series.length != 0) {
+				for (var i = 0; i < this.parent.series.length; i++) {
+					var range = this.parent.series[i];
+					if ((value >= range.min) && (value < range.max)) {
+						this._setFillWith(range.color);
+						this._defaultFill = range.color;
+						var col = new color.Color(range.color).toHsv();
+						col.v = (col.v + 20);
+						this._highlightFill = color.fromHsv(col);
+						return;
+					}
 				}
+				// did not found a range : unset color
+				this.unsetColor();
 			}
 		}
 	},
@@ -108,7 +118,7 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 	_onmouseoverHandler: function(evt){
 		this.parent.onFeatureOver(this);
 		this._setFillWith(this._highlightFill);
-		this.mapObj.marker.show(this.id);
+		this.mapObj.marker.show(this.id,evt);
 	},
 	_onmouseoutHandler: function(){
 		this._setFillWith(this._defaultFill);
@@ -117,10 +127,10 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 	},
 	_onmousemoveHandler: function(evt){
 		if(this.mapObj.marker._needTooltipRefresh){
-			this.mapObj.marker.show(this.id);
+			this.mapObj.marker.show(this.id,evt);
 		}
 		if(this.isSelected){
-			if (parent.enableFeatureZoom) {
+			if (this.parent.enableFeatureZoom) {
 				evt = dojo.fixEvent(evt || window.event);
 				dojo.style("mapZoomCursor", "left", evt.pageX + 12 + "px");
 				dojo.style("mapZoomCursor", "top", evt.pageY + "px");
@@ -137,7 +147,7 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 			this.parent.deselectAll();
 			this.select(true);
 			this._onmousemoveHandler(evt);
-		}else if(parent.enableFeatureZoom){
+		}else if(this.parent.enableFeatureZoom){
 			if(this._isZoomIn){
 				this._zoomOut();
 			}else{

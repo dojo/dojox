@@ -23,13 +23,17 @@ function(dojo, lang, dojox, dhtml, matrix, Tooltip, NodeListTraverse) {
 		var gfxDomContainer = dgc._getGfxContainer(gfxObject);
 		gfxObject.x = dojo.position(gfxDomContainer,true).x + point.x,
 		gfxObject.y = dojo.position(gfxDomContainer,true).y + point.y,
-		gfxObject.width = bbox.width * realMatrix.xx,
-		gfxObject.height = bbox.height * realMatrix.yy
+		gfxObject.w = bbox.width * realMatrix.xx,
+		gfxObject.h = bbox.height * realMatrix.yy
 		return gfxObject;
 	};
 
 	dgc._getGfxContainer = function(gfxObject){
-		return (new dojo.NodeList(gfxObject.rawNode)).parents("div")[0];
+		if (gfxObject.surface) {
+			return (new dojo.NodeList(gfxObject.surface.rawNode)).parents("div")[0];
+		} else {
+			return (new dojo.NodeList(gfxObject.rawNode)).parents("div")[0];
+		}
 	};
 
 	dgc._getRealBBox = function(gfxObject){

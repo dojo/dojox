@@ -35,18 +35,18 @@ return dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 	dataBindingValueFunction: null,
 	markerData : "",
 	series : "",
-	adjustMapCenterOnResize: false,
-	adjustMapScaleOnResize: false,
-	animateOnResize: false,
+	adjustMapCenterOnResize: null,
+	adjustMapScaleOnResize: null,
+	animateOnResize: null,
 	onFeatureClick: null,
 	onFeatureOver: null,
-	enableMouseSupport: false,
-	enableTouchSupport: false,
-	enableMouseZoom: false,
-	enableMousePan: false,
+	enableMouseSupport: null,
+	enableTouchSupport: null,
+	enableMouseZoom: null,
+	enableMousePan: null,
 	enableKeyboardSupport: false,
 	showTooltips: false,
-	enableFeatureZoom: true,
+	enableFeatureZoom: null,
 	colorAnimationDuration: 0,
 	mouseClickThreshold: 2,
 	_mouseInteractionSupport:null,
@@ -119,6 +119,7 @@ return dojo.declare("dojox.geo.charting.widget.Map", dijit._Widget, {
 				this._mouseInteractionSupport = new dojox.geo.charting.MouseInteractionSupport(this.map,options);
 				this._mouseInteractionSupport.connect();
 			}
+			
 			if (this.enableTouchSupport) {
 				if (!dojox.geo.charting.TouchInteractionSupport) {
 					throw Error("Can't find dojox.geo.charting.TouchInteractionSupport. Didn't you forget to dojo" + ".require() it?");

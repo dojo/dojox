@@ -3,11 +3,27 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare","dojo/_base
 							function(dojo, lang, declare, dhtml, window, Widget) {
 
 return dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
+	// summary:
+	//		A legend widget displaying association between colors and Feature value ranges. 
+	//
+	//	description:
+	//		This widget basically is a table comprising (icon,string) pairs, describing the color scheme
+	//		used for the map and its associated text descriptions.	 
+	// 
+	
+	//	example:
+	// |	var legend = new dojox.geo.charting.widget.Legend({
+	// |		map: map
+	// |	});
 	horizontal:true,
 	legendBody:null,
 	swatchSize:18,
 	map:null,
 	postCreate: function(){
+		//	summary:
+		//		inherited Dijit's postCreate function		
+		//	tags:
+		//		protected
 		if(!this.map){return;}
 		this.series = this.map.series;
 		if (!this.domNode.parentNode) {
@@ -16,7 +32,11 @@ return dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
 		}
 		this.refresh();
 	},
-	buildRendering: function(){  
+	buildRendering: function(){ 
+		//	summary:
+		//		Construct the UI for this widget, creates the underlying real dojox.geo.charting.Map object.		
+		//	tags:
+		//		protected
 		this.domNode = dojo.create("table",   
 					{role: "group", "class": "dojoxLegendNode"});  
 		this.legendBody = dojo.create("tbody", null, this.domNode);  
@@ -24,6 +44,8 @@ return dojo.declare("dojox.geo.charting.widget.Legend",dijit._Widget, {
  	},  
 
 	refresh:function(){
+		//	summary:
+		//		Refreshes this legend contents when Map series has changed.		
 		// cleanup
 		while(this.legendBody.lastChild){
 			dojo.destroy(this.legendBody.lastChild);

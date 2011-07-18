@@ -146,7 +146,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		//		private
 		
 		
-		//dojo.stopEvent(mouseEvent);
+		dojo.stopEvent(mouseEvent);
 		
 		this._map.focused = true;
 		// set various status parameters
