@@ -1,12 +1,7 @@
-dojo.provide("dojox.data.OpenSearchStore");
-
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dojox.xml.DomParser");
-dojo.require("dojox.xml.parser");
-
+define(["dojo/_base/kernel", "dojo/data/util/simpleFetch", "dojox/xml/parser", "dojo/_base/declare"], function (dojo, simpleFetch, parser) {
 dojo.experimental("dojox.data.OpenSearchStore");
 
-dojo.declare("dojox.data.OpenSearchStore", null, {
+var OpenSearchStore = dojo.declare("dojox.data.OpenSearchStore", null, {
 	constructor: function(/*Object*/args){
 		//	summary:
 		//		Initializer for the OpenSearchStore store.
@@ -364,4 +359,5 @@ dojo.declare("dojox.data.OpenSearchStore", null, {
 		}
 	}
 });
-dojo.extend(dojox.data.OpenSearchStore,dojo.data.util.simpleFetch);
+return dojo.extend(OpenSearchStore,dojo.data.util.simpleFetch);
+});
