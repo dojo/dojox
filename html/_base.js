@@ -1,3 +1,14 @@
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/xhr",
+	"dojo/_base/window",
+	"dojo/_base/sniff",
+	"dojo/_base/url",
+	"dojo/dom-construct",
+	"dojo/html",
+	"dojo/_base/declare"
+], function (dojo, lang, xhrUtil, windowUtil, has, _Url, domConstruct, htmlUtil) {
 /*
 	Status: dont know where this will all live exactly
 	Need to pull in the implementation of the various helper methods
@@ -7,15 +18,9 @@
 
 
 */
+	var html = dojo.getObject("dojox.html", true);
 
-dojo.provide("dojox.html._base");
-
-dojo.require("dojo.html");
-dojo.require("dojo._base.url");
-
-(function() {
-
-	if(dojo.isIE){
+	if(has("ie")){
 		var alphaImageLoader = /(AlphaImageLoader\([^)]*?src=(['"]))(?![a-z]+:|\/)([^\r\n;}]+?)(\2[^)]*\)\s*[;}]?)/g;
 	}
 
@@ -35,7 +40,7 @@ dojo.require("dojo._base.url");
 
 	var cssPaths = /(?:(?:@import\s*(['"])(?![a-z]+:|\/)([^\r\n;{]+?)\1)|url\(\s*(['"]?)(?![a-z]+:|\/)([^\r\n;]+?)\3\s*\))([a-z, \s]*[;}]?)/g;
 
-	var adjustCssPaths = dojox.html._adjustCssPaths = function(cssUrl, cssText){
+	var adjustCssPaths = html._adjustCssPaths = function(cssUrl, cssText){
 		//	summary:
 		//		adjusts relative paths in cssText to be relative to cssUrl
 		//		a path is considered relative if it doesn't start with '/' and not contains ':'
@@ -71,15 +76,15 @@ dojo.require("dojo._base.url");
 		// like * > .myselector { filter:none; }
 		if(alphaImageLoader){
 			cssText = cssText.replace(alphaImageLoader, function(ignore, pre, delim, url, post){
-				return pre + (new dojo._Url(cssUrl, './'+url).toString()) + post;
+				return pre + (new _Url(cssUrl, './'+url).toString()) + post;
 			});
 		}
 
 		return cssText.replace(cssPaths, function(ignore, delimStr, strUrl, delimUrl, urlUrl, media){
 			if(strUrl){
-				return '@import "' + (new dojo._Url(cssUrl, './'+strUrl).toString()) + '"' + media;
+				return '@import "' + (new _Url(cssUrl, './'+strUrl).toString()) + '"' + media;
 			}else{
-				return 'url(' + (new dojo._Url(cssUrl, './'+urlUrl).toString()) + ')' + media;
+				return 'url(' + (new _Url(cssUrl, './'+urlUrl).toString()) + ')' + media;
 			}
 		});
 	};
@@ -89,20 +94,20 @@ dojo.require("dojo._base.url");
 	// <img style='filter:progid...AlphaImageLoader(src="noticeTheSrcHereRunsThroughHtmlSrc")' src="img">
 	var htmlAttrPaths = /(<[a-z][a-z0-9]*\s[^>]*)(?:(href|src)=(['"]?)([^>]*?)\3|style=(['"]?)([^>]*?)\5)([^>]*>)/gi;
 
-	var adjustHtmlPaths = dojox.html._adjustHtmlPaths = function(htmlUrl, cont){
+	var adjustHtmlPaths = html._adjustHtmlPaths = function(htmlUrl, cont){
 		var url = htmlUrl || "./";
 
 		return cont.replace(htmlAttrPaths,
 			function(tag, start, name, delim, relUrl, delim2, cssText, end){
 				return start + (name ?
-							(name + '=' + delim + (new dojo._Url(url, relUrl).toString()) + delim)
+							(name + '=' + delim + (new _Url(url, relUrl).toString()) + delim)
 						: ('style=' + delim2 + adjustCssPaths(url, cssText) + delim2)
 				) + end;
 			}
 		);
 	};
 
-	var snarfStyles = dojox.html._snarfStyles = function	(/*String*/cssUrl, /*String*/cont, /*Array*/styles){
+	var snarfStyles = html._snarfStyles = function	(/*String*/cssUrl, /*String*/cont, /*Array*/styles){
 		/****************  cut out all <style> and <link rel="stylesheet" href=".."> **************/
 		// also return any attributes from this tag (might be a media attribute)
 		// if cssUrl is set it will adjust paths accordingly
@@ -132,7 +137,7 @@ dojo.require("dojo._base.url");
 		);
 	};
 
-	var snarfScripts = dojox.html._snarfScripts = function(cont, byRef){
+	var snarfScripts = html._snarfScripts = function(cont, byRef){
 		// summary
 		//		strips out script tags from cont
 		// invoke with
@@ -162,7 +167,7 @@ dojo.require("dojo._base.url");
 							return name.charAt(0)=="#" ? String.fromCharCode(name.substring(1)) : "&"+name+";";
 					}
 				});
-				dojo.xhrGet({
+				xhrUtil.get({
 					url: src,
 					sync: true,
 					load: function(code){
@@ -186,18 +191,18 @@ dojo.require("dojo._base.url");
 		);
 	};
 
-	var evalInGlobal = dojox.html.evalInGlobal = function(code, appendNode){
+	var evalInGlobal = html.evalInGlobal = function(code, appendNode){
 		// we do our own eval here as dojo.eval doesn't eval in global crossbrowser
 		// This work X browser but but it relies on a DOM
 		// plus it doesn't return anything, thats unrelevant here but not for dojo core
-		appendNode = appendNode || dojo.doc.body;
+		appendNode = appendNode || windowUtil.doc.body;
 		var n = appendNode.ownerDocument.createElement('script');
 		n.type = "text/javascript";
 		appendNode.appendChild(n);
 		n.text = code; // DOM 1 says this should work
 	};
 
-	dojo.declare("dojox.html._ContentSetter", [dojo.html._ContentSetter], {
+	html._ContentSetter = dojo.declare(/*===== "dojox.html._ContentSetter", =====*/ htmlUtil._ContentSetter, {
 		// adjustPaths: Boolean
 		//		Adjust relative paths in html string content to point to this page
 		//		Only useful if you grab content from a another folder than the current one
@@ -256,7 +261,7 @@ dojo.require("dojo._base.url");
 
 			var styles = this._styles;// init vars
 
-			if(dojo.isString(cont)){
+			if(lang.isString(cont)){
 				if(this.adjustPaths && this.referencePath){
 					cont = adjustHtmlPaths(this.referencePath, cont);
 				}
@@ -297,7 +302,7 @@ dojo.require("dojo._base.url");
 			// .. you'll have no practical way to do this)
 			if(this._styleNodes && this._styleNodes.length){
 				while(this._styleNodes.length){
-					dojo.destroy(this._styleNodes.pop());
+					domConstruct.destroy(this._styleNodes.pop());
 				}
 			}
 			// render new style nodes
@@ -332,17 +337,20 @@ dojo.require("dojo._base.url");
 			// references to the style nodes we added
 			if(this._styleNodes && this._styleNodes.length){
 				while(this._styleNodes.length){
-					dojo.destroy(this._styleNodes.pop());
+					domConstruct.destroy(this._styleNodes.pop());
 				}
 			}
 			delete this._styleNodes;
 			// reset the defaults from the prototype
-			dojo.mixin(this, dojo.getObject(this.declaredClass).prototype);
+			// XXX: not sure if this is the correct intended behaviour, it was originally
+			// dojo.getObject(this.declaredClass).prototype which will not work with anonymous
+			// modules
+			dojo.mixin(this, html._ContentSetter.prototype);
 		}
 
 	});
 
-	dojox.html.set = function(/* DomNode */ node, /* String|DomNode|NodeList */ cont, /* Object? */ params){
+	html.set = function(/* DomNode */ node, /* String|DomNode|NodeList */ cont, /* Object? */ params){
 		// TODO: add all the other options
 			// summary:
 			//		inserts (replaces) the given content into the given node
@@ -362,10 +370,10 @@ dojo.require("dojo._base.url");
 
 		if(!params){
 			// simple and fast
-			return dojo.html._setNodeContent(node, cont, true);
+			return htmlUtil._setNodeContent(node, cont, true);
 		}else{
 			// more options but slower
-			var op = new dojox.html._ContentSetter(dojo.mixin(
+			var op = new html._ContentSetter(dojo.mixin(
 					params,
 					{ content: cont, node: node }
 			));
@@ -373,4 +381,5 @@ dojo.require("dojo._base.url");
 		}
 	};
 
-})();
+	return html;
+});

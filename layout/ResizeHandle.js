@@ -1,13 +1,26 @@
-dojo.provide("dojox.layout.ResizeHandle");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/connect",
+	"dojo/_base/array",
+	"dojo/_base/event",
+	"dojo/_base/fx",
+	"dojo/_base/window",
+	"dojo/fx",
+	"dojo/window",
+	"dojo/dom",
+	"dojo/dom-class",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
+	"dijit",
+	"dijit/_Widget",
+	"dijit/_Templated",
+	"dojo/_base/declare"
+], function (dojo, lang, connect, arrayUtil, eventUtil, fxBase, windowBase, fxUtil, windowUtil, domUtil, domClass, domGeometry, domStyle, dijit, _Widget, _Templated) {
 dojo.experimental("dojox.layout.ResizeHandle");
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dojo.fx");
-dojo.require("dojo.window");
-
-dojo.declare("dojox.layout.ResizeHandle",
-	[dijit._Widget, dijit._Templated],
+var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
+	[_Widget, _Templated],
 	{
 	// summary: A dragable handle used to resize an attached node.
 	//
@@ -105,10 +118,10 @@ dojo.declare("dojox.layout.ResizeHandle",
 			// can't at once resize multiple things interactively.
 			this._resizeHelper = dijit.byId('dojoxGlobalResizeHelper');
 			if(!this._resizeHelper){
-				this._resizeHelper = new dojox.layout._ResizeHelper({
+				this._resizeHelper = new _ResizeHelper({
 						id: 'dojoxGlobalResizeHelper'
-				}).placeAt(dojo.body());
-				dojo.addClass(this._resizeHelper.domNode, this.activeResizeClass);
+				}).placeAt(windowBase.body());
+				domClass.add(this._resizeHelper.domNode, this.activeResizeClass);
 			}
 		}else{ this.animateSizing = false; }
 
@@ -122,7 +135,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 		
 		// should we modify the css for the cursor hover to n-resize nw-resize and w-resize?
 		this._resizeX = this._resizeY = false;
-		var addClass = dojo.partial(dojo.addClass, this.resizeHandle);
+		var addClass = lang.partial(domClass.add, this.resizeHandle);
 		switch(this.resizeAxis.toLowerCase()){
 			case "xy" :
 				this._resizeX = this._resizeY = true;
@@ -149,14 +162,14 @@ dojo.declare("dojox.layout.ResizeHandle",
 		dojo.publish(this.startTopic, [ this ]);
 		this.targetWidget = dijit.byId(this.targetId);
 
-		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : dojo.byId(this.targetId);
+		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : domUtil.byId(this.targetId);
 		if(this.targetContainer){ this.targetDomNode = this.targetContainer; }
 		if(!this.targetDomNode){ return false; }
 
 		if(!this.activeResize){
-			var c = dojo.position(this.targetDomNode, true);
+			var c = domGeometry.position(this.targetDomNode, true);
 			console.log(c);
-			console.log(dojo.window.getBox());
+			console.log(windowUtil.getBox());
 			this._resizeHelper.resize({l: c.x, t: c.y, w: c.w, h: c.h});
 			this._resizeHelper.show();
 		}
@@ -165,7 +178,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 		this.startPoint  = { x:e.clientX, y:e.clientY};
 
 		// FIXME: this is funky: marginBox adds height, contentBox ignores padding (expected, but foo!)
-		var mb = this.targetWidget ? dojo.marginBox(this.targetDomNode) : dojo.contentBox(this.targetDomNode);
+		var mb = this.targetWidget ? domGeometry.marginBox(this.targetDomNode) : domGeometry.contentBox(this.targetDomNode);
 		this.startSize  = { w:mb.w, h:mb.h };
 		
 		if(this.fixedAspect){
@@ -182,10 +195,10 @@ dojo.declare("dojox.layout.ResizeHandle",
 		}
 
 		this._pconnects = [];
-		this._pconnects.push(dojo.connect(dojo.doc,"onmousemove",this,"_updateSizing"));
-		this._pconnects.push(dojo.connect(dojo.doc,"onmouseup", this, "_endSizing"));
+		this._pconnects.push(connect(windowBase.doc,"onmousemove",this,"_updateSizing"));
+		this._pconnects.push(connect(windowBase.doc,"onmouseup", this, "_endSizing"));
 		
-		dojo.stopEvent(e);
+		eventUtil.stopEvent(e);
 	},
 
 	_updateSizing: function(/*Event*/ e){
@@ -265,19 +278,19 @@ dojo.declare("dojox.layout.ResizeHandle",
 		var tmp = this._getNewCoords(e);
 		if(tmp === false){ return; }
 
-		if(this.targetWidget && dojo.isFunction(this.targetWidget.resize)){
+		if(this.targetWidget && lang.isFunction(this.targetWidget.resize)){
 			this.targetWidget.resize(tmp);
 		}else{
 			if(this.animateSizing){
-				var anim = dojo.fx[this.animateMethod]([
-					dojo.animateProperty({
+				var anim = fxUtil[this.animateMethod]([
+					fxBase.animateProperty({
 						node: this.targetDomNode,
 						properties: {
 							width: { start: this.startSize.w, end: tmp.w }
 						},
 						duration: this.animateDuration
 					}),
-					dojo.animateProperty({
+					fxBase.animateProperty({
 						node: this.targetDomNode,
 						properties: {
 							height: { start: this.startSize.h, end: tmp.h }
@@ -287,7 +300,7 @@ dojo.declare("dojox.layout.ResizeHandle",
 				]);
 				anim.play();
 			}else{
-				dojo.style(this.targetDomNode,{
+				domStyle.style(this.targetDomNode,{
 					width: tmp.w + "px",
 					height: tmp.h + "px"
 				});
@@ -300,8 +313,8 @@ dojo.declare("dojox.layout.ResizeHandle",
 
 	_endSizing: function(/*Event*/ e){
 		// summary: disconnect listenrs and cleanup sizing
-		dojo.forEach(this._pconnects, dojo.disconnect);
-		var pub = dojo.partial(dojo.publish, this.endTopic, [ this ]);
+		arrayUtil.forEach(this._pconnects, dojo.disconnect);
+		var pub = lang.partial(dojo.publish, this.endTopic, [ this ]);
 		if(!this.activeResize){
 			this._resizeHelper.hide();
 			this._changeSizing(e);
@@ -321,27 +334,27 @@ dojo.declare("dojox.layout.ResizeHandle",
 	
 });
 
-dojo.declare("dojox.layout._ResizeHelper",
-	dijit._Widget,
+var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
+	_Widget,
 	{
 	// summary: A global private resize helper shared between any
 	//		`dojox.layout.ResizeHandle` with activeSizing off.
 	
 	show: function(){
 		// summary: show helper to start resizing
-		dojo.fadeIn({
+		fxBase.fadeIn({
 			node: this.domNode,
 			duration: 120,
-			beforeBegin: function(n){ dojo.style(n, "display", "") }
+			beforeBegin: function(n){ domStyle.style(n, "display", "") }
 		}).play();
 	},
 	
 	hide: function(){
 		// summary: hide helper after resizing is complete
-		dojo.fadeOut({
+		fxBase.fadeOut({
 			node: this.domNode,
 			duration: 250,
-			onEnd: function(n){ dojo.style(n, "display", "none") }
+			onEnd: function(n){ domStyle.style(n, "display", "none") }
 		}).play();
 	},
 	
@@ -349,7 +362,9 @@ dojo.declare("dojox.layout._ResizeHelper",
 		// summary: size the widget and place accordingly
 
 		// FIXME: this is off when padding present
-		dojo.marginBox(this.domNode, dim);
+		domGeometry.marginBox(this.domNode, dim);
 	}
 	
+});
+return ResizeHandle;
 });
