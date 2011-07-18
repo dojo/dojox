@@ -974,7 +974,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		this._currentPoint[type] = null;
 		
 		//We're holding SHIFT while clicking, it's a Click-Range selection.
-		if(isRange && this._lastType == type && lastIsSelected == this._toSelect){
+		if(isRange && this._lastType == type && lastIsSelected == this._toSelect && this._config[type] == MULTI){
 			if(type === "row"){
 				this._isUsingRowSelector = true;
 			}
