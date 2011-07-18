@@ -1,13 +1,17 @@
-dojo.provide("dojox.form.TimeSpinner");
-
-dojo.require("dijit.form._Spinner");
-dojo.require("dojo.date");
-dojo.require("dojo.date.locale");
-dojo.require("dojo.date.stamp");
-
-dojo.declare(
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/event",
+	"dijit/form/_Spinner",
+	"dojo/date",
+	"dojo/date/locale",
+	"dojo/date/stamp",
+	"dojo/_base/connect", // dojo.keys
+	"dojo/_base/declare"
+], function (dojo, lang, eventUtil, _Spinner, dateUtil, dateLocale, dateStamp) {
+return dojo.declare(
 "dojox.form.TimeSpinner",
-[dijit.form._Spinner],
+_Spinner,
 {
 	// summary: Time Spinner
 	// description: This widget is the same as a normal NumberSpinner, but for the time component of a date object instead
@@ -15,7 +19,7 @@ dojo.declare(
 	required: false,
 
 	adjust: function(/* Object */ val, /*Number*/ delta){
-		return dojo.date.add(val, "minute", delta)
+		return dateUtil.add(val, "minute", delta)
 	},
 
 	//FIXME should we allow for constraints in this widget?
@@ -28,15 +32,15 @@ dojo.declare(
 	timeoutChangeRate: 0.50,
 
 	parse: function(time, locale){
-		return dojo.date.locale.parse(time, {selector:"time", formatLength:"short"});
+		return dateLocale.parse(time, {selector:"time", formatLength:"short"});
 	},
 
 	format: function(time, locale){
-		if (dojo.isString(time)) { return time; }
-		return dojo.date.locale.format(time, {selector:"time", formatLength:"short"});
+		if (lang.isString(time)) { return time; }
+		return dateLocale.format(time, {selector:"time", formatLength:"short"});
 	},
 
-	serialize: dojo.date.stamp.toISOString,
+	serialize: dateStamp.toISOString,
 
 	value: "12:00 AM",
 
@@ -48,9 +52,10 @@ dojo.declare(
                                 this._setValueAttr(value,true);
                         }
                         // eat home or end key whether we change the value or not
-                        dojo.stopEvent(e);
+                        eventUtil.stopEvent(e);
                 }
         }
 
 
+});
 });

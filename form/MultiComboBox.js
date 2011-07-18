@@ -1,10 +1,13 @@
-dojo.provide("dojox.form.MultiComboBox");
+define([
+	"dojo/_base/kernel",
+	"dijit/form/ValidationTextBox",
+	"dijit/form/ComboBoxMixin",
+	"dojo/_base/declare"
+], function (dojo, ValidationTextBox, ComboBoxMixin) {
 dojo.experimental("dojox.form.MultiComboBox");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.ValidationTextBox");
 
-dojo.declare("dojox.form.MultiComboBox",
-	[dijit.form.ValidationTextBox, dijit.form.ComboBoxMixin],{
+return dojo.declare("dojox.form.MultiComboBox",
+	[ValidationTextBox, ComboBoxMixin],{
 	// summary:
 	//		A ComboBox that accepts multiple inputs on a single line
 
@@ -55,4 +58,5 @@ dojo.declare("dojox.form.MultiComboBox",
 		}
 		this.inherited(arguments);
 	}
+});
 });

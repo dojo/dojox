@@ -1,25 +1,26 @@
-dojo.provide("dojox.form.Manager");
+define([
+	"dojo/_base/kernel",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"./manager/_Mixin",
+	"./manager/_NodeMixin",
+	"./manager/_FormMixin",
+	"./manager/_ValueMixin",
+	"./manager/_EnableMixin",
+	"./manager/_DisplayMixin",
+	"./manager/_ClassMixin",
+	"dojo/_base/declare"
+], function (dojo, _Widget, _TemplatedMixin, _Mixin, _NodeMixin, _FormMixin, _ValueMixin, _EnableMixin, _DisplayMixin, _ClassMixin) {
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._TemplatedMixin");
-
-dojo.require("dojox.form.manager._Mixin");
-dojo.require("dojox.form.manager._NodeMixin");
-dojo.require("dojox.form.manager._FormMixin");
-dojo.require("dojox.form.manager._ValueMixin");
-dojo.require("dojox.form.manager._EnableMixin");
-dojo.require("dojox.form.manager._DisplayMixin");
-dojo.require("dojox.form.manager._ClassMixin");
-
-dojo.declare("dojox.form.Manager", [
-		dijit._Widget,
-		dojox.form.manager._Mixin,
-		dojox.form.manager._NodeMixin,
-		dojox.form.manager._FormMixin,
-		dojox.form.manager._ValueMixin,
-		dojox.form.manager._EnableMixin,
-		dojox.form.manager._DisplayMixin,
-		dojox.form.manager._ClassMixin
+return dojo.declare("dojox.form.Manager", [
+		_Widget,
+		_Mixin,
+		_NodeMixin,
+		_FormMixin,
+		_ValueMixin,
+		_EnableMixin,
+		_DisplayMixin,
+		_ClassMixin
 ], {
 	// summary:
 	//		The widget to orchestrate dynamic forms.
@@ -36,7 +37,7 @@ dojo.declare("dojox.form.Manager", [
 		this.inherited(arguments);
 		this._attachPoints = [];
 		this._attachEvents = [];
-		dijit._TemplatedMixin.prototype._attachTemplateNodes.call(this, node, function(n, p){ return n.getAttribute(p); });
+		_TemplatedMixin.prototype._attachTemplateNodes.call(this, node, function(n, p){ return n.getAttribute(p); });
 	},
 	
 	destroyRendering: function(preserveDom){
@@ -44,9 +45,10 @@ dojo.declare("dojox.form.Manager", [
 		if(!this.__ctm){
 			// avoid recursive call from _TemplatedMixin
 			this.__ctm = true;
-			dijit._TemplatedMixin.prototype.destroyRendering.apply(this, arguments);
+			_TemplatedMixin.prototype.destroyRendering.apply(this, arguments);
 			delete this.__ctm;
 			this.inherited(arguments);
 		}
 	}
+});
 });

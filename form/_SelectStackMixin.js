@@ -1,6 +1,13 @@
-dojo.provide("dojox.form._SelectStackMixin");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dijit",
+	"dojo/_base/connect",
+	"dojo/_base/declare"
+], function (dojo, lang, arrayUtil, dijit) {
 
-dojo.declare("dojox.form._SelectStackMixin", null, {
+return dojo.declare("dojox.form._SelectStackMixin", null, {
 	// summary:
 	//		Mix this class in to a dijit.form._FormSelectWidget in order to
 	//		provide support for "selectable" multiforms.  The widget is pointed
@@ -48,11 +55,11 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		//  we can toggle the widgets on it)
 		
 		if(pane._shown != undefined && pane._shown == shown){ return; }
-		var widgets = dojo.filter(pane.getDescendants(), "return item.name;");
+		var widgets = arrayUtil.filter(pane.getDescendants(), "return item.name;");
 		if(!shown){
 			// We are hiding - save the current state and then disable them
 			savedStates = {};
-			dojo.forEach(widgets, function(w){
+			arrayUtil.forEach(widgets, function(w){
 				savedStates[w.id] = w.disabled;
 				w.set("disabled", true);
 			});
@@ -60,7 +67,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 		}else{
 			// We are showing - restore our saved states
 			var savedStates = pane._savedStates||{};
-			dojo.forEach(widgets, function(w){
+			arrayUtil.forEach(widgets, function(w){
 				var state = savedStates[w.id];
 				if(state == undefined){
 					state = false;
@@ -73,7 +80,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	},
 	
 	_connectTitle: function(/*dijit._Widget*/ pane, /*String*/ value){
-		var fx = dojo.hitch(this, function(title){
+		var fx = lang.hitch(this, function(title){
 			this.updateOption({value: value, label: title});
 		});
 		if(pane._setTitleAttr){
@@ -96,8 +103,8 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 			this._connectTitle(pane, v);
 		}
 		if(!pane.onShow || !pane.onHide || pane._shown == undefined){
-			pane.onShow = dojo.hitch(this, "_togglePane", pane, true);
-			pane.onHide = dojo.hitch(this, "_togglePane", pane, false);
+			pane.onShow = lang.hitch(this, "_togglePane", pane, true);
+			pane.onHide = lang.hitch(this, "_togglePane", pane, false);
 			pane.onHide();
 		}
 	},
@@ -131,7 +138,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	onStartup: function(/*Object*/ info){
 		// summary: Called when the stack container is started up
 		var selPane = info.selected;
-		this.addOption(dojo.filter(dojo.map(info.children, function(c){
+		this.addOption(arrayUtil.filter(arrayUtil.map(info.children, function(c){
 			var v = this._optionValFromPane(c.id);
 			this._connectTitle(c, v);
 			var toAdd = null;
@@ -140,8 +147,8 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 				toAdd = {value: v, label: c.title};
 			}
 			if(!c.onShow || !c.onHide || c._shown == undefined){
-				c.onShow = dojo.hitch(this, "_togglePane", c, true);
-				c.onHide = dojo.hitch(this, "_togglePane", c, false);
+				c.onShow = lang.hitch(this, "_togglePane", c, true);
+				c.onHide = lang.hitch(this, "_togglePane", c, false);
 				c.onHide();
 			}
 			if("_savedValue" in this && v === this._savedValue){
@@ -194,7 +201,7 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 	},
 	
 	destroy: function(){
-		dojo.forEach(this._subscriptions, dojo.unsubscribe);
+		arrayUtil.forEach(this._subscriptions, dojo.unsubscribe);
 		delete this._panes; // Fixes memory leak in IE
 		this.inherited("destroy", arguments);
 	},
@@ -211,4 +218,5 @@ dojo.declare("dojox.form._SelectStackMixin", null, {
 			}
 		}
 	}
+});
 });

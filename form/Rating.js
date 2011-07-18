@@ -1,9 +1,15 @@
-dojo.provide("dojox.form.Rating");
+define([
+	"dojo/_base/kernel",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dojo/string",
+	"dojo/query",
+	"dijit/form/_FormWidget",
+	"dojo/_base/declare"
+], function (dojo, domAttr, domClass, stringUtil, query, _FormWidget) {
 
-dojo.require("dijit.form._FormWidget");
-
-dojo.declare("dojox.form.Rating",
-	dijit.form._FormWidget,{
+return dojo.declare("dojox.form.Rating",
+	_FormWidget,{
 	// summary:
 	//		A widget for rating using stars.
 	//
@@ -38,9 +44,9 @@ dojo.declare("dojox.form.Rating",
 		var starTpl = '<li class="dojoxRatingStar dijitInline" dojoAttachEvent="onclick:onStarClick,onmouseover:_onMouse,onmouseout:_onMouse" value="${value}"></li>';
 		var rendered = "";
 		for(var i = 0; i < this.numStars; i++){
-			rendered += dojo.string.substitute(starTpl, {value:i+1});
+			rendered += stringUtil.substitute(starTpl, {value:i+1});
 		}
-		this.templateString = dojo.string.substitute(tpl, {stars:rendered});
+		this.templateString = stringUtil.substitute(tpl, {stars:rendered});
 	},
 
 	postCreate: function(){
@@ -50,7 +56,7 @@ dojo.declare("dojox.form.Rating",
 
 	_onMouse: function(evt){
 		if(this.hovering){
-			var hoverValue = +dojo.attr(evt.target, "value");
+			var hoverValue = +domAttr.attr(evt.target, "value");
 			this.onMouseOver(evt, hoverValue);
 			this._renderStars(hoverValue, true);
 		}else{
@@ -60,13 +66,13 @@ dojo.declare("dojox.form.Rating",
 
 	_renderStars: function(value, hover){
 		// summary: Render the stars depending on the value.
-		dojo.query(".dojoxRatingStar", this.domNode).forEach(function(star, i){
+		query(".dojoxRatingStar", this.domNode).forEach(function(star, i){
 			if(i + 1 > value){
-				dojo.removeClass(star, "dojoxRatingStarHover");
-				dojo.removeClass(star, "dojoxRatingStarChecked");
+				domClass.remove(star, "dojoxRatingStarHover");
+				domClass.remove(star, "dojoxRatingStarChecked");
 			}else{
-				dojo.removeClass(star, "dojoxRatingStar" + (hover ? "Checked" : "Hover"));
-				dojo.addClass(star, "dojoxRatingStar" + (hover ? "Hover" : "Checked"));
+				domClass.remove(star, "dojoxRatingStar" + (hover ? "Checked" : "Hover"));
+				domClass.add(star, "dojoxRatingStar" + (hover ? "Hover" : "Checked"));
 			}
 		});
 	},
@@ -74,7 +80,7 @@ dojo.declare("dojox.form.Rating",
 	onStarClick:function(/* Event */evt){
 		// summary: Connect on this method to get noticed when a star was clicked.
 		// example: dojo.connect(widget, "onStarClick", function(event){ ... })
-		var newVal = +dojo.attr(evt.target, "value");
+		var newVal = +domAttr.attr(evt.target, "value");
 		this.setAttribute("value", newVal == this.value ? 0 : newVal);
 		this._renderStars(this.value);
 		this.onChange(this.value); // Do I have to call this by hand?
@@ -92,4 +98,5 @@ dojo.declare("dojox.form.Rating",
 			this.onChange(this.value); // Do I really have to call this by hand? :-(
 		}
 	}
+});
 });

@@ -1,21 +1,28 @@
-dojo.provide("dojox.form.FilePickerTextBox");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/event",
+	"dojo/window",
+	"dijit",
+	"dijit/form/ValidationTextBox",
+	"dijit/_HasDropDown",
+	"dojox/widget/FilePicker",
+	"dojo/text!./resources/FilePickerTextBox.html",
+	"dojo/_base/declare",
+	"dojo/_base/connect" // dojo.keys
+], function (dojo, lang, arrayUtil, eventUtil, windowUtil, dijit, ValidationTextBox, _HasDropDown, FilePicker, template) {
 
-dojo.require("dojo.window");
-dojo.require("dijit.form.ValidationTextBox");
-dojo.require("dijit._HasDropDown");
-dojo.require("dijit._base.focus");	// dijit.getFocus()
-dojo.require("dojox.widget.FilePicker");
-
-dojo.declare(
+return dojo.declare(
 	"dojox.form.FilePickerTextBox",
-	[dijit.form.ValidationTextBox, dijit._HasDropDown],
+	[ValidationTextBox, _HasDropDown],
 	{
 		// summary:
 		//		A validating text box tied to a file picker popup
 		
 		baseClass: "dojoxFilePickerTextBox",
 		
-		templateString: dojo.cache("dojox.form", "resources/FilePickerTextBox.html"),
+		templateString: template,
 		
 		// searchDelay: Integer
 		//		Delay in milliseconds between when user types something and we start
@@ -33,7 +40,7 @@ dojo.declare(
 		
 		postMixInProperties: function(){
 			this.inherited(arguments);
-			this.dropDown = new dojox.widget.FilePicker(this.constraints);
+			this.dropDown = new FilePicker(this.constraints);
 		},
 
 		postCreate: function(){
@@ -55,7 +62,7 @@ dojo.declare(
 				var tVal = this.dropDown.get("pathValue") || "";
 				if(value !== tVal){
 					this._skip = true;
-					var fx = dojo.hitch(this, "_setBlurValue");
+					var fx = lang.hitch(this, "_setBlurValue");
 					this.dropDown._setPathValueAttr(value, !fromWidget,
 											this._settingBlurValue ? fx : null);
 				}
@@ -108,7 +115,7 @@ dojo.declare(
 		_focusBlur: function(/*Event*/ e){
 			// summary: called when the focus node gets blurred
 			if(e.explicitOriginalTarget == this.focusNode && !this._allowBlur){
-				window.setTimeout(dojo.hitch(this, function(){
+				window.setTimeout(lang.hitch(this, function(){
 					if(!this._allowBlur){
 						this.focus();
 					}
@@ -194,28 +201,28 @@ dojo.declare(
 				val = val.substring(topDir.length);
 			}
 			var dirs = val.split(dd.pathSeparator);
-			var setFromChain = dojo.hitch(this, function(idx){
+			var setFromChain = lang.hitch(this, function(idx){
 				var dir = dirs[idx];
 				var child = dd.getChildren()[idx];
 				var conn;
 				this._searchInProgress = true;
-				var _cleanup = dojo.hitch(this, function(){
+				var _cleanup = lang.hitch(this, function(){
 					delete this._searchInProgress;
 				});
 				if((dir || child) && !this._opened){
 					this.toggleDropDown();
 				}
 				if(dir && child){
-					var fx = dojo.hitch(this, function(){
+					var fx = lang.hitch(this, function(){
 						if(conn){
 							this.disconnect(conn);
 						}
 						delete conn;
 						var children = child._menu.getChildren();
-						var exact = dojo.filter(children, function(i){
+						var exact = arrayUtil.filter(children, function(i){
 							return i.label == dir;
 						})[0];
-						var first = dojo.filter(children, function(i){
+						var first = arrayUtil.filter(children, function(i){
 							return (i.label.indexOf(dir) === 0);
 						})[0];
 						if(exact &&
@@ -242,7 +249,7 @@ dojo.declare(
 								}
 								targetString = targetString.substring(dir.length);
 								window.setTimeout(function(){
-									dojo.window.scrollIntoView(first.domNode);
+									windowUtil.scrollIntoView(first.domNode);
 								}, 1);
 								fn.value = oVal + targetString;
 								dijit.selectInputText(fn, oVal.length);
@@ -287,12 +294,12 @@ dojo.declare(
 				this.dropDown.onExecute();
 				dijit.selectInputText(this.focusNode, this.focusNode.value.length);
 				this._hasSelection = false;
-				dojo.stopEvent(e);
+				eventUtil.stopEvent(e);
 				return;
 			}
 			if((c==dk.RIGHT_ARROW || c==dk.LEFT_ARROW || c==dk.TAB) && this._hasSelection){
 				this._startSearchFromInput();
-				dojo.stopEvent(e);
+				eventUtil.stopEvent(e);
 				return;
 			}
 			this.inherited(arguments);
@@ -311,8 +318,9 @@ dojo.declare(
 			if(doSearch){
 				this._hasValidPath = false;
 				this._hasSelection = false;
-				this._searchTimer = window.setTimeout(dojo.hitch(this, "_startSearchFromInput"), this.searchDelay + 1);
+				this._searchTimer = window.setTimeout(lang.hitch(this, "_startSearchFromInput"), this.searchDelay + 1);
 			}
 		}
 	}
 );
+});

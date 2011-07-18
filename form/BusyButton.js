@@ -1,12 +1,16 @@
-dojo.provide("dojox.form.BusyButton");
-
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.DropDownButton");
-dojo.require("dijit.form.ComboButton");
-
-dojo.requireLocalization("dijit", "loading");
-
-dojo.declare("dojox.form._BusyButtonMixin",
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dijit/form/Button",
+	"dijit/form/DropDownButton",
+	"dijit/form/ComboButton",
+	"dojo/i18n",
+	"dojo/i18n!dijit/nls/loading",
+	"dojo/_base/declare"
+], function (dojo, lang, domAttr, domClass, Button, DropDownButton, ComboButton, i18n) {
+var _BusyButtonMixin = dojo.declare("dojox.form._BusyButtonMixin",
 	null,
 	{
 		
@@ -18,7 +22,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	postMixInProperties: function(){
 		this.inherited(arguments);
 		if(!this.busyLabel){
-			this.busyLabel = dojo.i18n.getLocalization("dijit", "loading", this.lang).loadingState;
+			this.busyLabel = i18n.getLocalization("dijit", "loading", this.lang).loadingState;
 		}
 	},
 	
@@ -64,7 +68,7 @@ dojo.declare("dojox.form._BusyButtonMixin",
 		
 		// new timeout
 		if(timeout){
-			this._timeout = setTimeout(dojo.hitch(this, function(){
+			this._timeout = setTimeout(lang.hitch(this, function(){
 				this.cancel();
 			}), timeout);
 		}else if(timeout == undefined || timeout === 0){
@@ -87,8 +91,8 @@ dojo.declare("dojox.form._BusyButtonMixin",
 		}
 		this.containerNode.innerHTML = this.label;
 		
-		if(this.showLabel == false && !(dojo.attr(this.domNode, "title"))){
-			this.titleNode.title=dojo.trim(this.containerNode.innerText || this.containerNode.textContent || '');
+		if(this.showLabel == false && !(domAttr.attr(this.domNode, "title"))){
+			this.titleNode.title=lang.trim(this.containerNode.innerText || this.containerNode.textContent || '');
 		}
 		// End IE hack
 		
@@ -103,8 +107,8 @@ dojo.declare("dojox.form._BusyButtonMixin",
 		if(this.useIcon && this.isBusy){
 			var node = new Image();
 			node.src = this._blankGif;
-			dojo.attr(node, "id", this.id+"_icon");
-			dojo.addClass(node, "dojoxBusyButtonIcon");
+			domAttr.attr(node, "id", this.id+"_icon");
+			domClass.add(node, "dojoxBusyButtonIcon");
 			this.containerNode.appendChild(node);
 		}
 	},
@@ -121,6 +125,8 @@ dojo.declare("dojox.form._BusyButtonMixin",
 	}
 });
 
-dojo.declare("dojox.form.BusyButton", [dijit.form.Button, dojox.form._BusyButtonMixin], {});
-dojo.declare("dojox.form.BusyComboButton", [dijit.form.ComboButton, dojox.form._BusyButtonMixin], {});
-dojo.declare("dojox.form.BusyDropDownButton", [dijit.form.DropDownButton, dojox.form._BusyButtonMixin], {});
+var BusyButton = dojo.declare("dojox.form.BusyButton", [Button, _BusyButtonMixin], {});
+dojo.declare("dojox.form.BusyComboButton", [ComboButton, _BusyButtonMixin], {});
+dojo.declare("dojox.form.BusyDropDownButton", [DropDownButton, _BusyButtonMixin], {});
+return BusyButton;
+});

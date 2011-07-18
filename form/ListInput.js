@@ -1,16 +1,27 @@
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/json",
+	"dojo/_base/fx",
+	"dojo/_base/window",
+	"dojo/_base/connect",
+	"dojo/dom-class",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
+	"dijit/_Widget",
+	"dijit/_Templated",
+	"dijit/form/_FormValueWidget",
+	"dijit/form/ValidationTextBox",
+	"dijit/InlineEditBox",
+	"dojo/i18n!dijit/nls/common",
+	"dojo/_base/declare"
+], function (dojo, lang, arrayUtil, jsonUtil, fxUtil, windowUtil, connect, domClass, domStyle, domConstruct, domGeometry, _Widget, _Templated, _FormValueWidget, ValidationTextBox, InlineEditBox, i18nCommon) {
 dojo.experimental("dojox.form.ListInput");
 
-dojo.provide("dojox.form.ListInput");
-
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dijit.form._FormWidget");
-dojo.require("dijit.form.ValidationTextBox");
-dojo.require("dijit.InlineEditBox");
-dojo.requireLocalization("dijit", "common");
-
-dojo.declare("dojox.form.ListInput",
-	[dijit.form._FormValueWidget],
+var ListInput = dojo.declare("dojox.form.ListInput",
+	[_FormValueWidget],
 	{
 	// summary:
 	//		An automatic list maker
@@ -22,7 +33,7 @@ dojo.declare("dojox.form.ListInput",
 		this._items = [];
 		
 		
-		if(!dojo.isArray(this.delimiter)){
+		if(!lang.isArray(this.delimiter)){
 			this.delimiter=[this.delimiter];
 		}
 		var r="("+this.delimiter.join("|")+")?";
@@ -176,7 +187,7 @@ dojo.declare("dojox.form.ListInput",
 		//		Create the input box
 		// tags:
 		//		private
-		dojo.toggleClass(this._inputNode, "dijitHidden", this.readOnlyInput);
+		domClass.toggle(this._inputNode, "dijitHidden", this.readOnlyInput);
 		if(this.readOnlyInput){ return; }
 		if(this._input){ return; }
 				
@@ -184,11 +195,11 @@ dojo.declare("dojox.form.ListInput",
 			console.warn("you must add some handler to connect to input field");
 			return false;
 		}
-		if(dojo.isString(this.inputHandler)){
+		if(lang.isString(this.inputHandler)){
 			this.inputHandler = this.inputHandler.split(",");
 		}
-		if(dojo.isString(this.inputProperties)){
-			this.inputProperties = dojo.fromJson(this.inputProperties);
+		if(lang.isString(this.inputProperties)){
+			this.inputProperties = jsonUtil.fromJson(this.inputProperties);
 		}
 		
 
@@ -199,8 +210,8 @@ dojo.declare("dojox.form.ListInput",
 		this._input = new input(this.inputProperties);
 		this._input.startup();
 		this._inputNode.appendChild(this._input.domNode);
-		dojo.forEach(this.inputHandler, function(handler){
-			this.connect(this._input,dojo.string.trim(handler),"_onHandler");
+		arrayUtil.forEach(this.inputHandler, function(handler){
+			this.connect(this._input,lang.trim(handler),"_onHandler");
 		},this);
 	
 		this.connect(this._input, "onKeyDown", "_inputOnKeyDown");
@@ -229,7 +240,7 @@ dojo.declare("dojox.form.ListInput",
 		if(this._count>=this.maxItems && this.maxItems !== null){return;}
 		this._lastValueReported = this._getValues();
 		
-		if(!dojo.isArray(values)){
+		if(!lang.isArray(values)){
 			values = [values];
 		}
 		
@@ -241,7 +252,7 @@ dojo.declare("dojox.form.ListInput",
 			this._count++;
 			var re = new RegExp(this.regExpGen(this.constraints));
 
-			this._lastAddedItem = new dojox.form._ListInputInputItem({
+			this._lastAddedItem = new _ListInputInputItem({
 				"index" : this._items.length,
 				readOnlyItem : this.readOnlyItem,
 				value : value,
@@ -251,19 +262,19 @@ dojo.declare("dojox.form.ListInput",
 			
 			this._testItem(this._lastAddedItem,value);
 			
-			this._lastAddedItem.onClose = dojo.hitch(this,"_onItemClose",this._lastAddedItem);
-			this._lastAddedItem.onChange = dojo.hitch(this,"_onItemChange",this._lastAddedItem);
-			this._lastAddedItem.onEdit = dojo.hitch(this,"_onItemEdit",this._lastAddedItem);
-			this._lastAddedItem.onKeyDown = dojo.hitch(this,"_onItemKeyDown",this._lastAddedItem);
+			this._lastAddedItem.onClose = lang.hitch(this,"_onItemClose",this._lastAddedItem);
+			this._lastAddedItem.onChange = lang.hitch(this,"_onItemChange",this._lastAddedItem);
+			this._lastAddedItem.onEdit = lang.hitch(this,"_onItemEdit",this._lastAddedItem);
+			this._lastAddedItem.onKeyDown = lang.hitch(this,"_onItemKeyDown",this._lastAddedItem);
 
 			if(this.useAnim){
-				dojo.style(this._lastAddedItem.domNode, {opacity:0, display:""});
+				domStyle.style(this._lastAddedItem.domNode, {opacity:0, display:""});
 			}
 
 			this._placeItem(this._lastAddedItem.domNode);
 			
 			if(this.useAnim){
-				var anim = dojo.fadeIn({
+				var anim = fxUtil.fadeIn({
 					node : this._lastAddedItem.domNode,
 					duration : this.duration,
 					easing : this.easingIn
@@ -310,10 +321,10 @@ dojo.declare("dojox.form.ListInput",
 		
 		var values=this.submitOnlyValidValue?this.get("MatchedValue"):this.value;
 		
-		if(!dojo.isArray(values)){
+		if(!lang.isArray(values)){
 			return;
 		}
-		dojo.forEach(values,function(item){
+		arrayUtil.forEach(values,function(item){
 			this._selectNode.options[this._selectNode.options.length]=new Option(item,item,true,true);
 		},this);
 	},
@@ -323,7 +334,7 @@ dojo.declare("dojox.form.ListInput",
 		//		Place item in the list
 		// tags:
 		//		private
-		dojo.place(node,this._inputNode,"before");
+		domConstruct.place(node,this._inputNode,"before");
 	},
 	
 	_getCursorPos: function(/*domNode*/node){
@@ -338,7 +349,7 @@ dojo.declare("dojox.form.ListInput",
 		// IE Support
 		try{ node.focus(); }catch(e){}
 		var range = node.createTextRange();
-		range.moveToBookmark(dojo.doc.selection.createRange().getBookmark());
+		range.moveToBookmark(windowUtil.doc.selection.createRange().getBookmark());
 		range.moveEnd('character', node.value.length);
 		try{
 			return node.value.length - range.text.length;
@@ -353,11 +364,11 @@ dojo.declare("dojox.form.ListInput",
 		if(this.disabled){ return; }
 		
 		if(this.useAnim){
-			var anim = dojo.fadeOut({
+			var anim = fxUtil.fadeOut({
 				node : item.domNode,
 				duration : this.duration,
 				easing : this.easingOut,
-				onEnd : dojo.hitch(this, "_destroyItem", item)
+				onEnd : lang.hitch(this, "_destroyItem", item)
 			}).play();
 		}else{
 			this._destroyItem(item);
@@ -427,7 +438,7 @@ dojo.declare("dojox.form.ListInput",
 		//		Call when item is edited
 		// tags:
 		//		private
-		dojo.removeClass(item.domNode,["dijitError", this.baseClass + "Match", this.baseClass + "Mismatch"]);
+		domClass.remove(item.domNode,["dijitError", this.baseClass + "Match", this.baseClass + "Mismatch"]);
 	},
 	
 	_testItem: function(/*Object*/item,/*String*/value){
@@ -436,17 +447,17 @@ dojo.declare("dojox.form.ListInput",
 		// tags:
 		//		private
 		var re = new RegExp(this.regExpGen(this.constraints));
-		var match = value.match(re);
+		var match = ('' + value).match(re);
 		
-		dojo.removeClass(item.domNode, this.baseClass + (!match ? "Match" : "Mismatch"));
-		dojo.addClass(item.domNode, this.baseClass + (match ? "Match" : "Mismatch"));
-		dojo.toggleClass(item.domNode, "dijitError", !match);
+		domClass.remove(item.domNode, this.baseClass + (!match ? "Match" : "Mismatch"));
+		domClass.add(item.domNode, this.baseClass + (match ? "Match" : "Mismatch"));
+		domClass.toggle(item.domNode, "dijitError", !match);
 		
 		if((this.showCloseButtonWhenValid && match) ||
 			(this.showCloseButtonWhenInvalid && !match)){
-			dojo.addClass(item.domNode,this.baseClass+"Closable");
+			domClass.add(item.domNode,this.baseClass+"Closable");
 		}else {
-			dojo.removeClass(item.domNode,this.baseClass+"Closable");
+			domClass.remove(item.domNode,this.baseClass+"Closable");
 		}
 	},
 	
@@ -476,7 +487,7 @@ dojo.declare("dojox.form.ListInput",
 		// tags:
 		//		private
 		if(typeof newValue == "string"){
-			if(dojo.isString(this.delimiter)){
+			if(lang.isString(this.delimiter)){
 				this.delimiter = [this.delimiter];
 			}
 			var re = new RegExp("^.*("+this.delimiter.join("|")+").*");
@@ -520,7 +531,7 @@ dojo.declare("dojox.form.ListInput",
 		// tags:
 		//		private
 		var parsedValue = this._parseValue(value);
-		if(dojo.isArray(parsedValue)){
+		if(lang.isArray(parsedValue)){
 			this.add(parsedValue);
 		}
 	},
@@ -577,7 +588,7 @@ dojo.declare("dojox.form.ListInput",
 		//		get value that match regexp in then list and return an array
 		// tags:
 		//		private
-		return this._getValues(dojo.hitch(this,this._matchValidator));
+		return this._getValues(lang.hitch(this,this._matchValidator));
 	},
 	
 	_getMismatchedValueAttr: function(){
@@ -585,7 +596,7 @@ dojo.declare("dojox.form.ListInput",
 		//		get value that mismatch regexp in then list and return an array
 		// tags:
 		//		private
-		return this._getValues(dojo.hitch(this,this._mismatchValidator));
+		return this._getValues(lang.hitch(this,this._mismatchValidator));
 	},
 	
 	_getValues: function(/*function*/validator){
@@ -739,8 +750,8 @@ dojo.declare("dojox.form.ListInput",
 	}
 });
 
-dojo.declare("dojox.form._ListInputInputItem",
-	[dijit._Widget, dijit._Templated],
+var _ListInputInputItem = dojo.declare("dojox.form._ListInputInputItem",
+	[_Widget, _Templated],
 	{
 	// summary:
 	//	Item created by ListInputInput when delimiter is found
@@ -781,7 +792,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 	},
 	
 	postMixInProperties: function(){
-		var _nlsResources = dojo.i18n.getLocalization("dijit", "common");
+		var _nlsResources = i18nCommon;
 		dojo.mixin(this, _nlsResources);
 		this.inherited(arguments);
 	},
@@ -791,15 +802,15 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		Create the close button if needed
 		this.inherited(arguments);
 		
-		this.closeButtonNode = dojo.create("span",{
+		this.closeButtonNode = domConstruct.create("span",{
 			"class" : "dijitButtonNode dijitDialogCloseIcon",
 			title : this.itemClose,
-			onclick: dojo.hitch(this, "onClose"),
-			onmouseenter: dojo.hitch(this, "_onCloseEnter"),
-			onmouseleave: dojo.hitch(this, "_onCloseLeave")
+			onclick: lang.hitch(this, "onClose"),
+			onmouseenter: lang.hitch(this, "_onCloseEnter"),
+			onmouseleave: lang.hitch(this, "_onCloseLeave")
 		}, this.domNode);
 		
-		dojo.create("span",{
+		domConstruct.create("span",{
 			"class" : "closeText",
 			title : this.itemClose,
 			innerHTML : "x"
@@ -837,7 +848,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 			this._editBox.set("disabled",false);
 			return;
 		}
-		this._editBox = new dijit.InlineEditBox({
+		this._editBox = new InlineEditBox({
 			value:this.value,
 			editor: "dijit.form.ValidationTextBox",
 			editorParams:{
@@ -862,7 +873,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		call when inline editor close himself
 		// tags:
 		//		private
-		dojo.removeClass(this.closeButtonNode,this.baseClass + "Edited");
+		domClass.remove(this.closeButtonNode,this.baseClass + "Edited");
 		dojo.disconnect(this._handleKeyDown);
 		this.onChange(value);
 	},
@@ -872,8 +883,8 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		call when inline editor start editing
 		// tags:
 		//		private
-		dojo.addClass(this.closeButtonNode,this.baseClass + "Edited");
-		this._handleKeyDown = dojo.connect(this._editBox.editWidget,"_onKeyPress",this,"onKeyDown");
+		domClass.add(this.closeButtonNode,this.baseClass + "Edited");
+		this._handleKeyDown = connect(this._editBox.editWidget,"_onKeyPress",this,"onKeyDown");
 		this.onEdit();
 	},
 	
@@ -909,7 +920,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		Called when user hovers over close icon
 		// tags:
 		//		private
-		dojo.addClass(this.closeButtonNode, "dijitDialogCloseIcon-hover");
+		domClass.add(this.closeButtonNode, "dijitDialogCloseIcon-hover");
 	},
 
 	_onCloseLeave: function(){
@@ -917,7 +928,7 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		Called when user stops hovering over close icon
 		// tags:
 		//		private
-		dojo.removeClass(this.closeButtonNode, "dijitDialogCloseIcon-hover");
+		domClass.remove(this.closeButtonNode, "dijitDialogCloseIcon-hover");
 	},
 	
 	onClose: function(){
@@ -946,8 +957,8 @@ dojo.declare("dojox.form._ListInputInputItem",
 		//		callback when widget get a KeyDown
 	}
 });
-dojo.declare("dojox.form._ListInputInputBox",
-	[dijit.form.ValidationTextBox],
+var _ListInputInputBox = dojo.declare("dojox.form._ListInputInputBox",
+	[ValidationTextBox],
 	{
 	// summary:
 	//	auto-sized text box
@@ -977,23 +988,25 @@ dojo.declare("dojox.form._ListInputInputBox",
 		//		compute content width
 		this.inherited(arguments);
 		if(this._sizer === null){
-			this._sizer = dojo.create("div",{
+			this._sizer = domConstruct.create("div",{
 				style : {
 					position : "absolute",
 					left : "-10000px",
 					top : "-10000px"
 				}
-			},dojo.body());
+			},windowUtil.body());
 		}
 		this._sizer.innerHTML = value;
-		var w = dojo.contentBox(this._sizer).w + this.minWidth;
-		dojo.contentBox(this.domNode,{ w : w });
+		var w = domGeometry.contentBox(this._sizer).w + this.minWidth;
+		domGeometry.contentBox(this.domNode,{ w : w });
 	},
 	
 	destroy: function(){
 		// summary:
 		//		destroy the widget
-		dojo.destroy(this._sizer);
+		domConstruct.destroy(this._sizer);
 		this.inherited(arguments);
 	}
+});
+return ListInput;
 });
