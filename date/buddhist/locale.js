@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "dojo/i18n!dojo/cldr/nls/buddhist"],
-	function(d, dd, i18n, regexp, string, buddhistDate){
+define(["dojo/main", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "dojo/i18n!dojo/cldr/nls/buddhist"],
+	function(dojo, dd, i18n, regexp, string, buddhistDate){
 
 	dojo.getObject("date.buddhist.locale", true, dojox);
 	dojo.experimental("dojox.date.buddhist.locale");

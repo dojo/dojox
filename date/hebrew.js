@@ -1,10 +1,11 @@
-define(["dojo/_base/kernel", "dojo/date", "./hebrew/Date"], function(d, dd, hebrewDate){
-	dojo.getObject("date.hebrew", true, dojox);
-	dojo.experimental("dojox.date.hebrew");
+define(["dojo/_base/kernel", "dojo/date", "./hebrew/Date"], function(dojo, dd, hebrewDate){
+
+dojo.getObject("date.hebrew", true, dojox);
+dojo.experimental("dojox.date.hebrew");
 	
 // Utility methods to do arithmetic calculations with hebrew.Dates
 
-	// added for compat to date
+// added for compat to date
 dojox.date.hebrew.getDaysInMonth = function(/*hebrew.Date*/month){
 	return month.getDaysInHebrewMonth(month.getMonth(), month.getFullYear());
 };

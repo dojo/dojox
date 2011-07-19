@@ -11,12 +11,12 @@
  *****************************************************************************/
 
 define(["dojo", "dojo/date", "dojo/date/locale", "dojo/_base/array", "dojo/_base/xhr"],
-	function(_d, _dd, _ddl){
+	function(dojo, _dd, _ddl){
 
-dojo.experimental("dojox.date.timezone");
-dojo.getObject("date.timezone", true, dojox);
+	dojo.experimental("dojox.date.timezone");
+	dojo.getObject("date.timezone", true, dojox);
 
-	var cfg = _d.config;
+	var cfg = dojo.config;
 	var _zoneFiles = [ "africa", "antarctica", "asia", "australasia", "backward",
 					"etcetera", "europe", "northamerica", "pacificnew",
 					"southamerica" ];
@@ -33,7 +33,7 @@ dojo.getObject("date.timezone", true, dojox);
 	// timezoneFileBasePath: String
 	//		A different location to pull zone files from
 	var timezoneFileBasePath = cfg.timezoneFileBasePath ||
-								_d.moduleUrl("dojox.date", "zoneinfo");
+								dojo.moduleUrl("dojox.date", "zoneinfo");
 	
 	// loadingScheme: String
 	//		One of "preloadAll", "lazyLoad" (Defaults "lazyLoad")
@@ -46,8 +46,8 @@ dojo.getObject("date.timezone", true, dojox);
 					((loadingScheme == "preloadAll") ? _zoneFiles : "northamerica");
 
 	// Set our olson-zoneinfo content handler
-	_d._contentHandlers["olson-zoneinfo"] = function(xhr){
-		var str = _d._contentHandlers["text"](xhr),
+	dojo._contentHandlers["olson-zoneinfo"] = function(xhr){
+		var str = dojo._contentHandlers["text"](xhr),
 			s = "",
 			lines = str.split("\n"),
 			arr = [],
@@ -105,8 +105,8 @@ dojo.getObject("date.timezone", true, dojox);
 		// data: Object
 		//		The data to load - contains "zones" and "rules" parameters
 		data = data || {};
-		_zones = _d.mixin(_zones, data.zones||{});
-		_rules = _d.mixin(_rules, data.rules||{});
+		_zones = dojo.mixin(_zones, data.zones||{});
+		_rules = dojo.mixin(_rules, data.rules||{});
 	}
 	
 	function loadZoneFile(/* String */ fileName){
@@ -120,7 +120,7 @@ dojo.getObject("date.timezone", true, dojox);
 		// TODO: Maybe behave similar to requireLocalization - rather than
 		//		Using dojo.xhrGet?
 		_loadedZones[fileName] = true;
-		_d.xhrGet({
+		dojo.xhrGet({
 			url: timezoneFileBasePath + "/" + fileName,
 			sync: true, // Needs to be synchronous so we can return values
 			handleAs: "olson-zoneinfo",
@@ -367,7 +367,7 @@ dojo.getObject("date.timezone", true, dojox);
 
 	function _getRulesForYear(/* Zone */ zone, /* int */ year){
 		var rules = [];
-		_d.forEach(_rules[zone[1]]||[], function(r){
+		dojo.forEach(_rules[zone[1]]||[], function(r){
 			// Clean up rules as needed
 			for(var i = 0; i < 2; i++){
 				switch(r[i]){
@@ -479,7 +479,7 @@ dojo.getObject("date.timezone", true, dojox);
 					utcStmp = r[1] = _getRuleStart([0,0,0,z[4],z[5],z[6]||"0"],
 											year, ((time[4] == "u") ? 0 : z[0])).getTime();
 				}
-				var matches = _d.filter(rlz, function(rl, idx){
+				var matches = dojo.filter(rlz, function(rl, idx){
 					var o = idx > 0 ? rlz[idx - 1].r[6] * 60 * 1000 : 0;
 					return (rl.d.getTime() < utcStmp + o);
 				});
@@ -640,7 +640,7 @@ dojox.date.timezone.getAllZones = function(){
 	//	Returns an array of zones that have been loaded
 };
 =====*/
-	_d.setObject("dojox.date.timezone", {
+	dojo.setObject("dojox.date.timezone", {
 		getTzInfo: function(/* Date */ dt, /* String */ tz){
 			// Lazy-load any zones not yet loaded
 			if(loadingScheme == "lazyLoad"){
@@ -687,8 +687,8 @@ dojox.date.timezone.getAllZones = function(){
 	if(typeof defaultZoneFile == "string" && defaultZoneFile){
 		defaultZoneFile = [defaultZoneFile];
 	}
-	if(_d.isArray(defaultZoneFile)){
-		_d.forEach(defaultZoneFile, loadZoneFile);
+	if(dojo.isArray(defaultZoneFile)){
+		dojo.forEach(defaultZoneFile, loadZoneFile);
 	}
 	
 	// And enhance the default formatting functions

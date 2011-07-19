@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel", "dojo/date"], function(dojo, dd){
-	dojo.getObject("date.buddhist.Date", true, dojox);
-	dojo.experimental("dojox.date.buddhist.Date");
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/date"], function(dojo, declare, dd){
+
+dojo.getObject("date.buddhist.Date", true, dojox);
+dojo.experimental("dojox.date.buddhist.Date");
 
 dojo.requireLocalization("dojo.cldr", "islamic");
 

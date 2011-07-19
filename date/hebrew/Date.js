@@ -1,6 +1,11 @@
-define(["dojo/_base/kernel", "./numerals"], function(dojo, numerals){
-	dojo.getObject("date.hebrew.Date", true, dojox);
-	dojo.experimental("dojox.date.hebrew.Date");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"./numerals"
+], function(dojo, declare, numerals){
+
+dojo.getObject("date.hebrew.Date", true, dojox);
+dojo.experimental("dojox.date.hebrew.Date");
 
 dojo.declare("dojox.date.hebrew.Date", null, {
 	// summary: A Date-like object which implements the Hebrew calendar

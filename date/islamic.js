@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel", "dojo/date", "./islamic/Date"], function(d, dd, islamicDate){
-	dojo.getObject("date.islamic", true, dojox);
-	dojo.experimental("dojox.date.islamic");
+define(["dojo/_base/kernel", "dojo/date", "./islamic/Date"], function(dojo, dd, islamicDate){
+
+dojo.getObject("date.islamic", true, dojox);
+dojo.experimental("dojox.date.islamic");
 
 // Utility methods to do arithmetic calculations with islamic.Dates
 

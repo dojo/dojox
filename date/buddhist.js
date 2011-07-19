@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "dojo/date", "./buddhist/Date"], function(d, dd, buddhistDate){
+define(["dojo/_base/kernel", "dojo/date", "./buddhist/Date"], function(dojo, dd, buddhistDate){
 	dojo.getObject("date.buddhist", true, dojox);
 	dojo.experimental("dojox.date.buddhist");
 
