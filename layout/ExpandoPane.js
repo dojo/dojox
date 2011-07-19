@@ -1,5 +1,5 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/main",
 	"dojo/text!./resources/ExpandoPane.html",
 	"dijit/layout/ContentPane",
 	"dijit/_TemplatedMixin",
