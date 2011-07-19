@@ -1,5 +1,11 @@
-define(["dojo/_base/kernel", "dojox/gfx3d", "dojo/_base/window", "dojo/_base/window", "dojo/_base/Color", "./Base"],
-	function(dojo, gfx3d) {
+define([
+	"dojo/_base/kernel",
+	"dojox/gfx3d",
+	"dojo/_base/declare",
+	"dojo/_base/Color",
+	"dojo/_base/window",
+	"./Base"
+], function(dojo, gfx3d) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
