@@ -114,6 +114,9 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 	// name: String
 	//		plugin name
 	name: "selector",
+
+	// noClear: Boolean
+	//		Not to clear rows selected by IndirectSelection.
 /*
 	//	_config: null,
 	//	_enabled: true,
@@ -965,8 +968,12 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 		}
 		
 		//If CTRL is not pressed or it's SINGLE mode, this is a brand new selection.
-		if(!this.noClear && (!extending || (!isSelected && this._config[type] == SINGLE))){
-			this._clearSelection("all", start);
+		if(!extending || (!isSelected && this._config[type] == SINGLE)){
+			this._clearSelection("col", start);
+			this._clearSelection("cell", start);
+			if(!this.noClear || type === 'row'){
+				this._clearSelection('row', start);
+			}
 			this._toSelect = toSelect === undefined ? true : toSelect;
 		}
 		
