@@ -1,4 +1,11 @@
-define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/ext-dojo/complex"], function(dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/connect",	// dojo.connect
+	"dojo/dom-style",	// dojo.style
+	"dojo/fx",
+	"dojox/html/ext-dojo/style",
+	"dojox/fx/ext-dojo/complex"],
+function(dojo){
 	var css3fx = dojo.getObject("css3.fx", true, dojox);
 	return dojo.mixin(css3fx, {
 		puff: function(args){
