@@ -1,4 +1,10 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/date/stamp", "dojox/xml/parser"], function (dojo, lang, stamp, parser) {
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare", // dojo.declare
+	 "dojo/_base/lang",
+	"dojo/date/stamp",
+	"dojox/xml/parser"
+], function (dojo, declare, lang, stamp, parser) {
 
 var model = dojo.getObject("dojox.atom.io.model", true);
 

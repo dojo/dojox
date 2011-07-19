@@ -1,6 +1,7 @@
 define([
 	"dojo/_base/kernel",
 	"dojo/_base/connect",
+	"dojo/_base/declare",
 	"dojo/_base/fx",
 	"dojo/_base/array",
 	"dojo/dom-style",
@@ -13,7 +14,7 @@ define([
 	"dojo/text!./templates/FeedEntryViewer.html",
 	"dojo/text!./templates/EntryHeader.html",
 	"dojo/i18n!./nls/FeedEntryViewer"
-], function (dojo, connect, fx, arrayUtil, domStyle, domConstruct, _Widget, _Templated, _Container, ContentPane, Connection, template, headerTemplate, i18nViewer) {
+], function (dojo, connect, declare, fx, arrayUtil, domStyle, domConstruct, _Widget, _Templated, _Container, ContentPane, Connection, template, headerTemplate, i18nViewer) {
 
 dojo.experimental("dojox.atom.widget.FeedEntryViewer");
 
