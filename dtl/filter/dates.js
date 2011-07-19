@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel","../utils/date"], function(dk,ddud){
+define(["dojo/_base/kernel","../utils/date"], function(dojo,ddud){
 	dojo.getObject("dtl.filter.dates", true, dojox);
 
 	var ddfd = dojox.dtl.filter.dates;

@@ -1,4 +1,7 @@
-define(["dojo/_base/kernel"], function(dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/json"	// dojo.toJson
+], function(dojo){
 	dojo.getObject("dtl.filter.misc", true, dojox);
 
 	dojo.mixin(dojox.dtl.filter.misc, {
