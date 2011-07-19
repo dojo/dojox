@@ -48,6 +48,7 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		this.descendingTip =  dojo.string.substitute(this.nls.sortAction, [this.nls.descending]);
 		this.grid.setSortInfo = function(){};
 		this.grid.setSortIndex = dojo.hitch(this, '_setGridSortIndex');
+		this.grid.getSortIndex = function(){};
 		this.grid.getSortProps = dojo.hitch(this, 'getSortProps');
 		if(this.grid.sortFields){
 			this._setGridSortIndex(this.grid.sortFields, null, true);
