@@ -1,4 +1,9 @@
-define(["dojo/_base/kernel", "./tokenize"], function(dojo, tokenize){
+define([
+	"dojo/_base/kernel",	// dojo.getObject, dojo.mixin
+	"dojo/_base/lang",	// dojo.extend
+	"dojo/_base/sniff",	// dojo.isOpera
+	 "./tokenize"
+], function(dojo, lang, has, tokenize){
 	dojo.getObject("string", true, dojox);
 
 	dojox.string.sprintf = function(/*String*/ format, /*mixed...*/ filler){
@@ -7,14 +12,15 @@ define(["dojo/_base/kernel", "./tokenize"], function(dojo, tokenize){
 		}
 		var formatter = new dojox.string.sprintf.Formatter(format);
 		return formatter.format.apply(formatter, args);
-	}
+	};
 
 	dojox.string.sprintf.Formatter = function(/*String*/ format){
 		var tokens = [];
 		this._mapped = false;
 		this._format = format;
 		this._tokens = tokenize(format, this._re, this._parseDelim, this);
-	}
+	};
+
 	dojo.extend(dojox.string.sprintf.Formatter, {
 		_re: /\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,
 		_parseDelim: function(mapping, intmapping, flags, minWidth, period, precision, specifier){

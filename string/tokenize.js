@@ -1,4 +1,7 @@
-define(["dojo/_base/kernel"], function(dojo){
+define([
+	"dojo/_base/kernel",	// dojo.getObject
+	"dojo/_base/sniff"	// dojo.isOpera
+], function(dojo){
 	dojo.getObject("string", true, dojox);
 
 	dojox.string.tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ parseDelim, /*Object?*/ instance){
