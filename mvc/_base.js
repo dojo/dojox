@@ -43,7 +43,7 @@ define([
 		//			  Promise
 		if(args.data){
 			return new StatefulModel({ data : args.data });
-		}else if(args.store && typeof lang.isFunction(args.store.query)){
+		}else if(args.store && lang.isFunction(args.store.query)){
 			var model;
 			var result = args.store.query(args.query);
 			if(result.then){
