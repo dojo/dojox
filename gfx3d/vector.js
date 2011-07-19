@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel","dojox","dojo/_base/array"],function(dojo,dojox) { 
+define(["dojo/_base/kernel", "dojo/_base/array"],function(dojo) {
 
 dojo.getObject("gfx3d",true,dojox);
 

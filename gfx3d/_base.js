@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "dojox"],function(dojo,dojox) { 
+define(["dojo/_base/kernel"],function(dojo) {
 	dojo.getObject("gfx3d",true,dojox);
 	dojo.mixin(dojox.gfx3d, {
 		// summary: defines constants, prototypes, and utility functions

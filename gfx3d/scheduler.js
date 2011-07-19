@@ -1,4 +1,9 @@
-define(["dojo/_base/kernel","dojox","./vector","dojo/_base/array"],function(dojo,dojox) { 
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/array",	// dojo.forEach, dojo.every
+	"dojo/_base/declare",	// dojo.declare
+	"./vector"
+], function(dojo, array, declare){
 
 dojo.getObject("gfx3d",true,dojox);
 

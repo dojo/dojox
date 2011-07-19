@@ -1,4 +1,9 @@
-define(["dojo/_base/kernel","dojox","dojox/gfx/_base"],function(dojo,dojox) { 
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/Color",	// dojo.Color
+	"dojo/_base/declare",	// dojo.declare
+	"dojox/gfx/_base"
+],function(dojo,Color,declare) {
 
 	dojo.getObject("gfx3d",true,dojox);
 
