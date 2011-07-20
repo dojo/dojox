@@ -11,7 +11,8 @@ define(["dojo/_base/kernel",
 
 	dojo.experimental("dojox.geo.openlayers.Map");
 
-	var gob = dojo.getObject("geo.openlayers.BaseLayerType", true, dojox);
+	var gob = dojo.getObject("geo.openlayers", true, dojox);
+
 	dojox.geo.openlayers.BaseLayerType = {
 		//	summary:
 		//		Defines the base layer types to be used at Map construction time or

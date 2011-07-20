@@ -2,6 +2,8 @@ define(["dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/Point", "d
 	function(geomFeatArg, pointArg, lineStringArg){
 		//	(function(){
 
+		dojo.getObject("geo.openlayers", true, dojox);
+
 		dojox.geo.openlayers.GreatCircle = {
 
 			toPointArray : function(p1, p2, increment){

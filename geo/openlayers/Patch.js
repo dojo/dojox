@@ -1,4 +1,12 @@
-define(["dojo/_base/kernel", "dojox/gfx", "dojox/gfx/shape"], function(dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",	// dojo.extend
+	"dojo/_base/sniff",	// dojo.isIE
+	"dojox/gfx",
+	"dojox/gfx/shape"
+], function(dojo){
+
+	dojo.getObject("geo.openlayers", true, dojox);
 
 	dojox.geo.openlayers.Patch = {
 
