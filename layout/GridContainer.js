@@ -1,5 +1,14 @@
-define(["dojo/_base/kernel","dojo/ready","dojo/_base/lang","dojo/_base/html","dojo/_base/window",
-	"dojo/_base/connect","dojo/_base/array","dojox/layout/GridContainerLite"],function(){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/ready",	// dojo.ready
+	"dojox/layout/GridContainerLite"
+],function(dojo){
 	return dojo.declare(
 		"dojox.layout.GridContainer",
 		dojox.layout.GridContainerLite,
