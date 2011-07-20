@@ -1,4 +1,4 @@
-define(['dojo/_base/kernel', './_base'], function(dojo){
+define(['./_base'], function(){
 
 dojox.uuid.generateRandomUuid = function(){
 	// summary:
