@@ -1,4 +1,10 @@
-define(["dojo/_base/kernel","dojo/_base/html","dojox/mdnd/AreaManager"],function(dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"dojox/mdnd/AreaManager"
+],function(dojo){
 	var ddm = dojo.declare("dojox.mdnd.dropMode.DefaultDropMode", null, {
 		// summary:
 		//		Enabled a type of calcul for Dnd.

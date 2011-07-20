@@ -1,4 +1,11 @@
-define(["dojo/_base/kernel","dojo/dnd/Manager","./PureSource"],function(dojo){
+define([
+	"dojo/_base/kernel",	// dojo.addOnUnload
+	"dojo/_base/lang",	// dojo.hitch
+	"dojo/_base/declare",
+	"dojo/_base/html",	// dojo.create, dojo.attr, dojo.addClass
+	"dojo/dnd/Manager",
+	"./PureSource"
+],function(dojo){
 	return dojo.declare(
 		"dojox.mdnd.LazyManager",
 		null,

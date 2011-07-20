@@ -1,4 +1,10 @@
-define(["dojo/_base/kernel","dojo/_base/html","dojo/_base/array","dojox/mdnd/AreaManager"],function(dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"dojo/_base/array",
+	"dojox/mdnd/AreaManager"
+],function(dojo){
 	var vdm = dojo.declare(
 		"dojox.mdnd.dropMode.VerticalDropMode",
 		null,

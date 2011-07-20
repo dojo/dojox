@@ -1,5 +1,13 @@
-define(["dojo/_base/kernel","dojo/_base/html","dojo/_base/connect","dojo/_base/sniff",
-	"dojo/_base/array","dojo/_base/window","dojo/_base/event"],function(dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dojo/_base/html",
+	"dojo/_base/sniff",
+	"dojo/_base/window"
+],function(dojo){
 	return dojo.declare(
 		"dojox.mdnd.Moveable",
 		null,
