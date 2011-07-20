@@ -102,12 +102,14 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "./common"
 		},
 
 		removeChild: function(/*Widget|Number*/widget){
-			if(typeof widget == "number"){
+			if(typeof widget === "number"){
 				widget = this.getChildren()[widget];
 			}
 			if(widget){
 				this.inherited(arguments);
-				this.containerNode.removeChild(widget.subNode);
+				if(this.transition === "below"){
+					this.containerNode.removeChild(widget.subNode);
+				}
 			}
 		}
 	});
