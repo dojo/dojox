@@ -1,5 +1,12 @@
 // AMD-ID "dojox/encoding/crypto/Blowfish"
-define(["dojo/_base/array", "dojox/encoding/base64", "dojox/encoding/crypto/_base"], function(dojo, base64, crypto){
+define([
+	"dojo/_base/kernel",	// dojo.getObject
+	"dojo/_base/lang",	// dojo.isString
+	"dojo/_base/array",	// dojo.map
+	"dojox/encoding/base64",
+	"dojox/encoding/crypto/_base"
+], function(dojo, lang, array, base64, crypto){
+
 dojo.getObject("encoding.crypto.Blowfish", true, dojox);
 
 /*	Blowfish

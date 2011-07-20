@@ -1,5 +1,10 @@
 // AMD-ID "dojox/encoding/crypto/RSAKey-ext"
-define(["dojo/_base/kernel", "dojox/encoding/crypto/RSAKey", "dojox/math/BigInteger-ext"], function(dojo, RSAKey, BigInteger) {
+define([
+	"dojo/_base/kernel", // dojo.experimental
+	"dojo/_base/lang", // dojo.extend
+	"dojox/encoding/crypto/RSAKey",
+	"dojox/math/BigInteger-ext"
+], function(dojo, lang, RSAKey, BigInteger) {
 
 	dojo.experimental("dojox.encoding.crypto.RSAKey-ext");
 
