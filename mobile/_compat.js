@@ -1,5 +1,18 @@
-define(["dojo/_base/kernel", "./common","dojo/uacss","dojo/_base/fx","dojo/fx","dojo/fx/easing","dojox/fx","dojox/fx/flip"],
-	function(dojo, common, uacss, fxbase, fx, easing, xfx, flip){
+define([
+	"dojo/_base/kernel",	// dojo.mixin, dojo.moduleUrl, dojo.global, dojo.addOnLoad
+	"dojo/_base/lang",	// dojo.extend, dojo.isArray
+	"dojo/_base/array",	// dojo.forEach
+	"dojo/_base/html",	// dojo.style, dojo.hasClass, dojo.addClass, dojo.removeClass,dojo.create
+	"dojo/_base/window",	// dojo.doc, dojo.body
+	"dojo/_base/connect",	// dojo.connect
+	"dojo/_base/fx",	// dojo.fadeOut, dojo.fadeIn
+	"dojo/uacss",		// dojo.isWebKit, dojo.isIE
+	"./common",
+	"dojo/fx",
+	"dojo/fx/easing",
+	"dojox/fx",
+	"dojox/fx/flip"
+], function(dojo, lang, array, html, window, connect, fxbase, has, common, fx, easing, xfx, flip){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
