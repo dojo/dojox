@@ -48,9 +48,9 @@ define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./
 		defaultClickAction: function(e){
 			if(this.toggle){
 				if(this.selected){
-					this.select();
-				}else{
 					this.deselect();
+				}else{
+					this.select();
 				}
 			}else if(!this.selected){
 				this.select();
