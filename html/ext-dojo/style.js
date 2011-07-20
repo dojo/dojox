@@ -1,4 +1,10 @@
-define(["dojo/_base/kernel", "dojo/_base/html"], function(dojo){
+define([
+	"dojo/_base/kernel",	// dojo.experimental, dojo.getObject, dojo.mixin etc
+	"dojo/_base/html",	// dojo.attr, dojo.hasAttr, dojo.style, dojo.place, dojo.byId, dojo.create, etc.
+	"dojo/_base/sniff",	// dojo.isIE
+	"dojo/_base/string",	// dojo.trim
+	"dojo/_base/window"	// dojo.body, dojo.doc
+], function(dojo){
 	dojo.experimental("dojox.html.ext-dojo.style");
 	var st = dojo.getObject("html.ext-dojo.style", true, dojox);
 
