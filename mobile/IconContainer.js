@@ -73,14 +73,42 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "./common"
 			}
 		},
 
-		addChild: function(widget){
-			this.domNode.insertBefore(widget.domNode, this._terminator);
+		addChild: function(widget, /*Number?*/insertIndex){
+			var children = this.getChildren();
+			if(typeof insertIndex !== "number" || insertIndex > children.length){
+				insertIndex = children.length;
+			}
+			var idx = insertIndex;
+			var refNode = this.containerNode;
+			if(idx > 0){
+				refNode = children[idx - 1].domNode;
+				idx = "after";
+			}
+			dojo.place(widget.domNode, refNode, idx);
+
 			widget.transition = this.transition;
 			if(this.transition === "below"){
-				this.domNode.appendChild(widget.subNode);
+				for(var i = 0, refNode = this._terminator; i < insertIndex; i++){
+					refNode = refNode.nextSibling;
+				}
+				dojo.place(widget.subNode, refNode, "after");
 			}
 			widget.inheritParams();
 			widget._setIconAttr(widget.icon);
+
+			if(this._started && !widget._started){
+				widget.startup();
+			}
+		},
+
+		removeChild: function(/*Widget|Number*/widget){
+			if(typeof widget == "number"){
+				widget = this.getChildren()[widget];
+			}
+			if(widget){
+				this.inherited(arguments);
+				this.containerNode.removeChild(widget.subNode);
+			}
 		}
 	});
 });

@@ -47,10 +47,13 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 			return (!parent || !parent.resize); // top level widget
 		},
 
-		addChild: function(widget){
+		addChild: function(widget, /*Number?*/insertIndex){
 			var c = widget.domNode;
 			var fixed = this.checkFixedBar(c, true);
 			if(fixed){
+				// Addition of a fixed bar is an exceptional case.
+				// It has to be added to domNode, not containerNode.
+				// In this case, insertIndex is ignored.
 				this.domNode.appendChild(c);
 				if(fixed === "top"){
 					this.fixedHeaderHeight = c.offsetHeight;
@@ -61,11 +64,11 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 					c.style.bottom = "0px";
 				}
 				this.resize();
+				if(this._started && !widget._started){
+					widget.startup();
+				}
 			}else{
-				this.containerNode.appendChild(c);
-			}
-			if(this._started && !widget._started){
-				widget.startup();
+				this.inherited(arguments);
 			}
 		},
 

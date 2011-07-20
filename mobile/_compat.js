@@ -252,7 +252,7 @@ define([
 						this.redrawBorders();
 					},
 		
-					addChild: function(widget){
+					addChild: function(widget, /*Number?*/insertIndex){
 						dojox.mobile.RoundRectList._addChild.apply(this, arguments);
 						this.redrawBorders();
 						if(dojox.mobile.applyPngFilter){
@@ -295,7 +295,7 @@ define([
 			if(dojox.mobile.IconContainer){
 				dojox.mobile.IconContainer._addChild = dojox.mobile.IconContainer.prototype.addChild;
 				dojo.extend(dojox.mobile.IconContainer, {
-					addChild: function(widget){
+					addChild: function(widget, /*Number?*/insertIndex){
 						dojox.mobile.IconContainer._addChild.apply(this, arguments);
 						if(dojox.mobile.applyPngFilter){
 							dojox.mobile.applyPngFilter(widget.domNode);
