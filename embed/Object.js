@@ -1,10 +1,11 @@
 define([
 	"dojo/_base/kernel",
+	"dojo/_base/declare",	// dojo.declare
 	"dojo/dom-geometry",
 	"dijit/_Widget",
 	"./Flash",
 	"./Quicktime"
-], function (dojo, domGeometry, _Widget, Flash, Quicktime) {
+], function (dojo, declare, domGeometry, _Widget, Flash, Quicktime) {
 dojo.experimental("dojox.embed.Object");
 
 return dojo.declare("dojox.embed.Object", _Widget, {
