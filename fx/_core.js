@@ -1,4 +1,11 @@
-define(["dojox","dojo/_base/array"],function(fx_core, dojo){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array"
+],function(dojo, lang, array){
+
+	dojo.getObject("fx", true, dojox);
+
 	dojox.fx._Line = function(start, end){
 		// summary: a custom _Line to accomodate multi-dimensional values
 		//
@@ -29,18 +36,18 @@ define(["dojox","dojo/_base/array"],function(fx_core, dojo){
 		this.start = start;
 		this.end = end;
 		
-		var isArray = dojo.isArray(start),
+		var isArray = lang.isArray(start),
 			d = (isArray ? [] : end - start);
 		
 		if(isArray){
 			// multi-dimensional branch
-			dojo.forEach(this.start, function(s, i){
+			array.forEach(this.start, function(s, i){
 				d[i] = this.end[i] - s;
 			}, this);
 			
 			this.getValue = function(/*float*/ n){
 				var res = [];
-				dojo.forEach(this.start, function(s, i){
+				array.forEach(this.start, function(s, i){
 					res[i] = (d[i] * n) + s;
 				}, this);
 				return res; // Array
