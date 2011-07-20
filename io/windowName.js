@@ -1,4 +1,4 @@
-define(["dojo/_base/window", "dojo/_base/xhr", "dojo/_base/sniff", "dojo/_base/url", "dojo/domReady!"], function(dojo){
+define(["dojo/_base/kernel", "dojo/_base/window", "dojo/_base/xhr", "dojo/_base/sniff", "dojo/_base/url", "dojo/domReady!"], function(dojo){
 dojo.getObject("io.windowName", true, dojox);
 // Implements the window.name transport
 

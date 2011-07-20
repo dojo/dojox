@@ -1,4 +1,4 @@
-define(["dojo/_base/html", "dojo/io/script", "dojo/io/iframe"], function(dojo, ioScript, iframe){
+define(["dojo/main", "dojo/io/script", "dojo/io/iframe"], function(dojo, ioScript, iframe){
 	dojo.deprecated("dojox.io.scriptFrame", "dojo.io.script now supports parallel requests without dojox.io.scriptFrame", "2.0");
 	dojo.getObject("io.scriptFrame", true, dojox);
 

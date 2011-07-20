@@ -1,4 +1,4 @@
-define(['dojo/_base/lang', 'dojo/io/iframe', 'dojox/data/dom', 'dojo/_base/xhr', 'dojo/_base/url'], function(dojo, iframe, dom){
+define(['dojo/main', 'dojo/io/iframe', 'dojox/data/dom', 'dojo/_base/xhr', 'dojo/_base/url'], function(dojo, iframe, dom){
 	dojo.getObject("io.proxy.xip", true, dojox);
 
 dojox.io.proxy.xip = {
@@ -59,7 +59,7 @@ dojox.io.proxy.xip = {
 		var url = this.xipClientUrl;
 		//Make sure we are not dealing with javascript urls, just to be safe.
 		if(url.split(":")[0].match(/javascript/i) || facade._ifpServerUrl.split(":")[0].match(/javascript/i)){
-			return;
+			return null;
 		}
 		
 		//Make xip_client a full URL.
