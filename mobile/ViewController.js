@@ -104,7 +104,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 		},
 
 		_parse: function(text, id){
-			var container, view;
+			var container, view, i, j, len;
 			var currentView	 = this.findCurrentView();
 			var target = dijit.byId(id) && dijit.byId(id).containerNode 
 						|| dojo.byId(id) 
@@ -112,7 +112,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 						|| dojo.body();
 			// if a fixed bottom bar exists, a new view should be placed before it.
 			var refNode = null;
-			for(var j = target.childNodes.length - 1; j >= 0; j--){
+			for(j = target.childNodes.length - 1; j >= 0; j--){
 				var c = target.childNodes[j];
 				if(c.nodeType === 1){
 					if(c.getAttribute("fixed") === "bottom"){
@@ -121,11 +121,17 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 					break;
 				}
 			}
-			if(text.charAt(0) == "<"){ // html markup
+			if(text.charAt(0) === "<"){ // html markup
 				container = dojo.create("DIV", {innerHTML: text});
-				view = container.firstChild; // <div dojoType="dojox.mobile.View">
-				if(!view && view.nodeType != 1){
-					console.log("dojox.mobile._ItemBase#transitionTo: invalid view content");
+				for(i = 0; i < container.childNodes.length; i++){
+					var n = container.childNodes[i];
+					if(n.nodeType === 1){
+						view = n; // expecting <div dojoType="dojox.mobile.View">
+						break;
+					}
+				}
+				if(!view){
+					console.log("dojox.mobile.ViewController#_parse: invalid view content");
 					return;
 				}
 				view.style.visibility = "hidden";
@@ -136,16 +142,23 @@ define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","
 						w.startup();
 					}
 				});
-				target.replaceChild(container.firstChild, container); // reparent
+
+				// allows multiple root nodes in the fragment,
+				// but transition will be performed to the 1st view.
+				for(i = 0, len = container.childNodes.length; i < len; i++){
+					target.insertBefore(container.firstChild, refNode); // reparent
+				}
+				target.removeChild(container);
+
 				dijit.byNode(view)._visible = true;
-			}else if(text.charAt(0) == "{"){ // json
+			}else if(text.charAt(0) === "{"){ // json
 				container = dojo.create("DIV");
 				target.insertBefore(container, refNode);
 				this._ws = [];
 				view = this._instantiate(eval('('+text+')'), container);
-				for(var i = 0; i < this._ws.length; i++){
-						var w = this._ws[i];
-						w.startup && !w._started && (!w.getParent || !w.getParent()) && w.startup();
+				for(i = 0; i < this._ws.length; i++){
+					var w = this._ws[i];
+					w.startup && !w._started && (!w.getParent || !w.getParent()) && w.startup();
 				}
 				this._ws = null;
 			}
