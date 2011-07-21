@@ -98,7 +98,7 @@ define([
 				// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
 				var eventName = ce(n);
 				arrayUtil.forEach(observers, function(o){
-					c.push(connect(n, eventName, this, function(evt){
+					c.push(connect.connect(n, eventName, this, function(evt){
 						if(this.watching){
 							this[o](this.formNodeValue(name), name, n, evt);
 						}

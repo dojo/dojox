@@ -652,7 +652,7 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 			if(this._optionButtonDisplayed){
 				if(this.enableMenuFade){
 					anim = fx.fadeOut({node: this.entryCheckBoxDisplayOptions,duration: 250});
-					connect(anim, "onEnd", this, function(){
+					connect.connect(anim, "onEnd", this, function(){
 						domStyle.style(this.entryCheckBoxDisplayOptions, 'display', 'none');
 						domStyle.style(this.entryCheckBoxRow, 'display', '');
 						domStyle.style(this.entryCheckBoxRow2, 'display', '');
@@ -670,7 +670,7 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 				if(this.enableMenuFade){
 					anim = fx.fadeOut({node: this.entryCheckBoxRow,duration: 250});
 					anim2 = fx.fadeOut({node: this.entryCheckBoxRow2,duration: 250});
-					connect(anim, "onEnd", this, function(){
+					connect.connect(anim, "onEnd", this, function(){
 						domStyle.style(this.entryCheckBoxRow, 'display', 'none');
 						domStyle.style(this.entryCheckBoxRow2, 'display', 'none');
 						domStyle.style(this.entryCheckBoxDisplayOptions, 'display', '');

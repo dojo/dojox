@@ -874,7 +874,7 @@ var _ListInputInputItem = dojo.declare("dojox.form._ListInputInputItem",
 		// tags:
 		//		private
 		domClass.remove(this.closeButtonNode,this.baseClass + "Edited");
-		dojo.disconnect(this._handleKeyDown);
+		connect.disconnect(this._handleKeyDown);
 		this.onChange(value);
 	},
 	
@@ -884,7 +884,7 @@ var _ListInputInputItem = dojo.declare("dojox.form._ListInputInputItem",
 		// tags:
 		//		private
 		domClass.add(this.closeButtonNode,this.baseClass + "Edited");
-		this._handleKeyDown = connect(this._editBox.editWidget,"_onKeyPress",this,"onKeyDown");
+		this._handleKeyDown = connect.connect(this._editBox.editWidget,"_onKeyPress",this,"onKeyDown");
 		this.onEdit();
 	},
 	

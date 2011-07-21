@@ -104,7 +104,7 @@ define([
 				// radio buttons
 				arrayUtil.forEach(w, function(w){
 					arrayUtil.forEach(observers, function(o){
-						c.push(connect(w, "onChange", this, function(evt){
+						c.push(connect.connect(w, "onChange", this, function(evt){
 							// TODO: for some reason for radio button widgets
 							// w.checked != w.focusNode.checked when value changes.
 							// We test the underlying value to be 100% sure.
@@ -120,7 +120,7 @@ define([
 				var eventName = w.isInstanceOf(Button) ?
 						"onClick" : "onChange";
 				arrayUtil.forEach(observers, function(o){
-					c.push(connect(w, eventName, this, function(evt){
+					c.push(connect.connect(w, eventName, this, function(evt){
 						if(this.watching){
 							this[o](w.get("value"), name, w, evt);
 						}
@@ -161,7 +161,7 @@ define([
 			//		Called when the widget is being destroyed
 
 			for(var name in this.formWidgets){
-				arrayUtil.forEach(this.formWidgets[name].connections, dojo.disconnect);
+				arrayUtil.forEach(this.formWidgets[name].connections, connect.disconnect);
 			}
 			this.formWidgets = {};
 

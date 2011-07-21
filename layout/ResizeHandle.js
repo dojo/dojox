@@ -195,8 +195,8 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		}
 
 		this._pconnects = [];
-		this._pconnects.push(connect(windowBase.doc,"onmousemove",this,"_updateSizing"));
-		this._pconnects.push(connect(windowBase.doc,"onmouseup", this, "_endSizing"));
+		this._pconnects.push(connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"));
+		this._pconnects.push(connect.connect(windowBase.doc,"onmouseup", this, "_endSizing"));
 		
 		eventUtil.stopEvent(e);
 	},
@@ -313,7 +313,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 
 	_endSizing: function(/*Event*/ e){
 		// summary: disconnect listenrs and cleanup sizing
-		arrayUtil.forEach(this._pconnects, dojo.disconnect);
+		arrayUtil.forEach(this._pconnects, connect.disconnect);
 		var pub = lang.partial(dojo.publish, this.endTopic, [ this ]);
 		if(!this.activeResize){
 			this._resizeHelper.hide();

@@ -1083,7 +1083,7 @@ widget.PeopleEditor = dojo.declare(/*===== "dojox.atom.widget.PeopleEditor", ===
 			node.appendChild(row);
 			row.className = "peopleEditorButton";
 			domStyle.style(row, 'font-size', 'x-small');
-			connect(row, "onclick", this, "_removeEditor");
+			connect.connect(row, "onclick", this, "_removeEditor");
 			row.id = "remove"+index;
 			
 			node = document.createTextNode("[X]");

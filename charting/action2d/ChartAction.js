@@ -18,7 +18,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base
 			//	summary:
 			//		Connect this action to the chart.
 			for(var i = 0; i < this._listeners.length; ++i){
-				this._listeners[i].handle = connect(this.chart.node, this._listeners[i].eventName, 
+				this._listeners[i].handle = connect.connect(this.chart.node, this._listeners[i].eventName,
 						this, this._listeners[i].methodName);
 			}
 		},
@@ -27,7 +27,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base
 			//	summary:
 			//		Disconnect this action from the chart.
 			for(var i = 0; i < this._listeners.length; ++i){
-				dojo.disconnect(this._listeners[i].handle);
+				connect.disconnect(this._listeners[i].handle);
 				delete this._listeners[i].handle;
 			}
 		}
