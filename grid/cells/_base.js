@@ -387,6 +387,8 @@ dojo.declare("dojox.grid._DeferredTextWidget", dijit._Widget, {
 			this.needFormatNode(inDatum, inRowIndex);
 			var h = [ '<select class="dojoxGridSelect">' ];
 			for (var i=0, o, v; ((o=this.options[i]) !== undefined)&&((v=this.values[i]) !== undefined); i++){
+				v = v.replace ? v.replace(/&/g, '&amp;').replace(/</g, '&lt;') : v;
+				o = o.replace ? o.replace(/&/g, '&amp;').replace(/</g, '&lt;') : o;
 				h.push("<option", (inDatum==v ? ' selected' : ''), ' value="' + v + '"', ">", o, "</option>");
 			}
 			h.push('</select>');
