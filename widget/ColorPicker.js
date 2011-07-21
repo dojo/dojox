@@ -1,11 +1,21 @@
-define(["dojo/_base/html","dojo/_base/connect","dojo/fx","dojo/dnd/move",
-		"dijit/form/_FormWidget",
-		"dijit/focus",		// dijit.focus()
-		"dijit/typematic",
-		"dojox/color",
-		"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
-		"dojo/text!./ColorPicker/ColorPicker.html"],
-			function(dojo,connect,fx,move,formwidget,focus,typematic,color,i18n,bundle1,bundle2,template){
+define([
+	"dojo/_base/kernel",	// dojo.moduleUrl, dojo.experimental, dojo.mixin
+	"dojo/_base/declare",	// dojo.declare
+	"dojo/_base/lang",	// dojo.moduleUrl, dojo.experimental, dojo.hitch
+	"dojo/_base/array",	// dojo.forEach
+	"dojo/_base/html",	// dojo.hasClass, dojo.body, dojo.setSelectable, dojo.style
+	"dojo/_base/connect",	// dojo.subscribe, dojo.unsubscribe, dojo.stopEvent
+	"dojo/_base/sniff",	// dojo.isIE
+	"dojo/keys",		// dojo.keys
+	"dojo/fx",
+	"dojo/dnd/move",
+	"dijit/form/_FormWidget",
+	"dijit/focus",		// dijit.focus()
+	"dijit/typematic",
+	"dojox/color",
+	"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
+	"dojo/text!./ColorPicker/ColorPicker.html"
+], function(dojo,declare,lang,array,html,connect,has,keys,fx,move,formwidget,focus,typematic,color,i18n,bundle1,bundle2,template){
 
 	dojo.experimental("dojox.widget.ColorPicker");
 	
