@@ -396,7 +396,7 @@ dojo.declare("dojox.data.XmlStore", null, {
 		//		A function to call on error
 		var url = this._getFetchUrl(request);
 		if(!url){
-			errorHandler(new Error("No URL specified."));
+			errorHandler(new Error("No URL specified."), request);
 			return;
 		}
 		var localRequest = (!this.sendQuery ? request : {}); // use request for _getItems()
