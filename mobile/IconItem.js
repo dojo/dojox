@@ -1,10 +1,21 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_base/array", "./common","./_ItemBase","./TransitionEvent"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"dojo/_base/array",
+	"./common",
+	"./_ItemBase",
+	"./TransitionEvent"
+],
 	function(dojo, declare, dhtml, darray, mcommon, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
 	//		TODOC
-	return dojo.declare("dojox.mobile.IconItem", dojox.mobile._ItemBase, { 
+	/*=====
+		ItemBase = dojox.mobile._ItemBase;
+	=====*/
+	return dojo.declare("dojox.mobile.IconItem", ItemBase, { 
 		lazy: false,
 		requires: "",
 		timeout: 10,

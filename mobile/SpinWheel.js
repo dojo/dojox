@@ -1,11 +1,25 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./SpinWheelSlot"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"./SpinWheelSlot"
+],
 	function(dojo, declare, darray, dbase, WidgetBase, Container, Contained, ScrollableMixin, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheel
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.SpinWheel", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.SpinWheel", [WidgetBase, Container, Contained],{
 		slotClasses: [],
 		slotProps: [],
 		centerPos: 0,

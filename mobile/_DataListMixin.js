@@ -1,4 +1,9 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "./ListItem"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"./ListItem"
+],
 	function(dojo, declare, darray, ListItem){
 	// module:
 	//		dojox/mobile/_DataListMixin

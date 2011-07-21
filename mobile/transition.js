@@ -1,4 +1,9 @@
-define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/DeferredList"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"dojo/DeferredList"
+],
 	function(dojo, darray, dhtml, DeferredList){
 	return function(from, to, options){
 		var rev = (options && options.reverse) ? " mblReverse" : "";
@@ -48,7 +53,7 @@ define(["dojo/_base/kernel", "dojo/_base/array","dojo/_base/html","dojo/Deferred
 			dojo.addClass(from, options.transition + " mblOut" + rev);
 			dojo.addClass(to, options.transition + " mblIn" + rev);
 
-			return new dojo.DeferredList(defs);
+			return new DeferredList(defs);
 			
 		}
 	}

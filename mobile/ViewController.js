@@ -1,4 +1,12 @@
-define(["dojo/_base/kernel", "dojo/_base/declare","dojo/on","dojo/_base/array","dojo/DeferredList","./TransitionEvent","./ProgressIndicator"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/on",
+	"dojo/_base/array",
+	"dojo/DeferredList",
+	"./TransitionEvent",
+	"./ProgressIndicator"
+],
 	function(dojo, declare, on, darra, DeferredList, TransitionEvent, ProgressIndicator){
 
 	var Controller = dojo.declare(null, {

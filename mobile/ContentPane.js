@@ -1,4 +1,12 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dijit/_WidgetBase", "dijit/_Container", "dijit/_Contained", "dojo/_base/xhr","./ProgressIndicator"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"dojo/_base/xhr",
+	"./ProgressIndicator"
+],
 	function(dojo, declare, WidgetBase, Container, Contained, xhr, ProgressIndicator) {
 
 	// summary:
@@ -8,9 +16,14 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dijit/_WidgetBase", "dijit/_
 	//		onLoad() is called when parsing is done and the content is ready.
 	//		"dojo/_base/xhr" is in the dependency list. Usually this is not
 	//		necessary, but there is a case where dojox.mobile custom build does not
-	//		contain dojo._base.xhr.
+	//		contain xhr.
 
-	return dojo.declare("dojox.mobile.ContentPane", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.ContentPane", [WidgetBase, Container, Contained],{
 		href: "",
 		content: "",
 		parseOnLoad: true,
@@ -19,7 +32,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dijit/_WidgetBase", "dijit/_
 		startup: function(){
 			if(this._started){ return; }
 			if(this.prog){
-				this._p = dojox.mobile.ProgressIndicator.getInstance();
+				this._p = ProgressIndicator.getInstance();
 			}
 			var parent = this.getParent && this.getParent();
 			if(!parent || !parent.resize){ // top level widget

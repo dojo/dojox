@@ -1,11 +1,20 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html", "./_ItemBase"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"./_ItemBase"
+],
 	function(dojo, declare, darray, dhtml, ItemBase){
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.ToolBarButton", dojox.mobile._ItemBase, {
+	/*=====
+		ItemBase = dojox.mobile._ItemBase;
+	=====*/
+	return dojo.declare("dojox.mobile.ToolBarButton", ItemBase, {
 		selected: false,
 		btnClass: "",
 		_defaultColor: "mblColorDefault",

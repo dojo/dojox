@@ -1,5 +1,12 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html","./View","./_ScrollableMixin"],
-	function(dojo, declare, darray, dhtml, View,ScrollableMixin){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"./View",
+	"./_ScrollableMixin"
+],
+	function(dojo, declare, darray, dhtml, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/ScrollableView
 	// summary:
@@ -15,7 +22,11 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_bas
 	//		The main purpose of this widget is to realize fixed-positioned header
 	//		and/or footer bars.
 
-	return dojo.declare("dojox.mobile.ScrollableView", [dojox.mobile.View,dojox.mobile._ScrollableMixin], {
+	/*=====
+		View = dojox.mobile.View;
+		ScrollableMixin = dojox.mobile._ScrollableMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.ScrollableView", [View, ScrollableMixin], {
 		scrollableParams: {noResize: true},
 
 		buildRendering: function(){

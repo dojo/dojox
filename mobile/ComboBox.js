@@ -1,7 +1,17 @@
-define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./common", "dijit/popup"], function(TextBox, ComboBoxMenu, AutoCompleterMixin, common, popup) {
+define([
+	"./TextBox",
+	"./_ComboBoxMenu",
+	"dijit/form/_AutoCompleterMixin",
+	"./common",
+	"dijit/popup"
+], function(TextBox, ComboBoxMenu, AutoCompleterMixin, common, popup) {
 	dojo.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
-	return dojo.declare("dojox.mobile.ComboBox", [dojox.mobile.TextBox, dijit.form._AutoCompleterMixin], {
+	/*=====
+		TextBox = dojox.mobile.TextBox;
+		AutoCompleterMixin = dijit.form._AutoCompleterMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
 		// summary:
 		//		A non-templated auto-completing text box widget
 		//
@@ -89,7 +99,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 			//		Opens the dropdown for this widget.   To be called only when this.dropDown
 			//		has been created and is ready to display (ie, it's data is loaded).
 			// returns:
-			//		return value of dijit.popup.open()
+			//		return value of popup.open()
 			// tags:
 			//		protected
 
@@ -100,7 +110,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 				self = this;
 
 
-			// TODO: isn't maxHeight dependent on the return value from dijit.popup.open(),
+			// TODO: isn't maxHeight dependent on the return value from popup.open(),
 			// ie, dependent on how much space is available (BK)
 
 			if(!this._preparedNode){

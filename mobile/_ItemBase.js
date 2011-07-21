@@ -1,10 +1,22 @@
-define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./ProgressIndicator","./TransitionEvent"], function(mcommon,WidgetBase,Container,Contained,ProgressIndicator,TransitionEvent){
+define([
+	"./common",
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"./ProgressIndicator",
+	"./TransitionEvent"
+], function(mcommon, WidgetBase, Container, Contained, ProgressIndicator, TransitionEvent){
 	// module:
 	//		dojox/mobile/_ItemBase
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile._ItemBase", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile._ItemBase", [WidgetBase, Container, Contained],{
 		icon: "",
 		iconPos: "", // top,left,width,height (ex. "0,0,29,29")
 		alt: "",

@@ -1,4 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html"
+],
 	function(dojo, declare, dhtml){
 	dojo.declare("dojox.mobile.ProgressIndicator", null, {
 		interval: 100, // milliseconds

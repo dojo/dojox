@@ -1,10 +1,19 @@
-define(["dijit/_WidgetBase", "dijit/_Contained","dijit/_Container"], function(WidgetBase,Contained,Container){
+define([
+	"dijit/_WidgetBase",
+	"dijit/_Contained",
+	"dijit/_Container"
+], function(WidgetBase, Contained, Container){
 	// module:
 	//		dojox/mobile/RoundRect
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.RoundRect", [dijit._WidgetBase, dijit._Container,dijit._Contained], {
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Contained = dijit._Contained;
+		Container = dijit._Container;
+	=====*/
+	return dojo.declare("dojox.mobile.RoundRect", [WidgetBase, Container, Contained], {
 
 		shadow: false,
 

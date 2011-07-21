@@ -1,4 +1,10 @@
-define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicator","./SwapView"], function(WidgetBase,Container,Contained,PageIndicator,SwapView){
+define([
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"./PageIndicator",
+	"./SwapView"
+], function(WidgetBase, Container, Contained, PageIndicator, SwapView){
 	// module:
 	//		dojox/mobile/Carousel
 	// summary:
@@ -6,7 +12,12 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 
 	dojo.experimental("dojox.mobile.Carousel");
 
-	return dojo.declare("dojox.mobile.Carousel", [dijit._WidgetBase, dijit._Container, dijit._Contained], {
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
 		numVisible: 3, // the number of visible items
 		title: "",
 		pageIndicator: true,
@@ -53,7 +64,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 				if(!this.title){
 					this.title = "&nbsp;";
 				}
-				this.piw = new dojox.mobile.PageIndicator();
+				this.piw = new PageIndicator();
 				dojo.style(this.piw, "float", "right"); // workaround for webkit rendering problem
 				this.headerNode.appendChild(this.piw.domNode);
 			}
@@ -106,7 +117,7 @@ define(["dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./PageIndicat
 			var nPages = Math.ceil(items.length / this.numVisible);
 			var h = this.domNode.offsetHeight - this.headerNode.offsetHeight;
 			for(var i = 0; i < nPages; i++){
-				var w = new dojox.mobile.SwapView({height:h+"px"});
+				var w = new SwapView({height:h+"px"});
 				this.addChild(w);
 				this.swapViews.push(w);
 				w._carouselImages = [];

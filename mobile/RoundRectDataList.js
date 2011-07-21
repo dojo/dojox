@@ -1,8 +1,15 @@
-define(["./RoundRectList", "./_DataListMixin"], function(RoundRectList,DataListMixin){
+define([
+	"./RoundRectList",
+	"./_DataListMixin"
+], function(RoundRectList, DataListMixin){
 	// module:
 	//		dojox/mobile/RoundRectDataList
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.RoundRectDataList", [dojox.mobile.RoundRectList,dojox.mobile._DataListMixin], {});
+	/*=====
+		RoundRectList = dojox.mobile.RoundRectList;
+		DataListMixin = dojox.mobile._DataListMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.RoundRectDataList", [RoundRectList, DataListMixin], {});
 });

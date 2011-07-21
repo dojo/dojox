@@ -1,10 +1,21 @@
-define(["./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./ViewController"], function(mcommon,WidgetBase,Container,Contained){
+define([
+	"./common",
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"./ViewController"
+], function(mcommon, WidgetBase, Container, Contained, mobileViewController){
 	// module:
 	//		dojox/mobile/View
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.View", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.View", [WidgetBase, Container, Contained],{
 		// summary:
 		//		A widget that represents a view that occupies the full screen
 		// description:

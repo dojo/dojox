@@ -1,11 +1,28 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./View","./Heading","./_ItemBase","./IconItem"],
-	function(dojo, declare, dhtml, mcommon, WidgetBase, Container, Contained, View, Heading, ItemBase){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"./common",
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"./View",
+	"./Heading",
+	"./_ItemBase",
+	"./IconItem"
+],
+	function(dojo, declare, dhtml, mcommon, WidgetBase, Container, Contained, View, Heading, ItemBase, mobileIconItem){
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.IconContainer", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.IconContainer", [WidgetBase, Container, Contained],{
 		defaultIcon: "",
 		transition: "below", // slide, flip, or below
 		pressedIconOpacity: 0.4,
@@ -38,14 +55,14 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "./common"
 			if(this.transition === "below"){
 				this._setupSubNodes(this.domNode);
 			}else{
-				var view = new dojox.mobile.View({id:this.id+"_mblApplView"});
+				var view = new View({id:this.id+"_mblApplView"});
 				var _this = this;
 				view.onAfterTransitionIn = function(moveTo, dir, transition, context, method){
 					_this._opening._open_1();
 				};
 				view.domNode.style.visibility = "hidden";
 				var heading = view._heading
-					= new dojox.mobile.Heading({back: this._cv(this.back),
+					= new Heading({back: this._cv(this.back),
 									label: this._cv(this.label),
 									moveTo: this.domNode.parentNode.id,
 									transition: this.transition});

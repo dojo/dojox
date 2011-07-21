@@ -1,7 +1,18 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html","dojo/_base/array", "dijit/_WidgetBase", "dijit/form/_FormValueMixin"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"dojo/_base/array",
+	"dijit/_WidgetBase",
+	"dijit/form/_FormValueMixin"
+],
 	function(dojo, declare, dhtml, darray, WidgetBase, FormValueMixin) {
 
-	return dojo.declare("dojox.mobile.Slider", [dijit._WidgetBase, dijit.form._FormValueMixin], {
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		FormValueMixin = dijit.form._FormValueMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.Slider", [WidgetBase, FormValueMixin], {
 		// summary:
 		//		A non-templated Slider widget similar to the HTML5 INPUT type=range.
 		//

@@ -1,6 +1,15 @@
-define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(dojo, dijit, dojox, win, WidgetBase) {
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dojo/window",
+	"dijit/_WidgetBase"
+], function(dojo, dijit, dojox, win, WidgetBase) {
 
-	return dojo.declare("dojox.mobile.Overlay", dijit._WidgetBase, {
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+	=====*/
+	return dojo.declare("dojox.mobile.Overlay", WidgetBase, {
 		// summary:
 		//		A non-templated widget that animates up from the bottom, overlaying the current content
 		//
@@ -14,7 +23,7 @@ define(["dojo", "dijit", "dojox", "dojo/window", "dijit/_WidgetBase"], function(
 			var reposition = dojo.hitch(this, function(){
 				dojo.style(this.domNode, { position: "", top: "auto", bottom: "0px" });
 				popupPos = dojo.position(this.domNode);
-				vp = dojo.window.getBox();
+				vp = win.getBox();
 				if((popupPos.y+popupPos.h) != vp.h){ // TODO: should be a has() test for position:fixed not scrolling
 					popupPos.y = vp.t + vp.h - popupPos.h;
 					dojo.style(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });

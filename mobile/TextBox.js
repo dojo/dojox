@@ -1,6 +1,15 @@
-define(["dijit/_WidgetBase", "dijit/form/_FormValueMixin", "dijit/form/_TextBoxMixin"], function(WidgetBase,FormValueMixin,TextBoxMixin) {
+define([
+	"dijit/_WidgetBase",
+	"dijit/form/_FormValueMixin",
+	"dijit/form/_TextBoxMixin"
+], function(WidgetBase, FormValueMixin, TextBoxMixin) {
 
-	return dojo.declare("dojox.mobile.TextBox",[dijit._WidgetBase,dijit.form._FormValueMixin,dijit.form._TextBoxMixin],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		FormValueMixin = dijit.form._FormValueMixin;
+		TextBoxMixin = dijit.form._TextBoxMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.TextBox",[WidgetBase, FormValueMixin, TextBoxMixin],{
 		// summary:
 		//		A non-templated base class for textbox form inputs
 

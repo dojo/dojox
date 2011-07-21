@@ -50,13 +50,13 @@ define([
 						this.invokeCallback();
 					}else if(transition == "slide" || transition == "cover" || transition == "reveal"){
 						var w = fromNode.offsetWidth;
-						var s1 = dojo.fx.slideTo({
+						var s1 = fx.slideTo({
 							node: fromNode,
 							duration: 400,
 							left: -w*dir,
 							top: dojo.style(fromNode, "top")
 						});
-						var s2 = dojo.fx.slideTo({
+						var s2 = fx.slideTo({
 							node: toNode,
 							duration: 400,
 							left: 0,
@@ -65,7 +65,7 @@ define([
 						toNode.style.position = "absolute";
 						toNode.style.left = w*dir + "px";
 						toNode.style.display = "";
-						anim = dojo.fx.combine([s1,s2]);
+						anim = fx.combine([s1,s2]);
 						dojo.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							fromNode.style.left = "0px";
@@ -80,13 +80,13 @@ define([
 						anim.play();
 					}else if(transition == "slidev" || transition == "coverv" || transition == "reavealv"){
 						var h = fromNode.offsetHeight;
-						var s1 = dojo.fx.slideTo({
+						var s1 = fx.slideTo({
 							node: fromNode,
 							duration: 400,
 							left: 0,
 							top: -h*dir
 						});
-						var s2 = dojo.fx.slideTo({
+						var s2 = fx.slideTo({
 							node: toNode,
 							duration: 400,
 							left: 0,
@@ -96,7 +96,7 @@ define([
 						toNode.style.top = h*dir + "px";
 						toNode.style.left = "0px";
 						toNode.style.display = "";
-						anim = dojo.fx.combine([s1,s2]);
+						anim = fx.combine([s1,s2]);
 						dojo.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							toNode.style.position = "relative";
@@ -104,7 +104,7 @@ define([
 						});
 						anim.play();
 					}else if(transition == "flip" || transition == "flip2"){
-						anim = dojox.fx.flip({
+						anim = xfx.flip({
 							node: fromNode,
 							dir: "right",
 							depth: 0.5,
@@ -121,7 +121,7 @@ define([
 						anim.play();
 					}else {
 						// other transitions - "fade", "dissolve", "swirl"
-						anim = dojo.fx.chain([
+						anim = fx.chain([
 							dojo.fadeOut({
 								node: fromNode,
 								duration: 600
@@ -203,7 +203,7 @@ define([
 					};
 		
 					if(anim){
-						var a = dojo.fx.slideTo({
+						var a = fx.slideTo({
 							node: this.inner,
 							duration: 300,
 							left: pos,

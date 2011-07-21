@@ -1,4 +1,6 @@
-define(["dojo/ready"], function(dlang){
+define([
+	"dojo/ready"
+], function(ready){
 
 	dojo.getObject("mobile", true, dojox);
 
@@ -84,7 +86,7 @@ define(["dojo/ready"], function(dlang){
 		};
 	}();
 	if(dojo.config.parseOnLoad){
-		dojo.ready(100, dojox.mobile.parser, "parse");
+		ready(100, dojox.mobile.parser, "parse");
 	}
 	dojo.parser = dojox.mobile.parser; // in case user app calls dojo.parser
 

@@ -1,10 +1,17 @@
-define(["dijit/_WidgetBase","dijit/_Contained"], function(WidgetBase,Contained){
+define([
+	"dijit/_WidgetBase",
+	"dijit/_Contained"
+], function(WidgetBase, Contained){
 	// module:
 	//		dojox/mobile/RoundRectCategory
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.RoundRectCategory", [dijit._WidgetBase, dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.RoundRectCategory", [WidgetBase, Contained],{
 		label: "",
 
 		buildRendering: function(){

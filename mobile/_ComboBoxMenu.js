@@ -1,7 +1,20 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dijit/form/_ComboBoxMenuMixin", "dijit/_WidgetBase", "dojox/mobile/_ListTouchMixin", "./scrollable"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"dijit/form/_ComboBoxMenuMixin",
+	"dijit/_WidgetBase",
+	"dojox/mobile/_ListTouchMixin",
+	"./scrollable"
+],
 	function(dojo, declare, dhtml, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable) {
 
-	return dojo.declare("dojox.mobile._ComboBoxMenu", [dijit._WidgetBase,dojox.mobile._ListTouchMixin,dijit.form._ComboBoxMenuMixin], {
+	/*=====
+		ComboBoxMenuMixin = dijit.form._ComboBoxMenuMixin;
+		WidgetBase = dijit._WidgetBase;
+		ListTouchMixin = dojox.mobile._ListTouchMixin;
+	=====*/
+	return dojo.declare("dojox.mobile._ComboBoxMenu", [WidgetBase, ListTouchMixin, ComboBoxMenuMixin], {
 		// summary:
 		//		Focus-less menu for internal use in `dijit.form.ComboBox`
 		//		Abstract methods that must be defined externally:
@@ -59,7 +72,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dijit/for
 
 		postCreate: function(){
 			this.inherited(arguments);
-			this.scrollable = new dojox.mobile.scrollable(dojo, dojox);
+			this.scrollable = new Scrollable(dojo, dojox);
 			this.scrollable.resize = function(){}; // resize changes the height rudely
 		}
 	});

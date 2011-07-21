@@ -1,4 +1,10 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/window", "./_base"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/array",
+	"dojo/dom-construct",
+	"dojo/_base/window",
+	"./_base"
+],
 	function(dojo, darray, domConstruct, dwindow, mbase){
 	// module:
 	//		dojox/mobile/deviceTheme

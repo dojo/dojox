@@ -1,10 +1,18 @@
-define(["./common","dijit/_WidgetBase","dijit/_Contained"], function(mcommon,WidgetBase,Contained){
+define([
+	"./common",
+	"dijit/_WidgetBase",
+	"dijit/_Contained"
+], function(mcommon, WidgetBase, Contained){
 	// module:
 	//		dojox/mobile/Switch
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.Switch", [dijit._WidgetBase,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.Switch", [WidgetBase, Contained],{
 		value: "on",
 		name: "",
 		leftLabel: "ON",

@@ -1,11 +1,21 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/html", "./_ItemBase", "./TransitionEvent"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"./_ItemBase",
+	"./TransitionEvent"
+],
 	function(dojo, declare, darray, dhtml, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.ListItem", dojox.mobile._ItemBase, {
+	/*=====
+		ItemBase = dojox.mobile._ItemBase;
+	=====*/
+	return dojo.declare("dojox.mobile.ListItem", ItemBase, {
 		//icon: "", // inherit from _ItemBase
 		//label: "", // inherit from _ItemBase
 		rightText: "",

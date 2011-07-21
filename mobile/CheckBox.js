@@ -1,7 +1,17 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "./ToggleButton", "dijit/form/_CheckBoxMixin"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"./ToggleButton",
+	"dijit/form/_CheckBoxMixin"
+],
 	function(dojo, declare, dhtml, ToggleButton, CheckBoxMixin) {
 
-	return dojo.declare("dojox.mobile.CheckBox", [dojox.mobile.ToggleButton, dijit.form._CheckBoxMixin], {
+	/*=====
+		ToggleButton = dojox.mobile.ToggleButton;
+		CheckBoxMixin = dijit.form._CheckBoxMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.CheckBox", [ToggleButton, CheckBoxMixin], {
 		// summary:
 		//		A non-templated checkbox widget that can be in two states (checked or not).
 

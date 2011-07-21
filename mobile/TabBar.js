@@ -1,11 +1,28 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./Heading","./_ItemBase","./TabBarButton"],
-	function(dojo, declare, darray, dhtml, mcommon, WidgetBase, Container, Contained, Heading, ItemBase){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"./common",
+	"dijit/_WidgetBase",
+	"dijit/_Container",
+	"dijit/_Contained",
+	"./Heading",
+	"./_ItemBase",
+	"./TabBarButton"
+],
+	function(dojo, declare, darray, dhtml, mcommon, WidgetBase, Container, Contained, Heading, ItemBase, mobileTabBarButton){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.TabBar", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		Container = dijit._Container;
+		Contained = dijit._Contained;
+	=====*/
+	return dojo.declare("dojox.mobile.TabBar", [WidgetBase, Container, Contained],{
 		iconBase: "",
 		iconPos: "",
 		barType: "tabBar", // "tabBar"(default) or "segmentedControl"

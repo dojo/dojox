@@ -1,7 +1,14 @@
-define(["./Tooltip", "./Overlay", "./common"], function(Tooltip, Overlay,mcommon) {
+define([
+	"./Tooltip",
+	"./Overlay",
+	"./common"
+], function(Tooltip, Overlay, mcommon) {
 
-	var cls = dojo.declare("dojox.mobile.Opener",
-		dojo.hasClass(dojo.doc.documentElement, "dj_phone") ? dojox.mobile.Overlay : dojox.mobile.Tooltip, {
+	/*=====
+		Tooltip = dojox.mobile.Tooltip;
+		Overlay = dojox.mobile.Overlay;
+	=====*/
+	var cls = dojo.declare("dojox.mobile.Opener", dojo.hasClass(dojo.doc.documentElement, "dj_phone") ? Overlay : Tooltip, {
 		// summary:
 		//		A non-templated popup widget that will use either Tooltip or Overlay depending on screen size
 		//

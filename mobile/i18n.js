@@ -1,4 +1,7 @@
-define(["./common", "dojo/i18n"], function(mcommon, i18n){
+define([
+	"./common",
+	"dojo/i18n"
+], function(mcommon, i18n){
 	// module:
 	//		dojox/mobile/i18n
 	// summary:
@@ -7,7 +10,7 @@ define(["./common", "dojo/i18n"], function(mcommon, i18n){
 	dojo.getObject("mobile.i18n", true, dojox);
 
 	dojox.mobile.i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
-		return dojox.mobile.i18n.registerBundle(dojo.i18n.getLocalization(packageName, bundleName, locale));
+		return dojox.mobile.i18n.registerBundle(i18n.getLocalization(packageName, bundleName, locale));
 	};
 
 	dojox.mobile.i18n.registerBundle = function(/*Array*/bundle){

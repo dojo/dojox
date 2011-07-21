@@ -1,11 +1,21 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"./common",
+	"./_ItemBase"
+],
 	function(dojo, declare, darray, dhtml, mcommon, ItemBase){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
 	//		TODOC
 
-	return dojo.declare("dojox.mobile.TabBarButton", [dojox.mobile._ItemBase],{
+	/*=====
+		ItemBase = dojox.mobile._ItemBase;
+	=====*/
+	return dojo.declare("dojox.mobile.TabBarButton", [ItemBase],{
 		icon1: "", // unselected (dark) icon
 		icon2: "", // selected (highlight) icon
 		iconPos1: "", // unselected (dark) icon position

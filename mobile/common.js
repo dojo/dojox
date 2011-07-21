@@ -1,4 +1,11 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/html", "dojo/ready", "dijit/_WidgetBase"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/html",
+	"dojo/ready",
+	"dijit/_WidgetBase"
+],
 	function(dojo, dlang, darray, dhtml, ready, WidgetBase){
 
 	dojo.getObject("mobile", true, dojox);
@@ -254,7 +261,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	};
 
 	if(dojo.config.parseOnLoad){
-		dojo.ready(90, function(){
+		ready(90, function(){
 			// avoid use of dojo.query
 			/*
 			var list = dojo.query('[lazy=true] [dojoType]', null);
@@ -390,7 +397,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		return null;
 	};
 
-	dojo.extend(dijit._WidgetBase, {
+	dojo.extend(WidgetBase, {
 		_cv: function(s){ return s; } // convert the given string
 	});
 

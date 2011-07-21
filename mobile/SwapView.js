@@ -1,4 +1,7 @@
-define(["./View","./_ScrollableMixin"], function(View,ScrollableMixin){
+define([
+	"./View",
+	"./_ScrollableMixin"
+], function(View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:
@@ -9,7 +12,11 @@ define(["./View","./_ScrollableMixin"], function(View,ScrollableMixin){
 	//		When SwapView is flipped, it finds an adjacent SwapView,
 	//		and opens it.
 
-	return dojo.declare("dojox.mobile.SwapView", [dojox.mobile.View,dojox.mobile._ScrollableMixin], {
+	/*=====
+		View = dojox.mobile.View;
+		ScrollableMixin = dojox.mobile._ScrollableMixin;
+	=====*/
+	return dojo.declare("dojox.mobile.SwapView", [View, ScrollableMixin], {
 		scrollDir: "f",
 		weight: 1.2,
 

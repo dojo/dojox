@@ -1,4 +1,11 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang","./common","dijit/_WidgetBase","./scrollable"],
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"./common",
+	"dijit/_WidgetBase",
+	"./scrollable"
+],
 	function(dojo, declare, dlang, mcommon, WidgetBase, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
