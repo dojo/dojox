@@ -1,4 +1,4 @@
-define(['doh', 'dojo/_base/html', '../parser'], function(doh, dojo, dxparser){
+define(['doh', 'dojo/_base/html', '../parser'], function(doh, html, dxparser){
 
 doh.register("dojox.xml.tests.parser",
 	[
@@ -56,7 +56,7 @@ doh.register("dojox.xml.tests.parser",
 			t.assertTrue(topNode !== null);
 			t.assertTrue(topNode.tagName === "parentNode");
 			t.assertTrue(text === dxparser.textContent(topNode));
-			dojo.destroy(topNode);
+			html.destroy(topNode);
 			t.assertTrue(document.firstChild === null);
 		},
 		function testSetTextContent(t){
@@ -71,7 +71,7 @@ doh.register("dojox.xml.tests.parser",
 			t.assertTrue(text === dxparser.textContent(topNode));
 			dxparser.textContent(topNode, text2);
 			t.assertTrue(text2 === dxparser.textContent(topNode));
-			dojo.destroy(topNode);
+			html.destroy(topNode);
 			t.assertTrue(document.firstChild === null);
 
 		},

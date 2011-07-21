@@ -1,6 +1,13 @@
-define(['dojo/_base/window', 'dojo/query', 'dojox/xml/parser', 'dojo/parser', 'dojo/_base/sniff'], function(dojo, query, dxparser, parser){
+define([
+	"dojo/_base/kernel",	// dojo.getObject
+	"dojo/_base/window",	// dojo.doc
+	"dojo/_base/sniff",	// dojo.isIE
+	"dojo/query",
+	"dojo/parser",
+	"dojox/xml/parser"
+], function(dojo, window, has, query, parser, dxparser){
 
-dojo.getObject("xml.widgetParser", true, dojox);
+dojo.getObject("xml", true, dojox);
 
 /**
 Take some sort of xml block
