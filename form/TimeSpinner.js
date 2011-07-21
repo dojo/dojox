@@ -52,7 +52,7 @@ _Spinner,
                                 this._setValueAttr(value,true);
                         }
                         // eat home or end key whether we change the value or not
-                        eventUtil.stopEvent(e);
+                        eventUtil.stop(e);
                 }
         }
 

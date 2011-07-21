@@ -198,7 +198,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		this._pconnects.push(connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"));
 		this._pconnects.push(connect.connect(windowBase.doc,"onmouseup", this, "_endSizing"));
 		
-		eventUtil.stopEvent(e);
+		eventUtil.stop(e);
 	},
 
 	_updateSizing: function(/*Event*/ e){

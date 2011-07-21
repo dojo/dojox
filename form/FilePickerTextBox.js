@@ -294,12 +294,12 @@ return dojo.declare(
 				this.dropDown.onExecute();
 				dijit.selectInputText(this.focusNode, this.focusNode.value.length);
 				this._hasSelection = false;
-				eventUtil.stopEvent(e);
+				eventUtil.stop(e);
 				return;
 			}
 			if((c==dk.RIGHT_ARROW || c==dk.LEFT_ARROW || c==dk.TAB) && this._hasSelection){
 				this._startSearchFromInput();
-				eventUtil.stopEvent(e);
+				eventUtil.stop(e);
 				return;
 			}
 			this.inherited(arguments);

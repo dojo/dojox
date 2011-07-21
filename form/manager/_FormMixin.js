@@ -47,7 +47,7 @@ define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "doj
 			if(!(this.onReset(faux) === false) && faux.returnValue){
 				this.reset();
 			}
-			eventUtil.stopEvent(evt);
+			eventUtil.stop(evt);
 			return false;
 		},
 
@@ -79,7 +79,7 @@ define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "doj
 			// for form-based managers.
 
 			if(this.onSubmit(evt) === false){ // only exactly false stops submit
-				eventUtil.stopEvent(evt);
+				eventUtil.stop(evt);
 			}
 		},
 
