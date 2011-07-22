@@ -1,10 +1,11 @@
 define([
+	"dojo/_base/declare",
 	"./RoundRectCategory"
-],function(RoundRectCategory){
+],function(declare, RoundRectCategory){
 	/*=====
 		RoundRectCategory = dojox.mobile.RoundRectCategory;
 	=====*/
-	return dojo.declare("dojox.mobile.EdgeToEdgeCategory", RoundRectCategory, {
+	return declare("dojox.mobile.EdgeToEdgeCategory", RoundRectCategory, {
 		buildRendering: function(){
 			this.inherited(arguments);
 			this.domNode.className = "mblEdgeToEdgeCategory";

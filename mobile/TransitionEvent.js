@@ -1,12 +1,13 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/Deferred",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/on",
 	"./transition"
 ],
-	function(dojo, declare, on, transition){
+	function(Deferred, lang, declare, on, transition){
 
-	return dojo.declare("dojox.mobile.TransitionEvent", null, {
+	return declare("dojox.mobile.TransitionEvent", null, {
 		constructor: function(target, transitionOptions, triggerEvent){
 			this.transitionOptions=transitionOptions;	
 			this.target = target;
@@ -19,8 +20,8 @@ define([
 
 			var evt = on.emit(this.target,"startTransition", opts);
 			//console.log('evt: ', evt);
-			if (evt){
-				dojo.when(transition.call(this, evt), dojo.hitch(this, function(results){
+			if(evt){
+				Deferred.when(transition.call(this, evt), lang.hitch(this, function(results){
 					this.endTransition(results);
 				}));
 			}

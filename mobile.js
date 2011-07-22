@@ -1,5 +1,10 @@
-define([".", "dojo/_base/kernel", "dojox/mobile/_base"], function(dojox, dojo, base){
-	dojo.getObject("mobile", true, dojox);
-	dojo.experimental("dojox.mobile");
+define([
+	".",
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojox/mobile/_base"
+], function(dojox, kernel, lang, base){
+	lang.getObject("mobile", true, dojox);
+	kernel.experimental("dojox.mobile");
 	return dojox.mobile;
 });

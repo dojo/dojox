@@ -1,20 +1,21 @@
 define([
+	"dojo/dom-construct",
+	"dojo/dom-class",
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
-	"dojo/_base/html",
 	"dijit/form/_ComboBoxMenuMixin",
 	"dijit/_WidgetBase",
 	"dojox/mobile/_ListTouchMixin",
 	"./scrollable"
 ],
-	function(dojo, declare, dhtml, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable) {
+	function(domConstruct, domClass, dojo, declare, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable){
 
 	/*=====
 		ComboBoxMenuMixin = dijit.form._ComboBoxMenuMixin;
 		WidgetBase = dijit._WidgetBase;
 		ListTouchMixin = dojox.mobile._ListTouchMixin;
 	=====*/
-	return dojo.declare("dojox.mobile._ComboBoxMenu", [WidgetBase, ListTouchMixin, ComboBoxMenuMixin], {
+	return declare("dojox.mobile._ComboBoxMenu", [WidgetBase, ListTouchMixin, ComboBoxMenuMixin], {
 		// summary:
 		//		Focus-less menu for internal use in `dijit.form.ComboBox`
 		//		Abstract methods that must be defined externally:
@@ -27,15 +28,15 @@ define([
 		bgIframe: true, // so it's not created for IE and FF
 
 		buildRendering: function(){
-			this.domNode = this.focusNode = dojo.create("div", { "class":"mblReset" });
-			this.containerNode = dojo.create("div", { style: { position:"absolute", top:0, left:0 } }, this.domNode); // needed for scrollable
-			this.previousButton = dojo.create("div", { "class":"mblReset mblComboBoxMenuItem mblComboBoxMenuPreviousButton", role:"option" }, this.containerNode);
-			this.nextButton = dojo.create("div", { "class":"mblReset mblComboBoxMenuItem mblComboBoxMenuNextButton", role:"option" }, this.containerNode);
+			this.domNode = this.focusNode = domConstruct.create("div", { "class":"mblReset" });
+			this.containerNode = domConstruct.create("div", { style: { position:"absolute", top:0, left:0 } }, this.domNode); // needed for scrollable
+			this.previousButton = domConstruct.create("div", { "class":"mblReset mblComboBoxMenuItem mblComboBoxMenuPreviousButton", role:"option" }, this.containerNode);
+			this.nextButton = domConstruct.create("div", { "class":"mblReset mblComboBoxMenuItem mblComboBoxMenuNextButton", role:"option" }, this.containerNode);
 			this.inherited(arguments);
 		},
 
 		_createMenuItem: function(){
-			return dojo.create("div", {
+			return domConstruct.create("div", {
 				"class": "mblReset mblComboBoxMenuItem" +(this.isLeftToRight() ? "" : " mblComboBoxMenuItemRtl"),
 				role: "option"
 			});
@@ -44,13 +45,13 @@ define([
 		onSelect: function(/*DomNode*/ node){
 			// summary:
 			//		Add selected CSS
-			dojo.addClass(node, "mblComboBoxMenuItemSelected");
+			domClass.add(node, "mblComboBoxMenuItemSelected");
 		},
 
 		onDeselect: function(/*DomNode*/ node){
 			// summary:
 			//		Remove selected CSS
-			dojo.removeClass(node, "mblComboBoxMenuItemSelected");
+			domClass.remove(node, "mblComboBoxMenuItemSelected");
 		},
 
 		onOpen: function(){

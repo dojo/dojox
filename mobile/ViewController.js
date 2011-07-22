@@ -1,21 +1,28 @@
 define([
+	"dojo/ready",
+//	"dojo/hash", // optionally prereq'ed
+	"dojo/_base/xhr",
+	"dojo/_base/window",
+	"dojo/dom-construct",
+	"dojo/dom",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"dojo/on",
 	"dojo/_base/array",
-	"dojo/DeferredList",
 	"./TransitionEvent",
 	"./ProgressIndicator"
 ],
-	function(dojo, declare, on, darra, DeferredList, TransitionEvent, ProgressIndicator){
+	function(ready, xhr, win, domConstruct, dom, connect, lang, dojo, declare, on, array, TransitionEvent, ProgressIndicator){
 
-	var Controller = dojo.declare(null, {
+	var Controller = declare(null, {
 		constructor: function(){
 			this.viewMap={};
 			this.currentView=null;
 			this.defaultView=null;
-			dojo.ready(dojo.hitch(this, function(){
-				on(dojo.body(), "startTransition", dojo.hitch(this, "onStartTransition"));
+			ready(lang.hitch(this, function(){
+				on(win.body(), "startTransition", lang.hitch(this, "onStartTransition"));
 			}));
 		},
 
@@ -24,7 +31,7 @@ define([
 				var w = dijit.byId(moveTo);
 				if(w && w.getShowingView){ return w.getShowingView(); }
 			}
-			if (dojox.mobile.currentView) {
+			if(dojox.mobile.currentView){
 				return dojox.mobile.currentView;
 			}
 			w = src;
@@ -51,7 +58,7 @@ define([
 				}
 				return;
 			} else if(evt.detail.scene){
-				dojo.publish("/dojox/mobile/app/pushScene", [evt.detail.scene]);
+				connect.publish("/dojox/mobile/app/pushScene", [evt.detail.scene]);
 				return;
 			}
 			var moveTo = evt.detail.moveTo;
@@ -65,29 +72,29 @@ define([
 					var text = this._text;
 					if(!text){
 						if(dijit.byId(evt.target.id).sync){
-							text = dojo.trim(dojo._getText(evt.detail.url));
+							text = lang.trim(dojo._getText(evt.detail.url));
 						}else{
-							require(["dojo/_base/xhr"], dojo.hitch(this, function(xhr){ 
+							require(["dojo/_base/xhr"], lang.hitch(this, function(xhr){
 								var prog = ProgressIndicator.getInstance();
-								dojo.body().appendChild(prog.domNode);
+								win.body().appendChild(prog.domNode);
 								prog.start();
-								var xhr = dojo.xhrGet({
+								var xhr = xhr.get({
 									url: evt.detail.url,
 									handleAs: "text"
 								});
-								xhr.addCallback(dojo.hitch(this, function(response, ioArgs){
+								xhr.addCallback(lang.hitch(this, function(response, ioArgs){
 									prog.stop();
 									if(response){
 										this._text = response;
 										new TransitionEvent(evt.target, {
 												transition: evt.detail.transition,
-											 	transitionDir: evt.detail.transitionDir, 
-											 	moveTo: moveTo, 
-											 	href: evt.detail.href, 
-											 	url: evt.detail.url, 
-											 	scene: evt.detail.scene}, 
+											 	transitionDir: evt.detail.transitionDir,
+											 	moveTo: moveTo,
+											 	href: evt.detail.href,
+											 	url: evt.detail.url,
+											 	scene: evt.detail.scene},
 											 		evt.detail)
-											 			.dispatch(); 
+											 			.dispatch();
 									}
 								}));
 								xhr.addErrback(function(error){
@@ -114,10 +121,10 @@ define([
 		_parse: function(text, id){
 			var container, view, i, j, len;
 			var currentView	 = this.findCurrentView();
-			var target = dijit.byId(id) && dijit.byId(id).containerNode 
-						|| dojo.byId(id) 
-						|| currentView && currentView.domNode.parentNode 
-						|| dojo.body();
+			var target = dijit.byId(id) && dijit.byId(id).containerNode
+						|| dom.byId(id)
+						|| currentView && currentView.domNode.parentNode
+						|| win.body();
 			// if a fixed bottom bar exists, a new view should be placed before it.
 			var refNode = null;
 			for(j = target.childNodes.length - 1; j >= 0; j--){
@@ -130,7 +137,7 @@ define([
 				}
 			}
 			if(text.charAt(0) === "<"){ // html markup
-				container = dojo.create("DIV", {innerHTML: text});
+				container = domConstruct.create("DIV", {innerHTML: text});
 				for(i = 0; i < container.childNodes.length; i++){
 					var n = container.childNodes[i];
 					if(n.nodeType === 1){
@@ -145,7 +152,7 @@ define([
 				view.style.visibility = "hidden";
 				target.insertBefore(container, refNode);
 				var ws = dojo.parser.parse(container);
-				dojo.forEach(ws, function(w){
+				array.forEach(ws, function(w){
 					if(w && !w._started && w.startup){
 						w.startup();
 					}
@@ -160,7 +167,7 @@ define([
 
 				dijit.byNode(view)._visible = true;
 			}else if(text.charAt(0) === "{"){ // json
-				container = dojo.create("DIV");
+				container = domConstruct.create("DIV");
 				target.insertBefore(container, refNode);
 				this._ws = [];
 				view = this._instantiate(eval('('+text+')'), container);
@@ -179,11 +186,11 @@ define([
 			var widget;
 			for(var key in obj){
 				if(key.charAt(0) == "@"){ continue; }
-				var cls = dojo.getObject(key);
+				var cls = lang.getObject(key);
 				if(!cls){ continue; }
 				var params = {};
 				var proto = cls.prototype;
-				var objs = dojo.isArray(obj[key]) ? obj[key] : [obj[key]];
+				var objs = lang.isArray(obj[key]) ? obj[key] : [obj[key]];
 				for(var i = 0; i < objs.length; i++){
 					for(var prop in objs[i]){
 						if(prop.charAt(0) == "@"){

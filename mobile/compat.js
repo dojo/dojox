@@ -1,9 +1,9 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/lang",
 	"dojo/_base/sniff"
-], function(dojo, has){
-	dojo.getObject("mobile.compat", true, dojox);
-	if(!dojo.isWebKit){
+], function(lang, has){
+	lang.getObject("mobile.compat", true, dojox);
+	if(!has("webKit")){
 		require(["dojox/mobile/_compat"]);
 	}
 	return dojox.mobile.compat;

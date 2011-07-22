@@ -1,10 +1,11 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/_base/array",
 	"./ListItem"
 ],
-	function(dojo, declare, darray, ListItem){
+	function(connect, lang, declare, array, ListItem){
 	// module:
 	//		dojox/mobile/_DataListMixin
 	// summary:
@@ -15,7 +16,7 @@ define([
 	//		as the child nodes of the widget and automatically re-generated
 	//		whenever the corresponding data items are modified.
 
-	return dojo.declare("dojox.mobile._DataListMixin", null,{
+	return declare("dojox.mobile._DataListMixin", null,{
 		// store: Object
 		//		Reference to data provider object
 		store: null,
@@ -40,33 +41,33 @@ define([
 			this.query = query;
 			this.queryOptions = queryOptions;
 			if(store && store.getFeatures()["dojo.data.api.Notification"]){
-				dojo.forEach(this._conn || [], dojo.disconnect);
+				array.forEach(this._conn || [], connect.disconnect);
 				this._conn = [
-					dojo.connect(store, "onSet", this, "onSet"),
-					dojo.connect(store, "onNew", this, "onNew"),
-					dojo.connect(store, "onDelete", this, "onDelete")
+					connect.connect(store, "onSet", this, "onSet"),
+					connect.connect(store, "onNew", this, "onNew"),
+					connect.connect(store, "onDelete", this, "onDelete")
 				];
 			}
 			this.refresh();
 		},
 
-		refresh: function() {
+		refresh: function(){
 			// summary:
 			//		Generate the list items.
 			if(!this.store){ return; }
 			this.store.fetch({
 				query: this.query,
 				queryOptions: this.queryOptions,
-				onComplete: dojo.hitch(this, "generateList"),
-				onError: dojo.hitch(this, "onError")
+				onComplete: lang.hitch(this, "generateList"),
+				onError: lang.hitch(this, "onError")
 			});
 		},
 
-		createListItem: function(item) {
+		createListItem: function(item){
 			var attr = {};
 			var arr = this.store.getLabelAttributes(item);
 			var labelAttr = arr ? arr[0] : null;
-			dojo.forEach(this.store.getAttributes(item), function(name){
+			array.forEach(this.store.getAttributes(item), function(name){
 				if(name === labelAttr){
 					attr["label"] = this.store.getLabel(item);
 				}else{
@@ -78,14 +79,14 @@ define([
 			return w;
 		},
 
-		generateList: function(/*Array*/items, /*Object*/ dataObject) {
-			dojo.forEach(this.getChildren(), function(child){
+		generateList: function(/*Array*/items, /*Object*/ dataObject){
+			array.forEach(this.getChildren(), function(child){
 				child.destroyRecursive();
 			});
-			dojo.forEach(items, function(item, index){
+			array.forEach(items, function(item, index){
 				this.addChild(this.createListItem(item));
 			}, this);
-		}, 
+		},
 
 		onError: function(errText){
 		},

@@ -1,17 +1,19 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/window",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dojo/_base/html",
-	"./common",
+	"./common", // is this needed?
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
 	"./View",
 	"./Heading",
-	"./_ItemBase",
-	"./IconItem"
+	"./_ItemBase", // is this needed?
+	"./IconItem" // is this needed?
 ],
-	function(dojo, declare, dhtml, mcommon, WidgetBase, Container, Contained, View, Heading, ItemBase, mobileIconItem){
+	function(win, domStyle, domConstruct, array, declare, mcommon, WidgetBase, Container, Contained, View, Heading, ItemBase, mobileIconItem){
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:
@@ -22,7 +24,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.IconContainer", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.IconContainer", [WidgetBase, Container, Contained],{
 		defaultIcon: "",
 		transition: "below", // slide, flip, or below
 		pressedIconOpacity: 0.4,
@@ -33,16 +35,16 @@ define([
 		single: false,
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
+			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
 			this.domNode.className = "mblIconContainer";
-			var t = this._terminator = dojo.create("LI");
+			var t = this._terminator = domConstruct.create("LI");
 			t.className = "mblIconItemTerminator";
 			t.innerHTML = "&nbsp;";
 			this.domNode.appendChild(t);
 		},
 
 		_setupSubNodes: function(ul){
-			dojo.forEach(this.getChildren(), function(w){
+			array.forEach(this.getChildren(), function(w){
 				if(this.single){
 					w.subNode.firstChild.style.display = "none";
 				}
@@ -67,12 +69,12 @@ define([
 									moveTo: this.domNode.parentNode.id,
 									transition: this.transition});
 				view.addChild(heading);
-				var ul = dojo.doc.createElement("UL");
+				var ul = win.doc.createElement("UL");
 				ul.className = "mblIconContainer";
 				ul.style.marginTop = "0px";
 				this._setupSubNodes(ul);
 				view.domNode.appendChild(ul);
-				dojo.doc.body.appendChild(view.domNode);
+				win.doc.body.appendChild(view.domNode);
 				heading.startup();
 			}
 			this.inherited(arguments);
@@ -86,7 +88,7 @@ define([
 				if(child === this._terminator){ break; }
 				var w = dijit.byNode(child);
 				w.containerNode.parentNode.style.display = "none";
-				dojo.style(w.iconNode, "opacity", 1);
+				domStyle.style(w.iconNode, "opacity", 1);
 			}
 		},
 
@@ -101,14 +103,14 @@ define([
 				refNode = children[idx - 1].domNode;
 				idx = "after";
 			}
-			dojo.place(widget.domNode, refNode, idx);
+			domConstruct.place(widget.domNode, refNode, idx);
 
 			widget.transition = this.transition;
 			if(this.transition === "below"){
 				for(var i = 0, refNode = this._terminator; i < insertIndex; i++){
 					refNode = refNode.nextSibling;
 				}
-				dojo.place(widget.subNode, refNode, "after");
+				domConstruct.place(widget.subNode, refNode, "after");
 			}
 			widget.inheritParams();
 			widget._setIconAttr(widget.icon);

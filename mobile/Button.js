@@ -1,20 +1,20 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-construct",
+	"dojo/dom-class",
 	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dojo/_base/html",
 	"dijit/_WidgetBase",
 	"dijit/form/_FormWidgetMixin",
 	"dijit/form/_ButtonMixin"
 ],
-	function(dojo, declare, darray, html, WidgetBase, FormWidgetMixin, ButtonMixin){
+	function(domConstruct, domClass, declare, array, WidgetBase, FormWidgetMixin, ButtonMixin){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 		FormWidgetMixin = dijit.form._FormWidgetMixin;
 		ButtonMixin = dijit.form._ButtonMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
+	return declare("dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
 		// summary:
 		//	Non-templated BUTTON widget with a thin API wrapper for click events and setting the label
 		//
@@ -36,10 +36,10 @@ define([
 			if(ret && this.duration >= 0){ // if its not a button with a state, then emulate press styles
 				var button = this.focusNode || this.domNode;
 				var newStateClasses = (this.baseClass+' '+this["class"]).split(" ");
-				newStateClasses = dojo.map(newStateClasses, function(c){ return c+"Selected"; });
-				dojo.addClass(button, newStateClasses);
+				newStateClasses = array.map(newStateClasses, function(c){ return c+"Selected"; });
+				domClass.add(button, newStateClasses);
 				setTimeout(function(){
-					dojo.removeClass(button, newStateClasses);
+					domClass.remove(button, newStateClasses);
 				}, this.duration);
 			}
 			return ret;
@@ -47,7 +47,7 @@ define([
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
-				this.srcNodeRef = dojo.create("button", {"type": this.type});
+				this.srcNodeRef = domConstruct.create("button", {"type": this.type});
 			}
 			this.inherited(arguments);
 			this.focusNode = this.domNode;

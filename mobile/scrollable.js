@@ -157,9 +157,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 //>>includeEnd("standaloneScrollable");
 
 	this.init = function(/*Object?*/params){
-		if (params){
+		if(params){
 			for(var p in params){
-				if (params.hasOwnProperty(p)) {
+				if(params.hasOwnProperty(p)){
 					this[p] = ((p == "domNode" || p == "containerNode") && typeof params[p] == "string") ?
 						dojo.doc.getElementById(params[p]) : params[p]; // mix-in params
 				}
@@ -1045,8 +1045,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
 		if(!dojox.mobile._rule[idx]){
-            var node = dojo.create("style", null, dojo.doc.getElementsByTagName("head")[0]);
-            node.textContent =
+			var node = dojo.create("style", null, dojo.doc.getElementsByTagName("head")[0]);
+			node.textContent =
 				".mblScrollableScrollTo"+idx+"{-webkit-animation-name: scrollableViewScroll"+idx+";}"+
 				"@-webkit-keyframes scrollableViewScroll"+idx+"{}";
 			dojox.mobile._rule[idx] = node.sheet.cssRules[1];

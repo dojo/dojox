@@ -1,4 +1,7 @@
 define([
+	"dojo/_base/window",
+	"dojo/_base/lang",
+	"dojo/_base/array",
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"dijit/_WidgetBase",
@@ -7,7 +10,7 @@ define([
 	"dojo/_base/xhr",
 	"./ProgressIndicator"
 ],
-	function(dojo, declare, WidgetBase, Container, Contained, xhr, ProgressIndicator) {
+	function(win, lang, array, dojo, declare, WidgetBase, Container, Contained, xhr, ProgressIndicator){
 
 	// summary:
 	//		A very simple content pane to embed an HTML fragment.
@@ -23,7 +26,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.ContentPane", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.ContentPane", [WidgetBase, Container, Contained],{
 		href: "",
 		content: "",
 		parseOnLoad: true,
@@ -42,7 +45,7 @@ define([
 		},
 	
 		resize: function(){
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},
@@ -63,15 +66,15 @@ define([
 		_setHrefAttr: function(/*String*/href){
 			var p = this._p;
 			if(p){
-				dojo.body().appendChild(p.domNode);
+				win.body().appendChild(p.domNode);
 				p.start();
 			}
 			this.href = href;
-			dojo.xhrGet({
+			xhr.get({
 				url: href,
 				handleAs: "text",
-				load: dojo.hitch(this, "loadHandler"),
-				error: dojo.hitch(this, "errorHandler")
+				load: lang.hitch(this, "loadHandler"),
+				error: lang.hitch(this, "errorHandler")
 			});
 		},
 

@@ -1,7 +1,11 @@
 define([
+	"dojo/dom-class",
+	"dojo/dom",
+	"dojo/_base/declare",
+	"dojo/_base/connect",
 	"./View",
 	"./_ScrollableMixin"
-], function(View, ScrollableMixin){
+], function(domClass, dom, declare, connect, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:
@@ -16,17 +20,17 @@ define([
 		View = dojox.mobile.View;
 		ScrollableMixin = dojox.mobile._ScrollableMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.SwapView", [View, ScrollableMixin], {
+	return declare("dojox.mobile.SwapView", [View, ScrollableMixin], {
 		scrollDir: "f",
 		weight: 1.2,
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblSwapView");
+			domClass.add(this.domNode, "mblSwapView");
 			this.setSelectable(this.domNode, false);
 			this.containerNode = this.domNode;
-			dojo.subscribe("/dojox/mobile/nextPage", this, "handleNextPage");
-			dojo.subscribe("/dojox/mobile/prevPage", this, "handlePrevPage");
+			connect.subscribe("/dojox/mobile/nextPage", this, "handleNextPage");
+			connect.subscribe("/dojox/mobile/prevPage", this, "handlePrevPage");
 			this.findAppBars();
 		},
 
@@ -34,25 +38,25 @@ define([
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
 				nextView.stopAnimation();
-				dojo.addClass(nextView.domNode, "mblIn");
+				domClass.add(nextView.domNode, "mblIn");
 			}
 			var prevView = this.previousView(this.domNode);
 			if(prevView){
 				prevView.stopAnimation();
-				dojo.addClass(prevView.domNode, "mblIn");
+				domClass.add(prevView.domNode, "mblIn");
 			}
 			this.inherited(arguments);
 		},
 
 		handleNextPage: function(/*Widget*/w){
-			var refNode = w.refId && dojo.byId(w.refId) || w.domNode;
+			var refNode = w.refId && dom.byId(w.refId) || w.domNode;
 			if(this.domNode.parentNode !== refNode.parentNode){ return; }
 			if(this.getShowingView() !== this){ return; }
 			this.goTo(1);
 		},
 
 		handlePrevPage: function(/*Widget*/w){
-			var refNode = w.refId && dojo.byId(w.refId) || w.domNode;
+			var refNode = w.refId && dom.byId(w.refId) || w.domNode;
 			if(this.domNode.parentNode !== refNode.parentNode){ return; }
 			if(this.getShowingView() !== this){ return; }
 			this.goTo(-1);
@@ -66,12 +70,12 @@ define([
 			view.scrollTo({x:w*dir});
 			view._beingFlipped = false;
 			view.domNode.style.display = "";
-			dojo.addClass(view.domNode, "mblIn");
+			domClass.add(view.domNode, "mblIn");
 			this.slideTo({x:0}, 0.5, "ease-out", {x:-w*dir});
 		},
 
 		isSwapView: function(node){
-			return (node && node.nodeType === 1 && dojo.hasClass(node, "mblSwapView"));
+			return (node && node.nodeType === 1 && domClass.contains(node, "mblSwapView"));
 		},
 
 		nextView: function(node){
@@ -163,7 +167,7 @@ define([
 			for(var i = 0; i < children.length; i++){
 				var c = children[i];
 				if(this.isSwapView(c)){
-					dojo.removeClass(c, "mblIn");
+					domClass.remove(c, "mblIn");
 					if(!c._isShowing){
 						c.style.display = "none";
 					}
@@ -171,7 +175,7 @@ define([
 			}
 			this.inherited(arguments);
 			if(this.getShowingView() === this){
-				dojo.publish("/dojox/mobile/viewChanged", [this]);
+				connect.publish("/dojox/mobile/viewChanged", [this]);
 			}
 		}
 	});

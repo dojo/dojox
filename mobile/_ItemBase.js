@@ -1,11 +1,14 @@
 define([
-	"./common",
+	"dojo/_base/config",
+	"dojo/_base/declare",
+	"dojo/_base/kernel",
+	"./common", // is this needed?
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
-	"./ProgressIndicator",
+	"./ProgressIndicator", // is this needed?
 	"./TransitionEvent"
-], function(mcommon, WidgetBase, Container, Contained, ProgressIndicator, TransitionEvent){
+], function(config, declare, kernel, mcommon, WidgetBase, Container, Contained, ProgressIndicator, TransitionEvent){
 	// module:
 	//		dojox/mobile/_ItemBase
 	// summary:
@@ -16,7 +19,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile._ItemBase", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile._ItemBase", [WidgetBase, Container, Contained],{
 		icon: "",
 		iconPos: "", // top,left,width,height (ex. "0,0,29,29")
 		alt: "",
@@ -73,12 +76,12 @@ define([
 					}, this._duration);
 				}
 				var transOpts;
-				if (this.moveTo || this.href || this.url || this.scene){
+				if(this.moveTo || this.href || this.url || this.scene){
 					transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transition: this.transition, transitionDir: this.transitionDir};
-				}else if (this.transitionOptions){
+				}else if(this.transitionOptions){
 					transOpts = this.transitionOptions;
 				}	
-				if (transOpts){
+				if(transOpts){
 					return new TransitionEvent(this.domNode,transOpts,e).dispatch();
 				}
 			}
@@ -105,11 +108,11 @@ define([
 
 		transitionTo: function(moveTo,href,url,scene){
 			// deprecated
-			if(dojo.config.isDebug){
+			if(config.isDebug){
 				var alreadyCalledHash = arguments.callee._ach || (arguments.callee._ach = {}),
 					caller = (arguments.callee.caller || "unknown caller").toString();
 				if(!alreadyCalledHash[caller]){
-					dojo.deprecated(this.declaredClass + "::transitionTo() is deprecated." +
+					kernel.deprecated(this.declaredClass + "::transitionTo() is deprecated." +
 					caller, "", "2.0");
 					alreadyCalledHash[caller] = true;
 				}

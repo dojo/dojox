@@ -1,9 +1,11 @@
 define([
+	"dojo/dom-class",
+	"dojo/_base/declare",
 	"dojo/date",
 	"dojo/date/locale",
 	"./SpinWheel",
 	"./SpinWheelSlot"
-],function(ddate, datelocale, SpinWheel, SpinWheelSlot){
+],function(domClass, declare, ddate, datelocale, SpinWheel, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheelDatePicker
 	// summary:
@@ -13,7 +15,7 @@ define([
 		SpinWheel = dojox.mobile.SpinWheel;
 		SpinWheelSlot = dojox.mobile.SpinWheelSlot;
 	=====*/
-	var SpinWheelYearSlot = dojo.declare(SpinWheelSlot, {
+	var SpinWheelYearSlot = declare(SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
 			if(this.labelFrom !== this.labelTo){
@@ -21,32 +23,32 @@ define([
 				var i, idx;
 				for(i = this.labelFrom, idx = 0; i <= this.labelTo; i++, idx++){
 					dtA.setFullYear(i);
-					this.labels.push(ddate.locale.format(dtA,{datePattern:"yyyy", selector:"date"}));
+					this.labels.push(datelocale.format(dtA,{datePattern:"yyyy", selector:"date"}));
 				}
 			}
 			this.inherited(arguments);
 		}
 	});
 
-	var SpinWheelMonthSlot = dojo.declare(SpinWheelSlot, {
+	var SpinWheelMonthSlot = declare(SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
 			var dtA = new Date(2000, 0, 1);
 			var monthStr;
 			for(var i = 0; i < 12; i++){
 				dtA.setMonth(i);
-				monthStr = ddate.locale.format(dtA,{datePattern:"MMM", selector:"date"});
+				monthStr = datelocale.format(dtA,{datePattern:"MMM", selector:"date"});
 				this.labels.push(monthStr);
 			}
 			this.inherited(arguments);
 		}
 	});
 
-	var SpinWheelDaySlot = dojo.declare(SpinWheelSlot, {});
+	var SpinWheelDaySlot = declare(SpinWheelSlot, {});
 
 
 
-	return dojo.declare("dojox.mobile.SpinWheelDatePicker", SpinWheel, {
+	return declare("dojox.mobile.SpinWheelDatePicker", SpinWheel, {
 		slotClasses: [
 			SpinWheelYearSlot,
 			SpinWheelMonthSlot,
@@ -60,7 +62,7 @@ define([
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblSpinWheelDatePicker");
+			domClass.add(this.domNode, "mblSpinWheelDatePicker");
 			this.connect(this.slots[1], "onFlickAnimationEnd", "onMonthSet");
 			this.connect(this.slots[2], "onFlickAnimationEnd", "onDaySet");
 		},
@@ -69,7 +71,7 @@ define([
 			// goto today
 			var slots = this.slots;
 			var now = new Date();
-			var monthStr = ddate.locale.format(now, {datePattern:"MMM", selector:"date"});
+			var monthStr = datelocale.format(now, {datePattern:"MMM", selector:"date"});
 			this.setValue([now.getFullYear(), monthStr, now.getDate()]);
 		},
 
@@ -83,7 +85,7 @@ define([
 		onDaySet: function(){
 			var y = this.slots[0].getValue();
 			var m = this.slots[1].getValue();
-			var newMonth = ddate.locale.parse(y+"/"+m, {datePattern:'yyyy/MMM', selector:'date'});
+			var newMonth = datelocale.parse(y+"/"+m, {datePattern:'yyyy/MMM', selector:'date'});
 			var daysInMonth = ddate.getDaysInMonth(newMonth);
 			var d = this.slots[2].getValue();
 			if(daysInMonth < d){

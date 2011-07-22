@@ -1,17 +1,24 @@
 define([
+	"dojo/window",
+	"dojo/_base/window",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/_base/declare",
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
 	"./TextBox",
 	"./_ComboBoxMenu",
 	"dijit/form/_AutoCompleterMixin",
-	"./common",
+	"./common", // is this neeed?
 	"dijit/popup"
-], function(TextBox, ComboBoxMenu, AutoCompleterMixin, common, popup) {
-	dojo.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
+], function(windowUtils, win, domStyle, domGeometry, declare, kernel, lang, TextBox, ComboBoxMenu, AutoCompleterMixin, common, popup){
+	kernel.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
 	/*=====
 		TextBox = dojox.mobile.TextBox;
 		AutoCompleterMixin = dijit.form._AutoCompleterMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
+	return declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
 		// summary:
 		//		A non-templated auto-completing text box widget
 		//
@@ -57,7 +64,7 @@ define([
 			if(this._throttleHandler){
 				clearTimeout(this._throttleHandler);
 			}
-			this._throttleHandler = setTimeout(dojo.hitch(this, function(){ this._throttleHandler = null; }), 500);
+			this._throttleHandler = setTimeout(lang.hitch(this, function(){ this._throttleHandler = null; }), 500);
 		},
 
 		_onFocus: function(){
@@ -136,15 +143,15 @@ define([
 			if(!this._explicitDDHeight){
 				myStyle.height = "";
 			}
-			dojo.style(ddNode, myStyle);
+			domStyle.style(ddNode, myStyle);
 
 			// Figure out maximum height allowed (if there is a height restriction)
 			var maxHeight = this.maxHeight;
 			if(maxHeight == -1){
 				// limit height to space available in viewport either above or below my domNode
 				// (whichever side has more room)
-				var viewport = dojo.window.getBox(),
-					position = dojo.position(aroundNode, false);
+				var viewport = windowUtils.getBox(),
+					position = domGeometry.position(aroundNode, false);
 				maxHeight = Math.floor(Math.max(position.y, viewport.h - (position.y + position.h)));
 			}
 
@@ -156,7 +163,7 @@ define([
 				dropDown.startup(); // this has to be done after being added to the DOM
 			}
 			// Get size of drop down, and determine if vertical scroll bar needed
-			var mb = dojo.position(this.dropDown.containerNode, false);
+			var mb = domGeometry.position(this.dropDown.containerNode, false);
 			var overHeight = (maxHeight && mb.h > maxHeight);
 			if(overHeight){
 				mb.h = maxHeight;
@@ -164,7 +171,7 @@ define([
 
 			// Adjust dropdown width to match or be larger than my width
 			mb.w = Math.max(mb.w, aroundNode.offsetWidth);
-			dojo.marginBox(ddNode, mb);
+			domGeometry.marginBox(ddNode, mb);
 
 			var retVal = popup.open({
 				parent: this,
@@ -187,11 +194,11 @@ define([
 				if(retVal.aroundCorner.charAt(0) == 'B'){ // is popup below?
 					this.domNode.scrollIntoView(true); // scroll to top
 				}
-				this.startHandler = this.connect(dojo.doc.documentElement, dojox.mobile.hasTouch ? "ontouchstart" : "onmousedown",
-					dojo.hitch(this, function(){
+				this.startHandler = this.connect(win.doc.documentElement, dojox.mobile.hasTouch ? "ontouchstart" : "onmousedown",
+					lang.hitch(this, function(){
 						var isMove = false;
-						this.moveHandler = this.connect(dojo.doc.documentElement, dojox.mobile.hasTouch ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
-						this.endHandler = this.connect(dojo.doc.documentElement, dojox.mobile.hasTouch ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
+						this.moveHandler = this.connect(win.doc.documentElement, dojox.mobile.hasTouch ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
+						this.endHandler = this.connect(win.doc.documentElement, dojox.mobile.hasTouch ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
 					})
 				);
 			}

@@ -1,17 +1,19 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/dom-construct",
+	"dojo/dom-class",
 	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dojo/_base/html",
-	"./common",
+	"./common", // is this needed?
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
 	"./Heading",
-	"./_ItemBase",
-	"./TabBarButton"
+	"./_ItemBase", // is this needed?
+	"./TabBarButton" // is this needed?
 ],
-	function(dojo, declare, darray, dhtml, mcommon, WidgetBase, Container, Contained, Heading, ItemBase, mobileTabBarButton){
+	function(domStyle, domGeometry, domConstruct, domClass, declare, array, mcommon, WidgetBase, Container, Contained, Heading, ItemBase, mobileTabBarButton){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
@@ -22,7 +24,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.TabBar", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.TabBar", [WidgetBase, Container, Contained],{
 		iconBase: "",
 		iconPos: "",
 		barType: "tabBar", // "tabBar"(default) or "segmentedControl"
@@ -35,7 +37,7 @@ define([
 
 		buildRendering: function(){
 			this._clsName = this.barType == "segmentedControl" ? "mblTabButton" : "mblTabBarButton";
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.create(this.tag);
+			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.domNode.className = this.barType == "segmentedControl" ? "mblTabPanelHeader" : "mblTabBar";
 		},
 
@@ -47,14 +49,14 @@ define([
 
 		resize: function(size){
 			var i,w;
-			if (size && size.w){
-				dojo.marginBox(this.domNode, size);
+			if(size && size.w){
+				domGeometry.marginBox(this.domNode, size);
 				w = size.w;
 			}else{
 				// Calculation of the bar width varies according to its "position" value.
 				// When the widget is used as a fixed bar, its position would be "absolute".
-				w = dojo.style(this.domNode, "position") === "absolute" ?
-					dojo.contentBox(this.domNode).w : dojo.marginBox(this.domNode).w;
+				w = domStyle.style(this.domNode, "position") === "absolute" ?
+					domGeometry.contentBox(this.domNode).w : domGeometry.marginBox(this.domNode).w;
 			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
@@ -64,7 +66,7 @@ define([
 			for(i = 0; i < children.length; i++){
 				var c = children[i];
 				if(c.nodeType != 1){ continue; }
-				if(dojo.hasClass(c, this._clsName)){
+				if(domClass.contains(c, this._clsName)){
 					arr.push(c);
 				}
 			}
@@ -74,15 +76,15 @@ define([
 				margin = w;
 				var totalW = 0; // total width of all the buttons
 				for(i = 0; i < arr.length; i++){
-					margin -= dojo.marginBox(arr[i]).w;
+					margin -= domGeometry.marginBox(arr[i]).w;
 					totalW += arr[i].offsetWidth;
 				}
 				margin = Math.floor(margin/2);
 				var parent = this.getParent();
-				var inHeading = this.inHeading || parent instanceof dojox.mobile.Heading;
+				var inHeading = this.inHeading || parent instanceof Heading;
 				this.containerNode.style.padding = (inHeading ? 0 : 3) + "px 0px 0px " + (inHeading ? 0 : margin) + "px";
 				if(inHeading){
-					dojo.style(this.domNode, {
+					domStyle.style(this.domNode, {
 						background: "none",
 						border: "none",
 						width: totalW + 2 + "px"
@@ -108,16 +110,16 @@ define([
 				}
 			}
 
-			if(!dojo.some(this.getChildren(), function(child){ return child.iconNode1; })){
-				dojo.addClass(this.domNode, "mblTabBarNoIcons");
+			if(!array.some(this.getChildren(), function(child){ return child.iconNode1; })){
+				domClass.add(this.domNode, "mblTabBarNoIcons");
 			}else{
-				dojo.removeClass(this.domNode, "mblTabBarNoIcons");
+				domClass.remove(this.domNode, "mblTabBarNoIcons");
 			}
 
-			if(!dojo.some(this.getChildren(), function(child){ return child.label; })){
-				dojo.addClass(this.domNode, "mblTabBarNoText");
+			if(!array.some(this.getChildren(), function(child){ return child.label; })){
+				domClass.add(this.domNode, "mblTabBarNoText");
 			}else{
-				dojo.removeClass(this.domNode, "mblTabBarNoText");
+				domClass.remove(this.domNode, "mblTabBarNoText");
 			}
 		}
 	});

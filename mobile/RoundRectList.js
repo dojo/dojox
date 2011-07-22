@@ -1,8 +1,11 @@
 define([
+	"dojo/_base/window",
+	"dojo/_base/declare",
+	"dojo/_base/array",
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained"
-], function(WidgetBase, Container, Contained){
+], function(win, declare, array, WidgetBase, Container, Contained){
 	// module:
 	//		dojox/mobile/RoundRectList
 	// summary:
@@ -13,7 +16,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.RoundRectList", [WidgetBase, Container, Contained], {
+	return declare("dojox.mobile.RoundRectList", [WidgetBase, Container, Contained], {
 		transition: "slide",
 		iconBase: "",
 		iconPos: "",
@@ -21,7 +24,7 @@ define([
 		stateful: false, // keep the selection state or not
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
+			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
 			this.domNode.className = "mblRoundRectList";
 		},
 	
@@ -31,7 +34,7 @@ define([
 
 		_setStatefulAttr: function(stateful){
 			this.stateful = stateful;
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				child.setArrow && child.setArrow();
 			});
 		},
@@ -41,7 +44,7 @@ define([
 		},
 
 		deselectAll: function(){
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				child.deselect && child.deselect();
 			});
 		},

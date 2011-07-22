@@ -1,10 +1,23 @@
 define([
-	"./common",
+	"dojo/_base/config",
+//	"dojo/hash", // optionally prereq'ed
+	"dojo/_base/window",
+	"dojo/_base/sniff",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/dom-class",
+	"dojo/dom",
+	"dojo/_base/declare",
+	"dojo/_base/kernel", // to test dojo.hash
+	"dojo/_base/connect",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"./common", // is this needed?
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
 	"./ViewController"
-], function(mcommon, WidgetBase, Container, Contained, mobileViewController){
+], function(config, win, has, domStyle, domGeometry, domClass, dom, declare, dojo, connect, lang, array, mcommon, WidgetBase, Container, Contained, mobileViewController){
 	// module:
 	//		dojox/mobile/View
 	// summary:
@@ -15,7 +28,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.View", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.View", [WidgetBase, Container, Contained],{
 		// summary:
 		//		A widget that represents a view that occupies the full screen
 		// description:
@@ -33,27 +46,27 @@ define([
 	
 		constructor: function(params, node){
 			if(node){
-				dojo.byId(node).style.visibility = "hidden";
+				dom.byId(node).style.visibility = "hidden";
 			}
-			this._aw = dojo.isAndroid >= 2.2 && dojo.isAndroid < 3; // flag for android animation workaround
+			this._aw = has('android') >= 2.2 && has('android') < 3; // flag for android animation workaround
 		},
 	
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
+			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("DIV");
 			this.domNode.className = "mblView";
-			if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3.1){ // workaround for android screen flicker problem
-				if(dojo.isAndroid < 3){ // for Android 2.2.x and 2.3.x
-					dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+			if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2 && has('android') < 3.1){ // workaround for android screen flicker problem
+				if(has('android') < 3){ // for Android 2.2.x and 2.3.x
+					domStyle.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 					// workaround for auto-scroll issue when focusing input fields
 					this.connect(null, "onfocus", function(e){
-						dojo.style(this.domNode, "webkitTransform", "");
+						domStyle.style(this.domNode, "webkitTransform", "");
 					});
 					this.connect(null, "onblur", function(e){
-						dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+						domStyle.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 					});
 				}else{ // for Android 3.0.x
-					if(dojo.config["mblAndroid3Workaround"] !== false){
-						dojo.style(this.domNode, {
+					if(config["mblAndroid3Workaround"] !== false){
+						domStyle.style(this.domNode, {
 							webkitBackfaceVisibility: "hidden",
 							webkitPerspective: 8000
 						});
@@ -79,7 +92,7 @@ define([
 			// check if a visible view exists
 			for(var i = 0; i < children.length; i++){
 				var c = children[i];
-				if(c.nodeType === 1 && dojo.hasClass(c, "mblView")){
+				if(c.nodeType === 1 && domClass.contains(c, "mblView")){
 					siblings.push(c);
 					visible = visible || dijit.byNode(c)._visible;
 				}
@@ -96,7 +109,7 @@ define([
 				}else{
 					dojox.mobile.currentView = _this;
 					_this.onStartView();
-					dojo.publish("/dojox/mobile/startView", [_this]);
+					connect.publish("/dojox/mobile/startView", [_this]);
 				}
 				if(_this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
 					_this.domNode.style.visibility = "visible";
@@ -105,12 +118,12 @@ define([
 				if(!parent || !parent.resize){ // top level widget
 					_this.resize();
 				}
-			}, dojo.isIE?100:0); // give IE a little time to complete drawing
+			}, has("ie") ? 100 : 0); // give IE a little time to complete drawing
 			this.inherited(arguments);
 		},
 	
 		resize: function(){
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},
@@ -145,7 +158,7 @@ define([
 			this._moveTo = moveTo;
 			this._dir = dir;
 			this._transition = transition;
-			this._arguments = dojo._toArray(arguments);
+			this._arguments = lang._toArray(arguments);
 			this._args = [];
 			if(context || method){
 				for(var i = 5; i < arguments.length; i++){
@@ -205,14 +218,14 @@ define([
 				toNode = this.convertToId(moveTo);
 			}else{
 				if(!this._dummyNode){
-					this._dummyNode = dojo.doc.createElement("DIV");
-					dojo.body().appendChild(this._dummyNode);
+					this._dummyNode = win.doc.createElement("DIV");
+					win.body().appendChild(this._dummyNode);
 				}
 				toNode = this._dummyNode;
 			}
 			var fromNode = this.domNode;
 			var fromTop = fromNode.offsetTop;
-			toNode = this.toNode = dojo.byId(toNode);
+			toNode = this.toNode = dom.byId(toNode);
 			if(!toNode){ console.log("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
 			toNode.style.visibility = this._aw ? "visible" : "hidden";
 			toNode.style.display = "";
@@ -228,19 +241,19 @@ define([
 			}
 	
 			this.onBeforeTransitionOut.apply(this, arguments);
-			dojo.publish("/dojox/mobile/beforeTransitionOut", [this].concat(dojo._toArray(arguments)));
+			connect.publish("/dojox/mobile/beforeTransitionOut", [this].concat(lang._toArray(arguments)));
 			if(toWidget){
 				// perform view transition keeping the scroll position
 				if(this.keepScrollPos && !this.getParent()){
-					var scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
+					var scrollTop = win.body().scrollTop || win.doc.documentElement.scrollTop || win.global.pageYOffset || 0;
 					fromNode._scrollTop = scrollTop;
 					var toTop = (dir == 1) ? 0 : (toNode._scrollTop || 0);
 					toNode.style.top = "0px";
 					if(scrollTop > 1 || toTop !== 0){
 						fromNode.style.top = toTop - scrollTop + "px";
-						if(dojo.config["mblHideAddressBar"] !== false){
+						if(config["mblHideAddressBar"] !== false){
 							setTimeout(function(){ // iPhone needs setTimeout
-								dojo.global.scrollTo(0, (toTop || 1));
+								win.global.scrollTo(0, (toTop || 1));
 							}, 0);
 						}
 					}
@@ -248,7 +261,7 @@ define([
 					toNode.style.top = "0px";
 				}
 				toWidget.onBeforeTransitionIn.apply(toWidget, arguments);
-				dojo.publish("/dojox/mobile/beforeTransitionIn", [toWidget].concat(dojo._toArray(arguments)));
+				connect.publish("/dojox/mobile/beforeTransitionIn", [toWidget].concat(lang._toArray(arguments)));
 			}
 			if(!this._aw){
 				toNode.style.display = "none";
@@ -272,35 +285,35 @@ define([
 				this.invokeCallback();
 			}else{
 				var s = this._toCls(transition);
-				dojo.addClass(fromNode, s + " mblOut" + rev);
-				dojo.addClass(toNode, s + " mblIn" + rev);
+				domClass.add(fromNode, s + " mblOut" + rev);
+				domClass.add(toNode, s + " mblIn" + rev);
 				// set transform origin
 				var fromOrigin = "50% 50%";
 				var toOrigin = "50% 50%";
 				var scrollTop, posX, posY;
 				if(transition.indexOf("swirl") != -1 || transition.indexOf("zoom") != -1){
 					if(this.keepScrollPos && !this.getParent()){
-						scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
+						scrollTop = win.body().scrollTop || win.doc.documentElement.scrollTop || win.global.pageYOffset || 0;
 					}else{
-						scrollTop = -dojo.position(fromNode, true).y;
+						scrollTop = -domGeometry.position(fromNode, true).y;
 					}
-					posY = dojo.global.innerHeight / 2 + scrollTop;
+					posY = win.global.innerHeight / 2 + scrollTop;
 					fromOrigin = "50% " + posY + "px";
 					toOrigin = "50% " + posY + "px";
 				}else if(transition.indexOf("scale") != -1){
-					var viewPos = dojo.position(fromNode, true);
-					posX = ((this.clickedPosX !== undefined) ? this.clickedPosX : dojo.global.innerWidth / 2) - viewPos.x;
+					var viewPos = domGeometry.position(fromNode, true);
+					posX = ((this.clickedPosX !== undefined) ? this.clickedPosX : win.global.innerWidth / 2) - viewPos.x;
 					if(this.keepScrollPos && !this.getParent()){
-						scrollTop = dojo.body().scrollTop || dojo.doc.documentElement.scrollTop || dojo.global.pageYOffset || 0;
+						scrollTop = win.body().scrollTop || win.doc.documentElement.scrollTop || win.global.pageYOffset || 0;
 					}else{
 						scrollTop = -viewPos.y;
 					}
-					posY = ((this.clickedPosY !== undefined) ? this.clickedPosY : dojo.global.innerHeight / 2) + scrollTop;
+					posY = ((this.clickedPosY !== undefined) ? this.clickedPosY : win.global.innerHeight / 2) + scrollTop;
 					fromOrigin = posX + "px " + posY + "px";
 					toOrigin = posX + "px " + posY + "px";
 				}
-				dojo.style(fromNode, {webkitTransformOrigin:fromOrigin});
-				dojo.style(toNode, {webkitTransformOrigin:toOrigin});
+				domStyle.style(fromNode, {webkitTransformOrigin:fromOrigin});
+				domStyle.style(toNode, {webkitTransformOrigin:toOrigin});
 			}
 			dojox.mobile.currentView = dijit.byNode(toNode);
 		},
@@ -314,10 +327,10 @@ define([
 				e.animationName.indexOf("In") === -1 &&
 				e.animationName.indexOf("Shrink") === -1){ return; }
 			var isOut = false;
-			if(dojo.hasClass(this.domNode, "mblOut")){
+			if(domClass.contains(this.domNode, "mblOut")){
 				isOut = true;
 				this.domNode.style.display = "none";
-				dojo.removeClass(this.domNode, [this._toCls(this._transition), "mblIn", "mblOut", "mblReverse"]);
+				domClass.remove(this.domNode, [this._toCls(this._transition), "mblIn", "mblOut", "mblReverse"]);
 			}else{
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
@@ -325,7 +338,7 @@ define([
 			if(e.animationName.indexOf("Shrink") !== -1){
 				var li = e.target;
 				li.style.display = "none";
-				dojo.removeClass(li, "mblCloseContent");
+				domClass.remove(li, "mblCloseContent");
 			}
 			if(isOut){
 				this.invokeCallback();
@@ -340,11 +353,11 @@ define([
 
 		invokeCallback: function(){
 			this.onAfterTransitionOut.apply(this, this._arguments);
-			dojo.publish("/dojox/mobile/afterTransitionOut", [this].concat(this._arguments));
+			connect.publish("/dojox/mobile/afterTransitionOut", [this].concat(this._arguments));
 			var toWidget = dijit.byNode(this.toNode);
 			if(toWidget){
 				toWidget.onAfterTransitionIn.apply(toWidget, this._arguments);
-				dojo.publish("/dojox/mobile/afterTransitionIn", [toWidget].concat(this._arguments));
+				connect.publish("/dojox/mobile/afterTransitionIn", [toWidget].concat(this._arguments));
 			}
 
 			var c = this._context, m = this._method;
@@ -353,7 +366,7 @@ define([
 				m = c;
 				c = null;
 			}
-			c = c || dojo.global;
+			c = c || win.global;
 			if(typeof(m) == "string"){
 				c[m].apply(c, this._args);
 			}else{
@@ -370,7 +383,7 @@ define([
 			var nodes = this.domNode.parentNode.childNodes;
 			for(var i = 0; i < nodes.length; i++){
 				var n = nodes[i];
-				if(n.nodeType === 1 && dojo.hasClass(n, "mblView") && dojo.style(n, "display") !== "none"){
+				if(n.nodeType === 1 && domClass.contains(n, "mblView") && domStyle.style(n, "display") !== "none"){
 					return dijit.byNode(n);
 				}
 			}

@@ -1,15 +1,15 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/window",
+	"dojo/dom-geometry",
+	"dojo/dom-class",
 	"dojo/_base/declare",
-	"dojo/_base/html",
-	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
 	"./FixedSplitterPane"
 ],
-	function(dojo, declare, dhtml, dlang, darray, WidgetBase, Container, Contained, mobileFixedSplitterPane){
+	function(win, domGeometry, domClass, declare, array, WidgetBase, Container, Contained, mobileFixedSplitterPane){
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:
@@ -38,21 +38,21 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.FixedSplitter", [WidgetBase, Container, Contained], {
+	return declare("dojox.mobile.FixedSplitter", [WidgetBase, Container, Contained], {
 		orientation: "H", // "H" or "V"
 
 		isContainer: true,
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : dojo.doc.createElement("DIV");
-			dojo.addClass(this.domNode, "mblFixedSpliter");
+			this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : win.doc.createElement("DIV");
+			domClass.add(this.domNode, "mblFixedSpliter");
 		},
 
 		startup: function(){
 			if(this._started){ return; }
-			var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
-			dojo.forEach(children, function(node){
-				dojo.addClass(node, "mblFixedSplitterPane"+this.orientation);
+			var children = array.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
+			array.forEach(children, function(node){
+				domClass.add(node, "mblFixedSplitterPane"+this.orientation);
 			}, this);
 			this.inherited(arguments);
 	
@@ -71,29 +71,29 @@ define([
 
 		layout: function(){
 			var sz = this.orientation == "H" ? "w" : "h";
-			var children = dojo.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
+			var children = array.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
 			var offset = 0;
 			for(var i = 0; i < children.length; i++){
-				dojo.marginBox(children[i], this.orientation == "H" ? {l:offset} : {t:offset});
+				domGeometry.marginBox(children[i], this.orientation == "H" ? {l:offset} : {t:offset});
 				if(i < children.length - 1){
-					offset += dojo.marginBox(children[i])[sz];
+					offset += domGeometry.marginBox(children[i])[sz];
 				}
 			}
 	
 			var h;
 			if(this.orientation == "V"){
 				if(this.domNode.parentNode.tagName == "BODY"){
-					if(dojo.filter(dojo.body().childNodes, function(node){ return node.nodeType == 1; }).length == 1){
-						h = (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight);
+					if(array.filter(win.body().childNodes, function(node){ return node.nodeType == 1; }).length == 1){
+						h = (win.global.innerHeight||win.doc.documentElement.clientHeight);
 					}
 				}
 			}
-			var l = (h || dojo.marginBox(this.domNode)[sz]) - offset;
+			var l = (h || domGeometry.marginBox(this.domNode)[sz]) - offset;
 			var props = {};
 			props[sz] = l;
-			dojo.marginBox(children[children.length - 1], props);
+			domGeometry.marginBox(children[children.length - 1], props);
 	
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		}

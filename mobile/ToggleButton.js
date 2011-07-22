@@ -1,18 +1,16 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-class",
 	"dojo/_base/declare",
-	"dojo/_base/html",
-	"dojo/_base/array",
 	"./Button",
 	"dijit/form/_ToggleButtonMixin"
 ],
-	function(dojo, declare, dhtml, darray, Button, ToggleButtonMixin) {
+	function(domClass, declare, Button, ToggleButtonMixin){
 
 	/*=====
 		Button = dojox.mobile.Button;
 		ToggleButtonMixin = dijit.form._ToggleButtonMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.ToggleButton", [Button, ToggleButtonMixin], {
+	return declare("dojox.mobile.ToggleButton", [Button, ToggleButtonMixin], {
 		// summary:
 		//		A non-templated button widget that can be in two states (checked or not).
 		//		Can be base class for things like tabs or checkbox or radio buttons
@@ -22,7 +20,7 @@ define([
 		_setCheckedAttr: function(){
 			this.inherited(arguments);
 			var newStateClasses = (this.baseClass+' '+this["class"]).replace(/(\S+)\s*/g, "$1Checked ").split(" ");
-			dojo[this.checked ? "addClass" : "removeClass"](this.focusNode || this.domNode, newStateClasses);
+			domClass[this.checked ? "add" : "remove"](this.focusNode || this.domNode, newStateClasses);
 		}
 	});
 });

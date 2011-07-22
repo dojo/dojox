@@ -1,14 +1,15 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dojo/_base/html",
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
 	"./SpinWheelSlot"
 ],
-	function(dojo, declare, darray, dbase, WidgetBase, Container, Contained, ScrollableMixin, SpinWheelSlot){
+	function(domConstruct, domClass, lang, declare, array, WidgetBase, Container, Contained, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheel
 	// summary:
@@ -19,22 +20,22 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.SpinWheel", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.SpinWheel", [WidgetBase, Container, Contained],{
 		slotClasses: [],
 		slotProps: [],
 		centerPos: 0,
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblSpinWheel");
+			domClass.add(this.domNode, "mblSpinWheel");
 			this.centerPos = Math.round(this.domNode.offsetHeight / 2);
 
 			this.slots = [];
 			for(var i = 0; i < this.slotClasses.length; i++){
-				this.slots.push(((typeof this.slotClasses[i] =='string') ? dojo.getObject(this.slotClasses[i]) : this.slotClasses[i])(this.slotProps[i]));
+				this.slots.push(((typeof this.slotClasses[i] =='string') ? lang.getObject(this.slotClasses[i]) : this.slotClasses[i])(this.slotProps[i]));
 				this.addChild(this.slots[i]);
 			}
-			dojo.create("DIV", {className: "mblSpinWheelBar"}, this.domNode);
+			domConstruct.create("DIV", {className: "mblSpinWheelBar"}, this.domNode);
 		},
 
 		startup: function(){
@@ -48,8 +49,8 @@ define([
 		getValue: function(){
 			// return array of slot values
 			var a = [];
-			dojo.forEach(this.getChildren(), function(w){
-				if(w instanceof dojox.mobile.SpinWheelSlot){
+			array.forEach(this.getChildren(), function(w){
+				if(w instanceof SpinWheelSlot){
 					a.push(w.getValue());
 				}
 			}, this);
@@ -59,8 +60,8 @@ define([
 		setValue: function(a){
 			// set slot values from array
 			var i = 0;
-			dojo.forEach(this.getChildren(), function(w){
-				if(w instanceof dojox.mobile.SpinWheelSlot){
+			array.forEach(this.getChildren(), function(w){
+				if(w instanceof SpinWheelSlot){
 					w.setValue(a[i]);
 					w.setColor(a[i]);
 					i++;
@@ -69,8 +70,8 @@ define([
 		},
 
 		reset: function(){
-			dojo.forEach(this.getChildren(), function(w){
-				if(w instanceof dojox.mobile.SpinWheelSlot){
+			array.forEach(this.getChildren(), function(w){
+				if(w instanceof SpinWheelSlot){
 					w.setInitialValue();
 				}
 			}, this);

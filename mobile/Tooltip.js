@@ -1,16 +1,19 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
-	"dojo/_base/html",
 	"dijit/place",
 	"dijit/_WidgetBase"
 ],
-	function(dojo, declare, dhtml, place, WidgetBase) {
+	function(domStyle, domGeometry, domConstruct, domClass, lang, declare, place, WidgetBase){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 	=====*/
-	return dojo.declare("dojox.mobile.Tooltip", WidgetBase, {
+	return declare("dojox.mobile.Tooltip", WidgetBase, {
 		// summary:
 		//		A non-templated popup bubble widget
 		//
@@ -20,9 +23,9 @@ define([
 		buildRendering: function(){
 			// create the helper nodes here in case the user overwrote domNode.innerHTML
 			this.inherited(arguments);
-			this.anchor = dojo.create("div", {"class":"mblTooltipAnchor"}, this.domNode, "first");
-			this.arrow = dojo.create("div", {"class":"mblTooltipArrow"}, this.anchor);
-			this.innerArrow = dojo.create("div", {"class":"mblTooltipInnerArrow"}, this.anchor);
+			this.anchor = domConstruct.create("div", {"class":"mblTooltipAnchor"}, this.domNode, "first");
+			this.arrow = domConstruct.create("div", {"class":"mblTooltipArrow"}, this.anchor);
+			this.innerArrow = domConstruct.create("div", {"class":"mblTooltipInnerArrow"}, this.anchor);
 		},
 
 		show: function(/*DomNode*/ aroundNode, positions){
@@ -48,17 +51,17 @@ define([
 				"BRB": "mblTooltipAfter",
 				"BLB": "mblTooltipBefore"
 			};
-			dojo.removeClass(this.domNode, ["mblTooltipAfter","mblTooltipBefore","mblTooltipBelow","mblTooltipAbove"]);
+			domClass.remove(this.domNode, ["mblTooltipAfter","mblTooltipBefore","mblTooltipBelow","mblTooltipAbove"]);
 			var best = place.around(this.domNode, aroundNode, positions || ['below-centered', 'above-centered', 'after', 'before'], this.isLeftToRight());
 			var connectorClass = connectorClasses[best.corner + best.aroundCorner.charAt(0)] || '';
-			dojo.addClass(this.domNode, connectorClass);
-			var pos = dojo.position(aroundNode, true);
-			dojo.style(this.anchor, (connectorClass == "mblTooltipAbove" || connectorClass == "mblTooltipBelow")
+			domClass.add(this.domNode, connectorClass);
+			var pos = domGeometry.position(aroundNode, true);
+			domStyle.style(this.anchor, (connectorClass == "mblTooltipAbove" || connectorClass == "mblTooltipBelow")
 				? { top: "", left: Math.max(0, pos.x - best.x + (pos.w >> 1) - (this.arrow.offsetWidth >> 1)) + "px" }
 				: { left: "", top: Math.max(0, pos.y - best.y + (pos.h >> 1) - (this.arrow.offsetHeight >> 1)) + "px" }
 			);
-			dojo.replaceClass(this.domNode, "mblTooltipVisible", "mblTooltipHidden");
-			this.resize = dojo.hitch(this, "show", aroundNode, positions); // orientation changes
+			domClass.replace(this.domNode, "mblTooltipVisible", "mblTooltipHidden");
+			this.resize = lang.hitch(this, "show", aroundNode, positions); // orientation changes
 			return best;
 		},
 
@@ -66,7 +69,7 @@ define([
 			// summary:
 			//		Pop down the tooltip
 			this.resize = undefined;
-			dojo.replaceClass(this.domNode, "mblTooltipHidden", "mblTooltipVisible");
+			domClass.replace(this.domNode, "mblTooltipHidden", "mblTooltipVisible");
 		},
 
 		onBlur: function(/*Event*/e){

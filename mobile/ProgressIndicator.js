@@ -1,10 +1,11 @@
 define([
-	"dojo/_base/kernel",
-	"dojo/_base/declare",
-	"dojo/_base/html"
-],
-	function(dojo, declare, dhtml){
-	dojo.declare("dojox.mobile.ProgressIndicator", null, {
+	"dojo/_base/config",
+	"dojo/has",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/_base/declare"
+], function(config, has, domStyle, domConstruct, declare){
+	declare("dojox.mobile.ProgressIndicator", null, {
 		interval: 100, // milliseconds
 		colors: [
 			"#C0C0C0", "#C0C0C0", "#C0C0C0", "#C0C0C0",
@@ -14,15 +15,15 @@ define([
 
 		constructor: function(){
 			this._bars = [];
-			this.domNode = dojo.create("DIV");
+			this.domNode = domConstruct.create("DIV");
 			this.domNode.className = "mblProgContainer";
-			if(dojo.config["mblAndroidWorkaround"] !== false && dojo.isAndroid >= 2.2 && dojo.isAndroid < 3){
+			if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2 && has('android') < 3){
 				// workaround to avoid the side effects of the fixes for android screen flicker problem
-				dojo.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+				domStyle.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 			}
-			this.spinnerNode = dojo.create("DIV", null, this.domNode);
+			this.spinnerNode = domConstruct.create("DIV", null, this.domNode);
 			for(var i = 0; i < this.colors.length; i++){
-				var div = dojo.create("DIV", {className:"mblProg mblProg"+i}, this.spinnerNode);
+				var div = domConstruct.create("DIV", {className:"mblProg mblProg"+i}, this.spinnerNode);
 				this._bars.push(div);
 			}
 		},
@@ -64,7 +65,7 @@ define([
 			//		Set an indicator icon image file (typically animated GIF).
 			//		If null is specified, restores the default spinner.
 			if(file){
-				this.imageNode = dojo.create("IMG", {src:file}, this.domNode);
+				this.imageNode = domConstruct.create("IMG", {src:file}, this.domNode);
 				this.spinnerNode.style.display = "none";
 			}else{
 				if(this.imageNode){

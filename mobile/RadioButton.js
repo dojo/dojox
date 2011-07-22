@@ -1,12 +1,13 @@
 define([
+	"dojo/_base/declare",
 	"./CheckBox",
 	"dijit/form/_RadioButtonMixin"
-], function(CheckBox, RadioButtonMixin) {
+], function(declare, CheckBox, RadioButtonMixin){
 	/*=====
 		CheckBox = dojox.mobile.CheckBox;
 		RadioButtonMixin = dijit.form._RadioButtonMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.RadioButton", [CheckBox, RadioButtonMixin], {
+	return declare("dojox.mobile.RadioButton", [CheckBox, RadioButtonMixin], {
 		// summary:
 		//		A non-templated radiobutton widget that can be in two states (checked or not).
 

@@ -1,15 +1,17 @@
 define([
+	"dojo/dom-construct",
+	"dojo/_base/declare",
 	"dijit/_WidgetBase",
 	"dijit/form/_FormValueMixin",
 	"dijit/form/_TextBoxMixin"
-], function(WidgetBase, FormValueMixin, TextBoxMixin) {
+], function(domConstruct, declare, WidgetBase, FormValueMixin, TextBoxMixin){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 		FormValueMixin = dijit.form._FormValueMixin;
 		TextBoxMixin = dijit.form._TextBoxMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.TextBox",[WidgetBase, FormValueMixin, TextBoxMixin],{
+	return declare("dojox.mobile.TextBox",[WidgetBase, FormValueMixin, TextBoxMixin],{
 		// summary:
 		//		A non-templated base class for textbox form inputs
 
@@ -20,7 +22,7 @@ define([
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
-				this.srcNodeRef = dojo.create("input", {});
+				this.srcNodeRef = domConstruct.create("input", {});
 			}
 			this.inherited(arguments);
 			this.textbox = this.focusNode = this.domNode;

@@ -1,13 +1,14 @@
 define([
-	"./common",
+	"dojo/_base/lang",
+	"./common", // is this needed?
 	"dojo/i18n"
-], function(mcommon, i18n){
+], function(lang, mcommon, i18n){
 	// module:
 	//		dojox/mobile/i18n
 	// summary:
 	//		TODOC
 
-	dojo.getObject("mobile.i18n", true, dojox);
+	lang.getObject("mobile.i18n", true, dojox);
 
 	dojox.mobile.i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
 		return dojox.mobile.i18n.registerBundle(i18n.getLocalization(packageName, bundleName, locale));
@@ -15,14 +16,14 @@ define([
 
 	dojox.mobile.i18n.registerBundle = function(/*Array*/bundle){
 		if(!dojox.mobile.i18n.bundle){ dojox.mobile.i18n.bundle = []; }
-		return dojo.mixin(dojox.mobile.i18n.bundle, bundle);
+		return lang.mixin(dojox.mobile.i18n.bundle, bundle);
 	};
 
-	dojo.extend(dijit._WidgetBase, {
+	lang.extend(dijit._WidgetBase, {
 		mblNoConv: false,
 		_cv: function(s){
 			if(this.mblNoConv || !dojox.mobile.i18n.bundle){ return s; }
-			return dojox.mobile.i18n.bundle[dojo.trim(s)] || s;
+			return dojox.mobile.i18n.bundle[lang.trim(s)] || s;
 		}
 	});
 

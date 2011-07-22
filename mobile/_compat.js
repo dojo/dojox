@@ -1,18 +1,23 @@
 define([
-	"dojo/_base/kernel",	// dojo.mixin, dojo.moduleUrl, dojo.global, dojo.addOnLoad
-	"dojo/_base/lang",	// dojo.extend, dojo.isArray
-	"dojo/_base/array",	// dojo.forEach
-	"dojo/_base/html",	// dojo.style, dojo.hasClass, dojo.addClass, dojo.removeClass,dojo.create
-	"dojo/_base/window",	// dojo.doc, dojo.body
-	"dojo/_base/connect",	// dojo.connect
-	"dojo/_base/fx",	// dojo.fadeOut, dojo.fadeIn
-	"dojo/uacss",		// dojo.isWebKit, dojo.isIE
-	"./common",
+	"dojo/_base/config",
+	"require",
+	"dojo/ready",
+	"dojo/_base/sniff",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/lang",	// lang.extend, lang.isArray
+	"dojo/_base/array",	// array.forEach
+	"dojo/_base/window",	// win.doc, win.body
+	"dojo/_base/connect",	// connect.connect
+	"dojo/_base/fx",	// fx.fadeOut, fx.fadeIn
+	"dojo/uacss",		// has("webKit"), has("ie")
+	"./common", // is this needed?
 	"dojo/fx",
-	"dojo/fx/easing",
-	"dojox/fx",
+	"dojo/fx/easing", // is this needed?
+	"dojox/fx", // is this needed?
 	"dojox/fx/flip"
-], function(dojo, lang, array, html, window, connect, fxbase, has, common, fx, easing, xfx, flip){
+], function(config, require, ready, has, domStyle, domConstruct, domClass, lang, array, win, connect, fx, has, common, fx, easing, xfx, flip){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -27,7 +32,7 @@ define([
 	//		only when isWebKit is true.
 	//
 	//		dojo.require("dojox.mobile");
-	//		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
+	//		dojo.requireIf(!has("webKit"), "dojox.mobile.compat");
 	//
 	//		This module also loads compatibility CSS files, which has -compat.css
 	//		suffix. You can use either the <link> tag or @import to load theme
@@ -37,9 +42,9 @@ define([
 	//		If you explicitly load iphone-compat.css with <link> or @import,
 	//		this module will not load the already loaded file.
 
-	if(!dojo.isWebKit){
+	if(!has("webKit")){
 		if(dojox.mobile.View){
-			dojo.extend(dojox.mobile.View, {
+			lang.extend(dojox.mobile.View, {
 				_doTransition: function(fromNode, toNode, transition, dir){
 					var anim;
 					this.wakeUp(toNode);
@@ -54,24 +59,24 @@ define([
 							node: fromNode,
 							duration: 400,
 							left: -w*dir,
-							top: dojo.style(fromNode, "top")
+							top: domStyle.style(fromNode, "top")
 						});
 						var s2 = fx.slideTo({
 							node: toNode,
 							duration: 400,
 							left: 0,
-							top: dojo.style(toNode, "top")
+							top: domStyle.style(toNode, "top")
 						});
 						toNode.style.position = "absolute";
 						toNode.style.left = w*dir + "px";
 						toNode.style.display = "";
 						anim = fx.combine([s1,s2]);
-						dojo.connect(anim, "onEnd", this, function(){
+						connect.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							fromNode.style.left = "0px";
 							toNode.style.position = "relative";
 							var toWidget = dijit.byNode(toNode);
-							if(toWidget && !dojo.hasClass(toWidget.domNode, "out")){
+							if(toWidget && !domClass.contains(toWidget.domNode, "out")){
 								// Reset the temporary padding
 								toWidget.containerNode.style.paddingTop = "";
 							}
@@ -97,7 +102,7 @@ define([
 						toNode.style.left = "0px";
 						toNode.style.display = "";
 						anim = fx.combine([s1,s2]);
-						dojo.connect(anim, "onEnd", this, function(){
+						connect.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							toNode.style.position = "relative";
 							this.invokeCallback();
@@ -112,7 +117,7 @@ define([
 						});
 						toNode.style.position = "absolute";
 						toNode.style.left = "0px";
-						dojo.connect(anim, "onEnd", this, function(){
+						connect.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							toNode.style.position = "relative";
 							toNode.style.display = "";
@@ -122,11 +127,11 @@ define([
 					}else {
 						// other transitions - "fade", "dissolve", "swirl"
 						anim = fx.chain([
-							dojo.fadeOut({
+							fx.fadeOut({
 								node: fromNode,
 								duration: 600
 							}),
-							dojo.fadeIn({
+							fx.fadeIn({
 								node: toNode,
 								duration: 600
 							})
@@ -134,11 +139,11 @@ define([
 						toNode.style.position = "absolute";
 						toNode.style.left = "0px";
 						toNode.style.display = "";
-						dojo.style(toNode, "opacity", 0);
-						dojo.connect(anim, "onEnd", this, function(){
+						domStyle.style(toNode, "opacity", 0);
+						connect.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							toNode.style.position = "relative";
-							dojo.style(fromNode, "opacity", 1);
+							domStyle.style(fromNode, "opacity", 1);
 							this.invokeCallback();
 						});
 						anim.play();
@@ -154,7 +159,7 @@ define([
 				//		The node to forcibly redraw.
 				// tags:
 				//		public
-					if(dojo.isIE && !node._wokeup){
+					if(has("ie") && !node._wokeup){
 						node._wokeup = true;
 						var disp = node.style.display;
 						node.style.display = "";
@@ -172,7 +177,7 @@ define([
 		}
 	
 		if(dojox.mobile.Switch){
-			dojo.extend(dojox.mobile.Switch, {
+			lang.extend(dojox.mobile.Switch, {
 				_changeState: function(/*String*/state, /*Boolean*/anim){
 					// summary:
 					//		Function to toggle the switch state on the switch
@@ -196,8 +201,8 @@ define([
 		
 					var _this = this;
 					var f = function(){
-						dojo.removeClass(_this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
-						dojo.addClass(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
+						domClass.remove(_this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
+						domClass.add(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
 						_this.left.style.display = on ? "" : "none";
 						_this.right.style.display = !on ? "" : "none";
 					};
@@ -220,9 +225,9 @@ define([
 			});	
 		}
 	
-		if(dojo.isIE){
+		if(has("ie")){
 			if(dojox.mobile.RoundRect){
-				dojo.extend(dojox.mobile.RoundRect, {
+				lang.extend(dojox.mobile.RoundRect, {
 					buildRendering: function(){
 						// summary:
 						//		Function to simulate the borderRadius appearance on IE, since
@@ -237,7 +242,7 @@ define([
 		
 			if(dojox.mobile.RoundRectList){
 				dojox.mobile.RoundRectList._addChild = dojox.mobile.RoundRectList.prototype.addChild;
-				dojo.extend(dojox.mobile.RoundRectList, {
+				lang.extend(dojox.mobile.RoundRectList, {
 					buildRendering: function(){
 						// summary:
 						//		Function to simulate the borderRadius appearance on IE, since
@@ -284,9 +289,9 @@ define([
 			}
 	
 			if(dojox.mobile.EdgeToEdgeList){
-				dojo.extend(dojox.mobile.EdgeToEdgeList, {
+				lang.extend(dojox.mobile.EdgeToEdgeList, {
 					buildRendering: function(){
-					this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("UL");
+					this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
 						this.domNode.className = "mblEdgeToEdgeList";
 					}
 				});
@@ -294,7 +299,7 @@ define([
 	
 			if(dojox.mobile.IconContainer){
 				dojox.mobile.IconContainer._addChild = dojox.mobile.IconContainer.prototype.addChild;
-				dojo.extend(dojox.mobile.IconContainer, {
+				lang.extend(dojox.mobile.IconContainer, {
 					addChild: function(widget, /*Number?*/insertIndex){
 						dojox.mobile.IconContainer._addChild.apply(this, arguments);
 						if(dojox.mobile.applyPngFilter){
@@ -304,7 +309,7 @@ define([
 				});
 			}
 		
-			dojo.mixin(dojox.mobile, {
+			lang.mixin(dojox.mobile, {
 				createRoundRect: function(_this, isList){
 					// summary:
 					//		Function to adjust the creation of rounded rectangles on IE.
@@ -312,11 +317,11 @@ define([
 					// tags:
 					//		public
 					var i, len;
-					_this.domNode = dojo.doc.createElement("DIV");
+					_this.domNode = win.doc.createElement("DIV");
 					_this.domNode.style.padding = "0px";
 					_this.domNode.style.backgroundColor = "transparent";
 					_this.domNode.style.borderStyle = "none";
-					_this.containerNode = dojo.doc.createElement(isList?"UL":"DIV");
+					_this.containerNode = win.doc.createElement(isList?"UL":"DIV");
 					_this.containerNode.className = "mblRoundRectContainer";
 					if(_this.srcNodeRef){
 						_this.srcNodeRef.parentNode.replaceChild(_this.domNode, _this.srcNodeRef);
@@ -328,11 +333,11 @@ define([
 					_this.domNode.appendChild(_this.containerNode);
 		
 					for(i = 0; i <= 5; i++){
-						var top = dojo.create("DIV");
+						var top = domConstruct.create("DIV");
 						top.className = "mblRoundCorner mblRoundCorner"+i+"T";
 						_this.domNode.insertBefore(top, _this.containerNode);
 		
-						var bottom = dojo.create("DIV");
+						var bottom = domConstruct.create("DIV");
 						bottom.className = "mblRoundCorner mblRoundCorner"+i+"B";
 						_this.domNode.appendChild(bottom);
 					}
@@ -340,13 +345,13 @@ define([
 			});
 		
 			if(dojox.mobile.ScrollableView){
-				dojo.extend(dojox.mobile.ScrollableView, {
+				lang.extend(dojox.mobile.ScrollableView, {
 					postCreate: function(){
 						// On IE, margin-top of the first child does not seem to be effective,
 						// probably because padding-top is specified for containerNode
 						// to make room for a fixed header. This dummy node is a workaround for that.
-						var dummy = dojo.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
-						dojo.style(dummy, {
+						var dummy = domConstruct.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
+						domStyle.style(dummy, {
 							position: "relative",
 							marginBottom: "-2px",
 							fontSize: "1px"
@@ -355,13 +360,13 @@ define([
 				});
 			}
 	
-		} // if	(dojo.isIE)
+		} // if	(has("ie"))
 	
-		if(dojo.isIE <= 6){
+		if(has("ie") <= 6){
 			dojox.mobile.applyPngFilter = function(root){
-				root = root || dojo.body();
+				root = root || win.body();
 				var nodes = root.getElementsByTagName("IMG");
-				var blank = dojo.moduleUrl("dojo", "resources/blank.gif");
+				var blank = require.toUrl("dojo/resources/blank.gif");
 				for(var i = 0, len = nodes.length; i < len; i++){
 					var img = nodes[i];
 					var w = img.offsetWidth;
@@ -370,7 +375,7 @@ define([
 						// The reason why the image has no width/height may be because
 						// display is "none". If that is the case, let's change the
 						// display to "" temporarily and see if the image returns them.
-						if(dojo.style(img, "display") != "none"){ continue; }
+						if(domStyle.style(img, "display") != "none"){ continue; }
 						img.style.display = "";
 						w = img.offsetWidth;
 						h = img.offsetHeight;
@@ -385,24 +390,24 @@ define([
 					img.style.height = h + "px";
 				}
 			};
-		} // if(dojo.isIE <= 6)
+		} // if(has("ie") <= 6)
 
 		// override deviceTheme.js
 		dojox.mobile.loadCssFile = function(/*String*/file){
-			if(dojo.doc.createStyleSheet){
+			if(win.doc.createStyleSheet){
 				// for some reason, IE hangs when you try to load
 				// multiple css files almost at once.
 				setTimeout(function(file){
 					return function(){
-						dojo.doc.createStyleSheet(file);
+						win.doc.createStyleSheet(file);
 					};
 				}(file), 0);
 			}else{
-				dojo.create("LINK", {
+				domConstruct.create("LINK", {
 					href: file,
 					type: "text/css",
 					rel: "stylesheet"
-				}, dojo.doc.getElementsByTagName('head')[0]);
+				}, win.doc.getElementsByTagName('head')[0]);
 			}
 		};
 
@@ -413,18 +418,18 @@ define([
 			//		The CSS files to load and register with the page.
 			// tags:
 			//		private
-			if(!dojo.global._loadedCss){
+			if(!win.global._loadedCss){
 				var obj = {};
-				dojo.forEach(dojox.mobile.getCssPaths(), function(path){
+				array.forEach(dojox.mobile.getCssPaths(), function(path){
 					obj[path] = true;
 				});
-				dojo.global._loadedCss = obj;
+				win.global._loadedCss = obj;
 			}
-			if(!dojo.isArray(files)){ files = [files]; }
+			if(!lang.isArray(files)){ files = [files]; }
 				for(var i = 0; i < files.length; i++){
 					var file = files[i];
-					if(!dojo.global._loadedCss[file]){
-						dojo.global._loadedCss[file] = true;
+					if(!win.global._loadedCss[file]){
+						win.global._loadedCss[file] = true;
 						dojox.mobile.loadCssFile(file);
 				}
 			}
@@ -435,7 +440,7 @@ define([
 			var i, j, len;
 
 			// find @import
-			var s = dojo.doc.styleSheets;
+			var s = win.doc.styleSheets;
 			for(i = 0; i < s.length; i++){
 				if(s[i].href){ continue; }
 				var r = s[i].cssRules || s[i].imports;
@@ -448,7 +453,7 @@ define([
 			}
 		
 			// find <link>
-			var elems = dojo.doc.getElementsByTagName("link");
+			var elems = win.doc.getElementsByTagName("link");
 			for(i = 0, len = elems.length; i < len; i++){
 				if(elems[i].href){
 					paths.push(elems[i].href);
@@ -478,8 +483,8 @@ define([
 			if(doResize !== false){ dojox.mobile.resizeAll(); }
 		};
 
-		dojo.addOnLoad(function(){
-			if(dojo.config["mblLoadCompatCssFiles"] !== false){
+		ready(function(){
+			if(config["mblLoadCompatCssFiles"] !== false){
 				setTimeout(function(){ // IE needs setTimeout
 					dojox.mobile.loadCompatCssFiles();
 				}, 0);
@@ -489,7 +494,7 @@ define([
 			}
 		});
 
-	} // end of if(!dojo.isWebKit){
+	} // end of if(!has("webKit")){
 
 	return dojox.mobile.compat;
 });

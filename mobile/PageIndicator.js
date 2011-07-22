@@ -1,13 +1,14 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/window",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/dom",
+	"dojo/_base/connect",
 	"dojo/_base/declare",
-	"dojo/_base/html",
-	"dojo/_base/array",
-	"dojo/_base/lang",
 	"dijit/_WidgetBase",
 	"dijit/_Contained"
 ],
-	function(dojo, declare, dhtml, darray, dlang, WidgetBase, Contained){
+	function(win, domConstruct, domClass, dom, connect, declare, WidgetBase, Contained){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
@@ -17,16 +18,16 @@ define([
 		WidgetBase = dijit._WidgetBase;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.PageIndicator", [WidgetBase, Contained],{
+	return declare("dojox.mobile.PageIndicator", [WidgetBase, Contained],{
 		refId: "",
 
 		buildRendering: function(){
-			this.domNode = this.srcNodeRef || dojo.doc.createElement("DIV");
+			this.domNode = this.srcNodeRef || win.doc.createElement("DIV");
 			this.domNode.className = "mblPageIndicator";
-			this._tblNode = dojo.create("TABLE", {className:"mblPageIndicatorContainer"}, this.domNode);
+			this._tblNode = domConstruct.create("TABLE", {className:"mblPageIndicatorContainer"}, this.domNode);
 			this._tblNode.insertRow(-1);
 			this.connect(this.domNode, "onclick", "onClick");
-			dojo.subscribe("/dojox/mobile/viewChanged", this, function(view){
+			connect.subscribe("/dojox/mobile/viewChanged", this, function(view){
 				this.reset();
 			});
 		},
@@ -41,7 +42,7 @@ define([
 		reset: function(){
 			var r = this._tblNode.rows[0];
 			var i, c, a = [], dot;
-			var refNode = (this.refId && dojo.byId(this.refId)) || this.domNode;
+			var refNode = (this.refId && dom.byId(this.refId)) || this.domNode;
 			var children = refNode.parentNode.childNodes;
 			for(i = 0; i < children.length; i++){
 				c = children[i];
@@ -50,10 +51,10 @@ define([
 				}
 			}
 			if(r.cells.length !== a.length){
-				dojo.empty(r);
+				domConstruct.empty(r);
 				for(i = 0; i < a.length; i++){
 					c = a[i];
-					dot = dojo.create("DIV", {className:"mblPageIndicatorDot"});
+					dot = domConstruct.create("DIV", {className:"mblPageIndicatorDot"});
 					r.insertCell(-1).appendChild(dot);
 				}
 			}
@@ -62,23 +63,23 @@ define([
 			for(i = 0; i < r.cells.length; i++){
 				dot = r.cells[i].firstChild;
 				if(a[i] === currentView.domNode){
-					dojo.addClass(dot, "mblPageIndicatorDotSelected");
+					domClass.add(dot, "mblPageIndicatorDotSelected");
 				}else{
-					dojo.removeClass(dot, "mblPageIndicatorDotSelected");
+					domClass.remove(dot, "mblPageIndicatorDotSelected");
 				}
 			}
 		},
 
 		isView: function(node){
-			return (node && node.nodeType === 1 && dojo.hasClass(node, "mblView"));
+			return (node && node.nodeType === 1 && domClass.contains(node, "mblView"));
 		},
 
 		onClick: function(e){
 			if(e.target !== this.domNode){ return; }
 			if(e.layerX < this._tblNode.offsetLeft){
-				dojo.publish("/dojox/mobile/prevPage", [this]);
+				connect.publish("/dojox/mobile/prevPage", [this]);
 			}else if(e.layerX > this._tblNode.offsetLeft + this._tblNode.offsetWidth){
-				dojo.publish("/dojox/mobile/nextPage", [this]);
+				connect.publish("/dojox/mobile/nextPage", [this]);
 			}
 		}
 	});

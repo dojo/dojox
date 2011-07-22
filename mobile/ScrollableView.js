@@ -1,12 +1,12 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-construct",
+	"dojo/dom-class",
 	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dojo/_base/html",
 	"./View",
 	"./_ScrollableMixin"
 ],
-	function(dojo, declare, darray, dhtml, View, ScrollableMixin){
+	function(domConstruct, domClass, declare, array, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/ScrollableView
 	// summary:
@@ -26,15 +26,15 @@ define([
 		View = dojox.mobile.View;
 		ScrollableMixin = dojox.mobile._ScrollableMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.ScrollableView", [View, ScrollableMixin], {
+	return declare("dojox.mobile.ScrollableView", [View, ScrollableMixin], {
 		scrollableParams: {noResize: true},
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblScrollableView");
+			domClass.add(this.domNode, "mblScrollableView");
 			this.domNode.style.overflow = "hidden";
 			this.domNode.style.top = "0px";
-			this.containerNode = dojo.create("DIV",
+			this.containerNode = domConstruct.create("DIV",
 				{className:"mblScrollableViewContainer"}, this.domNode);
 			this.containerNode.style.position = "absolute";
 			this.containerNode.style.top = "0px"; // view bar is relative
@@ -47,7 +47,7 @@ define([
 
 		resize: function(){
 			this.inherited(arguments); // scrollable#resize() will be called
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},

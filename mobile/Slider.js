@@ -1,18 +1,23 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/window",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
-	"dojo/_base/html",
 	"dojo/_base/array",
 	"dijit/_WidgetBase",
 	"dijit/form/_FormValueMixin"
 ],
-	function(dojo, declare, dhtml, darray, WidgetBase, FormValueMixin) {
+	function(win, domStyle, domGeometry, domConstruct, domClass, connect, lang, declare, array, WidgetBase, FormValueMixin){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 		FormValueMixin = dijit.form._FormValueMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.Slider", [WidgetBase, FormValueMixin], {
+	return declare("dojox.mobile.Slider", [WidgetBase, FormValueMixin], {
 		// summary:
 		//		A non-templated Slider widget similar to the HTML5 INPUT type=range.
 		//
@@ -54,12 +59,12 @@ define([
 		halo: "8pt",
 
 		buildRendering: function(){
-			this.focusNode = this.domNode = dojo.create("div", {});
-			this.valueNode = dojo.create("input", (this.srcNodeRef && this.srcNodeRef.name) ? { type: "hidden", name: this.srcNodeRef.name } : { type: "hidden" }, this.domNode, "last");
-			var relativeParent = dojo.create("div", { style: { position:"relative", height:"100%", width:"100%" } }, this.domNode, "last");
-			this.progressBar = dojo.create("div", { style:{ position:"absolute" }, "class":"mblSliderProgressBar" }, relativeParent, "last");
-			this.touchBox = dojo.create("div", { style:{ position:"absolute" }, "class":"mblSliderTouchBox" }, relativeParent, "last");
-			this.handle = dojo.create("div", { style:{ position:"absolute" }, "class":"mblSliderHandle" }, relativeParent, "last");
+			this.focusNode = this.domNode = domConstruct.create("div", {});
+			this.valueNode = domConstruct.create("input", (this.srcNodeRef && this.srcNodeRef.name) ? { type: "hidden", name: this.srcNodeRef.name } : { type: "hidden" }, this.domNode, "last");
+			var relativeParent = domConstruct.create("div", { style: { position:"relative", height:"100%", width:"100%" } }, this.domNode, "last");
+			this.progressBar = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderProgressBar" }, relativeParent, "last");
+			this.touchBox = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderTouchBox" }, relativeParent, "last");
+			this.handle = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderHandle" }, relativeParent, "last");
 			this.inherited(arguments);
 		},
 
@@ -75,14 +80,14 @@ define([
 			// now perform visual slide
 			var horizontal = this.orientation != "V";
 			if(priorityChange === true){
-				dojo.addClass(this.handle, "mblSliderTransition");
-				dojo.addClass(this.progressBar, "mblSliderTransition");
+				domClass.add(this.handle, "mblSliderTransition");
+				domClass.add(this.progressBar, "mblSliderTransition");
 			}else{
-				dojo.removeClass(this.handle, "mblSliderTransition");
-				dojo.removeClass(this.progressBar, "mblSliderTransition");
+				domClass.remove(this.handle, "mblSliderTransition");
+				domClass.remove(this.progressBar, "mblSliderTransition");
 			}
-			dojo.style(this.handle, this._attrs.handleLeft, (this._reversed ? (100-toPercent) : toPercent) + "%");
-			dojo.style(this.progressBar, this._attrs.width, toPercent + "%");
+			domStyle.style(this.handle, this._attrs.handleLeft, (this._reversed ? (100-toPercent) : toPercent) + "%");
+			domStyle.style(this.progressBar, this._attrs.width, toPercent + "%");
 		},
 
 		postCreate: function(){
@@ -101,32 +106,32 @@ define([
 				}
 				function continueDrag(e){
 					e.preventDefault();
-					dojo.hitch(this, getEventData)(e);
+					lang.hitch(this, getEventData)(e);
 					this.set('value', value, false);
 				}
 		
 				function endDrag(e){
 					e.preventDefault();
-					dojo.forEach(actionHandles, dojo.hitch(this, "disconnect"));
+					array.forEach(actionHandles, lang.hitch(this, "disconnect"));
 					actionHandles = [];
 					this.set('value', this.value, true);
 				}
 
 				e.preventDefault();
 				var isMouse = e.type == "mousedown";
-				var box = dojo.position(node, false); // can't use true since the added docScroll and the returned x are body-zoom incompatibile
-				var bodyZoom = dojo.style(dojo.body(), "zoom") || 1;
+				var box = domGeometry.position(node, false); // can't use true since the added docScroll and the returned x are body-zoom incompatibile
+				var bodyZoom = domStyle.style(win.body(), "zoom") || 1;
 				if(isNaN(bodyZoom)){ bodyZoom = 1; }
-				var nodeZoom = dojo.style(node, "zoom") || 1;
+				var nodeZoom = domStyle.style(node, "zoom") || 1;
 				if(isNaN(nodeZoom)){ nodeZoom = 1; }
-				var startPixel = box[this._attrs.x] * nodeZoom * bodyZoom + dojo._docScroll()[this._attrs.x];
+				var startPixel = box[this._attrs.x] * nodeZoom * bodyZoom + domGeometry.docScroll()[this._attrs.x];
 				var maxPixels = box[this._attrs.w] * nodeZoom * bodyZoom;
-				dojo.hitch(this, getEventData)(e);
+				lang.hitch(this, getEventData)(e);
 				if(e.target == this.touchBox){
 					this.set('value', value, true);
 				}
-				dojo.forEach(actionHandles, dojo.disconnect);
-				var root = dojo.doc.documentElement;
+				array.forEach(actionHandles, connect.disconnect);
+				var root = win.doc.documentElement;
 				var actionHandles = [
 					this.connect(root, isMouse ? "onmousemove" : "ontouchmove", continueDrag),
 					this.connect(root, isMouse ? "onmouseup" : "ontouchend", endDrag)
@@ -139,7 +144,7 @@ define([
 				 this.orientation = node.offsetHeight <= node.offsetWidth ? "H" : "V";
 			}
 			// add V or H suffix to baseClass for styling purposes
-			dojo.addClass(this.domNode, dojo.map(this.baseClass.split(" "), dojo.hitch(this, function(c){ return c+this.orientation; })));
+			domClass.add(this.domNode, array.map(this.baseClass.split(" "), lang.hitch(this, function(c){ return c+this.orientation; })));
 			var horizontal = this.orientation != "V";
 			var ltr = horizontal ? this.isLeftToRight() : false;
 			var flip = this.flip;

@@ -1,15 +1,18 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/window",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/connect",
 	"dojo/_base/declare",
-	"dojo/_base/html",
 	"dojo/_base/array",
 	"dojo/_base/lang",
-	"./common",
+	"./common", // is this needed?
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained"
 ],
-	function(dojo, declare, dhtml, darray, dlang, mcommon, WidgetBase, Container, Contained){
+	function(win, domStyle, domConstruct, domClass, connect, declare, array, lang, mcommon, WidgetBase, Container, Contained){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
@@ -20,7 +23,7 @@ define([
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.Heading", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.Heading", [WidgetBase, Container, Contained],{
 		back: "",
 		href: "",
 		moveTo: "",
@@ -31,24 +34,24 @@ define([
 		tag: "H1",
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement(this.tag);
+			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement(this.tag);
 			this.domNode.className = "mblHeading";
 			if(!this.label){
-				dojo.forEach(this.domNode.childNodes, function(n){
+				array.forEach(this.domNode.childNodes, function(n){
 					if(n.nodeType == 3){
-						var v = dojo.trim(n.nodeValue);
+						var v = lang.trim(n.nodeValue);
 						if(v){
 							this.label = v;
-							this.labelNode = dojo.create("SPAN", {innerHTML:v}, n, "replace");
+							this.labelNode = domConstruct.create("SPAN", {innerHTML:v}, n, "replace");
 						}
 					}
 				}, this);
 			}
 			if(!this.labelNode){
-				this.labelNode = dojo.create("SPAN", null, this.domNode);
+				this.labelNode = domConstruct.create("SPAN", null, this.domNode);
 			}
 			this.labelNode.className = "mblHeadingSpanTitle";
-			this.labelDivNode = dojo.create("DIV", {
+			this.labelDivNode = domConstruct.create("DIV", {
 				className: "mblHeadingDivTitle",
 				innerHTML: this.labelNode.innerHTML
 			}, this.domNode);
@@ -80,10 +83,10 @@ define([
 				for(var i = children.length - 1; i >= 0; i--){
 					var c = children[i];
 					if(c.nodeType === 1){
-						if(!rightBtn && dojo.hasClass(c, "mblToolbarButton") && dojo.style(c, "float") === "right"){
+						if(!rightBtn && domClass.contains(c, "mblToolbarButton") && domStyle.style(c, "float") === "right"){
 							rightBtn = c;
 						}
-						if(!leftBtn && (dojo.hasClass(c, "mblToolbarButton") && dojo.style(c, "float") === "left" || c === this._btn)){
+						if(!leftBtn && (domClass.contains(c, "mblToolbarButton") && domStyle.style(c, "float") === "left" || c === this._btn)){
 							leftBtn = c;
 						}
 					}
@@ -99,25 +102,25 @@ define([
 				var rw = rightBtn ? bw - rightBtn.offsetLeft + 5 : 0; // rightBtn width
 				var lw = leftBtn ? leftBtn.offsetLeft + leftBtn.offsetWidth + 5 : 0; // leftBtn width
 				var tw = this.labelNodeLen || 0; // title width
-				dojo[bw - Math.max(rw,lw)*2 > tw ? "addClass" : "removeClass"](this.domNode, "mblHeadingCenterTitle");
+				domClass[bw - Math.max(rw,lw)*2 > tw ? "add" : "remove"](this.domNode, "mblHeadingCenterTitle");
 			}
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},
 
 		_setBackAttr: function(/*String*/back){
 			if(!this._btn){
-				var btn = dojo.create("DIV", this.backProp, this.domNode, "first");
-				var head = dojo.create("DIV", {className:"mblArrowButtonHead"}, btn);
-				var body = dojo.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
+				var btn = domConstruct.create("DIV", this.backProp, this.domNode, "first");
+				var head = domConstruct.create("DIV", {className:"mblArrowButtonHead"}, btn);
+				var body = domConstruct.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
 
 				this._body = body;
 				this._head = head;
 				this._btn = btn;
 				this.backBtnNode = btn;
 				this.connect(body, "onclick", "onClick");
-				var neck = dojo.create("DIV", {className:"mblArrowButtonNeck"}, btn);
+				var neck = domConstruct.create("DIV", {className:"mblArrowButtonNeck"}, btn);
 			}
 			this.back = back;
 			this._body.innerHTML = this._cv(this.back);
@@ -141,12 +144,12 @@ define([
 
 		onClick: function(e){
 			var h1 = this.domNode;
-			dojo.addClass(h1, "mblArrowButtonSelected");
+			domClass.add(h1, "mblArrowButtonSelected");
 			setTimeout(function(){
-				dojo.removeClass(h1, "mblArrowButtonSelected");
+				domClass.remove(h1, "mblArrowButtonSelected");
 			}, 1000);
 
-			if (this.back && !this.moveTo && !this.href && history){
+			if(this.back && !this.moveTo && !this.href && history){
 				history.back();	
 				return;
 			}	
@@ -168,7 +171,7 @@ define([
 			}else{
 				if(dojox.mobile.app && dojox.mobile.app.STAGE_CONTROLLER_ACTIVE){
 					// If in a full mobile app, then use its mechanisms to move back a scene
-					dojo.publish("/dojox/mobile/app/goback");
+					connect.publish("/dojox/mobile/app/goback");
 				}else{
 					// Basically transition should be performed between two
 					// siblings that share the same parent.
@@ -180,7 +183,7 @@ define([
 						var parent = node.getParent();
 						while(view){
 							var myParent = view.getParent();
-							if (parent === myParent){
+							if(parent === myParent){
 								break;
 							}
 							view = myParent;

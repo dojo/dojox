@@ -1,8 +1,11 @@
 define([
+	"dojo/_base/config",
+	"dojo/_base/window",
+	"dojo/_base/lang",
 	"dojo/ready"
-], function(ready){
+], function(config, win, lang, ready){
 
-	dojo.getObject("mobile", true, dojox);
+	lang.getObject("mobile", true, dojox);
 
 	dojox.mobile.parser = new function(){
 		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
@@ -16,7 +19,7 @@ define([
 			if(nodes){
 				for(i = 0; i < nodes.length; i++){
 					var n = nodes[i];
-					var cls = dojo.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
+					var cls = lang.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
 					var proto = cls.prototype;
 					var params = {}, prop, v, t;
 					dojo._mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
@@ -47,7 +50,7 @@ define([
 					ws.push(instance);
 					var jsId = n.getAttribute("jsId") || n.getAttribute("data-dojo-id");
 					if(jsId){
-						dojo.setObject(jsId, instance);
+						lang.setObject(jsId, instance);
 					}
 				}
 				for(i = 0; i < ws.length; i++){
@@ -61,12 +64,12 @@ define([
 		this.parse = function(rootNode, args){
 			// summary:
 			//		Function to handle parsing for widgets in the current document.
-			//		It is not as powerful as the full dojo parser, but it will handle basic
+			//		It is not as powerful as the full parser, but it will handle basic
 			//		use cases fine.
 			// rootNode:
 			//		The root node in the document to parse from
 			if(!rootNode){
-				rootNode = dojo.body();
+				rootNode = win.body();
 			}else if(!args && rootNode.rootNode){
 				// Case where 'rootNode' is really a params object.
 				args = rootNode;
@@ -85,10 +88,10 @@ define([
 			return this.instantiate(list, mixin, args);
 		};
 	}();
-	if(dojo.config.parseOnLoad){
+	if(config.parseOnLoad){
 		ready(100, dojox.mobile.parser, "parse");
 	}
-	dojo.parser = dojox.mobile.parser; // in case user app calls dojo.parser
+	dojo.parser = dojox.mobile.parser; // in case user app calls parser
 
 	return dojox.mobile.parser;
 });

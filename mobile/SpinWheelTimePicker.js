@@ -1,13 +1,10 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/dom-class",
 	"dojo/_base/declare",
-	"dojo/_base/html",
-	"dojo/date",
-	"dojo/date/locale",
 	"./SpinWheel",
 	"./SpinWheelSlot"
 ],
-	function(dojo, declare, dhtml, ddate, dlocale, SpinWheel, SpinWheelSlot){
+	function(domClass, declare, SpinWheel, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:
@@ -16,7 +13,7 @@ define([
 	/*=====
 		SpinWheel = dojox.mobile.SpinWheel;
 	=====*/
-	return dojo.declare("dojox.mobile.SpinWheelTimePicker", SpinWheel, {
+	return declare("dojox.mobile.SpinWheelTimePicker", SpinWheel, {
 		slotClasses: [
 			SpinWheelSlot,
 			SpinWheelSlot
@@ -33,7 +30,7 @@ define([
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblSpinWheelTimePicker");
+			domClass.add(this.domNode, "mblSpinWheelTimePicker");
 		},
 
 		reset: function(){

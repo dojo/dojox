@@ -1,14 +1,19 @@
 define([
+	"dojo/_base/window",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/declare",
 	"./Tooltip",
 	"./Overlay",
-	"./common"
-], function(Tooltip, Overlay, mcommon) {
+	"./common" // is this needed?
+], function(win, domStyle, domConstruct, domClass, declare, Tooltip, Overlay, mcommon){
 
 	/*=====
 		Tooltip = dojox.mobile.Tooltip;
 		Overlay = dojox.mobile.Overlay;
 	=====*/
-	var cls = dojo.declare("dojox.mobile.Opener", dojo.hasClass(dojo.doc.documentElement, "dj_phone") ? Overlay : Tooltip, {
+	var cls = declare("dojox.mobile.Opener", domClass.contains(win.doc.documentElement, "dj_phone") ? Overlay : Tooltip, {
 		// summary:
 		//		A non-templated popup widget that will use either Tooltip or Overlay depending on screen size
 		//
@@ -18,15 +23,15 @@ define([
 			this.node = node;
 			this.onShow(node);
 			if(!this.cover){
-				this.cover = dojo.create('div', {style: {position:'absolute', top:'0px', left:'0px', width:'100%', height:'100%', backgroundColor:'transparent' }}, this.domNode, 'before');
+				this.cover = domConstruct.create('div', {style: {position:'absolute', top:'0px', left:'0px', width:'100%', height:'100%', backgroundColor:'transparent' }}, this.domNode, 'before');
 				this.connect(this.cover, "onclick", "_onBlur");
 			}
-			dojo.style(this.cover, "visibility", "visible");
+			domStyle.style(this.cover, "visibility", "visible");
 			return this.inherited(arguments);
 		},
 
 		hide: function(/*Anything*/ val){
-			dojo.style(this.cover, "visibility", "hidden");
+			domStyle.style(this.cover, "visibility", "hidden");
 			this.inherited(arguments);
 			this.onHide(this.node, val);
 		},
@@ -39,7 +44,7 @@ define([
 
 		destroy: function(){
 			this.inherited(arguments);
-			dojo.destroy(this.cover);
+			domConstruct.destroy(this.cover);
 		}
 
 	});

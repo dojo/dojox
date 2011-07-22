@@ -1,13 +1,13 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/window",
+	"dojo/dom-construct",
+	"dojo/dom-class",
 	"dojo/_base/declare",
-	"dojo/_base/array",
-	"dojo/_base/html",
 	"dijit/_WidgetBase",
 	"dijit/_Contained",
 	"./_ScrollableMixin"
 ],
-	function(dojo, declare, darray, dbase, WidgetBase, Contained, ScrollableMixin){
+	function(win, domConstruct, domClass, declare, WidgetBase, Contained, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SpinWheelSlot
 	// summary:
@@ -18,7 +18,7 @@ define([
 		Contained = dijit._Contained;
 		ScrollableMixin = dojox.mobile._ScrollableMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.SpinWheelSlot", [WidgetBase, Contained, ScrollableMixin], {
+	return declare("dojox.mobile.SpinWheelSlot", [WidgetBase, Contained, ScrollableMixin], {
 		items: [], // Ex. [[0,"Jan"],...]
 		labels: [], // Ex. ["Jan","Feb",...]
 		labelFrom: 0,
@@ -34,7 +34,7 @@ define([
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblSpinWheelSlot");
+			domClass.add(this.domNode, "mblSpinWheelSlot");
 
 			var i, j, idx;
 			if(this.labelFrom !== this.labelTo){
@@ -50,17 +50,17 @@ define([
 				}
 			}
 
-			this.containerNode = dojo.create("DIV", {className:"mblSpinWheelSlotContainer"});
+			this.containerNode = domConstruct.create("DIV", {className:"mblSpinWheelSlotContainer"});
 			this.containerNode.style.height
-				= (dojo.global.innerHeight||dojo.doc.documentElement.clientHeight) * 2 + "px"; // must bigger than the screen
+				= (win.global.innerHeight||win.doc.documentElement.clientHeight) * 2 + "px"; // must bigger than the screen
 			this.panelNodes = [];
 			for(var k = 0; k < 3; k++){
-				this.panelNodes[k] = dojo.create("DIV", {className:"mblSpinWheelSlotPanel"});
+				this.panelNodes[k] = domConstruct.create("DIV", {className:"mblSpinWheelSlotPanel"});
 				var len = this.items.length;
 				var n = Math.ceil(this.minItems / len);
 				for(j = 0; j < n; j++){
 					for(i = 0; i < len; i++){
-						dojo.create("DIV", {
+						domConstruct.create("DIV", {
 							className: "mblSpinWheelSlotLabel",
 							name: this.items[i][0],
 							innerHTML: this._cv(this.items[i][1])
@@ -70,7 +70,7 @@ define([
 				this.containerNode.appendChild(this.panelNodes[k]);
 			}
 			this.domNode.appendChild(this.containerNode);
-			this.touchNode = dojo.create("DIV", {className:"mblSpinWheelSlotTouch"}, this.domNode);
+			this.touchNode = domConstruct.create("DIV", {className:"mblSpinWheelSlotTouch"}, this.domNode);
 			this.setSelectable(this.domNode, false);
 		},
 	
@@ -125,9 +125,9 @@ define([
 				var items = this.panelNodes[i].childNodes;
 				for(var j = 0; j < items.length; j++){
 					if(items[j].innerHTML === String(value)){
-						dojo.addClass(items[j], "mblSpinWheelSlotLabelBlue");
+						domClass.add(items[j], "mblSpinWheelSlotLabelBlue");
 					}else{
-						dojo.removeClass(items[j], "mblSpinWheelSlotLabelBlue");
+						domClass.remove(items[j], "mblSpinWheelSlotLabelBlue");
 					}
 				}
 			}
@@ -137,10 +137,10 @@ define([
 			for(var i = 0, len = this.panelNodes.length; i < len; i++){
 				var items = this.panelNodes[i].childNodes;
 				for(var j = 0; j < items.length; j++){
-					dojo.removeClass(items[j], "mblSpinWheelSlotLabelGray");
+					domClass.remove(items[j], "mblSpinWheelSlotLabelGray");
 					for(var k = 0; k < values.length; k++){
 						if(items[j].innerHTML === String(values[k])){
-							dojo.addClass(items[j], "mblSpinWheelSlotLabelGray");
+							domClass.add(items[j], "mblSpinWheelSlotLabelGray");
 							break;
 						}
 					}

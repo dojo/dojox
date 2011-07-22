@@ -1,8 +1,11 @@
 define([
+	"dojo/_base/window",
+	"dojo/_base/declare",
+	"dojo/_base/array",
 	"dijit/_WidgetBase",
 	"dijit/_Contained",
 	"dijit/_Container"
-], function(WidgetBase, Contained, Container){
+], function(win, declare, array, WidgetBase, Contained, Container){
 	// module:
 	//		dojox/mobile/RoundRect
 	// summary:
@@ -13,17 +16,17 @@ define([
 		Contained = dijit._Contained;
 		Container = dijit._Container;
 	=====*/
-	return dojo.declare("dojox.mobile.RoundRect", [WidgetBase, Container, Contained], {
+	return declare("dojox.mobile.RoundRect", [WidgetBase, Container, Contained], {
 
 		shadow: false,
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("DIV");
+			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("DIV");
 			this.domNode.className = this.shadow ? "mblRoundRect mblShadow" : "mblRoundRect";
 		},
 
 		resize: function(){
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		}

@@ -1,23 +1,34 @@
 define([
+	"require",
+	"dojo/_base/sniff",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/declare",
+	"dojo/_base/kernel",
+	"dojo/_base/event",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
+	"dojo/_base/array",
 	"dijit/_WidgetBase",
 	"dijit/_Container",
 	"dijit/_Contained",
 	"./PageIndicator",
 	"./SwapView"
-], function(WidgetBase, Container, Contained, PageIndicator, SwapView){
+], function(require, has, domStyle, domConstruct, domClass, declare, kernel, event, connect, lang, array, WidgetBase, Container, Contained, PageIndicator, SwapView){
 	// module:
 	//		dojox/mobile/Carousel
 	// summary:
 	//		TODOC
 
-	dojo.experimental("dojox.mobile.Carousel");
+	kernel.experimental("dojox.mobile.Carousel");
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return dojo.declare("dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
+	return declare("dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
 		numVisible: 3, // the number of visible items
 		title: "",
 		pageIndicator: true,
@@ -39,19 +50,19 @@ define([
 				h = this.height;
 			}
 			this.domNode.style.height = h;
-			this.headerNode = dojo.create("DIV", {className:"mblCarouselHeaderBar"}, this.domNode);
+			this.headerNode = domConstruct.create("DIV", {className:"mblCarouselHeaderBar"}, this.domNode);
 
 			if(this.navButton){
-				this.btnContainerNode = dojo.create("DIV", {
+				this.btnContainerNode = domConstruct.create("DIV", {
 					className: "mblCarouselBtnContainer"
 				}, this.headerNode);
-				dojo.style(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
-				this.prevBtnNode = dojo.create("BUTTON", {
+				domStyle.style(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
+				this.prevBtnNode = domConstruct.create("BUTTON", {
 					className: "mblCarouselBtn",
 					title: "Previous",
 					innerHTML: "&lt;"
 				}, this.btnContainerNode);
-				this.nextBtnNode = dojo.create("BUTTON", {
+				this.nextBtnNode = domConstruct.create("BUTTON", {
 					className: "mblCarouselBtn",
 					title: "Next",
 					innerHTML: "&gt;"
@@ -65,16 +76,16 @@ define([
 					this.title = "&nbsp;";
 				}
 				this.piw = new PageIndicator();
-				dojo.style(this.piw, "float", "right"); // workaround for webkit rendering problem
+				domStyle.style(this.piw, "float", "right"); // workaround for webkit rendering problem
 				this.headerNode.appendChild(this.piw.domNode);
 			}
 
-			this.titleNode = dojo.create("DIV", {
+			this.titleNode = domConstruct.create("DIV", {
 				className: "mblCarouselTitle"
 			}, this.headerNode);
 
-			this.containerNode = dojo.create("DIV", {className:"mblCarouselPages"}, this.domNode);
-			dojo.subscribe("/dojox/mobile/viewChanged", this, "handleViewChanged");
+			this.containerNode = domConstruct.create("DIV", {className:"mblCarouselPages"}, this.domNode);
+			connect.subscribe("/dojox/mobile/viewChanged", this, "handleViewChanged");
 		},
 
 		startup: function(){
@@ -100,13 +111,13 @@ define([
 			this.store.fetch({
 				query: this.query,
 				queryOptions: this.queryOptions,
-				onComplete: dojo.hitch(this, "generate"),
-				onError: dojo.hitch(this, "onError")
+				onComplete: lang.hitch(this, "generate"),
+				onError: lang.hitch(this, "onError")
 			});
 		},
 
 		generate: function(/*Array*/items, /*Object*/ dataObject){
-			dojo.forEach(this.getChildren(), function(child){
+			array.forEach(this.getChildren(), function(child){
 				if(child instanceof dojox.mobile.SwapView){
 					child.destroyRecursive();
 				}
@@ -127,7 +138,7 @@ define([
 				for(var j = 0; j < this.numVisible; j++){
 					var idx = i * this.numVisible + j;
 					var item = idx < items.length ? items[idx] :
-						{src:dojo.moduleUrl("dojo", "resources/blank.gif"), height:"1px"};
+						{src:require.toUrl("dojo/resources/blank.gif"), height:"1px"};
 					var disp = w.domNode.style.display;
 					w.domNode.style.display = ""; // need to be visible during the size calculation
 					var box = this.createBox(item, h);
@@ -160,12 +171,12 @@ define([
 		createBox: function(item, h){
 			var width = item.width || (90/this.numVisible + "%");
 			var height = item.height || h + "px";
-			var m = dojo.isIE ? 5/this.numVisible-1 : 5/this.numVisible;
+			var m = has("ie") ? 5/this.numVisible-1 : 5/this.numVisible;
 			var margin = item.margin || (m + "%");
-			var box = dojo.create("DIV", {
+			var box = domConstruct.create("DIV", {
 				className: "mblCarouselBox"
 			});
-			dojo.style(box, {
+			domStyle.style(box, {
 				margin: "0px " + margin,
 				width: width,
 				height: height
@@ -174,7 +185,7 @@ define([
 		},
 
 		createHeaderText: function(item){
-			this.headerTextNode = dojo.create("DIV", {
+			this.headerTextNode = domConstruct.create("DIV", {
 				className: "mblCarouselImgHeaderText",
 				innerHTML: item.headerText ? item.headerText : "&nbsp;"
 			});
@@ -187,12 +198,12 @@ define([
 				tabIndex: "0", // for keyboard navigation on a desktop browser
 				className: "mblCarouselImg"
 			};
-			var img = dojo.create("IMG", props);
+			var img = domConstruct.create("IMG", props);
 			img._idx = idx;
 			if(item.height !== "1px"){
 				this.connect(img, "onclick", "onClick");
 				this.connect(img, "onkeydown", "onClick");
-				dojo.connect(img, "ondragstart", dojo.stopEvent);
+				connect.connect(img, "ondragstart", event.stop);
 			}else{
 				img.style.visibility = "hidden";
 			}
@@ -200,7 +211,7 @@ define([
 		},
 
 		createFooterText: function(item){
-			this.footerTextNode = dojo.create("DIV", {
+			this.footerTextNode = domConstruct.create("DIV", {
 				className: "mblCarouselImgFooterText",
 				innerHTML: item.footerText ? item.footerText : "&nbsp;"
 			});
@@ -233,22 +244,22 @@ define([
 			var img = e.currentTarget;
 			for(var i = 0; i < this.images.length; i++){
 				if(this.images[i] === img){
-					dojo.addClass(img, "mblCarouselImgSelected");
+					domClass.add(img, "mblCarouselImgSelected");
 				}else{
-					dojo.removeClass(this.images[i], "mblCarouselImgSelected");
+					domClass.remove(this.images[i], "mblCarouselImgSelected");
 				}
 			}
-			dojo.style(img, "opacity", 0.4);
+			domStyle.style(img, "opacity", 0.4);
 			setTimeout(function(){
-				dojo.style(img, "opacity", 1);
+				domStyle.style(img, "opacity", 1);
 			}, 1000);
-			dojo.publish("/dojox/mobile/carouselSelect", [this, img, this.items[img._idx], img._idx]);
+			connect.publish("/dojox/mobile/carouselSelect", [this, img, this.items[img._idx], img._idx]);
 		},
 
 		loadImages: function(view){
 			if(!view){ return; }
 			var imgs = view._carouselImages;
-			dojo.forEach(imgs, function(img){
+			array.forEach(imgs, function(img){
 				if(!img.src){
 					var item = this.items[img._idx];
 					img.src = item.src;

@@ -1,7 +1,8 @@
 define([
+	"dojo/_base/declare",
 	"./EdgeToEdgeList",
 	"./_DataListMixin"
-], function(EdgeToEdgeList, DataListMixin){
+], function(declare, EdgeToEdgeList, DataListMixin){
 	// module:
 	//		dojox/mobile/EdgeToEdgeDataList
 	// summary:
@@ -10,5 +11,5 @@ define([
 		EdgeToEdgeList = dojox.mobile.EdgeToEdgeList;
 		DataListMixin = dojox.mobile._DataListMixin;
 	=====*/
-	return dojo.declare("dojox.mobile.EdgeToEdgeDataList", [EdgeToEdgeList, DataListMixin],{});
+	return declare("dojox.mobile.EdgeToEdgeDataList", [EdgeToEdgeList, DataListMixin],{});
 });

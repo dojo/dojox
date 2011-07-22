@@ -1,12 +1,15 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/has",
+	"dojo/dom-construct",
+	"dojo/dom-class",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dojo/_base/html",
 	"./_ItemBase",
 	"./TransitionEvent"
 ],
-	function(dojo, declare, darray, dhtml, ItemBase, TransitionEvent){
+	function(has, domConstruct, domClass, connect, lang, declare, array, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:
@@ -15,7 +18,7 @@ define([
 	/*=====
 		ItemBase = dojox.mobile._ItemBase;
 	=====*/
-	return dojo.declare("dojox.mobile.ListItem", ItemBase, {
+	return declare("dojox.mobile.ListItem", ItemBase, {
 		//icon: "", // inherit from _ItemBase
 		//label: "", // inherit from _ItemBase
 		rightText: "",
@@ -51,7 +54,7 @@ define([
 			this.domNode.className = "mblListItem" + (this.selected ? " mblItemSelected" : "");
 
 			// label
-			var box = this.box = dojo.create("DIV");
+			var box = this.box = domConstruct.create("DIV");
 			box.className = "mblListItemTextBox";
 			if(this.anchorLabel){
 				box.style.cursor = "pointer";
@@ -61,9 +64,9 @@ define([
 				this.label = "";
 				for(var i = 0, len = r.childNodes.length; i < len; i++){
 					var n = r.firstChild;
-					if(n.nodeType === 3 && dojo.trim(n.nodeValue) !== ""){
+					if(n.nodeType === 3 && lang.trim(n.nodeValue) !== ""){
 						n.nodeValue = this._cv(n.nodeValue);
-						this.labelNode = dojo.create("SPAN", {className:"mblListItemLabel"});
+						this.labelNode = domConstruct.create("SPAN", {className:"mblListItemLabel"});
 						this.labelNode.appendChild(n);
 						n = this.labelNode;
 					}
@@ -71,28 +74,28 @@ define([
 				}
 			}
 			if(!this.labelNode){
-				this.labelNode = dojo.create("SPAN", {className:"mblListItemLabel"}, box);
+				this.labelNode = domConstruct.create("SPAN", {className:"mblListItemLabel"}, box);
 			}
 			if(this.anchorLabel){
 				box.style.display = "inline"; // to narrow the text region
 			}
 
-			var a = this.anchorNode = dojo.create("A");
+			var a = this.anchorNode = domConstruct.create("A");
 			a.className = "mblListItemAnchor";
 			this.domNode.appendChild(a);
 			a.appendChild(box);
 
 			// right text
-			this.rightTextNode = dojo.create("DIV", {className:"mblListItemRightText"}, a, "first");
+			this.rightTextNode = domConstruct.create("DIV", {className:"mblListItemRightText"}, a, "first");
 
 			// right icon2
-			this.rightIcon2Node = dojo.create("DIV", {className:"mblListItemRightIcon2"}, a, "first");
+			this.rightIcon2Node = domConstruct.create("DIV", {className:"mblListItemRightIcon2"}, a, "first");
 
 			// right icon
-			this.rightIconNode = dojo.create("DIV", {className:"mblListItemRightIcon"}, a, "first");
+			this.rightIconNode = domConstruct.create("DIV", {className:"mblListItemRightIcon"}, a, "first");
 
 			// icon
-			this.iconNode = dojo.create("DIV", {className:"mblListItemIcon"}, a, "first");
+			this.iconNode = domConstruct.create("DIV", {className:"mblListItemIcon"}, a, "first");
 		},
 
 		startup: function(){
@@ -107,13 +110,13 @@ define([
 				this.connect(this.anchorNode, "onclick", "onClick");
 			}
 
-			if(dojo.hasClass(this.domNode, "mblVariableHeight")){
+			if(domClass.contains(this.domNode, "mblVariableHeight")){
 				this.variableHeight = true;
 			}
 			if(this.variableHeight){
-				dojo.addClass(this.domNode, "mblVariableHeight");
-				dojo.subscribe("/dojox/mobile/resizeAll", this, "layoutVariableHeight");
-				setTimeout(dojo.hitch(this, "layoutVariableHeight"));
+				domClass.add(this.domNode, "mblVariableHeight");
+				connect.subscribe("/dojox/mobile/resizeAll", this, "layoutVariableHeight");
+				setTimeout(lang.hitch(this, "layoutVariableHeight"));
 			}
 
 			this.set("icon", this.icon);
@@ -123,14 +126,14 @@ define([
 		onClick: function(e){
 			var a = e.currentTarget;
 			var li = a.parentNode;
-			if(dojo.hasClass(li, "mblItemSelected")){ return; } // already selected
+			if(domClass.contains(li, "mblItemSelected")){ return; } // already selected
 			if(this.anchorLabel){
 				for(var p = e.target; p.tagName !== "LI"; p = p.parentNode){
 					if(p.className == "mblListItemTextBox"){
-						dojo.addClass(p, "mblListItemTextBoxSelected");
+						domClass.add(p, "mblListItemTextBoxSelected");
 						setTimeout(function(){
-							dojo.removeClass(p, "mblListItemTextBoxSelected");
-						}, dojo.isAndroid ? 300 : 1000);
+							domClass.remove(p, "mblListItemTextBoxSelected");
+						}, has('android') ? 300 : 1000);
 						this.onAnchorLabelClicked(e);
 						return;
 					}
@@ -149,20 +152,20 @@ define([
 			this.select();
 
 			var transOpts;
-			if (this.moveTo || this.href || this.url || this.scene){
+			if(this.moveTo || this.href || this.url || this.scene){
 				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transition: this.transition, transitionDir: this.transitionDir};
-			}else if (this.transitionOptions){
+			}else if(this.transitionOptions){
 				transOpts = this.transitionOptions;
 			}	
 
-			if (transOpts){
+			if(transOpts){
 				this.setTransitionPos(e);
 				return new TransitionEvent(this.domNode,transOpts,e).dispatch();
 			}
 		},
 	
 		deselect: function(){
-			dojo.removeClass(this.domNode, "mblItemSelected");
+			domClass.remove(this.domNode, "mblItemSelected");
 		},
 	
 		select: function(){
@@ -173,9 +176,9 @@ define([
 				var _this = this;
 				setTimeout(function(){
 					_this.deselect();
-				}, dojo.isAndroid ? 300 : 1000);
+				}, has('android') ? 300 : 1000);
 			}
-			dojo.addClass(this.domNode, "mblItemSelected");
+			domClass.add(this.domNode, "mblItemSelected");
 		},
 	
 		onAnchorLabelClicked: function(e){
@@ -184,7 +187,7 @@ define([
 
 		layoutVariableHeight: function(e){
 			var h = this.anchorNode.offsetHeight;
-			dojo.forEach([
+			array.forEach([
 					this.rightTextNode,
 					this.rightIcon2Node,
 					this.rightIconNode,
@@ -213,28 +216,28 @@ define([
 			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
 			this.icon = icon;
 			var a = this.anchorNode;
-			dojo.empty(this.iconNode);
+			domConstruct.empty(this.iconNode);
 			if(icon && icon !== "none"){
 				dojox.mobile.createIcon(icon, this.iconPos, null, this.alt, this.iconNode);
 				if(this.iconPos){
-					dojo.addClass(this.iconNode.firstChild, "mblListItemSpriteIcon");
+					domClass.add(this.iconNode.firstChild, "mblListItemSpriteIcon");
 				}
-				dojo.removeClass(a, "mblListItemAnchorNoIcon");
+				domClass.remove(a, "mblListItemAnchorNoIcon");
 			}else{
-				dojo.addClass(a, "mblListItemAnchorNoIcon");
+				domClass.add(a, "mblListItemAnchorNoIcon");
 			}
 		},
 	
 		_setCheckedAttr: function(/*Boolean*/checked){
 			var parent = this.getParent();
 			if(parent.select === "single" && checked){
-				dojo.forEach(parent.getChildren(), function(child){
+				array.forEach(parent.getChildren(), function(child){
 					child.set("checked", false);
 				});
 			}
 			this._setRightIconAttr(this.checkClass);
 			this.rightIconNode.style.display = checked ? "" : "none";
-			dojo.toggleClass(this.domNode, "mblListItemChecked", checked);
+			domClass.toggle(this.domNode, "mblListItemChecked", checked);
 			if(this.checked !== checked){
 				this.getParent().onCheckStateChanged(this, checked);
 			}
@@ -248,13 +251,13 @@ define([
 	
 		_setRightIconAttr: function(/*String*/icon){
 			this.rightIcon = icon;
-			dojo.empty(this.rightIconNode);
+			domConstruct.empty(this.rightIconNode);
 			dojox.mobile.createIcon(icon, null, null, this.rightIconTitle, this.rightIconNode);
 		},
 	
 		_setRightIcon2Attr: function(/*String*/icon){
 			this.rightIcon2 = icon;
-			dojo.empty(this.rightIcon2Node);
+			domConstruct.empty(this.rightIcon2Node);
 			dojox.mobile.createIcon(icon, null, null, this.rightIcon2Title, this.rightIcon2Node);
 		},
 	
