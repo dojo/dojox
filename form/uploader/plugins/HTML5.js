@@ -131,24 +131,24 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 	createXhr: function(){
 		var xhr = new XMLHttpRequest();
 		var timer;
-        xhr.upload.addEventListener("progress", dojo.hitch(this, "_xhrProgress"), false);
-        xhr.addEventListener("load", dojo.hitch(this, "_xhrProgress"), false);
-        xhr.addEventListener("error", dojo.hitch(this, function(evt){
+		xhr.upload.addEventListener("progress", dojo.hitch(this, "_xhrProgress"), false);
+		xhr.addEventListener("load", dojo.hitch(this, "_xhrProgress"), false);
+		xhr.addEventListener("error", dojo.hitch(this, function(evt){
 			this.onError(evt);
 			clearInterval(timer);
 		}), false);
-        xhr.addEventListener("abort", dojo.hitch(this, function(evt){
+		xhr.addEventListener("abort", dojo.hitch(this, function(evt){
 			this.onAbort(evt);
 			clearInterval(timer);
 		}), false);
-        xhr.onreadystatechange = dojo.hitch(this, function() {
+		xhr.onreadystatechange = dojo.hitch(this, function() {
 			if (xhr.readyState === 4) {
 //				console.info("COMPLETE")
 				clearInterval(timer);
 				this.onComplete(JSON.parse(xhr.responseText));
 			}
 		});
-        xhr.open("POST", this.getUrl());
+		xhr.open("POST", this.getUrl());
 
 		timer = setInterval(dojo.hitch(this, function(){
 			try{
