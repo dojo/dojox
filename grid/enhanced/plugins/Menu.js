@@ -40,6 +40,8 @@ dojo.declare("dojox.grid.enhanced.plugins.Menu", dojox.grid.enhanced._Plugin, {
 			g.set(menuType, m);
 			if(menuType != "headerMenu"){
 				m._scheduleOpen = function(){return;};
+			}else{
+				g.setupHeaderMenu();
 			}
 		}
 	},
