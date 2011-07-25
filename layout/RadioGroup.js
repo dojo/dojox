@@ -176,8 +176,9 @@ dojo.declare("dojox.layout.RadioGroupSlide",
 	
 	_positionChild: function(page){
 		// summary: set the child out of view immediately after being hidden
-		
-		if(!this._size){ return; } // FIXME: is there a real "size" floating around always?
+
+		// FIXME: is there a real "size" floating around always?
+		if(!this._size){ return; } 
 		
 		// there should be a contest: obfuscate this function as best you can.
 		var rA = true, rB = true;

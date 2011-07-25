@@ -4,6 +4,8 @@ dojo.experimental("dojox.layout.ScrollPane");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit._Templated");
 
+// FIXME: need to adust the _line somehow, it stops scrolling
+	
 dojo.declare("dojox.layout.ScrollPane",
 	[dijit.layout.ContentPane, dijit._Templated],
 	{
@@ -16,8 +18,6 @@ dojo.declare("dojox.layout.ScrollPane",
 	//		space.
 	//
 	// 		Horizontal scrolling is supported. Combination scrolling is not.
-	//
-	//		FIXME: need to adust the _line somehow, it stops scrolling
 	//
 	// example:
 	// |	<div dojoType="dojox.layout.ScrollPane" style="width:150px height:300px;">
