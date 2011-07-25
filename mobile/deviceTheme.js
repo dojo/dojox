@@ -4,10 +4,9 @@ define([
 	"dojo/dom-construct",
 	"dojo/_base/lang",
 	"dojo/_base/array",
-	"dojo/dom-construct",
 	"dojo/_base/window",
 	"./_base" // is this needed?
-], function(config, require, domConstruct, lang, array, domConstruct, win, mbase){
+], function(config, require, domConstruct, lang, array, win, mbase){
 	// module:
 	//		dojox/mobile/deviceTheme
 	// summary:
@@ -93,7 +92,7 @@ define([
 		[
 			"iPad",
 			"iphone",
-			[require.toUrl("dojox.mobile/themes/iphone/ipad.css")]
+			[require.toUrl("dojox/mobile/themes/iphone/ipad.css")]
 		],
 		[
 			"Custom",
