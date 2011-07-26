@@ -1,14 +1,14 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/dom",
 	"dojo/_base/connect",
 	"dojo/_base/declare",
-	"dijit/_WidgetBase",
-	"dijit/_Contained"
+	"dojo/_base/window",
+	"dojo/dom",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dijit/_Contained",
+	"dijit/_WidgetBase"
 ],
-	function(win, domConstruct, domClass, dom, connect, declare, WidgetBase, Contained){
+	function(connect, declare, win, dom, domClass, domConstruct, Contained, WidgetBase){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:

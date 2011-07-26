@@ -1,18 +1,17 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-style",
-	"dojo/dom-construct",
-	"dojo/dom-class",
+	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/declare",
-	"dojo/_base/array",
 	"dojo/_base/lang",
-	"./common", // is this needed?
-	"dijit/_WidgetBase",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
+	"dijit/_Contained",
 	"dijit/_Container",
-	"dijit/_Contained"
+	"dijit/_WidgetBase"
 ],
-	function(win, domStyle, domConstruct, domClass, connect, declare, array, lang, mcommon, WidgetBase, Container, Contained){
+	function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, Contained, Container, WidgetBase){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:

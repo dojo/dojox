@@ -1,15 +1,15 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-geometry",
-	"dojo/dom-class",
-	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/declare",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-geometry",
 	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"./FixedSplitterPane"
 ],
-	function(win, domGeometry, domClass, declare, array, WidgetBase, Container, Contained, mobileFixedSplitterPane){
+	function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, FixedSplitterPane){
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:
@@ -22,7 +22,7 @@ define([
 	//		function to resize the child panes with drag-and-drop.
 	//		If you need a visual splitter, you can specify a border of a child
 	//		dom node with CSS.
-	//		A child of the widget can be a plain <div> or mobileFixedSplitterPane.
+	//		A child of the widget can be a plain <div> or FixedSplitterPane.
 	// example:
 	// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
 	// |		<div style="width:200px;border-right:1px solid black;">

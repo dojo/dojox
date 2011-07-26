@@ -1,13 +1,13 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-construct",
-	"dojo/dom-class",
 	"dojo/_base/declare",
-	"dijit/_WidgetBase",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
 	"dijit/_Contained",
+	"dijit/_WidgetBase",
 	"./_ScrollableMixin"
 ],
-	function(win, domConstruct, domClass, declare, WidgetBase, Contained, ScrollableMixin){
+	function(declare, win, domClass, domConstruct, Contained, WidgetBase, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SpinWheelSlot
 	// summary:

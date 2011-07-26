@@ -1,13 +1,13 @@
 define([
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/declare",
 	"dojo/_base/array",
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dojo/dom-construct",
 	"dijit/_WidgetBase",
-	"dijit/form/_FormWidgetMixin",
-	"dijit/form/_ButtonMixin"
+	"dijit/form/_ButtonMixin",
+	"dijit/form/_FormWidgetMixin"
 ],
-	function(domConstruct, domClass, declare, array, WidgetBase, FormWidgetMixin, ButtonMixin){
+	function(array, declare, domClass, domConstruct, WidgetBase, ButtonMixin, FormWidgetMixin){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;

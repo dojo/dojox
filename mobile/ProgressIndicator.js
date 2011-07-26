@@ -1,10 +1,10 @@
 define([
 	"dojo/_base/config",
-	"dojo/has",
-	"dojo/dom-style",
+	"dojo/_base/declare",
 	"dojo/dom-construct",
-	"dojo/_base/declare"
-], function(config, has, domStyle, domConstruct, declare){
+	"dojo/dom-style",
+	"dojo/has"
+], function(config, declare, domConstruct, domStyle, has){
 	declare("dojox.mobile.ProgressIndicator", null, {
 		interval: 100, // milliseconds
 		colors: [

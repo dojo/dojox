@@ -1,8 +1,7 @@
 define([
 	"dojo/_base/lang",
-	"./common", // is this needed?
 	"dojo/i18n"
-], function(lang, mcommon, i18n){
+], function(lang, i18n){
 	// module:
 	//		dojox/mobile/i18n
 	// summary:

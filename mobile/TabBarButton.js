@@ -1,13 +1,12 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/lang",
 	"dojo/_base/declare",
-	"./common", // is this needed?
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
 	"./_ItemBase"
 ],
-	function(win, domConstruct, domClass, lang, declare, mcommon, ItemBase){
+	function(declare, lang, win, domClass, domConstruct, ItemBase){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:

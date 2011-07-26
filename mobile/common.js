@@ -1,19 +1,18 @@
 define([
-	"dojo/_base/config",
-//	"dojo/hash", // optionally prereq'ed
-	"dojo/query",
-	"dojo/_base/window",
-	"dojo/_base/sniff",
-	"dojo/dom-style",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/connect",
 	"dojo/_base/kernel", // to test dojo.hash
-	"dojo/_base/lang",
 	"dojo/_base/array",
+	"dojo/_base/config",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
+	"dojo/_base/sniff",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
 	"dojo/ready",
 	"dijit/_WidgetBase"
-], function(config, query, win, has, domStyle, domConstruct, domClass, connect, dojo, lang, array, ready, WidgetBase){
+//	"dojo/hash", // optionally prereq'ed
+], function(dojo, array, config, connect, lang, has, win, domClass, domConstruct, domStyle, ready, WidgetBase){
 
 	lang.getObject("mobile", true, dojox);
 

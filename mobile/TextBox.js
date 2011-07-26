@@ -1,10 +1,10 @@
 define([
-	"dojo/dom-construct",
 	"dojo/_base/declare",
+	"dojo/dom-construct",
 	"dijit/_WidgetBase",
 	"dijit/form/_FormValueMixin",
 	"dijit/form/_TextBoxMixin"
-], function(domConstruct, declare, WidgetBase, FormValueMixin, TextBoxMixin){
+], function(declare, domConstruct, WidgetBase, FormValueMixin, TextBoxMixin){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;

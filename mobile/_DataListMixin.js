@@ -1,11 +1,11 @@
 define([
-	"dojo/_base/connect",
-	"dojo/_base/lang",
-	"dojo/_base/declare",
 	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"./ListItem"
 ],
-	function(connect, lang, declare, array, ListItem){
+	function(array, connect, declare, lang, ListItem){
 	// module:
 	//		dojox/mobile/_DataListMixin
 	// summary:

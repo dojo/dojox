@@ -1,13 +1,12 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-class",
-	"dojo/dom",
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"./common", // is this needed?
+	"dojo/_base/window",
+	"dojo/dom",
+	"dojo/dom-class",
 	"./scrollable"
-], function(win, domClass, dom, dojo, declare, lang, mcommon, Scrollable){
+], function(dojo, declare, lang, win, dom, domClass, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
 	// summary:

@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/declare",
-	"./TextArea",
-	"dijit/form/_ExpandingTextAreaMixin"
-], function(declare, TextArea, ExpandingTextAreaMixin){
+	"dijit/form/_ExpandingTextAreaMixin",
+	"./TextArea"
+], function(declare, ExpandingTextAreaMixin, TextArea){
 
 	/*=====
 		TextArea = dojox.mobile.TextArea;

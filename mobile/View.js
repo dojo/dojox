@@ -1,23 +1,22 @@
 define([
-	"dojo/_base/config",
-//	"dojo/hash", // optionally prereq'ed
-	"dojo/_base/window",
-	"dojo/_base/sniff",
-	"dojo/dom-style",
-	"dojo/dom-geometry",
-	"dojo/dom-class",
-	"dojo/dom",
-	"dojo/_base/declare",
 	"dojo/_base/kernel", // to test dojo.hash
-	"dojo/_base/connect",
-	"dojo/_base/lang",
 	"dojo/_base/array",
-	"./common", // is this needed?
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/config",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/sniff",
+	"dojo/_base/window",
+	"dojo/dom",
+	"dojo/dom-class",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
 	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"./ViewController"
-], function(config, win, has, domStyle, domGeometry, domClass, dom, declare, dojo, connect, lang, array, mcommon, WidgetBase, Container, Contained, mobileViewController){
+//	"dojo/hash", // optionally prereq'ed
+], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, Contained, Container, WidgetBase, ViewController){
 	// module:
 	//		dojox/mobile/View
 	// summary:

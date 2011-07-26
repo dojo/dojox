@@ -1,11 +1,11 @@
 define([
-	"dojo/_base/window",
-	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dijit/_WidgetBase",
+	"dojo/_base/declare",
+	"dojo/_base/window",
 	"dijit/_Contained",
-	"dijit/_Container"
-], function(win, declare, array, WidgetBase, Contained, Container){
+	"dijit/_Container",
+	"dijit/_WidgetBase"
+], function(array, declare, win, Contained, Container, WidgetBase){
 	// module:
 	//		dojox/mobile/RoundRect
 	// summary:

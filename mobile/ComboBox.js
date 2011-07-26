@@ -1,17 +1,16 @@
 define([
-	"dojo/window",
-	"dojo/_base/window",
-	"dojo/dom-style",
-	"dojo/dom-geometry",
-	"dojo/_base/declare",
 	"dojo/_base/kernel",
+	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"./TextBox",
-	"./_ComboBoxMenu",
+	"dojo/_base/window",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
+	"dojo/window",
 	"dijit/form/_AutoCompleterMixin",
-	"./common", // is this neeed?
-	"dijit/popup"
-], function(windowUtils, win, domStyle, domGeometry, declare, kernel, lang, TextBox, ComboBoxMenu, AutoCompleterMixin, common, popup){
+	"dijit/popup",
+	"./_ComboBoxMenu",
+	"./TextBox"
+], function(kernel, declare, lang, win, domGeometry, domStyle, windowUtils, AutoCompleterMixin, popup, ComboBoxMenu, TextBox){
 	kernel.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
 	/*=====

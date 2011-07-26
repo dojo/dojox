@@ -1,11 +1,11 @@
 define([
+	"dojo/_base/declare",
 	"dojo/_base/Deferred",
 	"dojo/_base/lang",
-	"dojo/_base/declare",
 	"dojo/on",
 	"./transition"
 ],
-	function(Deferred, lang, declare, on, transition){
+	function(declare, Deferred, lang, on, transition){
 
 	return declare("dojox.mobile.TransitionEvent", null, {
 		constructor: function(target, transitionOptions, triggerEvent){

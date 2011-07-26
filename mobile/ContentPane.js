@@ -1,16 +1,16 @@
 define([
-	"dojo/_base/window",
-	"dojo/_base/lang",
-	"dojo/_base/array",
 	"dojo/_base/kernel",
+	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/lang",
+	"dojo/_base/window",
 	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"dojo/_base/xhr",
 	"./ProgressIndicator"
 ],
-	function(win, lang, array, dojo, declare, WidgetBase, Container, Contained, xhr, ProgressIndicator){
+	function(dojo, array, declare, lang, win, Contained, Container, WidgetBase, xhr, ProgressIndicator){
 
 	// summary:
 	//		A very simple content pane to embed an HTML fragment.

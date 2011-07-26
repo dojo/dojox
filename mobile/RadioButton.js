@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/declare",
-	"./CheckBox",
-	"dijit/form/_RadioButtonMixin"
-], function(declare, CheckBox, RadioButtonMixin){
+	"dijit/form/_RadioButtonMixin",
+	"./CheckBox"
+], function(declare, RadioButtonMixin, CheckBox){
 	/*=====
 		CheckBox = dojox.mobile.CheckBox;
 		RadioButtonMixin = dijit.form._RadioButtonMixin;

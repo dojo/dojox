@@ -1,9 +1,9 @@
 define([
-	"dojo/_base/window",
 	"dojo/_base/declare",
-	"dijit/_WidgetBase",
-	"dijit/_Contained"
-], function(win, declare, WidgetBase, Contained){
+	"dojo/_base/window",
+	"dijit/_Contained",
+	"dijit/_WidgetBase"
+], function(declare, win, Contained, WidgetBase){
 	// module:
 	//		dojox/mobile/RoundRectCategory
 	// summary:

@@ -1,14 +1,12 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/config",
 	"dojo/_base/declare",
-	"dojo/_base/kernel",
-	"./common", // is this needed?
-	"dijit/_WidgetBase",
-	"dijit/_Container",
 	"dijit/_Contained",
-	"./ProgressIndicator", // is this needed?
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"./TransitionEvent"
-], function(config, declare, kernel, mcommon, WidgetBase, Container, Contained, ProgressIndicator, TransitionEvent){
+], function(kernel, config, declare, Contained, Container, WidgetBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/_ItemBase
 	// summary:

@@ -1,12 +1,12 @@
 define([
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/declare",
 	"dojo/_base/array",
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dojo/dom-construct",
 	"./View",
 	"./_ScrollableMixin"
 ],
-	function(domConstruct, domClass, declare, array, View, ScrollableMixin){
+	function(array, declare, domClass, domConstruct, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/ScrollableView
 	// summary:

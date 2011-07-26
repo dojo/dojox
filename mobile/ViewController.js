@@ -1,20 +1,19 @@
 define([
-	"dojo/ready",
-//	"dojo/hash", // optionally prereq'ed
-	"dojo/_base/xhr",
-	"dojo/_base/window",
-	"dojo/dom-construct",
-	"dojo/dom",
-	"dojo/_base/connect",
-	"dojo/_base/lang",
 	"dojo/_base/kernel",
-	"dojo/_base/declare",
-	"dojo/on",
 	"dojo/_base/array",
-	"./TransitionEvent",
-	"./ProgressIndicator"
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom",
+	"dojo/dom-construct",
+	"dojo/on",
+	"dojo/ready",
+	"./ProgressIndicator",
+	"./TransitionEvent"
+//	"dojo/hash", // optionally prereq'ed
 ],
-	function(ready, xhr, win, domConstruct, dom, connect, lang, dojo, declare, on, array, TransitionEvent, ProgressIndicator){
+	function(dojo, array, connect, declare, lang, win, dom, domConstruct, on, ready, ProgressIndicator, TransitionEvent){
 
 	var Controller = declare(null, {
 		constructor: function(){
@@ -78,11 +77,11 @@ define([
 								var prog = ProgressIndicator.getInstance();
 								win.body().appendChild(prog.domNode);
 								prog.start();
-								var xhr = xhr.get({
+								var obj = xhr.get({
 									url: evt.detail.url,
 									handleAs: "text"
 								});
-								xhr.addCallback(lang.hitch(this, function(response, ioArgs){
+								obj.addCallback(lang.hitch(this, function(response, ioArgs){
 									prog.stop();
 									if(response){
 										this._text = response;
@@ -97,7 +96,7 @@ define([
 											 			.dispatch();
 									}
 								}));
-								xhr.addErrback(function(error){
+								obj.addErrback(function(error){
 									prog.stop();
 									console.log("Failed to load "+evt.detail.url+"\n"+(error.description||error));
 								});

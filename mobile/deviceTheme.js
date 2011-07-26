@@ -1,12 +1,11 @@
 define([
-	"dojo/_base/config",
-	"require",
-	"dojo/dom-construct",
-	"dojo/_base/lang",
 	"dojo/_base/array",
+	"dojo/_base/config",
+	"dojo/_base/lang",
 	"dojo/_base/window",
-	"./_base" // is this needed?
-], function(config, require, domConstruct, lang, array, win, mbase){
+	"dojo/dom-construct",
+	"require"
+], function(array, config, lang, win, domConstruct, require){
 	// module:
 	//		dojox/mobile/deviceTheme
 	// summary:

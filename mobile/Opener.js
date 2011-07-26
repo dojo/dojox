@@ -1,13 +1,12 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-style",
-	"dojo/dom-construct",
-	"dojo/dom-class",
 	"dojo/_base/declare",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
 	"./Tooltip",
-	"./Overlay",
-	"./common" // is this needed?
-], function(win, domStyle, domConstruct, domClass, declare, Tooltip, Overlay, mcommon){
+	"./Overlay"
+], function(declare, win, domClass, domConstruct, domStyle, Tooltip, Overlay){
 
 	/*=====
 		Tooltip = dojox.mobile.Tooltip;

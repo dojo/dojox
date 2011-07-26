@@ -1,15 +1,15 @@
 define([
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/lang",
-	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/dom-class",
+	"dojo/dom-construct",
 	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"./SpinWheelSlot"
 ],
-	function(domConstruct, domClass, lang, declare, array, WidgetBase, Container, Contained, SpinWheelSlot){
+	function(array, declare, lang, domClass, domConstruct, Contained, Container, WidgetBase, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheel
 	// summary:

@@ -11,7 +11,7 @@ define([
 	"./Switch",
 	"./ToolBarButton",
 	"./ProgressIndicator"
-], function(common, View, mobileHeading, mobileRoundRect, mobileRoundRectCategory, mobileEdgeToEdgeCategory, mobileRoundRectList, mobileEdgeToEdgeList, mobileListItem, mobileSwitch, mobileToolBarButton, mobileProgressIndicator){
+], function(common, View, Heading, RoundRect, RoundRectCategory, EdgeToEdgeCategory, RoundRectList, EdgeToEdgeList, ListItem, Switch, ToolBarButton, ProgressIndicator){
 	// module:
 	//		dojox/mobile/_base
 	// summary:

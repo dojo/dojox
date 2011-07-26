@@ -1,11 +1,11 @@
 define([
-	"dojo/dom-class",
 	"dojo/_base/declare",
+	"dojo/dom-class",
 	"dojo/date",
 	"dojo/date/locale",
 	"./SpinWheel",
 	"./SpinWheelSlot"
-],function(domClass, declare, ddate, datelocale, SpinWheel, SpinWheelSlot){
+],function(declare, domClass, ddate, datelocale, SpinWheel, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheelDatePicker
 	// summary:

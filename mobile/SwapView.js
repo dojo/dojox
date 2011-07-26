@@ -1,11 +1,11 @@
 define([
-	"dojo/dom-class",
-	"dojo/dom",
-	"dojo/_base/declare",
 	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/dom",
+	"dojo/dom-class",
 	"./View",
 	"./_ScrollableMixin"
-], function(domClass, dom, declare, connect, View, ScrollableMixin){
+], function(connect, declare, dom, domClass, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:

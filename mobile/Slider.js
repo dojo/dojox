@@ -1,17 +1,17 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-style",
-	"dojo/dom-geometry",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/connect",
-	"dojo/_base/lang",
-	"dojo/_base/declare",
 	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
 	"dijit/_WidgetBase",
 	"dijit/form/_FormValueMixin"
 ],
-	function(win, domStyle, domGeometry, domConstruct, domClass, connect, lang, declare, array, WidgetBase, FormValueMixin){
+	function(array, connect, declare, lang, win, domClass, domConstruct, domGeometry, domStyle, WidgetBase, FormValueMixin){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;

@@ -1,15 +1,15 @@
 define([
-	"dojo/has",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/connect",
-	"dojo/_base/lang",
-	"dojo/_base/declare",
 	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/has",
 	"./_ItemBase",
 	"./TransitionEvent"
 ],
-	function(has, domConstruct, domClass, connect, lang, declare, array, ItemBase, TransitionEvent){
+	function(array, connect, declare, lang, domClass, domConstruct, has, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:

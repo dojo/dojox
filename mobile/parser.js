@@ -1,9 +1,10 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/config",
-	"dojo/_base/window",
 	"dojo/_base/lang",
+	"dojo/_base/window",
 	"dojo/ready"
-], function(config, win, lang, ready){
+], function(dojo, config, lang, win, ready){
 
 	lang.getObject("mobile", true, dojox);
 

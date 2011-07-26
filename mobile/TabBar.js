@@ -1,19 +1,17 @@
 define([
-	"dojo/dom-style",
-	"dojo/dom-geometry",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/declare",
 	"dojo/_base/array",
-	"./common", // is this needed?
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
 	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"./Heading",
-	"./_ItemBase", // is this needed?
-	"./TabBarButton" // is this needed?
+	"./TabBarButton"
 ],
-	function(domStyle, domGeometry, domConstruct, domClass, declare, array, mcommon, WidgetBase, Container, Contained, Heading, ItemBase, mobileTabBarButton){
+	function(array, declare, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, Heading, TabBarButton){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:

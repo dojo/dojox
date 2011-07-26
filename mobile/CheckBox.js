@@ -1,10 +1,10 @@
 define([
-	"dojo/dom-construct",
 	"dojo/_base/declare",
-	"./ToggleButton",
-	"dijit/form/_CheckBoxMixin"
+	"dojo/dom-construct",
+	"dijit/form/_CheckBoxMixin",
+	"./ToggleButton"
 ],
-	function(domConstruct, declare, ToggleButton, CheckBoxMixin){
+	function(declare, domConstruct, CheckBoxMixin, ToggleButton){
 
 	/*=====
 		ToggleButton = dojox.mobile.ToggleButton;

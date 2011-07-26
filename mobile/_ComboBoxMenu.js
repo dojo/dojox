@@ -1,14 +1,14 @@
 define([
-	"dojo/dom-construct",
-	"dojo/dom-class",
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dojo/dom-construct",
 	"dijit/form/_ComboBoxMenuMixin",
 	"dijit/_WidgetBase",
 	"dojox/mobile/_ListTouchMixin",
 	"./scrollable"
 ],
-	function(domConstruct, domClass, dojo, declare, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable){
+	function(dojo, declare, domClass, domConstruct, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable){
 
 	/*=====
 		ComboBoxMenuMixin = dijit.form._ComboBoxMenuMixin;

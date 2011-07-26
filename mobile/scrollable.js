@@ -1,3 +1,127 @@
+//>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
+if(typeof dojo === "undefined"){
+	dojo = {doc:document, global:window};
+	dojox = {mobile:{}};
+
+	dojo.has = function(name){
+		var ua = navigator.userAgent;
+		if(name === "webKit"){
+			return ua.indexOf("WebKit") != -1;
+		}
+		if(name === "android"){
+			return parseFloat(ua.split("Android ")[1]) || undefined;
+		}
+		if(name === "ie"){
+			return parseFloat(ua.split("MSIE ")[1]) || undefined;
+		}
+	};
+
+	dojo.stopEvent = function(evt){
+		if(evt.preventDefault){
+			evt.preventDefault();
+			evt.stopPropagation();
+		}else{
+			evt.cancelBubble = true;
+		}
+		return false;
+	};
+
+	dojo.style = function(node, style, value){
+		if(typeof style === "string"){
+			var obj = {};
+			obj[style] = value;
+			style = obj;
+		}
+		for(var s in style){
+			if(style.hasOwnProperty(s)){
+				node.style[s] = style[s];
+				if(s === "opacity" && typeof(node.style.filter) !== "undefined"){
+					node.style.filter = " progid:DXImageTransform.Microsoft.alpha(opacity="+ (style[s]*100) +")";
+				}
+			}
+		}
+	};
+
+	dojo.create = function(tag, attrs, refNode){
+		return refNode.appendChild(dojo.doc.createElement(tag));
+	};
+
+	dojo.hasClass = function(node, s){
+		return (node.className.indexOf(s) != -1);
+	};
+	dojo.addClass = function(node, s){
+		if(!dojo.hasClass(node, s)){
+			node.className += " " + s;
+		}
+	};
+	dojo.removeClass = function(node, s){
+		node.className = node.className.replace(" " + s, "");
+	};
+
+	dojo.connect = function(node, eventName, scope, method){
+		var handler = function(e){
+			e = e || dojo.global.event;
+			if(!e.target){
+				e.target = e.srcElement;
+				e.pageX = e.offsetX;
+				e.pageY = e.offsetY;
+			}
+			scope[method](e);
+		};
+		if(node.addEventListener){
+			node.addEventListener(eventName.replace(/^on/,""), handler, false);
+		}else{
+			node.attachEvent(eventName, handler);
+		}
+		return {node:node, eventName:eventName, handler:handler};
+	};
+	dojo.disconnect = function(handle){
+		if(handle.node.removeEventListener){
+			handle.node.removeEventListener(handle.eventName.replace(/^on/,""), handle.handler, false);
+		}else{
+			handle.node.detachEvent(handle.eventName, handle.handler);
+		}
+	};
+
+	define = function(deps, def){
+		def(
+			dojo, // dojo
+			dojo, // win
+			dojo.has, // has
+			{ // event
+				stop: dojo.stopEvent
+			},
+			{ // domStyle
+				style: dojo.style
+			},
+			{ // domConstruct
+				create: dojo.create
+			},
+			{ // domClass
+				contains: dojo.hasClass,
+				add: dojo.addClass,
+				remove: dojo.removeClass
+			},
+			{ // connect
+				connect: dojo.connect,
+				disconnect: dojo.disconnect
+			}
+		);
+	};
+}
+//>>includeEnd("standaloneScrollable");
+
+
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/connect",
+	"dojo/_base/event",
+	"dojo/_base/sniff",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style"
+], function(dojo, connect, event, has, win, domClass, domConstruct, domStyle){
 /*=====
 // summary:
 //		Utility for enabling touch scrolling capability.
@@ -58,17 +182,8 @@
 //		| 	</div>
 //		| </body>
 =====*/
-if(typeof dojo === "undefined"){
-	dojo = {doc:document, global:window, isWebKit:navigator.userAgent.indexOf("WebKit") != -1,
-			isAndroid:parseFloat(navigator.userAgent.split("Android ")[1]) || undefined};
-	dojox = {mobile:{}};
-}
-if(typeof define === "undefined"){
-	define = function(def){ def.apply(); };
-}
-define(function(_dojo, _dojox){
 
-dojox.mobile.scrollable = function(dojo, dojox){
+dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.fixedHeaderHeight = 0; // height of a fixed header
 	this.fixedFooterHeight = 0; // height of a fixed footer
 	this.isLocalFooter = false; // footer is view-local (as opposed to application-wide)
@@ -90,70 +205,6 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		dojo = window.dojo;
 		dojox = window.dojox;
 	}
-	if(!dojo.version){ // seems running in a non-dojo environment
-		dojo.connect = function(node, eventName, scope, method){
-			var handler = function(e){
-				e = e || dojo.global.event;
-				if(!e.target){
-					e.target = e.srcElement;
-					e.pageX = e.offsetX;
-					e.pageY = e.offsetY;
-				}
-				scope[method](e);
-			};
-			if(node.addEventListener){
-				node.addEventListener(eventName.replace(/^on/,""), handler, false);
-			}else{
-				node.attachEvent(eventName, handler);
-			}
-			return {node:node, eventName:eventName, handler:handler};
-		};
-		dojo.disconnect = function(handle){
-			if(handle.node.removeEventListener){
-				handle.node.removeEventListener(handle.eventName.replace(/^on/,""), handle.handler, false);
-			}else{
-				handle.node.detachEvent(handle.eventName, handle.handler);
-			}
-		};
-		dojo.create = function(tag, attrs, refNode){
-			return refNode.appendChild(dojo.doc.createElement(tag));
-		};
-		dojo.stopEvent = function(evt){
-			if(evt.preventDefault){
-				evt.preventDefault();
-				evt.stopPropagation();
-			}else{
-				evt.cancelBubble = true;
-			}
-			return false;
-		};
-		dojo.style = function(node, style, value){
-			if(typeof style === "string"){
-				var obj = {};
-				obj[style] = value;
-				style = obj;
-			}
-			for(var s in style){
-				if(style.hasOwnProperty(s)){
-					node.style[s] = style[s];
-					if(s === "opacity" && typeof(node.style.filter) !== "undefined"){
-						node.style.filter = " progid:DXImageTransform.Microsoft.alpha(opacity="+ (style[s]*100) +")";
-					}
-				}
-			}
-		};
-		dojo.hasClass = function(node, s){
-			return (node.className.indexOf(s) != -1);
-		};
-		dojo.addClass = function(node, s){
-			if(!dojo.hasClass(node, s)){
-				node.className += " " + s;
-			}
-		};
-		dojo.removeClass = function(node, s){
-			node.className = node.className.replace(" " + s, "");
-		};
-	}
 //>>includeEnd("standaloneScrollable");
 
 	this.init = function(/*Object?*/params){
@@ -161,7 +212,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			for(var p in params){
 				if(params.hasOwnProperty(p)){
 					this[p] = ((p == "domNode" || p == "containerNode") && typeof params[p] == "string") ?
-						dojo.doc.getElementById(params[p]) : params[p]; // mix-in params
+						win.doc.getElementById(params[p]) : params[p]; // mix-in params
 				}
 			}
 		}
@@ -171,17 +222,17 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		this._f = (this.scrollDir == "f"); // flipping views
 
 		this._ch = []; // connect handlers
-		this._ch.push(dojo.connect(this.touchNode,
+		this._ch.push(connect.connect(this.touchNode,
 			dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchStart"));
-		if(dojo.isWebKit){
-			this._ch.push(dojo.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
-			this._ch.push(dojo.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
+		if(has("webKit")){
+			this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
+			this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 
 			this._aw = this.androidWorkaroud &&
-				dojo.isAndroid >= 2.2 && dojo.isAndroid < 3;
+				has("android") >= 2.2 && has("android") < 3;
 			if(this._aw){
-				this._ch.push(dojo.connect(dojo.global, "onresize", this, "onScreenSizeChanged"));
-				this._ch.push(dojo.connect(dojo.global, "onfocus", this, function(e){
+				this._ch.push(connect.connect(win.global, "onresize", this, "onScreenSizeChanged"));
+				this._ch.push(connect.connect(win.global, "onfocus", this, function(e){
 					if(this.containerNode.style.webkitTransform){
 						this.stopAnimation();
 						this.toTopLeft();
@@ -208,7 +259,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.cleanup = function(){
 		for(var i = 0; i < this._ch.length; i++){
-			dojo.disconnect(this._ch[i]);
+			connect.disconnect(this._ch[i]);
 		}
 		this._ch = null;
 	};
@@ -218,7 +269,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		var nodes = node.parentNode.childNodes;
 		for(var i = 0; i < nodes.length; i++){
 			var n = nodes[i];
-			if(n.nodeType === 1 && dojo.hasClass(n, "mblView") && n.style.display !== "none"){
+			if(n.nodeType === 1 && domClass.contains(n, "mblView") && n.style.display !== "none"){
 				return n;
 			}
 		}
@@ -227,8 +278,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.getScreenSize = function(){
 		return {
-			h: dojo.global.innerHeight||dojo.doc.documentElement.clientHeight||dojo.doc.documentElement.offsetHeight,
-			w: dojo.global.innerWidth||dojo.doc.documentElement.clientWidth||dojo.doc.documentElement.offsetWidth
+			h: win.global.innerHeight||win.doc.documentElement.clientHeight||win.doc.documentElement.offsetHeight,
+			w: win.global.innerWidth||win.doc.documentElement.clientWidth||win.doc.documentElement.offsetWidth
 		};
 	};
 
@@ -242,14 +293,14 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.disableScroll = function(/*Boolean*/v){
-		if(this.disableTouchScroll === v || dojo.style(this.domNode, "display") === "none"){ return; }
+		if(this.disableTouchScroll === v || domStyle.style(this.domNode, "display") === "none"){ return; }
 		this.disableTouchScroll = v;
 		this.scrollBar = !v;
 		dojox.mobile.disableHideAddressBar = dojox.mobile.disableResizeAll = v;
 		var of = v ? "visible" : "hidden";
-		dojo.style(this.domNode, "overflow", of);
-		dojo.style(dojo.doc.documentElement, "overflow", of);
-		dojo.style(dojo.body(), "overflow", of);
+		domStyle.style(this.domNode, "overflow", of);
+		domStyle.style(win.doc.documentElement, "overflow", of);
+		domStyle.style(win.body(), "overflow", of);
 		var c = this.containerNode;
 		if(v){
 			if(!c.style.webkitTransform){
@@ -260,18 +311,18 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			}
 			var mt = parseInt(c.style.marginTop) || 0;
 			var h = c.offsetHeight + mt + this.fixedFooterHeight - this._appFooterHeight;
-			dojo.style(this.domNode, "height", h + "px");
+			domStyle.style(this.domNode, "height", h + "px");
 			
 			this._cPos = { // store containerNode's position
 				x: parseInt(c.style.left) || 0,
 				y: parseInt(c.style.top) || 0
 			};
-			dojo.style(c, {
+			domStyle.style(c, {
 				top: "0px",
 				left: "0px"
 			});
 			
-			var a = dojo.doc.activeElement; // focused input field
+			var a = win.doc.activeElement; // focused input field
 			if(a){ // scrolling to show focused input field
 				var at = 0; // top position of focused input field
 				for(var n = a; n.tagName != "BODY"; n = n.offsetParent){
@@ -279,12 +330,12 @@ dojox.mobile.scrollable = function(dojo, dojox){
 				}
 				var st = at + a.clientHeight + 10 - this.getScreenSize().h; // top postion of browser scroll bar
 				if(st > 0){
-					dojo.body().scrollTop = st;
+					win.body().scrollTop = st;
 				}
 			}	
 		}else{
 			if(this._cPos){ // restore containerNode's position
-				dojo.style(c, {
+				domStyle.style(c, {
 					top: this._cPos.y + "px",
 					left: this._cPos.x + "px"
 				});
@@ -308,7 +359,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.toTransform = function(e){
 		var c = this.containerNode;
 		if(c.offsetTop === 0 && c.offsetLeft === 0 || !c._webkitTransform){ return; }
-		dojo.style(c, {
+		domStyle.style(c, {
 			webkitTransform: c._webkitTransform,
 			top: "0px",
 			left: "0px"
@@ -321,7 +372,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(!c.style.webkitTransform){ return; } // already converted to top/left
 		c._webkitTransform = c.style.webkitTransform;
 		var pos = this.getPos();
-		dojo.style(c, {
+		domStyle.style(c, {
 			webkitTransform: "",
 			top: pos.y + "px",
 			left: pos.x + "px"
@@ -370,7 +421,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	};
 
 	this.onFlickAnimationStart = function(e){
-		dojo.stopEvent(e);
+		event.stop(e);
 	};
 
 	this.onFlickAnimationEnd = function(e){
@@ -378,7 +429,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
 		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll2") === -1){ return; }
 		if(e && e.srcElement){
-			dojo.stopEvent(e);
+			event.stop(e);
 		}
 		this.stopAnimation();
 		if(this._bounce){
@@ -409,12 +460,12 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 		if(!this._conn){
 			this._conn = [];
-			this._conn.push(dojo.connect(dojo.doc, dojox.mobile.hasTouch ? "touchmove" : "onmousemove", this, "onTouchMove"));
-			this._conn.push(dojo.connect(dojo.doc, dojox.mobile.hasTouch ? "touchend" : "onmouseup", this, "onTouchEnd"));
+			this._conn.push(connect.connect(win.doc, dojox.mobile.hasTouch ? "touchmove" : "onmousemove", this, "onTouchMove"));
+			this._conn.push(connect.connect(win.doc, dojox.mobile.hasTouch ? "touchend" : "onmouseup", this, "onTouchEnd"));
 		}
 
 		this._aborted = false;
-		if(dojo.hasClass(this.containerNode, "mblScrollableScrollTo2")){
+		if(domClass.contains(this.containerNode, "mblScrollableScrollTo2")){
 			this.abort();
 		}
 		if(this._aw){ this.toTransform(e); } // android workaround
@@ -429,7 +480,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		this._locked = false;
 
 		if(!this.isFormElement(e.target) && !this.isNested){
-			dojo.stopEvent(e);
+			event.stop(e);
 		}
 	};
 
@@ -525,7 +576,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		if(e){
 			if(!this._conn){ return; } // if we get onTouchEnd without onTouchStart, ignore it.
 			for(var i = 0; i < this._conn.length; i++){
-				dojo.disconnect(this._conn[i]);
+				connect.disconnect(this._conn[i]);
 			}
 			this._conn = null;
 	
@@ -547,8 +598,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					if(elem.nodeType != 1){
 						elem = elem.parentNode;
 					}
-					var ev = dojo.doc.createEvent("MouseEvents");
-					ev.initMouseEvent("click", true, true, dojo.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
+					var ev = win.doc.createEvent("MouseEvents");
+					ev.initMouseEvent("click", true, true, win.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
 					setTimeout(function(){
 						elem.dispatchEvent(ev);
 					}, 0);
@@ -661,9 +712,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.stopAnimation = function(){
 		// stop the currently running animation
-		dojo.removeClass(this.containerNode, "mblScrollableScrollTo2");
-		if(dojo.isAndroid){
-			dojo.style(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
+		domClass.remove(this.containerNode, "mblScrollableScrollTo2");
+		if(has("android")){
+			domStyle.style(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
 		}
 		if(this._scrollBarV){
 			this._scrollBarV.className = "";
@@ -692,7 +743,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.scrollTo = function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node){ // to: {x, y}
 		var s = (node || this.containerNode).style;
-		if(dojo.isWebKit){
+		if(has("webKit")){
 			s.webkitTransform = this.makeTranslateStr(to);
 		}else{
 			if(this._v){
@@ -722,8 +773,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.getPos = function(){
 		// summary:
 		//		Get the top position in the midst of animation
-		if(dojo.isWebKit){
-			var m = dojo.doc.defaultView.getComputedStyle(this.containerNode, '')["-webkit-transform"];
+		if(has("webKit")){
+			var m = win.doc.defaultView.getComputedStyle(this.containerNode, '')["-webkit-transform"];
 			if(m && m.indexOf("matrix") === 0){
 				var arr = m.split(/[,\s\)]+/);
 				return {y:arr[5] - 0, x:arr[4] - 0};
@@ -764,7 +815,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		var createBar = function(self, dir){
 			var bar = self["_scrollBarNode" + dir];
 			if(!bar){
-				var wrapper = dojo.create("div", null, self.domNode);
+				var wrapper = domConstruct.create("div", null, self.domNode);
 				var props = { position: "absolute", overflow: "hidden" };
 				if(dir == "V"){
 					props.right = "2px";
@@ -773,12 +824,12 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					props.bottom = (self.isLocalFooter ? self.fixedFooterHeight : 0) + 2 + "px";
 					props.height = "5px";
 				}
-				dojo.style(wrapper, props);
+				domStyle.style(wrapper, props);
 				wrapper.className = "mblScrollBarWrapper";
 				self["_scrollBarWrapper"+dir] = wrapper;
 
-				bar = dojo.create("div", null, wrapper);
-				dojo.style(bar, {
+				bar = domConstruct.create("div", null, wrapper);
+				domStyle.style(bar, {
 					opacity: 0.6,
 					position: "absolute",
 					backgroundColor: "#606060",
@@ -788,7 +839,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					webkitTransformOrigin: "0 0",
 					zIndex: 2147483647 // max of signed 32-bit integer
 				});
-				dojo.style(bar, dir == "V" ? {width: "5px"} : {height: "5px"});
+				domStyle.style(bar, dir == "V" ? {width: "5px"} : {height: "5px"});
 				self["_scrollBarNode" + dir] = bar;
 			}
 			return bar;
@@ -804,9 +855,9 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this.hideScrollBar = function(){
 		var fadeRule;
-		if(this.fadeScrollBar && dojo.isWebKit){
+		if(this.fadeScrollBar && has("webKit")){
 			if(!dojox.mobile._fadeRule){
-				var node = dojo.create("style", null, dojo.doc.getElementsByTagName("head")[0]);
+				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 				node.textContent =
 					".mblScrollableFadeScrollBar{"+
 					"  -webkit-animation-duration: 1s;"+
@@ -820,7 +871,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 		if(!this.scrollBar){ return; }
 		var f = function(bar, self){
-			dojo.style(bar, {
+			domStyle.style(bar, {
 				opacity: 0,
 				webkitAnimationDuration: ""
 			});
@@ -865,14 +916,14 @@ dojox.mobile.scrollable = function(dojo, dojox){
 	this.scrollScrollBarTo = function(/*Object*/to){ // to: {x, y}
 		if(!this.scrollBar){ return; }
 		if(this._v && this._scrollBarV && typeof to.y == "number"){
-			if(dojo.isWebKit){
+			if(has("webKit")){
 				this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
 			}else{
 				this._scrollBarV.style.top = to.y + "px";
 			}
 		}
 		if(this._h && this._scrollBarH && typeof to.x == "number"){
-			if(dojo.isWebKit){
+			if(has("webKit")){
 				this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
 			}else{
 				this._scrollBarH.style.left = to.x + "px";
@@ -894,13 +945,13 @@ dojox.mobile.scrollable = function(dojo, dojox){
 
 	this._runSlideAnimation = function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, node, idx){
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
-		if(dojo.isWebKit){
+		if(has("webKit")){
 			this.setKeyframes(from, to, idx);
-			dojo.style(node, {
+			domStyle.style(node, {
 				webkitAnimationDuration: duration + "s",
 				webkitAnimationTimingFunction: easing
 			});
-			dojo.addClass(node, "mblScrollableScrollTo"+idx);
+			domClass.add(node, "mblScrollableScrollTo"+idx);
 			if(idx == 2){
 				this.scrollTo(to, true, node);
 			}else{
@@ -923,7 +974,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 				easing: (easing == "ease-out") ? dojo.fx.easing.quadOut : dojo.fx.easing.linear
 			}).play();
 			if(idx == 2){
-				dojo.connect(s, "onEnd", this, "onFlickAnimationEnd");
+				connect.connect(s, "onEnd", this, "onFlickAnimationEnd");
 			}
 		}else{
 			// directly jump to the destination without animation
@@ -945,11 +996,11 @@ dojox.mobile.scrollable = function(dojo, dojox){
 			var props = {};
 			props[v ? "top" : "left"] = hd + 4 + "px"; // +4 is for top or left margin
 			props[v ? "height" : "width"] = d - 8 + "px";
-			dojo.style(wrapper, props);
+			domStyle.style(wrapper, props);
 			var l = Math.round(d * d / c); // scroll bar length
 			l = Math.min(Math.max(l - 8, 5), d - 8); // -8 is for margin for both ends
 			bar.style[v ? "height" : "width"] = l + "px";
-			dojo.style(bar, {"opacity": 0.6});
+			domStyle.style(bar, {"opacity": 0.6});
 		};
 		var dim = this.getDim();
 		f(this._scrollBarWrapperV, this._scrollBarV, dim.d.h, dim.c.h, this.fixedHeaderHeight, true);
@@ -964,11 +1015,11 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		//		This function creates a mask that hides corners of one scroll
 		//		bar edge to make it round edge. The other side of the edge is
 		//		always visible and round shaped with the border-radius style.
-		if(!dojo.isWebKit){ return; }
+		if(!has("webKit")){ return; }
 		var ctx;
 		if(this._scrollBarWrapperV){
 			var h = this._scrollBarWrapperV.offsetHeight;
-			ctx = dojo.doc.getCSSCanvasContext("2d", "scrollBarMaskV", 5, h);
+			ctx = win.doc.getCSSCanvasContext("2d", "scrollBarMaskV", 5, h);
 			ctx.fillStyle = "rgba(0,0,0,0.5)";
 			ctx.fillRect(1, 0, 3, 2);
 			ctx.fillRect(0, 1, 5, 1);
@@ -980,7 +1031,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 		if(this._scrollBarWrapperH){
 			var w = this._scrollBarWrapperH.offsetWidth;
-			ctx = dojo.doc.getCSSCanvasContext("2d", "scrollBarMaskH", w, 5);
+			ctx = win.doc.getCSSCanvasContext("2d", "scrollBarMaskH", w, 5);
 			ctx.fillStyle = "rgba(0,0,0,0.5)";
 			ctx.fillRect(0, 1, 2, 3);
 			ctx.fillRect(1, 0, 1, 5);
@@ -1007,8 +1058,8 @@ dojox.mobile.scrollable = function(dojo, dojox){
 //>>excludeStart("webkitMobile", kwArgs.webkitMobile);
 		if(!dojox.mobile.hasTouch && !this.noCover){
 			if(!this._cover){
-				this._cover = dojo.create("div", null, dojo.doc.body);
-				dojo.style(this._cover, {
+				this._cover = domConstruct.create("div", null, win.doc.body);
+				domStyle.style(this._cover, {
 					backgroundColor: "#ffff00",
 					opacity: 0,
 					position: "absolute",
@@ -1018,7 +1069,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 					height: "100%",
 					zIndex: 2147483647 // max of signed 32-bit integer
 				});
-				this._ch.push(dojo.connect(this._cover,
+				this._ch.push(connect.connect(this._cover,
 					dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchEnd"));
 			}else{
 				this._cover.style.display = "";
@@ -1045,7 +1096,7 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		}
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
 		if(!dojox.mobile._rule[idx]){
-			var node = dojo.create("style", null, dojo.doc.getElementsByTagName("head")[0]);
+			var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 			node.textContent =
 				".mblScrollableScrollTo"+idx+"{-webkit-animation-name: scrollableViewScroll"+idx+";}"+
 				"@-webkit-keyframes scrollableViewScroll"+idx+"{}";
@@ -1071,25 +1122,26 @@ dojox.mobile.scrollable = function(dojo, dojox){
 		node.style.KhtmlUserSelect = selectable ? "auto" : "none";
 		node.style.MozUserSelect = selectable ? "" : "none";
 		node.onselectstart = selectable ? null : function(){return false;};
-		if(dojo.isIE){
+		if(has("ie")){
 			node.unselectable = selectable ? "" : "on";
-			dojo.forEach(node.getElementsByTagName("*"), function(n){
-				n.unselectable = selectable ? "" : "on";
-			});
+			var nodes = node.getElementsByTagName("*");
+			for(var i = 0; i < nodes.length; i++){
+				nodes[i].unselectable = selectable ? "" : "on";
+			}
 		}
 	};
 
 	// feature detection
-	if(dojo.isWebKit){
-		var elem = dojo.doc.createElement("div");
+	if(has("webKit")){
+		var elem = win.doc.createElement("div");
 		elem.style.webkitTransform = "translate3d(0px,1px,0px)";
-		dojo.doc.documentElement.appendChild(elem);
-		var v = dojo.doc.defaultView.getComputedStyle(elem, '')["-webkit-transform"];
+		win.doc.documentElement.appendChild(elem);
+		var v = win.doc.defaultView.getComputedStyle(elem, '')["-webkit-transform"];
 		dojox.mobile.hasTranslate3d = v && v.indexOf("matrix") === 0;
-		dojo.doc.documentElement.removeChild(elem);
+		win.doc.documentElement.removeChild(elem);
 	
-		dojox.mobile.hasTouch = (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
-			navigator.appVersion.indexOf("Mobile") != -1) || !!dojo.isAndroid;
+		dojox.mobile.hasTouch = (typeof win.doc.documentElement.ontouchstart != "undefined" &&
+			navigator.appVersion.indexOf("Mobile") != -1) || !!has("android");
 	}
 };
 

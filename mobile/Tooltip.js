@@ -1,14 +1,14 @@
 define([
-	"dojo/dom-style",
-	"dojo/dom-geometry",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/lang",
 	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
 	"dijit/place",
 	"dijit/_WidgetBase"
 ],
-	function(domStyle, domGeometry, domConstruct, domClass, lang, declare, place, WidgetBase){
+	function(declare, lang, domClass, domConstruct, domGeometry, domStyle, place, WidgetBase){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;

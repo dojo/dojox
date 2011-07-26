@@ -1,21 +1,21 @@
 define([
-	"require",
-	"dojo/_base/sniff",
-	"dojo/dom-style",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/declare",
 	"dojo/_base/kernel",
-	"dojo/_base/event",
-	"dojo/_base/connect",
-	"dojo/_base/lang",
 	"dojo/_base/array",
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dojo/_base/lang",
+	"dojo/_base/sniff",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
 	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
 	"./PageIndicator",
-	"./SwapView"
-], function(require, has, domStyle, domConstruct, domClass, declare, kernel, event, connect, lang, array, WidgetBase, Container, Contained, PageIndicator, SwapView){
+	"./SwapView",
+	"require"
+], function(kernel, array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, Contained, Container, WidgetBase, PageIndicator, SwapView, require){
 	// module:
 	//		dojox/mobile/Carousel
 	// summary:

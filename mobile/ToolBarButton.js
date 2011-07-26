@@ -1,12 +1,12 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-style",
-	"dojo/dom-construct",
-	"dojo/dom-class",
 	"dojo/_base/declare",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
 	"./_ItemBase"
 ],
-	function(win, domStyle, domConstruct, domClass, declare, ItemBase){
+	function(declare, win, domClass, domConstruct, domStyle, ItemBase){
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:

@@ -1,10 +1,10 @@
 define([
-	"dojo/dom-class",
 	"dojo/_base/declare",
-	"./Button",
-	"dijit/form/_ToggleButtonMixin"
+	"dojo/dom-class",
+	"dijit/form/_ToggleButtonMixin",
+	"./Button"
 ],
-	function(domClass, declare, Button, ToggleButtonMixin){
+	function(declare, domClass, ToggleButtonMixin, Button){
 
 	/*=====
 		Button = dojox.mobile.Button;

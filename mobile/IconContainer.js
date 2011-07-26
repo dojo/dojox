@@ -1,19 +1,17 @@
 define([
-	"dojo/_base/window",
-	"dojo/dom-style",
-	"dojo/dom-construct",
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"./common", // is this needed?
-	"dijit/_WidgetBase",
-	"dijit/_Container",
+	"dojo/_base/window",
+	"dojo/dom-construct",
+	"dojo/dom-style",
 	"dijit/_Contained",
-	"./View",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
+	"./IconItem",
 	"./Heading",
-	"./_ItemBase", // is this needed?
-	"./IconItem" // is this needed?
+	"./View"
 ],
-	function(win, domStyle, domConstruct, array, declare, mcommon, WidgetBase, Container, Contained, View, Heading, ItemBase, mobileIconItem){
+	function(array, declare, win, domConstruct, domStyle, Contained, Container, WidgetBase, IconItem, Heading, View){
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:

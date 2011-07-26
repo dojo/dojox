@@ -1,23 +1,22 @@
 define([
-	"dojo/_base/config",
-	"require",
-	"dojo/ready",
-	"dojo/_base/sniff",
-	"dojo/dom-style",
-	"dojo/dom-construct",
-	"dojo/dom-class",
-	"dojo/_base/lang",	// lang.extend, lang.isArray
 	"dojo/_base/array",	// array.forEach
-	"dojo/_base/window",	// win.doc, win.body
+	"dojo/_base/config",
 	"dojo/_base/connect",	// connect.connect
 	"dojo/_base/fx",	// fx.fadeOut, fx.fadeIn
-	"dojo/uacss",		// has("webKit"), has("ie")
-	"./common", // is this needed?
+	"dojo/_base/lang",	// lang.extend, lang.isArray
+	"dojo/_base/sniff",		// has("webKit"), has("ie")
+	"dojo/_base/window",	// win.doc, win.body
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
 	"dojo/fx",
-	"dojo/fx/easing", // is this needed?
-	"dojox/fx", // is this needed?
-	"dojox/fx/flip"
-], function(config, require, ready, has, domStyle, domConstruct, domClass, lang, array, win, connect, fx, has, common, fx, easing, xfx, flip){
+	"dojo/fx/easing",
+	"dojo/ready",
+	"dojo/uacss",
+	"dojox/fx",
+	"dojox/fx/flip",
+	"require"
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, xfx, flip, require){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -127,11 +126,11 @@ define([
 					}else {
 						// other transitions - "fade", "dissolve", "swirl"
 						anim = fx.chain([
-							fx.fadeOut({
+							bfx.fadeOut({
 								node: fromNode,
 								duration: 600
 							}),
-							fx.fadeIn({
+							bfx.fadeIn({
 								node: toNode,
 								duration: 600
 							})

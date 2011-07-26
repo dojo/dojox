@@ -1,15 +1,14 @@
 define([
-	"dojo/_base/window",
-	"dojo/_base/sniff",
-	"dojo/dom-class",
+	"dojo/_base/array",
+	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/event",
-	"dojo/_base/connect",
-	"dojo/_base/array",
-	"./common", // is this needed?
-	"dijit/_WidgetBase",
-	"dijit/_Contained"
-], function(win, has, domClass, declare, event, connect, array, mcommon, WidgetBase, Contained){
+	"dojo/_base/sniff",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dijit/_Contained",
+	"dijit/_WidgetBase"
+], function(array, connect, declare, event, has, win, domClass, Contained, WidgetBase){
 	// module:
 	//		dojox/mobile/Switch
 	// summary:

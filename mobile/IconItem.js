@@ -1,19 +1,17 @@
 define([
-	"dojo/query",
-	"dojo/_base/window",
-	"dojo/_base/sniff",
-	"dojo/dom-style",
-	"dojo/dom-class",
-	"dojo/dom-attr",
-	"dojo/_base/lang",
 	"dojo/_base/kernel",
-	"dojo/_base/declare",
 	"dojo/_base/array",
-	"./common", // is this needed?
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/sniff",
+	"dojo/_base/window",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dojo/dom-style",
 	"./_ItemBase",
 	"./TransitionEvent"
 ],
-	function(query, win, has, domStyle, domClass, domAttr, lang, dojo, declare, array, mcommon, ItemBase, TransitionEvent){
+	function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:

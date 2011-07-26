@@ -1,12 +1,12 @@
 define([
-	"dojo/dom-class",
-	"dojo/_base/declare",
 	"dojo/_base/array",
-	"dijit/_WidgetBase",
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dijit/_Contained",
 	"dijit/_Container",
-	"dijit/_Contained"
+	"dijit/_WidgetBase"
 ],
-	function(domClass, declare, array, WidgetBase, Container, Contained){
+	function(array, declare, domClass, Contained, Container, WidgetBase){
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 		Container = dijit._Container;

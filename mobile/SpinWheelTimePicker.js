@@ -1,10 +1,10 @@
 define([
-	"dojo/dom-class",
 	"dojo/_base/declare",
+	"dojo/dom-class",
 	"./SpinWheel",
 	"./SpinWheelSlot"
 ],
-	function(domClass, declare, SpinWheel, SpinWheelSlot){
+	function(declare, domClass, SpinWheel, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:
