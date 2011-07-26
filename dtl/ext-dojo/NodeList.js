@@ -1,7 +1,17 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,lang,dd){
-	dojo.getObject("dtl.ext-dojo.NodeList", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/NodeList",
+	"../_base"
+], function(dojo,lang,Nodelist,dd){
+	/*=====
+		Nodelist = dojo.Nodelist;
+		dd = dojox.dtl;
+	=====*/
+	
+	lang.getObject("dtl.ext-dojo.NodeList", true, dojox);
 
-	dojo.extend(dojo.NodeList, {
+	lang.extend(Nodelist, {
 		dtl: function(template, context){
 			// template: dojox.dtl.__StringArgs|String
 			//		The template string or location

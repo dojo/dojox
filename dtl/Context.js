@@ -1,6 +1,12 @@
-define(["dojo/_base/kernel","dojo/_base/lang","./_base"], function(dojo,lang,dd){
-
-	dojox.dtl.Context = dojo.extend(function(dict){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"./_base"
+], function(dojo,lang,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	dd.Context = lang.extend(function(dict){
 		this._this = {};
 		dd._Context.call(this, dict);
 	}, dd._Context.prototype,
@@ -17,7 +23,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base"], function(dojo,lang,dd)
 		extend: function(/*dojox.dtl.Context|Object*/ obj){
 			// summary: Returns a clone of this context object, with the items from the
 			//		passed objecct mixed in.
-			return  dojo.delegate(this, obj);
+			return  lang.delegate(this, obj);
 		},
 		filter: function(/*dojox.dtl.Context|Object|String...*/ filter){
 			// summary: Returns a clone of this context, only containing the items

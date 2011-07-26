@@ -1,9 +1,20 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojox/string/tokenize","dojo/_base/array"], function(dojo,lang,dd,dxst){
-	dojo.getObject("dtl.tag.loop", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/json",
+	"../_base",
+	"dojox/string/tokenize"
+], function(dojo,lang,array,json,dd,Tokenize){
+	/*=====
+		Tokenize = dojox.string.tokenize;
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.tag.loop", true, dojox);
 
 	var ddtl = dd.tag.loop;
 
-	ddtl.CycleNode = dojo.extend(function(cyclevars, name, text, shared){
+	ddtl.CycleNode = lang.extend(function(cyclevars, name, text, shared){
 		this.cyclevars = cyclevars;
 		this.name = name;
 		this.contents = text;
@@ -38,11 +49,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojox/string/tokenize"
 		}
 	});
 
-	ddtl.IfChangedNode = dojo.extend(function(nodes, vars, shared){
+	ddtl.IfChangedNode = lang.extend(function(nodes, vars, shared){
 		this.nodes = nodes;
 		this._vars = vars;
 		this.shared = shared || {last: null, counter: 0};
-		this.vars = dojo.map(vars, function(item){
+		this.vars = array.map(vars, function(item){
 			return new dojox.dtl._Filter(item);
 		});
 	}, {
@@ -56,7 +67,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojox/string/tokenize"
 
 			var change;
 			if(this.vars.length){
-				change = dojo.toJson(dojo.map(this.vars, function(item){
+				change = json.toJson(array.map(this.vars, function(item){
 					return item.resolve(context);
 				}));
 			}else{
@@ -83,7 +94,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojox/string/tokenize"
 		}
 	});
 
-	ddtl.RegroupNode = dojo.extend(function(expression, key, alias){
+	ddtl.RegroupNode = lang.extend(function(expression, key, alias){
 		this._expression = expression;
 		this.expression = new dd._Filter(expression);
 		this.key = key;
@@ -123,7 +134,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojox/string/tokenize"
 		}
 	});
 
-	dojo.mixin(ddtl, {
+	lang.mixin(ddtl, {
 		cycle: function(parser, token){
 			// summary: Cycle among the given strings each time this tag is encountered
 			var args = token.split_contents();
@@ -175,7 +186,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojox/string/tokenize"
 			return new ddtl.IfChangedNode(nodes, parts.slice(1));
 		},
 		regroup: function(parser, token){
-			var tokens = dxst(token.contents, /(\s+)/g, function(spaces){
+			var tokens = Tokenize(token.contents, /(\s+)/g, function(spaces){
 				return spaces;
 			});
 			if(tokens.length < 11 || tokens[tokens.length - 3] != "as" || tokens[tokens.length - 7] != "by"){

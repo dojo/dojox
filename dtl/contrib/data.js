@@ -1,10 +1,18 @@
-define(["dojo/_base/kernel", "dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,lang,dd){
-	dojo.getObject("dtl.contrib.data", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"../_base",
+	"dojo/_base/array"
+], function(dojo,lang,dd,array){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.contrib.data", true, dojox);
 
 	var ddcd = dd.contrib.data;
 	var first = true;
 
-	ddcd._BoundItem = dojo.extend(function(item, store){
+	ddcd._BoundItem = lang.extend(function(item, store){
 		this.item = item;
 		this.store = store;
 	},
@@ -40,12 +48,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang","../_base","dojo/_base/array"], f
 				if(!values){
 					return;
 				}
-				if(!dojo.isArray(values)){
+				if(!lang.isArray(values)){
 					return new ddcd._BoundItem(values, store);
 				}
 
-				values = dojo.map(values, function(value){
-					if(dojo.isObject(value) && store.isItem(value)){
+				values = array.map(values, function(value){
+					if(lang.isObject(value) && store.isItem(value)){
 						return new ddcd._BoundItem(value, store);
 					}
 					return value;
@@ -57,7 +65,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","../_base","dojo/_base/array"], f
 	});
 	ddcd._BoundItem.prototype.get.safe = true;
 
-	ddcd.BindDataNode = dojo.extend(function(items, query, store, alias){
+	ddcd.BindDataNode = lang.extend(function(items, query, store, alias){
 		this.items = items && new dd._Filter(items);
 		this.query = query && new dd._Filter(query);
 		this.store = new dd._Filter(store);
@@ -109,7 +117,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","../_base","dojo/_base/array"], f
 		}
 	});
 
-	dojo.mixin(ddcd, {
+	lang.mixin(ddcd, {
 		_get: function(key){
 			if(this.length){
 				return (this[0] instanceof ddcd._BoundItem) ? this[0].get(key) : this[0][key];

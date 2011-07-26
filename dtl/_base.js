@@ -1,7 +1,22 @@
-define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_base/json","dojo/_base/html","dojox/string/Builder"], 
-	function(dojo, lang, dxst){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojox/string/tokenize",
+	"dojo/_base/json",
+	"dojo/dom",
+	"dojo/_base/xhr",
+	"dojox/string/Builder"], 
+	function(dojo, lang, Tokenize, json, dom, xhr, StringBuilder){
+	/*=====
+		Tokenize = dojox.string.tokenize;
+		StringBuilder = dojox.string.Builder;
+	=====*/
 	dojo.experimental("dojox.dtl");
-	dojo.getObject("dtl", true, dojox);
+	var dtl = lang.getObject("dtl", true, dojox);
+	/*=====
+		dtl = dojox.dtl;
+		dd = dojox.dtl;
+	=====*/
 
 	(dojox.dtl._base = function(){
 		var dd = dojox.dtl;
@@ -11,10 +26,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 		dd.TOKEN_COMMENT = -3;
 		dd.TOKEN_TEXT = 3;
 
-		dd._Context = dojo.extend(function(dict){
+		dd._Context = lang.extend(function(dict){
 			// summary: Pass one of these when rendering a template to tell the template what values to use.
 			if(dict){
-				dojo._mixin(this, dict);
+				lang._mixin(this, dict);
 				if(dict.get){
 					// Preserve passed getter and restore prototype get
 					this._getter = dict.get;
@@ -25,7 +40,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 		{
 			push: function(){
 				var last = this;
-				var context = dojo.delegate(this);
+				var context = lang.delegate(this);
 				context.pop = function(){ return last; }
 				return context;
 			},
@@ -64,7 +79,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			update: function(dict){
 				var context = this.push();
 				if(dict){
-					dojo._mixin(this, dict);
+					lang._mixin(this, dict);
 				}
 				return context;
 			}
@@ -96,7 +111,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 
 		dd.Token = function(token_type, contents){
 			this.token_type = token_type;
-			this.contents = new String(dojo.trim(contents));
+			this.contents = new String(lang.trim(contents));
 			this.contents.split = split;
 			this.split = function(){
 				return String.prototype.split.apply(this.contents, arguments);
@@ -140,7 +155,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 
 				dojo["require"](require);
 
-				var parent = dojo.getObject(require);
+				var parent = lang.getObject(require);
 
 				return parent[fn || name] || parent[name + "_"] || parent[fn + "_"];
 			},
@@ -159,12 +174,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			_resolveLazy: function(location, sync, json){
 				if(sync){
 					if(json){
-						return dojo.fromJson(dojo._getText(location)) || {};
+						return json.fromJson(dojo._getText(location)) || {};
 					}else{
 						return dd.text.getTemplateString(location);
 					}
 				}else{
-					return dojo.xhrGet({
+					return xhr.xhrGet({
 						handleAs: (json) ? "json" : "text",
 						url: location
 					});
@@ -173,7 +188,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			_resolveTemplateArg: function(arg, sync){
 				if(ddt._isTemplate(arg)){
 					if(!sync){
-						var d = new dojo.Deferred();
+						var d = new deferred();
 						d.callback(arg);
 						return d;
 					}
@@ -187,7 +202,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			_resolveContextArg: function(arg, sync){
 				if(arg.constructor == Object){
 					if(!sync){
-						var d = new dojo.Deferred;
+						var d = new deferred;
 						d.callback(arg);
 						return d;
 					}
@@ -197,13 +212,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			},
 			_re: /(?:\{\{\s*(.+?)\s*\}\}|\{%\s*(load\s*)?(.+?)\s*%\})/g,
 			tokenize: function(str){
-				return dxst(str, ddt._re, ddt._parseDelims);
+				return Tokenize(str, ddt._re, ddt._parseDelims);
 			},
 			_parseDelims: function(varr, load, tag){
 				if(varr){
 					return [dd.TOKEN_VAR, varr];
 				}else if(load){
-					var parts = dojo.trim(tag).split(/\s+/g);
+					var parts = lang.trim(tag).split(/\s+/g);
 					for(var i = 0, part; part = parts[i]; i++){
 						dojo["require"](part);
 					}
@@ -213,7 +228,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			}
 		}
 
-		dd.Template = dojo.extend(function(/*String|dojo._Url*/ template, /*Boolean*/ isString){
+		dd.Template = lang.extend(function(/*String|dojo._Url*/ template, /*Boolean*/ isString){
 			// template:
 			//		The string or location of the string to
 			//		use as a template
@@ -235,7 +250,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 							item.innerHTML = content;
 						});
 					}else{
-						dojo.byId(node).innerHTML = content;
+						dom.byId(node).innerHTML = content;
 					}
 					return this;
 				});
@@ -246,7 +261,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 				return this.nodelist.render(context, buffer) + "";
 			},
 			getBuffer: function(){
-				return new dojox.string.Builder();
+				return new StringBuilder();
 			}
 		});
 
@@ -257,18 +272,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			}
 
 			if(str.indexOf("{%") == -1){
-				return new dd._QuickNodeList(dxst(str, qfRe, function(token){
+				return new dd._QuickNodeList(Tokenize(str, qfRe, function(token){
 					return new dd._Filter(token);
 				}));
 			}
 		}
 
-		dd._QuickNodeList = dojo.extend(function(contents){
+		dd._QuickNodeList = lang.extend(function(contents){
 			this.contents = contents;
 		},
 		{
 			render: function(context, buffer){
-				for(var i=0, l=this.contents.length; i<l; i++){
+				for(var i = 0, l = this.contents.length; i < l; i++){
 					if(this.contents[i].resolve){
 						buffer = buffer.concat(this.contents[i].resolve(context));
 					}else{
@@ -281,7 +296,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			clone: function(buffer){ return this; }
 		});
 
-		dd._Filter = dojo.extend(function(token){
+		dd._Filter = lang.extend(function(token){
 			// summary: Uses a string to find (and manipulate) a variable
 			if(!token) throw new Error("Filter must be called with variable name");
 			this.contents = token;
@@ -292,7 +307,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 				this.filters = cache[1];
 			}else{
 				this.filters = [];
-				dxst(token, this._re, this._tokenize, this);
+				Tokenize(token, this._re, this._tokenize, this);
 				this._cache[token] = [this.key, this.filters];
 			}
 		},
@@ -340,7 +355,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 					}
 					// Get a named filter
 					var fn = ddt.getFilter(arguments[3]);
-					if(!dojo.isFunction(fn)) throw new Error(arguments[3] + " is not registered as a filter");
+					if(!lang.isFunction(fn)) throw new Error(arguments[3] + " is not registered as a filter");
 					this.filters.push([fn, arg]);
 				}
 			},
@@ -385,7 +400,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 					parts = path.split(".");
 					current = context.get(parts[0]);
 
-					if(dojo.isFunction(current)){
+					if(lang.isFunction(current)){
 						var self = context.getThis && context.getThis();
 						if(current.alters_data){
 							current = "";
@@ -400,7 +415,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 						var part = parts[i];
 						if(current){
 							var base = current;
-							if(dojo.isObject(current) && part == "items" && typeof current[part] == "undefined"){
+							if(lang.isObject(current) && part == "items" && typeof current[part] == "undefined"){
 								var items = [];
 								for(var key in current){
 									items.push([key, current[key]]);
@@ -409,7 +424,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 								continue;
 							}
 
-							if(current.get && dojo.isFunction(current.get) && current.get.safe){
+							if(current.get && lang.isFunction(current.get) && current.get.safe){
 								current = current.get(part);
 							}else if(typeof current[part] == "undefined"){
 								current = current[part];
@@ -418,7 +433,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 								current = current[part];
 							}
 
-							if(dojo.isFunction(current)){
+							if(lang.isFunction(current)){
 								if(current.alters_data){
 									current = "";
 								}else{
@@ -436,7 +451,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			}
 		});
 
-		dd._TextNode = dd._Node = dojo.extend(function(/*Object*/ obj){
+		dd._TextNode = dd._Node = lang.extend(function(/*Object*/ obj){
 			// summary: Basic catch-all node
 			this.contents = obj;
 		},
@@ -450,12 +465,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 				return buffer.concat(this.contents);
 			},
 			isEmpty: function(){
-				return !dojo.trim(this.contents);
+				return !lang.trim(this.contents);
 			},
 			clone: function(){ return this; }
 		});
 
-		dd._NodeList = dojo.extend(function(/*Node[]*/ nodes){
+		dd._NodeList = lang.extend(function(/*Node[]*/ nodes){
 			// summary: Allows us to render a group of nodes
 			this.contents = nodes || [];
 			this.last = "";
@@ -497,7 +512,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			}
 		});
 
-		dd._VarNode = dojo.extend(function(str){
+		dd._VarNode = lang.extend(function(str){
 			// summary: A node to be processed as a variable
 			this.contents = new dd._Filter(str);
 		},
@@ -517,7 +532,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 			this.clone = function(){ return this; }
 		}
 
-		dd._Parser = dojo.extend(function(tokens){
+		dd._Parser = lang.extend(function(tokens){
 			// summary: Parser used during initialization and for tag groups.
 			this.contents = tokens;
 		},
@@ -621,8 +636,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 					if(entry.length == 3){
 						tags.push(entry);
 					}else{
-						var fn = dojo.getObject(entry[1]);
-						if(fn && dojo.isFunction(fn)){
+						var fn = lang.getObject(entry[1]);
+						if(fn && lang.isFunction(fn)){
 							entry.push(fn);
 							tags.push(entry);
 						}
@@ -634,7 +649,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang","dojox/string/tokenize","dojo/_ba
 				for(var path in locations){
 					for(var i = 0, fn; fn = locations[path][i]; i++){
 						var key = fn;
-						if(dojo.isArray(fn)){
+						if(lang.isArray(fn)){
 							key = fn[0];
 							fn = fn[1];
 						}

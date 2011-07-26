@@ -1,7 +1,14 @@
-define(["dojo/_base/kernel","../_base"], function(dojo,dd){
-	dojo.getObject("dtl.filter.htmlstrings", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"../_base"
+], function(dojo,lang,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.filter.htmlstrings", true, dojox);
 
-	dojo.mixin(dojox.dtl.filter.htmlstrings, {
+	lang.mixin(dd.filter.htmlstrings, {
 		_linebreaksrn: /(\r\n|\n\r)/g,
 		_linebreaksn: /\n{2,}/g,
 		_linebreakss: /(^\s+|\s+$)/g,
@@ -11,7 +18,7 @@ define(["dojo/_base/kernel","../_base"], function(dojo,dd){
 		linebreaks: function(value){
 			// summary: Converts newlines into <p> and <br />s
 			var output = [];
-			var dh = dojox.dtl.filter.htmlstrings;
+			var dh = dd.filter.htmlstrings;
 			value = value.replace(dh._linebreaksrn, "\n");
 			var parts = value.split(dh._linebreaksn);
 			for(var i = 0; i < parts.length; i++){
@@ -23,12 +30,12 @@ define(["dojo/_base/kernel","../_base"], function(dojo,dd){
 		},
 		linebreaksbr: function(value){
 			// summary: Converts newlines into <br />s
-			var dh = dojox.dtl.filter.htmlstrings;
+			var dh = dd.filter.htmlstrings;
 			return value.replace(dh._linebreaksrn, "\n").replace(dh._linebreaksbr, "<br />");
 		},
 		removetags: function(value, arg){
 			// summary: Removes a space separated list of [X]HTML tags from the output"
-			var dh = dojox.dtl.filter.htmlstrings;
+			var dh = dd.filter.htmlstrings;
 			var tags = [];
 			var group;
 			while(group = dh._removetagsfind.exec(arg)){

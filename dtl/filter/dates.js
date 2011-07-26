@@ -1,8 +1,16 @@
-define(["dojo/_base/kernel","../utils/date"], function(dojo,ddud){
-	dojo.getObject("dtl.filter.dates", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"../_base",	
+	"../utils/date"
+], function(dojo,lang,dd,ddud){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.filter.dates", true, dojox);
 
-	var ddfd = dojox.dtl.filter.dates;
-	dojo.mixin(ddfd, {
+	var ddfd = dd.filter.dates;
+	lang.mixin(ddfd, {
 		_toDate: function(value){
 			if(value instanceof Date){
 				return value;

@@ -1,6 +1,17 @@
-define(["dojo/_base/kernel","dojo/_base/html",".","./contrib/dijit","./render/dom","dojo/cache","dijit/_Templated"], 
-function(dojo,html,dtl,ddcd,ddrd){
-
+define([
+	"dojo/_base/kernel",
+	"dojo/dom-construct",
+	".",
+	"./contrib/dijit",
+	"./render/dom",
+	"dojo/cache",
+	"dijit/_TemplatedMixin"
+	], function(dojo,domconstruct,dtl,ddcd,ddrd,cache,TemplatedMixin){
+	/*=====
+		dtl = dojox.dtl;
+		cache = dojo.cache;
+		Templated = dijit._Templated
+	=====*/
 	dtl._DomTemplated = function(){};
 	dtl._DomTemplated.prototype = {
 		_dijitTemplateCompat: false,
@@ -27,7 +38,7 @@ function(dojo,html,dtl,ddcd,ddrd){
 
 			this.domNode = this.template.getRootNode();
 			if(this.srcNodeRef && this.srcNodeRef.parentNode){
-				dojo.destroy(this.srcNodeRef);
+				domconstruct.destroy(this.srcNodeRef);
 				delete this.srcNodeRef;
 			}
 		},
@@ -48,7 +59,7 @@ function(dojo,html,dtl,ddcd,ddrd){
 			this._render.render(this._getContext(context), this.template);
 		},
 		_getContext: function(context){
-			if (!(context instanceof dojox.dtl.Context)) {
+			if(!(context instanceof dojox.dtl.Context)){
 				context = false;
 			}
 			context = context || new dojox.dtl.Context(this);
@@ -60,7 +71,7 @@ function(dojo,html,dtl,ddcd,ddrd){
 				this._templates = {};
 			}
 			if(!templateString){
-				templateString = dojo.cache(templatePath, {sanitize: true});
+				templateString = cache.cache(templatePath, {sanitize: true});
 			}
 			var key = templateString;
 			var tmplts = this._templates;
@@ -68,7 +79,7 @@ function(dojo,html,dtl,ddcd,ddrd){
 				return tmplts[key];
 			}
 			return (tmplts[key] = new dojox.dtl.DomTemplate(
-				dijit._TemplatedMixin.getCachedTemplate(
+				TemplatedMixin.getCachedTemplate(
 					templateString,
 					true
 				)

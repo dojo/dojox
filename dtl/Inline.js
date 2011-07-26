@@ -1,15 +1,25 @@
-define(["dojo/_base/kernel","dojo/_base/lang","./_base","dijit/_Widget"], function(dojo,lang,dd,djw){
-
-	dd.Inline = dojo.extend(function(args, node){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"./_base",
+	"dijit/_Widget",
+	"dojo/query" // dojo.query
+], function(dojo,lang,dd,Widget,Query){
+	/*=====
+		Widget = dijit._Widget;
+		Query = dojo.query;
+		dd = dojox.dtl;
+	=====*/ 
+	dd.Inline = lang.extend(function(args, node){
 		this.create(args, node);
 	},
-	djw.prototype,
+	Widget.prototype,
 	{
 		context: null,
 		render: function(/*Object|dojox.dtl.Context?*/ context){
 			this.context = context || this.context;
 			this.postMixInProperties();
-			dojo.query("*", this.domNode).orphan();
+			Query("*", this.domNode).orphan();
 			this.domNode.innerHTML = this.template.render(this.context);
 		},
 		declaredClass: "dojox.dtl.Inline",
@@ -20,7 +30,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base","dijit/_Widget"], functi
 				node.parentNode.replaceChild(div, node);
 			}
 
-			this.template = new dd.Template(dojo.trim(node.text), true);
+			this.template = new dd.Template(lang.trim(node.text), true);
 			this.render();
 		},
 		postMixInProperties: function(){

@@ -1,7 +1,14 @@
-define(["dojo/_base/kernel","../_base"], function(dojo,dd){
-	dojo.getObject("dtl.filter.lists", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"../_base"
+], function(dojo,lang,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.filter.lists", true, dojox);
 
-	dojo.mixin(dojox.dtl.filter.lists, {
+	lang.mixin(dd.filter.lists, {
 		_dictsort: function(a, b){
 			if(a[0] == b[0]){
 				return 0;
@@ -15,7 +22,7 @@ define(["dojo/_base/kernel","../_base"], function(dojo,dd){
 			}
 
 			var i, item, items = [];
-			if(!dojo.isArray(value)){
+			if(!lang.isArray(value)){
 				var obj = value, value = [];
 				for(var key in obj){
 					value.push(obj[key]);

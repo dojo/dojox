@@ -1,6 +1,23 @@
-define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","dojo/_base/html"], function(dojo,declare,dd,dt){
-
-	return dojo.declare("dojox.dtl._Templated", dt, {
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"./_base",
+	"dijit/_Templated", 
+	"dojo/dom-construct",
+	"dojo/cache",
+	"dojo/_base/array",
+	"dojo/string",
+	"dojo/parser",
+	"dijit/_base/manager"
+], function(dojo,declare,dd,dt,domconstruct,Cache,Array,dString,Parser,dijitMgr){
+	/*=====
+		Cache = dojo.cache;
+		dString = dojo.string;
+		Parser = dojo.parser;
+		dt = dijit._Templated;
+		dd = dojox.dtl;
+	=====*/
+	return declare("dojox.dtl._Templated", dt, {
 		_dijitTemplateCompat: false,
 		buildRendering: function(){
 			var node;
@@ -26,7 +43,7 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 				if(!this._created){
 					delete context._getter;
 				}
-				var nodes = dojo._toDom(
+				var nodes = domconstruct.toDom(
 					this._template.render(context)
 				);
 				// TODO: is it really necessary to look for the first node?
@@ -49,8 +66,8 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 
 			if(this.widgetsInTemplate){
 				//Make sure dojoType is used for parsing widgets in template.
-				//The dojo.parser.query could be changed from multiversion support.
-				var parser = dojo.parser, qry, attr;
+				//The Parser.query could be changed from multiversion support.
+				var parser = Parser, qry, attr;
 				if(parser._query != "[dojoType]"){
 					qry = parser._query;
 					attr = parser._attrName;
@@ -59,7 +76,7 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 				}
 
 				//Store widgets that we need to start at a later point in time
-				var cw = (this._startupWidgets = dojo.parser.parse(node, {
+				var cw = (this._startupWidgets = Parser.parse(node, {
 					noStart: !this._earlyTemplatedStartup,
 					inherited: {dir: this.dir, lang: this.lang}
 				}));
@@ -70,7 +87,7 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 					parser._attrName = attr;
 				}
 
-				this._supportingWidgets = dijit.findWidgets(node);
+				this._supportingWidgets = dijitMgr.findWidgets(node);
 
 				this._attachTemplateNodes(cw, function(n,p){
 					return n[p];
@@ -78,9 +95,9 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 			}
 
 			if(this.domNode){
-				dojo.place(node, this.domNode, "before");
+				domconstruct.place(node, this.domNode, "before");
 				this.destroyDescendants();
-				dojo.destroy(this.domNode);
+				domconstruct.destroy(this.domNode);
 			}
 			this.domNode = node;
 
@@ -96,7 +113,7 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 				return tmplts[key];
 			}
 
-			templateString = dojo.string.trim(templateString || dojo.cache(templatePath, {sanitize: true}));
+			templateString = dString.trim(templateString || Cache(templatePath, {sanitize: true}));
 
 			if(	this._dijitTemplateCompat &&
 				(alwaysUseString || templateString.match(/\$\{([^\}]+)\}/g))
@@ -106,7 +123,7 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 
 			// If we always use a string, or find no variables, just store it as a node
 			if(alwaysUseString || !templateString.match(/\{[{%]([^\}]+)[%}]\}/g)){
-				return tmplts[key] = dojo._toDom(templateString);
+				return tmplts[key] = domconstruct.toDom(templateString);
 			}else{
 				return tmplts[key] = new dd.Template(templateString);
 			}
@@ -115,7 +132,7 @@ define(["dojo/_base/kernel","dojo/_base/declare","./_base","dijit/_Templated","d
 			this.buildRendering();
 		},
 		startup: function(){
-			dojo.forEach(this._startupWidgets, function(w){
+			Array.forEach(this._startupWidgets, function(w){
 				if(w && !w._started && w.startup){
 					w.startup();
 				}

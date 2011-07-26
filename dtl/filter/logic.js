@@ -1,7 +1,14 @@
-define(["dojo/_base/kernel"], function(dojo){
-	dojo.getObject("dtl.filter.logic", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"../_base"
+], function(dojo,lang,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.filter.logic", true, dojox);
 
-	dojo.mixin(dojox.dtl.filter.logic, {
+	lang.mixin(dd.filter.logic, {
 		default_: function(value, arg){
 			// summary: If value is unavailable, use given default
 			return value || arg || "";

@@ -1,8 +1,23 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"], function(dojo,lang,dd){
-	dojo.getObject("dtl.contrib.dijit", true, dojox);
-
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/connect",
+	"dojo/_base/array",
+	"dojo/query",
+	"../_base",
+	"../dom",
+	"dojo/parser",
+	"dojo/_base/sniff"
+], function(dojo,lang,connect,array,Query,dd,dxdom,Parser,has){
+	/*=====
+		Query = dojo.query;
+		Parser = dojo.parser;
+		dd = dojox.dtl;
+	=====*/
+	//dojo.getObject("dtl.contrib.dijit", true, dojox);
+	lang.getObject("dtl.contrib.dijit", true, dojox);
 	var ddcd = dd.contrib.dijit;
-	ddcd.AttachNode = dojo.extend(function(keys, object){
+	ddcd.AttachNode = lang.extend(function(keys, object){
 		this._keys = keys;
 		this._object = object;
 	},
@@ -10,7 +25,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 		render: function(context, buffer){
 			if(!this._rendered){
 				this._rendered = true;
-				for(var i=0, key; key = this._keys[i]; i++){
+				for(var i = 0, key; key = this._keys[i]; i++){
 					context.getThis()[key] = this._object || buffer.getParent();
 				}
 			}
@@ -19,7 +34,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 		unrender: function(context, buffer){
 			if(this._rendered){
 				this._rendered = false;
-				for(var i=0, key; key = this._keys[i]; i++){
+				for(var i = 0, key; key = this._keys[i]; i++){
 					if(context.getThis()[key] === (this._object || buffer.getParent())){
 						delete context.getThis()[key];
 					}
@@ -32,11 +47,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 		}
 	});
 
-	ddcd.EventNode = dojo.extend(function(command, obj){
+	ddcd.EventNode = lang.extend(function(command, obj){
 		this._command = command;
 
 		var type, events = command.split(/\s*,\s*/);
-		var trim = dojo.trim;
+		var trim = lang.trim;
 		var types = [];
 		var fns = [];
 		while(type = events.pop()){
@@ -76,10 +91,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 				var args;
 				if(fn.indexOf(" ") != -1){
 					if(this._rendered[i]){
-						dojo.disconnect(this._rendered[i]);
+						connect.disconnect(this._rendered[i]);
 						this._rendered[i] = false;
 					}
-					args = dojo.map(fn.split(" ").slice(1), function(item){
+					args = array.map(fn.split(" ").slice(1), function(item){
 						return new dd._Filter(item).resolve(context);
 					});
 					fn = fn.split(" ", 2)[0];
@@ -88,7 +103,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 					if(!this._object){
 						this._rendered[i] = buffer.addEvent(context, type, fn, args);
 					}else{
-						this._rendered[i] = dojo.connect(this._object, type, context.getThis(), fn);
+						this._rendered[i] = connect.connect(this._object, type, context.getThis(), fn);
 					}
 				}
 			}
@@ -98,7 +113,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 		},
 		unrender: function(context, buffer){
 			while(this._rendered.length){
-				dojo.disconnect(this._rendered.pop());
+				connect.disconnect(this._rendered.pop());
 			}
 			return buffer;
 		},
@@ -109,27 +124,27 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 
 	function cloneNode(n1){
 		var n2 = n1.cloneNode(true);
-		if(dojo.isIE){
-			dojo.query("script", n2).forEach("item.text = this[index].text;", dojo.query("script", n1));
+		if(has("ie")){
+			Query("script", n2).forEach("item.text = this[index].text;", Query("script", n1));
 		}
 		return n2;
 	}
 
-	ddcd.DojoTypeNode = dojo.extend(function(node, parsed){
+	ddcd.DojoTypeNode = lang.extend(function(node, parsed){
 		this._node = node;
 		this._parsed = parsed;
 
 		var events = node.getAttribute("dojoAttachEvent");
 		if(events){
-			this._events = new ddcd.EventNode(dojo.trim(events));
+			this._events = new ddcd.EventNode(lang.trim(events));
 		}
 		var attach = node.getAttribute("dojoAttachPoint");
 		if(attach){
-			this._attach = new ddcd.AttachNode(dojo.trim(attach).split(/\s*,\s*/));
+			this._attach = new ddcd.AttachNode(lang.trim(attach).split(/\s*,\s*/));
 		}
 
-		if (!parsed){
-			this._dijit = dojo.parser.instantiate([cloneNode(node)])[0];
+		if(!parsed){
+			this._dijit = Parser.instantiate([cloneNode(node)])[0];
 		}else{
 			node = cloneNode(node);
 			var old = ddcd.widgetsInTemplate;
@@ -153,7 +168,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 					if(this._dijit){
 						this._dijit.destroyRecursive();
 					}
-					this._dijit = dojo.parser.instantiate([root])[0];
+					this._dijit = Parser.instantiate([root])[0];
 				}
 			}
 
@@ -178,12 +193,12 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 		}
 	});
 
-	dojo.mixin(ddcd, {
+	lang.mixin(ddcd, {
 		widgetsInTemplate: true,
-		dojoAttachPoint: function(parser, token){
+		dojoAttachPoint: function(Parser, token){
 			return new ddcd.AttachNode(token.contents.slice(16).split(/\s*,\s*/));
 		},
-		dojoAttachEvent: function(parser, token){
+		dojoAttachEvent: function(Parser, token){
 			return new ddcd.EventNode(token.contents.slice(16));
 		},
 		dojoType: function(parser, token){
@@ -195,14 +210,14 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","../dom","dojo/parser"]
 			var dojoType = parsed ? contents.slice(0, -7) : contents.toString();
 
 			if(ddcd.widgetsInTemplate){
-				var node = parser.swallowNode();
+				var node = Parser.swallowNode();
 				node.setAttribute("dojoType", dojoType);
 				return new ddcd.DojoTypeNode(node, parsed);
 			}
 
 			return new dd.AttributeNode("dojoType", dojoType);
 		},
-		on: function(parser, token){
+		on: function(Parser, token){
 			// summary: Associates an event type to a function (on the current widget) by name
 			var parts = token.contents.split();
 			return new ddcd.EventNode(parts[0] + ":" + parts.slice(1).join(" "));

@@ -1,9 +1,18 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","dojo/_base/connect"], function(dojo,lang,dd){
-	dojo.getObject("dtl.tag.misc", true, dojox);
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/connect",
+	"../_base"
+], function(dojo,lang,array,connect,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dtl.tag.misc", true, dojox);
 
 	var ddtm = dd.tag.misc;
 
-	ddtm.DebugNode = dojo.extend(function(text){
+	ddtm.DebugNode = lang.extend(function(text){
 		this.text = text;
 	},
 	{
@@ -27,7 +36,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		toString: function(){ return "ddtm.DebugNode"; }
 	});
 
-	ddtm.FilterNode = dojo.extend(function(varnode, nodelist){
+	ddtm.FilterNode = lang.extend(function(varnode, nodelist){
 		this._varnode = varnode;
 		this._nodelist = nodelist;
 	},
@@ -48,9 +57,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		}
 	});
 
-	ddtm.FirstOfNode = dojo.extend(function(vars, text){
+	ddtm.FirstOfNode = lang.extend(function(vars, text){
 		this._vars = vars;
-		this.vars = dojo.map(vars, function(item){
+		this.vars = array.map(vars, function(item){
 			return new dojox.dtl._Filter(item);
 		});
 		this.contents = text;
@@ -77,7 +86,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		}
 	});
 
-	ddtm.SpacelessNode = dojo.extend(function(nodelist, text){
+	ddtm.SpacelessNode = lang.extend(function(nodelist, text){
 		this.nodelist = nodelist;
 		this.contents = text;
 	},
@@ -86,12 +95,12 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 			if(buffer.getParent){
 				// Unfortunately, we have to branch here
 				var watch = [
-					dojo.connect(buffer, "onAddNodeComplete", this, "_watch"),
-					dojo.connect(buffer, "onSetParent", this, "_watchParent")
+					connect.connect(buffer, "onAddNodeComplete", this, "_watch"),
+					connect.connect(buffer, "onSetParent", this, "_watchParent")
 				];
 				buffer = this.nodelist.render(context, buffer);
-				dojo.disconnect(watch[0]);
-				dojo.disconnect(watch[1]);
+				connect.disconnect(watch[0]);
+				connect.disconnect(watch[1]);
 			}else{
 				var value = this.nodelist.dummyRender(context);
 				this.contents.set(value.replace(/>\s+</g, '><'));
@@ -140,7 +149,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		}
 	});
 
-	ddtm.TemplateTagNode = dojo.extend(function(tag, text){
+	ddtm.TemplateTagNode = lang.extend(function(tag, text){
 		this.tag = tag;
 		this.contents = text;
 	},
@@ -167,7 +176,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		}
 	});
 
-	ddtm.WidthRatioNode = dojo.extend(function(current, max, width, text){
+	ddtm.WidthRatioNode = lang.extend(function(current, max, width, text){
 		this.current = new dd._Filter(current);
 		this.max = new dd._Filter(max);
 		this.width = width;
@@ -192,7 +201,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		}
 	});
 
-	ddtm.WithNode = dojo.extend(function(target, alias, nodelist){
+	ddtm.WithNode = lang.extend(function(target, alias, nodelist){
 		this.target = new dd._Filter(target);
 		this.alias = alias;
 		this.nodelist = nodelist;
@@ -214,7 +223,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base","dojo/_base/array","doj
 		}
 	});
 
-	dojo.mixin(ddtm, {
+	lang.mixin(ddtm, {
 		comment: function(parser, token){
 			// summary: Ignore everything between {% comment %} and {% endcomment %}
 			parser.skip_past("endcomment");
