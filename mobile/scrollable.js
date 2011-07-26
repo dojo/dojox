@@ -585,7 +585,8 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			if(!this._aborted){
 				if(n <= 1){
 					clicked = true;
-				}else if(n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4){
+				}else if(n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4
+					&& dojox.mobile.hasTouch){ // for desktop browsers, posY could be the same, since we're using clientY, see onTouchMove()
 					clicked = true;
 				}
 			}
