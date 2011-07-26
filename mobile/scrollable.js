@@ -116,12 +116,16 @@ define([
 	"dojo/_base/kernel",
 	"dojo/_base/connect",
 	"dojo/_base/event",
+	"dojo/_base/lang",
 	"dojo/_base/sniff",
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style"
-], function(dojo, connect, event, has, win, domClass, domConstruct, domStyle){
+], function(dojo, connect, event, lang, has, win, domClass, domConstruct, domStyle){
+
+	lang.getObject("mobile", true, dojox);
+
 /*=====
 // summary:
 //		Utility for enabling touch scrolling capability.
