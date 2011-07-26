@@ -5,12 +5,11 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dijit/_Contained",
-	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"dojo/_base/xhr",
 	"./ProgressIndicator"
 ],
-	function(dojo, array, declare, lang, win, Contained, Container, WidgetBase, xhr, ProgressIndicator){
+	function(dojo, array, declare, lang, win, Contained, WidgetBase, xhr, ProgressIndicator){
 
 	// summary:
 	//		A very simple content pane to embed an HTML fragment.
@@ -23,14 +22,20 @@ define([
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
 		Contained = dijit._Contained;
 	=====*/
-	return declare("dojox.mobile.ContentPane", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.ContentPane", [WidgetBase, Contained],{
 		href: "",
 		content: "",
 		parseOnLoad: true,
 		prog: true, // show progress indicator
+
+		buildRendering: function(){
+			this.inherited(arguments);
+			if(!this.containerNode){
+				this.containerNode = this.domNode;
+			}
+		},
 
 		startup: function(){
 			if(this._started){ return; }
