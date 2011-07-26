@@ -557,7 +557,8 @@ define([
 		getColumnTogglingItems: function(){
 			// Summary: returns an array of dijit.CheckedMenuItem widgets that can be
 			//		added to a menu for toggling columns on and off.
-			return dojo.map(this.layout.cells, function(cell){
+			var items, checkedItems = [];
+			items = dojo.map(this.layout.cells, function(cell){
 				if(!cell.menuItems){ cell.menuItems = []; }
 
 				var self = this;
@@ -596,8 +597,15 @@ define([
 					}
 				});
 				cell.menuItems.push(item);
+				if(!cell.hidden) {
+					checkedItems.push(item);
+				}
 				return item;
 			}, this); // dijit.CheckedMenuItem[]
+			if(checkedItems.length == 1) {
+				checkedItems[0].set('disabled', true);
+			}
+			return items;
 		},
 
 		_setHeaderMenuAttr: function(menu){
