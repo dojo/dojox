@@ -43,9 +43,6 @@ define([
 
 		_setupSubNodes: function(ul){
 			array.forEach(this.getChildren(), function(w){
-				if(this.single){
-					w.subNode.firstChild.style.display = "none";
-				}
 				ul.appendChild(w.subNode);
 			});
 		},
@@ -55,7 +52,7 @@ define([
 			if(this.transition === "below"){
 				this._setupSubNodes(this.domNode);
 			}else{
-				var view = new View({id:this.id+"_mblApplView"});
+				var view = this.appView = new View({id:this.id+"_mblApplView"});
 				var _this = this;
 				view.onAfterTransitionIn = function(moveTo, dir, transition, context, method){
 					_this._opening._open_1();
@@ -67,12 +64,22 @@ define([
 									moveTo: this.domNode.parentNode.id,
 									transition: this.transition});
 				view.addChild(heading);
-				var ul = win.doc.createElement("UL");
+				var ul = view._ul = win.doc.createElement("UL");
 				ul.className = "mblIconContainer";
 				ul.style.marginTop = "0px";
 				this._setupSubNodes(ul);
 				view.domNode.appendChild(ul);
-				win.doc.body.appendChild(view.domNode);
+
+				var target;
+				for(var w = this.getParent(); w; w = w.getParent()){
+					if(w instanceof dojox.mobile.View){
+						target = w.domNode.parentNode;
+						break;
+					}
+				}
+				if(!target){ target = win.body(); }
+				target.appendChild(view.domNode);
+
 				heading.startup();
 			}
 			this.inherited(arguments);
@@ -109,6 +116,8 @@ define([
 					refNode = refNode.nextSibling;
 				}
 				domConstruct.place(widget.subNode, refNode, "after");
+			}else{
+				domConstruct.place(widget.subNode, this.appView._ul, insertIndex);
 			}
 			widget.inheritParams();
 			widget._setIconAttr(widget.icon);
@@ -126,6 +135,8 @@ define([
 				this.inherited(arguments);
 				if(this.transition === "below"){
 					this.containerNode.removeChild(widget.subNode);
+				}else{
+					this.appView._ul.removeChild(widget.subNode);
 				}
 			}
 		}
