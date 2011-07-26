@@ -128,6 +128,9 @@ dojo.declare("dojox.grid._Layout", null, {
 		}
 
 		var cell_type = inDef.type || inDef.cellType || this._defaultCellProps.type || this._defaultCellProps.cellType || dojox.grid.cells.Cell;
+		if(dojo.isString(cell_type)){
+			cell_type = dojo.getObject(cell_type);
+		}
 
 		props.unitWidth = getCellWidth(inDef);
 		return new cell_type(dojo.mixin({}, this._defaultCellProps, inDef, props));
