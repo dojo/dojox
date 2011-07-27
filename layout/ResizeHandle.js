@@ -14,13 +14,13 @@ define([
 	"dojo/dom-style",
 	"dijit",
 	"dijit/_Widget",
-	"dijit/_Templated",
+	"dijit/_TemplatedMixin",
 	"dojo/_base/declare"
-], function (dojo, lang, connect, arrayUtil, eventUtil, fxBase, windowBase, fxUtil, windowUtil, domUtil, domClass, domGeometry, domStyle, dijit, _Widget, _Templated) {
+], function (dojo, lang, connect, arrayUtil, eventUtil, fxBase, windowBase, fxUtil, windowUtil, domUtil, domClass, domGeometry, domStyle, dijit, _Widget, _TemplatedMixin) {
 dojo.experimental("dojox.layout.ResizeHandle");
 
 var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
-	[_Widget, _Templated],
+	[_Widget, _TemplatedMixin],
 	{
 	// summary: A dragable handle used to resize an attached node.
 	//

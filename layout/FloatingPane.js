@@ -3,7 +3,7 @@ dojo.experimental("dojox.layout.FloatingPane");
 
 dojo.require("dojo.window");
 
-dojo.require("dijit._Templated");
+dojo.require("dijit._TemplatedMixin");
 dojo.require("dijit._Widget");
 dojo.require("dijit.BackgroundIframe");
 dojo.require("dojo.dnd.Moveable");
@@ -12,7 +12,7 @@ dojo.require("dojox.layout.ContentPane");
 dojo.require("dojox.layout.ResizeHandle");
 
 dojo.declare("dojox.layout.FloatingPane",
-	[ dojox.layout.ContentPane, dijit._Templated ],
+	[ dojox.layout.ContentPane, dijit._TemplatedMixin ],
 	{
 	// summary:
 	//		A non-modal Floating window.
@@ -104,7 +104,7 @@ dojo.declare("dojox.layout.FloatingPane",
 		this.domNode.style.position = "absolute";
 		
 		this.bgIframe = new dijit.BackgroundIframe(this.domNode);
-		this._naturalState = dojo.coords(this.domNode);
+		this._naturalState = dojo.position(this.domNode);
 	},
 	
 	startup: function(){
@@ -163,7 +163,7 @@ dojo.declare("dojox.layout.FloatingPane",
 		this.connect(this.domNode,	"onmousedown","bringToTop");
 
 		// Initial resize to give child the opportunity to lay itself out
-		this.resize(dojo.coords(this.domNode));
+		this.resize(dojo.position(this.domNode));
 		
 		this._started = true;
 	},
@@ -217,7 +217,7 @@ dojo.declare("dojox.layout.FloatingPane",
 				}
 			})
 		}).play();
-		this.resize(dojo.coords(this.domNode));
+		this.resize(dojo.position(this.domNode));
 		this._onShow(); // lazy load trigger
 	},
 
@@ -262,7 +262,9 @@ dojo.declare("dojox.layout.FloatingPane",
 		// From the ResizeHandle we only get width and height information
 		var dns = this.domNode.style;
 		if("t" in dim){ dns.top = dim.t + "px"; }
+		else if("y" in dim){ dns.top = dim.y + "px"; }
 		if("l" in dim){ dns.left = dim.l + "px"; }
+		else if("x" in dim){ dns.left = dim.x + "px"; }
 		dns.width = dim.w + "px";
 		dns.height = dim.h + "px";
 
@@ -310,7 +312,7 @@ dojo.declare("dojox.layout.FloatingPane",
 
 
 dojo.declare("dojox.layout.Dock",
-	[dijit._Widget,dijit._Templated],
+	[dijit._Widget,dijit._TemplatedMixin],
 	{
 	// summary:
 	//		A widget that attaches to a node and keeps track of incoming / outgoing FloatingPanes
@@ -374,7 +376,7 @@ dojo.declare("dojox.layout.Dock",
 });
 
 dojo.declare("dojox.layout._DockNode",
-	[dijit._Widget,dijit._Templated],
+	[dijit._Widget,dijit._TemplatedMixin],
 	{
 	// summary:
 	//		dojox.layout._DockNode is a private widget used to keep track of
