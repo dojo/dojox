@@ -4,9 +4,10 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"./common",
 	"./_ItemBase"
 ],
-	function(declare, win, domClass, domConstruct, domStyle, ItemBase){
+	function(declare, win, domClass, domConstruct, domStyle, common, ItemBase){
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:
@@ -36,7 +37,7 @@ define([
 			if(!this.label){
 				this.label = this.domNode.innerHTML;
 			}
-			this.domNode.innerHTML = this._cv(this.label);
+			this.domNode.innerHTML = this._cv ? this._cv(this.label) : this.label;
 	
 			if(this.icon && this.icon != "none"){
 				var img;

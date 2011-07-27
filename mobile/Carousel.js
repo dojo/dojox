@@ -276,7 +276,7 @@ define([
 
 		_setTitleAttr: function(/*String*/title){
 			this.title = title;
-			this.titleNode.innerHTML = this._cv(title);
+			this.titleNode.innerHTML = this._cv ? this._cv(title) : title;
 		}
 	});
 });

@@ -122,13 +122,13 @@ define([
 				var neck = domConstruct.create("DIV", {className:"mblArrowButtonNeck"}, btn);
 			}
 			this.back = back;
-			this._body.innerHTML = this._cv(this.back);
+			this._body.innerHTML = this._cv ? this._cv(this.back) : this.back;
 			this.resize();
 		},
 	
 		_setLabelAttr: function(/*String*/label){
 			this.label = label;
-			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv(label);
+			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv ? this._cv(label) : label;
 		},
 	
 		findCurrentView: function(){

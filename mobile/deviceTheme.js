@@ -6,6 +6,9 @@ define([
 	"dojo/dom-construct",
 	"require"
 ], function(array, config, lang, win, domConstruct, require){
+
+	lang.getObject("mobile", true, dojox);
+
 	// module:
 	//		dojox/mobile/deviceTheme
 	// summary:

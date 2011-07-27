@@ -63,7 +63,7 @@ define([
 						domConstruct.create("DIV", {
 							className: "mblSpinWheelSlotLabel",
 							name: this.items[i][0],
-							innerHTML: this._cv(this.items[i][1])
+							innerHTML: this._cv ? this._cv(this.items[i][1]) : this.items[i][1]
 						}, this.panelNodes[k]);
 					}
 				}

@@ -8,10 +8,11 @@ define([
 	"dojo/dom-attr",
 	"dojo/dom-class",
 	"dojo/dom-style",
+	"./common",
 	"./_ItemBase",
 	"./TransitionEvent"
 ],
-	function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, ItemBase, TransitionEvent){
+	function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, common, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
@@ -258,7 +259,7 @@ define([
 	
 		_setLabelAttr: function(/*String*/text){
 			this.label = text;
-			var s = this._cv(text);
+			var s = this._cv ? this._cv(text) : text;
 			this.labelNode1.innerHTML = s;
 			this.labelNode2.innerHTML = s;
 		}

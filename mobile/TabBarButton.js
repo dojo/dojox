@@ -4,9 +4,10 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"./common",
 	"./_ItemBase"
 ],
-	function(declare, lang, win, domClass, domConstruct, ItemBase){
+	function(declare, lang, win, domClass, domConstruct, common, ItemBase){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
@@ -60,13 +61,13 @@ define([
 					var n = r.firstChild;
 					if(n.nodeType === 3){
 						label += lang.trim(n.nodeValue);
-						n.nodeValue = this._cv(n.nodeValue);
+						n.nodeValue = this._cv ? this._cv(n.nodeValue) : n.nodeValue;
 					}
 					box.appendChild(n);
 				}
 			}
 			if(this.label){
-				box.appendChild(win.doc.createTextNode(this._cv(this.label)));
+				box.appendChild(win.doc.createTextNode(this._cv ? this._cv(this.label) : this.label));
 			}else{
 				this.label = label;
 			}

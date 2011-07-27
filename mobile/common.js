@@ -405,10 +405,6 @@ define([
 		return null;
 	};
 
-	lang.extend(WidgetBase, {
-		_cv: function(s){ return s; } // convert the given string
-	});
-
 	(function(){
 		// feature detection
 		if(has("webKit")){

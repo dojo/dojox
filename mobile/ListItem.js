@@ -6,10 +6,11 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/has",
+	"./common",
 	"./_ItemBase",
 	"./TransitionEvent"
 ],
-	function(array, connect, declare, lang, domClass, domConstruct, has, ItemBase, TransitionEvent){
+	function(array, connect, declare, lang, domClass, domConstruct, has, common, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:
@@ -65,7 +66,7 @@ define([
 				for(var i = 0, len = r.childNodes.length; i < len; i++){
 					var n = r.firstChild;
 					if(n.nodeType === 3 && lang.trim(n.nodeValue) !== ""){
-						n.nodeValue = this._cv(n.nodeValue);
+						n.nodeValue = this._cv ? this._cv(n.nodeValue) : n.nodeValue;
 						this.labelNode = domConstruct.create("SPAN", {className:"mblListItemLabel"});
 						this.labelNode.appendChild(n);
 						n = this.labelNode;
@@ -246,7 +247,7 @@ define([
 	
 		_setRightTextAttr: function(/*String*/text){
 			this.rightText = text;
-			this.rightTextNode.innerHTML = this._cv(text);
+			this.rightTextNode.innerHTML = this._cv ? this._cv(text) : text;
 		},
 	
 		_setRightIconAttr: function(/*String*/icon){
@@ -263,7 +264,7 @@ define([
 	
 		_setLabelAttr: function(/*String*/text){
 			this.label = text;
-			this.labelNode.innerHTML = this._cv(text);
+			this.labelNode.innerHTML = this._cv ? this._cv(text) : text;
 		}
 	});
 });

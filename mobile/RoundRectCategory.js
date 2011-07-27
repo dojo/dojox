@@ -26,7 +26,7 @@ define([
 
 		_setLabelAttr: function(/*String*/label){
 			this.label = label;
-			this.domNode.innerHTML = this._cv(label);
+			this.domNode.innerHTML = this._cv ? this._cv(label) : label;
 		}
 	});
 
