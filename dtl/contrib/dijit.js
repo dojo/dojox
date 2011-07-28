@@ -195,10 +195,10 @@ define([
 
 	lang.mixin(ddcd, {
 		widgetsInTemplate: true,
-		dojoAttachPoint: function(Parser, token){
+		dojoAttachPoint: function(parser, token){
 			return new ddcd.AttachNode(token.contents.slice(16).split(/\s*,\s*/));
 		},
-		dojoAttachEvent: function(Parser, token){
+		dojoAttachEvent: function(parser, token){
 			return new ddcd.EventNode(token.contents.slice(16));
 		},
 		dojoType: function(parser, token){
@@ -210,14 +210,14 @@ define([
 			var dojoType = parsed ? contents.slice(0, -7) : contents.toString();
 
 			if(ddcd.widgetsInTemplate){
-				var node = Parser.swallowNode();
+				var node = parser.swallowNode();
 				node.setAttribute("dojoType", dojoType);
 				return new ddcd.DojoTypeNode(node, parsed);
 			}
 
 			return new dd.AttributeNode("dojoType", dojoType);
 		},
-		on: function(Parser, token){
+		on: function(parser, token){
 			// summary: Associates an event type to a function (on the current widget) by name
 			var parts = token.contents.split();
 			return new ddcd.EventNode(parts[0] + ":" + parts.slice(1).join(" "));
