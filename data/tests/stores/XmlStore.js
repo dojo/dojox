@@ -157,6 +157,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			store.fetch({query:{isbn:"?9B574"}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
+		
 		function testReadAPI_fetch_pattern1(t){
 			//	summary:
 			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
@@ -276,6 +277,23 @@ doh.register("dojox.data.tests.stores.XmlStore",
 				d.errback(error);
 			}
 			store.fetch({query:{isbn:"?9B574"}, queryOptions: {ignoreCase: false}, onComplete: onComplete, onError: onError});
+			return d; //Object
+		},
+		function testReadAPI_fetch_regexp(t){
+			//	summary:
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
+			//	description:
+			//		Simple test of fetching one xml items through an XML element called isbn with ? pattern match
+			var store = dojox.data.tests.stores.XmlStore.getBooks2Store();
+			var d = new doh.Deferred();
+			function onComplete(items, request) {
+				t.assertEqual(1, items.length);
+				d.callback(true);
+			}
+			function onError(error, request) {
+				d.errback(error);
+			}
+			store.fetch({query:{isbn: new RegExp("^.9B574$")}, onComplete: onComplete, onError: onError});
 			return d; //Object
 		},
 		function testReadAPI_fetch_all_rootItem(t){
