@@ -47,16 +47,6 @@ return dojo.declare("dojox.layout.ContentPane", ContentPane, {
 	// NOTE this name might change in the near future
 	scriptHasHooks: false,
 
-	/*======
-	// ioMethod: dojo.xhrGet|dojo.xhrPost
-	//		reference to the method that should grab the content
-	ioMethod: dojo.xhrGet,
-	
-	// ioArgs: Object
-	//		makes it possible to add custom args to xhrGet, like ioArgs.headers['X-myHeader'] = 'true'
-	ioArgs: {},
-	======*/
-
 	constructor: function(){
 		// init per instance properties, initializer doesn't work here because how things is hooked up in dijit._Widget
 		this.ioArgs = {};
