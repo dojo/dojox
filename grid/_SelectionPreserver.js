@@ -1,6 +1,11 @@
-define(["dojo", "dojox"], function(dojo, dojox){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
+	"dojo/_base/array"
+], function(declare, connect, lang, array){
 
-dojo.declare("dojox.grid._SelectionPreserver", null, {
+return declare("dojox.grid._SelectionPreserver", null, {
 	// summary:
 	//		Preserve selections across various user actions.
 	//
@@ -21,16 +26,16 @@ dojo.declare("dojox.grid._SelectionPreserver", null, {
 		var grid = this.grid = selection.grid;
 		this.reset();
 		this._connects = [
-			dojo.connect(grid, '_setStore', this, 'reset'),
-			dojo.connect(grid, '_addItem', this, '_reSelectById'),
-			dojo.connect(selection, 'addToSelection', dojo.hitch(this, '_selectById', true)),
-			dojo.connect(selection, 'deselect', dojo.hitch(this, '_selectById', false)),
-			dojo.connect(selection, 'deselectAll', this, 'reset')
+			connect.connect(grid, '_setStore', this, 'reset'),
+			connect.connect(grid, '_addItem', this, '_reSelectById'),
+			connect.connect(selection, 'addToSelection', lang.hitch(this, '_selectById', true)),
+			connect.connect(selection, 'deselect', lang.hitch(this, '_selectById', false)),
+			connect.connect(selection, 'deselectAll', this, 'reset')
 		];
 	},
 	destroy: function(){
 		this.reset();
-		dojo.forEach(this._connects, dojo.disconnect);
+		array.forEach(this._connects, connect.disconnect);
 		delete this._connects;
 	},
 	reset: function(){
@@ -58,7 +63,4 @@ dojo.declare("dojox.grid._SelectionPreserver", null, {
 		return item;
 	}
 });
-
-return dojox.grid._SelectionPreserver;
-
 });

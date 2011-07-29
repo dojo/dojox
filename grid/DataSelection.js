@@ -1,8 +1,13 @@
-define(["dojo", "dojox", "./_SelectionPreserver", "./Selection"], function(dojo, dojox, SelectionPreserver){
-dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
+define([
+	"dojo/_base/declare",
+	"./_SelectionPreserver",
+	"./Selection"
+], function(declare, _SelectionPreserver, Selection){
+	
+return declare("dojox.grid.DataSelection", Selection, {
 	constructor: function(grid){
 		if(grid.keepSelection){
-			this.preserver = new SelectionPreserver(this);
+			this.preserver = new _SelectionPreserver(this);
 		}
 	},
 	
@@ -13,7 +18,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 	},
 	
 	getFirstSelected: function(){
-		var idx = dojox.grid.Selection.prototype.getFirstSelected.call(this);
+		var idx = Selection.prototype.getFirstSelected.call(this);
 
 		if(idx == -1){ return null; }
 		return this.grid.getItem(idx);
@@ -21,7 +26,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 
 	getNextSelected: function(inPrev){
 		var old_idx = this.grid.getItemIndex(inPrev);
-		var idx = dojox.grid.Selection.prototype.getNextSelected.call(this, old_idx);
+		var idx = Selection.prototype.getNextSelected.call(this, old_idx);
 
 		if(idx == -1){ return null; }
 		return this.grid.getItem(idx);
@@ -45,7 +50,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 		}else{
 			idx = this.grid.getItemIndex(inItemOrIndex);
 		}
-		dojox.grid.Selection.prototype.addToSelection.call(this, idx);
+		Selection.prototype.addToSelection.call(this, idx);
 	},
 
 	deselect: function(inItemOrIndex){
@@ -56,7 +61,7 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 		}else{
 			idx = this.grid.getItemIndex(inItemOrIndex);
 		}
-		dojox.grid.Selection.prototype.deselect.call(this, idx);
+		Selection.prototype.deselect.call(this, idx);
 	},
 
 	deselectAll: function(inItemOrIndex){
@@ -67,13 +72,10 @@ dojo.declare("dojox.grid.DataSelection", dojox.grid.Selection, {
 			}else{
 				idx = this.grid.getItemIndex(inItemOrIndex);
 			}
-			dojox.grid.Selection.prototype.deselectAll.call(this, idx);
+			Selection.prototype.deselectAll.call(this, idx);
 		}else{
 			this.inherited(arguments);
 		}
 	}
 });
-
-return dojox.grid.DataSelection;
-
 });

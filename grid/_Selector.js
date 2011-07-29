@@ -1,6 +1,16 @@
-define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo, dojox){
+define([
+	"../main",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/query",
+	"dojo/dom-class",
+	"./Selection",
+	"./_View",
+	"./util",
+	"./_Builder"
+], function(dojox, declare, lang, query, domClass, Selection, _View, util){
 	
-	dojox.grid._InputSelectorHeaderBuilder = dojo.extend(function(view){
+	dojox.grid._InputSelectorHeaderBuilder = lang.extend(function(view){
 		dojox.grid._HeaderBuilder.call(this, view);
 	},dojox.grid._HeaderBuilder.prototype,{
 		generateHtml: function(){
@@ -27,7 +37,7 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 		}
 	});
 
-	dojox.grid._SelectorContentBuilder = dojo.extend(function(view){
+	dojox.grid._SelectorContentBuilder = lang.extend(function(view){
 		dojox.grid._ContentBuilder.call(this, view);
 	},dojox.grid._ContentBuilder.prototype,{
 		generateHtml: function(inDataIndex, inRowIndex){
@@ -70,7 +80,7 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 		}
 	});
 
-	dojox.grid._InputSelectorContentBuilder = dojo.extend(function(view){
+	dojox.grid._InputSelectorContentBuilder = lang.extend(function(view){
 		dojox.grid._SelectorContentBuilder.call(this, view);
 	},dojox.grid._SelectorContentBuilder.prototype,{
 		getCellContent: function(rowIndex){
@@ -81,7 +91,7 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 		}
 	});
 
-	dojo.declare("dojox.grid._Selector", dojox.grid._View, {
+	declare("dojox.grid._Selector", _View, {
 		inputType: '',
 		selectionMode: '',
 
@@ -147,8 +157,8 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 		!dojox.grid._View.prototype._contentBuilderClass){
 		dojox.grid._Selector.prototype.postCreate = function(){
 			this.connect(this.scrollboxNode,"onscroll","doscroll");
-			dojox.grid.util.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
-			dojox.grid.util.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
+			util.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
+			util.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
 			if(this._contentBuilderClass){
 				this.content = new this._contentBuilderClass(this);
 			}else{
@@ -160,7 +170,7 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 				this.header = new dojox.grid._HeaderBuilder(this);
 			}
 			//BiDi: in RTL case, style width='9000em' causes scrolling problem in head node
-			if(!dojo._isBodyLtr()){
+			if(!this.grid.isLeftToRight()){
 				this.headerNodeContainer.style.width = "";
 			}
 			this.connect(this.grid.selection, 'onSelected', 'onSelected');
@@ -182,7 +192,7 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 		renderHeader: function(){}
 	});
 
-	dojo.declare("dojox.grid._CheckBoxSelector", dojox.grid._Selector, {
+	declare("dojox.grid._CheckBoxSelector", dojox.grid._Selector, {
 		inputType: 'checkbox',
 		_headerBuilderClass: dojox.grid._InputSelectorHeaderBuilder,
 		_contentBuilderClass: dojox.grid._InputSelectorContentBuilder,
@@ -200,12 +210,12 @@ define(["dojo", "dojox", "./Selection", "./_View", "./_Builder"], function(dojo,
 		},
 		onSelectionChanged: function(){
 			if(this._selectionChanging){ return; }
-			var inputDiv = dojo.query('.dojoxGridCheckSelector', this.headerNode)[0];
+			var inputDiv = query('.dojoxGridCheckSelector', this.headerNode)[0];
 			var g = this.grid;
 			var s = (g.rowCount && g.rowCount == g.selection.getSelectedCount());
 			g.allItemsSelected = s||false;
-			dojo.toggleClass(inputDiv, "dijitChecked", g.allItemsSelected);
-			dojo.toggleClass(inputDiv, "dijitCheckBoxChecked", g.allItemsSelected);
+			domClass.toggle(inputDiv, "dijitChecked", g.allItemsSelected);
+			domClass.toggle(inputDiv, "dijitCheckBoxChecked", g.allItemsSelected);
 		}
 	});
 	

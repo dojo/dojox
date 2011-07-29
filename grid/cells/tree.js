@@ -1,4 +1,9 @@
-define(["dojo", "dojox", "../cells"], function(dojo, dojox){
+define([
+	"dojo/_base/kernel",
+	"../../main",
+	"dojo/_base/lang",
+	"../cells"
+], function(dojo, dojox, lang){
 
 dojox.grid.cells.TreeCell = {
 	formatAggregate: function(inItem, level, inRowIndexes){
@@ -28,7 +33,7 @@ dojox.grid.cells.TreeCell = {
 		return this.openStates[itemId];
 	},
 	formatAtLevel: function(inRowIndexes, inItem, level, summaryRow, toggleClass, cellClasses){
-		if(!dojo.isArray(inRowIndexes)){
+		if(!lang.isArray(inRowIndexes)){
 			inRowIndexes = [inRowIndexes];
 		}
 		var result = "";

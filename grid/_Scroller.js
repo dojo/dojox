@@ -1,4 +1,10 @@
-define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
+define([
+	"dijit/_base/manager",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"./util",
+	"dojo/_base/html"
+], function(dijit, declare, lang, util){
 
 	var indexInParent = function(inNode){
 		var i=0, n, p=inNode.parentNode;
@@ -45,7 +51,7 @@ define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 		return nodeKids(inNode, 'div');
 	};
 
-	dojo.declare("dojox.grid._Scroller", null, {
+	return declare("dojox.grid._Scroller", null, {
 		constructor: function(inContentNodes){
 			this.setContentNodes(inContentNodes);
 			this.pageHeights = [];
@@ -84,7 +90,7 @@ define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 			if(this.scrollboxNode){
 				this.scrollboxNode.scrollTop = 0;
 				this.scroll(0);
-				this.scrollboxNode.onscroll = dojo.hitch(this, 'onscroll');
+				this.scrollboxNode.onscroll = lang.hitch(this, 'onscroll');
 			}
 		},
 		_getPageCount: function(rowCount, rowsPerPage){
@@ -252,7 +258,7 @@ define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 			for(var i=0; i<this.colCount; i++){
 				//We want to have 1px in height min to keep scroller.  Otherwise can't scroll
 				//and see header in empty grid.
-				dojox.grid.util.setStyleHeightPx(this.contentNodes[i], Math.max(1,this.height));
+				util.setStyleHeightPx(this.contentNodes[i], Math.max(1,this.height));
 			}
 			
 			// Calculate the average row height and update the defaults (row and page).
@@ -324,7 +330,7 @@ define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 			dojo.attr(p,"role","presentation");
 			p.style.position = 'absolute';
 			//p.style.width = '100%';
-			p.style[dojo._isBodyLtr() ? "left" : "right"] = '0';
+			p.style[this.grid.isLeftToRight() ? "left" : "right"] = '0';
 			return p;
 		},
 		getPageHeight: function(inPageIndex){
@@ -500,7 +506,4 @@ define(["dojo", "dijit", "dojox"], function(dojo, dijit, dojox){
 		},
 		dummy: 0
 	});
-
-	return dojox.grid._Scroller;
-
 });

@@ -1,14 +1,8 @@
 define([
-	"dojo",
-	"dijit",
-	"dojox",
-	"dojo/text!./resources/_Grid.html",
-	"dojo/i18n!dijit/nls/loading",
-	"dijit/dijit",
-	"dijit/CheckedMenuItem",
-	"dijit/Menu",
-	"dojox/html/metrics",
-	"./util",
+	"dojo/_base/kernel",
+	"../main",
+	"dojo/_base/declare",
+	"./_Events",
 	"./_Scroller",
 	"./_Layout",
 	"./_View",
@@ -18,7 +12,22 @@ define([
 	"./_EditManager",
 	"./Selection",
 	"./_RowSelector",
-	"./_Events"], function(dojo, dijit, dojox, template){
+	"./util",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/CheckedMenuItem",
+	"dojo/text!./resources/_Grid.html",
+	"dojo/string",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dojo/_base/sniff",
+	"dojox/html/metrics",
+	"dojo/_base/html",
+	"dojo/dnd/common",
+	"dojo/i18n!dijit/nls/loading"
+], function(dojo, dojox, declare, _Events, _Scroller, _Layout, _View, _ViewManager,
+	_RowManager, _FocusManager, _EditManager, Selection, _RowSelector, util, _Widget,
+	 _TemplatedMixin, CheckedMenuItem, template, string, array, lang, has, metrics){
 
 	// NOTE: this is for backwards compatibility with Dojo 1.3
 	if(!dojo.isCopyKey){
@@ -141,8 +150,8 @@ define([
 	}
 	=====*/
 
-	dojo.declare('dojox.grid._Grid',
-		[ dijit._Widget, dijit._TemplatedMixin, dojox.grid._Events ],
+	declare('dojox.grid._Grid',
+		[ _Widget, _TemplatedMixin, _Events ],
 		{
 		// summary:
 		// 		A grid widget with virtual scrolling, cell editing, complex rows,
@@ -324,7 +333,7 @@ define([
 
 		// _layoutClass: Object
 		//	The class to use for our layout - can be overridden by grid subclasses
-		_layoutClass: dojox.grid._Layout,
+		_layoutClass: _Layout,
 
 		// initialization
 		buildRendering: function(){
@@ -343,9 +352,9 @@ define([
 			this.connect(this.selection, "onDeselected", "onDeselected");
 			this.connect(this.selection, "onChanged", "onSelectionChanged");
 
-			dojox.html.metrics.initOnFontResize();
-			this.connect(dojox.html.metrics, "onFontResize", "textSizeChanged");
-			dojox.grid.util.funnelEvents(this.domNode, this, 'doKeyEvent', dojox.grid.util.keyEvents);
+			metrics.initOnFontResize();
+			this.connect(metrics, "onFontResize", "textSizeChanged");
+			util.funnelEvents(this.domNode, this, 'doKeyEvent', util.keyEvents);
 			if (this.selectionMode != "none") {
 				this.domNode.setAttribute("aria-multiselectable", this.selectionMode == "single" ? "false" : "true");
 			}
@@ -359,8 +368,8 @@ define([
 		postMixInProperties: function(){
 			this.inherited(arguments);
 			var messages = dojo.i18n.getLocalization("dijit", "loading", this.lang);
-			this.loadingMessage = dojo.string.substitute(this.loadingMessage, messages);
-			this.errorMessage = dojo.string.substitute(this.errorMessage, messages);
+			this.loadingMessage = string.substitute(this.loadingMessage, messages);
+			this.errorMessage = string.substitute(this.errorMessage, messages);
 			if(this.srcNodeRef && this.srcNodeRef.style.height){
 				this.height = this.srcNodeRef.style.height;
 			}
@@ -404,7 +413,7 @@ define([
 				delete this.focus;
 			}
 			if(this.headerMenu&&this._placeholders.length){
-				dojo.forEach(this._placeholders, function(p){ p.unReplace(true); });
+				array.forEach(this._placeholders, function(p){ p.unReplace(true); });
 				this.headerMenu.unBindDomNode(this.viewsHeaderNode);
 			}
 			this.inherited(arguments);
@@ -466,26 +475,26 @@ define([
 			//		create grid managers for various tasks including rows, focus, selection, editing
 
 			// row manager
-			this.rows = new dojox.grid._RowManager(this);
+			this.rows = new _RowManager(this);
 			// focus manager
-			this.focus = new dojox.grid._FocusManager(this);
+			this.focus = new _FocusManager(this);
 			// edit manager
-			this.edit = new dojox.grid._EditManager(this);
+			this.edit = new _EditManager(this);
 		},
 
 		createSelection: function(){
 			// summary:	Creates a new Grid selection manager.
 
 			// selection manager
-			this.selection = new dojox.grid.Selection(this);
+			this.selection = new Selection(this);
 		},
 
 		createScroller: function(){
 			// summary: Creates a new virtual scroller
-			this.scroller = new dojox.grid._Scroller();
+			this.scroller = new _Scroller();
 			this.scroller.grid = this;
-			this.scroller.renderRow = dojo.hitch(this, "renderRow");
-			this.scroller.removeRow = dojo.hitch(this, "rowRemoved");
+			this.scroller.renderRow = lang.hitch(this, "renderRow");
+			this.scroller.removeRow = lang.hitch(this, "rowRemoved");
 		},
 
 		createLayout: function(){
@@ -504,17 +513,17 @@ define([
 
 		// views
 		createViews: function(){
-			this.views = new dojox.grid._ViewManager(this);
-			this.views.createView = dojo.hitch(this, "createView");
+			this.views = new _ViewManager(this);
+			this.views.createView = lang.hitch(this, "createView");
 		},
 
 		createView: function(inClass, idx){
-			var c = dojo.getObject(inClass);
+			var c = lang.getObject(inClass);
 			var view = new c({ grid: this, index: idx });
 			this.viewsNode.appendChild(view.domNode);
 			this.viewsHeaderNode.appendChild(view.headerNode);
 			this.views.addView(view);
-			dojo.attr(this.domNode, "align", dojo._isBodyLtr() ? 'left' : 'right');
+			dojo.attr(this.domNode, "align", this.isLeftToRight() ? 'left' : 'right');
 			return view;
 		},
 
@@ -527,9 +536,9 @@ define([
 
 		_setStructureAttr: function(structure){
 			var s = structure;
-			if(s && dojo.isString(s)){
+			if(s && lang.isString(s)){
 				dojo.deprecated("dojox.grid._Grid.set('structure', 'objVar')", "use dojox.grid._Grid.set('structure', objVar) instead", "2.0");
-				s=dojo.getObject(s);
+				s=lang.getObject(s);
 			}
 			this.structure = s;
 			if(!s){
@@ -558,11 +567,11 @@ define([
 			// Summary: returns an array of dijit.CheckedMenuItem widgets that can be
 			//		added to a menu for toggling columns on and off.
 			var items, checkedItems = [];
-			items = dojo.map(this.layout.cells, function(cell){
+			items = array.map(this.layout.cells, function(cell){
 				if(!cell.menuItems){ cell.menuItems = []; }
 
 				var self = this;
-				var item = new dijit.CheckedMenuItem({
+				var item = new CheckedMenuItem({
 					label: cell.name,
 					checked: !cell.hidden,
 					_gridCell: cell,
@@ -570,30 +579,30 @@ define([
 						if(self.layout.setColumnVisibility(this._gridCell.index, checked)){
 							var items = this._gridCell.menuItems;
 							if(items.length > 1){
-								dojo.forEach(items, function(item){
+								array.forEach(items, function(item){
 									if(item !== this){
 										item.setAttribute("checked", checked);
 									}
 								}, this);
 							}
-							checked = dojo.filter(self.layout.cells, function(c){
+							checked = array.filter(self.layout.cells, function(c){
 								if(c.menuItems.length > 1){
-									dojo.forEach(c.menuItems, "item.set('disabled', false);");
+									array.forEach(c.menuItems, "item.set('disabled', false);");
 								}else{
 									c.menuItems[0].set('disabled', false);
 								}
 								return !c.hidden;
 							});
 							if(checked.length == 1){
-								dojo.forEach(checked[0].menuItems, "item.set('disabled', true);");
+								array.forEach(checked[0].menuItems, "item.set('disabled', true);");
 							}
 						}
 					},
 					destroy: function(){
-						var index = dojo.indexOf(this._gridCell.menuItems, this);
+						var index = array.indexOf(this._gridCell.menuItems, this);
 						this._gridCell.menuItems.splice(index, 1);
 						delete this._gridCell;
-						dijit.CheckedMenuItem.prototype.destroy.apply(this, arguments);
+						CheckedMenuItem.prototype.destroy.apply(this, arguments);
 					}
 				});
 				cell.menuItems.push(item);
@@ -610,7 +619,7 @@ define([
 
 		_setHeaderMenuAttr: function(menu){
 			if(this._placeholders && this._placeholders.length){
-				dojo.forEach(this._placeholders, function(p){
+				array.forEach(this._placeholders, function(p){
 					p.unReplace(true);
 				});
 				this._placeholders = [];
@@ -634,7 +643,7 @@ define([
 		
 		setupHeaderMenu: function(){
 			if(this._placeholders && this._placeholders.length){
-				dojo.forEach(this._placeholders, function(p){
+				array.forEach(this._placeholders, function(p){
 					if(p._replaced){
 						p.unReplace(true);
 					}
@@ -744,7 +753,7 @@ define([
 				this.domNode.style.height = Math.max(0, h) + "px";
 			}
 			
-			var hasFlex = dojo.some(this.views.views, function(v){ return v.flexCells; });
+			var hasFlex = array.some(this.views.views, function(v){ return v.flexCells; });
 
 			if(!this._autoHeight && (h || dojo._getContentBox(this.domNode).h) === 0){
 				// We need to hide the header, since the Grid is essentially hidden.
@@ -791,13 +800,13 @@ define([
 			this.views.onEach('adaptHeight');
 			if(!this._autoHeight){
 				var numScroll = 0, numNoScroll = 0;
-				var noScrolls = dojo.filter(this.views.views, function(v){
+				var noScrolls = array.filter(this.views.views, function(v){
 					var has = v.hasHScrollbar();
 					if(has){ numScroll++; }else{ numNoScroll++; }
 					return (!has);
 				});
 				if(numScroll > 0 && numNoScroll > 0){
-					dojo.forEach(noScrolls, function(v){
+					array.forEach(noScrolls, function(v){
 						v.adaptHeight(true);
 					});
 				}
@@ -993,11 +1002,11 @@ define([
 		getRowNode: function(inRowIndex){
 			// summary:
 			//		find the rowNode that is not a rowSelector
-			if (this.focus.focusView && !(this.focus.focusView instanceof dojox.grid._RowSelector)){
+			if (this.focus.focusView && !(this.focus.focusView instanceof _RowSelector)){
 					return this.focus.focusView.rowNodes[inRowIndex];
 			}else{ // search through views
 				for (var i = 0, cView; (cView = this.views.views[i]); i++) {
-					if (!(cView instanceof dojox.grid._RowSelector)) {
+					if (!(cView instanceof _RowSelector)) {
 						return cView.rowNodes[inRowIndex];
 					}
 				}
@@ -1024,7 +1033,7 @@ define([
 
 		// scrollRedrawThreshold: int
 		//	pixel distance a user must scroll vertically to trigger grid scrolling.
-		scrollRedrawThreshold: (dojo.isIE ? 100 : 50),
+		scrollRedrawThreshold: (has('ie') ? 100 : 50),
 
 		// scroll methods
 		scrollTo: function(inTop){
@@ -1361,7 +1370,7 @@ define([
 						cellFunc(th, cell);
 					}
 
-					cell.type = cell.type ? dojo.getObject(cell.type) : dojox.grid.cells.Cell;
+					cell.type = cell.type ? lang.getObject(cell.type) : dojox.grid.cells.Cell;
 
 					if(cell.type && cell.type.markupFactory){
 						cell.type.markupFactory(th, cell);
