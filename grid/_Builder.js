@@ -454,7 +454,7 @@ define([
 				}
 			}
 
-			if(this.grid.isLeftToRight){
+			if(this.grid.isLeftToRight()){
 				return e.cellNode && (e.cellX >= e.cellNode.offsetWidth - this.overResizeWidth);
 			}
 			return (e.cellIndex>0) && (e.cellX >= e.cellNode.offsetWidth - this.overResizeWidth) && this.prepareResize(e, -1);
