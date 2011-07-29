@@ -1,7 +1,14 @@
-define(['dojo', 'dojo/io/iframe', 'dojox/form/uploader/plugins/HTML5'],function(dojo){
+define([
+	"dojo/dom-construct",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/io/iframe",
+	"dojox/form/uploader/plugins/HTML5"
+],function(domConstruct, declare, lang, array, ioIframe, formUploaderPluginsHTML5){
 	
 
-dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
+var pluginsIFrame = declare("dojox.form.uploader.plugins.IFrame", [], {
 	//
 	// Version: 1.6
 	//
@@ -10,9 +17,9 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 	//
 	//	description:
 	//		Only supported by IE, due to the specifc iFrame hack used. The
-	//		dojox.form.uploader.plugins.HTML5 plugin should be used along with this to add HTML5
+	//		formUploaderPluginsHTML5 plugin should be used along with this to add HTML5
 	//		capabilities to browsers that support them. Progress events are not supported.
-	//		Inherits all properties from dojox.form.Uploader and dojox.form.uploader.plugins.HTML5.
+	//		Inherits all properties from dojox.form.Uploader and formUploaderPluginsHTML5.
 	//
 
 	force:"",
@@ -37,8 +44,8 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 		//
 		var form, destroyAfter = false;
 		if(!this.getForm()){
-			form = dojo.create('form', {enctype:"multipart/form-data", method:"post"}, this.domNode);
-			dojo.forEach(this._inputs, function(n, i){
+			form = domConstruct.create('form', {enctype:"multipart/form-data", method:"post"}, this.domNode);
+			array.forEach(this._inputs, function(n, i){
 				if(n.value) form.appendChild(n);
 			}, this);
 			destroyAfter = true;
@@ -48,16 +55,16 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 
 		var url = this.getUrl();
 
-		var dfd = dojo.io.iframe.send({
+		var dfd = ioIframe.send({
 			url: url,
 			form: form,
 			handleAs: "json",
-			error: dojo.hitch(this, function(err){
-				if(destroyAfter){ dojo.destroy(form); }
+			error: lang.hitch(this, function(err){
+				if(destroyAfter){ domConstruct.destroy(form); }
 				this.onError(err);
 			}),
-			load: dojo.hitch(this, function(data, ioArgs, widgetRef){
-				if(destroyAfter){ dojo.destroy(form); }
+			load: lang.hitch(this, function(data, ioArgs, widgetRef){
+				if(destroyAfter){ domConstruct.destroy(form); }
 				if(data["ERROR"] || data["error"]){
 					this.onError(data);
 				}else{
@@ -68,7 +75,7 @@ dojo.declare("dojox.form.uploader.plugins.IFrame", [], {
 	}
 });
 
-dojox.form.addUploaderPlugin(dojox.form.uploader.plugins.IFrame);
+dojox.form.addUploaderPlugin(pluginsIFrame);
 
-return dojox.form.uploader.plugins.IFrame;
+return pluginsIFrame;
 });

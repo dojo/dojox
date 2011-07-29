@@ -1,6 +1,12 @@
-define(['dojo'],function(dojo){
+define([
+	"dojo/dom-form",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo"
+],function(domForm, declare, lang, array, dojo){
 
-dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
+var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 	//
 	// Version: 1.6
 	//
@@ -49,7 +55,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		//		See: dojox.form.Uploader.submit
 		//
 		form = !!form ? form.tagName ? form : this.getForm() : this.getForm();
-		var data = dojo.formToObject(form);
+		var data = domForm.toObject(form);
 		this.upload(data);
 	},
 
@@ -94,7 +100,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 			console.error("No upload url found.", this); return;
 		}
 		var fd = new FormData();
-		dojo.forEach(this.inputNode.files, function(f, i){
+		array.forEach(this.inputNode.files, function(f, i){
 			fd.append(this.name+"s[]", f);
 		}, this);
 
@@ -131,18 +137,18 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 	createXhr: function(){
 		var xhr = new XMLHttpRequest();
 		var timer;
-		xhr.upload.addEventListener("progress", dojo.hitch(this, "_xhrProgress"), false);
-		xhr.addEventListener("load", dojo.hitch(this, "_xhrProgress"), false);
-		xhr.addEventListener("error", dojo.hitch(this, function(evt){
+		xhr.upload.addEventListener("progress", lang.hitch(this, "_xhrProgress"), false);
+		xhr.addEventListener("load", lang.hitch(this, "_xhrProgress"), false);
+		xhr.addEventListener("error", lang.hitch(this, function(evt){
 			this.onError(evt);
 			clearInterval(timer);
 		}), false);
-		xhr.addEventListener("abort", dojo.hitch(this, function(evt){
+		xhr.addEventListener("abort", lang.hitch(this, function(evt){
 			this.onAbort(evt);
 			clearInterval(timer);
 		}), false);
-		xhr.onreadystatechange = dojo.hitch(this, function() {
-			if (xhr.readyState === 4) {
+		xhr.onreadystatechange = lang.hitch(this, function(){
+			if(xhr.readyState === 4){
 //				console.info("COMPLETE")
 				clearInterval(timer);
 				this.onComplete(JSON.parse(xhr.responseText));
@@ -150,7 +156,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		});
 		xhr.open("POST", this.getUrl());
 
-		timer = setInterval(dojo.hitch(this, function(){
+		timer = setInterval(lang.hitch(this, function(){
 			try{
 				if(typeof(xhr.statusText)){} // accessing this error throws an error. Awesomeness.
 			}catch(e){
@@ -162,13 +168,13 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 		return xhr;
 	},
 
-	_buildRequestBody : function(data, boundary) {
+	_buildRequestBody : function(data, boundary){
 		var EOL  = "\r\n";
 		var part = "";
 		boundary = "--" + boundary;
 
 		var filesInError = [];
-		dojo.forEach(this.inputNode.files, function(f, i){
+		array.forEach(this.inputNode.files, function(f, i){
 			var fieldName = this.name+"s[]";//+i;
 			var fileName  = this.inputNode.files[i].fileName;
 			var binary;
@@ -214,9 +220,7 @@ dojo.declare("dojox.form.uploader.plugins.HTML5", [], {
 	}
 
 });
-dojox.form.addUploaderPlugin(dojox.form.uploader.plugins.HTML5);
+dojox.form.addUploaderPlugin(pluginsHTML5);
 
-
-
-return dojox.form.uploader.plugins.HTML5;
+return pluginsHTML5;
 });

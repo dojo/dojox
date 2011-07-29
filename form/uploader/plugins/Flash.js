@@ -1,7 +1,19 @@
-define(['dojo', 'dojox/form/uploader/plugins/HTML5', 'dojox/embed/Flash'],function(dojo){
+define([
+	"dojo/dom-form",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-attr",
+	"dojo/_base/declare",
+	"dojo/_base/config",
+	"dojo/_base/connect",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojox/form/uploader/plugins/HTML5",
+	"dojox/embed/Flash"
+],function(domForm, domStyle, domConstruct, domAttr, declare, config, connect, lang, array, formUploaderPluginsHTML5, embedFlash){
 
 
-dojo.declare("dojox.form.uploader.plugins.Flash", [], {
+var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 	//
 	// Version: 1.6
 	//
@@ -13,12 +25,12 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 	//		that Firefox and Webkit have with the Flash plugin.
 	//
 	//	description:
-	//		Inherits all properties from dojox.form.Uploader and dojox.form.uploader.plugins.HTML5.
+	//		Inherits all properties from dojox.form.Uploader and formUploaderPluginsHTML5.
 	//		All properties and methods listed here are specific to the Flash plugin only.
 	//
 	//	swfPath:String
 	//		Path to SWF. Can be overwritten or provided in djConfig.
-	swfPath:dojo.config.uploaderPath || dojo.moduleUrl("dojox.form", "resources/uploader.swf"),
+	swfPath:config.uploaderPath || require.toUrl("dojox/form/resources/uploader.swf"),
 	//
 	// skipServerCheck: Boolean
 	// 		If true, will not verify that the server was sent the correct format.
@@ -80,7 +92,7 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 
 	onReady: function(/* dojox.form.FileUploader */ uploader){
 		// summary:
-		//		Stub - Fired when dojox.embed.Flash has created the
+		//		Stub - Fired when embedFlash has created the
 		//		Flash object, but it has not necessarilly finished
 		//		downloading, and is ready to be communicated with.
 	},
@@ -137,7 +149,7 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		// 		Uploads selected files with form data. Alias "submit()" should be used instead.
 		// tags:
 		//		private
-		var formData = form ? dojo.formToObject(form) : null;
+		var formData = form ? domForm.toObject(form) : null;
 		this.onBegin(this.getFileList());
 		this.flashMovie.doUpload(formData);
 	},
@@ -145,7 +157,7 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 
 	_change: function(fileArray){
 		this._files = this._files.concat(fileArray);
-		dojo.forEach(fileArray, function(f){
+		array.forEach(fileArray, function(f){
 			f.bytesLoaded = 0;
 			f.bytesTotal = f.size;
 			this._fileMap[f.name+"_"+f.size] = f;
@@ -202,8 +214,8 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		this._subs = [];
 		this._cons = [];
 
-		var doSub = dojo.hitch(this, function(s, funcStr){
-			this._subs.push(dojo.subscribe(this.id + s, this, funcStr));
+		var doSub = lang.hitch(this, function(s, funcStr){
+			this._subs.push(connect.subscribe(this.id + s, this, funcStr));
 		});
 
 		doSub("/filesSelected", "_change");
@@ -213,8 +225,8 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		doSub("/filesCanceled", "onCancel");
 		doSub("/stageBlur", "_onFlashBlur");
 
-		var cs = dojo.hitch(this, function(s, nm){
-			this._cons.push(dojo.subscribe(this.id + s, this, function(evt){
+		var cs = lang.hitch(this, function(s, nm){
+			this._cons.push(connect.subscribe(this.id + s, this, function(evt){
 				this.button._cssMouseEvent({type:nm});
 			}));
 		});
@@ -230,7 +242,7 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 			this.flashMovie.doFocus();
 		});
 		if(this.tabIndex>=0){
-			dojo.attr(this.domNode, "tabIndex", this.tabIndex);
+			domAttr.set(this.domNode, "tabIndex", this.tabIndex);
 		}
 	},
 	_createFlashUploader: function(){
@@ -253,8 +265,8 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 			console.warn("Warning: no uploadUrl provided.");
 		}
 
-		this.inputNode = dojo.create("div", {className:"dojoxFlashNode"}, this.domNode, "first");
-		dojo.style(this.inputNode, {
+		this.inputNode = domConstruct.create("div", {className:"dojoxFlashNode"}, this.domNode, "first");
+		domStyle.set(this.inputNode, {
 			position:"absolute",
 			top:"-2px",
 			width:this.btnSize.w+"px",
@@ -293,14 +305,14 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 
 		};
 
-		this.flashObject = new dojox.embed.Flash(args, this.inputNode);
-		this.flashObject.onError = dojo.hitch(function(msg){
+		this.flashObject = new embedFlash(args, this.inputNode);
+		this.flashObject.onError = lang.hitch(function(msg){
 			console.error("Flash Error: " + msg);
 		});
-		this.flashObject.onReady = dojo.hitch(this, function(){
+		this.flashObject.onReady = lang.hitch(this, function(){
 			this.onReady(this);
 		});
-		this.flashObject.onLoad = dojo.hitch(this, function(mov){
+		this.flashObject.onLoad = lang.hitch(this, function(mov){
 			this.flashMovie = mov;
 			this.flashReady = true;
 
@@ -309,8 +321,8 @@ dojo.declare("dojox.form.uploader.plugins.Flash", [], {
 		this._connectFlash();
 	}
 });
-dojox.form.addUploaderPlugin(dojox.form.uploader.plugins.Flash);
+dojox.form.addUploaderPlugin(pluginsFlash);
 
 
-return dojox.form.uploader.plugins.Flash;
+return pluginsFlash;
 });

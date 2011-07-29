@@ -1,5 +1,4 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/connect",
@@ -8,9 +7,10 @@ define([
 	"dojo/query",
 	"./_Mixin",
 	"dijit/form/_FormWidget",
+	"dijit/_base/manager",
 	"dojo/_base/declare"
-], function (dojo, lang, arrayUtil, connect, domUtil, domAttr, query, _Mixin, _FormWidget) {
-	var fm = dojo.getObject("dojox.form.manager", true),
+], function(lang, array, connect, dom, domAttr, query, _Mixin, _FormWidget, manager, declare){
+	var fm = lang.getObject("dojox.form.manager", true),
 		aa = fm.actionAdapter,
 		keys = fm._keys,
 
@@ -44,12 +44,12 @@ define([
 		},
 
 		registerNode = function(node, groupNode){
-			var name = domAttr.attr(node, "name");
+			var name = domAttr.get(node, "name");
 			groupNode = groupNode || this.domNode;
 			if(name && !(name in this.formWidgets)){
 				// verify that it is not part of any widget
 				for(var n = node; n && n !== groupNode; n = n.parentNode){
-					if(domAttr.attr(n, "widgetId") && dijit.byNode(n).isInstanceOf(_FormWidget)){
+					if(domAttr.get(n, "widgetId") && manager.byNode(n).isInstanceOf(_FormWidget)){
 						// this is a child of some widget --- bail out
 						return null;
 					}
@@ -75,9 +75,9 @@ define([
 		getObserversFromNode = function(name){
 			var observers = {};
 			aa(function(_, n){
-				var o = domAttr.attr(n, "observer");
+				var o = domAttr.get(n, "observer");
 				if(o && typeof o == "string"){
-					arrayUtil.forEach(o.split(","), function(o){
+					array.forEach(o.split(","), function(o){
 						o = lang.trim(o);
 						if(o && lang.isFunction(this[o])){
 							observers[o] = 1;
@@ -91,13 +91,13 @@ define([
 		connectNode = function(name, observers){
 			var t = this.formNodes[name], c = t.connections;
 			if(c.length){
-				arrayUtil.forEach(c, dojo.disconnect);
+				array.forEach(c, connect.disconnect);
 				c = t.connections = [];
 			}
 			aa(function(_, n){
-				// the next line is a crude workaround for dijit.form.Button that fires onClick instead of onChange
+				// the next line is a crude workaround for Button that fires onClick instead of onChange
 				var eventName = ce(n);
-				arrayUtil.forEach(observers, function(o){
+				array.forEach(observers, function(o){
 					c.push(connect.connect(n, eventName, this, function(evt){
 						if(this.watching){
 							this[o](this.formNodeValue(name), name, n, evt);
@@ -107,7 +107,7 @@ define([
 			}).call(this, null, t.node);
 		};
 
-	return dojo.declare("dojox.form.manager._NodeMixin", null, {
+	return declare("dojox.form.manager._NodeMixin", null, {
 		// summary:
 		//		Mixin to orchestrate dynamic forms (works with DOM nodes).
 		// description:
@@ -122,7 +122,7 @@ define([
 			//		Called when the widget is being destroyed
 
 			for(var name in this.formNodes){
-				arrayUtil.forEach(this.formNodes[name].connections, dojo.disconnect);
+				array.forEach(this.formNodes[name].connections, connect.disconnect);
 			}
 			this.formNodes = {};
 
@@ -139,7 +139,7 @@ define([
 			// returns: Object:
 			//		Returns self
 			if(typeof node == "string"){
-				node = domUtil.byId(node);
+				node = dom.byId(node);
 			}
 			var name = registerNode.call(this, node);
 			if(name){
@@ -157,7 +157,7 @@ define([
 			// returns: Object:
 			//		Returns self
 			if(name in this.formNodes){
-				arrayUtil.forEach(this.formNodes[name].connections, this.disconnect, this);
+				array.forEach(this.formNodes[name].connections, this.disconnect, this);
 				delete this.formNodes[name];
 			}
 			return this;
@@ -172,7 +172,7 @@ define([
 			//		Returns self
 
 			if(typeof node == "string"){
-				node = domUtil.byId(node);
+				node = dom.byId(node);
 			}
 
 			query("input, select, textarea, button", node).
@@ -197,11 +197,11 @@ define([
 			//		Returns self
 
 			if(typeof node == "string"){
-				node = domUtil.byId(node);
+				node = dom.byId(node);
 			}
 
 			query("input, select, textarea, button", node).
-				map(function(n){ return domAttr.attr(node, "name") || null; }).
+				map(function(n){ return domAttr.get(node, "name") || null; }).
 				forEach(function(name){
 					if(name){
 						this.unregisterNode(name);
@@ -240,16 +240,16 @@ define([
 			if(lang.isArray(elem)){
 				// input/radio array
 				if(isSetter){
-					arrayUtil.forEach(elem, function(node){
+					array.forEach(elem, function(node){
 						node.checked = "";
 					});
-					arrayUtil.forEach(elem, function(node){
+					array.forEach(elem, function(node){
 						node.checked = node.value === value ? "checked" : "";
 					});
 					return this;	// self
 				}
 				// getter
-				arrayUtil.some(elem, function(node){
+				array.some(elem, function(node){
 					if(node.checked){
 						result = node;
 						return true;
@@ -266,7 +266,7 @@ define([
 						if(isSetter){
 							if(lang.isArray(value)){
 								var dict = {};
-								arrayUtil.forEach(value, function(v){
+								array.forEach(value, function(v){
 									dict[v] = 1;
 								});
 								query("> option", elem).forEach(function(opt){
@@ -344,7 +344,7 @@ define([
 
 			if(state){
 				if(lang.isArray(state)){
-					arrayUtil.forEach(state, function(name){
+					array.forEach(state, function(name){
 						if(name in this.formNodes){
 							result[name] = inspector.call(this, name, this.formNodes[name].node, defaultValue);
 						}

@@ -1,5 +1,4 @@
 define([
-	"dojo/_base/kernel",
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
 	"./manager/_Mixin",
@@ -10,23 +9,24 @@ define([
 	"./manager/_DisplayMixin",
 	"./manager/_ClassMixin",
 	"dojo/_base/declare"
-], function (dojo, _Widget, _TemplatedMixin, _Mixin, _NodeMixin, _FormMixin, _ValueMixin, _EnableMixin, _DisplayMixin, _ClassMixin) {
+], function(_Widget, _TemplatedMixin, _Mixin, _NodeMixin, _FormMixin, _ValueMixin, _EnableMixin, _DisplayMixin, _ClassMixin, declare){
 
-return dojo.declare("dojox.form.Manager", [
-		_Widget,
-		_Mixin,
-		_NodeMixin,
-		_FormMixin,
-		_ValueMixin,
-		_EnableMixin,
-		_DisplayMixin,
-		_ClassMixin
-], {
+	/*=====
+		_Widget = dijit._Widget;
+		_Mixin = dojox.form.manager._Mixin;
+		_NodeMixin = dojox.form.manager._NodeMixin;
+		_FormMixin = dojox.form.manager._FormMixin;
+		_ValueMixin = dojox.form.manager._ValueMixin;
+		_EnableMixin = dojox.form.manager._EnableMixin;
+		_DisplayMixin = dojox.form.manager._DisplayMixin;
+		_ClassMixin = dojox.form.manager._ClassMixin;
+	=====*/
+return declare("dojox.form.Manager", [ _Widget, _Mixin, _NodeMixin, _FormMixin, _ValueMixin, _EnableMixin, _DisplayMixin, _ClassMixin ], {
 	// summary:
 	//		The widget to orchestrate dynamic forms.
 	// description:
 	//		This widget hosts dojox.form.manager mixins.
-	//		See dojox.form.manager._Mixin for more info.
+	//		See _Mixin for more info.
 
 	buildRendering: function(){
 		var node = (this.domNode = this.srcNodeRef);
@@ -39,7 +39,7 @@ return dojo.declare("dojox.form.Manager", [
 		this._attachEvents = [];
 		_TemplatedMixin.prototype._attachTemplateNodes.call(this, node, function(n, p){ return n.getAttribute(p); });
 	},
-	
+
 	destroyRendering: function(preserveDom){
 		// ctm: calling _TemplatedMixin
 		if(!this.__ctm){

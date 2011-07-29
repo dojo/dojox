@@ -1,6 +1,22 @@
-define(['dojo', 'dijit', 'dojox/form/uploader/Base', 'dijit/form/Button', 'dojo/i18n!./nls/Uploader'],function(dojo, dijit, uploader, button, res){
-	
-	dojo.experimental("dojox.form.Uploader");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/_base/window",
+	"dojo/dom-style",
+	"dojo/dom-geometry",
+	"dojo/dom-attr",
+	"dojo/dom-construct",
+	"dijit",
+	"dijit/_WidgetsInTemplateMixin",
+	"dojox/form/uploader/Base",
+	"dojo/i18n!./nls/Uploader",
+	"dijit/form/Button" // template
+],function(kernel, declare, lang, array, connect, win, domStyle, domGeometry, domAttr, domConstruct, dijit, WidgetsInTemplateMixin, uploader, res){
+
+	kernel.experimental("dojox.form.Uploader");
 	//
 	// TODO:
 	//		i18n
@@ -13,7 +29,11 @@ define(['dojo', 'dijit', 'dojox/form/uploader/Base', 'dijit/form/Button', 'dojo/
 	//		Make it so URL can change (current set to Flash on build)
 	//
 
-dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
+	/*=====
+		uploader = dojox.form.uploader.Base;
+		WidgetsInTemplateMixin = dijit._WidgetsInTemplateMixin;
+	=====*/
+declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 	//
 	// Version: 1.6
 	//
@@ -73,7 +93,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	uploadType:"form",
 	//
 	_nameIndex:0,
-	widgetsInTemplate:true,
+
 	templateString:'<div><div dojoType="dijit.form.Button" dojoAttachPoint="button">${label}</div></div>',
 
 	postMixInProperties: function(){
@@ -85,14 +105,14 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		var restore = false;
 		var parent = this.domNode.parentNode;
 		var position = this._getNodePosition(this.domNode);
-		if(!this.btnSize.w || !this.btnSize.h) {
-			dojo.body().appendChild(this.domNode);
+		if(!this.btnSize.w || !this.btnSize.h){
+			win.body().appendChild(this.domNode);
 			this._getButtonStyle(this.domNode);
 			restore = true;
 		}
 		this._setButtonStyle();
 		if(restore){
-			dojo.place(this.domNode, position.node, position.pos)
+			domConstruct.place(this.domNode, position.node, position.pos)
 		}
 		this.inherited(arguments);
 	},
@@ -186,7 +206,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		// 		Add this ability by effectively, not uploading them
 		//
 		this._disconnectButton();
-		dojo.forEach(this._inputs, dojo.destroy, dojo);
+		array.forEach(this._inputs, domConstruct.destroy, dojo);
 		this._inputs = [];
 		this._nameIndex = 0;
 		this._createInput();
@@ -198,7 +218,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		//
 		var fileArray = [];
 		if(this.supports("multiple")){
-			dojo.forEach(this.inputNode.files, function(f, i){
+			array.forEach(this.inputNode.files, function(f, i){
 				fileArray.push({
 					index:i,
 					name:f.name,
@@ -207,7 +227,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 				});
 			}, this);
 		}else{
-			dojo.forEach(this._inputs, function(n, i){
+			array.forEach(this._inputs, function(n, i){
 				fileArray.push({
 					index:i,
 					name:n.value.substring(n.value.lastIndexOf("\\")+1),
@@ -245,7 +265,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		//		Internal. To set disabled use: uploader.set("disabled", true);
 		if(this._disabled == disabled){ return; }
 		this.button.set('disabled', disabled);
-		dojo.style(this.inputNode, "display", disabled ? "none" : "block");
+		domStyle.set(this.inputNode, "display", disabled ? "none" : "block");
 	},
 
 	_getNodePosition: function(node){
@@ -269,7 +289,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 				h:25
 			};
 		}else{
-			this.btnSize = dojo.marginBox(node);
+			this.btnSize = domGeometry.getMarginBox(node);
 		}
 	},
 
@@ -280,7 +300,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 			hasParent = false;
 		}
 
-		dojo.style(this.domNode, {
+		domStyle.set(this.domNode, {
 			width:this.btnSize.w+"px",
 			height:(this.btnSize.h+4)+"px",
 			overflow:"hidden",
@@ -290,14 +310,14 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		this.inputNodeFontSize = Math.max(2, Math.max(Math.ceil(this.btnSize.w / 60), Math.ceil(this.btnSize.h / 15)));
 		this._createInput();
 
-		dojo.style(this.button.domNode, {
+		domStyle.set(this.button.domNode, {
 			margin:"0px",
 			display:"block",
 			verticalAlign:"top" // IE fix
 
 		});
 
-		dojo.style(this.button.domNode.firstChild, {
+		domStyle.set(this.button.domNode.firstChild, {
 			margin:"0px",
 			display:"block"
 			//height:this.btnSize.h+"px"
@@ -311,7 +331,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 	_createInput: function(){
 
 		if(this._inputs.length){
-			dojo.style(this.inputNode, {
+			domStyle.set(this.inputNode, {
 				top:"500px"
 			});
 			this._disconnectButton();
@@ -326,19 +346,19 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 			// <=IE8
 			name = this.name + (this.multiple ? this._nameIndex : "");
 		}
-		this.inputNode = dojo.create("input", {type:"file", name:name}, this.domNode, "first");
+		this.inputNode = domConstruct.create("input", {type:"file", name:name}, this.domNode, "first");
 		if(this.supports("multiple") && this.multiple){
-			dojo.attr(this.inputNode, "multiple", true);
+			domAttr.set(this.inputNode, "multiple", true);
 		}
 		this._inputs.push(this.inputNode);
 
 
-		dojo.style(this.inputNode, {
+		domStyle.set(this.inputNode, {
 			fontSize:this.inputNodeFontSize+"em"
 		});
-		var size = dojo.marginBox(this.inputNode);
+		var size = domGeometry.getMarginBox(this.inputNode);
 
-		dojo.style(this.inputNode, {
+		domStyle.set(this.inputNode, {
 			position:"absolute",
 			top:"-2px",
 			left:"-"+(size.w-this.btnSize.w-2)+"px",
@@ -349,15 +369,15 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 
 	_connectButton: function(){
 		this._cons = [];
-		var cs = dojo.hitch(this, function(nm){
-			this._cons.push(dojo.connect(this.inputNode, nm, this, function(evt){
+		var cs = lang.hitch(this, function(nm){
+			this._cons.push(connect.connect(this.inputNode, nm, this, function(evt){
 				this.button._cssMouseEvent({type:nm})
 			}));
 		});
 		cs("mouseover");
 		cs("mouseout");
 		cs("mousedown");
-		this._cons.push(dojo.connect(this.inputNode, "change", this, function(evt){
+		this._cons.push(connect.connect(this.inputNode, "change", this, function(evt){
 			this.onChange(this.getFileList(evt));
 			if(!this.supports("multiple") && this.multiple) this._createInput();
 		}));
@@ -365,18 +385,18 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		this.button.set('tabIndex', -1);
 		if(this.tabIndex > -1){
 			this.inputNode.tabIndex = this.tabIndex;
-			var restoreBorderStyle = dojo.style(this.button.domNode.firstChild, "border");
-			this._cons.push(dojo.connect(this.inputNode, "focus", this, function(){
-				dojo.style(this.button.domNode.firstChild, "border", "1px dashed #ccc");
+			var restoreBorderStyle = domStyle.set(this.button.domNode.firstChild, "border");
+			this._cons.push(connect.connect(this.inputNode, "focus", this, function(){
+				domStyle.set(this.button.domNode.firstChild, "border", "1px dashed #ccc");
 			}));
-			this._cons.push(dojo.connect(this.inputNode, "blur", this, function(){
-				dojo.style(this.button.domNode.firstChild, "border", restoreBorderStyle);
+			this._cons.push(connect.connect(this.inputNode, "blur", this, function(){
+				domStyle.set(this.button.domNode.firstChild, "border", restoreBorderStyle);
 			}));
 		}
 	},
 
 	_disconnectButton: function(){
-		dojo.forEach(this._cons, dojo.disconnect, dojo);
+		array.forEach(this._cons, connect.disconnect, dojo);
 	}
 });
 
@@ -388,7 +408,7 @@ dojo.declare("dojox.form.Uploader", [dojox.form.uploader.Base], {
 		// 		the dojox.form.Uploader is recreated using the new plugin (mixin).
 		//
 		extensions.push(plug);
-		dojo.declare("dojox.form.Uploader", extensions, {});
+		declare("dojox.form.Uploader", extensions, {});
 	}
 
 	return dojox.form.Uploader;

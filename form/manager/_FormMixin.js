@@ -1,8 +1,15 @@
-define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "dojo/_base/declare"], function (dojo, eventUtil, windowUtil, _Mixin) {
-	var fm = dojo.getObject("dojox.form.manager", true),
+define([
+	"dojo/_base/lang",
+	"dojo/_base/kernel",
+	"dojo/_base/event",
+	"dojo/window",
+	"./_Mixin",
+	"dojo/_base/declare"
+], function(lang, dojo, event, windowUtils, _Mixin, declare){
+	var fm = lang.getObject("dojox.form.manager", true),
 		aa = fm.actionAdapter;
 
-	return dojo.declare("dojox.form.manager._FormMixin", null, {
+	return declare("dojox.form.manager._FormMixin", null, {
 		// summary:
 		//		Form manager's mixin for form-specific functionality.
 		// description:
@@ -47,7 +54,7 @@ define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "doj
 			if(!(this.onReset(faux) === false) && faux.returnValue){
 				this.reset();
 			}
-			eventUtil.stop(evt);
+			event.stop(evt);
 			return false;
 		},
 
@@ -79,7 +86,7 @@ define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "doj
 			// for form-based managers.
 
 			if(this.onSubmit(evt) === false){ // only exactly false stops submit
-				eventUtil.stop(evt);
+				event.stop(evt);
 			}
 		},
 
@@ -121,7 +128,7 @@ define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "doj
 			}
 			return true;
 		},
-		validate: function () {
+		validate: function(){
 			var isValid = true,
 				formWidgets = this.formWidgets,
 				didFocus = false, name;
@@ -134,7 +141,7 @@ define(["dojo/_base/kernel", "dojo/_base/event", "dojo/window", "./_Mixin", "doj
 					var valid = widget.disabled || !widget.validate || widget.validate();
 					if(!valid && !didFocus){
 						// Set focus of the first non-valid widget
-						windowUtil.scrollIntoView(widget.containerNode || widget.domNode);
+						windowUtils.scrollIntoView(widget.containerNode || widget.domNode);
 						widget.focus();
 						didFocus = true;
 					}

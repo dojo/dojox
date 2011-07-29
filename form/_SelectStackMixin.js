@@ -1,13 +1,12 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
-	"dijit",
+	"dijit/_base/manager",
 	"dojo/_base/connect",
 	"dojo/_base/declare"
-], function (dojo, lang, arrayUtil, dijit) {
+], function(lang, array, manager, connect, declare){
 
-return dojo.declare("dojox.form._SelectStackMixin", null, {
+return declare("dojox.form._SelectStackMixin", null, {
 	// summary:
 	//		Mix this class in to a dijit.form._FormSelectWidget in order to
 	//		provide support for "selectable" multiforms.  The widget is pointed
@@ -24,7 +23,7 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 	// stackId: string
 	//		The id of the stack that this widget is supposed to control
 	stackId: "",
-	
+
 	// stackPrefix: string
 	//		A prefix to remove from our stack pane ids when setting our options.
 	//		This exists so that we won't run into unique ID constraints.  For
@@ -35,12 +34,12 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 	//		with the same values - without having to have the panes require the
 	//		same ids.
 	stackPrefix: "",
-	
+
 	_paneIdFromOption: function(/*String*/ oVal){
 		// summary: Gets the pane ID given an option value
 		return (this.stackPrefix || "") + oVal; // String
 	},
-	
+
 	_optionValFromPane: function(/*String*/ id){
 		// summary: Gets the option value given a pane ID
 		var sp = this.stackPrefix;
@@ -49,17 +48,17 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 		}
 		return id; // String
 	},
-	
+
 	_togglePane: function(/*dijit._Widget*/ pane, /*Boolean*/ shown){
 		// summary: called when a pane is either shown or hidden (so that
 		//  we can toggle the widgets on it)
-		
+
 		if(pane._shown != undefined && pane._shown == shown){ return; }
-		var widgets = arrayUtil.filter(pane.getDescendants(), "return item.name;");
+		var widgets = array.filter(pane.getDescendants(), "return item.name;");
 		if(!shown){
 			// We are hiding - save the current state and then disable them
 			savedStates = {};
-			arrayUtil.forEach(widgets, function(w){
+			array.forEach(widgets, function(w){
 				savedStates[w.id] = w.disabled;
 				w.set("disabled", true);
 			});
@@ -67,7 +66,7 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 		}else{
 			// We are showing - restore our saved states
 			var savedStates = pane._savedStates||{};
-			arrayUtil.forEach(widgets, function(w){
+			array.forEach(widgets, function(w){
 				var state = savedStates[w.id];
 				if(state == undefined){
 					state = false;
@@ -78,7 +77,7 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 		}
 		pane._shown = shown;
 	},
-	
+
 	_connectTitle: function(/*dijit._Widget*/ pane, /*String*/ value){
 		var fx = lang.hitch(this, function(title){
 			this.updateOption({value: value, label: title});
@@ -108,7 +107,7 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 			pane.onHide();
 		}
 	},
-	
+
 	_setValueAttr: function(v){
 		if("_savedValue" in this){
 			return;
@@ -129,16 +128,16 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 			this.removeOption(this._optionValFromPane(pane.id));
 		}
 	},
-	
+
 	onSelectChild: function(/*dijit._Widget*/ pane){
 		// summary: Called when the stack container selects a new pane
 		this._setValueAttr(this._optionValFromPane(pane.id));
 	},
-	
+
 	onStartup: function(/*Object*/ info){
 		// summary: Called when the stack container is started up
 		var selPane = info.selected;
-		this.addOption(arrayUtil.filter(arrayUtil.map(info.children, function(c){
+		this.addOption(array.filter(array.map(info.children, function(c){
 			var v = this._optionValFromPane(c.id);
 			this._connectTitle(c, v);
 			var toAdd = null;
@@ -168,7 +167,7 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 			}
 		};
 		if(selPane !== info.selected){
-			var stack = dijit.byId(this.stackId);
+			var stack = manager.byId(this.stackId);
 			var c = this.connect(stack, "_showChild", function(sel){
 				this.disconnect(c);
 				fx();
@@ -177,40 +176,40 @@ return dojo.declare("dojox.form._SelectStackMixin", null, {
 			fx();
 		}
 	},
-	
+
 	postMixInProperties: function(){
 		this._savedValue = this.value;
 		this.inherited(arguments);
 		this.connect(this, "onChange", "_handleSelfOnChange");
 	},
-	
+
 	postCreate: function(){
 		this.inherited(arguments);
 		this._panes = {};
 		this._subscriptions = [
-			dojo.subscribe(this.stackId + "-startup", this, "onStartup"),
-			dojo.subscribe(this.stackId + "-addChild", this, "onAddChild"),
-			dojo.subscribe(this.stackId + "-removeChild", this, "onRemoveChild"),
-			dojo.subscribe(this.stackId + "-selectChild", this, "onSelectChild")
+			connect.subscribe(this.stackId + "-startup", this, "onStartup"),
+			connect.subscribe(this.stackId + "-addChild", this, "onAddChild"),
+			connect.subscribe(this.stackId + "-removeChild", this, "onRemoveChild"),
+			connect.subscribe(this.stackId + "-selectChild", this, "onSelectChild")
 		];
-		var stack = dijit.byId(this.stackId);
+		var stack = manager.byId(this.stackId);
 		if(stack && stack._started){
 			// If we have a stack, and it's already started, call our onStartup now
 			this.onStartup({children: stack.getChildren(), selected: stack.selectedChildWidget});
 		}
 	},
-	
+
 	destroy: function(){
-		arrayUtil.forEach(this._subscriptions, dojo.unsubscribe);
+		array.forEach(this._subscriptions, connect.unsubscribe);
 		delete this._panes; // Fixes memory leak in IE
 		this.inherited("destroy", arguments);
 	},
-	
+
 	_handleSelfOnChange: function(/*String*/ val){
 		// summary: Called when form select widget's value has changed
 		var pane = this._panes[this._paneIdFromOption(val)];
-		if (pane){
-			var s = dijit.byId(this.stackId);
+		if(pane){
+			var s = manager.byId(this.stackId);
 			if(pane == s.selectedChildWidget){
 				s._transition(pane);
 			}else{

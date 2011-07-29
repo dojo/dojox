@@ -1,17 +1,18 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/event",
 	"dijit/form/_Spinner",
+	"dojo/keys",
 	"dojo/date",
 	"dojo/date/locale",
 	"dojo/date/stamp",
-	"dojo/_base/connect", // dojo.keys
+	"dojo/_base/connect", // keys
 	"dojo/_base/declare"
-], function (dojo, lang, eventUtil, _Spinner, dateUtil, dateLocale, dateStamp) {
-return dojo.declare(
-"dojox.form.TimeSpinner",
-_Spinner,
+], function(lang, event, Spinner, keys, dateUtil, dateLocale, dateStamp, connect, declare){
+	/*=====
+		Spinner = dijit.form._Spinner;
+	=====*/
+return declare( "dojox.form.TimeSpinner", Spinner,
 {
 	// summary: Time Spinner
 	// description: This widget is the same as a normal NumberSpinner, but for the time component of a date object instead
@@ -36,7 +37,7 @@ _Spinner,
 	},
 
 	format: function(time, locale){
-		if (lang.isString(time)) { return time; }
+		if(lang.isString(time)){ return time; }
 		return dateLocale.format(time, {selector:"time", formatLength:"short"});
 	},
 
@@ -45,14 +46,14 @@ _Spinner,
 	value: "12:00 AM",
 
        _onKeyPress: function(e){
-                if((e.charOrCode == dojo.keys.HOME || e.charOrCode == dojo.keys.END) && !(e.ctrlKey || e.altKey || e.metaKey)
+                if((e.charOrCode == keys.HOME || e.charOrCode == keys.END) && !(e.ctrlKey || e.altKey || e.metaKey)
                 && typeof this.get('value') != 'undefined' /* gibberish, so HOME and END are default editing keys*/){
-                        var value = this.constraints[(e.charOrCode == dojo.keys.HOME ? "min" : "max")];
+                        var value = this.constraints[(e.charOrCode == keys.HOME ? "min" : "max")];
                         if(value){
                                 this._setValueAttr(value,true);
                         }
                         // eat home or end key whether we change the value or not
-                        eventUtil.stop(e);
+                        event.stop(e);
                 }
         }
 

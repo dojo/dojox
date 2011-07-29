@@ -1,5 +1,9 @@
-define(["dojo/_base/kernel", "dojo/dom-style", "dojo/_base/declare"], function (dojo, domStyle) {
-return dojo.declare("dojox.form.manager._DisplayMixin", null, {
+define([
+	"dojo/_base/kernel",
+	"dojo/dom-style",
+	"dojo/_base/declare"
+], function(dojo, domStyle, declare){
+return declare("dojox.form.manager._DisplayMixin", null, {
 	// summary:
 	//		Form manager's mixin for controlling show/hide state of
 	//		controlled elements (defined by dojoAttachPoint attributes).
@@ -19,7 +23,7 @@ return dojo.declare("dojox.form.manager._DisplayMixin", null, {
 		//		If it is omitted, all known attach point nodes are to be processed.
 
 		var result = this.inspectAttachedPoints(function(name, node){
-			return domStyle.style(node, "display") != "none";
+			return domStyle.get(node, "display") != "none";
 		}, names);
 
 		return result;	// Object
@@ -41,7 +45,7 @@ return dojo.declare("dojox.form.manager._DisplayMixin", null, {
 		}
 
 		this.inspectAttachedPoints(function(name, node, value){
-			domStyle.style(node, "display", value ? "" : "none");
+			domStyle.set(node, "display", value ? "" : "none");
 		}, state, defaultState);
 
 		return this;	// self

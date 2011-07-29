@@ -7,12 +7,13 @@ define([
 	"dijit/form/_DateTimeTextBox",
 	"dijit/form/TextBox",
 	"dojo/_base/declare"
-], function (dojo, lang, domStyle, Calendar, CalendarViews, _DateTimeTextBox, TextBox) {
-dojo.experimental("dojox.form.DateTextBox");
+], function(kernel, lang, domStyle, Calendar, CalendarViews, _DateTimeTextBox, TextBox, declare){
+kernel.experimental("dojox.form.DateTextBox");
 
-var DateTextBox = dojo.declare(
-	"dojox.form.DateTextBox",
-	_DateTimeTextBox,
+	/*=====
+		_DateTimeTextBox = dijit.form._DateTimeTextBox;
+	=====*/
+var DateTextBox = declare( "dojox.form.DateTextBox", _DateTimeTextBox,
 	{
 		// summary:
 		//		A validating, serializable, range-bound date text box with a popup calendar
@@ -24,15 +25,13 @@ var DateTextBox = dojo.declare(
 
 		openDropDown: function(){
 			this.inherited(arguments);
-			domStyle.style(this.dropDown.domNode.parentNode, "position", "absolute");
+			domStyle.set(this.dropDown.domNode.parentNode, "position", "absolute");
 		}
 	}
 );
 
 
-dojo.declare(
-	"dojox.form.DayTextBox",
-	DateTextBox,
+declare( "dojox.form.DayTextBox", DateTextBox,
 	{
 		// summary:
 		//		A validating, serializable, range-bound date text box with a popup calendar that contains just months.
@@ -48,7 +47,7 @@ dojo.declare(
 		format: function(value){
 			return value.getDate ? value.getDate() : value;
 		},
-		validator: function(value) {
+		validator: function(value){
 			var num = Number(value);
 			var isInt = /(^-?\d\d*$)/.test(String(value));
 			return value == "" || value == null || (isInt && num >= 1 && num <= 31);
@@ -76,9 +75,7 @@ dojo.declare(
 	}
 );
 
-dojo.declare(
-	"dojox.form.MonthTextBox",
-	DateTextBox,
+declare( "dojox.form.MonthTextBox", DateTextBox,
 	{
 		// summary:
 		//		A validating, serializable, range-bound date text box with a popup calendar that contains only years
@@ -94,7 +91,7 @@ dojo.declare(
 			this.constraints.datePattern = "MM";
 		},
 
-		format: function(value) {
+		format: function(value){
 			if(!value && value !== 0){
 				return 1;
 			}
@@ -108,11 +105,11 @@ dojo.declare(
 			return Number(value) - 1;
 		},
 
-		serialize: function(value, constraints) {
+		serialize: function(value, constraints){
 			return String(value);
 		},
 
-		validator: function(value) {
+		validator: function(value){
 			var num = Number(value);
 			var isInt = /(^-?\d\d*$)/.test(String(value));
 			return value == "" || value == null || (isInt && num >= 1 && num <= 12);
@@ -140,27 +137,25 @@ dojo.declare(
 );
 
 
-dojo.declare(
-	"dojox.form.YearTextBox",
-	DateTextBox,
+declare( "dojox.form.YearTextBox", DateTextBox,
 	{
 		// summary:
 		//		A validating, serializable, range-bound date text box with a popup calendar that contains only years
 
 		popupClass: "dojox.widget.YearlyCalendar",
 
-		format: function(value) {
-			console.log('Year format ' + value);
-			if (typeof value == "string"){
+		format: function(value){
+			//console.log('Year format ' + value);
+			if(typeof value == "string"){
 				return value;
 			}
-			else if (value.getFullYear){
+			else if(value.getFullYear){
 				return value.getFullYear();
 			}
 			return value;
 		},
 
-		validator: function(value) {
+		validator: function(value){
 			return value == "" || value == null || /(^-?\d\d*$)/.test(String(value));
 		},
 
@@ -175,7 +170,7 @@ dojo.declare(
 
 		openDropDown: function(){
 			this.inherited(arguments);
-			console.log('yearly openDropDown and value = ' + this.get('value'));
+			//console.log('yearly openDropDown and value = ' + this.get('value'));
 
 			this.dropDown.onValueSelected = lang.hitch(this, function(value){
 				this.focus(); // focus the textbox before the popup closes to avoid reopening the popup
@@ -184,12 +179,12 @@ dojo.declare(
 			});
 		},
 
-		parse: function(/*String*/value, /*dojo.date.locale.__FormatOptions*/constraints) {
+		parse: function(/*String*/value, /*dojo.date.locale.__FormatOptions*/constraints){
 			return value || (this._isEmpty(value) ? null : undefined); // Date
 		},
 
-		filter: function(val) {
-			if (val && val.getFullYear){
+		filter: function(val){
+			if(val && val.getFullYear){
 				return val.getFullYear().toString();
 			}
 			return this.inherited(arguments);

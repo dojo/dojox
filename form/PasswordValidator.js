@@ -1,18 +1,23 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/array",
+	"dojo/_base/lang",
 	"dojo/dom-attr",
 	"dojo/i18n",
 	"dojo/query",
+	"dojo/keys",
 	"dijit/form/_FormValueWidget",
 	"dijit/form/ValidationTextBox",
 	"dojo/text!./resources/PasswordValidator.html",
 	"dojo/i18n!./nls/PasswordValidator",
 	"dojo/_base/declare",
-	"dojo/_base/connect" // dojo.keys
-], function (dojo, arrayUtil, domAttr, i18n, query, _FormValueWidget, ValidationTextBox, template) {
+	"dojo/_base/connect" // keys
+], function(array, lang, domAttr, i18n, query, keys, FormValueWidget, ValidationTextBox, template, formNlsPasswordValidator, declare, connect){
 
-var _ChildTextBox = dojo.declare("dojox.form._ChildTextBox", ValidationTextBox, {
+	/*=====
+		FormValueWidget = dijit.form._FormValueWidget;
+		ValidationTextBox = dijit.form.ValidationTextBox;
+	=====*/
+var _ChildTextBox = declare("dojox.form._ChildTextBox", ValidationTextBox, {
 	// summary:
 	//		A class that is shared between all our children - extends
 	//		ValidationTextBox and provides some shared functionality
@@ -20,11 +25,11 @@ var _ChildTextBox = dojo.declare("dojox.form._ChildTextBox", ValidationTextBox, 
 	// containerWidget: widget
 	//		Our parent (the PasswordValidator)
 	containerWidget: null,
-	
+
 	// type: string
 	//		Don't override this - we are all "password" types
 	type: "password",
-	
+
 	reset: function(){
 		// summary:
 		//		Force-set to empty string (we don't save passwords EVER)...and
@@ -33,7 +38,7 @@ var _ChildTextBox = dojo.declare("dojox.form._ChildTextBox", ValidationTextBox, 
 		ValidationTextBox.prototype._setValueAttr.call(this, "", true);
 		this._hasBeenBlurred = false;
 	},
-	
+
 	postCreate: function(){
 		// summary:
 		//		We want to remove the "name" attribute from our focus node if
@@ -45,11 +50,11 @@ var _ChildTextBox = dojo.declare("dojox.form._ChildTextBox", ValidationTextBox, 
 		}
 		this.connect(this.focusNode, "onkeypress", "_onChildKeyPress");
 	},
-	
+
 	_onChildKeyPress: function(e){
 		// Check if we pressed <enter> - if so, set our blur value so that
 		// the parent widget will be updated correctly.
-		if(e && e.keyCode == dojo.keys.ENTER){
+		if(e && e.keyCode == keys.ENTER){
 			this._setBlurValue();
 		}
 	}
@@ -57,14 +62,14 @@ var _ChildTextBox = dojo.declare("dojox.form._ChildTextBox", ValidationTextBox, 
 
 
 
-var _OldPWBox = dojo.declare("dojox.form._OldPWBox", _ChildTextBox, {
+var _OldPWBox = declare("dojox.form._OldPWBox", _ChildTextBox, {
 	// summary:
 	//		A class representing our "old password" box.
 	//
 	// _isPWValid: boolean
 	//		Whether or not the password is valid
 	_isPWValid: false,
-	
+
 	_setValueAttr: function(/* anything */ newVal, /* boolean? */ priority){
 		// summary:
 		//		Updates _isPWValid if this isn't our initial update by calling
@@ -113,14 +118,14 @@ var _OldPWBox = dojo.declare("dojox.form._OldPWBox", _ChildTextBox, {
 });
 
 
-var _NewPWBox = dojo.declare("dojox.form._NewPWBox", _ChildTextBox, {
+var _NewPWBox = declare("dojox.form._NewPWBox", _ChildTextBox, {
 	// summary:
 	//		A class representing our new password textbox
 
 	// required: boolean
 	//		Whether or not this widget is required (default: true)
 	required: true,
-	
+
 	onChange: function(){
 		// summary:
 		//		Validates our verify box - to make sure that a change to me is
@@ -130,7 +135,7 @@ var _NewPWBox = dojo.declare("dojox.form._NewPWBox", _ChildTextBox, {
 	}
 });
 
-var _VerifyPWBox = dojo.declare("dojox.form._VerifyPWBox", _ChildTextBox, {
+var _VerifyPWBox = declare("dojox.form._VerifyPWBox", _ChildTextBox, {
 	// summary:
 	//		A class representing our verify textbox
 
@@ -142,7 +147,7 @@ var _VerifyPWBox = dojo.declare("dojox.form._VerifyPWBox", _ChildTextBox, {
 	}
 });
 
-return dojo.declare("dojox.form.PasswordValidator", _FormValueWidget, {
+return declare("dojox.form.PasswordValidator", FormValueWidget, {
 	// summary:
 	//		A password validation widget that simplifies the "old/new/verify"
 	//		style of requesting passwords.  You will probably want to override
@@ -159,14 +164,14 @@ return dojo.declare("dojox.form.PasswordValidator", _FormValueWidget, {
 	// oldName: string?
 	//		The name to send our old password as (when form is posted)
 	oldName: "",
-	
+
 	templateString: template,
-	
+
 	_hasBeenBlurred: false,
 
 	isValid: function(/* boolean */ isFocused){
 		// summary: we are valid if ALL our children are valid
-		return arrayUtil.every(this._inputWidgets, function(i){
+		return array.every(this._inputWidgets, function(i){
 			if(i && i._setStateClass){ i._setStateClass(); }
 			return (!i || i.isValid());
 		});
@@ -174,19 +179,19 @@ return dojo.declare("dojox.form.PasswordValidator", _FormValueWidget, {
 
 	validate: function(/* boolean */ isFocused){
 		// summary: Validating this widget validates all our children
-		return arrayUtil.every(arrayUtil.map(this._inputWidgets, function(i){
+		return array.every(array.map(this._inputWidgets, function(i){
 			if(i && i.validate){
 				i._hasBeenBlurred = (i._hasBeenBlurred || this._hasBeenBlurred);
 				return i.validate();
 			}
 			return true;
-		}, this), function (item) { return item; });
+		}, this), function(item){ return item; });
 	},
 
 	reset: function(){
 		// summary: Resetting this widget resets all our children
 		this._hasBeenBlurred = false;
-		arrayUtil.forEach(this._inputWidgets, function(i){
+		array.forEach(this._inputWidgets, function(i){
 			if(i && i.reset){ i.reset(); }
 		}, this);
 	},
@@ -197,7 +202,7 @@ return dojo.declare("dojox.form.PasswordValidator", _FormValueWidget, {
 		//		widgets - and sets up the needed connections.
 		var widgets = this._inputWidgets,
 			msg = i18n.getLocalization("dojox.form", "PasswordValidator", this.lang);
-		arrayUtil.forEach(widgets, function(i, idx){
+		array.forEach(widgets, function(i, idx){
 			if(i){
 				var p = {containerWidget: this}, c;
 				if(idx === 0){
@@ -250,18 +255,18 @@ return dojo.declare("dojox.form.PasswordValidator", _FormValueWidget, {
 		//		specify a third child text box with pwType="old" in order to
 		//		prompt the user to enter in their old password before the
 		//		widget returns that it is valid.
-		
+
 		this.inherited(arguments);
-		
+
 		// Turn my inputs into the correct stuff....
 		var widgets = this._inputWidgets = [];
-		arrayUtil.forEach(["old","new","verify"], function(i){
+		array.forEach(["old","new","verify"], function(i){
 			widgets.push(query("input[pwType=" + i + "]", this.containerNode)[0]);
 		}, this);
-		if (!widgets[1] || !widgets[2]){
+		if(!widgets[1] || !widgets[2]){
 			throw new Error("Need at least pwType=\"new\" and pwType=\"verify\"");
 		}
-		if (this.oldName && !widgets[0]){
+		if(this.oldName && !widgets[0]){
 			throw new Error("Need to specify pwType=\"old\" if using oldName");
 		}
 		this.containerNode = this.domNode;
@@ -269,44 +274,44 @@ return dojo.declare("dojox.form.PasswordValidator", _FormValueWidget, {
 		this.connect(this._inputWidgets[1], "_setValueAttr", "_childValueAttr");
 		this.connect(this._inputWidgets[2], "_setValueAttr", "_childValueAttr");
 	},
-	
+
 	_childValueAttr: function(v){
 		this.set("value", this.isValid() ? v : "");
 	},
-	
+
 	_setDisabledAttr: function(value){
 		this.inherited(arguments);
-		arrayUtil.forEach(this._inputWidgets, function(i){
+		array.forEach(this._inputWidgets, function(i){
 			if(i && i.set){ i.set("disabled", value);}
 		});
 	},
-	
+
 	_setRequiredAttribute: function(value){
 		this.required = value;
-		domAttr.attr(this.focusNode, "required", value);
+		domAttr.set(this.focusNode, "required", value);
 		this.focusNode.setAttribute("aria-required", value);
 		this._refreshState();
-		arrayUtil.forEach(this._inputWidgets, function(i){
+		array.forEach(this._inputWidgets, function(i){
 			if(i && i.set){ i.set("required", value);}
 		});
 	},
 
 	_setValueAttr: function(v){
 		this.inherited(arguments);
-		domAttr.attr(this.focusNode, "value", v);
+		domAttr.set(this.focusNode, "value", v);
 	},
-	
+
 	_getValueAttr: function(){
 		// Make sure we don't return undefined.... maybe should do conversion in _setValueAttr() instead?
 		return this.value||"";
 	},
-	
+
 	focus: function(){
 		// summary:
 		//		places focus on the first invalid input widget - if all
 		//		input widgets are valid, the first widget is focused.
 		var f = false;
-		arrayUtil.forEach(this._inputWidgets, function(i){
+		array.forEach(this._inputWidgets, function(i){
 			if(i && !i.isValid() && !f){
 				i.focus();
 				f = true;

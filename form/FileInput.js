@@ -1,9 +1,20 @@
-define(['dojo', 'dojo/text!./resources/FileInput.html', 'dijit/form/_FormWidget', 'dijit/_Templated'], 
-function(dojo, template){
-dojo.experimental("dojox.form.FileInput");
+define([
+	"dojo/_base/declare",
+	"dojo/_base/kernel",
+	"dojo/_base/fx",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dojo/text!./resources/FileInput.html",
+	"dijit/form/_FormWidget",
+	"dijit/_Templated"
+],
+function(declare, kernel, fx, domAttr, domClass, template, FormWidget, Templated){
+kernel.experimental("dojox.form.FileInput");
 
-dojo.declare("dojox.form.FileInput",
-	dijit.form._FormWidget,
+	/*=====
+		FormWidget = dijit.form._FormWidget;
+	=====*/
+declare("dojox.form.FileInput", FormWidget,
 	{
 	// summary: A styled input type="file"
 	//
@@ -24,7 +35,7 @@ dojo.declare("dojox.form.FileInput",
 	name: "uploadFile",
 
 	templateString: template,
-	
+
 	startup: function(){
 		// summary: listen for changes on our real file input
 		this._listener = this.connect(this.fileInput,"onchange","_matchValue");
@@ -34,13 +45,13 @@ dojo.declare("dojox.form.FileInput",
 	//get rid of the this.connect in _FormWidget.postCreate to allow IE to show
 	//the file picker dialog properly
 	postCreate: function(){},
-	
+
 	_matchValue: function(){
 		// summary: set the content of the upper input based on the semi-hidden file input
 		this.inputNode.value = this.fileInput.value;
 		if(this.inputNode.value){
 			this.cancelNode.style.visibility = "visible";
-			dojo.fadeIn({ node: this.cancelNode, duration:275 }).play();
+			fx.fadeIn({ node: this.cancelNode, duration:275 }).play();
 		}
 	},
 
@@ -57,17 +68,17 @@ dojo.declare("dojox.form.FileInput",
 		if(this.fileInput){
 			this.domNode.removeChild(this.fileInput);
 		}
-		dojo.fadeOut({ node: this.cancelNode, duration:275 }).play();
+		fx.fadeOut({ node: this.cancelNode, duration:275 }).play();
 
 		// should we use cloneNode()? can we?
 		this.fileInput = document.createElement('input');
-		// dojo.attr(this.fileInput,{
+		// domAttr.set(this.fileInput,{
 		//	"type":"file", "id":this.id, "name": this.name
 		//});
 		this.fileInput.setAttribute("type","file");
 		this.fileInput.setAttribute("id", this.id);
 		this.fileInput.setAttribute("name", this.name);
-		dojo.addClass(this.fileInput,"dijitFileInputReal");
+		domClass.add(this.fileInput,"dijitFileInputReal");
 		this.domNode.appendChild(this.fileInput);
 
 		this._keyListener = this.connect(this.fileInput, "onkeyup", "_matchValue");

@@ -1,43 +1,45 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/event",
 	"dojo/window",
 	"dijit",
+	"dijit/_base/manager",
 	"dijit/form/ValidationTextBox",
 	"dijit/_HasDropDown",
 	"dojox/widget/FilePicker",
 	"dojo/text!./resources/FilePickerTextBox.html",
 	"dojo/_base/declare",
-	"dojo/_base/connect" // dojo.keys
-], function (dojo, lang, arrayUtil, eventUtil, windowUtil, dijit, ValidationTextBox, _HasDropDown, FilePicker, template) {
+	"dojo/_base/connect" // keys
+], function(lang, array, event, windowUtils, dijit, manager, ValidationTextBox, _HasDropDown, FilePicker, template, declare, connect){
 
-return dojo.declare(
-	"dojox.form.FilePickerTextBox",
-	[ValidationTextBox, _HasDropDown],
+	/*=====
+		ValidationTextBox = dijit.form.ValidationTextBox;
+		_HasDropDown = dijit._HasDropDown;
+	=====*/
+return declare( "dojox.form.FilePickerTextBox", [ValidationTextBox, _HasDropDown],
 	{
 		// summary:
 		//		A validating text box tied to a file picker popup
-		
+
 		baseClass: "dojoxFilePickerTextBox",
-		
+
 		templateString: template,
-		
+
 		// searchDelay: Integer
 		//		Delay in milliseconds between when user types something and we start
 		//		searching based on that value
 		searchDelay: 500,
-		
+
 		// valueItem: item
 		//		The item, in our store, of the directory relating to our value
 		valueItem: null,
-		
+
 		// numPanes: number
 		//	The number of panes to display in our box (if we don't have any
 		//	minPaneWidth specified by our constraints)
 		numPanes: 2.25,
-		
+
 		postMixInProperties: function(){
 			this.inherited(arguments);
 			this.dropDown = new FilePicker(this.constraints);
@@ -53,7 +55,7 @@ return dojo.declare(
 				dijit.selectInputText(this.focusNode);
 			});
 		},
-		
+
 		_setValueAttr: function(/*string*/value, priorityChange, fromWidget){
 			// summary: sets the value of this widget
 			if(!this._searchInProgress){
@@ -68,7 +70,7 @@ return dojo.declare(
 				}
 			}
 		},
-		
+
 		_onWidgetChange: function(/*item*/item){
 			// summary: called when the path gets changed in the dropdown
 			if(!item && this.focusNode.value){
@@ -87,7 +89,7 @@ return dojo.declare(
 			}
 			this.validate();
 		},
-		
+
 		startup: function(){
 			if(!this.dropDown._started){
 				this.dropDown.startup();
@@ -103,7 +105,7 @@ return dojo.declare(
 			}
 			this.inherited(arguments);
 		},
-		
+
 		toggleDropDown: function(){
 			this.inherited(arguments);
 			// Make sure our display is up-to-date with our value
@@ -111,7 +113,7 @@ return dojo.declare(
 				this.dropDown.set("pathValue", this.get("value"));
 			}
 		},
-		
+
 		_focusBlur: function(/*Event*/ e){
 			// summary: called when the focus node gets blurred
 			if(e.explicitOriginalTarget == this.focusNode && !this._allowBlur){
@@ -125,7 +127,7 @@ return dojo.declare(
 				delete this._menuFocus;
 			}
 		},
-		
+
 		_focusFocus: function(/*Event*/ e){
 			// summary: called when the focus node gets focus
 			if(this._menuFocus){
@@ -134,7 +136,7 @@ return dojo.declare(
 			delete this._menuFocus;
 			var focusNode = dijit.getFocus(this);
 			if(focusNode && focusNode.node){
-				focusNode = dijit.byNode(focusNode.node);
+				focusNode = manager.byNode(focusNode.node);
 				if(focusNode){
 					this._menuFocus = focusNode.domNode;
 				}
@@ -144,14 +146,14 @@ return dojo.declare(
 			}
 			delete this._allowBlur;
 		},
-		
+
 		_onBlur: function(){
 			// summary: called when focus is shifted away from this widget
 			this._allowBlur = true;
 			delete this.dropDown._savedFocus;
 			this.inherited(arguments);
 		},
-		
+
 		_setBlurValue: function(){
 			// summary: sets the value of the widget once focus has left
 			if(this.dropDown && !this._settingBlurValue){
@@ -162,7 +164,7 @@ return dojo.declare(
 				this.inherited(arguments);
 			}
 		},
-		
+
 		parse: function(/* String */ value, /* Object */ constraints){
 			//	summary:
 			//		Function to convert a formatted string to a value - we use
@@ -188,7 +190,7 @@ return dojo.declare(
 			}
 			return undefined;
 		},
-		
+
 		_startSearchFromInput: function(){
 			// summary: kicks off a search based off the current text value of the widget
 			var dd = this.dropDown, fn = this.focusNode;
@@ -219,10 +221,10 @@ return dojo.declare(
 						}
 						delete conn;
 						var children = child._menu.getChildren();
-						var exact = arrayUtil.filter(children, function(i){
+						var exact = array.filter(children, function(i){
 							return i.label == dir;
 						})[0];
-						var first = arrayUtil.filter(children, function(i){
+						var first = array.filter(children, function(i){
 							return (i.label.indexOf(dir) === 0);
 						})[0];
 						if(exact &&
@@ -249,7 +251,7 @@ return dojo.declare(
 								}
 								targetString = targetString.substring(dir.length);
 								window.setTimeout(function(){
-									windowUtil.scrollIntoView(first.domNode);
+									windowUtils.scrollIntoView(first.domNode);
 								}, 1);
 								fn.value = oVal + targetString;
 								dijit.selectInputText(fn, oVal.length);
@@ -281,11 +283,11 @@ return dojo.declare(
 			});
 			setFromChain(0);
 		},
-		
+
 		_onKey: function(/*Event*/ e){
 			// summary: callback when the user presses a key on menu popup node
 			if(this.disabled || this.readOnly){ return; }
-			var dk = dojo.keys;
+			var dk = keys;
 			var c = e.charOrCode;
 			if(c==dk.DOWN_ARROW){
 				this._allowBlur = true;
@@ -294,12 +296,12 @@ return dojo.declare(
 				this.dropDown.onExecute();
 				dijit.selectInputText(this.focusNode, this.focusNode.value.length);
 				this._hasSelection = false;
-				eventUtil.stop(e);
+				event.stop(e);
 				return;
 			}
 			if((c==dk.RIGHT_ARROW || c==dk.LEFT_ARROW || c==dk.TAB) && this._hasSelection){
 				this._startSearchFromInput();
-				eventUtil.stop(e);
+				event.stop(e);
 				return;
 			}
 			this.inherited(arguments);

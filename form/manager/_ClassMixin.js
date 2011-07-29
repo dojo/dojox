@@ -1,14 +1,15 @@
 define([
+	"dojo/_base/lang",
 	"dojo/_base/kernel",
 	"dojo/dom-class",
 	"./_Mixin",
 	"dojo/_base/declare"
-], function (dojo, domClass, _Mixin) {
-	var fm = dojo.getObject("dojox.form.manager", true),
+], function(lang, dojo, domClass, _Mixin, declare){
+	var fm = lang.getObject("dojox.form.manager", true),
 		aa = fm.actionAdapter,
 		ia = fm.inspectorAdapter;
 
-	return dojo.declare("dojox.form.manager._ClassMixin", null, {
+	return declare("dojox.form.manager._ClassMixin", null, {
 		// summary:
 		//		Form manager's mixin for testing/assigning/removing
 		//		classes of controlled elements.

@@ -1,15 +1,17 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"dojo/dom-attr",
 	"dojo/dom-class",
 	"dojo/string",
 	"dojo/query",
-	"dijit/form/_FormWidget",
-	"dojo/_base/declare"
-], function (dojo, domAttr, domClass, stringUtil, query, _FormWidget) {
+	"dijit/form/_FormWidget"
+], function(declare, lang, domAttr, domClass, string, query, FormWidget){
 
-return dojo.declare("dojox.form.Rating",
-	_FormWidget,{
+	/*=====
+		FormWidget = dijit.form._FormWidget;
+	=====*/
+return declare("dojox.form.Rating", FormWidget,{
 	// summary:
 	//		A widget for rating using stars.
 	//
@@ -18,7 +20,7 @@ return dojo.declare("dojox.form.Rating",
 	// required: false,
 
 	templateString: null,
-	
+
 	// numStars: Integer/Float
 	//		The number of stars to show, default is 3.
 	numStars: 3,
@@ -29,13 +31,13 @@ return dojo.declare("dojox.form.Rating",
 	constructor:function(/*Object*/params){
 		// Build the templateString. The number of stars is given by this.numStars,
 		// which is normally an attribute to the widget node.
-		dojo.mixin(this, params);
-		
+		lang.mixin(this, params);
+
 		// TODO actually "dijitInline" should be applied to the surrounding div, but FF2
-		// screws up when we dojo.query() for the star nodes, it orders them randomly, because of the use
+		// screws up when we query() for the star nodes, it orders them randomly, because of the use
 		// of display:--moz-inline-box ... very strange bug
 		// Since using ul and li in combintaion with dijitInline this problem doesnt exist anymore.
-		
+
 		// The focusNode is normally used to store the value, i dont know if that is right here, but seems standard for _FormWidgets
 		var tpl = '<div dojoAttachPoint="domNode" class="dojoxRating dijitInline">' +
 					'<input type="hidden" value="0" dojoAttachPoint="focusNode" /><ul>${stars}</ul>' +
@@ -44,9 +46,9 @@ return dojo.declare("dojox.form.Rating",
 		var starTpl = '<li class="dojoxRatingStar dijitInline" dojoAttachEvent="onclick:onStarClick,onmouseover:_onMouse,onmouseout:_onMouse" value="${value}"></li>';
 		var rendered = "";
 		for(var i = 0; i < this.numStars; i++){
-			rendered += stringUtil.substitute(starTpl, {value:i+1});
+			rendered += string.substitute(starTpl, {value:i+1});
 		}
-		this.templateString = stringUtil.substitute(tpl, {stars:rendered});
+		this.templateString = string.substitute(tpl, {stars:rendered});
 	},
 
 	postCreate: function(){
@@ -56,7 +58,7 @@ return dojo.declare("dojox.form.Rating",
 
 	_onMouse: function(evt){
 		if(this.hovering){
-			var hoverValue = +domAttr.attr(evt.target, "value");
+			var hoverValue = +domAttr.get(evt.target, "value");
 			this.onMouseOver(evt, hoverValue);
 			this._renderStars(hoverValue, true);
 		}else{
@@ -79,21 +81,21 @@ return dojo.declare("dojox.form.Rating",
 
 	onStarClick:function(/* Event */evt){
 		// summary: Connect on this method to get noticed when a star was clicked.
-		// example: dojo.connect(widget, "onStarClick", function(event){ ... })
-		var newVal = +domAttr.attr(evt.target, "value");
+		// example: connect(widget, "onStarClick", function(event){ ... })
+		var newVal = +domAttr.get(evt.target, "value");
 		this.setAttribute("value", newVal == this.value ? 0 : newVal);
 		this._renderStars(this.value);
 		this.onChange(this.value); // Do I have to call this by hand?
 	},
-	
+
 	onMouseOver: function(/*evt, value*/){
 		// summary: Connect here, the value is passed to this function as the second parameter!
 	},
-	
+
 	setAttribute: function(/*String*/key, /**/value){
 		// summary: When calling setAttribute("value", 4), set the value and render the stars accordingly.
-		this.inherited("setAttribute", arguments);
-		if (key=="value"){
+		this.set(key, value);
+		if(key=="value"){
 			this._renderStars(this.value);
 			this.onChange(this.value); // Do I really have to call this by hand? :-(
 		}

@@ -1,6 +1,10 @@
-define(["dojo/_base/kernel", "dijit/form/Select"], function (dojo, Select) {
-dojo.deprecated("dojox.form.DropDownSelect", "Use dijit.form.Select instead", "2.0");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dijit/form/Select"
+], function(kernel, lang, Select){
+	kernel.deprecated("dojox.form.DropDownSelect", "Use Select instead", "2.0");
 
-dojo.setObject("dojox.form.DropDownSelect", Select);
-return Select;
+	lang.setObject("dojox.form.DropDownSelect", Select);
+	return Select;
 });

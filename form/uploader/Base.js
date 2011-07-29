@@ -1,7 +1,22 @@
-define(['dojo', 'dijit', 'dijit/_Widget', 'dijit/_TemplatedMixin', 'dijit/_WidgetsInTemplateMixin'],function(dojo, dijit){
+define([
+	"dojo/dom-form",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-attr",
+	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin"
+],function(domForm, domStyle, domConstruct, domAttr, declare, event, Widget, TemplatedMixin, WidgetsInTemplateMixin){
 
 
-dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	/*=====
+		Widget = dijit._Widget;
+		TemplatedMixin = dijit._TemplatedMixin;
+		WidgetsInTemplateMixin = dijit._WidgetsInTemplateMixin;
+	=====*/
+return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTemplateMixin], {
 	//
 	// Version: 1.6
 	//
@@ -49,8 +64,8 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		if(!this._fcon && !!this.getForm()){
 			this._fcon = true;
 			this.connect(this.form, "onsubmit", function(evt){
-				dojo.stopEvent(evt);
-				this.submit(dojo.formToObject(this.form));
+				event.stop(evt);
+				this.submit(domForm.toObject(this.form));
 			});
 		}
 	},
@@ -61,11 +76,11 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		//
 		if(!this._hascache){
 			this._hascache = {
-				testDiv: dojo.create("div"),
-				testInput: dojo.create("input", {type:"file"}),
+				testDiv: domConstruct.create("div"),
+				testInput: domConstruct.create("input", {type:"file"}),
 				xhr:!!window.XMLHttpRequest ? new XMLHttpRequest() : {}
 			};
-			dojo.style(this._hascache.testDiv, "opacity", .7);
+			domStyle.set(this._hascache.testDiv, "opacity", .7);
 		}
 		switch(what){
 			case "FormData":
@@ -73,10 +88,10 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 			case "sendAsBinary":
 				return !!this._hascache.xhr.sendAsBinary;
 			case "opacity":
-				return dojo.style(this._hascache.testDiv, "opacity") == .7;
+				return domStyle.get(this._hascache.testDiv, "opacity") == .7;
 			case "multiple":
 				if(this.force == "flash" || this.force == "iframe") return false;
-				var res = dojo.attr(this._hascache.testInput, "multiple");
+				var res = domAttr.get(this._hascache.testInput, "multiple");
 				return res===true || res===false; // IE will be undefined
 		}
 		return false; // Boolean
@@ -114,5 +129,4 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		}; // Object
 	}
 });
-return dojox.form.uploader.Base;
 });
