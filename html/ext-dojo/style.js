@@ -1,10 +1,11 @@
 define([
 	"dojo/_base/kernel",	// dojo variable, dojo.experimental
+	"dojo/dom-style",	// style.set, style.get
 	"dojo/_base/lang",	// dojo.trim, dojo.getObject, dojo.mixin etc
 	"dojo/_base/html",	// dojo.attr, dojo.hasAttr, dojo.style, dojo.place, dojo.byId, dojo.create, etc.
 	"dojo/_base/sniff",	// dojo.isIE
 	"dojo/_base/window"	// dojo.body, dojo.doc
-], function(dojo){
+], function(dojo, domStyle){
 	dojo.experimental("dojox.html.ext-dojo.style");
 	var st = dojo.getObject("html.ext-dojo.style", true, dojox);
 
@@ -28,39 +29,30 @@ define([
 			return ds(_conversion, "margin");
 		},
 		init: function(){
-			var ds = dojo.style, docStyle = dojo.doc.documentElement.style, extStyle = dojox.html["ext-dojo"].style;
-			dojo.style = function(	/*DomNode|String*/ node,
-									/*String?|Object?*/ style,
-									/*String?*/ value){
-				// summary:
-				//      extended dojo.style()
-				// description:
-				//      extended dojo.style() function, capable of handling the css3 "transform" and "transform-origin" properties
-				// example:
-				// | dojo.style("rotate(20deg) scaleX(1.5) scaleY(2) skew(10deg, 20deg)")
-				var n = dojo.byId(node),
-					tr = (style == "transform"),
-					to = (style == "transformOrigin"),
-					args = arguments.length
+			var docStyle = dojo.doc.documentElement.style, extStyle = dojox.html["ext-dojo"].style,
+				sget = domStyle.get, sset = domStyle.set;
+			domStyle.get = function(/*DOMNode|String*/ node, /*String|Object*/ name){
+				var tr = (name == "transform"),
+					to = (name == "transformOrigin");
+				if(tr){
+					return extStyle.getTransform(node);
+				}else if(to){
+					return extStyle.getTransformOrigin(node);
+				}else{
+					return arguments.length == 2 ? sget(node, name) : sget(node);
+				}
+			};
+			domStyle.set = function(/*DOMNode|String*/ node, /*String|Object*/ name, /*String?*/ value){
+				var tr = (name == "transform"),
+					to = (name == "transformOrigin"),
+					n = dojo.byId(node)
 				;
-				if(args == 1){
-					return ds(node);
-				}else if(args == 2){
-					if(tr){
-						return extStyle.getTransform(node);
-					}else if(to){
-						return extStyle.getTransformOrigin(node);
-					}else{
-						return ds(node, style);
-					}
-				}else if(args == 3){
-					if(tr){
-						extStyle.setTransform(n, value, true);
-					}else if(to){
-						extStyle.setTransformOrigin(n, value);
-					}else{
-						ds(node, style, value);
-					}
+				if(tr){
+					return extStyle.setTransform(n, value, true);
+				}else if(to){
+					return extStyle.setTransformOrigin(n, value);
+				}else{
+					return arguments.length == 3 ? sset(n, name, value) : sset(n, name);
 				}
 			};
 			// prefixes and property names
@@ -74,10 +66,10 @@ define([
 			}
 			if(this.tPropertyName){
 				this.setTransform = function(/*DomNode*/node, /*String*/ transform){
-					return dojo.style(node, this.tPropertyName, transform);
+					return domStyle.set(node, this.tPropertyName, transform);
 				};
 				this.getTransform = function(/*DomNode*/node){
-					return dojo.style(node, this.tPropertyName);
+					return domStyle.get(node, this.tPropertyName);
 				};
 			}else if(dojo.isIE){
 				this.setTransform = this._setTransformFilter;
@@ -85,10 +77,10 @@ define([
 			}
 			if(this.toPropertyName){
 				this.setTransformOrigin = function(/*DomNode*/node, /*String*/ transformOrigin){
-					return dojo.style(node, this.toPropertyName, transformOrigin);
+					return sset(node, this.toPropertyName, transformOrigin);
 				};
 				this.getTransformOrigin = function(/*DomNode*/node){
-					return dojo.style(node, this.toPropertyName);
+					return sget(node, this.toPropertyName);
 				};
 			}else if(dojo.isIE){
 				this.setTransformOrigin = this._setTransformOriginFilter;
@@ -130,14 +122,12 @@ define([
 					toAry[i] = this._toPx(toAry[i]);
 				}
 			}
-			if(!validOrigin){
-				return;
-			}
-			if(!toAry.length || toAry.length > 2 ){
-				return;
+			if(!validOrigin || !toAry.length || toAry.length > 2 ){
+				return transformOrigin;
 			}
 			dojo.attr(n, "dojo-transform-origin", toAry.join(" "));
 			t && this.setTransform(node, t);
+			return transformOrigin;
 		},
 		_getTransformOriginFilter: function(/*DomNode*/ node){
 			return dojo.attr(node, "dojo-transform-origin") || "50% 50%";
@@ -445,6 +435,7 @@ define([
 				left: x0 - parseInt(dx) + parseInt(xc) - ((parseInt(xc) - tx)*m11 + (parseInt(yc) - ty)*m12) + "px",
 				top:  y0 - parseInt(dy) + parseInt(yc) - ((parseInt(xc) - tx)*m21 + (parseInt(yc) - ty)*m22) + "px"
 			});
+			return transform;
 		},
 		_getTransformFilter: function(/*DomNode*/ node){
 			try{
