@@ -1,4 +1,4 @@
-dojo.provide("dojox.wire.ml.XMLHandler");
+dojo.provide("dojox.wire.ml.XmlHandler");
 
 dojo.require("dojox.wire.ml.RestHandler");
 dojo.require("dojox.xml.parser");
