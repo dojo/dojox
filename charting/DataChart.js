@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/html", "dojo/_base/connect",
-	 "./Chart2D", "./themes/PlotKit/blue"], 
-	 function(dojo, lang, declare, html, connect, Chart2D, blue){
-
+	 "dojo/_base/array", "./Chart2D", "./themes/PlotKit/blue", "dojo/dom"], 
+	 function(dojo, lang, declare, html, hub, arr, Chart, blue, dom){
+	// FIXME: This module drags in all Charting modules because of the Chart2D dependency...it is VERY heavy
 	dojo.experimental("dojox.charting.DataChart");
 
 	// Defaults for axes
@@ -39,7 +39,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		gap:2
 	};
 
-	return dojo.declare("dojox.charting.DataChart", dojox.charting.Chart2D, {
+	return declare("dojox.charting.DataChart", dojox.charting.Chart, {
 		//	summary:
 		//		DataChart
 		//		Extension to the 2D chart that connects to a data store in
@@ -163,18 +163,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//			chartPlot: Object
 			//				Options for chart elements (lines, bars, etc)
 
-			this.domNode = dojo.byId(node);
+			this.domNode = dom.byId(node);
 
-			dojo.mixin(this, kwArgs);
+			lang.mixin(this, kwArgs);
 
-			this.xaxis = dojo.mixin(dojo.mixin({}, _xaxis), kwArgs.xaxis);
+			this.xaxis = lang.mixin(lang.mixin({}, _xaxis), kwArgs.xaxis);
 			if(this.xaxis.labelFunc == "seriesLabels"){
-				this.xaxis.labelFunc = dojo.hitch(this, "seriesLabels");
+				this.xaxis.labelFunc = lang.hitch(this, "seriesLabels");
 			}
 
-			this.yaxis = dojo.mixin(dojo.mixin({}, _yaxis), kwArgs.yaxis);
+			this.yaxis = lang.mixin(lang.mixin({}, _yaxis), kwArgs.yaxis);
 			if(this.yaxis.labelFunc == "seriesLabels"){
-				this.yaxis.labelFunc = dojo.hitch(this, "seriesLabels");
+				this.yaxis.labelFunc = lang.hitch(this, "seriesLabels");
 			}
 
 			// potential event's collector
@@ -207,9 +207,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.addAxis("x", this.xaxis);
 			this.addAxis("y", this.yaxis);
 			chartPlot.type = kwArgs.type || "Markers"
-			this.addPlot("default", dojo.mixin(chartPlot, kwArgs.chartPlot));
+			this.addPlot("default", lang.mixin(chartPlot, kwArgs.chartPlot));
 
-			this.addPlot("grid", dojo.mixin(kwArgs.grid || {}, {type: "Grid", hMinorLines: true}));
+			this.addPlot("grid", lang.mixin(kwArgs.grid || {}, {type: "Grid", hMinorLines: true}));
 
 			if(this.showing){
 				this.render();
@@ -221,7 +221,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		},
 
 		destroy: function(){
-			dojo.forEach(this._events, dojo.disconnect);
+			arr.forEach(this._events, hub.disconnect);
 			this.inherited(arguments);
 		},
 
@@ -240,10 +240,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.label = this.store.getLabelAttributes();
 			this.queryOptions = queryOptions || queryOptions;
 
-			dojo.forEach(this._events, dojo.disconnect);
+			arr.forEach(this._events, hub.disconnect);
 			this._events = [
-				dojo.connect(this.store, "onSet", this, "onSet"),
-				dojo.connect(this.store, "onError", this, "onError")
+				hub.connect(this.store, "onSet", this, "onSet"),
+				hub.connect(this.store, "onError", this, "onError")
 			];
 			this.fetch();
 		},
@@ -252,7 +252,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		If chart is hidden, show it
 			if(!this.showing){
-				dojo.style(this.domNode, "display", "");
+				html.style(this.domNode, "display", "");
 				this.showing = true;
 				this.render();
 			}
@@ -262,7 +262,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		If chart is showing, hide it
 			//		Prevents rendering while hidden
 			if(this.showing){
-				dojo.style(this.domNode, "display", "none");
+				html.style(this.domNode, "display", "none");
 				this.showing = false;
 			}
 		},
@@ -288,7 +288,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				if(!this.onSetItems[nm]){
 					this.onSetItems[nm] = item;
 				}
-				this.onSetInterval = setTimeout(dojo.hitch(this, function(){
+				this.onSetInterval = setTimeout(lang.hitch(this, function(){
 					clearTimeout(this.onSetInterval);
 					var items = [];
 					for(var nm in this.onSetItems){
@@ -341,9 +341,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			if(!items || !items.length){ return; }
 
 			if(this.items && this.items.length != items.length){
-				dojo.forEach(items, function(m){
+				arr.forEach(items, function(m){
 					var id = this.getProperty(m, "id");
-					dojo.forEach(this.items, function(m2, i){
+					arr.forEach(this.items, function(m2, i){
 						if(this.getProperty(m2, "id") == id){
 							this.items[i] = m2;
 						}
@@ -365,7 +365,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 				this.seriesData[nm] = [];
 				this.seriesDataBk[nm] = [];
-				dojo.forEach(items, function(m, i){
+				arr.forEach(items, function(m, i){
 					var field = this.getProperty(m, this.fieldName);
 					this.seriesData[nm].push(field);
 				}, this);
@@ -373,7 +373,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			}else{
 
 				// each item is a seperate series.
-				dojo.forEach(items, function(m, i){
+				arr.forEach(items, function(m, i){
 					var nm = this.store.getLabel(m);
 					if(!this.seriesData[nm]){
 						this.seriesData[nm] = [];
@@ -455,12 +455,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//
 			if(!this.store){ return; }
 			this.store.fetch({query:this.query, queryOptions:this.queryOptions, start:this.start, count:this.count, sort:this.sort,
-				onComplete:dojo.hitch(this, function(data){
-					setTimeout(dojo.hitch(this, function(){
+				onComplete:lang.hitch(this, function(data){
+					setTimeout(lang.hitch(this, function(){
 						this.onData(data)
 					}),0);
 				}),
-				onError:dojo.hitch(this, "onError")
+				onError:lang.hitch(this, "onError")
 			});
 		},
 
@@ -469,9 +469,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		Convenience method to convert a label array of strings
 			//		into an array of objects
 			//
-			if(!axis.labels || dojo.isObject(axis.labels[0])){ return null; }
+			if(!axis.labels || lang.isObject(axis.labels[0])){ return null; }
 
-			axis.labels = dojo.map(axis.labels, function(ele, i){
+			axis.labels = arr.map(axis.labels, function(ele, i){
 				return {value:i, text:ele};
 			});
 			return null; // null

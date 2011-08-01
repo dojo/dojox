@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html",
-	"./Invisible", "../scaler/common", "../scaler/linear", "./common", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
+	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", "../scaler/common", "../scaler/linear", "./common", 
 	"dojox/gfx", "dojox/lang/utils"], 
-	function(dojo, lang, declare, connect, html, Invisible, scommon, lin, acommon, g, du){
+	function(dojo, lang, arr, ua, declare, connect, html, domGeom, Invisible, scommon, lin, acommon, g, du){
 
 	/*=====
 		dojox.charting.axis2d.__AxisCtorArgs = function(
@@ -113,7 +113,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	var labelGap = 4,			// in pixels
 		centerAnchorLimit = 45;	// in degrees
 
-	return dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Invisible, {
+	return declare("dojox.charting.axis2d.Default", Invisible, {
 		//	summary:
 		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
 		//
@@ -204,7 +204,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		The chart the axis belongs to.
 			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			if(this.opt.enableCache){
@@ -577,7 +577,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 					f = lin.getTransformerFromModel(this.scaler),
 					// GFX Canvas now supports labels, so let's _not_ fallback to HTML anymore on canvas, just use
 					// HTML labels if explicitly asked + no rotation + no IE + no Opera
-					labelType = !titleRotation && !rotation && this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
+					labelType = !titleRotation && !rotation && this.opt.htmlLabels && !ua.isIE && !ua.isOpera ? "html" : "gfx",
 					dx = tickVector.x * taMajorTick.length,
 					dy = tickVector.y * taMajorTick.length;
 
@@ -615,7 +615,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 					return;
 				}
 
-				dojo.forEach(t.major, function(tick){
+				arr.forEach(t.major, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
@@ -668,7 +668,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				dx = tickVector.x * taMinorTick.length;
 				dy = tickVector.y * taMinorTick.length;
 				canLabel = c.minMinorStep <= c.minor.tick * c.bounds.scale;
-				dojo.forEach(t.minor, function(tick){
+				arr.forEach(t.minor, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
@@ -719,7 +719,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 				dx = tickVector.x * taMicroTick.length;
 				dy = tickVector.y * taMicroTick.length;
-				dojo.forEach(t.micro, function(tick){
+				arr.forEach(t.micro, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
@@ -746,25 +746,25 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				fontWidth = g._base._getTextBox(truncatedLabel, {font: font}).w || 0,
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
 			if(elemType == "html"){
-				dojo.mixin(aroundRect, dojo.coords(elem.firstChild, true));
+				lang.mixin(aroundRect, domGeom.getBorderExtents(elem.firstChild, true));
 				aroundRect.width = Math.ceil(fontWidth);
 				aroundRect.height = Math.ceil(fontHeight);
 				this._events.push({
 					shape:  dojo,
-					handle: dojo.connect(elem.firstChild, "onmouseover", this, function(e){
+					handle: connect.connect(elem.firstChild, "onmouseover", this, function(e){
 						dijit.showTooltip(label, aroundRect, position);
 					})
 				});
 				this._events.push({
 					shape:  dojo,
-					handle: dojo.connect(elem.firstChild, "onmouseout", this, function(e){
+					handle: connect.connect(elem.firstChild, "onmouseout", this, function(e){
 						dijit.hideTooltip(aroundRect);
 					})
 				});
 			}else{
 				var shp = elem.getShape(),
-					lt = dojo.coords(chart.node, true);
-				aroundRect = dojo.mixin(aroundRect, {
+					lt = domGeom.getBorderExtents(chart.node, true);
+				aroundRect = lang.mixin(aroundRect, {
 					x: shp.x - fontWidth / 2,
 					y: shp.y
 				});

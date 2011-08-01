@@ -1,13 +1,13 @@
-define(["dojo/_base/kernel", "../../main", "dojo/_base/lang"], function(dojo, dojox){
+define(["dojo/_base/lang", "dojo/number"], function(lang, numberLib){
 
 	var eq = function(/*Number*/ a, /*Number*/ b){
 		// summary: compare two FP numbers for equality
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
 	};
 	
-	var common = dojo.getObject("charting.scaler.common", true, dojox);
+	var common = lang.getObject("dojox.charting.scaler.common", true);
 	
-	return dojo.mixin(common, {
+	return lang.mixin(common, {
 		findString: function(/*String*/ val, /*Array*/ text){
 			val = val.toLowerCase();
 			for(var i = 0; i < text.length; ++i){
@@ -17,9 +17,9 @@ define(["dojo/_base/kernel", "../../main", "dojo/_base/lang"], function(dojo, do
 		},
 		getNumericLabel: function(/*Number*/ number, /*Number*/ precision, /*Object*/ kwArgs){
 			var def = "";
-			if(dojo && dojo.number){
-				def = (kwArgs.fixed ? dojo.number.format(number, {places : precision < 0 ? -precision : 0}) :
-					dojo.number.format(number)) || "";
+			if(dojo && numberLib){
+				def = (kwArgs.fixed ? numberLib.format(number, {places : precision < 0 ? -precision : 0}) :
+					numberLib.format(number)) || "";
 			}else{
 				def = kwArgs.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
 			}

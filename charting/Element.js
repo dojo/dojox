@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojox/gfx"], 
-	function(dojo, array, declare, gfx){ 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gfx"], 
+	function(lang, arr, domConstruct, declare, gfx){ 
 	
-	return dojo.declare("dojox.charting.Element", null, {
+	return declare("dojox.charting.Element", null, {
 		//	summary:
 		//		A base class that is used to build other elements of a chart, such as
 		//		a series.
@@ -57,7 +57,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojox/gf
 			}
 			this.dirty = true;
 			if(this._events.length){
-				dojo.forEach(this._events, function(item){
+				arr.forEach(this._events, function(item){
 					item.shape.disconnect(item.handle);
 				});
 				this._events = [];
@@ -85,7 +85,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojox/gf
 			//	summary:
 			//		Destroy any DOMNodes that may have been created as a part of this element.
 			if(this.htmlElements.length){
-				dojo.forEach(this.htmlElements, dojo.destroy);
+				arr.forEach(this.htmlElements, domConstruct.destroy);
 				this.htmlElements = [];
 			}
 		},

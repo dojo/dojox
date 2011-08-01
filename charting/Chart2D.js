@@ -5,5 +5,11 @@ define(["dojo/_base/kernel", "./Chart",
 	"./plot2d/Bars", "./plot2d/StackedBars", "./plot2d/ClusteredBars", "./plot2d/Grid", "./plot2d/Pie",
 	"./plot2d/Bubble", "./plot2d/Candlesticks", "./plot2d/OHLC", "./plot2d/Spider"], function(dojo, Chart){
 	dojo.deprecated("dojox.charting.Chart2D", "Use dojo.charting.Chart instead and require all other components explicitly", "2.0");
+	// module:
+	//		dojox/charting/Chart2D
+	// summary:
+	//		This is a compatibility module which loads all charting modules that used to be automatically
+	//		loaded in versions prior to 1.6.  It is highly recommended for performance reasons that
+	//		this module no longer be referenced by applications.  Instead, use dojox/charting/Chart.
 	return dojox.charting.Chart2D = Chart;
 });

@@ -1,10 +1,11 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array", "dojo/_base/sniff",
+	"dojo/dom","dojo/dom-construct",
 	"dojox/gfx", "dojox/gfx/_gfxBidiSupport", "./Chart", "./axis2d/common", "dojox/string/BidiEngine", "dojox/lang/functional"], 
-	function(dojo, lang, html, array, g, gBidi, Chart, da, BidiEngine, df){
+	function(dojo, lang, html, arr, ua, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
 
-	var bidiEngine = new dojox.string.BidiEngine();
+	var bidiEngine = new BidiEngine();
 	
-	dojo.extend(dojox.charting.Chart, {
+	lang.extend(Chart, {
 		// summary:
 		//		Add support for bidi scripts.
 		// description:
@@ -38,7 +39,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 			var textDir = this.textDir == "auto" ? bidiEngine.checkContextual(text) : this.textDir;
 			// providing default value
 			if(!textDir){
-				textDir = dojo.style(this.node,"direction");
+				textDir = html.style(this.node,"direction");
 			}
 			return textDir;
 		},
@@ -54,7 +55,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 			// validate textDir
 			var textDir = args ? (args["textDir"] ? validateTextDir(args["textDir"]) : "") : "";
 			// if textDir wasn't defined or was defined wrong, apply default value
-			textDir = textDir ? textDir : dojo.style(this.node,"direction");
+			textDir = textDir ? textDir : html.style(this.node,"direction");
 			this.textDir = textDir;
 
 			this.surface.textDir = textDir;
@@ -92,7 +93,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 				// each time we created a gfx truncated label we stored it in the truncatedLabelsRegistry, so update now 
 				// the registry.
 				if(this.truncatedLabelsRegistry && newTextDir == "auto"){
-					dojo.forEach(this.truncatedLabelsRegistry, function(elem){
+					arr.forEach(this.truncatedLabelsRegistry, function(elem){
 						var tDir = this.getTextDir(elem["label"]);
 						if(elem["element"].textDir != tDir){
 							elem["element"].setShape({textDir: tDir});
@@ -106,7 +107,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 				var axesKeyArr = df.keys(this.axes);
 				if(axesKeyArr.length > 0){
 					// iterate over the axes, and for each that have html labels render it.
-					dojo.forEach(axesKeyArr, function(key, index, arr){
+					arr.forEach(axesKeyArr, function(key, index, arr){
 						// get the axis 
 						var axis = this.axes[key];
 						// if the axis has html labels 
@@ -119,10 +120,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 					// recreate title
 					if(this.title){
 						var forceHtmlLabels = (g.renderer == "canvas"),
-							labelType = forceHtmlLabels || !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
+							labelType = forceHtmlLabels || !ua.isIE && !ua.isOpera ? "html" : "gfx",
 							tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
 						// remove the title
-						dojo.destroy(this.chartTitle);
+						domConstruct.destroy(this.chartTitle);
 						this.chartTitle =null;
 						// create the new title
 						this.chartTitle = da.createText[labelType](
@@ -138,10 +139,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 					}				
 				}else{
 				// case of pies, spiders etc.
-					dojo.forEach(this.htmlElementsRegistry, function(elem, index, arr){
+					arr.forEach(this.htmlElementsRegistry, function(elem, index, arr){
 						var tDir = newTextDir == "auto" ? this.getTextDir(elem[4]) : newTextDir;
 						if(elem[0].children[0] && elem[0].children[0].dir != tDir){
-							dojo.destroy(elem[0].children[0]);
+							dom.destroy(elem[0].children[0]);
 							elem[0].children[0] = da.createText["html"]
 									(this, this.surface, elem[1], elem[2], elem[3], elem[4], elem[5], elem[6]).children[0];
 						}
@@ -208,7 +209,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 					return r;
 				};
 		}else{
-			var old = dojo.clone(obj[method]);
+			var old = lang.clone(obj[method]);
 			obj[method] = 
 				function(){
 					var rBefore;
@@ -228,7 +229,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 		// aditional preprocessing of the labels, needed for rtl base text direction in LTR 
 		// GUI, or for ltr base text direction for RTL GUI.
 
-		var isChartDirectionRtl = (dojo.style(chart.node,"direction") == "rtl");
+		var isChartDirectionRtl = (html.style(chart.node,"direction") == "rtl");
 		var isBaseTextDirRtl = (chart.getTextDir(label) == "rtl");
 
 		if(isBaseTextDirRtl && !isChartDirectionRtl){

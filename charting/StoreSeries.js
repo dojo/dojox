@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"], 
-	function(dojo){
+define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"], 
+  function(arr, declare, Deferred){
 	
-	return dojo.declare("dojox.charting.StoreSeries", null, {
+	return declare("dojox.charting.StoreSeries", null, {
 		constructor: function(store, kwArgs, value){
 			//	summary:
 			//		Series adapter for dojo object stores (dojo.store).
@@ -74,7 +74,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_ba
 				this.observeHandle.dismiss();
 			}
 			var results = this.store.query(this.kwArgs.query, this.kwArgs);
-			dojo.when(results, function(objects){
+			Deferred.when(results, function(objects){
 				self.objects = objects;
 				update();
 			});
@@ -82,7 +82,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_ba
 				this.observeHandle = results.observe(update, true);
 			}
 			function update(){
-				self.data = dojo.map(self.objects, function(object){
+				self.data = arr.map(self.objects, function(object){
 					return self.value(object, self.store);
 				});
 				self._pushDataChanges();

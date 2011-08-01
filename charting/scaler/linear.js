@@ -1,13 +1,13 @@
-define(["dojo/_base/kernel", "../../main", "dojo/_base/lang", "./common"], 
-	function(dojo, dojox, lang, common){
-	var linear = dojo.getObject("charting.scaler.linear", true, dojox);
+define(["dojo/_base/kernel", "dojo/_base/lang", "./common"], 
+	function(dojo, lang, common){
+	var linear = lang.getObject("dojox.charting.scaler.linear", true);
 	
 	var deltaLimit = 3,	// pixels
 		findString = common.findString,
 		getLabel = common.getNumericLabel;
 	
 	var calcTicks = function(min, max, kwArgs, majorTick, minorTick, microTick, span){
-		kwArgs = dojo.delegate(kwArgs);
+		kwArgs = lang.delegate(kwArgs);
 		if(!majorTick){
 			if(kwArgs.fixUpper == "major"){ kwArgs.fixUpper = "minor"; }
 			if(kwArgs.fixLower == "major"){ kwArgs.fixLower = "minor"; }
@@ -91,7 +91,7 @@ define(["dojo/_base/kernel", "../../main", "dojo/_base/lang", "./common"],
 		};
 	};
 	
-	return dojo.mixin(linear, {
+	return lang.mixin(linear, {
 		buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs){
 			var h = {fixUpper: "none", fixLower: "none", natural: false};
 			if(kwArgs){

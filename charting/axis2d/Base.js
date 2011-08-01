@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "../Element"], function(dojo, declare, Element){
+define(["dojo/_base/declare", "../Element"], 
+	function(declare, Element){
 
-return dojo.declare("dojox.charting.axis2d.Base", dojox.charting.Element, {
+return declare("dojox.charting.axis2d.Base", Element, {
 	//	summary:
 	//		The base class for any axis.  This is more of an interface/API
 	//		definition than anything else; see dojox.charting.axis2d.Default

@@ -1,7 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/color/_base", "dojox/color/Palette", "dojox/lang/utils", "dojox/gfx/gradutils"], 
-	function(dojo, lang, declare, dcolor, Palette, dlu, dgg){ 
+define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/Color",
+	    "dojox/color/_base", "dojox/color/Palette", "dojox/lang/utils", "dojox/gfx/gradutils"], 
+	function(lang, arr, declare, Color, ColorX, Palette, dlu, dgg){ 
 	
-	dojo.declare("dojox.charting.Theme", null, {
+	declare("dojox.charting.Theme", null, {
 	//	summary:
 	//		A Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
 	//		style a chart.
@@ -132,8 +133,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 
 		// populate theme with defaults updating them if needed
 		var def = dojox.charting.Theme.defaultTheme;
-		dojo.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
-			this[name] = dojo.delegate(def[name], kwArgs[name]);
+		arr.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
+			this[name] = lang.delegate(def[name], kwArgs[name]);
 		}, this);
 
 		// personalize theme
@@ -148,7 +149,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 		if(kwArgs.markerThemes && kwArgs.markerThemes.length){
 			this.markerThemes = kwArgs.markerThemes.slice(0);
 		}
-		this.markers = kwArgs.markers ? dojo.clone(kwArgs.markers) : dojo.delegate(dojox.charting.Theme.defaultMarkers);
+		this.markers = kwArgs.markers ? lang.clone(kwArgs.markers) : lang.delegate(dojox.charting.Theme.defaultMarkers);
 
 		// set flags
 		this.noGradConv = kwArgs.noGradConv;
@@ -185,7 +186,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 			noRadialConv: this.noRadialConv
 		});
 		// copy custom methods
-		dojo.forEach(
+		arr.forEach(
 			["clone", "clear", "next", "skip", "addMixin", "post", "getTick"],
 			function(name){
 				if(this.hasOwnProperty(name)){
@@ -216,22 +217,22 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 		//		An object of the structure { series, marker, symbol }
 		var merge = dlu.merge, series, marker;
 		if(this.colors){
-			series = dojo.delegate(this.series);
-			marker = dojo.delegate(this.marker);
-			var color = new dojo.Color(this.colors[this._current % this.colors.length]), old;
+			series = lang.delegate(this.series);
+			marker = lang.delegate(this.marker);
+			var color = new Color(this.colors[this._current % this.colors.length]), old;
 			// modify the stroke
 			if(series.stroke && series.stroke.color){
-				series.stroke = dojo.delegate(series.stroke);
-				old = new dojo.Color(series.stroke.color);
-				series.stroke.color = new dojo.Color(color);
+				series.stroke = lang.delegate(series.stroke);
+				old = new Color(series.stroke.color);
+				series.stroke.color = new Color(color);
 				series.stroke.color.a = old.a;
 			}else{
 				series.stroke = {color: color};
 			}
 			if(marker.stroke && marker.stroke.color){
-				marker.stroke = dojo.delegate(marker.stroke);
-				old = new dojo.Color(marker.stroke.color);
-				marker.stroke.color = new dojo.Color(color);
+				marker.stroke = lang.delegate(marker.stroke);
+				old = new Color(marker.stroke.color);
+				marker.stroke.color = new Color(color);
 				marker.stroke.color.a = old.a;
 			}else{
 				marker.stroke = {color: color};
@@ -240,15 +241,15 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 			if(!series.fill || series.fill.type){
 				series.fill = color;
 			}else{
-				old = new dojo.Color(series.fill);
-				series.fill = new dojo.Color(color);
+				old = new Color(series.fill);
+				series.fill = new Color(color);
 				series.fill.a = old.a;
 			}
 			if(!marker.fill || marker.fill.type){
 				marker.fill = color;
 			}else{
-				old = new dojo.Color(marker.fill);
-				marker.fill = new dojo.Color(color);
+				old = new Color(marker.fill);
+				marker.fill = new Color(color);
 				marker.fill.a = old.a;
 			}
 		}else{
@@ -296,31 +297,31 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 		//		If true, run the new theme through the post-processor.
 		//	returns: dojox.charting.Theme
 		//		The new theme.
-		if(dojo.isArray(mixin)){
-			dojo.forEach(mixin, function(m){
+		if(lang.isArray(mixin)){
+			arr.forEach(mixin, function(m){
 				theme = this.addMixin(theme, elementType, m);
 			}, this);
 		}else{
 			var t = {};
 			if("color" in mixin){
 				if(elementType == "line" || elementType == "area"){
-					dojo.setObject("series.stroke.color", mixin.color, t);
-					dojo.setObject("marker.stroke.color", mixin.color, t);
+					lang.setObject("series.stroke.color", mixin.color, t);
+					lang.setObject("marker.stroke.color", mixin.color, t);
 				}else{
-					dojo.setObject("series.fill", mixin.color, t);
+					lang.setObject("series.fill", mixin.color, t);
 				}
 			}
-			dojo.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor", "labelWiring"], function(name){
+			arr.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor", "labelWiring"], function(name){
 				var markerName = "marker" + name.charAt(0).toUpperCase() + name.substr(1),
 					b = markerName in mixin;
 				if(name in mixin){
-					dojo.setObject("series." + name, mixin[name], t);
+					lang.setObject("series." + name, mixin[name], t);
 					if(!b){
-						dojo.setObject("marker." + name, mixin[name], t);
+						lang.setObject("marker." + name, mixin[name], t);
 					}
 				}
 				if(b){
-					dojo.setObject("marker." + name, mixin[markerName], t);
+					lang.setObject("marker." + name, mixin[markerName], t);
 				}
 			});
 			if("marker" in mixin){
@@ -398,14 +399,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/col
 	},
 
 	inspectObjects: function(f){
-		dojo.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
+		arr.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
 			f(this[name]);
 		}, this);
 		if(this.seriesThemes){
-			dojo.forEach(this.seriesThemes, f);
+			arr.forEach(this.seriesThemes, f);
 		}
 		if(this.markerThemes){
-			dojo.forEach(this.markerThemes, f);
+			arr.forEach(this.markerThemes, f);
 		}
 	},
 
@@ -475,7 +476,7 @@ dojox.charting.Theme.__DefineColorArgs = function(num, colors, hue, saturation, 
 	this.generator = generator;
 }
 =====*/
-dojo.mixin(dojox.charting.Theme, {
+lang.mixin(dojox.charting.Theme, {
 	defaultMarkers: {
 		CIRCLE:   "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",
 		SQUARE:   "m-3,-3 l0,6 6,0 0,-6 z",
@@ -614,19 +615,19 @@ dojo.mixin(dojox.charting.Theme, {
 			// we'd like it to be a little on the darker side.
 			l = (end + st) / 2;
 			// alternately, use "shades"
-			return dcolor.Palette.generate(
-				dcolor.fromHsv(kwArgs.hue, s, l), "monochromatic"
+			return ColorX.Palette.generate(
+				ColorX.fromHsv(kwArgs.hue, s, l), "monochromatic"
 			).colors;
 		}
 		if(kwArgs.generator){
 			//	pass a base color and the name of a generator
-			return dcolor.Palette.generate(kwArgs.base, kwArgs.generator).colors;
+			return ColorX.Palette.generate(kwArgs.base, kwArgs.generator).colors;
 		}
 		return c;	//	dojo.Color[]
 	},
 	
 	generateGradient: function(fillPattern, colorFrom, colorTo){
-		var fill = dojo.delegate(fillPattern);
+		var fill = lang.delegate(fillPattern);
 		fill.colors = [
 			{offset: 0, color: colorFrom},
 			{offset: 1, color: colorTo}
@@ -635,18 +636,18 @@ dojo.mixin(dojox.charting.Theme, {
 	},
 	
 	generateHslColor: function(color, luminance){
-		color = new dojo.Color(color);
+		color = new Color(color);
 		var hsl    = color.toHsl(),
-			result = dcolor.fromHsl(hsl.h, hsl.s, luminance);
+			result = ColorX.fromHsl(hsl.h, hsl.s, luminance);
 		result.a = color.a;	// add missing opacity
 		return result;
 	},
 
 	generateHslGradient: function(color, fillPattern, lumFrom, lumTo){
-		color = new dojo.Color(color);
+		color = new Color(color);
 		var hsl       = color.toHsl(),
-			colorFrom = dcolor.fromHsl(hsl.h, hsl.s, lumFrom),
-			colorTo   = dcolor.fromHsl(hsl.h, hsl.s, lumTo);
+			colorFrom = ColorX.fromHsl(hsl.h, hsl.s, lumFrom),
+			colorTo   = ColorX.fromHsl(hsl.h, hsl.s, lumTo);
 		colorFrom.a = colorTo.a = color.a;	// add missing opacity
 		return dojox.charting.Theme.generateGradient(fillPattern, colorFrom, colorTo);	// Object
 	}

@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "./Element"], 
-	function(dojo, declare, Element){ 
+define(["dojo/_base/lang", "dojo/_base/declare", "./Element"], 
+	function(lang, declare, Element){ 
 	/*=====
 	dojox.charting.__SeriesCtorArgs = function(plot){
 		//	summary:
@@ -9,7 +9,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "./Element"],
 		this.plot = plot;
 	}
 	=====*/
-	return dojo.declare("dojox.charting.Series", dojox.charting.Element, {
+	return declare("dojox.charting.Series", dojox.charting.Element, {
 		//	summary:
 		//		An object representing a series of data for plotting on a chart.
 		constructor: function(chart, data, kwArgs){
@@ -24,7 +24,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "./Element"],
 			//		destroy(), and setSeriesObject().
 			//	kwArgs: dojox.charting.__SeriesCtorArgs?
 			//		An optional keyword arguments object to set details for this series.
-			dojo.mixin(this, kwArgs);
+			lang.mixin(this, kwArgs);
 			if(typeof this.plot != "string"){ this.plot = "default"; }
 			this.update(data);
 		},
@@ -43,7 +43,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "./Element"],
 			//		represents the data to be drawn. Or it can be an object. In
 			//		the latter case, it should have a property "data" (an array),
 			//		destroy(), and setSeriesObject().
-			if(dojo.isArray(data)){
+			if(lang.isArray(data)){
 				this.data = data;
 			}else{
 				this.source = data;

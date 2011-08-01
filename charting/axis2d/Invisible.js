@@ -1,12 +1,12 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
-	"dojo/string", "dojox/gfx", "dojox/lang/utils", "dojox/lang/functional"],
-	function(dojo, lang, declare, Base, lin, dstring, g, du, df){
+	"dojox/gfx", "dojox/lang/utils", "dojox/lang/functional", "dojo/string"],
+	function(dojo, lang, declare, Base, lin, g, du, df, dstring){
  
 	var merge = du.merge,
 		labelGap = 4,			// in pixels
 		centerAnchorLimit = 45;	// in degrees
 
-	return dojo.declare("dojox.charting.axis2d.Invisible", dojox.charting.axis2d.Base, {
+	return declare("dojox.charting.axis2d.Invisible", Base, {
 		//	summary:
 		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
 		//
@@ -81,7 +81,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			//		The chart the axis belongs to.
 			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 		},
@@ -134,12 +134,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			if(!labels.length){
 				return 0;
 			}
-			if(dojo.isObject(labels[0])){
+			if(lang.isObject(labels[0])){
 				labels = df.map(labels, function(label){ return label.text; });
 			}
 			if (wcLimit) {
 				labels = df.map(labels, function(label){
-					return dojo.trim(label).length == 0 ? "" : label.substring(0, wcLimit) + this.trailingSymbol;
+					return lang.trim(label).length == 0 ? "" : label.substring(0, wcLimit) + this.trailingSymbol;
 				}, this);
 			}
 			var s = labels.join("<br>");

@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/lang/functional"], 
-	function(dojo, lang, declare, connect, df){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/lang/functional"], 
+	function(lang, declare, hub, df){
 
-	return dojo.declare("dojox.charting.DataSeries", null, {
+	return declare("dojox.charting.DataSeries", null, {
 		constructor: function(store, kwArgs, value){
 			//	summary:
 			//		Series adapter for dojo.data stores.
@@ -21,16 +21,16 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.kwArgs = kwArgs;
 	
 			if(value){
-				if(dojo.isFunction(value)){
+				if(lang.isFunction(value)){
 					this.value = value;
-				}else if(dojo.isObject(value)){
-					this.value = dojo.hitch(this, "_dictValue",
+				}else if(lang.isObject(value)){
+					this.value = lang.hitch(this, "_dictValue",
 						df.keys(value), value);
 				}else{
-					this.value = dojo.hitch(this, "_fieldValue", value);
+					this.value = lang.hitch(this, "_fieldValue", value);
 				}
 			}else{
-				this.value = dojo.hitch(this, "_defaultValue");
+				this.value = lang.hitch(this, "_defaultValue");
 			}
 	
 			this.data = [];
@@ -39,9 +39,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	
 			if(this.store.getFeatures()["dojo.data.api.Notification"]){
 				this._events.push(
-					dojo.connect(this.store, "onNew", this, "_onStoreNew"),
-					dojo.connect(this.store, "onDelete", this, "_onStoreDelete"),
-					dojo.connect(this.store, "onSet", this, "_onStoreSet")
+					hub.connect(this.store, "onNew", this, "_onStoreNew"),
+					hub.connect(this.store, "onDelete", this, "_onStoreDelete"),
+					hub.connect(this.store, "onSet", this, "_onStoreSet")
 				);
 			}
 	
@@ -51,7 +51,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		destroy: function(){
 			//	summary:
 			//		Clean up before GC.
-			dojo.forEach(this._events, dojo.disconnect);
+			arr.forEach(this._events, hub.disconnect);
 		},
 	
 		setSeriesObject: function(series){
@@ -66,7 +66,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	
 		_dictValue: function(keys, dict, store, item){
 			var o = {};
-			dojo.forEach(keys, function(key){
+			arr.forEach(keys, function(key){
 				o[key] = store.getValue(item, dict[key]);
 			});
 			return o;
@@ -87,9 +87,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		Fetches data from the store and updates a chart.
 			if(!this._inFlight){
 				this._inFlight = true;
-				var kwArgs = dojo.delegate(this.kwArgs);
-				kwArgs.onComplete = dojo.hitch(this, "_onFetchComplete");
-				kwArgs.onError = dojo.hitch(this, "onFetchError");
+				var kwArgs = lang.delegate(this.kwArgs);
+				kwArgs.onComplete = lang.hitch(this, "_onFetchComplete");
+				kwArgs.onError = lang.hitch(this, "onFetchError");
 				this.store.fetch(kwArgs);
 			}
 		},
@@ -97,7 +97,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		_onFetchComplete: function(items, request){
 			this.items = items;
 			this._buildItemMap();
-			this.data = dojo.map(this.items, function(item){
+			this.data = arr.map(this.items, function(item){
 				return this.value(this.store, item);
 			}, this);
 			this._pushDataChanges();
@@ -115,7 +115,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		_buildItemMap: function(){
 			if(this.store.getFeatures()["dojo.data.api.Identity"]){
 				var itemMap = {};
-				dojo.forEach(this.items, function(item, index){
+				arr.forEach(this.items, function(item, index){
 					itemMap[this.store.getIdentity(item)] = index;
 				}, this);
 				this.itemMap = itemMap;
@@ -140,7 +140,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// we cannot do anything with deleted item, the only way is to compare
 			// items for equality
 			if(this.items){
-				var flag = dojo.xsome(this.items, function(it, index){
+				var flag = arr.some(this.items, function(it, index){
 					if(it === item){
 						this.items.splice(index, 1);
 						this._buildItemMap();
@@ -166,7 +166,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			}else{
 				// otherwise we have to rely on item's equality
 				if(this.items){
-					var flag = dojo.some(this.items, function(it, index){
+					var flag = arr.some(this.items, function(it, index){
 						if(it === item){
 							this.data[index] = this.value(this.store, it);
 							return true;
