@@ -64,7 +64,7 @@ define([
 				}
 			}
 			if(this.closeIconNode && this.closeBtnProp){
-				domAttr.attr(this.closeIconNode, this.closeBtnProp);
+				domAttr.set(this.closeIconNode, this.closeBtnProp);
 			}
 			var domNode = div.removeChild(div.firstChild);
 			div = null;
@@ -142,7 +142,7 @@ define([
 		},
 	
 		onMouseDownIcon: function (e){
-			domStyle.style(this.iconNode, "opacity", this.getParent().pressedIconOpacity);
+			domStyle.set(this.iconNode, "opacity", this.getParent().pressedIconOpacity);
 		},
 	
 		iconClicked: function(e){
@@ -160,7 +160,7 @@ define([
 			}
 			if(transOpts){
 				setTimeout(lang.hitch(this, function(d){
-					domStyle.style(this.iconNode, "opacity", 1);
+					domStyle.set(this.iconNode, "opacity", 1);
 				}), 1500);
 			}else{
 				return this.open(e);
@@ -184,7 +184,7 @@ define([
 			if(this.transition == "below"){
 				if(parent.single){
 					parent.closeAll();
-					domStyle.style(this.iconNode, "opacity", this.getParent().pressedIconOpacity);
+					domStyle.set(this.iconNode, "opacity", this.getParent().pressedIconOpacity);
 				}
 				this._open_1();
 			}else{
@@ -230,7 +230,7 @@ define([
 			}else{
 				this.containerNode.parentNode.style.display = "none";
 			}
-			domStyle.style(this.iconNode, "opacity", 1);
+			domStyle.set(this.iconNode, "opacity", 1);
 			this.onClose();
 		},
 	

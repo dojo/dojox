@@ -56,7 +56,7 @@ define([
 			var connectorClass = connectorClasses[best.corner + best.aroundCorner.charAt(0)] || '';
 			domClass.add(this.domNode, connectorClass);
 			var pos = domGeometry.position(aroundNode, true);
-			domStyle.style(this.anchor, (connectorClass == "mblTooltipAbove" || connectorClass == "mblTooltipBelow")
+			domStyle.set(this.anchor, (connectorClass == "mblTooltipAbove" || connectorClass == "mblTooltipBelow")
 				? { top: "", left: Math.max(0, pos.x - best.x + (pos.w >> 1) - (this.arrow.offsetWidth >> 1)) + "px" }
 				: { left: "", top: Math.max(0, pos.y - best.y + (pos.h >> 1) - (this.arrow.offsetHeight >> 1)) + "px" }
 			);

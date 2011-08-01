@@ -58,13 +58,13 @@ define([
 							node: fromNode,
 							duration: 400,
 							left: -w*dir,
-							top: domStyle.style(fromNode, "top")
+							top: domStyle.get(fromNode, "top")
 						});
 						var s2 = fx.slideTo({
 							node: toNode,
 							duration: 400,
 							left: 0,
-							top: domStyle.style(toNode, "top")
+							top: domStyle.get(toNode, "top")
 						});
 						toNode.style.position = "absolute";
 						toNode.style.left = w*dir + "px";
@@ -138,11 +138,11 @@ define([
 						toNode.style.position = "absolute";
 						toNode.style.left = "0px";
 						toNode.style.display = "";
-						domStyle.style(toNode, "opacity", 0);
+						domStyle.set(toNode, "opacity", 0);
 						connect.connect(anim, "onEnd", this, function(){
 							fromNode.style.display = "none";
 							toNode.style.position = "relative";
-							domStyle.style(fromNode, "opacity", 1);
+							domStyle.set(fromNode, "opacity", 1);
 							this.invokeCallback();
 						});
 						anim.play();
@@ -350,7 +350,7 @@ define([
 						// probably because padding-top is specified for containerNode
 						// to make room for a fixed header. This dummy node is a workaround for that.
 						var dummy = domConstruct.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
-						domStyle.style(dummy, {
+						domStyle.set(dummy, {
 							position: "relative",
 							marginBottom: "-2px",
 							fontSize: "1px"
@@ -374,7 +374,7 @@ define([
 						// The reason why the image has no width/height may be because
 						// display is "none". If that is the case, let's change the
 						// display to "" temporarily and see if the image returns them.
-						if(domStyle.style(img, "display") != "none"){ continue; }
+						if(domStyle.get(img, "display") != "none"){ continue; }
 						img.style.display = "";
 						w = img.offsetWidth;
 						h = img.offsetHeight;

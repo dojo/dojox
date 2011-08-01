@@ -46,7 +46,7 @@ define([
 					img = domConstruct.create("IMG", null, iconDiv);
 					img.style.position = "absolute";
 					var arr = this.iconPos.split(/[ ,]/);
-					domStyle.style(iconDiv, {
+					domStyle.set(iconDiv, {
 						position: "relative",
 						width: arr[2] + "px",
 						height: arr[3] + "px"

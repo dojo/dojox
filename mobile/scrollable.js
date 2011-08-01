@@ -26,7 +26,7 @@ if(typeof dojo === "undefined"){
 		return false;
 	};
 
-	dojo.style = function(node, style, value){
+	dojo.setStyle = function(node, style, value){
 		if(typeof style === "string"){
 			var obj = {};
 			obj[style] = value;
@@ -86,25 +86,28 @@ if(typeof dojo === "undefined"){
 	define = function(deps, def){
 		def(
 			dojo, // dojo
-			dojo, // win
-			dojo.has, // has
+			{ // connect
+				connect: dojo.connect,
+				disconnect: dojo.disconnect
+			},
 			{ // event
 				stop: dojo.stopEvent
 			},
-			{ // domStyle
-				style: dojo.style
+			{ // lang
+				getObject: function(){}
 			},
-			{ // domConstruct
-				create: dojo.create
-			},
+			dojo.has, // has
+			dojo, // win
 			{ // domClass
 				contains: dojo.hasClass,
 				add: dojo.addClass,
 				remove: dojo.removeClass
 			},
-			{ // connect
-				connect: dojo.connect,
-				disconnect: dojo.disconnect
+			{ // domConstruct
+				create: dojo.create
+			},
+			{ // domStyle
+				set: dojo.setStyle
 			}
 		);
 	};
@@ -297,14 +300,14 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.disableScroll = function(/*Boolean*/v){
-		if(this.disableTouchScroll === v || domStyle.style(this.domNode, "display") === "none"){ return; }
+		if(this.disableTouchScroll === v || this.domNode.style.display === "none"){ return; }
 		this.disableTouchScroll = v;
 		this.scrollBar = !v;
 		dojox.mobile.disableHideAddressBar = dojox.mobile.disableResizeAll = v;
 		var of = v ? "visible" : "hidden";
-		domStyle.style(this.domNode, "overflow", of);
-		domStyle.style(win.doc.documentElement, "overflow", of);
-		domStyle.style(win.body(), "overflow", of);
+		domStyle.set(this.domNode, "overflow", of);
+		domStyle.set(win.doc.documentElement, "overflow", of);
+		domStyle.set(win.body(), "overflow", of);
 		var c = this.containerNode;
 		if(v){
 			if(!c.style.webkitTransform){
@@ -315,13 +318,13 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			}
 			var mt = parseInt(c.style.marginTop) || 0;
 			var h = c.offsetHeight + mt + this.fixedFooterHeight - this._appFooterHeight;
-			domStyle.style(this.domNode, "height", h + "px");
+			domStyle.set(this.domNode, "height", h + "px");
 			
 			this._cPos = { // store containerNode's position
 				x: parseInt(c.style.left) || 0,
 				y: parseInt(c.style.top) || 0
 			};
-			domStyle.style(c, {
+			domStyle.set(c, {
 				top: "0px",
 				left: "0px"
 			});
@@ -339,7 +342,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			}	
 		}else{
 			if(this._cPos){ // restore containerNode's position
-				domStyle.style(c, {
+				domStyle.set(c, {
 					top: this._cPos.y + "px",
 					left: this._cPos.x + "px"
 				});
@@ -363,7 +366,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.toTransform = function(e){
 		var c = this.containerNode;
 		if(c.offsetTop === 0 && c.offsetLeft === 0 || !c._webkitTransform){ return; }
-		domStyle.style(c, {
+		domStyle.set(c, {
 			webkitTransform: c._webkitTransform,
 			top: "0px",
 			left: "0px"
@@ -376,7 +379,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(!c.style.webkitTransform){ return; } // already converted to top/left
 		c._webkitTransform = c.style.webkitTransform;
 		var pos = this.getPos();
-		domStyle.style(c, {
+		domStyle.set(c, {
 			webkitTransform: "",
 			top: pos.y + "px",
 			left: pos.x + "px"
@@ -719,7 +722,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		// stop the currently running animation
 		domClass.remove(this.containerNode, "mblScrollableScrollTo2");
 		if(has("android")){
-			domStyle.style(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
+			domStyle.set(this.containerNode, "webkitAnimationDuration", "0s"); // workaround for android screen flicker problem
 		}
 		if(this._scrollBarV){
 			this._scrollBarV.className = "";
@@ -829,12 +832,12 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					props.bottom = (self.isLocalFooter ? self.fixedFooterHeight : 0) + 2 + "px";
 					props.height = "5px";
 				}
-				domStyle.style(wrapper, props);
+				domStyle.set(wrapper, props);
 				wrapper.className = "mblScrollBarWrapper";
 				self["_scrollBarWrapper"+dir] = wrapper;
 
 				bar = domConstruct.create("div", null, wrapper);
-				domStyle.style(bar, {
+				domStyle.set(bar, {
 					opacity: 0.6,
 					position: "absolute",
 					backgroundColor: "#606060",
@@ -844,7 +847,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					webkitTransformOrigin: "0 0",
 					zIndex: 2147483647 // max of signed 32-bit integer
 				});
-				domStyle.style(bar, dir == "V" ? {width: "5px"} : {height: "5px"});
+				domStyle.set(bar, dir == "V" ? {width: "5px"} : {height: "5px"});
 				self["_scrollBarNode" + dir] = bar;
 			}
 			return bar;
@@ -876,7 +879,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 		if(!this.scrollBar){ return; }
 		var f = function(bar, self){
-			domStyle.style(bar, {
+			domStyle.set(bar, {
 				opacity: 0,
 				webkitAnimationDuration: ""
 			});
@@ -952,7 +955,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
 		if(has("webKit")){
 			this.setKeyframes(from, to, idx);
-			domStyle.style(node, {
+			domStyle.set(node, {
 				webkitAnimationDuration: duration + "s",
 				webkitAnimationTimingFunction: easing
 			});
@@ -1001,11 +1004,11 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			var props = {};
 			props[v ? "top" : "left"] = hd + 4 + "px"; // +4 is for top or left margin
 			props[v ? "height" : "width"] = d - 8 + "px";
-			domStyle.style(wrapper, props);
+			domStyle.set(wrapper, props);
 			var l = Math.round(d * d / c); // scroll bar length
 			l = Math.min(Math.max(l - 8, 5), d - 8); // -8 is for margin for both ends
 			bar.style[v ? "height" : "width"] = l + "px";
-			domStyle.style(bar, {"opacity": 0.6});
+			domStyle.set(bar, {"opacity": 0.6});
 		};
 		var dim = this.getDim();
 		f(this._scrollBarWrapperV, this._scrollBarV, dim.d.h, dim.c.h, this.fixedHeaderHeight, true);
@@ -1064,7 +1067,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(!dojox.mobile.hasTouch && !this.noCover){
 			if(!this._cover){
 				this._cover = domConstruct.create("div", null, win.doc.body);
-				domStyle.style(this._cover, {
+				domStyle.set(this._cover, {
 					backgroundColor: "#ffff00",
 					opacity: 0,
 					position: "absolute",

@@ -56,7 +56,7 @@ define([
 				this.btnContainerNode = domConstruct.create("DIV", {
 					className: "mblCarouselBtnContainer"
 				}, this.headerNode);
-				domStyle.style(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
+				domStyle.set(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
 				this.prevBtnNode = domConstruct.create("BUTTON", {
 					className: "mblCarouselBtn",
 					title: "Previous",
@@ -76,7 +76,7 @@ define([
 					this.title = "&nbsp;";
 				}
 				this.piw = new PageIndicator();
-				domStyle.style(this.piw, "float", "right"); // workaround for webkit rendering problem
+				domStyle.set(this.piw, "float", "right"); // workaround for webkit rendering problem
 				this.headerNode.appendChild(this.piw.domNode);
 			}
 
@@ -176,7 +176,7 @@ define([
 			var box = domConstruct.create("DIV", {
 				className: "mblCarouselBox"
 			});
-			domStyle.style(box, {
+			domStyle.set(box, {
 				margin: "0px " + margin,
 				width: width,
 				height: height
@@ -249,9 +249,9 @@ define([
 					domClass.remove(this.images[i], "mblCarouselImgSelected");
 				}
 			}
-			domStyle.style(img, "opacity", 0.4);
+			domStyle.set(img, "opacity", 0.4);
 			setTimeout(function(){
-				domStyle.style(img, "opacity", 1);
+				domStyle.set(img, "opacity", 1);
 			}, 1000);
 			connect.publish("/dojox/mobile/carouselSelect", [this, img, this.items[img._idx], img._idx]);
 		},

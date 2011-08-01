@@ -19,7 +19,7 @@ define([
 			this.domNode.className = "mblProgContainer";
 			if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2 && has('android') < 3){
 				// workaround to avoid the side effects of the fixes for android screen flicker problem
-				domStyle.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+				domStyle.set(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 			}
 			this.spinnerNode = domConstruct.create("DIV", null, this.domNode);
 			for(var i = 0; i < this.colors.length; i++){

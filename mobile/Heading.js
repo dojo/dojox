@@ -82,10 +82,10 @@ define([
 				for(var i = children.length - 1; i >= 0; i--){
 					var c = children[i];
 					if(c.nodeType === 1){
-						if(!rightBtn && domClass.contains(c, "mblToolbarButton") && domStyle.style(c, "float") === "right"){
+						if(!rightBtn && domClass.contains(c, "mblToolbarButton") && domStyle.get(c, "float") === "right"){
 							rightBtn = c;
 						}
-						if(!leftBtn && (domClass.contains(c, "mblToolbarButton") && domStyle.style(c, "float") === "left" || c === this._btn)){
+						if(!leftBtn && (domClass.contains(c, "mblToolbarButton") && domStyle.get(c, "float") === "left" || c === this._btn)){
 							leftBtn = c;
 						}
 					}

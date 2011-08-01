@@ -93,7 +93,7 @@ define([
 				if(child === this._terminator){ break; }
 				var w = dijit.byNode(child);
 				w.containerNode.parentNode.style.display = "none";
-				domStyle.style(w.iconNode, "opacity", 1);
+				domStyle.set(w.iconNode, "opacity", 1);
 			}
 		},
 

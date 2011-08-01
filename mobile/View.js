@@ -55,17 +55,17 @@ define([
 			this.domNode.className = "mblView";
 			if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2 && has('android') < 3.1){ // workaround for android screen flicker problem
 				if(has('android') < 3){ // for Android 2.2.x and 2.3.x
-					domStyle.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+					domStyle.set(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 					// workaround for auto-scroll issue when focusing input fields
 					this.connect(null, "onfocus", function(e){
-						domStyle.style(this.domNode, "webkitTransform", "");
+						domStyle.set(this.domNode, "webkitTransform", "");
 					});
 					this.connect(null, "onblur", function(e){
-						domStyle.style(this.domNode, "webkitTransform", "translate3d(0,0,0)");
+						domStyle.set(this.domNode, "webkitTransform", "translate3d(0,0,0)");
 					});
 				}else{ // for Android 3.0.x
 					if(config["mblAndroid3Workaround"] !== false){
-						domStyle.style(this.domNode, {
+						domStyle.set(this.domNode, {
 							webkitBackfaceVisibility: "hidden",
 							webkitPerspective: 8000
 						});
@@ -311,8 +311,8 @@ define([
 					fromOrigin = posX + "px " + posY + "px";
 					toOrigin = posX + "px " + posY + "px";
 				}
-				domStyle.style(fromNode, {webkitTransformOrigin:fromOrigin});
-				domStyle.style(toNode, {webkitTransformOrigin:toOrigin});
+				domStyle.set(fromNode, {webkitTransformOrigin:fromOrigin});
+				domStyle.set(toNode, {webkitTransformOrigin:toOrigin});
 			}
 			dojox.mobile.currentView = dijit.byNode(toNode);
 		},
@@ -382,7 +382,7 @@ define([
 			var nodes = this.domNode.parentNode.childNodes;
 			for(var i = 0; i < nodes.length; i++){
 				var n = nodes[i];
-				if(n.nodeType === 1 && domClass.contains(n, "mblView") && domStyle.style(n, "display") !== "none"){
+				if(n.nodeType === 1 && domClass.contains(n, "mblView") && domStyle.get(n, "display") !== "none"){
 					return dijit.byNode(n);
 				}
 			}

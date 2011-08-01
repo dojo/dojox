@@ -25,12 +25,12 @@ define([
 				this.cover = domConstruct.create('div', {style: {position:'absolute', top:'0px', left:'0px', width:'100%', height:'100%', backgroundColor:'transparent' }}, this.domNode, 'before');
 				this.connect(this.cover, "onclick", "_onBlur");
 			}
-			domStyle.style(this.cover, "visibility", "visible");
+			domStyle.set(this.cover, "visibility", "visible");
 			return this.inherited(arguments);
 		},
 
 		hide: function(/*Anything*/ val){
-			domStyle.style(this.cover, "visibility", "hidden");
+			domStyle.set(this.cover, "visibility", "hidden");
 			this.inherited(arguments);
 			this.onHide(this.node, val);
 		},

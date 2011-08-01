@@ -86,8 +86,8 @@ define([
 				domClass.remove(this.handle, "mblSliderTransition");
 				domClass.remove(this.progressBar, "mblSliderTransition");
 			}
-			domStyle.style(this.handle, this._attrs.handleLeft, (this._reversed ? (100-toPercent) : toPercent) + "%");
-			domStyle.style(this.progressBar, this._attrs.width, toPercent + "%");
+			domStyle.set(this.handle, this._attrs.handleLeft, (this._reversed ? (100-toPercent) : toPercent) + "%");
+			domStyle.set(this.progressBar, this._attrs.width, toPercent + "%");
 		},
 
 		postCreate: function(){
@@ -120,9 +120,9 @@ define([
 				e.preventDefault();
 				var isMouse = e.type == "mousedown";
 				var box = domGeometry.position(node, false); // can't use true since the added docScroll and the returned x are body-zoom incompatibile
-				var bodyZoom = domStyle.style(win.body(), "zoom") || 1;
+				var bodyZoom = domStyle.get(win.body(), "zoom") || 1;
 				if(isNaN(bodyZoom)){ bodyZoom = 1; }
-				var nodeZoom = domStyle.style(node, "zoom") || 1;
+				var nodeZoom = domStyle.get(node, "zoom") || 1;
 				if(isNaN(nodeZoom)){ nodeZoom = 1; }
 				var startPixel = box[this._attrs.x] * nodeZoom * bodyZoom + domGeometry.docScroll()[this._attrs.x];
 				var maxPixels = box[this._attrs.w] * nodeZoom * bodyZoom;

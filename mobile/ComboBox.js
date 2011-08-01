@@ -142,7 +142,7 @@ define([
 			if(!this._explicitDDHeight){
 				myStyle.height = "";
 			}
-			domStyle.style(ddNode, myStyle);
+			domStyle.set(ddNode, myStyle);
 
 			// Figure out maximum height allowed (if there is a height restriction)
 			var maxHeight = this.maxHeight;
@@ -170,7 +170,7 @@ define([
 
 			// Adjust dropdown width to match or be larger than my width
 			mb.w = Math.max(mb.w, aroundNode.offsetWidth);
-			domGeometry.marginBox(ddNode, mb);
+			domGeometry.setMarginBox(ddNode, NaN, NaN, mb.w, mb.h);
 
 			var retVal = popup.open({
 				parent: this,

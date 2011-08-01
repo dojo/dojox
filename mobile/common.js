@@ -108,10 +108,10 @@ define([
 			var r = arr[1] + arr[2]; // right
 			var b = arr[0] + arr[3]; // bottom
 			var l = arr[1]; // left
-			var offset = iconNode.parentNode ? domStyle.style(iconNode.parentNode, "paddingLeft") : 8;
-			domStyle.style(iconNode, {
+			var offset = iconNode.parentNode ? domStyle.get(iconNode.parentNode, "paddingLeft") : 8;
+			domStyle.set(iconNode, {
 				clip: "rect("+t+"px "+r+"px "+b+"px "+l+"px)",
-				top: (iconNode.parentNode ? domStyle.style(iconNode, "top") : 0) - t + "px",
+				top: (iconNode.parentNode ? domStyle.get(iconNode, "top") : 0) - t + "px",
 				left: offset - l + "px"
 			});
 		}
@@ -224,7 +224,7 @@ define([
 			return null;
 		}
 		domClass.add(node, "mblDomButton");
-		domStyle.style(node, style);
+		!!style && domStyle.set(node, style);
 		return node;
 	};
 	
@@ -256,7 +256,7 @@ define([
 			dm.setupIcon(node, iconPos);
 			if(parent && iconPos){
 				var arr = iconPos.split(/[ ,]/);
-				domStyle.style(parent, {
+				domStyle.set(parent, {
 					width: arr[2] + "px",
 					height: arr[3] + "px"
 				});
@@ -306,17 +306,17 @@ define([
 				domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, win.doc.head, "first");
 			}
 			if(has('android') < 3){ // for Android 2.2.x and 2.3.x
-				domStyle.style(win.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
+				domStyle.set(win.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
 				// workaround for auto-scroll issue when focusing input fields
 				connect.connect(null, "onfocus", null, function(e){
-					domStyle.style(win.doc.documentElement, "webkitTransform", "");
+					domStyle.set(win.doc.documentElement, "webkitTransform", "");
 				});
 				connect.connect(null, "onblur", null, function(e){
-					domStyle.style(win.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
+					domStyle.set(win.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
 				});
 			}else{ // for Android 3.0.x
 				if(config["mblAndroid3Workaround"] !== false){
-					domStyle.style(win.doc.documentElement, {
+					domStyle.set(win.doc.documentElement, {
 						webkitBackfaceVisibility: "hidden",
 						webkitPerspective: 8000
 					});

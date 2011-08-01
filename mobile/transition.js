@@ -12,21 +12,21 @@ define([
 		if(!options || !options.transition){
 			console.log("from: ", from, "to: ", to);
 			if(from && from.tagname){
-				domStyle.style(from,"display","none");
+				domStyle.set(from,"display","none");
 			}
 			if(to){
-				domStyle.style(to, "display", "");
+				domStyle.set(to, "display", "");
 			}
 		}else{
 			var defs=[];
 			if(to){
-				domStyle.style(to, "display", "");
+				domStyle.set(to, "display", "");
 			}
 			if(from){
-				domStyle.style(from, "display", "");
+				domStyle.set(from, "display", "");
 				var fromDef = new Deferred();
 				var fromHandle = connect.connect(from, "webkitAnimationEnd", function(){
-					domStyle.style(from,"display","none");
+					domStyle.set(from,"display","none");
 					//remove the animation classes in the node
 					array.forEach([options.transition,"mblIn","mblOut","mblReverse"], function(item){
 						domClass.remove(from, item);

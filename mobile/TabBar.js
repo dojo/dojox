@@ -48,13 +48,13 @@ define([
 		resize: function(size){
 			var i,w;
 			if(size && size.w){
-				domGeometry.marginBox(this.domNode, size);
+				domGeometry.setMarginBox(this.domNode, NaN, NaN, size.w, size.h);
 				w = size.w;
 			}else{
 				// Calculation of the bar width varies according to its "position" value.
 				// When the widget is used as a fixed bar, its position would be "absolute".
-				w = domStyle.style(this.domNode, "position") === "absolute" ?
-					domGeometry.contentBox(this.domNode).w : domGeometry.marginBox(this.domNode).w;
+				w = domStyle.get(this.domNode, "position") === "absolute" ?
+					domGeometry.getContentBox(this.domNode).w : domGeometry.getMarginBox(this.domNode).w;
 			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
@@ -74,7 +74,7 @@ define([
 				margin = w;
 				var totalW = 0; // total width of all the buttons
 				for(i = 0; i < arr.length; i++){
-					margin -= domGeometry.marginBox(arr[i]).w;
+					margin -= domGeometry.getMarginBox(arr[i]).w;
 					totalW += arr[i].offsetWidth;
 				}
 				margin = Math.floor(margin/2);
@@ -82,7 +82,7 @@ define([
 				var inHeading = this.inHeading || parent instanceof Heading;
 				this.containerNode.style.padding = (inHeading ? 0 : 3) + "px 0px 0px " + (inHeading ? 0 : margin) + "px";
 				if(inHeading){
-					domStyle.style(this.domNode, {
+					domStyle.set(this.domNode, {
 						background: "none",
 						border: "none",
 						width: totalW + 2 + "px"

@@ -74,9 +74,13 @@ define([
 			var children = array.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
 			var offset = 0;
 			for(var i = 0; i < children.length; i++){
-				domGeometry.marginBox(children[i], this.orientation == "H" ? {l:offset} : {t:offset});
+				if(this.orientation == "H"){
+					domGeometry.setMarginBox(children[i], offset); // set left
+				}else{
+					domGeometry.setMarginBox(children[i], NaN, offset); // set top
+				}
 				if(i < children.length - 1){
-					offset += domGeometry.marginBox(children[i])[sz];
+					offset += domGeometry.getMarginBox(children[i])[sz];
 				}
 			}
 	
@@ -88,10 +92,10 @@ define([
 					}
 				}
 			}
-			var l = (h || domGeometry.marginBox(this.domNode)[sz]) - offset;
+			var l = (h || domGeometry.getMarginBox(this.domNode)[sz]) - offset;
 			var props = {};
 			props[sz] = l;
-			domGeometry.marginBox(children[children.length - 1], props);
+			domGeometry.setMarginBox(children[children.length - 1], props.l, props.t, props.w, props.h);
 	
 			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }

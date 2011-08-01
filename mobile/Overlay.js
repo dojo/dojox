@@ -25,12 +25,12 @@ define([
 			//		Scroll the overlay up into view
 			var vp, popupPos;
 			var reposition = lang.hitch(this, function(){
-				domStyle.style(this.domNode, { position: "", top: "auto", bottom: "0px" });
+				domStyle.set(this.domNode, { position: "", top: "auto", bottom: "0px" });
 				popupPos = domGeometry.position(this.domNode);
 				vp = windowUtils.getBox();
 				if((popupPos.y+popupPos.h) != vp.h){ // TODO: should be a has() test for position:fixed not scrolling
 					popupPos.y = vp.t + vp.h - popupPos.h;
-					domStyle.style(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });
+					domStyle.set(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });
 				}
 			});
 			reposition();
