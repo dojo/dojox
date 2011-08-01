@@ -1,5 +1,4 @@
 define(["../Theme", "./common"], function(Theme){
-
 	dojox.charting.themes.Bahamation=new Theme({
 		colors: [
 			"#3f9998",
@@ -9,6 +8,5 @@ define(["../Theme", "./common"], function(Theme){
 			"#c663a6"
 		]
 	});
-	
 	return dojox.charting.themes.Bahamation;
 });

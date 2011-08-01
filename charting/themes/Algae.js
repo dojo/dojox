@@ -1,6 +1,5 @@
 define(["../Theme", "./common"], function(Theme){
-
-	dojox.charting.themes.Algae=new Theme({
+	dojox.charting.themes.Algae = new Theme({
 		colors: [
 			"#57808f",
 			"#506885",
@@ -9,6 +8,5 @@ define(["../Theme", "./common"], function(Theme){
 			"#508567"
 		]
 	});
-	
 	return dojox.charting.themes.Algae;
 });

@@ -1,3 +1,3 @@
-define(["dojo/_base/kernel", "../../main"], function(dojo, dojox){
-	return dojo.getObject("charting.themes", true, dojox);
+define(["dojo/_base/lang"], function(lang){
+	return lang.getObject("dojox.charting.themes", true);
 });
