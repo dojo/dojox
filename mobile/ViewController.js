@@ -71,7 +71,13 @@ define([
 					var text = this._text;
 					if(!text){
 						if(dijit.byId(evt.target.id).sync){
-							text = lang.trim(dojo._getText(evt.detail.url));
+							// We do not add explicit dependency on dojo/_base/xhr to this module
+							// to be able to create a build that does not contain dojo/_base/xhr.
+							// User applications that do sync loading here need to explicitly
+							// require dojo/_base/xhr up front.
+							dojo.xhrGet({url:evt.detail.url, sync:true, load:function(result){
+								text = lang.trim(result);
+							}});
 						}else{
 							require(["dojo/_base/xhr"], lang.hitch(this, function(xhr){
 								var prog = ProgressIndicator.getInstance();
