@@ -1,10 +1,10 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "./common", 
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx", "dojox/gfx/gradutils"],
-	function(dojo, lang, declare, Base, dc, df, dfr, du, fx, gradutils){
+	function(lang, arr, declare, Base, dc, df, dfr, du, fx, gradutils){
 
 	var purgeGroup = df.lambda("item.purgeGroup()");
 
-	return dojo.declare("dojox.charting.plot2d.Scatter", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Scatter", dojox.charting.plot2d.Base, {
 		//	summary:
 		//		A plot object representing a typical scatter chart.
 		defaultParams: {
@@ -30,7 +30,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional keyword arguments object to help define this plot's parameters.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
             du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.series = [];
@@ -54,7 +54,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
-				dojo.forEach(this.series, purgeGroup);
+				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;
@@ -79,14 +79,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 				if(typeof run.data[0] == "number"){
-					lpoly = dojo.map(run.data, function(v, i){
+					lpoly = arr.map(run.data, function(v, i){
 						return {
 							x: ht(i + 1) + offsets.l,
 							y: dim.height - offsets.b - vt(v)
 						};
 					}, this);
 				}else{
-					lpoly = dojo.map(run.data, function(v, i){
+					lpoly = arr.map(run.data, function(v, i){
 						return {
 							x: ht(v.x) + offsets.l,
 							y: dim.height - offsets.b - vt(v.y)
@@ -98,7 +98,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 					frontMarkers   = new Array(lpoly.length),
 					outlineMarkers = new Array(lpoly.length);
 
-				dojo.forEach(lpoly, function(c, i){
+				arr.forEach(lpoly, function(c, i){
 					var finalTheme = typeof run.data[i] == "number" ?
 							t.post(theme, "marker") :
 							t.addMixin(theme, "marker", run.data[i], true),
@@ -141,7 +141,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 
 				if(events){
 					var eventSeries = new Array(frontMarkers.length);
-					dojo.forEach(frontMarkers, function(s, i){
+					arr.forEach(frontMarkers, function(s, i){
 						var o = {
 							element: "marker",
 							index:   i,
@@ -172,7 +172,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			return this;	//	dojox.charting.plot2d.Scatter
 		},
 		_animateScatter: function(shape, offset){
-			fx.animateTransform(dojo.delegate({
+			fx.animateTransform(lang.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [

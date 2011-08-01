@@ -1,5 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
-	function(dojo, lang, declare, Base, dc, df, dfr, du, fx){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", 
+		"./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
+	function(lang, declare, arr, Base, dc, df, dfr, du, fx){
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
@@ -96,7 +97,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
-	return dojo.declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
@@ -130,7 +131,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional arguments object to help define this plot.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
             du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.series = [];
@@ -175,7 +176,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
-				dojo.forEach(this.series, purgeGroup);
+				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
 				this.group.setTransform(null);
@@ -229,14 +230,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 
                 for(var seg = 0; seg < rsegments.length; seg++){
 					if(typeof rsegments[seg][0] == "number"){
-						lpoly = dojo.map(rsegments[seg], function(v, i){
+						lpoly = arr.map(rsegments[seg], function(v, i){
 							return {
 								x: ht(i + startindexes[seg] + 1) + offsets.l,
 								y: dim.height - offsets.b - vt(v)
 							};
 						}, this);
 					}else{
-						lpoly = dojo.map(rsegments[seg], function(v, i){
+						lpoly = arr.map(rsegments[seg], function(v, i){
 							return {
 								x: ht(v.x) + offsets.l,
 								y: dim.height - offsets.b - vt(v.y)
@@ -248,7 +249,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 
 					if(this.opt.areas && lpoly.length > 1){
 						var fill = theme.series.fill;
-						var apoly = dojo.clone(lpoly);
+						var apoly = lang.clone(lpoly);
 						if(this.opt.tension){
 							var apath = "L" + apoly[apoly.length-1].x + "," + (dim.height - offsets.b) +
 								" L" + apoly[0].x + "," + (dim.height - offsets.b) +
@@ -275,7 +276,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 					var frontMarkers = null, outlineMarkers = null, shadowMarkers = null;
 					if(stroke && theme.series.shadow && lpoly.length > 1){
 						var shadow = theme.series.shadow,
-							spoly = dojo.map(lpoly, function(c){
+							spoly = arr.map(lpoly, function(c){
 								return {x: c.x + shadow.dx, y: c.y + shadow.dy};
 							});
 						if(this.opt.lines){
@@ -287,7 +288,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 						}
 						if(this.opt.markers && theme.marker.shadow){
 							shadow = theme.marker.shadow;
-							shadowMarkers = dojo.map(spoly, function(c){
+							shadowMarkers = arr.map(spoly, function(c){
 								return this.createPath(run, s, "M" + c.x + " " + c.y + " " + theme.symbol).
 									setStroke(shadow).setFill(shadow.color);
 							}, this);
@@ -315,7 +316,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 							outline = dc.makeStroke(theme.marker.outline);
 							outline.width = 2 * outline.width + (theme.marker.stroke ? theme.marker.stroke.width : 0);
 						}
-						dojo.forEach(lpoly, function(c, i){
+						arr.forEach(lpoly, function(c, i){
 							var path = "M" + c.x + " " + c.y + " " + theme.symbol;
 							if(outline){
 								outlineMarkers[i] = this.createPath(run, s, path).setStroke(outline);
@@ -325,7 +326,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 						run.dyn.markerFill = theme.marker.fill;
 						run.dyn.markerStroke = theme.marker.stroke;
 						if(events){
-							dojo.forEach(frontMarkers, function(s, i){
+							arr.forEach(frontMarkers, function(s, i){
 								var o = {
 									element: "marker",
 									index:   i + startindexes[seg],
@@ -356,7 +357,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", 
 			if(this.animate){
 				// grow from the bottom
 				var plotGroup = this.group;
-				fx.animateTransform(dojo.delegate({
+				fx.animateTransform(lang.delegate({
 					shape: plotGroup,
 					duration: DEFAULT_ANIMATION_LENGTH,
 					transform:[

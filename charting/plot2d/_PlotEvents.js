@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect"], 
-	function(dojo){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/connect"], 
+	function(lang, arr, declare, hub){
 
-	return dojo.declare("dojox.charting.plot2d._PlotEvents", null, {
+	return declare("dojox.charting.plot2d._PlotEvents", null, {
 		constructor: function(){
 			this._shapeEvents = [];
 			this._eventSeries = {};
@@ -24,11 +24,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//	o: Object
 			//		An object intended to represent event parameters.
 			this.plotEvent(o);
-			var t = dojo.delegate(o);
+			var t = lang.delegate(o);
 			t.originalEvent = o.type;
 			t.originalPlot  = o.plot;
 			t.type = "onindirect";
-			dojo.forEach(this.chart.stack, function(plot){
+			arr.forEach(this.chart.stack, function(plot){
 				if(plot !== this && plot.plotEvent){
 					t.plot = plot;
 					plot.plotEvent(t);
@@ -45,7 +45,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//	returns: Array
 			//		The handle as returned from dojo.connect (see dojo.connect).
 			this.dirty = true;
-			return dojo.connect(this, "plotEvent", object, method);	//	Array
+			return hub.connect(this, "plotEvent", object, method);	//	Array
 		},
 		events: function(){
 			//	summary:
@@ -58,7 +58,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//	summary:
 			//		Reset all events attached to our plotEvent (i.e. disconnect).
 			if(this._shapeEvents.length){
-				dojo.forEach(this._shapeEvents, function(item){
+				arr.forEach(this._shapeEvents, function(item){
 					item.shape.disconnect(item.handle);
 				});
 				this._shapeEvents = [];
@@ -77,21 +77,21 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			});
 		},
 		_connectEvents: function(o){
-	        if(o){
-	            o.chart = this.chart;
-	            o.plot  = this;
-	            o.hAxis = this.hAxis || null;
-	            o.vAxis = this.vAxis || null;
-	            o.eventMask = o.eventMask || o.shape;
-	            this._connectSingleEvent(o, "onmouseover");
-	            this._connectSingleEvent(o, "onmouseout");
-	            this._connectSingleEvent(o, "onclick");
-	        }
+			if(o){
+				o.chart = this.chart;
+				o.plot  = this;
+				o.hAxis = this.hAxis || null;
+				o.vAxis = this.vAxis || null;
+				o.eventMask = o.eventMask || o.shape;
+				this._connectSingleEvent(o, "onmouseover");
+				this._connectSingleEvent(o, "onmouseout");
+				this._connectSingleEvent(o, "onclick");
+			}
 		},
 		_reconnectEvents: function(seriesName){
 			var a = this._eventSeries[seriesName];
 			if(a){
-				dojo.forEach(a, this._connectEvents, this);
+				arr.forEach(a, this._connectEvents, this);
 			}
 		},
 		fireEvent: function(seriesName, eventName, index, eventObject){

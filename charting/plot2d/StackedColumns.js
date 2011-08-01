@@ -1,10 +1,10 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "./Columns", "./common", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Columns", "./common", 
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
-	function(dojo, array, declare, Columns, dc, df, dfr, dfs){
+	function(lang, arr, declare, Columns, dc, df, dfr, dfs){
 
 	var	purgeGroup = df.lambda("item.purgeGroup()");
 
-	return dojo.declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
+	return declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
 		//	summary:
 		//		The plot object representing a stacked column chart (vertical bars).
 		getSeriesStats: function(){
@@ -51,7 +51,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "./Column
 			this.resetEvents();
 			this.dirty = this.isDirty();
 			if(this.dirty){
-				dojo.forEach(this.series, purgeGroup);
+				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;

@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Element", "./_PlotEvents", "./common", "../axis2d/common", 
-	"dojox/gfx", "dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/utils"],
-	function(dojo, lang, declare, Element, PlotEvents, dc, da, g, m, df, du){
+define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", 
+		"../Element", "./_PlotEvents", "./common", "../axis2d/common", 
+		"dojox/gfx", "dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/utils"],
+	function(lang, arr, declare, Element, PlotEvents, dc, da, g, m, df, du){
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -55,7 +56,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
-	return dojo.declare("dojox.charting.plot2d.Pie", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+	return declare("dojox.charting.plot2d.Pie", [dojox.charting.Element, dojox.charting.plot2d.PlotEvents], {
 		//	summary:
 		//		The plot that represents a typical pie chart.
 		defaultParams: {
@@ -85,7 +86,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Create a pie plot.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.run = null;
@@ -121,7 +122,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 			//		Returns default stats (irrelevant for this type of plot).
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dojo.delegate(dc.defaultStats);
+			return lang.delegate(dc.defaultStats);
 		},
 		initializeScalers: function(){
 			//	summary:
@@ -172,7 +173,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 				}
 				slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
 				if(this.opt.labels){
-					labels = dojo.map(slices, function(x){
+					labels = arr.map(slices, function(x){
 						return x > 0 ? this._getLabel(x * 100) + "%" : "";
 					}, this);
 				}
@@ -183,7 +184,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 				}
 				slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
 				if(this.opt.labels){
-					labels = dojo.map(slices, function(x, i){
+					labels = arr.map(slices, function(x, i){
 						if(x <= 0){ return ""; }
 						var v = run[i];
 						return "text" in v ? v.text : this._getLabel(x * 100) + "%";
@@ -219,7 +220,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 			this.dyn = [];
 			// draw slices
 			var eventSeries = new Array(slices.length);
-			dojo.some(slices, function(slice, i){
+			arr.some(slices, function(slice, i){
 				if(slice < 0){
 					// degenerated slice
 					return false;	// continue
@@ -342,7 +343,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 			if(this.opt.labels){
 				if(this.opt.labelStyle == "default"){
 					start = startAngle;
-					dojo.some(slices, function(slice, i){
+					arr.some(slices, function(slice, i){
 						if(slice <= 0){
 							// degenerated slice
 							return false;	// continue
@@ -379,7 +380,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 					start = startAngle;
 					//calculate label angles
 					var labeledSlices = [];
-					dojo.forEach(slices, function(slice, i){
+					arr.forEach(slices, function(slice, i){
 						var end = start + slice * 2 * Math.PI;
 						if(i + 1 == slices.length){
 							end = startAngle + 2 * Math.PI;
@@ -398,7 +399,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 					var labelHeight = g._base._getTextBox("a",{font:taFont}).h;
 					this._getProperLabelRadius(labeledSlices, labelHeight, circle.r * 1.1);
 					//draw label and wiring
-					dojo.forEach(labeledSlices, function(slice, i){
+					arr.forEach(labeledSlices, function(slice, i){
 						if (!slice.omit) {
 							var leftColumn = circle.cx - circle.r * 2,
 								rightColumn = circle.cx + circle.r * 2,
