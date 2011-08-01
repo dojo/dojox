@@ -324,13 +324,13 @@ define([
 				this.hasDisplay = true;
 			}
 			if(this.toFracButton && !calc.toFrac){
-				domStyle.style(this.toFracButton.domNode, { visibility: "hidden" });
+				domStyle.set(this.toFracButton.domNode, { visibility: "hidden" });
 			}
 			if(this.functionMakerButton && !calc.FuncGen){
-				domStyle.style(this.functionMakerButton.domNode, { visibility: "hidden" });
+				domStyle.set(this.functionMakerButton.domNode, { visibility: "hidden" });
 			}
 			if(this.grapherMakerButton && !calc.Grapher){
-				domStyle.style(this.grapherMakerButton.domNode, { visibility: "hidden" });
+				domStyle.set(this.grapherMakerButton.domNode, { visibility: "hidden" });
 			}
 			this._connects.push(typematic.addKeyListener(this.textboxWidget.textbox,
 					{

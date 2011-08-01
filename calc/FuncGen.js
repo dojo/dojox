@@ -145,7 +145,7 @@ define([
 			if(parent && typeof parent.close == "function"){
 				this.closeButton.set("onClick", lang.hitch(parent, 'close'));
 			}else{
-				domStyle.style(this.closeButton.domNode, "display", "none"); // hide the button
+				domStyle.set(this.closeButton.domNode, { display: "none" }); // hide the button
 			}
 		}
 	});

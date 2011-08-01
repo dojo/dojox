@@ -210,7 +210,7 @@ define([
 			td.appendChild(d);
 
 			var colorBoxFieldset = domConstruct.create('fieldset');
-			domStyle.style(colorBoxFieldset, {backgroundColor: "black", width: "1em", height: "1em", display: "inline"});
+			domStyle.set(colorBoxFieldset, { backgroundColor: "black", width: "1em", height: "1em", display: "inline" });
 			this.array[tr.rowIndex][this.colorBoxFieldsetIndex] = colorBoxFieldset;
 
 			var drop = new DropDownButton({label:"Color ", dropDown:dialog}, d);
@@ -233,7 +233,7 @@ define([
 			td.appendChild(d);
 
 			d = domConstruct.create('div');
-			domStyle.style(d, {position:"absolute", left:"0px", top:"0px"})
+			domStyle.set(d, { position: "absolute", left: "0px", top: "0px" })
 			this.chartsParent.appendChild(d);
 			this.array[tr.rowIndex][this.chartNodeIndex] = d;
 			domClass.add(d, "dojoxCalcChart");
@@ -271,7 +271,7 @@ define([
 				}
 			}
 			chart.render();
-			domStyle.style(colorBoxFieldset, {backgroundColor:this.get("value")});
+			domStyle.set(colorBoxFieldset, { backgroundColor: this.get("value") });
 		},
 		makeDirty: function(){
 			// summary:
@@ -333,7 +333,7 @@ define([
 			if(parent && typeof parent.close == "function"){
 				this.closeButton.set("onClick", lang.hitch(parent, 'close'));
 			}else{
-				domStyle.style(this.closeButton.domNode, "display", "none"); // hide the button
+				domStyle.set(this.closeButton.domNode, { display: "none" }); // hide the button
 			}
 			// add one row at the start
 			this.createFunction();

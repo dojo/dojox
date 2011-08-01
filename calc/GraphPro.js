@@ -40,7 +40,7 @@ define([
 			this.inherited(arguments);
 			ready(lang.hitch(this, function(){
 				if(this.writeStore == null && "functionMakerButton" in this){
-					domStyle.style(this.functionMakerButton.domNode, { visibility: "hidden" });
+					domStyle.set(this.functionMakerButton.domNode, { visibility: "hidden" });
 				}
 			}));
 		},
