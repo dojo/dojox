@@ -1,5 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo, darray){
-	dojo.getObject("collections", true, dojox);
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array"], 
+  function(dojo, lang, arr){
+	lang.getObject("collections", true, dojox);
 
 	dojox.collections.DictionaryEntry=function(/* string */k, /* object */v){
 		//	summary
@@ -42,7 +43,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo, darray){
 		this.map=function(/* function */fn, /* object? */scope){
 			//	summary
 			//	Functional iteration with optional scope.
-			return dojo.map(a, fn, scope);
+			return arr.map(a, fn, scope);
 		};
 		this.reset=function(){
 			//	summary
@@ -86,7 +87,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo, darray){
 		this.map=function(/* function */fn, /* object? */scope){
 			//	summary
 			//	Functional iteration with optional scope.
-			return dojo.map(a, fn, scope);
+			return arr.map(a, fn, scope);
 		};
 		this.reset=function() {
 			//	summary

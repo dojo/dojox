@@ -153,6 +153,7 @@ define([
 					fn = parts.pop();
 				}
 
+// FIXME: THIS DESIGN DOES NOT WORK WITH ASYNC LOADERS!
 				dojo["require"](require);
 
 				var parent = lang.getObject(require);

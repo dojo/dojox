@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/window", "./lambda"], function(dojo, lang, win, df){
 
 // This module adds high-level functions and related constructs:
 //	- object/dictionary helpers
@@ -13,7 +13,7 @@ define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
 /*=====
 	var df = dojox.lang.functional;
  =====*/
-	dojo.mixin(df, {
+	lang.mixin(df, {
 		// object helpers
 		keys: function(/*Object*/ obj){
 			// summary: returns an array of all keys in the object
@@ -38,7 +38,7 @@ define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
 		filterIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: creates new object with all attributes that pass the test
 			//	implemented by the provided function.
-			o = o || dojo.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			var t = {}, v, i;
 			for(i in obj){
 				if(!(i in empty)){
@@ -50,7 +50,7 @@ define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
 		},
 		forIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: iterates over all object attributes.
-			o = o || dojo.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			for(var i in obj){
 				if(!(i in empty)){
 					f.call(o, obj[i], i, obj);
@@ -61,7 +61,7 @@ define(["dojo/_base/kernel", "./lambda"], function(dojo, df){
 		mapIn: function(/*Object*/ obj, /*Function|String|Array*/ f, /*Object?*/ o){
 			// summary: creates new object with the results of calling
 			//	a provided function on every attribute in this object.
-			o = o || dojo.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			var t = {}, i;
 			for(i in obj){
 				if(!(i in empty)){

@@ -1,5 +1,5 @@
-define(["../..", "dojo/_base/kernel", "dojo/_base/array"], function(dojox, dojo){
-	var df = dojo.getObject("lang.functional", true, dojox);
+define(["../..", "dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array"], function(dojox, dojo, lang, arr){
+	var df = lang.getObject("lang.functional", true, dojox);
 
 // This module adds high-level functions and related constructs:
 //	- anonymous functions built from the string
@@ -57,7 +57,7 @@ define(["../..", "dojo/_base/kernel", "dojo/_base/array"], function(dojox, dojo)
 				var vars = s.
 					replace(/(?:\b[A-Z]|\.[a-zA-Z_$])[a-zA-Z_$\d]*|[a-zA-Z_$][a-zA-Z_$\d]*:|this|true|false|null|undefined|typeof|instanceof|in|delete|new|void|arguments|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|escape|eval|isFinite|isNaN|parseFloat|parseInt|unescape|dojo|dijit|dojox|window|document|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, "").
 					match(/([a-z_$][a-z_$\d]*)/gi) || [], t = {};
-				dojo.forEach(vars, function(v){
+				arr.forEach(vars, function(v){
 					if(!(v in t)){
 						args.push(v);
 						t[v] = 1;
@@ -80,7 +80,7 @@ define(["../..", "dojo/_base/kernel", "dojo/_base/array"], function(dojox, dojo)
 					function(x){ return x; };
 	};
 
-	dojo.mixin(df, {
+	lang.mixin(df, {
 		// lambda
 		rawLambda: function(/*String*/ s){
 			// summary:

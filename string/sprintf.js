@@ -3,25 +3,25 @@ define([
 	"dojo/_base/lang",	// dojo.extend
 	"dojo/_base/sniff",	// dojo.isOpera
 	 "./tokenize"
-], function(dojo, lang, has, tokenize){
-	dojo.getObject("string", true, dojox);
+], function(dojo, lang, ua, tokenize){
+	var strLib = lang.getObject("string", true, dojox);
 
-	dojox.string.sprintf = function(/*String*/ format, /*mixed...*/ filler){
+	strLib.sprintf = function(/*String*/ format, /*mixed...*/ filler){
 		for(var args = [], i = 1; i < arguments.length; i++){
 			args.push(arguments[i]);
 		}
-		var formatter = new dojox.string.sprintf.Formatter(format);
+		var formatter = new strLib.sprintf.Formatter(format);
 		return formatter.format.apply(formatter, args);
 	};
 
-	dojox.string.sprintf.Formatter = function(/*String*/ format){
+	strLib.sprintf.Formatter = function(/*String*/ format){
 		var tokens = [];
 		this._mapped = false;
 		this._format = format;
 		this._tokens = tokenize(format, this._re, this._parseDelim, this);
 	};
 
-	dojo.extend(dojox.string.sprintf.Formatter, {
+	lang.extend(strLib.sprintf.Formatter, {
 		_re: /\%(?:\(([\w_]+)\)|([1-9]\d*)\$)?([0 +\-\#]*)(\*|\d+)?(\.)?(\*|\d+)?[hlL]?([\%scdeEfFgGiouxX])/g,
 		_parseDelim: function(mapping, intmapping, flags, minWidth, period, precision, specifier){
 			if(mapping){
@@ -185,10 +185,10 @@ define([
 							throw new Error("unexpected specifier '" + token.specifier + "'");
 						}
 						if(mixins.extend){
-							dojo.mixin(mixins, this._specifiers[mixins.extend]);
+							lang.mixin(mixins, this._specifiers[mixins.extend]);
 							delete mixins.extend;
 						}
-						dojo.mixin(token, mixins);
+						lang.mixin(token, mixins);
 					}
 
 					if(typeof token.setArg == "function"){
@@ -352,7 +352,7 @@ define([
 
 			// Ensure a '0' before the period.
 			// Opera implements (0.001).toString() as '0.001', but (0.001).toFixed(1) is '.001'
-			if(dojo.isOpera){
+			if(ua.isOpera){
 				token.arg = token.arg.replace(/^\./, '0.');
 			}
 
@@ -405,5 +405,5 @@ define([
 			token.arg = (token.rightJustify) ? token.arg + this._spaces10.substring(0, pad) : this._spaces10.substring(0, pad) + token.arg;
 		}
 	});
-	return dojox.string.sprintf;
+	return strLib.sprintf;
 });
