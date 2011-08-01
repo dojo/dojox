@@ -1,4 +1,6 @@
-define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],function (dojo){
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/loader" /* dojo._getText */,
+	    "dojo/_base/xhr","dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],
+  function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,htmlMetrics){
 	/*
 		dojox.gfx.VectorText
 		An implementation of the SVG Font 1.1 spec, using dojox.gfx.
@@ -27,8 +29,16 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 
 		Note that this will only render IF and WHEN you set the font.
 	 */
-	dojo.getObject("dojox.gfx.VectorText", true);
-	dojo.mixin(dojox.gfx, {
+	var _getText = function(url){
+		var result;
+		xhr.get({url:url, sync:true, load:function(text){ // Note synchronous!
+			result = text;
+		}});
+		return result;
+	};
+	 
+	lang.getObject("dojox.gfx.VectorText", true);
+	lang.mixin(dojox.gfx, {
 		vectorFontFitting: {
 			NONE: 0,	//	render text according to passed size.
 			FLOW: 1,		//	render text based on the passed width and size
@@ -52,7 +62,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 		}
 	});
 
-	return dojo.declare("dojox.gfx.VectorFont", null, {  // EARLY RETURN
+	return declare("dojox.gfx.VectorFont", null, {  // EARLY RETURN
 		_entityRe: /&(quot|apos|lt|gt|amp|#x[^;]+|#\d+);/g,
 		_decodeEntitySequence: function(str){
 			//	unescape the unicode sequences
@@ -132,7 +142,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 			if(dojox.gfx._vectorFontCache[name]){ return; }
 
 			//	get any provided baseline alignment offsets.
-			dojo.forEach(["alphabetic", "ideographic", "mathematical", "hanging" ], function(attr){
+			arr.forEach(["alphabetic", "ideographic", "mathematical", "hanging" ], function(attr){
 				var a = face.getAttribute(attr);
 				if(a !== null /* be explicit, might be 0 */){
 					baseline[attr] = parseFloat(a, 10);
@@ -142,7 +152,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 		/*
 			//	TODO: decoration hinting.
 			var decoration = { };
-			dojo.forEach(["underline", "strikethrough", "overline"], function(type){
+			arr.forEach(["underline", "strikethrough", "overline"], function(type){
 				if(face.getAttribute(type+"-position")!=null){
 					decoration[type]={ };
 				}
@@ -154,7 +164,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 
 			//	glyph information
 			var glyphs = {}, glyphsByName={}, g=doc.documentElement.byName("glyph");
-			dojo.forEach(g, function(node){
+			arr.forEach(g, function(node){
 				//	we are going to assume the following:
 				//		1) we have the unicode attribute
 				//		2) we have the name attribute
@@ -177,7 +187,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 
 			//	now the fun part: look for kerning pairs.
 			var hkern=doc.documentElement.byName("hkern");
-			dojo.forEach(hkern, function(node, i){
+			arr.forEach(hkern, function(node, i){
 				var k = -parseInt(node.getAttribute("k"),10);
 				//	look for either a code or a name
 				var u1=node.getAttribute("u1"),
@@ -216,7 +226,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 			}, this);
 
 			//	pop the final definition in the font cache.
-			dojo.mixin(this, {
+			lang.mixin(this, {
 				family: family,
 				name: name,
 				style: style,
@@ -226,7 +236,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 				range: range,
 				viewbox: { width: unitsPerEm, height: unitsPerEm },
 				origin: origin,
-				advance: dojo.mixin(advance, {
+				advance: lang.mixin(advance, {
 					missing:{ x: missing, y: missing }
 				}),
 				ascent: ascent,
@@ -251,7 +261,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 			//	summary:
 			//		Clean off all of the given mixin parameters.
 			var name = this.name, family = this.family;
-			dojo.forEach(["family","name","style","variant",
+			arr.forEach(["family","name","style","variant",
 				"weight","stretch","range","viewbox",
 				"origin","advance","ascent","descent",
 				"baseline","glyphs"], function(prop){
@@ -281,7 +291,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 			//		Load the passed SVG and send it to the parser for parsing.
 			this.onLoadBegin(url.toString());
 			this._parse(
-				dojox.gfx._svgFontCache[url.toString()]||dojo._getText(url.toString()),
+				dojox.gfx._svgFontCache[url.toString()]||_getText(url.toString()),
 				url.toString()
 			);
 			this.onLoad(this);
@@ -302,7 +312,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 
 		_getWidth: function(glyphs){
 			var w=0, last=0, lastGlyph=null;
-			dojo.forEach(glyphs, function(glyph, i){
+			arr.forEach(glyphs, function(glyph, i){
 				last=glyph.xAdvance;
 				if(glyphs[i] && glyph.kern && glyph.kern[glyphs[i].code]){
 					last += glyph.kern[glyphs[i].code].x;
@@ -321,7 +331,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 
 		_getLongestLine: function(lines){
 			var maxw=0, idx=0;
-			dojo.forEach(lines, function(line, i){
+			arr.forEach(lines, function(line, i){
 				var max = Math.max(maxw, this._getWidth(line));
 				if(max > maxw){
 					maxw = max;
@@ -340,9 +350,9 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 				if(arr[0].code == " "){ arr.splice(0, 1); }
 			};
 
-			if(dojo.isArray(lines[0])){
+			if(lang.isArray(lines[0])){
 				//	more than one line.
-				dojo.forEach(lines, fn);
+				arr.forEach(lines, fn);
 			} else {
 				fn(lines);
 			}
@@ -476,7 +486,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 		getWidth: function(/* String */text, /* Float? */scale){
 			//	summary:
 			//		Get the width of the rendered text without actually rendering it.
-			return this._getWidth(dojo.map(this._normalize(text).split(""), function(chr){
+			return this._getWidth(arr.map(this._normalize(text).split(""), function(chr){
 				return this.glyphs[chr] || { xAdvance: this.advance.missing.x };
 			}, this)) * (scale || 1);	//	Float
 		},
@@ -600,7 +610,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 			}
 
 			//	go get the glyph array.
-			var text = dojo.map(this._normalize(textArgs.text).split(""), function(chr){
+			var text = arr.map(this._normalize(textArgs.text).split(""), function(chr){
 				return this.glyphs[chr] || { path:null, xAdvance: this.advance.missing.x };
 			}, this);
 
@@ -642,7 +652,7 @@ define(["dojo/main", "dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],f
 			}
 
 			//	make sure lines doesn't have any empty lines.
-			lines = dojo.filter(lines, function(item){
+			lines = arr.filter(lines, function(item){
 				return item.length>0;
 			});
 

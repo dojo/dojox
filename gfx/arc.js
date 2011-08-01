@@ -1,13 +1,21 @@
-define(["dojo/main", "./matrix"], function(dojo, matrix){
-	dojo.getObject("dojox.gfx.arc", true);
-	var m = dojox.gfx.matrix,
-		twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,
+define(["dojo/_base/lang", "./matrix"], 
+  function(lang, m){
+/*===== 
+	dojox.gfx.arc = {
+		// summary:
+		//		This module contains the core graphics Arc functions.
+	};
+  =====*/
+
+	lang.getObject("dojox.gfx.arc", true);
+	var twoPI = 2 * Math.PI, pi4 = Math.PI / 4, pi8 = Math.PI / 8,
 		pi48 = pi4 + pi8, curvePI4 = unitArcAsBezier(pi8);
 
 	function unitArcAsBezier(alpha){
 		// summary: return a start point, 1st and 2nd control points, and an end point of
 		//		a an arc, which is reflected on the x axis
-		// alpha: Number: angle in radians, the arc will be 2 * angle size
+		// alpha: Number
+		//		angle in radians, the arc will be 2 * angle size
 		var cosa  = Math.cos(alpha), sina  = Math.sin(alpha),
 			p2 = {x: cosa + (4 / 3) * (1 - cosa), y: sina - (4 / 3) * cosa * (1 - cosa) / sina};
 		return {	// Object
@@ -18,22 +26,32 @@ define(["dojo/main", "./matrix"], function(dojo, matrix){
 		};
 	}
 
-	dojox.gfx.arc = {
+	var arc = dojox.gfx.arc = {
 		unitArcAsBezier: unitArcAsBezier,
 		curvePI4: curvePI4,
+			// curvePI4: Object
+			//		an object with properties of an arc around a unit circle from 0 to pi/4
 		arcAsBezier: function(last, rx, ry, xRotg, large, sweep, x, y){
 			// summary: calculates an arc as a series of Bezier curves
 			//	given the last point and a standard set of SVG arc parameters,
 			//	it returns an array of arrays of parameters to form a series of
 			//	absolute Bezier curves.
-			// last: Object: a point-like object as a start of the arc
-			// rx: Number: a horizontal radius for the virtual ellipse
-			// ry: Number: a vertical radius for the virtual ellipse
-			// xRotg: Number: a rotation of an x axis of the virtual ellipse in degrees
-			// large: Boolean: which part of the ellipse will be used (the larger arc if true)
-			// sweep: Boolean: direction of the arc (CW if true)
-			// x: Number: the x coordinate of the end point of the arc
-			// y: Number: the y coordinate of the end point of the arc
+			// last: Object
+			//		a point-like object as a start of the arc
+			// rx: Number
+			//		a horizontal radius for the virtual ellipse
+			// ry: Number
+			//		a vertical radius for the virtual ellipse
+			// xRotg: Number
+			//		a rotation of an x axis of the virtual ellipse in degrees
+			// large: Boolean
+			//		which part of the ellipse will be used (the larger arc if true)
+			// sweep: Boolean
+			//		direction of the arc (CW if true)
+			// x: Number
+			//		the x coordinate of the end point of the arc
+			// y: Number
+			//		the y coordinate of the end point of the arc
 
 			// calculate parameters
 			large = Boolean(large);
@@ -112,6 +130,6 @@ define(["dojo/main", "./matrix"], function(dojo, matrix){
 			return result;	// Array
 		}
 	};
-
-	return dojox.gfx.arc;
+	
+	return arc;
 });

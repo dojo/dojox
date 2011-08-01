@@ -1,5 +1,7 @@
-define(["dojo/main", "./Mover"], function(dojo){
-	return dojo.declare("dojox.gfx.Moveable", null, {
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/_base/connect",
+	"dojo/dom-Class","dojo/_base/window","./Mover"], 
+  function(lang,declare,arr,event,connect,domClass,win,Mover){
+	return declare("dojox.gfx.Moveable", null, {
 		constructor: function(shape, params){
 			// summary: an object, which makes a shape moveable
 			// shape: dojox.gfx.Shape: a shape object to be moved
@@ -21,7 +23,7 @@ define(["dojo/main", "./Mover"], function(dojo){
 		// methods
 		destroy: function(){
 			// summary: stops watching for possible move, deletes all references, so the object can be garbage-collected
-			dojo.forEach(this.events, this.shape.disconnect, this.shape);
+			arr.forEach(this.events, this.shape.disconnect, this.shape);
 			this.events = this.shape = null;
 		},
 	
@@ -38,7 +40,7 @@ define(["dojo/main", "./Mover"], function(dojo){
 			}else{
 				new this.mover(this.shape, e, this);
 			}
-			dojo.stopEvent(e);
+			event.stop(e);
 		},
 		onMouseMove: function(e){
 			// summary: event processor for onmousemove, used only for delayed drags
@@ -47,7 +49,7 @@ define(["dojo/main", "./Mover"], function(dojo){
 				this.onMouseUp(e);
 				new this.mover(this.shape, e, this);
 			}
-			dojo.stopEvent(e);
+			event.stop(e);
 		},
 		onMouseUp: function(e){
 			// summary: event processor for onmouseup, used only for delayed delayed drags
@@ -59,13 +61,13 @@ define(["dojo/main", "./Mover"], function(dojo){
 		// local events
 		onMoveStart: function(/* dojox.gfx.Mover */ mover){
 			// summary: called before every move operation
-			dojo.publish("/gfx/move/start", [mover]);
-			dojo.addClass(dojo.body(), "dojoMove");
+			connect.publish("/gfx/move/start", [mover]);
+			domClass.add(win.body(), "dojoMove");
 		},
 		onMoveStop: function(/* dojox.gfx.Mover */ mover){
 			// summary: called after every move operation
-			dojo.publish("/gfx/move/stop", [mover]);
-			dojo.removeClass(dojo.body(), "dojoMove");
+			connect.publish("/gfx/move/stop", [mover]);
+			domClass.remove(win.body(), "dojoMove");
 		},
 		onFirstMove: function(/* dojox.gfx.Mover */ mover){
 			// summary: called during the very first move notification,

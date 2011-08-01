@@ -1,9 +1,10 @@
-define(["dojo/main", "./matrix"], function(dojo, m){
+define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"], 
+  function(lang, m, Color){
 // Various utilities to deal with a linear gradient (mostly VML-specific)
-	dojo.getObject("dojox.gfx.gradient", true);
-	var C = dojo.Color;
+	var grad = lang.getObject("dojox.gfx.gradient", true);
+	var C = Color;
 	
-	dojox.gfx.gradient.rescale = function(stops, from, to){
+	grad.rescale = function(stops, from, to){
 		// summary:
 		//		recalculates a gradient from 0-1 window to
 		//		"from"-"to" window blending and replicating colors,
@@ -60,7 +61,7 @@ define(["dojo/main", "./matrix"], function(dojo, m){
 				prev = stops[i - 1];
 				newStops.push({
 					offset: 0,
-					color: dojo.blendColors(new C(prev.color), new C(stop.color), (from - prev.offset) / (stop.offset - prev.offset))
+					color: Color.blendColors(new C(prev.color), new C(stop.color), (from - prev.offset) / (stop.offset - prev.offset))
 				});
 			}else{
 				newStops.push({offset: 0, color: new C(stop.color)});
@@ -76,7 +77,7 @@ define(["dojo/main", "./matrix"], function(dojo, m){
 				prev = stops[i - 1];
 				newStops.push({
 					offset: 1,
-					color: dojo.blendColors(new C(prev.color), new C(stop.color), (to - prev.offset) / (stop.offset - prev.offset))
+					color: Color.blendColors(new C(prev.color), new C(stop.color), (to - prev.offset) / (stop.offset - prev.offset))
 				});
 			}else{
 				newStops.push({offset: 1, color: new C(stops[len - 1].color)});
@@ -105,7 +106,7 @@ define(["dojo/main", "./matrix"], function(dojo, m){
 		return a.o - b.o;
 	}
 	
-	dojox.gfx.gradient.project = function(matrix, grad, tl, rb, ttl, trb){
+	grad.project = function(matrix, grad, tl, rb, ttl, trb){
 		// summary:
 		//		return a new gradient using the "VML algorithm" and suitable for VML
 		// matrix: dojox.gfx.Matrix2D|Null:
@@ -141,7 +142,7 @@ define(["dojo/main", "./matrix"], function(dojo, m){
 				].sort(sortPoints),
 			from = points[0].o,
 			to   = points[3].o,
-			stops = dojox.gfx.gradient.rescale(grad.colors, from, to),
+			stops = grad.rescale(grad.colors, from, to),
 			//angle2 = Math.atan2(Math.abs(points[3].r.y - points[0].r.y) * (f2.y - f1.y), Math.abs(points[3].r.x - points[0].r.x) * (f2.x - f1.x));
 			angle2 = Math.atan2(points[3].r.y - points[0].r.y, points[3].r.x - points[0].r.x);
 
@@ -154,5 +155,5 @@ define(["dojo/main", "./matrix"], function(dojo, m){
 		};
 	};
 	
-	return dojox.gfx.gradient;
+	return grad;
 });
