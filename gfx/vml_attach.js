@@ -1,5 +1,6 @@
-define(["dojo/main", "./vml"],function (dojo){
-	dojo.getObject("dojox.gfx.vml_attach", true);
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "./vml"],
+  function (dojo,lang,Color,vml){
+	lang.getObject("dojox.gfx.vml_attach", true);
 	dojo.experimental("dojox.gfx.vml_attach");
 	var g = dojox.gfx, m = g.matrix, vml = g.vml;
 	
@@ -92,7 +93,7 @@ define(["dojo/main", "./vml"],function (dojo){
 		// object: dojox.gfx.Shape: an VML shape
 		var fillStyle = null, r = object.rawNode, fo = r.fill, stops, i, t;
 		if(fo.on && fo.type == "gradient"){
-			fillStyle = dojo.clone(g.defaultLinearGradient),
+			fillStyle = lang.clone(g.defaultLinearGradient),
 				rad = m._degToRad(fo.angle);
 			fillStyle.x2 = Math.cos(rad);
 			fillStyle.y2 = Math.sin(rad);
@@ -101,10 +102,10 @@ define(["dojo/main", "./vml"],function (dojo){
 			for(i = 0; i < stops.length; ++i){
 				 t = stops[i].match(/\S+/g);
 				if(!t || t.length != 2){ continue; }
-				fillStyle.colors.push({offset: vml._parseFloat(t[0]), color: new dojo.Color(t[1])});
+				fillStyle.colors.push({offset: vml._parseFloat(t[0]), color: new Color(t[1])});
 			}
 		}else if(fo.on && fo.type == "gradientradial"){
-			fillStyle = dojo.clone(g.defaultRadialGradient),
+			fillStyle = lang.clone(g.defaultRadialGradient),
 				w = parseFloat(r.style.width), h = parseFloat(r.style.height);
 			fillStyle.cx = isNaN(w) ? 0 : fo.focusposition.x * w;
 			fillStyle.cy = isNaN(h) ? 0 : fo.focusposition.y * h;
@@ -114,10 +115,10 @@ define(["dojo/main", "./vml"],function (dojo){
 			for(i = stops.length - 1; i >= 0; --i){
 				t = stops[i].match(/\S+/g);
 				if(!t || t.length != 2){ continue; }
-				fillStyle.colors.push({offset: vml._parseFloat(t[0]), color: new dojo.Color(t[1])});
+				fillStyle.colors.push({offset: vml._parseFloat(t[0]), color: new Color(t[1])});
 			}
 		}else if(fo.on && fo.type == "tile"){
-			fillStyle = dojo.clone(g.defaultPattern);
+			fillStyle = lang.clone(g.defaultPattern);
 			fillStyle.width  = g.pt2px(fo.size.x); // from pt
 			fillStyle.height = g.pt2px(fo.size.y); // from pt
 			fillStyle.x = fo.origin.x * fillStyle.width;
@@ -125,7 +126,7 @@ define(["dojo/main", "./vml"],function (dojo){
 			fillStyle.src = fo.src;
 		}else if(fo.on && r.fillcolor){
 			// a color object !
-			fillStyle = new dojo.Color(r.fillcolor+"");
+			fillStyle = new Color(r.fillcolor+"");
 			fillStyle.a = fo.opacity;
 		}
 		object.fillStyle = fillStyle;
@@ -139,9 +140,9 @@ define(["dojo/main", "./vml"],function (dojo){
 			object.strokeStyle = null;
 			return;
 		}
-		var strokeStyle = object.strokeStyle = dojo.clone(g.defaultStroke),
+		var strokeStyle = object.strokeStyle = lang.clone(g.defaultStroke),
 			rs = r.stroke;
-		strokeStyle.color = new dojo.Color(r.strokecolor.value);
+		strokeStyle.color = new Color(r.strokecolor.value);
 		strokeStyle.width = g.normalizedLength(r.strokeweight+"");
 		strokeStyle.color.a = rs.opacity;
 		strokeStyle.cap = this._translate(this._capMapReversed, rs.endcap);
@@ -215,7 +216,7 @@ define(["dojo/main", "./vml"],function (dojo){
 	var attachLine = function(object){
 		// summary: builds a line shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var shape = object.shape = dojo.clone(g.defaultLine),
+		var shape = object.shape = lang.clone(g.defaultLine),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp);
 		do{
 			if(p.length < 7 || p[0] != "m" || p[3] != "l" || p[6] != "e"){ break; }
@@ -229,7 +230,7 @@ define(["dojo/main", "./vml"],function (dojo){
 	var attachPolyline = function(object){
 		// summary: builds a polyline/polygon shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var shape = object.shape = dojo.clone(g.defaultPolyline),
+		var shape = object.shape = lang.clone(g.defaultPolyline),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp);
 		do{
 			if(p.length < 3 || p[0] != "m"){ break; }
@@ -249,7 +250,7 @@ define(["dojo/main", "./vml"],function (dojo){
 	var attachImage = function(object){
 		// summary: builds an image shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		object.shape = dojo.clone(g.defaultImage);
+		object.shape = lang.clone(g.defaultImage);
 		object.shape.src = object.rawNode.firstChild.src;
 	};
 
@@ -270,7 +271,7 @@ define(["dojo/main", "./vml"],function (dojo){
 	var attachText = function(object){
 		// summary: builds a text shape from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var shape = object.shape = dojo.clone(g.defaultText),
+		var shape = object.shape = lang.clone(g.defaultText),
 			r = object.rawNode, p = r.path.v.match(g.pathVmlRegExp);
 		do{
 			if(!p || p.length != 7){ break; }
@@ -305,7 +306,7 @@ define(["dojo/main", "./vml"],function (dojo){
 	var attachFont = function(object){
 		// summary: deduces a font style from a node.
 		// object: dojox.gfx.Shape: an VML shape
-		var fontStyle = object.fontStyle = dojo.clone(g.defaultFont),
+		var fontStyle = object.fontStyle = lang.clone(g.defaultFont),
 			c = object.rawNode.childNodes, i = 0;
 		for(; i < c.length && c[i].tagName == "textpath"; ++i);
 		if(i >= c.length){
@@ -334,7 +335,7 @@ define(["dojo/main", "./vml"],function (dojo){
 	var attachPath = function(object){
 		// summary: builds a path shape from a Node.
 		// object: dojox.gfx.Shape: an VML shape
-		var shape = object.shape = dojo.clone(g.defaultPath),
+		var shape = object.shape = lang.clone(g.defaultPath),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp),
 			t = [], skip = false, map = g.Path._pathVmlToSvgMap;
 		for(var i = 0; i < p.length; ++p){

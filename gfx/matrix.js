@@ -1,5 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
-	var m = dojo.getObject("gfx.matrix", true, dojox);
+define(["dojo/_base/lang"], 
+  function(lang){
+	var m = lang.getObject("gfx.matrix", true, dojox);
 
 	// candidates for dojox.math:
 	var _degToRadCache = {};
@@ -31,18 +32,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 						matrix.dx = l.xx * r.dx + l.xy * r.dy + l.dx;
 						matrix.dy = l.yx * r.dx + l.yy * r.dy + l.dy;
 					}
-					dojo.mixin(this, matrix);
+					lang.mixin(this, matrix);
 				}
 			}else{
-				dojo.mixin(this, arg);
+				lang.mixin(this, arg);
 			}
 		}
 	};
 
 	// the default (identity) matrix, which is used to fill in missing values
-	dojo.extend(m.Matrix2D, {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0});
+	lang.extend(m.Matrix2D, {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0});
 
-	dojo.mixin(m, {
+	lang.mixin(m, {
 		// summary: class constants, and methods of dojox.gfx.matrix
 
 		// matrix constants

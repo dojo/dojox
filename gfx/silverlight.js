@@ -1,5 +1,7 @@
-define(["dojo/main","./_base","./shape","./path"], function(dojo){
-	var sl = dojo.getObject("dojox.gfx.silverlight", true);
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "dojo/_base/array", "dojo/dom-geometry", "dojo/dom",
+		"dojo/_base/sniff", "./_base", "./shape", "./path"], 
+  function(dojo,lang,color,arr,domGeom,dom,ua,gfxBase,shape,path){
+	var sl = lang.getObject("dojox.gfx.silverlight", true);
 	dojo.experimental("dojox.gfx.silverlight");
 	var g = dojox.gfx, gs = g.shape;
 
@@ -39,7 +41,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		return "#" + (a.length < 2 ? "0" + a : a) + t.slice(1);	// String
 	}
 
-	dojo.declare("dojox.gfx.silverlight.Shape", gs.Shape, {
+	declare("dojox.gfx.silverlight.Shape", dojox.gfx.shape.Shape, {
 		// summary: Silverlight-specific implementation of dojox.gfx.Shape methods
 
 		setFill: function(fill){
@@ -66,7 +68,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 						lgb.mappingMode = "Absolute";
 						lgb.startPoint = f.x1 + "," + f.y1;
 						lgb.endPoint = f.x2 + "," + f.y2;
-						dojo.forEach(f.colors, function(c){
+						arr.forEach(f.colors, function(c){
 							var t = p.createFromXaml("<GradientStop/>");
 							t.offset = c.offset;
 							t.color = hexColor(c.color);
@@ -83,7 +85,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 						rgb.gradientOrigin = pt;
 						rgb.center = pt;
 						rgb.radiusX = rgb.radiusY = f.r;
-						dojo.forEach(f.colors, function(c){
+						arr.forEach(f.colors, function(c){
 							var t = p.createFromXaml("<GradientStop/>");
 							t.offset = c.offset;
 							t.color = hexColor(c.color);
@@ -124,7 +126,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 				return this;
 			}
 			// normalize the stroke
-			if(typeof stroke == "string" || dojo.isArray(stroke) || stroke instanceof dojo.Color){
+			if(typeof stroke == "string" || lang.isArray(stroke) || stroke instanceof Color){
 				stroke = {color: stroke};
 			}
 			var s = this.strokeStyle = g.makeParameters(g.defaultStroke, stroke);
@@ -147,7 +149,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 				var da = s.style.toLowerCase();
 				if(da in dasharray){ da = dasharray[da]; }
 				if(da instanceof Array){
-					da = dojo.clone(da);
+					da = lang.clone(da);
 					var i;
 					/*
 					for(var i = 0; i < da.length; ++i){
@@ -233,7 +235,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		}
 	});
 
-	dojo.declare("dojox.gfx.silverlight.Group", sl.Shape, {
+	declare("dojox.gfx.silverlight.Group", dojox.gfx.silverlight.Shape, {
 		// summary: a group shape (Silverlight), which can be used
 		//	to logically group shapes (e.g, to propagate matricies)
 		constructor: function(){
@@ -249,7 +251,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Group.nodeType = "Canvas";
 
-	dojo.declare("dojox.gfx.silverlight.Rect", [sl.Shape, gs.Rect], {
+	declare("dojox.gfx.silverlight.Rect", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Rect], {
 		// summary: a rectangle shape (Silverlight)
 		setShape: function(newShape){
 			// summary: sets a rectangle shape object (Silverlight)
@@ -270,7 +272,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Rect.nodeType = "Rectangle";
 
-	dojo.declare("dojox.gfx.silverlight.Ellipse", [sl.Shape, gs.Ellipse], {
+	declare("dojox.gfx.silverlight.Ellipse", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Ellipse], {
 		// summary: an ellipse shape (Silverlight)
 		setShape: function(newShape){
 			// summary: sets an ellipse shape object (Silverlight)
@@ -290,7 +292,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Ellipse.nodeType = "Ellipse";
 
-	dojo.declare("dojox.gfx.silverlight.Circle", [sl.Shape, gs.Circle], {
+	declare("dojox.gfx.silverlight.Circle", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Circle], {
 		// summary: a circle shape (Silverlight)
 		setShape: function(newShape){
 			// summary: sets a circle shape object (Silverlight)
@@ -309,7 +311,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Circle.nodeType = "Ellipse";
 
-	dojo.declare("dojox.gfx.silverlight.Line", [sl.Shape, gs.Line], {
+	declare("dojox.gfx.silverlight.Line", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Line], {
 		// summary: a line shape (Silverlight)
 		setShape: function(newShape){
 			// summary: sets a line shape object (Silverlight)
@@ -323,7 +325,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Line.nodeType = "Line";
 
-	dojo.declare("dojox.gfx.silverlight.Polyline", [sl.Shape, gs.Polyline], {
+	declare("dojox.gfx.silverlight.Polyline", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Polyline], {
 		// summary: a polyline/polygon shape (Silverlight)
 		setShape: function(points, closed){
 			// summary: sets a polyline/polygon shape object (Silverlight)
@@ -350,7 +352,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Polyline.nodeType = "Polyline";
 
-	dojo.declare("dojox.gfx.silverlight.Image", [sl.Shape, gs.Image], {
+	declare("dojox.gfx.silverlight.Image", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Image], {
 		// summary: an image (Silverlight)
 		setShape: function(newShape){
 			// summary: sets an image shape object (Silverlight)
@@ -379,7 +381,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Image.nodeType = "Image";
 
-	dojo.declare("dojox.gfx.silverlight.Text", [sl.Shape, gs.Text], {
+	declare("dojox.gfx.silverlight.Text", [dojox.gfx.silverlight.Shape, dojox.gfx.shape.Text], {
 		// summary: an anchored text (Silverlight)
 		setShape: function(newShape){
 			// summary: sets a text shape object (Silverlight)
@@ -392,7 +394,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 			r["Canvas.Left"] = -10000;
 			r["Canvas.Top"]  = -10000;
 			if(!this._delay){
-				this._delay = window.setTimeout(dojo.hitch(this, "_delayAlignment"), 10);
+				this._delay = window.setTimeout(lang.hitch(this, "_delayAlignment"), 10);
 			}
 			return this;	// self
 		},
@@ -453,7 +455,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Text.nodeType = "TextBlock";
 
-	dojo.declare("dojox.gfx.silverlight.Path", [sl.Shape, g.path.Path], {
+	declare("dojox.gfx.silverlight.Path", [dojox.gfx.silverlight.Shape, dojox.gfx.path.Path], {
 		// summary: a path shape (Silverlight)
 		_updateWithSegment: function(segment){
 			// summary: updates the bounding box of path with new segment
@@ -475,7 +477,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 	});
 	sl.Path.nodeType = "Path";
 
-	dojo.declare("dojox.gfx.silverlight.TextPath", [sl.Shape, g.path.TextPath], {
+	declare("dojox.gfx.silverlight.TextPath", [dojox.gfx.silverlight.Shape, dojox.gfx.path.TextPath], {
 		// summary: a textpath shape (Silverlight)
 		_updateWithSegment: function(segment){
 			// summary: updates the bounding box of path with new segment
@@ -492,7 +494,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 
 	var surfaces = {}, nullFunc = new Function;
 
-	dojo.declare("dojox.gfx.silverlight.Surface", gs.Surface, {
+	declare("dojox.gfx.silverlight.Surface", dojox.gfx.shape.Surface, {
 		// summary: a surface object to be used for drawings (Silverlight)
 		constructor: function(){
 			gs.Container._init.call(this);
@@ -532,7 +534,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		// height: String: height of surface, e.g., "100px"
 
 		if(!width && !height){
-			var pos = dojo.position(parentNode);
+			var pos = domGeom.position(parentNode);
 			width  = width  || pos.w;
 			height = height || pos.h;
 		}
@@ -544,7 +546,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		}
 
 		var s = new sl.Surface();
-		parentNode = dojo.byId(parentNode);
+		parentNode = dom.byId(parentNode);
 		s._parent = parentNode;
 		s._nodeName = g._base._getUniqueId();
 
@@ -563,13 +565,13 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		s._onLoadName = onLoadName;
 		window[onLoadName] = function(sender){
 			if(!s.rawNode){
-				s.rawNode = dojo.byId(pluginName).content.root;
+				s.rawNode = dom.byId(pluginName).content.root;
 				// register the plugin with its parent node
 				surfaces[s._nodeName] = parentNode;
 				s.onLoad(s);
 			}
 		};
-		if(dojo.isSafari){
+		if(ua.isSafari){
 			obj = "<embed type='application/x-silverlight' id='" +
 			pluginName + "' width='" + width + "' height='" + height +
 			" background='transparent'" +
@@ -592,7 +594,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		}
 		parentNode.innerHTML = obj;
 
-		var pluginNode = dojo.byId(pluginName);
+		var pluginNode = dom.byId(pluginName);
 		if(pluginNode.content && pluginNode.content.root){
 			// the plugin was created synchronously
 			s.rawNode = pluginNode.content.root;
@@ -648,7 +650,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 
 			// update the transform
 			if(!this._delay){
-				this._delay = window.setTimeout(dojo.hitch(this, "_delayAlignment"), 10);
+				this._delay = window.setTimeout(lang.hitch(this, "_delayAlignment"), 10);
 			}
 		}
 	};
@@ -700,16 +702,16 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		}
 	};
 
-	dojo.extend(sl.Text, Font);
+	lang.extend(sl.Text, Font);
 	//dojo.extend(sl.TextPath, Font);
 
-	dojo.extend(sl.Group, Container);
-	dojo.extend(sl.Group, gs.Creator);
-	dojo.extend(sl.Group, Creator);
+	lang.extend(sl.Group, Container);
+	lang.extend(sl.Group, gs.Creator);
+	lang.extend(sl.Group, Creator);
 
-	dojo.extend(sl.Surface, Container);
-	dojo.extend(sl.Surface, gs.Creator);
-	dojo.extend(sl.Surface, Creator);
+	lang.extend(sl.Surface, Container);
+	lang.extend(sl.Surface, gs.Creator);
+	lang.extend(sl.Surface, Creator);
 
 	function mouseFix(s, a){
 		var ev = {target: s, currentTarget: s, preventDefault: function(){}, stopPropagation: function(){}};
@@ -733,7 +735,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 				ev.y = ev.offsetY = ev.layerY = p.y;
 				// calculate clientX and clientY
 				var parent = surfaces[s.getHost().content.root.name];
-				var t = dojo.position(parent);
+				var t = domGeom.position(parent);
 				ev.clientX = t.x + p.x;
 				ev.clientY = t.y + p.y;
 			}catch(e){
@@ -780,7 +782,7 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 				{name: name, fix: function(){ return {}; }};
 			if(arguments.length > 2){
 				token = this.getEventSource().addEventListener(n.name,
-					function(s, a){ dojo.hitch(object, method)(n.fix(s, a)); });
+					function(s, a){ lang.hitch(object, method)(n.fix(s, a)); });
 			}else{
 				token = this.getEventSource().addEventListener(n.name,
 					function(s, a){ object(n.fix(s, a)); });
@@ -796,8 +798,8 @@ define(["dojo/main","./_base","./shape","./path"], function(dojo){
 		}
 	};
 	
-	dojo.extend(sl.Shape, eventsProcessing);
-	dojo.extend(sl.Surface, eventsProcessing);
+	lang.extend(sl.Shape, eventsProcessing);
+	lang.extend(sl.Surface, eventsProcessing);
 	
 	// patch dojox.gfx
 	g.equalSources = function(a, b){

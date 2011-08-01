@@ -1,1 +1,2 @@
-define(["dojo/_base/kernel", "./Mover", "./Moveable"], function(dojo){ return dojo.getObject("dojox.gfx.move", true); });
+define(["dojo/_base/lang", "./Mover", "./Moveable"], 
+  function(lang){ return lang.getObject("dojox.gfx.move", true); });
