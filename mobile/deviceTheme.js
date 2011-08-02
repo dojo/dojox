@@ -119,7 +119,7 @@ define([
 				var theme = m[i][1];
 				var files = m[i][2];
 				for(j = t.length - 1; j >= 0; j--){
-					var pkg = lang.isArray(t[j]) ? t[j][0] : "dojox/mobile";
+					var pkg = lang.isArray(t[j]) ? (t[j][0]||"").replace(/\./g, '/') : "dojox/mobile";
 					var name = lang.isArray(t[j]) ? t[j][1] : t[j];
 					var f = "themes/" + theme + "/" +
 						(name === "@theme" ? theme : name) + ".css";
