@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,dxa){
-	dojo.getObject("analytics.plugins", true, dojox);
+	var plugins = dojo.getObject("dojox.analytics.plugins", true);
 
-	dojox.analytics.plugins.dojo = new (function(){
+	plugins.dojo = new (function(){
 		// summary:
 		//	plugin to have analyitcs return the base info dojo collects
 		this.addData = dojo.hitch(dxa, "addData", "dojo");
@@ -17,5 +17,5 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,d
 			this.addData(data);
 		}));
 	})();
-	return dojox.analytics.plugins.dojo;
+	return plugins.dojo;
 });
