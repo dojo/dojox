@@ -1,12 +1,10 @@
 define([
 	"dojo/_base/kernel",
-	"dojox",
 	"dojo/_base/declare",
 	"dojox/math/BigInteger",
 	"dojox/math/random/Simple"
-], function(dojo, dojox, declare, BigInteger, Simple) {
+], function(dojo, declare, BigInteger, Simple) {
 
-	dojo.getObject("encoding.crypto.RSAKey", true, dojox);
 	dojo.experimental("dojox.encoding.crypto.RSAKey");
 
 // Copyright (c) 2005  Tom Wu
@@ -37,7 +35,7 @@ define([
 		return new BigInteger(ba);
 	}
 
-	dojo.declare("dojox.encoding.crypto.RSAKey", null, {
+	return dojo.declare("dojox.encoding.crypto.RSAKey", null, {
 		constructor: function(rngf){
 			// summary:
 			//	"empty" RSA key constructor
@@ -73,6 +71,4 @@ define([
 			return h.length % 2 ? "0" + h : h;
 		}
 	});
-
-	return dojox.encoding.crypto.RSAKey;
 });
