@@ -269,7 +269,7 @@ define(["dojo/_base/lang", "dojox/main", "dojo/_base/html", "dojo/_base/Color", 
 			height: 0,
 			//	height:Number
 			//		The height of the image, default value 0.
-			src: "",
+			src: ""
 			//	src: String
 			//		The src url of the image, defaults to empty string.
 		},
