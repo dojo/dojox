@@ -1,4 +1,9 @@
-define(["dojo", "dojox", "./_StoreLayer"], function(dojo, dojox){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"./_StoreLayer"
+], function(declare, array, lang, layers){
 
 var _devideToArrays = function(a){
 	a.sort(function(v1, v2){
@@ -15,10 +20,10 @@ var _devideToArrays = function(a){
 	return arr;
 },
 hitchIfCan = function(scope, func){
-	return func ? dojo.hitch(scope || dojo.global, func) : function(){};
+	return func ? lang.hitch(scope || lang.global, func) : function(){};
 };
 
-dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plugins._StoreLayer, {
+return declare("dojox.grid.enhanced.plugins._RowMapLayer", layers._StoreLayer, {
 	tags: ["reorder"],
 	constructor: function(grid){
 		this._map = {};
@@ -156,7 +161,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 			return userRequest;
 		}else{
 			//No row mapping at all.
-			return dojo.hitch(this._store, this._originFetch)(userRequest);
+			return lang.hitch(this._store, this._originFetch)(userRequest);
 		}
 	},
 	_getRowArrays: function(rows){
@@ -167,7 +172,7 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 		var urstart = userRequest.start = arr[0];
 		userRequest.count = arr[arr.length - 1] - arr[0] + 1;
 		userRequest.onComplete = function(items){
-			dojo.forEach(items, function(item, i){
+			array.forEach(items, function(item, i){
 				var r = urstart + i;
 				if(r in map){
 					result[map[r]] = item;
@@ -198,7 +203,4 @@ dojo.declare("dojox.grid.enhanced.plugins._RowMapLayer", dojox.grid.enhanced.plu
 		_this.originFetch(userRequest);
 	}
 });
-
-	return dojox.grid.enhanced.plugins._RowMapLayer;
-
 });

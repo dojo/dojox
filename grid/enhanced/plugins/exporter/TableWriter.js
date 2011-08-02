@@ -1,10 +1,14 @@
-define(["dojo", "dojox", "./_ExportWriter"], function(dojo, dojox){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/dom-geometry",
+	"./_ExportWriter",
+	"../Exporter"
+], function(declare, array, domGeometry, _ExportWriter, Exporter){
 
-dojox.grid.enhanced.plugins.Exporter.registerWriter("table",
-	"dojox.grid.enhanced.plugins.exporter.TableWriter");
+Exporter.registerWriter("table", "dojox.grid.enhanced.plugins.exporter.TableWriter");
 	
-dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
-	dojox.grid.enhanced.plugins.exporter._ExportWriter, {
+return declare("dojox.grid.enhanced.plugins.exporter.TableWriter", _ExportWriter, {
 	// summary:
 	//		Export grid to HTML table format. Primarily used by Printer plugin.
 	constructor: function(/* object? */writerArgs){
@@ -17,6 +21,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		this._viewTables = [];
 		this._tableAttrs = writerArgs || {};
 	},
+
 	_getTableAttrs: function(/* string */tagName){
 		// summary:
 		//		Get html attribute string for the given kind of tag.
@@ -33,6 +38,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		}
 		return attrs;	//String
 	},
+
 	_getRowClass: function(/* object */arg_obj){
 		// summary:
 		//		Get CSS class string for a row
@@ -44,6 +50,7 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 			arg_obj.rowIdx % 2 ? " grid_even_row" : " grid_odd_row"
 		].join('');
 	},
+
 	_getColumnClass: function(/* object */arg_obj){
 		// summary:
 		//		Get CSS class string for a column
@@ -53,28 +60,29 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		return [" grid_column grid_column_", col_idx,//String
 				col_idx % 2 ? " grid_odd_column" : " grid_even_column"].join('');
 	},
+
 	beforeView: function(/* object */arg_obj){
 		// summary:
 		//		Overrided from _ExportWriter
 		var viewIdx = arg_obj.viewIdx,
 			table = this._viewTables[viewIdx],
-			height, width = dojo.marginBox(arg_obj.view.contentNode).w;
+			height, width = domGeometry.getMarginBox(arg_obj.view.contentNode).w;
 		if(!table){
 			var left = 0;
 			for(var i = 0; i < viewIdx; ++i){
 				left += this._viewTables[i]._width;
 			}
 			table = this._viewTables[viewIdx] = ['<div class="grid_view" style="position: absolute; top: 0; ',
-				dojo._isBodyLtr() ? 'left' : 'right', ':', left,
+				domGeometry.isBodyLtr() ? 'left' : 'right', ':', left,
 				'px;">'];
 		}
 		table._width = width;
 		if(arg_obj.isHeader){
-			height = dojo.contentBox(arg_obj.view.headerContentNode).h;
+			height = domGeometry.getContentBox(arg_obj.view.headerContentNode).h;
 		}else{
 			var rowNode = arg_obj.grid.getRowNode(arg_obj.rowIdx);
 			if(rowNode){
-				height = dojo.contentBox(rowNode).h;
+				height = domGeometry.getContentBox(rowNode).h;
 			}else{
 				//This row has not been loaded from store, so we should estimate it's height.
 				height = arg_obj.grid.scroller.averageRowHeight;
@@ -87,34 +95,38 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 			'><tbody ', this._getTableAttrs('tbody'), '>');
 		return true;	//Boolean
 	},
+
 	afterView: function(/* object */arg_obj){
 		// summary:
 		//		Overrided from _ExportWriter
 		this._viewTables[arg_obj.viewIdx].push('</tbody></table>');
 	},
+
 	beforeSubrow: function(/* object */arg_obj){
 		// summary:
 		//		Overrided from _ExportWriter
 		this._viewTables[arg_obj.viewIdx].push('<tr', this._getTableAttrs('tr'), '>');
 		return true;	//Boolean
 	},
+
 	afterSubrow: function(/* object */arg_obj){
 		// summary:
 		//		Overrided from _ExportWriter
 		this._viewTables[arg_obj.viewIdx].push('</tr>');
 	},
+
 	handleCell: function(/* object */arg_obj){
 		// summary:
 		//		Overrided from _ExportWriter
 		var cell = arg_obj.cell;
-		if(cell.hidden || dojo.indexOf(arg_obj.spCols, cell.index) >= 0){
+		if(cell.hidden || array.indexOf(arg_obj.spCols, cell.index) >= 0){
 			//We are not interested in indirect selectors and row indexes.
 			return;
 		}
 		var cellTagName = arg_obj.isHeader ? 'th' : 'td',
 			attrs = [cell.colSpan ? ' colspan="' + cell.colSpan + '"' : '',
 					cell.rowSpan ? ' rowspan="' + cell.rowSpan + '"' : '',
-					' style="width: ', dojo.contentBox(cell.getHeaderNode()).w, 'px;"',
+					' style="width: ', domGeometry.getContentBox(cell.getHeaderNode()).w, 'px;"',
 					this._getTableAttrs(cellTagName),
 					' class="', this._getColumnClass(arg_obj), '"'].join(''),
 			table = this._viewTables[arg_obj.viewIdx];
@@ -126,23 +138,22 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter.TableWriter",
 		}
 		table.push('</', cellTagName, '>');
 	},
+
 	afterContent: function(){
 		// summary:
 		//		Overrided from _ExportWriter
-		dojo.forEach(this._viewTables, function(table){
+		array.forEach(this._viewTables, function(table){
 			table.push('</div>');
 		});
 	},
+
 	toString: function(){
 		// summary:
 		//		Overrided from _ExportWriter
-		var viewsHTML = dojo.map(this._viewTables, function(table){	//String
+		var viewsHTML = array.map(this._viewTables, function(table){	//String
 			return table.join('');
 		}).join('');
 		return ['<div style="position: relative;">', viewsHTML, '</div>'].join('');
 	}
 });
-
-return dojox.grid.enhanced.plugins.exporter.TableWriter;
-
 });

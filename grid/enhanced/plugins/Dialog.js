@@ -1,12 +1,17 @@
-define(["dojo", "dijit", "dojox", "dojo/window", "dijit/Dialog"], function(dojo, dijit, dojox){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/html",
+	"dojo/window",
+	"dijit/Dialog"
+], function(declare, html, win, Dialog){
 
-dojo.declare("dojox.grid.enhanced.plugins.Dialog", dijit.Dialog, {
+return declare("dojox.grid.enhanced.plugins.Dialog", Dialog, {
 	refNode: null,
 	_position: function(){
 		if(this.refNode && !this._relativePosition){
-			var refPos = dojo.position(dojo.byId(this.refNode)),
-				thisPos = dojo.position(this.domNode),
-				viewPort = dojo.window.getBox();
+			var refPos = html.position(html.byId(this.refNode)),
+				thisPos = html.position(this.domNode),
+				viewPort = win.getBox();
 			if(thisPos.w && thisPos.h){
 				if(refPos.x < 0){
 					refPos.x = 0;
@@ -31,7 +36,4 @@ dojo.declare("dojox.grid.enhanced.plugins.Dialog", dijit.Dialog, {
 		this.inherited(arguments);
 	}
 });
-
-return dojox.grid.enhanced.plugins.Dialog;
-
 });

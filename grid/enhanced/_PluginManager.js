@@ -1,6 +1,14 @@
-define(["dojo", "dojox", "./_Events", "./_FocusManager"], function(dojo, dojox){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/connect",
+	"./_Events",
+	"./_FocusManager"
+], function(dojo, lang, declare, array, connect, _Events, _FocusManager){
 
-dojo.declare("dojox.grid.enhanced._PluginManager", null, {
+declare("dojox.grid.enhanced._PluginManager", null, {
 	// summary:
 	//		Singleton plugin manager
 	//
@@ -32,7 +40,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		this._connects = [];
 		this._parseProps(this.grid.plugins);
 		
-		inGrid.connect(inGrid, "_setStore", dojo.hitch(this, function(store){
+		inGrid.connect(inGrid, "_setStore", lang.hitch(this, function(store){
 			if(this._store !== store){
 				this.forEach('onSetStore', [store, this._store]);
 				this._store = store;
@@ -47,8 +55,8 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		//		Load appropriate plugins before DataGrid.postCreate().
 		//		See EnhancedGrid.postCreate()
 		this.grid.focus.destroy();
-		this.grid.focus = new dojox.grid.enhanced._FocusManager(this.grid);
-		new dojox.grid.enhanced._Events(this.grid);//overwrite some default events of DataGrid
+		this.grid.focus = new _FocusManager(this.grid);
+		new _Events(this.grid);//overwrite some default events of DataGrid
 		this._init(true);
 		this.forEach('onPreInit');
 	},
@@ -58,8 +66,8 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		//		See EnhancedGrid.postCreate()
 		this._init(false);
 		
-		dojo.forEach(this.grid.views.views, this._initView, this);
-		this._connects.push(dojo.connect(this.grid.views, 'addView', dojo.hitch(this, this._initView)));
+		array.forEach(this.grid.views.views, this._initView, this);
+		this._connects.push(connect.connect(this.grid.views, 'addView', lang.hitch(this, this._initView)));
 			
 		if(this._plugins.length > 0){
 			var edit = this.grid.edit;
@@ -68,7 +76,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		this.forEach('onPostInit');
 	},
 	forEach: function(func, args){
-		dojo.forEach(this._plugins, function(p){
+		array.forEach(this._plugins, function(p){
 			if(!p || !p[func]){ return; }
 			p[func].apply(p, args ? args : []);
 		});
@@ -93,7 +101,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		}
 		
 		//mixin all plugin properties into Grid
-		dojo.mixin(grid, options);
+		lang.mixin(grid, options);
 	},
 	_normalize: function(p, plugins, registry, loading){
 		// summary:
@@ -115,14 +123,14 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		
 		loading[p] = true;
 		//TBD - more strict conditions?
-		options[p] = dojo.mixin({}, registry[p], dojo.isObject(plugins[p]) ? plugins[p] : {});
+		options[p] = lang.mixin({}, registry[p], lang.isObject(plugins[p]) ? plugins[p] : {});
 		
 		var dependencies = options[p]['dependency'];
 		if(dependencies){
-			if(!dojo.isArray(dependencies)){
+			if(!lang.isArray(dependencies)){
 				dependencies = options[p]['dependency'] = [dependencies];
 			}
-			dojo.forEach(dependencies, function(dependency){
+			array.forEach(dependencies, function(dependency){
 				if(!this._normalize(dependency, plugins, registry, loading)){
 					throw new Error('Plugin ' + dependency + ' is required.');
 				}
@@ -158,7 +166,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 		if(plugin){ return plugin; } //return if plugin("name") already existed
 		
 		var dependencies = option['dependency'];
-		dojo.forEach(dependencies, function(dependency){
+		array.forEach(dependencies, function(dependency){
 			if(!this.loadPlugin(dependency)){
 				throw new Error('Plugin ' + dependency + ' is required.');
 			}
@@ -204,15 +212,15 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 	},
 	getPluginClazz: function(clazz){
 		// summary:
-		//		Load target plugin which must be already required (dojo.require(..))
+		//		Load target plugin which must be already required (require(..))
 		// clazz: class | String
 		//		Plugin class
-		if(dojo.isFunction(clazz)){
+		if(lang.isFunction(clazz)){
 			return clazz;//return if it's already a clazz
 		}
 		var errorMsg = 'Please make sure Plugin "' + clazz + '" is existed.';
 		try{
-			var cls = dojo.getObject(clazz);
+			var cls = lang.getObject(clazz);
 			if(!cls){ throw new Error(errorMsg); }
 			return cls;
 		}catch(e){
@@ -233,7 +241,7 @@ dojo.declare("dojox.grid.enhanced._PluginManager", null, {
 	destroy: function(){
 		// summary:
 		//		Destroy all resources
-		dojo.forEach(this._connects, dojo.disconnect);
+		array.forEach(this._connects, connect.disconnect);
 		this.forEach('destroy');
 		if(this.grid.unwrap){
 			this.grid.unwrap();
@@ -257,7 +265,7 @@ dojox.grid.enhanced._PluginManager.registerPlugin = function(clazz, props){
 	}
 	var cls = dojox.grid.enhanced._PluginManager;
 	cls.registry = cls.registry || {};
-	cls.registry[clazz.prototype.name]/*plugin name*/ = dojo.mixin({"class": clazz}, (props ? props : {}));
+	cls.registry[clazz.prototype.name]/*plugin name*/ = lang.mixin({"class": clazz}, (props ? props : {}));
 };
 
 return dojox.grid.enhanced._PluginManager;

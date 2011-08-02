@@ -1,22 +1,33 @@
 define([
-	"dojo",
-	"dijit",
-	"dojox",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dojo/query",
+	"dojo/cache",
 	"dojo/string",
 	"dojo/date/locale",
+	"dijit/_Widget", 
+	"dijit/_TemplatedMixin", 
+	"dijit/_WidgetsInTemplateMixin", 
 	"dijit/TooltipDialog",
-	"dijit/_base/popup",
 	"dijit/form/Button",
-	"dojo/i18n!../../nls/Filter"], function(dojo, dijit, dojox){
+	"dijit/_base/popup",
+	"dojo/i18n!../../nls/Filter"
+], function(declare, array, lang, query, cache, string, dateLocale, _Widget, 
+	_TemplatedMixin, _WidgetsInTemplateMixin, TooltipDialog, Button, popup){
 
-var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
-	oddRowCssCls = "dojoxGridFStatusTipOddRow",
-	handleHolderCssCls = "dojoxGridFStatusTipHandle",
-	conditionCssCls = "dojoxGridFStatusTipCondition",
-	_removeRuleIconCls = "dojoxGridFStatusTipDelRuleBtnIcon",
-	_statusFooter = "</tbody></table>";
-	
-	dojo.declare("dojox.grid.enhanced.plugins.filter.FilterStatusTip", null, {
+	var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
+		oddRowCssCls = "dojoxGridFStatusTipOddRow",
+		handleHolderCssCls = "dojoxGridFStatusTipHandle",
+		conditionCssCls = "dojoxGridFStatusTipCondition",
+		_removeRuleIconCls = "dojoxGridFStatusTipDelRuleBtnIcon",
+		_statusFooter = "</tbody></table>";
+
+	var FilterStatusPane = declare("dojox.grid.enhanced.plugins.filter.FilterStatusPane", [_Widget, _TemplatedMixin], {
+		templateString: cache("dojox.grid", "enhanced/templates/FilterStatusPane.html")
+	});
+
+	return declare("dojox.grid.enhanced.plugins.filter.FilterStatusTip", null, {
 		// summary:
 		//		Create the status tip UI.
 		constructor: function(args){
@@ -29,14 +40,14 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 			].join('');
 			this._removedCriterias = [];
 			this._rules = [];
-			this.statusPane = new dojox.grid.enhanced.plugins.filter.FilterStatusPane();
-			this._dlg = new dijit.TooltipDialog({
+			this.statusPane = new FilterStatusPane();
+			this._dlg = new TooltipDialog({
 				"class": "dojoxGridFStatusTipDialog",
 				content: this.statusPane,
 				autofocus: false
 			});
-			this._dlg.connect(this._dlg.domNode, 'onmouseleave', dojo.hitch(this, this.closeDialog));
-			this._dlg.connect(this._dlg.domNode, 'click', dojo.hitch(this, this._modifyFilter));
+			this._dlg.connect(this._dlg.domNode, 'onmouseleave', lang.hitch(this, this.closeDialog));
+			this._dlg.connect(this._dlg.domNode, 'click', lang.hitch(this, this._modifyFilter));
 		},
 		destroy: function(){
 			this._dlg.destroyRecursive();
@@ -44,11 +55,11 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 		//-----------------Public Functions------------------------
 		showDialog: function(/* int */pos_x,/* int */pos_y, columnIdx){
 			this._pos = {x:pos_x,y:pos_y};
-			dijit.popup.close(this._dlg);
+			popup.close(this._dlg);
 			this._removedCriterias = [];
 			this._rules = [];
 			this._updateStatus(columnIdx);
-			dijit.popup.open({
+			popup.open({
 				popup: this._dlg,
 				parent: this.plugin.filterBar,
 				onCancel: function(){},
@@ -57,7 +68,7 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 			});
 		},
 		closeDialog: function(){
-			dijit.popup.close(this._dlg);
+			popup.close(this._dlg);
 			if(this._removedCriterias.length){
 				this.plugin.filterDefDialog.removeCriteriaBoxes(this._removedCriterias);
 				this._removedCriterias = [];
@@ -75,7 +86,7 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 				sp.statusRel.innerHTML = "";
 				var cell = p.grid.layout.cells[columnIdx];
 				var colName = cell ? "'" + (cell.name || cell.field) + "'" : nls["anycolumn"];
-				res = dojo.string.substitute(nls["statusTipMsg"], [colName]);
+				res = string.substitute(nls["statusTipMsg"], [colName]);
 			}else{
 				sp.statusTitle.innerHTML = nls["statusTipTitleHasFilter"];
 				sp.statusRel.innerHTML = fdg._relOpCls == "logicall" ? nls["statusTipRelAll"] : nls["statusTipRelAny"];
@@ -92,18 +103,18 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 			this._addButtonForRules();
 		},
 		_createStatusDetail: function(){
-			return this._statusHeader + dojo.map(this._rules, function(rule, i){
+			return this._statusHeader + array.map(this._rules, function(rule, i){
 				return this._getCriteriaStr(rule, i);
 			}, this).join('') + _statusFooter;
 		},
 		_addButtonForRules: function(){
 			if(this._rules.length > 1){
-				dojo.query("." + handleHolderCssCls, this.statusPane.statusDetailNode).forEach(dojo.hitch(this, function(nd, idx){
-					(new dijit.form.Button({
+				query("." + handleHolderCssCls, this.statusPane.statusDetailNode).forEach(lang.hitch(this, function(nd, idx){
+					(new Button({
 						label: this.plugin.nls["removeRuleButton"],
 						showLabel: false,
 						iconClass: _removeRuleIconCls,
-						onClick: dojo.hitch(this, function(e){
+						onClick: lang.hitch(this, function(e){
 							e.stopPropagation();
 							this._removedCriterias.push(this._rules[idx].index);
 							this._rules.splice(idx,1);
@@ -130,10 +141,7 @@ var gridCssCls = "", headerCssCls = "", cellCssCls = "", rowCssCls = "",
 			p.filterDefDialog.showDialog(p.filterBar.getColumnIdx(this._pos.x));
 		}
 	});
-	dojo.declare("dojox.grid.enhanced.plugins.filter.FilterStatusPane", [dijit._Widget, dijit._TemplatedMixin], {
-		templateString: dojo.cache("dojox.grid", "enhanced/templates/FilterStatusPane.html")
-	});
+	
 
-	return dojox.grid.enhanced.plugins.filter.FilterStatusTip;
-
+	return FilterStatusTip;
 });

@@ -1,6 +1,11 @@
-define(["dojo", "dojox", '../../_SelectionPreserver'], function(dojo, dojox, SelectionPreserver){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/connect",
+	'../../_SelectionPreserver'
+], function(declare, lang, connect, _SelectionPreserver){
 
-dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", SelectionPreserver, {
+return declare("dojox.grid.enhanced.plugins._SelectionPreserver", _SelectionPreserver, {
 	// summary:
 	//		Preserve selections across various user actions.
 	//
@@ -26,9 +31,9 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", SelectionPreserv
 			self._oldClearData.apply(grid, arguments);
 		};
 		this._connects.push(
-			dojo.connect(selection, 'selectRange', dojo.hitch(this, '_updateMapping', true, true, false)),
-			dojo.connect(selection, 'deselectRange', dojo.hitch(this, '_updateMapping', true, false, false)),
-			dojo.connect(selection, 'deselectAll', dojo.hitch(this, '_updateMapping', true, false, true))
+			connect.connect(selection, 'selectRange', lang.hitch(this, '_updateMapping', true, true, false)),
+			connect.connect(selection, 'deselectRange', lang.hitch(this, '_updateMapping', true, false, false)),
+			connect.connect(selection, 'deselectAll', lang.hitch(this, '_updateMapping', true, false, true))
 		);
 	},
 	destroy: function(){
@@ -100,7 +105,4 @@ dojo.declare("dojox.grid.enhanced.plugins._SelectionPreserver", SelectionPreserv
 		}
 	}
 });
-
-return dojox.grid.enhanced.plugins._SelectionPreserver;
-
 });
