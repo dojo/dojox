@@ -1,5 +1,5 @@
 define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/_base/connect",
-	"dojo/dom-Class","dojo/_base/window","./Mover"], 
+	"dojo/dom-class","dojo/_base/window","./Mover"], 
   function(lang,declare,arr,event,connect,domClass,win,Mover){
 	return declare("dojox.gfx.Moveable", null, {
 		constructor: function(shape, params){
