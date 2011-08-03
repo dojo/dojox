@@ -469,10 +469,6 @@ define([
 				}
 				dojo.toggleClass(e.sourceView.headerNode, "dojoxGridColNoResize", (c == "dojoxGridColNoResize"));
 				dojo.toggleClass(e.sourceView.headerNode, "dojoxGridColResize", (c == "dojoxGridColResize"));
-				if(has('ie')){
-					var t = e.sourceView.headerNode.scrollLeft;
-					e.sourceView.headerNode.scrollLeft = t;
-				}
 				if(c){
 					event.stop(e);
 				}
