@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "dojo/_base/array", "dojo/dom-geometry", "dojo/dom",
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/array", "dojo/dom-geometry", "dojo/dom",
 		"dojo/_base/sniff", "./_base", "./shape", "./path"], 
-  function(dojo,lang,color,arr,domGeom,dom,ua,gfxBase,shape,path){
+  function(dojo,lang,declare,color,arr,domGeom,dom,ua,gfxBase,shape,path){
 	var sl = lang.getObject("dojox.gfx.silverlight", true);
 	dojo.experimental("dojox.gfx.silverlight");
 	var g = dojox.gfx, gs = g.shape;
@@ -126,7 +126,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "dojo/_base/
 				return this;
 			}
 			// normalize the stroke
-			if(typeof stroke == "string" || lang.isArray(stroke) || stroke instanceof Color){
+			if(typeof stroke == "string" || lang.isArray(stroke) || stroke instanceof color){
 				stroke = {color: stroke};
 			}
 			var s = this.strokeStyle = g.makeParameters(g.defaultStroke, stroke);

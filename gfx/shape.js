@@ -168,7 +168,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 				return null;	// null
 			}
 			var m = this._getRealMatrix(),
-				gm = matrix;
+				gm = matrixLib;
 			return [	// Array
 					gm.multiplyPoint(m, b.x, b.y),
 					gm.multiplyPoint(m, b.x + b.width, b.y),

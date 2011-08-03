@@ -106,12 +106,12 @@ define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 		return a.o - b.o;
 	}
 	
-	grad.project = function(matrix, grad, tl, rb, ttl, trb){
+	grad.project = function(matrix, gradient, tl, rb, ttl, trb){
 		// summary:
 		//		return a new gradient using the "VML algorithm" and suitable for VML
 		// matrix: dojox.gfx.Matrix2D|Null:
 		//		matrix to apply to a shape and its gradient
-		// grad: Object:
+		// gradient: Object:
 		//		a linear gradient object to be transformed
 		// tl: dojox.gfx.Point:
 		//		top-left corner of shape's bounding box
@@ -124,8 +124,8 @@ define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 		
 		matrix = matrix || m.identity;
 
-		var f1 = m.multiplyPoint(matrix, grad.x1, grad.y1),
-			f2 = m.multiplyPoint(matrix, grad.x2, grad.y2),
+		var f1 = m.multiplyPoint(matrix, gradient.x1, gradient.y1),
+			f2 = m.multiplyPoint(matrix, gradient.x2, gradient.y2),
 			angle = Math.atan2(f2.y - f1.y, f2.x - f1.x),
 			project = m.project(f2.x - f1.x, f2.y - f1.y),
 			pf1 = m.multiplyPoint(project, f1),
@@ -142,7 +142,7 @@ define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 				].sort(sortPoints),
 			from = points[0].o,
 			to   = points[3].o,
-			stops = grad.rescale(grad.colors, from, to),
+			stops = grad.rescale(gradient.colors, from, to),
 			//angle2 = Math.atan2(Math.abs(points[3].r.y - points[0].r.y) * (f2.y - f1.y), Math.abs(points[3].r.x - points[0].r.x) * (f2.x - f1.x));
 			angle2 = Math.atan2(points[3].r.y - points[0].r.y, points[3].r.x - points[0].r.x);
 

@@ -28,13 +28,13 @@ define(["dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/
 						}
 						break;
 					case "vml":
-						if(ua.isIE){
+						if(ua("ie")){
 							renderer = "vml";
 						}
 						break;
 					case "silverlight":
 						try{
-							if(ua.isIE){
+							if(ua("ie")){
 								silverlightObject = new ActiveXObject("AgControl.AgControl");
 								if(silverlightObject && silverlightObject.IsVersionSupported("1.0")){
 									silverlightFlag = true;

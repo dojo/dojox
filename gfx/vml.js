@@ -1,12 +1,23 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/Color", "dojo/_base/sniff",
 		"dojo/dom", "dojo/dom-geometry", "dojo/_base/window", 
 		"./_base", "./shape", "./path", "./arc", "./gradient"],
-  function(lang, declare, arr, Color, ua, domGeom, gfxBase, shape, path, arc, gradient){
+  function(lang, declare, arr, Color, ua, dom, domGeom, win, gfxBase, shape, path, arc, gradient){
 	var vml = lang.getObject("dojox.gfx.vml", true),
 		g = dojox.gfx, m = g.matrix, gs = g.shape;
 
 	// dojox.gfx.vml.xmlns: String: a VML's namespace
 	vml.xmlns = "urn:schemas-microsoft-com:vml";
+
+	document.namespaces.add("v", vml.xmlns);
+	var vmlElems = ["*", "group", "roundrect", "oval", "shape", "rect", "imagedata", "path", "textpath", "text"],
+		i = 0, l = 1, s = document.createStyleSheet();
+	if(dojo.isIE >= 8){
+		i = 1;
+		l = vmlElems.length;
+	}
+	for (; i < l; ++i) {
+		s.addRule("v\\:" + vmlElems[i], "behavior:url(#default#VML); display:inline-block");
+	}
 
 	// dojox.gfx.vml.text_alignment: Object: mapping from SVG alignment to VML alignment
 	vml.text_alignment = {start: "left", middle: "center", end: "right"};
