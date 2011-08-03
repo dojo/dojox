@@ -8,7 +8,7 @@ define([
 	"./_Grid",
 	"./DataSelection",
 	"dojo/_base/html"
-], function(dojox, array, lang, json, has, declare, _Grid, DataSelection){
+], function(dojox, array, lang, json, has, declare, _Grid, DataSelection, html){
 
 /*=====
 declare("dojox.grid.__DataCellDef", dojox.grid.__CellDef, {
@@ -296,7 +296,7 @@ declare("dojox.grid.DataGrid", _Grid, {
 				this.setScrollTop(this._lastScrollTop);
 			}
 			if(has("ie")){
-				dojo.setSelectable(this.domNode, this.selectable);
+				html.setSelectable(this.domNode, this.selectable);
 			}	
 		}
 		delete this._lastScrollTop;
@@ -628,12 +628,12 @@ declare("dojox.grid.DataGrid", _Grid, {
 });
 
 dojox.grid.DataGrid.cell_markupFactory = function(cellFunc, node, cellDef){
-	var field = lang.trim(dojo.attr(node, "field")||"");
+	var field = lang.trim(html.attr(node, "field")||"");
 	if(field){
 		cellDef.field = field;
 	}
 	cellDef.field = cellDef.field||cellDef.name;
-	var fields = lang.trim(dojo.attr(node, "fields")||"");
+	var fields = lang.trim(html.attr(node, "fields")||"");
 	if(fields){
 		cellDef.fields = fields.split(",");
 	}

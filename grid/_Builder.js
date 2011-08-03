@@ -10,7 +10,7 @@ define([
 	"dojox/html/metrics",
 	"./util",
 	"dojo/_base/html"
-], function(dojox, array, lang, win, event, has, connect, Moveable, metrics, util){
+], function(dojox, array, lang, win, event, has, connect, Moveable, metrics, util, html){
 
 	var dg = dojox.grid;
 
@@ -127,11 +127,11 @@ define([
 
 		// cell finding
 		isCellNode: function(inNode){
-			return Boolean(inNode && inNode!=win.doc && dojo.attr(inNode, "idx"));
+			return Boolean(inNode && inNode!=win.doc && html.attr(inNode, "idx"));
 		},
 		
 		getCellNodeIndex: function(inCellNode){
-			return inCellNode ? Number(dojo.attr(inCellNode, "idx")) : -1;
+			return inCellNode ? Number(html.attr(inCellNode, "idx")) : -1;
 		},
 		
 		getCellNode: function(inRowNode, inCellIndex){
@@ -178,7 +178,7 @@ define([
 
 		isIntraNodeEvent: function(e){
 			try{
-				return (e.cellNode && e.relatedTarget && dojo.isDescendant(e.relatedTarget, e.cellNode));
+				return (e.cellNode && e.relatedTarget && html.isDescendant(e.relatedTarget, e.cellNode));
 			}catch(x){
 				// e.relatedTarget has permission problem in FF if it's an input: https://bugzilla.mozilla.org/show_bug.cgi?id=208427
 				return false;
@@ -415,7 +415,7 @@ define([
 
 		overLeftResizeArea: function(e){
 			// We are never over a resize area if we are in the process of moving
-			if(dojo.hasClass(win.body(), "dojoDndMove")){
+			if(html.hasClass(win.body(), "dojoDndMove")){
 				return false;
 			}
 			//Bugfix for crazy IE problem (#8807).  IE returns position information for the icon and text arrow divs
@@ -424,8 +424,8 @@ define([
 			//the image or text nodes, then just ignored them/treat them not in scale range.
 			if(has('ie')){
 				var tN = e.target;
-				if(dojo.hasClass(tN, "dojoxGridArrowButtonNode") ||
-					dojo.hasClass(tN, "dojoxGridArrowButtonChar")){
+				if(html.hasClass(tN, "dojoxGridArrowButtonNode") ||
+					html.hasClass(tN, "dojoxGridArrowButtonChar")){
 					return false;
 				}
 			}
@@ -439,7 +439,7 @@ define([
 
 		overRightResizeArea: function(e){
 			// We are never over a resize area if we are in the process of moving
-			if(dojo.hasClass(win.body(), "dojoDndMove")){
+			if(html.hasClass(win.body(), "dojoDndMove")){
 				return false;
 			}
 			//Bugfix for crazy IE problem (#8807).  IE returns position information for the icon and text arrow divs
@@ -448,8 +448,8 @@ define([
 			//the image or text nodes, then just ignored them/treat them not in scale range.
 			if(has('ie')){
 				var tN = e.target;
-				if(dojo.hasClass(tN, "dojoxGridArrowButtonNode") ||
-					dojo.hasClass(tN, "dojoxGridArrowButtonChar")){
+				if(html.hasClass(tN, "dojoxGridArrowButtonNode") ||
+					html.hasClass(tN, "dojoxGridArrowButtonChar")){
 					return false;
 				}
 			}
@@ -467,8 +467,8 @@ define([
 				if(c && !this.canResize(e)){
 					c = 'dojoxGridColNoResize';
 				}
-				dojo.toggleClass(e.sourceView.headerNode, "dojoxGridColNoResize", (c == "dojoxGridColNoResize"));
-				dojo.toggleClass(e.sourceView.headerNode, "dojoxGridColResize", (c == "dojoxGridColResize"));
+				html.toggleClass(e.sourceView.headerNode, "dojoxGridColNoResize", (c == "dojoxGridColNoResize"));
+				html.toggleClass(e.sourceView.headerNode, "dojoxGridColResize", (c == "dojoxGridColResize"));
 				if(c){
 					event.stop(e);
 				}
@@ -502,24 +502,24 @@ define([
 			//Set up the drag object for column resizing
 			// Called with mouse event in case of drag and drop,
 			// Also called from keyboard shift-arrow event when focus is on a header
-			var headContentBox = dojo.contentBox(e.sourceView.headerNode);
+			var headContentBox = html.contentBox(e.sourceView.headerNode);
 			
 			if(isMouse){  //IE draws line even with no mouse down so separate from keyboard
 				this.lineDiv = document.createElement('div');
 
-				var vw = dojo.position(e.sourceView.headerNode, true);
-				var bodyContentBox = dojo.contentBox(e.sourceView.domNode);
+				var vw = html.position(e.sourceView.headerNode, true);
+				var bodyContentBox = html.contentBox(e.sourceView.domNode);
 				//fix #11340
 				var l = e.pageX;
 				if(!this.grid.isLeftToRight() && has('ie') < 8){
 					l -= metrics.getScrollbar().w;
 				}
-				dojo.style(this.lineDiv, {
+				html.style(this.lineDiv, {
 					top: vw.y + "px",
 					left: l + "px",
 					height: (bodyContentBox.h + headContentBox.h) + "px"
 				});
-				dojo.addClass(this.lineDiv, "dojoxGridResizeColLine");
+				html.addClass(this.lineDiv, "dojoxGridResizeColLine");
 				this.lineDiv._origLeft = l;
 				win.body().appendChild(this.lineDiv);
 			}
@@ -542,10 +542,10 @@ define([
 				view: view,
 				node: e.cellNode,
 				index: e.cellIndex,
-				w: dojo.contentBox(e.cellNode).w,
+				w: html.contentBox(e.cellNode).w,
 				vw: headContentBox.w,
 				table: table,
-				tw: dojo.contentBox(table).w,
+				tw: html.contentBox(table).w,
 				spanners: spanners,
 				followers: followers
 			};
@@ -553,9 +553,9 @@ define([
 		},
 		beginColumnResize: function(e){
 			this.moverDiv = document.createElement("div");
-			dojo.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
+			html.style(this.moverDiv,{position: "absolute", left:0}); // to make DnD work with dir=rtl
 			win.body().appendChild(this.moverDiv);
-			dojo.addClass(this.grid.domNode, "dojoxGridColumnResizing");
+			html.addClass(this.grid.domNode, "dojoxGridColumnResizing");
 			var m = (this.moveable = new Moveable(this.moverDiv));
 
 			var drag = this.colResizeSetup(e,true);
@@ -570,7 +570,7 @@ define([
 				this.moveable.destroy();
 				delete this.moveable;
 				this.moveable = null;
-				dojo.removeClass(this.grid.domNode, "dojoxGridColumnResizing");
+				html.removeClass(this.grid.domNode, "dojoxGridColumnResizing");
 			}));
 
 			if(e.cellNode.setCapture){
@@ -595,7 +595,7 @@ define([
 					this.doResizeNow(inDrag, data);
 				}
 				else{
-					dojo.style(this.lineDiv, "left", (this.lineDiv._origLeft + data.deltaX) + "px");
+					html.style(this.lineDiv, "left", (this.lineDiv._origLeft + data.deltaX) + "px");
 				}
 			}
 		},
@@ -609,7 +609,7 @@ define([
 				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (inDrag.w + changeX);
 				if(has('webKit') && inDrag.spanners.length){
 					// Webkit needs the pad border extents back in
-					changeX += dojo._getPadBorderExtents(inDrag.spanners[0].node).w;
+					changeX += html._getPadBorderExtents(inDrag.spanners[0].node).w;
 				}
 				var data = {
 					deltaX: changeX,
@@ -622,9 +622,9 @@ define([
 				delete this.dragRecord;
 			}
 			
-			dojo.destroy(this.lineDiv);
- 			dojo.destroy(this.moverDiv);
-			dojo.destroy(this.moverDiv);
+			html.destroy(this.lineDiv);
+ 			html.destroy(this.moverDiv);
+			html.destroy(this.moverDiv);
 			delete this.moverDiv;
 			this._skipBogusClicks = true;
 			inDrag.view.update();

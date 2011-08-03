@@ -20,7 +20,7 @@ define([
 	"dojo/dnd/Manager",
 	"./_Builder"
 ], function(dojo, dijit, dojox, declare, array, lang, connect, has, query,
-	win, template, Source, _Widget, _TemplatedMixin, metrics, _RowSelector, util){
+	win, template, Source, _Widget, _TemplatedMixin, metrics, _RowSelector, util, html){
 
 	// a private function
 	var getStyleText = function(inNode, inStyleText){
@@ -78,10 +78,10 @@ define([
 		},
 
 		destroy: function(){
-			dojo.destroy(this.headerNode);
+			html.destroy(this.headerNode);
 			delete this.headerNode;
 			for(var i in this.rowNodes){
-				dojo.destroy(this.rowNodes[i]);
+				html.destroy(this.rowNodes[i]);
 			}
 			this.rowNodes = {};
 			if(this.source){
@@ -149,7 +149,7 @@ define([
 			array.forEach(query(".dojoxGridStubNode", inRowNode), function(n){
 				if(n && n.parentNode){
 					var lw = n.getAttribute("linkWidget");
-					var cellIdx = window.parseInt(dojo.attr(n, "cellIdx"), 10);
+					var cellIdx = window.parseInt(html.attr(n, "cellIdx"), 10);
 					var cellDef = g.getCell(cellIdx);
 					var w = dijit.byId(lw);
 					if(w){
@@ -185,7 +185,7 @@ define([
 
 		getScrollbarWidth: function(){
 			var hasScrollSpace = this.hasVScrollbar();
-			var overflow = dojo.style(this.scrollboxNode, "overflow");
+			var overflow = html.style(this.scrollboxNode, "overflow");
 			if(this.noscroll || !overflow || overflow == "hidden"){
 				hasScrollSpace = false;
 			}else if(overflow == "scroll"){
@@ -211,7 +211,7 @@ define([
 		},
 
 		getContentWidth: function(){
-			return Math.max(0, dojo._getContentBox(this.domNode).w - this.getScrollbarWidth()) + 'px'; // String
+			return Math.max(0, html._getContentBox(this.domNode).w - this.getScrollbarWidth()) + 'px'; // String
 		},
 
 		render: function(){
@@ -245,30 +245,30 @@ define([
 				var bottomMarkerId = "dojoxGrid_bottomMarker";
 				var topMarkerId = "dojoxGrid_topMarker";
 				if(this.bottomMarker){
-					dojo.destroy(this.bottomMarker);
+					html.destroy(this.bottomMarker);
 				}
-				this.bottomMarker = dojo.byId(bottomMarkerId);
+				this.bottomMarker = html.byId(bottomMarkerId);
 				if(this.topMarker){
-					dojo.destroy(this.topMarker);
+					html.destroy(this.topMarker);
 				}
-				this.topMarker = dojo.byId(topMarkerId);
+				this.topMarker = html.byId(topMarkerId);
 				if (!this.bottomMarker) {
-					this.bottomMarker = dojo.create("div", {
+					this.bottomMarker = html.create("div", {
 						"id": bottomMarkerId,
 						"class": "dojoxGridColPlaceBottom"
 					}, win.body());
 					this._hide(this.bottomMarker);
 
 					
-					this.topMarker = dojo.create("div", {
+					this.topMarker = html.create("div", {
 						"id": topMarkerId,
 						"class": "dojoxGridColPlaceTop"
 					}, win.body());
 					this._hide(this.topMarker);
 				}
-				this.arrowDim = dojo.contentBox(this.bottomMarker);
+				this.arrowDim = html.contentBox(this.bottomMarker);
 
-				var headerHeight = dojo.contentBox(this.headerContentNode.firstChild.rows[0]).h;
+				var headerHeight = html.contentBox(this.headerContentNode.firstChild.rows[0]).h;
 				
 				this.source = new Source(this.headerContentNode.firstChild.rows[0], {
 					horizontal: true,
@@ -309,20 +309,20 @@ define([
 
 						if (!target) {
 							target = src.targetAnchor;
-							endAdd = dojo.contentBox(target).w + this.arrowDim.w/2 + 2;
+							endAdd = html.contentBox(target).w + this.arrowDim.w/2 + 2;
 						}
 
-						var pos = dojo.position(target, true);
+						var pos = html.position(target, true);
 						var left = Math.floor(pos.x - this.arrowDim.w/2 + endAdd);
 
-						dojo.style(this.bottomMarker, "visibility", "visible");
-						dojo.style(this.topMarker, "visibility", "visible");
-						dojo.style(this.bottomMarker, {
+						html.style(this.bottomMarker, "visibility", "visible");
+						html.style(this.topMarker, "visibility", "visible");
+						html.style(this.bottomMarker, {
 							"left": left + "px",
 							"top" : (headerHeight + pos.y) + "px"
 						});
 
-						dojo.style(this.topMarker, {
+						html.style(this.topMarker, {
 							"left": left + "px",
 							"top" : (pos.y - this.arrowDim.h) + "px"
 						});
@@ -346,11 +346,11 @@ define([
 						connect.unsubscribe(this._source_sub);
 						Source.prototype.destroy.call(this.source);
 						if(this.bottomMarker){
-							dojo.destroy(this.bottomMarker);
+							html.destroy(this.bottomMarker);
 							delete this.bottomMarker;
 						}
 						if(this.topMarker){
-							dojo.destroy(this.topMarker);
+							html.destroy(this.topMarker);
 							delete this.topMarker;
 						}
 					}),
@@ -368,7 +368,7 @@ define([
 		},
 		
 		_hide: function(node){
-			dojo.style(node, {
+			html.style(node, {
 				left: "-10000px",
 				top: "-10000px",
 				"visibility": "hidden"
@@ -401,9 +401,9 @@ define([
 			this._hide(this.topMarker);
 
 			var getIdx = function(n){
-				return n ? dojo.attr(n, "idx") : null;
+				return n ? html.attr(n, "idx") : null;
 			};
-			var w = dojo.marginBox(nodes[0]).w;
+			var w = html.marginBox(nodes[0]).w;
 			if(source.viewIndex !== this.index){
 				var views = this.grid.views.views;
 				var srcView = views[source.viewIndex];
@@ -473,7 +473,7 @@ define([
 				if(this.noscroll){
 					this._hasHScroll = false;
 				}else{
-					var style = dojo.style(this.scrollboxNode, "overflow");
+					var style = html.style(this.scrollboxNode, "overflow");
 					if(style == "hidden"){
 						this._hasHScroll = false;
 					}else if(style == "scroll"){
@@ -495,7 +495,7 @@ define([
 				if(this.noscroll){
 					this._hasVScroll = false;
 				}else{
-					var style = dojo.style(this.scrollboxNode, "overflow");
+					var style = html.style(this.scrollboxNode, "overflow");
 					if(style == "hidden"){
 						this._hasVScroll = false;
 					}else if(style == "scroll"){
@@ -518,22 +518,22 @@ define([
 			var cellNodes = query("th", this.headerContentNode);
 			var fixedWidths = array.map(cellNodes, function(c, vIdx){
 				var w = c.style.width;
-				dojo.attr(c, "vIdx", vIdx);
+				html.attr(c, "vIdx", vIdx);
 				if(w && w.slice(-1) == "%"){
 					hasPct = true;
 				}else if(w && w.slice(-2) == "px"){
 					return window.parseInt(w, 10);
 				}
-				return dojo.contentBox(c).w;
+				return html.contentBox(c).w;
 			});
 			if(hasPct){
 				array.forEach(this.grid.layout.cells, function(cell, idx){
 					if(cell.view == this){
 						var cellNode = cell.view.getHeaderCellNode(cell.index);
-						if(cellNode && dojo.hasAttr(cellNode, "vIdx")){
-							var vIdx = window.parseInt(dojo.attr(cellNode, "vIdx"));
+						if(cellNode && html.hasAttr(cellNode, "vIdx")){
+							var vIdx = window.parseInt(html.attr(cellNode, "vIdx"));
 							this.setColWidth(idx, fixedWidths[vIdx]);
-							dojo.removeAttr(cellNode, "vIdx");
+							html.removeAttr(cellNode, "vIdx");
 						}
 					}
 				}, this);
@@ -606,9 +606,9 @@ define([
 			var node = document.createElement("div");
 			node.className = this.classTag + 'Row';
 			if (this instanceof dojox.grid._RowSelector){
-				dojo.attr(node,"role","presentation");
+				html.attr(node,"role","presentation");
 			}else{
-				dojo.attr(node,"role","row");
+				html.attr(node,"role","row");
 				if (this.grid.selectionMode != "none") {
 					node.setAttribute("aria-selected", "false"); //rows can be selected so add aria-selected prop
 				}
@@ -701,7 +701,7 @@ define([
 			var isLtr = this.grid.isLeftToRight();
 			if(this.firstScroll < 2){
 				if((!isLtr && this.firstScroll == 1) || (isLtr && this.firstScroll === 0)){
-					var s = dojo.marginBox(this.headerNodeContainer);
+					var s = html.marginBox(this.headerNodeContainer);
 					if(has('ie')){
 						this.headerNodeContainer.style.width = s.w + this.getScrollbarWidth() + 'px';
 					}else if(has('mozilla')){
@@ -820,7 +820,7 @@ define([
 			td.appendChild(node);
 			tr.appendChild(img);
 			tr.appendChild(td);
-			dojo.style(tr, "opacity", 0.9);
+			html.style(tr, "opacity", 0.9);
 			b.appendChild(tr);
 
 			a.appendChild(b);
@@ -839,7 +839,7 @@ define([
 	var oldMakeAvatar = dojo.dnd.manager().makeAvatar;
 	dojo.dnd.manager().makeAvatar = function(){
 		var src = this.source;
-		if(src.viewIndex !== undefined && !dojo.hasClass(win.body(),"dijit_a11y")){
+		if(src.viewIndex !== undefined && !html.hasClass(win.body(),"dijit_a11y")){
 			return new dojox.grid._GridAvatar(this);
 		}
 		return oldMakeAvatar.call(dojo.dnd.manager());

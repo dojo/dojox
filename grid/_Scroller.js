@@ -4,7 +4,7 @@ define([
 	"dojo/_base/lang",
 	"./util",
 	"dojo/_base/html"
-], function(dijit, declare, lang, util){
+], function(dijit, declare, lang, util, html){
 
 	var indexInParent = function(inNode){
 		var i=0, n, p=inNode.parentNode;
@@ -21,7 +21,7 @@ define([
 			return;
 		}
 		var filter = function(inW){
-			return inW.domNode && dojo.isDescendant(inW.domNode, inNode, true);
+			return inW.domNode && html.isDescendant(inW.domNode, inNode, true);
 		};
 		var ws = dijit.registry.filter(filter);
 		for(var i=0, w; (w=ws[i]); i++){
@@ -31,7 +31,7 @@ define([
 	};
 
 	var getTagName = function(inNodeOrId){
-		var node = dojo.byId(inNodeOrId);
+		var node = html.byId(inNodeOrId);
 		return (node && node.tagName ? node.tagName.toLowerCase() : '');
 	};
 	
@@ -223,7 +223,7 @@ define([
 			for(var i=0; i<this.colCount; i++){
 				var n = this.invalidatePageNode(inPageIndex, this.pageNodes[i]);
 				if(n){
-					dojo.destroy(n);
+					html.destroy(n);
 				}
 			}
 		},
@@ -327,7 +327,7 @@ define([
 		},
 		createPageNode: function(){
 			var p = document.createElement('div');
-			dojo.attr(p,"role","presentation");
+			html.attr(p,"role","presentation");
 			p.style.position = 'absolute';
 			//p.style.width = '100%';
 			p.style[this.grid.isLeftToRight() ? "left" : "right"] = '0';

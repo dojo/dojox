@@ -23,11 +23,12 @@ define([
 	"dojo/_base/sniff",
 	"dojox/html/metrics",
 	"dojo/_base/html",
+	"dojo/query",
 	"dojo/dnd/common",
 	"dojo/i18n!dijit/nls/loading"
 ], function(dojo, dojox, declare, _Events, _Scroller, _Layout, _View, _ViewManager,
 	_RowManager, _FocusManager, _EditManager, Selection, _RowSelector, util, _Widget,
-	 _TemplatedMixin, CheckedMenuItem, template, string, array, lang, has, metrics){
+	 _TemplatedMixin, CheckedMenuItem, template, string, array, lang, has, metrics, html, query){
 
 	// NOTE: this is for backwards compatibility with Dojo 1.3
 	if(!dojo.isCopyKey){
@@ -359,9 +360,9 @@ define([
 				this.domNode.setAttribute("aria-multiselectable", this.selectionMode == "single" ? "false" : "true");
 			}
 
-			dojo.addClass(this.domNode, this.classTag);
+			html.addClass(this.domNode, this.classTag);
 			if(!this.isLeftToRight()){
-				dojo.addClass(this.domNode, this.classTag+"Rtl");
+				html.addClass(this.domNode, this.classTag+"Rtl");
 			}
 		},
 		
@@ -389,7 +390,7 @@ define([
 			}
 			if (this.domNode && !this.editable){
 				// default value for aria-readonly is false, set to true if grid is not editable
-				dojo.attr(this.domNode,"aria-readonly", "true");
+				html.attr(this.domNode,"aria-readonly", "true");
 			}
 		},
 
@@ -523,7 +524,7 @@ define([
 			this.viewsNode.appendChild(view.domNode);
 			this.viewsHeaderNode.appendChild(view.headerNode);
 			this.views.addView(view);
-			dojo.attr(this.domNode, "align", this.isLeftToRight() ? 'left' : 'right');
+			html.attr(this.domNode, "align", this.isLeftToRight() ? 'left' : 'right');
 			return view;
 		},
 
@@ -696,7 +697,7 @@ define([
 		},
 
 		_getPadBorder: function() {
-			this._padBorder = this._padBorder || dojo._getPadBorderExtents(this.domNode);
+			this._padBorder = this._padBorder || html._getPadBorderExtents(this.domNode);
 			return this._padBorder;
 		},
 
@@ -745,17 +746,17 @@ define([
 				changeSize = resultSize;
 			}
 			if(!this._autoHeight && changeSize){
-				dojo.marginBox(this.domNode, changeSize);
+				html.marginBox(this.domNode, changeSize);
 				this.height = this.domNode.style.height;
 				delete this.fitTo;
 			}else if(this.fitTo == "parent"){
-				h = this._parentContentBoxHeight = this._parentContentBoxHeight || dojo._getContentBox(pn).h;
+				h = this._parentContentBoxHeight = this._parentContentBoxHeight || html._getContentBox(pn).h;
 				this.domNode.style.height = Math.max(0, h) + "px";
 			}
 			
 			var hasFlex = array.some(this.views.views, function(v){ return v.flexCells; });
 
-			if(!this._autoHeight && (h || dojo._getContentBox(this.domNode).h) === 0){
+			if(!this._autoHeight && (h || html._getContentBox(this.domNode).h) === 0){
 				// We need to hide the header, since the Grid is essentially hidden.
 				this.viewsHeaderNode.style.display = "none";
 			}else{
@@ -864,7 +865,7 @@ define([
 			this.postresize();
 			this.focus.initFocusView();
 			// make rows unselectable
-			dojo.setSelectable(this.domNode, this.selectable);
+			html.setSelectable(this.domNode, this.selectable);
 		},
 
 		postresize: function(){
@@ -1282,9 +1283,8 @@ define([
 	});
 
 	dojox.grid._Grid.markupFactory = function(props, node, ctor, cellFunc){
-		var d = dojo;
 		var widthFromAttr = function(n){
-			var w = d.attr(n, "width")||"auto";
+			var w = html.attr(n, "width")||"auto";
 			if((w != "auto")&&(w.slice(-2) != "em")&&(w.slice(-1) != "%")){
 				w = parseInt(w, 10)+"px";
 			}
@@ -1297,14 +1297,14 @@ define([
 			node.nodeName.toLowerCase() == "table"){
 
 			// try to discover a structure
-			props.structure = d.query("> colgroup", node).map(function(cg){
-				var sv = d.attr(cg, "span");
+			props.structure = query("> colgroup", node).map(function(cg){
+				var sv = html.attr(cg, "span");
 				var v = {
-					noscroll: (d.attr(cg, "noscroll") == "true") ? true : false,
+					noscroll: (html.attr(cg, "noscroll") == "true") ? true : false,
 					__span: (!!sv ? parseInt(sv, 10) : 1),
 					cells: []
 				};
-				if(d.hasAttr(cg, "width")){
+				if(html.hasAttr(cg, "width")){
 					v.width = widthFromAttr(cg);
 				}
 				return v; // for vendetta
@@ -1318,12 +1318,12 @@ define([
 			// check to see if we're gonna have more than one view
 
 			// for each tr in our th, create a row of cells
-			d.query("thead > tr", node).forEach(function(tr, tr_idx){
+			query("thead > tr", node).forEach(function(tr, tr_idx){
 				var cellCount = 0;
 				var viewIdx = 0;
 				var lastViewIdx;
 				var cView = null;
-				d.query("> th", tr).map(function(th){
+				query("> th", tr).map(function(th){
 					// what view will this cell go into?
 
 					// NOTE:
@@ -1346,24 +1346,24 @@ define([
 
 					// actually define the cell from what markup hands us
 					var cell = {
-						name: d.trim(d.attr(th, "name")||th.innerHTML),
-						colSpan: parseInt(d.attr(th, "colspan")||1, 10),
-						type: d.trim(d.attr(th, "cellType")||""),
-						id: d.trim(d.attr(th,"id")||"")
+						name: lang.trim(html.attr(th, "name")||th.innerHTML),
+						colSpan: parseInt(html.attr(th, "colspan")||1, 10),
+						type: lang.trim(html.attr(th, "cellType")||""),
+						id: lang.trim(html.attr(th,"id")||"")
 					};
 					cellCount += cell.colSpan;
-					var rowSpan = d.attr(th, "rowspan");
+					var rowSpan = html.attr(th, "rowspan");
 					if(rowSpan){
 						cell.rowSpan = rowSpan;
 					}
-					if(d.hasAttr(th, "width")){
+					if(html.hasAttr(th, "width")){
 						cell.width = widthFromAttr(th);
 					}
-					if(d.hasAttr(th, "relWidth")){
-						cell.relWidth = window.parseInt(dojo.attr(th, "relWidth"), 10);
+					if(html.hasAttr(th, "relWidth")){
+						cell.relWidth = window.parseInt(html.attr(th, "relWidth"), 10);
 					}
-					if(d.hasAttr(th, "hidden")){
-						cell.hidden = (d.attr(th, "hidden") == "true" || d.attr(th, "hidden") === true/*always boolean true in Chrome*/);
+					if(html.hasAttr(th, "hidden")){
+						cell.hidden = (html.attr(th, "hidden") == "true" || html.attr(th, "hidden") === true/*always boolean true in Chrome*/);
 					}
 
 					if(cellFunc){
