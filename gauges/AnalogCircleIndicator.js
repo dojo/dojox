@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","./AnalogIndicatorBase"],function(dojo,ddeclare,AnalogIndicatorBase) { 
-dojo.experimental("dojox.gauges.AnalogCircleIndicator");
+define(["dojo/_base/declare","./AnalogIndicatorBase"],
+  function(declare, AnalogIndicatorBase) { 
 
-return dojo.declare("dojox.gauges.AnalogCircleIndicator", [AnalogIndicatorBase], {
+return declare("dojox.gauges.AnalogCircleIndicator", [AnalogIndicatorBase], {
 	// summary:
 	//		An indicator for the AnalogGauge that draws a circle. The center of the circle is positionned
 	//   on the circular gauge according to the value of the indicator. The circle has for radius the 

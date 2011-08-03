@@ -1,9 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang","./BarLineIndicator"],
-function(dojo,ddeclare,dfx,dconnect,lang,BarLineIndicator) { 
+define(["dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang","./BarLineIndicator"],
+  function(declare, fx, Connect, lang, BarLineIndicator) { 
 
-dojo.experimental("dojox.gauges.BarIndicator");
-
-return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
+return declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
 	
 	// summary:
 	//		An indicator for the BarGauge that draws a bar corresponding to the indicator value.	
@@ -67,8 +65,8 @@ return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
 			this._createShapes(v);
 		}else{
 			if(c!=v){
-				var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createShapes));
+				var anim = new fx.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+				Connect.connect(anim, "onAnimate", lang.hitch(this, this._createShapes));
 				anim.play();
 			}
 		}

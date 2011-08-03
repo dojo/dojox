@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojox/gfx","./AnalogGauge","./AnalogCircleIndicator","./TextIndicator","./GlossyCircularGaugeNeedle"],
-function(dojo,ddeclare,dlang,dconnect,gfx,AnalogGauge,AnalogCircleIndicator,TextIndicator,GlossyCircularGaugeNeedle) {
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojox/gfx","./AnalogGauge","./AnalogCircleIndicator","./TextIndicator","./GlossyCircularGaugeNeedle"],
+function(declare, lang, Connect, gfx, AnalogGauge, AnalogCircleIndicator, TextIndicator, GlossyCircularGaugeNeedle) {
 
-return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
+return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	// summary:
 	//	The base class for GlossyCircularGauge and GlossySemiCircularGauge.
 	
@@ -185,7 +185,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 		}
 		
 		// connect needle and text
-		dojo.connect(this._needle, "valueChanged", dojo.hitch(this, function(){
+		Connect.connect(this._needle, "valueChanged", lang.hitch(this, function(){
 			this.value = this._needle.value;
 			this._textIndicator.update(this._needle.value);
 			this.onValueChanged();
@@ -323,7 +323,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	
 	_setMajorTicksProperty: function(prop){
 		if (this.majorTicks){
-			dojo.mixin(this.majorTicks, prop);
+			lang.mixin(this.majorTicks, prop);
 			this.setMajorTicks(this.majorTicks);
 		}
 	},
@@ -380,7 +380,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	
 	_setMinorTicksProperty: function(prop){
 		if (this.minorTicks){
-			dojo.mixin(this.minorTicks, prop);
+			lang.mixin(this.minorTicks, prop);
 			this.setMinorTicks(this.minorTicks);
 		}
 	},
@@ -533,7 +533,5 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 		this._setMajorTicksProperty({
 			'font': this._font
 		});
-	}
-	
-});
+	}});
 });

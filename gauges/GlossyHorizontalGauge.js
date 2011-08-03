@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/Color","dojox/gfx","./BarGauge","./BarCircleIndicator","./GlossyHorizontalGaugeMarker"],
-function(dojo,ddeclare,dconnect,dlang,dcolor,gfx,BarGauge,BarCircleIndicator,GlossyHorizontalGaugeMarker) {
+define(["dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/Color","dojo/number","dojox/gfx","./BarGauge","./BarCircleIndicator","./GlossyHorizontalGaugeMarker"],
+  function(declare, Connect, lang, Color, NumberUtils, gfx, BarGauge, BarCircleIndicator, GlossyHorizontalGaugeMarker) {
 
-return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
+return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	// summary:
 	//		Represents an horizontal bar gauge with a glossy appearance.
 	// example:
@@ -152,7 +152,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		});
 		this.addIndicator(this._needle);
 		
-		dojo.connect(this._needle, "valueChanged", dojo.hitch(this, function(){
+		Connect.connect(this._needle, "valueChanged", lang.hitch(this, function(){
 			this.value = this._needle.value;
 			this.onValueChanged();
 		}));
@@ -195,8 +195,8 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	
 	_formatNumber: function(val){
 	
-		if (dojo.number) // use internationalization if loaded
-			return dojo.number.format(val, {
+		if (NumberUtils.number) // use internationalization if loaded
+			return NumberUtils.number.format(val, {
 				places: this.scalePrecision
 			})
 		
@@ -247,7 +247,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 			return this._gaugeBackground;
 		}
 		
-		var lighterColor = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4);
+		var lighterColor = Color.blendColors(new Color(this.color), new Color('white'), 0.4);
 		this._gaugeBackground = group.createGroup();
 		var scale = this.height / this._designHeight;
 		var borderWidth = this._getBorderWidth();
@@ -350,7 +350,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 				color: lighterColor
 			}, {
 				offset: 1,
-				color: dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.2)
+				color: Color.blendColors(new Color(this.color), new Color('white'), 0.2)
 			}]
 		});
 	},
@@ -429,7 +429,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		if (this.majorTicks == null){
 			return;
 		}
-		dojo.mixin(this.majorTicks, prop);
+		lang.mixin(this.majorTicks, prop);
 		this.setMajorTicks(this.majorTicks);
 	},
 	
@@ -469,7 +469,7 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		if (this.minorTicks == null){
 			return;
 		}
-		dojo.mixin(this.minorTicks, prop);
+		lang.mixin(this.minorTicks, prop);
 		this.setMinorTicks(this.minorTicks);
 	},
 	

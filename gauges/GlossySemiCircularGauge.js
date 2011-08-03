@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],function(dojo,ddeclare,dcolor,GlossyCircularGaugeBase) {
+define(["dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],
+  function(declare, Color, GlossyCircularGaugeBase) {
 
-return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGaugeBase], {
+return declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a semi circular gauge with a glossy appearance.
 	// example:
@@ -51,8 +52,8 @@ return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGauge
 		//		Draws the background of the gauge
 		// group: dojox.gfx.Group
 		//		The GFX group where the background must be drawn
-		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4);
-		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8);
+		var lighterColor1 = Color.blendColors(new Color(this.color), new Color('white'), 0.4);
+		var lighterColor2 = Color.blendColors(new Color(this.color), new Color('white'), 0.8);
 		
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		var transform = {
@@ -156,8 +157,8 @@ return dojo.declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGauge
 			dy: (-264.5) * scale + (this.height - scale * this._designHeight) / 2
 		};
 		
-		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4);
-		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8);
+		var lighterColor1 = Color.blendColors(new Color(this.color), new Color('white'), 0.4);
+		var lighterColor2 = Color.blendColors(new Color(this.color), new Color('white'), 0.8);
 		
 		if (this._foreground) {
 			this._foreground.setTransform(transform);

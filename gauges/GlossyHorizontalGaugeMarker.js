@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color","./BarLineIndicator"],function(dojo,ddeclare,dcolor,BarLineIndicator) {
+define(["dojo/_base/declare","dojo/_base/Color","./BarLineIndicator"],
+  function(declare, Color, BarLineIndicator) {
 
-return dojo.declare("dojox.gauges.GlossyHorizontalGaugeMarker", [BarLineIndicator], {
+return declare("dojox.gauges.GlossyHorizontalGaugeMarker", [BarLineIndicator], {
 	// summary:
 	//		The marker for the dojox.gauges.GlossyHorizontalGauge.
 	// description:
@@ -37,10 +38,10 @@ return dojo.declare("dojox.gauges.GlossyHorizontalGaugeMarker", [BarLineIndicato
 		var pos = this._gauge._getPosition(v);
 		var shapes = [];
 		
-		var color = new dojo.Color(this.color);
+		var color = new Color(this.color);
 		color.a = .67;
 		
-		var lighterColor = dojo.blendColors(color, new dojo.Color('white'), 0.4);
+		var lighterColor = Color.blendColors(color, new Color('white'), 0.4);
 		
 		var top = shapes[0] = group.createGroup();
 		var scale = this._gauge.height / 100;

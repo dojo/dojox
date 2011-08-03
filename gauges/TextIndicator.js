@@ -1,8 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","./_Indicator"],function(dojo,ddeclare,_Indicator) { 
+define(["dojo/_base/declare","dojo/number","./_Indicator"],
+  function(declare, NumberUtils, Indicator) { 
 
-dojo.experimental("dojox.gauges.TextIndicator");
-
-return dojo.declare("dojox.gauges.TextIndicator", [_Indicator], {
+return declare("dojox.gauges.TextIndicator", [Indicator], {
 	// summary:
 	//		A gauge indicator the simply draws its value as text.
 	
@@ -40,10 +39,10 @@ return dojo.declare("dojox.gauges.TextIndicator", [_Indicator], {
 		}
 		var txt;
 		
-		if (dojo.number) {
-			txt = this.fixedPrecision ? dojo.number.format(v, {
+		if (NumberUtils.number) {
+			txt = this.fixedPrecision ? NumberUtils.number.format(v, {
 				places: this.precision
-			}) : dojo.number.format(v);
+			}) : NumberUtils.number.format(v);
 		} else {
 			txt = this.fixedPrecision ? v.toFixed(this.precision) : v.toString();
 		}

@@ -1,5 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],function(dojo,ddeclare, dcolor,GlossyCircularGaugeBase) {
-return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
+define(["dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],
+  function(declare, Color, GlossyCircularGaugeBase) {
+
+return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a circular gauge with a glossy appearance.
 	// example:
@@ -61,8 +63,8 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 
 		};
 		
-		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4 );
-		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8 );		
+		var lighterColor1 = Color.blendColors(new Color(this.color), new Color('white'), 0.4 );
+		var lighterColor2 = Color.blendColors(new Color(this.color), new Color('white'), 0.8 );		
 		
 		
 		if (this._gaugeBackground){
@@ -154,8 +156,8 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 				dy: (-263.5) * scale + (this.height - scale * this._designHeight) / 2
 		};
 		
-		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4 );
-		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8 );		
+		var lighterColor1 = Color.blendColors(new Color(this.color), new Color('white'), 0.4 );
+		var lighterColor2 = Color.blendColors(new Color(this.color), new Color('white'), 0.8 );		
 				
 		if (this._foreground){
 			this._foreground.setTransform(transform);

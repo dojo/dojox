@@ -1,8 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","./AnalogIndicatorBase"],function(dojo,ddeclare,AnalogIndicatorBase) { 
+define(["dojo/_base/declare","./AnalogIndicatorBase"],
+  function(declare, AnalogIndicatorBase) { 
 
-dojo.experimental("dojox.gauges.AnalogNeedleIndicator");
-
-return dojo.declare("dojox.gauges.AnalogNeedleIndicator",[AnalogIndicatorBase],{
+return declare("dojox.gauges.AnalogNeedleIndicator", [AnalogIndicatorBase], {
 	// summary:
 	//		An indicator for the AnalogGauge that draws a needle. The needle is drawn on the angle that corresponds
 	// to the value of the indicator.

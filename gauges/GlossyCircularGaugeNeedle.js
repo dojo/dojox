@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color" ,"./AnalogIndicatorBase"],
-function(dojo,ddeclare,dcolor,AnalogIndicatorBase) {
+define(["dojo/_base/declare","dojo/_base/Color" ,"./AnalogIndicatorBase"],
+  function(declare, Color, AnalogIndicatorBase) {
  
-return dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBase], {
+return declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBase], {
 	// summary:
 	//		The needle for the dojox.gauges.GlossyCircularGauge and
 	//      dojox.gauges.GlossySemiCircularGauge.
@@ -21,7 +21,7 @@ return dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBa
 		// summary:
 		//		Overrides AnalogIndicatorBase._getShapes
 		
-		var darkerColor = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('black'), 0.3);
+		var darkerColor = Color.blendColors(new Color(this.color), new Color('black'), 0.3);
 		
 		if (!this._gauge) 
 			return null;

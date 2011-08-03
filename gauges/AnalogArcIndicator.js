@@ -1,9 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojo/_base/fx","./AnalogIndicatorBase"],
-function(dojo,ddeclare,dlang,dconnect,dfx,AnalogIndicatorBase) { 
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojo/_base/fx","./AnalogIndicatorBase"],
+function(declare, lang, Connect, fx, AnalogIndicatorBase) { 
 
-dojo.experimental("dojox.gauges.AnalogArcIndicator");
-
-return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
+return declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 	
 	// summary:
 	//		An indicator for the AnalogGauge that draws a segment of arc.
@@ -65,8 +63,8 @@ return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 			if(dontAnimate){
 				this._createArc(v);
 			}else{
-				var anim = new dojo.Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
-				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createArc));
+				var anim = new fx.Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
+				Connect.connect(anim, "onAnimate", lang.hitch(this, this._createArc));
 				anim.play();
 			}
 		}else{
@@ -82,7 +80,6 @@ return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 			this.shape.connect("onmouseout", this,  this.handleMouseOut);
 			this.shape.connect("onmousedown", this, this.handleMouseDown);
 			this.shape.connect("touchstart", this, this.handleTouchStart);
-
 		}
 	}
 });

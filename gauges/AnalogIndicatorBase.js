@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/connect","dojo/_base/fx","dojox/gfx","./_Indicator"],
-function(dojo,lang,ddeclare,dconnect,dfx,gfx,_Indicator) {
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/connect","dojo/_base/fx","dojox/gfx","./_Indicator"],
+  function(lang, declare, Connect, fx, gfx, Indicator) {
  
-return dojo.declare("dojox.gauges.AnalogIndicatorBase",[_Indicator],{
+return declare("dojox.gauges.AnalogIndicatorBase",[Indicator],{
 		//	summary:
 		//		An abstract base class for indicators that can be used in an AnalogGauge.
 		//
@@ -183,8 +183,8 @@ return dojo.declare("dojox.gauges.AnalogIndicatorBase",[_Indicator],{
 			this.currentValue = v;
 		}else{
 			if(c!=v){
-				var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-				dojo.connect(anim, "onAnimate", dojo.hitch(this, function(step){
+				var anim = new fx.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+				Connect.connect(anim, "onAnimate", lang.hitch(this, function(step){
 				this.shape.setTransform([{dx:this._gauge.cx,dy:this._gauge.cy}, gfx.matrix.rotateg(this._gauge._getAngle(step))]);
 					
 				this.currentValue = step;

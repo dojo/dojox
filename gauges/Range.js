@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dijit/_Widget"], function(dojo,declare,_Widget) {
+define(["dojo/_base/declare","dijit/_Widget"], 
+  function(declare, Widget) {
 	
-return dojo.declare("dojox.gauges.Range",[_Widget],{
+return declare("dojox.gauges.Range", [Widget], {
 	// summary:
 	//		a range to be used in a _Gauge
 	//
@@ -9,8 +10,7 @@ return dojo.declare("dojox.gauges.Range",[_Widget],{
 	//
 	// usage:
 	//		<script type="text/javascript">
-	//			dojo.require("dojox.gauges.AnalogGauge");
-	//			dojo.require("dijit.util.parser");
+	//			require(["dojox/gauges/AnalogGauge"]);
 	//		</script>
 	//		...
 	//		<div	dojoType="dojox.gauges.AnalogGauge"

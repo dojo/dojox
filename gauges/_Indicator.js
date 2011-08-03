@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang","dojo/_base/declare","dojo/_base/fx","dojo/_base/html","dojo/_base/connect","dijit/_Widget"], 
-function(dojo,dlang,ddeclare,dfx,dhml,dconnect,_Widget) {
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/fx","dojo/_base/html","dojo/_base/connect","dijit/_Widget","dojo/dom-construct", "dojo/dom-class"], 
+function(lang,declare,fx,html,Connect,Widget,DOM,DOMClass) {
 
-return dojo.declare("dojox.gauges._Indicator",[_Widget],{
+return declare("dojox.gauges._Indicator",[Widget],{
 	// summary:
 	//		a indicator to be used in a gauge
 	//
@@ -10,8 +10,7 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 	//
 	// usage:
 	//		<script type="text/javascript">
-	//			dojo.require("dojox.gauges.AnalogGauge");
-	//			dojo.require("dijit.util.parser");
+	//			require(["dojox/gauges/AnalogGauge","dojox/gauges/Indicator"]);
 	//		</script>
 	//		...
 	//		<div	dojoType="dojox.gauges.AnalogGauge"
@@ -91,7 +90,7 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 
 	// easing: String|Object
 	// indicates the easing function to be used when animating the of an indicator.
-	easing: dojo._defaultEasing,
+	easing: fx._defaultEasing,
 
 	// duration: Number
 	// indicates how long an animation of the indicator should take
@@ -123,7 +122,7 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 
 	startup: function(){
 		if(this.onDragMove){
-			this.onDragMove = dojo.hitch(this.onDragMove);
+			this.onDragMove = lang.hitch(this.onDragMove);
 		}
 		if (this.strokeColor === ""){
 			this.strokeColor = undefined;
@@ -132,10 +131,10 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 
 	postCreate: function(){
 		if(this.title === ""){
-			dojo.style(this.domNode, "display", "none");
+			html.style(this.domNode, "display", "none");
 		}
-		if(dojo.isString(this.easing)){
-			this.easing = dojo.getObject(this.easing);
+		if(lang.isString(this.easing)){
+			this.easing = lang.getObject(this.easing);
 		}
 	},
 		
@@ -143,19 +142,19 @@ return dojo.declare("dojox.gauges._Indicator",[_Widget],{
 		// summary: 
 		//		Overrides _Widget.buildRendering
 		
-		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: dojo.create("div");
-		dojo.addClass(n, "dojoxGaugeIndicatorDiv");
-		var title = dojo.create("label");
+		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: DOM.create("div");
+		DOMClass.add(n, "dojoxGaugeIndicatorDiv");
+		var title = DOM.create("label");
 		if (this.title) title.innerHTML = this.title + ":";
-		dojo.place(title, n);
-		this.valueNode = dojo.create("input", {
+		DOM.place(title, n);
+		this.valueNode = DOM.create("input", {
 			className: "dojoxGaugeIndicatorInput",
 			size: 5,
 			value: this.value
 		});
 		
-		dojo.place(this.valueNode, n);
-		dojo.connect(this.valueNode, "onchange", this, this._update);
+		DOM.place(this.valueNode, n);
+		Connect.connect(this.valueNode, "onchange", this, this._update);
 	},
 	
 	_update: function(){

@@ -1,8 +1,9 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/array","dojo/_base/lang","dojo/_base/html","dojo/_base/event","./_Gauge","dojox/gfx" ,"./AnalogLineIndicator"],
-function(dojo,ddeclare,darray,dlang,dhtml,devent,_Gauge,gfx,AnalogLineIndicator) {
-dojo.experimental("dojox.gauges.AnalogGauge");
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/array","dojo/_base/lang","dojo/_base/html","dojo/_base/event",
+		"dojox/gfx", "./_Gauge","./AnalogLineIndicator", "dojo/dom-geometry"],
+  function(dojo, declare, arr, lang, html, Event, 
+  		   gfx, Gauge, AnalogLineIndicator, DOMGeometry) {
 
-return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
+return declare("dojox.gauges.AnalogGauge",Gauge,{
 	// summary:
 	//		a gauge built using the dojox.gfx package.
 	//
@@ -12,8 +13,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 	//
 	// usage:
 	//		<script type="text/javascript">
-	//			dojo.require("dojox.gauges.AnalogGauge");
-	//			dojo.require("dijit.util.parser");
+	//			require(["dojox/gauges/AnalogGauge"]);
 	//		</script>
 	//		...
 	//		<div	dojoType="dojox.gauges.AnalogGauge"
@@ -65,7 +65,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		// also connects mouse handling events
 
 		if(this.getChildren){
-			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+			arr.forEach(this.getChildren(), function(child){ child.startup(); });
 		}
 
 		this.startAngle = Number(this.startAngle);
@@ -277,7 +277,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 			path.closePath();
 		}
 
-		if(dojo.isArray(range.color) || dojo.isString(range.color)){
+		if(lang.isArray(range.color) || lang.isString(range.color)){
 			path.setStroke({color: range.color});
 			path.setFill(range.color);
 		}else if(range.color.type){
@@ -297,9 +297,8 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 			path.getEventSource().setAttribute("class", range.color.style);
 		}
 		
-		path.connect("onmouseover", dojo.hitch(this, this._handleMouseOverRange, range));
-	    path.connect("onmouseout", dojo.hitch(this, this._handleMouseOutRange, range));
-			
+		path.connect("onmouseover", lang.hitch(this, this._handleMouseOverRange, range));
+	    path.connect("onmouseout", lang.hitch(this, this._handleMouseOutRange, range));
 	
 		range.shape = path;
 	},
@@ -310,7 +309,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		// event:	Object
 		//			The event object as received by the mouse handling functions below.
 		var range = null,
-			pos = dojo.coords(this.gaugeContent),
+			pos = DOMGeometry.getContentBox(this.gaugeContent),
 			x = event.clientX - pos.x,
 			y = event.clientY - pos.y,
 			r = Math.sqrt((y - this.cy)*(y - this.cy) + (x - this.cx)*(x - this.cx))
@@ -336,14 +335,14 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		//      Handles the dragging of an indicator to the event position, including moving/re-drawing
 		// get angle for mouse position
         this._dragIndicatorAt(widget, event.pageX, event.pageY);
-        dojo.stopEvent(event);
+        Event.stop(event);
 	},
 		
 	_dragIndicatorAt: function(/*Object*/ widget, x,y){
 		// summary:
 		// Handles the dragging of an indicator to a specific position, including moving/re-drawing
 		// get angle for mouse position
-		var pos = dojo.position(widget.gaugeContent, true),
+		var pos = DOMGeometry.position(widget.gaugeContent, true),
 			xf = x - pos.x,
 			yf = y - pos.y,
 			angle = widget._getDegrees(Math.atan2(yf - widget.cy, xf - widget.cx) + Math.PI/2);

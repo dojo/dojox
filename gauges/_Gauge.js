@@ -1,9 +1,8 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/event","dojo/_base/connect", "dijit", "dijit/_Widget", "dojox/gfx", "dojo/fx/easing", "./Range"], 
-function(dojo,ddeclare,dlang,dhtml,devent,dconnect,dijit,_Widget,gfx,easing,range) { 
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/array","dojo/_base/event",
+		"dojo/_base/connect","dojo/dom-construct", "dijit/Tooltip","dijit/_Widget", "dojox/gfx", "dojo/number", "./Range", "dojo/fx/easing"], 
+  function( declare, lang, html, arr, Event, Connect, DOM, Tooltip, Widget, gfx, NumberUtils, Range, Easing) { 
 
-dojo.experimental("dojox.gauges._Gauge");
-
-return dojo.declare("dojox.gauges._Gauge",[_Widget],{
+return declare("dojox.gauges._Gauge",[Widget],{
 	// summary:
 	//		a gauge built using the dojox.gfx package.
 	//
@@ -127,8 +126,8 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		this.connect(this.gaugeContent, 'touchend', this.handleTouchEnd);
 		this.connect(this.gaugeContent, 'touchmove', this.handleTouchMove);	
 
-		if(!dojo.isArray(this.ranges)){ this.ranges = []; }
-		if(!dojo.isArray(this.indicators)){ this.indicators = []; }
+		if(!lang.isArray(this.ranges)){ this.ranges = []; }
+		if(!lang.isArray(this.indicators)){ this.indicators = []; }
 		var ranges = [], indicators = [];
 		var i;
 		if(this.hasChildren()){
@@ -175,25 +174,25 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	buildRendering: function(){
 		// summary: 
 		//		Overrides _Widget.buildRendering
-		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: dojo.create("div");
-		this.gaugeContent = dojo.create("div", {
+		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: DOM.create("div");
+		this.gaugeContent = DOM.create("div", {
 			className: "dojoxGaugeContent"
 		});
-		this.containerNode = dojo.create("div");
-		this.mouseNode = dojo.create("div");
+		this.containerNode = DOM.create("div");
+		this.mouseNode = DOM.create("div");
 		while(n.hasChildNodes()){
 			this.containerNode.appendChild(n.firstChild);
 		}
-		dojo.place(this.gaugeContent, n);
-		dojo.place(this.containerNode, n);
-		dojo.place(this.mouseNode, n);
+		DOM.place(this.gaugeContent, n);
+		DOM.place(this.containerNode, n);
+		DOM.place(this.mouseNode, n);
 	},
 
 	_setTicks: function(/*Object*/ oldTicks, /*Object*/ newTicks, /*Boolean*/ major){
 		// summary: 
 		//		internal method used to clear existing tick marks, then add new ones
 		var i;
-		if (oldTicks && dojo.isArray(oldTicks._ticks)){
+		if (oldTicks && lang.isArray(oldTicks._ticks)){
 			for (i = 0; i < oldTicks._ticks.length; i++){
 				this._removeScaleTick(oldTicks._ticks[i]);
 			}
@@ -217,10 +216,10 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 			if (i==this.max&&this._isScaleCircular()) continue; // do not draw last tick on fully circular gauges
 			t.value=i;
 			if (major){
-				if (dojo.number){ // use internationalization if loaded
-					t.label = (newTicks.fixedPrecision && newTicks.precision) ? dojo.number.format(i, {
+				if (NumberUtils.number){ // use internationalization if loaded
+					t.label = (newTicks.fixedPrecision && newTicks.precision) ? NumberUtils.number.format(i, {
 						places: newTicks.precision
-					}): dojo.number.format(i);
+					}): NumberUtils.number.format(i);
 				}else{
 					t.label = (newTicks.fixedPrecision && newTicks.precision) ? i.toFixed(newTicks.precision): i.toString();
 				}
@@ -252,15 +251,15 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 
 	postCreate: function(){
 		if(this.hideValues){
-			dojo.style(this.containerNode, "display", "none");
+			html.style(this.containerNode, "display", "none");
 		}
-		dojo.style(this.mouseNode, 'width', '0');
-		dojo.style(this.mouseNode, 'height', '0');
-		dojo.style(this.mouseNode, 'position', 'absolute');
-		dojo.style(this.mouseNode, 'z-index', '100');
-		if(dijit.Tooltip && this.useTooltip){
-			dijit.showTooltip('test',this.mouseNode, !this.isLeftToRight());
-			dijit.hideTooltip(this.mouseNode);
+		html.style(this.mouseNode, 'width', '0');
+		html.style(this.mouseNode, 'height', '0');
+		html.style(this.mouseNode, 'position', 'absolute');
+		html.style(this.mouseNode, 'z-index', '100');
+		if(Tooltip && this.useTooltip){
+			Tooltip.show('test',this.mouseNode, !this.isLeftToRight());
+			Tooltip.hide(this.mouseNode);
 		}
 	},
 
@@ -554,14 +553,14 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// txt:		String
 		//			The text to put in the tooltip.
 		
-		if (!dijit.Tooltip) return;
+		if (!Tooltip) return;
 		
 		if(this._lastHover != txt){
 			if(txt !== ''){ 
-				dijit.hideTooltip(this.mouseNode);
-				dijit.showTooltip(txt,this.mouseNode, !this.isLeftToRight());
+				Tooltip.hide(this.mouseNode);
+				Tooltip.show(txt,this.mouseNode, !this.isLeftToRight());
 			}else{
-				dijit.hideTooltip(this.mouseNode);
+				Tooltip.hide(this.mouseNode);
 			}
 			this._lastHover = txt;
 		}
@@ -583,7 +582,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 					hover = r.hover;
 				}
 				
-				if (dijit.Tooltip && this.useTooltip && !this._drag){
+				if (Tooltip && this.useTooltip && !this._drag){
 					if (hover){
 						this.updateTooltip(hover, event);
 					} else {
@@ -603,8 +602,8 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 
 		this._overOverlay = false;
 		
-		if(dijit.Tooltip && this.useTooltip && this.mouseNode){
-			dijit.hideTooltip(this.mouseNode);
+		if(Tooltip && this.useTooltip && this.mouseNode){
+			Tooltip.hide(this.mouseNode);
 		}
 	},
 
@@ -616,10 +615,10 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//			The event object
 		
 		
-		if (dijit.Tooltip){
+		if (Tooltip){
 			if (event){
-				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
-				dojo.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
+				html.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
+				html.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
 			}
 			if (this.useTooltip && this._overOverlay){
 				var r = this.getRangeUnderMouse(event);
@@ -653,7 +652,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		
 		if(this._drag){
 			this._dragIndicator(this, event);
-			dojo.stopEvent(event);
+			Event.stop(event);
 		}
 	},
 	
@@ -666,10 +665,10 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		this._drag = null;
 		
 		for (var i = 0 ; i < this._mouseListeners.length; i++){
-			dojo.disconnect(this._mouseListeners[i]);
+			Connect.disconnect(this._mouseListeners[i]);
 		}
 		this._mouseListeners = [];
-		dojo.stopEvent(event);
+		Event.stop(event);
 	},
 	
 	_handleMouseDownIndicator: function (indicator, event){
@@ -684,12 +683,12 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		if (!indicator.noChange){
 			if (!this._mouseListeners) this._mouseListeners = [];
 			this._drag = indicator;
-			this._mouseListeners.push(dojo.connect(document, "onmouseup", this, this._handleDragInteractionMouseUp));
-			this._mouseListeners.push(dojo.connect(document, "onmousemove", this, this._handleDragInteractionMouseMove));
-			this._mouseListeners.push(dojo.connect(document, "ondragstart", this, dojo.stopEvent));
-			this._mouseListeners.push(dojo.connect(document, "onselectstart", this, dojo.stopEvent));
+			this._mouseListeners.push(Connect.connect(document, "onmouseup", this, this._handleDragInteractionMouseUp));
+			this._mouseListeners.push(Connect.connect(document, "onmousemove", this, this._handleDragInteractionMouseMove));
+			this._mouseListeners.push(Connect.connect(document, "ondragstart", this, Event.stop));
+			this._mouseListeners.push(Connect.connect(document, "onselectstart", this, Event.stop));
 			this._dragIndicator(this, event);
-			dojo.stopEvent(event);
+			Event.stop(event);
 		}
 	},
 	
@@ -702,11 +701,11 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// event:	Object
 		//			The event object
 		
-		if (dijit.Tooltip && this.useTooltip && !this._drag){
+		if (Tooltip && this.useTooltip && !this._drag){
 			if (indicator.hover){
-				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
-				dojo.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
-				dijit.showTooltip(indicator.hover, this.mouseNode, !this.isLeftToRight());
+				html.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
+				html.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
+				Tooltip.show(indicator.hover, this.mouseNode, !this.isLeftToRight());
 			} else {
 				this.updateTooltip('', event);
 			}
@@ -725,25 +724,25 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//           The indicator object
 		// event:	Object
 		//			The event object
-		if(dijit.Tooltip && this.useTooltip && this.mouseNode){
-			dijit.hideTooltip(this.mouseNode);
+		if(Tooltip && this.useTooltip && this.mouseNode){
+			Tooltip.hide(this.mouseNode);
 		}
 		this.gaugeContent.style.cursor = 'pointer';
 		
 	},
 	
 	_handleMouseOutRange: function ( range, event){
-		if (dijit.Tooltip && this.useTooltip && this.mouseNode){
-			dijit.hideTooltip(this.mouseNode);
+		if (Tooltip && this.useTooltip && this.mouseNode){
+			Tooltip.hide(this.mouseNode);
 		}
 	},
 	
 	_handleMouseOverRange: function (range, event){
-		if (dijit.Tooltip && this.useTooltip && !this._drag){
+		if (Tooltip && this.useTooltip && !this._drag){
 			if (range.hover){
-				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
-				dojo.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
-				dijit.showTooltip(range.hover, this.mouseNode, !this.isLeftToRight());
+				html.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
+				html.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
+				Tooltip.show(range.hover, this.mouseNode, !this.isLeftToRight());
 			} else {
 				this.updateTooltip('', event);
 			}
@@ -760,7 +759,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//			The event object
 		if (!indicator.noChange){
 			this._drag = indicator;
-			dojo.stopEvent(event);
+			Event.stop(event);
 		}
 	},
 		
@@ -782,7 +781,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//			The touch event object	
 		if (this._drag){
 			this._drag = null;
-			dojo.stopEvent(event);
+			Event.stop(event);
 		}
 	},	
     
@@ -797,7 +796,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 			var touches = event.touches;
 			var firstTouch = touches[0];
 			this._dragIndicatorAt(this, firstTouch.pageX, firstTouch.pageY);
-			dojo.stopEvent(event);
+			Event.stop(event);
 		}
 	},
     
