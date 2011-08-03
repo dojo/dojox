@@ -1,6 +1,18 @@
-define("dojox/editor/plugins/LocalImage", ["dojo", "dijit", "dojox", "dijit/_base/popup", "dijit/_editor/plugins/LinkDialog", "dijit/form/Button", "dijit/form/DropDownButton", "dojox/form/FileUploader", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/LocalImage"], function(dojo, dijit, dojox) {
+define([
+	"dojo",//FIXME
+	"dijit",//FIXME
+	"dojo/_base/sniff",
+	"dijit/_base/popup",
+	"dijit/_editor/plugins/LinkDialog", // FIXME: ImgLinkDialog is not a separate module
+	"dijit/TooltipDialog", // FIXME: ImgLinkDialog is not a separate module
+	"dijit/form/Button",
+	"dijit/form/ValidationTextBox",
+	"dijit/form/DropDownButton",
+	"dojox/form/FileUploader", //FIXME: deprecated.  Use Uploader instead
+	"dojo/i18n!dojox/editor/plugins/nls/LocalImage"
+], function(dojo, dijit, has, popup, LinkDialog, TooltipDialog, Button, ValidationTextBox, DropDownButton, FileUploader, messages) {
 
-dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDialog, {
+var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDialog, {
 	// summary:
 	//		This plugin provides an enhanced image link dialog that
 	//		not only insert the online images, but upload the local image files onto
@@ -41,11 +53,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 	//		Used to validate if the input is a valid image URL.
 	urlRegExp: "",
 	
-	// _fileUploader [private] dojox.form.FileUploader
-	//		The component to upload the local image file onto the server
-	_fileUploader: null,
-	
-	// _fileUploader [private] htmlFieldName
+	// htmlFieldName [private] htmlFieldName
 	htmlFieldName:"uploadedfile",
 	
 	// _isLocalFile [private] Boolean
@@ -98,16 +106,15 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		//		Override _Plugin._initButton() to initialize DropDownButton and TooltipDialog.
 		// tags:
 		//		protected
-		var _this = this,
-			messages = (this._messages = dojo.i18n.getLocalization("dojox.editor.plugins", "LocalImage"));
-		
+	    	var _this = this;
+		this._messages = messages;
 		this.tag = "img";
-		var dropDown = (this.dropDown = new dijit.TooltipDialog({
+		var dropDown = (this.dropDown = new TooltipDialog({
 			title: messages[this.command + "Title"],
 			onOpen: function(){
 				_this._initialFileUploader();
 				_this._onOpenDialog();
-				dijit.TooltipDialog.prototype.onOpen.apply(this, arguments);
+				TooltipDialog.prototype.onOpen.apply(this, arguments);
 				setTimeout(function(){
 					// Auto-select the text if it is not empty
 					dijit.selectInputText(_this._urlInput.textbox);
@@ -134,7 +141,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 					tabIndex: "-1"
 				}, this.params || {});
 		
-		if(!dojo.isIE && (!dojo.isFF || dojo.isFF < 4)){
+		if(!has('ie')){
 			// Workaround for Non-IE problem:
 			// Safari 5: After the select-file dialog opens, the first time the user clicks anywhere (even on that dialog)
 			// it's treated like a plain click on the page, and the tooltip dialog closes
@@ -142,7 +149,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			props.closeDropDown = function(/*Boolean*/ focus){
 				if(_this._closable){
 					if(this._opened){
-						dijit.popup.close(this.dropDown);
+						popup.close(this.dropDown);
 						if(focus){ this.focus(); }
 						this._opened = false;
 						this.state = "";
@@ -152,7 +159,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			};
 		}
 		
-		this.button = new dijit.form.DropDownButton(props);
+		this.button = new DropDownButton(props);
 		
 		// Generate the RegExp of the ValidationTextBox from fileMask
 		// *.jpg;*.png => /.*\.jpg|.*\.JPG|.*\.png|.*\.PNG/
@@ -165,7 +172,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		messages.urlRegExp = this.urlRegExp = temp.substring(1);
 		
 		if(!this.uploadable){
-			messages["prePopuTextBrowse"] = ".";
+			messages.prePopuTextBrowse = ".";
 		}
 		
 		messages.id = dijit.getUniqueId(this.editor.id);
@@ -180,7 +187,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		this._setButton = dijit.byId(this._uniqueId + "_setButton");
 		
 		if(urlInput){
-			var pt = dijit.form.ValidationTextBox.prototype;
+			var pt = ValidationTextBox.prototype;
 			urlInput = dojo.mixin(urlInput, {
 				// Indicate if the widget is ready to validate the input text
 				isLoadComplete: false,
@@ -218,7 +225,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			urlInput = _this._urlInput;
 		
 		if(_this.uploadable && !_this._fileUploader){
-			fup = _this._fileUploader = new dojox.form.FileUploader({
+			fup = _this._fileUploader = new FileUploader({
 				force: "html", // Noticed that SWF may cause browsers to crash sometimes
 				uploadUrl: _this.uploadUrl,
 				htmlFieldName: _this.htmlFieldName,
@@ -236,12 +243,12 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 			
 			_this.connect(fup, "onClick", function(){
 				urlInput.validate(false);
-				if(!dojo.isIE && (!dojo.isFF || dojo.isFF < 4)){
-					// Firefox (below v4), Chome and Safari have a strange behavior:
+				if(!has('ie')){
+					// Firefox, Chrome and Safari have a strange behavior:
 					// When the File Upload dialog is open, the browse div (FileUploader) will lose its focus
 					// and triggers onBlur event. This event will cause the whole tooltip dialog
 					// to be closed when the File Upload dialog is open. The popup dialog should hang up
-					// the js executioin rather than triggering an event. IE does not have such a problem.
+					// the js execution rather than triggering an event. IE does not have such a problem.
 					_this._closable = false;
 				}
 			});
@@ -315,7 +322,7 @@ dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDia
 		this.inherited(arguments);
 		if(this._fileUploader){
 			this._fileUploader.destroy();
-			this._fileUploader = null;
+			delete this._fileUploader;
 		}
 	}
 });
@@ -325,7 +332,7 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
 	if(name ===  "localimage"){
-		o.plugin = new dojox.editor.plugins.LocalImage({
+		o.plugin = new LocalImage({
 			command: "insertImage",
 			uploadable: ("uploadable" in o.args) ? o.args.uploadable : false,
 			uploadUrl: ("uploadable" in o.args && "uploadUrl" in o.args) ? o.args.uploadUrl : "",
@@ -336,6 +343,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	}
 });
 
-return dojox.editor.plugins.LocalImage;
+return LocalImage;
 
 });
