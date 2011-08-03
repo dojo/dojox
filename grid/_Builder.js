@@ -398,7 +398,7 @@ define([
 		// resizing
 		prepareResize: function(e, mod){
 			do{
-				var i = getTdIndex(e.cellNode);
+				var i = e.cellIndex;
 				e.cellNode = (i ? e.cellNode.parentNode.cells[i+mod] : null);
 				e.cellIndex = (e.cellNode ? this.getCellNodeIndex(e.cellNode) : -1);
 			}while(e.cellNode && e.cellNode.style.display == "none");
