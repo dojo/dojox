@@ -56,10 +56,9 @@ return declare("dojox.form.uploader.FileList", [formUploaderBase], {
 	templateString:	'<div class="dojoxUploaderFileList">' +
 						'<div dojoAttachPoint="progressNode" class="dojoxUploaderFileListProgress"><div dojoAttachPoint="percentBarNode" class="dojoxUploaderFileListProgressBar"></div><div dojoAttachPoint="percentTextNode" class="dojoxUploaderFileListPercentText">0%</div></div>' +
 						'<table class="dojoxUploaderFileListTable">'+
-							'<tr class="dojoxUploaderFileListHeader"><th class="dojoxUploaderIndex">${headerIndex}</th><th class="dojoxUploaderIcon">${headerType}</th><th class="dojoxUploaderFileName">${headerFilename}</th><th class="dojoxUploaderFileSize">${headerFilesize}</th></tr>'+
-							'<tr ><td colSpan="4" class="dojoxUploaderFileListContainer" dojoAttachPoint="containerNode">'+
-								'<table class="dojoxUploaderFileListContent" dojoAttachPoint="listNode"></table>'+
-							'</td><tr>'+
+							'<thead><tr class="dojoxUploaderFileListHeader"><th class="dojoxUploaderIndex">${headerIndex}</th><th class="dojoxUploaderIcon">${headerType}</th><th class="dojoxUploaderFileName">${headerFilename}</th><th class="dojoxUploaderFileSize">${headerFilesize}</th></tr></thead>'+
+							'<tbody class="dojoxUploaderFileListContent" dojoAttachPoint="listNode">'+
+							'</tbody>'+
 						'</table>'+
 						'<div>'
 						,
