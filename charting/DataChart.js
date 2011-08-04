@@ -382,7 +382,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 					// the property in the item we are using
 					var field = this.getProperty(m, this.fieldName);
-					if(dojo.isArray(field)){
+					if(lang.isArray(field)){
 						// Data is an array, so it's a snapshot, and not
 						//	live, updating data
 						//
@@ -395,7 +395,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 							//
 							// create empty chart elements by starting an array
 							//	with zeros until we reach our relevant data
-							var ar = dojo.map(new Array(i+1), function(){ return 0; });
+							var ar = arr.map(new Array(i+1), function(){ return 0; });
 							ar.push(Number(field));
 							this.seriesData[nm] = ar;
 

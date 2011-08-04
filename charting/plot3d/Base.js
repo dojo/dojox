@@ -1,6 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo) {
+define(["dojo/_base/kernel", "dojo/_base/declare"], 
+  function(lang, declare) {
 
-	return dojo.declare("dojox.charting.plot3d.Base", null, {
+	return declare("dojox.charting.plot3d.Base", null, {
 		constructor: function(width, height, kwArgs){
 			this.width  = width;
 			this.height = height;

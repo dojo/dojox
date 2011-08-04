@@ -205,8 +205,8 @@ define(["dojo/_base/lang", "dojo/number", "dojo/_base/array", "dojo/_base/Color"
 		
 		getLabel: function(/*Number*/number, /*Boolean*/fixed, /*Number*/precision){
 			if(numberLib.number){
-				return (fixed ? dojo.number.format(number, {places : precision}) :
-					numberLib.number.format(number)) || "";
+				return (fixed ? numberLib.format(number, {places : precision}) :
+					numberLib.format(number)) || "";
 			}
 			return fixed ? number.toFixed(precision) : number.toString();
 		}
