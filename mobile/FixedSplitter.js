@@ -22,13 +22,14 @@ define([
 	//		function to resize the child panes with drag-and-drop.
 	//		If you need a visual splitter, you can specify a border of a child
 	//		dom node with CSS.
-	//		A child of the widget can be a plain <div> or FixedSplitterPane.
+	//		A child of the widget should be FixedSplitterPane.
 	// example:
 	// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
-	// |		<div style="width:200px;border-right:1px solid black;">
+	// |		<div dojoType="dojox.mobile.FixedSplitterPane"
+	// |			style="width:200px;border-right:1px solid black;">
 	// |			pane #1 (width=200px)
 	// |		</div>
-	// |		<div>
+	// |		<div dojoType="dojox.mobile.FixedSplitterPane">
 	// |			pane #2
 	// |		</div>
 	// |	</div>
@@ -40,8 +41,6 @@ define([
 	=====*/
 	return declare("dojox.mobile.FixedSplitter", [WidgetBase, Container, Contained], {
 		orientation: "H", // "H" or "V"
-
-		isContainer: true,
 
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : win.doc.createElement("DIV");
@@ -100,6 +99,11 @@ define([
 			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
+		},
+
+		addChild: function(widget, /*Number?*/insertIndex){
+			domClass.add(widget.domNode, "mblFixedSplitterPane"+this.orientation);
+			this.inherited(arguments);
 		}
 	});
 });
