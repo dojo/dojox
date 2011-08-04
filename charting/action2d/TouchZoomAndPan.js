@@ -1,8 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
 	"./ChartAction", "../Element", "dojo/gesture/tap", "../plot2d/common"], 
-	function(dojo, lang, declare, devent, ChartAction, Element, tap, common){
+	function(lang, declare, Event, has, ChartAction, Element, tap, common){
 	
-	var GlassView = dojo.declare(Element, {
+	var GlassView = declare(Element, {
 		//	tags:
 		//		private
 		constructor: function(chart){
@@ -41,7 +41,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		Returns default stats (irrelevant for this type of plot).
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dojo.delegate(common.defaultStats);
+			return lang.delegate(common.defaultStats);
 		},
 		initializeScalers: function(){
 			//	summary:
@@ -58,7 +58,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	
 	/*=====
-	dojo.declare("dojox.charting.action2d.__TouchZoomAndPanCtorArgs", null, {
+	
+	declare("dojox.charting.action2d.__TouchZoomAndPanCtorArgs", null, {
 		//	summary:
 		//		Additional arguments for mouse zoom and pan actions.
 		
@@ -75,7 +76,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	=====*/
 	
-	return dojo.declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.ChartAction, {
 		//	summary:
 		//		Create a touch zoom and pan action. 
 		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture. 
@@ -120,7 +121,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// this is needed to workaround issue on Safari + SVG, because a touch start action
 			// started above a item that is removed during the touch action will stop
 			// dispatching touch events!
-			if(dojo.isSafari && this.chart.surface.declaredClass.indexOf("svg")!=-1){
+			if(has("safari") && this.chart.surface.declaredClass.indexOf("svg")!=-1){
 				this.chart.addPlot(this._uName, {type: GlassView});
 			}
 		},
@@ -128,7 +129,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		disconnect: function(){
 			//	summary:
 			//		Disconnect this action from the chart. 
-			if(dojo.isSafari && this.chart.surface.declaredClass.indexOf("svg")!=-1){
+			if(has("safari") && this.chart.surface.declaredClass.indexOf("svg")!=-1){
 				this.chart.removePlot(this._uName);
 			}
 			this.inherited(arguments);
@@ -160,7 +161,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			}else if(this.enableScroll){
 				this._startScroll(axis);
 				// needed for Android, otherwise will get a touch cancel while swiping
-				dojo.stopEvent(event);
+				Event.stop(event);
 			}
 		},
 	
@@ -187,14 +188,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				newEnd = scale * (this._endCoord - newMiddleCoord) + this._middleCoord;
 				chart.zoomIn(this.axis, [newStart, newEnd]);
 				// avoid browser pan
-				dojo.stopEvent(event);
+				Event.stop(event);
 			}else if(this.enableScroll){
 				var delta = axis.vertical?(this._startPageCoord[attr] - event.touches[0][pAttr]):
 					(event.touches[0][pAttr] - this._startPageCoord[attr]);
 				chart.setAxisWindow(this.axis, this._lastScale, this._initOffset - delta / this._lastFactor / this._lastScale);
 				chart.delayedRender();
 				// avoid browser pan
-				dojo.stopEvent(event);
+				Event.stop(event);
 			}		
 		},
 	
@@ -236,7 +237,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				chart.setAxisWindow(this.axis, 1, 0);
 				chart.render();
 			}
-			dojo.stopEvent(event);
+			Event.stop(event);
 		}
 	});
 });		

@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./PlotAction", 
+define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", 
 	"dojo/fx", "dojo/fx/easing", "dojox/gfx/matrix", "dojox/gfx/fx"], 
-	function(dojo, connect, declare, PlotAction, df, dfe, m, gf){
+	function(Connect, declare, PlotAction, df, dfe, m, gf){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
@@ -15,7 +15,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Plot
 
 	var DEFAULT_SHIFT = 3;
 
-	return dojo.declare("dojox.charting.action2d.Shake", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Shake", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create a shaking action for use on an element in a chart.
 
@@ -95,7 +95,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Plot
 
 			anim.action = df.combine(vector);
 			if(o.type == "onmouseout"){
-				dojo.connect(anim.action, "onEnd", this, function(){
+				Connect.connect(anim.action, "onEnd", this, function(){
 					if(this.anim[runName]){
 						delete this.anim[runName][index];
 					}

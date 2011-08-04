@@ -1,4 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", "../axis2d/common", "dojox/gfx"], 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", 
+    "../axis2d/common", "dojox/gfx"], 
 	function(dojo, lang, declare, Element, dcpc, dcac, gfx){ 
 
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
@@ -62,7 +63,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 		return sz;
 	};
 
-	return dojo.declare(Element, {
+	return declare(Element, {
 		//	summary:
 		//		Internal element used by indicator actions.
 		//	tags:
@@ -88,12 +89,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 			// if we reached that point once, then we don't stop until mouse up
 			if(this._initTrackPhase){
 				this._initTrackPhase = false;
-				this._tracker = setInterval(dojo.hitch(this, this._trackMove), 100);
+				this._tracker = setInterval(lang.hitch(this, this._trackMove), 100);
 			}
 		},
 		initTrack: function(){
 			this._initTrackPhase = true;
-			this._tracker = setTimeout(dojo.hitch(this, this._trackMove), 500);
+			this._tracker = setTimeout(lang.hitch(this, this._trackMove), 500);
 		},
 		stopTrack: function(){
 			if(this._tracker){
@@ -340,7 +341,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Elemen
 			//		Returns default stats (irrelevant for this type of plot).
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dojo.delegate(dcpc.defaultStats);
+			return lang.delegate(dcpc.defaultStats);
 		},
 		initializeScalers: function(){
 			//	summary:

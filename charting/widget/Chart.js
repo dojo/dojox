@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/query", "dijit/_Widget", "../Chart", 
-	"dojox/lang/utils", "dojox/lang/functional"], 
-	function(dojo, lang, declare, query, Widget, Chart, du, df){
+	"dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda"], 
+	function(dojo, lang, declare, query, Widget, Chart, du, df, dfl){
 	var collectParams, collectAxisParams, collectPlotParams,
 		collectActionParams, collectDataParams,
 		notNull = function(o){ return o; },
@@ -258,7 +258,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/quer
 			t = ga("sort");
 			if(!!t){ kw.sort = eval("("+t+")"); }
 			t = ga("valueFn");
-			if(!!t){ kw.valueFn = df.lambda(t); }
+			if(!!t){ kw.valueFn = dfl.lambda(t); }
 			return o;
 		}
 		return null;

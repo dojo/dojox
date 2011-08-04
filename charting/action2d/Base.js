@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "../../main", "dojo/_base/lang", "dojo/_base/declare"], 
-	function(dojo, dojox){
+define(["dojo/_base/lang", "dojo/_base/declare"], 
+	function(lang, declare){
 
-	return dojo.declare("dojox.charting.action2d.Base", null, {
+	return declare("dojox.charting.action2d.Base", null, {
 		//	summary:
 		//		Base action class for plot and chart actions.
 
@@ -14,7 +14,7 @@ define(["dojo/_base/kernel", "../../main", "dojo/_base/lang", "dojo/_base/declar
 			//	plot: String?|dojox.charting.plot2d.Base?
 			//		Optional target plot for this action.  Default is "default".
 			this.chart = chart;
-			this.plot = plot ? (dojo.isString(plot) ? this.chart.getPlot(plot) : plot) : this.chart.getPlot("default");
+			this.plot = plot ? (lang.isString(plot) ? this.chart.getPlot(plot) : plot) : this.chart.getPlot("default");
 		},
 	
 		connect: function(){

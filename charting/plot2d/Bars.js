@@ -21,7 +21,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		enableCache: false
 	});
 	=====*/
-	var purgeGroup = df.lambda("item.purgeGroup()");
+	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.Bars", dojox.charting.plot2d.Base, {
 		//	summary:

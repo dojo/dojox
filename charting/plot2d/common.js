@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/number", "dojo/_base/array", "dojo/_base/Color"
 		"dojox/gfx", "dojox/lang/functional"], 
 	function(lang, numberLib, arr, Color, g, df){
 	
-	var common = lang.getObject("dojox.charting.plot2.common", true);
+	var common = lang.getObject("dojox.charting.plot2d.common", true);
 	
 	return lang.mixin(common, {	
 		makeStroke: function(stroke){

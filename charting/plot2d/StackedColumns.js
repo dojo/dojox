@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Columns"
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
 	function(lang, arr, declare, Columns, dc, df, dfr, dfs){
 
-	var	purgeGroup = df.lambda("item.purgeGroup()");
+	var	purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
 		//	summary:

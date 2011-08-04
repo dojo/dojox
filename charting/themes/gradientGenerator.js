@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "../Theme", "dojox/color/_base", "./common"], 
-	function(dojo, lang, arr, Color, Theme, dxcolor, themes){
+	function(lang, arr, Color, Theme, dxcolor, themes){
 	
 	var gg = lang.getObject("gradientGenerator", true, themes);
 
@@ -67,7 +67,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "../Theme", "
 		//	intensityMap: Array:
 		//		Array of tuples {o, i}, where o is a gradient offset (0-1),
 		//		and i is an intensity (0-255).
-		color = new dojo.Color(color);
+		color = new Color(color);
 		return arr.map(intensityMap, function(stop){	// Array
 			var s = stop.i / 255;
 			return {

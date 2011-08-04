@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/color/_base", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/connect", "dojox/color/_base", 
 		"./PlotAction", "dojo/fx/easing", "dojox/gfx/fx"], 
-	function(dojo, lang, declare, connect, c, PlotAction, dfe, dgf){
+	function(dojo, lang, declare, Color, ConnectUtil, c, PlotAction, dfe, dgf){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -39,7 +39,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			return c.fromHsl(x);
 		};
 
-	return dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Creates a highlighting action on a plot, where an element on that plot
 		//		has a highlight on it.
@@ -64,7 +64,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//	kwArgs: dojox.charting.action2d.__HighlightCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			var a = kwArgs && kwArgs.highlight;
-			this.colorFun = a ? (dojo.isFunction(a) ? a : cc(a)) : hl;
+			this.colorFun = a ? (lang.isFunction(a) ? a : cc(a)) : hl;
 
 			this.connect();
 		},
@@ -88,7 +88,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				anim.action.stop(true);
 			}else{
 				var color = o.shape.getFill();
-				if(!color || !(color instanceof dojo.Color)){
+				if(!color || !(color instanceof Color)){
 					return;
 				}
 				this.anim[runName][index] = anim = {
@@ -112,7 +112,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				color:    {start: start, end: end}
 			});
 			if(o.type == "onmouseout"){
-				dojo.connect(anim.action, "onEnd", this, function(){
+				ConnectUtil.connect(anim.action, "onEnd", this, function(){
 					if(this.anim[runName]){
 						delete this.anim[runName][index];
 					}

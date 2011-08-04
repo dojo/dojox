@@ -168,10 +168,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			arr.forEach(this.series, destroy);
 			arr.forEach(this.stack,  destroy);
 			func.forIn(this.axes, destroy);
-            if(this.chartTitle && this.chartTitle.tagName){
-                // destroy title if it is a DOM node
-			    domContruct.destroy(this.chartTitle);
-            }
+			if(this.chartTitle && this.chartTitle.tagName){
+				// destroy title if it is a DOM node
+				domContruct.destroy(this.chartTitle);
+			}
 			this.surface.destroy();
 		},
 		getCoords: function(){
@@ -181,7 +181,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			//	returns: Object
 			//		The resulting coordinates of the chart.  See dojo.coords for details.
 			if(!this.coords){
-				this.coords = domGeom.getBorderExtents(this.node, true);
+				this.coords = html.coords(this.node, true);
 			}
 			return this.coords;	//	Object
 		},
@@ -205,15 +205,15 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			//		An optional keyword arguments object for use in defining details of an axis.
 			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
-            var axis, axisType = kwArgs && kwArgs.type || "Default";
-            if(typeof axisType == "string"){
-                if(!dc.axis2d || !dc.axis2d[axisType]){
-                    throw Error("Can't find axis: " + axisType + " - Check " + "require() dependencies.");
-                }
-                axis = new dc.axis2d[axisType](this, kwArgs);
-            }else{
-                axis = new axisType(this, kwArgs);
-            }
+			var axis, axisType = kwArgs && kwArgs.type || "Default";
+			if(typeof axisType == "string"){
+				if(!dc.axis2d || !dc.axis2d[axisType]){
+					throw Error("Can't find axis: " + axisType + " - Check " + "require() dependencies.");
+				}
+				axis = new dc.axis2d[axisType](this, kwArgs);
+			}else{
+				axis = new axisType(this, kwArgs);
+			}
 			axis.name = name;
 			axis.dirty = true;
 			if(name in this.axes){
@@ -261,14 +261,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
 			var plot, plotType = kwArgs && kwArgs.type || "Default";
-            if(typeof plotType == "string"){
-                if(!dc.plot2d || !dc.plot2d[plotType]){
-                    throw Error("Can't find plot: " + plotType + " - didn't you forget to dojo" + ".require() it?");
-                }
-                plot = new dc.plot2d[plotType](this, kwArgs);
-            }else{
-                plot = new plotType(this, kwArgs);
-            }
+			if(typeof plotType == "string"){
+				if(!dc.plot2d || !dc.plot2d[plotType]){
+					throw Error("Can't find plot: " + plotType + " - didn't you forget to dojo" + ".require() it?");
+				}
+				plot = new dc.plot2d[plotType](this, kwArgs);
+			}else{
+				plot = new plotType(this, kwArgs);
+			}
 			plot.name = name;
 			plot.dirty = true;
 			if(name in this.plots){
@@ -311,22 +311,22 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 						plots[name] = idx - 1;
 					}
 				});
-                // remove all related series
-                var ns = arr.filter(this.series, function(run){ return run.plot != name; });
-                if(ns.length < this.series.length){
-                    // kill all removed series
-                    arr.forEach(this.series, function(run){
-                        if(run.plot == name){
-                            run.destroy();
-                        }
-                    });
-                    // rebuild all necessary data structures
-                    this.runs = {};
-                    arr.forEach(ns, function(run, index){
-                        this.runs[run.plot] = index;
-                    }, this);
-                    this.series = ns;
-                }
+				// remove all related series
+				var ns = arr.filter(this.series, function(run){ return run.plot != name; });
+				if(ns.length < this.series.length){
+					// kill all removed series
+					arr.forEach(this.series, function(run){
+						if(run.plot == name){
+							run.destroy();
+						}
+					});
+					// rebuild all necessary data structures
+					this.runs = {};
+					arr.forEach(ns, function(run, index){
+						this.runs[run.plot] = index;
+					}, this);
+					this.series = ns;
+				}
 				// mark the chart as dirty
 				this.dirty = true;
 			}
@@ -763,9 +763,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			// assign series
 			arr.forEach(this.series, function(run){
 				if(!(run.plot in this.plots)){
-                    if(!dc.plot2d || !dc.plot2d.Default){
-                        throw Error("Can't find plot: Default - didn't you forget to dojo" + ".require() it?");
-                    }
+					if(!dc.plot2d || !dc.plot2d.Default){
+						throw Error("Can't find plot: Default - didn't you forget to dojo" + ".require() it?");
+					}
 					var plot = new dc.plot2d.Default(this, {});
 					plot.name = run.plot;
 					this.plots[run.plot] = this.stack.length;
@@ -869,12 +869,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			arr.forEach(this.series, purge);
 			func.forIn(this.axes, purge);
 			arr.forEach(this.stack,  purge);
-            if(this.chartTitle && this.chartTitle.tagName){
-                // destroy title if it is a DOM node
+			if(this.chartTitle && this.chartTitle.tagName){
+				// destroy title if it is a DOM node
 			    domConstruct.destroy(this.chartTitle);
             }
 			this.surface.clear();
-            this.chartTitle = null;
+			this.chartTitle = null;
 
 			// generate shapes
 

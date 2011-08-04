@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "
 		"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
 	function(lang, arr, declare, Base, dc, df, dfr, du, fx){
 
-	var purgeGroup = df.lambda("item.purgeGroup()");
+	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.Columns", dojox.charting.plot2d.Base, {
 		//	summary:

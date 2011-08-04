@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(dojo, lang, declare, devent, ChartAction, IndicatorElement, du){ 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
+	function(lang, declare, Event, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
 	dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
@@ -30,7 +30,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//		The precision at which to round data values for display. Default is 1.
 		precision:		0,
 		
-		//	lineStroke: dojo.gfx.Stroke?
+		//	lineStroke: gfx.Stroke?
 		//		An optional stroke to use for indicator line.
 		lineStroke:		{},
 	
@@ -98,7 +98,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	=====*/
 
-	return dojo.declare("dojox.charting.action2d.TouchIndicator", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.TouchIndicator", dojox.charting.action2d.ChartAction, {
 		//	summary:
 		//		Create a touch indicator action. You can touch over the chart to display a data indicator.
 
@@ -141,7 +141,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			                   {eventName: "ontouchmove", methodName: "onTouchMove"},
 			                   {eventName: "ontouchend", methodName: "onTouchEnd"},
 			                   {eventName: "ontouchcancel", methodName: "onTouchEnd"}];
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this._uName = "touchIndicator"+this.opt.series;
@@ -205,7 +205,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			}else{
 				this.chart.render();
 			}
-			dojo.stopEvent(event);
+			Event.stop(event);
 		},
 		
 		_onTouchDual: function(event){
@@ -214,7 +214,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			plot.secondCoord = {x: event.touches[1].pageX, y: event.touches[1].pageY};
 			plot.dirty = true;
 			this.chart.render();
-			dojo.stopEvent(event);
+			Event.stop(event);
 		},
 
 		onTouchEnd: function(event){

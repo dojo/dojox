@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Bars", "
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
 	function(lang, arr, declare, Bars, dc, df, dfr, dfs){
 
-	var	purgeGroup = df.lambda("item.purgeGroup()");
+	var	purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.StackedBars", dojox.charting.plot2d.Bars, {
 		//	summary:

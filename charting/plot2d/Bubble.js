@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		"dojox/lang/utils", "dojox/gfx/fx"], 
 	function(lang, declare, arr, Base, dc, df, dfr, du, fx){
 
-	var purgeGroup = df.lambda("item.purgeGroup()");
+	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.Bubble", dojox.charting.plot2d.Base, {
 		//	summary:

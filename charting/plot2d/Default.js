@@ -93,7 +93,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 	});
 	=====*/
 
-	var purgeGroup = df.lambda("item.purgeGroup()");
+	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 

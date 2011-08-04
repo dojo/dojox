@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./PlotAction", 
-	"dojo/fx/easing", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
-	function(dojo, connect, declare, PlotAction, dfe, m, gf, df){
+define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/easing", "dojox/gfx/matrix", 
+	"dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
+	function(Connect, declare, PlotAction, dfe, m, gf, df, dfs, dff){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -20,7 +20,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Plot
 	var DEFAULT_SCALE = 1.05,
 		DEFAULT_SHIFT = 7;	// px
 
-	return dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create an action for a pie chart that moves and scales a pie slice.
 
@@ -106,7 +106,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Plot
 			});
 
 			if(o.type == "onmouseout"){
-				dojo.connect(anim.action, "onEnd", this, function(){
+				Connect.connect(anim.action, "onEnd", this, function(){
 					delete this.anim[index];
 				});
 			}

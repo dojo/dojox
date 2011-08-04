@@ -48,10 +48,10 @@ var reflect = function(){
 		}
 	});
 	setTimeout(function(){
-		dijit.byId("scaleXSlider").setValue(scaleX);
-		dijit.byId("offsetXSlider").setValue(offsetX);
-		dijit.byId("scaleYSlider").setValue(scaleY);
-		dijit.byId("offsetYSlider").setValue(offsetY);
+		dijit.byId("scaleXSlider").set("value",scaleX);
+		dijit.byId("offsetXSlider").set("value",offsetX);
+		dijit.byId("scaleYSlider").set("value",scaleY);
+		dijit.byId("offsetYSlider").set("value",offsetY);
 	}, 25);
 };
 

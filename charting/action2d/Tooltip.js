@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./PlotAction", "dijit/Tooltip", 
+define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "./PlotAction", "dijit/Tooltip", 
 	"dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
-	function(dojo, lang, declare, PlotAction, Tooltip, m, df){
+	function(dojo, Tooltip, lang, html, declare, PlotAction, Tooltip, m, df, dfs, dff){
 	
 	/*=====
 	dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -33,7 +33,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./PlotAct
 
 	var pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
-	return dojo.declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.PlotAction, {
 		//	summary:
 		//		Create an action on a plot where a tooltip is shown when hovering over an element.
 
@@ -63,7 +63,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./PlotAct
 			//	o: dojox.gfx.Shape
 			//		The object on which to process the highlighting action.
 			if(o.type === "onplotreset" || o.type === "onmouseout"){
-                dijit.hideTooltip(this.aroundRect);
+                Tooltip.hide(this.aroundRect);
 				this.aroundRect = null;
 				if(o.type === "onplotreset"){
 					delete this.angles;
@@ -79,24 +79,24 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./PlotAct
 				case "marker":
 					aroundRect.x = o.cx;
 					aroundRect.y = o.cy;
-					aroundRect.width = aroundRect.height = 1;
+					aroundRect.w = aroundRect.h = 1;
 					break;
 				case "circle":
 					aroundRect.x = o.cx - o.cr;
 					aroundRect.y = o.cy - o.cr;
-					aroundRect.width = aroundRect.height = 2 * o.cr;
+					aroundRect.w = aroundRect.h = 2 * o.cr;
 					break;
 				case "column":
 					position = ["above", "below"];
 					// intentional fall down
 				case "bar":
-					aroundRect = dojo.clone(o.shape.getShape());
+					aroundRect = lang.clone(o.shape.getShape());
 					break;
 				case "candlestick":
 					aroundRect.x = o.x;
 					aroundRect.y = o.y;
-					aroundRect.width = o.width;
-					aroundRect.height = o.height;
+					aroundRect.w = o.width;
+					aroundRect.h = o.height;
 					break;
 				default:
 				//case "slice":
@@ -114,7 +114,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./PlotAct
 						angle = (this.angles[o.index] + this.angles[o.index + 1]) / 2 + startAngle;
 					aroundRect.x = o.cx + o.cr * Math.cos(angle);
 					aroundRect.y = o.cy + o.cr * Math.sin(angle);
-					aroundRect.width = aroundRect.height = 1;
+					aroundRect.w = aroundRect.h = 1;
 					// calculate the position
 					if(angle < pi4){
 						// do nothing: the position is right
@@ -139,23 +139,23 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./PlotAct
 			aroundRect.y += lt.y;
 			aroundRect.x = Math.round(aroundRect.x);
 			aroundRect.y = Math.round(aroundRect.y);
-			aroundRect.width = Math.ceil(aroundRect.width);
-			aroundRect.height = Math.ceil(aroundRect.height);
+			aroundRect.w = Math.ceil(aroundRect.w);
+			aroundRect.h = Math.ceil(aroundRect.h);
 			this.aroundRect = aroundRect;
 
 			var tooltip = this.text(o);
 			if(this.chart.getTextDir){
-				var isChartDirectionRtl = (dojo.style(this.chart.node,"direction") == "rtl");
+				var isChartDirectionRtl = (html.style(this.chart.node,"direction") == "rtl");
 				var isBaseTextDirRtl = (this.chart.getTextDir(tooltip) == "rtl");
 			}
 			if(tooltip){
 				if(isBaseTextDirRtl && !isChartDirectionRtl){
-					dijit.showTooltip("<span dir = 'rtl'>" + tooltip +"</span>", this.aroundRect, position);
+					Tooltip.show("<span dir = 'rtl'>" + tooltip +"</span>", this.aroundRect, position);
 				}
 				else if(!isBaseTextDirRtl && isChartDirectionRtl){
-					dijit.showTooltip("<span dir = 'ltr'>" + tooltip +"</span>", this.aroundRect, position);
+					Tooltip.show("<span dir = 'ltr'>" + tooltip +"</span>", this.aroundRect, position);
 				}else{
-					dijit.showTooltip(tooltip, this.aroundRect, position);
+					Tooltip.show(tooltip, this.aroundRect, position);
 				}
 			}
 		}

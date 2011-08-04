@@ -1,8 +1,8 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./Default", "./common", 
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
-	function(lang, declare, Default, dc, df, dfr, dfs){
+	function(lang, declare, arr, Default, dc, df, dfr, dfs){
 
-	var purgeGroup = df.lambda("item.purgeGroup()");
+	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
 		//	summary:
