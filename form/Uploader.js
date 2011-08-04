@@ -117,10 +117,6 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 		this.inherited(arguments);
 	},
 
-	testPrivated: function(){
-		privated();
-	},
-
 	/*************************
 	 *	   Public Events	 *
 	 *************************/
@@ -218,7 +214,7 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 		//
 		var fileArray = [];
 		if(this.supports("multiple")){
-			array.forEach(this.inputNode.files, function(f, i){
+			array.forEach(this._getFiles(true), function(f, i){
 				fileArray.push({
 					index:i,
 					name:f.name,
@@ -243,6 +239,14 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 	/*********************************************
 	 *	   Private Property. Get off my lawn.	 *
 	 *********************************************/
+
+	_getFiles: function(keep){
+		var fs = this._files || this.inputNode.files;
+		if(!keep && this._files){
+			delete this._files;
+		}
+		return fs;
+	},
 
 	_getValueAttr: function(){
 		// summary:
@@ -385,7 +389,7 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 		this.button.set('tabIndex', -1);
 		if(this.tabIndex > -1){
 			this.inputNode.tabIndex = this.tabIndex;
-			var restoreBorderStyle = domStyle.set(this.button.domNode.firstChild, "border");
+			var restoreBorderStyle = domStyle.get(this.button.domNode.firstChild, "border");
 			this._cons.push(connect.connect(this.inputNode, "focus", this, function(){
 				domStyle.set(this.button.domNode.firstChild, "border", "1px dashed #ccc");
 			}));
