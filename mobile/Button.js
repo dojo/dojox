@@ -45,6 +45,8 @@ define([
 			return ret;
 		},
 
+		isFocusable: function(){ return false; },
+
 		buildRendering: function(){
 			if(!this.srcNodeRef){
 				this.srcNodeRef = domConstruct.create("button", {"type": this.type});
