@@ -81,7 +81,7 @@ define([
 		},
 	
 		createRoundMask: function(className, r, w){
-			if(!has("webKit") || !className){ return; }
+			if(!has("webkit") || !className){ return; }
 			if(!this._createdMasks){ this._createdMasks = []; }
 			if(this._createdMasks[className]){ return; }
 			this._createdMasks[className] = 1;

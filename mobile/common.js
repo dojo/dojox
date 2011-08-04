@@ -407,7 +407,7 @@ define([
 
 	(function(){
 		// feature detection
-		if(has("webKit")){
+		if(has("webkit")){
 			dm.hasTouch = (typeof win.doc.documentElement.ontouchstart != "undefined" &&
 				navigator.appVersion.indexOf("Mobile") != -1) || !!has('android');
 		}

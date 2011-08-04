@@ -4,7 +4,7 @@ define([
 	"dojo/_base/connect",	// connect.connect
 	"dojo/_base/fx",	// fx.fadeOut, fx.fadeIn
 	"dojo/_base/lang",	// lang.extend, lang.isArray
-	"dojo/_base/sniff",		// has("webKit"), has("ie")
+	"dojo/_base/sniff",		// has("webkit"), has("ie")
 	"dojo/_base/window",	// win.doc, win.body
 	"dojo/dom-class",
 	"dojo/dom-construct",
@@ -31,7 +31,7 @@ define([
 	//		only when isWebKit is true.
 	//
 	//		dojo.require("dojox.mobile");
-	//		dojo.requireIf(!has("webKit"), "dojox.mobile.compat");
+	//		dojo.requireIf(!has("webkit"), "dojox.mobile.compat");
 	//
 	//		This module also loads compatibility CSS files, which has -compat.css
 	//		suffix. You can use either the <link> tag or @import to load theme
@@ -41,7 +41,7 @@ define([
 	//		If you explicitly load iphone-compat.css with <link> or @import,
 	//		this module will not load the already loaded file.
 
-	if(!has("webKit")){
+	if(!has("webkit")){
 		if(dojox.mobile.View){
 			lang.extend(dojox.mobile.View, {
 				_doTransition: function(fromNode, toNode, transition, dir){
@@ -493,7 +493,7 @@ define([
 			}
 		});
 
-	} // end of if(!has("webKit")){
+	} // end of if(!has("webkit")){
 
 	return dojox.mobile.compat;
 });

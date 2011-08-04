@@ -61,7 +61,7 @@ define([
 				this.disconnect(this._moveHandle);
 				this._moveHandle = null;
 			}
-			if(has("webKit")){
+			if(has("webkit")){
 				var handler = this.connect(this.domNode, "webkitAnimationEnd", function(){
 					this.disconnect(handler);
 					domClass.replace(this.domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse"]);

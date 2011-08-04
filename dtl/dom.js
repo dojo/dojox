@@ -50,7 +50,7 @@ define([
 			text = text.replace(/\bstyle="/g, 'tstyle="');
 
 			var match;
-			var table = has("webKit");
+			var table = has("webkit");
 			var pairs = [ // Format: [enable, parent, allowed children (first for nesting), nestings]
 				[true, "select", "option"],
 				[table, "tr", "td|th"],

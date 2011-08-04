@@ -231,7 +231,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this._ch = []; // connect handlers
 		this._ch.push(connect.connect(this.touchNode,
 			dojox.mobile.hasTouch ? "touchstart" : "onmousedown", this, "onTouchStart"));
-		if(has("webKit")){
+		if(has("webkit")){
 			this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
 			this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 
@@ -751,7 +751,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 	this.scrollTo = function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node){ // to: {x, y}
 		var s = (node || this.containerNode).style;
-		if(has("webKit")){
+		if(has("webkit")){
 			s.webkitTransform = this.makeTranslateStr(to);
 		}else{
 			if(this._v){
@@ -781,7 +781,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.getPos = function(){
 		// summary:
 		//		Get the top position in the midst of animation
-		if(has("webKit")){
+		if(has("webkit")){
 			var m = win.doc.defaultView.getComputedStyle(this.containerNode, '')["-webkit-transform"];
 			if(m && m.indexOf("matrix") === 0){
 				var arr = m.split(/[,\s\)]+/);
@@ -863,7 +863,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 	this.hideScrollBar = function(){
 		var fadeRule;
-		if(this.fadeScrollBar && has("webKit")){
+		if(this.fadeScrollBar && has("webkit")){
 			if(!dojox.mobile._fadeRule){
 				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 				node.textContent =
@@ -924,14 +924,14 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.scrollScrollBarTo = function(/*Object*/to){ // to: {x, y}
 		if(!this.scrollBar){ return; }
 		if(this._v && this._scrollBarV && typeof to.y == "number"){
-			if(has("webKit")){
+			if(has("webkit")){
 				this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
 			}else{
 				this._scrollBarV.style.top = to.y + "px";
 			}
 		}
 		if(this._h && this._scrollBarH && typeof to.x == "number"){
-			if(has("webKit")){
+			if(has("webkit")){
 				this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
 			}else{
 				this._scrollBarH.style.left = to.x + "px";
@@ -953,7 +953,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 	this._runSlideAnimation = function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, node, idx){
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
-		if(has("webKit")){
+		if(has("webkit")){
 			this.setKeyframes(from, to, idx);
 			domStyle.set(node, {
 				webkitAnimationDuration: duration + "s",
@@ -1023,7 +1023,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		//		This function creates a mask that hides corners of one scroll
 		//		bar edge to make it round edge. The other side of the edge is
 		//		always visible and round shaped with the border-radius style.
-		if(!has("webKit")){ return; }
+		if(!has("webkit")){ return; }
 		var ctx;
 		if(this._scrollBarWrapperV){
 			var h = this._scrollBarWrapperV.offsetHeight;
@@ -1140,7 +1140,7 @@ dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	// feature detection
-	if(has("webKit")){
+	if(has("webkit")){
 		var elem = win.doc.createElement("div");
 		elem.style.webkitTransform = "translate3d(0px,1px,0px)";
 		win.doc.documentElement.appendChild(elem);

@@ -216,7 +216,7 @@ define([
 		},
 	
 		close: function(){
-			if(has("webKit")){
+			if(has("webkit")){
 				var t = this.domNode.parentNode.offsetWidth/8;
 				var y = this.iconNode.offsetLeft;
 				var pos = 0;
