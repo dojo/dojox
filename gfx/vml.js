@@ -11,7 +11,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 	document.namespaces.add("v", vml.xmlns);
 	var vmlElems = ["*", "group", "roundrect", "oval", "shape", "rect", "imagedata", "path", "textpath", "text"],
 		i = 0, l = 1, s = document.createStyleSheet();
-	if(dojo.isIE >= 8){
+	if(has("ie") >= 8){
 		i = 1;
 		l = vmlElems.length;
 	}

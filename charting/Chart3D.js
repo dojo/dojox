@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojox/gfx", "dojox/gfx3d"], 
-	function(dojo, arr, declare, html, gfx, gfx3d){
+define(["dojo/_base/array", "dojo/dom","dojo/_base/declare", "dojo/_base/html", "dojox/gfx", "dojox/gfx3d"], 
+	function(arr, DOM, declare, html, gfx, gfx3d){
 	// module:
 	//		dojox/charting/Chart3D
 	// summary:
@@ -25,7 +25,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_ba
 	return declare("dojox.charting.Chart3D", null, {
 		constructor: function(node, lights, camera, theme){
 			// setup a view
-			this.node = dojo.byId(node);
+			this.node = DOM.byId(node);
 			this.surface = gfx.createSurface(this.node, n(this.node.style.width), n(this.node.style.height));
 			this.view = this.surface.createViewport();
 			this.view.setLights(lights.lights, lights.ambient, lights.specular);

@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", ".", "dojo/_base/array", "dojo/_base/window", "dojo/_base/json", "dojo/_base/Deferred"], 
-  function(lang, gfx, arr, win, jsonLib, Deferred){
+define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","dojo/_base/array", "dojo/_base/window", "dojo/_base/json", 
+	"dojo/_base/Deferred", "dojo/_base/sniff"], 
+  function(dojo, dojox, lang, gfx, html, arr, win, jsonLib, Deferred, has){
 	var gu = lang.getObject("dojox.gfx.utils", true);
 
 	lang.mixin(gu, {
@@ -130,8 +131,8 @@ define(["dojo/_base/lang", ".", "dojo/_base/array", "dojo/_base/window", "dojo/_
 						gu._gfxSvgProxy.document.body.appendChild(node);
 						//Set the node scaling.
 						win.withDoc(gu._gfxSvgProxy.document, function() {
-							dojo.style(node, "width", width);
-							dojo.style(node, "height", height);
+							html.style(node, "width", width);
+							html.style(node, "height", height);
 						}, this);
 
 						//Create temp surface to render object to and render.
@@ -190,9 +191,9 @@ define(["dojo/_base/lang", ".", "dojo/_base/array", "dojo/_base/window", "dojo/_
 			// tags:
 			//		private
 			if(!gu._initSvgSerializerDeferred){
-				gu._initSvgSerializerDeferred = new dojo.Deferred();
-				var f = dojo.doc.createElement("iframe");
-				dojo.style(f, {
+				gu._initSvgSerializerDeferred = new Deferred();
+				var f = win.doc.createElement("iframe");
+				html.style(f, {
 					display: "none",
 					position: "absolute",
 					width: "1em",
@@ -200,7 +201,7 @@ define(["dojo/_base/lang", ".", "dojo/_base/array", "dojo/_base/window", "dojo/_
 					top: "-10000px"
 				});
 				var intv;
-				if(dojo.isIE){
+				if(has("ie")){
 					f.onreadystatechange = function(){
 						if(f.contentWindow.document.readyState == "complete"){
 							f.onreadystatechange = function() {};
