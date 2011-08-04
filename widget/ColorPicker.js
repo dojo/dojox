@@ -6,18 +6,28 @@ define([
 	"dojo/_base/html",	// dojo.hasClass, dojo.body, dojo.setSelectable, dojo.style
 	"dojo/_base/connect",	// dojo.subscribe, dojo.unsubscribe, dojo.stopEvent
 	"dojo/_base/sniff",	// dojo.isIE
+	"dojo/_base/window",
+	"dojo/_base/event",
+	"dojo/dom",
+	"dojo/dom-class",
 	"dojo/keys",		// dojo.keys
 	"dojo/fx",
 	"dojo/dnd/move",
+	"dijit/_base/manager",
+	"dijit/_base/focus",
 	"dijit/form/_FormWidget",
-	"dijit/focus",		// dijit.focus()
 	"dijit/typematic",
 	"dojox/color",
 	"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
 	"dojo/text!./ColorPicker/ColorPicker.html"
-], function(dojo,declare,lang,array,html,connect,has,keys,fx,move,formwidget,focus,typematic,color,i18n,bundle1,bundle2,template){
+], function(kernel,declare,lang,ArrayUtil,html,Hub,
+		has,win,Event,DOM,DOMClass,Keys,fx,move,
+		WidgetManager,FocusManager,FormWidget,Typematic,color,
+		i18n,bundle1,bundle2,template){
 
-	dojo.experimental("dojox.widget.ColorPicker");
+	var dijit = WidgetManager;
+
+	kernel.experimental("dojox.widget.ColorPicker");
 	
 	var webSafeFromHex = function(hex){
 		// stub, this is planned later:
@@ -25,7 +35,7 @@ define([
 	};
 
 	// TODO: shouldn't this extend _FormValueWidget?
-	return dojo.declare("dojox.widget.ColorPicker", dijit.form._FormWidget, {
+	return declare("dojox.widget.ColorPicker", dijit.form._FormWidget, {
 		// summary:
 		//		a HSV color picker - similar to Photoshop picker
 		//
@@ -109,26 +119,26 @@ define([
 		//	to cause the points to adjust and the values to reflect the current color.
 		value: "#ffffff",
 		
-		_underlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
+		_underlay: kernel.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
 
-		_hueUnderlay: dojo.moduleUrl("dojox.widget","ColorPicker/images/hue.png"),
+		_hueUnderlay: kernel.moduleUrl("dojox.widget","ColorPicker/images/hue.png"),
 
-		_pickerPointer: dojo.moduleUrl("dojox.widget","ColorPicker/images/pickerPointer.png"),
+		_pickerPointer: kernel.moduleUrl("dojox.widget","ColorPicker/images/pickerPointer.png"),
 
-		_huePickerPointer: dojo.moduleUrl("dojox.widget","ColorPicker/images/hueHandle.png"),
+		_huePickerPointer: kernel.moduleUrl("dojox.widget","ColorPicker/images/hueHandle.png"),
 
-		_huePickerPointerAlly: dojo.moduleUrl("dojox.widget","ColorPicker/images/hueHandleA11y.png"),
+		_huePickerPointerAlly: kernel.moduleUrl("dojox.widget","ColorPicker/images/hueHandleA11y.png"),
 
 		templateString: template,
 
 		postMixInProperties: function(){
-			if(dojo.hasClass(dojo.body(), "dijit_a11y")){
+			if(DOMClass.contains(win.body(), "dijit_a11y")){
 				// Use the pointer that will show up in high contrast.
 				this._huePickerPointer = this._huePickerPointerAlly;
 			}
-			this._uId = dijit.getUniqueId(this.id);
-			dojo.mixin(this, i18n.getLocalization("dojox.widget", "ColorPicker"));
-			dojo.mixin(this, i18n.getLocalization("dojo.cldr", "number"));
+			this._uId = WidgetManager.getUniqueId(this.id);
+			lang.mixin(this, i18n.getLocalization("dojox.widget", "ColorPicker"));
+			lang.mixin(this, i18n.getLocalization("dojo.cldr", "number"));
 			this.inherited(arguments);
 		},
 
@@ -138,7 +148,7 @@ define([
 			//		underlay.  we don't do image handles (done in css), just the 'core'
 			//		of this widget: the underlay.
 			this.inherited(arguments);
-			if(dojo.isIE < 7){
+			if(has("ie") < 7){
 				this.colorUnderlay.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+this._underlay+"', sizingMethod='scale')";
 				this.colorUnderlay.src = this._blankGif.toString();
 			}
@@ -155,7 +165,7 @@ define([
 			}
 			this._started = true;
 			this.set("value", this.value);
-			this._mover = new dojo.dnd.move.boxConstrainedMoveable(this.cursorNode, {
+			this._mover = new move.boxConstrainedMoveable(this.cursorNode, {
 				box: {
 					t: -(this.PICKER_SAT_SELECTOR_H/2),
 					l: -(this.PICKER_SAT_SELECTOR_W/2),
@@ -164,7 +174,7 @@ define([
 				}
 			});
 			
-			this._hueMover = new dojo.dnd.move.boxConstrainedMoveable(this.hueCursorNode, {
+			this._hueMover = new move.boxConstrainedMoveable(this.hueCursorNode, {
 				box: {
 					t: -(this.PICKER_HUE_SELECTOR_H/2),
 					l:0,
@@ -175,53 +185,53 @@ define([
 			
 			this._subs = [];
 			// no dnd/move/move published ... use a timer:
-			this._subs.push(dojo.subscribe("/dnd/move/stop", dojo.hitch(this, "_clearTimer")));
-			this._subs.push(dojo.subscribe("/dnd/move/start", dojo.hitch(this, "_setTimer")));
+			this._subs.push(Hub.subscribe("/dnd/move/stop", lang.hitch(this, "_clearTimer")));
+			this._subs.push(Hub.subscribe("/dnd/move/start", lang.hitch(this, "_setTimer")));
 
 			// Bind to up, down, left and right  arrows on the hue and saturation nodes.
 			this._keyListeners = [];
-			this._connects.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
-				charOrCode: dojo.keys.UP_ARROW,
+			this._connects.push(Typematic.addKeyListener(this.hueCursorNode,{
+				charOrCode: Keys.UP_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateHueCursorNode), 25, 25));
-			this._connects.push(dijit.typematic.addKeyListener(this.hueCursorNode,{
-				charOrCode: dojo.keys.DOWN_ARROW,
+			}, this, lang.hitch(this, this._updateHueCursorNode), 25, 25));
+			this._connects.push(Typematic.addKeyListener(this.hueCursorNode,{
+				charOrCode: Keys.DOWN_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateHueCursorNode), 25, 25));
-			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.UP_ARROW,
+			}, this, lang.hitch(this, this._updateHueCursorNode), 25, 25));
+			this._connects.push(Typematic.addKeyListener(this.cursorNode,{
+				charOrCode: Keys.UP_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
-			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.DOWN_ARROW,
+			}, this, lang.hitch(this, this._updateCursorNode), 25, 25));
+			this._connects.push(Typematic.addKeyListener(this.cursorNode,{
+				charOrCode: Keys.DOWN_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
-			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.LEFT_ARROW,
+			}, this, lang.hitch(this, this._updateCursorNode), 25, 25));
+			this._connects.push(Typematic.addKeyListener(this.cursorNode,{
+				charOrCode: Keys.LEFT_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
-			this._connects.push(dijit.typematic.addKeyListener(this.cursorNode,{
-				charOrCode: dojo.keys.RIGHT_ARROW,
+			}, this, lang.hitch(this, this._updateCursorNode), 25, 25));
+			this._connects.push(Typematic.addKeyListener(this.cursorNode,{
+				charOrCode: Keys.RIGHT_ARROW,
 				shiftKey: false,
 				metaKey: false,
 				ctrlKey: false,
 				altKey: false
-			}, this, dojo.hitch(this, this._updateCursorNode), 25, 25));
+			}, this, lang.hitch(this, this._updateCursorNode), 25, 25));
 		},
 		
 		_setValueAttr: function(value){
@@ -241,16 +251,16 @@ define([
 		
 		_setTimer: function(/* d.dnd.Mover */mover){
 			// FIXME: should I assume this? focus on mouse down so on mouse up
-			dijit.focus(mover.node);
-			dojo.setSelectable(this.domNode,false);
-			this._timer = setInterval(dojo.hitch(this, "_updateColor"), 45);
+			FocusManager.focus(mover.node);
+			DOM.setSelectable(this.domNode,false);
+			this._timer = setInterval(lang.hitch(this, "_updateColor"), 45);
 		},
 		
 		_clearTimer: function(/* d.dnd.Mover */mover){
 			clearInterval(this._timer);
 			this._timer = null;
 			this.onChange(this.value);
-			dojo.setSelectable(this.domNode,true);
+			DOM.setSelectable(this.domNode,true);
 		},
 		
 		_setHue: function(/* Decimal */h){
@@ -258,7 +268,7 @@ define([
 			//		Sets a natural color background for the
 			//		underlay image against closest hue value (full saturation)
 			//		h: 0..360
-			dojo.style(this.colorUnderlay, "backgroundColor", dojox.color.fromHsv(h,100,100).toHex());
+			html.style(this.colorUnderlay, "backgroundColor", dojox.color.fromHsv(h,100,100).toHex());
 			
 		},
 
@@ -273,18 +283,18 @@ define([
 			// e:
 			//		The event.
 			if(count !== -1){
-				var y = dojo.style(this.hueCursorNode, "top");
+				var y = html.style(this.hueCursorNode, "top");
 				var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
 
 				// Account for our offset
 				y += selCenter;
 				var update = false;
-				if(e.charOrCode == dojo.keys.UP_ARROW){
+				if(e.charOrCode == Keys.UP_ARROW){
 					if(y > 0){
 						y -= 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.DOWN_ARROW){
+				}else if(e.charOrCode == Keys.DOWN_ARROW){
 					if(y < this.PICKER_HUE_H){
 						y += 1;
 						update = true;
@@ -292,7 +302,7 @@ define([
 				}
 				y -= selCenter;
 				if(update){
-					dojo.style(this.hueCursorNode, "top", y + "px");
+					html.style(this.hueCursorNode, "top", y + "px");
 				}
 			}else{
 				this._updateColor(true);
@@ -313,30 +323,30 @@ define([
 			var selCenterW = this.PICKER_SAT_SELECTOR_W/2;
 
 			if(count !== -1){
-				var y = dojo.style(this.cursorNode, "top");
-				var x = dojo.style(this.cursorNode, "left");
+				var y = html.style(this.cursorNode, "top");
+				var x = html.style(this.cursorNode, "left");
 				
 				// Account for our offsets to center
 				y += selCenterH;
 				x += selCenterW;
 
 				var update = false;
-				if(e.charOrCode == dojo.keys.UP_ARROW){
+				if(e.charOrCode == Keys.UP_ARROW){
 					if(y > 0){
 						y -= 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.DOWN_ARROW){
+				}else if(e.charOrCode == Keys.DOWN_ARROW){
 					if(y < this.PICKER_SAT_VAL_H){
 						y += 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.LEFT_ARROW){
+				}else if(e.charOrCode == Keys.LEFT_ARROW){
 					if(x > 0){
 						x -= 1;
 						update = true;
 					}
-				}else if(e.charOrCode == dojo.keys.RIGHT_ARROW){
+				}else if(e.charOrCode == Keys.RIGHT_ARROW){
 					if(x < this.PICKER_SAT_VAL_W){
 						x += 1;
 						update = true;
@@ -346,8 +356,8 @@ define([
 					// Account for our offsets to center
 					y -= selCenterH;
 					x -= selCenterW;
-					dojo.style(this.cursorNode, "top", y + "px");
-					dojo.style(this.cursorNode, "left", x + "px");
+					html.style(this.cursorNode, "top", y + "px");
+					html.style(this.cursorNode, "left", x + "px");
 				}
 			}else{
 				this._updateColor(true);
@@ -361,9 +371,9 @@ define([
 				satSelCenterH = this.PICKER_SAT_SELECTOR_H/2,
 				satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
 
-			var _huetop = dojo.style(this.hueCursorNode,"top") + hueSelCenter,
-				_pickertop = dojo.style(this.cursorNode,"top") + satSelCenterH,
-				_pickerleft = dojo.style(this.cursorNode,"left") + satSelCenterW,
+			var _huetop = html.style(this.hueCursorNode,"top") + hueSelCenter,
+				_pickertop = html.style(this.cursorNode,"top") + satSelCenterH,
+				_pickerleft = html.style(this.cursorNode,"left") + satSelCenterW,
 				h = Math.round(360 - (_huetop / this.PICKER_HUE_H * 360)),
 				col = dojox.color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
 			;
@@ -438,14 +448,14 @@ define([
 			;
 			
 			if (this.animatePoint) {
-				dojo.fx.slideTo({
+				fx.slideTo({
 					node: this.hueCursorNode,
 					duration: this.slideDuration,
 					top: ypos,
 					left: 0
 				}).play();
 				
-				dojo.fx.slideTo({
+				fx.slideTo({
 					node: this.cursorNode,
 					duration: this.slideDuration,
 					top: newTop,
@@ -454,8 +464,8 @@ define([
 				
 			}
 			else {
-				dojo.style(this.hueCursorNode, "top", ypos + "px");
-				dojo.style(this.cursorNode, {
+				html.style(this.hueCursorNode, "top", ypos + "px");
+				html.style(this.cursorNode, {
 					left: newLeft + "px",
 					top: newTop + "px"
 				});
@@ -503,15 +513,15 @@ define([
 			var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
 			var ypos = evt.layerY - selCenter;
 			if(this.animatePoint){
-				dojo.fx.slideTo({
+				fx.slideTo({
 					node: this.hueCursorNode,
 					duration:this.slideDuration,
 					top: ypos,
 					left: 0,
-					onEnd: dojo.hitch(this, function() {this._updateColor(true); dijit.focus(this.hueCursorNode);})
+					onEnd: lang.hitch(this, function() {this._updateColor(true); FocusManager.focus(this.hueCursorNode);})
 				}).play();
 			}else{
-				dojo.style(this.hueCursorNode, "top", ypos + "px");
+				html.style(this.hueCursorNode, "top", ypos + "px");
 				this._updateColor(false);
 			}
 		},
@@ -524,18 +534,18 @@ define([
 			var newTop = evt.layerY - satSelCenterH;
 			var newLeft = evt.layerX - satSelCenterW;
 			
-			if(evt){ dijit.focus(evt.target); }
+			if(evt){ FocusManager.focus(evt.target); }
 
 			if(this.animatePoint){
-				dojo.fx.slideTo({
+				fx.slideTo({
 					node: this.cursorNode,
 					duration: this.slideDuration,
 					top: newTop,
 					left: newLeft,
-					onEnd: dojo.hitch(this, function() {this._updateColor(true); dijit.focus(this.cursorNode);})
+					onEnd: lang.hitch(this, function() {this._updateColor(true); FocusManager.focus(this.cursorNode);})
 				}).play();
 			}else{
-				dojo.style(this.cursorNode, {
+				html.style(this.cursorNode, {
 					left: newLeft + "px",
 					top: newTop + "px"
 				});
@@ -552,7 +562,7 @@ define([
 			// summary:
 			//		Put focus on this widget, only if focus isn't set on it already.
 			if(!this.focused){
-				dijit.focus(this.focusNode);
+				FocusManager.focus(this.focusNode);
 			}
 		},
 
@@ -561,15 +571,15 @@ define([
 			//		Function to hald the mouse down default
 			//		to disable draggong of images out of the color
 			//		picker.
-			dojo.stopEvent(e);
+			Event.stop(e);
 		},
 
 		destroy: function(){
 			// summary:
 			//		Over-ride to clean up subscriptions, etc.
 			this.inherited(arguments);
-			dojo.forEach(this._subs, function(sub){
-				dojo.unsubscribe(sub);
+			ArrayUtil.forEach(this._subs, function(sub){
+				Hub.unsubscribe(sub);
 			});
 			delete this._subs;
 		}
