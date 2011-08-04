@@ -746,7 +746,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 				fontWidth = g._base._getTextBox(truncatedLabel, {font: font}).w || 0,
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
 			if(elemType == "html"){
-				lang.mixin(aroundRect, domGeom.getBorderExtents(elem.firstChild, true));
+				lang.mixin(aroundRect, html.coords(elem.firstChild, true));
 				aroundRect.width = Math.ceil(fontWidth);
 				aroundRect.height = Math.ceil(fontHeight);
 				this._events.push({
@@ -763,7 +763,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 				});
 			}else{
 				var shp = elem.getShape(),
-					lt = domGeom.getBorderExtents(chart.node, true);
+					lt = html.coords(chart.node, true);
 				aroundRect = lang.mixin(aroundRect, {
 					x: shp.x - fontWidth / 2,
 					y: shp.y

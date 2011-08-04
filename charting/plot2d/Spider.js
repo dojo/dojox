@@ -1,9 +1,9 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "dojo/_base/array",
-	"dojo/dom-geometry", "dojo/fx", "dojo/_base/sniff",
+	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff",
 	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
 	"dojox/lang/utils", "dojo/fx/easing"],
-	function(lang, declare, hub, html, arr, domGeom, fx, ua,
+	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, ua,
 			Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, 
 			g, m, gfxfx, df, du, easing){
 
@@ -414,7 +414,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			var anims = arr.map(sps, function(np, j){
 				// create animation
 				var sp = osps[j],
-					anim = new fx._Animation({
+					anim = new baseFx.Animation({
 					duration: 1000,
 					easing:	  at,
 					curve:	  [sp.y, np.y]
@@ -436,7 +436,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			var anims1 = arr.map(sps, function(np, j){
 				// create animation
 				var sp = osps[j],
-					anim = new fx._Animation({
+					anim = new baseFx.Animation({
 					duration: 1000,
 					easing:	  at,
 					curve:	  [sp.x, np.x]
@@ -454,7 +454,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				});
 				return anim;
 			});
-			var masterAnimation = fx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
+			var masterAnimation = coreFx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
 			masterAnimation.play();
 			return {group :ts, poly: spoly, circles: scircle};
 		},
@@ -489,7 +489,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				a.anim = gfxfx.animateFill({
 					shape:	  o.shape,
 					duration: 800,
-					easing:	  fx.easing.backOut,
+					easing:	  coreFx.easing.backOut,
 					color:	  {start: start, end: end}
 				});
 				a.anim.play();
@@ -503,7 +503,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					aroundRect.x = o.cx;
 					aroundRect.y = o.cy;
 					aroundRect.width = aroundRect.height = 1;
-					var lt = domGeom.getBorderExtent(this.chart.node, true);
+					var lt = html.coords(this.chart.node, true);
 					aroundRect.x += lt.x;
 					aroundRect.y += lt.y;
 					aroundRect.x = Math.round(aroundRect.x);
