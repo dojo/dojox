@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojox/main", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sniff", "dojo/_base/window",
 	    "dojo/_base/array","dojo/dom", "dojo/dom-construct","dojo/dom-geometry"], 
-  function(lang, dojox, html, Color, ua, win, arr, dom, domConstruct, domGeom){
+  function(lang, dojox, html, Color, has, win, arr, dom, domConstruct, domGeom){
 	// module:
 	//		dojox/gfx
 	// summary:
@@ -52,7 +52,7 @@ define(["dojo/_base/lang", "dojox/main", "dojo/_base/html", "dojo/_base/Color", 
 		};
 		var p;
 
-		if(ua.isIE){
+		if(has("ie")){
 			//	we do a font-size fix if and only if one isn't applied already.
 			//	NOTE: If someone set the fontSize on the HTML Element, this will kill it.
 			win.doc.documentElement.style.fontSize="100%";

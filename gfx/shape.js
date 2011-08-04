@@ -1,6 +1,6 @@
 define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/sniff",
 	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix"], 
-  function(dojox, gfxBase, lang, declare, win, ua, events, arr, domConstruct, Color, matrixLib){
+  function(dojox, gfxBase, lang, declare, win, has, events, arr, domConstruct, Color, matrixLib){
 
 /*===== 
 	dojox.gfx.shape = {
@@ -543,7 +543,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			arr.forEach(this._events, events.disconnect);
 			this._events = [];
 			this.rawNode = null;	// recycle it in _nodes, if it needs to be recycled
-			if(ua.isIE){
+			if(has("ie")){
 				while(this._parent.lastChild){
 					domConstruct.destroy(this._parent.lastChild);
 				}

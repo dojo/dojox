@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/array", "dojo/dom-geometry", "dojo/dom",
 		"dojo/_base/sniff", "./_base", "./shape", "./path"], 
-  function(dojo,lang,declare,color,arr,domGeom,dom,ua,gfxBase,shape,path){
+  function(dojo,lang,declare,color,arr,domGeom,dom,has,gfxBase,shape,path){
 	var sl = lang.getObject("dojox.gfx.silverlight", true);
 	dojo.experimental("dojox.gfx.silverlight");
 	var g = dojox.gfx, gs = g.shape;
@@ -571,7 +571,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				s.onLoad(s);
 			}
 		};
-		if(ua.isSafari){
+		if(has("safari")){
 			obj = "<embed type='application/x-silverlight' id='" +
 			pluginName + "' width='" + width + "' height='" + height +
 			" background='transparent'" +

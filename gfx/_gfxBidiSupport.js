@@ -1,6 +1,6 @@
 define(["dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "dojo/_base/array",
 		"./utils", "./shape", "dojox/string/BidiEngine"], 
-  function(lang, ua, dom, html, arr, utils, shapeLib, BidiEngine){
+  function(lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 	lang.getObject("dojox.gfx._gfxBidiSupport", true);
 	var g = dojox.gfx;
 	switch (g.renderer){
@@ -151,10 +151,10 @@ define(["dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "do
 			}
 
 			if(g.isSvg){
-				if(ua.isFF){
+				if(has("ff")){
 					return (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRYNN","VLNNN") : bidiEngine.bidiTransform(text,"ILYNN","VLNNN");
 				}
-				if(ua.isChrome || ua.isSafari || ua.isOpera){
+				if(has("chrome") || has("safari") || has("opera")){
 					return bidi_const.LRM + (targetDir == "rtl" ? bidi_const.RLE : bidi_const.LRE) + text + bidi_const.PDF;
 				}					
 			}					
@@ -224,7 +224,7 @@ define(["dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "do
 				//unlike the g.Text that is rendered in logical layout for Bidi scripts.
 				//for g.TextPath in svg always visual -> bidi script is unreadable (except Opera).
 				if(g.isSvg){
-					if(ua.isOpera){
+					if(has("opera")){
 						text = bidi_const.LRM + (targetDir == "rtl"? bidi_const.RLE : bidi_const.LRE) + text + bidi_const.PDF;
 					}else{
 						text = (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRYNN","VLNNN") : bidiEngine.bidiTransform(text,"ILYNN","VLNNN");

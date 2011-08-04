@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/Color", "dojo/_base/sniff",
 		"dojo/dom", "dojo/dom-geometry", "dojo/_base/window", 
 		"./_base", "./shape", "./path", "./arc", "./gradient"],
-  function(lang, declare, arr, Color, ua, dom, domGeom, win, gfxBase, shape, path, arc, gradient){
+  function(lang, declare, arr, Color, has, dom, domGeom, win, gfxBase, shape, path, arc, gradient){
 	var vml = lang.getObject("dojox.gfx.vml", true),
 		g = dojox.gfx, m = g.matrix, gs = g.shape;
 
@@ -351,7 +351,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 				}
 				parent.removeChild(this.rawNode);
 			}
-			if(ua.isIE > 7){
+			if(has("ie") > 7){
 				var node = this.rawNode.ownerDocument.createElement("v:roundrect");
 				node.arcsize = r;
 				node.style.display = "inline-block";
@@ -1017,7 +1017,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			r = s.rawNode = p.ownerDocument.createElement("v:group"),
 			cs = c.style, rs = r.style;
 
-		if(ua.isIE > 7){
+		if(has("ie") > 7){
 			rs.display = "inline-block";
 		}
 
@@ -1161,7 +1161,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			if(!this.rawNode) return null;
 			var shape = new vml.Rect,
 				node = this.rawNode.ownerDocument.createElement("v:roundrect");
-			if(ua.isIE > 7){
+			if(has("ie") > 7){
 				node.style.display = "inline-block";
 			}
 			shape.setRawNode(node);
