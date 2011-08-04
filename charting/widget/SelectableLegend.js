@@ -1,8 +1,11 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/query", "dojo/_base/html", "dojo/_base/connect", "dojo/_base/Color",
-	"./Legend", "dijit/form/CheckBox", "../action2d/Highlight", "dojox/lang/functional", "dojox/gfx/fx"], 
-	function(dojo, array, declare, query, html, connect, color, Legend, CheckBox, Highlight, df, fx){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query", "dojo/_base/html", 
+		"dojo/_base/connect", "dojo/_base/Color", "./Legend", "dijit/form/CheckBox", "../action2d/Highlight",
+		"dojox/lang/functional", "dojox/gfx/fx", "dojo/keys", "dojo/_base/event", "dojo/dom-construct",
+		"dojo/dom-prop"], 
+	function(lang, ArrayUtil, declare, query, html, Hub, Color, Legend, CheckBox, 
+			 Highlight, df, fx, Keys, event, DOM, DOMProp){
 
-	var FocusManager = dojo.declare(null, {
+	var FocusManager = declare(null, {
 		//	summary:
 		//		It will take legend as a tab stop, and using
 		//		cursor keys to navigate labels within the legend.
@@ -10,14 +13,14 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 			this.legend = legend;
 			this.index = 0;
 			this.horizontalLength = this._getHrizontalLength();
-			dojo.forEach(legend.legends, function(item, i){
+			ArrayUtil.forEach(legend.legends, function(item, i){
 				if(i > 0){
-					dojo.query("input", item).attr("tabindex", -1);
+					query("input", item).attr("tabindex", -1);
 				}
 			});
-			this.firstLabel = dojo.query("input", legend.legends[0])[0];
-			dojo.connect(this.firstLabel, "focus", this, function(){this.legend.active = true;});
-			dojo.connect(this.legend.domNode, "keydown", this, "_onKeyEvent");
+			this.firstLabel = query("input", legend.legends[0])[0];
+			Hub.connect(this.firstLabel, "focus", this, function(){this.legend.active = true;});
+			Hub.connect(this.legend.domNode, "keydown", this, "_onKeyEvent");
 		},
 		_getHrizontalLength: function(){
 			var horizontal = this.legend.horizontal;
@@ -35,31 +38,31 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 				return;
 			}
 			//	lose focus
-			if(e.keyCode == dojo.keys.TAB){
+			if(e.keyCode == Keys.TAB){
 				this.legend.active = false;
 				return;
 			}
 			//	handle with arrow keys
 			var max = this.legend.legends.length;
 			switch(e.keyCode){
-				case dojo.keys.LEFT_ARROW:
+				case Keys.LEFT_ARROW:
 					this.index--;
 					if(this.index < 0){
 						this.index += max;
 					}
 					break;
-				case dojo.keys.RIGHT_ARROW:
+				case Keys.RIGHT_ARROW:
 					this.index++;
 					if(this.index >= max){
 						this.index -= max;
 					}
 					break;
-				case dojo.keys.UP_ARROW:
+				case Keys.UP_ARROW:
 					if(this.index - this.horizontalLength >= 0){
 						this.index -= this.horizontalLength;
 					}
 					break;
-				case dojo.keys.DOWN_ARROW:
+				case Keys.DOWN_ARROW:
 					if(this.index + this.horizontalLength < max){
 						this.index += this.horizontalLength;
 					}
@@ -68,14 +71,14 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 					return;
 			}
 			this._moveToFocus();
-			dojo.stopEvent(e);
+			Event.stop(e);
 		},
 		_moveToFocus: function(){
-			dojo.query("input", this.legend.legends[this.index])[0].focus();
+			query("input", this.legend.legends[this.index])[0].focus();
 		}
 	});
 			
-	dojo.declare("dojox.charting.widget.SelectableLegend", dojox.charting.widget.Legend, {
+	declare("dojox.charting.widget.SelectableLegend", dojox.charting.widget.Legend, {
 		//	summary:
 		//		An enhanced chart legend supporting interactive events on data series
 		
@@ -98,14 +101,14 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 		_addLabel: function(dyn, label){
 			this.inherited(arguments);
 			//	create checkbox
-			var legendNodes = dojo.query("td", this.legendBody);
+			var legendNodes = query("td", this.legendBody);
 			var currentLegendNode = legendNodes[legendNodes.length - 1];
 			this.legends.push(currentLegendNode);
 			var checkbox = new CheckBox({checked: true});
-			dojo.place(checkbox.domNode, currentLegendNode, "first");
+			DOM.place(checkbox.domNode, currentLegendNode, "first");
 			// connect checkbox and existed label
-			var label = dojo.query("label", currentLegendNode)[0];
-			dojo.attr(label, "for", checkbox.id);
+			var label = query("label", currentLegendNode)[0];
+			DOMProp.set(label, "for", checkbox.id);
 		},
 		_applyEvents: function(){
 			// summary:
@@ -115,7 +118,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 			if(this.chart.dirty){
 				return;
 			}
-			dojo.forEach(this.legends, function(legend, i){
+			ArrayUtil.forEach(this.legends, function(legend, i){
 				var targetData, shapes = [], plotName, seriesName;
 				if(this._isPie()){
 					targetData = this.chart.stack[0];
@@ -133,31 +136,31 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 					strokes: df.map(shapes, "x.getStroke()")
 				};
 				//	toggle action
-				var legendCheckBox = dojo.query(".dijitCheckBox", legend)[0];
-				dojo.connect(legendCheckBox, "onclick", this, function(e){
+				var legendCheckBox = query(".dijitCheckBox", legend)[0];
+				Hub.connect(legendCheckBox, "onclick", this, function(e){
 					this._toggle(shapes, i, legend.vanished, originalDyn, seriesName, plotName);
 					legend.vanished = !legend.vanished;
 					e.stopPropagation();
 				});
 				
 				//	highlight action
-				var legendIcon = dojo.query(".dojoxLegendIcon", legend)[0],
+				var legendIcon = query(".dojoxLegendIcon", legend)[0],
 					iconShape = this._getFilledShape(this._surfaces[i].children);
-				dojo.forEach(["onmouseenter", "onmouseleave"], function(event){
-					dojo.connect(legendIcon, event, this, function(e){
+				ArrayUtil.forEach(["onmouseenter", "onmouseleave"], function(event){
+					Hub.connect(legendIcon, event, this, function(e){
 						this._highlight(e, iconShape, shapes, i, legend.vanished, originalDyn, seriesName, plotName);
 					});
 				}, this);
 			},this);
 		},
 		_toggle: function(shapes, index, isOff, dyn, seriesName, plotName){
-			dojo.forEach(shapes, function(shape, i){
+			ArrayUtil.forEach(shapes, function(shape, i){
 				var startFill = dyn.fills[i],
 					endFill = this._getTransitionFill(plotName),
 					startStroke = dyn.strokes[i],
 					endStroke = this.transitionStroke;
 				if(startFill){
-					if(endFill && (typeof startFill == "string" || startFill instanceof dojo.Color)){
+					if(endFill && (typeof startFill == "string" || startFill instanceof Color)){
 						fx.animateFill({
 							shape: shape,
 							color: {
@@ -188,7 +191,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/que
 				};
 				anim.process(label);
 				//	highlight the data items
-				dojo.forEach(shapes, function(shape, i){
+				ArrayUtil.forEach(shapes, function(shape, i){
 					shape.setFill(dyn.fills[i]);
 					var o = {
 						shape: shape,

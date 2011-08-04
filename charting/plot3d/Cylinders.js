@@ -1,23 +1,22 @@
 define([
-	"dojo/_base/kernel",
 	"dojox/gfx3d",
 	"dojo/_base/declare",
 	"dojo/_base/Color",
 	"dojo/_base/window",
 	"./Base"
-], function(dojo, gfx3d) {
+], function(gfx3d, declare, Color, win) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
 		// summary: repeatedly applies a binary function to an array from left
 		//	to right; returns the final value.
-		a = typeof a == "string" ? a.split("") : a; o = o || dojo.global;
+		a = typeof a == "string" ? a.split("") : a; o = o || win.global;
 		var z = a[0];
 		for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));
 		return z;	// Object
 	};
 
-	return dojo.declare("dojox.charting.plot3d.Cylinders", dojox.charting.plot3d.Base, {
+	return declare("dojox.charting.plot3d.Cylinders", dojox.charting.plot3d.Base, {
 		constructor: function(width, height, kwArgs){
 			this.depth = "auto";
 			this.gap   = 0;
@@ -29,7 +28,7 @@ define([
 				if("gap"   in kwArgs){ this.gap   = kwArgs.gap; }
 				if("material" in kwArgs){
 					var m = kwArgs.material;
-					if(typeof m == "string" || m instanceof dojo.Color){
+					if(typeof m == "string" || m instanceof Color){
 						this.material.color = m;
 					}else{
 						this.material = m;

@@ -1,12 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query", 
-	"./Chart", "../themes/GreySkies", "../plot2d/Lines"], 
-	function(dojo, array, declare, dhtml, dquery, Chart, GreySkies, Lines){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query", 
+	"./Chart", "../themes/GreySkies", "../plot2d/Lines", "dojo/dom-prop"], 
+	function(lang, ArrayUtil, declare, html, $, Chart, GreySkies, Lines, DOMProp){
 
-	var d = dojo;
-
-	dojo.declare("dojox.charting.widget.Sparkline",
-		dojox.charting.widget.Chart,
-		{
+	declare("dojox.charting.widget.Sparkline", dojox.charting.widget.Chart, {
 			theme: GreySkies,
 			margins: { l: 0, r: 0, t: 0, b: 0 },
 			type: "Lines",
@@ -23,9 +19,9 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_ba
 			buildRendering: function(){
 				var n = this.srcNodeRef;
 				if(	!n.childNodes.length || // shortcut the query
-					!d.query("> .axis, > .plot, > .action, > .series", n).length){
+					!$("> .axis, > .plot, > .action, > .series", n).length){
 					var plot = document.createElement("div");
-					d.attr(plot, {
+					DOMProp.set(plot, {
 						"class": "plot",
 						"name": "default",
 						"type": this.type
@@ -33,7 +29,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_ba
 					n.appendChild(plot);
 
 					var series = document.createElement("div");
-					d.attr(series, {
+					DOMProp.set(series, {
 						"class": "series",
 						plot: "default",
 						name: this.name,
@@ -41,11 +37,11 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/declare", "dojo/_ba
 						count: this.count,
 						valueFn: this.valueFn
 					});
-					d.forEach(
+					ArrayUtil.forEach(
 						["store", "field", "query", "queryOptions", "sort", "data"],
 						function(i){
 							if(this[i].length){
-								d.attr(series, i, this[i]);
+								DOMProp.set(series, i, this[i]);
 							}
 						},
 						this

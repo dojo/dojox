@@ -1,13 +1,12 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/query", "dijit/_Widget", "../Chart", 
+define(["dojox","dojo/_base/lang", "dojo/_base/array","dojo/_base/html","dojo/_base/declare", "dojo/query", "dijit/_Widget", "../Chart", 
 	"dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda"], 
-	function(dojo, lang, declare, query, Widget, Chart, du, df, dfl){
+	function(dojox, lang, arr, html, declare, query, Widget, Chart, du, df, dfl){
 	var collectParams, collectAxisParams, collectPlotParams,
 		collectActionParams, collectDataParams,
 		notNull = function(o){ return o; },
-		dc = dojox.charting,
-		d = dojo;
+		dc = dojox.charting;
 	
-	dojo.declare("dojox.charting.widget.Chart", dijit._Widget, {
+	declare("dojox.charting.widget.Chart", dijit._Widget, {
 		// parameters for the markup
 		
 		// theme for the chart
@@ -30,10 +29,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/quer
 			n = this.domNode;
 			
 			// collect chart parameters
-			var axes    = d.query("> .axis", n).map(collectAxisParams).filter(notNull),
-				plots   = d.query("> .plot", n).map(collectPlotParams).filter(notNull),
-				actions = d.query("> .action", n).map(collectActionParams).filter(notNull),
-				series  = d.query("> .series", n).map(collectDataParams).filter(notNull);
+			var axes    = query("> .axis", n).map(collectAxisParams).filter(notNull),
+				plots   = query("> .plot", n).map(collectPlotParams).filter(notNull),
+				actions = query("> .action", n).map(collectActionParams).filter(notNull),
+				series  = query("> .series", n).map(collectDataParams).filter(notNull);
 			
 			// build the chart
 			n.innerHTML = "";
@@ -80,18 +79,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/quer
 					);
 					if(series.kwArgs.sort){
 						// sort is a complex object type and doesn't survive coercian
-						kw.sort = dojo.clone(series.kwArgs.sort);
+						kw.sort = lang.clone(series.kwArgs.sort);
 					}
-					d.mixin(kw, {
+					lang.mixin(kw, {
 						onComplete: function(data){
 							var values;
 							if("valueFn" in series.kwArgs){
 								var fn = series.kwArgs.valueFn;
-								values = d.map(data, function(x){
+								values = arr.map(data, function(x){
 									return fn(series.data.getValue(x, series.field, 0));
 								});
 							}else{
-								values = d.map(data, function(x){
+								values = arr.map(data, function(x){
 									return series.data.getValue(x, series.field, 0);
 								});
 							}
@@ -207,7 +206,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/quer
 	};
 
 	collectDataParams = function(node){
-		var ga = d.partial(d.attr, node);
+		var ga = lang.partial(html.attr, node);
 		var name = ga("name");
 		if(!name){ return null; }
 		var o = { name: name, kwArgs: {} }, kw = o.kwArgs, t;
@@ -232,7 +231,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/quer
 		t = ga("data");
 		if(t != null){
 			o.type = "data";
-			o.data = t ? dojo.map(String(t).split(','), Number) : [];
+			o.data = t ? arr.map(String(t).split(','), Number) : [];
 			return o;
 		}
 		t = ga("array");
