@@ -214,7 +214,7 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 		//
 		var fileArray = [];
 		if(this.supports("multiple")){
-			array.forEach(this._getFiles(true), function(f, i){
+			array.forEach(this.inputNode.files, function(f, i){
 				fileArray.push({
 					index:i,
 					name:f.name,
@@ -239,14 +239,6 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 	/*********************************************
 	 *	   Private Property. Get off my lawn.	 *
 	 *********************************************/
-
-	_getFiles: function(keep){
-		var fs = this._files || this.inputNode.files;
-		if(!keep && this._files){
-			delete this._files;
-		}
-		return fs;
-	},
 
 	_getValueAttr: function(){
 		// summary:
