@@ -224,12 +224,14 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 			}, this);
 		}else{
 			array.forEach(this._inputs, function(n, i){
-				fileArray.push({
-					index:i,
-					name:n.value.substring(n.value.lastIndexOf("\\")+1),
-					size:0,
-					type:n.value.substring(n.value.lastIndexOf(".")+1)
-				});
+				if(n.value){
+					fileArray.push({
+						index:i,
+						name:n.value.substring(n.value.lastIndexOf("\\")+1),
+						size:0,
+						type:n.value.substring(n.value.lastIndexOf(".")+1)
+					});
+				}
 			}, this)
 
 		}
