@@ -44,7 +44,8 @@ var pluginsIFrame = declare("dojox.form.uploader.plugins.IFrame", [], {
 		//
 		var form, destroyAfter = false;
 		if(!this.getForm()){
-			form = domConstruct.create('form', {enctype:"multipart/form-data", method:"post"}, this.domNode);
+			//enctype can't be changed once a form element is created
+			form = domConstruct.place('<form enctype="multipart/form-data" method="post"></form>', this.domNode);
 			array.forEach(this._inputs, function(n, i){
 				if(n.value) form.appendChild(n);
 			}, this);
