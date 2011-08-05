@@ -1,8 +1,8 @@
 
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare", "dojo/_base/connect","dojo/_base/window"],
-				function(dojo,lang,declare,connect,window) {
+define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/event", "dojo/_base/connect","dojo/_base/window"],
+				function(dojo,lang,declare,event,connect,win) {
 
-return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
+return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 	//	summary: 
 	//		class to handle touch interactions on a dojox.geo.charting.Map widget
 	//	tags:
@@ -48,7 +48,7 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	summary: 
 		//		disconnects any installed listeners. Must be called only when disposing of this instance 
 		if (this._touchStartListener) {
-			dojo.disconnect(this._touchStartListener);
+			connect.disconnect(this._touchStartListener);
 			this._touchStartListener = null;
 		}
 	},
@@ -121,7 +121,7 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		this._tapCount++;
 		this._lastTap.x = touches[0].pageX;
 		this._lastTap.y = touches[0].pageY;
-		setTimeout(dojo.hitch(this,function() {
+		setTimeout(lang.hitch(this,function() {
 			this._tapCount = 0;}),300);
 		
 		return isDoubleTap;
@@ -172,7 +172,7 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	tags:
 		//		private
 		
-		dojo.stopEvent(touchEvent);
+		event.stop(touchEvent);
 		
 		this._oneFingerTouch = (touchEvent.touches.length == 1);
 		this._tapCancel = !this._oneFingerTouch;
@@ -201,13 +201,13 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 
 		// install touch move and up listeners (if not done by other fingers before)
 		if (!this._touchMoveListener) 
-			this._touchMoveListener = dojo.connect(dojo.global,"touchmove",this,this._touchMoveHandler);
+			this._touchMoveListener = connect.connect(win.global,"touchmove",this,this._touchMoveHandler);
 		
 		if (!this._touchEndTapListener) 
 			this._touchEndTapListener = this._map.surface.connect("touchend", this, this._touchEndTapHandler);
 		
 		if (!this._touchEndListener) 
-			this._touchEndListener = dojo.connect(dojo.global,"touchend",this, this._touchEndHandler);
+			this._touchEndListener = connect.connect(win.global,"touchend",this, this._touchEndHandler);
 
 	},
 	
@@ -224,7 +224,7 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			// test potential tap ?
 			if (this._oneFingerTouch && !this._tapCancel) {
 				this._oneFingerTouch = false;
-				setTimeout(dojo.hitch(this,function() {
+				setTimeout(lang.hitch(this,function() {
 					// wait to check if double tap
 					// perform test for single tap
 					//console.log("double tap was performed ? " + this._doubleTapPerformed);
@@ -251,18 +251,18 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	touchEvent: a touch event
 		//	tags:
 		//		private
-		dojo.stopEvent(touchEvent);
+		event.stop(touchEvent);
 
 		var touches = touchEvent.touches;
 
 		if (touches.length == 0) {
 			// disconnect listeners only when all fingers are up
 			if (this._touchMoveListener) {
-				dojo.disconnect(this._touchMoveListener);
+				connect.disconnect(this._touchMoveListener);
 				this._touchMoveListener = null;
 			}
 			if (this._touchEndListener) {
-				dojo.disconnect(this._touchEndListener);
+				connect.disconnect(this._touchEndListener);
 				this._touchEndListener = null;
 			}
 		} else {
@@ -305,7 +305,7 @@ return dojo.declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//		private
 		
 		// prevent browser interaction
-		dojo.stopEvent(touchEvent);
+		event.stop(touchEvent);
 		
 		// cancel tap if moved too far from first touch location
 		if (!this._tapCancel) {

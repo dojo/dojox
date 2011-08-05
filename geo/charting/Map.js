@@ -1,10 +1,10 @@
 
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr","dojo/_base/connect",
-		"dojo/_base/window", "dojox/gfx", "dojox/geo/charting/_base", "dojox/geo/charting/Feature",
-		"dojox/geo/charting/_Marker","dojo/number"],
-				function(dojo, lang, declare, dhtml, xhr, connect, window, gfx, base, Feature, Marker, number) {
+define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/html","dojo/dom",
+		"dojo/dom-geometry","dojo/dom-class", "dojo/_base/xhr","dojo/_base/connect","dojo/_base/window", "dojox/gfx",
+		"dojox/geo/charting/_base","dojox/geo/charting/Feature","dojox/geo/charting/_Marker","dojo/number","dojo/_base/sniff"],
+				function(dojo, lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base, Feature, Marker, number,has) {
 
-	return dojo.declare("dojox.geo.charting.Map", null, {
+	return declare("dojox.geo.charting.Map", null, {
 	//	summary:
 	//		Map widget interacted with charting.
 	//	description:
@@ -39,7 +39,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		//	shapeData:
 		//		map shape data json object, or url to json file
 		
-		dojo.style(container, "display", "block");
+		html.style(container, "display", "block");
 		
 		this.container = container;
 		var containerBounds = this._getContainerBounds();
@@ -59,11 +59,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		} else {
 	        // load map shape file
 			if (typeof shapeData == "string" && shapeData.length > 0) {
-				dojo.xhrGet({
+				xhr.get({
 					url: shapeData,
 					handleAs: "json",
 					sync: true,
-					load: dojo.hitch(this, "_init")
+					load: lang.hitch(this, "_init")
 				});
 			}
 		}
@@ -75,10 +75,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		//	tags:
 		//		private
 		
-		var position = dojo.position(this.container,true);
-		var marginBox = dojo.marginBox(this.container);
+		var position = domGeom.position(this.container,true);
+		var marginBox = domGeom.getMarginBox(this.container);
 		// use contentBox for correct width and height - surface spans outside border otherwise
-		var contentBox = dojo.contentBox(this.container);
+		var contentBox = domGeom.getContentBox(this.container);
 		this._storedContainerBounds = {
 				x: position.x,
 				y: position.y,
@@ -135,7 +135,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		//		tests whether the application is running on a mobile device (android or iOS)
 		//	tags:
 		//		private
-		return (dojo.isSafari
+		return (has("safari")
 				&& (navigator.userAgent.indexOf("iPhone") > -1 ||
 					navigator.userAgent.indexOf("iPod") > -1 ||
 					navigator.userAgent.indexOf("iPad") > -1
@@ -150,10 +150,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		//	markerFile:
 		//		outside marker data url, handled as json style.
 		//		data format: {"NY":"New York",.....}
-		dojo.xhrGet({
+		xhr.get({
 			url: markerFile,
 			handleAs: "json",
-			handle: dojo.hitch(this, "_appendMarker")
+			handle: lang.hitch(this, "_appendMarker")
 		});
 	},
 	
@@ -194,7 +194,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 			scope: this,
 			onComplete: function(items){
 				this._idAttributes = mapInstance.dataStore.getIdentityAttributes({});
-				dojo.forEach(items, function(item) {
+				arr.forEach(items, function(item) {
 					var id = mapInstance.dataStore.getValue(item, this._idAttributes[0]);
 					if(mapInstance.mapObj.features[id]){
 						var val = null;
@@ -257,9 +257,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		if (this.dataStore != dataStore) {
 			// disconnect previous listener if any
 			if (this._onSetListener) {
-				dojo.disconnect(this._onSetListener);
-				dojo.disconnect(this._onNewListener);
-				dojo.disconnect(this._onDeleteListener);
+				connect.disconnect(this._onSetListener);
+				connect.disconnect(this._onNewListener);
+				connect.disconnect(this._onDeleteListener);
 			}
 			
 			// set new dataStore
@@ -267,9 +267,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 			
 			// install listener on new dataStore
 			if (dataStore) {
-				_onSetListener = dojo.connect(this.dataStore,"onSet",this,this._onSet);
-				_onNewListener = dojo.connect(this.dataStore,"onNew",this,this._onNew);
-				_onDeleteListener = dojo.connect(this.dataStore,"onDelete",this,this._onDelete);
+				_onSetListener = connect.connect(this.dataStore,"onSet",this,this._onSet);
+				_onNewListener = connect.connect(this.dataStore,"onNew",this,this._onNew);
+				_onDeleteListener = connect.connect(this.dataStore,"onDelete",this,this._onDelete);
 			}
 		}
 		if (dataBindingProp)
@@ -290,11 +290,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		} else {
 	        // load series file
 			if (typeof series == "string" && series.length > 0) {
-				dojo.xhrGet({
+				xhr.get({
 					url: series,
 					handleAs: "json",
 					sync: true,
-					load: dojo.hitch(this, function(content){
+					load: lang.hitch(this, function(content){
 						this._addSeriesImpl(content.series);
 					})
 				});
@@ -406,9 +406,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 
 		//install callback
 		if (onAnimationEnd) {
-			var listener = dojo.connect(anim,"onEnd",this,function(event){
+			var listener = connect.connect(anim,"onEnd",this,function(event){
 				onAnimationEnd(event);
-				dojo.disconnect(listener);
+				connect.disconnect(listener);
 			});
 		}
 		
@@ -566,7 +566,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 
 
 		//	if there are "features", then implement them now.
-		dojo.forEach(shapeData.featureNames, function(item){
+		arr.forEach(shapeData.featureNames, function(item){
 			var featureShape = shapeData.features[item];
 			featureShape.bbox.x = featureShape.bbox[0];
 			featureShape.bbox.y = featureShape.bbox[1];
@@ -585,12 +585,12 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/h
 		this.mapObj.marker = new Marker(markerData, this);
 	},
 	_createZoomingCursor: function(){
-		if(!dojo.byId("mapZoomCursor")){
-			var mapZoomCursor = dojo.doc.createElement("div");
-			dojo.attr(mapZoomCursor,"id","mapZoomCursor");
-			dojo.addClass(mapZoomCursor,"mapZoomIn");
-			dojo.style(mapZoomCursor,"display","none");
-			dojo.body().appendChild(mapZoomCursor);
+		if(!dom.byId("mapZoomCursor")){
+			var mapZoomCursor = win.doc.createElement("div");
+			html.attr(mapZoomCursor,"id","mapZoomCursor");
+			domClass.add(mapZoomCursor,"mapZoomIn");
+			html.style(mapZoomCursor,"display","none");
+			win.body().appendChild(mapZoomCursor);
 		}
 	},
 	onFeatureClick: function(feature){

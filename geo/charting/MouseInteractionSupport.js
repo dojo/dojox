@@ -1,9 +1,10 @@
 
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare", "dojo/_base/connect","dojo/_base/window","dojo/_base/html"],
-											function(dojo, lang, declare, connect, window, dhtml) {
+define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/event",
+		"dojo/_base/connect","dojo/_base/window","dojo/_base/html","dojo/dom","dojo/_base/sniff"],
+											function(dojo, lang, declare, event, connect, win, html,dom,has) {
 
 
-return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
+return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 	//	summary: 
 	//		class to handle mouse interactions on a dojox.geo.charting.Map widget
 	//	tags:
@@ -53,11 +54,11 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		//		enables mouse zoom on the map
 		if (enable && !this._mouseWheelListener) {
 			// enable
-			var wheelEventName = !dojo.isMozilla ? "onmousewheel" : "DOMMouseScroll";
+			var wheelEventName = !has("mozilla") ? "onmousewheel" : "DOMMouseScroll";
 			this._mouseWheelListener = this._map.surface.connect(wheelEventName, this, this._mouseWheelHandler);
 		} else if (!enable && this._mouseWheelListener) {
 			// disable
-			dojo.disconnect(this._mouseWheelListener);
+			connect.disconnect(this._mouseWheelListener);
 			this._mouseWheelListener = null;
 		}
 		this._zoomEnabled = enable;
@@ -77,9 +78,9 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this._mouseMoveListener = this._map.surface.connect("onmousemove", this, this._mouseMoveHandler);
 		this._mouseDownListener = this._map.surface.connect("onmousedown", this, this._mouseDownHandler);
 		
-		if (dojo.isIE) {
-			_onDragStartListener = dojo.connect(dojo.doc,"ondragstart",this,dojo.stopEvent);
-			_onSelectStartListener = dojo.connect(dojo.doc,"onselectstart",this,dojo.stopEvent);			
+		if (has("ie")) {
+			_onDragStartListener = connect.connect(win.doc,"ondragstart",this,event.stop);
+			_onSelectStartListener = connect.connect(win.doc,"onselectstart",this,event.stop);			
 		}
 		
 		this.setEnableZoom(this._zoomEnabled);
@@ -101,15 +102,15 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		
 		// disconnect remaining listeners
 		if (this._mouseMoveListener) {
-			dojo.disconnect(this._mouseMoveListener);
+			connect.disconnect(this._mouseMoveListener);
 			this._mouseMoveListener = null;
-			dojo.disconnect(this._mouseDownListener);
+			connect.disconnect(this._mouseDownListener);
 			this._mouseDownListener = null;
 		}
 		if (this._onDragStartListener) {
-			dojo.disconnect(this._onDragStartListener);
+			connect.disconnect(this._onDragStartListener);
 			this._onDragStartListener = null;
-			dojo.disconnect(this._onSelectStartListener);
+			connect.disconnect(this._onSelectStartListener);
 			this._onSelectStartListener = null;
 		}
 		
@@ -146,7 +147,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		//		private
 		
 		
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		this._map.focused = true;
 		// set various status parameters
@@ -163,14 +164,14 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this._mapClickLocation.y = mapPoint.y;
 		
 		// install drag listener if pan is enabled
-		if (!dojo.isIE) {
-			this._mouseDragListener = dojo.connect(dojo.doc,"onmousemove",this,this._mouseDragHandler);
+		if (!has("ie")) {
+			this._mouseDragListener = connect.connect(win.doc,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
-			this._mouseUpListener = dojo.connect(dojo.doc,"onmouseup",this, this._mouseUpHandler);
+			this._mouseUpListener = connect.connect(win.doc,"onmouseup",this, this._mouseUpHandler);
 			
 		} else {
-			var node = dojo.byId(this._map.container);
-			this._mouseDragListener = dojo.connect(node,"onmousemove",this,this._mouseDragHandler);
+			var node = dom.byId(this._map.container);
+			this._mouseDragListener = connect.connect(node,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
 			this._mouseUpListener = this._map.surface.connect("onmouseup", this, this._mouseUpHandler);
 			this._map.surface.rawNode.setCapture();
@@ -197,25 +198,25 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		//	tags:
 		//		private
 		
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		this._map.mapObj.marker._needTooltipRefresh = true;
 		
 		// disconnect listeners
 		if (this._mouseDragListener) {
-			dojo.disconnect(this._mouseDragListener);
+			connect.disconnect(this._mouseDragListener);
 			this._mouseDragListener = null;
 		}
 		if (this._mouseUpClickListener) {
-			dojo.disconnect(this._mouseUpClickListener);
+			connect.disconnect(this._mouseUpClickListener);
 			this._mouseUpClickListener = null;
 		}
 		if (this._mouseUpListener) {
-			dojo.disconnect(this._mouseUpListener);
+			connect.disconnect(this._mouseUpListener);
 			this._mouseUpListener = null;
 		}
 		
-		if (dojo.isIE) {
+		if (has("ie")) {
 			this._map.surface.rawNode.releaseCapture();
 		}
 	},
@@ -276,7 +277,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		//		private
 		
 		// prevent browser interaction
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		
 		// find out if this the movement discards the "mouse click" gesture
@@ -317,7 +318,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		
 
 		// prevent browser interaction
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		// hide tooltip
 		this._map.mapObj.marker.hide();
@@ -331,7 +332,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		var invariantMapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 
 		// zoom increment power
-		var power  = mouseEvent[(dojo.isMozilla ? "detail" : "wheelDelta")] / (dojo.isMozilla ? - 3 : 120) ;
+		var power  = mouseEvent[(has("mozilla") ? "detail" : "wheelDelta")] / (has("mozilla") ? - 3 : 120) ;
 		var scaleFactor = Math.pow(1.2,power);
 		this._map.setMapScaleAt(this._map.getMapScale()*scaleFactor ,invariantMapPoint.x,invariantMapPoint.y,false);
 		this._map.mapObj.marker._needTooltipRefresh = true;

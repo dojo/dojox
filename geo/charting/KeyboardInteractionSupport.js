@@ -1,8 +1,9 @@
 
-define(["dojo/_base/kernel", "dojo/_base/lang","dojo/_base/declare","dojo/_base/connect","dojo/_base/html","dojox/lang/functional"],
-					function(dojo, lang, declare, connect, dhtml, functional) {
+define(["dojo/_base/kernel", "dojo/_base/lang","dojo/_base/declare","dojo/_base/event","dojo/_base/connect",
+		"dojo/_base/html","dojo/dom","dojox/lang/functional","dojo/keys"],
+					function(dojo, lang, declare,event, connect, html,dom, functional, keys) {
 
-return dojo.declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
+return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 	//	summary: 
 	//		class to handle keyboard interactions on a dojox.geo.charting.Map widget
 	//
@@ -28,48 +29,48 @@ return dojo.declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 	connect: function(){
 		//	summary: 
 		//		connects this keyboard support class to the Map component
-		var container = dojo.byId(this._map.container);
+		var container = dom.byId(this._map.container);
 		//	tab accessing enable
-		dojo.attr(container, {
+		html.attr(container, {
 			tabindex: 0,
 			role: "presentation",
 			"aria-label": "map"
 		});
 		// install listeners
-		this._keydownListener = dojo.connect(container, "keydown", this, "keydownHandler");
-		this._onFocusListener = dojo.connect(container, "focus", this, "onFocus");
-		this._onBlurListener = dojo.connect(container, "blur", this, "onBlur");
+		this._keydownListener = connect.connect(container, "keydown", this, "keydownHandler");
+		this._onFocusListener = connect.connect(container, "focus", this, "onFocus");
+		this._onBlurListener = connect.connect(container, "blur", this, "onBlur");
 	},
 	disconnect: function(){
 		//	summary: 
 		//		disconnects any installed listeners
-		dojo.disconnect(this._keydownListener);
+		connect.disconnect(this._keydownListener);
 		this._keydownListener = null;
-		dojo.disconnect(this._onFocusListener);
+		connect.disconnect(this._onFocusListener);
 		this._onFocusListener = null;
-		dojo.disconnect(this._onBlurListener);
+		connect.disconnect(this._onBlurListener);
 		this._onBlurListener = null
 	},
 	keydownHandler: function(e){
 		switch(e.keyCode){
-			case dojo.keys.LEFT_ARROW:
+			case keys.LEFT_ARROW:
 				this._directTo(-1,-1,1,-1);
 				break;
-			case dojo.keys.RIGHT_ARROW:
+			case keys.RIGHT_ARROW:
 				this._directTo(-1,-1,-1,1);
 				break;
-			case dojo.keys.UP_ARROW:
+			case keys.UP_ARROW:
 				this._directTo(1,-1,-1,-1);
 				break;
-			case dojo.keys.DOWN_ARROW:
+			case keys.DOWN_ARROW:
 				this._directTo(-1,1,-1,-1);
 				break;
-			case dojo.keys.SPACE:
+			case keys.SPACE:
 				if(this._map.selectedFeature && !this._map.selectedFeature._isZoomIn && this._zoomEnabled){
 					this._map.selectedFeature._zoomIn();
 				}
 				break;
-			case dojo.keys.ESCAPE:
+			case keys.ESCAPE:
 				if(this._map.selectedFeature && this._map.selectedFeature._isZoomIn && this._zoomEnabled){
 					this._map.selectedFeature._zoomOut();
 				}
@@ -77,7 +78,7 @@ return dojo.declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 			default:
 				return;
 		}
-		dojo.stopEvent(e);
+		event.stop(e);
 	},
 	onFocus: function(e){
 		// select the leading region at the map center
