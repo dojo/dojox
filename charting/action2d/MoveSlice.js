@@ -1,6 +1,6 @@
-define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/easing", "dojox/gfx/matrix", 
+define(["dojox","dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/easing", "dojox/gfx/matrix", 
 	"dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
-	function(Connect, declare, PlotAction, dfe, m, gf, df, dfs, dff){
+	function(dojox, Hub, declare, PlotAction, dfe, m, gf, df, dfs, dff){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -106,7 +106,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 			});
 
 			if(o.type == "onmouseout"){
-				Connect.connect(anim.action, "onEnd", this, function(){
+				Hub.connect(anim.action, "onEnd", this, function(){
 					delete this.anim[index];
 				});
 			}

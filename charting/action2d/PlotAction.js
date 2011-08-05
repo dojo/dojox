@@ -1,6 +1,6 @@
-define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional", 
+define(["dojox","dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional", 
 		"dojox/lang/functional/object"], 
-	function(Connect, declare, Base, dfe, df, dlfo){
+	function(dojox, Hub, declare, Base, dfe, df, dlfo){
 	
 	/*=====
 	dojox.charting.action2d.__PlotActionCtorArgs = function(duration, easing){
@@ -52,7 +52,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", 
 			//	summary:
 			//		Disconnect this action from the given plot, if connected.
 			if(this.handle){
-				Connect.disconnect(this.handle);
+				Hub.disconnect(this.handle);
 				this.handle = null;
 			}
 		},

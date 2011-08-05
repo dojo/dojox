@@ -67,7 +67,7 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "dijit/_Widg
 			}
 
 			if(this.horizontal){
-				DOMClass.addClass(this.domNode, "dojoxLegendHorizontal");
+				DOMClass.add(this.domNode, "dojoxLegendHorizontal");
 				// make a container <tr>
 				this._tr = DOMFactory.create("tr", null, this.legendBody);
 				this._inrow = 0;
@@ -114,8 +114,8 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "dijit/_Widg
 						"float": "left"
 					}
 				}, icon);
-			DOMClass.addClass(icon, "dojoxLegendIcon dijitInline");
-			DOMClass.addClass(text, "dojoxLegendText");
+			DOMClass.add(icon, "dojoxLegendIcon dijitInline");
+			DOMClass.add(text, "dojoxLegendText");
 			// create a skeleton
 			if(this._tr){
 				// horizontal

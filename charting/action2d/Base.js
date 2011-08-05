@@ -4,7 +4,6 @@ define(["dojo/_base/lang", "dojo/_base/declare"],
 	return declare("dojox.charting.action2d.Base", null, {
 		//	summary:
 		//		Base action class for plot and chart actions.
-
 	
 		constructor: function(chart, plot){
 			//	summary:
