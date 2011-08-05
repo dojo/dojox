@@ -206,12 +206,12 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 						if(f.contentWindow.document.readyState == "complete"){
 							f.onreadystatechange = function() {};
 							intv = setInterval(function() {
-								if(f.contentWindow[dojo._scopeName] &&
-								   f.contentWindow[dojox._scopeName].gfx &&
-								   f.contentWindow[dojox._scopeName].gfx.utils){
+								if(f.contentWindow[kernel.scopeMap.dojo._scopeName] &&
+								   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx &&
+								   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx.utils){
 									clearInterval(intv);
-									f.contentWindow.parent[dojox._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
-									f.contentWindow.parent[dojox._scopeName].gfx.utils._svgSerializerInitialized();
+									f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
+									f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._svgSerializerInitialized();
 								}
 							}, 50);
 						}
@@ -220,20 +220,20 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 					f.onload = function(){
 						f.onload = function() {};
 						intv = setInterval(function() {
-							if(f.contentWindow[dojo._scopeName] &&
-							   f.contentWindow[dojox._scopeName].gfx &&
-							   f.contentWindow[dojox._scopeName].gfx.utils){
+							if(f.contentWindow[kernel.scopeMap.dojo._scopeName] &&
+							   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx &&
+							   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx.utils){
 								clearInterval(intv);
-								f.contentWindow.parent[dojox._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
-								f.contentWindow.parent[dojox._scopeName].gfx.utils._svgSerializerInitialized();
+								f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
+								f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._svgSerializerInitialized();
 							}
 						}, 50);
 					};
 				}
 				//We have to load the GFX SVG proxy frame.  Default is to use the one packaged in dojox.
-				var uri = (dojo.config["dojoxGfxSvgProxyFrameUrl"]||dojo.moduleUrl("dojox", "gfx/resources/gfxSvgProxyFrame.html"));
+				var uri = (kernel.config["dojoxGfxSvgProxyFrameUrl"]||kernel.moduleUrl("dojox", "gfx/resources/gfxSvgProxyFrame.html"));
 				f.setAttribute("src", uri.toString());
-				dojo.body().appendChild(f);
+				win.body().appendChild(f);
 			}
 		},
 

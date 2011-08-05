@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "dijit/_Widg
 		"dojo/dom", "dojo/dom-construct", "dojo/dom-class","dijit/_base/manager"], 
 		function(lang, html, declare, Widget, gfx, ArrayUtil, df, dfa, dff, 
 				DOM, DOMFactory, DOMClass, WidgetManager){
-
+	var dijit = WidgetManager; // Use local reference, rather than global. Will remove in 2.0.  Needed for declare() below...
 	var REVERSED_SERIES = /\.(StackedColumns|StackedAreas|ClusteredBars)$/;
 
 	return declare("dojox.charting.widget.Legend", dijit._Widget, {

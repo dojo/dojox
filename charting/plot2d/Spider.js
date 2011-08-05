@@ -2,10 +2,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff",
 	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
-	"dojox/lang/utils", "dojo/fx/easing"],
+	"dojox/lang/utils", "dojo/fx/easing", "dijit/_base/manager", "dijit/Tooltip"],
 	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, ua,
 			Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, 
-			g, m, gfxfx, df, du, easing){
+			g, m, gfxfx, df, du, easing, dijit, Tooltip){
 
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
@@ -512,14 +512,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					aroundRect.height = Math.ceil(aroundRect.height);
 					this.aroundRect = aroundRect;
 					var position = ["after", "before"];
-					if(dijit && dijit.Tooltip){
-						dijit.showTooltip(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
+					if(WidgetManager && Tooltip){
+						Tooltip.show(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
 					}
 				}else{
 					init  = m.scaleAt(defaultScale, o.cx, o.cy);
 					scale = 1/defaultScale;
-					if(dijit && dijit.Tooltip){
-						this.aroundRect && dijit.hideTooltip(this.aroundRect);
+					if(WidgetManager && Tooltip){
+						this.aroundRect && Tooltip.hide(this.aroundRect);
 					}
 				}
 				var cs = o.shape.getShape(),

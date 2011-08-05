@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/Color", "./svg"], 
-  function(dojo, lang, arr, Color, svg){
+  function(kernel, lang, arr, Color, svg){
 	lang.getObject("dojox.gfx.svg_attach", true);
-	dojo.experimental("dojox.gfx.svg_attach");
+	kernel.experimental("dojox.gfx.svg_attach");
 	var g = dojox.gfx, svg = g.svg;
 	
 	svg.attachNode = function(node){

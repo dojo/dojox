@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "./silverlight"], 
-  function(dojo,lang,silverlight){
+  function(kernel,lang,silverlight){
 	lang.getObject("dojox.gfx.silverlight_attach", true);
-	dojo.experimental("dojox.gfx.silverlight_attach");
+	kernel.experimental("dojox.gfx.silverlight_attach");
 	var g = dojox.gfx, sl = g.silverlight;
 	
 	sl.attachNode = function(node){

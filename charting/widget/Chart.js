@@ -1,8 +1,10 @@
-define(["dojox","dojo/_base/lang", "dojo/_base/array","dojo/_base/html","dojo/_base/declare", "dojo/query", "dijit/_Widget", "../Chart", 
-	"dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda"], 
-	function(dojox, lang, arr, html, declare, query, Widget, Chart, du, df, dfl){
+define(["dojox","dojo/_base/lang", "dojo/_base/array","dojo/_base/html","dojo/_base/declare", "dojo/query",
+	"dijit/_Widget", "../Chart", "dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda",
+	"dijit/_base/manager"], 
+	function(dojox, lang, arr, html, declare, query, Widget, Chart, du, df, dfl, WidgetManager){
 	var collectParams, collectAxisParams, collectPlotParams,
 		collectActionParams, collectDataParams,
+		dijit = WidgetManager,  // use local reference, rather than dijit global... will be removed in 2.0. Needed for proper api doc of declare() below.
 		notNull = function(o){ return o; },
 		dc = dojox.charting;
 	

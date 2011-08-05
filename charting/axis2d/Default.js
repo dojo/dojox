@@ -1,7 +1,8 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
 	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", "../scaler/common", "../scaler/linear", "./common", 
-	"dojox/gfx", "dojox/lang/utils"], 
-	function(dojo, lang, arr, ua, declare, connect, html, domGeom, Invisible, scommon, lin, acommon, g, du){
+	"dojox/gfx", "dojox/lang/utils", "dijit/_base/manager", "dijit/Tooltip"], 
+	function(dojo, lang, arr, ua, declare, connect, html, domGeom, Invisible, scommon, 
+			lin, acommon, g, du, WidgetManager, Tooltip){
 
 	/*=====
 		dojox.charting.axis2d.__AxisCtorArgs = function(
@@ -739,7 +740,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
 			// to avoid requiring dijit module for that feature, let's test that
 			// dynamically and return if we can't do it
-			if(!dijit || !dijit.Tooltip){
+			if(!WidgetManager || !Tooltip){
 				return;
 			}
 			var aroundRect = {type: "rect"}, position = ["above", "below"],
@@ -752,13 +753,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 				this._events.push({
 					shape:  dojo,
 					handle: connect.connect(elem.firstChild, "onmouseover", this, function(e){
-						dijit.showTooltip(label, aroundRect, position);
+						Tooltip.show(label, aroundRect, position);
 					})
 				});
 				this._events.push({
 					shape:  dojo,
 					handle: connect.connect(elem.firstChild, "onmouseout", this, function(e){
-						dijit.hideTooltip(aroundRect);
+						Tooltip.hide(aroundRect);
 					})
 				});
 			}else{
@@ -777,13 +778,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 				this._events.push({
 					shape:  elem,
 					handle: elem.connect("onmouseenter", this, function(e){
-						dijit.showTooltip(label, aroundRect, position);
+						Tooltip.show(label, aroundRect, position);
 					})
 				});
 				this._events.push({
 					shape:  elem,
 					handle: elem.connect("onmouseleave", this, function(e){
-						dijit.hideTooltip(aroundRect);
+						Tooltip.hide(aroundRect);
 					})
 				});
 			}

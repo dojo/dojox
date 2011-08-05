@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "./vml"],
-  function (dojo,lang,Color,vml){
+  function (kernel,lang,Color,vml){
 	lang.getObject("dojox.gfx.vml_attach", true);
-	dojo.experimental("dojox.gfx.vml_attach");
+	kernel.experimental("dojox.gfx.vml_attach");
 	var g = dojox.gfx, m = g.matrix, vml = g.vml;
 	
 	vml.attachNode = function(node){
