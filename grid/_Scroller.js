@@ -20,14 +20,11 @@ define([
 		if(!inNode){
 			return;
 		}
-		var filter = function(inW){
-			return inW.domNode && html.isDescendant(inW.domNode, inNode, true);
-		};
-		var ws = dijit.registry.filter(filter);
-		for(var i=0, w; (w=ws[i]); i++){
-			w.destroy();
-		}
-		delete ws;
+		dojo.forEach(dijit.registry.toArray(), function(w){
+			if(w.domNode && html.isDescendant(w.domNode, inNode, true)){
+				w.destroy();
+			}
+		});
 	};
 
 	var getTagName = function(inNodeOrId){

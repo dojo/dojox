@@ -114,11 +114,11 @@ dojo.declare("dojox.layout.ExpandoPane",
 		if(this.splitter){
 			// find our splitter and tie into it's drag logic
 			var myid = this.id;
-			dijit.registry.filter(function(w){
-				return w && w.child && w.child.id == myid;
-			}).forEach(dojo.hitch(this,function(w){
-				this.connect(w,"_stopDrag","_afterResize");
-			}));
+			dojo.forEach(dijit.registry.toArray(), function(w){
+				if(w && w.child && w.child.id == myid){
+					this.connect(w,"_stopDrag","_afterResize");
+				}
+			}, this);
 		}
 		
 		this._currentSize = dojo.contentBox(this.domNode);	// TODO: can compute this from passed in value to resize(), see _LayoutWidget for example
