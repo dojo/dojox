@@ -3,13 +3,17 @@ define([
 	"dojo/dom-style",
 	"dojo/dom-construct",
 	"dojo/dom-attr",
+	"dojo/has",
 	"dojo/_base/declare",
 	"dojo/_base/event",
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin"
-],function(domForm, domStyle, domConstruct, domAttr, declare, event, Widget, TemplatedMixin, WidgetsInTemplateMixin){
+],function(domForm, domStyle, domConstruct, domAttr, has, declare, event, Widget, TemplatedMixin, WidgetsInTemplateMixin){
 
+has.add('FormData', function(){return !!window.FormData;});
+has.add('xhr-sendAsBinary', function(){var xhr=window.XMLHttpRequest && new window.XMLHttpRequest(); return xhr && xhr.sendAsBinary;});
+has.add('file-multiple', function(){return !!({'true':1,'false':1}[domAttr.get(document.createElement('input',{type:"file"}), 'multiple')]);});
 
 	/*=====
 		Widget = dijit._Widget;
@@ -74,25 +78,14 @@ return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTem
 		//	summary:
 		// 		Does feature testing for uploader capabilities. (No browser sniffing - yay)
 		//
-		if(!this._hascache){
-			this._hascache = {
-				testDiv: domConstruct.create("div"),
-				testInput: domConstruct.create("input", {type:"file"}),
-				xhr:!!window.XMLHttpRequest ? new XMLHttpRequest() : {}
-			};
-			domStyle.set(this._hascache.testDiv, "opacity", .7);
-		}
 		switch(what){
-			case "FormData":
-				return !!window.FormData;
-			case "sendAsBinary":
-				return !!this._hascache.xhr.sendAsBinary;
-			case "opacity":
-				return domStyle.get(this._hascache.testDiv, "opacity") == .7;
 			case "multiple":
 				if(this.force == "flash" || this.force == "iframe") return false;
-				var res = domAttr.get(this._hascache.testInput, "multiple");
-				return res===true || res===false; // IE will be undefined
+				return has("file-multiple");
+			case "FormData":
+				return has(what);
+			case "sendAsBinary":
+				return has("xhr-sendAsBinary");
 		}
 		return false; // Boolean
 	},
