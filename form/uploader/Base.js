@@ -69,7 +69,7 @@ return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTem
 			this._fcon = true;
 			this.connect(this.form, "onsubmit", function(evt){
 				event.stop(evt);
-				this.submit(domForm.toObject(this.form));
+				this.submit(this.form);
 			});
 		}
 	},

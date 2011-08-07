@@ -1,10 +1,9 @@
 define([
-	"dojo/dom-form",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo"
-],function(domForm, declare, lang, array, dojo){
+],function(declare, lang, array, dojo){
 
 var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 	//
@@ -48,15 +47,6 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		}else if(this.supports("sendAsBinary")){
 			this.sendAsBinary(formData);
 		}
-	},
-
-	submit: function(/* form Node ? */form){
-		// summary:
-		//		See: dojox.form.Uploader.submit
-		//
-		form = !!form ? form.tagName ? form : this.getForm() : this.getForm();
-		var data = domForm.toObject(form);
-		this.upload(data);
 	},
 
 	sendAsBinary: function(/* Object */data){

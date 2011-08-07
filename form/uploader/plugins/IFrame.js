@@ -29,12 +29,7 @@ var pluginsIFrame = declare("dojox.form.uploader.plugins.IFrame", [], {
 		if(!this.supports("multiple") || this.force =="iframe"){
 			this.uploadType = "iframe";
 			this.upload = this.uploadIFrame;
-			this.submit = this.submitIFrame;
 		}
-	},
-
-	submitIFrame: function(data){
-		this.uploadIFrame(data);
 	},
 
 	uploadIFrame: function(data){
@@ -60,6 +55,7 @@ var pluginsIFrame = declare("dojox.form.uploader.plugins.IFrame", [], {
 			url: url,
 			form: form,
 			handleAs: "json",
+			content: data,
 			error: lang.hitch(this, function(err){
 				if(destroyAfter){ domConstruct.destroy(form); }
 				this.onError(err);

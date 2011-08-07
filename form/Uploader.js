@@ -9,12 +9,13 @@ define([
 	"dojo/dom-geometry",
 	"dojo/dom-attr",
 	"dojo/dom-construct",
+	"dojo/dom-form",
 	"dijit",
 	"dijit/_WidgetsInTemplateMixin",
 	"dojox/form/uploader/Base",
 	"dojo/i18n!./nls/Uploader",
 	"dijit/form/Button" // template
-],function(kernel, declare, lang, array, connect, win, domStyle, domGeometry, domAttr, domConstruct, dijit, WidgetsInTemplateMixin, uploader, res){
+],function(kernel, declare, lang, array, connect, win, domStyle, domGeometry, domAttr, domConstruct, domForm, dijit, WidgetsInTemplateMixin, uploader, res){
 
 	kernel.experimental("dojox.form.Uploader");
 	//
@@ -189,7 +190,10 @@ declare("dojox.form.Uploader", [uploader, WidgetsInTemplateMixin], {
 	submit: function(/* form Node ? */form){
 		// summary:
 		//		If Uploader is in a form, and other data should be sent along with the files, use
-		//		this instead of form submit. Only supported with plugins.
+		//		this instead of form submit.
+		form = !!form ? form.tagName ? form : this.getForm() : this.getForm();
+		var data = domForm.toObject(form);
+		this.upload(data);
 	},
 
 	reset: function(){

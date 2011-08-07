@@ -80,7 +80,6 @@ var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 			this.getFileList = this.getFlashFileList;
 			this.reset = this.flashReset;
 			this.upload = this.uploadFlash;
-			this.submit = this.submitFlash;
 			this.fieldname = "flashUploadFiles"; ///////////////////// this.name
 		}
 		this.inherited(arguments);
@@ -143,17 +142,6 @@ var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 		this.onBegin(this.getFileList());
 		this.flashMovie.doUpload(formData);
 	},
-
-	submitFlash: function(/* form node ? */form){
-		// summary:
-		// 		Uploads selected files with form data. Alias "submit()" should be used instead.
-		// tags:
-		//		private
-		var formData = form ? domForm.toObject(form) : null;
-		this.onBegin(this.getFileList());
-		this.flashMovie.doUpload(formData);
-	},
-
 
 	_change: function(fileArray){
 		this._files = this._files.concat(fileArray);
