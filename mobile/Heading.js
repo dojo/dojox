@@ -7,11 +7,13 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase"
 ],
-	function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, Contained, Container, WidgetBase){
+	function(array, connect, declare, lang, win, domClass, domConstruct, domStyle,
+			 registry, Contained, Container, WidgetBase){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
@@ -177,7 +179,7 @@ define([
 					// However, when views are nested and transition occurs from
 					// an inner view, search for an ancestor view that is a sibling
 					// of the target view, and use it as a source view.
-					var node = dijit.byId(view.convertToId(moveTo));
+					var node = registry.byId(view.convertToId(moveTo));
 					if(node){
 						var parent = node.getParent();
 						while(view){

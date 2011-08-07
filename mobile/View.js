@@ -11,12 +11,14 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./ViewController"
 //	"dojo/hash", // optionally prereq'ed
-], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, Contained, Container, WidgetBase, ViewController){
+], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle,
+			registry, Contained, Container, WidgetBase, ViewController){
 	// module:
 	//		dojox/mobile/View
 	// summary:
@@ -93,7 +95,7 @@ define([
 				var c = children[i];
 				if(c.nodeType === 1 && domClass.contains(c, "mblView")){
 					siblings.push(c);
-					visible = visible || dijit.byNode(c)._visible;
+					visible = visible || registry.byNode(c)._visible;
 				}
 			}
 			var _visible = this._visible;
@@ -228,7 +230,7 @@ define([
 			if(!toNode){ console.log("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
 			toNode.style.visibility = this._aw ? "visible" : "hidden";
 			toNode.style.display = "";
-			var toWidget = dijit.byNode(toNode);
+			var toWidget = registry.byNode(toNode);
 			if(toWidget){
 				// Now that the target view became visible, it's time to run resize()
 				dojox.mobile.resizeAll(null, toWidget);
@@ -314,7 +316,7 @@ define([
 				domStyle.set(fromNode, {webkitTransformOrigin:fromOrigin});
 				domStyle.set(toNode, {webkitTransformOrigin:toOrigin});
 			}
-			dojox.mobile.currentView = dijit.byNode(toNode);
+			dojox.mobile.currentView = registry.byNode(toNode);
 		},
 	
 		onAnimationStart: function(e){
@@ -353,7 +355,7 @@ define([
 		invokeCallback: function(){
 			this.onAfterTransitionOut.apply(this, this._arguments);
 			connect.publish("/dojox/mobile/afterTransitionOut", [this].concat(this._arguments));
-			var toWidget = dijit.byNode(this.toNode);
+			var toWidget = registry.byNode(this.toNode);
 			if(toWidget){
 				toWidget.onAfterTransitionIn.apply(toWidget, this._arguments);
 				connect.publish("/dojox/mobile/afterTransitionIn", [toWidget].concat(this._arguments));
@@ -383,7 +385,7 @@ define([
 			for(var i = 0; i < nodes.length; i++){
 				var n = nodes[i];
 				if(n.nodeType === 1 && domClass.contains(n, "mblView") && domStyle.get(n, "display") !== "none"){
-					return dijit.byNode(n);
+					return registry.byNode(n);
 				}
 			}
 			return null;

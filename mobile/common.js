@@ -10,9 +10,10 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"dojo/ready",
-	"dijit/_WidgetBase"
+	"dijit/registry",
+	"dijit/WidgetSet"	// to get filter(), forEach()
 //	"dojo/hash", // optionally prereq'ed
-], function(dojo, array, config, connect, lang, has, win, domClass, domConstruct, domStyle, ready, WidgetBase){
+], function(dojo, array, config, connect, lang, has, win, domClass, domConstruct, domStyle, ready, registry){
 
 	lang.getObject("mobile", true, dojox);
 
@@ -190,7 +191,7 @@ define([
 			if(root.resize){ root.resize(); }
 			resizeRecursively(root);
 		}else{
-			dijit.registry.filter(isTopLevel).forEach(function(w){
+			registry.filter(isTopLevel).forEach(function(w){
 				w.resize();
 			});
 		}
@@ -361,7 +362,7 @@ define([
 			// find widgets under root recursively
 			var findWidgets = function(root){
 				if(!root){ return []; }
-				var arr = dijit.findWidgets(root);
+				var arr = registry.findWidgets(root);
 				var widgets = arr;
 				for(var i = 0; i < widgets.length; i++){
 					arr = arr.concat(findWidgets(widgets[i].containerNode));
@@ -394,11 +395,12 @@ define([
 	
 		win.body().style.visibility = "visible";
 	});
-	
+
+	// TODO: why is this repeated here when it's already implemented in dijit/registry.js?
 	dijit.getEnclosingWidget = function(node){
 		while(node && node.tagName !== "BODY"){
 			if(node.getAttribute && node.getAttribute("widgetId")){
-				return dijit.registry.byId(node.getAttribute("widgetId"));
+				return registry.byId(node.getAttribute("widgetId"));
 			}
 			node = node._parentNode || node.parentNode;
 		}

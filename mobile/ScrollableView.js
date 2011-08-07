@@ -3,10 +3,11 @@ define([
 	"dojo/_base/declare",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dijit/registry",
 	"./View",
 	"./_ScrollableMixin"
 ],
-	function(array, declare, domClass, domConstruct, View, ScrollableMixin){
+	function(array, declare, domClass, domConstruct, registry, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/ScrollableView
 	// summary:
@@ -106,10 +107,10 @@ define([
 		getChildren: function(){
 			var children = this.inherited(arguments);
 			if(this.fixedHeader && this.fixedHeader.parentNode === this.domNode){
-				children.push(dijit.byNode(this.fixedHeader));
+				children.push(registry.byNode(this.fixedHeader));
 			}
 			if(this.fixedFooter && this.fixedFooter.parentNode === this.domNode){
-				children.push(dijit.byNode(this.fixedFooter));
+				children.push(registry.byNode(this.fixedFooter));
 			}
 			return children;
 		}

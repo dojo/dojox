@@ -3,9 +3,10 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
+	"dijit/registry",
 	"./ListItem"
 ],
-	function(array, connect, declare, lang, ListItem){
+	function(array, connect, declare, lang, registry, ListItem){
 	// module:
 	//		dojox/mobile/_DataListMixin
 	// summary:
@@ -102,7 +103,7 @@ define([
 		},
 
 		onDelete: function(/* item */ deletedItem){
-			dijit.byId(deletedItem._widgetId).destroyRecursive();
+			registry.byId(deletedItem._widgetId).destroyRecursive();
 		}
 	});
 });

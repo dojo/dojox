@@ -9,11 +9,13 @@ define([
 	"dojo/dom-construct",
 	"dojo/on",
 	"dojo/ready",
+	"dijit/registry",
 	"./ProgressIndicator",
 	"./TransitionEvent"
 //	"dojo/hash", // optionally prereq'ed
 ],
-	function(dojo, array, connect, declare, lang, win, dom, domConstruct, on, ready, ProgressIndicator, TransitionEvent){
+	function(dojo, array, connect, declare, lang, win, dom, domConstruct, on, ready,
+			 registry, ProgressIndicator, TransitionEvent){
 
 	var Controller = declare(null, {
 		constructor: function(){
@@ -27,7 +29,7 @@ define([
 
 		findCurrentView: function(moveTo,src){
 			if(moveTo){
-				var w = dijit.byId(moveTo);
+				var w = registry.byId(moveTo);
 				if(w && w.getShowingView){ return w.getShowingView(); }
 			}
 			if(dojox.mobile.currentView){
@@ -46,10 +48,10 @@ define([
 			//console.log("onStartTransition:", evt.detail, evt.detail.moveTo, evt.detail.href, evt.detail.scene, evt);
 			evt.preventDefault();
 			if(!evt.detail || (evt.detail && !evt.detail.moveTo && !evt.detail.href && !evt.detail.url && !evt.detail.scene)){ return; }
-			var w = this.findCurrentView(evt.detail.moveTo, (evt.target && evt.target.id)?dijit.byId(evt.target.id):dijit.byId(evt.target)); // the current view widget
-			if(!w || (evt.detail && evt.detail.moveTo && w === dijit.byId(evt.detail.moveTo))){ return; }
+			var w = this.findCurrentView(evt.detail.moveTo, (evt.target && evt.target.id)?registry.byId(evt.target.id):registry.byId(evt.target)); // the current view widget
+			if(!w || (evt.detail && evt.detail.moveTo && w === registry.byId(evt.detail.moveTo))){ return; }
 			if(evt.detail.href){
-				var t = dijit.byId(evt.target.id).hrefTarget;
+				var t = registry.byId(evt.target.id).hrefTarget;
 				if(t){
 					dojox.mobile.openWindow(evt.detail.href, t);
 				}else{
@@ -70,7 +72,7 @@ define([
 					// get the specified external view and append it to the <body>
 					var text = this._text;
 					if(!text){
-						if(dijit.byId(evt.target.id).sync){
+						if(registry.byId(evt.target.id).sync){
 							// We do not add explicit dependency on dojo/_base/xhr to this module
 							// to be able to create a build that does not contain dojo/_base/xhr.
 							// User applications that do sync loading here need to explicitly
@@ -111,14 +113,14 @@ define([
 						}
 					}
 					this._text = null;
-					id = this._parse(text, dijit.byId(evt.target.id).urlTarget);
+					id = this._parse(text, registry.byId(evt.target.id).urlTarget);
 					if(!dojox.mobile._viewMap){
 						dojox.mobile._viewMap = [];
 					}
 					dojox.mobile._viewMap[evt.detail.url] = id;
 				}
 				moveTo = id;
-				w = this.findCurrentView(moveTo,dijit.byId(evt.target.id)) || w; // the current view widget
+				w = this.findCurrentView(moveTo,registry.byId(evt.target.id)) || w; // the current view widget
 			}
 			w.performTransition(moveTo, evt.detail.transitionDir, evt.detail.transition, null, null);
 		},
@@ -126,7 +128,7 @@ define([
 		_parse: function(text, id){
 			var container, view, i, j, len;
 			var currentView	 = this.findCurrentView();
-			var target = dijit.byId(id) && dijit.byId(id).containerNode
+			var target = registry.byId(id) && registry.byId(id).containerNode
 						|| dom.byId(id)
 						|| currentView && currentView.domNode.parentNode
 						|| win.body();
@@ -170,7 +172,7 @@ define([
 				}
 				target.removeChild(container);
 
-				dijit.byNode(view)._visible = true;
+				registry.byNode(view)._visible = true;
 			}else if(text.charAt(0) === "{"){ // json
 				container = domConstruct.create("DIV");
 				target.insertBefore(container, refNode);

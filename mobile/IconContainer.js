@@ -4,6 +4,7 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
@@ -11,7 +12,8 @@ define([
 	"./Heading",
 	"./View"
 ],
-	function(array, declare, win, domConstruct, domStyle, Contained, Container, WidgetBase, IconItem, Heading, View){
+	function(array, declare, win, domConstruct, domStyle,
+			 registry, Contained, Container, WidgetBase, IconItem, Heading, View){
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:
@@ -91,7 +93,7 @@ define([
 				var child = this.domNode.childNodes[i];
 				if(child.nodeType !== 1){ continue; }
 				if(child === this._terminator){ break; }
-				var w = dijit.byNode(child);
+				var w = registry.byNode(child);
 				w.containerNode.parentNode.style.display = "none";
 				domStyle.set(w.iconNode, "opacity", 1);
 			}

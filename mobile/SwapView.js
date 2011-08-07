@@ -3,9 +3,10 @@ define([
 	"dojo/_base/declare",
 	"dojo/dom",
 	"dojo/dom-class",
+	"dijit/registry",
 	"./View",
 	"./_ScrollableMixin"
-], function(connect, declare, dom, domClass, View, ScrollableMixin){
+], function(connect, declare, dom, domClass, registry, View, ScrollableMixin){
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:
@@ -80,14 +81,14 @@ define([
 
 		nextView: function(node){
 			for(var n = node.nextSibling; n; n = n.nextSibling){
-				if(this.isSwapView(n)){ return dijit.byNode(n); }
+				if(this.isSwapView(n)){ return registry.byNode(n); }
 			}
 			return null;
 		},
 
 		previousView: function(node){
 			for(var n = node.previousSibling; n; n = n.previousSibling){
-				if(this.isSwapView(n)){ return dijit.byNode(n); }
+				if(this.isSwapView(n)){ return registry.byNode(n); }
 			}
 			return null;
 		},

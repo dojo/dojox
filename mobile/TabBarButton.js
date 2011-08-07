@@ -4,10 +4,11 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dijit/registry",
 	"./common",
 	"./_ItemBase"
 ],
-	function(declare, lang, win, domClass, domConstruct, common, ItemBase){
+	function(declare, lang, win, domClass, domConstruct, registry, common, ItemBase){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
@@ -109,7 +110,7 @@ define([
 				domClass.add(this.domNode, "mblTabButtonSelected");
 				for(var i = 0, c = this.domNode.parentNode.childNodes; i < c.length; i++){
 					if(c[i].nodeType != 1){ continue; }
-					var w = dijit.byNode(c[i]); // sibling widget
+					var w = registry.byNode(c[i]); // sibling widget
 					if(w && w != this){
 						w.deselect();
 					}

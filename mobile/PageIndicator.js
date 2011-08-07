@@ -5,10 +5,11 @@ define([
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase"
 ],
-	function(connect, declare, win, dom, domClass, domConstruct, Contained, WidgetBase){
+	function(connect, declare, win, dom, domClass, domConstruct, registry, Contained, WidgetBase){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
@@ -59,7 +60,7 @@ define([
 				}
 			}
 			if(a.length === 0){ return; }
-			var currentView = dijit.byNode(a[0]).getShowingView();
+			var currentView = registry.byNode(a[0]).getShowingView();
 			for(i = 0; i < r.cells.length; i++){
 				dot = r.cells[i].firstChild;
 				if(a[i] === currentView.domNode){

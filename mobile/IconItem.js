@@ -8,11 +8,12 @@ define([
 	"dojo/dom-attr",
 	"dojo/dom-class",
 	"dojo/dom-style",
+	"dijit/registry",
 	"./common",
 	"./_ItemBase",
 	"./TransitionEvent"
 ],
-	function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, common, ItemBase, TransitionEvent){
+	function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, registry, common, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
@@ -192,7 +193,7 @@ define([
 				if(parent.single){
 					this.closeNode.style.display = "none";
 					parent.closeAll();
-					var view = dijit.byId(parent.id+"_mblApplView");
+					var view = registry.byId(parent.id+"_mblApplView");
 					view._heading._setLabelAttr(this.label);
 				}
 				var transOpts = this.transitionOptions || {transition: this.transition, transitionDir: this.transitionDir, moveTo: parent.id + "_mblApplView"};		

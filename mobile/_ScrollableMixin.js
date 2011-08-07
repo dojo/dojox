@@ -5,8 +5,9 @@ define([
 	"dojo/_base/window",
 	"dojo/dom",
 	"dojo/dom-class",
+	"dijit/registry",
 	"./scrollable"
-], function(dojo, declare, lang, win, dom, domClass, Scrollable){
+], function(dojo, declare, lang, win, dom, domClass, registry, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
 	// summary:
@@ -79,7 +80,7 @@ define([
 		checkFixedBar: function(/*DomNode*/node, /*Boolean*/local){
 			if(node.nodeType === 1){
 				var fixed = node.getAttribute("fixed")
-					|| (dijit.byNode(node) && dijit.byNode(node).fixed);
+					|| (registry.byNode(node) && registry.byNode(node).fixed);
 				if(fixed === "top"){
 					domClass.add(node, "mblFixedHeaderBar");
 					if(local){

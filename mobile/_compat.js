@@ -13,10 +13,12 @@ define([
 	"dojo/fx/easing",
 	"dojo/ready",
 	"dojo/uacss",
+	"dijit/registry",
 	"dojox/fx",
 	"dojox/fx/flip",
 	"require"
-], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, xfx, flip, require){
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss,
+			registry, xfx, flip, require){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -74,7 +76,7 @@ define([
 							fromNode.style.display = "none";
 							fromNode.style.left = "0px";
 							toNode.style.position = "relative";
-							var toWidget = dijit.byNode(toNode);
+							var toWidget = registry.byNode(toNode);
 							if(toWidget && !domClass.contains(toWidget.domNode, "out")){
 								// Reset the temporary padding
 								toWidget.containerNode.style.paddingTop = "";
@@ -147,7 +149,7 @@ define([
 						});
 						anim.play();
 					}
-					dojox.mobile.currentView = dijit.byNode(toNode);
+					dojox.mobile.currentView = registry.byNode(toNode);
 				},
 			
 				wakeUp: function(node){
