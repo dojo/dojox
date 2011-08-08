@@ -273,10 +273,12 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 	};
 
 	this.cleanup = function(){
-		for(var i = 0; i < this._ch.length; i++){
-			connect.disconnect(this._ch[i]);
+		if(this._ch){
+			for(var i = 0; i < this._ch.length; i++){
+				connect.disconnect(this._ch[i]);
+			}
+			this._ch = null;
 		}
-		this._ch = null;
 	};
 
 	this.findDisp = function(/*DomNode*/node){
