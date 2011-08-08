@@ -36,10 +36,13 @@ define([
 			// goto now
 			var slots = this.slots;
 			var now = new Date();
-			slots[0].setValue(now.getHours());
-			slots[0].setColor(now.getHours());
-			slots[1].setValue(now.getMinutes());
-			slots[1].setColor(now.getMinutes());
+			var _h = now.getHours() + "";
+			slots[0].setValue(_h);
+			slots[0].setColor(_h);
+			var m = now.getMinutes();
+			var _m = (m < 10 ? "0" : "") + m;
+			slots[1].setValue(_m);
+			slots[1].setColor(_m);
 		}
 	});
 });
