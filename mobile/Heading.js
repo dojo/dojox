@@ -11,9 +11,11 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./View",
-	".."
-], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, View, dojox){
+	"./View"
+], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, View){
+
+	var dm = lang.getObject("dojox.mobile", true);
+
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
@@ -170,7 +172,7 @@ define([
 			if(href){
 				view.performTransition(null, -1, this.transition, this, function(){location.href = href;});
 			}else{
-				if(dojox.mobile.app && dojox.mobile.app.STAGE_CONTROLLER_ACTIVE){
+				if(dm.app && dm.app.STAGE_CONTROLLER_ACTIVE){
 					// If in a full mobile app, then use its mechanisms to move back a scene
 					connect.publish("/dojox/mobile/app/goback");
 				}else{

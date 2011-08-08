@@ -16,9 +16,11 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./ViewController",
-	".."
-], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, dojox){
+	"./ViewController"
+], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController){
+
+	var dm = lang.getObject("dojox.mobile", true);
+
 	// module:
 	//		dojox/mobile/View
 	// summary:
@@ -81,7 +83,7 @@ define([
 			this._visible = this.selected && !id || this.id == id;
 	
 			if(this.selected){
-				dojox.mobile._defaultView = this;
+				dm._defaultView = this;
 			}
 		},
 
@@ -108,7 +110,7 @@ define([
 				if(!_visible){
 					_this.domNode.style.display = "none";
 				}else{
-					dojox.mobile.currentView = _this; //TODO:1.8 reconsider this. currentView may not have a currently showing view when views are nested.
+					dm.currentView = _this; //TODO:1.8 reconsider this. currentView may not have a currently showing view when views are nested.
 					_this.onStartView();
 					connect.publish("/dojox/mobile/startView", [_this]);
 				}
@@ -204,10 +206,10 @@ define([
 			//	|	performTransition(null, 1, "slide", null, function(){location.href = href;});
 			if(moveTo === "#"){ return; }
 			if(dojo.hash){
-				if(typeof(moveTo) == "string" && moveTo.charAt(0) == '#' && !dojox.mobile._params){
-					dojox.mobile._params = [];
+				if(typeof(moveTo) == "string" && moveTo.charAt(0) == '#' && !dm._params){
+					dm._params = [];
 					for(var i = 0; i < arguments.length; i++){
-						dojox.mobile._params.push(arguments[i]);
+						dm._params.push(arguments[i]);
 					}
 					dojo.hash(moveTo);
 					return;
@@ -233,7 +235,7 @@ define([
 			var toWidget = registry.byNode(toNode);
 			if(toWidget){
 				// Now that the target view became visible, it's time to run resize()
-				dojox.mobile.resizeAll(null, toWidget);
+				dm.resizeAll(null, toWidget);
 	
 				if(transition && transition != "none"){
 					// Temporarily add padding to align with the fromNode while transition
@@ -316,7 +318,7 @@ define([
 				domStyle.set(fromNode, {webkitTransformOrigin:fromOrigin});
 				domStyle.set(toNode, {webkitTransformOrigin:toOrigin});
 			}
-			dojox.mobile.currentView = registry.byNode(toNode);
+			dm.currentView = registry.byNode(toNode);
 		},
 	
 		onAnimationStart: function(e){
@@ -399,7 +401,7 @@ define([
 				view.domNode.style.display = "none"; // from-style
 			}
 			this.domNode.style.display = ""; // to-style
-			dojox.mobile.currentView = this;
+			dm.currentView = this;
 		}
 	});
 });

@@ -13,9 +13,10 @@ define([
 	"dojo/ready",
 	"dijit/registry",	// registry.byId
 	"./ProgressIndicator",
-	"./TransitionEvent",
-	".."
-], function(dojo, array, connect, declare, lang, win, dom, domClass, domConstruct, on, ready, registry, ProgressIndicator, TransitionEvent, dojox){
+	"./TransitionEvent"
+], function(dojo, array, connect, declare, lang, win, dom, domClass, domConstruct, on, ready, registry, ProgressIndicator, TransitionEvent){
+
+	var dm = lang.getObject("dojox.mobile", true);
 
 	var Controller = declare(null, {
 		constructor: function(){
@@ -32,8 +33,8 @@ define([
 				var w = registry.byId(moveTo);
 				if(w && w.getShowingView){ return w.getShowingView(); }
 			}
-			if(dojox.mobile.currentView){
-				return dojox.mobile.currentView; //TODO:1.8 may not return an expected result especially when views are nested
+			if(dm.currentView){
+				return dm.currentView; //TODO:1.8 may not return an expected result especially when views are nested
 			}
 			w = src;
 			while(true){
@@ -53,7 +54,7 @@ define([
 			if(evt.detail.href){
 				var t = registry.byId(evt.target.id).hrefTarget;
 				if(t){
-					dojox.mobile.openWindow(evt.detail.href, t);
+					dm.openWindow(evt.detail.href, t);
 				}else{
 					w.performTransition(null, evt.detail.transitionDir, evt.detail.transition, evt.target, function(){location.href = evt.detail.href;});
 				}
@@ -65,9 +66,9 @@ define([
 			var moveTo = evt.detail.moveTo;
 			if(evt.detail.url){
 				var id;
-				if(dojox.mobile._viewMap && dojox.mobile._viewMap[evt.detail.url]){
+				if(dm._viewMap && dm._viewMap[evt.detail.url]){
 					// external view has already been loaded
-					id = dojox.mobile._viewMap[evt.detail.url];
+					id = dm._viewMap[evt.detail.url];
 				}else{
 					// get the specified external view and append it to the <body>
 					var text = this._text;
@@ -114,10 +115,10 @@ define([
 					}
 					this._text = null;
 					id = this._parse(text, registry.byId(evt.target.id).urlTarget);
-					if(!dojox.mobile._viewMap){
-						dojox.mobile._viewMap = [];
+					if(!dm._viewMap){
+						dm._viewMap = [];
 					}
-					dojox.mobile._viewMap[evt.detail.url] = id;
+					dm._viewMap[evt.detail.url] = id;
 				}
 				moveTo = id;
 				w = this.findCurrentView(moveTo,registry.byId(evt.target.id)) || w; // the current view widget

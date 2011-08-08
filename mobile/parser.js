@@ -3,14 +3,12 @@ define([
 	"dojo/_base/config",
 	"dojo/_base/lang",
 	"dojo/_base/window",
-	"dojo/ready",
-	".."
-], function(dojo, config, lang, win, ready, dojox){
+	"dojo/ready"
+], function(dojo, config, lang, win, ready){
 
-	lang.getObject("mobile", true, dojox);
+	var dm = lang.getObject("dojox.mobile", true);
 
-	// assigning to dojox.mobile.parser is for back compat, dojo.parser is in case user app calls it
-	var parser = dojox.mobile.parser = dojo.parser = new function(){
+	var parser = new function(){
 		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
 			// summary:
 			//		Function for instantiating a list of widget nodes.
@@ -94,5 +92,7 @@ define([
 	if(config.parseOnLoad){
 		ready(100, parser, "parse");
 	}
+	dm.parser = parser; // for backward compatibility
+	dojo.parser = parser; // in case user application calls dojo.parser
 	return parser;
 });

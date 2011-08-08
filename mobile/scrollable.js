@@ -113,8 +113,7 @@ if(typeof dojo === "undefined"){
 			{ // domStyle
 				set: dojo.setStyle
 			},
-			dojo.has, // has
-			dojox // dojox
+			dojo.has // has
 		);
 	};
 }
@@ -130,11 +129,10 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"./sniff",
-	".."
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has, dojox){
+	"./sniff"
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has){
 
-	lang.getObject("mobile", true, dojox);
+	var dm = lang.getObject("dojox.mobile", true);
 
 /*=====
 // summary:
@@ -197,8 +195,7 @@ define([
 //		| </body>
 =====*/
 
-// assigning to dojox.mobile.parser is for back compat.
-var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
+var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.fixedHeaderHeight = 0; // height of a fixed header
 	this.fixedFooterHeight = 0; // height of a fixed footer
 	this.isLocalFooter = false; // footer is view-local (as opposed to application-wide)
@@ -313,7 +310,7 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 		if(this.disableTouchScroll === v || this.domNode.style.display === "none"){ return; }
 		this.disableTouchScroll = v;
 		this.scrollBar = !v;
-		dojox.mobile.disableHideAddressBar = dojox.mobile.disableResizeAll = v;
+		dm.disableHideAddressBar = dm.disableResizeAll = v;
 		var of = v ? "visible" : "hidden";
 		domStyle.set(this.domNode, "overflow", of);
 		domStyle.set(win.doc.documentElement, "overflow", of);
@@ -784,7 +781,7 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 	this.makeTranslateStr = function(to){
 		var y = this._v && typeof to.y == "number" ? to.y+"px" : "0px";
 		var x = (this._h||this._f) && typeof to.x == "number" ? to.x+"px" : "0px";
-		return dojox.mobile.hasTranslate3d ?
+		return dm.hasTranslate3d ?
 				"translate3d("+x+","+y+",0px)" : "translate("+x+","+y+")";
 	};
 
@@ -874,7 +871,7 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 	this.hideScrollBar = function(){
 		var fadeRule;
 		if(this.fadeScrollBar && has("webkit")){
-			if(!dojox.mobile._fadeRule){
+			if(!dm._fadeRule){
 				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 				node.textContent =
 					".mblScrollableFadeScrollBar{"+
@@ -883,9 +880,9 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 					"@-webkit-keyframes scrollableViewFadeScrollBar{"+
 					"  from { opacity: 0.6; }"+
 					"  to { opacity: 0; }}";
-				dojox.mobile._fadeRule = node.sheet.cssRules[1];
+				dm._fadeRule = node.sheet.cssRules[1];
 			}
-			fadeRule = dojox.mobile._fadeRule;
+			fadeRule = dm._fadeRule;
 		}
 		if(!this.scrollBar){ return; }
 		var f = function(bar, self){
@@ -1109,18 +1106,18 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 	};
 
 	this.setKeyframes = function(/*Object*/from, /*Object*/to, /*Number*/idx){
-		if(!dojox.mobile._rule){
-			dojox.mobile._rule = [];
+		if(!dm._rule){
+			dm._rule = [];
 		}
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
-		if(!dojox.mobile._rule[idx]){
+		if(!dm._rule[idx]){
 			var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 			node.textContent =
 				".mblScrollableScrollTo"+idx+"{-webkit-animation-name: scrollableViewScroll"+idx+";}"+
 				"@-webkit-keyframes scrollableViewScroll"+idx+"{}";
-			dojox.mobile._rule[idx] = node.sheet.cssRules[1];
+			dm._rule[idx] = node.sheet.cssRules[1];
 		}
-		var rule = dojox.mobile._rule[idx];
+		var rule = dm._rule[idx];
 		if(rule){
 			if(from){
 				rule.deleteRule("from");
@@ -1155,10 +1152,14 @@ var scrollable = dojox.mobile.scrollable = function(/*Object?*/dojo, /*Object?*/
 		elem.style.webkitTransform = "translate3d(0px,1px,0px)";
 		win.doc.documentElement.appendChild(elem);
 		var v = win.doc.defaultView.getComputedStyle(elem, '')["-webkit-transform"];
-		dojox.mobile.hasTranslate3d = v && v.indexOf("matrix") === 0;
+		dm.hasTranslate3d = v && v.indexOf("matrix") === 0;
 		win.doc.documentElement.removeChild(elem);
 	}
 };
 
+//>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
+	if(!dm){ dm = dojox.mobile; }
+//>>includeEnd("standaloneScrollable");
+dm.scrollable = scrollable; // for backward compatibility
 return scrollable;
 });

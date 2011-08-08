@@ -15,7 +15,7 @@ define([
 	"./uacss"
 ], function(dojo, array, config, connect, lang, win, domClass, domConstruct, domStyle, ready, registry, has, uacss){
 
-	lang.getObject("mobile", true, dojox);
+	var dm = lang.getObject("dojox.mobile", true);
 
 // summary:
 //		Mobile Widgets
@@ -36,8 +36,6 @@ define([
 //
 //		Note that use of dijit._Templated and query was intentionally
 //		avoided to reduce download code size.
-
-	var dm = dojox.mobile;
 
 	dm.getScreenSize = function(){
 		return {

@@ -23,9 +23,8 @@ define([
 	"./ScrollableView",
 	"./Switch",
 	"./View",
-	"..",
 	"require"
-], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, RoundRect, RoundRectList, ScrollableView, Switch, View, dojox, require){
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -49,6 +48,8 @@ define([
 	//		this module automatically loads iphone-compat.css.
 	//		If you explicitly load iphone-compat.css with <link> or @import,
 	//		this module will not load the already loaded file.
+
+	var dm = lang.getObject("dojox.mobile", true);
 
 	if(!has("webkit")){
 		lang.extend(View, {
@@ -155,7 +156,7 @@ define([
 					});
 					anim.play();
 				}
-				dojox.mobile.currentView = registry.byNode(toNode);
+				dm.currentView = registry.byNode(toNode);
 			},
 		
 			wakeUp: function(node){
@@ -239,7 +240,7 @@ define([
 					//		IE does not support this CSS style.
 					// tags:
 					//		protected
-					dojox.mobile.createRoundRect(this);
+					dm.createRoundRect(this);
 					this.domNode.className = "mblRoundRect";
 				}
 			});
@@ -253,7 +254,7 @@ define([
 					//		IE does not support this CSS style.
 					// tags:
 					//		protected
-					dojox.mobile.createRoundRect(this, true);
+					dm.createRoundRect(this, true);
 					this.domNode.className = "mblRoundRectList";
 				},
 			
@@ -264,8 +265,8 @@ define([
 				addChild: function(widget, /*Number?*/insertIndex){
 					RoundRectList._addChild.apply(this, arguments);
 					this.redrawBorders();
-					if(dojox.mobile.applyPngFilter){
-						dojox.mobile.applyPngFilter(widget.domNode);
+					if(dm.applyPngFilter){
+						dm.applyPngFilter(widget.domNode);
 					}
 				},
 			
@@ -304,14 +305,14 @@ define([
 			lang.extend(IconContainer, {
 				addChild: function(widget, /*Number?*/insertIndex){
 					IconContainer._addChild.apply(this, arguments);
-					if(dojox.mobile.applyPngFilter){
-						dojox.mobile.applyPngFilter(widget.domNode);
+					if(dm.applyPngFilter){
+						dm.applyPngFilter(widget.domNode);
 					}
 				}
 			});
 
 
-			lang.mixin(dojox.mobile, {
+			lang.mixin(dm, {
 				createRoundRect: function(_this, isList){
 					// summary:
 					//		Function to adjust the creation of rounded rectangles on IE.
@@ -364,7 +365,7 @@ define([
 
 
 		if(has("ie") <= 6){
-			dojox.mobile.applyPngFilter = function(root){
+			dm.applyPngFilter = function(root){
 				root = root || win.body();
 				var nodes = root.getElementsByTagName("IMG");
 				var blank = require.toUrl("dojo/resources/blank.gif");
@@ -394,7 +395,7 @@ define([
 		} // if(has("ie") <= 6)
 
 		// override deviceTheme.js
-		dojox.mobile.loadCssFile = function(/*String*/file){
+		dm.loadCssFile = function(/*String*/file){
 			if(win.doc.createStyleSheet){
 				// for some reason, IE hangs when you try to load
 				// multiple css files almost at once.
@@ -412,7 +413,7 @@ define([
 			}
 		};
 
-		dojox.mobile.loadCss = function(/*String|Array*/files){
+		dm.loadCss = function(/*String|Array*/files){
 			// summary:
 			//		Function to load and register CSS files with the page
 			//	files: String|Array
@@ -421,7 +422,7 @@ define([
 			//		private
 			if(!win.global._loadedCss){
 				var obj = {};
-				array.forEach(dojox.mobile.getCssPaths(), function(path){
+				array.forEach(dm.getCssPaths(), function(path){
 					obj[path] = true;
 				});
 				win.global._loadedCss = obj;
@@ -431,12 +432,12 @@ define([
 					var file = files[i];
 					if(!win.global._loadedCss[file]){
 						win.global._loadedCss[file] = true;
-						dojox.mobile.loadCssFile(file);
+						dm.loadCssFile(file);
 				}
 			}
 		};
 
-		dojox.mobile.getCssPaths = function(){
+		dm.getCssPaths = function(){
 			var paths = [];
 			var i, j, len;
 
@@ -463,39 +464,39 @@ define([
 			return paths;
 		};
 
-		dojox.mobile.loadCompatPattern = /\/mobile\/themes\/.*\.css$/;
+		dm.loadCompatPattern = /\/mobile\/themes\/.*\.css$/;
 
-		dojox.mobile.loadCompatCssFiles = function(){
+		dm.loadCompatCssFiles = function(){
 			// summary:
 			//		Function to perform page-level adjustments on browsers such as
 			//		IE and firefox.  It loads compat specific css files into the
 			//		page header.
-			var paths = dojox.mobile.getCssPaths();
+			var paths = dm.getCssPaths();
 			for(var i = 0; i < paths.length; i++){
 				var href = paths[i];
-				if((href.match(dojox.mobile.loadCompatPattern) || location.href.indexOf("mobile/tests/") !== -1) && href.indexOf("-compat.css") === -1){
+				if((href.match(dm.loadCompatPattern) || location.href.indexOf("mobile/tests/") !== -1) && href.indexOf("-compat.css") === -1){
 					var compatCss = href.substring(0, href.length-4)+"-compat.css";
-					dojox.mobile.loadCss(compatCss);
+					dm.loadCss(compatCss);
 				}
 			}
 		};
 	
-		dojox.mobile.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
-			if(doResize !== false){ dojox.mobile.resizeAll(); }
+		dm.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
+			if(doResize !== false){ dm.resizeAll(); }
 		};
 
 		ready(function(){
 			if(config["mblLoadCompatCssFiles"] !== false){
 				setTimeout(function(){ // IE needs setTimeout
-					dojox.mobile.loadCompatCssFiles();
+					dm.loadCompatCssFiles();
 				}, 0);
 			}
-			if(dojox.mobile.applyPngFilter){
-				dojox.mobile.applyPngFilter();
+			if(dm.applyPngFilter){
+				dm.applyPngFilter();
 			}
 		});
 
 	} // end of if(!has("webkit")){
 
-	return dojox.mobile.compat;
+	return dm;
 });

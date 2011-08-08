@@ -10,13 +10,12 @@ define([
 	"./ListItem",
 	"./Switch",
 	"./ToolBarButton",
-	"./ProgressIndicator",
-	".."
-], function(common, View, Heading, RoundRect, RoundRectCategory, EdgeToEdgeCategory, RoundRectList, EdgeToEdgeList, ListItem, Switch, ToolBarButton, ProgressIndicator, dojox){
+	"./ProgressIndicator"
+], function(common, View, Heading, RoundRect, RoundRectCategory, EdgeToEdgeCategory, RoundRectList, EdgeToEdgeList, ListItem, Switch, ToolBarButton, ProgressIndicator){
 	// module:
 	//		dojox/mobile/_base
 	// summary:
 	//		TODOC
 
-	return dojox.mobile;
+	return common;
 });
