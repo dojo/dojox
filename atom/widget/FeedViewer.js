@@ -614,7 +614,7 @@ widget.FeedViewer = dojo.declare(/*===== "dojox.atom.widget.FeedViewer", =====*/
 	}
 });
 
-widget.FeedViewerEntry = dojo.declare(/*===== "dojox.atom.widget.FeedViewerEntry", =====*/ [dijit._Widget, dijit._Templated],{
+widget.FeedViewerEntry = dojo.declare(/*===== "dojox.atom.widget.FeedViewerEntry", =====*/ [_Widget, _Templated],{
 	//	summary:
 	//		Widget for handling the display of an entry and specific events associated with it.
 	//		description: Widget for handling the display of an entry and specific events associated with it.
