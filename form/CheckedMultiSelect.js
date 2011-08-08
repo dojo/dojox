@@ -6,12 +6,11 @@ define([
 	"dojo/dom-geometry",
 	"dojo/dom-class",
 	"dojo/dom-construct",
-	"dijit",
 	"dojo/i18n",
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
-	"dijit/_base/manager",
+	"dijit/registry",
 	"dijit/Menu",
 	"dijit/MenuItem",
 	"dijit/Tooltip",
@@ -22,7 +21,7 @@ define([
 	"dojo/text!dojox/form/resources/CheckedMultiSelect.html",
 	"dojo/i18n!dojox/form/nls/CheckedMultiSelect",
 	"dijit/form/CheckBox" // template
-], function(declare, lang, array, event, domGeometry, domClass, domConstruct, dijit, i18n, Widget, TemplatedMixin, WidgetsInTemplateMixin, manager, Menu, MenuItem, Tooltip, FormSelectWidget, ComboButton, CheckedMultiSelectMenuItem, CheckedMultiSelectItem, CheckedMultiSelect, nlsCheckedMultiSelect){
+], function(declare, lang, array, event, domGeometry, domClass, domConstruct, i18n, Widget, TemplatedMixin, WidgetsInTemplateMixin, registry, Menu, MenuItem, Tooltip, FormSelectWidget, ComboButton, CheckedMultiSelectMenuItem, CheckedMultiSelectItem, CheckedMultiSelect, nlsCheckedMultiSelect){
 
 	//	module:
 	//		dojox/form/CheckedMultiSelect
@@ -391,7 +390,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 	},
 
 	validate: function(isFocused){
-		dijit.hideTooltip(this.domNode);
+		Tooltip.hide(this.domNode);
 		var isValid = this.isValid(isFocused);
 		if(!isValid){ this.displayMessage(this.invalidMessage); }
 		return isValid;
@@ -420,9 +419,9 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		//		By default uses a tooltip.
 		// tags:
 		//		extension
-		dijit.hideTooltip(this.domNode);
+		Tooltip.hide(this.domNode);
 		if(message){
-			dijit.showTooltip(message, this.domNode, this.tooltipPosition);
+			Tooltip.show(message, this.domNode, this.tooltipPosition);
 		}
 	},
 
@@ -465,7 +464,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 	reset: function(){
 		// summary: Overridden so that the state will be cleared.
 		this.inherited(arguments);
-		dijit.hideTooltip(this.domNode);
+		Tooltip.hide(this.domNode);
 	},
 
 	_updateSelection: function(){
@@ -493,7 +492,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 			return this.dropDownMenu.getChildren();
 		}else{
 			return array.map(this.wrapperDiv.childNodes, function(n){
-				return manager.byNode(n);
+				return registry.byNode(n);
 			});
 		}
 	},
@@ -540,7 +539,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 	},
 
 	uninitialize: function(){
-		dijit.hideTooltip(this.domNode);
+		Tooltip.hide(this.domNode);
 		// Make sure these children are destroyed
 		array.forEach(this._getChildren(), function(child){
 			child.destroyRecursive();

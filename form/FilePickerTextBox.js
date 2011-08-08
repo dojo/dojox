@@ -3,15 +3,16 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/event",
 	"dojo/window",
-	"dijit",
-	"dijit/_base/manager",
+	"dijit/focus",
+	"dijit/registry",
+	"dijit/form/_TextBoxMixin",
 	"dijit/form/ValidationTextBox",
 	"dijit/_HasDropDown",
 	"dojox/widget/FilePicker",
 	"dojo/text!./resources/FilePickerTextBox.html",
 	"dojo/_base/declare",
-	"dojo/_base/connect" // keys
-], function(lang, array, event, windowUtils, dijit, manager, ValidationTextBox, _HasDropDown, FilePicker, template, declare, connect){
+	"dojo/keys" // keys
+], function(lang, array, event, windowUtils, focus, registry, _TextBoxMixin, ValidationTextBox, _HasDropDown, FilePicker, template, declare, keys){
 
 	/*=====
 		ValidationTextBox = dijit.form.ValidationTextBox;
@@ -52,7 +53,7 @@ return declare( "dojox.form.FilePickerTextBox", [ValidationTextBox, _HasDropDown
 			this.connect(this.focusNode, "onblur", "_focusBlur");
 			this.connect(this.focusNode, "onfocus", "_focusFocus");
 			this.connect(this.focusNode, "ondblclick", function(){
-				dijit.selectInputText(this.focusNode);
+				_TextBoxMixin.selectInputText(this.focusNode);
 			});
 		},
 
@@ -134,9 +135,9 @@ return declare( "dojox.form.FilePickerTextBox", [ValidationTextBox, _HasDropDown
 				this.dropDown._updateClass(this._menuFocus, "Item", {"Hover": false});
 			}
 			delete this._menuFocus;
-			var focusNode = dijit.getFocus(this);
-			if(focusNode && focusNode.node){
-				focusNode = manager.byNode(focusNode.node);
+			var focusNode = focus.curNode;
+			if(focusNode){
+				focusNode = registry.byNode(focusNode);
 				if(focusNode){
 					this._menuFocus = focusNode.domNode;
 				}
@@ -196,7 +197,7 @@ return declare( "dojox.form.FilePickerTextBox", [ValidationTextBox, _HasDropDown
 			var dd = this.dropDown, fn = this.focusNode;
 			var val = fn.value, oVal = val, topDir = dd.topDir;
 			if(this._hasSelection){
-				dijit.selectInputText(fn, oVal.length);
+				_TextBoxMixin.selectInputText(fn, oVal.length);
 			}
 			this._hasSelection = false;
 			if(topDir.length && val.indexOf(topDir) === 0){
@@ -254,7 +255,7 @@ return declare( "dojox.form.FilePickerTextBox", [ValidationTextBox, _HasDropDown
 									windowUtils.scrollIntoView(first.domNode);
 								}, 1);
 								fn.value = oVal + targetString;
-								dijit.selectInputText(fn, oVal.length);
+								_TextBoxMixin.selectInputText(fn, oVal.length);
 								this._hasSelection = true;
 								try{first.focusNode.focus();}catch(e){}
 							}else{
@@ -287,28 +288,27 @@ return declare( "dojox.form.FilePickerTextBox", [ValidationTextBox, _HasDropDown
 		_onKey: function(/*Event*/ e){
 			// summary: callback when the user presses a key on menu popup node
 			if(this.disabled || this.readOnly){ return; }
-			var dk = keys;
 			var c = e.charOrCode;
-			if(c==dk.DOWN_ARROW){
+			if(c==keys.DOWN_ARROW){
 				this._allowBlur = true;
 			}
-			if(c==dk.ENTER && this._opened){
+			if(c==keys.ENTER && this._opened){
 				this.dropDown.onExecute();
-				dijit.selectInputText(this.focusNode, this.focusNode.value.length);
+				_TextBoxMixin.selectInputText(this.focusNode, this.focusNode.value.length);
 				this._hasSelection = false;
 				event.stop(e);
 				return;
 			}
-			if((c==dk.RIGHT_ARROW || c==dk.LEFT_ARROW || c==dk.TAB) && this._hasSelection){
+			if((c==keys.RIGHT_ARROW || c==keys.LEFT_ARROW || c==keys.TAB) && this._hasSelection){
 				this._startSearchFromInput();
 				event.stop(e);
 				return;
 			}
 			this.inherited(arguments);
 			var doSearch = false;
-			if((c==dk.BACKSPACE || c==dk.DELETE) && this._hasSelection){
+			if((c==keys.BACKSPACE || c==keys.DELETE) && this._hasSelection){
 				this._hasSelection = false;
-			}else if(c==dk.BACKSPACE || c==dk.DELETE || c==" "){
+			}else if(c==keys.BACKSPACE || c==keys.DELETE || c==" "){
 				doSearch = true;
 			}else{
 				doSearch = e.keyChar !== "";
