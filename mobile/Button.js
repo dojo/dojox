@@ -50,6 +50,11 @@ define([
 		buildRendering: function(){
 			if(!this.srcNodeRef){
 				this.srcNodeRef = domConstruct.create("button", {"type": this.type});
+			}else if(this._cv){
+				var n = this.srcNodeRef.firstChild;
+				if(n && n.nodeType === 3){
+					n.nodeValue = this._cv(n.nodeValue);
+				}
 			}
 			this.inherited(arguments);
 			this.focusNode = this.domNode;
@@ -58,6 +63,10 @@ define([
 		postCreate: function(){
 			this.inherited(arguments);
 			this.connect(this.domNode, "onclick", "_onClick");
+		},
+
+		_setLabelAttr: function(/*String*/ content){
+			this.inherited(arguments, [this._cv ? this._cv(content) : content]);
 		}
 	});
 
