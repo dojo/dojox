@@ -1,14 +1,16 @@
 define(["dojo/_base/kernel", "../main", "dojo/_base/lang", "dojo/_base/Color", "dojo/colors"], 
 	function(dojo, dojox, lang, Color, colors){
 
-var cx = lang.getObject("color", true, dojox);
+var cx = lang.getObject("dojox.color", true);
+/*===== cx = dojox.color =====*/
+		
 //	alias all the dojo.Color mechanisms
 cx.Color=Color;
-cx.blend=colors.blendColors;
-cx.fromRgb=colors.colorFromRgb;
-cx.fromHex=colors.colorFromHex;
-cx.fromArray=colors.colorFromArray;
-cx.fromString=colors.colorFromString;
+cx.blend=Color.blendColors;
+cx.fromRgb=Color.fromRgb;
+cx.fromHex=Color.fromHex;
+cx.fromArray=Color.fromArray;
+cx.fromString=Color.fromString;
 
 //	alias the dojo.colors mechanisms
 cx.greyscale=colors.makeGrey;
