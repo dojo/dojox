@@ -1,11 +1,10 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"./StatefulModel",
 	"./Bind",
 	"./_DataBindingMixin",
 	"./_patches"
-], function(dojo, lang, StatefulModel){
+], function(lang, StatefulModel){
 	// module:
 	//		dojox/mvc/_base
 	// summary:
@@ -13,7 +12,7 @@ define([
 	//		data binds, a data model and data binding mixin for dijits.
 	dojo.experimental("dojox.mvc");
 
-	var mvc = dojo.getObject("dojox.mvc", true);
+	var mvc = lang.getObject("dojox.mvc", true);
 	/*=====
 		mvc = dojox.mvc;
 	=====*/

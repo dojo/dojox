@@ -1,13 +1,9 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dijit/_base/manager"
-], function(dojo, lang, array, declare, dijit){
-	/*=====
-		declare = dojo.declare;
-	=====*/
+	"dijit/registry"
+], function(lang, array, declare, registry){
 
 	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:
@@ -180,29 +176,29 @@ define([
 				binding = ref;
 			}else if(/^\s*expr\s*:\s*/.test(ref)){ // declarative: refs as dot-separated expressions
 				ref = ref.replace(/^\s*expr\s*:\s*/, "");
-				binding = dojo.getObject(ref);
+				binding = lang.getObject(ref);
 			}else if(/^\s*rel\s*:\s*/.test(ref)){ // declarative: refs relative to parent binding, dot-separated 
 				ref = ref.replace(/^\s*rel\s*:\s*/, "");
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = dojo.getObject("" + ref, false, parentBinding);
+					binding = lang.getObject("" + ref, false, parentBinding);
 				}
 			}else if(/^\s*widget\s*:\s*/.test(ref)){ // declarative: refs relative to another dijits binding, dot-separated
 				ref = ref.replace(/^\s*widget\s*:\s*/, "");
 				var tokens = ref.split(".");
 				if(tokens.length == 1){
-					binding = dijit.byId(ref).get("binding");
+					binding = registry.byId(ref).get("binding");
 				}else{
-					pb = dijit.byId(tokens.shift()).get("binding");
-					binding = dojo.getObject(tokens.join("."), false, pb);
+					pb = registry.byId(tokens.shift()).get("binding");
+					binding = lang.getObject(tokens.join("."), false, pb);
 				}
 			}else{ // defaults: outermost refs are expressions, nested are relative to parents
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = dojo.getObject("" + ref, false, parentBinding);
+					binding = lang.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
-						binding = dojo.getObject(ref);
+						binding = lang.getObject(ref);
 					}catch(err){
 						if(ref.indexOf("${") == -1){ // Ignore templated refs such as in repeat body
 							throw new Error("dojox.mvc._DataBindingMixin: '" + this.domNode +
@@ -327,7 +323,7 @@ define([
 			//		private
 			var binding = this.get("binding");
 			if(binding && !this._beingBound){
-				array.forEach(dijit.findWidgets(this.domNode), function(widget){
+				array.forEach(registry.findWidgets(this.domNode), function(widget){
 					if(widget._setupBinding){
 						widget._setupBinding(binding);
 					}
@@ -345,7 +341,7 @@ define([
 			//		private
 			var pn = this.domNode.parentNode, pw, pb;
 			while(pn){
-				pw = dijit.getEnclosingWidget(pn);
+				pw = registry.getEnclosingWidget(pn);
 				if(pw){
 					pb = pw.get("binding");
 					if(pb && lang.isFunction(pb.toPlainObject)){

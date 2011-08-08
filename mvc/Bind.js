@@ -1,9 +1,8 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array"
-], function(dojo, lang, array){
-	var mvc = dojo.getObject("dojox.mvc", true);
+], function(lang, array){
+	var mvc = lang.getObject("dojox.mvc", true);
 	/*=====
 		mvc = dojox.mvc;
 	=====*/
