@@ -9,7 +9,7 @@ define([
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/_TemplatedMixin",
 	"dojox/math/_base",
-	"dijit/_base/manager",
+	"dijit/registry",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
 	"dijit/form/TextBox",
@@ -25,7 +25,7 @@ define([
 	"dojox/calc/_Executor",
 	"dijit/form/Button", // template
 	"dijit/form/Select" // template
-], function(declare, lang, win, domConstruct, domClass, domStyle, WidgetBase, WidgetsInTemplateMixin, TemplatedMixin, math, dijit, DropDownButton, TooltipDialog, TextBox, CheckBox, ColorPalette, Chart, axis2d, plot2d, Lines, Tufte, colors, template, calc){
+], function(declare, lang, win, domConstruct, domClass, domStyle, WidgetBase, WidgetsInTemplateMixin, TemplatedMixin, math, registry, DropDownButton, TooltipDialog, TextBox, CheckBox, ColorPalette, Chart, axis2d, plot2d, Lines, Tufte, colors, template, calc){
 
 	// summary
 	//	provide static functions for Grapher
@@ -329,7 +329,7 @@ define([
 			//	make sure the parent has a close button if it needs to be able to close
 			this.inherited(arguments);// this is super class startup
 			// close is only valid if the parent is a widget with a close function
-			var parent = dijit.getEnclosingWidget(this.domNode.parentNode);
+			var parent = registry.getEnclosingWidget(this.domNode.parentNode);
 			if(parent && typeof parent.close == "function"){
 				this.closeButton.set("onClick", lang.hitch(parent, 'close'));
 			}else{

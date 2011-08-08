@@ -6,14 +6,14 @@ define([
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/_TemplatedMixin",
 	"dojox/math/_base",
-	"dijit/_base/manager",
+	"dijit/registry",
 	"dojo/text!./templates/FuncGen.html",
 	"dojox/calc/_Executor",
 	"dijit/form/ComboBox", // template
 	"dijit/form/SimpleTextarea", // template
 	"dijit/form/Button", // template
 	"dijit/form/TextBox" // template
-], function(declare, lang, domStyle, WidgetBase, WidgetsInTemplateMixin, TemplatedMixin, math, dijit, template, calc){
+], function(declare, lang, domStyle, WidgetBase, WidgetsInTemplateMixin, TemplatedMixin, math, registry, template, calc){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
@@ -141,7 +141,7 @@ define([
 
 			this.inherited(arguments);// this is super class startup
 			// close is only valid if the parent is a widget with a close function
-			var parent = dijit.getEnclosingWidget(this.domNode.parentNode);
+			var parent = registry.getEnclosingWidget(this.domNode.parentNode);
 			if(parent && typeof parent.close == "function"){
 				this.closeButton.set("onClick", lang.hitch(parent, 'close'));
 			}else{

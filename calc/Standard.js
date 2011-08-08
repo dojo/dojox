@@ -7,11 +7,12 @@ define([
 	"dojo/dom-style",
 	"dojo/ready",
 	"dojo/keys",
-	"dijit/_base/manager",
+	"dijit/registry",
 	"dijit/typematic",
 	"dijit/_WidgetBase",
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/_TemplatedMixin",
+	"dijit/form/_TextBoxMixin",
 	"dojox/math/_base",
 	"dijit/TooltipDialog",
 	"dojo/text!./templates/Standard.html",
@@ -21,7 +22,7 @@ define([
 	"dijit/form/ComboButton", // template
 	"dijit/form/Button", // template
 	"dijit/form/TextBox" // template
-], function(declare, lang, has, win, event, domStyle, ready, keys, dijit, typematic, WidgetBase, WidgetsInTemplateMixin, TemplatedMixin, math, TooltipDialog, template, calc){
+], function(declare, lang, has, win, event, domStyle, ready, keys, registry, typematic, WidgetBase, WidgetsInTemplateMixin, TemplatedMixin, _TextBoxMixin, math, TooltipDialog, template, calc){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
@@ -102,7 +103,7 @@ define([
 				}
 				//this.clearText();
 				//this.textboxWidget.focus();
-				dijit.selectInputText(this.textboxWidget.textbox);
+				_TextBoxMixin.selectInputText(this.textboxWidget.textbox);
 
 			}else{
 				this.textboxWidget.focus();
@@ -187,7 +188,7 @@ define([
 				}else if(this.putInAnsIfTextboxIsHighlighted(this.textboxWidget.textbox, event.charOrCode)){
 					this.setTextboxValue(this.textboxWidget, "Ans");//this.insertText("Ans");
 					// move the cursor to the end of "Ans"
-					dijit.selectInputText(this.textboxWidget.textbox, this.textboxWidget.textbox.value.length, this.textboxWidget.textbox.value.length);
+					_TextBoxMixin.selectInputText(this.textboxWidget.textbox, this.textboxWidget.textbox.value.length, this.textboxWidget.textbox.value.length);
 				}
 			}
 		},
@@ -262,7 +263,7 @@ define([
 			// summary
 			//	insert an operator with a button
 			if(typeof newText == "object"){
-				newText = newText = dijit.getEnclosingWidget(newText["target"]).value;
+				newText = newText = registry.getEnclosingWidget(newText["target"]).value;
 			}
 			if(this.textboxWidget.get("value") == "" || this.putInAnsIfTextboxIsHighlighted(this.textboxWidget.textbox)){
 				newText = "Ans"+newText;
@@ -280,7 +281,7 @@ define([
 				node.selectionEnd = 0;
 			}
 			if(typeof newText == "object"){
-				newText = newText = dijit.getEnclosingWidget(newText["target"]).value;
+				newText = newText = registry.getEnclosingWidget(newText["target"]).value;
 			}
 
 			var value = node.value.replace(/\r/g,'');
@@ -294,7 +295,7 @@ define([
 				node.focus();
 				pos += newText.length;
 			        //node.setSelectionRange(pos, pos);
-				dijit.selectInputText(this.textboxWidget.textbox, pos, pos);
+				_TextBoxMixin.selectInputText(this.textboxWidget.textbox, pos, pos);
 			}else if(document.selection){ // IE
 				if(this.handle){
 					clearTimeout(this.handle);
