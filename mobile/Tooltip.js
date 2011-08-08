@@ -7,8 +7,7 @@ define([
 	"dojo/dom-style",
 	"dijit/place",
 	"dijit/_WidgetBase"
-],
-	function(declare, lang, domClass, domConstruct, domGeometry, domStyle, place, WidgetBase){
+], function(declare, lang, domClass, domConstruct, domGeometry, domStyle, place, WidgetBase){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;

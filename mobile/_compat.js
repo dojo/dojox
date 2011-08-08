@@ -13,12 +13,19 @@ define([
 	"dojo/fx/easing",
 	"dojo/ready",
 	"dojo/uacss",
-	"dijit/registry",
+	"dijit/registry",	// registry.byNode
 	"dojox/fx",
 	"dojox/fx/flip",
+	"./EdgeToEdgeList",
+	"./IconContainer",
+	"./RoundRect",
+	"./RoundRectList",
+	"./ScrollableView",
+	"./Switch",
+	"./View",
+	"..",
 	"require"
-], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss,
-			registry, xfx, flip, require){
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, RoundRect, RoundRectList, ScrollableView, Switch, View, dojox, require){
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -44,272 +51,266 @@ define([
 	//		this module will not load the already loaded file.
 
 	if(!has("webkit")){
-		if(dojox.mobile.View){
-			lang.extend(dojox.mobile.View, {
-				_doTransition: function(fromNode, toNode, transition, dir){
-					var anim;
-					this.wakeUp(toNode);
-					if(!transition || transition == "none"){
-						toNode.style.display = "";
+		lang.extend(View, {
+			_doTransition: function(fromNode, toNode, transition, dir){
+				var anim;
+				this.wakeUp(toNode);
+				if(!transition || transition == "none"){
+					toNode.style.display = "";
+					fromNode.style.display = "none";
+					toNode.style.left = "0px";
+					this.invokeCallback();
+				}else if(transition == "slide" || transition == "cover" || transition == "reveal"){
+					var w = fromNode.offsetWidth;
+					var s1 = fx.slideTo({
+						node: fromNode,
+						duration: 400,
+						left: -w*dir,
+						top: domStyle.get(fromNode, "top")
+					});
+					var s2 = fx.slideTo({
+						node: toNode,
+						duration: 400,
+						left: 0,
+						top: domStyle.get(toNode, "top")
+					});
+					toNode.style.position = "absolute";
+					toNode.style.left = w*dir + "px";
+					toNode.style.display = "";
+					anim = fx.combine([s1,s2]);
+					connect.connect(anim, "onEnd", this, function(){
 						fromNode.style.display = "none";
-						toNode.style.left = "0px";
+						fromNode.style.left = "0px";
+						toNode.style.position = "relative";
+						var toWidget = registry.byNode(toNode);
+						if(toWidget && !domClass.contains(toWidget.domNode, "out")){
+							// Reset the temporary padding
+							toWidget.containerNode.style.paddingTop = "";
+						}
 						this.invokeCallback();
-					}else if(transition == "slide" || transition == "cover" || transition == "reveal"){
-						var w = fromNode.offsetWidth;
-						var s1 = fx.slideTo({
+					});
+					anim.play();
+				}else if(transition == "slidev" || transition == "coverv" || transition == "reavealv"){
+					var h = fromNode.offsetHeight;
+					var s1 = fx.slideTo({
+						node: fromNode,
+						duration: 400,
+						left: 0,
+						top: -h*dir
+					});
+					var s2 = fx.slideTo({
+						node: toNode,
+						duration: 400,
+						left: 0,
+						top: 0
+					});
+					toNode.style.position = "absolute";
+					toNode.style.top = h*dir + "px";
+					toNode.style.left = "0px";
+					toNode.style.display = "";
+					anim = fx.combine([s1,s2]);
+					connect.connect(anim, "onEnd", this, function(){
+						fromNode.style.display = "none";
+						toNode.style.position = "relative";
+						this.invokeCallback();
+					});
+					anim.play();
+				}else if(transition == "flip" || transition == "flip2"){
+					anim = xfx.flip({
+						node: fromNode,
+						dir: "right",
+						depth: 0.5,
+						duration: 400
+					});
+					toNode.style.position = "absolute";
+					toNode.style.left = "0px";
+					connect.connect(anim, "onEnd", this, function(){
+						fromNode.style.display = "none";
+						toNode.style.position = "relative";
+						toNode.style.display = "";
+						this.invokeCallback();
+					});
+					anim.play();
+				}else {
+					// other transitions - "fade", "dissolve", "swirl"
+					anim = fx.chain([
+						bfx.fadeOut({
 							node: fromNode,
-							duration: 400,
-							left: -w*dir,
-							top: domStyle.get(fromNode, "top")
-						});
-						var s2 = fx.slideTo({
+							duration: 600
+						}),
+						bfx.fadeIn({
 							node: toNode,
-							duration: 400,
-							left: 0,
-							top: domStyle.get(toNode, "top")
-						});
-						toNode.style.position = "absolute";
-						toNode.style.left = w*dir + "px";
-						toNode.style.display = "";
-						anim = fx.combine([s1,s2]);
-						connect.connect(anim, "onEnd", this, function(){
-							fromNode.style.display = "none";
-							fromNode.style.left = "0px";
-							toNode.style.position = "relative";
-							var toWidget = registry.byNode(toNode);
-							if(toWidget && !domClass.contains(toWidget.domNode, "out")){
-								// Reset the temporary padding
-								toWidget.containerNode.style.paddingTop = "";
-							}
-							this.invokeCallback();
-						});
-						anim.play();
-					}else if(transition == "slidev" || transition == "coverv" || transition == "reavealv"){
-						var h = fromNode.offsetHeight;
-						var s1 = fx.slideTo({
-							node: fromNode,
-							duration: 400,
-							left: 0,
-							top: -h*dir
-						});
-						var s2 = fx.slideTo({
-							node: toNode,
-							duration: 400,
-							left: 0,
-							top: 0
-						});
-						toNode.style.position = "absolute";
-						toNode.style.top = h*dir + "px";
-						toNode.style.left = "0px";
-						toNode.style.display = "";
-						anim = fx.combine([s1,s2]);
-						connect.connect(anim, "onEnd", this, function(){
-							fromNode.style.display = "none";
-							toNode.style.position = "relative";
-							this.invokeCallback();
-						});
-						anim.play();
-					}else if(transition == "flip" || transition == "flip2"){
-						anim = xfx.flip({
-							node: fromNode,
-							dir: "right",
-							depth: 0.5,
-							duration: 400
-						});
-						toNode.style.position = "absolute";
-						toNode.style.left = "0px";
-						connect.connect(anim, "onEnd", this, function(){
-							fromNode.style.display = "none";
-							toNode.style.position = "relative";
-							toNode.style.display = "";
-							this.invokeCallback();
-						});
-						anim.play();
-					}else {
-						// other transitions - "fade", "dissolve", "swirl"
-						anim = fx.chain([
-							bfx.fadeOut({
-								node: fromNode,
-								duration: 600
-							}),
-							bfx.fadeIn({
-								node: toNode,
-								duration: 600
-							})
-						]);
-						toNode.style.position = "absolute";
-						toNode.style.left = "0px";
-						toNode.style.display = "";
-						domStyle.set(toNode, "opacity", 0);
-						connect.connect(anim, "onEnd", this, function(){
-							fromNode.style.display = "none";
-							toNode.style.position = "relative";
-							domStyle.set(fromNode, "opacity", 1);
-							this.invokeCallback();
-						});
-						anim.play();
-					}
-					dojox.mobile.currentView = registry.byNode(toNode);
-				},
-			
-				wakeUp: function(node){
-				// summary:
-				//		Function to force IE to redraw a node since its layout code tends to misrender
-				//		in partial draws.
-				//	node:
-				//		The node to forcibly redraw.
-				// tags:
-				//		public
-					if(has("ie") && !node._wokeup){
-						node._wokeup = true;
-						var disp = node.style.display;
-						node.style.display = "";
-						var nodes = node.getElementsByTagName("*");
-						for(var i = 0, len = nodes.length; i < len; i++){
-							var val = nodes[i].style.display;
-							nodes[i].style.display = "none";
-							nodes[i].style.display = "";
-							nodes[i].style.display = val;
-						}
-						node.style.display = disp;
-					}
+							duration: 600
+						})
+					]);
+					toNode.style.position = "absolute";
+					toNode.style.left = "0px";
+					toNode.style.display = "";
+					domStyle.set(toNode, "opacity", 0);
+					connect.connect(anim, "onEnd", this, function(){
+						fromNode.style.display = "none";
+						toNode.style.position = "relative";
+						domStyle.set(fromNode, "opacity", 1);
+						this.invokeCallback();
+					});
+					anim.play();
 				}
-			});	
-		}
+				dojox.mobile.currentView = registry.byNode(toNode);
+			},
+		
+			wakeUp: function(node){
+			// summary:
+			//		Function to force IE to redraw a node since its layout code tends to misrender
+			//		in partial draws.
+			//	node:
+			//		The node to forcibly redraw.
+			// tags:
+			//		public
+				if(has("ie") && !node._wokeup){
+					node._wokeup = true;
+					var disp = node.style.display;
+					node.style.display = "";
+					var nodes = node.getElementsByTagName("*");
+					for(var i = 0, len = nodes.length; i < len; i++){
+						var val = nodes[i].style.display;
+						nodes[i].style.display = "none";
+						nodes[i].style.display = "";
+						nodes[i].style.display = val;
+					}
+					node.style.display = disp;
+				}
+			}
+		});	
+
 	
-		if(dojox.mobile.Switch){
-			lang.extend(dojox.mobile.Switch, {
-				_changeState: function(/*String*/state, /*Boolean*/anim){
-					// summary:
-					//		Function to toggle the switch state on the switch
-					// state:
-					//		The state to toggle, switch 'on' or 'off'
-					// anim:
-					//		Whether to use animation or not
-					// tags:
-					//		private
-					var on = (state === "on");
+		lang.extend(Switch, {
+			_changeState: function(/*String*/state, /*Boolean*/anim){
+				// summary:
+				//		Function to toggle the switch state on the switch
+				// state:
+				//		The state to toggle, switch 'on' or 'off'
+				// anim:
+				//		Whether to use animation or not
+				// tags:
+				//		private
+				var on = (state === "on");
 		
-					var pos;
-					if(!on){
-						pos = -this.inner.firstChild.firstChild.offsetWidth;
-					}else{
-						pos = 0;
-					}
-		
-					this.left.style.display = "";
-					this.right.style.display = "";
-		
-					var _this = this;
-					var f = function(){
-						domClass.remove(_this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
-						domClass.add(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
-						_this.left.style.display = on ? "" : "none";
-						_this.right.style.display = !on ? "" : "none";
-					};
-		
-					if(anim){
-						var a = fx.slideTo({
-							node: this.inner,
-							duration: 300,
-							left: pos,
-							onEnd: f
-						});
-						a.play();
-					}else{
-						if(on || pos){
-							this.inner.style.left = pos + "px";
-						}
-						f();
-					}
+				var pos;
+				if(!on){
+					pos = -this.inner.firstChild.firstChild.offsetWidth;
+				}else{
+					pos = 0;
 				}
-			});	
-		}
+		
+				this.left.style.display = "";
+				this.right.style.display = "";
+		
+				var _this = this;
+				var f = function(){
+					domClass.remove(_this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
+					domClass.add(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
+					_this.left.style.display = on ? "" : "none";
+					_this.right.style.display = !on ? "" : "none";
+				};
+		
+				if(anim){
+					var a = fx.slideTo({
+						node: this.inner,
+						duration: 300,
+						left: pos,
+						onEnd: f
+					});
+					a.play();
+				}else{
+					if(on || pos){
+						this.inner.style.left = pos + "px";
+					}
+					f();
+				}
+			}
+		});	
+
 	
 		if(has("ie")){
-			if(dojox.mobile.RoundRect){
-				lang.extend(dojox.mobile.RoundRect, {
-					buildRendering: function(){
-						// summary:
-						//		Function to simulate the borderRadius appearance on IE, since
-						//		IE does not support this CSS style.
-						// tags:
-						//		protected
-						dojox.mobile.createRoundRect(this);
-						this.domNode.className = "mblRoundRect";
-					}
-				});
-			}
-		
-			if(dojox.mobile.RoundRectList){
-				dojox.mobile.RoundRectList._addChild = dojox.mobile.RoundRectList.prototype.addChild;
-				lang.extend(dojox.mobile.RoundRectList, {
-					buildRendering: function(){
-						// summary:
-						//		Function to simulate the borderRadius appearance on IE, since
-						//		IE does not support this CSS style.
-						// tags:
-						//		protected
-						dojox.mobile.createRoundRect(this, true);
-						this.domNode.className = "mblRoundRectList";
-					},
-				
-					postCreate: function(){
-						this.redrawBorders();
-					},
-		
-					addChild: function(widget, /*Number?*/insertIndex){
-						dojox.mobile.RoundRectList._addChild.apply(this, arguments);
-						this.redrawBorders();
-						if(dojox.mobile.applyPngFilter){
-							dojox.mobile.applyPngFilter(widget.domNode);
-						}
-					},
-			
-					redrawBorders: function(){
-						// summary:
-						//		Function to adjust the creation of RoundRectLists on IE.
-						//		Removed undesired styles.
-						// tags:
-						//		public
-				
-						// Remove a border of the last ListItem.
-						// This is for browsers that do not support the last-child CSS pseudo-class.
+			lang.extend(RoundRect, {
+				buildRendering: function(){
+					// summary:
+					//		Function to simulate the borderRadius appearance on IE, since
+					//		IE does not support this CSS style.
+					// tags:
+					//		protected
+					dojox.mobile.createRoundRect(this);
+					this.domNode.className = "mblRoundRect";
+				}
+			});
 
-						if(this instanceof dojox.mobile.EdgeToEdgeList){ return; }
-						var lastChildFound = false;
-						for(var i = this.containerNode.childNodes.length - 1; i >= 0; i--){
-							var c = this.containerNode.childNodes[i];
-							if(c.tagName == "LI"){
-								c.style.borderBottomStyle = lastChildFound ? "solid" : "none";
-								lastChildFound = true;
-							}
-						}
-					}
-				});	
-			}
-	
-			if(dojox.mobile.EdgeToEdgeList){
-				lang.extend(dojox.mobile.EdgeToEdgeList, {
-					buildRendering: function(){
-					this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
-						this.domNode.className = "mblEdgeToEdgeList";
-					}
-				});
-			}
-	
-			if(dojox.mobile.IconContainer){
-				dojox.mobile.IconContainer._addChild = dojox.mobile.IconContainer.prototype.addChild;
-				lang.extend(dojox.mobile.IconContainer, {
-					addChild: function(widget, /*Number?*/insertIndex){
-						dojox.mobile.IconContainer._addChild.apply(this, arguments);
-						if(dojox.mobile.applyPngFilter){
-							dojox.mobile.applyPngFilter(widget.domNode);
-						}
-					}
-				});
-			}
+
+			RoundRectList._addChild = RoundRectList.prototype.addChild;
+			lang.extend(RoundRectList, {
+				buildRendering: function(){
+					// summary:
+					//		Function to simulate the borderRadius appearance on IE, since
+					//		IE does not support this CSS style.
+					// tags:
+					//		protected
+					dojox.mobile.createRoundRect(this, true);
+					this.domNode.className = "mblRoundRectList";
+				},
+			
+				postCreate: function(){
+					this.redrawBorders();
+				},
 		
+				addChild: function(widget, /*Number?*/insertIndex){
+					RoundRectList._addChild.apply(this, arguments);
+					this.redrawBorders();
+					if(dojox.mobile.applyPngFilter){
+						dojox.mobile.applyPngFilter(widget.domNode);
+					}
+				},
+			
+				redrawBorders: function(){
+					// summary:
+					//		Function to adjust the creation of RoundRectLists on IE.
+					//		Removed undesired styles.
+					// tags:
+					//		public
+			
+					// Remove a border of the last ListItem.
+					// This is for browsers that do not support the last-child CSS pseudo-class.
+
+					if(this instanceof EdgeToEdgeList){ return; }
+					var lastChildFound = false;
+					for(var i = this.containerNode.childNodes.length - 1; i >= 0; i--){
+						var c = this.containerNode.childNodes[i];
+						if(c.tagName == "LI"){
+							c.style.borderBottomStyle = lastChildFound ? "solid" : "none";
+							lastChildFound = true;
+						}
+					}
+				}
+			});	
+
+
+			lang.extend(EdgeToEdgeList, {
+				buildRendering: function(){
+				this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
+					this.domNode.className = "mblEdgeToEdgeList";
+				}
+			});
+
+
+			IconContainer._addChild = IconContainer.prototype.addChild;
+			lang.extend(IconContainer, {
+				addChild: function(widget, /*Number?*/insertIndex){
+					IconContainer._addChild.apply(this, arguments);
+					if(dojox.mobile.applyPngFilter){
+						dojox.mobile.applyPngFilter(widget.domNode);
+					}
+				}
+			});
+
+
 			lang.mixin(dojox.mobile, {
 				createRoundRect: function(_this, isList){
 					// summary:
@@ -344,25 +345,24 @@ define([
 					}
 				}
 			});
-		
-			if(dojox.mobile.ScrollableView){
-				lang.extend(dojox.mobile.ScrollableView, {
-					postCreate: function(){
-						// On IE, margin-top of the first child does not seem to be effective,
-						// probably because padding-top is specified for containerNode
-						// to make room for a fixed header. This dummy node is a workaround for that.
-						var dummy = domConstruct.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
-						domStyle.set(dummy, {
-							position: "relative",
-							marginBottom: "-2px",
-							fontSize: "1px"
-						});
-					}
-				});
-			}
-	
+
+
+			lang.extend(ScrollableView, {
+				postCreate: function(){
+					// On IE, margin-top of the first child does not seem to be effective,
+					// probably because padding-top is specified for containerNode
+					// to make room for a fixed header. This dummy node is a workaround for that.
+					var dummy = domConstruct.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
+					domStyle.set(dummy, {
+						position: "relative",
+						marginBottom: "-2px",
+						fontSize: "1px"
+					});
+				}
+			});
 		} // if	(has("ie"))
-	
+
+
 		if(has("ie") <= 6){
 			dojox.mobile.applyPngFilter = function(root){
 				root = root || win.body();

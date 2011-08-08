@@ -118,7 +118,7 @@ define([
 
 		generate: function(/*Array*/items, /*Object*/ dataObject){
 			array.forEach(this.getChildren(), function(child){
-				if(child instanceof dojox.mobile.SwapView){
+				if(child instanceof SwapView){
 					child.destroyRecursive();
 				}
 			});

@@ -4,8 +4,9 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-construct",
+	"..",
 	"require"
-], function(array, config, lang, win, domConstruct, require){
+], function(array, config, lang, win, domConstruct, dojox, require){
 
 	lang.getObject("mobile", true, dojox);
 

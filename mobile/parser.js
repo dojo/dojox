@@ -3,12 +3,14 @@ define([
 	"dojo/_base/config",
 	"dojo/_base/lang",
 	"dojo/_base/window",
-	"dojo/ready"
-], function(dojo, config, lang, win, ready){
+	"dojo/ready",
+	".."
+], function(dojo, config, lang, win, ready, dojox){
 
 	lang.getObject("mobile", true, dojox);
 
-	dojox.mobile.parser = new function(){
+	// assigning to dojox.mobile.parser is for back compat, dojo.parser is in case user app calls it
+	var parser = dojox.mobile.parser = dojo.parser = new function(){
 		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
 			// summary:
 			//		Function for instantiating a list of widget nodes.
@@ -23,9 +25,9 @@ define([
 					var cls = lang.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
 					var proto = cls.prototype;
 					var params = {}, prop, v, t;
-					dojo._mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
-					dojo._mixin(params, args.defaults);
-					dojo._mixin(params, mixin);
+					lang.mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
+					lang.mixin(params, args.defaults);
+					lang.mixin(params, mixin);
 					for(prop in proto){
 						v = n.getAttributeNode(prop);
 						v = v && v.nodeValue;
@@ -90,9 +92,7 @@ define([
 		};
 	}();
 	if(config.parseOnLoad){
-		ready(100, dojox.mobile.parser, "parse");
+		ready(100, parser, "parse");
 	}
-	dojo.parser = dojox.mobile.parser; // in case user app calls parser
-
-	return dojox.mobile.parser;
+	return parser;
 });

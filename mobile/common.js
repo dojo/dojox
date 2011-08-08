@@ -4,16 +4,16 @@ define([
 	"dojo/_base/config",
 	"dojo/_base/connect",
 	"dojo/_base/lang",
-	"dojo/_base/sniff",
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"dojo/ready",
-	"dijit/registry",
-	"dijit/WidgetSet"	// to get filter(), forEach()
 //	"dojo/hash", // optionally prereq'ed
-], function(dojo, array, config, connect, lang, has, win, domClass, domConstruct, domStyle, ready, registry){
+	"dojo/ready",
+	"dijit/registry",	// registry.toArray
+	"./sniff",
+	"./uacss"
+], function(dojo, array, config, connect, lang, win, domClass, domConstruct, domStyle, ready, registry, has, uacss){
 
 	lang.getObject("mobile", true, dojox);
 
@@ -36,34 +36,6 @@ define([
 //
 //		Note that use of dijit._Templated and query was intentionally
 //		avoided to reduce download code size.
-
-	var ua = navigator.userAgent;
-
-	// BlackBerry (OS 6 or later only)
-	has.add('bb', ua.indexOf("BlackBerry") >= 0 && parseFloat(ua.split("Version/")[1]) || undefined);
-
-	// Android
-	has.add('android', parseFloat(ua.split("Android ")[1]) || undefined);
-
-	// iPhone, iPod, or iPad
-	// If iPod or iPad is detected, in addition to has('ipod') or has('ipad'),
-	// has('iphone') will also have iOS version number.
-	if(ua.match(/(iPhone|iPod|iPad)/)){
-		var p = RegExp.$1.replace(/P/,/p/);
-		var v = ua.match(/OS ([\d_]+)/) ? RegExp.$1 : "1";
-		var os = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
-		has.add(p, os);
-		has.add('iphone', os);
-	}
-
-	var html = win.doc.documentElement;
-	html.className += lang.trim([
-		has('bb') ? "dj_bb" : "",
-		has('android') ? "dj_android" : "",
-		has('iphone') ? "dj_iphone" : "",
-		has('ipod') ? "dj_ipod" : "",
-		has('ipad') ? "dj_ipad" : ""
-	].join(" ").replace(/ +/g," "));
 
 	var dm = dojox.mobile;
 
@@ -191,9 +163,8 @@ define([
 			if(root.resize){ root.resize(); }
 			resizeRecursively(root);
 		}else{
-			registry.filter(isTopLevel).forEach(function(w){
-				w.resize();
-			});
+			array.forEach(array.filter(registry.toArray(), isTopLevel),
+					function(w){ w.resize(); });
 		}
 	};
 
@@ -396,24 +367,17 @@ define([
 		win.body().style.visibility = "visible";
 	});
 
-	// TODO: why is this repeated here when it's already implemented in dijit/registry.js?
-	dijit.getEnclosingWidget = function(node){
-		while(node && node.tagName !== "BODY"){
-			if(node.getAttribute && node.getAttribute("widgetId")){
-				return registry.byId(node.getAttribute("widgetId"));
+	// To search _parentNode first.  TODO:1.8 reconsider this redefinition.
+	registry.getEnclosingWidget = function(node){
+		while(node){
+			var id = node.getAttribute && node.getAttribute("widgetId");
+			if(id){
+				return registry.byId(id);
 			}
 			node = node._parentNode || node.parentNode;
 		}
 		return null;
 	};
-
-	(function(){
-		// feature detection
-		if(has("webkit")){
-			dm.hasTouch = (typeof win.doc.documentElement.ontouchstart != "undefined" &&
-				navigator.appVersion.indexOf("Mobile") != -1) || !!has('android');
-		}
-	})();
 
 	return dm;
 });

@@ -6,16 +6,16 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom",
+	"dojo/dom-class",
 	"dojo/dom-construct",
+//	"dojo/hash", // optionally prereq'ed
 	"dojo/on",
 	"dojo/ready",
-	"dijit/registry",
+	"dijit/registry",	// registry.byId
 	"./ProgressIndicator",
-	"./TransitionEvent"
-//	"dojo/hash", // optionally prereq'ed
-],
-	function(dojo, array, connect, declare, lang, win, dom, domConstruct, on, ready,
-			 registry, ProgressIndicator, TransitionEvent){
+	"./TransitionEvent",
+	".."
+], function(dojo, array, connect, declare, lang, win, dom, domClass, domConstruct, on, ready, registry, ProgressIndicator, TransitionEvent, dojox){
 
 	var Controller = declare(null, {
 		constructor: function(){
@@ -33,13 +33,13 @@ define([
 				if(w && w.getShowingView){ return w.getShowingView(); }
 			}
 			if(dojox.mobile.currentView){
-				return dojox.mobile.currentView;
+				return dojox.mobile.currentView; //TODO:1.8 may not return an expected result especially when views are nested
 			}
 			w = src;
 			while(true){
 				w = w.getParent();
 				if(!w){ return null; }
-				if(w instanceof dojox.mobile.View){ break; }
+				if(domClass.contains(w.domNode, "mblView")){ break; }
 			}
 			return w;
 		},

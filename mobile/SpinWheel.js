@@ -8,8 +8,7 @@ define([
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./SpinWheelSlot"
-],
-	function(array, declare, lang, domClass, domConstruct, Contained, Container, WidgetBase, SpinWheelSlot){
+], function(array, declare, lang, domClass, domConstruct, Contained, Container, WidgetBase, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheel
 	// summary:

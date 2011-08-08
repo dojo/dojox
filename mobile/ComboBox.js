@@ -9,8 +9,9 @@ define([
 	"dijit/form/_AutoCompleterMixin",
 	"dijit/popup",
 	"./_ComboBoxMenu",
-	"./TextBox"
-], function(kernel, declare, lang, win, domGeometry, domStyle, windowUtils, AutoCompleterMixin, popup, ComboBoxMenu, TextBox){
+	"./TextBox",
+	"./sniff"
+], function(kernel, declare, lang, win, domGeometry, domStyle, windowUtils, AutoCompleterMixin, popup, ComboBoxMenu, TextBox, has){
 	kernel.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
 	/*=====
@@ -193,11 +194,11 @@ define([
 				if(retVal.aroundCorner.charAt(0) == 'B'){ // is popup below?
 					this.domNode.scrollIntoView(true); // scroll to top
 				}
-				this.startHandler = this.connect(win.doc.documentElement, dojox.mobile.hasTouch ? "ontouchstart" : "onmousedown",
+				this.startHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchstart" : "onmousedown",
 					lang.hitch(this, function(){
 						var isMove = false;
-						this.moveHandler = this.connect(win.doc.documentElement, dojox.mobile.hasTouch ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
-						this.endHandler = this.connect(win.doc.documentElement, dojox.mobile.hasTouch ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
+						this.moveHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
+						this.endHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
 					})
 				);
 			}

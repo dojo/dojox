@@ -3,7 +3,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/dom",
 	"dojo/dom-class",
-	"dijit/registry",
+	"dijit/registry",	// registry.byNode
 	"./View",
 	"./_ScrollableMixin"
 ], function(connect, declare, dom, domClass, registry, View, ScrollableMixin){

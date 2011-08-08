@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"./RoundRectCategory"
-],function(declare, RoundRectCategory){
+], function(declare, RoundRectCategory){
 	/*=====
 		RoundRectCategory = dojox.mobile.RoundRectCategory;
 	=====*/

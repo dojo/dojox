@@ -5,7 +5,7 @@ define([
 	"dojo/_base/window",
 	"dojo/dom",
 	"dojo/dom-class",
-	"dijit/registry",
+	"dijit/registry",	// registry.byNode
 	"./scrollable"
 ], function(dojo, declare, lang, win, dom, domClass, registry, Scrollable){
 	// module:
@@ -17,7 +17,7 @@ define([
 	//		scrollable.js is not a dojo class, but just a collection
 	//		of functions. This module makes scrollable.js a dojo class.
 
-	declare("dojox.mobile._ScrollableMixin", null, {
+	var cls = declare("dojox.mobile._ScrollableMixin", null, {
 		fixedHeader: "",
 		fixedFooter: "",
 		scrollableParams: {},
@@ -97,6 +97,6 @@ define([
 			return null;
 		}
 	});
-	lang.extend(dojox.mobile._ScrollableMixin, new Scrollable(dojo, dojox));
-	return dojox.mobile._ScrollableMixin;
+	lang.extend(cls, new Scrollable(dojo, dojox));
+	return cls;
 });

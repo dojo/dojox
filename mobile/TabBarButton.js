@@ -4,11 +4,10 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
-	"dijit/registry",
+	"dijit/registry",	// registry.byNode
 	"./common",
 	"./_ItemBase"
-],
-	function(declare, lang, win, domClass, domConstruct, registry, common, ItemBase){
+], function(declare, lang, win, domClass, domConstruct, registry, common, ItemBase){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
@@ -78,7 +77,7 @@ define([
 			this.domNode.appendChild(a);
 			if(this.domNode.className.indexOf("mblDomButton") != -1){
 				var domBtn = domConstruct.create("DIV", null, a);
-				dojox.mobile.createDomButton(this.domNode, null, domBtn);
+				common.createDomButton(this.domNode, null, domBtn);
 				domClass.add(this.domNode, "mblTabButtonDomButton");
 			}
 		},
@@ -145,7 +144,7 @@ define([
 					this[n] = domConstruct.create("DIV", null, div);
 				}
 				this[n].className = icon + " mblTabBarButtonIcon";
-				dojox.mobile.createDomButton(this[n]);
+				common.createDomButton(this[n]);
 				domClass.remove(div, "mblTabBarButtonNoIcon");
 			}else if(icon && icon != "none"){
 				if(!this[n]){
@@ -156,7 +155,7 @@ define([
 				}
 				this[n].src = icon;
 				this[n].style.visibility = sel ? "hidden" : "";
-				dojox.mobile.setupIcon(this[n], this[p]);
+				common.setupIcon(this[n], this[p]);
 				this[n].onload = function(){
 					// iPhone and Windows Safari sometimes fail to draw icon images.
 					// For some reason, this code solves the problem.

@@ -3,8 +3,7 @@ define([
 	"dojo/dom-class",
 	"./SpinWheel",
 	"./SpinWheelSlot"
-],
-	function(declare, domClass, SpinWheel, SpinWheelSlot){
+], function(declare, domClass, SpinWheel, SpinWheelSlot){
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:

@@ -6,8 +6,7 @@ define([
 	"dojo/dom-style",
 	"./common",
 	"./_ItemBase"
-],
-	function(declare, win, domClass, domConstruct, domStyle, common, ItemBase){
+], function(declare, win, domClass, domConstruct, domStyle, common, ItemBase){
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:
@@ -56,10 +55,10 @@ define([
 				}
 				img.src = this.icon;
 				img.alt = this.alt;
-				dojox.mobile.setupIcon(img, this.iconPos);
+				common.setupIcon(img, this.iconPos);
 				this.iconNode = img;
 			}else{
-				if(dojox.mobile.createDomButton(this.domNode)){
+				if(common.createDomButton(this.domNode)){
 					domClass.add(this.domNode, "mblToolbarButtonDomButton");
 				}
 			}
@@ -86,7 +85,7 @@ define([
 				domClass.remove(node, RegExp.$1);
 			}
 			domClass.add(node, btnClass);
-			if(dojox.mobile.createDomButton(this.domNode)){
+			if(common.createDomButton(this.domNode)){
 				domClass.add(this.domNode, "mblToolbarButtonDomButton");
 			}
 		}

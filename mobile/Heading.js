@@ -7,13 +7,13 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"dijit/registry",
+	"dijit/registry",	// registry.byId
 	"dijit/_Contained",
 	"dijit/_Container",
-	"dijit/_WidgetBase"
-],
-	function(array, connect, declare, lang, win, domClass, domConstruct, domStyle,
-			 registry, Contained, Container, WidgetBase){
+	"dijit/_WidgetBase",
+	"./View",
+	".."
+], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, View, dojox){
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
@@ -138,7 +138,7 @@ define([
 			while(true){
 				w = w.getParent();
 				if(!w){ return null; }
-				if(w instanceof dojox.mobile.View){ break; }
+				if(w instanceof View){ break; }
 			}
 			return w;
 		},

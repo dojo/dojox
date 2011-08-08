@@ -8,8 +8,7 @@ define([
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./FixedSplitterPane"
-],
-	function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, FixedSplitterPane){
+], function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, FixedSplitterPane){
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:

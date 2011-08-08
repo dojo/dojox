@@ -5,7 +5,7 @@ define([
 	"dojo/dom-style",
 	"dojo/has"
 ], function(config, declare, domConstruct, domStyle, has){
-	declare("dojox.mobile.ProgressIndicator", null, {
+	var cls = declare("dojox.mobile.ProgressIndicator", null, {
 		interval: 100, // milliseconds
 		colors: [
 			"#C0C0C0", "#C0C0C0", "#C0C0C0", "#C0C0C0",
@@ -76,13 +76,14 @@ define([
 			}
 		}
 	});
-	dojox.mobile.ProgressIndicator._instance = null;
-	dojox.mobile.ProgressIndicator.getInstance = function(){
-		if(!dojox.mobile.ProgressIndicator._instance){
-			dojox.mobile.ProgressIndicator._instance = new dojox.mobile.ProgressIndicator();
+
+	cls._instance = null;
+	cls.getInstance = function(){
+		if(!cls._instance){
+			cls._instance = new cls();
 		}
-		return dojox.mobile.ProgressIndicator._instance;
+		return cls._instance;
 	};
 
-	return dojox.mobile.ProgressIndicator;
+	return cls;
 });

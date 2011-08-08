@@ -2,8 +2,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/dom-construct",
 	"./TextBox"
-],
-	function(declare, domConstruct, TextBox){
+], function(declare, domConstruct, TextBox){
 
 	/*=====
 		TextBox = dojox.mobile.TextBox;

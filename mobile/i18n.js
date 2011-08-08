@@ -1,7 +1,9 @@
 define([
 	"dojo/_base/lang",
-	"dojo/i18n"
-], function(lang, i18n){
+	"dojo/i18n",
+	"dijit/_WidgetBase",
+	".."
+], function(lang, i18n, WidgetBase, dojox){
 	// module:
 	//		dojox/mobile/i18n
 	// summary:
@@ -18,7 +20,7 @@ define([
 		return lang.mixin(dojox.mobile.i18n.bundle, bundle);
 	};
 
-	lang.extend(dijit._WidgetBase, {
+	lang.extend(WidgetBase, {
 		mblNoConv: false,
 		_cv: function(s){
 			if(this.mblNoConv || !dojox.mobile.i18n.bundle){ return s; }

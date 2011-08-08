@@ -3,10 +3,9 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dijit/registry",
+	"dijit/registry",	// registry.byId
 	"./ListItem"
-],
-	function(array, connect, declare, lang, registry, ListItem){
+], function(array, connect, declare, lang, registry, ListItem){
 	// module:
 	//		dojox/mobile/_DataListMixin
 	// summary:

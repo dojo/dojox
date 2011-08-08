@@ -29,6 +29,8 @@
 		require([
 			"dojo/_base/kernel",
 			"dojo/_base/connect",	// dojo.subscribe() (TODO: use on() instead)
+			"dojo/_base/html",		// dojo.byId
+			"dijit/_base/manager",	// dijit.byId
 			"dojox/mobile/parser", 	// This mobile app uses declarative programming with fast mobile parser
 			"dojox/mobile",			// This is a mobile app.
 			"dojox/mobile/FixedSplitter",
@@ -39,8 +41,7 @@
 			"dojox/mobile/FixedSplitterPane",
 			"dojox/mobile/compat"	// This mobile app supports running on desktop browsers
 			// "domReady!" // Enable if user code placed in the callback here that needs DOMReady
-			],
-			function(dojo){
+		], function(dojo){
 				dojo.subscribe("/dojox/mobile/screenSize/tablet", function(dim){
 					setStateful(true);
 					showBackButton(false);

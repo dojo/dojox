@@ -9,8 +9,7 @@ define([
 	"./common",
 	"./_ItemBase",
 	"./TransitionEvent"
-],
-	function(array, connect, declare, lang, domClass, domConstruct, has, common, ItemBase, TransitionEvent){
+], function(array, connect, declare, lang, domClass, domConstruct, has, common, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:
@@ -121,6 +120,9 @@ define([
 			}
 
 			this.set("icon", this.icon);
+			if(!this.checked && this.checkClass.indexOf(',') !== -1){
+				this.set("checked", this.checked);
+			}
 			this.inherited(arguments);
 		},
 
@@ -219,7 +221,7 @@ define([
 			var a = this.anchorNode;
 			domConstruct.empty(this.iconNode);
 			if(icon && icon !== "none"){
-				dojox.mobile.createIcon(icon, this.iconPos, null, this.alt, this.iconNode);
+				common.createIcon(icon, this.iconPos, null, this.alt, this.iconNode);
 				if(this.iconPos){
 					domClass.add(this.iconNode.firstChild, "mblListItemSpriteIcon");
 				}
@@ -237,7 +239,15 @@ define([
 				});
 			}
 			this._setRightIconAttr(this.checkClass);
-			this.rightIconNode.style.display = checked ? "" : "none";
+
+			var icons = this.rightIconNode.childNodes;
+			if(icons.length === 1){
+				this.rightIconNode.style.display = checked ? "" : "none";
+			}else{
+				icons[0].style.display = checked ? "" : "none";
+				icons[1].style.display = !checked ? "" : "none";
+			}
+
 			domClass.toggle(this.domNode, "mblListItemChecked", checked);
 			if(this.checked !== checked){
 				this.getParent().onCheckStateChanged(this, checked);
@@ -253,13 +263,19 @@ define([
 		_setRightIconAttr: function(/*String*/icon){
 			this.rightIcon = icon;
 			domConstruct.empty(this.rightIconNode);
-			dojox.mobile.createIcon(icon, null, null, this.rightIconTitle, this.rightIconNode);
+			var arr = (icon || "").split(/,/);
+			if(arr.length === 1){
+				common.createIcon(icon, null, null, this.rightIconTitle, this.rightIconNode);
+			}else{
+				common.createIcon(arr[0], null, null, this.rightIconTitle, this.rightIconNode);
+				common.createIcon(arr[1], null, null, this.rightIconTitle, this.rightIconNode);
+			}
 		},
 	
 		_setRightIcon2Attr: function(/*String*/icon){
 			this.rightIcon2 = icon;
 			domConstruct.empty(this.rightIcon2Node);
-			dojox.mobile.createIcon(icon, null, null, this.rightIcon2Title, this.rightIcon2Node);
+			common.createIcon(icon, null, null, this.rightIcon2Title, this.rightIcon2Node);
 		},
 	
 		_setLabelAttr: function(/*String*/text){

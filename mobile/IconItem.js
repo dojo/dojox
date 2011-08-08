@@ -8,12 +8,11 @@ define([
 	"dojo/dom-attr",
 	"dojo/dom-class",
 	"dojo/dom-style",
-	"dijit/registry",
+	"dijit/registry",	// registry.byId
 	"./common",
 	"./_ItemBase",
 	"./TransitionEvent"
-],
-	function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, registry, common, ItemBase, TransitionEvent){
+], function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, registry, common, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
@@ -89,7 +88,7 @@ define([
 		},
 
 		postCreate: function(){
-			dojox.mobile.createDomButton(this.closeIconNode, {
+			common.createDomButton(this.closeIconNode, {
 				top: "-2px",
 				left: "1px"
 			});
@@ -255,7 +254,7 @@ define([
 			this.icon = icon;
 			this.iconNode.src = icon;
 			this.iconNode.alt = this.alt;
-			dojox.mobile.setupIcon(this.iconNode, this.iconPos);
+			common.setupIcon(this.iconNode, this.iconPos);
 		},
 	
 		_setLabelAttr: function(/*String*/text){

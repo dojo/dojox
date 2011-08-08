@@ -2,11 +2,13 @@ define([
 	"dojo/_base/kernel",
 	"dojo/_base/config",
 	"dojo/_base/declare",
+	"dijit/registry",	// registry.getEnclosingWidget
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./TransitionEvent"
-], function(kernel, config, declare, Contained, Container, WidgetBase, TransitionEvent){
+	"./TransitionEvent",
+	"./View"
+], function(kernel, config, declare, registry, Contained, Container, WidgetBase, TransitionEvent, View){
 	// module:
 	//		dojox/mobile/_ItemBase
 	// summary:
@@ -89,14 +91,14 @@ define([
 			// almost equivalent to _Contained#getParent, but this method does not
 			// cause a script error even if this widget has no parent yet.
 			var ref = this.srcNodeRef || this.domNode;
-			return ref && ref.parentNode ? dijit.getEnclosingWidget(ref.parentNode) : null;
+			return ref && ref.parentNode ? registry.getEnclosingWidget(ref.parentNode) : null;
 		},
 
 		setTransitionPos: function(e){
 			var w = this;
 			while(true){
 				w = w.getParent();
-				if(!w || w instanceof dojox.mobile.View){ break; }
+				if(!w || w instanceof View){ break; }
 			}
 			if(w){
 				w.clickedPosX = e.clientX;

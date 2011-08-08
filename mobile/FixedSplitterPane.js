@@ -5,8 +5,7 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase"
-],
-	function(array, declare, domClass, Contained, Container, WidgetBase){
+], function(array, declare, domClass, Contained, Container, WidgetBase){
 	/*=====
 		WidgetBase = dijit._WidgetBase;
 		Container = dijit._Container;

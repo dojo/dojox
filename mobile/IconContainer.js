@@ -4,16 +4,14 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"dijit/registry",
+	"dijit/registry",	// registry.byNode
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./IconItem",
 	"./Heading",
 	"./View"
-],
-	function(array, declare, win, domConstruct, domStyle,
-			 registry, Contained, Container, WidgetBase, IconItem, Heading, View){
+], function(array, declare, win, domConstruct, domStyle, registry, Contained, Container, WidgetBase, IconItem, Heading, View){
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:
@@ -74,7 +72,7 @@ define([
 
 				var target;
 				for(var w = this.getParent(); w; w = w.getParent()){
-					if(w instanceof dojox.mobile.View){
+					if(w instanceof View){
 						target = w.domNode.parentNode;
 						break;
 					}

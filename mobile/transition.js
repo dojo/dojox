@@ -5,8 +5,7 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-style",
 	"dojo/DeferredList"
-],
-	function(array, connect, Deferred, domClass, domStyle, DeferredList){
+], function(array, connect, Deferred, domClass, domStyle, DeferredList){
 	return function(from, to, options){
 		var rev = (options && options.reverse) ? " mblReverse" : "";
 		if(!options || !options.transition){

@@ -11,14 +11,14 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
-	"dijit/registry",
+//	"dojo/hash", // optionally prereq'ed
+	"dijit/registry",	// registry.byNode
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./ViewController"
-//	"dojo/hash", // optionally prereq'ed
-], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle,
-			registry, Contained, Container, WidgetBase, ViewController){
+	"./ViewController",
+	".."
+], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, dojox){
 	// module:
 	//		dojox/mobile/View
 	// summary:
@@ -108,7 +108,7 @@ define([
 				if(!_visible){
 					_this.domNode.style.display = "none";
 				}else{
-					dojox.mobile.currentView = _this;
+					dojox.mobile.currentView = _this; //TODO:1.8 reconsider this. currentView may not have a currently showing view when views are nested.
 					_this.onStartView();
 					connect.publish("/dojox/mobile/startView", [_this]);
 				}

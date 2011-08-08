@@ -3,12 +3,12 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/event",
-	"dojo/_base/sniff",
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dijit/_Contained",
-	"dijit/_WidgetBase"
-], function(array, connect, declare, event, has, win, domClass, Contained, WidgetBase){
+	"dijit/_WidgetBase",
+	"./sniff"
+], function(array, connect, declare, event, win, domClass, Contained, WidgetBase, has){
 	// module:
 	//		dojox/mobile/Switch
 	// summary:
@@ -51,7 +51,7 @@ define([
 
 		postCreate: function(){
 			this.connect(this.domNode, "onclick", "onClick");
-			this.connect(this.domNode, dojox.mobile.hasTouch ? "touchstart" : "onmousedown", "onTouchStart");
+			this.connect(this.domNode, has('touch') ? "touchstart" : "onmousedown", "onTouchStart");
 		},
 
 		_changeState: function(/*String*/state, /*Boolean*/anim){
@@ -111,8 +111,8 @@ define([
 			this.innerStartX = this.inner.offsetLeft;
 			if(!this._conn){
 				this._conn = [];
-				this._conn.push(connect.connect(this.inner, dojox.mobile.hasTouch ? "touchmove" : "onmousemove", this, "onTouchMove"));
-				this._conn.push(connect.connect(this.inner, dojox.mobile.hasTouch ? "touchend" : "onmouseup", this, "onTouchEnd"));
+				this._conn.push(connect.connect(this.inner, has('touch') ? "touchmove" : "onmousemove", this, "onTouchMove"));
+				this._conn.push(connect.connect(this.inner, has('touch') ? "touchend" : "onmouseup", this, "onTouchEnd"));
 			}
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 			this.left.style.display = "";
@@ -143,7 +143,7 @@ define([
 			array.forEach(this._conn, connect.disconnect);
 			this._conn = null;
 			if(this.innerStartX == this.inner.offsetLeft){
-				if(dojox.mobile.hasTouch){
+				if(has('touch')){
 					var ev = win.doc.createEvent("MouseEvents");
 					ev.initEvent("click", true, true);
 					this.inner.dispatchEvent(ev);

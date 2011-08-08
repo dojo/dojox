@@ -10,8 +10,7 @@ define([
 	"dijit/_WidgetBase",
 	"./Heading",
 	"./TabBarButton"
-],
-	function(array, declare, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, Heading, TabBarButton){
+], function(array, declare, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, Heading, TabBarButton){
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
