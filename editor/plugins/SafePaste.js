@@ -1,4 +1,15 @@
-define("dojox/editor/plugins/SafePaste", ["dojo", "dijit", "dojox", "dojox/editor/plugins/PasteFromWord", "dojo/string", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/SafePaste"], function(dojo, dijit, dojox) {
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dijit/Dialog",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/i18n",
+	"dojo/string",
+	"dojox/editor/plugins/PasteFromWord",
+	"dojo/i18n!dojox/editor/plugins/nls/SafePaste"
+], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.SafePaste", [dojox.editor.plugins.PasteFromWord],{
 	// summary:

@@ -1,18 +1,25 @@
 define([
 	"dojo",//FIXME
 	"dijit",//FIXME
-	"dojo/_base/sniff",
+	"dijit/registry",
 	"dijit/_base/popup",
-	"dijit/_editor/plugins/LinkDialog", // FIXME: ImgLinkDialog is not a separate module
-	"dijit/TooltipDialog", // FIXME: ImgLinkDialog is not a separate module
+	"dijit/_editor/_Plugin",
+	"dijit/_editor/plugins/LinkDialog",
+	"dijit/TooltipDialog",
+	"dijit/form/_TextBoxMixin",
 	"dijit/form/Button",
 	"dijit/form/ValidationTextBox",
 	"dijit/form/DropDownButton",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/_base/sniff",
 	"dojox/form/FileUploader", //FIXME: deprecated.  Use Uploader instead
 	"dojo/i18n!dojox/editor/plugins/nls/LocalImage"
-], function(dojo, dijit, has, popup, LinkDialog, TooltipDialog, Button, ValidationTextBox, DropDownButton, FileUploader, messages) {
+], function(dojo, dijit, registry, popup, _Plugin, LinkDialog, TooltipDialog,
+			_TextBoxMixin, Button, ValidationTextBox, DropDownButton,
+			connect, declare, has, FileUploader, messages) {
 
-var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.plugins.ImgLinkDialog, {
+var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", LinkDialog.ImgLinkDialog, {
 	// summary:
 	//		This plugin provides an enhanced image link dialog that
 	//		not only insert the online images, but upload the local image files onto
@@ -117,7 +124,7 @@ var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.p
 				TooltipDialog.prototype.onOpen.apply(this, arguments);
 				setTimeout(function(){
 					// Auto-select the text if it is not empty
-					dijit.selectInputText(_this._urlInput.textbox);
+					_TextBoxMixin.selectInputText(_this._urlInput.textbox);
 					_this._urlInput.isLoadComplete = true;
 				}, 0);
 			},
@@ -175,16 +182,16 @@ var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.p
 			messages.prePopuTextBrowse = ".";
 		}
 		
-		messages.id = dijit.getUniqueId(this.editor.id);
+		messages.id = registry.getUniqueId(this.editor.id);
 		messages.uploadable = this.uploadable ? "inline" : "none";
 		this._uniqueId = messages.id;
 		this._setContent("<div class='" + this._cssPrefix + "Title'>" + dropDown.title + "</div>" +
 			dojo.string.substitute(this.linkDialogTemplate, messages));
 		dropDown.startup();
 		
-		var urlInput = (this._urlInput = dijit.byId(this._uniqueId + "_urlInput"));
-		this._textInput = dijit.byId(this._uniqueId + "_textInput");
-		this._setButton = dijit.byId(this._uniqueId + "_setButton");
+		var urlInput = (this._urlInput = registry.byId(this._uniqueId + "_urlInput"));
+		this._textInput = registry.byId(this._uniqueId + "_textInput");
+		this._setButton = registry.byId(this._uniqueId + "_setButton");
 		
 		if(urlInput){
 			var pt = ValidationTextBox.prototype;
@@ -328,20 +335,16 @@ var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", dijit._editor.p
 });
 
 // Register this plugin.
-dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
-	if(o.plugin){ return; }
-	var name = o.args.name.toLowerCase();
-	if(name ===  "localimage"){
-		o.plugin = new LocalImage({
-			command: "insertImage",
-			uploadable: ("uploadable" in o.args) ? o.args.uploadable : false,
-			uploadUrl: ("uploadable" in o.args && "uploadUrl" in o.args) ? o.args.uploadUrl : "",
-			htmlFieldName: ("uploadable" in o.args && "htmlFieldName" in o.args) ? o.args.htmlFieldName : "uploadedfile",
-			baseImageUrl: ("uploadable" in o.args && "baseImageUrl" in o.args) ? o.args.baseImageUrl : "",
-			fileMask: ("fileMask" in o.args) ? o.args.fileMask : "*.jpg;*.jpeg;*.gif;*.png;*.bmp"
-		});
-	}
-});
+_Plugin.registry["LocalImage"] = function(args){
+	return new LocalImage({
+		command: "insertImage",
+		uploadable: ("uploadable" in args) ? args.uploadable : false,
+		uploadUrl: ("uploadable" in args && "uploadUrl" in args) ? args.uploadUrl : "",
+		htmlFieldName: ("uploadable" in args && "htmlFieldName" in args) ? args.htmlFieldName : "uploadedfile",
+		baseImageUrl: ("uploadable" in args && "baseImageUrl" in args) ? args.baseImageUrl : "",
+		fileMask: ("fileMask" in args) ? args.fileMask : "*.jpg;*.jpeg;*.gif;*.png;*.bmp"
+	});
+};
 
 return LocalImage;
 
