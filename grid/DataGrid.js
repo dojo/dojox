@@ -210,12 +210,18 @@ declare("dojox.grid.DataGrid", _Grid, {
 	},
 
 	setStore: function(store, query, queryOptions){
+		if(this._requestsPending(0)){
+			return;
+		}
 		this._setQuery(query, queryOptions);
 		this._setStore(store);
 		this._refresh(true);
 	},
 	
 	setQuery: function(query, queryOptions){
+		if(this._requestsPending(0)){
+			return;
+		}
 		this._setQuery(query, queryOptions);
 		this._refresh(true);
 	},
