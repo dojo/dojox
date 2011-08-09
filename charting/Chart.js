@@ -3,7 +3,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 	"./Element", "./Theme", "./Series", "./axis2d/common",
 	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
 	function(dojo, lang, arr, declare, html, 
-	 		 dom, domGeom, domConstruct, Color, ua,
+	 		 dom, domGeom, domConstruct, Color, has,
 	 		 Element, Theme, Series, common, 
 	 		 g, func, funcFold, funcReversed){
 	/*=====
@@ -964,7 +964,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			//create title: Whether to make chart title as a widget which extends dojox.charting.Element?
 			if(this.title){
 				var forceHtmlLabels = (g.renderer == "canvas"),
-					labelType = forceHtmlLabels || !ua.isIE && !ua.isOpera ? "html" : "gfx",
+					labelType = forceHtmlLabels || !has("ie") && !has("opera") ? "html" : "gfx",
 					tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
 				this.chartTitle = common.createText[labelType](
 					this,

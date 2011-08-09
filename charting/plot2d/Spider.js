@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
 	"dojox/lang/utils", "dojo/fx/easing", "dijit/_base/manager", "dijit/Tooltip"],
-	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, ua,
+	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, has,
 			Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, 
 			g, m, gfxfx, df, du, easing, dijit, Tooltip){
 
@@ -537,7 +537,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				a.anim.play();
 			}else if(o.element == "spider_plot"){
 				//dojo gfx function "moveToFront" not work in IE
-				if (o.type == "onmouseover" && !ua.isIE) {
+				if (o.type == "onmouseover" && !has("ie")) {
 					o.shape.moveToFront();
 				}
 			}

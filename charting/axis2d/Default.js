@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
 	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", "../scaler/common", "../scaler/linear", "./common", 
 	"dojox/gfx", "dojox/lang/utils", "dijit/_base/manager", "dijit/Tooltip"], 
-	function(dojo, lang, arr, ua, declare, connect, html, domGeom, Invisible, scommon, 
+	function(dojo, lang, arr, has, declare, connect, html, domGeom, Invisible, scommon, 
 			lin, acommon, g, du, WidgetManager, Tooltip){
 
 	/*=====
@@ -578,7 +578,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 					f = lin.getTransformerFromModel(this.scaler),
 					// GFX Canvas now supports labels, so let's _not_ fallback to HTML anymore on canvas, just use
 					// HTML labels if explicitly asked + no rotation + no IE + no Opera
-					labelType = !titleRotation && !rotation && this.opt.htmlLabels && !ua.isIE && !ua.isOpera ? "html" : "gfx",
+					labelType = !titleRotation && !rotation && this.opt.htmlLabels && !has("ie") && !has("opera") ? "html" : "gfx",
 					dx = tickVector.x * taMajorTick.length,
 					dy = tickVector.y * taMajorTick.length;
 

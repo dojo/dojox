@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array", "dojo/_base/sniff",
 	"dojo/dom","dojo/dom-construct",
 	"dojox/gfx", "dojox/gfx/_gfxBidiSupport", "./Chart", "./axis2d/common", "dojox/string/BidiEngine", "dojox/lang/functional"], 
-	function(dojo, lang, html, arr, ua, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
+	function(dojo, lang, html, arr, has, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
 
 	var bidiEngine = new BidiEngine();
 	
@@ -120,7 +120,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/a
 					// recreate title
 					if(this.title){
 						var forceHtmlLabels = (g.renderer == "canvas"),
-							labelType = forceHtmlLabels || !ua.isIE && !ua.isOpera ? "html" : "gfx",
+							labelType = forceHtmlLabels || !has("ie") && !has("opera") ? "html" : "gfx",
 							tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
 						// remove the title
 						domConstruct.destroy(this.chartTitle);
