@@ -6,7 +6,7 @@
 
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/connect", "dojo/_base/sniff",
 		"dojo/keys"], 
-  function(dojo, lang, arr, hub, ua, keys){
+  function(dojo, lang, arr, hub, has, keys){
 	dojo.experimental("dojox.string.BidiComplex");
 	var bdc = lang.getObject("string.BidiComplex", true, dojox);
 
@@ -58,13 +58,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	};
 
 	bdc._ceKeyDown = function(event){
-		var elem = ua.isIE ? event.srcElement : event.target;
+		var elem = has("ie") ? event.srcElement : event.target;
 		_str0 = elem.value;
 	};
 				
 	bdc._ceKeyUp = function(event){
 		var LRM = '\u200E';
-		var elem = ua.isIE ? event.srcElement : event.target;
+		var elem = has("ie") ? event.srcElement : event.target;
 
 		var str1 = elem.value;
 		var ieKey = event.keyCode;
@@ -83,7 +83,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		}
 
 	//Jump over a cursor processing
-		if(ua.isIE){
+		if(has("ie")){
 			var cursorStart1 = cursorStart, cursorEnd1 = cursorEnd;
 
 			if(ieKey == keys.LEFT_ARROW){
@@ -150,7 +150,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//		This function strips the unicode directional controls when the text copied to the Clipboard
 
 		if(text == null){
-			if(ua.isIE){
+			if(has("ie")){
 				var range = document.selection.createRange();
 				text = range.text;
 			}else{
@@ -160,14 +160,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 
 		var textToClipboard = bdc.stripSpecialCharacters(text);
 	
-		if(ua.isIE){
+		if(has("ie")){
 			window.clipboardData.setData("Text", textToClipboard);
 		}
 		return true;
 	};
 
 	bdc._ceCopyText = function(elem){
-		if(ua.isIE){
+		if(has("ie")){
 			elem.returnValue = false;
 		}
 		return bdc._processCopy(elem, null, false);
@@ -180,7 +180,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 			return false;
 		}
 
-		if(ua.isIE){
+		if(has("ie")){
 	//		curPos = elem.selectionStart;
 			document.selection.clear();
 		}else{
@@ -194,7 +194,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 
 	// is there dijit code to do this?
 	bdc._getCaretPos = function(event, elem){
-		if(ua.isIE){
+		if(has("ie")){
 			var position = 0,
 			range = document.selection.createRange().duplicate(),
 			range2 = range.duplicate(),
@@ -218,7 +218,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 
 	// is there dijit code to do this?
 	bdc._setSelectedRange = function(elem,selectionStart,selectionEnd){
-		if(ua.isIE){
+		if(has("ie")){
 			var range = elem.createTextRange();
 			if(range){
 				if(elem.type == "textarea"){

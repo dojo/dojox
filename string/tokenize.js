@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/lang",
 	"dojo/_base/sniff"	
-], function(lang, ua){
-	var tokenize = lang.getObject("string", true, dojox).tokenize;
+], function(lang, has){
+	var tokenize = lang.getObject("dojox.string", true).tokenize;
 
 	tokenize = function(/*String*/ str, /*RegExp*/ re, /*Function?*/ parseDelim, /*Object?*/ instance){
 		// summary:
@@ -20,7 +20,7 @@ define([
 				tokens.push(content);
 			}
 			if(parseDelim){
-				if(ua.isOpera){
+				if(has("opera")){
 					var copy = match.slice(0);
 					while(copy.length < match.length){
 						copy.push(null);

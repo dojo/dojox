@@ -3,7 +3,7 @@ define([
 	"dojo/_base/lang",	// dojo.extend
 	"dojo/_base/sniff",	// dojo.isOpera
 	 "./tokenize"
-], function(dojo, lang, ua, tokenize){
+], function(dojo, lang, has, tokenize){
 	var strLib = lang.getObject("string", true, dojox);
 
 	strLib.sprintf = function(/*String*/ format, /*mixed...*/ filler){
@@ -352,7 +352,7 @@ define([
 
 			// Ensure a '0' before the period.
 			// Opera implements (0.001).toString() as '0.001', but (0.001).toFixed(1) is '.001'
-			if(ua.isOpera){
+			if(has("opera")){
 				token.arg = token.arg.replace(/^\./, '0.');
 			}
 

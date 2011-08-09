@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/config"], 
-  function(lang, ua, win, config){
+  function(lang, has, win, config){
 /*===== 
 	dojox.gfx.renderer = {
 		// summary:
@@ -28,13 +28,13 @@ define(["dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/
 						}
 						break;
 					case "vml":
-						if(ua("ie")){
+						if(has("ie")){
 							renderer = "vml";
 						}
 						break;
 					case "silverlight":
 						try{
-							if(ua("ie")){
+							if(has("ie")){
 								silverlightObject = new ActiveXObject("AgControl.AgControl");
 								if(silverlightObject && silverlightObject.IsVersionSupported("1.0")){
 									silverlightFlag = true;
