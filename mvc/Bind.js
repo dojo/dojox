@@ -7,7 +7,7 @@ define([
 		mvc = dojox.mvc;
 	=====*/
 
-	return dojo.mixin(mvc, {
+	return lang.mixin(mvc, {
 		bind: function(/*dojo.Stateful*/ source, /*String*/ sourceProp,
 					/*dojo.Stateful*/ target, /*String*/ targetProp,
 					/*Function?*/ func, /*Boolean?*/ bindOnlyIfUnequal){
