@@ -16,6 +16,9 @@ define([
 ], function(dojo, array, config, connect, lang, win, domClass, domConstruct, domStyle, ready, registry, has, uacss){
 
 	var dm = lang.getObject("dojox.mobile", true);
+	/*=====
+	dm = dojox.mobile
+	=====*/
 
 // summary:
 //		Mobile Widgets

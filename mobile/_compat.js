@@ -50,6 +50,9 @@ define([
 	//		this module will not load the already loaded file.
 
 	var dm = lang.getObject("dojox.mobile", true);
+	/*=====
+	dm = dojox.mobile
+	=====*/
 
 	if(!has("webkit")){
 		lang.extend(View, {
