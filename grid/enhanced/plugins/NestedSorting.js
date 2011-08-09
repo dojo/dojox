@@ -163,6 +163,7 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 	_initHeaderNode: function(node){
 		// summary:
 		//		Initiate sort for each header cell node
+		html.toggleClass(node, 'dojoxGridSortNoWrap', true);
 		var sortNode = query('.dojoxGridSortNode', node)[0];
 		if(sortNode){
 			html.toggleClass(sortNode, 'dojoxGridSortNoWrap', true);
