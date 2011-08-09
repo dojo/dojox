@@ -2,7 +2,7 @@
 define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/html","dojo/dom",
 		"dojo/dom-geometry","dojo/dom-class", "dojo/_base/xhr","dojo/_base/connect","dojo/_base/window", "dojox/gfx",
 		"dojox/geo/charting/_base","dojox/geo/charting/Feature","dojox/geo/charting/_Marker","dojo/number","dojo/_base/sniff"],
-				function(dojo, lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base, Feature, Marker, number,has) {
+	function(dojo, lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base, Feature, Marker, number, has) {
 
 	return declare("dojox.geo.charting.Map", null, {
 	//	summary:

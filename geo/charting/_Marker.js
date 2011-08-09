@@ -1,6 +1,6 @@
 
 define(["dojo/_base/kernel", "dojo/_base/lang","dojo/_base/array", "dojo/_base/declare","dojo/_base/sniff","./_base"], 
-				function(dojo, lang, arr, declare, has) {
+	function(dojo, lang, arr, declare, has) {
 
 return declare("dojox.geo.charting._Marker", null, {
 	

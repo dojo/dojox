@@ -1,7 +1,7 @@
 
 define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/event",
 		"dojo/_base/connect","dojo/_base/window","dojo/_base/html","dojo/dom","dojo/_base/sniff"],
-											function(dojo, lang, declare, event, connect, win, html,dom,has) {
+		function(dojo, lang, declare, event, connect, win, html, dom, has) {
 
 
 return declare("dojox.geo.charting.MouseInteractionSupport", null, {
