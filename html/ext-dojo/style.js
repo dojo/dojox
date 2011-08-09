@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/kernel", "dojo/dom-style", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/sniff",
 	"dojo/_base/window", "dojo/dom", "dojo/dom-construct"
-], function(dojo, domStyle, lang, html, ua, win, dom, domConstruct){
+], function(dojo, domStyle, lang, html, has, win, dom, domConstruct){
 	dojo.experimental("dojox.html.ext-dojo.style");
 	var st = lang.getObject("html.ext-dojo.style", true, dojox);
 
@@ -67,7 +67,7 @@ define([
 				this.getTransform = function(/*DomNode*/node){
 					return domStyle.get(node, this.tPropertyName);
 				};
-			}else if(ua.isIE){
+			}else if(has("ie")){
 				this.setTransform = this._setTransformFilter;
 				this.getTransform = this._getTransformFilter;
 			}
@@ -78,7 +78,7 @@ define([
 				this.getTransformOrigin = function(/*DomNode*/node){
 					return sget(node, this.toPropertyName);
 				};
-			}else if(ua.isIE){
+			}else if(has("ie")){
 				this.setTransformOrigin = this._setTransformOriginFilter;
 				this.getTransformOrigin = this._getTransformOriginFilter;
 			}else{
@@ -362,7 +362,7 @@ define([
 			;
 			dx = -Bx;
 			dy = -By;
-			if(ua.isIE < 8){
+			if(has("ie") < 8){
 				// on IE < 8 the node must have hasLayout = true
 				n.style.zoom = "1";
 				if(newPosition != "absolute"){
@@ -373,7 +373,7 @@ define([
 					;
 					dx -= (wMax - w) / 2 - (parentWidth > wMax ? 0 : (wMax - parentWidth) / 2);
 				}
-			}else if(ua.isIE == 8){
+			}else if(has("ie") == 8){
 				// IE8 bug, a filter is applied to positioned descendants
 				// only if the parent has z-index
 				ds(n, "zIndex") == "auto" && (n.style.zIndex = "0");
