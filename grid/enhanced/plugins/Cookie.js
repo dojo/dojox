@@ -73,7 +73,7 @@ define([
 		return array.map(array.filter(grid.layout.cells, function(cell){
 			return !(cell.isRowSelector || cell instanceof gridCells.RowIndex);
 		}), function(cell){
-			return html[has('webKit') ? "marginBox" : "contentBox"](cell.getHeaderNode()).w;
+			return html[has('webkit') ? "marginBox" : "contentBox"](cell.getHeaderNode()).w;
 		});
 	};
 	

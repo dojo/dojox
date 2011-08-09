@@ -607,7 +607,7 @@ define([
 				// Make sure we are not under our minimum
 				// http://bugs.dojotoolkit.org/ticket/9390
 				changeX += Math.max(inDrag.w + changeX, this.minColWidth) - (inDrag.w + changeX);
-				if(has('webKit') && inDrag.spanners.length){
+				if(has('webkit') && inDrag.spanners.length){
 					// Webkit needs the pad border extents back in
 					changeX += html._getPadBorderExtents(inDrag.spanners[0].node).w;
 				}

@@ -92,7 +92,7 @@ define([
 
 		// focus
 		focus: function(){
-			if(has('ie') || has('webKit') || has('opera')){
+			if(has('ie') || has('webkit') || has('opera')){
 				this.hiddenFocusNode.focus();
 			}else{
 				this.scrollboxNode.focus();
