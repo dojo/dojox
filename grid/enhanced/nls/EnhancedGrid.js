@@ -3,9 +3,8 @@ define({ root:
 ({
 	singleSort: "Single Sort",
 	nestedSort: "Nested Sort",
-	ascending: "Ascending",
-	descending: "Descending",
-	sortAction: "Click to sort ${0}",
+	ascending: "Click to sort Ascending",
+	descending: "Click to sort Descending",
 	sortingState: "${0} - ${1}",
 	unsorted: "Do not sort this column",
 	indirectSelectionRadio: "Row ${0}, single selection, radio box",

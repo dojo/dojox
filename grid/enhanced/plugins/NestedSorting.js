@@ -6,11 +6,12 @@ define([
 	"dojo/_base/html",
 	"dojo/_base/event",
 	"dojo/_base/window",
+	"dojo/keys",
 	"dojo/query",
 	"dojo/string",
 	"../_Plugin",
 	"../../EnhancedGrid"
-], function(declare, array, connect, lang, html, evt, win, query, string, _Plugin, EnhancedGrid){
+], function(declare, array, connect, lang, html, evt, win, keys, query, string, _Plugin, EnhancedGrid){
 
 var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin, {
 	// summary:
@@ -56,8 +57,6 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 		//column index that are hidden, un-sortable or indirect selection etc.
 		this._excludedColIdx = [];
 		this.nls = this.grid._nls;
-		this.ascendingTip = string.substitute(this.nls.sortAction, [this.nls.ascending]);
-		this.descendingTip =  string.substitute(this.nls.sortAction, [this.nls.descending]);
 		this.grid.setSortInfo = function(){};
 		this.grid.setSortIndex = lang.hitch(this, '_setGridSortIndex');
 		this.grid.getSortIndex = function(){};
@@ -183,13 +182,13 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 			});
 			var n = html.create('a', {
 				className: 'dojoxGridSortBtn dojoxGridSortBtnNested',
-				title: string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.ascendingTip]),
+				title: string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.nls.ascending]),
 				innerHTML: '1'
 			}, node.firstChild, 'last');
 			n.onmousedown = evt.stop;
 			n = html.create('a', {
 				className: 'dojoxGridSortBtn dojoxGridSortBtnSingle',
-				title: string.substitute(this.nls.sortingState, [this.nls.singleSort, this.ascendingTip])
+				title: string.substitute(this.nls.sortingState, [this.nls.singleSort, this.nls.ascending])
 			}, node.firstChild, 'last');
 			n.onmousedown = evt.stop;
 		}else{
@@ -370,11 +369,11 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 		html.toggleClass(singleSortBtn, 'dojoxGridSortBtnAsc', this._currMainSort === 'asc');
 		html.toggleClass(singleSortBtn, 'dojoxGridSortBtnDesc', this._currMainSort === 'desc');
 		if(this._currMainSort === 'asc'){
-			singleSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.singleSort, this.descendingTip]);
+			singleSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.singleSort, this.nls.descending]);
 		}else if(this._currMainSort === 'desc'){
 			singleSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.singleSort, this.nls.unsorted]);
 		}else{
-			singleSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.singleSort, this.ascendingTip]);
+			singleSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.singleSort, this.nls.ascending]);
 		}
 		
 		var _this = this;
@@ -415,7 +414,7 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 		var a11y = html.hasClass(win.body(), "dijit_a11y");
 		if(!data){
 			nestedSortBtn.innerHTML = this._sortDef.length + 1;
-			nestedSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.ascendingTip]);
+			nestedSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.nls.ascending]);
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridUnsortedTip;}
 			return;
 		}
@@ -425,7 +424,7 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 		html.addClass(sortNode, 'dojoxGridSortNodeSorted');
 		if(this.isAsc(cellIdx)){
 			html.addClass(sortNode, 'dojoxGridSortNodeAsc');
-			nestedSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.descendingTip]);
+			nestedSortBtn.title = string.substitute(this.nls.sortingState, [this.nls.nestedSort, this.nls.descending]);
 			if(a11y){sortNode.innerHTML = this._a11yText.dojoxGridAscendingTip;}
 		}else if(this.isDesc(cellIdx)){
 			html.addClass(sortNode, 'dojoxGridSortNodeDesc');
