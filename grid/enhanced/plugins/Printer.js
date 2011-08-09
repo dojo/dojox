@@ -5,12 +5,13 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/sniff",
 	"dojo/_base/xhr",
+	"dojo/_base/array",
 	"dojo/query", 
 	"dojo/DeferredList",
 	"../_Plugin",
 	"../../EnhancedGrid",
 	"./exporter/TableWriter"
-], function(declare, html, Deferred, lang, has, xhr, query, DeferredList, _Plugin, EnhancedGrid, TableWriter){
+], function(declare, html, Deferred, lang, has, xhr, array, query, DeferredList, _Plugin, EnhancedGrid, TableWriter){
 
 var Printer = declare("dojox.grid.enhanced.plugins.Printer", _Plugin, {
 	// summary:
@@ -220,18 +221,18 @@ var Printer = declare("dojox.grid.enhanced.plugins.Printer", _Plugin, {
 		// returns:
 		//		the wrapped HTML string ready for print
 		return this._loadCSSFiles(cssFiles).then(function(cssStrs){
-			var i, html = ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
+			var i, sb = ['<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
 					'<html ', html._isBodyLtr() ? '' : 'dir="rtl"', '><head><title>', title,
 					'</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>'];
 			for(i = 0; i < cssStrs.length; ++i){
-				html.push('<style type="text/css">', cssStrs[i], '</style>');
+				sb.push('<style type="text/css">', cssStrs[i], '</style>');
 			}
-			html.push('</head>');
+			sb.push('</head>');
 			if(body_content.search(/^\s*<body/i) < 0){
 				body_content = '<body>' + body_content + '</body>';
 			}
-			html.push(body_content, '</html>');
-			return html.join('');
+			sb.push(body_content, '</html>');
+			return sb.join('');
 		});
 	},
 	normalizeRowHeight: function(doc){
