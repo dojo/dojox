@@ -109,12 +109,24 @@
 					node.appendChild(div);
 				});
 			});
+		},
+		handleDnD = function(domnode, uploader){
+			if(uploader.addDropTarget && uploader.uploadType=='html5'){
+				dojo.create('div',{innerHTML:'Drag and Drop files to this feildset'},domnode,'last');
+				uploader.addDropTarget(domnode);
+			}
 		}
+
 		dojo.addOnLoad(function(){
-			dojo.connect(dijit.byId("remBtn"), "onClick", dijit.byId("uploader"), "reset");
-			dojo.connect(dijit.byId("remBtn2"), "onClick", dijit.byId("uploader2"), "reset");
-			handleUpload(dijit.byId("uploader"), dojo.byId('colImages'));
-			handleUpload(dijit.byId("uploader2"), dojo.byId('colImages'));
+			var uploader=dijit.byId("uploader"), uploader2=dijit.byId("uploader2");
+			dojo.connect(dijit.byId("remBtn"), "onClick", uploader, "reset");
+			dojo.connect(dijit.byId("remBtn2"), "onClick", uploader2, "reset");
+			handleUpload(uploader, dojo.byId('colImages'));
+			handleUpload(uploader2, dojo.byId('colImages'));
+			if(require.has('file-multiple')){
+				handleDnD(uploader.domNode.parentNode, uploader);
+				handleDnD(uploader2.domNode.parentNode, uploader2);
+			}
 		});
 	</script>
 </head>
@@ -132,6 +144,7 @@
 		is provided because Flash has some features that HTML5 does not yet have. But it is still not
 		recommended because of the many problems that Firefox and Webkit have with the Flash plugin.
 	</p>
+	<p class="HTML5">When HTML5 plugin is in use, drag&amp;drop of files to the fieldset is supported.</p>
 
 	<table class="pageTable">
 		<tr>
@@ -139,7 +152,7 @@
 				<form method="post" action="UploadFile.php" id="myForm" enctype="multipart/form-data" >
 					<fieldset>
 						<legend>Block Browse Button Form Post Test</legend>
-						<input class="browseButton" name="uploadedfile" multiple="true" type="file" dojoType="dojox.form.Uploader" label="Select Some Files" isDebug="true" id="uploader">
+						<input class="browseButton" name="uploadedfile" multiple="true" type="file" dojoType="dojox.form.Uploader" label="Select Some Files" isDebug="true" id="uploader" />
 						<input type="text" name="album" value="Summer Vacation" />
 						<input type="text" name="year" value="2011" />
 						<input type="button" id="remBtn" label="Clear" dojoType="dijit.form.Button" />

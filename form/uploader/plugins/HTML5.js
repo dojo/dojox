@@ -33,6 +33,12 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		}
 	},
 
+	_drop: function(e){
+		dojo.stopEvent(e);
+		var dt = e.dataTransfer;
+		this._files = dt.files;
+		this.onChange(this.getFileList());
+	},
 	/*************************
 	 *	   Public Methods	 *
 	 *************************/
@@ -49,6 +55,24 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		}
 	},
 
+	addDropTarget: function(node, /*Boolean?*/onlyConnectDrop){
+		// summary:
+		//		Add a dom node which will act as the drop target area so user
+		//		can drop files to this node.
+		// description:
+		//		If onlyConnectDrop is true, dragenter/dragover/dragleave events
+		//		won't be connected to dojo.stopEvent, and they need to be
+		//		canceled by user code to allow DnD files to happen.
+		//		This API is only available in HTML5 plugin (only HTML5 allows
+		//		DnD files).
+		if(!onlyConnectDrop){
+			this.connect(node, 'dragenter', dojo.stopEvent);
+			this.connect(node, 'dragover', dojo.stopEvent);
+			this.connect(node, 'dragleave', dojo.stopEvent);
+		}
+		this.connect(node, 'drop', '_drop');
+	},
+	
 	sendAsBinary: function(/* Object */data){
 		// summary:
 		// 		Used primarily in FF < 4.0. Sends files and form object as binary data, written to
@@ -74,7 +98,7 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 			this.onError(this.errMsg);
 		}else{
 			console.log("msg:", msg)
-		console.log("xhr:", xhr)
+			console.log("xhr:", xhr)
 
 			xhr.sendAsBinary(msg);
 		}
@@ -90,7 +114,7 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 			console.error("No upload url found.", this); return;
 		}
 		var fd = new FormData();
-		array.forEach(this.inputNode.files, function(f, i){
+		array.forEach(this._files, function(f, i){
 			fd.append(this.name+"s[]", f);
 		}, this);
 
@@ -163,14 +187,14 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		var part = "";
 		boundary = "--" + boundary;
 
-		var filesInError = [];
-		array.forEach(this.inputNode.files, function(f, i){
+		var filesInError = [], files = this._files;
+		array.forEach(files, function(f, i){
 			var fieldName = this.name+"s[]";//+i;
-			var fileName  = this.inputNode.files[i].fileName;
+			var fileName  = f.fileName;
 			var binary;
 
 			try{
-				binary = this.inputNode.files[i].getAsBinary() + EOL;
+				binary = f.getAsBinary() + EOL;
 				part += boundary + EOL;
 				part += 'Content-Disposition: form-data; ';
 				part += 'name="' + fieldName + '"; ';
@@ -183,7 +207,7 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		}, this);
 
 		if(filesInError.length){
-			if(filesInError.length >= this.inputNode.files.length){
+			if(filesInError.length >= files.length){
 				// all files were bad. Nothing to upload.
 				this.onError({
 					message:this.errMsg,

@@ -239,6 +239,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		// 		TODO:
 		// 		Add this ability by effectively, not uploading them
 		//
+		delete this._files;
 		this._disconnectButton();
 		array.forEach(this._inputs, domConstruct.destroy, dojo);
 		this._inputs = [];
@@ -252,7 +253,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		//
 		var fileArray = [];
 		if(this.supports("multiple")){
-			array.forEach(this.inputNode.files, function(f, i){
+			array.forEach(this._files, function(f, i){
 				fileArray.push({
 					index:i,
 					name:f.name,
@@ -344,6 +345,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 
 	_connectButton: function(){
 		this._cons.push(connect.connect(this.inputNode, "change", this, function(evt){
+			this._files = this.inputNode.files;
 			this.onChange(this.getFileList(evt));
 			if(!this.supports("multiple") && this.multiple) this._createInput();
 		}));
