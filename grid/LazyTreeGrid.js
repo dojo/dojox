@@ -122,7 +122,7 @@ dojo.declare("dojox.grid._TreeGridContentBuilder", dojox.grid._ContentBuilder, {
 				cs = cell.customStyles = [];
 				if(mergedCells && mergedCells[k] && (i >= mergedCells[k].start && i <= mergedCells[k].end)){
 					var primaryIdx = mergedCells[k].primary ? mergedCells[k].primary : mergedCells[k].start;
-					if(i == primaryIdx){
+					if(i === primaryIdx){
 						m[5] = cell.formatAtLevel(rowStack, item, level, false, toggleClasses[0], cc, inRowIndex);
 						// classes
 						m[1] = cc.join(' ');
@@ -131,7 +131,7 @@ dojo.declare("dojox.grid._TreeGridContentBuilder", dojox.grid._ContentBuilder, {
 						cs = cell.customStyles = ['width:' + (totalWidthes[k] - pbm) + "px"];
 						m[3] = cs.join(';');
 						html.push.apply(html, m);
-					}else if(i == mergedCells[k].end){
+					}else if(i === mergedCells[k].end){
 						k++;
 						continue;
 					}else{
@@ -171,7 +171,7 @@ dojo.declare("dojox.grid._TreeGridContentBuilder", dojox.grid._ContentBuilder, {
 		// summary:
 		//		calculate column width by header cell's size
 		var node = cells[colIndex].getHeaderNode();
-		if(colIndex == cells.length - 1 || dojo.every(cells.slice(colIndex + 1), function(cell){
+		if(colIndex === cells.length - 1 || dojo.every(cells.slice(colIndex + 1), function(cell){
 			return cell.hidden;
 		})){
 			var headerNodePos = dojo.position(cells[colIndex].view.headerContentNode.firstChild);
@@ -194,11 +194,11 @@ dojo.declare("dojox.grid._TreeGridView", [dojox.grid._View], {
 	},
 	
 	_cleanupExpandoCache: function(index, identity, item){
-		if(index == -1){
+		if(index === -1){
 			return;
 		}
 		dojo.forEach(this.grid.layout.cells, function(cell){
-			if(cell.openStates && identity in cell.openStates){
+			if(cell.openStates && cell.openStates[identity]){
 				delete cell.openStates[identity];
 			}
 		});
@@ -265,8 +265,9 @@ dojox.grid.cells.LazyTreeCell = dojo.mixin(dojo.clone(dojox.grid.cells.TreeCell)
 			ret = '<span ' + dojo._scopeName + 'Type="dojox.grid._LazyExpando" level="' + level + '" class="dojoxGridExpando"' +
 					'" toggleClass="' + toggleClass + '" itemId="' + id + '" cellIdx="' + this.index + '"></span>';
 		}
-		result = ret + this.formatIndexes(inRowIndex, inRowIndexes, inItem, level);
-		if(this.grid.focus.cell && this.index == this.grid.focus.cell.index && inRowIndexes.join('/') == this.grid.focus.rowIndex){
+		var content = this.formatIndexes(inRowIndex, inRowIndexes, inItem, level);
+		result = ret !== "" ? '<div>' + ret + content + '</div>' : content;
+		if(this.grid.focus.cell && this.index === this.grid.focus.cell.index && inRowIndexes.join('/') === this.grid.focus.rowIndex){
 			cellClasses.push(this.grid.focus.focusClass);
 		}
 		return result;
@@ -275,7 +276,7 @@ dojox.grid.cells.LazyTreeCell = dojo.mixin(dojo.clone(dojox.grid.cells.TreeCell)
 	formatIndexes: function(inRowIndex, inRowIndexes, inItem, level){
 		var info = this.grid.edit.info,
 			d = this.get ? this.get(inRowIndexes[0], inItem, inRowIndexes) : (this.value || this.defaultValue);
-		if(this.editable && (this.alwaysEditing || (info.rowIndex == inRowIndexes[0] && info.cell == this))){
+		if(this.editable && (this.alwaysEditing || (info.rowIndex === inRowIndexes[0] && info.cell === this))){
 			return this.formatEditing(d, inRowIndex, inRowIndexes);
 		}else{
 			return this._defaultFormat(d, [d, inRowIndex, level, this]);
@@ -294,7 +295,7 @@ dojo.declare("dojox.grid._LazyTreeLayout", dojox.grid._Layout, {
 		})){
 			s = arguments[0] = [{cells:[s]}];//intentionally change arguments[0]
 		}
-		if(s.length == 1 && s[0].cells.length == 1){
+		if(s.length === 1 && s[0].cells.length === 1){
 			s[0].type = "dojox.grid._TreeGridView";
 			this._isCollapsable = true;
 			s[0].cells[0][this.grid.expandoCell].isCollapsable = true;
@@ -375,7 +376,7 @@ dojo.declare("dojox.grid.TreeGridItemCache", null, {
 	
 	getInfoByItem: function(item){
 		for(var i = 0, len = this.items.length; i < len; i++){
-			if(this.items[i].item == item){
+			if(this.items[i].item === item){
 				return dojo.mixin({rowIdx: i}, this.items[i]);
 			}
 		}
