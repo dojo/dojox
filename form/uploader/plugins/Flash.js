@@ -213,16 +213,6 @@ var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 		doSub("/filesCanceled", "onCancel");
 		doSub("/stageBlur", "_onFlashBlur");
 
-		var cs = lang.hitch(this, function(s, nm){
-			this._cons.push(connect.subscribe(this.id + s, this, function(evt){
-				this.button._cssMouseEvent({type:nm});
-			}));
-		});
-		cs("/up", "mouseup");
-		cs("/down", "mousedown");
-		cs("/over", "mouseover");
-		cs("/out", "mouseout");
-
 		this.connect(this.domNode, "focus", function(){
 			// TODO: some kind of indicator that the Flash button
 			//	is in focus
