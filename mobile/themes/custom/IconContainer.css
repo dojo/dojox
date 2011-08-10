@@ -19,7 +19,7 @@
 }
 .mblIconItemSub {
   list-style-type: none;
-  margin-left: - 8px;
+  margin-left: -8px;
   background-color: white;
   color: #131313;
 }
@@ -34,11 +34,14 @@
 .mblIconArea DIV {
   position: relative;
   height: 65px;
+  line-height: 65px;
+  text-align: center;
 }
 .mblIconArea IMG {
+  vertical-align: middle;
+}
+.mblIconItemSpriteIcon {
   position: absolute;
-  top: 0;
-  left: 4px;
 }
 .mblContent {
   clear: both;

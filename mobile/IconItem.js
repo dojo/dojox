@@ -252,9 +252,17 @@ define([
 		_setIconAttr: function(icon){
 			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
 			this.icon = icon;
-			this.iconNode.src = icon;
-			this.iconNode.alt = this.alt;
-			common.setupIcon(this.iconNode, this.iconPos);
+			common.createIcon(icon, this.iconPos, this.iconNode, this.alt);
+			if(this.iconPos){
+				domClass.add(this.iconNode, "mblIconItemSpriteIcon");
+				var arr = this.iconPos.split(/[ ,]/);
+				var p = this.iconNode.parentNode;
+				domStyle.set(p, {
+					width: arr[2] + "px",
+					top: Math.round((p.offsetHeight - arr[3]) / 2) + 1 + "px",
+					margin: "auto"
+				});
+			}
 		},
 	
 		_setLabelAttr: function(/*String*/text){

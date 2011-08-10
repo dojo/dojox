@@ -35,11 +35,14 @@
 .mblIconArea DIV {
   position: relative;
   height: 65px;
+  line-height: 65px;
+  text-align: center;
 }
 .mblIconArea IMG {
+  vertical-align: middle;
+}
+.mblIconItemSpriteIcon {
   position: absolute;
-  top: 18px;
-  left: 29px;
 }
 .mblContent {
   clear: both;
