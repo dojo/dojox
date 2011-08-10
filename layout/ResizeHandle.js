@@ -168,8 +168,8 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 
 		if(!this.activeResize){
 			var c = domGeometry.position(this.targetDomNode, true);
-			console.log(c);
-			console.log(windowUtil.getBox());
+			//console.log(c);
+			//console.log(windowUtil.getBox());
 			this._resizeHelper.resize({l: c.x, t: c.y, w: c.w, h: c.h});
 			this._resizeHelper.show();
 		}
@@ -178,7 +178,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		this.startPoint  = { x:e.clientX, y:e.clientY};
 
 		// FIXME: this is funky: marginBox adds height, contentBox ignores padding (expected, but foo!)
-		var mb = this.targetWidget ? domGeometry.marginBox(this.targetDomNode) : domGeometry.contentBox(this.targetDomNode);
+		var mb = this.targetWidget ? domGeometry.getMarginBox(this.targetDomNode) : domGeometry.getContentBox(this.targetDomNode);
 		this.startSize  = { w:mb.w, h:mb.h };
 		
 		if(this.fixedAspect){
@@ -300,7 +300,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 				]);
 				anim.play();
 			}else{
-				domStyle.style(this.targetDomNode,{
+				domStyle.set(this.targetDomNode,{
 					width: tmp.w + "px",
 					height: tmp.h + "px"
 				});
@@ -345,7 +345,7 @@ var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
 		fxBase.fadeIn({
 			node: this.domNode,
 			duration: 120,
-			beforeBegin: function(n){ domStyle.style(n, "display", "") }
+			beforeBegin: function(n){ domStyle.set(n, "display", "") }
 		}).play();
 	},
 	
@@ -354,7 +354,7 @@ var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
 		fxBase.fadeOut({
 			node: this.domNode,
 			duration: 250,
-			onEnd: function(n){ domStyle.style(n, "display", "none") }
+			onEnd: function(n){ domStyle.set(n, "display", "none") }
 		}).play();
 	},
 	
@@ -362,7 +362,7 @@ var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
 		// summary: size the widget and place accordingly
 
 		// FIXME: this is off when padding present
-		domGeometry.marginBox(this.domNode, dim);
+		domGeometry.setMarginBox(this.domNode, dim.l, dim.t, dim.w, dim.h);
 	}
 	
 });
