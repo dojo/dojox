@@ -165,7 +165,7 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 			if(xhr.readyState === 4){
 //				console.info("COMPLETE")
 				clearInterval(timer);
-				this.onComplete(JSON.parse(xhr.responseText));
+				this.onComplete(JSON.parse(xhr.responseText.replace(/^\{\}&&/,'')));
 			}
 		});
 		xhr.open("POST", this.getUrl());
