@@ -83,12 +83,12 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		widget.FeedEntryEditor.superclass.setEntry.call(this, entry, feed);
 		this._editable = this._isEditable(entry);
 		if(!leaveMenuState && !this._editable){
-			domStyle.style(this.entryEditButton, 'display', 'none');
-			domStyle.style(this.entrySaveCancelButtons, 'display', 'none');
+			domStyle.set(this.entryEditButton, 'display', 'none');
+			domStyle.set(this.entrySaveCancelButtons, 'display', 'none');
 		}
 		if(this._editable && this.enableEdit){
 			if(!leaveMenuState){
-				domStyle.style(this.entryEditButton, 'display', '');
+				domStyle.set(this.entryEditButton, 'display', '');
 				//TODO double check this &&...
 				if(this.enableMenuFade && this.entrySaveCancelButton){
 					fx.fadeOut({node: this.entrySaveCancelButton,duration: 250}).play();
@@ -106,8 +106,8 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		//	returns:
 		//		Nothing.
 		if(this._editable && this.enableEdit){
-			domStyle.style(this.entryEditButton, 'display', 'none');
-			domStyle.style(this.entrySaveCancelButtons, 'display', '');
+			domStyle.set(this.entryEditButton, 'display', 'none');
+			domStyle.set(this.entrySaveCancelButtons, 'display', '');
 			this._editMode = true;
 
 			//Rebuild the view using the same entry and feed.
@@ -128,7 +128,7 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		//		Nothing.
 		if(entrySelectionEvent.source != this && entrySelectionEvent.action == "delete" &&
 			entrySelectionEvent.entry && entrySelectionEvent.entry == this._entry){
-				domStyle.style(this.entryEditButton, 'display', 'none');
+				domStyle.set(this.entryEditButton, 'display', 'none');
 		}
 		widget.FeedEntryEditor.superclass._handleEvent.call(this, entrySelectionEvent);
 	},
@@ -414,13 +414,13 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 				// If multiline, create a textarea
 				viewNode = document.createElement("textarea");
 				anchorNode.appendChild(viewNode);
-				domStyle.style(viewNode, 'width', '90%');
+				domStyle.set(viewNode, 'width', '90%');
 				box = new SimpleTextarea({},viewNode);
 			}else{
 				// If single line, create a textbox.
 				viewNode = document.createElement("input");
 				anchorNode.appendChild(viewNode);
-				domStyle.style(viewNode, 'width', '95%');
+				domStyle.set(viewNode, 'width', '95%');
 				box = new TextBox({},viewNode);
 			}
 			box.attr('value', '');
@@ -462,13 +462,13 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 			// If multiline, create a textarea
 			viewNode = document.createElement("textarea");
 			anchorNode.appendChild(viewNode);
-			domStyle.style(viewNode, 'width', '90%');
+			domStyle.set(viewNode, 'width', '90%');
 			box = new SimpleTextarea({},viewNode);
 		}else{
 			// If single line, create a textbox.
 			viewNode = document.createElement("input");
 			anchorNode.appendChild(viewNode);
-			domStyle.style(viewNode, 'width', '95%');
+			domStyle.set(viewNode, 'width', '95%');
 			box = new TextBox({},viewNode);
 		}
 		box.attr('value', value);
@@ -569,9 +569,9 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		//
 		//	returns:
 		//		Nothing.
-		domStyle.style(this.entrySaveCancelButtons, 'display', 'none');
-		domStyle.style(this.entryEditButton, 'display', '');
-		domStyle.style(this.entryNewButton, 'display', '');
+		domStyle.set(this.entrySaveCancelButtons, 'display', 'none');
+		domStyle.set(this.entryEditButton, 'display', '');
+		domStyle.set(this.entryNewButton, 'display', '');
 		var modifiedEntry = false;
 		var value;
 		var i;
@@ -750,7 +750,7 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 			}
 			entry.content = new model.Content("content", value, null, this.entryContentSelect.value);
 
-			domStyle.style(this.entryNewButton, 'display', '');
+			domStyle.set(this.entryNewButton, 'display', '');
 			dojo.publish(this.entrySelectionTopic, [{action: "post", source: this, entry: entry }]);
 		}
 		this._editMode = false;
@@ -788,11 +788,11 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		//	returns:
 		//		Nothing.
 		this._new = false;
-		domStyle.style(this.entrySaveCancelButtons, 'display', 'none');
+		domStyle.set(this.entrySaveCancelButtons, 'display', 'none');
 		if(this._editable){
-			domStyle.style(this.entryEditButton, 'display', '');
+			domStyle.set(this.entryEditButton, 'display', '');
 		}
-		domStyle.style(this.entryNewButton, 'display', '');
+		domStyle.set(this.entryNewButton, 'display', '');
 		this._editMode = false;
 		
 		//Rebuild the view using the same entry and feed.
@@ -900,9 +900,9 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		//		Function to put the editor into a state to create a new entry.
 		
 		// Hide the edit/new buttons and show the save/cancel buttons.
-		domStyle.style(this.entryNewButton, 'display', 'none');
-		domStyle.style(this.entryEditButton, 'display', 'none');
-		domStyle.style(this.entrySaveCancelButtons, 'display', '');
+		domStyle.set(this.entryNewButton, 'display', 'none');
+		domStyle.set(this.entryEditButton, 'display', 'none');
+		domStyle.set(this.entrySaveCancelButtons, 'display', '');
 		
 		// Reset the type select boxes to text.
 		this.entrySummarySelect.value = "text";
@@ -968,19 +968,19 @@ widget.FeedEntryEditor = dojo.declare(/*===== "dojox.atom.widget.FeedEntryEditor
 		// description: Function to display the appropriate sections based on validity.
 		
 		// Hide select boxes.
-		domStyle.style(this.entrySummarySelect, 'display', 'none');
-		domStyle.style(this.entryContentSelect, 'display', 'none');
-		domStyle.style(this.entryTitleSelect, 'display', 'none');
+		domStyle.set(this.entrySummarySelect, 'display', 'none');
+		domStyle.set(this.entryContentSelect, 'display', 'none');
+		domStyle.set(this.entryTitleSelect, 'display', 'none');
 
 		// Show select boxes if the flags are set.
 		if(this.isFieldValid("contentedit")){
-			domStyle.style(this.entryContentSelect, 'display', '');
+			domStyle.set(this.entryContentSelect, 'display', '');
 		}
 		if(this.isFieldValid("summaryedit")){
-			domStyle.style(this.entrySummarySelect, 'display', '');
+			domStyle.set(this.entrySummarySelect, 'display', '');
 		}
 		if(this.isFieldValid("titleedit")){
-			domStyle.style(this.entryTitleSelect, 'display', '');
+			domStyle.set(this.entryTitleSelect, 'display', '');
 		}
 		// Call super's _displaySections.
 		widget.FeedEntryEditor.superclass._displaySections.apply(this);
@@ -1082,7 +1082,7 @@ widget.PeopleEditor = dojo.declare(/*===== "dojox.atom.widget.PeopleEditor", ===
 			row = document.createElement("span");
 			node.appendChild(row);
 			row.className = "peopleEditorButton";
-			domStyle.style(row, 'font-size', 'x-small');
+			domStyle.set(row, 'font-size', 'x-small');
 			connect.connect(row, "onclick", this, "_removeEditor");
 			row.id = "remove"+index;
 			
@@ -1095,21 +1095,21 @@ widget.PeopleEditor = dojo.declare(/*===== "dojox.atom.widget.PeopleEditor", ===
 			
 			var labelNode = document.createElement("td");
 			row.appendChild(labelNode);
-			domStyle.style(labelNode, 'width', '20%');
+			domStyle.set(labelNode, 'width', '20%');
 			
 			node = document.createElement("td");
 			row.appendChild(node);
 			
 			row = document.createElement("table");
 			labelNode.appendChild(row);
-			domStyle.style(row, 'width', '100%');
+			domStyle.set(row, 'width', '100%');
 			
 			labelNode = document.createElement("tbody");
 			row.appendChild(labelNode);
 			
 			row = document.createElement("table");
 			node.appendChild(row);
-			domStyle.style(row, 'width', '100%');
+			domStyle.set(row, 'width', '100%');
 			
 			node = document.createElement("tbody");
 			row.appendChild(node);
@@ -1158,7 +1158,7 @@ widget.PeopleEditor = dojo.declare(/*===== "dojox.atom.widget.PeopleEditor", ===
 			var viewNode = document.createElement("input");
 			viewNode.setAttribute('id', id);
 			node.appendChild(viewNode);
-			domStyle.style(viewNode, 'width', '95%');
+			domStyle.set(viewNode, 'width', '95%');
 			
 			var box = new TextBox({},viewNode);
 			box.attr('value', value);

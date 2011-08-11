@@ -170,7 +170,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 			func.forIn(this.axes, destroy);
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
-				domContruct.destroy(this.chartTitle);
+				domConstruct.destroy(this.chartTitle);
 			}
 			this.surface.destroy();
 		},

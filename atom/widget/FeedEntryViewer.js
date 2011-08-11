@@ -70,7 +70,7 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 		this._setDisplaySectionsCheckboxes();
 
 		if(this.enableMenu){
-			domStyle.style(this.feedEntryViewerMenu, 'display', '');
+			domStyle.set(this.feedEntryViewerMenu, 'display', '');
 			if(this.entryCheckBoxRow && this.entryCheckBoxRow2){
 				if(this.enableMenuFade){
 					fx.fadeOut({node: this.entryCheckBoxRow,duration: 250}).play();
@@ -101,7 +101,7 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 			"entryTitleRow", "entryAuthorRow", "entryContributorRow", "entrySummaryRow", "entryContentRow",
 			"entryIdRow", "entryUpdatedRow"
 			], function(node){
-				domStyle.style(this[node], "display", "none");
+				domStyle.set(this[node], "display", "none");
 			}, this);
 
 		arrayUtil.forEach([
@@ -506,36 +506,36 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 		//
 		//	returns:
 		//		Nothing.
-		domStyle.style(this.entryTitleRow, 'display', 'none');
-		domStyle.style(this.entryAuthorRow, 'display', 'none');
-		domStyle.style(this.entryContributorRow, 'display', 'none');
-		domStyle.style(this.entrySummaryRow, 'display', 'none');
-		domStyle.style(this.entryContentRow, 'display', 'none');
-		domStyle.style(this.entryIdRow, 'display', 'none');
-		domStyle.style(this.entryUpdatedRow, 'display', 'none');
+		domStyle.set(this.entryTitleRow, 'display', 'none');
+		domStyle.set(this.entryAuthorRow, 'display', 'none');
+		domStyle.set(this.entryContributorRow, 'display', 'none');
+		domStyle.set(this.entrySummaryRow, 'display', 'none');
+		domStyle.set(this.entryContentRow, 'display', 'none');
+		domStyle.set(this.entryIdRow, 'display', 'none');
+		domStyle.set(this.entryUpdatedRow, 'display', 'none');
 
 		for(var i in this._displayEntrySections){
 			var section = this._displayEntrySections[i].toLowerCase();
 			if(section === "title" && this.isFieldValid("title")){
-				domStyle.style(this.entryTitleRow, 'display', '');
+				domStyle.set(this.entryTitleRow, 'display', '');
 			}
 			if(section === "authors" && this.isFieldValid("authors")){
-				domStyle.style(this.entryAuthorRow, 'display', '');
+				domStyle.set(this.entryAuthorRow, 'display', '');
 			}
 			if(section === "contributors" && this.isFieldValid("contributors")){
-				domStyle.style(this.entryContributorRow, 'display', '');
+				domStyle.set(this.entryContributorRow, 'display', '');
 			}
 			if(section === "summary" && this.isFieldValid("summary")){
-				domStyle.style(this.entrySummaryRow, 'display', '');
+				domStyle.set(this.entrySummaryRow, 'display', '');
 			}
 			if(section === "content" && this.isFieldValid("content")){
-				domStyle.style(this.entryContentRow, 'display', '');
+				domStyle.set(this.entryContentRow, 'display', '');
 			}
 			if(section === "id" && this.isFieldValid("id")){
-				domStyle.style(this.entryIdRow, 'display', '');
+				domStyle.set(this.entryIdRow, 'display', '');
 			}
 			if(section === "updated" && this.isFieldValid("updated")){
-				domStyle.style(this.entryUpdatedRow, 'display', '');
+				domStyle.set(this.entryUpdatedRow, 'display', '');
 			}
 
 		}
@@ -571,7 +571,7 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 		var items = ["title","authors","contributors","summary","content","id","updated"];
 		for(var i in items){
 			if(arrayUtil.indexOf(this._displayEntrySections, items[i]) == -1){
-				domStyle.style(this["feedEntryCell"+items[i]], 'display', 'none');
+				domStyle.set(this["feedEntryCell"+items[i]], 'display', 'none');
 			}else{
 				this["feedEntryCheckBox"+items[i].substring(0,1).toUpperCase()+items[i].substring(1)].checked=true;
 			}
@@ -653,17 +653,17 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 				if(this.enableMenuFade){
 					anim = fx.fadeOut({node: this.entryCheckBoxDisplayOptions,duration: 250});
 					connect.connect(anim, "onEnd", this, function(){
-						domStyle.style(this.entryCheckBoxDisplayOptions, 'display', 'none');
-						domStyle.style(this.entryCheckBoxRow, 'display', '');
-						domStyle.style(this.entryCheckBoxRow2, 'display', '');
+						domStyle.set(this.entryCheckBoxDisplayOptions, 'display', 'none');
+						domStyle.set(this.entryCheckBoxRow, 'display', '');
+						domStyle.set(this.entryCheckBoxRow2, 'display', '');
 						fx.fadeIn({node: this.entryCheckBoxRow, duration: 250}).play();
 						fx.fadeIn({node: this.entryCheckBoxRow2, duration: 250}).play();
 					});
 					anim.play();
 				}else{
-					domStyle.style(this.entryCheckBoxDisplayOptions, 'display', 'none');
-					domStyle.style(this.entryCheckBoxRow, 'display', '');
-					domStyle.style(this.entryCheckBoxRow2, 'display', '');
+					domStyle.set(this.entryCheckBoxDisplayOptions, 'display', 'none');
+					domStyle.set(this.entryCheckBoxRow, 'display', '');
+					domStyle.set(this.entryCheckBoxRow2, 'display', '');
 				}
 				this._optionButtonDisplayed=false;
 			}else{
@@ -671,17 +671,17 @@ widget.FeedEntryViewer = dojo.declare(/*===== "dojox.atom.widget.FeedEntryViewer
 					anim = fx.fadeOut({node: this.entryCheckBoxRow,duration: 250});
 					anim2 = fx.fadeOut({node: this.entryCheckBoxRow2,duration: 250});
 					connect.connect(anim, "onEnd", this, function(){
-						domStyle.style(this.entryCheckBoxRow, 'display', 'none');
-						domStyle.style(this.entryCheckBoxRow2, 'display', 'none');
-						domStyle.style(this.entryCheckBoxDisplayOptions, 'display', '');
+						domStyle.set(this.entryCheckBoxRow, 'display', 'none');
+						domStyle.set(this.entryCheckBoxRow2, 'display', 'none');
+						domStyle.set(this.entryCheckBoxDisplayOptions, 'display', '');
 						fx.fadeIn({node: this.entryCheckBoxDisplayOptions, duration: 250}).play();
 					});
 					anim.play();
 					anim2.play();
 				}else{
-					domStyle.style(this.entryCheckBoxRow, 'display', 'none');
-					domStyle.style(this.entryCheckBoxRow2, 'display', 'none');
-					domStyle.style(this.entryCheckBoxDisplayOptions, 'display', '');
+					domStyle.set(this.entryCheckBoxRow, 'display', 'none');
+					domStyle.set(this.entryCheckBoxRow2, 'display', 'none');
+					domStyle.set(this.entryCheckBoxDisplayOptions, 'display', '');
 				}
 				this._optionButtonDisplayed=true;
 			}
