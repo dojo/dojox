@@ -106,14 +106,12 @@
 							doh.assertEqual("../images/a-icon-2-41x41.png", demoWidget.get("defaultIcon"));
 
 							demoWidget = dijit.byId("dojox_mobile_IconItem_0");
-							demoWidget.set({icon:""});
-							doh.assertEqual("", demoWidget.get("icon"));
+							demoWidget.set({icon:"notexist.gif"});
+							doh.assertEqual("notexist.gif", demoWidget.get("icon"));
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("dojox_mobile_IconItem_0");
-								if(!dojo.isFF){
-									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/a-icon-2-41x41.png/i) != -1);
-								}
+								doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/a-icon-2-41x41.png/i) != -1);
 							}),2000);
 							return d;
 						}
