@@ -189,19 +189,6 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 				//width/height as well
 				bw: padborder.w, bh: padborder.h};
 		
-		if(this.fixedAspect){
-			var max, val;
-			if(mb.w > mb.h){
-				max = "w";
-				val = mb.w / mb.h
-			}else{
-				max = "h";
-				val = mb.h / mb.w
-			}
-			this._aspect = { prop: max };
-			this._aspect[max] = val;
-		}
-
 		this._pconnects = [
 			connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"),
 			connect.connect(windowBase.doc,"onmouseup", this, "_endSizing")
@@ -276,11 +263,12 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		}
 		
 		if(this.fixedAspect){
-			var ta = this._aspect[this._aspect.prop];
-			if(newW < newH){
-				newH = newW * ta;
-			}else if(newH < newW){
-				newW = newH * ta;
+			var w = this.startSize.w, h = this.startSize.h,
+				delta = w * newH - h * newW;
+			if(delta<0){
+				newW = newH * w / h;
+			}else if(delta>0){
+				newH = newW * h / w;
 			}
 		}
 		
