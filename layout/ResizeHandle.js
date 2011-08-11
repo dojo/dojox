@@ -354,7 +354,7 @@ var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
 	
 	resize: function(/* Object */dim){
 		// summary: size the widget and place accordingly
-		domGeometry.setMarginBox(this.domNode, dim.l, dim.t, dim.w, dim.h);
+		domGeometry.setMarginBox(this.domNode, dim);
 	}
 	
 });
