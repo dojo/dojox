@@ -80,7 +80,7 @@ define([
 				if(!target){ target = win.body(); }
 				target.appendChild(view.domNode);
 
-				heading.startup();
+				view.startup();
 			}
 			this.inherited(arguments);
 		},
