@@ -157,29 +157,37 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 	_beginSizing: function(/*Event*/ e){
 		// summary: setup movement listeners and calculate initial size
 		
-		if(this._isSizing){ return false; }
+		if(this._isSizing){ return; }
 
 		dojo.publish(this.startTopic, [ this ]);
 		this.targetWidget = dijit.byId(this.targetId);
 
 		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : domUtil.byId(this.targetId);
 		if(this.targetContainer){ this.targetDomNode = this.targetContainer; }
-		if(!this.targetDomNode){ return false; }
+		if(!this.targetDomNode){ return; }
 
 		if(!this.activeResize){
 			var c = domGeometry.position(this.targetDomNode, true);
-			//console.log(c);
-			//console.log(windowUtil.getBox());
 			this._resizeHelper.resize({l: c.x, t: c.y, w: c.w, h: c.h});
 			this._resizeHelper.show();
 		}
 
 		this._isSizing = true;
-		this.startPoint  = { x:e.clientX, y:e.clientY};
+		this.startPoint  = { x:e.clientX, y:e.clientY };
 
-		// FIXME: this is funky: marginBox adds height, contentBox ignores padding (expected, but foo!)
-		var mb = this.targetWidget ? domGeometry.getMarginBox(this.targetDomNode) : domGeometry.getContentBox(this.targetDomNode);
-		this.startSize  = { w:mb.w, h:mb.h };
+		// widget.resize() or setting style.width/height expects native box model dimension 
+		// (in most cases content-box, but it may be border-box if in backcompact mode)
+		var style = domStyle.getComputedStyle(this.targetDomNode), 
+			borderModel = domGeometry.boxModel==='border-model',
+			padborder = borderModel?{w:0,h:0}:domGeometry.getPadBorderExtents(this.targetDomNode, style), 
+			mb;
+		mb = this.startSize = { 
+				w: domStyle.get(this.targetDomNode, 'width', style), 
+				h: domStyle.get(this.targetDomNode, 'height', style),
+				//ResizeHelper.resize expects a bounding box of the
+				//border box, so let's keep track of padding/border
+				//width/height as well
+				bw: padborder.w, bh: padborder.h};
 		
 		if(this.fixedAspect){
 			var max, val;
@@ -194,9 +202,10 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 			this._aspect[max] = val;
 		}
 
-		this._pconnects = [];
-		this._pconnects.push(connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"));
-		this._pconnects.push(connect.connect(windowBase.doc,"onmouseup", this, "_endSizing"));
+		this._pconnects = [
+			connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"),
+			connect.connect(windowBase.doc,"onmouseup", this, "_endSizing")
+		];
 		
 		eventUtil.stop(e);
 	},
@@ -208,14 +217,14 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		if(this.activeResize){
 			this._changeSizing(e);
 		}else{
-			var tmp = this._getNewCoords(e);
+			var tmp = this._getNewCoords(e, true);
 			if(tmp === false){ return; }
 			this._resizeHelper.resize(tmp);
 		}
 		e.preventDefault();
 	},
 
-	_getNewCoords: function(/* Event */ e){
+	_getNewCoords: function(/* Event */ e, /* Boolean */ useBorderBox){
 		
 		// On IE, if you move the mouse above/to the left of the object being resized,
 		// sometimes clientX/Y aren't set, apparently.  Just ignore the event.
@@ -227,13 +236,18 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		}
 		this._activeResizeLastEvent = e;
 
-		var dx = (this.isLeftToRight()? this.startPoint.x - e.clientX: e.clientX - this.startPoint.x),
+		var dx = (this.isLeftToRight()?1:-1) * (this.startPoint.x - e.clientX),
 			dy = this.startPoint.y - e.clientY,
 			newW = this.startSize.w - (this._resizeX ? dx : 0),
-			newH = this.startSize.h - (this._resizeY ? dy : 0)
+			newH = this.startSize.h - (this._resizeY ? dy : 0),
+			r = this._checkConstraints(newW, newH)
 		;
-			
-		return this._checkConstraints(newW, newH); // Object
+		
+		if(useBorderBox){
+			r.w += this.startSize.bw;
+			r.h += this.startSize.bh;
+		}
+		return r; // Object
 	},
 	
 	_checkConstraints: function(newW, newH){
@@ -352,8 +366,6 @@ var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
 	
 	resize: function(/* Object */dim){
 		// summary: size the widget and place accordingly
-
-		// FIXME: this is off when padding present
 		domGeometry.setMarginBox(this.domNode, dim.l, dim.t, dim.w, dim.h);
 	}
 	
