@@ -342,20 +342,12 @@ var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
 	
 	show: function(){
 		// summary: show helper to start resizing
-		fxBase.fadeIn({
-			node: this.domNode,
-			duration: 120,
-			beforeBegin: function(n){ domStyle.set(n, "display", "") }
-		}).play();
+		domStyle.set(this.domNode, "display", "");
 	},
 	
 	hide: function(){
 		// summary: hide helper after resizing is complete
-		fxBase.fadeOut({
-			node: this.domNode,
-			duration: 250,
-			onEnd: function(n){ domStyle.set(n, "display", "none") }
-		}).play();
+		domStyle.set(this.domNode, "display", "none");
 	},
 	
 	resize: function(/* Object */dim){
