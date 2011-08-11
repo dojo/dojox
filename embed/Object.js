@@ -58,7 +58,7 @@ return dojo.declare("dojox.embed.Object", _Widget, {
 		//		Constructs the movie and places it in the document.
 		if(!this.width || !this.height){
 			//	get the width and height from the domNode
-			var box=domGeometry.marginBox(this.domNode);
+			var box=domGeometry.getMarginBox(this.domNode);
 			this.width=box.w, this.height=box.h;
 		}
 
