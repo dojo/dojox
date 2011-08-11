@@ -171,7 +171,7 @@ define([
 
 			// Adjust dropdown width to match or be larger than my width
 			mb.w = Math.max(mb.w, aroundNode.offsetWidth);
-			domGeometry.setMarginBox(ddNode, NaN, NaN, mb.w, mb.h);
+			domGeometry.setMarginBox(ddNode, mb);
 
 			var retVal = popup.open({
 				parent: this,

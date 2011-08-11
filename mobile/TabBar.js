@@ -47,7 +47,7 @@ define([
 		resize: function(size){
 			var i,w;
 			if(size && size.w){
-				domGeometry.setMarginBox(this.domNode, NaN, NaN, size.w, size.h);
+				domGeometry.setMarginBox(this.domNode, size);
 				w = size.w;
 			}else{
 				// Calculation of the bar width varies according to its "position" value.
