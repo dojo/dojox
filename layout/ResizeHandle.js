@@ -179,7 +179,8 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		// (in most cases content-box, but it may be border-box if in backcompact mode)
 		var style = domStyle.getComputedStyle(this.targetDomNode), 
 			borderModel = domGeometry.boxModel==='border-model',
-			padborder = borderModel?{w:0,h:0}:domGeometry.getPadBorderExtents(this.targetDomNode, style), 
+			padborder = borderModel?{w:0,h:0}:domGeometry.getPadBorderExtents(this.targetDomNode, style),
+			margin = domGeometry.getMarginExtents(this.targetDomNode, style),
 			mb;
 		mb = this.startSize = { 
 				w: domStyle.get(this.targetDomNode, 'width', style), 
@@ -187,7 +188,8 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 				//ResizeHelper.resize expects a bounding box of the
 				//border box, so let's keep track of padding/border
 				//width/height as well
-				bw: padborder.w, bh: padborder.h};
+				pbw: padborder.w, pbh: padborder.h,
+				mw: margin.w, mh: margin.h};
 		
 		this._pconnects = [
 			connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"),
@@ -204,14 +206,14 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		if(this.activeResize){
 			this._changeSizing(e);
 		}else{
-			var tmp = this._getNewCoords(e, true);
+			var tmp = this._getNewCoords(e, 'border');
 			if(tmp === false){ return; }
 			this._resizeHelper.resize(tmp);
 		}
 		e.preventDefault();
 	},
 
-	_getNewCoords: function(/* Event */ e, /* Boolean */ useBorderBox){
+	_getNewCoords: function(/* Event */ e, /* String */ box){
 		
 		// On IE, if you move the mouse above/to the left of the object being resized,
 		// sometimes clientX/Y aren't set, apparently.  Just ignore the event.
@@ -230,10 +232,18 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 			r = this._checkConstraints(newW, newH)
 		;
 		
-		if(useBorderBox){
-			r.w += this.startSize.bw;
-			r.h += this.startSize.bh;
+		switch(box){
+			case 'margin':
+				r.w += this.startSize.mw;
+				r.h += this.startSize.mh;
+				//pass through
+			case "border":
+				r.w += this.startSize.pbw;
+				r.h += this.startSize.pbh;
+				break;
+			//default: //native, do nothing
 		}
+
 		return r; // Object
 	},
 	
@@ -277,10 +287,12 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		
 	_changeSizing: function(/*Event*/ e){
 		// summary: apply sizing information based on information in (e) to attached node
-		var tmp = this._getNewCoords(e);
+		
+		var isWidget = this.targetWidget && lang.isFunction(this.targetWidget.resize),
+			tmp = this._getNewCoords(e, isWidget && 'margin');
 		if(tmp === false){ return; }
 
-		if(this.targetWidget && lang.isFunction(this.targetWidget.resize)){
+		if(isWidget){
 			this.targetWidget.resize(tmp);
 		}else{
 			if(this.animateSizing){
