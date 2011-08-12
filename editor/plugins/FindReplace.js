@@ -81,7 +81,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceTextBox",
 		"<span style='white-space: nowrap' class='dijit dijitReset dijitInline dijitEditorFindReplaceTextBox' " +
 			"title='${tooltip}' tabindex='-1'>" +
 			"<label class='dijitLeft dijitInline' for='${textId}' tabindex='-1'>${label}</label>" +
-			"<input dojoType='dijit.form.TextBox' required='false' intermediateChanges='true' class='focusTextBox'" +
+			"<input dojoType='dijit.form.TextBox' intermediateChanges='true' class='focusTextBox' " +
 					"tabIndex='0' id='${textId}' dojoAttachPoint='textBox, focusNode' value='' dojoAttachEvent='onKeyPress: _onKeyPress'/>" +
 		"</span>",
 
@@ -97,6 +97,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceTextBox",
 		this.textBox.set("value", "");
 		this.disabled =  this.textBox.get("disabled");
 		this.connect(this.textBox, "onChange", "onChange");
+		dojo.attr(this.textBox.textbox, "formnovalidate", "true");
 	},
 
 	_setValueAttr: function(/*String*/ value){
@@ -186,7 +187,7 @@ dojo.declare("dojox.editor.plugins._FindReplaceCheckBox",
 	templateString:
 		"<span style='white-space: nowrap' tabindex='-1' " +
 			"class='dijit dijitReset dijitInline dijitEditorFindReplaceCheckBox' title='${tooltip}' >" +
-			"<input dojoType='dijit.form.CheckBox' required=false " +
+			"<input dojoType='dijit.form.CheckBox' " +
 					"tabIndex='0' id='${checkId}' dojoAttachPoint='checkBox, focusNode' value=''/>" +
 			"<label tabindex='-1' class='dijitLeft dijitInline' for='${checkId}'>${label}</label>" +
 		"</span>",
