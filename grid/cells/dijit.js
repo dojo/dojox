@@ -23,16 +23,15 @@ define([
 	"dijit/form/HorizontalSlider",
 	"dijit/Editor",
 	"../util",
-	"../cells"
+	"./_base"
 ], function(dojo, dojox, declare, array, lang, json, connect, has, dom, domAttr, domConstruct,
 	domGeometry, ItemFileReadStore, DateTextBox, TimeTextBox, ComboBox, CheckBox, TextBox,
-	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, Editor, util){
+	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, Editor, util, BaseCell){
 		
 // TODO: shouldn't it be the test file's job to require these modules,
 // if it is using them?  Most of these modules aren't referenced by this file.
 	
-	var dgc = dojox.grid.cells;
-	declare("dojox.grid.cells._Widget", dgc._Base, {
+	var _Widget = declare("dojox.grid.cells._Widget", BaseCell, {
 		widgetClass: TextBox,
 		constructor: function(inCell){
 			this.widget = null;
@@ -124,8 +123,8 @@ define([
 			}
 		}
 	});
-	dgc._Widget.markupFactory = function(node, cell){
-		dgc._Base.markupFactory(node, cell);
+	_Widget.markupFactory = function(node, cell){
+		BaseCell.markupFactory(node, cell);
 		var widgetProps = lang.trim(domAttr.get(node, "widgetProps")||"");
 		var constraint = lang.trim(domAttr.get(node, "constraint")||"");
 		var widgetClass = lang.trim(domAttr.get(node, "widgetClass")||"");
@@ -140,7 +139,7 @@ define([
 		}
 	};
 
-	declare("dojox.grid.cells.ComboBox", dgc._Widget, {
+	var ComboBox = declare("dojox.grid.cells.ComboBox", _Widget, {
 		widgetClass: ComboBox,
 		getWidgetProps: function(inDatum){
 			var items=[];
@@ -160,8 +159,8 @@ define([
 			return e.get('value');
 		}
 	});
-	dgc.ComboBox.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
+	ComboBox.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
 		var options = lang.trim(domAttr.get(node, "options")||"");
 		if(options){
 			var o = options.split(',');
@@ -171,7 +170,7 @@ define([
 		}
 	};
 
-	declare("dojox.grid.cells.DateTextBox", dgc._Widget, {
+	var DateTextBox = declare("dojox.grid.cells.DateTextBox", _Widget, {
 		widgetClass: DateTextBox,
 		setValue: function(inRowIndex, inValue){
 			if(this.widget){
@@ -186,11 +185,11 @@ define([
 			});
 		}
 	});
-	dgc.DateTextBox.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
+	DateTextBox.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
 	};
 
-	declare("dojox.grid.cells.CheckBox", dgc._Widget, {
+	var CheckBox = declare("dojox.grid.cells.CheckBox", _Widget, {
 		widgetClass: CheckBox,
 		getValue: function(){
 			return this.widget.checked;
@@ -206,11 +205,11 @@ define([
 			return;
 		}
 	});
-	dgc.CheckBox.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
+	CheckBox.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
 	};
 
-	declare("dojox.grid.cells.Editor", dgc._Widget, {
+	var Editor = declare("dojox.grid.cells.Editor", _Widget, {
 		widgetClass: Editor,
 		getWidgetProps: function(inDatum){
 			return lang.mixin({}, this.widgetProps||{}, {
@@ -240,8 +239,8 @@ define([
 			this.widget.placeCursorAtEnd();
 		}
 	});
-	dgc.Editor.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
+	Editor.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
 		var h = lang.trim(domAttr.get(node, "widgetHeight")||"");
 		if(h){
 			if((h != "auto")&&(h.substr(-2) != "em")){

@@ -39,7 +39,7 @@ declare("dojox.grid.__DataViewDef", dojox.grid.__ViewDef, {
 });
 =====*/
 
-declare("dojox.grid.DataGrid", _Grid, {
+var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 	store: null,
 	query: null,
 	queryOptions: null,
@@ -633,7 +633,7 @@ declare("dojox.grid.DataGrid", _Grid, {
 	}
 });
 
-dojox.grid.DataGrid.cell_markupFactory = function(cellFunc, node, cellDef){
+DataGrid.cell_markupFactory = function(cellFunc, node, cellDef){
 	var field = lang.trim(html.attr(node, "field")||"");
 	if(field){
 		cellDef.field = field;
@@ -648,11 +648,11 @@ dojox.grid.DataGrid.cell_markupFactory = function(cellFunc, node, cellDef){
 	}
 };
 
-dojox.grid.DataGrid.markupFactory = function(props, node, ctor, cellFunc){
+DataGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return _Grid.markupFactory(props, node, ctor,
-					lang.partial(dojox.grid.DataGrid.cell_markupFactory, cellFunc));
+					lang.partial(DataGrid.cell_markupFactory, cellFunc));
 };
 
-return dojox.grid.DataGrid;
+return DataGrid;
 
 });

@@ -6,13 +6,13 @@ define([
 	"dojo/dom-class",
 	"./Selection",
 	"./_View",
-	"./util",
-	"./_Builder"
-], function(dojox, declare, lang, query, domClass, Selection, _View, util){
+	"./_Builder",
+	"./util"
+], function(dojox, declare, lang, query, domClass, Selection, _View, _Builder, util){
 	
-	dojox.grid._InputSelectorHeaderBuilder = lang.extend(function(view){
-		dojox.grid._HeaderBuilder.call(this, view);
-	},dojox.grid._HeaderBuilder.prototype,{
+	var _InputSelectorHeaderBuilder = dojox.grid._InputSelectorHeaderBuilder = lang.extend(function(view){
+		_Builder._HeaderBuilder.call(this, view);
+	},_Builder._HeaderBuilder.prototype,{
 		generateHtml: function(){
 			var w = this.view.contentWidth || 0;
 			var selectedCount = this.view.grid.selection.getSelectedCount();
@@ -37,9 +37,9 @@ define([
 		}
 	});
 
-	dojox.grid._SelectorContentBuilder = lang.extend(function(view){
-		dojox.grid._ContentBuilder.call(this, view);
-	},dojox.grid._ContentBuilder.prototype,{
+	var _SelectorContentBuilder = dojox.grid._SelectorContentBuilder = lang.extend(function(view){
+		_Builder._ContentBuilder.call(this, view);
+	},_Builder._ContentBuilder.prototype,{
 		generateHtml: function(inDataIndex, inRowIndex){
 			var w = this.view.contentWidth || 0;
 			return '<table class="dojoxGridRowbarTable" style="width:' + w + 'px;" border="0" ' +
@@ -50,7 +50,7 @@ define([
 			return '&nbsp;';
 		},
 		findTarget: function(){
-			var t = dojox.grid._ContentBuilder.prototype.findTarget.apply(this, arguments);
+			var t = _Builder._ContentBuilder.prototype.findTarget.apply(this, arguments);
 			return t;
 		},
 		domouseover: function(e){
@@ -80,9 +80,9 @@ define([
 		}
 	});
 
-	dojox.grid._InputSelectorContentBuilder = lang.extend(function(view){
-		dojox.grid._SelectorContentBuilder.call(this, view);
-	},dojox.grid._SelectorContentBuilder.prototype,{
+	var _InputSelectorContentBuilder = dojox.grid._InputSelectorContentBuilder = lang.extend(function(view){
+		_SelectorContentBuilder.call(this, view);
+	},_SelectorContentBuilder.prototype,{
 		getCellContent: function(rowIndex){
 			var v = this.view;
 			var type = v.inputType == "checkbox" ? "CheckBox" : "Radio";
@@ -91,7 +91,7 @@ define([
 		}
 	});
 
-	declare("dojox.grid._Selector", _View, {
+	var _Selector = declare("dojox.grid._Selector", _View, {
 		inputType: '',
 		selectionMode: '',
 
@@ -101,7 +101,7 @@ define([
 		noscroll: true,
 		padBorderWidth: 2,
 
-		_contentBuilderClass: dojox.grid._SelectorContentBuilder,
+		_contentBuilderClass: _SelectorContentBuilder,
 
 		postCreate: function(){
 			this.inherited(arguments);
@@ -153,21 +153,21 @@ define([
 			this.grid.updateRow(inIndex);
 		}
 	});
-	if(!dojox.grid._View.prototype._headerBuilderClass &&
-		!dojox.grid._View.prototype._contentBuilderClass){
-		dojox.grid._Selector.prototype.postCreate = function(){
+	if(!_View.prototype._headerBuilderClass &&
+		!_View.prototype._contentBuilderClass){
+		_Selector.prototype.postCreate = function(){
 			this.connect(this.scrollboxNode,"onscroll","doscroll");
 			util.funnelEvents(this.contentNode, this, "doContentEvent", [ 'mouseover', 'mouseout', 'click', 'dblclick', 'contextmenu', 'mousedown' ]);
 			util.funnelEvents(this.headerNode, this, "doHeaderEvent", [ 'dblclick', 'mouseover', 'mouseout', 'mousemove', 'mousedown', 'click', 'contextmenu' ]);
 			if(this._contentBuilderClass){
 				this.content = new this._contentBuilderClass(this);
 			}else{
-				this.content = new dojox.grid._ContentBuilder(this);
+				this.content = new _Builder._ContentBuilder(this);
 			}
 			if(this._headerBuilderClass){
 				this.header = new this._headerBuilderClass(this);
 			}else{
-				this.header = new dojox.grid._HeaderBuilder(this);
+				this.header = new _Builder._HeaderBuilder(this);
 			}
 			//BiDi: in RTL case, style width='9000em' causes scrolling problem in head node
 			if(!this.grid.isLeftToRight()){
@@ -178,11 +178,11 @@ define([
 		};
 	}
 
-	dojo.declare("dojox.grid._RadioSelector", dojox.grid._Selector, {
+	var _RadioSelector = declare("dojox.grid._RadioSelector", _Selector, {
 		inputType: 'radio',
 		selectionMode: 'single',
 
-		_contentBuilderClass: dojox.grid._InputSelectorContentBuilder,
+		_contentBuilderClass: _InputSelectorContentBuilder,
 
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -192,10 +192,10 @@ define([
 		renderHeader: function(){}
 	});
 
-	declare("dojox.grid._CheckBoxSelector", dojox.grid._Selector, {
+	var _CheckBoxSelector = declare("dojox.grid._CheckBoxSelector", _Selector, {
 		inputType: 'checkbox',
-		_headerBuilderClass: dojox.grid._InputSelectorHeaderBuilder,
-		_contentBuilderClass: dojox.grid._InputSelectorContentBuilder,
+		_headerBuilderClass: _InputSelectorHeaderBuilder,
+		_contentBuilderClass: _InputSelectorContentBuilder,
 		postCreate: function(){
 			this.inherited(arguments);
 			this.connect(this.grid, 'onSelectionChanged', 'onSelectionChanged');
@@ -219,6 +219,6 @@ define([
 		}
 	});
 	
-	return dojox.grid._Selector;
+	return _Selector;
 
 });

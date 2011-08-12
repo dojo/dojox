@@ -45,7 +45,7 @@ define([
 	var gridViewTag = util.gridViewTag;
 
 	// base class for generating markup for the views
-	dg._Builder = lang.extend(function(view){
+	var _Builder = dg._Builder = lang.extend(function(view){
 		if(view){
 			this.view = view;
 			this.grid = view.grid;
@@ -230,9 +230,9 @@ define([
 
 	// Produces html for grid data content. Owned by grid and used internally
 	// for rendering data. Override to implement custom rendering.
-	dg._ContentBuilder = lang.extend(function(view){
-		dg._Builder.call(this, view);
-	},dg._Builder.prototype,{
+	var _ContentBuilder = dg._ContentBuilder = lang.extend(function(view){
+		_Builder.call(this, view);
+	},_Builder.prototype,{
 		update: function(){
 			this.prepareHtml();
 		},
@@ -298,10 +298,10 @@ define([
 
 	// Produces html for grid header content. Owned by grid and used internally
 	// for rendering data. Override to implement custom rendering.
-	dg._HeaderBuilder = lang.extend(function(view){
+	var _HeaderBuilder = dg._HeaderBuilder = lang.extend(function(view){
 		this.moveable = null;
-		dg._Builder.call(this, view);
-	},dg._Builder.prototype,{
+		_Builder.call(this, view);
+	},_Builder.prototype,{
 		_skipBogusClicks: false,
 		overResizeWidth: 4,
 		minColWidth: 1,
@@ -749,6 +749,9 @@ define([
 		}
 	});
 
-	return dojox.grid._Builder;
-
+	return {
+		_Builder: _Builder,
+		_HeaderBuilder: _HeaderBuilder,
+		_ContentBuilder: _ContentBuilder
+	};
 });

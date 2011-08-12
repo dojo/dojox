@@ -69,6 +69,6 @@ dojox.grid.cells.TreeCell = {
 	}
 };
 
-return dojox.grid.cells.tree;
+return dojox.grid.cells.TreeCell;
 
 });

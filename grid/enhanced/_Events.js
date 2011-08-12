@@ -7,7 +7,7 @@ define([
 	"dojox/grid/_Events"
 ], function(dojo, declare, keys, html, event, _Events){
 
-declare("dojox.grid.enhanced._Events", null, {
+return declare("dojox.grid.enhanced._Events", null, {
 	// summary:
 	//		Overwrite some default events of DataGrid
 	//
@@ -211,7 +211,4 @@ declare("dojox.grid.enhanced._Events", null, {
 	},
 	onRowMouseUp: function(e){}
 });
-
-return dojox.grid.enhanced._Events;
-
 });

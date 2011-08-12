@@ -19,11 +19,11 @@ define([
 	"./cells/tree",
 	"./_TreeView"
 ], function(dojo, dojox, declare, array, lang, event, domAttr, domClass, query, keys, ForestStoreModel, 
-	DataGrid, _Layout, _FocusManager, _RowManager, _EditManager, TreeSelection){
+	DataGrid, _Layout, _FocusManager, _RowManager, _EditManager, TreeSelection, TreeCell){
 		
 dojo.experimental("dojox.grid.TreeGrid");
 
-declare("dojox.grid._TreeAggregator", null, {
+var _TreeAggregator = declare("dojox.grid._TreeAggregator", null, {
 	cells: [],
 	grid: null,
 	childFields: [],
@@ -132,7 +132,7 @@ declare("dojox.grid._TreeAggregator", null, {
 	}
 });
 
-declare("dojox.grid._TreeLayout", _Layout, {
+var _TreeLayout = declare("dojox.grid._TreeLayout", _Layout, {
 	// Whether or not we are collapsable - this is calculated when we
 	// set our structure.
 	_isCollapsable: false,
@@ -181,7 +181,7 @@ declare("dojox.grid._TreeLayout", _Layout, {
 		};
 		var tCell = {children: cells, itemAggregates: []};
 		tree.cells[0] = getTreeCells(tCell, 0);
-		g.aggregator = new dojox.grid._TreeAggregator({cells: tree.cells[0],
+		g.aggregator = new _TreeAggregator({cells: tree.cells[0],
 														grid: g,
 														childFields: cFields});
 		if(g.scroller && g.defaultOpen){
@@ -223,11 +223,11 @@ declare("dojox.grid._TreeLayout", _Layout, {
 
 	addCellDef: function(inRowIndex, inCellIndex, inDef){
 		var obj = this.inherited(arguments);
-		return lang.mixin(obj, dojox.grid.cells.TreeCell);
+		return lang.mixin(obj, TreeCell);
 	}
 });
 
-declare("dojox.grid.TreePath", null, {
+var TreePath = declare("dojox.grid.TreePath", null, {
 	level: 0,
 	_str: "",
 	_arr: null,
@@ -273,8 +273,8 @@ declare("dojox.grid.TreePath", null, {
 		if(lang.isString(path) || lang.isArray(path)){
 			if(this._str == path){ return 0; }
 			if(path.join && this._str == path.join('/')){ return 0; }
-			path = new dojox.grid.TreePath(path, this.grid);
-		}else if(path instanceof dojox.grid.TreePath){
+			path = new TreePath(path, this.grid);
+		}else if(path instanceof TreePath){
 			if(this._str == path._str){ return 0; }
 		}
 		for(var i=0, l=(this._arr.length < path._arr.length ? this._arr.length : path._arr.length); i<l; i++){
@@ -304,11 +304,11 @@ declare("dojox.grid.TreePath", null, {
 
 		if(new_path[last] === 0){
 			new_path.pop();
-			return new dojox.grid.TreePath(new_path, this.grid);
+			return new TreePath(new_path, this.grid);
 		}
 
 		new_path[last]--;
-		var path = new dojox.grid.TreePath(new_path, this.grid);
+		var path = new TreePath(new_path, this.grid);
 		return path.lastChild(true);
 	},
 	next: function(){
@@ -336,7 +336,7 @@ declare("dojox.grid.TreePath", null, {
 			}
 		}
 
-		return new dojox.grid.TreePath(new_path, this.grid);
+		return new TreePath(new_path, this.grid);
 	},
 	children: function(alwaysReturn){
 		// summary:
@@ -381,7 +381,7 @@ declare("dojox.grid.TreePath", null, {
 			return [];
 		}
 		return array.map(childItems, function(item, index){
-			return new dojox.grid.TreePath(this._str + '/' + index, this.grid);
+			return new TreePath(this._str + '/' + index, this.grid);
 		}, this);
 	},
 	parent: function(){
@@ -391,7 +391,7 @@ declare("dojox.grid.TreePath", null, {
 		if(this.level === 0){
 			return null;
 		}
-		return new dojox.grid.TreePath(this._arr.slice(0, this.level), this.grid);
+		return new TreePath(this._arr.slice(0, this.level), this.grid);
 	},
 	lastChild: function(/*Boolean?*/ traverse){
 		// summary:
@@ -402,7 +402,7 @@ declare("dojox.grid.TreePath", null, {
 		if(!children || !children.length){
 			return this;
 		}
-		var path = new dojox.grid.TreePath(this._str + "/" + String(children.length-1), this.grid);
+		var path = new TreePath(this._str + "/" + String(children.length-1), this.grid);
 		if(!traverse){
 			return path;
 		}
@@ -413,7 +413,7 @@ declare("dojox.grid.TreePath", null, {
 	}
 });
 
-declare("dojox.grid._TreeFocusManager", _FocusManager, {
+var _TreeFocusManager = declare("dojox.grid._TreeFocusManager", _FocusManager, {
 	setFocusCell: function(inCell, inRowIndex){
 		if(inCell && inCell.getNode(inRowIndex)){
 			this.inherited(arguments);
@@ -421,7 +421,7 @@ declare("dojox.grid._TreeFocusManager", _FocusManager, {
 	},
 	isLastFocusCell: function(){
 		if(this.cell && this.cell.index == this.grid.layout.cellCount-1){
-			var path = new dojox.grid.TreePath(this.grid.rowCount-1, this.grid);
+			var path = new TreePath(this.grid.rowCount-1, this.grid);
 			path = path.lastChild(true);
 			return this.rowIndex == path._str;
 		}
@@ -432,7 +432,7 @@ declare("dojox.grid._TreeFocusManager", _FocusManager, {
 		//	focus next grid cell
 		if(this.cell){
 			var row=this.rowIndex, col=this.cell.index+1, cc=this.grid.layout.cellCount-1;
-			var path = new dojox.grid.TreePath(this.rowIndex, this.grid);
+			var path = new TreePath(this.rowIndex, this.grid);
 			if(col > cc){
 				var new_path = path.next();
 				if(!new_path){
@@ -460,7 +460,7 @@ declare("dojox.grid._TreeFocusManager", _FocusManager, {
 		//	focus previous grid cell
 		if(this.cell){
 			var row=(this.rowIndex || 0), col=(this.cell.index || 0) - 1;
-			var path = new dojox.grid.TreePath(row, this.grid);
+			var path = new TreePath(row, this.grid);
 			if(col < 0){
 				var new_path = path.previous();
 				if(!new_path){
@@ -493,7 +493,7 @@ declare("dojox.grid._TreeFocusManager", _FocusManager, {
 		var sc = this.grid.scroller,
 			r = this.rowIndex,
 			rc = this.grid.rowCount-1,
-			path = new dojox.grid.TreePath(this.rowIndex, this.grid);
+			path = new TreePath(this.rowIndex, this.grid);
 		if(inRowDelta){
 			var row;
 			if(inRowDelta>0){
@@ -533,7 +533,7 @@ declare("dojox.grid._TreeFocusManager", _FocusManager, {
 	}
 });
 
-declare("dojox.grid.TreeGrid", DataGrid, {
+var TreeGrid = declare("dojox.grid.TreeGrid", DataGrid, {
 	// summary:
 	//		A grid that supports nesting rows - it provides an expando function
 	//		similar to dijit.Tree.  It also provides mechanisms for aggregating
@@ -583,7 +583,7 @@ declare("dojox.grid.TreeGrid", DataGrid, {
 
 
 	// Override this to get our "magic" layout
-	_layoutClass: dojox.grid._TreeLayout,
+	_layoutClass: _TreeLayout,
 
 	createSelection: function(){
 		this.selection = new TreeSelection(this);
@@ -766,7 +766,7 @@ declare("dojox.grid.TreeGrid", DataGrid, {
 		// row manager
 		this.rows = new _RowManager(this);
 		// focus manager
-		this.focus = new dojox.grid._TreeFocusManager(this);
+		this.focus = new _TreeFocusManager(this);
 		// edit manager
 		this.edit = new _EditManager(this);
 	},
@@ -852,8 +852,8 @@ declare("dojox.grid.TreeGrid", DataGrid, {
 				}
 				break;
 			case keys.DOWN_ARROW:
-				var currPath = new dojox.grid.TreePath(this.focus.rowIndex, this);
-				var lastPath = new dojox.grid.TreePath(this.rowCount-1, this);
+				var currPath = new TreePath(this.focus.rowIndex, this);
+				var lastPath = new TreePath(this.rowCount-1, this);
 				lastPath = lastPath.lastChild(true);
 				if(!this.edit.isEditing() && currPath.toString() != lastPath.toString()){
 					event.stop(e);
@@ -884,7 +884,7 @@ declare("dojox.grid.TreeGrid", DataGrid, {
 		this.onApplyCellEdit(inValue, inRowIndex, inAttrName);
 	}
 });
-dojox.grid.TreeGrid.markupFactory = function(props, node, ctor, cellFunc){
+TreeGrid.markupFactory = function(props, node, ctor, cellFunc){
 	var widthFromAttr = function(n){
 		var w = domAttr.get(n, "width")||"auto";
 		if((w != "auto")&&(w.slice(-2) != "em")&&(w.slice(-1) != "%")){
@@ -964,6 +964,6 @@ dojox.grid.TreeGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return DataGrid.markupFactory(props, node, ctor, cellFunc);
 };
 
-return dojox.grid.TreeGrid;
+return TreeGrid;
 
 });

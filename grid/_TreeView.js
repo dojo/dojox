@@ -15,9 +15,10 @@ define([
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
 	"./_View",
+	"./_Builder",
 	"./util"
 ], function(dijit, dojox, declare, array, lang, event, domAttr, domClass, 
-	domStyle, domCtr, query, parser, template, _Widget, _TemplatedMixin, _View, util){
+	domStyle, domCtr, query, parser, template, _Widget, _TemplatedMixin, _View, _Builder, util){
 
 declare("dojox.grid._Expando", [ _Widget, _TemplatedMixin ], {
 	open: false,
@@ -195,7 +196,7 @@ declare("dojox.grid._Expando", [ _Widget, _TemplatedMixin ], {
 	}
 });
 
-declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
+var _TreeContentBuilder = declare("dojox.grid._TreeContentBuilder", _Builder._ContentBuilder, {
 	generateHtml: function(inDataIndex, inRowIndex){
 		var
 			html = this.getTableArray(),
@@ -329,8 +330,8 @@ declare("dojox.grid._TreeContentBuilder", dojox.grid._ContentBuilder, {
 	}
 });
 
-declare("dojox.grid._TreeView", _View, {
-	_contentBuilderClass: dojox.grid._TreeContentBuilder,
+return declare("dojox.grid._TreeView", _View, {
+	_contentBuilderClass: _TreeContentBuilder,
 	_onDndDrop: function(source, nodes, copy){
 		if(this.grid && this.grid.aggregator){
 			this.grid.aggregator.clearSubtotalCache();
@@ -460,7 +461,4 @@ declare("dojox.grid._TreeView", _View, {
 		this.inherited(arguments);
 	}
 });
-
-return dojox.grid._TreeView;
-
 });

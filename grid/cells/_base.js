@@ -1,6 +1,5 @@
 define([
 	"dojo/_base/kernel",
-	"../../main",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/event",
@@ -11,9 +10,9 @@ define([
 	"dojo/dom-construct",
 	"dijit/_Widget",
 	"../util"
-], function(dojo, dojox, declare, lang, event, connect, has, dom, domAttr, domConstruct, _Widget, util){
+], function(dojo, declare, lang, event, connect, has, dom, domAttr, domConstruct, _Widget, util){
 
-	declare("dojox.grid._DeferredTextWidget", _Widget, {
+	var _DeferredTextWidget = declare("dojox.grid._DeferredTextWidget", _Widget, {
 		deferred: null,
 		_destroyOnRemove: true,
 		postCreate: function(){
@@ -39,9 +38,7 @@ define([
 		setTimeout(lang.hitch.apply(dojo, arguments), 0);
 	};
 
-	var dgc = lang.getObject("grid.cells", true, dojox);
-
-	declare("dojox.grid.cells._Base", null, {
+	var BaseCell = declare("dojox.grid.cells._Base", null, {
 		// summary:
 		//	Respresents a grid cell and contains information about column options and methods
 		//	for retrieving cell related information.
@@ -81,7 +78,7 @@ define([
 			}
 			if(v && v.addBoth){
 				// Check if it's a deferred
-				v = new dojox.grid._DeferredTextWidget({deferred: v},
+				v = new _DeferredTextWidget({deferred: v},
 									domConstruct.create("span", {innerHTML: this.defaultValue}));
 			}
 			if(v && v.declaredClass && v.startup){
@@ -279,7 +276,7 @@ define([
 			this._finish(inRowIndex);
 		}
 	});
-	dgc._Base.markupFactory = function(node, cellDef){
+	BaseCell.markupFactory = function(node, cellDef){
 		var formatter = lang.trim(domAttr.get(node, "formatter")||"");
 		if(formatter){
 			cellDef.formatter = lang.getObject(formatter)||formatter;
@@ -315,7 +312,7 @@ define([
 		getStrAttr("cellClasses", cellDef);
 	};
 
-	declare("dojox.grid.cells.Cell", dgc._Base, {
+	var Cell = declare("dojox.grid.cells.Cell", BaseCell, {
 		// summary
 		// grid cell that provides a standard text input box upon editing
 		constructor: function(){
@@ -345,19 +342,19 @@ define([
 			this.inherited(arguments);
 			var n = this.getEditNode(inRowIndex);
 			try{
-				dojox.grid.util.fire(n, "blur");
+				util.fire(n, "blur");
 			}catch(e){}
 		}
 	});
-	dgc.Cell.markupFactory = function(node, cellDef){
-		dgc._Base.markupFactory(node, cellDef);
+	Cell.markupFactory = function(node, cellDef){
+		BaseCell.markupFactory(node, cellDef);
 		var keyFilter = lang.trim(domAttr.get(node, "keyFilter")||"");
 		if(keyFilter){
 			cellDef.keyFilter = new RegExp(keyFilter);
 		}
 	};
 
-	declare("dojox.grid.cells.RowIndex", dgc.Cell, {
+	var RowIndex = declare("dojox.grid.cells.RowIndex", Cell, {
 		name: 'Row',
 
 		postscript: function(){
@@ -367,11 +364,11 @@ define([
 			return inRowIndex + 1;
 		}
 	});
-	dgc.RowIndex.markupFactory = function(node, cellDef){
-		dgc.Cell.markupFactory(node, cellDef);
+	RowIndex.markupFactory = function(node, cellDef){
+		Cell.markupFactory(node, cellDef);
 	};
 
-	declare("dojox.grid.cells.Select", dgc.Cell, {
+	var Select = declare("dojox.grid.cells.Select", Cell, {
 		// summary:
 		// grid cell that provides a standard select for editing
 
@@ -409,8 +406,8 @@ define([
 			}
 		}
 	});
-	dgc.Select.markupFactory = function(node, cell){
-		dgc.Cell.markupFactory(node, cell);
+	Select.markupFactory = function(node, cell){
+		Cell.markupFactory(node, cell);
 		var options = lang.trim(domAttr.get(node, "options")||"");
 		if(options){
 			var o = options.split(',');
@@ -427,7 +424,7 @@ define([
 		}
 	};
 
-	declare("dojox.grid.cells.AlwaysEdit", dgc.Cell, {
+	var AlwaysEdit = declare("dojox.grid.cells.AlwaysEdit", Cell, {
 		// summary:
 		// grid cell that is always in an editable state, regardless of grid editing state
 		alwaysEditing: true,
@@ -440,11 +437,11 @@ define([
 			e.start(this, inRowIndex, true);
 		}
 	});
-	dgc.AlwaysEdit.markupFactory = function(node, cell){
-		dgc.Cell.markupFactory(node, cell);
+	AlwaysEdit.markupFactory = function(node, cell){
+		Cell.markupFactory(node, cell);
 	};
 
-	declare("dojox.grid.cells.Bool", dgc.AlwaysEdit, {
+	var Bool = declare("dojox.grid.cells.Bool", AlwaysEdit, {
 		// summary:
 		// grid cell that provides a standard checkbox that is always on for editing
 		_valueProp: "checked",
@@ -457,10 +454,10 @@ define([
 			}
 		}
 	});
-	dgc.Bool.markupFactory = function(node, cell){
-		dgc.AlwaysEdit.markupFactory(node, cell);
+	Bool.markupFactory = function(node, cell){
+		AlwaysEdit.markupFactory(node, cell);
 	};
 
-	return dojox.grid.cells._base;
+	return BaseCell;
 
 });

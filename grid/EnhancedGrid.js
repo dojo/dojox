@@ -7,17 +7,18 @@ define([
 	"dojo/_base/sniff",
 	"dojo/dom",
 	"dojo/dom-geometry",
+	"dojo/i18n",
 	"./DataGrid",
 	"./DataSelection",
 	"./enhanced/_PluginManager",
 	"./enhanced/plugins/_SelectionPreserver",//default loaded plugin
 	"dojo/i18n!./enhanced/nls/EnhancedGrid"
-], function(dojo, dojox, declare, lang, array, has, dom, domGeometry,
+], function(dojo, dojox, declare, lang, array, has, dom, domGeometry, i18n,
 	DataGrid, DataSelection, _PluginManager, _SelectionPreserver){
 
 dojo.experimental("dojox.grid.EnhancedGrid");
 
-declare("dojox.grid.EnhancedGrid", DataGrid, {
+var EnhancedGrid = declare("dojox.grid.EnhancedGrid", DataGrid, {
 	// summary:
 	//		Provides enhanced features based on DataGrid
 	//
@@ -77,7 +78,7 @@ declare("dojox.grid.EnhancedGrid", DataGrid, {
 
 	postMixInProperties: function(){
 		//load nls bundle
-		this._nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "EnhancedGrid", this.lang);
+		this._nls = i18n.getLocalization("dojox.grid.enhanced", "EnhancedGrid", this.lang);
 		this.inherited(arguments);
 	},
 	postCreate: function(){
@@ -247,15 +248,15 @@ declare("dojox.grid.enhanced.DataSelection", DataSelection, {
 	}
 });
 
-dojox.grid.EnhancedGrid.markupFactory = function(props, node, ctor, cellFunc){
+EnhancedGrid.markupFactory = function(props, node, ctor, cellFunc){
 	return dojox.grid._Grid.markupFactory(props, node, ctor,
 					lang.partial(DataGrid.cell_markupFactory, cellFunc));
 };
 
-dojox.grid.EnhancedGrid.registerPlugin = function(clazz, props){
+EnhancedGrid.registerPlugin = function(clazz, props){
 	_PluginManager.registerPlugin(clazz, props);
 };
 
-return dojox.grid.EnhancedGrid;
+return EnhancedGrid;
 
 });

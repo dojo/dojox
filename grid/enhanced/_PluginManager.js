@@ -5,17 +5,18 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"./_Events",
-	"./_FocusManager"
-], function(dojo, lang, declare, array, connect, _Events, _FocusManager){
+	"./_FocusManager",
+	"../util"
+], function(dojo, lang, declare, array, connect, _Events, _FocusManager, util){
 
-declare("dojox.grid.enhanced._PluginManager", null, {
+var _PluginManager = declare("dojox.grid.enhanced._PluginManager", null, {
 	// summary:
 	//		Singleton plugin manager
 	//
 	// description:
 	//		Plugin manager is responsible for
 	//		1. Loading required plugins
-	//		2. Handling collaboration and dependencies among plugins
+	//		2. Handling collaborat	ion and dependencies among plugins
 	//
 	//      Some plugin dependencies:
 	//		- "columnReordering" attribute won't work when either DnD or Indirect Selections plugin is on.
@@ -89,7 +90,7 @@ declare("dojox.grid.enhanced._PluginManager", null, {
 		if(!plugins){ return; }
 		
 		var p, loading = {}, options = this._options, grid = this.grid;
-		var registry = dojox.grid.enhanced._PluginManager.registry;//global plugin registry
+		var registry = _PluginManager.registry;//global plugin registry
 		for(p in plugins){
 			if(plugins[p]){//filter out boolean false e.g. {p:false}
 				this._normalize(p, plugins, registry, loading);
@@ -182,8 +183,8 @@ declare("dojox.grid.enhanced._PluginManager", null, {
 		//		Overwrite several default behavior for each views(including _RowSelector view)
 		if(!view){ return; }
 		//add more events handler - _View
-		dojox.grid.util.funnelEvents(view.contentNode, view, "doContentEvent", ['mouseup', 'mousemove']);
-		dojox.grid.util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
+		util.funnelEvents(view.contentNode, view, "doContentEvent", ['mouseup', 'mousemove']);
+		util.funnelEvents(view.headerNode, view, "doHeaderEvent", ['mouseup']);
 	},
 	pluginExisted: function(name){
 		// summary:
@@ -252,7 +253,7 @@ declare("dojox.grid.enhanced._PluginManager", null, {
 	}
 });
 
-dojox.grid.enhanced._PluginManager.registerPlugin = function(clazz, props){
+_PluginManager.registerPlugin = function(clazz, props){
 		// summary:
 		//		Register plugins - TODO, a better way rather than global registry?
 		// clazz: String
@@ -263,11 +264,11 @@ dojox.grid.enhanced._PluginManager.registerPlugin = function(clazz, props){
 		console.warn("Failed to register plugin, class missed!");
 		return;
 	}
-	var cls = dojox.grid.enhanced._PluginManager;
+	var cls = _PluginManager;
 	cls.registry = cls.registry || {};
 	cls.registry[clazz.prototype.name]/*plugin name*/ = lang.mixin({"class": clazz}, (props ? props : {}));
 };
 
-return dojox.grid.enhanced._PluginManager;
+return _PluginManager;
 
 });

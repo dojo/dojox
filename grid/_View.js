@@ -14,13 +14,12 @@ define([
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
 	"dojox/html/metrics",
-	"./_RowSelector",
 	"./util",
 	"dojo/_base/html",
-	"dojo/dnd/Manager",
-	"./_Builder"
+	"./_Builder",
+	"dojo/dnd/Manager"
 ], function(dojo, dijit, dojox, declare, array, lang, connect, has, query,
-	win, template, Source, _Widget, _TemplatedMixin, metrics, _RowSelector, util, html){
+	win, template, Source, _Widget, _TemplatedMixin, metrics, util, html, _Builder){
 
 	// a private function
 	var getStyleText = function(inNode, inStyleText){
@@ -55,11 +54,11 @@ define([
 		
 		// _headerBuilderClass: Object
 		//		The class to use for our header builder
-		_headerBuilderClass: dojox.grid._HeaderBuilder,
+		_headerBuilderClass: _Builder._HeaderBuilder,
 		
 		// _contentBuilderClass: Object
 		//		The class to use for our content builder
-		_contentBuilderClass: dojox.grid._ContentBuilder,
+		_contentBuilderClass: _Builder._ContentBuilder,
 		
 		postMixInProperties: function(){
 			this.rowNodes = {};

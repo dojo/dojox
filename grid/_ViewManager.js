@@ -302,6 +302,5 @@ return declare('dojox.grid._ViewManager', null, {
 		}
 		return null;
 	}
-	
 });
 });
