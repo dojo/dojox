@@ -1,10 +1,10 @@
 define([
-	"dijit/_base/manager",
+	"dijit/registry",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"./util",
 	"dojo/_base/html"
-], function(dijit, declare, lang, util, html){
+], function(dijitRegistry, declare, lang, util, html){
 
 	var indexInParent = function(inNode){
 		var i=0, n, p=inNode.parentNode;
@@ -20,7 +20,7 @@ define([
 		if(!inNode){
 			return;
 		}
-		dojo.forEach(dijit.registry.toArray(), function(w){
+		dojo.forEach(dijitRegistry.toArray(), function(w){
 			if(w.domNode && html.isDescendant(w.domNode, inNode, true)){
 				w.destroy();
 			}

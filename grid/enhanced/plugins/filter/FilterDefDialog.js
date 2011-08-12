@@ -26,7 +26,7 @@ define([
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/focus",
 	"dojox/html/metrics",
-	"dijit/_base/manager",
+	"dijit/a11y",
 	"dijit/Tooltip",
 	"dijit/form/Select",
 	"dijit/form/RadioButton",
@@ -34,7 +34,7 @@ define([
 	"../../../cells/dijit"
 ], function(declare, array, connect, lang, event, html, has, cache, keys, string, win, dateLocale, 
 	FilterBuilder, Dialog, ComboBox, TextBox, NumberTextBox, DateTextBox, TimeTextBox, Button, 
-	AccordionContainer, ContentPane, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, dijitFocus, metrics, dijit){
+	AccordionContainer, ContentPane, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, dijitFocus, metrics, dijitA11y){
 		
 var _tabIdxes = {
 		// summary:
@@ -1144,7 +1144,7 @@ var FilterDefDialog = declare("dojox.grid.enhanced.plugins.filter.FilterDefDialo
 		// cbox:
 		//		Current visible criteria box
 		if(!has('ff')){
-			var elems = dijit._getTabNavigable(html.byId(cbox.domNode));
+			var elems = dijitA11y._getTabNavigable(html.byId(cbox.domNode));
 			dijitFocus.focus(elems.lowest || elems.first);
 		}else{
 			var dp = this._defPane;

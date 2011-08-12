@@ -1,6 +1,6 @@
 define([
 	"dojo",
-	"dijit/_base/manager",
+	"dijit/registry",
 	"../main",
 	"dojo/_base/declare",
 	"dojo/_base/array",

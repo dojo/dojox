@@ -8,10 +8,10 @@ define([
 	"dojo/_base/sniff",
 	"dojo/_base/html",
 	"dojo/keys",
-	"dijit/_base/manager",
+	"dijit/a11y",
 	"dijit/focus",
 	"../_FocusManager"
-], function(dojo, lang, declare, array, connect, event, has, html, keys, dijit, dijitFocus, _FocusManager){
+], function(dojo, lang, declare, array, connect, event, has, html, keys, dijitA11y, dijitFocus, _FocusManager){
 
 declare("dojox.grid.enhanced._FocusArea", null, {
 	// summary:
@@ -688,7 +688,7 @@ return declare("dojox.grid.enhanced._FocusManager", _FocusManager, {
 		return true;
 	},
 	_initNavigatableElems: function(){
-		this._navElems = dijit._getTabNavigable(this.cell.getNode(this.rowIndex));
+		this._navElems = dijitA11y._getTabNavigable(this.cell.getNode(this.rowIndex));
 	},
 	_onEditableCellKeyDown: function(e, isBubble){
 		var dk = keys,
