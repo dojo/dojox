@@ -35,7 +35,7 @@ define([
 			for(var key in this.contents){
 				var value = this.contents[key].render(context);
 				if(this._current[key] != value){
-					domstyle.style(buffer.getParent(), key, this._current[key] = value);
+					domstyle.set(buffer.getParent(), key, this._current[key] = value);
 				}
 			}
 			return buffer;
