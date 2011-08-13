@@ -206,12 +206,12 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 						if(f.contentWindow.document.readyState == "complete"){
 							f.onreadystatechange = function() {};
 							intv = setInterval(function() {
-								if(f.contentWindow[kernel.scopeMap.dojo._scopeName] &&
-								   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx &&
-								   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx.utils){
+								if(f.contentWindow[kernel.scopeMap["dojo"]._scopeName] &&
+								   f.contentWindow[kernel.scopeMap["dojox"]._scopeName].gfx &&
+								   f.contentWindow[kernel.scopeMap["dojox"]._scopeName].gfx.utils){
 									clearInterval(intv);
-									f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
-									f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._svgSerializerInitialized();
+									f.contentWindow.parent[kernel.scopeMap["dojox"]._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
+									f.contentWindow.parent[kernel.scopeMap["dojox"]._scopeName].gfx.utils._svgSerializerInitialized();
 								}
 							}, 50);
 						}
@@ -220,12 +220,12 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 					f.onload = function(){
 						f.onload = function() {};
 						intv = setInterval(function() {
-							if(f.contentWindow[kernel.scopeMap.dojo._scopeName] &&
-							   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx &&
-							   f.contentWindow[kernel.scopeMap.dojox._scopeName].gfx.utils){
+							if(f.contentWindow[kernel.scopeMap["dojo"]._scopeName] &&
+							   f.contentWindow[kernel.scopeMap["dojox"]._scopeName].gfx &&
+							   f.contentWindow[kernel.scopeMap["dojox"]._scopeName].gfx.utils){
 								clearInterval(intv);
-								f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
-								f.contentWindow.parent[kernel.scopeMap.dojox._scopeName].gfx.utils._svgSerializerInitialized();
+								f.contentWindow.parent[kernel.scopeMap["dojox"]._scopeName].gfx.utils._gfxSvgProxy = f.contentWindow;
+								f.contentWindow.parent[kernel.scopeMap["dojox"]._scopeName].gfx.utils._svgSerializerInitialized();
 							}
 						}, 50);
 					};

@@ -11,7 +11,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 	};
   =====*/
 
-	var shape = lang.getObject("gfx.shape", true, dojox);
+	var shape = lang.getObject("dojox.gfx.shape", true);
 	// a set of ids (keys=type)
 	var _ids = {};
 	// a simple set impl to map shape<->id
@@ -593,7 +593,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		//	You should use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
 	});
 	
-	declare("dojox.gfx.shape.Rect", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Rect", shape.Shape, {
 		// summary: a generic rectangle
 		constructor: function(rawNode){
 			// rawNode: Node
@@ -607,7 +607,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		}
 	});
 	
-	declare("dojox.gfx.shape.Ellipse", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Ellipse", shape.Shape, {
 		// summary: a generic ellipse
 		constructor: function(rawNode){
 			// rawNode: Node
@@ -626,7 +626,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		}
 	});
 	
-	declare("dojox.gfx.shape.Circle", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Circle", shape.Shape, {
 		// summary: a generic circle
 		//	(this is a helper object, which is defined for convenience)
 		constructor: function(rawNode){
@@ -646,7 +646,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		}
 	});
 	
-	declare("dojox.gfx.shape.Line", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Line", shape.Shape, {
 		// summary: a generic line
 		//	(this is a helper object, which is defined for convenience)
 		constructor: function(rawNode){
@@ -670,7 +670,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		}
 	});
 	
-	declare("dojox.gfx.shape.Polyline", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Polyline", shape.Shape, {
 		// summary: a generic polyline/polygon
 		//	(this is a helper object, which is defined for convenience)
 		constructor: function(rawNode){
@@ -732,7 +732,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		}
 	});
 	
-	declare("dojox.gfx.shape.Image", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Image", shape.Shape, {
 		// summary: a generic image
 		//	(this is a helper object, which is defined for convenience)
 		constructor: function(rawNode){
@@ -755,7 +755,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		}
 	});
 	
-	declare("dojox.gfx.shape.Text", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.shape.Text", shape.Shape, {
 		// summary: a generic text
 		constructor: function(rawNode){
 			// rawNode: Node

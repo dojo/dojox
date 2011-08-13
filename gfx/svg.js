@@ -1,8 +1,28 @@
 define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare", "dojo/_base/array", 
   "dojo/dom-geometry", "dojo/_base/Color", "./_base", "./shape", "./path"], 
-  function(lang, win, dom, declare, arr, domGeom, Color, gfxBase, shapeLib, pathLib){
-	var svg = lang.getObject("gfx.svg", true, dojox),
-		g = gfxBase, gs = shapeLib;
+  function(lang, win, dom, declare, arr, domGeom, Color, g, gs, pathLib){
+/*===== 
+	dojox.gfx.svg = {
+	// module:
+	//		dojox/gfx/svg
+	// summary:
+	//		This the graphics rendering bridge for browsers compliant with W3C SVG1.0.
+	//		This is the preferred renderer to use for interactive and accessible graphics.
+	};
+	var pathLib.Path = dojox.gfx.path.Path;
+	var pathLib.TextPath = dojox.gfx.path.TextPath;
+	var svg.Shape = dojox.gfx.canvas.Shape;
+	var gs.Shape = dojox.gfx.shape.Shape;
+	var gs.Rect = dojox.gfx.shape.Rect;
+	var gs.Ellipse = dojox.gfx.shape.Ellipse;
+	var gs.Circle = dojox.gfx.shape.Circle;
+	var gs.Line = dojox.gfx.shape.Line;
+	var gs.PolyLine = dojox.gfx.shape.PolyLine;
+	var gs.Image = dojox.gfx.shape.Image;
+	var gs.Text = dojox.gfx.shape.Text;
+	var gs.Surface = dojox.gfx.shape.Surface;
+  =====*/
+  var svg = lang.getObject("dojox.gfx.svg", true);
 	svg.useSvgWeb = (typeof window.svgweb != "undefined");
 	
 	// Need to detect iOS in order to workaround bug when
@@ -74,7 +94,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 		longdashdotdot:		[8, 3, 1, 3, 1, 3]
 	};
 
-	declare("dojox.gfx.svg.Shape", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.svg.Shape", gs.Shape, {
 		// summary: SVG-specific implementation of dojox.gfx.Shape methods
 
 		setFill: function(fill){
@@ -108,8 +128,8 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 						break;
 					case "radial":
 						f = g.makeParameters(g.defaultRadialGradient, fill);
-						var gradient = this._setFillObject(f, "radialGradient");
-						arr.forEach(["cx", "cy", "r"], setter, gradient);
+						var grad = this._setFillObject(f, "radialGradient");
+						arr.forEach(["cx", "cy", "r"], setter, grad);
 						break;
 					case "pattern":
 						f = g.makeParameters(g.defaultPattern, fill);
@@ -121,7 +141,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 				return this;
 			}
 			// color object
-			var f = g.normalizeColor(fill);
+			f = g.normalizeColor(fill);
 			this.fillStyle = f;
 			this.rawNode.setAttribute("fill", f.toCss());
 			this.rawNode.setAttribute("fill-opacity", f.a);
@@ -313,7 +333,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 		}
 	});
 
-	declare("dojox.gfx.svg.Group", dojox.gfx.svg.Shape, {
+	declare("dojox.gfx.svg.Group", svg.Shape, {
 		// summary: a group shape (SVG), which can be used
 		//	to logically group shapes (e.g, to propagate matricies)
 		constructor: function(){
@@ -330,7 +350,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	});
 	svg.Group.nodeType = "g";
 
-	declare("dojox.gfx.svg.Rect", [dojox.gfx.svg.Shape, dojox.gfx.shape.Rect], {
+	declare("dojox.gfx.svg.Rect", [svg.Shape, gs.Rect], {
 		// summary: a rectangle shape (SVG)
 		setShape: function(newShape){
 			// summary: sets a rectangle shape object (SVG)
@@ -351,16 +371,16 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	});
 	svg.Rect.nodeType = "rect";
 
-	declare("dojox.gfx.svg.Ellipse", [dojox.gfx.svg.Shape, dojox.gfx.shape.Ellipse], {});
+	declare("dojox.gfx.svg.Ellipse", [svg.Shape, gs.Ellipse], {});
 	svg.Ellipse.nodeType = "ellipse";
 
-	declare("dojox.gfx.svg.Circle", [dojox.gfx.svg.Shape, dojox.gfx.shape.Circle], {});
+	declare("dojox.gfx.svg.Circle", [svg.Shape, gs.Circle], {});
 	svg.Circle.nodeType = "circle";
 
-	declare("dojox.gfx.svg.Line", [dojox.gfx.svg.Shape, dojox.gfx.shape.Line], {});
+	declare("dojox.gfx.svg.Line", [svg.Shape, gs.Line], {});
 	svg.Line.nodeType = "line";
 
-	declare("dojox.gfx.svg.Polyline", [dojox.gfx.svg.Shape, dojox.gfx.shape.Polyline], {
+	declare("dojox.gfx.svg.Polyline", [svg.Shape, gs.Polyline], {
 		// summary: a polyline/polygon shape (SVG)
 		setShape: function(points, closed){
 			// summary: sets a polyline/polygon shape object (SVG)
@@ -387,7 +407,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	});
 	svg.Polyline.nodeType = "polyline";
 
-	declare("dojox.gfx.svg.Image", [dojox.gfx.svg.Shape, dojox.gfx.shape.Image], {
+	declare("dojox.gfx.svg.Image", [svg.Shape, gs.Image], {
 		// summary: an image (SVG)
 		setShape: function(newShape){
 			// summary: sets an image shape object (SVG)
@@ -410,7 +430,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	});
 	svg.Image.nodeType = "image";
 
-	declare("dojox.gfx.svg.Text", [dojox.gfx.svg.Shape, dojox.gfx.shape.Text], {
+	declare("dojox.gfx.svg.Text", [svg.Shape, gs.Text], {
 		// summary: an anchored text (SVG)
 		setShape: function(newShape){
 			// summary: sets a text shape object (SVG)
@@ -486,7 +506,7 @@ else
 	});
 	svg.Path.nodeType = "path";
 
-	declare("dojox.gfx.svg.TextPath", [dojox.gfx.svg.Shape, pathLib.TextPath], {
+	declare("dojox.gfx.svg.TextPath", [svg.Shape, pathLib.TextPath], {
 		// summary: a textpath shape (SVG)
 		_updateWithSegment: function(segment){
 			// summary: updates the bounding box of path with new segment
@@ -563,7 +583,7 @@ else
 	});
 	svg.TextPath.nodeType = "text";
 
-	declare("dojox.gfx.svg.Surface", dojox.gfx.shape.Surface, {
+	declare("dojox.gfx.svg.Surface", gs.Surface, {
 		// summary: a surface object to be used for drawings (SVG)
 		constructor: function(){
 			gs.Container._init.call(this);
@@ -733,9 +753,9 @@ else
 		if (!event.gfxTarget) {
 			if (safMobile && event.target.wholeText) {
 				// Workaround iOS bug when touching text nodes
-				event.gfxTarget = dojox.gfx.shape.byId(event.target.parentElement.__gfxObject__);
+				event.gfxTarget = gs.byId(event.target.parentElement.__gfxObject__);
 			} else { 
-				event.gfxTarget = dojox.gfx.shape.byId(event.target.__gfxObject__);
+				event.gfxTarget = gs.byId(event.target.__gfxObject__);
 			}
 		}
 		return true;

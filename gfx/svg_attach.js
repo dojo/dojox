@@ -1,8 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/Color", "./svg"], 
-  function(kernel, lang, arr, Color, svg){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/Color", "./_base","./svg","./matrix"], 
+  function(kernel, lang, arr, Color, g, svg, Matrix){
 	lang.getObject("dojox.gfx.svg_attach", true);
 	kernel.experimental("dojox.gfx.svg_attach");
-	var g = dojox.gfx, svg = g.svg;
 	
 	svg.attachNode = function(node){
 		// summary: creates a shape from a Node
@@ -160,7 +159,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/C
 		var matrix = object.rawNode.getAttribute("transform");
 		if(matrix.match(/^matrix\(.+\)$/)){
 			var t = matrix.slice(7, -1).split(",");
-			object.matrix = g.matrix.normalize({
+			object.matrix = Matrix.normalize({
 				xx: parseFloat(t[0]), xy: parseFloat(t[2]),
 				yx: parseFloat(t[1]), yy: parseFloat(t[3]),
 				dx: parseFloat(t[4]), dy: parseFloat(t[5])

@@ -17,6 +17,18 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 	//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
 	//		API.
 	};
+	var pathLib.Path = dojox.gfx.path.Path;
+	var pathLib.TextPath = dojox.gfx.path.TextPath;
+	var canvas.Shape = dojox.gfx.canvas.Shape;
+	var gs.Shape = dojox.gfx.shape.Shape;
+	var gs.Rect = dojox.gfx.shape.Rect;
+	var gs.Ellipse = dojox.gfx.shape.Ellipse;
+	var gs.Circle = dojox.gfx.shape.Circle;
+	var gs.Line = dojox.gfx.shape.Line;
+	var gs.PolyLine = dojox.gfx.shape.PolyLine;
+	var gs.Image = dojox.gfx.shape.Image;
+	var gs.Text = dojox.gfx.shape.Text;
+	var gs.Surface = dojox.gfx.shape.Surface;
   =====*/
 
 	var canvas = lang.getObject("dojox.gfx.canvas", true);
@@ -28,7 +40,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		halfPI = pi /2,
 		extend = lang.extend;
 
-	declare("dojox.gfx.canvas.Shape", dojox.gfx.shape.Shape, {
+	declare("dojox.gfx.canvas.Shape", gs.Shape, {
 		_render: function(/* Object */ ctx){
 			// summary: render the shape
 			ctx.save();
@@ -192,7 +204,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 
-	declare("dojox.gfx.canvas.Rect", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Rect], {
+	declare("dojox.gfx.canvas.Rect", [canvas.Shape, gs.Rect], {
 		// summary: a rectangle shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
 			var s = this.shape, r = Math.min(s.r, s.height / 2, s.width / 2),
@@ -225,7 +237,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	})();
 
-	declare("dojox.gfx.canvas.Ellipse", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Ellipse], {
+	declare("dojox.gfx.canvas.Ellipse", [canvas.Shape, gs.Ellipse], {
 		// summary: an ellipse shape (Canvas)
 		setShape: function(){
 			this.inherited(arguments);
@@ -254,7 +266,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 
-	declare("dojox.gfx.canvas.Circle", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Circle], {
+	declare("dojox.gfx.canvas.Circle", [canvas.Shape, gs.Circle], {
 		// summary: a circle shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
 			var s = this.shape;
@@ -263,7 +275,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 
-	declare("dojox.gfx.canvas.Line", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Line], {
+	declare("dojox.gfx.canvas.Line", [canvas.Shape, gs.Line], {
 		// summary: a line shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
 			var s = this.shape;
@@ -273,7 +285,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 
-	declare("dojox.gfx.canvas.Polyline", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Polyline], {
+	declare("dojox.gfx.canvas.Polyline", [canvas.Shape, gs.Polyline], {
 		// summary: a polyline/polygon shape (Canvas)
 		setShape: function(){
 			this.inherited(arguments);
@@ -311,7 +323,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 
-	declare("dojox.gfx.canvas.Image", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Image], {
+	declare("dojox.gfx.canvas.Image", [canvas.Shape, gs.Image], {
 		// summary: an image shape (Canvas)
 		setShape: function(){
 			this.inherited(arguments);
@@ -327,7 +339,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 	
-	declare("dojox.gfx.canvas.Text", [dojox.gfx.canvas.Shape, dojox.gfx.shape.Text], {
+	declare("dojox.gfx.canvas.Text", [canvas.Shape, gs.Text], {
 		_setFont:function(){
 			if (this.fontStyle){
 				this.canvasFont = g.makeFontString(this.fontStyle);
@@ -416,7 +428,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 			Z: "_closePath", z: "_closePath"
 		};
 
-	declare("dojox.gfx.canvas.Path", [dojox.gfx.canvas.Shape, dojox.gfx.path.Path], {
+	declare("dojox.gfx.canvas.Path", [canvas.Shape, pathLib.Path], {
 		// summary: a path shape (Canvas)
 		constructor: function(){
 			this.lastControl = {};
@@ -641,7 +653,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		function(method){ modifyMethod(canvas.Path, method); }
 	);
 
-	declare("dojox.gfx.canvas.TextPath", [dojox.gfx.canvas.Shape, dojox.gfx.path.TextPath], {
+	declare("dojox.gfx.canvas.TextPath", [canvas.Shape, pathLib.TextPath], {
 		// summary: a text shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
 			var s = this.shape;
@@ -655,7 +667,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		}
 	});
 
-	declare("dojox.gfx.canvas.Surface", dojox.gfx.shape.Surface, {
+	declare("dojox.gfx.canvas.Surface", gs.Surface, {
 		// summary: a surface object to be used for drawings (Canvas)
 		constructor: function(){
 			gs.Container._init.call(this);

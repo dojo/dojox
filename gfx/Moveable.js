@@ -11,7 +11,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			//		mover: Object: a constructor of custom Mover
 			this.shape = shape;
 			this.delay = (params && params.delay > 0) ? params.delay : 0;
-			this.mover = (params && params.mover) ? params.mover : dojox.gfx.Mover;
+			this.mover = (params && params.mover) ? params.mover : Mover;
 			this.events = [
 				this.shape.connect("onmousedown", this, "onMouseDown")
 				// cancel text selection and text dragging

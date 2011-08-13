@@ -1,8 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "./vml"],
-  function (kernel,lang,Color,vml){
+define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path", "dojo/_base/Color", "./vml"],
+  function (kernel, lang, g, m, pathLib, Color, vml){
 	lang.getObject("dojox.gfx.vml_attach", true);
 	kernel.experimental("dojox.gfx.vml_attach");
-	var g = dojox.gfx, m = g.matrix, vml = g.vml;
 	
 	vml.attachNode = function(node){
 		// summary: creates a shape from a Node
@@ -337,7 +336,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "./vml"],
 		// object: dojox.gfx.Shape: an VML shape
 		var shape = object.shape = lang.clone(g.defaultPath),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp),
-			t = [], skip = false, map = g.Path._pathVmlToSvgMap;
+			t = [], skip = false, map = pathLib._pathVmlToSvgMap;
 		for(var i = 0; i < p.length; ++p){
 			var s = p[i];
 			if(s in map) {

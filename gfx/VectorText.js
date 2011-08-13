@@ -1,6 +1,6 @@
 define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/loader" /* dojo._getText */,
-	    "dojo/_base/xhr","dojox/gfx", "dojox/xml/DomParser", "dojox/html/metrics"],
-  function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,htmlMetrics){
+	    "dojo/_base/xhr","./_base", "dojox/xml/DomParser", "dojox/html/metrics","./matrix"],
+  function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,HtmlMetrics,Matrix){
 	/*
 		dojox.gfx.VectorText
 		An implementation of the SVG Font 1.1 spec, using dojox.gfx.
@@ -38,7 +38,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 	};
 	 
 	lang.getObject("dojox.gfx.VectorText", true);
-	lang.mixin(dojox.gfx, {
+	lang.mixin(gfx, {
 		vectorFontFitting: {
 			NONE: 0,	//	render text according to passed size.
 			FLOW: 1,		//	render text based on the passed width and size
@@ -55,10 +55,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		_vectorFontCache: {},
 		_svgFontCache: {},
 		getVectorFont: function(/* String */url){
-			if(dojox.gfx._vectorFontCache[url]){
-				return dojox.gfx._vectorFontCache[url];
+			if(gfx._vectorFontCache[url]){
+				return gfx._vectorFontCache[url];
 			}
-			return new dojox.gfx.VectorFont(url);
+			return new gfx.VectorFont(url);
 		}
 	});
 
@@ -93,7 +93,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			//		Take the loaded SVG Font definition file and convert the info
 			//		into things we can use. The SVG Font definition must follow
 			//		the SVG 1.1 Font specification.
-			var doc = dojox.gfx._svgFontCache[url]||dojox.xml.DomParser.parse(svg);
+			var doc = gfx._svgFontCache[url]||xmlDomParser.parse(svg);
 
 			//	font information
 			var f = doc.documentElement.byName("font")[0], face = doc.documentElement.byName("font-face")[0];
@@ -139,7 +139,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			}
 
 			//	see if this is cached already, and if so, forget the rest of the parsing.
-			if(dojox.gfx._vectorFontCache[name]){ return; }
+			if(gfx._vectorFontCache[name]){ return; }
 
 			//	get any provided baseline alignment offsets.
 			arr.forEach(["alphabetic", "ideographic", "mathematical", "hanging" ], function(attr){
@@ -246,15 +246,15 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			});
 
 			//	cache the parsed font
-			dojox.gfx._vectorFontCache[name] = this;
-			dojox.gfx._vectorFontCache[url] = this;
-			if(name!=family && !dojox.gfx._vectorFontCache[family]){
-				dojox.gfx._vectorFontCache[family] = this;
+			gfx._vectorFontCache[name] = this;
+			gfx._vectorFontCache[url] = this;
+			if(name!=family && !gfx._vectorFontCache[family]){
+				gfx._vectorFontCache[family] = this;
 			}
 
 			//	cache the doc
-			if(!dojox.gfx._svgFontCache[url]){
-				dojox.gfx._svgFontCache[url]=doc;
+			if(!gfx._svgFontCache[url]){
+				gfx._svgFontCache[url]=doc;
 			}
 		},
 		_clean: function(){
@@ -269,11 +269,11 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			}, this);
 
 			//	try to pull out of the font cache.
-			if(dojox.gfx._vectorFontCache[name]){
-				delete dojox.gfx._vectorFontCache[name];
+			if(gfx._vectorFontCache[name]){
+				delete gfx._vectorFontCache[name];
 			}
-			if(dojox.gfx._vectorFontCache[family]){
-				delete dojox.gfx._vectorFontCache[family];
+			if(gfx._vectorFontCache[family]){
+				delete gfx._vectorFontCache[family];
 			}
 			return this;
 		},
@@ -291,7 +291,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			//		Load the passed SVG and send it to the parser for parsing.
 			this.onLoadBegin(url.toString());
 			this._parse(
-				dojox.gfx._svgFontCache[url.toString()]||_getText(url.toString()),
+				gfx._svgFontCache[url.toString()]||_getText(url.toString()),
 				url.toString()
 			);
 			this.onLoad(this);
@@ -397,7 +397,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			//	given the size, return a scaling factor based on the height of the
 			//	font as defined in the font definition file.
 			size += "";	//	force the string cast.
-			var metrics = dojox.html.metrics.getCachedFontMeasurements(),
+			var metrics = HtmlMetrics.getCachedFontMeasurements(),
 				height=this.viewbox.height,
 				f=metrics["1em"],
 				unit=parseFloat(size, 10);	//	the default.
@@ -625,22 +625,22 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			//	figure out if we have to do fitting at all.
 			if(fitting){
 				//	more than zero.
-				if((fitting==dojox.gfx.vectorFontFitting.FLOW && !width) || (fitting==dojox.gfx.vectorFontFitting.FIT && (!width || !height))){
+				if((fitting==gfx.vectorFontFitting.FLOW && !width) || (fitting==gfx.vectorFontFitting.FIT && (!width || !height))){
 					//	reset the fitting if we don't have everything we need.
-					fitting = dojox.gfx.vectorFontFitting.NONE;
+					fitting = gfx.vectorFontFitting.NONE;
 				}
 			}
 
 			//	set up the lines array and the scaling factor.
 			var lines, scale;
 			switch(fitting){
-				case dojox.gfx.vectorFontFitting.FIT:
+				case gfx.vectorFontFitting.FIT:
 					var o=this._getBestFit(text, width, height, leading);
 					scale = o.scale;
 					lines = o.lines;
 					break;
 
-				case dojox.gfx.vectorFontFitting.FLOW:
+				case gfx.vectorFontFitting.FLOW:
 					scale = this._getSizeFactor(size);
 					lines = this._getBestFlow(text, width, scale);
 					break;
@@ -673,8 +673,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 						var p = lg.createPath(glyph.path).setFill(fillArgs);
 						if(strokeArgs){ p.setStroke(strokeArgs); }
 						p.setTransform([
-							dojox.gfx.matrix.flipY,
-							dojox.gfx.matrix.translate(cx, -this.viewbox.height-this.descent)
+							Matrix.flipY,
+							Matrix.translate(cx, -this.viewbox.height-this.descent)
 						]);
 					}
 					cx += glyph.xAdvance;
@@ -692,7 +692,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			}
 
 			//	scale the group
-			g.setTransform(dojox.gfx.matrix.scale(scale));
+			g.setTransform(Matrix.scale(scale));
 
 			//	return the overall group
 			return g;	//	dojox.gfx.Group

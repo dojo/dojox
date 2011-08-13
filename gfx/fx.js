@@ -1,7 +1,6 @@
-define(["dojo/_base/lang", "./matrix","dojo/_base/Color", "dojo/_base/array", "dojo/_base/fx","dojo/_base/connect"], 
-  function(lang, m, Color, arr, fx, Hub){
+define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_base/array", "dojo/_base/fx", "dojo/_base/connect"], 
+  function(lang, g, m, Color, arr, fx, Hub){
 	var fxg = lang.getObject("dojox.gfx.fx", true);
-	var g = dojox.gfx;
 
 	// Generic interpolators. Should they be moved to dojox.fx?
 
@@ -125,7 +124,7 @@ define(["dojo/_base/lang", "./matrix","dojo/_base/Color", "dojo/_base/array", "d
 		return new InterpolNumber(start, end);
 	}
 
-	g.fx.animateStroke = function(/*Object*/ args){
+	fxg.animateStroke = function(/*Object*/ args){
 		// summary:
 		//	Returns an animation which will change stroke properties over time
 		// example:
@@ -174,7 +173,7 @@ define(["dojo/_base/lang", "./matrix","dojo/_base/Color", "dojo/_base/array", "d
 		return anim; // dojo.Animation
 	};
 
-	g.fx.animateFill = function(/*Object*/ args){
+	fxg.animateFill = function(/*Object*/ args){
 		// summary:
 		//	Returns an animation which will change fill color over time.
 		//	Only solid fill color is supported at the moment
@@ -197,7 +196,7 @@ define(["dojo/_base/lang", "./matrix","dojo/_base/Color", "dojo/_base/array", "d
 		return anim; // dojo.Animation
 	};
 
-	g.fx.animateFont = function(/*Object*/ args){
+	fxg.animateFont = function(/*Object*/ args){
 		// summary:
 		//	Returns an animation which will change font properties over time
 		// example:
@@ -239,7 +238,7 @@ define(["dojo/_base/lang", "./matrix","dojo/_base/Color", "dojo/_base/array", "d
 		return anim; // dojo.Animation
 	};
 
-	g.fx.animateTransform = function(/*Object*/ args){
+	fxg.animateTransform = function(/*Object*/ args){
 		// summary:
 		//	Returns an animation which will change transformation over time
 		// example:
@@ -261,5 +260,5 @@ define(["dojo/_base/lang", "./matrix","dojo/_base/Color", "dojo/_base/array", "d
 		return anim; // dojo.Animation
 	};
 	
-	return g.fx;
+	return fxg;
 });
