@@ -140,7 +140,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 				}
 
 				switch(children[i].declaredClass){
-					case range.prototype.declaredClass:
+					case Range.prototype.declaredClass:
 						ranges.push(children[i]);
 						break;
 				}
