@@ -9,7 +9,7 @@ define([
 		dd = dojox.dtl;
 	=====*/
 	
-	lang.getObject("dtl.ext-dojo.NodeList", true, dojox);
+	lang.getObject("dojox.dtl.ext-dojo.NodeList", true);
 
 	lang.extend(Nodelist, {
 		dtl: function(template, context){

@@ -6,7 +6,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.contrib.objects", true, dojox);
+	lang.getObject("dojox.dtl.contrib.objects", true);
 
 	lang.mixin(dd.contrib.objects, {
 		key: function(value, arg){

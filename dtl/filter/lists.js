@@ -6,7 +6,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.filter.lists", true, dojox);
+	lang.getObject("dojox.dtl.filter.lists", true);
 
 	lang.mixin(dd.filter.lists, {
 		_dictsort: function(a, b){

@@ -8,7 +8,7 @@ define([
 		ddp = dojox.data.php;
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.utils.date", true, dojox);
+	lang.getObject("dojox.dtl.utils.date", true);
 
 	dd.utils.date.DateFormat = function(/*String*/ format){
 		ddp.DateFormat.call(this, format);

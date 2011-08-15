@@ -7,7 +7,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.filter.misc", true, dojox);
+	lang.getObject("dojox.dtl.filter.misc", true);
 
 	lang.mixin(dd.filter.misc, {
 		filesizeformat: function(value){

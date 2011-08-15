@@ -10,7 +10,7 @@ define([
 		Tokenize = dojox.string.tokenize;
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.tag.loop", true, dojox);
+	lang.getObject("dojox.dtl.tag.loop", true);
 
 	var ddtl = dd.tag.loop;
 

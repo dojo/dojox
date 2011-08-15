@@ -2,22 +2,22 @@ define([
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"./_base",
-	"dijit/_Templated", 
+	"dijit/_TemplatedMixin",
 	"dojo/dom-construct",
 	"dojo/cache",
 	"dojo/_base/array",
 	"dojo/string",
 	"dojo/parser",
 	"dijit/_base/manager"
-], function(dojo,declare,dd,dt,domconstruct,Cache,Array,dString,Parser,dijitMgr){
+], function(dojo,declare,dd,TemplatedMixin, domConstruct,Cache,Array,dString,Parser,dijitMgr){
 	/*=====
 		Cache = dojo.cache;
 		dString = dojo.string;
 		Parser = dojo.parser;
-		dt = dijit._Templated;
+		TemplatedMixin = dijit._TemplatedMixin;
 		dd = dojox.dtl;
 	=====*/
-	return declare("dojox.dtl._Templated", dt, {
+	return declare("dojox.dtl._Templated", TemplatedMixin, {
 		_dijitTemplateCompat: false,
 		buildRendering: function(){
 			var node;
@@ -43,7 +43,7 @@ define([
 				if(!this._created){
 					delete context._getter;
 				}
-				var nodes = domconstruct.toDom(
+				var nodes = domConstruct.toDom(
 					this._template.render(context)
 				);
 				// TODO: is it really necessary to look for the first node?
@@ -61,9 +61,9 @@ define([
 					node = nodes;
 				}
 			}
-
-			this._attachTemplateNodes(node);
-
+			this._attachTemplateNodes(node, function(n,p){
+				return n.getAttribute(p);
+			});
 			if(this.widgetsInTemplate){
 				//Make sure dojoType is used for parsing widgets in template.
 				//The Parser.query could be changed from multiversion support.
@@ -95,9 +95,9 @@ define([
 			}
 
 			if(this.domNode){
-				domconstruct.place(node, this.domNode, "before");
+				domConstruct.place(node, this.domNode, "before");
 				this.destroyDescendants();
-				domconstruct.destroy(this.domNode);
+				domConstruct.destroy(this.domNode);
 			}
 			this.domNode = node;
 
@@ -123,7 +123,7 @@ define([
 
 			// If we always use a string, or find no variables, just store it as a node
 			if(alwaysUseString || !templateString.match(/\{[{%]([^\}]+)[%}]\}/g)){
-				return tmplts[key] = domconstruct.toDom(templateString);
+				return tmplts[key] = domConstruct.toDom(templateString);
 			}else{
 				return tmplts[key] = new dd.Template(templateString);
 			}

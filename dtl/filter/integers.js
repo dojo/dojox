@@ -6,7 +6,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.filter.integers", true, dojox);
+	lang.getObject("dojox.dtl.filter.integers", true);
 
 	lang.mixin(dd.filter.integers, {
 		add: function(value, arg){

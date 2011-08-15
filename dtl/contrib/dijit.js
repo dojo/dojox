@@ -14,8 +14,7 @@ define([
 		Parser = dojo.parser;
 		dd = dojox.dtl;
 	=====*/
-	//dojo.getObject("dtl.contrib.dijit", true, dojox);
-	lang.getObject("dtl.contrib.dijit", true, dojox);
+	lang.getObject("dojox.dtl.contrib.dijit", true);
 	var ddcd = dd.contrib.dijit;
 	ddcd.AttachNode = lang.extend(function(keys, object){
 		this._keys = keys;

@@ -6,13 +6,11 @@ define([
 	"dojo/dom-construct",
 	"../_base",
 	"../dom"
-], function(dojo,lang,connect,domstyle,domconstruct,dd,dddom){
+], function(dojo,lang,connect,domStyle,domConstruct,dd,dddom){
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.contrib.dom", true, dojox);
-
-	var ddch = dd.contrib.dom;
+	var ddch = lang.getObject("dojox.dtl.contrib.dom", true);
 
 	var simple = {render: function(){ return this.contents; }};
 
@@ -35,7 +33,7 @@ define([
 			for(var key in this.contents){
 				var value = this.contents[key].render(context);
 				if(this._current[key] != value){
-					domstyle.set(buffer.getParent(), key, this._current[key] = value);
+					domStyle.set(buffer.getParent(), key, this._current[key] = value);
 				}
 			}
 			return buffer;
@@ -92,7 +90,7 @@ define([
 
 			if(this.swapped){
 				this.swapped.parentNode.replaceChild(this.parent, this.swapped);
-				domconstruct.destroy(this.swapped);
+				domConstruct.destroy(this.swapped);
 			}else{
 				this.onAddNode && connect.disconnect(this.onAddNode);
 				this.onRemoveNode && connect.disconnect(this.onRemoveNode);

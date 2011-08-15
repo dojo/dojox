@@ -9,7 +9,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.render.dom", true, dojox);
+	lang.getObject("dojox.dtl.render.dom", true);
 
 	dd.render.dom.Render = function(/*DOMNode?*/ attachPoint, /*dojox.dtl.DomTemplate?*/ tpl){
 		this._tpl = tpl;

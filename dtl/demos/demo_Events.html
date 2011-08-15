@@ -7,11 +7,11 @@
 				@import "../../../dijit/themes/tundra/tundra.css";
 			</style>
 	    <script type="text/javascript">
-					dojo.require("dijit._Widget");
+					dojo.require("dijit._WidgetBase");
 					dojo.require("dojox.dtl._DomTemplated");
 					dojo.require("dijit.form.Button");
 
-					dojo.declare("Fruit", [dijit._Widget, dojox.dtl._DomTemplated], {
+					dojo.declare("Fruit", [dijit._WidgetBase, dojox.dtl._DomTemplated], {
 						widgetsInTemplate: true,
 						items: ["apple", "banana", "orange"],
 						keyUp: function(e){

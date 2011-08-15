@@ -5,14 +5,15 @@ define([
 	"dojo/_base/json",
 	"dojo/dom",
 	"dojo/_base/xhr",
-	"dojox/string/Builder"], 
-	function(dojo, lang, Tokenize, json, dom, xhr, StringBuilder){
+	"dojox/string/Builder",
+	"dojo/_base/Deferred"], 
+	function(dojo, lang, Tokenize, json, dom, xhr, StringBuilder, deferred){
 	/*=====
 		Tokenize = dojox.string.tokenize;
 		StringBuilder = dojox.string.Builder;
 	=====*/
 	dojo.experimental("dojox.dtl");
-	var dtl = lang.getObject("dtl", true, dojox);
+	var dtl = lang.getObject("dojox.dtl", true);
 	/*=====
 		dtl = dojox.dtl;
 		dd = dojox.dtl;
@@ -52,12 +53,12 @@ define([
 
 				if(this._getter){
 					var got = this._getter(key);
-					if(typeof got != "undefined"){
+					if(got != undefined){
 						return n(got);
 					}
 				}
 
-				if(typeof this[key] != "undefined"){
+				if(this[key] != undefined){
 					return n(this[key]);
 				}
 
@@ -180,8 +181,8 @@ define([
 						return dd.text.getTemplateString(location);
 					}
 				}else{
-					return xhr.xhrGet({
-						handleAs: (json) ? "json" : "text",
+					return xhr.get({
+						handleAs: json ? "json" : "text",
 						url: location
 					});
 				}
@@ -198,7 +199,7 @@ define([
 				return ddt._resolveLazy(arg, sync);
 			},
 			_isTemplate: function(arg){
-				return (typeof arg == "undefined") || (typeof arg == "string" && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
+				return (arg == undefined) || (typeof arg == "string" && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
 			},
 			_resolveContextArg: function(arg, sync){
 				if(arg.constructor == Object){
@@ -331,7 +332,7 @@ define([
 				var pos, arg;
 
 				for(var i = 0, has = []; i < arguments.length; i++){
-					has[i] = (typeof arguments[i] != "undefined" && typeof arguments[i] == "string" && arguments[i]);
+					has[i] = (arguments[i] != undefined && typeof arguments[i] == "string" && arguments[i]);
 				}
 
 				if(!this.key){
@@ -364,7 +365,7 @@ define([
 				return this.contents;
 			},
 			resolve: function(context){
-				if(typeof this.key == "undefined"){
+				if(this.key == undefined){
 					return "";
 				}
 
@@ -416,7 +417,7 @@ define([
 						var part = parts[i];
 						if(current){
 							var base = current;
-							if(lang.isObject(current) && part == "items" && typeof current[part] == "undefined"){
+							if(lang.isObject(current) && part == "items" && current[part] == undefined){
 								var items = [];
 								for(var key in current){
 									items.push([key, current[key]]);
@@ -427,7 +428,7 @@ define([
 
 							if(current.get && lang.isFunction(current.get) && current.get.safe){
 								current = current.get(part);
-							}else if(typeof current[part] == "undefined"){
+							}else if(current[part] == undefined){
 								current = current[part];
 								break;
 							}else{

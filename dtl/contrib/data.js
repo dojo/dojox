@@ -7,7 +7,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.contrib.data", true, dojox);
+	lang.getObject("dojox.dtl.contrib.data", true);
 
 	var ddcd = dd.contrib.data;
 	var first = true;

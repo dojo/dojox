@@ -6,7 +6,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.filter.htmlstrings", true, dojox);
+	lang.getObject("dojox.dtl.filter.htmlstrings", true);
 
 	lang.mixin(dd.filter.htmlstrings, {
 		_linebreaksrn: /(\r\n|\n\r)/g,

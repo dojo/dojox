@@ -3,11 +3,11 @@ define([
 	"dojo/_base/lang",
 	"./dom",
 	"./_base",
-	"dijit/_Widget"
+	"dijit/_WidgetBase"
 ], function(dojo,lang,ddd,dd,Widget){
 	/*=====
 		dd = dojox.dtl;
-		Widget = dijit._Widget;
+		Widget = dijit._WidgetBase;
 	=====*/ 
 	dd.DomInline = lang.extend(function(args, node){
 		this.create(args, node);

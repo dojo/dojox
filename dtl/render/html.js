@@ -7,7 +7,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/ 
-	lang.getObject("dtl.render.html", true, dojox);
+	lang.getObject("dojox.dtl.render.html", true);
 
 	dd.render.html.Render = ddrd.Render;
 	return dojox.dtl.render.html;

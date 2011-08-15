@@ -7,7 +7,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.filter.dates", true, dojox);
+	lang.getObject("dojox.dtl.filter.dates", true);
 
 	var ddfd = dd.filter.dates;
 	lang.mixin(ddfd, {

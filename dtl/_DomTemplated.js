@@ -6,7 +6,7 @@ define([
 	"./render/dom",
 	"dojo/cache",
 	"dijit/_TemplatedMixin"
-	], function(dojo,domconstruct,dtl,ddcd,ddrd,cache,TemplatedMixin){
+	], function(dojo,domConstruct,dtl,ddcd,ddrd,cache,TemplatedMixin){
 	/*=====
 		dtl = dojox.dtl;
 		cache = dojo.cache;
@@ -38,7 +38,7 @@ define([
 
 			this.domNode = this.template.getRootNode();
 			if(this.srcNodeRef && this.srcNodeRef.parentNode){
-				domconstruct.destroy(this.srcNodeRef);
+				domConstruct.destroy(this.srcNodeRef);
 				delete this.srcNodeRef;
 			}
 		},
@@ -71,7 +71,7 @@ define([
 				this._templates = {};
 			}
 			if(!templateString){
-				templateString = cache.cache(templatePath, {sanitize: true});
+				templateString = cache(templatePath, {sanitize: true});
 			}
 			var key = templateString;
 			var tmplts = this._templates;

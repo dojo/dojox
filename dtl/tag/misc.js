@@ -8,7 +8,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.tag.misc", true, dojox);
+	lang.getObject("dojox.dtl.tag.misc", true);
 
 	var ddtm = dd.tag.misc;
 

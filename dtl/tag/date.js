@@ -7,7 +7,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.tag.date", true, dojox);
+	lang.getObject("dojox.dtl.tag.date", true);
 
 	dojox.dtl.tag.date.NowNode = function(format, node){
 		this._format = format;

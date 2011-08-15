@@ -12,7 +12,7 @@ define([
 		Tokenize = dojox.string.tokenize;
 		Sprintf = dojox.string.sprintf;
 	=====*/
-	lang.getObject("dtl.filter.strings", true, dojox);
+	lang.getObject("dojox.dtl.filter.strings", true);
 
 	lang.mixin(dd.filter.strings, {
 		_urlquote: function(/*String*/ url, /*String?*/ safe){

@@ -6,7 +6,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.tag.logic", true, dojox);
+	lang.getObject("dojox.dtl.tag.logic", true);
 
 	var ddt = dd.text;
 	var ddtl = dd.tag.logic;

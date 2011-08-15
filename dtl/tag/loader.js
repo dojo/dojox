@@ -8,7 +8,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.tag.loader", true, dojox);
+	lang.getObject("dojox.dtl.tag.loader", true);
 
 	var ddtl = dd.tag.loader;
 

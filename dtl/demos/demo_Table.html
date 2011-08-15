@@ -21,12 +21,13 @@
 				}
 			</style>
 	    <script type="text/javascript">
+					dojo.require("dijit._WidgetBase");
 					dojo.require("dojox.dtl._DomTemplated");
 					dojo.require("dojox.dtl.tag.logic");
 					dojo.require("dojox.dtl.tag.loop");
 					dojo.require("dojox.dtl.filter.lists");
 
-					dojo.declare("demo.Table", [dijit._Widget, dojox.dtl._DomTemplated], {
+					dojo.declare("demo.Table", [dijit._WidgetBase, dojox.dtl._DomTemplated], {
 						pos: 0,
 						postMixInProperties: function(){
 							this.ths = dojo.query("th", this.domNode).map(function(item){

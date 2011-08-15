@@ -6,7 +6,7 @@ define([
 	/*=====
 		dd = dojox.dtl;
 	=====*/
-	lang.getObject("dtl.filter.logic", true, dojox);
+	lang.getObject("dojox.dtl.filter.logic", true);
 
 	lang.mixin(dd.filter.logic, {
 		default_: function(value, arg){
