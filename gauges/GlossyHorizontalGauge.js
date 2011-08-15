@@ -78,7 +78,7 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	font: "normal normal normal 10pt serif",
 	
 	// scalePrecision: Number
-	// The precision for the formating of numbers in the scale (default is 0)
+	// The precision for the formatting of numbers in the scale (default is 0)
 	scalePrecision: 0,
 	
 	_font: null,
@@ -195,14 +195,13 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	
 	_formatNumber: function(val){
 	
-		if (NumberUtils.number) // use internationalization if loaded
+		if(NumberUtils.number){ // use internationalization if loaded
 			return NumberUtils.number.format(val, {
 				places: this.scalePrecision
-			})
-		
-		else 			
+			});
+		}else{
 			return val.toFixed(this.scalePrecision);
-		
+		}
 	},
 	
 	_computeDataRectangle: function(){
@@ -249,7 +248,7 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		
 		var lighterColor = Color.blendColors(new Color(this.color), new Color('white'), 0.4);
 		this._gaugeBackground = group.createGroup();
-		var scale = this.height / this._designHeight;
+
 		var borderWidth = this._getBorderWidth();
 		var margin = this._margin;
 		var w = this.width;

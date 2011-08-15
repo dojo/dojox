@@ -53,7 +53,7 @@ return declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
 	_move: function(/*Boolean?*/ dontAnimate){
 		// summary:
 		//		Override of dojox.gauges.BarLineIndicator._move to resize the bar (rather than moving it)
-		var changed = false;
+		
 		var c;
 		var v = this.value ;
 		if(v < this.min){v = this.min;}

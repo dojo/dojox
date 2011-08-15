@@ -49,21 +49,22 @@ return declare("dojox.gauges.TextIndicator", [Indicator], {
 		
 		var x = this.x ? this.x : 0;
 		var y = this.y ? this.y : 0;
-		var color = this.color | 'black';
 		var align = this.align ? this.align : "middle";
-		if (!this.shape) 
+		if(!this.shape){
 			this.shape = group.createText({
 				x: x,
 				y: y,
 				text: txt,
 				align: align
 			});
-		else this.shape.setShape({
-			x: x,
-			y: y,
-			text: txt,
-			align: align
-		});
+		}else{
+			this.shape.setShape({
+				x: x,
+				y: y,
+				text: txt,
+				align: align
+			});
+		}
 		this.shape.setFill(this.color);
 		if (this.font) this.shape.setFont(this.font);
 		

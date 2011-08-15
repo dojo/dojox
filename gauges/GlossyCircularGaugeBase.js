@@ -97,11 +97,11 @@ return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	font: "normal normal normal 10pt serif",
 	
 	// scalePrecision: Number
-	// The precision for the formating of numbers in the scale (default is 0)
+	// The precision for the formatting of numbers in the scale (default is 0)
 	scalePrecision: 0,
 	
 	// textIndicatorPrecision: Number
-	// The precision for the formating of numbers in the text indicator (default is 0)
+	// The precision for the formatting of numbers in the text indicator (default is 0)
 	textIndicatorPrecision: 0,
 	
 	_font: null,

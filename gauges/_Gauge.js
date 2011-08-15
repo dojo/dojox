@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/array","dojo/_base/event",
 		"dojo/_base/connect","dojo/dom-construct", "dijit/Tooltip","dijit/_Widget", "dojox/gfx", "dojo/number", "./Range", "dojo/fx/easing"], 
-  function( declare, lang, html, arr, Event, Connect, DOM, Tooltip, Widget, gfx, NumberUtils, Range, Easing) { 
+  function( declare, lang, html, arr, Event, Connect, DOM, Tooltip, Widget, gfx, NumberUtils, Range) {
 
 return declare("dojox.gauges._Gauge",[Widget],{
 	// summary:
@@ -792,7 +792,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		// event:	Object
 		//			The touch event object
 		
-		if (this._drag && this._drag.noChange == false){
+		if (this._drag && !this._drag.noChange){
 			var touches = event.touches;
 			var firstTouch = touches[0];
 			this._dragIndicatorAt(this, firstTouch.pageX, firstTouch.pageY);

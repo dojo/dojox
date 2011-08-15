@@ -1,6 +1,8 @@
 define(["dojo/_base/declare","./AnalogIndicatorBase"],
   function(declare, AnalogIndicatorBase) {
- 
+/*=====
+	AnalogIndicatorBase = dojox.gauges.AnalogIndicatorBase;
+ =====*/
 return declare("dojox.gauges.AnalogLineIndicator", [AnalogIndicatorBase], {
 	//	summary:
 	//		An indicator for the AnalogGauge that draws a segment of line that has for length the length of the indicator
@@ -21,4 +23,5 @@ return declare("dojox.gauges.AnalogLineIndicator", [AnalogIndicatorBase], {
 	}
 	
 });
-})
+
+});

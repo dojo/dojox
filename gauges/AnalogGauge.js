@@ -348,7 +348,7 @@ return declare("dojox.gauges.AnalogGauge",Gauge,{
 			angle = widget._getDegrees(Math.atan2(yf - widget.cy, xf - widget.cx) + Math.PI/2);
 		
 		// get value and restrict to our min/max
-		value = widget._getValueForAngle(angle);
+		var value = widget._getValueForAngle(angle);
 		value = Math.min(Math.max(value, widget.min), widget.max);
 		// update the indicator
 		widget._drag.value = widget._drag.currentValue = value;
