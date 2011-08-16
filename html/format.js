@@ -1,5 +1,6 @@
-define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/window"], function(d, dhe) {
-	var dhf = d.getObject("html.format",true,dojox);
+define(["dojo/_base/kernel", "./entities", "dojo/_base/array", "dojo/_base/window", "dojo/_base/sniff"], 
+	function(lang, Entities, ArrayUtil, Window, has) {
+	var dhf = lang.getObject("dojox.html.format",true);
 	
 	dhf.prettyPrint = function(html/*String*/, indentBy /*Integer?*/, maxLineLength /*Integer?*/, map/*Array?*/, /*boolean*/ xhtml){
 		// summary:
@@ -46,13 +47,13 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 	
 		//Build the content outside of the editor so we can walk
 		//via DOM and build a 'pretty' output.
-		var contentDiv = d.doc.createElement("div");
+		var contentDiv = Window.doc.createElement("div");
 		contentDiv.innerHTML = html;
 	
 		// Use the entity encode/decode functions, they cache on the map,
 		// so it won't multiprocess a map.
-		var encode = dhe.encode;
-		var decode = dhe.decode;
+		var encode = Entities.encode;
+		var decode = Entities.decode;
 	
 		/** Define a bunch of formatters to format the output. **/
 		var isInlineFormat = function(tag){
@@ -144,10 +145,10 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 			// anyway.
 			var _lines = txt.split("\n");
 			for(i = 0; i < _lines.length; i++){
-				_lines[i] = d.trim(_lines[i]);
+				_lines[i] = lang.trim(_lines[i]);
 			}
 			txt = _lines.join(" ");
-			txt = d.trim(txt);
+			txt = lang.trim(txt);
 			if(txt !== ""){
 				var lines = [];
 				if(maxLineLength && maxLineLength > 0){
@@ -168,9 +169,9 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 								}
 							}
 							var line = txt.substring(0, i);
-							line = d.trim(line);
+							line = lang.trim(line);
 							// Shift up the text string to the next chunk.
-							txt = d.trim(txt.substring((i == txt.length)?txt.length:i + 1, txt.length));
+							txt = lang.trim(txt.substring((i == txt.length)?txt.length:i + 1, txt.length));
 							if(line){
 								_iTxt = "";
 								for(i = 0; i < indentDepth; i++){
@@ -233,7 +234,7 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 				for (i = 0; i < scriptLines.length; i++){
 					var line = scriptLines[i];
 					var hasNewlines = (line.indexOf("\n") > -1);
-					line = d.trim(line);
+					line = lang.trim(line);
 					if(line){
 						var iLevel = indent;
 						// Not all blank, so we need to process.
@@ -273,7 +274,7 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 			//		Function to open a new tag for writing content.
 			var name = node.nodeName.toLowerCase();
 			// Generate the outer node content (tag with attrs)
-			var nText = d.trim(outerHTML(node));
+			var nText = lang.trim(outerHTML(node));
 			var tag = nText.substring(0, nText.indexOf(">") + 1);
 	
 			// Also thanks to IE, we need to check for quotes around
@@ -287,11 +288,11 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 				var sL = match.substring(0,6);
 				var style = match.substring(6, match.length);
 				var closure = style.charAt(0);
-				style = d.trim(style.substring(1,style.length -1));
+				style = lang.trim(style.substring(1,style.length -1));
 				style = style.split(";");
 				var trimmedStyles = [];
-				d.forEach(style, function(s){
-					s = d.trim(s);
+				ArrayUtil.forEach(style, function(s){
+					s = lang.trim(s);
 					if(s){
 						// Lower case the style name, leave the value alone.  Mainly a fixup for IE.
 						s = s.substring(0, s.indexOf(":")).toLowerCase() + s.substring(s.indexOf(":"), s.length);
@@ -302,7 +303,7 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 				
 				// Reassemble and return the styles in sorted order.
 				style = trimmedStyles.join("; ");
-				var ts = d.trim(style);
+				var ts = lang.trim(style);
 				if(!ts || ts === ";"){
 					// Just remove any style attrs that are empty.
 					return "";
@@ -315,7 +316,7 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 			// Try and sort the attributes while we're at it.
 			var attrs = [];
 			tag = tag.replace(rgxp_attrsMatch, function(attr){
-				attrs.push(d.trim(attr));
+				attrs.push(lang.trim(attr));
 				return "";
 			});
 			attrs = attrs.sort();
@@ -415,8 +416,8 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 				for(i = 0; i < children.length; i++){
 					var n = children[i];
 					if(n.nodeType === 1){
-						var tg = d.trim(n.tagName.toLowerCase());
-						if(d.isIE && n.parentNode != node){
+						var tg = lang.trim(n.tagName.toLowerCase());
+						if(has("ie") && n.parentNode != node){
 							// IE is broken.  DOMs are supposed to be a tree.
 							// But in the case of malformed HTML, IE generates a graph
 							// meaning one node ends up with multiple references
@@ -437,7 +438,7 @@ define(["dojo/_base/kernel", "./entities", "dojo/_base/lang", "dojo/_base/array"
 								content.push(formatScript(n.innerHTML));
 							}else if(tg === "pre"){
 								var preTxt = n.innerHTML;
-								if(d.isMoz){
+								if(has("mozilla")){
 									//Mozilla screws this up, so fix it up.
 									preTxt = preTxt.replace("<br>", "\n");
 									preTxt = preTxt.replace("<pre>", "");

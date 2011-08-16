@@ -1,8 +1,9 @@
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo/_base/lang"], function(lang) {
 	// dojox.html.entities.html [public] Array
 	//		Entity characters for HTML, represented as an array of
 	//		character code, entity name (minus & and ; wrapping.
 	//		The function wrapper is to fix global leking with the build tools.
+	var dhe = lang.getObject("dojox.html.entities",true);	
 	
 	var _applyEncodingMap = function(str, map){
 		// summary:
@@ -77,8 +78,6 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 		return str;
 	};
 
-	var dhe = dojo.getObject("html.entities",true,dojox);
-	
 	dhe.html = [
 		["\u0026","amp"], ["\u0022","quot"],["\u003C","lt"], ["\u003E","gt"],
 		["\u00A0","nbsp"]

@@ -1,33 +1,32 @@
-define([
-	"dojo/_base/kernel", "dojo/dom-style", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/sniff",
-	"dojo/_base/window", "dojo/dom", "dojo/dom-construct"
-], function(dojo, domStyle, lang, html, has, win, dom, domConstruct){
-	dojo.experimental("dojox.html.ext-dojo.style");
-	var st = lang.getObject("html.ext-dojo.style", true, dojox);
-
+define(["dojo/_base/kernel", "dojo/dom-style", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/sniff",
+		"dojo/_base/window", "dojo/dom", "dojo/dom-construct", "dojo/dom-style", "dojo/dom-attr"], 
+	function(kernel, domStyle, lang, Html, has, win, DOM, DOMConstruct, DOMStyle, DOMAttr){
+	kernel.experimental("dojox.html.ext-dojo.style");
+	var st = lang.getObject("dojox.html.ext-dojo.style", true);
+	var HtmlX = lang.getObject("dojox.html");
 	// summary: Extensions to dojo.style adding the css3 "transform" and "transform-origin" properties on IE5.5+
 	// description:
 	//	A Package to extend the dojo.style function
 	//	Supported transformation functions:
 	//  matrix, translate, translateX, translateY, scale, scaleX, scaleY, rotate, skewX, skewY, skew
-	lang.mixin(dojox.html["ext-dojo"].style, {
+	lang.mixin(HtmlX["ext-dojo"].style, {
 		supportsTransform: true,
 		_toPx: function(measure){
-			var ds = html.style, _conversion = this._conversion;
+			var ds = Html.style, _conversion = this._conversion;
 			if(typeof measure === "number"){
 				return measure + "px";
 			}else if(measure.toLowerCase().indexOf("px") != -1){
 				return measure;
 			}
 			// "native" conversion in px
-			!_conversion.parentNode && domConstruct.place(_conversion, win.body());
+			!_conversion.parentNode && DOMConstruct.place(_conversion, win.body());
 			ds(_conversion, "margin", measure);
 			return ds(_conversion, "margin");
 		},
 		init: function(){
-			var docStyle = win.doc.documentElement.style, extStyle = dojox.html["ext-dojo"].style,
-				sget = domStyle.get, sset = domStyle.set;
-			domStyle.get = function(/*DOMNode|String*/ node, /*String|Object*/ name){
+			var docStyle = win.doc.documentElement.style, extStyle = HtmlX["ext-dojo"].style,
+				sget = DOMStyle.get, sset = DOMStyle.set;
+			DOMStyle.get = function(/*DOMNode|String*/ node, /*String|Object*/ name){
 				var tr = (name == "transform"),
 					to = (name == "transformOrigin");
 				if(tr){
@@ -38,10 +37,10 @@ define([
 					return arguments.length == 2 ? sget(node, name) : sget(node);
 				}
 			};
-			domStyle.set = function(/*DOMNode|String*/ node, /*String|Object*/ name, /*String?*/ value){
+			DOMStyle.set = function(/*DOMNode|String*/ node, /*String|Object*/ name, /*String?*/ value){
 				var tr = (name == "transform"),
 					to = (name == "transformOrigin"),
-					n = dom.byId(node)
+					n = DOM.byId(node)
 				;
 				if(tr){
 					return extStyle.setTransform(n, value, true);
@@ -62,10 +61,10 @@ define([
 			}
 			if(this.tPropertyName){
 				this.setTransform = function(/*DomNode*/node, /*String*/ transform){
-					return domStyle.set(node, this.tPropertyName, transform);
+					return DOMStyle.set(node, this.tPropertyName, transform);
 				};
 				this.getTransform = function(/*DomNode*/node){
-					return domStyle.get(node, this.tPropertyName);
+					return DOMStyle.get(node, this.tPropertyName);
 				};
 			}else if(has("ie")){
 				this.setTransform = this._setTransformFilter;
@@ -84,7 +83,7 @@ define([
 			}else{
 				this.supportsTransform = false;
 			}
-			this._conversion = domConstruct.create("div", {
+			this._conversion = DOMConstruct.create("div", {
 				style: {
 					position: "absolute",
 					top: "-100px",
@@ -108,7 +107,7 @@ define([
 				.replace("right ", "100% ")
 				.replace(/\s+/, " "),
 				toAry = to.split(" "),
-				n = dom.byId(node),
+				n = DOM.byId(node),
 				t = this.getTransform(n),
 				validOrigin = true
 			;
@@ -121,22 +120,22 @@ define([
 			if(!validOrigin || !toAry.length || toAry.length > 2 ){
 				return transformOrigin;
 			}
-			html.attr(n, "dojo-transform-origin", toAry.join(" "));
+			Html.attr(n, "dojo-transform-origin", toAry.join(" "));
 			t && this.setTransform(node, t);
 			return transformOrigin;
 		},
 		_getTransformOriginFilter: function(/*DomNode*/ node){
-			return html.attr(node, "dojo-transform-origin") || "50% 50%";
+			return Html.attr(node, "dojo-transform-origin") || "50% 50%";
 		},
 		_setTransformFilter: function(/*DomNode*/ node, /*String*/ transform){
 			// Using the Matrix Filter to implement the transform property on IE
 			var t = transform.replace(/\s/g, ""),
-				n = dom.byId(node),
+				n = DOM.byId(node),
 				transforms = t.split(")"),
 				toRad = 1, toRad1 = 1,
 				mstr = "DXImageTransform.Microsoft.Matrix",
-				hasAttr = domAttr.hasAttr,
-				attr = html.attr,
+				hasAttr = DOMAttr.hasAttr,
+				attr = Html.attr,
 				// Math functions
 				PI = Math.PI, cos = Math.cos, sin = Math.sin, tan = Math.tan, max = Math.max, min = Math.min, abs = Math.abs,
 				degToRad = PI/180, gradToRad = PI/200,
@@ -153,7 +152,7 @@ define([
 				tx = 0, ty = 0,
 				props = [m11, m12, m21, m22, tx, ty],
 				hasMatrix = false,
-				ds = html.style,
+				ds = Html.style,
 				newPosition = ds(n, "position") == "absolute" ? "absolute" : "relative",
 				w = ds(n, "width") + ds(n, "paddingLeft") + ds(n, "paddingRight"),
 				h = ds(n, "height") + ds(n, "paddingTop") + ds(n, "paddingBottom"),
@@ -435,11 +434,11 @@ define([
 		},
 		_getTransformFilter: function(/*DomNode*/ node){
 			try{
-				var n = dom.byId(node),
+				var n = DOM.byId(node),
 					item = n.filters.item(0)
 				;
 				return "matrix(" + item.M11 + ", " + item.M12 + ", " + item.M21 + ", " +
-					item.M22 + ", " + (html.attr(node, "dojo-transform-tx") || "0") + ", " + (html.attr(node, "dojo-transform-ty") || "0") + ")";
+					item.M22 + ", " + (Html.attr(node, "dojo-transform-tx") || "0") + ", " + (Html.attr(node, "dojo-transform-ty") || "0") + ")";
 			}catch(e){
 				return "matrix(1, 0, 0, 1, 0, 0)";
 			}
@@ -452,6 +451,6 @@ define([
 		}
 	});
 
-	dojox.html["ext-dojo"].style.init();
-	return html.style;
+	HtmlX["ext-dojo"].style.init();
+	return Html.style;
 });
