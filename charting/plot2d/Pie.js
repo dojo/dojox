@@ -4,6 +4,8 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 	function(lang, arr, declare, Element, PlotEvents, dc, da, g, m, df, du){
 
 	/*=====
+	var Element = dojox.charting.Element;
+	var PlotEvents = dojox.charting.plot2d._PlotEvents;
 	dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
 		//	summary:
 		//		Specialized keyword arguments object for use in defining parameters on a Pie chart.
@@ -56,7 +58,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
-	return declare("dojox.charting.plot2d.Pie", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+	return declare("dojox.charting.plot2d.Pie", [Element, PlotEvents], {
 		//	summary:
 		//		The plot that represents a typical pie chart.
 		defaultParams: {

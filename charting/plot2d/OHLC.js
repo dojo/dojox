@@ -1,6 +1,9 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "./common", 
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"],
 	function(lang, arr, declare, Base, dc, df, dfr, du, fx){
+/*=====
+var Base = dojox.charting.plot2d.Base;
+=====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
@@ -9,7 +12,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "
 	//	{ x?, open, close, high, low }
 	//	if x is not provided, the array index is used.
 	//	failing to provide the OHLC values will throw an error.
-	return declare("dojox.charting.plot2d.OHLC", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.OHLC", Base, {
 		//	summary:
 		//		A plot that represents typical open/high/low/close (financial reporting, primarily).
 		//		Unlike most charts, the Candlestick expects data points to be represented by

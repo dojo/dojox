@@ -2,8 +2,9 @@ define(["dojox","dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 		"../Element", "./_PlotEvents", "dojo/_base/array",
 		"../scaler/primitive", "./common", "dojox/gfx/fx"],
 	function(dojox,lang, declare, hub, Element, PlotEvents, arr, primitive, common, fx){
-
 /*=====
+var Element = dojox.charting.Element;
+var PlotEvents = dojox.charting.plot2d._PlotEvents;
 dojox.charting.plot2d.__PlotCtorArgs = function(){
 	//	summary:
 	//		The base keyword arguments object for plot constructors.
@@ -12,7 +13,7 @@ dojox.charting.plot2d.__PlotCtorArgs = function(){
 	//		details).
 }
 =====*/
-return declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+return declare("dojox.charting.plot2d.Base", [Element, PlotEvents], {
 	constructor: function(chart, kwArgs){
 		//	summary:
 		//		Create a base plot for charting.

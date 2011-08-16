@@ -36,9 +36,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
+	var Element = dojox.charting.plot2d.Element;
 	=====*/
 
-	return declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
+	return declare("dojox.charting.plot2d.Grid", Element, {
 		//	summary:
 		//		A "faux" plot that can be placed behind other plots to represent
 		//		a grid against which other plots can be easily measured.

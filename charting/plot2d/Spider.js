@@ -6,10 +6,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, has,
 			Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, 
 			g, m, gfxfx, df, du, easing, dijit, Tooltip){
-
+/*=====
+var Element = dojox.charting.Element;
+var PlotEvents = dojox.charting.plot2d._PlotEvents;
+=====*/
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
-	declare("dojox.charting.plot2d.Spider", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+	var Spider = declare("dojox.charting.plot2d.Spider", [Element, PlotEvents], {
 		//	summary:
 		//		The plot that represents a typical Spider chart.
 		defaultParams: {
@@ -624,5 +627,5 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		return color;
 	}
 	
-	return dojox.charting.plot2d.Spider;
+	return Spider; // dojox.plot2d.Spider
 });

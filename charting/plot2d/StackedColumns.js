@@ -3,8 +3,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Columns"
 	function(lang, arr, declare, Columns, dc, df, dfr, dfs){
 
 	var	purgeGroup = dfr.lambda("item.purgeGroup()");
-
-	return declare("dojox.charting.plot2d.StackedColumns", dojox.charting.plot2d.Columns, {
+/*=====
+var Columns = dojox.charting.plot2d.Columns;
+=====*/
+	return declare("dojox.charting.plot2d.StackedColumns", Columns, {
 		//	summary:
 		//		The plot object representing a stacked column chart (vertical bars).
 		getSeriesStats: function(){

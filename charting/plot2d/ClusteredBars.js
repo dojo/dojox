@@ -1,10 +1,13 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Bars", "./common", 
 		"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils"], 
 	function(lang, arr, declare, Bars, dc, df, dfr, du){
+/*=====
+var Bars = dojox.charting.plot2d.Bars;
+=====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.ClusteredBars", dojox.charting.plot2d.Bars, {
+	return declare("dojox.charting.plot2d.ClusteredBars", Bars, {
 		//	summary:
 		//		A plot representing grouped or clustered bars (horizontal bars)
 		render: function(dim, offsets){

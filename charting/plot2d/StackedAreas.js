@@ -1,5 +1,8 @@
 define(["dojo/_base/declare", "./Stacked"], function(declare, Stacked){
-	return declare("dojox.charting.plot2d.StackedAreas", dojox.charting.plot2d.Stacked, {
+/*=====
+var Stacked = dojox.charting.plot2d.Stacked;
+=====*/
+	return declare("dojox.charting.plot2d.StackedAreas", Stacked, {
 		//	summary:
 		//		A convenience object to set up a stacked area plot.
 		constructor: function(){

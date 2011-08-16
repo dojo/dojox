@@ -1,10 +1,12 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./Default", "./common", 
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/functional/sequence"], 
 	function(lang, declare, arr, Default, dc, df, dfr, dfs){
-
+/*=====
+var Default = dojox.charting.plot2d.Default;
+=====*/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.Stacked", dojox.charting.plot2d.Default, {
+	return declare("dojox.charting.plot2d.Stacked", Default, {
 		//	summary:
 		//		Like the default plot, Stacked sets up lines, areas and markers
 		//		in a stacked fashion (values on the y axis added to each other)

@@ -20,10 +20,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
+	var Base = dojox.charting.plot2d.Base;
 	=====*/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.Bars", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Bars", Base, {
 		//	summary:
 		//		The plot object representing a bar chart (horizontal bars).
 		defaultParams: {

@@ -3,8 +3,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Bars", "
 	function(lang, arr, declare, Bars, dc, df, dfr, dfs){
 
 	var	purgeGroup = dfr.lambda("item.purgeGroup()");
-
-	return declare("dojox.charting.plot2d.StackedBars", dojox.charting.plot2d.Bars, {
+/*=====
+var bars = dojox.charting.plot2d.Bars;
+=====*/
+	return declare("dojox.charting.plot2d.StackedBars", Bars, {
 		//	summary:
 		//		The plot object representing a stacked bar chart (horizontal bars).
 		getSeriesStats: function(){

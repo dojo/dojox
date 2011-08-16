@@ -1,10 +1,12 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "./common", 
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx", "dojox/gfx/gradutils"],
 	function(lang, arr, declare, Base, dc, df, dfr, du, fx, gradutils){
-
+/*=====
+var Base = dojox.charting.plot2d.Base;
+=====*/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.Scatter", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Scatter", Base, {
 		//	summary:
 		//		A plot object representing a typical scatter chart.
 		defaultParams: {

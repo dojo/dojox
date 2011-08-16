@@ -1,5 +1,8 @@
 define(["dojo/_base/declare", "./Default"], function(declare, Default){
-	return declare("dojox.charting.plot2d.Lines", dojox.charting.plot2d.Default, {
+/*=====
+var Default = dojox.charting.plot2d.Default;
+=====*/
+	return declare("dojox.charting.plot2d.Lines", Default, {
 		//	summary:
 		//		A convenience constructor to create a typical line chart.
 		constructor: function(){

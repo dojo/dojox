@@ -91,13 +91,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
-	=====*/
+	
+	var Base = dojox.charting.plot2d.Base;
+=====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
-	return declare("dojox.charting.plot2d.Default", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Default", Base, {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"

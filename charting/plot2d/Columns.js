@@ -3,8 +3,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "
 	function(lang, arr, declare, Base, dc, df, dfr, du, fx){
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
+/*=====
+var Base = dojox.charting.plot2d.Base;
+=====*/
 
-	return declare("dojox.charting.plot2d.Columns", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Columns", Base, {
 		//	summary:
 		//		The plot object representing a column chart (vertical bars).
 		defaultParams: {
