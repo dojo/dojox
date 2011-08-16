@@ -14,6 +14,7 @@ define(["dojox","dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/e
 		this.duration = duration;
 		this.easing = easing;
 	}
+	var Base = dojox.charting.action2d.Base;
 	=====*/
 
 	var DEFAULT_DURATION = 400,	// ms

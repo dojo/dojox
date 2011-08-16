@@ -22,6 +22,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 		//	keyZoomModifier: Boolean?
 		//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
 	});
+	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
 	var sUnit = has("mozilla") ? -3 : 120;
@@ -40,7 +41,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 		}
 	};
 
-	return declare("dojox.charting.action2d.MouseZoomAndPan", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.MouseZoomAndPan", ChartAction, {
 		//	summary:
 		//		Create an mouse zoom and pan action.
 		//		You can zoom in or out the data window with mouse wheel. You can scroll using mouse drag gesture. 

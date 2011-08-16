@@ -11,6 +11,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//		Either a color or a function that creates a color when highlighting happens.
 		highlight: null
 	});
+	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SATURATION  = 100,	// %
@@ -39,7 +40,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			return c.fromHsl(x);
 		};
 
-	return declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Highlight", PlotAction, {
 		//	summary:
 		//		Creates a highlighting action on a plot, where an element on that plot
 		//		has a highlight on it.
@@ -61,7 +62,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		The chart this action belongs to.
 			//	plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
-			//	kwArgs: dojox.charting.action2d.__HighlightCtorArgs?
+			//	kwArgs: charting.action2d.__HighlightCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			var a = kwArgs && kwArgs.highlight;
 			this.colorFun = a ? (lang.isFunction(a) ? a : cc(a)) : hl;

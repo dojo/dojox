@@ -93,9 +93,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		An optional symbol string to use for indicator marker.
 		markerFill:			{}	
 	});
+	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
-	return declare("dojox.charting.action2d.MouseIndicator", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.MouseIndicator", ChartAction, {
 		//	summary:
 		//		Create a mouse indicator action. You can drag mouse over the chart to display a data indicator.
 

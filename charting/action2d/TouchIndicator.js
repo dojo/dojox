@@ -96,9 +96,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		//		An optional symbol string to use for indicator marker.
 		markerFill:			{}	
 	});
+	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
-	return declare("dojox.charting.action2d.TouchIndicator", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.TouchIndicator", ChartAction, {
 		//	summary:
 		//		Create a touch indicator action. You can touch over the chart to display a data indicator.
 

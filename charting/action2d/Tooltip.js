@@ -12,6 +12,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/html
 		//		set by the plot in question, by returning the value of the element.
 		text: null
 	});
+	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 
 	var DEFAULT_TEXT = function(o){
@@ -33,7 +34,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/html
 
 	var pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
-	return declare("dojox.charting.action2d.Tooltip", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Tooltip", PlotAction, {
 		//	summary:
 		//		Create an action on a plot where a tooltip is shown when hovering over an element.
 

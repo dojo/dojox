@@ -15,12 +15,13 @@ define(["dojox","dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "doj
 		//		The amount in pixels to shift the pie slice.  Default is 7.
 		shift: 7
 	});
+	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SCALE = 1.05,
 		DEFAULT_SHIFT = 7;	// px
 
-	return declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.MoveSlice", PlotAction, {
 		//	summary:
 		//		Create an action for a pie chart that moves and scales a pie slice.
 

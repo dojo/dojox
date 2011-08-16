@@ -1,7 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
 	"./ChartAction", "../Element", "dojo/gesture/tap", "../plot2d/common"], 
 	function(lang, declare, Event, has, ChartAction, Element, tap, common){
-	
 	var GlassView = declare(Element, {
 		//	tags:
 		//		private
@@ -74,9 +73,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		//	enableZoom: Boolean?
 		//		Whether touch pinch and spread gesture should zoom out or in the chart.  Default is true.
 	});
+	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 	
-	return declare("dojox.charting.action2d.TouchZoomAndPan", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.TouchZoomAndPan", ChartAction, {
 		//	summary:
 		//		Create a touch zoom and pan action. 
 		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture. 
