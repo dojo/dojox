@@ -1,6 +1,10 @@
-define(["dojo", "dijit", "dojox", "dijit/tree/ForestStoreModel"], function(dojo, dijit, dojox){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dijit/tree/ForestStoreModel"], function(declare, array, lang, ForestStoreModel){
 
-dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
+return declare("dojox.grid.LazyTreeGridStoreModel", ForestStoreModel, {
 
 	// There are different approaches to get children for client-side
 	// DataStore (e.g. dojo.data.ItemFileReadStore) or server-side DataStore
@@ -14,9 +18,9 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 
 	mayHaveChildren: function(/*dojo.data.Item*/ item){
 		var children = null;
-		return dojo.some(this.childrenAttrs, function(attr){
+		return array.some(this.childrenAttrs, function(attr){
 				children = this.store.getValue(item, attr);
-				if(dojo.isString(children)){
+				if(lang.isString(children)){
 					return parseInt(children, 10) > 0 || children.toLowerCase() === "true" ? true : false;
 				}else if(typeof children == "number"){
 					return children > 0;
@@ -24,7 +28,7 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 					return children;
 				}else if(this.store.isItem(children)){
 					children = this.store.getValues(item, attr);
-					return dojo.isArray(children) ? children.length > 0 : false;
+					return lang.isArray(children) ? children.length > 0 : false;
 				}else{
 					return false;
 				}
@@ -44,10 +48,10 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 					count: count,
 					sort: sort,
 					query: this.query,
-					onBegin: dojo.hitch(this, function(size){
+					onBegin: lang.hitch(this, function(size){
 						this.root.size = size;
 					}),
-					onComplete: dojo.hitch(this, function(items){
+					onComplete: lang.hitch(this, function(items){
 						onComplete(items, queryObj, this.root.size);
 					}),
 					onError: onError
@@ -55,7 +59,7 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 			}else{
 				var store = this.store;
 				if(!store.isItemLoaded(parentItem)){
-					var getChildren = dojo.hitch(this, arguments.callee);
+					var getChildren = lang.hitch(this, arguments.callee);
 					store.loadItem({
 						item: parentItem,
 						onItem: function(parentItem){
@@ -71,11 +75,11 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 						start: start,
 						count: count,
 						sort: sort,
-						query: dojo.mixin({parentId: parentId}, this.query || {}),
-						onBegin: dojo.hitch(this, function(size){
+						query: lang.mixin({parentId: parentId}, this.query || {}),
+						onBegin: lang.hitch(this, function(size){
 							this.childrenSize = size;
 						}),
-						onComplete: dojo.hitch(this, function(items){
+						onComplete: lang.hitch(this, function(items){
 							onComplete(items, queryObj, this.childrenSize);
 						}),
 						onError: onError
@@ -93,9 +97,9 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 		// summary:
 		//		Check if all children of the given item have been loaded
 		var children = null;
-		return dojo.every(this.childrenAttrs, function(attr){
+		return array.every(this.childrenAttrs, function(attr){
 			children = this.store.getValues(parentItem, attr);
-			return dojo.every(children, function(c){
+			return array.every(children, function(c){
 				return this.store.isItemLoaded(c);
 			}, this);
 		}, this);
@@ -106,7 +110,4 @@ dojo.declare("dojox.grid.LazyTreeGridStoreModel", dijit.tree.ForestStoreModel, {
 	
 	onDeleteItem: function(item){ }
 });
-
-return dojox.grid.LazyTreeGridStoreModel;
-
 });
