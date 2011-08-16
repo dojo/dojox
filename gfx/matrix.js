@@ -1,6 +1,7 @@
-define(["dojo/_base/lang"], 
-  function(lang){
-	var m = lang.getObject("gfx.matrix", true, dojox);
+define(["./_base","dojo/_base/lang"], 
+  function(g, lang){
+	/*===== g = dojox.gfx =====*/
+	var m = g.matrix = {};
 
 	// candidates for dojox.math:
 	var _degToRadCache = {};
@@ -23,7 +24,7 @@ define(["dojo/_base/lang"],
 					var matrix = m.normalize(arg[0]);
 					// combine matrices
 					for(var i = 1; i < arg.length; ++i){
-						var l = matrix, r = dojox.gfx.matrix.normalize(arg[i]);
+						var l = matrix, r = m.normalize(arg[i]);
 						matrix = new m.Matrix2D();
 						matrix.xx = l.xx * r.xx + l.xy * r.yx;
 						matrix.xy = l.xx * r.xy + l.xy * r.yy;
@@ -437,7 +438,7 @@ define(["dojo/_base/lang"],
 
 	});
 	// propagate Matrix2D up
-	dojox.gfx.Matrix2D = m.Matrix2D;
+	g.Matrix2D = m.Matrix2D;
 
 	return m;
 });

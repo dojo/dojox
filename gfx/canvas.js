@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/window", "dojo/dom-geometry", 
+define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/window", "dojo/dom-geometry", 
 		"dojo/dom", "./_base", "./shape", "./path", "./arc", "./matrix", "./decompose"], 
-  function(lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, decompose ){
+  function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, decompose ){
 /*===== 
 	dojox.gfx.canvas = {
 	// module:
@@ -17,6 +17,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 	//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
 	//		API.
 	};
+	g = dojox.gfx;
 	pathLib.Path = dojox.gfx.path.Path;
 	pathLib.TextPath = dojox.gfx.path.TextPath;
 	canvas.Shape = dojox.gfx.canvas.Shape;
@@ -31,9 +32,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 	gs.Surface = dojox.gfx.shape.Surface;
   =====*/
 
-	var canvas = lang.getObject("dojox.gfx.canvas", true);
-	var g = dojox.gfx, 
-		pattrnbuffer = null,
+	var canvas = g.canvas = {};
+	var pattrnbuffer = null,
 		mp = m.multiplyPoint, 
 		pi = Math.PI, 
 		twoPI = 2 * pi, 

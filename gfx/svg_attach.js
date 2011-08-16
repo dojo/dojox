@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/Color", "./_base","./svg","./matrix"], 
   function(kernel, lang, arr, Color, g, svg, Matrix){
-	lang.getObject("dojox.gfx.svg_attach", true);
+
 	kernel.experimental("dojox.gfx.svg_attach");
 	
 	svg.attachNode = function(node){

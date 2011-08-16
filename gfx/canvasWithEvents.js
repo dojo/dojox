@@ -1,7 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/dom", 
 		"dojo/dom-geometry", "./_base","./canvas", "./shape", "./matrix"], 
   function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
-	var canvasEvent = lang.getObject("dojox.gfx.canvasWithEvents", true);
 /*===== 
 	dojox.gfx.canvasWithEvents = {
 	// module:
@@ -20,6 +19,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
 	//		API.	
 	};
+	g = dojox.gfx;
 	var canvas.Shape = dojox.gfx.canvas.Shape;
 	var canvas.Group = dojox.gfx.canvas.Group;
 	var canvas.Image = dojox.gfx.canvas.Image;
@@ -35,6 +35,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	var canvasEvent.Shape = dojox.gfx.canvasWithEvents.Shape;
 	
   =====*/
+	var canvasEvent = g.canvasWithEvents = {};
 
 	declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
 		

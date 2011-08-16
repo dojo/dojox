@@ -1,6 +1,7 @@
 define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_base/array", "dojo/_base/fx", "dojo/_base/connect"], 
   function(lang, g, m, Color, arr, fx, Hub){
-	var fxg = lang.getObject("dojox.gfx.fx", true);
+	/*===== g = dojox.gfx =====*/
+	var fxg = g.fx = {};
 
 	// Generic interpolators. Should they be moved to dojox.fx?
 

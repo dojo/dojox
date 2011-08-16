@@ -1,8 +1,8 @@
-define(["dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "dojo/_base/array",
+define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "dojo/_base/array",
 		"./utils", "./shape", "dojox/string/BidiEngine"], 
-  function(lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
+  function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 	lang.getObject("dojox.gfx._gfxBidiSupport", true);
-	var g = dojox.gfx;
+	/*===== g = dojox.gfx; =====*/
 	switch (g.renderer){
 		case 'vml':
 			g.isVml = true;
@@ -347,7 +347,7 @@ define(["dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "do
 	extendMethod(g.Group,"createTextPath", textDirPreprocess, null);
 
 	g.createSurface = function(parentNode, width, height, textDir) {        
-		var s = dojox.gfx[g.renderer].createSurface(parentNode, width, height);
+		var s = g[g.renderer].createSurface(parentNode, width, height);
 		var tDir = validateTextDir(textDir);
 		
 		if(g.isSvgWeb){

@@ -1,21 +1,24 @@
-define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"], 
-  function(lang, declare, matrix, shapeLib){
+define(["./_base", "dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"], 
+  function(g, lang, declare, matrix, shapeLib){
 /*===== 
 	dojox.gfx.path = {
 		// summary:
 		//		This module contains the core graphics Path API.
 		//		Path command format follows the W3C SVG 1.0 Path api.
 	};
+	g = dojox.gfx;
+	shape.Shape = dojox.gfx.shape.Shape;
   =====*/
 
-	declare("dojox.gfx.path.Path", dojox.gfx.shape.Shape, {
+	var path = g.path = {};
+	var Path = declare("dojox.gfx.path.Path", shapeLib.Shape, {
 		// summary: a generalized path shape
 
 		constructor: function(rawNode){
 			// summary: a path constructor
 			// rawNode: Node
 			//		a DOM node to be used by this path object
-			this.shape = lang.clone(dojox.gfx.defaultPath);
+			this.shape = lang.clone(g.defaultPath);
 			this.segments = [];
 			this.tbbox = null;
 			this.absolute = true;
@@ -80,15 +83,15 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 		},
 
 		// segment interpretation
-		_updateBBox: function(x, y, matrix){
+		_updateBBox: function(x, y, m){
 			// summary: updates the bounding box of path with new point
 			// x: Number
 			//		an x coordinate
 			// y: Number
 			//		a y coordinate
 
-			if(matrix){
-				var t = dojox.gfx.matrix.multiplyPoint(matrix, x, y);
+			if(m){
+				var t = matrix.multiplyPoint(m, x, y);
 				x = t.x;
 				y = t.y;
 			}
@@ -201,7 +204,7 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 			// add an SVG path segment
 			var path = [segment.action];
 			for(i = 0; i < l; ++i){
-				path.push(dojox.gfx.formatNumber(n[i], true));
+				path.push(g.formatNumber(n[i], true));
 			}
 			if(typeof this.shape.path == "string"){
 				this.shape.path += path.join("");
@@ -354,7 +357,7 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 			// summary: forms a path using an SVG path string
 			// path: String
 			//		an SVG path string
-			var p = lang.isArray(path) ? path : path.match(dojox.gfx.pathSvgRegExp);
+			var p = lang.isArray(path) ? path : path.match(g.pathSvgRegExp);
 			this.segments = [];
 			this.absolute = true;
 			this.bbox = {};
@@ -386,7 +389,7 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 
 			this.segmented = false;
 			this.segments = [];
-			if(!dojox.gfx.lazyPathSegmentation){
+			if(!g.lazyPathSegmentation){
 				this._confirmSegmented();
 			}
 			return this; // self
@@ -396,7 +399,7 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 		_2PI: Math.PI * 2
 	});
 
-	declare("dojox.gfx.path.TextPath", dojox.gfx.path.Path, {
+	var TextPath = declare("dojox.gfx.path.TextPath", Path, {
 		// summary: a generalized TextPath shape
 
 		constructor: function(rawNode){
@@ -404,10 +407,10 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 			// rawNode: Node
 			//		a DOM node to be used by this TextPath object
 			if(!("text" in this)){
-				this.text = lang.clone(dojox.gfx.defaultTextPath);
+				this.text = lang.clone(g.defaultTextPath);
 			}
 			if(!("fontStyle" in this)){
-				this.fontStyle = lang.clone(dojox.gfx.defaultFont);
+				this.fontStyle = lang.clone(g.defaultFont);
 			}
 		},
 		getText: function(){
@@ -416,7 +419,7 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 		},
 		setText: function(newText){
 			// summary: sets a text to be drawn along the path
-			this.text = dojox.gfx.makeParameters(this.text,
+			this.text = g.makeParameters(this.text,
 				typeof newText == "string" ? {text: newText} : newText);
 			this._setText();
 			return this;	// self
@@ -428,15 +431,15 @@ define(["dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"],
 		setFont: function(newFont){
 			// summary: sets a font for text
 			this.fontStyle = typeof newFont == "string" ?
-				dojox.gfx.splitFontString(newFont) :
-				dojox.gfx.makeParameters(dojox.gfx.defaultFont, newFont);
+				g.splitFontString(newFont) :
+				g.makeParameters(g.defaultFont, newFont);
 			this._setFont();
 			return this;	// self
 		}
 	});
 
 	return { // our hash of newly defined objects
-		Path: dojox.gfx.path.Path,
-		TextPath: dojox.gfx.path.TextPath
+		Path: Path,
+		TextPath: TextPath
 	};
 });

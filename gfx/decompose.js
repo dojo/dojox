@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", "./matrix"], 
-  function (lang, m){
+define(["./_base", "dojo/_base/lang", "./matrix"], 
+  function (g, lang, m){
+	/*===== g = dojox.gfx =====*/
 	function eq(/* Number */ a, /* Number */ b){
 		// summary: compare two FP numbers for equality
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
@@ -91,7 +92,7 @@ define(["dojo/_base/lang", "./matrix"],
 		return result;	// Object
 	}
 
-	return dojox.gfx.decompose = function(matrix){
+	return g.decompose = function(matrix){
 		// summary: decompose a 2D matrix into translation, scaling, and rotation components
 		// description: this function decompose a matrix into four logical components:
 		//	translation, rotation, scaling, and one more rotation using SVD.

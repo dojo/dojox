@@ -22,7 +22,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	gs.Text = dojox.gfx.shape.Text;
 	gs.Surface = dojox.gfx.shape.Surface;
   =====*/
-  var svg = lang.getObject("dojox.gfx.svg", true);
+  var svg = g.svg = {};
 	svg.useSvgWeb = (typeof window.svgweb != "undefined");
 	
 	// Need to detect iOS in order to workaround bug when

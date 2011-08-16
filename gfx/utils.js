@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","dojo/_base/array", "dojo/_base/window", "dojo/_base/json", 
+define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo/_base/array", "dojo/_base/window", "dojo/_base/json", 
 	"dojo/_base/Deferred", "dojo/_base/sniff"], 
-  function(dojo, dojox, lang, gfx, html, arr, win, jsonLib, Deferred, has){
-	var gu = lang.getObject("dojox.gfx.utils", true);
+  function(dojo, lang, g, html, arr, win, jsonLib, Deferred, has){
+	var gu = g.utils = {};
 
 	lang.mixin(gu, {
 		forEach: function(
@@ -10,7 +10,7 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 		){
 			o = o || win.global;
 			f.call(o, object);
-			if(object instanceof gfx.Surface || object instanceof gfx.Group){
+			if(object instanceof g.Surface || object instanceof g.Group){
 				arr.forEach(object.children, function(shape){
 					gu.forEach(shape, f, o);
 				});
@@ -20,8 +20,8 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 		serialize: function(
 			/* dojox.gfx.Surface || dojox.gfx.Shape */ object
 		){
-			var t = {}, v, isSurface = object instanceof gfx.Surface;
-			if(isSurface || object instanceof gfx.Group){
+			var t = {}, v, isSurface = object instanceof g.Surface;
+			if(isSurface || object instanceof g.Group){
 				t.children = arr.map(object.children, gu.serialize);
 				if(isSurface){
 					return t.children;	// Array
@@ -105,7 +105,7 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 			//return a deferred that will be called when content has serialized.
 			var deferred = new Deferred();
 		
-			if(dojox.gfx.renderer === "svg"){
+			if(g.renderer === "svg"){
 				//If we're already in SVG mode, this is easy and quick.
 				try{
 					var svg = gu._cleanSvg(gu._innerXML(surface.rawNode));
@@ -119,7 +119,7 @@ define(["dojo/_base/kernel","dojox","dojo/_base/lang", ".", "dojo/_base/html","d
 				if (!gu._initSvgSerializerDeferred) {
 					gu._initSvgSerializer();
 				}
-				var jsonForm = dojox.gfx.utils.toJson(surface);
+				var jsonForm = gu.toJson(surface);
 				var serializer = function(){
 					try{
 						var sDim = surface.getDimensions();

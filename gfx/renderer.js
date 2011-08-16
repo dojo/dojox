@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/config"], 
-  function(lang, has, win, config){
+define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/config"], 
+  function(g, lang, has, win, config){
 /*===== 
 	dojox.gfx.renderer = {
 		// summary:
@@ -71,7 +71,7 @@ define(["dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/
 
 			function loadRenderer(){
 				require(["dojox/gfx/" + renderer], function(module){
-					dojox.gfx.renderer = renderer;
+					g.renderer = renderer;
 					// memorize the renderer module
 					currentRenderer = module;
 					// now load it

@@ -1,6 +1,6 @@
-define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/sniff",
+define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/sniff",
 	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix"], 
-  function(dojox, gfxBase, lang, declare, win, has, events, arr, domConstruct, Color, matrixLib){
+  function(g, lang, declare, win, has, events, arr, domConstruct, Color, matrixLib){
 
 /*===== 
 	dojox.gfx.shape = {
@@ -11,7 +11,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 	};
   =====*/
 
-	var shape = lang.getObject("dojox.gfx.shape", true);
+	var shape = g.shape = {};
 	// a set of ids (keys=type)
 	var _ids = {};
 	// a simple set impl to map shape<->id
@@ -198,7 +198,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			//	dojox.gfx.defaultLine,
 			//	or dojox.gfx.defaultImage)
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
-			this.shape = gfxBase.makeParameters(this.shape, shape);
+			this.shape = g.makeParameters(this.shape, shape);
 			this.bbox = null;
 			return this;	// self
 		},
@@ -222,18 +222,18 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 				// gradient or pattern
 				switch(fill.type){
 					case "linear":
-						f = gfxBase.makeParameters(gfxBase.defaultLinearGradient, fill);
+						f = g.makeParameters(g.defaultLinearGradient, fill);
 						break;
 					case "radial":
-						f = gfxBase.makeParameters(gfxBase.defaultRadialGradient, fill);
+						f = g.makeParameters(g.defaultRadialGradient, fill);
 						break;
 					case "pattern":
-						f = gfxBase.makeParameters(gfxBase.defaultPattern, fill);
+						f = g.makeParameters(g.defaultPattern, fill);
 						break;
 				}
 			}else{
 				// color object
-				f = gfxBase.normalizeColor(fill);
+				f = g.normalizeColor(fill);
 			}
 			this.fillStyle = f;
 			return this;	// self
@@ -254,8 +254,8 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			if(typeof stroke == "string" || lang.isArray(stroke) || stroke instanceof Color){
 				stroke = {color: stroke};
 			}
-			var s = this.strokeStyle = gfxBase.makeParameters(gfxBase.defaultStroke, stroke);
-			s.color = gfxBase.normalizeColor(s.color);
+			var s = this.strokeStyle = g.makeParameters(g.defaultStroke, stroke);
+			s.color = g.normalizeColor(s.color);
 			return this;	// self
 		},
 		setTransform: function(matrix){
@@ -384,7 +384,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			// redirect to fixCallback to normalize events and add the gfxTarget to the event. The latter
 			// is done by dojox.gfx.fixTarget which is defined by each renderer
-			return events.connect(this.getEventSource(), name, shape.fixCallback(this, gfxBase.fixTarget, object, method));
+			return events.connect(this.getEventSource(), name, shape.fixCallback(this, g.fixTarget, object, method));
 			
 		},
 		disconnect: function(token){
@@ -598,7 +598,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		The underlying graphics system object (typically a DOM Node)
-			this.shape = gfxBase.getDefault("Rect");
+			this.shape = g.getDefault("Rect");
 			this.rawNode = rawNode;
 		},
 		getBoundingBox: function(){
@@ -612,7 +612,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
-			this.shape = gfxBase.getDefault("Ellipse");
+			this.shape = g.getDefault("Ellipse");
 			this.rawNode = rawNode;
 		},
 		getBoundingBox: function(){
@@ -632,7 +632,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
-			this.shape = gfxBase.getDefault("Circle");
+			this.shape = g.getDefault("Circle");
 			this.rawNode = rawNode;
 		},
 		getBoundingBox: function(){
@@ -652,7 +652,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
-			this.shape = gfxBase.getDefault("Line");
+			this.shape = g.getDefault("Line");
 			this.rawNode = rawNode;
 		},
 		getBoundingBox: function(){
@@ -676,7 +676,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
-			this.shape = gfxBase.getDefault("Polyline");
+			this.shape = g.getDefault("Polyline");
 			this.rawNode = rawNode;
 		},
 		setShape: function(points, closed){
@@ -738,7 +738,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
-			this.shape = gfxBase.getDefault("Image");
+			this.shape = g.getDefault("Image");
 			this.rawNode = rawNode;
 		},
 		getBoundingBox: function(){
@@ -761,7 +761,7 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			// rawNode: Node
 			//		a DOM Node
 			this.fontStyle = null;
-			this.shape = gfxBase.getDefault("Text");
+			this.shape = g.getDefault("Text");
 			this.rawNode = rawNode;
 		},
 		getFont: function(){
@@ -772,8 +772,8 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			// summary: sets a font for text
 			// newFont: Object
 			//		a font object (see dojox.gfx.defaultFont) or a font string
-			this.fontStyle = typeof newFont == "string" ? gfxBase.splitFontString(newFont) :
-				gfxBase.makeParameters(gfxBase.defaultFont, newFont);
+			this.fontStyle = typeof newFont == "string" ? g.splitFontString(newFont) :
+				g.makeParameters(g.defaultFont, newFont);
 			this._setFont();
 			return this;	// self
 		}
@@ -787,76 +787,76 @@ define(["..", "./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			// shape: Object
 			//		a shape descriptor object
 			switch(shape.type){
-				case gfxBase.defaultPath.type:		return this.createPath(shape);
-				case gfxBase.defaultRect.type:		return this.createRect(shape);
-				case gfxBase.defaultCircle.type:	return this.createCircle(shape);
-				case gfxBase.defaultEllipse.type:	return this.createEllipse(shape);
-				case gfxBase.defaultLine.type:		return this.createLine(shape);
-				case gfxBase.defaultPolyline.type:	return this.createPolyline(shape);
-				case gfxBase.defaultImage.type:		return this.createImage(shape);
-				case gfxBase.defaultText.type:		return this.createText(shape);
-				case gfxBase.defaultTextPath.type:	return this.createTextPath(shape);
+				case g.defaultPath.type:		return this.createPath(shape);
+				case g.defaultRect.type:		return this.createRect(shape);
+				case g.defaultCircle.type:	return this.createCircle(shape);
+				case g.defaultEllipse.type:	return this.createEllipse(shape);
+				case g.defaultLine.type:		return this.createLine(shape);
+				case g.defaultPolyline.type:	return this.createPolyline(shape);
+				case g.defaultImage.type:		return this.createImage(shape);
+				case g.defaultText.type:		return this.createText(shape);
+				case g.defaultTextPath.type:	return this.createTextPath(shape);
 			}
 			return null;
 		},
 		createGroup: function(){
 			// summary: creates a group shape
-			return this.createObject(gfxBase.Group);	// dojox.gfx.Group
+			return this.createObject(g.Group);	// dojox.gfx.Group
 		},
 		createRect: function(rect){
 			// summary: creates a rectangle shape
 			// rect: Object
 			//		a path object (see dojox.gfx.defaultRect)
-			return this.createObject(gfxBase.Rect, rect);	// dojox.gfx.Rect
+			return this.createObject(g.Rect, rect);	// dojox.gfx.Rect
 		},
 		createEllipse: function(ellipse){
 			// summary: creates an ellipse shape
 			// ellipse: Object
 			//		an ellipse object (see dojox.gfx.defaultEllipse)
-			return this.createObject(gfxBase.Ellipse, ellipse);	// dojox.gfx.Ellipse
+			return this.createObject(g.Ellipse, ellipse);	// dojox.gfx.Ellipse
 		},
 		createCircle: function(circle){
 			// summary: creates a circle shape
 			// circle: Object
 			//		a circle object (see dojox.gfx.defaultCircle)
-			return this.createObject(gfxBase.Circle, circle);	// dojox.gfx.Circle
+			return this.createObject(g.Circle, circle);	// dojox.gfx.Circle
 		},
 		createLine: function(line){
 			// summary: creates a line shape
 			// line: Object
 			//		a line object (see dojox.gfx.defaultLine)
-			return this.createObject(gfxBase.Line, line);	// dojox.gfx.Line
+			return this.createObject(g.Line, line);	// dojox.gfx.Line
 		},
 		createPolyline: function(points){
 			// summary: creates a polyline/polygon shape
 			// points: Object
 			//		a points object (see dojox.gfx.defaultPolyline)
 			//		or an Array of points
-			return this.createObject(gfxBase.Polyline, points);	// dojox.gfx.Polyline
+			return this.createObject(g.Polyline, points);	// dojox.gfx.Polyline
 		},
 		createImage: function(image){
 			// summary: creates a image shape
 			// image: Object
 			//		an image object (see dojox.gfx.defaultImage)
-			return this.createObject(gfxBase.Image, image);	// dojox.gfx.Image
+			return this.createObject(g.Image, image);	// dojox.gfx.Image
 		},
 		createText: function(text){
 			// summary: creates a text shape
 			// text: Object
 			//		a text object (see dojox.gfx.defaultText)
-			return this.createObject(gfxBase.Text, text);	// dojox.gfx.Text
+			return this.createObject(g.Text, text);	// dojox.gfx.Text
 		},
 		createPath: function(path){
 			// summary: creates a path shape
 			// path: Object
 			//		a path object (see dojox.gfx.defaultPath)
-			return this.createObject(gfxBase.Path, path);	// dojox.gfx.Path
+			return this.createObject(g.Path, path);	// dojox.gfx.Path
 		},
 		createTextPath: function(text){
 			// summary: creates a text shape
 			// text: Object
 			//		a textpath object (see dojox.gfx.defaultTextPath)
-			return this.createObject(gfxBase.TextPath, {}).setText(text);	// dojox.gfx.TextPath
+			return this.createObject(g.TextPath, {}).setText(text);	// dojox.gfx.TextPath
 		},
 		createObject: function(shapeType, rawShape){
 			// summary: creates an instance of the passed shapeType class

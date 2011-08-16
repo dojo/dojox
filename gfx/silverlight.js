@@ -10,6 +10,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	//		This the graphics rendering bridge for the Microsoft Silverlight plugin.
 	//		Silverlight is a faster implementation on IE6-8 than the default 2d graphics, VML
 	};
+	g = dojox.gfx;
 	pathLib.Path = dojox.gfx.path.Path;
 	pathLib.TextPath = dojox.gfx.path.TextPath;
 	sl.Shape = dojox.gfx.canvas.Shape;
@@ -24,7 +25,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	gs.Surface = dojox.gfx.shape.Surface;
   =====*/
 
-	var sl = lang.getObject("dojox.gfx.silverlight", true);
+	var sl = g.silverlight = {};
 	kernel.experimental("dojox.gfx.silverlight");
 
 	var dasharray = {

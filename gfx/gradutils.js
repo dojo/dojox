@@ -1,9 +1,10 @@
 // Various generic utilities to deal with a linear gradient
 
-define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"], 
+define(["./_base", "dojo/_base/lang", "./matrix", "dojo/_base/Color"], 
   function(lang, m, Color){
-	gradutils= lang.getObject("dojox.gfx.gradutils", true);
-	var  C = Color;
+  
+	/*===== g= dojox.gfx =====*/
+	var gradutils = g.gradutils = {};
 
 	function findColor(o, c){
 		if(o <= 0){
@@ -19,7 +20,7 @@ define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 			if(stop.offset >= o){
 				if(i){
 					var prev = c[i - 1];
-					return C.blendColors(new C(prev.color), new C(stop.color),
+					return Color.blendColors(new Color(prev.color), new Color(stop.color),
 						(o - prev.offset) / (stop.offset - prev.offset));
 				}
 				return stop.color;
@@ -56,7 +57,7 @@ define(["dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 			return findColor(o, fill.colors);	// dojo.Color
 		}
 		// simple color
-		return new C(fill || [0, 0, 0, 0]);	// dojo.Color
+		return new Color(fill || [0, 0, 0, 0]);	// dojo.Color
 	};
 
 	gradutils.reverse = function(fill){

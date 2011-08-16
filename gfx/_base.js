@@ -1,14 +1,14 @@
-define(["dojo/_base/lang", "dojox/main", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sniff", "dojo/_base/window",
+define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sniff", "dojo/_base/window",
 	    "dojo/_base/array","dojo/dom", "dojo/dom-construct","dojo/dom-geometry"], 
-  function(lang, dojox, html, Color, has, win, arr, dom, domConstruct, domGeom){
+  function(lang, html, Color, has, win, arr, dom, domConstruct, domGeom){
 	// module:
 	//		dojox/gfx
 	// summary:
 	//		This module contains common core Graphics API used by different graphics renderers.
-	lang.getObject("gfx._base", true, dojox);
-
-	var g = dojox.gfx, b = g._base;
-
+	var g = lang.getObject("dojox.gfx", true),
+		b = g._base = {};
+	/*===== g = dojox.gfx; b = dojox.gfx._base; =====*/
+	
 	// candidates for dojox.style (work on VML and SVG nodes)
 	g._hasClass = function(/*DomNode*/node, /*String*/classStr){
 		//	summary:
@@ -144,7 +144,7 @@ define(["dojo/_base/lang", "dojox/main", "dojo/_base/html", "dojo/_base/Color", 
 		// summary: returns a unique string for use with any DOM element
 		var id;
 		do{
-			id = dojox._scopeName + "Unique" + (++uniqueId);
+			id = dojo._scopeName + "xUnique" + (++uniqueId);
 		}while(dom.byId(id));
 		return id;
 	};
