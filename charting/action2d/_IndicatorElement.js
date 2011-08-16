@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", 
+define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", 
     "../axis2d/common", "dojox/gfx"], 
-	function(dojo, lang, declare, Element, dcpc, dcac, gfx){ 
+	function(lang, declare, Element, dcpc, dcac, gfx){ 
 
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
 	var getBoundingBox = function(shape){

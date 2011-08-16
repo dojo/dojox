@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(lang, declare, Event, ChartAction, IndicatorElement, du){ 
+	function(lang, declare, eventUtil, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
 	dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
@@ -206,7 +206,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			}else{
 				this.chart.render();
 			}
-			Event.stop(event);
+			eventUtil.stop(event);
 		},
 		
 		_onTouchDual: function(event){
@@ -215,7 +215,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			plot.secondCoord = {x: event.touches[1].pageX, y: event.touches[1].pageY};
 			plot.dirty = true;
 			this.chart.render();
-			Event.stop(event);
+			eventUtil.stop(event);
 		},
 
 		onTouchEnd: function(event){

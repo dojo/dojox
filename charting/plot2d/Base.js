@@ -1,7 +1,7 @@
-define(["dojox","dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", 
 		"../Element", "./_PlotEvents", "dojo/_base/array",
 		"../scaler/primitive", "./common", "dojox/gfx/fx"],
-	function(dojox,lang, declare, hub, Element, PlotEvents, arr, primitive, common, fx){
+	function(lang, declare, hub, Element, PlotEvents, arr, primitive, common, fx){
 /*=====
 var Element = dojox.charting.Element;
 var PlotEvents = dojox.charting.plot2d._PlotEvents;

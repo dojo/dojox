@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "./PlotAction", "dijit/Tooltip", 
+define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "./PlotAction", 
 	"dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
-	function(dojo, Tooltip, lang, html, declare, PlotAction, Tooltip, m, df, dfs, dff){
+	function(dojo, Tooltip, lang, html, declare, PlotAction, m, df, dfs, dff){
 	
 	/*=====
 	dojo.declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {

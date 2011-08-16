@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "../../main", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/window", "dojo/dom-geometry", "dojox/gfx"], 
-	function(dojo, dojox, lang, html, win, domGeom, g){
-	
-	var common = lang.getObject("charting.axis2d.common", true, dojox);
+define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/window", "dojo/dom-geometry", "dojox/gfx"], 
+	function(lang, html, win, domGeom, g){
+
+	var common = lang.getObject("dojox.charting.axis2d.common", true);
 	
 	var clearNode = function(s){
 		s.marginLeft   = "0px";

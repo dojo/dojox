@@ -1,6 +1,6 @@
 define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_base/event",
 	"dojo/_base/connect", "./ChartAction", "dojo/_base/sniff", "dojo/dom-prop", "dojo/keys"], 
-	function(html, declare, win, arr, Event, connect, ChartAction, has, DOMProp, Keys){
+	function(html, declare, win, arr, eventUtil, connect, ChartAction, has, domProp, keys){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
@@ -102,7 +102,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 			this.inherited(arguments);
 			if(this.enableKeyZoom){
 				// we want to be able to get focus to receive key events 
-				DOMProp.set(this.chart.node, "tabindex", "0");
+				domProp.set(this.chart.node, "tabindex", "0");
 				// if one doesn't want a focus border he can do something like
 				// dojo.style(this.chart.node, "outline", "none");
 			}
@@ -114,7 +114,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 			this.inherited(arguments);
 			if(this.enableKeyZoom){
 				// we don't need anymore to be able to get focus to receive key events 
-				DOMProp.set(this.chart.node, "tabindex", "-1");
+				domProp.set(this.chart.node, "tabindex", "-1");
 			}
 			// in case we disconnect before the end of the action
 			this._disconnectHandles();
@@ -143,7 +143,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 			}
 			chart.node.focus();
 			// prevent the browser from trying the drag on the "image"
-			Event.stop(event);
+			eventUtil.stop(event);
 		},
 	
 		onMouseMove: function(event){
@@ -188,9 +188,9 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 			//	summary:
 			//		Called when a key is pressed on the chart.
 			if(keyTests[this.keyZoomModifier](event)){
-				if(event.keyChar == "+" || event.keyCode == Keys.NUMPAD_PLUS){
+				if(event.keyChar == "+" || event.keyCode == keys.NUMPAD_PLUS){
 					this._onZoom(1, event);
-				}else if(event.keyChar == "-" || event.keyCode == Keys.NUMPAD_MINUS){
+				}else if(event.keyChar == "-" || event.keyCode == keys.NUMPAD_MINUS){
 					this._onZoom(-1, event);					
 				}
 			} 
@@ -213,7 +213,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 				chart.setAxisWindow(this.axis, 1, 0);
 				chart.render();
 			}
-			Event.stop(event);
+			eventUtil.stop(event);
 		},
 		
 		_onZoom: function(scroll, event){
@@ -232,7 +232,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 			var newStart = scale * (start - middle) + middle, newEnd = scale * (end - middle) + middle;
 			chart.zoomIn(this.axis, [newStart, newEnd]);
 			// do not scroll browser
-			Event.stop(event);
+			eventUtil.stop(event);
 		}
 	});		
 });

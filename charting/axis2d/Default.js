@@ -1,8 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
+define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
 	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", "../scaler/common", "../scaler/linear", "./common", 
 	"dojox/gfx", "dojox/lang/utils", "dijit/_base/manager", "dijit/Tooltip"], 
-	function(dojo, lang, arr, has, declare, connect, html, domGeom, Invisible, scommon, 
-			lin, acommon, g, du, WidgetManager, Tooltip){
+	function(lang, arr, has, declare, connect, html, domGeom, Invisible, scommon, 
+			lin, acommon, g, du, widgetManager, Tooltip){
 
 	/*=====
 		dojox.charting.axis2d.__AxisCtorArgs = function(
@@ -741,7 +741,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
 			// to avoid requiring dijit module for that feature, let's test that
 			// dynamically and return if we can't do it
-			if(!WidgetManager || !Tooltip){
+			if(!widgetManager || !Tooltip){
 				return;
 			}
 			var aroundRect = {type: "rect"}, position = ["above", "below"],

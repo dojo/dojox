@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/Color",
 	    "dojox/color/_base", "dojox/color/Palette", "dojox/lang/utils", "dojox/gfx/gradutils"], 
-	function(lang, arr, declare, Color, ColorX, Palette, dlu, dgg){ 
+	function(lang, arr, declare, Color, colorX, Palette, dlu, dgg){ 
 	
 	var Theme = declare("dojox.charting.Theme", null, {
 	//	summary:
@@ -615,13 +615,13 @@ lang.mixin(Theme, {
 			// we'd like it to be a little on the darker side.
 			l = (end + st) / 2;
 			// alternately, use "shades"
-			return ColorX.Palette.generate(
-				ColorX.fromHsv(kwArgs.hue, s, l), "monochromatic"
+			return colorX.Palette.generate(
+				colorX.fromHsv(kwArgs.hue, s, l), "monochromatic"
 			).colors;
 		}
 		if(kwArgs.generator){
 			//	pass a base color and the name of a generator
-			return ColorX.Palette.generate(kwArgs.base, kwArgs.generator).colors;
+			return colorX.Palette.generate(kwArgs.base, kwArgs.generator).colors;
 		}
 		return c;	//	dojo.Color[]
 	},
@@ -638,7 +638,7 @@ lang.mixin(Theme, {
 	generateHslColor: function(color, luminance){
 		color = new Color(color);
 		var hsl    = color.toHsl(),
-			result = ColorX.fromHsl(hsl.h, hsl.s, luminance);
+			result = colorX.fromHsl(hsl.h, hsl.s, luminance);
 		result.a = color.a;	// add missing opacity
 		return result;
 	},
@@ -646,8 +646,8 @@ lang.mixin(Theme, {
 	generateHslGradient: function(color, fillPattern, lumFrom, lumTo){
 		color = new Color(color);
 		var hsl       = color.toHsl(),
-			colorFrom = ColorX.fromHsl(hsl.h, hsl.s, lumFrom),
-			colorTo   = ColorX.fromHsl(hsl.h, hsl.s, lumTo);
+			colorFrom = colorX.fromHsl(hsl.h, hsl.s, lumFrom),
+			colorTo   = colorX.fromHsl(hsl.h, hsl.s, lumTo);
 		colorFrom.a = colorTo.a = color.a;	// add missing opacity
 		return Theme.generateGradient(fillPattern, colorFrom, colorTo);	// Object
 	}

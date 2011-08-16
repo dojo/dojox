@@ -1,6 +1,6 @@
 define(["dojo/dom", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/connect", "dojo/query",
 	"dijit/_BidiSupport", "../BidiSupport", "dijit/registry", "./Chart", "./Legend"], 
-	function(DOM, lang, html, ArrayUtil, Hub, query, dBidi, cBidi, WidgetManager, Chart, Legend){
+	function(dom, lang, html, arrayUtil, hub, query, dBidi, cBidi, widgetManager, Chart, Legend){
 
 	// patch only if present
 	if( Legend ){
@@ -22,21 +22,21 @@ define(["dojo/dom", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "
 				// textDir
 				if(!this.chart){
 					if(!this.chartRef){ return; }
-					var chart = WidgetManager.byId(this.chartRef);
+					var chart = widgetManager.byId(this.chartRef);
 					if(!chart){
-						var node = DOM.byId(this.chartRef);
+						var node = dom.byId(this.chartRef);
 						if(node){
-							chart = WidgetManager.byNode(node);
+							chart = widgetManager.byNode(node);
 						}else{
 							return;
 						}
 					}
 					this.textDir = chart.chart.textDir;
-					Hub.connect(chart.chart, "setTextDir", this, "_setTextDirAttr");
+					hub.connect(chart.chart, "setTextDir", this, "_setTextDirAttr");
 
 				}else{
 					this.textDir = this.chart.textDir;
-					Hub.connect(this.chart, "setTextDir", this, "_setTextDirAttr");
+					hub.connect(this.chart, "setTextDir", this, "_setTextDirAttr");
 
 				}
 			},
@@ -57,7 +57,7 @@ define(["dojo/dom", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "
 						// get array of all the labels
 						var legendLabels = query(".dojoxLegendText", this._tr);
 							// for every label calculate it's new dir.
-							ArrayUtil.forEach(legendLabels, function(label){
+							arrayUtil.forEach(legendLabels, function(label){
 								label.dir = this.getTextDir(label.innerHTML, label.dir);
 						}, this);					
 					}

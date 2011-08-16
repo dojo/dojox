@@ -2,8 +2,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		"dojo/_base/connect", "dojo/_base/Color", "./Legend", "dijit/form/CheckBox", "../action2d/Highlight",
 		"dojox/lang/functional", "dojox/gfx/fx", "dojo/keys", "dojo/_base/event", "dojo/dom-construct",
 		"dojo/dom-prop"], 
-	function(lang, ArrayUtil, declare, query, html, Hub, Color, Legend, CheckBox, 
-			 Highlight, df, fx, Keys, event, DOM, DOMProp){
+	function(lang, arrayUtil, declare, query, html, hub, Color, Legend, CheckBox, 
+			 Highlight, df, fx, keys, event, dom, domProp){
 /*=====
 var Legend = dojox.charting.widget.Legend;
 =====*/
@@ -15,14 +15,14 @@ var Legend = dojox.charting.widget.Legend;
 			this.legend = legend;
 			this.index = 0;
 			this.horizontalLength = this._getHrizontalLength();
-			ArrayUtil.forEach(legend.legends, function(item, i){
+			arrayUtil.forEach(legend.legends, function(item, i){
 				if(i > 0){
 					query("input", item).attr("tabindex", -1);
 				}
 			});
 			this.firstLabel = query("input", legend.legends[0])[0];
-			Hub.connect(this.firstLabel, "focus", this, function(){this.legend.active = true;});
-			Hub.connect(this.legend.domNode, "keydown", this, "_onKeyEvent");
+			hub.connect(this.firstLabel, "focus", this, function(){this.legend.active = true;});
+			hub.connect(this.legend.domNode, "keydown", this, "_onKeyEvent");
 		},
 		_getHrizontalLength: function(){
 			var horizontal = this.legend.horizontal;
@@ -40,31 +40,31 @@ var Legend = dojox.charting.widget.Legend;
 				return;
 			}
 			//	lose focus
-			if(e.keyCode == Keys.TAB){
+			if(e.keyCode == keys.TAB){
 				this.legend.active = false;
 				return;
 			}
 			//	handle with arrow keys
 			var max = this.legend.legends.length;
 			switch(e.keyCode){
-				case Keys.LEFT_ARROW:
+				case keys.LEFT_ARROW:
 					this.index--;
 					if(this.index < 0){
 						this.index += max;
 					}
 					break;
-				case Keys.RIGHT_ARROW:
+				case keys.RIGHT_ARROW:
 					this.index++;
 					if(this.index >= max){
 						this.index -= max;
 					}
 					break;
-				case Keys.UP_ARROW:
+				case keys.UP_ARROW:
 					if(this.index - this.horizontalLength >= 0){
 						this.index -= this.horizontalLength;
 					}
 					break;
-				case Keys.DOWN_ARROW:
+				case keys.DOWN_ARROW:
 					if(this.index + this.horizontalLength < max){
 						this.index += this.horizontalLength;
 					}
@@ -107,10 +107,10 @@ var Legend = dojox.charting.widget.Legend;
 			var currentLegendNode = legendNodes[legendNodes.length - 1];
 			this.legends.push(currentLegendNode);
 			var checkbox = new CheckBox({checked: true});
-			DOM.place(checkbox.domNode, currentLegendNode, "first");
+			dom.place(checkbox.domNode, currentLegendNode, "first");
 			// connect checkbox and existed label
 			var label = query("label", currentLegendNode)[0];
-			DOMProp.set(label, "for", checkbox.id);
+			domProp.set(label, "for", checkbox.id);
 		},
 		_applyEvents: function(){
 			// summary:
@@ -120,7 +120,7 @@ var Legend = dojox.charting.widget.Legend;
 			if(this.chart.dirty){
 				return;
 			}
-			ArrayUtil.forEach(this.legends, function(legend, i){
+			arrayUtil.forEach(this.legends, function(legend, i){
 				var targetData, shapes = [], plotName, seriesName;
 				if(this._isPie()){
 					targetData = this.chart.stack[0];
@@ -139,7 +139,7 @@ var Legend = dojox.charting.widget.Legend;
 				};
 				//	toggle action
 				var legendCheckBox = query(".dijitCheckBox", legend)[0];
-				Hub.connect(legendCheckBox, "onclick", this, function(e){
+				hub.connect(legendCheckBox, "onclick", this, function(e){
 					this._toggle(shapes, i, legend.vanished, originalDyn, seriesName, plotName);
 					legend.vanished = !legend.vanished;
 					e.stopPropagation();
@@ -148,15 +148,15 @@ var Legend = dojox.charting.widget.Legend;
 				//	highlight action
 				var legendIcon = query(".dojoxLegendIcon", legend)[0],
 					iconShape = this._getFilledShape(this._surfaces[i].children);
-				ArrayUtil.forEach(["onmouseenter", "onmouseleave"], function(event){
-					Hub.connect(legendIcon, event, this, function(e){
+				arrayUtil.forEach(["onmouseenter", "onmouseleave"], function(event){
+					hub.connect(legendIcon, event, this, function(e){
 						this._highlight(e, iconShape, shapes, i, legend.vanished, originalDyn, seriesName, plotName);
 					});
 				}, this);
 			},this);
 		},
 		_toggle: function(shapes, index, isOff, dyn, seriesName, plotName){
-			ArrayUtil.forEach(shapes, function(shape, i){
+			arrayUtil.forEach(shapes, function(shape, i){
 				var startFill = dyn.fills[i],
 					endFill = this._getTransitionFill(plotName),
 					startStroke = dyn.strokes[i],
@@ -193,7 +193,7 @@ var Legend = dojox.charting.widget.Legend;
 				};
 				anim.process(label);
 				//	highlight the data items
-				ArrayUtil.forEach(shapes, function(shape, i){
+				arrayUtil.forEach(shapes, function(shape, i){
 					shape.setFill(dyn.fills[i]);
 					var o = {
 						shape: shape,

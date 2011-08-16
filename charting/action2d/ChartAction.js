@@ -1,5 +1,5 @@
 define(["dojo/_base/connect", "dojo/_base/declare", "./Base"], 
-	function(ConnectUtil, declare, Base){
+	function(hub, declare, Base){
 	/*=====
 	var Base = dojox.charting.action2d.Base;
 	=====*/
@@ -20,7 +20,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./Base"],
 			//	summary:
 			//		Connect this action to the chart.
 			for(var i = 0; i < this._listeners.length; ++i){
-				this._listeners[i].handle = ConnectUtil.connect(this.chart.node, this._listeners[i].eventName,
+				this._listeners[i].handle = hub.connect(this.chart.node, this._listeners[i].eventName,
 						this, this._listeners[i].methodName);
 			}
 		},
@@ -29,7 +29,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./Base"],
 			//	summary:
 			//		Disconnect this action from the chart.
 			for(var i = 0; i < this._listeners.length; ++i){
-				ConnectUtil.disconnect(this._listeners[i].handle);
+				hub.disconnect(this._listeners[i].handle);
 				delete this._listeners[i].handle;
 			}
 		}

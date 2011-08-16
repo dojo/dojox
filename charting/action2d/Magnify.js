@@ -1,7 +1,7 @@
-define(["dojox","dojo/_base/connect", "dojo/_base/declare", 
+define(["dojo/_base/connect", "dojo/_base/declare", 
 	"./PlotAction", "dojox/gfx/matrix", 
 	"dojox/gfx/fx", "dojo/fx", "dojo/fx/easing"], 
-	function(dojox, Hub, declare, PlotAction, m, gf, df, dfe){
+	function(Hub, declare, PlotAction, m, gf, df, dfe){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {

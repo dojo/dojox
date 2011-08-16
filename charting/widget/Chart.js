@@ -1,17 +1,16 @@
-define(["dojox","dojo/_base/lang", "dojo/_base/array","dojo/_base/html","dojo/_base/declare", "dojo/query",
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/html","dojo/_base/declare", "dojo/query",
 	"dijit/_Widget", "../Chart", "dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda",
 	"dijit/_base/manager"], 
-	function(dojox, lang, arr, html, declare, query, Widget, Chart, du, df, dfl, WidgetManager){
+	function(kernel, lang, arr, html, declare, query, Widget, Chart, du, df, dfl){
 /*=====
 var Widget = dijit._Widget;
 =====*/
 	var collectParams, collectAxisParams, collectPlotParams,
 		collectActionParams, collectDataParams,
-		dijit = WidgetManager,  // use local reference, rather than dijit global... will be removed in 2.0. Needed for proper api doc of declare() below.
 		notNull = function(o){ return o; },
 		dc = lang.getObject("dojox.charting");
 	
-	declare("dojox.charting.widget.Chart", Widget, {
+	var ChartWidget = declare("dojox.charting.widget.Chart", Widget, {
 		// parameters for the markup
 		
 		// theme for the chart
@@ -150,12 +149,12 @@ var Widget = dijit._Widget;
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dc.axis2d[type]){
-				type = dojox._scopeName + ".charting.axis2d." + type;
+				type = dojo._scopeName + "x.charting.axis2d." + type;
 			}
 			var axis = eval("(" + type + ")");
 			if(axis){ kw.type = axis; }
 		}else{
-			type = dojox._scopeName + ".charting.axis2d.Default";
+			type = dojo._scopeName + "x.charting.axis2d.Default";
 		}
 		collectParams(node, type, kw);
 		// compatibility conversions
@@ -180,12 +179,12 @@ var Widget = dijit._Widget;
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dc.plot2d && dc.plot2d[type]){
-				type = dojox._scopeName + ".charting.plot2d." + type;
+				type = dojo._scopeName + "x.charting.plot2d." + type;
 			}
 			var plot = eval("(" + type + ")");
 			if(plot){ kw.type = plot; }
 		}else{
-			type = dojox._scopeName + ".charting.plot2d.Default";
+			type = dojo._scopeName + "x.charting.plot2d.Default";
 		}
 		collectParams(node, type, kw);
 		return o;
@@ -198,7 +197,7 @@ var Widget = dijit._Widget;
 		var o = {plot: plot, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dc.action2d[type]){
-				type = dojox._scopeName + ".charting.action2d." + type;
+				type = dojo._scopeName + "x.charting.action2d." + type;
 			}
 			var action = eval("(" + type + ")");
 			if(!action){ return null; }
@@ -268,5 +267,5 @@ var Widget = dijit._Widget;
 		return null;
 	};
 	
-	return dojox.charting.widget.Chart;
+	return ChartWidget;
 });

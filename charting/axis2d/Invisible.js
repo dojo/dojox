@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
 	"dojox/gfx", "dojox/lang/utils", "dojox/lang/functional", "dojo/string"],
-	function(dojo, lang, declare, Base, lin, g, du, df, dstring){
+	function(lang, declare, Base, lin, g, du, df, dstring){
 /*=====
 var Base = dojox.charting.axis2d.Base;
 =====*/ 

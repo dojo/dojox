@@ -1,8 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/html", 
+define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/html", 
 	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/_base/sniff",
 	"./Element", "./Theme", "./Series", "./axis2d/common",
 	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
-	function(dojo, lang, arr, declare, html, 
+	function(lang, arr, declare, html, 
 	 		 dom, domGeom, domConstruct, Color, has,
 	 		 Element, Theme, Series, common, 
 	 		 g, func, funcFold, funcReversed){

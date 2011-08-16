@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", "dojo/_base/sniff",
 	"./ChartAction", "./_IndicatorElement", "dojox/lang/utils", "dojo/_base/event","dojo/_base/array"],
-	function(lang, declare, ConnectUtil, win, has, ChartAction, IndicatorElement, du, Event, arr){ 
+	function(lang, declare, hub, win, has, ChartAction, IndicatorElement, du, eventUtil, arr){ 
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
@@ -147,7 +147,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			if(has("ie")){
 				this.chart.node.releaseCapture();
 			}
-			arr.forEach(this._handles, ConnectUtil.disconnect);
+			arr.forEach(this._handles, hub.disconnect);
 			this._handles = [];
 		},
 
@@ -179,12 +179,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			// we now want to capture mouse move events everywhere to avoid
 			// stop scrolling when going out of the chart window
 			if(has("ie")){
-				this._handles.push(ConnectUtil.connect(this.chart.node, "onmousemove", this, "onMouseMove"));
-				this._handles.push(ConnectUtil.connect(this.chart.node, "onmouseup", this, "onMouseUp"));
+				this._handles.push(hub.connect(this.chart.node, "onmousemove", this, "onMouseMove"));
+				this._handles.push(hub.connect(this.chart.node, "onmouseup", this, "onMouseUp"));
 				this.chart.node.setCapture();
 			}else{
-				this._handles.push(ConnectUtil.connect(win.doc, "onmousemove", this, "onMouseMove"));
-				this._handles.push(ConnectUtil.connect(win.doc, "onmouseup", this, "onMouseUp"));
+				this._handles.push(hub.connect(win.doc, "onmousemove", this, "onMouseMove"));
+				this._handles.push(hub.connect(win.doc, "onmouseup", this, "onMouseUp"));
 			}	
 			
 			this._onMouseSingle(event);
@@ -203,7 +203,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			plot.pageCoord  = {x: event.pageX, y: event.pageY};
 			plot.dirty = true;
 			this.chart.render();
-			Event.stop(event);
+			eventUtil.stop(event);
 		},
 
 		onMouseUp: function(event){

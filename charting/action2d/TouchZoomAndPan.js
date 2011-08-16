@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
 	"./ChartAction", "../Element", "dojo/gesture/tap", "../plot2d/common"], 
-	function(lang, declare, Event, has, ChartAction, Element, tap, common){
+	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
 	var GlassView = declare(Element, {
 		//	tags:
 		//		private
@@ -161,7 +161,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			}else if(this.enableScroll){
 				this._startScroll(axis);
 				// needed for Android, otherwise will get a touch cancel while swiping
-				Event.stop(event);
+				eventUtil.stop(event);
 			}
 		},
 	
@@ -188,14 +188,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				newEnd = scale * (this._endCoord - newMiddleCoord) + this._middleCoord;
 				chart.zoomIn(this.axis, [newStart, newEnd]);
 				// avoid browser pan
-				Event.stop(event);
+				eventUtil.stop(event);
 			}else if(this.enableScroll){
 				var delta = axis.vertical?(this._startPageCoord[attr] - event.touches[0][pAttr]):
 					(event.touches[0][pAttr] - this._startPageCoord[attr]);
 				chart.setAxisWindow(this.axis, this._lastScale, this._initOffset - delta / this._lastFactor / this._lastScale);
 				chart.delayedRender();
 				// avoid browser pan
-				Event.stop(event);
+				eventUtil.stop(event);
 			}		
 		},
 	
@@ -237,7 +237,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				chart.setAxisWindow(this.axis, 1, 0);
 				chart.render();
 			}
-			Event.stop(event);
+			eventUtil.stop(event);
 		}
 	});
 });		

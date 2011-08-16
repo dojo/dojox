@@ -1,10 +1,5 @@
-define([
-	"dojox/gfx3d",
-	"dojo/_base/declare",
-	"dojo/_base/Color",
-	"dojo/_base/window",
-	"./Base"
-], function(gfx3d, declare, Color, win, Base) {
+define(["dojox/gfx3d", "dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/window", "./Base"], 
+	function(gfx3d, matrix3d, declare, Color, win, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -61,7 +56,7 @@ define([
 						radius: step / 2 - this.gap,
 						height: this.data[i] * scale
 					})
-					.setTransform(gfx3d.matrix.rotateXg(-90))
+					.setTransform(matrix3d.rotateXg(-90))
 					.setFill(this.material).setStroke(this.outline);
 			}
 		}
