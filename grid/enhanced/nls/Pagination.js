@@ -16,7 +16,8 @@ define({ root:
 	"dialogIndication": "Specify the page number",
 	"pageCountIndication": " (${0} pages)",
 	"dialogConfirm": "Go",
-	"dialogCancel": "Cancel"
+	"dialogCancel": "Cancel",
+	"all": "All"
 })
 //end v1.x content
 ,

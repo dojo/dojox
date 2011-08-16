@@ -141,3 +141,7 @@
 	width: 220px!important;
 	text-align: right;
 }
+.dojoxGridButtonFocus {
+	outline: none;
+	border: 0.5px dotted darkblue !important;
+}
