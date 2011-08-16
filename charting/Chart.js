@@ -601,12 +601,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 				case 1:
 					// argument, override node box
 					box = lang.mixin({}, width);
-					domGeom.getMarginBox(this.node, box);
+					domGeom.setMarginBox(this.node, box);
 					break;
 				case 2:
 					box = {w: width, h: height};
 					// argument, override node box
-					domGeom.getMarginBox(this.node, box);
+					domGeom.setMarginBox(this.node, box);
 					break;
 			}
 			// in all cases take back the computed box
