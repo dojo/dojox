@@ -296,7 +296,7 @@ var _LazyTreeGridCache = declare("dojox.grid._LazyTreeGridCache", null, {
 			treePath = this.items[rowIndex] ? this.items[rowIndex].treePath : [];
 		for(; i < this.items.length; i++){
 			tp = this.items[i] ? this.items[i].treePath : [];
-			if(tp.join('/') === treePath.join('/')){
+			if(tp.join('/') === treePath.join('/') || tp.length <= treePath.length){
 				break;
 			}
 		}
