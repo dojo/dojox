@@ -289,24 +289,25 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 		// summary: a polyline/polygon shape (Canvas)
 		setShape: function(){
 			this.inherited(arguments);
-			// prepare Canvas-specific structures
-			var p = this.shape.points, f = p[0], r = [], c, i;
-			if(p.length){
-				if(typeof f == "number"){
-					r.push(f, p[1]);
-					i = 2;
-				}else{
-					r.push(f.x, f.y);
-					i = 1;
-				}
-				for(; i < p.length; ++i){
-					c = p[i];
-					if(typeof c == "number"){
-						r.push(c, p[++i]);
-					}else{
+			var p = this.shape.points, f = p[0], r, c, i;
+			this.bbox = null;
+			// normalize this.shape.points as array of points: [{x,y}, {x,y}, ...]
+			this._normalizePoints();			
+			// after _normalizePoints, if shape.points was [x1,y1,x2,y2,..], shape.points references a new array 
+			// and p references the original points array
+			// prepare Canvas-specific structures, if needed
+			if(p.length){  
+				if(typeof f == "number"){ // already in the canvas format [x1,y1,x2,y2,...]
+					r = p; 
+				}else{ // convert into canvas-specific format
+					r = [];
+					for(i=0; i < p.length; ++i){
+						c = p[i];
 						r.push(c.x, c.y);
 					}
 				}
+			}else{
+				r = [];
 			}
 			this.canvasPolyline = r;
 			return this;
