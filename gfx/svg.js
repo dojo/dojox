@@ -9,18 +9,18 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	//		This the graphics rendering bridge for browsers compliant with W3C SVG1.0.
 	//		This is the preferred renderer to use for interactive and accessible graphics.
 	};
-	var pathLib.Path = dojox.gfx.path.Path;
-	var pathLib.TextPath = dojox.gfx.path.TextPath;
-	var svg.Shape = dojox.gfx.canvas.Shape;
-	var gs.Shape = dojox.gfx.shape.Shape;
-	var gs.Rect = dojox.gfx.shape.Rect;
-	var gs.Ellipse = dojox.gfx.shape.Ellipse;
-	var gs.Circle = dojox.gfx.shape.Circle;
-	var gs.Line = dojox.gfx.shape.Line;
-	var gs.PolyLine = dojox.gfx.shape.PolyLine;
-	var gs.Image = dojox.gfx.shape.Image;
-	var gs.Text = dojox.gfx.shape.Text;
-	var gs.Surface = dojox.gfx.shape.Surface;
+	pathLib.Path = dojox.gfx.path.Path;
+	pathLib.TextPath = dojox.gfx.path.TextPath;
+	svg.Shape = dojox.gfx.canvas.Shape;
+	gs.Shape = dojox.gfx.shape.Shape;
+	gs.Rect = dojox.gfx.shape.Rect;
+	gs.Ellipse = dojox.gfx.shape.Ellipse;
+	gs.Circle = dojox.gfx.shape.Circle;
+	gs.Line = dojox.gfx.shape.Line;
+	gs.PolyLine = dojox.gfx.shape.PolyLine;
+	gs.Image = dojox.gfx.shape.Image;
+	gs.Text = dojox.gfx.shape.Text;
+	gs.Surface = dojox.gfx.shape.Surface;
   =====*/
   var svg = lang.getObject("dojox.gfx.svg", true);
 	svg.useSvgWeb = (typeof window.svgweb != "undefined");

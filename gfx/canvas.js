@@ -17,18 +17,18 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base
 	//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
 	//		API.
 	};
-	var pathLib.Path = dojox.gfx.path.Path;
-	var pathLib.TextPath = dojox.gfx.path.TextPath;
-	var canvas.Shape = dojox.gfx.canvas.Shape;
-	var gs.Shape = dojox.gfx.shape.Shape;
-	var gs.Rect = dojox.gfx.shape.Rect;
-	var gs.Ellipse = dojox.gfx.shape.Ellipse;
-	var gs.Circle = dojox.gfx.shape.Circle;
-	var gs.Line = dojox.gfx.shape.Line;
-	var gs.PolyLine = dojox.gfx.shape.PolyLine;
-	var gs.Image = dojox.gfx.shape.Image;
-	var gs.Text = dojox.gfx.shape.Text;
-	var gs.Surface = dojox.gfx.shape.Surface;
+	pathLib.Path = dojox.gfx.path.Path;
+	pathLib.TextPath = dojox.gfx.path.TextPath;
+	canvas.Shape = dojox.gfx.canvas.Shape;
+	gs.Shape = dojox.gfx.shape.Shape;
+	gs.Rect = dojox.gfx.shape.Rect;
+	gs.Ellipse = dojox.gfx.shape.Ellipse;
+	gs.Circle = dojox.gfx.shape.Circle;
+	gs.Line = dojox.gfx.shape.Line;
+	gs.PolyLine = dojox.gfx.shape.PolyLine;
+	gs.Image = dojox.gfx.shape.Image;
+	gs.Text = dojox.gfx.shape.Text;
+	gs.Surface = dojox.gfx.shape.Surface;
   =====*/
 
 	var canvas = lang.getObject("dojox.gfx.canvas", true);
