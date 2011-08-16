@@ -362,7 +362,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 					this.rawNode.setAttribute(i, this.shape[i]);
 				}
 			}
-			if(this.shape.r){
+			if("r" in this.shape){
 				this.rawNode.setAttribute("ry", this.shape.r);
 				this.rawNode.setAttribute("rx", this.shape.r);
 			}
