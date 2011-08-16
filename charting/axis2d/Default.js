@@ -109,6 +109,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/s
 		this.fontColor = fontColor;
 		this.enableCache = enableCache;
 	}
+	var Invisible = dojox.charting.axis2d.Invisible
 	=====*/
 
 	var labelGap = 4,			// in pixels

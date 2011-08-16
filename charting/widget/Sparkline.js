@@ -1,8 +1,11 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query", 
 	"./Chart", "../themes/GreySkies", "../plot2d/Lines", "dojo/dom-prop"], 
 	function(lang, ArrayUtil, declare, html, $, Chart, GreySkies, Lines, DOMProp){
+/*=====
+var Chart = dojox.charting.widget.Chart;
+=====*/
 
-	declare("dojox.charting.widget.Sparkline", dojox.charting.widget.Chart, {
+	declare("dojox.charting.widget.Sparkline", Chart, {
 			theme: GreySkies,
 			margins: { l: 0, r: 0, t: 0, b: 0 },
 			type: "Lines",

@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	    "dojox/color/_base", "dojox/color/Palette", "dojox/lang/utils", "dojox/gfx/gradutils"], 
 	function(lang, arr, declare, Color, ColorX, Palette, dlu, dgg){ 
 	
-	declare("dojox.charting.Theme", null, {
+	var Theme = declare("dojox.charting.Theme", null, {
 	//	summary:
 	//		A Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
 	//		style a chart.
@@ -132,7 +132,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 		kwArgs = kwArgs || {};
 
 		// populate theme with defaults updating them if needed
-		var def = dojox.charting.Theme.defaultTheme;
+		var def = Theme.defaultTheme;
 		arr.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
 			this[name] = lang.delegate(def[name], kwArgs[name]);
 		}, this);
@@ -143,13 +143,13 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 			this.seriesThemes = kwArgs.seriesThemes.slice(0);
 		}else{
 			this.seriesThemes = null;
-			this.colors = (kwArgs.colors || dojox.charting.Theme.defaultColors).slice(0);
+			this.colors = (kwArgs.colors || Theme.defaultColors).slice(0);
 		}
 		this.markerThemes = null;
 		if(kwArgs.markerThemes && kwArgs.markerThemes.length){
 			this.markerThemes = kwArgs.markerThemes.slice(0);
 		}
-		this.markers = kwArgs.markers ? lang.clone(kwArgs.markers) : lang.delegate(dojox.charting.Theme.defaultMarkers);
+		this.markers = kwArgs.markers ? lang.clone(kwArgs.markers) : lang.delegate(Theme.defaultMarkers);
 
 		// set flags
 		this.noGradConv = kwArgs.noGradConv;
@@ -168,7 +168,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 		//		Clone the current theme.
 		//	returns: dojox.charting.Theme
 		//		The cloned theme; any alterations made will not affect the original.
-		var theme = new dojox.charting.Theme({
+		var theme = new Theme({
 			// theme components
 			chart: this.chart,
 			plotarea: this.plotarea,
@@ -476,7 +476,7 @@ dojox.charting.Theme.__DefineColorArgs = function(num, colors, hue, saturation, 
 	this.generator = generator;
 }
 =====*/
-lang.mixin(dojox.charting.Theme, {
+lang.mixin(Theme, {
 	defaultMarkers: {
 		CIRCLE:   "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",
 		SQUARE:   "m-3,-3 l0,6 6,0 0,-6 z",
@@ -649,9 +649,9 @@ lang.mixin(dojox.charting.Theme, {
 			colorFrom = ColorX.fromHsl(hsl.h, hsl.s, lumFrom),
 			colorTo   = ColorX.fromHsl(hsl.h, hsl.s, lumTo);
 		colorFrom.a = colorTo.a = color.a;	// add missing opacity
-		return dojox.charting.Theme.generateGradient(fillPattern, colorFrom, colorTo);	// Object
+		return Theme.generateGradient(fillPattern, colorFrom, colorTo);	// Object
 	}
 });
 
-return dojox.charting.Theme;
+return Theme;
 });

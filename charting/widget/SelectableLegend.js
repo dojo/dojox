@@ -4,7 +4,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		"dojo/dom-prop"], 
 	function(lang, ArrayUtil, declare, query, html, Hub, Color, Legend, CheckBox, 
 			 Highlight, df, fx, Keys, event, DOM, DOMProp){
-
+/*=====
+var Legend = dojox.charting.widget.Legend;
+=====*/
 	var FocusManager = declare(null, {
 		//	summary:
 		//		It will take legend as a tab stop, and using
@@ -78,7 +80,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		}
 	});
 			
-	declare("dojox.charting.widget.SelectableLegend", dojox.charting.widget.Legend, {
+	declare("dojox.charting.widget.SelectableLegend", Legend, {
 		//	summary:
 		//		An enhanced chart legend supporting interactive events on data series
 		

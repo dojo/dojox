@@ -4,7 +4,7 @@ define([
 	"dojo/_base/Color",
 	"dojo/_base/window",
 	"./Base"
-], function(gfx3d, declare, Color, win) {
+], function(gfx3d, declare, Color, win, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -15,8 +15,10 @@ define([
 		for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));
 		return z;	// Object
 	};
-
-	return declare("dojox.charting.plot3d.Cylinders", dojox.charting.plot3d.Base, {
+	/*=====
+	var Base = dojox.charting.plot3d.Base;
+	=====*/
+	return declare("dojox.charting.plot3d.Cylinders", Base, {
 		constructor: function(width, height, kwArgs){
 			this.depth = "auto";
 			this.gap   = 0;

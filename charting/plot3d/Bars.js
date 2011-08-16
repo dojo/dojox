@@ -10,8 +10,10 @@ define(["dojox/gfx3d", "dojo/_base/window", "dojo/_base/declare", "dojo/_base/Co
 		for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));
 		return z;	// Object
 	};
-
-	return declare("dojox.charting.plot3d.Bars", dojox.charting.plot3d.Base, {
+	/*=====
+	var Base = dojox.charting.plot3d.Base;
+	=====*/
+	return declare("dojox.charting.plot3d.Bars", Base, {
 		constructor: function(width, height, kwArgs){
 			this.depth = "auto";
 			this.gap   = 0;

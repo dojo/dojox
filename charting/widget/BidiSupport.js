@@ -1,5 +1,5 @@
 define(["dojo/dom", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/connect", "dojo/query",
-	"dijit/_BidiSupport", "../BidiSupport", "dijit/_base/manager", "./Chart", "./Legend"], 
+	"dijit/_BidiSupport", "../BidiSupport", "dijit/registry", "./Chart", "./Legend"], 
 	function(DOM, lang, html, ArrayUtil, Hub, query, dBidi, cBidi, WidgetManager, Chart, Legend){
 
 	// patch only if present

@@ -38,8 +38,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		tension:2,
 		gap:2
 	};
-
-	return declare("dojox.charting.DataChart", dojox.charting.Chart, {
+	/*=====
+	var Chart = dojox.charting.Chart;
+	=====*/
+	return declare("dojox.charting.DataChart", Chart, {
 		//	summary:
 		//		DataChart
 		//		Extension to the 2D chart that connects to a data store in

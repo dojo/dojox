@@ -1,7 +1,9 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
 	"dojox/gfx", "dojox/lang/utils", "dojox/lang/functional", "dojo/string"],
 	function(dojo, lang, declare, Base, lin, g, du, df, dstring){
- 
+/*=====
+var Base = dojox.charting.axis2d.Base;
+=====*/ 
 	var merge = du.merge,
 		labelGap = 4,			// in pixels
 		centerAnchorLimit = 45;	// in degrees
