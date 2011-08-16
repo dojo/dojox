@@ -53,12 +53,12 @@ define([
 
 				if(this._getter){
 					var got = this._getter(key);
-					if(got != undefined){
+					if(got !== undefined){
 						return n(got);
 					}
 				}
 
-				if(this[key] != undefined){
+				if(this[key] !== undefined){
 					return n(this[key]);
 				}
 
@@ -99,7 +99,7 @@ define([
 			splitter.exec(""); // Reset the global
 
 			var part, parts = [], lastIndex = 0, i = 0;
-			while(part = splitter.exec(this)){
+			while((part = splitter.exec(this))){
 				parts.push(this.slice(lastIndex, splitter.lastIndex - part[0].length));
 				lastIndex = splitter.lastIndex;
 				if(limit && (++i > limit - 1)){
@@ -199,7 +199,7 @@ define([
 				return ddt._resolveLazy(arg, sync);
 			},
 			_isTemplate: function(arg){
-				return (arg == undefined) || (typeof arg == "string" && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
+				return (arg === undefined) || (typeof arg == "string" && (arg.match(/^\s*[<{]/) || arg.indexOf(" ") != -1));
 			},
 			_resolveContextArg: function(arg, sync){
 				if(arg.constructor == Object){
@@ -332,7 +332,7 @@ define([
 				var pos, arg;
 
 				for(var i = 0, has = []; i < arguments.length; i++){
-					has[i] = (arguments[i] != undefined && typeof arguments[i] == "string" && arguments[i]);
+					has[i] = (arguments[i] !== undefined && typeof arguments[i] == "string" && arguments[i]);
 				}
 
 				if(!this.key){
@@ -365,7 +365,7 @@ define([
 				return this.contents;
 			},
 			resolve: function(context){
-				if(this.key == undefined){
+				if(this.key === undefined){
 					return "";
 				}
 
@@ -417,7 +417,7 @@ define([
 						var part = parts[i];
 						if(current){
 							var base = current;
-							if(lang.isObject(current) && part == "items" && current[part] == undefined){
+							if(lang.isObject(current) && part == "items" && current[part] === undefined){
 								var items = [];
 								for(var key in current){
 									items.push([key, current[key]]);
@@ -428,7 +428,7 @@ define([
 
 							if(current.get && lang.isFunction(current.get) && current.get.safe){
 								current = current.get(part);
-							}else if(current[part] == undefined){
+							}else if(current[part] === undefined){
 								current = current[part];
 								break;
 							}else{
