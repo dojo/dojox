@@ -1,13 +1,12 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/lang",
 	"dojo/_base/Color",	// dojo.Color
 	"dojo/_base/declare",	// dojo.declare
-	"dojox/gfx/_base"
-],function(dojo,Color,declare) {
+	"dojox/gfx/_base",
+	"./_base"
+],function(lang,Color,declare,gfx,gfx3d) {
 
-	dojo.getObject("gfx3d",true,dojox);
-
-	var lite = dojox.gfx3d.lighting = {
+	var lite = gfx3d.lighting = {
 		// color utilities
 		black: function(){
 			return {r: 0, g: 0, b: 0, a: 1};
@@ -16,11 +15,11 @@ define([
 			return {r: 1, g: 1, b: 1, a: 1};
 		},
 		toStdColor: function(c){
-			c = dojox.gfx.normalizeColor(c);
+			c = gfx.normalizeColor(c);
 			return {r: c.r / 255, g: c.g / 255, b: c.b / 255, a: c.a};
 		},
 		fromStdColor: function(c){
-			return new dojo.Color([Math.round(255 * c.r), Math.round(255 * c.g), Math.round(255 * c.b), c.a]);
+			return new Color([Math.round(255 * c.r), Math.round(255 * c.g), Math.round(255 * c.b), c.a]);
 		},
 		scaleColor: function(s, c){
 			return {r: s * c.r, g: s * c.g, b: s * c.b, a: s * c.a};
@@ -68,18 +67,18 @@ define([
 			return Math.min(Math.max(v, 0), 1);
 		},
 		length: function(v){
-			return Math.sqrt(dojox.gfx3d.lighting.dot(v, v));
+			return Math.sqrt(gfx3d.lighting.dot(v, v));
 		},
 		normalize: function(v){
 			return lite.scale(1 / lite.length(v), v);
 		},
 		faceforward: function(n, i){
-			var p = dojox.gfx3d.lighting;
+			var p = gfx3d.lighting;
 			var s = p.dot(i, n) < 0 ? 1 : -1;
 			return p.scale(s, n);
 		},
 		reflect: function(i, n){
-			var p = dojox.gfx3d.lighting;
+			var p = gfx3d.lighting;
 			return p.add(i, p.scale(-2 * p.dot(i, n), n));
 		},
 		
@@ -118,7 +117,7 @@ define([
 
 	// this lighting model is derived from RenderMan Interface Specification Version 3.2
 
-	dojo.declare("dojox.gfx3d.lighting.Model", null, {
+	declare("dojox.gfx3d.lighting.Model", null, {
 		constructor: function(incident, lights, ambient, specular){
 			this.incident = lite.normalize(incident);
 			this.lights = [];
@@ -209,7 +208,7 @@ define([
 
 	// POV-Ray basic finishes
 	
-	dojox.gfx3d.lighting.finish = {
+	gfx3d.lighting.finish = {
 	
 		// Default
 		
