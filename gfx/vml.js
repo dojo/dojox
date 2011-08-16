@@ -313,7 +313,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		_getRealMatrix: function(){
 			// summary: returns the cumulative ("real") transformation matrix
 			//	by combining the shape's matrix with its parent's matrix
-			return this.parentMatrix ? new m([this.parentMatrix, this.matrix]) : this.matrix;	// dojox.gfx.Matrix2D
+			return this.parentMatrix ? new m.Matrix2D([this.parentMatrix, this.matrix]) : this.matrix;	// dojox.gfx.Matrix2D
 		}
 	});
 
