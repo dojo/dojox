@@ -2,10 +2,9 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/array",	// dojo.forEach, dojo.every
 	"dojo/_base/declare",	// dojo.declare
+	"./_base",
 	"./vector"
-], function(lang, ArrayUtil, declare, Vector){
-
-var gfx3d = lang.getObject("dojox.gfx3d",true);
+], function(lang, arrayUtil, declare, gfx3d, vectorUtil){
 
 gfx3d.scheduler = {
 	zOrder: function(buffer, order){
@@ -18,9 +17,9 @@ gfx3d.scheduler = {
 
 	bsp: function(buffer, outline){
 		// console.debug("BSP scheduler");
-		outline = outline ? outline : dojox.gfx3d.scheduler.outline;
+		outline = outline ? outline : gfx3d.scheduler.outline;
 		var p = new gfx3d.scheduler.BinarySearchTree(buffer[0], outline);
-		ArrayUtil.forEach(buffer.slice(1), function(item){ p.add(item, outline); });
+		arrayUtil.forEach(buffer.slice(1), function(item){ p.add(item, outline); });
 		return p.iterate(outline);
 	},
 
@@ -32,7 +31,6 @@ gfx3d.scheduler = {
 	outline: function(it){
 		return it.getOutline();
 	}
-
 };
 
 declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
@@ -55,19 +53,19 @@ declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 
 		var o = outline(obj);
 		this.orient = o[0];
-		this.normal = Vector.normalize(o);
+		this.normal = vectorUtil.normalize(o);
 	},
 
 	add: function(obj, outline){
 		var epsilon = 0.5,
 			o = outline(obj),
-			v = Vector,
+			v = vectorUtil,
 			n = this.normal,
 			a = this.orient,
-			BST = dojox.gfx3d.scheduler.BinarySearchTree;
+			BST = gfx3d.scheduler.BinarySearchTree;
 
 		if(
-			ArrayUtil.every(o, function(item){
+			arrayUtil.every(o, function(item){
 				return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) <= 0;
 			})
 		){
@@ -77,7 +75,7 @@ declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 				this.minus = new BST(obj, outline);
 			}
 		}else if(
-			ArrayUtil.every(o, function(item){
+			arrayUtil.every(o, function(item){
 				return Math.floor(epsilon + v.dotProduct(n, v.substract(item, a))) >= 0;
 			})
 		){
@@ -88,17 +86,17 @@ declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 			}
 		}else{
 			/*
-			dojo.forEach(o, function(item){
+			arrayUtil.forEach(o, function(item){
 				console.debug(v.dotProduct(n, v.substract(item, a)));
 			});
 			*/
-			throw "The case: polygon cross siblings' plate is not implemneted yet";
+			throw "The case: polygon cross siblings' plate is not implemented yet";
 		}
 	},
 
 	iterate: function(outline){
 		var epsilon = 0.5;
-		var v = Vector;
+		var v = vectorUtil;
 		var sorted = [];
 		var subs = null;
 		// FIXME: using Infinity here?
@@ -126,10 +124,10 @@ declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 gfx3d.drawer = {
 	conservative: function(todos, objects, viewport){
 		// console.debug('conservative draw');
-		ArrayUtil.forEach(this.objects, function(item){
+		arrayUtil.forEach(this.objects, function(item){
 			item.destroy();
 		});
-		ArrayUtil.forEach(objects, function(item){
+		arrayUtil.forEach(objects, function(item){
 			item.draw(viewport.lighting);
 		});
 	},
@@ -138,7 +136,7 @@ gfx3d.drawer = {
 		// to redraw themselves to maintain the z-order.
 
 		// console.debug('chart draw');
-		ArrayUtil.forEach(this.todos, function(item){
+		arrayUtil.forEach(this.todos, function(item){
 			item.draw(viewport.lighting);
 		});
 	}
@@ -146,5 +144,5 @@ gfx3d.drawer = {
 	// of objects, and only elements of todos call setShape.
 };
 
-return gfx3d; // access scheduler and drawer
+return gfx3d.scheduler;
 });
