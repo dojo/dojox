@@ -1,8 +1,9 @@
 var repeatModel, setRef, nextIndexToAdd, selectedIndex;
 var setRef, setDetailsContext, insertResult, updateView, updateModel;
 
-require([
-	'dojox/mobile/parser',
+require(['dojo/has',
+	//'dojox/mobile/parser',
+	'dojo/parser',
 	'dojox/mvc',
 	'dojox/mobile',
 	'dojox/mobile/ScrollableView',
@@ -18,11 +19,17 @@ require([
 	'dojox/mobile/EdgeToEdgeCategory',
 	'dojox/mobile/deviceTheme',
 	'dojox/mobile/RoundRectCategory',
-	'dojox/mobile/Heading'
-], function(){
-	require([
-	         "dojox/mobile/compat"
-	]);
+	'dojox/mobile/Heading',
+	'dijit/registry',
+	'dojo/_base/json',
+	'dojo/dom'
+], function(has, parser, mvc, mobile, ScrollableView, Button, TextArea, Group, Generate, Repeat, TextBox, ViewController,
+		FixedSplitter, EdgeToEdgeList, EdgeToEdgeCategory, deviceTheme, RoundRectCategory, Heading, WidgetRegistry,
+		json, dom){
+
+	if(!has("webkit")){
+		require(["dojox/mobile/compat"]);
+	}
 
 	var names = {
 	"Serial" : "360324",
@@ -74,29 +81,29 @@ var repeatData = [
 	}
 ];
 
-selectedIndex = 0;
+	selectedIndex = 0;
 
-model = dojox.mvc.newStatefulModel({ data : names });
-repeatmodel = dojox.mvc.newStatefulModel({ data : repeatData });
-nextIndexToAdd = repeatmodel.data.length;
+	model = mvc.newStatefulModel({ data : names });
+	repeatmodel = mvc.newStatefulModel({ data : repeatData });
+	nextIndexToAdd = repeatmodel.data.length;
 
- // used in the Ship to - Bill to demo
-setRef = function(id, addrRef) {
-	var widget = dijit.byId(id);
-	widget.set("ref", addrRef);
-}
+	// used in the Ship to - Bill to demo
+	setRef = function(id, addrRef) {
+		var widget = WidgetRegistry.byId(id);
+		widget.set("ref", addrRef);
+	}
 
-// used in the Repeat Data binding demo
-setDetailsContext = function(index){
-	selectedIndex = index;
-	var groupRoot = dijit.byId("detailsGroup");
-	groupRoot.set("ref", index);
-}
+	// used in the Repeat Data binding demo
+	setDetailsContext = function(index){
+		selectedIndex = index;
+		var groupRoot = WidgetRegistry.byId("detailsGroup");
+		groupRoot.set("ref", index);
+	}
 
-// used in the Repeat Data binding demo
-insertResult = function(index){
-	if (repeatmodel[index-1].First.value !== ""){ // TODO: figure out why we are getting called twice for each click
-		var insert = dojox.mvc.newStatefulModel({ "data" : {
+	// used in the Repeat Data binding demo
+	insertResult = function(index){
+		if (repeatmodel[index-1].First.value !== ""){ // TODO: figure out why we are getting called twice for each click
+			var insert = mvc.newStatefulModel({ "data" : {
 			"First"   : "",
 			"Last"    : "",
 			"Location": "CA",
@@ -104,53 +111,57 @@ insertResult = function(index){
 			"Email"   : "",
 			"Tel"     : "",
 			"Fax"     : ""} 
-		});
-		repeatmodel.add(index, insert);
-		setDetailsContext(index);
-		nextIndexToAdd++;
-	}else{
-		setDetailsContext(index-1);                 
-	}
-};
-
-// used in the Generate View demo
-var genmodel;
-updateView = function() {
-	try {
-		var modeldata = dojo.fromJson(dojo.byId("modelArea").value);
-		genmodel = dojox.mvc.newStatefulModel({ data : modeldata });
-		dijit.byId("view").set("ref", genmodel);
-		dojo.byId("outerModelArea").style.display = "none";
-		dojo.byId("viewArea").style.display = "";              		
-	}catch(err){
-		console.error("Error parsing json from model: "+err);
-	}
-};
-
-// used in the Generate View demo
-updateModel = function() {
-	dojo.byId("outerModelArea").style.display = "";
-	try {
-		dojo.byId("modelArea").focus(); // hack: do this to force focus off of the textbox, bug on mobile?
-		dojo.byId("viewArea").style.display = "none";
-		dijit.byId("modelArea").set("value",(dojo.toJson(genmodel.toPlainObject(), true)));
-	} catch(e) {
-		console.log(e);
+			});
+			repeatmodel.add(index, insert);
+			setDetailsContext(index);
+			nextIndexToAdd++;
+		}else{
+			setDetailsContext(index-1);                 
+		}
 	};
-};
+
+	// used in the Generate View demo
+	var genmodel;
+	updateView = function() {
+		try {
+			var modeldata = json.fromJson(dom.byId("modelArea").value);
+			genmodel = mvc.newStatefulModel({ data : modeldata });
+			WidgetRegistry.byId("view").set("ref", genmodel);
+			dom.byId("outerModelArea").style.display = "none";
+			dom.byId("viewArea").style.display = "";              		
+		}catch(err){
+			console.error("Error parsing json from model: "+err);
+		}
+	};
+
+	// used in the Generate View demo
+	updateModel = function() {
+		dom.byId("outerModelArea").style.display = "";
+		try {
+			dom.byId("modelArea").focus(); // hack: do this to force focus off of the textbox, bug on mobile?
+			dom.byId("viewArea").style.display = "none";
+			WidgetRegistry.byId("modelArea").set("value",(json.toJson(genmodel.toPlainObject(), true)));
+		} catch(e) {
+			console.log(e);
+		};
+	};
 
 
-// The dojox.mvc.StatefulModel class creates a data model instance
-// where each leaf within the data model is decorated with dojo.Stateful
-// properties that widgets can bind to and watch for their changes.
+	// The dojox.mvc.StatefulModel class creates a data model instance
+	// where each leaf within the data model is decorated with dojo.Stateful
+	// properties that widgets can bind to and watch for their changes.
 
-require(['dojo/domReady!'], function(){
-			dojox.mobile.parser.parse();
-		});
 
-dojo.addOnLoad(function() {
-			dojo.byId("wholepage").style.display = "";
-});
+	require(["dojo/ready"], function(ready){
+		//dojox.mobile.parser.parse();
+		//dojo.parser.parse();
+		parser.parse();
+	});
+
+	require(['dojo/domReady!'], function(){
+		//console.log("dom is now ready 2a");
+		dom.byId("wholepage").style.display = "";
+	});
 
 }); // end function
 
