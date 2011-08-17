@@ -63,7 +63,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 		return sz;
 	};
 
-	return declare(Element, {
+	return declare("dojox.charting.action2d._IndicatorElement",[Element], {
 		//	summary:
 		//		Internal element used by indicator actions.
 		//	tags:
