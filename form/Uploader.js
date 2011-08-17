@@ -327,7 +327,8 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		}
 		// reset focusNode to the inputNode, so when the button is clicked,
 		// the focus is properly moved to the input element
-		this.focusNode = this.inputNode = domConstruct.create("input", {type:"file", name:name}, this.domNode, "first");
+		this.focusNode = this.inputNode = domConstruct.create("input", {type:"file", name:name, 
+		  'class':'dijitUploaderRealInput'}, this.domNode, "first");
 		if(this.supports("multiple") && this.multiple){
 			domAttr.set(this.inputNode, "multiple", true);
 		}
