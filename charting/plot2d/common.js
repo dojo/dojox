@@ -1,8 +1,9 @@
-define(["dojo/_base/lang", "dojo/number", "dojo/_base/array", "dojo/_base/Color", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", 
 		"dojox/gfx", "dojox/lang/functional"], 
-	function(lang, numberLib, arr, Color, g, df){
+	function(lang, arr, Color, g, df){
 	
 	var common = lang.getObject("dojox.charting.plot2d.common", true);
+	var numberLib = 0;
 	
 	return lang.mixin(common, {	
 		makeStroke: function(stroke){
@@ -204,7 +205,14 @@ define(["dojo/_base/lang", "dojo/number", "dojo/_base/array", "dojo/_base/Color"
 		},
 		
 		getLabel: function(/*Number*/number, /*Boolean*/fixed, /*Number*/precision){
-			if(numberLib.number){
+			if(numberLib == 0){
+				try{
+					numberLib = require("dojo/number");
+				}catch(e){
+					numberLib = null;
+				}
+			}
+			if(numberLib){
 				return (fixed ? numberLib.format(number, {places : precision}) :
 					numberLib.format(number)) || "";
 			}

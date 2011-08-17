@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/number"], function(lang, numberLib){
+define(["dojo/_base/lang"], function(lang){
 
 	var eq = function(/*Number*/ a, /*Number*/ b){
 		// summary: compare two FP numbers for equality
@@ -6,6 +6,7 @@ define(["dojo/_base/lang", "dojo/number"], function(lang, numberLib){
 	};
 	
 	var common = lang.getObject("dojox.charting.scaler.common", true);
+	var numberLib = 0;
 	
 	return lang.mixin(common, {
 		findString: function(/*String*/ val, /*Array*/ text){
@@ -17,7 +18,14 @@ define(["dojo/_base/lang", "dojo/number"], function(lang, numberLib){
 		},
 		getNumericLabel: function(/*Number*/ number, /*Number*/ precision, /*Object*/ kwArgs){
 			var def = "";
-			if(dojo && numberLib){
+			if(numberLib == 0){
+				try{
+					numberLib = require("dojo/number");
+				}catch(e){
+					numberLib = null;
+				}
+			}
+			if(numberLib){
 				def = (kwArgs.fixed ? numberLib.format(number, {places : precision < 0 ? -precision : 0}) :
 					numberLib.format(number)) || "";
 			}else{
