@@ -33,7 +33,7 @@ gfx3d.scheduler = {
 	}
 };
 
-declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
+var BST = declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 	constructor: function(obj, outline){
 		// summary: build the binary search tree, using binary space partition algorithm.
 		// The idea is for any polygon, for example, (a, b, c), the space is divided by
@@ -144,5 +144,11 @@ gfx3d.drawer = {
 	// of objects, and only elements of todos call setShape.
 };
 
-return gfx3d.scheduler;
+var api = { 
+	scheduler: gfx3d.scheduler,
+	drawer: gfx3d.drawer,
+	BinarySearchTree: BST
+};
+
+return api;
 });
