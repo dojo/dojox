@@ -13,7 +13,7 @@ define([
 	"../_FocusManager"
 ], function(dojo, lang, declare, array, connect, event, has, html, keys, dijitA11y, dijitFocus, _FocusManager){
 
-declare("dojox.grid.enhanced._FocusArea", null, {
+var _FocusArea = declare("dojox.grid.enhanced._FocusArea", null, {
 	// summary:
 	//		This is a friend class of _FocusManager
 /*=====
@@ -192,7 +192,7 @@ return declare("dojox.grid.enhanced._FocusManager", _FocusManager, {
 				//Just replace the original area, instead of remove it, so the position does not change.
 				array.forEach(area._connects, connect.disconnect);
 			}
-			this._areas[area.name] = new dojox.grid.enhanced._FocusArea(area, this);
+			this._areas[area.name] = new _FocusArea(area, this);
 			if(area.onHeaderMouseEvent){
 				this._headerMouseEventHandlers.push(area.name);
 			}
@@ -263,7 +263,7 @@ return declare("dojox.grid.enhanced._FocusManager", _FocusManager, {
 			}
 		}else{
 			return (cai < 0 || cai >= this._areaQueue.length) ?
-				new dojox.grid.enhanced._FocusArea({}, this) :
+				new _FocusArea({}, this) :
 				this._areas[this._areaQueue[this._currentAreaIdx]];
 		}
 		return null;

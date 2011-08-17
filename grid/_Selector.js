@@ -178,7 +178,7 @@ define([
 		};
 	}
 
-	var _RadioSelector = declare("dojox.grid._RadioSelector", _Selector, {
+	declare("dojox.grid._RadioSelector", _Selector, {
 		inputType: 'radio',
 		selectionMode: 'single',
 
@@ -192,7 +192,7 @@ define([
 		renderHeader: function(){}
 	});
 
-	var _CheckBoxSelector = declare("dojox.grid._CheckBoxSelector", _Selector, {
+	declare("dojox.grid._CheckBoxSelector", _Selector, {
 		inputType: 'checkbox',
 		_headerBuilderClass: _InputSelectorHeaderBuilder,
 		_contentBuilderClass: _InputSelectorContentBuilder,

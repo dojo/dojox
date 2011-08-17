@@ -17,9 +17,10 @@ define([
 	"./util",
 	"dojo/_base/html",
 	"./_Builder",
+	"dojo/dnd/Avatar",
 	"dojo/dnd/Manager"
 ], function(dojo, dijit, dojox, declare, array, lang, connect, has, query,
-	win, template, Source, _Widget, _TemplatedMixin, metrics, util, html, _Builder){
+	win, template, Source, _Widget, _TemplatedMixin, metrics, util, html, _Builder, Avatar){
 
 	// a private function
 	var getStyleText = function(inNode, inStyleText){
@@ -27,7 +28,7 @@ define([
 	};
 
 	// some public functions
-	declare('dojox.grid._View', [_Widget, _TemplatedMixin], {
+	var _View = declare('dojox.grid._View', [_Widget, _TemplatedMixin], {
 		// summary:
 		//		A collection of grid columns. A grid is comprised of a set of views that stack horizontally.
 		//		Grid creates views automatically based on grid's layout structure.
@@ -771,7 +772,7 @@ define([
 		}
 	});
 
-	declare("dojox.grid._GridAvatar", dojo.dnd.Avatar, {
+	var _GridAvatar = declare("dojox.grid._GridAvatar", Avatar, {
 		construct: function(){
 			var dd = win.doc;
 
@@ -839,11 +840,11 @@ define([
 	dojo.dnd.manager().makeAvatar = function(){
 		var src = this.source;
 		if(src.viewIndex !== undefined && !html.hasClass(win.body(),"dijit_a11y")){
-			return new dojox.grid._GridAvatar(this);
+			return new _GridAvatar(this);
 		}
 		return oldMakeAvatar.call(dojo.dnd.manager());
 	};
 
-	return dojox.grid._View;
+	return _View;
 
 });
