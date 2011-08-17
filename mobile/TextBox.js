@@ -17,12 +17,16 @@ define([
 
 		baseClass: "mblTextBox",
 
+		// Override automatic assigning type --> node, it causes exception on IE8.
+		// Instead, type must be specified as this.type when the node is created, as part of the original DOM
+		_setTypeAttr: null,
+
 		// Map widget attributes to DOMNode attributes.
 		_setPlaceHolderAttr: "textbox",
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
-				this.srcNodeRef = domConstruct.create("input", {});
+				this.srcNodeRef = domConstruct.create("input", {"type":this.type});
 			}
 			this.inherited(arguments);
 			this.textbox = this.focusNode = this.domNode;

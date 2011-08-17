@@ -27,6 +27,10 @@ define([
 
 		baseClass: "mblButton",
 
+		// Override automatic assigning type --> node, it causes exception on IE.
+		// Instead, type must be specified as this.type when the node is created, as part of the original DOM
+		_setTypeAttr: null,
+
 		// duration: Number
 		//	duration of selection, milliseconds or -1 for no post-click CSS styling
 		duration: 1000,
