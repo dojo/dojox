@@ -207,7 +207,7 @@ define([
 			var abspos = domGeometry.position(this.sliderBarContainer, true),
 				bar = domGeometry.position(this.progressBar, true),
 				relMousePos = e[this._mousePixelCoord] - abspos[this._startingPixelCoord],
-				leftPos = bar[this._startingPixelCount],
+				leftPos = bar[this._startingPixelCoord],
 				rightPos = leftPos + bar[this._pixelCount],
 				isMaxVal = this._isReversed() ? relMousePos <= leftPos : relMousePos >= rightPos,
 				p = this._isReversed() ? abspos[this._pixelCount] - relMousePos : relMousePos
@@ -353,7 +353,7 @@ define([
 			var coordEvent = e.touches ? e.touches[0] : e; // if multitouch take first touch for coords
 
 			if(!mouseOffset){
-				mouseOffset = widget._mouseOffset = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - bar[widget._startingPixelCount];
+				mouseOffset = widget._mouseOffset = coordEvent[widget._mousePixelCoord] - abspos[widget._startingPixelCoord] - bar[widget._startingPixelCoord];
 			}
 
 
