@@ -1,7 +1,7 @@
 define(["./_base","dojo/_base/lang"], 
   function(g, lang){
-	/*===== g = dojox.gfx =====*/
 	var m = g.matrix = {};
+	/*===== g = dojox.gfx; m = dojox.gfx.matrix =====*/
 
 	// candidates for dojox.math:
 	var _degToRadCache = {};
@@ -11,7 +11,8 @@ define(["./_base","dojo/_base/lang"],
 	m._radToDeg = function(radian){ return radian / Math.PI * 180; };
 
 	m.Matrix2D = function(arg){
-		// summary: a 2D matrix object
+		// summary: 
+		//		a 2D matrix object
 		// description: Normalizes a 2D matrix-like object. If arrays is passed,
 		//		all objects of the array are normalized and multiplied sequentially.
 		// arg: Object

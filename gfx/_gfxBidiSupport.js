@@ -33,7 +33,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 	var bidiEngine = new BidiEngine();
 
 	lang.extend(g.shape.Surface, {
-		// textDir:
+		// textDir: String
 		//		Will be used as default for Text/TextPath/Group objects that created by this surface
 		//		and textDir wasn't directly specified for them, though the bidi support was loaded.
 		//		Can be setted in two ways:
@@ -43,7 +43,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 		//			of textDir propogates to all of it's children and the children of children (for Groups) etc.
 		textDir: "",
 
-		setTextDir: function(newTextDir){
+		setTextDir: function(/*String*/newTextDir){
 			// summary:
 			//		Used for propogation and change of textDir.
 			//		newTextDir will be forced as textDir for all of it's children (Group/Text/TextPath).
@@ -56,12 +56,12 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 	});
 
 	lang.extend(g.Group, {                          
-		// textDir:
+		// textDir: String
 		//		Will be used for inheritance, or as default for text objects
 		//		that textDir wasn't directly specified for them but the bidi support was required.
 		textDir: "",
 
-		setTextDir: function(newTextDir){
+		setTextDir: function(/*String*/newTextDir){
 			// summary:
 			//		Used for propogation and change of textDir.
 			//		newTextDir will be forced as textDir for all of it's children (Group/Text/TextPath).
@@ -176,7 +176,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 			//			3. "auto" - base direction is contextual (defined by first strong character).
 		textDir: "",
 
-		formatText: function (text, textDir){
+		formatText: function (/*String*/text, /*String*/textDir){
 			// summary: 
 			//		Applies the right transform on text, according to renderer.
 			// text:	the string for manipulation, by default return value.

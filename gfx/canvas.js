@@ -18,8 +18,10 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 	//		API.
 	};
 	g = dojox.gfx;
+	gs = dojox.gfx.shape;
 	pathLib.Path = dojox.gfx.path.Path;
 	pathLib.TextPath = dojox.gfx.path.TextPath;
+	canvas = dojox.gfx.canvas;
 	canvas.Shape = dojox.gfx.canvas.Shape;
 	gs.Shape = dojox.gfx.shape.Shape;
 	gs.Rect = dojox.gfx.shape.Rect;

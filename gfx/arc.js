@@ -28,6 +28,14 @@ define(["./_base", "dojo/_base/lang", "./matrix"],
 
 	var arc = g.arc = {
 		unitArcAsBezier: unitArcAsBezier,
+		/*===== 
+			unitArcAsBezier: function(alpha) {
+			// summary: return a start point, 1st and 2nd control points, and an end point of
+			//		a an arc, which is reflected on the x axis
+			// alpha: Number
+			//		angle in radians, the arc will be 2 * angle size
+			},
+		=====*/
 		curvePI4: curvePI4,
 			// curvePI4: Object
 			//		an object with properties of an arc around a unit circle from 0 to pi/4

@@ -9,18 +9,25 @@ define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_bas
 	
 		//	axis: String?
 		//		Target axis name for this action.  Default is "x".
+		axis: "x",
 		//	scaleFactor: Number?
 		//		The scale factor applied on mouse wheel zoom.  Default is 1.2.
+		scaleFactor: 1.2,
 		//	maxScale: Number?
 		//		The max scale factor accepted by this chart action.  Default is 100.
+		maxScale: 100,
 		//	enableScroll: Boolean?
 		//		Whether mouse drag gesture should scroll the chart.  Default is true.
+		enableScroll: true,
 		//	enableDoubleClickZoom: Boolean?
 		//		Whether a double click gesture should toggle between fit and zoom on the chart.  Default is true.
+		enableDoubleClickZoom: true,
 		//	enableKeyZoom: Boolean?
 		//		Whether a keyZoomModifier + + or keyZoomModifier + - key press should zoom in our out on the chart.  Default is true.
-		//	keyZoomModifier: Boolean?
+		enableKeyZoom: true,
+		//	keyZoomModifier: String?
 		//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
+		keyZoomModifier: "ctrl"
 	});
 	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/

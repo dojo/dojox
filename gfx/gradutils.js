@@ -5,6 +5,7 @@ define(["./_base", "dojo/_base/lang", "./matrix", "dojo/_base/Color"],
   
 	/*===== g= dojox.gfx =====*/
 	var gradutils = g.gradutils = {};
+	/*===== g= dojox.gfx; gradutils = dojox.gfx.gradutils; =====*/
 
 	function findColor(o, c){
 		if(o <= 0){

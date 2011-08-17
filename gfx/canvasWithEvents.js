@@ -20,19 +20,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	//		API.	
 	};
 	g = dojox.gfx;
-	var canvas.Shape = dojox.gfx.canvas.Shape;
-	var canvas.Group = dojox.gfx.canvas.Group;
-	var canvas.Image = dojox.gfx.canvas.Image;
-	var canvas.Text = dojox.gfx.canvas.Text;
-	var canvas.Rect = dojox.gfx.canvas.Rect;
-	var canvas.Circle = dojox.gfx.canvas.Circle;
-	var canvas.Ellipse = dojox.gfx.canvas.Ellipse;
-	var canvas.Line = dojox.gfx.canvas.Line;
-	var canvas.PolyLine = dojox.gfx.canvas.PolyLine;
-	var canvas.TextPath = dojox.gfx.canvas.TextPath;
-	var canvas.Path = dojox.gfx.canvas.Path;
-	var canvas.Surface = dojox.gfx.canvas.Surface;
-	var canvasEvent.Shape = dojox.gfx.canvasWithEvents.Shape;
+	canvas.Shape = dojox.gfx.canvas.Shape;
+	canvas.Group = dojox.gfx.canvas.Group;
+	canvas.Image = dojox.gfx.canvas.Image;
+	canvas.Text = dojox.gfx.canvas.Text;
+	canvas.Rect = dojox.gfx.canvas.Rect;
+	canvas.Circle = dojox.gfx.canvas.Circle;
+	canvas.Ellipse = dojox.gfx.canvas.Ellipse;
+	canvas.Line = dojox.gfx.canvas.Line;
+	canvas.PolyLine = dojox.gfx.canvas.PolyLine;
+	canvas.TextPath = dojox.gfx.canvas.TextPath;
+	canvas.Path = dojox.gfx.canvas.Path;
+	canvas.Surface = dojox.gfx.canvas.Surface;
+	canvasEvent.Shape = dojox.gfx.canvasWithEvents.Shape;
 	
   =====*/
 	var canvasEvent = g.canvasWithEvents = {};

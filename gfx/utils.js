@@ -2,12 +2,20 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 	"dojo/_base/Deferred", "dojo/_base/sniff", "require","dojo/_base/config"], 
   function(kernel, lang, g, html, arr, win, jsonLib, Deferred, has, require, config){
 	var gu = g.utils = {};
+	/*===== g= dojox.gfx; gu = dojox.gfx.utils; =====*/
 
 	lang.mixin(gu, {
 		forEach: function(
-			/* dojox.gfx.Surface || dojox.gfx.Shape */ object,
+			/*dojox.gfx.Surface|dojox.gfx.Shape*/ object,
 			/*Function|String|Array*/ f, /*Object?*/ o
 		){
+			// summary:
+			//		Takes a shape or a surface and applies a function "f" to in the context of "o" 
+			//		(or global, if missing). If "shape" was a surface or a group, it applies the same 
+			//		function to all children recursively effectively visiting all shapes of the underlying scene graph.
+			// object : The gfx container to iterate.
+			// f : The function to apply.
+			// o : The scope.
 			o = o || win.global;
 			f.call(o, object);
 			if(object instanceof g.Surface || object instanceof g.Group){
@@ -18,8 +26,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		},
 
 		serialize: function(
-			/* dojox.gfx.Surface || dojox.gfx.Shape */ object
+			/* dojox.gfx.Surface|dojox.gfx.Shape */ object
 		){
+			// summary:
+			//		Takes a shape or a surface and returns a DOM object, which describes underlying shapes.
 			var t = {}, v, isSurface = object instanceof g.Surface;
 			if(isSurface || object instanceof g.Group){
 				t.children = arr.map(object.children, gu.serialize);
@@ -49,16 +59,20 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		},
 
 		toJson: function(
-			/* dojox.gfx.Surface || dojox.gfx.Shape */ object,
+			/* dojox.gfx.Surface|dojox.gfx.Shape */ object,
 			/* Boolean? */ prettyPrint
 		){
+			// summary:
+			//		Works just like serialize() but returns a JSON string. If prettyPrint is true, the string is pretty-printed to make it more human-readable.
 			return jsonLib.toJson(gu.serialize(object), prettyPrint);	// String
 		},
 
 		deserialize: function(
-			/* dojox.gfx.Surface || dojox.gfx.Shape */ parent,
-			/* dojox.gfx.Shape || Array */ object
+			/* dojox.gfx.Surface|dojox.gfx.Shape */ parent,
+			/* dojox.gfx.Shape|Array */ object
 		){
+			// summary:
+			//		Takes a surface or a shape and populates it with an object produced by serialize().
 			if(object instanceof Array){
 				return arr.map(object, lang.hitch(null, gu.deserialize, parent));	// Array
 			}
@@ -82,8 +96,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		},
 
 		fromJson: function(
-			/* dojox.gfx.Surface || dojox.gfx.Shape */ parent,
+			/* dojox.gfx.Surface|dojox.gfx.Shape */ parent,
 			/* String */ json){
+			// summary:
+			//		Works just like deserialize() but takes a JSON representation of the object.
 			return gu.deserialize(parent, jsonLib.fromJson(json));	// Array || dojox.gfx.Shape
 		},
 

@@ -13,7 +13,7 @@ define(["./_base", "dojo/_base/lang", "./matrix"],
 		}else if(!isFinite(r2)){
 			return r1;	// Number
 		}
-		m1 = Math.abs(m1), m2 = Math.abs(m2);
+		m1 = Math.abs(m1); m2 = Math.abs(m2);
 		return (m1 * r1 + m2 * r2) / (m1 + m2);	// Number
 	}
 
@@ -93,8 +93,8 @@ define(["./_base", "dojo/_base/lang", "./matrix"],
 	}
 
 	return g.decompose = function(matrix){
-		// summary: decompose a 2D matrix into translation, scaling, and rotation components
-		// description: this function decompose a matrix into four logical components:
+		// summary: Decompose a 2D matrix into translation, scaling, and rotation components.
+		// description: This function decompose a matrix into four logical components:
 		//	translation, rotation, scaling, and one more rotation using SVD.
 		//	The components should be applied in following order:
 		//	| [translate, rotate(angle2), scale, rotate(angle1)]
