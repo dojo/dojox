@@ -1,8 +1,8 @@
-define(["dojo", "dijit", "dojox/main", "dijit/_Widget", "dijit/_Templated", "dijit/BackgroundIframe", "dijit/_base/manager", "dojo/fx", "dojo/window"], function(dojo, dijit, dojox){
+define(["dojo", "dijit", "dojox/main", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/BackgroundIframe", "dijit/_base/manager", "dojo/fx", "dojo/window"], function(dojo, dijit, dojox){
 
 	dojo.getObject("widget", true, dojox);
 	
-	return dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._Templated], {
+	return dojo.declare("dojox.widget.Toaster", [dijit._Widget, dijit._TemplatedMixin], {
 		// summary:
 		//		Message that slides in from the corner of the screen, used for notifications
 		//		like "new email".
