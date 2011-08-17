@@ -391,6 +391,18 @@ dojo.declare("dojox.grid.TreeGridItemCache", null, {
 	
 	deleteItem: function(rowIdx){
 		if(this.items[rowIdx]){
+			var treePath = this.items[rowIdx].treePath,
+				i = rowIdx, indexes,
+				parentTreePath = treePath.indexOf('/') > 0 ? treePath.substring(0, treePath.lastIndexOf("/") + 1) : "";
+			for(; i < this.items.length; i++){
+				if(this.items[i].treePath.indexOf(parentTreePath + '/') == 0){
+					indexes = this.items[i].treePath.substring(parentTreePath.length).split('/');
+					indexes[0] = parseInt(indexes[0], 10) - 1;
+					this.updateCache(i, {treePath: parentTreePath + indexes.join('/')});
+				}else{
+					break;
+				}
+			}
 			this.items.splice(rowIdx, 1);
 		}
 	},
