@@ -56,7 +56,7 @@ return declare("dojox.form.uploader.FileList", [formUploaderBase], {
 	templateString:	'<div class="dojoxUploaderFileList">' +
 						'<div dojoAttachPoint="progressNode" class="dojoxUploaderFileListProgress"><div dojoAttachPoint="percentBarNode" class="dojoxUploaderFileListProgressBar"></div><div dojoAttachPoint="percentTextNode" class="dojoxUploaderFileListPercentText">0%</div></div>' +
 						'<table class="dojoxUploaderFileListTable">'+
-							'<thead><tr class="dojoxUploaderFileListHeader"><th class="dojoxUploaderIndex">${headerIndex}</th><th class="dojoxUploaderIcon">${headerType}</th><th class="dojoxUploaderFileName">${headerFilename}</th><th class="dojoxUploaderFileSize">${headerFilesize}</th></tr></thead>'+
+							'<thead><tr class="dojoxUploaderFileListHeader"><th class="dojoxUploaderIndex">${headerIndex}</th><th class="dojoxUploaderIcon">${headerType}</th><th class="dojoxUploaderFileName">${headerFilename}</th><th class="dojoxUploaderFileSize" dojoAttachPoint="sizeHeader">${headerFilesize}</th></tr></thead>'+
 							'<tbody class="dojoxUploaderFileListContent" dojoAttachPoint="listNode">'+
 							'</tbody>'+
 						'</table>'+
@@ -103,6 +103,11 @@ return declare("dojox.form.uploader.FileList", [formUploaderBase], {
 					this.hideProgress(true);
 				}), 1250);
 			});
+			if(!(this._fileSizeAvail = {'html5':1,'flash':1}[this.uploader.uploadType])){
+				//if uploadType is neither html5 nor flash, file size is not available
+				//hide the size header
+				this.sizeHeader.style.display="none";
+			}
 		}else{
 			this._upCheckCnt++;
 			setTimeout(lang.hitch(this, "setUploader"), 250);
@@ -184,9 +189,11 @@ return declare("dojox.form.uploader.FileList", [formUploaderBase], {
 		c = r.insertCell(-1);
 		domClass.add(c, "dojoxUploaderFileName");
 		c.innerHTML = name;
-		c = r.insertCell(-1);
-		domClass.add(c, "dojoxUploaderSize");
-		c.innerHTML = this.convertBytes(size).value;
+		if(this._fileSizeAvail){
+			c = r.insertCell(-1);
+			domClass.add(c, "dojoxUploaderSize");
+			c.innerHTML = this.convertBytes(size).value;
+		}
 
 		this.rowAmt++;
 	}
