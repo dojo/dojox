@@ -1,5 +1,5 @@
-define(["dojo/_base/declare","dojo/number","./_Indicator"],
-  function(declare, NumberUtils, Indicator) { 
+define(["dojo/_base/declare","./_Indicator"],
+  function(declare, Indicator) { 
 
 return declare("dojox.gauges.TextIndicator", [Indicator], {
 	// summary:
@@ -38,11 +38,11 @@ return declare("dojox.gauges.TextIndicator", [Indicator], {
 			v = this._gauge.max;
 		}
 		var txt;
-		
-		if (NumberUtils.number) {
-			txt = this.fixedPrecision ? NumberUtils.number.format(v, {
+		var NumberUtils = this._gauge ? this._gauge._getNumberModule() : null;
+		if (NumberUtils) {
+			txt = this.fixedPrecision ? NumberUtils.format(v, {
 				places: this.precision
-			}) : NumberUtils.number.format(v);
+			}) : NumberUtils.format(v);
 		} else {
 			txt = this.fixedPrecision ? v.toFixed(this.precision) : v.toString();
 		}

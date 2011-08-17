@@ -1,6 +1,8 @@
-define(["dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/Color","dojo/number","dojox/gfx","./BarGauge","./BarCircleIndicator","./GlossyHorizontalGaugeMarker"],
-  function(declare, Connect, lang, Color, NumberUtils, gfx, BarGauge, BarCircleIndicator, GlossyHorizontalGaugeMarker) {
+define(["dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/Color","dojox/gfx","./BarGauge","./BarCircleIndicator","./GlossyHorizontalGaugeMarker"],
+  function(declare, Connect, lang, Color, gfx, BarGauge, BarCircleIndicator, GlossyHorizontalGaugeMarker) {
 
+
+var NumberUtils
 return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	// summary:
 	//		Represents an horizontal bar gauge with a glossy appearance.
@@ -194,9 +196,9 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	},
 	
 	_formatNumber: function(val){
-	
-		if(NumberUtils.number){ // use internationalization if loaded
-			return NumberUtils.number.format(val, {
+	    var NumberUtils = this._getNumberModule();
+		if(NumberUtils){ // use internationalization if loaded
+			return NumberUtils.format(val, {
 				places: this.scalePrecision
 			});
 		}else{

@@ -1,6 +1,9 @@
 define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/array","dojo/_base/event",
-		"dojo/_base/connect","dojo/dom-construct", "dijit/Tooltip","dijit/_Widget", "dojox/gfx", "dojo/number", "./Range", "dojo/fx/easing"], 
-  function( declare, lang, html, arr, Event, Connect, DOM, Tooltip, Widget, gfx, NumberUtils, Range) {
+		"dojo/_base/connect","dojo/dom-construct", "dijit/_Widget", "dojox/gfx", "./Range", "dojo/fx/easing"], 
+  function( declare, lang, html, arr, Event, Connect, DOM , Widget, gfx, Range) {
+
+	var _tooltipModule =  0;
+    var _numberModule =  0;
 
 return declare("dojox.gauges._Gauge",[Widget],{
 	// summary:
@@ -216,10 +219,11 @@ return declare("dojox.gauges._Gauge",[Widget],{
 			if (i==this.max&&this._isScaleCircular()) continue; // do not draw last tick on fully circular gauges
 			t.value=i;
 			if (major){
-				if (NumberUtils.number){ // use internationalization if loaded
-					t.label = (newTicks.fixedPrecision && newTicks.precision) ? NumberUtils.number.format(i, {
+				var NumberUtils = this._getNumberModule();
+				if (NumberUtils){ // use internationalization if loaded
+					t.label = (newTicks.fixedPrecision && newTicks.precision) ? NumberUtils.format(i, {
 						places: newTicks.precision
-					}): NumberUtils.number.format(i);
+					}): NumberUtils.format(i);
 				}else{
 					t.label = (newTicks.fixedPrecision && newTicks.precision) ? i.toFixed(newTicks.precision): i.toString();
 				}
@@ -257,12 +261,43 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		html.style(this.mouseNode, 'height', '0');
 		html.style(this.mouseNode, 'position', 'absolute');
 		html.style(this.mouseNode, 'z-index', '100');
+		var Tooltip = this._getToolTipModule();
 		if(Tooltip && this.useTooltip){
 			Tooltip.show('test',this.mouseNode, !this.isLeftToRight());
 			Tooltip.hide(this.mouseNode);
 		}
 	},
 
+    _getToolTipModule :function() {
+		// summary:
+		// 	 Tests is AMD dijit/Tooltip is loaded
+		
+		if (_tooltipModule == 0) {
+			try {
+				_tooltipModule = require("dijit/Tooltip");
+			} 
+			catch (e) {
+				_tooltipModule = null;
+			}
+		}
+		return _tooltipModule;
+	},
+	
+	_getNumberModule :function() {
+		// summary:
+		//  	Tests is AMD dojo/number is loaded
+		
+		if (_numberModule == 0) {
+			try {
+				_numberModule = require("dojo/number");
+			} 
+			catch (e) {
+				_numberModule = null;
+			}
+		}
+		return _numberModule;
+	},
+	
 	createSurface: function(){
 		// summary:
 		//		internal method used by the gauge to create the graphics surface area
@@ -552,7 +587,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//		Updates the tooltip for the gauge to display the given text.
 		// txt:		String
 		//			The text to put in the tooltip.
-		
+		var Tooltip = this._getToolTipModule();
 		if (!Tooltip) return;
 		
 		if(this._lastHover != txt){
@@ -581,7 +616,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 				if (r && r.hover){
 					hover = r.hover;
 				}
-				
+				var Tooltip = this._getToolTipModule();
 				if (Tooltip && this.useTooltip && !this._drag){
 					if (hover){
 						this.updateTooltip(hover, event);
@@ -601,7 +636,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//			The event object
 
 		this._overOverlay = false;
-		
+		var Tooltip = this._getToolTipModule();
 		if(Tooltip && this.useTooltip && this.mouseNode){
 			Tooltip.hide(this.mouseNode);
 		}
@@ -614,7 +649,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		// event:	Object
 		//			The event object
 		
-		
+		var Tooltip = this._getToolTipModule();
 		if (Tooltip){
 			if (event){
 				html.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
@@ -700,7 +735,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//           The indicator object
 		// event:	Object
 		//			The event object
-		
+		var Tooltip = this._getToolTipModule();
 		if (Tooltip && this.useTooltip && !this._drag){
 			if (indicator.hover){
 				html.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
@@ -724,6 +759,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//           The indicator object
 		// event:	Object
 		//			The event object
+		var Tooltip = this._getToolTipModule();
 		if(Tooltip && this.useTooltip && this.mouseNode){
 			Tooltip.hide(this.mouseNode);
 		}
@@ -732,12 +768,14 @@ return declare("dojox.gauges._Gauge",[Widget],{
 	},
 	
 	_handleMouseOutRange: function ( range, event){
+		var Tooltip = this._getToolTipModule();
 		if (Tooltip && this.useTooltip && this.mouseNode){
 			Tooltip.hide(this.mouseNode);
 		}
 	},
 	
 	_handleMouseOverRange: function (range, event){
+		var Tooltip = this._getToolTipModule();
 		if (Tooltip && this.useTooltip && !this._drag){
 			if (range.hover){
 				html.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
