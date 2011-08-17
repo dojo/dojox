@@ -7,6 +7,7 @@ define([
 	"dojo/_base/sniff",
 	"dojo/dom-style",
 	"dojo/dom-geometry",
+	"dojo/keys",
 	"dijit",
 	"dojo/dnd/Mover",
 	"dojo/dnd/Moveable",
@@ -17,8 +18,8 @@ define([
 	"dijit/form/_FormValueWidget",
 	"dijit/focus",
 	"dojo/fx",
-	"dojox/fx"
-], function(declare, lang, array, fx, event, has, domStyle, domGeometry, dijit, Mover, Moveable, hTemplate, vTemplate, HorizontalSlider, VerticalSlider, FormValueWidget, FocusManager, fxUtils, fx){
+	"dojox/fx" // unused?
+], function(declare, lang, array, fx, event, has, domStyle, domGeometry, keys, dijit, Mover, Moveable, hTemplate, vTemplate, HorizontalSlider, VerticalSlider, FormValueWidget, FocusManager, fxUtils){
 
 	// make these functions once:
 	var sortReversed = function(a, b){ return b - a; },
@@ -77,8 +78,7 @@ define([
 
 			var focusedEl = e.currentTarget,
 				minSelected = false,
-				maxSelected = false,
-				k = keys
+				maxSelected = false
 			;
 
 			if(focusedEl == this.sliderHandle){
@@ -90,40 +90,40 @@ define([
 			}
 
 			switch(e.keyCode){
-				case k.HOME:
+				case keys.HOME:
 					this._setValueAttr(this.minimum, true, maxSelected);
 					break;
-				case k.END:
+				case keys.END:
 					this._setValueAttr(this.maximum, true, maxSelected);
 					break;
 				// this._descending === false: if ascending vertical (min on top)
 				// (this._descending || this.isLeftToRight()): if left-to-right horizontal or descending vertical
-				case ((this._descending || this.isLeftToRight()) ? k.RIGHT_ARROW : k.LEFT_ARROW):
-				case (this._descending === false ? k.DOWN_ARROW : k.UP_ARROW):
-				case (this._descending === false ? k.PAGE_DOWN : k.PAGE_UP):
+				case ((this._descending || this.isLeftToRight()) ? keys.RIGHT_ARROW : keys.LEFT_ARROW):
+				case (this._descending === false ? keys.DOWN_ARROW : keys.UP_ARROW):
+				case (this._descending === false ? keys.PAGE_DOWN : keys.PAGE_UP):
 					if(minSelected && maxSelected){
 						this._bumpValue([
-							{'change': e.keyCode == k.PAGE_UP ? this.pageIncrement : 1, 'useMaxValue': true},
-							{'change': e.keyCode == k.PAGE_UP ? this.pageIncrement : 1, 'useMaxValue': false}
+							{'change': e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1, 'useMaxValue': true},
+							{'change': e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1, 'useMaxValue': false}
 						]);
 					}else if(minSelected){
-						this._bumpValue(e.keyCode == k.PAGE_UP ? this.pageIncrement : 1, true);
+						this._bumpValue(e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1, true);
 					}else if(maxSelected){
-						this._bumpValue(e.keyCode == k.PAGE_UP ? this.pageIncrement : 1);
+						this._bumpValue(e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1);
 					}
 					break;
-				case ((this._descending || this.isLeftToRight()) ? k.LEFT_ARROW : k.RIGHT_ARROW) :
-				case (this._descending === false ? k.UP_ARROW : k.DOWN_ARROW):
-				case (this._descending === false ? k.PAGE_UP : k.PAGE_DOWN):
+				case ((this._descending || this.isLeftToRight()) ? keys.LEFT_ARROW : keys.RIGHT_ARROW) :
+				case (this._descending === false ? keys.UP_ARROW : keys.DOWN_ARROW):
+				case (this._descending === false ? keys.PAGE_UP : keys.PAGE_DOWN):
 					if(minSelected && maxSelected){
 						this._bumpValue([
-							{ change: e.keyCode == k.PAGE_DOWN ? -this.pageIncrement : -1, useMaxValue: false },
-							{ change: e.keyCode == k.PAGE_DOWN ? -this.pageIncrement : -1, useMaxValue: true }
+							{ change: e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1, useMaxValue: false },
+							{ change: e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1, useMaxValue: true }
 						]);
 					}else if(minSelected){
-						this._bumpValue(e.keyCode == k.PAGE_DOWN ? -this.pageIncrement : -1);
+						this._bumpValue(e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1);
 					}else if(maxSelected){
-						this._bumpValue(e.keyCode == k.PAGE_DOWN ? -this.pageIncrement : -1, true);
+						this._bumpValue(e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1, true);
 					}
 					break;
 				default:

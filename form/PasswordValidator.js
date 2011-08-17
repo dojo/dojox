@@ -9,9 +9,8 @@ define([
 	"dijit/form/ValidationTextBox",
 	"dojo/text!./resources/PasswordValidator.html",
 	"dojo/i18n!./nls/PasswordValidator",
-	"dojo/_base/declare",
-	"dojo/_base/connect" // keys
-], function(array, lang, domAttr, i18n, query, keys, FormValueWidget, ValidationTextBox, template, formNlsPasswordValidator, declare, connect){
+	"dojo/_base/declare"
+], function(array, lang, domAttr, i18n, query, keys, FormValueWidget, ValidationTextBox, template, formNlsPasswordValidator, declare){
 
 	/*=====
 		FormValueWidget = dijit.form._FormValueWidget;

@@ -6,9 +6,8 @@ define([
 	"dojo/date",
 	"dojo/date/locale",
 	"dojo/date/stamp",
-	"dojo/_base/connect", // keys
 	"dojo/_base/declare"
-], function(lang, event, Spinner, keys, dateUtil, dateLocale, dateStamp, connect, declare){
+], function(lang, event, Spinner, keys, dateUtil, dateLocale, dateStamp, declare){
 	/*=====
 		Spinner = dijit.form._Spinner;
 	=====*/
