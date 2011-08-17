@@ -76,62 +76,38 @@ define([
 		_onKeyPress: function(/*Event*/ e){
 			if(this.disabled || this.readOnly || e.altKey || e.ctrlKey){ return; }
 
-			var focusedEl = e.currentTarget,
-				minSelected = false,
-				maxSelected = false
-			;
-
-			if(focusedEl == this.sliderHandle){
-				minSelected = true;
-			}else if(focusedEl == this.progressBar){
-				maxSelected = minSelected = true;
-			}else if(focusedEl == this.sliderHandleMax){
-				maxSelected = true;
-			}
+			var useMaxValue = e.target === this.sliderHandleMax;
+			var barFocus = e.target === this.progressBar;
+			var k = lang.delegate(keys, this.isLeftToRight() ? {PREV_ARROW: keys.LEFT_ARROW, NEXT_ARROW: keys.RIGHT_ARROW} 
+			                                                 : {PREV_ARROW: keys.RIGHT_ARROW, NEXT_ARROW: keys.LEFT_ARROW});			
+			var delta = 0;
+			var down = false;
 
 			switch(e.keyCode){
-				case keys.HOME:
-					this._setValueAttr(this.minimum, true, maxSelected);
-					break;
-				case keys.END:
-					this._setValueAttr(this.maximum, true, maxSelected);
-					break;
-				// this._descending === false: if ascending vertical (min on top)
-				// (this._descending || this.isLeftToRight()): if left-to-right horizontal or descending vertical
-				case ((this._descending || this.isLeftToRight()) ? keys.RIGHT_ARROW : keys.LEFT_ARROW):
-				case (this._descending === false ? keys.DOWN_ARROW : keys.UP_ARROW):
-				case (this._descending === false ? keys.PAGE_DOWN : keys.PAGE_UP):
-					if(minSelected && maxSelected){
-						this._bumpValue([
-							{'change': e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1, 'useMaxValue': true},
-							{'change': e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1, 'useMaxValue': false}
-						]);
-					}else if(minSelected){
-						this._bumpValue(e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1, true);
-					}else if(maxSelected){
-						this._bumpValue(e.keyCode == keys.PAGE_UP ? this.pageIncrement : 1);
-					}
-					break;
-				case ((this._descending || this.isLeftToRight()) ? keys.LEFT_ARROW : keys.RIGHT_ARROW) :
-				case (this._descending === false ? keys.UP_ARROW : keys.DOWN_ARROW):
-				case (this._descending === false ? keys.PAGE_UP : keys.PAGE_DOWN):
-					if(minSelected && maxSelected){
-						this._bumpValue([
-							{ change: e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1, useMaxValue: false },
-							{ change: e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1, useMaxValue: true }
-						]);
-					}else if(minSelected){
-						this._bumpValue(e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1);
-					}else if(maxSelected){
-						this._bumpValue(e.keyCode == keys.PAGE_DOWN ? -this.pageIncrement : -1, true);
-					}
-					break;
-				default:
-					FormValueWidget.prototype._onKeyPress.apply(this, arguments);
-					this.inherited(arguments);
-					return;
+				case k.HOME       :	this._setValueAttr(this.minimum, true, useMaxValue);event.stop(e);return;
+				case k.END        :	this._setValueAttr(this.maximum, true, useMaxValue);event.stop(e);return;
+				case k.PREV_ARROW :
+				case k.DOWN_ARROW :	down = true;
+				case k.NEXT_ARROW :
+				case k.UP_ARROW   :	delta = 1; break;
+				case k.PAGE_DOWN  :	down = true;
+				case k.PAGE_UP    :	delta = this.pageIncrement; break;
+				default           : this.inherited(arguments);return;
 			}
-			event.stop(e);
+			
+			if(down){delta = -delta;}
+
+			if(delta){
+				if(barFocus){
+					this._bumpValue([
+						{ change: delta, useMaxValue: false },
+						{ change: delta, useMaxValue: true }
+					]);
+				}else{
+					this._bumpValue(delta, useMaxValue);
+				}
+				event.stop(e);
+			}
 		},
 
 		_onHandleClickMax: function(e){
@@ -157,26 +133,24 @@ define([
 				]
 				: this._getBumpValue(signedChange, useMaxValue)
 
-			this._setValueAttr(value, true,
-				// conditional passed the valueAttr
-				!lang.isArray(signedChange) &&
-				((signedChange > 0 && !useMaxValue) || (useMaxValue && signedChange < 0))
-			);
+			this._setValueAttr(value, true, useMaxValue);
 		},
 
 		_getBumpValue: function(signedChange, useMaxValue){
+
+			var idx = useMaxValue ? 1 : 0;
+			if(this._isReversed()){
+				idx = 1 - idx;
+			}
+
 			var s = domStyle.getComputedStyle(this.sliderBarContainer),
 				c = domGeometry.getContentBox(this.sliderBarContainer, s),
 				count = this.discreteValues,
-				myValue = !useMaxValue ? this.value[0] : this.value[1]
+				myValue = this.value[idx]
 			;
 
 			if(count <= 1 || count == Infinity){ count = c[this._pixelCount]; }
 			count--;
-
-			if((this._isReversed() && signedChange < 0) || (signedChange > 0 && !this._isReversed())){
-				myValue = !useMaxValue ? this.value[1] : this.value[0];
-			}
 
 			var value = (myValue - this.minimum) * count / (this.maximum - this.minimum) + signedChange;
 			if(value < 0){ value = 0; }
