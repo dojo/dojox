@@ -1,16 +1,15 @@
 define([
 	"dojo/_base/kernel",
-	"dojo/_base/lang",
 	"dojo/_base/connect",	// dojo.connect
-	"dojo/dom-style",
-	"dojo/fx", // FIXME: chain,etc. not yet refactored in core...
-	"dojo/_base/html",	// dojo.style
+	"dojo/dom-style",	// dojo.style
+	"dojo/_base/fx",
+	"dojo/fx",
+	"dojo/_base/html",
 	"dojox/html/ext-dojo/style",
 	"dojox/fx/ext-dojo/complex"],
-function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
-	var css3fx = lang.getObject("css3.fx", true, dojox);
-	
-	lang.mixin(css3fx, {
+function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
+	var css3fx = Lang.getObject("dojox.css3.fx", true);
+	return Lang.mixin(css3fx, {
 		puff: function(args){
 			// summary:
 			//		Returns an animation that will do a "puff" effect on the given node
@@ -18,7 +17,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 			// description:
 			//		Fades out an element and scales it to args.endScale
 			//
-			return fx.combine([fx.fadeOut(args),
+			return CoreFx.combine([BaseFx.fadeOut(args),
 				this.expand({
 					node: args.node,
 					endScale: args.endScale || 2
@@ -33,7 +32,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 			// description:
 			//		Scales an element to args.endScale
 			//
-			return fx.animateProperty({
+			return BaseFx.animateProperty({
 				node: args.node,
 				properties: {
 					transform: { start: "scale(1)", end: "scale(" + [args.endScale || 3] + ")" }
@@ -61,7 +60,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 			// description:
 			//		Rotates an element from args.startAngle to args.endAngle
 			//
-			return fx.animateProperty({
+			return BaseFx.animateProperty({
 				node: args.node,
 				duration: args.duration || 1000,
 				properties: {
@@ -95,8 +94,8 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 					{ start: "scale(0, 1) skew(0deg," + (-direction * 30) + "deg)", end: "scale(1, 1) skew(0deg,0deg)" }
 			];
 			for(var i = 0; i < whichAnims.length; i++){
-				anims.push(fx.animateProperty(
-					lang.mixin({
+				anims.push(BaseFx.animateProperty(
+					Lang.mixin({
 					node: args.node,
 					duration: args.duration || 600,
 					properties: {
@@ -104,7 +103,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 					}}, args)
 				));
 			}
-			return fx.chain(anims);
+			return CoreFx.chain(anims);
 		},
 
 		bounce: function(args){
@@ -120,7 +119,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 				duration = args.duration || 1000,
 				scaleX = args.scaleX || 1.2,
 				scaleY = args.scaleY || .6,
-				ds = html.style,
+				ds = Html.style,
 				oldPos = ds(n, "position"),
 				newPos = "absolute",
 				oldTop = ds(n, "top"),
@@ -132,21 +131,21 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 			if(oldPos !== "absolute"){
 				newPos = "relative";
 			}
-			var a1 = fx.animateProperty({
+			var a1 = BaseFx.animateProperty({
 				node: n,
 				duration: duration / 6,
 				properties: {
 					transform: { start: "scale(1, 1)", end: "scale(" + scaleX + ", " + scaleY + ")" }
 				}
 			});
-			connect.connect(a1, "onBegin", function(){
+			Hub.connect(a1, "onBegin", function(){
 				ds(n, {
 					transformOrigin: "50% 100%",
 					position: newPos
 				});
 			});
 			anims.push(a1);
-			var a2 = fx.animateProperty({
+			var a2 = BaseFx.animateProperty({
 				node: n,
 				duration: duration / 6,
 				properties: {
@@ -154,7 +153,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 				}
 			});
 			combinedAnims.push(a2);
-			combinedAnims.push(new fx.Animation(lang.mixin({
+			combinedAnims.push(new BaseFx.Animation(Lang.mixin({
 				curve: [],
 				duration: duration / 3,
 				delay: duration / 12,
@@ -169,8 +168,8 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 					bTime = cTime;
 				}
 			}, args)));
-			anims.push(fx.combine(combinedAnims));
-			anims.push(fx.animateProperty(lang.mixin({
+			anims.push(CoreFx.combine(combinedAnims));
+			anims.push(BaseFx.animateProperty(Lang.mixin({
 				duration: duration / 3,
 				onEnd: function(){
 					ds(n, {
@@ -184,8 +183,7 @@ function(dojo,lang,connect,domStyle,fx,extStyle,complexfx){
 			anims.push(a1);
 			anims.push(a2);
 
-			return fx.chain(anims);
+			return CoreFx.chain(anims);
 		}
 	});
-	return css3fx
 });
