@@ -250,6 +250,7 @@ define([
 		},
 		
 		_setTimer: function(/* d.dnd.Mover */mover){
+			if(mover.node != this.cursorNode){ return; }
 			// FIXME: should I assume this? focus on mouse down so on mouse up
 			FocusManager.focus(mover.node);
 			DOM.setSelectable(this.domNode,false);
@@ -257,6 +258,7 @@ define([
 		},
 		
 		_clearTimer: function(/* d.dnd.Mover */mover){
+			if(!this._timer){ return; }
 			clearInterval(this._timer);
 			this._timer = null;
 			this.onChange(this.value);
@@ -284,7 +286,7 @@ define([
 			//		The event.
 			if(count !== -1){
 				var y = html.style(this.hueCursorNode, "top");
-				var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
+				var selCenter = this.PICKER_HUE_SELECTOR_H/2;
 
 				// Account for our offset
 				y += selCenter;
@@ -382,7 +384,7 @@ define([
 			this._updateValue(col, true);
 			
 			// update hue, not all the pickers
-			if (h!=this._hue) {
+			if(h!=this._hue){
 				this._setHue(h);
 			}
 		},
@@ -391,7 +393,7 @@ define([
 			//summary: updates picker position and inputs
 			//         according to rgb, hex or hsv input changes
 			var col, hasit = false;
-			switch (e.target) {
+			switch(e.target){
 				//transform to hsv to pixels
 
 				case this.hexCode:
@@ -429,7 +431,7 @@ define([
 			this.value = this.valueNode.value = hex;
 			
 			// anytime we muck with the color, fire onChange?
-			if(fireChange && (!this._timer || this.liveUpdate)) {
+			if(fireChange && (!this._timer || this.liveUpdate)){
 				this.onChange(hex);
 			}
 		},
@@ -441,13 +443,13 @@ define([
 				satSelCenterH = this.PICKER_SAT_SELECTOR_H/2,
 				satSelCenterW = this.PICKER_SAT_SELECTOR_W/2;
 
-            var hsv = col.toHsv(),
+			var hsv = col.toHsv(),
 				ypos = Math.round(this.PICKER_HUE_H - hsv.h / 360 * this.PICKER_HUE_H) - hueSelCenter,
 				newLeft = Math.round(hsv.s / 100 * this.PICKER_SAT_VAL_W) - satSelCenterW,
 				newTop = Math.round(this.PICKER_SAT_VAL_H - hsv.v / 100 * this.PICKER_SAT_VAL_H) - satSelCenterH
 			;
 			
-			if (this.animatePoint) {
+			if(this.animatePoint){
 				fx.slideTo({
 					node: this.hueCursorNode,
 					duration: this.slideDuration,
@@ -472,7 +474,7 @@ define([
 			}
 			
 			// limit hue calculations to only when it changes
-			if (hsv.h != this._hue) {
+			if(hsv.h != this._hue){
 				this._setHue(hsv.h);
 			}
 			
@@ -484,33 +486,33 @@ define([
 			
 			var hex = col.toHex();
 			
-			if (this.showRgb) {
+			if(this.showRgb){
 				this.Rval.value = col.r;
 				this.Gval.value = col.g;
 				this.Bval.value = col.b;
 			}
 			
-			if (this.showHsv) {
+			if(this.showHsv){
 				var hsv = col.toHsv();
 				this.Hval.value = Math.round((hsv.h)); // convert to 0..360
 				this.Sval.value = Math.round(hsv.s);
 				this.Vval.value = Math.round(hsv.v);
 			}
 			
-			if (this.showHex) {
+			if(this.showHex){
 				this.hexCode.value = hex;
 			}
 			
 			this.previewNode.style.backgroundColor = hex;
 			
-			if (this.webSafe) {
+			if(this.webSafe){
 				this.safePreviewNode.style.backgroundColor = webSafeFromHex(hex);
 			}
 		},
 		
 		_setHuePoint: function(/* Event */evt){
 			// summary: set the hue picker handle on relative y coordinates
-			var selCenter = (this.PICKER_HUE_SELECTOR_H/2);
+			var selCenter = this.PICKER_HUE_SELECTOR_H/2;
 			var ypos = evt.layerY - selCenter;
 			if(this.animatePoint){
 				fx.slideTo({
@@ -518,7 +520,7 @@ define([
 					duration:this.slideDuration,
 					top: ypos,
 					left: 0,
-					onEnd: lang.hitch(this, function() {this._updateColor(true); FocusManager.focus(this.hueCursorNode);})
+					onEnd: lang.hitch(this, function(){ this._updateColor(true); FocusManager.focus(this.hueCursorNode); })
 				}).play();
 			}else{
 				html.style(this.hueCursorNode, "top", ypos + "px");
@@ -542,7 +544,7 @@ define([
 					duration: this.slideDuration,
 					top: newTop,
 					left: newLeft,
-					onEnd: lang.hitch(this, function() {this._updateColor(true); FocusManager.focus(this.cursorNode);})
+					onEnd: lang.hitch(this, function(){ this._updateColor(true); FocusManager.focus(this.cursorNode); })
 				}).play();
 			}else{
 				html.style(this.cursorNode, {
@@ -584,5 +586,4 @@ define([
 			delete this._subs;
 		}
 	});
-
 });
