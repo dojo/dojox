@@ -1,5 +1,6 @@
-define(["."],function(){
-dojox.fx._arg.StyleArgs = function(/*Object*/ args){
+define(["dojo/_base/lang"],function(lang){
+var fxArg = lang.getObject("dojox.fx._arg",true);
+fxArg.StyleArgs = function(/*Object*/ args){
 	// summary:
 	//		The node and CSS class to use for style manipulations.
 	// node: DOMNode
@@ -10,7 +11,7 @@ dojox.fx._arg.StyleArgs = function(/*Object*/ args){
 	this.cssClass = args.cssClass;
 }
 
-dojox.fx._arg.ShadowResizeArgs = function(/*Object*/ args){
+fxArg.ShadowResizeArgs = function(/*Object*/ args){
 	// summary:
 	//	The odd way to document object parameters.
 	// x: Integer
@@ -20,9 +21,5 @@ dojox.fx._arg.ShadowResizeArgs = function(/*Object*/ args){
 	this.x = args.x;
 	this.y = args.y;
 }
-
-return {
-	StyleArgs: dojox.fx._arg.StyleArgs,
-	ShadowResizeArgs: dojox.fx._arg.ShadowResizeArgs};
-
+return fxArg;
 });

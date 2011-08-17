@@ -1,12 +1,7 @@
-define([
-	"dojo/_base/kernel",
-	"dojo/_base/lang",
-	"dojo/_base/array"
-],function(dojo, lang, array){
-
-	dojo.getObject("fx", true, dojox);
-
-	dojox.fx._Line = function(start, end){
+define(["dojo/_base/lang", "dojo/_base/array","./_base"],
+	function(lang, arrayUtil, dojoxFx){
+	/*===== var dojox.fx._Line = line =====*/
+	var line = function(start, end){
 		// summary: a custom _Line to accomodate multi-dimensional values
 		//
 		// description:
@@ -41,13 +36,13 @@ define([
 		
 		if(isArray){
 			// multi-dimensional branch
-			array.forEach(this.start, function(s, i){
+			arrayUtil.forEach(this.start, function(s, i){
 				d[i] = this.end[i] - s;
 			}, this);
 			
 			this.getValue = function(/*float*/ n){
 				var res = [];
-				array.forEach(this.start, function(s, i){
+				arrayUtil.forEach(this.start, function(s, i){
 					res[i] = (d[i] * n) + s;
 				}, this);
 				return res; // Array
@@ -62,5 +57,6 @@ define([
 			}
 		}
 	};
-	return dojox.fx._Line;
+	dojoxFx._Line = line; // COMPAT
+	return line;
 });

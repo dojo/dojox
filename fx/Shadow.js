@@ -1,7 +1,8 @@
-define(["dojo", "dijit/_Widget","dojo/NodeList-fx"], function(dojo, Widget, NodeList){
-dojo.experimental("dojox.fx.Shadow");
-dojo.declare("dojox.fx.Shadow",
-		dijit._Widget,{
+define(["dojo/_base/kernel", "dojo/_base/query" ,"dojo/_base/lang", "dojo/_base/declare", "dojo/_base/sniff",
+		"dojo/dom-construct", "dojo/dom-class", "dojo/dom-geometry", "dojo/fx", "dijit/_Widget","dojo/NodeList-fx"], 
+  function(kernel, query, lang, declare, has, domConstruct, domClass, domGeom, coreFx, Widget, NodeListFx){
+kernel.experimental("dojox.fx.Shadow");
+declare("dojox.fx.Shadow", Widget,{
 		// summary: Adds a drop-shadow to a node.
 		//
 		// example:
@@ -13,7 +14,7 @@ dojo.declare("dojox.fx.Shadow",
 		//
 		// shadowPng: String
 		// 	Base location for drop-shadow images
-		shadowPng: dojo.moduleUrl("dojox.fx", "resources/shadow"),
+		shadowPng: kernel.moduleUrl("dojox.fx", "resources/shadow"),
 	
 		// shadowThickness: Integer
 		// 	How wide (in px) to make the shadow
@@ -54,7 +55,7 @@ dojo.declare("dojox.fx.Shadow",
 			this._makePiece("b", "top", 0, "left", 0, "crop");
 			this._makePiece("br", "top", 0, "left", 0);
 	
-			this.nodeList = dojo.query(".shadowPiece",this.node);
+			this.nodeList = query(".shadowPiece",this.node);
 	
 			this.setOpacity(this.opacity);
 			this.resize();
@@ -64,12 +65,12 @@ dojo.declare("dojox.fx.Shadow",
 			// summary: append a shadow pieces to the node, and position it
 			var img;
 			var url = this.shadowPng + name.toUpperCase() + ".png";
-			if(dojo.isIE < 7){
-				img = dojo.create("div");
+			if(has("ie") < 7){
+				img = domConstruct.create("div");
 				img.style.filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+url+"'"+
 					(sizing?", sizingMethod='"+sizing+"'":"") + ")";
 			}else{
-				img = dojo.create("img", { src:url });
+				img = domConstruct.create("img", { src:url });
 			}
 	
 			img.style.position="absolute";
@@ -77,7 +78,7 @@ dojo.declare("dojox.fx.Shadow",
 			img.style[horzAttach]=horzCoord+"px";
 			img.style.width=this.shadowThickness+"px";
 			img.style.height=this.shadowThickness+"px";
-			dojo.addClass(img,"shadowPiece");
+			domClass.add(img,"shadowPiece");
 			this.pieces[name]=img;
 			this.node.appendChild(img);
 	
@@ -86,14 +87,14 @@ dojo.declare("dojox.fx.Shadow",
 		setOpacity: function(/* Float */n,/* Object? */animArgs){
 			// summary: set the opacity of the underlay
 			// note: does not work in IE? FIXME.
-			if(dojo.isIE){ return; }
+			if(has("ie")){ return; }
 			if(!animArgs){ animArgs = {}; }
 			if(this.animate){
 				var _anims = [];
 				this.nodeList.forEach(function(node){
-					_anims.push(dojo._fade(dojo.mixin(animArgs,{ node: node, end: n })));
+					_anims.push(coreFx._fade(lang.mixin(animArgs,{ node: node, end: n })));
 				});
-				dojo.fx.combine(_anims).play();
+				coreFx.combine(_anims).play();
 			}else{
 				this.nodeList.style("opacity",n);
 			}
@@ -120,7 +121,7 @@ dojo.declare("dojox.fx.Shadow",
 			var x; var y;
 			if(args){ x = args.x; y = args.y;
 			}else{
-				var co = dojo.position(this.node);
+				var co = domGeom.position(this.node);
 				x = co.w; y = co.h;
 			}
 			var sideHeight = y - (this.shadowOffset+this.shadowThickness);
@@ -140,5 +141,5 @@ dojo.declare("dojox.fx.Shadow",
 			}
 		}
 	});
-	return dojox.fx.Shadow;
+	return coreFx.Shadow;
 });

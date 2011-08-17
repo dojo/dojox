@@ -1,8 +1,10 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/_base/fx"], function(dojo){
-	dojo.getObject("fx.ext-dojo.complex", true, dojox);
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/connect", 
+	"dojo/_base/Color", "dojo/_base/fx", "dojo/fx"], 
+	function(dojo, lang, arrayUtil, declare, connectUtil, Color, baseFx, coreFx){
+	lang.getObject("dojox.fx.ext-dojo.complex", true);
 	
-	var da = dojo.animateProperty;
-	dojo.animateProperty = function(options){
+	var da = baseFx.animateProperty;
+	dojo.animateProperty = baseFx.animateProperty = function(options){
 		// summary:
 		//		An extension of dojo.animateProperty which adds functionality
 		//		that animates a "complex property". The primary example is the
@@ -30,7 +32,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		var d = dojo;
 		var ani = da(options);
 
-		dojo.connect(ani, "beforeBegin", function(){
+		connectUtil.connect(ani, "beforeBegin", function(){
 			// dojo.Animate original still invokes and still
 			// works. We're appending this functionality to
 			// modify targeted properties.
@@ -68,7 +70,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		return ani; // dojo.Animation
 	}
 
-	return dojo.declare("dojox.fx._Complex", null, {
+	return declare("dojox.fx._Complex", null, {
 		// summary:
 		//		A class that takes a complex property such as
 		//		clip style: rect(10px 30px 10px 50px), and breaks it
@@ -80,13 +82,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			var beg = options.start.match(this.PROP);
 			var end = options.end.match(this.PROP);
 
-			var begProps = dojo.map(beg, this.getProps, this);
-			var endProps = dojo.map(end, this.getProps, this);
+			var begProps = arrayUtil.map(beg, this.getProps, this);
+			var endProps = arrayUtil.map(end, this.getProps, this);
 
 			this._properties = {};
 			this.strProp = options.start;
-			dojo.forEach(begProps, function(prop, i){
-				dojo.forEach(prop, function(p, j){
+			arrayUtil.forEach(begProps, function(prop, i){
+				arrayUtil.forEach(prop, function(p, j){
 					this.strProp = this.strProp.replace(p, "PROP_"+i+""+j);
 					this._properties["PROP_"+i+""+j] = this.makePropObject(p, endProps[i][j])
 				},this);
@@ -101,7 +103,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			for(var nm in this._properties){
 				var v, o = this._properties[nm];
 				if(o.units == "isColor"){
-					v = dojo.blendColors(o.beg, o.end, r).toCss(false);
+					v = Color.blendColors(o.beg, o.end, r).toCss(false);
 					u = "";
 				}else{
 					v = ((o.end - o.beg) * r) + o.beg;
@@ -152,7 +154,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			if(!prop){ return {}; }
 			if(/#/.test(prop)){
 				return {
-					num: new dojo.Color(prop),
+					num: new Color(prop),
 					units:"isColor"
 				}; // Object
 			}
@@ -164,5 +166,4 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			return o; // Object
 		}
 	});
-	return dojox.fx;
 });
