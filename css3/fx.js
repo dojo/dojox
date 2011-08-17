@@ -7,9 +7,9 @@ define([
 	"dojo/_base/html",
 	"dojox/html/ext-dojo/style",
 	"dojox/fx/ext-dojo/complex"],
-function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
-	var css3fx = Lang.getObject("dojox.css3.fx", true);
-	return Lang.mixin(css3fx, {
+function(lang,connectUtil,domStyle,baseFx,coreFx,htmlUtil,htmlStyleExt,complexFx){
+	var css3fx = lang.getObject("dojox.css3.fx", true);
+	return lang.mixin(css3fx, {
 		puff: function(args){
 			// summary:
 			//		Returns an animation that will do a "puff" effect on the given node
@@ -17,7 +17,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 			// description:
 			//		Fades out an element and scales it to args.endScale
 			//
-			return CoreFx.combine([BaseFx.fadeOut(args),
+			return coreFx.combine([baseFx.fadeOut(args),
 				this.expand({
 					node: args.node,
 					endScale: args.endScale || 2
@@ -32,7 +32,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 			// description:
 			//		Scales an element to args.endScale
 			//
-			return BaseFx.animateProperty({
+			return baseFx.animateProperty({
 				node: args.node,
 				properties: {
 					transform: { start: "scale(1)", end: "scale(" + [args.endScale || 3] + ")" }
@@ -60,7 +60,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 			// description:
 			//		Rotates an element from args.startAngle to args.endAngle
 			//
-			return BaseFx.animateProperty({
+			return baseFx.animateProperty({
 				node: args.node,
 				duration: args.duration || 1000,
 				properties: {
@@ -94,8 +94,8 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 					{ start: "scale(0, 1) skew(0deg," + (-direction * 30) + "deg)", end: "scale(1, 1) skew(0deg,0deg)" }
 			];
 			for(var i = 0; i < whichAnims.length; i++){
-				anims.push(BaseFx.animateProperty(
-					Lang.mixin({
+				anims.push(baseFx.animateProperty(
+					lang.mixin({
 					node: args.node,
 					duration: args.duration || 600,
 					properties: {
@@ -103,7 +103,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 					}}, args)
 				));
 			}
-			return CoreFx.chain(anims);
+			return coreFx.chain(anims);
 		},
 
 		bounce: function(args){
@@ -119,7 +119,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 				duration = args.duration || 1000,
 				scaleX = args.scaleX || 1.2,
 				scaleY = args.scaleY || .6,
-				ds = Html.style,
+				ds = htmlUtil.style,
 				oldPos = ds(n, "position"),
 				newPos = "absolute",
 				oldTop = ds(n, "top"),
@@ -131,21 +131,21 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 			if(oldPos !== "absolute"){
 				newPos = "relative";
 			}
-			var a1 = BaseFx.animateProperty({
+			var a1 = baseFx.animateProperty({
 				node: n,
 				duration: duration / 6,
 				properties: {
 					transform: { start: "scale(1, 1)", end: "scale(" + scaleX + ", " + scaleY + ")" }
 				}
 			});
-			Hub.connect(a1, "onBegin", function(){
+			connectUtil.connect(a1, "onBegin", function(){
 				ds(n, {
 					transformOrigin: "50% 100%",
 					position: newPos
 				});
 			});
 			anims.push(a1);
-			var a2 = BaseFx.animateProperty({
+			var a2 = baseFx.animateProperty({
 				node: n,
 				duration: duration / 6,
 				properties: {
@@ -153,7 +153,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 				}
 			});
 			combinedAnims.push(a2);
-			combinedAnims.push(new BaseFx.Animation(Lang.mixin({
+			combinedAnims.push(new baseFx.Animation(lang.mixin({
 				curve: [],
 				duration: duration / 3,
 				delay: duration / 12,
@@ -168,8 +168,8 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 					bTime = cTime;
 				}
 			}, args)));
-			anims.push(CoreFx.combine(combinedAnims));
-			anims.push(BaseFx.animateProperty(Lang.mixin({
+			anims.push(coreFx.combine(combinedAnims));
+			anims.push(baseFx.animateProperty(lang.mixin({
 				duration: duration / 3,
 				onEnd: function(){
 					ds(n, {
@@ -183,7 +183,7 @@ function(Lang,Hub,DOMStyle,BaseFx,CoreFx,Html,HtmlStyleExt,ComplexFx){
 			anims.push(a1);
 			anims.push(a2);
 
-			return CoreFx.chain(anims);
+			return coreFx.chain(anims);
 		}
 	});
 });
