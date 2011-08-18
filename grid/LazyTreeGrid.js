@@ -631,7 +631,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		// Check cache, do not need to fetch data if there are required data in cache
 		var i = 0, fetchedItems = [];
 		var count = Math.min(this.rowsPerPage, this.cache.items.length - start);
-		for(i = start; i < count; i++){
+		for(i = start; i < start + count; i++){
 			if(this.cache.getItemByRowIndex(i)){
 				fetchedItems.push(this.cache.getItemByRowIndex(i));
 			}else{
