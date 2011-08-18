@@ -539,6 +539,16 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 		this._fetch(0, true);
 	},
 	
+	_updateChangedRows: function(start){
+		dojo.forEach(this.scroller.stack, function(p){
+			if(p * this.rowsPerPage >= start){
+				this.updateRows(p * this.rowsPerPage, this.rowsPerPage);
+			}else if((p + 1) * this.rowsPerPage >=  start){
+				this.updateRows(start, (p + 1) * this.rowsPerPage - start + 1);
+			}
+		}, this);
+	},
+	
 	render: function(){
 		this.inherited(arguments);
 		this.setScrollTop(this.scrollTop);
@@ -577,7 +587,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			this._by_idx.splice(index, 0, this._by_idty[idty]);
 			// update grid
 			this.updateRowCount(items.length);
-			this.updateRows(info.rowIdx + childrenNum + 1, this.keepRows);
+			this._updateChangedRows(index);
 		}else if(info && info.rowIdx >= 0){
 			this.updateRow(info.rowIdx);
 		}
@@ -603,7 +613,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			this.cache.deleteItem(info.rowIdx);
 			this._by_idx.splice(info.rowIdx, 1);
 			this.updateRowCount(this.cache.items.length);
-			this.updateRows(info.rowIdx, this.keepRows);
+			this._updateChangedRows(info.rowIdx);
 		}
 	},
 	
@@ -793,7 +803,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			this._bop = this._eop = -1;
 			//update grid
 			this.updateRowCount(this.cache.items.length);
-			this.updateRows(rowIndex + 1, this.keepRows);
+			this._updateChangedRows(rowIndex + 1);
 			this.toggleLoadingClass(false);
 			if(this._loading){
 				this._loading = false;
@@ -834,7 +844,7 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 			this._by_idx.splice(this.expandoRowIndex + 1 + i, 1, this._by_idty[idty]);
 		}
 		
-		this.updateRows(this.expandoRowIndex + 1, this.keepRows);
+		this._updateChangedRows(this.expandoRowIndex + 1);
 		this.toggleLoadingClass(false);
 		this.stateChangeNode = null;
 		if(this._loading){
