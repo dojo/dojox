@@ -711,14 +711,22 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 				throw new Error("Lazy loading TreeGrid on fetch error:");
 			}
 			var parentId = this.store.getIdentity(parentItem);
-			this.queryObj = {
+			var queryObj = {
 				start: parseInt(startIdx, 10),
 				startRowIdx: this.reqQueue[idx].startRowIdx,
 				count: this.reqQueue[idx].count,
 				parentId: parentId,
 				sort: this.getSortProps()
 			};
-			this.treeModel.getChildren(parentItem, onComplete, onError, this.queryObj);
+			var _this = this;
+			var onFetchComplete = function(){
+				if(arguments.length == 1){
+					onComplete.apply(_this, [arguments[0], queryObj]);
+				}else{
+					onComplete.apply(_this, arguments);
+				}
+			};
+			this.treeModel.getChildren(parentItem, onFetchComplete, onError, queryObj);
 		}
 	},
 	
@@ -735,7 +743,6 @@ dojo.declare("dojox.grid.LazyTreeGrid", dojox.grid.TreeGrid, {
 
 	_onFetchComplete: function(items, request, size){
 		var treePath = "",
-			request = request ? request : this.queryObj,
 			startRowIdx = request.startRowIdx,
 			count = request.count,
 			start = items.length <= count ? 0: request.start;
