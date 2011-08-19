@@ -1,5 +1,5 @@
 define(["dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang", "dojox/gfx", "./_Indicator"], 
-  function(declare, fx, Connect, lang, gfx, Indicator) { 
+  function(declare, fx, connect, lang, gfx, Indicator) { 
 
 return declare("dojox.gauges.BarLineIndicator",[Indicator],{
 	
@@ -118,7 +118,7 @@ return declare("dojox.gauges.BarLineIndicator",[Indicator],{
 			this.shape.setTransform(gfx.matrix.translate(v,0));
 		}else{
 			var anim = new fx.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-			Connect.connect(anim, "onAnimate", lang.hitch(this, function(jump){
+			connect.connect(anim, "onAnimate", lang.hitch(this, function(jump){
 				if (this.shape)
 				 this.shape.setTransform(gfx.matrix.translate(jump,0));
 			}));

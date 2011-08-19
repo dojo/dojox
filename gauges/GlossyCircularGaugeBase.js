@@ -1,107 +1,107 @@
 define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojox/gfx","./AnalogGauge","./AnalogCircleIndicator","./TextIndicator","./GlossyCircularGaugeNeedle"],
-function(declare, lang, Connect, gfx, AnalogGauge, AnalogCircleIndicator, TextIndicator, GlossyCircularGaugeNeedle) {
+function(declare, lang, connect, gfx, AnalogGauge, AnalogCircleIndicator, TextIndicator, GlossyCircularGaugeNeedle) {
 
 return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	// summary:
-	//	The base class for GlossyCircularGauge and GlossySemiCircularGauge.
+	//		The base class for GlossyCircularGauge and GlossySemiCircularGauge.
 	
 	
-	
-	// the type of default indicator to create
+	//_defaultIndicator : _Indicator
+	//		the type of default indicator to create
 	_defaultIndicator: AnalogCircleIndicator,
 	
 	// _needle: dojox.gauges.GlossyCircularGaugeNeedle
-	// the needle of this circular gauge
+	//	 	the needle of this circular gauge
 	_needle: null,
 	
 	// _textIndicator: dojox.gauges.TextIndicator
-	// the text displaying the gauge's value
+	// 		the text displaying the gauge's value
 	_textIndicator: null,
 	
 	_textIndicatorAdded: false,
 	
 	// _range: Object
-	// the range of this gauge
+	// 		the range of this gauge
 	_range: null,
 	
 	// value: Number
-	// The value of the gauge.
+	// 		The value of the gauge.
 	value: 0,
 	
 	// color: String
-	// The main color of the gauge.
+	// 		The main color of the gauge.
 	color: 'black',
 	
 	// needleColor: Color
-	// The main color of the needle.
+	// 		The main color of the needle.
 	needleColor: '#c4c4c4',
 	
 	// textIndicatorFont: String
-	// The font of the text indicator
+	// 		The font of the text indicator
 	textIndicatorFont: "normal normal normal 20pt serif",
 	
 	// textIndicatorVisible: Boolean
-	// Indicates if the text indicator is visible			
+	// 		Indicates if the text indicator is visible			
 	textIndicatorVisible: true,
 	
 	// textIndicatorColor: Color
-	// The color of the text indicator
+	//		 The color of the text indicator
 	textIndicatorColor: '#c4c4c4',
 	
 	// _majorTicksOffset: Number
-	// Distance, at design, from gauge's center to major ticks
+	// 		Distance, at design, from gauge's center to major ticks
 	_majorTicksOffset: 130,
 	
 	// majorTicksInterval: Number
-	// Interval between major ticks
+	// 		Interval between major ticks
 	majorTicksInterval: 10,
 	
 	// _majorTicksLength: Number
-	// Major tick size, at design
+	// 		Major tick size, at design
 	_majorTicksLength: 5,
 	
 	// majorTicksColor: Color
-	// Color of major tick marks
+	// 		Color of major tick marks
 	majorTicksColor: '#c4c4c4',
 	
 	// majorTicksLabelPlacement: String
-	// Placement of major tick labels
+	// 		Placement of major tick labels
 	majorTicksLabelPlacement: 'inside',
 	
 	// _minorTicksOffset: Number
-	// Distance, at design, from gauge's center to minor ticks
+	// 		Distance, at design, from gauge's center to minor ticks
 	_minorTicksOffset: 130,
 	
 	// minorTicksInterval: Number
-	// Interval between minor ticks
+	// 		Interval between minor ticks
 	minorTicksInterval: 5,
 	
 	// _minorTicksLength: Number
-	// Minor tick size, at design
+	// 		Minor tick size, at design
 	_minorTicksLength: 3,
 	
 	// minorTicksColor: Color
-	// Color of minor tick marks
+	// 		Color of minor tick marks
 	minorTicksColor: '#c4c4c4',
 	
 	// noChange: Boolean
-	// Indicates if the gauge reacts to touch events
+	// 		Indicates if the gauge reacts to touch events
 	noChange: false,
 	
 	// title: String
-	// The title displayed in the needle's tooltip
+	// 		The title displayed in the needle's tooltip
 	title: "",
 	
 	// font: Object
-	// The font of the gauge
+	//		 The font of the gauge
 	font: "normal normal normal 10pt serif",
 	
 	// scalePrecision: Number
-	// The precision for the formatting of numbers in the scale (default is 0)
+	// 		The precision for the formatting of numbers in the scale (default is 0)
 	scalePrecision: 0,
 	
 	// textIndicatorPrecision: Number
-	// The precision for the formatting of numbers in the text indicator (default is 0)
+	//		 The precision for the formatting of numbers in the text indicator (default is 0)
 	textIndicatorPrecision: 0,
 	
 	_font: null,
@@ -119,8 +119,9 @@ return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 		//		Overrides AnalogGauge.startup
 		this.inherited(arguments);
 		
-		if (this._needle) return; //just in case someone calls the startup twice.
+		//just in case someone calls the startup twice.
 
+		if (this._needle) return; 
 		
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		this.cx = scale * this._designCx + (this.width - scale * this._designWidth) / 2;
@@ -185,7 +186,7 @@ return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 		}
 		
 		// connect needle and text
-		Connect.connect(this._needle, "valueChanged", lang.hitch(this, function(){
+		connect.connect(this._needle, "valueChanged", lang.hitch(this, function(){
 			this.value = this._needle.value;
 			this._textIndicator.update(this._needle.value);
 			this.onValueChanged();
@@ -196,7 +197,7 @@ return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 	
 	onValueChanged: function(){
 		// summary:
-		//		Callback when the value of the gauge has changed.
+		//		Invoked when the value of the gauge has changed.
 	
 	},
 	
@@ -461,7 +462,7 @@ return declare("dojox.gauges.GlossyCircularGaugeBase", [AnalogGauge], {
 		// summary: 
 		//		Changes the visibility of the text indicator displaying the gauge's value.
 		// value: boolean
-		//	
+		//		true to show the indicator, false to hide.
 		
 		this.textIndicatorVisible = value;
 		if (this._textIndicator && this._needle){

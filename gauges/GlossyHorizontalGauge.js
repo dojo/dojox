@@ -1,5 +1,5 @@
 define(["dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/Color","dojox/gfx","./BarGauge","./BarCircleIndicator","./GlossyHorizontalGaugeMarker"],
-  function(declare, Connect, lang, Color, gfx, BarGauge, BarCircleIndicator, GlossyHorizontalGaugeMarker) {
+  function(declare, connect, lang, Color, gfx, BarGauge, BarCircleIndicator, GlossyHorizontalGaugeMarker) {
 
 
 var NumberUtils
@@ -7,80 +7,80 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	// summary:
 	//		Represents an horizontal bar gauge with a glossy appearance.
 	// example:
-	//	<div dojoType="dojox.gauges.GlossyHorizontalGauge"
-	//				id="testGauge"
-	//				width="500"
-	//				height="100"
-	//				min="0"
-	//				max="100"
-	//	            value="0" 
-	//	            majorTicksInterval="10"
-	//	            majorTicksColor="#c4c4c4"
-	//	            minorTicksInterval="5"
-	//	            minorTicksColor="#c4c4c4"
-	//	            color="black" 
-	//	            markerColor="#c4c4c4"
-	//	            font="normal normal normal 10pt sans-serif"
-	//              noChange="true"
-	//              title="title"
-	//              scalePrecision="0"
-	//			>
-	//		</div>
+	//	|<div dojoType="dojox.gauges.GlossyHorizontalGauge"
+	//	|		id="testGauge"
+	//	|		width="500"
+	//	|		height="100"
+	//	|		min="0"
+	//	|		max="100"
+	//	|		value="0" 
+	//	|		majorTicksInterval="10"
+	//	|		majorTicksColor="#c4c4c4"
+	//	|		minorTicksInterval="5"
+	//	|		minorTicksColor="#c4c4c4"
+	//	|		color="black" 
+	//	|		markerColor="#c4c4c4"
+	//	|		font="normal normal normal 10pt sans-serif"
+	//	|		noChange="true"
+	//	|		title="title"
+	//	|		scalePrecision="0"
+	//	|	>
+	//	|</div>
 	
 	
 	// the type of default indicator to create
 	_defaultIndicator: BarCircleIndicator,
 	
 	// color: String
-	// The main color of the gauge.
+	// 		The main color of the gauge.
 	color: 'black',
 	
 	// needleColor: Color
-	// The main color of the needle.
+	// 		The main color of the needle.
 	markerColor: 'black',
 	
 	// majorTicksInterval: Number
-	// Interval between major ticks
+	// 		Interval between major ticks
 	majorTicksInterval: 10,
 	
 	// _majorTicksLength: Number
-	// Major tick size, at design
+	// 		Major tick size, at design
 	_majorTicksLength: 10,
 	
 	// majorTicksColor: Color
-	// Color of major tick marks
+	// 		Color of major tick marks
 	majorTicksColor: '#c4c4c4',
 	
 	// minorTicksInterval: Number
-	// Interval between minor ticks
+	// 		Interval between minor ticks
 	minorTicksInterval: 5,
 	
 	// _minorTicksLength: Number
-	// Minor tick size, at design
+	// 		Minor tick size, at design
 	_minorTicksLength: 6,
 	
 	// minorTicksColor: Color
-	// Color of minor tick marks
+	// 		Color of minor tick marks
 	minorTicksColor: '#c4c4c4',
 	
 	// value: Number
-	// The value of the gauge.
+	// 		The value of the gauge.
 	value: 0,
 	
 	// noChange: Boolean
-	// Indicates if the gauge reacts to touch events
+	// 		Indicates if the gauge reacts to touch events
 	noChange: false,
 	
 	// title: String
-	// The title displayed in the needle's tooltip
+	// 		The title displayed in the needle's tooltip
 	title: "",
 	
 	// font: Object
-	// The font of the gauge
+	// 		The font of the gauge
 	font: "normal normal normal 10pt serif",
 	
 	// scalePrecision: Number
-	// The precision for the formatting of numbers in the scale (default is 0)
+	// 		The precision for the formatting of numbers in the scale (default is 0)
 	scalePrecision: 0,
 	
 	_font: null,
@@ -154,7 +154,7 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		});
 		this.addIndicator(this._needle);
 		
-		Connect.connect(this._needle, "valueChanged", lang.hitch(this, function(){
+		connect.connect(this._needle, "valueChanged", lang.hitch(this, function(){
 			this.value = this._needle.value;
 			this.onValueChanged();
 		}));
@@ -453,7 +453,7 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	
 	getMinorTicksLength: function(){
 		// summary: 
-		//		Return the size of the minor ticks.
+		//		Gets the size of the minor ticks.
 		return this._minorTicksLength;
 	},
 	

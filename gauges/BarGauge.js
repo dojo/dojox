@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/array","dojo/_base/html","dojo/_base/event","dojox/gfx",
 		"./_Gauge","./BarLineIndicator", "dojo/dom-geometry"],
- function(declare, lang, arr, html, Event, gfx, Gauge, BarLineIndicator, DOMGeometry) {
+ function(declare, lang, arr, html, event, gfx, Gauge, BarLineIndicator, domGeometry) {
 	
 return declare("dojox.gauges.BarGauge", Gauge, {
 	// summary:
@@ -39,7 +39,8 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 	// height of data area (default is bar graph width - 10)
 	dataHeight: 0,
 
-	// _defaultIndicator: override of dojox.gauges._Gauge._defaultIndicator
+	// _defaultIndicator: Object
+	// 		override of dojox.gauges._Gauge._defaultIndicator
 	_defaultIndicator: BarLineIndicator,
 
 	startup: function(){
@@ -126,14 +127,14 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 		range.shape = path;
 	},
 
-	getRangeUnderMouse: function(/*Object*/event){
+	getRangeUnderMouse: function(/*Object*/e){
 		// summary:
 		//		Determines which range the mouse is currently over
-		// event:	Object
+		// e:	Object
 		//			The event object as received by the mouse handling functions below.
 		var range = null;
-		var pos = DOMGeometry.getContentBox(this.gaugeContent);
-		var x = event.clientX - pos.x;
+		var pos = domGeometry.getContentBox(this.gaugeContent);
+		var x = e.clientX - pos.x;
 		var value = this._getValueForPosition(x);
 		if(this._rangeData){
 			for(var i=0; (i<this._rangeData.length) && !range; i++){
@@ -145,12 +146,12 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 		return range;
 	},
 
-	_dragIndicator: function(/*Object*/widget, /*Object*/ event){
+	_dragIndicator: function(/*Object*/widget, /*Object*/ e){
 		// summary:
 		// Handles the dragging of an indicator to the event position, including moving/re-drawing
 		// get angle for mouse position
-		this._dragIndicatorAt(widget, event.pageX, event.pageY);
-		Event.stop(event);
+		this._dragIndicatorAt(widget, e.pageX, e.pageY);
+		event.stop(e);
 	},
 	
 	_dragIndicatorAt: function(/*Object*/ widget, x, y){
@@ -158,7 +159,7 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 		// summary:
 		//		Handles the dragging of an indicator, including moving/re-drawing
 		// get new value based on mouse position
-		var pos = DOMGeometry.position(widget.gaugeContent, true);
+		var pos = domGeometry.position(widget.gaugeContent, true);
 		var xl = x - pos.x;
 		var value = widget._getValueForPosition(xl);
 		if(value < widget.min){value = widget.min;}

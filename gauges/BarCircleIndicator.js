@@ -4,7 +4,7 @@ define(["dojo/_base/declare","dojox/gfx","./BarLineIndicator"],
 return declare("dojox.gauges.BarCircleIndicator", [BarLineIndicator], {
 	// summary:
 	//		An indicator for the BarGauge that draws a circle at a position that corresponds to the
-	// indicator value. This indicator is mainly used to draw round ticks for the scale.
+	// 		indicator value. This indicator is mainly used to draw round ticks for the scale.
 	
 	_getShapes: function(group){
 		// summary: 

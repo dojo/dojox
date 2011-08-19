@@ -4,10 +4,10 @@ define(["dojo/_base/declare","dojo/_base/Color" ,"./AnalogIndicatorBase"],
 return declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBase], {
 	// summary:
 	//		The needle for the dojox.gauges.GlossyCircularGauge and
-	//      dojox.gauges.GlossySemiCircularGauge.
+	//		dojox.gauges.GlossySemiCircularGauge.
 	// description:
 	//		This object defines the needle for the dojox.gauges.GlossyCircularGauge and
-	//      dojox.gauges.GlossySemiCircularGauge.
+	//		dojox.gauges.GlossySemiCircularGauge.
 	//		Since the needle is created by the gauges class, you do not have to use this class directly.
 	
 	

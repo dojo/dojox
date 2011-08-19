@@ -4,7 +4,7 @@ define(["dojo/_base/declare","./AnalogIndicatorBase"],
 return declare("dojox.gauges.AnalogNeedleIndicator", [AnalogIndicatorBase], {
 	// summary:
 	//		An indicator for the AnalogGauge that draws a needle. The needle is drawn on the angle that corresponds
-	// to the value of the indicator.
+	// 		to the value of the indicator.
 	
 	_getShapes: function(group){
 		// summary:
@@ -18,7 +18,7 @@ return declare("dojox.gauges.AnalogNeedleIndicator", [AnalogIndicatorBase], {
 		var color = this.color ? this.color : 'black';
 		var strokeColor = this.strokeColor ? this.strokeColor : color;
 		var strokeWidth = this.strokeWidth ? this.strokeWidth : 1;
-        
+
 		var stroke = {
 			color: strokeColor,
 			width: strokeWidth

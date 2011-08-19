@@ -1,8 +1,8 @@
 define(["dojo/_base/declare","./AnalogIndicatorBase"],
-  function(declare, AnalogIndicatorBase) { 
+function(declare, AnalogIndicatorBase) { 
 
 return declare("dojox.gauges.AnalogArrowIndicator", [AnalogIndicatorBase],{
-	
+
 	// summary:
 	//		An indicator for the AnalogGauge that draws an arrow. The arrow is drawn on the angle that corresponds
 	// to the value of the indicator.
