@@ -1,10 +1,9 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"./_base",
 	"dijit/_WidgetBase",
 	"dojo/query" // dojo.query
-], function(dojo,lang,dd,Widget,Query){
+], function(lang,dd,Widget,Query){
 	/*=====
 		Widget = dijit._WidgetBase;
 		Query = dojo.query;

@@ -1,10 +1,16 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"./_base"
-], function(dojo,lang,dd){
+], function(lang,dd){
 	/*=====
 		dd = dojox.dtl;
+	=====*/
+	
+	/*=====
+	 dd.Context = function(dict){
+	 	// summary: Represents a runtime context used by DTL templates.
+	 }
+	 
 	=====*/
 	dd.Context = lang.extend(function(dict){
 		this._this = {};
@@ -12,6 +18,7 @@ define([
 	}, dd._Context.prototype,
 	{
 		getKeys: function(){
+			// summary: Returns the set of keys exported by this context.
 			var keys = [];
 			for(var key in this){
 				if(this.hasOwnProperty(key) && key != "_this"){
@@ -52,12 +59,17 @@ define([
 			return context;
 		},
 		setThis: function(/*Object*/ _this){
+			// summary: Sets the object on which to perform operations. 
+			// _this: the this ref.
 			this._this = _this;
 		},
 		getThis: function(){
+			// summary: Gets the object on which to perform operations. 
 			return this._this;
 		},
-		hasKey: function(key){
+		hasKey: function(/*String*/key){
+			// summary: Indicates whether the specified key is defined on this context.
+			// key: The key to look up.
 			if(this._getter){
 				var got = this._getter(key);
 				if(typeof got != "undefined"){

@@ -3,7 +3,7 @@ define([
 	"dojo/_base/lang",
 	"../_base",
 	"dojo/_base/array"
-], function(dojo,lang,dd,array){
+], function(kernel,lang,dd,array){
 	/*=====
 		dd = dojox.dtl;
 	=====*/
@@ -35,7 +35,7 @@ define([
 					if(key.slice(-1) == "s"){
 						if(first){
 							first = false;
-							dojo.deprecated("You no longer need an extra s to call getValues, it can be figured out automatically");
+							kernel.deprecated("You no longer need an extra s to call getValues, it can be figured out automatically");
 						}
 						key = key.slice(0, -1);
 					}

@@ -1,5 +1,4 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"./_base",
 	"dijit/_TemplatedMixin",
@@ -9,7 +8,7 @@ define([
 	"dojo/string",
 	"dojo/parser",
 	"dijit/_base/manager"
-], function(dojo,declare,dd,TemplatedMixin, domConstruct,Cache,Array,dString,Parser,dijitMgr){
+], function(declare,dd,TemplatedMixin, domConstruct,Cache,Array,dString,Parser,dijitMgr){
 	/*=====
 		Cache = dojo.cache;
 		dString = dojo.string;
@@ -18,8 +17,11 @@ define([
 		dd = dojox.dtl;
 	=====*/
 	return declare("dojox.dtl._Templated", TemplatedMixin, {
+		// summary: The base-class for DTL-templated widgets.
+
 		_dijitTemplateCompat: false,
 		buildRendering: function(){
+			// summary: The method overrides dijit._TemplatedMixin.startup.
 			var node;
 
 			if(this.domNode && !this._template){
@@ -129,9 +131,11 @@ define([
 			}
 		},
 		render: function(){
+			// summary: Renders the widget.
 			this.buildRendering();
 		},
 		startup: function(){
+			// summary: The method overrides dijit._TemplatedMixin.startup.
 			Array.forEach(this._startupWidgets, function(w){
 				if(w && !w._started && w.startup){
 					w.startup();

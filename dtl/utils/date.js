@@ -1,9 +1,8 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojox/date/php",
 	"../_base"
-], function(dojo,lang,ddp,dd){
+], function(lang,ddp,dd){
 	/*=====
 		ddp = dojox.data.php;
 		dd = dojox.dtl;

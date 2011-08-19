@@ -1,5 +1,4 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/connect",
 	"dojo/_base/array",
@@ -8,7 +7,7 @@ define([
 	"../dom",
 	"dojo/parser",
 	"dojo/_base/sniff"
-], function(dojo,lang,connect,array,Query,dd,dxdom,Parser,has){
+], function(lang,connect,array,Query,dd,dxdom,Parser,has){
 	/*=====
 		Query = dojo.query;
 		Parser = dojo.parser;

@@ -1,11 +1,10 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/json",
 	"../_base",
 	"dojox/string/tokenize"
-], function(dojo,lang,array,json,dd,Tokenize){
+], function(lang,array,json,dd,Tokenize){
 	/*=====
 		Tokenize = dojox.string.tokenize;
 		dd = dojox.dtl;

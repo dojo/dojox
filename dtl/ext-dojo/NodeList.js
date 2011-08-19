@@ -1,25 +1,24 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/NodeList",
 	"../_base"
-], function(dojo,lang,Nodelist,dd){
+], function(lang,Nodelist,dd){
 	/*=====
 		Nodelist = dojo.Nodelist;
 		dd = dojox.dtl;
 	=====*/
 	
-	lang.getObject("dojox.dtl.ext-dojo.NodeList", true);
+	var nl = lang.getObject("dojox.dtl.ext-dojo.NodeList", true);
 
 	lang.extend(Nodelist, {
 		dtl: function(template, context){
+			// summary: Renders the specified template in each of the Nodelist entries.
 			// template: dojox.dtl.__StringArgs|String
 			//		The template string or location
 			// context: dojox.dtl.__ObjectArgs|Object
 			//		The context object or location
-			var d = dd;
-
-			var self = this;
+			var d = dd, self = this;
+			
 			var render = function(template, context){
 				var content = template.render(new d._Context(context));
 				self.forEach(function(node){
@@ -37,5 +36,5 @@ define([
 			return this;
 		}
 	});
-	return dojox.dtl.ext-dojo.NodeList;
+	return nl;
 });

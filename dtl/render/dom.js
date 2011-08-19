@@ -1,11 +1,10 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/dom",
 	"../Context",
 	"../dom",
 	"../_base"
-], function(dojo,lang,dom,ddc,dddom,dd){
+], function(lang,dom,ddc,dddom,dd){
 	/*=====
 		dd = dojox.dtl;
 	=====*/

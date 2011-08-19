@@ -1,12 +1,11 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojox/string/tokenize",
 	"dojox/string/sprintf",
 	"../filter/htmlstrings",
 	"../_base"
-], function(dojo,lang,array,Tokenize,Sprintf,htmlstrings,dd){
+], function(lang,array,Tokenize,Sprintf,htmlstrings,dd){
 	/*=====
 		dd = dojox.dtl;
 		Tokenize = dojox.string.tokenize;

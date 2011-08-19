@@ -1,5 +1,4 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"./_base",
 	"dojox/string/tokenize",
@@ -10,7 +9,7 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/sniff"
-], function(dojo,lang,dd,Tokenize,context,dom,domconstruct,html,array,connect,has){
+], function(lang,dd,Tokenize,context,dom,domconstruct,html,array,connect,has){
 	/*=====
 		Tokenize = dojox.string.tokenize;
 		dd = dojox.dtl;
@@ -44,7 +43,7 @@ define([
 				text = text.replace(/<!--({({|%).*?(%|})})-->/g, "$1");
 			}
 
-			if(dojo.isIE){
+			if(has("ie")){
 				text = text.replace(/\b(checked|disabled|readonly|style)="/g, 't$1="');
 			}
 			text = text.replace(/\bstyle="/g, 'tstyle="');
@@ -343,7 +342,7 @@ define([
 	};
 
 	dd.DomTemplate = lang.extend(function(/*String|DOMNode|dojo._Url*/ obj){
-		// summary: Use this object for DOM templating
+		// summary: The template class for DOM templating.
 		if(!obj.nodes){
 			var node = dom.byId(obj);
 			if(node && node.nodeType == 1){
@@ -372,16 +371,20 @@ define([
 	{
 		_count: 0,
 		_re: /\bdojo:([a-zA-Z0-9_]+)\b/g,
-		setClass: function(str){
+		setClass: function(/*String*/str){
+			// summary: Sets the specified class name on the root node.
 			this.getRootNode().className = str;
 		},
 		getRootNode: function(){
+			// summary: Returns the template root node.
 			return this.buffer.rootNode;
 		},
 		getBuffer: function(){
+			// summary: Returns a new buffer.
 			return new dd.DomBuffer();
 		},
-		render: function(context, buffer){
+		render: function(/*dojox.dtl.Context?*/context, /*concatenable?*/buffer){
+			// summary: Renders this template.
 			buffer = this.buffer = buffer || this.getBuffer();
 			this.rootNode = null;
 			var output = this.nodelist.render(context || new dd.Context({}), buffer);
@@ -452,7 +455,7 @@ define([
 			parent._cache.push(node);
 			return this;
 		},
-		remove: function(obj){
+		remove: function(/*String|DomNode*/obj){
 			if(typeof obj == "string"){
 				if(this._parent){
 					this._parent.removeAttribute(obj);

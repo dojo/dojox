@@ -1,16 +1,15 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/dom-construct",
 	".",
 	"./contrib/dijit",
 	"./render/dom",
 	"dojo/cache",
 	"dijit/_TemplatedMixin"
-	], function(dojo,domConstruct,dtl,ddcd,ddrd,cache,TemplatedMixin){
+	], function(domConstruct,dtl,ddcd,ddrd,cache,TemplatedMixin){
 	/*=====
 		dtl = dojox.dtl;
 		cache = dojo.cache;
-		Templated = dijit._Templated
+		TemplatedMixin = dijit._TemplatedMixin
 	=====*/
 	dtl._DomTemplated = function(){};
 	dtl._DomTemplated.prototype = {
@@ -45,6 +44,9 @@ define([
 		setTemplate: function(/*String|dojo._Url*/ template, /*dojox.dtl.Context?*/ context){
 			// summary:
 			//		Quickly switch between templated by location
+			// template: The new template.
+			// context:
+			//		The runtime context.
 			if(dojox.dtl.text._isTemplate(template)){
 				this.template = this._getCachedTemplate(null, template);
 			}else{
@@ -53,6 +55,12 @@ define([
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context, /*dojox.dtl.DomTemplate?*/ tpl){
+			// summary:
+			//		Renders this template.
+			// context:
+			//		The runtime context.
+			// tpl:
+			//		The template to render. Optional.
 			if(tpl){
 				this.template = tpl;
 			}

@@ -6,7 +6,7 @@ define([
 	"dojo/dom-construct",
 	"../_base",
 	"../dom"
-], function(dojo,lang,connect,domStyle,domConstruct,dd,dddom){
+], function(kernel,lang,connect,domStyle,domConstruct,dd,dddom){
 	/*=====
 		dd = dojox.dtl;
 	=====*/
@@ -150,7 +150,7 @@ define([
 			return new ddch.BufferNode(nodelist, options);
 		},
 		html: function(parser, token){
-			dojo.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead");
+			kernel.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead");
 			return parser.create_variable_node(token.contents.slice(5) + "|safe");
 		},
 		style_: function(parser, token){

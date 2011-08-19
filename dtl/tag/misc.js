@@ -1,10 +1,9 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"../_base"
-], function(dojo,lang,array,connect,dd){
+], function(lang,array,connect,dd){
 	/*=====
 		dd = dojox.dtl;
 	=====*/

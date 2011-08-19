@@ -1,9 +1,8 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"../_base",
 	"../utils/date"
-], function(dojo,lang,dd,ddud){
+], function(lang,dd,ddud){
 	/*=====
 		dd = dojox.dtl;
 	=====*/

@@ -1,10 +1,9 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"./dom",
 	"./_base",
 	"dijit/_WidgetBase"
-], function(dojo,lang,ddd,dd,Widget){
+], function(lang,ddd,dd,Widget){
 	/*=====
 		dd = dojox.dtl;
 		Widget = dijit._WidgetBase;
