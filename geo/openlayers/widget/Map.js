@@ -1,12 +1,14 @@
 define(["dojo/_base/kernel",
 				"dojo/_base/declare",
-				"dojo/query",
 				"dojo/_base/array",
+				"dojo/_base/html",
+				"dojo/query",
 				"dijit/_Widget",
 				"dojox/geo/openlayers/Map",
-				"dojox/geo/openlayers/GfxLayer"], function(dojo, declare, queryArg, arrayArg, widgetArg, mapArg, gfxLayerArg){
+				"dojox/geo/openlayers/Layer",
+				"dojox/geo/openlayers/GfxLayer"], function(dojo, declare, array, html, query, _Widget, Map, Layer, GfxLayer){
 
-	return dojo.declare("dojox.geo.openlayers.widget.Map", dijit._Widget, {
+	return declare("dojox.geo.openlayers.widget.Map", dijit._Widget, {
 		//	summary: 
 		//		A widget version of the `dojox.geo.openlayers.Map` component.
 		//	description: 
@@ -89,7 +91,7 @@ define(["dojo/_base/kernel",
 			//		protected
 			this.inherited(arguments);
 			var div = this.domNode;
-			var map = new mapArg(div, {
+			var map = new Map(div, {
 				baseLayerType : this.baseLayerType,
 				touchHandler : this.touchHandler
 			});
@@ -104,8 +106,8 @@ define(["dojo/_base/kernel",
 			//	tags:
 			//		private
 			var n = this.domNode;
-			var layers = dojo.query("> .layer", n);
-			dojo.forEach(layers, function(l){
+			var layers = /* ?? query. */query("> .layer", n);
+			array.forEach(layers, function(l){
 				var type = l.getAttribute("type");
 				var name = l.getAttribute("name");
 				var cls = "dojox.geo.openlayers." + type;

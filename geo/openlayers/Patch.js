@@ -1,14 +1,14 @@
 define([
 	"dojo/_base/kernel",
-	"dojo/_base/lang",	// dojo.extend
+	"dojo/_base/lang",	// dojo.extend getObject
 	"dojo/_base/sniff",	// dojo.isIE
 	"dojox/gfx",
 	"dojox/gfx/shape"
-], function(dojo){
+], function(dojo, lang, sniff, gfx, shape){
 
-	dojo.getObject("geo.openlayers", true, dojox);
+	var dgo = lang.getObject("geo.openlayers", true, dojox);
 
-	dojox.geo.openlayers.Patch = {
+	dgo.Patch = {
 
 		patchMethod : function(/*Object*/type, /*String*/method, /*Function*/execBefore, /*Function*/
 		execAfter){
@@ -52,38 +52,15 @@ define([
 					this.rawNode.fill.colors = {};
 			};
 			
-			if (dojo.isIE <= 8) {
+			if (sniff.isIE <= 8) {
 				
-				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.Line, "setShape", vmlFixRawNodePath, null);
-				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.Polyline, "setShape", vmlFixRawNodePath, null);
-				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.Path, "setShape", vmlFixRawNodePath, null);
+				dojox.geo.openlayers.Patch.patchMethod(gfx.Line, "setShape", vmlFixRawNodePath, null);
+				dojox.geo.openlayers.Patch.patchMethod(gfx.Polyline, "setShape", vmlFixRawNodePath, null);
+				dojox.geo.openlayers.Patch.patchMethod(gfx.Path, "setShape", vmlFixRawNodePath, null);
 				
-				dojox.geo.openlayers.Patch.patchMethod(dojox.gfx.shape.Shape, "setFill", vmlFixFillColors, null);
+				dojox.geo.openlayers.Patch.patchMethod(shape.Shape, "setFill", vmlFixFillColors, null);
 			}
 		}
-/*		,
-		OpenLayersMapRemoveLayer : function() {
-		},
-		OpenLayersMapDestroyMap : function() {
-		},
-		OpenLayersControlPanZoom_removeButton : function() {
-		},
-		OpenLayersLayerGetResolution : function() {
-		},
-		patchOpenLayers : function() {
-		if (dojo.isIE)
-				dojo.extend(OpenLayers.Map, {
-					removeLayer : this.OpenLayersMapRemoveLayer,
-					destroy : this.OpenLayersMapDestroyMap
-				});
-			if (dojo.isIE)
-				dojo.extend(OpenLayers.Control.PanZoom, {
-					_removeButton : this.OpenLayersControlPanZoom_removeButton
-				});
-			dojo.extend(OpenLayers.Layer, {
-				getResolution : this.OpenLayersLayerGetResolution
-			});
-		}
-*/		
 	};
+	return dgo.Patch;
 });

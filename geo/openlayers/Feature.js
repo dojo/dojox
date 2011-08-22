@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Map"], function(dojo, declare, mapArg){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Map"], function(dojo, declare, Map){
 
-	return dojo.declare("dojox.geo.openlayers.Feature", null, {
+	return declare("dojox.geo.openlayers.Feature", null, {
 		//	summary:
 		//		A Feature encapsulates an item so that it can be added to a Layer.
 		//		This class is not attended to be used as it, but serve as a base class

@@ -1,7 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo/openlayers/Feature"],
-	function(dojo, declare, htmlArg, featureArg){
+define(
+	["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojox/geo/openlayers/Feature"],
+	function(dojo, declare, html, lang, Feature){
 
-		return dojo.declare("dojox.geo.openlayers.WidgetFeature", dojox.geo.openlayers.Feature, {
+		return declare("dojox.geo.openlayers.WidgetFeature", dojox.geo.openlayers.Feature, {
 			//	summary:
 			//		Wraps a Dojo widget, provide geolocalisation of the widget and interface
 			//		to Layer class.
@@ -60,7 +61,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 						w = params.createWidget.call(this);
 					} else if (params.dojoType) {
 						dojo["require"](params.dojoType);
-						var c = dojo.getObject(params.dojoType);
+						var c = lang.getObject(params.dojoType);
 						w = new c(params);
 					} else if (params.dijitId) {
 						w = dijit.byId(params.dijitId);
@@ -74,7 +75,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 							w.startup();
 						var n = w.domNode;
 						if (n != null)
-							dojo.style(n, {
+							html.style(n, {
 								position : "absolute"
 							});
 					}
@@ -93,7 +94,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 					return p.width;
 				var w = this._getWidget();
 				if (w)
-					return dojo.style(w.domNode, "width");
+					return html.style(w.domNode, "width");
 			},
 
 			_getWidgetHeight : function(){
@@ -106,7 +107,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 					return p.height;
 				var w = this._getWidget();
 				if (w)
-					return dojo.style(w.domNode, "height");
+					return html.style(w.domNode, "height");
 			},
 
 			render : function(){
@@ -134,7 +135,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 				var x = a[0] - width / 2;
 				var y = a[1] - height / 2;
 				var dom = widget.domNode;
-				
+
 				var p = layer.olLayer.div;
 				if (dom.parentNode != p) {
 					if (dom.parentNode)
@@ -159,7 +160,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 				var w = this._widget;
 				var dom = w.domNode;
 
-				dojo.style(dom, {
+				html.style(dom, {
 					position : "absolute",
 					left : box.x + "px",
 					top : box.y + "px",
@@ -168,7 +169,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 				});
 
 				if (w.srcNodeRef) {
-					dojo.style(w.srcNodeRef, {
+					html.style(w.srcNodeRef, {
 						position : "absolute",
 						left : box.x + "px",
 						top : box.y + "px",
@@ -177,7 +178,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojox/geo
 					});
 				}
 
-				if (dojo.isFunction(w.resize))
+				if (lang.isFunction(w.resize))
 					w.resize({
 						w : box.width,
 						h : box.height

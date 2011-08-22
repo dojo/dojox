@@ -2,13 +2,14 @@ define(["dojo/_base/kernel",
 				"dojo/_base/declare",
 				"dojo/_base/xhr",
 				"dojo/_base/lang",
+				"dojo/_base/array",
 				"dojox/geo/openlayers/LineString",
 				"dojox/geo/openlayers/Collection",
 				"dojo/data/ItemFileReadStore",
-				"dojox/geo/openlayers/GeometryFeature"], function(dojo, declare, xhrArg, langArg, lineStringArg, collectionArg,
-																													fileReadStoreArg, geometryFeatureArg){
+				"dojox/geo/openlayers/GeometryFeature"], function(dojo, declare, xhr, lang, array, LineString, Collection,
+																													ItemFileReadStore, GeometryFeature){
 
-	return dojo.declare("dojox.geo.openlayers.JsonImport", null, {
+	return declare("dojox.geo.openlayers.JsonImport", null, {
 		//	summary:
 		//		Class to load JSON formated ShapeFile as output of the JSon Custom Map Converter.
 		//	description:
@@ -35,12 +36,12 @@ define(["dojo/_base/kernel",
 			//	summary:
 			//		Triggers the loading.
 			var p = this._params;
-			dojo.xhrGet({
+			xhr.get({
 				url : p.url,
 				handleAs : "json",
 				sync : true,
-				load : dojo.hitch(this, this._gotData),
-				error : dojo.hitch(this, this._loadError)
+				load : lang.hitch(this, this._gotData),
+				error : lang.hitch(this, this._loadError)
 			});
 		},
 
@@ -50,7 +51,7 @@ define(["dojo/_base/kernel",
 			//	tags:
 			//		private
 			var nf = this._params.nextFeature;
-			if (!dojo.isFunction(nf))
+			if (!lang.isFunction(nf))
 				return;
 
 			var extent = items.layerExtent;
@@ -76,15 +77,15 @@ define(["dojo/_base/kernel",
 				var o = features[f];
 				var s = o["shape"];
 				var gf = null;
-				if (dojo.isArray(s[0])) {
+				if (lang.isArray(s[0])) {
 
-					var a = [];
-					dojo.forEach(s, function(item){
+					var a = new Array();
+					array.forEach(s, function(item){
 						var ls = this._makeGeometry(item, ulx, uly, lrx, lry, ulxLL, ulyLL, lrxLL, lryLL);
 						a.push(ls);
 					}, this);
-					var g = new collectionArg(a);
-					gf = new geometryFeatureArg(g);
+					var g = new Collection(a);
+					gf = new GeometryFeature(g);
 					nf.call(this, gf);
 
 				} else {
@@ -93,7 +94,7 @@ define(["dojo/_base/kernel",
 				}
 			}
 			var complete = this._params.complete;
-			if (dojo.isFunction(complete))
+			if (lang.isFunction(complete))
 				complete.call(this, complete);
 		},
 
@@ -121,7 +122,7 @@ define(["dojo/_base/kernel",
 				});
 
 			}
-			var ls = new lineStringArg(a);
+			var ls = new LineString(a);
 			return ls;
 		},
 
@@ -132,7 +133,7 @@ define(["dojo/_base/kernel",
 			//	tags:
 			//		private
 			var ls = this._makeGeometry(s, ulx, uly, lrx, lry, ulxLL, ulyLL, lrxLL, lryLL);
-			var gf = new geometryFeatureArg(ls);
+			var gf = new GeometryFeature(ls);
 			return gf;
 		},
 
@@ -142,7 +143,7 @@ define(["dojo/_base/kernel",
 			//	tags:
 			//		private
 			var f = this._params.error;
-			if (dojo.isFunction(f))
+			if (lang.isFunction(f))
 				f.apply(this, parameters);
 		}
 	});

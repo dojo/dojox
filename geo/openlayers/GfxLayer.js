@@ -6,11 +6,12 @@ define(["dojo/_base/kernel",
 				"dojox/gfx/_base",
 				"dojox/gfx/shape",
 				"dojox/gfx/path",
+				"dojox/gfx/matrix",
 				"dojox/geo/openlayers/Feature",
-				"dojox/geo/openlayers/Layer"], function(dojo, declare, connectArg, htmlArg, gfxArg, gbaseArg, shapeArg,
-																								pathArg, featureArg, layerArg){
+				"dojox/geo/openlayers/Layer"], function(dojo, declare, connect, html, gfx, gbase, shape,
+																								path, matrix, Feature, Layer){
 
-	return dojo.declare("dojox.geo.openlayers.GfxLayer", dojox.geo.openlayers.Layer, {
+	return declare("dojox.geo.openlayers.GfxLayer", dojox.geo.openlayers.Layer, {
 		//	summary: 
 		//		A layer dedicated to render dojox.geo.openlayers.GeometryFeature
 		//	description:
@@ -120,7 +121,7 @@ define(["dojo/_base/kernel",
 					return;
 				var vp = this.getViewport();
 
-				vp.setTransform(dojox.gfx.matrix.translate(left, top));
+				vp.setTransform(matrix.translate(left, top));
 
 				this.inherited(arguments);
 

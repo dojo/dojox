@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Geometry"],
-function(dojo, declare,	geometryArg){
+function(dojo, declare,	Geometry){
 
-	return dojo.declare("dojox.geo.openlayers.Collection", dojox.geo.openlayers.Geometry, {
+	return declare("dojox.geo.openlayers.Collection", dojox.geo.openlayers.Geometry, {
 		//	summary:
 		//		A collection of geometries. _coordinates_ holds an array of geometries. 
 

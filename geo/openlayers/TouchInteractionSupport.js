@@ -4,9 +4,9 @@ define(["dojo/_base/kernel",
 				"dojo/_base/html",
 				"dojo/_base/lang",
 				"dojo/_base/event",
-				"dojo/_base/window"], function(dojo, declare, connectArg, htmlArg, langArg, eventArg, windowArg){
+				"dojo/_base/window"], function(dojo, declare, connect, html, lang, event, window){
 
-	return dojo.declare("dojox.geo.openlayers.TouchInteractionSupport", null, {
+	return declare("dojox.geo.openlayers.TouchInteractionSupport", null, {
 		//	summary: 
 		//		class to handle touch interactions on a OpenLayers.Map widget
 		//	tags:
@@ -33,9 +33,9 @@ define(["dojo/_base/kernel",
 			var div = this._map.div;
 
 			// install touch listeners
-			dojo.connect(div, "touchstart", this, this._touchStartHandler);
-			dojo.connect(div, "touchmove", this, this._touchMoveHandler);
-			dojo.connect(div, "touchend", this, this._touchEndHandler);
+			connect.connect(div, "touchstart", this, this._touchStartHandler);
+			connect.connect(div, "touchmove", this, this._touchMoveHandler);
+			connect.connect(div, "touchend", this, this._touchEndHandler);
 
 			this._tapCount = 0;
 			this._lastTap = {
@@ -64,7 +64,7 @@ define(["dojo/_base/kernel",
 				secondTouch = touches[0];
 			}
 
-			var marginBox = dojo.marginBox(this._map.div);
+			var marginBox = html.marginBox(this._map.div);
 
 			var middleX = (firstTouch.pageX + secondTouch.pageX) / 2.0 - marginBox.l;
 			var middleY = (firstTouch.pageY + secondTouch.pageY) / 2.0 - marginBox.t;
@@ -121,7 +121,7 @@ define(["dojo/_base/kernel",
 			this._tapCount++;
 			this._lastTap.x = touches[0].pageX;
 			this._lastTap.y = touches[0].pageY;
-			setTimeout(dojo.hitch(this, function(){
+			setTimeout(lang.hitch(this, function(){
 				this._tapCount = 0;
 			}), 300);
 
@@ -136,7 +136,7 @@ define(["dojo/_base/kernel",
 			//		private
 			// perform a basic 2x zoom on touch
 			var touches = touchEvent.touches;
-			var marginBox = dojo.marginBox(this._map.div);
+			var marginBox = html.marginBox(this._map.div);
 			var offX = touches[0].pageX - marginBox.l;
 			var offY = touches[0].pageY - marginBox.t;
 			// clicked map point before zooming
@@ -151,7 +151,7 @@ define(["dojo/_base/kernel",
 			//	touchEvent: a touch event
 			//	tags:
 			//		private
-			dojo.stopEvent(touchEvent);
+			event.stopEvent(touchEvent);
 
 			// test double tap
 			if (this._isDoubleTap(touchEvent)) {
@@ -172,9 +172,9 @@ define(["dojo/_base/kernel",
 
 			// install touch move and up listeners (if not done by other fingers before)
 			if (!this._touchMoveListener)
-				this._touchMoveListener = dojo.connect(dojo.global, "touchmove", this, this._touchMoveHandler);
+				this._touchMoveListener = connect.connect(window.global, "touchmove", this, this._touchMoveHandler);
 			if (!this._touchEndListener)
-				this._touchEndListener = dojo.connect(dojo.global, "touchend", this, this._touchEndHandler);
+				this._touchEndListener = connect.connect(window.global, "touchend", this, this._touchEndHandler);
 
 		},
 
@@ -184,18 +184,18 @@ define(["dojo/_base/kernel",
 			//	touchEvent: a touch event
 			//	tags:
 			//		private
-			dojo.stopEvent(touchEvent);
+			event.stopEvent(touchEvent);
 
 			var touches = touchEvent.touches;
 
 			if (touches.length == 0) {
 				// disconnect listeners only when all fingers are up
 				if (this._touchMoveListener) {
-					dojo.disconnect(this._touchMoveListener);
+					connect.disconnect(this._touchMoveListener);
 					this._touchMoveListener = null;
 				}
 				if (this._touchEndListener) {
-					dojo.disconnect(this._touchEndListener);
+					connect.disconnect(this._touchEndListener);
 					this._touchEndListener = null;
 				}
 			} else {
@@ -215,7 +215,7 @@ define(["dojo/_base/kernel",
 			//		private
 
 			// prevent browser interaction
-			dojo.stopEvent(touchEvent);
+			event.stopEvent(touchEvent);
 
 			var middlePoint = this._getTouchBarycenter(touchEvent);
 

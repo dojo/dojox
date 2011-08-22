@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff"],
-	function(dojo, declare, langArg, arrayArg){
+	function(dojo, declare, lang, array, sniff){
 
-		return dojo.declare("dojox.geo.openlayers.Layer", null, {
+		return declare("dojox.geo.openlayers.Layer", null, {
 			//	summary: 
 			//		Base layer class for dojox.geo.openlayers.Map specific layers extending OpenLayers.Layer class.
 			//		This layer class accepts Features which encapsulates graphic objects to be added to the map.
@@ -18,11 +18,11 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang", "dojo/_bas
 				var ol = options ? options.olLayer : null;
 
 				if (!ol)
-					ol = dojo.delegate(new OpenLayers.Layer(name, options));
+					ol = lang.delegate(new OpenLayers.Layer(name, options));
 
 				this.olLayer = ol;
 				this._features = null;
-				this.olLayer.events.register("moveend", this, dojo.hitch(this, this.moveTo));
+				this.olLayer.events.register("moveend", this, lang.hitch(this, this.moveTo));
 			},
 
 			renderFeature : function(/* Feature */f){
@@ -42,8 +42,8 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang", "dojo/_bas
 				//		Add a feature or an array of features to the layer.
 				//	f : Feature or Array
 				//		The Feature or array of features to add.
-				if (dojo.isArray(f)) {
-					dojo.forEach(f, function(item){
+				if (lang.isArray(f)) {
+					array.forEach(f, function(item){
 						this.addFeature(item);
 					}, this);
 					return;
@@ -64,12 +64,12 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang", "dojo/_bas
 					return;
 				if (f instanceof Array) {
 					f = f.slice(0);
-					dojo.forEach(f, function(item){
+					array.forEach(f, function(item){
 						this.removeFeature(item);
 					}, this);
 					return;
 				}
-				var i = dojo.indexOf(ft, f);
+				var i = array.indexOf(ft, f);
 				if (i != -1)
 					ft.splice(i, 1);
 				f._setLayer(null);
@@ -137,7 +137,7 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang", "dojo/_bas
 				if (event.zoomChanged) {
 					if (this._features == null)
 						return;
-					dojo.forEach(this._features, function(f){
+					array.forEach(this._features, function(f){
 						this.renderFeature(f);
 					}, this);
 				}
@@ -146,8 +146,8 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/lang", "dojo/_bas
 			redraw : function(){
 				//	summary:
 				//		Redraws this layer
-				if (dojo.isIE)
-					setTimeout(dojo.hitch(this, function(){
+				if (sniff.isIE)
+					setTimeout(lang.hitch(this, function(){
 						this.olLayer.redraw();
 					}, 0));
 				else

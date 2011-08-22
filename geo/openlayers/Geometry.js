@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo, declare){
 
-	return dojo.declare("dojox.geo.openlayers.Geometry", null, {
+	return declare("dojox.geo.openlayers.Geometry", null, {
 		//	summary:
 		//		A Geometry handles description of shapes to be rendered in a GfxLayer
 		//		using a GeometryFeature feature.

@@ -1,17 +1,18 @@
 define(["dojo/_base/kernel",
 				"dojo/_base/declare",
-				"dojox/main",
 				"dojo/_base/lang",
 				"dojo/_base/array",
 				"dojo/_base/json",
+				"dojo/_base/html",
+				"dojox/main",
 				"dojox/geo/openlayers/TouchInteractionSupport",
 				"dojox/geo/openlayers/Layer",
-				"dojox/geo/openlayers/Patch"], function(dojo, declare, dojox, langArg, arrayArg, jsonArg, tiArg, layerArg,
-																								patch){
+				"dojox/geo/openlayers/Patch"], function(dojo, declare, lang, array, json, html, dojox, TouchInteractionSupport,
+																								Layer, Patch){
 
 	dojo.experimental("dojox.geo.openlayers.Map");
 
-	var gob = dojo.getObject("geo.openlayers", true, dojox);
+	lang.getObject("geo.openlayers", true, dojox);
 
 	dojox.geo.openlayers.BaseLayerType = {
 		//	summary:
@@ -43,10 +44,9 @@ define(["dojo/_base/kernel",
 		ARCGIS : "ArcGIS"
 	};
 
-	var gom = dojo.getObject("geo.openlayers", true, dojox);
 	dojox.geo.openlayers.EPSG4326 = new OpenLayers.Projection("EPSG:4326");
 
-	var re = /^\s*(\d{1,3})[D�]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
+	var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
 	dojox.geo.openlayers.parseDMS = function(v, toDecimal){
 		//	summary: 
 		//		Parses the specified string and returns degree minute second or decimal degree.
@@ -69,7 +69,7 @@ define(["dojo/_base/kernel",
 		var nsew = res[5];
 		if (toDecimal) {
 			var lc = nsew.toLowerCase();
-			var dd = d + (m + s / 60) / 60;
+			var dd = d + (m + s / 60.0) / 60.0;
 			if (lc == "w" || lc == "s")
 				dd = -dd;
 			return dd;
@@ -77,9 +77,9 @@ define(["dojo/_base/kernel",
 		return [d, m, s, nsew];
 	};
 
-	dojox.geo.openlayers.Patch.patchGFX();
-	
-	return dojo.declare("dojox.geo.openlayers.Map", null, {
+	Patch.patchGFX();
+
+	return declare("dojox.geo.openlayers.Map", null, {
 		//	summary:
 		//		A map viewer based on the OpenLayers library.
 		//
@@ -129,8 +129,8 @@ define(["dojo/_base/kernel",
 			//		Constructs a new Map object
 			if (!options)
 				options = {};
-			
-			div = dojo.byId(div);
+
+			div = html.byId(div);
 
 			this._tp = {
 				x : 0,
@@ -156,9 +156,9 @@ define(["dojo/_base/kernel",
 			if (!baseLayerType)
 				baseLayerType = dojox.geo.openlayers.BaseLayerType.OSM;
 
-			dojo.style(div, {
-			  width : "100%",
-			  height : "100%",
+			html.style(div, {
+				width : "100%",
+				height : "100%",
 				dir : "ltr"
 			});
 
@@ -171,7 +171,7 @@ define(["dojo/_base/kernel",
 			};
 
 			if (options.touchHandler)
-				this._touchControl = new tiArg(map);
+				this._touchControl = new TouchInteractionSupport(map);
 
 			var base = this._createBaseLayer(options);
 			this.addLayer(base);
@@ -299,7 +299,7 @@ define(["dojo/_base/kernel",
 				case dojox.geo.openlayers.BaseLayerType.OSM:
 					options.transitionEffect = "resize";
 					//				base = new OpenLayers.Layer.OSM(name, url, options);
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.OSM(name, url, options)
 					});
 				break;
@@ -309,7 +309,7 @@ define(["dojo/_base/kernel",
 						if (!options.layers)
 							options.layers = "basic";
 					}
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.WMS(name, url, options, {
 							transitionEffect : "resize"
 						})
@@ -317,19 +317,19 @@ define(["dojo/_base/kernel",
 				break;
 				case dojox.geo.openlayers.BaseLayerType.GOOGLE:
 					//				base = new OpenLayers.Layer.Google(name, options);
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.Google(name, options)
 					});
 				break;
 				case dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH:
 					//				base = new OpenLayers.Layer.VirtualEarth(name);
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.VirtualEarth(name, options)
 					});
 				break;
 				case dojox.geo.openlayers.BaseLayerType.YAHOO:
 					//				base = new OpenLayers.Layer.Yahoo(name);
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.Yahoo(name, options)
 					});
 				break;
@@ -339,7 +339,7 @@ define(["dojo/_base/kernel",
 					//				if (!options.layers)
 					//					options.layers = "0,1,2";
 					//				base = new OpenLayers.Layer.ArcGIS93Rest(name, url, options, {});
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.ArcGIS93Rest(name, url, options, {})
 					});
 
@@ -353,7 +353,7 @@ define(["dojo/_base/kernel",
 					//base = new OpenLayers.Layer.OSM(name, url, options);
 					options.transitionEffect = "resize";
 					//				base = new OpenLayers.Layer.OSM(name, url, options);
-					base = new layerArg(name, {
+					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.OSM(name, url, options)
 					});
 					this.baseLayerType = dojox.geo.openlayers.BaseLayerType.OSM;
@@ -369,11 +369,11 @@ define(["dojo/_base/kernel",
 			//	layer: 
 			//		The layer to remove from the map.
 			var om = this.olMap;
-			var i = dojo.indexOf(this._layerDictionary.layers, layer);
+			var i = array.indexOf(this._layerDictionary.layers, layer);
 			if (i > 0)
 				this._layerDictionary.layers.splice(i, 1);
 			var oll = layer.olLayer;
-			var j = dojo.indexOf(this._layerDictionary.olLayers, oll);
+			var j = array.indexOf(this._layerDictionary.olLayers, oll);
 			if (j > 0)
 				this._layerDictionary.olLayers.splice(i, j);
 			om.removeLayer(oll, false);
@@ -387,20 +387,23 @@ define(["dojo/_base/kernel",
 			//		if the index parameter is provided, the layer index is set to
 			//		this value. If the index parameter is not provided, the index of 
 			//		the layer is returned.
-			//	index:undefined | Number
+			//	index: undefined | int
 			//		index of the layer
-			// 	return:
+			// 	returns: int
 			//		the index of the layer.
 			var olm = this.olMap;
 			if (!index)
 				return olm.getLayerIndex(layer.olLayer);
-			olm.raiseLayer(layer.olLayer, index);
+			//olm.raiseLayer(layer.olLayer, index);
+			olm.setLayerIndex(layer.olLayer, index);
+
 			this._layerDictionary.layers.sort(function(l1, l2){
 				return olm.getLayerIndex(l1.olLayer) - olm.getLayerIndex(l2.olLayer);
 			});
 			this._layerDictionary.olLayers.sort(function(l1, l2){
 				return olm.getLayerIndex(l1) - olm.getLayerIndex(l2);
 			});
+
 			return index;
 		},
 
@@ -423,7 +426,7 @@ define(["dojo/_base/kernel",
 			//		Retrieve the dojox.geo.openlayer.Layer from the OpenLayer.Layer
 			//	tags:
 			//		private
-			var i = dojo.indexOf(this._layerDictionary.olLayers, ol);
+			var i = array.indexOf(this._layerDictionary.olLayers, ol);
 			if (i != -1)
 				return this._layerDictionary.layers[i];
 			return null;
@@ -437,14 +440,14 @@ define(["dojo/_base/kernel",
 			//	value: Object
 			//		The value to match
 			//	returns: dojox.geo.openlayer.Layer | Array
-			//		The layer(s) matching the property's value. If multiple layers
-			//		match the property's value an array is returned. 
+			//		The layer(s) matching the property's value. Since multiple layers
+			//		match the property's value the return value is an array. 
 			//	example: 
-			//		map.getLayer("name", "Layer Name");
+			//		var layers = map.getLayer("name", "Layer Name");
 			var om = this.olMap;
 			var ols = om.getBy("layers", property, value);
-			var ret = [];
-			dojo.forEach(ols, function(ol){
+			var ret = new Array(); //[];
+			array.forEach(ols, function(ol){
 				ret.push(this._getLayer(ol));
 			}, this);
 			return ret;
@@ -496,7 +499,7 @@ define(["dojo/_base/kernel",
 			}
 			var b = null;
 			if (typeof o == "string")
-				var j = dojo.fromJson(o);
+				var j = json.fromJson(o);
 			else
 				j = o;
 			var ul;
