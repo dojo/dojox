@@ -1,10 +1,9 @@
 define(	[	"dojo/_base/kernel",
 					"dojo/_base/declare",
 					"dojo/_base/array",
-					"dojo/_base/lang",
-					"dojo/data/ItemFileReadStore"], function(dojo, declare){
+					"dojo/_base/lang"], function(dojo, declare, arr, lang){
 
-					return dojo.declare("dojox.geo.openlayers.tests.ecr.EcrRenderer", null, {
+					return declare("dojox.geo.openlayers.tests.ecr.EcrRenderer", null, {
 
 						constructor : function(opts, context){
 							this._options = opts;
@@ -33,9 +32,9 @@ define(	[	"dojo/_base/kernel",
 									}
 									return 0;
 								});
-								dojo.forEach(o, function(oi, index, array){
+								arr.forEach(o, function(oi, index, array){
 
-									var co = dojo.clone(oi);
+									var co = lang.clone(oi);
 									this._callFunctions(co, item);
 									this._solveReferences(co, item);
 
@@ -50,7 +49,7 @@ define(	[	"dojo/_base/kernel",
 								return features;
 							}
 
-							var co = dojo.clone(o);
+							var co = lang.clone(o);
 							this._callFunctions(co, item);
 							this._solveReferences(co, item);
 							var gf = this._renderItem(co, item);

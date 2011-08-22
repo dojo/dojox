@@ -4,16 +4,12 @@
 <link rel="stylesheet" type="text/css" href="../../../../dijit/themes/tundra/tundra.css">
 <title>Dojo OpenLayers Benchmarks</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<meta name="GENERATOR"
-	content="Rational® Application Developer Standard Edition for WebSphere® Software">
-<meta name="viewport" content="user-scalable=no, width=device-width" />
 
 <!-- hosted version -->
 <script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
 
 <script type="text/javascript">
 	var djConfig = {
-		isDebug : true,
 		parseOnLoad : true
 	};
 </script>
@@ -21,12 +17,19 @@
 <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 
 <script type="text/javascript">
-	dojo.require("dojox.geo.openlayers.Map");
-	dojo.require("dojox.geo.openlayers.GfxLayer");
-	dojo.require("dojox.geo.openlayers.Point");
-	dojo.require("dojox.geo.openlayers.LineString");
-	dojo.require("dojox.geo.openlayers.GeometryFeature");
-	dojo.require("dojo.parser");
+
+	require(["dojo/ready", 
+					"dojo/dom",
+					"dojo/_base/array",
+					"dojo/_base/html",
+					"dojox/geo/openlayers/Map", 
+					"dojox/geo/openlayers/Layer", 
+					"dojox/geo/openlayers/GfxLayer", 
+					"dojox/geo/openlayers/Point", 
+					"dojox/geo/openlayers/LineString", 
+					"dojox/geo/openlayers/GeometryFeature", 
+					"dojo/parser"],
+	function(ready, dom, arr, html, Map, Layer, GfxLayer, Point, LineString, GeometryFeature, parser) {
 
 	var map;
 	//	var messageDiv;
@@ -61,7 +64,7 @@
 	var numLoadString = "numLoad";
 	var cumulativeTimeString = "cumulativeTime";
 
-	dojo.addOnLoad(function(){
+	ready(function(){
 		var options = {
 			baseLayerName : "TheLayer",
 			baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
@@ -72,10 +75,10 @@
 			Cookies.create(numLoadString, numLoad);
 		if (!Cookies[cumulativeTimeString])
 			Cookies.create(cumulativeTimeString, "0");
-		var div = dojo.byId("map");
-		map = new dojox.geo.openlayers.Map(div, options);
+		var div = dom.byId("map");
+		map = new Map(div, options);
 		var la = map.getLayer("name", "TheLayer");
-		dojo.forEach(la, function(l){
+		arr.forEach(la, function(l){
 			var ol = l.olLayer;
 			ol.events.register("loadstart", this, loadStart);
 			ol.events.register("tileloaded", this, tileLoaded);
@@ -131,17 +134,17 @@
   var pointLayer = null;
 	var numPoints = dojo.isIE ? 10 : 1000;
 	function benchPoints(){
-		var layer = new dojox.geo.openlayers.GfxLayer();
+		var layer = new GfxLayer();
 		map.addLayer(layer);
 		var startDate = new Date();
 		for ( var i = 0; i < numPoints; i++) {
 			var x = Math.random() * 360 - 180;
 			var y = Math.random() * 180 - 90;
-			var g = new dojox.geo.openlayers.Point({
+			var g = new Point({
 				x : x,
 				y : y
 			});
-			var pf = new dojox.geo.openlayers.GeometryFeature(g).setStroke([ 0, 0, 0 ]).setShapeProperties({
+			var pf = new GeometryFeature(g).setStroke([ 0, 0, 0 ]).setShapeProperties({
 				r : 10
 			});
 			layer.addFeature(pf);
@@ -173,7 +176,7 @@ var lineLayer = null;
 	var numLines = 100;
 	var numPointsPerLine = 20;
 	function benchLines(){
-		var layer = new dojox.geo.openlayers.GfxLayer();
+		var layer = new GfxLayer();
 		map.addLayer(layer);
 		var startDate = new Date();
 
@@ -196,8 +199,8 @@ var lineLayer = null;
           a.push(p);
         }
       }
-      var g = new dojox.geo.openlayers.LineString(a);
-			var lf = new dojox.geo.openlayers.GeometryFeature(g).setStroke([ 0, 0, 0 ]);
+      var g = new LineString(a);
+			var lf = new GeometryFeature(g).setStroke([ 0, 0, 0 ]);
 			layer.addFeature(lf);
 	  }
 
@@ -233,12 +236,12 @@ var lineLayer = null;
   function log(msg) {
     console.log(msg);
     if(msgDiv == null) {
-      var layer = new dojox.geo.openlayers.Layer();
+      var layer = new Layer();
       map.addLayer(layer);
       
       var s = layer.olLayer.map.getSize();
 
-      dojo.style(layer.olLayer.div, {
+      html.style(layer.olLayer.div, {
           width : s.w.toFixed(),
           left : "0px",
           top : "0px",
@@ -259,6 +262,8 @@ var lineLayer = null;
     d.textContent = msg;
     d.innerText = msg;
   }
+  });
+  
 </script>
 
 <style type="text/css">

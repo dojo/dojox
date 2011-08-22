@@ -23,47 +23,50 @@
 <script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
 <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 <script>
-	dojo.require("dojox.geo.openlayers.widget.Map");
-	dojo.require("dijit.layout.ContentPane");
-	dojo.require("dijit.layout.BorderContainer");
-	dojo.require("dojo.parser");
+	require([	"dojo/ready",
+						"dojo/_base/array",
+						"dojox/geo/openlayers/widget/Map",
+						"dijit/layout/ContentPane",
+						"dijit/layout/BorderContainer",
+						"dojo/parser"], function(ready, arr, Map){
 
-	var maps = ["osm", "google", "yahoo", "arcGis", "virtualEarth"];
+		var maps = ["osm", "google", "yahoo", "arcGis", "virtualEarth"];
 
-	dojo.addOnLoad(function(){
-		dojo.forEach(maps, function(map){
-			var m = dijit.byId(map);
-			dojo.connect(m.map.olMap, "setCenter", m, update);
+		ready(function(){
+			arr.forEach(maps, function(map){
+				var m = dijit.byId(map);
+				dojo.connect(m.map.olMap, "setCenter", m, update);
+			});
 		});
+
+		var _updating = false;
+
+		function update(center, zoom, dragging, forceZoomChange){
+			if (dragging)
+				return;
+			if (_updating)
+				return;
+			var from = this.map.olMap.getProjectionObject();
+			var to = dojox.geo.openlayers.EPSG4326;
+			var p = {
+				x : center.lon,
+				y : center.lat
+			};
+			OpenLayers.Projection.transform(p, from, to);
+			_updating = true;
+			dojo.forEach(maps, function(map){
+				var m = dijit.byId(map);
+				if (m != this) {
+					from = dojox.geo.openlayers.EPSG4326;
+					to = m.map.olMap.getProjectionObject();
+					var c = dojo.mixin({}, p);
+					OpenLayers.Projection.transform(c, from, to);
+					m.map.olMap.setCenter(new OpenLayers.LonLat(c.x, c.y));
+				}
+			});
+			_updating = false;
+		}
 	});
-
-	var _updating = false;
-
-	function update(center, zoom, dragging, forceZoomChange){
-		if (dragging)
-			return;
-		if (_updating)
-			return;
-		var from = this.map.olMap.getProjectionObject();
-		var to = dojox.geo.openlayers.EPSG4326;
-		var p = {
-			x : center.lon,
-			y : center.lat
-		};
-		OpenLayers.Projection.transform(p, from, to);
-		_updating = true;
-		dojo.forEach(maps, function(map){
-			var m = dijit.byId(map);
-			if (m != this) {
-				from = dojox.geo.openlayers.EPSG4326;
-				to = m.map.olMap.getProjectionObject();
-				var c = dojo.mixin({}, p);
-				OpenLayers.Projection.transform(c, from, to);
-				m.map.olMap.setCenter(new OpenLayers.LonLat(c.x, c.y));
-			}
-		});
-		_updating = false;
-	}
 </script>
 
 <style type="text/css">

@@ -1,5 +1,7 @@
 define(["dojo/_base/kernel",
 				"dojo/_base/declare",
+				"dojo/_base/html",
+				"dojo/_base/lang",
 				"dojo/date",
 				"dojox/geo/openlayers/tests/sun/Sun",
 				"dojox/geo/openlayers/widget/Map",
@@ -9,10 +11,16 @@ define(["dojo/_base/kernel",
 				"dojox/geo/openlayers/LineString",
 				"dojox/geo/openlayers/Point",
 				"dojox/geo/openlayers/JsonImport",
-				"dijit/Tooltip"], function(dojo, declare){
+				"dojox/geo/openlayers/tests/sun/Cities",
+				"dijit/Tooltip"], function(dojo, declare, html, lang, date, Sun, Map, timinig, GfxLayer, GeometryFeature, LineString,
+																		Point, JsonImport, Cities){
 
-	return dojo.declare("dojox.geo.openlayers.tests.sun.SunDemo", null, {
+	return declare("dojox.geo.openlayers.tests.sun.SunDemo", null, {
 		now : true,
+		map : null,
+		cities : null,
+		layer : null,
+		sun : null,
 
 		constructor : function(div){
 
@@ -21,19 +29,49 @@ define(["dojo/_base/kernel",
 				touchHandler : true
 			};
 
-			var map = new dojox.geo.openlayers.widget.Map(options);
-			dojo.place(map.domNode, div);
+			var map = new Map(options);
+			html.place(map.domNode, div);
 			map.startup();
-			map.map.fitTo([-160, 70, 160, -70]);
 			this.map = map;
 
-			this.sun = new dojox.geo.openlayers.tests.sun.Sun();
-			var layer = new dojox.geo.openlayers.GfxLayer();
+			map.map.fitTo([-160, 70, 160, -70]);
+
+			var cities = new Cities(this);
+			dojo.connect(this, "updateFeatures", cities, "updateCities");
+			this.cities = cities;
+
+			this.sun = new Sun();
+			var layer = new GfxLayer("sun");
 			this.layer = layer;
-			this.map.map.addLayer(layer);
+			map.map.addLayer(layer);
 
 			this.updateFeatures();
 
+		},
+
+		showGradients : function(grd){
+			return this.cities.useGradients(grd);
+		},
+
+		showCircles : function(c){
+			return this.cities.useCircles(c);
+		},
+
+		showTooltips : function(tt){
+			var map = this.map.map;
+			var ls = map.getLayer("name", "sun")[0];
+			var lc = map.getLayer("name", "cities")[0];
+			var is = map.layerIndex(ls);
+			var ic = map.layerIndex(lc);
+			var m = Math.min(is, ic);
+			var M = Math.max(is, ic);
+			if (tt) {
+				map.layerIndex(ls, m);
+				map.layerIndex(lc, M);
+			} else {
+				map.layerIndex(ls, M);
+				map.layerIndex(lc, m);
+			}
 		},
 
 		updateFeatures : function(){
@@ -56,18 +94,18 @@ define(["dojo/_base/kernel",
 			l.redraw();
 		},
 
-		getHour : function(date){
-			if (!date)
-				date = this.sun.getDate();
-			return date.getHours() + date.getMinutes() / 60 + date.getSeconds() / 3600;
+		getHour : function(d){
+			if (!d)
+				d = this.sun.getDate();
+			return d.getHours() + d.getMinutes() / 60 + d.getSeconds() / 3600;
 		},
 
-		getDay : function(date){
-			if (!date)
-				date = this.sun.getDate();
-			var start = new Date(date.getFullYear(), 0, 1);
+		getDay : function(d){
+			if (!d)
+				d = this.sun.getDate();
+			var start = new Date(d.getFullYear(), 0, 1);
 			var oneDay = 1000 * 60 * 60 * 24;
-			var day = Math.floor((date.getTime() - start.getTime()) / oneDay);
+			var day = Math.floor((d.getTime() - start.getTime()) / oneDay);
 			return day;
 		},
 
@@ -79,36 +117,36 @@ define(["dojo/_base/kernel",
 			var seconds = now.getSeconds();
 			var milliSeconds = now.getMilliseconds();
 			var start = new Date(year, 0, 1, hours, minutes, seconds, milliSeconds);
-			start = dojo.date.add(start, "day", day);
+			start = date.add(start, "day", day);
 			this.setDate(start);
 		},
 
 		setTime : function(t){
-			var date = this.sun.getDate();
+			var d = this.sun.getDate();
 
-			var year = date.getFullYear();
-			var month = date.getMonth();
-			var day = date.getDate();
+			var year = d.getFullYear();
+			var month = d.getMonth();
+			var day = d.getDate();
 			var hours = Math.floor(t);
 			t = 60 * (t - hours);
 			var minutes = Math.floor(t);
 			t = 60 * (t - minutes);
 			var seconds = Math.floor(t);
-			date = new Date(year, month, day, hours, minutes, seconds, 0);
+			d = new Date(year, month, day, hours, minutes, seconds, 0);
 
-			this.setDate(date);
+			this.setDate(d);
 		},
 
-		setDate : function(date){
-			this.now = !date;
-			this.sun.setDate(date);
+		setDate : function(d){
+			this.now = !d;
+			this.sun.setDate(d);
 			this.updateFeatures();
 		},
 
 		advance : function(ms){
-			var date = this.sun.getDate();
-			date = dojo.date.add(date, "millisecond", ms);
-			this.setDate(date);
+			var d = this.sun.getDate();
+			d = date.add(d, "millisecond", ms);
+			this.setDate(d);
 		},
 
 		getTZone : function(){
@@ -117,8 +155,8 @@ define(["dojo/_base/kernel",
 
 		twilightZone : function(clip){
 			var tz = this.sun.twilightZone(clip);
-			var g = new dojox.geo.openlayers.LineString(tz);
-			var gf = new dojox.geo.openlayers.GeometryFeature(g);
+			var g = new LineString(tz);
+			var gf = new GeometryFeature(g);
 			gf.setStroke([248, 236, 56]);
 			gf.setFill([252, 251, 45, 0.3]);
 			this.tZone = gf;
@@ -150,12 +188,10 @@ define(["dojo/_base/kernel",
 
 		createStar : function(){
 			var s = this.sun.sun();
-			var geom = new dojox.geo.openlayers.Point(s);
-			var gf = new dojox.geo.openlayers.GeometryFeature(geom);
+			var geom = new Point(s);
+			var gf = new GeometryFeature(geom);
 
-			gf.createShape = dojo.hitch(this, function(/* Surface */s){
-				var g = s.createGroup();
-
+			gf.createShape = lang.hitch(this, function(/* Surface */s){
 				var r1 = 30;
 				var r2 = 10;
 				var branches = 7;
@@ -165,8 +201,10 @@ define(["dojo/_base/kernel",
 					path : star
 				});
 				path.setStroke([0, 100, 0]);
-				g.add(path);
-				return g;
+				path.setFill([0, 100, 0]);
+				//				g.add(path);
+				//				return g;
+				return path;
 			});
 			return gf;
 		},
@@ -190,28 +228,40 @@ define(["dojo/_base/kernel",
 
 		createSun : function(){
 			var s = this.sun.sun();
-			var g = new dojox.geo.openlayers.Point({
+			var g = new Point({
 				x : s.x,
 				y : s.y
 			});
-			var gf = new dojox.geo.openlayers.GeometryFeature(g);
-
+			var gf = new GeometryFeature(g);
+			var sunRadius = 20;
 			gf.setShapeProperties({
-				r : 15
+				r : sunRadius
 			});
 			gf.setStroke("");
 			gf.setFill({
 				type : "radial",
-				r : 15,
+				r : sunRadius,
 				colors : [{
 					offset : 0,
 					color : [248, 236, 100]
 				}, {
 					offset : 1,
-					color : [255, 255, 255, 0.4]
+					color : [255, 127, 0]
 				}]
 			});
-
+			/*
+						gf.setFill({
+							type : "radial",
+							r : 15,
+							colors : [{
+								offset : 0,
+								color : [248, 236, 100]
+							}, {
+								offset : 1,
+								color : [255, 255, 255, 0.4]
+							}]
+						});
+			*/
 			return gf;
 		},
 
@@ -224,7 +274,7 @@ define(["dojo/_base/kernel",
 					time = 1000;
 
 				t = this._timer = new dojox.timing.Timer(time);
-				t.onTick = dojo.hitch(this, function(){
+				t.onTick = lang.hitch(this, function(){
 					if (this.now)
 						this.setDate();
 					else

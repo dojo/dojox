@@ -18,9 +18,9 @@
 	white-space: nowrap
 }
 </style>
+
 <script type="text/javascript">
 	var djConfig = {
-		debug : true,
 		parseOnLoad : true
 	};
 </script>
@@ -28,45 +28,48 @@
 <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 
 <script type="text/javascript">
-	dojo.require("dijit.dijit");
-	dojo.require("dijit.layout.ContentPane");
-	dojo.require("dijit.form.HorizontalSlider");
-	dojo.require("dijit.form.HorizontalRuleLabels");
-	dojo.require("dijit.form.Textarea");
-	dojo.require("dijit.form.CheckBox");
-	dojo.require("dojo.parser");
-	dojo.require("dojox.geo.openlayers.tests.sun.SunDemo");
-	dojo.require("dojox.geo.openlayers.tests.sun.Cities");
-
 	var sunDemo;
-	dojo.addOnLoad(function(){
-		sunDemo = new dojox.geo.openlayers.tests.sun.SunDemo('map');
 
-		updateSliders();
+	require([	"dojo/ready",
+						"dojo/_base/connect",
+						"dojox/geo/openlayers/tests/sun/SunDemo",
+						"dijit/layout/ContentPane",
+						"dijit/form/HorizontalSlider",
+						"dijit/form/HorizontalRuleLabels",
+						"dijit/form/Textarea",
+						"dijit/form/CheckBox",
+						"dijit/Menu",
+						"dijit/MenuItem",
+						"dijit/CheckedMenuItem",
+						"dijit/PopupMenuItem",
+						"dojo/parser"], function(ready, connect, SunDemo){
 
-		dojo.connect(sunDemo, "updateFeatures", this, updateText);
+		ready(function(){
+			sunDemo = new SunDemo('map');
 
-		var cities = new dojox.geo.openlayers.tests.sun.Cities(sunDemo);
-		dojo.connect(sunDemo, "updateFeatures", cities, "updateCities");
+			updateSliders();
 
+			// dojo.on(sunDemo, "updateFeatures", dojo.hitch(this, updateText));
+			dojo.connect(sunDemo, "updateFeatures", this, updateText);
+		});
+
+		function updateSliders(){
+			var dateSlider = dijit.byId("date");
+			dateSlider.set("value", sunDemo.getDay());
+
+			var bissextile = new Date(sunDemo.sun.getDate().getFullYear(), 2, 0).getDate() == 29;
+			dateSlider.set("maximum", (bissextile ? 366 : 365));
+
+			var timeSlider = dijit.byId("time");
+			timeSlider.set("value", sunDemo.getHour());
+		}
+
+		function updateText(){
+			var ta = dijit.byId("textArea");
+			var s = sunDemo.sun.getDate().toString();
+			ta.set('value', s);
+		}
 	});
-
-	function updateSliders(){
-		var dateSlider = dijit.byId("date");
-		dateSlider.set("value", sunDemo.getDay());
-
-		var bissextile = new Date(sunDemo.sun.getDate().getFullYear(), 2, 0).getDate() == 29;
-		dateSlider.set("maximum", (bissextile ? 366 : 365));
-
-		var timeSlider = dijit.byId("time");
-		timeSlider.set("value", sunDemo.getHour());
-	}
-
-	function updateText(){
-		var ta = dijit.byId("textArea");
-		var s = sunDemo.sun.getDate().toString();
-		ta.set('value', s);
-	}
 </script>
 
 </head>
@@ -74,7 +77,16 @@
 	<table id="theTable" style="width: 100%; height: 100%;">
 		<tr>
 			<td colspan="2" style="width: 100%; height: 100%;">
-				<div id="map" style="background-color: #b5d0d0; height: 100%; width: 100%;"></div></td>
+				<div id="map" style="background-color: #b5d0d0; height: 100%; width: 100%;">
+					<div dojoType="dijit.Menu" targetNodeIds="map" style="display: none;">
+						<div id="tt" dojoType="dijit.CheckedMenuItem"
+							onClick="sunDemo.showTooltips(dijit.byId('tt').checked)">Tooltips</div>
+						<div id="grd" dojoType="dijit.CheckedMenuItem"
+							onClick="sunDemo.showGradients(dijit.byId('grd').checked)">Gradients</div>
+						<div id="crl" dojoType="dijit.CheckedMenuItem"
+							onClick="sunDemo.showCircles(dijit.byId('crl').checked)">Circles</div>
+					</div>
+				</div></td>
 		</tr>
 		<tr>
 			<td class="text" width="5%">Day</td>

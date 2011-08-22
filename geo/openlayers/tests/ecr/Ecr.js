@@ -3,26 +3,28 @@ define(["dojo/_base/kernel",
 				"dojo/_base/html",
 				"dojo/_base/array",
 				"dojo/_base/lang",
+				"dojo/dom",
 				"dojox/geo/openlayers/Map",
 				"dojox/geo/openlayers/GfxLayer",
 				"dojo/data/ItemFileReadStore",
 				"dojox/geo/openlayers/tests/ecr/PortRenderer",
-				"dojox/geo/openlayers/tests/ecr/LegsRenderer"], function(dojo, declare){
+				"dojox/geo/openlayers/tests/ecr/LegsRenderer"], function(dojo, declare, html, arr, lang, dom, Map, GfxLayer,
+																																	ItemFileReadStore, PortRenderer, LegsRenderer){
 
-	return dojo.declare("dojox.geo.openlayers.tests.ecr.Ecr", null, {
+	return declare("dojox.geo.openlayers.tests.ecr.Ecr", null, {
 		constructor : function(){
 
-			var map = new dojox.geo.openlayers.Map("map");
+			var map = new Map("map");
 
 			map.fitTo([-160, 70, 160, -70]);
-			
+
 			this._map = map;
 
-			layer = new dojox.geo.openlayers.GfxLayer("legs");
+			layer = new GfxLayer("legs");
 			this._legLayer = layer;
 			map.addLayer(layer);
 
-			layer = new dojox.geo.openlayers.GfxLayer("ports");
+			layer = new GfxLayer("ports");
 			this._portLayer = layer;
 			map.addLayer(layer);
 
@@ -47,7 +49,7 @@ define(["dojo/_base/kernel",
 		},
 
 		setDataSet : function(name){
-			var o = dojo.byId(name);
+			var o = dom.byId(name);
 			var ds = o.value;
 
 			var layer = this._portLayer;
@@ -57,7 +59,7 @@ define(["dojo/_base/kernel",
 			this.clearLayer(layer);
 
 			this.loadData(ds);
-			
+
 		},
 
 		log : function(o){
@@ -99,10 +101,10 @@ define(["dojo/_base/kernel",
 			var ctx = {
 				store : store
 			};
-			var renderer = new dojox.geo.openlayers.tests.ecr.PortRenderer(this._portStyle, ctx);
+			var renderer = new PortRenderer(this._portStyle, ctx);
 			var layer = this._portLayer;
 
-			dojo.forEach(items, function(item, index, array){
+			arr.forEach(items, function(item, index, array){
 				var f = renderer.render(item);
 				if (f != null)
 					layer.addFeature(f);
@@ -111,7 +113,7 @@ define(["dojo/_base/kernel",
 			this.fillPortChooser(items);
 
 			this.portChange('portChooser');
-			
+
 			layer.redraw();
 		},
 
@@ -127,10 +129,10 @@ define(["dojo/_base/kernel",
 			var ctx = {
 				store : request.store
 			};
-			var renderer = new dojox.geo.openlayers.tests.ecr.LegsRenderer(this._legsStyle, ctx);
+			var renderer = new LegsRenderer(this._legsStyle, ctx);
 			renderer.setGeodetic(true);
 			var layer = this._legLayer;
-			dojo.forEach(items, function(item, index, array){
+			arr.forEach(items, function(item, index, array){
 				var f = renderer.render(item);
 				if (f != null)
 					layer.addFeature(f);
@@ -140,7 +142,7 @@ define(["dojo/_base/kernel",
 
 		loadData : function(dataSet){
 			//      this.log("load " + dataSet);
-			var store = new dojo.data.ItemFileReadStore({
+			var store = new ItemFileReadStore({
 				url : dataSet,
 				urlPreventCache : true
 			});
@@ -149,8 +151,8 @@ define(["dojo/_base/kernel",
 				query : {
 					type : "legs"
 				},
-				onComplete : dojo.hitch(this, this.gotLegs),
-				onError : dojo.hitch(this, this.loadError),
+				onComplete : lang.hitch(this, this.gotLegs),
+				onError : lang.hitch(this, this.loadError),
 				queryOptions : {
 					deep : true
 				}
@@ -160,8 +162,8 @@ define(["dojo/_base/kernel",
 				query : {
 					type : "port"
 				},
-				onComplete : dojo.hitch(this, this.gotPorts),
-				onError : dojo.hitch(this, this.loadError)
+				onComplete : lang.hitch(this, this.gotPorts),
+				onError : lang.hitch(this, this.loadError)
 			});
 
 		},
@@ -171,12 +173,12 @@ define(["dojo/_base/kernel",
 		},
 
 		portChange : function(name){
-			var o = dojo.byId(name);
+			var o = dom.byId(name);
 			this.fitTo(o.value);
 		},
 
 		fillPortChooser : function(items){
-			var ps = dojo.byId("portChooser");
+			var ps = dom.byId("portChooser");
 			var opts = ps.options;
 			var ws = '{"position" : [0, 0], "extent" : 70}';
 			if (items == null) {
@@ -197,9 +199,9 @@ define(["dojo/_base/kernel",
 		},
 
 		toggleLayerVisibility : function(name){
-			var cb = dojo.byId(name);
+			var cb = dom.byId(name);
 			var a = this._map.getLayer('name', name);
-			dojo.forEach(a, function(item, index, array){
+			arr.forEach(a, function(item, index, array){
 				item.olLayer.setVisibility(cb.checked);
 			});
 		}

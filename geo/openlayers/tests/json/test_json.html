@@ -17,35 +17,36 @@
 <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 
 <script type="text/javascript">
-	dojo.require("dojox.geo.openlayers.Map");
-	dojo.require("dojox.geo.openlayers.Layer");
-	dojo.require("dojox.geo.openlayers.GfxLayer");
-	dojo.require("dojox.geo.openlayers.JsonImport");
+	require([	"dojo/ready",
+						"dojo/_base/lang",
+						"dojox/geo/openlayers/Map",
+						"dojox/geo/openlayers/Layer",
+						"dojox/geo/openlayers/GfxLayer",
+						"dojox/geo/openlayers/JsonImport"], function(ready, lang, Map, Layer, GfxLayer, JsonImport){
 
-	var map;
+		var map;
 
-	dojo.addOnLoad(function(){
-		var options = {
-			baseLayerName : "TheMap"
-		};
+		ready(function(){
+			var options = {
+				baseLayerName : "TheMap"
+			};
 
-		map = new dojox.geo.openlayers.Map("map", options);
+			map = new Map("map", options);
 
-		loadJsonMap();
+			loadJsonMap();
 
-		map.fitTo([-160, 70, 160, -70]);
+			map.fitTo([-160, 70, 160, -70]);
 
-	});
+		});
 
-	function loadJsonMap(){
+		function loadJsonMap(){
 
-		layer = new dojox.geo.openlayers.GfxLayer("GfxLayer");
-		map.addLayer(layer);
+			layer = new GfxLayer("GfxLayer");
+			map.addLayer(layer);
 
-		var cmc = new dojox.geo.openlayers.JsonImport({
-			url : 'ContinentalEurope.json',
-			nextFeature : dojo.hitch(this,
-				function(f){
+			var cmc = new JsonImport({
+				url : 'ContinentalEurope.json',
+				nextFeature : lang.hitch(this, function(f){
 					f.setStroke([	Math.floor(Math.random() * 255),
 												Math.floor(Math.random() * 255),
 												Math.floor(Math.random() * 255)]);
@@ -56,12 +57,13 @@
 					f.setFill(c);
 					layer.addFeature(f);
 				}),
-			complete : dojo.hitch(this, function(){
-				layer.redraw();
-			})
-		});
-		cmc.loadData();
-	};
+				complete : lang.hitch(this, function(){
+					layer.redraw();
+				})
+			});
+			cmc.loadData();
+		};
+	});
 </script>
 
 </head>

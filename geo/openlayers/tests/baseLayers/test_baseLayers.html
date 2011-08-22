@@ -16,6 +16,10 @@
 
 <script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
 
+<!-- 
+<script type="text/javascript" src="../../../../../../OpenLayers-2.11-rc1/lib/OpenLayers.js"></script>
+-->
+
 <script type="text/javascript">
 	var djConfig = {
 		parseOnLoad : true
@@ -25,43 +29,46 @@
 <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 
 <script type="text/javascript">
-	dojo.require("dojox.geo.openlayers.Map");
-	dojo.require("dojox.geo.openlayers.Layer");
-	dojo.require("dijit.Menu");
-	dojo.require("dijit.MenuItem");
-	dojo.require("dijit.PopupMenuItem");
-	dojo.require("dojo.parser");
+	require([	"dojo/_base/kernel",
+						"dojo/_base/html",
+						"dojo/dom",
+						"dojox/geo/openlayers/Map",
+						"dijit/Menu",
+						"dijit/MenuItem",
+						"dijit/PopupMenuItem",
+						"dojo/parser"], function(dojo, html, dom, Map){
+
+		dojo.ready(function(){
+			var options = {
+				baseLayerName : "TheMap",
+				baseLayerType : dojox.geo.openlayers.BaseLayerType.GOOGLE,
+				touchHandler : true,
+				accessible : true
+			};
+
+			var menu = dom.byId("menu");
+
+			html.style(menu, "visibility", "visible");
+
+			map = new Map("map", options);
+
+			map.fitTo([-160, 70, 160, -70]);
+
+			updateTF(options);
+		})
+
+	});
 
 	var map;
 
-	dojo.addOnLoad(_onLoad);
-
-	function _onLoad(){
-		var options = {
-			baseLayerName : "TheMap",
-			baseLayerType : dojox.geo.openlayers.BaseLayerType.GOOGLE,
-			touchHandler : true,
-			accessible : true
-		};
-
-		var menu = dojo.byId("menu");
-
-		dojo.style(menu, "visibility", "visible");
-
-		map = new dojox.geo.openlayers.Map("map", options);
-		//		dojo.place(map.domNode, "map");
-		//		map.startup();
-
-		map.fitTo([-160, 70, 160, -70]);
-
-		//      setBaseLayer(options);
-
+	function setBaseLayer(o){
+		map.setBaseLayerType(o);
+		updateTF(o);
 	}
 
-	function setBaseLayer(o){
+	function updateTF(o){
 		var ta = dojo.byId("textArea");
 		ta.innerHTML = "Params: " + dojo.toJson(o).replace(/[,]/g, ' ');
-		map.setBaseLayerType(o);
 		var bl = map.getOLMap().baseLayer;
 		if (bl && bl.getURL) {
 			var msg = bl.getURL(new OpenLayers.Bounds());
@@ -78,12 +85,12 @@
 
 </head>
 
-<body class="tundra">
+<body class="tundra" >
 
 	<table height="100%" width="100%">
 		<tr>
 			<td height="50" width="100%">
-				<table >
+				<table>
 					<tr>
 						<td>
 							<div id="menu" style="visibility: hidden;">

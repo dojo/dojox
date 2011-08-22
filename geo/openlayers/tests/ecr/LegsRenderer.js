@@ -4,9 +4,11 @@ define(["dojo/_base/kernel",
 				"dojox/geo/openlayers/tests/ecr/EcrRenderer",
 				"dojox/geo/openlayers/GeometryFeature",
 				"dojox/geo/openlayers/LineString",
-				"dojox/geo/openlayers/GreatCircle"], function(dojo, declare){
+				"dojox/geo/openlayers/Point",
+				"dojox/geo/openlayers/GreatCircle"], function(dojo, declare, arr, EcrRenderer, GeometryFeature, LineString,
+																											Point, GreatCircle){
 
-	return dojo.declare("dojox.geo.openlayers.tests.ecr.LegsRenderer", [dojox.geo.openlayers.tests.ecr.EcrRenderer], {
+	return declare("dojox.geo.openlayers.tests.ecr.LegsRenderer", [dojox.geo.openlayers.tests.ecr.EcrRenderer], {
 
 		constructor : function(opts, context){
 			this._geodetic = false;
@@ -28,7 +30,7 @@ define(["dojo/_base/kernel",
 				var stops = store.getValues(item, 'stops');
 				var pts = [];
 				var lastCoords = null;
-				dojo.forEach(stops, function(it, index, array){
+				arr.forEach(stops, function(it, index, array){
 					if (store.isItem(it)) {
 						var port = this.getValue(it, "port");
 						var coords = this.getCoordinates(port);
@@ -42,7 +44,7 @@ define(["dojo/_base/kernel",
 								pts = pts.concat(geodetic);
 							}
 						} else {
-							var p = new dojox.geo.openlayers.Point({
+							var p = new Point({
 								x : coords[0],
 								y : coords[1]
 							});
@@ -55,8 +57,8 @@ define(["dojo/_base/kernel",
 					}
 				}, this);
 
-				var g = new dojox.geo.openlayers.LineString(pts);
-				gf = new dojox.geo.openlayers.GeometryFeature(g);
+				var g = new LineString(pts);
+				gf = new GeometryFeature(g);
 			}
 			return gf;
 		}

@@ -1,11 +1,11 @@
 define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo, declare){
-	return dojo.declare("dojox.geo.openlayers.tests.sun.Sun", null, {
+	return declare("dojox.geo.openlayers.tests.sun.Sun", null, {
 		_now : false,
 
-		constructor : function(date){
-			if (!date)
-				date = new Date();
-			this._date = date;
+		constructor : function(d){
+			if (!d)
+				d = new Date();
+			this._date = d;
 		},
 
 		getDate : function(){
@@ -17,10 +17,10 @@ define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo, declare){
 			return d;
 		},
 
-		setDate : function(date){
-			if (!date)
-				date = new Date();
-			this._date = date;
+		setDate : function(d){
+			if (!d)
+				d = new Date();
+			this._date = d;
 		},
 
 		isNow : function(){
@@ -194,9 +194,9 @@ define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo, declare){
 			};
 		},
 
-		et : function(date){
-			if (!date)
-				date = this.getDate();
+		et : function(d){
+			if (!d)
+				d = this.getDate();
 			var year = date.getUTCFullYear();
 			var month = date.getUTCMonth() + 1;
 			var day = date.getUTCDate();
