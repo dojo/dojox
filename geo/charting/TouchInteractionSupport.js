@@ -1,6 +1,5 @@
-
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/event", "dojo/_base/connect","dojo/_base/window"],
-				function(dojo,lang,declare,event,connect,win) {
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/event", "dojo/_base/connect","dojo/_base/window"],
+  function(lang,declare,event,connect,win) {
 
 return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 	//	summary: 
@@ -23,7 +22,6 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 	_oneFingerTouch:false,
 	_tapCancel:false,
 	
-	
 	constructor : function(/* dojox.geo.charting.Map */map,options) {
 		//	summary: 
 		//		Constructs a new _TouchInteractionSupport instance
@@ -35,15 +33,14 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		this._tapCount = 0;
 		this._lastTap = {x: 0,y: 0};
 		this._tapThreshold = 100; // square distance in pixels
-		
 	},
-	
+
 	connect: function() {
 		//	summary: 
 		//		install touch listeners
 		_touchStartListener = this._map.surface.connect("touchstart", this, this._touchStartHandler);
 	},
-	
+
 	disconnect: function() {
 		//	summary: 
 		//		disconnects any installed listeners. Must be called only when disposing of this instance 
@@ -52,7 +49,7 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			this._touchStartListener = null;
 		}
 	},
-	
+
 	_getTouchBarycenter: function(touchEvent) {
 		//	summary: 
 		//		returns the midpoint of the two first fingers (or the first finger location if only one)
@@ -69,15 +66,12 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		} else {
 			secondTouch = touches[0];
 		}
-		
 		var containerBounds = this._map._getContainerBounds();
 		var middleX = (firstTouch.pageX + secondTouch.pageX) / 2.0 - containerBounds.x;
 		var middleY = (firstTouch.pageY + secondTouch.pageY) / 2.0 - containerBounds.y;
-		
 		return {x: middleX,y: middleY};
-
 	},
-	
+
 	_getFingerSpacing: function(touchEvent) {
 		//	summary: 
 		//		computes the distance between the first two fingers
@@ -95,7 +89,7 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		}
 		return spacing;
 	},
-	
+
 	_isDoubleTap: function(touchEvent) {
 		//	summary: 
 		//		checks whether the specified touchStart event is a double tap 
@@ -122,11 +116,10 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		this._lastTap.x = touches[0].pageX;
 		this._lastTap.y = touches[0].pageY;
 		setTimeout(lang.hitch(this,function() {
-			this._tapCount = 0;}),300);
-		
+		this._tapCount = 0;}),300);
 		return isDoubleTap;
 	},
-	
+
 	_doubleTapHandler: function(touchEvent) {
 		//	summary: 
 		//		action performed on the map when a double tap was triggered 
@@ -148,7 +141,7 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			this._map.setMapCenterAndScale(mapPoint.x, mapPoint.y,this._map.getMapScale()*2,true);
 		}
 	},
-	
+
 	_getFeatureFromTouchEvent: function(touchEvent) {
 		//	summary: 
 		//		utility function to return the feature located at this touch event location
@@ -164,19 +157,15 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		return feature;
 	},
 
-
 	_touchStartHandler: function(touchEvent){
 		//	summary: 
 		//		action performed on the map when a touch start was triggered 
 		//	touchEvent: a touch event
 		//	tags:
 		//		private
-		
 		event.stop(touchEvent);
-		
 		this._oneFingerTouch = (touchEvent.touches.length == 1);
 		this._tapCancel = !this._oneFingerTouch;
-
 		// test double tap
 		this._doubleTapPerformed = false;
 		if (this._isDoubleTap(touchEvent)) {
@@ -185,32 +174,24 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			this._doubleTapPerformed = true;
 			return;
 		}
-
 		// compute map midpoint between fingers		
 		var middlePoint = this._getTouchBarycenter(touchEvent);
-
 		var mapPoint = this._map.screenCoordsToMapCoords(middlePoint.x,middlePoint.y);
 		this._centerTouchLocation.x = mapPoint.x;
 		this._centerTouchLocation.y = mapPoint.y;
-		
 		// store initial finger spacing to compute zoom later
 		this._initialFingerSpacing = this._getFingerSpacing(touchEvent);
-		
 		// store initial map scale
 		this._initialScale = this._map.getMapScale();
-
 		// install touch move and up listeners (if not done by other fingers before)
 		if (!this._touchMoveListener) 
 			this._touchMoveListener = connect.connect(win.global,"touchmove",this,this._touchMoveHandler);
-		
 		if (!this._touchEndTapListener) 
 			this._touchEndTapListener = this._map.surface.connect("touchend", this, this._touchEndTapHandler);
-		
 		if (!this._touchEndListener) 
 			this._touchEndListener = connect.connect(win.global,"touchend",this, this._touchEndHandler);
-
 	},
-	
+
 	_touchEndTapHandler: function(touchEvent) {
 		//	summary: 
 		//		action performed on the map when a tap was triggered 
@@ -218,7 +199,6 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	tags:
 		//		private
 		var touches = touchEvent.touches;
-
 		if (touches.length == 0) {
 			
 			// test potential tap ?
@@ -252,9 +232,7 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	tags:
 		//		private
 		event.stop(touchEvent);
-
 		var touches = touchEvent.touches;
-
 		if (touches.length == 0) {
 			// disconnect listeners only when all fingers are up
 			if (this._touchMoveListener) {
@@ -268,7 +246,6 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		} else {
 			// recompute touch center
 			var middlePoint = this._getTouchBarycenter(touchEvent);
-
 			var mapPoint = this._map.screenCoordsToMapCoords(middlePoint.x,middlePoint.y);
 			this._centerTouchLocation.x = mapPoint.x;
 			this._centerTouchLocation.y = mapPoint.y;
@@ -282,7 +259,6 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		//	tags:
 		//		private
 		var feature = this._getFeatureFromTouchEvent(touchEvent);
-		
 		if (feature) {
 			// call feature handler
 			feature._onclickHandler(touchEvent);
@@ -294,22 +270,19 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			this._map.onFeatureClick(null);
 		}
 	},
-	
 
-	
 	_touchMoveHandler: function(touchEvent){
 		//	summary: 
 		//		action performed on the map when a touch move was triggered 
 		//	touchEvent: a touch event
 		//	tags:
 		//		private
-		
+
 		// prevent browser interaction
 		event.stop(touchEvent);
-		
+
 		// cancel tap if moved too far from first touch location
 		if (!this._tapCancel) {
-			
 			var dx = (touchEvent.touches[0].pageX - this._lastTap.x),
 				dy = (touchEvent.touches[0].pageY - this._lastTap.y);
 			var distance = dx*dx + dy*dy;
@@ -317,14 +290,11 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 				this._tapCancel = true;
 			}
 		}
-
 		var middlePoint = this._getTouchBarycenter(touchEvent);
-		
 		// compute map offset
 		var mapPoint = this._map.screenCoordsToMapCoords(middlePoint.x,middlePoint.y),
 			mapOffsetX = mapPoint.x - this._centerTouchLocation.x,
 			mapOffsetY = mapPoint.y - this._centerTouchLocation.y;
-		
 		// compute scale factor
 		var scaleFactor = 1;
 		var touches = touchEvent.touches;
@@ -334,12 +304,9 @@ return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 			// scale map
 			this._map.setMapScale(this._initialScale*scaleFactor);
 		}
-				
 		// adjust map center on barycentre
 		var currentMapCenter = this._map.getMapCenter();
 		this._map.setMapCenter(currentMapCenter.x - mapOffsetX, currentMapCenter.y - mapOffsetY);
-		
 	}
-	
 });
 });

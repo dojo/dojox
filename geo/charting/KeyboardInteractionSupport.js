@@ -1,7 +1,6 @@
-
-define(["dojo/_base/kernel", "dojo/_base/lang","dojo/_base/declare","dojo/_base/event","dojo/_base/connect",
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/event","dojo/_base/connect",
 		"dojo/_base/html","dojo/dom","dojox/lang/functional","dojo/keys"],
-					function(dojo, lang, declare,event, connect, html,dom, functional, keys) {
+  function(lang, declare, event, connect, html, dom, functional, keys) {
 
 return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 	//	summary: 
@@ -102,20 +101,15 @@ return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 			needClick = true;
 		}
 		if(leadingRegion){
-//			this._map.deselectAll();
 			if(needClick) {
 				leadingRegion._onclickHandler(null);
 			}else{
-//				leadingRegion.select(true);
 			}
 			this._map.mapObj.marker.show(leadingRegion.id);
-//			leadingRegion.select(true);
 		}
 	},
 	onBlur: function(){
 		this._map.lastSelectedFeature = this._map.selectedFeature;
-//		this._map.mapObj.marker.hide();
-//		this._map.deselectAll();
 	},
 	_directTo: function(up,down,left,right){
 		var currentSelected = this._map.selectedFeature,
@@ -142,11 +136,8 @@ return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 		});
 		if(nextSelected){
 			this._map.mapObj.marker.hide();
-//			this._map.deselectAll();
 			nextSelected._onclickHandler(null);
 			this._map.mapObj.marker.show(nextSelected.id);
-//			nextSelected.select(true);
-
 		}
 	}
 });

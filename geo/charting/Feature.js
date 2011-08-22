@@ -1,8 +1,6 @@
-
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare","dojo/_base/array",
+define(["dojo/_base/lang", "dojo/_base/declare","dojo/_base/array",
 		"dojo/_base/html","dojo/dom","dojo/_base/event", "dojox/gfx/fx", "dojox/color"], 
-			function(dojo, lang, declare,arr, html,dom, event, fx,color) {
-
+  function(lang, declare,arr, html,dom, event, fx,color) {
 
 return declare("dojox.geo.charting.Feature", null, {
 	//	summary: 
@@ -50,9 +48,6 @@ return declare("dojox.geo.charting.Feature", null, {
 	},
 	unsetColor:function(){
 		this._defaultFill = this.parent.defaultColor;
-//		var color = new dojox.color.Color(this.parent.defaultColor);
-//		color.a = 0.7;
-//		this._highlightFill = color;
 		var col = new color.Color(this.parent.defaultColor).toHsl();
 		col.l = 1.2 * col.l;
 		this._highlightFill = color.fromHsl(col);

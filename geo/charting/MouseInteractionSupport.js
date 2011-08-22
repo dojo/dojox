@@ -1,8 +1,6 @@
-
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/declare","dojo/_base/event",
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/event",
 		"dojo/_base/connect","dojo/_base/window","dojo/_base/html","dojo/dom","dojo/_base/sniff"],
-		function(dojo, lang, declare, event, connect, win, html, dom, has) {
-
+  function(lang, declare, event, connect, win, html, dom, has) {
 
 return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 	//	summary: 
@@ -48,7 +46,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			}
 		}
 	},
-	
+
 	setEnableZoom: function(enable){
 		//	summary: 
 		//		enables mouse zoom on the map
@@ -63,13 +61,13 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		}
 		this._zoomEnabled = enable;
 	},
-	
+
 	setEnablePan: function(enable){
 		//	summary: 
 		//		enables mouse panning on the map
 		this._panEnabled = enable;
 	},
-	
+
 	connect: function() {
 		//	summary: 
 		//		connects this mouse support class to the Map component
@@ -86,7 +84,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this.setEnableZoom(this._zoomEnabled);
 		this.setEnablePan(this._panEnabled);
 	},
-	
+
 	disconnect: function() {
 		//	summary: 
 		//		disconnects any installed listeners
@@ -115,8 +113,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		}
 		
 	},
-	
-	
+
 	_mouseClickHandler: function(mouseEvent) {
 		//	summary: 
 		//		action performed on the map when a mouse click was performed
@@ -138,7 +135,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		}
 			
 	},
-	
+
 	_mouseDownHandler: function(mouseEvent){
 		//	summary: 
 		//		action performed on the map when a mouse down was performed
@@ -162,13 +159,12 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		var mapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 		this._mapClickLocation.x = mapPoint.x;
 		this._mapClickLocation.y = mapPoint.y;
-		
+
 		// install drag listener if pan is enabled
 		if (!has("ie")) {
 			this._mouseDragListener = connect.connect(win.doc,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
 			this._mouseUpListener = connect.connect(win.doc,"onmouseup",this, this._mouseUpHandler);
-			
 		} else {
 			var node = dom.byId(this._map.container);
 			this._mouseDragListener = connect.connect(node,"onmousemove",this,this._mouseDragHandler);
@@ -176,10 +172,8 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			this._mouseUpListener = this._map.surface.connect("onmouseup", this, this._mouseUpHandler);
 			this._map.surface.rawNode.setCapture();
 		}
-
 	},
-	
-	
+
 	_mouseUpClickHandler: function(mouseEvent) {
 		
 		if (!this._cancelMouseClick) {
@@ -190,7 +184,6 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		
 	},
 
-	
 	_mouseUpHandler: function(mouseEvent) {
 		//	summary: 
 		//		action performed on the map when a mouse up was performed
@@ -220,7 +213,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			this._map.surface.rawNode.releaseCapture();
 		}
 	},
-	
+
 	_getFeatureFromMouseEvent: function(mouseEvent) {
 		//	summary: 
 		//		utility function to return the feature located at this mouse event location
@@ -235,7 +228,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		}
 		return feature;
 	},
-	
+
 	_mouseMoveHandler: function(mouseEvent) {
 		//	summary: 
 		//		action performed on the map when a mouse move was performed
@@ -268,7 +261,6 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			feature._onmousemoveHandler(mouseEvent);
 	},
 
-	
 	_mouseDragHandler: function(mouseEvent){
 		//	summary: 
 		//		action performed on the map when a mouse drag was performed
@@ -308,7 +300,7 @@ return declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this._map.setMapCenter(currentMapCenter.x - mapOffsetX, currentMapCenter.y - mapOffsetY);
 		
 	},
-	
+
 	_mouseWheelHandler: function(mouseEvent) {
 		//	summary: 
 		//		action performed on the map when a mouse wheel up/down was performed
