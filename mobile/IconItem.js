@@ -7,12 +7,13 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-attr",
 	"dojo/dom-class",
+	"dojo/dom-construct",
 	"dojo/dom-style",
 	"dijit/registry",	// registry.byId
 	"./common",
 	"./_ItemBase",
 	"./TransitionEvent"
-], function(dojo, array, declare, lang, has, win, domAttr, domClass, domStyle, registry, common, ItemBase, TransitionEvent){
+], function(dojo, array, declare, lang, has, win, domAttr, domClass, domConstruct, domStyle, registry, common, ItemBase, TransitionEvent){
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
@@ -27,11 +28,9 @@ define([
 		closeBtnClass: "mblDomButtonBlueMinus",
 		closeBtnProp: null,
 
-		templateString: '<li class="mblIconItem">'+
-						'<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
+		templateString: '<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
 							'<div><img src="${icon}" dojoAttachPoint="iconNode"></div><span dojoAttachPoint="labelNode1"></span>'+
-						'</div>'+
-					'</li>',
+						'</div>',
 		templateStringSub: '<li class="mblIconItemSub" lazy="${lazy}" style="display:none;" dojoAttachPoint="contentNode">'+
 						'<h2 class="mblIconContentHeading" dojoAttachPoint="closeNode">'+
 							'<div class="${closeBtnClass}" style="position:absolute;left:4px;top:2px;" dojoAttachPoint="closeIconNode"></div><span dojoAttachPoint="labelNode2"></span>'+
@@ -73,18 +72,19 @@ define([
 
 		buildRendering: function(){
 			this.inheritParams();
-			this.domNode = this.createTemplate(this.templateString);
+			var node = this.createTemplate(this.templateString);
 			this.subNode = this.createTemplate(this.templateStringSub);
 			this.subNode._parentNode = this.domNode; // [custom property]
 
+			this.domNode = this.srcNodeRef || domConstruct.create("LI");
+			domClass.add(this.domNode, "mblIconItem");
 			if(this.srcNodeRef){
 				// reparent
 				for(var i = 0, len = this.srcNodeRef.childNodes.length; i < len; i++){
-					this.containerNode.appendChild(this.srcNodeRef.removeChild(this.srcNodeRef.firstChild));
+					this.containerNode.appendChild(this.srcNodeRef.firstChild);
 				}
-				this.srcNodeRef.parentNode.replaceChild(this.domNode, this.srcNodeRef);
-				this.srcNodeRef = null;
 			}
+			this.domNode.appendChild(node);
 		},
 
 		postCreate: function(){
