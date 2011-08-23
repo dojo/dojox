@@ -32,13 +32,13 @@
   font-size: 12px;
   color: white;
 }
-.mblIconArea DIV {
+.mblIconArea div {
   position: relative;
   height: 65px;
   line-height: 65px;
   text-align: center;
 }
-.mblIconArea IMG {
+.mblIconArea img {
   vertical-align: middle;
 }
 .mblIconItemSpriteIcon {

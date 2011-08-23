@@ -31,13 +31,13 @@
   font-weight: normal;
   font-size: 14px;
 }
-.mblIconArea DIV {
+.mblIconArea div {
   position: relative;
   height: 65px;
   line-height: 65px;
   text-align: center;
 }
-.mblIconArea IMG {
+.mblIconArea img {
   vertical-align: middle;
 }
 .mblIconItemSpriteIcon {
