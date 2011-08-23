@@ -1,8 +1,7 @@
 define(["dojox","dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "../Theme", "./gradientGenerator", "./PrimaryColors", "dojo/colors" /* for sanitize */, "./common"], 
-	function(dojox, kernel, lang, ArrayUtil, Theme, gradientGenerator, PrimaryColors){
+	function(dojox, kernel, lang, ArrayUtil, Theme, gradientGenerator, PrimaryColors, themes){
 
-	var themes = dojox.charting.themes, 
-		colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f", "./common"],	// the same is in PrimaryColors
+	var colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f", "./common"],	// the same is in PrimaryColors
 		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 100, y2: 0},
 		// 3D cylinder map is calculated using dojox.gfx3d
 		cyl3dMap = [

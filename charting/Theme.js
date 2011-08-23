@@ -97,7 +97,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		font:    "normal normal normal 8pt Tahoma",	// label
 	//	|		fontColor: "#000"
 	//	|	},
-	//	|   indicator: {
+	//	|	indicator: {
 	//	|		lineStroke:  {width: 1.5, color: "#333"},		// line
 	//	|		lineOutline: {width: 0.1, color: "#ccc"},		// line outline
 	//	|		lineShadow: null,								// no line shadow

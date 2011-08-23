@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Minty=new Theme({
+	themes.Minty=new Theme({
 		colors: [
 			"#80ccbb",
 			"#539e8b",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.Minty;
+	return themes.Minty;
 });

@@ -1,8 +1,8 @@
-define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutils){
+define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutils, themes){
 
 	// created by Tom Trenka
 	
-	var themes = dojox.charting.themes, g = Theme.generateGradient,
+	var g = Theme.generateGradient,
 		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 0, y2: 100};
 	
 	themes.Tom = new Theme({
@@ -23,7 +23,7 @@ define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutil
 				color:     "#888c76",
 				position:  "center",
 				font:      "normal normal normal 7pt Helvetica, Arial, sans-serif",	// labels on axis
-				fontColor: "#888c76"								// color of labels
+				fontColor: "#888c76"	// color of labels
 			}
 		},
 		series: {

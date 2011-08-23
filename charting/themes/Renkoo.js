@@ -1,8 +1,8 @@
-define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutils){
+define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutils, themes){
 
 	// created by Tom Trenka
 
-	var themes = dojox.charting.themes, g = Theme.generateGradient,
+	var g = Theme.generateGradient,
 		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 0, y2: 150};
 	
 	themes.Renkoo = new Theme({
@@ -22,7 +22,7 @@ define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutil
 				color:     "#95afdb",
 				position:  "center",
 				font:      "normal normal normal 7pt Lucida Grande, Helvetica, Arial, sans-serif",	// labels on axis
-				fontColor: "#95afdb"								// color of labels
+				fontColor: "#95afdb"	// color of labels
 			}
 		},
 		series: {
@@ -78,4 +78,6 @@ define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutil
 		}
 		return theme;
 	};
+	
+	return themes.Renkoo;
 });

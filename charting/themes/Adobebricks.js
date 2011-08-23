@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 
-	dojox.charting.themes.Adobebricks=new Theme({
+	themes.Adobebricks=new Theme({
 		colors: [
 			"#7f2518",
 			"#3e170c",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.Adobebricks;
+	return themes.Adobebricks;
 });

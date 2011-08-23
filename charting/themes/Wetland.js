@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Wetland=new Theme({
+	themes.Wetland = new Theme({
 		colors: [
 			"#bfbc64",
 			"#737130",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.Wetland;
+	return themes.Wetland;
 });

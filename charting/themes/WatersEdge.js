@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.WatersEdge=new Theme({
+	themes.WatersEdge = new Theme({
 		colors: [
 			"#437cc0",
 			"#6256a5",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return  dojox.charting.themes.WatersEdge;
+	return  themes.WatersEdge;
 });

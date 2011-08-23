@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 
-	dojox.charting.themes.BlueDusk=new Theme({
+	themes.BlueDusk=new Theme({
 		colors: [
 			"#292e76",
 			"#3e56a6",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.BlueDusk;
+	return themes.BlueDusk;
 });

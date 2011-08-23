@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Distinctive=new Theme({
+	themes.Distinctive=new Theme({
 		colors: [
 			"#497c91",
 			"#ada9d6",
@@ -38,5 +38,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.Distinctive;
+	return themes.Distinctive;
 });

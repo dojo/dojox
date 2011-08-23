@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.SageToLime=new Theme({
+	themes.SageToLime=new Theme({
 		colors: [
 			"#abdbcb",
 			"#435a51",
@@ -15,5 +15,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.SageToLime;
+	return themes.SageToLime;
 });
