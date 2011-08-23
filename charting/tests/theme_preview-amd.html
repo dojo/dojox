@@ -60,6 +60,8 @@
 				arr.forEach(themes, function(theme){
 					// remove dojox/charting/themes from displayed name
 					theme = theme.substring(22);
+					// move / to .
+					theme = theme.replace("/", ".");
 					var container = domConstruct.create("div", { className: "container" }, "main");
 					var chart = domConstruct.create("div", { className: "chart" }, container);
 					var title = domConstruct.create("div", { 

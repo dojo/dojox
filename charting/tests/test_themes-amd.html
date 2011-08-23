@@ -71,8 +71,8 @@
 			if(!test){
 				name = select.options[select.selectedIndex].value;
 			}
-	
-			require(["dojox/charting/themes/" + name], function(theme){
+			
+			require(["dojox/charting/themes/" + name.replace(".", "/")], function(theme){
 	
 				var chartStyle = theme.chart;
 		
