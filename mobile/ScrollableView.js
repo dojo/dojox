@@ -27,7 +27,11 @@ define([
 		ScrollableMixin = dojox.mobile._ScrollableMixin;
 	=====*/
 	return declare("dojox.mobile.ScrollableView", [View, ScrollableMixin], {
-		scrollableParams: {noResize: true},
+		scrollableParams: null,
+
+		constructor: function(){
+			this.scrollableParams = {noResize: true};
+		},
 
 		buildRendering: function(){
 			this.inherited(arguments);

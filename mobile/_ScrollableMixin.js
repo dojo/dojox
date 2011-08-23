@@ -20,8 +20,12 @@ define([
 	var cls = declare("dojox.mobile._ScrollableMixin", null, {
 		fixedHeader: "",
 		fixedFooter: "",
-		scrollableParams: {},
+		scrollableParams: null,
 		allowNestedScrolls: true, // e.g. Allow ScrollableView in a SwapView
+
+		constructor: function(){
+			this.scrollableParams = {};
+		},
 
 		destroy: function(){
 			this.cleanup();
