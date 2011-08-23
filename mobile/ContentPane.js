@@ -59,7 +59,7 @@ define([
 		},
 	
 		errorHandler: function(err){
-			if(p){ p.stop(); }
+			if(this._p){ this._p.stop(); }
 		},
 	
 		onLoad: function(){
