@@ -46,119 +46,113 @@
 		Memory, Observable, NumberSpinner,
 		lang, arr, xhr, domConstruct, on){
 	
-		xhr.get({
-			url: "stock.json",
-			sync: true,
-			handleAs: "json"
-		}).then(function(data){
-			store = Observable(new Memory({data:data}));
+	xhr.get({
+		url: "stock.json",
+		sync: true,
+		handleAs: "json"
+	}).then(function(data){
+		store = Observable(new Memory({data:data}));
+	});
+	
+	function addLegend(chart, node){
+		var legend = new Legend({chart: chart}, node);
+		on(chart, "render", legend, "refresh");
+	}
+	
+	var templates = {
+		low:   "<strong>{0}</strong>: <strong>low {1}</strong> &ndash; {2} &ndash; {3}",
+		price: "<strong>{0}</strong>: {1} &ndash; <strong>price {2}</strong> &ndash; {3}",
+		high:  "<strong>{0}</strong>: {1} &ndash; {2} &ndash; <strong>high {3}</strong>"
+	};
+	
+	function valTrans(value, object){
+		return {
+			y: object[value],
+			tooltip: lang.replace(
+				templates[value],
+				arr.map(["symbol", "low", "price", "high"], function(field){
+					return object[field];
+				})
+			)
+		};
+	}
+	
+	var chartL, chartC, chartP;
+	
+	makeCharts = function(){
+		chartL = new Chart("lines").
+				setTheme(ThreeD).
+				addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, majorTickStep: 5}).
+				addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
+				addPlot("default", {type: Markers}).
+				addSeries("Price", new StoreSeries(
+					store, {query: {}}, "price")).
+				render();
+		addLegend(chartL, "lines_legend");
+		new Magnify(chartL);
+		new Tooltip(chartL);
+
+		chartC = new Chart("cols").
+				setTheme(ThreeD).
+				addAxis("x", {natural: true}).
+				addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
+				addPlot("default", {type: Columns}).
+				addSeries("Low", new StoreSeries(
+					store, {query: {}}, lang.hitch(null, valTrans, "low"))).
+				addSeries("Price", new StoreSeries(
+					store, {query: {}}, lang.hitch(null, valTrans, "price"))).
+				addSeries("High", new StoreSeries(
+					store, {query: {}}, lang.hitch(null, valTrans, "high"))).
+				render();
+		addLegend(chartC, "cols_legend");
+		new dojox.charting.action2d.Shake(chartC, "default", {shiftY: 0});
+		new dojox.charting.action2d.Tooltip(chartC);
+		
+		chartP = new dojox.charting.Chart("pie").
+				setTheme(ThreeD).
+				addPlot("default", {type: Pie, radius: 125}).
+				addSeries("Price", new StoreSeries(
+					store, {query: {}}, {y: "price", text: "symbol", tooltip: "price"})).
+				render();
+		addLegend(chartP, "pie_legend");
+		new Tooltip(chartP);
+		new MoveSlice(chartP);
+	};
+
+	makeSpinners = function(objects){
+		arr.forEach(objects, function(m){
+			var nm = m.symbol;
+			var num = m.price;
+			console.log(nm, num);
+			var w = new NumberSpinner({
+				onChange: function(val){
+					val = val===0 ? 0.01 : val; //HACKS the no label-when-zero bug
+					console.log("OC:", nm, val);
+					m.price = val;
+					store.put(m);
+					//store.setValues(m, "historicPrice", store.getValues("historicPrice").push(val));
+					console.log("OC:", nm, val);
+				},
+				value: num,
+				constraints: {min:0, max:10,places:2},
+				className: "myField",
+				intermediateChanges: true
+			});
+			domConstruct.place('<label>'+nm+'</label>', dojo.byId("spinners"), "last")
+			domConstruct.place(w.domNode, "spinners", "last")
 		});
 		
-		function addLegend(chart, node){
-			var legend = new Legend({chart: chart}, node);
-			on(chart, "render", legend, "refresh");
-		}
-		
-		var templates = {
-			low:   "<strong>{0}</strong>: <strong>low {1}</strong> &ndash; {2} &ndash; {3}",
-			price: "<strong>{0}</strong>: {1} &ndash; <strong>price {2}</strong> &ndash; {3}",
-			high:  "<strong>{0}</strong>: {1} &ndash; {2} &ndash; <strong>high {3}</strong>"
-		};
-		
-		function valTrans(value, object){
-			return {
-				y: object[value],
-				tooltip: lang.replace(
-					templates[value],
-					arr.map(["symbol", "low", "price", "high"], function(field){
-						return object[field];
-					})
-				)
-			};
-		}
-		
-		var chartL, chartC, chartP;
-		
-		makeCharts = function(){
-			chartL = new Chart("lines").
-					setTheme(ThreeD).
-					addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, majorTickStep: 5}).
-					addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
-					addPlot("default", {type: Markers}).
-					addSeries("Price", new StoreSeries(
-						store, {query: {}}, "price")).
-					render();
-			addLegend(chartL, "lines_legend");
-			new Magnify(chartL);
-			new Tooltip(chartL);
-	
-			chartC = new Chart("cols").
-					setTheme(ThreeD).
-					addAxis("x", {natural: true}).
-					addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
-					addPlot("default", {type: Columns}).
-					addSeries("Low", new StoreSeries(
-						store, {query: {}}, lang.hitch(null, valTrans, "low"))).
-					addSeries("Price", new StoreSeries(
-						store, {query: {}}, lang.hitch(null, valTrans, "price"))).
-					addSeries("High", new StoreSeries(
-						store, {query: {}}, lang.hitch(null, valTrans, "high"))).
-					render();
-			addLegend(chartC, "cols_legend");
-			new dojox.charting.action2d.Shake(chartC, "default", {shiftY: 0});
-			new dojox.charting.action2d.Tooltip(chartC);
-			
-			chartP = new dojox.charting.Chart("pie").
-					setTheme(ThreeD).
-					addPlot("default", {type: Pie, radius: 125}).
-					addSeries("Price", new StoreSeries(
-						store, {query: {}}, {y: "price", text: "symbol", tooltip: "price"})).
-					render();
-			addLegend(chartP, "pie_legend");
-			new Tooltip(chartP);
-			new MoveSlice(chartP);
-		};
-	
-		makeSpinners = function(objects){
-			arr.forEach(objects, function(m){
-				var nm = m.symbol;
-				var num = m.price;
-				console.log(nm, num);
-				var w = new NumberSpinner({
-					onChange: function(val){
-						val = val===0 ? 0.01 : val; //HACKS the no label-when-zero bug
-						console.log("OC:", nm, val);
-						m.price = val;
-						store.put(m);
-						//store.setValues(m, "historicPrice", store.getValues("historicPrice").push(val));
-						console.log("OC:", nm, val);
-					},
-					value: num,
-					constraints: {min:0, max:10,places:2},
-					className: "myField",
-					intermediateChanges: true
-				});
-				domConstruct.place('<label>'+nm+'</label>', dojo.byId("spinners"), "last")
-				domConstruct.place(w.domNode, "spinners", "last")
+		var labels = arr.map(objects, function(object, index){
+				return {
+					value: index + 1,
+					text:  object.symbol
+				}
 			});
-			
-			var labels = arr.map(objects, function(object, index){
-					return {
-						value: index + 1,
-						text:  object.symbol
-					}
-				});
-			chartC.addAxis("x", {natural: true, labels: labels}).render();
-		};
-		
-		//var init = function(){
-			makeCharts();
-			makeSpinners(store.query({}));
-		//};
+		chartC.addAxis("x", {natural: true, labels: labels}).render();
+	};
 	
-		//require(["dojo/ready"], function(ready){
-		//	ready(init);
-		//});
+	makeCharts();
+	makeSpinners(store.query({}));
 });
 </script>
 
