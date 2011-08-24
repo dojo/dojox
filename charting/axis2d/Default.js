@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
-	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", "../scaler/common", "../scaler/linear", "./common", 
-	"dojox/gfx", "dojox/lang/utils"], 
+	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", 
+	"../scaler/common", "../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils"], 
 	function(lang, arr, has, declare, connect, html, domGeom, Invisible, scommon, 
 			lin, acommon, g, du){
 
@@ -114,8 +114,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 
 	var labelGap = 4,			// in pixels
 		centerAnchorLimit = 45;	// in degrees
-		
-	var Tooltip = 0;
 
 	return declare("dojox.charting.axis2d.Default", Invisible, {
 		//	summary:
@@ -741,18 +739,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 			return this;	//	dojox.charting.axis2d.Default
 		},
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
-			// to avoid requiring dijit module for that feature, let's test that
-			// dynamically and return if we can't do it
-			if(Tooltip == 0){
-				try{
-					Tooltip = require("dijit/Tooltip");
-				}catch(e){
-					Tooltip = null;
-				}
-			}
-			if(!Tooltip){
-				return;
-			}
+			var modules = ["dijit/Tooltip"];
 			var aroundRect = {type: "rect"}, position = ["above", "below"],
 				fontWidth = g._base._getTextBox(truncatedLabel, {font: font}).w || 0,
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
@@ -763,13 +750,17 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				this._events.push({
 					shape:  dojo,
 					handle: connect.connect(elem.firstChild, "onmouseover", this, function(e){
-						Tooltip.show(label, aroundRect, position);
+						require(modules, function(Tooltip){
+							Tooltip.show(label, aroundRect, position);
+						});
 					})
 				});
 				this._events.push({
 					shape:  dojo,
 					handle: connect.connect(elem.firstChild, "onmouseout", this, function(e){
-						Tooltip.hide(aroundRect);
+						require(modules, function(Tooltip){
+							Tooltip.hide(aroundRect);
+						});
 					})
 				});
 			}else{
@@ -788,13 +779,17 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				this._events.push({
 					shape:  elem,
 					handle: elem.connect("onmouseenter", this, function(e){
-						Tooltip.show(label, aroundRect, position);
+						require(modules, function(Tooltip){
+							Tooltip.show(label, aroundRect, position);
+						});
 					})
 				});
 				this._events.push({
 					shape:  elem,
 					handle: elem.connect("onmouseleave", this, function(e){
-						Tooltip.hide(aroundRect);
+						require(modules, function(Tooltip){
+							Tooltip.hide(aroundRect);
+						});
 					})
 				});
 			}

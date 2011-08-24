@@ -1,9 +1,9 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "dojo/_base/array",
-	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff",
+	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff", 
 	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
 	"dojox/lang/utils", "dojo/fx/easing"],
-	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, has,
+	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, has, 
 			Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, 
 			g, m, gfxfx, df, du, easing){
 /*=====
@@ -11,8 +11,6 @@ var Element = dojox.charting.Element;
 var PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
-	
-	var Tooltip = 0;
 
 	var Spider = declare("dojox.charting.plot2d.Spider", [Element, PlotEvents], {
 		//	summary:
@@ -517,22 +515,15 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 					aroundRect.height = Math.ceil(aroundRect.height);
 					this.aroundRect = aroundRect;
 					var position = ["after", "before"];
-					if(Tooltip == 0){
-						try{
-							Tooltip = require("dijit/Tooltip");
-						}catch(e){
-							Tooltip = null;
-						}
-					}
-					if(Tooltip){
+					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
 						Tooltip.show(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
-					}
+					}));
 				}else{
 					init  = m.scaleAt(defaultScale, o.cx, o.cy);
 					scale = 1/defaultScale;
-					if(Tooltip){
+					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
 						this.aroundRect && Tooltip.hide(this.aroundRect);
-					}
+					}));
 				}
 				var cs = o.shape.getShape(),
 					init = m.scaleAt(defaultScale, cs.cx, cs.cy),

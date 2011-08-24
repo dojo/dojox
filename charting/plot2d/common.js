@@ -1,11 +1,11 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", 
-		"dojox/gfx", "dojox/lang/functional"], 
-	function(lang, arr, Color, g, df){
+		"dojox/gfx", "dojox/lang/functional", "../scaler"], 
+	function(lang, arr, Color, g, df, sc){
 	
 	var common = lang.getObject("dojox.charting.plot2d.common", true);
-	var numberLib = 0;
 	
 	return lang.mixin(common, {	
+		doIfLoaded: sc.doIfLoaded,
 		makeStroke: function(stroke){
 			if(!stroke){ return stroke; }
 			if(typeof stroke == "string" || stroke instanceof Color){
@@ -205,18 +205,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color",
 		},
 		
 		getLabel: function(/*Number*/number, /*Boolean*/fixed, /*Number*/precision){
-			if(numberLib == 0){
-				try{
-					numberLib = require("dojo/number");
-				}catch(e){
-					numberLib = null;
-				}
-			}
-			if(numberLib){
+			return sc.doIfLoaded("dojo/number", function(numberLib){
 				return (fixed ? numberLib.format(number, {places : precision}) :
 					numberLib.format(number)) || "";
-			}
-			return fixed ? number.toFixed(precision) : number.toString();
+			}, function(){
+				return fixed ? number.toFixed(precision) : number.toString();
+			});
 		}
 	});
 });

@@ -6,9 +6,24 @@ define(["dojo/_base/lang"], function(lang){
 	};
 	
 	var common = lang.getObject("dojox.charting.scaler.common", true);
-	var numberLib = 0;
 	
+	var testedModules = {};
+
 	return lang.mixin(common, {
+		doIfLoaded: function(moduleName, ifloaded, ifnotloaded){
+			if(testedModules[moduleName] == undefined){
+				try{
+					testedModules[moduleName] = require(moduleName);
+				}catch(e){
+					testedModules[moduleName] = null;
+				}
+			}
+			if(testedModules[moduleName]){
+				return ifloaded(testedModules[moduleName]);
+			}else{
+				return ifnotloaded();
+			}
+		},
 		findString: function(/*String*/ val, /*Array*/ text){
 			val = val.toLowerCase();
 			for(var i = 0; i < text.length; ++i){
@@ -18,19 +33,12 @@ define(["dojo/_base/lang"], function(lang){
 		},
 		getNumericLabel: function(/*Number*/ number, /*Number*/ precision, /*Object*/ kwArgs){
 			var def = "";
-			if(numberLib == 0){
-				try{
-					numberLib = require("dojo/number");
-				}catch(e){
-					numberLib = null;
-				}
-			}
-			if(numberLib){
+			common.doIfLoaded("dojo/number", function(numberLib){
 				def = (kwArgs.fixed ? numberLib.format(number, {places : precision < 0 ? -precision : 0}) :
 					numberLib.format(number)) || "";
-			}else{
+			}, function(){
 				def = kwArgs.fixed ? number.toFixed(precision < 0 ? -precision : 0) : number.toString();
-			}
+			});
 			if(kwArgs.labelFunc){
 				var r = kwArgs.labelFunc(def, number, precision);
 				if(r){ return r; }
