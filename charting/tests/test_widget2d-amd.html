@@ -44,7 +44,7 @@
 	<body class="tundra">
 		<h1>Chart 2D</h1>
 		<p>Examples of charts using widgets.</p>
-		<div dojoType="dojox.data.HtmlStore" dataId="tableExample" jsId="tableStore"></div>
+		<div data-dojo-type="dojox.data.HtmlStore" dataId="tableExample" jsId="tableStore"></div>
 		<table id="tableExample" style="display: none;">
 			<thead>
 				<tr><th>value</th></tr>
@@ -62,7 +62,7 @@
 		<table border="0" cellspacing="30">
 			<tr>
 				<td>
-					<div dojoType="dojox.charting.widget.Chart" id="chart1" style="width: 300px; height: 300px;">
+					<div data-dojo-type="dojox.charting.widget.Chart" id="chart1" style="width: 300px; height: 300px;">
 						<div class="axis" name="x" font="italic normal normal 8pt Tahoma"></div>
 						<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
 							font="italic normal normal 8pt Tahoma"></div>
@@ -73,10 +73,10 @@
 						<div class="series" name="Run C" store="tableStore" valueFn="Number(x)"></div>
 						<div class="action" type="MouseZoomAndPan" maxScale="40"></div>
 					</div>
-					<div dojoType="dojox.charting.widget.Legend" chartRef="chart1"></div>
+					<div data-dojo-type="dojox.charting.widget.Legend" chartRef="chart1"></div>
 				</td>
 				<td>
-					<div dojoType="dojox.charting.widget.Chart" id="chart2" theme="dojox.charting.themes.PlotKit.orange" 
+					<div data-dojo-type="dojox.charting.widget.Chart" id="chart2" theme="dojox.charting.themes.PlotKit.orange" 
 							fill="'lightgrey'" style="width: 300px; height: 300px;">
 						<div class="axis" name="x" font="italic normal bold 10pt Tahoma"></div>
 						<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
@@ -89,12 +89,12 @@
 						<div class="action" type="MouseZoomAndPan" axis="x" scaleFactor="1.05"></div>
 						<div class="action" type="MouseZoomAndPan" axis="y" scaleFactor="1.05"></div>					
 					</div>
-					<div dojoType="dojox.charting.widget.Legend" chartRef="chart2"></div>
+					<div data-dojo-type="dojox.charting.widget.Legend" chartRef="chart2"></div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<div dojoType="dojox.charting.widget.Chart" id="chart3" theme="dojox.charting.themes.PlotKit.blue"
+					<div data-dojo-type="dojox.charting.widget.Chart" id="chart3" theme="dojox.charting.themes.PlotKit.blue"
 							 style="width: 300px; height: 300px;">
 						<div class="plot" name="default" type="Pie" radius="100" fontColor="white"></div>
 						<div class="series" name="Series B" array="seriesB"></div>
@@ -102,7 +102,7 @@
 					</div>
 				</td>
 				<td>
-					<div dojoType="dojox.charting.widget.Chart" id="chart4" theme="dojox.charting.themes.PlotKit.green"
+					<div data-dojo-type="dojox.charting.widget.Chart" id="chart4" theme="dojox.charting.themes.PlotKit.green"
 							 style="width: 300px; height: 300px;">
 						<div class="plot" name="default" type="Pie" radius="100" fontColor="black" labelOffset="-20"></div>
 						<div class="series" name="Series C" store="tableStore" valueFn="Number(x)"></div>
