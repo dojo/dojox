@@ -16,28 +16,31 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./ViewController"
+	"./ViewController" // to load ViewController for you (no direct references)
 ], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController){
 
-	var dm = lang.getObject("dojox.mobile", true);
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+	var ViewController = dojox.mobile.ViewController;
+=====*/
 
 	// module:
 	//		dojox/mobile/View
 	// summary:
-	//		TODOC
+	//		A widget that represents a view that occupies the full screen
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
-	return declare("dojox.mobile.View", [WidgetBase, Container, Contained],{
+	var dm = lang.getObject("dojox.mobile", true);
+
+	return declare("dojox.mobile.View", [WidgetBase, Container, Contained], {
 		// summary:
 		//		A widget that represents a view that occupies the full screen
 		// description:
-		//		View acts as a container for any HTML and/or widgets. An entire HTML page
-		//		can have multiple View widgets and the user can navigate through
-		//		the views back and forth without page transitions.
+		//		View acts as a container for any HTML and/or widgets. An entire
+		//		HTML page can have multiple View widgets and the user can
+		//		navigate through the views back and forth without page
+		//		transitions.
 	
 		// selected: Boolean
 		//		If true, the view is displayed at startup time.
@@ -126,30 +129,46 @@ define([
 		},
 	
 		resize: function(){
+			// summary:
+			//		Calls resize() of each child widget.
 			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},
 
 		onStartView: function(){
-			// Stub function to connect to from your application.
-			// Called only when this view is shown at startup time.
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called only when this view is shown at startup time.
 		},
 	
 		onBeforeTransitionIn: function(moveTo, dir, transition, context, method){
-			// Stub function to connect to from your application.
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called before the arriving transition occurs.
 		},
 	
 		onAfterTransitionIn: function(moveTo, dir, transition, context, method){
-			// Stub function to connect to from your application.
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called after the arriving transition occurs.
 		},
 	
 		onBeforeTransitionOut: function(moveTo, dir, transition, context, method){
-			// Stub function to connect to from your application.
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called before the leaving transition occurs.
 		},
 	
 		onAfterTransitionOut: function(moveTo, dir, transition, context, method){
-			// Stub function to connect to from your application.
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called after the leaving transition occurs.
 		},
 	
 		_saveState: function(moveTo, dir, transition, context, method){
@@ -185,15 +204,29 @@ define([
 			// summary:
 			//		Function to perform the various types of view transitions, such as fade, slide, and flip.
 			// moveTo: String
-			//		The destination view id to transition the current view to.
+			//		The id of the transition destination view which resides in
+			//		the current page.
+			//		If the value has a hash sign ('#') before the id
+			//		(e.g. #view1) and the dojo.hash module is loaded by the user
+			//		application, the view transition updates the hash in the
+			//		browser URL so that the user can bookmark the destination
+			//		view. In this case, the user can also use the browser's
+			//		back/forward button to navigate through the views in the
+			//		browser history.
 			//		If null, transitions to a blank view.
-			//		If "#", returns immediately without transition.
+			//		If '#', returns immediately without transition.
 			// dir: Number
 			//		The transition direction. If 1, transition forward. If -1, transition backward.
 			//		For example, the slide transition slides the view from right to left when dir == 1,
 			//		and from left to right when dir == -1.
-			// transision: String
-			//		The type of transition to perform. "slide", "fade", or "flip"
+			// transition: String
+			//		A type of animated transition effect. You can choose from
+			//		the standard transition types, "slide", "fade", "flip", or
+			//		from the extended transition types, "cover", "coverv",
+			//		"dissolve", "flip2", "reveal", "revealv", "scaleIn",
+			//		"scaleOut", "slidev", "swirl", "zoomIn", "zoomOut". If
+			//		"none" is specified, transition occurs immediately without
+			//		animation.
 			// context: Object
 			//		The object that the callback function will receive as "this".
 			// method: String|Function
@@ -201,8 +234,13 @@ define([
 			//		A function reference, or name of a function in context.
 			// tags:
 			//		public
+			//
 			// example:
-			//		Transitions to the blank view, and then opens another page.
+			//		Transition backward to a view whose id is "foo" with the slide animation.
+			//	|	performTransition("foo", -1, "slide");
+			//
+			// example:
+			//		Transition forward to a blank view, and then open another page.
 			//	|	performTransition(null, 1, "slide", null, function(){location.href = href;});
 			if(moveTo === "#"){ return; }
 			if(dojo.hash){

@@ -25,6 +25,17 @@ define([
 	"./View",
 	"require"
 ], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
+
+/*=====
+	var EdgeToEdgeList = dojox.mobile.EdgeToEdgeList;
+	var IconContainer = dojox.mobile.IconContainer;
+	var RoundRect = dojox.mobile.RoundRect;
+	var RoundRectList = dojox.mobile.RoundRectList;
+	var ScrollableView = dojox.mobile.ScrollableView;
+	var Switch = dojox.mobile.Switch;
+	var View = dojox.mobile.View;
+=====*/
+
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -162,14 +173,14 @@ define([
 				dm.currentView = registry.byNode(toNode);
 			},
 		
-			wakeUp: function(node){
-			// summary:
-			//		Function to force IE to redraw a node since its layout code tends to misrender
-			//		in partial draws.
-			//	node:
-			//		The node to forcibly redraw.
-			// tags:
-			//		public
+			wakeUp: function(/*DomNode*/node){
+				// summary:
+				//		Function to force IE to redraw a node since its layout
+				//		code tends to misrender in partial draws.
+				// node: DomNode
+				//		The node to forcibly redraw.
+				// tags:
+				//		public
 				if(has("ie") && !node._wokeup){
 					node._wokeup = true;
 					var disp = node.style.display;
@@ -239,8 +250,8 @@ define([
 			lang.extend(RoundRect, {
 				buildRendering: function(){
 					// summary:
-					//		Function to simulate the borderRadius appearance on IE, since
-					//		IE does not support this CSS style.
+					//		Function to simulate the borderRadius appearance on
+					//		IE, since IE does not support this CSS style.
 					// tags:
 					//		protected
 					dm.createRoundRect(this);
@@ -253,8 +264,8 @@ define([
 			lang.extend(RoundRectList, {
 				buildRendering: function(){
 					// summary:
-					//		Function to simulate the borderRadius appearance on IE, since
-					//		IE does not support this CSS style.
+					//		Function to simulate the borderRadius appearance on
+					//		IE, since IE does not support this CSS style.
 					// tags:
 					//		protected
 					dm.createRoundRect(this, true);
@@ -419,7 +430,7 @@ define([
 		dm.loadCss = function(/*String|Array*/files){
 			// summary:
 			//		Function to load and register CSS files with the page
-			//	files: String|Array
+			// files: String|Array
 			//		The CSS files to load and register with the page.
 			// tags:
 			//		private

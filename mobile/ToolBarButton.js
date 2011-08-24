@@ -7,17 +7,34 @@ define([
 	"./common",
 	"./_ItemBase"
 ], function(declare, win, domClass, domConstruct, domStyle, common, ItemBase){
+/*=====
+	var ItemBase = dojox.mobile._ItemBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:
-	//		TODOC
+	//		A button widget that is placed in the Heading widget.
 
-	/*=====
-		ItemBase = dojox.mobile._ItemBase;
-	=====*/
 	return declare("dojox.mobile.ToolBarButton", ItemBase, {
+		// summary:
+		//		A button widget that is placed in the Heading widget.
+		// description:
+		//		ToolBarButton is a button that is placed in the Heading
+		//		widget. It is a subclass of dojox.mobile._ItemBase just like
+		//		ListItem or IconItem. So, unlike Button, it has basically the
+		//		same capability as ListItem or IconItem, such as icon support,
+		//		transition, etc.
+
+		// selected: Boolean
+		//		If true, the button is in the selected status.
 		selected: false,
+
+		// btnClass: String
+		//		Deprecated.
 		btnClass: "",
+
+		/* internal properties */	
 		_defaultColor: "mblColorDefault",
 		_selColor: "mblColorDefaultSel",
 
@@ -66,11 +83,15 @@ define([
 		},
 	
 		select: function(){
+			// summary:
+			//		Makes this widget in the selected state.
 			domClass.toggle(this.domNode, this._selColor, !arguments[0]);
 			this.selected = !arguments[0];
 		},
 		
 		deselect: function(){
+			// summary:
+			//		Makes this widget in the deselected state.
 			this.select(true);
 		},
 	

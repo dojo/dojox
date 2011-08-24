@@ -16,26 +16,64 @@ define([
 	"./SwapView",
 	"require"
 ], function(kernel, array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, Contained, Container, WidgetBase, PageIndicator, SwapView, require){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+	var PageIndicator = dojox.mobile.PageIndicator;
+	var SwapView = dojox.mobile.SwapView;
+=====*/
+
 	// module:
 	//		dojox/mobile/Carousel
 	// summary:
-	//		TODOC
+	//		A carousel widget that manages a list of images
 
 	kernel.experimental("dojox.mobile.Carousel");
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
-		numVisible: 3, // the number of visible items
+		// summary:
+		//		A carousel widget that manages a list of images
+		// description:
+		//		The carousel widget manages a list of images that can be
+		//		displayed horizontally, and allows the user to scroll through
+		//		the list and select a single item.
+
+		// numVisible: Number
+		//		The number of visible items.
+		numVisible: 3,
+
+		// title: String
+		//		A title of the carousel to be displayed on the title bar.
 		title: "",
+
+		// pageIndicator: Boolean
+		//		If true, a page indicator, a series of small dots that indicate
+		//		the current page, is displayed on the title bar.
 		pageIndicator: true,
+
+		// navButton: Boolean
+		//		If true, navigation buttons are displyaed on the title bar.
 		navButton: false,
+
+		// height: String
+		//		Explicitly specified height of the widget (ex. "300px"). If
+		//		"inherit" is specified, the height is inherited from its offset
+		//		parent.
 		height: "300px",
+
+		// store: Object
+		//		Reference to data provider object used by this widget.
 		store: null,
+
+		// query: Object
+		//		A query that can be passed to 'store' to initially filter the
+		//		items.
 		query: null,
+
+		// queryOptions: Object
+		//		An optional parameter for the query.
 		queryOptions: null,
 
 		buildRendering: function(){
@@ -99,6 +137,8 @@ define([
 		},
 
 		setStore: function(store, query, queryOptions){
+			// summary:
+			//		Sets the store to use with this widget.
 			if(store === this.store){ return; }
 			this.store = store;
 			this.query = query;

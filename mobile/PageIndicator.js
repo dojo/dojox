@@ -9,16 +9,30 @@ define([
 	"dijit/_Contained",
 	"dijit/_WidgetBase"
 ], function(connect, declare, win, dom, domClass, domConstruct, registry, Contained, WidgetBase){
-	// module:
-	//		dojox/mobile/Heading
-	// summary:
-	//		TODOC
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Contained = dijit._Contained;
-	=====*/
+/*=====
+	var Contained = dijit._Contained;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
+	// module:
+	//		dojox/mobile/PageIndicator
+	// summary:
+	//		A current page indicator.
+
 	return declare("dojox.mobile.PageIndicator", [WidgetBase, Contained],{
+		// summary:
+		//		A current page indicator.
+		// description:
+		//		PageIndicator displays a series of gray and white dots to
+		//		indicate which page is currently being viewed. It can typically
+		//		be used with dojox.mobile.SwapView. It is also internally used
+		//		in dojox.mobile.Carousel.
+
+		// refId: String
+		//		An ID of a DOM node to be searched. Siblings of the reference
+		//		node will be searched for views. If not specified, this.domNode
+		//		will be the reference node.
 		refId: "",
 
 		buildRendering: function(){
@@ -40,6 +54,8 @@ define([
 		},
 
 		reset: function(){
+			// summary:
+			//		Updates the indicator.
 			var r = this._tblNode.rows[0];
 			var i, c, a = [], dot;
 			var refNode = (this.refId && dom.byId(this.refId)) || this.domNode;
@@ -71,6 +87,8 @@ define([
 		},
 
 		isView: function(node){
+			// summary:
+			//		Returns true if the given node is a view.
 			return (node && node.nodeType === 1 && domClass.contains(node, "mblView"));
 		},
 

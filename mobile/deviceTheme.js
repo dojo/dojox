@@ -8,9 +8,9 @@ define([
 ], function(array, config, lang, win, domConstruct, require){
 
 	var dm = lang.getObject("dojox.mobile", true);
-	/*=====
-	dm = dojox.mobile
-	=====*/
+/*=====
+	var dm = dojox.mobile
+=====*/
 
 	// module:
 	//		dojox/mobile/deviceTheme

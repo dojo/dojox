@@ -15,7 +15,7 @@ define([
 	// module:
 	//		dojox/mobile/_base
 	// summary:
-	//		TODOC
+	//		Includes the basic dojox.mobile modules
 
 	return common;
 });

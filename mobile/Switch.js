@@ -9,20 +9,43 @@ define([
 	"dijit/_WidgetBase",
 	"./sniff"
 ], function(array, connect, declare, event, win, domClass, Contained, WidgetBase, has){
+
+/*=====
+	Contained = dijit._Contained;
+	WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/Switch
 	// summary:
-	//		TODOC
+	//		A toggle switch with a sliding knob.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.Switch", [WidgetBase, Contained],{
+		// summary:
+		//		A toggle switch with a sliding knob.
+		// description:
+		//		Switch is a toggle switch with a sliding knob. You can either
+		//		tap or slide the knob to toggle the switch. The onStateChanged
+		//		handler is called when the switch is manipulated.
+
+		// value: String
+		//		The initial state of the switch. "on" or "off". The default
+		//		value is "on".
 		value: "on",
+
+		// name: String
+		//		A name for a hidden input field, which holds the current value.
 		name: "",
+
+		// leftLabel: String
+		//		The left-side label of the switch.
 		leftLabel: "ON",
+
+		// rightLabel: String
+		//		The right-side label of the switch.
 		rightLabel: "OFF",
+
+		/* internal properties */	
 		_width: 53,
 
 		buildRendering: function(){
@@ -107,6 +130,8 @@ define([
 		},
 	
 		onTouchStart: function(e){
+			// summary:
+			//		Internal function to handle touchStart events.
 			this._moved = false;
 			this.innerStartX = this.inner.offsetLeft;
 			if(!this._conn){
@@ -121,6 +146,8 @@ define([
 		},
 	
 		onTouchMove: function(e){
+			// summary:
+			//		Internal function to handle touchMove events.
 			e.preventDefault();
 			var dx;
 			if(e.targetTouches){
@@ -140,6 +167,8 @@ define([
 		},
 	
 		onTouchEnd: function(e){
+			// summary:
+			//		Internal function to handle touchEnd events.
 			array.forEach(this._conn, connect.disconnect);
 			this._conn = null;
 			if(this.innerStartX == this.inner.offsetLeft){
@@ -159,6 +188,10 @@ define([
 		},
 	
 		onStateChanged: function(/*String*/newState){
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called when the state has been changed.
 		},
 	
 		_setValueAttr: function(/*String*/value){

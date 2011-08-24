@@ -4,15 +4,23 @@ define([
 	"./SpinWheel",
 	"./SpinWheelSlot"
 ], function(declare, domClass, SpinWheel, SpinWheelSlot){
+
+/*=====
+	var SpinWheel = dojox.mobile.SpinWheel;
+=====*/
+
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:
-	//		TODOC
+	//		A SpinWheel-based time picker widget.
 
-	/*=====
-		SpinWheel = dojox.mobile.SpinWheel;
-	=====*/
 	return declare("dojox.mobile.SpinWheelTimePicker", SpinWheel, {
+		// summary:
+		//		A SpinWheel-based time picker widget.
+		// description:
+		//		SpinWheelTimePicker is a time picker widget. It is a subclass of
+		//		dojox.mobile.SpinWheel. It has the hour and minute slots.
+
 		slotClasses: [
 			SpinWheelSlot,
 			SpinWheelSlot
@@ -33,7 +41,8 @@ define([
 		},
 
 		reset: function(){
-			// goto now
+			// summary:
+			//		Goes to now.
 			var slots = this.slots;
 			var now = new Date();
 			var _h = now.getHours() + "";

@@ -11,23 +11,48 @@ define([
 	"./Heading",
 	"./TabBarButton"
 ], function(array, declare, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, Heading, TabBarButton){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
-	//		TODOC
+	//		A bar widget that has buttons to control visibility of views.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.TabBar", [WidgetBase, Container, Contained],{
+		// summary:
+		//		A bar widget that has buttons to control visibility of views.
+		// description:
+		//		TabBar is a container widget that has typically multiple
+		//		TabBarButtons which controls visibility of views. It can be used
+		//		as a tab container.
+
+		// iconBase: String
+		//		The default icon path for child items.
 		iconBase: "",
+
+		// iconPos: String
+		//		The default icon position for child items.
 		iconPos: "",
-		barType: "tabBar", // "tabBar"(default) or "segmentedControl"
+
+		// barType: String
+		//		"tabBar"(default) or "segmentedControl".
+		barType: "tabBar",
+
+		// inHeading: Boolean
+		//		A flag that indicates whether this widget is in a Heading
+		//		widget.
 		inHeading: false,
+
+		// tag: String
+		//		A name of html tag to create as domNode.
 		tag: "UL",
 
+		/* internal properties */	
 		_fixedButtonWidth: 76,
 		_fixedButtonMargin: 17,
 		_largeScreenWidth: 500,

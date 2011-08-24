@@ -9,19 +9,36 @@ define([
 	"dijit/_WidgetBase",
 	"./SpinWheelSlot"
 ], function(array, declare, lang, domClass, domConstruct, Contained, Container, WidgetBase, SpinWheelSlot){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/SpinWheel
 	// summary:
-	//		TODOC
+	//		A value picker widget that has spin wheels.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.SpinWheel", [WidgetBase, Container, Contained],{
+		// summary:
+		//		A value picker widget that has spin wheels.
+		// description:
+		//		SpinWheel is a value picker component. It is a sectioned wheel
+		//		that can be used to pick up some values from the wheel slots by
+		//		spinning them.
+
+		// slotClasses: Array
+		//		An array of slot classes to be this SpinWheel's slots.
 		slotClasses: [],
+
+		// slotProps: Array
+		//		An array of property objects for each slot class specified in
+		//		slotClasses.
 		slotProps: [],
+
+		/* internal properties */	
 		centerPos: 0,
 
 		buildRendering: function(){
@@ -46,7 +63,8 @@ define([
 		},
 
 		getValue: function(){
-			// return array of slot values
+			// summary:
+			//		Returns an array of slot values.
 			var a = [];
 			array.forEach(this.getChildren(), function(w){
 				if(w instanceof SpinWheelSlot){
@@ -56,8 +74,9 @@ define([
 			return a;
 		},
 
-		setValue: function(a){
-			// set slot values from array
+		setValue: function(/*Array*/a){
+			// summary:
+			//		Sets the slot values.
 			var i = 0;
 			array.forEach(this.getChildren(), function(w){
 				if(w instanceof SpinWheelSlot){
@@ -69,6 +88,8 @@ define([
 		},
 
 		reset: function(){
+			// summary:
+			//		Resets the SpinWheel to show the initial values.
 			array.forEach(this.getChildren(), function(w){
 				if(w instanceof SpinWheelSlot){
 					w.setInitialValue();

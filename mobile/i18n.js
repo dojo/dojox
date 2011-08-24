@@ -3,10 +3,12 @@ define([
 	"dojo/i18n",
 	"dijit/_WidgetBase"
 ], function(lang, di18n, WidgetBase){
+
 	// module:
 	//		dojox/mobile/i18n
 	// summary:
-	//		TODOC
+	//		An internationalization utility for dojox.mobile-based user
+	//		applications.
 
 	var i18n = lang.getObject("dojox.mobile.i18n", true);
 

@@ -7,21 +7,29 @@ define([
 	"./View",
 	"./_ScrollableMixin"
 ], function(connect, declare, dom, domClass, registry, View, ScrollableMixin){
+
+/*=====
+	var View = dojox.mobile.View;
+	var ScrollableMixin = dojox.mobile._ScrollableMixin;
+=====*/
+
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:
 	//		A container that can be flipped horizontally.
-	// description:
-	//		SwapView allows the user to swipe the screen left or right to
-	//		flip between the views.
-	//		When SwapView is flipped, it finds an adjacent SwapView,
-	//		and opens it.
 
-	/*=====
-		View = dojox.mobile.View;
-		ScrollableMixin = dojox.mobile._ScrollableMixin;
-	=====*/
 	return declare("dojox.mobile.SwapView", [View, ScrollableMixin], {
+		// summary:
+		//		A container that can be flipped horizontally.
+		// description:
+		//		SwapView is a container widget that represents entire mobile
+		//		device screen, and can be swiped horizontally. (In dojo-1.6, it
+		//		was called 'FlippableView'.) SwapView is a subclass of
+		//		dojox.mobile.View. SwapView allows the user to swipe the screen
+		//		left or right to move between the views. When SwapView is
+		//		swiped, it finds an adjacent SwapView to open it.
+
+		/* internal properties */	
 		scrollDir: "f",
 		weight: 1.2,
 
@@ -36,6 +44,8 @@ define([
 		},
 
 		onTouchStart: function(e){
+			// summary:
+			//		Internal function to handle touchStart events.
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
 				nextView.stopAnimation();
@@ -50,6 +60,8 @@ define([
 		},
 
 		handleNextPage: function(/*Widget*/w){
+			// summary:
+			//		Called when the "/dojox/mobile/nextPage" topic is published.
 			var refNode = w.refId && dom.byId(w.refId) || w.domNode;
 			if(this.domNode.parentNode !== refNode.parentNode){ return; }
 			if(this.getShowingView() !== this){ return; }
@@ -57,6 +69,8 @@ define([
 		},
 
 		handlePrevPage: function(/*Widget*/w){
+			// summary:
+			//		Called when the "/dojox/mobile/prevPage" topic is published.
 			var refNode = w.refId && dom.byId(w.refId) || w.domNode;
 			if(this.domNode.parentNode !== refNode.parentNode){ return; }
 			if(this.getShowingView() !== this){ return; }
@@ -64,6 +78,8 @@ define([
 		},
 
 		goTo: function(/*Number*/dir){
+			// summary:
+			//		Moves to the next or previous view.
 			var w = this.domNode.offsetWidth;
 			var view = (dir == 1) ? this.nextView(this.domNode) : this.previousView(this.domNode);
 			if(!view){ return; }
@@ -76,10 +92,14 @@ define([
 		},
 
 		isSwapView: function(node){
+			// summary:
+			//		Returns true if the given node is a SwapView widget.
 			return (node && node.nodeType === 1 && domClass.contains(node, "mblSwapView"));
 		},
 
 		nextView: function(node){
+			// summary:
+			//		Returns the next view.
 			for(var n = node.nextSibling; n; n = n.nextSibling){
 				if(this.isSwapView(n)){ return registry.byNode(n); }
 			}
@@ -87,6 +107,8 @@ define([
 		},
 
 		previousView: function(node){
+			// summary:
+			//		Returns the previous view.
 			for(var n = node.previousSibling; n; n = n.previousSibling){
 				if(this.isSwapView(n)){ return registry.byNode(n); }
 			}
@@ -94,6 +116,8 @@ define([
 		},
 
 		scrollTo: function(/*Object*/to){
+			// summary:
+			//		Overrides dojox.mobile.scrollable.scrollTo().
 			if(!this._beingFlipped){
 				var newView, x;
 				if(to.x < 0){
@@ -114,6 +138,8 @@ define([
 		},
 
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing, fake_pos){
+			// summary:
+			//		Overrides dojox.mobile.scrollable.slideTo().
 			if(!this._beingFlipped){
 				var w = this.domNode.offsetWidth;
 				var pos = fake_pos || this.getPos();
@@ -160,6 +186,8 @@ define([
 		},
 	
 		onFlickAnimationEnd: function(e){
+			// summary:
+			//		Overrides dojox.mobile.scrollable.onFlickAnimationEnd().
 			if(e && e.animationName && e.animationName !== "scrollableViewScroll2"){ return; }
 			// Hide all the views other than the currently showing one.
 			// Otherwise, when the orientation is changed, other views

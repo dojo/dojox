@@ -6,15 +6,18 @@ define([
 	"./SpinWheel",
 	"./SpinWheelSlot"
 ], function(declare, domClass, ddate, datelocale, SpinWheel, SpinWheelSlot){
+
+/*=====
+	var SpinWheel = dojox.mobile.SpinWheel;
+	var SpinWheelSlot = dojox.mobile.SpinWheelSlot;
+=====*/
+
 	// module:
 	//		dojox/mobile/SpinWheelDatePicker
 	// summary:
-	//		TODOC
+	//		A SpinWheel-based date picker widget.
 
-	/*=====
-		SpinWheel = dojox.mobile.SpinWheel;
-		SpinWheelSlot = dojox.mobile.SpinWheelSlot;
-	=====*/
+	//TODO: the api doc parser seems to fail if the 1st arg for declare (=class name) is missing..
 	var SpinWheelYearSlot = declare(SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
@@ -23,7 +26,7 @@ define([
 				var i, idx;
 				for(i = this.labelFrom, idx = 0; i <= this.labelTo; i++, idx++){
 					dtA.setFullYear(i);
-					this.labels.push(datelocale.format(dtA,{datePattern:"yyyy", selector:"date"}));
+					this.labels.push(datelocale.format(dtA, {datePattern:"yyyy", selector:"date"}));
 				}
 			}
 			this.inherited(arguments);
@@ -37,18 +40,23 @@ define([
 			var monthStr;
 			for(var i = 0; i < 12; i++){
 				dtA.setMonth(i);
-				monthStr = datelocale.format(dtA,{datePattern:"MMM", selector:"date"});
+				monthStr = datelocale.format(dtA, {datePattern:"MMM", selector:"date"});
 				this.labels.push(monthStr);
 			}
 			this.inherited(arguments);
 		}
 	});
 
-	var SpinWheelDaySlot = declare(SpinWheelSlot, {});
-
-
+	var SpinWheelDaySlot = declare(SpinWheelSlot, {
+	});
 
 	return declare("dojox.mobile.SpinWheelDatePicker", SpinWheel, {
+		// summary:
+		//		A SpinWheel-based date picker widget.
+		// description:
+		//		SpinWheelDatePicker is a date picker widget. It is a subclass of
+		//		dojox.mobile.SpinWheel. It has the year, month, and day slots.
+
 		slotClasses: [
 			SpinWheelYearSlot,
 			SpinWheelMonthSlot,
@@ -68,7 +76,8 @@ define([
 		},
 
 		reset: function(){
-			// goto today
+			// summary:
+			//		Goes to today.
 			var slots = this.slots;
 			var now = new Date();
 			var monthStr = datelocale.format(now, {datePattern:"MMM", selector:"date"});
@@ -76,13 +85,16 @@ define([
 		},
 
 		onMonthSet: function(){
+			// summary:
+			//		A handler called when the month value is changed.
 			var daysInMonth = this.onDaySet();
 			var disableValuesTable = {28:[29,30,31], 29:[30,31], 30:[31], 31:[]};
 			this.slots[2].disableValues(disableValuesTable[daysInMonth]);
-		
 		},
 
 		onDaySet: function(){
+			// summary:
+			//		A handler called when the day value is changed.
 			var y = this.slots[0].getValue();
 			var m = this.slots[1].getValue();
 			var newMonth = datelocale.parse(y+"/"+m, {datePattern:'yyyy/MMM', selector:'date'});

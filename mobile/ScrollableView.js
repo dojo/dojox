@@ -7,26 +7,33 @@ define([
 	"./View",
 	"./_ScrollableMixin"
 ], function(array, declare, domClass, domConstruct, registry, View, ScrollableMixin){
+
+	/*=====
+		var View = dojox.mobile.View;
+		var ScrollableMixin = dojox.mobile._ScrollableMixin;
+	=====*/
+
 	// module:
 	//		dojox/mobile/ScrollableView
 	// summary:
 	//		A container that has a touch scrolling capability.
-	// description:
-	//		ScrollableView is a subclass of View (=dojox.mobile.View).
-	//		Unlike the base View class, ScrollableView's domNode always stays
-	//		at the top of the screen and its height is "100%" of the screen.
-	//		In this fixed domNode, containerNode scrolls. Browser's default
-	//		scrolling behavior is disabled, and the scrolling machinery is
-	//		re-implemented with JavaScript. Thus the user does not need to use the
-	//		two-finger operation to scroll an inner DIV (containerNode).
-	//		The main purpose of this widget is to realize fixed-positioned header
-	//		and/or footer bars.
 
-	/*=====
-		View = dojox.mobile.View;
-		ScrollableMixin = dojox.mobile._ScrollableMixin;
-	=====*/
 	return declare("dojox.mobile.ScrollableView", [View, ScrollableMixin], {
+		// summary:
+		//		A container that has a touch scrolling capability.
+		// description:
+		//		ScrollableView is a subclass of View (=dojox.mobile.View).
+		//		Unlike the base View class, ScrollableView's domNode always stays
+		//		at the top of the screen and its height is "100%" of the screen.
+		//		In this fixed domNode, containerNode scrolls. Browser's default
+		//		scrolling behavior is disabled, and the scrolling machinery is
+		//		re-implemented with JavaScript. Thus the user does not need to use the
+		//		two-finger operation to scroll an inner DIV (containerNode).
+		//		The main purpose of this widget is to realize fixed-positioned header
+		//		and/or footer bars.
+
+		// scrollableParams: Object
+		//		Parameters for dojox.mobile.scrollable.init().
 		scrollableParams: null,
 
 		constructor: function(){
@@ -50,14 +57,18 @@ define([
 		},
 
 		resize: function(){
+			// summary:
+			//		Calls resize() of each child widget.
 			this.inherited(arguments); // scrollable#resize() will be called
 			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},
 
-		// override dojox.mobile.scrollable
 		isTopLevel: function(e){
+			// summary:
+			//		Returns true if this is a top-level widget.
+			//		Overrides dojox.mobile.scrollable.
 			var parent = this.getParent && this.getParent();
 			return (!parent || !parent.resize); // top level widget
 		},
@@ -88,7 +99,9 @@ define([
 		},
 
 		reparent: function(){
-			// move all the children, except header and footer, to containerNode.
+			// summary:
+			//		Moves all the children, except header and footer, to
+			//		containerNode.
 			var i, idx, len, c;
 			for(i = 0, idx = 0, len = this.domNode.childNodes.length; i < len; i++){
 				c = this.domNode.childNodes[idx];
@@ -105,9 +118,10 @@ define([
 			this.flashScrollBar();
 		},
 	
-		// override _WidgetBase#getChildren to add local fixed bars, which are not
-		// under containerNode, to the children array.
 		getChildren: function(){
+			// summary:
+			//		Overrides _WidgetBase#getChildren to add local fixed bars,
+			//		which are not under containerNode, to the children array.
 			var children = this.inherited(arguments);
 			if(this.fixedHeader && this.fixedHeader.parentNode === this.domNode){
 				children.push(registry.byNode(this.fixedHeader));

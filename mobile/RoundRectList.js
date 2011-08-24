@@ -6,22 +6,48 @@ define([
 	"dijit/_Container",
 	"dijit/_WidgetBase"
 ], function(array, declare, win, Contained, Container, WidgetBase){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/RoundRectList
 	// summary:
-	//		TODOC
+	//		A rounded rectangle list.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.RoundRectList", [WidgetBase, Container, Contained], {
+		// summary:
+		//		A rounded rectangle list.
+		// description:
+		//		RoundRectList is a rounded rectangle list, which can be used to
+		//		display a group of items. Each item must be
+		//		dojox.mobile.ListItem.
+
+		// transition: String
+		//		The default animated transition effect for child items.
 		transition: "slide",
+
+		// iconBase: String
+		//		The default icon path for child items.
 		iconBase: "",
+
+		// iconPos: String
+		//		The default icon position for child items.
 		iconPos: "",
-		select: "", // "single", "multiple", or ""
-		stateful: false, // keep the selection state or not
+
+		// select: String
+		//		Selection mode of the list. The check mark is shown for the
+		//		selected list item(s). The value can be "single", "multiple", or
+		//		"". If "single", there can be only one selected item at a time.
+		//		If "multiple", there can be multiple selected items at a time.
+		select: "",
+
+		// stateful: String
+		//		If true, the last selected item remains highlighted.
+		stateful: false,
 
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
@@ -29,7 +55,10 @@ define([
 		},
 	
 		onCheckStateChanged: function(/*Widget*/listItem, /*String*/newState){
-			// Stub function to connect to from your application.
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		Called when the check state has been changed.
 		},
 
 		_setStatefulAttr: function(stateful){
@@ -40,16 +69,22 @@ define([
 		},
 
 		deselectItem: function(/*ListItem*/item){
-			item.deselectItem();
+			// summary:
+			//		Deselects the given item.
+			item.deselect();
 		},
 
 		deselectAll: function(){
+			// summary:
+			//		Deselects all the items.
 			array.forEach(this.getChildren(), function(child){
 				child.deselect && child.deselect();
 			});
 		},
 
 		selectItem: function(/*ListItem*/item){
+			// summary:
+			//		Selects the given item.
 			item.select();
 		}
 	});

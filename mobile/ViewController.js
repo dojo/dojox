@@ -16,9 +16,22 @@ define([
 	"./TransitionEvent"
 ], function(dojo, array, connect, declare, lang, win, dom, domClass, domConstruct, on, ready, registry, ProgressIndicator, TransitionEvent){
 
+	// module:
+	//		dojox/mobile/ViewController
+	// summary:
+	//		A singleton class that controlls view transition.
+
 	var dm = lang.getObject("dojox.mobile", true);
 
-	var Controller = declare(null, {
+	var Controller = declare("dojox.mobile.ViewController", null, {
+		// summary:
+		//		A singleton class that controlls view transition.
+		// description:
+		//		This class listens to the "startTransition" events and performs
+		//		view transitions. If the transition destination is an external
+		//		view specified with the url parameter, retrieves the view
+		//		content and parses it to create a new target view.
+
 		constructor: function(){
 			this.viewMap={};
 			this.currentView=null;
@@ -29,6 +42,8 @@ define([
 		},
 
 		findCurrentView: function(moveTo,src){
+			// summary:
+			//		Searches for the currently showing view.
 			if(moveTo){
 				var w = registry.byId(moveTo);
 				if(w && w.getShowingView){ return w.getShowingView(); }
@@ -36,6 +51,7 @@ define([
 			if(dm.currentView){
 				return dm.currentView; //TODO:1.8 may not return an expected result especially when views are nested
 			}
+			//TODO:1.8 probably never reaches here
 			w = src;
 			while(true){
 				w = w.getParent();
@@ -46,7 +62,9 @@ define([
 		},
 
 		onStartTransition: function(evt){
-			//console.log("onStartTransition:", evt.detail, evt.detail.moveTo, evt.detail.href, evt.detail.scene, evt);
+			// summary:
+			//		A handler that performs view transition.
+
 			evt.preventDefault();
 			if(!evt.detail || (evt.detail && !evt.detail.moveTo && !evt.detail.href && !evt.detail.url && !evt.detail.scene)){ return; }
 			var w = this.findCurrentView(evt.detail.moveTo, (evt.target && evt.target.id)?registry.byId(evt.target.id):registry.byId(evt.target)); // the current view widget
@@ -127,6 +145,12 @@ define([
 		},
 
 		_parse: function(text, id){
+			// summary:
+			//		Parses the given view content.
+			// description:
+			//		If the content is html fragment, constructs dom tree with it
+			//		and runs the parser. If the content is json data, passes it
+			//		to _instantiate().
 			var container, view, i, j, len;
 			var currentView	 = this.findCurrentView();
 			var target = registry.byId(id) && registry.byId(id).containerNode
@@ -191,6 +215,9 @@ define([
 		},
 
 		_instantiate: function(/*Object*/obj, /*DomNode*/node, /*Widget*/parent){
+			// summary:
+			//		Given the evaluated json data, does the same thing as what
+			//		the parser does.
 			var widget;
 			for(var key in obj){
 				if(key.charAt(0) == "@"){ continue; }

@@ -12,16 +12,30 @@ define([
 	//		dojox/mobile/_ScrollableMixin
 	// summary:
 	//		Mixin for widgets to have a touch scrolling capability.
-	// description:
-	//		Actual implementation is in scrollable.js.
-	//		scrollable.js is not a dojo class, but just a collection
-	//		of functions. This module makes scrollable.js a dojo class.
 
 	var cls = declare("dojox.mobile._ScrollableMixin", null, {
+		// summary:
+		//		Mixin for widgets to have a touch scrolling capability.
+		// description:
+		//		Actual implementation is in scrollable.js.
+		//		scrollable.js is not a dojo class, but just a collection
+		//		of functions. This module makes scrollable.js a dojo class.
+
+		// fixedHeader: String
+		//		Id of the fixed header.
 		fixedHeader: "",
+
+		// fixedFooter: String
+		//		Id of the fixed footer.
 		fixedFooter: "",
+
+		// scrollableParams: Object
+		//		Parameters for dojox.mobile.scrollable.init().
 		scrollableParams: null,
-		allowNestedScrolls: true, // e.g. Allow ScrollableView in a SwapView
+
+		// allowNestedScrolls: Boolean
+		//		e.g. Allow ScrollableView in a SwapView.
+		allowNestedScrolls: true,
 
 		constructor: function(){
 			this.scrollableParams = {};
@@ -66,7 +80,8 @@ define([
 		},
 
 		findAppBars: function(){
-			// search for application-specific header or footer
+			// summary:
+			//		Search for application-specific header or footer.
 			var i, len, c;
 			for(i = 0, len = win.body().childNodes.length; i < len; i++){
 				c = win.body().childNodes[i];
@@ -82,6 +97,8 @@ define([
 		},
 
 		checkFixedBar: function(/*DomNode*/node, /*Boolean*/local){
+			// summary:
+			//		Checks if the given node is a fixed bar or not.
 			if(node.nodeType === 1){
 				var fixed = node.getAttribute("fixed")
 					|| (registry.byNode(node) && registry.byNode(node).fixed);

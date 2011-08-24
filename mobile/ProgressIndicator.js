@@ -5,8 +5,26 @@ define([
 	"dojo/dom-style",
 	"dojo/has"
 ], function(config, declare, domConstruct, domStyle, has){
+
+	// module:
+	//		dojox/mobile/ProgressIndicator
+	// summary:
+	//		A progress indication widget.
+
 	var cls = declare("dojox.mobile.ProgressIndicator", null, {
-		interval: 100, // milliseconds
+		// summary:
+		//		A progress indication widget.
+		// description:
+		//		ProgressIndicator is a round spinning graphical representation
+		//		that indicates the current task is on-going.
+
+		// interval: Number
+		//		The time interval in milliseconds for updating the spinning
+		//		indicator.
+		interval: 100,
+
+		// colors: Array
+		//		An array of indicator colors.
 		colors: [
 			"#C0C0C0", "#C0C0C0", "#C0C0C0", "#C0C0C0",
 			"#C0C0C0", "#C0C0C0", "#B8B9B8", "#AEAFAE",
@@ -29,6 +47,8 @@ define([
 		},
 	
 		start: function(){
+			// summary:
+			//		Starts the ProgressIndicator spinning.
 			if(this.imageNode){
 				var img = this.imageNode;
 				var l = Math.round((this.domNode.offsetWidth - img.offsetWidth) / 2);
@@ -51,6 +71,8 @@ define([
 		},
 	
 		stop: function(){
+			// summary:
+			//		Stops the ProgressIndicator spinning.
 			if(this.timer){
 				clearInterval(this.timer);
 			}
@@ -62,7 +84,7 @@ define([
 
 		setImage: function(/*String*/file){
 			// summary:
-			//		Set an indicator icon image file (typically animated GIF).
+			//		Sets an indicator icon image file (typically animated GIF).
 			//		If null is specified, restores the default spinner.
 			if(file){
 				this.imageNode = domConstruct.create("IMG", {src:file}, this.domNode);

@@ -9,37 +9,48 @@ define([
 	"dijit/_WidgetBase",
 	"./FixedSplitterPane"
 ], function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, FixedSplitterPane){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:
 	//		A layout container that splits the window horizontally or vertically.
-	// description:
-	//		FixedSplitter is a very simple container widget that layouts its child
-	//		dom nodes side by side either horizontally or vertically.
-	//		An example usage of this widget would be to realize the split view on iPad.
-	//		There is no visual splitter between the children, and there is no
-	//		function to resize the child panes with drag-and-drop.
-	//		If you need a visual splitter, you can specify a border of a child
-	//		dom node with CSS.
-	//		A child of the widget should be FixedSplitterPane.
-	// example:
-	// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
-	// |		<div dojoType="dojox.mobile.FixedSplitterPane"
-	// |			style="width:200px;border-right:1px solid black;">
-	// |			pane #1 (width=200px)
-	// |		</div>
-	// |		<div dojoType="dojox.mobile.FixedSplitterPane">
-	// |			pane #2
-	// |		</div>
-	// |	</div>
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.FixedSplitter", [WidgetBase, Container, Contained], {
-		orientation: "H", // "H" or "V"
+		// summary:
+		//		A layout container that splits the window horizontally or
+		//		vertically.
+		// description:
+		//		FixedSplitter is a very simple container widget that layouts its
+		//		child dom nodes side by side either horizontally or
+		//		vertically. An example usage of this widget would be to realize
+		//		the split view on iPad. There is no visual splitter between the
+		//		children, and there is no function to resize the child panes
+		//		with drag-and-drop. If you need a visual splitter, you can
+		//		specify a border of a child dom node with CSS.
+		//		A child of the widget should be FixedSplitterPane.
+		//
+		// example:
+		// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
+		// |		<div dojoType="dojox.mobile.FixedSplitterPane"
+		// |			style="width:200px;border-right:1px solid black;">
+		// |			pane #1 (width=200px)
+		// |		</div>
+		// |		<div dojoType="dojox.mobile.FixedSplitterPane">
+		// |			pane #2
+		// |		</div>
+		// |	</div>
+
+		// orientation: String
+		//		The direction of split. If "H" is specified, panes are split
+		//		horizontally. If "V" is specified, panes are split vertically.
+		orientation: "H",
+
 
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : win.doc.createElement("DIV");

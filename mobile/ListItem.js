@@ -10,35 +10,95 @@ define([
 	"./_ItemBase",
 	"./TransitionEvent"
 ], function(array, connect, declare, lang, domClass, domConstruct, has, common, ItemBase, TransitionEvent){
+
+/*=====
+	var ItemBase = dojox.mobile._ItemBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:
-	//		TODOC
+	//		An item of either RoundRectList or EdgeToEdgeList.
 
-	/*=====
-		ItemBase = dojox.mobile._ItemBase;
-	=====*/
 	return declare("dojox.mobile.ListItem", ItemBase, {
-		//icon: "", // inherit from _ItemBase
-		//label: "", // inherit from _ItemBase
+		// summary:
+		//		An item of either RoundRectList or EdgeToEdgeList.
+		// description:
+		//		ListItem represents an item of either RoundRectList or
+		//		EdgeToEdgeList. There are three ways to move to a different
+		//		view, moveTo, href, and url. You can choose only one of them.
+
+		// rightText: String
+		//		A right-aligned text to display on the item.
 		rightText: "",
-		rightIcon2: "",
+
+		// rightIcon: String
+		//		An icon to display at the right hand side of the item. The value
+		//		can be either a path for an image file or a class name of a DOM
+		//		button.
 		rightIcon: "",
 
+		// rightIcon2: String
+		//		An icon to display at the left of the rightIcon. The value can
+		//		be either a path for an image file or a class name of a DOM
+		//		button.
+		rightIcon2: "",
+
+
+		// anchorLabel: Boolean
+		//		If true, the label text becomes a clickable anchor text. When
+		//		the user clicks on the text, the onAnchorLabelClicked handler is
+		//		called. You can override or connect to the handler and implement
+		//		any action. The handler has no default action.
 		anchorLabel: false,
+
+		// noArrow: Boolean
+		//		If true, the right hand side arrow is not displayed.
 		noArrow: false,
+
+		// selected: Boolean
+		//		If true, the item is highlighted to indicate it is selected.
 		selected: false,
+
+		// checked: Boolean
+		//		If true, a check mark is displayed at the right of the item.
 		checked: false,
+
+		// arrowClass: String
+		//		An icon to display as an arrow. The value can be either a path
+		//		for an image file or a class name of a DOM button.
 		arrowClass: "mblDomButtonArrow",
+
+		// checkClass: String
+		//		An icon to display as a check mark. The value can be either a
+		//		path for an image file or a class name of a DOM button.
 		checkClass: "mblDomButtonCheck",
+
+		// variableHeight: Boolean
+		//		If true, the height of the item varies according to its
+		//		content. In dojo 1.6 or older, the "mblVariableHeight" class was
+		//		used for this purpose. In dojo 1.7, adding the mblVariableHeight
+		//		class still works for backward compatibility.
 		variableHeight: false,
 
+
+		// rightIconTitle: String
+		//		An alt text for the right icon.
 		rightIconTitle: "",
+
+		// rightIcon2Title: String
+		//		An alt text for the right icon2.
 		rightIcon2Title: "",
 
-		// for backward compatibility
+
+		// btnClass: String
+		//		Deprecated. For backward compatibility.
 		btnClass: "",
+
+		// btnClass2: String
+		//		Deprecated. For backward compatibility.
 		btnClass2: "",
+
 	
 		postMixInProperties: function(){
 			// for backward compatibility
@@ -167,11 +227,9 @@ define([
 			}
 		},
 	
-		deselect: function(){
-			domClass.remove(this.domNode, "mblItemSelected");
-		},
-	
 		select: function(){
+			// summary:
+			//		Makes this widget in the selected state.
 			var parent = this.getParent();
 			if(parent.stateful){
 				parent.deselectAll();
@@ -184,8 +242,15 @@ define([
 			domClass.add(this.domNode, "mblItemSelected");
 		},
 	
+		deselect: function(){
+			// summary:
+			//		Makes this widget in the deselected state.
+			domClass.remove(this.domNode, "mblItemSelected");
+		},
+	
 		onAnchorLabelClicked: function(e){
-			// Stub function to connect to from your application.
+			// summary:
+			//		Stub function to connect to from your application.
 		},
 
 		layoutVariableHeight: function(e){
@@ -202,6 +267,8 @@ define([
 		},
 
 		setArrow: function(){
+			// summary:
+			//		Sets the arrow icon if necessary.
 			if(this.checked){ return; }
 			var c = "";
 			var parent = this.getParent();

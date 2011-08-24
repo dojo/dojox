@@ -16,24 +16,79 @@ define([
 
 	var dm = lang.getObject("dojox.mobile", true);
 
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
-	//		TODOC
+	//		A widget that represents a navigation bar.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.Heading", [WidgetBase, Container, Contained],{
+		// summary:
+		//		A widget that represents a navigation bar.
+		// description:
+		//		Heading is a widget that represents a navigation bar, which
+		//		usually appears at the top of an application. It usually
+		//		displays the title of the current view and can contain a
+		//		navigational control. If you use it with
+		//		dojox.mobile.ScrollableView, it can also be used as a fixed
+		//		header bar or a fixed footer bar. In such cases, specify the
+		//		fixed="top" attribute to be a fixed header bar or the
+		//		fixed="bottom" attribute to be a fixed footer bar. Heading can
+		//		have one or more ToolBarButton widgets as its children.
+
+		// back: String
+		//		A label for the navigational control to return to the previous
+		//		View.
 		back: "",
+
+		// href: String
+		//		A URL to open when the navigational control is pressed.
 		href: "",
+
+		// moveTo: String
+		//		The id of the transition destination view which resides in the
+		//		current page.
+		//
+		//		If the value has a hash sign ('#') before the id (e.g. #view1)
+		//		and the dojo.hash module is loaded by the user application, the
+		//		view transition updates the hash in the browser URL so that the
+		//		user can bookmark the destination view. In this case, the user
+		//		can also use the browser's back/forward button to navigate
+		//		through the views in the browser history.
+		//
+		//		If null, transitions to a blank view.
+		//		If '#', returns immediately without transition.
 		moveTo: "",
+
+		// transition: String
+		//		A type of animated transition effect. You can choose from the
+		//		standard transition types, "slide", "fade", "flip", or from the
+		//		extended transition types, "cover", "coverv", "dissolve",
+		//		"flip2", "reveal", "revealv", "scaleIn", "scaleOut", "slidev",
+		//		"swirl", "zoomIn", "zoomOut". If "none" is specified, transition
+		//		occurs immediately without animation.
 		transition: "slide",
+
+		// label: String
+		//		A title text of the heading. If the label is not specified, the
+		//		innerHTML of the node is used as a label.
 		label: "",
+
+		// iconBase: String
+		//		The default icon path for child items.
 		iconBase: "",
+
+		// backProp: Object
+		//		Properties for the back button.
 		backProp: {className: "mblArrowButton"},
+
+		// tag: String
+		//		A name of html tag to create as domNode.
 		tag: "H1",
 
 		buildRendering: function(){
@@ -136,6 +191,8 @@ define([
 		},
 	
 		findCurrentView: function(){
+			// summary:
+			//		Search for the view widget that contains this widget.
 			var w = this;
 			while(true){
 				w = w.getParent();
@@ -167,6 +224,8 @@ define([
 		},
 	
 		goTo: function(moveTo, href){
+			// summary:
+			//		Given the destination, makes a view transition.
 			var view = this.findCurrentView();
 			if(!view){ return; }
 			if(href){

@@ -8,25 +8,70 @@ define([
 	"./common",
 	"./_ItemBase"
 ], function(declare, lang, win, domClass, domConstruct, registry, common, ItemBase){
-	// module:
-	//		dojox/mobile/TabBar
-	// summary:
-	//		TODOC
 
-	/*=====
-		ItemBase = dojox.mobile._ItemBase;
-	=====*/
-	return declare("dojox.mobile.TabBarButton", [ItemBase],{
-		icon1: "", // unselected (dark) icon
-		icon2: "", // selected (highlight) icon
-		iconPos1: "", // unselected (dark) icon position
-		iconPos2: "", // selected (highlight) icon position
+/*=====
+	var ItemBase = dojox.mobile._ItemBase;
+=====*/
+
+	// module:
+	//		dojox/mobile/TabBarButton
+	// summary:
+	//		A button widget that is placed in the TabBar widget.
+
+	return declare("dojox.mobile.TabBarButton", ItemBase,{
+		// summary:
+		//		A button widget that is placed in the TabBar widget.
+		// description:
+		//		TabBarButton is a button that is placed in the TabBar widget. It
+		//		is a subclass of dojox.mobile._ItemBase just like ListItem or
+		//		IconItem. So, unlike Button, it has similar capability as
+		//		ListItem or IconItem, such as icon support, transition, etc.
+
+		// icon1: String
+		//		A path for the unselected (typically dark) icon. If icon is not
+		//		specified, the iconBase parameter of the parent widget is used.
+		icon1: "",
+
+		// icon2: String
+		//		A path for the selected (typically highlight) icon. If icon is
+		//		not specified, the iconBase parameter of the parent widget or
+		//		icon1 is used.
+		icon2: "",
+
+		// iconPos1: String
+		//		The position of an aggregated unselected (typically dark)
+		//		icon. IconPos1 is comma separated values like
+		//		top,left,width,height (ex. "0,0,29,29"). If iconPos1 is not
+		//		specified, the iconPos parameter of the parent widget is used.
+		iconPos1: "",
+
+		// iconPos2: String
+		//		The position of an aggregated selected (typically highlight)
+		//		icon. IconPos2 is comma separated values like
+		//		top,left,width,height (ex. "0,0,29,29"). If iconPos2 is not
+		//		specified, the iconPos parameter of the parent widget or
+		//		iconPos1 is used.
+		iconPos2: "",
+
+		// selected: Boolean
+		//		If true, the button is in the selected status.
 		selected: false,
+
+		// transition: String
+		//		A type of animated transition effect.
 		transition: "none",
+
+		// tag: String
+		//		A name of html tag to create as domNode.
 		tag: "LI",
+
+		/* internal properties */	
 		selectOne: true,
+
 	
 		inheritParams: function(){
+			// summary:
+			//		Overrides dojox.mobile._ItemBase.inheritParams().
 			var parent = this.getParent();
 			if(parent){
 				if(!this.transition){ this.transition = parent.transition; }
@@ -101,6 +146,8 @@ define([
 		},
 	
 		select: function(){
+			// summary:
+			//		Makes this widget in the selected state.
 			if(arguments[0]){ // deselect
 				this.selected = false;
 				domClass.remove(this.domNode, "mblTabButtonSelected");
@@ -124,6 +171,8 @@ define([
 		},
 		
 		deselect: function(){
+			// summary:
+			//		Makes this widget in the deselected state.
 			this.select(true);
 		},
 	

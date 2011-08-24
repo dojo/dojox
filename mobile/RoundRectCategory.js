@@ -4,16 +4,23 @@ define([
 	"dijit/_Contained",
 	"dijit/_WidgetBase"
 ], function(declare, win, Contained, WidgetBase){
+
+/*=====
+	var Contained = dijit._Contained;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/RoundRectCategory
 	// summary:
-	//		TODOC
+	//		A category header for a rounded rectangle list.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.RoundRectCategory", [WidgetBase, Contained],{
+		// summary:
+		//		A category header for a rounded rectangle list.
+
+		// label: String
+		//		A label text for the widget.
 		label: "",
 
 		buildRendering: function(){

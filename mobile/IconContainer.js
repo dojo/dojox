@@ -12,24 +12,62 @@ define([
 	"./Heading",
 	"./View"
 ], function(array, declare, win, domConstruct, domStyle, registry, Contained, Container, WidgetBase, IconItem, Heading, View){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:
-	//		TODOC
+	//		A container widget that holds multiple icons.
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		Container = dijit._Container;
-		Contained = dijit._Contained;
-	=====*/
 	return declare("dojox.mobile.IconContainer", [WidgetBase, Container, Contained],{
+		// summary:
+		//		A container widget that holds multiple icons.
+		// description:
+		//		IconContainer is a container widget that holds multiple icons
+		//		each of which represents application component.
+
+		// defaultIcon: String
+		//		The default fall-back icon, which is displayed only when the
+		//		specified icon has failed to load.
 		defaultIcon: "",
-		transition: "below", // slide, flip, or below
+
+		// transition: String
+		//		A type of animated transition effect. You can choose from the
+		//		standard transition types, "slide", "fade", "flip", or from the
+		//		extended transition types, "cover", "coverv", "dissolve",
+		//		"flip2", "reveal", "revealv", "scaleIn", "scaleOut", "slidev",
+		//		"swirl", "zoomIn", "zoomOut". If "none" is specified, transition
+		//		occurs immediately without animation. If "below" is specified,
+		//		the application contents are displayed below the icons.
+		transition: "below",
+
+		// pressedIconOpacity: Number
+		//		The opacity of the pressed icon image.
 		pressedIconOpacity: 0.4,
+
+		// iconBase: String
+		//		The default icon path for child items.
 		iconBase: "",
+
+		// iconPos: String
+		//		The default icon position for child items.
 		iconPos: "",
+
+		// back: String
+		//		A label for the navigational control.
 		back: "Home",
+
+		// label: String
+		//		A title text of the heading.
 		label: "My Application",
+
+		// single: Boolean
+		//		If true, only one icon content can be opened at a time.
 		single: false,
 
 		buildRendering: function(){
@@ -86,6 +124,8 @@ define([
 		},
 
 		closeAll: function(){
+			// summary:
+			//		Closes all the icon items.
 			var len = this.domNode.childNodes.length, child, w;
 			for(var i = 0; i < len; i++){
 				var child = this.domNode.childNodes[i];

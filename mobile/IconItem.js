@@ -14,19 +14,54 @@ define([
 	"./_ItemBase",
 	"./TransitionEvent"
 ], function(dojo, array, declare, lang, has, win, domAttr, domClass, domConstruct, domStyle, registry, common, ItemBase, TransitionEvent){
+
+/*=====
+	var ItemBase = dojox.mobile._ItemBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:
-	//		TODOC
-	/*=====
-		ItemBase = dojox.mobile._ItemBase;
-	=====*/
+	//		An icon item widget.
+
 	return declare("dojox.mobile.IconItem", ItemBase, {
+		// summary:
+		//		An icon item widget.
+		// description:
+		//		IconItem represents an item that has an application component
+		//		and its icon image. You can tap the icon to open the
+		//		corresponding application component. You can also use the icon
+		//		to move to a different view by specifying either of the moveTo,
+		//		href or url parameters.
+
+		// lazy: String
+		//		If true, the content of the item, which includes dojo markup, is
+		//		instantiated lazily. That is, only when the icon is opened by
+		//		the user, the required modules are loaded and dojo widgets are
+		//		instantiated.
 		lazy: false,
+
+		// requires: String
+		//		Comma-separated required module names to be loaded. All the
+		//		modules specified with dojoType and their depending modules are
+		//		automatically loaded by the IconItem. If you need other extra
+		//		modules to be loaded, use this parameter. If lazy is true, the
+		//		specified required modules are loaded when the user opens the
+		//		icon for the first time.
 		requires: "",
+
+		// timeout: String
+		//		Duration of highlight in seconds.
 		timeout: 10,
+
+		// closeBtnClass: String
+		//		A class name of a DOM button to be used as a close button.
 		closeBtnClass: "mblDomButtonBlueMinus",
+
+		// closeBtnProp: String
+		//		Properties for the close button.
 		closeBtnProp: null,
+
 
 		templateString: '<div class="mblIconArea" dojoAttachPoint="iconDivNode">'+
 							'<div><img src="${icon}" dojoAttachPoint="iconNode"></div><span dojoAttachPoint="labelNode1"></span>'+
@@ -99,6 +134,8 @@ define([
 		},
 	
 		highlight: function(){
+			// summary:
+			//		Shakes the icon 10 seconds.
 			domClass.add(this.iconDivNode, "mblVibrate");
 			if(this.timeout > 0){
 				var _this = this;
@@ -109,10 +146,15 @@ define([
 		},
 
 		unhighlight: function(){
+			// summary:
+			//		Stops shaking the icon.
 			domClass.remove(this.iconDivNode, "mblVibrate");
 		},
 
 		instantiateWidget: function(e){
+			// summary:
+			//		Instantiates the icon content.
+
 			// avoid use of query
 			/*
 			var list = query('[dojoType]', this.containerNode);
@@ -138,6 +180,8 @@ define([
 		},
 	
 		isOpen: function(e){
+			// summary:
+			//		Returns true if the icon is open.
 			return this.containerNode.style.display != "none";
 		},
 	
@@ -180,6 +224,8 @@ define([
 		},
 	
 		open: function(e){
+			// summary:
+			//		Opens the icon content, or makes a transition.
 			var parent = this.getParent(); // IconContainer
 			if(this.transition == "below"){
 				if(parent.single){
@@ -216,6 +262,8 @@ define([
 		},
 	
 		close: function(){
+			// summary:
+			//		Closes the icon content.
 			if(has("webkit")){
 				var t = this.domNode.parentNode.offsetWidth/8;
 				var y = this.iconNode.offsetLeft;
@@ -235,11 +283,13 @@ define([
 		},
 	
 		onOpen: function(){
-			// stub method to allow the application to connect to.
+			// summary:
+			//		Stub method to allow the application to connect to.
 		},
 	
 		onClose: function(){
-			// stub method to allow the application to connect to.
+			// summary:
+			//		Stub method to allow the application to connect to.
 		},
 	
 		onError: function(){
