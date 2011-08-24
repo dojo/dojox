@@ -1,8 +1,8 @@
 <!--[if IE 8]>
 <!DOCTYPE>
 <html lang="en">
-    <head>
-           <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+	<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
 <![endif]-->
 <![if !(IE 8)]>
 <!DOCTYPE>
@@ -14,6 +14,7 @@
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
 	</style>
+	<!-- NOTE: This test uses amd style modules and loading, but must run in sync loading mode because it uses DTL which does not work async-->
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: false"></script>
 	<script type="text/javascript">
 		require([
@@ -21,7 +22,7 @@
 		"dojo/dom",
 		"dojo/dom-style",
 		"dojo/ready",
-        "dojox/charting/Chart",
+		"dojox/charting/Chart",
 		"dojox/charting/themes/Shrooms",
 		"dojox/charting/themes/PlotKit/blue",
 		"dojox/charting/themes/PlotKit/cyan",
@@ -32,23 +33,23 @@
 		"dojox/charting/themes/Tufte",
 		"dojox/dtl",
 		"dojox/dtl/Context",
-        "dojox/charting/axis2d/Default",
-        "dojox/charting/plot2d/Default",
-        "dojox/charting/plot2d/Areas",
-        "dojox/charting/plot2d/Markers",
-        "dojox/charting/plot2d/MarkersOnly",
-        "dojox/charting/plot2d/StackedLines",
-        "dojox/charting/plot2d/StackedAreas",
-        "dojox/charting/plot2d/Bars",
-        "dojox/charting/plot2d/ClusteredBars",
-        "dojox/charting/plot2d/StackedBars",
-        "dojox/charting/plot2d/ClusteredColumns",
-        "dojox/charting/plot2d/StackedColumns",
-        "dojox/charting/plot2d/Bubble",
-        "dojox/charting/plot2d/Grid",
-        "dojox/charting/plot2d/Candlesticks",
-        "dojox/charting/plot2d/OHLC",
-        "dojox/charting/plot2d/Scatter"],
+		"dojox/charting/axis2d/Default",
+		"dojox/charting/plot2d/Default",
+		"dojox/charting/plot2d/Areas",
+		"dojox/charting/plot2d/Markers",
+		"dojox/charting/plot2d/MarkersOnly",
+		"dojox/charting/plot2d/StackedLines",
+		"dojox/charting/plot2d/StackedAreas",
+		"dojox/charting/plot2d/Bars",
+		"dojox/charting/plot2d/ClusteredBars",
+		"dojox/charting/plot2d/StackedBars",
+		"dojox/charting/plot2d/ClusteredColumns",
+		"dojox/charting/plot2d/StackedColumns",
+		"dojox/charting/plot2d/Bubble",
+		"dojox/charting/plot2d/Grid",
+		"dojox/charting/plot2d/Candlesticks",
+		"dojox/charting/plot2d/OHLC",
+		"dojox/charting/plot2d/Scatter"],
 		function(arr, dom, domStyle, ready, Chart, Shrooms, blue, cyan, green, Ireland, SageToLime, Minty, Tufte,
 			dtl, Context){
 		
@@ -112,12 +113,12 @@
 							minorTicks: false, 
 							microTicks: false,
 							majorTickStep: 2,
-							htmlLabels: true,                                                                    
+							htmlLabels: true,																	 
 							labelFunc: function(value){
 								return value + " s";
 							},
 							maxLabelSize: 30,
-							fixUpper: "major", fixLower: "major",                                                
+							fixUpper: "major", fixLower: "major",												 
 							majorTick: { length: 3 }
 						}).
 						addAxis("y", {
@@ -153,8 +154,8 @@
 								{ value: 4, text: "4 units" },
 								{ value: 8, text: "2*4 units" }
 							],
-							htmlLabels: true,                                                                    
-							fixUpper: "major", fixLower: "major",                                                
+							htmlLabels: true,																	 
+							fixUpper: "major", fixLower: "major",												 
 							majorTick: { length: 3 }
 						}).
 						addAxis("y", {
@@ -293,7 +294,7 @@
 								min: 0,
 								max: 3,
 								stroke: {color: "red", width: 2},
-								fill:   "red",
+								fill:	"red",
 								marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"
 							}
 						).
@@ -301,7 +302,7 @@
 							[ 2, 1, 2, 1, 2, 1, 2 ],
 							{
 								stroke: {color: "blue", width: 2},
-								fill:   "blue",
+								fill:	"blue",
 								marker: "m-3,-3 l0,6 6,0 0,-6 z"
 							}
 						).
@@ -321,7 +322,7 @@
 								min: 0,
 								max: 3,
 								stroke: {color: "red", width: 2, join: "round"},
-								fill:   "red",
+								fill:	"red",
 								marker: "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0"
 							}
 						).
@@ -329,7 +330,7 @@
 							[ 2, 1, 2, 1, 2, 1, 2 ],
 							{
 								stroke: {color: "blue", width: 2, join: "round"},
-								fill:   "blue",
+								fill:	"blue",
 								marker: "m-3,-3 l0,6 6,0 0,-6 z"
 							}
 						).
@@ -344,7 +345,7 @@
 							type: "StackedLines",
 							markers: true,
 							tension:"S",
-							shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]}
+							shadow:	 {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]}
 						}).
 						addSeries("Series A",
 							[ 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6 ],
