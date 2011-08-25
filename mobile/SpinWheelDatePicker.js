@@ -18,7 +18,7 @@ define([
 	//		A SpinWheel-based date picker widget.
 
 	//TODO: the api doc parser seems to fail if the 1st arg for declare (=class name) is missing..
-	var SpinWheelYearSlot = declare(SpinWheelSlot, {
+	var SpinWheelYearSlot = declare(/*===== "dojox.mobile.SpinWheelYearSlot", =====*/ SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
 			if(this.labelFrom !== this.labelTo){
@@ -33,7 +33,7 @@ define([
 		}
 	});
 
-	var SpinWheelMonthSlot = declare(SpinWheelSlot, {
+	var SpinWheelMonthSlot = declare(/*===== "dojox.mobile.SpinWheelMonthSlot", =====*/ SpinWheelSlot, {
 		buildRendering: function(){
 			this.labels = [];
 			var dtA = new Date(2000, 0, 1);
@@ -47,7 +47,7 @@ define([
 		}
 	});
 
-	var SpinWheelDaySlot = declare(SpinWheelSlot, {
+	var SpinWheelDaySlot = declare(/*===== "dojox.mobile.SpinWheelDaySlot", =====*/ SpinWheelSlot, {
 	});
 
 	return declare("dojox.mobile.SpinWheelDatePicker", SpinWheel, {
