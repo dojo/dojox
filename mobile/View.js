@@ -193,7 +193,7 @@ define([
 			if(typeof(moveTo) == "string"){
 				// removes a leading hash mark (#) and params if exists
 				// ex. "#bar&myParam=0003" -> "bar"
-				moveTo.match(/^#?([^&]+)/);
+				moveTo.match(/^#?([^&?]+)/);
 				return RegExp.$1;
 			}
 			return moveTo;
