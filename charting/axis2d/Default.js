@@ -613,8 +613,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				
 				// go out nicely instead of try/catch
 				if(t==null){
-					this.diry = false;
-					return;
+					this.dirty = false;
+					return this;
 				}
 
 				arr.forEach(t.major, function(tick){
