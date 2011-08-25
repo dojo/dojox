@@ -1,31 +1,12 @@
 define([
-	"dojo/_base/kernel",	// dojo.moduleUrl, dojo.experimental, dojo.mixin
-	"dojo/_base/declare",	// dojo.declare
-	"dojo/_base/lang",	// dojo.moduleUrl, dojo.experimental, dojo.hitch
-	"dojo/_base/array",	// dojo.forEach
-	"dojo/_base/html",	// dojo.hasClass, dojo.body, dojo.setSelectable, dojo.style
-	"dojo/_base/connect",	// dojo.subscribe, dojo.unsubscribe, dojo.stopEvent
-	"dojo/_base/sniff",	// dojo.isIE
-	"dojo/_base/window",
-	"dojo/_base/event",
-	"dojo/dom",
-	"dojo/dom-class",
-	"dojo/keys",		// dojo.keys
-	"dojo/fx",
-	"dojo/dnd/move",
-	"dijit/_base/manager",
-	"dijit/_base/focus",
-	"dijit/form/_FormWidget",
-	"dijit/typematic",
-	"dojox/color",
-	"dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
+	"dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/array",
+	"dojo/_base/html","dojo/_base/connect","dojo/_base/sniff","dojo/_base/window",
+	"dojo/_base/event","dojo/dom","dojo/dom-class","dojo/keys","dojo/fx","dojo/dnd/move",
+	"dijit/registry","dijit/_base/focus","dijit/form/_FormWidget","dijit/typematic",
+	"dojox/color","dojo/i18n","dojo/i18n!./nls/ColorPicker","dojo/i18n!dojo/cldr/nls/number",
 	"dojo/text!./ColorPicker/ColorPicker.html"
-], function(kernel,declare,lang,ArrayUtil,html,Hub,
-		has,win,Event,DOM,DOMClass,Keys,fx,move,
-		WidgetManager,FocusManager,FormWidget,Typematic,color,
-		i18n,bundle1,bundle2,template){
-
-	var dijit = WidgetManager;
+], function(kernel,declare,lang,ArrayUtil,html,Hub,has,win,Event,DOM,DOMClass,Keys,fx,move,
+		registry,FocusManager,FormWidget,Typematic,color,i18n,bundle1,bundle2,template){
 
 	kernel.experimental("dojox.widget.ColorPicker");
 	
@@ -33,9 +14,11 @@ define([
 		// stub, this is planned later:
 		return hex;
 	};
-
+/*===== 
+	var FormWidget = dijit.form._FormWidget;
+=====*/
 	// TODO: shouldn't this extend _FormValueWidget?
-	return declare("dojox.widget.ColorPicker", dijit.form._FormWidget, {
+	return declare("dojox.widget.ColorPicker", FormWidget, {
 		// summary:
 		//		a HSV color picker - similar to Photoshop picker
 		//
@@ -136,7 +119,7 @@ define([
 				// Use the pointer that will show up in high contrast.
 				this._huePickerPointer = this._huePickerPointerAlly;
 			}
-			this._uId = WidgetManager.getUniqueId(this.id);
+			this._uId = registry.getUniqueId(this.id);
 			lang.mixin(this, i18n.getLocalization("dojox.widget", "ColorPicker"));
 			lang.mixin(this, i18n.getLocalization("dojo.cldr", "number"));
 			this.inherited(arguments);
@@ -243,7 +226,7 @@ define([
 			// summary: Set a color on a picker. Usually used to set
 			//          initial color as an alternative to passing defaultColor option
 			//          to the constructor.
-			var col = dojox.color.fromString(color);
+			var col = color.fromString(color);
 			this._updatePickerLocations(col);
 			this._updateColorInputs(col);
 			this._updateValue(col, force);
@@ -270,7 +253,7 @@ define([
 			//		Sets a natural color background for the
 			//		underlay image against closest hue value (full saturation)
 			//		h: 0..360
-			html.style(this.colorUnderlay, "backgroundColor", dojox.color.fromHsv(h,100,100).toHex());
+			html.style(this.colorUnderlay, "backgroundColor", color.fromHsv(h,100,100).toHex());
 			
 		},
 
@@ -377,7 +360,7 @@ define([
 				_pickertop = html.style(this.cursorNode,"top") + satSelCenterH,
 				_pickerleft = html.style(this.cursorNode,"left") + satSelCenterW,
 				h = Math.round(360 - (_huetop / this.PICKER_HUE_H * 360)),
-				col = dojox.color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
+				col = color.fromHsv(h, _pickerleft / this.PICKER_SAT_VAL_W * 100, 100 - (_pickertop / this.PICKER_SAT_VAL_H * 100))
 			;
 			
 			this._updateColorInputs(col);
@@ -397,20 +380,20 @@ define([
 				//transform to hsv to pixels
 
 				case this.hexCode:
-					col = dojox.color.fromString(e.target.value);
+					col = color.fromString(e.target.value);
 					hasit = true;
 					
 					break;
 				case this.Rval:
 				case this.Gval:
 				case this.Bval:
-					col = dojox.color.fromArray([this.Rval.value, this.Gval.value, this.Bval.value]);
+					col = color.fromArray([this.Rval.value, this.Gval.value, this.Bval.value]);
 					hasit = true;
 					break;
 				case this.Hval:
 				case this.Sval:
 				case this.Vval:
-					col = dojox.color.fromHsv(this.Hval.value, this.Sval.value, this.Vval.value);
+					col = color.fromHsv(this.Hval.value, this.Sval.value, this.Vval.value);
 					hasit = true;
 					break;
 			}
