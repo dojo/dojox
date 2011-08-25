@@ -41,10 +41,10 @@
 	"dojox/charting/plot2d/Columns", "dojox/charting/plot2d/Pie", "dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/MoveSlice", "dojox/charting/action2d/Magnify", "dojox/charting/action2d/Shake",
 	"dojo/store/Memory", "dojo/store/Observable","dijit/form/NumberSpinner", "dojo/_base/lang", "dojo/_base/array",
-	"dojo/_base/xhr", "dojo/dom-construct", "dojo/on"], 
+	"dojo/_base/xhr", "dojo/dom-construct", "dojo/aspect"],
 	function(Chart, StoreSeries, ThreeD, Legend, Default, Markers, Columns, Pie, Tooltip, MoveSlice, Magnify, Shake,
 		Memory, Observable, NumberSpinner,
-		lang, arr, xhr, domConstruct, on){
+		lang, arr, xhr, domConstruct, aspect){
 	
 	xhr.get({
 		url: "stock.json",
@@ -56,7 +56,7 @@
 	
 	function addLegend(chart, node){
 		var legend = new Legend({chart: chart}, node);
-		on(chart, "render", legend, "refresh");
+		aspect.after(chart, "render", lang.hitch(legend, "refresh"));
 	}
 	
 	var templates = {
