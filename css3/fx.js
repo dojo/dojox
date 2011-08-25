@@ -9,6 +9,8 @@ define([
 	"dojox/fx/ext-dojo/complex"],
 function(lang,connectUtil,domStyle,baseFx,coreFx,htmlUtil,htmlStyleExt,complexFx){
 	var css3fx = lang.getObject("dojox.css3.fx", true);
+	/*===== css3fx = dojox.css3.fx =====*/
+	
 	return lang.mixin(css3fx, {
 		puff: function(args){
 			// summary:

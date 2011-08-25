@@ -1,5 +1,6 @@
 define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,dxa){
 	var plugins = dojo.getObject("dojox.analytics.plugins", true);
+	/*===== plugins = dojox.analytics.plugins =====*/
 
 	plugins.dojo = new (function(){
 		// summary:
