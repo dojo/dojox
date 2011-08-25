@@ -161,7 +161,7 @@ dojo.declare(
 			if(typeof(moveTo) == "string"){
 				// removes a leading hash mark (#) and params if exists
 				// ex. "#bar&myParam=0003" -> "bar"
-				moveTo.match(/^#?([^&]+)/);
+				moveTo.match(/^#?([^&?]+)/);
 				toNode = RegExp.$1;
 			}else{
 				toNode = moveTo;
