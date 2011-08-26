@@ -151,7 +151,7 @@ define(["dojo/_base/kernel",
 			//	touchEvent: a touch event
 			//	tags:
 			//		private
-			event.stopEvent(touchEvent);
+			event.stop(touchEvent);
 
 			// test double tap
 			if (this._isDoubleTap(touchEvent)) {
@@ -184,7 +184,7 @@ define(["dojo/_base/kernel",
 			//	touchEvent: a touch event
 			//	tags:
 			//		private
-			event.stopEvent(touchEvent);
+			event.stop(touchEvent);
 
 			var touches = touchEvent.touches;
 
@@ -215,7 +215,7 @@ define(["dojo/_base/kernel",
 			//		private
 
 			// prevent browser interaction
-			event.stopEvent(touchEvent);
+			event.stop(touchEvent);
 
 			var middlePoint = this._getTouchBarycenter(touchEvent);
 

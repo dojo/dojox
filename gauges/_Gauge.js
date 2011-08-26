@@ -259,28 +259,15 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		html.style(this.mouseNode, 'height', '0');
 		html.style(this.mouseNode, 'position', 'absolute');
 		html.style(this.mouseNode, 'z-index', '100');
-		var Tooltip = this._getToolTipModule();
-		if(Tooltip && this.useTooltip){
-			Tooltip.show('test',this.mouseNode, !this.isLeftToRight());
-			Tooltip.hide(this.mouseNode);
+
+		if(this.useTooltip){
+			require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+				Tooltip.show('test', this.mouseNode, !this.isLeftToRight());
+				Tooltip.hide(this.mouseNode);
+			}));
 		}
 	},
 
-	_getToolTipModule :function() {
-		// summary:
-		//		Tests is AMD dijit/Tooltip is loaded
-		
-		if (_tooltipModule == 0) {
-			try {
-				_tooltipModule = require("dijit/Tooltip");
-			} 
-			catch (e) {
-				_tooltipModule = null;
-			}
-		}
-		return _tooltipModule;
-	},
-	
 	_getNumberModule :function() {
 		// summary:
 		//		Tests is AMD dojo/number is loaded
@@ -587,17 +574,19 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//		Updates the tooltip for the gauge to display the given text.
 		// txt:		String
 		//		The text to put in the tooltip.
-		var Tooltip = this._getToolTipModule();
-		if (!Tooltip) return;
-		
-		if(this._lastHover != txt){
-			if(txt !== ''){ 
-				Tooltip.hide(this.mouseNode);
-				Tooltip.show(txt,this.mouseNode, !this.isLeftToRight());
-			}else{
-				Tooltip.hide(this.mouseNode);
-			}
-			this._lastHover = txt;
+	
+		if (this.useTooltip) {
+			require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+				if (this._lastHover != txt) {
+					if (txt !== '') {
+						Tooltip.hide(this.mouseNode);
+						Tooltip.show(txt, this.mouseNode, !this.isLeftToRight());
+					} else {
+						Tooltip.hide(this.mouseNode);
+					}
+					this._lastHover = txt;
+				}
+			}));
 		}
 	},
 
@@ -616,8 +605,8 @@ return declare("dojox.gauges._Gauge",[Widget],{
 				if (r && r.hover){
 					hover = r.hover;
 				}
-				var Tooltip = this._getToolTipModule();
-				if (Tooltip && this.useTooltip && !this._drag){
+				
+				if (this.useTooltip && !this._drag){					
 					if (hover){
 						this.updateTooltip(hover, e);
 					} else {
@@ -636,10 +625,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//		The event object
 
 		this._overOverlay = false;
-		var Tooltip = this._getToolTipModule();
-		if(Tooltip && this.useTooltip && this.mouseNode){
-			Tooltip.hide(this.mouseNode);
-		}
+		this._hideTooltip();
 	},
 
 	handleMouseMove: function(/*Object*/e){
@@ -648,21 +634,20 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//		the mouse to show the tooltips
 		// e:	Object
 		//		The event object
-		
-		var Tooltip = this._getToolTipModule();
-		if (Tooltip){
-			if (e){
-				html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
-				html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
-			}
-			if (this.useTooltip && this._overOverlay){
-				var r = this.getRangeUnderMouse(e);
-				if (r && r.hover){
-					this.updateTooltip(r.hover, e);
-				}else{
-					this.updateTooltip('', e);
+			
+		if (this.useTooltip) {
+				if (e) {
+					html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
+					html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
 				}
-			}
+				if (this._overOverlay) {
+					var r = this.getRangeUnderMouse(e);
+					if (r && r.hover) {
+						this.updateTooltip(r.hover, e);
+					} else {
+						this.updateTooltip('', e);
+					}
+				}
 		}
 	},
 	
@@ -734,13 +719,15 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		// indicator: _Indicator 
 		//      The indicator object
 		// e:	Object
-		//		The event object
-		var Tooltip = this._getToolTipModule();
-		if (Tooltip && this.useTooltip && !this._drag){
+		//		The event object	
+		if (this.useTooltip && !this._drag){
+			
 			if (indicator.hover){
-				html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
-				html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
-				Tooltip.show(indicator.hover, this.mouseNode, !this.isLeftToRight());
+				require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+					html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
+					html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
+					Tooltip.show(indicator.hover, this.mouseNode, !this.isLeftToRight());
+				}));
 			} else {
 				this.updateTooltip('', e);
 			}
@@ -759,28 +746,31 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//      The indicator object
 		// e:	Object
 		//		The event object
-		var Tooltip = this._getToolTipModule();
-		if(Tooltip && this.useTooltip && this.mouseNode){
-			Tooltip.hide(this.mouseNode);
-		}
+		this._hideTooltip();
 		this.gaugeContent.style.cursor = 'pointer';
 		
 	},
 	
-	_handleMouseOutRange: function ( range, e){
-		var Tooltip = this._getToolTipModule();
-		if (Tooltip && this.useTooltip && this.mouseNode){
-			Tooltip.hide(this.mouseNode);
+	_hideTooltip: function(){
+		if (this.useTooltip && this.mouseNode) {
+			require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+				Tooltip.hide(this.mouseNode);
+			}));
 		}
 	},
 	
+	_handleMouseOutRange: function ( range, e){
+			this._hideTooltip();
+	},
+	
 	_handleMouseOverRange: function (range, e){
-		var Tooltip = this._getToolTipModule();
-		if (Tooltip && this.useTooltip && !this._drag){
-			if (range.hover){
+		if (this.useTooltip && !this._drag){
+			if (range.hover) {
 				html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
 				html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
-				Tooltip.show(range.hover, this.mouseNode, !this.isLeftToRight());
+				require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+					Tooltip.show(range.hover, this.mouseNode, !this.isLeftToRight());
+				}));
 			} else {
 				this.updateTooltip('', e);
 			}
