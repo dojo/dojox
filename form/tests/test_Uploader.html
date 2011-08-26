@@ -73,6 +73,9 @@
 		#dialog p{
 			width:310px;
 		}
+		form{
+			margin-bottom:15px;
+		}
 		code{
 			font-family:monospace;
 			white-space:nowrap;
@@ -112,7 +115,7 @@
 		},
 		handleDnD = function(domnode, uploader){
 			if(uploader.addDropTarget && uploader.uploadType=='html5'){
-				dojo.create('div',{innerHTML:'Drag and Drop files to this feildset'},domnode,'last');
+				dojo.create('div',{innerHTML:'Drag and Drop files to this fieldset'}, domnode,'last');
 				uploader.addDropTarget(domnode);
 			}
 		}
@@ -144,7 +147,7 @@
 		is provided because Flash has some features that HTML5 does not yet have. But it is still not
 		recommended because of the many problems that Firefox and Webkit have with the Flash plugin.
 	</p>
-	<p class="HTML5">When HTML5 plugin is in use, drag&amp;drop of files to the fieldset is supported.</p>
+	<p class="HTML5">When HTML5 plugin is in use, drag &amp; drop of files to the fieldset is supported.</p>
 
 	<table class="pageTable">
 		<tr>

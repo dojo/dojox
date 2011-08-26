@@ -101,7 +101,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 	//		shown). Specify showInput="before" to mimic the look&feel of a
 	//		native file input element.
 	showInput: "",
-	
+
 	_nameIndex:0,
 
 	templateString: template,
@@ -114,6 +114,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		this.inherited(arguments);
 	},
 	buildRendering: function(){
+		console.warn("buildRendering", this.id)
 		this.inherited(arguments);
 		domStyle.set(this.domNode, {
 			overflow:"hidden",
@@ -146,7 +147,20 @@ declare("dojox.form.Uploader", [uploader, Button], {
 			});
 		}
 	},
+
+	postCreate: function(){
+		this.inherited(arguments);
+		// startup() checks the size of the button, but only fires if within
+		// a Dijit container.
+		setTimeout(dojo.hitch(this, function(){
+			if(!this._buildInitialized){
+				this.startup();
+			}
+		}), 1);
+	},
+
 	startup: function(){
+		this._buildInitialized = true;
 		this._getButtonStyle(this.domNode);
 		this._setButtonStyle();
 		this.inherited(arguments);
@@ -327,8 +341,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		}
 		// reset focusNode to the inputNode, so when the button is clicked,
 		// the focus is properly moved to the input element
-		this.focusNode = this.inputNode = domConstruct.create("input", {type:"file", name:name, 
-		  'class':'dijitUploaderRealInput'}, this.domNode, "first");
+		this.focusNode = this.inputNode = domConstruct.create("input", {type:"file", name:name}, this.domNode, "first");
 		if(this.supports("multiple") && this.multiple){
 			domAttr.set(this.inputNode, "multiple", true);
 		}
