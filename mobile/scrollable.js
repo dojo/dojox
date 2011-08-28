@@ -279,7 +279,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.findDisp = function(/*DomNode*/node){
-		// Find the currently displayed view node from my sibling nodes.
+		// summary:
+		//		Finds the currently displayed view node from my sibling nodes.
 		var nodes = node.parentNode.childNodes;
 		for(var i = 0; i < nodes.length; i++){
 			var n = nodes[i];
@@ -291,6 +292,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.getScreenSize = function(){
+		// summary:
+		//		Returns the dimensions of the browser window.
 		return {
 			h: win.global.innerHeight||win.doc.documentElement.clientHeight||win.doc.documentElement.offsetHeight,
 			w: win.global.innerWidth||win.doc.documentElement.clientWidth||win.doc.documentElement.offsetWidth
@@ -298,8 +301,12 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.isKeyboardShown = function(e){
-		// indirectly detects whether a virtual keyboard is shown or not
-		// by examining the screen size.
+		// summary:
+		//		Internal function for android workaround.
+		// description:
+		//		Returns true if a virtual keyboard is shown.
+		//		Indirectly detects whether a virtual keyboard is shown or not by
+		//		examining the screen size.
 		// TODO: need more reliable detection logic
 		if(!this._sz){ return false; }
 		var sz = this.getScreenSize();
@@ -307,6 +314,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.disableScroll = function(/*Boolean*/v){
+		// summary:
+		//		Internal function for android workaround.
+		// description:
+		//		Disables the touch scrolling and enables the browser's default
+		//		scrolling.
 		if(this.disableTouchScroll === v || this.domNode.style.display === "none"){ return; }
 		this.disableTouchScroll = v;
 		this.scrollBar = !v;
@@ -319,7 +331,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(v){
 			if(!c.style.webkitTransform){
 				// stop animation when soft keyborad is shown before animation ends.
-				// TODO there might be the better way to wait for animation ending.
+				// TODO: there might be a better way to wait for animation ending.
 				this.stopAnimation();
 				this.toTopLeft();
 			}
@@ -363,6 +375,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.onScreenSizeChanged = function(e){
+		// summary:
+		//		Internal function for android workaround.
 		var sz = this.getScreenSize();
 		if(sz.w * sz.h > this._sz.w * this._sz.h){
 			this._sz = sz; // update the screen size
@@ -371,6 +385,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.toTransform = function(e){
+		// summary:
+		//		Internal function for android workaround.
 		var c = this.containerNode;
 		if(c.offsetTop === 0 && c.offsetLeft === 0 || !c._webkitTransform){ return; }
 		domStyle.set(c, {
@@ -382,6 +398,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.toTopLeft = function(){
+		// summary:
+		//		Internal function for android workaround.
 		var c = this.containerNode;
 		if(!c.style.webkitTransform){ return; } // already converted to top/left
 		c._webkitTransform = c.style.webkitTransform;
@@ -394,6 +412,17 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 	
 	this.resize = function(e){
+		// summary:
+		//		Adjusts the height of the widget.
+		// description:
+		//		If the height property is 'inherit', the height is inherited
+		//		from its offset parent. If 'auto', the content height, which
+		//		could be smaller than the entire screen height, is used. If an
+		//		explicit height value (ex. "300px"), it is used as the new
+		//		height. If nothing is specified as the height property, from the
+		//		current top position of the widget to the bottom of the screen
+		//		will be the new height.
+
 		// moved from init() to support dynamically added fixed bars
 		this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
 			this.fixedFooterHeight : 0;
@@ -757,6 +786,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.scrollTo = function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node){ // to: {x, y}
+		// summary:
+		//		Scrolls to the given position.
 		var s = (node || this.containerNode).style;
 		if(has("webkit")){
 			s.webkitTransform = this.makeTranslateStr(to);
@@ -774,6 +805,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.slideTo = function(/*Object*/to, /*Number*/duration, /*String*/easing){
+		// summary:
+		//		Scrolls to the given position with slide animation.
 		this._runSlideAnimation(this.getPos(), to, duration, easing, this.containerNode, 2);
 		this.slideScrollBarTo(to, duration, easing);
 	};

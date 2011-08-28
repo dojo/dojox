@@ -54,7 +54,7 @@ define([
 	//	|	com/acme/themes/iphone/MyWidget.css
 	//
 	//		If you specify '@theme' as a theme file name, it will be replaced with
-	//		the theme folder name. For example,
+	//		the theme folder name (e.g. 'iphone'). For example,
 	//
 	//	|	['@theme',['com.acme','MyWidget']]
 	//
@@ -62,8 +62,33 @@ define([
 	//
 	//	|	dojox/mobile/themes/iphone/iphone.css
 	//	|	com/acme/themes/iphone/MyWidget.css
+	//
+	//		Note that the load of the theme files is performed asynchronously by
+	//		the browser, and thus you cannot assume the load has been completed
+	//		when your appliation is initialized. For example, if some widget in
+	//		your application uses node dimensions that cannot be determined
+	//		without CSS styles being applied to them to calculate its layout at
+	//		initialization, the layout calculation may fail.
+	//		Possible workaround for this problem is to use dojo.require to load
+	//		deviceTheme.js and place it in a separate <script> block immediately
+	//		below a script tag that loads dojo.js as below. This may (or may
+	//		not) solve the problem.
+	//
+	//	|	<script src="dojo.js"></script>
+	//	|	<script>
+	//	|		dojo.require("dojox.mobile.deviceTheme");
+	//	|	</script>
+	//	|	<script>
+	//	|		dojo.require("dojox.mobile");
+	//	|		....
+	//
+	//		A better solution would be to not use deviceTheme and use <link>
+	//		or @import instead to load the theme files.
+
 
 	dm.loadCssFile = function(/*String*/file){
+		// summary:
+		//		Loads the given CSS file programmatically.
 		domConstruct.create("LINK", {
 			href: file,
 			type: "text/css",
@@ -112,6 +137,12 @@ define([
 	];
 
 	dm.loadDeviceTheme = function(){
+		// summary:
+		//		Loads a device-specific theme according to the user-agent
+		//		string.
+		// description:
+		//		This function is automatically called when this module is
+		//		evaluated.
 		var t = config["mblThemeFiles"] || dm.themeFiles || ["@theme"];
 		if(!lang.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
 		var i, j;

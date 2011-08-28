@@ -6,9 +6,24 @@ define([
 	"dojo/ready"
 ], function(dojo, config, lang, win, ready){
 
+	// module:
+	//		dojox/mobile/parser
+	// summary:
+	//		A lightweight parser.
+
 	var dm = lang.getObject("dojox.mobile", true);
 
 	var parser = new function(){
+		// summary:
+		//		A lightweight parser.
+		// description:
+		//		dojox.mobile.parser is an extremely small subset of
+		//		dojo.parser. It has no extended features over dojo.parser, so
+		//		there is no reason you have to use dojox.mobile.parser instead
+		//		of dojo.parser. However, if dojox.mobile.parser's capability is
+		//		enough for your application, use of it could reduce the total
+		//		code size.
+
 		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
 			// summary:
 			//		Function for instantiating a list of widget nodes.

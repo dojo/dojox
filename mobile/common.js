@@ -16,31 +16,23 @@ define([
 ], function(dojo, array, config, connect, lang, win, domClass, domConstruct, domStyle, ready, registry, has, uacss){
 
 	var dm = lang.getObject("dojox.mobile", true);
-	/*=====
-	dm = dojox.mobile
-	=====*/
+/*=====
+	var dm = dojox.mobile;
+=====*/
 
-// summary:
-//		Mobile Widgets
-// description:
-//		This module provides a number of widgets that can be used to build
-//		web-based applications for mobile devices such as iPhone or Android.
-//		These widgets work best with webkit-based browsers, such as Safari or
-//		Chrome, since webkit-specific CSS3 features are used.
-//		However, the widgets should work in a "graceful degradation" manner
-//		even on non-CSS3 browsers, such as IE or Firefox. In that case,
-//		fancy effects, such as animation, gradient color, or round corner
-//		rectangle, may not work, but you can still operate your application.
-//
-//		Furthermore, as a separate file, a compatibility module,
-//		dojox.mobile.compat, is available that simulates some of CSS3 features
-//		used in this module. If you use the compatibility module, fancy visual
-//		effects work better even on non-CSS3 browsers.
-//
-//		Note that use of dijit._Templated and query was intentionally
-//		avoided to reduce download code size.
+	// module:
+	//		dojox/mobile/common
+	// summary:
+	//		A common module for dojox.mobile.
+	// description:
+	//		This module includes common utility functions that are used by
+	//		dojox.mobile widgets. Also, it provides functions that are commonly
+	//		necessary for mobile web applications, such as the hide address bar
+	//		function.
 
 	dm.getScreenSize = function(){
+		// summary:
+		//		Returns the dimensions of the browser window.
 		return {
 			h: win.global.innerHeight || win.doc.documentElement.clientHeight,
 			w: win.global.innerWidth || win.doc.documentElement.clientWidth
@@ -48,6 +40,9 @@ define([
 	};
 
 	dm.updateOrient = function(){
+		// summary:
+		//		Updates the orientation specific css classes, 'dj_portrait' and
+		//		'dj_landscape'.
 		var dim = dm.getScreenSize();
 		domClass.replace(win.doc.documentElement,
 				  dim.h > dim.w ? "dj_portrait" : "dj_landscape",
@@ -57,6 +52,15 @@ define([
 
 	dm.tabletSize = 500;
 	dm.detectScreenSize = function(/*Boolean?*/force){
+		// summary:
+		//		Detects the screen size and determines if the screen is like
+		//		phone or like tablet. If the result is changed,
+		//		it sets either of the following css class to <html>
+		//			- 'dj_phone'
+		//			- 'dj_tablet'
+		//		and it publishes either of the following events.
+		//			- '/dojox/mobile/screenSize/phone'
+		//			- '/dojox/mobile/screenSize/tablet'
 		var dim = dm.getScreenSize();
 		var sz = Math.min(dim.w, dim.h);
 		var from, to;
@@ -76,6 +80,8 @@ define([
 	dm.detectScreenSize();
 
 	dm.setupIcon = function(/*DomNode*/iconNode, /*String*/iconPos){
+		// summary:
+		//		Sets up CSS sprite for a foreground image.
 		if(iconNode && iconPos){
 			var arr = array.map(iconPos.split(/[ ,]/),function(item){return item-0});
 			var t = arr[0]; // top
@@ -91,9 +97,15 @@ define([
 		}
 	};
 
+	// dojox.mobile.hideAddressBarWait: Number
+	//		The time in milliseconds to wait before the fail-safe hiding address
+	//		bar runs. The value must be larger than 800.
 	dm.hideAddressBarWait = typeof(config["mblHideAddressBarWait"]) === "number" ?
-		config["mblHideAddressBarWait"] : 1500; // [ms] value must be larger than 800
+		config["mblHideAddressBarWait"] : 1500;
+
 	dm.hide_1 = function(force){
+		// summary:
+		//		Internal function to hide the address bar.
 		scrollTo(0, 1);
 		var h = dm.getScreenSize().h + "px";
 		if(has('android')){
@@ -109,8 +121,15 @@ define([
 		}
 		dm._h = h;
 	};
+
 	dm.hide_fs = function(){
-		// for fail-safe, in case of failure to complete the address bar hiding in time
+		// summary:
+		//		Internal function to hide the address bar for fail-safe.
+		// description:
+		//		Resets the height of the body, performs hiding the address
+		//		bar, and calls resizeAll().
+		//		This is for fail-safe, in case of failure to complete the
+		//		address bar hiding in time.
 		var t = win.body().style.minHeight;
 		win.body().style.minHeight = (dm.getScreenSize().h * 2) + "px"; // to ensure enough height for scrollTo to work
 		scrollTo(0, 1);
@@ -120,6 +139,12 @@ define([
 		}, 1000);
 	};
 	dm.hideAddressBar = function(/*Event?*/evt){
+		// summary:
+		//		Hides the address bar.
+		// description:
+		//		Tries hiding of the address bar a couple of times to do it as
+		//		quick as possible while ensuring resize is done after the hiding
+		//		finishes.
 		if(dm.disableHideAddressBar || dm._hiding){ return; }
 		dm._hiding = true;
 		dm._h = 0;
@@ -170,10 +195,30 @@ define([
 	};
 
 	dm.openWindow = function(url, target){
+		// summary:
+		//		Opens a new browser window with the given url.
 		win.global.open(url, target || "_blank");
 	};
 
 	dm.createDomButton = function(/*DomNode*/refNode, /*Object?*/style, /*DomNode?*/toNode){
+		// summary:
+		//		Creates a DOM button.
+		// description:
+		//		DOM button is a simple graphical object that consists of the DIV
+		//		element with some CSS styling. It can be used in place of an
+		//		icon image on ListItem, IconItem, and so on. The kind of DOM
+		//		button to create is given as a class name of refNode. By
+		//		default, this function creates 4 nested DIV elements to
+		//		construct the DOM button. If the class name has a suffix that
+		//		starts with an underscore, like mblDomButtonGoldStar_5, it
+		//		creates the given number of DIV elements. A class name for DOM
+		//		button must starts with 'mblDomButton'.
+		// refNode:
+		//		A node that has a DOM button class name.
+		// style:
+		//		A hash object to set styles to the node.
+		// toNode:
+		//		A root node to create a DOM button. If omitted, refNode is used.
 		var s = refNode.className;
 		var node = toNode || refNode;
 		if(s.match(/(mblDomButton\w+)/) && s.indexOf("/") === -1){
@@ -203,9 +248,9 @@ define([
 	
 	dm.createIcon = function(/*String*/icon, /*String*/iconPos, /*DomNode*/node, /*String?*/title, /*DomNode?*/parent){
 		// summary:
-		//		Create or update a ListItem icon node
+		//		Creates or updates an icon node
 		// description:
-		//		If node exists, update the existing node. Otherwise, create a new one.
+		//		If node exists, updates the existing node. Otherwise, creates a new one.
 		// icon:
 		//		Path for an image, or DOM button class name.
 		if(icon && icon.indexOf("mblDomButton") === 0){

@@ -408,8 +408,10 @@ define([
 			};
 		} // if(has("ie") <= 6)
 
-		// override deviceTheme.js
 		dm.loadCssFile = function(/*String*/file){
+			// summary:
+			//		Overrides dojox.mobile.loadCssFile() defined in
+			//		deviceTheme.js.
 			if(win.doc.createStyleSheet){
 				// for some reason, IE hangs when you try to load
 				// multiple css files almost at once.
