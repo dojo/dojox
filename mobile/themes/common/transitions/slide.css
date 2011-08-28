@@ -10,6 +10,9 @@
 	-webkit-animation-timing-function: linear;
 	-webkit-transform: translateX(0px);
 }
+.dj_iphone .mblSlide {
+	-webkit-animation-duration: .15s;
+}
 .mblSlide.mblOut.mblReverse {
 	-webkit-animation-name: mblSlideOutReverse;
 }
