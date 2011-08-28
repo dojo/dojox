@@ -455,7 +455,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(!h){
 			h = dh + "px";
 		}
-		if(h.charAt(0) !== "-"){ // to ensure that h is not negative (e.g. "-10px")
+		if(h.charAt(0) !== "-" && // to ensure that h is not negative (e.g. "-10px")
+			h !== "default"){
 			this.domNode.style.height = h;
 		}
 
