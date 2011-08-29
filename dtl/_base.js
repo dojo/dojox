@@ -148,7 +148,7 @@ define([
 			}
 
 			var fn = params[1];
-			var require = params[2];
+			var deps = params[2];
 
 			var parts;
 			if(fn.indexOf(":") != -1){
@@ -157,9 +157,13 @@ define([
 			}
 
 // FIXME: THIS DESIGN DOES NOT WORK WITH ASYNC LOADERS!
-			dojo["require"](require);
+			var mod = deps;
+			if (/\./.test(deps)) {
+				deps = deps.replace(/\./g, "/");
+			}
+			require([deps], function(){});
 
-			var parent = lang.getObject(require);
+			var parent = lang.getObject(mod);
 
 			return parent[fn || name] || parent[name + "_"] || parent[fn + "_"];
 		},
@@ -224,7 +228,10 @@ define([
 			}else if(load){
 				var parts = lang.trim(tag).split(/\s+/g);
 				for(var i = 0, part; part = parts[i]; i++){
-					dojo["require"](part);
+					if (/\./.test(part)){
+						part = part.replace(/\./g,"/");
+					}
+					require([part]);
 				}
 			}else{
 				return [dd.TOKEN_BLOCK, tag];

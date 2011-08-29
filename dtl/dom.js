@@ -327,7 +327,10 @@ define([
 						if(text.substr(0, 5) == "load "){
 							var parts = lang.trim(text).split(/\s+/g);
 							for(var i = 1, part; part = parts[i]; i++){
-								dojo["require"](part);
+								if (/\./.test(part)){
+									part = part.replace(/\./g,"/");
+								}
+								require([part]);
 							}
 						}
 						tokens.push([dd.TOKEN_BLOCK, text]);
