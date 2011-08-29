@@ -242,7 +242,7 @@ dojo.declare("dojox.widget.Standby",[dijit._Widget, dijit._TemplatedMixin],{
 		}
 		dojo.style(this._centerNode, "display", "none");
 		dojo.style(this._underlayNode, "display", "none");
-		if(dojo.isIE == 7){
+		if(dojo.isIE == 7 && this._ieFixNode){
 			dojo.body().removeChild(this._ieFixNode);
 			delete this._ieFixNode;
 		}
