@@ -38,7 +38,10 @@ var _LazyExpando = declare("dojox.grid._LazyExpando", [_widget, _templatedMixin]
 	itemId: "",
 	templateString: template,
 	onToggle: function(evt){
+		// summary:
+		//		The onclick handler of expando, expand/collapse a tree node if has children.
 		if(this.grid._treeCache.items[this.rowIdx]){
+			this.grid.focus.setFocusIndex(this.rowIdx, this.cellIdx);
 			this.setOpen(!this.grid._treeCache.items[this.rowIdx].opened);
 			try{
 				event.stop(evt);
@@ -46,6 +49,8 @@ var _LazyExpando = declare("dojox.grid._LazyExpando", [_widget, _templatedMixin]
 		}
 	},
 	setOpen: function(open){
+		// summary:
+		//		expand/collapse the row where the expando is in.
 		var g = this.grid,
 			item = g._by_idx[this.rowIdx].item;
 		if(item && g.treeModel.mayHaveChildren(item) && !g._loading && g._treeCache.items[this.rowIdx].opened !== open){
@@ -273,8 +278,16 @@ var _LazyTreeLayout = declare("dojox.grid._LazyTreeLayout", _Layout, {
 });
 
 var _LazyTreeGridCache = declare("dojox.grid._LazyTreeGridCache", null, {
-	// [{opened: true/false, treePath: [level0 parent id, level1 parent id, ...]}]
-	items: null,
+	// summary:
+	//		An internal object used to cache the tree path and open state of each item.
+	//		The form of the cache items would be an object array: 
+	//		[{opened: true/false, treePath: [level0 parent id, level1 parent id, ...]}]
+	// example:
+	//		| [{opened: true, treePath: []},
+	//		|  {opened: false, treePath: ["root0"]},
+	//		|  {opened: false, treePath: ["root0"]},
+	//		|  {opened: false, treePath: []},
+	//		|  ...]
 	constructor: function(){
 		this.items = [];
 	},
@@ -319,13 +332,15 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 	//		and dojox.grid.TreeGrid also apply here
 	//
 	//		LazyTreeGrid does not support summary row/items aggregate due to the lazy-loading rationale.
-	
-	treeModel: null,
-	
 	_layoutClass: _LazyTreeLayout,
-	
+	_size: 0,
+	// treeModel: dijit.tree.ForestStoreModel | dojox.grid.LazyTreeGridStoreModel
+	//		A tree store model object.
+	treeModel: null,
+	// defaultState: Object
+	//		Used to restore the state of LazyTreeGrid.
+	//		This object should ONLY be obtained from `LazyTreeGrid.getState()`.
 	defaultState: null,
-	
 	// colSpans: Object
 	//		a json object that defines column span of each level rows
 	//		attributes:
@@ -344,8 +359,6 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 	//		|		]
 	//		|	};
 	colSpans: null,
-	
-	_size: 0,
 	
 	postCreate: function(){
 		this._setState();
@@ -385,7 +398,10 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		this.treeModel.root.children = [];
 		this.setModel(this.treeModel);
 	},
-	onSetState: function(){},
+	onSetState: function(){
+		// summary:
+		//		Event fired when a default state being set.
+	},
 	_setState: function(){
 		if(this.defaultState){
 			this._treeCache = this.defaultState.cache;
@@ -401,6 +417,8 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		}
 	},
 	getState: function(){
+		// summary:
+		//		Get the current state of LazyTreeGrid including expanding, sorting, selection and scroll top state.
 		var _this = this, 
 			selection = this.keepSelection ? this.selection.preserver._selectedById : this.selection.selected;
 		return {
@@ -424,12 +442,21 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		this.inherited(arguments);
 	},
 	expand: function(itemId){
+		//	summary:
+		//		Expand the row with the given itemId.
+		//	id: string?
 		this._fold(itemId, true);
 	},
 	collapse: function(itemId){
+		//	summary:
+		//		Collapse the row with the given itemId.
+		//	id: string?
 		this._fold(itemId, false);
 	},
 	refresh: function(keepState){
+		//	summary:
+		//		Refresh, and persist the expand/collapse state when keepState equals true
+		//	keepState: boolean
 		if(!keepState){
 			this._cleanup();
 		}
@@ -447,7 +474,6 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		this.inherited(arguments);
 	},
 	_refresh: function(isRender){
-		// this._cleanup();
 		this._clearData();
 		this.updateRowCount(this._size);
 		this._fetch(0, true);
@@ -463,6 +489,7 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		var items = this._treeCache.items, byIdx = this._by_idx;
 		if(!addingChild){
 			items.push({opened: false, treePath: []});
+			this._size += 1;
 			this.inherited(arguments);
 		}else{
 			var parentItem = parentInfo.item, 
@@ -635,9 +662,13 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		if(lang.isArray(items) && items.length > 0){
 			var i = 0, len = Math.min(count, items.length);
 			for(; i < len; i++){
-				this._treeCache.items[startRowIdx + i] = {opened: false, treePath: treePath};
+				if(!this._treeCache.items[startRowIdx + i]){
+					this._treeCache.items[startRowIdx + i] = {opened: false, treePath: treePath};
+				}
+				if(!this._by_idx[startRowIdx + i]){
+					this._addItem(items[start + i], startRowIdx + i, true);
+				}
 				// this._treeCache.items.splice(startRowIdx + i, 0, {opened: false, treePath: treePath});
-				this._addItem(items[start + i], startRowIdx + i, true);
 			}
 			this.updateRows(startRowIdx, len);
 		}
