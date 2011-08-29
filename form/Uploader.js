@@ -148,17 +148,6 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		}
 	},
 
-	postCreate: function(){
-		this.inherited(arguments);
-		// startup() checks the size of the button, but only fires if within
-		// a Dijit container.
-		setTimeout(dojo.hitch(this, function(){
-			if(!this._buildInitialized){
-				this.startup();
-			}
-		}), 1);
-	},
-
 	startup: function(){
 		this._buildInitialized = true;
 		this._getButtonStyle(this.domNode);
