@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Especifiqueu el número de pàgina",
 	"pageCountIndication": " (${0} pàgines)",
 	"dialogConfirm": "Vés-hi",
-	"dialogCancel": "Cancel·la"
+	"dialogCancel": "Cancel·la",
+	"all": "tot"
 })
 //end v1.x content
 );

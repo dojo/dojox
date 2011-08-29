@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Oppgi sidetallet",
 	"pageCountIndication": " (${0} sider)",
 	"dialogConfirm": "Utfør",
-	"dialogCancel": "Avbryt"
+	"dialogCancel": "Avbryt",
+	"all": "alle"
 })
 //end v1.x content
 );

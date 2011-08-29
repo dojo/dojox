@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Καθορίστε τον αριθμό της σελίδας",
 	"pageCountIndication": " (${0} σελίδες)",
 	"dialogConfirm": "Μετάβαση",
-	"dialogCancel": "Ακύρωση"
+	"dialogCancel": "Ακύρωση",
+	"all": "όλα"
 })
 //end v1.x content
 );

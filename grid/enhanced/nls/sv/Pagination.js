@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Ange sidnummer",
 	"pageCountIndication": " (${0} sidor)",
 	"dialogConfirm": "Gå",
-	"dialogCancel": "Avbryt"
+	"dialogCancel": "Avbryt",
+	"all": "alla"
 })
 //end v1.x content
 );

@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Angiv sidetallet",
 	"pageCountIndication": " (${0} sider)",
 	"dialogConfirm": "Gå",
-	"dialogCancel": "Annullér"
+	"dialogCancel": "Annullér",
+	"all": "alle"
 })
 //end v1.x content
 );

@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "حدد رقم الصفحة",
 	"pageCountIndication": " (${0} صفحات)",
 	"dialogConfirm": "بدء",
-	"dialogCancel": "الغاء"
+	"dialogCancel": "الغاء",
+	"all": "كل"
 })
 //end v1.x content
 );

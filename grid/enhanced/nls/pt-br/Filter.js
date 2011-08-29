@@ -1,5 +1,3 @@
-define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Limpar Filtro",
 	"filterDefDialogTitle": "Filtrar",
@@ -8,28 +6,28 @@ define(
 	"conditionEqual": "igual",
 	"conditionNotEqual": "não é igual",
 	"conditionLess": "é menor que",
-	"conditionLessEqual": "menor ou igual a",
+	"conditionLessEqual": "menor que ou igual",
 	"conditionLarger": "é maior que",
-	"conditionLargerEqual": "maior ou igual a",
+	"conditionLargerEqual": "maior que ou igual",
 	"conditionContains": "contém",
 	"conditionIs": "é",
-	"conditionStartsWith": "inicia com",
+	"conditionStartsWith": "começa com",
 	"conditionEndWith": "termina com",
 	"conditionNotContain": "não contém",
 	"conditionIsNot": "não é",
-	"conditionNotStartWith": "não inicia com",
+	"conditionNotStartWith": "não começa com",
 	"conditionNotEndWith": "não termina com",
 	"conditionBefore": "antes",
-	"conditionAfter": "depois",
+	"conditionAfter": "após",
 	"conditionRange": "intervalo",
 	"conditionIsEmpty": "está vazio",
 	
 	"all": "todos",
-	"any": "qualquer um",
+	"any": "qualquer",
 	"relationAll": "todas as regras",
-	"waiRelAll": "Corresponder a todas as seguintes regras:",
-	"relationAny": "qualquer regra",
-	"waiRelAny": "Corresponder a qualquer uma das seguintes regras:",
+	"waiRelAll": "Corresponder todas as regras a seguir:",
+	"relationAny": "quaisquer regras",
+	"waiRelAny": "Corresponder qualquer uma das regras a seguir:",
 	"relationMsgFront": "Corresponder",
 	"relationMsgTail": "",
 	"and": "e",
@@ -41,42 +39,42 @@ define(
 	"waiRemoveRuleButtonTemplate": "Remover regra ${0}",
 	
 	"cancelButton": "Cancelar",
-	"waiCancelButton": "Cancelar este diálogo",
+	"waiCancelButton": "cancelar este diálogo",
 	"clearButton": "Limpar",
 	"waiClearButton": "Limpar o filtro",
 	"filterButton": "Filtrar",
-	"waiFilterButton": "Enviar o filtro",
+	"waiFilterButton": "Submeter o filtro",
 	
 	"columnSelectLabel": "Coluna",
 	"waiColumnSelectTemplate": "Coluna para a regra ${0}",
 	"conditionSelectLabel": "Condição",
 	"waiConditionSelectTemplate": "Condição para a regra ${0}",
 	"valueBoxLabel": "Valor",
-	"waiValueBoxTemplate": "Insira o valor para filtragem da regra ${0}",
+	"waiValueBoxTemplate": "Inserir o valor para filtro para a regra ${0}",
 	
-	"rangeTo": "a",
-	"rangeTemplate": "de ${0} a ${1}",
+	"rangeTo": "para",
+	"rangeTemplate": "de ${0} para ${1}",
 	
 	"statusTipHeaderColumn": "Coluna",
 	"statusTipHeaderCondition": "Regras",
-	"statusTipTitle": "Barra de Filtragem",
-	"statusTipMsg": "Clique na barra de filtragem aqui para filtrar os valores de ${0}.",
+	"statusTipTitle": "Barra de Filtro",
+	"statusTipMsg": "Clique aqui na barra de filtro para filtrar os valores em ${0}.",
 	"anycolumn": "qualquer coluna",
-	"statusTipTitleNoFilter": "Barra de Filtragem",
+	"statusTipTitleNoFilter": "Barra de Filtro",
 	"statusTipTitleHasFilter": "Filtrar",
 	"statusTipRelPre": "Corresponder",
 	"statusTipRelPost": "regras.",
 	
 	"defaultItemsName": "itens",
-	"filterBarMsgHasFilterTemplate": "${0} de ${1} ${2} mostrados.",
+	"filterBarMsgHasFilterTemplate": "${0} de ${1} ${2} mostrado.",
 	"filterBarMsgNoFilterTemplate": "Nenhum filtro aplicado",
 	
 	"filterBarDefButton": "Definir filtro",
 	"waiFilterBarDefButton": "Filtrar a tabela",
 	"a11yFilterBarDefButton": "Filtrar...",
-	"filterBarClearButton": "Limpar filtro",
+	"filterBarClearButton": "Limpar Filtro",
 	"waiFilterBarClearButton": "Limpar o filtro",
-	"closeFilterBarBtn": "Fechar a barra de filtragem",
+	"closeFilterBarBtn": "Fechar a barra de filtro",
 	
 	"clearFilterMsg": "Isso removerá o filtro e mostrará todos os registros disponíveis.",
 	"anyColumnOption": "Qualquer Coluna",
@@ -84,8 +82,6 @@ define(
 	"trueLabel": "Verdadeiro",
 	"falseLabel": "Falso"
 })
-//end v1.x content
-);
 
 
 

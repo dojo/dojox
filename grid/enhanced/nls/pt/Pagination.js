@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Especifique o número da página",
 	"pageCountIndication": " (${0} páginas)",
 	"dialogConfirm": "Ir",
-	"dialogCancel": "Cancelar"
+	"dialogCancel": "Cancelar",
+	"all": "todos"
 })
 //end v1.x content
 );
