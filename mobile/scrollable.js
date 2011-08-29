@@ -1,5 +1,10 @@
 //>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
-if(typeof dojo === "undefined"){
+
+// The code block surrounded by the includeStart/End pragma is to simulate
+// several dojo APIs that are used in this module for non-dojo applications.
+// For dojo applications, this code block is removed by the build tool.
+
+if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 	dojo = {doc:document, global:window};
 	dojox = {mobile:{}};
 
