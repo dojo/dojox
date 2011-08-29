@@ -68,7 +68,7 @@ define([
 			this.store.fetch({
 				query: this.query,
 				queryOptions: this.queryOptions,
-				onComplete: lang.hitch(this, "generateList"),
+				onComplete: lang.hitch(this, "onComplete"),
 				onError: lang.hitch(this, "onError")
 			});
 		},
@@ -102,12 +102,18 @@ define([
 			}, this);
 		},
 
-		onError: function(errText){
+		onComplete: function(/*Array*/items, /*Object*/request){
+			// summary:
+			//		An handler that is called after the fetch completes.
+			this.generateList(items, request);
+		},
+
+		onError: function(/*Object*/errorData, /*Object*/request){
 			// summary:
 			//		An error handler.
 		},
 
-		onSet: function(/*Object*/item, /*String*/ attribute, /*Object|Array*/oldValue, /*Object|Array*/newValue){
+		onSet: function(/*Object*/item, /*String*/attribute, /*Object|Array*/oldValue, /*Object|Array*/newValue){
 			//	summary:
 			//		See dojo.data.api.Notification.onSet()
 		},
