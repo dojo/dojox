@@ -115,8 +115,8 @@
 				{name: 'Area', field: 'area', width: 'auto'}
 			]
 			
-			function refresh(){
-				grid2._refresh();
+			function refresh(flg){
+				grid2.refresh(flg);
 			}
 			var idx = 0;
 			function addItem(){
@@ -133,6 +133,18 @@
 			function removeSelected(){
 				grid2.removeSelectedRows();
 			}
+			function expandSelected(){
+				var item = grid2.selection.getSelected()[0];
+				if(item){
+					grid2.expand(grid2.store.getIdentity(item));
+				}
+			}
+			function collapseSelected(){
+				var item = grid2.selection.getSelected()[0];
+				if(item){
+					grid2.collapse(grid2.store.getIdentity(item));
+				}
+			}
         </script>
     </head>
     <body class="claro">
@@ -142,12 +154,16 @@
 				structure='layout' treeModel='model1' rowSelector='true'></div>
 				
 		<h2>grid 2</h2>
-		<div id='grid2' jsid='grid2' dojoType='dojox.grid.LazyTreeGrid' 
-				structure='layout' treeModel='model2' keepSelection='true' rowSelector='true'></div>
+		<div id='grid2' jsid='grid2' dojoType='dojox.grid.LazyTreeGrid'
+				structure='layout' treeModel='model2' 
+				keepSelection='true' rowSelector='true'></div>
 		
-		<button dojoType="dijit.form.Button" onClick="refresh()">Refresh</button>
+		<button dojoType="dijit.form.Button" onClick="refresh(true)">Refresh with state</button>
+		<button dojoType="dijit.form.Button" onClick="refresh(false)">Refresh without state</button>
 		<button dojoType="dijit.form.Button" onClick="addItem()">Add Item</button>
 		<button dojoType="dijit.form.Button" onClick="addChildItem()">Add Child Item</button>
 		<button dojoType="dijit.form.Button" onClick="removeSelected()">Delete Selected</button>
+		<button dojoType="dijit.form.Button" onClick="expandSelected()">Expand Selected</button>
+		<button dojoType="dijit.form.Button" onClick="collapseSelected()">Collapse Selected</button>
     </body>
 </html>
