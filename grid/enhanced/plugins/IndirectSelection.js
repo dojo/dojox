@@ -497,6 +497,7 @@ var MultipleRowSelector = declare("dojox.grid.cells.MultipleRowSelector", RowSel
 		html.empty(headerCellNode);
 		var g = this.grid;
 		var selector = headerCellNode.appendChild(html.create("div", {
+			'aria-label': g._nls["selectAll"],
 			"tabindex": -1, "id": g.id + "_rowSelector_-1", "class": this.baseClass, "role": "presentation",
 			"innerHTML": "<span class = '" + this.statusTextClass +
 				"'></span><span style='height: 0; width: 0; overflow: hidden; display: block;'>" +
