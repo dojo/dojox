@@ -1,20 +1,26 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,da){
+define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/aspect"
+], function(lang, dxa, config, aspect){
+	/*=====
+		dxa = dojox.analytics;
+		aspect = dojo.aspect;
+	=====*/
+	consoleMessages = lang.getObject("dojox.analytics.plugins.consoleMessages", true);
 
 		// summary:
 		//	plugin to have analyitcs return the base info dojo collects
-		this.addData = dojo.hitch(da, "addData", "consoleMessages");
+		this.addData = lang.hitch(dxa, "addData", "consoleMessages");
 
-		var lvls = dojo.config["consoleLogFuncs"] || ["error", "warn", "info", "rlog"];
+		var lvls = config["consoleLogFuncs"] || ["error", "warn", "info", "rlog"];
 		if(!console){
 			console = {};
 		}
 
 		for(var i=0; i < lvls.length; i++){
 			if(console[lvls[i]]){
-				dojo.connect(console, lvls[i], dojo.hitch(this, "addData", lvls[i]));
+				aspect.after(console, lvls[i], lang.hitch(this, "addData", lvls[i]),true);
 			}else{
-				console[lvls[i]] = dojo.hitch(this, "addData", lvls[i]);
+				console[lvls[i]] = lang.hitch(this, "addData", lvls[i]);
 			}
 		}
-	return dojox.analytics.plugins.consoleMessages;
+	return consoleMessages;
 });

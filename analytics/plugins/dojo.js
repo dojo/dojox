@@ -1,22 +1,27 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,dxa){
-	var plugins = dojo.getObject("dojox.analytics.plugins", true);
-	/*===== plugins = dojox.analytics.plugins =====*/
+define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/ready"
+], function(lang, dxa, config, ready){
+	var plugins = lang.getObject("dojox.analytics.plugins", true);
+	/*=====
+		dxa = dojox.analytics;
+		ready = dojo.ready;
+		plugins = dojox.analytics.plugins; 
+		plugins.dojo = dojox.analytics.plugins.dojo;
+	=====*/	
 
-	plugins.dojo = new (function(){
+	return (plugins.dojo = new (function(){
 		// summary:
 		//	plugin to have analyitcs return the base info dojo collects
-		this.addData = dojo.hitch(dxa, "addData", "dojo");
-		dojo.addOnLoad(dojo.hitch(this, function(){
+		this.addData = lang.hitch(dxa, "addData", "dojo");
+		ready(lang.hitch(this, function(){
 			var data = {};
 			for(var i in dojo){
-				if ((i=="version") || ((!dojo.isObject(dojo[i]))&&(i[0]!="_"))){
+				if ((i=="version") || ((!(typeof dojo[i] == "object" || typeof dojo[i] == "function"))&&(i[0]!="_"))){
 					data[i]=dojo[i];
 				}
 			}
 
-			if (dojo.config){data.djConfig=dojo.config}
+			if (config){data.djConfig=config}
 			this.addData(data);
 		}));
-	})();
-	return plugins.dojo;
+	})());
 });

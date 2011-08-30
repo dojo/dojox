@@ -1,13 +1,18 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,dxa){
+define(["dojo/_base/lang","../_base", "dojo/_base/window", "dojo/on"
+], function(lang, dxa, window, on){
+	/*=====
+		dxa = dojox.analytics;
+		on = dojo.on;
+	=====*/	
 
 	// window startup data
-	dxa.plugins.mouseClick = new (function(){
-		this.addData = dojo.hitch(dxa, "addData", "mouseClick");
+	return (dxa.plugins.mouseClick = new (function(){
+		this.addData = lang.hitch(dxa, "addData", "mouseClick");
 
 		this.onClick=function(e){
 			this.addData(this.trimEvent(e));
 		}
-		dojo.connect(dojo.doc, "onclick", this, "onClick");
+		on(window.doc, "click", lang.hitch(this, "onClick"));
 
 		this.trimEvent=function(e){
 			var t = {};
@@ -42,6 +47,5 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,d
 			}
 			return t;
 		}
-	})();
-	return dojox.analytics.plugins.mouseClick;
+	})());
 });

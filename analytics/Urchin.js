@@ -1,4 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window"], function(dojo){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
+        "dojo/_base/config", "dojo/dom-construct"
+], function(lang, declare, window, config, construct){
 
 	/*=====
 	dojo.mixin(djConfig,{
@@ -10,7 +12,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	=====*/
 
-	return dojo.declare("dojox.analytics.Urchin", null, {
+	return declare("dojox.analytics.Urchin", null, {
 		// summary: A Google-analytics helper, for post-onLoad inclusion of the tracker, and
 		//		dynamic tracking during long-lived page cycles.
 		//
@@ -58,17 +60,17 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		sequence, so defer construction until (ideally) after onLoad and
 			//		potentially widget parsing.
 			this.tracker = null;
-			dojo.mixin(this, args);
-			this.acct = this.acct || dojo.config.urchin;
+			lang.mixin(this, args);
+			this.acct = this.acct || config.urchin;
 
 			var re = /loaded|complete/,
-				gaHost = ("https:" == dojo.doc.location.protocol) ? "https://ssl." : "http://www.",
-				h = dojo.doc.getElementsByTagName("head")[0],
-				n = dojo.create('script', {
+				gaHost = ("https:" == window.doc.location.protocol) ? "https://ssl." : "http://www.",
+				h = window.doc.getElementsByTagName("head")[0],
+				n = construct.create('script', {
 					src: gaHost + "google-analytics.com/ga.js"
 				}, h);
 
-			n.onload = n.onreadystatechange = dojo.hitch(this, function(e){
+			n.onload = n.onreadystatechange = lang.hitch(this, function(e){
 				if(e && e.type == "load" || re.test(n.readyState)){
 					n.onload = n.onreadystatechange = null;
 					this._gotGA();

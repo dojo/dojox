@@ -1,9 +1,16 @@
-define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,dxa){
+define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/ready", 
+        "dojo/aspect", "dojo/_base/window"
+], function(lang, dxa, config, ready, aspect, window){
+	/*=====
+		dxa = dojox.analytics;
+		ready = dojo.ready;
+		aspect = dojo/aspect;
+	=====*/
 
 	// window startup data
-	dxa.plugins.idle = new (function(){
-		this.addData = dojo.hitch(dxa, "addData", "idle");
-		this.idleTime=dojo.config["idleTime"] || 60000;
+	return (dxa.plugins.idle = new (function(){
+		this.addData = lang.hitch(dxa, "addData", "idle");
+		this.idleTime=config["idleTime"] || 60000;
 		this.idle=true;
 
 		this.setIdle = function(){
@@ -12,21 +19,20 @@ define(["dojo/_base/kernel","dojo/_base/lang","../_base"], function(dojo,dlang,d
 
 		}
 
-		dojo.addOnLoad(dojo.hitch(this, function(){
+		ready(lang.hitch(this, function(){
 			var idleResets=["onmousemove","onkeydown","onclick","onscroll"];
 			for (var i=0;i<idleResets.length;i++){
-				dojo.connect(dojo.doc,idleResets[i],this, function(e){
+				aspect.after(window.doc,idleResets[i],lang.hitch(this, function(e){
 					if (this.idle){
 						this.idle=false;
 						this.addData("isActive");
-						this.idleTimer=setTimeout(dojo.hitch(this,"setIdle"), this.idleTime);
+						this.idleTimer=setTimeout(lang.hitch(this,"setIdle"), this.idleTime);
 					}else{
 						clearTimeout(this.idleTimer);
-						this.idleTimer=setTimeout(dojo.hitch(this,"setIdle"), this.idleTime);
+						this.idleTimer=setTimeout(lang.hitch(this,"setIdle"), this.idleTime);
 					}
-				});
+				}),true);
 			}
 		}));
-	})();
-	return dojox.analytics.plugins.idle;
+	})());
 });

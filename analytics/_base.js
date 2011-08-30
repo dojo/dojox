@@ -1,6 +1,13 @@
-define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
+define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload", 
+        "dojo/_base/sniff", "dojo/_base/xhr", "dojo/_base/json", "dojo/io-query", "dojo/io/script"
+], function(lang, config, ready, unload, has, xhr, json, ioQuery, scriptIO){
+	/*=====
+		ready = dojo.ready;
+		ioQuery = dojo/io-query;
+		scriptIO = dojo/io/script;
+	=====*/
 
-	dojox.analytics = function(){
+	var Analytics = function(){
 		// summary: TODOC
 		//		where we store data until we're ready to send it off.
 		//
@@ -11,23 +18,23 @@ define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 		this._id = 1;
 
 		//some default values
-		this.sendInterval = dojo.config["sendInterval"] || 5000;
-		this.inTransitRetry = dojo.config["inTransitRetry"] || 200;
-		this.dataUrl = dojo.config["analyticsUrl"] || dojo.moduleUrl("dojox.analytics.logger", "dojoxAnalytics.php");
-		this.sendMethod = dojo.config["sendMethod"] || "xhrPost";
-		this.maxRequestSize = dojo.isIE ? 2000 : dojo.config["maxRequestSize"] || 4000;
+		this.sendInterval = config["sendInterval"] || 5000;
+		this.inTransitRetry = config["inTransitRetry"] || 200;
+		this.dataUrl = config["analyticsUrl"] || require.toUrl("dojox/analytics/logger/dojoxAnalytics.php");
+		this.sendMethod = config["sendMethod"] || "xhrPost";
+		this.maxRequestSize = has("ie") ? 2000 : config["maxRequestSize"] || 4000;
 
 		//while we can go ahead and being logging as soon as this constructor is completed
 		//we're not going to schedule pushing data to the server until after the page
 		//has completed loading
-		dojo.addOnLoad(this, "schedulePusher");
-		dojo.addOnUnload(this, "pushData", true);
+		ready(this, "schedulePusher");
+		unload.addOnUnload(this, "pushData", true);
 	};
 
-	dojo.extend(dojox.analytics, {
+	lang.extend(Analytics, {
 		schedulePusher: function(/* Int */interval){
 			// summary: Schedule the data pushing routines to happen in interval ms
-			setTimeout(dojo.hitch(this, "checkData"), interval || this.sendInterval);
+			setTimeout(lang.hitch(this, "checkData"), interval || this.sendInterval);
 		},
 
 		addData: function(dataType, data){
@@ -70,7 +77,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 				var def;
 				switch(this.sendMethod){
 					case "script":
-						def = dojo.io.script.get({
+						def = scriptIO.get({
 							url: this.getQueryPacket(),
 							preventCache: 1,
 							callbackParamName: "callback"
@@ -78,11 +85,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 						break;
 					case "xhrPost":
 					default:
-						def = dojo.xhrPost({
+						def = xhr.post({
 							url:this.dataUrl,
 							content:{
 								id: this._id++,
-								data: dojo.toJson(this._inTransit)
+								data: json.toJson(this._inTransit)
 							}
 						});
 						break;
@@ -98,11 +105,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 			while(true){
 				var content = {
 					id: this._id++,
-					data: dojo.toJson(this._inTransit)
+					data: json.toJson(this._inTransit)
 				};
 				
-				//FIXME would like a much better way to get the query down to lenght
-				var query = this.dataUrl + '?' + dojo.objectToQuery(content);
+				//FIXME would like a much better way to get the query down to length
+				var query = this.dataUrl + '?' + ioQuery.objectToQuery(content);
 				if(query.length > this.maxRequestSize){
 					this._data.unshift(this._inTransit.pop());
 					this._split = 1;
@@ -129,6 +136,5 @@ define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 	});
 
 	//create the analytics  singleton
-	dojox.analytics = new dojox.analytics();
-	return dojox.analytics;
+	return lang.setObject("dojox.analytics",new Analytics());
 });
