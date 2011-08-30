@@ -3,6 +3,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/_base/array",
+	"dojo/_base/event",
 	"dojo/keys",
 	"dojo/query",
 	"dojo/_base/html",
@@ -13,7 +14,7 @@ define([
 	"../../EnhancedGrid",
 	"../../cells/_base",
 	"./AutoScroll"
-], function(dojo, lang, declare, array, keys, query, html, win, dijitFocus, _RowSelector, _Plugin, EnhancedGrid){
+], function(dojo, lang, declare, array, event, keys, query, html, win, dijitFocus, _RowSelector, _Plugin, EnhancedGrid){
 
 /*=====
 dojo.declare("__SelectItem", null,{
