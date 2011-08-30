@@ -15,6 +15,8 @@ dojo.declare("dojox.grid._FocusManager", null, {
 		this.headerMenu = this.grid.headerMenu;
 		this._connects.push(dojo.connect(this.grid.domNode, "onfocus", this, "doFocus"));
 		this._connects.push(dojo.connect(this.grid.domNode, "onblur", this, "doBlur"));
+		this._connects.push(dojo.connect(this.grid.domNode, "mousedown", this, "_mouseDown"));
+		this._connects.push(dojo.connect(this.grid.domNode, "mouseup", this, "_mouseUp"));
 		this._connects.push(dojo.connect(this.grid.domNode, "oncontextmenu", this, "doContextMenu"));
 		this._connects.push(dojo.connect(this.grid.lastFocusNode, "onfocus", this, "doLastNodeFocus"));
 		this._connects.push(dojo.connect(this.grid.lastFocusNode, "onblur", this, "doLastNodeBlur"));
@@ -553,6 +555,10 @@ dojo.declare("dojox.grid._FocusManager", null, {
 			dojo.stopEvent(e);
 			return;
 		}
+		// don't change focus if clicking on scroller bar
+		if(this._clickFocus){
+			return;
+		}
 		// do not focus for scrolling if grid is about to blur
 		if(!this.tabbingOut){
 			this.focusHeader();
@@ -593,5 +599,14 @@ dojo.declare("dojox.grid._FocusManager", null, {
 	},
 	doColHeaderBlur: function(e){
 		dojo.toggleClass(e.target, this.focusClass, false);
-	}		
+	},
+	_mouseDown: function(e){
+		// a flag indicating grid is being focused by clicking
+		this._clickFocus = dojo.some(this.grid.views.views, function(v){
+			return v.scrollboxNode === e.target;
+		});
+	},
+	_mouseUp: function(e){
+		this._clickFocus = false;
+	}
 });
