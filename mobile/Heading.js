@@ -168,20 +168,26 @@ define([
 		},
 
 		_setBackAttr: function(/*String*/back){
-			if(!this._btn){
-				var btn = domConstruct.create("DIV", this.backProp, this.domNode, "first");
-				var head = domConstruct.create("DIV", {className:"mblArrowButtonHead"}, btn);
-				var body = domConstruct.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
+			if (!back){
+				domConstruct.destroy(this._btn);
+				this._btn = null;
+				this.back = "";
+			}else{
+				if(!this._btn){
+					var btn = domConstruct.create("DIV", this.backProp, this.domNode, "first");
+					var head = domConstruct.create("DIV", {className:"mblArrowButtonHead"}, btn);
+					var body = domConstruct.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
 
-				this._body = body;
-				this._head = head;
-				this._btn = btn;
-				this.backBtnNode = btn;
-				this.connect(body, "onclick", "onClick");
-				var neck = domConstruct.create("DIV", {className:"mblArrowButtonNeck"}, btn);
+					this._body = body;
+					this._head = head;
+					this._btn = btn;
+					this.backBtnNode = btn;
+					this.connect(body, "onclick", "onClick");
+					var neck = domConstruct.create("DIV", {className:"mblArrowButtonNeck"}, btn);
+				}
+				this.back = back;
+				this._body.innerHTML = this._cv ? this._cv(this.back) : this.back;
 			}
-			this.back = back;
-			this._body.innerHTML = this._cv ? this._cv(this.back) : this.back;
 			this.resize();
 		},
 	
