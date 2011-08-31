@@ -128,7 +128,8 @@ define([
 						arr[i].style.width = bw + "px";
 						arr[i].style.margin = "0 " + bm + "px";
 					}
-					this.containerNode.style.padding = "0px 0px 0px " + margin + "px";
+					arr[0].style.marginLeft = margin + bm + "px";
+					this.containerNode.style.padding = "0px";
 				}
 			}
 
