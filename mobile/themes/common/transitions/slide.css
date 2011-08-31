@@ -11,7 +11,7 @@
 	-webkit-transform: translateX(0px);
 }
 .dj_iphone .mblSlide {
-	-webkit-animation-duration: .15s;
+	-webkit-animation-duration: .2s;
 }
 .mblSlide.mblOut.mblReverse {
 	-webkit-animation-name: mblSlideOutReverse;
