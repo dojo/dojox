@@ -369,7 +369,6 @@ define([
 		
 		_hide: function(node){
 			html.style(node, {
-				left: "-10000px",
 				top: "-10000px",
 				"visibility": "hidden"
 			});
