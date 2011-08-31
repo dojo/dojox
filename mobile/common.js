@@ -227,8 +227,12 @@ define([
 			if(s.match(/(mblDomButton\w+_(\d+))/)){
 				nDiv = RegExp.$2 - 0;
 			}
+			var props = null;
+			if(has("bb") && config["mblBBBoxShadowWorkaround"] !== false){
+				props = {style:"-webkit-box-shadow:none"};
+			}
 			for(var i = 0, p = node; i < nDiv; i++){
-				p = p.firstChild || domConstruct.create("DIV", null, p);
+				p = p.firstChild || domConstruct.create("DIV", props, p);
 			}
 			if(toNode){
 				setTimeout(function(){
