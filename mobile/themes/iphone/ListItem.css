@@ -60,6 +60,7 @@
 .mblListItemRightIcon, .mblListItemRightIcon2 {
   position: relative;
   float: right;
+  line-height: normal;
   margin-top: 7px;
   margin-bottom: -7px;
 }
