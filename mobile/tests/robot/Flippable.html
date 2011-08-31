@@ -31,12 +31,15 @@
 						timeout: 40000,
 						runTest: function(){
 							var d = new doh.Deferred();
+							var dim = dojox.mobile.getScreenSize();
 
-							doh.robot.mouseMoveAt(dijit.byId("foo").domNode, 1000,100,300,100);
+							doh.robot.mouseMoveAt(dijit.byId("foo").domNode, 1000,100, (dim.w -30),100);
 							doh.robot.mousePress({left: true}, 1000);
 
-							doh.robot.mouseMoveAt(dijit.byId("foo").domNode, 2000,100,0,100);
-							doh.robot.mouseRelease({left: true}, 500);
+							doh.robot.mouseMoveAt(dijit.byId("foo").domNode, 1000,100,(dim.w -30)/2,0);
+
+							doh.robot.mouseMoveAt(dijit.byId("foo").domNode, 1000,100,0,100);
+							doh.robot.mouseRelease({left: true}, 50);
 							
 							doh.robot.sequence(d.getTestCallback(function(){
 								doh.assertEqual("",  dijit.byId("bar").domNode.style.display);
