@@ -1,4 +1,6 @@
 define([
+	"dojo/_base/array", // array.forEach
+	"dijit/registry",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/dom-class",
@@ -7,7 +9,7 @@ define([
 	"dojo/dom-style",
 	"dijit/place",
 	"dijit/_WidgetBase"
-], function(declare, lang, domClass, domConstruct, domGeometry, domStyle, place, WidgetBase){
+], function(array, registry, declare, lang, domClass, domConstruct, domGeometry, domStyle, place, WidgetBase){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
@@ -51,6 +53,11 @@ define([
 				"BLB": "mblTooltipBefore"
 			};
 			domClass.remove(this.domNode, ["mblTooltipAfter","mblTooltipBefore","mblTooltipBelow","mblTooltipAbove"]);
+			array.forEach(registry.findWidgets(this.domNode), function(widget){
+				if(widget.height == "auto" && typeof widget.resize == "function"){
+					widget.resize();
+				}
+			});
 			var best = place.around(this.domNode, aroundNode, positions || ['below-centered', 'above-centered', 'after', 'before'], this.isLeftToRight());
 			var connectorClass = connectorClasses[best.corner + best.aroundCorner.charAt(0)] || '';
 			domClass.add(this.domNode, connectorClass);

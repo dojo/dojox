@@ -134,8 +134,9 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-geometry",
 	"./sniff"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has){
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, domGeometry, has){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -451,13 +452,26 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 
 		// adjust the height of this view
-		var h;
-		var dh = this.getScreenSize().h - top - this._appFooterHeight; // default height
+		var	h,
+			dh = this.getScreenSize().h - top - this._appFooterHeight; // default height
 		if(this.height === "inherit"){
 			if(this.domNode.offsetParent){
 				h = this.domNode.offsetParent.offsetHeight + "px";
 			}
 		}else if(this.height === "auto"){
+			var parent = this.domNode.offsetParent;
+			if(parent){
+				this.domNode.style.height = "0px";
+				var	parentRect = parent.getBoundingClientRect(),
+					scrollableRect = this.domNode.getBoundingClientRect(),
+					pb = domGeometry.getPadBorderExtents(parent),
+					contentBottom = parentRect.bottom - pb.b - this._appFooterHeight;
+				if(scrollableRect.bottom >= contentBottom){ // use entire screen
+					dh = this.getScreenSize().h - (scrollableRect.top - parentRect.top) - pb.b - this._appFooterHeight;
+				}else{ // stretch to fill predefined area
+					dh = contentBottom - scrollableRect.bottom;
+				}
+			}
 			// content could be smaller than entire screen height
 			var contentHeight = Math.max(this.domNode.scrollHeight, this.containerNode.scrollHeight);
 			h = (contentHeight ? Math.min(contentHeight, dh) : dh) + "px";

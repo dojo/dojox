@@ -7,8 +7,10 @@ define([
 	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"dojo/window",
-	"dijit/_WidgetBase"
-], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase){
+	"dijit/_WidgetBase",
+	"dojo/_base/array",
+	"dijit/registry"
+], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry){
 
 	/*=====
 		WidgetBase = dijit._WidgetBase;
@@ -23,6 +25,11 @@ define([
 		show: function(/*DomNode?*/aroundNode){
 			// summary:
 			//		Scroll the overlay up into view
+			array.forEach(registry.findWidgets(this.domNode), function(w){
+				if(w && w.height == "auto" && typeof w.resize == "function"){
+					w.resize();
+				}
+			});
 			var vp, popupPos;
 			var reposition = lang.hitch(this, function(){
 				domStyle.set(this.domNode, { position: "", top: "auto", bottom: "0px" });

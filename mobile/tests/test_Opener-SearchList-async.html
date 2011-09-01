@@ -17,6 +17,9 @@
 			margin: 0 70px;
 			width: 160px;
 		}
+		.mblOverlay#listPicker {
+			height: 200px;
+		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -29,6 +32,8 @@
 			"dojox/mobile/Opener",
 			"dojox/mobile/ScrollableView"
 		]);
+
+		var checkedItem = 'Aaron Smith';
 
 		function getSelectedContact(node, accept){
 			if(accept === true){
