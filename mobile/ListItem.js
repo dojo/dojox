@@ -175,7 +175,6 @@ define([
 			}
 			if(this.variableHeight){
 				domClass.add(this.domNode, "mblVariableHeight");
-				connect.subscribe("/dojox/mobile/resizeAll", this, "layoutVariableHeight");
 				setTimeout(lang.hitch(this, "layoutVariableHeight"));
 			}
 
@@ -255,6 +254,8 @@ define([
 
 		layoutVariableHeight: function(e){
 			var h = this.anchorNode.offsetHeight;
+			if(h === this.anchorNodeHeight){ return; }
+			this.anchorNodeHeight = h;
 			array.forEach([
 					this.rightTextNode,
 					this.rightIcon2Node,

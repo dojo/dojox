@@ -54,6 +54,12 @@ define([
 			this.domNode.className = "mblRoundRectList";
 		},
 	
+		resize: function(){
+			array.forEach(this.getChildren(), function(child){
+				child.variableHeight && child.layoutVariableHeight();
+			});
+		},
+
 		onCheckStateChanged: function(/*Widget*/listItem, /*String*/newState){
 			// summary:
 			//		Stub function to connect to from your application.
