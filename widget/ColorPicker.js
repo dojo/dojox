@@ -222,11 +222,11 @@ define([
 			this.setColor(value, true);
 		},
 		
-		setColor: function(/* String */color, force){
+		setColor: function(/* String */col, force){
 			// summary: Set a color on a picker. Usually used to set
 			//          initial color as an alternative to passing defaultColor option
 			//          to the constructor.
-			var col = color.fromString(color);
+			col = color.fromString(col);
 			this._updatePickerLocations(col);
 			this._updateColorInputs(col);
 			this._updateValue(col, force);
