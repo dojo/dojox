@@ -7,8 +7,8 @@ define([
 	"dojo/_base/window", // dojo.doc
 	"dojo/query",
 	"dojo/data/util/simpleFetch",
-	"dojox/xml/parser"], function (dojo, lang, declare, dxhr, array, window, query, simpleFetch, parser) {
-dojo.experimental("dojox.data.OpenSearchStore");
+	"dojox/xml/parser"], function (kernel, lang, declare, dxhr, array, window, query, simpleFetch, parser) {
+kernel.experimental("dojox.data.OpenSearchStore");
 
 var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	constructor: function(/*Object*/args){
