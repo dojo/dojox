@@ -36,6 +36,10 @@ define([
 		//		Parameters for dojox.mobile.scrollable.init().
 		scrollableParams: null,
 
+		// keepScrollPos: Boolean
+		//		Overrides dojox.mobile.View.keepScrollPos.
+		keepScrollPos: false,
+
 		constructor: function(){
 			this.scrollableParams = {noResize: true};
 		},
