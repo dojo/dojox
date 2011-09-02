@@ -55,8 +55,10 @@ define([
 		},
 	
 		resize: function(){
+			// summary:
+			//		Calls resize() of each child widget.
 			array.forEach(this.getChildren(), function(child){
-				child.variableHeight && child.layoutVariableHeight();
+				if(child.resize){ child.resize(); }
 			});
 		},
 

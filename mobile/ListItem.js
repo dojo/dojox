@@ -144,18 +144,6 @@ define([
 			a.className = "mblListItemAnchor";
 			this.domNode.appendChild(a);
 			a.appendChild(box);
-
-			// right text
-			this.rightTextNode = domConstruct.create("DIV", {className:"mblListItemRightText"}, a, "first");
-
-			// right icon2
-			this.rightIcon2Node = domConstruct.create("DIV", {className:"mblListItemRightIcon2"}, a, "first");
-
-			// right icon
-			this.rightIconNode = domConstruct.create("DIV", {className:"mblListItemRightIcon"}, a, "first");
-
-			// icon
-			this.iconNode = domConstruct.create("DIV", {className:"mblListItemIcon"}, a, "first");
 		},
 
 		startup: function(){
@@ -178,11 +166,17 @@ define([
 				setTimeout(lang.hitch(this, "layoutVariableHeight"));
 			}
 
-			this.set("icon", this.icon);
+			this.set("icon", this.icon); // _setIconAttr may be called twice but this is necessary for offline instantiation
 			if(!this.checked && this.checkClass.indexOf(',') !== -1){
 				this.set("checked", this.checked);
 			}
 			this.inherited(arguments);
+		},
+
+		resize: function(){
+			if(this.variableHeight){
+				this.layoutVariableHeight();
+			}
 		},
 
 		onClick: function(e){
@@ -252,7 +246,7 @@ define([
 			//		Stub function to connect to from your application.
 		},
 
-		layoutVariableHeight: function(e){
+		layoutVariableHeight: function(){
 			var h = this.anchorNode.offsetHeight;
 			if(h === this.anchorNodeHeight){ return; }
 			this.anchorNodeHeight = h;
@@ -262,8 +256,10 @@ define([
 					this.rightIconNode,
 					this.iconNode
 				], function(n){
-					var t = Math.round((h - n.offsetHeight) / 2);
-					n.style.marginTop = t + "px";
+					if(n){
+						var t = Math.round((h - n.offsetHeight) / 2);
+						n.style.marginTop = t + "px";
+					}
 				});
 		},
 
@@ -287,7 +283,12 @@ define([
 			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
 			this.icon = icon;
 			var a = this.anchorNode;
-			domConstruct.empty(this.iconNode);
+			if(!this.iconNode){
+				var ref = this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.box;
+				this.iconNode = domConstruct.create("DIV", {className:"mblListItemIcon"}, ref, "before");
+			}else{
+				domConstruct.empty(this.iconNode);
+			}
 			if(icon && icon !== "none"){
 				common.createIcon(icon, this.iconPos, null, this.alt, this.iconNode);
 				if(this.iconPos){
@@ -324,13 +325,21 @@ define([
 		},
 	
 		_setRightTextAttr: function(/*String*/text){
+			if(!this.rightTextNode){
+				this.rightTextNode = domConstruct.create("DIV", {className:"mblListItemRightText"}, this.box, "before");
+			}
 			this.rightText = text;
 			this.rightTextNode.innerHTML = this._cv ? this._cv(text) : text;
 		},
 	
 		_setRightIconAttr: function(/*String*/icon){
+			if(!this.rightIconNode){
+				var ref = this.rightIcon2Node || this.rightTextNode || this.box;
+				this.rightIconNode = domConstruct.create("DIV", {className:"mblListItemRightIcon"}, ref, "before");
+			}else{
+				domConstruct.empty(this.rightIconNode);
+			}
 			this.rightIcon = icon;
-			domConstruct.empty(this.rightIconNode);
 			var arr = (icon || "").split(/,/);
 			if(arr.length === 1){
 				common.createIcon(icon, null, null, this.rightIconTitle, this.rightIconNode);
@@ -341,8 +350,13 @@ define([
 		},
 	
 		_setRightIcon2Attr: function(/*String*/icon){
+			if(!this.rightIcon2Node){
+				var ref = this.rightTextNode || this.box;
+				this.rightIcon2Node = domConstruct.create("DIV", {className:"mblListItemRightIcon2"}, ref, "before");
+			}else{
+				domConstruct.empty(this.rightIcon2Node);
+			}
 			this.rightIcon2 = icon;
-			domConstruct.empty(this.rightIcon2Node);
 			common.createIcon(icon, null, null, this.rightIcon2Title, this.rightIcon2Node);
 		},
 	
