@@ -273,7 +273,10 @@ define([
 			var toWidget = registry.byNode(toNode);
 			if(toWidget){
 				// Now that the target view became visible, it's time to run resize()
-				dm.resizeAll(null, toWidget);
+				if(config["mblAlwaysResizeOnTransition"] || !toWidget._resized){
+					dm.resizeAll(null, toWidget);
+					toWidget._resized = true;
+				}
 	
 				if(transition && transition != "none"){
 					// Temporarily add padding to align with the fromNode while transition
