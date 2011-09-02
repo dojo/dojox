@@ -57,6 +57,7 @@ define([
 		scrollBar: false,
 		constraint: false,
 		allowNestedScrolls: false,
+		androidWorkaroud: false, // disable workaround in SpinWheel
 
 		buildRendering: function(){
 			this.inherited(arguments);
