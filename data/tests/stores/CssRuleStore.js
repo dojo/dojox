@@ -13,7 +13,7 @@ dojox.data.tests.stores.CssRuleStore.createStore = function(context){
 		if(!dojox.data.tests.stores.CssRuleStore._loaded){
 			var head = dojo.doc.getElementsByTagName('head')[0];
 			var link = document.createElement('link');
-			link.href = dojo.moduleUrl('dojox.data.tests.stores', 'test1.css').toString();
+			link.href = require.toUrl('dojox/data/tests/stores/test1.css').toString();
 			link.rel = "stylesheet";
 			link.type = "text/css";
 			head.appendChild(link);
@@ -21,10 +21,10 @@ dojox.data.tests.stores.CssRuleStore.createStore = function(context){
 			var text;
 			if(dojo.isIE){
 				style = document.createStyleSheet();
-				style.cssText = '@import "'+dojo.moduleUrl('dojox.data.tests.stores', 'test2.css').toString()+'";';
+				style.cssText = '@import "'+require.toUrl('dojox/data/tests/stores/test2.css').toString()+'";';
 			}else{
 				style = document.createElement('style');
-				text = document.createTextNode('@import "'+dojo.moduleUrl('dojox.data.tests.stores', 'test2.css').toString()+'";');
+				text = document.createTextNode('@import "'+require.toUrl('dojox/data/tests/stores/test2.css').toString()+'";');
 				style.appendChild(text);
 				head.appendChild(style);
 			}
