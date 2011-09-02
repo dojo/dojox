@@ -204,21 +204,66 @@ define([
 		// summary:
 		//		Creates a DOM button.
 		// description:
-		//		DOM button is a simple graphical object that consists of the DIV
-		//		element with some CSS styling. It can be used in place of an
-		//		icon image on ListItem, IconItem, and so on. The kind of DOM
-		//		button to create is given as a class name of refNode. By
-		//		default, this function creates 4 nested DIV elements to
-		//		construct the DOM button. If the class name has a suffix that
-		//		starts with an underscore, like mblDomButtonGoldStar_5, it
-		//		creates the given number of DIV elements. A class name for DOM
-		//		button must starts with 'mblDomButton'.
+		//		DOM button is a simple graphical object that consists of one or
+		//		more nested DIV elements with some CSS styling. It can be used
+		//		in place of an icon image on ListItem, IconItem, and so on.
+		//		The kind of DOM button to create is given as a class name of
+		//		refNode. The number of DIVs to create is searched from the style
+		//		sheets in the page. However, if the class name has a suffix that
+		//		starts with an underscore, like mblDomButtonGoldStar_5, then the
+		//		suffixed number is used instead. A class name for DOM button
+		//		must starts with 'mblDomButton'.
 		// refNode:
 		//		A node that has a DOM button class name.
 		// style:
 		//		A hash object to set styles to the node.
 		// toNode:
 		//		A root node to create a DOM button. If omitted, refNode is used.
+
+		if(!dm._domButtons){
+			if(has("webkit")){
+				var findDomButtons = function(sheet, dic){
+					// summary:
+					//		Searches the style sheets for DOM buttons.
+					// description:
+					//		Returns a key-value pair object whose keys are DOM
+					//		button class names and values are the number of DOM
+					//		elements they need.
+					var i, j;
+					if(!sheet){
+						var dic = {};
+						var ss = dojo.doc.styleSheets;
+						for (i = 0; i < ss.length; i++){
+							ss[i] && findDomButtons(ss[i], dic);
+						}
+						return dic;
+					}
+					var rules = sheet.cssRules;
+					for (i = 0; i < rules.length; i++){
+						var rule = rules[i];
+						if(rule.href && rule.styleSheet){
+							findDomButtons(rule.styleSheet, dic);
+						}else if(rule.selectorText){
+							var sels = rule.selectorText.split(/,/);
+							for (j = 0; j < sels.length; j++){
+								var sel = sels[j];
+								var n = sel.split(/>/).length - 1;
+								if(sel.match(/(mblDomButton\w+)/)){
+									var cls = RegExp.$1;
+									if(!dic[cls] || n > dic[cls]){
+										dic[cls] = n;
+									}
+								}
+							}
+						}
+					}
+				}
+				dm._domButtons = findDomButtons();
+			}else{
+				dm._domButtons = {};
+			}
+		}
+
 		var s = refNode.className;
 		var node = toNode || refNode;
 		if(s.match(/(mblDomButton\w+)/) && s.indexOf("/") === -1){
@@ -226,9 +271,12 @@ define([
 			var nDiv = 4;
 			if(s.match(/(mblDomButton\w+_(\d+))/)){
 				nDiv = RegExp.$2 - 0;
+			}else if(dm._domButtons[btnClass] !== undefined){
+				nDiv = dm._domButtons[btnClass];
 			}
 			var props = null;
 			if(has("bb") && config["mblBBBoxShadowWorkaround"] !== false){
+				// Removes box-shadow because BlackBerry incorrectly renders it.
 				props = {style:"-webkit-box-shadow:none"};
 			}
 			for(var i = 0, p = node; i < nDiv; i++){
