@@ -1,4 +1,5 @@
-define(["dojo", "dojox"], function(dojo, dojox) {
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array"], 
+  function(declare, lang, array) {
 
 // note that dojox.rpc.Service is not required, you can create your own services
 
@@ -15,10 +16,10 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 // The object would automatically be requested from the server (with an object id of "obj2").
 //
 
-dojo.declare("dojox.data.ServiceStore",
+return declare("dojox.data.ServiceStore",
 	// ClientFilter is intentionally not required, ServiceStore does not need it, and is more
 	// lightweight without it, but if it is provided, the ServiceStore will use it.
-	dojo.getObject("data.ClientFilter", 0, dojox)||null,{
+	lang.getObject("dojox.data.ClientFilter", 0)||null,{
 		service: null,
 		constructor: function(options){
 			//summary:
@@ -86,7 +87,7 @@ dojo.declare("dojox.data.ServiceStore",
 			this._index = {};
 			// if the advanced json parser is enabled, we can pass through object updates as onSet events
 			if(options){
-				dojo.mixin(this,options);
+				lang.mixin(this,options);
 			}
 			// We supply a default idAttribute for parser driven construction, but if no id attribute
 			//	is supplied, it should be null so that auto identification takes place properly
@@ -175,7 +176,7 @@ dojo.declare("dojox.data.ServiceStore",
 			//	item: /* object */
 			//	attribute: /* string */
 			//	value: /* anything */
-			return dojo.indexOf(this.getValues(item,attribute),value) > -1;
+			return array.indexOf(this.getValues(item,attribute),value) > -1;
 		},
 
 
@@ -257,7 +258,7 @@ dojo.declare("dojox.data.ServiceStore",
 							for(var j in existingObj){
 								delete existingObj[j]; // clear it so we can mixin
 							}
-							results = dojo.mixin(existingObj,results);
+							results = lang.mixin(existingObj,results);
 						}
 						results.__id = id;
 						this._index[id] = results;
@@ -397,6 +398,4 @@ dojo.declare("dojox.data.ServiceStore",
 
 	}
 );
-
-return dojox.data.ServiceStore;
 });

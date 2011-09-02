@@ -1,6 +1,9 @@
-define(["dojo", "dojox", "dojox/data/CssRuleStore"], function(dojo, dojox) {
+define(["dojo/_base/declare","dojox/data/CssRuleStore"], 
+  function(declare, CssRuleStore) {
 
-dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
+/*===== var CssRuleStore = dojox.data.CssRuleStore =====*/
+
+return declare("dojox.data.CssClassStore", CssRuleStore, {
 	//	summary:
 	//		Basic store to display CSS information.
 	//	description:
@@ -155,5 +158,4 @@ dojo.declare("dojox.data.CssClassStore", dojox.data.CssRuleStore, {
 	}
 });
 
-return dojox.data.CssClassStore;
 });

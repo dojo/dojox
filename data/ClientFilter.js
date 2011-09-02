@@ -1,7 +1,8 @@
-define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/Deferred", "dojo/data/util/filter"], 
+  function(declare, lang, array, Deferred, filter) {
 
 // This is an abstract data store module for adding updateable result set functionality to an existing data store class
-	var cf;
+
 	var addUpdate = function(store,create,remove){
 		// create a handler that adds to the list of notifications
 		return function(item){
@@ -9,12 +10,10 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 					create:create && item,
 					remove:remove && item
 				});
-			cf.onUpdate();
+			ClientFilter.onUpdate();
 		}
 	};
-	cf = dojo.declare("dojox.data.ClientFilter",
-		null,
-		{
+	var ClientFilter = declare("dojox.data.ClientFilter", null, {
 			cacheByDefault: false,
 			constructor: function(){
 				// summary:
@@ -89,7 +88,7 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 							}
 						}
 						if(create && this.matchesQuery(create,request) && // if there is a new/replacement item and it matches the query
-								dojo.indexOf(resultSet,create) == -1){ // and it doesn't already exist in query
+								array.indexOf(resultSet,create) == -1){ // and it doesn't already exist in query
 							resultSet.push(create); // should this go at the beginning by default instead?
 							updated = true;
 						}
@@ -124,14 +123,14 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 						(!argsSuper.query || typeof argsSuper.query == 'object'))){
 					return false;
 				}
-				var clientQuery = dojo.mixin({},argsSub.query);
+				var clientQuery = lang.mixin({},argsSub.query);
 				for(var i in argsSuper.query){
 					if(clientQuery[i] == argsSuper.query[i]){
 						delete clientQuery[i];
 					}else if(!(typeof argsSuper.query[i] == 'string' &&
 							// if it is a pattern, we can test to see if it is a sub-pattern
 							// FIXME: This is not technically correct, but it will work for the majority of cases
-							dojo.data.util.filter.patternToRegExp(argsSuper.query[i]).test(clientQuery[i]))){
+							filter.patternToRegExp(argsSuper.query[i]).test(clientQuery[i]))){
 						return false;
 					}
 				}
@@ -149,11 +148,11 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 					if(clientQuery !== false){
 						var defResult = cachedArgs._loading;
 						if(!defResult){
-							defResult = new dojo.Deferred();
+							defResult = new Deferred();
 							defResult.callback(cachedArgs.cacheResults);
 						}
 						defResult.addCallback(function(results){
-							results = self.clientSideFetch(dojo.mixin(dojo.mixin({}, args),{query:clientQuery}), results);
+							results = self.clientSideFetch(lang.mixin(lang.mixin({}, args),{query:clientQuery}), results);
 							defResult.fullLength = results._fullLength;
 							return results;
 						});
@@ -162,7 +161,7 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 					}
 				}
 				if(!defResult){
-					var serverArgs = dojo.mixin({}, args);
+					var serverArgs = lang.mixin({}, args);
 					var putInCache = (args.queryOptions || 0).cache;
 					var fetchCache = this._fetchCache;
 					if(putInCache === undefined ? this.cacheByDefault : putInCache){
@@ -170,7 +169,7 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 						if(args.start || args.count){
 							delete serverArgs.start;
 							delete serverArgs.count;
-							args.clientQuery = dojo.mixin(args.clientQuery || {}, {
+							args.clientQuery = lang.mixin(args.clientQuery || {}, {
 								start: args.start,
 								count: args.count
 							});
@@ -181,7 +180,7 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 					defResult= args._loading = this._doQuery(args);
 					 
 					defResult.addErrback(function(){
-						fetchCache.splice(dojo.indexOf(fetchCache, args), 1);
+						fetchCache.splice(array.indexOf(fetchCache, args), 1);
 					});
 				}
 				var version = this.serverVersion;
@@ -253,7 +252,7 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 					var match = query[i];
 					var value = this.getValue(item,i);
 					if((typeof match == 'string' && (match.match(/[\*\.]/) || ignoreCase)) ?
-						!dojo.data.util.filter.patternToRegExp(match, ignoreCase).test(value) :
+						!filter.patternToRegExp(match, ignoreCase).test(value) :
 						value != match){
 						return false;
 					}
@@ -287,7 +286,7 @@ define(["dojo", "dojox", "dojo/data/util/filter"], function(dojo, dojox) {
 			}
 		}
 	);
-	cf.onUpdate = function(){};
+	ClientFilter.onUpdate = function(){};
 
-	return dojox.data.ClientFilter;
+	return ClientFilter;
 });
