@@ -49,6 +49,7 @@ define([
 
 		buildRendering: function(){
 			this.inherited(arguments);
+			this.domNode.className = "mblContentPane";
 			if(!this.containerNode){
 				this.containerNode = this.domNode;
 			}
