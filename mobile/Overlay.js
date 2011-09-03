@@ -35,7 +35,8 @@ define([
 				domStyle.set(this.domNode, { position: "", top: "auto", bottom: "0px" });
 				popupPos = domGeometry.position(this.domNode);
 				vp = windowUtils.getBox();
-				if((popupPos.y+popupPos.h) != vp.h){ // TODO: should be a has() test for position:fixed not scrolling
+				if((popupPos.y+popupPos.h) != vp.h // TODO: should be a has() test for position:fixed not scrolling
+					|| has('android') < 3){ // android 2.x supports position:fixed but child transforms don't persist
 					popupPos.y = vp.t + vp.h - popupPos.h;
 					domStyle.set(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });
 				}
