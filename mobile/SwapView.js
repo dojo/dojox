@@ -1,4 +1,5 @@
 define([
+	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/dom",
@@ -6,7 +7,7 @@ define([
 	"dijit/registry",	// registry.byNode
 	"./View",
 	"./_ScrollableMixin"
-], function(connect, declare, dom, domClass, registry, View, ScrollableMixin){
+], function(array, connect, declare, dom, domClass, registry, View, ScrollableMixin){
 
 /*=====
 	var View = dojox.mobile.View;
@@ -41,6 +42,15 @@ define([
 			connect.subscribe("/dojox/mobile/nextPage", this, "handleNextPage");
 			connect.subscribe("/dojox/mobile/prevPage", this, "handlePrevPage");
 			this.findAppBars();
+		},
+
+		resize: function(){
+			// summary:
+			//		Calls resize() of each child widget.
+			this.inherited(arguments); // scrollable#resize() will be called
+			array.forEach(this.getChildren(), function(child){
+				if(child.resize){ child.resize(); }
+			});
 		},
 
 		onTouchStart: function(e){
