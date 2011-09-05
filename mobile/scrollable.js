@@ -258,6 +258,13 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				}));
 				this._sz = this.getScreenSize();
 			}
+
+			// Creation of keyframes takes a little time. If they are created
+			// in a lazy manner, a slight delay is noticeable when you start
+			// scrolling for the first time. This is to create keyframes up front.
+			for(var i = 0; i < 3; i++){
+				this.setKeyframes(null, null, i);
+			}
 		}
 
 		this._appFooterHeight = 0;
@@ -268,13 +275,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		setTimeout(function(){
 			_this.flashScrollBar();
 		}, 600);
-
-		// Creation of keyframes takes a little time. If they are created
-		// in a lazy manner, a slight delay is noticeable when you start
-		// scrolling for the first time. This is to create keyframes up front.
-		for(var i = 0; i < 3; i++){
-			this.setKeyframes(null, null, i);
-		}
 	};
 
 	this.isTopLevel = function(){
