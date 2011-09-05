@@ -15,7 +15,7 @@ define([
 	// If iPod or iPad is detected, in addition to has('ipod') or has('ipad'),
 	// has('iphone') will also have iOS version number.
 	if(ua.match(/(iPhone|iPod|iPad)/)){
-		var p = RegExp.$1.replace(/P/,/p/);
+		var p = RegExp.$1.replace(/P/, 'p');
 		var v = ua.match(/OS ([\d_]+)/) ? RegExp.$1 : "1";
 		var os = parseFloat(v.replace(/_/, '.').replace(/_/g, ''));
 		has.add(p, os, undefined, true);
