@@ -29,7 +29,6 @@
 
 	        dojo.require("doh.runner");
 			dojo.addOnLoad(function(){
-
 				dojo.create("div", {className:"label", innerHTML:"Segmented Control"}, dojo.doc.body);
 				var tabBar = new dojox.mobile.TabBar({barType:"segmentedControl"});
 				dojo.doc.body.appendChild(tabBar.domNode);
@@ -55,7 +54,6 @@
 				dojo.create("div", {className:"label", innerHTML:"Tab Bar (CSS Sprite)"}, dojo.doc.body);
 				tabBar = new dojox.mobile.TabBar({iconBase:"../images/tab-icons.png"});
 				dojo.doc.body.appendChild(tabBar.domNode);
-				tabBar.startup();
 				tabBarButton = new dojox.mobile.TabBarButton({iconPos1:"0,0,29,29", iconPos2:"29,0,29,29", selected:"true", label:"Featured"});
 				tabBar.addChild(tabBarButton);
 				tabBarButton = new dojox.mobile.TabBarButton({iconPos1:"0,29,29,29", iconPos2:"29,29,29,29", label:"Categories"});
@@ -66,6 +64,7 @@
 				tabBar.addChild(tabBarButton);
 				tabBarButton = new dojox.mobile.TabBarButton({iconPos1:"0,116,29,29", iconPos2:"29,116,29,29", label:"Updates"});
 				tabBar.addChild(tabBarButton);
+				tabBar.startup();
 
 				var view = new dojox.mobile.View({id:"view1", selected:"true", innerHTML:'<div class="view">View 1</div>'});
 				dojo.doc.body.appendChild(view.domNode);
