@@ -19,8 +19,8 @@
 	to { -webkit-transform: translateY(-100%); }
 }
 @-webkit-keyframes mblRevealVIn {
-	from {}
-	to {}
+	from { -webkit-transform: scale(1.0); }
+	to { -webkit-transform: scale(1.0); }
 }
 @-webkit-keyframes mblRevealVOutReverse {
 	from { -webkit-transform: translateY(0px); }

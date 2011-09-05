@@ -14,8 +14,8 @@
 	-webkit-animation-name: mblCoverInReverse;
 }
 @-webkit-keyframes mblCoverOut {
-	from {}
-	to {}
+	from { -webkit-transform: scale(1.0); }
+	to { -webkit-transform: scale(1.0); }
 }
 @-webkit-keyframes mblCoverIn {
 	from { -webkit-transform: translateX(100%); }

@@ -14,8 +14,8 @@
 	-webkit-animation-timing-function: ease-out;
 }
 @-webkit-keyframes mblFadeOut {
-	from {}
-	to {}
+	from { -webkit-transform: scale(1.0); }
+	to { -webkit-transform: scale(1.0); }
 }
 @-webkit-keyframes mblFadeIn {
 	from { opacity: 0; }

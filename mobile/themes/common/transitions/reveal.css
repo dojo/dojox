@@ -18,8 +18,8 @@
 	to { -webkit-transform: translateX(-100%); }
 }
 @-webkit-keyframes mblRevealIn {
-	from {}
-	to {}
+	from { -webkit-transform: scale(1.0); }
+	to { -webkit-transform: scale(1.0); }
 }
 @-webkit-keyframes mblRevealOutReverse {
 	from { -webkit-transform: translateX(0px); }
