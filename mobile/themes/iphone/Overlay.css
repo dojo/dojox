@@ -11,7 +11,6 @@
   text-align: -webkit-center;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#fdfdfd), to(#cecece));
 }
-.mblOverlayHidden *,
-.mblOverlayHidden {
+.mblOverlayHidden *, .mblOverlayHidden {
   visibility: hidden !important;
 }

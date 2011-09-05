@@ -12,7 +12,6 @@
   background-color: #000000;
   background-image: none;
 }
-.mblOverlayHidden *,
-.mblOverlayHidden {
+.mblOverlayHidden *, .mblOverlayHidden {
   visibility: hidden !important;
 }
