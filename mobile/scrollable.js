@@ -118,6 +118,7 @@ if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 			{ // domStyle
 				set: dojo.setStyle
 			},
+			null, // TODO: this module should not use domGeometry
 			dojo.has // has
 		);
 	};
