@@ -53,6 +53,11 @@
   -webkit-transform: scale(0.8, 1) rotate(45deg);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f7fbf7), to(#cecfd6), color-stop(0.5, #ced3ce));
 }
+.dj_chrome .mblArrowButtonHead {
+  height: 20px;
+  border: 1px inset #39454A;
+  -webkit-transform: scale(0.7, 1) rotate(45deg);
+}
 .mblArrowButtonBody {
   position: absolute;
   cursor: pointer;

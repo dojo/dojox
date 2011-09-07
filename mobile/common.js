@@ -369,6 +369,10 @@ define([
 		if(config["mblApplyPageStyles"] !== false){
 			domClass.add(win.doc.documentElement, "mobile");
 		}
+		if(has('chrome')){
+			// dojox.mobile does not load uacss (only _compat does), but we need dj_chrome.
+			domClass.add(win.doc.documentElement, "dj_chrome");
+		}
 
 		if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2 && has('android') < 3.1){ // workaround for android screen flicker problem
 			if(config["mblAndroidWorkaroundButtonStyle"] !== false){

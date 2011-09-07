@@ -10,3 +10,8 @@
 .dj_tablet .mblArrowButtonBody, .dj_tablet .mblArrowButtonNeck {
 	background-image: url(compat/ipad-arrow-button-bg.png);
 }
+
+/* mbl.widget.TabBar */
+.dj_tablet .mblTabPanelHeader {
+	background-image: url(compat/ipad-heading-bg.png);
+}
