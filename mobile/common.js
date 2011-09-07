@@ -322,7 +322,7 @@ define([
 					alt: title
 				});
 			}
-			node.src = icon;
+			node.src = (icon || "").replace("${theme}", dm.currentTheme);
 			dm.setupIcon(node, iconPos);
 			if(parent && iconPos){
 				var arr = iconPos.split(/[ ,]/);

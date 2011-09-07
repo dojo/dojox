@@ -150,7 +150,7 @@ define([
 		var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;
 		for(i = 0; i < m.length; i++){
 			if(ua.match(new RegExp(m[i][0]))){
-				var theme = m[i][1];
+				var theme = dm.currentTheme = m[i][1];
 				var files = m[i][2];
 				for(j = t.length - 1; j >= 0; j--){
 					var pkg = lang.isArray(t[j]) ? (t[j][0]||"").replace(/\./g, '/') : "dojox/mobile";
