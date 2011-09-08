@@ -1,9 +1,8 @@
-define(["dojo", "dijit", "dojox/main", "dijit/_Widget"], function(dojo, dijit, dojox){
+define(["dojo/_base/kernel", "dojo/_base/declare", "dijit/_Widget", "dojo/dom-construct", "dojo/dom-style", "dojo/dom-geometry", "dojo/_base/window", "dojo/_base/lang"], function(kernel, declare, _Widget, construct, style, geometry, window, lang){
 
-	dojo.experimental("dojox.image.MagnifierLite");
-	dojo.getObject("image", true, dojox);
+	kernel.experimental("dojox.image.MagnifierLite");
 	
-	return dojo.declare("dojox.image.MagnifierLite", dijit._Widget,{
+	return declare("dojox.image.MagnifierLite", _Widget, {
 		// summary:	Adds magnification on a portion of an image element
 		//
 		// description: An unobtrusive way to add an unstyled overlay
@@ -38,37 +37,35 @@ define(["dojo", "dijit", "dojox/main", "dijit/_Widget"], function(dojo, dijit, d
 			// when position of domNode changes, _adjustScale needs to run.
 			// window.resize isn't it always, FIXME:
 			this.connect(window,"onresize","_adjustScale");
-
 		},
 
 		_createGlass: function(){
 			// summary: make img and glassNode elements as children of the body
 
-			var node = this.glassNode = dojo.create('div', {
-				style:{
+			var node = this.glassNode = construct.create('div', {
+				style: {
 					height: this.glassSize + "px",
 					width: this.glassSize + "px"
 				},
-				className:"glassNode"
-			}, dojo.body());
+				className: "glassNode"
+			}, window.body());
 
-			this.surfaceNode = node.appendChild(dojo.create('div'));
+			this.surfaceNode = node.appendChild(construct.create('div'));
 
-			this.img = dojo.place(dojo.clone(this.domNode), node);
+			this.img = construct.place(lang.clone(this.domNode), node);
 			// float the image around inside the .glassNode
-			dojo.style(this.img, {
+			style.set(this.img, {
 				position: "relative",
 				top: 0, left: 0,
 				width: this._zoomSize.w + "px",
 				height: this._zoomSize.h + "px"
 			});
-
 		},
 
 		_adjustScale: function(){
 			// summary: update the calculations should this.scale change
 
-			this.offset = dojo.position(this.domNode, true);
+			this.offset = geometry.position(this.domNode, true);
 			console.dir(this.offset);
 			this._imageSize = { w: this.offset.w, h:this.offset.h };
 			this._zoomSize = {
@@ -80,16 +77,15 @@ define(["dojo", "dijit", "dojox/main", "dijit/_Widget"], function(dojo, dijit, d
 		_showGlass: function(e){
 			// summary: show the overlay
 			this._placeGlass(e);
-			dojo.style(this.glassNode, {
+			style.set(this.glassNode, {
 				visibility: "visible",
 				display:""
 			});
-
 		},
 
 		_hideGlass: function(e){
 			// summary: hide the overlay
-			dojo.style(this.glassNode, {
+			style.set(this.glassNode, {
 				visibility: "hidden",
 				display:"none"
 			});
@@ -100,11 +96,10 @@ define(["dojo", "dijit", "dojox/main", "dijit/_Widget"], function(dojo, dijit, d
 
 			this._setImage(e);
 			var sub = Math.floor(this.glassSize / 2);
-			dojo.style(this.glassNode,{
+			style.set(this.glassNode,{
 				top: Math.floor(e.pageY - sub) + "px",
 				left:Math.floor(e.pageX - sub) + "px"
 			});
-
 		},
 
 		_setImage: function(e){
@@ -115,18 +110,16 @@ define(["dojo", "dijit", "dojox/main", "dijit/_Widget"], function(dojo, dijit, d
 				x = (this._zoomSize.w * xOff * -1) + (this.glassSize * xOff),
 				y = (this._zoomSize.h * yOff * -1) + (this.glassSize * yOff);
 
-			dojo.style(this.img, {
+			style.set(this.img, {
 				top: y + "px",
 				left: x + "px"
 			});
-
 		},
 
 		destroy: function(finalize){
-			dojo.destroy(this.glassNode);
+			construct.destroy(this.glassNode);
 			this.inherited(arguments);
 		}
 
 	});
-	
 });

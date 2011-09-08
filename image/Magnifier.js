@@ -1,7 +1,6 @@
-define(["dojo", "dojox", "dojox/gfx", "./MagnifierLite"], function(dojo, dojox){
+define(["dojo/_base/declare", "dojo/dom-construct", "dojo/_base/window", "dojox/gfx", "dojox/gfx/canvas", "./MagnifierLite"], function(declare, construct, window, gfx, canvas, MagnifierLite){
 	
-	dojo.getObject("image", true, dojox);
-	return dojo.declare("dojox.image.Magnifier", dojox.image.MagnifierLite, {
+	return declare("dojox.image.Magnifier", MagnifierLite, {
 		// summary:
 		//		Adds magnification on a portion of an image element, using `dojox.gfx`
 		//
@@ -19,16 +18,17 @@ define(["dojo", "dojox", "dojox/gfx", "./MagnifierLite"], function(dojo, dojox){
 
 			// images are hard to make into workable templates, so just add outer overlay
 			// and skip using dijit._Templated
-			this.glassNode = dojo.create('div', {
-				style:{
+			this.glassNode = construct.create('div', {
+				style: {
 					height: this.glassSize + "px",
 					width: this.glassSize + "px"
 				},
-				"className":"glassNode"
-			}, dojo.body());
-			this.surfaceNode = dojo.create('div', null, this.glassNode);
+				className: "glassNode"
+			}, window.body());
+			this.surfaceNode = construct.create('div', null, this.glassNode);
 
-			this.surface = dojox.gfx.createSurface(this.surfaceNode, this.glassSize, this.glassSize);
+			gfx.switchTo('canvas');
+			this.surface = canvas.createSurface(this.surfaceNode, this.glassSize, this.glassSize);
 			this.img = this.surface.createImage({
 			   src: this.domNode.src,
 			   width: this._zoomSize.w,
@@ -66,7 +66,5 @@ define(["dojo", "dojox", "dojox/gfx", "./MagnifierLite"], function(dojo, dojox){
 			this.img.setShape({ x: x, y: y });
 
 		}
-
 	});	
-
 });
