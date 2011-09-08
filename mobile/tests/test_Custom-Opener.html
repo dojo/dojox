@@ -20,7 +20,7 @@
 		dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 		dojo.require("dojox.mobile.SpinWheelDatePicker");
 		dojo.require("dojox.mobile.Opener");
-		dojo.require("dijit.Calendar");
+		dojo.require("dijit.CalendarLite");
 		dojo.require("dijit.ColorPalette");
 		dojo.require("dojox.widget.ColorPicker");
 
@@ -126,7 +126,7 @@
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('calPicker').hide(false)"></div>
 		</h1>
-		<div id="cal" dojoType='dijit.Calendar'></div>
+		<div id="cal" dojoType='dijit.CalendarLite'></div>
 	</div>
 
 	<div id="colorPicker1" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getColor1">
