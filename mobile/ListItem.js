@@ -150,13 +150,10 @@ define([
 			if(this._started){ return; }
 			this.inheritParams();
 			var parent = this.getParent();
-			if(this.moveTo || this.href || this.url || this.clickable){
-				this.connect(this.anchorNode, "onclick", "onClick");
+			if(this.moveTo || this.href || this.url || this.clickable || (parent && parent.select)){
+				this._onClickHandle = this.connect(this.anchorNode, "onclick", "onClick");
 			}
 			this.setArrow();
-			if(parent && parent.select){
-				this.connect(this.anchorNode, "onclick", "onClick");
-			}
 
 			if(domClass.contains(this.domNode, "mblVariableHeight")){
 				this.variableHeight = true;
