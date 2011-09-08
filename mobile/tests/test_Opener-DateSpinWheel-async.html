@@ -11,10 +11,11 @@
 			display: none;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, async:true"></script>
 
 	<script language="JavaScript" type="text/javascript">
 		require([
+			"dijit/_base/manager",  // dijit.byId
 			"dojox/mobile",				// This is a mobile app.
 			"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
 			"dojox/mobile/parser",		// This mobile app uses declarative programming with fast mobile parser

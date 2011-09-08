@@ -10,7 +10,7 @@
 			display: none;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, async:true"></script>
 
 	<script language="JavaScript" type="text/javascript">
 		require([
@@ -58,7 +58,7 @@
 			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
 				onclick="dijit.byId('calPicker').hide(false)"></div>
 		</h1>
-		<div id="cal" dojoType='dijit.Calendar'></div>
+		<div id="cal" dojoType='dijit.CalendarLite'></div>
 	</div>
 
 </body>
