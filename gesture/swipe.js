@@ -1,132 +1,126 @@
-define(["dojo", "../gesture"], function(dojo, gesture){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"./Base",
+	"../main"
+], function(dojo, declare, Base, dojox){
 // module:
-//		dojo/gesture/swipe
+//		dojox/gesture/swipe
 // summary:
-//		This module provides event handlers for swipe gesture
-//		- dojo.gesture.swipe -> to fire 'swipe' event
-//		- dojo.gesture.swipe.up -> to fire 'swipe.up' event
-//		- dojo.gesture.swipe.down -> to fire 'swipe.down' event
-//		- dojo.gesture.swipe.left -> to fire 'swipe.left' event
-//		- dojo.gesture.swipe.right -> to fire 'swipe.right' event
+//		This module provides swipe gestures including:
+//		1. dojox.gesture.swipe
+//			A series of "swipe" will be fired during touchmove, this will mostly
+//			be used to keep sliding the Dom target based on the swiped distance(dX, dY).
+//
+//		2. dojox.gesture.swipe.end	
+//			Fired when a swipe is ended so that an bounce animation may be applied
+//			to the Dom target sliding to the final position.
+//
+//		Following information will be included in the fired swipe events:
+//		1. type: "swipe"|"swipe.end"
+//		2. time: an integer indicating the delta time(in milliseconds)
+//		3. dX: delta distance on X axis, dX < 0 -> moving left, dX > 0 - moving right
+//		4. dY: delta distance on Y axis, dY < 0 -> moving up, dX > 0 - moving down
+//		Note - dX and dY can be used together for a hybrid swipe(both vertically and horizontally)
+//
 // example:
 //		A. Used with dojo.connect()
-//		|	dojo.connect(node, dojo.gesture.swipe, function(e){});
-//		|	dojo.connect(node, dojo.gesture.swipe.up|down|left|right, function(e){});
+//		|	dojo.connect(node, dojox.gesture.swipe, function(e){});
+//		|	dojo.connect(node, dojox.gesture.swipe.end, function(e){});
 //
 //		B. Used with dojo.on
-//		|	define(["dojo/on", "dojo/gesture/swipe"], function(on, swipe){
+//		|	define(["dojo/on", "dojox/gesture/swipe"], function(on, swipe){
 //		|		on(node, swipe, function(e){});
-//		|		on(node, swipe.up|down|left|right, function(e){});
+//		|		on(node, swipe.end, function(e){});
 //
-//		C. Used with dojo.gesture.swipe.* directly
-//		|	dojo.gesture.swipe(node, function(e){});
-//		|	dojo.gesture.swipe.up(node, function(e){});
-//		|	...
-//
-//		Though there is always a default singleton gesture instance after required, e.g 
-//		|	require(["dojo/gesture/swipe"], function(){...});
-//		It's possible to unRegister it and create a new one with different parameter setting:
-//		|	dojo.gesture.unRegister(dojo.gesture.swipe);
-//		|	var mySwipe = new dojo.gesture.swipe.Swipe({swipeRange: 300});
-//		|	dojo.gesture.register(mySwipe);
-//		|	dojo.connect(node, mySwipe, function(e){});
-//		|	dojo.connect(node, mySwipe.up|down|left|right, function(e){});
+//		C. Used with dojox.gesture.swipe.* directly
+//		|	dojox.gesture.swipe(node, function(e){});
+//		|	dojox.gesture.swipe.end(node, function(e){});
 
-var clz = dojo.declare(null, {
-	
-	swipeTimeout: 300,
-	
-	swipeSpeed: 600,
-	
-	swipeRange: 60,
-	
-	swipeDirection: {none: 0, up: 1, down: 2, left: 4, right: 8},
-	
-	defaultEvent: 'swipe',
-	
-	subEvents: ['up', 'right', 'down', 'left'],
+dojo.experimental("dojox.gesture.swipe");
 
-	constructor: function(args){
-		dojo.mixin(this, args);
-	},
-	press: function(data, e){
+var clz = declare(Base, {
+
+	// defaultEvent: String
+	//		Default event - "swipe"
+	defaultEvent: "swipe",
+
+	// subEvents: Array
+	//		Read-only, list of sub events, used by 
+	//		being combined with defaultEvent as "swipe.end"
+	subEvents: ["end"],
+
+	press: function(/*Object*/data, /*Event*/e){
+		// summary:
+		//		Overwritten, set initial swipe info
 		if(e.touches && e.touches.length >= 2){
 			//currently only support single-touch swipe
-			delete data.swipeContext;
+			delete data.context;
 			return;
 		}
-		if(!data.swipeContext){
-			data.swipeContext = {x: 0, y: 0, t: 0};
+		if(!data.context){
+			data.context = {x: 0, y: 0, t: 0};
 		}
-		data.swipeContext.t = new Date().getTime();
-		data.swipeContext.x = e.screenX;
-		data.swipeContext.y = e.screenY;
+		data.context.x = e.screenX;
+		data.context.y = e.screenY;
+		data.context.t = new Date().getTime();
+		this.lock(e.currentTarget);
 	},
-	release: function(data, e){
-		if(!data.swipeContext){
-			return;
-		}
-		var t = (new Date().getTime() - data.swipeContext.t);
-		if(t > this.swipeTimeout){
-			// gesture is too long
-			return;
-		}
-		var dx = e.screenX - data.swipeContext.x,
-			dy = e.screenY - data.swipeContext.y,
-			dirx = (dx > 0 ? this.swipeDirection.right : dx < 0 ? this.swipeDirection.left : this.swipeDirection.none),
-			diry = (dy > 0 ? this.swipeDirection.down : dy < 0 ? this.swipeDirection.up : this.swipeDirection.none);
-		if(dirx === this.swipeDirection.none && diry === this.swipeDirection.none){
-			// not a swipe
-			return;
-		}
-		dx = Math.abs(dx);
-		dy = Math.abs(dy);
-		var target = e.target, current = e.currentTarget;
-		if(dx >= dy){
-			if(dx/t*1000 < this.swipeSpeed){
-				// gesture is too slow
-				return;
-			}
-			switch(dy > this.swipeRange ? this.swipeDirection.none : dirx){
-			case this.swipeDirection.left:
-				gesture.fire(current, target, "swipe.left");
-				break;
-			case this.swipeDirection.right:
-				gesture.fire(current, target, "swipe.right");
-				break;
-			default: 
-				// not a swipe
-				return;
-			}
-		}else{
-			if(dy/t*1000 < this.swipeSpeed){
-				// gesture is too slow
-				return;
-			}
-			switch(dx > this.swipeRange ? this.swipeDirection.none : diry){
-			case this.swipeDirection.up:
-				gesture.fire(current, target, "swipe.up");
-				break;
-			case this.swipeDirection.down:
-				gesture.fire(current, target, "swipe.down");
-				break;
-			default:
-				// not a swipe
-				return;
-			}
-		}
-		gesture.fire(current, target, 'swipe');
+	move: function(/*Object*/data, /*Event*/e){
+		// summary:
+		//		Overwritten, fire matched "swipe" during touchmove
+		this._recognize(data, e, "swipe");
 	},
-	destroy: function(){}
+	release: function(/*Object*/data, /*Event*/e){
+		// summary:
+		//		Overwritten, fire matched "swipe.end" when touchend
+		this._recognize(data, e, "swipe.end");		
+		delete data.context;
+		this.unLock();
+	},
+	cancel: function(data, e){
+		// summary:
+		//		Overwritten
+		delete data.context;
+		this.unLock();
+	},
+	_recognize: function(/*Object*/data, /*Event*/e, /*String*/type){
+		// summary:
+		//		Recognize and fire appropriate gesture events
+		if(!data.context){
+			return;
+		}
+		var info = this._getSwipeInfo(data, e);
+		if(!info){
+			return; //no swipe happened
+		}
+		info.type = type;
+		this.fire(e.target, info);
+	},
+	_getSwipeInfo: function(/*Object*/data, /*Event*/e){
+		// summary:
+		//		Calculate swipe information - time, dX and dY
+		var dX, dY, info = {}, startData = data.context;
+		
+		info.time = new Date().getTime() - startData.t;
+		
+		dX = e.screenX - startData.x;
+		dY = e.screenY - startData.y;
+		
+		if(dX === 0 && dY === 0){
+			return null; // no swipes happened
+		}
+		info.dX = dX;
+		info.dY = dY;
+		return info;
+	}
 });
 
-//register a default singleton Swipe instance
-dojo.gesture.swipe = new clz();
+// the default swipe instance for handy use
+dojox.gesture.swipe = new clz();
+// Class for creating a new Swipe instance
+dojox.gesture.swipe.Swipe = clz;
 
-dojo.gesture.swipe.Swipe = clz;
-
-gesture.register(dojo.gesture.swipe);
-
-return dojo.gesture.swipe;
+return dojox.gesture.swipe;
 
 });

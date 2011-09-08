@@ -1,344 +1,340 @@
 define([
-	"./_base/kernel",
-	"./_base/array",
-	"./_base/lang",	
-	"./on",
-	"./touch",
-	"./has"
-], function(dojo, array, lang, on, touch, has){
-// module:
-//		dojo/gesture
-//
-// summary:
-//		This module provides an internal central management for all gestures, including
-//		1. Registering/un-registering singleton gesture instances
-//		2. Binding listen handlers for gesture events
-//		3. Normalizing, dispatching and bubbling gesture events etc.
-//
-// register(gesture):
-//		Register a new gesture(e.g dojo.gesture.tap) with 
-//		its event list(e.g. 'tap', 'tap.hold' and 'tap.dobletap')
-//
-// unRegister(gesture):
-//		Un-register a gesture and remove all corresponding event handlers
-//
-// handle(eventType):
-//		Bind a static listen handler for the given gesture event, 
-//		the handle will be internally used by on(), e.g.
-//		|	var dojo.gesture.tap = handle('tap');
-//		|	//so that we can use it with on
-//		|	on(node, dojo.gesture.tap, func(e){});
-//		|	//or used directly as
-//		|	dojo.gesture.tap(node, func(e){});
-//
-// isGestureEvent(event):
-//		Whether the given event is a supported gesture event
-//
-// fire(node, target, eventType, event):
-//		Used by gesture implementations to fire a recognized gesture event, fire() invokes appropriate callbacks
-//		with a wrapped gesture event with detail gesture information.
-//
-// example:
-//		1. A gesture can be used in the following ways:
-//		A. Used with dojo.connect()
-//		|	dojo.connect(node, dojo.gesture.tap, function(e){});
-//		|	dojo.connect(node, dojo.gesture.tap.hold, function(e){});
-//		|	dojo.connect(node, dojo.gesture.tap.doubletap, function(e){});		
-//
-//		B. Used with dojo.on
-//		|	define(["dojo/on", "dojo/gesture/tap"], function(on, tap){
-//		|		on(node, tap, function(e){});
-//		|		on(node, tap.hold, function(e){});
-//		|		on(node, tap.doubletap, function(e){});
-//
-//		C. Used with dojo.gesture.tap.* directly
-//		|	dojo.gesture.tap(node, function(e){});
-//		|	dojo.gesture.tap.hold(node, function(e){});
-//		|	dojo.gesture.tap.doubletap(node, function(e){});
-//
-//		Though there is always a default singleton gesture instance after being required, e.g 
-//		|	require(["dojo/gesture/tap"], function(){...});
-//		It's possible to unRegister it and create a new one with different parameter setting:
-//		|	dojo.gesture.unRegister(dojo.gesture.tap);
-//		|	var myTap = new dojo.gesture.tap.Tap({holdThreshold: 300});
-//		|	dojo.gesture.register(myTap);
-//		|	dojo.connect(node, myTap, function(e){});
-//		|	dojo.connect(node, myTap.hold, function(e){});
-//		|	dojo.connect(node, myTap.doubletap, function(e){});
-//		
-//		Please refer to dojo/gesture/* for more gesture usages
-
-function isEmpty(o){
-	for(var x in o){
-		return false;
-	}
-	return true;
-}
-
-//singleton gesture manager
-dojo.gesture = {
-	events: {},//<event, gesture> map, e.g {'taphold': xxx, 'rotate': xxx}
-	gestures: [],
-	_gestureElements: [],
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dojo/dom",
+	"dojo/on",
+	"dojo/touch",
+	"dojo/has",
+	"../main"
+], function(declare, array, lang, dom, on, touch, has, dojox){
+	// module:
+	//		dojox/gesture/Base
+	// summary:
+	//		This module provides an abstract parental class for various gesture implementations.
 	
-	register: function(/*Object*/gesture){
+	lang.getObject("gesture", true, dojox);
+
+	return declare(null, {
 		// summary:
-		//		Register a new singleton gesture instance
-		// description:
-		//		The gesture event list will be added for listening.
-		if(!gesture){ return; }
-		if(!has("touch") && gesture.touchOnly){
-			console.warn("Gestures:[", gesture.defaultEvent, "] is only supported on touch devices!");
-			return;
-		}
-		if(array.indexOf(this.gestures, gesture) < 0){
-			this.gestures.push(gesture);
-		}
+		//		An abstract parental class for various gesture implementations.
+		//
+		//		It's mainly responsible for:
+		//		1. Binding on() listening handlers for supported gesture events.
+		//		2. Monitoring underneath events and process different phases - "press"|"move"|"release"|"cancel".
+		//		3. Normalizing, dispatching and bubbling gesture events with on() API.
+		//
+		//		A gesture implementation only needs to extend this class and overwrite
+		//		appropriate phase handlers - press()|move()|release()|cancel for recognizing and firing gestures
+		//
+		// example:
+		//		1. A typical gesture implementation:
+		//		- Define dojox/gesture/a module which provides 3 gesture events:"a", "a.x", "a.y" to be used as:
+		//			
+		//		|	dojo.connect(node, dojox.gesture.a, function(e){});
+		//		|	dojo.connect(node, dojox.gesture.a.x, function(e){});
+		//		|	dojo.connect(node, dojox.gesture.a.y, function(e){});
+		//		
+		//		|	define([..., "./Base"], function(..., Base){
+		//		|		var clz = declare(Base, {
+		//		|			defaultEvent: "a",
+		//		|
+		//		|			subEvents: ["x", "y"],
+		//		|			
+		//		|			press: function(data, e){
+		//		|				this.fire(node, {type: "a.x", ...});
+		//		|			},
+		//		|			move: function(data, e){
+		//		|				this.fire(node, {type: "a.y", ...});
+		//		|			},
+		//		|			release: function(data, e){
+		//		|				this.fire(node, {type: "a", ...});
+		//		|			},
+		//		|			cancel: function(data, e){
+		//		|				// clean up
+		//		|			}
+		//		|		});
+		//		|
+		//		|		// in order to have a default instance for handy use
+		//		|		dojox.gesture.a = new clz();
+		//		|
+		//		|		// so that we can create new instances like
+		//		|		// var mine = new dojox.gesture.a.A({/*parameters*/})
+		//		|		dojox.gesture.a.A = clz;
+		//		|
+		//		|		return dojox.gesture.a;
+		//		|	});
+		//		|
+		//		2. A gesture can be used in the following ways(taking dojox.gestre.tap for example):
+		//		A. Used with dojo.connect()
+		//		|	dojo.connect(node, dojox.gesture.tap, function(e){});
+		//		|	dojo.connect(node, dojox.gesture.tap.hold, function(e){});
+		//		|	dojo.connect(node, dojox.gesture.tap.doubletap, function(e){});		
+		//
+		//		B. Used with dojo.on
+		//		|	define(["dojo/on", "dojox/gesture/tap"], function(on, tap){
+		//		|		on(node, tap, function(e){});
+		//		|		on(node, tap.hold, function(e){});
+		//		|		on(node, tap.doubletap, function(e){});
+		//
+		//		C. Used with dojox.gesture.tap.* directly
+		//		|	dojox.gesture.tap(node, function(e){});
+		//		|	dojox.gesture.tap.hold(node, function(e){});
+		//		|	dojox.gesture.tap.doubletap(node, function(e){});
+		//
+		//		Though there is always a default gesture instance after being required, e.g 
+		//		|	require(["dojox/gesture/tap"], function(){...});
+		//		It's possible to create a new one with different parameter setting:
+		//		|	var myTap = new dojox.gesture.tap.Tap({holdThreshold: 300});
+		//		|	dojo.connect(node, myTap, function(e){});
+		//		|	dojo.connect(node, myTap.hold, function(e){});
+		//		|	dojo.connect(node, myTap.doubletap, function(e){});
+		//		
+		//		Please refer to dojox/gesture/* for more gesture usages	
+
+		// defaultEvent: String
+		//		Default event e.g. "tap" is a default event of dojox.gesture.tap
+		defaultEvent: " ",
+
+		// subEvents: Array
+		//		Read-only, a list of sub events e.g ["hold", "doubletap"],
+		//		used by being combined with defaultEvent like "tap.hold", "tap.doubletap" etc.
+		subEvents: [],
+
+		// touchOnly: boolean
+		//		Whether the gesture is touch-device only
+		touchOnly : false,
+
+		//	_elements
+		//		List of elements that wraps target node and gesture data
+		_elements: null,
+
+		/*=====
+		// _lock: Dom
+		//		The dom target that's being locked for processing
+		_lock: null,
 		
-		var evt = gesture.defaultEvent;
-		this.events[evt] = gesture;
-		gesture.call = this.handle(evt);
-		
-		array.forEach(gesture.subEvents, function(type){
-			gesture[type] = this.handle(evt + '.' + type);
-			this.events[evt + '.' + type] = gesture;
-		}, this);
-	},
-	unRegister: function(/*Object*/gesture){
-		// summary:
-		//		Un-register the given singleton gesture instance
-		// description:
-		//		The gesture event list will also be removed
-		if(!gesture){ return; }
-		var self = this;
-		function _remove(node, evt){
-			if(self.events[evt]){
-				delete self.events[evt];
-			}
-			self._remove(node, evt, null, true);
-		}
-		array.forEach(this._gestureElements, function(element){
-			_remove(element.target, gesture.defaultEvent);
-			array.forEach(gesture.subEvents, function(type){
-				_remove(element.target, gesture.defaultEvent + '.' + type);
-			}, this);
-		}, this);
-		this._gestureElements = array.filter(this._gestureElements, function(element){
-			return !isEmpty(element.gestures);//remove empty ones
-		});
-		var i = array.indexOf(this.gestures, gesture);
-		if(i >= 0){
-			this.gestures.splice(i, 1);
-		}
-		if(gesture.destroy){
-			gesture.destroy();
-		}
-	},
-	handle: function(/*String*/eventType){
-		// summary:
-		//		Bind a static listen handler for the given gesture event,
-		//		the handle will be used internally by on()
-		var self = this;
-		return function(node, listener){//called by on(), see dojo.on
-			//normalize, arguments might be (null, node, listener)
-			var a = arguments;
-			if(a.length > 2){
-				node = a[1];
-				listener = a[2];
-			}
-			var isNode = node && (node.nodeType || node.attachEvent || node.addEventListener);
-			if(!isNode || !self.isGestureEvent(eventType)){
-				return on(node, eventType, listener);
-			}else{
-				var signal = {
-					remove: function(){
-						self._remove(node, eventType, listener);
-					}			
-				};
-				self._add(node, eventType, listener);
-				return signal;
-			}
-		};
-	},
-	isGestureEvent: function(/*String*/e){
-		return !!this.events[e];
-	},
-	isMouseEvent: function(/*String*/type){
-		return (/^mousedown$|^mousemove$|^mouseup$|^click$|^contextmenu$/).test(type);
-	},
-	_add: function(node, type, listener){
-		var element = this.getGestureElement(node);
-		if(element === null){
-			element = {
-				target: node,
-				gestures: {},
-				data: {},
-				listening: false
-			};
-			this._gestureElements.push(element);
-		}
-		var gesture = this.events[type];
-		if(gesture && !element.data[gesture.defaultEvent]){
-			element.data[gesture.defaultEvent] = {};
-		}
-		if(!element.gestures[type]){
-			element.gestures[type] = {
-				callbacks: [listener],
-				stopped: false //to cancel event bubbling
-			};
-		}else{
-			element.gestures[type].callbacks.push(listener);
-		}
-		if(!element.listening){
-			var _press = lang.hitch(this, "_press", element);
-			var _move = lang.hitch(this, "_move", element);
-			var _release = lang.hitch(this, "_release", element);
-			
-			var touchOnly = this.events[type].touchOnly;
-			if(touchOnly){
-				element.press = on(node, 'touchstart', _press);
-				element.move = on(node, 'touchmove', _move);
-				element.release = on(node, 'touchend', _release);
-			}else{
-				element.press = touch.press(node, _press);
-				element.move = touch.move(node, _move);
-				element.release = touch.release(node, _release);
-			}
-			if(has("touch")){
-				var _cancel = lang.hitch(this, "_cancel", element);
-				element.cancel = on(node, 'touchcancel', _cancel);
-			}
-			element.listening = true;
-		}
-	},
-	_remove: function(node, type, listener, keepElement){
-		var element = this.getGestureElement(node);
-		if(!element){ return; }
-		var callbacks = (element.gestures[type] || {}).callbacks;
-		if(!callbacks){ return; }
-		var i;
-		if(listener){
-			i = array.indexOf(callbacks, listener);
-			if(i >= 0){
-				callbacks.splice(i, 1);
-			}
-		}
-		if(callbacks.length === 0 || !listener){
-			//clear if not listened anymore
-			delete element.gestures[type];
-		}
-		if(isEmpty(element.gestures)){
-			// no more gestures are being listened for the element
-			// so disconnect native listeners
-			array.forEach(['press', 'move', 'release', 'cancel'], function(type){
-				if(element[type] && element[type].remove){
-					element[type].remove();
-				}
-			});
-			if(keepElement){
+		// _events: Array
+		//		Read-only, complete list of supported gesture events with full name space
+		//		e.g ["tap", "tap.hold", "tap.doubletap"]
+		_events: null
+		=====*/
+
+		constructor: function(args){
+			lang.mixin(this, args);
+			this.init();
+		},
+		init: function(){
+			// summary:
+			//		Initialization works
+			this._elements = [];
+
+			if(!has("touch") && this.touchOnly){
+				console.warn("Gestures:[", this.defaultEvent, "] is only supported on touch devices!");
 				return;
 			}
-			//also release the element if needed
-			i = array.indexOf(this._gestureElements, element);
-			if(i >= 0){
-				this._gestureElements.splice(i, 1);
-			}
-		}
-	},
-	getGestureElement: function(node){
-		var i;
-		for(i = 0; i < this._gestureElements.length; i++){
-			var element = this._gestureElements[i];
-			if(element.target === node){
-				return element;
-			}
-		}
-		return null;
-	},
-	_press: function(element, e){
-		this._forEach(element, 'press', e);
-	},
-	_move: function(element, e){
-		this._forEach(element, 'move', e);
-	},
-	_release: function(element, e){
-		this._forEach(element, 'release', e);
-	},
-	_cancel: function(element, e){
-		this._forEach(element, 'cancel', e);
-	},
-	_forEach: function(element, type, e){
-		e.preventDefault();
-		if(e.locking){
-			return;
-		}
-		var visited = [], x;
-		for(x in element.gestures){
-			var gesture = this.events[x];
-			if(gesture[type] && array.indexOf(visited, gesture) < 0){
-				//add a lock attr indicating the event is being processed by the most inner node,
-				//so that we can do gesture bubbling manually
-				e.locking = true;
-				gesture[type](element.data[gesture.defaultEvent], e);
-				visited.push(gesture);
-			}
-		}
-	},
-	fire: function(node, target, eventType, event){
-		// summary:
-		//		Used by gesture implementations to fire a recognized gesture event, invoking appropriate callbacks
-		//		with a wrapped gesture event
-		//		[TODO] - use on.emit() to fire gesture events
-		// node: DomNode
-		//		Target node to fire the gesture
-		// target: DomNode
-		//		Node that the event originated from
-		// event: Object
-		//		Simulated event containing gesture info e.g {type: 'tap.hold'|'swipe.left'), ...}
-		//gesture looks like {callbacks:[...], stopped:true|false}
-		var gesture =((this.getGestureElement(node) || {}).gestures || {})[eventType];
-		if(!gesture){ return; }
 
-		if(!event){
-			event = {};
-		}
-		event.type = eventType;	
-		event.target = target;
-		event.currentTarget = node;
-		event.preventDefault = function(){};
-		event.stopPropagation = function(){
-			gesture.stopped = true;
-		};
-		this._fire(node, eventType, event);
-	},
-	_fire: function(node, eventType, e){
-		var gesture =((this.getGestureElement(node) || {}).gestures || {})[eventType];
-		if(!gesture){ return;}
-		
-		array.forEach(gesture.callbacks, function(func){
-			func.call(node, e);
-		});
-		
-		//gesture bubbling - also fire for parents unless stopped explicitly
-		if(!gesture.stopped){
-			var parentNode = node.parentNode;
-			if(parentNode){
-				e.currentTarget = parentNode;
-				this._fire(parentNode, eventType, e);
+			// bind on() handlers for various events
+			var evt = this.defaultEvent;
+			this.call = this._handle(evt);
+
+			this._events = [evt];
+			array.forEach(this.subEvents, function(subEvt){
+				this[subEvt] = this._handle(evt + '.' + subEvt);
+				this._events.push(evt + '.' + subEvt);
+			}, this);
+		},
+		_handle: function(/*String*/eventType){
+			// summary:
+			//		Bind listen handler for the given gesture event(e.g. "tap", "tap.hold" etc.)
+			//		the returned handle will be used internally by on()
+			var self = this;
+			//called by on(), see dojo.on
+			return function(node, listener){
+				// normalize, arguments might be (null, node, listener)
+				var a = arguments;
+				if(a.length > 2){
+					node = a[1];
+					listener = a[2];
+				}
+				var isNode = node && (node.nodeType || node.attachEvent || node.addEventListener);
+				if(!isNode){
+					return on(node, eventType, listener);
+				}else{
+					var onHandle = self._add(node, eventType, listener);
+					// FIXME - users are supposed to explicitly call either
+					// disconnect(signal) or signal.remove() to release resources
+					var signal = {
+						remove: function(){
+							onHandle.remove();
+							self._remove(node, eventType);
+						}
+					};
+					return signal;
+				}
+			};
+		},
+		_add: function(/*Dom*/node, /*String*/type, /*function*/listener){
+			// summary:
+			//		Bind handlers for both gesture event(e.g "tab.hold")
+			//		and underneath "press"|"move"|"release" events
+			var element = this._getGestureElement(node);
+			if(!element){
+				// the first time listening to the node
+				element = {
+					target: node,
+					data: {},
+					handles: {}
+				};
+
+				var _press = lang.hitch(this, "_process", element, "press");
+				var _move = lang.hitch(this, "_process", element, "move");
+				var _release = lang.hitch(this, "_process", element, "release");
+				var _cancel = lang.hitch(this, "_process", element, "cancel");
+
+				var handles = element.handles;
+				if(this.touchOnly){
+					handles.press = on(node, 'touchstart', _press);
+					handles.move = on(node, 'touchmove', _move);
+					handles.release = on(node, 'touchend', _release);
+					handles.cancel = on(node, 'touchcancel', _cancel);
+				}else{
+					handles.press = touch.press(node, _press);
+					handles.move = touch.move(node, _move);
+					handles.release = touch.release(node, _release);
+					handles.cancel = touch.cancel(node, _cancel);
+				}
+				this._elements.push(element);
 			}
-		}
-	},
-	reset: function(){
-		var g;
-		while(g = this.gestures.pop()){
-			this.unRegister(g);
-		}
-	},
-	destroy: function(){
-		this.reset();
-	}
-};
+			// track num of listeners for the gesture event - type
+			// so that we can release element if no more gestures being monitored
+			element.handles[type] = !element.handles[type] ? 1 : ++element.handles[type];
 
-return dojo.gesture;
+			return on(node, type, listener); //handle
+		},
+		_getGestureElement: function(/*Dom*/node){
+			// summary:
+			//		Obtain a gesture element for the give node
+			var i = 0, element;
+			for(; i < this._elements.length; i++){
+				element = this._elements[i];
+				if(element.target === node){
+					return element;
+				}
+			}
+		},
+		_process: function(element, phase, e){
+			// summary:
+			//		Process and dispatch to appropriate phase handlers
+			// element: Object
+			//		Gesture element
+			// phase: String
+			//		Phase of a gesture to be processed, might be "press"|"move"|"release"|"cancel"
+			// e: Event
+			//		Native event
+			e._locking = e._locking || {};
+			//TODO - add more descriptions for the locking machinery
+			if(e._locking[this.defaultEvent] || this.isLocked(e.currentTarget)){
+				//console.log('this.lock=', this._lock, ' e.currentTarget = ', e.currentTarget, ' phase = ', phase);
+				return;
+			}
+			// invoking gesture.press()|move()|release()|cancel()
+			e.preventDefault();
+			e._locking[this.defaultEvent] = true;
+			this[phase](element.data, e);
+		},
+		press: function(data, e){
+			// summary:
+			//		Process the "press" phase of a gesture
+		},
+		move: function(data, e){
+			// summary:
+			//		Process the "move" phase of a gesture
+		},
+		release: function(data, e){
+			// summary:
+			//		Process the "release" phase of a gesture
+		},
+		cancel: function(data, e){
+			// summary:
+			//		Process the "cancel" phase of a gesture
+		},
+		fire: function(node, event){
+			// summary:
+			//		Fire a gesture event and invoke registered listeners
+			//		a simulated GestureEvent will also be sent along
+			// node: DomNode
+			//		Target node to fire the gesture
+			// event: Object
+			//		An object containing specific gesture info e.g {type: 'tap.hold'|'swipe.left'), ...}
+			//		all these properties will be put into a simulated GestureEvent when fired.
+			//		Note - Default properties in a native Event won't be overwritten,
+			//				please see on.emit() for more details.
+			if(!node || !event){
+				return;
+			}
+			event.bubbles = true;
+			event.cancelable = true;
+			on.emit(node, event.type, event);
+		},
+		_remove: function(/*Dom*/node, /*String*/type){
+			// summary:
+			//		Check and remove underneath handlers if node
+			//		is not being listened for 'this' gesture anymore,
+			//		this happens when user removed all previous on() handlers.
+			var element = this._getGestureElement(node);
+			if(!element || !element.handles){ return; }
+			
+			element.handles[type]--;
 
+			var handles = element.handles;
+			if(!array.some(this._events, function(evt){
+				return handles[evt] > 0;
+			})){
+				// clean up if node is not being listened anymore
+				this._cleanHandles(handles);
+				var i = array.indexOf(this._elements, element);
+				if(i >= 0){
+					this._elements.splice(i, 1);
+				}
+			}
+		},
+		_cleanHandles: function(/*Object*/handles){
+			// summary:
+			//		Clean up on handles
+			for(var x in handles){
+				//remove handles for "press"|"move"|"release"|"cancel"
+				if(handles[x].remove){
+					handles[x].remove();
+				}
+				delete handles[x];
+			}
+		},
+		lock: function(/*Dom*/node){
+			// summary:
+			//		Lock the node for processing
+			this._lock = node;
+		},
+		unLock: function(){
+			// summary:
+			//		Release the currently locked node
+			this._lock = null;
+		},
+		isLocked: function(node){
+			// summary:
+			//		Check if the node is being locked for processing
+			if(!this._lock || !node){
+				return false;
+			}
+			return this._lock !== node && dom.isDescendant(node, this._lock);
+		},
+		destroy: function(){
+			// summary:
+			//		Remove all handlers and resources
+			array.forEach(this._elements, function(element){
+				this._cleanHandles(element.handles);
+			});
+			this._elements = null;
+		}
+	});
 });
