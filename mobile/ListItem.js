@@ -281,8 +281,10 @@ define([
 			this.icon = icon;
 			var a = this.anchorNode;
 			if(!this.iconNode){
-				var ref = this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.box;
-				this.iconNode = domConstruct.create("DIV", {className:"mblListItemIcon"}, ref, "before");
+				if(icon){
+					var ref = this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.box;
+					this.iconNode = domConstruct.create("DIV", {className:"mblListItemIcon"}, ref, "before");
+				}
 			}else{
 				domConstruct.empty(this.iconNode);
 			}

@@ -23,11 +23,13 @@ function verifyListItem(id, text, rightText, domButtonType, hasIcon, hasRightIco
 	childNodes = childNodes[0].childNodes;
 
 	var i=0;
-	if(!dojo.isIE && hasIcon && regExp) {
-		doh.assertTrue(childNodes[i].childNodes[0].src.search(regExp) != -1, "search " + regExp.toString());
+	if(hasIcon){
+		if(!dojo.isIE && regExp){
+			doh.assertTrue(childNodes[i].childNodes[0].src.search(regExp) != -1, "search " + regExp.toString());
+		}
+		doh.assertEqual('mblListItemIcon', childNodes[i++].className);
 	}
 
-	doh.assertEqual('mblListItemIcon', childNodes[i++].className);
 	if(hasRightIcon){
 		if(domButtonType){
 			doh.assertEqual(domButtonType + ' mblDomButton', childNodes[i].childNodes[0].className);

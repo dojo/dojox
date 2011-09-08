@@ -15,10 +15,10 @@ dojo.addOnLoad(function(){
 					verifyListItem("dojox_mobile_ListItem_6", 'Sounds', '', "mblDomButtonArrow", true, true, false);
 					verifyListItem("dojox_mobile_ListItem_7", 'Brightness', '', "mblDomButtonArrow", true, true, false);
 					verifyListItem("dojox_mobile_ListItem_8", 'Wallpaper', '', "mblDomButtonArrow", true, true, false);
-					verifyListItem("dojox_mobile_ListItem_9", 'XX Widget', '', "", true, true, false);
-					verifyListItem("dojox_mobile_ListItem_10", 'YY Widget', '', "", true, true, false);
-					verifyListItem("dojox_mobile_ListItem_11", 'Use wireless networks', '', "", false, true, false, true);
-					verifyListItem("dojox_mobile_ListItem_12", 'Use GPS satellites', '', "", false, true, false, true);
+					verifyListItem("dojox_mobile_ListItem_9", 'XX Widget', '', "mblDomButtonBluePlus", true, true, false);
+					verifyListItem("dojox_mobile_ListItem_10", 'YY Widget', '', "mblDomButtonRedMinus", true, true, false);
+					verifyListItem("dojox_mobile_ListItem_11", 'Use wireless networks', '', "mblDomButtonCheckboxOff", false, true, false, true);
+					verifyListItem("dojox_mobile_ListItem_12", 'Use GPS satellites', '', "mblDomButtonCheckboxOn", false, true, false, true);
 					verifyListItem("dojox_mobile_ListItem_13", 'Set unlock pattern', '', "", false, false, false);
 				}));
 				return d;
@@ -93,7 +93,7 @@ dojo.addOnLoad(function(){
 			runTest: function(){
 				var demoWidget = dijit.byId("dojox_mobile_ListItem_9");
 				demoWidget.set({btnClass:"mblDomButtonRedMinus"});
-				doh.assertEqual('mblDomButtonRedMinus mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
+				verifyListItem("dojox_mobile_ListItem_9", 'XX Widget', '', "mblDomButtonRedMinus", true, true, false);
 //							doh.assertEqual("mblDomButtonRedMinus", demoWidget.get("btnClass"));
 			}
 		},
@@ -104,7 +104,7 @@ dojo.addOnLoad(function(){
 				var demoWidget = dijit.byId("dojox_mobile_ListItem_11");
 				demoWidget.set({btnClass:"mblDomButtonCheckboxOn"});
 
-				doh.assertEqual('mblDomButtonCheckboxOn mblDomButton', demoWidget.domNode.childNodes[0].childNodes[1].childNodes[0].className);
+				verifyListItem("dojox_mobile_ListItem_11", 'Use wireless networks', '', "mblDomButtonCheckboxOn", false, true, false, true);
 //							doh.assertEqual("mblDomButtonCheckboxOn", demoWidget.get("btnClass"));
 			}
 		}
