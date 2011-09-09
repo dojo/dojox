@@ -73,12 +73,10 @@ var clz = declare(Base, {
 		}
 		var target = e.target;
 		this._initTap(data, e);
-		clearTimeout(data.tapTimeOut);
 		data.tapTimeOut = setTimeout(lang.hitch(this, function(){
 			if(this._isTap(data, e)){
 				this.fire(target, {type: "tap.hold"});
 			}
-			clearTimeout(data.tapTimeOut);
 			delete data.context;
 		}), this.holdThreshold);
 	},

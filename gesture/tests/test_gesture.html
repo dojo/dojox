@@ -41,7 +41,7 @@
 				
 				ready(function(){
 					var action = function(e){
-						html.byId("log").innerHTML = "";
+						html.byId("log1").innerHTML = "";
 						var info = " e.target.id=" + e.target.id + " | e.type=" + e.type + " | e.currentTarget.id="+ e.currentTarget.id;
 						/*
 						for(var i in e){
@@ -49,15 +49,15 @@
 						      info += "- " + i + ": " + e[i] + (e[i] && e[i]['id'] ? ' id = '+e[i]['id'] : '') + "<br/>";
 						    }
 						}*/
-						html.byId("log").innerHTML += info;
+						html.byId("log1").innerHTML += info;
 						//evt.stop(e);
 					};
 					
 					var swipeAction = function(e){
-						html.byId("log").innerHTML = "";
+						html.byId("log2").innerHTML = "";
 						var info =  " e.target.id=" + e.target.id + " | e.type=" + e.type + " | e.currentTarget.id="+ e.currentTarget.id +
-							" e.dX=" + e.dX + " e.dY=" + e.dY + " e.time=" + e.time + "<br/>";
-						html.byId("log").innerHTML += info;
+							" e.dx=" + e.dx + " e.dy=" + e.dy + " e.time=" + e.time + "<br/>";
+						html.byId("log2").innerHTML += info;
 						//evt.stop(e);
 					};
 					
@@ -87,6 +87,8 @@
 		<div id="outer">
 			outer<div id="inner">inner</div>
 		</div>
-		<div id="log"></div>
+		<div id="log1"></div>
+		<hr/>
+		<div id="log2"></div>
 	</body>
 </html>

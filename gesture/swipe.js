@@ -10,7 +10,7 @@ define([
 //		This module provides swipe gestures including:
 //		1. dojox.gesture.swipe
 //			A series of "swipe" will be fired during touchmove, this will mostly
-//			be used to keep sliding the Dom target based on the swiped distance(dX, dY).
+//			be used to keep sliding the Dom target based on the swiped distance(dx, dy).
 //
 //		2. dojox.gesture.swipe.end	
 //			Fired when a swipe is ended so that an bounce animation may be applied
@@ -19,9 +19,9 @@ define([
 //		Following information will be included in the fired swipe events:
 //		1. type: "swipe"|"swipe.end"
 //		2. time: an integer indicating the delta time(in milliseconds)
-//		3. dX: delta distance on X axis, dX < 0 -> moving left, dX > 0 - moving right
-//		4. dY: delta distance on Y axis, dY < 0 -> moving up, dX > 0 - moving down
-//		Note - dX and dY can be used together for a hybrid swipe(both vertically and horizontally)
+//		3. dx: delta distance on X axis, dx < 0 -> moving left, dx > 0 - moving right
+//		4. dy: delta distance on Y axis, dy < 0 -> moving up, dx > 0 - moving down
+//		Note - dx and dy can be used together for a hybrid swipe(both vertically and horizontally)
 //
 // example:
 //		A. Used with dojo.connect()
@@ -99,19 +99,19 @@ var clz = declare(Base, {
 	},
 	_getSwipeInfo: function(/*Object*/data, /*Event*/e){
 		// summary:
-		//		Calculate swipe information - time, dX and dY
-		var dX, dY, info = {}, startData = data.context;
+		//		Calculate swipe information - time, dx and dy
+		var dx, dy, info = {}, startData = data.context;
 		
 		info.time = new Date().getTime() - startData.t;
 		
-		dX = e.screenX - startData.x;
-		dY = e.screenY - startData.y;
+		dx = e.screenX - startData.x;
+		dy = e.screenY - startData.y;
 		
-		if(dX === 0 && dY === 0){
+		if(dx === 0 && dy === 0){
 			return null; // no swipes happened
 		}
-		info.dX = dX;
-		info.dY = dY;
+		info.dx = dx;
+		info.dy = dy;
 		return info;
 	}
 });

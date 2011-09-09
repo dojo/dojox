@@ -333,7 +333,7 @@ define([
 			//		Remove all handlers and resources
 			array.forEach(this._elements, function(element){
 				this._cleanHandles(element.handles);
-			});
+			}, this);
 			this._elements = null;
 		}
 	});
