@@ -56,15 +56,20 @@ define([
 		onTouchStart: function(e){
 			// summary:
 			//		Internal function to handle touchStart events.
+			var fromTop = this.domNode.offsetTop;
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
 				nextView.stopAnimation();
 				domClass.add(nextView.domNode, "mblIn");
+				// Temporarily add padding to align with the fromNode while transition
+				nextView.containerNode.style.paddingTop = fromTop + "px";
 			}
 			var prevView = this.previousView(this.domNode);
 			if(prevView){
 				prevView.stopAnimation();
 				domClass.add(prevView.domNode, "mblIn");
+				// Temporarily add padding to align with the fromNode while transition
+				prevView.containerNode.style.paddingTop = fromTop + "px";
 			}
 			this.inherited(arguments);
 		},
@@ -215,6 +220,8 @@ define([
 			this.inherited(arguments);
 			if(this.getShowingView() === this){
 				connect.publish("/dojox/mobile/viewChanged", [this]);
+				// Reset the temporary padding
+				this.containerNode.style.paddingTop = "";
 			}
 		}
 	});
