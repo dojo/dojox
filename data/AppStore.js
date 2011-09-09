@@ -185,7 +185,7 @@ dojo.declare("dojox.data.AppStore",
 			}
 			if(item[attribute]){
 				item = item[attribute];
-				if(item.declaredClass == "dojox.atom.io.model.Content"){
+				if(item.nodeType == "Content"){
 					return [item.value];
 				}
 				return [item] ;

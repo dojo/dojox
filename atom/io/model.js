@@ -205,6 +205,7 @@ model.Node = dojo.declare(/*===== 'dojox.atom.io.model.Node', =====*/ null, {
 		}
 		this.shortNs = shortNs;
 		this._objName = "Node";//for debugging purposes
+		this.nodeType = "Node";
 	},
 	buildFromDom: function(node){
 		this._saveAttributes(node);
@@ -313,6 +314,7 @@ model.AtomItem = dojo.declare(/*===== "dojox.atom.io.model.AtomItem", =====*/ mo
 		this.entries = null;					//Array of Entry
 		this.name_spaces = {};
 		this._objName = "AtomItem";			 //for debugging purposes
+		this.nodeType = "AtomItem";
 	},
 	// summary: Class container for generic Atom items.
 	// description: Class container for generic Atom items.
@@ -581,6 +583,7 @@ model.Category = dojo.declare(/*===== "dojox.atom.io.model.Category", =====*/ mo
 	constructor: function(/*String*/scheme, /*String*/term, /*String*/label){
 		this.scheme = scheme; this.term = term; this.label = label;
 		this._objName = "Category";//for debugging
+		this.nodeType = "Category";
 	},
 	_postBuild: function(){},
 	_getAttributeNames: function(){
@@ -624,6 +627,7 @@ model.Content = dojo.declare(/*===== "dojox.atom.io.model.Content", =====*/ mode
 		this.tagName = tagName; this.value = value; this.src = src; this.type=type; this.xmlLang = xmlLang;
 		this.HTML = "html"; this.TEXT = "text"; this.XHTML = "xhtml"; this.XML="xml";
 		this._useTextContent = "true";
+		this.nodeType = "Content";
 	},
 	_getAttributeNames: function(){return ["type","src"];},
 	_postBuild: function(){},
@@ -709,6 +713,7 @@ model.Link = dojo.declare(/*===== "dojox.atom.io.model.Link", =====*/ model.Node
 	//		Class container for 'link' types.
 	constructor: function(href,rel,hrefLang,title,type){
 		this.href = href; this.hrefLang = hrefLang; this.rel = rel; this.title = title;this.type = type;
+		this.nodeType = "Link";
 	},
 	_getAttributeNames: function(){return ["href","jrefLang","rel","title","type"];},
 	_postBuild: function(){},
@@ -761,6 +766,7 @@ model.Person = dojo.declare(/*===== "dojox.atom.io.model.Person", =====*/ model.
 		this.email = email || '';
 		this.uri = uri || '';
 		this._objName = "Person";//for debugging
+		this.nodeType = "Person";
 	},
 	_getAttributeNames: function(){return null;},
 	_postBuild: function(){},
