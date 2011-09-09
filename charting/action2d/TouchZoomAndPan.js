@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
-	"./ChartAction", "../Element", "dojo/gesture/tap", "../plot2d/common"], 
+	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"], 
 	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
 	var GlassView = declare("dojox.charting.action2d._GlassView", [Element], {
 		//	summary: Private internal class used by TouchZoomAndPan actions.
