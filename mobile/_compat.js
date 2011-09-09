@@ -337,7 +337,7 @@ define([
 					_this.domNode = win.doc.createElement("DIV");
 					_this.domNode.style.padding = "0px";
 					_this.domNode.style.backgroundColor = "transparent";
-					_this.domNode.style.borderStyle = "none";
+					_this.domNode.style.border = "none"; // borderStyle = "none"; doesn't work on IE9
 					_this.containerNode = win.doc.createElement(isList?"UL":"DIV");
 					_this.containerNode.className = "mblRoundRectContainer";
 					if(_this.srcNodeRef){
