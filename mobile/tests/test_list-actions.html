@@ -7,11 +7,13 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
+			dojo.require("dojox.mobile.deviceTheme");
+		</script>
+		<script language="JavaScript" type="text/javascript">
 			dojo.require("dojo.data.ItemFileReadStore");
 			dojo.require("dojox.mobile");			// This is a mobile app.
 			dojo.require("dojox.mobile.parser");	// This mobile app supports running on desktop browsers
 			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
-			dojo.require("dojox.mobile.deviceTheme");
 			dojo.require("dojox.mobile.RoundRectDataList");
 			dojo.require("dojox.mobile.ScrollableView");
 			dojo.require("dojox.mobile.ContentPane");
@@ -194,7 +196,7 @@
 
 		<div id="view1" dojoType="dojox.mobile.View">
 			<h1 dojoType="dojox.mobile.Heading" back="Home" moveTo="home">Current Status</h1>
-			<h2 dojoType="dojox.mobile.RoundRectCategory">Local Time</h2>
+			Local Time:
 			<div id="rect1" dojoType="dojox.mobile.RoundRect" shadow="true"></div>
 		</div>
 
@@ -211,7 +213,7 @@
 
 		<div id="view6" dojoType="dojox.mobile.ScrollableView">
 			<h1 dojoType="dojox.mobile.Heading" back="Home" moveTo="home" fixed="top">Partial Update</h1>
-			<h2 dojoType="dojox.mobile.RoundRectCategory">Dynamic Content</h2>
+			Dynamic Content:
 			<div id="pane1" dojoType="dojox.mobile.ContentPane"></div>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" moveTo="home" transitionDir="-1">
