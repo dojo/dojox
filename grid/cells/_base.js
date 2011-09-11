@@ -4,13 +4,14 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/event",
 	"dojo/_base/connect",
+	"dojo/_base/array",
 	"dojo/_base/sniff",
 	"dojo/dom",
 	"dojo/dom-attr",
 	"dojo/dom-construct",
 	"dijit/_Widget",
 	"../util"
-], function(dojo, declare, lang, event, connect, has, dom, domAttr, domConstruct, _Widget, util){
+], function(dojo, declare, lang, event, connect, array, has, dom, domAttr, domConstruct, _Widget, util){
 
 	var _DeferredTextWidget = declare("dojox.grid._DeferredTextWidget", _Widget, {
 		deferred: null,
@@ -397,6 +398,18 @@ define([
 			}
 			h.push('</select>');
 			return h.join('');
+		},
+		_defaultFormat: function(inValue, callArgs){
+			var v = this.inherited(arguments);
+			// when 'values' and 'options' both provided and there is no cutomized formatter,
+			// then we use 'options' as label in order to be consistent
+			if(!this.formatter && this.values && this.options){
+				var i = array.indexOf(this.values, v);
+				if(i >= 0){
+					v = this.options[i];
+				}
+			}
+			return v;
 		},
 		getValue: function(inRowIndex){
 			var n = this.getEditNode(inRowIndex);
