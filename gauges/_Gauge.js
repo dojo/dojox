@@ -109,8 +109,6 @@ return declare("dojox.gauges._Gauge",[Widget],{
 	_overOverlay: false,
 	_lastHover: '',
 
-	isContainer: true,
-
 	startup: function(){
 		// handle settings from HTML by making sure all the options are
 		// converted correctly to numbers and that we calculate defaults
