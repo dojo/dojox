@@ -25,20 +25,18 @@
 	<script type="text/javascript">
 		require([
 			"dojo/_base/html",
-			"dojo/_base/connect",
 			"dojo/ready",
 			"dojo/on",
 			"doh/runner",
 			"dojox/gesture/tap"
-		], function(html, conn, ready, on, doh, tap){			
+		], function(html, ready, on, doh, tap){			
 			ready(function(){
 				var inner = html.byId("inner");
 				var h1, h2, h3;
-				//TODO - why tap is undefined here?
 				doh.register("dojox.gesture.tap", [
-					function tap(){
+					function singleTap(){
 						var executed;
-						h1 = on(inner, dojox.gesture.tap, function(e){
+						h1 = on(inner, tap, function(e){
 							executed = true;
 							doh.assertEqual('tap', e.type);
 							doh.assertEqual(inner, e.target);
@@ -47,10 +45,10 @@
 						on.emit(inner, 'mouseup', {screenX: 106, screenY: 108});
 						doh.assertTrue(executed, 'dojox.gesture.tap not fired!');
 					},
-					function doubletap(){
+					function doubleTap(){
 						setTimeout(function(){
 							var executed;
-							h2 = on(inner, dojox.gesture.tap.doubletap, function(e){
+							h2 = on(inner, tap.doubletap, function(e){
 								executed = true;
 								doh.assertEqual('tap.doubletap', e.type);
 								doh.assertEqual(inner, e.target);
@@ -62,12 +60,12 @@
 							on.emit(inner, 'mousedown', {screenX: 0, screenY: 0});
 							on.emit(inner, 'mouseup', {screenX: 0, screenY: 0});
 							doh.assertTrue(executed, 'dojox.gesture.tap.doubletap not fired!');							
-						}, dojox.gesture.tap.doubleTapTimeout);//so won't be affected by the 1st tap data.context
+						}, tap.doubleTapTimeout);//so won't be affected by the 1st tap data.context
 					},
-					function taphold(){
+					function tapHold(){
 						setTimeout(function(){
 							var executed;
-							h3 = on(inner, dojox.gesture.tap.hold, function(e){
+							h3 = on(inner, tap.hold, function(e){
 								executed = true;
 								doh.assertEqual('tap.hold', e.type);
 								doh.assertEqual(inner, e.target);
@@ -75,12 +73,12 @@
 							on.emit(inner, 'mousedown', {screenX: 0, screenY: 0});
 							setTimeout(function(){
 								doh.assertTrue(executed, 'dojox.gesture.tap.hold not fired!');
-							}, dojox.gesture.tap.holdThreshold);
-						}, dojox.gesture.tap.doubleTapTimeout);//so won't be affected by the 2nd tap data.context
+							}, tap.holdThreshold);
+						}, tap.doubleTapTimeout);//so won't be affected by the 2nd tap data.context
 					},
 					function disconnect(){
 						setTimeout(function(){
-							var elements = dojox.gesture.tap._elements;
+							var elements = tap._elements;
 							h1.remove();
 							doh.assertTrue(elements[0].handles.tap === 0, 'dojox.gesture.tap handle not cleared!');
 							
@@ -95,12 +93,12 @@
 					function destroy(){
 						setTimeout(function(){
 							//re-connect them back
-							h1 = on(inner, dojox.gesture.tap, function(e){ });
-							h2 = on(inner, dojox.gesture.tap.doubletap, function(e){ });
-							h3 = on(inner, dojox.gesture.tap.hold, function(e){ });
+							h1 = on(inner, tap, function(e){ });
+							h2 = on(inner, tap.doubletap, function(e){ });
+							h3 = on(inner, tap.hold, function(e){ });
 							//destroy them all		
-							dojox.gesture.tap.destroy();
-							doh.assertTrue(dojox.gesture.tap._elements === null, 'dojox.gesture.tap not destroyed!');
+							tap.destroy();
+							doh.assertTrue(tap._elements === null, 'dojox.gesture.tap not destroyed!');
 						}, 800);
 					}
 				]);

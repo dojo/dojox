@@ -25,27 +25,25 @@
 	<script type="text/javascript">
 		require([
 			"dojo/_base/html",
-			"dojo/_base/connect",
 			"dojo/ready",
 			"dojo/on",
 			"doh/runner",
 			"dojox/gesture/swipe"
-		], function(html, conn, ready, on, doh, swipe){			
+		], function(html, ready, on, doh, swipe){			
 			ready(function(){
 				var inner = html.byId("inner");
 				var h1, h2;
-				//TODO - why swipe is undefined here?
 				doh.register("dojox.gesture.swipe", [
 					function swipe_swipeEnd(){
 						var executed, endExecuted;
-						h1 = on(inner, dojox.gesture.swipe, function(e){
+						h1 = on(inner, swipe, function(e){
 							executed = true;
 							doh.assertEqual('swipe', e.type);
 							doh.assertEqual(inner, e.target);
 							doh.assertEqual(160, e.dx);
 							doh.assertEqual(-100, e.dy);
 						});
-						h2 = on(inner, dojox.gesture.swipe.end, function(e){
+						h2 = on(inner, swipe.end, function(e){
 							endExecuted = true;
 							doh.assertEqual('swipe.end', e.type);
 							doh.assertEqual(inner, e.target);
@@ -59,7 +57,7 @@
 						doh.assertTrue(endExecuted, 'dojox.gesture.swipe.end not fired!');
 					}, 
 					function disconnect(){
-						var elements = dojox.gesture.swipe._elements;
+						var elements = swipe._elements;
 						h1.remove();
 						doh.assertTrue(elements[0].handles.swipe === 0, 'dojox.gesture.swipe handle not cleared!');
 						
@@ -68,11 +66,11 @@
 					},
 					function destroy(){
 						//re-connect them back
-						h1 = on(inner, dojox.gesture.swipe, function(e){ });
-						h2 = on(inner, dojox.gesture.swipe.end, function(e){ });
+						h1 = on(inner, swipe, function(e){ });
+						h2 = on(inner, swipe.end, function(e){ });
 						//destroy them all		
-						dojox.gesture.swipe.destroy();
-						doh.assertTrue(dojox.gesture.swipe._elements === null, 'dojox.gesture.swipe not destroyed!');
+						swipe.destroy();
+						doh.assertTrue(swipe._elements === null, 'dojox.gesture.swipe not destroyed!');
 					}
 				]);
 				doh.run();
