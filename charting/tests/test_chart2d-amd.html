@@ -15,7 +15,7 @@
 		@import "../../../dijit/tests/css/dijitTests.css";
 	</style>
 	<!-- NOTE: This test uses amd style modules and loading, but must run in sync loading mode because it uses DTL which does not work async-->
-	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: false"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true"></script>
 	<script type="text/javascript">
 		require([
 		"dojo/_base/array",
@@ -33,6 +33,7 @@
 		"dojox/charting/themes/Tufte",
 		"dojox/dtl",
 		"dojox/dtl/Context",
+		"dojox/dtl/tag/logic",
 		"dojox/charting/axis2d/Default",
 		"dojox/charting/plot2d/Default",
 		"dojox/charting/plot2d/Areas",
