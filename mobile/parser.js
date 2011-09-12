@@ -71,7 +71,7 @@ define([
 				}
 				for(i = 0; i < ws.length; i++){
 					var w = ws[i];
-					!args.noStart && w.startup && !w._started && (!w.getParent || !w.getParent()) && w.startup();
+					!args.noStart && w.startup && !w._started && w.startup();
 				}
 			}
 			return ws;
