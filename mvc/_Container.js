@@ -1,10 +1,9 @@
 define([
 	"dojo/_base/declare",
-	"dojo/parser",
 	"dojo/_base/lang",
 	"dijit/_WidgetBase",
 	"dojo/regexp"
-], function(declare, parser, lang, _WidgetBase, regexp){
+], function(declare, lang, _WidgetBase, regexp){
 	/*=====
 		declare = dojo.declare;
 		_WidgetBase = dijit._WidgetBase;
@@ -33,6 +32,8 @@ define([
 	
 		////////////////////// PROTECTED METHODS ////////////////////////
 	
+		_parser : null,
+		
 		_createBody: function(){
 			// summary:
 			//		Parse the body of this MVC container widget.
@@ -42,12 +43,29 @@ define([
 			//		contained widgets as necessary.
 			// tags:
 			//		protected
-			this._containedWidgets = parser.parse(this.srcNodeRef,{
-				template: true,
-				inherited: {dir: this.dir, lang: this.lang},
-				propsThis: this,
-				scope: "dojo"
-			});
+			if(!this._parser){
+				try{
+					// returns dojo/parser if loaded, otherwise throws
+					this._parser = require("dojo/parser");
+				}catch(e){
+					// if here, dojo/parser not loaded
+					try{
+						// returns dojox/mobile/parser if loaded, otherwise throws
+						this._parser = require("dojox/mobile/parser");
+					}catch(e){
+						// if here, both dojox/mobile/parser and dojo/parser are not loaded
+						console.error("Add explicit require(['dojo/parser']) or explicit require(['dojox/mobile/parser']), one of the parsers is required!");
+					}
+				}
+			}
+			if(this._parser){
+				this._containedWidgets = this._parser.parse(this.srcNodeRef,{
+					template: true,
+					inherited: {dir: this.dir, lang: this.lang},
+					propsThis: this,
+					scope: "dojo"
+				});
+			}
 		},
 	
 		_destroyBody: function(){
@@ -77,7 +95,7 @@ define([
 				if(!value){return "";}
 				var exp = value.substr(2);
 				exp = exp.substr(0, exp.length - 1);
-				with (pThis) {return eval(exp);};
+				with(pThis){return eval(exp);}
 			};
 			transform = lang.hitch(this, transform);
 			return tmpl.replace(new RegExp(regexp.escapeString(this.exprchar)+"(\{.*?\})","g"),

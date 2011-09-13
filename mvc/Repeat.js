@@ -1,9 +1,11 @@
 define([
 	"dojo/_base/declare",
+	"dojo/dom",
 	"./_Container"
-], function(declare, _Container){
+], function(declare, dom, _Container){
 	/*=====
 		declare = dojo.declare;
+		dom = dojo.dom;
 		_Container = dojox.mvc._Container;
 	=====*/
 
@@ -39,7 +41,7 @@ define([
 		// summary:
 		//		Override and save template from body.
 		postscript: function(params, srcNodeRef){
-			this.srcNodeRef = dojo.byId(srcNodeRef);
+			this.srcNodeRef = dom.byId(srcNodeRef);
 			if(this.srcNodeRef){
 				this.templateString = this.srcNodeRef.innerHTML;
 				this.srcNodeRef.innerHTML = "";

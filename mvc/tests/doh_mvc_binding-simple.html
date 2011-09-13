@@ -107,6 +107,18 @@
 		doh.register("check initial values and bindings", [{
 			name : "initial",
 			runTest : function() {
+				// First test an empty array
+				var m = new dojox.mvc.newStatefulModel({ data: {arr: []} });
+				doh.is([],m.arr.toPlainObject(),"m.arr.toPlainObject()should be [].");
+				doh.is("object",typeof m.arr.toPlainObject(),"m.arr.toPlainObject() should be an object (array)");
+				doh.is(0,m.arr.toPlainObject().length,"m.arr.toPlainObject().length should be 0 for [].");
+
+				var m2 = new dojox.mvc.newStatefulModel({ data: {str: ""} });
+				doh.is("",m2.str.toPlainObject(),"m2.str.toPlainObject()should be [].");
+				doh.is("string",typeof m2.str.toPlainObject(),"m2.str.toPlainObject() should be a string.");
+				doh.is(0,m2.str.toPlainObject().length,"m2.str.toPlainObject().length should be 0 for an empty string.");
+
+
 				var first1, bind1, addr1;
 				//test serialInput
 				first1 = dijit.byId("firstnameInput");

@@ -2,8 +2,9 @@ var repeatModel, setRef, nextIndexToAdd, selectedIndex;
 var setRef, setDetailsContext, insertResult, updateView, updateModel;
 
 require(['dojo/has',
-	//'dojox/mobile/parser',
-	'dojo/parser',
+	'dojox/mobile/parser',
+	//'dojo/parser',
+	'dojo/ready',
 	'dojox/mvc',
 	'dojox/mobile',
 	'dojox/mobile/ScrollableView',
@@ -23,7 +24,7 @@ require(['dojo/has',
 	'dijit/registry',
 	'dojo/_base/json',
 	'dojo/dom'
-], function(has, parser, mvc, mobile, ScrollableView, Button, TextArea, Group, Generate, Repeat, TextBox, ViewController,
+], function(has, parser, ready, mvc, mobile, ScrollableView, Button, TextArea, Group, Generate, Repeat, TextBox, ViewController,
 		FixedSplitter, EdgeToEdgeList, EdgeToEdgeCategory, deviceTheme, RoundRectCategory, Heading, WidgetRegistry,
 		json, dom){
 
@@ -152,14 +153,13 @@ var repeatData = [
 	// properties that widgets can bind to and watch for their changes.
 
 
-	require(["dojo/ready"], function(ready){
-		//dojox.mobile.parser.parse();
-		//dojo.parser.parse();
+	// when "dojo/ready" is ready call parse
+	ready(function(){
 		parser.parse();
 	});
 
+	// when domReady! is ready show the page 
 	require(['dojo/domReady!'], function(){
-		//console.log("dom is now ready 2a");
 		dom.byId("wholepage").style.display = "";
 	});
 

@@ -6,6 +6,12 @@ define([
 	"dijit/form/ValidationTextBox",
 	"dijit/form/NumberTextBox"
 ], function(lang, array, wb, dbm, vtb, ntb){
+	/*=====
+		vtb = dijit.form.ValidationTextBox;
+		ntb = dijit.form.NumberTextBox;
+		dbm = dojox.mvc._DataBindingMixin;
+		wb = dijit._WidgetBase;
+	=====*/
 
 	//Apply the data binding mixin to all dijits, see mixin class description for details
 	lang.extend(wb, new dbm());

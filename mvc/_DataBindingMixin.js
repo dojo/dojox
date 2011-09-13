@@ -4,6 +4,9 @@ define([
 	"dojo/_base/declare",
 	"dijit/registry"
 ], function(lang, array, declare, registry){
+	/*=====
+	registry = dijit.registry;
+	=====*/
 
 	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:

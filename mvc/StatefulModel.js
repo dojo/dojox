@@ -1,10 +1,9 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/declare",
 	"dojo/Stateful"
-], function(dojo, lang, array, declare, Stateful){
+], function(lang, array, declare, Stateful){
 	/*=====
 		declare = dojo.declare;
 		Stateful = dojo.Stateful;
@@ -236,7 +235,11 @@ define([
 				}
 			}
 			if(!nested){
-				ret = this.value;
+				if(this.get("length") === 0){
+					ret = [];
+				} else {				
+					ret = this.value;
+				}
 			}
 			return ret;
 		},
@@ -331,6 +334,24 @@ define([
 					delete this[name];
 				}
 			}
+		},
+
+		valueOf: function () {
+			// summary:
+			//		Returns the value representation of the data currently within this data model.
+			// returns:
+			//		Object
+			//		The object representation of the data in this model.
+			return this.toPlainObject();
+		},
+
+		toString: function () {
+			// summary:
+			//		Returns the string representation of the data currently within this data model.
+			// returns:
+			//		String
+			//		The object representation of the data in this model.
+			return this.value === "" && this.data ? this.data.toString() : this.value.toString();
 		},
 
 		//////////////////////// PRIVATE INITIALIZATION METHOD ////////////////////////

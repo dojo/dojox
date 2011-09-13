@@ -105,7 +105,7 @@
 			]);
 
 
-			doh.register("select John and update John to Johnny", [
+			doh.register("select John and update John to Johnny test valueOf and toString", [
 				{
 					name: "testJohn",
 					runTest: function(){
@@ -117,6 +117,8 @@
 							if (bind9 && bind9.isInstanceOf(dojox.mvc.StatefulModel)) {
 								doh.is("John",bind9.data,"bind9.data is wrong");
 								doh.is("John",bind9.value,"bind9.value is wrong");
+								doh.is("John",bind9.valueOf(),"bind9.valueOf() is wrong");
+								doh.is("John",bind9.toString(),"bind9.toString() is wrong");
 							}
 						}
 
@@ -130,6 +132,8 @@
 							if (bind9 && bind9.isInstanceOf(dojox.mvc.StatefulModel)) {
 								doh.is("Johnny",bind9.value,"firstInput bind9.value is wrong");
 								doh.is("Johnny",firstInput.value,"firstInput firstInput.value is wrong");
+								doh.is("Johnny",bind9.valueOf(),"firstInput bind9.valueOf() is wrong");
+								doh.is("Johnny",bind9.toString(),"firstInput bind9.toString() is wrong");
 							}
 						}
 					}					
