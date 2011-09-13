@@ -134,13 +134,6 @@ return declare("dojox.data.ServiceStore",
 			//		property to look up value for
 
 			var val = this.getValue(item,property);
-			if(val instanceof Array){
-				return val;
-			}
-			if(!this.isItemLoaded(val)){
-				dojox.rpc._sync = true;
-				val = this.loadItem({item:val});
-			}
 			return val instanceof Array ? val : val === undefined ? [] : [val];
 		},
 
