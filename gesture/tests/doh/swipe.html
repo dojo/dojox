@@ -36,23 +36,38 @@
 				doh.register("dojox.gesture.swipe", [
 					function swipe_swipeEnd(){
 						var executed, endExecuted;
+						var swipeType, swipeTarget, swipeDx, swipeDy;
 						h1 = on(inner, swipe, function(e){
 							executed = true;
-							doh.assertEqual('swipe', e.type);
-							doh.assertEqual(inner, e.target);
-							doh.assertEqual(160, e.dx);
-							doh.assertEqual(-100, e.dy);
+							swipeType = e.type;
+							swipeTarget = e.target;
+							swipeDx = e.dx;
+							swipeDy = e.dy;
 						});
+						var swipeEndType, swipeEndTarget, swipeEndDx, swipeEndDy;
 						h2 = on(inner, swipe.end, function(e){
 							endExecuted = true;
-							doh.assertEqual('swipe.end', e.type);
-							doh.assertEqual(inner, e.target);
-							doh.assertEqual(200, e.dx);
-							doh.assertEqual(-120, e.dy);
-						});						
+							swipeEndType = e.type;
+							swipeEndTarget = e.target;
+							swipeEndDx = e.dx;
+							swipeEndDy = e.dy;
+						});
 						on.emit(inner, 'mousedown', {screenX: 100, screenY: 200});
 						on.emit(inner, 'mousemove', {screenX: 260, screenY: 100});
 						on.emit(inner, 'mouseup', {screenX: 300, screenY: 80});
+						
+						// swipe assertions
+						doh.assertEqual('swipe', swipeType);
+						doh.assertEqual(inner, swipeTarget);
+						doh.assertEqual(160, swipeDx);
+						doh.assertEqual(-100, swipeDy);
+						
+						// swipe.end assertions
+						doh.assertEqual('swipe.end', swipeEndType);
+						doh.assertEqual(inner, swipeEndTarget);
+						doh.assertEqual(200, swipeEndDx);
+						doh.assertEqual(-120, swipeEndDy);	
+						
 						doh.assertTrue(executed, 'dojox.gesture.swipe not fired!');
 						doh.assertTrue(endExecuted, 'dojox.gesture.swipe.end not fired!');
 					}, 
