@@ -1,26 +1,17 @@
-define([
-	"dojo/_base/kernel",
-	"dojo/_base/lang",
-	"dojo/_base/connect",
-	"dojo/_base/array",
-	"dojo/_base/event",
-	"dojo/_base/fx",
-	"dojo/_base/window",
-	"dojo/fx",
-	"dojo/window",
-	"dojo/dom",
-	"dojo/dom-class",
-	"dojo/dom-geometry",
-	"dojo/dom-style",
-	"dijit",
-	"dijit/_Widget",
-	"dijit/_TemplatedMixin",
-	"dojo/_base/declare"
-], function (dojo, lang, connect, arrayUtil, eventUtil, fxBase, windowBase, fxUtil, windowUtil, domUtil, domClass, domGeometry, domStyle, dijit, _Widget, _TemplatedMixin) {
-dojo.experimental("dojox.layout.ResizeHandle");
+define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/connect","dojo/_base/array","dojo/_base/event",
+	"dojo/_base/fx","dojo/_base/window","dojo/fx","dojo/window","dojo/dom","dojo/dom-class",
+	"dojo/dom-geometry","dojo/dom-style","dijit/_base/manager","dijit/_Widget","dijit/_TemplatedMixin",
+	"dojo/_base/declare"], function (
+	kernel, lang, connect, arrayUtil, eventUtil, fxBase, windowBase, fxUtil, windowUtil, 
+	domUtil, domClass, domGeometry, domStyle, manager, Widget, TemplatedMixin, declare) {
 
-var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
-	[_Widget, _TemplatedMixin],
+kernel.experimental("dojox.layout.ResizeHandle");
+
+/*===== 
+	var Widget = dijit._Widget;
+	var TemplatedMixin = dijit._TemplatedMixin;
+=====*/
+var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	{
 	// summary: A dragable handle used to resize an attached node.
 	//
@@ -116,7 +107,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 			// level so that we can overlay it on anything whenever the user
 			// resizes something. Since there is only one mouse pointer he
 			// can't at once resize multiple things interactively.
-			this._resizeHelper = dijit.byId('dojoxGlobalResizeHelper');
+			this._resizeHelper = manager.byId('dojoxGlobalResizeHelper');
 			if(!this._resizeHelper){
 				this._resizeHelper = new _ResizeHelper({
 						id: 'dojoxGlobalResizeHelper'
@@ -159,8 +150,8 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 		
 		if(this._isSizing){ return; }
 
-		dojo.publish(this.startTopic, [ this ]);
-		this.targetWidget = dijit.byId(this.targetId);
+		connect.publish(this.startTopic, [ this ]);
+		this.targetWidget = manager.byId(this.targetId);
 
 		this.targetDomNode = this.targetWidget ? this.targetWidget.domNode : domUtil.byId(this.targetId);
 		if(this.targetContainer){ this.targetDomNode = this.targetContainer; }
@@ -328,7 +319,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 	_endSizing: function(/*Event*/ e){
 		// summary: disconnect listenrs and cleanup sizing
 		arrayUtil.forEach(this._pconnects, connect.disconnect);
-		var pub = lang.partial(dojo.publish, this.endTopic, [ this ]);
+		var pub = lang.partial(connect.publish, this.endTopic, [ this ]);
 		if(!this.activeResize){
 			this._resizeHelper.hide();
 			this._changeSizing(e);
@@ -348,9 +339,7 @@ var ResizeHandle = dojo.declare("dojox.layout.ResizeHandle",
 	
 });
 
-var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper",
-	_Widget,
-	{
+var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper", Widget, {
 	// summary: A global private resize helper shared between any
 	//		`dojox.layout.ResizeHandle` with activeSizing off.
 	
