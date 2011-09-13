@@ -1,13 +1,13 @@
 define([
-	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/xhr",
 	"dijit/layout/ContentPane",
 	"dojox/html/_base",
 	"dojo/_base/declare"
-], function (dojo, lang, xhrUtil, ContentPane, htmlUtil) {
+], function (lang, xhrUtil, ContentPane, htmlUtil, declare) {
 
-return dojo.declare("dojox.layout.ContentPane", ContentPane, {
+/*===== var ContentPane = dijit.layout.ContentPane =====*/
+return declare("dojox.layout.ContentPane", ContentPane, {
 	// summary:
 	//		An extended version of dijit.layout.ContentPane.
 	//		Supports infile scripts and external ones declared by <script src=''
