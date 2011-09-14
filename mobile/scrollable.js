@@ -266,6 +266,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			}
 		}
 
+		this._speed = {x:0, y:0};
 		this._appFooterHeight = 0;
 		if(this.isTopLevel() && !this.noResize){
 			this.resize();
