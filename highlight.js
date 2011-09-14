@@ -1,1 +1,3 @@
-define(["./highlight/_base"], function(){});
+define(["./highlight/_base"], function(highlight){
+	return highlight;
+});

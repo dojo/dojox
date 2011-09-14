@@ -14,7 +14,7 @@ define(["dojo", "dojox/main"], function(dojo, dojox){
 			//
 		};
 	=====*/
-	var dh = dojo.getObject("highlight", true, dojox),
+	var dh = dojo.getObject("dojox.highlight", true),
 		C_NUMBER_RE = '\\b(0x[A-Za-z0-9]+|\\d+(\\.\\d+)?)'
 	;
 	dh.languages = dh.languages || {};
