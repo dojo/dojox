@@ -88,11 +88,10 @@ define([
 			var r = arr[1] + arr[2]; // right
 			var b = arr[0] + arr[3]; // bottom
 			var l = arr[1]; // left
-			var offset = iconNode.parentNode ? domStyle.get(iconNode.parentNode, "paddingLeft") : 8;
 			domStyle.set(iconNode, {
 				clip: "rect("+t+"px "+r+"px "+b+"px "+l+"px)",
 				top: (iconNode.parentNode ? domStyle.get(iconNode, "top") : 0) - t + "px",
-				left: offset - l + "px"
+				left: -l + "px"
 			});
 		}
 	};

@@ -112,6 +112,7 @@ define([
 						width: totalW + 2 + "px"
 					});
 				}
+				domClass.add(this.domNode, "mblTabBar" + (inHeading ? "Head" : "Top"));
 			}else{
 				margin = Math.floor((w - (bw + bm * 2) * arr.length) / 2);
 				if(w < this._largeScreenWidth || margin < 0){
