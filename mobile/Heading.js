@@ -141,10 +141,10 @@ define([
 				for(var i = children.length - 1; i >= 0; i--){
 					var c = children[i];
 					if(c.nodeType === 1){
-						if(!rightBtn && domClass.contains(c, "mblToolbarButton") && domStyle.get(c, "float") === "right"){
+						if(!rightBtn && domClass.contains(c, "mblToolBarButton") && domStyle.get(c, "float") === "right"){
 							rightBtn = c;
 						}
-						if(!leftBtn && (domClass.contains(c, "mblToolbarButton") && domStyle.get(c, "float") === "left" || c === this._btn)){
+						if(!leftBtn && (domClass.contains(c, "mblToolBarButton") && domStyle.get(c, "float") === "left" || c === this._btn)){
 							leftBtn = c;
 						}
 					}
@@ -183,7 +183,6 @@ define([
 					this._btn = btn;
 					this.backBtnNode = btn;
 					this.connect(body, "onclick", "onClick");
-					var neck = domConstruct.create("DIV", {className:"mblArrowButtonNeck"}, btn);
 				}
 				this.back = back;
 				this._body.innerHTML = this._cv ? this._cv(this.back) : this.back;

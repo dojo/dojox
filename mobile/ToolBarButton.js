@@ -41,7 +41,7 @@ define([
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("div");
 			this.inheritParams();
-			domClass.add(this.domNode, "mblToolbarButton mblArrowButtonText");
+			domClass.add(this.domNode, "mblToolBarButton mblArrowButtonText");
 			var color;
 			if(this.selected){
 				color = this._selColor;
@@ -54,29 +54,18 @@ define([
 				this.label = this.domNode.innerHTML;
 			}
 			this.domNode.innerHTML = this._cv ? this._cv(this.label) : this.label;
-	
+
 			if(this.icon && this.icon != "none"){
-				var img;
+				this.iconNode = domConstruct.create("div", {className:"mblToolBarButtonIcon"}, this.domNode);
+				common.createIcon(this.icon, this.iconPos, null, this.alt, this.iconNode);
 				if(this.iconPos){
-					var iconDiv = domConstruct.create("DIV", null, this.domNode);
-					img = domConstruct.create("IMG", null, iconDiv);
-					img.style.position = "absolute";
-					var arr = this.iconPos.split(/[ ,]/);
-					domStyle.set(iconDiv, {
-						position: "relative",
-						width: arr[2] + "px",
-						height: arr[3] + "px"
-					});
-				}else{
-					img = domConstruct.create("IMG", null, this.domNode);
+					domClass.add(this.iconNode.firstChild, "mblToolBarButtonSpriteIcon");
 				}
-				img.src = this.icon;
-				img.alt = this.alt;
-				common.setupIcon(img, this.iconPos);
-				this.iconNode = img;
 			}else{
 				if(common.createDomButton(this.domNode)){
-					domClass.add(this.domNode, "mblToolbarButtonDomButton");
+					domClass.add(this.domNode, "mblToolBarButtonDomButton");
+				}else{
+					domClass.add(this.domNode, "mblToolBarButtonText");
 				}
 			}
 			this.connect(this.domNode, "onclick", "onClick");
@@ -107,7 +96,7 @@ define([
 			}
 			domClass.add(node, btnClass);
 			if(common.createDomButton(this.domNode)){
-				domClass.add(this.domNode, "mblToolbarButtonDomButton");
+				domClass.add(this.domNode, "mblToolBarButtonDomButton");
 			}
 		}
 	});
