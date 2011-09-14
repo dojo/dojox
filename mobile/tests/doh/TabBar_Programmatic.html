@@ -26,8 +26,8 @@
 			dojo.require("dojox.mobile");
 			dojo.require("dojox.mobile.TabBar");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-	        dojo.require("doh.runner");
+		</script>
+		<script language="JavaScript" type="text/javascript">
 			dojo.addOnLoad(function(){
 				dojo.create("div", {className:"label", innerHTML:"Segmented Control"}, dojo.doc.body);
 				var tabBar = new dojox.mobile.TabBar({barType:"segmentedControl"});
@@ -77,6 +77,11 @@
 				view = new dojox.mobile.View({id:"view3", innerHTML:'<div class="view">View 3</div>'});
 				dojo.doc.body.appendChild(view.domNode);
 				view.startup();
+			});
+		</script>
+		<script type="text/javascript" src="TestUtil.js"></script>
+		<script language="JavaScript" type="text/javascript">
+			dojo.addOnLoad(function(){
 				doh.register("dojox.mobile.test.doh.TabBar", [
 					{
 						name: "TabBar and TabBarButton Verification",
@@ -91,15 +96,15 @@
 								doh.assertEqual('mblTabButton mblTabButtonSelected', demoWidget.domNode.className);
 								doh.assertEqual('mblTabBarButtonAnchor', demoWidget.domNode.childNodes[0].className);
 								doh.assertEqual('mblTabBarButtonDiv', demoWidget.domNode.childNodes[0].childNodes[0].className);
-								doh.assertEqual('mblTabBarButtonDiv mblTabBarButtonDivInner', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].className);
+								doh.assertEqual('mblTabBarButtonIcon', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].className);
 								if(!dojo.isIE) {
 									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src.search(/tab-icon-16.png/i) != -1);
 								}
-								doh.assertEqual('hidden', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.visibility);
+								doh.assertEqual('hidden', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.visibility);
 								if(!dojo.isIE) {
-									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].src.search(/tab-icon-16h.png/i) != -1);
+									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0].src.search(/tab-icon-16h.png/i) != -1);
 								}
-								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].style.visibility);
+								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0].style.visibility);
 								doh.assertEqual('New', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[1].innerHTML));
 
 								demoWidget = dijit.byId("dojox_mobile_TabBar_1");
@@ -109,16 +114,16 @@
 								doh.assertEqual('mblTabBarButton mblTabButtonSelected', demoWidget.domNode.className);
 								doh.assertEqual('mblTabBarButtonAnchor', demoWidget.domNode.childNodes[0].className);
 								doh.assertEqual('mblTabBarButtonDiv', demoWidget.domNode.childNodes[0].childNodes[0].className);
-								doh.assertEqual('mblTabBarButtonDiv mblTabBarButtonDivInner', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].className);
+								doh.assertEqual('mblTabBarButtonIcon', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].className);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.display);
 								if(!dojo.isIE) {
 									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src.search(/tab-icon-16.png/i) != -1);
 								}
-								doh.assertEqual('hidden', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.visibility);
+								doh.assertEqual('hidden', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.visibility);
 								if(!dojo.isIE) {
-									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].src.search(/tab-icon-16h.png/i) != -1);
+									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0].src.search(/tab-icon-16h.png/i) != -1);
 								}
-								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].style.visibility);
+								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0].style.visibility);
 								doh.assertEqual('New', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[1].innerHTML));
 
 								demoWidget = dijit.byId("dojox_mobile_TabBar_2");
@@ -128,34 +133,19 @@
 								doh.assertEqual('mblTabBarButton mblTabButtonSelected', demoWidget.domNode.className);
 								doh.assertEqual('mblTabBarButtonAnchor', demoWidget.domNode.childNodes[0].className);
 								doh.assertEqual('mblTabBarButtonDiv', demoWidget.domNode.childNodes[0].childNodes[0].className);
-								doh.assertEqual('mblTabBarButtonDiv mblTabBarButtonDivInner', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].className);
+								doh.assertEqual('mblTabBarButtonIcon', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].className);
 								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.display);
 								if(!dojo.isIE) {
 									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].src.search(/tab-icons.png/i) != -1);
 								}
-								doh.assertEqual('hidden', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.visibility);
-								if(dojo.isFF){
-									doh.assertEqual('rect(0px, 29px, 29px, 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
-								}else{
-									try{
-										doh.assertEqual('rect(0px 29px 29px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
-									} catch (e) {
-										doh.assertEqual('rect(0px,29px,29px,0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
-									}
-								}
+								doh.assertEqual('hidden', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.visibility);
+								verifyRect(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0], "0px", "29px", "29px", "0px");
 								if(!dojo.isIE) {
-									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].src.search(/tab-icons.png/i) != -1);
+									doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0].src.search(/tab-icons.png/i) != -1);
 								}
-								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[1].style.visibility);
-								if(dojo.isFF){
-									doh.assertEqual('rect(0px, 29px, 29px, 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
-								}else{
-									try{
-										doh.assertEqual('rect(0px 29px 29px 0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
-									} catch (e) {
-										doh.assertEqual('rect(0px,29px,29px,0px)', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0].style.clip);
-									}
-								}
+
+								doh.assertEqual('', demoWidget.domNode.childNodes[0].childNodes[0].childNodes[1].childNodes[0].style.visibility);
+								verifyRect(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].childNodes[0], "0px", "29px", "29px", "0px");
 								doh.assertEqual('Featured', dojo.trim(demoWidget.domNode.childNodes[0].childNodes[1].innerHTML));
 							}),500);
 							return d;

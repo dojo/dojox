@@ -14,8 +14,9 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-	        dojo.require("doh.runner");
+		</script>
+		<script type="text/javascript" src="TestUtil.js"></script>
+		<script language="JavaScript" type="text/javascript">
 			dojo.addOnLoad(function(){
 				doh.register("dojox.mobile.test.doh.Heading2", [
 					{
@@ -72,13 +73,7 @@
 						runTest: function(){
 							var d = new doh.Deferred();
 							var demoWidget = dijit.byId("dojox_mobile_Heading_2");
-							if(dojo.isIE){
-								demoWidget.domNode.childNodes[0].childNodes[1].fireEvent( "onclick" );
-							}else{
-								var e = document.createEvent('Events');
-								e.initEvent('click', true, true);
-								demoWidget.domNode.childNodes[0].childNodes[1].dispatchEvent(e);
-							}
+							fireOnClick(demoWidget.domNode.childNodes[0].childNodes[1]);
 							setTimeout(d.getTestCallback(function(){
 
 								var demoWidget = dijit.byId("bar");
@@ -94,15 +89,8 @@
 							setTimeout(function(){
 								var d = new doh.Deferred();
 								var demoWidget = dijit.byId("dojox_mobile_Heading_5");
-								if(dojo.isIE){
-									demoWidget.domNode.childNodes[0].childNodes[1].fireEvent( "onclick" );
-								}else{
-									var e = document.createEvent('Events');
-									e.initEvent('click', true, true);
-									demoWidget.domNode.childNodes[0].childNodes[1].dispatchEvent(e);
-								}
+								fireOnClick(demoWidget.domNode.childNodes[0].childNodes[1]);
 								setTimeout(d.getTestCallback(function(){
-
 									var demoWidget = dijit.byId("general");
 									doh.assertEqual('visible', demoWidget.domNode.style.visibility);
 								}));
@@ -119,14 +107,7 @@
 							doh.assertEqual("about:blank", demoWidget.get("href"));
 
 							var d = new doh.Deferred();
-							var demoWidget = dijit.byId("dojox_mobile_Heading_1");
-							if(dojo.isIE){
-								demoWidget.domNode.childNodes[0].childNodes[1].fireEvent( "onclick" );
-							}else{
-								var e = document.createEvent('Events');
-								e.initEvent('click', true, true);
-								demoWidget.domNode.childNodes[0].childNodes[1].dispatchEvent(e);
-							}
+							fireOnClick(demoWidget.domNode.childNodes[0].childNodes[1]);
 							setTimeout(d.getTestCallback(function(){
 							}));
 							return d;

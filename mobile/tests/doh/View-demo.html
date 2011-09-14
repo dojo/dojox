@@ -82,9 +82,9 @@
 		dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx");
 		dojo.requireIf(!dojo.isWebKit, "dojo.fx.easing");
-
-        dojo.require("doh.runner");
-
+	</script>
+	<script type="text/javascript" src="TestUtil.js"></script>
+	<script language="JavaScript" type="text/javascript">
 		dojo.addOnLoad(function(){
 			doh.register("dojox.mobile.test.doh.View", [
 				{
@@ -130,14 +130,7 @@
 					timeout: 2000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_1");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_1");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -175,14 +168,7 @@
 					timeout: 20000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_2");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_2");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -220,14 +206,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_4");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_4");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -265,14 +244,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_5");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_5");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -310,14 +282,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_6");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_6");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -355,14 +320,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_7");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_7");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -400,14 +358,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_3");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_3");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -445,43 +396,36 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_0");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_0");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
-							doh.assertEqual('', demoWidget.domNode.style.display);
+							doh.assertEqual('', demoWidget.domNode.style.display, "group1");
 
 							demoWidget = dijit.byId("view1");
-							doh.assertEqual('', demoWidget.domNode.style.display);
+							doh.assertEqual('', demoWidget.domNode.style.display, "view1");
 
 							demoWidget = dijit.byId("view2");
-							doh.assertEqual('none', demoWidget.domNode.style.display);
+							doh.assertEqual('none', demoWidget.domNode.style.display, "view2");
 
 							demoWidget = dijit.byId("view3");
-							doh.assertEqual('none', demoWidget.domNode.style.display);
+							doh.assertEqual('none', demoWidget.domNode.style.display, "view3");
 
 							demoWidget = dijit.byId("categ");
-							doh.assertEqual('none', demoWidget.domNode.style.display);
+							doh.assertEqual('none', demoWidget.domNode.style.display, "categ");
 							
 							demoWidget = dijit.byId("top25");
-							doh.assertEqual('none', demoWidget.domNode.style.display);
+							doh.assertEqual('none', demoWidget.domNode.style.display, "top25");
 
 							demoWidget = dijit.byId("search");
-							doh.assertEqual('none', demoWidget.domNode.style.display);
+							doh.assertEqual('none', demoWidget.domNode.style.display, "search");
 
 							demoWidget = dijit.byId("article");
-							doh.assertEqual('none', demoWidget.domNode.style.display);
+							doh.assertEqual('none', demoWidget.domNode.style.display, "article");
 
 							demoWidget = dijit.byId("dojox_mobile_TabBar_1");
-							doh.assertEqual('', demoWidget.domNode.style.display);
-						}),500);
+							doh.assertEqual('', demoWidget.domNode.style.display, "dojox_mobile_TabBar_1");
+						}),800);
 						return d;
 					}
 				},
@@ -490,14 +434,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_1");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_1");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");
@@ -535,14 +472,7 @@
 					timeout: 10000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						var demoWidget = dijit.byId("dojox_mobile_TabBarButton_2");
-						if(dojo.isIE){
-							demoWidget.anchorNode.fireEvent( "onclick" );
-						}else{
-							var e = document.createEvent('Events');
-							e.initEvent('click', true, true);
-							demoWidget.anchorNode.dispatchEvent(e);
-						}
+						fireOnClick("dojox_mobile_TabBarButton_2");
 						setTimeout(d.getTestCallback(function(){
 
 							var demoWidget = dijit.byId("group1");

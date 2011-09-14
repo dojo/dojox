@@ -25,9 +25,9 @@
 			dojo.require("dojox.mobile");
 			dojo.require("dojox.mobile.IconContainer");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-	        dojo.require("doh.runner");
-
+		</script>
+		<script type="text/javascript" src="TestUtil.js"></script>
+		<script language="JavaScript" type="text/javascript">
 			dojo.addOnLoad(function(){
 				doh.register("dojox.mobile.test.doh.IconContainer", [
 					{
@@ -50,13 +50,7 @@
 							var d = new doh.Deferred();
 							var demoWidget = dijit.byId("dojox_mobile_IconItem_0");
 							doh.assertEqual('none', demoWidget.contentNode.style.display);
-							if(dojo.isIE){
-								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].fireEvent( "onclick" );
-							}else{
-								var e = document.createEvent('Events');
-								e.initEvent('click', true, true);
-								demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].dispatchEvent(e);
-							}
+							fireOnClick(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0]);
 							demoWidget = dijit.byId("dojox_mobile_IconItem_1");
 							doh.assertEqual('none', demoWidget.contentNode.style.display);
 							var t = 1000;

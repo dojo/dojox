@@ -1,13 +1,19 @@
 dojo.require("doh.runner");
 
-function fireOnClick(id){
-	demoWidget = dijit.byId(id);
-	if(dojo.isIE){
-		demoWidget.anchorNode.fireEvent( "onclick" );
+function fireOnClick(obj){
+	var anchorNode;
+	if(typeof obj === "string"){
+		var demoWidget = dijit.byId(obj);
+		anchorNode = demoWidget.anchorNode;
+	}else{
+		anchorNode = obj;
+	}
+	if(dojo.isIE<9){
+		anchorNode.fireEvent( "onclick" );
 	}else{
 		var e = document.createEvent('Events');
 		e.initEvent('click', true, true);
-		demoWidget.anchorNode.dispatchEvent(e);
+		anchorNode.dispatchEvent(e);
 	}
 }
 
@@ -62,15 +68,16 @@ function verifyListItem(id, text, rightText, domButtonType, hasIcon, hasRightIco
 
 function verifyListItemPos(id, rTop, rRight, rBottom, rLeft, sTop, sLeft) {
 	var demoWidget = dijit.byId(id);
-	if(dojo.isFF){
-		doh.assertEqual("rect(" + rTop + ", " + rRight + ", " + rBottom + ", " + rLeft + ")", demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
-	}else{
-		try{
-			doh.assertEqual("rect(" + rTop + " " + rRight + " " + rBottom + " " + rLeft + ")", demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
-		} catch (e) {
-			doh.assertEqual("rect(" + rTop + "," + rRight + "," + rBottom + "," + rLeft + ")", demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.clip);
-		}
-	}
+	verifyRect(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0], rTop, rRight, rBottom, rLeft);
+
 	doh.assertEqual(sTop, demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.top);
 	doh.assertEqual(sLeft, demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].style.left);
+}
+
+function verifyRect(node, rTop, rRight, rBottom, rLeft) {
+	var rectArray = node.style.clip.split(/[, ]+/);
+	doh.assertEqual("rect("+rTop, rectArray[0]);
+	doh.assertEqual(rRight, rectArray[1]);
+	doh.assertEqual(rBottom, rectArray[2]);
+	doh.assertEqual(rLeft+")", rectArray[3]);
 }
