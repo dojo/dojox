@@ -106,11 +106,7 @@ define([
 			this.centerPos = this.getParent().centerPos;
 			var items = this.panelNodes[1].childNodes;
 			this._itemHeight = items[0].offsetHeight;
-	
-			var _this = this;
-			setTimeout(function(){ // to get the correct dimension
-				_this.adjust();
-			}, 0);
+			this.adjust();
 		},
 	
 		adjust: function(){
@@ -190,11 +186,13 @@ define([
 			//		Gets the currently selected item.
 			var pos = this.getPos();
 			var centerPanel = this.getCenterPanel();
-			var top = pos.y + centerPanel.offsetTop;
-			var items = centerPanel.childNodes;
-			for(var i = 0, len = items.length; i < len; i++){
-				if(top + items[i].offsetTop <= this.centerPos && this.centerPos < top + items[i].offsetTop + items[i].offsetHeight){
-					return items[i];
+			if(centerPanel){
+				var top = pos.y + centerPanel.offsetTop;
+				var items = centerPanel.childNodes;
+				for(var i = 0, len = items.length; i < len; i++){
+					if(top + items[i].offsetTop <= this.centerPos && this.centerPos < top + items[i].offsetTop + items[i].offsetHeight){
+						return items[i];
+					}
 				}
 			}
 			return null;
@@ -204,7 +202,8 @@ define([
 		getValue: function(){
 			// summary:
 			//		Gets the currently selected value.
-			return this.getCenterItem().innerHTML;
+			var item = this.getCenterItem();
+			return (item && item.innerHTML);
 		},
 	
 		getKey: function(){
@@ -218,6 +217,11 @@ define([
 			//		Sets the newValue to this slot.
 			var idx0, idx1;
 			var curValue = this.getValue();
+			if(!curValue){
+				this._penddingValue = newValue;
+				return;
+			}
+			this._penddingValue = undefined;
 			var n = this.items.length;
 			for(var i = 0; i < n; i++){
 				if(this.items[i][1] === String(curValue)){
@@ -278,6 +282,12 @@ define([
 			to.y = j - r;
 		},
 	
+		resize: function(e){
+			if(this._penddingValue){
+				this.setValue(this._penddingValue);
+			}
+		},
+
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing){
 			// summary:
 			//		Overrides dojox.mobile.scrollable.slideTo().

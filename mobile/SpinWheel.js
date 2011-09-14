@@ -56,10 +56,7 @@ define([
 
 		startup: function(){
 			this.inherited(arguments);
-			var _this = this;
-			setTimeout(function(){
-				_this.reset();
-			}, 0);
+			this.reset();
 		},
 
 		getValue: function(){
