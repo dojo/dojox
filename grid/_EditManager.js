@@ -241,7 +241,7 @@ return declare("dojox.grid._EditManager", null, {
 		//		Grid view
 		var c = this.info.cell;
 		if(this.isEditRow(inRowIndex) && c.view == inView && c.editable){
-			c.restore(c, this.info.rowIndex);
+			c.restore(this.info.rowIndex);
 		}
 	},
 	
