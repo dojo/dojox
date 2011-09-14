@@ -15,16 +15,10 @@
 
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 		</script>
-		<style>
-		.mblRoundRectCategory {
-			color: black;
-			text-shadow: rgba(192,192,192,1) 1px 1px 0px;
-		}
-		</style>
 	</head>
 	<body style="visibility:hidden;">
-		<div id="view1" dojoType="dojox.mobile.ScrollableView" selected="true" style="background-color:#855AA0;height:100%;">
-			<h1 dojoType="dojox.mobile.Heading" style="background: -webkit-gradient(linear, left top, left bottom, from(#CDB0BC), to(#A26D84), color-stop(0.5, #B3889B), color-stop(0.5, #AF8195));">View 1</h1>
+		<div id="view1" dojoType="dojox.mobile.ScrollableView" selected="true">
+			<h1 dojoType="dojox.mobile.Heading">View 1</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Standard Transitions</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" moveTo="view2" transition="slide">
@@ -99,7 +93,7 @@
 			</ul>
 		</div>
 
-		<div id="view2" dojoType="dojox.mobile.ScrollableView" style="background-color:#009BB9;height:100%;">
+		<div id="view2" dojoType="dojox.mobile.ScrollableView">
 			<h1 dojoType="dojox.mobile.Heading">View 2</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Standard Transitions</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
@@ -175,8 +169,8 @@
 			</ul>
 		</div>
 
-		<div id="view3" dojoType="dojox.mobile.ScrollableView" style="background-color:#FFCC00;height:100%;">
-			<h1 dojoType="dojox.mobile.Heading" style="background: -webkit-gradient(linear, left top, left bottom, from(#B0CDBC), to(#6DA284), color-stop(0.5, #88B39B), color-stop(0.5, #81AF95));">View 3</h1>
+		<div id="view3" dojoType="dojox.mobile.ScrollableView">
+			<h1 dojoType="dojox.mobile.Heading">View 3</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Standard Transitions</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" moveTo="view1" transition="slide">
