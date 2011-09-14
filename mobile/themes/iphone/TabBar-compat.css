@@ -26,3 +26,11 @@
 .dj_ie6 .mblTabPanelHeader .mblDomButton {
 	left: 0px;
 }
+.mblTabButton:first-child {
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-bottomleft: 5px;
+}
+.mblTabButton:last-child {
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-bottomright: 5px;
+}

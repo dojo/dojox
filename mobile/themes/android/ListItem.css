@@ -54,6 +54,7 @@
 .mblListItemSpriteIcon {
   position: absolute;
   margin-top: 7px;
+  margin-left: 8px;
 }
 .mblListItemRightIcon, .mblListItemRightIcon2 {
   position: relative;

@@ -35,7 +35,7 @@
 	border-left: 1px solid #2A2D47;
 	-webkit-border-radius: 3px 3px 0 0;
 }
-.dj_tablet .mblTooltip .mblHeading .mblToolbarButton {
+.dj_tablet .mblTooltip .mblHeading .mblToolBarButton {
 	float: left;
 	position: relative;
 	cursor: pointer;
@@ -67,14 +67,10 @@
 	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 }
-.dj_tablet .mblArrowButtonNeck {
-	border-color: #C0C0C0 transparent;
-	background: -webkit-gradient(linear, left top, left bottom, from(#B1B5BB), to(#6A727D));
-}
 .dj_tablet .mblArrowButtonSelected .mblArrowButtonHead {
 	background: -webkit-gradient(linear, left top, right bottom, from(#9DA0A3), to(#43484F));
 }
-.dj_tablet .mblArrowButtonSelected .mblArrowButtonBody, .dj_tablet .mblArrowButtonSelected .mblArrowButtonNeck {
+.dj_tablet .mblArrowButtonSelected .mblArrowButtonBody {
 	background: -webkit-gradient(linear, left top, left bottom, from(#9DA0A3), to(#43484F));
 }
 
@@ -139,7 +135,7 @@
 }
 
 /* dojox.mobile.ToolBarButton */
-.dj_tablet .mblToolbarButton {
+.dj_tablet .mblToolBarButton {
 	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
 	border: 1px inset silver;
 }
