@@ -315,10 +315,13 @@ define([
 					this.panelNodes[2] = t;
 				}
 			}
-			if(Math.abs(this._speed.y) < 40){
+			if(!this._initialized){
+				duration = 0; // to reduce flickers at start-up especially on android
+				this._initialized = true;
+			}else if(Math.abs(this._speed.y) < 40){
 				duration = 0.2;
 			}
-			this.inherited(arguments);
+			this.inherited(arguments, [to, duration, easing]); // 2nd arg is to avoid excessive optimization by closure compiler
 		}
 	});
 });
