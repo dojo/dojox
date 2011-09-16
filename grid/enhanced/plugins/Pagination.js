@@ -880,7 +880,7 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 			nls.pageSizeLabelTemplate,
 			nls.pageStepLabelTemplate,
 			nls.itemTitle,
-			nls.singularoItemTitle,
+			nls.singularItemTitle,
 			nls.prevTip,
 			nls.firstTip,
 			nls.nextTip,
