@@ -81,6 +81,7 @@ define([
 			}
 			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 			this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
+			this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
 			var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
 	
 			this._visible = this.selected && !id || this.id == id;
@@ -331,6 +332,10 @@ define([
 				var s = this._toCls(transition);
 				domClass.add(fromNode, s + " mblOut" + rev);
 				domClass.add(toNode, s + " mblIn" + rev);
+				setTimeout(function(){
+					domClass.add(fromNode, "mblTransition");
+					domClass.add(toNode, "mblTransition");
+				}, 100);
 				// set transform origin
 				var fromOrigin = "50% 50%";
 				var toOrigin = "50% 50%";
@@ -367,9 +372,10 @@ define([
 
 
 		onAnimationEnd: function(e){
-			if(e.animationName.indexOf("Out") === -1 &&
-				e.animationName.indexOf("In") === -1 &&
-				e.animationName.indexOf("Shrink") === -1){ return; }
+			var name = e.target.className;
+			if(name.indexOf("Out") === -1 &&
+				name.indexOf("In") === -1 &&
+				name.indexOf("Shrink") === -1){ return; }
 			var isOut = false;
 			if(domClass.contains(this.domNode, "mblOut")){
 				isOut = true;
@@ -379,7 +385,7 @@ define([
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
 			}
-			if(e.animationName.indexOf("Shrink") !== -1){
+			if(name.indexOf("Shrink") !== -1){
 				var li = e.target;
 				li.style.display = "none";
 				domClass.remove(li, "mblCloseContent");
