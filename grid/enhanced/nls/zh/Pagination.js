@@ -1,7 +1,7 @@
 define(
 //begin v1.x content
 ({
-	"descTemplate": "${2} - ${1} ${0} 的 ${3}",
+	"descTemplate": "${1} 个${0}中的  ${2} - ${3}",
 	"firstTip": "第一页",
 	"lastTip": "最后一页",
 	"nextTip": "下一页",
