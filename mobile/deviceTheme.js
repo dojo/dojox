@@ -19,6 +19,7 @@ define([
 	// description:
 	//		Detects the User Agent of the browser and loads appropriate theme files.
 	//		Simply dojo.require this module to enable the automatic theme loading.
+	//		For simulations, the user agent may be overridden by setting djConfig.mblUserAgent.
 	//
 	//		By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
 	//		loaded. The all-in-one theme files contain style sheets for all the
@@ -136,7 +137,7 @@ define([
 		]
 	];
 
-	dm.loadDeviceTheme = function(){
+	dm.loadDeviceTheme = function(/*String?*/userAgent){
 		// summary:
 		//		Loads a device-specific theme according to the user-agent
 		//		string.
@@ -147,9 +148,9 @@ define([
 		if(!lang.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
 		var i, j;
 		var m = dm.themeMap;
-		var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;
+		userAgent = userAgent || config["mblUserAgent"] || (location.search.match(/theme=(\w+)/) ? RegExp.$1 : navigator.userAgent);
 		for(i = 0; i < m.length; i++){
-			if(ua.match(new RegExp(m[i][0]))){
+			if(userAgent.match(new RegExp(m[i][0]))){
 				var theme = dm.currentTheme = m[i][1];
 				var files = m[i][2];
 				for(j = t.length - 1; j >= 0; j--){

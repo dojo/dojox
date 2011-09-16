@@ -408,26 +408,20 @@ define([
 			};
 		} // if(has("ie") <= 6)
 
-		dm.loadCssFile = function(/*String*/file){
-			// summary:
-			//		Overrides dojox.mobile.loadCssFile() defined in
-			//		deviceTheme.js.
-			if(win.doc.createStyleSheet){
-				// for some reason, IE hangs when you try to load
-				// multiple css files almost at once.
+		if(win.doc.createStyleSheet){
+			// for some reason, IE hangs when you try to load
+			// multiple css files almost at once.
+			dm.loadCssFile = function(/*String*/file){
+				// summary:
+				//		Overrides dojox.mobile.loadCssFile() defined in
+				//		deviceTheme.js.
 				setTimeout(function(file){
 					return function(){
 						win.doc.createStyleSheet(file);
 					};
 				}(file), 0);
-			}else{
-				domConstruct.create("LINK", {
-					href: file,
-					type: "text/css",
-					rel: "stylesheet"
-				}, win.doc.getElementsByTagName('head')[0]);
-			}
-		};
+			};
+		}
 
 		dm.loadCss = function(/*String|Array*/files){
 			// summary:
@@ -444,13 +438,12 @@ define([
 				win.global._loadedCss = obj;
 			}
 			if(!lang.isArray(files)){ files = [files]; }
-				for(var i = 0; i < files.length; i++){
-					var file = files[i];
-					if(!win.global._loadedCss[file]){
-						win.global._loadedCss[file] = true;
-						dm.loadCssFile(file);
+			array.forEach(files, function(file){
+				if(!win.global._loadedCss[file]){
+					win.global._loadedCss[file] = true;
+					dm.loadCssFile(file);
 				}
-			}
+			});
 		};
 
 		dm.getCssPaths = function(){
