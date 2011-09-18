@@ -283,6 +283,8 @@ define([
 					// Temporarily add padding to align with the fromNode while transition
 					toWidget.containerNode.style.paddingTop = fromTop + "px";
 				}
+
+				toWidget.movedFrom = fromNode.id;
 			}
 	
 			this.onBeforeTransitionOut.apply(this, arguments);
@@ -408,6 +410,7 @@ define([
 			if(toWidget){
 				toWidget.onAfterTransitionIn.apply(toWidget, this._arguments);
 				connect.publish("/dojox/mobile/afterTransitionIn", [toWidget].concat(this._arguments));
+				toWidget.movedFrom = undefined;
 			}
 
 			var c = this._context, m = this._method;
