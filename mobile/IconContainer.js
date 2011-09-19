@@ -40,7 +40,7 @@ define([
 		//		A type of animated transition effect. You can choose from the
 		//		standard transition types, "slide", "fade", "flip", or from the
 		//		extended transition types, "cover", "coverv", "dissolve",
-		//		"flip2", "reveal", "revealv", "scaleIn", "scaleOut", "slidev",
+		//		"reveal", "revealv", "scaleIn", "scaleOut", "slidev",
 		//		"swirl", "zoomIn", "zoomOut". If "none" is specified, transition
 		//		occurs immediately without animation. If "below" is specified,
 		//		the application contents are displayed below the icons.

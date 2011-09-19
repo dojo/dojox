@@ -130,7 +130,7 @@ define([
 						this.invokeCallback();
 					});
 					anim.play();
-				}else if(transition == "flip" || transition == "flip2"){
+				}else if(transition == "flip"){
 					anim = xfx.flip({
 						node: fromNode,
 						dir: "right",
