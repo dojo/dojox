@@ -1,6 +1,10 @@
 define(["dojo/_base/declare","dojox/gfx","./BarLineIndicator"],
   function(declare, gfx, BarLineIndicator) { 
 
+/*=====
+	BarLineIndicator = dojox.gauges.BarLineIndicator;
+=====*/
+
 return declare("dojox.gauges.BarCircleIndicator", [BarLineIndicator], {
 	// summary:
 	//		An indicator for the BarGauge that draws a circle at a position that corresponds to the

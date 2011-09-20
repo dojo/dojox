@@ -1,6 +1,10 @@
 define(["dojo/_base/declare","./_Indicator"],
   function(declare, Indicator) { 
 
+/*=====
+	Indicator = dojox.gauges._Indicator;
+=====*/
+
 return declare("dojox.gauges.TextIndicator", [Indicator], {
 	// summary:
 	//		A gauge indicator the simply draws its value as text.

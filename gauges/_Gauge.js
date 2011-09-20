@@ -5,6 +5,10 @@ define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/arr
 	var _tooltipModule =  0;
 	var _numberModule =  0;
 
+/*=====
+	Widget = dijit._Widget;
+=====*/
+	
 return declare("dojox.gauges._Gauge",[Widget],{
 	// summary:
 	//		The abstract base class for gauges.
@@ -833,6 +837,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 				return indicator;
 			}
 		}
+		return null;
 	}
 });
 });

@@ -1,5 +1,9 @@
 define(["dojo/_base/declare","dijit/_Widget"], 
   function(declare, Widget) {
+
+/*=====
+	Widget = dijit._Widget;
+=====*/	
 	
 return declare("dojox.gauges.Range", [Widget], {
 	// summary:

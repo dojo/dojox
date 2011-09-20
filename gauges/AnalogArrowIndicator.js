@@ -1,6 +1,10 @@
 define(["dojo/_base/declare","./AnalogIndicatorBase"],
 function(declare, AnalogIndicatorBase) { 
 
+/*=====
+	AnalogIndicatorBase = dojox.gauges.AnalogIndicatorBase;
+=====*/
+
 return declare("dojox.gauges.AnalogArrowIndicator", [AnalogIndicatorBase],{
 
 	// summary:

@@ -3,6 +3,11 @@ define(["dojo/_base/declare","dojo/_base/connect","dojo/_base/lang","dojo/_base/
 
 
 var NumberUtils
+
+/*=====
+	BarGauge = dojox.gauges.BarGauge;
+=====*/
+
 return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 	// summary:
 	//		Represents an horizontal bar gauge with a glossy appearance.
@@ -245,7 +250,7 @@ return declare("dojox.gauges.GlossyHorizontalGauge", [BarGauge], {
 		// group: dojox.gfx.Group
 		//		The GFX group where the background must be drawn
 		if (this._gaugeBackground){
-			return this._gaugeBackground;
+			return;
 		}
 		
 		var lighterColor = Color.blendColors(new Color(this.color), new Color('white'), 0.4);

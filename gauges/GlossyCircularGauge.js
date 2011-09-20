@@ -1,6 +1,10 @@
 define(["dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],
   function(declare, Color, GlossyCircularGaugeBase) {
 
+/*=====
+	GlossyCircularGaugeBase = dojox.gauges.GlossyCircularGaugeBase;
+=====*/
+
 return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a circular gauge with a glossy appearance.
@@ -68,7 +72,7 @@ return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 		
 		if (this._gaugeBackground){
 			this._gaugeBackground.setTransform(transform);
-			return this._gaugeBackground;
+			return;
 		}
 		this._gaugeBackground = group.createGroup();
 		this._gaugeBackground.setTransform(transform);
@@ -160,7 +164,7 @@ return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 				
 		if (this._foreground){
 			this._foreground.setTransform(transform);
-			return this._foreground;
+			return;
 		}
 		this._foreground = group.createGroup();
 		this._foreground.setTransform(transform);

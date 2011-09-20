@@ -1,6 +1,10 @@
 define(["dojo/_base/declare","./AnalogIndicatorBase"],
   function(declare, AnalogIndicatorBase) { 
 
+/*=====
+	AnalogIndicatorBase = dojox.gauges.AnalogIndicatorBase;
+=====*/
+
 return declare("dojox.gauges.AnalogCircleIndicator", [AnalogIndicatorBase], {
 	// summary:
 	//		An indicator for the AnalogGauge that draws a circle. The center of the circle is positioned
