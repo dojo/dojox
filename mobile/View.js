@@ -374,7 +374,7 @@ define([
 
 
 		onAnimationEnd: function(e){
-			var name = e.target.className;
+			var name = e.animationName || e.target.className;
 			if(name.indexOf("Out") === -1 &&
 				name.indexOf("In") === -1 &&
 				name.indexOf("Shrink") === -1){ return; }
@@ -387,6 +387,7 @@ define([
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
 			}
+			domStyle.set(this.domNode, {webkitTransformOrigin:""});
 			if(name.indexOf("Shrink") !== -1){
 				var li = e.target;
 				li.style.display = "none";

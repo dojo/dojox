@@ -3,9 +3,10 @@ define([
 	"dojo/_base/config",
 	"dojo/_base/lang",
 	"dojo/_base/window",
+	"dojo/dom-class",
 	"dojo/dom-construct",
 	"require"
-], function(array, config, lang, win, domConstruct, require){
+], function(array, config, lang, win, domClass, domConstruct, require){
 
 	var dm = lang.getObject("dojox.mobile", true);
 /*=====
@@ -163,6 +164,7 @@ define([
 				for(j = 0; j < files.length; j++){
 					dm.loadCssFile(files[j].toString());
 				}
+				domClass.add(win.doc.documentElement, theme + "_theme");
 				break;
 			}
 		}

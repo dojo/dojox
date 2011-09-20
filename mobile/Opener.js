@@ -21,7 +21,7 @@ define([
 		//
 		buildRendering: function(){
 			this.inherited(arguments);
-			this.cover = domConstruct.create('div', { onclick: lang.hitch(this, '_onBlur'), 'class': 'mblOpenerUnderlay', style: { top:'0px', left:'0px', width:'0px', height:'0px', position: isOverlay ? 'absolute' : 'fixed', backgroundColor:'transparent', overflow:'hidden' }}, this.domNode, 'first');
+			this.cover = domConstruct.create('div', { onclick: lang.hitch(this, '_onBlur'), 'class': 'mblOpenerUnderlay', style: { top:'0px', left:'0px', width:'0px', height:'0px', position: isOverlay ? 'absolute' : 'fixed', backgroundColor:'transparent', overflow:'hidden', zIndex:'-1' }}, this.domNode, 'first');
 		},
 
 		onShow: function(/*DomNode*/node){},

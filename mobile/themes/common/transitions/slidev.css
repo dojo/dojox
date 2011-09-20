@@ -5,7 +5,7 @@
 }
 .mblSlidev.mblOut.mblTransition {
 	-webkit-transition-property: -webkit-transform;
-	-webkit-transition-duration: .25s;
+	-webkit-transition-duration: .3s;
 	-webkit-transform: translate3d(0px,-100%,0px) !important;
 }
 .mblSlidev.mblIn {
@@ -16,7 +16,7 @@
 }
 .mblSlidev.mblIn.mblTransition {
 	-webkit-transition-property: -webkit-transform;
-	-webkit-transition-duration: .25s;
+	-webkit-transition-duration: .3s;
 	-webkit-transform: translate3d(0px,0%,0px) !important;
 }
 .mblSlidev.mblOut.mblReverse {
@@ -28,7 +28,6 @@
 	-webkit-transform: translate3d(0px,100%,0px) !important;
 }
 .mblSlidev.mblIn.mblReverse {
-	-webkit-transition-property: none;
 	-webkit-transform: translate3d(0px,-100%,0px) !important;
 }
 .mblSlidev.mblIn.mblReverse.mblTransition {

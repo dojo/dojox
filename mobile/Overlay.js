@@ -50,6 +50,10 @@ define([
 				}
 			}
 			domClass.replace(this.domNode, ["mblCoverv", "mblIn"], ["mblOverlayHidden", "mblRevealv", "mblOut", "mblReverse"]);
+			var _domNode = this.domNode;
+			setTimeout(function(){
+				domClass.add(_domNode, "mblTransition");
+			}, 100);
 			var timeoutHandler = null;
 			this._moveHandle = this.connect(win.doc.documentElement, "ontouchmove", function(){
 				if(timeoutHandler){
@@ -70,11 +74,15 @@ define([
 				this._moveHandle = null;
 			}
 			if(has("webkit")){
-				var handler = this.connect(this.domNode, "webkitAnimationEnd", function(){
+				var handler = this.connect(this.domNode, "webkitTransitionEnd", function(){
 					this.disconnect(handler);
-					domClass.replace(this.domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse"]);
+					domClass.replace(this.domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
 				});
-				domClass.replace(this.domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn"]);
+				domClass.replace(this.domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn", "mblTransition"]);
+				var _domNode = this.domNode;
+				setTimeout(function(){
+					domClass.add(_domNode, "mblTransition");
+				}, 100);
 			}else{
 				domClass.replace(this.domNode, ["mblOverlayHidden"], ["mblCoverv", "mblIn", "mblRevealv", "mblOut", "mblReverse"]);
 			}
