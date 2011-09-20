@@ -189,6 +189,23 @@ define([
 				}
 			}
 		},
+		
+		_fixViewState: function(/*DomNode*/toNode){
+			// summary:
+			//		Sanity check for view transition states.
+			// description:
+			//		Sometimes uninitialization of Views fails after making view transition,
+			//		and that results in failure of subsequent view transitions.
+			//		This function does the uninitialization for all the sibling views.
+			var nodes = this.domNode.parentNode.childNodes;
+			for(var i = 0; i < nodes.length; i++){
+				var n = nodes[i];
+				if(n.nodeType === 1 && domClass.contains(n, "mblView")){
+					n.className = "mblView"; //TODO: Should remove classes one by one. This would clear user defined classes or even mblScrollableView.
+				}
+			}
+			toNode.className = "mblView"; // just in case toNode is a sibling of an ancestor.
+		},
 	
 		convertToId: function(moveTo){
 			if(typeof(moveTo) == "string"){
@@ -271,6 +288,7 @@ define([
 			if(!toNode){ console.log("dojox.mobile.View#performTransition: destination view not found: "+moveTo); return; }
 			toNode.style.visibility = this._aw ? "visible" : "hidden";
 			toNode.style.display = "";
+			this._fixViewState(toNode);
 			var toWidget = registry.byNode(toNode);
 			if(toWidget){
 				// Now that the target view became visible, it's time to run resize()
