@@ -406,7 +406,7 @@ define([
 				delete this.scroller;
 			}
 			this.edit.destroy();
-			delete this.edit;			
+			delete this.edit;
 			this.views.destroyViews();
 			if(this.focus){
 				this.focus.destroy();

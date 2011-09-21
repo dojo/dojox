@@ -176,6 +176,10 @@ declare("dojox.grid._TreeGridView", _View, {
 		this._expandos = {};
 		this.connect(this.grid, '_onCleanupExpandoCache', '_cleanupExpandoCache');
 	},
+	destroy: function(){
+		this._cleanupExpandoCache();
+		this.inherited(arguments);
+	},
 	_cleanupExpandoCache: function(identity){
 		if(identity && this._expandos[identity]){
 			this._expandos[identity].destroy();
