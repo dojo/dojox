@@ -61,7 +61,7 @@ define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "d
 				}
 			}
 
-			if (renderer === 'canvas' && config.canvasEvent !== false) {
+			if (renderer === 'canvas' && config.canvasEvents !== false) {
 				renderer = "canvasWithEvents";
 			}
 
