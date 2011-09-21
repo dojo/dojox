@@ -29,9 +29,9 @@
 				if(color){
 					node.value = color;
 					node.style.backgroundColor = color;
-					node.style.color =  "#" + (255-parseInt(color.substr(1,2), 16)).toString(16)
-							+ (255-parseInt(color.substr(3,2), 16)).toString(16)
-							+ (255-parseInt(color.substr(5,2), 16)).toString(16);
+					node.style.color =  "#" + ("0" +(255-parseInt(color.substr(1,2), 16)).toString(16)).slice(-2)
+							+ ("0" + (255-parseInt(color.substr(3,2), 16)).toString(16)).slice(-2)
+							+ ("0" + (255-parseInt(color.substr(5,2), 16)).toString(16)).slice(-2);
 				}
 			}
 		}
