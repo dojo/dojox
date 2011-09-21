@@ -48,11 +48,14 @@ var Search = declare("dojox.grid.enhanced.plugins.Search", _Plugin, {
 		var _this = this,
 			cnt = this._cacheSize,
 			args = {
-				"start": start,
-				"onBegin": function(size){
+				start: start,
+				query: this.grid.query,
+				sort: this.grid.getSortProps(),
+				queryOptions: this.grid.queryOptions,
+				onBegin: function(size){
 					_this._storeSize = size;
 				},
-				"onComplete": function(items){
+				onComplete: function(items){
 					if(!array.some(items, function(item, i){
 						if(_this._checkRow(item, searchArgs, isGlobal)){
 							onSearched(start + i, item);
