@@ -26,6 +26,10 @@ define([
 			}
 			this.inherited(arguments);
 			this.focusNode = this.domNode;
+		},
+		
+		_getValueAttr: function(){
+			return (this.checked ? this.value : false);
 		}
 	});
 });
