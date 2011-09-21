@@ -81,6 +81,7 @@ define([
 			html.destroy(this.headerNode);
 			delete this.headerNode;
 			for(var i in this.rowNodes){
+				this._cleanupRowWidgets(this.rowNodes[i]);
 				html.destroy(this.rowNodes[i]);
 			}
 			this.rowNodes = {};
@@ -129,8 +130,6 @@ define([
 					if(w._destroyOnRemove){
 						w.destroy();
 						delete w;
-					}else if(w.domNode && w.domNode.parentNode){
-						w.domNode.parentNode.removeChild(w.domNode);
 					}
 				});
 			}
@@ -157,6 +156,7 @@ define([
 						if(!w._started){
 							w.startup();
 						}
+						dojo.destroy(n);
 					}else{
 						n.innerHTML = "";
 					}
