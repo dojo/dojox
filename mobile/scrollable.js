@@ -265,7 +265,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				this.setKeyframes(null, null, i);
 			}
 		}
-
+		// Workaround for iPhone flicker issue
+		if(dm._iw){
+			domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
+		}
+		
 		this._speed = {x:0, y:0};
 		this._appFooterHeight = 0;
 		if(this.isTopLevel() && !this.noResize){
