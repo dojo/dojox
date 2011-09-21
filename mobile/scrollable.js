@@ -1074,10 +1074,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			if(!bar){ return; }
 			var props = {};
 			props[v ? "top" : "left"] = hd + 4 + "px"; // +4 is for top or left margin
-			props[v ? "height" : "width"] = d - 8 + "px";
+			var t = (d - 8) <= 0 ? 1 : d - 8;
+			props[v ? "height" : "width"] = t + "px";
 			domStyle.set(wrapper, props);
 			var l = Math.round(d * d / c); // scroll bar length
-			l = Math.min(Math.max(l - 8, 5), d - 8); // -8 is for margin for both ends
+			l = Math.min(Math.max(l - 8, 5), t); // -8 is for margin for both ends
 			bar.style[v ? "height" : "width"] = l + "px";
 			domStyle.set(bar, {"opacity": 0.6});
 		};
