@@ -156,15 +156,21 @@ var _TreeGridContentBuilder = declare("dojox.grid._TreeGridContentBuilder", _Bui
 		return colSpans && colSpans[level] ? colSpans[level] : null;
 	},
 	_getCellWidth: function(cells, colIndex){
-		var node = cells[colIndex].getHeaderNode();
-		if(colIndex === cells.length - 1 || array.every(cells.slice(colIndex + 1), function(cell){
+		var curCell = cells[colIndex], node = curCell.getHeaderNode();
+		if(curCell.hidden){
+			return 0;
+		}
+		if(colIndex == cells.length - 1 || array.every(cells.slice(colIndex + 1), function(cell){
 			return cell.hidden;
 		})){
 			var headerNodePos = domGeometry.position(cells[colIndex].view.headerContentNode.firstChild);
 			return headerNodePos.x + headerNodePos.w - domGeometry.position(node).x;
 		}else{
-			var nextNode = cells[colIndex + 1].getHeaderNode();
-			return domGeometry.position(nextNode).x - domGeometry.position(node).x;
+			var nextCell;
+			do{
+				nextCell = cells[++colIndex];
+			}while(nextCell.hidden);
+			return domGeometry.position(nextCell.getHeaderNode()).x - domGeometry.position(node).x;
 		}
 	}
 });
