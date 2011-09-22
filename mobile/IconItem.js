@@ -197,7 +197,7 @@ define([
 			}
 
 			if (this.href && this.hrefTarget) {
-				mcommon.openWindow(this.href, this.hrefTarget);
+				common.openWindow(this.href, this.hrefTarget);
 				dojo.style(this.iconNode, "opacity", 1);
 				return;
 			}
