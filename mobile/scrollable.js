@@ -16,6 +16,9 @@ if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 		if(name === "android"){
 			return parseFloat(ua.split("Android ")[1]) || undefined;
 		}
+		if(name === "iphone"){
+			return ua.match(/(iPhone|iPod|iPad)/);
+		}
 		if(name === "ie"){
 			return parseFloat(ua.split("MSIE ")[1]) || undefined;
 		}
@@ -266,7 +269,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			}
 		}
 		// Workaround for iPhone flicker issue
-		if(dm._iw){
+		if(has('iphone')){
 			domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
 		}
 		

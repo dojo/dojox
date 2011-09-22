@@ -333,7 +333,7 @@ define([
 				toNode.style.visibility = "visible";
 			}
 			
-			if(dm._iw){ // Workaround for iPhone flicker issue
+			if(dm._iw && dm.scrollable){ // Workaround for iPhone flicker issue (only when scrollable.js is loaded)
 				var ss = dm.getScreenSize();
 				// Show cover behind the view.
 				// cover's z-index is set to -10000, lower than z-index value specified in transition css.
@@ -373,7 +373,7 @@ define([
 	
 		_doTransition: function(fromNode, toNode, transition, dir){
 			var rev = (dir == -1) ? " mblReverse" : "";
-			if(dm._iw){ // Workaround for iPhone flicker issue
+			if(dm._iw && dm.scrollable){ // Workaround for iPhone flicker issue (only when scrollable.js is loaded)
 				// Show toNode after flicker ends
 				domStyle.set(toNode, {
 					position: "",
