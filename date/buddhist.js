@@ -236,5 +236,5 @@ dojox.date.buddhist.difference = function(/*dojox.date.buddhist.Date*/date1, /*d
 	// Round for fractional values and DST leaps
 	return Math.round(delta); // Number (integer)
 };
-return dojo.date.buddhist;
+return dojox.date.buddhist;
 });
