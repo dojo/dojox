@@ -196,6 +196,12 @@ define([
 				return;
 			}
 
+			if (this.href && this.hrefTarget) {
+				mcommon.openWindow(this.href, this.hrefTarget);
+				dojo.style(this.iconNode, "opacity", 1);
+				return;
+			}
+
 			var transOpts;
 			if(this.moveTo || this.href || this.url || this.scene){
 				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transitionDir: this.transitionDir, transition: this.transition};

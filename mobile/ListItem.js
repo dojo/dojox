@@ -204,6 +204,10 @@ define([
 			}
 			this.select();
 
+			if (this.href && this.hrefTarget) {
+				mcommon.openWindow(this.href, this.hrefTarget);
+				return;
+			}
 			var transOpts;
 			if(this.moveTo || this.href || this.url || this.scene){
 				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transition: this.transition, transitionDir: this.transitionDir};
