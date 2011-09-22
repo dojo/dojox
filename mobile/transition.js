@@ -1,61 +1,19 @@
 define([
-	"dojo/_base/array",
-	"dojo/_base/connect",
 	"dojo/_base/Deferred",
-	"dojo/dom-class",
-	"dojo/dom-style",
-	"dojo/DeferredList"
-], function(array, connect, Deferred, domClass, domStyle, DeferredList){
-	return function(from, to, options){
-		var rev = (options && options.reverse) ? " mblReverse" : "";
-		if(!options || !options.transition){
-			console.log("from: ", from, "to: ", to);
-			if(from && from.tagname){
-				domStyle.set(from,"display","none");
-			}
-			if(to){
-				domStyle.set(to, "display", "");
-			}
-		}else{
-			var defs=[];
-			if(to){
-				domStyle.set(to, "display", "");
-			}
-			if(from){
-				domStyle.set(from, "display", "");
-				var fromDef = new Deferred();
-				var fromHandle = connect.connect(from, "webkitAnimationEnd", function(){
-					domStyle.set(from,"display","none");
-					//remove the animation classes in the node
-					array.forEach([options.transition,"mblIn","mblOut","mblReverse"], function(item){
-						domClass.remove(from, item);
-					});
-					
-					connect.disconnect(fromHandle);		
-					fromDef.resolve(from);
-				});
-				defs.push(fromDef);
-			}
-			
-			var toDef = new Deferred();
-			var toHandle= connect.connect(to, "webkitAnimationEnd", function(){
-				//remove the animation classes in the node
-				array.forEach([options.transition,"mblIn","mblOut","mblReverse"], function(item){
-					domClass.remove(to, item);
-				});
-				
-				connect.disconnect(toHandle);		
-				toDef.resolve(to);
-			});
-
-			defs.push(toDef);
-			options.transition = "mbl"+(options.transition.charAt(0).toUpperCase() + options.transition.substring(1));
-
-			domClass.add(from, options.transition + " mblOut" + rev);
-			domClass.add(to, options.transition + " mblIn" + rev);
-
-			return new DeferredList(defs);
-			
-		}
+	"dojo/_base/config"
+], function(Deferred, config){
+	/* summary: this is the wrapper module which load
+	 * dojox/css3/transit conditionally. If mblCSS3Transition
+	 * is set to 'dojox/css3/transit', it will be loaded as
+	 * the module to conduct the view transition.
+	 */
+	if(config['mblCSS3Transition']){
+		//require dojox/css3/transit and resolve it as the result of transitDeferred.
+		var transitDeferred = new Deferred();
+		require([config['mblCSS3Transition']], function(transit){
+			transitDeferred.resolve(transit);
+		});
+		return transitDeferred;
 	}
+	return null;
 });

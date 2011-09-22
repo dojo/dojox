@@ -7,6 +7,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/sniff",
 	"dojo/_base/window",
+	"dojo/_base/Deferred",
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-geometry",
@@ -16,8 +17,9 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./ViewController" // to load ViewController for you (no direct references)
-], function(dojo, array, config, connect, declare, lang, has, win, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController){
+	"./ViewController", // to load ViewController for you (no direct references)
+	"./transition"
+], function(dojo, array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, transitDeferred){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -387,6 +389,18 @@ define([
 			if(!transition || transition == "none"){
 				this.domNode.style.display = "none";
 				this.invokeCallback();
+			}else if(config['mblCSS3Transition']){
+				//get dojox/css3/transit first
+				Deferred.when(transitDeferred, lang.hitch(this, function(transit){
+					//follow the style of .mblView.mblIn in View.css
+					//need to set the toNode to absolute position
+					var toPosition = domStyle.get(toNode, "position");
+					domStyle.set(toNode, "position", "absolute");
+					Deferred.when(transit(fromNode, toNode, {transition: transition, reverse: (dir===-1)?true:false}),lang.hitch(this,function(){
+						domStyle.set(toNode, "position", toPosition);
+						this.invokeCallback();
+					}));
+				}));
 			}else{
 				var s = this._toCls(transition);
 				domClass.add(fromNode, s + " mblOut" + rev);
