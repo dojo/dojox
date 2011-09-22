@@ -24,7 +24,7 @@
 			"jq",
 			"jsonPath",
 			"lang/(aspect|async|docs|observable|oo|typed|functional/(binrec|curry|linrec|listcomp|multirec|numrec|tailrec|util|zip))",
-			"layout/(BorderContainer|DragPane|FloatingPane|RadioGroup|RotatorContainer|ScrollPane|TableContainer|dnd|ext-dijit)",
+			"layout/(BorderContainer|dnd|ext-dijit)",
 			"mobile/app/",
 			"rails",
 			"robot",
@@ -37,14 +37,10 @@
 			"NodeList"
 		],
 
-		excludeMids = {
-			"dojox/html":1
-		},
-
 		excludesRe = new RegExp(("^dojox/(" + excludes.join("|") + ")").replace(/\//, "\\/")),
 
 		usesDojoProvideEtAl = function(mid){
-			return (mid in excludeMids) || excludesRe.test(mid);
+			return excludesRe.test(mid);
 		};
 
 	return {
