@@ -130,6 +130,8 @@ define([
 					if(w._destroyOnRemove){
 						w.destroy();
 						delete w;
+					}else if(w.domNode && w.domNode.parentNode){
+						w.domNode.parentNode.removeChild(w.domNode);
 					}
 				});
 			}
