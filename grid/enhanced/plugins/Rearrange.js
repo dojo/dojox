@@ -100,7 +100,7 @@ var Rearrange = declare("dojox.grid.enhanced.plugins.Rearrange", _Plugin, {
 			}
 			++delta;
 			if(colIndex != targetPos){
-				layout.moveColumn(cells[colIndex].view.idx, cells[targetPos].view.idx, colIndex, targetPos, before);
+				layout.moveColumn(cells[colIndex].view.idx, cells[targetPos].view.idx, colIndex, targetPos, before && colIndex > targetPos);
 				cells = layout.cells;
 			}
 			if(targetPos <= colIndex){
