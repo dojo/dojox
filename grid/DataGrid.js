@@ -203,6 +203,10 @@ var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 				this.showMessage(this.noDataMessage);
 			}
 		}
+		
+		if(this.selection.isSelected(idx)){
+			this.selection.deselect(idx);
+		}
 	},
 
 	_onRevert: function(){
