@@ -205,7 +205,7 @@ define([
 			this.select();
 
 			if (this.href && this.hrefTarget) {
-				mcommon.openWindow(this.href, this.hrefTarget);
+				common.openWindow(this.href, this.hrefTarget);
 				return;
 			}
 			var transOpts;
