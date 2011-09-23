@@ -297,14 +297,14 @@ var _Paginator = declare("dojox.grid.enhanced.plugins._Paginator", [_Widget, _Te
 		}
 		this.grid.resize = this._originalResize;
 	},
-	onSwitchPageSize: function(evt){
-		// change page size event
+	onSwitchPageSize: function(/*Event*/evt){
+
 	},
-	onPageStep: function(evt){
-		// page jump event
+	onPageStep: function(/*Event*/evt){
+
 	},
-	onShowGotoPageDialog: function(evt){
-		// show goto page dialog
+	onShowGotoPageDialog: function(/*Event*/evt){
+
 	},
 	_update: function(){
 		// summary:
@@ -672,17 +672,36 @@ var _Paginator = declare("dojox.grid.enhanced.plugins._Paginator", [_Widget, _Te
 
 var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	// summary:
-	//		The typical pagination way as an alternative to deal with huge data set besides the default virtual scrolling way
-	// =============== Public APIs =============== 
+	//		The typical pagination way to deal with huge dataset
+	//		an alternative for the default virtual scrolling manner.
 	name: "pagination",
+	// defaultPageSize: Integer
+	//		Number of rows in a page, 25 by default.
 	defaultPageSize: 25,
+	// defaultPage: Integer
+	//		Which page will be displayed initially, 1st page by default.
 	defaultPage: 1,
+	// description: boolean
+	//		Whether the description information will be displayed, true by default.
 	description: true,
+	// sizeSwitch: boolean
+	//		Whether the page size switch options will be displayed, true by default.
 	sizeSwitch: true,
+	// pageStepper: boolean
+	//		Whether the page switch options will be displayed, true by default.
 	pageStepper: true,
+	// gotoButton: boolean
+	//		Whether the goto page button will be displayed, false by default.
 	gotoButton: false,
+	// pageSizes: Array
+	//		Array of page sizes for switching, e.g. [10, 25, 50, 100, Infinity] by default,
+	//		Infinity or any NaN value will be treated as "all".
 	pageSizes: [10, 25, 50, 100, Infinity],
+	// maxPageStep: Integer
+	//		The max number of page sizes to be displayed, 7 by default.
 	maxPageStep: 7,
+	// position: string
+	//		The position of the pagination bar - "top"|"bottom", "bottom" by default.
 	position: 'bottom',
 	
 	init: function(){
@@ -706,9 +725,9 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		this._paginator.destroy();
 		var g = this.grid;
 		g.unwrap(this.forcePageStoreLayer.name());
-		g._onNew = this._gridOriginalfuncs[0];
-		g.removeSelectedRows = this._gridOriginalfuncs[1];
-		g.scrollToRow = this._gridOriginalfuncs[2];
+		g.scrollToRow = this._gridOriginalfuncs[0];
+		g._onNew = this._gridOriginalfuncs[1];
+		g.removeSelectedRows = this._gridOriginalfuncs[2];
 		this._paginator = null;
 		this._nls = null;
 	},
@@ -729,12 +748,12 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	},
 	nextPage: function(){
 		// summary:
-		//		Function to handle shifting to the next page in the list.
+		//		Go to the next page.
 		this.currentPage(this._currentPage + 1);
 	},
 	prevPage: function(){
 		// summary:
-		//		Function to handle shifting to the previous page in the list.
+		//		Go to the previous page.
 		this.currentPage(this._currentPage - 1);
 	},
 	firstPage: function(){
@@ -749,11 +768,11 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	},
 	currentPageSize: function(size){
 		//	summary:
-		//		Change size of items per page, return the current page size.
+		//		Change the size of current page or return the current page size.
 		//	size: Integer || null
-		//		A integer to identify the number of items per page. If the size
-		//		is an Infinity, will show all items; if an invalid value pssed
-		//		in, will only return current page size.
+		//		An integer identifying the number of rows per page. If the size
+		//		is an Infinity, all rows will be displayed; if an invalid value pssed
+		//		in, the current page size will be returned.
 		//	return
 		//		Current size of items per page.  
 		if(!isNaN(size)){
@@ -779,6 +798,8 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		return this._currentPageSize;
 	},
 	getTotalPageNum: function(){
+		// summary:
+		//		Get total page number
 		return Math.ceil(this._maxSize / this._currentPageSize);
 	},
 	getTotalRowCount: function(){
@@ -792,13 +813,13 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		//		and scroll to the specific row
 		// inRowIndex: integer
 		//		The row index
-		var page = parseInt(inRowIndex / this._currentPageSize, 10);
+		var page = parseInt(inRowIndex / this._currentPageSize, 10) + 1;
 		if(page > this.getTotalPageNum()){
 			return;
 		}
 		this.currentPage(page);
 		var rowIdx = inRowIndex % this._currentPageSize;
-		this.grid.setScrollTop(this.grid.scroller.findScrollTop(rowIdx) + 1);
+		return this._gridOriginalfuncs[0](rowIdx);
 	},
 	removeSelectedRows: function(){
 		this._multiRemoving = true;
@@ -817,27 +838,19 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	},
 	// [DEPRECATED] ============
 	gotoPage: function(page){
-		kernel.deprecated("dojox.grid.Enhanced.gotoPage(page)", "use dojox.Enhanced.currentPage(page) instead", "1.8");
+		kernel.deprecated("dojox.grid.enhanced.EnhancedGrid.gotoPage(page)", "use dojox.grid.enhanced.EnhancedGrid.currentPage(page) instead", "1.8");
 		this.currentPage(page);
 	},
-	gotoNextPage: function(){
-		kernel.deprecated("dojox.grid.Enhanced.gotoNextPage()", "use dojox.Enhanced.nextPage() instead", "1.8");
-		this.nextPage();
-	},
-	gotoPrevPage: function(){
-		kernel.deprecated("dojox.grid.Enhanced.gotoPrevPage()", "use dojox.Enhanced.prevPage() instead", "1.8");
-		this.nextPage();
-	},
 	gotoFirstPage: function(){
-		kernel.deprecated("dojox.grid.Enhanced.gotoFirstPage()", "use dojox.Enhanced.firstPage() instead", "1.8");
+		kernel.deprecated("dojox.grid.enhanced.EnhancedGrid.gotoFirstPage()", "use dojox.grid.enhanced.EnhancedGrid.firstPage() instead", "1.8");
 		this.firstPage();
 	},
 	gotoLastPage: function(){
-		kernel.deprecated("dojox.grid.Enhanced.gotoLastPage()", "use dojox.Enhanced.lastPage() instead", "1.8");
+		kernel.deprecated("dojox.grid.enhanced.EnhancedGrid.gotoLastPage()", "use dojox.grid.enhanced.EnhancedGrid.lastPage() instead", "1.8");
 		this.lastPage();
 	},
 	changePageSize: function(size){
-		kernel.deprecated("dojox.grid.Enhanced.changePageSize(size)", "use dojox.Enhanced.currentPageSize(size) instead", "1.8");
+		kernel.deprecated("dojox.grid.enhanced.EnhancedGrid.changePageSize(size)", "use dojox.grid.enhanced.EnhancedGrid.currentPageSize(size) instead", "1.8");
 		this.currentPageSize(size);
 	},
 	// =============== Protected ================
@@ -852,7 +865,6 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	_initOptions: function(){
 		this._defaultRowsPerPage = this.grid.rowsPerPage || 25;
 		this.defaultPage = this.option.defaultPage >= 1 ? parseInt(this.option.defaultPage, 10) : 1;
-		this.defaultPageSize = this.option.defaultPageSize >= 1 ? parseInt(this.option.defaultPageSize, 10) : 25;
 		this.option.description = this.option.description !== undefined ? !!this.option.description : this.description;
 		this.option.sizeSwitch = this.option.sizeSwitch !== undefined ? !!this.option.sizeSwitch : this.sizeSwitch;
 		this.option.pageStepper = this.option.pageStepper !== undefined ? !!this.option.pageStepper : this.pageStepper;
@@ -871,6 +883,7 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		}else{
 			this.option.pageSizes = this.pageSizes;
 		}
+		this.defaultPageSize = this.option.defaultPageSize >= 1 ? parseInt(this.option.defaultPageSize, 10) : this.pageSizes[0];
 		this.option.maxPageStep = this.option.maxPageStep > 0 ? this.option.maxPageStep : this.maxPageStep;
 		this.option.position = lang.isString(this.option.position) ? this.option.position.toLowerCase() : this.position;
 		var nls = i18n.getLocalization("dojox.grid.enhanced", "Pagination");
@@ -905,10 +918,9 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		g.currentPageSize = lang.hitch(this, this.currentPageSize);
 		g.showGotoPageButton = lang.hitch(this, this.showGotoPageButton);
 		g.getTotalRowCount = lang.hitch(this, this.getTotalRowCount);
+		g.getTotalPageNum = lang.hitch(this, this.getTotalPageNum);
 		
 		g.gotoPage = lang.hitch(this, this.gotoPage);
-		g.gotoNextPage = lang.hitch(this, this.gotoNextPage);
-		g.gotoPrevPage = lang.hitch(this, this.gotoPrevPage);
 		g.gotoFirstPage = lang.hitch(this, this.gotoFirstPage);
 		g.gotoLastPage = lang.hitch(this, this.gotoLastPage);
 		g.changePageSize = lang.hitch(this, this.changePageSize);
