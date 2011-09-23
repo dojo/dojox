@@ -83,7 +83,9 @@ define([
 			}
 			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 			this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
-			this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
+			if(!config['mblCSS3Transition']){
+			    this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
+			}
 			var id = location.href.match(/#(\w+)([^\w=]|$)/) ? RegExp.$1 : null;
 	
 			this._visible = this.selected && !id || this.id == id;
