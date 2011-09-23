@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>13899 mvc Stateful Dates</title>
+
+	<style>
+		@import "../../../dijit/themes/claro/document.css";
+		@import "../../../util/doh/robot/robot.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+	</style>
+
+	<!-- required: the default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/claro/claro.css"/>
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../../dojo/dojo.js"
+		data-dojo-config="isDebug: true, parseOnLoad: false"></script>
+
+	<!-- only needed for alternate theme testing: -->
+	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
+	<script type="text/javascript">
+	var model;
+			
+		require([
+			'dijit/form/DateTextBox',
+			'dijit/CalendarLite',
+			'dojox/mvc/StatefulModel',
+			'dijit/form/Button',
+			'dojox/mvc/Output',
+			'dijit/form/TextBox',
+			'dojox/mvc',
+			'dojo/on',
+			'dojo/domReady!'
+		], function (DateTextBox, Calendar, StatefulModel, Button, Output, TextBox) {
+			var now = new Date("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)");
+			var now2 = new Date("Mon May 05 2010 00:00:00 GMT-0400 (Eastern Daylight Time)");
+			var now3 = new Date("Mon May 05 2009 00:00:00 GMT-0400 (Eastern Daylight Time)");
+
+			var regx = new RegExp("abc","i");			
+			model = new StatefulModel({
+				data: {
+					date: now,
+					//regex: /abc/i // should be regex: /abc/
+					regex: regx // should be regex: /abc/
+				}
+			});
+
+			model2 = new StatefulModel({
+				data: {
+					date2: now2
+				}
+			});
+
+			model3 = new StatefulModel({
+				data: {
+					date3: now3
+				}
+			});
+
+			//console.log('model.date is now -> ', +model.date.get('value') === +now);
+			console.log('model.regex', model.regex.get('value'));
+			var str = "ABCDEFGHIJKLMNOP abcdefghi";
+			var patt1 = model.regex.get('value');
+			console.log("str.match(model.regex.get('value')) is ",str.match(model.regex.get('value')));
+			console.log('str.match(patt1)',str.match(patt1));
+			model.regex.set('value',/def/i);
+			console.log("set to def str.match(model.regex.get('value')) is ",str.match(model.regex.get('value')));
+			model.regex.reset();
+			console.log("after reset str.match(model.regex.get('value')) is ",str.match(model.regex.get('value')));
+
+			var cal = new Calendar({
+				ref: model2.date2 // bind to model.date
+			}, document.getElementById('cal'));
+			cal.startup();
+
+			var cal2 = new Calendar({
+				ref: model2.date2 // bind to model.date
+			}, document.getElementById('cal2'));
+			cal2.startup();
+
+			var txt2 = new TextBox({
+				ref: model2.date2
+			}, document.getElementById('txt2'));
+			dojo.style(txt2.domNode, "width", "368px");
+			txt2.startup();
+
+			var reset2 = new Button({
+				label: "Reset Calendar" 
+			}, document.getElementById('reset2'));
+			var connectHandle = reset2.connect(reset2, "onClick", function(){
+				//console.log("callreset2 called");
+				model2.date2.reset();
+			});
+			reset2.startup();
+
+			var out2 = new Output({
+				ref: model2.date2 // bind to model.date
+			}, document.getElementById('output2'));
+			out2.startup();
+
+			var setday2 = new Button({
+				label: "Set Calendar to Aug 27 2010 (date)" 
+			}, document.getElementById('set8272'));
+			var connectHandle = setday2.connect(setday2, "onClick", function(){
+				//console.log("setday2 called");
+				var day2 = new Date("Fri Aug 27 2010 01:00:00 GMT-0400 (Eastern Daylight Time)");
+				cal2.set("value", day2);
+			});
+			setday2.startup();
+
+			var settext2 = new Button({
+				label: "Set TextBox to 2011-05-05 (string)" 
+			}, document.getElementById('set05052'));
+			var connectHandle = settext2.connect(settext2, "onClick", function(){
+				txt2.set("value", "2011-05-05"); // used to FAIL, works now 
+				//cal2.set("value", "2011-05-05"); 
+				//txt2.set("value", "Thu May 05 2011 00:00:00 GMT-0400 (Eastern Daylight Time)");  
+			});
+			settext2.startup();
+
+
+
+			var dateBox = new DateTextBox({
+				ref: model.date // bind to model.date
+			}, document.getElementById('db'));
+			dateBox.startup();
+
+			var dateBox2 = new DateTextBox({
+				ref: model.date // bind to model.date
+			}, document.getElementById('db2'));
+			dateBox2.startup();
+			var out = new Output({
+				ref: model.date // bind to model.date
+			}, document.getElementById('output'));
+
+			out.startup();
+/*			dojox.mvc.bind(cal, "value", out, "value", function(){
+				console.log("in bind-update for date cal.vlaue ="+cal.value);
+				out.set("value", cal.value);
+				return out.value;
+			},true); 
+*/
+			var txt = new TextBox({
+				ref: model.date
+			}, document.getElementById('txt'));
+			dojo.style(txt.domNode, "width", "368px");
+			txt.startup();
+
+			var reset = new Button({
+				label: "Reset DateTextbox" 
+			}, document.getElementById('reset'));
+			var connectHandle = reset.connect(reset, "onClick", function(){
+				//console.log("callreset called");
+				model.date.reset();
+			});
+			reset.startup();
+
+			var setday = new Button({
+				label: "Set date to Aug 27 2010 (date)" 
+			}, document.getElementById('set827'));
+			var connectHandle = setday.connect(setday, "onClick", function(){
+				//console.log("setday called");
+				var day = new Date("Fri Aug 27 2010 00:00:00 GMT-0400 (Eastern Daylight Time)");
+				dateBox.set("value", day);
+			});
+			setday.startup();
+
+			var settext = new Button({
+				label: "Set TextBox to full date Thu May 05 2011 00:00:00 (string) FAILS" 
+			}, document.getElementById('set0505'));
+			var connectHandle = settext.connect(settext, "onClick", function(){
+				//console.log("settext called");
+				//txt.set("value", "2011-05-05");     // Works 
+				//dateBox.set("value", "2011-05-05"); // Works 
+				txt.set("value", "Thu May 05 2011 00:00:00 GMT-0400 (Eastern Daylight Time)"); // FAILS 
+				
+			});
+			settext.startup();
+
+			var settextw = new Button({
+				label: "Set TextBox to 2011-05-05 (string) WORKS" 
+			}, document.getElementById('set0505w'));
+			var connectHandle = settextw.connect(settextw, "onClick", function(){
+				//console.log("settextw called");
+				txt.set("value", "2011-05-05");     // Works 
+				//dateBox.set("value", "2011-05-05"); // Works 
+				//txt.set("value", "Thu May 05 2011 00:00:00 GMT-0400 (Eastern Daylight Time)"); // FAILS 
+				
+			});
+			settextw.startup();
+
+
+           // setup for the failure tests
+			var cal3 = new Calendar({
+				ref: model3.date3 // bind to model.date
+			}, document.getElementById('cal3'));
+			cal3.startup();
+
+			var txt3 = new DateTextBox({
+				ref: model3.date3
+			}, document.getElementById('txt3'));
+			dojo.style(txt3.domNode, "width", "368px");
+			txt3.startup();
+
+
+			var settext3 = new Button({
+				label: "Set date to long 2011-05-05 (string)" 
+			}, document.getElementById('set05053'));
+			var connectHandle = settext3.connect(settext3, "onClick", function(){
+				txt3.set("value", "2011-05-05"); // FAILS? 
+				//cal3.set("value", "2011-05-05"); // Works
+				//txt3.set("value", "Thu May 05 2011 00:00:00 GMT-0400 (Eastern Daylight Time)"); // FAILS? 
+			});
+			settext3.startup();
+
+			
+		});
+	</script>
+</head>
+
+<body class="claro">
+			<h2>Two Calendars bound to each other and to a TextBox and an mvc Output:</h2>
+				<div  style="border-style: solid; border-width: 2px; width: 727px;">
+					<table>
+						<tbody>
+							<tr>
+								<td><div id="cal"></div></td>
+								<td><div id="cal2"></div></td>
+							</tr>
+						</tbody>
+					</table>
+					<table><tbody>
+								<tr><td><div id="txt2"></div></td></tr>
+								<tr><td><div id="output2"></div></td></tr>
+					</tbody></table>
+					<table><tbody><tr>
+								<td><div id="reset2"></div></td>
+								<td><div id="set8272"></div></td>
+								<td><div id="set05052"></div></td>
+					</tr></tbody></table>
+				</div>
+			<h2>Two DateTextBox bound to each other and to a TextBox and an mvc Output:</h2>
+				<div  style="border-style: solid; border-width: 2px; width: 727px;">
+					<table><tbody><tr>
+								<td><div id="db"></div></td>
+								<td><div id="db2"></div></td>
+					</tr></tbody></table>
+					<table><tbody>
+								<tr><td><div id="txt"></div></td></tr>
+								<tr><td><div id="output"></div></td></tr>
+					</tbody></table>
+					<table><tbody><tr>
+								<td><div id="reset"></div></td>
+								<td><div id="set827"></div></td>
+					</tr></tbody></table>
+					<table><tbody><tr>
+								<td><div id="set0505w"></div></td>
+								<td><div id="set0505"></div></td>
+					</tr></tbody></table>
+				</div>
+	<!--  
+			<h2>Problems Binding a TextBox to DateTextBox when setting a full date string in the TextBox:</h2>
+				<div  style="border-style: solid; border-width: 2px; width: 727px;">
+				<span>There is also a problem when trying to set a date string in this format:</span><br>
+				<span>"Wed May 05 2010 01:00:00 GMT-0400 (Eastern Daylight Time)" into a  into a TextBox bound to a dijit.form.DateTextbox, but that works in a Calendar.</span><br>
+				<span>It is ending up with the DateTextBox set to null.  You can see this above with the button labeled: </span><br>
+				<span>"Set TextBox to full date Thu May 05 2011 00:00:00 (string) FAILS"</span><br>
+				<span></span><br>
+				<span>Another thing I have found was that on a calendar I would get a different value from dijit.byId("cal").get('value') and dijit.byId("cal").value.</span><br>
+				<span>dijit.byId("cal").value:        Wed May 05 2010 <b>01:00:00</b> GMT-0400 (Eastern Daylight Time)</span><br>
+				<span>dijit.byId("cal").get('value'): Wed May 05 2010 <b>00:00:00</b> GMT-0400 (Eastern Daylight Time)</span><br>
+				<span>dijit.byId("cal").get('value') is getting 00:00:00 when it should be 01:00:00</span><br>
+				</div>
+		-->			
+			<h2>One Calendar bound to a DateTextBox</h2>
+				<div  style="border-style: solid; border-width: 2px; width: 727px;">
+					<table><tbody><tr>
+								<td><div id="cal3"></div></td>
+					</tr></tbody></table>
+					<table><tbody>
+								<tr><td><div id="txt3"></div></td></tr>
+								<td><div id="set05053"></div></td>
+					</tbody></table>
+				</div>
+
+</body>
+</html>
