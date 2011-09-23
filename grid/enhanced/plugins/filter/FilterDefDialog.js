@@ -1099,7 +1099,9 @@ var FilterDefDialog = declare("dojox.grid.enhanced.plugins.filter.FilterDefDialo
 	closeDialog: function(){
 		// summary:
 		//		Close the filter definition dialog.
-		this._defPane.hide();
+		if(this._defPane.open){
+			this._defPane.hide();
+		}
 	},
 	onFilter: function(e){
 		// summary:
@@ -1176,23 +1178,24 @@ var FilterDefDialog = declare("dojox.grid.enhanced.plugins.filter.FilterDefDialo
 		}else if(this._criteriasChanged){
 			this.filterDefPane._relSelect.set("value", this._relOpCls === "logicall" ? "0" : "1");
 			this._criteriasChanged = false;
-			var needNewCBox = sc.length > cbs.length;
-			this.addCriteriaBoxes(sc.length - cbs.length);
+			var needNewCBox = sc.length > cbs.length ? sc.length - cbs.length : 0;
+			this.addCriteriaBoxes(needNewCBox);
 			this.removeCriteriaBoxes(cbs.length - sc.length);
 			this.filterDefPane._clearFilterBtn.set("disabled", false);
-			if(needNewCBox){
-				array.forEach(sc, function(c, i){
-					var handle = connect.connect(this, "onRendered", function(cbox){
-						if(cbox == cbs[i]){
+			for(i = 0; i < cbs.length - needNewCBox; ++i){
+				cbs[i].load(sc[i]);
+			}
+			if(needNewCBox > 0){
+				var handled = [], handle = connect.connect(this, "onRendered", function(cbox){
+					var i = array.indexOf(cbs, cbox);
+					if(!handled[i]){
+						handled[i] = true;
+						if(--needNewCBox === 0){
 							connect.disconnect(handle);
-							cbox.load(c);
 						}
-					});
-				}, this);
-			}else{
-				for(i = 0; i < sc.length; ++i){
-					cbs[i].load(sc[i]);
-				}
+						cbox.load(sc[i]);
+					}
+				});
 			}
 		}
 		//Since we're allowed to remove cboxes when the definition pane is not shown,
