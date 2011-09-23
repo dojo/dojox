@@ -185,7 +185,7 @@ define([
 			//		Resets this data model values to its original state.
 			//		Structural changes to the data model (such as adds or removes)
 			//		are not restored.
-			if(lang.isObject(this.data)){
+			if(lang.isObject(this.data) && !(this.data instanceof Date) && !(this.data instanceof RegExp)){	
 				for(var x in this){
 					if(this[x] && lang.isFunction(this[x].reset)){
 						this[x].reset();
@@ -237,7 +237,7 @@ define([
 			if(!nested){
 				if(this.get("length") === 0){
 					ret = [];
-				} else {				
+				}else{				
 					ret = this.value;
 				}
 			}
@@ -336,7 +336,7 @@ define([
 			}
 		},
 
-		valueOf: function () {
+		valueOf: function(){
 			// summary:
 			//		Returns the value representation of the data currently within this data model.
 			// returns:
@@ -345,7 +345,7 @@ define([
 			return this.toPlainObject();
 		},
 
-		toString: function () {
+		toString: function(){
 			// summary:
 			//		Returns the string representation of the data currently within this data model.
 			// returns:
@@ -385,7 +385,7 @@ define([
 			//		The input for the model, as a plain JavaScript object.
 			// tags:
 			//		private
-			if(lang.isObject(obj)){
+			if(lang.isObject(obj) && !(obj instanceof Date) && !(obj instanceof RegExp)){	
 				for(var x in obj){
 					var newProp = new StatefulModel({ data : obj[x] });
 					this.set(x, newProp);

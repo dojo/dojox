@@ -116,7 +116,10 @@ define([
 					if(this._databound){
 						var binding = this.get("binding");
 						if(binding){
-							binding.set("value", current);
+							// dont set value if the valueOf current and old match.
+							if(!((current && old) && (old.valueOf() === current.valueOf()))){
+								binding.set("value", current);
+							}
 						}
 					}
 				})

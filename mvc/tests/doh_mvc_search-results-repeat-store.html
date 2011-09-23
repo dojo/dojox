@@ -136,6 +136,21 @@
 								doh.is("Johnny",bind9.toString(),"firstInput bind9.toString() is wrong");
 							}
 						}
+
+						// Test the value of and toString
+						valueOfTest = new dojox.mvc.StatefulModel({ data: 42 });
+						doh.is(42,valueOfTest.data,"valueOfTest.data is wrong");
+						doh.is(42,valueOfTest.value,"valueOfTest.value is wrong");
+						doh.is(42,+valueOfTest,"valueOfTest.valueOf() is wrong");
+						doh.is("42",'' + valueOfTest,"valueOfTest.toString() is wrong");
+
+						toStringTest = new dojox.mvc.StatefulModel({ data: 'abc' });
+						doh.is('abc',toStringTest.data,"toStringTest.data is wrong");
+						doh.is('abc',toStringTest.value,"toStringTest.value is wrong");
+						doh.is(NaN,+toStringTest,"toStringTest.valueOf() is wrong");
+						doh.is('abc','' + toStringTest,"toStringTest.toString() is wrong")
+
+						
 					}					
 				}
 			]);
