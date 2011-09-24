@@ -3,51 +3,59 @@ define([
 	"dojo/_base/declare",
 	"./Base",
 	"../main"
-], function(dojo, declare, Base, dojox){
+], function(kernel, declare, Base, dojox){
 // module:
 //		dojox/gesture/swipe
-// summary:
-//		This module provides swipe gestures including:
-//		1. dojox.gesture.swipe
-//			A series of "swipe" will be fired during touchmove, this will mostly
-//			be used to keep sliding the Dom target based on the swiped distance(dx, dy).
-//
-//		2. dojox.gesture.swipe.end	
-//			Fired when a swipe is ended so that an bounce animation may be applied
-//			to the Dom target sliding to the final position.
-//
-//		Following information will be included in the fired swipe events:
-//		1. type: "swipe"|"swipe.end"
-//		2. time: an integer indicating the delta time(in milliseconds)
-//		3. dx: delta distance on X axis, dx < 0 -> moving left, dx > 0 - moving right
-//		4. dy: delta distance on Y axis, dy < 0 -> moving up, dx > 0 - moving down
-//		Note - dx and dy can be used together for a hybrid swipe(both vertically and horizontally)
-//
-// example:
-//		A. Used with dojo.connect()
-//		|	dojo.connect(node, dojox.gesture.swipe, function(e){});
-//		|	dojo.connect(node, dojox.gesture.swipe.end, function(e){});
-//
-//		B. Used with dojo.on
-//		|	define(["dojo/on", "dojox/gesture/swipe"], function(on, swipe){
-//		|		on(node, swipe, function(e){});
-//		|		on(node, swipe.end, function(e){});
-//
-//		C. Used with dojox.gesture.swipe.* directly
-//		|	dojox.gesture.swipe(node, function(e){});
-//		|	dojox.gesture.swipe.end(node, function(e){});
 
-dojo.experimental("dojox.gesture.swipe");
+/*=====
+	dojox.gesture.swipe = {
+		// summary:
+		//		This module provides swipe gestures including:
+		//		1. dojox.gesture.swipe
+		//			A series of 'swipe' will be fired during touchmove, this will mostly
+		//			be used to keep sliding the Dom target based on the swiped distance(dx, dy).
+		//
+		//		2. dojox.gesture.swipe.end	
+		//			Fired when a swipe is ended so that an bounce animation may be applied
+		//			to the Dom target sliding to the final position.
+		//
+		//		Following information will be included in the fired swipe events:
+		//		1. type: 'swipe'|'swipe.end'
+		//		2. time: an integer indicating the delta time(in milliseconds)
+		//		3. dx: delta distance on X axis, dx less than 0 - moving left, dx larger than 0 - moving right
+		//		4. dy: delta distance on Y axis, dy less than 0 - moving up, dY larger than 0 - moving down
+		//		Note - dx and dy can also be used together for a hybrid swipe(both vertically and horizontally)
+		//
+		// example:
+		//		A. Used with dojo.connect()
+		//		|	dojo.connect(node, dojox.gesture.swipe, function(e){});
+		//		|	dojo.connect(node, dojox.gesture.swipe.end, function(e){});
+		//
+		//		B. Used with dojo.on
+		//		|	define(['dojo/on', 'dojox/gesture/swipe'], function(on, swipe){
+		//		|		on(node, swipe, function(e){});
+		//		|		on(node, swipe.end, function(e){});
+		//
+		//		C. Used with dojox.gesture.swipe.* directly
+		//		|	dojox.gesture.swipe(node, function(e){});
+		//		|	dojox.gesture.swipe.end(node, function(e){});
+	};
+=====*/
 
-var clz = declare(Base, {
+kernel.experimental("dojox.gesture.swipe");
 
-	// defaultEvent: String
-	//		Default event - "swipe"
+// Declare an anonymous and internal class which will only be exported
+// by module return value e.g. dojox.gesture.swipe.Swipe
+// will be changed to declare(Base, {...}); once http://bugs.dojotoolkit.org/ticket/13890 is fixed
+var clz = declare(" ", Base, {
+
+	// defaultEvent: [readonly] String
+	//		Default event - 'swipe'
 	defaultEvent: "swipe",
 
-	// subEvents: Array
-	//		Read-only, list of sub events, used by 
-	//		being combined with defaultEvent as "swipe.end"
+	// subEvents: [readonly] Array
+	//		List of sub events, used by 
+	//		being combined with defaultEvent as 'swipe.end'
 	subEvents: ["end"],
 
 	press: function(/*Object*/data, /*Event*/e){
@@ -68,12 +76,12 @@ var clz = declare(Base, {
 	},
 	move: function(/*Object*/data, /*Event*/e){
 		// summary:
-		//		Overwritten, fire matched "swipe" during touchmove
+		//		Overwritten, fire matched 'swipe' during touchmove
 		this._recognize(data, e, "swipe");
 	},
 	release: function(/*Object*/data, /*Event*/e){
 		// summary:
-		//		Overwritten, fire matched "swipe.end" when touchend
+		//		Overwritten, fire matched 'swipe.end' when touchend
 		this._recognize(data, e, "swipe.end");		
 		delete data.context;
 		this.unLock();
@@ -92,7 +100,8 @@ var clz = declare(Base, {
 		}
 		var info = this._getSwipeInfo(data, e);
 		if(!info){
-			return; //no swipe happened
+			// no swipe happened
+			return;
 		}
 		info.type = type;
 		this.fire(e.target, info);
@@ -108,7 +117,8 @@ var clz = declare(Base, {
 		dy = e.screenY - startData.y;
 		
 		if(dx === 0 && dy === 0){
-			return null; // no swipes happened
+			// no swipes happened
+			return null;
 		}
 		info.dx = dx;
 		info.dy = dy;

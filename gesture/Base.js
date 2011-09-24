@@ -1,4 +1,5 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"dojo/_base/array",
 	"dojo/_base/lang",
@@ -7,28 +8,36 @@ define([
 	"dojo/touch",
 	"dojo/has",
 	"../main"
-], function(declare, array, lang, dom, on, touch, has, dojox){
+], function(kernel, declare, array, lang, dom, on, touch, has, dojox){
 	// module:
 	//		dojox/gesture/Base
 	// summary:
 	//		This module provides an abstract parental class for various gesture implementations.
 	
+	kernel.experimental("dojox.gesture.Base");
+	
 	lang.getObject("gesture", true, dojox);
 
-	return declare(null, {
+	// Declare an anonymous and internal class which will only be exported by module return value
+	// will be changed to declare(null, {...}); once http://bugs.dojotoolkit.org/ticket/13890 is fixed
+	return declare(" ", null, {
 		// summary:
 		//		An abstract parental class for various gesture implementations.
 		//
 		//		It's mainly responsible for:
+		//
 		//		1. Binding on() listening handlers for supported gesture events.
-		//		2. Monitoring underneath events and process different phases - "press"|"move"|"release"|"cancel".
+		//
+		//		2. Monitoring underneath events and process different phases - 'press'|'move'|'release'|'cancel'.
+		//
 		//		3. Normalizing, dispatching and bubbling gesture events with on() API.
 		//
-		//		A gesture implementation only needs to extend this class and overwrite
-		//		appropriate phase handlers - press()|move()|release()|cancel for recognizing and firing gestures
+		//		A gesture implementation only needs to extend this class and overwrite appropriate phase handlers
+		//		- press()|move()|release()|cancel for recognizing and firing gestures
 		//
 		// example:
 		//		1. A typical gesture implementation:
+		//
 		//		- Define dojox/gesture/a module which provides 3 gesture events:"a", "a.x", "a.y" to be used as:
 		//			
 		//		|	dojo.connect(node, dojox.gesture.a, function(e){});
@@ -84,6 +93,7 @@ define([
 		//
 		//		Though there is always a default gesture instance after being required, e.g 
 		//		|	require(["dojox/gesture/tap"], function(){...});
+		//
 		//		It's possible to create a new one with different parameter setting:
 		//		|	var myTap = new dojox.gesture.tap.Tap({holdThreshold: 300});
 		//		|	dojo.connect(node, myTap, function(e){});
@@ -92,32 +102,32 @@ define([
 		//		
 		//		Please refer to dojox/gesture/* for more gesture usages	
 
-		// defaultEvent: String
-		//		Default event e.g. "tap" is a default event of dojox.gesture.tap
+		// defaultEvent: [readonly] String
+		//		Default event e.g. 'tap' is a default event of dojox.gesture.tap
 		defaultEvent: " ",
 
-		// subEvents: Array
-		//		Read-only, a list of sub events e.g ["hold", "doubletap"],
-		//		used by being combined with defaultEvent like "tap.hold", "tap.doubletap" etc.
+		// subEvents: [readonly] Array
+		//		A list of sub events e.g ['hold', 'doubletap'],
+		//		used by being combined with defaultEvent like 'tap.hold', 'tap.doubletap' etc.
 		subEvents: [],
 
 		// touchOnly: boolean
 		//		Whether the gesture is touch-device only
 		touchOnly : false,
 
-		//	_elements
+		//	_elements: Array
 		//		List of elements that wraps target node and gesture data
 		_elements: null,
 
 		/*=====
 		// _lock: Dom
-		//		The dom target that's being locked for processing
+		//		The dom target(including all its descendant) that's being locked for processing
 		_lock: null,
 		
-		// _events: Array
-		//		Read-only, complete list of supported gesture events with full name space
-		//		e.g ["tap", "tap.hold", "tap.doubletap"]
-		_events: null
+		// _events: [readonly] Array
+		//		The complete list of supported gesture events with full name space
+		//		e.g ['tap', 'tap.hold', 'tap.doubletap']
+		_events: null,
 		=====*/
 
 		constructor: function(args){
@@ -146,10 +156,10 @@ define([
 		},
 		_handle: function(/*String*/eventType){
 			// summary:
-			//		Bind listen handler for the given gesture event(e.g. "tap", "tap.hold" etc.)
-			//		the returned handle will be used internally by on()
+			//		Bind listen handler for the given gesture event(e.g. 'tap', 'tap.hold' etc.)
+			//		the returned handle will be used internally by dojo/on
 			var self = this;
-			//called by on(), see dojo.on
+			//called by dojo/on
 			return function(node, listener){
 				// normalize, arguments might be (null, node, listener)
 				var a = arguments;
@@ -172,12 +182,12 @@ define([
 					};
 					return signal;
 				}
-			};
+			}; // dojo/on handle
 		},
 		_add: function(/*Dom*/node, /*String*/type, /*function*/listener){
 			// summary:
-			//		Bind handlers for both gesture event(e.g "tab.hold")
-			//		and underneath "press"|"move"|"release" events
+			//		Bind dojo/on handlers for both gesture event(e.g 'tab.hold')
+			//		and underneath 'press'|'move'|'release' events
 			var element = this._getGestureElement(node);
 			if(!element){
 				// the first time listening to the node
@@ -225,17 +235,27 @@ define([
 		},
 		_process: function(element, phase, e){
 			// summary:
-			//		Process and dispatch to appropriate phase handlers
+			//		Process and dispatch to appropriate phase handlers.
+			//		Also provides the machinery for managing gesture bubbling.
+			// description:
+			//		1. e._locking is used to make sure only the most inner node
+			//		will be processed for the same gesture, suppose we have:
+			//	|	on(inner, dojox.gesture.tap, func1);
+			//	|	on(outer, dojox.gesture.tap, func2);
+			//		only the inner node will be processed by tap gesture, once matched,
+			//		the 'tap' event will be bubbled up from inner to outer, dojo.StopEvent(e)
+			//		can be used at any level to stop the 'tap' event.
+			//
+			//		2. Once a node starts being processed, all it's descendant nodes will be locked.
+			//		The same gesture won't be processed on its descendant nodes until the lock is released.
 			// element: Object
 			//		Gesture element
 			// phase: String
-			//		Phase of a gesture to be processed, might be "press"|"move"|"release"|"cancel"
+			//		Phase of a gesture to be processed, might be 'press'|'move'|'release'|'cancel'
 			// e: Event
 			//		Native event
 			e._locking = e._locking || {};
-			//TODO - add more descriptions for the locking machinery
 			if(e._locking[this.defaultEvent] || this.isLocked(e.currentTarget)){
-				//console.log('this.lock=', this._lock, ' e.currentTarget = ', e.currentTarget, ' phase = ', phase);
 				return;
 			}
 			// invoking gesture.press()|move()|release()|cancel()
@@ -245,19 +265,19 @@ define([
 		},
 		press: function(data, e){
 			// summary:
-			//		Process the "press" phase of a gesture
+			//		Process the 'press' phase of a gesture
 		},
 		move: function(data, e){
 			// summary:
-			//		Process the "move" phase of a gesture
+			//		Process the 'move' phase of a gesture
 		},
 		release: function(data, e){
 			// summary:
-			//		Process the "release" phase of a gesture
+			//		Process the 'release' phase of a gesture
 		},
 		cancel: function(data, e){
 			// summary:
-			//		Process the "cancel" phase of a gesture
+			//		Process the 'cancel' phase of a gesture
 		},
 		fire: function(node, event){
 			// summary:
@@ -268,8 +288,7 @@ define([
 			// event: Object
 			//		An object containing specific gesture info e.g {type: 'tap.hold'|'swipe.left'), ...}
 			//		all these properties will be put into a simulated GestureEvent when fired.
-			//		Note - Default properties in a native Event won't be overwritten,
-			//				please see on.emit() for more details.
+			//		Note - Default properties in a native Event won't be overwritten, see on.emit() for more details.
 			if(!node || !event){
 				return;
 			}
@@ -312,17 +331,24 @@ define([
 		},
 		lock: function(/*Dom*/node){
 			// summary:
-			//		Lock the node for processing
+			//		Lock the node including all its descendant for processing.
+			// tags:
+			//		protected
 			this._lock = node;
 		},
 		unLock: function(){
 			// summary:
-			//		Release the currently locked node
+			//		Release the lock
+			// tags:
+			//		protected
 			this._lock = null;
 		},
 		isLocked: function(node){
 			// summary:
-			//		Check if the node is being locked for processing
+			//		Check if the node is locked, isLocked(node) means
+			//		whether it's a descendant of the currently locked node.
+			// tags:
+			//		protected
 			if(!this._lock || !node){
 				return false;
 			}
@@ -330,7 +356,7 @@ define([
 		},
 		destroy: function(){
 			// summary:
-			//		Remove all handlers and resources
+			//		Release all handlers and resources
 			array.forEach(this._elements, function(element){
 				this._cleanHandles(element.handles);
 			}, this);
