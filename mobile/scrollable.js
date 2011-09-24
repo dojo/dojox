@@ -502,9 +502,18 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.onFlickAnimationEnd = function(e){
-		if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
-		if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
-		if(e && e.animationName && e.animationName.indexOf("scrollableViewScroll2") === -1){ return; }
+		var an = e && e.animationName;
+		if(an && an.indexOf("scrollableViewScroll2") === -1){
+			if(an.indexOf("scrollableViewScroll0") !== -1){ // scrollBarV
+				domClass.remove(this._scrollBarNodeV, "mblScrollableScrollTo0");
+			}else if(an.indexOf("scrollableViewScroll1") !== -1){ // scrollBarH
+				domClass.remove(this._scrollBarNodeH, "mblScrollableScrollTo1");
+			}else{ // fade or others
+				if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
+				if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
+			}
+			return;
+		}
 		if(e && e.srcElement){
 			event.stop(e);
 		}
@@ -544,6 +553,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this._aborted = false;
 		if(domClass.contains(this.containerNode, "mblScrollableScrollTo2")){
 			this.abort();
+		}else{ // reset scrollbar class especially for reseting fade-out animation
+			if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
+			if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
 		}
 		if(this._aw){ this.toTransform(e); } // android workaround
 		this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
