@@ -170,15 +170,21 @@ dojo.declare("dojox.grid._TreeGridContentBuilder", dojox.grid._ContentBuilder, {
 	_getCellWidth: function(cells, colIndex){
 		// summary:
 		//		calculate column width by header cell's size
-		var node = cells[colIndex].getHeaderNode();
-		if(colIndex === cells.length - 1 || dojo.every(cells.slice(colIndex + 1), function(cell){
+		var curCell = cells[colIndex], node = curCell.getHeaderNode();
+		if(curCell.hidden){
+			return 0;
+		}
+		if(colIndex == cells.length - 1 || dojo.every(cells.slice(colIndex + 1), function(cell){
 			return cell.hidden;
 		})){
 			var headerNodePos = dojo.position(cells[colIndex].view.headerContentNode.firstChild);
 			return headerNodePos.x + headerNodePos.w - dojo.position(node).x;
 		}else{
-			var nextNode = cells[colIndex + 1].getHeaderNode();
-			return dojo.position(nextNode).x - dojo.position(node).x;
+			var nextCell;
+			do{
+				nextCell = cells[++colIndex];
+			}while(nextCell.hidden);
+			return dojo.position(nextCell.getHeaderNode()).x - dojo.position(node).x;
 		}
 	}
 });
