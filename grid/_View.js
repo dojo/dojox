@@ -69,6 +69,7 @@ dojo.require("dojo.dnd.Manager");
 			dojo.destroy(this.headerNode);
 			delete this.headerNode;
 			for(var i in this.rowNodes){
+				this._cleanupRowWidgets(this.rowNodes[i]);
 				dojo.destroy(this.rowNodes[i]);
 			}
 			this.rowNodes = {};
@@ -145,6 +146,7 @@ dojo.require("dojo.dnd.Manager");
 						if(!w._started){
 							w.startup();
 						}
+						dojo.destroy(n);
 					}else{
 						n.innerHTML = "";
 					}

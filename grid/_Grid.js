@@ -391,14 +391,13 @@ dojo.requireLocalization("dijit", "loading");
 			// Fixes IE domNode leak
 			delete this._click;
 
-			this.edit.destroy();
-			delete this.edit;
-
-			this.views.destroyViews();
 			if(this.scroller){
 				this.scroller.destroy();
 				delete this.scroller;
 			}
+			this.edit.destroy();
+			delete this.edit;
+			this.views.destroyViews();
 			if(this.focus){
 				this.focus.destroy();
 				delete this.focus;
