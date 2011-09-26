@@ -100,7 +100,8 @@ define([
 								text = lang.trim(result);
 							}});
 						}else{
-							require(["dojo/_base/xhr"], lang.hitch(this, function(xhr){
+							var s = "dojo/_base/xhr"; // assign to a variable so as not to be picked up by the build tool
+							require([s], lang.hitch(this, function(xhr){
 								var prog = ProgressIndicator.getInstance();
 								win.body().appendChild(prog.domNode);
 								prog.start();
