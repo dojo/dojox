@@ -9,9 +9,7 @@ define([
 	=====*/
 	lang.getObject("dojox.dtl.utils.date", true);
 
-	dd.utils.date.DateFormat = function(/*String*/ format){
-		ddp.DateFormat.call(this, format);
-	}
+	dd.utils.date.DateFormat = ddp.DateFormat;
 	lang.extend(dd.utils.date.DateFormat, ddp.DateFormat.prototype, {
 		f: function(){
 			// summary:
