@@ -755,6 +755,9 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		if(this._loading){
 			this._loading = false;
 		}
+		if(this.autoHeight === true){
+			this._resize();
+		}
 		this.focus._delayedCellFocus();
 	},
 	styleRowNode: function(rowIndex, rowNode){
