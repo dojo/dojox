@@ -4,7 +4,8 @@ define([
 ], function(lang, has){
 	var dm = lang.getObject("dojox.mobile", true);
 	if(!has("webkit")){
-		require(["dojox/mobile/_compat"]);
+		var s = "dojox/mobile/_compat"; // assign to a variable so as not to be picked up by the build tool
+		require([s]);
 	}
 	return dm;
 });
