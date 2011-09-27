@@ -12,7 +12,7 @@ define([
 ],function(domForm, domStyle, domConstruct, domAttr, has, declare, event, Widget, TemplatedMixin, WidgetsInTemplateMixin){
 
 has.add('FormData', function(){return !!window.FormData;});
-has.add('xhr-sendAsBinary', function(){var xhr=window.XMLHttpRequest && new window.XMLHttpRequest(); return xhr && xhr.sendAsBinary;});
+has.add('xhr-sendAsBinary', function(){var xhr=window.XMLHttpRequest && new window.XMLHttpRequest(); return xhr && !!xhr.sendAsBinary;});
 has.add('file-multiple', function(){return !!({'true':1,'false':1}[domAttr.get(document.createElement('input',{type:"file"}), 'multiple')]);});
 
 	/*=====
