@@ -91,11 +91,11 @@ define([
 	dm.loadCssFile = function(/*String*/file){
 		// summary:
 		//		Loads the given CSS file programmatically.
-		domConstruct.create("LINK", {
+		dm.loadedCssFiles.push(domConstruct.create("LINK", {
 			href: file,
 			type: "text/css",
 			rel: "stylesheet"
-		}, win.doc.getElementsByTagName('head')[0]);
+		}, win.doc.getElementsByTagName('head')[0]));
 	};
 
 	dm.themeMap = dm.themeMap || [
@@ -149,11 +149,13 @@ define([
 		if(!lang.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
 		var i, j;
 		var m = dm.themeMap;
-		userAgent = userAgent || config["mblUserAgent"] || (location.search.match(/theme=(\w+)/) ? RegExp.$1 : navigator.userAgent);
+		var ua = userAgent || config["mblUserAgent"] || (location.search.match(/theme=(\w+)/) ? RegExp.$1 : navigator.userAgent);
 		for(i = 0; i < m.length; i++){
-			if(userAgent.match(new RegExp(m[i][0]))){
-				var theme = dm.currentTheme = m[i][1];
-				var files = m[i][2];
+			if(ua.match(new RegExp(m[i][0]))){
+				var theme = m[i][1];
+				domClass.replace(win.doc.documentElement, theme + "_theme", dm.currentTheme ? dm.currentTheme + "_theme" : "");
+				dm.currentTheme = theme;
+				var files = [].concat(m[i][2]);
 				for(j = t.length - 1; j >= 0; j--){
 					var pkg = lang.isArray(t[j]) ? (t[j][0]||"").replace(/\./g, '/') : "dojox/mobile";
 					var name = lang.isArray(t[j]) ? t[j][1] : t[j];
@@ -161,10 +163,17 @@ define([
 						(name === "@theme" ? theme : name) + ".css";
 					files.unshift(require.toUrl(pkg+"/"+f));
 				}
+				//remove old css files
+				array.forEach(dm.loadedCssFiles, function(n){
+					n.parentNode.removeChild(n);
+				});
+				dm.loadedCssFiles = [];
 				for(j = 0; j < files.length; j++){
 					dm.loadCssFile(files[j].toString());
 				}
-				domClass.add(win.doc.documentElement, theme + "_theme");
+				if(userAgent && dm.loadCompatCssFiles){ // we will assume compat is loaded and ready..
+					dm.loadCompatCssFiles();
+				}
 				break;
 			}
 		}

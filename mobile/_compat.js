@@ -412,20 +412,22 @@ define([
 			// summary:
 			//		Overrides dojox.mobile.loadCssFile() defined in
 			//		deviceTheme.js.
+			if(!dm.loadedCssFiles){ dm.loadedCssFiles = []; }
 			if(win.doc.createStyleSheet){
 				// for some reason, IE hangs when you try to load
 				// multiple css files almost at once.
 				setTimeout(function(file){
 					return function(){
-						win.doc.createStyleSheet(file);
+						var ss = win.doc.createStyleSheet(file);
+						ss && dm.loadedCssFiles.push(ss.owningElement);
 					};
 				}(file), 0);
 			}else{
-				domConstruct.create("LINK", {
+				dm.loadedCssFiles.push(domConstruct.create("LINK", {
 					href: file,
 					type: "text/css",
 					rel: "stylesheet"
-				}, win.doc.getElementsByTagName('head')[0]);
+				}, win.doc.getElementsByTagName('head')[0]));
 			}
 		};
 
@@ -436,18 +438,18 @@ define([
 			//		The CSS files to load and register with the page.
 			// tags:
 			//		private
-			if(!win.global._loadedCss){
+			if(!dm._loadedCss){
 				var obj = {};
 				array.forEach(dm.getCssPaths(), function(path){
 					obj[path] = true;
 				});
-				win.global._loadedCss = obj;
+				dm._loadedCss = obj;
 			}
 			if(!lang.isArray(files)){ files = [files]; }
 			for(var i = 0; i < files.length; i++){
 				var file = files[i];
-				if(!win.global._loadedCss[file]){
-					win.global._loadedCss[file] = true;
+				if(!dm._loadedCss[file]){
+					dm._loadedCss[file] = true;
 					dm.loadCssFile(file);
 				}
 			}
@@ -482,11 +484,17 @@ define([
 
 		dm.loadCompatPattern = /\/mobile\/themes\/.*\.css$/;
 
-		dm.loadCompatCssFiles = function(){
+		dm.loadCompatCssFiles = function(/*Boolean?*/force){
 			// summary:
 			//		Function to perform page-level adjustments on browsers such as
 			//		IE and firefox.  It loads compat specific css files into the
 			//		page header.
+			if(has("ie") && !force){
+				setTimeout(function(){ // IE needs setTimeout
+					dm.loadCompatCssFiles(true);
+				}, 0);
+			}
+			dm._loadedCss = undefined;
 			var paths = dm.getCssPaths();
 			for(var i = 0; i < paths.length; i++){
 				var href = paths[i];
@@ -503,9 +511,7 @@ define([
 
 		ready(function(){
 			if(config["mblLoadCompatCssFiles"] !== false){
-				setTimeout(function(){ // IE needs setTimeout
-					dm.loadCompatCssFiles();
-				}, 0);
+				dm.loadCompatCssFiles();
 			}
 			if(dm.applyPngFilter){
 				dm.applyPngFilter();
