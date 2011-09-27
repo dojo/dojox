@@ -117,7 +117,7 @@ tests.register("dojox.date.tests.islamic.Date",
 				dojo.forEach(start, function(s, i) {
 					dateHijriRes = new dojox.date.islamic.Date(s[2], s[3], 1);
 					dateHijriStart = new dojox.date.islamic.Date(s[0], s[1], 1);
-					t.is(add[i], dojox.date.islamic.difference(dateHijriRes, dateHijriStart, "month"));
+					t.is(add[i], dojox.date.islamic.difference(dateHijriStart, dateHijriRes, "month"));
 				});
 			}
 		},
@@ -132,35 +132,35 @@ tests.register("dojox.date.tests.islamic.Date",
 
 				dojo.forEach(amouts, function(amount, i) {
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "month", amount);
-					t.is(dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "month"), amount);
+					t.is(dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "month"), amount);
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "year", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "year"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "year"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "week", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "week"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "week"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "weekday", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "weekday"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "weekday"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "day", amount)
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "day"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "day"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "hour", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "hour"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "hour"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "minute", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "minute"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "minute"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "second", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "second"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "second"));
 
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "millisecond", amount);
-					t.is(amount, dojox.date.islamic.difference(dateIslamicAdd, dateIslamic, "millisecond"));
+					t.is(amount, dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "millisecond"));
 				});
 
 				var dateIslamicDiff = new dojox.date.islamic.Date(1431, 4, 7);
-				t.is(1, dojox.date.islamic.difference(dateIslamicDiff, dateIslamic));
+				t.is(1, dojox.date.islamic.difference(dateIslamic, dateIslamicDiff));
 			}
 		},
 		{

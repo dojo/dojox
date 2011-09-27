@@ -108,35 +108,35 @@ tests.register("dojox.date.tests.buddhist.Date",
 				
 				var dateBuddhistAdd = dojox.date.buddhist.add(dateBuddhist, "month",  18);
 				var dateBuddhistAddLeap = dojox.date.buddhist.add(dateBuddhistLeap, "month",  18);
-				t.is(0, 18 - dojox.date.buddhist.difference(dateBuddhistAdd, dateBuddhist, "month"));
-				t.is(0, 18 - dojox.date.buddhist.difference(dateBuddhistAddLeap, dateBuddhistLeap, "month"));
+				t.is(0, 18 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd, "month"));
+				t.is(0, 18 - dojox.date.buddhist.difference(dateBuddhistLeap, dateBuddhistAddLeap, "month"));
 				
 				var dateBuddhistAdd1= dojox.date.buddhist.add(dateBuddhist, "year", 2);
-				t.is(0,  2 - dojox.date.buddhist.difference(dateBuddhistAdd1, dateBuddhist, "year"));
-				t.is(0,  2 - dojox.date.buddhist.difference(dojox.date.buddhist.add(dateBuddhistLeap, "year", 2), dateBuddhistLeap, "year"));
+				t.is(0,  2 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd1, "year"));
+				t.is(0,  2 - dojox.date.buddhist.difference(dateBuddhistLeap, dojox.date.buddhist.add(dateBuddhistLeap, "year", 2), "year"));
 				
 				var dateBuddhistAdd2= dojox.date.buddhist.add(dateBuddhist, "week",  12);
-				t.is(0, 12 - dojox.date.buddhist.difference(dateBuddhistAdd2, dateBuddhist, "week"));
-				t.is(0,  12 - dojox.date.buddhist.difference(dojox.date.buddhist.add(dateBuddhistLeap, "week", 12), dateBuddhistLeap,"week"));
-								
+				t.is(0, 12 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd2, "week"));
+				t.is(0,  12 - dojox.date.buddhist.difference(dateBuddhistLeap, dojox.date.buddhist.add(dateBuddhistLeap, "week", 12), "week"));
+							
 				var dateBuddhistAdd3= dojox.date.buddhist.add(dateBuddhist, "weekday", 20);
-				t.is(0, 20 - dojox.date.buddhist.difference(dateBuddhistAdd3, dateBuddhist, "weekday"));
-				t.is(0,  20 - dojox.date.buddhist.difference(dojox.date.buddhist.add(dateBuddhistLeap, "weekday", 20), dateBuddhistLeap,"weekday"));
+				t.is(0, 20 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd3, "weekday"));
+				t.is(0,  20 - dojox.date.buddhist.difference(dateBuddhistLeap, dojox.date.buddhist.add(dateBuddhistLeap, "weekday", 20), "weekday"));
 				
 				var dateBuddhistAdd4= dojox.date.buddhist.add(dateBuddhist, "day", -50)
-				t.is(0, -50 - dojox.date.buddhist.difference(dateBuddhistAdd4, dateBuddhist, "day"));
-				t.is(0, -50 - dojox.date.buddhist.difference(dojox.date.buddhist.add(dateBuddhistLeap, "day", -50), dateBuddhistLeap,"day"));
-											
+				t.is(0, -50 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd4, "day"));
+				t.is(0, -50 - dojox.date.buddhist.difference(dateBuddhistLeap, dojox.date.buddhist.add(dateBuddhistLeap, "day", -50), "day"));
+									
 				var dateBuddhistAdd5= dojox.date.buddhist.add(dateBuddhist, "hour", 200);
-				t.is(0, 200 - dojox.date.buddhist.difference(dateBuddhistAdd5, dateBuddhist, "hour"));
-				t.is(0, 200 - dojox.date.buddhist.difference(dojox.date.buddhist.add(dateBuddhistLeap, "hour", 200), dateBuddhistLeap,"hour"));
+				t.is(0, 200 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd5, "hour"));
+				t.is(0, 200 - dojox.date.buddhist.difference(dateBuddhistLeap, dojox.date.buddhist.add(dateBuddhistLeap, "hour", 200), "hour"));
 				
 				var dateBuddhistAdd6= dojox.date.buddhist.add(dateBuddhist, "minute", -200);
-				t.is(0, -200 - dojox.date.buddhist.difference(dateBuddhistAdd6, dateBuddhist, "minute"));
-				t.is(0, -200 - dojox.date.buddhist.difference(dojox.date.buddhist.add(dateBuddhistLeap, "minute", -200), dateBuddhistLeap,"minute"));
+				t.is(0, -200 - dojox.date.buddhist.difference(dateBuddhist, dateBuddhistAdd6, "minute"));
+				t.is(0, -200 - dojox.date.buddhist.difference(dateBuddhistLeap, dojox.date.buddhist.add(dateBuddhistLeap, "minute", -200), "minute"));
 				
 				var dateBuddhistDiff = new dojox.date.buddhist.Date(2552, 5, 17);
-				t.is(1, dojox.date.buddhist.difference(dateBuddhistDiff, dateBuddhist));
+				t.is(1, dojox.date.buddhist.difference(dateBuddhist, dateBuddhistDiff));
 			}
 		},
 		{
