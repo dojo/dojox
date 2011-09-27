@@ -18,8 +18,8 @@ define([
 	
 	lang.getObject("gesture", true, dojox);
 
-	// Declare an anonymous and internal class which will only be exported by module return value
-	// will be changed to declare(null, {...}); once http://bugs.dojotoolkit.org/ticket/13890 is fixed
+	// Declare an internal anonymous class which will only be exported by module return value
+	// should be changed to "declare(null, {...});" once http://bugs.dojotoolkit.org/ticket/13890 is fixed
 	return declare(" ", null, {
 		// summary:
 		//		An abstract parental class for various gesture implementations.

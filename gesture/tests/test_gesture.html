@@ -7,7 +7,7 @@
 		<style type="text/css">
 			#outer {
 				width: 350px;
-				height: 200px;
+				height: 180px;
 				border: 1px solid #54A201;
 				background-color: #54A201;			
 			}
@@ -17,17 +17,15 @@
 				border: 1px solid #7FB0DB;
 				background-color: #7FB0DB
 			}
-			#log {
+			#log1, #log2 {
 				width: 350px;
-				height: 200px;
+				height: 50px;
 			}
-			#outerDoH{
-				display: none;
-			}			
 		</style>		
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 		<script>
 			require([
+				"dojo/_base/kernel",
 				"dojo/_base/connect",
 				"dojo/_base/html",
 				"dojo/_base/event",
@@ -37,7 +35,7 @@
 				"dojo/window",
 				"dojox/gesture/tap",
 				"dojox/gesture/swipe"
-			], function(conn, html, evt, on, touch, ready, win, tap, swipe){
+			], function(dojo, conn, html, evt, on, touch, ready, win, tap, swipe){
 				
 				ready(function(){
 					var action = function(e){
@@ -78,7 +76,10 @@
 					
 					//conn.connect(outer, touch.press, function(){console.log('outer.touch.press!');});
 					
-					conn.connect(win.doc, "orientationchange", function(e){html.byId("log").innerHTML="";});
+					on(dojo.doc, "orientationchange", function(e){
+						html.byId("log1").innerHTML="";
+						html.byId("log2").innerHTML="";
+					});
 				});
 			});
 		</script>

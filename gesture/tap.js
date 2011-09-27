@@ -44,9 +44,9 @@ define([
 
 kernel.experimental("dojox.gesture.tap");
 
-// Declare an anonymous and internal class which will only be exported
+// Declare an internal anonymous class which will only be exported
 // by module return value e.g. dojox.gesture.tap.Tap
-// will be changed to declare(Base, {...}); once http://bugs.dojotoolkit.org/ticket/13890 is fixed
+// should be changed to "declare(Base, {...});" once http://bugs.dojotoolkit.org/ticket/13890 is fixed
 var clz = declare(" ", Base, {
 	// defaultEvent: [readonly] String
 	//		Default event - 'tap'
