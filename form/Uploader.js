@@ -149,6 +149,9 @@ declare("dojox.form.Uploader", [uploader, Button], {
 	},
 
 	startup: function(){
+		if(this._buildInitialized){
+			return;
+		}
 		this._buildInitialized = true;
 		this._getButtonStyle(this.domNode);
 		this._setButtonStyle();
