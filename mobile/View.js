@@ -62,25 +62,6 @@ define([
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("DIV");
 			this.domNode.className = "mblView";
-			if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2 && has('android') < 3.1){ // workaround for android screen flicker problem
-				if(has('android') < 3){ // for Android 2.2.x and 2.3.x
-					domStyle.set(this.domNode, "webkitTransform", "translate3d(0,0,0)");
-					// workaround for auto-scroll issue when focusing input fields
-					this.connect(null, "onfocus", function(e){
-						domStyle.set(this.domNode, "webkitTransform", "");
-					});
-					this.connect(null, "onblur", function(e){
-						domStyle.set(this.domNode, "webkitTransform", "translate3d(0,0,0)");
-					});
-				}else{ // for Android 3.0.x
-					if(config["mblAndroid3Workaround"] !== false){
-						domStyle.set(this.domNode, {
-							webkitBackfaceVisibility: "hidden",
-							webkitPerspective: 8000
-						});
-					}
-				}
-			}
 			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
 			this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 			if(!config['mblCSS3Transition']){
