@@ -128,8 +128,11 @@
 									doh.assertTrue(svg != null, "Checking that non-null was returned.");
 									ta.value = svg;
 									doh.assertTrue(svg.length > 0, "Checking that svg length > 0");
-									doh.assertTrue(svg.toLowerCase().indexOf("<svg") === 0, "Checking that the string starts with SVG open tag.");
-									doh.assertTrue(svg.toLowerCase().indexOf("xmlns:xlink=\"http://www.w3.org/1999/xlink\"") !== -1, "Checking the xmlns:xlink attribute.");
+									var low = svg.toLowerCase();
+									doh.assertTrue(low.indexOf("<svg") === 0, "Checking that the string starts with SVG open tag.");
+									doh.assertTrue(low.indexOf("xmlns:xlink=\"http://www.w3.org/1999/xlink\"") !== -1, "Checking the xmlns:xlink attribute.");
+									doh.assertFalse(/\s+href\s*=/g.test(low), "Checking there's no href attributes.");
+									doh.assertTrue(low.indexOf("xlink:href=") !== -1, "Checking the xlink:href attribute.");
 									d.callback(true);
 								}catch(e){
 									d.errback(e);
