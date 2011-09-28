@@ -75,6 +75,7 @@ define([
 		postCreate: function(){
 			this.connect(this.domNode, "onclick", "onClick");
 			this.connect(this.domNode, has('touch') ? "touchstart" : "onmousedown", "onTouchStart");
+			this._initialValue = this.value; // for reset()
 		},
 
 		_changeState: function(/*String*/state, /*Boolean*/anim){
@@ -210,6 +211,12 @@ define([
 		_setRightLabelAttr: function(/*String*/label){
 			this.rightLabel = label;
 			this.right.firstChild.innerHTML = this._cv ? this._cv(label) : label;
+		},
+
+		reset: function(){
+			// summary:
+			//		Reset the widget's value to what it was at initialization time
+			this.set("value", this._initialValue);
 		}
 	});
 });
