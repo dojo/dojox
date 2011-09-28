@@ -120,7 +120,7 @@
 			var dectextareamodel = new dojox.mvc.newStatefulModel({data: {number: '8'}});
 
 			// create a model for dijit.Calendar
-			var deccalmodel = new dojox.mvc.newStatefulModel({data: {date: "Mon Apr 04 2011 01:00:00 GMT-0400 (Eastern Daylight Time)"}});
+			var deccalmodel = new dojox.mvc.newStatefulModel({data: {date: new Date(2011,4,4)}});
 
 			// create a model for dijit.ColorPalette
 			var deccolormodel = new dojox.mvc.newStatefulModel({data: {code: "#000000"}});
@@ -368,9 +368,9 @@
 						textboxval = dijit.byId("seltext").value;
 						outputval = dijit.byId("selOutput").value;
 						if (wid) {
-								doh.is("1",wid.value,"This test will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("1",wid.get('value'),"This test will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 					}
 				}
@@ -380,58 +380,57 @@
 				{
 					name: "initialOtherThanSelect",
 					runTest: function(){
+
 						var wid, textboxval, outputval; 
 						// Test FilteringSelect
 						wid = dijit.byId("filsel");
 						textboxval = dijit.byId("filtext").value;
 						outputval = dijit.byId("filoutput").value;
 						if (wid) {
-								doh.is("2",wid.value,"wid.value should be set");
+								doh.is("2",wid.get('value'),"wid.get('value') should be set");
 								doh.is("two",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.ComboBox
 						wid = dijit.byId("combosel");
 						textboxval = dijit.byId("combotext").value;
 						outputval = dijit.byId("combooutput").value;
 						if (wid) {
-								doh.is("three",wid.value,"wid.value should be set");
+								doh.is("three",wid.get('value'),"wid.get('value') should be set");
 								doh.is("three",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.DateTextBox
 						wid = dijit.byId("datesel");
 						textboxval = dijit.byId("datetext").value;
 						outputval = dijit.byId("dateoutput").value;
 						if (wid) {
-							if(!dojo.isIE){
 								var date1 = "Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Mon Apr 04 2011 00:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set");
-								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is("2011-04-04",textboxval,"textboxval should be set");
-								doh.is("2011-04-04",outputval,"outputval should be set");
-							}
+								var date2 = "Mon Apr 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"wid.get('value') should be set it is:"+wid.get('value'));
+								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set it is:"+wid.displayedValue);
+								doh.is("2011-04-04",textboxval,"textboxval should be set it is:"+textboxval);
+								doh.is("2011-04-04",outputval,"outputval should be set it is:"+outputval);
 						}
 						// Test dijit.form.HorizontalSlider
 						wid = dijit.byId("slidersel");
 						textboxval = dijit.byId("slidertext").value;
 						outputval = dijit.byId("slideroutput").value;
 						if (wid) {
-								doh.is("5",wid.value,"wid.value should be set");
+								doh.is("5",wid.get('value'),"wid.get('value') should be set");
 								//doh.is("five",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.NumberSpinner
 						wid = dijit.byId("numspinsel");
 						textboxval = dijit.byId("numspintext").value;
 						outputval = dijit.byId("numspinoutput").value;
 						if (wid) {
-								//doh.is("6",wid.value,"wid.value should be set");
+								//doh.is("6",wid.get('value'),"wid.get('value') should be set");
 								doh.is("6",wid.displayedValue,"wid.displayedValue should be set");
 								doh.is(textboxval,wid.displayedValue,"wid.displayedValue should be set same as textboxval");
 								doh.is(outputval,wid.displayedValue,"wid.displayedValue should be set same as outputval");
@@ -441,18 +440,18 @@
 						textboxval = dijit.byId("simpTAtext").value;
 						outputval = dijit.byId("simpTAoutput").value;
 						if (wid) {
-								doh.is("7",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("7",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.Textarea
 						wid = dijit.byId("textareasel");
 						textboxval = dijit.byId("textareatext").value;
 						outputval = dijit.byId("textareaoutput").value;
 						if (wid) {
-								doh.is("8",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("8",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 
@@ -471,62 +470,59 @@
 						textboxval = dijit.byId("decseltext").value;
 						outputval = dijit.byId("decselOutput").value;
 						if (wid) {
-								doh.is("1",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("1",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test FilteringSelect
 						wid = dijit.byId("decfilsel");
 						textboxval = dijit.byId("decfiltext").value;
 						outputval = dijit.byId("decfilOutput").value;
 						if (wid) {
-								doh.is("2",wid.value,"wid.value should be set");
+								doh.is("2",wid.get('value'),"wid.get('value') should be set");
 								doh.is("two",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.ComboBox
 						wid = dijit.byId("deccombosel");
 						textboxval = dijit.byId("deccombotext").value;
 						outputval = dijit.byId("deccomboOutput").value;
 						if (wid) {
-								doh.is("three",wid.value,"wid.value should be set");
+								doh.is("three",wid.get('value'),"wid.get('value') should be set");
 								doh.is("three",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.DateTextBox
 						wid = dijit.byId("decdatesel");
 						textboxval = dijit.byId("decdatetext").value;
 						outputval = dijit.byId("decdateOutput").value;
 						if (wid) {
-							if(!dojo.isIE){
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",wid.value,"wid.value should be set");
 								var date1 = "Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Mon Apr 04 2011 00:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set");
-								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is("2011-04-04",textboxval,"textboxval should be set");
-								doh.is("2011-04-04",outputval,"outputval should be set");
-							}
+								var date2 = "Mon Apr 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"wid.get('value') should be set it is:"+wid.get('value'));
+								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set it is:"+wid.displayedValue);
+								doh.is("2011-04-04",textboxval,"textboxval should be set it is:"+textboxval);
+								doh.is("2011-04-04",outputval,"outputval should be set it is:"+outputval);
 						}
 						// Test dijit.form.HorizontalSlider
 						wid = dijit.byId("decslidersel");
 						textboxval = dijit.byId("decslidertext").value;
 						outputval = dijit.byId("decsliderOutput").value;
 						if (wid) {
-								doh.is("5",wid.value,"wid.value should be set");
+								doh.is("5",wid.get('value'),"wid.get('value') should be set");
 								//doh.is("five",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.NumberSpinner
 						wid = dijit.byId("decnumspinsel");
 						textboxval = dijit.byId("decnumspintext").value;
 						outputval = dijit.byId("decnumspinOutput").value;
 						if (wid) {
-								//doh.is("6",wid.value,"wid.value should be set");
+								//doh.is("6",wid.get('value'),"wid.get('value') should be set");
 								doh.is("6",wid.displayedValue,"wid.displayedValue should be set");
 								doh.is(textboxval,wid.displayedValue,"wid.displayedValue should be set same as textboxval");
 								doh.is(outputval,wid.displayedValue,"wid.displayedValue should be set same as outputval");
@@ -536,18 +532,18 @@
 						textboxval = dijit.byId("decsimpTAtext").value;
 						outputval = dijit.byId("decsimpTAOutput").value;
 						if (wid) {
-								doh.is("7",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("7",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.Textarea
 						wid = dijit.byId("dectextareasel");
 						textboxval = dijit.byId("dectextareatext").value;
 						outputval = dijit.byId("dectextareaOutput").value;
 						if (wid) {
-								doh.is("8",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("8",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 
@@ -566,40 +562,47 @@
 						textboxval = dijit.byId("deccaltext").value;
 						outputval = dijit.byId("deccalOutput").value;
 						if (wid) {
-							if(!dojo.isIE){
-							   var date1 = "Mon Apr 04 2011 01:00:00 GMT-0400 (Eastern Daylight Time)";
-							   var date2 = "Mon Apr 04 2011 01:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"1-wid.value should be set "+wid.value);
-								doh.t((date1==(textboxval) || date2==(textboxval)),"1-textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"1-outputval should be set"+outputval);
-							}
+							   var date1 = "Wed May 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
+							   var date2 = "Wed May 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"1-wid.get('value') should be set value is: "+wid.get('value').toString().substring(0,15));
+								doh.t((date1.substring(0,15)==(textboxval.toString().substring(0,15)) || date2==(textboxval)),"1-textboxval should be set "+textboxval.toString().substring(0,15));
+								doh.t((date1.substring(0,15)==(outputval.toString().substring(0,15)) || date2==(outputval)),"1-outputval should be set "+outputval.toString().substring(0,15));
 						}
 						// Test dijit.ColorPalette
 						wid = dijit.byId("deccolor");
 						textboxval = dijit.byId("deccolortext").value;
 						outputval = dijit.byId("deccolorOutput").value;
 						if (wid) {
-								doh.is("#000000",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
-						}
+								doh.is("#000000",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
+						}						
+					}
+				}
+			]);
+
+			doh.register("Check update and reset calendar and colorpalette values", [
+				{
+					name: "test-calendar-and-color",
+					runTest: function(){
+						var wid, textboxval, outputval; 
 						// Test Update calendar
 						var d = new Date(2011,10,10);
 						wid = dijit.byId("deccal");
-						wid.set('value', d.toDateString()); 						
+						//wid.set('value', d.toDateString()); 						
+						wid.set('value', d); 						
 						textboxval = dijit.byId("deccaltext").value;
 						outputval = dijit.byId("deccalOutput").value;
-						if (wid && wid.value) {
-							if(!dojo.isIE){
-							   var date1 = "Thu Nov 10 2011 01:00:00 GMT-0500 (Eastern Standard Time)";
-							   var date2 = "Thu Nov 10 2011 01:00:00 GMT-0500 (EST)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"2-wid.value should be set "+wid.value);
-								doh.t((date1==(textboxval) || date2==(textboxval)),"2-textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"2-outputval should be set"+outputval);
-								//doh.is("Thu Nov 10 2011 01:00:00 GMT-0500 (Eastern Standard Time)",wid.value,"wid.value should be set");
-								//doh.is("Thu Nov 10 2011 01:00:00 GMT-0500 (Eastern Standard Time)",textboxval,"textboxval should be set");
-								//doh.is("Thu Nov 10 2011 01:00:00 GMT-0500 (Eastern Standard Time)",outputval,"outputval should be set");
-							}
+						if (wid && wid.get('value')) {
+							   var date1 = "Thu Nov 10 2011 00:00:00 GMT-0500 (Eastern Standard Time)";
+							   var date2 = "Thu Nov 10 00:00:00 EST 2011";
+							   var date1b = "Thu Nov 10 2011 01:00:00 GMT-0500 (Eastern Standard Time)";
+							   var date2b = "Thu Nov 10 01:00:00 EST 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"2-wid.get('value') should be set "+wid.get('value'));
+								doh.t((date1b.substring(0,15)==(textboxval.toString().substring(0,15)) || date2b==(textboxval)),"2-textboxval should be set"+textboxval);
+								doh.t((date1b.substring(0,15)==(outputval.toString().substring(0,15)) || date2b==(outputval)),"2-outputval should be set"+outputval);
 						}
 
 						// Test dijit.ColorPalette
@@ -609,9 +612,9 @@
 						textboxval = dijit.byId("deccolortext").value;
 						outputval = dijit.byId("deccolorOutput").value;
 						if (wid) {
-								doh.is("#ffffff",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("#ffffff",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 						// Test Reset Calendar
@@ -621,13 +624,12 @@
 						textboxval = dijit.byId("deccaltext").value;
 						outputval = dijit.byId("deccalOutput").value;
 						if (wid) {
-							if(!dojo.isIE){
-							   var date1 = "Mon Apr 04 2011 01:00:00 GMT-0400 (Eastern Daylight Time)";
-							   var date2 = "Mon Apr 04 2011 01:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"3-wid.value should be set "+wid.value);
-								doh.t((date1==(textboxval) || date2==(textboxval)),"3-textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"3-outputval should be set"+outputval);
-							}
+							   var date1 = "Wed May 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
+							   var date2 = "Wed May 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"3-wid.get('value') should be set "+wid.get('value'));
+								doh.t((date1.substring(0,15)==(textboxval.toString().substring(0,15)) || date2==(textboxval)),"3-textboxval should be set"+textboxval);
+								doh.t((date1.substring(0,15)==(outputval.toString().substring(0,15)) || date2==(outputval)),"3-outputval should be set"+outputval);
 						}
 						// Test reset the dijit.ColorPalette
 						button = dijit.byId("deccolorReset"); // reset the model
@@ -636,9 +638,9 @@
 						textboxval = dijit.byId("deccolortext").value;
 						outputval = dijit.byId("deccolorOutput").value;
 						if (wid) {
-								doh.is("#000000",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("#000000",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						
 						
@@ -661,9 +663,9 @@
 						textboxval = dijit.byId("seltext").value;
 						outputval = dijit.byId("selOutput").value;
 						if (wid) {
-								doh.is("10",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("10",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test FilteringSelect
 						// update the text field
@@ -672,10 +674,10 @@
 						textboxval = dijit.byId("filtext").value;
 						outputval = dijit.byId("filoutput").value;
 						if (wid) {
-								doh.is("10",wid.value,"wid.value should be set");
+								doh.is("10",wid.get('value'),"wid.get('value') should be set");
 								doh.is("ten",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.ComboBox
 						dijit.byId('combotext').set('value',"ten");						
@@ -683,10 +685,10 @@
 						textboxval = dijit.byId("combotext").value;
 						outputval = dijit.byId("combooutput").value;
 						if (wid) {
-								doh.is("ten",wid.value,"wid.value should be set");
+								doh.is("ten",wid.get('value'),"wid.get('value') should be set");
 								doh.is("ten",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.DateTextBox
 						// update the text field
@@ -698,15 +700,13 @@
 						textboxval = dijit.byId("datetext").value;
 						outputval = dijit.byId("dateoutput").value;
 						if (wid) {
-							if(!dojo.isIE){
-								//doh.is("Mon Oct 10 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",wid.value,"wid.value should be set");
 								var date1 = "Mon Oct 10 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Mon Oct 10 2011 00:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set"+wid.value);
+								var date2 = "Mon Oct 10 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"wid.get(value) should be set "+wid.get('value'));
 								doh.is("10/10/2011",wid.displayedValue,"wid.displayedValue should be set");
-								doh.t((date1==(textboxval) || date2==(textboxval)),"2-textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"2-outputval should be set"+outputval);
-							}
+								doh.t((date1.substring(0,15)==(textboxval.toString().substring(0,15)) || date2==(textboxval)),"2-textboxval should be set"+textboxval);
+								doh.t((date1.substring(0,15)==(outputval.toString().substring(0,15)) || date2==(outputval)),"2-outputval should be set"+outputval);
 						}
 						// Test dijit.form.HorizontalSlider
 						// update the text field
@@ -715,10 +715,10 @@
 						textboxval = dijit.byId("slidertext").value;
 						outputval = dijit.byId("slideroutput").value;
 						if (wid) {
-								doh.is("10",wid.value,"wid.value should be set");
+								doh.is("10",wid.get('value'),"wid.get(value) should be set");
 								//doh.is("five",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.NumberSpinner
 						dijit.byId('numspintext').set('value',"10");						
@@ -736,9 +736,9 @@
 						textboxval = dijit.byId("simpTAtext").value;
 						outputval = dijit.byId("simpTAoutput").value;
 						if (wid) {
-								doh.is("10",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("10",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.Textarea
 						dijit.byId('textareatext').set('value',"10");						
@@ -746,9 +746,9 @@
 						textboxval = dijit.byId("textareatext").value;
 						outputval = dijit.byId("textareaoutput").value;
 						if (wid) {
-								doh.is("10",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("10",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 
@@ -768,9 +768,9 @@
 						textboxval = dijit.byId("decseltext").value;
 						outputval = dijit.byId("decselOutput").value;
 						if (wid) {
-								doh.is("4",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("4",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test FilteringSelect
 						wid = dijit.byId("decfilsel");
@@ -778,10 +778,10 @@
 						textboxval = dijit.byId("decfiltext").value;
 						outputval = dijit.byId("decfilOutput").value;
 						if (wid) {
-								doh.is("4",wid.value,"wid.value should be set");
+								doh.is("4",wid.get('value'),"wid.get('value') should be set");
 								doh.is("four",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.ComboBox
 						wid = dijit.byId("deccombosel");
@@ -789,10 +789,10 @@
 						textboxval = dijit.byId("deccombotext").value;
 						outputval = dijit.byId("deccomboOutput").value;
 						if (wid) {
-								doh.is("four",wid.value,"wid.value should be set");
+								doh.is("four",wid.get('value'),"wid.get('value') should be set");
 								doh.is("four",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.DateTextBox
 						wid = dijit.byId("decdatesel");
@@ -802,17 +802,13 @@
 						textboxval = dijit.byId("decdatetext").value;
 						outputval = dijit.byId("decdateOutput").value;
 						if (wid) {
-							if(!dojo.isIE){
-								//doh.is("Fri Sep 09 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",wid.value,"wid.value should be set");
 								var date1 = "Fri Sep 09 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Fri Sep 09 2011 00:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set "+wid.value);
-								doh.t((date1==(textboxval) || date2==(textboxval)),"textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"outputval should be set"+outputval);
+								var date2 = "Fri Sep 9 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"wid.get('value') should be set "+wid.get('value'));
+								doh.t((date1.substring(0,15)==(textboxval.toString().substring(0,15)) || date2==(textboxval)),"textboxval should be set"+textboxval);
+								doh.t((date1.substring(0,15)==(outputval.toString().substring(0,15)) || date2==(outputval)),"outputval should be set"+outputval);
 								doh.is("9/9/2011",wid.displayedValue,"wid.displayedValue should be set");
-								//doh.is("Fri Sep 09 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",textboxval,"textboxval should be set");
-								//doh.is("Fri Sep 09 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",outputval,"outputval should be set");
-							}
 						}
 						// Test dijit.form.HorizontalSlider
 						wid = dijit.byId("decslidersel");
@@ -820,9 +816,9 @@
 						textboxval = dijit.byId("decslidertext").value;
 						outputval = dijit.byId("decsliderOutput").value;
 						if (wid) {
-								doh.is("4",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("4",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.NumberSpinner
 						wid = dijit.byId("decnumspinsel");
@@ -840,9 +836,9 @@
 						textboxval = dijit.byId("decsimpTAtext").value;
 						outputval = dijit.byId("decsimpTAOutput").value;
 						if (wid) {
-								doh.is("4",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("4",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.Textarea
 						wid = dijit.byId("dectextareasel");
@@ -850,9 +846,9 @@
 						textboxval = dijit.byId("dectextareatext").value;
 						outputval = dijit.byId("dectextareaOutput").value;
 						if (wid) {
-								doh.is("4",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("4",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 
@@ -877,9 +873,9 @@
 						textboxval = dijit.byId("seltext").value;
 						outputval = dijit.byId("selOutput").value;
 						if (wid) {
-								doh.is("1",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("1",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test FilteringSelect
 						button = dijit.byId("filReset"); 
@@ -888,10 +884,10 @@
 						textboxval = dijit.byId("filtext").value;
 						outputval = dijit.byId("filoutput").value;
 						if (wid) {
-								doh.is("2",wid.value,"wid.value should be set");
+								doh.is("2",wid.get('value'),"wid.get('value') should be set");
 								doh.is("two",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.ComboBox
 						button = dijit.byId("comboReset"); 
@@ -900,10 +896,10 @@
 						textboxval = dijit.byId("combotext").value;
 						outputval = dijit.byId("combooutput").value;
 						if (wid) {
-								doh.is("three",wid.value,"wid.value should be set");
+								doh.is("three",wid.get('value'),"wid.get('value') should be set");
 								doh.is("three",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.DateTextBox
 						button = dijit.byId("dateReset"); 
@@ -912,34 +908,21 @@
 						textboxval = dijit.byId("datetext").value;
 						outputval = dijit.byId("dateoutput").value;
 						if (wid) {
-							if(!dojo.isIE){
-							//	doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",wid.value,"wid.value should be set");
-							//	doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
-							//	doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set");
 								var date1 = "Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Mon Apr 04 2011 00:00:00 GMT-0400 (EDT)";
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",textboxval,"textboxval should be set");
-								doh.t((date1==(textboxval) || date2==(textboxval)),"textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"outputval should be set"+outputval);
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",outputval,"outputval should be set");
-							}
+								var date2 = "Mon Apr 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(textboxval.toString().substring(0,15)) || date2==(textboxval)),"textboxval should be set"+textboxval);
+								doh.t((date1.substring(0,15)==(outputval.toString().substring(0,15)) || date2==(outputval)),"outputval should be set"+outputval);
 						}
 						// test a second reset...
 						button.onClick();
 						if (wid) {
-							if(!dojo.isIE){
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",wid.value,"wid.value should be set");
 								var date1 = "Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Mon Apr 04 2011 00:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set "+wid.value);
-								doh.t((date1==(textboxval) || date2==(textboxval)),"textboxval should be set"+textboxval);
-								doh.t((date1==(outputval) || date2==(outputval)),"outputval should be set"+outputval);
+								var date2 = "Mon Apr 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"wid.get('value') should be set "+wid.get('value'));
+								doh.t((date1.substring(0,15)==(textboxval.toString().substring(0,15)) || date2==(textboxval)),"textboxval should be set"+textboxval);
+								doh.t((date1.substring(0,15)==(outputval.toString().substring(0,15)) || date2==(outputval)),"outputval should be set"+outputval);
 								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",textboxval,"textboxval should be set");
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",outputval,"outputval should be set");
-								//doh.is("2011-04-04",textboxval,"textboxval should be set");
-								//doh.is("2011-04-04",outputval,"outputval should be set");
-							}
 						}
 						// Test dijit.form.HorizontalSlider
 						button = dijit.byId("sliderReset"); 
@@ -948,10 +931,10 @@
 						textboxval = dijit.byId("slidertext").value;
 						outputval = dijit.byId("slideroutput").value;
 						if (wid) {
-								doh.is("5",wid.value,"wid.value should be set");
+								doh.is("5",wid.get('value'),"wid.get('value') should be set");
 								//doh.is("five",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.NumberSpinner
 						button = dijit.byId("numspinReset"); 
@@ -960,7 +943,6 @@
 						textboxval = dijit.byId("numspintext").value;
 						outputval = dijit.byId("numspinoutput").value;
 						if (wid) {
-								//doh.is("6",wid.value,"wid.value should be set");
 								doh.is("6",wid.displayedValue,"wid.displayedValue should be set");
 								doh.is(textboxval,wid.displayedValue,"wid.displayedValue should be set same as textboxval");
 								doh.is(outputval,wid.displayedValue,"wid.displayedValue should be set same as outputval");
@@ -972,9 +954,9 @@
 						textboxval = dijit.byId("simpTAtext").value;
 						outputval = dijit.byId("simpTAoutput").value;
 						if (wid) {
-								doh.is("7",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("7",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.Textarea
 						button = dijit.byId("textareaReset"); 
@@ -983,9 +965,9 @@
 						textboxval = dijit.byId("textareatext").value;
 						outputval = dijit.byId("textareaoutput").value;
 						if (wid) {
-								doh.is("8",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("8",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 
@@ -1006,9 +988,9 @@
 						textboxval = dijit.byId("decseltext").value;
 						outputval = dijit.byId("decselOutput").value;
 						if (wid) {
-								doh.is("1",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("1",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test FilteringSelect
 						button = dijit.byId("decfilReset"); // reset the model
@@ -1017,10 +999,10 @@
 						textboxval = dijit.byId("decfiltext").value;
 						outputval = dijit.byId("decfilOutput").value;
 						if (wid) {
-								doh.is("2",wid.value,"wid.value should be set");
+								doh.is("2",wid.get('value'),"wid.get('value') should be set");
 								doh.is("two",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.ComboBox
 						button = dijit.byId("deccomboReset"); // reset the model
@@ -1029,10 +1011,10 @@
 						textboxval = dijit.byId("deccombotext").value;
 						outputval = dijit.byId("deccomboOutput").value;
 						if (wid) {
-								doh.is("three",wid.value,"wid.value should be set");
+								doh.is("three",wid.get('value'),"wid.get('value') should be set");
 								doh.is("three",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.DateTextBox
 						button = dijit.byId("decdateReset"); // reset the model
@@ -1041,15 +1023,13 @@
 						textboxval = dijit.byId("decdatetext").value;
 						outputval = dijit.byId("decdateOutput").value;
 						if (wid) {
-							if(!dojo.isIE){
 								var date1 = "Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Mon Apr 04 2011 00:00:00 GMT-0400 (EDT)";
-								doh.t((date1==(wid.value) || date2==(wid.value)),"wid.value should be set "+wid.value);
-								//doh.is("Mon Apr 04 2011 00:00:00 GMT-0400 (Eastern Daylight Time)",wid.value,"wid.value should be set");
+								var date2 = "Mon Apr 4 00:00:00 EDT 2011";
+								doh.t((date1.substring(0,15)==(wid.get('value').toString().substring(0,15)) || 
+									date2==(wid.get('value'))),"wid.get('value') should be set "+wid.get('value'));
 								doh.is("4/4/2011",wid.displayedValue,"wid.displayedValue should be set");
 								doh.is("2011-04-04",textboxval,"textboxval should be set");
 								doh.is("2011-04-04",outputval,"outputval should be set");
-							}
 						}
 						// Test dijit.form.HorizontalSlider
 						button = dijit.byId("decsliderReset"); // reset the model
@@ -1058,10 +1038,10 @@
 						textboxval = dijit.byId("decslidertext").value;
 						outputval = dijit.byId("decsliderOutput").value;
 						if (wid) {
-								doh.is("5",wid.value,"wid.value should be set");
+								doh.is("5",wid.get('value'),"wid.get('value') should be set");
 								//doh.is("five",wid.displayedValue,"wid.displayedValue should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.NumberSpinner
 						button = dijit.byId("decnumspinReset"); // reset the model
@@ -1070,7 +1050,7 @@
 						textboxval = dijit.byId("decnumspintext").value;
 						outputval = dijit.byId("decnumspinOutput").value;
 						if (wid) {
-								//doh.is("6",wid.value,"wid.value should be set");
+								//doh.is("6",wid.get('value'),"wid.get('value') should be set");
 								doh.is("6",wid.displayedValue,"wid.displayedValue should be set");
 								doh.is(textboxval,wid.displayedValue,"wid.displayedValue should be set same as textboxval");
 								doh.is(outputval,wid.displayedValue,"wid.displayedValue should be set same as outputval");
@@ -1082,9 +1062,9 @@
 						textboxval = dijit.byId("decsimpTAtext").value;
 						outputval = dijit.byId("decsimpTAOutput").value;
 						if (wid) {
-								doh.is("7",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("7",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 						// Test dijit.form.Textarea
 						button = dijit.byId("dectextareaReset"); // reset the model
@@ -1093,9 +1073,9 @@
 						textboxval = dijit.byId("dectextareatext").value;
 						outputval = dijit.byId("dectextareaOutput").value;
 						if (wid) {
-								doh.is("8",wid.value,"wid.value should be set");
-								doh.is(textboxval,wid.value,"wid.value should be set same as textboxval");
-								doh.is(outputval,wid.value,"wid.value should be set same as outputval");
+								doh.is("8",wid.get('value'),"wid.get('value') should be set");
+								doh.is(textboxval,wid.get('value'),"wid.get('value') should be set same as textboxval");
+								doh.is(outputval,wid.get('value'),"wid.get('value') should be set same as outputval");
 						}
 
 
