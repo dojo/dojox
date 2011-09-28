@@ -285,8 +285,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 				if(svg.indexOf("xmlns:xlink=\"http://www.w3.org/1999/xlink\"") == -1){
 					svg = svg.substring(4, svg.length);
 					svg = "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"" + svg;
-					//and add namespace to href attribute
-					svg = svg.replace(/\bhref\s*=/g,"xlink:href=");
+				}
+				//and add namespace to href attribute if not done yet 
+				//(FF 5+ adds xlink:href but not the xmlns def)
+				if(svg.indexOf("xlink:href") === -1){
+					svg = svg.replace(/href\s*=/g, "xlink:href=");
 				}
 				//Do some other cleanup, like stripping out the
 				//dojoGfx attributes and quoting ids.
