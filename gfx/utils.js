@@ -281,6 +281,13 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 					svg = svg.substring(4, svg.length);
 					svg = "<svg xmlns=\"http://www.w3.org/2000/svg\"" + svg;
 				}
+				//Same for xmlns:xlink (missing in Chrome and Safari)
+				if(svg.indexOf("xmlns:xlink=\"http://www.w3.org/1999/xlink\"") == -1){
+					svg = svg.substring(4, svg.length);
+					svg = "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"" + svg;
+					//and add namespace to href attribute
+					svg = svg.replace(/\bhref\s*=/g,"xlink:href=");
+				}
 				//Do some other cleanup, like stripping out the
 				//dojoGfx attributes and quoting ids.
 				svg = svg.replace(/\bdojoGfx\w*\s*=\s*(['"])\w*\1/g, "");
