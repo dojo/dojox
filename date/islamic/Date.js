@@ -235,77 +235,43 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		this._hours = hours;
 	},
 
-	setMinutes:function(/*number*/minutes){
-		//summary: set the Minutes
+	addMinutes: function(/*Number*/minutes){
+		minutes += this._minutes;
+		this.setMinutes(minutes);
+		this.setHours(this._hours + parseInt(minutes / 60));
+		return this;
+	},
 
-		while(minutes >= 60){
-			this._hours++;
-			if(this._hours >= 24){
-				this._date++;
-				this._hours -= 24;
-				var mdays = this.getDaysInIslamicMonth(this._month, this._year);
-				if(this._date > mdays){
-						this._month ++;
-						if(this._month >= 12){this._year++; this._month -= 12;}
-						this._date -= mdays;
-				}
-			}
-			minutes -= 60;
-		}
-		this._minutes = minutes;
+	addSeconds: function(/*Number*/seconds){
+		seconds += this._seconds;
+		this.setSeconds(seconds);
+		this.addMinutes(parseInt(seconds / 60));
+		return this;
 	},
-		
-		
-	setSeconds:function(/*number*/seconds){
-		//summary: set Seconds
-		while(seconds >= 60){
-			this._minutes++;
-			if(this._minutes >= 60){
-				this._hours++;
-				this._minutes -= 60;
-				if(this._hours >= 24){
-					this._date++;
-					this._hours -= 24;
-					var mdays = this.getDaysInIslamicMonth(this._month, this._year);
-					if(this._date > mdays){
-						this._month ++;
-						if(this._month >= 12){this._year++; this._month -= 12;}
-						this._date -= mdays;
-					}
-				}
-			}
-			seconds -= 60;
-		}
-		this._seconds = seconds;
+
+	addMilliseconds: function(/*Number*/milliseconds){
+		milliseconds += this._milliseconds;
+		this.setMilliseconds(milliseconds);
+		this.addSeconds(parseInt(milliseconds / 1000));
+		return this;
 	},
-		
-	setMilliseconds:function(/*number*/milliseconds){
-		//summary: set the Millisconds
-		while(milliseconds >= 1000){
-			this.setSeconds++;
-			if(this.setSeconds >= 60){
-				this._minutes++;
-				this.setSeconds -= 60;
-				if(this._minutes >= 60){
-					this._hours++;
-					this._minutes -= 60;
-					if(this._hours >= 24){
-						this._date++;
-						this._hours -= 24;
-						var mdays = this.getDaysInIslamicMonth(this._month, this._year);
-				if(this._date > mdays){
-					this._month ++;
-					if(this._month >= 12){this._year++; this._month -= 12;}
-					this._date -= mdays;
-					}
-				}
-			}
-		}
-			milliseconds -= 1000;
-		}
-		this._milliseconds = milliseconds;
+
+	setMinutes: function(/*Number*/minutes){
+		//summary: sets the minutes (0-59) only.
+		this._minutes = minutes % 60;
+		return this;
 	},
-		
+
+	setSeconds: function(/*Number*/seconds){
+		//summary: sets the seconds (0-59) only.
+		this._seconds = seconds % 60;
+		return this;
+	},
+
+	setMilliseconds: function(/*Number*/milliseconds){
+		this._milliseconds = milliseconds % 1000;
+		return this;
+	},
 		
 	toString:function(){
 		// summary: This returns a string representation of the date in "DDDD MMMM DD YYYY HH:MM:SS" format

@@ -86,13 +86,13 @@ dojox.date.buddhist.add = function(/*dojox.date.buddhist.Date*/date, /*String*/i
 			newBuddDate.setHours(date.getHours() + amount );
 			break;
 		case "minute":
-			newBuddDate.setMinutes(date.getMinutes() + amount );
+			newBuddDate.addMinutes(amount);
 			break;
 		case "second":
-			newBuddDate.setSeconds(date.getSeconds() + amount );
+			newBuddDate.addSeconds(amount);
 			break;
 		case "millisecond":
-			newBuddDate.setMilliseconds(date.getMilliseconds() + amount );
+			newBuddDate.addMilliseconds(amount);
 			break;
 	}
 	return newBuddDate; // dojox.date.buddhist.Date

@@ -227,6 +227,68 @@ tests.register("dojox.date.tests.islamic.Date",
 				str = dojox.date.islamic.locale.format(dateIslamic, options);
 				t.is(str, "3:3:59");
 			}
+		},
+		{
+			name: "addMilliseconds",
+			runTest: function(t){												
+				var islamicDates = [
+							[5771, 8, 21, 10, 30],
+							[5771, 8, 21, 2, 2],
+							[5771, 8, 21, 8, 10], // "absolute" index of month, non-leap year
+							[5771, 8, 21, 12, 59],
+							[5771, 8, 21, 3, 33]
+						];
+						
+				var dates = [
+							[1432, 8, 21, 10, 30],
+							[1432, 8, 21, 2, 2],
+							[1432, 8, 21, 8, 10], // "absolute" index of month, non-leap year
+							[1432, 8, 21, 12, 59],
+							[1432, 8, 21, 3, 33]
+						];
+						
+				var traceAttributes = function(date){
+					console.log("getHours():" + date.getHours()+" getMinutes():"+date.getMinutes()+" getSeconds():"+date.getSeconds()+" getMilliseconds():"+date.getMilliseconds());
+				};
+						
+				var dateIslamic, date2;
+				dojo.forEach(islamicDates, function(date, i){
+					dateIslamic = new dojox.date.islamic.Date(date[0], date[1], date[2], date[3], date[4]);
+					date2 = new Date(dates[i][0], dates[i][1], dates[i][2], dates[i][3], dates[i][4]);			
+		
+					var newIslamicDate = dojox.date.islamic.add(dateIslamic, "millisecond",  1200);
+					var newDate = dojo.date.add(date2, "millisecond",  1200);
+					t.is(newIslamicDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newIslamicDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newIslamicDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newIslamicDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newIslamicDate);
+
+					newIslamicDate = dojox.date.islamic.add(dateIslamic, "millisecond",  12022);
+					newDate = dojo.date.add(date2, "millisecond",  12022);
+					t.is(newIslamicDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newIslamicDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newIslamicDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newIslamicDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newIslamicDate);
+
+					newIslamicDate = dojox.date.islamic.add(dateIslamic, "millisecond",  120422);
+					newDate = dojo.date.add(date2, "millisecond",  120422);
+					t.is(newIslamicDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newIslamicDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newIslamicDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newIslamicDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newIslamicDate);
+
+					newIslamicDate = dojox.date.islamic.add(dateIslamic, "millisecond",  1204422);
+					newDate = dojo.date.add(date2, "millisecond",  1204422);
+					t.is(newIslamicDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newIslamicDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newIslamicDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newIslamicDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newIslamicDate);
+				});
+			}
 		}
 	]
 );

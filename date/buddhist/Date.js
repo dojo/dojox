@@ -206,74 +206,43 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 		}
 		this._hours = hours;
 	},
-
-	setMinutes: function(/*number*/minutes){
-		//summary: set the Minutes  frm 0-59
-		while(minutes >= 60){
-			this._hours++;
-			if(this._hours >= 24){
-				this._date++;
-				this._hours -= 24;
-				var mdays = this._getDaysInMonth(this._month, this._year);
-				if(this._date > mdays){
-						this._month ++;
-						if(this._month >= 12){this._year++; this._month -= 12;}
-						this._date -= mdays;
-				}
-			}
-			minutes -= 60;
-		}
-		this._minutes = minutes;
+	
+	addMinutes: function(/*Number*/minutes){
+		minutes += this._minutes;
+		this.setMinutes(minutes);
+		this.setHours(this._hours + parseInt(minutes / 60));
+		return this;
 	},
 
-	setSeconds: function(/*number*/seconds){
-		//summary: set the Seconds  from 0-59
-		while(seconds >= 60){
-			this._minutes++;
-			if(this._minutes >= 60){
-				this._hours++;
-				this._minutes -= 60;
-				if(this._hours >= 24){
-					this._date++;
-					this._hours -= 24;
-					var mdays = this._getDaysInMonth(this._month, this._year);
-					if(this._date > mdays){
-						this._month ++;
-						if(this._month >= 12){this._year++; this._month -= 12;}
-						this._date -= mdays;
-					}
-				}
-			}
-			seconds -= 60;
-		}
-		this._seconds = seconds;
+	addSeconds: function(/*Number*/seconds){
+		seconds += this._seconds;
+		this.setSeconds(seconds);
+		this.addMinutes(parseInt(seconds / 60));
+		return this;
 	},
 
-	setMilliseconds: function(/*number*/milliseconds){
-		//summary: set the milliseconds
-		while(milliseconds >= 1000){
-			this.setSeconds++;
-			if(this.setSeconds >= 60){
-				this._minutes++;
-				this.setSeconds -= 60;
-				if(this._minutes >= 60){
-					this._hours++;
-					this._minutes -= 60;
-					if(this._hours >= 24){
-						this._date++;
-						this._hours -= 24;
-						var mdays = this._getDaysInMonth(this._month, this._year);
-				if(this._date > mdays){
-					this._month ++;
-					if(this._month >= 12){this._year++; this._month -= 12;}
-					this._date -= mdays;
-					}
-				}
-			}
-		}
-			milliseconds -= 1000;
-		}
-		this._milliseconds = milliseconds;
+	addMilliseconds: function(/*Number*/milliseconds){
+		milliseconds += this._milliseconds;
+		this.setMilliseconds(milliseconds);
+		this.addSeconds(parseInt(milliseconds / 1000));
+		return this;
+	},
+
+	setMinutes: function(/*Number*/minutes){
+		//summary: sets the minutes (0-59) only.
+		this._minutes = minutes % 60;
+		return this;
+	},
+
+	setSeconds: function(/*Number*/seconds){
+		//summary: sets the seconds (0-59) only.
+		this._seconds = seconds % 60;
+		return this;
+	},
+
+	setMilliseconds: function(/*Number*/milliseconds){
+		this._milliseconds = milliseconds % 1000;
+		return this;
 	},
 
 	toString: function(){

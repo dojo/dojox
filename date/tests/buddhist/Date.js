@@ -170,6 +170,68 @@ tests.register("dojox.date.tests.buddhist.Date",
 				t.is(0, dojo.date.compare(gregDate, dateBuddhist1.toGregorian(), 'time'));
 								 	
 			}
+		},
+		{
+			name: "addMilliseconds",
+			runTest: function(t){												
+				var buddhistDates = [
+							[5771, 8, 21, 10, 30],
+							[5771, 8, 21, 2, 2],
+							[5771, 8, 21, 8, 10], // "absolute" index of month, non-leap year
+							[5771, 8, 21, 12, 59],
+							[5771, 8, 21, 3, 33]
+						];
+						
+				var dates = [
+							[1432, 8, 21, 10, 30],
+							[1432, 8, 21, 2, 2],
+							[1432, 8, 21, 8, 10], // "absolute" index of month, non-leap year
+							[1432, 8, 21, 12, 59],
+							[1432, 8, 21, 3, 33]
+						];
+						
+				var traceAttributes = function(date){
+					console.log("getHours():" + date.getHours()+" getMinutes():"+date.getMinutes()+" getSeconds():"+date.getSeconds()+" getMilliseconds():"+date.getMilliseconds());
+				};
+						
+				var dateBuddhist, date2;
+				dojo.forEach(buddhistDates, function(date, i){
+					dateBuddhist = new dojox.date.buddhist.Date(date[0], date[1], date[2], date[3], date[4]);
+					date2 = new Date(dates[i][0], dates[i][1], dates[i][2], dates[i][3], dates[i][4]);			
+		
+					var newBuddhistDate = dojox.date.buddhist.add(dateBuddhist, "millisecond",  1200);
+					var newDate = dojo.date.add(date2, "millisecond",  1200);
+					t.is(newBuddhistDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newBuddhistDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newBuddhistDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newBuddhistDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newBuddhistDate);
+
+					newBuddhistDate = dojox.date.buddhist.add(dateBuddhist, "millisecond",  12022);
+					newDate = dojo.date.add(date2, "millisecond",  12022);
+					t.is(newBuddhistDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newBuddhistDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newBuddhistDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newBuddhistDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newBuddhistDate);
+
+					newBuddhistDate = dojox.date.buddhist.add(dateBuddhist, "millisecond",  120422);
+					newDate = dojo.date.add(date2, "millisecond",  120422);
+					t.is(newBuddhistDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newBuddhistDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newBuddhistDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newBuddhistDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newBuddhistDate);
+
+					newBuddhistDate = dojox.date.buddhist.add(dateBuddhist, "millisecond",  1204422);
+					newDate = dojo.date.add(date2, "millisecond",  1204422);
+					t.is(newBuddhistDate.getHours(), newDate.getHours(), "Hours are different");
+					t.is(newBuddhistDate.getMinutes(), newDate.getMinutes(), "Minutes are different");
+					t.is(newBuddhistDate.getSeconds(), newDate.getSeconds(), "Seconds are different");
+					t.is(newBuddhistDate.getMilliseconds(), newDate.getMilliseconds(), "Milliseconds are different");
+					//traceAttributes(newBuddhistDate);
+				});
+			}
 		}
 	]
 );

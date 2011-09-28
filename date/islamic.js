@@ -94,13 +94,13 @@ dojox.date.islamic.add = function(/*dojox.date.islamic.Date*/date, /*String*/int
 			newIslamDate.setHours(date.getHours() + amount);
 			break;
 		case "minute":
-			newIslamDate.setMinutes(date.getMinutes() + amount);
+			newIslamDate.addMinutes(amount);
 			break;
 		case "second":
-			newIslamDate.setSeconds(date.getSeconds() + amount);
+			newIslamDate.addSeconds(amount);
 			break;
 		case "millisecond":
-			newIslamDate.setMilliseconds(date.getMilliseconds() + amount);
+			newIslamDate.addMilliseconds(amount);
 			break;
 	}
 
