@@ -294,6 +294,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 				//Do some other cleanup, like stripping out the
 				//dojoGfx attributes and quoting ids.
 				svg = svg.replace(/\bdojoGfx\w*\s*=\s*(['"])\w*\1/g, "");
+				svg = svg.replace(/\b__gfxObject__\s*=\s*(['"])\w*\1/g, "");
 				svg = svg.replace(/[=]([^"']+?)(\s|>)/g,'="$1"$2');
 			}
 			return svg;  //Cleaned SVG text.
