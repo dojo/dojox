@@ -12,7 +12,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			// try/catch the FF native getBBox error. cheaper than walking up in the DOM
 			// hierarchy to check the conditions (bench show /10 )
 			try {
-				return s.rawNode.getBBox();
+				return lang.mixin({}, s.rawNode.getBBox());
 			}catch (e){
 				return null;
 			}
@@ -32,7 +32,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			return sz;
 		}else if(c.indexOf("silverlight")!=-1){
 			var bb = {width: s.rawNode.actualWidth, height: s.rawNode.actualHeight};
-			return computeLocation(s, bb, 0.75	);			
+			return computeLocation(s, bb, 0.75);
 		}else if(s.getTextWidth){
 			// canvas
 			var w = s.getTextWidth();
@@ -40,7 +40,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			var fz = font ? font.size : gfx.defaultFont.size;
 			var h = gfx.normalizedLength(fz);
 			sz = {width: w, height: h};
-			computeLocation(s, sz,0.75);
+			computeLocation(s, sz, 0.75);
 			return sz;
 		}
 	};
