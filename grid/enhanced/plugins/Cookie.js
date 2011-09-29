@@ -59,6 +59,8 @@ define([
 					for(var i = cells.length - 1; i >= 0; --i){
 						if(typeof colWidths[i] == "number"){
 							cells[i].width = colWidths[i] + "px";
+						}else if(colWidths[i] == 'hidden'){
+							cells[i].hidden = true;
 						}
 					}
 				}
@@ -73,7 +75,7 @@ define([
 		return array.map(array.filter(grid.layout.cells, function(cell){
 			return !(cell.isRowSelector || cell instanceof gridCells.RowIndex);
 		}), function(cell){
-			return html[has('webkit') ? "marginBox" : "contentBox"](cell.getHeaderNode()).w;
+			return cell.hidden ? 'hidden' : html[has('webkit') ? "marginBox" : "contentBox"](cell.getHeaderNode()).w;
 		});
 	};
 	
@@ -325,7 +327,7 @@ define([
 			// cookieName: String?
 			//		Name of a cookie handler if provided, otherwise for all cookies.
 			// enabled: Boolean
-			if(arguments.length == 2){
+			if(typeof cookieName == 'string'){
 				var chs = this._cookieHandlers;
 				for(var i = chs.length - 1; i >= 0; --i){
 					if(chs[i].name === cookieName){
