@@ -1,4 +1,3 @@
-// AMD-ID "dojox/encoding/crypto/SimpleAES"
 define(["dojo/_base/kernel", "dojox/encoding/base64", "dojox/encoding/crypto/_base"], function(dojo, base64, crypto){
 
 	/*=====
