@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "dojox/encoding/base64", "dojox/encoding/crypto/_base"], function(dojo, base64, crypto){
+define(["dojo/_base/kernel", "../base64", "./_base"], function(dojo, base64, crypto){
 
 	/*=====
 		crypto = dojox.encoding.crypto;
