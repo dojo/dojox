@@ -1,7 +1,8 @@
-// AMD-ID "dojox/encoding/digests/SHA1"
-define(["dojo/_base/kernel", "dojox/encoding/digests/_base"], function(dojo, dxd) {
+define(["dojo/_base/kernel", "./_base"], function(dojo, dxd) {
 
-	dojo.getObject("encoding.digests.SHA1", true, dojox);
+	/*=====
+		dxd = dojox.encoding.digests;
+	=====*/
 
 /*
  * A port of Paul Johnstone's SHA1 implementation
@@ -149,5 +150,5 @@ define(["dojo/_base/kernel", "dojox/encoding/digests/_base"], function(dojo, dxd
 		}
 	};
 
-	return dojox.encoding.digests.SHA1;
+	return dxd.SHA1;
 });

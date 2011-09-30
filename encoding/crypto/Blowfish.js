@@ -1,20 +1,20 @@
-// AMD-ID "dojox/encoding/crypto/Blowfish"
 define([
 	"dojo/_base/kernel",	// dojo.getObject
 	"dojo/_base/lang",	// dojo.isString
 	"dojo/_base/array",	// dojo.map
-	"dojox/encoding/base64",
-	"dojox/encoding/crypto/_base"
+	"../base64",
+	"./_base"
 ], function(dojo, lang, array, base64, crypto){
-
-dojo.getObject("encoding.crypto.Blowfish", true, dojox);
+	/*=====
+		crypto = dojox.encoding.crypto;
+	=====*/
 
 /*	Blowfish
  *	Created based on the C# implementation by Marcus Hahn (http://www.hotpixel.net/)
  *	Unsigned math based on Paul Johnstone and Peter Wood patches.
  *	2005-12-08
  */
-dojox.encoding.crypto.Blowfish = new function(){
+crypto.Blowfish = new function(){
 	//	summary
 	//	Object for doing Blowfish encryption/decryption.
 	var POW2=Math.pow(2,2);
@@ -483,5 +483,5 @@ dojox.encoding.crypto.Blowfish = new function(){
 }();
 
 
-return dojox.encoding.crypto.Blowfish;
+return crypto.Blowfish;
 });

@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
-	"dojox/math/BigInteger",
-	"dojox/math/random/Simple"
+	"../../math/BigInteger",
+	"../../math/random/Simple"
 ], function(dojo, declare, BigInteger, Simple) {
 
 	dojo.experimental("dojox.encoding.crypto.RSAKey");

@@ -1,7 +1,9 @@
 // AMD-ID "dojox/encoding/crypto/SimpleAES"
 define(["dojo/_base/kernel", "dojox/encoding/base64", "dojox/encoding/crypto/_base"], function(dojo, base64, crypto){
 
-	dojo.getObject("encoding.crypto.SimpleAES", true, dojox);
+	/*=====
+		crypto = dojox.encoding.crypto;
+	=====*/
 
 	// Sbox is pre-computed multiplicative inverse in GF(2^8) used in SubBytes and KeyExpansion [ок5.1.1]
 	var Sbox =	[0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
@@ -297,7 +299,7 @@ define(["dojo/_base/kernel", "dojox/encoding/base64", "dojox/encoding/crypto/_ba
 
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-	dojox.encoding.crypto.SimpleAES = new (function(){
+	crypto.SimpleAES = new (function(){
 		// summary:
 		// 		SimpleAES, ported from dojox.sql, and done without the need for
 		// 		a Google Gears worker pool.
@@ -332,5 +334,5 @@ define(["dojo/_base/kernel", "dojox/encoding/base64", "dojox/encoding/crypto/_ba
 		};
 	})();
 
-	return dojox.encoding.crypto.SimpleAES;
+	return crypto.SimpleAES;
 });

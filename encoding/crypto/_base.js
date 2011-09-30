@@ -1,9 +1,10 @@
-// AMD-ID "dojox/encoding/crypto/_base"
 define(["dojo/_base/kernel"], function(dojo) {
 	
-	dojo.getObject("encoding.crypto", true, dojox);
+	var c = dojo.getObject("dojox.encoding.crypto", true);
+	/*=====
+		c = dojox.encoding.crypto;
+	=====*/
 
-	var c = dojox.encoding.crypto;
 	c.cipherModes = {
 		// summary:
 		//	Enumeration for various cipher modes.
@@ -15,5 +16,5 @@ define(["dojo/_base/kernel"], function(dojo) {
 		Base64:0, Hex:1, String:2, Raw:3
 	};
 	
-	return dojox.encoding.crypto;
+	return c;
 });

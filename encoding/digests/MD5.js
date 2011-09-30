@@ -1,7 +1,8 @@
-// AMD-ID "dojox/encoding/digests/MD5"
-define(["dojo/_base/kernel", "dojox/encoding/digests/_base"], function(dojo, dxd) {
+define(["dojo/_base/kernel", "./_base"], function(dojo, dxd) {
 
-	dojo.getObject("encoding.digests.MD5", true, dojox);
+	/*=====
+		dxd = dojox.encoding.digests;
+	=====*/
 
 /*	A port of Paul Johnstone's MD5 implementation
  *	http://pajhome.org.uk/crypt/md5/index.html
@@ -171,5 +172,5 @@ define(["dojo/_base/kernel", "dojox/encoding/digests/_base"], function(dojo, dxd
 		}
 	};
 
-	return dojox.encoding.digests.MD5;
+	return dxd.MD5;
 });
