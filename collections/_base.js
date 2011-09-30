@@ -1,8 +1,12 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array"], 
   function(dojo, lang, arr){
-	lang.getObject("collections", true, dojox);
+	var collections = lang.getObject("dojox.collections", true);
 
-	dojox.collections.DictionaryEntry=function(/* string */k, /* object */v){
+/*=====
+	collections = dojox.collections;
+=====*/
+
+	collections.DictionaryEntry=function(/* string */k, /* object */v){
 		//	summary
 		//	return an object of type dojox.collections.DictionaryEntry
 		this.key=k;
@@ -20,10 +24,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array"],
 	 *	work with the Collections included in this module.  However, they *can*
 	 *	be used with arrays and objects, respectively, should one choose to do so.
 	 */
-	dojox.collections.Iterator=function(/* array */arr){
+	collections.Iterator=function(/* array */a){
 		//	summary
 		//	return an object of type dojox.collections.Iterator
-		var a=arr;
 		var position=0;
 		this.element=a[position]||null;
 		this.atEnd=function(){
@@ -58,7 +61,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array"],
 	 *	the reality is that you can use this to iterate over a JS object
 	 *	being used as a hashtable.
 	 */
-	dojox.collections.DictionaryIterator=function(/* object */obj){
+	collections.DictionaryIterator=function(/* object */obj){
 		//	summary
 		//	return an object of type dojox.collections.DictionaryIterator
 		var a=[];	//	Create an indexing array
@@ -97,5 +100,5 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array"],
 		};
 	};
 
-	return dojox.collections;
+	return collections;
 });
