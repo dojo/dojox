@@ -30,7 +30,7 @@ define([
 		//
 		//		2. Monitoring underneath events and process different phases - 'press'|'move'|'release'|'cancel'.
 		//
-		//		3. Normalizing, dispatching and bubbling gesture events with on() API.
+		//		3. Firing and bubbling gesture events with on() API.
 		//
 		//		A gesture implementation only needs to extend this class and overwrite appropriate phase handlers
 		//		- press()|move()|release()|cancel for recognizing and firing gestures
