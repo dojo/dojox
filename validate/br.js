@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "./_base"], function(dojo, validate){
 
-var br = dojo.getObject("br", true, dojox.validate);
+var br = dojo.getObject("br", true, validate);
 br.isValidCnpj = function(/*String*/value){
 	// summary:
 	//		Validates a CNPJ/CGC number

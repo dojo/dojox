@@ -1,7 +1,14 @@
 define(["dojo/_base/lang", "./_base"], function(dojo, validate){
 // summary: Provides ISBN validation functions in `dojox.validate`
 //
-dojox.validate.isValidIsbn = function(/* String */value) {
+
+/*=====
+
+	validate = dojox.validate;
+
+=====*/
+
+validate.isValidIsbn = function(/* String */value) {
 	// summary: Validate ISBN-10 or ISBN-13 based on the length of value
 	// value: String
 	//		An ISBN to validate
@@ -37,5 +44,5 @@ dojox.validate.isValidIsbn = function(/* String */value) {
 	return false;
 };
 
-return dojox.validate.isValidIsbn;
+return validate.isValidIsbn;
 });

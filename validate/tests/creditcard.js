@@ -1,4 +1,4 @@
-define(["doh", "../creditcard"], function(doh, validate){
+define(["doh", "../creditCard"], function(doh, validate){
 
 doh.register("dojox.validate.tests.creditcard",
 	[{

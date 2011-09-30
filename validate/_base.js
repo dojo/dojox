@@ -1,4 +1,3 @@
-// AMD-ID "dojox/validate/_base"
 define([
 	"dojo/_base/kernel",
 	"dojo/regexp", // dojo core expressions
@@ -6,9 +5,12 @@ define([
 	"./regexp" // additional expressions
 ], function(dojo, regexp, number, xregexp) {
 
-dojo.getObject("validate", true, dojox);
+	var validate = dojo.getObject("dojox.validate", true);
+	/*=====
+		validate = dojox.validate;
+	=====*/
 
-dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
+validate.isText = function(/*String*/value, /*Object?*/flags){
 	// summary:
 	//	Checks if a string has non whitespace characters.
 	//	Parameters allow you to constrain the length.
@@ -33,8 +35,8 @@ dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
 
 };
 
-dojox.validate._isInRangeCache = {};
-dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
+validate._isInRangeCache = {};
+validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	// summary:
 	//	Validates whether a string denoting a number
 	//	is between a max and min.
@@ -68,7 +70,7 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 
 };
 
-dojox.validate.isNumberFormat = function(/* String */value, /* Object? */flags){
+validate.isNumberFormat = function(/* String */value, /* Object? */flags){
 	// summary: Validates any sort of number based format
 	//
 	// description:
@@ -110,7 +112,7 @@ dojox.validate.isNumberFormat = function(/* String */value, /* Object? */flags){
 	return re.test(value); // Boolean
 };
 
-dojox.validate.isValidLuhn = function(/* String */value){
+validate.isValidLuhn = function(/* String */value){
 	// summary: Validate a String value against the Luhn algorithm.
 	// description:
 	//		Validate a String value against the Luhn algorithm to verify
@@ -136,6 +138,6 @@ dojox.validate.isValidLuhn = function(/* String */value){
 	return !(sum % 10); // Boolean
 };
 
-return dojox.validate;
+return validate;
 
 });
