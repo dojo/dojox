@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/rpc/Rest", 
-		"dojox/rpc/JsonRest", "dojox/json/Schema", "dojox/data/ServiceStore"], 
+		"dojox/rpc/JsonRest", "dojox/json/schema", "dojox/data/ServiceStore"], 
   function(lang, declare, connect, rpcRest, rpcJsonRest, jsonSchema, ServiceStore) {
 
 /*=====
