@@ -235,24 +235,24 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		this._hours = hours;
 	},
 
-	addMinutes: function(/*Number*/minutes){
+	_addMinutes: function(/*Number*/minutes){
 		minutes += this._minutes;
 		this.setMinutes(minutes);
 		this.setHours(this._hours + parseInt(minutes / 60));
 		return this;
 	},
 
-	addSeconds: function(/*Number*/seconds){
+	_addSeconds: function(/*Number*/seconds){
 		seconds += this._seconds;
 		this.setSeconds(seconds);
-		this.addMinutes(parseInt(seconds / 60));
+		this._addMinutes(parseInt(seconds / 60));
 		return this;
 	},
 
-	addMilliseconds: function(/*Number*/milliseconds){
+	_addMilliseconds: function(/*Number*/milliseconds){
 		milliseconds += this._milliseconds;
 		this.setMilliseconds(milliseconds);
-		this.addSeconds(parseInt(milliseconds / 1000));
+		this._addSeconds(parseInt(milliseconds / 1000));
 		return this;
 	},
 

@@ -93,13 +93,13 @@ dojox.date.hebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/inter
 			newHebrDate.setHours(date.getHours() + amount);
 			break;
 		case "minute":
-			newHebrDate.addMinutes(amount);
+			newHebrDate._addMinutes(amount);
 			break;
 		case "second":
-			newHebrDate.addSeconds(amount);
+			newHebrDate._addSeconds(amount);
 			break;
 		case "millisecond":
-			newHebrDate.addMilliseconds(amount);
+			newHebrDate._addMilliseconds(amount);
 			break;
 	}
 
