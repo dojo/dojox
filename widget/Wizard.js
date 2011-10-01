@@ -3,6 +3,7 @@ dojo.provide("dojox.widget.Wizard");
 dojo.require("dijit.layout.StackContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.Button");
+dojo.require("dijit._Templated");
 
 dojo.require("dojo.i18n");
 dojo.requireLocalization("dijit", "common");
