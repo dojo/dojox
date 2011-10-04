@@ -76,7 +76,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 		//		An optional color to be used in drawing labels.
 		//	enableCache: Boolean?
 		//		Whether the ticks and labels are cached from one rendering to another. This improves the rendering performance of
-		//		successive rendering but penalize the first rendering.  Default false.
+		//		successive rendering but penalize the first rendering. For labels it is only working with gfx labels
+		//		not html ones.  Default false.
 	
 		this.vertical = vertical;
 		this.fixUpper = fixUpper;
