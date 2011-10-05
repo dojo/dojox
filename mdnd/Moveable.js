@@ -76,7 +76,7 @@ dojo.declare(
 
 		//console.log("dojox.mdnd.Moveable ::: onMouseDown");
 		if(this._isDragging){ return;}
-		var isLeftButton = dojo.isIE ? (e.button == 1) : (e.which == 1);
+		var isLeftButton = (e.which || e.button) == 1;
 		if(!isLeftButton){
 			return;
 		}
