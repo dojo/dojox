@@ -57,10 +57,10 @@
 @theme-tabbar-font-size: @theme-default-font-size - 3;
 @theme-tabbar-font-family: @theme-default-font-family;
 @theme-tabbar-font-weight: @theme-default-font-weight;
-@theme-category-font-size: @theme-default-font-size;
+@theme-category-font-size: @theme-highlight-font-size;
 @theme-category-font-family: @theme-highlight-font-family;
-@theme-category-font-weight: @theme-highlight-font-weight;
-@theme-category-text-shadow: none;
+@theme-category-font-weight: @theme-default-font-weight;
+@theme-category-text-shadow: @theme-highlight-text-shadow;
 @theme-list-item-font-size: @theme-highlight-font-size;
 @theme-list-item-font-family: @theme-default-font-family;
 @theme-list-item-font-weight: @theme-default-font-weight;
@@ -267,7 +267,7 @@
 	font-weight: @theme-category-font-weight;
 	text-shadow: @theme-category-text-shadow;
 	color: @theme-category-color;
-	line-height: @theme-category-height;
+	line-height: @theme-category-height + 2;
 }
 
 //----------------------------------------------------------------
