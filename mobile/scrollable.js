@@ -391,6 +391,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			for(var i = 0; i < tags.length; i++){
 				tags[i].blur && tags[i].blur();
 			}
+			// Call dojox.mobile.resizeAll if exists.
+			dm.resizeAll && dm.resizeAll();
 		}
 	};
 
