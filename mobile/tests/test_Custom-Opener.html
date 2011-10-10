@@ -11,6 +11,9 @@
 		.mblTooltip.mblOpener DIV[label='Cancel'] {
 			display: none;
 		}
+		HTML {
+			min-height: 100%; /* workaround for android 3.x position:fixed bug */
+		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
