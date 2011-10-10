@@ -121,7 +121,7 @@ define([
 
 		/*=====
 		// _lock: Dom
-		//		The dom target(including all its descendant) that's being locked for processing
+		//		The dom node whose descendants are all locked for processing
 		_lock: null,
 		
 		// _events: [readonly] Array
@@ -331,7 +331,7 @@ define([
 		},
 		lock: function(/*Dom*/node){
 			// summary:
-			//		Lock the node including all its descendant for processing.
+			//		Lock all descendants of the node.
 			// tags:
 			//		protected
 			this._lock = node;
