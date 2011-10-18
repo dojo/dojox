@@ -301,6 +301,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.findDisp = function(/*DomNode*/node){
 		// summary:
 		//		Finds the currently displayed view node from my sibling nodes.
+		if(!node.parentNode){ return null; }
 		var nodes = node.parentNode.childNodes;
 		for(var i = 0; i < nodes.length; i++){
 			var n = nodes[i];
