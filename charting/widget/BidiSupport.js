@@ -1,10 +1,10 @@
-define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/connect", "dojo/query",
-	"dijit/_BidiSupport", "../BidiSupport"], 
-	function(dojo, dhtml, darray, dconnect, dquery, dBidi, cBidi){
+define(["dojo/dom", "dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/connect", "dojo/query",
+	"dijit/_BidiSupport", "../BidiSupport", "dijit/registry", "./Chart", "./Legend"], 
+	function(dom, lang, html, arrayUtil, hub, query, dBidi, cBidi, widgetManager, Chart, Legend){
 
 	// patch only if present
-	if(dojox.charting.widget.Legend){
-		dojo.extend(dojox.charting.widget.Legend, {
+	if( Legend ){
+		lang.extend(Legend, {
 			// summary:
 			//		Add support for bidi scripts in legend.
 			// description:
@@ -22,21 +22,21 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/c
 				// textDir
 				if(!this.chart){
 					if(!this.chartRef){ return; }
-					var chart = dijit.byId(this.chartRef);
+					var chart = widgetManager.byId(this.chartRef);
 					if(!chart){
-						var node = dojo.byId(this.chartRef);
+						var node = dom.byId(this.chartRef);
 						if(node){
-							chart = dijit.byNode(node);
+							chart = widgetManager.byNode(node);
 						}else{
 							return;
 						}
 					}
 					this.textDir = chart.chart.textDir;
-					dojo.connect(chart.chart, "setTextDir", this, "_setTextDirAttr");
+					hub.connect(chart.chart, "setTextDir", this, "_setTextDirAttr");
 
 				}else{
 					this.textDir = this.chart.textDir;
-					dojo.connect(this.chart, "setTextDir", this, "_setTextDirAttr");
+					hub.connect(this.chart, "setTextDir", this, "_setTextDirAttr");
 
 				}
 			},
@@ -55,9 +55,9 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/c
 					if(this.textDir != textDir){
 						this._set("textDir", textDir);
 						// get array of all the labels
-						var legendLabels = dojo.query(".dojoxLegendText", this._tr);
+						var legendLabels = query(".dojoxLegendText", this._tr);
 							// for every label calculate it's new dir.
-							dojo.forEach(legendLabels, function(label){
+							arrayUtil.forEach(legendLabels, function(label){
 								label.dir = this.getTextDir(label.innerHTML, label.dir);
 						}, this);					
 					}
@@ -67,8 +67,8 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/array",  "dojo/_base/c
 	}
 	
 	// patch only if present
-	if(dojox.charting.widget.Chart){
-		dojo.extend(dojox.charting.widget.Chart ,{
+	if( Chart ){
+		lang.extend( Chart ,{
 			postMixInProperties: function(){
 				// set initial textDir of the chart, if passed in the creation use that value
 				// else use default value, following the GUI direction, this.chart doesn't exist yet

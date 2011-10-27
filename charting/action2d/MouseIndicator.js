@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", 
-	"./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(dojo, declare, dconnect, dwindow, ChartAction, _IndicatorElement, du){ 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", "dojo/_base/sniff",
+	"./ChartAction", "./_IndicatorElement", "dojox/lang/utils", "dojo/_base/event","dojo/_base/array"],
+	function(lang, declare, hub, win, has, ChartAction, IndicatorElement, du, eventUtil, arr){ 
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
@@ -9,7 +9,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		
 		//	series: String
 		//		Target series name for this action.
-		series: null,
+		series: "",
 		
 		//	autoScroll: Boolean? 
 		//		Whether when moving indicator the chart is automatically scrolled. Default is true.
@@ -93,15 +93,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		An optional symbol string to use for indicator marker.
 		markerFill:			{}	
 	});
+	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
-	return dojo.declare("dojox.charting.action2d.MouseIndicator", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.MouseIndicator", ChartAction, {
 		//	summary:
 		//		Create a mouse indicator action. You can drag mouse over the chart to display a data indicator.
 
 		// the data description block for the widget parser
 		defaultParams: {
-			series: null,
+			series: "",
 			vertical: true,
 			autoScroll: true,
 			fixed: true,
@@ -134,19 +135,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//	kwArgs: dojox.charting.action2d.__MouseIndicatorCtorArgs?
 			//		Optional arguments for the chart action.
 			this._listeners = [{eventName: "onmousedown", methodName: "onMouseDown"}];
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.uName = "mouseIndicator"+this.opt.series.name;
+			this._uName = "mouseIndicator"+this.opt.series;
 			this._handles = [];
 			this.connect();
 		},
 		
 		_disconnectHandles: function(){
-			if(dojo.isIE){
+			if(has("ie")){
 				this.chart.node.releaseCapture();
 			}
-			dojo.forEach(this._handles, dojo.disconnect);
+			arr.forEach(this._handles, hub.disconnect);
 			this._handles = [];
 		},
 
@@ -156,7 +157,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		to the chart that's why Chart.render() must be called after connect.
 			this.inherited(arguments);
 			// add plot with unique name
-			this.chart.addPlot(this.uName, {type: _IndicatorElement, inter: this});
+			this.chart.addPlot(this._uName, {type: IndicatorElement, inter: this});
 		},
 
 		disconnect: function(){
@@ -165,7 +166,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			if(this._isMouseDown){
 				this.onMouseUp();
 			}
-			this.chart.removePlot(this.uName);
+			this.chart.removePlot(this._uName);
 			this.inherited(arguments);
 			this._disconnectHandles();
 		},
@@ -177,13 +178,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			
 			// we now want to capture mouse move events everywhere to avoid
 			// stop scrolling when going out of the chart window
-			if(dojo.isIE){
-				this._handles.push(dojo.connect(this.chart.node, "onmousemove", this, "onMouseMove"));
-				this._handles.push(dojo.connect(this.chart.node, "onmouseup", this, "onMouseUp"));
+			if(has("ie")){
+				this._handles.push(hub.connect(this.chart.node, "onmousemove", this, "onMouseMove"));
+				this._handles.push(hub.connect(this.chart.node, "onmouseup", this, "onMouseUp"));
 				this.chart.node.setCapture();
 			}else{
-				this._handles.push(dojo.connect(dojo.doc, "onmousemove", this, "onMouseMove"));
-				this._handles.push(dojo.connect(dojo.doc, "onmouseup", this, "onMouseUp"));
+				this._handles.push(hub.connect(win.doc, "onmousemove", this, "onMouseMove"));
+				this._handles.push(hub.connect(win.doc, "onmouseup", this, "onMouseUp"));
 			}	
 			
 			this._onMouseSingle(event);
@@ -198,17 +199,17 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 
 		_onMouseSingle: function(event){
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.pageCoord  = {x: event.pageX, y: event.pageY};
 			plot.dirty = true;
 			this.chart.render();
-			dojo.stopEvent(event);
+			eventUtil.stop(event);
 		},
 
 		onMouseUp: function(event){
 			//	summary:
 			//		Called when mouse is up on the chart.
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.stopTrack();
 			this._isMouseDown = false;
 			this._disconnectHandles();

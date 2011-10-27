@@ -1,21 +1,28 @@
 define([
-				"dojo",
-				"dijit",
-				"dijit/form/ToggleButton",
-				"dojo/text!./resources/TriStateCheckBox.html"], function(dojo, dijit) {
-				//	module:
-				//		dojox/form/TriStateCheckBox
-				//	summary:
-				//		Checkbox with three states
-				//
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/event",
+	"dojo/query",
+	"dojo/dom-attr",
+	"dojo/text!./resources/TriStateCheckBox.html",
+	"dijit/form/ToggleButton"
+], function(kernel, declare, array, event, query, domAttr, template, ToggleButton){
+//	module:
+//		dojox/form/TriStateCheckBox
+//	summary:
+//		Checkbox with three states
+//
 
-dojo.declare("dojox.form.TriStateCheckBox",
-	dijit.form.ToggleButton,
+	/*=====
+		ToggleButton = dijit.form.ToggleButton;
+	=====*/
+return declare("dojox.form.TriStateCheckBox", ToggleButton,
 	{
 		// summary:
 		//		Checkbox with three states
 
-		templateString: dojo.cache("dojox.form", "resources/TriStateCheckBox.html"),
+		templateString: template,
 
 		baseClass: "dojoxTriStateCheckBox",
 
@@ -23,17 +30,17 @@ dojo.declare("dojox.form.TriStateCheckBox",
 		//		type attribute on <input> node.
 		//		Overrides `dijit.form.Button.type`.  Users should not change this value.
 		type: "checkbox",
-		
+
 		/*=====
 		// states: Array
 		//		States of TriStateCheckBox.
 		//		The value of This.checked should be one of these three states.
 		states: [false, true, "mixed"],
 		=====*/
-		
+
 		/*=====
 		// _stateLabels: Object
-		//		These characters are used to replace the image to show 
+		//		These characters are used to replace the image to show
 		//		current state of TriStateCheckBox in high contrast mode.
 		_stateLabels: {
 				"False": '&#63219',
@@ -41,17 +48,17 @@ dojo.declare("dojox.form.TriStateCheckBox",
 				"Mixed": '&#8801'
 		},
 		=====*/
-		
+
 		/*=====
 		// stateValues: Object
-		//		The values of the TriStateCheckBox in corresponding states. 
+		//		The values of the TriStateCheckBox in corresponding states.
 		stateValues:	{
 				"False": "off",
-				"True": "on", 
+				"True": "on",
 				"Mixed": "mixed"
 		},
 		=====*/
-		
+
 		// _currentState: Integer
 		//		The current state of the TriStateCheckBox
 		_currentState: 0,
@@ -80,11 +87,14 @@ dojo.declare("dojox.form.TriStateCheckBox",
 			};
 			this.stateValues = {
 				"False": "off",
-				"True": "on", 
+				"True": "on",
 				"Mixed": "mixed"
 			};
 		},
-		
+
+		// Override behavior from Button, since we don't have an iconNode
+		_setIconClassAttr: null,
+
 		_setCheckedAttr: function(/*String|Boolean*/ checked, /*Boolean?*/ priorityChange){
 			// summary:
 			//		Handler for checked = attribute to constructor, and also calls to
@@ -92,29 +102,29 @@ dojo.declare("dojox.form.TriStateCheckBox",
 			// checked:
 			//		true, false or 'mixed'
 			// description:
-			//		Controls the state of the TriStateCheckBox. Set this.checked, 
+			//		Controls the state of the TriStateCheckBox. Set this.checked,
 			//		this._currentState, value attribute of the <input type=checkbox>
 			//		according to the value of 'checked'.
 			this._set("checked", checked);
-			this._currentState = dojo.indexOf(this.states, checked);
+			this._currentState = array.indexOf(this.states, checked);
 			this._stateType = this._getStateType(checked);
-			dojo.attr(this.focusNode || this.domNode, "checked", checked);
-			dojo.attr(this.focusNode, "value", this.stateValues[this._stateType]);
-			dijit.setWaiState(this.focusNode || this.domNode, "checked", checked);
+			domAttr.set(this.focusNode || this.domNode, "checked", checked);
+			domAttr.set(this.focusNode, "value", this.stateValues[this._stateType]);
+			(this.focusNode || this.domNode).setAttribute("aria-checked", checked);
 			this._handleOnChange(checked, priorityChange);
 		},
 
 		setChecked: function(/*String|Boolean*/ checked){
 			// summary:
 			//		Deprecated.  Use set('checked', true/false) instead.
-			dojo.deprecated("setChecked("+checked+") is deprecated. Use set('checked',"+checked+") instead.", "", "2.0");
+			kernel.deprecated("setChecked("+checked+") is deprecated. Use set('checked',"+checked+") instead.", "", "2.0");
 			this.set('checked', checked);
 		},
-		
+
 		_setReadOnlyAttr: function(/*Boolean*/ value){
 			this._set("readOnly", value);
-			dojo.attr(this.focusNode, "readOnly", value);
-			dijit.setWaiState(this.focusNode, "readonly", value);
+			domAttr.set(this.focusNode, "readOnly", value);
+			this.focusNode.setAttribute("aria-readonly", value);
 		},
 
 		_setValueAttr: function(/*String|Boolean*/ newValue, /*Boolean*/ priorityChange){
@@ -129,7 +139,7 @@ dojo.declare("dojox.form.TriStateCheckBox",
 			//		TriStateCheckBox.
 			//		If passed a string except 'mixed', changes the value attribute of the
 			//		TriStateCheckBox. Sets the state of the TriStateCheckBox to checked.
-			if(typeof newValue == "string" && (dojo.indexOf(this.states, newValue) < 0)){
+			if(typeof newValue == "string" && (array.indexOf(this.states, newValue) < 0)){
 				if(newValue == ""){
 					newValue = "on";
 				}
@@ -137,9 +147,9 @@ dojo.declare("dojox.form.TriStateCheckBox",
 				newValue = true;
 			}
 			if(this._created){
-				this._currentState = dojo.indexOf(this.states, newValue);
+				this._currentState = array.indexOf(this.states, newValue);
 				this.set('checked', newValue, priorityChange);
-				dojo.attr(this.focusNode, "value", this.stateValues[this._stateType]);
+				domAttr.set(this.focusNode, "value", this.stateValues[this._stateType]);
 			}
 		},
 
@@ -168,7 +178,7 @@ dojo.declare("dojox.form.TriStateCheckBox",
 
 		startup: function(){
 			this.set("checked", this.params.checked || this.states[this._currentState]);
-			dojo.attr(this.stateLabelNode, 'innerHTML', this._stateLabels[this._stateType]);
+			domAttr.set(this.stateLabelNode, 'innerHTML', this._stateLabels[this._stateType]);
 			this.inherited(arguments);
 		},
 
@@ -189,14 +199,14 @@ dojo.declare("dojox.form.TriStateCheckBox",
 
 		_onFocus: function(){
 			if(this.id){
-				dojo.query("label[for='"+this.id+"']").addClass("dijitFocusedLabel");
+				query("label[for='"+this.id+"']").addClass("dijitFocusedLabel");
 			}
 			this.inherited(arguments);
 		},
-		
+
 		_onBlur: function(){
 			if(this.id){
-				dojo.query("label[for='"+this.id+"']").removeClass("dijitFocusedLabel");
+				query("label[for='"+this.id+"']").removeClass("dijitFocusedLabel");
 			}
 			this.inherited(arguments);
 		},
@@ -206,7 +216,7 @@ dojo.declare("dojox.form.TriStateCheckBox",
 			//		Internal function to handle click actions - need to check
 			//		readOnly and disabled
 			if(this.readOnly || this.disabled){
-				dojo.stopEvent(e);
+				event.stop(e);
 				return false;
 			}
 			if(this._currentState >= this.states.length - 1){
@@ -215,10 +225,10 @@ dojo.declare("dojox.form.TriStateCheckBox",
 				this._currentState++;
 			}
 			this.set("checked", this.states[this._currentState]);
-			dojo.attr(this.stateLabelNode, 'innerHTML', this._stateLabels[this._stateType]);
+			domAttr.set(this.stateLabelNode, 'innerHTML', this._stateLabels[this._stateType]);
 			return this.onClick(e); // user click actions
 		},
-		
+
 		_getStateType: function(/*String|Boolean*/ state){
 			//	summary:
 			//		Internal function to return the type of a certain state
@@ -230,5 +240,4 @@ dojo.declare("dojox.form.TriStateCheckBox",
 	}
 );
 
-return dojox.form.TriStateCheckBox;
 });

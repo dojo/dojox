@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Kirjoita sivunumero",
 	"pageCountIndication": " (${0} sivua)",
 	"dialogConfirm": "Siirry",
-	"dialogCancel": "Peruuta"
+	"dialogCancel": "Peruuta",
+	"all": "kaikki"
 })
 //end v1.x content
 );

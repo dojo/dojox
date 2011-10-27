@@ -1,4 +1,10 @@
-define(["dojo/_base/array", "dojo/query", "dojox/uuid/generateRandomUuid", "dojo/_base/xhr"], function(dojo, query, generateRandomUuid){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/array",
+	"dojo/_base/xhr",
+	 "dojo/query",
+	"dojox/uuid/generateRandomUuid"
+], function(dojo, array, xhr, query, generateRandomUuid){
 	dojo.getObject("io.xhrMultiPart", true, dojox);
 
 	/*=====

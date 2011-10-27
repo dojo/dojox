@@ -30,7 +30,7 @@ define(
 	"waiRelAll": "Барлық мына ережелерге сәйкес:",
 	"relationAny": "кез келген ереже",
 	"waiRelAny": "Мына ережелерге сәйкес:",
-	"relationMsgFront": "Сәйкес",
+	"relationMsgFront": "Сәйкес келу",
 	"relationMsgTail": "",
 	"and": "және",
 	"or": "немесе",
@@ -42,7 +42,7 @@ define(
 	
 	"cancelButton": "Болдырмау",
 	"waiCancelButton": "Осы тілқатысу терезесін болдырмау",
-	"clearButton": "Тазалау",
+	"clearButton": "Тазалау ",
 	"waiClearButton": "Сүзгіні тазалау",
 	"filterButton": "Сүзгі",
 	"waiFilterButton": "Сүзгіні жіберу",
@@ -64,7 +64,7 @@ define(
 	"anycolumn": "кез келген баған",
 	"statusTipTitleNoFilter": "Сүзгі тақтасы",
 	"statusTipTitleHasFilter": "Сүзгі",
-	"statusTipRelPre": "Сәйкес",
+	"statusTipRelPre": "Сәйкес келу",
 	"statusTipRelPost": "ережелер.",
 	
 	"defaultItemsName": "элементтер",

@@ -1,12 +1,18 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", 
-	"./common", "../axis2d/common", "../scaler/primitive", 
-	"dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/utils",
-	"dojo/fx", "dojo/fx/easing"],
-	function(dojo, declare, dconnect, dhtml, Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, g, m, gfxfx, df, du, fx, easing){
-
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "dojo/_base/array",
+	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff", 
+	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
+	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
+	"dojox/lang/utils", "dojo/fx/easing"],
+	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, has, 
+			Element, PlotEvents, dcolors, dxcolor, dc, da, primitive, 
+			g, m, gfxfx, df, du, easing){
+/*=====
+var Element = dojox.charting.Element;
+var PlotEvents = dojox.charting.plot2d._PlotEvents;
+=====*/
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
-	dojo.declare("dojox.charting.plot2d.Spider", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+	var Spider = declare("dojox.charting.plot2d.Spider", [Element, PlotEvents], {
 		//	summary:
 		//		The plot that represents a typical Spider chart.
 		defaultParams: {
@@ -43,7 +49,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Create a Spider plot.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.series = [];
@@ -194,7 +200,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				axisExtra = 0.2;
 			
 			if(o.labels){
-				labels = dojo.map(this.series, function(s){
+				labels = arr.map(this.series, function(s){
 					return s.name;
 				}, this);
 				shift = df.foldl1(df.map(labels, function(label, i){
@@ -275,7 +281,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				var point = labelPoints[j],
 					fontWidth = g._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0,
 					render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx",
-					elem = da.createText[render](this.chart, labelGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
+					elem = da.createText[render](this.chart, labelGroup, (!domGeom.isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 							"middle", this.labelKey[j], axisFont, axisFontColor);
 				if (this.opt.htmlLabels) {
 					this.htmlElements.push(elem);
@@ -314,7 +320,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 						render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx";
 					if (this.opt.htmlLabels) {
 						this.htmlElements.push(da.createText[render]
-							(this.chart, textGroup, (!dojo._isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
+							(this.chart, textGroup, (!domGeom.isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 								"start", text, axisTickFont, axisTickFontColor));
 					}
 				}
@@ -377,7 +383,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					};
 					this._connectEvents(so);
 					
-					dojo.forEach(cs.circles, function(c, i){
+					arr.forEach(cs.circles, function(c, i){
 						var shape = c.getShape(),
 							co = {
 								element: "spider_circle",
@@ -408,16 +414,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				scircle.push(circle);
 			}
 			
-			var anims = dojo.map(sps, function(np, j){
+			var anims = arr.map(sps, function(np, j){
 				// create animation
 				var sp = osps[j],
-					anim = new dojo._Animation({
+					anim = new baseFx.Animation({
 					duration: 1000,
 					easing:	  at,
 					curve:	  [sp.y, np.y]
 				});
 				var spl = spoly, sc = scircle[j];
-				dojo.connect(anim, "onAnimate", function(y){
+				hub.connect(anim, "onAnimate", function(y){
 					//apply poly
 					var pshape = spl.getShape();
 					pshape.points[j].y = y;
@@ -430,16 +436,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				return anim;
 			});
 			
-			var anims1 = dojo.map(sps, function(np, j){
+			var anims1 = arr.map(sps, function(np, j){
 				// create animation
 				var sp = osps[j],
-					anim = new dojo._Animation({
+					anim = new baseFx.Animation({
 					duration: 1000,
 					easing:	  at,
 					curve:	  [sp.x, np.x]
 				});
 				var spl = spoly, sc = scircle[j];
-				dojo.connect(anim, "onAnimate", function(x){
+				hub.connect(anim, "onAnimate", function(x){
 					//apply poly
 					var pshape = spl.getShape();
 					pshape.points[j].x = x;
@@ -451,7 +457,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				});
 				return anim;
 			});
-			var masterAnimation = fx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
+			var masterAnimation = coreFx.combine(anims.concat(anims1)); //dojo.fx.chain(anims);
 			masterAnimation.play();
 			return {group :ts, poly: spoly, circles: scircle};
 		},
@@ -470,7 +476,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			if(o.element == "spider_poly"){
 				if(!a.color){
 					var color = o.shape.getFill();
-					if(!color || !(color instanceof dojo.Color)){
+					if(!color || !(color instanceof Color)){
 						return;
 					}
 					a.color = {
@@ -486,7 +492,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				a.anim = gfxfx.animateFill({
 					shape:	  o.shape,
 					duration: 800,
-					easing:	  fx.easing.backOut,
+					easing:	  coreFx.easing.backOut,
 					color:	  {start: start, end: end}
 				});
 				a.anim.play();
@@ -500,7 +506,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					aroundRect.x = o.cx;
 					aroundRect.y = o.cy;
 					aroundRect.width = aroundRect.height = 1;
-					var lt = dojo.coords(this.chart.node, true);
+					var lt = html.coords(this.chart.node, true);
 					aroundRect.x += lt.x;
 					aroundRect.y += lt.y;
 					aroundRect.x = Math.round(aroundRect.x);
@@ -509,15 +515,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					aroundRect.height = Math.ceil(aroundRect.height);
 					this.aroundRect = aroundRect;
 					var position = ["after", "before"];
-					if(dijit && dijit.Tooltip){
-						dijit.showTooltip(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
-					}
+					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
+						Tooltip.show(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
+					}));
 				}else{
 					init  = m.scaleAt(defaultScale, o.cx, o.cy);
 					scale = 1/defaultScale;
-					if(dijit && dijit.Tooltip){
-						this.aroundRect && dijit.hideTooltip(this.aroundRect);
-					}
+					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
+						this.aroundRect && Tooltip.hide(this.aroundRect);
+					}));
 				}
 				var cs = o.shape.getShape(),
 					init = m.scaleAt(defaultScale, cs.cx, cs.cy),
@@ -534,7 +540,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				a.anim.play();
 			}else if(o.element == "spider_plot"){
 				//dojo gfx function "moveToFront" not work in IE
-				if (o.type == "onmouseover" && !dojo.isIE) {
+				if (o.type == "onmouseover" && !has("ie")) {
 					o.shape.moveToFront();
 				}
 			}
@@ -586,7 +592,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		
 		_getObjectLength: function(obj){
 			var count = 0;
-			if(dojo.isObject(obj)){
+			if(lang.isObject(obj)){
 				for(var key in obj){
 					count++;
 				}
@@ -621,5 +627,5 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		return color;
 	}
 	
-	return dojox.charting.plot2d.Spider;
+	return Spider; // dojox.plot2d.Spider
 });

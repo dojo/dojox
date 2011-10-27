@@ -1,9 +1,16 @@
-
-define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
-		"dojox/geo/openlayers/Map", "dojox/geo/openlayers/GfxLayer" ], function(queryArg, arrayArg,
-		kernelArg, widgetArg, mapArg, gfxLayerArg){
-
-	return dojo.declare("dojox.geo.openlayers.widget.Map", dijit._Widget, {
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/array",
+				"dojo/_base/html",
+				"dojo/query",
+				"dijit/_Widget",
+				"dojox/geo/openlayers/Map",
+				"dojox/geo/openlayers/Layer",
+				"dojox/geo/openlayers/GfxLayer"], function(dojo, declare, array, html, query, Widget, Map, Layer, GfxLayer){
+		/*===== 
+		var Widget = dijit.Widget; 
+		=====*/
+	return declare("dojox.geo.openlayers.widget.Map", Widget, {
 		//	summary: 
 		//		A widget version of the `dojox.geo.openlayers.Map` component.
 		//	description: 
@@ -65,7 +72,7 @@ define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
 		//		on mobile applications.
 		touchHandler : false,
 
-		//	summary
+		//	summary:
 		//		The underlying `dojox.geo.openlayers.Map` object.
 		//		This is s readonly member.
 		map : null,
@@ -86,7 +93,7 @@ define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
 			//		protected
 			this.inherited(arguments);
 			var div = this.domNode;
-			var map = new mapArg(div, {
+			var map = new Map(div, {
 				baseLayerType : this.baseLayerType,
 				touchHandler : this.touchHandler
 			});
@@ -101,8 +108,8 @@ define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
 			//	tags:
 			//		private
 			var n = this.domNode;
-			var layers = dojo.query("> .layer", n);
-			dojo.forEach(layers, function(l){
+			var layers = /* ?? query. */query("> .layer", n);
+			array.forEach(layers, function(l){
 				var type = l.getAttribute("type");
 				var name = l.getAttribute("name");
 				var cls = "dojox.geo.openlayers." + type;
@@ -121,8 +128,10 @@ define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
 			//	description:
 			//		Resize the domNode and the widget to the dimensions of a box of the following form:
 			//			`{ l: 50, t: 200, w: 300: h: 150 }`
-			//	box:
+			//	b:
 			//		If passed, denotes the new size of the widget.
+			// 		Can be either nothing (widget adapts to the div),
+			// 		a box, or a width and a height.
 
 			var olm = this.map.getOLMap();
 
@@ -130,12 +139,12 @@ define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
 			switch (arguments.length) {
 				case 0:
 					// case 0, do not resize the div, just the surface
-					break;
+				break;
 				case 1:
 					// argument, override node box
 					box = dojo.mixin({}, b);
 					dojo.marginBox(olm.div, box);
-					break;
+				break;
 				case 2:
 					// two argument, width, height
 					box = {
@@ -143,7 +152,7 @@ define([ "dojo/query", "dojo/_base/array", "dojo/_base/kernel", "dijit/_Widget",
 						h : arguments[1]
 					};
 					dojo.marginBox(olm.div, box);
-					break;
+				break;
 			}
 			olm.updateSize();
 		}

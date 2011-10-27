@@ -1,8 +1,16 @@
 define([
-	"dojo",
-	"dijit",
-	"dojox",
-	"../cells",
+	"dojo/_base/kernel",
+	"../../main",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dojo/_base/json",
+	"dojo/_base/connect",
+	"dojo/_base/sniff",
+	"dojo/dom",
+	"dojo/dom-attr",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
 	"dojo/data/ItemFileReadStore",
 	"dijit/form/DateTextBox",
 	"dijit/form/TimeTextBox",
@@ -13,20 +21,23 @@ define([
 	"dijit/form/NumberTextBox",
 	"dijit/form/CurrencyTextBox",
 	"dijit/form/HorizontalSlider",
-	"dijit/Editor"], function(dojo, dijit, dojox){
+	"dijit/Editor",
+	"../util",
+	"./_base"
+], function(dojo, dojox, declare, array, lang, json, connect, has, dom, domAttr, domConstruct,
+	domGeometry, ItemFileReadStore, DateTextBox, TimeTextBox, ComboBox, CheckBox, TextBox,
+	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, Editor, util, BaseCell){
 		
 // TODO: shouldn't it be the test file's job to require these modules,
 // if it is using them?  Most of these modules aren't referenced by this file.
 	
-(function(){
-	var dgc = dojox.grid.cells;
-	dojo.declare("dojox.grid.cells._Widget", dgc._Base, {
-		widgetClass: dijit.form.TextBox,
+	var _Widget = declare("dojox.grid.cells._Widget", BaseCell, {
+		widgetClass: TextBox,
 		constructor: function(inCell){
 			this.widget = null;
 			if(typeof this.widgetClass == "string"){
 				dojo.deprecated("Passing a string to widgetClass is deprecated", "pass the widget class object instead", "2.0");
-				this.widgetClass = dojo.getObject(this.widgetClass);
+				this.widgetClass = lang.getObject(this.widgetClass);
 			}
 		},
 		formatEditing: function(inDatum, inRowIndex){
@@ -57,14 +68,14 @@ define([
 			}
 		},
 		getWidgetProps: function(inDatum){
-			return dojo.mixin(
+			return lang.mixin(
 				{
 					dir: this.dir,
 					lang: this.lang
 				},
 				this.widgetProps||{},
 				{
-					constraints: dojo.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
+					constraints: lang.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
 					value: this._unescapeHTML(inDatum)
 				}
 			);
@@ -99,45 +110,44 @@ define([
 		},
 		focus: function(inRowIndex, inNode){
 			if(this.widget){
-				setTimeout(dojo.hitch(this.widget, function(){
-					dojox.grid.util.fire(this, "focus");
+				setTimeout(lang.hitch(this.widget, function(){
+					util.fire(this, "focus");
 				}), 0);
 			}
 		},
 		_finish: function(inRowIndex){
 			this.inherited(arguments);
-			dojox.grid.util.removeNode(this.widget.domNode);
-			if(dojo.isIE){
-				dojo.setSelectable(this.widget.domNode, true);
+			util.removeNode(this.widget.domNode);
+			if(has('ie')){
+				dom.setSelectable(this.widget.domNode, true);
 			}
 		}
 	});
-	dgc._Widget.markupFactory = function(node, cell){
-		dgc._Base.markupFactory(node, cell);
-		var d = dojo;
-		var widgetProps = d.trim(d.attr(node, "widgetProps")||"");
-		var constraint = d.trim(d.attr(node, "constraint")||"");
-		var widgetClass = d.trim(d.attr(node, "widgetClass")||"");
+	_Widget.markupFactory = function(node, cell){
+		BaseCell.markupFactory(node, cell);
+		var widgetProps = lang.trim(domAttr.get(node, "widgetProps")||"");
+		var constraint = lang.trim(domAttr.get(node, "constraint")||"");
+		var widgetClass = lang.trim(domAttr.get(node, "widgetClass")||"");
 		if(widgetProps){
-			cell.widgetProps = d.fromJson(widgetProps);
+			cell.widgetProps = json.fromJson(widgetProps);
 		}
 		if(constraint){
-			cell.constraint = d.fromJson(constraint);
+			cell.constraint = json.fromJson(constraint);
 		}
 		if(widgetClass){
-			cell.widgetClass = d.getObject(widgetClass);
+			cell.widgetClass = lang.getObject(widgetClass);
 		}
 	};
 
-	dojo.declare("dojox.grid.cells.ComboBox", dgc._Widget, {
-		widgetClass: dijit.form.ComboBox,
+	var ComboBox = declare("dojox.grid.cells.ComboBox", _Widget, {
+		widgetClass: ComboBox,
 		getWidgetProps: function(inDatum){
 			var items=[];
-			dojo.forEach(this.options, function(o){
+			array.forEach(this.options, function(o){
 				items.push({name: o, value: o});
 			});
-			var store = new dojo.data.ItemFileReadStore({data: {identifier:"name", items: items}});
-			return dojo.mixin({}, this.widgetProps||{}, {
+			var store = new ItemFileReadStore({data: {identifier:"name", items: items}});
+			return lang.mixin({}, this.widgetProps||{}, {
 				value: inDatum,
 				store: store
 			});
@@ -149,10 +159,9 @@ define([
 			return e.get('value');
 		}
 	});
-	dgc.ComboBox.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
-		var d=dojo;
-		var options = d.trim(d.attr(node, "options")||"");
+	ComboBox.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
+		var options = lang.trim(domAttr.get(node, "options")||"");
 		if(options){
 			var o = options.split(',');
 			if(o[0] != options){
@@ -161,8 +170,8 @@ define([
 		}
 	};
 
-	dojo.declare("dojox.grid.cells.DateTextBox", dgc._Widget, {
-		widgetClass: dijit.form.DateTextBox,
+	var DateTextBox = declare("dojox.grid.cells.DateTextBox", _Widget, {
+		widgetClass: DateTextBox,
 		setValue: function(inRowIndex, inValue){
 			if(this.widget){
 				this.widget.set('value', new Date(inValue));
@@ -171,17 +180,17 @@ define([
 			}
 		},
 		getWidgetProps: function(inDatum){
-			return dojo.mixin(this.inherited(arguments), {
+			return lang.mixin(this.inherited(arguments), {
 				value: new Date(inDatum)
 			});
 		}
 	});
-	dgc.DateTextBox.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
+	DateTextBox.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
 	};
 
-	dojo.declare("dojox.grid.cells.CheckBox", dgc._Widget, {
-		widgetClass: dijit.form.CheckBox,
+	var CheckBox = declare("dojox.grid.cells.CheckBox", _Widget, {
+		widgetClass: CheckBox,
 		getValue: function(){
 			return this.widget.checked;
 		},
@@ -196,32 +205,32 @@ define([
 			return;
 		}
 	});
-	dgc.CheckBox.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
+	CheckBox.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
 	};
 
-	dojo.declare("dojox.grid.cells.Editor", dgc._Widget, {
-		widgetClass: dijit.Editor,
+	var Editor = declare("dojox.grid.cells.Editor", _Widget, {
+		widgetClass: Editor,
 		getWidgetProps: function(inDatum){
-			return dojo.mixin({}, this.widgetProps||{}, {
+			return lang.mixin({}, this.widgetProps||{}, {
 				height: this.widgetHeight || "100px"
 			});
 		},
 		createWidget: function(inNode, inDatum, inRowIndex){
 			// widget needs its value set after creation
 			var widget = new this.widgetClass(this.getWidgetProps(inDatum), inNode);
-			dojo.connect(widget, 'onLoad', dojo.hitch(this, 'populateEditor'));
+			connect.connect(widget, 'onLoad', lang.hitch(this, 'populateEditor'));
 			return widget;
 		},
 		formatNode: function(inNode, inDatum, inRowIndex){
 			this.content = inDatum;
 			this.inherited(arguments);
-			if(dojo.isMoz){
+			if(has('mozilla')){
 				// FIXME: seem to need to reopen the editor and display the toolbar
 				var e = this.widget;
 				e.open();
 				if(this.widgetToolbar){
-					dojo.place(e.toolbar.domNode, e.editingArea, "before");
+					domConstruct.place(e.toolbar.domNode, e.editingArea, "before");
 				}
 			}
 		},
@@ -230,10 +239,9 @@ define([
 			this.widget.placeCursorAtEnd();
 		}
 	});
-	dgc.Editor.markupFactory = function(node, cell){
-		dgc._Widget.markupFactory(node, cell);
-		var d = dojo;
-		var h = dojo.trim(dojo.attr(node, "widgetHeight")||"");
+	Editor.markupFactory = function(node, cell){
+		_Widget.markupFactory(node, cell);
+		var h = lang.trim(domAttr.get(node, "widgetHeight")||"");
 		if(h){
 			if((h != "auto")&&(h.substr(-2) != "em")){
 				h = parseInt(h, 10)+"px";
@@ -241,8 +249,7 @@ define([
 			cell.widgetHeight = h;
 		}
 	};
-})();
 
-return dojox.grid.cells.dijit;
+	return dojox.grid.cells.dijit;
 
 });

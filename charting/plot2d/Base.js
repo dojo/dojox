@@ -1,9 +1,10 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", 
-	"../Element", "./_PlotEvents", 
-	"../scaler/primitive", "./common", "dojox/gfx/fx"],
-	function(dojo, declare, dconnect, Element, PlotEvents, primitive, common, fx){
-
+		"../Element", "./_PlotEvents", "dojo/_base/array",
+		"../scaler/primitive", "./common", "dojox/gfx/fx"],
+	function(lang, declare, hub, Element, PlotEvents, arr, primitive, common, fx){
 /*=====
+var Element = dojox.charting.Element;
+var PlotEvents = dojox.charting.plot2d._PlotEvents;
 dojox.charting.plot2d.__PlotCtorArgs = function(){
 	//	summary:
 	//		The base keyword arguments object for plot constructors.
@@ -12,7 +13,7 @@ dojox.charting.plot2d.__PlotCtorArgs = function(){
 	//		details).
 }
 =====*/
-return dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox.charting.plot2d._PlotEvents], {
+return declare("dojox.charting.plot2d.Base", [Element, PlotEvents], {
 	constructor: function(chart, kwArgs){
 		//	summary:
 		//		Create a base plot for charting.
@@ -138,7 +139,7 @@ return dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox
 		//		Returns whether or not any of this plot's data series need to be rendered.
 		//	returns: Boolean
 		//		Flag indicating if any of this plot's series are invalid and need rendering.
-		return dojo.some(this.series, function(item){ return item.dirty; });	//	Boolean
+		return arr.some(this.series, function(item){ return item.dirty; });	//	Boolean
 	},
 	performZoom: function(dim, offsets){
 		//	summary:
@@ -167,7 +168,7 @@ return dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox
 				((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
 
 			shape = this.group,
-			anim = fx.animateTransform(dojo.delegate({
+			anim = fx.animateTransform(lang.delegate({
 				shape: shape,
 				duration: 1200,
 				transform:[
@@ -177,12 +178,12 @@ return dojo.declare("dojox.charting.plot2d.Base", [dojox.charting.Element, dojox
 					{name:"translate", start: [0, 0], end: [rXOffset, rYOffset]}
 				]}, this.zoom));
 
-		dojo.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
+		lang.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
 		//add anim to zooming action queue,
 		//in order to avoid several zooming action happened at the same time
 		this.zoomQueue.push(anim);
 		//perform each anim one by one in zoomQueue
-		dojo.connect(anim, "onEnd", this, function(){
+		hub.connect(anim, "onEnd", this, function(){
 			this.zoom = null;
 			this.zoomQueue.shift();
 			if(this.zoomQueue.length > 0){

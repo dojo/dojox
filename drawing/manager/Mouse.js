@@ -140,10 +140,8 @@ EventObject: function(){
 				}
 			});
 			dojo.connect(document, "mouseup", this, function(evt){
-				if(evt.button != dojo.mouseButtons.RIGHT){
-					dojo.disconnect(c);
-					_isDown = false;
-				}
+				dojo.disconnect(c);
+				_isDown = false;
 				this.up(evt);
 			});
 			dojo.connect(document, "mousemove", this, function(evt){

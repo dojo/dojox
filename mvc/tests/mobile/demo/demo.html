@@ -12,32 +12,33 @@
 		}
 		.mblEdgeToEdgeList {
 			background-color: #DBDDE2;
-		}		
+		}
 		</style>
 
-		<script type="text/javascript" src="../../../../../dojo/dojo.js" djConfig="parseOnLoad: false"></script>
-		<!-- <script type="text/javascript" src="../../dojo/dojo.js" djConfig="parseOnLoad: false"></script>	 -->	 
+	<!--<script type="text/javascript" src="../../../../../dojo/dojo.js" djConfig="parseOnLoad: false"></script> -->
+		<script type="text/javascript" djConfig="parseOnLoad:0,isDebug:1,async:1" src="../../../../../dojo/dojo.js"></script>
 		<script type="text/javascript" src="src.js" charset="utf-8"></script>
+
 	</head>
 	<body>
+	<div id="wholepage" style="display:none">
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Mobile MVC Demo</h1>
-			<h2 dojoType="dojox.mobile.RoundRectCategory">Mobile MVC Views</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
-				<li id="sdb" dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" transition="slide" moveTo="settings">
+				<li id="sdb" dojoType="dojox.mobile.ListItem" transition="slide" moveTo="settings">
 					Simple Data Binding
 				</li>
-				<li id="rdb" dojoType="dojox.mobile.ListItem" icon="images/i-icon-2.png" transition="slide" moveTo="repeat">
+				<li id="rdb" dojoType="dojox.mobile.ListItem" transition="slide" moveTo="repeat">
 					Repeat Data Binding
 				</li>
-				<li id="sfg" dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" transition="slide" moveTo="generate">
-					Simple Form Generate
+				<li id="sfg" dojoType="dojox.mobile.ListItem" transition="slide" moveTo="generate">
+					Generate Simple Form
 				</li>
 			</ul>
 		</div>
 
 	<div id="settings" dojoType="dojox.mobile.ScrollableView">
-		<h1 id="home" dojoType="dojox.mobile.Heading" back="Home" moveTo="foo">Data Binding Example</h1>
+		<h1 id="home" dojoType="dojox.mobile.Heading" back="Back" moveTo="foo">Data Binding Example</h1>
 		<form name="testForm" id="testForm">	
 		<div class="field-title">Ship to - Bill to Address</div>
 			<div class="fieldset" dojoType="dojox.mvc.Group" ref="model">
@@ -89,7 +90,7 @@
 	</div>
 
 	<div id="repeat" dojoType="dojox.mobile.ScrollableView">
-		<h1 dojoType="dojox.mobile.Heading" back="Home" moveTo="foo">Repeat Data Binding Example</h1>
+		<h1 dojoType="dojox.mobile.Heading" back="Back" moveTo="foo">Repeat Data Binding Example</h1>
 		<form name="repeatTestForm" id="repeatTestForm">	
 		<div class="field-title">Search Results</div>
 			<div class="fieldset" dojoType="dojox.mvc.Repeat" class="row" ref="repeatmodel">
@@ -126,26 +127,25 @@
 								placeholder="Telephone" ref="'rel:Tel'"/>
 						</div>
 					</div>
-				</div>		   
+				</div>
 			<div class="spacer"></div>
 			<button id="add" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="insertResult(nextIndexToAdd)">Add</button>
 			<button id="save" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="console.log(repeatmodel[selectedIndex].toPlainObject());repeatmodel[selectedIndex].commit()">Save</button>
 			<button id="reset2" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="repeatmodel.reset()">Reset</button>
 		</form>
-	
+
 	</div>
 
 	<div id="generate" data-dojo-type="dojox.mobile.ScrollableView">
-	<h1 data-dojo-type="dojox.mobile.Heading" back="Home" moveTo="foo">Simple Form Generate Example</h1>
-	<div class="field-title"></div>
-		<div id="main">
-		  <div id="leftNav">
-		  </div>
-		  <div id="mainContent" class="generate-maincontent">
-			<div id="outerModelArea">
-				<h3 data-dojo-type="dojox.mobile.RoundRectCategory">Model</h3>
-				<div class="generate-textarea-row">
-					<textarea class="generate-textarea-cell" data-dojo-type="dojox.mobile.TextArea" id="modelArea">
+		<h1 data-dojo-type="dojox.mobile.Heading" back="Back" moveTo="foo">Simple Form Generate Example</h1>
+		<div class="field-title"></div>
+			<div id="main">
+				<div id="leftNav"></div>
+				<div id="mainContent" class="generate-maincontent">
+					<div id="outerModelArea">
+						<div id="generateModel">Model</div>
+						<div class="generate-textarea-row">
+							<textarea class="generate-textarea-cell" data-dojo-type="dojox.mobile.TextArea" id="modelArea">
 {
 	"Serial": "11111",
 	"First": "John",
@@ -160,21 +160,23 @@
 		}
 	]
 }
-					</textarea>
-				</div>
-				<div class="fieldset">
-					<div class="spacer"></div>
-					<button id="generate1" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="updateView()">Generate Form</button>
-				</div>
-			</div>
-			<div id="viewArea" style="display:none">
-				<h3 data-dojo-type="dojox.mobile.RoundRectCategory">Generated View</h3>
-				<div class="fieldset">
-					<div id="view" data-dojo-type="dojox.mvc.Generate" data-dojo-props="widgetMapping:{'String' : 'dojox.mobile.TextBox'}, idNameMapping:{'String' : 'TB'}"></div>
-				</div>
-				<div class="fieldset">
-					<div class="spacer"></div>
-					<button id="updateModel" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="updateModel()">Update Model</button>
+							</textarea>
+						</div>
+						<div class="fieldset">
+							<div class="spacer"></div>
+							<button id="generate1" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="updateView()">Generate Form</button>
+						</div>
+					</div>
+					<div id="viewArea" style="display:none">
+						<div id="generateView">Generated View</div>
+							<div class="fieldset">
+							<div id="view" data-dojo-type="dojox.mvc.Generate" data-dojo-props="widgetMapping:{'String' : 'dojox.mobile.TextBox'}, idNameMapping:{'String' : 'TB'}"></div>
+						</div>
+						<div class="fieldset">
+							<div class="spacer"></div>
+							<button id="updateModel" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="updateModel()">Update Model</button>
+						</div>
+					</div>
 				</div>
 			</div>
 					<textarea style="display:none" data-dojo-type="dojox.mobile.TextArea" id="modelArea2">
@@ -195,10 +197,7 @@
 }
 					</textarea>
 			
-		  </div>
-		</div></div>
-		
-		
-		
+		</div>
+	</div>
 	</body>
 </html>

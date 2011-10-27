@@ -1,4 +1,4 @@
-define(["dojo/_base/window", "dojo/io/script", "dojox/io/xhrPlugins", "dojox/io/scriptFrame"], function(dojo, script, xhrPlugins, scriptFrame){
+define(["dojo/_base/kernel", "dojo/_base/window", "dojo/io/script", "dojox/io/xhrPlugins", "dojox/io/scriptFrame"], function(dojo, window, script, xhrPlugins, scriptFrame){
 dojo.getObject("io.xhrScriptPlugin", true, dojox);
 
 dojox.io.xhrScriptPlugin = function(/*String*/url, /*String*/callbackParamName, /*Function?*/httpAdapter){

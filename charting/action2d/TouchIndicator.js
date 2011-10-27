@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(dojo, declare, devent, ChartAction, _IndicatorElement, du){ 
+	function(lang, declare, eventUtil, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
 	dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
@@ -8,6 +8,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		
 		//	series: String
 		//		Target series name for this chart action.
+		series:	"",
 		
 		//	dualIndicator: Boolean? 
 		//		Whether a double touch on the chart creates a dual indicator showing data trend between the two touch points. Default is false.
@@ -29,7 +30,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		//		The precision at which to round data values for display. Default is 1.
 		precision:		0,
 		
-		//	lineStroke: dojo.gfx.Stroke?
+		//	lineStroke: gfx.Stroke?
 		//		An optional stroke to use for indicator line.
 		lineStroke:		{},
 	
@@ -95,15 +96,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		//		An optional symbol string to use for indicator marker.
 		markerFill:			{}	
 	});
+	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
-	return dojo.declare("dojox.charting.action2d.TouchIndicator", dojox.charting.action2d.ChartAction, {
+	return declare("dojox.charting.action2d.TouchIndicator", ChartAction, {
 		//	summary:
 		//		Create a touch indicator action. You can touch over the chart to display a data indicator.
 
 		// the data description block for the widget parser
 		defaultParams: {
-			series: null,
+			series: "",
 			dualIndicator: false,
 			vertical: true,
 			autoScroll: true,
@@ -140,11 +142,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			                   {eventName: "ontouchmove", methodName: "onTouchMove"},
 			                   {eventName: "ontouchend", methodName: "onTouchEnd"},
 			                   {eventName: "ontouchcancel", methodName: "onTouchEnd"}];
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.uName = "touchIndicator"+this.opt.series.name;
-			this._handles = [];
+			this._uName = "touchIndicator"+this.opt.series;
 			this.connect();
 		},
 		
@@ -154,27 +155,26 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			//		to the chart that's why Chart.render() must be called after connect.
 			this.inherited(arguments);
 			// add plot with unique name
-			this.chart.addPlot(this.uName, {type: dojox.charting.action2d._IndicatorElement, inter: this});
+			this.chart.addPlot(this._uName, {type: IndicatorElement, inter: this});
 		},
 
 		disconnect: function(){
 			//	summary:
 			//		Disconnect this action from the chart.
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			if(plot.pageCoord){
 				// we might still have something drawn on the screen
 				this.onTouchEnd();
 			}
-			this.chart.removePlot(this.uName);
+			this.chart.removePlot(this._uName);
 			this.inherited(arguments);
 		},
 
 		onTouchStart: function(event){
 			//	summary:
-			//		Called when touch is started on the chart.
-			// make sure our layer goes on top
+			//		Called when touch is started on the chart.		
 			if(event.touches.length==1){
-				this._onTouchSingle(event);
+				this._onTouchSingle(event, true);
 			}else if(this.opt.dualIndicator && event.touches.length==2){
 				this._onTouchDual(event);
 			}
@@ -190,32 +190,43 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			}
 		},
 
-		_onTouchSingle: function(event){
-			var plot = this.chart.getPlot(this.uName);
+		_onTouchSingle: function(event, delayed){
+			// sync
+			if(this.chart._delayedRenderHandle && !delayed){
+				// we have pending rendering from a previous call, let's sync
+				clearTimeout(this.chart._delayedRenderHandle);
+				this.chart._delayedRenderHandle = null;
+				this.chart.render();
+			}
+			var plot = this.chart.getPlot(this._uName);
 			plot.pageCoord  = {x: event.touches[0].pageX, y: event.touches[0].pageY};
 			plot.dirty = true;
-			this.chart.render();
-			dojo.stopEvent(event);
+			if(delayed){
+				this.chart.delayedRender();
+			}else{
+				this.chart.render();
+			}
+			eventUtil.stop(event);
 		},
 		
 		_onTouchDual: function(event){
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.pageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
 			plot.secondCoord = {x: event.touches[1].pageX, y: event.touches[1].pageY};
 			plot.dirty = true;
 			this.chart.render();
-			dojo.stopEvent(event);
+			eventUtil.stop(event);
 		},
 
 		onTouchEnd: function(event){
 			//	summary:
 			//		Called when touch is ended or canceled on the chart.
-			var plot = this.chart.getPlot(this.uName);
+			var plot = this.chart.getPlot(this._uName);
 			plot.stopTrack();
 			plot.pageCoord = null;
 			plot.secondCoord = null;
 			plot.dirty = true;
-			this.chart.render();
+			this.chart.delayedRender();
 		}
 	});
 });

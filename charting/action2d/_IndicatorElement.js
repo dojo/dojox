@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", "../axis2d/common", "dojox/gfx"], 
-	function(dojo, declare, Element, dcpc, dcac, gfx){ 
+define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", 
+    "../axis2d/common", "dojox/gfx"], 
+	function(lang, declare, Element, dcpc, dcac, gfx){ 
 
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
 	var getBoundingBox = function(shape){
@@ -11,7 +12,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			// try/catch the FF native getBBox error. cheaper than walking up in the DOM
 			// hierarchy to check the conditions (bench show /10 )
 			try {
-				return s.rawNode.getBBox();
+				return lang.mixin({}, s.rawNode.getBBox());
 			}catch (e){
 				return null;
 			}
@@ -31,7 +32,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			return sz;
 		}else if(c.indexOf("silverlight")!=-1){
 			var bb = {width: s.rawNode.actualWidth, height: s.rawNode.actualHeight};
-			return computeLocation(s, bb, 0.75	);			
+			return computeLocation(s, bb, 0.75);
 		}else if(s.getTextWidth){
 			// canvas
 			var w = s.getTextWidth();
@@ -39,7 +40,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			var fz = font ? font.size : gfx.defaultFont.size;
 			var h = gfx.normalizedLength(fz);
 			sz = {width: w, height: h};
-			computeLocation(s, sz,0.75);
+			computeLocation(s, sz, 0.75);
 			return sz;
 		}
 	};
@@ -62,7 +63,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 		return sz;
 	};
 
-	return dojo.declare("dojox.charting.action2d._IndicatorElement", Element, {
+	return declare("dojox.charting.action2d._IndicatorElement",[Element], {
+		//	summary:
+		//		Internal element used by indicator actions.
+		//	tags:
+		//		private
 		constructor: function(chart, kwArgs){
 			if(!kwArgs){ kwArgs = {}; }
 			this.inter = kwArgs.inter;
@@ -84,12 +89,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			// if we reached that point once, then we don't stop until mouse up
 			if(this._initTrackPhase){
 				this._initTrackPhase = false;
-				this._tracker = setInterval(dojo.hitch(this, this._trackMove), 100);
+				this._tracker = setInterval(lang.hitch(this, this._trackMove), 100);
 			}
 		},
 		initTrack: function(){
 			this._initTrackPhase = true;
-			this._tracker = setTimeout(dojo.hitch(this, this._trackMove), 500);
+			this._tracker = setTimeout(lang.hitch(this, this._trackMove), 500);
 		},
 		stopTrack: function(){
 			if(this._tracker){
@@ -336,7 +341,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			//		Returns default stats (irrelevant for this type of plot).
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dojo.delegate(dcpc.defaultStats);
+			return lang.delegate(dcpc.defaultStats);
 		},
 		initializeScalers: function(){
 			//	summary:

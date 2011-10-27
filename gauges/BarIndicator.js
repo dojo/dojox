@@ -1,9 +1,15 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang","./BarLineIndicator"],
-function(dojo,ddeclare,dfx,dconnect,lang,BarLineIndicator) { 
+define(["dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang","./BarLineIndicator"],
+function(declare, fx, connect, lang, BarLineIndicator) { 
 
-dojo.experimental("dojox.gauges.BarIndicator");
+/*=====
+	BarLineIndicator = dojox.gauges.BarLineIndicator;
+=====*/
 
-return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
+return declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
+	
+	// summary:
+	//		An indicator for the BarGauge that draws a bar corresponding to the indicator value.	
+	
 	_getShapes: function(group){
 		// summary:
 		//		Override of dojox.gauges.BarLineIndicator._getShapes
@@ -51,7 +57,7 @@ return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
 	_move: function(/*Boolean?*/ dontAnimate){
 		// summary:
 		//		Override of dojox.gauges.BarLineIndicator._move to resize the bar (rather than moving it)
-		var changed = false;
+		
 		var c;
 		var v = this.value ;
 		if(v < this.min){v = this.min;}
@@ -63,8 +69,8 @@ return dojo.declare("dojox.gauges.BarIndicator",[BarLineIndicator],{
 			this._createShapes(v);
 		}else{
 			if(c!=v){
-				var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createShapes));
+				var anim = new fx.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+				connect.connect(anim, "onAnimate", lang.hitch(this, this._createShapes));
 				anim.play();
 			}
 		}

@@ -1,17 +1,19 @@
-define(["dojox/gfx3d", "dojo/_base/window", "dojo/_base/window", "dojo/_base/Color", "./Base"], 
-	function(gfx3d, dojo, declare, dcolor, Base) {
+define(["dojox/gfx3d", "dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/window", "./Base"], 
+	function(gfx3d, matrix3d, declare, Color, win, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
 		// summary: repeatedly applies a binary function to an array from left
 		//	to right; returns the final value.
-		a = typeof a == "string" ? a.split("") : a; o = o || dojo.global;
+		a = typeof a == "string" ? a.split("") : a; o = o || win.global;
 		var z = a[0];
 		for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));
 		return z;	// Object
 	};
-
-	return dojo.declare("dojox.charting.plot3d.Cylinders", dojox.charting.plot3d.Base, {
+	/*=====
+	var Base = dojox.charting.plot3d.Base;
+	=====*/
+	return declare("dojox.charting.plot3d.Cylinders", Base, {
 		constructor: function(width, height, kwArgs){
 			this.depth = "auto";
 			this.gap   = 0;
@@ -23,7 +25,7 @@ define(["dojox/gfx3d", "dojo/_base/window", "dojo/_base/window", "dojo/_base/Col
 				if("gap"   in kwArgs){ this.gap   = kwArgs.gap; }
 				if("material" in kwArgs){
 					var m = kwArgs.material;
-					if(typeof m == "string" || m instanceof dojo.Color){
+					if(typeof m == "string" || m instanceof Color){
 						this.material.color = m;
 					}else{
 						this.material = m;
@@ -54,7 +56,7 @@ define(["dojox/gfx3d", "dojo/_base/window", "dojo/_base/window", "dojo/_base/Col
 						radius: step / 2 - this.gap,
 						height: this.data[i] * scale
 					})
-					.setTransform(gfx3d.matrix.rotateXg(-90))
+					.setTransform(matrix3d.rotateXg(-90))
 					.setFill(this.material).setStroke(this.outline);
 			}
 		}

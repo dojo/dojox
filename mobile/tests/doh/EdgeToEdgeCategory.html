@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Edge To Edge List</title>
-		<link href="../../themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../../themes/iphone/iphone.css" rel="stylesheet">
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -13,157 +13,9 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-	        dojo.require("doh.runner");
-
-			dojo.addOnLoad(function(){
-				doh.register("dojox.mobile.test.doh.EdgeToEdgeList", [
-					{
-						name: "EdgeToEdgeList Verification",
-						timeout: 4000,
-						runTest: function(){
-							var d = new doh.Deferred();
-							setTimeout(d.getTestCallback(function(){
-								var demoWidget = dijit.byId("Category");
-								doh.assertEqual('mblEdgeToEdgeCategory', demoWidget.domNode.className);
-								doh.assertEqual('Spaces', demoWidget.domNode.innerHTML);
-
-
-								demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
-								doh.assertEqual('mblEdgeToEdgeList', demoWidget.domNode.className);
-
-								demoWidget = dijit.byId("item1");
-								childNodes = demoWidget.domNode.childNodes;
-								doh.assertEqual('mblListItemIcon', childNodes[0].className);
-								doh.assertEqual('mblListItemAnchor', childNodes[1].className);
-								doh.assertEqual('A', childNodes[1].tagName);
-								
-								childNodes = childNodes[1].childNodes;
-								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
-								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
-								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('u1space', childNodes[0].childNodes[0].innerHTML);
-								doh.assertEqual('Off', childNodes[1].innerHTML);
-
-								demoWidget = dijit.byId("item2");
-								childNodes = demoWidget.domNode.childNodes;
-								doh.assertEqual('mblListItemIcon', childNodes[0].className);
-								doh.assertEqual('mblListItemAnchor', childNodes[1].className);
-								doh.assertEqual('A', childNodes[1].tagName);
-								
-								childNodes = childNodes[1].childNodes;
-								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
-								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
-								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('u2space', childNodes[0].childNodes[0].innerHTML);
-								doh.assertEqual('On', childNodes[1].innerHTML);
-
-								demoWidget = dijit.byId("item3");
-								childNodes = demoWidget.domNode.childNodes;
-								doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', childNodes[0].className);
-								doh.assertEqual('A', childNodes[0].tagName);
-								
-								childNodes = childNodes[0].childNodes;
-								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
-								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('mblDomButtonArrow mblRightButton mblDomButton', childNodes[2].className);
-								doh.assertEqual('DIV', childNodes[2].tagName);
-								doh.assertEqual('Wi-Fi', childNodes[0].childNodes[0].innerHTML);
-								doh.assertEqual('Off', childNodes[1].innerHTML);
-								
-							}));
-							return d;
-						}
-					},
-					{
-						name: "EdgeToEdgeList Verification2",
-						timeout: 1000,
-						runTest: function(){
-							var d = new doh.Deferred();
-							var demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
-							demoWidget.set({transition :"flip"});
-							doh.assertEqual("flip", demoWidget.get("transition"));
-							demoWidget.set({transition :"fade"});
-							doh.assertEqual("fade", demoWidget.get("transition"));
-
-							var e = document.createEvent('Events');
-							if(dojo.isIE)
-							{
-								demoWidget.anchorNode.fireEvent( "onclick" );
-							} else {
-								e.initEvent('click', true, true);
-								demoWidget = dijit.byId("item3");
-								demoWidget.anchorNode.dispatchEvent(e);
-							}
-							setTimeout(d.getTestCallback(function(){
-
-								var demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeCategory_0");
-								doh.assertEqual('mblEdgeToEdgeCategory', demoWidget.domNode.className);
-								doh.assertEqual('Applications', demoWidget.domNode.innerHTML);
-
-								demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_1");
-								doh.assertEqual('mblEdgeToEdgeList', demoWidget.domNode.className);
-
-								demoWidget = dijit.byId("dojox_mobile_ListItem_0");
-								childNodes = demoWidget.domNode.childNodes;
-								doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', childNodes[0].className);
-								doh.assertEqual('A', childNodes[0].tagName);
-								
-								childNodes = childNodes[0].childNodes;
-								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
-								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('Video', childNodes[0].childNodes[0].innerHTML);
-								doh.assertEqual('Off', childNodes[1].innerHTML);
-
-								demoWidget = dijit.byId("dojox_mobile_ListItem_1");
-								childNodes = demoWidget.domNode.childNodes;
-								doh.assertEqual('mblListItemIcon', childNodes[0].className);
-								doh.assertEqual('mblListItemAnchor', childNodes[1].className);
-								doh.assertEqual('A', childNodes[1].tagName);
-								
-								childNodes = childNodes[1].childNodes;
-								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
-								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('Maps', childNodes[0].childNodes[0].innerHTML);
-								doh.assertEqual('VPN', childNodes[1].innerHTML);
-
-								demoWidget = dijit.byId("dojox_mobile_ListItem_2");
-								childNodes = demoWidget.domNode.childNodes;
-								doh.assertEqual('mblListItemAnchor mblListItemAnchorNoIcon', childNodes[0].className);
-								doh.assertEqual('A', childNodes[0].tagName);
-								
-								childNodes = childNodes[0].childNodes;
-								doh.assertEqual('mblListItemTextBox', childNodes[0].className);
-								doh.assertEqual('mblRightText', childNodes[1].className);
-								doh.assertEqual('Phone Number', childNodes[0].childNodes[0].innerHTML);
-								doh.assertEqual('Off', childNodes[1].innerHTML);
-							}),500);
-							return d;
-						}
-					},
-					{
-						name: "EdgeToEdgeCategory getLabel",
-						timeout: 1000,
-						runTest: function(){
-							doh.assertEqual("Spaces", dijit.byId("Category").get("label")); 
-						}
-					},
-					{
-						name: "EdgeToEdgeCategory setLabel",
-						timeout: 1000,
-						runTest: function(){
-							var demoWidget = dijit.byId("Category");
-							demoWidget.set({label :"Value Changed"});
-							doh.assertEqual("Value Changed", demoWidget.get("label"));
-							doh.assertEqual('Value Changed', demoWidget.domNode.innerHTML);
-						}
-					}
-				]);
-				doh.run();
-			});
 		</script>
+		<script type="text/javascript" src="TestUtil.js"></script>
+		<script type="text/javascript" src="EdgeToEdgeCatagory.js"></script>
 	</head>
 	<body>
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">

@@ -1,8 +1,10 @@
-define(["dojo", "dojox", "../Exporter"], function(dojo, dojox){
+define([
+	"dojo/_base/declare"
+], function(declare){
 //require Exporter here, so the implementations only need to require this file,
 //and the users only need to require the implementation file.
 
-dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
+return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 	// summary:
 	//		This is an abstract class for all kinds of writers used in the Exporter plugin.
 	//		It utilizes the strategy pattern to break the export work into several stages,
@@ -263,7 +265,4 @@ dojo.declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		return '';	//String
 	}
 });
-
-return dojox.grid.enhanced.plugins.exporter._ExportWriter;
-
 });

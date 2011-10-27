@@ -1,4 +1,7 @@
 /* Indirect Selection */
+.dojoxGridRowSelector {
+	cursor: pointer;
+}
 .dojoxGridRowSelectorStatusText{
 	visibility:hidden;
 }

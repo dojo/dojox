@@ -1,11 +1,20 @@
-define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,dd){
-	dojo.getObject("dtl.contrib.dom", true, dojox);
-
-	var ddch = dd.contrib.dom;
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/lang",
+	"dojo/_base/connect",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"../_base",
+	"../dom"
+], function(kernel,lang,connect,domStyle,domConstruct,dd,dddom){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	var ddch = lang.getObject("dojox.dtl.contrib.dom", true);
 
 	var simple = {render: function(){ return this.contents; }};
 
-	ddch.StyleNode = dojo.extend(function(styles){
+	ddch.StyleNode = lang.extend(function(styles){
 		this.contents = {};
 		this._current = {};
 		this._styles = styles;
@@ -13,7 +22,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 			if(styles[key].indexOf("{{") != -1){
 				var node = new dd.Template(styles[key]);
 			}else{
-				var node = dojo.delegate(simple);
+				var node = lang.delegate(simple);
 				node.contents = styles[key];
 			}
 			this.contents[key] = node;
@@ -24,7 +33,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 			for(var key in this.contents){
 				var value = this.contents[key].render(context);
 				if(this._current[key] != value){
-					dojo.style(buffer.getParent(), key, this._current[key] = value);
+					domStyle.set(buffer.getParent(), key, this._current[key] = value);
 				}
 			}
 			return buffer;
@@ -38,7 +47,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 		}
 	});
 
-	ddch.BufferNode = dojo.extend(function(nodelist, options){
+	ddch.BufferNode = lang.extend(function(nodelist, options){
 		this.nodelist = nodelist;
 		this.options = options;
 	},
@@ -55,10 +64,10 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 					}
 				}
 
-				this.onAddNode && dojo.disconnect(this.onAddNode);
-				this.onRemoveNode && dojo.disconnect(this.onRemoveNode);
-				this.onChangeAttribute && dojo.disconnect(this.onChangeAttribute);
-				this.onChangeData && dojo.disconnect(this.onChangeData);
+				this.onAddNode && connect.disconnect(this.onAddNode);
+				this.onRemoveNode && connect.disconnect(this.onRemoveNode);
+				this.onChangeAttribute && connect.disconnect(this.onChangeAttribute);
+				this.onChangeData && connect.disconnect(this.onChangeData);
 
 				this.swapped = this.parent.cloneNode(true);
 				this.parent.parentNode.replaceChild(this.swapped, this.parent);
@@ -67,26 +76,26 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 		render: function(context, buffer){
 			this.parent = buffer.getParent();
 			if(this.options.node){
-				this.onAddNode = dojo.connect(buffer, "onAddNode", dojo.hitch(this, "_swap", "node"));
-				this.onRemoveNode = dojo.connect(buffer, "onRemoveNode", dojo.hitch(this, "_swap", "node"));
+				this.onAddNode = connect.connect(buffer, "onAddNode", lang.hitch(this, "_swap", "node"));
+				this.onRemoveNode = connect.connect(buffer, "onRemoveNode", lang.hitch(this, "_swap", "node"));
 			}
 			if(this.options.text){
-				this.onChangeData = dojo.connect(buffer, "onChangeData", dojo.hitch(this, "_swap", "node"));
+				this.onChangeData = connect.connect(buffer, "onChangeData", lang.hitch(this, "_swap", "node"));
 			}
 			if(this.options["class"]){
-				this.onChangeAttribute = dojo.connect(buffer, "onChangeAttribute", dojo.hitch(this, "_swap", "class"));
+				this.onChangeAttribute = connect.connect(buffer, "onChangeAttribute", lang.hitch(this, "_swap", "class"));
 			}
 
 			buffer = this.nodelist.render(context, buffer);
 
 			if(this.swapped){
 				this.swapped.parentNode.replaceChild(this.parent, this.swapped);
-				dojo.destroy(this.swapped);
+				domConstruct.destroy(this.swapped);
 			}else{
-				this.onAddNode && dojo.disconnect(this.onAddNode);
-				this.onRemoveNode && dojo.disconnect(this.onRemoveNode);
-				this.onChangeAttribute && dojo.disconnect(this.onChangeAttribute);
-				this.onChangeData && dojo.disconnect(this.onChangeData);
+				this.onAddNode && connect.disconnect(this.onAddNode);
+				this.onRemoveNode && connect.disconnect(this.onRemoveNode);
+				this.onChangeAttribute && connect.disconnect(this.onChangeAttribute);
+				this.onChangeData && connect.disconnect(this.onChangeData);
 			}
 
 			delete this.parent;
@@ -101,7 +110,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 		}
 	});
 
-	dojo.mixin(ddch, {
+	lang.mixin(ddch, {
 		buffer: function(parser, token){
 			// summary:
 			//		Buffer large DOM manipulations during re-render.
@@ -129,7 +138,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 			var parts = token.contents.split().slice(1);
 			var options = {};
 			var found = false;
-			for(var i=parts.length; i--;){
+			for(var i = parts.length; i--;){
 				found = true;
 				options[parts[i]] = true;
 			}
@@ -141,7 +150,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 			return new ddch.BufferNode(nodelist, options);
 		},
 		html: function(parser, token){
-			dojo.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead");
+			kernel.deprecated("{% html someVariable %}", "Use {{ someVariable|safe }} instead");
 			return parser.create_variable_node(token.contents.slice(5) + "|safe");
 		},
 		style_: function(parser, token){
@@ -151,7 +160,7 @@ define(["dojo/_base/lang","../_base","../dom","dojo/_base/html"], function(dojo,
 			for(var i = 0, rule; rule = rules[i]; i++){
 				var parts = rule.split(/\s*:\s*/g);
 				var key = parts[0];
-				var value = dojo.trim(parts[1]);
+				var value = lang.trim(parts[1]);
 				if(value){
 					styles[key] = value;
 				}

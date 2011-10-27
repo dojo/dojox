@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.GreySkies=new Theme(Theme._def);
+	themes.GreySkies=new Theme(Theme._def);
 	
-	return dojox.charting.themes.GreySkies;
+	return themes.GreySkies;
 });

@@ -1,13 +1,12 @@
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/event",
+		"dojo/_base/connect","dojo/_base/window","dojo/_base/html","dojo/dom","dojo/_base/sniff"],
+  function(lang, declare, event, connect, win, html, dom, has) {
 
-define(["dojo/_base/lang","dojo/_base/declare", "dojo/_base/connect","dojo/_base/window","dojo/_base/html"],
-											function(dojo, declare, connect, window, dhtml) {
-
-
-return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
-	// summary: 
-	//   class to handle mouse interactions on a dojox.geo.charting.Map widget
-	// tags:
-	//   private
+return declare("dojox.geo.charting.MouseInteractionSupport", null, {
+	//	summary: 
+	//		class to handle mouse interactions on a dojox.geo.charting.Map widget
+	//	tags:
+	//		private
 	
 	_map : null,
 	_mapClickLocation : null,
@@ -29,12 +28,12 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 	mouseClickThreshold: 2,
 
 	constructor : function(/* Map */map,/*boolean*/options) {
-		// summary: 
-		//   Constructs a new _MouseInteractionSupport instance
-		// map: dojox.geo.charting.Map
-		//   the Map widget this class provides touch navigation for.
-		// options: object
-		//  to enable panning and mouse wheel zooming
+		//	summary: 
+		//		Constructs a new _MouseInteractionSupport instance
+		//	map: dojox.geo.charting.Map
+		//		the Map widget this class provides touch navigation for.
+		//	options: object
+		//		to enable panning and mouse wheel zooming
 		this._map = map;
 		this._mapClickLocation = {x: 0,y: 0};
 		this._screenClickLocation = {x: 0,y: 0};
@@ -47,48 +46,48 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			}
 		}
 	},
-	
+
 	setEnableZoom: function(enable){
-		// summary: 
-		//   enables mouse zoom on the map
+		//	summary: 
+		//		enables mouse zoom on the map
 		if (enable && !this._mouseWheelListener) {
 			// enable
-			var wheelEventName = !dojo.isMozilla ? "onmousewheel" : "DOMMouseScroll";
+			var wheelEventName = !has("mozilla") ? "onmousewheel" : "DOMMouseScroll";
 			this._mouseWheelListener = this._map.surface.connect(wheelEventName, this, this._mouseWheelHandler);
 		} else if (!enable && this._mouseWheelListener) {
 			// disable
-			dojo.disconnect(this._mouseWheelListener);
+			connect.disconnect(this._mouseWheelListener);
 			this._mouseWheelListener = null;
 		}
 		this._zoomEnabled = enable;
 	},
-	
+
 	setEnablePan: function(enable){
-		// summary: 
-		//   enables mouse panning on the map
+		//	summary: 
+		//		enables mouse panning on the map
 		this._panEnabled = enable;
 	},
-	
+
 	connect: function() {
-		// summary: 
-		//   connects this mouse support class to the Map component
+		//	summary: 
+		//		connects this mouse support class to the Map component
 		
 		// install mouse listeners
 		this._mouseMoveListener = this._map.surface.connect("onmousemove", this, this._mouseMoveHandler);
 		this._mouseDownListener = this._map.surface.connect("onmousedown", this, this._mouseDownHandler);
 		
-		if (dojo.isIE) {
-			_onDragStartListener = dojo.connect(dojo.doc,"ondragstart",this,dojo.stopEvent);
-			_onSelectStartListener = dojo.connect(dojo.doc,"onselectstart",this,dojo.stopEvent);			
+		if (has("ie")) {
+			_onDragStartListener = connect.connect(win.doc,"ondragstart",this,event.stop);
+			_onSelectStartListener = connect.connect(win.doc,"onselectstart",this,event.stop);			
 		}
 		
 		this.setEnableZoom(this._zoomEnabled);
 		this.setEnablePan(this._panEnabled);
 	},
-	
+
 	disconnect: function() {
-		// summary: 
-		//   disconnects any installed listeners
+		//	summary: 
+		//		disconnects any installed listeners
 		
 		// store zoomPan state
 		var isZoom = this._zoomEnabled;
@@ -101,27 +100,26 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		
 		// disconnect remaining listeners
 		if (this._mouseMoveListener) {
-			dojo.disconnect(this._mouseMoveListener);
+			connect.disconnect(this._mouseMoveListener);
 			this._mouseMoveListener = null;
-			dojo.disconnect(this._mouseDownListener);
+			connect.disconnect(this._mouseDownListener);
 			this._mouseDownListener = null;
 		}
 		if (this._onDragStartListener) {
-			dojo.disconnect(this._onDragStartListener);
+			connect.disconnect(this._onDragStartListener);
 			this._onDragStartListener = null;
-			dojo.disconnect(this._onSelectStartListener);
+			connect.disconnect(this._onSelectStartListener);
 			this._onSelectStartListener = null;
 		}
 		
 	},
-	
-	
+
 	_mouseClickHandler: function(mouseEvent) {
-		// summary: 
-		//   action performed on the map when a mouse click was performed
-		// mouseEvent: the mouse event
-		// tags:
-		//   private
+		//	summary: 
+		//		action performed on the map when a mouse click was performed
+		//	mouseEvent: the mouse event
+		//	tags:
+		//		private
 		
 		var feature = this._getFeatureFromMouseEvent(mouseEvent);
 		
@@ -137,14 +135,16 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		}
 			
 	},
-	
+
 	_mouseDownHandler: function(mouseEvent){
-		// summary: 
-		//   action performed on the map when a mouse down was performed
-		// mouseEvent: the mouse event
-		// tags:
-		//   private
-		//dojo.stopEvent(mouseEvent);
+		//	summary: 
+		//		action performed on the map when a mouse down was performed
+		//	mouseEvent: the mouse event
+		//	tags:
+		//		private
+		
+		
+		event.stop(mouseEvent);
 		
 		this._map.focused = true;
 		// set various status parameters
@@ -154,28 +154,26 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 
 		// store map location where mouse down occurred
 		var containerBounds = this._map._getContainerBounds();
-		var offX = mouseEvent.pageX - containerBounds.x,
+		var offX = mouseEvent.pageX	- containerBounds.x,
 			offY = mouseEvent.pageY - containerBounds.y;
 		var mapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 		this._mapClickLocation.x = mapPoint.x;
 		this._mapClickLocation.y = mapPoint.y;
-		
+
 		// install drag listener if pan is enabled
-		if (!dojo.isIE) {
-			this._mouseDragListener = dojo.connect(dojo.doc,"onmousemove",this,this._mouseDragHandler);
+		if (!has("ie")) {
+			this._mouseDragListener = connect.connect(win.doc,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
-			this._mouseUpListener = dojo.connect(dojo.doc,"onmouseup",this, this._mouseUpHandler);
-			
+			this._mouseUpListener = connect.connect(win.doc,"onmouseup",this, this._mouseUpHandler);
 		} else {
-			this._mouseDragListener = dojo.connect(node,"onmousemove",this,this._mouseDragHandler);
+			var node = dom.byId(this._map.container);
+			this._mouseDragListener = connect.connect(node,"onmousemove",this,this._mouseDragHandler);
 			this._mouseUpClickListener = this._map.surface.connect("onmouseup", this, this._mouseUpClickHandler);
 			this._mouseUpListener = this._map.surface.connect("onmouseup", this, this._mouseUpHandler);
 			this._map.surface.rawNode.setCapture();
 		}
-
 	},
-	
-	
+
 	_mouseUpClickHandler: function(mouseEvent) {
 		
 		if (!this._cancelMouseClick) {
@@ -186,58 +184,57 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		
 	},
 
-	
 	_mouseUpHandler: function(mouseEvent) {
-		// summary: 
-		//   action performed on the map when a mouse up was performed
-		// mouseEvent: the mouse event
-		// tags:
-		//   private
+		//	summary: 
+		//		action performed on the map when a mouse up was performed
+		//	mouseEvent: the mouse event
+		//	tags:
+		//		private
 		
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		this._map.mapObj.marker._needTooltipRefresh = true;
 		
 		// disconnect listeners
 		if (this._mouseDragListener) {
-			dojo.disconnect(this._mouseDragListener);
+			connect.disconnect(this._mouseDragListener);
 			this._mouseDragListener = null;
 		}
 		if (this._mouseUpClickListener) {
-			dojo.disconnect(this._mouseUpClickListener);
+			connect.disconnect(this._mouseUpClickListener);
 			this._mouseUpClickListener = null;
 		}
 		if (this._mouseUpListener) {
-			dojo.disconnect(this._mouseUpListener);
+			connect.disconnect(this._mouseUpListener);
 			this._mouseUpListener = null;
 		}
 		
-		if (dojo.isIE) {
+		if (has("ie")) {
 			this._map.surface.rawNode.releaseCapture();
 		}
 	},
-	
+
 	_getFeatureFromMouseEvent: function(mouseEvent) {
-		// summary: 
-		//   utility function to return the feature located at this mouse event location
-		// mouseEvent: the mouse event
-		// returns: dojox.geo.charting.Feature
-		//   the feature found if any, null otherwise.
-		// tags:
-		//   private
+		//	summary: 
+		//		utility function to return the feature located at this mouse event location
+		//	mouseEvent: the mouse event
+		//	returns: dojox.geo.charting.Feature
+		//		the feature found if any, null otherwise.
+		//	tags:
+		//		private
 		var feature = null;
 		if (mouseEvent.gfxTarget && mouseEvent.gfxTarget.getParent) {
 			feature = this._map.mapObj.features[mouseEvent.gfxTarget.getParent().id];
 		}
 		return feature;
 	},
-	
+
 	_mouseMoveHandler: function(mouseEvent) {
-		// summary: 
-		//   action performed on the map when a mouse move was performed
-		// mouseEvent: the mouse event
-		// tags:
-		//   private
+		//	summary: 
+		//		action performed on the map when a mouse move was performed
+		//	mouseEvent: the mouse event
+		//	tags:
+		//		private
 
 		
 		// do nothing more if dragging
@@ -264,16 +261,15 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 			feature._onmousemoveHandler(mouseEvent);
 	},
 
-	
 	_mouseDragHandler: function(mouseEvent){
-		// summary: 
-		//   action performed on the map when a mouse drag was performed
-		// mouseEvent: the mouse event
-		// tags:
-		//   private
+		//	summary: 
+		//		action performed on the map when a mouse drag was performed
+		//	mouseEvent: the mouse event
+		//	tags:
+		//		private
 		
 		// prevent browser interaction
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		
 		// find out if this the movement discards the "mouse click" gesture
@@ -304,17 +300,17 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		this._map.setMapCenter(currentMapCenter.x - mapOffsetX, currentMapCenter.y - mapOffsetY);
 		
 	},
-	
+
 	_mouseWheelHandler: function(mouseEvent) {
-		// summary: 
-		//   action performed on the map when a mouse wheel up/down was performed
-		// mouseEvent: the mouse event
-		// tags:
-		//   private
+		//	summary: 
+		//		action performed on the map when a mouse wheel up/down was performed
+		//	mouseEvent: the mouse event
+		//	tags:
+		//		private
 		
 
 		// prevent browser interaction
-		dojo.stopEvent(mouseEvent);
+		event.stop(mouseEvent);
 		
 		// hide tooltip
 		this._map.mapObj.marker.hide();
@@ -328,7 +324,7 @@ return dojo.declare("dojox.geo.charting.MouseInteractionSupport", null, {
 		var invariantMapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 
 		// zoom increment power
-		var power  = mouseEvent[(dojo.isMozilla ? "detail" : "wheelDelta")] / (dojo.isMozilla ? - 3 : 120) ;
+		var power  = mouseEvent[(has("mozilla") ? "detail" : "wheelDelta")] / (has("mozilla") ? - 3 : 120) ;
 		var scaleFactor = Math.pow(1.2,power);
 		this._map.setMapScaleAt(this._map.getMapScale()*scaleFactor ,invariantMapPoint.x,invariantMapPoint.y,false);
 		this._map.mapObj.marker._needTooltipRefresh = true;

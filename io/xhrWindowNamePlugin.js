@@ -1,4 +1,12 @@
-define(["dojo/_base/json", "dojox/io/xhrPlugins", "dojox/io/windowName", "dojox/io/httpParse", "dojox/secure/capability", "dojo/_base/xhr"], function(dojo, xhrPlugins, windowName, httpParse, capability){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/json",
+	"dojo/_base/xhr",
+	"dojox/io/xhrPlugins",
+	"dojox/io/windowName",
+	"dojox/io/httpParse",
+	"dojox/secure/capability"
+], function(dojo, json, xhr, xhrPlugins, windowName, httpParse, capability){
 dojo.getObject("io.xhrWindowNamePlugin", true, dojox);
 
 dojox.io.xhrWindowNamePlugin = function(/*String*/url, /*Function?*/httpAdapter, /*Boolean?*/trusted){

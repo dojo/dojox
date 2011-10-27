@@ -1,10 +1,10 @@
+define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/html","dojo/dom",
+		"dojo/dom-geometry","dojo/dom-class", "dojo/_base/xhr","dojo/_base/connect","dojo/_base/window", "dojox/gfx",
+		"dojox/geo/charting/_base","dojox/geo/charting/Feature","dojox/geo/charting/_Marker","dojo/number","dojo/_base/sniff"],
+  function(lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base, 
+		   Feature, Marker, number, has) {
 
-define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr","dojo/_base/connect",
-		"dojo/_base/window", "dojox/gfx", "dojox/geo/charting/_base", "dojox/geo/charting/Feature",
-		"dojox/geo/charting/_Marker","dojo/number"],
-				function(dojo, declare, dhtml, xhr, connect, window, gfx, base, Feature, Marker, number) {
-
-	return dojo.declare("dojox.geo.charting.Map", null, {
+	return declare("dojox.geo.charting.Map", null, {
 	//	summary:
 	//		Map widget interacted with charting.
 	//	description:
@@ -33,13 +33,13 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	_onSetListener:null,
 	_onNewListener:null,
 	_onDeleteListener:null,
-	constructor: function(/*HTML Node*/container, /*String*/shapeFile){
+	constructor: function(/*HTML Node*/container, /*String or Json object*/shapeData){
 		//	container:
 		//		map container html node/id
-		//	shapeFile:
-		//		map shape data url, handled as json style
+		//	shapeData:
+		//		map shape data json object, or url to json file
 		
-		dojo.style(container, "display", "block");
+		html.style(container, "display", "block");
 		
 		this.container = container;
 		var containerBounds = this._getContainerBounds();
@@ -48,30 +48,40 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 		
 		this._createZoomingCursor();
 		
+		// add transparent background for event capture
+		this.mapBackground = this.surface.createRect({x: 0, y: 0, width: containerBounds.w, height: containerBounds.w}).setFill("rgba(0,0,0,0)");
+		
 		this.mapObj = this.surface.createGroup();
 		this.mapObj.features = {};
-        // load map shape file
-		dojo.xhrGet({
-			url: shapeFile,
-			handleAs: "json",
-			sync:true,
-			load: dojo.hitch(this, "_init")
-		});
+		
+		if (typeof shapeData == "object") {
+			this._init(shapeData);
+		} else {
+	        // load map shape file
+			if (typeof shapeData == "string" && shapeData.length > 0) {
+				xhr.get({
+					url: shapeData,
+					handleAs: "json",
+					sync: true,
+					load: lang.hitch(this, "_init")
+				});
+			}
+		}
 	},
 	
 	_getContainerBounds: function() {
-		// summary: 
-		//   returns the bounds {x:, y:, w: ,h:} of the DOM node container in absolute coordinates 
-		// tags:
-		//   private
+		//	summary: 
+		//		returns the bounds {x:, y:, w: ,h:} of the DOM node container in absolute coordinates 
+		//	tags:
+		//		private
 		
-		var coords = dojo.coords(this.container);
-		var marginBox = dojo.marginBox(this.container);
+		var position = domGeom.position(this.container,true);
+		var marginBox = domGeom.getMarginBox(this.container);
 		// use contentBox for correct width and height - surface spans outside border otherwise
-		var contentBox = dojo.contentBox(this.container);
+		var contentBox = domGeom.getContentBox(this.container);
 		this._storedContainerBounds = {
-				x: coords.x,
-				y: coords.y,
+				x: position.x,
+				y: position.y,
 				w: contentBox.w || 100,
 				h: contentBox.h || 100
 			};
@@ -79,12 +89,12 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	resize: function(/**boolean**/ adjustMapCenter/**boolean**/,adjustMapScale,/**boolean**/ animate) {
-		// summary: 
-		//   resize the underlying GFX surface to accommodate to parent DOM Node size change
-		// adjustMapCenter: boolean
-		//   keeps the center of the map when resizing the surface
-		// adjustMapScale: boolean
-		//   adjusts the map scale to keep the visible portion of the map as much as possible 
+		//	summary: 
+		//		resize the underlying GFX surface to accommodate to parent DOM Node size change
+		//	adjustMapCenter: boolean
+		//		keeps the center of the map when resizing the surface
+		//	adjustMapScale: boolean
+		//		adjusts the map scale to keep the visible portion of the map as much as possible 
 		
 		var oldBounds = this._storedContainerBounds; 
 		var newBounds = this._getContainerBounds();
@@ -93,7 +103,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 			return;
 		}
 		
-		// set surface dimensions
+		// set surface dimensions, and background
+		this.mapBackground.setShape({width:newBounds.w, height:newBounds.h});
 		this.surface.setDimensions(newBounds.w,newBounds.h);
 		
 		this.mapObj.marker.hide();
@@ -117,17 +128,14 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 			//	apply new parameters
 			this.setMapCenterAndScale(invariantMapPoint.x,invariantMapPoint.y,newScale,animate);
 		}
-
-		
-		
 	},
 	
 	_isMobileDevice: function() {
-		// summary: 
-		//   tests whether the application is running on a mobile device (android or iOS)
-		// tags:
-		//   private
-		return (dojo.isSafari
+		//	summary: 
+		//		tests whether the application is running on a mobile device (android or iOS)
+		//	tags:
+		//		private
+		return (has("safari")
 				&& (navigator.userAgent.indexOf("iPhone") > -1 ||
 					navigator.userAgent.indexOf("iPod") > -1 ||
 					navigator.userAgent.indexOf("iPad") > -1
@@ -142,10 +150,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 		//	markerFile:
 		//		outside marker data url, handled as json style.
 		//		data format: {"NY":"New York",.....}
-		dojo.xhrGet({
+		xhr.get({
 			url: markerFile,
 			handleAs: "json",
-			handle: dojo.hitch(this, "_appendMarker")
+			handle: lang.hitch(this, "_appendMarker")
 		});
 	},
 	
@@ -163,7 +171,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	setDataBindingValueFunction: function(/* function */valueFunction) {
-	//  summary:
+		//  summary:
 		//		sets the function that extracts values from dataStore items,to use as Feature values (see Feature.setValue function)
 		//	prop:
 		//		the function
@@ -186,7 +194,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 			scope: this,
 			onComplete: function(items){
 				this._idAttributes = mapInstance.dataStore.getIdentityAttributes({});
-				dojo.forEach(items, function(item) {
+				arr.forEach(items, function(item) {
 					var id = mapInstance.dataStore.getValue(item, this._idAttributes[0]);
 					if(mapInstance.mapObj.features[id]){
 						var val = null;
@@ -242,16 +250,16 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	setDataStore: function(/*ItemFileReadStore*/ dataStore, /*String*/ dataBindingProp){
 		//	summary:
 		//		populate data for each map feature from fetched data store
-		//  dataStore:
-		//      the dataStore to fetch the information from
-		//  dataBindingProp:
-		//      sets the property name of the dataStore items to use as value
+		//	dataStore:
+		//		the dataStore to fetch the information from
+		//	dataBindingProp:
+		//		sets the property name of the dataStore items to use as value
 		if (this.dataStore != dataStore) {
 			// disconnect previous listener if any
 			if (this._onSetListener) {
-				dojo.disconnect(this._onSetListener);
-				dojo.disconnect(this._onNewListener);
-				dojo.disconnect(this._onDeleteListener);
+				connect.disconnect(this._onSetListener);
+				connect.disconnect(this._onNewListener);
+				connect.disconnect(this._onDeleteListener);
 			}
 			
 			// set new dataStore
@@ -259,9 +267,9 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 			
 			// install listener on new dataStore
 			if (dataStore) {
-				_onSetListener = dojo.connect(this.dataStore,"onSet",this,this._onSet);
-				_onNewListener = dojo.connect(this.dataStore,"onNew",this,this._onNew);
-				_onDeleteListener = dojo.connect(this.dataStore,"onDelete",this,this._onDelete);
+				_onSetListener = connect.connect(this.dataStore,"onSet",this,this._onSet);
+				_onNewListener = connect.connect(this.dataStore,"onNew",this,this._onNew);
+				_onDeleteListener = connect.connect(this.dataStore,"onDelete",this,this._onDelete);
 			}
 		}
 		if (dataBindingProp)
@@ -270,11 +278,33 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	
-	addSeries: function(series){
-		// summary: 
-		//   sets ranges of data values (associated with label, color) to style map data values
-		// series:
-		//   array of range objects such as : [{name:'label 1', min:20, max:70, color:'#DDDDDD'},{...},...]
+	
+	addSeries: function(/*url or Json Object*/ series){
+		//	summary: 
+		//		sets ranges of data values (associated with label, color) to style map data values
+		//	series:
+		//		array of range objects such as : [{name:'label 1', min:20, max:70, color:'#DDDDDD'},{...},...]
+		
+		if (typeof series == "object") {
+			this._addSeriesImpl(series);
+		} else {
+	        // load series file
+			if (typeof series == "string" && series.length > 0) {
+				xhr.get({
+					url: series,
+					handleAs: "json",
+					sync: true,
+					load: lang.hitch(this, function(content){
+						this._addSeriesImpl(content.series);
+					})
+				});
+			}
+		}
+		
+	},
+	
+	_addSeriesImpl: function(/*Json object*/series) {
+		
 		this.series = series;
 		
 		// refresh color scheme
@@ -282,36 +312,20 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 			var feature = this.mapObj.features[item];
 			feature.setValue(feature.value);
 		}
-		
 	},
-	
-	setSeriesFile: function(/** file url **/seriesFile) {
-		// summary: 
-		//   sets the url of the json file containing value ranges (see addSeries).
-		// seriesFile:
-		//   url
-		dojo.xhrGet({
-			url: seriesFile,
-			handleAs: "json",
-			sync:true,
-			load: dojo.hitch(this, function(data) {
-				if (data.series)
-					this.addSeries(data.series);
-			})
-		});
-	},
+
 	
 	fitToMapArea: function(/*bbox: {x,y,w,h}*/mapArea,pixelMargin,animate,/* callback function */onAnimationEnd){
-		// summary: 
-		//   set this component's transformation so that the specified area fits in the component (centered)
-		// mapArea: 
-		//   the map area that needs to fill the component
-		// pixelMargin: int
-		//   a margin (in pixels) from the borders of the Map component.
-		// animate: boolean
-		//   true if the transform change should be animated
-		// onAnimationEnd: function
-		//   a callback function to be executed when the animation completes (if animate set to true).
+		//	summary: 
+		//		set this component's transformation so that the specified area fits in the component (centered)
+		//	mapArea: 
+		//		the map area that needs to fill the component
+		//	pixelMargin: int
+		//		a margin (in pixels) from the borders of the Map component.
+		//	animate: boolean
+		//		true if the transform change should be animated
+		//	onAnimationEnd: function
+		//		a callback function to be executed when the animation completes (if animate set to true).
 		
 		if(!pixelMargin){
 			pixelMargin = 0;
@@ -326,14 +340,14 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	fitToMapContents: function(pixelMargin,animate,/* callback function */onAnimationEnd){
-		// summary: 
-		//   set this component's transformation so that the whole map data fits in the component (centered)
-		// pixelMargin: int
-		//   a margin (in pixels) from the borders of the Map component.
-		// animate: boolean
-		//   true if the transform change should be animated
-		// onAnimationEnd: function
-		//   a callback function to be executed when the animation completes (if animate set to true).
+		//	summary: 
+		//		set this component's transformation so that the whole map data fits in the component (centered)
+		//	pixelMargin: int
+		//		a margin (in pixels) from the borders of the Map component.
+		//	animate: boolean
+		//		true if the transform change should be animated
+		//	onAnimationEnd: function
+		//		a callback function to be executed when the animation completes (if animate set to true).
 		
 		//transform map to fit container
 		var bbox = this.mapObj.boundBox;
@@ -341,16 +355,16 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	setMapCenter: function(centerX,centerY,animate,/* callback function */onAnimationEnd) {
-		// summary: 
-		//   set this component's transformation so that the map is centered on the specified map coordinates
-		// centerX: float
-		//   the X coordinate (in map coordinates) of the new center
-		// centerY: float
-		//   the Y coordinate (in map coordinates) of the new center
-		// animate: boolean
-		//   true if the transform change should be animated
-		// onAnimationEnd: function
-		//   a callback function to be executed when the animation completes (if animate set to true).
+		//	summary: 
+		//		set this component's transformation so that the map is centered on the specified map coordinates
+		//	centerX: float
+		//		the X coordinate (in map coordinates) of the new center
+		//	centerY: float
+		//		the Y coordinate (in map coordinates) of the new center
+		//	animate: boolean
+		//		true if the transform change should be animated
+		//	onAnimationEnd: function
+		//		a callback function to be executed when the animation completes (if animate set to true).
 		
 		// call setMapCenterAndScale with current map scale 
 		var currentScale = this.getMapScale();
@@ -359,14 +373,14 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	_createAnimation: function(onShape,fromTransform,toTransform,/* callback function */onAnimationEnd) {
-		// summary: 
-		//   creates a transform animation object (between two transforms) used internally
-		// fromTransform: dojox.gfx.matrix.Matrix2D
-		//   the start transformation (when animation begins)
-		// toTransform: dojox.gfx.matrix.Matrix2D
-		//   the end transormation (when animation ends)
-		// onAnimationEnd: function
-		//   callback function to be executed when the animation completes.
+		//	summary: 
+		//		creates a transform animation object (between two transforms) used internally
+		//	fromTransform: dojox.gfx.matrix.Matrix2D
+		//		the start transformation (when animation begins)
+		//	toTransform: dojox.gfx.matrix.Matrix2D
+		//		the end transormation (when animation ends)
+		//	onAnimationEnd: function
+		//		callback function to be executed when the animation completes.
 		var fromDx = fromTransform.dx?fromTransform.dx:0;
 		var fromDy = fromTransform.dy?fromTransform.dy:0;
 		var toDx = toTransform.dx?toTransform.dx:0;
@@ -392,9 +406,9 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 
 		//install callback
 		if (onAnimationEnd) {
-			var listener = dojo.connect(anim,"onEnd",this,function(event){
+			var listener = connect.connect(anim,"onEnd",this,function(event){
 				onAnimationEnd(event);
-				dojo.disconnect(listener);
+				connect.disconnect(listener);
 			});
 		}
 		
@@ -404,19 +418,19 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	
 	setMapCenterAndScale: function(centerX,centerY,scale, animate,/* callback function */onAnimationEnd) {
 		
-		// summary: 
-		//   set this component's transformation so that the map is centered on the specified map coordinates
-		//   and scaled to the specified scale.
-		// centerX: float
-		//   the X coordinate (in map coordinates) of the new center
-		// centerY: float
-		//   the Y coordinate (in map coordinates) of the new center
-		// scale: float
-		//   the scale of the map
-		// animate: boolean
-		//   true if the transform change should be animated
-		// onAnimationEnd: function
-		//   a callback function to be executed when the animation completes (if animate set to true).
+		//	summary: 
+		//		set this component's transformation so that the map is centered on the specified map coordinates
+		//		and scaled to the specified scale.
+		//	centerX: float
+		//		the X coordinate (in map coordinates) of the new center
+		//	centerY: float
+		//		the Y coordinate (in map coordinates) of the new center
+		//	scale: float
+		//		the scale of the map
+		//	animate: boolean
+		//		true if the transform change should be animated
+		//	onAnimationEnd: function
+		//		a callback function to be executed when the animation completes (if animate set to true).
 		
 		
 		// compute matrix parameters
@@ -439,21 +453,21 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	getMapCenter: function() {
-		// summary: 
-		//   returns the map coordinates of the center of this Map component.
-		// returns: {x:,y:}
-		//   the center in map coordinates
+		//	summary: 
+		//		returns the map coordinates of the center of this Map component.
+		//	returns: {x:,y:}
+		//		the center in map coordinates
 		var containerBounds = this._getContainerBounds();
 		return this.screenCoordsToMapCoords(containerBounds.w/2,containerBounds.h/2);
 	},
 	
 	setMapScale: function(scale,animate,/* callback function */onAnimationEnd) {
-		// summary: 
-		//   set this component's transformation so that the map is scaled to the specified scale.
-		// animate: boolean
-		//   true if the transform change should be animated
-		// onAnimationEnd: function
-		//   a callback function to be executed when the animation completes (if animate set to true).
+		//	summary: 
+		//		set this component's transformation so that the map is scaled to the specified scale.
+		//	animate: boolean
+		//		true if the transform change should be animated
+		//	onAnimationEnd: function
+		//		a callback function to be executed when the animation completes (if animate set to true).
 		
 		
 		// default invariant is map center
@@ -463,17 +477,17 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	setMapScaleAt: function(scale,fixedMapX,fixedMapY,animate,/* callback function */onAnimationEnd) {
-		// summary: 
-	    //   set this component's transformation so that the map is scaled to the specified scale, and the specified 
-		//   point (in map coordinates) stays fixed on this Map component
-		// fixedMapX: float
-		//   the X coordinate (in map coordinates) of the fixed screen point
-		// fixedMapY: float
-		//   the Y coordinate (in map coordinates) of the fixed screen point
-		// animate: boolean
-		//   true if the transform change should be animated
-		// onAnimationEnd: function
-		//   a callback function to be executed when the animation completes (if animate set to true).
+		//	summary: 
+	    //		set this component's transformation so that the map is scaled to the specified scale, and the specified 
+		//		point (in map coordinates) stays fixed on this Map component
+		//	fixedMapX: float
+		//		the X coordinate (in map coordinates) of the fixed screen point
+		//	fixedMapY: float
+		//		the Y coordinate (in map coordinates) of the fixed screen point
+		//	animate: boolean
+		//		true if the transform change should be animated
+		//	onAnimationEnd: function
+		//		a callback function to be executed when the animation completes (if animate set to true).
 		
 		
 		var invariantMapPoint = null;
@@ -500,37 +514,37 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	},
 	
 	getMapScale: function() {
-		// summary: 
-		//   returns the scale of this Map component.
-		// returns: float
-		//   the scale
+		//	summary: 
+		//		returns the scale of this Map component.
+		//	returns: float
+		//		the scale
 		var mat = this.mapObj.getTransform();
 		var scale = mat?mat.xx:1.0;
 		return scale;
 	},
 	
 	mapCoordsToScreenCoords: function(mapX,mapY) {
-		// summary: 
-		//   converts map coordinates to screen coordinates given the current transform of this Map component
-		// returns: {x:,y:}
-		//   the screen coordinates correspondig to the specified map coordinates.
+		//	summary: 
+		//		converts map coordinates to screen coordinates given the current transform of this Map component
+		//	returns: {x:,y:}
+		//		the screen coordinates correspondig to the specified map coordinates.
 		var matrix = this.mapObj.getTransform();
 		var screenPoint = gfx.matrix.multiplyPoint(matrix, mapX, mapY);
 		return screenPoint;
 	},
 	
 	screenCoordsToMapCoords: function(screenX, screenY) {
-		// summary: 
-		//   converts screen coordinates to map coordinates given the current transform of this Map component
-		// returns: {x:,y:}
-		//   the map coordinates corresponding to the specified screen coordinates.
+		//	summary: 
+		//		converts screen coordinates to map coordinates given the current transform of this Map component
+		//	returns: {x:,y:}
+		//		the map coordinates corresponding to the specified screen coordinates.
 		var invMatrix = gfx.matrix.invert(this.mapObj.getTransform());
 		var mapPoint = gfx.matrix.multiplyPoint(invMatrix, screenX, screenY);
 		return mapPoint;
 	},
 	deselectAll: function(){
-		// summary:
-		//   deselect all features of map
+		//	summary:
+		//		deselect all features of map
 		for(var name in this.mapObj.features){
 			this.mapObj.features[name].select(false);
 		}
@@ -540,8 +554,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 	
 	_init: function(shapeData){
 		
-		// summary: 
-		//   inits this Map component.
+		//	summary: 
+		//		inits this Map component.
 		
 		//transform map to fit container
 		this.mapObj.boundBox = {x: shapeData.layerExtent[0],
@@ -552,7 +566,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 
 
 		//	if there are "features", then implement them now.
-		dojo.forEach(shapeData.featureNames, function(item){
+		arr.forEach(shapeData.featureNames, function(item){
 			var featureShape = shapeData.features[item];
 			featureShape.bbox.x = featureShape.bbox[0];
 			featureShape.bbox.y = featureShape.bbox[1];
@@ -571,12 +585,12 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/html","dojo/_base/xhr
 		this.mapObj.marker = new Marker(markerData, this);
 	},
 	_createZoomingCursor: function(){
-		if(!dojo.byId("mapZoomCursor")){
-			var mapZoomCursor = dojo.doc.createElement("div");
-			dojo.attr(mapZoomCursor,"id","mapZoomCursor");
-			dojo.addClass(mapZoomCursor,"mapZoomIn");
-			dojo.style(mapZoomCursor,"display","none");
-			dojo.body().appendChild(mapZoomCursor);
+		if(!dom.byId("mapZoomCursor")){
+			var mapZoomCursor = win.doc.createElement("div");
+			html.attr(mapZoomCursor,"id","mapZoomCursor");
+			domClass.add(mapZoomCursor,"mapZoomIn");
+			html.style(mapZoomCursor,"display","none");
+			win.body().appendChild(mapZoomCursor);
 		}
 	},
 	onFeatureClick: function(feature){

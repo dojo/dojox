@@ -1,9 +1,12 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/array","dojo/_base/html","dojo/_base/event","dojox/gfx","./_Gauge","./BarLineIndicator"],
- function(dojo,ddeclare,dlang,darray,dhtml,devent,gfx,_Gauge,BarLineIndicator) {
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/array","dojo/_base/html","dojo/_base/event","dojox/gfx",
+		"./_Gauge","./BarLineIndicator", "dojo/dom-geometry"],
+ function(declare, lang, arr, html, event, gfx, Gauge, BarLineIndicator, domGeometry) {
 
-dojo.experimental("dojox.gauges.BarGauge");
-	
-return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
+/*=====
+	Gauge = dojox.gauges._Gauge;
+=====*/
+
+return declare("dojox.gauges.BarGauge", Gauge, {
 	// summary:
 	//		a bar graph built using the dojox.gfx package.
 	//
@@ -13,8 +16,7 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 	//
 	// usage:
 	//		<script type="text/javascript">
-	//			dojo.require("dojox.gauges.BarGauge");
-	//			dojo.require("dijit.util.parser");
+	//			require(["dojox/gauges/BarGauge"]);
 	//		</script>
 	//		...
 	//		<div 	dojoType="dojox.gauges.BarGauge"
@@ -41,7 +43,8 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 	// height of data area (default is bar graph width - 10)
 	dataHeight: 0,
 
-	// _defaultIndicator: override of dojox.gauges._Gauge._defaultIndicator
+	// _defaultIndicator: Object
+	// 		override of dojox.gauges._Gauge._defaultIndicator
 	_defaultIndicator: BarLineIndicator,
 
 	startup: function(){
@@ -51,7 +54,7 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 		// also connects mouse handling events
 
 		if(this.getChildren){
-			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+			arr.forEach(this.getChildren(), function(child){ child.startup(); });
 		}
 
 		if(!this.dataWidth){this.dataWidth = this.gaugeWidth - 10;}
@@ -103,7 +106,7 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 			width: x2 - x1,
 			height: this.dataHeight
 		});	
-		if(dojo.isArray(range.color) || dojo.isString(range.color)){
+		if(lang.isArray(range.color) || lang.isString(range.color)){
 			path.setStroke({color: range.color});
 			path.setFill(range.color);
 		}else if(range.color.type){
@@ -122,20 +125,20 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 			path.getEventSource().setAttribute("class", range.color.style);
 		}
 	
-		path.connect("onmouseover", dojo.hitch(this, this._handleMouseOverRange, range));
-		path.connect("onmouseout", dojo.hitch(this, this._handleMouseOutRange, range));
+		path.connect("onmouseover", lang.hitch(this, this._handleMouseOverRange, range));
+		path.connect("onmouseout", lang.hitch(this, this._handleMouseOutRange, range));
 	
 		range.shape = path;
 	},
 
-	getRangeUnderMouse: function(/*Object*/event){
+	getRangeUnderMouse: function(/*Object*/e){
 		// summary:
 		//		Determines which range the mouse is currently over
-		// event:	Object
+		// e:	Object
 		//			The event object as received by the mouse handling functions below.
 		var range = null;
-		var pos = dojo.coords(this.gaugeContent);
-		var x = event.clientX - pos.x;
+		var pos = domGeometry.getContentBox(this.gaugeContent);
+		var x = e.clientX - pos.x;
 		var value = this._getValueForPosition(x);
 		if(this._rangeData){
 			for(var i=0; (i<this._rangeData.length) && !range; i++){
@@ -147,13 +150,12 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 		return range;
 	},
 
-
-	_dragIndicator: function(/*Object*/widget, /*Object*/ event){
+	_dragIndicator: function(/*Object*/widget, /*Object*/ e){
 		// summary:
 		// Handles the dragging of an indicator to the event position, including moving/re-drawing
 		// get angle for mouse position
-		this._dragIndicatorAt(widget, event.pageX, event.pageY);
-		dojo.stopEvent(event);
+		this._dragIndicatorAt(widget, e.pageX, e.pageY);
+		event.stop(e);
 	},
 	
 	_dragIndicatorAt: function(/*Object*/ widget, x, y){
@@ -161,7 +163,7 @@ return dojo.declare("dojox.gauges.BarGauge",_Gauge,{
 		// summary:
 		//		Handles the dragging of an indicator, including moving/re-drawing
 		// get new value based on mouse position
-		var pos = dojo.position(widget.gaugeContent, true);
+		var pos = domGeometry.position(widget.gaugeContent, true);
 		var xl = x - pos.x;
 		var value = widget._getValueForPosition(xl);
 		if(value < widget.min){value = widget.min;}

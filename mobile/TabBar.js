@@ -1,47 +1,84 @@
-define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dijit/_Container","dijit/_Contained","./Heading","./_ItemBase","./TabBarButton"],function(darray,dhtml, mcommon,WidgetBase,Container,Contained,Heading,ItemBase){
+define([
+	"dojo/_base/array",
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
+	"dijit/_Contained",
+	"dijit/_Container",
+	"dijit/_WidgetBase",
+	"./Heading",
+	"./TabBarButton"
+], function(array, declare, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, Heading, TabBarButton){
+
+/*=====
+	var Contained = dijit._Contained;
+	var Container = dijit._Container;
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:
-	//		TODOC
+	//		A bar widget that has buttons to control visibility of views.
 
-	return dojo.declare("dojox.mobile.TabBar", [dijit._WidgetBase,dijit._Container,dijit._Contained],{
+	return declare("dojox.mobile.TabBar", [WidgetBase, Container, Contained],{
+		// summary:
+		//		A bar widget that has buttons to control visibility of views.
+		// description:
+		//		TabBar is a container widget that has typically multiple
+		//		TabBarButtons which controls visibility of views. It can be used
+		//		as a tab container.
+
+		// iconBase: String
+		//		The default icon path for child items.
 		iconBase: "",
+
+		// iconPos: String
+		//		The default icon position for child items.
 		iconPos: "",
-		barType: "tabBar", // "tabBar"(default) or "segmentedControl"
+
+		// barType: String
+		//		"tabBar"(default) or "segmentedControl".
+		barType: "tabBar",
+
+		// inHeading: Boolean
+		//		A flag that indicates whether this widget is in a Heading
+		//		widget.
 		inHeading: false,
+
+		// tag: String
+		//		A name of html tag to create as domNode.
 		tag: "UL",
 
+		/* internal properties */	
 		_fixedButtonWidth: 76,
 		_fixedButtonMargin: 17,
 		_largeScreenWidth: 500,
 
 		buildRendering: function(){
 			this._clsName = this.barType == "segmentedControl" ? "mblTabButton" : "mblTabBarButton";
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.create(this.tag);
+			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.domNode.className = this.barType == "segmentedControl" ? "mblTabPanelHeader" : "mblTabBar";
 		},
 
 		startup: function(){
 			if(this._started){ return; }
-			var _this = this;
-			setTimeout(function(){ // to get proper dimension
-				// resize() has to be called regardless of whether this is top-level or not
-				// to ensure that TabBarButton#startup() has been called before resize().
-				_this.resize();
-			}, 0);
 			this.inherited(arguments);
+			this.resize();
 		},
 
 		resize: function(size){
 			var i,w;
-			if (size && size.w){
-				dojo.marginBox(this.domNode, size);
+			if(size && size.w){
+				domGeometry.setMarginBox(this.domNode, size);
 				w = size.w;
 			}else{
 				// Calculation of the bar width varies according to its "position" value.
 				// When the widget is used as a fixed bar, its position would be "absolute".
-				w = dojo.style(this.domNode, "position") === "absolute" ?
-					dojo.contentBox(this.domNode).w : dojo.marginBox(this.domNode).w;
+				w = domStyle.get(this.domNode, "position") === "absolute" ?
+					domGeometry.getContentBox(this.domNode).w : domGeometry.getMarginBox(this.domNode).w;
 			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
@@ -51,7 +88,7 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 			for(i = 0; i < children.length; i++){
 				var c = children[i];
 				if(c.nodeType != 1){ continue; }
-				if(dojo.hasClass(c, this._clsName)){
+				if(domClass.contains(c, this._clsName)){
 					arr.push(c);
 				}
 			}
@@ -61,21 +98,21 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 				margin = w;
 				var totalW = 0; // total width of all the buttons
 				for(i = 0; i < arr.length; i++){
-					margin -= dojo.marginBox(arr[i]).w;
-					arr[i].style.marginTop = "3px";
+					margin -= domGeometry.getMarginBox(arr[i]).w;
 					totalW += arr[i].offsetWidth;
 				}
 				margin = Math.floor(margin/2);
 				var parent = this.getParent();
-				var inHeading = this.inHeading || parent instanceof dojox.mobile.Heading;
-				this.containerNode.style.padding = "3px 0px 0px " + (inHeading ? 0 : margin) + "px";
+				var inHeading = this.inHeading || parent instanceof Heading;
+				this.containerNode.style.padding = (inHeading ? 0 : 3) + "px 0px 0px " + (inHeading ? 0 : margin) + "px";
 				if(inHeading){
-					dojo.style(this.domNode, {
+					domStyle.set(this.domNode, {
 						background: "none",
 						border: "none",
 						width: totalW + 2 + "px"
 					});
 				}
+				domClass.add(this.domNode, "mblTabBar" + (inHeading ? "Head" : "Top"));
 			}else{
 				margin = Math.floor((w - (bw + bm * 2) * arr.length) / 2);
 				if(w < this._largeScreenWidth || margin < 0){
@@ -92,14 +129,23 @@ define(["dojo/_base/array","dojo/_base/html","./common","dijit/_WidgetBase","dij
 						arr[i].style.width = bw + "px";
 						arr[i].style.margin = "0 " + bm + "px";
 					}
-					this.containerNode.style.padding = "0px 0px 0px " + margin + "px";
+					if(arr.length > 0){
+						arr[0].style.marginLeft = margin + bm + "px";
+					}
+					this.containerNode.style.padding = "0px";
 				}
 			}
-			if(!dojo.some(this.getChildren(), function(child){ return child.iconNode1; })){
-				dojo.addClass(this.domNode, "mblTabBarNoIcons");
+
+			if(!array.some(this.getChildren(), function(child){ return child.iconNode1; })){
+				domClass.add(this.domNode, "mblTabBarNoIcons");
+			}else{
+				domClass.remove(this.domNode, "mblTabBarNoIcons");
 			}
-			if(!dojo.some(this.getChildren(), function(child){ return child.label; })){
-				dojo.addClass(this.domNode, "mblTabBarNoText");
+
+			if(!array.some(this.getChildren(), function(child){ return child.label; })){
+				domClass.add(this.domNode, "mblTabBarNoText");
+			}else{
+				domClass.remove(this.domNode, "mblTabBarNoText");
 			}
 		}
 	});

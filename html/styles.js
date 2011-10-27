@@ -1,6 +1,7 @@
-define(["dojo/_base/lang","dojo/_base/window"], function(d) {
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/sniff"], 
+	function(lang, ArrayUtil, Window, has) {
 	// summary:
-	//		Methods for creating and minipulating dynamic CSS Styles and Style Sheets
+	//		Methods for creating and manipulating dynamic CSS Styles and Style Sheets
 	//
 	// example:
 	//		| dojox.html.createStyle("#myDiv input", "font-size:24px");
@@ -8,7 +9,7 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 	//			the inner input will be targeted
 	//		| dojox.html.createStyle(".myStyle", "color:#FF0000");
 	//			Now the class myStyle can be assigned to a node's className
-	var dh = d.getObject("html",true,dojox);
+	var dh = lang.getObject("dojox.html",true);
 	var dynamicStyleMap = {};
 	var pageStyleSheets = {};
 	var titledSheets = [];
@@ -19,7 +20,7 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		//	arguments:
 		//		selector:
 		//					A fully qualified class name, as it would appear in
-		//					a CSS d.doc. Start classes with periods, target
+		//					a CSS dojo.doc. Start classes with periods, target
 		//					nodes with '#'. Large selectors can also be created
 		//					like:
 		//					| "#myDiv.myClass span input"
@@ -27,7 +28,7 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		//					A single string that would make up a style block, not
 		//					including the curly braces. Include semi-colons between
 		//					statements. Do not use JavaScript style declarations
-		//					in camel case, use as you would in a CSS d.doc:
+		//					in camel case, use as you would in a CSS dojo.doc:
 		//					| "color:#ffoooo;font-size:12px;margin-left:5px;"
 		//		styleSheetName: ( optional )
 		//					Name of the dynamic style sheet this rule should be
@@ -38,14 +39,14 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		var ss = dh.getDynamicStyleSheet(styleSheetName);
 		var styleText = selector + " {" + declaration + "}";
 		console.log("insertRule:", styleText);
-		if(d.isIE){
+		if(has("ie")){
 			// Note: check for if(ss.cssText) does not work
 			ss.cssText+=styleText;
 			console.log("ss.cssText:", ss.cssText);
 		}else if(ss.sheet){
 			ss.sheet.insertRule(styleText, ss._indicies.length);
 		}else{
-			ss.appendChild(d.doc.createTextNode(styleText));
+			ss.appendChild(Window.doc.createTextNode(styleText));
 		}
 		ss._indicies.push(selector+" "+declaration);
 		return selector; // String
@@ -82,13 +83,11 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 			return false;
 		}
 		ss._indicies.splice(index, 1);
-		if(d.isIE){
+		if(has("ie")){
 			// Note: check for if(ss.removeRule) does not work
 			ss.removeRule(index);
 		}else if(ss.sheet){
 			ss.sheet.deleteRule(index);
-		}else if(document.styleSheets[0]){
-			console.log("what browser hath useth thith?");
 		}
 		return true; //Boolean
 	};
@@ -151,16 +150,16 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		//
 		if(!styleSheetName){ styleSheetName="default"; }
 		if(!dynamicStyleMap[styleSheetName]){
-			if(d.doc.createStyleSheet){ //IE
+			if(Window.doc.createStyleSheet){ //IE
 				dynamicStyleMap[styleSheetName] = d.doc.createStyleSheet();
-				if(d.isIE < 9) {
+				if(has("ie") < 9) {
 					// IE9 calls this read-only. Loving the new browser so far.
 					dynamicStyleMap[styleSheetName].title = styleSheetName;
 				}
 			}else{
-				dynamicStyleMap[styleSheetName] = d.doc.createElement("style");
+				dynamicStyleMap[styleSheetName] = Window.doc.createElement("style");
 				dynamicStyleMap[styleSheetName].setAttribute("type", "text/css");
-				d.doc.getElementsByTagName("head")[0].appendChild(dynamicStyleMap[styleSheetName]);
+				Window.doc.getElementsByTagName("head")[0].appendChild(dynamicStyleMap[styleSheetName]);
 				console.log(styleSheetName, " ss created: ", dynamicStyleMap[styleSheetName].sheet);
 			}
 			dynamicStyleMap[styleSheetName]._indicies = [];
@@ -211,7 +210,7 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		var i;
 		if(arguments.length === 1){
 			//console.log("sheets:", sheets);
-			d.forEach(sheets, function(s){
+			ArrayUtil.forEach(sheets, function(s){
 				s.disabled = (s.title === title) ? false : true;
 			});
 		}else{
@@ -267,11 +266,11 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 		//		only go one level deep.
 		//
 		if(pageStyleSheets.collected) {return pageStyleSheets;}
-		var sheets = d.doc.styleSheets;
-		d.forEach(sheets, function(n){
+		var sheets = Window.doc.styleSheets;
+		ArrayUtil.forEach(sheets, function(n){
 			var s = (n.sheet) ? n.sheet : n;
 			var name = s.title || s.href;
-			if(d.isIE){
+			if(has("ie")){
 				// IE attaches a style sheet for VML - do not include this
 				if(s.cssText.indexOf("#default#VML") === -1){
 					if(s.href){
@@ -279,7 +278,7 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 						pageStyleSheets[name] = s;
 					}else if(s.imports.length){
 						// Imported via @import
-						d.forEach(s.imports, function(si){
+						ArrayUtil.forEach(s.imports, function(si){
 							pageStyleSheets[si.title || si.href] = si;
 						});
 					}else{
@@ -291,7 +290,7 @@ define(["dojo/_base/lang","dojo/_base/window"], function(d) {
 				//linked or embedded
 				pageStyleSheets[name] = s;
 				pageStyleSheets[name].id = s.ownerNode.id;
-				d.forEach(s.cssRules, function(r){
+				ArrayUtil.forEach(s.cssRules, function(r){
 					if(r.href){
 						// imported
 						pageStyleSheets[r.href] = r.styleSheet;

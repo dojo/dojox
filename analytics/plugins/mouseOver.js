@@ -1,30 +1,35 @@
-define(["dojo/_base/lang","../_base"], function(dojo,dxa){
+define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window", "dojo/on"
+], function(lang, dxa, config, window, on){
+	/*=====
+		dxa = dojox.analytics;
+		on = dojo.on;
+	=====*/	
 
-	dxa.plugins.mouseOver = new (function(){
-		this.watchMouse = dojo.config["watchMouseOver"] || true;
-		this.mouseSampleDelay = dojo.config["sampleDelay"] || 2500;
-		this.addData = dojo.hitch(dxa, "addData", "mouseOver");
-		this.targetProps = dojo.config["targetProps"] || ["id","className","localName","href", "spellcheck", "lang", "textContent", "value" ];
+	return (dxa.plugins.mouseOver = new (function(){
+		this.watchMouse = config["watchMouseOver"] || true;
+		this.mouseSampleDelay = config["sampleDelay"] || 2500;
+		this.addData = lang.hitch(dxa, "addData", "mouseOver");
+		this.targetProps = config["targetProps"] || ["id","className","localName","href", "spellcheck", "lang", "textContent", "value" ];
 
 		this.toggleWatchMouse=function(){
 			if (this._watchingMouse){
-				dojo.disconnect(this._watchingMouse);
+				this._watchingMouse.remove();
 				delete this._watchingMouse;
 				return;
 			}
-			dojo.connect(dojo.doc, "onmousemove", this, "sampleMouse");
+			on(window.doc, "mousemove", lang.hitch(this, "sampleMouse"));
 		}
 
 		if (this.watchMouse){
-			dojo.connect(dojo.doc, "onmouseover", this, "toggleWatchMouse");
-			dojo.connect(dojo.doc, "onmouseout", this, "toggleWatchMouse");
+			on(window.doc, "mouseover", lang.hitch(this, "toggleWatchMouse"));
+			on(window.doc, "mouseout", lang.hitch(this, "toggleWatchMouse"));
 		}
 
 		this.sampleMouse=function(e){
 			if (!this._rateLimited){
 				this.addData("sample",this.trimMouseEvent(e));
 				this._rateLimited=true;
-				setTimeout(dojo.hitch(this, function(){
+				setTimeout(lang.hitch(this, function(){
 					if (this._rateLimited){
 						//this.addData("sample", this.trimMouseEvent(this._lastMouseEvent));
 						this.trimMouseEvent(this._lastMouseEvent);
@@ -49,7 +54,7 @@ define(["dojo/_base/lang","../_base"], function(dojo,dxa){
 						t[i]={};
 						//console.log(e, i, e[i]);
 						for(var j=0;j<props.length;j++){
-							if(dojo.isObject(e[i]) && props[j] in e[i]){
+							if((typeof e[i] == "object" || typeof e[i] == "function") && props[j] in e[i]){
 								 
 								if (props[j]=="text" || props[j]=="textContent"){
 									if (e[i]["localName"] && (e[i]["localName"]!="HTML")&&(e[i]["localName"]!="BODY")){
@@ -83,6 +88,5 @@ define(["dojo/_base/lang","../_base"], function(dojo,dxa){
 			}
 			return t;
 		}
-	})();
-	return dojox.analytics.plugins.mouseOver;
+	})());
 });

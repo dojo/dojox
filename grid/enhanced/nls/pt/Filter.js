@@ -2,7 +2,7 @@ define(
 //begin v1.x content
 ({
 	"clearFilterDialogTitle": "Limpar Filtro",
-	"filterDefDialogTitle": "Filtro",
+	"filterDefDialogTitle": "Filtrar",
 	"ruleTitleTemplate": "Regra ${0}",
 	
 	"conditionEqual": "igual",
@@ -25,12 +25,12 @@ define(
 	"conditionIsEmpty": "está vazio",
 	
 	"all": "todos",
-	"any": "qualquer",
+	"any": "qualquer um",
 	"relationAll": "todas as regras",
 	"waiRelAll": "Corresponder a todas as seguintes regras:",
 	"relationAny": "qualquer regra",
 	"waiRelAny": "Corresponder a qualquer uma das seguintes regras:",
-	"relationMsgFront": "Match",
+	"relationMsgFront": "Corresponder",
 	"relationMsgTail": "",
 	"and": "e",
 	"or": "ou",
@@ -44,7 +44,7 @@ define(
 	"waiCancelButton": "Cancelar este diálogo",
 	"clearButton": "Limpar",
 	"waiClearButton": "Limpar o filtro",
-	"filterButton": "Filtro",
+	"filterButton": "Filtrar",
 	"waiFilterButton": "Enviar o filtro",
 	
 	"columnSelectLabel": "Coluna",
@@ -54,7 +54,7 @@ define(
 	"valueBoxLabel": "Valor",
 	"waiValueBoxTemplate": "Insira o valor para filtragem da regra ${0}",
 	
-	"rangeTo": "para",
+	"rangeTo": "a",
 	"rangeTemplate": "de ${0} a ${1}",
 	
 	"statusTipHeaderColumn": "Coluna",
@@ -63,8 +63,8 @@ define(
 	"statusTipMsg": "Clique na barra de filtragem aqui para filtrar os valores de ${0}.",
 	"anycolumn": "qualquer coluna",
 	"statusTipTitleNoFilter": "Barra de Filtragem",
-	"statusTipTitleHasFilter": "Filtro",
-	"statusTipRelPre": "Match",
+	"statusTipTitleHasFilter": "Filtrar",
+	"statusTipRelPre": "Corresponder",
 	"statusTipRelPost": "regras.",
 	
 	"defaultItemsName": "itens",
@@ -81,7 +81,7 @@ define(
 	"clearFilterMsg": "Isso removerá o filtro e mostrará todos os registros disponíveis.",
 	"anyColumnOption": "Qualquer Coluna",
 	
-	"trueLabel": "True",
+	"trueLabel": "Verdadeiro",
 	"falseLabel": "Falso"
 })
 //end v1.x content

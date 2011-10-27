@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./PlotAction", 
-	"dojo/fx/easing", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
-	function(dojo, connect, declare, PlotAction, dfe, m, gf, df){
+define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/easing", "dojox/gfx/matrix", 
+	"dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"], 
+	function(hub, declare, PlotAction, dfe, m, gf, df, dfs, dff){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -15,12 +15,13 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Plot
 		//		The amount in pixels to shift the pie slice.  Default is 7.
 		shift: 7
 	});
+	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SCALE = 1.05,
 		DEFAULT_SHIFT = 7;	// px
 
-	return dojo.declare("dojox.charting.action2d.MoveSlice", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.MoveSlice", PlotAction, {
 		//	summary:
 		//		Create an action for a pie chart that moves and scales a pie slice.
 
@@ -106,7 +107,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Plot
 			});
 
 			if(o.type == "onmouseout"){
-				dojo.connect(anim.action, "onEnd", this, function(){
+				hub.connect(anim.action, "onEnd", this, function(){
 					delete this.anim[index];
 				});
 			}

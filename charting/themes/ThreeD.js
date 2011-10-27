@@ -1,8 +1,7 @@
-define(["dojo/_base/array", "../Theme", "./gradientGenerator", "./PrimaryColors", "dojo/colors" /* for sanitize */, "./common"], 
-	function(dojo, Theme, gradientGenerator, PrimaryColors){
+define(["dojox","dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "../Theme", "./gradientGenerator", "./PrimaryColors", "dojo/colors" /* for sanitize */, "./common"], 
+	function(dojox, kernel, lang, ArrayUtil, Theme, gradientGenerator, PrimaryColors, themes){
 
-	var themes = dojox.charting.themes, 
-		colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f", "./common"],	// the same is in PrimaryColors
+	var colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f", "./common"],	// the same is in PrimaryColors
 		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 100, y2: 0},
 		// 3D cylinder map is calculated using dojox.gfx3d
 		cyl3dMap = [
@@ -11,8 +10,8 @@ define(["dojo/_base/array", "../Theme", "./gradientGenerator", "./PrimaryColors"
 			{o: 0.80, i: 128}, {o: 0.90, i: 102}, {o: 1.00, i: 174}
 		],
 		hiliteIndex = 2, hiliteIntensity = 100, lumStroke = 50,
-		cyl3dFills = dojo.map(colors, function(c){
-			var fill = dojo.delegate(defaultFill),
+		cyl3dFills = ArrayUtil.map(colors, function(c){
+			var fill = lang.delegate(defaultFill),
 				colors = fill.colors = gradientGenerator.generateGradientByIntensity(c, cyl3dMap),
 				hilite = colors[hiliteIndex].color;
 			// add highlight

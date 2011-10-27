@@ -1,12 +1,12 @@
-define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query", 
-	"./Chart", "../themes/GreySkies", "../plot2d/Lines"], function(dojo, declare, dhtml, dquery, Chart, GreySkies, Lines){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query", 
+	"./Chart", "../themes/GreySkies", "../plot2d/Lines", "dojo/dom-prop"], 
+	function(lang, arrayUtil, declare, html, query, Chart, GreySkies, Lines, domProp){
+/*=====
+var Chart = dojox.charting.widget.Chart;
+=====*/
 
-	var d = dojo;
-
-	dojo.declare("dojox.charting.widget.Sparkline",
-		dojox.charting.widget.Chart,
-		{
-			theme: dojox.charting.themes.GreySkies,
+	declare("dojox.charting.widget.Sparkline", Chart, {
+			theme: GreySkies,
 			margins: { l: 0, r: 0, t: 0, b: 0 },
 			type: "Lines",
 			valueFn: "Number(x)",
@@ -22,9 +22,9 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query
 			buildRendering: function(){
 				var n = this.srcNodeRef;
 				if(	!n.childNodes.length || // shortcut the query
-					!d.query("> .axis, > .plot, > .action, > .series", n).length){
+					!query("> .axis, > .plot, > .action, > .series", n).length){
 					var plot = document.createElement("div");
-					d.attr(plot, {
+					domProp.set(plot, {
 						"class": "plot",
 						"name": "default",
 						"type": this.type
@@ -32,7 +32,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query
 					n.appendChild(plot);
 
 					var series = document.createElement("div");
-					d.attr(series, {
+					domProp.set(series, {
 						"class": "series",
 						plot: "default",
 						name: this.name,
@@ -40,11 +40,11 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query
 						count: this.count,
 						valueFn: this.valueFn
 					});
-					d.forEach(
+					arrayUtil.forEach(
 						["store", "field", "query", "queryOptions", "sort", "data"],
 						function(i){
 							if(this[i].length){
-								d.attr(series, i, this[i]);
+								domProp.set(series, i, this[i]);
 							}
 						},
 						this

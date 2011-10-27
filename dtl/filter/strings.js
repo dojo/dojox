@@ -1,13 +1,24 @@
-define(["dojo/_base/lang","dojox/string/tokenize","dojox/string/sprintf","../filter/htmlstrings","dojo/_base/array"], 
-function(dojo,dxst){
-	dojo.getObject("dtl.filter.strings", true, dojox);
+define([
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojox/string/tokenize",
+	"dojox/string/sprintf",
+	"../filter/htmlstrings",
+	"../_base"
+], function(lang,array,Tokenize,Sprintf,htmlstrings,dd){
+	/*=====
+		dd = dojox.dtl;
+		Tokenize = dojox.string.tokenize;
+		Sprintf = dojox.string.sprintf;
+	=====*/
+	lang.getObject("dojox.dtl.filter.strings", true);
 
-	dojo.mixin(dojox.dtl.filter.strings, {
+	lang.mixin(dd.filter.strings, {
 		_urlquote: function(/*String*/ url, /*String?*/ safe){
 			if(!safe){
 				safe = "/";
 			}
-			return dxst(url, /([^\w-_.])/g, function(token){
+			return Tokenize(url, /([^\w-_.])/g, function(token){
 				if(safe.indexOf(token) == -1){
 					if(token == " "){
 						return "+";
@@ -142,7 +153,7 @@ function(dojo,dxst){
 			arg = "" + arg;
 			var strings = dojox.dtl.filter.strings._strings;
 			if(!strings[arg]){
-				strings[arg] = new dojox.string.sprintf.Formatter("%" + arg);
+				strings[arg] = new Sprintf.Formatter("%" + arg);
 			}
 			return strings[arg].format(value);
 		},
@@ -200,7 +211,7 @@ function(dojo,dxst){
 			var words = 0;
 			var open = [];
 
-			var output = dxst(value, strings._truncate_words, function(all, word){
+			var output = Tokenize(value, strings._truncate_words, function(all, word){
 				if(word){
 					// It's an actual non-HTML word
 					++words;
@@ -221,7 +232,7 @@ function(dojo,dxst){
 				var selfclosing = tag[3];
 				if(closing || strings._truncate_singlets[tagname]){
 				}else if(closing){
-					var i = dojo.indexOf(open, tagname);
+					var i = array.indexOf(open, tagname);
 					if(i != -1){
 						open = open.slice(i + 1);
 					}
@@ -252,7 +263,7 @@ function(dojo,dxst){
 		},
 		urlizetrunc: function(value, arg){
 			arg = parseInt(arg);
-			return dxst(value, /(\S+)/g, function(word){
+			return Tokenize(value, /(\S+)/g, function(word){
 				var matches = dojox.dtl.filter.strings._urlize.exec(word);
 				if(!matches){
 					return word;
@@ -285,7 +296,7 @@ function(dojo,dxst){
 			}).join("");
 		},
 		wordcount: function(value){
-			value = dojo.trim(value);
+			value = lang.trim(value);
 			if(!value){ return 0; }
 			return value.split(/\s+/g).length;
 		},

@@ -1,9 +1,12 @@
 // Various generic utilities to deal with a linear gradient
 
-define(["./matrix"], function(m){
-	dojo.getObject("dojox.gfx.gradutils", true);
-	var d = dojo, C = d.Color;
-	
+define(["./_base", "dojo/_base/lang", "./matrix", "dojo/_base/Color"], 
+  function(g, lang, m, Color){
+  
+	/*===== g= dojox.gfx =====*/
+	var gradutils = g.gradutils = {};
+	/*===== g= dojox.gfx; gradutils = dojox.gfx.gradutils; =====*/
+
 	function findColor(o, c){
 		if(o <= 0){
 			return c[0].color;
@@ -18,7 +21,7 @@ define(["./matrix"], function(m){
 			if(stop.offset >= o){
 				if(i){
 					var prev = c[i - 1];
-					return d.blendColors(new C(prev.color), new C(stop.color),
+					return Color.blendColors(new Color(prev.color), new Color(stop.color),
 						(o - prev.offset) / (stop.offset - prev.offset));
 				}
 				return stop.color;
@@ -27,7 +30,7 @@ define(["./matrix"], function(m){
 		return c[len - 1].color;
 	}
 
-	dojox.gfx.gradutils.getColor = function(fill, pt){
+	gradutils.getColor = function(fill, pt){
 		// summary:
 		//		sample a color from a gradient using a point
 		// fill: Object:
@@ -55,10 +58,10 @@ define(["./matrix"], function(m){
 			return findColor(o, fill.colors);	// dojo.Color
 		}
 		// simple color
-		return new C(fill || [0, 0, 0, 0]);	// dojo.Color
+		return new Color(fill || [0, 0, 0, 0]);	// dojo.Color
 	};
 
-	dojox.gfx.gradutils.reverse = function(fill){
+	gradutils.reverse = function(fill){
 		// summary:
 		//		reverses a gradient
 		// fill: Object:
@@ -67,7 +70,7 @@ define(["./matrix"], function(m){
 			switch(fill.type){
 				case "linear":
 				case "radial":
-					fill = dojo.delegate(fill);
+					fill = lang.delegate(fill);
 					if(fill.colors){
 						var c = fill.colors, l = c.length, i = 0, stop,
 							n = fill.colors = new Array(c.length);
@@ -86,5 +89,5 @@ define(["./matrix"], function(m){
 		return fill;	// Object
 	};
 
-	return dojox.gfx.gradutils;
+	return gradutils;
 });

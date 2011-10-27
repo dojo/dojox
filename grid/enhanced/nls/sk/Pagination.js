@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Zadajte číslo strany",
 	"pageCountIndication": " (${0} strán)",
 	"dialogConfirm": "Prejsť",
-	"dialogCancel": "Zrušiť"
+	"dialogCancel": "Zrušiť",
+	"all": "všetko"
 })
 //end v1.x content
 );

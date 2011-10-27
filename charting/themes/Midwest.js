@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Midwest=new Theme({
+	themes.Midwest=new Theme({
 		colors: [
 			"#927b51",
 			"#a89166",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.Midwest;
+	return themes.Midwest;
 });

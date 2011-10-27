@@ -1,20 +1,25 @@
-// AMD-ID "dojox/encoding/compression/lzw"
-define(["dojo/_base/kernel", "dojox/encoding/bits"], function(dojo) {
-dojo.getObject("encoding.compression.lzw", true, dojox);
+define([
+	"dojo/_base/lang",	// dojo.extend
+	"../bits"
+], function(lang, bits) {
 
-(function(){
-		var _bits = function(x){
+	var lzw = lang.getObject("dojox.encoding.compression.lzw", true);
+	/*=====
+		lzw = dojox.encoding.compression.lzw;
+	=====*/
+
+	var _bits = function(x){
 		var w = 1;
 		for(var v = 2; x >= v; v <<= 1, ++w);
 		return w;
 	};
 
-	dojox.encoding.compression.lzw.Encoder = function(n){
+	lzw.Encoder = function(n){
 		this.size = n;
 		this.init();
 	};
 
-	dojo.extend(dojox.encoding.compression.lzw.Encoder, {
+	lang.extend(lzw.Encoder, {
 		init: function(){
 			this.dict = {};
 			for(var i = 0; i < this.size; ++i){
@@ -50,12 +55,12 @@ dojo.getObject("encoding.compression.lzw", true, dojox);
 		}
 	});
 
-	dojox.encoding.compression.lzw.Decoder = function(n){
+	lzw.Decoder = function(n){
 		this.size = n;
 		this.init();
 	};
 
-	dojo.extend(dojox.encoding.compression.lzw.Decoder, {
+	lang.extend(lzw.Decoder, {
 		init: function(){
 			this.codes = new Array(this.size);
 			for(var i = 0; i < this.size; ++i){
@@ -85,8 +90,6 @@ dojo.getObject("encoding.compression.lzw", true, dojox);
 			return v;
 		}
 	});
-})();
 
-
-return dojox.encoding.compression.lzw;
+	return lzw;
 });

@@ -1,10 +1,16 @@
-dojo.provide("dojox.form.MultiComboBox");
-dojo.experimental("dojox.form.MultiComboBox");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.ValidationTextBox");
+define([
+	"dojo/_base/kernel",
+	"dijit/form/ValidationTextBox",
+	"dijit/form/ComboBoxMixin",
+	"dojo/_base/declare"
+], function(kernel, ValidationTextBox, ComboBoxMixin, declare){
+kernel.experimental("dojox.form.MultiComboBox");
 
-dojo.declare("dojox.form.MultiComboBox",
-	[dijit.form.ValidationTextBox, dijit.form.ComboBoxMixin],{
+	/*=====
+		ValidationTextBox = dijit.form.ValidationTextBox;
+		ComboBoxMixin = dijit.form.ComboBoxMixin;
+	=====*/
+return declare("dojox.form.MultiComboBox", [ValidationTextBox, ComboBoxMixin],{
 	// summary:
 	//		A ComboBox that accepts multiple inputs on a single line
 
@@ -15,7 +21,7 @@ dojo.declare("dojox.form.MultiComboBox",
 	_previousMatches: false,
 
 	_setValueAttr: function(value){
-		if (this.delimiter && value.length != 0){
+		if(this.delimiter && value.length != 0){
 			value = value+this.delimiter+" ";
 			arguments[0] = this._addPreviousMatches(value);
 		}
@@ -40,7 +46,7 @@ dojo.declare("dojox.form.MultiComboBox",
 		}
 		return text;
 	},
-			
+
 	_autoCompleteText: function(/* String */text){
 		arguments[0] = this._addPreviousMatches(text);
 		this.inherited(arguments);
@@ -49,10 +55,11 @@ dojo.declare("dojox.form.MultiComboBox",
 	_startSearch: function(/* String */text){
 		text = this._cleanupDelimiters(text);
 		var re = new RegExp("^.*"+this.delimiter+" *");
-		
+
 		if((this._previousMatches = text.match(re))){
 			arguments[0] = text.replace(re, "");
 		}
 		this.inherited(arguments);
 	}
+});
 });

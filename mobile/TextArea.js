@@ -1,6 +1,13 @@
-define(["dojo/_base/html","./TextBox"], function(dhtml,TextBox){
+define([
+	"dojo/_base/declare",
+	"dojo/dom-construct",
+	"./TextBox"
+], function(declare, domConstruct, TextBox){
 
-	return dojo.declare("dojox.mobile.TextArea",dojox.mobile.TextBox,{
+	/*=====
+		TextBox = dojox.mobile.TextBox;
+	=====*/
+	return declare("dojox.mobile.TextArea",TextBox, {
 		// summary:
 		//		Non-templated TEXTAREA widget.
 		//
@@ -24,7 +31,7 @@ define(["dojo/_base/html","./TextBox"], function(dhtml,TextBox){
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
-				this.srcNodeRef = dojo.create("textarea", {});
+				this.srcNodeRef = domConstruct.create("textarea", {});
 			}
 			this.inherited(arguments);
 		}

@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "Бет нөмірін көрсету",
 	"pageCountIndication": " (${0} бет)",
 	"dialogConfirm": "Өту",
-	"dialogCancel": "Болдырмау"
+	"dialogCancel": "Болдырмау",
+	"all": "барлығы"
 })
 //end v1.x content
 );

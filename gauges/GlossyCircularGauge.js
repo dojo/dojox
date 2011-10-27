@@ -1,32 +1,37 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],function(dojo,ddeclare, dcolor,GlossyCircularGaugeBase) {
-return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
+define(["dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],
+  function(declare, Color, GlossyCircularGaugeBase) {
+
+/*=====
+	GlossyCircularGaugeBase = dojox.gauges.GlossyCircularGaugeBase;
+=====*/
+
+return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a circular gauge with a glossy appearance.
 	// example:
-	//	<div	dojoType="dojox.gauges.GlossyCircularGauge"
-	//		id="testGauge"
-	//		width="300"
-	//		height="300"
-	//		min="0"
-	//		max="100"
-	//		value="0" 
-	//		majorTicksInterval="10"
-	//		majorTicksColor="#c4c4c4"
-	//		minorTicksInterval="5"
-	//		minorTicksColor="#c4c4c4"
-	//		color="black" 
-	//		needleColor="#c4c4c4"
-	//		font="normal normal normal 10pt sans-serif"
-	//		textIndicatorFont="normal normal normal 20pt sans-serif"
-	//		textIndicatorVisible="true" 
-	//		textIndicatorColor="#c4c4c4" 
-	//		majorTicksLabelPlacement="inside"|"outside"
-	//		noChange="true"
-	//		title="title"
-	//		scalePrecision="0"
-	//		textIndicatorPrecision="0"
-	//	>
-	//	</div>
+	//	|	<div	dojoType="dojox.gauges.GlossyCircularGauge"
+	//	|		id="testGauge"
+	//	|		width="300"
+	//	|		height="300"
+	//	|		min="0"
+	//	|		max="100"
+	//	|		value="0" 
+	//	|		majorTicksInterval="10"
+	//	|		majorTicksColor="#c4c4c4"
+	//	|		minorTicksInterval="5"
+	//	|		minorTicksColor="#c4c4c4"
+	//	|		color="black" 
+	//	|		needleColor="#c4c4c4"
+	//	|		font="normal normal normal 10pt sans-serif"
+	//	|		textIndicatorFont="normal normal normal 20pt sans-serif"
+	//	|		textIndicatorVisible="true" 
+	//	|		textIndicatorColor="#c4c4c4" 
+	//	|		majorTicksLabelPlacement="inside"|"outside"
+	//	|		noChange="true"
+	//	|		title="title"
+	//	|		scalePrecision="0"
+	//	|		textIndicatorPrecision="0">
+	//	|	</div>
 
 	_designWidth : 376.25,
 	_designHeight : 382.5,
@@ -35,6 +40,8 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 	_designTextIndicatorX :	187.19173,
 	_designTextIndicatorY :	267.81589,	
 	
+	// summary:
+	//		Creates a new GlossyCircularGauge.
 	constructor: function(){
 		this.startAngle= -135;
 		this.endAngle= 135;
@@ -45,6 +52,9 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 	drawBackground: function(group){
 		// summary:
 		//		Draws the background of the gauge.
+		// group: dojox.gfx.Group
+		//		The GFX group where the background must be drawn
+
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		var transform = {
 				xx: scale,
@@ -56,13 +66,13 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 
 		};
 		
-		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4 );
-		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8 );		
+		var lighterColor1 = Color.blendColors(new Color(this.color), new Color('white'), 0.4 );
+		var lighterColor2 = Color.blendColors(new Color(this.color), new Color('white'), 0.8 );		
 		
 		
 		if (this._gaugeBackground){
 			this._gaugeBackground.setTransform(transform);
-			return this._gaugeBackground;
+			return;
 		}
 		this._gaugeBackground = group.createGroup();
 		this._gaugeBackground.setTransform(transform);
@@ -136,6 +146,9 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 	drawForeground: function(group){
 		// summary:
 		//		Draws the foreground of the gauge.
+		// group: dojox.gfx.Group
+		//		The GFX group where the foreground must be drawn
+
 		var scale = Math.min((this.width / this._designWidth), (this.height / this._designHeight));
 		var transform = {
 				xx: scale,
@@ -146,12 +159,12 @@ return dojo.declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase
 				dy: (-263.5) * scale + (this.height - scale * this._designHeight) / 2
 		};
 		
-		var lighterColor1 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.4 );
-		var lighterColor2 = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('white'), 0.8 );		
+		var lighterColor1 = Color.blendColors(new Color(this.color), new Color('white'), 0.4 );
+		var lighterColor2 = Color.blendColors(new Color(this.color), new Color('white'), 0.8 );		
 				
 		if (this._foreground){
 			this._foreground.setTransform(transform);
-			return this._foreground;
+			return;
 		}
 		this._foreground = group.createGroup();
 		this._foreground.setTransform(transform);

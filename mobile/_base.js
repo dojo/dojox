@@ -1,21 +1,21 @@
 define([
-  "./common",
-  "./View",
-  "./Heading",
-  "./RoundRect",
-  "./RoundRectCategory",
-  "./EdgeToEdgeCategory",
-  "./RoundRectList",
-  "./EdgeToEdgeList",
-  "./ListItem",
-  "./Switch",
-  "./ToolBarButton",
-  "./ProgressIndicator"
-], function(dojo, dijit) {
+	"./common",
+	"./View",
+	"./Heading",
+	"./RoundRect",
+	"./RoundRectCategory",
+	"./EdgeToEdgeCategory",
+	"./RoundRectList",
+	"./EdgeToEdgeList",
+	"./ListItem",
+	"./Switch",
+	"./ToolBarButton",
+	"./ProgressIndicator"
+], function(common, View, Heading, RoundRect, RoundRectCategory, EdgeToEdgeCategory, RoundRectList, EdgeToEdgeList, ListItem, Switch, ToolBarButton, ProgressIndicator){
 	// module:
 	//		dojox/mobile/_base
 	// summary:
-	//		TODOC
+	//		Includes the basic dojox.mobile modules
 
-return dojox.mobile._base;
+	return common;
 });

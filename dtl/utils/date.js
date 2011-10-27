@@ -1,10 +1,16 @@
-define(["dojo/_base/lang","dojox/date/php"], function(dojo,ddp){
-	dojo.getObject("dtl.utils.date", true, dojox);
+define([
+	"dojo/_base/lang",
+	"dojox/date/php",
+	"../_base"
+], function(lang,ddp,dd){
+	/*=====
+		ddp = dojox.data.php;
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dojox.dtl.utils.date", true);
 
-	dojox.dtl.utils.date.DateFormat = function(/*String*/ format){
-		ddp.DateFormat.call(this, format);
-	}
-	dojo.extend(dojox.dtl.utils.date.DateFormat, ddp.DateFormat.prototype, {
+	dd.utils.date.DateFormat = ddp.DateFormat;
+	lang.extend(dd.utils.date.DateFormat, ddp.DateFormat.prototype, {
 		f: function(){
 			// summary:
 			//		Time, in 12-hour hours and minutes, with minutes left off if they're zero.
@@ -34,7 +40,7 @@ define(["dojo/_base/lang","dojox/date/php"], function(dojo,ddp){
 		}
 	});
 
-	dojo.mixin(dojox.dtl.utils.date, {
+	lang.mixin(dojox.dtl.utils.date, {
 		format: function(/*Date*/ date, /*String*/ format){
 			var df = new dojox.dtl.utils.date.DateFormat(format);
 			return df.format(date);

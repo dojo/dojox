@@ -1,7 +1,16 @@
-define(["dojo/_base/kernel","dojo/_base/declare","./AnalogIndicatorBase"],function(dojo,ddeclare,AnalogIndicatorBase) { 
-dojo.experimental("dojox.gauges.AnalogArrowIndicator");
+define(["dojo/_base/declare","./AnalogIndicatorBase"],
+function(declare, AnalogIndicatorBase) { 
 
-return dojo.declare("dojox.gauges.AnalogArrowIndicator",[AnalogIndicatorBase],{
+/*=====
+	AnalogIndicatorBase = dojox.gauges.AnalogIndicatorBase;
+=====*/
+
+return declare("dojox.gauges.AnalogArrowIndicator", [AnalogIndicatorBase],{
+
+	// summary:
+	//		An indicator for the AnalogGauge that draws an arrow. The arrow is drawn on the angle that corresponds
+	// to the value of the indicator.
+	
 	_getShapes: function(group){
 		// summary:
 		//		Override of dojox.gauges.AnalogLineIndicator._getShapes

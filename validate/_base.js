@@ -1,14 +1,16 @@
-// AMD-ID "dojox/validate/_base"
 define([
 	"dojo/_base/lang",
 	"dojo/regexp", // dojo core expressions
 	"dojo/number", // dojo number expressions
 	"./regexp" // additional expressions
-], function(dojo, regexp, number, xregexp) {
+], function(lang, regexp, number, xregexp) {
 
-dojo.getObject("validate", true, dojox);
+	var validate = lang.getObject("dojox.validate", true);
+	/*=====
+		validate = dojox.validate;
+	=====*/
 
-dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
+validate.isText = function(/*String*/value, /*Object?*/flags){
 	// summary:
 	//	Checks if a string has non whitespace characters.
 	//	Parameters allow you to constrain the length.
@@ -33,8 +35,8 @@ dojox.validate.isText = function(/*String*/value, /*Object?*/flags){
 
 };
 
-dojox.validate._isInRangeCache = {};
-dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
+validate._isInRangeCache = {};
+validate.isInRange = function(/*String*/value, /*Object?*/flags){
 	// summary:
 	//	Validates whether a string denoting a number
 	//	is between a max and min.
@@ -56,7 +58,7 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 		min = (typeof flags.min == "number") ? flags.min : -Infinity,
 		dec = (typeof flags.decimal == "string") ? flags.decimal : ".",
 	
-		cache = dojox.validate._isInRangeCache,
+		cache = validate._isInRangeCache,
 		cacheIdx = value + "max" + max + "min" + min + "dec" + dec
 	;
 	if(typeof cache[cacheIdx] != "undefined"){
@@ -68,7 +70,7 @@ dojox.validate.isInRange = function(/*String*/value, /*Object?*/flags){
 
 };
 
-dojox.validate.isNumberFormat = function(/* String */value, /* Object? */flags){
+validate.isNumberFormat = function(/* String */value, /* Object? */flags){
 	// summary: Validates any sort of number based format
 	//
 	// description:
@@ -110,14 +112,14 @@ dojox.validate.isNumberFormat = function(/* String */value, /* Object? */flags){
 	return re.test(value); // Boolean
 };
 
-dojox.validate.isValidLuhn = function(/* String */value){
+validate.isValidLuhn = function(/* String */value){
 	// summary: Validate a String value against the Luhn algorithm.
 	// description:
 	//		Validate a String value against the Luhn algorithm to verify
 	//		its integrity.
 	
 	var sum = 0, parity, curDigit;
-	if(!dojo.isString(value)){
+	if(!lang.isString(value)){
 		value = String(value);
 	}
 	value = value.replace(/[- ]/g,''); //ignore dashes and whitespaces
@@ -136,6 +138,6 @@ dojox.validate.isValidLuhn = function(/* String */value){
 	return !(sum % 10); // Boolean
 };
 
-return dojox.validate;
+return validate;
 
 });

@@ -1,13 +1,19 @@
-define(["dojo/_base/kernel"], function(dojo){
-	dojo.getObject("dtl.contrib.objects", true, dojox);
+define([
+	"dojo/_base/lang",
+	"../_base"	
+], function(lang,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dojox.dtl.contrib.objects", true);
 
-	dojo.mixin(dojox.dtl.contrib.objects, {
+	lang.mixin(dd.contrib.objects, {
 		key: function(value, arg){
 			return value[arg];
 		}
 	});
 
-	dojox.dtl.register.filters("dojox.dtl.contrib", {
+	dd.register.filters("dojox.dtl.contrib", {
 		"objects": ["key"]
 	});
 	return dojox.dtl.contrib.objects;

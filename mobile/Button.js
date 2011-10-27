@@ -1,6 +1,20 @@
-define(["dojo/_base/array", "dojo/_base/html","dijit/_WidgetBase", "dijit/form/_FormWidgetMixin", "dijit/form/_ButtonMixin"], function(darray, html, WidgetBase,FormWidgetMixin,ButtonMixin){
+define([
+	"dojo/_base/array",
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dijit/_WidgetBase",
+	"dijit/form/_ButtonMixin",
+	"dijit/form/_FormWidgetMixin"
+],
+	function(array, declare, domClass, domConstruct, WidgetBase, ButtonMixin, FormWidgetMixin){
 
-	return dojo.declare("dojox.mobile.Button", [dijit._WidgetBase, dijit.form._FormWidgetMixin, dijit.form._ButtonMixin], {
+	/*=====
+		WidgetBase = dijit._WidgetBase;
+		FormWidgetMixin = dijit.form._FormWidgetMixin;
+		ButtonMixin = dijit.form._ButtonMixin;
+	=====*/
+	return declare("dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
 		// summary:
 		//	Non-templated BUTTON widget with a thin API wrapper for click events and setting the label
 		//
@@ -13,6 +27,10 @@ define(["dojo/_base/array", "dojo/_base/html","dijit/_WidgetBase", "dijit/form/_
 
 		baseClass: "mblButton",
 
+		// Override automatic assigning type --> node, it causes exception on IE.
+		// Instead, type must be specified as this.type when the node is created, as part of the original DOM
+		_setTypeAttr: null,
+
 		// duration: Number
 		//	duration of selection, milliseconds or -1 for no post-click CSS styling
 		duration: 1000,
@@ -22,18 +40,25 @@ define(["dojo/_base/array", "dojo/_base/html","dijit/_WidgetBase", "dijit/form/_
 			if(ret && this.duration >= 0){ // if its not a button with a state, then emulate press styles
 				var button = this.focusNode || this.domNode;
 				var newStateClasses = (this.baseClass+' '+this["class"]).split(" ");
-				newStateClasses = dojo.map(newStateClasses, function(c){ return c+"Selected"; });
-				dojo.addClass(button, newStateClasses);
+				newStateClasses = array.map(newStateClasses, function(c){ return c+"Selected"; });
+				domClass.add(button, newStateClasses);
 				setTimeout(function(){
-					dojo.removeClass(button, newStateClasses);
+					domClass.remove(button, newStateClasses);
 				}, this.duration);
 			}
 			return ret;
 		},
 
+		isFocusable: function(){ return false; },
+
 		buildRendering: function(){
 			if(!this.srcNodeRef){
-				this.srcNodeRef = dojo.create("button", {"type": this.type});
+				this.srcNodeRef = domConstruct.create("button", {"type": this.type});
+			}else if(this._cv){
+				var n = this.srcNodeRef.firstChild;
+				if(n && n.nodeType === 3){
+					n.nodeValue = this._cv(n.nodeValue);
+				}
 			}
 			this.inherited(arguments);
 			this.focusNode = this.domNode;
@@ -42,6 +67,10 @@ define(["dojo/_base/array", "dojo/_base/html","dijit/_WidgetBase", "dijit/form/_
 		postCreate: function(){
 			this.inherited(arguments);
 			this.connect(this.domNode, "onclick", "_onClick");
+		},
+
+		_setLabelAttr: function(/*String*/ content){
+			this.inherited(arguments, [this._cv ? this._cv(content) : content]);
 		}
 	});
 

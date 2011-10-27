@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", 
+define(["dojo/_base/connect", "dojo/_base/declare", 
 	"./PlotAction", "dojox/gfx/matrix", 
 	"dojox/gfx/fx", "dojo/fx", "dojo/fx/easing"], 
-	function(dojo, connect, declare, PlotAction, m, gf, df, dfe){
+	function(Hub, declare, PlotAction, m, gf, df, dfe){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -12,11 +12,12 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare",
 		//		The amount to magnify the given object to.  Default is 2.
 		scale: 2
 	});
+	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SCALE = 2;
 
-	return dojo.declare("dojox.charting.action2d.Magnify", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Magnify", PlotAction, {
 		//	summary:
 		//		Create an action that magnifies the object the action is applied to.
 
@@ -102,7 +103,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare",
 
 			anim.action = df.combine(vector);
 			if(o.type == "onmouseout"){
-				dojo.connect(anim.action, "onEnd", this, function(){
+				Hub.connect(anim.action, "onEnd", this, function(){
 					if(this.anim[runName]){
 						delete this.anim[runName][index];
 					}

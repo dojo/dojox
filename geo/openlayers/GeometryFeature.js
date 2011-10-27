@@ -1,10 +1,17 @@
-
-define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/openlayers/Point",
-		"dojox/geo/openlayers/LineString", "dojox/geo/openlayers/Collection",
-		"dojox/geo/openlayers/Feature" ], function(arrayArg, kernalArg, langArg, pointArg,
-		lineStringArg, collectionArg, featureArg){
-
-	return dojo.declare("dojox.geo.openlayers.GeometryFeature", dojox.geo.openlayers.Feature, {
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/array",
+				"dojo/_base/lang",
+				"dojox/gfx/matrix",
+				"dojox/geo/openlayers/Point",
+				"dojox/geo/openlayers/LineString",
+				"dojox/geo/openlayers/Collection",
+				"dojox/geo/openlayers/Feature"], function(dojo, declare, array, lang, matrix, Point, LineString,
+																									Collection, Feature){
+	/*===== 
+	var Feature = dojox.geo.openlayers.Feature; 
+	=====*/
+	return declare("dojox.geo.openlayers.GeometryFeature", Feature, {
 		//	summary:
 		//		A Feature encapsulating a geometry.
 		//	description:
@@ -66,12 +73,12 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			var prop = this.getShapeProperties();
 			s.setShape(prop);
 
-			dojo.forEach(g.coordinates, function(item){
-				if (item instanceof dojox.geo.openlayers.Point)
+			array.forEach(g.coordinates, function(item){
+				if (item instanceof Point)
 					this.renderPoint(item);
-				else if (item instanceof dojox.geo.openlayers.LineString)
+				else if (item instanceof LineString)
 					this.renderLineString(item);
-				else if (item instanceof dojox.geo.openlayers.Collection)
+				else if (item instanceof Collection)
 					this.renderCollection(item);
 				else
 					throw new Error();
@@ -88,11 +95,11 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			if (g == undefined)
 				g = this._geometry;
 
-			if (g instanceof dojox.geo.openlayers.Point)
+			if (g instanceof Point)
 				this.renderPoint(g);
-			else if (g instanceof dojox.geo.openlayers.LineString)
+			else if (g instanceof LineString)
 				this.renderLineString(g);
-			else if (g instanceof dojox.geo.openlayers.Collection)
+			else if (g instanceof Collection)
 				this.renderCollection(g);
 			else
 				throw new Error();
@@ -131,13 +138,13 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 				g = this._geometry;
 
 			var shape = null;
-			if (g instanceof dojox.geo.openlayers.Point)
+			if (g instanceof Point) {
 				shape = s.createCircle();
-			else if (g instanceof dojox.geo.openlayers.LineString) {
+			} else if (g instanceof LineString) {
 				shape = s.createPolyline();
-			} else if (g instanceof dojox.geo.openlayers.Collection) {
+			} else if (g instanceof Collection) {
 				var grp = s.createGroup();
-				dojo.forEach(g.coordinates, function(item){
+				array.forEach(g.coordinates, function(item){
 					var shp = this.createShape(s, item);
 					grp.add(shp);
 				}, this);
@@ -145,6 +152,20 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			} else
 				throw new Error();
 			return shape;
+		},
+
+		getShape : function(){
+			//	summary:
+			//		Retrieves the shape rendering the geometry
+			//	returns: Shape
+			//		The shape used to render the geometry.
+			var g = this._geometry;
+			if (!g)
+				return null;
+			if (g.shape)
+				return g.shape;
+			this.render();
+			return g.shape;
 		},
 
 		_createPoint : function(/* dojox.geo.openlayer.Geometry */g){
@@ -184,18 +205,19 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			var map = layer.getDojoMap();
 
 			s = this._getPointShape(g);
-			var prop = dojo.mixin({}, this._defaults.pointShape);
-			prop = dojo.mixin(prop, this.getShapeProperties());
+			var prop = lang.mixin({}, this._defaults.pointShape);
+			prop = lang.mixin(prop, this.getShapeProperties());
 			s.setShape(prop);
 
 			var from = this.getCoordinateSystem();
 			var p = map.transform(g.coordinates, from);
+
 			var a = this._getLocalXY(p);
 			var cx = a[0];
 			var cy = a[1];
 			var tr = layer.getViewport().getTransform();
 			if (tr)
-				s.setTransform(dojox.gfx.matrix.translate(cx - tr.dx, cy - tr.dy));
+				s.setTransform(matrix.translate(cx - tr.dx, cy - tr.dy));
 
 			this._applyStyle(g);
 		},
@@ -240,7 +262,7 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			var from = this.getCoordinateSystem();
 			var points = new Array(g.coordinates.length); // ss.getShape().points;		
 			var tr = layer.getViewport().getTransform();
-			dojo.forEach(g.coordinates, function(c, i, array){
+			array.forEach(g.coordinates, function(c, i, array){
 				var p = map.transform(c, from);
 				var a = this._getLocalXY(p);
 				if (tr) {
@@ -252,9 +274,9 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 					y : a[1]
 				};
 			}, this);
-			var prop = dojo.mixin({}, this._defaults.lineStringShape);
-			var prop = dojo.mixin(prop, this.getShapeProperties());
-			prop = dojo.mixin(prop, {
+			var prop = lang.mixin({}, this._defaults.lineStringShape);
+			prop = lang.mixin(prop, this.getShapeProperties());
+			prop = lang.mixin(prop, {
 				points : points
 			});
 			lss.setShape(prop);
@@ -274,20 +296,20 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			var f = this.getFill();
 
 			var fill;
-			if (!f || dojo.isString(f) || dojo.isArray(f))
+			if (!f || lang.isString(f) || lang.isArray(f))
 				fill = f;
 			else {
-				fill = dojo.mixin({}, this._defaults.fill);
-				fill = dojo.mixin(fill, f);
+				fill = lang.mixin({}, this._defaults.fill);
+				fill = lang.mixin(fill, f);
 			}
 
 			var s = this.getStroke();
 			var stroke;
-			if (!s || dojo.isString(s) || dojo.isArray(s))
+			if (!s || lang.isString(s) || lang.isArray(s))
 				stroke = s;
 			else {
-				stroke = dojo.mixin({}, this._defaults.stroke);
-				stroke = dojo.mixin(stroke, s);
+				stroke = lang.mixin({}, this._defaults.stroke);
+				stroke = lang.mixin(stroke, s);
 			}
 
 			this._applyRecusiveStyle(g, stroke, fill);
@@ -312,8 +334,8 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			if (shp.setStroke)
 				shp.setStroke(stroke);
 
-			if (g instanceof dojox.geo.openlayers.Collection) {
-				dojo.forEach(g.coordinates, function(i){
+			if (g instanceof Collection) {
+				array.forEach(g.coordinates, function(i){
 					this._applyRecusiveStyle(i, stroke, fill);
 				}, this);
 			}
@@ -360,9 +382,10 @@ define([ "dojo/_base/array", "dojo/_base/kernel", "dojo/_base/lang", "dojox/geo/
 			var g = this._geometry;
 			var shp = g.shape;
 			g.shape = null;
-			shp.removeShape();
-			if (g instanceof dojox.geo.openlayers.Collection) {
-				dojo.forEach(g.coordinates, function(i){
+			if (shp)
+				shp.removeShape();
+			if (g instanceof Collection) {
+				array.forEach(g.coordinates, function(i){
 					this.remove(i);
 				}, this);
 			}

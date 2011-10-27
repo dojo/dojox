@@ -1,13 +1,8 @@
 @import url("../common/domButtons/DomButtonColorButtons-compat.css");
 
-/* Icon Container */
-.mblIconArea DIV {
-	line-height: 88px;
-}
-.mblIconArea IMG {
-	position: relative;
-	top: 0;
-	left: 0;
+/* dojox.mobile.IconItem */
+.mblIconArea div {
+	*font-size: 60px; /* IE 7 quirks */
 }
 
 /* Icon Content Heading */

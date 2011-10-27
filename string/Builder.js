@@ -1,6 +1,7 @@
-define(["dojo/_base/lang"], function(dojo){
-	dojo.getObject("string", true, dojox);
-	dojox.string.Builder = function(/*String?*/str){
+define(["dojo/_base/lang"], 
+  function(lang){
+	lang.getObject("string", true, dojox).Builder = 
+	  function(/*String?*/str){
 		//	summary:
 		//		A fast buffer for creating large strings.
 		//

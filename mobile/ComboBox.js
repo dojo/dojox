@@ -1,7 +1,24 @@
-define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./common", "dijit/popup"], function(TextBox, ComboBoxMenu, AutoCompleterMixin, common, popup) {
-	dojo.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom-geometry",
+	"dojo/dom-style",
+	"dojo/window",
+	"dijit/form/_AutoCompleterMixin",
+	"dijit/popup",
+	"./_ComboBoxMenu",
+	"./TextBox",
+	"./sniff"
+], function(kernel, declare, lang, win, domGeometry, domStyle, windowUtils, AutoCompleterMixin, popup, ComboBoxMenu, TextBox, has){
+	kernel.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
-	return dojo.declare("dojox.mobile.ComboBox", [dojox.mobile.TextBox, dijit.form._AutoCompleterMixin], {
+	/*=====
+		TextBox = dojox.mobile.TextBox;
+		AutoCompleterMixin = dijit.form._AutoCompleterMixin;
+	=====*/
+	return declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
 		// summary:
 		//		A non-templated auto-completing text box widget
 		//
@@ -47,7 +64,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 			if(this._throttleHandler){
 				clearTimeout(this._throttleHandler);
 			}
-			this._throttleHandler = setTimeout(dojo.hitch(this, function(){ this._throttleHandler = null; }), 500);
+			this._throttleHandler = setTimeout(lang.hitch(this, function(){ this._throttleHandler = null; }), 500);
 		},
 
 		_onFocus: function(){
@@ -89,7 +106,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 			//		Opens the dropdown for this widget.   To be called only when this.dropDown
 			//		has been created and is ready to display (ie, it's data is loaded).
 			// returns:
-			//		return value of dijit.popup.open()
+			//		return value of popup.open()
 			// tags:
 			//		protected
 
@@ -100,7 +117,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 				self = this;
 
 
-			// TODO: isn't maxHeight dependent on the return value from dijit.popup.open(),
+			// TODO: isn't maxHeight dependent on the return value from popup.open(),
 			// ie, dependent on how much space is available (BK)
 
 			if(!this._preparedNode){
@@ -126,15 +143,15 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 			if(!this._explicitDDHeight){
 				myStyle.height = "";
 			}
-			dojo.style(ddNode, myStyle);
+			domStyle.set(ddNode, myStyle);
 
 			// Figure out maximum height allowed (if there is a height restriction)
 			var maxHeight = this.maxHeight;
 			if(maxHeight == -1){
 				// limit height to space available in viewport either above or below my domNode
 				// (whichever side has more room)
-				var viewport = dojo.window.getBox(),
-					position = dojo.position(aroundNode, false);
+				var viewport = windowUtils.getBox(),
+					position = domGeometry.position(aroundNode, false);
 				maxHeight = Math.floor(Math.max(position.y, viewport.h - (position.y + position.h)));
 			}
 
@@ -146,7 +163,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 				dropDown.startup(); // this has to be done after being added to the DOM
 			}
 			// Get size of drop down, and determine if vertical scroll bar needed
-			var mb = dojo.position(this.dropDown.containerNode, false);
+			var mb = domGeometry.position(this.dropDown.containerNode, false);
 			var overHeight = (maxHeight && mb.h > maxHeight);
 			if(overHeight){
 				mb.h = maxHeight;
@@ -154,7 +171,7 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 
 			// Adjust dropdown width to match or be larger than my width
 			mb.w = Math.max(mb.w, aroundNode.offsetWidth);
-			dojo.marginBox(ddNode, mb);
+			domGeometry.setMarginBox(ddNode, mb);
 
 			var retVal = popup.open({
 				parent: this,
@@ -177,11 +194,11 @@ define(["./TextBox", "./_ComboBoxMenu", "dijit/form/_AutoCompleterMixin", "./com
 				if(retVal.aroundCorner.charAt(0) == 'B'){ // is popup below?
 					this.domNode.scrollIntoView(true); // scroll to top
 				}
-				this.startHandler = this.connect(dojo.doc.documentElement, dojox.mobile.hasTouch ? "ontouchstart" : "onmousedown",
-					dojo.hitch(this, function(){
+				this.startHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchstart" : "onmousedown",
+					lang.hitch(this, function(){
 						var isMove = false;
-						this.moveHandler = this.connect(dojo.doc.documentElement, dojox.mobile.hasTouch ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
-						this.endHandler = this.connect(dojo.doc.documentElement, dojox.mobile.hasTouch ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
+						this.moveHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
+						this.endHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
 					})
 				);
 			}

@@ -1,7 +1,26 @@
-define(['dojo', 'dijit', 'dijit/_Widget', 'dijit/_TemplatedMixin', 'dijit/_WidgetsInTemplateMixin'],function(dojo, dijit){
+define([
+	"dojo/dom-form",
+	"dojo/dom-style",
+	"dojo/dom-construct",
+	"dojo/dom-attr",
+	"dojo/has",
+	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin"
+],function(domForm, domStyle, domConstruct, domAttr, has, declare, event, Widget, TemplatedMixin, WidgetsInTemplateMixin){
 
+has.add('FormData', function(){return !!window.FormData;});
+has.add('xhr-sendAsBinary', function(){var xhr=window.XMLHttpRequest && new window.XMLHttpRequest(); return xhr && !!xhr.sendAsBinary;});
+has.add('file-multiple', function(){return !!({'true':1,'false':1}[domAttr.get(document.createElement('input',{type:"file"}), 'multiple')]);});
 
-dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+	/*=====
+		Widget = dijit._Widget;
+		TemplatedMixin = dijit._TemplatedMixin;
+		WidgetsInTemplateMixin = dijit._WidgetsInTemplateMixin;
+	=====*/
+return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTemplateMixin], {
 	//
 	// Version: 1.6
 	//
@@ -49,8 +68,8 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		if(!this._fcon && !!this.getForm()){
 			this._fcon = true;
 			this.connect(this.form, "onsubmit", function(evt){
-				dojo.stopEvent(evt);
-				this.submit(dojo.formToObject(this.form));
+				event.stop(evt);
+				this.submit(this.form);
 			});
 		}
 	},
@@ -59,28 +78,14 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		//	summary:
 		// 		Does feature testing for uploader capabilities. (No browser sniffing - yay)
 		//
-		if(!this._hascache){
-			this._hascache = {
-				testDiv: dojo.create("div"),
-				testInput: dojo.create("input", {type:"file"}),
-				xhr:!!window.XMLHttpRequest ? new XMLHttpRequest() : {}
-			};
-			dojo.style(this._hascache.testDiv, "opacity", .7);
-		}
 		switch(what){
-			case "FormData":
-				// works around ticket:
-				//		http://trac.dojotoolkit.org/ticket/12674
-				if(dojo.isFF && this.uploadOnSelect) { return false; }
-				return !!window.FormData;
-			case "sendAsBinary":
-				return !!this._hascache.xhr.sendAsBinary;
-			case "opacity":
-				return dojo.style(this._hascache.testDiv, "opacity") == .7;
 			case "multiple":
 				if(this.force == "flash" || this.force == "iframe") return false;
-				var res = dojo.attr(this._hascache.testInput, "multiple");
-				return res===true || res===false; // IE will be undefined
+				return has("file-multiple");
+			case "FormData":
+				return has(what);
+			case "sendAsBinary":
+				return has("xhr-sendAsBinary");
 		}
 		return false; // Boolean
 	},
@@ -117,5 +122,4 @@ dojo.declare("dojox.form.uploader.Base", [dijit._Widget, dijit._TemplatedMixin, 
 		}; // Object
 	}
 });
-return dojox.form.uploader.Base;
 });

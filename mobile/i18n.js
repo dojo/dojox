@@ -1,27 +1,46 @@
-define(["./common", "dojo/i18n"], function(mcommon, i18n){
+define([
+	"dojo/_base/lang",
+	"dojo/i18n",
+	"dijit/_WidgetBase"
+], function(lang, di18n, WidgetBase){
+
+/*=====
+	var WidgetBase = dijit._WidgetBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/i18n
 	// summary:
-	//		TODOC
+	//		An internationalization utility for dojox.mobile-based user
+	//		applications.
 
-	dojo.getObject("mobile.i18n", true, dojox);
+	var i18n = lang.getObject("dojox.mobile.i18n", true);
+/*=====
+	var i18n = dojox.mobile.i18n;
+=====*/
 
-	dojox.mobile.i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
-		return dojox.mobile.i18n.registerBundle(dojo.i18n.getLocalization(packageName, bundleName, locale));
+	i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
+		// summary:
+		//		Loads an nls resouce bundle and returns an array of localized
+		//		resources.
+		return i18n.registerBundle(di18n.getLocalization(packageName, bundleName, locale));
 	};
 
-	dojox.mobile.i18n.registerBundle = function(/*Array*/bundle){
-		if(!dojox.mobile.i18n.bundle){ dojox.mobile.i18n.bundle = []; }
-		return dojo.mixin(dojox.mobile.i18n.bundle, bundle);
+	i18n.registerBundle = function(/*Array*/bundle){
+		// summary:
+		//		Accumulates the given localized resouces in an array and returns
+		//		it.
+		if(!i18n.bundle){ i18n.bundle = []; }
+		return lang.mixin(i18n.bundle, bundle);
 	};
 
-	dojo.extend(dijit._WidgetBase, {
+	lang.extend(WidgetBase, {
 		mblNoConv: false,
 		_cv: function(s){
-			if(this.mblNoConv || !dojox.mobile.i18n.bundle){ return s; }
-			return dojox.mobile.i18n.bundle[dojo.trim(s)] || s;
+			if(this.mblNoConv || !i18n.bundle){ return s; }
+			return i18n.bundle[lang.trim(s)] || s;
 		}
 	});
 
-	return dojox.mobile.i18n;
+	return i18n;
 });

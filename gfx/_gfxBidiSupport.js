@@ -1,7 +1,8 @@
-define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
-	dojo.getObject("dojox.gfx._gfxBidiSupport", true);
-	var g = dojox.gfx;
-
+define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "dojo/_base/array",
+		"./utils", "./shape", "dojox/string/BidiEngine"], 
+  function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
+	lang.getObject("dojox.gfx._gfxBidiSupport", true);
+	/*===== g = dojox.gfx; =====*/
 	switch (g.renderer){
 		case 'vml':
 			g.isVml = true;
@@ -29,10 +30,10 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	};
 
 	// the object that performs text transformations.
-	var bidiEngine = new dojox.string.BidiEngine();
+	var bidiEngine = new BidiEngine();
 
-	dojo.extend(dojox.gfx.shape.Surface, {
-		// textDir:
+	lang.extend(g.shape.Surface, {
+		// textDir: String
 		//		Will be used as default for Text/TextPath/Group objects that created by this surface
 		//		and textDir wasn't directly specified for them, though the bidi support was loaded.
 		//		Can be setted in two ways:
@@ -42,7 +43,7 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 		//			of textDir propogates to all of it's children and the children of children (for Groups) etc.
 		textDir: "",
 
-		setTextDir: function(newTextDir){
+		setTextDir: function(/*String*/newTextDir){
 			// summary:
 			//		Used for propogation and change of textDir.
 			//		newTextDir will be forced as textDir for all of it's children (Group/Text/TextPath).
@@ -54,13 +55,13 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 		}
 	});
 
-	dojo.extend(dojox.gfx.Group, {                          
-		// textDir:
+	lang.extend(g.Group, {                          
+		// textDir: String
 		//		Will be used for inheritance, or as default for text objects
 		//		that textDir wasn't directly specified for them but the bidi support was required.
 		textDir: "",
 
-		setTextDir: function(newTextDir){
+		setTextDir: function(/*String*/newTextDir){
 			// summary:
 			//		Used for propogation and change of textDir.
 			//		newTextDir will be forced as textDir for all of it's children (Group/Text/TextPath).
@@ -72,7 +73,7 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 		}	
 	});
 	
-	dojo.extend(dojox.gfx.Text, {  
+	lang.extend(g.Text, {  
 		// summary:
 		//		Overrides some of dojox.gfx.Text properties, and adds some 
 		//		for bidi support.
@@ -116,13 +117,13 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 
 			if(targetDir == "auto"){
 				//is auto by default
-				if(dojox.gfx.isVml){
+				if(g.isVml){
 					return text;
 				}
 				targetDir = bidiEngine.checkContextual(text);
 			}
 
-			if(dojox.gfx.isVml){
+			if(g.isVml){
 				sourceDir = bidiEngine.checkContextual(text);
 				if(targetDir != sourceDir){
 					if(targetDir == "rtl"){
@@ -134,26 +135,26 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 				return text;
 			}
 
-			if(dojox.gfx.isSvgWeb){
+			if(g.isSvgWeb){
 				if(targetDir == "rtl"){
 					return bidiEngine.bidiTransform(text,"IRNNN","ILNNN");
 				}
 				return text;
 			}
 
-			if(dojox.gfx.isSilverlight){
+			if(g.isSilverlight){
 				return (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRNNN","VLYNN") : bidiEngine.bidiTransform(text,"ILNNN","VLYNN");
 			}
 
-			if(dojox.gfx.isCanvas){
+			if(g.isCanvas){
 				return (targetDir == "rtl") ? bidi_const.RLE + text + bidi_const.PDF : bidi_const.LRE + text + bidi_const.PDF;
 			}
 
-			if(dojox.gfx.isSvg){
-				if(dojo.isFF){
+			if(g.isSvg){
+				if(has("ff")){
 					return (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRYNN","VLNNN") : bidiEngine.bidiTransform(text,"ILYNN","VLNNN");
 				}
-				if(dojo.isChrome || dojo.isSafari || dojo.isOpera){
+				if(has("chrome") || has("safari") || has("opera")){
 					return bidi_const.LRM + (targetDir == "rtl" ? bidi_const.RLE : bidi_const.LRE) + text + bidi_const.PDF;
 				}					
 			}					
@@ -166,7 +167,7 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 		}	
 	});
 
-	dojo.extend(dojox.gfx.TextPath, {          
+	lang.extend(g.TextPath, {          
 			// textDir: String
 			//		Used for displaying bidi scripts in right layout.
 			//		Defines the base direction of text that displayed, can have 3 values:
@@ -175,7 +176,7 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 			//			3. "auto" - base direction is contextual (defined by first strong character).
 		textDir: "",
 
-		formatText: function (text, textDir){
+		formatText: function (/*String*/text, /*String*/textDir){
 			// summary: 
 			//		Applies the right transform on text, according to renderer.
 			// text:	the string for manipulation, by default return value.
@@ -197,13 +198,13 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 
 				if(targetDir == "auto"){
 					//is auto by default
-					if(dojox.gfx.isVml){
+					if(g.isVml){
 						return text;
 					}
 					targetDir = bidiEngine.checkContextual(text);
 				}
 
-				if(dojox.gfx.isVml){
+				if(g.isVml){
 					sourceDir = bidiEngine.checkContextual(text);
 					if(targetDir != sourceDir){
 						if(targetDir == "rtl"){
@@ -214,7 +215,7 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 					}
 					return text;
 				}
-				if(dojox.gfx.isSvgWeb){
+				if(g.isSvgWeb){
 					if(targetDir == "rtl"){
 						return bidiEngine.bidiTransform(text,"IRNNN","ILNNN");
 					}
@@ -222,8 +223,8 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 				}
 				//unlike the g.Text that is rendered in logical layout for Bidi scripts.
 				//for g.TextPath in svg always visual -> bidi script is unreadable (except Opera).
-				if(dojox.gfx.isSvg){
-					if(dojo.isOpera){
+				if(g.isSvg){
+					if(has("opera")){
 						text = bidi_const.LRM + (targetDir == "rtl"? bidi_const.RLE : bidi_const.LRE) + text + bidi_const.PDF;
 					}else{
 						text = (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRYNN","VLNNN") : bidiEngine.bidiTransform(text,"ILYNN","VLNNN");
@@ -291,11 +292,11 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	// Istead of adding bidiPreprocess to all renders one by one
 	// use the extendMethod, at first there's a need for bidi transformation 
 	// on text then call to original setShape.
-	extendMethod(dojox.gfx.Text,"setShape", bidiPreprocess, null);
-	extendMethod(dojox.gfx.TextPath,"setText", bidiPreprocess, null);
+	extendMethod(g.Text,"setShape", bidiPreprocess, null);
+	extendMethod(g.TextPath,"setText", bidiPreprocess, null);
 	
 	var restoreText = function(origObj){
-		var obj = dojo.clone(origObj);
+		var obj = lang.clone(origObj);
 		if (obj && this.origText){
 			obj.text = this.origText;
 		}
@@ -305,8 +306,8 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	// Istead of adding restoreText to all renders one by one
 	// use the extendMethod, at first get the shape by calling the original getShape,
 	// than resrore original text (without the text transformations).
-	extendMethod(dojox.gfx.Text, "getShape", null, restoreText);
-	extendMethod(dojox.gfx.TextPath, "getText", null, restoreText);
+	extendMethod(g.Text, "getShape", null, restoreText);
+	extendMethod(g.TextPath, "getText", null, restoreText);
 
 	var groupTextDir = function(group, args){
 		var textDir;
@@ -322,8 +323,8 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	// use the extendMethod, at first the original createGroup is applied, the
 	// groupTextDir which is setts Group's textDir as it's father's or if was defined
 	// by user by this value.
-	extendMethod(dojox.gfx.Surface, "createGroup", null, groupTextDir);
-	extendMethod(dojox.gfx.Group, "createGroup", null, groupTextDir);
+	extendMethod(g.Surface, "createGroup", null, groupTextDir);
+	extendMethod(g.Group, "createGroup", null, groupTextDir);
 
 	var textDirPreprocess =  function(text){
 		//  inherit from surface / group  if textDir is defined there
@@ -340,28 +341,28 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	// so instead of doing it in renders one by one (vml vs others)
 	// use the extendMethod, at first the textDirPreprocess function handles the input
 	// then the original createXXXXXX is applied.
-	extendMethod(dojox.gfx.Surface,"createText", textDirPreprocess, null);
-	extendMethod(dojox.gfx.Surface,"createTextPath", textDirPreprocess, null);
-	extendMethod(dojox.gfx.Group,"createText", textDirPreprocess, null);
-	extendMethod(dojox.gfx.Group,"createTextPath", textDirPreprocess, null);
+	extendMethod(g.Surface,"createText", textDirPreprocess, null);
+	extendMethod(g.Surface,"createTextPath", textDirPreprocess, null);
+	extendMethod(g.Group,"createText", textDirPreprocess, null);
+	extendMethod(g.Group,"createTextPath", textDirPreprocess, null);
 
-	dojox.gfx.createSurface = function(parentNode, width, height, textDir) {        
-		var s = dojox.gfx[dojox.gfx.renderer].createSurface(parentNode, width, height);
+	g.createSurface = function(parentNode, width, height, textDir) {        
+		var s = g[g.renderer].createSurface(parentNode, width, height);
 		var tDir = validateTextDir(textDir);
 		
-		if(dojox.gfx.isSvgWeb){
-			s.textDir = tDir ? tDir : dojo.style(dojo.byId(parentNode),"direction");
+		if(g.isSvgWeb){
+			s.textDir = tDir ? tDir : html.style(dom.byId(parentNode),"direction");
 			return s;
 		}
 		// if textDir was defined use it, else get default value.
-		//s.textDir = tDir ? tDir : dojo.style(s.rawNode,"direction");
-		if(dojox.gfx.isVml || dojox.gfx.isSvg || dojox.gfx.isCanvas){
-			s.textDir = tDir ? tDir : dojo.style(s.rawNode,"direction");
+		//s.textDir = tDir ? tDir : html.style(s.rawNode,"direction");
+		if(g.isVml || g.isSvg || g.isCanvas){
+			s.textDir = tDir ? tDir : html.style(s.rawNode,"direction");
 		}
-		if(dojox.gfx.isSilverlight){
+		if(g.isSilverlight){
 			// allow this once rawNode will be able for the silverlight
 			//s.textDir = tDir ? tDir : dojo.style(s.rawNode,"direction");
-			s.textDir = tDir ? tDir : dojo.style(s._nodes[1],"direction");
+			s.textDir = tDir ? tDir : html.style(s._nodes[1],"direction");
 		}
 		
 		return s;
@@ -372,14 +373,14 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 	function setTextDir(/*Object*/ obj, /*String*/ newTextDir){
 		var tDir = validateTextDir(newTextDir);
 		if (tDir){
-			dojox.gfx.utils.forEach(obj,function(e){
-				if(e instanceof dojox.gfx.Surface || e instanceof dojox.gfx.Group){
+			g.utils.forEach(obj,function(e){
+				if(e instanceof g.Surface || e instanceof g.Group){
 					e.textDir = tDir;
 				}		
-				if(e instanceof dojox.gfx.Text){
+				if(e instanceof g.Text){
 					e.setShape({textDir: tDir});
 				}
-				if(e instanceof dojox.gfx.TextPath){
+				if(e instanceof g.TextPath){
 					e.setText({textDir: tDir})
 				}
 			}, obj);
@@ -391,7 +392,7 @@ define(["./utils", "./shape", "dojox/string/BidiEngine"], function(){
 		var validValues = ["ltr","rtl","auto"]; 
 		if (textDir){
 			textDir = textDir.toLowerCase();
-			if (dojo.indexOf(validValues, textDir) < 0){
+			if (arr.indexOf(validValues, textDir) < 0){
 				return null;
 			}
 		}

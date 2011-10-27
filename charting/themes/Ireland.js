@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Ireland=new Theme({
+	themes.Ireland=new Theme({
 		colors: [
 			"#abdbcb",
 			"#435a51",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.Ireland;
+	return themes.Ireland;
 });

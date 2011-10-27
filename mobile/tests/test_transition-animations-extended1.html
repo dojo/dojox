@@ -11,73 +11,54 @@
 			dojo.require("dojox.mobile.parser");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.compat");	// This mobile app supports running on desktop browsers
 			dojo.require("dojox.mobile.deviceTheme");
+			dojo.require("dojox.mobile.IconContainer");
 		</script>
 		<style>
 		html,body {
 			height: 100%;
 			overflow: hidden;
 		}
-		.mblRoundRectCategory {
-			color: black;
-			text-shadow: rgba(192,192,192,1) 1px 1px 0px;
-		}
 		</style>
 	</head>
-	<body>
-		<div id="view1" dojoType="dojox.mobile.View" selected="true" style="background-color:#855AA0;height:100%;">
-			<h1 dojoType="dojox.mobile.Heading" style="background: -webkit-gradient(linear, left top, left bottom, from(#CDB0BC), to(#A26D84), color-stop(0.5, #B3889B), color-stop(0.5, #AF8195));" back="Top" href="test_transition-animations.html" transition="none">View 1</h1>
+	<body style="visibility:hidden;">
+		<div id="view1" dojoType="dojox.mobile.View" selected="true" style="height:100%;">
+			<h1 dojoType="dojox.mobile.Heading" back="Top" href="test_transition-animations.html" transition="none">View 1</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Extended Transitions 1</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" moveTo="view2" transition="dissolve">
+				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-9.png" moveTo="view2" transition="dissolve">
 					Dissolve
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-6.png" moveTo="view2" transition="flip2">
-					Flip2
-				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="view2" transition="slidev">
+				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-2.png" moveTo="view2" transition="slidev">
 					Slide Vertical
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="view3" transition="slidev" transitionDir="-1">
+				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" moveTo="view3" transition="slidev" transitionDir="-1">
 					Slide Vertical (Reverse)
 				</li>
 			</ul>
 		</div>
 
-		<div id="view2" dojoType="dojox.mobile.View" style="background-color:#009BB9;height:100%;">
+		<div id="view2" dojoType="dojox.mobile.View" style="height:100%;">
 			<h1 dojoType="dojox.mobile.Heading" back="Top" href="test_transition-animations.html" transition="none">View 2</h1>
-			<h2 dojoType="dojox.mobile.RoundRectCategory">Extended Transitions 1</h2>
-			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" moveTo="view3" transition="dissolve">
+			<h2 dojoType="dojox.mobile.EdgeToEdgeCategory">Extended Transitions 1</h2>
+			<ul dojoType="dojox.mobile.EdgeToEdgeList">
+				<li dojoType="dojox.mobile.ListItem" moveTo="view3" transition="dissolve">
 					Dissolve
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-6.png" moveTo="view3" transition="flip2">
-					Flip2
-				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="view3" transition="slidev">
+				<li dojoType="dojox.mobile.ListItem" moveTo="view3" transition="slidev">
 					Slide Vertical
 				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="view1" transition="slidev" transitionDir="-1">
+				<li dojoType="dojox.mobile.ListItem" moveTo="view1" transition="slidev" transitionDir="-1">
 					Slide Vertical (Reverse)
 				</li>
 			</ul>
 		</div>
 
-		<div id="view3" dojoType="dojox.mobile.View" style="background-color:#FFCC00;height:100%;">
-			<h1 dojoType="dojox.mobile.Heading" style="background: -webkit-gradient(linear, left top, left bottom, from(#B0CDBC), to(#6DA284), color-stop(0.5, #88B39B), color-stop(0.5, #81AF95));" back="Top" href="test_transition-animations.html" transition="none">View 3</h1>
-			<h2 dojoType="dojox.mobile.RoundRectCategory">Extended Transitions 1</h2>
-			<ul dojoType="dojox.mobile.RoundRectList">
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" moveTo="view1" transition="dissolve">
-					Dissolve
-				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-6.png" moveTo="view1" transition="flip2">
-					Flip2
-				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="view1" transition="slidev">
-					Slide Vertical
-				</li>
-				<li dojoType="dojox.mobile.ListItem" icon="images/i-icon-5.png" moveTo="view2" transition="slidev" transitionDir="-1">
-					Slide Vertical (Reverse)
-				</li>
+		<div id="view3" dojoType="dojox.mobile.View" style="height:100%;">
+			<h1 dojoType="dojox.mobile.Heading" back="Top" href="test_transition-animations.html" transition="none">View 3</h1>
+			<ul dojoType="dojox.mobile.IconContainer">
+				<li dojoType="dojox.mobile.IconItem" label="Dissolve" icon="images/icon9.png" lazy="true" moveTo="view1" transition="dissolve"></li>
+				<li dojoType="dojox.mobile.IconItem" label="Slide Vertical" icon="images/icon2.png" lazy="true" moveTo="view1" transition="slidev"></li>
+				<li dojoType="dojox.mobile.IconItem" label="Slide Vertical (Reverse)" icon="images/icon3.png" lazy="true" moveTo="view2" transition="slidev" transitionDir="-1"></li>
 			</ul>
 		</div>
 

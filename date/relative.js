@@ -1,32 +1,32 @@
-define(["dojo/_base/lang", "dojo/date/locale", "dojo/i18n"], function(d, ddl, i18n){
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/date/locale", "dojo/i18n"], function(dojo, dlang, ddl, i18n){
 
-	dojo.getObject("date.relative", true, dojox);
+dojo.getObject("date.relative", true, dojox);
 
 /*=====
-	dojox.date.relative.__FormatOptions = function(){
-	//	locale: String
-	//		override the locale used to determine formatting rules
-	//	relativeDate: Date
-	//		Date to calculate relation to (defaults to new Date())
-	//	weekCheck: boolean
-	//		Whether or not to display the day of week (defaults true)
-		this.locale = locale;
-		this.relativeDate = relativeDate;
-		this.weekCheck = weekCheck;
-	}
+dojox.date.relative.__FormatOptions = function(){
+//	locale: String
+//		override the locale used to determine formatting rules
+//	relativeDate: Date
+//		Date to calculate relation to (defaults to new Date())
+//	weekCheck: boolean
+//		Whether or not to display the day of week (defaults true)
+	this.locale = locale;
+	this.relativeDate = relativeDate;
+	this.weekCheck = weekCheck;
+}
 =====*/
 
-	var DAY = 1000*60*60*24,
-	    SIX_DAYS = 6 * DAY,
-	    del = d.delegate,
-	    ggb = ddl._getGregorianBundle,
-	    fmt = ddl.format;
+var DAY = 1000*60*60*24,
+	SIX_DAYS = 6 * DAY,
+	del = dojo.delegate,
+	ggb = ddl._getGregorianBundle,
+	fmt = ddl.format;
 
-	function _clearTime(date){
-	    date = new Date(date);
-	    date.setHours(0, 0, 0, 0);
-	    return date;
-	}
+function _clearTime(date){
+	date = new Date(date);
+	date.setHours(0, 0, 0, 0);
+	return date;
+}
 
 dojox.date.relative.format = function(/*Date*/dateObject, /*dojox.date.relative.__FormatOptions?*/options){
 	// summary:

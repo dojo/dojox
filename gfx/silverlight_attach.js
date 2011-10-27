@@ -1,7 +1,7 @@
-define(["./silverlight"], function(){
-	dojo.getObject("dojox.gfx.silverlight_attach", true);
-	dojo.experimental("dojox.gfx.silverlight_attach");
-	var g = dojox.gfx, sl = g.silverlight;
+define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./silverlight"], 
+  function(kernel, lang, g, sl){
+	lang.getObject("dojox.gfx.silverlight_attach", true);
+	kernel.experimental("dojox.gfx.silverlight_attach");
 	
 	sl.attachNode = function(node){
 		// summary: creates a shape from a Node

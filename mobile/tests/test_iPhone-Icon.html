@@ -4,8 +4,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Icon</title>
-		<link href="../themes/iphone/base.css" rel="stylesheet"></link>
-		<link href="../themes/iphone/IconContainer.css" rel="stylesheet"></link>
+		<link href="../themes/iphone/base.css" rel="stylesheet">
+		<link href="../themes/iphone/IconContainer.css" rel="stylesheet">
 
 		<style>
 			.box {
@@ -29,7 +29,7 @@
 			dojo.require("dojox.mobile.ListItem");
 		</script>
 	</head>
-	<body>
+	<body style="visibility:hidden;">
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container</h1>
 			<ul dojoType="dojox.mobile.IconContainer">
@@ -38,6 +38,7 @@
 				<li dojoType="dojox.mobile.IconItem" label="app3" icon="images/icon-1.png" lazy="true"><div class="box"></div></li>
 				<li dojoType="dojox.mobile.IconItem" label="moveTo" icon="images/icon-1.png" moveTo="about" transition="slide"></li>
 				<li dojoType="dojox.mobile.IconItem" label="href" icon="images/icon-1.png" href="test_iPhone-RoundRectList.html" transition="slide"></li>
+				<li dojoType="dojox.mobile.IconItem" label="hrefTarget" icon="images/icon-1.png" href="test_iPhone-RoundRectList.html" hrefTarget="_blank"></li>
 				<li dojoType="dojox.mobile.IconItem" label="url" icon="images/icon-1.png" url="view-sample.html" transition="slide"></li>
 				<li dojoType="dojox.mobile.IconItem" label="url-async" icon="images/icon-1.png" url="view-sample.html" transition="slide" sync="false"></li>
 			</ul>

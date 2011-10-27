@@ -1,5 +1,7 @@
-define(["dojo/_base/kernel"], function(){
-	var m = dojo.getObject("gfx.matrix", true, dojox);
+define(["./_base","dojo/_base/lang"], 
+  function(g, lang){
+	var m = g.matrix = {};
+	/*===== g = dojox.gfx; m = dojox.gfx.matrix =====*/
 
 	// candidates for dojox.math:
 	var _degToRadCache = {};
@@ -9,7 +11,8 @@ define(["dojo/_base/kernel"], function(){
 	m._radToDeg = function(radian){ return radian / Math.PI * 180; };
 
 	m.Matrix2D = function(arg){
-		// summary: a 2D matrix object
+		// summary: 
+		//		a 2D matrix object
 		// description: Normalizes a 2D matrix-like object. If arrays is passed,
 		//		all objects of the array are normalized and multiplied sequentially.
 		// arg: Object
@@ -22,7 +25,7 @@ define(["dojo/_base/kernel"], function(){
 					var matrix = m.normalize(arg[0]);
 					// combine matrices
 					for(var i = 1; i < arg.length; ++i){
-						var l = matrix, r = dojox.gfx.matrix.normalize(arg[i]);
+						var l = matrix, r = m.normalize(arg[i]);
 						matrix = new m.Matrix2D();
 						matrix.xx = l.xx * r.xx + l.xy * r.yx;
 						matrix.xy = l.xx * r.xy + l.xy * r.yy;
@@ -31,18 +34,18 @@ define(["dojo/_base/kernel"], function(){
 						matrix.dx = l.xx * r.dx + l.xy * r.dy + l.dx;
 						matrix.dy = l.yx * r.dx + l.yy * r.dy + l.dy;
 					}
-					dojo.mixin(this, matrix);
+					lang.mixin(this, matrix);
 				}
 			}else{
-				dojo.mixin(this, arg);
+				lang.mixin(this, arg);
 			}
 		}
 	};
 
 	// the default (identity) matrix, which is used to fill in missing values
-	dojo.extend(m.Matrix2D, {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0});
+	lang.extend(m.Matrix2D, {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0});
 
-	dojo.mixin(m, {
+	lang.mixin(m, {
 		// summary: class constants, and methods of dojox.gfx.matrix
 
 		// matrix constants
@@ -436,7 +439,7 @@ define(["dojo/_base/kernel"], function(){
 
 	});
 	// propagate Matrix2D up
-	dojox.gfx.Matrix2D = m.Matrix2D;
+	g.Matrix2D = m.Matrix2D;
 
 	return m;
 });

@@ -1,6 +1,7 @@
-define(["dojo/_base/NodeList","dojo/NodeList-fx","../style"],function(){
+define(["dojo/_base/lang", "dojo/_base/NodeList","dojo/NodeList-fx", "dojo/fx", "../style"],
+	function(lang, NodeList, NodeListFx, coreFx, styleX){
 // summary:
-//		Core extensions to `dojo.NodeList` providing addtional fx to `dojo.NodeList-fx`
+//		Core extensions to `dojo.NodeList` providing additional fx to `dojo.NodeList-fx`
 // 		from `dojox.fx.style`
 //
 // description:
@@ -8,7 +9,7 @@ define(["dojo/_base/NodeList","dojo/NodeList-fx","../style"],function(){
 //		These are experimental animations, in an experimental
 
 
-dojo.extend(dojo.NodeList, {
+lang.extend( NodeList, {
 
 	addClassFx: function(cssClass, args){
 		// 	summary:
@@ -21,8 +22,8 @@ dojo.extend(dojo.NodeList, {
 		//	|	// fade all elements with class "bar" to to 50% opacity
 		//	|	dojo.query(".bar").addClassFx("bar").play();
 
-		return dojo.fx.combine(this.map(function(n){ // dojo.Animation
-			return dojox.fx.addClass(n, cssClass, args);
+		return coreFx.combine(this.map(function(n){ // dojo.Animation
+			return styleX.addClass(n, cssClass, args);
 		}));
 	},
 	
@@ -36,8 +37,8 @@ dojo.extend(dojo.NodeList, {
 		// example:
 		//	| dojo.query(".box").removeClassFx("bar").play();
 
-		return dojo.fx.combine(this.map(function(n){ // dojo.Animation
-			return dojox.fx.removeClass(n, cssClass, args);
+		return coreFx.combine(this.map(function(n){ // dojo.Animation
+			return styleX.removeClass(n, cssClass, args);
 		}));
 	},
 	
@@ -51,10 +52,10 @@ dojo.extend(dojo.NodeList, {
 		// example:
 		//	| dojo.query(".box").toggleClass("bar").play();
 
-		return dojo.fx.combine(this.map(function(n){ // dojo.Animation
-			return dojox.fx.toggleClass(n, cssClass, force, args);
+		return coreFx.combine(this.map(function(n){ // dojo.Animation
+			return styleX.toggleClass(n, cssClass, force, args);
 		}));
 	}
 });
-return dojo.NodeList;
+return NodeList;
 });

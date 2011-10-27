@@ -15,7 +15,8 @@ define(
 	"dialogIndication": "ระบุหมายเลขหน้า",
 	"pageCountIndication": " (${0} หน้า)",
 	"dialogConfirm": "ไปที่",
-	"dialogCancel": "ยกเลิก"
+	"dialogCancel": "ยกเลิก",
+	"all": "ทั้งหมด"
 })
 //end v1.x content
 );

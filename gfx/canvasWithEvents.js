@@ -1,9 +1,43 @@
-define(["./canvas"], function(){
-	var canvasEvent = dojo.getObject("dojox.gfx.canvasWithEvents", true);
-	dojo.experimental("dojox.gfx.canvasWithEvents");
-	var d = dojo, g = dojox.gfx, gs = g.shape, ga = g.arc, canvas = g.canvas, m = g.matrix;
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/dom", 
+		"dojo/dom-geometry", "./_base","./canvas", "./shape", "./matrix"], 
+  function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
+/*===== 
+	dojox.gfx.canvasWithEvents = {
+	// module:
+	//		dojox/gfx/canvasWithEvents
+	// summary:
+	//		This the graphics rendering bridge for W3C Canvas compliant browsers which extends
+	//		the basic canvas drawing renderer bridge to add additional support for graphics events
+	//		on Shapes.
+	//		Since Canvas is an immediate mode graphics api, with no object graph or
+	//		eventing capabilities, use of the canvas module alone will only add in drawing support.
+	//		This additional module, canvasWithEvents extends this module with additional support
+	//		for handling events on Canvas.  By default, the support for events is now included 
+	//		however, if only drawing capabilities are needed, canvas event module can be disabled
+	//		using the dojoConfig option, canvasEvents:true|false.
+	//		The id of the Canvas renderer is 'canvasWithEvents'.  This id can be used when switch Dojo's
+	//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
+	//		API.	
+	};
+	g = dojox.gfx;
+	canvas.Shape = dojox.gfx.canvas.Shape;
+	canvas.Group = dojox.gfx.canvas.Group;
+	canvas.Image = dojox.gfx.canvas.Image;
+	canvas.Text = dojox.gfx.canvas.Text;
+	canvas.Rect = dojox.gfx.canvas.Rect;
+	canvas.Circle = dojox.gfx.canvas.Circle;
+	canvas.Ellipse = dojox.gfx.canvas.Ellipse;
+	canvas.Line = dojox.gfx.canvas.Line;
+	canvas.PolyLine = dojox.gfx.canvas.PolyLine;
+	canvas.TextPath = dojox.gfx.canvas.TextPath;
+	canvas.Path = dojox.gfx.canvas.Path;
+	canvas.Surface = dojox.gfx.canvas.Surface;
+	canvasEvent.Shape = dojox.gfx.canvasWithEvents.Shape;
 	
-	d.declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
+  =====*/
+	var canvasEvent = g.canvasWithEvents = {};
+
+	declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
 		
 		_testInputs: function(/* Object */ctx, /* Array */ pos){
 			if (!this.canvasFill && this.strokeStyle) {
@@ -18,7 +52,7 @@ define(["./canvas"], function(){
 					if (input.target) 
 						continue;
 					var x = input.x, y = input.y;
-					var p = t ? dojox.gfx.matrix.multiplyPoint(dojox.gfx.matrix.invert(t), x, y) : {
+					var p = t ? m.multiplyPoint(m.invert(t), x, y) : {
 						x: x,
 						y: y
 					};
@@ -66,7 +100,7 @@ define(["./canvas"], function(){
 			if (this.strokeStyle && ctx.pickingMode) {
 				var c = this.strokeStyle.color;
 				try {
-					this.strokeStyle.color = new dojo.Color(ctx.strokeStyle);
+					this.strokeStyle.color = new Color(ctx.strokeStyle);
 					this.inherited(arguments);
 				} finally {
 					this.strokeStyle.color = c;
@@ -91,11 +125,11 @@ define(["./canvas"], function(){
 			// '_setupEvents()' are always invoked first and they
 			// already 'fix' the event
 			return arguments.length > 2 ? // Object
-					 dojo.connect(this, name, object, method) : dojo.connect(this, name, object);
+					 hub.connect(this, name, object, method) : hub.connect(this, name, object);
 		},
 		disconnect: function(token){
 			// summary: disconnects an event handler
-			dojo.disconnect(token);
+			hub.disconnect(token);
 		},
 		// connect hook
 		oncontextmenu:  function(){},
@@ -118,7 +152,7 @@ define(["./canvas"], function(){
 		onkeyup:        function(){}
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
+	declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
 		_testInputs: function(/*Object*/ctx, /*Array*/ pos){
 			var children = this.children, t = this.getTransform(), i, j;
 			if(children.length == 0){
@@ -134,7 +168,7 @@ define(["./canvas"], function(){
 				};
 				if(input.target) continue;
 				var x = input.x, y = input.y;
-				var p = t ? dojox.gfx.matrix.multiplyPoint(dojox.gfx.matrix.invert(t), x, y) : {
+				var p = t ? m.multiplyPoint(m.invert(t), x, y) : {
 					x: x,
 					y: y
 				};
@@ -162,7 +196,7 @@ define(["./canvas"], function(){
 		}	
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Image", [canvasEvent.Shape, canvas.Image], {
+	declare("dojox.gfx.canvasWithEvents.Image", [canvasEvent.Shape, canvas.Image], {
 		_renderShape: function(/* Object */ ctx){
 			// summary:
 			//		render image
@@ -183,20 +217,20 @@ define(["./canvas"], function(){
 		}
 	});
 	
-	d.declare("dojox.gfx.canvasWithEvents.Text", [canvasEvent.Shape, canvas.Text], {
+	declare("dojox.gfx.canvasWithEvents.Text", [canvasEvent.Shape, canvas.Text], {
 		_testInputs: function(ctx, pos){
 			return this._hitTestPixel(ctx, pos);
 		}
 	});
 
 
-	d.declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
-	d.declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
-	d.declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasEvent.Shape, canvas.Ellipse],{});
-	d.declare("dojox.gfx.canvasWithEvents.Line", [canvasEvent.Shape, canvas.Line],{});
-	d.declare("dojox.gfx.canvasWithEvents.Polyline", [canvasEvent.Shape, canvas.Polyline],{});
-	d.declare("dojox.gfx.canvasWithEvents.Path", [canvasEvent.Shape, canvas.Path],{});
-	d.declare("dojox.gfx.canvasWithEvents.TextPath", [canvasEvent.Shape, canvas.TextPath],{});
+	declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
+	declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
+	declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasEvent.Shape, canvas.Ellipse],{});
+	declare("dojox.gfx.canvasWithEvents.Line", [canvasEvent.Shape, canvas.Line],{});
+	declare("dojox.gfx.canvasWithEvents.Polyline", [canvasEvent.Shape, canvas.Polyline],{});
+	declare("dojox.gfx.canvasWithEvents.Path", [canvasEvent.Shape, canvas.Path],{});
+	declare("dojox.gfx.canvasWithEvents.TextPath", [canvasEvent.Shape, canvas.TextPath],{});
 
 	
 	// a map that redirects shape-specific events to the canvas event handler that deals with these events
@@ -220,7 +254,7 @@ define(["./canvas"], function(){
 			    uagent.search('ipad') > -1 || 
 				uagent.search('ipod') > -1;
 	
-	dojo.declare("dojox.gfx.canvasWithEvents.Surface", canvas.Surface, {
+	declare("dojox.gfx.canvasWithEvents.Surface", canvas.Surface, {
 		constructor:function(){
 			this._pick = { curr: null, last: null };
 			this._pickOfMouseDown = null;
@@ -243,11 +277,11 @@ define(["./canvas"], function(){
 				// and connect to the _ontouchXXXImpl_ hooks that are called back by invokeHandler() 
 				this._setupEvents(name);
 				name = "_on" + name + "Impl_";
-				return dojo.connect(this, name, object, method);
+				return hub.connect(this, name, object, method);
 			} else {
 				this._initMirrorCanvas();
-				return dojo.connect(this.getEventSource(), name, null,
-							dojox.gfx.shape.fixCallback(this, g.fixTarget, object, method));
+				return hub.connect(this.getEventSource(), name, null,
+							shapeLib.fixCallback(this, g.fixTarget, object, method));
 			}	
 		},
 
@@ -285,27 +319,27 @@ define(["./canvas"], function(){
 			if (!this._eventsH)
 				this._eventsH = {};
 			// register event hooks if not done yet
-			this._eventsH[eventName] = dojo.connect(this.getEventSource(), eventName,
-					dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_" + eventName));
+			this._eventsH[eventName] = hub.connect(this.getEventSource(), eventName,
+					shapeLib.fixCallback(this, g.fixTarget, this, "_" + eventName));
 			if (eventName === 'onclick' || eventName==='ondblclick') {
 				if(!this._eventsH['onmousedown']){
-					this._eventsH['onmousedown'] = dojo.connect(this.getEventSource(),
-							'onmousedown', dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_onmousedown"));
+					this._eventsH['onmousedown'] = hub.connect(this.getEventSource(),
+							'onmousedown', shapeLib.fixCallback(this, g.fixTarget, this, "_onmousedown"));
 				}
 			 	if(!this._eventsH['onmouseup']){
-					this._eventsH['onmouseup'] = dojo.connect(this.getEventSource(),
-							'onmouseup', dojox.gfx.shape.fixCallback(this, g.fixTarget, this, "_onmouseup"));
+					this._eventsH['onmouseup'] = hub.connect(this.getEventSource(),
+							'onmouseup', shapeLib.fixCallback(this, g.fixTarget, this, "_onmouseup"));
 				}
 			} 			
 		},
 		
 		destroy: function(){
 			// summary: stops the move, deletes all references, so the object can be garbage-collected
-			dojox.gfx.canvas.Surface.destroy.apply(this);
+			canvas.Surface.destroy.apply(this);
 			
 			// destroy events and objects
 			for(var i in this._eventsH){
-				dojo.disconnect(this._eventsH[i]);
+				hub.disconnect(this._eventsH[i]);
 			}
 			this._eventsH = this.mirrorCanvas = null;
 		},	
@@ -456,7 +490,7 @@ define(["./canvas"], function(){
 						var targetTouches = toFire[i].__gfxtt;
 						// fires the original event BUT with our own targetTouches array.
 						// Note for iOS:
-						var evt = dojo.delegate(e, {gfxTarget: toFire[i]});
+						var evt = lang.delegate(e, {gfxTarget: toFire[i]});
 						if(isiOS){
 							// must use the original preventDefault function or iOS will throw a TypeError
 							evt.preventDefault = function(){e.preventDefault();};
@@ -481,7 +515,7 @@ define(["./canvas"], function(){
 			// evt:		mouse event
 			
 			var surface = this, i,
-				pos = dojo.position(surface.rawNode, true),
+				pos = domGeom.position(surface.rawNode, true),
 				inputs = [], changedTouches = evt.changedTouches, touches = evt.touches;
 			// collect input events targets
 			if(changedTouches){
@@ -545,7 +579,7 @@ define(["./canvas"], function(){
 		// height: String: height of surface, e.g., "100px"
 
 		if(!width && !height){
-			var pos = d.position(parentNode);
+			var pos = domGeom.position(parentNode);
 			width  = width  || pos.w;
 			height = height || pos.h;
 		}
@@ -557,7 +591,7 @@ define(["./canvas"], function(){
 		}
 
 		var s = new canvasEvent.Surface(),
-			p = d.byId(parentNode),
+			p = dom.byId(parentNode),
 			c = p.ownerDocument.createElement("canvas");
 
 		c.width  = g.normalizedLength(width);	// in pixels
@@ -597,7 +631,7 @@ define(["./canvas"], function(){
 		if(!event.gfxTarget){
 			gfxElement._pick.last = gfxElement._pick.curr;
 			gfxElement._pick.curr = gfxElement._whatsUnderEvent(event);
-			if (!dojo.isArray(gfxElement._pick.curr))
+			if (!lang.isArray(gfxElement._pick.curr))
 				event.gfxTarget = gfxElement._pick.curr;
 		}
 		return true;

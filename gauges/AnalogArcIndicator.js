@@ -1,18 +1,27 @@
-define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/kernel","dojo/_base/connect","dojo/_base/fx","./AnalogIndicatorBase"],
-function(dojo,ddeclare,dkernel,dconnect,dfx,AnalogIndicatorBase) { 
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/connect","dojo/_base/fx","./AnalogIndicatorBase"],
+function(declare, lang, connect, fx, AnalogIndicatorBase) { 
 
-dojo.experimental("dojox.gauges.AnalogArcIndicator");
+/*=====
+	AnalogIndicatorBase = dojox.gauges.AnalogIndicatorBase;
+=====*/
 
-return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
+return declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
+	
+	// summary:
+	//		An indicator for the AnalogGauge that draws a segment of arc.
+	//		The segment of arc starts at the start angle of the gauge and ends at the
+	//		angle that corresponds to the value of the indicator.
+	
 	_createArc: function(val){
+		
 		// Creating the Arc Path string manually.  This is instead of creating new dojox.gfx.Path object
 		// each time since we really just need the Path string (to use with setShape) and we don't want to
 		// have to redo the connects, etc.
 		if(this.shape){
-		    var startAngle = this._gauge._mod360(this._gauge.startAngle);
+			var startAngle = this._gauge._mod360(this._gauge.startAngle);
 			var a = this._gauge._getRadians(this._gauge._getAngle(val));
 			var sa = this._gauge._getRadians(startAngle);
-		
+
 			if (this._gauge.orientation == 'cclockwise'){
 				var tmp = a;
 				a = sa;
@@ -22,9 +31,9 @@ return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 			var arange;
 			var big = 0;
 			if (sa<=a)
-			   arange = a-sa;
+				arange = a-sa;
 			else
-			   arange = 2*Math.PI+a-sa;
+				arange = 2*Math.PI+a-sa;
 			if(arange>Math.PI){big=1;}
 			
 			var cosa = Math.cos(a);
@@ -59,8 +68,8 @@ return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 			if(dontAnimate){
 				this._createArc(v);
 			}else{
-				var anim = new dojo.Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
-				dojo.connect(anim, "onAnimate", dojo.hitch(this, this._createArc));
+				var anim = new fx.Animation({curve: [this.currentValue, v], duration: this.duration, easing: this.easing});
+				connect.connect(anim, "onAnimate", lang.hitch(this, this._createArc));
 				anim.play();
 			}
 		}else{
@@ -76,7 +85,6 @@ return dojo.declare("dojox.gauges.AnalogArcIndicator",[AnalogIndicatorBase],{
 			this.shape.connect("onmouseout", this,  this.handleMouseOut);
 			this.shape.connect("onmousedown", this, this.handleMouseDown);
 			this.shape.connect("touchstart", this, this.handleTouchStart);
-
 		}
 	}
 });

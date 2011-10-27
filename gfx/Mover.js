@@ -1,5 +1,6 @@
-define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/connect"], function(dojo){
-	return dojo.declare("dojox.gfx.Mover", null, {
+define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/event"], 
+  function(lang,arr,declare,connect,evt){
+	return declare("dojox.gfx.Mover", null, {
 		constructor: function(shape, e, host){
 			// summary: an object, which makes a shape follow the mouse,
 			//	used as a default mover, and as a base class for custom movers
@@ -12,13 +13,13 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/connect"], functio
 			this.lastX = e.clientX
 			this.lastY = e.clientY;
 			var h = this.host = host, d = document,
-				firstEvent = dojo.connect(d, "onmousemove", this, "onFirstMove");
+				firstEvent = connect.connect(d, "onmousemove", this, "onFirstMove");
 			this.events = [
-				dojo.connect(d, "onmousemove", this, "onMouseMove"),
-				dojo.connect(d, "onmouseup",   this, "destroy"),
+				connect.connect(d, "onmousemove", this, "onMouseMove"),
+				connect.connect(d, "onmouseup",   this, "destroy"),
 				// cancel text selection and text dragging
-				dojo.connect(d, "ondragstart",   dojo, "stopEvent"),
-				dojo.connect(d, "onselectstart", dojo, "stopEvent"),
+				connect.connect(d, "ondragstart",   evt, "stop"),
+				connect.connect(d, "onselectstart", evt, "stop"),
 				firstEvent
 			];
 			// notify that the move has started
@@ -35,17 +36,17 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/connect"], functio
 			this.host.onMove(this, {dx: x - this.lastX, dy: y - this.lastY});
 			this.lastX = x;
 			this.lastY = y;
-			dojo.stopEvent(e);
+			evt.stop(e);
 		},
 		// utilities
 		onFirstMove: function(){
 			// summary: it is meant to be called only once
 			this.host.onFirstMove(this);
-			dojo.disconnect(this.events.pop());
+			connect.disconnect(this.events.pop());
 		},
 		destroy: function(){
 			// summary: stops the move, deletes all references, so the object can be garbage-collected
-			dojo.forEach(this.events, dojo.disconnect);
+			arr.forEach(this.events, connect.disconnect);
 			// undo global settings
 			var h = this.host;
 			if(h && h.onMoveStop){

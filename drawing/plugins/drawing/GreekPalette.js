@@ -1,6 +1,7 @@
 dojo.provide("dojox.drawing.plugins.drawing.GreekPalette");
 
 dojo.require("dojox.drawing.library.greek");
+dojo.require("dijit.focus");
 dojo.require("dijit._Widget");
 dojo.require("dijit._TemplatedMixin");
 dojo.require("dijit._PaletteMixin");
@@ -12,8 +13,13 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 	[dijit._Widget, dijit._TemplatedMixin, dijit._PaletteMixin],
 	{
 	// summary:
-	//		This plugin uses the palette dijit in order to give
-	//		tips for non-english (mostly greek for now) letters.
+	//		This plugin uses the palette dijit in order to give tips for
+	//		non-english (mostly greek for now) letters.
+	//
+	//		IMPORTANT!  Because it is a full blown dijit it is NOT loaded
+	//		like the other plugins.  INSTEAD currently it is instantiated
+	//		in markup.  TextBlock LOOKS FOR IT by ID - "greekPalette"
+	//		and if it finds it does the necessary initialization/connections.
 	// description:
 	//		Grid showing all available entity options which the
 	//		user can pick from.  The library loaded for use by the picker
@@ -22,13 +28,14 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 	//
 	//		This works as a popup and as such its onChange and onCancel
 	//		close it.  TextBlock manages it, since it's what uses the assist
-	//		so opening it happens there.  In order to activate the plugin
-	//		add it to the dojox.drawing.Drawing node as shown below:
+	//		so it calls show (all actual popup management happens here).
+	//		In order to activate the plugin require it and then include the
+	//		markup in the example:
 	//
 	// example:
-	// |	<div dojoType="dojox.drawing.Drawing" id="drawing" jsId="myDrawing" class="drawing"
-	//			     plugins="[{'name':'dojox.drawing.plugins.drawing.GreekPalette'}]" >
-
+	// |	<!--Because this is a widget it is included in markup and NOT like the other plugins-->
+	// |	<div dojoType="dojox.drawing.plugins.drawing.GreekPalette" id="greekPalette"></div>
+	
 	postMixInProperties: function(){
 		// Convert hash of entities into two-dimensional rows/columns table (array of arrays)
 		var choices = dojox.drawing.library.greek;
@@ -54,9 +61,14 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 		this._palette = rows;
 	},
 	
+	show: function(obj){
+		dojo.mixin(obj, {popup: this});
+		dijit.popup.open(obj);
+	},
+	
 	onChange: function(val){
 		var textBlock = this._textBlock;
-		dijit.popup.close(this);
+		dijit.popup.hide(this);
 		textBlock.insertText(this._pushChangeTo,val);
 		textBlock._dropMode = false;
 	},
@@ -64,11 +76,9 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 	onCancel: function(/*Boolean*/ closeAll){
 		// summary:
 		//		attach point for notification about when the user cancels the current menu
-		dijit.popup.close(this);
+		dijit.popup.hide(this);
 		this._textBlock._dropMode = false;
 	},
-	
-	id: "dropdown",
 
 	// templateString: String
 	//		The template of this widget.  Using dojoxEntityPalette classes
@@ -175,6 +185,7 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 		if(!this.showPreview){
 			dojo.style(this.previewNode,"display","none");
 		}
+		dijit.popup.moveOffScreen(this);
 	},
 
 	_setCurrent: function(/*DOMNode*/ node){
@@ -293,11 +304,6 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 		}
 	}
 });
-
-dojox.drawing.register({
-	name:"dojox.drawing.plugins.drawing.GreekPalette",
-	button: false
-}, "plugin");
 
 dojo.declare("dojox.drawing.plugins.Greeks",
         null,

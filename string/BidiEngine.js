@@ -1,7 +1,8 @@
-define(["dojo/_base/lang"], function(dojo){
-dojo.getObject("string", true, dojox);
+define(["dojo/_base/lang", "dojo/_base/declare"], 
+  function(lang,declare){
+lang.getObject("string", true, dojox);
 
-dojo.declare("dojox.string.BidiEngine", null, {
+declare("dojox.string.BidiEngine", null, {
 	// summary:
 	//		This class provides a bidi transformation engine, i.e.
 	//		functions for reordering and shaping bidi text.

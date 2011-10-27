@@ -1,8 +1,13 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/array","dojo/_base/lang","dojo/_base/html","dojo/_base/event","./_Gauge","dojox/gfx" ,"./AnalogLineIndicator"],
-function(dojo,ddeclare,darray,dlang,dhtml,devent,_Gauge,gfx,AnalogLineIndicator) {
-dojo.experimental("dojox.gauges.AnalogGauge");
+define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/array","dojo/_base/lang","dojo/_base/html","dojo/_base/event",
+		"dojox/gfx", "./_Gauge","./AnalogLineIndicator", "dojo/dom-geometry"],
+	function(dojo, declare, arr, lang, html, event, 
+			gfx, Gauge, AnalogLineIndicator, domGeometry) {
 
-return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
+/*=====
+	Gauge = dojox.gauges._Gauge;
+=====*/
+
+return declare("dojox.gauges.AnalogGauge",Gauge,{
 	// summary:
 	//		a gauge built using the dojox.gfx package.
 	//
@@ -10,52 +15,52 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 	//		using dojo.gfx (and thus either SVG or VML based on what is supported), this widget
 	//		builds a gauge component, used to display numerical data in a familiar format 
 	//
-	// usage:
-	//		<script type="text/javascript">
-	//			dojo.require("dojox.gauges.AnalogGauge");
-	//			dojo.require("dijit.util.parser");
-	//		</script>
-	//		...
-	//		<div	dojoType="dojox.gauges.AnalogGauge"
-	//				id="testGauge"
-	//				width="300"
-	//				height="200"
-	//				cx=150
-	//				cy=175
-	//				radius=125
-	//				image="gaugeOverlay.png"
-	//				imageOverlay="false"
-	//				imageWidth="280"
-	//				imageHeight="155"
-	//				imageX="12"
-	//				imageY="38">
-	//		</div>
+	// example:
+	//	|	<script type="text/javascript">
+	//	|		require(["dojox/gauges/AnalogGauge"]);
+	//	|	</script>
+	//	|
+	//	|	<div	dojoType="dojox.gauges.AnalogGauge"
+	//	|			id="testGauge"
+	//	|			width="300"
+	//	|			height="200"
+	//	|			cx=150
+	//	|			cy=175
+	//	|			radius=125
+	//	|			image="gaugeOverlay.png"
+	//	|			imageOverlay="false"
+	//	|			imageWidth="280"
+	//	|			imageHeight="155"
+	//	|			imageX="12"
+	//	|			imageY="38">
+	//	|	</div>
 
 	// startAngle: Number
-	// angle (in degrees) for start of gauge (default is -90)
+	// 		angle (in degrees) for start of gauge (default is -90)
 	startAngle: -90,
 
 	// endAngle: Number
-	// angle (in degrees) for end of gauge (default is 90)
+	// 		angle (in degrees) for end of gauge (default is 90)
 	endAngle: 90,
 
 	// cx: Number
-	// center of gauge x coordinate (default is gauge width / 2)
+	// 		center of gauge x coordinate (default is gauge width / 2)
 	cx: 0,
 
 	// cy: Number
-	// center of gauge x coordinate (default is gauge height / 2)
+	// 		center of gauge x coordinate (default is gauge height / 2)
 	cy: 0,
 
 	// radius: Number
-	// radius of gauge (default is smaller of cx-25 or cy-25)
+	// 		radius of gauge (default is smaller of cx-25 or cy-25)
 	radius: 0,
 	
-	// orientation: "clockwise" or "cclockwise
-	// The orientation of the gauge (default is 'clockwise')
+	// orientation: String
+	// 		The orientation of the gauge. The value can be 'clockwise' or 'cclockwise' (default is 'clockwise')
 	orientation: "clockwise",
 
-	// _defaultIndicator: override of dojox.gauges._Gauge._defaultIndicator
+	// _defaultIndicator: dojox.gauges._Indicator
+	//		override of dojox.gauges._Gauge._defaultIndicator
 	_defaultIndicator: AnalogLineIndicator,
 
 	startup: function(){
@@ -65,7 +70,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		// also connects mouse handling events
 
 		if(this.getChildren){
-			dojo.forEach(this.getChildren(), function(child){ child.startup(); });
+			arr.forEach(this.getChildren(), function(child){ child.startup(); });
 		}
 
 		this.startAngle = Number(this.startAngle);
@@ -87,25 +92,25 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		//		This is a helper function used to determine the angle that represents
 		//		a given value on the gauge
 		// value:	Number
-		//			A value to be converted to an angle for this gauge.
+		//		A value to be converted to an angle for this gauge.
 		
-        var v = Number(value);
-        var angle;
-        if (value == null || isNaN(v) || v <= this.min) 
-            angle = this._mod360(this.startAngle);
-        else 
-            if (v >= this.max) 
-                angle = this._mod360(this.endAngle);
-            else {
+		var v = Number(value);
+		var angle;
+		if (value == null || isNaN(v) || v <= this.min) 
+			angle = this._mod360(this.startAngle);
+		else
+			if (v >= this.max) 
+				angle = this._mod360(this.endAngle);
+			else {
 				var startAngle = this._mod360(this.startAngle);
-                var relativeValue = (v - this.min);
-                if (this.orientation != 'clockwise') 
-                    relativeValue = -relativeValue;
-                
-                angle = this._mod360(startAngle + this._getAngleRange() * relativeValue / Math.abs(this.min - this.max));
-            }
-        
-        return angle;
+				var relativeValue = (v - this.min);
+				if (this.orientation != 'clockwise') 
+					relativeValue = -relativeValue;
+
+				angle = this._mod360(startAngle + this._getAngleRange() * relativeValue / Math.abs(this.min - this.max));
+			}
+
+		return angle;
 	},
 
 	_getValueForAngle: function(/*Number*/angle){
@@ -113,94 +118,94 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		//		This is a helper function used to determine the value represented by a
 		//		given angle on the gauge
 		// angle:	Number
-		//			A angle to be converted to a value for this gauge.
-        var startAngle = this._mod360(this.startAngle);
-        var endAngle = this._mod360(this.endAngle);
-        
-        if (!this._angleInRange(angle)){
-        
-            var min1 = this._mod360(startAngle - angle);
-            var min2 = 360 - min1;
-            var max1 = this._mod360(endAngle - angle);
-            var max2 = 360 - max1;
-            if (Math.min(min1, min2) < Math.min(max1, max2)) 
-                return this.min;
-            else 
-                return this.max;
-        }
-        else {
-            var range = Math.abs(this.max - this.min);
-            var relativeAngle = this._mod360(this.orientation == 'clockwise' ?
-			   (angle - startAngle) : (-angle + startAngle));
-            return this.min + range * relativeAngle / this._getAngleRange();
-        }
+		//		A angle to be converted to a value for this gauge.
+		var startAngle = this._mod360(this.startAngle);
+		var endAngle = this._mod360(this.endAngle);
+
+		if (!this._angleInRange(angle)){
+
+			var min1 = this._mod360(startAngle - angle);
+			var min2 = 360 - min1;
+			var max1 = this._mod360(endAngle - angle);
+			var max2 = 360 - max1;
+			if (Math.min(min1, min2) < Math.min(max1, max2)) 
+				return this.min;
+			else 
+				return this.max;
+		}
+		else {
+			var range = Math.abs(this.max - this.min);
+			var relativeAngle = this._mod360(this.orientation == 'clockwise' ?
+				(angle - startAngle): (-angle + startAngle));
+			return this.min + range * relativeAngle / this._getAngleRange();
+		}
 	},
 
-    _getAngleRange : function(){
+	_getAngleRange: function(){
 		// summary:
 		//		This is a helper function that returns the angle range
 		//      from startAngle to endAngle according to orientation.
-        var range;
-        var startAngle = this._mod360(this.startAngle);
-        var endAngle = this._mod360(this.endAngle);
-        if (startAngle == endAngle) 
-            return 360;
-        if (this.orientation == 'clockwise'){
-            if (endAngle < startAngle) 
-                range = 360 - (startAngle - endAngle);
-            else 
-                range = endAngle - startAngle;
-        }
-        else {
-            if (endAngle < startAngle) 
-                range = startAngle - endAngle;
-            else 
-                range = 360 - (endAngle - startAngle); 
-        }
+		var range;
+		var startAngle = this._mod360(this.startAngle);
+		var endAngle = this._mod360(this.endAngle);
+		if (startAngle == endAngle) 
+			return 360;
+		if (this.orientation == 'clockwise'){
+			if (endAngle < startAngle) 
+				range = 360 - (startAngle - endAngle);
+			else 
+				range = endAngle - startAngle;
+		}
+		else {
+			if (endAngle < startAngle) 
+				range = startAngle - endAngle;
+			else 
+				range = 360 - (endAngle - startAngle); 
+		}
 		return range;
 	},
 	
-    _angleInRange : function(value){
+	_angleInRange: function(value){
 		// summary:
 		//		Test if the angle value is in the startAngle/endAngle range
-        var startAngle = this._mod360(this.startAngle);
-        var endAngle = this._mod360(this.endAngle);
-        if (startAngle == endAngle) 
-            return true;
-        value = this._mod360(value);
-        if (this.orientation == "clockwise"){
-            if (startAngle < endAngle) 
-                return value >= startAngle && value <= endAngle;
-            else 
-                return !(value > endAngle && value < startAngle);
-        }
-        else {
-            if (startAngle < endAngle) 
-                return !(value > startAngle && value < endAngle);
-            else 
-                return value >= endAngle && value <= startAngle;
-        }
+		var startAngle = this._mod360(this.startAngle);
+		var endAngle = this._mod360(this.endAngle);
+		if (startAngle == endAngle) 
+			return true;
+			value = this._mod360(value);
+		if (this.orientation == "clockwise"){
+			if (startAngle < endAngle) 
+				return value >= startAngle && value <= endAngle;
+			else 
+				return !(value > endAngle && value < startAngle);
+		}
+		else {
+			if (startAngle < endAngle) 
+				return !(value > startAngle && value < endAngle);
+			else 
+				return value >= endAngle && value <= startAngle;
+		}
 	},
 	
 	_isScaleCircular: function(){
 		// summary: 
 		//		internal method to check if the scale is fully circular
-        return (this._mod360(this.startAngle) == this._mod360(this.endAngle));
+		return (this._mod360(this.startAngle) == this._mod360(this.endAngle));
 	},
 	
-    _mod360 :function(v){
+	_mod360:function(v){
 		// summary:
 		//     returns the angle between 0 and 360;
 		while (v>360) v = v - 360;
 		while (v<0) v = v + 360;
 		return v;
 	},
-    
+
 	_getRadians: function(/*Number*/angle){
 		// summary:
 		//		This is a helper function than converts degrees to radians
 		// angle:	Number
-		//			An angle, in degrees, to be converted to radians.
+		//		An angle, in degrees, to be converted to radians.
 		return angle*Math.PI/180;
 	},
 
@@ -208,7 +213,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		// summary:
 		//		This is a helper function that converts radians to degrees
 		// radians:	Number
-		//			An angle, in radians, to be converted to degrees.
+		//		An angle, in radians, to be converted to degrees.
 		return radians*180/Math.PI;
 	},
 
@@ -220,7 +225,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		//		Draws a range (colored area on the background of the gauge) 
 		//		based on the given arguments.
 		// group:
-		//      The GFX group where the range must be drawn.
+		//		The GFX group where the range must be drawn.
 		// range:
 		//		A range is a dojox.gauges.Range or an object
 		//		with similar parameters (low, high, hover, etc.).
@@ -277,7 +282,7 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 			path.closePath();
 		}
 
-		if(dojo.isArray(range.color) || dojo.isString(range.color)){
+		if(lang.isArray(range.color) || lang.isString(range.color)){
 			path.setStroke({color: range.color});
 			path.setFill(range.color);
 		}else if(range.color.type){
@@ -297,22 +302,21 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 			path.getEventSource().setAttribute("class", range.color.style);
 		}
 		
-		path.connect("onmouseover", dojo.hitch(this, this._handleMouseOverRange, range));
-	    path.connect("onmouseout", dojo.hitch(this, this._handleMouseOutRange, range));
-			
+		path.connect("onmouseover", lang.hitch(this, this._handleMouseOverRange, range));
+		path.connect("onmouseout", lang.hitch(this, this._handleMouseOutRange, range));
 	
 		range.shape = path;
 	},
 
-	getRangeUnderMouse: function(/*Object*/event){
+	getRangeUnderMouse: function(/*Object*/e){
 		// summary:
 		//		Determines which range the mouse is currently over
-		// event:	Object
-		//			The event object as received by the mouse handling functions below.
+		// e:	Object
+		//		The event object as received by the mouse handling functions below.
 		var range = null,
-			pos = dojo.coords(this.gaugeContent),
-			x = event.clientX - pos.x,
-			y = event.clientY - pos.y,
+			pos = domGeometry.getContentBox(this.gaugeContent),
+			x = e.clientX - pos.x,
+			y = e.clientY - pos.y,
 			r = Math.sqrt((y - this.cy)*(y - this.cy) + (x - this.cx)*(x - this.cx))
 		;
 		if(r < this.radius){
@@ -331,25 +335,25 @@ return dojo.declare("dojox.gauges.AnalogGauge",_Gauge,{
 		return range;
 	},
 
-	_dragIndicator: function(/*Object*/ widget, /*Object*/ event){
+	_dragIndicator: function(/*Object*/ widget, /*Object*/ e){
 		// summary:
-		//      Handles the dragging of an indicator to the event position, including moving/re-drawing
-		// get angle for mouse position
-        this._dragIndicatorAt(widget, event.pageX, event.pageY);
-        dojo.stopEvent(event);
+		//		Handles the dragging of an indicator to the event position, including moving/re-drawing
+		// 		get angle for mouse position
+		this._dragIndicatorAt(widget, e.pageX, e.pageY);
+		event.stop(e);
 	},
 		
 	_dragIndicatorAt: function(/*Object*/ widget, x,y){
 		// summary:
-		// Handles the dragging of an indicator to a specific position, including moving/re-drawing
-		// get angle for mouse position
-		var pos = dojo.position(widget.gaugeContent, true),
+		// 		Handles the dragging of an indicator to a specific position, including moving/re-drawing
+		// 		get angle for mouse position
+		var pos = domGeometry.position(widget.gaugeContent, true),
 			xf = x - pos.x,
 			yf = y - pos.y,
 			angle = widget._getDegrees(Math.atan2(yf - widget.cy, xf - widget.cx) + Math.PI/2);
 		
 		// get value and restrict to our min/max
-		value = widget._getValueForAngle(angle);
+		var value = widget._getValueForAngle(angle);
 		value = Math.min(Math.max(value, widget.min), widget.max);
 		// update the indicator
 		widget._drag.value = widget._drag.currentValue = value;

@@ -1,5 +1,15 @@
-define(["dojox/mvc/_Container"], function(_Container){
-	return dojo.declare("dojox.mvc.Repeat", [dojox.mvc._Container], {
+define([
+	"dojo/_base/declare",
+	"dojo/dom",
+	"./_Container"
+], function(declare, dom, _Container){
+	/*=====
+		declare = dojo.declare;
+		dom = dojo.dom;
+		_Container = dojox.mvc._Container;
+	=====*/
+
+	return declare("dojox.mvc.Repeat", [_Container], {
 		// summary:
 		//		A model-bound container which binds to a collection within a data model
 		//		and produces a repeating user-interface from a template for each
@@ -31,9 +41,11 @@ define(["dojox/mvc/_Container"], function(_Container){
 		// summary:
 		//		Override and save template from body.
 		postscript: function(params, srcNodeRef){
-			this.srcNodeRef = dojo.byId(srcNodeRef);
+			this.srcNodeRef = dom.byId(srcNodeRef);
 			if(this.srcNodeRef){
-				this.templateString = this.srcNodeRef.innerHTML;
+				if(this.templateString == ""){ // only overwrite templateString if it has not been set
+					this.templateString = this.srcNodeRef.innerHTML;
+				}
 				this.srcNodeRef.innerHTML = "";
 			}
 			this.inherited(arguments);
@@ -67,6 +79,10 @@ define(["dojox/mvc/_Container"], function(_Container){
 			}
 			var repeatNode = this.srcNodeRef || this.domNode;
 			repeatNode.innerHTML = insert;
+
+			// srcNodeRef is used in _createBody, so in the programmatic create case where repeatNode was set  
+			// from this.domNode we need to set srcNodeRef from repeatNode
+			this.srcNodeRef = repeatNode;
 
 			this._createBody();
 		},

@@ -1,10 +1,26 @@
-define(["dojo/_base/html", "dojo/date","dojo/date/locale","./SpinWheel","./SpinWheelSlot"],function(dhtml,ddate,dlocale,SpinWheel,SpinWheelSlot){
+define([
+	"dojo/_base/declare",
+	"dojo/dom-class",
+	"./SpinWheel",
+	"./SpinWheelSlot"
+], function(declare, domClass, SpinWheel, SpinWheelSlot){
+
+/*=====
+	var SpinWheel = dojox.mobile.SpinWheel;
+=====*/
+
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:
-	//		TODOC
+	//		A SpinWheel-based time picker widget.
 
-	return dojo.declare("dojox.mobile.SpinWheelTimePicker", dojox.mobile.SpinWheel, {
+	return declare("dojox.mobile.SpinWheelTimePicker", SpinWheel, {
+		// summary:
+		//		A SpinWheel-based time picker widget.
+		// description:
+		//		SpinWheelTimePicker is a time picker widget. It is a subclass of
+		//		dojox.mobile.SpinWheel. It has the hour and minute slots.
+
 		slotClasses: [
 			SpinWheelSlot,
 			SpinWheelSlot
@@ -21,17 +37,21 @@ define(["dojo/_base/html", "dojo/date","dojo/date/locale","./SpinWheel","./SpinW
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			dojo.addClass(this.domNode, "mblSpinWheelTimePicker");
+			domClass.add(this.domNode, "mblSpinWheelTimePicker");
 		},
 
 		reset: function(){
-			// goto now
+			// summary:
+			//		Goes to now.
 			var slots = this.slots;
 			var now = new Date();
-			slots[0].setValue(now.getHours());
-			slots[0].setColor(now.getHours());
-			slots[1].setValue(now.getMinutes());
-			slots[1].setColor(now.getMinutes());
+			var _h = now.getHours() + "";
+			slots[0].setValue(_h);
+			slots[0].setColor(_h);
+			var m = now.getMinutes();
+			var _m = (m < 10 ? "0" : "") + m;
+			slots[1].setValue(_m);
+			slots[1].setColor(_m);
 		}
 	});
 });

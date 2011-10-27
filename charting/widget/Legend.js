@@ -1,9 +1,15 @@
-define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/array", "dojox/lang/functional/fold"], 
-		function(dojo, declare, Widget, gfx, df){
+define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx","dojo/_base/array", 
+		"dojox/lang/functional", "dojox/lang/functional/array", "dojox/lang/functional/fold",
+		"dojo/dom", "dojo/dom-construct", "dojo/dom-class","dijit/_base/manager"], 
+		function(lang, html, declare, Widget, gfx, arrayUtil, df, dfa, dff, 
+				dom, domFactory, domClass, widgetManager){
+/*=====
+var Widget = dijit._Widget;
+=====*/
 
 	var REVERSED_SERIES = /\.(StackedColumns|StackedAreas|ClusteredBars)$/;
 
-	return dojo.declare("dojox.charting.widget.Legend", dijit._Widget, {
+	return declare("dojox.charting.widget.Legend", Widget, {
 		// summary: A legend for a chart. A legend contains summary labels for
 		// each series of data contained in the chart.
 		//
@@ -26,11 +32,11 @@ define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "
 		postCreate: function(){
 			if(!this.chart){
 				if(!this.chartRef){ return; }
-				this.chart = dijit.byId(this.chartRef);
+				this.chart = widgetManager.byId(this.chartRef);
 				if(!this.chart){
-					var node = dojo.byId(this.chartRef);
+					var node = dom.byId(this.chartRef);
 					if(node){
-						this.chart = dijit.byNode(node);
+						this.chart = widgetManager.byNode(node);
 					}else{
 						console.log("Could not find chart instance with id: " + this.chartRef);
 						return;
@@ -44,9 +50,9 @@ define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "
 			this.refresh();
 		},
 		buildRendering: function(){
-			this.domNode = dojo.create("table",
+			this.domNode = domFactory.create("table",
 					{role: "group", "aria-label": "chart legend", "class": "dojoxLegendNode"});
-			this.legendBody = dojo.create("tbody", null, this.domNode);
+			this.legendBody = domFactory.create("tbody", null, this.domNode);
 			this.inherited(arguments);
 		},
 		refresh: function(){
@@ -54,19 +60,19 @@ define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "
 
 			// cleanup
 			if(this._surfaces){
-				dojo.forEach(this._surfaces, function(surface){
+				arrayUtil.forEach(this._surfaces, function(surface){
 					surface.destroy();
 				});
 			}
 			this._surfaces = [];
 			while(this.legendBody.lastChild){
-				dojo.destroy(this.legendBody.lastChild);
+				domFactory.destroy(this.legendBody.lastChild);
 			}
 
 			if(this.horizontal){
-				dojo.addClass(this.domNode, "dojoxLegendHorizontal");
+				domClass.add(this.domNode, "dojoxLegendHorizontal");
 				// make a container <tr>
-				this._tr = dojo.create("tr", null, this.legendBody);
+				this._tr = domFactory.create("tr", null, this.legendBody);
 				this._inrow = 0;
 			}
 
@@ -82,49 +88,49 @@ define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "
 						return;
 					}
 					var slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
-					dojo.forEach(slices, function(x, i){
+					arrayUtil.forEach(slices, function(x, i){
 						this._addLabel(t.dyn[i], t._getLabel(x * 100) + "%");
 					}, this);
 				}else{
-					dojo.forEach(t.run.data, function(x, i){
+					arrayUtil.forEach(t.run.data, function(x, i){
 						this._addLabel(t.dyn[i], x.legend || x.text || x.y);
 					}, this);
 				}
 			}else{
 				if(this._isReversal()){
-					s = s.reverse();
+					s = s.slice(0).reverse();
 				}
-				dojo.forEach(s, function(x){
+				arrayUtil.forEach(s, function(x){
 					this._addLabel(x.dyn, x.legend || x.name);
 				}, this);
 			}
 		},
 		_addLabel: function(dyn, label){
 			// create necessary elements
-			var wrapper = dojo.create("td"),
-				icon = dojo.create("div", null, wrapper),
-				text = dojo.create("label", null, wrapper),
-				div  = dojo.create("div", {
+			var wrapper = domFactory.create("td"),
+				icon = domFactory.create("div", null, wrapper),
+				text = domFactory.create("label", null, wrapper),
+				div  = domFactory.create("div", {
 					style: {
 						"width": this.swatchSize + "px",
 						"height":this.swatchSize + "px",
 						"float": "left"
 					}
 				}, icon);
-			dojo.addClass(icon, "dojoxLegendIcon dijitInline");
-			dojo.addClass(text, "dojoxLegendText");
+			domClass.add(icon, "dojoxLegendIcon dijitInline");
+			domClass.add(text, "dojoxLegendText");
 			// create a skeleton
 			if(this._tr){
 				// horizontal
 				this._tr.appendChild(wrapper);
 				if(++this._inrow === this.horizontal){
 					// make a fresh container <tr>
-					this._tr = dojo.create("tr", null, this.legendBody);
+					this._tr = domFactory.create("tr", null, this.legendBody);
 					this._inrow = 0;
 				}
 			}else{
 				// vertical
-				var tr = dojo.create("tr", null, this.legendBody);
+				var tr = domFactory.create("tr", null, this.legendBody);
 				tr.appendChild(wrapper);
 			}
 
@@ -167,7 +173,7 @@ define(["dojo/_base/html", "dojo/_base/declare", "dijit/_Widget", "dojox/gfx", "
 			}
 		},
 		_isReversal: function(){
-			return (!this.horizontal) && dojo.some(this.chart.stack, function(item){
+			return (!this.horizontal) && arrayUtil.some(this.chart.stack, function(item){
 				return REVERSED_SERIES.test(item.declaredClass);
 			});
 		}

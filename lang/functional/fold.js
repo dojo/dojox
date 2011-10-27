@@ -1,4 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, darray, df){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "./lambda"],
+	function(lang, arr, win, df){
 
 // This module adds high-level functions and related constructs:
 //	- "fold" family of functions
@@ -16,18 +17,21 @@ define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, dar
 //	- take a string as the array argument
 //	- take an iterator objects as the array argument (only foldl, foldl1, and reduce)
 
-	var d = dojo, empty = {};
+	var empty = {};
 
-	d.mixin(df, {
+/*=====
+	var df = dojox.lang.functional;
+ =====*/
+	lang.mixin(df, {
 		// classic reduce-class functions
 		foldl: function(/*Array|String|Object*/ a, /*Function*/ f, /*Object*/ z, /*Object?*/ o){
 			// summary: repeatedly applies a binary function to an array from left
 			//	to right using a seed value as a starting point; returns the final
 			//	value.
 			if(typeof a == "string"){ a = a.split(""); }
-			o = o || d.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			var i, n;
-			if(d.isArray(a)){
+			if(lang.isArray(a)){
 				// array
 				for(i = 0, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
 			}else if(typeof a.hasNext == "function" && typeof a.next == "function"){
@@ -47,9 +51,9 @@ define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, dar
 			// summary: repeatedly applies a binary function to an array from left
 			//	to right; returns the final value.
 			if(typeof a == "string"){ a = a.split(""); }
-			o = o || d.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			var z, i, n;
-			if(d.isArray(a)){
+			if(lang.isArray(a)){
 				// array
 				z = a[0];
 				for(i = 1, n = a.length; i < n; z = f.call(o, z, a[i], i, a), ++i);
@@ -80,7 +84,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, dar
 			//	to left using a seed value as a starting point; returns the final
 			//	value.
 			if(typeof a == "string"){ a = a.split(""); }
-			o = o || d.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			for(var i = a.length; i > 0; --i, z = f.call(o, z, a[i], i, a));
 			return z;	// Object
 		},
@@ -88,7 +92,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, dar
 			// summary: repeatedly applies a binary function to an array from right
 			//	to left; returns the final value.
 			if(typeof a == "string"){ a = a.split(""); }
-			o = o || d.global; f = df.lambda(f);
+			o = o || win.global; f = df.lambda(f);
 			var n = a.length, z = a[n - 1], i = n - 1;
 			for(; i > 0; --i, z = f.call(o, z, a[i], i, a));
 			return z;	// Object
@@ -108,7 +112,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "./lambda"], function(dojo, dar
 		unfold: function(/*Function|String|Array*/ pr, /*Function|String|Array*/ f,
 						/*Function|String|Array*/ g, /*Object*/ z, /*Object?*/ o){
 			// summary: builds an array by unfolding a value
-			o = o || d.global; f = df.lambda(f); g = df.lambda(g); pr = df.lambda(pr);
+			o = o || win.global; f = df.lambda(f); g = df.lambda(g); pr = df.lambda(pr);
 			var t = [];
 			for(; !pr.call(o, z); t.push(f.call(o, z)), z = g.call(o, z));
 			return t;	// Array

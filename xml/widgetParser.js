@@ -1,6 +1,13 @@
-define(['dojo/_base/window', 'dojo/query', 'dojox/xml/parser', 'dojo/parser', 'dojo/_base/sniff'], function(dojo, query, dxparser, parser){
+define([
+	"dojo/_base/lang",	// dojo.getObject
+	"dojo/_base/window",	// dojo.doc
+	"dojo/_base/sniff",	// dojo.isIE
+	"dojo/query",
+	"dojo/parser",
+	"dojox/xml/parser"
+], function(dojo, window, has, query, parser, dxparser){
 
-dojo.getObject("xml.widgetParser", true, dojox);
+var dXml = lang.getObject("dojox.xml", true);
 
 /**
 Take some sort of xml block
@@ -41,7 +48,7 @@ Take some sort of xml block
 	 *
 	 */
 
-dojox.xml.widgetParser = new function(){
+xXml.widgetParser = new function(){
 	
 	var d = dojo;
 	
@@ -80,7 +87,7 @@ dojox.xml.widgetParser = new function(){
 	this.toHTML = function (/*XmlNode*/ node){
 		var newNode;
 		var nodeName = node.nodeName;
-		var dd = dojo.doc;
+		var dd = window.doc;
 		var type = node.nodeType;
 		
 		
@@ -142,7 +149,7 @@ dojox.xml.widgetParser = new function(){
 				// is uses the browser HTML parsing exactly at is and won't
 				// cause any sort of issues. We could just special case style
 				// as well?
-				if(dojo.isIE && name == "style"){
+				if(has("ie") && name == "style"){
 					newNode.style.setAttribute("cssText", value);
 				}else{
 					newNode.setAttribute(name, value);
@@ -166,6 +173,6 @@ dojox.xml.widgetParser = new function(){
 	
 }();
 
-return dojox.xml.widgetParser;
+return dXml.widgetParser;
 
 });

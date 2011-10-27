@@ -1,8 +1,27 @@
-define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo/_base/html"], function(dojo,dd,dt){
+define([
+	"dojo/_base/declare",
+	"./_base",
+	"dijit/_TemplatedMixin",
+	"dojo/dom-construct",
+	"dojo/cache",
+	"dojo/_base/array",
+	"dojo/string",
+	"dojo/parser",
+	"dijit/_base/manager"
+], function(declare,dd,TemplatedMixin, domConstruct,Cache,Array,dString,Parser,dijitMgr){
+	/*=====
+		Cache = dojo.cache;
+		dString = dojo.string;
+		Parser = dojo.parser;
+		TemplatedMixin = dijit._TemplatedMixin;
+		dd = dojox.dtl;
+	=====*/
+	return declare("dojox.dtl._Templated", TemplatedMixin, {
+		// summary: The base-class for DTL-templated widgets.
 
-	return dojo.declare("dojox.dtl._Templated", dt, {
 		_dijitTemplateCompat: false,
 		buildRendering: function(){
+			// summary: The method overrides dijit._TemplatedMixin.startup.
 			var node;
 
 			if(this.domNode && !this._template){
@@ -26,7 +45,7 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 				if(!this._created){
 					delete context._getter;
 				}
-				var nodes = dojo._toDom(
+				var nodes = domConstruct.toDom(
 					this._template.render(context)
 				);
 				// TODO: is it really necessary to look for the first node?
@@ -44,13 +63,13 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 					node = nodes;
 				}
 			}
-
-			this._attachTemplateNodes(node);
-
+			this._attachTemplateNodes(node, function(n,p){
+				return n.getAttribute(p);
+			});
 			if(this.widgetsInTemplate){
 				//Make sure dojoType is used for parsing widgets in template.
-				//The dojo.parser.query could be changed from multiversion support.
-				var parser = dojo.parser, qry, attr;
+				//The Parser.query could be changed from multiversion support.
+				var parser = Parser, qry, attr;
 				if(parser._query != "[dojoType]"){
 					qry = parser._query;
 					attr = parser._attrName;
@@ -59,7 +78,7 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 				}
 
 				//Store widgets that we need to start at a later point in time
-				var cw = (this._startupWidgets = dojo.parser.parse(node, {
+				var cw = (this._startupWidgets = Parser.parse(node, {
 					noStart: !this._earlyTemplatedStartup,
 					inherited: {dir: this.dir, lang: this.lang}
 				}));
@@ -70,7 +89,7 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 					parser._attrName = attr;
 				}
 
-				this._supportingWidgets = dijit.findWidgets(node);
+				this._supportingWidgets = dijitMgr.findWidgets(node);
 
 				this._attachTemplateNodes(cw, function(n,p){
 					return n[p];
@@ -78,9 +97,9 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 			}
 
 			if(this.domNode){
-				dojo.place(node, this.domNode, "before");
+				domConstruct.place(node, this.domNode, "before");
 				this.destroyDescendants();
-				dojo.destroy(this.domNode);
+				domConstruct.destroy(this.domNode);
 			}
 			this.domNode = node;
 
@@ -96,7 +115,7 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 				return tmplts[key];
 			}
 
-			templateString = dojo.string.trim(templateString || dojo.cache(templatePath, {sanitize: true}));
+			templateString = dString.trim(templateString || Cache(templatePath, {sanitize: true}));
 
 			if(	this._dijitTemplateCompat &&
 				(alwaysUseString || templateString.match(/\$\{([^\}]+)\}/g))
@@ -106,16 +125,18 @@ define(["dojo/_base/declare","../_base","dijit/_Templated","../_Templated","dojo
 
 			// If we always use a string, or find no variables, just store it as a node
 			if(alwaysUseString || !templateString.match(/\{[{%]([^\}]+)[%}]\}/g)){
-				return tmplts[key] = dojo._toDom(templateString);
+				return tmplts[key] = domConstruct.toDom(templateString);
 			}else{
 				return tmplts[key] = new dd.Template(templateString);
 			}
 		},
 		render: function(){
+			// summary: Renders the widget.
 			this.buildRendering();
 		},
 		startup: function(){
-			dojo.forEach(this._startupWidgets, function(w){
+			// summary: The method overrides dijit._TemplatedMixin.startup.
+			Array.forEach(this._startupWidgets, function(w){
 				if(w && !w._started && w.startup){
 					w.startup();
 				}

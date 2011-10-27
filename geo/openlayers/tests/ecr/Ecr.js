@@ -1,40 +1,38 @@
-// dojo.provide allows pages to use all of the types declared in this resource.
-//dojo.provide("dojox.geo.openlayers.tests.ecr.Ecr");
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/html",
+				"dojo/_base/array",
+				"dojo/_base/lang",
+				"dojo/dom",
+				"dojox/geo/openlayers/Map",
+				"dojox/geo/openlayers/GfxLayer",
+				"dojo/data/ItemFileReadStore",
+				"dojox/geo/openlayers/tests/ecr/PortRenderer",
+				"dojox/geo/openlayers/tests/ecr/LegsRenderer"], function(dojo, declare, html, arr, lang, dom, Map, GfxLayer,
+																																	ItemFileReadStore, PortRenderer, LegsRenderer){
 
-//dojo.require("dojox.geo.openlayers.widget.Map");
-//dojo.require("dojox.geo.openlayers.GfxLayer");
-//dojo.require("dojo.data.ItemFileReadStore");
-//dojo.require("dojox.geo.openlayers.tests.ecr.PortRenderer");
-//dojo.require("dojox.geo.openlayers.tests.ecr.LegsRenderer");
-
-define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
-		"dojox/geo/openlayers/widget/Map", "dojox/geo/openlayers/GfxLayer",
-		"dojo/data/ItemFileReadStore", "dojox/geo/openlayers/tests/ecr/PortRenderer",
-		"dojox/geo/openlayers/tests/ecr/LegsRenderer" ], function(){
-
-	return dojo.declare("dojox.geo.openlayers.tests.ecr.Ecr", null, {
+	return declare("dojox.geo.openlayers.tests.ecr.Ecr", null, {
 		constructor : function(){
 
-			var map = new dojox.geo.openlayers.widget.Map();
-			dojo.place(map.domNode, "map");
-			map.startup();
-			map.map.fitTo([ -160, 70, 160, -70 ]);
+			var map = new Map("map");
+
+			map.fitTo([-160, 70, 160, -70]);
 
 			this._map = map;
 
-			layer = new dojox.geo.openlayers.GfxLayer("legs");
+			layer = new GfxLayer("legs");
 			this._legLayer = layer;
-			map.map.addLayer(layer);
+			map.addLayer(layer);
 
-			layer = new dojox.geo.openlayers.GfxLayer("ports");
+			layer = new GfxLayer("ports");
 			this._portLayer = layer;
-			map.map.addLayer(layer);
+			map.addLayer(layer);
 
 			this.loadData("data/ecr.json");
 		},
 
 		fitTo : function(where){
-			this._map.map.fitTo(where);
+			this._map.fitTo(where);
 		},
 
 		clearLayer : function(layer){
@@ -51,7 +49,7 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 		},
 
 		setDataSet : function(name){
-			var o = dojo.byId(name);
+			var o = dom.byId(name);
 			var ds = o.value;
 
 			var layer = this._portLayer;
@@ -61,6 +59,7 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 			this.clearLayer(layer);
 
 			this.loadData(ds);
+
 		},
 
 		log : function(o){
@@ -71,7 +70,7 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 			this.log(arguments[0]);
 		},
 
-		_portStyle : [ {
+		_portStyle : [{
 			type : "circle",
 			depth : "{radius}",
 			radius : function(ctx){
@@ -94,7 +93,7 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 				color : "#bb0000",
 				width : 1
 			}
-		} ],
+		}],
 
 		gotPorts : function(items, request){
 			this.log("got ports " + items.length);
@@ -102,10 +101,10 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 			var ctx = {
 				store : store
 			};
-			var renderer = new dojox.geo.openlayers.tests.ecr.PortRenderer(this._portStyle, ctx);
+			var renderer = new PortRenderer(this._portStyle, ctx);
 			var layer = this._portLayer;
 
-			dojo.forEach(items, function(item, index, array){
+			arr.forEach(items, function(item, index, array){
 				var f = renderer.render(item);
 				if (f != null)
 					layer.addFeature(f);
@@ -113,25 +112,27 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 
 			this.fillPortChooser(items);
 
+			this.portChange('portChooser');
+
 			layer.redraw();
 		},
 
 		_legsStyle : {
 			type : "polyline",
 			stroke : {
-				color : [ 255, 165, 0 ]
+				color : [255, 165, 0]
 			}
 		},
 
 		gotLegs : function(items, request){
-			this.log("got legs " + items.length);
+			//      this.log("got legs " + items.length);
 			var ctx = {
 				store : request.store
 			};
-			var renderer = new dojox.geo.openlayers.tests.ecr.LegsRenderer(this._legsStyle, ctx);
+			var renderer = new LegsRenderer(this._legsStyle, ctx);
 			renderer.setGeodetic(true);
 			var layer = this._legLayer;
-			dojo.forEach(items, function(item, index, array){
+			arr.forEach(items, function(item, index, array){
 				var f = renderer.render(item);
 				if (f != null)
 					layer.addFeature(f);
@@ -140,8 +141,8 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 		},
 
 		loadData : function(dataSet){
-			this.log("load " + dataSet);
-			var store = new dojo.data.ItemFileReadStore({
+			//      this.log("load " + dataSet);
+			var store = new ItemFileReadStore({
 				url : dataSet,
 				urlPreventCache : true
 			});
@@ -150,8 +151,8 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 				query : {
 					type : "legs"
 				},
-				onComplete : dojo.hitch(this, this.gotLegs),
-				onError : dojo.hitch(this, this.loadError),
+				onComplete : lang.hitch(this, this.gotLegs),
+				onError : lang.hitch(this, this.loadError),
 				queryOptions : {
 					deep : true
 				}
@@ -161,8 +162,8 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 				query : {
 					type : "port"
 				},
-				onComplete : dojo.hitch(this, this.gotPorts),
-				onError : dojo.hitch(this, this.loadError)
+				onComplete : lang.hitch(this, this.gotPorts),
+				onError : lang.hitch(this, this.loadError)
 			});
 
 		},
@@ -172,12 +173,12 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 		},
 
 		portChange : function(name){
-			var o = dojo.byId(name);
+			var o = dom.byId(name);
 			this.fitTo(o.value);
 		},
 
 		fillPortChooser : function(items){
-			var ps = dojo.byId("portChooser");
+			var ps = dom.byId("portChooser");
 			var opts = ps.options;
 			var ws = '{"position" : [0, 0], "extent" : 70}';
 			if (items == null) {
@@ -198,9 +199,9 @@ define([ "dojo/_base/html", "dojo/_base/array", "dojo/_base/lang",
 		},
 
 		toggleLayerVisibility : function(name){
-			var cb = dojo.byId(name);
-			var a = this._map.map.getLayer('name', name);
-			dojo.forEach(a, function(item, index, array){
+			var cb = dom.byId(name);
+			var a = this._map.getLayer('name', name);
+			arr.forEach(a, function(item, index, array){
 				item.olLayer.setVisibility(cb.checked);
 			});
 		}

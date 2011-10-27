@@ -1,6 +1,17 @@
-define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/ext-dojo/complex"], function(dojo){
-	var css3fx = dojo.getObject("css3.fx", true, dojox);
-	return dojo.mixin(css3fx, {
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/connect",	// dojo.connect
+	"dojo/dom-style",	// dojo.style
+	"dojo/_base/fx",
+	"dojo/fx",
+	"dojo/_base/html",
+	"dojox/html/ext-dojo/style",
+	"dojox/fx/ext-dojo/complex"],
+function(lang,connectUtil,domStyle,baseFx,coreFx,htmlUtil,htmlStyleExt,complexFx){
+	var css3fx = lang.getObject("dojox.css3.fx", true);
+	/*===== css3fx = dojox.css3.fx =====*/
+	
+	return lang.mixin(css3fx, {
 		puff: function(args){
 			// summary:
 			//		Returns an animation that will do a "puff" effect on the given node
@@ -8,7 +19,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 			// description:
 			//		Fades out an element and scales it to args.endScale
 			//
-			return dojo.fx.combine([dojo.fadeOut(args),
+			return coreFx.combine([baseFx.fadeOut(args),
 				this.expand({
 					node: args.node,
 					endScale: args.endScale || 2
@@ -23,7 +34,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 			// description:
 			//		Scales an element to args.endScale
 			//
-			return dojo.animateProperty({
+			return baseFx.animateProperty({
 				node: args.node,
 				properties: {
 					transform: { start: "scale(1)", end: "scale(" + [args.endScale || 3] + ")" }
@@ -51,7 +62,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 			// description:
 			//		Rotates an element from args.startAngle to args.endAngle
 			//
-			return dojo.animateProperty({
+			return baseFx.animateProperty({
 				node: args.node,
 				duration: args.duration || 1000,
 				properties: {
@@ -85,8 +96,8 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 					{ start: "scale(0, 1) skew(0deg," + (-direction * 30) + "deg)", end: "scale(1, 1) skew(0deg,0deg)" }
 			];
 			for(var i = 0; i < whichAnims.length; i++){
-				anims.push(dojo.animateProperty(
-					dojo.mixin({
+				anims.push(baseFx.animateProperty(
+					lang.mixin({
 					node: args.node,
 					duration: args.duration || 600,
 					properties: {
@@ -94,7 +105,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 					}}, args)
 				));
 			}
-			return dojo.fx.chain(anims);
+			return coreFx.chain(anims);
 		},
 
 		bounce: function(args){
@@ -110,7 +121,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 				duration = args.duration || 1000,
 				scaleX = args.scaleX || 1.2,
 				scaleY = args.scaleY || .6,
-				ds = dojo.style,
+				ds = htmlUtil.style,
 				oldPos = ds(n, "position"),
 				newPos = "absolute",
 				oldTop = ds(n, "top"),
@@ -122,21 +133,21 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 			if(oldPos !== "absolute"){
 				newPos = "relative";
 			}
-			var a1 = dojo.animateProperty({
+			var a1 = baseFx.animateProperty({
 				node: n,
 				duration: duration / 6,
 				properties: {
 					transform: { start: "scale(1, 1)", end: "scale(" + scaleX + ", " + scaleY + ")" }
 				}
 			});
-			dojo.connect(a1, "onBegin", function(){
+			connectUtil.connect(a1, "onBegin", function(){
 				ds(n, {
 					transformOrigin: "50% 100%",
 					position: newPos
 				});
 			});
 			anims.push(a1);
-			var a2 = dojo.animateProperty({
+			var a2 = baseFx.animateProperty({
 				node: n,
 				duration: duration / 6,
 				properties: {
@@ -144,7 +155,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 				}
 			});
 			combinedAnims.push(a2);
-			combinedAnims.push(new dojo.Animation(dojo.mixin({
+			combinedAnims.push(new baseFx.Animation(lang.mixin({
 				curve: [],
 				duration: duration / 3,
 				delay: duration / 12,
@@ -159,8 +170,8 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 					bTime = cTime;
 				}
 			}, args)));
-			anims.push(dojo.fx.combine(combinedAnims));
-			anims.push(dojo.animateProperty(dojo.mixin({
+			anims.push(coreFx.combine(combinedAnims));
+			anims.push(baseFx.animateProperty(lang.mixin({
 				duration: duration / 3,
 				onEnd: function(){
 					ds(n, {
@@ -174,7 +185,7 @@ define(["dojo/_base/kernel", "dojo/fx", "dojox/html/ext-dojo/style", "dojox/fx/e
 			anims.push(a1);
 			anims.push(a2);
 
-			return dojo.fx.chain(anims);
+			return coreFx.chain(anims);
 		}
 	});
 });

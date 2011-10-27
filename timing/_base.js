@@ -1,4 +1,4 @@
-define(["dojo/_base/lang"], function(dojo){
+define(["dojo/_base/kernel", "dojo/_base/lang"], function(dojo){
 	dojo.experimental("dojox.timing");
 	dojo.getObject("timing", true, dojox);
 
@@ -15,11 +15,11 @@ define(["dojo/_base/lang"], function(dojo){
 	};
 
 	dojo.extend(dojox.timing.Timer, {
-		onTick : function(){
+		onTick: function(){
 			// summary: Method called every time the interval passes.  Override to do something useful.
 		},
 			
-		setInterval : function(interval){
+		setInterval: function(interval){
 			// summary: Reset the interval of a timer, whether running or not.
 			// interval: New interval, in milliseconds.
 			if (this.isRunning){
@@ -31,7 +31,7 @@ define(["dojo/_base/lang"], function(dojo){
 			}
 		},
 		
-		start : function(){
+		start: function(){
 			// summary: Start the timer ticking.
 			// description: Calls the "onStart()" handler, if defined.
 			// 				Note that the onTick() function is not called right away,
@@ -43,7 +43,7 @@ define(["dojo/_base/lang"], function(dojo){
 			this.timer = window.setInterval(dojo.hitch(this, "onTick"), this.interval);
 		},
 		
-		stop : function(){
+		stop: function(){
 			// summary: Stop the timer.
 			// description: Calls the "onStop()" handler, if defined.
 			if (typeof this.onStop == "function"){

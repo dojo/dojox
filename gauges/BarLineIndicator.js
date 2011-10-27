@@ -1,7 +1,15 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang", "dojox/gfx", "./_Indicator"], 
-function(dojo,ddeclare,dfx,dconnect,dlang, gfx, _Indicator) { 
-dojo.experimental("dojox.gauges.BarIndicator");
-return dojo.declare("dojox.gauges.BarLineIndicator",[_Indicator],{
+define(["dojo/_base/declare","dojo/_base/fx","dojo/_base/connect","dojo/_base/lang", "dojox/gfx", "./_Indicator"], 
+  function(declare, fx, connect, lang, gfx, Indicator) { 
+
+/*=====
+	Indicator = dojox.gauges._Indicator;
+=====*/
+
+return declare("dojox.gauges.BarLineIndicator",[Indicator],{
+	
+	// summary:
+	//		An indicator for the BarGauge that draws a segment a line corresponding to the indicator value.	
+	
 	width: 1,
 	_getShapes: function(/*dojox.gfx.Group*/ group){
 		// summary:
@@ -113,8 +121,8 @@ return dojo.declare("dojox.gauges.BarLineIndicator",[_Indicator],{
 		if(dontAnimate || (c==v)){
 			this.shape.setTransform(gfx.matrix.translate(v,0));
 		}else{
-			var anim = new dojo.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
-			dojo.connect(anim, "onAnimate", dojo.hitch(this, function(jump){
+			var anim = new fx.Animation({curve: [c, v], duration: this.duration, easing: this.easing});
+			connect.connect(anim, "onAnimate", lang.hitch(this, function(jump){
 				if (this.shape)
 				 this.shape.setTransform(gfx.matrix.translate(jump,0));
 			}));

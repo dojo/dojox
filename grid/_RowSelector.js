@@ -1,6 +1,9 @@
-define(["dojo", "dojox", "./_View"], function(dojo, dojox){
+define([
+	"dojo/_base/declare",
+	"./_View"
+], function(declare, _View){
 
-dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
+return declare('dojox.grid._RowSelector', _View, {
 	// summary:
 	//	Custom grid view. If used in a grid structure, provides a small selectable region for grid rows.
 	defaultWidth: "2em",
@@ -52,7 +55,4 @@ dojo.declare('dojox.grid._RowSelector', dojox.grid._View, {
 		}
 	}
 });
-
-return dojox.grid._RowSelector;
-
 });

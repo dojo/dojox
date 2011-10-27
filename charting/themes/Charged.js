@@ -1,6 +1,6 @@
-define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutils){
+define(["../Theme", "dojox/gfx/gradutils", "./common"], function(Theme, gradutils, themes){
 
-	var themes = dojox.charting.themes, g = Theme.generateGradient,
+	var g = Theme.generateGradient,
 		defaultFill = {type: "linear", space: "shape", x1: 0, y1: 0, x2: 0, y2: 75};
 	
 	themes.Charged = new Theme({

@@ -1,4 +1,4 @@
-define(["dojo/_base"], function(dojo) {
+define(["dojo"], function(dojo) {
 
 	/*******************************************************
 		dojox.embed.Flash
@@ -208,13 +208,6 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 		//		to be the only consistent time calling EI methods are stable (since the
 		//		Flash movie will shoot several methods into the window object before
 		//		EI callbacks can be used properly).
-		//
-		//		*Important note*:  this code includes a workaround for the Eolas "fix" from
-		//		Microsoft; in order to work around the "click to activate this control" message
-		//		on any embedded Flash movie, this code will load a separate, non-dojo.require
-		//		javascript file in order to write the Flash movie into the document.  As such
-		//		it cannot be used with Dojo's scope map techniques for working with multiple
-		//		versions of Dojo on the same page.
 		//
 		//	kwArgs: dojox.embed.__flashArgs
 		//		The various arguments that will be used to help define the Flash movie.
@@ -492,7 +485,7 @@ dojox.embed.__flashArgs = function(path, id, width, height, style, params, vars,
 			}, obj);
 		}
 	});
-	
+
 	dojox.embed.Flash.place = function(kwArgs, node){
 		var o = fMarkup(kwArgs);
 		node = dojo.byId(node);

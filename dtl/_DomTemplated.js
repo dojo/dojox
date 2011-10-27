@@ -1,6 +1,16 @@
-define(["dojo/_base/html",".","./contrib/dijit","./render/dom","dojo/cache","dijit/_Templated"], 
-function(dojo,dtl,ddcd,ddrd){
-
+define([
+	"dojo/dom-construct",
+	".",
+	"./contrib/dijit",
+	"./render/dom",
+	"dojo/cache",
+	"dijit/_TemplatedMixin"
+	], function(domConstruct,dtl,ddcd,ddrd,cache,TemplatedMixin){
+	/*=====
+		dtl = dojox.dtl;
+		cache = dojo.cache;
+		TemplatedMixin = dijit._TemplatedMixin
+	=====*/
 	dtl._DomTemplated = function(){};
 	dtl._DomTemplated.prototype = {
 		_dijitTemplateCompat: false,
@@ -27,13 +37,16 @@ function(dojo,dtl,ddcd,ddrd){
 
 			this.domNode = this.template.getRootNode();
 			if(this.srcNodeRef && this.srcNodeRef.parentNode){
-				dojo.destroy(this.srcNodeRef);
+				domConstruct.destroy(this.srcNodeRef);
 				delete this.srcNodeRef;
 			}
 		},
 		setTemplate: function(/*String|dojo._Url*/ template, /*dojox.dtl.Context?*/ context){
 			// summary:
 			//		Quickly switch between templated by location
+			// template: The new template.
+			// context:
+			//		The runtime context.
 			if(dojox.dtl.text._isTemplate(template)){
 				this.template = this._getCachedTemplate(null, template);
 			}else{
@@ -42,13 +55,19 @@ function(dojo,dtl,ddcd,ddrd){
 			this.render(context);
 		},
 		render: function(/*dojox.dtl.Context?*/ context, /*dojox.dtl.DomTemplate?*/ tpl){
+			// summary:
+			//		Renders this template.
+			// context:
+			//		The runtime context.
+			// tpl:
+			//		The template to render. Optional.
 			if(tpl){
 				this.template = tpl;
 			}
 			this._render.render(this._getContext(context), this.template);
 		},
 		_getContext: function(context){
-			if (!(context instanceof dojox.dtl.Context)) {
+			if(!(context instanceof dojox.dtl.Context)){
 				context = false;
 			}
 			context = context || new dojox.dtl.Context(this);
@@ -60,7 +79,7 @@ function(dojo,dtl,ddcd,ddrd){
 				this._templates = {};
 			}
 			if(!templateString){
-				templateString = dojo.cache(templatePath, {sanitize: true});
+				templateString = cache(templatePath, {sanitize: true});
 			}
 			var key = templateString;
 			var tmplts = this._templates;
@@ -68,7 +87,7 @@ function(dojo,dtl,ddcd,ddrd){
 				return tmplts[key];
 			}
 			return (tmplts[key] = new dojox.dtl.DomTemplate(
-				dijit._TemplatedMixin.getCachedTemplate(
+				TemplatedMixin.getCachedTemplate(
 					templateString,
 					true
 				)

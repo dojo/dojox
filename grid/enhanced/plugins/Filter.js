@@ -1,6 +1,7 @@
 define([
-	"dojo",
-	"dojox",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/i18n",
 	"../_Plugin",
 	"./Dialog",
 	"./filter/FilterLayer",
@@ -8,13 +9,11 @@ define([
 	"./filter/FilterDefDialog",
 	"./filter/FilterStatusTip",
 	"./filter/ClearFilterConfirm",
-	"dojo/i18n!../nls/Filter"], function(dojo, dojox){
+	"../../EnhancedGrid",
+	"dojo/i18n!../nls/Filter"
+], function(declare, lang, i18n, _Plugin, Dialog, layers, FilterBar, FilterDefDialog, FilterStatusTip, ClearFilterConfirm, EnhancedGrid){
 
-(function(){
-	var ns = dojo.getObject("grid.enhanced.plugins", true, dojox),
-		fns = dojo.getObject("grid.enhanced.plugins.filter", true, dojox);
-		
-	dojo.declare("dojox.grid.enhanced.plugins.Filter", dojox.grid.enhanced._Plugin, {
+	var Filter = declare("dojox.grid.enhanced.plugins.Filter", _Plugin, {
 		// summary:
 		//		Provide filter functionality for grid.
 		//
@@ -35,6 +34,11 @@ define([
 		//			If isServerSide is true, set the server side filter to be stateful or not. default to false.
 		//		7. url: string
 		//			If using stateful, this is the url to send commands. default to store.url.
+		//		8. ruleCountToConfirmClearFilter: Integer | null |Infinity
+		//			If the filter rule count is larger than or equal to this value, then a confirm dialog will show when clearing filter.
+		//			If set to less than 1 or null, then always show the confirm dialog.
+		//			If set to Infinity, then never show the confirm dialog.
+		//			Default value is 2.
 		//
 		//		Acceptable cell parameters defined in layout:
 		//		1. filterable: boolean
@@ -84,11 +88,15 @@ define([
 			// summary:
 			//		See constructor of dojox.grid.enhanced._Plugin.
 			this.grid = grid;
-			this.nls = dojo.i18n.getLocalization("dojox.grid.enhanced", "Filter");
+			this.nls = i18n.getLocalization("dojox.grid.enhanced", "Filter");
 			
-			args = this.args = dojo.isObject(args) ? args : {};
+			args = this.args = lang.isObject(args) ? args : {};
 			if(typeof args.ruleCount != 'number' || args.ruleCount < 0){
 				args.ruleCount = 3;
+			}
+			var rc = this.ruleCountToConfirmClearFilter = args.ruleCountToConfirmClearFilter;
+			if(rc === undefined){
+				this.ruleCountToConfirmClearFilter = 2;
 			}
 			
 			//Install filter layer
@@ -96,14 +104,14 @@ define([
 			
 			//Install UI components
 			var obj = { "plugin": this };
-			this.clearFilterDialog = new dojox.grid.enhanced.plugins.Dialog({
+			this.clearFilterDialog = new Dialog({
 				refNode: this.grid.domNode,
 				title: this.nls["clearFilterDialogTitle"],
-				content: new fns.ClearFilterConfirm(obj)
+				content: new ClearFilterConfirm(obj)
 			});
-			this.filterDefDialog = new fns.FilterDefDialog(obj);
-			this.filterBar = new fns.FilterBar(obj);
-			this.filterStatusTip = new fns.FilterStatusTip(obj);
+			this.filterDefDialog = new FilterDefDialog(obj);
+			this.filterBar = new FilterBar(obj);
+			this.filterStatusTip = new FilterStatusTip(obj);
 			
 			//Expose the layer event to grid.
 			grid.onFilterDefined = function(){};
@@ -133,15 +141,15 @@ define([
 		_wrapStore: function(){
 			var g = this.grid;
 			var args = this.args;
-			var filterLayer = args.isServerSide ? new fns.ServerSideFilterLayer(args) :
-				new fns.ClientSideFilterLayer({
+			var filterLayer = args.isServerSide ? new layers.ServerSideFilterLayer(args) :
+				new layers.ClientSideFilterLayer({
 					cacheSize: args.filterCacheSize,
 					fetchAll: args.fetchAllOnFirstFilter,
 					getter: this._clientFilterGetter
 				});
-			ns.wrap(g, "_storeLayerFetch", filterLayer);
+			layers.wrap(g, "_storeLayerFetch", filterLayer);
 			
-			this.connect(g, "_onDelete", dojo.hitch(filterLayer, "invalidate"));
+			this.connect(g, "_onDelete", lang.hitch(filterLayer, "invalidate"));
 		},
 		onSetStore: function(store){
 			this.filterDefDialog.clearFilter(true);
@@ -156,10 +164,9 @@ define([
 			return cell.get(rowIndex, datarow);
 		}
 	});
-})();
 
-dojox.grid.EnhancedGrid.registerPlugin(dojox.grid.enhanced.plugins.Filter/*name:'filter'*/);
+	EnhancedGrid.registerPlugin(Filter/*name:'filter'*/);
 
-return dojox.grid.enhanced.plugins.Filter;
+	return Filter;
 
 });

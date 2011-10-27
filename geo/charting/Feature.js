@@ -1,13 +1,12 @@
+define(["dojo/_base/lang", "dojo/_base/declare","dojo/_base/array",
+		"dojo/_base/html","dojo/dom","dojo/_base/event", "dojox/gfx/fx", "dojox/color"], 
+  function(lang, declare,arr, html,dom, event, fx,color) {
 
-define(["dojo/_base/lang", "dojo/_base/declare","dojo/_base/html","dojo/_base/event", "dojox/gfx/fx", "dojox/color"], 
-			function(dojo, declare, dhtml, event, fx,color) {
-
-
-return dojo.declare("dojox.geo.charting.Feature", null, {
-	// summary: 
-	//   class to encapsulate a map element.
-	// tags:
-	//   private
+return declare("dojox.geo.charting.Feature", null, {
+	//	summary: 
+	//		class to encapsulate a map element.
+	//	tags:
+	//		private
 
 	_isZoomIn: false,
 	isSelected: false,
@@ -15,6 +14,10 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 
 
 	constructor: function(parent, name, shapeData){
+		//	summary: 
+		//		constructs a new Feature.
+		//	tags:
+		//		private
 		this.id = name;
 		this.shape = parent.mapObj.createGroup();
 		this.parent = parent;
@@ -30,41 +33,55 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 			color: "white"
 		};
 		
-		var shapes = (dojo.isArray(shapeData.shape[0])) ? shapeData.shape : [shapeData.shape];
-		dojo.forEach(shapes, function(points){
+		var shapes = (lang.isArray(shapeData.shape[0])) ? shapeData.shape : [shapeData.shape];
+		arr.forEach(shapes, function(points){
 			this.shape.createPolyline(points).setStroke(this._defaultStroke);
 		}, this);
 		this.unsetValue();
 	},
 	unsetValue:function(){
+		//	summary: 
+		//		clears the numeric value on this Feature object (removes color).
+		
 		this.value = null;
+		this.unsetColor();
+	},
+	unsetColor:function(){
 		this._defaultFill = this.parent.defaultColor;
-//		var color = new dojox.color.Color(this.parent.defaultColor);
-//		color.a = 0.7;
-//		this._highlightFill = color;
 		var col = new color.Color(this.parent.defaultColor).toHsl();
 		col.l = 1.2 * col.l;
 		this._highlightFill = color.fromHsl(col);
 		this._setFillWith(this._defaultFill);
 	},
 	setValue:function(value){
+		//	summary: 
+		//		sets a numeric value on this Feature object (used together with series to apply a color).
+		//	value:
+		//		a number
 		this.value = value;
-		if(this.parent.series.length != 0){
-			for(var i = 0;i < this.parent.series.length;i++){
-				var range = this.parent.series[i];
-				if((value>=range.min)&&(value<range.max)){
-					this._setFillWith(range.color);
-					this._defaultFill = range.color;
-					var col = new color.Color(range.color).toHsv();
-					col.v = (col.v + 20);
-					this._highlightFill = color.fromHsv(col);
+		if (value == null) {
+			this.unsetValue();
+		} else {
+			if (this.parent.series.length != 0) {
+				for (var i = 0; i < this.parent.series.length; i++) {
+					var range = this.parent.series[i];
+					if ((value >= range.min) && (value < range.max)) {
+						this._setFillWith(range.color);
+						this._defaultFill = range.color;
+						var col = new color.Color(range.color).toHsv();
+						col.v = (col.v + 20);
+						this._highlightFill = color.fromHsv(col);
+						return;
+					}
 				}
+				// did not found a range : unset color
+				this.unsetColor();
 			}
 		}
 	},
 	_setFillWith: function(color){
-		var borders = (dojo.isArray(this.shape.children)) ? this.shape.children : [this.shape.children];
-		dojo.forEach(borders, dojo.hitch(this,function(item){
+		var borders = (lang.isArray(this.shape.children)) ? this.shape.children : [this.shape.children];
+		arr.forEach(borders, lang.hitch(this,function(item){
 			if(this.parent.colorAnimationDuration > 0){
 				var anim1 = fx.animateFill({
 					shape: item,
@@ -81,8 +98,8 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 		}));
 	},
 	_setStrokeWith: function(stroke){
-		var borders = (dojo.isArray(this.shape.children)) ? this.shape.children : [this.shape.children];
-		dojo.forEach(borders, function(item){
+		var borders = (lang.isArray(this.shape.children)) ? this.shape.children : [this.shape.children];
+		arr.forEach(borders, function(item){
 			item.setStroke({
 				color: stroke.color,
 				width: stroke.width,
@@ -97,26 +114,26 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 	_onmouseoverHandler: function(evt){
 		this.parent.onFeatureOver(this);
 		this._setFillWith(this._highlightFill);
-		this.mapObj.marker.show(this.id);
+		this.mapObj.marker.show(this.id,evt);
 	},
 	_onmouseoutHandler: function(){
 		this._setFillWith(this._defaultFill);
 		this.mapObj.marker.hide();
-		dojo.style("mapZoomCursor", "display", "none");
+		html.style("mapZoomCursor", "display", "none");
 	},
 	_onmousemoveHandler: function(evt){
 		if(this.mapObj.marker._needTooltipRefresh){
-			this.mapObj.marker.show(this.id);
+			this.mapObj.marker.show(this.id,evt);
 		}
 		if(this.isSelected){
-			if (parent.enableFeatureZoom) {
-				evt = dojo.fixEvent(evt || window.event);
-				dojo.style("mapZoomCursor", "left", evt.pageX + 12 + "px");
-				dojo.style("mapZoomCursor", "top", evt.pageY + "px");
-				dojo.byId("mapZoomCursor").className = this._isZoomIn ? "mapZoomOut":"mapZoomIn";
-				dojo.style("mapZoomCursor", "display", "block");
+			if (this.parent.enableFeatureZoom) {
+				evt = event.fix(evt || window.event);
+				html.style("mapZoomCursor", "left", evt.pageX + 12 + "px");
+				html.style("mapZoomCursor", "top", evt.pageY + "px");
+				html.byId("mapZoomCursor").className = this._isZoomIn ? "mapZoomOut":"mapZoomIn";
+				html.style("mapZoomCursor", "display", "block");
 			}else{
-				dojo.style("mapZoomCursor", "display", "none");
+				html.style("mapZoomCursor", "display", "none");
 			}
 		}
 	},
@@ -126,7 +143,7 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 			this.parent.deselectAll();
 			this.select(true);
 			this._onmousemoveHandler(evt);
-		}else if(parent.enableFeatureZoom){
+		}else if(this.parent.enableFeatureZoom){
 			if(this._isZoomIn){
 				this._zoomOut();
 			}else{
@@ -153,24 +170,24 @@ return dojo.declare("dojox.geo.charting.Feature", null, {
 	_zoomIn: function(){
 		var marker = this.mapObj.marker;
 		marker.hide();
-		this.parent.fitToMapArea(this._bbox, 15,true,dojo.hitch(this,function(){
+		this.parent.fitToMapArea(this._bbox, 15,true,lang.hitch(this,function(){
 			this._setStrokeWith({color:"black",width:this._normalizeStrokeWeight(2)});
 			marker._needTooltipRefresh = true;
 			this.parent.onZoomEnd(this);
 		}));
 		this._isZoomIn = true;
-		dojo.byId("mapZoomCursor").className = "";
+		dom.byId("mapZoomCursor").className = "";
 	},
 	_zoomOut: function(){
 		var marker = this.mapObj.marker;
 		marker.hide();
-		this.parent.fitToMapContents(3,true,dojo.hitch(this,function(){
+		this.parent.fitToMapContents(3,true,lang.hitch(this,function(){
 			this._setStrokeWith({color:"black",width:this._normalizeStrokeWeight(2)});
 			marker._needTooltipRefresh = true;
 			this.parent.onZoomEnd(this);
 		}));
 		this._isZoomIn = false;
-		dojo.byId("mapZoomCursor").className = "";
+		dom.byId("mapZoomCursor").className = "";
 	},
 	
 	init: function(){

@@ -1,7 +1,13 @@
-define(["dojo/_base/kernel"], function(dojo){
-	dojo.getObject("dtl.filter.integers", true, dojox);
+define([
+	"dojo/_base/lang",
+	"../_base"
+], function(lang,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dojox.dtl.filter.integers", true);
 
-	dojo.mixin(dojox.dtl.filter.integers, {
+	lang.mixin(dd.filter.integers, {
 		add: function(value, arg){
 			value = parseInt(value, 10);
 			arg = parseInt(arg, 10);

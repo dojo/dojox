@@ -1,6 +1,11 @@
-define(["dojo/_base/kernel", "./numerals"], function(dojo, numerals){
-	dojo.getObject("date.hebrew.Date", true, dojox);
-	dojo.experimental("dojox.date.hebrew.Date");
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"./numerals"
+], function(dojo, declare, numerals){
+
+dojo.getObject("date.hebrew.Date", true, dojox);
+dojo.experimental("dojox.date.hebrew.Date");
 
 dojo.declare("dojox.date.hebrew.Date", null, {
 	// summary: A Date-like object which implements the Hebrew calendar
@@ -423,32 +428,41 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		return this;
 	},
 
+	_addMinutes: function(/*Number*/minutes){
+		minutes += this._minutes;
+		this.setMinutes(minutes);
+		this.setHours(this._hours + parseInt(minutes / 60));
+		return this;
+	},
+
+	_addSeconds: function(/*Number*/seconds){
+		seconds += this._seconds;
+		this.setSeconds(seconds);
+		this._addMinutes(parseInt(seconds / 60));
+		return this;
+	},
+
+	_addMilliseconds: function(/*Number*/milliseconds){
+		milliseconds += this._milliseconds;
+		this.setMilliseconds(milliseconds);
+		this._addSeconds(parseInt(milliseconds / 1000));
+		return this;
+	},
+
 	setMinutes: function(/*Number*/minutes){
-		//summary: sets the minutes (0-59)
-		minutes = +minutes;
+		//summary: sets the minutes (0-59) only.
 		this._minutes = minutes % 60;
-		this.setHours(parseInt(minutes / 60));
-		this._setDay();
 		return this;
 	},
 
 	setSeconds: function(/*Number*/seconds){
-		//summary: sets the seconds (0-59)
-
-		seconds = +seconds;
+		//summary: sets the seconds (0-59) only.
 		this._seconds = seconds % 60;
-		this.setMinutes(parseInt(seconds / 60));
-		this._setDay();
 		return this;
 	},
 
 	setMilliseconds: function(/*Number*/milliseconds){
-		//summary: sets the milliseconds
-
-		milliseconds = +milliseconds;
 		this._milliseconds = milliseconds % 1000;
-		this.setSeconds(parseInt(milliseconds / 1000));
-		this._setDay();
 		return this;
 	},
 

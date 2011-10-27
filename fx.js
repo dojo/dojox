@@ -1,3 +1,3 @@
-define(["dojo/_base/kernel","./fx/_base"], function(){
-	return dojo.getObject("fx", true, dojox);
+define(["./fx/_base"], function(DojoxFx){
+	return DojoxFx;
 });

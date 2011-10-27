@@ -15,12 +15,10 @@
 	}
 </style>
 
-<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async:1, isDebug: true, fontSizeWatch: true" ></script>
+<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, fontSizeWatch: true" ></script>
 <script type="text/javascript">
 
-	require.ready(["dojo", "dojox/html/styles"], function(dojo){
-		onDomReady();
-	});
+	dojo.require("dojox.html.styles");
 
 	getSelectedStyleSheet = function(){
 		if(dojo.byId("ssDefault").checked) return false;
@@ -35,7 +33,7 @@
 		dojox.html.disableStyleSheet(getSelectedStyleSheet());
 	}
 
-	onDomReady = function(){
+	dojo.ready(function(){
 
 		console.log(dojo.version.toString());
 		var styles = [
@@ -102,8 +100,7 @@
 		console.log("dojox.html.getStyleSheet [href:dijitTests.css, object]:", dojox.html.getStyleSheet("dijitTests.css"));
 		console.log("dojox.html.getStyleSheet [title:BadStyleName]:", dojox.html.getStyleSheet("BadStyleName"));
 
-	};
-
+	});
 </script>
 <style>
 	#btnCol{

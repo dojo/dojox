@@ -1,6 +1,12 @@
-define(["dojo/_base/kernel", "./_base", "./regexp"], function(dojo, validate, xregexp){
+define(["./_base", "./regexp"], function(validate, xregexp){
 
-dojox.validate.isIpAddress = function(/*String*/value, /*Object?*/flags) {
+/*=====
+
+	validate = dojox.validate;
+
+=====*/
+
+validate.isIpAddress = function(/*String*/value, /*Object?*/flags) {
 	// summary: Validates an IP address
 	//
 	// description:
@@ -24,7 +30,7 @@ dojox.validate.isIpAddress = function(/*String*/value, /*Object?*/flags) {
 };
 
 
-dojox.validate.isUrl = function(/*String*/value, /*Object?*/flags) {
+validate.isUrl = function(/*String*/value, /*Object?*/flags) {
 	// summary: Checks if a string could be a valid URL
 	// value: A string
 	// flags: An object
@@ -38,7 +44,7 @@ dojox.validate.isUrl = function(/*String*/value, /*Object?*/flags) {
 	return re.test(value); // Boolean
 };
 
-dojox.validate.isEmailAddress = function(/*String*/value, /*Object?*/flags) {
+validate.isEmailAddress = function(/*String*/value, /*Object?*/flags) {
 	// summary: Checks if a string could be a valid email address
 	//
 	// value: A string
@@ -52,7 +58,7 @@ dojox.validate.isEmailAddress = function(/*String*/value, /*Object?*/flags) {
 	return re.test(value); // Boolean
 };
 
-dojox.validate.isEmailAddressList = function(/*String*/value, /*Object?*/flags) {
+validate.isEmailAddressList = function(/*String*/value, /*Object?*/flags) {
 	// summary: Checks if a string could be a valid email address list.
 	//
 	// value  A string.
@@ -67,7 +73,7 @@ dojox.validate.isEmailAddressList = function(/*String*/value, /*Object?*/flags) 
 	return re.test(value); // Boolean
 };
 
-dojox.validate.getEmailAddressList = function(/*String*/value, /*Object?*/flags) {
+validate.getEmailAddressList = function(/*String*/value, /*Object?*/flags) {
 	// summary: Check if value is an email address list. If an empty list
 	//  is returned, the value didn't pass the test or it was empty.
 	//
@@ -83,5 +89,5 @@ dojox.validate.getEmailAddressList = function(/*String*/value, /*Object?*/flags)
 	return []; // Array
 };
 
-return dojox.validate;
+return validate;
 });

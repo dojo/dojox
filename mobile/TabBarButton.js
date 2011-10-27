@@ -1,20 +1,78 @@
-define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(darray,dhtml, mcommon,ItemBase){
-	// module:
-	//		dojox/mobile/TabBar
-	// summary:
-	//		TODOC
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dijit/registry",	// registry.byNode
+	"./common",
+	"./_ItemBase"
+], function(declare, lang, win, domClass, domConstruct, registry, common, ItemBase){
 
-	return dojo.declare("dojox.mobile.TabBarButton", [dojox.mobile._ItemBase],{
-		icon1: "", // unselected (dark) icon
-		icon2: "", // selected (highlight) icon
-		iconPos1: "", // unselected (dark) icon position
-		iconPos2: "", // selected (highlight) icon position
+/*=====
+	var ItemBase = dojox.mobile._ItemBase;
+=====*/
+
+	// module:
+	//		dojox/mobile/TabBarButton
+	// summary:
+	//		A button widget that is placed in the TabBar widget.
+
+	return declare("dojox.mobile.TabBarButton", ItemBase,{
+		// summary:
+		//		A button widget that is placed in the TabBar widget.
+		// description:
+		//		TabBarButton is a button that is placed in the TabBar widget. It
+		//		is a subclass of dojox.mobile._ItemBase just like ListItem or
+		//		IconItem. So, unlike Button, it has similar capability as
+		//		ListItem or IconItem, such as icon support, transition, etc.
+
+		// icon1: String
+		//		A path for the unselected (typically dark) icon. If icon is not
+		//		specified, the iconBase parameter of the parent widget is used.
+		icon1: "",
+
+		// icon2: String
+		//		A path for the selected (typically highlight) icon. If icon is
+		//		not specified, the iconBase parameter of the parent widget or
+		//		icon1 is used.
+		icon2: "",
+
+		// iconPos1: String
+		//		The position of an aggregated unselected (typically dark)
+		//		icon. IconPos1 is comma separated values like
+		//		top,left,width,height (ex. "0,0,29,29"). If iconPos1 is not
+		//		specified, the iconPos parameter of the parent widget is used.
+		iconPos1: "",
+
+		// iconPos2: String
+		//		The position of an aggregated selected (typically highlight)
+		//		icon. IconPos2 is comma separated values like
+		//		top,left,width,height (ex. "0,0,29,29"). If iconPos2 is not
+		//		specified, the iconPos parameter of the parent widget or
+		//		iconPos1 is used.
+		iconPos2: "",
+
+		// selected: Boolean
+		//		If true, the button is in the selected status.
 		selected: false,
+
+		// transition: String
+		//		A type of animated transition effect.
 		transition: "none",
+
+		// tag: String
+		//		A name of html tag to create as domNode.
 		tag: "LI",
+
+		/* internal properties */	
 		selectOne: true,
+
 	
 		inheritParams: function(){
+			// summary:
+			//		Overrides dojox.mobile._ItemBase.inheritParams().
+			if(this.icon && !this.icon1){ this.icon1 = this.icon; }
 			var parent = this.getParent();
 			if(parent){
 				if(!this.transition){ this.transition = parent.transition; }
@@ -34,13 +92,10 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 		},
 	
 		buildRendering: function(){
-			var a = this.anchorNode = dojo.create("A", {className:"mblTabBarButtonAnchor"});
+			var a = this.anchorNode = domConstruct.create("A", {className:"mblTabBarButtonAnchor"});
 			this.connect(a, "onclick", "onClick");
 	
-			var div = dojo.create("DIV", {className:"mblTabBarButtonDiv"}, a);
-			var divInner = this.innerDivNode = dojo.create("DIV", {className:"mblTabBarButtonDiv mblTabBarButtonDivInner"}, div);
-	
-			this.box = dojo.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
+			this.box = domConstruct.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
 			var box = this.box;
 			var label = "";
 			var r = this.srcNodeRef;
@@ -48,25 +103,30 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 				for(var i = 0, len = r.childNodes.length; i < len; i++){
 					var n = r.firstChild;
 					if(n.nodeType === 3){
-						label += dojo.trim(n.nodeValue);
-						n.nodeValue = this._cv(n.nodeValue);
+						label += lang.trim(n.nodeValue);
+						n.nodeValue = this._cv ? this._cv(n.nodeValue) : n.nodeValue;
 					}
 					box.appendChild(n);
 				}
 			}
 			if(this.label){
-				box.appendChild(dojo.doc.createTextNode(this._cv(this.label)));
+				box.appendChild(win.doc.createTextNode(this._cv ? this._cv(this.label) : this.label));
 			}else{
 				this.label = label;
 			}
 	
-			this.domNode = this.srcNodeRef || dojo.create(this.tag);
+			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.containerNode = this.domNode;
 			this.domNode.appendChild(a);
 			if(this.domNode.className.indexOf("mblDomButton") != -1){
-				var domBtn = dojo.create("DIV", null, a);
-				dojox.mobile.createDomButton(this.domNode, null, domBtn);
-				dojo.addClass(this.domNode, "mblTabButtonDomButton");
+				// deprecated. TODO: remove this code in 1.8
+				var domBtn = domConstruct.create("DIV", null, a);
+				common.createDomButton(this.domNode, null, domBtn);
+				domClass.add(this.domNode, "mblTabButtonDomButton");
+				domClass.add(domBtn, "mblTabButtonDomButtonClass");
+			}
+			if((this.icon1 || this.icon).indexOf("mblDomButton") != -1){
+				domClass.add(this.domNode, "mblTabButtonDomButton");
 			}
 		},
 	
@@ -76,30 +136,32 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 			var parent = this.getParent();
 	
 			var _clsName = parent ? parent._clsName : "mblTabBarButton";
-			dojo.addClass(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
+			domClass.add(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
 	
 			if(parent && parent.barType == "segmentedControl"){
 				// proper className may not be set when created dynamically
-				dojo.removeClass(this.domNode, "mblTabBarButton");
-				dojo.addClass(this.domNode, parent._clsName);
+				domClass.remove(this.domNode, "mblTabBarButton");
+				domClass.add(this.domNode, parent._clsName);
 				this.box.className = "";
 			}
 			this.set({icon1:this.icon1, icon2:this.icon2});
 			this.inherited(arguments);
 		},
 	
-		select: function(deselect){
-			if(deselect){
+		select: function(){
+			// summary:
+			//		Makes this widget in the selected state.
+			if(arguments[0]){ // deselect
 				this.selected = false;
-				dojo.removeClass(this.domNode, "mblTabButtonSelected");
-			}else{
+				domClass.remove(this.domNode, "mblTabButtonSelected");
+			}else{ // select
 				this.selected = true;
-				dojo.addClass(this.domNode, "mblTabButtonSelected");
+				domClass.add(this.domNode, "mblTabButtonSelected");
 				for(var i = 0, c = this.domNode.parentNode.childNodes; i < c.length; i++){
 					if(c[i].nodeType != 1){ continue; }
-					var w = dijit.byNode(c[i]); // sibling widget
+					var w = registry.byNode(c[i]); // sibling widget
 					if(w && w != this){
-						w.select(true);
+						w.deselect();
 					}
 				}
 			}
@@ -109,6 +171,12 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 			if(this.iconNode2){
 				this.iconNode2.style.visibility = this.selected ? "" : "hidden";
 			}
+		},
+		
+		deselect: function(){
+			// summary:
+			//		Makes this widget in the deselected state.
+			this.select(true);
 		},
 	
 		onClick: function(e){
@@ -122,35 +190,23 @@ define(["dojo/_base/array","dojo/_base/html","./common","./_ItemBase"],function(
 				if(this[p] === pos){ return; }
 				this[p] = pos;
 			}
-			var div = this.innerDivNode;
-			if(icon && icon.indexOf("mblDomButton") === 0){
-				if(!this[n]){
-					this[n] = dojo.create("DIV", null, div);
+			if(icon && icon !== "none"){
+				if(!this.iconDivNode){
+					this.iconDivNode = domConstruct.create("DIV", {className:"mblTabBarButtonDiv"}, this.anchorNode, "first");
 				}
-				this[n].className = icon + " mblTabBarButtonIcon";
-				dojox.mobile.createDomButton(this[n]);
-				dojo.removeClass(div, "mblTabBarButtonNoIcon");
-			}else if(icon && icon != "none"){
 				if(!this[n]){
-					this[n] = dojo.create("IMG", {
-						className: "mblTabBarButtonIcon",
-						alt: this.alt
-					}, div);
+					this[n] = domConstruct.create("div", {className:"mblTabBarButtonIcon"}, this.iconDivNode);
+				}else{
+					domConstruct.empty(this[n]);
 				}
-				this[n].src = icon;
+				common.createIcon(icon, this[p], null, this.alt, this[n]);
+				if(this[p]){
+					domClass.add(this[n].firstChild, "mblTabBarButtonSpriteIcon");
+				}
+				domClass.remove(this.iconDivNode, "mblTabBarButtonNoIcon");
 				this[n].style.visibility = sel ? "hidden" : "";
-				dojox.mobile.setupIcon(this[n], this[p]);
-				this[n].onload = function(){
-					// iPhone and Windows Safari sometimes fail to draw icon images.
-					// For some reason, this code solves the problem.
-					// Other browsers, including Chrome, do not have this problem.
-					// Same issue is fixed again a few lines below inside icon2Node.onload()
-					var originDisplay = this.style.display;
-					this.style.display = "none";
-					this.style.display = originDisplay;
-				};
-			}else{
-				dojo.addClass(div, "mblTabBarButtonNoIcon");
+			}else if(this.iconDivNode){
+				domClass.add(this.iconDivNode, "mblTabBarButtonNoIcon");
 			}
 		},
 	

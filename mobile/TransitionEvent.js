@@ -1,4 +1,10 @@
-define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,listen, transition){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/Deferred",
+	"dojo/_base/lang",
+	"dojo/on",
+	"./transition"
+], function(declare, Deferred, lang, on, transitDeferred){
 
 	return declare("dojox.mobile.TransitionEvent", null, {
 		constructor: function(target, transitionOptions, triggerEvent){
@@ -11,17 +17,19 @@ define(["dojo/_base/declare", "dojo/listen", "./transition"], function(declare,l
 			var opts = {bubbles:true, cancelable:true, detail: this.transitionOptions, triggerEvent: this.triggerEvent};	
 			//console.log("Target: ", this.target, " opts: ", opts);
 
-			var evt = listen.emit(this.target,"startTransition", opts);
+			var evt = on.emit(this.target,"startTransition", opts);
 			//console.log('evt: ', evt);
-			if (evt){
-				dojo.when(transition.call(this, evt), dojo.hitch(this, function(results){
-					this.endTransition(results);
+			if(evt){
+				Deferred.when(transitDeferred, lang.hitch(this, function(transition){
+					Deferred.when(transition.call(this, evt), lang.hitch(this, function(results){
+						this.endTransition(results);
+					})); 
 				}));
 			}
 		},
 
 		endTransition: function(results){
-			listen.emit(this.target, "endTransition" , {detail: results.transitionOptions});
+			on.emit(this.target, "endTransition" , {detail: results.transitionOptions});
 		}
 	});
 });

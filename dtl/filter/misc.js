@@ -1,7 +1,14 @@
-define(["dojo/_base/kernel"], function(dojo){
-	dojo.getObject("dtl.filter.misc", true, dojox);
+define([
+	"dojo/_base/lang",
+	"dojo/_base/json",	// dojo.toJson
+	"../_base"
+], function(lang,json,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dojox.dtl.filter.misc", true);
 
-	dojo.mixin(dojox.dtl.filter.misc, {
+	lang.mixin(dd.filter.misc, {
 		filesizeformat: function(value){
 			// summary: Format the value like a 'human-readable' file size (i.e. 13 KB, 4.1 MB, 102bytes, etc).
 			value = parseFloat(value);
@@ -40,7 +47,7 @@ define(["dojo/_base/kernel"], function(dojo){
 		_phone2numeric: { a: 2, b: 2, c: 2, d: 3, e: 3, f: 3, g: 4, h: 4, i: 4, j: 5, k: 5, l: 5, m: 6, n: 6, o: 6, p: 7, r: 7, s: 7, t: 8, u: 8, v: 8, w: 9, x: 9, y: 9 },
 		phone2numeric: function(value){
 			// summary: Takes a phone number and converts it in to its numerical equivalent
-			var dm = dojox.dtl.filter.misc;
+			var dm = dd.filter.misc;
 			value = value + "";
 			var output = "";
 			for(var i = 0; i < value.length; i++){
@@ -51,7 +58,7 @@ define(["dojo/_base/kernel"], function(dojo){
 		},
 		pprint: function(value){
 			// summary: A wrapper around toJson unless something better comes along
-			return dojo.toJson(value);
+			return json.toJson(value);
 		}
 	});
 	return dojox.dtl.filter.misc;

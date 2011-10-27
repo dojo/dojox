@@ -1,66 +1,103 @@
-define(["dojo/_base/array","dojo/_base/html", "./_ItemBase"],function(darray,dhtml, ItemBase){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dojo/dom-style",
+	"./common",
+	"./_ItemBase"
+], function(declare, win, domClass, domConstruct, domStyle, common, ItemBase){
+/*=====
+	var ItemBase = dojox.mobile._ItemBase;
+=====*/
+
 	// module:
 	//		dojox/mobile/ToolBarButton
 	// summary:
-	//		TODOC
+	//		A button widget that is placed in the Heading widget.
 
-	return dojo.declare("dojox.mobile.ToolBarButton", dojox.mobile._ItemBase, {
+	return declare("dojox.mobile.ToolBarButton", ItemBase, {
+		// summary:
+		//		A button widget that is placed in the Heading widget.
+		// description:
+		//		ToolBarButton is a button that is placed in the Heading
+		//		widget. It is a subclass of dojox.mobile._ItemBase just like
+		//		ListItem or IconItem. So, unlike Button, it has basically the
+		//		same capability as ListItem or IconItem, such as icon support,
+		//		transition, etc.
+
+		// selected: Boolean
+		//		If true, the button is in the selected status.
 		selected: false,
+
+		// btnClass: String
+		//		Deprecated.
+		btnClass: "",
+
+		/* internal properties */	
 		_defaultColor: "mblColorDefault",
 		_selColor: "mblColorDefaultSel",
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || dojo.doc.createElement("div");
+			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("div");
 			this.inheritParams();
-			dojo.addClass(this.domNode, "mblToolbarButton mblArrowButtonText");
+			domClass.add(this.domNode, "mblToolBarButton mblArrowButtonText");
 			var color;
 			if(this.selected){
 				color = this._selColor;
 			}else if(this.domNode.className.indexOf("mblColor") == -1){
 				color = this._defaultColor;
 			}
-			dojo.addClass(this.domNode, color);
+			domClass.add(this.domNode, color);
 	
 			if(!this.label){
 				this.label = this.domNode.innerHTML;
 			}
-			this.domNode.innerHTML = this._cv(this.label);
-	
+			this.domNode.innerHTML = this._cv ? this._cv(this.label) : this.label;
+
 			if(this.icon && this.icon != "none"){
-				var img;
+				this.iconNode = domConstruct.create("div", {className:"mblToolBarButtonIcon"}, this.domNode);
+				common.createIcon(this.icon, this.iconPos, null, this.alt, this.iconNode);
 				if(this.iconPos){
-					var iconDiv = dojo.create("DIV", null, this.domNode);
-					img = dojo.create("IMG", null, iconDiv);
-					img.style.position = "absolute";
-					var arr = this.iconPos.split(/[ ,]/);
-					dojo.style(iconDiv, {
-						position: "relative",
-						width: arr[2] + "px",
-						height: arr[3] + "px"
-					});
-				}else{
-					img = dojo.create("IMG", null, this.domNode);
+					domClass.add(this.iconNode.firstChild, "mblToolBarButtonSpriteIcon");
 				}
-				img.src = this.icon;
-				img.alt = this.alt;
-				dojox.mobile.setupIcon(img, this.iconPos);
-				this.iconNode = img;
 			}else{
-				if(dojox.mobile.createDomButton(this.domNode)){
-					dojo.addClass(this.domNode, "mblToolbarButtonDomButton");
+				if(common.createDomButton(this.domNode)){
+					domClass.add(this.domNode, "mblToolBarButtonDomButton");
+				}else{
+					domClass.add(this.domNode, "mblToolBarButtonText");
 				}
 			}
 			this.connect(this.domNode, "onclick", "onClick");
 		},
 	
-		select: function(/*Boolean?*/deselect){
-			dojo.toggleClass(this.domNode, this._selColor, !deselect);
-			this.selected = !deselect;
+		select: function(){
+			// summary:
+			//		Makes this widget in the selected state.
+			domClass.toggle(this.domNode, this._selColor, !arguments[0]);
+			this.selected = !arguments[0];
+		},
+		
+		deselect: function(){
+			// summary:
+			//		Makes this widget in the deselected state.
+			this.select(true);
 		},
 	
 		onClick: function(e){
 			this.setTransitionPos(e);
 			this.defaultClickAction();
+		},
+	
+		_setBtnClassAttr: function(/*String*/btnClass){
+			var node = this.domNode;
+			if(node.className.match(/(mblDomButton\w+)/)){
+				domClass.remove(node, RegExp.$1);
+			}
+			domClass.add(node, btnClass);
+			if(common.createDomButton(this.domNode)){
+				domClass.add(this.domNode, "mblToolBarButtonDomButton");
+			}
 		}
 	});
 });

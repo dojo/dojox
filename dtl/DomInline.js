@@ -1,9 +1,17 @@
-define(["dojo/_base/lang","./dom","dijit/_Widget"], function(dojo,ddd,dwid){
-
-	dojox.dtl.DomInline = dojo.extend(function(args, node){
+define([
+	"dojo/_base/lang",
+	"./dom",
+	"./_base",
+	"dijit/_WidgetBase"
+], function(lang,ddd,dd,Widget){
+	/*=====
+		dd = dojox.dtl;
+		Widget = dijit._WidgetBase;
+	=====*/ 
+	dd.DomInline = lang.extend(function(args, node){
 		this.create(args, node);
 	},
-	dwid.prototype,
+	Widget.prototype,
 	{
 		context: null,
 		render: function(/*dojox.dtl.Context?*/ context){
@@ -24,7 +32,7 @@ define(["dojo/_base/lang","./dom","dijit/_Widget"], function(dojo,ddd,dwid){
 				node.parentNode.replaceChild(div, node);
 			}
 
-			this.template = new dojox.dtl.DomTemplate(dojo.trim(node.text), true);
+			this.template = new dojox.dtl.DomTemplate(lang.trim(node.text), true);
 			this.render();
 		},
 		postMixInProperties: function(){

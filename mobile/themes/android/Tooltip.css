@@ -1,6 +1,7 @@
 /* dojox.mobile.Tooltip */
 .mblTooltip {
   position: absolute;
+  z-index: 2000;
   display: block;
   margin: 0;
   padding: 5px;
@@ -131,7 +132,7 @@
   border-bottom-width: 0;
   border-top-color: #848284;
 }
-.mblTooltipHidden {
+.mblTooltipHidden, .mblTooltipHidden * {
   visibility: hidden !important;
 }
 .mblTooltip .mblHeading {

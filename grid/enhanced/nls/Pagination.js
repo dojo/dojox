@@ -7,6 +7,7 @@ define({ root:
 	"nextTip": "Next Page",
 	"prevTip": "Previous Page",
 	"itemTitle": "items",
+	"singularItemTitle": "item",
 	"pageStepLabelTemplate": "Page ${0}",
 	"pageSizeLabelTemplate": "${0} items per page",
 	"allItemsLabelTemplate": "All items",
@@ -15,7 +16,8 @@ define({ root:
 	"dialogIndication": "Specify the page number",
 	"pageCountIndication": " (${0} pages)",
 	"dialogConfirm": "Go",
-	"dialogCancel": "Cancel"
+	"dialogCancel": "Cancel",
+	"all": "All"
 })
 //end v1.x content
 ,

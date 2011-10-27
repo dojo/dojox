@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Element", "./common", "dojox/lang/utils", "dojox/gfx/fx"], 
-	function(dojo, declare, dconnect, Element, dc, du, fx){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
+		"../Element", "./common", "dojox/lang/utils", "dojox/gfx/fx"], 
+	function(lang, declare, hub, arr, Element, dc, du, fx){
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -35,9 +36,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
+	var Element = dojox.charting.plot2d.Element;
 	=====*/
 
-	return dojo.declare("dojox.charting.plot2d.Grid", dojox.charting.Element, {
+	return declare("dojox.charting.plot2d.Grid", Element, {
 		//	summary:
 		//		A "faux" plot that can be placed behind other plots to represent
 		//		a grid against which other plots can be easily measured.
@@ -58,11 +60,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 		constructor: function(chart, kwArgs){
 			//	summary:
 			//		Create the faux Grid plot.
-			//	chart: dojox.charting.Chart2D
+			//	chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__GridCtorArgs?
 			//		An optional keyword arguments object to help define the parameters of the underlying grid.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
@@ -108,7 +110,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 			//		Returns default stats (irrelevant for this type of plot).
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
-			return dojo.delegate(dc.defaultStats);
+			return lang.delegate(dc.defaultStats);
 		},
 		initializeScalers: function(){
 			//	summary:
@@ -149,7 +151,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 					((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
 
 				shape = this.group,
-				anim = fx.animateTransform(dojo.delegate({
+				anim = fx.animateTransform(lang.delegate({
 					shape: shape,
 					duration: 1200,
 					transform:[
@@ -159,12 +161,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 						{name:"translate", start: [0, 0], end: [rXOffset, rYOffset]}
 					]}, this.zoom));
 
-			dojo.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
+			lang.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
 			//add anim to zooming action queue,
 			//in order to avoid several zooming action happened at the same time
 			this.zoomQueue.push(anim);
 			//perform each anim one by one in zoomQueue
-			dojo.connect(anim, "onEnd", this, function(){
+			hub.connect(anim, "onEnd", this, function(){
 				this.zoom = null;
 				this.zoomQueue.shift();
 				if(this.zoomQueue.length > 0){
@@ -226,33 +228,35 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 				var vScaler = this._vAxis.getScaler(),
 					vt = vScaler.scaler.getTransformerFromModel(vScaler),
 					ticks = this._vAxis.getTicks();
-				if(this.opt.hMinorLines){
-					dojo.forEach(ticks.minor, function(tick){
-						var y = dim.height - offsets.b - vt(tick.value);
-						var hMinorLine = this.createLine(s, {
-							x1: offsets.l,
-							y1: y,
-							x2: dim.width - offsets.r,
-							y2: y
-						}).setStroke(ta.minorTick);
-						if(this.animate){
-							this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
-						}
-					}, this);
-				}
-				if(this.opt.hMajorLines){
-					dojo.forEach(ticks.major, function(tick){
-						var y = dim.height - offsets.b - vt(tick.value);
-						var hMajorLine = this.createLine(s, {
-							x1: offsets.l,
-							y1: y,
-							x2: dim.width - offsets.r,
-							y2: y
-						}).setStroke(ta.majorTick);
-						if(this.animate){
-							this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
-						}
-					}, this);
+				if(ticks != null){
+					if(this.opt.hMinorLines){
+						arr.forEach(ticks.minor, function(tick){
+							var y = dim.height - offsets.b - vt(tick.value);
+							var hMinorLine = this.createLine(s, {
+								x1: offsets.l,
+								y1: y,
+								x2: dim.width - offsets.r,
+								y2: y
+							}).setStroke(ta.minorTick);
+							if(this.animate){
+								this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
+							}
+						}, this);
+					}
+					if(this.opt.hMajorLines){
+						arr.forEach(ticks.major, function(tick){
+							var y = dim.height - offsets.b - vt(tick.value);
+							var hMajorLine = this.createLine(s, {
+								x1: offsets.l,
+								y1: y,
+								x2: dim.width - offsets.r,
+								y2: y
+							}).setStroke(ta.majorTick);
+							if(this.animate){
+								this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
+							}
+						}, this);
+					}
 				}
 			}catch(e){
 				// squelch
@@ -262,33 +266,35 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 				var hScaler = this._hAxis.getScaler(),
 					ht = hScaler.scaler.getTransformerFromModel(hScaler),
 					ticks = this._hAxis.getTicks();
-				if(ticks && this.opt.vMinorLines){
-					dojo.forEach(ticks.minor, function(tick){
-						var x = offsets.l + ht(tick.value);
-						var vMinorLine = this.createLine(s, {
-							x1: x,
-							y1: offsets.t,
-							x2: x,
-							y2: dim.height - offsets.b
-						}).setStroke(ta.minorTick);
-						if(this.animate){
-							this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
-						}
-					}, this);
-				}
-				if(ticks && this.opt.vMajorLines){
-					dojo.forEach(ticks.major, function(tick){
-						var x = offsets.l + ht(tick.value);
-						var vMajorLine = this.createLine(s, {
-							x1: x,
-							y1: offsets.t,
-							x2: x,
-							y2: dim.height - offsets.b
-						}).setStroke(ta.majorTick);
-						if(this.animate){
-							this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
-						}
-					}, this);
+				if(this != null){
+					if(ticks && this.opt.vMinorLines){
+						arr.forEach(ticks.minor, function(tick){
+							var x = offsets.l + ht(tick.value);
+							var vMinorLine = this.createLine(s, {
+								x1: x,
+								y1: offsets.t,
+								x2: x,
+								y2: dim.height - offsets.b
+							}).setStroke(ta.minorTick);
+							if(this.animate){
+								this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
+							}
+						}, this);
+					}
+					if(ticks && this.opt.vMajorLines){
+						arr.forEach(ticks.major, function(tick){
+							var x = offsets.l + ht(tick.value);
+							var vMajorLine = this.createLine(s, {
+								x1: x,
+								y1: offsets.t,
+								x2: x,
+								y2: dim.height - offsets.b
+							}).setStroke(ta.majorTick);
+							if(this.animate){
+								this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
+							}
+						}, this);
+					}
 				}
 			}catch(e){
 				// squelch
@@ -299,7 +305,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "../Eleme
 		_animateGrid: function(shape, type, offset, size){
 			var transStart = type == "h" ? [offset, 0] : [0, offset];
 			var scaleStart = type == "h" ? [1/size, 1] : [1, 1/size];
-			fx.animateTransform(dojo.delegate({
+			fx.animateTransform(lang.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [

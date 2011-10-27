@@ -1,6 +1,13 @@
-define(["dijit/form/_ListBase"], function(ListBase) {
+define([
+	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dijit/form/_ListBase"
+], function(declare, event, ListBase){
 
-	return dojo.declare( "dojox.mobile._ListTouchMixin", dijit.form._ListBase, {
+	/*=====
+		ListBase = dijit.form._ListBase;
+	=====*/
+	return declare( "dojox.mobile._ListTouchMixin", ListBase, {
 		// summary:
 		//		Focus-less menu to handle touch events consistently
 		//		Abstract methods that must be defined externally:
@@ -14,7 +21,7 @@ define(["dijit/form/_ListBase"], function(ListBase) {
 		},
 	
 		_onClick: function(/*Event*/ evt){
-			dojo.stopEvent(evt);
+			event.stop(evt);
 			var target = this._getTarget(evt);
 			if(target){
 				this._setSelectedAttr(target);

@@ -1,7 +1,8 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html",
-	"./Invisible", "../scaler/common", "../scaler/linear", "./common", 
-	"dojox/gfx", "dojox/lang/utils"], 
-	function(dojo, declare, dconnect, dhtml, Invisible, scommon, lin, acommon, g, du){
+define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
+	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", 
+	"../scaler/common", "../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils"], 
+	function(lang, arr, has, declare, connect, html, domGeom, Invisible, scommon, 
+			lin, acommon, g, du){
 
 	/*=====
 		dojox.charting.axis2d.__AxisCtorArgs = function(
@@ -75,7 +76,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		An optional color to be used in drawing labels.
 		//	enableCache: Boolean?
 		//		Whether the ticks and labels are cached from one rendering to another. This improves the rendering performance of
-		//		successive rendering but penalize the first rendering.  Default false.
+		//		successive rendering but penalize the first rendering. For labels it is only working with gfx labels
+		//		not html ones.  Default false.
 	
 		this.vertical = vertical;
 		this.fixUpper = fixUpper;
@@ -108,12 +110,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		this.fontColor = fontColor;
 		this.enableCache = enableCache;
 	}
+	var Invisible = dojox.charting.axis2d.Invisible
 	=====*/
 
 	var labelGap = 4,			// in pixels
 		centerAnchorLimit = 45;	// in degrees
 
-	return dojo.declare("dojox.charting.axis2d.Default", dojox.charting.axis2d.Invisible, {
+	return declare("dojox.charting.axis2d.Default", Invisible, {
 		//	summary:
 		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
 		//
@@ -204,7 +207,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		The chart the axis belongs to.
 			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			if(this.opt.enableCache){
@@ -577,7 +580,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					f = lin.getTransformerFromModel(this.scaler),
 					// GFX Canvas now supports labels, so let's _not_ fallback to HTML anymore on canvas, just use
 					// HTML labels if explicitly asked + no rotation + no IE + no Opera
-					labelType = !titleRotation && !rotation && this.opt.htmlLabels && !dojo.isIE && !dojo.isOpera ? "html" : "gfx",
+					labelType = (!o.title || !titleRotation) && !rotation && this.opt.htmlLabels && !has("ie") && !has("opera") ? "html" : "gfx",
 					dx = tickVector.x * taMajorTick.length,
 					dy = tickVector.y * taMajorTick.length;
 
@@ -611,11 +614,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				
 				// go out nicely instead of try/catch
 				if(t==null){
-					this.diry = false;
-					return;
+					this.dirty = false;
+					return this;
 				}
 
-				dojo.forEach(t.major, function(tick){
+				arr.forEach(t.major, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
@@ -668,7 +671,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				dx = tickVector.x * taMinorTick.length;
 				dy = tickVector.y * taMinorTick.length;
 				canLabel = c.minMinorStep <= c.minor.tick * c.bounds.scale;
-				dojo.forEach(t.minor, function(tick){
+				arr.forEach(t.minor, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
@@ -719,7 +722,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 
 				dx = tickVector.x * taMicroTick.length;
 				dy = tickVector.y * taMicroTick.length;
-				dojo.forEach(t.micro, function(tick){
+				arr.forEach(t.micro, function(tick){
 					var offset = f(tick.value), elem,
 						x = start.x + axisVector.x * offset,
 						y = start.y + axisVector.y * offset;
@@ -737,34 +740,34 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return this;	//	dojox.charting.axis2d.Default
 		},
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
-			// to avoid requiring dijit module for that feature, let's test that
-			// dynamically and return if we can't do it
-			if(!dijit || !dijit.Tooltip){
-				return;
-			}
+			var modules = ["dijit/Tooltip"];
 			var aroundRect = {type: "rect"}, position = ["above", "below"],
 				fontWidth = g._base._getTextBox(truncatedLabel, {font: font}).w || 0,
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
 			if(elemType == "html"){
-				dojo.mixin(aroundRect, dojo.coords(elem.firstChild, true));
+				lang.mixin(aroundRect, html.coords(elem.firstChild, true));
 				aroundRect.width = Math.ceil(fontWidth);
 				aroundRect.height = Math.ceil(fontHeight);
 				this._events.push({
 					shape:  dojo,
-					handle: dojo.connect(elem.firstChild, "onmouseover", this, function(e){
-						dijit.showTooltip(label, aroundRect, position);
+					handle: connect.connect(elem.firstChild, "onmouseover", this, function(e){
+						require(modules, function(Tooltip){
+							Tooltip.show(label, aroundRect, position);
+						});
 					})
 				});
 				this._events.push({
 					shape:  dojo,
-					handle: dojo.connect(elem.firstChild, "onmouseout", this, function(e){
-						dijit.hideTooltip(aroundRect);
+					handle: connect.connect(elem.firstChild, "onmouseout", this, function(e){
+						require(modules, function(Tooltip){
+							Tooltip.hide(aroundRect);
+						});
 					})
 				});
 			}else{
 				var shp = elem.getShape(),
-					lt = dojo.coords(chart.node, true);
-				aroundRect = dojo.mixin(aroundRect, {
+					lt = html.coords(chart.node, true);
+				aroundRect = lang.mixin(aroundRect, {
 					x: shp.x - fontWidth / 2,
 					y: shp.y
 				});
@@ -777,13 +780,17 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				this._events.push({
 					shape:  elem,
 					handle: elem.connect("onmouseenter", this, function(e){
-						dijit.showTooltip(label, aroundRect, position);
+						require(modules, function(Tooltip){
+							Tooltip.show(label, aroundRect, position);
+						});
 					})
 				});
 				this._events.push({
 					shape:  elem,
 					handle: elem.connect("onmouseleave", this, function(e){
-						dijit.hideTooltip(aroundRect);
+						require(modules, function(Tooltip){
+							Tooltip.hide(aroundRect);
+						});
 					})
 				});
 			}

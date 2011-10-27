@@ -1,10 +1,16 @@
-define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
-	dojo.getObject("dtl.tag.logic", true, dojox);
+define([
+	"dojo/_base/lang",
+	"../_base"
+], function(lang, dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dojox.dtl.tag.logic", true);
 
 	var ddt = dd.text;
 	var ddtl = dd.tag.logic;
 
-	ddtl.IfNode = dojo.extend(function(bools, trues, falses, type){
+	ddtl.IfNode = lang.extend(function(bools, trues, falses, type){
 		this.bools = bools;
 		this.trues = trues;
 		this.falses = falses;
@@ -61,7 +67,7 @@ define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
 		}
 	});
 
-	ddtl.IfEqualNode = dojo.extend(function(var1, var2, trues, falses, negate){
+	ddtl.IfEqualNode = lang.extend(function(var1, var2, trues, falses, negate){
 		this.var1 = new dd._Filter(var1);
 		this.var2 = new dd._Filter(var2);
 		this.trues = trues;
@@ -95,7 +101,7 @@ define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
 		}
 	});
 
-	ddtl.ForNode = dojo.extend(function(assign, loop, reversed, nodelist){
+	ddtl.ForNode = lang.extend(function(assign, loop, reversed, nodelist){
 		this.assign = assign;
 		this.loop = new dd._Filter(loop);
 		this.reversed = reversed;
@@ -128,7 +134,7 @@ define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
 				items = items.slice(0).reverse();
 			}
 
-			var isObject = dojo.isObject(items) && !dojo.isArrayLike(items);
+			var isObject = lang.isObject(items) && !lang.isArrayLike(items);
 			var arred = [];
 			if(isObject){
 				for(var key in items){
@@ -152,7 +158,7 @@ define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
 				forloop.first = !j;
 				forloop.last = (j == arred.length - 1);
 
-				if(assign.length > 1 && dojo.isArrayLike(item)){
+				if(assign.length > 1 && lang.isArrayLike(item)){
 					if(!dirty){
 						dirty = true;
 						context = context.push();
@@ -161,7 +167,7 @@ define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
 					for(k = 0; k < item.length && k < assign.length; k++){
 						zipped[assign[k]] = item[k];
 					}
-					dojo.mixin(context, zipped);
+					lang.mixin(context, zipped);
 				}else{
 					context[assign[0]] = item;
 				}
@@ -193,7 +199,7 @@ define(["dojo/_base/lang","../_base","dojo/_base/array"], function(dojo,dd){
 		}
 	});
 
-	dojo.mixin(ddtl, {
+	lang.mixin(ddtl, {
 		if_: function(parser, token){
 			var i, part, type, bools = [], parts = token.contents.split();
 			parts.shift();

@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Harmony=new Theme({
+	themes.Harmony=new Theme({
 		colors: [
 			"#497c91",
 			"#59a0bd",
@@ -34,9 +34,8 @@ define(["../Theme", "./common"], function(Theme){
 			"#a5a5a5",
 			"#bebebe",
 			"#d8d8d8"
-			
 		]
 	});
 	
-	return dojox.charting.themes.Harmony;
+	return themes.Harmony;
 });

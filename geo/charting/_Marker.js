@@ -1,8 +1,7 @@
 
-define(["dojo/_base/lang", "dojo/_base/declare"], 
-				function(dojo,declare) {
-
-return dojo.declare("dojox.geo.charting._Marker", null, {
+define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare","dojo/_base/sniff","./_base"], 
+	function(lang, arr, declare, has) {
+return declare("dojox.geo.charting._Marker", null, {
 	
 	_needTooltipRefresh: null,
 	_map: null,
@@ -15,7 +14,7 @@ return dojo.declare("dojox.geo.charting._Marker", null, {
 		_needTooltipRefresh = false;
 	},
 
-	show: function(featureId){
+	show: function(featureId,evt){
 		this.currentFeature = this.features[featureId];
 		if (this._map.showTooltips && this.currentFeature) {
 			this.markerText = this.currentFeature.markerText || this.markerData[featureId] || featureId;
@@ -34,8 +33,8 @@ return dojo.declare("dojox.geo.charting._Marker", null, {
 		var shapes = group.children;
 		var feature = shapes[0];
 		var bbox = feature.getBoundingBox();
-		this._arround = dojo.clone(bbox);
-		dojo.forEach(shapes, function(item){
+		this._arround = lang.clone(bbox);
+		arr.forEach(shapes, function(item){
 			var _bbox = item.getBoundingBox();
 			this._arround.x = Math.min(this._arround.x, _bbox.x);
 			this._arround.y = Math.min(this._arround.y, _bbox.y);
@@ -45,11 +44,11 @@ return dojo.declare("dojox.geo.charting._Marker", null, {
 	_toWindowCoords: function(arround, coords, containerSize){
 		var toLeft = (arround.x - this.topLeft[0]) * this.scale;
 		var toTop = (arround.y - this.topLeft[1]) * this.scale
-		if (dojo.isFF == 3.5) {
+		if (has("ff") == 3.5) {
 			arround.x = coords.x;
 			arround.y = coords.y;
 		}
-		else if (dojo.isChrome) {
+		else if (has("chrome")) {
 			arround.x = containerSize.x + toLeft;
 			arround.y = containerSize.y + toTop;
 		}

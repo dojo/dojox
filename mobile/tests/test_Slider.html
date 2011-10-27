@@ -56,9 +56,9 @@
 					var e = document.createEvent('Events');
 					if(!hasTouch){
 						switch(type){
-							case 'touchstart': type = 'mousedown'; break;;
-							case 'touchmove': type = 'mousemove'; break;;
-							case 'touchend': type = 'mouseup'; break;;
+							case 'touchstart': type = 'mousedown'; break;
+							case 'touchmove': type = 'mousemove'; break;
+							case 'touchend': type = 'mouseup'; break;
 						}
 					}
 					e.initEvent(type, true, true);
@@ -447,7 +447,7 @@
 						dojo.style(sv.handle, "WebkitTransitionDuration", "");
 					}
 				})
-			};
+			}
 
 			doh.register("log", function(){
 				dojo.byId('failures').innerHTML = doh._failureCount;
@@ -458,13 +458,13 @@
 		});
 	</script>
 </head>
-<body style="zoom:1.2;">
+<body style="visibility:hidden;zoom:1.2;">
 	<form>
 		<br>
 		<center>
 			<table><tr>
 				<td>0</td>
-				<td><input id="sh" name="sh" data-dojo-type="dojox.mobile.Slider" type="range" data-dojo-props='value:0, min:0, max:20, step:0.1, onChange:function(v){ dojo.byId("sh_val").innerHTML=this.value; }' style="width:200px;" /></td>
+				<td><input id="sh" data-dojo-type="dojox.mobile.Slider" type="range" data-dojo-props='value:0, min:0, max:20, step:0.1, onChange:function(v){ dojo.byId("sh_val").innerHTML=this.value; }' style="width:200px;" /></td>
 				<td>20</td>
 			</tr><tr>
 				<td></td><td><center>Value:&nbsp;<span id="sh_val">0</span></center></td><td></td>

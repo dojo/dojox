@@ -1,4 +1,26 @@
-define("dojox/editor/plugins/InsertAnchor", ["dojo", "dijit", "dojox", "dojo/string", "dijit/_editor/range", "dijit/_Templated", "dijit/TooltipDialog", "dijit/form/ValidationTextBox", "dijit/form/Select", "dijit/_editor/_Plugin", "dijit/form/Button", "dijit/form/DropDownButton", "dojox/editor/plugins/ToolbarLineBreak",  "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/InsertAnchor", "dojo/i18n!dijit/nls/common"], function(dojo, dijit, dojox) {
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dijit/_base/manager",	// TODO: change to dijit/registry, and change dijit.byId to registry.byId
+	"dijit/_editor/range",
+	"dijit/_Templated",
+	"dijit/TooltipDialog",
+	"dijit/form/ValidationTextBox",
+	"dijit/form/Select",
+	"dijit/form/Button",
+	"dijit/form/DropDownButton",
+	"dijit/_editor/range",
+	"dijit/_editor/selection",
+	"dijit/_editor/_Plugin",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/i18n",
+	"dojo/string",
+	"dojox/editor/plugins/ToolbarLineBreak",
+	"dojo/i18n!dojox/editor/plugins/nls/InsertAnchor",
+	"dojo/i18n!dijit/nls/common"
+], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 	// summary:

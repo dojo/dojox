@@ -5,9 +5,9 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>SwapView</title>
 		<link href="../themes/iphone/base.css" rel="stylesheet">
-		<link href="../themes/iphone/PageIndicator.css" rel="stylesheet"></link>
-		<link href="../themes/common/FixedSplitter.css" rel="stylesheet"></link>
-		<link href="../themes/common/domButtons.css" rel="stylesheet"></link>
+		<link href="../themes/iphone/PageIndicator.css" rel="stylesheet">
+		<link href="../themes/common/FixedSplitter.css" rel="stylesheet">
+		<link href="../themes/common/domButtons.css" rel="stylesheet">
 		<style>
 		html,body{
 			height: 100%;
@@ -90,9 +90,9 @@
 			dojo.require("dojox.mobile.ScrollableView");
 		</script>
 	</head>
-	<body>
+	<body style="visibility:hidden;">
 		<div dojoType="dojox.mobile.FixedSplitter" orientation="V">
-			<div dojoType="dojox.mobile.FixedSplitterPane" style="height:50%;">
+			<div dojoType="dojox.mobile.FixedSplitterPane" style="height:50%;overflow:hidden;">
 				<div id="general" dojoType="dojox.mobile.ScrollableView" height="inherit">
 					<ul dojoType="dojox.mobile.RoundRectList" class="list1" stateful="true">
 						<li dojoType="dojox.mobile.ListItem" moveTo="#">
@@ -139,12 +139,12 @@
 				</div>
 			</div>
 
-			<div dojoType="dojox.mobile.FixedSplitterPane" style="height:10px;">
+			<div dojoType="dojox.mobile.FixedSplitterPane" style="height:10px;overflow:hidden;">
 			</div>
 
-			<div dojoType="dojox.mobile.FixedSplitterPane">
+			<div dojoType="dojox.mobile.FixedSplitterPane" style="overflow:hidden;">
 				<div id="swap1" dojoType="dojox.mobile.SwapView">
-					<div dojoType="dojox.mobile.ScrollableView" style="height:100%">
+					<div dojoType="dojox.mobile.ScrollableView" height="100%">
 						<ul id="news" dojoType="dojox.mobile.RoundRectList">
 							<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem"
 								href="test_iPhone-ScrollableView-demo.html" hrefTarget="_blank" arrowClass="mblDomButtonBlueCircleArrow">
@@ -187,7 +187,7 @@
 				</div>
 
 				<div id="swap2" dojoType="dojox.mobile.SwapView">
-					<div dojoType="dojox.mobile.ScrollableView" style="height:100%">
+					<div dojoType="dojox.mobile.ScrollableView" height="100%">
 						<div dojoType="dojox.mobile.RoundRect" style="position:relative;">
 						<table id="tbl1" cellpadding="0" cellspacing="0" width="90%">
 							<tr><td>2 Yr Bond</td><td>113.75</td><td>0.00</td><td class="g">0.00%</td></tr>
@@ -203,7 +203,7 @@
 				</div>
 
 				<div id="swap3" dojoType="dojox.mobile.SwapView">
-					<div dojoType="dojox.mobile.ScrollableView" style="height:100%">
+					<div dojoType="dojox.mobile.ScrollableView" height="100%">
 						<div dojoType="dojox.mobile.RoundRect" style="overflow:hidden">
 							<img src="images/chart.png">
 						</div>

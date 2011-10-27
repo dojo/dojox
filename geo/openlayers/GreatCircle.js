@@ -1,7 +1,9 @@
+define(["dojo/_base/lang",
+				"dojox/geo/openlayers/GeometryFeature",
+				"dojox/geo/openlayers/Point",
+				"dojox/geo/openlayers/LineString"], function(lang, GeometryFeature, Point, lineString){
 
-define([ "dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/Point",
-		"dojox/geo/openlayers/LineString" ], function(geomFeatArg, pointArg, lineStringArg){
-	//	(function(){
+	lang.getObject("geo.openlayers", true, dojox);
 
 	dojox.geo.openlayers.GreatCircle = {
 
@@ -50,9 +52,9 @@ define([ "dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/Point",
 			var r2d = this.RAD2DEG;
 
 			while (lon <= elon) {
-				lat = Math.atan((Math.sin(lat1) * Math.cos(lat2) * Math.sin(lon - lon2) - Math.sin(lat2)
-						* Math.cos(lat1) * Math.sin(lon - lon1))
-						/ (Math.cos(lat1) * Math.cos(lat2) * Math.sin(lon1 - lon2)));
+				lat = Math.atan((Math.sin(lat1) * Math.cos(lat2) * Math.sin(lon - lon2) - Math.sin(lat2) * Math.cos(lat1)
+																																									* Math.sin(lon - lon1))
+												/ (Math.cos(lat1) * Math.cos(lat2) * Math.sin(lon1 - lon2)));
 				var p = {
 					x : lon * r2d,
 					y : lat * r2d
@@ -89,7 +91,7 @@ define([ "dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/Point",
 		toGeometryFeature : function(p1, p2, increment){
 			//	summary:
 			//		Create a geodetic line as an array of dojox.geo.openlayers.GeometryFeature.
-			//	descritpion:
+			//	description:
 			// 		Create a geodetic line as a dojox.geo.openlayers.GeometryFeature between the point p1
 			//		ant the point p2. Result is a polyline approximation for which a new point is 
 			//		calculated every <em>increment</em> degrees.
@@ -101,8 +103,11 @@ define([ "dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/Point",
 			//		latitude in decimal degrees.
 			//	increment: Float
 			//		The value at which a new point is computed. 
+			//	returns: GeometryFeature
+			//		The geodetic line as a GeometryFeature
+
 			var ls = this.toLineString(p1, p2, increment);
-			return new geomFeatArg(ls);
+			return new GeometryFeature(ls);
 		},
 
 		DEG2RAD : Math.PI / 180,
@@ -111,5 +116,4 @@ define([ "dojox/geo/openlayers/GeometryFeature", "dojox/geo/openlayers/Point",
 
 		TOLERANCE : 0.00001
 	};
-	//	})();
 });

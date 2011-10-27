@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/Color", "../Theme", "dojox/color/_base", "./common"], 
-	function(dojo, darray, dcolor, Theme, dxcolor, themes){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color", "../Theme", "dojox/color/_base", "./common"], 
+	function(lang, arr, Color, Theme, dxcolor, themes){
 	
-	var gg = dojo.getObject("gradientGenerator", true, themes);
+	var gg = lang.getObject("gradientGenerator", true, themes);
 
 	gg.generateFills = function(colors, fillPattern, lumFrom, lumTo){
 		//	summary:
@@ -14,7 +14,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/Color", "../Theme",
 		//		Initial luminance value (0-100).
 		//	lumTo: Number:
 		//		Final luminance value (0-100).
-		return dojo.map(colors, function(c){	// Array
+		return arr.map(colors, function(c){	// Array
 			return Theme.generateHslGradient(c, fillPattern, lumFrom, lumTo);
 		});
 	};
@@ -30,7 +30,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/Color", "../Theme",
 		//		Initial luminance value (0-100).
 		//	lumTo: Number:
 		//		Final luminance value (0-100).
-		dojo.forEach(themes, function(t){
+		arr.forEach(themes, function(t){
 			if(t.fill && !t.fill.type){
 				t.fill = Theme.generateHslGradient(t.fill, fillPattern, lumFrom, lumTo);
 			}
@@ -50,7 +50,7 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/Color", "../Theme",
 		//		Final luminance value (0-100).
 		//	lumStroke: Number:
 		//		Stroke luminance value (0-100).
-		return dojo.map(colors, function(c){	// Array
+		return arr.map(colors, function(c){	// Array
 			c = new dxcolor.Color(c);
 			return {
 				fill:   Theme.generateHslGradient(c, fillPattern, lumFrom, lumTo),
@@ -67,12 +67,12 @@ define(["dojo/_base/kernel", "dojo/_base/array", "dojo/_base/Color", "../Theme",
 		//	intensityMap: Array:
 		//		Array of tuples {o, i}, where o is a gradient offset (0-1),
 		//		and i is an intensity (0-255).
-		color = new dojo.Color(color);
-		return dojo.map(intensityMap, function(stop){	// Array
+		color = new Color(color);
+		return arr.map(intensityMap, function(stop){	// Array
 			var s = stop.i / 255;
 			return {
 				offset: stop.o,
-				color:  new dojo.Color([color.r * s, color.g * s, color.b * s, color.a])
+				color:  new Color([color.r * s, color.g * s, color.b * s, color.a])
 			};
 		});
 	}

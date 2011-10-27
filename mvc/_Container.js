@@ -1,9 +1,23 @@
-define(["dijit/_WidgetBase"], function(_WidgetBase){
-	return dojo.declare("dojox.mvc._Container", [dijit._WidgetBase], {
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dijit/_WidgetBase",
+	"dojo/regexp"
+], function(declare, lang, _WidgetBase, regexp){
+	/*=====
+		declare = dojo.declare;
+		_WidgetBase = dijit._WidgetBase;
+	=====*/
+
+	return declare("dojox.mvc._Container", [_WidgetBase], {
 	
 		// stopParser: [private] Boolean
 		//		Flag to parser to not try and parse widgets declared inside the container.
 		stopParser: true,
+
+		// exprchar:  Character
+		//		Character to use for a substitution expression, for a substitution string like ${this.index}
+		exprchar: '$',
 	
 		// templateString: [private] String
 		//		The template or content for this container. It is usually obtained from the
@@ -18,6 +32,8 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 	
 		////////////////////// PROTECTED METHODS ////////////////////////
 	
+		_parser : null,
+		
 		_createBody: function(){
 			// summary:
 			//		Parse the body of this MVC container widget.
@@ -27,12 +43,29 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 			//		contained widgets as necessary.
 			// tags:
 			//		protected
-			this._containedWidgets = dojo.parser.parse(this.srcNodeRef,{
-				template: true,
-				inherited: {dir: this.dir, lang: this.lang},
-				propsThis: this,
-				scope: "dojo"
-			});
+			if(!this._parser){
+				try{
+					// returns dojo/parser if loaded, otherwise throws
+					this._parser = require("dojo/parser");
+				}catch(e){
+					// if here, dojo/parser not loaded
+					try{
+						// returns dojox/mobile/parser if loaded, otherwise throws
+						this._parser = require("dojox/mobile/parser");
+					}catch(e){
+						// if here, both dojox/mobile/parser and dojo/parser are not loaded
+						console.error("Add explicit require(['dojo/parser']) or explicit require(['dojox/mobile/parser']), one of the parsers is required!");
+					}
+				}
+			}
+			if(this._parser){
+				this._containedWidgets = this._parser.parse(this.srcNodeRef,{
+					template: true,
+					inherited: {dir: this.dir, lang: this.lang},
+					propsThis: this,
+					scope: "dojo"
+				});
+			}
 		},
 	
 		_destroyBody: function(){
@@ -52,7 +85,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 		},
 	
 		////////////////////// PRIVATE METHODS ////////////////////////
-	
+
 		_exprRepl: function(tmpl){
 			// summary:
 			//		Does substitution of ${foo+bar} type expressions in template string.
@@ -62,10 +95,10 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 				if(!value){return "";}
 				var exp = value.substr(2);
 				exp = exp.substr(0, exp.length - 1);
-				return eval(exp, pThis);
+				with(pThis){return eval(exp);}
 			};
-			transform = dojo.hitch(this, transform);
-			return tmpl.replace(/\$\{.*?\}/g,
+			transform = lang.hitch(this, transform);
+			return tmpl.replace(new RegExp(regexp.escapeString(this.exprchar)+"(\{.*?\})","g"),
 				function(match, key, format){
 					return transform(match, key).toString();
 				});

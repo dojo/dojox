@@ -1,4 +1,13 @@
-define("dojox/editor/plugins/ToolbarLineBreak", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/_editor/_Plugin"], function(dojo, dijit, dojox) {
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_editor/_Plugin",
+	"dojo/_base/connect",
+	"dojo/_base/declare"
+], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.ToolbarLineBreak",
 	[ dijit._Widget, dijit._TemplatedMixin ],

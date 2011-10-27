@@ -1,11 +1,20 @@
-define(["dojo/_base/lang","../Context","../dom","dojo/_base/html","dojo/_base/kernel"], function(dojo,ddc){
-	dojo.getObject("dtl.render.dom", true, dojox);
+define([
+	"dojo/_base/lang",
+	"dojo/dom",
+	"../Context",
+	"../dom",
+	"../_base"
+], function(lang,dom,ddc,dddom,dd){
+	/*=====
+		dd = dojox.dtl;
+	=====*/
+	lang.getObject("dojox.dtl.render.dom", true);
 
-	dojox.dtl.render.dom.Render = function(/*DOMNode?*/ attachPoint, /*dojox.dtl.DomTemplate?*/ tpl){
+	dd.render.dom.Render = function(/*DOMNode?*/ attachPoint, /*dojox.dtl.DomTemplate?*/ tpl){
 		this._tpl = tpl;
-		this.domNode = dojo.byId(attachPoint);
+		this.domNode = dom.byId(attachPoint);
 	}
-	dojo.extend(dojox.dtl.render.dom.Render, {
+	lang.extend(dd.render.dom.Render, {
 		setAttachPoint: function(/*Node*/ node){
 			this.domNode = node;
 		},

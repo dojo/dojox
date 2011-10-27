@@ -1,4 +1,7 @@
-define(['dojo/_base/array'], function(dojo){
+define([
+	"dojo/_base/kernel",// dojo.getObject
+	"dojo/_base/array"	// dojo.forEach
+], function(dojo){
 dojo.getObject("xml", true, dojox);
 
 dojox.xml.DomParser=new (function(){

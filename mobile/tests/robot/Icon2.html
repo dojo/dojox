@@ -36,7 +36,6 @@
 							doh.robot.mouseClick({left: true}, 500);
 
 							doh.robot.sequence(d.getTestCallback(function(){
-	debugger;
 								doh.assertEqual("",  dijit.byId("dojox_mobile_IconItem_0").subNode.style.display);
 							}), 500);
 							return d;

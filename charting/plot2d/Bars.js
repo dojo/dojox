@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "./common", 
 	"dojox/gfx/fx", "dojox/lang/utils", "dojox/lang/functional", "dojox/lang/functional/reversed"], 
-	function(dojo, declare, Base, dc, fx, du, df, dfr){
+	function(dojo, lang, arr, declare, Base, dc, fx, du, df, dfr){
 		
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -20,10 +20,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common",
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
+	var Base = dojox.charting.plot2d.Base;
 	=====*/
-	var purgeGroup = df.lambda("item.purgeGroup()");
+	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return dojo.declare("dojox.charting.plot2d.Bars", dojox.charting.plot2d.Base, {
+	return declare("dojox.charting.plot2d.Bars", Base, {
 		//	summary:
 		//		The plot object representing a bar chart (horizontal bars).
 		defaultParams: {
@@ -52,7 +53,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common",
 			//		The chart this plot belongs to.
 			//	kwArgs: dojox.charting.plot2d.__BarCtorArgs?
 			//		An optional keyword arguments object to help define the plot.
-			this.opt = dojo.clone(this.defaultParams);
+			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.series = [];
@@ -105,7 +106,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common",
 			this.dirty = this.isDirty();
 			this.resetEvents();
 			if(this.dirty){
-				dojo.forEach(this.series, purgeGroup);
+				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
 				var s = this.group;
@@ -144,7 +145,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common",
 							finalTheme = typeof value != "number" ?
 								t.addMixin(theme, "bar", value, true) :
 								t.post(theme, "bar");
-						if(w >= 1 && height >= 1){
+						if(w >= 0 && height >= 1){
 							var rect = {
 								x: offsets.l + (v < baseline ? hv : baselineWidth),
 								y: dim.height - offsets.b - vt(j + 1.5) + gap,
@@ -180,7 +181,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "./common",
 			return this;	//	dojox.charting.plot2d.Bars
 		},
 		_animateBar: function(shape, hoffset, hsize){
-			fx.animateTransform(dojo.delegate({
+			fx.animateTransform(lang.delegate({
 				shape: shape,
 				duration: 1200,
 				transform: [

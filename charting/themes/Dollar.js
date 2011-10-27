@@ -1,14 +1,14 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.Dollar=new Theme({
+	themes.Dollar=new Theme({
 		colors: [
 			"#A4CE67",
-            "#739363",
-            "#6B824A",
-            "#343434",
-            "#636563"
+			"#739363",
+			"#6B824A",
+			"#343434",
+			"#636563"
 		]
 	});
 	
-	return dojox.charting.themes.Dollar;
+	return themes.Dollar;
 });

@@ -1,4 +1,18 @@
-define(["dojo/_base/array", "./_base"], function(darray,mbase){
+define([
+	"dojo/_base/array",
+	"dojo/_base/config",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"require"
+], function(array, config, lang, win, domClass, domConstruct, require){
+
+	var dm = lang.getObject("dojox.mobile", true);
+/*=====
+	var dm = dojox.mobile
+=====*/
+
 	// module:
 	//		dojox/mobile/deviceTheme
 	// summary:
@@ -6,6 +20,7 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 	// description:
 	//		Detects the User Agent of the browser and loads appropriate theme files.
 	//		Simply dojo.require this module to enable the automatic theme loading.
+	//		For simulations, the user agent may be overridden by setting djConfig.mblUserAgent.
 	//
 	//		By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
 	//		loaded. The all-in-one theme files contain style sheets for all the
@@ -41,7 +56,7 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 	//	|	com/acme/themes/iphone/MyWidget.css
 	//
 	//		If you specify '@theme' as a theme file name, it will be replaced with
-	//		the theme folder name. For example,
+	//		the theme folder name (e.g. 'iphone'). For example,
 	//
 	//	|	['@theme',['com.acme','MyWidget']]
 	//
@@ -49,16 +64,41 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 	//
 	//	|	dojox/mobile/themes/iphone/iphone.css
 	//	|	com/acme/themes/iphone/MyWidget.css
+	//
+	//		Note that the load of the theme files is performed asynchronously by
+	//		the browser, and thus you cannot assume the load has been completed
+	//		when your appliation is initialized. For example, if some widget in
+	//		your application uses node dimensions that cannot be determined
+	//		without CSS styles being applied to them to calculate its layout at
+	//		initialization, the layout calculation may fail.
+	//		Possible workaround for this problem is to use dojo.require to load
+	//		deviceTheme.js and place it in a separate <script> block immediately
+	//		below a script tag that loads dojo.js as below. This may (or may
+	//		not) solve the problem.
+	//
+	//	|	<script src="dojo.js"></script>
+	//	|	<script>
+	//	|		dojo.require("dojox.mobile.deviceTheme");
+	//	|	</script>
+	//	|	<script>
+	//	|		dojo.require("dojox.mobile");
+	//	|		....
+	//
+	//		A better solution would be to not use deviceTheme and use <link>
+	//		or @import instead to load the theme files.
 
-	dojox.mobile.loadCssFile = function(/*String*/file){
-		dojo.create("LINK", {
+
+	dm.loadCssFile = function(/*String*/file){
+		// summary:
+		//		Loads the given CSS file programmatically.
+		dm.loadedCssFiles.push(domConstruct.create("LINK", {
 			href: file,
 			type: "text/css",
 			rel: "stylesheet"
-		}, dojo.doc.getElementsByTagName('head')[0]);
+		}, win.doc.getElementsByTagName('head')[0]));
 	};
 
-	dojox.mobile.themeMap = dojox.mobile.themeMap || [
+	dm.themeMap = dm.themeMap || [
 		// summary:
 		//		A map of user-agents to theme files.
 		// description:
@@ -84,7 +124,12 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 		[
 			"iPad",
 			"iphone",
-			[dojo.moduleUrl("dojox.mobile", "themes/iphone/ipad.css")]
+			[require.toUrl("dojox/mobile/themes/iphone/ipad.css")]
+		],
+		[
+			"Custom",
+			"custom",
+			[]
 		],
 		[
 			".*",
@@ -93,35 +138,51 @@ define(["dojo/_base/array", "./_base"], function(darray,mbase){
 		]
 	];
 
-	dojox.mobile.loadDeviceTheme = function(){
-		var t = dojo.config["mblThemeFiles"] || dojox.mobile.themeFiles || ["@theme"];
-		if(!dojo.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
+	dm.loadDeviceTheme = function(/*String?*/userAgent){
+		// summary:
+		//		Loads a device-specific theme according to the user-agent
+		//		string.
+		// description:
+		//		This function is automatically called when this module is
+		//		evaluated.
+		var t = config["mblThemeFiles"] || dm.themeFiles || ["@theme"];
+		if(!lang.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
 		var i, j;
-		var m = dojox.mobile.themeMap;
-		var ua = (location.search.match(/theme=(\w+)/)) ? RegExp.$1 : navigator.userAgent;
+		var m = dm.themeMap;
+		var ua = userAgent || config["mblUserAgent"] || (location.search.match(/theme=(\w+)/) ? RegExp.$1 : navigator.userAgent);
 		for(i = 0; i < m.length; i++){
 			if(ua.match(new RegExp(m[i][0]))){
 				var theme = m[i][1];
-				var files = m[i][2];
+				domClass.replace(win.doc.documentElement, theme + "_theme", dm.currentTheme ? dm.currentTheme + "_theme" : "");
+				dm.currentTheme = theme;
+				var files = [].concat(m[i][2]);
 				for(j = t.length - 1; j >= 0; j--){
-					var pkg = dojo.isArray(t[j]) ? t[j][0] : "dojox.mobile";
-					var name = dojo.isArray(t[j]) ? t[j][1] : t[j];
+					var pkg = lang.isArray(t[j]) ? (t[j][0]||"").replace(/\./g, '/') : "dojox/mobile";
+					var name = lang.isArray(t[j]) ? t[j][1] : t[j];
 					var f = "themes/" + theme + "/" +
 						(name === "@theme" ? theme : name) + ".css";
-					files.unshift(dojo.moduleUrl(pkg, f));
+					files.unshift(require.toUrl(pkg+"/"+f));
 				}
+				//remove old css files
+				array.forEach(dm.loadedCssFiles, function(n){
+					n.parentNode.removeChild(n);
+				});
+				dm.loadedCssFiles = [];
 				for(j = 0; j < files.length; j++){
-					dojox.mobile.loadCssFile(files[j].toString());
+					dm.loadCssFile(files[j].toString());
+				}
+				if(userAgent && dm.loadCompatCssFiles){ // we will assume compat is loaded and ready..
+					dm.loadCompatCssFiles();
 				}
 				break;
 			}
 		}
 	};
 	
-	if(dojox.mobile.configDeviceTheme){
-		dojox.mobile.configDeviceTheme();
+	if(dm.configDeviceTheme){
+		dm.configDeviceTheme();
 	}
-	dojox.mobile.loadDeviceTheme();
+	dm.loadDeviceTheme();
 
-	return dojox.mobile.deviceTheme;
+	return dm;
 });

@@ -5,7 +5,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>SwapView</title>
 		<link href="../themes/blackberry/base.css" rel="stylesheet">
-		<link href="../themes/blackberry/IconContainer.css" rel="stylesheet"></link>
+		<link href="../themes/blackberry/IconContainer.css" rel="stylesheet">
 		<style>
 		.lnk {
 			font-size: 14px;
@@ -15,6 +15,7 @@
 		html,body{
 			height: 100%;
 			overflow: hidden;
+			margin: 0px;
 		}
 		.mobile body {
 			background-color: black;
@@ -22,6 +23,7 @@
 		.mblIconArea {
 			height: 90px;
 			width: 90px;
+			color: white;
 		}
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, mblAlwaysHideAddressBar: true"></script>
@@ -34,14 +36,14 @@
 			dojo.require("dojox.mobile.SwapView");
 		</script>
 	</head>
-	<body>
+	<body style="visibility:hidden;">
 		<div id="foo" dojoType="dojox.mobile.SwapView" selected="true">
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Page flipping demo</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li class="mblVariableHeight" dojoType="dojox.mobile.ListItem" style="font-size:10px">
 				Swipe the screen left or right to flip between the views.
 				There are 4 views in this demo.
-				Virtical scrolling and page indicator are not supported.
+				Vertical scrolling and page indicator are not supported.
 			</ul>
 		</div>
 

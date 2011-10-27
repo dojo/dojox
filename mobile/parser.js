@@ -1,8 +1,29 @@
-define(["dojo/_base/load"], function(dlang){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/config",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/ready"
+], function(dojo, config, lang, win, ready){
 
-	dojo.getObject("mobile", true, dojox);
+	// module:
+	//		dojox/mobile/parser
+	// summary:
+	//		A lightweight parser.
 
-	dojox.mobile.parser = new function(){
+	var dm = lang.getObject("dojox.mobile", true);
+
+	var parser = new function(){
+		// summary:
+		//		A lightweight parser.
+		// description:
+		//		dojox.mobile.parser is an extremely small subset of
+		//		dojo.parser. It has no extended features over dojo.parser, so
+		//		there is no reason you have to use dojox.mobile.parser instead
+		//		of dojo.parser. However, if dojox.mobile.parser's capability is
+		//		enough for your application, use of it could reduce the total
+		//		code size.
+
 		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
 			// summary:
 			//		Function for instantiating a list of widget nodes.
@@ -14,12 +35,12 @@ define(["dojo/_base/load"], function(dlang){
 			if(nodes){
 				for(i = 0; i < nodes.length; i++){
 					var n = nodes[i];
-					var cls = dojo.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
+					var cls = lang.getObject(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
 					var proto = cls.prototype;
 					var params = {}, prop, v, t;
-					dojo._mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
-					dojo._mixin(params, args.defaults);
-					dojo._mixin(params, mixin);
+					lang.mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
+					lang.mixin(params, args.defaults);
+					lang.mixin(params, mixin);
 					for(prop in proto){
 						v = n.getAttributeNode(prop);
 						v = v && v.nodeValue;
@@ -45,12 +66,12 @@ define(["dojo/_base/load"], function(dlang){
 					ws.push(instance);
 					var jsId = n.getAttribute("jsId") || n.getAttribute("data-dojo-id");
 					if(jsId){
-						dojo.setObject(jsId, instance);
+						lang.setObject(jsId, instance);
 					}
 				}
 				for(i = 0; i < ws.length; i++){
 					var w = ws[i];
-					!args.noStart && w.startup && !w._started && (!w.getParent || !w.getParent()) && w.startup();
+					!args.noStart && w.startup && !w._started && w.startup();
 				}
 			}
 			return ws;
@@ -59,18 +80,18 @@ define(["dojo/_base/load"], function(dlang){
 		this.parse = function(rootNode, args){
 			// summary:
 			//		Function to handle parsing for widgets in the current document.
-			//		It is not as powerful as the full dojo parser, but it will handle basic
+			//		It is not as powerful as the full parser, but it will handle basic
 			//		use cases fine.
 			// rootNode:
 			//		The root node in the document to parse from
 			if(!rootNode){
-				rootNode = dojo.body();
+				rootNode = win.body();
 			}else if(!args && rootNode.rootNode){
 				// Case where 'rootNode' is really a params object.
 				args = rootNode;
 				rootNode = rootNode.rootNode;
 			}
-	
+
 			var nodes = rootNode.getElementsByTagName("*");
 			var i, list = [];
 			for(i = 0; i < nodes.length; i++){
@@ -83,10 +104,10 @@ define(["dojo/_base/load"], function(dlang){
 			return this.instantiate(list, mixin, args);
 		};
 	}();
-	if(dojo.config.parseOnLoad){
-		dojo.ready(100, dojox.mobile.parser, "parse");
+	if(config.parseOnLoad){
+		ready(100, parser, "parse");
 	}
-	dojo.parser = dojox.mobile.parser; // in case user app calls dojo.parser
-
-	return dojox.mobile.parser;
+	dm.parser = parser; // for backward compatibility
+	dojo.parser = parser; // in case user application calls dojo.parser
+	return parser;
 });

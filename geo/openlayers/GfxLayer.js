@@ -1,10 +1,19 @@
-
-define([ "dojo/_base/connect", "dojo/_base/html", "dojox/gfx", "dojox/gfx/_base",
-		"dojox/gfx/shape", "dojox/gfx/path", "dojox/geo/openlayers/Feature",
-		"dojox/geo/openlayers/Layer" ], function(connectArg, htmlArg, gfxArg, gbaseArg, shapeArg,
-		pathArg, featureArg, layerArg){
-
-	return dojo.declare("dojox.geo.openlayers.GfxLayer", dojox.geo.openlayers.Layer, {
+define(["dojo/_base/kernel",
+				"dojo/_base/declare",
+				"dojo/_base/connect",
+				"dojo/_base/html",
+				"dojox/gfx",
+				"dojox/gfx/_base",
+				"dojox/gfx/shape",
+				"dojox/gfx/path",
+				"dojox/gfx/matrix",
+				"dojox/geo/openlayers/Feature",
+				"dojox/geo/openlayers/Layer"], function(dojo, declare, connect, html, gfx, gbase, shape,
+																								path, matrix, Feature, Layer){
+	/*===== 
+	var Layer = dojox.geo.openlayers.Layer; 
+	=====*/
+	return declare("dojox.geo.openlayers.GfxLayer", Layer, {
 		//	summary: 
 		//		A layer dedicated to render dojox.geo.openlayers.GeometryFeature
 		//	description:
@@ -20,10 +29,12 @@ define([ "dojo/_base/connect", "dojo/_base/html", "dojox/gfx", "dojox/gfx/_base"
 			//		Constructs a new GFX layer.
 			var s = dojox.gfx.createSurface(this.olLayer.div, 100, 100);
 			this._surface = s;
+			var vp;
 			if (options && options.viewport)
-				this._viewport = options.viewport;
+				vp = options.viewport;
 			else
-				this._viewport = s.createGroup();
+				vp = s.createGroup();
+			this.setViewport(vp);
 			dojo.connect(this.olLayer, "onMapResize", this, "onMapResize");
 			this.olLayer.getDataExtent = this.getDataExtent;
 		},
@@ -70,9 +81,10 @@ define([ "dojo/_base/connect", "dojo/_base/html", "dojox/gfx", "dojox/gfx/_base"
 			//		Get data extent
 			//	tags:
 			//		private
-			var ret = this._surface.getDimensions();;
+			var ret = this._surface.getDimensions();
 			return ret;
 		},
+
 		getSurface : function(){
 			//	summary:
 			//		Get the underlying dojox.gfx.Surface
@@ -101,6 +113,7 @@ define([ "dojo/_base/connect", "dojo/_base/html", "dojox/gfx", "dojox/gfx/_base"
 
 			if (event.zoomChanged || left || top) {
 				var d = this.olLayer.div;
+
 				dojo.style(d, {
 					left : -left + "px",
 					top : -top + "px"
@@ -110,15 +123,10 @@ define([ "dojo/_base/connect", "dojo/_base/html", "dojox/gfx", "dojox/gfx/_base"
 					return;
 				var vp = this.getViewport();
 
-				vp.setTransform(dojox.gfx.matrix.translate(left, top));
+				vp.setTransform(matrix.translate(left, top));
 
 				this.inherited(arguments);
 
-				//			if (event.zoomChanged) {
-				//				dojo.forEach(this._features, function(f){
-				//					this.renderFeature(f);
-				//				}, this);
-				//			}
 			}
 		},
 

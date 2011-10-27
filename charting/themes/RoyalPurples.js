@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.RoyalPurples=new Theme({
+	themes.RoyalPurples=new Theme({
 		colors: [
 			"#473980",
 			"#685aa7",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.RoyalPurples;
+	return themes.RoyalPurples;
 });

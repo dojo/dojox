@@ -4,8 +4,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Icon Container</title>
-		<link href="../themes/blackberry/base.css" rel="stylesheet"></link>
-		<link href="../themes/blackberry/IconContainer.css" rel="stylesheet"></link>
+		<link href="../themes/blackberry/base.css" rel="stylesheet">
+		<link href="../themes/blackberry/IconContainer.css" rel="stylesheet">
 
 		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -15,9 +15,15 @@
 			dojo.require("dojox.mobile.compat");	// This mobile app uses declarative programming with fast mobile parser
 			dojo.require("dojox.mobile.IconContainer");
 		</script>
+
+		<style>
+		.mblIconArea {
+			color: white;
+		}
+		</style>
 		
 	</head>
-	<body style="background-color: black;">
+	<body style="visibility:hidden;background-color: black;">
 		<div id="foo" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container</h1>
 			<ul dojoType="dojox.mobile.IconContainer">

@@ -1,6 +1,7 @@
-define(["dojox/fx/_base"],function(){
+define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/fx","dojo/fx","./_base","dojo/_base/array","dojo/dom","dojo/dom-style","dojo/dom-class",
+		"dojo/_base/connect"],
+	function(dojo,lang,baseFx,coreFx,dojoxFx,arrayUtil,dom,domStyle,domClass,connectUtil){
 	dojo.experimental("dojox.fx.style");
-//
 // summary:
 //		dojox.fx CSS Class Animations:
 //
@@ -11,7 +12,6 @@ define(["dojox/fx/_base"],function(){
 //	provides: addClass, removeClass, and toggleClass
 //
 		
-	var d = dojo;
 
 	var _getStyleSnapshot = function(/* Object */cache){
 		// summary:
@@ -22,7 +22,7 @@ define(["dojox/fx/_base"],function(){
 		// returns:  Array
 		//		an array of raw, calculcated values (no keys), to be normalized/compared
 		//		elsewhere
-		return d.map(dojox.fx._allowedProperties, function(style){
+		return arrayUtil.map(dojoxFx._allowedProperties, function(style){
 			return cache[style]; // String
 		}); // Array
 	};
@@ -38,17 +38,17 @@ define(["dojox/fx/_base"],function(){
 		// 	true to calculate what adding a class would do,
 		// 	false to calculate what removing the class would do
 
-		node = d.byId(node);
-		var	cs = d.getComputedStyle(node);
+		node = dom.byId(node);
+		var	cs = domStyle.getComputedStyle(node);
 
 		// take our snapShots
 		var _before = _getStyleSnapshot(cs);
-		d[(addClass ? "addClass" : "removeClass")](node, cssClass);
+		dojo[(addClass ? "addClass" : "removeClass")](node, cssClass);
 		var _after = _getStyleSnapshot(cs);
-		d[(addClass ? "removeClass" : "addClass")](node, cssClass);
+		dojo[(addClass ? "removeClass" : "addClass")](node, cssClass);
 
 		var calculated = {}, i = 0;
-		d.forEach(dojox.fx._allowedProperties, function(prop){
+		arrayUtil.forEach(dojoxFx._allowedProperties, function(prop){
 			if(_before[i] != _after[i]){
 				// FIXME: the static units: px is not good, either. need to parse unit from computed style?
 				calculated[prop] = parseInt(_after[i]) /* start: parseInt(_before[i]), units: 'px' */ ;
@@ -58,7 +58,7 @@ define(["dojox/fx/_base"],function(){
 		return calculated;
 	};
 
-	d.mixin(dojox.fx,{
+	var styleFx = { // Augment dojox.fx for compat
 
 		addClass: function(node, cssClass, args){
 			// summary:
@@ -91,7 +91,7 @@ define(["dojox/fx/_base"],function(){
 			//	|	// animate to line-height:40px
 			//	|	dojo.fx.addClass("test", "foo").play();
 			//
-			node = d.byId(node);
+			node = dom.byId(node);
 
 			var pushClass = (function(n){
 				// summary: onEnd we want to add the class to the node
@@ -101,7 +101,7 @@ define(["dojox/fx/_base"],function(){
 				//	and will only apply the class so children can inherit
 				//	after the animation is done (potentially more flicker)
 				return function(){
-					d.addClass(n, cssClass);
+					domClass.add(n, cssClass);
 					n.style.cssText = _beforeStyle;
 				}
 			})(node);
@@ -109,11 +109,11 @@ define(["dojox/fx/_base"],function(){
 			// _getCalculatedStleChanges is the core of our style/class animations
 			var mixedProperties = _getCalculatedStyleChanges(node, cssClass, true);
 			var _beforeStyle = node.style.cssText;
-			var _anim = d.animateProperty(d.mixin({
+			var _anim = baseFx.animateProperty(lang.mixin({
 				node: node,
 				properties: mixedProperties
 			}, args));
-			d.connect(_anim, "onEnd", _anim, pushClass);
+			connectUtil.connect(_anim, "onEnd", _anim, pushClass);
 			return _anim; // dojo.Animation
 		},
 	
@@ -132,7 +132,7 @@ define(["dojox/fx/_base"],function(){
 			// |	// animate the removal of "foo" from a node with id="bar"
 			// |	dojox.fx.removeClass("bar", "foo").play()
 
-			node = d.byId(node);
+			node = dom.byId(node);
 
 			var pullClass = (function(n){
 				// summary: onEnd we want to remove the class from the node
@@ -143,18 +143,18 @@ define(["dojox/fx/_base"],function(){
 				//	animation is done (potentially more flicker)
 				//
 				return function(){
-					d.removeClass(n, cssClass);
+					domClass.remove(n, cssClass);
 					n.style.cssText = _beforeStyle;
 				}
 			})(node);
 
 			var mixedProperties = _getCalculatedStyleChanges(node, cssClass);
 			var _beforeStyle = node.style.cssText;
-			var _anim = d.animateProperty(d.mixin({
+			var _anim = baseFx.animateProperty(lang.mixin({
 				node: node,
 				properties: mixedProperties
 			}, args));
-			d.connect(_anim, "onEnd", _anim, pullClass);
+			connectUtil.connect(_anim, "onEnd", _anim, pullClass);
 			return _anim; // dojo.Animation
 		},
 
@@ -185,9 +185,9 @@ define(["dojox/fx/_base"],function(){
 			// |	dojox.fx.toggleClass("theNode","sampleClass").play();
 
 			if(typeof condition == "undefined"){
-				condition = !d.hasClass(node, cssClass);
+				condition = !domClass.contains(node, cssClass);
 			}
-			return dojox.fx[(condition ? "addClass" : "removeClass")](node, cssClass, args); // dojo.Animation
+			return dojoxFx[(condition ? "addClass" : "removeClass")](node, cssClass, args); // dojo.Animation
 		},
 	
 		_allowedProperties: [
@@ -230,6 +230,7 @@ define(["dojox/fx/_base"],function(){
 			"letterSpacing",
 			"fontSize"
 		]
-	});
-	return dojox.fx;
+	};
+		lang.mixin(dojoxFx,styleFx);
+	return styleFx;
 });

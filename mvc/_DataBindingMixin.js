@@ -1,5 +1,14 @@
-define(["dojo/Stateful"], function(Stateful){
-	return dojo.declare("dojox.mvc._DataBindingMixin", null, {
+define([
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/declare",
+	"dijit/registry"
+], function(lang, array, declare, registry){
+	/*=====
+	registry = dijit.registry;
+	=====*/
+
+	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:
 		//		Provides the ability for dijits or custom view components to become
 		//		data binding aware.
@@ -107,7 +116,10 @@ define(["dojo/Stateful"], function(Stateful){
 					if(this._databound){
 						var binding = this.get("binding");
 						if(binding){
-							binding.set("value", current);
+							// dont set value if the valueOf current and old match.
+							if(!((current && old) && (old.valueOf() === current.valueOf()))){
+								binding.set("value", current);
+							}
 						}
 					}
 				})
@@ -166,33 +178,33 @@ define(["dojo/Stateful"], function(Stateful){
 			}
 			var ref = this.ref, pw, pb, binding;
 			// Now compute the model node to bind to
-			if(ref && dojo.isFunction(ref.toPlainObject)){ // programmatic instantiation or direct ref
+			if(ref && lang.isFunction(ref.toPlainObject)){ // programmatic instantiation or direct ref
 				binding = ref;
 			}else if(/^\s*expr\s*:\s*/.test(ref)){ // declarative: refs as dot-separated expressions
 				ref = ref.replace(/^\s*expr\s*:\s*/, "");
-				binding = dojo.getObject(ref);
+				binding = lang.getObject(ref);
 			}else if(/^\s*rel\s*:\s*/.test(ref)){ // declarative: refs relative to parent binding, dot-separated 
 				ref = ref.replace(/^\s*rel\s*:\s*/, "");
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = dojo.getObject(ref, false, parentBinding);
+					binding = lang.getObject("" + ref, false, parentBinding);
 				}
 			}else if(/^\s*widget\s*:\s*/.test(ref)){ // declarative: refs relative to another dijits binding, dot-separated
 				ref = ref.replace(/^\s*widget\s*:\s*/, "");
 				var tokens = ref.split(".");
 				if(tokens.length == 1){
-					binding = dijit.byId(ref).get("binding");
+					binding = registry.byId(ref).get("binding");
 				}else{
-					pb = dijit.byId(tokens.shift()).get("binding");
-					binding = dojo.getObject(tokens.join("."), false, pb);
+					pb = registry.byId(tokens.shift()).get("binding");
+					binding = lang.getObject(tokens.join("."), false, pb);
 				}
 			}else{ // defaults: outermost refs are expressions, nested are relative to parents
 				parentBinding = parentBinding || this._getParentBindingFromDOM();
 				if(parentBinding){
-					binding = parentBinding.get(ref);
+					binding = lang.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
-						binding = dojo.getObject(ref);
+						binding = lang.getObject(ref);
 					}catch(err){
 						if(ref.indexOf("${") == -1){ // Ignore templated refs such as in repeat body
 							throw new Error("dojox.mvc._DataBindingMixin: '" + this.domNode +
@@ -202,7 +214,7 @@ define(["dojo/Stateful"], function(Stateful){
 				}
 			}
 			if(binding){
-				if(dojo.isFunction(binding.toPlainObject)){
+				if(lang.isFunction(binding.toPlainObject)){
 					this.binding = binding;
 					this._updateBinding("binding", null, binding);
 				}else{
@@ -235,19 +247,20 @@ define(["dojo/Stateful"], function(Stateful){
 			this._unwatchArray(this._modelWatchHandles);
 			// add 5 new model watches
 			var binding = this.get("binding");
-			if(binding && dojo.isFunction(binding.watch)){
+			if(binding && lang.isFunction(binding.watch)){
 				var pThis = this;
 				this._modelWatchHandles = [
 					// 1. value - no default
 					binding.watch("value", function (name, old, current){
 						if(old === current){return;}
+						if(pThis.get('value') === current){return;}
 						pThis.set("value", current);
 					}),
 					// 2. valid - default "true"
 					binding.watch("valid", function (name, old, current){
 						pThis._updateProperty(name, old, current, true);
 						if(current !== pThis.get("binding").get(name)){
-							if(pThis.validate && dojo.isFunction(pThis.validate)){
+							if(pThis.validate && lang.isFunction(pThis.validate)){
 								pThis.validate(true);
 							}
 						}
@@ -316,7 +329,7 @@ define(["dojo/Stateful"], function(Stateful){
 			//		private
 			var binding = this.get("binding");
 			if(binding && !this._beingBound){
-				dojo.forEach(dijit.findWidgets(this.domNode), function(widget){
+				array.forEach(registry.findWidgets(this.domNode), function(widget){
 					if(widget._setupBinding){
 						widget._setupBinding(binding);
 					}
@@ -334,10 +347,10 @@ define(["dojo/Stateful"], function(Stateful){
 			//		private
 			var pn = this.domNode.parentNode, pw, pb;
 			while(pn){
-				pw = dijit.getEnclosingWidget(pn);
+				pw = registry.getEnclosingWidget(pn);
 				if(pw){
 					pb = pw.get("binding");
-					if(pb && dojo.isFunction(pb.toPlainObject)){
+					if(pb && lang.isFunction(pb.toPlainObject)){
 						break;
 					}
 				}
@@ -353,7 +366,7 @@ define(["dojo/Stateful"], function(Stateful){
 			//		The array of watch handles.
 			// tags:
 			//		private
-			dojo.forEach(watchHandles, function(h){ h.unwatch(); });
+			array.forEach(watchHandles, function(h){ h.unwatch(); });
 		}
 	});
 });

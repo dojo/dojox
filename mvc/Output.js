@@ -1,5 +1,16 @@
-define(["dijit/_WidgetBase"], function(_WidgetBase){
-	return dojo.declare("dojox.mvc.Output", [dijit._WidgetBase], {
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/dom",
+	"dijit/_WidgetBase"
+], function(declare, lang, dom, _WidgetBase){
+	/*=====
+		declare = dojo.declare;
+		dom = dojo.dom;
+		_WidgetBase = dijit._WidgetBase;
+	=====*/
+
+	return declare("dojox.mvc.Output", [_WidgetBase], {
 		// summary:
 		//		A simple widget that displays templated output, parts of which may
 		//		be data-bound.
@@ -22,7 +33,7 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 		postscript: function(params, srcNodeRef){
 			// summary:
 			//		Override and save template from body.
-			this.srcNodeRef = dojo.byId(srcNodeRef);
+			this.srcNodeRef = dom.byId(srcNodeRef);
 			if(this.srcNodeRef){
 				this.templateString = this.srcNodeRef.innerHTML;
 				this.srcNodeRef.innerHTML = "";
@@ -68,9 +79,9 @@ define(["dijit/_WidgetBase"], function(_WidgetBase){
 				if(!value){return "";}
 				var exp = value.substr(2);
 				exp = exp.substr(0, exp.length - 1);
-				return eval(exp, pThis) || "";
+				with(pThis){return eval(exp) || "";}
 			};
-			transform = dojo.hitch(this, transform);
+			transform = lang.hitch(this, transform);
 			return tmpl.replace(/\$\{.*?\}/g,
 				function(match, key, format){
 					return transform(match, key).toString();

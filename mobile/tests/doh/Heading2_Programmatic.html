@@ -4,8 +4,8 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Heading</title>
-		<link href="../../themes/android/android.css" rel="stylesheet"></link>
-		<link href="../../themes/common/domButtons.css" rel="stylesheet"></link>
+		<link href="../../themes/android/android.css" rel="stylesheet">
+		<link href="../../themes/common/domButtons.css" rel="stylesheet">
 
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 
@@ -14,8 +14,8 @@
 			dojo.require("dojox.mobile.parser");
 			dojo.require("dojox.mobile");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
-
-	        dojo.require("doh.runner");
+		</script>
+		<script language="JavaScript" type="text/javascript">
 			dojo.addOnLoad(function(){
 				var view = dijit.byId("general");
 				var demoWidget = new dojox.mobile.Heading({back:"Settings", moveTo:"foo", label:"General"});
@@ -30,8 +30,11 @@
 				demoWidget = new dojox.mobile.Heading();
 				demoWidget.set({back:"Long Button", moveTo:"bar", label:"Very Very Long Title May Not Be Displayed in the Narrow Space"});
 				view.addChild(demoWidget);
-
-
+			});
+		</script>
+		<script type="text/javascript" src="TestUtil.js"></script>
+		<script language="JavaScript" type="text/javascript">
+			dojo.addOnLoad(function(){
 				doh.register("dojox.mobile.test.doh.Heading2", [
 					{
 						name: "Heading Verification",
@@ -40,23 +43,23 @@
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("dojox_mobile_Heading_0");
-								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+								doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
 								doh.assertEqual('General', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Settings', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_1");
-								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+								doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
 								doh.assertEqual('Test', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Go To', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_2");
-								doh.assertEqual('mblHeading', demoWidget.domNode.className);
+								doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
 								doh.assertEqual('Test', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Settings', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 
 								demoWidget = dijit.byId("dojox_mobile_Heading_3");
-								doh.assertEqual('mblHeading', demoWidget.domNode.className);
-								doh.assertEqual('2', demoWidget.domNode.childNodes.length);
+								doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
+								doh.assertEqual('3', demoWidget.domNode.childNodes.length);
 								doh.assertEqual('Very Very Long Title May Not Be Displayed in the Narrow Space', demoWidget.domNode.childNodes[1].childNodes[0].nodeValue);
 								doh.assertEqual('Long Button', demoWidget.domNode.childNodes[0].childNodes[1].innerHTML);
 							}));
@@ -68,7 +71,7 @@
 						timeout: 1000,
 						runTest: function(){
 							var demoWidget = dijit.byId("dojox_mobile_Heading_2");
-							demoWidget.set({back:"Value Changed", moveTo:"", label:"Value Changed", moveTo:"bar", transition:"flip"});
+							demoWidget.set({back:"Value Changed", label:"Value Changed", moveTo:"bar", transition:"flip"});
 							doh.assertEqual("Value Changed", demoWidget.get("label"));
 							doh.assertEqual("Value Changed", demoWidget.get("back"));
 							doh.assertEqual("bar", demoWidget.get("moveTo"));
@@ -87,16 +90,9 @@
 						runTest: function(){
 							var d = new doh.Deferred();
 							var demoWidget = dijit.byId("dojox_mobile_Heading_2");
-							if(dojo.isIE)
-							{
-								demoWidget.domNode.childNodes[0].childNodes[1].fireEvent( "onclick" );
-							} else {
-								var e = document.createEvent('Events');
-								e.initEvent('click', true, true);
-								demoWidget.domNode.childNodes[0].childNodes[1].dispatchEvent(e);
-							}
-							setTimeout(d.getTestCallback(function(){
+							fireOnClick(demoWidget.domNode.childNodes[0].childNodes[1]);
 
+							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("bar");
 								doh.assertEqual('visible', demoWidget.domNode.style.visibility);
 							}));
@@ -110,16 +106,9 @@
 							setTimeout(function(){
 								var d = new doh.Deferred();
 								var demoWidget = dijit.byId("dojox_mobile_Heading_5");
-								if(dojo.isIE)
-								{
-									demoWidget.domNode.childNodes[0].childNodes[1].fireEvent( "onclick" );
-								} else {
-									var e = document.createEvent('Events');
-									e.initEvent('click', true, true);
-									demoWidget.domNode.childNodes[0].childNodes[1].dispatchEvent(e);
-								}
-								setTimeout(d.getTestCallback(function(){
+								fireOnClick(demoWidget.domNode.childNodes[0].childNodes[1]);
 
+								setTimeout(d.getTestCallback(function(){
 									var demoWidget = dijit.byId("general");
 									doh.assertEqual('visible', demoWidget.domNode.style.visibility);
 								}));

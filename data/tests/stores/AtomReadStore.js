@@ -3,7 +3,7 @@ dojo.require("dojox.data.AtomReadStore");
 dojo.require("dojo.data.api.Read");
 
 dojox.data.tests.stores.AtomReadStore.getBlog1Store = function(){
-	return new dojox.data.AtomReadStore({url: dojo.moduleUrl("dojox.data.tests", "stores/atom1.xml").toString()});
+	return new dojox.data.AtomReadStore({url: require.toUrl("dojox/data/tests/stores/atom1.xml").toString()});
 	//return new dojox.data.AtomReadStore({url: "/sos/feeds/blog.php"});
 };
 /*

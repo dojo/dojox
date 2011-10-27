@@ -1,77 +1,81 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/event","dojo/_base/connect", "dijit", "dijit/_Widget", "dojox/gfx", "dojo/fx/easing", "./Range"], 
-function(dojo,ddeclare,dlang,dhtml,devent,dconnect,dijit,_Widget,gfx,easing,range) { 
+define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/array","dojo/_base/event",
+		"dojo/_base/connect","dojo/dom-construct", "dijit/_Widget", "dojox/gfx", "./Range", "dojo/fx/easing"], 
+  function(declare, lang, html, arr, event, connect, dom, Widget, gfx, Range) {
 
-dojo.experimental("dojox.gauges._Gauge");
+	var _tooltipModule =  0;
+	var _numberModule =  0;
 
-return dojo.declare("dojox.gauges._Gauge",[_Widget],{
+/*=====
+	Widget = dijit._Widget;
+=====*/
+	
+return declare("dojox.gauges._Gauge",[Widget],{
 	// summary:
-	//		a gauge built using the dojox.gfx package.
+	//		The abstract base class for gauges.
 	//
 	// description:
 	//		using dojo.gfx (and thus either SVG or VML based on what is supported), this widget
-	//		builds a gauge component, used to display numerical data in a familiar format
-	//
-	// usage:
-	//		this widget is not to be used alone. it is meant to be subclassed, such as
+	//		builds a gauge component, used to display numerical data in a familiar format.
+	//		This widget is not to be used alone. it is meant to be subclassed, such as
 	//		dojox.gauges.BarGauge or dojox.gauges.AnalogGauge
 
 	// width: Number
-	// the width of the gauge (default is 300)
+	//		The width of the gauge (default is 300)
 	width: 0,
 
 	// height: Number
-	// the height of the gauge (default is 200)
+	//		The height of the gauge (default is 200)
 	height: 0,
 
 	// background: Object
-	// the color of the background.  This must be an object of one of two forms:
-	// {'color': 'color-name'}
-	// OR
-	// (for a gradient:)
-	// {'type': 'linear', 'x1': 0, 'x2': 0, 'y1': 0, 'y2': 200, 'colors': [{offset: 0, color:'#C0C0C0'}, {offset: 1, color: '#E0E0E0'}] }
+	// 		The color of the background.  This must be an object of one of two forms:
+	// 		{'color': 'color-name'}
+	// 		OR
+	// 		(for a gradient:)
+	// 		{'type': 'linear', 'x1': 0, 'x2': 0, 'y1': 0, 'y2': 200, 'colors': [{offset: 0, color:'#C0C0C0'}, {offset: 1, color: '#E0E0E0'}] }
 	background: null,
 
 	// image: String
-	// background image for gauge (default is no image)
+	// 		Background image for gauge (default is no image)
 	image: null,
 
 	// useRangeStyles: Number
-	// indicates whether to use given css classes (dojoxGaugeRangeXX)
-	// to determine the color (and other style attributes?) of the ranges
-	// this value should be the number of dojoxGaugeRange classes that are
-	// defined, starting at dojoxGaugeRange1 (0 indicates falling to default
-	// hardcoded colors)
+	// 		Indicates whether to use given css classes (dojoxGaugeRangeXX)
+	// 		to determine the color (and other style attributes?) of the ranges
+	// 		this value should be the number of dojoxGaugeRange classes that are
+	// 		defined, starting at dojoxGaugeRange1 (0 indicates falling to default
+	// 		hardcoded colors)
 	useRangeStyles: 0,
 
 	// useTooltip: Boolean
-	// indicates whether tooltips should be displayed for ranges, indicators, etc.
+	// 		Indicates whether tooltips should be displayed for ranges, indicators, etc.
 	useTooltip: true,
 	
 	// majorTicks: Object
-	// An object representing the tick marks that should be added to the gauge. Major tick marks have a text label
-	// indicating the value.  The object can have the following attributes (required are marked with a *):
-	//		offset: the distance from the 'center' of the gauge.  Used differently for Analog vs. Bar
-	//		width: The width of the mark
-	//		length: The length of the mark
-	//		interval: The interval the ticks should be added on
-	//		color: The color of the mark and text
-	//		font: an object with any/all of the following parameters:
+	// 		An object representing the tick marks that should be added to the gauge. Major tick marks have a text label
+	// 		indicating the value.  The object can have the following attributes (required are marked with a *):
+	//		- offset: the distance from the 'center' of the gauge.  Used differently for Analog vs. Bar
+	//		- width: The width of the mark
+	//		- length: The length of the mark
+	//		- interval: The interval the ticks should be added on
+	//		- color: The color of the mark and text
+	//		- font: an object with any/all of the following parameters:
 	//			{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
 	majorTicks: null,
 	
 	// minorTicks: Object
-	// An object of the same format as majorTicks, indicating where the minor (label-less) marks should be placed
-	// The font parameter is ignored if provided since minor tick marks have no text label.
+	// 		An object of the same format as majorTicks, indicating where the minor (label-less) marks should be placed
+	// 		The font parameter is ignored if provided since minor tick marks have no text label.
 	minorTicks: null,
 
-	// _defaultIndicator: Objection
-	// Should be overridden by any extending classes and used to indicate what the 'default' indicator is.
-	// This object is used as the indicator when creating tick marks or when an anonymous object is passed into 
-	// addIndicator.
+	// _defaultIndicator: Object
+	// 		Should be overridden by any extending classes and used to indicate what the 'default' indicator is.
+	// 		This object is used as the indicator when creating tick marks or when an anonymous object is passed into 
+	// 		addIndicator.
 	_defaultIndicator: null,
 
 	// defaultColors: Array
-	// Set of default colors to color ranges with.
+	//		 Set of default colors to color ranges with.
 	defaultColors: [[0x00,0x54,0xAA,1],
 					[0x44,0x77,0xBB,1],
 					[0x66,0x99,0xCC,1],
@@ -81,22 +85,22 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 					[0xDD,0xEE,0xFF,1]],
 	
 	// min: Number
-	// The minimum value of the gauge.  Normally not set explicitly, as it will be determined by
-	// the ranges that are added.
+	// 		The minimum value of the gauge.  Normally not set explicitly, as it will be determined by
+	// 		the ranges that are added.
 	min: null,
 	
 	// max: Number
-	// The maximum value of the gauge.  Normally not set explicitly, as it will be determined by
-	// the ranges that are added.
+	// 		The maximum value of the gauge.  Normally not set explicitly, as it will be determined by
+	// 		the ranges that are added.
 	max: null,
 	
 	// surface: Object
-	// The GFX surface that the shapes are drawn on.  Can be accessed/used by indicators to draw themselves
+	// 		The GFX surface that the shapes are drawn on.  Can be accessed/used by indicators to draw themselves
 	surface: null,
 
 	// hideValues: Boolean
-	// indicates whether the text boxes showing the value of the indicator (as text
-	// content) should be hidden or shown.  Default is not hidden, aka shown.
+	// 		Indicates whether the text boxes showing the value of the indicator (as text
+	// 		content) should be hidden or shown.  Default is not hidden, aka shown.
 	hideValues: false,
 
 	// internal data
@@ -108,8 +112,6 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	_img: null,
 	_overOverlay: false,
 	_lastHover: '',
-
-	isContainer: true,
 
 	startup: function(){
 		// handle settings from HTML by making sure all the options are
@@ -127,8 +129,8 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		this.connect(this.gaugeContent, 'touchend', this.handleTouchEnd);
 		this.connect(this.gaugeContent, 'touchmove', this.handleTouchMove);	
 
-		if(!dojo.isArray(this.ranges)){ this.ranges = []; }
-		if(!dojo.isArray(this.indicators)){ this.indicators = []; }
+		if(!lang.isArray(this.ranges)){ this.ranges = []; }
+		if(!lang.isArray(this.indicators)){ this.indicators = []; }
 		var ranges = [], indicators = [];
 		var i;
 		if(this.hasChildren()){
@@ -141,7 +143,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 				}
 
 				switch(children[i].declaredClass){
-					case range.prototype.declaredClass:
+					case Range.prototype.declaredClass:
 						ranges.push(children[i]);
 						break;
 				}
@@ -175,25 +177,25 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	buildRendering: function(){
 		// summary: 
 		//		Overrides _Widget.buildRendering
-		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef : dojo.create("div");
-		this.gaugeContent = dojo.create("div", {
+		var n = this.domNode = this.srcNodeRef ? this.srcNodeRef: dom.create("div");
+		this.gaugeContent = dom.create("div", {
 			className: "dojoxGaugeContent"
 		});
-		this.containerNode = dojo.create("div");
-		this.mouseNode = dojo.create("div");
+		this.containerNode = dom.create("div");
+		this.mouseNode = dom.create("div");
 		while(n.hasChildNodes()){
 			this.containerNode.appendChild(n.firstChild);
 		}
-		dojo.place(this.gaugeContent, n);
-		dojo.place(this.containerNode, n);
-		dojo.place(this.mouseNode, n);
+		dom.place(this.gaugeContent, n);
+		dom.place(this.containerNode, n);
+		dom.place(this.mouseNode, n);
 	},
 
 	_setTicks: function(/*Object*/ oldTicks, /*Object*/ newTicks, /*Boolean*/ major){
 		// summary: 
 		//		internal method used to clear existing tick marks, then add new ones
 		var i;
-		if (oldTicks && dojo.isArray(oldTicks._ticks)){
+		if (oldTicks && lang.isArray(oldTicks._ticks)){
 			for (i = 0; i < oldTicks._ticks.length; i++){
 				this._removeScaleTick(oldTicks._ticks[i]);
 			}
@@ -217,12 +219,13 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 			if (i==this.max&&this._isScaleCircular()) continue; // do not draw last tick on fully circular gauges
 			t.value=i;
 			if (major){
-				if (dojo.number){ // use internationalization if loaded
-					t.label = (newTicks.fixedPrecision && newTicks.precision) ? dojo.number.format(i, {
+				var NumberUtils = this._getNumberModule();
+				if (NumberUtils){ // use internationalization if loaded
+					t.label = (newTicks.fixedPrecision && newTicks.precision) ? NumberUtils.format(i, {
 						places: newTicks.precision
-					}) : dojo.number.format(i);
+					}): NumberUtils.format(i);
 				}else{
-					t.label = (newTicks.fixedPrecision && newTicks.precision) ? i.toFixed(newTicks.precision) : i.toString();
+					t.label = (newTicks.fixedPrecision && newTicks.precision) ? i.toFixed(newTicks.precision): i.toString();
 				}
 			}
 			newTicks._ticks.push(this._addScaleTick(t, major));
@@ -232,7 +235,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 	
 	_isScaleCircular: function(){
 		// summary: 
-		//		internal method to check if the scale is fully circular
+		//		Internal method to check if the scale is fully circular
 		return false;
 	},
 	
@@ -252,21 +255,39 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 
 	postCreate: function(){
 		if(this.hideValues){
-			dojo.style(this.containerNode, "display", "none");
+			html.style(this.containerNode, "display", "none");
 		}
-		dojo.style(this.mouseNode, 'width', '0');
-		dojo.style(this.mouseNode, 'height', '0');
-		dojo.style(this.mouseNode, 'position', 'absolute');
-		dojo.style(this.mouseNode, 'z-index', '100');
-		if(dijit.Tooltip && this.useTooltip){
-			dijit.showTooltip('test',this.mouseNode, !this.isLeftToRight());
-			dijit.hideTooltip(this.mouseNode);
+		html.style(this.mouseNode, 'width', '0');
+		html.style(this.mouseNode, 'height', '0');
+		html.style(this.mouseNode, 'position', 'absolute');
+		html.style(this.mouseNode, 'z-index', '100');
+
+		if(this.useTooltip){
+			require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+				Tooltip.show('test', this.mouseNode, !this.isLeftToRight());
+				Tooltip.hide(this.mouseNode);
+			}));
 		}
 	},
 
+	_getNumberModule :function() {
+		// summary:
+		//		Tests is AMD dojo/number is loaded
+		
+		if (_numberModule == 0) {
+			try {
+				_numberModule = require("dojo/number");
+			} 
+			catch (e) {
+				_numberModule = null;
+			}
+		}
+		return _numberModule;
+	},
+	
 	createSurface: function(){
 		// summary:
-		//		internal method used by the gauge to create the graphics surface area
+		//		Internal method used by the gauge to create the graphics surface area
 		this.gaugeContent.style.width = this.width + 'px';
 		this.gaugeContent.style.height = this.height + 'px';
 		this.surface = gfx.createSurface(this.gaugeContent, this.width, this.height);
@@ -327,11 +348,11 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 				this._indicatorData[i].draw(this._indicatorsGroup);
 			}
 		}
-	    this.drawForeground(this._foregroundGroup);
+		this.drawForeground(this._foregroundGroup);
 	},
 
 
-	drawBackground :function(group){
+	drawBackground:function(group){
 		// summary:
 		//		This function is used to draw (or redraw) the background of the gauge.
 		// description:
@@ -339,7 +360,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		
 	},
 	
-	drawForeground :function(group){
+	drawForeground:function(group){
 		// summary:
 		//		This function is used to draw (or redraw) the foreground of the gauge.
 		// description:
@@ -353,7 +374,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// description:
 		//		Sets the background using the given object.  Must be the same 'type' of object
 		//		as the original background argument.
-		// background:
+		// background: Object
 		//		An object in one of the two forms:
 		//			{'color': 'color-name'}
 		//				OR
@@ -371,7 +392,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// description:
 		//		Creates a range (colored area on the background of the gauge)
 		//		based on the given arguments.
-		// range:
+		// range: Object
 		//		A range is either a dojox.gauges.Range object, or a object
 		//		with similar parameters (low, high, hover, etc.).
 		this.addRanges([range]);
@@ -383,7 +404,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// description:
 		//		Creates a range (colored area on the background of the gauge)
 		//		based on the given arguments.
-		// range:
+		// range: Range
 		//		A range is either a dojox.gauges.Range object, or a object
 		//		with similar parameters (low, high, hover, etc.).
 		if(!this._rangeData){
@@ -415,7 +436,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//		Adds a scale ticks, that is an indicator.
 		// description:
 		//		This method adds  a tick mark to the gauge
-		// indicator:
+		// indicator: dojox.gauges._Indicator
 		//		A dojox.gauges._Indicator or an object with similar parameters
 		//		(value, color, offset, etc.).
 	
@@ -468,7 +489,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// description:
 		//		This method adds an indicator, such as a t needle,
 		//		to the gauge.
-		// indicator:
+		// indicator: dojox.gauges._Indicator
 		//		A dojox.gauges._Indicator or an object with similar parameters
 		//		(value, color, offset, etc.).
 
@@ -490,6 +511,8 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// summary:
 		//		Removes the given indicator from the gauge by calling it's remove function 
 		//		and removing it from the local cache.
+		// indicator: dojox.gauges._Indicator
+		//		The indicator to remove.
 		for(var i=0; i<this._indicatorData.length; i++){
 			if(this._indicatorData[i] === indicator){
 				this._indicatorData.splice(i, 1);
@@ -503,7 +526,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// summary:
 		//		This function is used to move an indicator the the front (top)
 		//		of the gauge
-		// indicator:
+		// indicator: dojox.gauges._Indicator
 		//		A dojox.gauges._Indicator or an object with similar parameters
 		//		(value, color, offset, etc.).
 		if(indicator.shape)
@@ -534,7 +557,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		//			{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
 
 		var t = group.createText({x: x, y: y, text: txt, align: align});
-		t.setFill(color ? color : 'black');
+		t.setFill(color ? color: 'black');
 		if (font) t.setFont(font);
 		return t;
 	},
@@ -552,163 +575,163 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		// summary:
 		//		Updates the tooltip for the gauge to display the given text.
 		// txt:		String
-		//			The text to put in the tooltip.
-		
-		if (!dijit.Tooltip) return;
-		
-		if(this._lastHover != txt){
-			if(txt !== ''){ 
-				dijit.hideTooltip(this.mouseNode);
-				dijit.showTooltip(txt,this.mouseNode, !this.isLeftToRight());
-			}else{
-				dijit.hideTooltip(this.mouseNode);
-			}
-			this._lastHover = txt;
+		//		The text to put in the tooltip.
+	
+		if (this.useTooltip) {
+			require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+				if (this._lastHover != txt) {
+					if (txt !== '') {
+						Tooltip.hide(this.mouseNode);
+						Tooltip.show(txt, this.mouseNode, !this.isLeftToRight());
+					} else {
+						Tooltip.hide(this.mouseNode);
+					}
+					this._lastHover = txt;
+				}
+			}));
 		}
 	},
 
-	handleMouseOver: function(/*Object*/event){
+	handleMouseOver: function(/*Object*/e){
 		// summary:
 		//		This is an internal handler used by the gauge to support 
 		//		hover text
-		// event:	Object
-		//			The event object
+		// e:	Object
+		//		The event object
 		
 		if (this.image && this.image.overlay){
-			if (event.target == this._img.getEventSource()){
+			if (e.target == this._img.getEventSource()){
 				var hover;
 				this._overOverlay = true;
-				var r = this.getRangeUnderMouse(event);
+				var r = this.getRangeUnderMouse(e);
 				if (r && r.hover){
 					hover = r.hover;
 				}
 				
-				if (dijit.Tooltip && this.useTooltip && !this._drag){
+				if (this.useTooltip && !this._drag){					
 					if (hover){
-						this.updateTooltip(hover, event);
+						this.updateTooltip(hover, e);
 					} else {
-						this.updateTooltip('', event);
+						this.updateTooltip('', e);
 					}
 				}
 			}
 		}
 	},
 
-	handleMouseOut: function(/*Object*/event){
+	handleMouseOut: function(/*Object*/e){
 		// summary:
 		//		This is an internal handler used by the gauge to support
 		//		hover text
-		// event:	Object
-		//			The event object
+		// e:	Object
+		//		The event object
 
 		this._overOverlay = false;
-		
-		if(dijit.Tooltip && this.useTooltip && this.mouseNode){
-			dijit.hideTooltip(this.mouseNode);
-		}
+		this._hideTooltip();
 	},
 
-	handleMouseMove: function(/*Object*/event){
+	handleMouseMove: function(/*Object*/e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to show the tooltips
-		// event:	Object
-		//			The event object
-		
-		
-		if (dijit.Tooltip){
-			if (event){
-				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
-				dojo.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
-			}
-			if (this.useTooltip && this._overOverlay){
-				var r = this.getRangeUnderMouse(event);
-				if (r && r.hover){
-					this.updateTooltip(r.hover, event);
-				}else{
-					this.updateTooltip('', event);
+		// e:	Object
+		//		The event object
+			
+		if (this.useTooltip) {
+				if (e) {
+					html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
+					html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
 				}
-			}
+				if (this._overOverlay) {
+					var r = this.getRangeUnderMouse(e);
+					if (r && r.hover) {
+						this.updateTooltip(r.hover, e);
+					} else {
+						this.updateTooltip('', e);
+					}
+				}
 		}
 	},
 	
-	handleMouseDown: function(event){
+	handleMouseDown: function(e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to move indicators
-		// event:	Object
-		//			The event object
+		// e:	Object
+		//		The event object
 		var indicator = this._getInteractiveIndicator();
 		if (indicator){
-			this._handleMouseDownIndicator(indicator, event);
+			this._handleMouseDownIndicator(indicator, e);
 		}
 	},	
 	
-	_handleDragInteractionMouseMove: function(/*Object*/event){
+	_handleDragInteractionMouseMove: function(e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// event:	Object
-		//			The event object
+		// e:	Object
+		//		The event object
 		
 		if(this._drag){
-			this._dragIndicator(this, event);
-			dojo.stopEvent(event);
+			this._dragIndicator(this, e);
+			event.stop(e);
 		}
 	},
 	
-	_handleDragInteractionMouseUp: function(/*Object*/event){
+	_handleDragInteractionMouseUp: function(/*Object*/e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// event:	Object
-		//			The event object
+		// e:	Object
+		//		The event object
 		this._drag = null;
 		
 		for (var i = 0 ; i < this._mouseListeners.length; i++){
-			dojo.disconnect(this._mouseListeners[i]);
+			connect.disconnect(this._mouseListeners[i]);
 		}
 		this._mouseListeners = [];
-		dojo.stopEvent(event);
+		event.stop(e);
 	},
 	
-	_handleMouseDownIndicator : function (indicator, event){
+	_handleMouseDownIndicator: function (indicator, e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// indicator : _Indicator 
-		//           The indicator object
-		// event:	Object
-		//			The event object
+		// indicator: _Indicator 
+		//      The indicator object
+		// e:Object
+		//		The event object
 		
 		if (!indicator.noChange){
 			if (!this._mouseListeners) this._mouseListeners = [];
 			this._drag = indicator;
-			this._mouseListeners.push(dojo.connect(document, "onmouseup", this, this._handleDragInteractionMouseUp));
-			this._mouseListeners.push(dojo.connect(document, "onmousemove", this, this._handleDragInteractionMouseMove));
-			this._mouseListeners.push(dojo.connect(document, "ondragstart", this, dojo.stopEvent));
-			this._mouseListeners.push(dojo.connect(document, "onselectstart", this, dojo.stopEvent));
-			this._dragIndicator(this, event);
-			dojo.stopEvent(event);
+			this._mouseListeners.push(connect.connect(document, "onmouseup", this, this._handleDragInteractionMouseUp));
+			this._mouseListeners.push(connect.connect(document, "onmousemove", this, this._handleDragInteractionMouseMove));
+			this._mouseListeners.push(connect.connect(document, "ondragstart", this, event.stop));
+			this._mouseListeners.push(connect.connect(document, "onselectstart", this, event.stop));
+			this._dragIndicator(this, e);
+			event.stop(e);
 		}
 	},
 	
-	_handleMouseOverIndicator : function (indicator, event){
+	_handleMouseOverIndicator: function (indicator, e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// indicator : _Indicator 
-		//           The indicator object
-		// event:	Object
-		//			The event object
-		
-		if (dijit.Tooltip && this.useTooltip && !this._drag){
+		// indicator: _Indicator 
+		//      The indicator object
+		// e:	Object
+		//		The event object	
+		if (this.useTooltip && !this._drag){
+			
 			if (indicator.hover){
-				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
-				dojo.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
-				dijit.showTooltip(indicator.hover, this.mouseNode, !this.isLeftToRight());
+				require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+					html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
+					html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
+					Tooltip.show(indicator.hover, this.mouseNode, !this.isLeftToRight());
+				}));
 			} else {
-				this.updateTooltip('', event);
+				this.updateTooltip('', e);
 			}
 		}
 		
@@ -717,90 +740,96 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 		}
 	},
 	
-	_handleMouseOutIndicator : function (indicator, event){
+	_handleMouseOutIndicator: function (indicator, e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		the mouse to drag an indicator to modify it's value
-		// indicator : _Indicator 
-		//           The indicator object
-		// event:	Object
-		//			The event object
-		if(dijit.Tooltip && this.useTooltip && this.mouseNode){
-			dijit.hideTooltip(this.mouseNode);
-		}
+		// indicator: _Indicator 
+		//      The indicator object
+		// e:	Object
+		//		The event object
+		this._hideTooltip();
 		this.gaugeContent.style.cursor = 'pointer';
 		
 	},
 	
-	_handleMouseOutRange : function ( range, event){
-		if (dijit.Tooltip && this.useTooltip && this.mouseNode){
-			dijit.hideTooltip(this.mouseNode);
+	_hideTooltip: function(){
+		if (this.useTooltip && this.mouseNode) {
+			require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+				Tooltip.hide(this.mouseNode);
+			}));
 		}
 	},
 	
-	_handleMouseOverRange : function (range, event){
-		if (dijit.Tooltip && this.useTooltip && !this._drag){
-			if (range.hover){
-				dojo.style(this.mouseNode, 'left', event.pageX + 1 + 'px');
-				dojo.style(this.mouseNode, 'top', event.pageY + 1 + 'px');
-				dijit.showTooltip(range.hover, this.mouseNode, !this.isLeftToRight());
+	_handleMouseOutRange: function ( range, e){
+			this._hideTooltip();
+	},
+	
+	_handleMouseOverRange: function (range, e){
+		if (this.useTooltip && !this._drag){
+			if (range.hover) {
+				html.style(this.mouseNode, 'left', e.pageX + 1 + 'px');
+				html.style(this.mouseNode, 'top', e.pageY + 1 + 'px');
+				require(["dijit/Tooltip"], dojo.hitch(this, function(Tooltip){
+					Tooltip.show(range.hover, this.mouseNode, !this.isLeftToRight());
+				}));
 			} else {
-				this.updateTooltip('', event);
+				this.updateTooltip('', e);
 			}
 		}
 	},
 	
-	handleTouchStartIndicator: function(indicator, event){
+	handleTouchStartIndicator: function(indicator, e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		touch events to drag an indicator to modify it's value
-		// indicator : _Indicator 
-		//           The indicator object
-		// event:	Object
-		//			The event object
+		// indicator: _Indicator 
+		//      The indicator object
+		// e:	Object
+		//		The event object
 		if (!indicator.noChange){
 			this._drag = indicator;
-			dojo.stopEvent(event);
+			event.stop(e);
 		}
 	},
 		
-	handleTouchStart: function(event){
+	handleTouchStart: function(e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		touch events to drag an indicator to modify it's value
-		// event:	Object
-		//			The touch event object
+		// e:	Object
+		//		The touch event object
 		this._drag = this._getInteractiveIndicator();
-		this.handleTouchMove(event); //drag indicator to touch position
+		this.handleTouchMove(e); //drag indicator to touch position
 	},	
 	
-	handleTouchEnd: function(event){
+	handleTouchEnd: function(e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		touch events to drag an indicator to modify it's value
-		// event:	Object
-		//			The touch event object	
+		// e:	Object
+		//		The touch e object	
 		if (this._drag){
 			this._drag = null;
-			dojo.stopEvent(event);
+			event.stop(e);
 		}
 	},	
-    
-	handleTouchMove: function(event){
+
+	handleTouchMove: function(e){
 		// summary:
 		//		This is an internal handler used by the gauge to support using
 		//		touch events to drag an indicator to modify it's value
-		// event:	Object
-		//			The touch event object
+		// e:	Object
+		//		The touch event object
 		
-		if (this._drag && this._drag.noChange == false){
-			var touches = event.touches;
+		if (this._drag && !this._drag.noChange){
+			var touches = e.touches;
 			var firstTouch = touches[0];
 			this._dragIndicatorAt(this, firstTouch.pageX, firstTouch.pageY);
-			dojo.stopEvent(event);
+			event.stop(e);
 		}
 	},
-    
+
 	_getInteractiveIndicator: function(){
 		for (var i = 0; i < this._indicatorData.length; i++){
 			var indicator = this._indicatorData[i];
@@ -808,6 +837,7 @@ return dojo.declare("dojox.gauges._Gauge",[_Widget],{
 				return indicator;
 			}
 		}
+		return null;
 	}
 });
 });

@@ -17,23 +17,23 @@
 			background-color: #DBDDE2;
 		}
 		</style>
-		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="parseOnLoad: 1, isDebug:1, async:1"></script>
+		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="parseOnLoad: true, mblAlwaysHideAddressBar: true, async: true"></script>
 		<script language="JavaScript" type="text/javascript">
 		require([
-			"dojox/mobile",			// This is a mobile app.
-			"dojox/mobile/compat", 	// This mobile app supports running on desktop browsers
 			"dojox/mobile/parser", 	// This mobile app uses declarative programming with fast mobile parser
+			"dojox/mobile",			// This is a mobile app.
 			"dojox/mobile/FixedSplitter",
 			"dojox/mobile/ScrollableView",
 			"dojox/mobile/EdgeToEdgeList",
 			"dojox/mobile/EdgeToEdgeCategory",
 			"dojox/mobile/Heading",
-			"dojox/mobile/FixedSplitterPane"
+			"dojox/mobile/FixedSplitterPane",
+			"dojox/mobile/compat" 	// This mobile app supports running on desktop browsers
 			// "domReady!" // Enable if user code placed in the callback here that needs DOMReady
 		]);
 		</script>
 	</head>
-	<body>
+	<body style="visibility:hidden;">
 		<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
 			<div dojoType="dojox.mobile.FixedSplitterPane" style="width:300px;border-right:1px solid black;">
 				<div id="settings" dojoType="dojox.mobile.ScrollableView" selected="true">
@@ -225,8 +225,8 @@
 				<div id="picture" dojoType="dojox.mobile.ScrollableView">
 					<h1 dojoType="dojox.mobile.Heading" fixed="top">Picture Frame</h1>
 					<h2 dojoType="dojox.mobile.RoundRectCategory">Transition</h2>
-					<ul dojoType="dojox.mobile.RoundRectList">
-						<li dojoType="dojox.mobile.ListItem">
+					<ul dojoType="dojox.mobile.RoundRectList" select="single">
+						<li dojoType="dojox.mobile.ListItem" checked="true">
 							Dissolve
 						</li>
 						<li dojoType="dojox.mobile.ListItem">

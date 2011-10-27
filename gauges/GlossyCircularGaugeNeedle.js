@@ -1,24 +1,31 @@
-define(["dojo/_base/kernel","dojo/_base/declare","dojo/_base/Color" ,"./AnalogIndicatorBase"],
-function(dojo,ddeclare,dcolor,AnalogIndicatorBase) {
- 
-return dojo.declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBase], {
+define(["dojo/_base/declare","dojo/_base/Color" ,"./AnalogIndicatorBase"],
+  function(declare, Color, AnalogIndicatorBase) {
+
+/*=====
+	AnalogIndicatorBase = dojox.gauges.AnalogIndicatorBase;
+=====*/
+
+return declare("dojox.gauges.GlossyCircularGaugeNeedle", [AnalogIndicatorBase], {
 	// summary:
 	//		The needle for the dojox.gauges.GlossyCircularGauge and
-	//      dojox.gauges.GlossySemiCircularGauge.
+	//		dojox.gauges.GlossySemiCircularGauge.
 	// description:
 	//		This object defines the needle for the dojox.gauges.GlossyCircularGauge and
-	//      dojox.gauges.GlossySemiCircularGauge.
+	//		dojox.gauges.GlossySemiCircularGauge.
 	//		Since the needle is created by the gauges class, you do not have to use this class directly.
+	
 	
 	interactionMode: "gauge",
 	
+	// color: String
+	// The color of the indicator.
 	color: '#c4c4c4',
 	
 	_getShapes: function(group){
 		// summary:
 		//		Overrides AnalogIndicatorBase._getShapes
 		
-		var darkerColor = dojo.blendColors(new dojo.Color(this.color), new dojo.Color('black'), 0.3);
+		var darkerColor = Color.blendColors(new Color(this.color), new Color('black'), 0.3);
 		
 		if (!this._gauge) 
 			return null;

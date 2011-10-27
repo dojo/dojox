@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/color/_base", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/connect", "dojox/color/_base", 
 		"./PlotAction", "dojo/fx/easing", "dojox/gfx/fx"], 
-	function(dojo, declare, connect, c, PlotAction, dfe, dgf){
+	function(dojo, lang, declare, Color, hub, c, PlotAction, dfe, dgf){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
@@ -11,6 +11,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/co
 		//		Either a color or a function that creates a color when highlighting happens.
 		highlight: null
 	});
+	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SATURATION  = 100,	// %
@@ -39,7 +40,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/co
 			return c.fromHsl(x);
 		};
 
-	return dojo.declare("dojox.charting.action2d.Highlight", dojox.charting.action2d.PlotAction, {
+	return declare("dojox.charting.action2d.Highlight", PlotAction, {
 		//	summary:
 		//		Creates a highlighting action on a plot, where an element on that plot
 		//		has a highlight on it.
@@ -61,10 +62,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/co
 			//		The chart this action belongs to.
 			//	plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
-			//	kwArgs: dojox.charting.action2d.__HighlightCtorArgs?
+			//	kwArgs: charting.action2d.__HighlightCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			var a = kwArgs && kwArgs.highlight;
-			this.colorFun = a ? (dojo.isFunction(a) ? a : cc(a)) : hl;
+			this.colorFun = a ? (lang.isFunction(a) ? a : cc(a)) : hl;
 
 			this.connect();
 		},
@@ -88,7 +89,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/co
 				anim.action.stop(true);
 			}else{
 				var color = o.shape.getFill();
-				if(!color || !(color instanceof dojo.Color)){
+				if(!color || !(color instanceof Color)){
 					return;
 				}
 				this.anim[runName][index] = anim = {
@@ -112,7 +113,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/co
 				color:    {start: start, end: end}
 			});
 			if(o.type == "onmouseout"){
-				dojo.connect(anim.action, "onEnd", this, function(){
+				hub.connect(anim.action, "onEnd", this, function(){
 					if(this.anim[runName]){
 						delete this.anim[runName][index];
 					}

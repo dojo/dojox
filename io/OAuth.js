@@ -1,4 +1,11 @@
-define(["dojo/_base/array", "dojo/_base/xhr", "dojox/encoding/digests/SHA1"], function(dojo, xhr, SHA1){
+define([
+	"dojo/_base/kernel", // dojo
+	"dojo/_base/lang", // mixin
+	"dojo/_base/array", // isArray, map
+	"dojo/_base/xhr", // formToObject, queryToObject, xhr
+	"dojo/dom", // byId
+	"dojox/encoding/digests/SHA1", // SHA1
+], function(dojo, lang, array, xhr, dom, SHA1){
 dojo.getObject("io.OAuth", true, dojox);
 
 dojox.io.OAuth = new (function(){

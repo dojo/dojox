@@ -1,5 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional", "dojox/lang/functional/object"], 
-	function(dojo, connect, declare, Base, dfe, df, dlfo){
+define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional", 
+		"dojox/lang/functional/object"], 
+	function(hub, declare, Base, dfe, df, dlfo){
 	
 	/*=====
 	dojox.charting.action2d.__PlotActionCtorArgs = function(duration, easing){
@@ -13,12 +14,15 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base
 		this.duration = duration;
 		this.easing = easing;
 	}
+	var Base = dojox.charting.action2d.Base;
 	=====*/
 
 	var DEFAULT_DURATION = 400,	// ms
 		DEFAULT_EASING   = dfe.backOut;
 
-	return dojo.declare("dojox.charting.action2d.PlotAction", dojox.charting.action2d.Base, {
+	return declare("dojox.charting.action2d.PlotAction", Base, {
+		//	summary:
+		//		Base action class for plot actions.
 
 		overOutEvents: {onmouseover: 1, onmouseout: 1},
 
@@ -49,7 +53,7 @@ define(["dojo/_base/kernel", "dojo/_base/connect", "dojo/_base/declare", "./Base
 			//	summary:
 			//		Disconnect this action from the given plot, if connected.
 			if(this.handle){
-				dojo.disconnect(this.handle);
+				hub.disconnect(this.handle);
 				this.handle = null;
 			}
 		},

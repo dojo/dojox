@@ -1,4 +1,4 @@
-define([], function(){
+define(["dojo/_base/kernel"], function(dojo){
 dojo.getObject("io.httpParse", true, dojox);
 
 dojox.io.httpParse = function(/*String*/httpStream, /*String?*/topHeaders,/*Boolean?*/ partial){

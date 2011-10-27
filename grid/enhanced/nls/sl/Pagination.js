@@ -7,6 +7,7 @@ define(
 	"nextTip": "Naslednja stran",
 	"prevTip": "Prejšnja stran",
 	"itemTitle": "postavke",
+	"singularItemTitle": "postavka",
 	"pageStepLabelTemplate": "Stran ${0}",
 	"pageSizeLabelTemplate": "${0} postavk na stran",
 	"allItemsLabelTemplate": "Vse postavke",
@@ -15,7 +16,8 @@ define(
 	"dialogIndication": "Podajte številko strani",
 	"pageCountIndication": " (${0} strani)",
 	"dialogConfirm": "Pojdi",
-	"dialogCancel": "Prekliči"
+	"dialogCancel": "Prekliči",
+	"all": "vse"
 })
 //end v1.x content
 );

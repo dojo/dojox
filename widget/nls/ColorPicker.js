@@ -42,5 +42,6 @@ saturationPickerTitle: "Saturation Selector"
 "da": true,
 "cs": true,
 "ca": true,
+"az": true,
 "ar": true
 });

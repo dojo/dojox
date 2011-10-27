@@ -1,6 +1,13 @@
-// dojox/renderer! plugin
-
-define(["dojo/_base/lang", "dojo/_base/sniff"], function(dojo){
+define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/_base/config"],
+  function(g, lang, has, win, config){
+  //>> noBuildResolver
+/*=====
+	dojox.gfx.renderer = {
+		// summary:
+		//		This module is an AMD loader plugin that loads the appropriate graphics renderer
+		//		implementation based on detected environment and current configuration settings.
+	};
+  =====*/
 	var currentRenderer = null;
 	return {
 		load: function(id, require, load){
@@ -8,27 +15,27 @@ define(["dojo/_base/lang", "dojo/_base/sniff"], function(dojo){
 				load(currentRenderer);
 				return;
 			}
-			var renderer = dojo.config.forceGfxRenderer,
-				renderers = !renderer && (dojo.isString(dojo.config.gfxRenderer) ?
-					dojo.config.gfxRenderer : "svg,vml,canvas,silverlight").split(","),
+			var renderer = config.forceGfxRenderer,
+				renderers = !renderer && (lang.isString(config.gfxRenderer) ?
+					config.gfxRenderer : "svg,vml,canvas,silverlight").split(","),
 				silverlightObject, silverlightFlag;
 
 			while(!renderer && renderers.length){
 				switch(renderers.shift()){
 					case "svg":
 						// the next test is from https://github.com/phiggins42/has.js
-						if("SVGAngle" in dojo.global){
+						if("SVGAngle" in win.global){
 							renderer = "svg";
 						}
 						break;
 					case "vml":
-						if(dojo.isIE){
+						if(has("ie")){
 							renderer = "vml";
 						}
 						break;
 					case "silverlight":
 						try{
-							if(dojo.isIE){
+							if(has("ie")){
 								silverlightObject = new ActiveXObject("AgControl.AgControl");
 								if(silverlightObject && silverlightObject.IsVersionSupported("1.0")){
 									silverlightFlag = true;
@@ -48,24 +55,24 @@ define(["dojo/_base/lang", "dojo/_base/sniff"], function(dojo){
 						}
 						break;
 					case "canvas":
-						if(dojo.global.CanvasRenderingContext2D){
+						if(win.global.CanvasRenderingContext2D){
 							renderer = "canvas";
 						}
 						break;
 				}
 			}
 
-			if (renderer === 'canvas' && dojo.config.canvasEvent !== false) {
+			if (renderer === 'canvas' && config.canvasEvents !== false) {
 				renderer = "canvasWithEvents";
 			}
 
-			if(dojo.config.isDebug){
+			if(config.isDebug){
 				console.log("gfx renderer = " + renderer);
 			}
 
 			function loadRenderer(){
 				require(["dojox/gfx/" + renderer], function(module){
-					dojox.gfx.renderer = renderer;
+					g.renderer = renderer;
 					// memorize the renderer module
 					currentRenderer = module;
 					// now load it

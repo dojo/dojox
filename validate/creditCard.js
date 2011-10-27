@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "./_base"], function(dojo, validate){
+define(["dojo/_base/lang", "./_base"], function(lang, validate){
 /*=====
 
 	dojox.validate.creditCard = {
@@ -6,10 +6,12 @@ define(["dojo/_base/lang", "./_base"], function(dojo, validate){
 		//		Module provides validation functions for Credit Cards, using account number
 		//		rules in conjunction with the Luhn algorigthm, with a plugable card info database.
 	};
-	
+
+	validate = dojox.validate;
+
 =====*/
 
-dojox.validate._cardInfo = {
+validate._cardInfo = {
 	// summary: A dictionary list of credit card abbreviations
 	//
 	// description:
@@ -44,7 +46,7 @@ dojox.validate._cardInfo = {
 	'er':'2(?:014|149)[0-9]{11}'
 };
 
-dojox.validate.isValidCreditCard = function(value, ccType){
+validate.isValidCreditCard = function(value, ccType){
 	// summary: Validate a credit card number by type with Luhn checking.
 	//
 	// description:
@@ -67,7 +69,7 @@ dojox.validate.isValidCreditCard = function(value, ccType){
 			validate.isValidCreditCardNumber(value, ccType.toLowerCase())); // Boolean
 };
 
-dojox.validate.isValidCreditCardNumber = function(value, ccType){
+validate.isValidCreditCardNumber = function(value, ccType){
 	// summary:
 	//		Checks if value matches the pattern for that card or any card types if none is specified
 	//
@@ -95,7 +97,7 @@ dojox.validate.isValidCreditCardNumber = function(value, ccType){
 	return results.length ? results.join('|') : false; // String | boolean
 };
 
-dojox.validate.isValidCvv = function(/* String|Int */value, /* String */ccType) {
+validate.isValidCvv = function(/* String|Int */value, /* String */ccType) {
 	// summary:
 	//  	Validate the security code (CCV) for a passed credit-card type.
 	//
@@ -103,7 +105,7 @@ dojox.validate.isValidCvv = function(/* String|Int */value, /* String */ccType) 
 	//
 	// value:
 	
-	if(!dojo.isString(value)){
+	if(!lang.isString(value)){
 		value = String(value);
 	}
 	var format;
@@ -122,5 +124,5 @@ dojox.validate.isValidCvv = function(/* String|Int */value, /* String */ccType) 
 	return !!format && value.length && validate.isNumberFormat(value, { format: format }); // Boolean
 };
 
-return dojox.validate;
+return validate;
 });

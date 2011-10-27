@@ -1,17 +1,15 @@
-
-define(["dojo/_base/lang","dojo/_base/kernel", "dojo/_base/html", "dojox/gfx/matrix","dijit/Tooltip","dojo/NodeList-traverse"],
-						
-
-function(dojo, kernel, dhtml, matrix, Tooltip, NodeListTraverse) {
-	var dgc = dojo.getObject("geo.charting", true, dojox); 
+define(["dojo/_base/lang","dojo/_base/array","../../main", "dojo/_base/html","dojo/dom-geometry",
+		"dojox/gfx/matrix","dijit/Tooltip","dojo/_base/NodeList","dojo/NodeList-traverse"],
+  function(lang, arr, dojox, html, domGeom, matrix, Tooltip, NodeList, NodeListTraverse) {
+	var dgc = lang.getObject("geo.charting", true, dojox); 
 
 	dgc.showTooltip = function(/*String*/innerHTML, /*dojox.gfx.shape*/ gfxObject, /*String[]?*/ positions){
 		var arroundNode = dgc._normalizeArround(gfxObject);
-		return dijit.showTooltip(innerHTML, arroundNode, positions);
+		return Tooltip.show(innerHTML, arroundNode, positions);
 	};
 
 	dgc.hideTooltip = function( /*dojox.gfx.shape*/gfxObject){
-		return dijit.hideTooltip(gfxObject);
+		return Tooltip.hide(gfxObject);
 	};
 
 	dgc._normalizeArround = function(gfxObject){
@@ -21,23 +19,27 @@ function(dojo, kernel, dhtml, matrix, Tooltip, NodeListTraverse) {
 		var realMatrix = gfxObject._getRealMatrix() || {xx:1,xy:0,yx:0,yy:1,dx:0,dy:0};
 		var point = matrix.multiplyPoint(realMatrix, bbox.x, bbox.y);
 		var gfxDomContainer = dgc._getGfxContainer(gfxObject);
-		gfxObject.x = dojo.coords(gfxDomContainer,true).x + point.x,
-		gfxObject.y = dojo.coords(gfxDomContainer,true).y + point.y,
-		gfxObject.width = bbox.width * realMatrix.xx,
-		gfxObject.height = bbox.height * realMatrix.yy
+		gfxObject.x = domGeom.position(gfxDomContainer,true).x + point.x,
+		gfxObject.y = domGeom.position(gfxDomContainer,true).y + point.y,
+		gfxObject.w = bbox.width * realMatrix.xx,
+		gfxObject.h = bbox.height * realMatrix.yy
 		return gfxObject;
 	};
 
 	dgc._getGfxContainer = function(gfxObject){
-		return (new dojo.NodeList(gfxObject.rawNode)).parents("div")[0];
+		if (gfxObject.surface) {
+			return (new NodeList(gfxObject.surface.rawNode)).parents("div")[0];
+		} else {
+			return (new NodeList(gfxObject.rawNode)).parents("div")[0];
+		}
 	};
 
 	dgc._getRealBBox = function(gfxObject){
 		var bboxObject = gfxObject.getBoundingBox();
 		if(!bboxObject){//the gfx object is group
 			var shapes = gfxObject.children;
-			bboxObject = dojo.clone(dgc._getRealBBox(shapes[0]));
-			dojo.forEach(shapes, function(item){
+			bboxObject = lang.clone(dgc._getRealBBox(shapes[0]));
+			arr.forEach(shapes, function(item){
 				var nextBBox = dgc._getRealBBox(item);
 				bboxObject.x = Math.min(bboxObject.x, nextBBox.x);
 				bboxObject.y = Math.min(bboxObject.y, nextBBox.y);

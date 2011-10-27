@@ -21,15 +21,20 @@
 				border: solid 1px;
 			}
 		</style>
-		<script type="text/javascript" djConfig="parseOnLoad:true,isDebug:true,gfxRenderer:'svg,vml,silverlight'" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript" djConfig="parseOnLoad:true,isDebug:true,gfxRenderer:'svg,canvas,vml,silverlight'" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+				var isTouchDevice = dojo.isIos || (navigator.userAgent.toLowerCase().indexOf("android") > -1)
+				|| (navigator.userAgent.toLowerCase().indexOf("blackberry") > -1);
+		</script>
 		<script type="text/javascript">
 			dojo.require("dojox.geo.charting.Map");
 			dojo.require("dojox.charting.Chart");
 			dojo.require("dojox.charting.axis2d.Default");
-      dojo.require("dojox.charting.plot2d.ClusteredBars");
+      		dojo.require("dojox.charting.plot2d.ClusteredBars");
 			dojo.require("dojox.charting.plot2d.Grid");
 			dojo.require("dojo.data.ItemFileReadStore");
-			dojo.require("dojox.geo.charting.MouseInteractionSupport");
+			dojo.requireIf(isTouchDevice,"dojox.geo.charting.TouchInteractionSupport");
+			dojo.requireIf(!isTouchDevice,"dojox.geo.charting.MouseInteractionSupport");
 			dojo.require("dojox.geo.charting.KeyboardInteractionSupport");
 			dojo.require("dojox.charting.themes.PlotKit.blue");
 			var chartStore = new dojo.data.ItemFileReadStore({
@@ -65,9 +70,14 @@
 						render();
 				var map = new dojox.geo.charting.Map("map", "../resources/data/USStates.json");
 				map.setMarkerData("../resources/markers/USStates.json");
-				// install mouse navigation
-				var mouseInteraction = new dojox.geo.charting.MouseInteractionSupport(map,{enablePan:true,enableZoom:true});
-				mouseInteraction.connect();
+				// install mouse/touch navigation
+				if (!isTouchDevice) {
+					var mouseInteraction = new dojox.geo.charting.MouseInteractionSupport(map,{enablePan:true,enableZoom:true});
+					mouseInteraction.connect();
+				} else {
+					var touchInteraction = new dojox.geo.charting.TouchInteractionSupport(map,{});
+					touchInteraction.connect();
+				}
 				var keyboardInteraction = new dojox.geo.charting.KeyboardInteractionSupport(map, {enableZoom: true});
 				keyboardInteraction.connect();
 			

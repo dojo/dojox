@@ -1,4 +1,17 @@
-define("dojox/editor/plugins/CollapsibleToolbar", ["dojo", "dijit", "dojox", "dijit/_Widget", "dijit/_TemplatedMixin", "dijit/_editor/_Plugin", "dijit/form/Button", "dojo/i18n", "dojo/i18n!dojox/editor/plugins/nls/CollapsibleToolbar"], function(dojo, dijit, dojox) {
+define([
+	"dojo",
+	"dijit",
+	"dojox",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_editor/_Plugin",
+	"dijit/form/Button",
+	"dijit/focus",
+	"dojo/_base/connect",
+	"dojo/_base/declare",
+	"dojo/i18n",
+	"dojo/i18n!dojox/editor/plugins/nls/CollapsibleToolbar"
+], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins._CollapsibleToolbarButton", [dijit._Widget, dijit._TemplatedMixin], {
 	// summary:

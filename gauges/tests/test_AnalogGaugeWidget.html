@@ -13,7 +13,7 @@
 		isDebug: true
 	};
 </script>
-<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+<script type="text/javascript" src="../../../dojo/dojo.js" dojoConfig="parseOnLoad: true"></script>
 <script language="JavaScript" type="text/javascript">
 	dojo.require('dojox.gauges.AnalogGauge');
 	dojo.require('dojox.gauges.AnalogArcIndicator');
@@ -21,8 +21,7 @@
 	dojo.require('dojox.gauges.AnalogArrowIndicator');
 	dojo.require('dijit.form.Button');
 	dojo.require('dojo.parser');
-	dojo.require('dijit.Tooltip');
-	dojo.addOnLoad(init);
+	dojo.ready(init);
 
 	var gauge, valueIndicator, targetIndicator, handle;
 	var ranges1 = [ {low:5, high:10, hover:'5 - 10'},
@@ -83,7 +82,7 @@
 		}, gauge);
 		gauge.startup();
 		var g = gauge;
-		var int = 10
+		var int = 10;
 		dojo.connect(dijit.byId('changeTicks'), 'onClick', function(){
 			var o = g.majorTicks;
 			o.interval = ++int;
@@ -334,6 +333,7 @@
 	dojo.addOnUnload(function(){
 		clearInterval(handle);
 	});
+	
 </script>
 </head>
 <body class="tundra">

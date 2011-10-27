@@ -1,6 +1,6 @@
-define(["../Theme", "./common"], function(Theme){
+define(["../Theme", "./common"], function(Theme, themes){
 	
-	dojox.charting.themes.MiamiNice=new Theme({
+	themes.MiamiNice=new Theme({
 		colors: [
 			"#7f9599",
 			"#45b8cc",
@@ -10,5 +10,5 @@ define(["../Theme", "./common"], function(Theme){
 		]
 	});
 	
-	return dojox.charting.themes.MiamiNice;
+	return themes.MiamiNice;
 });
