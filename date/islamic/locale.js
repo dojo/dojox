@@ -1,10 +1,10 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./Date", "dojo/i18n!dojo/cldr/nls/islamic"],
-	function(dojo, dlang, darray, dd, i18n, regexp, string, islamicDate){
+       function(dojo, dlang, darray, dd, i18n, regexp, string, islamicDate, bundle){
 
 	dojo.getObject("date.islamic.locale", true, dojox);
 	dojo.experimental("dojox.date.islamic.locale");
 
-	dojo.requireLocalization("dojo.cldr", "islamic");
+	//	dojo.requireLocalization("dojo.cldr", "islamic");
 
 	// Format a pattern without literals
 	function formatPattern(dateObject, bundle, locale, fullYear,  pattern){
