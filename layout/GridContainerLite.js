@@ -1,8 +1,9 @@
-define(["dojo/_base/kernel",
+define([
+	"dojo/_base/kernel",
 	"dojo/text!./resources/GridContainer.html",
 	"dojo/_base/declare", // declare 
 	"dojo/query",
-	"dojo/has",
+	"dojo/_base/sniff",
 	"dojo/dom-class",
 	"dojo/dom-style",
 	"dojo/dom-geometry",
@@ -15,15 +16,14 @@ define(["dojo/_base/kernel",
 	"dojo/topic", // topic.publish()
 	"dijit/registry",
 	"dijit/focus",
+	"dijit/_base/focus", // dijit.getFocus()
+	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/layout/_LayoutWidget",
 	"dojo/_base/NodeList",
 	"dojox/mdnd/AreaManager", "dojox/mdnd/DropIndicator",
 	"dojox/mdnd/dropMode/OverDropMode","dojox/mdnd/AutoScroll"
-	/*"dojo/ready",
-	"dojo/_base/sniff","dojo/_base/html",
-	"dijit/_base/focus"		// dijit.getFocus()*/
-],function(dojo, template, declare, query, has, domClass, domStyle, geom, domConstruct, domAttr, array, lang, events, keys, topic, registry, focus, _TemplatedMixin, _LayoutWidget, NodeList){
+],function(dojo, template, declare, query, has, domClass, domStyle, geom, domConstruct, domAttr, array, lang, events, keys, topic, registry, focus, baseFocus, _WidgetBase, _TemplatedMixin, _LayoutWidget, NodeList){
 
 	var gcl = declare(
 		"dojox.layout.GridContainerLite",
@@ -131,7 +131,7 @@ define(["dojo/_base/kernel",
 
 			if(this.doLayout){
 				this._border = {
-					h:(has("ie")) ? geom.getBorderExtents(this.gridContainerTable).h : 0,
+					h: has("ie") ? geom.getBorderExtents(this.gridContainerTable).h : 0,
 					w: (has("ie") == 6) ? 1 : 0
 				}
 			}
@@ -590,7 +590,7 @@ define(["dojo/_base/kernel",
 			var key = event.keyCode,
 				k = keys,
 				zone = null,
-				cFocus = dijit.getFocus(),
+				cFocus = baseFocus.getFocus(),
 				focusNode = cFocus.node,
 				m = this._dragManager,
 				found,
@@ -775,7 +775,7 @@ define(["dojo/_base/kernel",
 											node = node.parentNode.childNodes[node.parentNode.childNodes.length-1];
 										}
 										else{
-											node = (has("ie"))? node.parentNode.childNodes[0]: node.parentNode.childNodes[1];
+											node = node.parentNode.childNodes[has("ie") ? 0 : 1];
 										}
 									}
 									zone = node[child];
@@ -827,7 +827,7 @@ define(["dojo/_base/kernel",
 		}
 	});
 
-	lang.extend(dijit._Widget, {
+	lang.extend(_WidgetBase, {
 
 		// column: String
 		//		Column of the grid to place the widget.
