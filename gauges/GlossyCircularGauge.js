@@ -8,6 +8,7 @@ define(["dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],
 return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a circular gauge with a glossy appearance.
+	//
 	// example:
 	//	|	<div	dojoType="dojox.gauges.GlossyCircularGauge"
 	//	|		id="testGauge"
