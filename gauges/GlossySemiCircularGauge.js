@@ -43,9 +43,10 @@ return declare("dojox.gauges.GlossySemiCircularGauge", [GlossyCircularGaugeBase]
 	_designTextIndicatorX: 190.6675,
 	_designTextIndicatorY: 145.87665,
 	
-	// summary: 
-	//		Creates a new GlossySemiCircularGauge
+
 	constructor: function(){
+		// summary: 
+		//		Creates a new GlossySemiCircularGauge
 		this.min = 0;
 		this.max = 100;
 		this.startAngle = -91.5;
