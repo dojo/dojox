@@ -7,6 +7,22 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//	summary:
 		//		A special keyword arguments object that is specific to a grid "plot".
 	
+		//	majorHLine: dojox.gfx.Stroke?
+		//		An optional dojox.gfx.Stroke for a major horizontal line. By default major lines use major tick stroke.
+		majorHLine,
+		
+		//	minorHLine: dojox.gfx.Stroke?
+		//		An optional dojox.gfx.Stroke for a minor horizontal line. By default minor lines use minor tick stroke.
+		minorHLine,
+		
+		//	majorVLine: dojox.gfx.Stroke?
+		//		An optional dojox.gfx.Stroke for a major vertical line. By default major lines use major tick stroke.
+		majorVLine,
+		
+		//	minorVLine: dojox.gfx.Stroke?
+		//		An optional dojox.gfx.Stroke for a minor vertical line. By default major lines use major tick stroke.
+		minorVLine,
+	
 		//	hMajorLines: Boolean?
 		//		Whether to show lines at the major ticks along the horizontal axis. Default is true.
 		hMajorLines: true,
@@ -22,19 +38,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//	vMinorLines: Boolean?
 		//		Whether to show lines at the major ticks along the vertical axis. Default is false.
 		vMinorLines: false,
-	
-		//	hStripes: String?
-		//		Whether or not to show stripes (alternating fills) along the horizontal axis. Default is "none".
-		hStripes: "none",
-	
-		//	vStripes: String?
-		//		Whether or not to show stripes (alternating fills) along the vertical axis. Default is "none".
-		vStripes: "none",
 		
 		//	enableCache: Boolean?
 		//		Whether the grid lines are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
-		enableCache: false
+		enableCache: false,
+		
+		//	renderOnAxis: Boolean?
+		//		Whether or not the grid is rendered when drawn at horizontal or vertical axis position. Default is true.
+		renderOnAxis: true
 	});
 	var Element = dojox.charting.plot2d.Element;
 	=====*/
@@ -50,12 +62,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			hMinorLines: false,	// draw horizontal minor lines
 			vMajorLines: true,	// draw vertical major lines
 			vMinorLines: false,	// draw vertical minor lines
-			hStripes: "none",	// TBD
-			vStripes: "none",	// TBD
+			hStripes: false,	// TBD, stripes are not implemented
+			vStripes: false,	// TBD, stripes are not implemented
 			animate: null,   // animate bars into place
-			enableCache: false
+			enableCache: false,
+			renderOnAxis: true
 		},
-		optionalParams: {},	// no optional parameters
+		
+		optionalParams: {
+			majorHLine: {},
+			minorHLine: {},
+			majorVLine: {},
+			minorVLine: {}
+		},	
 
 		constructor: function(chart, kwArgs){
 			//	summary:
@@ -66,6 +85,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		An optional keyword arguments object to help define the parameters of the underlying grid.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
+			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.hAxis = this.opt.hAxis;
 			this.vAxis = this.opt.vAxis;
 			this.dirty = true;
@@ -222,36 +242,48 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			this.dirty = this.isDirty();
 			if(!this.dirty){ return this; }
 			this.cleanGroup();
-			var s = this.group, ta = this.chart.theme.axis;
+			var s = this.group, ta = this.chart.theme, lineStroke;
+			var renderOnAxis = this.opt.renderOnAxis;
+			var vScaler = this._vAxis.getScaler(),
+					vt = vScaler.scaler.getTransformerFromModel(vScaler);	
+			var hScaler = this._hAxis.getScaler(),
+					ht = hScaler.scaler.getTransformerFromModel(hScaler);
+			var ticks;
 			// draw horizontal stripes and lines
 			try{
-				var vScaler = this._vAxis.getScaler(),
-					vt = vScaler.scaler.getTransformerFromModel(vScaler),
-					ticks = this._vAxis.getTicks();
+				ticks = this._vAxis.getTicks();
 				if(ticks != null){
 					if(this.opt.hMinorLines){
+						lineStroke = this.opt.minorHLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;		
 						arr.forEach(ticks.minor, function(tick){
+							if(!renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
+								return;
+							}
 							var y = dim.height - offsets.b - vt(tick.value);
 							var hMinorLine = this.createLine(s, {
 								x1: offsets.l,
 								y1: y,
 								x2: dim.width - offsets.r,
 								y2: y
-							}).setStroke(ta.minorTick);
+							}).setStroke(lineStroke);
 							if(this.animate){
 								this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
 							}
 						}, this);
 					}
 					if(this.opt.hMajorLines){
+						lineStroke = this.opt.majorHLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;	
 						arr.forEach(ticks.major, function(tick){
+							if(!renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
+								return;
+							}							
 							var y = dim.height - offsets.b - vt(tick.value);
 							var hMajorLine = this.createLine(s, {
 								x1: offsets.l,
 								y1: y,
 								x2: dim.width - offsets.r,
 								y2: y
-							}).setStroke(ta.majorTick);
+							}).setStroke(lineStroke);
 							if(this.animate){
 								this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
 							}
@@ -263,33 +295,39 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 			// draw vertical stripes and lines
 			try{
-				var hScaler = this._hAxis.getScaler(),
-					ht = hScaler.scaler.getTransformerFromModel(hScaler),
-					ticks = this._hAxis.getTicks();
+				ticks = this._hAxis.getTicks();
 				if(this != null){
 					if(ticks && this.opt.vMinorLines){
+						lineStroke = this.opt.minorVLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;	
 						arr.forEach(ticks.minor, function(tick){
+							if(!renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
+								return;
+							}								
 							var x = offsets.l + ht(tick.value);
 							var vMinorLine = this.createLine(s, {
 								x1: x,
 								y1: offsets.t,
 								x2: x,
 								y2: dim.height - offsets.b
-							}).setStroke(ta.minorTick);
+							}).setStroke(lineStroke);
 							if(this.animate){
 								this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
 							}
 						}, this);
 					}
 					if(ticks && this.opt.vMajorLines){
+						lineStroke = this.opt.majorVLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;	
 						arr.forEach(ticks.major, function(tick){
+							if(!renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
+								return;
+							}								
 							var x = offsets.l + ht(tick.value);
 							var vMajorLine = this.createLine(s, {
 								x1: x,
 								y1: offsets.t,
 								x2: x,
 								y2: dim.height - offsets.b
-							}).setStroke(ta.majorTick);
+							}).setStroke(lineStroke);
 							if(this.animate){
 								this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
 							}
