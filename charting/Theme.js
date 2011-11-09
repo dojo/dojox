@@ -97,6 +97,18 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		font:    "normal normal normal 8pt Tahoma",	// label
 	//	|		fontColor: "#000"
 	//	|	},
+	//	|	grid: {	// grid, when not present axis tick strokes are used instead
+	//	|		majorLine: {	// major grid line
+	//	|			color:     "#666",
+	//	|			width:  1,
+	//	|			length: 6
+	//	|		},
+	//	|		minorLine: {	// minor grid line
+	//	|			color:     "#666",
+	//	|			width:  0.8,
+	//	|			length: 3
+	//	|		}
+	//	|	},
 	//	|	indicator: {
 	//	|		lineStroke:  {width: 1.5, color: "#333"},		// line
 	//	|		lineOutline: {width: 0.1, color: "#ccc"},		// line outline
@@ -133,7 +145,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 
 		// populate theme with defaults updating them if needed
 		var def = Theme.defaultTheme;
-		arr.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
+		arr.forEach(["chart", "plotarea", "axis", "grid", "series", "marker", "indicator"], function(name){
 			this[name] = lang.delegate(def[name], kwArgs[name]);
 		}, this);
 
@@ -173,6 +185,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 			chart: this.chart,
 			plotarea: this.plotarea,
 			axis: this.axis,
+			grid: this.grid,
 			series: this.series,
 			marker: this.marker,
 			// individual arrays
@@ -399,7 +412,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	},
 
 	inspectObjects: function(f){
-		arr.forEach(["chart", "plotarea", "axis", "series", "marker", "indicator"], function(name){
+		arr.forEach(["chart", "plotarea", "axis", "grid", "series", "marker", "indicator"], function(name){
 			f(this[name]);
 		}, this);
 		if(this.seriesThemes){
