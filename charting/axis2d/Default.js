@@ -74,6 +74,15 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 		//		An optional font definition (as used in the CSS font property) for labels.
 		//	fontColor: String|dojo.Color?
 		//		An optional color to be used in drawing labels.
+		//	titleGap: Number?
+		//		An optional grap between axis title and axis label
+		//	titleFont: String?
+		// 		An optional font definition for axis title
+		//	titleFontColor:	 String?
+		// 		An optional axis title color
+		//	titleOrientation: String?
+		// 		An optional orientation for axis title. "axis" means the title facing the axis, "away" means facing away.
+		//		If no value is set "axis" is used.
 		//	enableCache: Boolean?
 		//		Whether the ticks and labels are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering. For labels it is only working with gfx labels
@@ -232,8 +241,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				ta = this.chart.theme.axis,
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
 				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
-				taTitleFont = o.titleFont || (ta.tick && ta.tick.titleFont),
-				taTitleGap = (o.titleGap==0) ? 0 : o.titleGap || (ta.tick && ta.tick.titleGap) || 15,
+				taTitleFont = o.titleFont || (ta.title && ta.title.font),
+				taTitleGap = (o.titleGap==0) ? 0 : o.titleGap || (ta.title && ta.title.gap),
 				taMajorTick = this.chart.theme.getTick("major", o),
 				taMinorTick = this.chart.theme.getTick("minor", o),
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
@@ -259,8 +268,9 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 					], taFont, o.maxLabelCharCount);
 				}
 				labelWidth = o.maxLabelSize ? Math.min(o.maxLabelSize, labelWidth) : labelWidth;
+				var side;
 				if(this.vertical){
-					var side = leftBottom ? "l" : "r";
+					side = leftBottom ? "l" : "r";
 					switch(rotation){
 						case 0:
 						case 180:
@@ -292,7 +302,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 					}
 					offsets[side] += labelGap + Math.max(taMajorTick.length, taMinorTick.length) + (o.title ? (tsize + taTitleGap) : 0);
 				}else{
-					var side = leftBottom ? "b" : "t";
+					side = leftBottom ? "b" : "t";
 					switch(rotation){
 						case 0:
 						case 180:
@@ -409,12 +419,12 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
 				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
-				taTitleFont = o.titleFont || (ta.tick && ta.tick.titleFont),
+				taTitleFont = o.titleFont || (ta.title && ta.title.font),
 				// TODO: we use one font color --- we need to use different colors
 				taFontColor = o.fontColor || (ta.majorTick && ta.majorTick.fontColor) || (ta.tick && ta.tick.fontColor) || "black",
-				taTitleFontColor = o.titleFontColor || (ta.tick && ta.tick.titleFontColor) || "black",
-				taTitleGap = (o.titleGap==0) ? 0 : o.titleGap || (ta.tick && ta.tick.titleGap) || 15,
-				taTitleOrientation = o.titleOrientation || (ta.tick && ta.tick.titleOrientation) || "axis",
+				taTitleFontColor = o.titleFontColor || (ta.title && ta.title.fontColor) || "black",
+				taTitleGap = (o.titleGap==0) ? 0 : o.titleGap || (ta.title && ta.title.gap) || 15,
+				taTitleOrientation = o.titleOrientation || (ta.title && ta.title.orientation) || "axis",
 				taMajorTick = this.chart.theme.getTick("major", o),
 				taMinorTick = this.chart.theme.getTick("minor", o),
 				taMicroTick = this.chart.theme.getTick("micro", o),
@@ -572,169 +582,165 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 
 			this.cleanGroup();
 
-			try{
-				var s = this.group,
-					c = this.scaler,
-					t = this.ticks,
-					canLabel,
-					f = lin.getTransformerFromModel(this.scaler),
-					// GFX Canvas now supports labels, so let's _not_ fallback to HTML anymore on canvas, just use
-					// HTML labels if explicitly asked + no rotation + no IE + no Opera
-					labelType = (!o.title || !titleRotation) && !rotation && this.opt.htmlLabels && !has("ie") && !has("opera") ? "html" : "gfx",
-					dx = tickVector.x * taMajorTick.length,
-					dy = tickVector.y * taMajorTick.length;
+			var s = this.group,
+				c = this.scaler,
+				t = this.ticks,
+				canLabel,
+				f = lin.getTransformerFromModel(this.scaler),
+				// GFX Canvas now supports labels, so let's _not_ fallback to HTML anymore on canvas, just use
+				// HTML labels if explicitly asked + no rotation + no IE + no Opera
+				labelType = (!o.title || !titleRotation) && !rotation && this.opt.htmlLabels && !has("ie") && !has("opera") ? "html" : "gfx",
+				dx = tickVector.x * taMajorTick.length,
+				dy = tickVector.y * taMajorTick.length;
 
-				s.createLine({
-					x1: start.x,
-					y1: start.y,
-					x2: stop.x,
-					y2: stop.y
-				}).setStroke(taStroke);
-				
-				//create axis title
-				if(o.title){
-					var axisTitle = acommon.createText[labelType](
-						this.chart,
-						s,
-						titlePos.x,
-						titlePos.y,
-						"middle",
-						o.title,
-						taTitleFont,
-						taTitleFontColor
-					);
-					if(labelType == "html"){
-						this.htmlElements.push(axisTitle);
-					}else{
-						//as soon as rotation is provided, labelType won't be "html"
-						//rotate gfx labels
-						axisTitle.setTransform(g.matrix.rotategAt(titleRotation, titlePos.x, titlePos.y));
-					}
+			s.createLine({
+				x1: start.x,
+				y1: start.y,
+				x2: stop.x,
+				y2: stop.y
+			}).setStroke(taStroke);
+
+			//create axis title
+			if(o.title){
+				var axisTitle = acommon.createText[labelType](
+					this.chart,
+					s,
+					titlePos.x,
+					titlePos.y,
+					"middle",
+					o.title,
+					taTitleFont,
+					taTitleFontColor
+				);
+				if(labelType == "html"){
+					this.htmlElements.push(axisTitle);
+				}else{
+					//as soon as rotation is provided, labelType won't be "html"
+					//rotate gfx labels
+					axisTitle.setTransform(g.matrix.rotategAt(titleRotation, titlePos.x, titlePos.y));
 				}
-				
-				// go out nicely instead of try/catch
-				if(t==null){
-					this.dirty = false;
-					return this;
-				}
-
-				arr.forEach(t.major, function(tick){
-					var offset = f(tick.value), elem,
-						x = start.x + axisVector.x * offset,
-						y = start.y + axisVector.y * offset;
-						this.createLine(s, {
-							x1: x, y1: y,
-							x2: x + dx,
-							y2: y + dy
-						}).setStroke(taMajorTick);
-						if(tick.label){
-							var label = o.maxLabelCharCount ? this.getTextWithLimitCharCount(tick.label, taFont, o.maxLabelCharCount) : {
-								text: tick.label,
-								truncated: false
-							};
-							label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
-							elem = this.createText(labelType,
-								s,
-								x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
-								y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
-								labelAlign,
-								label.text,
-								taFont,
-								taFontColor
-								//this._cachedLabelWidth
-							);
-							
-							// if bidi support was required, the textDir is "auto" and truncation
-							// took place, we need to update the dir of the element for cases as: 
-							// Fool label: 111111W (W for bidi character)
-							// truncated label: 11... 
-							// in this case for auto textDir the dir will be "ltr" which is wrong.
-							if(this.chart.truncateBidi  && label.truncated){
-								this.chart.truncateBidi(elem, tick.label, labelType);
-							}
-							label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
-							if(labelType == "html"){
-								this.htmlElements.push(elem);
-							}else if(rotation){
-								elem.setTransform([
-									{dx: labelOffset.x, dy: labelOffset.y},
-									g.matrix.rotategAt(
-										rotation,
-										x + dx + anchorOffset.x,
-										y + dy + anchorOffset.y
-									)
-								]);
-							}
-						}
-				}, this);
-
-				dx = tickVector.x * taMinorTick.length;
-				dy = tickVector.y * taMinorTick.length;
-				canLabel = c.minMinorStep <= c.minor.tick * c.bounds.scale;
-				arr.forEach(t.minor, function(tick){
-					var offset = f(tick.value), elem,
-						x = start.x + axisVector.x * offset,
-						y = start.y + axisVector.y * offset;
-						this.createLine(s, {
-							x1: x, y1: y,
-							x2: x + dx,
-							y2: y + dy
-						}).setStroke(taMinorTick);
-						if(canLabel && tick.label){
-							var label = o.maxLabelCharCount ? this.getTextWithLimitCharCount(tick.label, taFont, o.maxLabelCharCount) : {
-								text: tick.label,
-								truncated: false
-							};
-							label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
-							elem = this.createText(labelType,
-								s,
-								x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
-								y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
-								labelAlign,
-								label.text,
-								taFont,
-								taFontColor
-								//this._cachedLabelWidth
-							);
-							// if bidi support was required, the textDir is "auto" and truncation
-							// took place, we need to update the dir of the element for cases as: 
-							// Fool label: 111111W (W for bidi character)
-							// truncated label: 11... 
-							// in this case for auto textDir the dir will be "ltr" which is wrong.
-							if(this.chart.getTextDir && label.truncated){
-								this.chart.truncateBidi(elem, tick.label, labelType);
-							}
-							label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
-							if(labelType == "html"){
-								this.htmlElements.push(elem);
-							}else if(rotation){
-								elem.setTransform([
-									{dx: labelOffset.x, dy: labelOffset.y},
-									g.matrix.rotategAt(
-										rotation,
-										x + dx + anchorOffset.x,
-										y + dy + anchorOffset.y
-									)
-								]);
-							}
-						}
-				}, this);
-
-				dx = tickVector.x * taMicroTick.length;
-				dy = tickVector.y * taMicroTick.length;
-				arr.forEach(t.micro, function(tick){
-					var offset = f(tick.value), elem,
-						x = start.x + axisVector.x * offset,
-						y = start.y + axisVector.y * offset;
-						this.createLine(s, {
-							x1: x, y1: y,
-							x2: x + dx,
-							y2: y + dy
-						}).setStroke(taMicroTick);
-				}, this);
-			}catch(e){
-				// squelch
 			}
+
+			// go out nicely instead of try/catch
+			if(t==null){
+				this.dirty = false;
+				return this;
+			}
+
+			arr.forEach(t.major, function(tick){
+				var offset = f(tick.value), elem,
+					x = start.x + axisVector.x * offset,
+					y = start.y + axisVector.y * offset;
+					this.createLine(s, {
+						x1: x, y1: y,
+						x2: x + dx,
+						y2: y + dy
+					}).setStroke(taMajorTick);
+					if(tick.label){
+						var label = o.maxLabelCharCount ? this.getTextWithLimitCharCount(tick.label, taFont, o.maxLabelCharCount) : {
+							text: tick.label,
+							truncated: false
+						};
+						label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
+						elem = this.createText(labelType,
+							s,
+							x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
+							y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
+							labelAlign,
+							label.text,
+							taFont,
+							taFontColor
+							//this._cachedLabelWidth
+						);
+
+						// if bidi support was required, the textDir is "auto" and truncation
+						// took place, we need to update the dir of the element for cases as:
+						// Fool label: 111111W (W for bidi character)
+						// truncated label: 11...
+						// in this case for auto textDir the dir will be "ltr" which is wrong.
+						if(this.chart.truncateBidi  && label.truncated){
+							this.chart.truncateBidi(elem, tick.label, labelType);
+						}
+						label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
+						if(labelType == "html"){
+							this.htmlElements.push(elem);
+						}else if(rotation){
+							elem.setTransform([
+								{dx: labelOffset.x, dy: labelOffset.y},
+								g.matrix.rotategAt(
+									rotation,
+									x + dx + anchorOffset.x,
+									y + dy + anchorOffset.y
+								)
+							]);
+						}
+					}
+			}, this);
+
+			dx = tickVector.x * taMinorTick.length;
+			dy = tickVector.y * taMinorTick.length;
+			canLabel = c.minMinorStep <= c.minor.tick * c.bounds.scale;
+			arr.forEach(t.minor, function(tick){
+				var offset = f(tick.value), elem,
+					x = start.x + axisVector.x * offset,
+					y = start.y + axisVector.y * offset;
+					this.createLine(s, {
+						x1: x, y1: y,
+						x2: x + dx,
+						y2: y + dy
+					}).setStroke(taMinorTick);
+					if(canLabel && tick.label){
+						var label = o.maxLabelCharCount ? this.getTextWithLimitCharCount(tick.label, taFont, o.maxLabelCharCount) : {
+							text: tick.label,
+							truncated: false
+						};
+						label = o.maxLabelSize ? this.getTextWithLimitLength(label.text, taFont, o.maxLabelSize, label.truncated) : label;
+						elem = this.createText(labelType,
+							s,
+							x + dx + anchorOffset.x + (rotation ? 0 : labelOffset.x),
+							y + dy + anchorOffset.y + (rotation ? 0 : labelOffset.y),
+							labelAlign,
+							label.text,
+							taFont,
+							taFontColor
+							//this._cachedLabelWidth
+						);
+						// if bidi support was required, the textDir is "auto" and truncation
+						// took place, we need to update the dir of the element for cases as:
+						// Fool label: 111111W (W for bidi character)
+						// truncated label: 11...
+						// in this case for auto textDir the dir will be "ltr" which is wrong.
+						if(this.chart.getTextDir && label.truncated){
+							this.chart.truncateBidi(elem, tick.label, labelType);
+						}
+						label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
+						if(labelType == "html"){
+							this.htmlElements.push(elem);
+						}else if(rotation){
+							elem.setTransform([
+								{dx: labelOffset.x, dy: labelOffset.y},
+								g.matrix.rotategAt(
+									rotation,
+									x + dx + anchorOffset.x,
+									y + dy + anchorOffset.y
+								)
+							]);
+						}
+					}
+			}, this);
+
+			dx = tickVector.x * taMicroTick.length;
+			dy = tickVector.y * taMicroTick.length;
+			arr.forEach(t.micro, function(tick){
+				var offset = f(tick.value), elem,
+					x = start.x + axisVector.x * offset,
+					y = start.y + axisVector.y * offset;
+					this.createLine(s, {
+						x1: x, y1: y,
+						x2: x + dx,
+						y2: y + dy
+					}).setStroke(taMicroTick);
+			}, this);
 
 			this.dirty = false;
 			return this;	//	dojox.charting.axis2d.Default

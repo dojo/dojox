@@ -8,6 +8,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 	};
 	var getTextBBox = function(s, t){
 		var c = s.declaredClass;
+		var w, h;
 		if (c.indexOf("svg")!=-1){
 			// try/catch the FF native getBBox error. cheaper than walking up in the DOM
 			// hierarchy to check the conditions (bench show /10 )
@@ -19,8 +20,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 		}else if(c.indexOf("vml")!=-1){
 			var rawNode = s.rawNode, _display = rawNode.style.display;
 			rawNode.style.display = "inline";
-			var w = gfx.pt2px(parseFloat(rawNode.currentStyle.width));
-			var h = gfx.pt2px(parseFloat(rawNode.currentStyle.height));
+			w = gfx.pt2px(parseFloat(rawNode.currentStyle.width));
+			h = gfx.pt2px(parseFloat(rawNode.currentStyle.height));
 			var sz = {x: 0, y: 0, width: w, height: h};
 			// in VML, the width/height we get are in view coordinates
 			// in our case we don't zoom the view so that is ok
@@ -35,14 +36,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			return computeLocation(s, bb, 0.75);
 		}else if(s.getTextWidth){
 			// canvas
-			var w = s.getTextWidth();
+			w = s.getTextWidth();
 			var font = s.getFont();
 			var fz = font ? font.size : gfx.defaultFont.size;
-			var h = gfx.normalizedLength(fz);
+			h = gfx.normalizedLength(fz);
 			sz = {width: w, height: h};
 			computeLocation(s, sz, 0.75);
 			return sz;
 		}
+		return null;
 	};
 	var computeLocation =  function(s, sz, coef){
 		var width = sz.width, height = sz.height, sh = s.getShape(), align = sh.align;
@@ -63,7 +65,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 		return sz;
 	};
 
-	return declare("dojox.charting.action2d._IndicatorElement",[Element], {
+	return declare("dojox.charting.action2d._IndicatorElement",Element, {
 		//	summary:
 		//		Internal element used by indicator actions.
 		//	tags:
@@ -197,7 +199,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 				var text = inter.opt.labelFunc?inter.opt.labelFunc(c1, c2, inter.opt.fixed, inter.opt.precision):
 					(dcpc.getLabel(delta, inter.opt.fixed, inter.opt.precision)+" ("+dcpc.getLabel(100*delta/(v?c1.y:c1.x), true, 2)+"%)");
 				this._renderText(text, inter, this.chart.theme, v?(t1.x+t2.x)/2:t1.x, v?t1.y:(t1.y+t2.y)/2, c1, c2);
-			};
+			}
 			
 		},
 		_renderIndicator: function(coord, index, hn, vn, min, max){
@@ -246,10 +248,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 				var text = inter.opt.labelFunc?inter.opt.labelFunc(coord, null, inter.opt.fixed, inter.opt.precision):
 					dcpc.getLabel(v?coord.y:coord.x, inter.opt.fixed, inter.opt.precision);
 				this._renderText(text, inter, t, v?x1:x2+5, v?y2+5:y1, coord);
-			}else{
-				return v?{x: x1, y: y2+5}:{x: x2+5, y: y1};
 			}
-			
+			return v?{x: x1, y: y2+5}:{x: x2+5, y: y1};
 		},
 		_renderText: function(text, inter, t, x, y, c1, c2){
 			var label = dcac.createText.gfx(

@@ -76,6 +76,12 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		microTick:	{ // minor ticks on axis, and used for minor gridlines
 	//	|			width:  0.5,
 	//	|			length: 1
+	//	|		},
+	//	|		title: {
+	//	|			gap:  15,
+	//	|			font: "normal normal normal 11pt Tahoma",	// title font
+	//	|			fontColor: "#333",							// title font color
+	//	|			orientation: "axis"						// "axis": facing the axis, "away": facing away
 	//	|		}
 	//	|	},
 	//	|	series: {
@@ -513,7 +519,7 @@ lang.mixin(Theme, {
 			pageStyle: null,
 			titleGap:		20,
 			titlePos:		"top",
-			titleFont:      "normal normal bold 14pt Tahoma",	// labels on axis
+			titleFont:      "normal normal bold 14pt Tahoma",	// chart title
 			titleFontColor: "#333"
 		},
 		plotarea:{
@@ -530,11 +536,7 @@ lang.mixin(Theme, {
 				color:     "#666",
 				position:  "center",
 				font:      "normal normal normal 7pt Tahoma",	// labels on axis
-				fontColor: "#333",								// color of labels
-				titleGap:  15,
-				titleFont: "normal normal normal 11pt Tahoma",	// labels on axis
-				titleFontColor: "#333",							// color of labels
-				titleOrientation: "axis"						// "axis": facing the axis, "away": facing away
+				fontColor: "#333"								// color of labels
 			},
 			majorTick:	{ // major ticks on axis, and used for major gridlines
 				width:  1,
@@ -547,6 +549,12 @@ lang.mixin(Theme, {
 			microTick:	{ // minor ticks on axis, and used for minor gridlines
 				width:  0.5,
 				length: 1
+			},
+			title: {
+				gap:  15,
+				font: "normal normal normal 11pt Tahoma",	// title font
+				fontColor: "#333",							// title font color
+				orientation: "axis"						// "axis": facing the axis, "away": facing away
 			}
 		},
 		series: {
