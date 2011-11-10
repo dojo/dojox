@@ -29,16 +29,24 @@ var Default = dojox.charting.plot2d.Default;
 			//		An object of the form { l, r, t, b}.
 			//	returns: dojox.charting.plot2d.Stacked
 			//		A reference to this plot for functional chaining.
+
+			// we are a special case, getSeriesStat() must be called each time
+			// we render because we rely on its result to decide whether we are
+			// rendering or not
+			this.getSeriesStats();
+
 			if(this._maxRunLength <= 0){
 				return this;
 			}
 
+			var i, j, s, v, run;
+
 			// stack all values
 			var acc = df.repeat(this._maxRunLength, "-> 0", 0);
-			for(var i = 0; i < this.series.length; ++i){
-				var run = this.series[i];
-				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
+			for(i = 0; i < this.series.length; ++i){
+				run = this.series[i];
+				for(j = 0; j < run.data.length; ++j){
+					v = run.data[j];
 					if(v !== null){
 						if(isNaN(v)){ v = 0; }
 						acc[j] += v;
@@ -55,7 +63,7 @@ var Default = dojox.charting.plot2d.Default;
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
-				var s = this.group;
+				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 
@@ -63,16 +71,17 @@ var Default = dojox.charting.plot2d.Default;
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 
-			for(var i = this.series.length - 1; i >= 0; --i){
-				var run = this.series[i];
+			for(i = this.series.length - 1; i >= 0; --i){
+				run = this.series[i];
 				if(!this.dirty && !run.dirty){
 					t.skip();
 					this._reconnectEvents(run.name);
 					continue;
 				}
 				run.cleanGroup();
+				s = run.group;
 				var theme = t.next(this.opt.areas ? "area" : "line", [this.opt, run], true),
-					s = run.group, outline,
+					outline,
 					lpoly = arr.map(acc, function(v, i){
 						return {
 							x: ht(i + 1) + offsets.l,
@@ -181,8 +190,8 @@ var Default = dojox.charting.plot2d.Default;
 				}
 				run.dirty = false;
 				// update the accumulator
-				for(var j = 0; j < run.data.length; ++j){
-					var v = run.data[j];
+				for(j = 0; j < run.data.length; ++j){
+					v = run.data[j];
 					if(v !== null){
 						if(isNaN(v)){ v = 0; }
 						acc[j] -= v;
