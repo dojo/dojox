@@ -121,6 +121,7 @@ define(["dojo/_base/kernel","dojo/_base/lang", "dojo/_base/sniff", "dojo/ready",
 		fs.width = "5em";
 		fs.height = "10em";
 		fs.top = "-10000px";
+		fs.display = "none";
 		if(has("ie")){
 			f.onreadystatechange = function(){
 				if(f.contentWindow.document.readyState == "complete"){
