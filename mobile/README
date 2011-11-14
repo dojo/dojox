@@ -32,7 +32,7 @@ required in separately.
 -------------------------------------------------------------------------------
 Dependencies:
         dojo base
-        dijit/_Widget.js
+        dijit/_WidgetBase.js
 -------------------------------------------------------------------------------
 Documentation
         Documentatation will reside at:
