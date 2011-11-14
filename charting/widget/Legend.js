@@ -156,13 +156,8 @@ var Widget = dijit._Widget;
 				if(dyn.marker){
 					// draw marker on top
 					var c = {x: mb.w / 2, y: mb.h / 2};
-					if(dyn.stroke){
-						surface.createPath({path: "M" + c.x + " " + c.y + " " + dyn.marker}).
-							setFill(dyn.stroke.color).setStroke(dyn.stroke);
-					}else{
-						surface.createPath({path: "M" + c.x + " " + c.y + " " + dyn.marker}).
-							setFill(dyn.color).setStroke(dyn.color);
-					}
+					surface.createPath({path: "M" + c.x + " " + c.y + " " + dyn.marker}).
+						setFill(dyn.markerFill).setStroke(dyn.markerStroke);
 				}
 			}else{
 				// nothing
