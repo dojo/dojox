@@ -14,6 +14,30 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//	maxBarSize: Number?
 		//		The maximum size for a bar in pixels.  Default is 1.
 		maxBarSize: 1,
+
+		//	stroke: dojox.gfx.Stroke?
+		//		An optional stroke to use for any series on the plot.
+		stroke:		{},
+
+		//	outline: dojox.gfx.Stroke?
+		//		An optional stroke used to outline any series on the plot.
+		outline:	{},
+
+		//	shadow: dojox.gfx.Stroke?
+		//		An optional stroke to use to draw any shadows for a series on a plot.
+		shadow:		{},
+
+		//	fill: dojox.gfx.Fill?
+		//		Any fill to be used for elements on the plot.
+		fill:		{},
+
+		//	font: String?
+		//		A font definition to be used for labels and other text-based elements on the plot.
+		font:		"",
+
+		//	fontColor: String|dojo.Color?
+		//		The color to be used for any text-based elements on the plot.
+		fontColor:	"",
 		
 		//	enableCache: Boolean?
 		//		Whether the bars rect are cached from one rendering to another. This improves the rendering performance of
@@ -105,11 +129,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 			}
 			this.dirty = this.isDirty();
 			this.resetEvents();
+			var s;
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
-				var s = this.group;
+				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, f, gap, height,
@@ -133,8 +158,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 					run._rectFreePool = (run._rectFreePool?run._rectFreePool:[]).concat(run._rectUsePool?run._rectUsePool:[]);
 					run._rectUsePool = [];
 				}
-				var theme = t.next("bar", [this.opt, run]), s = run.group,
+				var theme = t.next("bar", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
+				s = run.group;
 				for(var j = 0; j < run.data.length; ++j){
 					var value = run.data[j];
 					if(value !== null){
@@ -151,6 +177,16 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 								y: dim.height - offsets.b - vt(j + 1.5) + gap,
 								width: w, height: height
 							};
+							var sshape;
+							if(finalTheme.series.shadow){
+								var srect = lang.clone(rect);
+								srect.x += finalTheme.series.shadow.dx;
+								srect.y += finalTheme.series.shadow.dy;
+								sshape = this.createRect(run, s,  srect).setFill(finalTheme.series.shadow.color).setStroke(finalTheme.series.shadow);
+								if(this.animate){
+									this._animateBar(sshape, offsets.l + baselineWidth, -w);
+								}
+							}
 							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 							specialFill = this._shapeFill(specialFill, rect);
 							var shape = this.createRect(run, s, rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
@@ -162,6 +198,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 									index:   j,
 									run:     run,
 									shape:   shape,
+									shadow:	 sshape,
 									x:       v,
 									y:       j + 1.5
 								};

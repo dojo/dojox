@@ -57,6 +57,10 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 		//	radius: Number?
 		//		The size of the radial gradient.  Default is 0.
 		radius:		0
+
+		//	shadow: dojox.gfx.Stroke?
+		//		An optional stroke to use to draw any shadows for a series on a plot.
+		shadow:		{},
 	});
 	=====*/
 
@@ -224,6 +228,15 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 					r:  r
 				};
 
+			// draw shadow
+			if(this.opt.shadow || t.shadow){
+				var shadow = this.opt.shadow || t.shadow;
+				var scircle = lang.clone(circle);
+				scircle.cx += shadow.dx;
+				scircle.cy += shadow.dy;
+				s.createCircle(scircle).setFill(shadow.color).setStroke(shadow);
+			}
+			
 			this.dyn = [];
 			// draw slices
 			var eventSeries = new Array(slices.length);
@@ -236,7 +249,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				  this.dyn.push({fill: null, stroke: null});
 				  return false;
 				}
-				var v = run[i], theme = themes[i], specialFill;
+				var v = run[i], theme = themes[i], specialFill, o;
 				if(slice >= 1){
 					// whole pie
 					specialFill = this._plotFill(theme.series.fill, dim, offsets);
@@ -250,7 +263,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 					this.dyn.push({fill: specialFill, stroke: theme.series.stroke});
 
 					if(events){
-						var o = {
+						o = {
 							element: "slice",
 							index:   i,
 							run:     this.run,
@@ -327,7 +340,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				this.dyn.push({fill: specialFill, stroke: theme.series.stroke});
 
 				if(events){
-					var o = {
+					o = {
 						element: "slice",
 						index:   i,
 						run:     this.run,

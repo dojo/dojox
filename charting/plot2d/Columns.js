@@ -84,14 +84,16 @@ var Base = dojox.charting.plot2d.Base;
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
-			var t = this.getSeriesStats();
+			// TODO do we need to call this? This is not done in Bars.js
+			this.getSeriesStats();
 			this.resetEvents();
 			this.dirty = this.isDirty();
+			var s;
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
-				var s = this.group;
+				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, f, gap, width,
@@ -116,8 +118,9 @@ var Base = dojox.charting.plot2d.Base;
 					run._rectFreePool = (run._rectFreePool?run._rectFreePool:[]).concat(run._rectUsePool?run._rectUsePool:[]);
 					run._rectUsePool = [];
 				}
-				var theme = t.next("column", [this.opt, run]), s = run.group,
+				var theme = t.next("column", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
+				s = run.group;
 				var l = Math.min(run.data.length, max);
 				for(var j = min; j < l; ++j){
 					var value = run.data[j];
@@ -135,6 +138,16 @@ var Base = dojox.charting.plot2d.Base;
 								y: dim.height - offsets.b - (v > baseline ? vv : baselineHeight),
 								width: width, height: h
 							};
+							var sshape;
+							if(finalTheme.series.shadow){
+								var srect = lang.clone(rect);
+								srect.x += finalTheme.series.shadow.dx;
+								srect.y += finalTheme.series.shadow.dy;
+								sshape = this.createRect(run, s,  srect).setFill(finalTheme.series.shadow.color).setStroke(finalTheme.series.shadow);
+								if(this.animate){
+									this._animateColumn(sshape, dim.height - offsets.b + baselineHeight, h);
+								}
+							}
 							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 							specialFill = this._shapeFill(specialFill, rect);
 							var shape = this.createRect(run, s, rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
@@ -146,6 +159,7 @@ var Base = dojox.charting.plot2d.Base;
 									index:   j,
 									run:     run,
 									shape:   shape,
+									shadow:  sshape,
 									x:       j + 0.5,
 									y:       v
 								};
