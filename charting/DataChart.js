@@ -206,8 +206,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			if(!this.stretchToFit){
 				this.xaxis.to = this.displayRange;
 			}
-			this.addAxis("x", this.xaxis);
-			this.addAxis("y", this.yaxis);
+			// we don't want axis on Pie
+			if(kwArgs.type && kwArgs.type != "Pie" && kwArgs.type.prototype.declaredClass != "dojox.charting.plot2d.Pie"){
+				this.addAxis("x", this.xaxis);
+				this.addAxis("y", this.yaxis);
+			}
 			chartPlot.type = kwArgs.type || "Markers"
 			this.addPlot("default", lang.mixin(chartPlot, kwArgs.chartPlot));
 
