@@ -152,7 +152,7 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/window", "dojo/dom-geo
 				w.width = "0px";
 				w.height = "0px";
 				// insert nodes
-				wrap.appendChild(p)
+				wrap.appendChild(p);
 				chart.node.insertBefore(wrap, chart.node.firstChild);
 				return wrap;	//	DOMNode
 			}
