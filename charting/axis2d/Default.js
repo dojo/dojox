@@ -380,9 +380,9 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 						align,
 						textContent,
 						font,
-						fontColor,
-						labelWidth
-					);			}
+						fontColor						
+					);			
+			}
 			this._textUsePool.push(text);
 			return text;
 		},
