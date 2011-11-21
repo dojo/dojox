@@ -261,11 +261,15 @@ define([
 			if(typeof this.get("length") === "number" && /^[0-9]+$/.test(name.toString())){
 				n = name;
 				if(!this.get(n)){
-					n1 = n-1;
-					if(!this.get(n1)){
-						throw new Error("Out of bounds insert attempted, must be contiguous.");
+					if(this.get("length") == 0 && n == 0){ // handle the empty array case
+						this.set(n, stateful);
+					} else {
+						n1 = n-1;
+						if(!this.get(n1)){
+							throw new Error("Out of bounds insert attempted, must be contiguous.");
+						}
+						this.set(n, stateful);
 					}
-					this.set(n, stateful);
 				}else{
 					n1 = n-0+1;
 					elem = stateful;
