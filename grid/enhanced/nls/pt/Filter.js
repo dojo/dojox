@@ -64,6 +64,8 @@ define(
 	"anycolumn": "qualquer coluna",
 	"statusTipTitleNoFilter": "Barra de Filtragem",
 	"statusTipTitleHasFilter": "Filtrar",
+	"statusTipRelAny": "Quaisquer Regras.",
+	"statusTipRelAll": "Todas as Regras.",
 	
 	"defaultItemsName": "itens",
 	"filterBarMsgHasFilterTemplate": "${0} de ${1} ${2} mostrados.",
