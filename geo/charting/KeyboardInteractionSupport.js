@@ -101,9 +101,8 @@ return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 			needClick = true;
 		}
 		if(leadingRegion){
-			if(needClick) {
+			if(needClick){
 				leadingRegion._onclickHandler(null);
-			}else{
 			}
 			this._map.mapObj.marker.show(leadingRegion.id);
 		}

@@ -2,7 +2,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		"dojo/dom-geometry","dojo/dom-class", "dojo/_base/xhr","dojo/_base/connect","dojo/_base/window", "dojox/gfx",
 		"dojox/geo/charting/_base","dojox/geo/charting/Feature","dojox/geo/charting/_Marker","dojo/number","dojo/_base/sniff"],
   function(lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base, 
-		   Feature, Marker, number, has) {
+		   Feature, Marker, number, has){
 
 	return declare("dojox.geo.charting.Map", null, {
 	//	summary:
@@ -54,11 +54,11 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		this.mapObj = this.surface.createGroup();
 		this.mapObj.features = {};
 		
-		if (typeof shapeData == "object") {
+		if(typeof shapeData == "object"){
 			this._init(shapeData);
-		} else {
+		}else{
 	        // load map shape file
-			if (typeof shapeData == "string" && shapeData.length > 0) {
+			if(typeof shapeData == "string" && shapeData.length > 0){
 				xhr.get({
 					url: shapeData,
 					handleAs: "json",
@@ -69,7 +69,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		}
 	},
 	
-	_getContainerBounds: function() {
+	_getContainerBounds: function(){
 		//	summary: 
 		//		returns the bounds {x:, y:, w: ,h:} of the DOM node container in absolute coordinates 
 		//	tags:
@@ -88,7 +88,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		return this._storedContainerBounds;
 	},
 	
-	resize: function(/**boolean**/ adjustMapCenter/**boolean**/,adjustMapScale,/**boolean**/ animate) {
+	resize: function(/**boolean**/ adjustMapCenter/**boolean**/,adjustMapScale,/**boolean**/ animate){
 		//	summary: 
 		//		resize the underlying GFX surface to accommodate to parent DOM Node size change
 		//	adjustMapCenter: boolean
@@ -99,7 +99,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		var oldBounds = this._storedContainerBounds; 
 		var newBounds = this._getContainerBounds();
 		
-		if ((oldBounds.w == newBounds.w) && (oldBounds.h == newBounds.h)) {
+		if((oldBounds.w == newBounds.w) && (oldBounds.h == newBounds.h)){
 			return;
 		}
 		
@@ -110,12 +110,12 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		this.mapObj.marker.hide();
 		this.mapObj.marker._needTooltipRefresh = true;
 		
-		if (adjustMapCenter) {
+		if(adjustMapCenter){
 			
 			var mapScale = this.getMapScale();
 			var newScale = mapScale;
 			
-			if (adjustMapScale) {
+			if(adjustMapScale){
 				var bbox = this.mapObj.boundBox;
 				var widthFactor = newBounds.w / oldBounds.w;
 				var heightFactor = newBounds.h / oldBounds.h;
@@ -130,7 +130,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		}
 	},
 	
-	_isMobileDevice: function() {
+	_isMobileDevice: function(){
 		//	summary: 
 		//		tests whether the application is running on a mobile device (android or iOS)
 		//	tags:
@@ -157,7 +157,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		});
 	},
 	
-	setDataBindingAttribute: function(/*String*/prop) {
+	setDataBindingAttribute: function(/*String*/prop){
 		//  summary:
 		//		sets the property name of the dataStore items to use as value (see Feature.setValue function)
 		//	prop:
@@ -165,12 +165,12 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		this.dataBindingAttribute = prop;
 		
 		// refresh data
-		if (this.dataStore) {
+		if(this.dataStore){
 			this._queryDataStore();
 		}
 	},
 	
-	setDataBindingValueFunction: function(/* function */valueFunction) {
+	setDataBindingValueFunction: function(/* function */valueFunction){
 		//  summary:
 		//		sets the function that extracts values from dataStore items,to use as Feature values (see Feature.setValue function)
 		//	prop:
@@ -178,41 +178,43 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		this.dataBindingValueFunction = valueFunction;
 		
 		// refresh data
-		if (this.dataStore) {
+		if(this.dataStore){
 			this._queryDataStore();
 		}
 	},
 	
 	
 	
-	_queryDataStore: function() {
-		if (!this.dataBindingAttribute || (this.dataBindingAttribute.length == 0))
+	_queryDataStore: function(){
+		if(!this.dataBindingAttribute || (this.dataBindingAttribute.length == 0)){
 			return;
+		}
 		
 		var mapInstance = this;
 		this.dataStore.fetch({
 			scope: this,
 			onComplete: function(items){
 				this._idAttributes = mapInstance.dataStore.getIdentityAttributes({});
-				arr.forEach(items, function(item) {
+				arr.forEach(items, function(item){
 					var id = mapInstance.dataStore.getValue(item, this._idAttributes[0]);
 					if(mapInstance.mapObj.features[id]){
 						var val = null;
 						var itemVal = mapInstance.dataStore.getValue(item, mapInstance.dataBindingAttribute);
-						if (itemVal) {
-							if (this.dataBindingValueFunction) {
+						if(itemVal){
+							if(this.dataBindingValueFunction){
 								val = this.dataBindingValueFunction(itemVal);
-							} else {
-								if (isNaN(val)) {
+							}else{
+								if(isNaN(val)){
 									// regular parse
 									val=number.parse(itemVal);
-								} else {
+								}else{
 									val = itemVal;
 								}
 							}
 						}
-						if (val)
+						if(val){
 							mapInstance.mapObj.features[id].setValue(val);
+						}
 					}
 				},this);						
 			}
@@ -223,18 +225,19 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		// look for matching feature
 		var id = this.dataStore.getValue(item, this._idAttributes[0]);
 		var feature = this.mapObj.features[id];
-		if (feature && (attribute == this.dataBindingAttribute)) {
-			if (newValue)
+		if(feature && (attribute == this.dataBindingAttribute)){
+			if(newValue){
 				feature.setValue(newValue);
-			else
+			}else{
 				feature.unsetValue();
+			}
 		}
 	},
 
 	_onNew:function(newItem,  parentItem){
 		var id = this.dataStore.getValue(item, this._idAttributes[0]);
 		var feature = this.mapObj.features[id];
-		if (feature && (attribute == this.dataBindingAttribute)) {
+		if(feature && (attribute == this.dataBindingAttribute)){
 			feature.setValue(newValue);
 		}
 	},
@@ -242,7 +245,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 	_onDelete:function(item){
 		var id = item[this._idAttributes[0]];
 		var feature = this.mapObj.features[id];
-		if (feature) {
+		if(feature){
 			feature.unsetValue();
 		}
 	},
@@ -254,9 +257,9 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		//		the dataStore to fetch the information from
 		//	dataBindingProp:
 		//		sets the property name of the dataStore items to use as value
-		if (this.dataStore != dataStore) {
+		if(this.dataStore != dataStore){
 			// disconnect previous listener if any
-			if (this._onSetListener) {
+			if(this._onSetListener){
 				connect.disconnect(this._onSetListener);
 				connect.disconnect(this._onNewListener);
 				connect.disconnect(this._onDeleteListener);
@@ -266,30 +269,28 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 			this.dataStore = dataStore;
 			
 			// install listener on new dataStore
-			if (dataStore) {
+			if(dataStore){
 				_onSetListener = connect.connect(this.dataStore,"onSet",this,this._onSet);
 				_onNewListener = connect.connect(this.dataStore,"onNew",this,this._onNew);
 				_onDeleteListener = connect.connect(this.dataStore,"onDelete",this,this._onDelete);
 			}
 		}
-		if (dataBindingProp)
+		if(dataBindingProp){
 			this.setDataBindingAttribute(dataBindingProp);
-
+		}
 	},
-	
-	
-	
+
 	addSeries: function(/*url or Json Object*/ series){
 		//	summary: 
 		//		sets ranges of data values (associated with label, color) to style map data values
 		//	series:
 		//		array of range objects such as : [{name:'label 1', min:20, max:70, color:'#DDDDDD'},{...},...]
 		
-		if (typeof series == "object") {
+		if(typeof series == "object"){
 			this._addSeriesImpl(series);
-		} else {
+		}else{
 	        // load series file
-			if (typeof series == "string" && series.length > 0) {
+			if(typeof series == "string" && series.length > 0){
 				xhr.get({
 					url: series,
 					handleAs: "json",
@@ -303,12 +304,12 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		
 	},
 	
-	_addSeriesImpl: function(/*Json object*/series) {
+	_addSeriesImpl: function(/*Json object*/series){
 		
 		this.series = series;
 		
 		// refresh color scheme
-		for (var item in this.mapObj.features) {
+		for(var item in this.mapObj.features){
 			var feature = this.mapObj.features[item];
 			feature.setValue(feature.value);
 		}
@@ -354,7 +355,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		this.fitToMapArea(bbox,pixelMargin,animate,onAnimationEnd);
 	},
 	
-	setMapCenter: function(centerX,centerY,animate,/* callback function */onAnimationEnd) {
+	setMapCenter: function(centerX,centerY,animate,/* callback function */onAnimationEnd){
 		//	summary: 
 		//		set this component's transformation so that the map is centered on the specified map coordinates
 		//	centerX: float
@@ -372,7 +373,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		
 	},
 	
-	_createAnimation: function(onShape,fromTransform,toTransform,/* callback function */onAnimationEnd) {
+	_createAnimation: function(onShape,fromTransform,toTransform,/* callback function */onAnimationEnd){
 		//	summary: 
 		//		creates a transform animation object (between two transforms) used internally
 		//	fromTransform: dojox.gfx.matrix.Matrix2D
@@ -405,7 +406,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		});
 
 		//install callback
-		if (onAnimationEnd) {
+		if(onAnimationEnd){
 			var listener = connect.connect(anim,"onEnd",this,function(event){
 				onAnimationEnd(event);
 				connect.disconnect(listener);
@@ -416,7 +417,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 	},
 
 	
-	setMapCenterAndScale: function(centerX,centerY,scale, animate,/* callback function */onAnimationEnd) {
+	setMapCenterAndScale: function(centerX,centerY,scale, animate,/* callback function */onAnimationEnd){
 		
 		//	summary: 
 		//		set this component's transformation so that the map is centered on the specified map coordinates
@@ -444,15 +445,15 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		var currentTransform = this.mapObj.getTransform();
 		
 		// can animate only if specified AND curentTransform exists
-		if (!animate || !currentTransform) {
+		if(!animate || !currentTransform){
 			this.mapObj.setTransform(newTransform);
-		} else {
+		}else{
 			var anim = this._createAnimation(this.mapObj,currentTransform,newTransform,onAnimationEnd);
 			anim.play();
 		}
 	},
 	
-	getMapCenter: function() {
+	getMapCenter: function(){
 		//	summary: 
 		//		returns the map coordinates of the center of this Map component.
 		//	returns: {x:,y:}
@@ -461,7 +462,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		return this.screenCoordsToMapCoords(containerBounds.w/2,containerBounds.h/2);
 	},
 	
-	setMapScale: function(scale,animate,/* callback function */onAnimationEnd) {
+	setMapScale: function(scale,animate,/* callback function */onAnimationEnd){
 		//	summary: 
 		//		set this component's transformation so that the map is scaled to the specified scale.
 		//	animate: boolean
@@ -476,7 +477,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		this.setMapScaleAt(scale,invariantMapPoint.x,invariantMapPoint.y,animate,onAnimationEnd);
 	},
 	
-	setMapScaleAt: function(scale,fixedMapX,fixedMapY,animate,/* callback function */onAnimationEnd) {
+	setMapScaleAt: function(scale,fixedMapX,fixedMapY,animate,/* callback function */onAnimationEnd){
 		//	summary: 
 	    //		set this component's transformation so that the map is scaled to the specified scale, and the specified 
 		//		point (in map coordinates) stays fixed on this Map component
@@ -505,15 +506,15 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		var currentTransform = this.mapObj.getTransform();
 
 		// can animate only if specified AND curentTransform exists
-		if (!animate || !currentTransform) {
+		if(!animate || !currentTransform){
 			this.mapObj.setTransform(newTransform);
-		} else {
+		}else{
 			var anim = this._createAnimation(this.mapObj,currentTransform,newTransform,onAnimationEnd);
 			anim.play();
 		}
 	},
 	
-	getMapScale: function() {
+	getMapScale: function(){
 		//	summary: 
 		//		returns the scale of this Map component.
 		//	returns: float
@@ -523,7 +524,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		return scale;
 	},
 	
-	mapCoordsToScreenCoords: function(mapX,mapY) {
+	mapCoordsToScreenCoords: function(mapX,mapY){
 		//	summary: 
 		//		converts map coordinates to screen coordinates given the current transform of this Map component
 		//	returns: {x:,y:}
@@ -533,7 +534,7 @@ define(["dojo/_base/lang","dojo/_base/array","dojo/_base/declare","dojo/_base/ht
 		return screenPoint;
 	},
 	
-	screenCoordsToMapCoords: function(screenX, screenY) {
+	screenCoordsToMapCoords: function(screenX, screenY){
 		//	summary: 
 		//		converts screen coordinates to map coordinates given the current transform of this Map component
 		//	returns: {x:,y:}
