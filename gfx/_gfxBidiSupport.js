@@ -151,10 +151,10 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 			}
 
 			if(g.isSvg){
-				if(has("ff")){
+				if(has("ff") && has("ff") < 4){
 					return (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRYNN","VLNNN") : bidiEngine.bidiTransform(text,"ILYNN","VLNNN");
 				}
-				if(has("chrome") || has("safari") || has("opera")){
+				if(has("chrome") || has("safari") || has("opera") || has("ff") >= 4){
 					return bidi_const.LRM + (targetDir == "rtl" ? bidi_const.RLE : bidi_const.LRE) + text + bidi_const.PDF;
 				}					
 			}					
@@ -222,9 +222,9 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 					return text;
 				}
 				//unlike the g.Text that is rendered in logical layout for Bidi scripts.
-				//for g.TextPath in svg always visual -> bidi script is unreadable (except Opera).
+				//for g.TextPath in svg always visual -> bidi script is unreadable (except Opera and FF start from version 4)
 				if(g.isSvg){
-					if(has("opera")){
+					if(has("opera") || has("ff") >= 4){
 						text = bidi_const.LRM + (targetDir == "rtl"? bidi_const.RLE : bidi_const.LRE) + text + bidi_const.PDF;
 					}else{
 						text = (targetDir == "rtl") ? bidiEngine.bidiTransform(text,"IRYNN","VLNNN") : bidiEngine.bidiTransform(text,"ILYNN","VLNNN");
