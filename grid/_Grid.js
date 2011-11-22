@@ -395,6 +395,9 @@ define([
 		},
 
 		destroy: function(){
+			if(this._destroyed){
+				return;
+			}
 			this.domNode.onReveal = null;
 			this.domNode.onSizeChange = null;
 
