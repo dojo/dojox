@@ -15,7 +15,7 @@ define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/aspect"
 			console = {};
 		}
 
-		for(var i=0; i < lvls.length; i++){
+		for(var i = 0; i < lvls.length; i++){
 			if(console[lvls[i]]){
 				aspect.after(console, lvls[i], lang.hitch(this, "addData", lvls[i]),true);
 			}else{

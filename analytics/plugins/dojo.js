@@ -15,12 +15,12 @@ define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/ready"
 		ready(lang.hitch(this, function(){
 			var data = {};
 			for(var i in dojo){
-				if ((i=="version") || ((!(typeof dojo[i] == "object" || typeof dojo[i] == "function"))&&(i[0]!="_"))){
-					data[i]=dojo[i];
+				if((i == "version") || ((!(typeof dojo[i] == "object" || typeof dojo[i] == "function")) && (i[0] != "_"))){
+					data[i] = dojo[i];
 				}
 			}
 
-			if (config){data.djConfig=config}
+			if(config){data.djConfig = config}
 			this.addData(data);
 		}));
 	})());
