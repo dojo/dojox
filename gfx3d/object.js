@@ -956,8 +956,14 @@ declare("dojox.gfx3d.Viewport", gfx.Group, {
 			// there is no rawNode in canvas GFX implementation
 			if(this.rawNode){
 				var trs = this.rawNode.style;
-				trs.height = h;
-				trs.width = w;
+				if(trs){
+					trs.height = h;
+					trs.width = w;
+				}else{
+					// silverlight
+					this.rawNode.width = w;
+					this.rawNode.height = h;
+				}
 			}
 			this.dimension = {
 				width:  w,
