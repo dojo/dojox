@@ -153,11 +153,13 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 			return this.parent;	// Object
 		},
 		getBoundingBox: function(){
-			// summary: Returns the bounding box Rectanagle for this shape or null if a BoundingBox cannot be
+			// summary: Returns the bounding box Rectangle for this shape or null if a BoundingBox cannot be
 			//	calculated for the shape on the current renderer or for shapes with no geometric area (points).
 			//	A bounding box is a rectangular geometric region
 			//	defining the X and Y extent of the shape.
 			//	(see dojox.gfx.defaultRect)
+			//	Note that this method returns a direct reference to the attribute of this instance. Therefore you should
+			//	not modify its value directly but clone it instead.
 			return this.bbox;	// dojox.gfx.Rectangle
 		},
 		getTransformedBoundingBox: function(){
