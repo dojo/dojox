@@ -296,11 +296,7 @@ var MultipleRowSelector = declare("dojox.grid.cells.MultipleRowSelector", RowSel
 	//lastClickRowIdx: Integer
 	//		Row index for last click, used for range selection via Shift + click
 	lastClickRowIdx: -1,
-	
-	//toggleAllTrigerred: Boolean
-	//		Whether toggle all has been triggered or not
-	toggleAllTrigerred: false,
-	
+		
 	unCheckedText: '&#9633;',
 
 	constructor: function(){
@@ -330,7 +326,6 @@ var MultipleRowSelector = declare("dojox.grid.cells.MultipleRowSelector", RowSel
 		}else{
 			selection.deselectAll();
 		}
-		this.toggleAllTrigerred = true;
 	},
 	_onMouseDown: function(e){
 		if(e.cell == this){
