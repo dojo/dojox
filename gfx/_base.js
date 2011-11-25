@@ -540,9 +540,9 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sn
 			//		string components should follow the W3C specified order
 			//		(see http://www.w3.org/TR/CSS2/fonts.html#font-shorthand):
 			//		style, variant, weight, size, optional line height (will be
-			//		ignored), and family.
+			//		ignored), and family. Note that the Font.size attribute is limited to numeric CSS length.
 			// str: String
-			//		a CSS font string
+			//		a CSS font string.
 			var font = g.getDefault("Font");
 			var t = str.split(/\s+/);
 			do{
