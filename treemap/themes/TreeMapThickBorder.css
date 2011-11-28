@@ -1,0 +1,58 @@
+.dojoxTreeMap {
+	background-color: #EBEADB;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+
+.dojoxTreeMapLeaf {
+	border: 1px solid black;
+}
+
+.dojoxTreeMapGroup {
+}
+
+.dojoxTreeMapGroupContent {
+}
+
+.dojoxTreeMapHeader {
+	background-color: white;
+	border: 1px solid black;
+}
+
+.dojoxTreeMapLeaf:hover {
+	border-color: white;
+}
+
+.dojoxTreeMapGroup:hover {
+}
+
+.dojoxTreeMapSelected:after {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	border: 2px solid red;
+}
+
+.dojoxTreeMapGroup.dojoxTreeMapSelected:after {
+	content: '';
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	right: 1px;
+	bottom: 1px;
+	border: 2px solid red;
+}
+
+.dj_iequircks .dojoxTreeMapSelected + div,
+.dj_ie7 .dojoxTreeMapSelected + div,
+.dj_ie8 .dojoxTreeMapSelected + div {
+	border:  2px solid red;
+}
+
+.dj_iequircks .dojoxTreeMapGroup.dojoxTreeMapSelected + div,
+.dj_ie7 .dojoxTreeMapGroup.dojoxTreeMapSelected + div,
+.dj_ie8 .dojoxTreeMapGroup.dojoxTreeMapSelected + div {
+	border:  2px solid red;
+}
