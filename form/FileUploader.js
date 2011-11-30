@@ -73,7 +73,7 @@ declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	//
 	//	NEW FEATURES -
 	//		There are a ton of features and fixes in this version.
-	//			Disabled: Can be toggled with widget.attr("disable", true|false)
+	//			Disabled: Can be toggled with widget.set("disabled", true|false)
 	//			Submit: A convenience method has been added for if the uploader is in a form.
 	//					Instead of submitting the form, call uploader.submit(theForm), and the
 	//					Uploader will handle all of the form values and post the data.
