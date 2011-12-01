@@ -370,10 +370,8 @@ define([
 			//		the data structure.
 			// tags:
 			//		private
-			var data = (args && args.data) || this.data;
-			if(data){
-				this._createModel(data);
-			}
+			var data = (args && "data" in args) ? args.data : this.data; 
+			this._createModel(data);
 		},
 
 		//////////////////////// PRIVATE METHODS ////////////////////////
@@ -385,7 +383,7 @@ define([
 			//		The input for the model, as a plain JavaScript object.
 			// tags:
 			//		private
-			if(lang.isObject(obj) && !(obj instanceof Date) && !(obj instanceof RegExp)){	
+			if(lang.isObject(obj) && !(obj instanceof Date) && !(obj instanceof RegExp) && obj !== null){
 				for(var x in obj){
 					var newProp = new StatefulModel({ data : obj[x] });
 					this.set(x, newProp);
