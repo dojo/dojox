@@ -175,6 +175,21 @@ define([
 			}
 		},
 		
+		_clearClasses: function(/*DomNode*/node){
+			// summary:
+			//		Clean up the domNode classes that were added while making a transition.
+			// description:
+			//		Remove all the "mbl" prefixed classes except mbl*View.
+			if(!node){ return; }
+			var classes = [];
+			array.forEach(lang.trim(node.className||"").split(/\s+/), function(c){
+				if(c.match(/^mbl\w*View$/) || c.indexOf("mbl") === -1){
+					classes.push(c);
+				}
+			}, this);
+			node.className = classes.join(' ');
+		},
+		
 		_fixViewState: function(/*DomNode*/toNode){
 			// summary:
 			//		Sanity check for view transition states.
@@ -186,10 +201,10 @@ define([
 			for(var i = 0; i < nodes.length; i++){
 				var n = nodes[i];
 				if(n.nodeType === 1 && domClass.contains(n, "mblView")){
-					n.className = "mblView"; //TODO: Should remove classes one by one. This would clear user defined classes or even mblScrollableView.
+					this._clearClasses(n);
 				}
 			}
-			toNode.className = "mblView"; // just in case toNode is a sibling of an ancestor.
+			this._clearClasses(toNode); // just in case toNode is a sibling of an ancestor.
 		},
 	
 		convertToId: function(moveTo){
@@ -450,9 +465,7 @@ define([
 			if(isOut){
 				this.invokeCallback();
 			}
-			// this.domNode may be destroyed as a result of invoking the callback,
-			// so check for that before accessing it.
-			this.domNode && (this.domNode.className = "mblView");
+			this._clearClasses(this.domNode);
 
 			// clear the clicked position
 			this.clickedPosX = this.clickedPosY = undefined;
