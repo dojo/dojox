@@ -105,9 +105,17 @@ define([
 		};
 	}();
 	if(config.parseOnLoad){
-		ready(100, parser, "parse");
+		ready(100, function(){
+			// Now that all the modules are loaded, check if the app loaded dojo/parser too.
+			// If it did, let dojo/parser handle the parseOnLoad flag instead of me.
+			try{
+				require("dojo/parser");
+			}catch(e){
+				parser.parse();
+			}
+		});
 	}
 	dm.parser = parser; // for backward compatibility
-	dojo.parser = parser; // in case user application calls dojo.parser
+	dojo.parser = dojo.parser || parser; // in case user application calls dojo.parser
 	return parser;
 });
