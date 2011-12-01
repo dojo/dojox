@@ -215,7 +215,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.threshold = 4; // drag threshold value in pixels
 	this.constraint = true; // bounce back to the content area
 	this.touchNode = null; // a node that will have touch event handlers
-	this.isNested = false; // this scrollable's parent is also a scrollable
+	this.propagatable = true; // let touchstart event propagate up
 	this.dirLock = false; // disable the move handler if scroll starts in the unexpected direction
 	this.height = ""; // explicitly specified height of this widget (ex. "300px")
 	this.androidWorkaroud = true; // workaround input field jumping issue
@@ -570,9 +570,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this._posX = [this.touchStartX];
 		this._posY = [this.touchStartY];
 		this._locked = false;
-
-		if(!this.isFormElement(e.target) && !this.isNested){
-			event.stop(e);
+		
+		if(!this.isFormElement(e.target)){
+			this.propagatable ? e.preventDefault() : event.stop(e);
 		}
 	};
 

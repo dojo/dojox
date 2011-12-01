@@ -69,7 +69,6 @@ define([
 			if(this.allowNestedScrolls){
 				for(var p = this.getParent(); p; p = p.getParent()){
 					if(p && p.scrollableParams){
-						this.isNested = true;
 						this.dirLock = true;
 						p.dirLock = true;
 						break;
