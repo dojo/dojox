@@ -42,6 +42,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		
 		_setSelectedItemAttr: function(value){
 			if(this.selectedItem != value){
+				this._set("selectedItem", value);
 				this.set("selectedItems", value ? [value] : null);
 			}
 		},

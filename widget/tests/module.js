@@ -1,3 +1,4 @@
 define([
-	"dojox/widget/tests/_Invalidating"
-	], 1);
+	"dojox/widget/tests/_Invalidating",
+	"dojox/widget/tests/Selection"
+], 1);
