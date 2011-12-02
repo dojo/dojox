@@ -132,7 +132,7 @@ var AndOrReadStore = declare("dojox.data.AndOrReadStore", null, {
 	// headers: [public] Object
 	//		Any additional headers to pass to the fetch.
 	//		Defaults now to application/json for accepts.
-	headers: { "Accepts": "application/json" },
+	headers: { "Accept": "application/json" },
 	
 	_assertIsItem: function(/* item */ item){
 		//	summary:
