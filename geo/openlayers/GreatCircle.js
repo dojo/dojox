@@ -116,4 +116,6 @@ define(["dojo/_base/lang",
 
 		TOLERANCE : 0.00001
 	};
+	
+	return dojox.geo.openlayers.GreatCircle;
 });
