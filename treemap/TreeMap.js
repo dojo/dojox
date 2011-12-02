@@ -355,10 +355,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				case "leaf":
 					domStyle.set(renderer, "background", this.getColorForItem(item).toHex());
 				case "header":
-					if(isNaN(this.labelThreshold) || level < this.labelThreshold){
-						renderer.innerHTML = this.getLabelForItem(item);
+					var label = this.getLabelForItem(item);
+					if(label && (isNaN(this.labelThreshold) || level < this.labelThreshold)){
+						renderer.innerHTML = label;
 					}else{
-						renderer.innerHTML = null;
+						domConstruct.empty(renderer);
 					}
 					break;
 				default:
@@ -487,9 +488,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	            		return parent.children[i];
 	                }
 				}	
-			}else{
-				return this.itemToRenderer[this.getIdentity(item)];
 			}
+			return this.itemToRenderer[this.getIdentity(item)];
 		},
 
 		_buildRenderer: function(container, parent, child, rect, level, forceCreate, anim){
