@@ -235,9 +235,11 @@ var AndOrReadStore = declare("dojox.data.AndOrReadStore", null, {
 				if(possibleValue.toString().match(regexp)){
 					return true; // Boolean
 				}
-			} else if(value === possibleValue){
+			}else if(typeof value === "function"){
+				return value(possibleValue);
+			}else if(value === possibleValue){
 				return true; // Boolean
-			} else {
+			}else{
 				return false;
 			}
 		});
