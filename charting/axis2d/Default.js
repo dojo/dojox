@@ -410,7 +410,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 			//		An object of the form { l, r, t, b }.
 			//	returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
-			if(!this.dirty){
+			if(!this.dirty || !this.scaler){
 				return this;	//	dojox.charting.axis2d.Default
 			}
 			// prepare variable

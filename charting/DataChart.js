@@ -211,7 +211,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				this.addAxis("x", this.xaxis);
 				this.addAxis("y", this.yaxis);
 			}
-			chartPlot.type = kwArgs.type || "Markers"
+			chartPlot.type = kwArgs.type || "Markers";
 			this.addPlot("default", lang.mixin(chartPlot, kwArgs.chartPlot));
 
 			this.addPlot("grid", lang.mixin(kwArgs.grid || {}, {type: "Grid", hMinorLines: true}));

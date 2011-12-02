@@ -244,98 +244,98 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			this.cleanGroup();
 			var s = this.group, ta = this.chart.theme, lineStroke;
 			var renderOnAxis = this.opt.renderOnAxis;
-			var vScaler = this._vAxis.getScaler(),
-					vt = vScaler.scaler.getTransformerFromModel(vScaler);	
-			var hScaler = this._hAxis.getScaler(),
-					ht = hScaler.scaler.getTransformerFromModel(hScaler);
-			var ticks;
-			// draw horizontal stripes and lines
-			try{
-				ticks = this._vAxis.getTicks();
-				if(ticks != null){
-					if(this.opt.hMinorLines){
-						lineStroke = this.opt.minorHLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;		
-						arr.forEach(ticks.minor, function(tick){
-							if(!renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
-								return;
-							}
-							var y = dim.height - offsets.b - vt(tick.value);
-							var hMinorLine = this.createLine(s, {
-								x1: offsets.l,
-								y1: y,
-								x2: dim.width - offsets.r,
-								y2: y
-							}).setStroke(lineStroke);
-							if(this.animate){
-								this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
-							}
-						}, this);
-					}
-					if(this.opt.hMajorLines){
-						lineStroke = this.opt.majorHLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;	
-						arr.forEach(ticks.major, function(tick){
-							if(!renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
-								return;
-							}							
-							var y = dim.height - offsets.b - vt(tick.value);
-							var hMajorLine = this.createLine(s, {
-								x1: offsets.l,
-								y1: y,
-								x2: dim.width - offsets.r,
-								y2: y
-							}).setStroke(lineStroke);
-							if(this.animate){
-								this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
-							}
-						}, this);
+			if(this._vAxis){
+				var vScaler = this._vAxis.getScaler();				
+				if(vScaler){
+					var vt = vScaler.scaler.getTransformerFromModel(vScaler);
+					var ticks;
+					// draw horizontal stripes and lines
+					ticks = this._vAxis.getTicks();
+					if(ticks != null){
+						if(this.opt.hMinorLines){
+							lineStroke = this.opt.minorHLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;		
+							arr.forEach(ticks.minor, function(tick){
+								if(!renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
+									return;
+								}
+								var y = dim.height - offsets.b - vt(tick.value);
+								var hMinorLine = this.createLine(s, {
+									x1: offsets.l,
+									y1: y,
+									x2: dim.width - offsets.r,
+									y2: y
+								}).setStroke(lineStroke);
+								if(this.animate){
+									this._animateGrid(hMinorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
+								}
+							}, this);
+						}
+						if(this.opt.hMajorLines){
+							lineStroke = this.opt.majorHLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;	
+							arr.forEach(ticks.major, function(tick){
+								if(!renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
+									return;
+								}							
+								var y = dim.height - offsets.b - vt(tick.value);
+								var hMajorLine = this.createLine(s, {
+									x1: offsets.l,
+									y1: y,
+									x2: dim.width - offsets.r,
+									y2: y
+								}).setStroke(lineStroke);
+								if(this.animate){
+									this._animateGrid(hMajorLine, "h", offsets.l, offsets.r + offsets.l - dim.width);
+								}
+							}, this);
+						}
 					}
 				}
-			}catch(e){
-				// squelch
 			}
-			// draw vertical stripes and lines
-			try{
-				ticks = this._hAxis.getTicks();
-				if(this != null){
-					if(ticks && this.opt.vMinorLines){
-						lineStroke = this.opt.minorVLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;	
-						arr.forEach(ticks.minor, function(tick){
-							if(!renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
-								return;
-							}								
-							var x = offsets.l + ht(tick.value);
-							var vMinorLine = this.createLine(s, {
-								x1: x,
-								y1: offsets.t,
-								x2: x,
-								y2: dim.height - offsets.b
-							}).setStroke(lineStroke);
-							if(this.animate){
-								this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
-							}
-						}, this);
-					}
-					if(ticks && this.opt.vMajorLines){
-						lineStroke = this.opt.majorVLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;	
-						arr.forEach(ticks.major, function(tick){
-							if(!renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
-								return;
-							}								
-							var x = offsets.l + ht(tick.value);
-							var vMajorLine = this.createLine(s, {
-								x1: x,
-								y1: offsets.t,
-								x2: x,
-								y2: dim.height - offsets.b
-							}).setStroke(lineStroke);
-							if(this.animate){
-								this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
-							}
-						}, this);
+			if(this._hAxis){
+				var hScaler = this._hAxis.getScaler();				
+				if(hScaler){
+					var ht = hScaler.scaler.getTransformerFromModel(hScaler);
+					// draw vertical stripes and lines
+					ticks = this._hAxis.getTicks();
+					if(this != null){
+						if(ticks && this.opt.vMinorLines){
+							lineStroke = this.opt.minorVLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;	
+							arr.forEach(ticks.minor, function(tick){
+								if(!renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
+									return;
+								}								
+								var x = offsets.l + ht(tick.value);
+								var vMinorLine = this.createLine(s, {
+									x1: x,
+									y1: offsets.t,
+									x2: x,
+									y2: dim.height - offsets.b
+								}).setStroke(lineStroke);
+								if(this.animate){
+									this._animateGrid(vMinorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
+								}
+							}, this);
+						}
+						if(ticks && this.opt.vMajorLines){
+							lineStroke = this.opt.majorVLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;	
+							arr.forEach(ticks.major, function(tick){
+								if(!renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
+									return;
+								}								
+								var x = offsets.l + ht(tick.value);
+								var vMajorLine = this.createLine(s, {
+									x1: x,
+									y1: offsets.t,
+									x2: x,
+									y2: dim.height - offsets.b
+								}).setStroke(lineStroke);
+								if(this.animate){
+									this._animateGrid(vMajorLine, "v", dim.height - offsets.b, dim.height - offsets.b - offsets.t);
+								}
+							}, this);
+						}
 					}
 				}
-			}catch(e){
-				// squelch
 			}
 			this.dirty = false;
 			return this;	//	dojox.charting.plot2d.Grid

@@ -139,7 +139,7 @@ var Base = dojox.charting.axis2d.Base;
 			if(lang.isObject(labels[0])){
 				labels = df.map(labels, function(label){ return label.text; });
 			}
-			if (wcLimit) {
+			if (wcLimit){
 				labels = df.map(labels, function(label){
 					return lang.trim(label).length == 0 ? "" : label.substring(0, wcLimit) + this.trailingSymbol;
 				}, this);
