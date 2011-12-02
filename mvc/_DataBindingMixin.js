@@ -267,9 +267,9 @@ define([
 					// 2. valid - default "true"
 					binding.watch("valid", function (name, old, current){
 						pThis._updateProperty(name, old, current, true);
-						if(current !== pThis.get("binding").get(name)){
+						if(current !== pThis.get(name)){
 							if(pThis.validate && lang.isFunction(pThis.validate)){
-								pThis.validate(true);
+								pThis.validate();
 							}
 						}
 					}),

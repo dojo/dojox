@@ -14,6 +14,7 @@ try{
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_template_repeat_exprchar", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_template_repeat_exprchar.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_form-kitchensink", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_form-kitchensink.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_date_test", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_date_test.html"+userArgs), 999999);
+	doh.registerUrl("dojox.mvc.tests.doh_mvc_validation-test-simple", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_validation-test-simple.html"+userArgs), 999999);
 	// Robot
 	doh.registerUrl("dojox.mvc.tests.robot.mobile-demo-test", dojo.moduleUrl("dojox.mvc","tests/robot/mobile-demo-test.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.robot.mvc_shipto-billto-simple", dojo.moduleUrl("dojox.mvc","tests/robot/mvc_shipto-billto-simple.html"+userArgs), 999999);
