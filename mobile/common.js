@@ -374,7 +374,16 @@ define([
 			}
 		});
 	}
-	
+
+	if(win.global._no_dojo_dm){
+		// deviceTheme seems to be loaded from a script tag (= non-dojo usage)
+		var _dm = win.global._no_dojo_dm;
+		for(var i in _dm){
+			dm[i] = _dm[i];
+		}
+		dm.deviceTheme.setDm(dm);
+	}
+
 	ready(function(){
 		dm.detectScreenSize(true);
 		if(config["mblApplyPageStyles"] !== false){
