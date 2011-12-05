@@ -492,7 +492,7 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 				a.anim = gfxfx.animateFill({
 					shape:	  o.shape,
 					duration: 800,
-					easing:	  coreFx.easing.backOut,
+					easing:	  easing.backOut,
 					color:	  {start: start, end: end}
 				});
 				a.anim.play();
