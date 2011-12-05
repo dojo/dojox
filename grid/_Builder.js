@@ -417,7 +417,8 @@ dojo.require("dojo.dnd.Moveable");
 			if(dojo.isIE){
 				var tN = e.target;
 				if(dojo.hasClass(tN, "dojoxGridArrowButtonNode") ||
-					dojo.hasClass(tN, "dojoxGridArrowButtonChar")){
+					dojo.hasClass(tN, "dojoxGridArrowButtonChar") ||
+					dojo.hasClass(tN, "dojoxGridColCaption")){
 					return false;
 				}
 			}
@@ -441,7 +442,8 @@ dojo.require("dojo.dnd.Moveable");
 			if(dojo.isIE){
 				var tN = e.target;
 				if(dojo.hasClass(tN, "dojoxGridArrowButtonNode") ||
-					dojo.hasClass(tN, "dojoxGridArrowButtonChar")){
+					dojo.hasClass(tN, "dojoxGridArrowButtonChar") ||
+					dojo.hasClass(tN, "dojoxGridColCaption")){
 					return false;
 				}
 			}
