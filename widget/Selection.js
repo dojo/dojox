@@ -109,7 +109,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			if(this.selectionMode == "single"){
 				if(value){
 					this.set("selectedItem", item);
-				}else if(isItemSelected(item)){
+				}else if(this.isItemSelected(item)){
 					this.set("selectedItems", null);
 				}
 			}else{ // multiple
