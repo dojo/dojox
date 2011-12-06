@@ -90,11 +90,12 @@ define([
 			//		protected
 
 			this._throttleOpenClose();
-			if(this.startHandler){
+			if(this.endHandler){
 				this.disconnect(this.startHandler);
-				this.startHandler = null;
-				if(this.moveHandler){ this.disconnect(this.moveHandler); }
-				if(this.endHandler){ this.disconnect(this.endHandler); }
+				this.disconnect(this.endHandler);
+				this.disconnect(this.moveHandler);
+				clearInterval(this.repositionTimer);
+				this.repositionTimer = this.endHandler = null;
 			}
 			this.inherited(arguments);
 			popup.close(this.dropDown);
@@ -116,6 +117,9 @@ define([
 				aroundNode = this.domNode,
 				self = this;
 
+			if(has('touch')){
+				win.global.scrollBy(0, domGeometry.position(aroundNode, false).y); // don't call scrollIntoView since it messes up ScrollableView
+			}
 
 			// TODO: isn't maxHeight dependent on the return value from popup.open(),
 			// ie, dependent on how much space is available (BK)
@@ -191,23 +195,68 @@ define([
 			this._opened=true;
 
 			if(wasClosed){
-				if(retVal.aroundCorner.charAt(0) == 'B'){ // is popup below?
-					this.domNode.scrollIntoView(true); // scroll to top
-				}
+				var	isGesture = false,
+					skipReposition = false,
+					active = false,
+					wrapper = dropDown.domNode.parentNode,
+					aroundNodePos = domGeometry.position(aroundNode, false),
+					popupPos = domGeometry.position(wrapper, false),
+					deltaX = popupPos.x - aroundNodePos.x,
+					deltaY = popupPos.y - aroundNodePos.y;
+
+				// touchstart isn't really needed since touchmove implies touchstart, but
+				// mousedown is needed since mousemove doesn't know if the left button is down or not
 				this.startHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchstart" : "onmousedown",
-					lang.hitch(this, function(){
-						var isMove = false;
-						this.moveHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchmove" : "onmousemove", function(){ isMove = true; });
-						this.endHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchend" : "onmouseup", function(){ if(!isMove){ this.closeDropDown(); } });
-					})
+					function(){
+						skipReposition = true;
+						active = true;
+						isGesture = false;
+					}
 				);
+				this.moveHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchmove" : "onmousemove",
+					function(e){
+						skipReposition = true;
+						isGesture = has('touch') || active;
+					}
+				);
+				this.endHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchend" : "onmouseup",
+					function(){
+						skipReposition = true;
+						active = false;
+						if(!isGesture){ // if click without move, then close dropdown
+							this.closeDropDown();
+						}
+					}
+				);
+				this.repositionTimer = setInterval(lang.hitch(this, function(){
+					if(skipReposition){ // don't reposition if busy
+						skipReposition = false;
+						return;
+					}
+					var	currentAroundNodePos = domGeometry.position(aroundNode, false),
+						currentPopupPos = domGeometry.position(wrapper, false),
+						currentDeltaX = currentPopupPos.x - currentAroundNodePos.x,
+						currentDeltaY = currentPopupPos.y - currentAroundNodePos.y;
+					// if the popup is no longer placed correctly, relocate it
+					if(currentDeltaX != deltaX || currentDeltaY != deltaY){
+						domStyle.set(wrapper, { left: parseInt(domStyle.get(wrapper, "left")) + deltaX - currentDeltaX + 'px', top: parseInt(domStyle.get(wrapper, "top")) + deltaY - currentDeltaY + 'px' });
+					}
+				}), 50); // yield a short time to allow for consolidation for better CPU throughput
 			}
+
 			return retVal;
 		},
 
 		postCreate: function(){
 			this.inherited(arguments);
 			this.connect(this.domNode, "onclick", "_onClick");
+		},
+
+		destroy: function(){
+			if(this.repositionTimer){
+				clearInterval(this.repositionTimer);
+			}
+			this.inherited(arguments);
 		},
 
 		_onClick: function(/*Event*/ e){
