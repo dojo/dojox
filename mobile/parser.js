@@ -109,8 +109,13 @@ define([
 			// Now that all the modules are loaded, check if the app loaded dojo/parser too.
 			// If it did, let dojo/parser handle the parseOnLoad flag instead of me.
 			try{
-				require("dojo/parser");
+				if(!require("dojo/parser")){
+					// IE6 takes this path when dojo/parser unavailable, rather than catch() block below,
+					// due to http://support.microsoft.com/kb/944397
+					parser.parse();
+				}
 			}catch(e){
+				// Other browsers (and later versions of IE) take this path when dojo/parser unavailable
 				parser.parse();
 			}
 		});
