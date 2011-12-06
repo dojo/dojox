@@ -45,26 +45,22 @@
 			}
 		}
 		function setSelectedRingtone(node){
-		// NOOP
+		// NO-OP
 		}
 		function onCheck(item, checked){
-			setTimeout(function(){
-				if(checked){
-					checkedItem = trim(item.labelNode.innerText || item.labelNode.textContent || '');
-				}
-			}, 500);
+			if(checked){
+				checkedItem = trim(item.labelNode.innerText || item.labelNode.textContent || '');
+			}
 		}
 	</script>
 </head>
 <body style="visibility:hidden;">
-	<table cellspacing="20" style="margin-top:100px;padding-bottom:1500px;z-index:9999;"><!-- scrollable for testing purposes -->
-	<tr>
-		<td style="text-align:right;font-weight:bold;z-index:9999;">Ringtone</td>
-		<td><input id="ringtone" readOnly value="" placeholder="Select a ringtone"
-			onclick="listPicker.show(this, ['above-centered','below-centered','after','before'])" /></td>
-	</tr>
-	</table>
-
+	<input value="native input" style="z-index:9999;margin:20px;display:block;">
+	<label for="ringtone">Ringtone</label>
+	<input id="ringtone" readOnly value="" placeholder="Select a ringtone" style="margin:40px 0;"
+		onfocus="listPicker.show(this,['above-centered','below-centered','after','before'])" />
+	<input value="native input" style="margin:20px;display:block;">
+	<input value="native input" style="margin:1500px 0 20px 0;display:block;">
 	<!-- if onBlur returns !false, then the popup is closed when a click event is received away from the popup -->
 	<!-- override user's custom z-index --> 
 	<div id="listPicker" style="z-index:10000;" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getSelectedRingtone, onShow:setSelectedRingtone, onBlur:function(){ return true; }">
