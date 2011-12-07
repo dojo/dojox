@@ -29,7 +29,7 @@
 							]
 					});
 					var colorModel = new MeanColorModel(new Color(Color.named.red), new Color(Color.named.green));
-					new TreeMap({store: dataStore, labelThreshold: 1, selectedItems: [ dataStore.get("France") ],
+					new TreeMap({store: dataStore, labelThreshold: 1, selectedItem:  dataStore.get("France") ,
 								areaAttr: "sales", colorAttr: "profit", groupAttrs: ["region"],
 								colorModel: colorModel }, dom.byId("treeMap"));
 				});
