@@ -502,6 +502,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 				renderer.item = child;
 				renderer.parentItem = parent;
 				this.itemToRenderer[this.getIdentity(child)] = renderer;
+				// update its selection status
+				this.updateRenderers(child);
 			}
 	
 			// in some cases the computation might be slightly incorrect (0.0000...1)
@@ -687,7 +689,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		
 		_onMouseUp: function(e){
 			var renderer = this._getRendererFromTarget(e.target);
-			if(renderer.item){	
+			if(renderer.item){
 				this.selectFromEvent(e, renderer.item, e.currentTarget, true);
 				//event.stop(e);
 			}
@@ -730,6 +732,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			for(var i=0; i<items.length;i++){
 				var item = items[i];
 				var renderer = this._getRenderer(item);
+				// at init time the renderer might not be ready
+				if(!renderer){
+					continue;
+				}
 				var selected = this.isItemSelected(item);
 				var ie = has("ie");
 				var div;
