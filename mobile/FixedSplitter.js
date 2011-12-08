@@ -4,11 +4,12 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-geometry",
+	"dojo/dom-style",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./FixedSplitterPane"
-], function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase, FixedSplitterPane){
+], function(array, declare, win, domClass, domGeometry, domStyle, Contained, Container, WidgetBase, FixedSplitterPane){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -51,45 +52,57 @@ define([
 		//		horizontally. If "V" is specified, panes are split vertically.
 		orientation: "H",
 
+		// variablePane: Number
+		//		The index of a pane that fills the remainig space.
+		//		If -1, the last child pane fills the remaining space.
+		variablePane: -1,
 
-		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef ? this.srcNodeRef : win.doc.createElement("DIV");
-			domClass.add(this.domNode, "mblFixedSpliter");
-		},
+		// screenSizeAware: Boolean
+		//		If true, dynamically load a screen-size-aware module.
+		screenSizeAware: false,
+
+		// screenSizeAwareClass: String
+		//		A screen-size-aware module to load.
+		screenSizeAwareClass: "dojox/mobile/ScreenSizeAware",
+
+		baseClass: "mblFixedSplitter",
 
 		startup: function(){
 			if(this._started){ return; }
-			var children = array.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
-			array.forEach(children, function(node){
-				domClass.add(node, "mblFixedSplitterPane"+this.orientation);
-			}, this);
-			this.inherited(arguments);
-	
+			domClass.add(this.domNode, this.baseClass + this.orientation);
+
 			var _this = this;
 			setTimeout(function(){
-				var parent = _this.getParent && _this.getParent();
+				var parent = _this.getParent();
 				if(!parent || !parent.resize){ // top level widget
 					_this.resize();
 				}
 			}, 0);
+
+			if(this.screenSizeAware){
+				require([this.screenSizeAwareClass], function(module){
+					module.getInstance();
+				});
+			}
+
+			this.inherited(arguments);
 		},
 	
 		resize: function(){
-			this.layout();
-		},
-
-		layout: function(){
-			var sz = this.orientation == "H" ? "w" : "h";
-			var children = array.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; });
-			var offset = 0;
-			for(var i = 0; i < children.length; i++){
-				domGeometry.setMarginBox(children[i], this.orientation == "H" ? {l:offset} : {t:offset});
-				if(i < children.length - 1){
-					offset += domGeometry.getMarginBox(children[i])[sz];
+			var wh = this.orientation === "H" ? "w" : "h", // width/height
+				tl = this.orientation === "H" ? "l" : "t", // top/left
+				props1 = {}, props2 = {},
+				i, c, h,
+				a = [], offset = 0, total = 0,
+				children = array.filter(this.domNode.childNodes, function(node){ return node.nodeType == 1; }),
+				idx = this.variablePane == -1 ? children.length - 1 : this.variablePane;
+			for(i = 0; i < children.length; i++){
+				if(i != idx){
+					a[i] = domGeometry.getMarginBox(children[i])[wh];
+					total += a[i];
 				}
 			}
 	
-			var h;
 			if(this.orientation == "V"){
 				if(this.domNode.parentNode.tagName == "BODY"){
 					if(array.filter(win.body().childNodes, function(node){ return node.nodeType == 1; }).length == 1){
@@ -97,19 +110,32 @@ define([
 					}
 				}
 			}
-			var l = (h || domGeometry.getMarginBox(this.domNode)[sz]) - offset;
-			var props = {};
-			props[sz] = l;
-			domGeometry.setMarginBox(children[children.length - 1], props);
-	
+			var l = (h || domGeometry.getMarginBox(this.domNode)[wh]) - total;
+			props2[wh] = a[idx] = l;
+			c = children[idx];
+			domGeometry.setMarginBox(c, props2);
+			c.style[this.orientation === "H" ? "height" : "width"] = "";
+
+			for(i = 0; i < children.length; i++){
+				c = children[i];
+				props1[tl] = offset;
+				domGeometry.setMarginBox(c, props1);
+				c.style[this.orientation === "H" ? "top" : "left"] = "";
+				offset += a[i];
+			}
+
 			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
 		},
 
-		addChild: function(widget, /*Number?*/insertIndex){
-			domClass.add(widget.domNode, "mblFixedSplitterPane"+this.orientation);
-			this.inherited(arguments);
+		_setOrientationAttr: function(/*String*/orientation){
+			var s = this.baseClass;
+			domClass.replace(this.domNode, s + orientation, s + this.orientation);
+			this.orientation = orientation;
+			if(this._started){
+				this.resize();
+			}
 		}
 	});
 });

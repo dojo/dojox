@@ -18,7 +18,7 @@ define([
 	// summary:
 	//		A pane widget that is used in a dojox.mobile.FixedSplitter.
 
-	return declare("dojox.mobile.FixedSplitterPane",[WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.FixedSplitterPane", [WidgetBase, Container, Contained], {
 		// summary:
 		//		A pane widget that is used in a dojox.mobile.FixedSplitter.
 		// description:
@@ -26,10 +26,7 @@ define([
 		//		dojox.mobile.FixedSplitter. It is a widget, but can be regarded
 		//		as a simple <div> element.
 
-		buildRendering: function(){
-			this.inherited(arguments);
-			domClass.add(this.domNode, "mblFixedSplitterPane");
-		},
+		baseClass: "mblFixedSplitterPane",
 
 		resize: function(){
 			array.forEach(this.getChildren(), function(child){
