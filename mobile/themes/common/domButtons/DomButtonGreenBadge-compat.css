@@ -1,0 +1,5 @@
+/* === Green Badge ==*/
+.mblDomButtonGreenBadge > div {
+	-moz-border-radius: 12px;
+	background: -moz-linear-gradient(top, #7BE75A 0%, #6BC642 50%, #4AAD21 50%, #398C08 100%);
+}
