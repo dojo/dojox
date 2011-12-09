@@ -334,8 +334,7 @@ var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", LinkDialog.ImgL
 	}
 });
 
-// Register this plugin.
-_Plugin.registry["LocalImage"] = function(args){
+var plugin = function(args){
 	return new LocalImage({
 		command: "insertImage",
 		uploadable: ("uploadable" in args) ? args.uploadable : false,
@@ -345,6 +344,11 @@ _Plugin.registry["LocalImage"] = function(args){
 		fileMask: ("fileMask" in args) ? args.fileMask : "*.jpg;*.jpeg;*.gif;*.png;*.bmp"
 	});
 };
+
+// Register the plugin and some name varients.
+_Plugin.registry["LocalImage"] = plugin;
+_Plugin.registry["localImage"] = plugin;
+_Plugin.registry["localimage"] = plugin;
 
 return LocalImage;
 
