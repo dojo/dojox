@@ -74,7 +74,7 @@ define([
 
 		postCreate: function(){
 			this.connect(this.domNode, "onclick", "onClick");
-			this.connect(this.domNode, has('touch') ? "touchstart" : "onmousedown", "onTouchStart");
+			this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart");
 			this._initialValue = this.value; // for reset()
 		},
 
@@ -137,8 +137,8 @@ define([
 			this.innerStartX = this.inner.offsetLeft;
 			if(!this._conn){
 				this._conn = [];
-				this._conn.push(connect.connect(this.inner, has('touch') ? "touchmove" : "onmousemove", this, "onTouchMove"));
-				this._conn.push(connect.connect(this.inner, has('touch') ? "touchend" : "onmouseup", this, "onTouchEnd"));
+				this._conn.push(connect.connect(this.inner, has('touch') ? "ontouchmove" : "onmousemove", this, "onTouchMove"));
+				this._conn.push(connect.connect(this.inner, has('touch') ? "ontouchend" : "onmouseup", this, "onTouchEnd"));
 			}
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 			this.left.style.display = "";

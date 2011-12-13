@@ -152,9 +152,9 @@ define([
 			this._reversed = !(horizontal && ((ltr && !flip) || (!ltr && flip))) || (!horizontal && !flip);
 			this._attrs = horizontal ? { x:'x', w:'w', l:'l', r:'r', pageX:'pageX', clientX:'clientX', handleLeft:"left", left:this._reversed ? "right" : "left", width:"width" } : { x:'y', w:'h', l:'t', r:'b', pageX:'pageY', clientX:'clientY', handleLeft:"top", left:this._reversed ? "bottom" : "top", width:"height" };
 			this.progressBar.style[this._attrs.left] = "0px";
-			this.connect(this.touchBox, "touchstart", beginDrag);
+			this.connect(this.touchBox, "ontouchstart", beginDrag);
 			this.connect(this.touchBox, "onmousedown", beginDrag); // in case this works
-			this.connect(this.handle, "touchstart", beginDrag);
+			this.connect(this.handle, "ontouchstart", beginDrag);
 			this.connect(this.handle, "onmousedown", beginDrag); // in case this works
 			this.startup();
 			this.set('value', this.value);

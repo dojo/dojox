@@ -243,7 +243,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 		this._ch = []; // connect handlers
 		this._ch.push(connect.connect(this.touchNode,
-			has('touch') ? "touchstart" : "onmousedown", this, "onTouchStart"));
+			has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchStart"));
 		if(has("webkit")){
 			this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
 			this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
@@ -549,8 +549,8 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 		if(!this._conn){
 			this._conn = [];
-			this._conn.push(connect.connect(win.doc, has('touch') ? "touchmove" : "onmousemove", this, "onTouchMove"));
-			this._conn.push(connect.connect(win.doc, has('touch') ? "touchend" : "onmouseup", this, "onTouchEnd"));
+			this._conn.push(connect.connect(win.doc, has('touch') ? "ontouchmove" : "onmousemove", this, "onTouchMove"));
+			this._conn.push(connect.connect(win.doc, has('touch') ? "ontouchend" : "onmouseup", this, "onTouchEnd"));
 		}
 
 		this._aborted = false;
@@ -1168,7 +1168,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					zIndex: 2147483647 // max of signed 32-bit integer
 				});
 				this._ch.push(connect.connect(this._cover,
-					has('touch') ? "touchstart" : "onmousedown", this, "onTouchEnd"));
+					has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchEnd"));
 			}else{
 				this._cover.style.display = "";
 			}
