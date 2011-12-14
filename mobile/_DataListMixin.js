@@ -55,7 +55,8 @@ define([
 				this._conn = [
 					connect.connect(store, "onSet", this, "onSet"),
 					connect.connect(store, "onNew", this, "onNew"),
-					connect.connect(store, "onDelete", this, "onDelete")
+					connect.connect(store, "onDelete", this, "onDelete"),
+					connect.connect(store, "close", this, "onStoreClose")
 				];
 			}
 			this.refresh();
@@ -128,6 +129,14 @@ define([
 			//	summary:
 			//		See dojo.data.api.Notification.onDelete()
 			registry.byId(deletedItem._widgetId).destroyRecursive();
+		},
+
+		onStoreClose: function(/*Object?*/request){
+			//	summary:
+			//		Refresh list on close.
+			if(this.store.clearOnClose){
+				this.refresh();
+			}
 		}
 	});
 });
