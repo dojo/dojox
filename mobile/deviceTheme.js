@@ -248,8 +248,6 @@ define([
 					break;
 				}
 			}
-
-			var t = config.mblCommonFiles || dm.commonFiles || [];
 		};
 	}();
 	deviceTheme.loadDeviceTheme();
