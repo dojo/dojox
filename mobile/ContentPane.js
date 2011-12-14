@@ -47,9 +47,10 @@ define([
 		//		If true, shows progress indicator.
 		prog: true,
 
+		baseClass: "mblContentPane",
+
 		buildRendering: function(){
 			this.inherited(arguments);
-			this.domNode.className = "mblContentPane";
 			if(!this.containerNode){
 				this.containerNode = this.domNode;
 			}
@@ -99,7 +100,7 @@ define([
 				win.body().appendChild(p.domNode);
 				p.start();
 			}
-			this.href = href;
+			this._set("href", href);
 			xhr.get({
 				url: href,
 				handleAs: "text",
