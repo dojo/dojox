@@ -182,7 +182,7 @@ define([
 					this._head = head;
 					this._btn = btn;
 					this.backBtnNode = btn;
-					this.connect(body, "onclick", "onClick");
+					this.connect(body, "onclick", "_onClick");
 				}
 				this.back = back;
 				this._body.innerHTML = this._cv ? this._cv(this.back) : this.back;
@@ -207,7 +207,12 @@ define([
 			return w;
 		},
 
-		onClick: function(e){
+		_onClick: function(e){
+			// summary:
+			//		Internal handler for click events.
+			// tags:
+			//		private
+			if(this.onClick(e) === false){ return; } // user's click action
 			var h1 = this.domNode;
 			domClass.add(h1, "mblArrowButtonSelected");
 			setTimeout(function(){
@@ -226,6 +231,13 @@ define([
 				view.clickedPosY = e.clientY;
 			}
 			this.goTo(this.moveTo, this.href);
+		},
+	
+		onClick: function(/*Event*/ /*===== e =====*/){
+			// summary:
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
 		},
 	
 		goTo: function(moveTo, href){

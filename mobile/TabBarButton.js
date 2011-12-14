@@ -93,7 +93,7 @@ define([
 	
 		buildRendering: function(){
 			var a = this.anchorNode = domConstruct.create("A", {className:"mblTabBarButtonAnchor"});
-			this.connect(a, "onclick", "onClick");
+			this.connect(a, "onclick", "_onClick");
 	
 			this.box = domConstruct.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
 			var box = this.box;
@@ -176,8 +176,20 @@ define([
 			this.select(true);
 		},
 	
-		onClick: function(e){
+		_onClick: function(e){
+			// summary:
+			//		Internal handler for click events.
+			// tags:
+			//		private
+			if(this.onClick(e) === false){ return; } // user's click action
 			this.defaultClickAction();
+		},
+
+		onClick: function(/*Event*/ /*===== e =====*/){
+			// summary:
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
 		},
 	
 		_setIcon: function(icon, pos, num, sel){

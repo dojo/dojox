@@ -67,7 +67,7 @@ define([
 					domClass.add(this.domNode, "mblToolBarButtonText");
 				}
 			}
-			this.connect(this.domNode, "onclick", "onClick");
+			this.connect(this.domNode, "onclick", "_onClick");
 		},
 	
 		select: function(){
@@ -83,9 +83,21 @@ define([
 			this.select(true);
 		},
 	
-		onClick: function(e){
+		_onClick: function(e){
+			// summary:
+			//		Internal handler for click events.
+			// tags:
+			//		private
+			if(this.onClick(e) === false){ return; } // user's click action
 			this.setTransitionPos(e);
 			this.defaultClickAction();
+		},
+
+		onClick: function(/*Event*/ /*===== e =====*/){
+			// summary:
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
 		},
 	
 		_setBtnClassAttr: function(/*String*/btnClass){

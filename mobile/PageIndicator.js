@@ -40,7 +40,7 @@ define([
 			this.domNode.className = "mblPageIndicator";
 			this._tblNode = domConstruct.create("TABLE", {className:"mblPageIndicatorContainer"}, this.domNode);
 			this._tblNode.insertRow(-1);
-			this.connect(this.domNode, "onclick", "onClick");
+			this.connect(this.domNode, "onclick", "_onClick");
 			connect.subscribe("/dojox/mobile/viewChanged", this, function(view){
 				this.reset();
 			});
@@ -92,13 +92,25 @@ define([
 			return (node && node.nodeType === 1 && domClass.contains(node, "mblView"));
 		},
 
-		onClick: function(e){
+		_onClick: function(e){
+			// summary:
+			//		Internal handler for click events.
+			// tags:
+			//		private
+			if(this.onClick(e) === false){ return; } // user's click action
 			if(e.target !== this.domNode){ return; }
 			if(e.layerX < this._tblNode.offsetLeft){
 				connect.publish("/dojox/mobile/prevPage", [this]);
 			}else if(e.layerX > this._tblNode.offsetLeft + this._tblNode.offsetWidth){
 				connect.publish("/dojox/mobile/nextPage", [this]);
 			}
+		},
+
+		onClick: function(/*Event*/ /*===== e =====*/){
+			// summary:
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
 		}
 	});
 });

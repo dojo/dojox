@@ -155,7 +155,7 @@ define([
 			this.inheritParams();
 			var parent = this.getParent();
 			if(this.moveTo || this.href || this.url || this.clickable || (parent && parent.select)){
-				this._onClickHandle = this.connect(this.anchorNode, "onclick", "onClick");
+				this._onClickHandle = this.connect(this.anchorNode, "onclick", "_onClick");
 			}
 			this.setArrow();
 
@@ -180,7 +180,12 @@ define([
 			}
 		},
 
-		onClick: function(e){
+		_onClick: function(e){
+			// summary:
+			//		Internal handler for click events.
+			// tags:
+			//		private
+			if(this.onClick(e) === false){ return; } // user's click action
 			var a = e.currentTarget;
 			var li = a.parentNode;
 			if(domClass.contains(li, "mblItemSelected")){ return; } // already selected
@@ -223,6 +228,13 @@ define([
 				this.setTransitionPos(e);
 				return new TransitionEvent(this.domNode,transOpts,e).dispatch();
 			}
+		},
+	
+		onClick: function(/*Event*/ /*===== e =====*/){
+			// summary:
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
 		},
 	
 		select: function(){
