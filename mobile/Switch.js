@@ -49,7 +49,7 @@ define([
 		_width: 53,
 
 		buildRendering: function(){
-			this.domNode = win.doc.createElement("DIV");
+			this.domNode = win.doc.createElement("div");
 			var c = (this.srcNodeRef && this.srcNodeRef.className) || this.className || this["class"];
 			this._swClass = (c || "").replace(/ .*/,"");
 			this.domNode.className = "mblSwitch";
@@ -73,8 +73,8 @@ define([
 		},
 
 		postCreate: function(){
-			this.connect(this.domNode, "onclick", "_onClick");
-			this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart");
+			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
+			this._startHandle = this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart");
 			this._initialValue = this.value; // for reset()
 		},
 

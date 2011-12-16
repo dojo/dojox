@@ -1,10 +1,10 @@
 @import url("../common/Switch.css");
 /* dojox.mobile.Switch */
-.mblItemSwitch {
+.mblItemSwitch, .mblListItem .mblSwitch {
   top: 14px;
 }
 .mblSwitchBg {
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
 }
 .mblSwitchBgLeft {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#088eef), to(#0851ad), color-stop(0.5, #0869c6));
@@ -14,5 +14,5 @@
 }
 .mblSwitchKnob {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#999999), color-stop(0.5, #bbbbbb));
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
 }
