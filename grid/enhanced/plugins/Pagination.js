@@ -948,7 +948,7 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		if(this._showAll && this.grid.autoHeight){
 			this.grid._refresh();
 		}else{
-			this._paginator.update();
+			this._paginator._update();
 		}
 	},
 	_onDelete: function(){
