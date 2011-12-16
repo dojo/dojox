@@ -138,10 +138,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			//		The chart this action applies to.
 			//	kwArgs: dojox.charting.action2d.__TouchIndicatorCtorArgs?
 			//		Optional arguments for the chart action.
-			this._listeners = [{eventName: "ontouchstart", methodName: "onTouchStart"},
-			                   {eventName: "ontouchmove", methodName: "onTouchMove"},
-			                   {eventName: "ontouchend", methodName: "onTouchEnd"},
-			                   {eventName: "ontouchcancel", methodName: "onTouchEnd"}];
+			this._listeners = [
+				{eventName: "ontouchstart", methodName: "onTouchStart"},
+				{eventName: "ontouchmove", methodName: "onTouchMove"},
+				{eventName: "ontouchend", methodName: "onTouchEnd"},
+				{eventName: "ontouchcancel", methodName: "onTouchEnd"}
+			];
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);

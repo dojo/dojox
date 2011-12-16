@@ -105,10 +105,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			//		The chart this action applies to.
 			//	kwArgs: dojox.charting.action2d.__TouchZoomAndPanCtorArgs?
 			//		Optional arguments for the action.
-			this._listeners = [{eventName: "ontouchstart", methodName: "onTouchStart"},
-			                   {eventName: "ontouchmove", methodName: "onTouchMove"},
-			                   {eventName: "ontouchend", methodName: "onTouchEnd"},
-							   {eventName: tap.doubletap, methodName: "onDoubleTap"}];
+			this._listeners = [
+				{eventName: "ontouchstart", methodName: "onTouchStart"},{eventName: "ontouchmove", methodName: "onTouchMove"},
+			    {eventName: "ontouchend", methodName: "onTouchEnd"},
+				{eventName: tap.doubletap, methodName: "onDoubleTap"}
+			];
 			if(!kwArgs){ kwArgs = {}; }
 			this.axis = kwArgs.axis ? kwArgs.axis : "x";
 			this.scaleFactor = kwArgs.scaleFactor ? kwArgs.scaleFactor : 1.2;
