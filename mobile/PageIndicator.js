@@ -36,12 +36,12 @@ define([
 		refId: "",
 
 		buildRendering: function(){
-			this.domNode = this.srcNodeRef || win.doc.createElement("DIV");
+			this.domNode = this.srcNodeRef || win.doc.createElement("div");
 			this.domNode.className = "mblPageIndicator";
-			this._tblNode = domConstruct.create("TABLE", {className:"mblPageIndicatorContainer"}, this.domNode);
+			this._tblNode = domConstruct.create("table", {className:"mblPageIndicatorContainer"}, this.domNode);
 			this._tblNode.insertRow(-1);
-			this.connect(this.domNode, "onclick", "_onClick");
-			connect.subscribe("/dojox/mobile/viewChanged", this, function(view){
+			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
+			this.subscribe("/dojox/mobile/viewChanged", function(view){
 				this.reset();
 			});
 		},
@@ -70,7 +70,7 @@ define([
 				domConstruct.empty(r);
 				for(i = 0; i < a.length; i++){
 					c = a[i];
-					dot = domConstruct.create("DIV", {className:"mblPageIndicatorDot"});
+					dot = domConstruct.create("div", {className:"mblPageIndicatorDot"});
 					r.insertCell(-1).appendChild(dot);
 				}
 			}
