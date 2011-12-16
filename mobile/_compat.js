@@ -8,6 +8,7 @@ define([
 	"dojo/_base/window",	// win.doc, win.body
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"dojo/fx",
 	"dojo/fx/easing",
@@ -18,17 +19,19 @@ define([
 	"dojox/fx/flip",
 	"./EdgeToEdgeList",
 	"./IconContainer",
+	"./ProgressIndicator",
 	"./RoundRect",
 	"./RoundRectList",
 	"./ScrollableView",
 	"./Switch",
 	"./View",
 	"require"
-], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domGeometry, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, ProgressIndicator, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
 
 /*=====
 	var EdgeToEdgeList = dojox.mobile.EdgeToEdgeList;
 	var IconContainer = dojox.mobile.IconContainer;
+	var ProgressIndicator = dojox.mobile.ProgressIndicator;
 	var RoundRect = dojox.mobile.RoundRect;
 	var RoundRectList = dojox.mobile.RoundRectList;
 	var ScrollableView = dojox.mobile.ScrollableView;
@@ -246,6 +249,26 @@ define([
 		});	
 
 	
+		lang.extend(ProgressIndicator, {
+			scale: function(/*Number*/size){
+				if(has("ie")){
+					var dim = {w:size, h:size};
+					domGeometry.setMarginBox(this.domNode, dim);
+					domGeometry.setMarginBox(this.containerNode, dim);
+				}else if(has("ff")){
+					var scale = size / 40;
+					domStyle.set(this.containerNode, {
+						MozTransform: "scale(" + scale + ")",
+						MozTransformOrigin: "0 0"
+					});
+
+					domGeometry.setMarginBox(this.domNode, {w:size, h:size});
+					domGeometry.setMarginBox(this.containerNode, {w:size / scale, h:size / scale});
+				}
+			}
+		});	
+
+	
 		if(has("ie")){
 			lang.extend(RoundRect, {
 				buildRendering: function(){
@@ -309,7 +332,7 @@ define([
 
 			lang.extend(EdgeToEdgeList, {
 				buildRendering: function(){
-				this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
+				this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("ul");
 					this.domNode.className = "mblEdgeToEdgeList";
 				}
 			});
@@ -334,11 +357,11 @@ define([
 					// tags:
 					//		public
 					var i, len;
-					_this.domNode = win.doc.createElement("DIV");
+					_this.domNode = win.doc.createElement("div");
 					_this.domNode.style.padding = "0px";
 					_this.domNode.style.backgroundColor = "transparent";
 					_this.domNode.style.border = "none"; // borderStyle = "none"; doesn't work on IE9
-					_this.containerNode = win.doc.createElement(isList?"UL":"DIV");
+					_this.containerNode = win.doc.createElement(isList?"ul":"div");
 					_this.containerNode.className = "mblRoundRectContainer";
 					if(_this.srcNodeRef){
 						_this.srcNodeRef.parentNode.replaceChild(_this.domNode, _this.srcNodeRef);
@@ -350,11 +373,11 @@ define([
 					_this.domNode.appendChild(_this.containerNode);
 		
 					for(i = 0; i <= 5; i++){
-						var top = domConstruct.create("DIV");
+						var top = domConstruct.create("div");
 						top.className = "mblRoundCorner mblRoundCorner"+i+"T";
 						_this.domNode.insertBefore(top, _this.containerNode);
 		
-						var bottom = domConstruct.create("DIV");
+						var bottom = domConstruct.create("div");
 						bottom.className = "mblRoundCorner mblRoundCorner"+i+"B";
 						_this.domNode.appendChild(bottom);
 					}
@@ -367,7 +390,7 @@ define([
 					// On IE, margin-top of the first child does not seem to be effective,
 					// probably because padding-top is specified for containerNode
 					// to make room for a fixed header. This dummy node is a workaround for that.
-					var dummy = domConstruct.create("DIV", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
+					var dummy = domConstruct.create("div", {className:"mblDummyForIE", innerHTML:"&nbsp;"}, this.containerNode, "first");
 					domStyle.set(dummy, {
 						position: "relative",
 						marginBottom: "-2px",
@@ -443,7 +466,7 @@ define([
 					};
 				}(file), 0);
 			}else{
-				dm.loadedCssFiles.push(domConstruct.create("LINK", {
+				dm.loadedCssFiles.push(domConstruct.create("link", {
 					href: file,
 					type: "text/css",
 					rel: "stylesheet"
@@ -513,6 +536,7 @@ define([
 				setTimeout(function(){ // IE needs setTimeout
 					dm.loadCompatCssFiles(true);
 				}, 0);
+				return;
 			}
 			dm._loadedCss = undefined;
 			var paths = dm.getCssPaths();
