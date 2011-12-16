@@ -2,10 +2,11 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
 	"dojo/_base/window",
+	"dojo/dom-class",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase"
-], function(array, declare, win, Contained, Container, WidgetBase){
+], function(array, declare, win, domClass, Contained, Container, WidgetBase){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -32,9 +33,13 @@ define([
 		//		If true, adds a shadow effect to the container element.
 		shadow: false,
 
+		baseClass: "mblRoundRect",
+
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("DIV");
-			this.domNode.className = this.shadow ? "mblRoundRect mblShadow" : "mblRoundRect";
+			this.inherited(arguments);
+			if(this.shadow){
+				domClass.add(this.domNode, "mblShadow");
+			}
 		},
 
 		resize: function(){
