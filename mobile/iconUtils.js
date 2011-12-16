@@ -2,11 +2,14 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/event",
+	"dojo/_base/lang",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"./sniff"
-], function(array, connect, event, domClass, domConstruct, domStyle, has){
+], function(array, connect, event, lang, domClass, domConstruct, domStyle, has){
+
+	var dm = lang.getObject("dojox.mobile", true);
 
 	// module:
 	//		dojox/mobile/iconUtils
@@ -156,7 +159,7 @@ define([
 						alt: title
 					}, refNode || parent, pos); /* 1.8 */
 				}
-				node.src = (icon || "").replace("${theme}", this.currentTheme); //TODO: how do I pass currentTheme
+				node.src = (icon || "").replace("${theme}", dm.currentTheme);
 				this.setupSpriteIcon(node, iconPos);
 				if(iconPos && parent){
 					var arr = iconPos.split(/[ ,]/);
@@ -171,9 +174,27 @@ define([
 			return node;
 		};
 
-		// iconNode is a DIV node that holds an icon
 		this.iconWrapper = false;
 		this.setIcon = function(/*String*/icon, /*String*/iconPos, /*DomNode*/iconNode, /*String?*/alt, /*DomNode*/parent, /*DomNode?*/refNode, /*String?*/pos){
+			// summary:
+			//		A setter function to set an icon.
+			// description:
+			//		This function is intended to be used by icon setters (e.g. _setIconAttr)
+			// icon:
+			//		An icon path or a DOM button class name.
+			// iconPos:
+			//		The position of an aggregated icon. IconPos is comma separated
+			//		values like top,left,width,height (ex. "0,0,29,29").
+			// iconNode:
+			//		An icon node.
+			// alt:
+			//		An alt text for the icon image.
+			// parent:
+			//		Parent node of the icon.
+			// refNode:
+			//		A node reference to place the icon.
+			// pos:
+			//		The position of the icon relative to refNode.
 			if(!parent || !icon && !iconNode){ return; }
 			if(icon && icon !== "none"){ // create or update an icon
 				if(!this.iconWrapper && icon.indexOf("mblDomButton") !== 0 && !iconPos){ // image
