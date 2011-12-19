@@ -314,6 +314,17 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		this._createInput();
 	},
 
+	_getFileFieldName: function(){
+		var name;
+		if(this.multiple && this.supports("multiple")){
+			// FF3.5+, WebKit
+			name = this.name+"s[]";
+		}else{
+			// <=IE8
+			name = this.name + (this.multiple ? this._nameIndex : "");
+		}
+		return name;
+	},
 	_createInput: function(){
 		if(this._inputs.length){
 			domStyle.set(this.inputNode, {
@@ -323,14 +334,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 			this._nameIndex++;
 		}
 
-		var name;
-		if(this.supports("multiple")){
-			// FF3.5+, WebKit
-			name = this.name+"s[]";
-		}else{
-			// <=IE8
-			name = this.name + (this.multiple ? this._nameIndex : "");
-		}
+		var name = this._getFileFieldName();
 		// reset focusNode to the inputNode, so when the button is clicked,
 		// the focus is properly moved to the input element
 		this.focusNode = this.inputNode = domConstruct.create("input", {type:"file", name:name}, this.domNode, "first");

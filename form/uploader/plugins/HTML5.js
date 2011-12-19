@@ -113,9 +113,9 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		if(!this.getUrl()){
 			console.error("No upload url found.", this); return;
 		}
-		var fd = new FormData();
+		var fd = new FormData(), fieldName=this._getFileFieldName();
 		array.forEach(this._files, function(f, i){
-			fd.append(this.name+"s[]", f);
+			fd.append(fieldName, f);
 		}, this);
 
 		if(data){
@@ -187,9 +187,9 @@ var pluginsHTML5 = declare("dojox.form.uploader.plugins.HTML5", [], {
 		var part = "";
 		boundary = "--" + boundary;
 
-		var filesInError = [], files = this._files;
+		var filesInError = [], files = this._files, 
+		  fieldName=this._getFileFieldName();
 		array.forEach(files, function(f, i){
-			var fieldName = this.name+"s[]";//+i;
 			var fileName  = f.fileName;
 			var binary;
 
