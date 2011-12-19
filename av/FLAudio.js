@@ -102,7 +102,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 		this.initialVolume = this._normalizeVolume(this.initialVolume);
 
 		var args = {
-			path:this._swfPath.uri,
+			path:this._swfPath,
 			width:"1px",
 			height:"1px",
 			minimumVersion:9, // this may need to be 10, not sure
