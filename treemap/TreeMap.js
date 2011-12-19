@@ -779,6 +779,11 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					domClass.remove(renderer, "dojoxTreeMapSelected");
 
 				}
+				if(this._hoveredItem == item){
+					domClass.add(renderer, "dojoxTreeMapHovered");
+				}else{
+					domClass.remove(renderer, "dojoxTreeMapHovered");
+				}
 				if(selected || this._hoveredItem == item){
 					domStyle.set(renderer, "zIndex", 20);
 				}else{
