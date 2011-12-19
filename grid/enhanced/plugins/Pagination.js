@@ -353,11 +353,11 @@ dojo.declare("dojox.grid.enhanced.plugins._Paginator", [dijit._Widget,dijit._Tem
 		var self = this;
 		var g = this.grid;
 		this.plugin.connect(g, "_resize", dojo.hitch(this, "_resetGridHeight"));
-		this._originalResize = dojo.hitch(g, "resize");
+		this._originalResize = g.resize;
 		g.resize = function(changeSize, resultSize){
 			self._changeSize = changeSize;
 			self._resultSize = resultSize;
-			self._originalResize();
+			self._originalResize.apply(g, arguments);
 		};
 		this._placeSelf();
 	},
