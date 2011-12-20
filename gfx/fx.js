@@ -63,6 +63,17 @@ define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_bas
 				ret.push(this.original);
 				return;
 			}
+ 			// Adding support for custom matrices
+ 			if(t.name == "transformationMatrix"){
+ 				if((t.start instanceof m.Matrix2D) && (t.end instanceof m.Matrix2D)){
+ 					var transfMatrix = new m.Matrix2D();
+ 					for(attr in t.end) {
+ 						transfMatrix[attr] = (t.end[attr] - t.start[attr])*r + t.start[attr];
+ 					}
+ 					ret.push(transfMatrix);
+ 				}
+ 				return;
+ 			}
 			if(!(t.name in m)){ return; }
 			var f = m[t.name];
 			if(typeof f != "function"){

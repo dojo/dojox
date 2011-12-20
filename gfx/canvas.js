@@ -800,6 +800,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 			this.surface.makeDirty();
 			return C.clear.apply(this, arguments);
 		},
+		getBoundingBox: C.getBoundingBox,
 		_moveChildToFront: function(shape){
 			this.surface.makeDirty();
 			return C._moveChildToFront.apply(this, arguments);

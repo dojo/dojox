@@ -1153,6 +1153,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			}
 			return C.clear.apply(this, arguments);
 		},
+		getBoundingBox: C.getBoundingBox,
 		_moveChildToFront: C._moveChildToFront,
 		_moveChildToBack:  C._moveChildToBack
 	};

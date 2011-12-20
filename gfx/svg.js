@@ -708,6 +708,7 @@ else
 			}
 			return C.clear.apply(this, arguments);
 		},
+		getBoundingBox: C.getBoundingBox,
 		_moveChildToFront: C._moveChildToFront,
 		_moveChildToBack:  C._moveChildToBack
 	};
