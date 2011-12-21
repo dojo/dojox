@@ -937,7 +937,7 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	},
 	_onNew: function(item, parentInfo){
 		var totalPages = this.getTotalPageNum();
-		if(((this._currentPage === totalPages || totalPages === 0) && this.grid.rowCount < this._currentPageSize) || this._showAll){
+		if(((this._currentPage === totalPages || totalPages === 0) && this.grid.get('rowCount') < this._currentPageSize) || this._showAll){
 			lang.hitch(this.grid, this._gridOriginalfuncs[1])(item, parentInfo);
 			this.forcePageStoreLayer.endIdx++;
 		}
