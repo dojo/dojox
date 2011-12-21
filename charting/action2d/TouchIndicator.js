@@ -65,7 +65,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		
 		//	labelFunc: Function?
 		//		An optional function to use to compute label text. It takes precedence over
-		//		the default text when available.
+		//		the default text when available. The function must be of the following form:
+		//	|		function labelFunc(firstTouchPoint, secondTouchPoint, fixed, precision) {}
+		//		`firstDataPoint` is the `{x, y}` data coordinates pointed by the first touch point
+		//		`secondDataPoint`  is the `{x, y}` data coordinates pointed by the second touch point if any
+		//		`fixed` is true if fixed precision must be applied.
+		//		`precision` is the requested precision to be applied.
 		labelFunc:		{},
 	
 		//	font: String?

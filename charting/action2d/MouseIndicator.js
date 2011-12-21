@@ -63,6 +63,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//	labelFunc: Function?
 		//		An optional function to use to compute label text. It takes precedence over
 		//		the default text when available.
+		//	|		function labelFunc(firstDataPoint, secondDataPoint, fixed, precision) {}
+		//		`firstDataPoint` is the `{x, y}` data coordinates pointed by the mouse
+		//		`secondDataPoint` is only useful for dual touch indicators not mouse indicators
+		//		`fixed` is true if fixed precision must be applied.
+		//		`precision` is the requested precision to be applied.
 		labelFunc:		{},
 	
 		//	font: String?
