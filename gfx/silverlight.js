@@ -412,7 +412,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.shape = g.makeParameters(this.shape, newShape);
 			this.bbox = null;
 			var r = this.rawNode, s = this.shape;
-			r.text = s.text;
+			r.text = "" + s.text; // #14522
 			r.textDecorations = s.decoration === "underline" ? "Underline" : "None";
 			r["Canvas.Left"] = -10000;
 			r["Canvas.Top"]  = -10000;
