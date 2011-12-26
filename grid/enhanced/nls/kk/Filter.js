@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Сүзгіні тазалау",
 	"filterDefDialogTitle": "Сүзгі",
-	"incompleteRuleTip": "Бұл ереже толық емес.",
 	"ruleTitleTemplate": "${0} ережесі",
 	
 	"conditionEqual": "тең",
@@ -21,6 +20,7 @@
 	"conditionBefore": "алдында",
 	"conditionAfter": "артында",
 	"conditionRange": "ауқым",
+	"conditionIsEmpty": "бос",
 	
 	"all": "барлығы",
 	"any": "кез келген",
@@ -79,10 +79,6 @@
 	"clearFilterMsg": "Бұл сүзгіні жояды және барлық қол жетімді жазбаларды көрсетеді.",
 	"anyColumnOption": "Кез келген баған",
 	
-	"trueLabelEditable": "Белгіленген",
 	"trueLabel": "Шын",
 	"falseLabel": "Жалған"
 })
-
-
-

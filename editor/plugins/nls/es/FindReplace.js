@@ -8,7 +8,6 @@
 	"matchCaseTooltip": "Coincidir mayúsculas y minúsculas",
 	"backwards": "Hacia atrás",
 	"backwardsTooltip": "Buscar texto hacia atrás",
-	"replaceAll": "Todas las apariciones",
 	"replaceAllButton": "Sustituir todo",
 	"replaceAllButtonTooltip": "Sustituir todo el texto",
 	"findButton": "Buscar",

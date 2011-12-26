@@ -8,7 +8,6 @@
 	"matchCaseTooltip": "Store/små bogstaver",
 	"backwards": "Tilbage",
 	"backwardsTooltip": "Søg baglæns efter tekst",
-	"replaceAll": "Alle forekomster",
 	"replaceAllButton": "Erstat alle",
 	"replaceAllButtonTooltip": "Erstat alle forekomster i teksten",
 	"findButton": "Søg",

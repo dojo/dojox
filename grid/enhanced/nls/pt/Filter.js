@@ -1,7 +1,6 @@
 ({
 	"clearFilterDialogTitle": "Limpar Filtro",
 	"filterDefDialogTitle": "Filtrar",
-	"incompleteRuleTip": "Esta regra não está completa.",
 	"ruleTitleTemplate": "Regra ${0}",
 
 	"conditionEqual": "igual",
@@ -21,6 +20,7 @@
 	"conditionBefore": "antes",
 	"conditionAfter": "depois",
 	"conditionRange": "intervalo",
+	"conditionIsEmpty": "está vazio",
 
 	"all": "todos",
 	"any": "qualquer um",
@@ -79,8 +79,6 @@
 	"clearFilterMsg": "Isso removerá o filtro e mostrará todos os registros disponíveis.",
 	"anyColumnOption": "Qualquer Coluna",
 
-	"trueLabelEditable": "Verificado",
 	"trueLabel": "Verdadeiro",
 	"falseLabel": "Falso"
 })
-

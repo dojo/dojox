@@ -8,7 +8,6 @@
 	"matchCaseTooltip": "Razlikuj velike in male črke",
 	"backwards": "Nazaj",
 	"backwardsTooltip": "Vzvratno iskanje besedila ",
-	"replaceAll": "Vse pojavitve ",
 	"replaceAllButton": "Zamenjaj vse",
 	"replaceAllButtonTooltip": "Zamenjaj celotno besedilo ",
 	"findButton": "Najdi",

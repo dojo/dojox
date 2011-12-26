@@ -8,7 +8,6 @@
 	"matchCaseTooltip": "Skill mellom store og små bokstaver",
 	"backwards": "Bakover",
 	"backwardsTooltip": "Søk bakover etter tekst",
-	"replaceAll": "Alle forekomster",
 	"replaceAllButton": "Erstatt alle",
 	"replaceAllButtonTooltip": "Erstatt all tekst",
 	"findButton": "Søk",

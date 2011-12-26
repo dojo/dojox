@@ -8,7 +8,6 @@
 	"matchCaseTooltip": "ตรงตามตัวพิมพ์ใหญ่เล็ก",
 	"backwards": "ย้อนกลับ",
 	"backwardsTooltip": "ค้นหาย้อนกับเพื่อหาข้อความ",
-	"replaceAll": "ที่เกิดขึ้นทั้งหมด",
 	"replaceAllButton": "แทนที่ทั้งหมด",
 	"replaceAllButtonTooltip": "แทนที่ข้อความทั้งหมด",
 	"findButton": "ค้นหา",
