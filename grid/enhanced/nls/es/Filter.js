@@ -1,8 +1,7 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Borrar filtro",
-	"filterDefDialogTitle": "Filtro",
+	"filterDefDialogTitle": "Filtrar",
 	"ruleTitleTemplate": "Regla ${0}",
 	
 	"conditionEqual": "es igual a",
@@ -14,11 +13,11 @@ define(
 	"conditionContains": "contiene",
 	"conditionIs": "es",
 	"conditionStartsWith": "empieza por",
-	"conditionEndWith": "acaba por",
+	"conditionEndWith": "termina con",
 	"conditionNotContain": "no contiene",
 	"conditionIsNot": "no es",
 	"conditionNotStartWith": "no empieza por",
-	"conditionNotEndWith": "no acaba por",
+	"conditionNotEndWith": "no termina con",
 	"conditionBefore": "antes",
 	"conditionAfter": "después",
 	"conditionRange": "rango",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Coincidir con todas las reglas siguientes:",
 	"relationAny": "cualquier regla",
 	"waiRelAny": "Coincidir con cualquiera de las reglas siguientes:",
-	"relationMsgFront": "Coincidir",
+	"relationMsgFront": "Coincidir:",
 	"relationMsgTail": "",
 	"and": "y",
 	"or": "o",
@@ -64,17 +63,19 @@ define(
 	"anycolumn": "cualquier columna",
 	"statusTipTitleNoFilter": "Barra de filtro",
 	"statusTipTitleHasFilter": "Filtro",
+	"statusTipRelAny": "Coincidir con cualquier regla.",
+	"statusTipRelAll": "Coincidir con todas las reglas.",
 	
 	"defaultItemsName": "elementos",
-	"filterBarMsgHasFilterTemplate": "${0} de ${1} ${2} mostrados.",
-	"filterBarMsgNoFilterTemplate": "Ningún filtro aplicado",
+	"filterBarMsgHasFilterTemplate": "Se muestran ${0} de ${1} ${2}.",
+	"filterBarMsgNoFilterTemplate": "No se aplica ningún filtro",
 	
 	"filterBarDefButton": "Definir filtro",
 	"waiFilterBarDefButton": "Filtrar la tabla",
 	"a11yFilterBarDefButton": "Filtrar...",
 	"filterBarClearButton": "Borrar filtro",
 	"waiFilterBarClearButton": "Borrar el filtro",
-	"closeFilterBarBtn": "Cerrar barra de filtro",
+	"closeFilterBarBtn": "Cerrar la barra de filtro",
 	
 	"clearFilterMsg": "Esto eliminará el filtro y mostrará todos los registros disponibles.",
 	"anyColumnOption": "Cualquier columna",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Verdadero",
 	"falseLabel": "Falso"
 })
-//end v1.x content
 );
-
-
-

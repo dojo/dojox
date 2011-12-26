@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Сүзгіні тазалау",
 	"filterDefDialogTitle": "Сүзгі",
@@ -8,9 +7,9 @@ define(
 	"conditionEqual": "тең",
 	"conditionNotEqual": "тең емес",
 	"conditionLess": "аздау",
-	"conditionLessEqual": "аздау немесе тең",
+	"conditionLessEqual": "кем немесе тең",
 	"conditionLarger": "үлкендеу",
-	"conditionLargerEqual": "үлкендеу немесе тең",
+	"conditionLargerEqual": "артық немесе тең",
 	"conditionContains": "құрамында бар",
 	"conditionIs": "–",
 	"conditionStartsWith": "басталады",
@@ -22,7 +21,7 @@ define(
 	"conditionBefore": "алдында",
 	"conditionAfter": "артында",
 	"conditionRange": "ауқым",
-	"conditionIsEmpty": "– бос",
+	"conditionIsEmpty": "бос",
 	
 	"all": "барлығы",
 	"any": "кез келген",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Барлық мына ережелерге сәйкес:",
 	"relationAny": "кез келген ереже",
 	"waiRelAny": "Мына ережелерге сәйкес:",
-	"relationMsgFront": "Сәйкес келу",
+	"relationMsgFront": "Сәйкестендіру:",
 	"relationMsgTail": "",
 	"and": "және",
 	"or": "немесе",
@@ -42,7 +41,7 @@ define(
 	
 	"cancelButton": "Болдырмау",
 	"waiCancelButton": "Осы тілқатысу терезесін болдырмау",
-	"clearButton": "Тазалау ",
+	"clearButton": "Тазалау",
 	"waiClearButton": "Сүзгіні тазалау",
 	"filterButton": "Сүзгі",
 	"waiFilterButton": "Сүзгіні жіберу",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "кез келген баған",
 	"statusTipTitleNoFilter": "Сүзгі тақтасы",
 	"statusTipTitleHasFilter": "Сүзгі",
+	"statusTipRelAny": "Кез келген ережелерді сәйкестендіріңіз.",
+	"statusTipRelAll": "Барлық ережелерді сәйкестендіріңіз.",
 	
 	"defaultItemsName": "элементтер",
 	"filterBarMsgHasFilterTemplate": "${1} ${2} ішінен ${0} көрсетілді.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Шын",
 	"falseLabel": "Жалған"
 })
-//end v1.x content
 );
-
-
-

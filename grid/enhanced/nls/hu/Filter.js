@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Szűrő törlése",
 	"filterDefDialogTitle": "Szűrő",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Megfelel a következő összes szabálynak:",
 	"relationAny": "bármely szabály",
 	"waiRelAny": "Megfelel a következő bármely szabálynak:",
-	"relationMsgFront": "Egyezik",
+	"relationMsgFront": "Egyezés:",
 	"relationMsgTail": "",
 	"and": "és",
 	"or": "vagy",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "bármely oszlop",
 	"statusTipTitleNoFilter": "Szűrősáv",
 	"statusTipTitleHasFilter": "Szűrő",
+	"statusTipRelAny": "Bármely szabálynak megfelel.",
+	"statusTipRelAll": "Minden szabálynak megfelel.",
 	
 	"defaultItemsName": "elemek",
 	"filterBarMsgHasFilterTemplate": "${0} / ${1} ${2} megjelenítve.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Igaz",
 	"falseLabel": "Hamis"
 })
-//end v1.x content
 );
-
-
-

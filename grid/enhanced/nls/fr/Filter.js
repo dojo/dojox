@@ -1,16 +1,15 @@
-﻿define(
-//begin v1.x content
+define(
 ({
 	"clearFilterDialogTitle": "Effacer le filtre",
 	"filterDefDialogTitle": "Filtrer",
 	"ruleTitleTemplate": "Règle ${0}",
 	
-	"conditionEqual": "égal",
-	"conditionNotEqual": "est différent de",
-	"conditionLess": "est inférieur à",
-	"conditionLessEqual": "inférieur ou égal",
-	"conditionLarger": "est supérieur à",
-	"conditionLargerEqual": "supérieur ou égal",
+	"conditionEqual": "égal à",
+	"conditionNotEqual": "différent de",
+	"conditionLess": "inférieur à",
+	"conditionLessEqual": "inférieur ou égal à",
+	"conditionLarger": "supérieur à",
+	"conditionLargerEqual": "supérieur ou égal à",
 	"conditionContains": "contient",
 	"conditionIs": "est",
 	"conditionStartsWith": "commence par",
@@ -18,26 +17,26 @@
 	"conditionNotContain": "ne contient pas",
 	"conditionIsNot": "n'est pas",
 	"conditionNotStartWith": "ne commence pas par",
-	"conditionNotEndWith": "ne se termine pas par",
+	"conditionNotEndWith": "ne se termine pas",
 	"conditionBefore": "avant",
 	"conditionAfter": "après",
 	"conditionRange": "plage",
 	"conditionIsEmpty": "est vide",
 	
 	"all": "tout",
-	"any": "n'importe quelle",
+	"any": "n'importe lequel",
 	"relationAll": "toutes les règles",
-	"waiRelAll": "Satisfaire à toutes les règles suivantes :",
-	"relationAny": "n'importe quelles règles",
-	"waiRelAny": "Satisfaire à une quelconque des règles suivantes :",
-	"relationMsgFront": "Satisfaire",
+	"waiRelAll": "Répondre à toutes les règles suivantes :",
+	"relationAny": "n'importe quelle règle",
+	"waiRelAny": "Répondre à l'une des règles suivantes :",
+	"relationMsgFront": "Répondre :",
 	"relationMsgTail": "",
 	"and": "et",
 	"or": "ou",
 	
 	"addRuleButton": "Ajouter une règle",
 	"waiAddRuleButton": "Ajouter une nouvelle règle",
-	"removeRuleButton": "Supprimer la règle",
+	"removeRuleButton": "Supprimer une règle",
 	"waiRemoveRuleButtonTemplate": "Supprimer la règle ${0}",
 	
 	"cancelButton": "Annuler",
@@ -52,7 +51,7 @@
 	"conditionSelectLabel": "Condition",
 	"waiConditionSelectTemplate": "Condition pour la règle ${0}",
 	"valueBoxLabel": "Valeur",
-	"waiValueBoxTemplate": "Saisir la valeur à filtrer pour la règle ${0}",
+	"waiValueBoxTemplate": "Entrez une valeur pour filtrer la règle ${0}",
 	
 	"rangeTo": "à",
 	"rangeTemplate": "de ${0} à ${1}",
@@ -60,30 +59,28 @@
 	"statusTipHeaderColumn": "Colonne",
 	"statusTipHeaderCondition": "Règles",
 	"statusTipTitle": "Barre de filtre",
-	"statusTipMsg": "Cliquer sur la barre de filtre ici pour filtrer sur les valeurs de ${0}.",
-	"anycolumn": "n'importe quelle colonne",
+	"statusTipMsg": "Cliquez sur cette barre de filtre pour filtrer les valeurs de ${0}.",
+	"anycolumn": "toute colonne",
 	"statusTipTitleNoFilter": "Barre de filtre",
 	"statusTipTitleHasFilter": "Filtrer",
+	"statusTipRelAny": "Répondre à l'une des règles.",
+	"statusTipRelAll": "Réponde à toutes les régles.",
 	
 	"defaultItemsName": "éléments",
-	"filterBarMsgHasFilterTemplate": "${0} sur ${1} ${2} affichés.",
+	"filterBarMsgHasFilterTemplate": "${0} sur ${1} ${2} montrés.",
 	"filterBarMsgNoFilterTemplate": "Aucun filtre appliqué",
 	
 	"filterBarDefButton": "Définir le filtre",
-	"waiFilterBarDefButton": "Filtrer le tableau",
+	"waiFilterBarDefButton": "Filtrer la table",
 	"a11yFilterBarDefButton": "Filtrer...",
 	"filterBarClearButton": "Effacer le filtre",
 	"waiFilterBarClearButton": "Effacer le filtre",
 	"closeFilterBarBtn": "Fermer la barre de filtre",
 	
-	"clearFilterMsg": "Cela supprimera le filtre et affichera tous les enregistrements disponibles.",
-	"anyColumnOption": "N'importe quelle colonne",
+	"clearFilterMsg": "Le filtre sera supprimé et tous les enregistrements disponibles affichés.",
+	"anyColumnOption": "Toute colonne",
 	
 	"trueLabel": "Vrai",
 	"falseLabel": "Faux"
 })
-//end v1.x content
 );
-
-
-

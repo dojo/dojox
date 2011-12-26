@@ -1,26 +1,24 @@
 define(
-//begin v1.x content
 ({
 	smiley: "插入表情图标",
 	emoticonSmile: "微笑",
 	emoticonLaughing: "大笑",
 	emoticonWink: "眨眼",
-	emoticonGrin: "咧着嘴笑",
-	emoticonCool: "酷",
+	emoticonGrin: "露齿而笑",
+	emoticonCool: "冷峻",
 	emoticonAngry: "愤怒",
-	emoticonHalf: "左右为难",
-	emoticonEyebrow: "挑眉",
-	emoticonFrown: "皱眉",
+	emoticonHalf: "一半",
+	emoticonEyebrow: "讽刺",
+	emoticonFrown: "不悦",
 	emoticonShy: "害羞",
-	emoticonGoofy: "傻了",
-	emoticonOops: "oops",
-	emoticonTongue: "吐舌",
+	emoticonGoofy: "傻瓜",
+	emoticonOops: "吐舌头",
+	emoticonTongue: "吐舌而笑",
 	emoticonIdea: "思考",
-	emoticonYes: "点头",
-	emoticonNo: "摇头",
+	emoticonYes: "是",
+	emoticonNo: "否",
 	emoticonAngel: "天使",
-	emoticonCrying: "哭泣"
+	emoticonCrying: "哭泣",
+	emoticonHappy: "高兴"
 })
-
-//end v1.x content
 );

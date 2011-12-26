@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Filter wissen",
 	"filterDefDialogTitle": "Filteren",
@@ -30,13 +29,13 @@ define(
 	"waiRelAll": "Voldoen aan al deze regels:",
 	"relationAny": "een of meer regels",
 	"waiRelAny": "Voldoen aan een van deze regels:",
-	"relationMsgFront": "Voldoen aan",
+	"relationMsgFront": "Voldoen aan:",
 	"relationMsgTail": "",
 	"and": "en",
 	"or": "of",
 	
 	"addRuleButton": "Regel toevoegen",
-	"waiAddRuleButton": "Een nieuwe regel toevoegen",
+	"waiAddRuleButton": "Nieuwe regel toevoegen",
 	"removeRuleButton": "Regel verwijderen",
 	"waiRemoveRuleButtonTemplate": "Regel ${0} verwijderen",
 	
@@ -45,7 +44,7 @@ define(
 	"clearButton": "Leegmaken",
 	"waiClearButton": "Het filter wissen",
 	"filterButton": "Filteren",
-	"waiFilterButton": "Het filter verzenden",
+	"waiFilterButton": "Filter activeren",
 	
 	"columnSelectLabel": "Kolom",
 	"waiColumnSelectTemplate": "Kolom voor regel ${0}",
@@ -63,7 +62,9 @@ define(
 	"statusTipMsg": "Klik hier op de filterbalk om te filteren op waarden in ${0}.",
 	"anycolumn": "een kolom",
 	"statusTipTitleNoFilter": "Filterbalk",
-	"statusTipTitleHasFilter": "Filter",
+	"statusTipTitleHasFilter": "Filteren",
+	"statusTipRelAny": "Voldoen aan een van de regels.",
+	"statusTipRelAll": "Voldoen aan alle regels.",
 	
 	"defaultItemsName": "items",
 	"filterBarMsgHasFilterTemplate": "${0} van ${1} ${2} afgebeeld.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Waar",
 	"falseLabel": "Onwaar"
 })
-//end v1.x content
 );
-
-
-

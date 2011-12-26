@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Filter löschen",
 	"filterDefDialogTitle": "Filter",
@@ -19,18 +18,18 @@ define(
 	"conditionIsNot": "ist nicht",
 	"conditionNotStartWith": "beginnt nicht mit",
 	"conditionNotEndWith": "endet nicht mit",
-	"conditionBefore": "vorher",
-	"conditionAfter": "danach",
+	"conditionBefore": "vor",
+	"conditionAfter": "nach",
 	"conditionRange": "Bereich",
 	"conditionIsEmpty": "ist leer",
 	
 	"all": "alle",
-	"any": "beliebige",
+	"any": "ein(e/r)",
 	"relationAll": "alle Regeln",
-	"waiRelAll": "Stimmt mit allen der folgenden Regeln überein:",
-	"relationAny": "beliebige Regeln",
-	"waiRelAny": "Stimmt mit einer beliebigen der folgenden Regeln überein:",
-	"relationMsgFront": "Übereinstimmung",
+	"waiRelAll": "Übereinstimmung mit allen folgenden Regeln:",
+	"relationAny": "eine Regel",
+	"waiRelAny": "Übereinstimmung mit einer der folgenden Regeln:",
+	"relationMsgFront": "Übereinstimmung:",
 	"relationMsgTail": "",
 	"and": "und",
 	"or": "oder",
@@ -41,18 +40,18 @@ define(
 	"waiRemoveRuleButtonTemplate": "Regel ${0} entfernen",
 	
 	"cancelButton": "Abbrechen",
-	"waiCancelButton": "Diesen Dialog abbrechen",
+	"waiCancelButton": "Dieses Dialogfenster abbrechen",
 	"clearButton": "Löschen",
-	"waiClearButton": "Den Filter löschen",
+	"waiClearButton": "Filter löschen",
 	"filterButton": "Filter",
-	"waiFilterButton": "Den Filter abschicken",
+	"waiFilterButton": "Filter übergeben",
 	
 	"columnSelectLabel": "Spalte",
 	"waiColumnSelectTemplate": "Spalte für Regel ${0}",
 	"conditionSelectLabel": "Bedingung",
 	"waiConditionSelectTemplate": "Bedingung für Regel ${0}",
 	"valueBoxLabel": "Wert",
-	"waiValueBoxTemplate": "Wert eingeben, um nach Regel ${0} zu filtern",
+	"waiValueBoxTemplate": "Wert zum Filtern für Regel ${0} eingeben",
 	
 	"rangeTo": "bis",
 	"rangeTemplate": "von ${0} bis ${1}",
@@ -60,30 +59,28 @@ define(
 	"statusTipHeaderColumn": "Spalte",
 	"statusTipHeaderCondition": "Regeln",
 	"statusTipTitle": "Filterleiste",
-	"statusTipMsg": "Klicken Sie auf die Filterleiste hier, um nach Werten in ${0} zu filtern.",
-	"anycolumn": "beliebige Spalte",
+	"statusTipMsg": "Klicken Sie hier auf die Filterleiste, um die Werte in ${0} zu filtern.",
+	"anycolumn": "eine Spalte",
 	"statusTipTitleNoFilter": "Filterleiste",
 	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Übereinstimmung mit einer oder mehreren beliebigen Regeln.",
+	"statusTipRelAll": "Übereinstimmung mit allen Regeln.",
 	
 	"defaultItemsName": "Elemente",
 	"filterBarMsgHasFilterTemplate": "${0} von ${1} ${2} angezeigt.",
 	"filterBarMsgNoFilterTemplate": "Kein Filter angewendet",
 	
 	"filterBarDefButton": "Filter definieren",
-	"waiFilterBarDefButton": "Die Tabelle filtern",
-	"a11yFilterBarDefButton": "Filter...",
+	"waiFilterBarDefButton": "Tabelle filtern",
+	"a11yFilterBarDefButton": "Filtern...",
 	"filterBarClearButton": "Filter löschen",
-	"waiFilterBarClearButton": "Den Filter löschen",
+	"waiFilterBarClearButton": "Filter löschen",
 	"closeFilterBarBtn": "Filterleiste schließen",
 	
-	"clearFilterMsg": "Damit wird der Filter gelöscht und es werden alle verfügbaren Sätze angezeigt.",
-	"anyColumnOption": "Beliebige Spalte",
+	"clearFilterMsg": "Dadurch wird der Filter gelöscht und alle verfügbaren Einträge werden angezeigt.",
+	"anyColumnOption": "Eine Spalte",
 	
 	"trueLabel": "Wahr",
 	"falseLabel": "Falsch"
 })
-//end v1.x content
 );
-
-
-

@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "محو ترشيح البيانات",
 	"filterDefDialogTitle": "ترشيح البيانات",
@@ -82,8 +81,4 @@ define(
 	"trueLabel": "متحقق",
 	"falseLabel": "غير متحقق"
 })
-//end v1.x content
 );
-
-
-

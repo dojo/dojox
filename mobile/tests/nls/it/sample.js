@@ -1,5 +1,4 @@
 ﻿define(
-//begin v1.x content
 ({
 	"MINUTES": "%1 Minuto",
 	"Second": "secondo",
@@ -7,5 +6,4 @@
 	"Sunday": "Domenica",
 	"Monday": "Lunedì"
 })
-//end v1.x content
 );

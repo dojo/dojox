@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Ryd filter",
 	"filterDefDialogTitle": "Filter",
@@ -25,12 +24,12 @@ define(
 	"conditionIsEmpty": "er tom",
 	
 	"all": "alle",
-	"any": "vilkårlig",
+	"any": "vilkårlige",
 	"relationAll": "alle regler",
 	"waiRelAll": "Matcher alle følgende regler:",
 	"relationAny": "vilkårlige regler",
 	"waiRelAny": "Matcher en eller flere af følgende regler:",
-	"relationMsgFront": "Match",
+	"relationMsgFront": "Match:",
 	"relationMsgTail": "",
 	"and": "og",
 	"or": "eller",
@@ -43,9 +42,9 @@ define(
 	"cancelButton": "Annullér",
 	"waiCancelButton": "Annullér denne dialogboks",
 	"clearButton": "Ryd",
-	"waiClearButton": "Ryd filtret",
-	"filterButton": "Filter",
-	"waiFilterButton": "Send filtret",
+	"waiClearButton": "Ryd filteret",
+	"filterButton": "Filtrér",
+	"waiFilterButton": "Send filteret",
 	
 	"columnSelectLabel": "Kolonne",
 	"waiColumnSelectTemplate": "Kolonne for reglen ${0}",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "vilkårlig kolonne",
 	"statusTipTitleNoFilter": "Filterlinje",
 	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Matcher en hvilken som helst regel.",
+	"statusTipRelAll": "Matcher alle regler.",
 	
 	"defaultItemsName": "elementer",
 	"filterBarMsgHasFilterTemplate": "${0} af ${1} ${2} vist.",
@@ -73,17 +74,13 @@ define(
 	"waiFilterBarDefButton": "Filtrér tabellen",
 	"a11yFilterBarDefButton": "Filtrér...",
 	"filterBarClearButton": "Ryd filter",
-	"waiFilterBarClearButton": "Ryd filtret",
+	"waiFilterBarClearButton": "Ryd filteret",
 	"closeFilterBarBtn": "Luk filterlinje",
 	
-	"clearFilterMsg": "Denne funktion fjerner filtret og viser alle tilgængelige records.",
+	"clearFilterMsg": "Denne funktion fjerner filteret og viser alle tilgængelige records.",
 	"anyColumnOption": "Vilkårlig kolonne",
 	
 	"trueLabel": "Sand",
 	"falseLabel": "Falsk"
 })
-//end v1.x content
 );
-
-
-

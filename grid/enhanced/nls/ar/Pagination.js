@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} من ${1} ${0}",
 	"firstTip": "الصفحة الأولى",
@@ -18,6 +17,4 @@ define(
 	"dialogCancel": "الغاء",
 	"all": "كل"
 })
-//end v1.x content
 );
-

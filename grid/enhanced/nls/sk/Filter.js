@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Zrušiť filter",
 	"filterDefDialogTitle": "Filter",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Vyhovovať všetkým týmto pravidlám:",
 	"relationAny": "ľubovoľné pravidlá",
 	"waiRelAny": "Vyhovovať ľubovoľným z týchto pravidiel:",
-	"relationMsgFront": "Vyhovieť",
+	"relationMsgFront": "Zhoda:",
 	"relationMsgTail": "",
 	"and": "a",
 	"or": "alebo",
@@ -44,7 +43,7 @@ define(
 	"waiCancelButton": "Zrušiť toto dialógové okno",
 	"clearButton": "Zrušiť",
 	"waiClearButton": "Zrušiť filter",
-	"filterButton": "Filtrovať",
+	"filterButton": "Filter",
 	"waiFilterButton": "Odoslať filter",
 	
 	"columnSelectLabel": "Stĺpec",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "ľubovoľný stĺpec",
 	"statusTipTitleNoFilter": "Lišta filtra",
 	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Zhoda s akýmikoľvek pravidlami.",
+	"statusTipRelAll": "Zhoda so všetkými pravidlami.",
 	
 	"defaultItemsName": "položky",
 	"filterBarMsgHasFilterTemplate": "Zobrazuje sa ${0} z ${1} ${2}.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Pravda",
 	"falseLabel": "Nepravda"
 })
-//end v1.x content
 );
-
-
-

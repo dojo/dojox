@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Tøm filter",
 	"filterDefDialogTitle": "Filter",
@@ -13,11 +12,11 @@ define(
 	"conditionLargerEqual": "større enn eller lik",
 	"conditionContains": "inneholder",
 	"conditionIs": "er",
-	"conditionStartsWith": "starter med",
+	"conditionStartsWith": "begynner med",
 	"conditionEndWith": "slutter med",
 	"conditionNotContain": "inneholder ikke",
 	"conditionIsNot": "er ikke",
-	"conditionNotStartWith": "starter ikke med",
+	"conditionNotStartWith": "begynner ikke med",
 	"conditionNotEndWith": "slutter ikke med",
 	"conditionBefore": "før",
 	"conditionAfter": "etter",
@@ -27,10 +26,10 @@ define(
 	"all": "alle",
 	"any": "minst en",
 	"relationAll": "alle regler",
-	"waiRelAll": "Samsvar med alle disse reglene:",
+	"waiRelAll": "Samsvar med alle følgende regler:",
 	"relationAny": "minst en regel",
-	"waiRelAny": "Samsvar med minst en av disse reglene:",
-	"relationMsgFront": "Samsvar med",
+	"waiRelAny": "Samsvar med minst en av følgende regler:",
+	"relationMsgFront": "Samsvar:",
 	"relationMsgTail": "",
 	"and": "og",
 	"or": "eller",
@@ -44,7 +43,7 @@ define(
 	"waiCancelButton": "Avbryt denne dialogboksen",
 	"clearButton": "Tøm",
 	"waiClearButton": "Tøm filteret",
-	"filterButton": "Filtrer",
+	"filterButton": "Filter",
 	"waiFilterButton": "Send filteret",
 	
 	"columnSelectLabel": "Kolonne",
@@ -52,7 +51,7 @@ define(
 	"conditionSelectLabel": "Betingelse",
 	"waiConditionSelectTemplate": "Betingelse for regel ${0}",
 	"valueBoxLabel": "Verdi",
-	"waiValueBoxTemplate": "Oppgi verdi som skal filtreres for regel ${0}",
+	"waiValueBoxTemplate": "Angi verdi som skal filtreres for regel ${0}",
 	
 	"rangeTo": "til",
 	"rangeTemplate": "fra ${0} til ${1}",
@@ -60,21 +59,23 @@ define(
 	"statusTipHeaderColumn": "Kolonne",
 	"statusTipHeaderCondition": "Regler",
 	"statusTipTitle": "Filterlinje",
-	"statusTipMsg": "Klikk på filterlinjen her for å filtrere på verdiene i ${0}.",
+	"statusTipMsg": "Klikk på filterlinjen her for å filtrere på verdier i ${0}.",
 	"anycolumn": "enhver kolonne",
 	"statusTipTitleNoFilter": "Filterlinje",
 	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Samsvar med minst en regel.",
+	"statusTipRelAll": "Samsvar med alle regler.",
 	
 	"defaultItemsName": "elementer",
 	"filterBarMsgHasFilterTemplate": "${0} av ${1} ${2} vist.",
-	"filterBarMsgNoFilterTemplate": "Ikke brukt filter",
+	"filterBarMsgNoFilterTemplate": "Det er ikke brukt filter",
 	
 	"filterBarDefButton": "Definer filter",
 	"waiFilterBarDefButton": "Filtrer tabellen",
 	"a11yFilterBarDefButton": "Filtrer...",
 	"filterBarClearButton": "Tøm filter",
 	"waiFilterBarClearButton": "Tøm filteret",
-	"closeFilterBarBtn": "Lukk filterlinjen",
+	"closeFilterBarBtn": "Lukk filterlinje",
 	
 	"clearFilterMsg": "Dette fjerner filteret og viser alle tilgjengelige poster.",
 	"anyColumnOption": "Minst en kolonne",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Sann",
 	"falseLabel": "Usann"
 })
-//end v1.x content
 );
-
-
-

@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Ştergere filtru",
 	"filterDefDialogTitle": "Filtru",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Răspundeţi tuturor regulilor următoare:",
 	"relationAny": "oricare reguli",
 	"waiRelAny": "Răspundeţi oricărei dintre regulile următoare:",
-	"relationMsgFront": "Răspuns",
+	"relationMsgFront": "Potrivire:",
 	"relationMsgTail": "",
 	"and": "şi",
 	"or": "sau",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "orice coloană",
 	"statusTipTitleNoFilter": "Bară de filtru",
 	"statusTipTitleHasFilter": "Filtru",
+	"statusTipRelAny": "Potrivire orice regulă.",
+	"statusTipRelAll": "Potrivire toate regulile.",
 	
 	"defaultItemsName": "articole",
 	"filterBarMsgHasFilterTemplate": "${0} din ${1} ${2} afişate.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Adevărat",
 	"falseLabel": "Fals"
 })
-//end v1.x content
 );
-
-
-

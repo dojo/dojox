@@ -1,26 +1,24 @@
 define(
-//begin v1.x content
 ({
-	smiley: "Inserisci emoticon",
-	emoticonSmile: "sorriso",
+	smiley: "Inserisci Emoticon",
+	emoticonSmile: "sorridente",
 	emoticonLaughing: "risata",
 	emoticonWink: "occhiolino",
 	emoticonGrin: "ghigno",
 	emoticonCool: "figo",
 	emoticonAngry: "arrabbiato",
 	emoticonHalf: "metà",
-	emoticonEyebrow: "sopracciglia",
-	emoticonFrown: "triste",
+	emoticonEyebrow: "sopracciglio",
+	emoticonFrown: "corrucciato",
 	emoticonShy: "timido",
 	emoticonGoofy: "sciocco",
-	emoticonOops: "ops",
-	emoticonTongue: "linguaccia",
+	emoticonOops: "oops",
+	emoticonTongue: "lingua",
 	emoticonIdea: "idea",
-	emoticonYes: "yes",
+	emoticonYes: "sì",
 	emoticonNo: "no",
 	emoticonAngel: "angelo",
-	emoticonCrying: "in lacrime"
+	emoticonCrying: "piangente",
+	emoticonHappy: "felice"
 })
-
-//end v1.x content
 );

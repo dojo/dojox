@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	singleSort: "فرز منفرد",
 	nestedSort: "فرز متداخل",
@@ -11,6 +10,4 @@ define(
 	indirectSelectionCheckBox: "الصف ${0}، اختيارات متعددة، مربع اختيار",
 	selectAll: "تحديد كل"
 })
-//end v1.x content
 );
-

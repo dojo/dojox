@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	displayOptions: "[možnosti prikaza]",
 	title: "Naslov",
@@ -11,5 +10,4 @@ define(
 	summary: "Povzetek",
 	content: "Vsebina"
 })
-//end v1.x content
 );

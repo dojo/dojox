@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Počisti filter",
 	"filterDefDialogTitle": "Filter",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Ujema se z vsemi od naslednjih pravil:",
 	"relationAny": "katerakoli pravila",
 	"waiRelAny": "Ujema se s katerimkoli od naslednjih pravil:",
-	"relationMsgFront": "Ujemanje",
+	"relationMsgFront": "Ujemanje:",
 	"relationMsgTail": "",
 	"and": "in",
 	"or": "ali",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "katerikoli stolpec",
 	"statusTipTitleNoFilter": "Vrstica za filtriranje",
 	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Ujemanje s katerimkoli pravilom.",
+	"statusTipRelAll": "Ujemanje z vsemi pravili.",
 	
 	"defaultItemsName": "postavke",
 	"filterBarMsgHasFilterTemplate": "Prikazanih je ${0} od ${1} ${2}.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "True",
 	"falseLabel": "False"
 })
-//end v1.x content
 );
-
-
-

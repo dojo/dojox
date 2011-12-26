@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Εκκαθάριση φίλτρου",
 	"filterDefDialogTitle": "Φίλτρο",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Αντιστοιχία με όλους τους παρακάτω κανόνες:",
 	"relationAny": "οποιοσδήποτε κανόνας",
 	"waiRelAny": "Αντιστοιχία με οποιονδήποτε από τους παρακάτω κανόνες:",
-	"relationMsgFront": "Αντιστοιχία",
+	"relationMsgFront": "Επιστροφή:",
 	"relationMsgTail": "",
 	"and": "και",
 	"or": "ή",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "οποιαδήποτε στήλη",
 	"statusTipTitleNoFilter": "Γραμμή φίλτρου",
 	"statusTipTitleHasFilter": "Φίλτρο",
+	"statusTipRelAny": "Αντιστοιχία με οποιουσδήποτε κανόνες.",
+	"statusTipRelAll": "Αντιστοιχία με όλους τους κανόνες.",
 	
 	"defaultItemsName": "στοιχεία",
 	"filterBarMsgHasFilterTemplate": "Εμφανίζονται ${0} από ${1} ${2}.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Αληθές",
 	"falseLabel": "Ψευδές"
 })
-//end v1.x content
 );
-
-
-

@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Netejar el filtre",
 	"filterDefDialogTitle": "Filtre",
@@ -22,7 +21,7 @@ define(
 	"conditionBefore": "abans",
 	"conditionAfter": "després",
 	"conditionRange": "interval",
-	"conditionIsEmpty": "és buida",
+	"conditionIsEmpty": "és buit",
 	
 	"all": "tot",
 	"any": "qualsevol",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Fes coincidir totes les regles següents:",
 	"relationAny": "qualsevol regla",
 	"waiRelAny": "Fes coincidir qualsevol de les regles següents:",
-	"relationMsgFront": "Coincidència",
+	"relationMsgFront": "Coincidència:",
 	"relationMsgTail": "",
 	"and": "i",
 	"or": "o",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "qualsevol columna",
 	"statusTipTitleNoFilter": "Barra de filtre",
 	"statusTipTitleHasFilter": "Filtre",
+	"statusTipRelAny": "Coincideix amb qualsevol regla.",
+	"statusTipRelAll": "Coincideix amb totes les regles.",
 	
 	"defaultItemsName": "elements",
 	"filterBarMsgHasFilterTemplate": "Es mostren ${0} de ${1} ${2}.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "Cert",
 	"falseLabel": "Fals"
 })
-//end v1.x content
 );
-
-
-

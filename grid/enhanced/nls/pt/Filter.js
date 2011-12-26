@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Limpar Filtro",
 	"filterDefDialogTitle": "Filtrar",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "Corresponder a todas as seguintes regras:",
 	"relationAny": "qualquer regra",
 	"waiRelAny": "Corresponder a qualquer uma das seguintes regras:",
-	"relationMsgFront": "Corresponder",
+	"relationMsgFront": "Corresponder:",
 	"relationMsgTail": "",
 	"and": "e",
 	"or": "ou",
@@ -64,8 +63,8 @@ define(
 	"anycolumn": "qualquer coluna",
 	"statusTipTitleNoFilter": "Barra de Filtragem",
 	"statusTipTitleHasFilter": "Filtrar",
-	"statusTipRelAny": "Quaisquer Regras.",
-	"statusTipRelAll": "Todas as Regras.",
+	"statusTipRelAny": "Corresponder a quaisquer regras.",
+	"statusTipRelAll": "Corresponder a todas as regras.",
 	
 	"defaultItemsName": "itens",
 	"filterBarMsgHasFilterTemplate": "${0} de ${1} ${2} mostrados.",
@@ -84,8 +83,4 @@ define(
 	"trueLabel": "Verdadeiro",
 	"falseLabel": "Falso"
 })
-//end v1.x content
 );
-
-
-

@@ -1,15 +1,14 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Rensa filter",
-	"filterDefDialogTitle": "Filter",
+	"filterDefDialogTitle": "Filtrera",
 	"ruleTitleTemplate": "Regel ${0}",
 	
 	"conditionEqual": "lika med",
 	"conditionNotEqual": "inte lika med",
-	"conditionLess": "är mindre än",
-	"conditionLessEqual": "mindre eller lika med",
-	"conditionLarger": "är större än",
+	"conditionLess": "mindre än",
+	"conditionLessEqual": "mindre än eller lika med",
+	"conditionLarger": "större än",
 	"conditionLargerEqual": "större än eller lika med",
 	"conditionContains": "innehåller",
 	"conditionIs": "är",
@@ -30,29 +29,29 @@ define(
 	"waiRelAll": "Matcha alla följande regler:",
 	"relationAny": "någon regel",
 	"waiRelAny": "Matcha någon av följande regler:",
-	"relationMsgFront": "Matcha",
+	"relationMsgFront": "Matcha:",
 	"relationMsgTail": "",
 	"and": "och",
 	"or": "eller",
 	
 	"addRuleButton": "Lägg till regel",
-	"waiAddRuleButton": "Lägg till en ny regel",
+	"waiAddRuleButton": "Lägg till ny regel",
 	"removeRuleButton": "Ta bort regel",
-	"waiRemoveRuleButtonTemplate": "Ta bort regel ${0}",
+	"waiRemoveRuleButtonTemplate": "Ta bort regeln ${0}",
 	
 	"cancelButton": "Avbryt",
-	"waiCancelButton": "Avbryt dialogen",
+	"waiCancelButton": "Ständ dialogrutan",
 	"clearButton": "Rensa",
 	"waiClearButton": "Rensa filtret",
-	"filterButton": "Filtrera",
-	"waiFilterButton": "Filtrera",
+	"filterButton": "Filter",
+	"waiFilterButton": "Använd filtret",
 	
 	"columnSelectLabel": "Kolumn",
-	"waiColumnSelectTemplate": "Kolumn för regel ${0}",
+	"waiColumnSelectTemplate": "Kolumn för regeln ${0}",
 	"conditionSelectLabel": "Villkor",
-	"waiConditionSelectTemplate": "Villkor för regel ${0}",
+	"waiConditionSelectTemplate": "Villkor för regeln ${0}",
 	"valueBoxLabel": "Värde",
-	"waiValueBoxTemplate": "Ange värde för filtrering efter regeln ${0}",
+	"waiValueBoxTemplate": "Filtervärde för regeln ${0}",
 	
 	"rangeTo": "till",
 	"rangeTemplate": "från ${0} till ${1}",
@@ -60,30 +59,28 @@ define(
 	"statusTipHeaderColumn": "Kolumn",
 	"statusTipHeaderCondition": "Regler",
 	"statusTipTitle": "Filterfält",
-	"statusTipMsg": "Klicka på filterfältet om du vill filtrera värden i ${0}.",
-	"anycolumn": "alla kolumner",
+	"statusTipMsg": "Klicka på filterfältet för att filtrera värden i ${0}.",
+	"anycolumn": "någon kolumn",
 	"statusTipTitleNoFilter": "Filterfält",
 	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Matcha någon regel.",
+	"statusTipRelAll": "Matcha alla regler.",
 	
 	"defaultItemsName": "objekt",
 	"filterBarMsgHasFilterTemplate": "${0} av ${1} ${2} visas.",
-	"filterBarMsgNoFilterTemplate": "Inget filter tillämpat",
+	"filterBarMsgNoFilterTemplate": "Inga filter tillämpas",
 	
 	"filterBarDefButton": "Definiera filter",
 	"waiFilterBarDefButton": "Filtrera tabellen",
 	"a11yFilterBarDefButton": "Filter...",
 	"filterBarClearButton": "Rensa filter",
 	"waiFilterBarClearButton": "Rensa filtret",
-	"closeFilterBarBtn": "Stäng filterfält",
+	"closeFilterBarBtn": "Stäng filterfältet",
 	
-	"clearFilterMsg": "Tar bort filtret och visar alla tillgängliga poster.",
-	"anyColumnOption": "Alla kolumner",
+	"clearFilterMsg": "Filtret tas bort och alla tillgängliga poster visas.",
+	"anyColumnOption": "Någon kolumn",
 	
 	"trueLabel": "Sant",
 	"falseLabel": "Falskt"
 })
-//end v1.x content
 );
-
-
-

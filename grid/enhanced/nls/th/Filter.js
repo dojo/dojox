@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "ลบตัวกรอง",
 	"filterDefDialogTitle": "ตัวกรอง",
@@ -30,7 +29,7 @@ define(
 	"waiRelAll": "ตรงกับกฏทั้งหมดต่อไปนี้:",
 	"relationAny": "กฏใดๆ",
 	"waiRelAny": "ตรงกับกฏใดๆต่อไปนี้:",
-	"relationMsgFront": "ตรงกับ",
+	"relationMsgFront": "ตรงกัน:",
 	"relationMsgTail": "",
 	"and": "และ",
 	"or": "หรือ",
@@ -42,7 +41,7 @@ define(
 	
 	"cancelButton": "ยกเลิก",
 	"waiCancelButton": "ยกเลิกไดอะล็อกนี้",
-	"clearButton": "ลบ",
+	"clearButton": "ใส",
 	"waiClearButton": "ลบตัวกรอง",
 	"filterButton": "ตัวกรอง",
 	"waiFilterButton": "ส่งตัวกรอง",
@@ -51,7 +50,7 @@ define(
 	"waiColumnSelectTemplate": "คอลัมน์สำหรับกฏ ${0}",
 	"conditionSelectLabel": "เงื่อนไข",
 	"waiConditionSelectTemplate": "เงื่อนไขสำหรับกฏ ${0}",
-	"valueBoxLabel": "ค่า",
+	"valueBoxLabel": "คุณค่า",
 	"waiValueBoxTemplate": "ป้อนค่าให้กับตัวกรองสำหรับกฏ ${0}",
 	
 	"rangeTo": "ถึง",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "คอลัมน์ใดๆ",
 	"statusTipTitleNoFilter": "แถบตัวกรอง",
 	"statusTipTitleHasFilter": "ตัวกรอง",
+	"statusTipRelAny": "ตรงกับกฏใดๆ",
+	"statusTipRelAll": "ตรงกับทุกกฏ",
 	
 	"defaultItemsName": "ไอเท็ม",
 	"filterBarMsgHasFilterTemplate": "${0} ของ ${1} ${2} จะถูกแสดง",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "จริง",
 	"falseLabel": "เท็จ"
 })
-//end v1.x content
 );
-
-
-

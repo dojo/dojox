@@ -1,36 +1,35 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "Cancella filtro",
 	"filterDefDialogTitle": "Filtro",
 	"ruleTitleTemplate": "Regola ${0}",
 	
 	"conditionEqual": "uguale a",
-	"conditionNotEqual": "non uguale a",
+	"conditionNotEqual": "diverso da",
 	"conditionLess": "minore di",
-	"conditionLessEqual": "minore di o uguale a",
+	"conditionLessEqual": "minore o uguale",
 	"conditionLarger": "maggiore di",
-	"conditionLargerEqual": "maggiore di o uguale a",
+	"conditionLargerEqual": "maggiore o uguale",
 	"conditionContains": "contiene",
 	"conditionIs": "è",
 	"conditionStartsWith": "inizia con",
-	"conditionEndWith": "finisce con",
+	"conditionEndWith": "termina con",
 	"conditionNotContain": "non contiene",
 	"conditionIsNot": "non è",
 	"conditionNotStartWith": "non inizia con",
-	"conditionNotEndWith": "non finisce con",
+	"conditionNotEndWith": "non termina con",
 	"conditionBefore": "prima",
 	"conditionAfter": "dopo",
 	"conditionRange": "intervallo",
 	"conditionIsEmpty": "è vuoto",
 	
-	"all": "tutte",
+	"all": "tutto",
 	"any": "qualsiasi",
 	"relationAll": "tutte le regole",
-	"waiRelAll": "Confronta con tutte le seguenti regole:",
+	"waiRelAll": "Corrispondenza con tutte le regole seguenti:",
 	"relationAny": "qualsiasi regola",
-	"waiRelAny": "Confronta con qualsiasi delle seguenti regole:",
-	"relationMsgFront": "Confronta",
+	"waiRelAny": "Corrispondenza una qualsiasi delle regole seguenti:",
+	"relationMsgFront": "Corrispondenza:",
 	"relationMsgTail": "",
 	"and": "e",
 	"or": "o",
@@ -42,8 +41,8 @@ define(
 	
 	"cancelButton": "Annulla",
 	"waiCancelButton": "Annulla questa finestra di dialogo",
-	"clearButton": "Cancella",
-	"waiClearButton": "Cancella il filtro",
+	"clearButton": "Elimina",
+	"waiClearButton": "Annulla il filtro",
 	"filterButton": "Filtro",
 	"waiFilterButton": "Inoltra il filtro",
 	
@@ -59,14 +58,16 @@ define(
 	
 	"statusTipHeaderColumn": "Colonna",
 	"statusTipHeaderCondition": "Regole",
-	"statusTipTitle": "Barra di filtro",
-	"statusTipMsg": "Fare clic sulla barra di filtro qui per filtrare sui valori in ${0}.",
+	"statusTipTitle": "Barra filtro",
+	"statusTipMsg": "Fare clic sulla barra filtro per filtrare in base ai valori in ${0}.",
 	"anycolumn": "qualsiasi colonna",
-	"statusTipTitleNoFilter": "Barra di filtro",
+	"statusTipTitleNoFilter": "Barra filtro",
 	"statusTipTitleHasFilter": "Filtro",
+	"statusTipRelAny": "Corrispondenza con qualsiasi regola.",
+	"statusTipRelAll": "Corrispondenza con tutte le regole.",
 	
 	"defaultItemsName": "elementi",
-	"filterBarMsgHasFilterTemplate": "${0} di ${1} ${2} visualizzati.",
+	"filterBarMsgHasFilterTemplate": "${0} di ${1} ${2} mostrate.",
 	"filterBarMsgNoFilterTemplate": "Nessun filtro applicato",
 	
 	"filterBarDefButton": "Definisci filtro",
@@ -74,16 +75,12 @@ define(
 	"a11yFilterBarDefButton": "Filtro...",
 	"filterBarClearButton": "Cancella filtro",
 	"waiFilterBarClearButton": "Cancella il filtro",
-	"closeFilterBarBtn": "Chiudi barra di filtro",
+	"closeFilterBarBtn": "Chiudi barra filtro",
 	
-	"clearFilterMsg": "Questo rimuoverà il filtro e visualizzerà tutti i record disponibili.",
+	"clearFilterMsg": "Questa operazione rimuoverà il filtro e visualizzerà tutti i record disponibili.",
 	"anyColumnOption": "Qualsiasi colonna",
 	
 	"trueLabel": "Vero",
 	"falseLabel": "Falso"
 })
-//end v1.x content
 );
-
-
-
