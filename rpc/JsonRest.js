@@ -112,7 +112,9 @@ define("dojox/rpc/JsonRest", ["dojo", "dojox", "dojox/json/ref", "dojox/rpc/Rest
 					dirtyObjects = postCommitDirtyObjects;
 				}
 				else{
-					dirtyObjects = dirtyObject.concat(savingObjects);
+					dojo.forEach(savingObjects, function(obj) {
+						jr.changing(obj.object, !obj.object);
+				    });
 				}
 			});
 			jr.sendToServer(actions, kwArgs);
