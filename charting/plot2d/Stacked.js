@@ -39,15 +39,16 @@ var Default = dojox.charting.plot2d.Default;
 				return this;
 			}
 
-			var i, j, s, v, run;
+			var i, j, s, v, run, value;
 
 			// stack all values
 			var acc = df.repeat(this._maxRunLength, "-> 0", 0);
 			for(i = 0; i < this.series.length; ++i){
 				run = this.series[i];
 				for(j = 0; j < run.data.length; ++j){
-					v = run.data[j];
-					if(v !== null){
+					value = run.data[j];
+					if(value !== null){
+						v = (typeof value == "number") ? value : value.y;
 						if(isNaN(v)){ v = 0; }
 						acc[j] += v;
 					}
@@ -94,7 +95,7 @@ var Default = dojox.charting.plot2d.Default;
 				if(this.opt.areas){
 					var apoly = lang.clone(lpoly);
 					if(this.opt.tension){
-						var p=dc.curve(apoly, this.opt.tension);
+						var p = dc.curve(apoly, this.opt.tension);
 						p += " L" + lpoly[lpoly.length - 1].x + "," + (dim.height - offsets.b) +
 							" L" + lpoly[0].x + "," + (dim.height - offsets.b) +
 							" L" + lpoly[0].x + "," + lpoly[0].y;
@@ -191,8 +192,9 @@ var Default = dojox.charting.plot2d.Default;
 				run.dirty = false;
 				// update the accumulator
 				for(j = 0; j < run.data.length; ++j){
-					v = run.data[j];
-					if(v !== null){
+					value = run.data[j];
+					if(value !== null){
+						v = (typeof value == "number") ? value : value.y;
 						if(isNaN(v)){ v = 0; }
 						acc[j] -= v;
 					}
