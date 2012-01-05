@@ -5,6 +5,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/window",
+	"dojo/_base/Deferred",
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
@@ -14,7 +15,7 @@ define([
 	"dijit/registry",	// registry.byId
 	"./ProgressIndicator",
 	"./TransitionEvent"
-], function(dojo, array, connect, declare, lang, win, dom, domClass, domConstruct, on, ready, registry, ProgressIndicator, TransitionEvent){
+], function(dojo, array, connect, declare, lang, win, Deferred, dom, domClass, domConstruct, on, ready, registry, ProgressIndicator, TransitionEvent){
 
 	// module:
 	//		dojox/mobile/ViewController
@@ -31,6 +32,10 @@ define([
 		//		view transitions. If the transition destination is an external
 		//		view specified with the url parameter, retrieves the view
 		//		content and parses it to create a new target view.
+
+		dataHandlerClass: "dojox/mobile/dh/DataHandler",
+		dataSourceClass: "dojox/mobile/dh/UrlDataSource",
+		fileTypeMapClass: "dojox/mobile/dh/SuffixFileTypeMap",
 
 		constructor: function(){
 			this.viewMap={};
@@ -59,6 +64,53 @@ define([
 				if(domClass.contains(w.domNode, "mblView")){ break; }
 			}
 			return w;
+		},
+
+		openExternalView: function(/*Object*/ transOpts, /*DomNode*/ target){
+			var d = new Deferred();
+			var id = this.viewMap[transOpts.url];
+			if(id){
+				transOpts.moveTo = id;
+				if(!transOpts.noTransition){
+					new TransitionEvent(win.body(), transOpts).dispatch();
+				}
+				d.resolve(true);
+				return d;
+			}
+
+			// if a fixed bottom bar exists, a new view should be placed before it.
+			var refNode = null;
+			for(var i = target.childNodes.length - 1; i >= 0; i--){
+				var c = target.childNodes[i];
+				if(c.nodeType === 1){
+					var fixed = c.getAttribute("fixed")
+						|| (registry.byNode(c) && registry.byNode(c).fixed);
+					if(fixed === "bottom"){
+						refNode = c;
+					}
+					break;
+				}
+			}
+
+			var dh = transOpts.dataHandlerClass || this.dataHandlerClass;
+			var ds = transOpts.dataSourceClass || this.dataSourceClass;
+			var ft = transOpts.fileTypeMapClass || this.fileTypeMapClass;
+			require([dh, ds, ft], lang.hitch(this, function(DataHandler, DataSource, FileTypeMap){
+				var handler = new DataHandler(new DataSource(transOpts.url || transOpts.data), target, refNode);
+				var contentType = transOpts.contentType || FileTypeMap.getContentType(transOpts.url) || "html";
+				handler.processData(contentType, lang.hitch(this, function(id){
+					if(id){
+						this.viewMap[transOpts.url] = transOpts.moveTo = id;
+						if(!transOpts.noTransition){
+							new TransitionEvent(win.body(), transOpts).dispatch();
+						}
+						d.resolve(true);
+					}else{
+						d.reject("Failed to load "+transOpts.url);
+					}
+				}));
+			}));
+			return d;
 		},
 
 		onStartTransition: function(evt){
