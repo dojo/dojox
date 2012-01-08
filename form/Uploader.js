@@ -114,7 +114,6 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		this.inherited(arguments);
 	},
 	buildRendering: function(){
-		console.warn("buildRendering", this.id)
 		this.inherited(arguments);
 		domStyle.set(this.domNode, {
 			overflow:"hidden",
