@@ -140,6 +140,7 @@ var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 		// tags:
 		//		private
 		this.onBegin(this.getFileList());
+		formData.returnType = "F";
 		this.flashMovie.doUpload(formData);
 	},
 
@@ -227,6 +228,17 @@ var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 		// summary:
 		//		Internal. Creates Flash Uploader
 		//
+
+		var w = this.btnSize.w;
+		var h = this.btnSize.h;
+		if(!w){
+			// FIXME: Commit this
+			setTimeout(dojo.hitch(this, function(){
+				this._getButtonStyle(this.domNode);
+				this._createFlashUploader();
+			}), 200);
+			return;
+		}
 		var url = this.getUrl();
 		if(url){
 			if(url.toLowerCase().indexOf("http")<0 && url.indexOf("/")!=0){
@@ -247,13 +259,12 @@ var pluginsFlash = declare("dojox.form.uploader.plugins.Flash", [], {
 		domStyle.set(this.inputNode, {
 			position:"absolute",
 			top:"-2px",
-			width:this.btnSize.w+"px",
-			height:this.btnSize.h+"px",
+			width:w+"px",
+			height:h+"px",
 			opacity:0
 		});
 
-		var w = this.btnSize.w;
-		var h = this.btnSize.h;
+
 
 		var args = {
 			expressInstall:true,
