@@ -46,7 +46,9 @@ define([
 						v = v && v.nodeValue;
 						t = typeof proto[prop];
 						if(!v && (t !== "boolean" || v !== "")){ continue; }
-						if(t === "string"){
+						if(lang.isArray(proto[prop])){
+							params[prop] = v.split(/\s*,\s*/);
+						}else if(t === "string"){
 							params[prop] = v;
 						}else if(t === "number"){
 							params[prop] = v - 0;
