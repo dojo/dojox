@@ -3,8 +3,9 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/config",
 	"dojo/_base/window",
+	"dojo/_base/Deferred",
 	"dojo/ready"
-], function(dojo, array, config, win, ready){
+], function(dojo, array, config, win, Deferred, ready){
 
 	// module:
 	//		dojox/mobile/lazyLoadUtils
@@ -54,6 +55,7 @@ define([
 			// description:
 			//		Find dom nodes that have the dojoType or data-dojo-type attributes,
 			//		require the found dojo modules, and run the parser.
+			var d = new Deferred();
 			var req = requires ? requires.split(/,/) : [];
 			var nodes = root.getElementsByTagName("*"); // avoid use of dojo.query
 			var len = nodes.length;
@@ -61,7 +63,7 @@ define([
 				var s = nodes[i].getAttribute("dojoType") || nodes[i].getAttribute("data-dojo-type");
 				if(s){ req.push(s); }
 			}
-			if(req.length === 0){ return; }
+			if(req.length === 0){ return true; }
 
 			if(dojo.require){
 				array.forEach(req, function(c){
@@ -69,13 +71,16 @@ define([
 				});
 				dojo.parser.parse(root);
 				if(callback){ callback(root); }
+				return true;
 			}else{
 				req = array.map(req, function(s){ return s.replace(/\./g, "/"); });
 				require(req, function(){
 					dojo.parser.parse(root);
 					if(callback){ callback(root); }
+					d.resolve(true);
 				});
 			}
+			return d;
 		}	
 	};
 	return lazyLoadUtils;

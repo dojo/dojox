@@ -9,7 +9,6 @@
         "@icon": "images/i-icon-1.png",
         "@label": "Airplane Mode",
         "dojox.mobile.Switch": {
-          "@class": "mblItemSwitch"
         }
       }, {
         "@href": "test_iPhone-Icon.html",

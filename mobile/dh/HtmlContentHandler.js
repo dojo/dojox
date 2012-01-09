@@ -2,40 +2,51 @@ define([
 	"dojo/_base/kernel",
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dojo/dom-construct"
-], function(dojo, array, declare, domConstruct){
+	"dojo/_base/Deferred",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"dijit/registry",
+	"dojox/mobile/lazyLoadUtils"
+], function(dojo, array, declare, Deferred, domClass, domConstruct, registry, lazyLoadUtils){
+
+	// module:
+	//		dojox/mobile/dh/HtmlContentHandler
+	// summary:
+	//		An HTML content handler.
 
 	return declare("dojox.mobile.dh.HtmlContentHandler", null, {
+		// summary:
+		//		A HTML content handler.
+		// description:
+		//		This module is a content handler that creates a view from HTML
+		//		data. If widgets used in the HTML data are not available, they
+		//		are loaded automatically before instantiation.
 
 		parse: function(/*String*/ text, /*DomNode*/ target, /*DomNode*/ refNode){
-			var view, container = domConstruct.create("div", {innerHTML: text});
-			for(i = 0; i < container.childNodes.length; i++){
-				var n = container.childNodes[i];
-				if(n.nodeType === 1){
-					view = n; // expecting <div dojoType="dojox.mobile.View">
-					break;
-				}
-			}
-			if(!view){
-				console.log(this.declaredClass + ".parse: invalid view content");
-				return;
-			}
-			view.style.visibility = "hidden";
-			target.insertBefore(container, refNode);
-			var ws = dojo.parser.parse(container); // [global reference]
-			array.forEach(ws, function(w){
-				if(!w._started && w.startup){
-					w.startup();
-				}
+			var container = domConstruct.create("div", {
+				innerHTML: text,
+				style: {visibility: "hidden"}
 			});
+			target.insertBefore(container, refNode);
 
-			// allows multiple root nodes in the fragment,
-			// but transition will be performed to the 1st view.
-			for(i = 0, len = container.childNodes.length; i < len; i++){
-				target.insertBefore(container.firstChild, refNode); // reparent
-			}
-			target.removeChild(container);
-			return view.id;
+			return Deferred.when(lazyLoadUtils.instantiateLazyWidgets(container), function(){
+				// allows multiple root nodes in the fragment,
+				// but transition will be performed to the 1st view.
+				var view;
+				for(i = 0, len = container.childNodes.length; i < len; i++){
+					var n = container.firstChild;
+					if(!view && n.nodeType === 1){
+						view = registry.byNode(n);
+					}
+					target.insertBefore(container.firstChild, refNode); // reparent
+				}
+				target.removeChild(container);
+				if(!view || !domClass.contains(view.domNode, "mblView")){
+					console.log("HtmlContentHandler.parse: invalid view content");
+					return null;
+				}
+				return view.id;
+			});
 		}
 	});
 });

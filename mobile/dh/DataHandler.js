@@ -25,8 +25,9 @@ define([
 			var ch = ContentTypeMap.getHandlerClass(contentType);
 			require([ch], lang.hitch(this, function(ContentHandler){
 				Deferred.when(this.ds.getData(), lang.hitch(this, function(){
-					var id = new ContentHandler().parse(this.ds.text, this.target, this.refNode);
-					callback(id);
+					Deferred.when(new ContentHandler().parse(this.ds.text, this.target, this.refNode), function(id){
+						callback(id);
+					});
 				}))
 			}));
 		}
