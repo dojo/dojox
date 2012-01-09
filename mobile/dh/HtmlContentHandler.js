@@ -23,6 +23,9 @@ define([
 		//		are loaded automatically before instantiation.
 
 		parse: function(/*String*/ text, /*DomNode*/ target, /*DomNode*/ refNode){
+			if(this.execScript){
+				text = this.execScript(text);
+			}
 			var container = domConstruct.create("div", {
 				innerHTML: text,
 				style: {visibility: "hidden"}

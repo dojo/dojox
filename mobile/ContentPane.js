@@ -4,11 +4,11 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/window",
-	"dijit/_Contained",
-	"dijit/_WidgetBase",
 	"dojo/_base/xhr",
+	"./_ExecScriptMixin",
+	"./Pane",
 	"./ProgressIndicator"
-], function(dojo, array, declare, lang, win, Contained, WidgetBase, xhr, ProgressIndicator){
+], function(dojo, array, declare, lang, win, xhr, ExecScriptMixin, Pane, ProgressIndicator){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -20,7 +20,7 @@ define([
 	// summary:
 	//		A very simple content pane to embed an HTML fragment.
 
-	return declare("dojox.mobile.ContentPane", [WidgetBase, Contained],{
+	return declare("dojox.mobile.ContentPane", [Pane, ExecScriptMixin], {
 		// summary:
 		//		A very simple content pane to embed an HTML fragment.
 		// description:
@@ -47,14 +47,11 @@ define([
 		//		If true, shows progress indicator.
 		prog: true,
 
-		baseClass: "mblContentPane",
+		// executeScripts: Boolean
+		//		If true, executes scripts that is found in the content
+		executeScripts: true,
 
-		buildRendering: function(){
-			this.inherited(arguments);
-			if(!this.containerNode){
-				this.containerNode = this.domNode;
-			}
-		},
+		baseClass: "mblContentPane",
 
 		startup: function(){
 			if(this._started){ return; }
@@ -66,14 +63,6 @@ define([
 				this.resize();
 			}
 			this.inherited(arguments);
-		},
-	
-		resize: function(){
-			// summary:
-			//		Calls resize() of each child widget.
-			array.forEach(this.getChildren(), function(child){
-				if(child.resize){ child.resize(); }
-			});
 		},
 	
 		loadHandler: function(/*String*/response){
@@ -101,7 +90,7 @@ define([
 				p.start();
 			}
 			this._set("href", href);
-			xhr.get({
+			return xhr.get({
 				url: href,
 				handleAs: "text",
 				load: lang.hitch(this, "loadHandler"),
@@ -112,12 +101,15 @@ define([
 		_setContentAttr: function(/*String|DomNode*/data){
 			this.destroyDescendants();
 			if(typeof data === "object"){
-				this.domNode.appendChild(data);
+				this.containerNode.appendChild(data);
 			}else{
-				this.domNode.innerHTML = data;
+				if(this.executeScripts){
+					data = this.execScript(data);
+				}
+				this.containerNode.innerHTML = data;
 			}
 			if(this.parseOnLoad){
-				dojo.parser.parse(this.domNode);
+				dojo.parser.parse(this.containerNode);
 			}
 			if(this._p){ this._p.stop(); }
 			this.onLoad();
