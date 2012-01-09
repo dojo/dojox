@@ -10,7 +10,8 @@
 	<script type="text/javascript">
 		require([
 			"dojox/mobile/parser",
-			"dojox/mobile/FixedSplitter"
+			"dojox/mobile/FixedSplitter",
+			"dojox/mobile/Pane"
 		]);
 	</script>
 
@@ -26,10 +27,10 @@
 </head>
 <body>
 	<div data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='orientation:"H"'>
-		<div data-dojo-type="dojox.mobile.FixedSplitterPane" style="background-color:yellow;width:200px;">
+		<div data-dojo-type="dojox.mobile.Pane" style="background-color:yellow;width:200px;">
 			pane #1 (width=200px)
 		</div>
-		<div data-dojo-type="dojox.mobile.FixedSplitterPane" style="background-color:pink;">
+		<div data-dojo-type="dojox.mobile.Pane" style="background-color:pink;">
 			pane #2
 		</div>
 	</div>

@@ -13,7 +13,8 @@
 			"dojo/ready",
 			"dijit/registry",
 			"dojox/mobile/parser",
-			"dojox/mobile/FixedSplitter"
+			"dojox/mobile/FixedSplitter",
+			"dojox/mobile/Pane"
 		], function(connect, ready, registry){
 			ready(function(){
 				connect.connect(null, "onresize", function(){
@@ -47,13 +48,13 @@
 </head>
 <body>
 	<div id="splitter1" data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='orientation:"V"'>
-		<div id="pane0" data-dojo-type="dojox.mobile.FixedSplitterPane">
+		<div id="pane0" data-dojo-type="dojox.mobile.Pane">
 			pane #0 (height=100px)
 		</div>
-		<div id="pane1" data-dojo-type="dojox.mobile.FixedSplitterPane">
+		<div id="pane1" data-dojo-type="dojox.mobile.Pane">
 			pane #1 (height=100px)
 		</div>
-		<div id="pane2" data-dojo-type="dojox.mobile.FixedSplitterPane">
+		<div id="pane2" data-dojo-type="dojox.mobile.Pane">
 			pane #2 (height=variable)
 		</div>
 	</div>

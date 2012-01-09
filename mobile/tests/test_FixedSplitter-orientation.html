@@ -19,9 +19,11 @@
 			"dijit/registry",
 			"dojox/mobile/parser",
 			"dojox/mobile/FixedSplitter",
+			"dojox/mobile/Container",
+			"dojox/mobile/Pane",
 			"dijit/Calendar"
 		], function(connect, win, dom, domClass, ready, registry){
-			change = function() {
+			var change = function() {
 				var splitter = registry.byId("splitter1");
 				var h = win.global.innerHeight || win.doc.documentElement.clientHeight;
 				var w = win.global.innerWidth || win.doc.documentElement.clientWidth;
@@ -47,7 +49,7 @@
 		}
 
 		.mblFixedSplitterH > #pane2 {
-			width: 200px;
+			width: 240px;
 		}
 		.mblFixedSplitterV > #pane2 {
 			height: 220px;
@@ -60,11 +62,11 @@
 </head>
 <body class="tundra">
 	<div id="splitter1" data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='variablePane:0'>
-		<div id="pane1" data-dojo-type="dojox.mobile.FixedSplitterPane" style="background-color:yellow;">
+		<div id="pane1" data-dojo-type="dojox.mobile.Pane" style="background-color:yellow;">
 			pane #1
 		</div>
 
-		<div id="pane2" data-dojo-type="dojox.mobile.FixedSplitterPane" style="background-color:pink;">
+		<div id="pane2" data-dojo-type="dojox.mobile.Container" style="background-color:pink;">
 			<div id="cal" dojoType='dijit.Calendar'></div>
 		</div>
 	</div>
