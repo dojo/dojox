@@ -1,37 +1,8 @@
 define([
-	"dojo/_base/array",
-	"dojo/_base/declare",
-	"dojo/dom-class",
-	"dijit/_Contained",
-	"dijit/_Container",
-	"dijit/_WidgetBase"
-], function(array, declare, domClass, Contained, Container, WidgetBase){
-
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
-	// module:
-	//		dojox/mobile/FixedSplitterPane
-	// summary:
-	//		A pane widget that is used in a dojox.mobile.FixedSplitter.
-
-	return declare("dojox.mobile.FixedSplitterPane", [WidgetBase, Container, Contained], {
-		// summary:
-		//		A pane widget that is used in a dojox.mobile.FixedSplitter.
-		// description:
-		//		FixedSplitterPane is a pane widget that is used in a
-		//		dojox.mobile.FixedSplitter. It is a widget, but can be regarded
-		//		as a simple <div> element.
-
-		baseClass: "mblFixedSplitterPane",
-
-		resize: function(){
-			array.forEach(this.getChildren(), function(child){
-				if(child.resize){ child.resize(); }
-			});
-		}
-	});
+	"dojo/_base/kernel",
+	"dojox/mobile/Container"
+], function(kernel, Container){
+	kernel.deprecated("dojox.mobile.FixedSplitterPane is deprecated", "Use dojox.mobile.Container instead", 2.0);
+	dojox.mobile.FixedSplitterPane = Container;
+	return Container;
 });
