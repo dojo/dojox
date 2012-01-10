@@ -795,7 +795,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 			// assumption: we don't have stacked axes yet
 			var offsets = this.offsets = { l: 0, r: 0, t: 0, b: 0 };
 			func.forIn(this.axes, function(axis){
-				func.forIn(axis.getOffsets(), function(o, i){ offsets[i] += o; });
+				func.forIn(axis.getOffsets(), function(o, i){ offsets[i] = Math.max(o, offsets[i]); });
 			});
 			// add title area
 			if(this.title){

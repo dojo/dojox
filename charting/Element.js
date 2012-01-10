@@ -114,7 +114,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			//			text: processed text, maybe truncated or not
 			//			truncated: whether text has been truncated
 			//		}
-			if (!s || s.length <= 0) {
+			if(!s || s.length <= 0){
 				return {
 					text: "",
 					truncated: truncated || false
@@ -131,7 +131,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 				trucPercentage = 0.618,
 				minStr = s.substring(0,1) + this.trailingSymbol,
 				minWidth = this.getTextWidth(minStr, font);
-			if (limitWidth <= minWidth) {
+			if(limitWidth <= minWidth){
 				return {
 					text: minStr,
 					truncated: true
@@ -154,7 +154,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 						return {
 							text: (s.substring(0,begin) + this.trailingSymbol),
 							truncated: true
-						};
+							};
 					}
 					var index = begin + Math.round((end - begin) * trucPercentage),
 						widthIntercepted = this.getTextWidth(s.substring(0, index), font);

@@ -64,8 +64,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		An optional function to use to compute label text. It takes precedence over
 		//		the default text when available.
 		//	|		function labelFunc(firstDataPoint, secondDataPoint, fixed, precision) {}
-		//		`firstDataPoint` is the `{x, y}` data coordinates pointed by the mouse
-		//		`secondDataPoint` is only useful for dual touch indicators not mouse indicators
+		//		`firstDataPoint` is the `{x, y}` data coordinates pointed by the mouse.
+		//		`secondDataPoint` is only useful for dual touch indicators not mouse indicators.
 		//		`fixed` is true if fixed precision must be applied.
 		//		`precision` is the requested precision to be applied.
 		labelFunc:		{},
@@ -181,7 +181,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		Called when mouse is down on the chart.
 			this._isMouseDown = true;
 			
-			// we now want to capture mouse move events everywhere to avoid
+			//ff we now want to capture mouse move events everywhere to avoid
 			// stop scrolling when going out of the chart window
 			if(has("ie")){
 				this._handles.push(hub.connect(this.chart.node, "onmousemove", this, "onMouseMove"));

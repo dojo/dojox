@@ -46,6 +46,7 @@ define(["dojo/_base/lang"], function(lang){
 			}
 			if(kwArgs.labels){
 				// classic binary search
+				// TODO: working only if the array is sorted per value should be better documented or sorted automatically
 				var l = kwArgs.labels, lo = 0, hi = l.length;
 				while(lo < hi){
 					var mid = Math.floor((lo + hi) / 2), val = l[mid].value;

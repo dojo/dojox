@@ -1,12 +1,9 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
-	"dojox/gfx", "dojox/lang/utils", "dojox/lang/functional", "dojo/string"],
-	function(lang, declare, Base, lin, g, du, df, dstring){
+	"dojox/gfx", "dojox/lang/utils", "dojo/string"],
+	function(lang, declare, Base, lin, g, du, dstring){
 /*=====
 var Base = dojox.charting.axis2d.Base;
 =====*/ 
-	var merge = du.merge,
-		labelGap = 4,			// in pixels
-		centerAnchorLimit = 45;	// in degrees
 
 	return declare("dojox.charting.axis2d.Invisible", Base, {
 		//	summary:
@@ -132,22 +129,7 @@ var Base = dojox.charting.axis2d.Base;
 			//		Get the current windowing offset for the axis.
 			return "offset" in this ? this.offset : 0;	//	Number
 		},
-		_groupLabelWidth: function(labels, font, wcLimit){
-			if(!labels.length){
-				return 0;
-			}
-			if(lang.isObject(labels[0])){
-				labels = df.map(labels, function(label){ return label.text; });
-			}
-			if (wcLimit){
-				labels = df.map(labels, function(label){
-					return lang.trim(label).length == 0 ? "" : label.substring(0, wcLimit) + this.trailingSymbol;
-				}, this);
-			}
-			var s = labels.join("<br>");
-			return g._base._getTextBox(s, {font: font}).w || 0;
-		},
-		calculate: function(min, max, span, labels){
+		calculate: function(min, max, span){
 			//	summary:
 			//		Perform all calculations needed to render this axis.
 			//	min: Number
@@ -156,16 +138,18 @@ var Base = dojox.charting.axis2d.Base;
 			//		The largest value represented on this axis.
 			//	span: Number
 			//		The span in pixels over which axis calculations are made.
-			//	labels: String[]
-			//		Optional list of labels.
 			//	returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			if(this.initialized()){
 				return this;
 			}
 			var o = this.opt;
-			this.labels = "labels" in o  ? o.labels : labels;
+			// we used to have a 4th function parameter to reach labels but
+			// nobody was calling it with 4 parameters.
+			this.labels = o.labels;
 			this.scaler = lin.buildScaler(min, max, span, o);
+			// store the absolute major tick start, this will be useful when dropping a label every n labels
+			// TODO: if o.lower then it does not work
 			var tsb = this.scaler.bounds;
 			if("scale" in this){
 				// calculate new range
@@ -204,71 +188,6 @@ var Base = dojox.charting.axis2d.Base;
 					delete this.offset;
 				}
 			}
-
-			var ta = this.chart.theme.axis, labelWidth = 0, rotation = o.rotation % 360,
-				// TODO: we use one font --- of major tick, we need to use major and minor fonts
-				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
-				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
-				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
-				sinr = Math.abs(Math.sin(rotation * Math.PI / 180));
-
-			if(rotation < 0){
-				rotation += 360;
-			}
-
-			if(size){
-				if(this.vertical ? rotation != 0 && rotation != 180 : rotation != 90 && rotation != 270){
-					// we need width of all labels
-					if(this.labels){
-						labelWidth = this._groupLabelWidth(this.labels, taFont, o.maxLabelCharCount);
-					}else{
-						var labelLength = Math.ceil(
-								Math.log(
-									Math.max(
-										Math.abs(tsb.from),
-										Math.abs(tsb.to)
-									)
-								) / Math.LN10
-							),
-							t = [];
-						if(tsb.from < 0 || tsb.to < 0){
-							t.push("-");
-						}
-						t.push(dstring.rep("9", labelLength));
-						var precision = Math.floor(
-							Math.log( tsb.to - tsb.from ) / Math.LN10
-						);
-						if(precision > 0){
-							t.push(".");
-							t.push(dstring.rep("9", precision));
-						}
-						labelWidth = g._base._getTextBox(
-							t.join(""),
-							{ font: taFont }
-						).w;
-					}
-					labelWidth = o.maxLabelSize ? Math.min(o.maxLabelSize, labelWidth) : labelWidth;
-				}else{
-					labelWidth = size;
-				}
-				switch(rotation){
-					case 0:
-					case 90:
-					case 180:
-					case 270:
-						// trivial cases: use labelWidth
-						break;
-					default:
-						// rotated labels
-						var gap1 = Math.sqrt(labelWidth * labelWidth + size * size),									// short labels
-							gap2 = this.vertical ? size * cosr + labelWidth * sinr : labelWidth * cosr + size * sinr;	// slanted labels
-						labelWidth = Math.min(gap1, gap2);
-						break;
-				}
-			}
-
-			this.scaler.minMinorStep = labelWidth + labelGap;
-			this.ticks = lin.buildTicks(this.scaler, o);
 			return this;	//	dojox.charting.axis2d.Default
 		},
 		getScaler: function(){
