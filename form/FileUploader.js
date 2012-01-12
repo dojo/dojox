@@ -7,6 +7,7 @@ define([
 	"dojo/_base/window",
 	"dojo/_base/sniff",
 	"dojo/query",
+	"dojo/dom",
 	"dojo/dom-style",
 	"dojo/dom-geometry",
 	"dojo/dom-attr",
@@ -24,7 +25,7 @@ define([
 	"dojox/embed/Flash",
 	"dojox/embed/flashVars",
 	"dojox/html/styles"
-],function(kernel, declare, lang, array, connect, win, has, query, domStyle, domGeometry, domAttr, domClass, domConstruct, domForm, config, manager, ioIframe, Color, unloadUtils, Widget, TemplatedMixin, Contained, embedFlash, embedFlashVars, htmlStyles){
+],function(kernel, declare, lang, array, connect, win, has, query, dom, domStyle, domGeometry, domAttr, domClass, domConstruct, domForm, config, manager, ioIframe, Color, unloadUtils, Widget, TemplatedMixin, Contained, embedFlash, embedFlashVars, htmlStyles){
 
 kernel.deprecated("dojox.form.FileUploader", "Use dojox.form.Uploader", "2.0");
 
