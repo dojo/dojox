@@ -57,7 +57,7 @@ var UpgradeBar = declare("dojox.widget.UpgradeBar", [_WidgetBase, _TemplatedMixi
 	//				bar should show or not. Should be a simple expression
 	//				if used in HTML:
 	//				|	<div validate="!google.gears">
-	//				|	<div validate="dojo.isIE<8">
+	//				|	<div validate="has('ie')<8">
 	notifications:[],
 	//
 	//	buttonCancel:String

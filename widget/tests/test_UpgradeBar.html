@@ -14,21 +14,20 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:false, isDebug: false"></script>
 
 	<script type="text/javascript">
-		// TODO: need dojo.isIE, dojo.isFF, dojox.embed.Flash.available
-		require(["dojox/widget/UpgradeBar"], function(UpgradeBar){
+		require(["dojox/widget/UpgradeBar", "dojo/sniff", "dojox/embed/Flash"], function(UpgradeBar, has, flash){
 
 			new UpgradeBar({
 				notifications:[
 					{
 						validate:function(){
-							return dojo.isIE<10;
+							return has("ie")<10;
 						},
 						message:   '<span>Your version of Internet Explorer needs to be upgraded to Firefox.</span>'
 								 + '<a href="http://www.getfirefox.net/">Get Firefox</a>'
 					},
 					{
 						validate:function(){
-							return dojo.isFF<20;
+							return has("ff")<20;
 						},
 						message:   '<span>Your version of Firefox needs to be upgraded to a version that does not exist.</span>'
 								 + '<a href="http://www.getfirefox.net/">Get Firefox</a>'
@@ -36,7 +35,7 @@
 					{
 						validate:function(){
 							var evals = true;
-							try{ evals = dojox.embed.Flash.available<14}catch(e){}
+							try{ evals = flash.available<14}catch(e){}
 							return evals;
 						},
 						message:   '<span>This app needs a version of Flash that has never been released.</span>'
@@ -56,6 +55,6 @@
 
 </head>
 <body class="tundra">
-	<h1 class="testTitle">dojox.widget.UpgradeBar</h1>
+	<h1 class="testTitle">dojox/widget/UpgradeBar</h1>
 </body>
 </html>
