@@ -56,7 +56,6 @@ define([
 			if(node){
 				dom.byId(node).style.visibility = "hidden";
 			}
-			this._aw = has('android') >= 2.2 && has('android') < 3; // flag for android animation workaround
 		},
 
 		destroy: function(){
@@ -309,7 +308,7 @@ define([
 			var fromTop = fromNode.offsetTop;
 			toNode = this.toNode = dom.byId(toNode);
 			if(!toNode){ console.log("dojox.mobile.View#performTransition: destination view not found: "+detail.moveTo); return; }
-			toNode.style.visibility = this._aw ? "visible" : "hidden";
+			toNode.style.visibility = "hidden";
 			toNode.style.display = "";
 			this._fixViewState(toNode);
 			var toWidget = registry.byNode(toNode);
@@ -351,10 +350,9 @@ define([
 				toWidget.onBeforeTransitionIn.apply(toWidget, this._arguments);
 				connect.publish("/dojox/mobile/beforeTransitionIn", [toWidget].concat(lang._toArray(this._arguments)));
 			}
-			if(!this._aw){
-				toNode.style.display = "none";
-				toNode.style.visibility = "visible";
-			}
+			toNode.style.display = "none";
+			toNode.style.visibility = "visible";
+
 			
 			this._doTransition(fromNode, toNode, transition, transitionDir);
 		},

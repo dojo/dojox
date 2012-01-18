@@ -293,12 +293,6 @@ define([
 			return null;
 		}
 		domClass.add(node, "mblDomButton");
-		if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2){
-			// Android workaround for the issue that domButtons' -webkit-transform styles sometimes invalidated
-			// by applying -webkit-transform:translated3d(x,y,z) style programmatically to non-ancestor elements,
-			// which results in breaking domButtons.
-			domStyle.set(node, "webkitTransform", "translate3d(0,0,0)");
-		}
 		!!style && domStyle.set(node, style);
 		return node;
 	};
@@ -388,30 +382,6 @@ define([
 			domClass.add(win.doc.documentElement, "dj_chrome");
 		}
 
-		if(config["mblAndroidWorkaround"] !== false && has('android') >= 2.2){ // workaround for android screen flicker problem
-			if(config["mblAndroidWorkaroundButtonStyle"] !== false){
-				// workaround to avoid buttons disappear due to the side-effect of the webkitTransform workaroud below
-				domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, win.doc.head, "first");
-			}
-			if(has('android') < 3){ // for Android 2.2.x and 2.3.x
-				domStyle.set(win.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
-				// workaround for auto-scroll issue when focusing input fields
-				connect.connect(null, "onfocus", null, function(e){
-					domStyle.set(win.doc.documentElement, "webkitTransform", "");
-				});
-				connect.connect(null, "onblur", null, function(e){
-					domStyle.set(win.doc.documentElement, "webkitTransform", "translate3d(0,0,0)");
-				});
-			}else{ // for Android 3.x
-				if(config["mblAndroid3Workaround"] !== false){
-					domStyle.set(win.doc.documentElement, {
-						webkitBackfaceVisibility: "hidden",
-						webkitPerspective: 8000
-					});
-				}
-			}
-		}
-	
 		//	You can disable hiding the address bar with the following djConfig.
 		//	var djConfig = { mblHideAddressBar: false };
 		var f = dm.resizeAll;
