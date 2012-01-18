@@ -343,12 +343,6 @@ define([
 		return node;
 	};
 
-	// flag for iphone flicker workaround
-	dm._iw = config["mblIosWorkaround"] !== false && has('iphone');
-	if(dm._iw){
-		dm._iwBgCover = domConstruct.create("div"); // Cover to hide flicker in the background
-	}
-	
 	if(config.parseOnLoad){
 		ready(90, function(){
 			// avoid use of query

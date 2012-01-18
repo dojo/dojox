@@ -356,37 +356,7 @@ define([
 				toNode.style.visibility = "visible";
 			}
 			
-			if(dm._iw && dm.scrollable){ // Workaround for iPhone flicker issue (only when scrollable.js is loaded)
-				var ss = dm.getScreenSize();
-				// Show cover behind the view.
-				// cover's z-index is set to -10000, lower than z-index value specified in transition css.
-				win.body().appendChild(dm._iwBgCover);
-				domStyle.set(dm._iwBgCover, {
-					position: "absolute",
-					top: "0px",
-					left: "0px",
-					height: (ss.h + 1) + "px", // "+1" means the height of scrollTo(0,1)
-					width: ss.w + "px",
-					backgroundColor: domStyle.get(win.body(), "background-color"),
-					zIndex: -10000,
-					display: ""
-				});
-				// Show toNode behind the cover.
-				domStyle.set(toNode, {
-					position: "absolute",
-					zIndex: -10001,
-					visibility: "visible",
-					display: ""
-				});
-				// setTimeout seems to be necessary to avoid flicker.
-				// Also the duration of setTimeout should be long enough to avoid flicker.
-				// 0 is not effective. 50 sometimes causes flicker.
-				setTimeout(lang.hitch(this, function(){
-					this._doTransition(fromNode, toNode, transition, transitionDir);
-				}), 80);
-			}else{
-				this._doTransition(fromNode, toNode, transition, transitionDir);
-			}
+			this._doTransition(fromNode, toNode, transition, transitionDir);
 		},
 
 		_toCls: function(s){
@@ -397,17 +367,7 @@ define([
 	
 		_doTransition: function(fromNode, toNode, transition, transitionDir){
 			var rev = (transitionDir == -1) ? " mblReverse" : "";
-			if(dm._iw && dm.scrollable){ // Workaround for iPhone flicker issue (only when scrollable.js is loaded)
-				// Show toNode after flicker ends
-				domStyle.set(toNode, {
-					position: "",
-					zIndex: ""
-				});
-				// Remove cover
-				win.body().removeChild(dm._iwBgCover);
-			}else if(!this._aw){
-				toNode.style.display = "";
-			}
+			toNode.style.display = "";
 			if(!transition || transition == "none"){
 				this.domNode.style.display = "none";
 				this.invokeCallback();
