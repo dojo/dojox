@@ -4,14 +4,16 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/window",
+	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"dijit/registry",	// registry.byId
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
+	"./ToolBarButton",
 	"./View"
-], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, registry, Contained, WidgetBase, View){
+], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, WidgetBase, ToolBarButton, View){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -128,11 +130,8 @@ define([
 			}
 			this.inherited(arguments);
 		},
-	
+
 		resize: function(){
-			if(this._btn){
-				this._btn.style.width = this._body.offsetWidth + this._head.offsetWidth + "px";
-			}
 			if(this.labelNode){
 				// find the rightmost left button (B), and leftmost right button (C)
 				// +-----------------------------+
@@ -143,10 +142,10 @@ define([
 				for(var i = children.length - 1; i >= 0; i--){
 					var c = children[i];
 					if(c.nodeType === 1){
-						if(!rightBtn && domClass.contains(c, "mblToolBarButton") && domStyle.get(c, "float") === "right"){
+						if(!rightBtn && domStyle.get(c, "float") === "right"){
 							rightBtn = c;
 						}
-						if(!leftBtn && (domClass.contains(c, "mblToolBarButton") && domStyle.get(c, "float") === "left" || c === this._btn)){
+						if(!leftBtn && domStyle.get(c, "float") === "left"){
 							leftBtn = c;
 						}
 					}
@@ -170,111 +169,29 @@ define([
 		},
 
 		_setBackAttr: function(/*String*/back){
-			if (!back){
-				domConstruct.destroy(this._btn);
-				this._btn = null;
-				this.back = "";
-			}else{
-				if(!this._btn){
-					var btn = domConstruct.create("DIV", this.backProp, this.domNode, "first");
-					var head = domConstruct.create("DIV", {className:"mblArrowButtonHead"}, btn);
-					var body = domConstruct.create("DIV", {className:"mblArrowButtonBody mblArrowButtonText"}, btn);
-
-					this._body = body;
-					this._head = head;
-					this._btn = btn;
-					this.backBtnNode = btn;
-					this.connect(body, "onclick", "_onClick");
+			this._set("back", back);
+			if(!this.backButton){
+				this.backButton = new ToolBarButton({
+					arrow: "left",
+					label: back,
+					moveTo: this.moveTo,
+					href: this.href,
+					transition: this.transition,
+					transitionDir: -1
+				});
+				this.backButton.placeAt(this.domNode, "first");
+				if(this._started){
+					this.backButton.startup();
 				}
-				this.back = back;
-				this._body.innerHTML = this._cv ? this._cv(this.back) : this.back;
+			}else{
+				this.backButton.set("label", back);
 			}
 			this.resize();
 		},
-	
+
 		_setLabelAttr: function(/*String*/label){
 			this._set("label", label);
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv ? this._cv(label) : label;
-		},
-	
-		findCurrentView: function(){
-			// summary:
-			//		Search for the view widget that contains this widget.
-			var w = this;
-			while(true){
-				w = w.getParent();
-				if(!w){ return null; }
-				if(w instanceof View){ break; }
-			}
-			return w;
-		},
-
-		_onClick: function(e){
-			// summary:
-			//		Internal handler for click events.
-			// tags:
-			//		private
-			if(this.onClick(e) === false){ return; } // user's click action
-			var h1 = this.domNode;
-			domClass.add(h1, "mblArrowButtonSelected");
-			setTimeout(function(){
-				domClass.remove(h1, "mblArrowButtonSelected");
-			}, 1000);
-
-			if(this.back && !this.moveTo && !this.href && history){
-				history.back();	
-				return;
-			}	
-	
-			// keep the clicked position for transition animations
-			var view = this.findCurrentView();
-			if(view){
-				view.clickedPosX = e.clientX;
-				view.clickedPosY = e.clientY;
-			}
-			this.goTo(this.moveTo, this.href);
-		},
-	
-		onClick: function(/*Event*/ /*===== e =====*/){
-			// summary:
-			//		User defined function to handle clicks
-			// tags:
-			//		callback
-		},
-	
-		goTo: function(moveTo, href){
-			// summary:
-			//		Given the destination, makes a view transition.
-			var view = this.findCurrentView();
-			if(!view){ return; }
-			if(href){
-				view.performTransition(null, -1, this.transition, this, function(){location.href = href;});
-			}else{
-				if(dm.app && dm.app.STAGE_CONTROLLER_ACTIVE){
-					// If in a full mobile app, then use its mechanisms to move back a scene
-					connect.publish("/dojox/mobile/app/goback");
-				}else{
-					// Basically transition should be performed between two
-					// siblings that share the same parent.
-					// However, when views are nested and transition occurs from
-					// an inner view, search for an ancestor view that is a sibling
-					// of the target view, and use it as a source view.
-					var node = registry.byId(view.convertToId(moveTo));
-					if(node){
-						var parent = node.getParent();
-						while(view){
-							var myParent = view.getParent();
-							if(parent === myParent){
-								break;
-							}
-							view = myParent;
-						}
-					}
-					if(view){
-						view.performTransition(moveTo, -1, this.transition);
-					}
-				}
-			}
 		}
 	});
 });

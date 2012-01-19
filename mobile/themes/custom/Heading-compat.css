@@ -1,47 +1,35 @@
-/* mbl.widget.Heading */
+/* dojox.mobile.Heading */
 .mblHeading {
-	background-image: url(compat/heading-bg.png);
+  background-image: url(compat/heading-bg.png);
+  background-image: -moz-linear-gradient(top, #ffffff, #ffffff 2.5%, rgba(255, 255, 255, 0.14) 2.5%, rgba(255, 255, 255, 0.14) 5%, rgba(255, 255, 255, 0.52) 5%, rgba(255, 255, 255, 0.52) 7.5%, rgba(255, 255, 255, 0.68) 7.5%, rgba(255, 255, 255, 0.68) 10%, rgba(255, 255, 255, 0));
 }
 .mblHeadingSpanTitle {
-	white-space: normal;
+  white-space: normal;
 }
-
-/* Heading Arrow Button */
-.mblArrowButtonHead {
-	background-image: url(compat/ui-widget-bg.png);
-	-moz-transform-origin: left top;
-	-o-transform-origin: left top;
-	-ms-transform-origin: left top;
-	transform-origin: left top;
-	-moz-transform: scale(0.9, 0.99) rotate(45deg);
-	-o-transform: scale(0.9, 0.99) rotate(45deg);
-	-ms-transform: scale(0.9, 0.99) rotate(45deg);
-	transform: scale(0.9, 0.99) rotate(45deg);
-	left: 1px\9; /* IE7/8 hack */
-	_left: 9px; /* IE6 hack */
-	height: 32px\9; /* IE6/7/8 hack */
-	border-width: 0\9; /* IE6/7/8 hack */
-	background-image: url(compat/arrow-button-head.png)\9; /* IE6/7/8 hack */
+/* Heading Back Button */
+.mblBackButtonHead {
+  transform-origin: left top;
+  transform: scale(0.9, 0.99) rotate(45deg);
+  background-image: url(compat/ui-widget-bg.png);
+  -moz-transform-origin: left top;
+  -moz-transform: scale(0.9, 0.99) rotate(45deg);
+  background-image: -moz-linear-gradient(left top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
 }
-.mblArrowButtonHead:not(:target) { /* IE9 hack */
-	background-image: url(compat/ui-widget-bg.png)\9;
-	left: 17px\9;
-	height: 21px\9;
-	border-width: 1px\9;
+.dj_ie8 .mblBackButtonHead, .dj_ie7 .mblBackButtonHead, .dj_ie6 .mblBackButtonHead {
+  left: 1px;
+  _left: 9px;
+  height: 32px;
+  border-width: 0;
+  background-image: url(compat/arrow-button-head.png);
 }
-.mblArrowButtonBody {
-	-moz-border-radius-topright: 2px;
-	-moz-border-radius-bottomright: 2px;
-	-o-border-top-right-radius: 2px;
-	-o-border-bottom-right-radius: 2px;
-	-ms-border-top-right-radius: 2px;
-	-ms-border-bottom-right-radius: 2px;
-	border-top-right-radius: 2px;
-	border-bottom-right-radius: 2px;
-	background-image: url(compat/ui-widget-bg.png);
+.mblBackButtonBody {
+  -moz-border-radius-topright: 2px;
+  -moz-border-radius-bottomright: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-image: url(compat/ui-widget-bg.png);
+  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
 }
-*html .mblArrowButtonBody { /* IE6 hack */
-	padding: 0px 10px 0px 3px;
-	top: 0px;
-	left: 17px;
+.dj_ie6 .mblBackButtonBody {
+  top: 0;
 }
