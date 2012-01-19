@@ -1,8 +1,8 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color",
+define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/Color", "dojo/touch",
 		"dojo/_base/Deferred", "dojo/on", "dojo/query", "dojo/dom-construct", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-style",
 		"./_utils", "dijit/_WidgetBase", "dojox/widget/_Invalidating", "dojox/widget/Selection",
 		"dojo/_base/sniff", "dojo/uacss"],
-	function(arr, lang, declare, event, Color, Deferred, on, query, domConstruct, domGeom, domClass, domStyle,
+	function(arr, lang, declare, event, Color, touch, Deferred, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
 	/*=====
@@ -110,7 +110,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this.inherited(arguments);
 			this.connect(this.domNode, "mouseover", this._onMouseOver);
 			this.connect(this.domNode, "mouseout", this._onMouseOut);
-			this.connect(this.domNode, "mouseup", this._onMouseUp);	
+			this.connect(this.domNode, touch.release, this._onMouseUp);
 		},
 		
 		buildRendering: function(){

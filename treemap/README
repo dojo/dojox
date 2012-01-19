@@ -11,7 +11,7 @@ Project description:
 Treemap widget for Dojo 1.8+
 -------------------------------------------------------------------------------
 Dependencies:
-Dojo Core, Dijit, dojox.color, dojox.widget
+Dojo Core, Dijit, dojox.color, dojox.widget, dojox.gesture
 -------------------------------------------------------------------------------
 Documentation:
     http://docs.dojocampus.org/dojox/treemap
