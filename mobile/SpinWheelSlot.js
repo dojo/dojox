@@ -57,7 +57,6 @@ define([
 		scrollBar: false,
 		constraint: false,
 		propagatable: false, // stop touchstart event propagation to make spin wheel work inside scrollable
-		androidWorkaroud: false, // disable workaround in SpinWheel
 
 		buildRendering: function(){
 			this.inherited(arguments);
