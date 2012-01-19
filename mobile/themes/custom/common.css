@@ -25,7 +25,20 @@ html.mobile, .mobile body {
 }
 .mblColorDefaultSel {
   background-color: #0064c2;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
 }
 .mblColorDefaultSel.mblDomButton {
   background-color: #0064c2;
+}
+.mblSpriteIcon {
+  position: absolute;
+}
+.mblSpriteIconParent {
+  position: relative;
+  font-size: 1px;
+  /*	.mblIconRoot-styles;*/
+
+}
+.mblImageIcon {
+  vertical-align: top;
 }

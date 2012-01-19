@@ -1,0 +1,39 @@
+/* dojox.mobile.ToolBarButton */
+.dj_ie .mblToolBarButton {
+	display: inline;
+}
+.dj_gecko .mblToolBarButtonArrow {
+	-moz-transform: scale(0.7, 0.99) rotate(45deg);
+}
+.dj_ie .mblToolBarButtonLeftArrow {
+	position: absolute;
+	top: 0px;
+	left: -2px;
+	width: 13px;
+	height: 30px;
+	border-style: none;
+	background-image: url(compat/arrow-button-head.png);
+}
+.dj_ie .mblToolBarButtonSelected .mblToolBarButtonLeftArrow {
+	background-image: url(compat/arrow-button-head-sel.png);
+}
+
+.dj_ie .mblToolBarButtonRightArrow {
+	position: absolute;
+	top: 0px;
+	right: -13px;
+	width: 13px;
+	height: 30px;
+	border-style: none;
+	background-image: url(compat/arrow-button-right-head.png);
+}
+.dj_ie .mblToolBarButtonSelected .mblToolBarButtonRightArrow {
+	background-image: url(compat/arrow-button-right-head-sel.png);
+}
+
+.dj_ie .mblToolBarButtonBody {
+	background-image: url(compat/arrow-button-bg.png);
+}
+.dj_ie .mblToolBarButtonSelected .mblToolBarButtonBody {
+	background-image: url(compat/arrow-button-bg-sel.png);
+}
