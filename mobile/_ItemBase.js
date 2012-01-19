@@ -4,15 +4,13 @@ define([
 	"dojo/_base/declare",
 	"dijit/registry",	// registry.getEnclosingWidget
 	"dijit/_Contained",
-	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./TransitionEvent",
 	"./View"
-], function(kernel, config, declare, registry, Contained, Container, WidgetBase, TransitionEvent, View){
+], function(kernel, config, declare, registry, Contained, WidgetBase, TransitionEvent, View){
 
 /*=====
 	var Contained = dijit._Contained;
-	var Container = dijit._Container;
 	var WidgetBase = dijit._WidgetBase;
 	var TransitionEvent = dojox.mobile.TransitionEvent;
 	var View = dojox.mobile.View;
@@ -23,7 +21,7 @@ define([
 	// summary:
 	//		A base class for item classes (e.g. ListItem, IconItem, etc.)
 
-	return declare("dojox.mobile._ItemBase", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile._ItemBase", [WidgetBase, Contained],{
 		// summary:
 		//		A base class for item classes (e.g. ListItem, IconItem, etc.)
 		// description:

@@ -9,16 +9,14 @@ define([
 	"dojo/dom-style",
 	"dijit/registry",	// registry.byId
 	"dijit/_Contained",
-	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./View"
-], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, View){
+], function(array, connect, declare, lang, win, domClass, domConstruct, domStyle, registry, Contained, WidgetBase, View){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
 /*=====
 	var Contained = dijit._Contained;
-	var Container = dijit._Container;
 	var WidgetBase = dijit._WidgetBase;
 =====*/
 
@@ -27,7 +25,7 @@ define([
 	// summary:
 	//		A widget that represents a navigation bar.
 
-	return declare("dojox.mobile.Heading", [WidgetBase, Container, Contained],{
+	return declare("dojox.mobile.Heading", [WidgetBase, Contained],{
 		// summary:
 		//		A widget that represents a navigation bar.
 		// description:

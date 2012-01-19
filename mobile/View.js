@@ -14,16 +14,14 @@ define([
 	"dojo/dom-style",
 	"dijit/registry",	// registry.byNode
 	"dijit/_Contained",
-	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./ViewController", // to load ViewController for you (no direct references)
 	"./transition",
 	"./viewRegistry"
-], function(dojo, array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, transitDeferred, viewRegistry){
+], function(dojo, array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domGeometry, domStyle, registry, Contained, WidgetBase, ViewController, transitDeferred, viewRegistry){
 
 /*=====
 	var Contained = dijit._Contained;
-	var Container = dijit._Container;
 	var WidgetBase = dijit._WidgetBase;
 	var ViewController = dojox.mobile.ViewController;
 =====*/
@@ -35,7 +33,7 @@ define([
 
 	var dm = lang.getObject("dojox.mobile", true);
 
-	return declare("dojox.mobile.View", [WidgetBase, Container, Contained], {
+	return declare("dojox.mobile.View", [WidgetBase, Contained], {
 		// summary:
 		//		A widget that represents a view that occupies the full screen
 		// description:
