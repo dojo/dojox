@@ -1,6 +1,9 @@
-define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/array","dojo/_base/event",
+define(["dojo/_base/kernel", "dojo/_base/declare","dojo/_base/lang","dojo/_base/html","dojo/_base/array","dojo/_base/event",
 		"dojo/_base/connect","dojo/dom-construct", "dijit/_Widget", "dojox/gfx", "./Range", "dojo/fx/easing"], 
-  function(declare, lang, html, arr, event, connect, dom, Widget, gfx, Range) {
+  function(kernel, declare, lang, html, arr, event, connect, dom, Widget, gfx, Range) {
+
+  kernel.deprecated("dojox.gauges", "Use the new extensible dojox.dgauges framework instead", "2.0");
+
 
 	var _tooltipModule =  0;
 	var _numberModule =  0;
