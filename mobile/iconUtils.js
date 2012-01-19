@@ -198,9 +198,17 @@ define([
 			if(!parent || !icon && !iconNode){ return; }
 			if(icon && icon !== "none"){ // create or update an icon
 				if(!this.iconWrapper && icon.indexOf("mblDomButton") !== 0 && !iconPos){ // image
+					if(iconNode && iconNode.tagName === "DIV"){
+						domConstruct.destroy(iconNode);
+						iconNode = null;
+					}
 					iconNode = this.createIcon(icon, null, iconNode, alt, parent, refNode, pos);
 					domClass.add(iconNode, "mblImageIcon");
 				}else{ // sprite or DOM button
+					if(iconNode && iconNode.tagName === "IMG"){
+						domConstruct.destroy(iconNode);
+						iconNode = null;
+					}
 					iconNode && domConstruct.empty(iconNode);
 					if(!iconNode){
 						iconNode = domConstruct.create("div", null, refNode || parent, pos);
