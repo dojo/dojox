@@ -49,7 +49,13 @@ define([
 		// keepScrollPos: Boolean
 		//		If true, the scroll position is kept between views.
 		keepScrollPos: true,
-	
+
+		// tag: String
+		//		A name of html tag to create as domNode.
+		tag: "div",
+
+		baseClass: "mblView",
+
 		constructor: function(params, node){
 			if(node){
 				dom.byId(node).style.visibility = "hidden";
@@ -62,12 +68,12 @@ define([
 		},
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("DIV");
-			this.domNode.className = "mblView";
-			this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
-			this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
+			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+
+			this._animEndHandle = this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
+			this._animStartHandle = this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
 			if(!config['mblCSS3Transition']){
-			    this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
+			    this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
 			}
 
 			viewRegistry.add(this);

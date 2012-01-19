@@ -89,28 +89,32 @@ define([
 		//		A name of html tag to create as domNode.
 		tag: "H1",
 
+		baseClass: "mblHeading",
+
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement(this.tag);
-			this.domNode.className = "mblHeading";
+			this.inherited(arguments);
 			if(!this.label){
 				array.forEach(this.domNode.childNodes, function(n){
 					if(n.nodeType == 3){
 						var v = lang.trim(n.nodeValue);
 						if(v){
 							this.label = v;
-							this.labelNode = domConstruct.create("SPAN", {innerHTML:v}, n, "replace");
+							this.labelNode = domConstruct.create("span", {innerHTML:v}, n, "replace");
 						}
 					}
 				}, this);
 			}
 			if(!this.labelNode){
-				this.labelNode = domConstruct.create("SPAN", null, this.domNode);
+				this.labelNode = domConstruct.create("span", null, this.domNode);
 			}
 			this.labelNode.className = "mblHeadingSpanTitle";
-			this.labelDivNode = domConstruct.create("DIV", {
+			this.labelDivNode = domConstruct.create("div", {
 				className: "mblHeadingDivTitle",
 				innerHTML: this.labelNode.innerHTML
 			}, this.domNode);
+
+			dom.setSelectable(this.domNode, false);
 		},
 
 		startup: function(){
@@ -189,7 +193,7 @@ define([
 		},
 	
 		_setLabelAttr: function(/*String*/label){
-			this.label = label;
+			this._set("label", label);
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv ? this._cv(label) : label;
 		},
 	
