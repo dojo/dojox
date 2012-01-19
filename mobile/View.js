@@ -1,5 +1,4 @@
 define([
-	"dojo/_base/kernel", // to test dojo.hash
 	"dojo/_base/array",
 	"dojo/_base/config",
 	"dojo/_base/connect",
@@ -10,15 +9,17 @@ define([
 	"dojo/_base/Deferred",
 	"dojo/dom",
 	"dojo/dom-class",
+	"dojo/dom-construct",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
-	"dijit/registry",	// registry.byNode
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
 	"./ViewController", // to load ViewController for you (no direct references)
+	"./common",
 	"./transition",
 	"./viewRegistry"
-], function(dojo, array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domGeometry, domStyle, registry, Contained, WidgetBase, ViewController, transitDeferred, viewRegistry){
+], function(array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domConstruct, domGeometry, domStyle, registry, Contained, WidgetBase, ViewController, common, transitDeferred, viewRegistry){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -41,7 +42,7 @@ define([
 		//		HTML page can have multiple View widgets and the user can
 		//		navigate through the views back and forth without page
 		//		transitions.
-	
+
 		// selected: Boolean
 		//		If true, the view is displayed at startup time.
 		selected: false,
@@ -128,7 +129,7 @@ define([
 				this.hide();
 			}
 		},
-	
+
 		resize: function(){
 			// summary:
 			//		Calls resize() of each child widget.
@@ -143,28 +144,28 @@ define([
 			// description:
 			//		Called only when this view is shown at startup time.
 		},
-	
+
 		onBeforeTransitionIn: function(moveTo, dir, transition, context, method){
 			// summary:
 			//		Stub function to connect to from your application.
 			// description:
 			//		Called before the arriving transition occurs.
 		},
-	
+
 		onAfterTransitionIn: function(moveTo, dir, transition, context, method){
 			// summary:
 			//		Stub function to connect to from your application.
 			// description:
 			//		Called after the arriving transition occurs.
 		},
-	
+
 		onBeforeTransitionOut: function(moveTo, dir, transition, context, method){
 			// summary:
 			//		Stub function to connect to from your application.
 			// description:
 			//		Called before the leaving transition occurs.
 		},
-	
+
 		onAfterTransitionOut: function(moveTo, dir, transition, context, method){
 			// summary:
 			//		Stub function to connect to from your application.
@@ -186,7 +187,7 @@ define([
 			}, this);
 			node.className = classes.join(' ');
 		},
-		
+
 		_fixViewState: function(/*DomNode*/toNode){
 			// summary:
 			//		Sanity check for view transition states.
@@ -319,7 +320,7 @@ define([
 			if(toWidget){
 				// Now that the target view became visible, it's time to run resize()
 				if(config["mblAlwaysResizeOnTransition"] || !toWidget._resized){
-					dm.resizeAll(null, toWidget);
+					common.resizeAll(null, toWidget);
 					toWidget._resized = true;
 				}
 
@@ -357,8 +358,10 @@ define([
 			toNode.style.display = "none";
 			toNode.style.visibility = "visible";
 
-			
-			this._doTransition(fromNode, toNode, transition, transitionDir);
+			common.fromView = this;
+			common.toView = toWidget;
+
+			this._doTransition(fromNode, toNode, detail.transition, detail.transitionDir);
 		},
 
 		_toCls: function(s){
@@ -366,7 +369,7 @@ define([
 			// ex. "slide" -> "mblSlide"
 			return "mbl"+s.charAt(0).toUpperCase() + s.substring(1);
 		},
-	
+
 		_doTransition: function(fromNode, toNode, transition, transitionDir){
 			var rev = (transitionDir == -1) ? " mblReverse" : "";
 			toNode.style.display = "";
@@ -421,12 +424,10 @@ define([
 				domStyle.set(fromNode, {webkitTransformOrigin:fromOrigin});
 				domStyle.set(toNode, {webkitTransformOrigin:toOrigin});
 			}
-			dm.currentView = registry.byNode(toNode);
-		},
-	
-		onAnimationStart: function(e){
 		},
 
+		onAnimationStart: function(e){
+		},
 
 		onAnimationEnd: function(e){
 			var name = e.animationName || e.target.className;
