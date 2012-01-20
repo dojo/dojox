@@ -24,6 +24,9 @@ define([
 		//		enough for your application, use of it could reduce the total
 		//		code size.
 
+		var _ctorMap = {};
+		var _eval = function(js){ return eval(js); };
+
 		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
 			// summary:
 			//		Function for instantiating a list of widget nodes.
@@ -35,11 +38,11 @@ define([
 			if(nodes){
 				for(i = 0; i < nodes.length; i++){
 					var n = nodes[i],
-						type = n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"),
-						cls = lang.getObject(type) || require(type),
-						proto = cls.prototype,
+						type = n._type,
+						ctor = _ctorMap[type],
+						proto = ctor.prototype,
 						params = {}, prop, v, t;
-					lang.mixin(params, eval('({'+(n.getAttribute("data-dojo-props")||"")+'})'));
+					lang.mixin(params, _eval.call(args.propsThis, '({'+(n.getAttribute("data-dojo-props")||"")+'})'));
 					lang.mixin(params, args.defaults);
 					lang.mixin(params, mixin);
 					for(prop in proto){
@@ -63,12 +66,12 @@ define([
 						}
 					}
 					params["class"] = n.className;
-					params.style = n.style && n.style.cssText;
+					if(!params.style){ params.style = n.style.cssText; }
 					v = n.getAttribute("data-dojo-attach-point");
 					if(v){ params.dojoAttachPoint = v; }
 					v = n.getAttribute("data-dojo-attach-event");
 					if(v){ params.dojoAttachEvent = v; }
-					var instance = new cls(params, n);
+					var instance = new ctor(params, n);
 					ws.push(instance);
 					var jsId = n.getAttribute("jsId") || n.getAttribute("data-dojo-id");
 					if(jsId){
@@ -99,10 +102,22 @@ define([
 			}
 
 			var nodes = rootNode.getElementsByTagName("*");
-			var i, list = [];
+			var i, j, list = [];
 			for(i = 0; i < nodes.length; i++){
-				var n = nodes[i];
-				if(n.getAttribute("dojoType") || n.getAttribute("data-dojo-type")){
+				var n = nodes[i],
+					type = (n._type = n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
+				if(type){
+					if(n._skip){
+						n._skip = undefined;
+						continue;
+					}
+					var ctor = _ctorMap[type] || (_ctorMap[type] = lang.getObject(type) || require(type));
+					if(ctor.prototype.stopParser && !(args && args.template)){
+						var arr = n.getElementsByTagName("*");
+						for(j = 0; j < arr.length; j++){
+							arr[j]._skip = 1;
+						}
+					}
 					list.push(n);
 				}
 			}
