@@ -1,19 +1,14 @@
 define([
-	"dojo/_base/kernel",
-	"dojo/_base/array",
 	"dojo/_base/declare",
+	"dojo/_base/Deferred",
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/_base/xhr",
 	"./_ExecScriptMixin",
 	"./Pane",
-	"./ProgressIndicator"
-], function(dojo, array, declare, lang, win, xhr, ExecScriptMixin, Pane, ProgressIndicator){
-
-/*=====
-	var Contained = dijit._Contained;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
+	"./ProgressIndicator",
+	"./lazyLoadUtils"
+], function(declare, Deferred, lang, win, xhr, ExecScriptMixin, Pane, ProgressIndicator, lazyLoadUtils){
 
 	// module:
 	//		dojox/mobile/ContentPane
@@ -24,16 +19,21 @@ define([
 		// summary:
 		//		A very simple content pane to embed an HTML fragment.
 		// description:
-		//		This widget embeds an HTML fragment and run the parser. onLoad()
-		//		is called when parsing is done and the content is ready.
-		//		"dojo/_base/xhr" is in the dependency list. Usually this is not
-		//		necessary, but there is a case where dojox.mobile custom build
-		//		does not contain xhr. Note that this widget does not inherit
-		//		from dijit._Container.
+		//		This widget embeds an HTML fragment and run the parser. It has
+		//		ability to load external content using dojo/_base/xhr. onLoad()
+		//		is called when parsing is done and the content is
+		//		ready. Compared with dijit.layout.ContentPane, this widget
+		//		provides only basic fuctionality, but it is much smaller than
+		//		dijit.layout.ContentPane.
 
 		// href: String
 		//		URL of the content to embed.
 		href: "",
+
+		// lazy: String
+		//		If true, external content specified with the href property is
+		//		not loaded at startup time. It can be loaded by calling load().
+		lazy: false,
 
 		// content: String
 		//		An html fragment to embed.
@@ -64,32 +64,42 @@ define([
 			}
 			this.inherited(arguments);
 		},
-	
+
 		loadHandler: function(/*String*/response){
 			// summary:
 			//		A handler called when load completes.
 			this.set("content", response);
 		},
-	
+
 		errorHandler: function(err){
 			// summary:
 			//		An error handler called when load fails.
 			if(this._p){ this._p.stop(); }
 		},
-	
+
+		load: function(){
+			this.set("href", this.href);
+		},
+
 		onLoad: function(){
 			// summary:
 			//		Stub method to allow the application to connect to.
 			//		Called when parsing is done and the content is ready.
+			return true;
 		},
-	
+
 		_setHrefAttr: function(/*String*/href){
+			if(this.lazy || href === this._loaded){
+				this.lazy = false;
+				return null;
+			}
 			var p = this._p;
 			if(p){
 				win.body().appendChild(p.domNode);
 				p.start();
 			}
 			this._set("href", href);
+			this._loaded = href;
 			return xhr.get({
 				url: href,
 				handleAs: "text",
@@ -109,10 +119,14 @@ define([
 				this.containerNode.innerHTML = data;
 			}
 			if(this.parseOnLoad){
-				dojo.parser.parse(this.containerNode);
+				var _this = this;
+				return Deferred.when(lazyLoadUtils.instantiateLazyWidgets(_this.containerNode), function(){
+					if(_this._p){ _this._p.stop(); }
+					return _this.onLoad();
+				});
 			}
 			if(this._p){ this._p.stop(); }
-			this.onLoad();
+			return this.onLoad();
 		}
 	});
 });
