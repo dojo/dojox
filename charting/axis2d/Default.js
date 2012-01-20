@@ -431,7 +431,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 			if(rotation < 0){
 				rotation += 360;
 			}
-
 			var maxLabelSize = this._getMaxLabelSize(); // don't need parameters, calculate has been called before => we use cached value
 			if(maxLabelSize){
 				var side;
@@ -502,9 +501,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 					}
 					offsets[side] += labelGap + Math.max(taMajorTick.length, taMinorTick.length) + (o.title ? (tsize + taTitleGap) : 0);
 				}
-			}
-			if(labelWidth){
-				this._cachedLabelWidth = labelWidth;
 			}
 			return offsets;	//	Object
 		},
@@ -606,11 +602,13 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 			if(rotation < 0){
 				rotation += 360;
 			}
+			var cachedLabelW = this._getMaxLabelSize();
+			cachedLabelW = cachedLabelW && cachedLabelW.majLabelW;
 			if(this.vertical){
 				start = {y: dim.height - offsets.b};
 				stop  = {y: offsets.t};
 				titlePos = {y: (dim.height - offsets.b + offsets.t)/2};
-				titleOffset = size * sinr + (this._cachedLabelWidth || 0) * cosr + labelGap + Math.max(taMajorTick.length, taMinorTick.length) + tsize + taTitleGap;
+				titleOffset = size * sinr + (cachedLabelW || 0) * cosr + labelGap + Math.max(taMajorTick.length, taMinorTick.length) + tsize + taTitleGap;
 				axisVector = {x: 0, y: -1};
 				labelOffset = {x: 0, y: 0};
 				tickVector = {x: 1, y: 0};
@@ -680,7 +678,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				start = {x: offsets.l};
 				stop  = {x: dim.width - offsets.r};
 				titlePos = {x: (dim.width - offsets.r + offsets.l)/2};
-				titleOffset = size * cosr + (this._cachedLabelWidth || 0) * sinr + labelGap + Math.max(taMajorTick.length, taMinorTick.length) + tsize + taTitleGap;
+				titleOffset = size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length, taMinorTick.length) + tsize + taTitleGap;
 				axisVector = {x: 1, y: 0};
 				labelOffset = {x: 0, y: 0};
 				tickVector = {x: 0, y: 1};
@@ -820,7 +818,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 						label.text,
 						taFont,
 						taFontColor
-						//this._cachedLabelWidth
+						//cachedLabelW
 					);
 					// if bidi support was required, the textDir is "auto" and truncation
 					// took place, we need to update the dir of the element for cases as:
@@ -872,7 +870,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 						label.text,
 						taFont,
 						taFontColor
-						//this._cachedLabelWidth
+						//cachedLabelW
 					);
 					// if bidi support was required, the textDir is "auto" and truncation
 					// took place, we need to update the dir of the element for cases as:
