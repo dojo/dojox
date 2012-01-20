@@ -197,7 +197,7 @@ define([
 				f = dm.hideAddressBar;
 			}
 		}
-		connect.connect(null, (win.global.onorientationchange !== undefined && !has('android'))
+		connect.connect(null, win.global.onorientationchange !== undefined
 			? "onorientationchange" : "onresize", null, f);
 		win.body().style.visibility = "visible";
 	});
