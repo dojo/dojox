@@ -1,19 +1,15 @@
 define([
-	"dojo/_base/kernel", // to test dojo.hash
 	"dojo/_base/array",
 	"dojo/_base/config",
 	"dojo/_base/connect",
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-class",
-	"dojo/dom-construct",
-	"dojo/dom-style",
-//	"dojo/hash", // optionally prereq'ed
 	"dojo/ready",
-	"dijit/registry",	// registry.toArray
+	"dijit/registry",
 	"./sniff",
-	"./uacss"
-], function(dojo, array, config, connect, lang, win, domClass, domConstruct, domStyle, ready, registry, has, uacss){
+	"./uacss" // (no direct references)
+], function(array, config, connect, lang, win, domClass, ready, registry, has){
 
 	var dm = lang.getObject("dojox.mobile", true);
 /*=====
@@ -140,7 +136,8 @@ define([
 		//		top level widget or not.
 		//		If omitted, search the entire page.
 		if(dm.disableResizeAll){ return; }
-		connect.publish("/dojox/mobile/resizeAll", [evt, root]);
+		connect.publish("/dojox/mobile/resizeAll", [evt, root]); // back compat
+		connect.publish("/dojox/mobile/beforeResizeAll", [evt, root]);
 		dm.updateOrient();
 		dm.detectScreenSize();
 		var isTopLevel = function(w){
@@ -160,6 +157,7 @@ define([
 			array.forEach(array.filter(registry.toArray(), isTopLevel),
 					function(w){ w.resize(); });
 		}
+		connect.publish("/dojox/mobile/afterResizeAll", [evt, root]);
 	};
 
 	dm.openWindow = function(url, target){
@@ -168,30 +166,12 @@ define([
 		win.global.open(url, target || "_blank");
 	};
 
-	if(config.parseOnLoad){
-		ready(90, function(){
-			// avoid use of query
-			/*
-			var list = query('[lazy=true] [dojoType]', null);
-			list.forEach(function(node, index, nodeList){
-				node.setAttribute("__dojoType", node.getAttribute("dojoType"));
-				node.removeAttribute("dojoType");
-			});
-			*/
-		
-			var nodes = win.body().getElementsByTagName("*");
-			var i, len, s;
-			len = nodes.length;
-			for(i = 0; i < len; i++){
-				s = nodes[i].getAttribute("dojoType");
-				if(s){
-					if(nodes[i].parentNode.getAttribute("lazy") == "true"){
-						nodes[i].setAttribute("__dojoType", s);
-						nodes[i].removeAttribute("dojoType");
-					}
-				}
-			}
-		});
+	if(config["mblApplyPageStyles"] !== false){
+		domClass.add(win.doc.documentElement, "mobile");
+	}
+	if(has('chrome')){
+		// dojox.mobile does not load uacss (only _compat does), but we need dj_chrome.
+		domClass.add(win.doc.documentElement, "dj_chrome");
 	}
 
 	if(win.global._no_dojo_dm){
@@ -205,13 +185,6 @@ define([
 
 	ready(function(){
 		dm.detectScreenSize(true);
-		if(config["mblApplyPageStyles"] !== false){
-			domClass.add(win.doc.documentElement, "mobile");
-		}
-		if(has('chrome')){
-			// dojox.mobile does not load uacss (only _compat does), but we need dj_chrome.
-			domClass.add(win.doc.documentElement, "dj_chrome");
-		}
 
 		//	You can disable hiding the address bar with the following djConfig.
 		//	var djConfig = { mblHideAddressBar: false };
@@ -226,26 +199,6 @@ define([
 		}
 		connect.connect(null, (win.global.onorientationchange !== undefined && !has('android'))
 			? "onorientationchange" : "onresize", null, f);
-	
-		// avoid use of query
-		/*
-		var list = query('[__dojoType]', null);
-		list.forEach(function(node, index, nodeList){
-			node.setAttribute("dojoType", node.getAttribute("__dojoType"));
-			node.removeAttribute("__dojoType");
-		});
-		*/
-	
-		var nodes = win.body().getElementsByTagName("*");
-		var i, len = nodes.length, s;
-		for(i = 0; i < len; i++){
-			s = nodes[i].getAttribute("__dojoType");
-			if(s){
-				nodes[i].setAttribute("dojoType", s);
-				nodes[i].removeAttribute("__dojoType");
-			}
-		}
-
 		win.body().style.visibility = "visible";
 	});
 
