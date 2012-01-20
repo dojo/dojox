@@ -102,41 +102,25 @@ define([
 	dm.hideAddressBarWait = typeof(config["mblHideAddressBarWait"]) === "number" ?
 		config["mblHideAddressBarWait"] : 1500;
 
-	dm.hide_1 = function(force){
+	dm.hide_1 = function(){
 		// summary:
 		//		Internal function to hide the address bar.
 		scrollTo(0, 1);
-		var h = dm.getScreenSize().h + "px";
-		if(has('android')){
-			if(force){
-				win.body().style.minHeight = h;
-			}
+		dm._hidingTimer = (dm._hidingTimer == 0) ? 200 : dm._hidingTimer * 2;
+		if(dm.isAddressBarHidden() || dm._hidingTimer > dm.hideAddressBarWait){
+			// Succeeded to hide address bar, or failed but timed out 
+			win.body().style.minHeight = dm.getScreenSize().h + "px";
 			dm.resizeAll();
+			dm._hiding = false;
 		}else{
-			if(force || dm._h === h && h !== win.body().style.minHeight){
-				win.body().style.minHeight = h;
+			// Failed to hide address bar, so retry after a while
+			setTimeout(dm.hide_1, dm._hidingTimer);
+			if(has('android')){
 				dm.resizeAll();
 			}
 		}
-		dm._h = h;
 	};
 
-	dm.hide_fs = function(){
-		// summary:
-		//		Internal function to hide the address bar for fail-safe.
-		// description:
-		//		Resets the height of the body, performs hiding the address
-		//		bar, and calls resizeAll().
-		//		This is for fail-safe, in case of failure to complete the
-		//		address bar hiding in time.
-		var t = win.body().style.minHeight;
-		win.body().style.minHeight = (dm.getScreenSize().h * 2) + "px"; // to ensure enough height for scrollTo to work
-		scrollTo(0, 1);
-		setTimeout(function(){
-			dm.hide_1(1);
-			dm._hiding = false;
-		}, 1000);
-	};
 	dm.hideAddressBar = function(/*Event?*/evt){
 		// summary:
 		//		Hides the address bar.
@@ -146,12 +130,14 @@ define([
 		//		finishes.
 		if(dm.disableHideAddressBar || dm._hiding){ return; }
 		dm._hiding = true;
-		dm._h = 0;
-		win.body().style.minHeight = (dm.getScreenSize().h * 2) + "px"; // to ensure enough height for scrollTo to work
-		setTimeout(dm.hide_1, 0);
-		setTimeout(dm.hide_1, 200);
-		setTimeout(dm.hide_1, 800);
-		setTimeout(dm.hide_fs, dm.hideAddressBarWait);
+		dm._hidingTimer = has('iphone') ? 200 : 0; // Need to wait longer in case of iPhone
+		var minH = has('android') ? (outerHeight / devicePixelRatio) : screen.availHeight;
+		win.body().style.minHeight = minH + "px"; // to ensure enough height for scrollTo to work
+		setTimeout(dm.hide_1, dm._hidingTimer);
+	};
+
+	dm.isAddressBarHidden = function(){
+		return pageYOffset === 1;
 	};
 
 	dm.resizeAll = function(/*Event?*/evt, /*Widget?*/root){
