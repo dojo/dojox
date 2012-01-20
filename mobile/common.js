@@ -245,42 +245,7 @@ define([
 				nodes[i].removeAttribute("__dojoType");
 			}
 		}
-	
-		if(dojo.hash){
-			// find widgets under root recursively
-			var findWidgets = function(root){
-				if(!root){ return []; }
-				var arr = registry.findWidgets(root);
-				var widgets = arr;
-				for(var i = 0; i < widgets.length; i++){
-					arr = arr.concat(findWidgets(widgets[i].containerNode));
-				}
-				return arr;
-			};
-			connect.subscribe("/dojo/hashchange", null, function(value){
-				var view = dm.currentView;
-				if(!view){ return; }
-				var params = dm._params;
-				if(!params){ // browser back/forward button was pressed
-					var moveTo = value ? value : dm._defaultView.id;
-					var widgets = findWidgets(view.domNode);
-					var dir = 1, transition = "slide";
-					for(i = 0; i < widgets.length; i++){
-						var w = widgets[i];
-						if("#"+moveTo == w.moveTo){
-							// found a widget that has the given moveTo
-							transition = w.transition;
-							dir = (w instanceof dm.Heading) ? -1 : 1;
-							break;
-						}
-					}
-					params = [ moveTo, dir, transition ];
-				}
-				view.performTransition.apply(view, params);
-				dm._params = null;
-			});
-		}
-	
+
 		win.body().style.visibility = "visible";
 	});
 
