@@ -202,17 +202,5 @@ define([
 		win.body().style.visibility = "visible";
 	});
 
-	// To search _parentNode first.  TODO:1.8 reconsider this redefinition.
-	registry.getEnclosingWidget = function(node){
-		while(node){
-			var id = node.getAttribute && node.getAttribute("widgetId");
-			if(id){
-				return registry.byId(id);
-			}
-			node = node._parentNode || node.parentNode;
-		}
-		return null;
-	};
-
 	return dm;
 });
