@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
-	function(dojo, darray, domStyle, DeferredList,transition){
+define(["dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
+	function(darray, domStyle, DeferredList,transition){
 	// module: 
 	//		dojox/css3/transit
 	// summary:

@@ -1,11 +1,10 @@
-define(["dojo/_base/kernel", 
-		"dojo/_base/lang",
+define(["dojo/_base/lang",
 		"dojo/_base/array",
 		"dojo/_base/Deferred",
 		"dojo/DeferredList",
 		"dojo/on",
 		"dojo/_base/sniff"], 
-		function(dojo, lang, array, deferred, deferredList, on, has){
+		function(lang, array, Deferred, DeferredList, on, has){
 	// module: 
 	//		dojox/css3/transition
 	// summary:
@@ -55,7 +54,7 @@ define(["dojo/_base/kernel",
 		//We can rely on "onAfterEnd" function to notify the end of a single animation,
 		//but using a deferred object is easier to wait for multiple animations end.
 		if(!this.deferred){
-			this.deferred = new deferred();
+			this.deferred = new Deferred();
 		}
 	};
 	
@@ -296,7 +295,7 @@ define(["dojo/_base/kernel",
 			}
 			
 		});
-		return new deferredList(defs);
+		return new DeferredList(defs);
 	};
 	
 	transition.getWaitingList = getWaitingList;
@@ -322,7 +321,7 @@ define(["dojo/_base/kernel",
 		});
 		
 		//wait for all deferred object in deferred list to resolve
-		dojo.when(waitingList, function(){
+		Deferred.when(waitingList, function(){
 			array.forEach(args, function(item){
 				//set the start state
 				item.initState();
@@ -358,7 +357,7 @@ define(["dojo/_base/kernel",
 			}
 		});
 		
-		dojo.when(waitingList, function(){
+		Deferred.when(waitingList, function(){
 			array.forEach(args, function(item){
 				//set the start state
 				item.initState();
