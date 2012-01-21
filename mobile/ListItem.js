@@ -8,8 +8,9 @@ define([
 	"dojo/has",
 	"./common",
 	"./_ItemBase",
+	"./ProgressIndicator",
 	"./TransitionEvent"
-], function(array, connect, declare, lang, domClass, domConstruct, has, common, ItemBase, TransitionEvent){
+], function(array, connect, declare, lang, domClass, domConstruct, has, common, ItemBase, ProgressIndicator, TransitionEvent){
 
 /*=====
 	var ItemBase = dojox.mobile._ItemBase;
@@ -102,6 +103,14 @@ define([
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "li",
+
+		// busy: Boolean
+		//		If true, a progress indicator spins.
+		busy: false,
+
+		// progStyle: String
+		//		A css class name to add to the progress indicator.
+		progStyle: "",
 
 		postMixInProperties: function(){
 			// for backward compatibility
@@ -382,6 +391,31 @@ define([
 		_setLabelAttr: function(/*String*/text){
 			this.label = text;
 			this.labelNode.innerHTML = this._cv ? this._cv(text) : text;
+		},
+
+		_setBusyAttr: function(/*Boolean*/busy){
+			var prog = this._prog;
+			if(busy){
+				if(!this.iconNode){
+					this.iconNode = domConstruct.create("div", {className:"mblListItemIcon"},
+						this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.labelNode, "before");
+				}
+				if(!prog){
+					prog = this._prog = new ProgressIndicator({size:25, center:false});
+					domClass.add(prog.domNode, this.progStyle);
+				}
+				array.forEach(this.iconNode.childNodes, function(child){
+					child.style.display = "none";
+				});
+				this.iconNode.appendChild(prog.domNode);
+				prog.start();
+			}else{
+				array.forEach(this.iconNode.childNodes, function(child){
+					child.style.display = "";
+				});
+				prog.stop();
+			}
+			this._set("busy", busy);
 		}
 	});
 });

@@ -11,9 +11,10 @@ define([
 	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
+	"./ProgressIndicator",
 	"./ToolBarButton",
 	"./View"
-], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, WidgetBase, ToolBarButton, View){
+], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, WidgetBase, ProgressIndicator, ToolBarButton, View){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -83,13 +84,17 @@ define([
 		//		The default icon path for child items.
 		iconBase: "",
 
-		// backProp: Object
-		//		Properties for the back button.
-		backProp: {className: "mblArrowButton"},
-
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "H1",
+
+		// busy: Boolean
+		//		If true, a progress indicator spins.
+		busy: false,
+
+		// progStyle: String
+		//		A css class name to add to the progress indicator.
+		progStyle: "mblProgWhite",
 
 		baseClass: "mblHeading",
 
@@ -192,6 +197,21 @@ define([
 		_setLabelAttr: function(/*String*/label){
 			this._set("label", label);
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv ? this._cv(label) : label;
-		}
+		},
+
+		_setBusyAttr: function(/*Boolean*/busy){
+			var prog = this._prog;
+			if(busy){
+				if(!prog){
+					prog = this._prog = new ProgressIndicator({size:30, center:false});
+					domClass.add(prog.domNode, this.progStyle);
+				}
+				domConstruct.place(prog.domNode, this.domNode, "first");
+				prog.start();
+			}else{
+				prog.stop();
+			}
+			this._set("busy", busy);
+		}	
 	});
 });
