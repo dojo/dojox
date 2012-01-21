@@ -8,7 +8,8 @@
   vertical-align: bottom;
   /* To avoid IE6 LI bug */
 
-  padding: 0 0 0 8px;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  padding: 0 8px;
   height: 50px;
   border-bottom: 1px solid #b5bcc7;
   font-size: 18px;
@@ -20,7 +21,7 @@
 }
 .mblListItem.mblVariableHeight {
   height: auto;
-  padding: 11px 0px 10px 6px;
+  padding: 8px;
   line-height: normal;
 }
 .mblListItem .mblListItemAnchor {
@@ -34,14 +35,14 @@
 .mblListItem .mblListItemAnchor * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
 }
-.mblItemSelected {
+.mblListItemSelected {
   background-color: #5cb0ff;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
 }
-.mblItemSelected .mblListItemAnchor {
+.mblListItemSelected .mblListItemAnchor {
   color: #000000;
 }
-.mblItemSelected .mblDomButton div {
+.mblListItemSelected .mblDomButton div {
   border-color: white;
 }
 .mblListItemTextBoxSelected {
@@ -50,18 +51,34 @@
 .mblListItemChecked {
   color: #000000;
 }
-.mblListItemIcon {
+.mblListItemChecked .mblListItemRightIcon {
+  visibility: visible;
+}
+.mblListItemChecked .mblListItemUncheckIcon {
+  position: absolute;
+  visibility: hidden;
+}
+.mblListItemUnchecked .mblListItemRightIcon {
+  visibility: hidden;
+}
+.mblListItemUnchecked .mblListItemUncheckIcon {
+  visibility: visible;
+}
+.mblListItemDeleteIcon {
+  position: relative;
   float: left;
   line-height: normal;
   margin-top: 10.5px;
   margin-right: 11px;
 }
-.mblListItemSpriteIcon {
-  position: absolute;
+.mblListItemIcon {
+  position: relative;
+  float: left;
+  line-height: normal;
   margin-top: 10.5px;
-  margin-left: 8px;
+  margin-right: 11px;
 }
-.mblListItemRightIcon, .mblListItemRightIcon2 {
+.mblListItemRightIcon, .mblListItemRightIcon2, .mblListItemUncheckIcon {
   position: relative;
   float: right;
   line-height: normal;

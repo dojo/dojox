@@ -8,7 +8,8 @@
   vertical-align: bottom;
   /* To avoid IE6 LI bug */
 
-  padding: 0px 0px 0px 7px;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  padding: 0px 8px;
   height: 64px;
   border-bottom: solid 1px #313431;
   background-color: black;
@@ -18,7 +19,7 @@
 }
 .mblListItem.mblVariableHeight {
   height: auto;
-  padding: 11px 0px 10px 6px;
+  padding: 11px 8px;
   line-height: normal;
 }
 .mblListItem .mblListItemAnchor {
@@ -32,31 +33,48 @@
 .mblListItem .mblListItemAnchor * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
 }
-.mblItemSelected {
-  background-color: #FFC700;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ad7500), to(#ffaa00), color-stop(0.06, #ffb200), color-stop(0.5, #ffc700));
+.mblListItemSelected {
+  color: white;
+  background-color: #3578b1;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#306ea1), to(#266093), color-stop(0.06, #4090d3), color-stop(0.5, #306ea1));
 }
-.mblItemSelected .mblListItemAnchor {
+.mblListItemSelected .mblListItemAnchor {
   color: black;
 }
-.mblItemSelected .mblDomButton div {
+.mblListItemSelected .mblDomButton div {
   border-color: white;
 }
 .mblListItemTextBoxSelected {
   background-color: #048BF4;
 }
-.mblListItemIcon {
+.mblListItemChecked .mblListItemRightIcon {
+  visibility: visible;
+}
+.mblListItemChecked .mblListItemUncheckIcon {
+  position: absolute;
+  visibility: hidden;
+}
+.mblListItemUnchecked .mblListItemRightIcon {
+  visibility: hidden;
+}
+.mblListItemUnchecked .mblListItemUncheckIcon {
+  visibility: visible;
+}
+.mblListItemDeleteIcon {
+  position: relative;
   float: left;
   line-height: normal;
   margin-top: 17px;
   margin-right: 11px;
 }
-.mblListItemSpriteIcon {
-  position: absolute;
-  margin-top: 7px;
-  margin-left: 8px;
+.mblListItemIcon {
+  position: relative;
+  float: left;
+  line-height: normal;
+  margin-top: 17px;
+  margin-right: 11px;
 }
-.mblListItemRightIcon, .mblListItemRightIcon2 {
+.mblListItemRightIcon, .mblListItemRightIcon2, .mblListItemUncheckIcon {
   position: relative;
   float: right;
   line-height: normal;

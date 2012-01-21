@@ -3,6 +3,7 @@
 	position: relative;
 	list-style-type: none;
 	vertical-align: bottom; /* To avoid IE6 LI bug */
+	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	.mblListItem-styles;
 	&.mblVariableHeight {
 		height: auto;
@@ -18,17 +19,17 @@
 		}
 	}
 }
-.mblItemSelected {
-	.mblItemSelected-styles;
+.mblListItemSelected {
+	.mblListItemSelected-styles;
 	.mblListItemSubText {
-		.mblItemSelected-mblListItemSubText-styles;
+		.mblListItemSelected-mblListItemSubText-styles;
 	}
 	.mblListItemAnchor {
-		.mblItemSelected-mblListItemAnchor-styles;
+		.mblListItemSelected-mblListItemAnchor-styles;
 	}
 	.mblDomButton {
 		div {
-			.mblItemSelected-mblDomButton-Div-styles;
+			.mblListItemSelected-mblDomButton-Div-styles;
 		}
 	}
 }
@@ -38,23 +39,43 @@
 .mblListItemChecked {
 	.mblListItemChecked-styles;
 }
+
+.mblListItemChecked .mblListItemRightIcon {
+	visibility: visible;
+}
+.mblListItemChecked .mblListItemUncheckIcon {
+	position: absolute;
+	visibility: hidden;
+}
+
+.mblListItemUnchecked .mblListItemRightIcon {
+	visibility: hidden;
+}
+.mblListItemUnchecked .mblListItemUncheckIcon {
+	visibility: visible;
+}
+
+.mblListItemDeleteIcon {
+	position: relative;
+	float: left;
+	line-height: normal;
+	.mblListItemDeleteIcon-styles;
+}
 .mblListItemIcon {
+	position: relative;
 	float: left;
 	line-height: normal;
 	.mblListItemIcon-styles;
 }
-.mblListItemSpriteIcon {
-	position: absolute;
-	.mblListItemSpriteIcon-styles;
-
-}
 .mblListItemRightIcon,
-.mblListItemRightIcon2 {
+.mblListItemRightIcon2,
+.mblListItemUncheckIcon {
 	position: relative;
 	float: right;
 	line-height: normal;
 	.mblListItemRightIcon-styles;
 }
+
 .mblListItemRightText {
 	position: relative;
 	float: right;
@@ -69,9 +90,6 @@
 }
 .mblVariableHeight .mblListItemTextBox {
 	white-space: normal;
-}
-.mblListItemAnchorNoIcon .mblListItemTextBox {
-	.mblListItemAnchorNoIcon-mblListItemTextBox-styles;
 }
 .mblListItemSubText {
 	.mblListItemSubText-styles;
