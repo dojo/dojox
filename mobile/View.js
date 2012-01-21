@@ -215,8 +215,7 @@ define([
 		},
 
 		_isBookmarkable: function(detail){
-			return config['mblForceBookmarkable'] ||
-				(detail.moveTo && detail.moveTo.charAt(0) === '#' && !detail.hashchange);
+			return detail.moveTo && (config['mblForceBookmarkable'] || detail.moveTo.charAt(0) === '#') && !detail.hashchange;
 		},
 
 		performTransition: function(/*String*/moveTo, /*Number*/transitionDir, /*String*/transition,
