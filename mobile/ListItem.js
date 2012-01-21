@@ -235,20 +235,32 @@ define([
 		},
 
 		layoutVariableHeight: function(){
-			var h = this.anchorNode.offsetHeight;
-			if(h === this.anchorNodeHeight){ return; }
-			this.anchorNodeHeight = h;
+			var h = this.domNode.offsetHeight;
+			if(h === this.domNodeHeight){ return; }
+			this.domNodeHeight = h;
 			array.forEach([
-					this.rightTextNode,
-					this.rightIcon2Node,
-					this.rightIconNode,
-					this.iconNode
-				], function(n){
-					if(n){
-						var t = Math.round((h - n.offsetHeight) / 2);
+				this.rightTextNode,
+				this.rightIcon2Node,
+				this.rightIconNode,
+				this.uncheckIconNode,
+				this.iconNode,
+				this.deleteIconNode,
+				this.knobIconNode
+			], function(n){
+				if(n){
+					var domNode = this.domNode;
+					var f = function(){
+						var t = Math.round((domNode.offsetHeight - n.offsetHeight) / 2) -
+							domStyle.get(domNode, "paddingTop");
 						n.style.marginTop = t + "px";
 					}
-				});
+					if(n.offsetHeight === 0 && n.tagName === "IMG"){
+						n.onload = f;
+					}else{
+						f();
+					}
+				}
+			}, this);
 		},
 
 		setArrow: function(){
