@@ -49,9 +49,15 @@ define([
 		//		If true, the last selected item remains highlighted.
 		stateful: false,
 
+		// tag: String
+		//		A name of html tag to create as domNode.
+		tag: "ul",
+
+		baseClass: "mblRoundRectList",
+
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
-			this.domNode.className = "mblRoundRectList";
+			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+			this.inherited(arguments);
 		},
 	
 		resize: function(){
@@ -70,7 +76,8 @@ define([
 		},
 
 		_setStatefulAttr: function(stateful){
-			this.stateful = stateful;
+			this._set("stateful", stateful);
+			this.selectOne = stateful;
 			array.forEach(this.getChildren(), function(child){
 				child.setArrow && child.setArrow();
 			});
@@ -79,21 +86,21 @@ define([
 		deselectItem: function(/*ListItem*/item){
 			// summary:
 			//		Deselects the given item.
-			item.deselect();
+			item.set("selected", false);
 		},
 
 		deselectAll: function(){
 			// summary:
 			//		Deselects all the items.
 			array.forEach(this.getChildren(), function(child){
-				child.deselect && child.deselect();
+				child.set("selected", false);
 			});
 		},
 
 		selectItem: function(/*ListItem*/item){
 			// summary:
 			//		Selects the given item.
-			item.select();
+			item.set("selected", true);
 		}
 	});
 });
