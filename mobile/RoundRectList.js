@@ -57,18 +57,30 @@ define([
 		//		synchronized with view's visibility.
 		syncWithViews: false,
 
+		// editable: Boolean
+		//		If true, the list can be re-ordered.
+		editable: false,
+
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "ul",
 
+		editableMixinClass: "dojox/mobile/_EditableListMixin",
 		baseClass: "mblRoundRectList",
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.inherited(arguments);
 		},
-	
+
 		postCreate: function(){
+			if(this.editable){
+				require([this.editableMixinClass], lang.hitch(this, function(module){
+					lang.mixin(this, new module());
+				}));
+			}
+			this.connect(this.domNode, "onselectstart", event.stop);
+
 			if(this.syncWithViews){ // see also TabBar#postCreate
 				var f = function(view, moveTo, dir, transition, context, method){
 					var child = array.filter(this.getChildren(), function(w){

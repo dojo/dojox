@@ -1,3 +1,15 @@
+/* dojox.mobile.RoundRectList */
+.mblRoundRectList {
+	-moz-border-radius: 8px;
+}
+.mblRoundRectList .mblListItem:first-child {
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-topright: 8px;
+}
+.mblRoundRectList .mblListItem:last-child {
+	-moz-border-radius-bottomleft: 8px;
+	-moz-border-radius-bottomright: 8px;
+}
 /* Round Corner */
 .mblRoundCorner {
 	background-color: black;
