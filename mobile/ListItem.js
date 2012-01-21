@@ -112,6 +112,8 @@ define([
 		//		A css class name to add to the progress indicator.
 		progStyle: "",
 
+		baseClass: "mblListItem",
+
 		postMixInProperties: function(){
 			// for backward compatibility
 			if(this.btnClass){
@@ -124,7 +126,6 @@ define([
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.inherited(arguments);
-			this.domNode.className = "mblListItem" + (this.selected ? " mblItemSelected" : "");
 
 			// label
 			var box = this.box = domConstruct.create("DIV");
