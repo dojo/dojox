@@ -43,6 +43,11 @@ define([
 		//		button.
 		rightIcon2: "",
 
+		// deleteIcon: String
+		//		A delete icon to display at the left of the item. The value can
+		//		be either a path for an image file or a class name of a DOM
+		//		button.
+		deleteIcon: "",
 
 		// anchorLabel: Boolean
 		//		If true, the label text becomes a clickable anchor text. When
@@ -55,10 +60,6 @@ define([
 		//		If true, the right hand side arrow is not displayed.
 		noArrow: false,
 
-		// selected: Boolean
-		//		If true, the item is highlighted to indicate it is selected.
-		selected: false,
-
 		// checked: Boolean
 		//		If true, a check mark is displayed at the right of the item.
 		checked: false,
@@ -66,12 +67,17 @@ define([
 		// arrowClass: String
 		//		An icon to display as an arrow. The value can be either a path
 		//		for an image file or a class name of a DOM button.
-		arrowClass: "mblDomButtonArrow",
+		arrowClass: "",
 
 		// checkClass: String
 		//		An icon to display as a check mark. The value can be either a
 		//		path for an image file or a class name of a DOM button.
-		checkClass: "mblDomButtonCheck",
+		checkClass: "",
+
+		// uncheckClass: String
+		//		An icon to display as an uncheck mark. The value can be either a
+		//		path for an image file or a class name of a DOM button.
+		uncheckClass: "",
 
 		// variableHeight: Boolean
 		//		If true, the height of the item varies according to its
@@ -89,14 +95,9 @@ define([
 		//		An alt text for the right icon2.
 		rightIcon2Title: "",
 
-
-		// btnClass: String
-		//		Deprecated. For backward compatibility.
-		btnClass: "",
-
-		// btnClass2: String
-		//		Deprecated. For backward compatibility.
-		btnClass2: "",
+		// header: Boolean
+		//		If true, this item is rendered as a category header.
+		header: false,
 
 		// tag: String
 		//		A name of html tag to create as domNode.
@@ -110,60 +111,52 @@ define([
 		//		A css class name to add to the progress indicator.
 		progStyle: "",
 
+		/* internal properties */	
+		paramsToInherit: "variableHeight,transition,deleteIcon,icon,rightIcon,rightIcon2,uncheckIcon,arrowClass,checkClass,uncheckClass",
 		baseClass: "mblListItem",
 
-		postMixInProperties: function(){
-			// for backward compatibility
-			if(this.btnClass){
-				this.rightIcon = this.btnClass;
-			}
-			this._setBtnClassAttr = this._setRightIconAttr;
-			this._setBtnClass2Attr = this._setRightIcon2Attr;
-		},
+		_selStartMethod: "touch",
+		_selEndMethod: "timer",
+		_delayedSelection: true,
+
+		_selClass: "mblListItemSelected",
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.inherited(arguments);
 
-			// label
-			var box = this.box = domConstruct.create("DIV");
-			box.className = "mblListItemTextBox";
-			if(this.anchorLabel){
-				box.style.cursor = "pointer";
+			if(this.selected){
+				domClass.add(this.domNode, this._selClass);
 			}
-			var r = this.srcNodeRef;
-			if(r && !this.label){
-				this.label = "";
-				for(var i = 0, len = r.childNodes.length; i < len; i++){
-					var n = r.firstChild;
-					if(n.nodeType === 3 && lang.trim(n.nodeValue) !== ""){
-						n.nodeValue = this._cv ? this._cv(n.nodeValue) : n.nodeValue;
-						this.labelNode = domConstruct.create("SPAN", {className:"mblListItemLabel"});
-						this.labelNode.appendChild(n);
-						n = this.labelNode;
-					}
-					box.appendChild(n);
-				}
-			}
-			if(!this.labelNode){
-				this.labelNode = domConstruct.create("SPAN", {className:"mblListItemLabel"}, box);
-			}
-			if(this.anchorLabel){
-				box.style.display = "inline"; // to narrow the text region
+			if(this.header){
+				domClass.replace(this.domNode, "mblEdgeToEdgeCategory", this.baseClass);
 			}
 
-			var a = this.anchorNode = domConstruct.create("A");
-			a.className = "mblListItemAnchor";
-			this.domNode.appendChild(a);
-			a.appendChild(box);
+			this.labelNode = this.containerNode =
+				domConstruct.create("div", {className:"mblListItemTextBox"});
+			var ref = this.srcNodeRef;
+			if(ref){
+				// reparent
+				for(var i = 0, len = ref.childNodes.length; i < len; i++){
+					this.labelNode.appendChild(ref.firstChild);
+				}
+			}
+			this.domNode.appendChild(this.labelNode);
+
+			if(this.anchorLabel){
+				this.labelNode.style.display = "inline"; // to narrow the text region
+				this.labelNode.style.cursor = "pointer";
+			}
 		},
 
 		startup: function(){
 			if(this._started){ return; }
-			this.inheritParams();
+
 			var parent = this.getParent();
 			if(this.moveTo || this.href || this.url || this.clickable || (parent && parent.select)){
-				this._onClickHandle = this.connect(this.anchorNode, "onclick", "_onClick");
+				this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+			}else{
+				this._handleClick = false;
 			}
 			this.setArrow();
 
@@ -175,11 +168,20 @@ define([
 				setTimeout(lang.hitch(this, "layoutVariableHeight"));
 			}
 
-			this.set("icon", this.icon); // _setIconAttr may be called twice but this is necessary for offline instantiation
-			if(!this.checked && this.checkClass.indexOf(',') !== -1){
+			if(parent.select){
 				this.set("checked", this.checked);
 			}
+
 			this.inherited(arguments);
+			if(!this._isOnLine){
+				this._isOnLine = true;
+				this.set({ // retry applying the attribute
+					icon: this.icon,
+					deleteIcon: this.deleteIcon,
+					rightIcon: this.rightIcon,
+					rightIcon2: this.rightIcon2
+				});
+			}
 		},
 
 		resize: function(){
@@ -193,17 +195,15 @@ define([
 			//		Internal handler for click events.
 			// tags:
 			//		private
+			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
-			var a = e.currentTarget;
-			var li = a.parentNode;
-			if(domClass.contains(li, "mblItemSelected")){ return; } // already selected
 			if(this.anchorLabel){
 				for(var p = e.target; p.tagName !== this.tag.toUpperCase(); p = p.parentNode){
 					if(p.className == "mblListItemTextBox"){
 						domClass.add(p, "mblListItemTextBoxSelected");
 						setTimeout(function(){
 							domClass.remove(p, "mblListItemTextBoxSelected");
-						}, has('android') ? 300 : 1000);
+						}, this._duration);
 						this.onAnchorLabelClicked(e);
 						return;
 					}
@@ -219,53 +219,16 @@ define([
 					this.set("checked", !this.checked);
 				}
 			}
-			this.select();
-
-			if (this.href && this.hrefTarget) {
-				common.openWindow(this.href, this.hrefTarget);
-				return;
-			}
-			var transOpts;
-			if(this.moveTo || this.href || this.url || this.scene){
-				transOpts = {moveTo: this.moveTo, href: this.href, url: this.url, scene: this.scene, transition: this.transition, transitionDir: this.transitionDir};
-			}else if(this.transitionOptions){
-				transOpts = this.transitionOptions;
-			}	
-
-			if(transOpts){
-				this.setTransitionPos(e);
-				return new TransitionEvent(this.domNode,transOpts,e).dispatch();
-			}
+			this.defaultClickAction(e);
 		},
-	
+
 		onClick: function(/*Event*/ /*===== e =====*/){
 			// summary:
 			//		User defined function to handle clicks
 			// tags:
 			//		callback
 		},
-	
-		select: function(){
-			// summary:
-			//		Makes this widget in the selected state.
-			var parent = this.getParent();
-			if(parent.stateful){
-				parent.deselectAll();
-			}else{
-				var _this = this;
-				setTimeout(function(){
-					_this.deselect();
-				}, has('android') ? 300 : 1000);
-			}
-			domClass.add(this.domNode, "mblItemSelected");
-		},
-	
-		deselect: function(){
-			// summary:
-			//		Makes this widget in the deselected state.
-			domClass.remove(this.domNode, "mblItemSelected");
-		},
-	
+
 		onAnchorLabelClicked: function(e){
 			// summary:
 			//		Stub function to connect to from your application.
@@ -313,6 +276,10 @@ define([
 				var cap = type.charAt(0).toUpperCase() + type.substring(1);
 				domClass.add(this[type + "Node"], "mblListItem" + cap);
 			}
+		},
+
+		_setDeleteIconAttr: function(/*String*/icon){
+			this._setIcon(icon, "deleteIcon", this.iconNode || this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.labelNode);
 		},
 
 		_setIconAttr: function(icon){
@@ -383,6 +350,13 @@ define([
 				prog.stop();
 			}
 			this._set("busy", busy);
+		},
+
+		_setSelectedAttr: function(/*Boolean*/selected){
+			// summary:
+			//		Makes this widget in the selected or unselected state.
+			this.inherited(arguments);
+			domClass.toggle(this.domNode, this._selClass, selected);
 		}
 	});
 });
