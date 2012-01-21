@@ -92,6 +92,17 @@ define([
 			}
 		},
 
+		startup: function(){
+			// If there seems to be a wrapper widget (e.g. dojox.mvc.Repeat),
+			// fix containerNode to point to its domNode so that this widget's
+			// getChildren can find list items.
+			var children = this.getChildren();
+			if(children.length === 1 &&
+				(children[0].domNode.className || "").indexOf("mbl") !== -1){
+				this.containerNode = children[0].domNode;
+			}
+		},
+
 		resize: function(){
 			// summary:
 			//		Calls resize() of each child widget.

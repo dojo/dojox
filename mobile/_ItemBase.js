@@ -199,6 +199,20 @@ define([
 			return !!parent;
 		},
 
+		getParent: function(){
+			// summary:
+			//		Returns a dojox.mobile parent widget
+			// description:
+			//		Skips parent widgets that do not look like dojox.mobile
+			//		widget, e.g. dojox.mvc.Repeat, and finds a real parent.
+			for(var p = this.inherited(arguments); p; p = p.getParent()){
+				if((p.domNode.className || "").indexOf("mbl") !== -1){
+					return p;
+				}
+			}
+			return null;
+		},
+
 		userClickAction: function(e){
 			// summary:
 			//		User defined click action
