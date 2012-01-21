@@ -90,6 +90,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
+
+		//	interpolate: Boolean?
+		//		Whether when there is a null data point in the data the plot interpolates it or if the lines is split at that
+		//		point.	Default false.
+		interpolate: false
 	});
 	
 	var Base = dojox.charting.plot2d.Base;
@@ -108,7 +113,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			markers: false,	// draw markers
 			tension: "",	// draw curved lines (tension is "X", "x", or "S")
 			animate: false, // animate chart to place
-			enableCache: false 
+			enableCache: false,
+			interpolate: false
 		},
 		optionalParams: {
 			// theme component
@@ -216,21 +222,25 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				var min = indexed?Math.max(0, Math.floor(this._hScaler.bounds.from - 1)):0, 
 						max = indexed?Math.min(run.data.length, Math.ceil(this._hScaler.bounds.to)):run.data.length;
 
-                // split the run data into dense segments (each containing no nulls)
-                for(var j = min; j < max; j++){
-                    if(run.data[j] != null){
-                        if(!rseg){
-                            rseg = [];
-                            startindexes.push(j);
-                            rsegments.push(rseg);
-                        }
-                        rseg.push(run.data[j]);
-                    }else{
-                        rseg = null;
-                    }
-                }
+				// split the run data into dense segments (each containing no nulls)
+				// except if interpolates is null in which case ignore null between valid data
+				for(var j = min; j < max; j++){
+					if((indexed && run.data[j] != null) || (!indexed && run.data[j] != null && run.data[j].y != null)){
+						if(!rseg){
+							rseg = [];
+							startindexes.push(j);
+							rsegments.push(rseg);
+						}
+						rseg.push(run.data[j]);
+					}else{
+						if(!this.opt.interpolate || indexed){
+							// we break the line only if not interpolating or if we have indexed data
+							rseg = null;
+						}
+					}
+				}
 
-                for(var seg = 0; seg < rsegments.length; seg++){
+				for(var seg = 0; seg < rsegments.length; seg++){
 					if(typeof rsegments[seg][0] == "number"){
 						lpoly = arr.map(rsegments[seg], function(v, i){
 							return {
@@ -239,13 +249,26 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 							};
 						}, this);
 					}else{
-						lpoly = arr.map(rsegments[seg], function(v, i){
+						lpoly = arr.map(rsegments[seg], function(v){
 							return {
 								x: ht(v.x) + offsets.l,
 								y: dim.height - offsets.b - vt(v.y)
 							};
 						}, this);
 					}
+
+					// if we are indexed & we interpolate we need to put all the segments as a single one now
+					if(indexed && this.opt.interpolate){
+						while(seg < rsegments.length) {
+							seg++;
+							lpoly = lpoly.concat(arr.map(rsegments[seg], function(v, i){
+								return {
+									x: ht(i + startindexes[seg] + 1) + offsets.l,
+									y: dim.height - offsets.b - vt(v)
+								};
+							}, this));
+						}
+					} 
 
 					var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 
@@ -353,7 +376,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 							delete this._eventSeries[run.name];
 						}
 					}
-                }
+				}
 				run.dirty = false;
 			}
 			if(this.animate){
