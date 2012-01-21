@@ -48,6 +48,11 @@ define([
 		//		widget.
 		inHeading: false,
 
+		// syncWithViews: Boolean
+		//		True if this widget listens to view transition events to be
+		//		synchronized with view's visibility.
+		syncWithViews: false,
+
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "UL",
@@ -61,6 +66,18 @@ define([
 			this._clsName = this.barType == "segmentedControl" ? "mblTabButton" : "mblTabBarButton";
 			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.domNode.className = this.barType == "segmentedControl" ? "mblTabPanelHeader" : "mblTabBar";
+		},
+
+		postCreate: function(){
+			if(this.syncWithViews){ // see also RoundRect#postCreate
+				var f = function(view, moveTo, dir, transition, context, method){
+					var child = array.filter(this.getChildren(), function(w){
+						return w.moveTo === "#" + view.id || w.moveTo === view.id; })[0];
+					if(child){ child.set("selected", true); }
+				};
+				this.subscribe("/dojox/mobile/afterTransitionIn", f);
+				this.subscribe("/dojox/mobile/startView", f);
+			}
 		},
 
 		startup: function(){

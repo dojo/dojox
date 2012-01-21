@@ -1,11 +1,14 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
+	"dojo/_base/event",
+	"dojo/_base/lang",
 	"dojo/_base/window",
+	"dojo/dom-construct",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase"
-], function(array, declare, win, Contained, Container, WidgetBase){
+], function(array, declare, event, lang, win, domConstruct, Contained, Container, WidgetBase){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -45,9 +48,14 @@ define([
 		//		If "multiple", there can be multiple selected items at a time.
 		select: "",
 
-		// stateful: String
+		// stateful: Boolean
 		//		If true, the last selected item remains highlighted.
 		stateful: false,
+
+		// syncWithViews: Boolean
+		//		True if this widget listens to view transition events to be
+		//		synchronized with view's visibility.
+		syncWithViews: false,
 
 		// tag: String
 		//		A name of html tag to create as domNode.
@@ -60,6 +68,18 @@ define([
 			this.inherited(arguments);
 		},
 	
+		postCreate: function(){
+			if(this.syncWithViews){ // see also TabBar#postCreate
+				var f = function(view, moveTo, dir, transition, context, method){
+					var child = array.filter(this.getChildren(), function(w){
+						return w.moveTo === "#" + view.id || w.moveTo === view.id; })[0];
+					if(child){ child.set("selected", true); }
+				};
+				this.subscribe("/dojox/mobile/afterTransitionIn", f);
+				this.subscribe("/dojox/mobile/startView", f);
+			}
+		},
+
 		resize: function(){
 			// summary:
 			//		Calls resize() of each child widget.
