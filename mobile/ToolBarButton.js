@@ -114,6 +114,7 @@ define([
 
 		_updateArrowColor: function(){
 			if(this.arrowNode && !has("ie")){
+				domStyle.set(this.arrowNode, "backgroundColor", domStyle.get(this.bodyNode, "backgroundColor"));
 				var s = domStyle.get(this.bodyNode, "backgroundImage");
 				if(s === "none"){ return false; }					
 				domStyle.set(this.arrowNode, "backgroundImage",
