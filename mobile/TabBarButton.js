@@ -1,13 +1,16 @@
 define([
+	"dojo/_base/connect",
 	"dojo/_base/declare",
+	"dojo/_base/event",
 	"dojo/_base/lang",
-	"dojo/_base/window",
+	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
-	"dijit/registry",	// registry.byNode
-	"./common",
-	"./_ItemBase"
-], function(declare, lang, win, domClass, domConstruct, registry, common, ItemBase){
+	"dojo/dom-style",
+	"./iconUtils",
+	"./_ItemBase",
+	"./sniff"
+], function(connect, declare, event, lang, dom, domClass, domConstruct, domStyle, iconUtils, ItemBase, has){
 
 /*=====
 	var ItemBase = dojox.mobile._ItemBase;
@@ -63,12 +66,13 @@ define([
 
 		// tag: String
 		//		A name of html tag to create as domNode.
-		tag: "LI",
+		tag: "li",
 
 		/* internal properties */	
-		selectOne: true,
+		baseClass: "mblTabBarButton",
+		_selStartMethod: "none",
+		_selEndMethod: "none",
 
-	
 		inheritParams: function(){
 			// summary:
 			//		Overrides dojox.mobile._ItemBase.inheritParams().
@@ -88,101 +92,87 @@ define([
 				}
 				if(!this.icon2){ this.icon2 = parent.iconBase || this.icon1; }
 				if(!this.iconPos2){ this.iconPos2 = parent.iconPos || this.iconPos1; }
-			}
-		},
-	
-		buildRendering: function(){
-			var a = this.anchorNode = domConstruct.create("A", {className:"mblTabBarButtonAnchor"});
-			this.connect(a, "onclick", "_onClick");
-	
-			this.box = domConstruct.create("DIV", {className:"mblTabBarButtonTextBox"}, a);
-			var box = this.box;
-			var label = "";
-			var r = this.srcNodeRef;
-			if(r){
-				for(var i = 0, len = r.childNodes.length; i < len; i++){
-					var n = r.firstChild;
-					if(n.nodeType === 3){
-						label += lang.trim(n.nodeValue);
+
+				if(parent.closable){
+					if(!this.icon1){
+						this.icon1 = "mblDomButtonGrayCross";
 					}
-					box.appendChild(n);
+					if(!this.icon2){
+						this.icon2 = "mblDomButtonGrayCross";
+					}
+					domClass.add(this.domNode, "mblTabBarButtonClosable");
 				}
 			}
-			if(!this.label){
-				this.label = label;
-			}
-	
-			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
-			this.containerNode = this.domNode;
-			this.domNode.appendChild(a);
-			if(this.domNode.className.indexOf("mblDomButton") != -1){
-				// deprecated. TODO: remove this code in 1.8
-				var domBtn = domConstruct.create("DIV", null, a);
-				common.createDomButton(this.domNode, null, domBtn);
-				domClass.add(this.domNode, "mblTabButtonDomButton");
-				domClass.add(domBtn, "mblTabButtonDomButtonClass");
-			}
-			if((this.icon1 || this.icon).indexOf("mblDomButton") != -1){
-				domClass.add(this.domNode, "mblTabButtonDomButton");
-			}
 		},
-	
-		startup: function(){
-			if(this._started){ return; }
-			this.inheritParams();
-			var parent = this.getParent();
-	
-			var _clsName = parent ? parent._clsName : "mblTabBarButton";
-			domClass.add(this.domNode, _clsName + (this.selected ? " mblTabButtonSelected" : ""));
-	
-			if(parent && parent.barType == "segmentedControl"){
-				// proper className may not be set when created dynamically
-				domClass.remove(this.domNode, "mblTabBarButton");
-				domClass.add(this.domNode, parent._clsName);
-				this.box.className = "";
+
+		buildRendering: function(){
+			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+
+			if(this.srcNodeRef){
+				if(!this.label){
+					this.label = lang.trim(this.srcNodeRef.innerHTML);
+				}
+				this.srcNodeRef.innerHTML = "";
 			}
-			this.set({icon1:this.icon1, icon2:this.icon2});
+
+			this.labelNode = this.box = domConstruct.create("div", {className:"mblTabBarButtonLabel"}, this.domNode);
+
 			this.inherited(arguments);
 		},
-	
-		select: function(){
-			// summary:
-			//		Makes this widget in the selected state.
-			if(arguments[0]){ // deselect
-				this.selected = false;
-				domClass.remove(this.domNode, "mblTabButtonSelected");
-			}else{ // select
-				this.selected = true;
-				domClass.add(this.domNode, "mblTabButtonSelected");
-				for(var i = 0, c = this.domNode.parentNode.childNodes; i < c.length; i++){
-					if(c[i].nodeType != 1){ continue; }
-					var w = registry.byNode(c[i]); // sibling widget
-					if(w && w != this){
-						w.deselect();
-					}
-				}
+
+		startup: function(){
+			if(this._started){ return; }
+
+			this._dragstartHandle = this.connect(this.domNode, "ondragstart", event.stop);
+
+			// Unlike other _ItemBase-based widgets, TabBarButton should be
+			// selected immediately after it is touched. So we use ontouchstart
+			// rather than onclick to invode the button action.
+			// Even so, we use "_onClick" as a handler name to be consistent
+			// with others.
+			this._clickHandle = this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "_onClick");
+			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+			if(this.getParent().closable){
+				this._clickCloseHandler = this.connect(this.iconDivNode, "onclick", "_onCloseButtonClick");
 			}
-			if(this.iconNode1){
-				this.iconNode1.style.visibility = this.selected ? "hidden" : "";
+
+			this.inherited(arguments);
+			if(!this._isOnLine){
+				this._isOnLine = true;
+				this.set({icon1:this.icon1, icon2:this.icon2}); // retry applying the attribute
 			}
-			if(this.iconNode2){
-				this.iconNode2.style.visibility = this.selected ? "" : "hidden";
+			dom.setSelectable(this.domNode, false);
+		},
+
+		onClose: function(e){
+			connect.publish("/dojox/mobile/tabClose", [this]);
+			return this.getParent().onCloseButtonClick(this);
+		},
+
+		_onCloseButtonClick: function(e){
+			if(this.onCloseButtonClick(e) === false){ return; } // user's click action
+			if(this.onClose()){
+				this.destroy();
 			}
 		},
-		
-		deselect: function(){
+
+		onCloseButtonClick: function(/*Event*/ /*===== e =====*/){
 			// summary:
-			//		Makes this widget in the deselected state.
-			this.select(true);
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
 		},
-	
+
 		_onClick: function(e){
 			// summary:
 			//		Internal handler for click events.
 			// tags:
 			//		private
+			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
-			this.defaultClickAction();
+			if(!this.selected){
+				this.defaultClickAction(e);
+			}
 		},
 
 		onClick: function(/*Event*/ /*===== e =====*/){
@@ -191,53 +181,37 @@ define([
 			// tags:
 			//		callback
 		},
-	
-		_setIcon: function(icon, pos, num, sel){
-			var i = "icon" + num, n = "iconNode" + num, p = "iconPos" + num;
-			if(icon){ this[i] = icon; }
-			if(pos){
-				if(this[p] === pos){ return; }
-				this[p] = pos;
+
+		_setIcon: function(icon, n){
+			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
+			this._set("icon" + n, icon);
+			if(!this.iconDivNode){
+				this.iconDivNode = domConstruct.create("div", {className:"mblTabBarButtonIconArea"}, this.domNode, "first");
+				// mblTabBarButtonDiv -> mblTabBarButtonIconArea
 			}
-			if(icon && icon !== "none"){
-				if(!this.iconDivNode){
-					this.iconDivNode = domConstruct.create("DIV", {className:"mblTabBarButtonDiv"}, this.anchorNode, "first");
-				}
-				if(!this[n]){
-					this[n] = domConstruct.create("div", {className:"mblTabBarButtonIcon"}, this.iconDivNode);
-				}else{
-					domConstruct.empty(this[n]);
-				}
-				common.createIcon(icon, this[p], null, this.alt, this[n]);
-				if(this[p]){
-					domClass.add(this[n].firstChild, "mblTabBarButtonSpriteIcon");
-				}
-				domClass.remove(this.iconDivNode, "mblTabBarButtonNoIcon");
-				this[n].style.visibility = sel ? "hidden" : "";
-			}else if(this.iconDivNode){
-				domClass.add(this.iconDivNode, "mblTabBarButtonNoIcon");
+			if(!this["iconParentNode" + n]){
+				this["iconParentNode" + n] = domConstruct.create("div", {className:"mblTabBarButtonIconParent mblTabBarButtonIconParent" + n}, this.iconDivNode);
+				// mblTabBarButtonIcon -> mblTabBarButtonIconParent
 			}
-		},
-	
-		_setIcon1Attr: function(icon){
-			this._setIcon(icon, null, 1, this.selected);
-		},
-	
-		_setIcon2Attr: function(icon){
-			this._setIcon(icon, null, 2, !this.selected);
-		},
-	
-		_setIconPos1Attr: function(pos){
-			this._setIcon(null, pos, 1, this.selected);
-		},
-	
-		_setIconPos2Attr: function(pos){
-			this._setIcon(null, pos, 2, !this.selected);
+			this["iconNode" + n] = iconUtils.setIcon(icon, this["iconPos" + n],
+				this["iconNode" + n], this.alt, this["iconParentNode" + n]);
+			this["icon" + n] = icon;
+			domClass.toggle(this.domNode, "mblTabBarButtonHasIcon", icon && icon !== "none");
 		},
 
-		_setLabelAttr: function(/*String*/text){
-			this.label = text;
-			this.box.innerHTML = this._cv ? this._cv(text) : text;
+		_setIcon1Attr: function(icon){
+			this._setIcon(icon, 1);
+		},
+
+		_setIcon2Attr: function(icon){
+			this._setIcon(icon, 2);
+		},
+
+		_setSelectedAttr: function(/*Boolean*/selected){
+			// summary:
+			//		Makes this widget in the selected or unselected state.
+			this.inherited(arguments);
+			domClass.toggle(this.domNode, "mblTabBarButtonSelected", selected);
 		}
 	});
 });
