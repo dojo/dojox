@@ -258,7 +258,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(has('iphone')){
 			domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
 		}
-		
+
 		this._speed = {x:0, y:0};
 		this._appFooterHeight = 0;
 		if(this.isTopLevel() && !this.noResize){
@@ -441,7 +441,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this._posX = [this.touchStartX];
 		this._posY = [this.touchStartY];
 		this._locked = false;
-		
+
 		if(!this.isFormElement(e.target)){
 			this.propagatable ? e.preventDefault() : event.stop(e);
 		}
@@ -542,7 +542,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				connect.disconnect(this._conn[i]);
 			}
 			this._conn = null;
-	
+
 			var n = this._time.length; // # of samples
 			var clicked = false;
 			if(!this._aborted){
@@ -583,7 +583,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			to.x = pos.x + speed.x;
 		}
 
-		this.adjustDestination(to, pos);
+		this.adjustDestination(to, pos, dim);
 
 		if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
 			this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
@@ -660,7 +660,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this.slideTo(to, duration, easing);
 	};
 
-	this.adjustDestination = function(to, pos){
+	this.adjustDestination = function(to, pos, dim){
 		// subclass may want to implement
 	};
 
@@ -1015,9 +1015,10 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.addCover = function(){
 //>>excludeStart("webkitMobile", kwArgs.webkitMobile);
 		if(!has('touch') && !this.noCover){
-			if(!this._cover){
-				this._cover = domConstruct.create("div", null, win.doc.body);
-				domStyle.set(this._cover, {
+			if(!dm._cover){
+				dm._cover = domConstruct.create("div", null, win.doc.body);
+				dm._cover.className = "mblScrollableCover";
+				domStyle.set(dm._cover, {
 					backgroundColor: "#ffff00",
 					opacity: 0,
 					position: "absolute",
@@ -1027,12 +1028,12 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					height: "100%",
 					zIndex: 2147483647 // max of signed 32-bit integer
 				});
-				this._ch.push(connect.connect(this._cover,
+				this._ch.push(connect.connect(dm._cover,
 					has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchEnd"));
 			}else{
-				this._cover.style.display = "";
+				dm._cover.style.display = "";
 			}
-			this.setSelectable(this._cover, false);
+			this.setSelectable(dm._cover, false);
 			this.setSelectable(this.domNode, false);
 		}
 //>>excludeEnd("webkitMobile");
@@ -1040,9 +1041,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 	this.removeCover = function(){
 //>>excludeStart("webkitMobile", kwArgs.webkitMobile);
-		if(!has('touch') && this._cover){
-			this._cover.style.display = "none";
-			this.setSelectable(this._cover, true);
+		if(!has('touch') && dm._cover){
+			dm._cover.style.display = "none";
+			this.setSelectable(dm._cover, true);
 			this.setSelectable(this.domNode, true);
 		}
 //>>excludeEnd("webkitMobile");
