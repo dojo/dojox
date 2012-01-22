@@ -9,8 +9,9 @@ define([
 	"dojo/dom-style",
 	"./iconUtils",
 	"./_ItemBase",
+	"./Badge",
 	"./sniff"
-], function(connect, declare, event, lang, dom, domClass, domConstruct, domStyle, iconUtils, ItemBase, has){
+], function(connect, declare, event, lang, dom, domClass, domConstruct, domStyle, iconUtils, ItemBase, Badge, has){
 
 /*=====
 	var ItemBase = dojox.mobile._ItemBase;
@@ -70,8 +71,17 @@ define([
 
 		/* internal properties */	
 		baseClass: "mblTabBarButton",
+		badge: "",
+
 		_selStartMethod: "none",
 		_selEndMethod: "none",
+
+		destroy: function(){
+			if(this.badgeObj){
+				delete this.badgeObj;
+			}
+			this.inherited(arguments);
+		},
 
 		inheritParams: function(){
 			// summary:
@@ -205,6 +215,27 @@ define([
 
 		_setIcon2Attr: function(icon){
 			this._setIcon(icon, 2);
+		},
+
+		_getBadgeAttr: function(){
+			return this.badgeObj ? this.badgeObj.getValue() : null;
+		},
+
+		_setBadgeAttr: function(/*String*/value){
+			if(!this.badgeObj){
+				this.badgeObj = new Badge({fontSize:11});
+				domStyle.set(this.badgeObj.domNode, {
+					position: "absolute",
+					top: "0px",
+					right: "0px"
+				});
+			}
+			this.badgeObj.setValue(value);
+			if(value){
+				this.domNode.appendChild(this.badgeObj.domNode);
+			}else{
+				this.domNode.removeChild(this.badgeObj.domNode);
+			}
 		},
 
 		_setSelectedAttr: function(/*Boolean*/selected){
