@@ -1,7 +1,11 @@
-/* Switch - default */
+/* Switch - common */
+.mblSwitch {
+  display: inline-block;
+}
+.dj_ie .mblSwitch {
+  display: inline;
+}
 .mblSwitchBg {
-  -moz-border-radius: 2px;
-  border-radius: 2px;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -16,26 +20,35 @@
 .mblSwitchKnob {
   background-image: url(compat/ui-widget-bg.png);
   background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-  -moz-border-radius: 2px;
-  border-radius: 2px;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+/* Square Shape */
+/* Default Shape */
+.mblSwDefaultShape .mblSwitchBg {
+  -moz-border-radius: 2px;
+}
+.mblSwDefaultShape .mblSwitchKnob {
+  -moz-border-radius: 2px;
 }
 /* Round Shape */
 .mblSwRoundShape1 .mblSwitchBg, .mblSwRoundShape2 .mblSwitchBg {
   -moz-border-radius: 14px;
-  border-radius: 14px;
 }
 .mblSwRoundShape1 .mblSwitchKnob, .mblSwRoundShape2 .mblSwitchKnob {
   -moz-border-radius: 13px;
-  border-radius: 13px;
 }
 /* Arc Shape */
 .mblSwArcShape1 .mblSwitchBg, .mblSwArcShape2 .mblSwitchBg {
-  -moz-border-radius: 0.42857142857142855px;
-  border-radius: 0.42857142857142855px;
+  -moz-border-radius: 5px/14px;
 }
 .mblSwArcShape1 .mblSwitchKnob, .mblSwArcShape2 .mblSwitchKnob {
-  -moz-border-radius: 0.38461538461538464px;
-  border-radius: 0.38461538461538464px;
+  -moz-border-radius: 5px/13px;
+}
+/* Default Shape */
+.mblSwDefaultShape .mblSwitchBg {
+  -moz-border-radius: 5px/14px;
+}
+.mblSwDefaultShape .mblSwitchKnob {
+  -moz-border-radius: 5px/13px;
 }

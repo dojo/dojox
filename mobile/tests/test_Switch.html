@@ -34,8 +34,7 @@
 	.color2 .mblSwitchKnob {
 		background: -webkit-gradient(linear, left top, left bottom, from(#999999), to(#FAFAFA), color-stop(0.5, #BBBBBB), color-stop(0.5, #CACACA));
 	}
-	.float {
-		float: left;
+	.mblSwitch {
 		margin-right: 10px;
 	}
 	.bold {
@@ -47,32 +46,38 @@
 	<div data-dojo-type="dojox.mobile.View">
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Default Shape</span><br>
-			<div class="float" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
-			<div data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop"'></div>
+			<div data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
+			<div class="color1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop"'></div>
+		</div>
+
+		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
+			<span class="bold">Square Shape</span><br>
+			<div class="mblSwSquareShape" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
+			<div class="color2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop", shape:"mblSwSquareShape"'></div>
 		</div>
 
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Round Shape 1</span><br>
-			<div class="mblSwRoundShape1 float" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
-			<div class="mblSwRoundShape1 color1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop"'></div>
+			<div class="mblSwRoundShape1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
+			<div class="color1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop", shape:"mblSwRoundShape1"'></div>
 		</div>
 
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Round Shape 2</span><br>
-			<div class="mblSwRoundShape2 float" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
-			<div class="mblSwRoundShape2 color2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop"'></div>
+			<div class="mblSwRoundShape2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
+			<div class="color2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop", shape:"mblSwRoundShape2"'></div>
 		</div>
 
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Arc Shape 1</span><br>
-			<div class="mblSwArcShape1 float" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
-			<div class="mblSwArcShape1 color1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop"'></div>
+			<div class="mblSwArcShape1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
+			<div class="color1" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop", shape:"mblSwArcShape1"'></div>
 		</div>
 
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Arc Shape 2</span><br>
-			<div class="mblSwArcShape2 float" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
-			<div class="mblSwArcShape2 color2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop"'></div>
+			<div class="mblSwArcShape2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"off"'></div>
+			<div class="color2" data-dojo-type="dojox.mobile.Switch" data-dojo-props='value:"on", leftLabel:"Start", rightLabel:"Stop", shape:"mblSwArcShape2"'></div>
 		</div>
 	</div>
 </body>
