@@ -186,25 +186,28 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		_setStoreAttr: function(value){
+			var r;
 			if(value != null){
 				var results = value.query(this.query);
 				if(results.observe){
 					// user asked us to observe the store
 					results.observe(lang.hitch(this, this._updateItem), true);
 				}				
-				Deferred.when(results, lang.hitch(this, this._initItems));
+				r = Deferred.when(results, lang.hitch(this, this._initItems));
 			}else{
-				this._initItems([]);
+				r = this._initItems([]);
 			}
 			this._set("store", value);
+			return r;
 		},
 	
 		_initItems: function(items){
 			this._dataChanged = true;
 			this._data = items;
 			this.invalidateRendering();
+			return items;
 		},
-		
+
 		_updateItem: function(item, previousIndex, newIndex){
 			if(previousIndex!=-1){
 				if(newIndex!=previousIndex){
