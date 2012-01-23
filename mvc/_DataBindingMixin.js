@@ -4,9 +4,9 @@ define([
 	"dojo/_base/declare",
 	"dojo/Stateful",
 	"dijit/registry"
-], function(lang, array, declare, stateful, registry){
+], function(lang, array, declare, Stateful, registry){
 	/*=====
-	stateful = dojo.Stateful;
+	Stateful = dojo.Stateful;
 	registry = dijit.registry;
 	=====*/
 
@@ -206,7 +206,7 @@ define([
 					binding = lang.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
-						if(lang.getObject(ref) instanceof stateful){
+						if(lang.getObject(ref) instanceof Stateful){
 							binding = lang.getObject(ref);
 						}						
 					}catch(err){
