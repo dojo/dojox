@@ -3,7 +3,6 @@ define(["doh", "dojo/_base/declare", "../TreeMap", "dojo/store/JsonRest", "dojo/
 	doh.register("dojox.treemap.tests.Store", [
 		function test_Error(t){
 			var treeMap = new TreeMap();
-			var ok, notok;
 			var d = Deferred.when(treeMap.set("store", new JsonRest({ target: "/" }), function(){
 				t.f(true, "ok fct must not have been called");
 			}, function(){
