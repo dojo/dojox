@@ -166,7 +166,7 @@ define([
 			//		  dijits that specify a data binding reference, the binding is
 			//		  calculated by treating the reference String as an expression and
 			//		  evaluating it to obtain the dojo.Stateful node in the datamodel.
-			//		This method throws an Error in these two conditions:
+			//		This method calls console.warn in these two conditions:
 			//		- The ref is an expression i.e. outermost bound dijit, but the
 			//		  expression evaluation fails.
 			//		- The calculated binding turns out to not be an instance of a
@@ -204,11 +204,15 @@ define([
 					binding = lang.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
-						binding = lang.getObject(ref);
+						//binding = lang.getObject(ref);
+						if(lang.getObject(ref) instanceof dojo.Stateful){
+							binding = lang.getObject(ref);
+						}
+						
 					}catch(err){
 						if(ref.indexOf("${") == -1){ // Ignore templated refs such as in repeat body
-							throw new Error("dojox.mvc._DataBindingMixin: '" + this.domNode +
-								"' widget with illegal ref expression: '" + ref + "'");
+							console.warn("dojox.mvc._DataBindingMixin: '" + this.domNode +
+								"' widget with illegal ref not evaluating to a dojo.Stateful node: '" + ref + "'");
 						}
 					}
 				}
@@ -218,7 +222,7 @@ define([
 					this.binding = binding;
 					this._updateBinding("binding", null, binding);
 				}else{
-					throw new Error("dojox.mvc._DataBindingMixin: '" + this.domNode +
+					console.warn("dojox.mvc._DataBindingMixin: '" + this.domNode +
 						"' widget with illegal ref not evaluating to a dojo.Stateful node: '" + ref + "'");
 				}
 			}
