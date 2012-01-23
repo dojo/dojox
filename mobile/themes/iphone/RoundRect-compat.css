@@ -1,3 +1,10 @@
+/* dojox.mobile.RoundRect */
+.mblRoundRect {
+	-moz-border-radius: 8px;
+}
+.mblRoundRect.mblShadow {
+	-moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
 /* Round Corner */
 .mblRoundCorner {
 	background-color: white;

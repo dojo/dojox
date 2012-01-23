@@ -1,0 +1,38 @@
+@import "variables.less";
+
+/* dojox.mobile.Slider */
+.mblSlider {
+	._background-image-gradient-mask-ui-widget-compat;
+	._background-image-gradient-mask-ui-widget-gecko;
+	-moz-border-radius: @theme-ui-widget-border-radius;
+	border-radius: @theme-ui-widget-border-radius;
+	-moz-user-select: none; // prevent selection
+	user-select: none;
+	-moz-box-sizing: content-box; // make width and height consistent with a DIV
+	box-sizing: content-box;
+}
+.mblSlider.mblSliderV {
+	background: #ABABAB;
+}
+.mblSliderProgressBar {
+	._background-image-gradient-mask-ui-widget-compat;
+	background-repeat: repeat-x;
+	._background-image-gradient-mask-ui-widget-gecko;
+	-moz-border-radius: @theme-ui-widget-border-radius;
+	border-radius: @theme-ui-widget-border-radius;
+	_background-image: url(compat/slider-h-bar-bg.png); // IE6 hack
+	_background-color: transparent; // IE6 hack
+}
+.mblSliderV .mblSliderProgressBar {
+	background: #0D48A8;
+}
+.mblSliderHandle {
+	._background-image-gradient-mask-ui-widget-compat;
+	._background-image-gradient-mask-ui-widget-gecko;
+	-moz-border-radius: @theme-ui-widget-border-radius;
+	border-radius: @theme-ui-widget-border-radius;
+}
+.mblSliderTransition {
+	-moz-transition-duration: 400ms;
+	transition-duration: 400ms;
+}

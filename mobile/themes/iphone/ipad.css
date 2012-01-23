@@ -33,7 +33,7 @@
 	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
 	z-index: 1;
 	border-left: 1px solid #2A2D47;
-	-webkit-border-radius: 3px 3px 0 0;
+	border-radius: 3px 3px 0 0;
 }
 .dj_tablet .mblTooltip .mblHeading .mblToolBarButton {
 	float: left;
@@ -50,27 +50,26 @@
 	color: white;
 	line-height: 29px;
 	text-align: center;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+	border-radius: 5px;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#686F80), to(#000924), color-stop(0.5, #000B29));
 }
 
 /* Heading Arrow Button */
-.dj_tablet .mblArrowButtonHead {
+.dj_tablet .mblBackButtonHead {
 	border-color: #4D4E50;
 	background: -webkit-gradient(linear, left top, right bottom, from(#B1B5BB), to(#6A727D));
 }
-.dj_tablet .mblArrowButtonBody {
+.dj_tablet .mblBackButtonBody {
 	border-color: #C0C0C0;
 	background-color: #8B919A;
 	background: -webkit-gradient(linear, left top, left bottom, from(#B1B5BB), to(#6A727D));
 	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
 }
-.dj_tablet .mblArrowButtonSelected .mblArrowButtonHead {
+.dj_tablet .mblBackButtonSelected .mblBackButtonHead {
 	background: -webkit-gradient(linear, left top, right bottom, from(#9DA0A3), to(#43484F));
 }
-.dj_tablet .mblArrowButtonSelected .mblArrowButtonBody {
+.dj_tablet .mblBackButtonSelected .mblBackButtonBody {
 	background: -webkit-gradient(linear, left top, left bottom, from(#9DA0A3), to(#43484F));
 }
 

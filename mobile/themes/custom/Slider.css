@@ -13,7 +13,7 @@
   border: 1px outset #b5bcc7;
   background-color: #8fc9ff;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
-  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }
 .mblSliderH {
   width: 200px;
@@ -36,7 +36,7 @@
   left: 50%;
 }
 .mblSliderProgressBar {
-  -webkit-border-radius: 2px;
+  border-radius: 2px;
   background-color: #0064c2;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
 }
@@ -47,7 +47,7 @@
   border: 1px outset #b5bcc7;
   background-color: #5cb0ff;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
-  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }
 .mblSliderTransition {
   -webkit-transition-duration: 400ms;

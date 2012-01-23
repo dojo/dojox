@@ -6,30 +6,3 @@
 .mblHeadingSpanTitle {
   white-space: normal;
 }
-/* Heading Back Button */
-.mblBackButtonHead {
-  transform-origin: left top;
-  transform: scale(0.9, 0.99) rotate(45deg);
-  background-image: url(compat/ui-widget-bg.png);
-  -moz-transform-origin: left top;
-  -moz-transform: scale(0.9, 0.99) rotate(45deg);
-  background-image: -moz-linear-gradient(left top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-}
-.dj_ie8 .mblBackButtonHead, .dj_ie7 .mblBackButtonHead, .dj_ie6 .mblBackButtonHead {
-  left: 1px;
-  _left: 9px;
-  height: 32px;
-  border-width: 0;
-  background-image: url(compat/arrow-button-head.png);
-}
-.mblBackButtonBody {
-  -moz-border-radius-topright: 2px;
-  -moz-border-radius-bottomright: 2px;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  background-image: url(compat/ui-widget-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-}
-.dj_ie6 .mblBackButtonBody {
-  top: 0;
-}

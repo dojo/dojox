@@ -1,47 +1,46 @@
 /* dojox.mobile.Tooltip */
 .mblTooltip {
-	-moz-border-radius: 8px;
-	-o-border-radius: 8px;
-	-ms-border-radius: 8px;
-	border-radius: 8px;
-	background-image: none;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-image: url(compat/ui-widget-bg.png);
+  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
+  _background-image: none;
+}
+.mblTooltipBubble {
+  background-image: none;
 }
 .mblTooltipBefore .mblTooltipArrow {
-	*right: 0; /* IE 7 quirks */
+  *right: 0;
+  /* IE 7 quirks */
+
 }
 .mblTooltipAbove .mblTooltipArrow {
-	*bottom: 0px; /* IE 7 quirks */
+  *bottom: 0px;
+  /* IE 7 quirks */
+
 }
 .mblTooltipBefore .mblTooltipInnerArrow {
-	*right: -1px; /* IE 7 quirks */
+  *right: -1px;
+  /* IE 7 quirks */
+
 }
 .mblTooltipAbove .mblTooltipInnerArrow {
-	*bottom: -1px;  /* IE 7 quirks */
-}
-.mblTooltipBefore .mblTooltipInnerArrow {
-	border-right-color: #5cb0ff;
-}
-.mblTooltipAfter .mblTooltipInnerArrow {
-	border-left-color: #5cb0ff;
-}
-.mblTooltipAbove .mblTooltipInnerArrow {
-	border-bottom-color: #5cb0ff;
-}
-.mblTooltipBelow .mblTooltipInnerArrow {
-	border-top-color: #5cb0ff;
+  *bottom: -1px;
+  /* IE 7 quirks */
+
 }
 .mblTooltip .mblHeading {
-	*padding: 0 9px 15px;
-	*border-top: 1px solid #5cb0ff;
-	*border-bottom: 1px solid #5cb0ff;
-	*width: auto;
-	*height: auto;
-	*overflow: visible;
-	*line-height: normal;
+  *padding: 0 9px 15px;
+  *border-top: 1px solid #5cb0ff;
+  *border-bottom: 1px solid #5cb0ff;
+  *width: auto;
+  *height: auto;
+  *overflow: visible;
+  *line-height: normal;
 }
 .dj_ie9 .mblTooltip .mblHeading {
-	width: auto;
+  width: auto;
 }
 .mblTooltip .mblHeading .mblToolBarButton {
-	*margin: auto 6px;
+  *margin: auto 6px;
 }

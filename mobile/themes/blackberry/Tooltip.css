@@ -8,7 +8,7 @@
   border: #ADAAAD 1px solid;
   background-color: #424142;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#4a4d52), to(#292c31));
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   opacity: .97;
 }
 .mblTooltipBubble {

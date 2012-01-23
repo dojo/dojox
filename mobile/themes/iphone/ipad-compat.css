@@ -3,11 +3,16 @@
 	background-image: url(compat/ipad-heading-bg.png);
 }
 
+/*Headings and Button styles are overridden in Tooltips*/
+.dj_tablet .mblTooltip .mblHeading .mblToolBarButton {
+	-moz-border-radius: 5px;
+}
+
 /* Heading Arrow Button */
-.dj_tablet .mblArrowButtonHead {
+.dj_tablet .mblBackButtonHead {
 	background-image: url(compat/ipad-arrow-button-head.png);
 }
-.dj_tablet .mblArrowButtonBody {
+.dj_tablet .mblBackButtonBody {
 	background-image: url(compat/ipad-arrow-button-bg.png);
 }
 

@@ -3,8 +3,7 @@
   margin: 2px 3px 4px;
   padding: 8px;
   border: 1px solid #C6C7C6;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
+  border-radius: 6px;
   color: black;
   background-color: white;
 }

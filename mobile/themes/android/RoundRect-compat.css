@@ -1,4 +1,10 @@
 /* Round Corner */
+.mblRoundRect {
+	-moz-border-radius: 8px;
+}
+.mblRoundRect.mblShadow {
+	-moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
 .mblRoundCorner {
 	background-color: black;
 	height: 1px;

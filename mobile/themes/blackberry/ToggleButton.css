@@ -9,7 +9,7 @@
   border-width: 1px 1px 1px 1px;
   border-style: outset;
   border-color: #9CACC0;
-  -webkit-border-radius: 6px;
+  border-radius: 6px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f7fbf7), to(#cecfd6), color-stop(0.5, #ced3ce));
   font-family: Helvetica;
   font-size: 16px;

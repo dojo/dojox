@@ -1,0 +1,18 @@
+@import "variables.less";
+
+/* dojox.mobile.ToggleButton */
+.mblToggleButton {
+	._background-image-gradient-mask-ui-widget-compat;
+	._background-image-gradient-mask-ui-widget-gecko;
+	-moz-border-radius: @theme-default-border-radius;
+	border-radius: @theme-default-border-radius;
+}
+.mblToggleButton.mblToggleButtonChecked::after {
+	-moz-transform: translate(-(@theme-default-padding + 17px),0px) rotate(45deg) skew(10deg);
+	transform: rotate(45deg) skew(10deg);
+	-moz-transform-origin: 50% 50%;
+	transform-origin: 50% 50%;
+}
+.dj_ff3 .mblToggleButton.mblToggleButtonChecked::after {
+	-moz-transform: translate(-(@theme-default-padding + 17px),-(@theme-default-padding - 2px)) rotate(45deg) skew(10deg);
+}
