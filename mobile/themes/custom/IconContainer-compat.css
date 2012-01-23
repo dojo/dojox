@@ -1,11 +1,12 @@
 @import url("../common/domButtons/DomButtonColorButtons-compat.css");
 
+@import url("../common/domButtons/DomButtonBlackCircleCross-compat.css");
 /* dojox.mobile.IconItem */
 .mblIconArea div {
-	*font-size: 60px; /* IE 7 quirks */
+  *font-size: 60px;
 }
-
 /* Icon Content Heading */
 .mblIconContentHeading {
-	background-image: url(compat/heading-bg.png);
+  background-image: url(compat/heading-bg.png);
+  background-image: -moz-linear-gradient(top, #ffffff, #ffffff 2.5%, rgba(255, 255, 255, 0.14) 2.5%, rgba(255, 255, 255, 0.14) 5%, rgba(255, 255, 255, 0.52) 5%, rgba(255, 255, 255, 0.52) 7.5%, rgba(255, 255, 255, 0.68) 7.5%, rgba(255, 255, 255, 0.68) 10%, rgba(255, 255, 255, 0));
 }

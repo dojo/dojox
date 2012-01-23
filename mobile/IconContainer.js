@@ -1,17 +1,16 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-construct",
-	"dojo/dom-style",
-	"dijit/registry",	// registry.byNode
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"./IconItem",
+	"./IconItem", // to load IconItem for you (no direct references)
 	"./Heading",
 	"./View"
-], function(array, declare, win, domConstruct, domStyle, registry, Contained, Container, WidgetBase, IconItem, Heading, View){
+], function(array, declare, lang, win, domConstruct, Contained, Container, WidgetBase, IconItem, Heading, View){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -70,115 +69,94 @@ define([
 		//		If true, only one icon content can be opened at a time.
 		single: false,
 
-		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement("UL");
-			this.domNode.className = "mblIconContainer";
-			var t = this._terminator = domConstruct.create("LI");
-			t.className = "mblIconItemTerminator";
-			t.innerHTML = "&nbsp;";
-			this.domNode.appendChild(t);
-		},
+		// tag: String
+		//		A name of html tag to create as domNode.
+		tag: "ul",
 
-		_setupSubNodes: function(ul){
-			array.forEach(this.getChildren(), function(w){
-				ul.appendChild(w.subNode);
-			});
+		/* internal properties */	
+		baseClass: "mblIconContainer",
+		iconItemPaneContainerClass: "dojox/mobile/Container",
+		iconItemPaneContainerProps: null,
+		iconItemPaneClass: "dojox/mobile/_IconItemPane",
+		iconItemPaneProps: null,
+
+		buildRendering: function(){
+			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+			// _terminator is used to apply the clear:both style to terminate floating icons.
+			this._terminator = domConstruct.create(this.tag === "ul" ? "li" : "div",
+				{className:"mblIconItemTerminator"}, this.domNode);
+			this.inherited(arguments);
 		},
 
 		startup: function(){
 			if(this._started){ return; }
-			if(this.transition === "below"){
-				this._setupSubNodes(this.domNode);
-			}else{
-				var view = this.appView = new View({id:this.id+"_mblApplView"});
-				var _this = this;
-				view.onAfterTransitionIn = function(moveTo, dir, transition, context, method){
-					_this._opening._open_1();
-				};
-				view.domNode.style.visibility = "hidden";
-				var heading = view._heading
-					= new Heading({back: this._cv ? this._cv(this.back) : this.back,
-									label: this._cv ? this._cv(this.label) : this.label,
-									moveTo: this.domNode.parentNode.id,
-									transition: this.transition});
-				view.addChild(heading);
-				var ul = view._ul = win.doc.createElement("UL");
-				ul.className = "mblIconContainer";
-				ul.style.marginTop = "0px";
-				this._setupSubNodes(ul);
-				view.domNode.appendChild(ul);
 
-				var target;
-				for(var w = this.getParent(); w; w = w.getParent()){
-					if(w instanceof View){
-						target = w.domNode.parentNode;
-						break;
+			require([this.iconItemPaneContainerClass], lang.hitch(this, function(module){
+				this.paneContainerWidget = new module(this.iconItemPaneContainerProps);
+				if(this.transition === "below"){
+					domConstruct.place(this.paneContainerWidget.domNode, this.domNode, "after");
+				}else{
+					var view = this.appView = new View({id:this.id+"_mblApplView"});
+					var _this = this;
+					view.onAfterTransitionIn = function(moveTo, dir, transition, context, method){
+						_this._opening._open_1();
+					};
+					view.domNode.style.visibility = "hidden";
+					var heading = view._heading
+						= new Heading({back: this._cv ? this._cv(this.back) : this.back,
+										label: this._cv ? this._cv(this.label) : this.label,
+										moveTo: this.domNode.parentNode.id,
+										transition: this.transition == "zoomIn" ? "zoomOut" : this.transition});
+					heading.placeAt(view.domNode);
+					if(view._started){
+						heading.startup();
 					}
-				}
-				if(!target){ target = win.body(); }
-				target.appendChild(view.domNode);
+					this.paneContainerWidget.placeAt(view.domNode);
+					if(view._started){
+						this.paneContainerWidget.startup();
+					}
 
-				view.startup();
-			}
+					var target;
+					for(var w = this.getParent(); w; w = w.getParent()){
+						if(w instanceof View){
+							target = w.domNode.parentNode;
+							break;
+						}
+					}
+					if(!target){ target = win.body(); }
+					target.appendChild(view.domNode);
+
+					view.startup();
+				}
+			}));
+
 			this.inherited(arguments);
 		},
 
 		closeAll: function(){
 			// summary:
 			//		Closes all the icon items.
-			var len = this.domNode.childNodes.length, child, w;
-			for(var i = 0; i < len; i++){
-				var child = this.domNode.childNodes[i];
-				if(child.nodeType !== 1){ continue; }
-				if(child === this._terminator){ break; }
-				var w = registry.byNode(child);
-				w.containerNode.parentNode.style.display = "none";
-				domStyle.set(w.iconNode, "opacity", 1);
-			}
+			array.forEach(this.getChildren(), function(w){
+				w.close(true); // disables closing animation
+			}, this);
 		},
 
 		addChild: function(widget, /*Number?*/insertIndex){
-			var children = this.getChildren();
-			if(typeof insertIndex !== "number" || insertIndex > children.length){
-				insertIndex = children.length;
-			}
-			var idx = insertIndex;
-			var refNode = this.containerNode;
-			if(idx > 0){
-				refNode = children[idx - 1].domNode;
-				idx = "after";
-			}
-			domConstruct.place(widget.domNode, refNode, idx);
-
-			widget.transition = this.transition;
-			if(this.transition === "below"){
-				for(var i = 0, refNode = this._terminator; i < insertIndex; i++){
-					refNode = refNode.nextSibling;
-				}
-				domConstruct.place(widget.subNode, refNode, "after");
-			}else{
-				domConstruct.place(widget.subNode, this.appView._ul, insertIndex);
-			}
-			widget.inheritParams();
-			widget._setIconAttr(widget.icon);
-
-			if(this._started && !widget._started){
-				widget.startup();
-			}
+			this.inherited(arguments);
+			this.domNode.appendChild(this._terminator); // to ensure that _terminator is always the last node
 		},
 
 		removeChild: function(/*Widget|Number*/widget){
-			if(typeof widget === "number"){
-				widget = this.getChildren()[widget];
-			}
-			if(widget){
-				this.inherited(arguments);
-				if(this.transition === "below"){
-					this.containerNode.removeChild(widget.subNode);
-				}else{
-					this.appView._ul.removeChild(widget.subNode);
-				}
-			}
+			var index = (typeof widget == "number") ? widget : widget.getIndexInParent();
+			this.paneContainerWidget.removeChild(index);
+			this.inherited(arguments);
+		},	
+
+		_setLabelAttr: function(/*String*/text){
+			if(!this.appView){ return; }
+			this.label = text;
+			var s = this._cv ? this._cv(text) : text;
+			this.appView._heading.set("label", s);
 		}
 	});
 });

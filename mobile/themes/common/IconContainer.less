@@ -1,10 +1,13 @@
 /* dojox.mobile.IconContainer */
 .mblIconContainer {
+	margin: 20px 10px;
+	padding: 0;
 	.mblIconContainer-styles;
 }
 
 /* dojox.mobile.IconItem */
 .mblIconItem {
+	position: relative;
 	list-style-type: none;
 	float: left;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
@@ -14,21 +17,27 @@
 	clear: both;
 	.mblIconItemTerminator-styles;
 }
-.mblIconItemSub {
+.mblIconItemPane {
 	list-style-type: none;
 	.mblIconItemSub-styles;
 }
 .mblIconArea {
+	position: relative;
 	.mblIconArea-styles;
-	div {
-		position: relative;
-		height: 65px;
-		line-height: 65px;
-		text-align: center;
-	}
 	img {
 		vertical-align: middle;
 	}
+}
+.mblIconAreaInner {
+	position: relative;
+	height: 65px;
+	line-height: 65px;
+	text-align: center;
+}
+.mblIconItemDeleteIcon {
+	position: absolute;
+	top: -5px;
+	left: -2px;
 }
 .mblIconItemSpriteIcon {
 	position: absolute;
@@ -45,7 +54,7 @@ table.mblClose {
 	position: relative;
 	-webkit-animation-duration: .5s;
 	-webkit-animation-timing-function: ease-in-out;
-	-webkit-animation-iteration-count: 20;
+	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-name: mblVibrate;
 	-webkit-transform: rotate(0deg);
 }
@@ -68,12 +77,17 @@ table.mblClose {
 	}
 }
 
-/* Icon Content Heading */
-.mblIconContentHeading {
+/* dojox.mobile._IconItemPane */
+.mblIconItemPaneHeading {
 	position: relative;
 	clear: both;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	.mblIconContentHeading-styles;
+}
+.mblIconItemPaneIcon {
+	position: absolute;
+	top: -2px;
+	left: 1px;
 }

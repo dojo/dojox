@@ -1,14 +1,17 @@
 @import url("../common/domButtons/DomButtonColorButtons.css");
 
+@import url("../common/domButtons/DomButtonBlackCircleCross.css");
+
 @import url("../common/IconContainer_keyframes.css");
 /* dojox.mobile.IconContainer */
 .mblIconContainer {
-  margin: 8px 0 8px 8px;
-  padding: 8px 0 8px;
+  margin: 20px 10px;
+  padding: 0;
   background-color: #eff1f3;
 }
 /* dojox.mobile.IconItem */
 .mblIconItem {
+  position: relative;
   list-style-type: none;
   float: left;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
@@ -16,15 +19,14 @@
 .mblIconItemTerminator {
   list-style-type: none;
   clear: both;
-  height: 8px;
 }
-.mblIconItemSub {
+.mblIconItemPane {
   list-style-type: none;
-  margin-left: -8px;
   background-color: white;
   color: #131313;
 }
 .mblIconArea {
+  position: relative;
   height: 87px;
   width: 73px;
   text-align: center;
@@ -32,14 +34,19 @@
   font-weight: normal;
   font-size: 14px;
 }
-.mblIconArea div {
+.mblIconArea img {
+  vertical-align: middle;
+}
+.mblIconAreaInner {
   position: relative;
   height: 65px;
   line-height: 65px;
   text-align: center;
 }
-.mblIconArea img {
-  vertical-align: middle;
+.mblIconItemDeleteIcon {
+  position: absolute;
+  top: -5px;
+  left: -2px;
 }
 .mblIconItemSpriteIcon {
   position: absolute;
@@ -56,7 +63,7 @@ table.mblClose {
   position: relative;
   -webkit-animation-duration: .5s;
   -webkit-animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 20;
+  -webkit-animation-iteration-count: infinite;
   -webkit-animation-name: mblVibrate;
   -webkit-transform: rotate(0deg);
 }
@@ -78,8 +85,8 @@ table.mblClose {
 .mblCloseContent.mblShrink3 {
   -webkit-animation-name: mblShrink3;
 }
-/* Icon Content Heading */
-.mblIconContentHeading {
+/* dojox.mobile._IconItemPane */
+.mblIconItemPaneHeading {
   position: relative;
   clear: both;
   overflow: hidden;
@@ -98,4 +105,9 @@ table.mblClose {
   font-weight: normal;
   text-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px;
   line-height: 26px;
+}
+.mblIconItemPaneIcon {
+  position: absolute;
+  top: -2px;
+  left: 1px;
 }
