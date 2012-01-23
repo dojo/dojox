@@ -2,9 +2,11 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/declare",
+	"dojo/Stateful",
 	"dijit/registry"
-], function(lang, array, declare, registry){
+], function(lang, array, declare, stateful, registry){
 	/*=====
+	stateful = dojo.Stateful;
 	registry = dijit.registry;
 	=====*/
 
@@ -204,11 +206,9 @@ define([
 					binding = lang.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
-						//binding = lang.getObject(ref);
-						if(lang.getObject(ref) instanceof dojo.Stateful){
+						if(lang.getObject(ref) instanceof stateful){
 							binding = lang.getObject(ref);
-						}
-						
+						}						
 					}catch(err){
 						if(ref.indexOf("${") == -1){ // Ignore templated refs such as in repeat body
 							console.warn("dojox.mvc._DataBindingMixin: '" + this.domNode +
