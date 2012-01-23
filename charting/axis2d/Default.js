@@ -307,7 +307,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 						arr.forEach(tb.major, tickLabelFunc, labels);
 						majLabelW = this._groupLabelWidth(labels, font, o.maxLabelCharCount);
 						if(o.maxLabelSize){
-							majLabelW = Math.min(this.maxLabelSize, majLabelW);
+							majLabelW = Math.min(o.maxLabelSize, majLabelW);
 						}
 					}
 					// do the minor labels computation only if dropLabels is set
@@ -316,7 +316,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 						arr.forEach(tb.minor, tickLabelFunc, labels);
 						minLabelW = this._groupLabelWidth(labels, font, o.maxLabelCharCount);
 						if(o.maxLabelSize){
-							minLabelW = Math.min(this.maxLabelSize, minLabelW);
+							minLabelW = Math.min(o.maxLabelSize, minLabelW);
 						}
 					}
 					this._maxLabelSize = {

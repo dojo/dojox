@@ -872,7 +872,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
 			    domConstruct.destroy(this.chartTitle);
-            }
+			}
 			this.surface.clear();
 			this.chartTitle = null;
 
