@@ -7,7 +7,7 @@ define([
 	"dojo/dom-style",
 	"./iconUtils",
 	"./_ItemBase",
-	"./ProgressIndicator",
+	"./ProgressIndicator"
 ], function(array, declare, lang, domClass, domConstruct, domStyle, iconUtils, ItemBase, ProgressIndicator){
 
 /*=====
