@@ -36,6 +36,7 @@ define([
 		// description:
 		//		
 
+		deleteIconForEdit: "mblDomButtonBlackCircleCross",
 		threshold: 4, // drag threshold value in pixels
 
 		destroy: function(){
@@ -71,6 +72,10 @@ define([
 					}
 					w.disconnect(w._keydownHandle);
 
+					w.set("deleteIcon", this.deleteIconForEdit);
+					if(w.deleteIconNode){
+						w._deleteHandle = this.connect(w.deleteIconNode, "onclick", "_deleteIconClicked");
+					}
 					w.highlight(0);
 				}), 15*count++);
 			}, this);
@@ -84,6 +89,11 @@ define([
 
 			array.forEach(this.getChildren(), function(w){
 				w.unhighlight();
+				if(w._deleteHandle){
+					this.disconnect(w._deleteHandle);
+					w._deleteHandle = null;
+				}
+				w.set("deleteIcon", "");
 				if(w._handleClick && w._selStartMethod === "touch"){ // reconnect ontouchstart handler
 					w._onTouchStartHandle = w.connect(w.domNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart");
 				}
@@ -292,6 +302,16 @@ define([
 			}
 		},
 
+		removeChildWithAnimation: function(/*Widget|Number*/widget){
+			var index = (typeof widget === "number") ? widget : this.getIndexOfChild(widget);
+			this.removeChild(widget);
+
+			// Show remove animation
+			this.addChild(this._blankItem);
+			this._animate(index, this.getChildren().length - 1);
+			this.removeChild(this._blankItem);
+		},
+
 		moveChild: function(/*Widget|Number*/widget, /*Number?*/insertIndex){
 			this.addChild(widget, insertIndex);
 			this.paneContainerWidget.addChild(widget.paneWidget, insertIndex);
@@ -303,6 +323,39 @@ define([
 
 			// Show move animation
 			this._animate(index, insertIndex);
+		},
+
+		_deleteIconClicked: function(e){
+			// summary:
+			//		Internal handler for click events.
+			// tags:
+			//		private
+			if(this.deleteIconClicked(e) === false){ return; } // user's click action
+			var item = registry.getEnclosingWidget(e.target);
+			this.deleteItem(item);
+		},
+
+		deleteIconClicked: function(/*Event*/ /*===== e =====*/){
+			// summary:
+			//		User defined function to handle clicks
+			// tags:
+			//		callback
+		},
+
+		deleteItem: function(item){
+			if(item._deleteHandle){
+				this.disconnect(item._deleteHandle);
+			}
+			this.removeChildWithAnimation(item);
+
+			connect.publish("/dojox/mobile/deleteIconItem", [this, item]); // pubsub
+			this.onDeleteItem(item); // callback
+
+			item.destroy();
+		},
+
+		onDeleteItem: function(/*Widget*/item){
+			// Stub function to connect to from your application.
 		},
 
 		onMoveItem: function(/*Widget*/item, /*Integer*/from, /*Ingeter*/to){
