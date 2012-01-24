@@ -69,12 +69,17 @@ define([
 		//		If true, only one icon content can be opened at a time.
 		single: false,
 
+		// editable: Boolean
+		//		If true, the icons can be removed or re-ordered.
+		editable: false,
+
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "ul",
 
 		/* internal properties */	
 		baseClass: "mblIconContainer",
+		editableMixinClass: "dojox/mobile/_EditableIconMixin",
 		iconItemPaneContainerClass: "dojox/mobile/Container",
 		iconItemPaneContainerProps: null,
 		iconItemPaneClass: "dojox/mobile/_IconItemPane",
@@ -86,6 +91,15 @@ define([
 			this._terminator = domConstruct.create(this.tag === "ul" ? "li" : "div",
 				{className:"mblIconItemTerminator"}, this.domNode);
 			this.inherited(arguments);
+		},
+
+		postCreate: function(){
+			if(this.editable && !this.startEdit){ // if editable is true but editableMixinClass is not inherited
+				require([this.editableMixinClass], lang.hitch(this, function(module){
+					declare.safeMixin(this, new module());
+					this.set("editable", this.editable);
+				}));
+			}
 		},
 
 		startup: function(){
