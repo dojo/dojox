@@ -8,10 +8,11 @@ define([
 	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"./_ItemBase",
+	"./Badge",
 	"./TransitionEvent",
 	"./iconUtils",
 	"./lazyLoadUtils"
-], function(declare, event, lang, has, domClass, domConstruct, domGeometry, domStyle, ItemBase, TransitionEvent, iconUtils, lazyLoadUtils){
+], function(declare, event, lang, has, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils){
 
 /*=====
 	var ItemBase = dojox.mobile._ItemBase;
@@ -56,6 +57,9 @@ define([
 		//		An html fragment to embed.
 		content: "",
 
+		badge: "",
+		badgeClass: "mblDomButtonRedBadge",
+
 		deletable: true,
 		deleteIcon: "",
 
@@ -67,6 +71,13 @@ define([
 		baseClass: "mblIconItem",
 		_selStartMethod: "touch",
 		_selEndMethod: "none",
+
+		destroy: function(){
+			if(this.badgeObj){
+				delete this.badgeObj;
+			}
+			this.inherited(arguments);
+		},
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
@@ -259,6 +270,27 @@ define([
 			this.labelNode.innerHTML = s;
 			if(this.paneWidget){
 				this.paneWidget.set("label", text);
+			}
+		},
+
+		_getBadgeAttr: function(){
+			return this.badgeObj ? this.badgeObj.getValue() : null;
+		},
+
+		_setBadgeAttr: function(/*String*/value){
+			if(!this.badgeObj){
+				this.badgeObj = new Badge({fontSize:14, className:this.badgeClass});
+				domStyle.set(this.badgeObj.domNode, {
+					position: "absolute",
+					top: "-2px",
+					right: "2px"
+				});
+			}
+			this.badgeObj.setValue(value);
+			if(value){
+				this.iconDivNode.appendChild(this.badgeObj.domNode);
+			}else{
+				this.iconDivNode.removeChild(this.badgeObj.domNode);
 			}
 		},
 
