@@ -250,7 +250,20 @@ define([
 			//		Closes the icon content.
 			if(!this.isOpen()){ return; }
 			this.set("selected", false);
-			this.paneWidget.hide();
+			if(has("webkit") && !noAnimation){
+				var contentNode = this.paneWidget.domNode;
+				if(this.getParent().transition == "below"){
+					domClass.add(contentNode, "mblCloseContent mblShrink");
+					var nodePos = domGeometry.position(contentNode, true);
+					var targetPos = domGeometry.position(this.domNode, true);
+					var origin = (targetPos.x + targetPos.w/2 - nodePos.x) + "px " + (targetPos.y + targetPos.h/2 - nodePos.y) + "px";
+					domStyle.set(contentNode, { webkitTransformOrigin:origin });
+				}else{
+					domClass.add(contentNode, "mblCloseContent mblShrink0");
+				}
+			}else{
+				this.paneWidget.hide();
+			}
 			this.onClose();
 		},
 
@@ -297,7 +310,7 @@ define([
 		_setDeleteIconAttr: function(icon){
 			if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
 
-			this._set("deleteIcon", icon);			
+			this._set("deleteIcon", icon);
 			icon = this.deletable ? icon : "";
 			this.deleteIconNode = iconUtils.setIcon(icon, this.deleteIconPos, this.deleteIconNode, 
 					this.deleteIconTitle || this.alt, this.iconDivNode);
