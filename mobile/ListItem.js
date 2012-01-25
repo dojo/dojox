@@ -168,7 +168,7 @@ define([
 				setTimeout(lang.hitch(this, "layoutVariableHeight"));
 			}
 
-			if(parent.select){
+			if(parent && parent.select){
 				this.set("checked", this.checked);
 			}
 
