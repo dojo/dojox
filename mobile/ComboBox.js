@@ -221,11 +221,13 @@ define([
 				);
 				this.endHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchend" : "onmouseup",
 					function(){
-						skipReposition = true;
-						active = false;
-						if(!isGesture){ // if click without move, then close dropdown
-							this.closeDropDown();
-						}
+						setTimeout(dojo.hitch(this, function(){ // allow onclick to go first
+							skipReposition = true;
+							if(!isGesture && active){ // if click without move, then close dropdown
+								this.closeDropDown();
+							}
+							active = false;
+						}), 0);
 					}
 				);
 				this.repositionTimer = setInterval(lang.hitch(this, function(){
