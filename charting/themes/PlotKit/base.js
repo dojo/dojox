@@ -43,7 +43,8 @@ define(["dojo/_base/lang", "dojo/_base/Color", "../../Theme", "../common"],
 			theme.marker.stroke.width = 2;
 		}else if(elementType == "candlestick"){
 			theme.series.stroke.width = 1;
-		}else if(theme.series.stroke.color.toString() == new Color(this.colors[(this._current-1) % this.colors.length]).toString()){
+		}else if(theme.series.stroke.color && (theme.series.stroke.color.toString() ==
+				new Color(this.colors[(this._current-1) % this.colors.length]).toString())){
 			// if the user did not override the stroke, let's force blank
 			theme.series.stroke.color = "#fff";
 		}
