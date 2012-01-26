@@ -240,7 +240,7 @@ define([
 						currentDeltaX = currentPopupPos.x - currentAroundNodePos.x,
 						currentDeltaY = currentPopupPos.y - currentAroundNodePos.y;
 					// if the popup is no longer placed correctly, relocate it
-					if(currentDeltaX != deltaX || currentDeltaY != deltaY){
+					if(Math.abs(currentDeltaX - deltaX) >= 1 || Math.abs(currentDeltaY - deltaY) >= 1){ // Firefox plays with partial pixels
 						domStyle.set(wrapper, { left: parseInt(domStyle.get(wrapper, "left")) + deltaX - currentDeltaX + 'px', top: parseInt(domStyle.get(wrapper, "top")) + deltaY - currentDeltaY + 'px' });
 					}
 				}), 50); // yield a short time to allow for consolidation for better CPU throughput
