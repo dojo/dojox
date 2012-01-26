@@ -147,8 +147,8 @@
 							var d = new doh.Deferred();
 							
 							//doh.robot.mouseMoveAt("home", 500, 0);
-							var t1 = dojo.query('.mblArrowButtonBody')[0];
-							doh.robot.mouseMoveAt(dojo.query('.mblArrowButtonBody')[0], 500);							
+							var t1 = dojo.query('.mblToolBarButtonLeftArrow')[0];
+							doh.robot.mouseMoveAt(dojo.query('.mblToolBarButtonLeftArrow')[0], 500);							
 							doh.robot.mouseClick({left:true}, 500);
 							
 							doh.robot.mouseMoveAt("rdb", 1500, 0);
@@ -294,7 +294,7 @@
 							var d = new doh.Deferred();
 
 							// move back to Home
-							doh.robot.mouseMoveAt(dojo.query('.mblArrowButtonBody')[1], 500);							
+							doh.robot.mouseMoveAt(dojo.query('.mblToolBarButtonLeftArrow')[1], 500);							
 							doh.robot.mouseClick({left:true}, 500);
 							
 							doh.robot.mouseMoveAt("sfg", 1000, 0);
@@ -385,8 +385,8 @@
 							var d = new doh.Deferred();
 
 							// move back to Home
-							var t = dojo.query('.mblArrowButtonBody');
-							doh.robot.mouseMoveAt(dojo.query('.mblArrowButtonBody')[2], 500);							
+							var t = dojo.query('.mblToolBarButtonLeftArrow');
+							doh.robot.mouseMoveAt(dojo.query('.mblToolBarButtonLeftArrow')[2], 500);							
 							doh.robot.mouseClick({left:true}, 500);
 							
 							doh.robot.sequence(d.getTestCallback(function(){

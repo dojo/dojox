@@ -11,7 +11,7 @@ define([
 		_WidgetBase = dijit._WidgetBase;
 	=====*/
 
-	return declare("dojox.mvc.Output", [_WidgetBase], {
+	return declare("dojox.mvc.Output", _WidgetBase, {
 		// summary:
 		//		A simple widget that displays templated output, parts of which may
 		//		be data-bound.

@@ -9,7 +9,7 @@ define([
 		_WidgetBase = dijit._WidgetBase;
 	=====*/
 
-	return declare("dojox.mvc._Container", [_WidgetBase], {
+	return declare("dojox.mvc._Container", _WidgetBase, {
 	
 		// stopParser: [private] Boolean
 		//		Flag to parser to not try and parse widgets declared inside the container.

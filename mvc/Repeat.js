@@ -1,15 +1,20 @@
 define([
 	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"dojo/dom",
+	"dojo/dom-construct",
+	"dojo/_base/array",
+	"dojo/query",
+	"dijit/registry",
 	"./_Container"
-], function(declare, dom, _Container){
+], function(declare, lang, dom, domconstruct, array, query, registry, _Container){
 	/*=====
 		declare = dojo.declare;
 		dom = dojo.dom;
 		_Container = dojox.mvc._Container;
 	=====*/
 
-	return declare("dojox.mvc.Repeat", [_Container], {
+	return declare("dojox.mvc.Repeat", _Container, {
 		// summary:
 		//		A model-bound container which binds to a collection within a data model
 		//		and produces a repeating user-interface from a template for each
@@ -38,10 +43,42 @@ define([
 		//		|	</div>
 		index : 0,
 
+		// useParent: String
+		//		id of the DOM node to use as the parent for the repeating items, similar to useParentId processed a little differently 
+		useParent : "",
+		
+		// removeRepeatNode: boolean
+		//		When true the dom node for the Repeat and Groups within the Repeat
+		//		will be removed, their children will be placed into the parent node 
+		//		of the Repeat node.  This should be set to true when working with 
+		//		a Repeat inside of a dojox.mobile list.		
+		removeRepeatNode : false,
+
+		startup: function(){
+			// This code needed for ticket 14423 is using removeRepeatNode to work with mobile.lists
+			// this.select and this.onCheckStateChanged are called by ListItem so they need to be set
+			// but it seems like a bit of a hack.
+			if(this.removeRepeatNode){				
+				var parent = null;
+				if(lang.isFunction(this.getParent)){
+					if(this.getParent()){
+						this.select = this.getParent().select;
+						this.onCheckStateChanged = this.getParent().onCheckStateChanged;
+					}
+				}			
+			}
+			this.inherited(arguments);			
+		},
+
 		// summary:
 		//		Override and save template from body.
 		postscript: function(params, srcNodeRef){
-			this.srcNodeRef = dom.byId(srcNodeRef);
+			//this.srcNodeRef = dom.byId(srcNodeRef);
+			if(this.useParent && dom.byId(this.useParent)){
+				this.srcNodeRef = dom.byId(this.useParent);				
+			} else{
+				this.srcNodeRef = dom.byId(srcNodeRef);
+			}
 			if(this.srcNodeRef){
 				if(this.templateString == ""){ // only overwrite templateString if it has not been set
 					this.templateString = this.srcNodeRef.innerHTML;
@@ -70,6 +107,10 @@ define([
 			//		private
 
 			// TODO: Potential optimization: only create new widgets for insert, only destroy for delete.
+			if(this.useParent && dom.byId(this.useParent)){
+				this.srcNodeRef = dom.byId(this.useParent);				
+			}
+
 			this._destroyBody();
 			this._updateAddRemoveWatch();
 
@@ -85,6 +126,31 @@ define([
 			this.srcNodeRef = repeatNode;
 
 			this._createBody();
+
+			if(this.removeRepeatNode){				
+				var repeatnode = this.domNode;
+				if(!this.savedParentId && this.domNode.parentNode && this.domNode.parentNode.id){
+					this.savedParentId = this.domNode.parentNode.id;
+				}
+				var repeatParent = dom.byId(this.savedParentId);			
+				if(repeatnode && repeatnode.children){
+					var t3 = registry.findWidgets(repeatnode);
+					var parentcnt = t3.length;
+					for(var j=parentcnt;j>0;j--){
+						if(t3[j-1].declaredClass=="dojox.mvc.Group"){
+							var cnt = repeatnode.children[j-1].children.length;
+							var selForList = registry.byId(repeatParent.id).select;
+							for(var i=cnt;i>0;i--){
+								registry.byId(repeatnode.children[j-1].id).select = selForList;
+								domconstruct.place(repeatnode.children[j-1].removeChild(repeatnode.children[j-1].children[i-1]), repeatParent, "first");
+							}							
+						}else{
+							domconstruct.place(repeatnode.removeChild(repeatnode.children[j-1]), repeatParent, "first");							
+						}
+					}
+					domconstruct.destroy(repeatnode);
+				}
+			}			
 		},
 
 		_updateAddRemoveWatch: function(){

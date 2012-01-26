@@ -11,10 +11,11 @@ try{
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_ref-set-repeat", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_ref-set-repeat.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_binding-hierarchical", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_shipto-billto-hierarchical.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_async_mvc_input-output-simple", dojo.moduleUrl("dojox.mvc","tests/doh_async_mvc_input-output-simple.html"+userArgs), 999999);
-	doh.registerUrl("dojox.mvc.tests.doh_mvc_template_repeat_exprchar", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_template_repeat_exprchar.html"+userArgs), 999999);
+	doh.registerUrl("dojox.mvc.tests.doh_async_mvc_zero-value-test", dojo.moduleUrl("dojox.mvc","tests/doh_async_mvc_zero-value-test.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_form-kitchensink", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_form-kitchensink.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_date_test", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_date_test.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.doh_mvc_validation-test-simple", dojo.moduleUrl("dojox.mvc","tests/doh_mvc_validation-test-simple.html"+userArgs), 999999);
+	doh.registerUrl("dojox.mvc.tests.multiattrib.doh_mvc_test_Toolbar", dojo.moduleUrl("dojox.mvc","tests/multiattrib/doh_mvc_test_Toolbar.html"+userArgs), 999999);
 	// Robot
 	doh.registerUrl("dojox.mvc.tests.robot.mobile-demo-test", dojo.moduleUrl("dojox.mvc","tests/robot/mobile-demo-test.html"+userArgs), 999999);
 	doh.registerUrl("dojox.mvc.tests.robot.mvc_shipto-billto-simple", dojo.moduleUrl("dojox.mvc","tests/robot/mvc_shipto-billto-simple.html"+userArgs), 999999);

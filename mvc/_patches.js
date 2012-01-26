@@ -23,6 +23,20 @@ define([
 		oldWidgetBaseStartup.apply(this);
 	};
 
+	var oldWidgetBasePostScript = wb.prototype.postscript;
+	wb.prototype.postscript = function(/*Object?*/ params, /*DomNode|String*/ srcNodeRef){
+		this._dbpostscript(params, srcNodeRef);
+		oldWidgetBasePostScript.apply(this, lang._toArray(arguments));
+	};
+
+	var oldWidgetBaseSet = wb.prototype.set;
+	wb.prototype.set = function(/*String*/ name, /*Anything*/ value){
+		if((value || {}).atsignature == "dojox.mvc.at"){
+			return this._setAtWatchHandle(name, value);
+		}
+		return oldWidgetBaseSet.apply(this, lang._toArray(arguments));
+	};
+
 	// monkey patch dijit._WidgetBase.destroy to remove watches setup in _DataBindingMixin
 	var oldWidgetBaseDestroy = wb.prototype.destroy;
 	wb.prototype.destroy = function(/*Boolean*/ preserveDom){
@@ -32,7 +46,11 @@ define([
 		if(this._viewWatchHandles){
 			array.forEach(this._viewWatchHandles, function(h){ h.unwatch(); });
 		}
-		oldWidgetBaseDestroy.apply(this, [preserveDom]);		
+		for(var s in this._atWatchHandles){
+			this._atWatchHandles[s].unwatch();
+			delete this._atWatchHandles[s];
+		}
+		oldWidgetBaseDestroy.apply(this, [preserveDom]);
 	};
 
 	// monkey patch dijit.form.ValidationTextBox.isValid to check this.inherited for isValid
