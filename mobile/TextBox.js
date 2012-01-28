@@ -34,7 +34,12 @@ define([
 
 		postCreate: function(){
 			this.inherited(arguments);
-			this.connect(this.textbox, "onfocus", "_onFocus");
+			this.connect(this.textbox, "onmouseup", function(){ this._mouseIsDown = false; });
+			this.connect(this.textbox, "onmousedown", function(){ this._mouseIsDown = true; });
+			this.connect(this.textbox, "onfocus", function(e){
+				this._onFocus(this._mouseIsDown ? "mouse" : e);
+				this._mouseIsDown = false;
+			});
 			this.connect(this.textbox, "onblur", "_onBlur");
 		}
 	});
