@@ -246,16 +246,15 @@ define([
 				return;
 			}
 			var transOpts = this.transitionOptions || {};
-			var doTransition = false;
-			if(this.moveTo || this.href || this.url || this.scene){
-				array.forEach(["moveTo", "href", "hrefTarget", "url",
-					"urlTarget", "scene", "transition", "transitionDir"], function(p){
-					if(this[p]){
-						transOpts[p] = this[p];
-					}
-				}, this);
-				doTransition = true;
-			}
+			array.forEach(["moveTo", "href", "hrefTarget", "url",
+				"urlTarget", "scene", "transition", "transitionDir"], function(p){
+				if(this[p]){
+					transOpts[p] = this[p];
+				}
+			}, this);
+
+			var doTransition = 
+				!!(transOpts.moveTo || transOpts.href || transOpts.url || transOpts.scene);
 			if(this._prepareForTransition(e, doTransition ? transOpts : null) === false){ return; }
 			if(doTransition){
 				this.setTransitionPos(e);
