@@ -94,6 +94,10 @@ define([
 		//		a sibling of the current view.
 		urlTarget: "",
 
+		// back: Boolean
+		//		If true, history.back() is called when clicked.
+		back: false,
+
 		// transition: String
 		//		A type of animated transition effect. You can choose from the
 		//		standard transition types, "slide", "fade", "flip", or from the
@@ -240,6 +244,10 @@ define([
 		},
 
 		makeTransition: function(e){
+			if(this.back && history){
+				history.back();	
+				return;
+			}	
 			if (this.href && this.hrefTarget) {
 				win.global.open(this.href, this.hrefTarget || "_blank");
 				this._onNewWindowOpened(e);
