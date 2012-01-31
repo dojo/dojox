@@ -1,11 +1,8 @@
 /* dojox.mobile.RoundRectList */
 .mblRoundRectList {
-  position: relative;
-  /* IE needs this */
-
-  margin: 7px 9px 16px 9px;
-  padding: 0px;
-  border: 1px solid #ADAAAD;
+  margin: 7px 9px 16px;
+  padding: 0;
+  border: 1px solid #adaaad;
   border-radius: 8px;
   background-color: white;
 }
@@ -14,7 +11,7 @@
   border-top-right-radius: 8px;
 }
 .mblRoundRectList .mblListItem:last-child, .mblRoundRectList .mblEdgeToEdgeCategory:last-child {
-  border-bottom-width: 0px;
+  border-bottom-width: 0;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }

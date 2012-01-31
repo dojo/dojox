@@ -1,35 +1,23 @@
 /* dojox.mobile.ListItem */
 .mblListItem {
 	position: relative;
+	padding: 0 8px;
+	height: @mbl-list-item-height;
 	list-style-type: none;
-	vertical-align: bottom; /* To avoid IE6 LI bug */
+	line-height: @mbl-list-item-height;
 	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	.mblListItem-styles;
 	&.mblVariableHeight {
+		padding: 11px 8px;
 		height: auto;
-		.mblListItem-mblVariableHeight-styles;
-	}
-	.mblListItemAnchor {
-		display: block;
-		height: 100%;
-		-webkit-tap-highlight-color: rgba(255,255,255,0);
-		.mblListItem-mblListItemAnchor-styles;
-		* {
-			-webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
-		}
+		line-height: normal;
 	}
 }
 .mblListItemSelected {
 	.mblListItemSelected-styles;
-	.mblListItemSubText {
-		.mblListItemSelected-mblListItemSubText-styles;
-	}
-	.mblListItemAnchor {
-		.mblListItemSelected-mblListItemAnchor-styles;
-	}
 	.mblDomButton {
 		div {
-			.mblListItemSelected-mblDomButton-Div-styles;
+			border-color: white;
 		}
 	}
 }
@@ -59,38 +47,62 @@
 	position: relative;
 	float: left;
 	line-height: normal;
-	.mblListItemDeleteIcon-styles;
+	margin-top: (@mbl-list-item-height - 29) / 2; // '29': Icon's height.
+	margin-right: 11px;
 }
-.mblListItemIcon {
+.mblListItemIcon,
+.mblListItemLayoutLeft {
 	position: relative;
 	float: left;
 	line-height: normal;
-	.mblListItemIcon-styles;
+	margin-top: (@mbl-list-item-height - 29) / 2;
+	margin-right: 11px;
 }
 .mblListItemRightIcon,
 .mblListItemRightIcon2,
-.mblListItemUncheckIcon {
+.mblListItemUncheckIcon,
+.mblListItemLayoutRight {
 	position: relative;
 	float: right;
 	line-height: normal;
-	.mblListItemRightIcon-styles;
+	margin-top: (@mbl-list-item-height - 29) / 2;
+	margin-bottom: -(@mbl-list-item-height - 29) / 2;
+}
+.mblListItemLayoutCenter {
+	position: absolute;
+	width: 100%;
+	line-height: normal;
+	margin-top: (@mbl-list-item-height - 29) / 2;
+	text-align: center;
 }
 
 .mblListItemRightText {
 	position: relative;
 	float: right;
 	line-height: normal;
+	margin-right: 4px;
 	.mblListItemRightText-styles;
 }
 .mblListItemTextBox {
+	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	.mblListItemTextBox-styles;
+	height: 100%;
 }
 .mblVariableHeight .mblListItemTextBox {
 	white-space: normal;
 }
 .mblListItemSubText {
 	.mblListItemSubText-styles;
+}
+
+/* dojox.mobile._EditableListMixin */
+.mblListItemFloat {
+	position: absolute;
+	border: 1px solid gray;
+	opacity: 0.5;
+	-webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
 }

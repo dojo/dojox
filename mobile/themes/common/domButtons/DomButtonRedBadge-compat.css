@@ -1,5 +1,5 @@
 /* === Red Badge ==*/
 .mblDomButtonRedBadge > div {
 	-moz-border-radius: 12px;
-	background: -moz-linear-gradient(top, #F5BDC0 0%, #E44149 50%, #DE151F 50%, #AE0001 100%);
+	background: -moz-linear-gradient(top, #f5bdc0 0%, #e44149 50%, #de151f 50%, #ae0001 100%);
 }

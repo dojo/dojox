@@ -1,7 +1,10 @@
-/* mbl.widget.Heading */
-.mblHeading {
-	background-image: url(compat/heading-bg.png);
-}
+/* dojox.mobile.Heading */
 .mblHeadingSpanTitle {
-	white-space: normal;
+  white-space: normal;
+}
+.dj_gecko .mblHeading {
+  background-image: -moz-linear-gradient(top, #4a4d52 0%, #292c31 100%);
+}
+.dj_ie .mblHeading {
+  background-image: url(compat/heading-bg.png);
 }

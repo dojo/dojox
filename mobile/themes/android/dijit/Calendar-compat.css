@@ -1,0 +1,26 @@
+.dijitCalendar {
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+.dijitCalendar thead {
+	background-color: #000000;
+	background-image: url(compat/calendar-month-bg.png);
+	background-repeat: repeat-x;
+}
+.dijitCalendar .dijitDropDownButton .dijitButtonNode {
+	-moz-box-shadow: 0 0 0 transparent;
+	box-shadow: 0 0 0 transparent;
+}
+.dijitCalendarSelectedDate .dijitCalendarDateLabel {
+	background-image: url(compat/calendar-datelabel-sel-bg.png);
+	background-repeat: repeat-x;
+}
+.dijitCalendarActiveDate .dijitCalendarDateLabel {
+	background-image: url(compat/calendar-datelabel-act-bg.png);
+	background-repeat: repeat-x;
+}
+.dijitCalendarYearLabel {
+	background-color: #000000;
+	background-image: url(compat/calendar-year-bg.png);
+	background-repeat: repeat-x;
+}

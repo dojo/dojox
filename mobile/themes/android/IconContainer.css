@@ -26,13 +26,13 @@
 }
 .mblIconArea {
   position: relative;
-  margin-bottom: 10px;
   height: 78px;
-  width: 74px;
   font-family: Helvetica;
   font-size: 12px;
-  color: white;
   text-align: center;
+  margin-bottom: 10px;
+  width: 74px;
+  color: white;
 }
 .mblIconArea img {
   vertical-align: middle;
@@ -90,19 +90,19 @@ table.mblClose {
   position: relative;
   clear: both;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   margin-top: 0px;
   padding-left: 40px;
   height: 25px;
-  border-top: 1px solid #F1F3F4;
-  border-bottom: 1px solid #717D85;
+  border-top: 1px solid #f1f3f4;
+  border-bottom: 1px solid #717d85;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#e0e4e7), to(#b4bec6), color-stop(0.5, #c4ccd2), color-stop(0.5, #bfc8ce));
   font-family: Helvetica;
   font-size: 14px;
   color: white;
   line-height: 26px;
   text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .mblIconItemPaneIcon {
   position: absolute;

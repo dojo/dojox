@@ -30,7 +30,7 @@
   height: 4px;
   overflow: hidden;
   -webkit-transform-origin: 0 2px;
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
   border-radius: 2px;
 }
 .mblProg0 {
@@ -70,74 +70,74 @@
   -webkit-transform: translate(14px, 11px) rotate(240deg);
 }
 .mblProg0Color {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 .mblProg1Color {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 .mblProg2Color {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 .mblProg3Color {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 .mblProg4Color {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 .mblProg5Color {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 .mblProg6Color {
-  background-color: #B8B9B8;
+  background-color: #b8b9b8;
 }
 .mblProg7Color {
-  background-color: #AEAFAE;
+  background-color: #aeafae;
 }
 .mblProg8Color {
-  background-color: #A4A5A4;
+  background-color: #a4a5a4;
 }
 .mblProg9Color {
-  background-color: #9A9A9A;
+  background-color: #9a9a9a;
 }
 .mblProg10Color {
-  background-color: #8E8E8E;
+  background-color: #8e8e8e;
 }
 .mblProg11Color {
   background-color: #838383;
 }
 .mblProgWhite .mblProg0Color {
-  background-color: #ADB9C9;
+  background-color: #adb9c9;
 }
 .mblProgWhite .mblProg1Color {
-  background-color: #ADB9C9;
+  background-color: #adb9c9;
 }
 .mblProgWhite .mblProg2Color {
-  background-color: #ADB9C9;
+  background-color: #adb9c9;
 }
 .mblProgWhite .mblProg3Color {
-  background-color: #ADB9C9;
+  background-color: #adb9c9;
 }
 .mblProgWhite .mblProg4Color {
-  background-color: #ADB9C9;
+  background-color: #adb9c9;
 }
 .mblProgWhite .mblProg5Color {
-  background-color: #ADB9C9;
+  background-color: #adb9c9;
 }
 .mblProgWhite .mblProg6Color {
-  background-color: #ACB9CB;
+  background-color: #acb9cb;
 }
 .mblProgWhite .mblProg7Color {
-  background-color: #B7C2D2;
+  background-color: #b7c2d2;
 }
 .mblProgWhite .mblProg8Color {
-  background-color: #C4CDDA;
+  background-color: #c4cdda;
 }
 .mblProgWhite .mblProg9Color {
-  background-color: #D1D8E2;
+  background-color: #d1d8e2;
 }
 .mblProgWhite .mblProg10Color {
-  background-color: #DEE3EA;
+  background-color: #dee3ea;
 }
 .mblProgWhite .mblProg11Color {
-  background-color: #ECEFF3;
+  background-color: #eceff3;
 }

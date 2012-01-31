@@ -4,48 +4,30 @@
 /* dojox.mobile.ListItem */
 .mblListItem {
   position: relative;
-  list-style-type: none;
-  vertical-align: bottom;
-  /* To avoid IE6 LI bug */
-
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  padding: 0px 8px;
+  padding: 0 8px;
   height: 64px;
-  border-bottom: solid 1px #313431;
+  list-style-type: none;
+  line-height: 64px;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  border-bottom: 1px solid #313431;
   background-color: black;
   font-size: 21px;
   color: white;
-  line-height: 64px;
 }
 .mblListItem.mblVariableHeight {
-  height: auto;
   padding: 11px 8px;
+  height: auto;
   line-height: normal;
-}
-.mblListItem .mblListItemAnchor {
-  display: block;
-  height: 100%;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  background-position: 14px 17px;
-  text-decoration: none;
-  padding-right: 7px;
-}
-.mblListItem .mblListItemAnchor * {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
 }
 .mblListItemSelected {
   color: white;
-  background-color: #3578b1;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#306ea1), to(#266093), color-stop(0.06, #4090d3), color-stop(0.5, #306ea1));
-}
-.mblListItemSelected .mblListItemAnchor {
-  color: black;
 }
 .mblListItemSelected .mblDomButton div {
   border-color: white;
 }
 .mblListItemTextBoxSelected {
-  background-color: #048BF4;
+  background-color: #048bf4;
 }
 .mblListItemChecked .mblListItemRightIcon {
   visibility: visible;
@@ -64,34 +46,47 @@
   position: relative;
   float: left;
   line-height: normal;
-  margin-top: 17px;
+  margin-top: 17.5px;
   margin-right: 11px;
 }
-.mblListItemIcon {
+.mblListItemIcon, .mblListItemLayoutLeft {
   position: relative;
   float: left;
   line-height: normal;
-  margin-top: 17px;
+  margin-top: 17.5px;
   margin-right: 11px;
 }
-.mblListItemRightIcon, .mblListItemRightIcon2, .mblListItemUncheckIcon {
+.mblListItemRightIcon,
+.mblListItemRightIcon2,
+.mblListItemUncheckIcon,
+.mblListItemLayoutRight {
   position: relative;
   float: right;
   line-height: normal;
-  margin-top: 17px;
-  margin-bottom: -17px;
+  margin-top: 17.5px;
+  margin-bottom: -17.5px;
+}
+.mblListItemLayoutCenter {
+  position: absolute;
+  width: 100%;
+  line-height: normal;
+  margin-top: 17.5px;
+  text-align: center;
 }
 .mblListItemRightText {
   position: relative;
   float: right;
   line-height: normal;
+  margin-right: 4px;
   color: white;
-  margin: 20px 4px 0 0;
+  margin-top: 20px;
 }
 .mblListItemTextBox {
+  position: relative;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  height: 100%;
 }
 .mblVariableHeight .mblListItemTextBox {
   white-space: normal;
@@ -99,4 +94,13 @@
 .mblListItemSubText {
   font-size: 14px;
   color: gray;
+}
+/* dojox.mobile._EditableListMixin */
+.mblListItemFloat {
+  position: absolute;
+  border: 1px solid gray;
+  opacity: 0.5;
+  -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
 }

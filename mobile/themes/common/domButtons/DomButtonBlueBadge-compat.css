@@ -1,5 +1,5 @@
 /* === Blue Badge ==*/
 .mblDomButtonBlueBadge > div {
 	-moz-border-radius: 12px;
-	background: -moz-linear-gradient(top, #6BA2E7 0%, #4282DE 50%, #216DD6 50%, #216DD6 100%);
+	background: -moz-linear-gradient(top, #6ba2e7 0%, #4282de 50%, #216dd6 50%, #216dd6 100%);
 }

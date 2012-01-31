@@ -18,7 +18,7 @@
 	border: 2px solid white;
 	border-radius: 12px;
 	text-align: center;
-	background: -webkit-gradient(linear, left top, left bottom, from(#7BE75A), to(#398C08), color-stop(0.5, #6BC642), color-stop(0.5, #4AAD21));
+	background: -webkit-gradient(linear, left top, left bottom, from(#7be75a), to(#398c08), color-stop(0.5, #6bc642), color-stop(0.5, #4aad21));
 	background-clip: padding-box;
 	-webkit-box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.5);
 }

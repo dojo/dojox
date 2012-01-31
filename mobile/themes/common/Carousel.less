@@ -1,30 +1,17 @@
 /* dojox.mobile.Carousel */
 .mblCarousel {
 	overflow: hidden;
+	height: 300px; // 1.8
 }
 .mblCarouselBox {
 	position: relative;
 	float: left;
 }
-.mblCarouselImg {
-	-webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-	vertical-align: bottom;
-}
-.mblCarouselImgSelected {
-	border: 1px dashed #C0C0C0;
-	-webkit-box-shadow: none;
-}
-.mblCarouselImgHeaderText {
-	color: white;
-	font: 14px arial,helvetica,clean,sans-serif;
-}
-.mblCarouselImgFooterText {
-	color: white;
-	font: 14px arial,helvetica,clean,sans-serif;
+.mblCarouselItemSelected {
 }
 .mblCarouselHeaderBar {
-	background-color: #3A3A3B;
-	color: #B1B1B1;
+	background-color: #3a3a3b;
+	color: #b1b1b1;
 	font: bold 16px arial,helvetica,clean,sans-serif;
 	padding: 1px;
 }
@@ -55,4 +42,26 @@
 .mblCarouselPages {
 	position: relative;
 	text-align: center;
+}
+
+/* dojox.mobile._CarouselItem */
+.mblCarouselItemHeaderText {
+	color: white;
+	font: 14px arial,helvetica,clean,sans-serif;
+	text-align: center;
+	margin-top: 8px;
+}
+.mblCarouselItemFooterText {
+	color: white;
+	font: 14px arial,helvetica,clean,sans-serif;
+	text-align: center;
+	margin-bottom: 8px;
+}
+.mblCarouselItemImage {
+	-webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+	vertical-align: bottom;
+}
+.mblCarouselItemSelected .mblCarouselItemImage {
+	border: 1px dashed #c0c0c0;
+	-webkit-box-shadow: none;
 }
