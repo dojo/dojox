@@ -1,36 +1,45 @@
-/* dojox.mobile.TabBarButton */
-.dj_ie6 .mblTabBarButtonDiv, .dj_ie7 .mblTabBarButtonDiv {
-	left: auto;
-}
+@import "../common/domButtons/DomButtonWhiteCross-compat.css";
+/* dojox.mobile.TabBar */
 .dj_ie6 .mblTabBar .mblTabBarButton {
-  display: inline; /* IE bug*/
+  display: inline;
+  /* IE bug*/
+
 }
-.mblTabPanelHeader {
-	background-image: url(compat/heading-bg.png);
+/* barType=tabBar */
+.mblTabBarTabBar {
+  background-image: none;
+  background-color: #000000;
 }
-.mblTabContainer .mblTabButton {
-	background-image: url(compat/tab-button-bg.png);
+/* barType=segmentedControl */
+.mblTabBarSegmentedControl {
+  background-image: url(compat/heading-bg.png);
 }
-.mblTabContainer .mblTabButtonSelected {
-	background-image: url(compat/tab-sel-button-bg.png);
+.mblTabBarSegmentedControl .mblTabBarButton {
+  background-image: url(compat/tab-seg-button-bg.png);
 }
-*html .mblTabButton { /* IE6 hack */
-	behavior: expression(
-		(function(el){
-			if(!el.previousSibling)
-				el.style.borderWidth = "1px";
-			el.style.behavior = "none";
-		})(this)
-	);
+.mblTabBarSegmentedControl .mblTabBarButtonSelected {
+  background-image: url(compat/tab-seg-sel-button-bg.png);
 }
-.dj_ie6 .mblTabPanelHeader .mblDomButton {
-	left: 0px;
+/* barType=plainTab */
+.mblTabBarPlainTab {
+  background-image: url(compat/heading-bg.png);
 }
-.mblTabButton:first-child {
-  -moz-border-radius-topleft: 5px;
-  -moz-border-radius-bottomleft: 5px;
+.mblTabBarPlainTab .mblTabBarButtonSelected {
+  background-image: url(compat/tab-seg-sel-button-bg.png);
 }
-.mblTabButton:last-child {
-  -moz-border-radius-topright: 5px;
-  -moz-border-radius-bottomright: 5px;
+/* barType=slimTab */
+.mblTabBarSlimTab {
+  background-image: url(compat/tab-slim-bar-bg.png);
+}
+/* barType=flatTab */
+.mblTabBarFlatTab {
+  /*	background-image: none;*/
+
+}
+/* barType=tallTab */
+.mblTabBarTallTab {
+  background-image: url(compat/tab-tall-bar-bg.png);
+}
+.mblTabBarTallTab .mblTabBarButtonSelected {
+  background-color: #8c8e8c;
 }

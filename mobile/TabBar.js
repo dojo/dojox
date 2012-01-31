@@ -1,6 +1,7 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
+	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-geometry",
@@ -9,7 +10,7 @@ define([
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./TabBarButton" // to load TabBarButton for you (no direct references)
-], function(array, declare, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, TabBarButton){
+], function(array, declare, win, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, TabBarButton){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -39,18 +40,19 @@ define([
 		iconPos: "",
 
 		// barType: String
-		//		"tabBar", "segmentedControl", "tabPanel", or "slimTabBar".
+		//		"tabBar", "segmentedControl", "standardTab", "slimTab", "flatTab",
+		//		or "tallTab"
 		barType: "tabBar",
 
 		// closable: Boolean
 		//		True if user can close (destroy) a child tab by clicking the X on the tab.
-		//		This property is effective only when barType is "tabPanel".
+		//		This property is NOT effective for "tabBar" and "tallBar".
 		closable: false,
 
-		// inHeading: Boolean
-		//		A flag that indicates whether this widget is in a Heading
-		//		widget.
-		inHeading: false,
+		// center: Boolean
+		//		If true, place the tabs in the center of the bar.
+		//		This property is NOT effective for "tabBar".
+		center: true,
 
 		// syncWithViews: Boolean
 		//		True if this widget listens to view transition events to be
@@ -70,16 +72,8 @@ define([
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+			this.reset();
 			this.inherited(arguments);
-			var t = this.barType,
-				c = this.baseClass + t.charAt(0).toUpperCase() + t.substring(1);
-			// mblTabPanelHeader -> mblTabBar mblTabBarSegmentedControl
-			// mblTabBar -> mblTabBar mblTabBarTabBar
-			domClass.add(this.domNode, c);
-
-			if(this.barType !== "tabPanel" && this.barType !== "slimTabBar"){
-				this.closable = false;
-			}
 		},
 
 		postCreate: function(){
@@ -100,8 +94,30 @@ define([
 			this.resize();
 		},
 
+		reset: function(){
+			var prev = this._barType;
+			if(typeof this.barType === "object"){
+				this._barType = this.barType["*"];
+				for(var c in this.barType){
+					if(domClass.contains(win.doc.documentElement, c)){
+						this._barType = this.barType[c];
+						break;
+					}
+				}
+			}else{
+				this._barType = this.barType;
+			}
+			var cap = function(s){
+				return s.charAt(0).toUpperCase() + s.substring(1);
+			};
+			if(prev){
+				domClass.remove(this.domNode, this.baseClass + cap(prev));
+			}
+			domClass.add(this.domNode, this.baseClass + cap(this._barType));
+		},
+
 		resize: function(size){
-			var i,w;
+			var i, w;
 			if(size && size.w){
 				domGeometry.setMarginBox(this.domNode, size);
 				w = size.w;
@@ -115,26 +131,9 @@ define([
 			var bm = this._fixedButtonMargin;
 			var arr = dojo.map(this.getChildren(), function(w){ return w.domNode; });
 
-			var margin;
-			if(this.barType == "segmentedControl"){
-				margin = w;
-				var totalW = 0; // total width of all the buttons
-				for(i = 0; i < arr.length; i++){
-					margin -= domGeometry.getMarginBox(arr[i]).w;
-					totalW += arr[i].offsetWidth;
-				}
-				margin = Math.floor(margin/2);
-				var parent = this.getParent();
-				var inHeading = this.inHeading || parent && domClass.contains(parent.domNode, "mblHeading");
-				this.containerNode.style.paddingLeft = (inHeading ? 0 : margin) + "px";
-				if(inHeading){
-					domStyle.set(this.domNode, {
-						background: "none",
-						border: "none",
-						width: totalW + 2 + "px"
-					});
-				}
-			}else if (this.barType == "tabBar"){
+			var margin = 0;
+			if (this._barType == "tabBar"){
+				this.containerNode.style.paddingLeft = "";
 				margin = Math.floor((w - (bw + bm * 2) * arr.length) / 2);
 				if(w < this._largeScreenWidth || margin < 0){
 					// If # of buttons is 4, for example, assign "25%" to each button.
@@ -153,6 +152,19 @@ define([
 						arr[0].style.marginLeft = margin + bm + "px";
 					}
 				}
+			}else{
+				for(i = 0; i < arr.length; i++){
+					arr[i].style.width = arr[i].style.margin = "";
+				}
+				var parent = this.getParent();
+				if(this.center && (!parent || !domClass.contains(parent.domNode, "mblHeading"))){
+					margin = w;
+					for(i = 0; i < arr.length; i++){
+						margin -= domGeometry.getMarginBox(arr[i]).w;
+					}
+					margin = Math.floor(margin/2);
+				}
+				this.containerNode.style.paddingLeft = margin ? margin + "px" : "";
 			}
 
 			domClass.toggle(this.domNode, "mblTabBarNoIcons",
