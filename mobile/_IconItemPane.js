@@ -42,10 +42,6 @@ define([
 			return this.domNode.style.display !== "none";
 		},
 
-		scrollIntoView: function(){
-			this.domNode.scrollIntoView();
-		},
-
 		_setLabelAttr: function(/*String*/text){
 			this._set("label", text);
 			this.labelNode.innerHTML = this._cv ? this._cv(text) : text;

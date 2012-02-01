@@ -681,6 +681,26 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 	};
 
+	this.scrollIntoView = function(/*DOMNode*/node, /*Boolean?*/alignWithTop, /*number?*/duration){
+		if(!this._v){ return; } // cannot scroll vertically
+		
+		var c = this.containerNode,
+			h = this.getDim().d.h, // the height of ScrollableView's content display area
+			top = 0;
+		
+		// Get the top position of node relative to containerNode
+		for(var n = node; n !== c; n = n.offsetParent){
+			if(!n || n.tagName === "BODY"){ return; } // exit if node is not a child of scrollableView
+			top += n.offsetTop;
+		}
+		// Calculate scroll destination position
+		var y = alignWithTop ? Math.max(h - c.offsetHeight, -top) : Math.min(0, h - top - node.offsetHeight);
+		
+		// Scroll to destination position
+		(duration && typeof duration === "number") ? 
+			this.slideTo({y: y}, duration, "ease-out") : this.scrollTo({y: y});
+	};
+
 	this.getSpeed = function(){
 		var x = 0, y = 0, n = this._time.length;
 		// if the user holds the mouse or finger more than 0.5 sec, do not move.

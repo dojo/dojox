@@ -3,6 +3,7 @@ define([
 	"dojo/_base/event",
 	"dojo/_base/lang",
 	"dojo/_base/sniff",
+	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-geometry",
@@ -11,8 +12,9 @@ define([
 	"./Badge",
 	"./TransitionEvent",
 	"./iconUtils",
-	"./lazyLoadUtils"
-], function(declare, event, lang, has, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils){
+	"./lazyLoadUtils",
+	"./viewRegistry"
+], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry){
 
 /*=====
 	var ItemBase = dojox.mobile._ItemBase;
@@ -241,8 +243,17 @@ define([
 				lazyLoadUtils.instantiateLazyWidgets(this.containerNode, this.requires);
 				this.lazy = false;
 			}
-			this.paneWidget.scrollIntoView();
+			this.scrollIntoView(this.paneWidget.domNode);
 			this.onOpen();
+		},
+
+		scrollIntoView: function(/*DomNode*/node){
+			var s = viewRegistry.getEnclosingScrollable(node);
+			if(s){ // this node is placed inside scrollable
+				s.scrollIntoView(node, true);
+			}else{
+				win.global.scrollBy(0, domGeometry.position(node, false).y);
+			}
 		},
 
 		close: function(/*Boolean?*/noAnimation){

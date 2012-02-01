@@ -447,6 +447,11 @@ define([
 				var li = e.target;
 				li.style.display = "none";
 				domClass.remove(li, "mblCloseContent");
+				
+				// If target is placed inside scrollable, need to call onTouchEnd
+				// to adjust scroll position
+				var p = viewRegistry.getEnclosingScrollable(this.domNode);
+				p && p.onTouchEnd();
 			}
 			if(isOut){
 				this.invokeCallback();
