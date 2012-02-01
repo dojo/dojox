@@ -330,19 +330,25 @@ define([
 				this.set(setPropName, setPropValue);
 			}
 		},
-
-		_updateChildBindings: function(){
+		_updateChildBindings: function(parentBind){
 			// summary:
 			//		Update this widget's value based on the current binding and
 			//		set up the bindings of all contained widgets so as to refresh
-			//		any relative binding references.
+			//		any relative binding references. 
+			// 		findWidgets does not return children of widgets so need to also
+			//		update children of widgets which are not bound but may hold widgets which are.
+			//	parentBind:
+			//		The binding on the parent of a widget whose children may have bindings 
+			//		which need to be updated.
 			// tags:
 			//		private
-			var binding = this.get("binding");
+			var binding = this.get("binding") || parentBind;
 			if(binding && !this._beingBound){
 				array.forEach(registry.findWidgets(this.domNode), function(widget){
-					if(widget._setupBinding){
+					if(widget.ref && widget._setupBinding){
 						widget._setupBinding(binding);
+					}else{	
+						widget._updateChildBindings(binding);
 					}
 				});
 			}
