@@ -1,6 +1,6 @@
 .mblSpinWheel {
-	background-color: #D6D7DC;
-	background-image: -moz-linear-gradient(top, #313137 0%, #73747D 5%, #92939B 7%, #ABABB5 9%, #C5C6CE 12%, #DFE0E4 16%, #F4F5F6 22%, #FBFCFC 35%, #FBFCFC 50%, #FBFCFC 61%, #B4C1C7 61%, #FBFCFC 65%, #F4F5F6 78%, #DFE0E4 84%, #C5C6CE 88%, #ABABB5 91%, #92939B 93%, #73747D 95%, #313137 100%);
+	background-color: #d6d7dc;
+	background-image: -moz-linear-gradient(top, #313137 0%, #73747d 5%, #92939b 7%, #ababb5 9%, #c5c6ce 12%, #dfe0e4 16%, #f4f5f6 22%, #fbfcfc 35%, #fbfcfc 50%, #fbfcfc 61%, #b4c1c7 61%, #fbfcfc 65%, #f4f5f6 78%, #dfe0e4 84%, #c5c6ce 88%, #ababb5 91%, #92939b 93%, #73747d 95%, #313137 100%);
 	-moz-border-radius: 3px;
 }
 .dj_ie .mblSpinWheel {
@@ -8,8 +8,8 @@
 }
 
 .mblSpinWheelBar {
-	background-color: #C4CADC;
-	background-image: -moz-linear-gradient(top, #EDEEF2 0%, #C8CADD 25%, #BBBFD4 49%, #9FA8C6 51%, #A2A9C7 81%, #A6ABC9 82%, #A7ADCA 1%);
+	background-color: #c4cadc;
+	background-image: -moz-linear-gradient(top, #edeef2 0%, #c8cadd 25%, #bbbfd4 49%, #9fa8c6 51%, #a2a9c7 81%, #a6abc9 82%, #a7adca 1%);
 	-khtml-opacity: 0.6;
 	-moz-opacity: 0.6;
 	opacity: 0.6;
