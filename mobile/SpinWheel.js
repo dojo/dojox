@@ -44,17 +44,17 @@ define([
 		buildRendering: function(){
 			this.inherited(arguments);
 			domClass.add(this.domNode, "mblSpinWheel");
-			this.centerPos = Math.round(this.domNode.offsetHeight / 2);
 
 			this.slots = [];
 			for(var i = 0; i < this.slotClasses.length; i++){
 				this.slots.push(((typeof this.slotClasses[i] =='string') ? lang.getObject(this.slotClasses[i]) : this.slotClasses[i])(this.slotProps[i]));
 				this.addChild(this.slots[i]);
 			}
-			domConstruct.create("DIV", {className: "mblSpinWheelBar"}, this.domNode);
+			domConstruct.create("div", {className: "mblSpinWheelBar"}, this.domNode);
 		},
 
 		startup: function(){
+			this.centerPos = Math.round(this.domNode.offsetHeight / 2);
 			this.inherited(arguments);
 			this.reset();
 		},

@@ -76,17 +76,17 @@ define([
 				}
 			}
 
-			this.containerNode = domConstruct.create("DIV", {className:"mblSpinWheelSlotContainer"});
+			this.containerNode = domConstruct.create("div", {className:"mblSpinWheelSlotContainer"});
 			this.containerNode.style.height
 				= (win.global.innerHeight||win.doc.documentElement.clientHeight) * 2 + "px"; // must bigger than the screen
 			this.panelNodes = [];
 			for(var k = 0; k < 3; k++){
-				this.panelNodes[k] = domConstruct.create("DIV", {className:"mblSpinWheelSlotPanel"});
+				this.panelNodes[k] = domConstruct.create("div", {className:"mblSpinWheelSlotPanel"});
 				var len = this.items.length;
 				var n = Math.ceil(this.minItems / len);
 				for(j = 0; j < n; j++){
 					for(i = 0; i < len; i++){
-						domConstruct.create("DIV", {
+						domConstruct.create("div", {
 							className: "mblSpinWheelSlotLabel",
 							name: this.items[i][0],
 							innerHTML: this._cv ? this._cv(this.items[i][1]) : this.items[i][1]
@@ -96,10 +96,10 @@ define([
 				this.containerNode.appendChild(this.panelNodes[k]);
 			}
 			this.domNode.appendChild(this.containerNode);
-			this.touchNode = domConstruct.create("DIV", {className:"mblSpinWheelSlotTouch"}, this.domNode);
+			this.touchNode = domConstruct.create("div", {className:"mblSpinWheelSlotTouch"}, this.domNode);
 			this.setSelectable(this.domNode, false);
 		},
-	
+
 		startup: function(){
 			this.inherited(arguments);
 			this.centerPos = this.getParent().centerPos;
@@ -107,7 +107,7 @@ define([
 			this._itemHeight = items[0].offsetHeight;
 			this.adjust();
 		},
-	
+
 		adjust: function(){
 			// summary:
 			//		Adjusts the position of slot panels.
@@ -125,7 +125,7 @@ define([
 			this.panelNodes[1].style.top = adjustY + "px";
 			this.panelNodes[2].style.top = h + adjustY + "px";
 		},
-	
+
 		setInitialValue: function(){
 			// summary:
 			//		Sets the initial value using this.value or the first item.
@@ -134,7 +134,7 @@ define([
 				this.setValue(val);
 			}
 		},
-	
+
 		getCenterPanel: function(){
 			// summary:
 			//		Gets a panel that contains the currently selected item.
@@ -147,7 +147,7 @@ define([
 			}
 			return null;
 		},
-	
+
 		setColor: function(/*String*/value){
 			// summary:
 			//		Sets the color of the specified item as blue.
@@ -162,7 +162,7 @@ define([
 				}
 			}
 		},
-	
+
 		disableValues: function(/*Array*/values){
 			// summary:
 			//		Makes the specified items grayed out.
@@ -179,7 +179,7 @@ define([
 				}
 			}
 		},
-	
+
 		getCenterItem: function(){
 			// summary:
 			//		Gets the currently selected item.
@@ -195,22 +195,22 @@ define([
 				}
 			}
 			return null;
-	
+
 		},
-	
+
 		getValue: function(){
 			// summary:
 			//		Gets the currently selected value.
 			var item = this.getCenterItem();
 			return (item && item.innerHTML);
 		},
-	
+
 		getKey: function(){
 			// summary:
 			//		Gets the key for the currently selected value.
 			return this.getCenterItem().getAttribute("name");
 		},
-	
+
 		setValue: function(newValue){
 			// summary:
 			//		Sets the newValue to this slot.
@@ -244,7 +244,7 @@ define([
 			to.y += m * this._itemHeight;
 			this.slideTo(to, 1);
 		},
-	
+
 		getSpeed: function(){
 			// summary:
 			//		Overrides dojox.mobile.scrollable.getSpeed().
@@ -270,7 +270,7 @@ define([
 			}
 			return ret;
 		},
-	
+
 		adjustDestination: function(to, pos){
 			// summary:
 			//		Overrides dojox.mobile.scrollable.adjustDestination().
@@ -280,7 +280,7 @@ define([
 			var r = j >= 0 ? j % h : j % h + h;
 			to.y = j - r;
 		},
-	
+
 		resize: function(e){
 			if(this._penddingValue){
 				this.setValue(this._penddingValue);

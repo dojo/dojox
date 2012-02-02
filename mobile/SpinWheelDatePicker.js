@@ -71,8 +71,8 @@ define([
 		buildRendering: function(){
 			this.inherited(arguments);
 			domClass.add(this.domNode, "mblSpinWheelDatePicker");
-			this.connect(this.slots[1], "onFlickAnimationEnd", "onMonthSet");
-			this.connect(this.slots[2], "onFlickAnimationEnd", "onDaySet");
+			this._monthHandle = this.connect(this.slots[1], "onFlickAnimationEnd", "onMonthSet");
+			this._dayHandle = this.connect(this.slots[2], "onFlickAnimationEnd", "onDaySet");
 		},
 
 		reset: function(){
