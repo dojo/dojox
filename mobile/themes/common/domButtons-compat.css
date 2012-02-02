@@ -36,3 +36,7 @@
 
 @import url("domButtons/DomButtonYellowStar-compat.css");
 @import url("domButtons/DomButtonGrayStar-compat.css");
+
+@import url("domButtons/DomButtonGrayCross-compat.css");
+@import url("domButtons/DomButtonRedCross-compat.css");
+@import url("domButtons/DomButtonWhiteCross-compat.css");

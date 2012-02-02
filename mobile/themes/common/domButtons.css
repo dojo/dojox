@@ -40,3 +40,7 @@
 
 @import url("domButtons/DomButtonYellowStar.css");
 @import url("domButtons/DomButtonGrayStar.css");
+
+@import url("domButtons/DomButtonGrayCross.css");
+@import url("domButtons/DomButtonRedCross.css");
+@import url("domButtons/DomButtonWhiteCross.css");
