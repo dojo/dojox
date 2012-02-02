@@ -62,7 +62,7 @@ define([
 			this.domNode = domConstruct.create("table", {cellPadding:"0",cellSpacing:"0",border:"0"});
 			var cell = this.domNode.insertRow(-1).insertCell(-1);
 			var c = (this.srcNodeRef && this.srcNodeRef.className) || this.className || this["class"];
-			if(c = c.match(/mblSw.*Shape\d*/)){ this.shape = c; }
+			if((c = c.match(/mblSw.*Shape\d*/))){ this.shape = c; }
 			this.domNode.className = this.baseClass + " " + this.shape;
 			var nameAttr = this.name ? " name=\"" + this.name + "\"" : "";
 			cell.innerHTML =
@@ -191,7 +191,7 @@ define([
 			e.preventDefault();
 			var dx;
 			if(e.targetTouches){
-				if(e.targetTouches.length != 1){ return false; }
+				if(e.targetTouches.length != 1){ return; }
 				dx = e.targetTouches[0].clientX - this.touchStartX;
 			}else{
 				dx = e.clientX - this.touchStartX;
