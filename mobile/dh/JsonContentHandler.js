@@ -178,11 +178,11 @@ define([
 				if(key.charAt(0) == "@" || key === "children"){ continue; }
 				var cls = lang.getObject(className || key.replace(/:.*/, ""));
 				if(!cls){ continue; }
-				var params = {},
-					proto = cls.prototype,
+				var proto = cls.prototype,
 					objs = className ? [obj] :
 						(lang.isArray(obj[key]) ? obj[key] : [obj[key]]);
 				for(var i = 0; i < objs.length; i++){
+					var params = {};
 					for(var prop in objs[i]){
 						if(prop.charAt(0) == "@"){
 							var v = objs[i][prop];
