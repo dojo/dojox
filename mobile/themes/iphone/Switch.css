@@ -44,20 +44,20 @@
 .mblSwitchBgLeft {
   left: 0;
   color: white;
-  background-color: #3F84EB;
+  background-color: #3f84eb;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#2859b1), to(#75acfb), color-stop(0.5, #3f84eb), color-stop(0.5, #4c8eee));
 }
 .mblSwitchBgRight {
-  color: #7F7F7F;
+  color: #7f7f7f;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#fdfdfd), color-stop(0.5, #eeeeee), color-stop(0.5, #f8f8f8));
 }
 .mblSwitchKnob {
   position: absolute;
   top: 0;
   height: 27px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#cccccc), to(#fafafa));
   font-size: 1px;
   -webkit-box-sizing: border-box;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#cccccc), to(#fafafa));
   border-width: 1px;
   border-style: solid;
   border-color: #5e5e5e #9e9e9e #828282 #797979;
