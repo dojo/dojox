@@ -1,10 +1,11 @@
 define([
 	"dojo/_base/kernel",
+	"dojo/_base/array",
 	"dojo/_base/config",
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/ready"
-], function(dojo, config, lang, win, ready){
+], function(dojo, array, config, lang, win, ready){
 
 	// module:
 	//		dojox/mobile/parser
@@ -17,33 +18,40 @@ define([
 		// summary:
 		//		A lightweight parser.
 		// description:
-		//		dojox.mobile.parser is an extremely small subset of
-		//		dojo.parser. It has no extended features over dojo.parser, so
-		//		there is no reason you have to use dojox.mobile.parser instead
-		//		of dojo.parser. However, if dojox.mobile.parser's capability is
-		//		enough for your application, use of it could reduce the total
-		//		code size.
+		//		dojox.mobile.parser is an extremely small subset of dojo.parser.
+		//		It has no extended features over dojo.parser, so there is no
+		//		reason you must use dojox.mobile.parser instead of dojo.parser.
+		//		However, if dojox.mobile.parser's capability is enough for your
+		//		application, use of it could reduce the total code size.
 
 		var _ctorMap = {};
+		var getCtor = function(type, mixins){
+			if(typeof(mixins) === "string"){
+				var t = type + ":" + mixins.replace(/ /g, "");
+				return _ctorMap[t] ||
+					(_ctorMap[t] = getCtor(type).createSubclass(array.map(mixins.split(/, */), getCtor)));
+			}
+			return _ctorMap[type] || (_ctorMap[type] = lang.getObject(type) || require(type));
+		};
 		var _eval = function(js){ return eval(js); };
 
-		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */args){
+		this.instantiate = function(/* Array */nodes, /* Object? */mixin, /* Object? */options){
 			// summary:
 			//		Function for instantiating a list of widget nodes.
 			// nodes:
 			//		The list of DOMNodes to walk and instantiate widgets on.
 			mixin = mixin || {};
-			args = args || {};
+			options = options || {};
 			var i, ws = [];
 			if(nodes){
 				for(i = 0; i < nodes.length; i++){
 					var n = nodes[i],
 						type = n._type,
-						ctor = _ctorMap[type],
+						ctor = getCtor(type, n.getAttribute("data-dojo-mixins")),
 						proto = ctor.prototype,
 						params = {}, prop, v, t;
-					lang.mixin(params, _eval.call(args.propsThis, '({'+(n.getAttribute("data-dojo-props")||"")+'})'));
-					lang.mixin(params, args.defaults);
+					lang.mixin(params, _eval.call(options.propsThis, '({'+(n.getAttribute("data-dojo-props")||"")+'})'));
+					lang.mixin(params, options.defaults);
 					lang.mixin(params, mixin);
 					for(prop in proto){
 						v = n.getAttributeNode(prop);
@@ -80,13 +88,13 @@ define([
 				}
 				for(i = 0; i < ws.length; i++){
 					var w = ws[i];
-					!args.noStart && w.startup && !w._started && w.startup();
+					!options.noStart && w.startup && !w._started && w.startup();
 				}
 			}
 			return ws;
 		};
 
-		this.parse = function(rootNode, args){
+		this.parse = function(rootNode, options){
 			// summary:
 			//		Function to handle parsing for widgets in the current document.
 			//		It is not as powerful as the full parser, but it will handle basic
@@ -95,9 +103,9 @@ define([
 			//		The root node in the document to parse from
 			if(!rootNode){
 				rootNode = win.body();
-			}else if(!args && rootNode.rootNode){
+			}else if(!options && rootNode.rootNode){
 				// Case where 'rootNode' is really a params object.
-				args = rootNode;
+				options = rootNode;
 				rootNode = rootNode.rootNode;
 			}
 
@@ -111,8 +119,7 @@ define([
 						n._skip = undefined;
 						continue;
 					}
-					var ctor = _ctorMap[type] || (_ctorMap[type] = lang.getObject(type) || require(type));
-					if(ctor.prototype.stopParser && !(args && args.template)){
+					if(getCtor(type).prototype.stopParser && !(options && options.template)){
 						var arr = n.getElementsByTagName("*");
 						for(j = 0; j < arr.length; j++){
 							arr[j]._skip = 1;
@@ -121,8 +128,8 @@ define([
 					list.push(n);
 				}
 			}
-			var mixin = args && args.template ? {template: true} : null;
-			return this.instantiate(list, mixin, args);
+			var mixin = options && options.template ? {template: true} : null;
+			return this.instantiate(list, mixin, options);
 		};
 	}();
 	if(config.parseOnLoad){
