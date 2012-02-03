@@ -25,8 +25,6 @@ define([
 		}}),
 
 		constructor: function (args) {
-			this.inherited(arguments);
-
 			// try to precompute address fields from the zipcode and country...	 
 			mvc.bindInputs([this.Zip, this.Country], dojo.hitch(this, this._lookupAddrs));
 			// simple dependence of percentages on input values and total
