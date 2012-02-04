@@ -55,6 +55,7 @@ define([
 		//		A name of html tag to create as domNode.
 		tag: "div",
 
+		/* internal properties */	
 		baseClass: "mblView",
 
 		constructor: function(params, node){
@@ -328,6 +329,8 @@ define([
 					toWidget.containerNode.style.paddingTop = fromTop + "px";
 				}
 
+				toWidget.load && toWidget.load(); // for ContentView
+
 				toWidget.movedFrom = fromNode.id;
 			}
 
@@ -554,6 +557,7 @@ define([
 					v.domNode.style.display = (v === this) ? "" : "none";
 				}, this);
 			}
+			this.load && this.load(); // for ContentView
 
 			if(!noEvent){
 				if(out){
