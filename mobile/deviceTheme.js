@@ -1,3 +1,4 @@
+var _define;
 if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 	define = _define = function(module, deps, def){
 		((arguments.length === 2) ? arguments[1] : arguments[2])();
@@ -119,7 +120,10 @@ define([
 				config.baseUrl = src.replace("deviceTheme\.js", "../../dojo/");
 				var conf = (n.getAttribute("data-dojo-config") || n.getAttribute("djConfig"));
 				if(conf){
-					config.mblThemeFiles = eval("({ " + conf + " })").mblThemeFiles;
+					var obj = eval("({ " + conf + " })");
+					for(var key in obj){
+						config[key] = obj[key];
+					}
 				}
 				break;
 			}else if(src.match(/\/dojo\.js/i)){
@@ -181,6 +185,11 @@ define([
 				[]
 			],
 			[
+				"iPhone",
+				"iphone",
+				[]
+			],
+			[
 				"iPad",
 				"iphone",
 				[this.toUrl("dojox/mobile/themes/iphone/ipad.css")]
@@ -213,8 +222,7 @@ define([
 				if(ua.match(new RegExp(m[i][0]))){
 					var theme = m[i][1];
 					var cls = win.doc.documentElement.className;
-					var cur = dm.currentTheme + "_theme";
-					cls = cls.replace(new RegExp(" *" + cur), "") + " " + theme + "_theme";
+					cls = cls.replace(new RegExp(" *" + dm.currentTheme + "_theme"), "") + " " + theme + "_theme";
 					win.doc.documentElement.className = cls;
 					dm.currentTheme = theme;
 					var files = [].concat(m[i][2]);
