@@ -1,27 +1,23 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html style="overflow:hidden;">
 <head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
-	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<title>Test Opener with DateSpinWheel</title>
-	<link href="../themes/common/SpinWheel.css" rel="stylesheet">
+
 	<link href="../themes/common/dijit/dijit.css" rel="stylesheet">
-	<style>
-		.mblTooltip.mblOpener DIV[label='Cancel'] {
-			display: none;
-		}
-	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true, async:true"></script>
+	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','Overlay','Tooltip','SpinWheel']"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 
 	<script language="JavaScript" type="text/javascript">
 		require([
 			"dijit/_base/manager",  // dijit.byId
-			"dojox/mobile",				// This is a mobile app.
-			"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
-			"dojox/mobile/parser",		// This mobile app uses declarative programming with fast mobile parser
-			"dojox/mobile/deviceTheme",	// This mobile app automatically changes it's theme to match devices
-			"dojox/mobile/SpinWheelDatePicker",
-			"dojox/mobile/Opener"
+			"dojox/mobile",
+			"dojox/mobile/compat",
+			"dojox/mobile/parser",
+			"dojox/mobile/Opener",
+			"dojox/mobile/SpinWheelDatePicker"
 		]);
 
 		function getDate(node, v){
@@ -36,9 +32,16 @@
 				w.setValue(v);
 			}
 		}
-
-
 	</script>
+
+	<style>
+		html, body{
+			overflow: hidden;
+		}
+		.mblTooltip.mblOpener DIV[label='Cancel'] {
+			display: none;
+		}
+	</style>
 </head>
 <body style="visibility:hidden;">
 	<table cellspacing="20">
@@ -51,10 +54,10 @@
 
 	<div id="datePicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getDate, onShow:setDate">
  		<h1 dojoType="dojox.mobile.Heading" label="Date Picker">
-			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
-				onclick="dijit.byId('datePicker').hide(true)"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
-				onclick="dijit.byId('datePicker').hide(false)"></div>
+			<button dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('datePicker').hide(true)"></button>
+			<button dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('datePicker').hide(false)"></button>
 		</h1>
 		<div id="spin1" dojoType="dojox.mobile.SpinWheelDatePicker"></div>
 	</div>
