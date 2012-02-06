@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
-	<title>Icon Container (Multi - Below)</title>
+	<title>Icon (css sprite)</title>
 
 	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','IconContainer']"></script>
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
@@ -19,6 +19,9 @@
 	</script>
 
 	<style>
+		html,body{
+			overflow: hidden;
+		}
 		.box {
 			border: 1px solid #A7C0E0;
 			width: 300px;
@@ -31,16 +34,15 @@
 </head>
 <body style="visibility:hidden;">
 	<div id="view1" data-dojo-type="dojox.mobile.View">
-		<h1 data-dojo-type="dojox.mobile.Heading">Icon Container (Multi - Below)</h1>
-		<ul data-dojo-type="dojox.mobile.IconContainer">
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"app1", icon:"images/icon-1.png", lazy:true'><div class="box"></div></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"app2", icon:"images/icon-1.png", lazy:true'><div class="box"></div></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"app3", icon:"images/icon-1.png", lazy:true'><div class="box"></div></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"moveTo", icon:"images/icon-1.png", moveTo:"about", transition:"slide"'></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"href", icon:"images/icon-1.png", href:"test_RoundRectList.html", transition:"slide"'></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"hrefTarget", icon:"images/icon-1.png", href:"test_RoundRectList.html", hrefTarget:"_blank"'></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"url", icon:"images/icon-1.png", url:"view-sample.html", transition:"slide"'></li>
-			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"url-async", icon:"images/icon-1.png", url:"view-sample.html", transition:"slide", sync:false'></li>
+		<h1 data-dojo-type="dojox.mobile.Heading">Sprite Icons</h1>
+		<ul data-dojo-type="dojox.mobile.IconContainer" data-dojo-props='iconBase:"images/icon-all.png"'>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"app1", iconPos:"0,0,65,65"'><div class="box"></div></li>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"app2", iconPos:"0,65,65,65"'><div class="box"></div></li>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"app3", iconPos:"0,130,65,65"'><div class="box"></div></li>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"moveTo", iconPos:"0,195,65,65", moveTo:"about", transition:"slide"'></li>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"href", iconPos:"0,260,65,65", href:"test_RoundRectList.html", transition:"slide"'></li>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"url", iconPos:"65,0,65,65", url:"data/view-sample.html", transition:"slide"'></li>
+			<li data-dojo-type="dojox.mobile.IconItem" data-dojo-props='label:"url-async", iconPos:"65,65,65,65", url:"data/view-sample.html", transition:"slide", sync:false'></li>
 		</ul>
 	</div>
 
