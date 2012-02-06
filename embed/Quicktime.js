@@ -5,7 +5,7 @@ define([
 	"dojo/_base/window",
 	"dojo/dom",
 	"dojo/dom-construct",
-	"dojo/domReady" // fixes doc.readyState in Fx<=3.5
+	"dojo/domReady!" // fixes doc.readyState in Fx<=3.5
 ], function (dojo, lang, has, windowUtil, domUtil, domConstruct) {
 	/*******************************************************
 		dojox.embed.Quicktime
@@ -246,20 +246,11 @@ define([
 			}, 20);
 		}
 
-		if(windowUtil.doc.readyState === 'loaded' || windowUtil.doc.readyState === 'complete'){
-			// if onload has already fired, then body is available and we can create a new node
-			domConstruct.create("div", {
-				innerHTML: o.markup,
-				id: id,
-				style: { top:top, left:0, width:widthHeight, height:widthHeight, overflow:"hidden", position:"absolute" }
-			}, windowUtil.body());
-		}else{
-			// body isn't loaded yet, so we need to document.write the QuickTime markup
-			document.write(
-				'<div style="top:'+top+';left:0;width:'+widthHeight+';height:'+widthHeight+';overflow:hidden;position:absolute" id="' + id + '">'
-				+ o.markup
-				+ '</div>');
-		}
+		domConstruct.create("div", {
+			innerHTML: o.markup,
+			id: id,
+			style: { top:top, left:0, width:widthHeight, height:widthHeight, overflow:"hidden", position:"absolute" }
+		}, windowUtil.body());
 		getVer();
 	}else if(has("ie") && installed){
 		// we already know if IE has QuickTime installed, but we need this to seem like a callback.
