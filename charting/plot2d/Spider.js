@@ -1,9 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/html", "dojo/_base/array",
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
 	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff", 
 	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
 	"dojox/lang/utils", "dojo/fx/easing"],
-	function(lang, declare, hub, html, arr, domGeom, baseFx, coreFx, has, 
+	function(lang, declare, hub, arr, domGeom, baseFx, coreFx, has,
 			Element, PlotEvents, Color, dxcolor, dc, da, primitive, 
 			g, m, gfxfx, df, du, easing){
 /*=====
@@ -506,7 +506,7 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 					aroundRect.x = o.cx;
 					aroundRect.y = o.cy;
 					aroundRect.width = aroundRect.height = 1;
-					var lt = html.coords(this.chart.node, true);
+					var lt = this.chart.getCoords();
 					aroundRect.x += lt.x;
 					aroundRect.y += lt.y;
 					aroundRect.x = Math.round(aroundRect.x);

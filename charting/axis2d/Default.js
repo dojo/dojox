@@ -1,7 +1,7 @@
-define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/declare", 
-	"dojo/_base/connect", "dojo/_base/html", "dojo/dom-geometry", "./Invisible", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/declare",
+	"dojo/_base/connect", "dojo/dom-geometry", "./Invisible",
 	"../scaler/common", "../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils", "dojox/lang/functional"],
-	function(lang, arr, has, declare, connect, html, domGeom, Invisible, scommon, 
+	function(lang, arr, has, declare, connect, domGeom, Invisible, scommon,
 			lin, acommon, g, du, df){
 
 	/*=====
@@ -12,7 +12,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 			labels, labelFunc, maxLabelSize,
 			stroke, majorTick, minorTick, microTick, tick,
 			font, fontColor
-		){
+	
 		//	summary:
 		//		Optional arguments used in the definition of an axis.
 		//
@@ -918,7 +918,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				fontWidth = g._base._getTextBox(truncatedLabel, {font: font}).w || 0,
 				fontHeight = font ? g.normalizedLength(g.splitFontString(font).size) : 0;
 			if(elemType == "html"){
-				lang.mixin(aroundRect, html.coords(elem.firstChild, true));
+				lang.mixin(aroundRect, domGeom.position(elem.firstChild, true));
 				aroundRect.width = Math.ceil(fontWidth);
 				aroundRect.height = Math.ceil(fontHeight);
 				this._events.push({
@@ -939,7 +939,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/sniff", "dojo/_base/de
 				});
 			}else{
 				var shp = elem.getShape(),
-					lt = html.coords(chart.node, true);
+					lt = chart.getCoords();
 				aroundRect = lang.mixin(aroundRect, {
 					x: shp.x - fontWidth / 2,
 					y: shp.y

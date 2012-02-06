@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/html", "dojo/query", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query",
 	"./Chart", "../themes/GreySkies", "../plot2d/Lines", "dojo/dom-prop"], 
-	function(lang, arrayUtil, declare, html, query, Chart, GreySkies, Lines, domProp){
+	function(lang, arrayUtil, declare, query, Chart, GreySkies, Lines, domProp){
 /*=====
 var Chart = dojox.charting.widget.Chart;
 =====*/

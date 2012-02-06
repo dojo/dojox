@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/connect", "dojox/lang/functional"], 
-	function(Lang, declare, ArrayUtil, Hub, df){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/connect", "dojox/lang/functional"],
+	function(Lang, declare, ArrayUtil, connect, df){
 
 	return declare("dojox.charting.DataSeries", null, {
 		constructor: function(store, kwArgs, value){
@@ -39,19 +39,20 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 	
 			if(this.store.getFeatures()["dojo.data.api.Notification"]){
 				this._events.push(
-					Hub.connect(this.store, "onNew", this, "_onStoreNew"),
-					Hub.connect(this.store, "onDelete", this, "_onStoreDelete"),
-					Hub.connect(this.store, "onSet", this, "_onStoreSet")
+					connect.connect(this.store, "onNew", this, "_onStoreNew"),
+					connect.connect(this.store, "onDelete", this, "_onStoreDelete"),
+					connect.connect(this.store, "onSet", this, "_onStoreSet")
 				);
 			}
-	
+
+			this._initialRendering = true;
 			this.fetch();
 		},
 	
 		destroy: function(){
 			//	summary:
 			//		Clean up before GC.
-			ArrayUtil.forEach(this._events, Hub.disconnect);
+			ArrayUtil.forEach(this._events, connect.disconnect);
 		},
 	
 		setSeriesObject: function(series){
@@ -124,7 +125,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 	
 		_pushDataChanges: function(){
 			if(this.series){
-				this.series.chart.updateSeries(this.series.name, this);
+				this.series.chart.updateSeries(this.series.name, this, this._initialRendering);
+				this._initialRendering = false;
 				this.series.chart.delayedRender();
 			}
 		},

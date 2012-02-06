@@ -43,7 +43,8 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 			}
 	
 			this.data = [];
-	
+
+			this._initialRendering = false;
 			this.fetch();
 		},
 	
@@ -91,7 +92,8 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 	
 		_pushDataChanges: function(){
 			if(this.series){
-				this.series.chart.updateSeries(this.series.name, this);
+				this.series.chart.updateSeries(this.series.name, this, this._initialRendering);
+				this._initialRendering = false;
 				this.series.chart.delayedRender();
 			}
 		}

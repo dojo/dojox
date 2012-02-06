@@ -1,6 +1,6 @@
-define(["dojo/_base/html", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_base/event",
+define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_base/event",
 	"dojo/_base/connect", "./ChartAction", "dojo/_base/sniff", "dojo/dom-prop", "dojo/keys"], 
-	function(html, declare, win, arr, eventUtil, connect, ChartAction, has, domProp, keys){
+	function(declare, win, arr, eventUtil, connect, ChartAction, has, domProp, keys){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {

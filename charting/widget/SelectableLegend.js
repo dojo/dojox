@@ -1,8 +1,8 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query", "dojo/_base/html", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query", 
 		"dojo/_base/connect", "dojo/_base/Color", "./Legend", "dijit/form/CheckBox", "../action2d/Highlight",
 		"dojox/lang/functional", "dojox/gfx/fx", "dojo/keys", "dojo/_base/event", "dojo/dom-construct",
 		"dojo/dom-prop"], 
-	function(lang, arrayUtil, declare, query, html, hub, Color, Legend, CheckBox, 
+	function(lang, arrayUtil, declare, query, hub, Color, Legend, CheckBox,
 			 Highlight, df, fx, keys, event, dom, domProp){
 /*=====
 var Legend = dojox.charting.widget.Legend;
