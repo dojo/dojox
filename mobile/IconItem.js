@@ -231,8 +231,8 @@ define([
 					}
 					parent.appView._heading.set("label", this.label);
 				}
-				var transOpts = this.transitionOptions || {transition: this.transition, transitionDir: this.transitionDir, moveTo: parent.id + "_mblApplView"};		
-				new TransitionEvent(this.domNode, transOpts, e).dispatch();
+				this.moveTo = parent.id + "_mblApplView";
+				new TransitionEvent(this.domNode, this.getTransOpts(), e).dispatch();
 			}
 		},
 

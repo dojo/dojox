@@ -5,10 +5,11 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dijit/registry",
 	"./iconUtils",
 	"./_ItemBase",
 	"./ProgressIndicator"
-], function(array, declare, lang, domClass, domConstruct, domStyle, iconUtils, ItemBase, ProgressIndicator){
+], function(array, declare, lang, domClass, domConstruct, domStyle, registry, iconUtils, ItemBase, ProgressIndicator){
 
 /*=====
 	var ItemBase = dojox.mobile._ItemBase;
@@ -19,6 +20,11 @@ define([
 	// summary:
 	//		An item of either RoundRectList or EdgeToEdgeList.
 
+	lang.extend(dijit._WidgetBase, {
+		layout: "",
+		preventTouch: false
+	});
+
 	return declare("dojox.mobile.ListItem", ItemBase, {
 		// summary:
 		//		An item of either RoundRectList or EdgeToEdgeList.
@@ -26,6 +32,26 @@ define([
 		//		ListItem represents an item of either RoundRectList or
 		//		EdgeToEdgeList. There are three ways to move to a different
 		//		view, moveTo, href, and url. You can choose only one of them.
+		//
+		//		A child DOM node (or widget) can have the layout attribute,
+		//		whose value is "left", "right", or "center". Such nodes will be
+		//		aligned as specified.
+		// example:
+		// |	<li data-dojo-type="dojox.mobile.ListItem">
+		// |		<div layout="left">Left Node</div>
+		// |		<div layout="right">Right Node</div>
+		// |		<div layout="center">Center Node</div>
+		// |	</li>
+		//
+		//		Note that even if you specify variableHeight="true" to the list
+		//		and place a tall object inside the layout node as an example
+		//		below, the layout node does not expand as you may expect,
+		//		because layout node is aligned using float:left, float:right, or
+		//		position:absolute.
+		// example:
+		// |	<li data-dojo-type="dojox.mobile.ListItem" variableHeight="true">
+		// |		<div layout="left"><img src="large-picture.jpg"></div>
+		// |	</li>
 
 		// rightText: String
 		//		A right-aligned text to display on the item.
@@ -122,7 +148,7 @@ define([
 		_selClass: "mblListItemSelected",
 
 		buildRendering: function(){
-			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
 			this.inherited(arguments);
 
 			if(this.selected){
@@ -132,20 +158,22 @@ define([
 				domClass.replace(this.domNode, "mblEdgeToEdgeCategory", this.baseClass);
 			}
 
-			this.labelNode = this.containerNode =
-				domConstruct.create("div", {className:"mblListItemTextBox"});
+			this.labelNode =
+				domConstruct.create("div", {className:"mblListItemLabel"});
 			var ref = this.srcNodeRef;
-			if(ref){
-				// reparent
-				for(var i = 0, len = ref.childNodes.length; i < len; i++){
-					this.labelNode.appendChild(ref.firstChild);
-				}
+			if(ref && ref.childNodes.length === 1 && ref.firstChild.nodeType === 3){
+				// if ref has only one text node, regard it as a label
+				this.labelNode.appendChild(ref.firstChild);
 			}
 			this.domNode.appendChild(this.labelNode);
 
 			if(this.anchorLabel){
 				this.labelNode.style.display = "inline"; // to narrow the text region
 				this.labelNode.style.cursor = "pointer";
+				this._anchorClickHandle = this.connect(this.labelNode, "onclick", "_onClick");
+				this.onTouchStart = function(e){
+					return (e.target !== this.labelNode);
+				};
 			}
 		},
 
@@ -153,12 +181,12 @@ define([
 			if(this._started){ return; }
 
 			var parent = this.getParent();
-			if(this.moveTo || this.href || this.url || this.clickable || (parent && parent.select)){
+			var opts = this.getTransOpts();
+			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
 				this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 			}else{
 				this._handleClick = false;
 			}
-			this.setArrow();
 
 			if(domClass.contains(this.domNode, "mblVariableHeight")){
 				this.variableHeight = true;
@@ -166,10 +194,6 @@ define([
 			if(this.variableHeight){
 				domClass.add(this.domNode, "mblVariableHeight");
 				setTimeout(lang.hitch(this, "layoutVariableHeight"));
-			}
-
-			if(parent && parent.select){
-				this.set("checked", this.checked);
 			}
 
 			this.inherited(arguments);
@@ -182,12 +206,46 @@ define([
 					rightIcon2: this.rightIcon2
 				});
 			}
+			if(parent && parent.select){
+				this.set("checked", this.checked); // retry applying the attribute
+			}
+			this.setArrow();
+			this.layoutChildren();
+		},
+
+		layoutChildren: function(){
+			this._layoutChildren = [];
+			var centerNode;
+			array.forEach(this.domNode.childNodes, function(n){
+				if(n.nodeType !== 1){ return; }
+				var layout = n.getAttribute("layout") || (registry.byNode(n) || {}).layout;
+				if(layout){
+					domClass.add(n, "mblListItemLayout" +
+						layout.charAt(0).toUpperCase() + layout.substring(1));
+					this._layoutChildren.push(n);
+					if(layout === "center"){ centerNode = n; }
+				}
+			}, this);
+			if(centerNode){
+				this.domNode.insertBefore(centerNode, this.domNode.firstChild);
+			}
 		},
 
 		resize: function(){
 			if(this.variableHeight){
 				this.layoutVariableHeight();
 			}
+
+			// If labelNode is empty, shrink it so as not to prevent user clicks.
+			this.labelNode.style.display = this.labelNode.firstChild ? "block" : "inline";
+		},
+
+		_onTouchStart: function(e){
+			if(e.target.getAttribute("preventTouch") ||
+				(registry.getEnclosingWidget(e.target) || {}).preventTouch){
+				return;
+			}
+			this.inherited(arguments);
 		},
 
 		_onClick: function(e){
@@ -197,17 +255,14 @@ define([
 			//		private
 			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
-			if(this.anchorLabel){
-				for(var p = e.target; p.tagName !== this.tag.toUpperCase(); p = p.parentNode){
-					if(p.className == "mblListItemTextBox"){
-						domClass.add(p, "mblListItemTextBoxSelected");
-						setTimeout(function(){
-							domClass.remove(p, "mblListItemTextBoxSelected");
-						}, this._duration);
-						this.onAnchorLabelClicked(e);
-						return;
-					}
-				}
+			var n = this.labelNode;
+			if(this.anchorLabel && e.currentTarget === n){
+				domClass.add(n, "mblListItemLabelSelected");
+				setTimeout(function(){
+					domClass.remove(n, "mblListItemLabelSelected");
+				}, this._duration);
+				this.onAnchorLabelClicked(e);
+				return;
 			}
 			var parent = this.getParent();
 			if(parent.select){
@@ -238,7 +293,7 @@ define([
 			var h = this.domNode.offsetHeight;
 			if(h === this.domNodeHeight){ return; }
 			this.domNodeHeight = h;
-			array.forEach([
+			array.forEach(this._layoutChildren.concat([
 				this.rightTextNode,
 				this.rightIcon2Node,
 				this.rightIconNode,
@@ -246,7 +301,7 @@ define([
 				this.iconNode,
 				this.deleteIconNode,
 				this.knobIconNode
-			], function(n){
+			]), function(n){
 				if(n){
 					var domNode = this.domNode;
 					var f = function(){
@@ -269,7 +324,8 @@ define([
 			if(this.checked){ return; }
 			var c = "";
 			var parent = this.getParent();
-			if(this.moveTo || this.href || this.url || this.clickable){
+			var opts = this.getTransOpts();
+			if(opts.moveTo || opts.href || opts.url || this.clickable){
 				if(!this.noArrow && !(parent && parent.selectOne)){
 					c = this.arrowClass || "mblDomButtonArrow";
 				}
@@ -279,11 +335,26 @@ define([
 			}
 		},
 
-		_setIcon: function(/*String*/icon, /*String*/type, /*DomNode*/ref){
-			if(!this.getParent()){ return; }
+		_findRef: function(/*String*/type){
+			// summary:
+			//		Find an appropriate position to insert a new child node.
+			var i, node, list = ["deleteIcon", "icon", "rightIcon", "uncheckIcon", "rightIcon2", "rightText"];
+			for(i = array.indexOf(list, type) + 1; i < list.length; i++){
+				node = this[list[i] + "Node"];
+				if(node){ return node; }
+			}
+			for(i = list.length - 1; i >= 0; i--){
+				node = this[list[i] + "Node"];
+				if(node){ return node.nextSibling; }
+			}
+			return this.domNode.firstChild;
+		},
+
+		_setIcon: function(/*String*/icon, /*String*/type){
+			if(!this._isOnLine){ return; } // icon may be invalid because inheritParams is not called yet
 			this._set(type, icon);
 			this[type + "Node"] = iconUtils.setIcon(icon, this[type + "Pos"],
-				this[type + "Node"], this[type + "Title"] || this.alt, this.domNode, ref, "before");
+				this[type + "Node"], this[type + "Title"] || this.alt, this.domNode, this._findRef(type), "before");
 			if(this[type + "Node"]){
 				var cap = type.charAt(0).toUpperCase() + type.substring(1);
 				domClass.add(this[type + "Node"], "mblListItem" + cap);
@@ -291,11 +362,11 @@ define([
 		},
 
 		_setDeleteIconAttr: function(/*String*/icon){
-			this._setIcon(icon, "deleteIcon", this.iconNode || this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.labelNode);
+			this._setIcon(icon, "deleteIcon");
 		},
 
 		_setIconAttr: function(icon){
-			this._setIcon(icon, "icon", this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.labelNode);
+			this._setIcon(icon, "icon");
 		},
 
 		_setRightTextAttr: function(/*String*/text){
@@ -307,18 +378,19 @@ define([
 		},
 
 		_setRightIconAttr: function(/*String*/icon){
-			this._setIcon(icon, "rightIcon", this.rightIcon2Node || this.rightTextNode || this.labelNode);
+			this._setIcon(icon, "rightIcon");
 		},
 
 		_setUncheckIconAttr: function(/*String*/icon){
-			this._setIcon(icon, "uncheckIcon", this.rightIcon2Node || this.rightTextNode || this.labelNode);
+			this._setIcon(icon, "uncheckIcon");
 		},
 
 		_setRightIcon2Attr: function(/*String*/icon){
-			this._setIcon(icon, "rightIcon2", this.rightTextNode || this.labelNode);
+			this._setIcon(icon, "rightIcon2");
 		},
 
 		_setCheckedAttr: function(/*Boolean*/checked){
+			if(!this._isOnLine){ return; } // icon may be invalid because inheritParams is not called yet
 			var parent = this.getParent();
 			if(parent && parent.select === "single" && checked){
 				array.forEach(parent.getChildren(), function(child){
@@ -344,7 +416,7 @@ define([
 			if(busy){
 				if(!this.iconNode){
 					this.iconNode = domConstruct.create("div", {className:"mblListItemIcon"},
-						this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.labelNode, "before");
+						this._findRef("icon"), "before");
 				}
 				if(!prog){
 					prog = this._prog = new ProgressIndicator({size:25, center:false});
