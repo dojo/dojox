@@ -28,8 +28,12 @@ define([
 		//		display a group of items. Each item must be
 		//		dojox.mobile.ListItem.
 
-		rightIconForEdit: "images/tab-icon-11.png",
+		rightIconForEdit: "mblDomButtonGrayKnob",
 		deleteIconForEdit: "mblDomButtonRedCircleMinus",
+
+		// isEditing: Boolean
+		//		A read-only flag that indicates whether the widget is in the edit mode.
+		isEditing: false,
 
 		destroy: function(){
 			if(this._blankItem){
@@ -146,10 +150,15 @@ define([
 		},
 
 		startEdit: function(){
+			this.isEditing = true;
 			domClass.add(this.domNode, "mblEditableRoundRectList");
 			array.forEach(this.getChildren(), function(child){
-				child.set("rightIcon", this.rightIconForEdit);
-				child.set("deleteIcon", this.deleteIconForEdit);
+				if(!child.deleteIconNode){
+					child.set("rightIcon", this.rightIconForEdit);
+					child.set("deleteIcon", this.deleteIconForEdit);
+				}
+				child.rightIconNode.style.display = "";
+				child.deleteIconNode.style.display = "";
 			}, this);
 			if(!this._handles){
 				this._handles = [];
@@ -159,10 +168,11 @@ define([
 		},
 
 		endEdit: function(){
+			this.isEditing = false;
 			domClass.remove(this.domNode, "mblEditableRoundRectList");
 			array.forEach(this.getChildren(), function(child){
-				child.set("rightIcon", "");
-				child.set("deleteIcon", "");
+				child.rightIconNode.style.display = "none";
+				child.deleteIconNode.style.display = "none";
 			});
 			if(this._handles){
 				array.forEach(this._handles, this.disconnect, this);
