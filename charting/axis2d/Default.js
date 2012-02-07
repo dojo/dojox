@@ -272,18 +272,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			return g._base._getTextBox(s, {font: font}).w || 0;
 		},
 
-		clear: function(){
-			// if the scale has not changed there is no reason for minMinorStep to change
-			// so keep it and re-set it later
-			this._prevMinMinorStep = this.scaler?this.scaler.minMinorStep:0;
-			this.inherited(arguments);
-		},
-
 		_getMaxLabelSize: function(min, max, span, rotation, font, size){
 			if(this._maxLabelSize == null && arguments.length == 6){
 				var o = this.opt;
 				// everything might have changed, reset the minMinorStep value
-				this.scaler.minMinorStep = 0;
+				this.scaler.minMinorStep = this._prevMinMinorStep = 0;
 				var ob = lang.clone(o);
 				delete o.to;
 				delete o.from;
@@ -332,10 +325,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 
 		calculate: function(min, max, span){
 			this.inherited(arguments);
+			// when the scale has not changed there is no reason for minMinorStep to change
 			this.scaler.minMinorStep = this._prevMinMinorStep;
 			// we want to recompute the dropping mechanism only when the scale or the size of the axis is changing
 			// not when for example when we scroll (otherwise effect would be weird)
-			if(this._invalidMaxLabelSize || span != this._oldSpan){
+			if((this._invalidMaxLabelSize || span != this._oldSpan) && (min != Infinity && max != -Infinity)){
 				this._invalidMaxLabelSize = false;
 				this._oldSpan = span;
 				var o = this.opt;
@@ -384,7 +378,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 						break;
 					}
 					// we need to check both minor and major labels fit a minor step
-					this.scaler.minMinorStep = Math.max(majLabelW, minLabelW) + labelGap;
+					this.scaler.minMinorStep = this._prevMinMinorStep =  Math.max(majLabelW, minLabelW) + labelGap;
 					var canMinorLabel = this.scaler.minMinorStep <= this.scaler.minor.tick * this.scaler.bounds.scale;
 					if(!canMinorLabel){
 						// we can't place minor labels, let's see if we can place major ones
