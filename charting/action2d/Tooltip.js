@@ -75,7 +75,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 			if(!o.shape || o.type !== "onmouseover"){ return; }
 			
 			// calculate relative coordinates and the position
-			var aroundRect = {type: "rect"}, position = ["after", "before"];
+			var aroundRect = {type: "rect"}, position = ["after-centered", "before-centered"];
 			switch(o.element){
 				case "marker":
 					aroundRect.x = o.cx;

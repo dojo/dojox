@@ -511,10 +511,10 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 					aroundRect.y += lt.y;
 					aroundRect.x = Math.round(aroundRect.x);
 					aroundRect.y = Math.round(aroundRect.y);
-					aroundRect.width = Math.ceil(aroundRect.width);
-					aroundRect.height = Math.ceil(aroundRect.height);
+					aroundRect.w = Math.ceil(aroundRect.width);
+					aroundRect.h = Math.ceil(aroundRect.height);
 					this.aroundRect = aroundRect;
-					var position = ["after", "before"];
+					var position = ["after-centered", "before-centered"];
 					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
 						Tooltip.show(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
 					}));
