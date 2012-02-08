@@ -2,7 +2,7 @@ define([
 	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/window",
-	"dojox/mobile/sniff"
+	"./sniff"
 ], function(dojo, lang, win, has){
 	win.doc.documentElement.className += lang.trim([
 		has('bb') ? "dj_bb" : "",

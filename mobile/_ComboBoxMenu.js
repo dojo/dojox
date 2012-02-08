@@ -5,7 +5,7 @@ define([
 	"dojo/dom-construct",
 	"dijit/form/_ComboBoxMenuMixin",
 	"dijit/_WidgetBase",
-	"dojox/mobile/_ListTouchMixin",
+	"./_ListTouchMixin",
 	"./scrollable"
 ],
 	function(dojo, declare, domClass, domConstruct, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable){

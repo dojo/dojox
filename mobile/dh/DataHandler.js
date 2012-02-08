@@ -2,7 +2,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/Deferred",
-	"dojox/mobile/dh/ContentTypeMap"
+	"./ContentTypeMap"
 ], function(declare, lang, Deferred, ContentTypeMap){
 
 	// module:

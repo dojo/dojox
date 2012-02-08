@@ -6,7 +6,7 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dijit/registry",
-	"dojox/mobile/lazyLoadUtils"
+	"../lazyLoadUtils"
 ], function(dojo, array, declare, Deferred, domClass, domConstruct, registry, lazyLoadUtils){
 
 	// module:

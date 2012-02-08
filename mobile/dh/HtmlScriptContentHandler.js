@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"./HtmlContentHandler",
-	"dojox/mobile/_ExecScriptMixin"
+	"./_ExecScriptMixin"
 ], function(declare, HtmlContentHandler, _ExecScriptMixin){
 
 	return declare("dojox.mobile.dh.HtmlScriptContentHandler", [HtmlContentHandler, _ExecScriptMixin], {
