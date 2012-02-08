@@ -15,8 +15,20 @@ span.mblToolBarButton {
   padding: 6px 10px 7px 10px;
   display: inline;
 }
+span.mblToolBarButtonLightIcon {
+  padding: 0;
+}
 table.mblToolBarButton {
   vertical-align: middle;
+}
+.mblHeading .mblToolBarButton {
+  float: left;
+}
+.mblHeading span.mblToolBarButton {
+  padding: 0 10px;
+}
+.mblHeading span.mblToolBarButtonLightIcon {
+  padding: 0;
 }
 .mblToolBarButtonCell {
   position: relative;
@@ -29,10 +41,10 @@ table.mblToolBarButton {
 .mblToolBarButtonArrow {
   position: absolute;
   top: 5px;
-  width: 19px;
+  width: 20px;
   height: 19px;
   border-radius: 1px;
-  -webkit-transform: scale(0.7, 0.99) rotate(45deg);
+  -webkit-transform: scale(0.7, 1.05) rotate(45deg);
   border: 1px solid #9cacc0;
 }
 .mblToolBarButtonHasLeftArrow .mblToolBarButtonArrow {
@@ -52,9 +64,6 @@ table.mblToolBarButton {
 }
 .mblToolBarButtonBody table {
   margin: 0 auto;
-}
-.dj_ie .mblToolBarButtonBody table {
-  margin: 0;
 }
 .mblToolBarButtonHasLeftArrow .mblToolBarButtonBody {
   left: 11px;
@@ -81,10 +90,4 @@ table.mblToolBarButton {
 }
 .mblToolBarButtonIcon > div {
   height: 29px;
-}
-.mblHeading .mblToolBarButton {
-  float: left;
-}
-.mblHeading span.mblToolBarButton {
-  padding: 0 10px;
 }
