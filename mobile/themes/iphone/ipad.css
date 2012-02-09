@@ -2,7 +2,6 @@
 
 /* dojox.mobile.Heading */
 .dj_tablet .mblHeading {
-	background-color: #889bb3;
 	background: -webkit-gradient(linear, left top, left bottom, from(#f3f4f6), to(#a7abb8));
 	border-top: 1px solid #fefefe;
 	border-bottom: 1px solid #787e8f;
@@ -10,67 +9,21 @@
 	text-shadow: rgba(256,256,256,0.6) 0px 1px 0px;
 }
 
-/*Headings and Button styles are overridden in Tooltips*/
-.dj_tablet .mblTooltip .mblHeading { 
-	position: relative;
-	margin: 0px;
-	width: 100%;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	padding: 0px;
-	height: 42px;
-	background-color: #889bb3;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#5e6167), to(#1a1d24), color-stop(0.5, #2e322b));
-	border-top: 3px solid #4f5055;
-	border-bottom: 1px solid #2d3642;
-	color: white;
-	font-family: Helvetica;
-	font-size: 20px;
-	font-weight: normal;
-	text-align: center;
-	line-height: 44px;
+/* dojox.mobile.ToolBarButton */
+.dj_tablet .mblToolBarButton {
 	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
-	z-index: 1;
-	border-left: 1px solid #2a2d47;
-	border-radius: 3px 3px 0 0;
 }
-.dj_tablet .mblTooltip .mblHeading .mblToolBarButton {
-	float: left;
-	position: relative;
-	cursor: pointer;
-	-webkit-tap-highlight-color: rgba(255,255,255,0);
-	margin: 6px;
-	padding: 0px 10px;
-	height: 29px;
-	border: 1px inset #434450;
-	font-family: Helvetica;
-	font-size: 13px;
-	font-weight: normal;
-	color: white;
-	line-height: 29px;
-	text-align: center;
-	border-radius: 5px;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#686f80), to(#000924), color-stop(0.5, #000b29));
+.dj_tablet .mblHeading .mblToolBarButtonArrow {
+	border-color: #60656f #60656f #5a5c5f #5a5c5f;
+}
+.dj_tablet .mblHeading .mblToolBarButtonBody {
+	border-color: #4e4f51 #60656f #565b64 #5a5c5f;
 }
 
-/* Heading Arrow Button */
-.dj_tablet .mblBackButtonHead {
-	border-color: #4d4e50;
-	background: -webkit-gradient(linear, left top, right bottom, from(#b1b5bb), to(#6a727d));
-}
-.dj_tablet .mblBackButtonBody {
-	border-color: #c0c0c0;
-	background-color: #8b919a;
-	background: -webkit-gradient(linear, left top, left bottom, from(#b1b5bb), to(#6a727d));
-	-webkit-tap-highlight-color: rgba(255,255,255,0);
-	text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
-}
-.dj_tablet .mblBackButtonSelected .mblBackButtonHead {
-	background: -webkit-gradient(linear, left top, right bottom, from(#9da0a3), to(#43484f));
-}
-.dj_tablet .mblBackButtonSelected .mblBackButtonBody {
-	background: -webkit-gradient(linear, left top, left bottom, from(#9da0a3), to(#43484f));
+/*Headings and Button styles are overridden in Tooltips*/
+.dj_tablet .mblTooltip .mblHeading { 
+	color: white;
+	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
 }
 
 /* dojox.mobile.RoundRect */
@@ -110,7 +63,7 @@
 /* dojox.mobile.TabBar */
 .dj_tablet .mblTabBar {
 	color: #70777f;
-	text-shadow: rgba(256,256,256,0.6) 0px 1px 0px;
+	text-shadow: rgba(255,255,255,0.6) 0px 1px 0px;
 }
 /* barType=tabBar */
 .dj_tablet .mblTabBarTabBar {
@@ -126,8 +79,8 @@
 }
 .dj_tablet .mblTabBarSegmentedControl .mblTabBarButton {
 	background-color: #889bb3;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f3f4f6), to(#a7abb8));
-	border-color: silver;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#f3f4f6), to(#a7abb8));
+	border-color: #4e4f51 #60656f #565b64 #5a5c5f;
 	color: #70777f;
 	text-shadow: none;
 }
@@ -136,6 +89,9 @@
 	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
 	background-color: #8b919a;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#b1b5bb), to(#6a727d));
+}
+.dj_tablet .mblHeading .mblTabBarSegmentedControl {
+ 	border: none;
 }
 /* barType=standardTab */
 .dj_tablet .mblTabBarStandardTab .mblTabBarButton {
@@ -151,19 +107,11 @@
 	color: white;
 }
 
-/* dojox.mobile.ToolBarButton */
-.dj_tablet .mblToolBarButton {
-	text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
-	border: 1px inset silver;
-}
-
 /* Default Button Colors */
 .dj_tablet .mblColorDefault {
-	background-color: #8b919a;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#b1b5bb), to(#6a727d));
 
 }
 .dj_tablet .mblColorDefaultSel {
-	background-color: #515761;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#7a7e85), to(#303845));
 }
