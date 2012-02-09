@@ -77,6 +77,10 @@ define([
 			if(!config['mblCSS3Transition']){
 			    this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
 			}
+			if(config["mblAndroidWorkaround"] !== false && has('android')){
+				// workaround for the screen flicker issue on Android 2.2 (partially works for 3.x/4.0)
+				domStyle.set(this.domNode, "webkitTransformStyle", "preserve-3d");
+			}
 
 			viewRegistry.add(this);
 			this.inherited(arguments);

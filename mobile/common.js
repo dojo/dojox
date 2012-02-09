@@ -186,6 +186,11 @@ define([
 	ready(function(){
 		dm.detectScreenSize(true);
 
+		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
+			// workaround for the form button disappearing issue on Android 2.2-4.0
+			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, win.doc.head, "first");
+		}
+
 		//	You can disable hiding the address bar with the following djConfig.
 		//	var djConfig = { mblHideAddressBar: false };
 		var f = dm.resizeAll;

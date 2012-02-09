@@ -253,10 +253,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			for(var i = 0; i < 3; i++){
 				this.setKeyframes(null, null, i);
 			}
-		}
-		// Workaround for iPhone flicker issue
-		if(has('iphone')){
-			domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
+			if(dm.hasTranslate3d){ // workaround for flicker issue on iPhone and Android 3.x/4.0
+				domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
+			}
 		}
 
 		this._speed = {x:0, y:0};
