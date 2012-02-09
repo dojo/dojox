@@ -23,7 +23,7 @@
 .dijitCalendarMonthMenu {
   border: 1px solid black;
   border-radius: 6px;
-  background-color: black;
+  background-color: white;
 }
 .dijitCalendarMonthMenu .dijitCalendarMonthLabel {
   color: black;
