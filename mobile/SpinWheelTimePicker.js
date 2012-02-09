@@ -46,11 +46,11 @@ define([
 			var slots = this.slots;
 			var now = new Date();
 			var _h = now.getHours() + "";
-			slots[0].setValue(_h);
+			slots[0].set("value", _h);
 			slots[0].setColor(_h);
 			var m = now.getMinutes();
 			var _m = (m < 10 ? "0" : "") + m;
-			slots[1].setValue(_m);
+			slots[1].set("value", _m);
 			slots[1].setColor(_m);
 		}
 	});

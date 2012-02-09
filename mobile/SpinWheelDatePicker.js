@@ -81,7 +81,7 @@ define([
 			var slots = this.slots;
 			var now = new Date();
 			var monthStr = datelocale.format(now, {datePattern:"MMM", selector:"date"});
-			this.setValue([now.getFullYear(), monthStr, now.getDate()]);
+			this.set("value", [now.getFullYear(), monthStr, now.getDate()]);
 		},
 
 		onMonthSet: function(){
@@ -95,13 +95,13 @@ define([
 		onDaySet: function(){
 			// summary:
 			//		A handler called when the day value is changed.
-			var y = this.slots[0].getValue();
-			var m = this.slots[1].getValue();
+			var y = this.slots[0].get("value");
+			var m = this.slots[1].get("value");
 			var newMonth = datelocale.parse(y+"/"+m, {datePattern:'yyyy/MMM', selector:'date'});
 			var daysInMonth = ddate.getDaysInMonth(newMonth);
-			var d = this.slots[2].getValue();
+			var d = this.slots[2].get("value");
 			if(daysInMonth < d){
-				this.slots[2].setValue(daysInMonth);
+				this.slots[2].set("value", daysInMonth);
 			}
 			return daysInMonth;
 		}
