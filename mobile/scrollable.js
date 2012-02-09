@@ -26,6 +26,7 @@ if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 			return (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
 				navigator.appVersion.indexOf("Mobile") != -1) || !!dojo.has("android");
 		}
+		return null;
 	};
 
 	dojo.stopEvent = function(evt){
@@ -582,7 +583,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			to.x = pos.x + speed.x;
 		}
 
-		this.adjustDestination(to, pos, dim);
+		if(this.adjustDestination(to, pos, dim) === false){ return; }
 
 		if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
 			this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
@@ -661,6 +662,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 	this.adjustDestination = function(to, pos, dim){
 		// subclass may want to implement
+		return true;
 	};
 
 	this.abort = function(){
