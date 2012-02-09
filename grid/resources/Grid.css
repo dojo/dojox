@@ -288,6 +288,12 @@
 }
 
 /* Drag and Drop */
+.dojoxGridRowTable .dojoDndHorizontal th.dojoDndItem {
+	display: table-cell;
+	/* overwrite margin/padding setting from dijit.css */
+	margin: 0;
+	padding: 3px;
+}
 .dojoxGridDndAvatar {
 	font-size: 100%;
 }
