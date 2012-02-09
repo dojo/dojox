@@ -58,6 +58,7 @@
 		.mblTabBarTabBarButtonLabel-styles;
 	}
 	.mblTabBarButtonSelected {
+		border-radius: 3px;
 		.mblTabBarTabBarButtonSelected-styles;
 	}
 	.mblTabBarButtonSelected .mblTabBarButtonLabel {
@@ -77,13 +78,12 @@
 		}
 		.mblTabBarButtonIconArea {
 			position: relative;
-			display: block;
 		}
 	}
 	.mblTabBarButton {
-		margin-top: 6px;
+		margin: 6px 0;
 		width: 100px;
-		height: 28px;
+		height: 29px;
 		border-width: 1px 1px 1px 0px;
 		font-family: Helvetica;
 		font-size: 13px;
@@ -93,14 +93,15 @@
 		.mblTabBarSegmentedControlButton-styles;
 		&:first-child {
 			border-left-width: 1px;
-			.mblTabBarSegmentedControlButton-FirstChild-styles;
+			border-top-left-radius: @mbl-tab-bar-segmented-control-border-radius;
+			border-bottom-left-radius: @mbl-tab-bar-segmented-control-border-radius;
 		}
 		&:last-child {
-			.mblTabBarSegmentedControlButton-LastChild-styles;
+			border-top-right-radius: @mbl-tab-bar-segmented-control-border-radius;
+			border-bottom-right-radius: @mbl-tab-bar-segmented-control-border-radius;
 		}
 	}
 	.mblTabBarButtonIconArea {
-		display: none;
 		position: absolute;
 		top: 0px;
 		left: 0px;

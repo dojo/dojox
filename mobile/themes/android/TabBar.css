@@ -70,12 +70,11 @@
 }
 .mblTabBarSegmentedControl.mblTabBarNoText .mblTabBarButtonIconArea {
   position: relative;
-  display: block;
 }
 .mblTabBarSegmentedControl .mblTabBarButton {
-  margin-top: 6px;
+  margin: 6px 0;
   width: 100px;
-  height: 28px;
+  height: 29px;
   border-width: 1px 1px 1px 0px;
   font-family: Helvetica;
   font-size: 13px;
@@ -97,7 +96,6 @@
   border-bottom-right-radius: 5px;
 }
 .mblTabBarSegmentedControl .mblTabBarButtonIconArea {
-  display: none;
   position: absolute;
   top: 0px;
   left: 0px;

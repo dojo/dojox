@@ -70,37 +70,33 @@
 }
 .mblTabBarSegmentedControl.mblTabBarNoText .mblTabBarButtonIconArea {
   position: relative;
-  display: block;
 }
 .mblTabBarSegmentedControl .mblTabBarButton {
-  margin-top: 6px;
+  margin: 6px 0;
   width: 100px;
-  height: 28px;
+  height: 29px;
   border-width: 1px 1px 1px 0px;
   font-family: Helvetica;
   font-size: 13px;
   font-weight: bold;
   text-align: center;
   line-height: 29px;
-  border-style: inset;
-  border-color: #9cacc0;
-  border-right-color: #5e708a;
+  border-style: solid;
+  border-color: #2f3740 #405a7e #375073 #3a4755;
   color: white;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#b0bccd), to(#6d84a2), color-stop(0.5, #889bb3), color-stop(0.5, #8195af));
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.305);
 }
 .mblTabBarSegmentedControl .mblTabBarButton:first-child {
   border-left-width: 1px;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  border-left-width: 1px;
 }
 .mblTabBarSegmentedControl .mblTabBarButton:last-child {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  border-right-color: #9cacc0;
 }
 .mblTabBarSegmentedControl .mblTabBarButtonIconArea {
-  display: none;
   position: absolute;
   top: 0px;
   left: 0px;
