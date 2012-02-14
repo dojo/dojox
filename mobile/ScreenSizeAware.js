@@ -32,7 +32,7 @@ define([
 		// example:
 		// |	<span dojoType="dojox.mobile.ScreenSizeAware"></span>
 		// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
-		// |	  <div dojoType="dojox.mobile.FixedSplitterPane" style="width:300px;">
+		// |	  <div dojoType="dojox.mobile.Container" style="width:300px;">
 		// |	    <div id="leftView" dojoType="dojox.mobile.ScrollableView">
 		// |	      <h1 dojoType="dojox.mobile.Heading" fixed="top">Left Pane</h1>
 		// |	      <ul dojoType="dojox.mobile.EdgeToEdgeList" stateful="true">
@@ -41,7 +41,7 @@ define([
 		// |	      </ul>
 		// |	    </div>
 		// |	  </div>
-		// |	  <div dojoType="dojox.mobile.FixedSplitterPane">
+		// |	  <div dojoType="dojox.mobile.Container">
 		// |	    <div id="view1" dojoType="dojox.mobile.ScrollableView">
 		// |	      <h1 dojoType="dojox.mobile.Heading" fixed="top" back="Home" moveTo="leftView">Right Pane</h1>
 		// |	      ....
@@ -54,11 +54,11 @@ define([
 		splitterId: "",
 
 		// splitter: String
-		//		The id of the left FixedSplitterPane
+		//		The id of the left pane
 		leftPaneId: "",
 
 		// splitter: String
-		//		The id of the right FixedSplitterPane
+		//		The id of the right pane
 		rightPaneId: "",
 
 		// splitter: String
@@ -200,7 +200,7 @@ define([
 				var items = array.filter(this.leftList.getChildren(),
 					function(item){ return this.getDestinationId(item) === id; }, this);
 				if(items && items.length > 0){
-					items[0].select();
+					items[0].set("selected", true);
 				}
 			}else{
 				this.leftList.deselectAll && this.leftList.deselectAll();
