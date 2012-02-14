@@ -86,6 +86,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
+			this.hAxis = this.opt.hAxis;
+			this.vAxis = this.opt.vAxis;
 			this.animate = this.opt.animate;
 			if(this.opt.enableCache){
 				this._lineFreePool = [];
