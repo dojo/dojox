@@ -1,6 +1,6 @@
-define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys",  
+define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/declare", "dojo/on", "dojo/keys", "dojo/dom-attr",
 	"./_utils", "dijit/_FocusMixin"],
-	function(arr, lang, event, declare, on, keys, utils, _FocusMixin){
+	function(arr, lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
 		
 	/*=====
 	var _FocusMixin = dijit._FocusMixin;
@@ -28,6 +28,14 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 			this.inherited(arguments);
 			this._keyDownHandle.remove();
 			this._mouseDownHandle.remove();
+		},
+
+		createRenderer: function(item, level, kind){
+			var renderer = this.inherited(arguments);
+			// on Firefox we need a tabindex on sub divs to let the keyboard event be dispatched
+			// put -1 so that it is not tablable
+			domAttr.set(renderer, "tabindex", "-1");
+			return renderer;
 		},
 		
 		_onMouseDown: function(e){
