@@ -34,12 +34,12 @@ var _WidgetBase = dijit._WidgetBase;
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dc.axis2d[type]){
-				type = dojo._scopeName + "x.charting.axis2d." + type;
+				type = kernel._scopeName + "x.charting.axis2d." + type;
 			}
 			var axis = eval("(" + type + ")");
 			if(axis){ kw.type = axis; }
 		}else{
-			type = dojo._scopeName + "x.charting.axis2d.Default";
+			type = kernel._scopeName + "x.charting.axis2d.Default";
 		}
 		collectParams(node, type, kw);
 		// compatibility conversions
@@ -64,12 +64,12 @@ var _WidgetBase = dijit._WidgetBase;
 		var o = {name: name, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dc.plot2d && dc.plot2d[type]){
-				type = dojo._scopeName + "x.charting.plot2d." + type;
+				type = kernel._scopeName + "x.charting.plot2d." + type;
 			}
 			var plot = eval("(" + type + ")");
 			if(plot){ kw.type = plot; }
 		}else{
-			type = dojo._scopeName + "x.charting.plot2d.Default";
+			type = kernel._scopeName + "x.charting.plot2d.Default";
 		}
 		collectParams(node, type, kw);
 		return o;
@@ -82,7 +82,7 @@ var _WidgetBase = dijit._WidgetBase;
 		var o = {plot: plot, kwArgs: {}}, kw = o.kwArgs;
 		if(type){
 			if(dc.action2d[type]){
-				type = dojo._scopeName + "x.charting.action2d." + type;
+				type = kernel._scopeName + "x.charting.action2d." + type;
 			}
 			var action = eval("(" + type + ")");
 			if(!action){ return null; }
