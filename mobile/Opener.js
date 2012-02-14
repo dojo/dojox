@@ -1,5 +1,6 @@
 define([
 	"dojo/_base/declare",
+	"dojo/_base/Deferred",
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-class",
@@ -7,8 +8,9 @@ define([
 	"dojo/dom-style",
 	"dojo/dom-geometry",
 	"./Tooltip",
-	"./Overlay"
-], function(declare, lang, win, domClass, domConstruct, domStyle, domGeometry, Tooltip, Overlay){
+	"./Overlay",
+	"./lazyLoadUtils"
+], function(declare, Deferred, lang, win, domClass, domConstruct, domStyle, domGeometry, Tooltip, Overlay, lazyLoadUtils){
 
 	/*=====
 		Tooltip = dojox.mobile.Tooltip;
@@ -19,6 +21,22 @@ define([
 		// summary:
 		//		A non-templated popup widget that will use either Tooltip or Overlay depending on screen size
 		//
+
+		// lazy: String
+		//		If true, the content of the widget, which includes dojo markup,
+		//		is instantiated lazily. That is, only when the widget is opened
+		//		by the user, the required modules are loaded and the content
+		//		widgets are instantiated.
+		lazy: false,
+
+		// requires: String
+		//		Comma-separated required module names to be lazily loaded. This
+		//		is effective only when lazy=true. All the modules specified with
+		//		dojoType and their depending modules are automatically loaded
+		//		when the widget is opened. However, if you need other extra
+		//		modules to be loaded, use this parameter.
+		requires: "",
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			this.cover = domConstruct.create('div', {
@@ -31,6 +49,13 @@ define([
 		onHide: function(/*DomNode*/node, /*Anything*/v){},
 
 		show: function(node, positions){
+			if(this.lazy){
+				this.lazy = false;
+				var _this = this;
+				return Deferred.when(lazyLoadUtils.instantiateLazyWidgets(this.domNode, this.requires), function(){
+					return _this.show(node, positions);
+				});
+			}
 			this.node = node;
 			this.onShow(node);
 			domStyle.set(this.cover, { top:'0px', left:'0px', width:'0px', height:'0px' }); // move cover temporarily to calculate domNode vertical position correctly
