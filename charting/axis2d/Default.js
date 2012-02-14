@@ -11,7 +11,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			min, max, from, to, majorTickStep, minorTickStep, microTickStep,
 			labels, labelFunc, maxLabelSize,
 			stroke, majorTick, minorTick, microTick, tick,
-			font, fontColor
+			font, fontColor){
 	
 		//	summary:
 		//		Optional arguments used in the definition of an axis.
@@ -153,7 +153,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 
 		 //	opt: Object
 		 //		The actual options used to define this axis, created at initialization.
-		 //	scalar: Object
+		 //	scaler: Object
 		 //		The calculated helper object to tell charts how to draw an axis and any data.
 		 //	ticks: Object
 		 //		The calculated tick object that helps a chart draw the scaling on an axis.
@@ -165,7 +165,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		 //		The current offset of the axis.
 
 		 opt: null,
-		 scalar: null,
+		 scaler: null,
 		 ticks: null,
 		 dirty: true,
 		 scale: 1,

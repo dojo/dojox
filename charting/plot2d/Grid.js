@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
-		"../Element", "./common", "dojox/lang/utils", "dojox/gfx/fx"], 
-	function(lang, declare, hub, arr, Element, dc, du, fx){
+		"./CartesianBase", "./common", "dojox/lang/utils", "dojox/gfx/fx"],
+	function(lang, declare, hub, arr, CartesianBase, dc, du, fx){
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -48,10 +48,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		Whether or not the grid is rendered when drawn at horizontal or vertical axis position. Default is true.
 		renderOnAxis: true
 	});
-	var Element = dojox.charting.plot2d.Element;
+	var CartesianBase = dojox.charting.plot2d.CartesianBase;
 	=====*/
 
-	return declare("dojox.charting.plot2d.Grid", Element, {
+	return declare("dojox.charting.plot2d.Grid", CartesianBase, {
 		//	summary:
 		//		A "faux" plot that can be placed behind other plots to represent
 		//		a grid against which other plots can be easily measured.
@@ -86,37 +86,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.hAxis = this.opt.hAxis;
-			this.vAxis = this.opt.vAxis;
-			this.dirty = true;
 			this.animate = this.opt.animate;
-			this.zoom = null,
-			this.zoomQueue = [];	// zooming action task queue
-			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
 			if(this.opt.enableCache){
 				this._lineFreePool = [];
 				this._lineUsePool = [];
 			}
-		},
-		clear: function(){
-			//	summary:
-			//		Clear out any parameters set on this plot.
-			//	returns: dojox.charting.plot2d.Grid
-			//		The reference to this plot for functional chaining.
-			this._hAxis = null;
-			this._vAxis = null;
-			this.dirty = true;
-			return this;	//	dojox.charting.plot2d.Grid
-		},
-		setAxis: function(axis){
-			//	summary:
-			//		Set an axis for this plot.
-			//	returns: dojox.charting.plot2d.Grid
-			//		The reference to this plot for functional chaining.
-			if(axis){
-				this[axis.vertical ? "_vAxis" : "_hAxis"] = axis;
-			}
-			return this;	//	dojox.charting.plot2d.Grid
 		},
 		addSeries: function(run){
 			//	summary:
@@ -131,79 +105,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(dc.defaultStats);
-		},
-		initializeScalers: function(){
-			//	summary:
-			//		Does nothing (irrelevant for this type of plot).
-			return this;
-		},
-		isDirty: function(){
-			//	summary:
-			//		Return whether or not this plot needs to be redrawn.
-			//	returns: Boolean
-			//		If this plot needs to be rendered, this will return true.
-			return this.dirty || this._hAxis && this._hAxis.dirty || this._vAxis && this._vAxis.dirty;	//	Boolean
-		},
-		performZoom: function(dim, offsets){
-			//	summary:
-			//		Create/alter any zooming windows on this plot.
-			//	dim: Object
-			//		An object of the form { width, height }.
-			//	offsets: Object
-			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.plot2d.Grid
-			//		A reference to this plot for functional chaining.
-
-			// get current zooming various
-			var vs = this._vAxis.scale || 1,
-				hs = this._hAxis.scale || 1,
-				vOffset = dim.height - offsets.b,
-				hBounds = this._hAxis.getScaler().bounds,
-				xOffset = (hBounds.from - hBounds.lower) * hBounds.scale,
-				vBounds = this._vAxis.getScaler().bounds,
-				yOffset = (vBounds.from - vBounds.lower) * vBounds.scale,
-				// get incremental zooming various
-				rVScale = vs / this.lastWindow.vscale,
-				rHScale = hs / this.lastWindow.hscale,
-				rXOffset = (this.lastWindow.xoffset - xOffset)/
-					((this.lastWindow.hscale == 1)? hs : this.lastWindow.hscale),
-				rYOffset = (yOffset - this.lastWindow.yoffset)/
-					((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
-
-				shape = this.group,
-				anim = fx.animateTransform(lang.delegate({
-					shape: shape,
-					duration: 1200,
-					transform:[
-						{name:"translate", start:[0, 0], end: [offsets.l * (1 - rHScale), vOffset * (1 - rVScale)]},
-						{name:"scale", start:[1, 1], end: [rHScale, rVScale]},
-						{name:"original"},
-						{name:"translate", start: [0, 0], end: [rXOffset, rYOffset]}
-					]}, this.zoom));
-
-			lang.mixin(this.lastWindow, {vscale: vs, hscale: hs, xoffset: xOffset, yoffset: yOffset});
-			//add anim to zooming action queue,
-			//in order to avoid several zooming action happened at the same time
-			this.zoomQueue.push(anim);
-			//perform each anim one by one in zoomQueue
-			hub.connect(anim, "onEnd", this, function(){
-				this.zoom = null;
-				this.zoomQueue.shift();
-				if(this.zoomQueue.length > 0){
-					this.zoomQueue[0].play();
-				}
-			});
-			if(this.zoomQueue.length == 1){
-				this.zoomQueue[0].play();
-			}
-			return this;	//	dojox.charting.plot2d.Grid
-		},
-		getRequiredColors: function(){
-			//	summary:
-			//		Ignored but included as a dummy method.
-			//	returns: Number
-			//		Returns 0, since there are no series associated with this plot type.
-			return 0;	//	Number
 		},
 		cleanGroup: function(){
 			this.inherited(arguments);

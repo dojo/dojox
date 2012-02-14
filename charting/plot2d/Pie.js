@@ -100,6 +100,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
+			this.axes = [];
 			this.run = null;
 			this.dyn = [];
 		},
@@ -108,7 +109,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			//		Clear out all of the information tied to this plot.
 			//	returns: dojox.charting.plot2d.Pie
 			//		A reference to this plot for functional chaining.
-			this.dirty = true;
+			this.inherited(arguments);
 			this.dyn = [];
 			this.run = null;
 			return this;	//	dojox.charting.plot2d.Pie
@@ -135,17 +136,11 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(dc.defaultStats);
 		},
-		initializeScalers: function(){
-			//	summary:
-			//		Does nothing (irrelevant for this type of plot).
-			return this;
-		},
 		getRequiredColors: function(){
 			//	summary:
 			//		Return the number of colors needed to draw this plot.
 			return this.run ? this.run.data.length : 0;
 		},
-
 		render: function(dim, offsets){
 			//	summary:
 			//		Render the plot on the chart.

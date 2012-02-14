@@ -1,12 +1,13 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "./common", 
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./CartesianBase", "./_PlotEvents", "./common",
 	"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx", "dojox/gfx/gradutils"],
-	function(lang, arr, declare, Base, dc, df, dfr, du, fx, gradutils){
+	function(lang, arr, declare, CartesianBase, _PlotEvents, dc, df, dfr, du, fx, gradutils){
 /*=====
-var Base = dojox.charting.plot2d.Base;
+var CartesianBase = dojox.charting.plot2d.CartesianBase;
+var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.Scatter", Base, {
+	return declare("dojox.charting.plot2d.Scatter", [CartesianBase, _PlotEvents], {
 		//	summary:
 		//		A plot object representing a typical scatter chart.
 		defaultParams: {

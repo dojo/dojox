@@ -1,6 +1,25 @@
 define(["dojo/_base/declare", "../Element"], 
 	function(declare, Element){
 /*=====
+	/*=====
+		dojox.charting.axis2d.__BaseAxisCtorArgs = function(
+			vertical, min, max, from, to){
+
+		//	summary:
+		//		Optional arguments used in the definition of an invisible axis.
+		//
+		//	vertical: Boolean?
+		//		A flag that says whether an axis is vertical (i.e. y axis) or horizontal. Default is false (horizontal).
+		//	min: Number?
+		//		The smallest value on an axis. Default is 0.
+		//	max: Number?
+		//		The largest value on an axis. Default is 1.
+
+		this.vertical = vertical;
+		this.min = min;
+		this.max = max;
+	}
+
 var Element = dojox.charting.Element;
 =====*/ 
 return declare("dojox.charting.axis2d.Base", Element, {
@@ -13,9 +32,12 @@ return declare("dojox.charting.axis2d.Base", Element, {
 		//		Return a new base axis.
 		//	chart: dojox.charting.Chart
 		//		The chart this axis belongs to.
-		//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
+		//	kwArgs: dojox.charting.axis2d.__BaseAxisCtorArgs?
 		//		An optional arguments object to define the axis parameters.
 		this.vertical = kwArgs && kwArgs.vertical;
+		this.opt = {};
+		this.opt.min = kwArgs && kwArgs.min;
+		this.opt.max = kwArgs && kwArgs.max;
 	},
 	clear: function(){
 		//	summary:

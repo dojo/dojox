@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Base", "./common", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./CartesianBase", "./_PlotEvents", "./common",
 	"dojox/gfx/fx", "dojox/lang/utils", "dojox/lang/functional", "dojox/lang/functional/reversed"], 
-	function(dojo, lang, arr, declare, Base, dc, fx, du, df, dfr){
+	function(dojo, lang, arr, declare, CartesianBase, _PlotEvents, dc, fx, du, df, dfr){
 		
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -44,11 +44,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
-	var Base = dojox.charting.plot2d.Base;
+	var CarstesianBase = dojox.charting.plot2d.CartesianBase;
+	var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 	=====*/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.Bars", Base, {
+	return declare("dojox.charting.plot2d.Bars", [CartesianBase, _PlotEvents], {
 		//	summary:
 		//		The plot object representing a bar chart (horizontal bars).
 		defaultParams: {

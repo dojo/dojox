@@ -1,13 +1,83 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
-	"dojox/gfx", "dojox/lang/utils", "dojo/string"],
-	function(lang, declare, Base, lin, g, du, dstring){
+	"dojox/gfx", "dojox/lang/utils"],
+	function(lang, declare, Base, lin, g, du){
+
+	/*=====
+		dojox.charting.axis2d.__InvisibleAxisCtorArgs = function(
+			vertical, fixUpper, fixLower, natural, leftBottom,
+			includeZero, fixed, majorLabels, minorTicks, minorLabels, microTicks,
+			min, max, from, to, majorTickStep, minorTickStep, microTickStep){
+
+		//	summary:
+		//		Optional arguments used in the definition of an invisible axis.
+		//
+		//	vertical: Boolean?
+		//		A flag that says whether an axis is vertical (i.e. y axis) or horizontal. Default is false (horizontal).
+		//	fixUpper: String?
+		//		Align the greatest value on the axis with the specified tick level. Options are "major", "minor", "micro", or "none".  Defaults to "none".
+		//	fixLower: String?
+		//		Align the smallest value on the axis with the specified tick level. Options are "major", "minor", "micro", or "none".  Defaults to "none".
+		//	natural: Boolean?
+		//		Ensure tick marks are made on "natural" numbers. Defaults to false.
+		//	leftBottom: Boolean?
+		//		The position of a vertical axis; if true, will be placed against the left-bottom corner of the chart.  Defaults to true.
+		//	includeZero: Boolean?
+		//		Include 0 on the axis rendering.  Default is false.
+		//	fixed: Boolean?
+		//		Force all axis labels to be fixed numbers.  Default is true.
+		//	majorLabels: Boolean?
+		//		Flag to draw all labels at major ticks. Default is true.
+		//	minorTicks: Boolean?
+		//		Flag to draw minor ticks on an axis.  Default is true.
+		//	minorLabels: Boolean?
+		//		Flag to draw labels on minor ticks. Default is true.
+		//	microTicks: Boolean?
+		//		Flag to draw micro ticks on an axis. Default is false.
+		//	min: Number?
+		//		The smallest value on an axis. Default is 0.
+		//	max: Number?
+		//		The largest value on an axis. Default is 1.
+		//	from: Number?
+		//		Force the chart to render data visible from this value. Default is 0.
+		//	to: Number?
+		//		Force the chart to render data visible to this value. Default is 1.
+		//	majorTickStep: Number?
+		//		The amount to skip before a major tick is drawn. When not set the major ticks step is computed from
+		//		the data range.
+		//	minorTickStep: Number?
+		//		The amount to skip before a minor tick is drawn. When not set the minor ticks step is computed from
+		//		the data range.
+		//	microTickStep: Number?
+		//		The amount to skip before a micro tick is drawn. When not set the micro ticks step is computed from
+
+		this.vertical = vertical;
+		this.fixUpper = fixUpper;
+		this.fixLower = fixLower;
+		this.natural = natural;
+		this.leftBottom = leftBottom;
+		this.includeZero = includeZero;
+		this.fixed = fixed;
+		this.majorLabels = majorLabels;
+		this.minorTicks = minorTicks;
+		this.minorLabels = minorLabels;
+		this.microTicks = microTicks;
+		this.min = min;
+		this.max = max;
+		this.from = from;
+		this.to = to;
+		this.majorTickStep = majorTickStep;
+		this.minorTickStep = minorTickStep;
+		this.microTickStep = microTickStep;
+	}
+
 /*=====
 var Base = dojox.charting.axis2d.Base;
 =====*/ 
 
 	return declare("dojox.charting.axis2d.Invisible", Base, {
 		//	summary:
-		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
+		//		A axis object used in dojox.charting.  You can use that axis if you want the axis to be invisible.
+		// 		See dojox.charting.Chart.addAxis for details.
 		//
 		//	defaultParams: Object
 		//		The default parameters used to define any axis.
@@ -21,7 +91,7 @@ var Base = dojox.charting.axis2d.Base;
 
 		//	opt: Object
 		//		The actual options used to define this axis, created at initialization.
-		//	scalar: Object
+		//	scaler: Object
 		//		The calculated helper object to tell charts how to draw an axis and any data.
 		//	ticks: Object
 		//		The calculated tick object that helps a chart draw the scaling on an axis.
@@ -33,7 +103,7 @@ var Base = dojox.charting.axis2d.Base;
 		//		The current offset of the axis.
 
 		opt: null,
-		scalar: null,
+		scaler: null,
 		ticks: null,
 		dirty: true,
 		scale: 1,
@@ -51,7 +121,6 @@ var Base = dojox.charting.axis2d.Base;
 			minorTicks:  true,		// draw minor ticks
 			minorLabels: true,		// draw minor labels
 			microTicks:  false,		// draw micro ticks
-			rotation:    0			// label rotation angle in degrees
 		},
 		optionalParams: {
 			min:			0,	// minimal value on this axis
@@ -60,25 +129,15 @@ var Base = dojox.charting.axis2d.Base;
 			to:				1,	// visible to this value
 			majorTickStep:	4,	// major tick step
 			minorTickStep:	2,	// minor tick step
-			microTickStep:	1,	// micro tick step
-			labels:			[],	// array of labels for major ticks
-								// with corresponding numeric values
-								// ordered by values
-			labelFunc:		null, // function to compute label values
-			maxLabelSize:	0,	// size in px. For use with labelFunc
-			maxLabelCharCount:	0,	// size in word count.
-			trailingSymbol:			null
-
-			// TODO: add support for minRange!
-			// minRange:		1,	// smallest distance from min allowed on the axis
+			microTickStep:	1	// micro tick step
 		},
 
 		constructor: function(chart, kwArgs){
 			//	summary:
-			//		The constructor for an axis.
+			//		The constructor for an invisible axis.
 			//	chart: dojox.charting.Chart
 			//		The chart the axis belongs to.
-			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
+			//	kwArgs: dojox.charting.axis2d.__InvisibleAxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
 			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);

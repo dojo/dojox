@@ -1,8 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./Base", "./common", 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./CartesianBase", "./_PlotEvents", "./common",
 		"dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
-	function(lang, declare, arr, Base, dc, df, dfr, du, fx){
+	function(lang, declare, arr, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 /*=====
-var Base = dojox.charting.plot2d.Base;
+var CartesianBase = dojox.charting.plot2d.CartesianBase;
+var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
@@ -12,7 +13,7 @@ var Base = dojox.charting.plot2d.Base;
 	//	{ x?, open, close, high, low, mid? }
 	//	if x is not provided, the array index is used.
 	//	failing to provide the OHLC values will throw an error.
-	return declare("dojox.charting.plot2d.Candlesticks", Base, {
+	return declare("dojox.charting.plot2d.Candlesticks", [CartesianBase, _PlotEvents], {
 		//	summary:
 		//		A plot that represents typical candlesticks (financial reporting, primarily).
 		//		Unlike most charts, the Candlestick expects data points to be represented by

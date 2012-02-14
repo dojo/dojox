@@ -1,14 +1,15 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", 
-		"./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", 
+		"./CartesianBase", "./_PlotEvents", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed",
 		"dojox/lang/utils", "dojox/gfx/fx"], 
-	function(lang, declare, arr, Base, dc, df, dfr, du, fx){
+	function(lang, declare, arr, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 /*=====
-var Base = dojox.charting.plot2d.Base;
+var CartesianBase = dojox.charting.plot2d.CartesianBase;
+var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
-	return declare("dojox.charting.plot2d.Bubble", Base, {
+	return declare("dojox.charting.plot2d.Bubble", [CartesianBase, _PlotEvents], {
 		//	summary:
 		//		A plot representing bubbles.  Note that data for Bubbles requires 3 parameters,
 		//		in the form of:  { x, y, size }, where size determines the size of the bubble.

@@ -784,12 +784,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			}, this);
 			// assign axes
 			arr.forEach(this.stack, function(plot){
-				if(plot.hAxis){
-					plot.setAxis(this.axes[plot.hAxis]);
-				}
-				if(plot.vAxis){
-					plot.setAxis(this.axes[plot.vAxis]);
-				}
+				plot.assignAxes(this.axes);
 			}, this);
 
 			// calculate geometry

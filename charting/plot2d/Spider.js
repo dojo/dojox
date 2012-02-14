@@ -1,18 +1,18 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
 	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff", 
-	"../Element", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common", 
+	"./Base", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common",
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
 	"dojox/lang/utils", "dojo/fx/easing"],
 	function(lang, declare, hub, arr, domGeom, baseFx, coreFx, has,
-			Element, PlotEvents, Color, dxcolor, dc, da, primitive, 
+			Base, PlotEvents, Color, dxcolor, dc, da, primitive,
 			g, m, gfxfx, df, du, easing){
 /*=====
-var Element = dojox.charting.Element;
+var Base = dojox.charting.plot2d.Base;
 var PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
-	var Spider = declare("dojox.charting.plot2d.Spider", [Element, PlotEvents], {
+	var Spider = declare("dojox.charting.plot2d.Spider", [Base, PlotEvents], {
 		//	summary:
 		//		The plot that represents a typical Spider chart.
 		defaultParams: {
@@ -52,7 +52,6 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.series = [];
 			this.dyn = [];
 			this.datas = {};
 			this.labelKey = [];
@@ -64,9 +63,9 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 			//		Clear out all of the information tied to this plot.
 			//	returns: dojox.charting.plot2d.Spider
 			//		A reference to this plot for functional chaining.
-			this.dirty = true;
+			this.inherited(arguments);
 			this.dyn = [];
-			this.series = [];
+			this.axes = [];
 			this.datas = {};
 			this.labelKey = [];
 			this.oldSeriePoints = {};
@@ -75,9 +74,18 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 		},
 		setAxis: function(axis){
 			//	summary:
-			//		Dummy method, since axes are irrelevant with a Spider chart.
+			//		Optionally set axis min and max property.
 			//	returns: dojox.charting.plot2d.Spider
 			//		The reference to this plot for functional chaining.
+			// override the computed min/max with provided values if any
+			if(axis){
+				if(axis.opt.min != undefined){
+					this.datas[axis.name].min = axis.opt.min;
+				}
+				if(axis.opt.max != undefined){
+					this.datas[axis.name].max = axis.opt.max;
+				}
+			}
 			return this;	//	dojox.charting.plot2d.Spider
 		},
 		addSeries: function(run){
@@ -97,6 +105,9 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 					data.min = Math.min(data.min, val);
 					data.max = Math.max(data.max, val);
 				}else{
+					var axisKey = "__"+key;
+					this.axes.push(axisKey);
+					this[axisKey] = key;
 					this.datas[key] = {min: val, max: val, vlist: [val]};
 				}
 			}
@@ -113,50 +124,6 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return dc.collectSimpleStats(this.series);
-		},
-		calculateAxes: function(dim){
-			//	summary:
-			//		Stub function for running the axis calculations (depricated).
-			//	dim: Object
-			//		An object of the form { width, height }
-			//	returns: dojox.charting.plot2d.Base
-			//		A reference to this plot for functional chaining.
-			this.initializeScalers(dim, this.getSeriesStats());
-			return this;	//	dojox.charting.plot2d.Base
-		},
-		getRequiredColors: function(){
-			//	summary:
-			//		Get how many data series we have, so we know how many colors to use.
-			//	returns: Number
-			//		The number of colors needed.
-			return this.series.length;	//	Number
-		},
-		initializeScalers: function(dim, stats){
-			//	summary:
-			//		Initializes scalers using attached axes.
-			//	dim: Object:
-			//		Size of a plot area in pixels as {width, height}.
-			//	stats: Object:
-			//		Min/max of data in both directions as {hmin, hmax, vmin, vmax}.
-			//	returns: dojox.charting.plot2d.Base
-			//		A reference to this plot for functional chaining.
-			if(this._hAxis){
-				if(!this._hAxis.initialized()){
-					this._hAxis.calculate(stats.hmin, stats.hmax, dim.width);
-				}
-				this._hScaler = this._hAxis.getScaler();
-			}else{
-				this._hScaler = primitive.buildScaler(stats.hmin, stats.hmax, dim.width);
-			}
-			if(this._vAxis){
-				if(!this._vAxis.initialized()){
-					this._vAxis.calculate(stats.vmin, stats.vmax, dim.height);
-				}
-				this._vScaler = this._vAxis.getScaler();
-			}else{
-				this._vScaler = primitive.buildScaler(stats.vmin, stats.vmax, dim.height);
-			}
-			return this;	//	dojox.charting.plot2d.Base
 		},
 		render: function(dim, offsets){
 			//	summary:
@@ -515,13 +482,13 @@ var PlotEvents = dojox.charting.plot2d._PlotEvents;
 					aroundRect.h = Math.ceil(aroundRect.height);
 					this.aroundRect = aroundRect;
 					var position = ["after-centered", "before-centered"];
-					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
+					dc.doIfLoaded("dijit/Tooltip", lang.hitch(this, function(Tooltip){
 						Tooltip.show(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
 					}));
 				}else{
 					init  = m.scaleAt(defaultScale, o.cx, o.cy);
 					scale = 1/defaultScale;
-					dc.doIfLoaded("dijit/Tooltip", dojo.hitch(this, function(Tooltip){
+					dc.doIfLoaded("dijit/Tooltip", lang.hitch(this, function(Tooltip){
 						this.aroundRect && Tooltip.hide(this.aroundRect);
 					}));
 				}

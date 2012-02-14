@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", 
-		"./Base", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"], 
-	function(lang, declare, arr, Base, dc, df, dfr, du, fx){
+		"./CartesianBase", "./_PlotEvents", "./common", "dojox/lang/functional", "dojox/lang/functional/reversed", "dojox/lang/utils", "dojox/gfx/fx"],
+	function(lang, declare, arr, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
@@ -97,14 +97,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		interpolate: false
 	});
 	
-	var Base = dojox.charting.plot2d.Base;
+	var CartesianBase = dojox.charting.plot2d.CartesianBase;
+	var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	var DEFAULT_ANIMATION_LENGTH = 1200;	// in ms
 
-	return declare("dojox.charting.plot2d.Default", Base, {
+	return declare("dojox.charting.plot2d.Default", [CartesianBase, _PlotEvents], {
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
 			vAxis: "y",		// use a vertical axis named "y"
