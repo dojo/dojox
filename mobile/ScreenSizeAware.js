@@ -7,7 +7,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom",
-	"dijit/registry",
+	"dijit/registry"
 ], function(kernel, array, config, connect, declare, lang, win, dom, registry){
 
 	// module:

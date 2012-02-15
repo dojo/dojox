@@ -134,7 +134,7 @@ define([
 		getTransitionInfo: function(){ b.getTransitionInfo.apply(b, arguments); },
 		addTransitionInfo: function(){ b.addTransitionInfo.apply(b, arguments); },
 		handleFragIds: function(){ b.handleFragIds.apply(b, arguments); },
-		setFragIds: function(){ b.setFragIds.apply(b, arguments); },
+		setFragIds: function(){ b.setFragIds.apply(b, arguments); }
 	});
 
 	return b;
