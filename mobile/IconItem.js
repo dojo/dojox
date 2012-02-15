@@ -115,6 +115,7 @@ define([
 				p.paneContainerWidget.addChild(w, this.getIndexInParent());
 				w.set("label", this.label);
 				this._clickCloseHandle = this.connect(w.closeIconNode, "onclick", "_closeIconClicked");
+				this._keydownCloseHandle = this.connect(w.closeIconNode, "onkeydown", "_closeIconClicked"); // for desktop browsers
 			}));
 
 			this.inherited(arguments);
@@ -198,6 +199,7 @@ define([
 			// tags:
 			//		private
 			if(e){
+				if(e.type === "keydown" && e.keyCode !== 13){ return; }
 				if(this.closeIconClicked(e) === false){ return; } // user's click action
 				setTimeout(lang.hitch(this, function(d){ this._closeIconClicked(); }), 0);
 				return;
