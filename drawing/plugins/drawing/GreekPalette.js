@@ -267,7 +267,7 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 
 					dojo.place(cellNode, rowNode);
 
-					cellNode.index = this._cells.length;
+					cellNode.idx = this._cells.length;
 
 					// save cell info into _cells
 					this._cells.push({node:cellNode, dye:cellObject});
@@ -297,7 +297,7 @@ dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 		};
 		
 		var increment = keyIncrementMap[evt.keyCode];
-		var newFocusIndex = this._currentFocus.index + increment;
+		var newFocusIndex = this._currentFocus.idx + increment;
 		if(newFocusIndex < this._cells.length && newFocusIndex > -1){
 			var focusNode = this._cells[newFocusIndex].node;
 			this._setCurrent(focusNode);
