@@ -120,7 +120,7 @@ var Base = dojox.charting.axis2d.Base;
 			majorLabels: true,		// draw major labels
 			minorTicks:  true,		// draw minor ticks
 			minorLabels: true,		// draw minor labels
-			microTicks:  false,		// draw micro ticks
+			microTicks:  false		// draw micro ticks
 		},
 		optionalParams: {
 			min:			0,	// minimal value on this axis
