@@ -935,7 +935,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			}else{
 				this.scrollScrollBarTo(to);
 			}
-//>>excludeStart("webkitMobile", kwArgs.webkitMobile);
 		}else if(dojo.fx && dojo.fx.easing && duration){
 			// If you want to support non-webkit browsers,
 			// your application needs to load necessary modules as follows:
@@ -962,7 +961,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			}else{
 				this.scrollScrollBarTo(to);
 			}
-//>>excludeEnd("webkitMobile");
 		}
 	};
 
