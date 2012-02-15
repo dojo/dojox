@@ -197,7 +197,7 @@ define([
 
 	var currentTheme;
 
-	var migrationAssist = new function(){
+	var migrationAssist = function(){
 		var get = function(w, key){
 			return w[key] || w.srcNodeRef && w.srcNodeRef.getAttribute(key);
 		};
@@ -295,7 +295,7 @@ define([
 		};
 
 		this.checkSwitch = function(/*Widget*/ w){
-			if(w.class === "mblItemSwitch"){
+			if(w["class"] === "mblItemSwitch"){
 				console.log('[MIG:fixed] Switch: class="mblItemSwitch" is no longer necessary.');
 			}
 		};
@@ -310,10 +310,10 @@ define([
 		};
 
 		this.checkTabBarButton = function(/*Widget*/ w){
-			if((w.class || "").indexOf("mblDomButton") === 0){
-				console.log('[MIG:fixed] TabBarButton: Use icon="' + w.class + '" instead of class="' + w.class + '".');
-				w.icon = w.class;
-				w.class = "";
+			if((w["class"] || "").indexOf("mblDomButton") === 0){
+				console.log('[MIG:fixed] TabBarButton: Use icon="' + w["class"] + '" instead of class="' + w["class"] + '".');
+				w.icon = w["class"];
+				w["class"] = "";
 				if(w.srcNodeRef){
 					w.srcNodeRef.className = "";
 				}
@@ -321,19 +321,19 @@ define([
 		};
 
 		this.checkToolBarButton = function(/*Widget*/ w){
-			if((w.class || "").indexOf("mblColor") === 0){
-				console.log('[MIG:fixed] ToolBarButton: Use defaultColor="' + w.class + '" instead of class="' + w.class + '".');
-				w.defaultColor = w.class;
-				w.class = "";
+			if((w["class"] || "").indexOf("mblColor") === 0){
+				console.log('[MIG:fixed] ToolBarButton: Use defaultColor="' + w["class"] + '" instead of class="' + w["class"] + '".');
+				w.defaultColor = w["class"];
+				w["class"] = "";
 				if(w.srcNodeRef){
 					w.srcNodeRef.className = "";
 				}
 			}
 
-			if((w.class || "").indexOf("mblDomButton") === 0){
-				console.log('[MIG:fixed] ToolBarButton: Use icon="' + w.class + '" instead of class="' + w.class + '".');
-				w.icon = w.class;
-				w.class = "";
+			if((w["class"] || "").indexOf("mblDomButton") === 0){
+				console.log('[MIG:fixed] ToolBarButton: Use icon="' + w["class"] + '" instead of class="' + w["class"] + '".');
+				w.icon = w["class"];
+				w["class"] = "";
 				if(w.srcNodeRef){
 					w.srcNodeRef.className = "";
 				}
