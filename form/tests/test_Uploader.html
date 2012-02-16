@@ -119,19 +119,15 @@
 						}
 					}
 
-					dojo.addOnLoad(function(){
-						var uploader=dijit.byId("uploader"), uploader2=dijit.byId("uploader2");
-						dojo.connect(dijit.byId("remBtn"), "onClick", uploader, "reset");
-						dojo.connect(dijit.byId("remBtn2"), "onClick", uploader2, "reset");
-						handleUpload(uploader, dojo.byId('colImages'));
-						handleUpload(uploader2, dojo.byId('colImages'));
-						if(require.has('file-multiple')){
-							handleDnD(uploader.domNode.parentNode, uploader);
-							handleDnD(uploader2.domNode.parentNode, uploader2);
-						}
-					});
-
-
+					var uploader=dijit.byId("uploader"), uploader2=dijit.byId("uploader2");
+					dojo.connect(dijit.byId("remBtn"), "onClick", uploader, "reset");
+					dojo.connect(dijit.byId("remBtn2"), "onClick", uploader2, "reset");
+					handleUpload(uploader, dojo.byId('colImages'));
+					handleUpload(uploader2, dojo.byId('colImages'));
+					if(require.has('file-multiple')){
+						handleDnD(uploader.domNode.parentNode, uploader);
+						handleDnD(uploader2.domNode.parentNode, uploader2);
+					}
 				});
 
 
