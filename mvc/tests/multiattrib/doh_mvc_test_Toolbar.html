@@ -49,6 +49,8 @@
 				require([
 					'dojo/domReady!'
 					], function(){
+						dojox.debugDataBinding = true;
+
 						doh.register("parse", function() {
 							dojo.parser.parse();
 						});
@@ -75,7 +77,7 @@
 								//test first relevant false
 								copyLabel = dijit.byId("selCopy");
 								if (copyLabel) {
-									copyLabel.set("value","Copy to clipboard...");
+									copyItemModel.set("label","Copy to clipboard...");
 									doh.is("Copy to clipboard...", dijit.byId("selCopy").get('value'),"value should be Copy to clipboard...");
 									doh.is("Copy to clipboard...",  dijit.byId("toolbar1.copy").get('label'),"label should be Copy to clipboard...");
 								}

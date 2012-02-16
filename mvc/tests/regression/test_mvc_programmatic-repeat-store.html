@@ -31,7 +31,7 @@
 						'</div>';
 
 			function setup() {
-				var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests._data", "mvcRepeatData.json")});
+				var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests.regression._data", "mvcRepeatData.json")});
 				var modelPromise = dojox.mvc.newStatefulModel({store: new dojo.store.DataStore({store: writeStore})}); 
 				modelPromise.then(function(model){ 
 					results = model;

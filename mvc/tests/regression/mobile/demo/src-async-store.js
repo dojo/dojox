@@ -114,7 +114,7 @@ updateModel = function() {
 // The dojox.mvc.StatefulModel class creates a data model instance
 // where each leaf within the data model is decorated with dojo.Stateful
 // properties that widgets can bind to and watch for their changes.
-var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests._data", "mvcRepeatData.json")});
+var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests.regression._data", "mvcRepeatData.json")});
 var modelPromise = dojox.mvc.newStatefulModel({store: new dojo.store.DataStore({store: writeStore}), query:{"Location" : "CA"}}); // example of using a query parm for Location 
 
 require(['dojo/domReady!'], function(){

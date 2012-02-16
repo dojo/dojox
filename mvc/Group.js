@@ -24,6 +24,19 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", 	"dojo/_base/lang"], function
 				}
 			}			
 			this.inherited(arguments);
+		},
+
+		_setTargetAttr: function(/*dojo.Stateful*/ value){
+			// summary:
+			//		Handler for calls to set("target", val).
+			// description:
+			//		Sets "ref" property so that child widgets can refer to.
+
+			this._set("target", value);
+			if(this.binding != value){
+				// The new value not matching to this.binding means that the change is not initiated by ref change.
+				this.set("ref", value);
+			}
 		}
 	});
 });

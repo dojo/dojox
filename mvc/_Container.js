@@ -26,6 +26,10 @@ define([
 		//		attributes are not supported in the template.
 		templateString : "",
 	
+		// inlineTemplateString: [private] String
+		//		Same as templateString. Used when this widget is mixed with a regular templated widget.
+		inlineTemplateString : "",
+
 		// _containedWidgets: [protected] dijit._Widget[]
 		//		The array of contained widgets at any given point in time within this container.
 		_containedWidgets : [],

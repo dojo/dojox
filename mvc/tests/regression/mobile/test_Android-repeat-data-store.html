@@ -4,15 +4,15 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<title>Android Repeat Data Example</title>
-		<link href="../../../../dojox/mobile/themes/android/android.css" rel="stylesheet"/>
+		<link href="../../../../../dojox/mobile/themes/android/android.css" rel="stylesheet"/>
 		<link href="../css/android-format.css" rel="stylesheet"/>
 
 	<!--  use below for iPhone theme  
-		<link href="../../../../dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+		<link href="../../../../../dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
 		<link href="../css/iphone-format.css" rel="stylesheet"></link>
 	-->
 
-		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
+		<script type="text/javascript" src="../../../../../dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
 
 		<script language="JavaScript" type="text/javascript">
 			//dojo.require("dojo.parser"); 
@@ -31,7 +31,7 @@
 			var model, selectedIndex = 0, nextIndexToAdd, theModelPromise;
 
 			function setup() {
-				var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests._data", "mvcRepeatData.json")});
+				var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests.regression._data", "mvcRepeatData.json")});
 				var modelPromise = dojox.mvc.newStatefulModel({store: new dojo.store.DataStore({store: writeStore}), query:{"Location" : "CA"}}); // example of using a query parm for Location 
 				modelPromise.then(function(results){ 
 					model = results;

@@ -121,11 +121,11 @@
 					<div class="row">
 						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('ref',model1);}">Swap Model1</button>
 						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('ref',model2);}">Swap Model2</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('ref',model3);}">Swap Model3</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',dojox.mvc.at(model3));}">Swap Model3</button>
 					</div>
-					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="ref: 'model1'">
-						<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="ref: 'Results'">
-							<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="ref: 'rel:${this.index}'">
+					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('model1')">
+						<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+							<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
 								<input class="cell" data-dojo-type="dijit.form.CheckBox" id="CBInput${this.index}" data-dojo-props="checked: dojox.mvc.at('rel:Checked', 'value')"/>
 								<label data-dojo-type="dojox.mvc.Output" for="CBInput${this.index}" data-dojo-props="ref: 'First'"></label>
 					<!--  		<label for="CBInput${this.index}" data-dojo-props="ref: 'First'">LABEL(firstname)->${model1.Results[this.index].First}</label>-->	

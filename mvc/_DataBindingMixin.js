@@ -1,14 +1,17 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/lang",
 	"dojo/_base/array",
 	"dojo/_base/declare",
 	"dojo/Stateful",
 	"dijit/registry"
-], function(lang, array, declare, Stateful, registry){
+], function(dojo, lang, array, declare, Stateful, registry){
 	/*=====
 	Stateful = dojo.Stateful;
 	registry = dijit.registry;
 	=====*/
+
+	dojo.deprecated("dojox.mvc._DataBindingMixin", "Use dojox.mvc.at() for data binding.");
 
 	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:
@@ -90,7 +93,8 @@ define([
 			//		assess the model validity of the data binding via the
 			//		this.inherited(arguments) hierarchy and declare any values
 			//		failing the test as invalid.
-			return this.get("binding") ? this.get("binding").get("valid") : true;
+			var valid = this.get("valid");
+			return typeof valid != "undefined" ? valid : this.get("binding") ? this.get("binding").get("valid") : true;
 		},
 
 		//////////////////////// LIFECYCLE METHODS ////////////////////////
@@ -109,7 +113,7 @@ define([
 			this._viewWatchHandles = [
 				// 1. data binding refs
 				this.watch("ref", function(name, old, current){
-					if(this._databound){
+					if(this._databound && old !== current){
 						this._setupBinding();
 					}
 				}),
@@ -176,39 +180,11 @@ define([
 			// tags:
 			//		private
 
-			var ref = this.ref, refs = this.ref, pw, pb, binding;
-			for(var prop in this._refs){
-				refs = this._refs;
-				break;
-			}
-			if(refs && typeof refs == "object" && !lang.isFunction(refs.toPlainObject)){ // hash table of ref handles (dojox.mvc.at)
-				var atWatchHandles = this._atWatchHandles = this._atWatchHandles || {};
-				// When this widget starts up, or there is a change in ref attribute, stop and clean up all active data binding created with dojox.mvc.at
-				for(var s in this._atWatchHandles){
-					this._atWatchHandles[s].unwatch();
-					delete this._atWatchHandles[s];
-				}
-				// Clear the cache of properties that data binding is established with
-				this._excludes = null;
-				// First, establish non-wildcard data bindings
-				for(var prop in refs){
-					if(prop == "*"){ continue; }
-					if((refs[prop] || {}).atsignature != "dojox.mvc.at"){
-						throw new Error("dojox.mvc._DataBindingMixin: '" + this.domNode +
-							"' widget with illegal ref['" + prop + "'] not evaluating to a dojox.mvc.at: '" + refs[prop] + "'");
-					}
-					atWatchHandles[prop] = refs[prop].setParent(parentBinding || this._getParentBindingFromDOM()).bind(this, prop);
-				}
-				// Then establish wildcard data bindings
-				if((refs["*"] || {}).atsignature == "dojox.mvc.at"){
-					atWatchHandles["*"] = refs["*"].setParent(parentBinding || this._getParentBindingFromDOM()).bind(this, "*");
-				}
-				return;
-			}
-			// Now compute the model node to bind to
 			if(!this.ref){
 				return; // nothing to do here
 			}
+			var ref = this.ref, pw, pb, binding;
+			// Now compute the model node to bind to
 			if(ref && lang.isFunction(ref.toPlainObject)){ // programmatic instantiation or direct ref
 				binding = ref;
 			}else if(/^\s*expr\s*:\s*/.test(ref)){ // declarative: refs as dot-separated expressions
@@ -235,8 +211,9 @@ define([
 					binding = lang.getObject("" + ref, false, parentBinding);
 				}else{
 					try{
-						if(lang.getObject(ref) instanceof Stateful){
-							binding = lang.getObject(ref);
+						var b = lang.getObject("" + ref) || {};
+						if(lang.isFunction(b.set) && lang.isFunction(b.watch)){
+							binding = b;
 						}						
 					}catch(err){
 						if(ref.indexOf("${") == -1){ // Ignore templated refs such as in repeat body
@@ -249,83 +226,15 @@ define([
 			if(binding){
 				if(lang.isFunction(binding.toPlainObject)){
 					this.binding = binding;
+					if(this[this._relTargetProp || "target"] !== binding){
+						this.set(this._relTargetProp || "target", binding);
+					}
 					this._updateBinding("binding", null, binding);
 				}else{
 					console.warn("dojox.mvc._DataBindingMixin: '" + this.domNode +
 						"' widget with illegal ref not evaluating to a dojo.Stateful node: '" + ref + "'");
 				}
 			}
-		},
-
-		_dbpostscript: function(/*Object?*/ params, /*DomNode|String*/ srcNodeRef){
-			// summary:
-			//		See if any parameters for this widget are dojox.mvc.at handles.
-			//		If so, move them under this._refs to prevent widget implementations from referring them.
-
-			var refs = this._refs = {};
-			for(var prop in params){
-				if((params[prop] || {}).atsignature == "dojox.mvc.at"){
-					var h = params[prop];
-					delete params[prop];
-					refs[prop] = h;
-				}
-			}
-		},
-
-		_setAtWatchHandle: function(/*String*/ name, /*Anything*/ value){
-			// summary:
-			//		Called if the value is a dojox.mvc.at handle.
-			//		If this widget has started, start data binding with the new dojox.mvc.at handle.
-			//		Otherwise, queue it up to this._refs so that _dbstartup() can pick it up.
-
-			// Claen up older data binding
-			if((this._atWatchHandles || {})[name]){
-				this._atWatchHandles[name].unwatch();
-				delete this._atWatchHandles[name];
-			}
-
-			// Claar the value
-			this[name] = null;
-
-			// Clear the cache of properties that data binding is established with
-			this._excludes = null;
-
-			if(this._started){
-				// If this widget has started, start data binding with the new dojox.mvc.at handle
-				this._atWatchHandles[name] = value.setParent(this._getParentBindingFromDOM()).bind(this, name);
-			}else{
-				// Otherwise, queue it up to this._refs so that _dbstartup() can pick it up.
-				this._refs[name] = value;
-			}
-
-			return this;
-		},
-
-		_getExcludesAttr: function(){
-			// summary:
-			//		Returns list of all properties that data binding is established with.
-
-			if(this._excludes){ return this._excludes; }
-			var list = [];
-			for(var s in this._atWatchHandles){
-				if(s != "*"){ list.push(s); }
-			}
-			return list; // String[]
-		},
-
-		_getPropertiesAttr: function(){
-			// summary:
-			//		Returns list of all properties in this widget, except "id".
-
-			if(this.constructor._attribs){
-				return this.constructor._attribs;
-			}
-			var list = [].concat(this.constructor._setterAttrs);
-			array.forEach(["id", "excludes", "properties"], function(s){
-				var index = array.indexOf(list, s);
-				if (index >= 0){ list.splice(index, 1); }
-			});
-			return this.constructor._attribs = list; // String[]
 		},
 
 		_isEqual: function(one, other){

@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>DOH Async MVC Mobile Demo Test</title>
-		<link rel="stylesheet" type="text/css" href="mobile/demo/demo.css"/>
+		<link rel="stylesheet" type="text/css" href="./mobile/demo/demo.css"/>		
 		<style>
 		
 		html, body{
@@ -134,7 +134,7 @@ updateModel = function() {
 // The dojox.mvc.StatefulModel class creates a data model instance
 // where each leaf within the data model is decorated with dojo.Stateful
 // properties that widgets can bind to and watch for their changes.
-var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests._data", "mvcRepeatData.json")});
+var writeStore = new dojo.data.ItemFileWriteStore({url: dojo.moduleUrl("dojox.mvc.tests.regression/_data", "mvcRepeatData.json")});
 var modelPromise = dojox.mvc.newStatefulModel({store: new dojo.store.DataStore({store: writeStore}), query:{"Location" : "CA"}}); // example of using a query parm for Location 
 
 				require([
@@ -181,13 +181,13 @@ dojo.addOnLoad(function() {
 			<h1 dojoType="dojox.mobile.Heading">Mobile MVC Demo</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">Mobile MVC Views</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
-				<li id="sdb" dojoType="dojox.mobile.ListItem" icon="images/i-icon-1.png" transition="slide" moveTo="settings">
+				<li id="sdb" dojoType="dojox.mobile.ListItem" icon="mobile/demo/images/i-icon-1.png" transition="slide" moveTo="settings">
 					Simple Data Binding
 				</li>
-				<li id="rdb" dojoType="dojox.mobile.ListItem" icon="images/i-icon-2.png" transition="slide" moveTo="repeat">
+				<li id="rdb" dojoType="dojox.mobile.ListItem" icon="mobile/demo/images/i-icon-2.png" transition="slide" moveTo="repeat">
 					Repeat Data Binding
 				</li>
-				<li id="sfg" dojoType="dojox.mobile.ListItem" icon="images/i-icon-3.png" transition="slide" moveTo="generate">
+				<li id="sfg" dojoType="dojox.mobile.ListItem" icon="mobile/demo/images/i-icon-3.png" transition="slide" moveTo="generate">
 					Simple Form Generate
 				</li>
 			</ul>

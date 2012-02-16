@@ -138,6 +138,11 @@
 		 <div id="leftNav">
 		 </div>
 		 <div id="mainContent">
+			<div class="row">
+			<div class="spacer"></div>
+				<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){console.log(searchRecords.Results.toPlainObject());searchRecords.Results.commit();;}">Commit All</button>        
+				<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){searchRecords.Results.reset();}">Reset to last saved</button>        
+			</div>
 		 <!--
 			 The group container denotes some logical grouping of widgets and also serves
 			 to establish a parent data binding context for its children.
@@ -225,7 +230,7 @@
 					"Tel"	  : "",
 					"Fax"	  : ""
 				} });
-				searchRecords.Results.add(index, insert);
+				searchRecords.Results.add(parseInt(index)+1, insert);
 			}
 			function deleteResult(index) {
 				searchRecords.Results.remove(index);
