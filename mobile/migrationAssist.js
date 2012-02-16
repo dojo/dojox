@@ -3,9 +3,9 @@
 About migrationAssist
 =====================
 
-The migrationAssist module helps you migrate your dojox.mobile-1.6/1.7
-applications to 1.8. To enable migrationAssist, all you need to do is
-require this module as shown examples below.
+The migrationAssist is a dojo module that helps you migrate your
+dojox.mobile-1.6/1.7 applications to 1.8. To enable migrationAssist,
+all you need to do is require this module as shown in the examples below.
 
 	<script language="JavaScript" type="text/javascript">
 		dojo.require("dojox.mobile.migrationAssist");
@@ -32,7 +32,7 @@ This module dynamically inserts the addChild method into View
 in case the application is using it.
 
 Note, however, that the purpose of migrationAssist is not to
-run the older applications, but to assist migration.
+run the older applications as they are, but to assist migration.
 
 
 Changes from 1.6/1.7 to 1.8
@@ -75,6 +75,11 @@ SpinWheel
 ---------
  - SpinWheel.css is no longer in the themes/common folder.
    It is in a device theme folder. (e.g. themes/iphone/SpinWheel.css)
+
+SpinWheelSlot
+-------------
+ - getValue() is no longer supported. Use get("value") instead.
+ - setValue() is no longer supported. Use set("value", newValue) instead.
 
 Switch
 ------
@@ -123,7 +128,8 @@ dojox.mobile.parser
 -------------------
  - dojox.mobile.parser no longer accepts array-type attribute like
      labels="['A','B','C','D','E']"
-   Instead, you should specify like labels="A,B,C,D,E", which dojo.parser accepts as well.
+   Instead, you should specify like labels="A,B,C,D,E", which is the format dojo.parser
+   accepts.
 
 bookmarkable
 ------------
@@ -184,11 +190,12 @@ define([
 	"./ListItem",
 	"./RoundRect",
 	"./SpinWheel",
+	"./SpinWheelSlot",
 	"./SwapView",
 	"./TabBarButton",
 	"./ToolBarButton",
 	"./View"
-], function(declare, lang, win, domClass, domConstruct, domStyle, ready, Container, WidgetBase, _ItemBase, mobile, FixedSplitterPane, Heading, iconUtils, ListItem, RoundRect, SpinWheel, SwapView, TabBarButton, ToolBarButton, View){
+], function(declare, lang, win, domClass, domConstruct, domStyle, ready, Container, WidgetBase, _ItemBase, mobile, FixedSplitterPane, Heading, iconUtils, ListItem, RoundRect, SpinWheel, SpinWheelSlot, SwapView, TabBarButton, ToolBarButton, View){
 
 	// module:
 	//		dojox/mobile/migrationAssist
@@ -197,7 +204,7 @@ define([
 
 	var currentTheme;
 
-	var migrationAssist = function(){
+	var migrationAssist = new function(){
 		var get = function(w, key){
 			return w[key] || w.srcNodeRef && w.srcNodeRef.getAttribute(key);
 		};
@@ -409,6 +416,17 @@ define([
 				key = "rightIcon2";
 			}
 			WidgetBase.prototype.set.apply(this, [key, value]);
+		}
+	});
+
+	lang.extend(SpinWheelSlot, {
+		getValue: function(){
+			console.log('[MIG:fixed] SpinWheelSlot: getValue() is no longer supported. Use get("value") instead.');
+			return this.get("value");
+		},
+		setValue: function(newValue){
+			console.log('[MIG:fixed] SpinWheelSlot: setValue() is no longer supported. Use set("value",x) instead.');
+			return this.set("value", newValue);
 		}
 	});
 
