@@ -54,6 +54,12 @@ define([
 		//		The default value is "mblSwDefaultShape".
 		shape: "mblSwDefaultShape",
 
+		// tabIndex: String
+		//		Tabindex setting for this widget so users can hit the tab key to
+		//		focus on it.
+		tabIndex: "0",
+		_setTabIndexAttr: "", // sets tabIndex to domNode
+
 		/* internal properties */
 		baseClass: "mblSwitch",
 		_createdMasks: [],
@@ -85,6 +91,7 @@ define([
 
 		postCreate: function(){
 			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
+			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 			this._startHandle = this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart");
 			this._initialValue = this.value; // for reset()
 		},
@@ -154,6 +161,7 @@ define([
 			//		Internal handler for click events.
 			// tags:
 			//		private
+			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
 			if(this._moved){ return; }
 			this.value = this.input.value = (this.value == "on") ? "off" : "on";
