@@ -124,8 +124,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 		//		The main graphics surface upon which a chart is drawn.
 		//	dirty: Boolean
 		//		A boolean flag indicating whether or not the chart needs to be updated/re-rendered.
-		//	coords: Object
-		//		The coordinates on a page of the containing node, as returned from dojo.coords.
 
 		constructor: function(/* DOMNode */node, /* dojox.charting.__ChartCtorArgs? */kwArgs){
 			//	summary:
@@ -154,7 +152,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			this.series = [];	// stack of data runs
 			this.runs = {};		// map of data run indices
 			this.dirty = true;
-			this.coords = null;
 
 			// create a surface
 			this.node = dom.byId(node);

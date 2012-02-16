@@ -31,11 +31,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		//	fixed: Boolean?
 		//		Force all axis labels to be fixed numbers.  Default is true.
 		//	majorLabels: Boolean?
-		//		Flag to draw all labels at major ticks. Default is true.
+		//		Flag to draw labels at major ticks. Default is true.
 		//	minorTicks: Boolean?
 		//		Flag to draw minor ticks on an axis.  Default is true.
 		//	minorLabels: Boolean?
-		//		Flag to draw labels on minor ticks. Default is true.
+		//		Flag to labels on minor ticks when there is enough space. Default is true.
 		//	microTicks: Boolean?
 		//		Flag to draw micro ticks on an axis. Default is false.
 		//	htmlLabels: Boolean?
@@ -278,9 +278,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 				// everything might have changed, reset the minMinorStep value
 				this.scaler.minMinorStep = this._prevMinMinorStep = 0;
 				var ob = lang.clone(o);
-				delete o.to;
-				delete o.from;
-				var sb = lin.buildScaler(min, max, span, o);
+				delete ob.to;
+				delete ob.from;
+				var sb = lin.buildScaler(min, max, span, ob);
 				sb.minMinorStep = 0;
 				this._majorStart = sb.major.start;
 				// we build all the ticks not only the ones we need to draw in order to get
@@ -298,18 +298,18 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 					var labels = [];
 					if(this.opt.majorLabels){
 						arr.forEach(tb.major, tickLabelFunc, labels);
-						majLabelW = this._groupLabelWidth(labels, font, o.maxLabelCharCount);
-						if(o.maxLabelSize){
-							majLabelW = Math.min(o.maxLabelSize, majLabelW);
+						majLabelW = this._groupLabelWidth(labels, font, ob.maxLabelCharCount);
+						if(ob.maxLabelSize){
+							majLabelW = Math.min(ob.maxLabelSize, majLabelW);
 						}
 					}
 					// do the minor labels computation only if dropLabels is set
 					labels = [];
 					if(this.opt.dropLabels && this.opt.minorLabels){
 						arr.forEach(tb.minor, tickLabelFunc, labels);
-						minLabelW = this._groupLabelWidth(labels, font, o.maxLabelCharCount);
-						if(o.maxLabelSize){
-							minLabelW = Math.min(o.maxLabelSize, minLabelW);
+						minLabelW = this._groupLabelWidth(labels, font, ob.maxLabelCharCount);
+						if(ob.maxLabelSize){
+							minLabelW = Math.min(ob.maxLabelSize, minLabelW);
 						}
 					}
 					this._maxLabelSize = {
@@ -428,8 +428,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			var maxLabelSize = this._getMaxLabelSize(); // don't need parameters, calculate has been called before => we use cached value
 			if(maxLabelSize){
 				var side;
-				// TODO: here we take only major labels into account for offsets, might not be enough is some corner cases
-				var labelWidth = maxLabelSize.majLabelW, size = maxLabelSize.majLabelH;
+				var labelWidth = Math.ceil(Math.max(maxLabelSize.majLabelW, maxLabelSize.minLabelW)) + 1,
+					size = Math.ceil(Math.max(maxLabelSize.majLabelH, maxLabelSize.minLabelH)) + 1;
 				if(this.vertical){
 					side = leftBottom ? "l" : "r";
 					switch(rotation){
@@ -788,6 +788,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			}
 
 			var rel = (t.major.length > 0)?(t.major[0].value - this._majorStart) / c.major.tick:0;
+			var canLabel = this.opt.majorLabels;
 			arr.forEach(t.major, function(tick, i){
 				var offset = f(tick.value), elem,
 					x = start.x + axisVector.x * offset,
@@ -840,7 +841,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 
 			dx = tickVector.x * taMinorTick.length;
 			dy = tickVector.y * taMinorTick.length;
-			var canLabel = c.minMinorStep <= c.minor.tick * c.bounds.scale;
+			canLabel = this.opt.minorLabels && c.minMinorStep <= c.minor.tick * c.bounds.scale;
 			arr.forEach(t.minor, function(tick){
 				var offset = f(tick.value), elem,
 					x = start.x + axisVector.x * offset,
