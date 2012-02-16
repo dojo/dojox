@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common", 
+define(["dojo/_base/lang", "dojo/_base/declare", "../plot2d/Base", "../plot2d/common",
     "../axis2d/common", "dojox/gfx"], 
-	function(lang, declare, Element, dcpc, dcac, gfx){ 
+	function(lang, declare, Base, dcpc, dcac, gfx){
 
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
 	var getBoundingBox = function(shape){
@@ -65,7 +65,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 		return sz;
 	};
 
-	return declare("dojox.charting.action2d._IndicatorElement",Element, {
+	return declare("dojox.charting.action2d._IndicatorElement", Base, {
 		//	summary:
 		//		Internal element used by indicator actions.
 		//	tags:
@@ -339,25 +339,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../Element", "../plot2d/common
 			this.group.moveToFront();
 			return this;	//	dojox.charting.Element
 		},
-		clear: function(){
-			//	summary:
-			//		Clear out any parameters set on this plot.
-			//	returns: dojox.charting.action2d._IndicatorElement
-			//		The reference to this plot for functional chaining.
-			this.dirty = true;
-			return this;	//	dojox.charting.plot2d._IndicatorElement
-		},
 		getSeriesStats: function(){
 			//	summary:
 			//		Returns default stats (irrelevant for this type of plot).
 			//	returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(dcpc.defaultStats);
-		},
-		initializeScalers: function(){
-			//	summary:
-			//		Does nothing (irrelevant for this type of plot).
-			return this;
 		},
 		isDirty: function(){
 			//	summary:
