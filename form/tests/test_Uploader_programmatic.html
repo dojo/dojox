@@ -111,12 +111,12 @@
 	<script>
 		require(['dojo', 'dojo/domReady!', 'dojo/parser', 'dijit/form/Button', 'dijit/Dialog', 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/form/uploader/plugins/Flash'],
 				function(dojo, dr, parser, Button, Dialog, Uploader, FileList, uFlash){
-
+					console.log('ready')
 					parser.parse();
 
 					makeSKP = function(){
 
-						var div = dojo.create('div',{innerHTML:'<p>Testing build only. will not upload.</p>'});
+						var div = dojo.create('div',{innerHTML;'<p>This dialog will not upload. Only testing that it parses correctly.</p>'});
 						myUploadDialog = new Dialog({
 							title: "Upload Video",
 							style: "width: 400px;height:300px;",
@@ -124,10 +124,24 @@
 						});
 						myUploadDialog.show();
 
+						//
+						// IMPORTANT NOTE!
+						// When using the Uploader programmatically, you cannot use the ref
+						// from the require() - you must use the global. In other words:
+						//
+						// require(['dojox/form/Uploader'], function(Uploader){
+						// 	myUploader = Uploader(...);
+						// })
+						// ... will NOT work!!
+						// You must use:
+						// require(['dojox/form/Uploader'], function(Uploader){
+						//	 myUploader = new dojox.form.Uploader(...);
+						// })
 
-						myUploader = new Uploader({
+
+						myUploader = new dojox.form.Uploader({
 							label: 'Prog Browse',
-							url:"test/abc.php",
+							url:"abc.php",
 							id:"programmatic",
 							multiple: true
 						});
@@ -138,6 +152,7 @@
 						div.appendChild(b.domNode);
 
 						dojo.connect(b, "onClick", function(){
+							console.log(myUploader.upload)
 							myUploader.upload();
 						});
 					}
@@ -156,7 +171,7 @@
 							});
 						});
 					}
-					var u = new Uploader({label:"Programmatic Uploader", multiple:true, uploadOnSelect:true, url:"UploadFile.php"});
+					var u = new dojox.form.Uploader({label:"Programmatic Uploader", multiple:true, uploadOnSelect:true, url:"UploadFile.php"});
 					dojo.byId("parent").appendChild(u.domNode);
 					u.startup();
 
