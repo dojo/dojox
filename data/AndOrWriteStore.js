@@ -259,7 +259,7 @@ return declare("dojox.data.AndOrWriteStore", AndOrReadStore, {
 							//Remove the note of the reference to the item and set the values on the modified attribute.
 							this._removeReferenceFromMap(item, containingItem, attribute);
 							if(newValues.length < oldValues.length){
-								this._setValueOrValues(containingItem, attribute, newValues);
+								this._setValueOrValues(containingItem, attribute, newValues, true);
 							}
 						}
 					}
