@@ -4,6 +4,9 @@
 /* dojox.mobile.ListItem */
 .mblListItem {
   position: relative;
+  overflow: hidden;
+  /* for focus frame */
+
   padding: 0 8px;
   height: 43px;
   list-style-type: none;
