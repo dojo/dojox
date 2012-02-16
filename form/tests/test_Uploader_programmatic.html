@@ -117,7 +117,7 @@
 					makeSKP = function(){
 
 						var div = dojo.create('div',{innerHTML:'<p>Testing build only. will not upload.</p>'});
-						myUploadDialog = new dijit.Dialog({
+						myUploadDialog = new Dialog({
 							title: "Upload Video",
 							style: "width: 400px;height:300px;",
 							content: div
@@ -125,7 +125,7 @@
 						myUploadDialog.show();
 
 
-						myUploader = new dojox.form.Uploader({
+						myUploader = new Uploader({
 							label: 'Prog Browse',
 							url:"test/abc.php",
 							id:"programmatic",
@@ -133,7 +133,7 @@
 						});
 						div.appendChild(myUploader.domNode);
 						myUploader.startup();
-						var b = new dijit.form.Button({label:"Upload"});
+						var b = new Button({label:"Upload"});
 
 						div.appendChild(b.domNode);
 
@@ -156,7 +156,7 @@
 							});
 						});
 					}
-					var u = new dojox.form.Uploader({label:"Programmatic Uploader", multiple:true, uploadOnSelect:true, url:"UploadFile.php"});
+					var u = new Uploader({label:"Programmatic Uploader", multiple:true, uploadOnSelect:true, url:"UploadFile.php"});
 					dojo.byId("parent").appendChild(u.domNode);
 					u.startup();
 
