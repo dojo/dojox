@@ -1,11 +1,10 @@
 define([
 	"dojo/_base/array",
-	"dojo/_base/connect",
 	"dojo/_base/declare",
-	"dojo/_base/lang",
-	"dijit/registry",	// registry.byId
+	"dijit/registry",
+	"./_DataMixin",
 	"./ListItem"
-], function(array, connect, declare, lang, registry, ListItem){
+], function(array, declare, registry, DataMixin, ListItem){
 
 	// module:
 	//		dojox/mobile/_DataListMixin
@@ -13,7 +12,7 @@ define([
 	//		Mixin for widgets to generate the list items corresponding to the
 	//		data provider object.
 
-	return declare("dojox.mobile._DataListMixin", null,{
+	return declare("dojox.mobile._DataListMixin", DataMixin, {
 		// summary:
 		//		Mixin for widgets to generate the list items corresponding to
 		//		the data provider object.
@@ -22,18 +21,9 @@ define([
 		//		generated as the child nodes of the widget and automatically
 		//		re-generated whenever the corresponding data items are modified.
 
-		// store: Object
-		//		Reference to data provider object
-		store: null,
-
-		// query: Object
-		//		A query that can be passed to 'store' to initially filter the
-		//		items.
-		query: null,
-
-		// queryOptions: Object
-		//		An optional parameter for the query.
-		queryOptions: null,
+		// append: Boolean
+		//		If true, refresh() does not clear the existing items.
+		append: false,
 
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -41,37 +31,6 @@ define([
 			var store = this.store;
 			this.store = null;
 			this.setStore(store, this.query, this.queryOptions);
-		},
-
-		setStore: function(store, query, queryOptions){
-			// summary:
-			//		Sets the store to use with this widget.
-			if(store === this.store){ return; }
-			this.store = store;
-			this.query = query;
-			this.queryOptions = queryOptions;
-			if(store && store.getFeatures()["dojo.data.api.Notification"]){
-				array.forEach(this._conn || [], connect.disconnect);
-				this._conn = [
-					connect.connect(store, "onSet", this, "onSet"),
-					connect.connect(store, "onNew", this, "onNew"),
-					connect.connect(store, "onDelete", this, "onDelete"),
-					connect.connect(store, "close", this, "onStoreClose")
-				];
-			}
-			this.refresh();
-		},
-
-		refresh: function(){
-			// summary:
-			//		Fetches the data and generates the list items.
-			if(!this.store){ return; }
-			this.store.fetch({
-				query: this.query,
-				queryOptions: this.queryOptions,
-				onComplete: lang.hitch(this, "onComplete"),
-				onError: lang.hitch(this, "onError")
-			});
 		},
 
 		createListItem: function(/*Object*/item){
@@ -95,9 +54,11 @@ define([
 		generateList: function(/*Array*/items, /*Object*/dataObject){
 			// summary:
 			//		Given the data, generates a list of items.
-			array.forEach(this.getChildren(), function(child){
-				child.destroyRecursive();
-			});
+			if(!this.append){
+				array.forEach(this.getChildren(), function(child){
+					child.destroyRecursive();
+				});
+			}
 			array.forEach(items, function(item, index){
 				this.addChild(this.createListItem(item));
 			}, this);

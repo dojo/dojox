@@ -1,8 +1,9 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"./RoundRectList",
 	"./_DataListMixin"
-], function(declare, RoundRectList, DataListMixin){
+], function(kernel, declare, RoundRectList, DataListMixin){
 
 /*=====
 	var RoundRectList = dojox.mobile.RoundRectList;
@@ -14,6 +15,7 @@ define([
 	// summary:
 	//		An enhanced version of RoundRectList.
 
+	kernel.deprecated("dojox.mobile.RoundRectDataList is deprecated", "Use dojox.mobile.RoundRectStoreList instead", 2.0);
 	return declare("dojox.mobile.RoundRectDataList", [RoundRectList, DataListMixin], {
 		// summary:
 		//		An enhanced version of RoundRectList.

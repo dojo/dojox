@@ -122,7 +122,7 @@ define([
 				clearInterval(this.timer);
 			}
 			this.timer = null;
-			if(this.removeOnStop && this.domNode.parentNode){
+			if(this.removeOnStop && this.domNode && this.domNode.parentNode){
 				this.domNode.parentNode.removeChild(this.domNode);
 			}
 		},
