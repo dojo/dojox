@@ -37,6 +37,8 @@ define([
 		//		e.g. Allow ScrollableView in a SwapView.
 		allowNestedScrolls: true,
 
+		appBars: true, // search for application-level bars
+
 		constructor: function(){
 			this.scrollableParams = {};
 		},
@@ -48,8 +50,8 @@ define([
 
 		startup: function(){
 			if(this._started){ return; }
-			var node;
-			var params = this.scrollableParams;
+			this.findAppBars();
+			var node, params = this.scrollableParams;
 			if(this.fixedHeader){
 				node = dom.byId(this.fixedHeader);
 				if(node.parentNode == this.domNode){ // local footer
@@ -81,6 +83,7 @@ define([
 		findAppBars: function(){
 			// summary:
 			//		Search for application-specific header or footer.
+			if(!this.appBars){ return; }
 			var i, len, c;
 			for(i = 0, len = win.body().childNodes.length; i < len; i++){
 				c = win.body().childNodes[i];

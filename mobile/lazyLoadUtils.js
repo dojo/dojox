@@ -61,7 +61,12 @@ define([
 			var len = nodes.length;
 			for(var i = 0; i < len; i++){
 				var s = nodes[i].getAttribute("dojoType") || nodes[i].getAttribute("data-dojo-type");
-				if(s){ req.push(s); }
+				if(s){
+					req.push(s);
+					var m = nodes[i].getAttribute("data-dojo-mixins"),
+						mixins = m ? m.split(/, */) : [];
+					req = req.concat(mixins);
+				}
 			}
 			if(req.length === 0){ return true; }
 

@@ -4,7 +4,7 @@ define([
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
-	"dijit/registry",	// registry.byNode
+	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase"
 ], function(connect, declare, dom, domClass, domConstruct, registry, Contained, WidgetBase){

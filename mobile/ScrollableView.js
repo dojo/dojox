@@ -61,7 +61,6 @@ define([
 		startup: function(){
 			if(this._started){ return; }
 			this.reparent();
-			this.findAppBars();
 			this.inherited(arguments);
 		},
 

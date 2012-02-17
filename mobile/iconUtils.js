@@ -66,12 +66,12 @@ define([
 						//		elements they need.
 						var i, j;
 						if(!sheet){
-							var dic = {};
+							var _dic = {};
 							var ss = dojo.doc.styleSheets;
 							for (i = 0; i < ss.length; i++){
-								ss[i] && findDomButtons(ss[i], dic);
+								ss[i] && findDomButtons(ss[i], _dic);
 							}
-							return dic;
+							return _dic;
 						}
 						var rules = sheet.cssRules || [];
 						for (i = 0; i < rules.length; i++){
@@ -92,6 +92,7 @@ define([
 								}
 							}
 						}
+						return dic;
 					}
 					this._domButtons = findDomButtons();
 				}else{
@@ -195,7 +196,7 @@ define([
 			//		A node reference to place the icon.
 			// pos:
 			//		The position of the icon relative to refNode.
-			if(!parent || !icon && !iconNode){ return; }
+			if(!parent || !icon && !iconNode){ return null; }
 			if(icon && icon !== "none"){ // create or update an icon
 				if(!this.iconWrapper && icon.indexOf("mblDomButton") !== 0 && !iconPos){ // image
 					if(iconNode && iconNode.tagName === "DIV"){

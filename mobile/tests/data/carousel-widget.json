@@ -1,11 +1,12 @@
 {
 	items: [
+		{type:"dojox.mobile.ContentPane", props:'href:"data/fragment2.html"'},
+		{type:"dojox.mobile.ContentPane", props:'href:"data/fragment4.html"'},
 		{src:"images/shell1.jpg", design:"Lion", model: "984", produced: "1990'", size: "H3.5cm W4cm", price: "3,300yen", headerText:"shell", footerText:"Free"},
-		{type:"dojox.mobile._CarouselItem", props:'src:"images/dish1.jpg",footerText:"ashi",headerText:"dish"'},
+		{type:"dojox.mobile.CarouselItem", props:'src:"images/dish1.jpg",footerText:"Free",headerText:"dish"'},
 		{src:"images/shell2.jpg", design:"Lion", model: "984", produced: "1990'", size: "H3.5cm W4cm", price: "2,800yen"},
 		{src:"images/shell3.jpg", design:"Lion", model: "984", produced: "1990'", size: "H3.5cm W4cm", price: "1,800yen"},
 		{type:"dijit.Calendar"},
-		{type:"dojox.mobile.ContentPane", props:'href:"data/fragment1.html"'},
 		{src:"images/shell4.jpg", design:"Lion", model: "984", produced: "1990'", size: "H3.5cm W4cm", price: "800yen"},
 		{src:"images/shell5.jpg", design:"Lion", model: "984", produced: "1990'", size: "H3.5cm W4cm", price: "100yen"},
 		{src:"images/shell6.jpg", design:"Lion", model: "984", produced: "1990'", size: "H3.5cm W4cm", price: "4,800yen"},
