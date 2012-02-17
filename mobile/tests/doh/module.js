@@ -4,6 +4,10 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.Button", dojo.moduleUrl("dojox.mobile", "tests/doh/Button.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Button", dojo.moduleUrl("dojox.mobile", "tests/doh/Button_Programmatic.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeCategory", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeCategory.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeDataList", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeDataList.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeDataList", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeDataList_Programmatic.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeStoreList", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeStoreList.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeStoreList", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeStoreList_Programmatic.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Heading", dojo.moduleUrl("dojox.mobile", "tests/doh/Heading.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Heading", dojo.moduleUrl("dojox.mobile", "tests/doh/Heading2.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Heading", dojo.moduleUrl("dojox.mobile", "tests/doh/Heading_Programmatic.html"),999999);
@@ -21,6 +25,10 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.Progress-indicator", dojo.moduleUrl("dojox.mobile", "tests/doh/progress-indicator.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.RoundRect", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRect.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.RoundRect", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRect_Programmatic.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.RoundRectDataList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectDataList.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.RoundRectDataList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectDataList_Programmatic.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.RoundRectStoreList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectStoreList.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.RoundRectStoreList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectStoreList_Programmatic.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.RoundRectList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectList.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Switch", dojo.moduleUrl("dojox.mobile", "tests/doh/Switch.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Switch", dojo.moduleUrl("dojox.mobile", "tests/doh/Switch_Programmatic.html"),999999);
@@ -42,6 +50,7 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.ComboBoxTests", dojo.moduleUrl("dojox.mobile", "tests/doh/ComboBoxTests.html"),999999);
 	if(!dojo.isIE){
 		doh.registerUrl("dojox.mobile.tests.doh.ContentPane", dojo.moduleUrl("dojox.mobile", "tests/doh/ContentPaneTests.html"),999999);
+		doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeDataList", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeDataListTests.html"),999999);
 	}
 	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeCategory", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeCategoryTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.EdgeToEdgeList", dojo.moduleUrl("dojox.mobile", "tests/doh/EdgeToEdgeListTests.html"),999999);
@@ -59,6 +68,7 @@ try{
 		doh.registerUrl("dojox.mobile.tests.doh.PageIndicator", dojo.moduleUrl("dojox.mobile", "tests/doh/PageIndicatorTests1.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.PageIndicator", dojo.moduleUrl("dojox.mobile", "tests/doh/PageIndicatorTests2.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.PageIndicator", dojo.moduleUrl("dojox.mobile", "tests/doh/PageIndicatorTests3.html"),999999);
+		doh.registerUrl("dojox.mobile.tests.doh.RoundRectDataList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectDataListTests.html"),999999);
 	}
 	doh.registerUrl("dojox.mobile.tests.doh.RadioButton", dojo.moduleUrl("dojox.mobile", "tests/doh/RadioButtonTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.RoundRectList", dojo.moduleUrl("dojox.mobile", "tests/doh/RoundRectListTests.html"),999999);
