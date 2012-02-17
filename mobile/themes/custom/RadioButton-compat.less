@@ -1,19 +1,2 @@
 @import "variables.less";
-
-/* dojox.mobile.RadioButton */
-.mblRadioButton {
-	._background-image-gradient-mask-ui-widget-compat;
-	._background-image-gradient-mask-ui-widget-gecko;
-	-moz-border-radius: 0.5em;
-	border-radius: 0.5em;
-	-moz-appearance: none;
-	appearance: none;
-	transform: translateY(0.45em);
-}
-.mblRadioButtonChecked::after,
-.mblRadioButton:checked::after {
-	-moz-transform: rotate(45deg);
-	transform: rotate(45deg);
-	-moz-transform-origin: 50% 50%;
-	transform-origin: 50% 50%;
-}
+@import "../common/RadioButton-compat.less";

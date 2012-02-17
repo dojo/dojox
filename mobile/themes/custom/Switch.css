@@ -13,7 +13,7 @@
 .mblListItem .mblSwitch {
   position: absolute;
   right: 12px;
-  top: 12px;
+  top: 8px;
 }
 .mblSwitchInner {
   position: absolute;
@@ -37,33 +37,28 @@
   font-weight: bold;
   line-height: 29px;
   -webkit-box-sizing: border-box;
-  border-width: 1px;
-  border-style: inset;
-  border-color: #b5bcc7;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
+  border: 1px solid #c0c0c0;
+  border-bottom-color: #9b9b9b;
 }
 .mblSwitchBgLeft {
   left: 0;
   color: white;
-  background-color: #3F84EB;
-  background-color: #007ef5;
-  color: #131313;
+  background-color: #3f84eb;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
 }
 .mblSwitchBgRight {
-  color: #7F7F7F;
-  background-color: #8fc9ff;
+  color: #7f7f7f;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e2e2e2));
 }
 .mblSwitchKnob {
   position: absolute;
   top: 0;
   height: 27px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#e2e2e2), to(#a4a4a4));
   font-size: 1px;
   -webkit-box-sizing: border-box;
-  border-width: 1px;
-  border-style: outset;
-  border-color: #b5bcc7;
-  background-color: #5cb0ff;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(3.3333333333333335%, rgba(255, 255, 255, 0.1)), color-stop(0.5, rgba(255, 255, 255, 0.6)), color-stop(1, rgba(255, 255, 255, 0.3)));
+  border: 1px solid #9b9b9b;
+  border-bottom-color: #767676;
 }
 .mblSwitchText {
   position: relative;
@@ -204,26 +199,25 @@
 }
 /* Default Shape */
 .mblSwDefaultShape {
-  width: 77px;
+  width: 94px;
 }
 .mblSwDefaultShape.mblSwitchOff .mblSwitchInner {
-  left: -50px;
+  left: -53px;
 }
 .mblSwDefaultShape .mblSwitchBg {
-  width: 77px;
-  border-radius: 5px/14px;
+  border-radius: 2px;
 }
 .mblSwDefaultShape .mblSwitchBgRight {
-  left: 50px;
+  left: 53px;
 }
 .mblSwDefaultShape .mblSwitchKnob {
-  left: 50px;
-  width: 27px;
-  border-radius: 5px/13px;
+  left: 53px;
+  width: 41px;
+  border-radius: 2px;
 }
 .mblSwDefaultShape .mblSwitchText {
-  width: 50px;
+  width: 53px;
 }
 .mblSwDefaultShape .mblSwitchTextRight {
-  left: 26px;
+  left: 40px;
 }

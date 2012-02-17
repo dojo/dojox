@@ -1,46 +1,34 @@
 /* dojox.mobile.Tooltip */
 .mblTooltip {
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background-image: url(compat/ui-widget-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-  _background-image: none;
-}
-.mblTooltipBubble {
   background-image: none;
 }
-.mblTooltipBefore .mblTooltipArrow {
-  *right: 0;
-  /* IE 7 quirks */
-
-}
-.mblTooltipAbove .mblTooltipArrow {
-  *bottom: 0px;
-  /* IE 7 quirks */
-
-}
-.mblTooltipBefore .mblTooltipInnerArrow {
-  *right: -1px;
-  /* IE 7 quirks */
-
-}
-.mblTooltipAbove .mblTooltipInnerArrow {
-  *bottom: -1px;
-  /* IE 7 quirks */
-
-}
-.mblTooltip .mblHeading {
-  *padding: 0 9px 15px;
-  *border-top: 1px solid #5cb0ff;
-  *border-bottom: 1px solid #5cb0ff;
-  *width: auto;
-  *height: auto;
-  *overflow: visible;
-  *line-height: normal;
+.dj_ff3 .mblTooltip {
+  -moz-border-radius: 3px;
 }
 .dj_ie9 .mblTooltip .mblHeading {
   width: auto;
 }
-.mblTooltip .mblHeading .mblToolBarButton {
-  *margin: auto 6px;
+.dj_ie6 .mblTooltipBefore .mblTooltipArrow, .dj_ie7 .mblTooltipBefore .mblTooltipArrow {
+  right: 0;
+}
+.dj_ie6 .mblTooltipAbove .mblTooltipArrow, .dj_ie7 .mblTooltipAbove .mblTooltipArrow {
+  bottom: 0;
+}
+.dj_ie6 .mblTooltipBefore .mblTooltipInnerArrow, .dj_ie7 .mblTooltipBefore .mblTooltipInnerArrow {
+  right: -1px;
+}
+.dj_ie6 .mblTooltipAbove .mblTooltipInnerArrow, .dj_ie7 .mblTooltipAbove .mblTooltipInnerArrow {
+  bottom: -1px;
+}
+.dj_ie6 .mblTooltip .mblHeading, .dj_ie7 .mblTooltip .mblHeading {
+  padding: 0 9px 12px;
+  border-top: 1px solid #dedede;
+  border-bottom: 1px solid #dedede;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  line-height: normal;
+}
+.dj_ie6 .mblTooltip .mblHeading .mblToolBarButton, .dj_ie7 .mblTooltip .mblHeading .mblToolBarButton {
+  margin: auto 6px;
 }

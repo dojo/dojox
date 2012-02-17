@@ -1,15 +1,7 @@
 /* dojox.mobile.ComboBox */
-.dijitPopup {
-  -moz-box-shadow: 0px 0px 50px black;
-  box-shadow: 0px 0px 50px black;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+.dj_gecko .dijitPopup {
+  -moz-box-shadow: none;
 }
-.mblComboBoxMenu {
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
-.mblComboBoxMenuItemSelected {
-  background-image: url(compat/ui-widget-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
+.dj_gecko .mblComboBoxMenuItemSelected {
+  background-image: -moz-linear-gradient(top, #bbbbbb 0%, #666666 100%);
 }

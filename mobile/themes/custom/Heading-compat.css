@@ -1,8 +1,10 @@
 /* dojox.mobile.Heading */
 .mblHeading {
   background-image: url(compat/heading-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, #ffffff 2.5%, rgba(255, 255, 255, 0.14) 2.5%, rgba(255, 255, 255, 0.14) 5%, rgba(255, 255, 255, 0.52) 5%, rgba(255, 255, 255, 0.52) 7.5%, rgba(255, 255, 255, 0.68) 7.5%, rgba(255, 255, 255, 0.68) 10%, rgba(255, 255, 255, 0));
 }
 .mblHeadingSpanTitle {
   white-space: normal;
+}
+.dj_gecko .mblHeading {
+  background-image: -moz-linear-gradient(top, #f6f6f6 0%, #dedede 100%);
 }

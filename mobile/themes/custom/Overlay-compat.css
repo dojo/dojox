@@ -1,8 +1,5 @@
 /* dojox.mobile.Overlay */
 .mblOverlay {
-  background-image: url(compat/ui-widget-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-  _position: absolute;
   text-align: center;
 }
 .dj_gecko .mblOverlay {
@@ -10,4 +7,7 @@
 }
 .dj_ie9 .mblOverlay > *, .dj_ie8 .mblOverlay > * {
   margin: 0 auto;
+}
+.dj_ie6 .mblOverlay {
+  *position: absolute;
 }

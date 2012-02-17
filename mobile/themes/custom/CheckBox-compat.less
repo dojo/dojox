@@ -1,19 +1,2 @@
 @import "variables.less";
-
-/* dojox.mobile.CheckBox */
-.mblCheckBox {
-	._background-image-gradient-mask-ui-widget-compat;
-	._background-image-gradient-mask-ui-widget-gecko;
-	-moz-border-radius: @theme-ui-widget-border-radius;
-	border-radius: @theme-ui-widget-border-radius;
-	-moz-appearance: none;
-	appearance: none;
-	transform: translateY(0.45em);
-}
-.mblCheckBoxChecked::after,
-.mblCheckBox:checked::after {
-	-moz-transform: rotate(45deg);
-	transform: rotate(45deg);
-	-moz-transform-origin: 50% 50%;
-	transform-origin: 50% 50%;
-}
+@import "../common/CheckBox-compat.less";

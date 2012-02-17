@@ -1,29 +1,24 @@
 /* dojox.mobile.Heading */
 .mblHeading {
   position: relative;
-  margin: 0px;
+  margin: 0;
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   z-index: 1;
-  padding: 0px;
+  padding: 0;
   height: 42px;
   font-family: Helvetica;
   font-size: 20px;
   font-weight: bold;
   text-align: center;
   line-height: 44px;
-  background-color: #5cb0ff;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(2.5%, #ffffff), color-stop(2.5%, rgba(255, 255, 255, 0.14)), color-stop(5%, rgba(255, 255, 255, 0.14)), color-stop(5%, rgba(255, 255, 255, 0.52)), color-stop(7.5%, rgba(255, 255, 255, 0.52)), color-stop(7.5%, rgba(255, 255, 255, 0.68)), color-stop(10%, rgba(255, 255, 255, 0.68)), color-stop(1, rgba(255, 255, 255, 0)));
-  border-bottom: 1px solid #769dc0;
-  color: #131313;
-  font-size: 18px;
-  font-family: Helvetica;
-  font-weight: normal;
-  text-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px;
-  text-align: center;
-  line-height: 42px;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f6f6f6), to(#dedede));
+  border-top: 1px solid #bfbfbf;
+  border-bottom: 1px solid #bfbfbf;
+  color: black;
+  text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
 }
 .mblHeading * {
   z-index: 2;
@@ -32,7 +27,7 @@
   position: absolute;
   width: 100%;
   display: none;
-  left: 0px;
+  left: 0;
   z-index: 1;
 }
 .mblHeadingCenterTitle .mblHeadingDivTitle {

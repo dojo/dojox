@@ -1,60 +1,7 @@
 @import "variables.less";
+@import "../common/Switch-compat.less";
 
-/* Switch - common */
-.mblSwitch {
-	display: inline-block;
-}
-.dj_ie .mblSwitch {
-	display: inline;
-}
-.mblSwitchBg {
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-.mblSwitchBgLeft {
-	._background-image-gradient-mask-ui-widget-compat;
-	._background-image-gradient-mask-ui-widget-gecko;
-}
-.mblSwitchBgRight {
-	._background-image-gradient-mask-ui-widget-compat;
-	._background-image-gradient-mask-ui-widget-gecko;
-}
-.mblSwitchKnob {
-	._background-image-gradient-mask-ui-widget-compat;
-	._background-image-gradient-mask-ui-widget-gecko;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-/* Square Shape */
 /* Default Shape */
-.mblSwDefaultShape .mblSwitchBg {
-	-moz-border-radius: @theme-ui-widget-border-radius;
-}
-.mblSwDefaultShape .mblSwitchKnob {
-	-moz-border-radius: @theme-ui-widget-border-radius;
-}
-/* Round Shape */
-.mblSwRoundShape1 .mblSwitchBg,
-.mblSwRoundShape2 .mblSwitchBg {
-	-moz-border-radius: 14px;
-}
-.mblSwRoundShape1 .mblSwitchKnob,
-.mblSwRoundShape2 .mblSwitchKnob {
-	-moz-border-radius: 13px;
-}
-/* Arc Shape */
-.mblSwArcShape1 .mblSwitchBg,
-.mblSwArcShape2 .mblSwitchBg {
-	-moz-border-radius: ~"5px/14px";
-}
-.mblSwArcShape1 .mblSwitchKnob,
-.mblSwArcShape2 .mblSwitchKnob {
-	-moz-border-radius: ~"5px/13px";
-}
-/* Default Shape */
-.mblSwDefaultShape .mblSwitchBg {
-	-moz-border-radius: ~"5px/14px";
-}
-.mblSwDefaultShape .mblSwitchKnob {
-	-moz-border-radius: ~"5px/13px";
+.mblSwDefaultShape {
+	.mblSwSquareShape-styles;
 }

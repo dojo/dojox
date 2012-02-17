@@ -10,20 +10,26 @@
   font-family: Helvetica;
   font-size: 13px;
   font-weight: bold;
-  font-size: 14px;
-  font-family: Helvetica;
-  font-weight: normal;
   text-shadow: none;
-}
-.mblToolBarButton.mblBackButtonText {
-  margin: 6px 8px;
 }
 span.mblToolBarButton {
   padding: 6px 10px 7px 10px;
   display: inline;
 }
+span.mblToolBarButtonLightIcon {
+  padding: 0;
+}
 table.mblToolBarButton {
   vertical-align: middle;
+}
+.mblHeading .mblToolBarButton {
+  float: left;
+}
+.mblHeading span.mblToolBarButton {
+  padding: 0 10px;
+}
+.mblHeading span.mblToolBarButtonLightIcon {
+  padding: 0;
 }
 .mblToolBarButtonCell {
   position: relative;
@@ -36,16 +42,16 @@ table.mblToolBarButton {
 .mblToolBarButtonArrow {
   position: absolute;
   top: 5px;
-  width: 19px;
+  width: 20px;
   height: 19px;
   border-radius: 1px;
-  /* anti-aliasing looks better with this */
-
-  -webkit-transform: scale(0.7, 0.99) rotate(45deg);
-  border: 1px solid #3A4655;
+  -webkit-transform: scale(0.7, 1.05) rotate(45deg);
+  border: 1px solid #9b9b9b;
+  border-right-color: #767676;
+  border-bottom-color: #767676;
 }
 .mblToolBarButtonHasLeftArrow .mblToolBarButtonArrow {
-  left: 0px;
+  left: 0;
 }
 .mblToolBarButtonHasRightArrow .mblToolBarButtonArrow {
   right: -11px;
@@ -53,27 +59,24 @@ table.mblToolBarButton {
 .mblToolBarButtonBody {
   position: relative;
   overflow: hidden;
-  border: 1px inset #b5bcc7;
-  border-radius: 2px;
+  border-radius: 0;
+  border: 1px solid #9b9b9b;
+  border-bottom-color: #767676;
+  text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
 }
 .mblToolBarButtonBody table {
   margin: 0 auto;
 }
-.dj_ie .mblToolBarButtonBody table {
-  /* this can't be moved to compat */
-
-  margin: 0;
-}
 .mblToolBarButtonHasLeftArrow .mblToolBarButtonBody {
   left: 11px;
   border-left-width: 0;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .mblToolBarButtonHasRightArrow .mblToolBarButtonBody {
   border-right-width: 0;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .mblToolBarButtonText .mblToolBarButtonIcon {
   padding-left: 10px;
@@ -89,10 +92,4 @@ table.mblToolBarButton {
 }
 .mblToolBarButtonIcon > div {
   height: 29px;
-}
-.mblHeading .mblToolBarButton {
-  float: left;
-}
-.mblHeading span.mblToolBarButton {
-  padding: 0 10px;
 }

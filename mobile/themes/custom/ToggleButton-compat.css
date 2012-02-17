@@ -1,15 +1,34 @@
 /* dojox.mobile.ToggleButton */
 .mblToggleButton {
-  background-image: url(compat/ui-widget-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  background-image: url(compat/button-bg.png);
 }
-.mblToggleButton.mblToggleButtonChecked::after {
-  -moz-transform: translate(-25px, 0px) rotate(45deg) skew(10deg);
-  transform: rotate(45deg) skew(10deg);
+.mblToggleButtonSelected {
+  background-image: url(compat/button-sel-bg.png);
+}
+.mblToggleButtonChecked {
+  background-image: url(compat/button-chk-bg.png);
+}
+.mblToggleButtonChecked.mblToggleButtonSelected {
+  background-image: url(compat/button-unsel-bg.png);
+}
+.dj_gecko .mblToggleButton {
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #e2e2e2 100%);
+}
+.dj_gecko .mblToggleButtonSelected {
+  background-image: -moz-linear-gradient(top, #bbbbbb 0%, #666666 100%);
+}
+.dj_gecko .mblToggleButtonChecked {
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #e2e2e2 100%);
+}
+.dj_gecko .mblToggleButtonChecked::after {
+  -moz-transform: translate(-25px, 0) rotate(45deg) skew(10deg);
   -moz-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
+}
+.dj_gecko .mblToggleButtonChecked.mblToggleButtonSelected {
+  background-image: -moz-linear-gradient(top, #bbbbbb 0%, #666666 100%);
+}
+.dj_ff3 .mblToggleButton {
+  -moz-border-radius: 0;
 }
 .dj_ff3 .mblToggleButton.mblToggleButtonChecked::after {
   -moz-transform: translate(-25px, -6px) rotate(45deg) skew(10deg);

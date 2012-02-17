@@ -1,16 +1,33 @@
 /* dojox.mobile.CheckBox */
 .mblCheckBox {
-  background-image: url(compat/ui-widget-bg.png);
-  background-image: -moz-linear-gradient(top, #ffffff, rgba(255, 255, 255, 0.1) 3.3%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.3));
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  -moz-appearance: none;
-  appearance: none;
-  transform: translatey(0.45em);
+  background-image: url(compat/button-bg.png);
 }
-.mblCheckBoxChecked::after, .mblCheckBox:checked::after {
+.mblCheckBoxSelected {
+  background-image: url(compat/button-sel-bg.png);
+}
+.mblCheckBoxChecked, .mblCheckBox:checked {
+  background-image: url(compat/button-chk-bg.png);
+}
+.mblCheckBoxChecked.mblCheckBoxSelected, .mblCheckBox:checked.mblCheckBoxSelected {
+  background-image: url(compat/button-unsel-bg.png);
+}
+.dj_gecko .mblCheckBox {
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #e2e2e2 100%);
+  -moz-appearance: none;
+}
+.dj_gecko .mblCheckBoxSelected {
+  background-image: -moz-linear-gradient(top, #bbbbbb 0%, #666666 100%);
+}
+.dj_gecko .mblCheckBoxChecked, .dj_gecko .mblCheckBox:checked {
+  background-image: -moz-linear-gradient(top, #ffffff 0%, #e2e2e2 100%);
+}
+.dj_gecko .mblCheckBoxChecked::after, .dj_gecko .mblCheckBox:checked::after {
   -moz-transform: rotate(45deg);
-  transform: rotate(45deg);
   -moz-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
+}
+.dj_gecko .mblCheckBoxChecked.mblCheckBoxSelected, .dj_gecko .mblCheckBox:checked.mblCheckBoxSelected {
+  background-image: -moz-linear-gradient(top, #bbbbbb 0%, #666666 100%);
+}
+.dj_ff3 .mblCheckBox {
+  -moz-border-radius: 0;
 }
