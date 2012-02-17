@@ -45,30 +45,34 @@
 			}
 		}
 		function setSelectedRingtone(node){
-		// NO-OP
+		// NOOP
 		}
 		function onCheck(item, checked){
-			if(checked){
-				checkedItem = trim(item.labelNode.innerText || item.labelNode.textContent || '');
-			}
+			setTimeout(function(){
+				if(checked){
+					checkedItem = trim(item.labelNode.innerText || item.labelNode.textContent || '');
+				}
+			}, 500);
 		}
 	</script>
 </head>
 <body style="visibility:hidden;">
-	<input value="native input" style="z-index:9999;margin:20px;display:block;">
-	<label for="ringtone">Ringtone</label>
-	<input id="ringtone" readOnly value="" placeholder="Select a ringtone" style="margin:40px 0;"
-		onfocus="listPicker.show(this,['above-centered','below-centered','after','before'])" />
-	<input value="native input" style="margin:20px;display:block;">
-	<input value="native input" style="margin:1500px 0 20px 0;display:block;">
+	<table cellspacing="20" style="margin-top:100px;padding-bottom:1500px;z-index:9999;"><!-- scrollable for testing purposes -->
+	<tr>
+		<td style="text-align:right;font-weight:bold;z-index:9999;">Ringtone</td>
+		<td><input id="ringtone" readOnly value="" placeholder="Select a ringtone"
+			onclick="listPicker.show(this, ['above-centered','below-centered','after','before'])" /></td>
+	</tr>
+	</table>
+
 	<!-- if onBlur returns !false, then the popup is closed when a click event is received away from the popup -->
 	<!-- override user's custom z-index --> 
 	<div id="listPicker" style="z-index:10000;" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getSelectedRingtone, onShow:setSelectedRingtone, onBlur:function(){ return true; }">
 		<h1 id="header1" dojoType="dojox.mobile.Heading" label="Ringtone">
-			<div dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
-				onclick="listPicker.hide(true)"></div>
-			<div dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
-				onclick="listPicker.hide(false)"></div>
+			<button dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="listPicker.hide(true)"></button>
+			<button dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="listPicker.hide(false)"></button>
 		</h1>
 		<div dojoType="dojox.mobile.ScrollableView" selected="true" height="auto">
 			<ul id="list1" dojoType="dojox.mobile.RoundRectList" select="single" data-dojo-props="onCheckStateChanged:onCheck">
