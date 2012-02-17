@@ -17,7 +17,8 @@
 			"dojox/mobile/FixedSplitter",
 			"dojox/mobile/ScrollableView",
 			"dojox/mobile/IconContainer",
-			"dojox/mobile/ScreenSizeAware"
+			"dojox/mobile/ScreenSizeAware",
+			"dojox/mobile/Container"
 		]);
 	</script>
 
@@ -35,7 +36,7 @@
 <body style="visibility:hidden;">
 	<span data-dojo-type="dojox.mobile.ScreenSizeAware"></span>
 	<div data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='orientation:"H"'>
-		<div data-dojo-type="dojox.mobile.FixedSplitterPane" style="width:300px;border-right:1px solid black;">
+		<div data-dojo-type="dojox.mobile.Container" style="width:300px;border-right:1px solid black;">
 			<div id="settings" data-dojo-type="dojox.mobile.ScrollableView" data-dojo-props='selected:true'>
 				<h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='fixed:"top"'>Settings</h1>
 
@@ -54,7 +55,7 @@
 			</div>
 		</div>
 
-		<div data-dojo-type="dojox.mobile.FixedSplitterPane">
+		<div data-dojo-type="dojox.mobile.Container">
 
 			<div id="general" data-dojo-type="dojox.mobile.ScrollableView" data-dojo-props='selected:true'>
 				<h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='fixed:"top", back:"Settings", moveTo:"settings"'>General</h1>

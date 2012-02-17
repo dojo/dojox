@@ -22,7 +22,8 @@
 			"dojox/mobile/parser",
 			"dojox/mobile",
 			"dojox/mobile/compat",
-			"dojox/mobile/FixedSplitter"
+			"dojox/mobile/FixedSplitter",
+			"dojox/mobile/Container"
 		], function(connect, ItemFileWriteStore, domConstruct, ready, registry, Heading, ScrollableView, EdgeToEdgeDataList){
 			var viewCache = {};
 			function leftItemSelected(e){
@@ -33,10 +34,8 @@
 					// Dynamically creates a new view
 					id = item.id ? item.id + "View" : undefined;
 					var view = new ScrollableView({
-						id: id,
-						selected: true
+						id: id
 					}, domConstruct.create("DIV", null, "rightPane"));
-					view.startup();
 					id = viewCache[item.data] = view.id;
 
 					var heading = new Heading({
@@ -45,18 +44,18 @@
 						moveTo: "view1",
 						fixed: "top"
 					});
-					view.addChild(heading);
+					view.addFixedBar(heading);
 
 					var store = new ItemFileWriteStore({url: item.data});
 					var list = new EdgeToEdgeDataList({
 						store: store
 					});
-					view.addChild(list);
+					list.placeAt(view.containerNode);
 
 					this.updateBackButton();
 					this.updateTransition();
 
-					view.resize();
+					view.startup();
 				}
 				item.transitionTo(id);
 			}
@@ -85,18 +84,24 @@
 		overflow: hidden;
 		position: relative;
 	}
+	.iphone_theme #leftPane, .blackberry_theme #leftPane {
+		border-right: 1px solid black;
+	}
+	.android_theme #leftPane {
+		border-right: 1px solid gray;
+	}
 	</style>
 </head>
-<body style="visibility:hidden;background-color:white;">
+<body style="visibility:hidden;">
 	<div data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='orientation:"H", screenSizeAware:true'>
-		<div id="leftPane" data-dojo-type="dojox.mobile.FixedSplitterPane" style="width:300px;border-right:1px solid black;">
+		<div id="leftPane" data-dojo-type="dojox.mobile.Container" style="width:300px;">
 			<div id="view1" data-dojo-type="dojox.mobile.ScrollableView">
 				<h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='fixed:"top"'>Insurance</h1>
 				<ul data-dojo-type="dojox.mobile.EdgeToEdgeDataList" id="list1" data-dojo-props='store:store1, query:{label: "*"}, stateful:true'></ul>
 			</div>
 		</div>
 
-		<div id="rightPane" data-dojo-type="dojox.mobile.FixedSplitterPane"></div>
+		<div id="rightPane" data-dojo-type="dojox.mobile.Container"></div>
 	</div>
 </body>
 </html>
