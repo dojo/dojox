@@ -94,7 +94,7 @@ define([
 
 		var prop = targetProp == "*" ? sourceProp : targetProp, logContent = getLogContent(target, prop, source, sourceProp);
 
-		try {
+		try{
 			current = convertFunc ? convertFunc(current) : current;
 		}catch(e){
 			if(dojox.debugDataBinding){
@@ -206,7 +206,7 @@ define([
 				_watchHandles.push(source.watch.apply(source, ((sourceProp != "*") ? [sourceProp] : []).concat([function(name, old, current){
 					copy(parseFunc, target, targetProp, source, name, old, current, excludes);
 				}])));
-			}else if (debugDataBinding){
+			}else if(debugDataBinding){
 				console.log(logContent.join(" is not a stateful property. Its change is not reflected to ") + ".");
 			}
 		}

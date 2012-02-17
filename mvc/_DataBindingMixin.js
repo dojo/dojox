@@ -238,7 +238,7 @@ define([
 		},
 
 		_isEqual: function(one, other){
-        	// test for equality
+			// test for equality
 			return one === other ||
 				// test for NaN === NaN
 				isNaN(one) && typeof one === 'number' &&

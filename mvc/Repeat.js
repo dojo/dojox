@@ -178,11 +178,11 @@ define([
 				if(repeatnode && repeatnode.children){
 					var t3 = registry.findWidgets(repeatnode);
 					var parentcnt = t3.length;
-					for(var j=parentcnt;j>0;j--){
-						if(t3[j-1].declaredClass=="dojox.mvc.Group"){
+					for(var j = parentcnt;j > 0;j--){
+						if(t3[j-1].declaredClass == "dojox.mvc.Group"){
 							var cnt = repeatnode.children[j-1].children.length;
 							var selForList = registry.byId(repeatParent.id).select;
-							for(var i=cnt;i>0;i--){
+							for(var i = cnt;i > 0;i--){
 								registry.byId(repeatnode.children[j-1].id).select = selForList;
 								domconstruct.place(repeatnode.children[j-1].removeChild(repeatnode.children[j-1].children[i-1]), repeatParent, "first");
 							}							

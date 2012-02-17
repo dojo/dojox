@@ -207,7 +207,7 @@ define([
 			var list = ["onClick"].concat(this.constructor._setterAttrs);
 			array.forEach(["id", "excludes", "properties", "ref", "binding"], function(s){
 				var index = array.indexOf(list, s);
-				if (index >= 0){ list.splice(index, 1); }
+				if(index >= 0){ list.splice(index, 1); }
 			});
 			return this.constructor._attribs = list; // String[]
 		}
