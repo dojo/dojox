@@ -24,7 +24,7 @@
 			showSelectedValue = function(){
 				var w = registry.byId("spin1");
 				document.getElementById("msg").innerHTML =
-					w.slots[0].getValue()+ ":" + w.slots[1].getValue() + ":" + w.slots[2].getValue();
+					w.slots[0].get("value")+ ":" + w.slots[1].get("value") + ":" + w.slots[2].get("value");
 			}
 		});
 	</script>
