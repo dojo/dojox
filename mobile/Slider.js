@@ -72,6 +72,7 @@ define([
 		_setValueAttr: function(/*Number*/ value, /*Boolean?*/ priorityChange){
 			// summary:
 			//		Hook so set('value', value) works.
+			value = Math.max(Math.min(value, this.max), this.min);
 			var fromPercent = (this.value - this.min) * 100 / (this.max - this.min);
 			this.valueNode.value = value;
 			this.inherited(arguments);
