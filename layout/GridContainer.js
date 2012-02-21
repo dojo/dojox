@@ -12,7 +12,7 @@ define([
 	"dojo/_base/window",
 	"dojo/ready",	// dojo.ready
 	"dojox/layout/GridContainerLite"
-],function(dojo, declare, array, connect, sniff, domClass, domStyle, geom, domConstruct, lang, win, ready, GridContainerLite){
+],function(dojo, declare, array, connect, has, domClass, domStyle, geom, domConstruct, lang, win, ready, GridContainerLite){
 	return declare(
 		"dojox.layout.GridContainer",
 		GridContainerLite,
