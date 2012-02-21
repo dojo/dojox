@@ -19,7 +19,7 @@ define([
 			//		Construct the UI for this widget, setting this.domNode.
 
 			//render needs a domNode to work with
-			this.domNode = this.srcNodeRef;
+			this.domNode = this.srcNodeRef || dojo.create('div');
 
 			if(!this._render){
 				var old = ddcd.widgetsInTemplate;
