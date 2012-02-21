@@ -165,7 +165,7 @@ doh.register("dojox.dtl.text.filter",
 
 			tpl = new dd.Template('{{ now|date:"z" }}');
 			t.is("0", tpl.render(context));
-		
+
 			tpl = new dd.Template('{{ now|date:"W" }}');
 			t.is("1", tpl.render(context));
 		},
@@ -544,6 +544,8 @@ doh.register("dojox.dtl.text.filter",
 
 			tpl = new dd.Template('{{ now|time }}');
 			t.is(dojox.dtl.utils.date.format(context.now, "P"), tpl.render(context));
+			tpl = new dd.Template('{{ now|time:"g" }}');
+			t.is('12', tpl.render(context));
 		},
 		function test_filter_timesince(t){
 			var dd = dojox.dtl;

@@ -70,7 +70,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 		// summary: A full textual representation of the day of the week
 		return this.weekdays[this.date.getDay()];
 	},
-	
+
 	N: function(){
 		// summary: ISO-8601 numeric representation of the day of the week (added in PHP 5.1.0)
 		var w = this.w();
@@ -132,7 +132,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 				}
 			}
 		}
-		
+
 		return week;
 	},
 
@@ -213,7 +213,7 @@ dojo.extend(dojox.date.php.DateFormat, {
 
 	g: function(){
 		// summary: 12-hour format of an hour without leading zeros
-		return (this.date.getHours() > 12) ? this.date.getHours() - 12 + "" : this.date.getHours() + "";
+		return (this.date.getHours() % 12 || 12) + "";
 	},
 
 	G: function(){
