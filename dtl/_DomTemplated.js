@@ -24,7 +24,7 @@ define([
 			if(!this._render){
 				var old = ddcd.widgetsInTemplate;
 				ddcd.widgetsInTemplate = this.widgetsInTemplate;
-				this.template = this.template || this._getCachedTemplate(this.templatePath, this.templateString);
+				this.template = this.template && this.template !== true ? this.template : this._getCachedTemplate(this.templatePath, this.templateString);
 				this._render = new ddrd.Render(this.domNode, this.template);
 				ddcd.widgetsInTemplate = old;
 			}
