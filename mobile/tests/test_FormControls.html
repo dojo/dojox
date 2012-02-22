@@ -18,14 +18,102 @@
 			dojo.require("dojox.mobile.RadioButton");
 			dojo.require("dojox.mobile.Slider");
 			dojo.require("dojox.mobile.TextBox");
+			dojo.require("dojox.mobile.SearchBox");
 			dojo.require("dojox.mobile.ExpandingTextArea");
 			dojo.require("dojox.mobile.ToggleButton");
+
+			myOnSearch = function(results, query, options){
+				if(results.length){
+					console.log('first paged result ' + (options.start+1) + ' of ' + results.total + ': label = ' + results[0].name + ', value = ' + results[0].value);
+					console.log('last paged result ' + (options.start+results.length) + ' of ' + results.total + ': label = ' + results[results.length-1].name + ', value = ' + results[results.length-1].value);
+				}else if(results.total == 0){
+					console.log('no matching results');
+				}
+				if((options.start+results.length) < results.total){
+					results.nextPage();
+				}
+			};
 		</script>
 		
 		<style>
 		.bold {
 			font-weight: bold;
 		}
+
+.mblSearchBox.iphone4:focus::-webkit-search-cancel-button
+{ /* cannot touch cancel button even if visibile */
+	background: none !important;
+	border-color: transparent !important;
+}
+
+.mblSearchBox::-webkit-search-cancel-button 
+{ 
+	-webkit-appearance: none;
+	background-color: gray;
+	background-repeat: no-repeat; /* needed for smooth X lines on iPad */
+	background-position: center center;
+	background-size: 15px 15px;
+	background-image:
+		-webkit-gradient(linear,
+			left top,
+			right bottom,
+			from(transparent),
+				color-stop(0.46,  transparent),
+				color-stop(0.46,  white),
+				color-stop(0.54,  white),
+				color-stop(0.54,  transparent),
+			to(transparent)
+		),
+		-webkit-gradient(linear,
+			right top,
+			left bottom,
+			from(transparent),
+				color-stop(0.46,  transparent),
+				color-stop(0.46,  white),
+				color-stop(0.54,  white),
+				color-stop(0.54,  transparent),
+			to(transparent)
+		)
+		!important;
+	border: 2px solid gray;
+	border-radius: 99px; /* circular */
+	box-sizing: border-box;
+	height: 15px;
+	width: 15px;
+	display: inline-block;
+	vertical-align: 0px;
+} 
+
+.mblSearchBox::-webkit-search-results-decoration { 
+	-webkit-appearance: none; 
+	background-repeat: no-repeat;
+	background-size: 13px 13px, 9px 9px;
+	background-position: 0px 0px, 10px 10px;
+	background-image:
+		-webkit-gradient(radial,
+			50% 50%, 0,
+			50% 50%, 6,
+			from(transparent),
+				color-stop(0.65, transparent),
+			color-stop(0.8, gray),
+				color-stop(0.95, transparent),
+			to(transparent)
+		),
+		-webkit-gradient(linear,
+			right top,
+			left bottom,
+			from(transparent),
+				color-stop(0.45,  transparent),
+			color-stop(0.5,  gray),
+				color-stop(0.55,  transparent),
+			to(transparent)
+		)
+		!important;
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	vertical-align: 0px;
+} 
 		</style>
 	</head>
 	<body style="visibility:hidden;">
@@ -165,6 +253,10 @@
 					<tr>
 						<td valign="top"><span class="bold">TextBox</span></td>
 						<td align="right"><input dojoType="dojox.mobile.TextBox" maxLength="9" selectOnClick="true" placeHolder="max 9 chars"></td>
+					</tr>
+					<tr>
+						<td valign="top"><span class="bold">SearchBox</span></td>
+						<td align="right"><input dojoType="dojox.mobile.SearchBox" type="search" selectOnClick="true" placeHolder="Search" data-dojo-props='list:"states", pageSize:5, onSearch:myOnSearch'></td>
 					</tr>
 				</table>
 			</div>
