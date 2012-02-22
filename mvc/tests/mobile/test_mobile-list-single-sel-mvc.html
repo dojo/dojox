@@ -21,7 +21,6 @@
 			"dojo/ready",
 			"dojo/_base/Deferred",
 			"dojox/mvc/getStateful",
-			"dojox/mvc/getStatefulOptions",
 			"dojox/mvc/at",
 			"dojox/mvc/Group",
 			"dojox/mvc/Repeat",
@@ -39,7 +38,7 @@
 //			"dojox/mobile/RoundRectCategory",
 //			"dojox/mobile/Heading",
 			"dojox/mobile/deviceTheme"
-		], function(lang, registry, parser, MemoryStore, ready, Deferred, getStateful, getStatefulOptions){
+		], function(lang, registry, parser, MemoryStore, ready, Deferred, getStateful){
 
 			dojox.debugDataBinding = false;
 
@@ -91,7 +90,7 @@
 				dojox.debugDataBinding = true;
 
 				Deferred.when(memStore1.query(), function(data){
-					model1 = getStateful(data, getStatefulOptions)[0];
+					model1 = getStateful(data)[0];
 					model1Orig = lang.clone(model1);
 					//if(model1 && model2 && model3){ runTests(); }
 				});
@@ -100,7 +99,7 @@
 		var memStore2 = new MemoryStore({data : search_results_init2});
 		//model2 = mvc.newStatefulModel({ store : memStore2 })[0];
 				Deferred.when(memStore2.query(), function(data){
-					model2 = getStateful(data, getStatefulOptions)[0];
+					model2 = getStateful(data)[0];
 					model2Orig = lang.clone(model2);
 					//if(model1 && model2 && model3){ runTests(); }
 				});

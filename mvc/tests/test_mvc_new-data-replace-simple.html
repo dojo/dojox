@@ -6,52 +6,74 @@
 
 		<script src="../../../dojo/dojo.js"
 				type="text/javascript"
-				djConfig="parseOnLoad: true, isDebug: true">
+				djConfig="parseOnLoad: false, isDebug: true">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
 		<script type="text/javascript" >
-			dojo.require("dojox.mvc");
-			dojo.require("dojox.mvc.Output");
-			dojo.require("dojox.mvc.at");
-			dojo.require("dojox.mvc.Group");
-			dojo.require("dojox.mvc.Repeat");
-			dojo.require("dijit.form.TextBox");
-			dojo.require("dijit.form.Button");
-			dojo.require("dojo.store.Memory");
-			dojo.require("dojo.parser");
-
-			dojox.debugDataBinding = true;
+		var model1, model1Data, model2Data, model3Data;
+ 
+		require([
+			'dojo/parser',
+			"dojo/_base/lang",
+			'dojo/ready',
+			"dojo/Stateful",
+			"dojox/mvc/getStateful",
+			"dojox/mvc/getPlainValue",
+			"dojox/mvc/EditModelRefController",
+			"dojo/store/Memory",
+			'dijit/registry',			
+			"dojo/_base/Deferred",
+			'dojox/mvc/at',
+			'dijit/form/TextBox',
+			'dijit/form/Button',
+			'dojox/mvc/Group',
+			'dojox/mvc/Repeat',
+			'dojox/mvc/Output'
+			], function(parser, lang, ready, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
+				dojox.debugDataBinding = true;
 			
-			var model1Data =
+			model1Data =
 			[{
 				"Query" : "Engineers1",
 				"First"	  : "Anne1",
 				"Last"	  : "Ackerman1"
 			}];
 
-			var model2Data =
+			model2Data =
 			[{
 				"Query" : "Engineers2",
 				"First"	  : "Anne2",
 				"Last"	  : "Ackerman2"
 			}];
-			var model3Data =
+			model3Data =
 			[{
 				"Query" : "Engineers3",
 				"First"	  : "",
 				"Last"	  : ""
 			}];
 
-			var memStore1 = new dojo.store.Memory({data : model1Data});
-			var model1 = dojox.mvc.newStatefulModel({ store : memStore1 })[0];
-			var memStore2 = new dojo.store.Memory({data : model2Data});
-			//var model2 = dojox.mvc.newStatefulModel({ store : memStore2 })[0];
-			//var memStore3 = new dojo.store.Memory({data : model3Data});
-			//var model3 = dojox.mvc.newStatefulModel({ store : memStore3 })[0];
-		</script>
+			//var memStore1 = new dojo.store.Memory({data : model1Data});
+			//var model1 = dojox.mvc.newStatefulModel({ store : memStore1 })[0];
+				var memStore1 = new Memory({data : model1Data});
+				dojo.Deferred.when(memStore1.query(), function(data){
+					model1 = EditModelRefController({sourceModel : new Stateful({current: getStateful(data)[0]})});
+				});
+			
+				replaceData = function(dest, src){
+					src = getPlainValue(src);
+					dest.set("current", getStateful(src));
+				}
+				
+					
+				// when "dojo/ready" is ready call parser.parse
+				ready(function(){
+					parser.parse();
+				});
+			});
+	</script>
 	</head>
 	<body class="claro">
 		<div id="wrapper">
@@ -65,53 +87,50 @@
 			<div id="main">
 				<div id="leftNav"></div>
 				<div id="mainContent">
-				<!--	<div class="row">
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('ref',model1);}">Swap Model1</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('ref',model2);}">Swap Model2</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('ref',model3);}">Swap Model3</button>
+
+					<h4>Replace Model 1 data with original data from the models listed below, this should keep the bindings to the Model1 Output</h4>
+					<div class="row" style="width: 740px">
+	  					<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model1Data[0]);}">Replace with Orig. Model1 data</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model2Data[0]);}">Replace with Orig. Model2 data</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model3Data[0]);}">Replace with Orig. Model3 data</button>
 					</div>
-				-->	
-					<div class="row">
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',model1Data);}">Swap Model1 data</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){console.log(model2Data);dijit.byId('outergroupId').set('target', model2Data);}">Swap Model2 data</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',model3Data);}">Swap Model3 data</button>						
-					</div>
-					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: model1">
+				
+					<div id="outergroupId1x"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model1, 'current')">
 						<div class="row">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="fnameInput" 
-									data-dojo-props="value: dojox.mvc.at('rel:First', 'value')">
+									data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
 						</div>
 						<div class="row">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="lnameInput" 
-									data-dojo-props="value: dojox.mvc.at('rel:Last', 'value')">
+									data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
 						</div>
 						<div class="row">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="qnameInput" 
-									data-dojo-props="value: dojox.mvc.at('rel:Query', 'value')">
+									data-dojo-props="value: dojox.mvc.at('rel:', 'Query')">
 						</div>
 					</div>
-					<div class="row" id="outputgroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: model1">
+					<div class="row" id="outputgroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model1, 'current')">
 							<span>
 								Model1 Output is ==>  
 							</span>
 							<span id="firstnameOutput10" data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:First', 'value')">
+								data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
 								Name1 is "${this.value}" : 
 							</span>
 							<span id="firstnameOutput11" data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:Last', 'value')">
+								data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
 								Name2 is "${this.value}" : 
 							</span>
 							<span id="firstnameOutput12" data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:Query', 'value')">
+								data-dojo-props="value: dojox.mvc.at('rel:', 'Query')">
 								Name3 is "${this.value}"  
 							</span>
 					</div>
 					<br/>Model:
-					<button id="reset" type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model1.reset();model2.reset();model3.reset();}">Reset all</button>
+					<button id="reset" type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model1.reset();}">Reset all</button>
 				</div>
 			</div>
 		</div>

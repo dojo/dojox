@@ -135,7 +135,7 @@ define([
 				//		The index to end at. (a[end] won't be picked up)
 
 				var slice = [], end = typeof end === "undefined" ? this.get("length") : end;
-				for(var i = start; i < Math.min(end, this.get("length")); i++){
+				for(var i = start || 0; i < Math.min(end, this.get("length")); i++){
 					slice.push(this.get(i));
 				}
 				return new StatefulArray(slice); // dojox.mvc.StatefuArray
@@ -187,8 +187,12 @@ define([
 					}
 					return this;
 				}else{
+					var oldLength = this.length;
 					Stateful.prototype.set.call(this, name, value);
-					return Stateful.prototype.set.call(this, "length", this.length);
+					if(oldLength != this.length){
+						Stateful.prototype.set.call(this, "length", this.length);
+					}
+					return this;
 				}
 			}
 		});

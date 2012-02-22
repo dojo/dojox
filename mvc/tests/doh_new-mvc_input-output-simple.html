@@ -19,18 +19,17 @@
 				"dijit/registry",
 				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
-				"dojox/mvc/getStatefulOptions",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
-			], function(doh, ddom, parser, registry, at, getStateful, getStatefulOptions){
+			], function(doh, ddom, parser, registry, at, getStateful){
 				dojox.debugDataBinding = true;
 				// The dojox.mvc.StatefulModel class creates a data model instance
 				// where each leaf within the data model is decorated with dojo.Stateful
 				// properties that widgets can bind to and watch for their changes.
 				//model = mvc.newStatefulModel({data :{"First": "John", "Last": "Doe", "Email": "jdoe@example.com"}});
-				model = getStateful({"First": "John", "Last": "Doe", "Email": "jdoe@example.com"},getStatefulOptions);
+				model = getStateful({"First": "John", "Last": "Doe", "Email": "jdoe@example.com"});
 				// the StatefulModel created above is initialized with 
 				// model.First set to "John", model.Last set to "Doe" and model.Email set to "jdoe@example.com"
 				parser.parse();

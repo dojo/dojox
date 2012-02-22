@@ -35,7 +35,6 @@
 				"dijit/form/ValidationTextBox",
 				"dijit/form/NumberTextBox",
 				"dojox/charting/plot2d/Pie",
-				"dojox/mvc/_Controller",
 				"dojox/mvc/_TextBoxExtensions",
 				"dojox/mvc/Group",
 				"dojox/mvc/ModelRefController",
@@ -131,7 +130,7 @@
 	</head>
 	<body class="claro" style="background-image: url(images/validating_form_pattern.png)">
 		<div id="wrapper">
-			<div id="addressLookupController" class="dijitDisplayNone" data-dojo-type="dojox.mvc._Controller" data-dojo-mixins="dojox.mvc.ModelRefController"
+			<div id="addressLookupController" class="dijitDisplayNone" data-dojo-type="dojox.mvc.ModelRefController"
 			 data-dojo-props="model: loanModel, ownProps: {_setZipAttr: 1, _setCountyAttr: 1}">
 				<script type="dojo/method" event="_setZipAttr" args="value">
 					var changed = this.model.Zip != value;

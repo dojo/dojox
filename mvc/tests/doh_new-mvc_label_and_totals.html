@@ -19,14 +19,13 @@
 				"dojo/parser",
 				"dijit/registry",
 				"dojox/mvc/getStateful",
-				"dojox/mvc/getStatefulOptions",
 				"dojox/mvc/at",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Repeat",
 				"dojox/mvc/Output"
-			], function(doh, ddom, parser, registry, getStateful, getStatefulOptions){
+			], function(doh, ddom, parser, registry, getStateful){
 				dojox.debugDataBinding = true;
 
 				// Order data
@@ -102,13 +101,13 @@
 				};
 
 				//summodel = mvc.newStatefulModel({ data : sumData });
-				summodel = getStateful(sumData,getStatefulOptions );
+				summodel = getStateful(sumData );
 
 				//sumrepeatmodel = mvc.newStatefulModel({ data : sumRepeatData });
-				sumrepeatmodel = getStateful(sumRepeatData, getStatefulOptions);
+				sumrepeatmodel = getStateful(sumRepeatData);
 
 				//model = mvc.newStatefulModel({ data : order });
-				model = getStateful(orderData, getStatefulOptions);
+				model = getStateful(orderData);
 				
 				parser.parse();
 				recomputeTotal();

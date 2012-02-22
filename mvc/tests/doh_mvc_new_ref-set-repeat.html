@@ -9,10 +9,10 @@
 			@import "css/app-format.css";
 		</style>
 		<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/claro/claro.css"/>
-		<script src="../../../dojo/dojo.js" type="text/javascript" djConfig="isDebug: true"></script>
+		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="isDebug: true"></script>
 		<script type="text/javascript" src="./helpers.js"></script>
 		<script type="text/javascript">
-			var data1, data2, data3, model1, model2, model3;
+			var ctrl, data1, data2, data3;
 
 			require([
 				"doh/runner",
@@ -23,7 +23,7 @@
 				"dojo/store/Memory",
 				"dijit/registry",
 				"dojox/mvc/getStateful",
-				"dojox/mvc/getStatefulOptions",
+				"dojox/mvc/ModelRefcontroller",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojox/mvc/at",
@@ -31,14 +31,13 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, array, lang, Deferred, parser, MemoryStore, registry, getStateful, getStatefulOptions){
+			], function(doh, array, lang, Deferred, parser, MemoryStore, registry, getStateful, ModelRefController){
 				function runTests(){
-					parser.parse();
-
 					doh.register("Tests", [
 						{
 							name : "initial",
 							runTest : function() {
+								ctrl.set("model", ctrl.get("model1"));
 								doh.is("Anne1", registry.byId("nameInput0").get("value"), "nameInput0 should be Anne1");
 								doh.is("Ben1", registry.byId("nameInput1").get("value"), "nameInput1 should be Ben1 ");
 								doh.is("Chad1", registry.byId("nameInput2").get("value"), "nameInput2 should be Chad1");
@@ -52,7 +51,7 @@
 						}, {
 							name : "SelectModel2",
 							runTest : function() {
-								registry.byId("outergroupId").set("target", model2);
+								ctrl.set("model", ctrl.get("model2"));
 								doh.is("Anne2", registry.byId("nameInput0").get("value"), "nameInput0 should be Anne2");
 								doh.is("Ben2", registry.byId("nameInput1").get("value"), "nameInput1 should be Ben2 ");
 							}
@@ -68,7 +67,7 @@
 						}, {
 							name : "SelectModel3",
 							runTest : function() {
-								registry.byId("outergroupId").set("target", model3);
+								ctrl.set("model", ctrl.get("model3"));
 								doh.is("", registry.byId("nameInput0").get("value"), "nameInput0 should be blank");
 							}
 						}, {
@@ -93,7 +92,7 @@
 										}
 									]
 								};
-								registry.byId("outergroupId").set("target", newdata);
+								ctrl.set("model", newdata);
 								doh.is("Anne1x", registry.byId("nameInput0").get("value"), "nameInput0 should be Anne1X");
 							}
 						}
@@ -103,6 +102,10 @@
 				}
 
 				dojox.debugDataBinding = true;
+
+				ctrl = new ModelRefController({ownProps: {model1: 1, model2: 1, model3: 1}});
+
+				parser.parse();
 
 				Deferred.when((new dojo.store.Memory({data: data1 = [
 					{
@@ -123,8 +126,8 @@
 						]
 					}
 				]}).query()), function(data){
-					model1 = getStateful(data, getStatefulOptions)[0];
-					if(model1 && model2 && model3){ runTests(); }
+					ctrl.set("model1", getStateful(data)[0])
+					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 
 				Deferred.when((new dojo.store.Memory({data: data2 = [
@@ -142,8 +145,8 @@
 						]
 					}
 				]}).query()), function(data){
-					model2 = getStateful(data, getStatefulOptions)[0];
-					if(model1 && model2 && model3){ runTests(); }
+					ctrl.set("model2", getStateful(data)[0]);
+					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 
 				Deferred.when((new dojo.store.Memory({data: data3 = [
@@ -157,8 +160,8 @@
 						]
 					}
 				]}).query()), function(data){
-					model3 = getStateful(data, getStatefulOptions)[0];
-					if(model1 && model2 && model3){ runTests(); }
+					ctrl.set("model3", getStateful(data)[0]);
+					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 			});
 		</script>
@@ -175,46 +178,50 @@
 			<div id="main">
 				<div id="leftNav"></div>
 				<div id="mainContent">
-					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: model1">
-							<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
-								<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
-									<label class="cell" for="nameInput${this.index}">Name:</label>
-									<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" data-dojo-props="value: dojox.mvc.at('rel:', 'First')"/>
-								</div>
-							</div>
+					<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: dojox.mvc.at(ctrl, 'Results')">
+						<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+							<label class="cell" for="nameInput${this.index}">Name:</label>
+							<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" data-dojo-props="value: dojox.mvc.at('rel:', 'First')"/>
+						</div>
 					</div>
-					<div class="row">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model1')">
+						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Results')">
 							<span>
 								Model1 Output is ==> 
 							</span>
-							<span id="firstnameOutput10" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model1.Results[0], 'First')">
+							<span id="firstnameOutput10" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:0', 'First')">
 								Name1 is "${this.value}" : 
 							</span>
-							<span id="firstnameOutput11" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model1.Results[1], 'First')">
+							<span id="firstnameOutput11" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:1', 'First')">
 								Name2 is "${this.value}" : 
 							</span>
-							<span id="firstnameOutput12" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model1.Results[2], 'First')">
+							<span id="firstnameOutput12" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:2', 'First')">
 								Name3 is "${this.value}"
 							</span>
+						</div>
 					</div>
-					<div class="row">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model2')">
+						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Results')">
 							<span>
 								Model2 Output is ==>
 							</span>
-							<span id="firstnameOutput20" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model2.Results[0], 'First')">
+							<span id="firstnameOutput20" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:0', 'First')">
 								Name1 is "${this.value}" : 
 							</span>
-							<span id="firstnameOutput21" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model2.Results[1], 'First')">
+							<span id="firstnameOutput21" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:1', 'First')">
 								Name2 is "${this.value}"
 							</span>
+						</div>
 					</div>
-					<div class="row">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model3')">
+						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Results')">
 							<span>
 								Model3 Output is ==>
 							</span>
-							<span id="firstnameOutput30" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model3.Results[0], 'First')">
+							<span id="firstnameOutput30" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:0', 'First')">
 								Name1 is "${this.value}"
 							</span>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -18,24 +18,20 @@
 				"dojo/parser",
 				"dijit/registry",
 				"dojox/mvc/getStateful",
-				"dojox/mvc/getStatefulOptions",
 				"dojo/_base/declare",
 				"dojo/Stateful",
 				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
 				"dojox/mvc/_atBindingExtension",
-				"dojox/mvc/_Controller",
 				"dojox/mvc/ListController",
 				"dojox/mvc/StatefulArray",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, parser, registry, getStateful, getStatefulOptions){
+			], function(doh, parser, registry, getStateful){
 				function runTests(){
-					parser.parse();
-
 					// should be able to verify all of the inputs 
 					doh.register("Check initial values and bindings", [
 						{
@@ -81,6 +77,8 @@
 				}
 
 				dojox.debugDataBinding = true;
+
+				parser.parse();
 
 				setDetailsContext = function(index){
 					var ctl = registry.byId("listCtl");
@@ -182,17 +180,17 @@
 								"Fax"	  : "408-764-4321"
 							}
 						]
-					}, getStatefulOptions);
-				
+					});
+
+				registry.byId("listCtl").set("model", searchRecords.Results);
 				runTests();
 
 			});
 		</script>
 	</head>
 <body class="claro" style="width:100%;height:100%;margin:0;padding:0;">
-		<span id="listCtl"  data-dojo-type="dojox.mvc._Controller" 
-							data-dojo-mixins="dojox.mvc.ListController" 
-							data-dojo-props="model: searchRecords.Results, cursorIndex: 0"></span>
+		<span id="listCtl"  data-dojo-type="dojox.mvc.ListController" 
+							data-dojo-props="cursorIndex: 0"></span>
 		<div id="header">
 		  <div id="navigation">
 		  </div>
@@ -211,15 +209,7 @@
 			 The target attribute for the outermost container obtains the binding from the
 			 "page scope" itself.
 		 -->
-	   <div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: searchRecords"> 	
-			<div class="row">
-				<label class="cell" for="queryInput">Search for:</label>
-				<input class="cell" id="queryInput" data-dojo-type="dijit.form.TextBox" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Query')"/>
-				<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){setSearchBanner();}">Search</button>
-			</div>
-			<div class="spacer"></div>
-
+	   <div> 	
 			<div id="searchBanner">Search Results for term: Engineers</div>
 
 			<!--
@@ -229,7 +219,7 @@
 				${this.index} for the iteration index.
 			-->
 			<div data-dojo-type="dojox.mvc.Repeat" 
-						data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+						data-dojo-props="children: dojox.mvc.at('widget:listCtl', 'model')">
 				<div class="row" data-dojo-type="dojox.mvc.Group" 
 								data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
 					<label class="cell" for="nameInput${this.index}">Name:</label>

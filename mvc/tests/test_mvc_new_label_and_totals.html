@@ -16,14 +16,13 @@
 			'dojo/parser',
 			'dojo/ready',
 			"dojox/mvc/getStateful",
-			"dojox/mvc/getStatefulOptions",
 			'dojox/mvc/at',
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
-			], function(parser, ready, getStateful, getStatefulOptions){
+			], function(parser, ready, getStateful){
 
 			// Order data
 			orderData = {
@@ -107,9 +106,9 @@
 			//sumrepeatmodel = mvc.newStatefulModel({ data : sumRepeatData });
 			//model = mvc.newStatefulModel({ data : order });
 			// new Api
-			summodel = getStateful(sumData,getStatefulOptions );
-			sumrepeatmodel = getStateful(sumRepeatData, getStatefulOptions);
-			model = getStateful(orderData, getStatefulOptions);
+			summodel = getStateful(sumData );
+			sumrepeatmodel = getStateful(sumRepeatData);
+			model = getStateful(orderData);
 			
 
 		});

@@ -26,12 +26,12 @@ define([
 		}catch(e){
 			return;
 		}
-		var pn = w.domNode.parentNode, pw, pb;
+		var pn = w.domNode && w.domNode.parentNode, pw, pb;
 		while(pn){
 			pw = registry.getEnclosingWidget(pn);
 			if(pw){
 				var relTargetProp = pw._relTargetProp || "target", pt = lang.isFunction(pw.get) ? pw.get(relTargetProp) : pw[relTargetProp];
-				if(pt){
+				if(pt || relTargetProp in pw.constructor.prototype){
 					return pw; // dijit._WidgetBase
 				}
 			}
@@ -66,18 +66,19 @@ define([
 			if(!resolvedTarget || /^rel:/.test(target) && !parent){ logResolveFailure(target, targetProp); }
 			if(!resolvedSource || /^rel:/.test(source) && !parent){ logResolveFailure(source, sourceProp); }
 			if(!resolvedTarget || !resolvedSource || (/^rel:/.test(target) || /^rel:/.test(source)) && !parent){ return; }
+			if((!resolvedTarget.set || !resolvedTarget.watch) && targetProp == "*"){
+				logResolveFailure(target, targetProp);
+				return;
+			}
 
-			if(!targetProp){
+			if(targetProp == null){
 				// If target property is not specified, it means this handle is just for resolving data binding target.
 				// (For dojox.mvc.Group and dojox.mvc.Repeat)
 				// Do not perform data binding synchronization in such case.
-				lang.isFunction(resolvedSource.set) ? resolvedSource.set(sourceProp, resolvedTarget) : resolvedSource[sourceProp] = resolvedTarget;
+				lang.isFunction(resolvedSource.set) ? resolvedSource.set(sourceProp, resolvedTarget) : (resolvedSource[sourceProp] = resolvedTarget);
 				if(dojox.debugDataBinding){
 					console.log("dojox.mvc._atBindingMixin set " + resolvedTarget + " to: " + getLogContent(resolvedSource, sourceProp));
 				}
-			}else if((!resolvedTarget.set || !resolvedTarget.watch) && targetProp == "*"){
-				logResolveFailure(target, targetProp);
-				return;
 			}else{
 				// Start data binding
 				_handles["Two"] = BindTwo(resolvedTarget, targetProp, resolvedSource, sourceProp, options); // dojox.mvc.BindTwo.handle

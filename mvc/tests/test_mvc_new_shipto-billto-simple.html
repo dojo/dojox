@@ -21,7 +21,7 @@
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
-			], function(parser, ready, at, getStateful, getStatefulOptions){
+			], function(parser, ready, at, getStateful){
 
 			dojox.debugDataBinding = true;
 			
@@ -45,7 +45,7 @@
 				}
 			};
 				// The getStateful call will take json data and create make it Stateful
-				model = getStateful(order, getStatefulOptions);
+				model = getStateful(order);
 				// the model created above is initialized with 
 				// model.First set to "John", model.Last set to "Doe" and model.Email set to "jdoe@example.com"
 

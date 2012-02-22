@@ -120,7 +120,7 @@ define([
 
 		// Data binding goes in both directions (dojox.mvc.Bind.from | dojox.mvc.Bind.to)
 		both: 3
-	};
+	}, undef;
 
 	var BindTwo = /*===== dojox.mvc.BindTwo = =====*/ function(/*dojo.Stateful*/ target, /*String*/ targetProp, /*dojo.Stateful*/ source, /*String*/ sourceProp, /*dojox.mvc.BindTwo.options*/ options){
 		// summary:
@@ -176,11 +176,7 @@ define([
 				// In "all properties synchronization" case, copy is not done for properties in "exclude" list
 				if(sourceProp != "*" || !(prop in (excludes || {}))){
 					var value = lang.isFunction(target.get) ? target.get(prop) : target[prop];
-					// There are cases where model only provides "partial" set of properties for widgets.
-					// Copying non-null properties from data model to widget, for example, will erase widget properties that are defined by default.
-					if(value != null){
-						copy(formatFunc, source, sourceProp == "*" ? prop : sourceProp, target, prop, null, value);
-					}
+					copy(formatFunc, source, sourceProp == "*" ? prop : sourceProp, target, prop, undef, value);
 				}
 			});
 		}
@@ -193,10 +189,7 @@ define([
 					if(sourceProp != "*" || !(prop in (excludes || {}))){
 						// Initial copy from source to target (e.g. from widget to model), only done for one-way binding from widget to model
 						var value = lang.isFunction(source.get) ? source.get(sourceProp) : source[sourceProp];
-						// Follow the practice of model->view initial copy, not copying null value
-						if(value != null){
-							copy(parseFunc, target, prop, source, sourceProp == "*" ? prop : sourceProp, null, value);
-						}
+						copy(parseFunc, target, prop, source, sourceProp == "*" ? prop : sourceProp, undef, value);
 					}
 				});
 			}

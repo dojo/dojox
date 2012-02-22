@@ -116,7 +116,6 @@
 			"dijit/Menu",
 			"dojox/mvc/at",
 			"dojox/mvc/getStateful",
-			"dojox/mvc/getStatefulOptions",
 			"dijit/form/CheckBox",
 			"dijit/form/DateTextBox",
 			"dijit/form/Select",
@@ -128,12 +127,11 @@
 			"dijit/MenuBarItem",
 			"dijit/MenuItem",
 			"dojox/mvc/_atBindingExtension",
-			"dojox/mvc/_Controller",
 			"dojox/mvc/ListController",
 			"dojox/mvc/StatefulArray",
 			"dojox/mvc/Output",
 			"dojox/mvc/Repeat"
-		], function(dojox, declare, lang, ddom, domClass, parser, Stateful, registry, Menu, at, getStateful, getStatefulOptions){
+		], function(dojox, declare, lang, ddom, domClass, parser, Stateful, registry, Menu, at, getStateful){
 			dojox.debugDataBinding = true;
 
 			var uniqueIdSeq = 3;
@@ -163,7 +161,7 @@
 					Priority: 3,
 					Description: "Need to buy a cleaner before that"
 				}
-			], getStatefulOptions);
+			]);
 
 			ViewMenuBarData = getStateful([
 				{
@@ -176,7 +174,7 @@
 							Due: new Date(""),
 							Priority: 2,
 							Description: ""
-						}, getStatefulOptions);
+						});
 						ctl.model.splice(0, 0, payload);
 						ctl.set("cursor", payload);
 					}
@@ -196,7 +194,7 @@
 						}
 					}
 				}
-			], getStatefulOptions);
+			]);
 
 			domClass.add(ddom.byId("loading"), "dijitDisplayNone");
 			domClass.remove(ddom.byId("main"), "dijitDisplayNone");
@@ -213,7 +211,7 @@
 		</tbody>
 	</table>
 	<div id="main" class="dijitDisplayNone" style="width:100%;height:100%;">
-		<span id="listCtl" data-dojo-type="dojox.mvc._Controller" data-dojo-mixins="dojox.mvc.ListController" data-dojo-props="model: initialRows, cursorIndex: 0"></span>
+		<span id="listCtl" data-dojo-type="dojox.mvc.ListController" data-dojo-props="model: initialRows, cursorIndex: 0"></span>
 		<div class="bordercontainer-nopadding" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="persist: false, gutters: true, style: 'height: 100%; width: 100%;'">
 			<div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'left', style: 'background-color: white; width: 48ex', splitter: true">
 				<div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="persist: false, gutters: false">

@@ -1,29 +1,51 @@
-define(["dojo/_base/lang"], function(lang){
-	/*=====
-	dojox.mvc.getStatefulOptions = {
+define([
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dojo/Stateful",
+	"./StatefulArray"
+], function(array, lang, Stateful, StatefulArray){
+	var getStatefulOptions = /*===== dojox.mvc.getStatefulOptions = =====*/ {
 		// summary:
-		//		An object that defines how model object should be created from plain object hierarchy.
+		//		Options used for dojox.mvc.getStateful().
 
-		getType: function(v){
+		getType: function(/*Anything*/ v){
 			// summary:
 			//		Returns the type of the given value.
 			// v: Anything
 			//		The value.
 
-			return "value"; // String
+			return lang.isArray(v) ? "array" : {}.toString.call(v) == "[object Object]" ? "object" : "value";
 		},
 
-		getStatefulType: function(v){
+		getStatefulArray: function(/*Anything[]*/ a){
 			// summary:
-			//		Creates a stateful value from a plain value.
-			//		The "Type" in this function name is actually what getType() returns, with first character uppercased, such as: getStatefulArray, getStatefulObject, getStatefulValue.
-			// v: Anything
-			//		The plain value.
+			//		Returns the stateful version of the given array.
+			// a: Anything[]
+			//		The array.
+
+			return new StatefulArray(array.map(a, function(item){ return getStateful(item, this); }, this)); // dojox.mvc.StatefulArray
+		},
+
+		getStatefulObject: function(/*Object*/ o){
+			// summary:
+			//		Returns the stateful version of the given object.
+			// o: Object
+			//		The object.
+
+			var stateful = new Stateful();
+			for(var s in o){
+				stateful[s] = getStateful(o[s], this);
+			}
+			return stateful; // dojo.Stateful
+		},
+
+		getStatefulValue: function(/*Anything*/ v){
+			// summary:
+			//		Just returns the given value.
 
 			return v; // Anything
 		}
 	};
-	=====*/
 
 	var getStateful = /*===== dojox.mvc.getStateful = =====*/ function(/*Anything*/ value, /*dojox.mvc.getStatefulOptions*/ options){
 		// summary:
@@ -32,12 +54,12 @@ define(["dojo/_base/lang"], function(lang){
 		//		Recursively iterates the raw value given, and convert them to stateful ones.
 		// value: Anything
 		//		The raw value.
-		// options: Object
+		// options: dojox.mvc.getStatefulOptions
 		//		The object that defines how model object should be created from plain object hierarchy.
 		// returns: Anything
 		//		 The converted value.
 
-		return options["getStateful" + options.getType(value).replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](value); // Anything
+		return (options || getStatefulOptions)["getStateful" + (options || getStatefulOptions).getType(value).replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](value); // Anything
 	};
 
 	return lang.setObject("dojox.mvc.getStateful", getStateful);
