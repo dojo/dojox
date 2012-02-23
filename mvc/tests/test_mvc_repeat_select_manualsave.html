@@ -131,7 +131,7 @@
 			"dijit/MenuBarItem",
 			"dijit/MenuItem",
 			"dojox/mvc/_atBindingExtension",
-			"dojox/mvc/EditModelRefControllerMixin",
+			"dojox/mvc/EditModelRefController",
 			"dojox/mvc/ListController",
 			"dojox/mvc/StatefulArray",
 			"dojox/mvc/Group",
@@ -267,7 +267,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="editCtl" data-dojo-type="dijit.layout.ContentPane" data-dojo-mixins="dojox.mvc.EditModelRefControllerMixin"
+			<div id="editCtl" data-dojo-type="dijit.layout.ContentPane" data-dojo-mixins="dojox.mvc.EditModelRefController"
 			 data-dojo-props="region: 'center', style: 'background-color: white;', holdModelUntilCommit: true, sourceModel: dojox.mvc.at('widget:listCtl', 'cursor')">
 				<div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="persist: false, gutters: false, target: dojox.mvc.at('rel:', 'model')">
 					<div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'top'">

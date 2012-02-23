@@ -10,6 +10,10 @@ define([
 			//		If this object is not called from Dojo parser, starts this up right away.
 			//		Also, if widget registry is available, register this object.
 
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(this._applyAttributes){
+				return this.inherited(arguments);
+			}
 			this._dbpostscript(params, srcNodeRef);
 			if(params){
 				this.params = params;
@@ -33,7 +37,10 @@ define([
 			// summary:
 			//		Starts up data binding as this object starts up.
 
-			this._startAtWatchHandles();
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(!this._applyAttributes){
+				this._startAtWatchHandles();
+			}
 			this.inherited(arguments);
 		},
 
@@ -41,7 +48,10 @@ define([
 			// summary:
 			//		Stops data binding as this object is destroyed.
 
-			this._stopAtWatchHandles();
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(!this._applyAttributes){
+				this._stopAtWatchHandles();
+			}
 			this.inherited(arguments);
 		},
 
@@ -55,7 +65,8 @@ define([
 			// value: Anything
 			//		The property value.
 
-			if((value || {}).atsignature == "dojox.mvc.at"){
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(!this._applyAttributes && (value || {}).atsignature == "dojox.mvc.at"){
 				return this._setAtWatchHandle(name, value);
 			}
 			return this.inherited(arguments);

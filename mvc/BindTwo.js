@@ -62,6 +62,16 @@ define([
 		];
 	}
 
+	function equals(/*Anything*/ dst, /*Anything*/ src){
+		// summary:
+		//		Returns if the given two values are equal.
+
+		return dst === src
+		 || typeof dst == "number" && isNaN(dst) && typeof src == "number" && isNaN(src)
+		 || lang.isFunction((dst || {}).getTime) && lang.isFunction((src || {}).getTime) && dst.getTime() == src.getTime()
+		 || (lang.isFunction((dst || {}).equals) ? dst.equals(src) : lang.isFunction((src || {}).equals) ? src.equals(dst) : false);
+	}
+
 	function copy(/*Function*/ convertFunc, /*dojo.Stateful*/ target, /*String*/ targetProp, /*dojo.Stateful*/ source, /*String*/ sourceProp, /*Anything*/ old, /*Anything*/ current, /*Object?*/ excludes){
 		// summary:
 		//		Watch for change in property in dojo.Stateful object.
@@ -88,7 +98,7 @@ define([
 		// Bail if there is no change in value,
 		// or property name is wildcarded and the property to be copied is not in target property list (and target property list is defined),
 		// or property name is wildcarded and the property to be copied is in explicit "excludes" list
-		if(old === current || typeof old == "number" && isNaN(old) && typeof current == "number" && isNaN(current)
+		if(equals(current, old)
 		 || targetProp == "*" && array.indexOf(target.get("properties") || [sourceProp], sourceProp) < 0
 		 || targetProp == "*" && sourceProp in (excludes || {})){ return; }
 
