@@ -1223,9 +1223,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 		// summary:
 		//		Blur the current point.
 		var f = this.grid.focus;
-		if(type == "col"){
-			f._blurHeader();
-		}else if(type == "cell"){
+		if(type == "cell"){
 			f._blurContent();
 		}
 	},
