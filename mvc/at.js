@@ -1,9 +1,9 @@
 define([
 	"dojo/_base/kernel",
 	"dojo/_base/lang",
-	"./BindTwo",
+	"./sync",
 	"./_atBindingExtension"
-], function(kernel, lang, BindTwo){
+], function(kernel, lang, sync){
 	/*=====
 	dojox.mvc.at.handle = {
 		// summary:
@@ -18,10 +18,10 @@ define([
 		targetProp: "",
 
 		// direction: Number
-		//		The data binding direction, choose from: dojox.mvc.BindTwo.from, dojox.mvc.BindTwo.to or dojox.mvc.BindTwo.both.
-		direction: dojox.mvc.BindTwo.both,
+		//		The data binding direction, choose from: dojox.mvc.sync.from, dojox.mvc.sync.to or dojox.mvc.sync.both.
+		direction: dojox.mvc.sync.both,
 
-		// converter: dojox.mvc.BindTwo.converter
+		// converter: dojox.mvc.sync.converter
 		//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
 		converter: null,
 
@@ -29,13 +29,13 @@ define([
 			// summary:
 			//		Sets data binding direction.
 			// direction: Number
-			//		The data binding direction, choose from: dojox.mvc.BindTwo.from, dojox.mvc.BindTwo.to or dojox.mvc.BindTwo.both.
+			//		The data binding direction, choose from: dojox.mvc.sync.from, dojox.mvc.sync.to or dojox.mvc.sync.both.
 		},
 
 		attach: function(converter){
 			// summary:
 			//		Attach a data converter.
-			// converter: dojox.mvc.BindTwo.converter
+			// converter: dojox.mvc.sync.converter
 			//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
 		}
 	};
@@ -61,12 +61,12 @@ define([
 			atsignature: "dojox.mvc.at",
 			target: target,
 			targetProp: targetProp,
-			direction: BindTwo.both,
+			direction: sync.both,
 			direct: function(/*Number*/ direction){
 				this.direction = direction;
 				return this;
 			},
-			attach: function(/*dojox.mvc.BindTwo.converter*/ converter){
+			attach: function(/*dojox.mvc.sync.converter*/ converter){
 				this.converter = converter;
 				return this;
 			}

@@ -8,7 +8,7 @@ define([
 	=====*/
 
 	/*=====
-	dojox.mvc.BindTwo.converter = {
+	dojox.mvc.sync.converter = {
 		// summary:
 		//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
 
@@ -31,7 +31,7 @@ define([
 		}
 	};
 
-	dojox.mvc.BindTwo.options = {
+	dojox.mvc.sync.options = {
 		// summary:
 		//		Data binding options.
 
@@ -44,7 +44,7 @@ define([
 		converter: null
 	};
 
-	dojox.mvc.BindTwo.handle = {
+	dojox.mvc.sync.handle = {
 		// summary:
 		//		A handle of data binding synchronization.
 
@@ -132,7 +132,7 @@ define([
 		both: 3
 	}, undef;
 
-	var BindTwo = /*===== dojox.mvc.BindTwo = =====*/ function(/*dojo.Stateful*/ target, /*String*/ targetProp, /*dojo.Stateful*/ source, /*String*/ sourceProp, /*dojox.mvc.BindTwo.options*/ options){
+	var sync = /*===== dojox.mvc.sync = =====*/ function(/*dojo.Stateful*/ target, /*String*/ targetProp, /*dojo.Stateful*/ source, /*String*/ sourceProp, /*dojox.mvc.sync.options*/ options){
 		// summary:
 		//		Synchronize two dojo.Stateful properties.
 		// description:
@@ -145,7 +145,7 @@ define([
 		//		Source dojo.Stateful to be synchronized.
 		// sourceProp: String
 		//		The property name in source to be synchronized.
-		// options: dojox.mvc.BindTwo.options
+		// options: dojox.mvc.sync.options
 		//		Data binding options.
 		// returns:
 		//		The handle of data binding synchronization.
@@ -227,10 +227,10 @@ define([
 					}
 				}
 			}
-		}; // dojox.mvc.BindTwo.handle
+		}; // dojox.mvc.sync.handle
 	};
 
 	lang.mixin(mvc, directions);
 
-	return lang.setObject("dojox.mvc.BindTwo", lang.mixin(BindTwo, directions));
+	return lang.setObject("dojox.mvc.sync", lang.mixin(sync, directions));
 });

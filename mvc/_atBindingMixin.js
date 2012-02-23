@@ -3,8 +3,8 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"./resolve",
-	"./BindTwo"
-], function(array, lang, declare, resolve, BindTwo){
+	"./sync"
+], function(array, lang, declare, resolve, sync){
 	function getLogContent(/*dojo.Stateful*/ target, /*String*/ targetProp){
 		return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
 	}
@@ -39,7 +39,7 @@ define([
 		}
 	}
 
-	function bind(/*dojo.Stateful|String*/ target, /*String*/ targetProp, /*dijit._WidgetBase*/ source, /*String*/ sourceProp, /*dojox.mvc.BindTwo.options*/ options){
+	function bind(/*dojo.Stateful|String*/ target, /*String*/ targetProp, /*dijit._WidgetBase*/ source, /*String*/ sourceProp, /*dojox.mvc.sync.options*/ options){
 		// summary:
 		//		Resolves the data binding literal, and starts data binding.
 		// target: dojo.Stateful|String
@@ -50,7 +50,7 @@ define([
 		//		Source dojo.Stateful to be synchronized.
 		// sourceProp: String
 		//		The property name in source to be synchronized.
-		// options: dojox.mvc.BindTwo.options
+		// options: dojox.mvc.sync.options
 		//		Data binding options.
 
 		var _handles = {}, parent = getParent(source), relTargetProp = parent && parent._relTargetProp || "target";
@@ -81,7 +81,7 @@ define([
 				}
 			}else{
 				// Start data binding
-				_handles["Two"] = BindTwo(resolvedTarget, targetProp, resolvedSource, sourceProp, options); // dojox.mvc.BindTwo.handle
+				_handles["Two"] = sync(resolvedTarget, targetProp, resolvedSource, sourceProp, options); // dojox.mvc.sync.handle
 			}
 		}
 
