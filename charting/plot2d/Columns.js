@@ -26,6 +26,7 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			styleFunc:  null,
 			font:		"",
 			fontColor:	""
 		},
@@ -129,10 +130,16 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 						var v = typeof value == "number" ? value : value.y,
 							vv = vt(v),
 							height = vv - baselineHeight,
-							h = Math.abs(height),
-							finalTheme = typeof value != "number" ?
-								t.addMixin(theme, "column", value, true) :
-								t.post(theme, "column");
+							h = Math.abs(height), finalTheme;
+						if(this.opt.styleFunc || typeof value != "number"){
+							var tMixin = typeof value != "number" ? [value] : [];
+							if(this.opt.styleFunc){
+								tMixin.push(this.opt.styleFunc(value));
+							}
+							finalTheme = t.addMixin(theme, "column", tMixin, true);
+						}else{
+							finalTheme = t.post(theme, "column");
+						}
 						if(width >= 1 && h >= 0){
 							var rect = {
 								x: offsets.l + ht(j + 0.5) + gap,

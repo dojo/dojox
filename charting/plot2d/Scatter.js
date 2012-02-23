@@ -23,7 +23,8 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 			markerShadow:		{},
 			markerFill:			{},
 			markerFont:			"",
-			markerFontColor:	""
+			markerFontColor:	"",
+			styleFunc:			null
 		},
 
 		constructor: function(chart, kwArgs){
@@ -102,10 +103,17 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 					outlineMarkers = new Array(lpoly.length);
 
 				arr.forEach(lpoly, function(c, i){
-					var finalTheme = typeof run.data[i] == "number" ?
-							t.post(theme, "marker") :
-							t.addMixin(theme, "marker", run.data[i], true),
-						path = "M" + c.x + " " + c.y + " " + finalTheme.symbol;
+					var value = run.data[i], finalTheme;
+					if(this.opt.styleFunc || typeof value != "number"){
+						var tMixin = typeof value != "number" ? [value] : [];
+						if(this.opt.styleFunc){
+							tMixin.push(this.opt.styleFunc(value));
+						}
+						finalTheme = t.addMixin(theme, "marker", tMixin, true);
+					}else{
+						finalTheme = t.post(theme, "marker");
+					}
+					var path = "M" + c.x + " " + c.y + " " + finalTheme.symbol;
 					if(finalTheme.marker.shadow){
 						shadowMarkers[i] = s.createPath("M" + (c.x + finalTheme.marker.shadow.dx) + " " +
 							(c.y + finalTheme.marker.shadow.dy) + " " + finalTheme.symbol).

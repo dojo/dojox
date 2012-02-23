@@ -61,6 +61,14 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 		//	shadow: dojox.gfx.Stroke?
 		//		An optional stroke to use to draw any shadows for a series on a plot.
 		shadow:		{},
+
+		//	fill: dojox.gfx.Fill?
+		//		Any fill to be used for elements on the plot.
+		fill:		{},
+
+		//	styleFunc: Function?
+		//		A function that returns a styling object for the a given data item.
+		styleFunc:	null,
 	});
 	=====*/
 
@@ -89,6 +97,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			styleFunc:	null,
 			font:		"",
 			fontColor:	"",
 			labelWiring: {}
@@ -198,10 +207,14 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				}
 			}
 			var themes = df.map(run, function(v, i){
-				if(v === null || typeof v == "number"){
-					return t.next("slice", [this.opt, this.run], true);
+				var tMixin = [this.opt, this.run];
+				if(v !== null && typeof v != "number"){
+					tMixin.push(v);
 				}
-				return t.next("slice", [this.opt, this.run, v], true);
+				if(this.opt.styleFunc){
+					tMixin.push(this.opt.styleFunc(v));
+				}
+				return t.next("slice", tMixin, true);
 			}, this);
 			if(this.opt.labels){
 				shift = df.foldl1(df.map(labels, function(label, i){

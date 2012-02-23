@@ -31,6 +31,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//		Any fill to be used for elements on the plot.
 		fill:		{},
 
+		//	styleFunc: Function?
+		//		A function that returns a styling object for the a given data item.
+		styleFunc:	null,
+
 		//	font: String?
 		//		A font definition to be used for labels and other text-based elements on the plot.
 		font:		"",
@@ -67,6 +71,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			styleFunc:  null,
 			font:		"",
 			fontColor:	""
 		},
@@ -168,10 +173,16 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 						var v = typeof value == "number" ? value : value.y,
 							hv = ht(v),
 							width = hv - baselineWidth,
-							w = Math.abs(width),
-							finalTheme = typeof value != "number" ?
-								t.addMixin(theme, "bar", value, true) :
-								t.post(theme, "bar");
+							w = Math.abs(width), finalTheme;
+						if(this.opt.styleFunc || typeof value != "number"){
+							var tMixin = typeof value != "number" ? [value] : [];
+							if(this.opt.styleFunc){
+								tMixin.push(this.opt.styleFunc(value));
+							}
+							finalTheme = t.addMixin(theme, "bar", tMixin, true);
+						}else{
+							finalTheme = t.post(theme, "bar");
+						}
 						if(w >= 0 && height >= 1){
 							var rect = {
 								x: offsets.l + (v < baseline ? hv : baselineWidth),

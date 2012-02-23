@@ -24,6 +24,7 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			styleFunc:	null,
 			font:		"",
 			fontColor:	""
 		},
@@ -100,13 +101,20 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 						} : null;
 					}, this);
 
-				var frontCircles = null, outlineCircles = null, shadowCircles = null;
+				var frontCircles = null, outlineCircles = null, shadowCircles = null, styleFunc = this.opt.styleFunc;
+
+				var getFinalTheme = function(item){
+					if(styleFunc){
+						return t.addMixin(theme, "circle", [item, styleFunc(item)], true);
+					}
+					return t.addMixin(theme, "circle", item, true);
+				};
 
 				// make shadows if needed
 				if(theme.series.shadow){
-					shadowCircles = arr.map(points, function(item){
+					shadowCircles = arr.map(points, function(item, i){
 						if(item !== null){
-							var finalTheme = t.addMixin(theme, "circle", item, true),
+							var finalTheme = getFinalTheme(run.data[i]),
 								shadow = finalTheme.series.shadow;
 							var shape = s.createCircle({
 								cx: item.x + shadow.dx, cy: item.y + shadow.dy, r: item.radius
@@ -125,9 +133,9 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 
 				// make outlines if needed
 				if(theme.series.outline){
-					outlineCircles = arr.map(points, function(item){
+					outlineCircles = arr.map(points, function(item, i){
 						if(item !== null){
-							var finalTheme = t.addMixin(theme, "circle", item, true),
+							var finalTheme = getFinalTheme(run.data[i]),
 								outline = dc.makeStroke(finalTheme.series.outline);
 							outline.width = 2 * outline.width + theme.series.stroke.width;
 							var shape = s.createCircle({
@@ -146,9 +154,9 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 				}
 
 				//	run through the data and add the circles.
-				frontCircles = arr.map(points, function(item){
+				frontCircles = arr.map(points, function(item, i){
 					if(item !== null){
-						var finalTheme = t.addMixin(theme, "circle", item, true),
+						var finalTheme = getFinalTheme(run.data[i]),
 							rect = {
 								x: item.x - item.radius,
 								y: item.y - item.radius,
