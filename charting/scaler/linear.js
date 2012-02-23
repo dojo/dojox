@@ -92,7 +92,7 @@ define(["dojo/_base/lang", "./common"],
 	};
 	
 	return lang.mixin(linear, {
-		buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs){
+		buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs, /*Number?*/delta){
 			var h = {fixUpper: "none", fixLower: "none", natural: false};
 			if(kwArgs){
 				if("fixUpper" in kwArgs){ h.fixUpper = String(kwArgs.fixUpper); }
@@ -125,8 +125,10 @@ define(["dojo/_base/lang", "./common"],
 			if(max <= min){
 				return calcTicks(min, max, h, 0, 0, 0, span);	// Object
 			}
-			
-			var mag = Math.floor(Math.log(max - min) / Math.LN10),
+			if(!delta){
+				delta = max - min;
+			}
+			var mag = Math.floor(Math.log(delta) / Math.LN10),
 				major = kwArgs && ("majorTickStep" in kwArgs) ? kwArgs.majorTickStep : Math.pow(10, mag),
 				minor = 0, micro = 0, ticks;
 				
