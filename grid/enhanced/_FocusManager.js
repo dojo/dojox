@@ -447,7 +447,7 @@ dojo.declare("dojox.grid.enhanced._FocusManager", dojox.grid._FocusManager, {
 	_delayedHeaderFocus: function(){
 		// summary:
 		//		Overwritten
-		if(this.isNavHeader()){
+		if(this.isNavHeader() && !dojo.isIE){
 			this.focusHeader();
 		}
 	},
