@@ -1,5 +1,6 @@
 define([
 	"dojo/_base/array",
+	"dojo/_base/config",
 	"dojo/_base/connect",
 	"dojo/_base/event",
 	"dojo/_base/lang",
@@ -7,7 +8,7 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"./sniff"
-], function(array, connect, event, lang, domClass, domConstruct, domStyle, has){
+], function(array, config, connect, event, lang, domClass, domConstruct, domStyle, has){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -141,6 +142,7 @@ define([
 			//		If node exists, updates the existing node. Otherwise, creates a new one.
 			// icon:
 			//		Path for an image, or DOM button class name.
+			title = title || "";
 			if(icon && icon.indexOf("mblDomButton") === 0){
 				// DOM button
 				if(!node){
