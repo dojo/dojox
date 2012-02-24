@@ -461,7 +461,7 @@ return declare("dojox.grid.enhanced._FocusManager", _FocusManager, {
 	_delayedHeaderFocus: function(){
 		// summary:
 		//		Overwritten
-		if(this.isNavHeader()){
+		if(this.isNavHeader() && !has('ie')){
 			this.focusHeader();
 		}
 	},
