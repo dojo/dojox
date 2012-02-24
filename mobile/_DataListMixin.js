@@ -25,6 +25,12 @@ define([
 		//		If true, refresh() does not clear the existing items.
 		append: false,
 
+		// itemMap: Object
+		//		An optional parameter mapping field names from the store to ItemList name.
+		// example:
+		// |	itemMap:{text:'label', profile_image_url:'icon' }
+		itemMap: null,
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(!this.store){ return; }
@@ -43,7 +49,7 @@ define([
 				if(name === labelAttr){
 					attr["label"] = this.store.getLabel(item);
 				}else{
-					attr[name] = this.store.getValue(item, name);
+					attr[(this.itemMap && this.itemMap[name]) || name] = this.store.getValue(item, name);
 				}
 			}, this);
 			var w = new ListItem(attr);

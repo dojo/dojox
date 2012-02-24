@@ -1,10 +1,9 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dojo/_base/lang",
 	"./_StoreMixin",
 	"./ListItem"
-], function(array, declare, lang, StoreMixin, ListItem){
+], function(array, declare, StoreMixin, ListItem){
 
 	// module:
 	//		dojox/mobile/_StoreListMixin
@@ -25,6 +24,12 @@ define([
 		//		If true, refresh() does not clear the existing items.
 		append: false,
 
+		// itemMap: Object
+		//		An optional parameter mapping field names from the store to ItemList name.
+		// example:
+		// |	itemMap:{text:'label', profile_image_url:'icon' }
+		itemMap: null,
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(!this.store){ return; }
@@ -40,7 +45,10 @@ define([
 			if(!item["label"]){
 				props["label"] = item[this.labelProperty];
 			}
-			return new ListItem(lang.mixin(props, item));
+			for(var name in item){
+				props[(this.itemMap && this.itemMap[name]) || name] = item[name];
+			}
+			return new ListItem(props);
 		},
 
 		generateList: function(/*Array*/items){
