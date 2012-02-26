@@ -4,9 +4,9 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
-	<title>SpinWheel Date Picker</title>
+	<title>ValuePickerDatePicker</title>
 
-	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','SpinWheel']"></script>
+	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','ValuePicker']"></script>
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
@@ -24,7 +24,7 @@
 				"dojox/mobile/parser",
 				"dojox/mobile",
 				"dojox/mobile/compat",
-				"dojox/mobile/SpinWheelDatePicker"
+				"dojox/mobile/ValuePickerDatePicker"
 			], function(win, dom, ready, registry){
 				changeLocale = function(){
 					win.doc.forms[0].submit();
@@ -46,11 +46,11 @@
 
 	<style>
 	#picker1 {
-		margin: 10px auto;
+		margin: 20px;
 	}
 	</style>
 </head>
-<body style="visibility:hidden;">
+<body style="visibility:hidden;background-color:#424142;">
 	<div data-dojo-type="dojox.mobile.View">
 		<form>
 			<div data-dojo-type="dojox.mobile.Heading">
@@ -95,7 +95,7 @@
 					<option value="zh-tw">zh-tw</option>
 				</select>
 			</div>
-			<div id="picker1" data-dojo-type="dojox.mobile.SpinWheelDatePicker"></div>
+			<div id="picker1" data-dojo-type="dojox.mobile.ValuePickerDatePicker"></div>
 			<div id="msg"></div>
 		</form>
 	</div>

@@ -23,7 +23,7 @@
   width: 312px;
 }
 .mblSpinWheelTimePicker {
-  width: 208px;
+  width: 98px;
 }
 .mblSpinWheelSlot {
   position: relative;
@@ -33,6 +33,7 @@
   height: 100%;
   border-left: solid 2px #000000;
   border-right: solid 2px #000000;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 .mblSpinWheelSlotLabel {
   padding: 0 8px;

@@ -1,4 +1,5 @@
 define([
+	"dojo/_base/array",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/window",
@@ -7,7 +8,7 @@ define([
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
 	"./scrollable"
-], function(declare, lang, win, domClass, domConstruct, Contained, WidgetBase, Scrollable){
+], function(array, declare, lang, win, domClass, domConstruct, Contained, WidgetBase, Scrollable){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -49,9 +50,19 @@ define([
 		//		The end value of display values of the slot.
 		labelTo: 0,
 
+		// zeroPad: Number
+		//		Length of zero padding numbers.
+		//		Ex. zeroPad=2 -> "00", "01", ...
+		//		Ex. zeroPad=3 -> "000", "001", ...
+		zeroPad: 0,
+
 		// value: String
 		//		The initial value of the slot.
 		value: "",
+
+		// step: Number
+		//		The steps between labelFrom and labelTo.
+		step: 1,
 
 		// tabIndex: String
 		//		Tabindex setting for this widget so users can hit the tab key to
@@ -60,24 +71,19 @@ define([
 		_setTabIndexAttr: "", // sets tabIndex to domNode
 
 		/* internal properties */	
+		baseClass: "mblSpinWheelSlot",
 		maxSpeed: 500,
 		minItems: 15,
 		centerPos: 0,
 		scrollBar: false,
 		constraint: false,
 		propagatable: false, // stop touchstart event propagation to make spin wheel work inside scrollable
+		androidWorkaroud: false, // disable workaround in SpinWheel TODO:remove this line later
 
 		buildRendering: function(){
 			this.inherited(arguments);
-			domClass.add(this.domNode, "mblSpinWheelSlot");
 
-			var i, j, idx;
-			if(this.labelFrom !== this.labelTo){
-				this.labels = [];
-				for(i = this.labelFrom, idx = 0; i <= this.labelTo; i++, idx++){
-					this.labels[idx] = String(i);
-				}
-			}
+			this.initLabels();
 			if(this.labels.length > 0){
 				this.items = [];
 				for(i = 0; i < this.labels.length; i++){
@@ -107,17 +113,33 @@ define([
 			this.domNode.appendChild(this.containerNode);
 			this.touchNode = domConstruct.create("div", {className:"mblSpinWheelSlotTouch"}, this.domNode);
 			this.setSelectable(this.domNode, false);
+
+			if(this.value === "" && this.items.length > 0){
+				this.value = this.items[0][1];
+			}
+			this._initialValue = this.value;
 		},
 
 		startup: function(){
 			if(this._started){ return; }
 			this.inherited(arguments);
+			this.noResize = true;
 			this.init();
 			this.centerPos = this.getParent().centerPos;
 			var items = this.panelNodes[1].childNodes;
 			this._itemHeight = items[0].offsetHeight;
 			this.adjust();
 			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
+		},
+
+		initLabels: function(){
+			if(this.labelFrom !== this.labelTo){
+				var a = this.labels = [],
+					zeros = this.zeroPad && Array(this.zeroPad).join("0");
+				for(var i = this.labelFrom; i <= this.labelTo; i += this.step){
+					a.push(this.zeroPad ? (zeros + i).slice(-this.zeroPad) : i + "");
+				}
+			}
 		},
 
 		adjust: function(){
@@ -141,9 +163,15 @@ define([
 		setInitialValue: function(){
 			// summary:
 			//		Sets the initial value using this.value or the first item.
-			if(this.items.length > 0){
-				var val = (this.value !== "") ? this.value : this.items[0][1];
-				this.set("value", val);
+			this.set("value", this._initialValue);
+		},
+
+		_onKeyDown: function(e){
+			if(!e || e.type !== "keydown"){ return; }
+			if(e.keyCode === 40){ // down arrow key
+				this.spin(-1);
+			}else if(e.keyCode === 38){ // up arrow key
+				this.spin(1);
 			}
 		},
 
@@ -160,36 +188,24 @@ define([
 			return null;
 		},
 
-		setColor: function(/*String*/value){
+		setColor: function(/*String*/value, /*String?*/color){
 			// summary:
 			//		Sets the color of the specified item as blue.
-			for(var i = 0, len = this.panelNodes.length; i < len; i++){
-				var items = this.panelNodes[i].childNodes;
-				for(var j = 0; j < items.length; j++){
-					if(items[j].innerHTML === String(value)){
-						domClass.add(items[j], "mblSpinWheelSlotLabelBlue");
-					}else{
-						domClass.remove(items[j], "mblSpinWheelSlotLabelBlue");
-					}
-				}
-			}
+			array.forEach(this.panelNodes, function(panel){
+				array.forEach(panel.childNodes, function(node, i){
+					domClass.toggle(node, color || "mblSpinWheelSlotLabelBlue", node.innerHTML === value);
+				}, this);
+			}, this);
 		},
 
-		disableValues: function(/*Array*/values){
+		disableValues: function(/*Number*/n){
 			// summary:
 			//		Makes the specified items grayed out.
-			for(var i = 0, len = this.panelNodes.length; i < len; i++){
-				var items = this.panelNodes[i].childNodes;
-				for(var j = 0; j < items.length; j++){
-					domClass.remove(items[j], "mblSpinWheelSlotLabelGray");
-					for(var k = 0; k < values.length; k++){
-						if(items[j].innerHTML === String(values[k])){
-							domClass.add(items[j], "mblSpinWheelSlotLabelGray");
-							break;
-						}
-					}
+			array.forEach(this.panelNodes, function(panel){
+				for(var i = 27; i < 31; i++){
+					domClass.toggle(panel.childNodes[i], "mblSpinWheelSlotLabelGray", i >= nDays);
 				}
-			}
+			});
 		},
 
 		getCenterItem: function(){
@@ -210,36 +226,37 @@ define([
 
 		},
 
-		_getValueAttr: function(){
-			// summary:
-			//		Gets the currently selected value.
-			var item = this.items[this.getKey()];
-			return item && item[1];
-		},
-
-		getKey: function(){
+		_getKeyAttr: function(){
 			// summary:
 			//		Gets the key for the currently selected value.
 			var item = this.getCenterItem();
 			return (item && item.getAttribute("name"));
 		},
 
-		_setValueAttr: function(newValue){
+		_getValueAttr: function(){
 			// summary:
-			//		Sets the newValue to this slot.
+			//		Gets the currently selected value.
+			var item = this.items[this.get("key")];
+			return item && item[1];
+		},
+
+		_setValueAttr: function(value){
+			// summary:
+			//		Sets the value to this slot.
 			var idx0, idx1;
 			var curValue = this.get("value");
 			if(!curValue){
-				this._penddingValue = newValue;
+				this._penddingValue = value;
 				return;
 			}
 			this._penddingValue = undefined;
+			this._set("value", value);
 			var n = this.items.length;
 			for(var i = 0; i < n; i++){
 				if(this.items[i][1] === String(curValue)){
 					idx0 = i;
 				}
-				if(this.items[i][1] === String(newValue)){
+				if(this.items[i][1] === String(value)){
 					idx1 = i;
 				}
 				if(idx0 !== undefined && idx1 !== undefined){
@@ -259,6 +276,7 @@ define([
 		spin: function(/*Number*/steps){
 			// summary:
 			//		Spins the slot as specified by steps.
+			if(!this._started){ return; } // do not work until start up
 			var to = this.getPos();
 			if(to.y % this._itemHeight){ return; } // maybe still spinning
 			to.y += steps * this._itemHeight;
@@ -342,15 +360,6 @@ define([
 				duration = 0.2;
 			}
 			this.inherited(arguments, [to, duration, easing]); // 2nd arg is to avoid excessive optimization by closure compiler
-		},
-
-		_onKeyDown: function(e){
-			if(!e || e.type !== "keydown"){ return; }
-			if(e.keyCode === 40){ // down arrow key
-				this.spin(-1);
-			}else if(e.keyCode === 38){ // up arrow key
-				this.spin(1);
-			}
 		}
 	});
 });
