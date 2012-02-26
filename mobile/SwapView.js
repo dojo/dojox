@@ -41,6 +41,7 @@ define([
 			this.containerNode = this.domNode;
 			this.subscribe("/dojox/mobile/nextPage", "handleNextPage");
 			this.subscribe("/dojox/mobile/prevPage", "handlePrevPage");
+			this.noResize = true; // not to call resize() from scrollable#init
 		},
 
 		startup: function(){
