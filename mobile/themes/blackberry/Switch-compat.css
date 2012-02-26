@@ -1,8 +1,5 @@
 /* dojox.mobile.Switch */
 /* Switch - common */
-.mblSwitch {
-  display: inline-block;
-}
 .dj_gecko .mblSwitchBg {
   -moz-box-sizing: border-box;
 }
@@ -17,9 +14,6 @@
 }
 .dj_gecko .mblSwitch .mblSwitchKnob {
   background-image: -moz-linear-gradient(top, #fafafa 0%, #bbbbbb 50%, #999999 100%);
-}
-.dj_ie .mblSwitch {
-  display: inline;
 }
 .dj_ie .mblSwitchBg {
   border: none;
