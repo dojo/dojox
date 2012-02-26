@@ -60,10 +60,10 @@
 	</table>
 	<div id="calPicker" data-dojo-type="dojox.mobile.Opener" data-dojo-props="onHide:getDate2, onShow:setDate2">
 		<h1 dojoType="dojox.mobile.Heading" label="Dates">
-			<button dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
-				onclick="dijit.byId('calPicker').hide(true)"></button>
-			<button dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
-				onclick="dijit.byId('calPicker').hide(false)"></button>
+			<span dojoType="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="position:absolute;width:45px;right:0;"
+				onclick="dijit.byId('calPicker').hide(true)"></span>
+			<span dojoType="dojox.mobile.ToolBarButton" label="Cancel" class="mblColorBlue" style="position:absolute;width:45px;left:0;"
+				onclick="dijit.byId('calPicker').hide(false)"></span>
 		</h1>
 		<div id="cal" dojoType='dijit.CalendarLite'></div>
 	</div>
