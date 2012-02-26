@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<title>Accessibility</title>
+
+	<link href="../themes/common/domButtons.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','IconContainer','TabBar']"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+
+	<script type="text/javascript">
+		require([
+			"dojo/ready",
+			"dijit/registry",
+			"dojox/mobile/parser",
+			"dojox/mobile",
+			"dojox/mobile/compat",
+			"dojox/mobile/IconContainer",
+			"dojox/mobile/TabBar"
+		], function(ready, registry){
+			ready(function(){
+				var btn1 = registry.byId("btn1");
+				btn1.connect(btn1.domNode, "onclick", function(){
+					console.log(this.label + " button was clicked");
+				});
+			});
+		});
+	</script>
+
+	<style>
+		.box {
+			border: 1px solid #A7C0E0;
+			width: 300px;
+			height: 250px;
+			background-image: url(images/widget-bg.png);
+			background-repeat: no-repeat;
+			background-color: white;
+		}
+	</style>
+</head>
+<body style="visibility:hidden;">
+	<div id="view1" data-dojo-type="dojox.mobile.View">
+		<h1 data-dojo-type="dojox.mobile.Heading">Mobile Mashup</h1>
+		<h2 data-dojo-type="dojox.mobile.RoundRectCategory">Spaces</h2>
+		<ul data-dojo-type="dojox.mobile.RoundRectList">
+			<li id="item1" data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-1.png", alt:"Orangy Icon", rightText:"Go To", moveTo:"view2"'>
+				Heading Sample
+			</li>
+			<li id="item2" data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-2.png", alt:"Green Icon", rightText:"Go To", moveTo:"view3"'>
+				ListItem Sample
+			</li>
+			<li id="item3" data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-3.png", rightText:"Go To", moveTo:"view4"'>
+				Icon Sample
+			</li>
+		</ul>
+	</div>
+
+	<div id="view2" data-dojo-type="dojox.mobile.View">
+		<div data-dojo-type="dojox.mobile.Heading" tabindex="0">
+			<span id="btn1" data-dojo-type="dojox.mobile.ToolBarButton" title="Edit" role="button" tabindex="0">Edit</span>
+			<span id="btn2" data-dojo-type="dojox.mobile.ToolBarButton" title="+" role="button"  tabindex="0" class="mblDomButtonWhitePlus" style="float:right;" onclick="console.log('+ was clicked')"></span>
+			World Clock
+		</div><br>
+
+
+		<div data-dojo-type="dojox.mobile.Heading" tabindex="0">
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="New" role="button" tabindex="0" data-dojo-props='toggle:true'>New</span>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Toggle" role="button" tabindex="0" data-dojo-props='toggle:true'>Toggle</span>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Information" role="button" tabindex="0" data-dojo-props='alt:"Information", icon:"images/a-icon-12.png", moveTo:"view3"'></span>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Hint" role="button" tabindex="0" data-dojo-props='alt:"Hint", icon:"images/tab-icons.png", iconPos:"29,0,29,29", moveTo:"view3"'></span>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Search" role="button" tabindex="0" data-dojo-props='icon:"mblDomButtonWhiteSearch"' style="float:right;"></span>
+		</div><br>
+
+		<div data-dojo-type="dojox.mobile.Heading" data-dojo-props='back:"Inbox", backProp:{className: "mblBackButton", role:"button", title:"Inbox", tabindex:"0"}, moveTo:"view1"' tabindex="0"><!-- 1.8 -->
+			<ul data-dojo-type="dojox.mobile.TabBar" data-dojo-props='barType:"segmentedControl"' style="float:right;margin-right:6px;">
+				<li data-dojo-type="dojox.mobile.TabBarButton" title="Up" role="button" tabindex="0" data-dojo-props='icon:"mblDomButtonWhiteUpArrow", selectOne:false'></li>
+				<li data-dojo-type="dojox.mobile.TabBarButton" title="Down" role="button" tabindex="0" data-dojo-props='icon:"mblDomButtonWhiteDownArrow", selectOne:false'></li>
+			</ul>
+			1 of 10
+		</div><br>
+
+		<div data-dojo-type="dojox.mobile.Heading" tabindex="0" data-dojo-props='back:"Top", backProp:{className: "mblArrowButton", role:"button", title:"Top", tabindex:"0"}, label:"Inbox(32)"'>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Search" role="button" tabindex="0" style="float:right;" data-dojo-props='icon:"mblDomButtonWhiteSearch"'></span>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Up" role="button" tabindex="0" style="float:right;" data-dojo-props='icon:"mblDomButtonWhiteUpArrow"'></span>
+			<span data-dojo-type="dojox.mobile.ToolBarButton" title="Down" role="button" tabindex="0" style="float:right;" data-dojo-props='icon:"mblDomButtonWhiteDownArrow"'></span>
+		</div><br>
+
+
+	</div>
+
+	<div id="view3" data-dojo-type="dojox.mobile.View">
+		<h1 data-dojo-type="dojox.mobile.Heading">Settings</h1>
+		<ul data-dojo-type="dojox.mobile.EdgeToEdgeList">
+			<li data-dojo-type="dojox.mobile.ListItem" tabindex="0" data-dojo-props='icon:"images/i-icon-1.png"'>
+				Airplane Mode
+				<div class="mblItemSwitch" data-dojo-type="dojox.mobile.Switch" data-dojo-props='prop:{tabindex:"0"}'></div>
+			</li>
+			<li data-dojo-type="dojox.mobile.ListItem" tabindex="0" data-dojo-props='icon:"images/i-icon-2.png", rightText:"mac", moveTo:"view1"'>
+				Wi-Fi
+			</li>
+			<li data-dojo-type="dojox.mobile.ListItem" tabindex="0" data-dojo-props='icon:"images/i-icon-3.png", rightText:"AcmePhone", moveTo:"view1"'>
+				Carrier
+			</li>
+		</ul>
+	</div>
+
+	<div id="view4" data-dojo-type="dojox.mobile.View">
+		<h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='back:"Top", backProp:{className: "mblBackButton", role:"button", title:"Top", tabindex:"0"}, moveTo:"view1"'>Icon Container</h1><!-- 1.8 -->
+		<ul data-dojo-type="dojox.mobile.IconContainer">
+			<li data-dojo-type="dojox.mobile.IconItem" lazy="true" data-dojo-props='label:"app1", icon:"images/icon-1.png", closeBtnProp:{title:"Close", role:"button"}'><div class="box"></div></li>
+			<li data-dojo-type="dojox.mobile.IconItem" lazy="true" data-dojo-props='label:"app2", icon:"images/icon-1.png", closeBtnProp:{title:"Close", role:"button"}'><div class="box"></div></li>
+			<li data-dojo-type="dojox.mobile.IconItem" lazy="true" data-dojo-props='label:"app3", icon:"images/icon-1.png", closeBtnProp:{title:"Close", role:"button"}'><div class="box"></div></li>
+		</ul>
+	</div>
+</body>
+</html>

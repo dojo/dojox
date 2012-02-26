@@ -11,7 +11,9 @@
 	.section {
 		font-weight: bold;
 		color: #008080;
-		margin: 10px 0;
+	}
+	.titleBar {
+		padding: 10px 0;
 	}
 	.contents {
 		margin-left: 30px;
@@ -37,7 +39,7 @@
 			icon.src = "../themes/common/domButtons/compat/mblDomButtonBlackDownArrow16.png";
 		}
 		function isRightIcon(icon){
-			return (icon.src.indexOf("Right") !== -1);
+			return (icon.src && icon.src.indexOf("Right") !== -1);
 		}
 
 		function sort(keys){
@@ -72,18 +74,22 @@
 
 				var section = document.createElement("div");
 				section.className = "section";
-				section.onclick = toggleSection;
 				container.appendChild(section);
+
+				var titleBar = document.createElement("div");
+				titleBar.className = "titleBar";
+				titleBar.onclick = toggleSection;
+				section.appendChild(titleBar);
 
 				var icon = document.createElement("img");
 				icon.className = "icon";
 				setRightIcon(icon);
-				section.appendChild(icon);
+				titleBar.appendChild(icon);
 
 				var title = document.createElement("label");
 				title.className = "title";
 				title.innerHTML = items.label + " (" + items.length + ")";
-				section.appendChild(title);
+				titleBar.appendChild(title);
 
 				var contents = document.createElement("div");
 				contents.className = "contents";
@@ -110,13 +116,11 @@
 		}
 
 		function toggleSection(e) {
-			var obj = e.srcElement ? e.srcElement : e.target;
-			if (obj.tagName == "DIV")
-				return;
-			obj = obj.parentNode;
-			var img = obj.childNodes[0];
-			var label = obj.childNodes[1];
-			var contents = obj.lastChild;
+			var node = e.srcElement ? e.srcElement : e.target;
+			var titleBar = (node.className == "titleBar") ? node : node.parentNode;
+			var img = titleBar.childNodes[0];
+			var label = titleBar.childNodes[1];
+			var contents = titleBar.nextSibling;
 			if (isRightIcon(img)){
 				setDownIcon(img);
 				contents.style.display = "block";

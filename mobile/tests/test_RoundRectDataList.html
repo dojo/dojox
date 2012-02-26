@@ -53,6 +53,10 @@
 					store.deleteItem(item);
 				}
 			};
+			reload1 = function(){
+				store.close();
+				registry.byId("list").setStore(store);
+			};
 		});
 	</script>
 </head>
@@ -66,6 +70,7 @@
 		<p>alter the object store:<br>
 		<input type="button" value="Add" onclick="add1()">
 		<input type="button" value="Delete" onclick="delete1()">
+		<input type="button" value="Reload" onclick="reload1()">
 	</div>
 </body>
 </html>
