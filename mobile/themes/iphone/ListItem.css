@@ -52,6 +52,7 @@
   float: left;
   line-height: normal;
   margin-top: 7px;
+  margin-bottom: -7px;
   margin-right: 11px;
 }
 .mblListItemIcon {
@@ -59,6 +60,7 @@
   float: left;
   line-height: normal;
   margin-top: 7px;
+  margin-bottom: -7px;
   margin-right: 11px;
 }
 .mblListItemRightIcon, .mblListItemRightIcon2, .mblListItemUncheckIcon {

@@ -5,7 +5,6 @@
   border-width: 1px;
   border-radius: 6px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f3f7), to(#cec5d6), color-stop(0.5, #ced3ce));
-  outline: none;
   -webkit-user-select: none;
   -webkit-box-sizing: content-box;
   border-color: #b0b0b0;
