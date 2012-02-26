@@ -175,6 +175,7 @@ define([
 					return (e.target !== this.labelNode);
 				};
 			}
+			this._layoutChildren = [];
 		},
 
 		startup: function(){
@@ -193,7 +194,7 @@ define([
 			}
 			if(this.variableHeight){
 				domClass.add(this.domNode, "mblVariableHeight");
-				setTimeout(lang.hitch(this, "layoutVariableHeight"));
+				setTimeout(lang.hitch(this, "layoutVariableHeight"), 0);
 			}
 
 			this.inherited(arguments);
@@ -214,7 +215,6 @@ define([
 		},
 
 		layoutChildren: function(){
-			this._layoutChildren = [];
 			var centerNode;
 			array.forEach(this.domNode.childNodes, function(n){
 				if(n.nodeType !== 1){ return; }

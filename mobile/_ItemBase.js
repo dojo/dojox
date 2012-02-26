@@ -328,7 +328,7 @@ define([
 
 				var p = this.getParent();
 				if(p && p.selectOne){
-					this._prevSel.set("selected", true);
+					this._prevSel && this._prevSel.set("selected", true);
 				}else{
 					this.set("selected", false);
 				}
