@@ -25,11 +25,7 @@
   -moz-border-radius-topright: 0;
   -moz-border-radius-bottomright: 0;
 }
-.dj_ie .mblToolBarButton {
-  display: inline;
-}
 .dj_ie .mblToolBarButtonLeftArrow {
-  position: absolute;
   top: 0;
   left: -2px;
   width: 13px;
@@ -42,9 +38,8 @@
   background-image: url(compat/arrow-button-head-sel.png);
 }
 .dj_ie .mblToolBarButtonRightArrow {
-  position: absolute;
   top: 0;
-  right: -13px;
+  right: -3px;
   width: 13px;
   height: 31px;
   border-style: none;
@@ -54,18 +49,17 @@
 .dj_ie .mblToolBarButtonSelected .mblToolBarButtonRightArrow {
   background-image: url(compat/arrow-button-right-head-sel.png);
 }
-.dj_ie .mblToolBarButton .mblToolBarButtonBody {
+.dj_ie .mblToolBarButtonBody {
   background-image: url(compat/arrow-button-bg.png);
   background-position: left bottom;
 }
-.dj_ie .mblToolBarButtonSelected .mblToolBarButtonBody {
+.dj_ie .mblToolBarButtonBodySelected {
   background-image: url(compat/arrow-button-bg-sel.png);
 }
 .dj_ie .mblToolBarButtonBody table {
   margin: 0;
 }
 .dj_ie .mblToolBarButtonHasLeftArrow .mblToolBarButtonBody {
-  left: 11px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }

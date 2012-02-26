@@ -40,6 +40,7 @@ define([
 		// 		setters.
 		light: true,
 
+		/* internal properties */
 		baseClass: "mblToolBarButton",
 
 		defaultColor: "mblColorDefault",
@@ -52,29 +53,27 @@ define([
 			if(!this.label && this.srcNodeRef){
 				this.label = this.srcNodeRef.innerHTML;
 			}
-			if(this.light && !this.arrow && (!this.icon || !this.label)){
-				this.domNode = this.labelNode = this.tableNode = this.bodyNode = this.iconParentNode =
-					domConstruct.create("span", {
-						className: this.defaultColor + " mblToolBarButtonBody" +
-							(this.icon ? " mblToolBarButtonLightIcon" : " mblToolBarButtonLightText")
-					});
-				this.inherited(arguments);
-				return;
-			}
-			this.domNode = domConstruct.create("table", {cellPadding:"0",cellSpacing:"0",border:"0"});
-			var cell = this.domNode.insertRow(-1).insertCell(-1);
-			cell.className = "mblToolBarButtonCell";
+			this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
+				this.srcNodeRef : domConstruct.create("span");
 			this.inherited(arguments);
 
+			if(this.light && !this.arrow && (!this.icon || !this.label)){
+				this.labelNode = this.tableNode = this.bodyNode = this.iconParentNode = this.domNode;
+				domClass.add(this.domNode, this.defaultColor + " mblToolBarButtonBody" +
+							 (this.icon ? " mblToolBarButtonLightIcon" : " mblToolBarButtonLightText"));
+				return;
+			}
+
+			this.domNode.innerHTML = "";
 			if(this.arrow === "left" || this.arrow === "right"){
-				this.arrowNode = domConstruct.create("div", {
+				this.arrowNode = domConstruct.create("span", {
 					className: "mblToolBarButtonArrow mblToolBarButton" +
 					(this.arrow === "left" ? "Left" : "Right") + "Arrow"
-				}, cell);
+				}, this.domNode);
 				domClass.add(this.domNode, "mblToolBarButtonHas" +
 					(this.arrow === "left" ? "Left" : "Right") + "Arrow");
 			}
-			this.bodyNode = domConstruct.create("div", {className:"mblToolBarButtonBody"}, cell);
+			this.bodyNode = domConstruct.create("span", {className:"mblToolBarButtonBody"}, this.domNode);
 			this.tableNode = domConstruct.create("table", {cellPadding:"0",cellSpacing:"0",border:"0"}, this.bodyNode);
 
 			var row = this.tableNode.insertRow(-1);
@@ -84,6 +83,7 @@ define([
 			this.labelNode.className = "mblToolBarButtonLabel";
 
 			if(this.icon && this.icon !== "none" && this.label){
+				domClass.add(this.domNode, "mblToolBarButtonHasIcon");
 				domClass.add(this.bodyNode, "mblToolBarButtonLabeledIcon");
 			}
 
@@ -159,6 +159,7 @@ define([
 				domClass.replace(this.bodyNode, this.defaultColor, this.selColor);
 			}
 			domClass.toggle(this.domNode, "mblToolBarButtonSelected", selected);
+			domClass.toggle(this.bodyNode, "mblToolBarButtonBodySelected", selected);
 			this._updateArrowColor();
 		}
 	});

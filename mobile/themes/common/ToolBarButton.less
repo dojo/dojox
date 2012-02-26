@@ -1,45 +1,36 @@
 /* dojox.mobile.ToolBarButton */
 .mblToolBarButton {
-	display: inline-table;
+	display:inline-block;
+	position: relative;
 	cursor: pointer;
 	-webkit-tap-highlight-color: rgba(255,255,255,0);
 	margin: 6px;
+	padding: 0 10px;
 	height: 29px;
 	line-height: 29px;
 	text-align: center;
 	font-family: Helvetica;
 	font-size: 13px;
 	font-weight: bold;
+	vertical-align: middle;
 	.mblToolBarButton-styles;
 }
-span.mblToolBarButton {
-	padding: 6px 10px 7px 10px;
-	display:inline;
-}
-span.mblToolBarButtonLightIcon {
+.mblToolBarButtonHasIcon, .mblToolBarButtonLightIcon {
 	padding: 0;
-}
-table.mblToolBarButton {
-	vertical-align: middle;
 }
 .mblHeading {
 	.mblToolBarButton {
 		float: left;
 	}
-	span.mblToolBarButton {
-		padding: 0 10px;
-	}
 	span.mblToolBarButtonLightIcon {
 		padding: 0;
 	}
 }
-.mblToolBarButtonCell {
-	position: relative;
-	display: block;
-	padding: 0;
+.mblToolBarButtonHasLeftArrow {
+	padding-right: 0;
 }
-.mblToolBarButtonHasLeftArrow, .mblToolBarButtonHasRightArrow {
-	margin-right: 17px;
+.mblToolBarButtonHasRightArrow {
+	padding-left: 0;
 }
 .mblToolBarButtonArrow {
 	position: absolute;
@@ -51,10 +42,10 @@ table.mblToolBarButton {
 	.mblToolBarButtonArrow-styles;
 }
 .mblToolBarButtonHasLeftArrow .mblToolBarButtonArrow {
-	left: 0;
+	left: -1px;
 }
 .mblToolBarButtonHasRightArrow .mblToolBarButtonArrow {
-	right: -11px;
+	right: -1px;
 }
 .mblHeading {
 	.mblToolBarButtonArrow {
@@ -69,10 +60,14 @@ table.mblToolBarButton {
 }
 
 .mblToolBarButtonBody {
+	display: inline-block;
 	position: relative;
 	overflow: hidden;
 	border-radius: @mbl-tool-bar-button-body-border-radius;
 	.mblToolBarButtonBody-styles;
+}
+.mblToolBarButton .mblToolBarButtonBody {
+	width: 100%;
 }
 .mblHeading .mblToolBarButtonBody {
 	.mblToolBarButtonBodyInHeading-styles;
@@ -81,7 +76,6 @@ table.mblToolBarButton {
 	margin: 0 auto;
 }
 .mblToolBarButtonHasLeftArrow .mblToolBarButtonBody {
-	left: 11px;
 	border-left-width: 0;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
