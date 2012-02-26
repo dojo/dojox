@@ -395,6 +395,13 @@ define([
 					}));
 				}));
 			}else{
+				if(transition.indexOf("cube") != -1){
+					if(has('ipad')){
+						domStyle.set(toNode.parentNode, {webkitPerspective:1600});
+					}else if(has('iphone')){
+						domStyle.set(toNode.parentNode, {webkitPerspective:800});
+					}
+				}
 				var s = this._toCls(transition);
 				domClass.add(fromNode, s + " mblOut" + rev);
 				domClass.add(toNode, s + " mblIn" + rev);
@@ -467,6 +474,11 @@ define([
 
 			// clear the clicked position
 			this.clickedPosX = this.clickedPosY = undefined;
+
+			if(name.indexOf("Cube") !== -1 &&
+				name.indexOf("In") !== -1 && has('iphone')){
+				this.domNode.parentNode.style.webkitPerspective = "";
+			}
 		},
 
 		invokeCallback: function(){
