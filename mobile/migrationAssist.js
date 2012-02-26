@@ -75,10 +75,13 @@ SpinWheel
 ---------
  - SpinWheel.css is no longer in the themes/common folder.
    It is in a device theme folder. (e.g. themes/iphone/SpinWheel.css)
+ - getValue() is no longer supported. Use get("values") instead.
+ - setValue() is no longer supported. Use set("values", newValue) instead.
 
 SpinWheelSlot
 -------------
  - getValue() is no longer supported. Use get("value") instead.
+ - getKey() is no longer supported. Use get("key") instead.
  - setValue() is no longer supported. Use set("value", newValue) instead.
 
 Switch
@@ -419,10 +422,25 @@ define([
 		}
 	});
 
+	lang.extend(SpinWheel, {
+		getValue: function(){
+			console.log('[MIG:fixed] SpinWheel: getValue() is no longer supported. Use get("values") instead.');
+			return this.get("values");
+		},
+		setValue: function(newValue){
+			console.log('[MIG:fixed] SpinWheel: setValue() is no longer supported. Use set("values",x) instead.');
+			return this.set("values", newValue);
+		}
+	});
+
 	lang.extend(SpinWheelSlot, {
 		getValue: function(){
 			console.log('[MIG:fixed] SpinWheelSlot: getValue() is no longer supported. Use get("value") instead.');
 			return this.get("value");
+		},
+		getKey: function(){
+			console.log('[MIG:fixed] SpinWheelSlot: getKey() is no longer supported. Use get("key") instead.');
+			return this.get("key");
 		},
 		setValue: function(newValue){
 			console.log('[MIG:fixed] SpinWheelSlot: setValue() is no longer supported. Use set("value",x) instead.');
