@@ -1,5 +1,4 @@
 
-// experimental, still work-in-progress
 // TODO: auto scroll?
 
 define([

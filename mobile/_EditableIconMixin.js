@@ -1,29 +1,15 @@
-
-// experimental, still work-in-progress
-
 define([
 	"dojo/_base/array",
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/event",
 	"dojo/_base/lang",
-	"dojo/_base/window",
-	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"dijit/registry",
-	"dijit/_Contained",
-	"dijit/_Container",
-	"dijit/_WidgetBase",
 	"./IconItem",
 	"./sniff"
-], function(array, connect, declare, event, lang, win, domClass, domGeometry, domStyle, registry, Contained, Container, WidgetBase, IconItem, has){
-
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
+], function(array, connect, declare, event, lang, domGeometry, domStyle, registry, IconItem, has){
 
 	// module:
 	//		dojox/mobile/_EditableIconMixin
