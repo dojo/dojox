@@ -165,7 +165,7 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 				this.fromGregorian(arg0);
 			}else if(arg0 == ""){
 				// date should be invalid.  Dijit relies on this behavior.
-				this._date = new Date(""); //TODO: should this be NaN?  _date is not a Date object
+				this._year = this._month = this._date = this._hours = this._minutes = this._seconds = this._milliseconds = NaN;
 			}else{  // this is hebrew.Date object
 				this._year = arg0._year;
 				this._month =  arg0._month;
