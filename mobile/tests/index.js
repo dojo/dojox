@@ -10,7 +10,6 @@ var categories = [
 	{ tag: "EdgeToEdgeDataList", label: "EdgeToEdgeDataList"},
 	{ tag: "EdgeToEdgeList", label: "EdgeToEdgeList"},
 	{ tag: "EdgeToEdgeStoreList", label: "EdgeToEdgeStoreList"},
-	{ tag: "FeedReader", label: "FeedReader"},
 	{ tag: "FixedSplitter", label: "FixedSplitter"},
 	{ tag: "FormControls", label: "FormControls"},
 	{ tag: "GridLayout", label: "GridLayout"},
@@ -48,7 +47,6 @@ var categories = [
 ];
 var tests = [
 	{ url: "test_Accordion-demo.html", tags: "Accordion" },
-	{ url: "test_ArrowButton.html", tags: "Button" },
 	{ url: "test_Audio-single-source.html", tags: "Media" },
 	{ url: "test_Audio.html", tags: "Media" },
 	{ url: "test_Badge.html", tags: "Badge" },
@@ -69,8 +67,6 @@ var tests = [
 	{ url: "test_EdgeToEdgeDataList-more-sv.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList-more-v.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList.html", tags: "EdgeToEdgeDataList" },
-	{ url: "test_EdgeToEdgeFeedReader-atom.html", tags: "FeedReader" },
-	{ url: "test_EdgeToEdgeFeedReader-rss.html", tags: "FeedReader" },
 	{ url: "test_EdgeToEdgeList-check.html", tags: "EdgeToEdgeList" },
 	{ url: "test_EdgeToEdgeList-editable-sv.html", tags: "EdgeToEdgeList" },
 	{ url: "test_EdgeToEdgeList-editable.html", tags: "EdgeToEdgeList" },
@@ -146,8 +142,6 @@ var tests = [
 	{ url: "test_RoundRect.html", tags: "RoundRect" },
 	{ url: "test_RoundRectCategory.html", tags: "RoundRect" },
 	{ url: "test_RoundRectDataList.html", tags: "RoundRectDataList" },
-	{ url: "test_RoundRectFeedReader-atom.html", tags: "FeedReader" },
-	{ url: "test_RoundRectFeedReader-rss.html", tags: "FeedReader" },
 	{ url: "test_RoundRectList-check.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList-editable-sv.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList-editable.html", tags: "RoundRectList" },
