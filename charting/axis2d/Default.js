@@ -361,35 +361,35 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 						rotation += 360;
 					}
 					switch(rotation){
-					case 0:
-					case 180:
-						// trivial cases: horizontal labels
-						if(this.vertical){
-							majLabelW = minLabelW = size;
-						}else{
-							majLabelW = labelW.majLabelW;
-							minLabelW = labelW.minLabelW;
-						}
-						break;
-					case 90:
-					case 270:
-						// trivial cases: vertical
-						if(this.vertical){
-							majLabelW = labelW.majLabelW;
-							minLabelW = labelW.minLabelW;
-						}else{
-							majLabelW = minLabelW = size;
-						}
-						break;
-					default:
-						// all major labels are parallel they can't collapse except if the two ticks are
-						// closer than the height of the text * cos(90-rotation)
-						majLabelW  = this.vertical?Math.min(labelW.majLabelW, size / cosr):Math.min(labelW.majLabelW, size / sinr);
-						// for minor labels we need to rotated them
-						var gap1 = Math.sqrt(labelW.minLabelW * labelW.minLabelW + size * size),
-							gap2 = this.vertical?size * cosr + labelW.minLabelW * sinr:labelW.minLabelW * cosr + size * sinr;
-						minLabelW = Math.min(gap1, gap2);
-						break;
+						case 0:
+						case 180:
+							// trivial cases: horizontal labels
+							if(this.vertical){
+								majLabelW = minLabelW = size;
+							}else{
+								majLabelW = labelW.majLabelW;
+								minLabelW = labelW.minLabelW;
+							}
+							break;
+						case 90:
+						case 270:
+							// trivial cases: vertical
+							if(this.vertical){
+								majLabelW = labelW.majLabelW;
+								minLabelW = labelW.minLabelW;
+							}else{
+								majLabelW = minLabelW = size;
+							}
+							break;
+						default:
+							// all major labels are parallel they can't collapse except if the two ticks are
+							// closer than the height of the text * cos(90-rotation)
+							majLabelW  = this.vertical ? Math.min(labelW.majLabelW, size / cosr) : Math.min(labelW.majLabelW, size / sinr);
+							// for minor labels we need to rotated them
+							var gap1 = Math.sqrt(labelW.minLabelW * labelW.minLabelW + size * size),
+								gap2 = this.vertical ? size * cosr + labelW.minLabelW * sinr : labelW.minLabelW * cosr + size * sinr;
+							minLabelW = Math.min(gap1, gap2);
+							break;
 					}
 					// we need to check both minor and major labels fit a minor step
 					this.scaler.minMinorStep = this._prevMinMinorStep =  Math.max(majLabelW, minLabelW) + labelGap;

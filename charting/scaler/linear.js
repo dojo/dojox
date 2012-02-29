@@ -3,8 +3,11 @@ define(["dojo/_base/lang", "./common"],
 	var linear = lang.getObject("dojox.charting.scaler.linear", true);
 	
 	var deltaLimit = 3,	// pixels
-		findString = common.findString,
 		getLabel = common.getNumericLabel;
+
+	function findString(/*String*/ val, /*Array*/ text){
+		return text.indexOf(val.toLowerCase()) >= 0;    // Boolean
+	}
 	
 	var calcTicks = function(min, max, kwArgs, majorTick, minorTick, microTick, span){
 		kwArgs = lang.delegate(kwArgs);

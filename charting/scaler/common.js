@@ -24,13 +24,6 @@ define(["dojo/_base/lang"], function(lang){
 				return ifnotloaded();
 			}
 		},
-		findString: function(/*String*/ val, /*Array*/ text){
-			val = val.toLowerCase();
-			for(var i = 0; i < text.length; ++i){
-				if(val == text[i]){ return true; }
-			}
-			return false;
-		},
 		getNumericLabel: function(/*Number*/ number, /*Number*/ precision, /*Object*/ kwArgs){
 			var def = "";
 			common.doIfLoaded("dojo/number", function(numberLib){
