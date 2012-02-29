@@ -4,7 +4,7 @@
   padding: 0;
   border: 1px solid #cccccc;
   border-radius: 8px;
-  background-color: #f7f7f7;
+  background-color: #ffffff;
 }
 .mblRoundRectList .mblListItem:first-child, .mblRoundRectList .mblEdgeToEdgeCategory:first-child {
   border-top-left-radius: 8px;

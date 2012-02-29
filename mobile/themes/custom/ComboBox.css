@@ -23,7 +23,7 @@
   border: 1px solid black;
   border-color: #869cbf;
   border-radius: 0;
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   color: black;
 }
 .mblComboBoxMenuItem {
@@ -32,7 +32,7 @@
   border-style: solid;
   text-align: left;
   white-space: nowrap;
-  border-color: #f7f7f7;
+  border-color: #ffffff;
   color: inherit;
 }
 .mblComboBoxMenuItemSelected {

@@ -6,7 +6,7 @@ html.mobile, .mobile body {
 .mobile body {
   overflow-x: hidden;
   -webkit-text-size-adjust: none;
-  background-color: whitef;
+  background-color: #d0d0d0;
   font-family: Helvetica;
   font-size: 17px;
   color: black;
