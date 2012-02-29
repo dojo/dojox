@@ -5,9 +5,15 @@ define(["dojo/_base/lang", "./common"],
 	var deltaLimit = 3,	// pixels
 		getLabel = common.getNumericLabel;
 
-	function findString(/*String*/ val, /*Array*/ text){
-		return text.indexOf(val.toLowerCase()) >= 0;    // Boolean
-	}
+		function findString(/*String*/ val, /*Array*/ text){
+			val = val.toLowerCase();
+			for(var i = text.length - 1; i >= 0; --i){
+				if(val === text[i]){
+					return true;
+				}
+			}
+			return false;
+		}
 	
 	var calcTicks = function(min, max, kwArgs, majorTick, minorTick, microTick, span){
 		kwArgs = lang.delegate(kwArgs);
