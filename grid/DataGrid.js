@@ -619,6 +619,9 @@ var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 			var fx = lang.hitch(this, function(items){
 				if(items.length){
 					array.forEach(items, this.store.deleteItem, this.store);
+					if(this.store.save){
+						this.store.save();					
+					}
 					this.selection.clear();
 				}
 			});
