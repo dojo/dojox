@@ -825,6 +825,9 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		this._multiRemoving = true;
 		this._gridOriginalfuncs[2].apply();
 		this._multiRemoving = false;
+		if(this.grid.store.save){
+			this.grid.store.save();
+		}
 		this.grid.resize();
 		this.grid._refresh();
 	},
