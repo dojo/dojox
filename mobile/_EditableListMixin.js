@@ -64,6 +64,7 @@ define([
 			//		Internal handler for click events.
 			// tags:
 			//		private
+			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
 			var item = registry.getEnclosingWidget(e.target);
 			for(var n = e.target; n !== item.domNode; n = n.parentNode){
@@ -155,14 +156,17 @@ define([
 				if(!child.deleteIconNode){
 					child.set("rightIcon", this.rightIconForEdit);
 					child.set("deleteIcon", this.deleteIconForEdit);
+					child.deleteIconNode.tabIndex = child.tabIndex;
 				}
 				child.rightIconNode.style.display = "";
 				child.deleteIconNode.style.display = "";
 			}, this);
 			if(!this._handles){
-				this._handles = [];
-				this._handles.push(this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart"));
-				this._handles.push(this.connect(this.domNode, "onclick", "_onClick"));
+				this._handles = [
+					this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart"),
+					this.connect(this.domNode, "onclick", "_onClick"),
+					this.connect(this.domNode, "onkeydown", "_onClick") // for desktop browsers
+				];
 			}
 		},
 
