@@ -134,6 +134,10 @@
 .mblTooltipHidden, .mblTooltipHidden * {
   visibility: hidden !important;
 }
+.mblTooltipHidden {
+  top: -99999px !important;
+  left: -99999px !important;
+}
 .mblTooltip .mblHeading {
   border-top: 3px solid #4F5055;
   border-bottom: 1px solid #2D3642;
