@@ -128,7 +128,7 @@ return declare("dojox.grid._FocusManager", null, {
 	_delayedHeaderFocus: function(){
 		if(this.isNavHeader()){
 			this.focusHeader();
-			this.grid.domNode.focus();
+			//this.grid.domNode.focus();
 		}
 	},
 	_initColumnHeaders: function(){
