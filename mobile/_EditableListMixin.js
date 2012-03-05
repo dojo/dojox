@@ -171,7 +171,6 @@ define([
 		},
 
 		endEdit: function(){
-			this.isEditing = false;
 			domClass.remove(this.domNode, "mblEditableRoundRectList");
 			array.forEach(this.getChildren(), function(child){
 				child.rightIconNode.style.display = "none";
@@ -181,6 +180,7 @@ define([
 				array.forEach(this._handles, this.disconnect, this);
 				this._handles = null;
 			}
+			this.isEditing = false;
 		}
 	});
 });

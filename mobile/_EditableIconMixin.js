@@ -33,31 +33,19 @@ define([
 		},
 
 		startEdit: function(){
-			if(!this.editable || this._editing){ return; }
+			if(!this.editable || this.isEditing){ return; }
 
-			this._editing = true;
+			this.isEditing = true;
 			if(!this._handles){
-				this._handles = [];
-				this._handles.push(this.connect(this.domNode, "webkitTransitionStart", "_onTransitionStart"));
-				this._handles.push(this.connect(this.domNode, "webkitTransitionEnd", "_onTransitionEnd"));
+				this._handles = [
+					this.connect(this.domNode, "webkitTransitionStart", "_onTransitionStart"),
+					this.connect(this.domNode, "webkitTransitionEnd", "_onTransitionEnd")
+				];
 			}
 
 			var count = 0;
 			array.forEach(this.getChildren(), function(w){
 				setTimeout(lang.hitch(this, function(){
-					// disconnect default ontouchstart/ontouchmove/ontouchend, onkeydown event handler
-					// so as not to open IconItem's content
-					if(w._onTouchStartHandle){ 
-						w.disconnect(w._onTouchStartHandle);
-						w._onTouchStartHandle = null;
-					}
-					if(w._onTouchEndHandle){
-						w.disconnect(w._onTouchMoveHandle);
-						w.disconnect(w._onTouchEndHandle);
-						w._onTouchMoveHandle = w._onTouchEndHandle = null;
-					}
-					w.disconnect(w._keydownHandle);
-
 					w.set("deleteIcon", this.deleteIconForEdit);
 					if(w.deleteIconNode){
 						w._deleteHandle = this.connect(w.deleteIconNode, "onclick", "_deleteIconClicked");
@@ -71,7 +59,7 @@ define([
 		},
 
 		endEdit: function(){
-			if(!this._editing){ return; }
+			if(!this.isEditing){ return; }
 
 			array.forEach(this.getChildren(), function(w){
 				w.unhighlight();
@@ -80,13 +68,8 @@ define([
 					w._deleteHandle = null;
 				}
 				w.set("deleteIcon", "");
-				if(w._handleClick && w._selStartMethod === "touch"){ // reconnect ontouchstart handler
-					w._onTouchStartHandle = w.connect(w.domNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart");
-				}
-				w._keydownHandle = w.connect(w.domNode, "onkeydown", "_onClick"); // reconnect onkeydown handler
 			}, this);
 
-			this._editing = false;
 			this._movingItem = null;
 			if(this._handles){
 				array.forEach(this._handles, this.disconnect, this);
@@ -95,6 +78,7 @@ define([
 
 			connect.publish("/dojox/mobile/endEdit", [this]); // pubsub
 			this.onEndEdit(); // callback
+			this.isEditing = false;
 		},
 
 		scaleItem: function(/*Widget*/widget, /*Number*/ratio){
@@ -138,7 +122,7 @@ define([
 			}
 			this._touchStartPosX = e.touches ? e.touches[0].pageX : e.pageX;
 			this._touchStartPosY = e.touches ? e.touches[0].pageY : e.pageY;
-			if(this._editing){
+			if(this.isEditing){
 				this._onDragStart(e);
 			}else{
 				// set timer to detect long press

@@ -100,6 +100,7 @@ var tests = [
 	{ url: "test_Icon.html", tags: "Icon" },
 	{ url: "test_IconContainer-badge.html", tags: "IconContainer" },
 	{ url: "test_IconContainer-connect.html", tags: "IconContainer" },
+	{ url: "test_IconContainer-editable-a11y.html", tags: "IconContainer" },
 	{ url: "test_IconContainer-editable.html", tags: "IconContainer" },
 	{ url: "test_IconContainer-highlight.html", tags: "IconContainer" },
 	{ url: "test_IconContainer-multi.html", tags: "IconContainer" },

@@ -288,7 +288,7 @@ define([
 		},
 
 		_onTouchStart: function(e){
-			if(this.onTouchStart(e) === false){ return; } // user's touchStart action
+			if(this.getParent().isEditing || this.onTouchStart(e) === false){ return; } // user's touchStart action
 			if(!this._onTouchEndHandle && this._selStartMethod === "touch"){
 				// Connect to the entire window. Otherwise, fail to receive
 				// events if operation is performed outside this widget.
@@ -320,12 +320,7 @@ define([
 			var y = e.touches ? e.touches[0].pageY : e.clientY;
 			if(Math.abs(x - this.touchStartX) >= 4 ||
 			   Math.abs(y - this.touchStartY) >= 4){ // dojox.mobile.scrollable#threshold
-				if(this._selTimer){
-					clearTimeout(this._selTimer);
-					this._selTimer = null;
-				}
-				this._disconnect();
-
+				this.cancel();
 				var p = this.getParent();
 				if(p && p.selectOne){
 					this._prevSel && this._prevSel.set("selected", true);
@@ -341,14 +336,17 @@ define([
 			this._onTouchMoveHandle = this._onTouchEndHandle = null;
 		},
 
-		_onTouchEnd: function(e){
-			this._disconnect();
+		cancel: function(){
 			if(this._selTimer){
 				clearTimeout(this._selTimer);
 				this._selTimer = null;
-			}else if (this._delayedSelection){
-				return;
 			}
+			this._disconnect();
+		},
+
+		_onTouchEnd: function(e){
+			this.cancel();
+			if(this._delayedSelection){ return; }
 			this._onClick(e);
 		},
 

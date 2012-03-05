@@ -253,7 +253,7 @@ define([
 			//		Internal handler for click events.
 			// tags:
 			//		private
-			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
+			if(this.getParent().isEditing || e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
 			var n = this.labelNode;
 			if(this.anchorLabel && e.currentTarget === n){
