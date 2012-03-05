@@ -17,6 +17,7 @@
 
 		<script type="text/javascript">
 			dojo.require("dijit.robotx");
+			dojo.require("dijit.registry");
 
 			dojo.addOnLoad(function(){
 				doh.robot.initRobot("../test_ajax-html.html");
@@ -28,7 +29,7 @@
 						runTest: function(){
 							var d = new doh.Deferred();
 
-							doh.robot.mouseMoveAt(dojo.query(".mblListItemTextBox", dijit.registry.byId("dojox_mobile_ListItem_0").domNode)[0], 2000);
+							doh.robot.mouseMoveAt(dijit.registry.byId("dojox_mobile_ListItem_0").domNode, 2000);
 							doh.robot.mouseClick({left: true}, 500);
 
 

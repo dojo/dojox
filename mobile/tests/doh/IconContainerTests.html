@@ -93,17 +93,21 @@
 			}
 			runner.assertEqual(widget.label, widget.domNode.childNodes[0].childNodes[1].childNodes[0].nodeValue, "id=" + widget.domNode.id);
 		}
-		function _assertCorrectIconItemPos(widgetId1, widgetId2, widgetId3){
+		function _assertCorrectIconItemPos(widgetId1, widgetId2, widgetId3, widgetId4){
 			var widget1 = registry.byId(widgetId1);
 			var widget2 = registry.byId(widgetId2);
 			var widget3 = registry.byId(widgetId3);
+			var widget4 = registry.byId(widgetId4);
+			
 			
 			runner.assertNotEqual(null, widget1, "Widget (Id=" +  widgetId1 + ") dose not exist.");
 			runner.assertNotEqual(null, widget2, "Widget (Id=" +  widgetId2 + ") dose not exist.");
-			runner.assertNotEqual(widget1.domNode.offsetTop, widget2.domNode.offsetTop, "id=" + widgetId1);
-			runner.assertNotEqual(widget1.domNode.offsetLeft, widget2.domNode.offsetLeft, "left id=" + widgetId1);
-			runner.assertEqual(widget2.domNode.offsetTop, widget3.domNode.offsetTop, "id=" + widgetId2);
-			runner.assertEqual(widget1.domNode.offsetLeft, widget3.domNode.offsetLeft, "left id=" + widgetId1);
+			runner.assertNotEqual(null, widget3, "Widget (Id=" +  widgetId3 + ") dose not exist.");
+			runner.assertNotEqual(null, widget4, "Widget (Id=" +  widgetId4 + ") dose not exist.");
+			runner.assertEqual(widget2.domNode.offsetTop, widget1.domNode.offsetTop, "id=" + widgetId1);
+			runner.assertEqual(widget3.domNode.offsetLeft, widget1.domNode.offsetLeft, "left id=" + widgetId1);
+			runner.assertEqual(widget3.domNode.offsetTop, widget4.domNode.offsetTop, "id=" + widgetId3);
+			runner.assertEqual(widget2.domNode.offsetLeft, widget4.domNode.offsetLeft, "left id=" + widgetId4);
 		}
 		function _showView2(){
 			var view1 = registry.byId("view1");
@@ -117,11 +121,11 @@
 					var widget3 = _createIconContainerProgrammaticallyWithSourceNodeReference("view1-IconContainer3");
 
 					_assertCorrectIconContainer(widget1);
-					_assertCorrectIconItemPos("dojox_mobile_IconItem_0", "dojox_mobile_IconItem_5", "dojox_mobile_IconItem_4");
+					_assertCorrectIconItemPos("dojox_mobile_IconItem_0", "dojox_mobile_IconItem_2", "dojox_mobile_IconItem_3", "dojox_mobile_IconItem_5");
 					_assertCorrectIconContainer(widget2);
-					_assertCorrectIconItemPos("dojox_mobile_IconItem_12", "dojox_mobile_IconItem_17", "dojox_mobile_IconItem_16");
+					_assertCorrectIconItemPos("dojox_mobile_IconItem_12", "dojox_mobile_IconItem_14", "dojox_mobile_IconItem_15", "dojox_mobile_IconItem_17");
 					_assertCorrectIconContainer(widget3);
-					_assertCorrectIconItemPos("view1-IconContainer3-IconItem1", "view1-IconContainer3-IconItem6", "view1-IconContainer3-IconItem5");
+					_assertCorrectIconItemPos("view1-IconContainer3-IconItem1", "view1-IconContainer3-IconItem3", "view1-IconContainer3-IconItem4", "view1-IconContainer3-IconItem6");
 				},
 				function testInView2(){
 					var widget1 = _createIconContainerDeclaratively("dojox_mobile_IconContainer_1");
@@ -131,11 +135,11 @@
 					_showView2();
 
 					_assertCorrectIconContainer(widget1);
-					_assertCorrectIconItemPos("dojox_mobile_IconItem_6", "dojox_mobile_IconItem_11", "dojox_mobile_IconItem_10");
+					_assertCorrectIconItemPos("dojox_mobile_IconItem_6", "dojox_mobile_IconItem_8", "dojox_mobile_IconItem_9", "dojox_mobile_IconItem_11");
 					_assertCorrectIconContainer(widget2);
-					_assertCorrectIconItemPos("dojox_mobile_IconItem_18", "dojox_mobile_IconItem_23", "dojox_mobile_IconItem_22");
+					_assertCorrectIconItemPos("dojox_mobile_IconItem_18", "dojox_mobile_IconItem_20", "dojox_mobile_IconItem_21", "dojox_mobile_IconItem_23");
 					_assertCorrectIconContainer(widget3);
-					_assertCorrectIconItemPos("view2-IconContainer3-IconItem1", "view2-IconContainer3-IconItem6", "view2-IconContainer3-IconItem5");
+					_assertCorrectIconItemPos("view2-IconContainer3-IconItem1", "view2-IconContainer3-IconItem3", "view2-IconContainer3-IconItem4", "view2-IconContainer3-IconItem6");
 				}
 			]);
 			runner.run();

@@ -1,9 +1,9 @@
 var timeoutInterval = 1500;
 
-var FIXEDSPLITER_CLASSNAME = "mblFixedSpliter";
+var FIXEDSPLITER_CLASSNAME = "mblFixedSplitter";
 var FIXEDSPLITERPANE_CLASSNAME1 = "mblContainer";
-var FIXEDSPLITERPANE_CLASSNAME2 = "mblContainerV";
-var FIXEDSPLITERPANE_CLASSNAME3 = "mblContainerH";
+var FIXEDSPLITERPANE_CLASSNAME2 = "mblFixedSplitterV";
+var FIXEDSPLITERPANE_CLASSNAME3 = "mblFixedSplitterH";
 
 var HEIGHT_RATIO1 = 0.2;
 var HEIGHT_RATIO2 = 1 - HEIGHT_RATIO1;
@@ -30,6 +30,7 @@ require([
 	"dojo/_base/lang", // dojo.mixin
 	"dojo/dom-construct", // dojo.place
 	"dojo/dom-class", // dojo.hasClass
+	"dojo/dom-geometry",
 	"dojo/window", // dojo.window.getBox
 	"dojo/ready", // dojo.ready
 	"dijit/registry",  // dijit.byId
@@ -37,7 +38,7 @@ require([
 	"dojox/mobile/FixedSplitter",
 	"dojox/mobile/Container",
 	"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-], function(connect, lang, domConst, domClass, window, ready, registry, runner, FixedSplitter, Container){
+], function(connect, lang, domConst, domClass, domGeometry, window, ready, registry, runner, FixedSplitter, Container){
 	function _createFixedSplitterDeclaratively(widgetId) {
 		return registry.byId(widgetId);
 	}
@@ -77,7 +78,7 @@ require([
 		_assertCorrectFixedSplitterHW(widget, height, width);
 		runner.assertTrue(domClass.contains(widget.domNode, FIXEDSPLITER_CLASSNAME), FIXEDSPLITER_CLASSNAME);
 		if(className){
-			runner.assertTrue(domClass.contains(widget.domNode, className), className);
+			runner.assertTrue(domClass.contains(widget.domNode, className),  "expected: " + className + " but got " + widget.domNode.className);
 		}
 	}
 	function _assertCorrectContainer(widget, height, width, className){
@@ -89,8 +90,8 @@ require([
 	}
 	function _assertCorrectFixedSplitterHW(widget, height, width){
 		runner.assertNotEqual(null, widget, "FixedSplitter: Did not instantiate.");
-		runner.assertEqual(height, widget.domNode.offsetHeight);
-		runner.assertEqual(width, widget.domNode.offsetWidth);
+		runner.assertTrue( (height - 2) < widget.domNode.offsetHeight && widget.domNode.offsetHeight < (height + 2), "expected: " +height + "+-2 but got " + widget.domNode.offsetHeight + "height: id = " + widget.domNode.id);
+		runner.assertTrue( (width - 2) < widget.domNode.offsetWidth && widget.domNode.offsetWidth < (width + 2), "expected: " +width + "+-2 but got " + widget.domNode.offsetWidth + "offsetWidth: id = " + widget.domNode.id);
 	}
 	ready(function(){
 		if(WIDGET_PROGRAMMATICALLY === 1){
@@ -114,14 +115,16 @@ require([
 						var widget4 = registry.byId("dojox_mobile_Container_1");
 						var widget5 = registry.byId("dojox_mobile_Container_2");
 
+						var box2 = domGeometry.getMarginBox(widget1.domNode);
+
 						runner.assertEqual(box.h, widget2.domNode.offsetHeight + widget5.domNode.offsetHeight);
 						runner.assertEqual(box.w, widget4.domNode.offsetWidth + widget5.domNode.offsetWidth);
 
-						_assertCorrectFixedSplitter(widget1, box.h, box.w);
-						_assertCorrectContainer(widget2, Math.round(box.h * HEIGHT_RATIO1), box.w, FIXEDSPLITERPANE_CLASSNAME2);
-						_assertCorrectFixedSplitter(widget3, Math.round(box.h * HEIGHT_RATIO2), box.w, FIXEDSPLITERPANE_CLASSNAME2);
-						_assertCorrectContainer(widget4, Math.round(box.h * HEIGHT_RATIO2), Math.round(box.w * WIDTH_RATIO1), FIXEDSPLITERPANE_CLASSNAME3);
-						_assertCorrectContainer(widget5, Math.round(box.h * HEIGHT_RATIO2), Math.round(box.w * WIDTH_RATIO2), FIXEDSPLITERPANE_CLASSNAME3);
+						_assertCorrectFixedSplitter(widget1, 0, box2.w);
+						_assertCorrectContainer(widget2, Math.round(box.h * HEIGHT_RATIO1), box.w);
+						_assertCorrectFixedSplitter(widget3, Math.round(box.h * HEIGHT_RATIO2), box.w, FIXEDSPLITERPANE_CLASSNAME3);
+						_assertCorrectContainer(widget4, Math.round(box.h * HEIGHT_RATIO2), Math.round(box.w * WIDTH_RATIO1));
+						_assertCorrectContainer(widget5, Math.round(box.h * HEIGHT_RATIO2), Math.round(box.w * WIDTH_RATIO2));
 					}), timeoutInterval);
 					return d;
 				}

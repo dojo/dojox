@@ -86,15 +86,14 @@
 			runner.register("dojox.mobile.test.doh.TextArea", [
 				{
 					name: "TextArea Verification1",
-					timeout: 4000,
+					timeout: 10000,
 					runTest: function(){
 						var widget1 = _createTextAreaDeclaratively("view1-TextArea1");
 						var widget2 = _createTextAreaProgrammatically("view1-TextArea2place", "view1-TextArea2", TEXTAREA_ROWS, TEXTAREA_COLS, TEXTAREA_INNERHTML);
 						var widget3 = _createTextAreaProgrammaticallyWithSourceNodeReference("view1-TextArea3");
 
 						var d = new runner.Deferred();
-						var handle1 = connect.connect(widget3, "resize", this, d.getTestCallback(function(){
-							connect.disconnect(handle1);
+						setTimeout(d.getTestCallback(function(){
 							var widget1 = registry.byId("view1-TextArea1");
 							var widget2 = registry.byId("view1-TextArea2");
 							var widget3 = registry.byId("view1-TextArea3");
@@ -106,31 +105,28 @@
 							_assertCorrectTextArea(widget1, offsetHeight1, offsetHeight2, scrollHeight1a, scrollHeight2a);
 							_assertCorrectTextArea(widget2, offsetHeight1, offsetHeight2, scrollHeight1a, scrollHeight2a);
 							_assertCorrectTextArea(widget3, offsetHeight1, offsetHeight2, scrollHeight1a, scrollHeight2a);
-						}));
+						}), 1000);
 						return d;
 					}
 				},
 				{
 					name: "TextArea Verification2",
-					timeout: 4000,
+					timeout: 10000,
 					runTest: function(){
 						var widget1 = _createTextAreaDeclaratively("view2-TextArea1");
 						var widget2 = _createTextAreaProgrammatically("view2-TextArea2place", "view2-TextArea2", TEXTAREA_ROWS, TEXTAREA_COLS, TEXTAREA_INNERHTML);
 						var widget3 = _createTextAreaProgrammaticallyWithSourceNodeReference("view2-TextArea3");
 
+						_showView2();
 						var d = new runner.Deferred();
-						var handle2 = connect.subscribe("/dojox/mobile/afterTransitionIn", d.getTestCallback(function(view){
-							if(view.id=="view2"){
-								connect.unsubscribe(handle2);
-							}
+						setTimeout(d.getTestCallback(function(){
 							var widget1 = registry.byId("view2-TextArea1");
 							var widget2 = registry.byId("view2-TextArea2");
 							var widget3 = registry.byId("view2-TextArea3");
 							_assertCorrectTextArea(widget1, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2);
 							_assertCorrectTextArea(widget2, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2);
 							_assertCorrectTextArea(widget3, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2);
-						}));
-						_showView2();
+						}), 1000);
 						return d;
 					}
 				}

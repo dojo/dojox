@@ -33,7 +33,8 @@
 			var actualOffsetLeft = Math.floor((tabBarWidth - tabBarButtonWidth) / 2);
 
 			var offsetLeft = tabBar.domNode.children[0].offsetLeft;
-			runner.assertTrue( ((actualOffsetLeft *0.95) < offsetLeft) && (offsetLeft < (actualOffsetLeft *1.05)), "expected: " +actualOffsetLeft + "+-5% but got " + offsetLeft + tabBar.toString());
+			var clientWidth = tabBar.domNode.clientWidth;
+			runner.assertTrue( (((actualOffsetLeft *0.95) < offsetLeft) && (offsetLeft < (actualOffsetLeft *1.05))) || (offsetLeft <= 6), "expected: " +actualOffsetLeft + "+-5% but got " + offsetLeft + tabBar.toString());
 		}
 
 		function _createTabBarDeclaratively(tabBarId){
