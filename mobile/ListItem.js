@@ -359,6 +359,10 @@ define([
 				var cap = type.charAt(0).toUpperCase() + type.substring(1);
 				domClass.add(this[type + "Node"], "mblListItem" + cap);
 			}
+			var role = this[type + "Role"];
+			if(role){
+				this[type + "Node"].setAttribute("role", role);
+			}
 		},
 
 		_setDeleteIconAttr: function(/*String*/icon){
