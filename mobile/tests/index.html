@@ -116,6 +116,7 @@
 		}
 
 		function toggleSection(e) {
+			e = e || event;
 			var node = e.srcElement ? e.srcElement : e.target;
 			var titleBar = (node.className == "titleBar") ? node : node.parentNode;
 			var img = titleBar.childNodes[0];

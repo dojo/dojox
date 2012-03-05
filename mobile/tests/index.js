@@ -69,6 +69,7 @@ var tests = [
 	{ url: "test_EdgeToEdgeDataList-more-v.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeList-check.html", tags: "EdgeToEdgeList" },
+	{ url: "test_EdgeToEdgeList-editable-a11y.html", tags: "EdgeToEdgeList" },
 	{ url: "test_EdgeToEdgeList-editable-sv.html", tags: "EdgeToEdgeList" },
 	{ url: "test_EdgeToEdgeList-editable.html", tags: "EdgeToEdgeList" },
 	{ url: "test_EdgeToEdgeList-variable.html", tags: "EdgeToEdgeList"},
