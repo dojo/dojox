@@ -4,7 +4,8 @@ define([
 	"dojo/_base/window",
 	"./sniff"
 ], function(dojo, lang, win, has){
-	win.doc.documentElement.className += lang.trim([
+	var html = win.doc.documentElement;
+	html.className = lang.trim(html.className + " " + [
 		has('bb') ? "dj_bb" : "",
 		has('android') ? "dj_android" : "",
 		has('iphone') ? "dj_iphone" : "",
