@@ -47,10 +47,17 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 			// summary: render the shape
 			ctx.save();
 			this._renderTransform(ctx);
+			this._renderClip(ctx);
 			this._renderShape(ctx);
 			this._renderFill(ctx, true);
 			this._renderStroke(ctx, true);
 			ctx.restore();
+		},
+		_renderClip: function(ctx){
+			if (this.canvasClip){
+				this.canvasClip.render(ctx);
+				ctx.clip();
+			}
 		},
 		_renderTransform: function(/* Object */ ctx){
 			if("canvasTransform" in this){
@@ -120,8 +127,59 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 		// events are not implemented
 		getEventSource: function(){ return null; },
 		connect:		function(){},
-		disconnect:		function(){}
+		disconnect:		function(){},
+		
+		canvasClip:null,
+		setClip: function(/*String||Object*/clip){
+			// summary: sets the clipping area of this shape.
+			// description: This method overrides the dojox.gfx.shape.Shape.setClip() method.
+			// clip: Object
+			//		an object that defines the clipping geometry, or null to remove clip.
+			this.inherited(arguments);
+			var clipType = clip ? "width" in clip ? "rect" : 
+							"cx" in clip ? "ellipse" : 
+							"points" in clip ? "polyline" : "d" in clip ? "path" : null : null;
+			if(clip && !clipType){
+				return this;
+			}
+			this.canvasClip = clip ? makeClip(clipType, clip) : null;
+			this.surface.makeDirty();
+			return this;
+		}
 	});
+
+	var makeClip = function(clipType, geometry){
+		switch(clipType){
+			case "ellipse":
+				return {
+					canvasEllipse: makeEllipse(geometry),
+					render: function(ctx){return canvas.Ellipse.prototype._renderShape.call(this, ctx);}
+				};
+			case "rect":
+				return {
+					shape: lang.delegate(geometry,{r:0}),
+					render: function(ctx){return canvas.Rect.prototype._renderShape.call(this, ctx);}
+				};
+			case "path":
+				return {
+					canvasPath: makeClipPath(geometry),
+					render: function(ctx){this.canvasPath._renderShape(ctx);}
+				}
+			case "polyline":
+				return {
+					canvasPolyline: geometry.points,
+					render: function(ctx){return canvas.Polyline.prototype._renderShape.call(this, ctx);}
+				};
+		}
+		return null;
+	};
+	
+	var makeClipPath = function(geo){	
+		var p = new dojox.gfx.canvas.Path();		
+		p.canvasPath = [];
+		p._setPath(geo.d);
+		return p;
+	};
 
 	var modifyMethod = function(shape, method, extra){
 			var old = shape.prototype[method];
@@ -199,6 +257,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 			// summary: render the group
 			ctx.save();
 			this._renderTransform(ctx);
+			this._renderClip(ctx);
 			for(var i = 0; i < this.children.length; ++i){
 				this.children[i]._render(ctx);
 			}
@@ -238,23 +297,27 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 			bezierCircle.push(mp(r, u.c1), mp(r, u.c2), mp(r, u.e));
 		}
 	})();
+	
+	var makeEllipse = function(s){
+		// prepare Canvas-specific structures
+		var t, c1, c2, r = [],
+			M = m.normalize([m.translate(s.cx, s.cy), m.scale(s.rx, s.ry)]);
+		t = mp(M, bezierCircle[0]);
+		r.push([t.x, t.y]);
+		for(var i = 1; i < bezierCircle.length; i += 3){
+			c1 = mp(M, bezierCircle[i]);
+			c2 = mp(M, bezierCircle[i + 1]);
+			t  = mp(M, bezierCircle[i + 2]);
+			r.push([c1.x, c1.y, c2.x, c2.y, t.x, t.y]);
+		}
+		return r;
+	};
 
 	declare("dojox.gfx.canvas.Ellipse", [canvas.Shape, gs.Ellipse], {
 		// summary: an ellipse shape (Canvas)
 		setShape: function(){
 			this.inherited(arguments);
-			// prepare Canvas-specific structures
-			var s = this.shape, t, c1, c2, r = [],
-				M = m.normalize([m.translate(s.cx, s.cy), m.scale(s.rx, s.ry)]);
-			t = mp(M, bezierCircle[0]);
-			r.push([t.x, t.y]);
-			for(var i = 1; i < bezierCircle.length; i += 3){
-				c1 = mp(M, bezierCircle[i]);
-				c2 = mp(M, bezierCircle[i + 1]);
-				t  = mp(M, bezierCircle[i + 2]);
-				r.push([c1.x, c1.y, c2.x, c2.y, t.x, t.y]);
-			}
-			this.canvasEllipse = r;
+			this.canvasEllipse = makeEllipse(this.shape);
 			return this;
 		},
 		_renderShape: function(/* Object */ ctx){

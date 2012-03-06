@@ -40,17 +40,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
 		
 		_testInputs: function(/* Object */ctx, /* Array */ pos){
-			if (!this.canvasFill && this.strokeStyle) {
+			if(this.clip || (!this.canvasFill && this.strokeStyle)){
 				// pixel-based until a getStrokedPath-like api is available on the path
 				this._hitTestPixel(ctx, pos);
-			} else {
+			}else{
 				this._renderShape(ctx);
 				var cnt = pos.length, t = this.getTransform();
-				for (var i = 0; i < pos.length; ++i) {
+				for(var i = 0; i < pos.length; ++i){
 					var input = pos[i];
 					// already hit
-					if (input.target) 
-						continue;
+					if(input.target) continue;
 					var x = input.x, y = input.y;
 					var p = t ? m.multiplyPoint(m.invert(t), x, y) : {
 						x: x,
@@ -61,10 +60,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_hitTestPixel: function(/* Object */ctx, /* Array */ pos){
-			for (var i = 0; i < pos.length; ++i) {
+			for(var i = 0; i < pos.length; ++i){
 				var input = pos[i];
-				if (input.target) 
-					continue;
+				if(input.target) continue;
 				var x = input.x, y = input.y;
 				ctx.clearRect(0,0,1,1);
 				ctx.save();
@@ -76,8 +74,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_hitTestGeometry: function(ctx, x, y){
 			return ctx.isPointInPath(x, y) ? this : null;
-		},		
-		
+		},				
 		_renderFill: function(/* Object */ ctx, /* Boolean */ apply){
 			// summary:
 			//		render fill for the shape
@@ -86,7 +83,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			// apply:
 			//		whether ctx.fill() shall be called
 			if(ctx.pickingMode){
-				if("canvasFill" in this && apply){ ctx.fill(); }
+				if("canvasFill" in this && apply){
+					ctx.fill();
+				}
 				return;
 			}
 			this.inherited(arguments);
@@ -98,15 +97,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		a canvas context object
 			// apply:
 			//		whether ctx.stroke() shall be called
-			if (this.strokeStyle && ctx.pickingMode) {
+			if(this.strokeStyle && ctx.pickingMode){
 				var c = this.strokeStyle.color;
-				try {
+				try{
 					this.strokeStyle.color = new Color(ctx.strokeStyle);
 					this.inherited(arguments);
-				} finally {
+				}finally{
 					this.strokeStyle.color = c;
 				}
-			} else{
+			}else{
 				this.inherited(arguments);				
 			}
 		},
@@ -114,11 +113,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		// events
 		
 		getEventSource: function(){
-			// summary: returns this gfx shape event source, which is the surface rawnode in the case of canvas.
-			
+			// summary: returns this gfx shape event source, which is the surface rawnode in the case of canvas.			
 			return this.surface.getEventSource();
-		},
-		
+		},		
 		connect: function(name, object, method){
 			// summary: connects a handler to an event on this shape
 			this.surface._setupEvents(name); // setup events on demand
@@ -132,7 +129,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			// summary: disconnects an event handler
 			hub.disconnect(token);
 		},
+		
 		// connect hook
+		
 		oncontextmenu:  function(){},
 		onclick:        function(){},
 		ondblclick:     function(){},
@@ -155,13 +154,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	
 	declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
 		_testInputs: function(/*Object*/ctx, /*Array*/ pos){
-			var children = this.children, t = this.getTransform(), i, j;
-			if(children.length == 0){
+			var children = this.children, t = this.getTransform(), i, j, input;
+			if(children.length === 0){
 				return;
 			}
 			var posbk = [];
 			for(i = 0; i < pos.length; ++i){
-				var input = pos[i];
+				input = pos[i];
 				// backup position before transform applied
 				posbk[i] = {
 					x: input.x,
@@ -190,10 +189,29 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					break;
 				}
 			}
-			for(i = 0; i < pos.length; ++i){
-				pos[i].x = posbk[i].x;
-				pos[i].y = posbk[i].y;
-			}	
+			if(this.clip){
+				// filter positive hittests against the group clipping area
+				for(i = 0; i < pos.length; ++i){
+					input = pos[i];
+					input.x = posbk[i].x;
+					input.y = posbk[i].y;
+					if(input.target){
+						ctx.clearRect(0,0,1,1);
+						ctx.save();
+						ctx.translate(-input.x, -input.y);
+						this._render(ctx, true);
+						if(!ctx.getImageData(0, 0, 1, 1).data[0]){
+							input.target = null;
+						}
+						ctx.restore();
+					}
+				}
+			}else{
+				for(i = 0; i < pos.length; ++i){
+					pos[i].x = posbk[i].x;
+					pos[i].y = posbk[i].y;
+				}	
+			}
 		}	
 	});
 	
@@ -209,8 +227,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}else{
 				this.inherited(arguments);
 			}
-		},
-		
+		},		
 		_hitTestGeometry: function(ctx, x, y){
 			// TODO: improve hit testing to take into account transparency
 			var s = this.shape;
@@ -223,7 +240,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return this._hitTestPixel(ctx, pos);
 		}
 	});
-
 
 	declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
 	declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
@@ -271,7 +287,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			// method: Function
 			//		A function reference, or name of a function in context.
 			 
-			if (name.indexOf('touch') !== -1) {
+			if(name.indexOf('touch') !== -1){
 				// in case of surface.connect('touchXXX'...), we must root the handler to the
 				// specific touch event processing (done in fireTouchEvents) so that the event is properly configured.
 				// So, we activate the shape-level event processing calling _setupEvents,
@@ -279,7 +295,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				this._setupEvents(name);
 				name = "_on" + name + "Impl_";
 				return hub.connect(this, name, object, method);
-			} else {
+			}else{
 				this._initMirrorCanvas();
 				return hub.connect(this.getEventSource(), name, null,
 							shapeLib.fixCallback(this, g.fixTarget, object, method));
@@ -292,7 +308,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		_ontouchmoveImpl_:  function(){},
 		
 		_initMirrorCanvas: function(){
-			if (!this.mirrorCanvas) {
+			if(!this.mirrorCanvas){
 				var p = this._parent, mirror = p.ownerDocument.createElement("canvas");
 				mirror.width = 1;
 				mirror.height = 1;
@@ -309,20 +325,22 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		setup event listeners if not yet
 
 			// onmouseenter and onmouseleave shape events are handled in the onmousemove surface handler
-			if (eventName in _eventsRedirectMap)
+			if(eventName in _eventsRedirectMap){
 				eventName = _eventsRedirectMap[eventName];
-			if (this._eventsH && this._eventsH[eventName]) {
+			}
+			if(this._eventsH && this._eventsH[eventName]){
 				// the required listener has already been connected
 				return;
 			}
 			// a mirror canvas for shape picking
 			this._initMirrorCanvas();
-			if (!this._eventsH)
+			if(!this._eventsH){
 				this._eventsH = {};
+			}
 			// register event hooks if not done yet
 			this._eventsH[eventName] = hub.connect(this.getEventSource(), eventName,
 					shapeLib.fixCallback(this, g.fixTarget, this, "_" + eventName));
-			if (eventName === 'onclick' || eventName==='ondblclick') {
+			if(eventName === 'onclick' || eventName==='ondblclick'){
 				if(!this._eventsH['onmousedown']){
 					this._eventsH['onmousedown'] = hub.connect(this.getEventSource(),
 							'onmousedown', shapeLib.fixCallback(this, g.fixTarget, this, "_onmousedown"));
@@ -331,13 +349,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					this._eventsH['onmouseup'] = hub.connect(this.getEventSource(),
 							'onmouseup', shapeLib.fixCallback(this, g.fixTarget, this, "_onmouseup"));
 				}
-			} 			
+			}
 		},
 		
 		destroy: function(){
 			// summary: stops the move, deletes all references, so the object can be garbage-collected
-			canvas.Surface.destroy.apply(this);
-			
+			shapeLib.Surface.prototype.destroy.apply(this);
 			// destroy events and objects
 			for(var i in this._eventsH){
 				hub.disconnect(this._eventsH[i]);
@@ -374,7 +391,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 			// Propagates event up in the DOM hierarchy only if event
 			// has not been stopped (event.cancelBubble is true)
-			if (!isEventStopped(event) && base.parent) {
+			if(!isEventStopped(event) && base.parent){
 				this._invokeHandler(base.parent, method, event);
 			}
 		},
@@ -410,10 +427,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		_ontouchstart: function(e){
 			// summary: triggers ontouchstart			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
-			if (this._pick.curr) {
+			if(this._pick.curr) {
 				this._fireTouchEvent(e);
-			}
-			
+			}			
 		},
 		_onmouseup: function(e){
 			// summary: triggers onmouseup
@@ -632,8 +648,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		if(!event.gfxTarget){
 			gfxElement._pick.last = gfxElement._pick.curr;
 			gfxElement._pick.curr = gfxElement._whatsUnderEvent(event);
-			if (!lang.isArray(gfxElement._pick.curr))
+			if(!lang.isArray(gfxElement._pick.curr)){
 				event.gfxTarget = gfxElement._pick.curr;
+			}
 		}
 		return true;
 	};

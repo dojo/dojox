@@ -186,6 +186,41 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 		},
 	
 		// empty settings
+		
+		setClip: function(clip){
+			// summary: sets the clipping area of this shape.
+			// description:
+			//	The clipping area defines the shape area that will be effectively visible. Everything that
+			//	would be drawn outside of the clipping area will not be rendered.
+			//	The possible clipping area types are rectangle, ellipse, polyline and path, but all are not 
+			//	supported by all the renderers. vml only supports rectangle clipping, while the gfx silverlight renderer does not
+			//	support path clipping.
+			//	The clip parameter defines the clipping area geometry, and should be an object with the following properties:
+			//		* {x:Number, y:Number, width:Number, height:Number} for rectangular clip
+			//		* {cx:Number, cy:Number, rx:Number, ry:Number} for ellipse clip
+			//		* {points:Array} for polyline clip
+			//		* {d:String} for a path clip.
+			//	The clip geometry coordinates are expressed in the coordinate system used to draw the shape. In other
+			//	words, the clipping area is defined in the shape parent coordinate system and the shape transform is automatically applied.
+			//	example:
+			//	The following example shows how to clip a gfx image with all the possible clip geometry: a rectangle, 
+			//	an ellipse, a circle (using the ellipse geometry), a polyline and a path :
+			//	|	surface.createImage({src:img, width:200,height:200}).setClip({x:10,y:10,width:50,height:50});
+			//	|	surface.createImage({src:img, x:100,y:50,width:200,height:200}).setClip({cx:200,cy:100,rx:20,ry:30});
+			//	|	surface.createImage({src:img, x:0,y:350,width:200,height:200}).setClip({cx:100,cy:425,rx:60,ry:60});
+			//	|	surface.createImage({src:img, x:300,y:0,width:200,height:200}).setClip({points:[350,0,450,50,380,130,300,110]});
+			//	|	surface.createImage({src:img, x:300,y:350,width:200,height:200}).setClip({d:"M 350,350 C314,414 317,557 373,450.0000 z"});
+			//
+			// clip: Object
+			//		an object that defines the clipping geometry, or null to remove clip.
+			
+			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
+			this.clip = clip;
+		},
+		
+		getClip: function(){
+			return this.clip;
+		},
 	
 		setShape: function(shape){
 			// summary: sets a shape object

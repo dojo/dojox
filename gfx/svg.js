@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare", "dojo/_base/array",
-  "dojo/dom-geometry", "dojo/_base/Color", "./_base", "./shape", "./path"],
-  function(lang, win, dom, declare, arr, domGeom, Color, g, gs, pathLib){
+  "dojo/dom-geometry", "dojo/dom-attr", "dojo/_base/Color", "./_base", "./shape", "./path"],
+  function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 /*=====
 	dojox.gfx.svg = {
 	// module:
@@ -93,6 +93,8 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 		longdashdot:		[8, 3, 1, 3],
 		longdashdotdot:		[8, 3, 1, 3, 1, 3]
 	};
+
+	var clipCount = 0;
 
 	declare("dojox.gfx.svg.Shape", gs.Shape, {
 		// summary: SVG-specific implementation of dojox.gfx.Shape methods
@@ -330,9 +332,55 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 			// summary: moves a shape to back of its parent's list of shapes (SVG)
 			this.rawNode.parentNode.insertBefore(this.rawNode, this.rawNode.parentNode.firstChild);
 			return this;	// self
+		},
+		setClip: function(clip){
+			// summary: sets the clipping area of this shape.
+			// description: This method overrides the dojox.gfx.shape.Shape.setClip() method.
+			// clip: Object
+			//		an object that defines the clipping geometry, or null to remove clip.
+			this.inherited(arguments);
+			var clipType = clip ? "width" in clip ? "rect" : 
+							"cx" in clip ? "ellipse" : 
+							"points" in clip ? "polyline" : "d" in clip ? "path" : null : null;
+			if(clip && !clipType){
+				return this;
+			}
+			if(clipType === "polyline"){
+				clip = lang.clone(clip);
+				clip.points = clip.points.join(",");
+			}
+			var clipNode, clipShape,
+				clipPathProp = domAttr.get(this.rawNode, "clip-path");
+			if(clipPathProp){
+				clipNode = win.doc.getElementById(clipPathProp.match(/gfx_clip[\d]+/)[0], this.rawNode.parentNode);
+				clipNode.removeChild(clipNode.childNodes[0]);
+			}
+			if(clip){
+				if(clipNode){
+					clipShape = _createElementNS(svg.xmlns.svg, clipType);
+					clipNode.appendChild(clipShape);
+				}else{
+					var idIndex = ++clipCount;
+					var clipId = "gfx_clip" + idIndex;
+					var clipUrl = "url(#" + clipId + ")";
+					this.rawNode.setAttribute("clip-path", clipUrl);
+					clipNode = _createElementNS(svg.xmlns.svg, "clipPath");
+					clipShape = _createElementNS(svg.xmlns.svg, clipType);
+					clipNode.appendChild(clipShape);
+					this.rawNode.parentNode.appendChild(clipNode);
+					domAttr.set(clipNode, "id", clipId);
+				}
+				domAttr.set(clipShape, clip);
+			}else if(clipNode){
+				//remove clip-path
+				this.rawNode.removeAttribute("clip-path");
+				clipNode.parentNode.removeChild(clipNode);
+			}
+			return this;
 		}
 	});
-
+	
+	
 	declare("dojox.gfx.svg.Group", svg.Shape, {
 		// summary: a group shape (SVG), which can be used
 		//	to logically group shapes (e.g, to propagate matricies)
