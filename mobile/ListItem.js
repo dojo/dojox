@@ -138,7 +138,7 @@ define([
 		progStyle: "",
 
 		/* internal properties */	
-		paramsToInherit: "variableHeight,transition,deleteIcon,icon,rightIcon,rightIcon2,uncheckIcon,arrowClass,checkClass,uncheckClass",
+		paramsToInherit: "variableHeight,transition,deleteIcon,icon,rightIcon,rightIcon2,uncheckIcon,arrowClass,checkClass,uncheckClass,deleteIconTitle,deleteIconRole",
 		baseClass: "mblListItem",
 
 		_selStartMethod: "touch",

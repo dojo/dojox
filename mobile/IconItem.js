@@ -69,6 +69,7 @@ define([
 		tag: "li",
 
 		/* internal properties */	
+		paramsToInherit: "transition,icon,deleteIcon,badgeClass,deleteIconTitle,deleteIconRole",
 		baseClass: "mblIconItem",
 		_selStartMethod: "touch",
 		_selEndMethod: "none",
@@ -328,6 +329,9 @@ define([
 					this.deleteIconTitle || this.alt, this.iconDivNode);
 			if(this.deleteIconNode){
 				domClass.add(this.deleteIconNode, "mblIconItemDeleteIcon");
+				if(this.deleteIconRole){
+					this.deleteIconNode.setAttribute("role", this.deleteIconRole);
+				}
 			}
 		},
 

@@ -204,9 +204,8 @@ define([
 						}
 						if(!this[p]){ this[p] = parent[base]; }
 						if(!this[pos]){ this[pos] = parent[pos]; }
-					}else{
-						if(!this[p]){ this[p] = parent[p]; }
 					}
+					if(!this[p]){ this[p] = parent[p]; }
 				}, this);
 			}
 			return !!parent;
