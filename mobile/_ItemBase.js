@@ -344,8 +344,8 @@ define([
 		},
 
 		_onTouchEnd: function(e){
+			if(!this._selTimer && this._delayedSelection){ return; }
 			this.cancel();
-			if(this._delayedSelection){ return; }
 			this._onClick(e);
 		},
 
