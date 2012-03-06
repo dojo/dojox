@@ -206,10 +206,7 @@ define(["dojo/main", "dojo/date", "dojo/i18n", "dojo/regexp", "dojo/string", "./
 
 		var locale = i18n.normalizeLocale(options.locale);
 
-		if(!match){
-			console.debug("dojox.date.hebrew.locale.parse: value  "+value+" doesn't match pattern   " + re);
-			return null;
-		} // null
+		if(!match){ return null; } // null
 	
 		var date, date1;
 	
