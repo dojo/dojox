@@ -28,7 +28,7 @@
   background-image: -webkit-gradient(linear, left top, left bottom, from(#7a9de9), to(#2362dd), color-stop(0.5, #366edf), color-stop(0.5, #215fdc));
   color: white;
 }
-.mblToggleButtonChecked::after {
+.mblToggleButtonChecked:after {
   position: absolute;
   content: "";
   top: 6px;

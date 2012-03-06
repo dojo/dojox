@@ -20,8 +20,8 @@
 .dj_gecko .mblToggleButtonChecked {
   background-image: -moz-linear-gradient(top, #ffffff 0%, #e2e2e2 100%);
 }
-.dj_gecko .mblToggleButtonChecked::after {
-  -moz-transform: translate(-25px, 0) rotate(45deg) skew(10deg);
+.dj_gecko .mblToggleButtonChecked:after {
+  -moz-transform: rotate(45deg) skew(10deg);
   -moz-transform-origin: 50% 50%;
 }
 .dj_gecko .mblToggleButtonChecked.mblToggleButtonSelected {
@@ -32,4 +32,11 @@
 }
 .dj_ff3 .mblToggleButton.mblToggleButtonChecked::after {
   -moz-transform: translate(-25px, -6px) rotate(45deg) skew(10deg);
+}
+.dj_ie .mblToggleButtonChecked:after {
+  top: 9px;
+  left: 5px;
+  width: 12px;
+  border: none;
+  background-image: url(compat/togglebutton-chk-mark-bg.png);
 }

@@ -25,7 +25,7 @@
 .mblToggleButtonChecked {
 	background-image: @mbl-button-checked-background-image;
 	.mblToggleButtonChecked-styles;
-	&::after {
+	&:after {
 		position: absolute;
 		content: "";
 		top: 6px;
@@ -41,7 +41,7 @@
 	&.mblToggleButtonSelected {
 		background-image: @mbl-blue-button-selected-background-image;
 		.mblToggleButtonCheckedSelected-styles;
-		&::after {
+		&:after {
 			.mblToggleButtonCheckedSelected-after-styles;
 		}
 	}

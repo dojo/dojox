@@ -30,7 +30,7 @@
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e2e2e2));
   color: black;
 }
-.mblToggleButtonChecked::after {
+.mblToggleButtonChecked:after {
   position: absolute;
   content: "";
   top: 6px;
@@ -47,6 +47,6 @@
   background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
   color: white;
 }
-.mblToggleButtonChecked.mblToggleButtonSelected::after {
+.mblToggleButtonChecked.mblToggleButtonSelected:after {
   border-color: white;
 }
