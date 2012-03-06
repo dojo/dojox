@@ -9,10 +9,10 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
+	"dojo/touch",
 	"dijit/registry",
-	"./ListItem",
-	"./sniff"
-], function(array, connect, declare, event, domClass, domGeometry, domStyle, registry, ListItem, has){
+	"./ListItem"
+], function(array, connect, declare, event, domClass, domGeometry, domStyle, touch, registry, ListItem){
 
 	// module:
 	//		dojox/mobile/EditableRoundRectList
@@ -82,7 +82,7 @@ define([
 			//		callback
 		},
 
-		onTouchStart: function(e){
+		_onTouchStart: function(e){
 			if(this.getChildren().length <= 1){ return; }
 			if(!this._blankItem){
 				this._blankItem = new ListItem();
@@ -103,9 +103,10 @@ define([
 			this.domNode.appendChild(item.domNode);
 
 			if(!this._conn){
-				this._conn = [];
-				this._conn.push(connect.connect(this.domNode, has('touch') ? "ontouchmove" : "onmousemove", this, "onTouchMove"));
-				this._conn.push(connect.connect(this.domNode, has('touch') ? "ontouchend" : "onmouseup", this, "onTouchEnd"));
+				this._conn = [
+					this.connect(this.domNode, touch.move, "_onTouchMove"),
+					this.connect(this.domNode, touch.release, "_onTouchEnd")
+				];
 			}
 			this._pos = [];
 			array.forEach(this.getChildren(), function(c, index){
@@ -116,7 +117,7 @@ define([
 			event.stop(e);
 		},
 
-		onTouchMove: function(e){
+		_onTouchMove: function(e){
 			var y = e.touches ? e.touches[0].pageY : e.pageY;
 			var index = this._pos.length - 1;
 			for(var i = 1; i < this._pos.length; i++){
@@ -138,7 +139,7 @@ define([
 			this._movingItem.domNode.style.top = this._startTop + (y - this.touchStartY) + "px";
 		},
 
-		onTouchEnd: function(e){
+		_onTouchEnd: function(e){
 			var ref = this._blankItem.getNextSibling();
 			ref = ref ? ref.domNode : null;
 			this.domNode.insertBefore(this._movingItem.domNode, ref);
@@ -163,7 +164,7 @@ define([
 			}, this);
 			if(!this._handles){
 				this._handles = [
-					this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart"),
+					this.connect(this.domNode, touch.press, "_onTouchStart"),
 					this.connect(this.domNode, "onclick", "_onClick"),
 					this.connect(this.domNode, "onkeydown", "_onClick") // for desktop browsers
 				];
