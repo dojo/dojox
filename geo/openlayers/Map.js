@@ -1,81 +1,19 @@
-define(["dojo/_base/kernel",
-				"dojo/_base/declare",
-				"dojo/_base/lang",
-				"dojo/_base/array",
-				"dojo/_base/json",
-				"dojo/_base/html",
-				"dojox/main",
-				"dojox/geo/openlayers/TouchInteractionSupport",
-				"dojox/geo/openlayers/Layer",
-				"dojox/geo/openlayers/Patch"], function(dojo, declare, lang, array, json, html, dojox, TouchInteractionSupport,
-																								Layer, Patch){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojo/_base/json",
+	"dojo/dom",
+	"dojo/dom-style",
+	"dojox/geo/openlayers/_base",
+	"dojox/geo/openlayers/TouchInteractionSupport",
+	"dojox/geo/openlayers/Layer",
+	"dojox/geo/openlayers/Patch"], 
+	function(kernel, declare, lang, array, json, dom, style, openlayers, TouchInteractionSupport, Layer, Patch){
 
-	dojo.experimental("dojox.geo.openlayers.Map");
+	kernel.experimental("dojox.geo.openlayers.Map");
 
-	lang.getObject("geo.openlayers", true, dojox);
-
-	dojox.geo.openlayers.BaseLayerType = {
-		//	summary:
-		//		Defines the base layer types to be used at Map construction time or
-		//		with the setBaseLayerType function.
-		//	description:
-		//		This object defines the base layer types to be used at Map construction
-		//		time or with the setBaseLayerType function.
-		//	OSM: String
-		//		The Open Street Map base layer type selector.
-		OSM : "OSM",
-		//	WMS: String
-		//		The Web Map Server base layer type selector.
-		WMS : "WMS",
-		//	GOOGLE: String
-		//		The Google base layer type selector.
-		GOOGLE : "Google",
-		//	VIRTUAL_EARTH: String
-		//		The Virtual Earth base layer type selector.
-		VIRTUAL_EARTH : "VirtualEarth",
-		//	BING: String
-		//		Same as Virtual Earth
-		BING : "VirtualEarth",
-		//	YAHOO: String
-		//		The Yahoo base layer type selector.
-		YAHOO : "Yahoo",
-		//	ARCGIS: String
-		//		The ESRI ARCGis base layer selector.
-		ARCGIS : "ArcGIS"
-	};
-
-	dojox.geo.openlayers.EPSG4326 = new OpenLayers.Projection("EPSG:4326");
-
-	var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
-	dojox.geo.openlayers.parseDMS = function(v, toDecimal){
-		//	summary: 
-		//		Parses the specified string and returns degree minute second or decimal degree.
-		//	description: 
-		//		Parses the specified string and returns degree minute second or decimal degree.
-		//	v: String
-		//		The string to parse
-		//	toDecimal: Boolean
-		//		Specifies if the result should be returned in decimal degrees or in an array
-		//		containg the degrees, minutes, seconds values.
-		//	returns: Float | Array
-		//		the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
-
-		var res = re.exec(v);
-		if (res == null || res.length < 5)
-			return parseFloat(v);
-		var d = parseFloat(res[1]);
-		var m = parseFloat(res[2]);
-		var s = parseFloat(res[3]);
-		var nsew = res[5];
-		if (toDecimal) {
-			var lc = nsew.toLowerCase();
-			var dd = d + (m + s / 60.0) / 60.0;
-			if (lc == "w" || lc == "s")
-				dd = -dd;
-			return dd;
-		}
-		return [d, m, s, nsew];
-	};
 
 	Patch.patchGFX();
 
@@ -130,7 +68,7 @@ define(["dojo/_base/kernel",
 			if (!options)
 				options = {};
 
-			div = html.byId(div);
+			div = dom.byId(div);
 
 			this._tp = {
 				x : 0,
@@ -154,9 +92,9 @@ define(["dojo/_base/kernel",
 			}
 			var baseLayerType = options.baseLayerType;
 			if (!baseLayerType)
-				baseLayerType = dojox.geo.openlayers.BaseLayerType.OSM;
+				baseLayerType = openlayers.BaseLayerType.OSM;
 
-			html.style(div, {
+			style.set(div, {
 				width : "100%",
 				height : "100%",
 				dir : "ltr"
@@ -220,7 +158,7 @@ define(["dojo/_base/kernel",
 					if (recenter) {
 						var proj = olm.getProjectionObject();
 						if (proj != null)
-							oc = oc.transform(proj, dojox.geo.openlayers.EPSG4326);
+							oc = oc.transform(proj, openlayers.EPSG4326);
 					}
 					var old = olm.baseLayer;
 					if (old != null) {
@@ -232,7 +170,7 @@ define(["dojo/_base/kernel",
 					if (recenter) {
 						proj = olm.getProjectionObject();
 						if (proj != null)
-							oc = oc.transform(dojox.geo.openlayers.EPSG4326, proj);
+							oc = oc.transform(openlayers.EPSG4326, proj);
 						olm.setCenter(oc, ob);
 					}
 				}
@@ -296,14 +234,14 @@ define(["dojo/_base/kernel",
 			if (!options)
 				options = {};
 			switch (type) {
-				case dojox.geo.openlayers.BaseLayerType.OSM:
+				case openlayers.BaseLayerType.OSM:
 					options.transitionEffect = "resize";
 					//				base = new OpenLayers.Layer.OSM(name, url, options);
 					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.OSM(name, url, options)
 					});
 				break;
-				case dojox.geo.openlayers.BaseLayerType.WMS:
+				case openlayers.BaseLayerType.WMS:
 					if (!url) {
 						url = "http://labs.metacarta.com/wms/vmap0";
 						if (!options.layers)
@@ -315,23 +253,23 @@ define(["dojo/_base/kernel",
 						})
 					});
 				break;
-				case dojox.geo.openlayers.BaseLayerType.GOOGLE:
+				case openlayers.BaseLayerType.GOOGLE:
 					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.Google(name, options)
 					});
 				break;
-				case dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH:
+				case openlayers.BaseLayerType.VIRTUAL_EARTH:
 					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.VirtualEarth(name, options)
 					});
 				break;
-				case dojox.geo.openlayers.BaseLayerType.YAHOO:
+				case openlayers.BaseLayerType.YAHOO:
 					//				base = new OpenLayers.Layer.Yahoo(name);
 					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.Yahoo(name, options)
 					});
 				break;
-				case dojox.geo.openlayers.BaseLayerType.ARCGIS:
+				case openlayers.BaseLayerType.ARCGIS:
 					if (!url)
 						url = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer/export";
 					base = new Layer(name, {
@@ -349,7 +287,7 @@ define(["dojo/_base/kernel",
 					base = new Layer(name, {
 						olLayer : new OpenLayers.Layer.OSM(name, url, options)
 					});
-					this.baseLayerType = dojox.geo.openlayers.BaseLayerType.OSM;
+					this.baseLayerType = openlayers.BaseLayerType.OSM;
 				}
 			}
 
@@ -483,7 +421,7 @@ define(["dojo/_base/kernel",
 			//		the specified center position.
 
 			var map = this.olMap;
-			var from = dojox.geo.openlayers.EPSG4326;
+			var from = openlayers.EPSG4326;
 
 			if (o == null) {
 				var c = this.transformXY(0, 0, from);
@@ -579,7 +517,7 @@ define(["dojo/_base/kernel",
 			tp.x = x;
 			tp.y = y;
 			if (!from)
-				from = dojox.geo.openlayers.EPSG4326;
+				from = openlayers.EPSG4326;
 			if (!to)
 				to = this.olMap.getProjectionObject();
 			tp = OpenLayers.Projection.transform(tp, from, to);

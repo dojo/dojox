@@ -1,6 +1,10 @@
-define(
-	["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/html", "dojo/_base/lang", "dojox/geo/openlayers/Feature"],
-	function(dojo, declare, html, lang, Feature){
+define([
+	"dojo/_base/declare",
+	"dojo/dom-style",
+	"dojo/_base/lang",
+	"dijit/registry",
+	"dojox/geo/openlayers/Feature"],
+	function(declare, style, lang, registry, Feature){
 		/*===== 
 		var Feature = dojox.geo.openlayers.Feature; 
 		=====*/
@@ -66,7 +70,7 @@ define(
 						var c = lang.getObject(params.dojoType);
 						w = new c(params);
 					} else if (params.dijitId) {
-						w = dijit.byId(params.dijitId);
+						w = registry.byId(params.dijitId);
 					} else if (params.widget) {
 						w = params.widget;
 					}
@@ -77,7 +81,7 @@ define(
 							w.startup();
 						var n = w.domNode;
 						if (n != null)
-							html.style(n, {
+							style.set(n, {
 								position : "absolute"
 							});
 					}
@@ -96,7 +100,7 @@ define(
 					return p.width;
 				var w = this._getWidget();
 				if (w)
-					return html.style(w.domNode, "width");
+					return style.get(w.domNode, "width");
 				return 10;
 			},
 
@@ -110,7 +114,7 @@ define(
 					return p.height;
 				var w = this._getWidget();
 				if (w)
-					return html.style(w.domNode, "height");
+					return style.get(w.domNode, "height");
 				return 10;
 			},
 
@@ -164,7 +168,7 @@ define(
 				var w = this._widget;
 				var dom = w.domNode;
 
-				html.style(dom, {
+				style.set(dom, {
 					position : "absolute",
 					left : box.x + "px",
 					top : box.y + "px",
@@ -173,7 +177,7 @@ define(
 				});
 
 				if (w.srcNodeRef) {
-					html.style(w.srcNodeRef, {
+					style.set(w.srcNodeRef, {
 						position : "absolute",
 						left : box.x + "px",
 						top : box.y + "px",

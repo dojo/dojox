@@ -1,7 +1,11 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojox/geo/openlayers/Geometry"], function(dojo, declare,
+define([
+	"dojo/_base/declare", 
+	"dojox/geo/openlayers/Geometry"], 
+	function(declare,Geometry){
+
 		/* ===== 
 		var Geometry = dojox.geo.openlayers.Geometry; 
-		=====*/																																															Geometry){
+		=====*/
 	return declare("dojox.geo.openlayers.LineString", Geometry, {
 		//	summary:
 		//		The `dojox.geo.openlayers.LineString` geometry. This geometry holds an array

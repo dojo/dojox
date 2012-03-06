@@ -1,4 +1,4 @@
-define(["dojo/_base/kernel", "dojo/_base/declare"], function(dojo, declare){
+define(["dojo/_base/declare"], function(declare){
 
 	return declare("dojox.geo.openlayers.Geometry", null, {
 		//	summary:

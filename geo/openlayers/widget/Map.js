@@ -1,12 +1,15 @@
-define(["dojo/_base/kernel",
-				"dojo/_base/declare",
-				"dojo/_base/array",
-				"dojo/_base/html",
-				"dojo/query",
-				"dijit/_Widget",
-				"dojox/geo/openlayers/Map",
-				"dojox/geo/openlayers/Layer",
-				"dojox/geo/openlayers/GfxLayer"], function(dojo, declare, array, html, query, Widget, Map, Layer, GfxLayer){
+define([
+	"dojo/_base/lang",
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/dom-geometry",
+	"dojo/query",
+	"dijit/_Widget",
+	"dojox/geo/openlayers/_base",
+	"dojox/geo/openlayers/Map",
+	"dojox/geo/openlayers/Layer",
+	"dojox/geo/openlayers/GfxLayer"], 
+	function(lang, declare, array, domgeo, query, Widget, openlayers, Map, Layer, GfxLayer){
 		/*===== 
 		var Widget = dijit.Widget; 
 		=====*/
@@ -42,7 +45,7 @@ define(["dojo/_base/kernel",
 		//		* `ArcGIS`
 		//	baseLayerType : String
 		//		Base layer type property.
-		baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
+		baseLayerType : openlayers.BaseLayerType.OSM,
 
 		//	summary:
 		//		The part of the map shown at startup time.
@@ -113,7 +116,7 @@ define(["dojo/_base/kernel",
 				var type = l.getAttribute("type");
 				var name = l.getAttribute("name");
 				var cls = "dojox.geo.openlayers." + type;
-				var p = dojo.getObject(cls);
+				var p = lang.getObject(cls);
 				if (p) {
 					var layer = new p(name, {});
 					if (layer)
@@ -142,8 +145,8 @@ define(["dojo/_base/kernel",
 				break;
 				case 1:
 					// argument, override node box
-					box = dojo.mixin({}, b);
-					dojo.marginBox(olm.div, box);
+					box = lang.mixin({}, b);
+					domgeo.setMarginBox(olm.div, box);
 				break;
 				case 2:
 					// two argument, width, height
@@ -151,7 +154,7 @@ define(["dojo/_base/kernel",
 						w : arguments[0],
 						h : arguments[1]
 					};
-					dojo.marginBox(olm.div, box);
+					domgeo.setMarginBox(olm.div, box);
 				break;
 			}
 			olm.updateSize();

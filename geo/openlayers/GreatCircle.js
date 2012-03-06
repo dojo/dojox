@@ -1,11 +1,10 @@
-define(["dojo/_base/lang",
-				"dojox/geo/openlayers/GeometryFeature",
-				"dojox/geo/openlayers/Point",
-				"dojox/geo/openlayers/LineString"], function(lang, GeometryFeature, Point, lineString){
+define([
+	"dojo/_base/lang",
+	"dojox/geo/openlayers/_base",
+	"dojox/geo/openlayers/GeometryFeature"], 
+	function(lang, openlayers, GeometryFeature){
 
-	lang.getObject("geo.openlayers", true, dojox);
-
-	dojox.geo.openlayers.GreatCircle = {
+	var gc = openlayers.GreatCircle = {
 
 		toPointArray : function(p1, p2, increment){
 			//	summary:
@@ -117,5 +116,5 @@ define(["dojo/_base/lang",
 		TOLERANCE : 0.00001
 	};
 	
-	return dojox.geo.openlayers.GreatCircle;
+	return gc;
 });

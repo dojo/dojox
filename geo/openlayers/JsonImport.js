@@ -1,13 +1,12 @@
-define(["dojo/_base/kernel",
-				"dojo/_base/declare",
-				"dojo/_base/xhr",
-				"dojo/_base/lang",
-				"dojo/_base/array",
-				"dojox/geo/openlayers/LineString",
-				"dojox/geo/openlayers/Collection",
-				"dojo/data/ItemFileReadStore",
-				"dojox/geo/openlayers/GeometryFeature"], function(dojo, declare, xhr, lang, array, LineString, Collection,
-																													ItemFileReadStore, GeometryFeature){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/xhr",
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"dojox/geo/openlayers/LineString",
+	"dojox/geo/openlayers/Collection",
+	"dojox/geo/openlayers/GeometryFeature"], 
+	function(declare, xhr, lang, array, LineString, Collection, GeometryFeature){
 
 	return declare("dojox.geo.openlayers.JsonImport", null, {
 		//	summary:

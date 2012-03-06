@@ -1,15 +1,12 @@
-define(["dojo/_base/kernel",
-				"dojo/_base/declare",
-				"dojo/_base/connect",
-				"dojo/_base/html",
-				"dojox/gfx",
-				"dojox/gfx/_base",
-				"dojox/gfx/shape",
-				"dojox/gfx/path",
-				"dojox/gfx/matrix",
-				"dojox/geo/openlayers/Feature",
-				"dojox/geo/openlayers/Layer"], function(dojo, declare, connect, html, gfx, gbase, shape,
-																								path, matrix, Feature, Layer){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/connect",
+	"dojo/dom-style",
+	"dojox/gfx",
+	"dojox/gfx/matrix",
+	"dojox/geo/openlayers/Feature",
+	"dojox/geo/openlayers/Layer"], 
+	function(declare, connect, style, gfx, matrix, Feature, Layer){
 	/*===== 
 	var Layer = dojox.geo.openlayers.Layer; 
 	=====*/
@@ -27,7 +24,7 @@ define(["dojo/_base/kernel",
 		constructor : function(name, options){
 			//	summary:
 			//		Constructs a new GFX layer.
-			var s = dojox.gfx.createSurface(this.olLayer.div, 100, 100);
+			var s = gfx.createSurface(this.olLayer.div, 100, 100);
 			this._surface = s;
 			var vp;
 			if (options && options.viewport)
@@ -35,7 +32,7 @@ define(["dojo/_base/kernel",
 			else
 				vp = s.createGroup();
 			this.setViewport(vp);
-			dojo.connect(this.olLayer, "onMapResize", this, "onMapResize");
+			connect.connect(this.olLayer, "onMapResize", this, "onMapResize");
 			this.olLayer.getDataExtent = this.getDataExtent;
 		},
 
@@ -107,14 +104,14 @@ define(["dojo/_base/kernel",
 			//   Called when this layer is moved or zoommed.
 			//	event:
 			//		The event
-			var s = dojo.style(this.olLayer.map.layerContainerDiv);
+			var s = style.get(this.olLayer.map.layerContainerDiv);
 			var left = parseInt(s.left);
 			var top = parseInt(s.top);
 
 			if (event.zoomChanged || left || top) {
 				var d = this.olLayer.div;
 
-				dojo.style(d, {
+				style.set(d, {
 					left : -left + "px",
 					top : -top + "px"
 				});
