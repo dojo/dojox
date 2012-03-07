@@ -553,11 +553,14 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					clicked = true;
 				}
 			}
-			var isFormElem = this.isFormElement(e.target);
-			if(clicked && !isFormElem){ // clicked, not dragged or flicked
+			if(clicked){ // clicked, not dragged or flicked
 				this.hideScrollBar();
 				this.removeCover();
-				if(has('touch')){
+				// #12697 Do not generate a click event programmatically when a
+				// form element (input, select, etc.) is clicked.
+				// Otherwise, in particular, when checkbox is clicked, its state
+				// is reversed again by the generated event.
+				if(has('touch') && !this.isFormElement(e.target)){
 					var elem = e.target;
 					if(elem.nodeType != 1){
 						elem = elem.parentNode;
@@ -645,7 +648,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(duration === undefined){
 			var distance, velocity;
 			if(this._v && this._h){
-				velocity = Math.sqrt(speed.x+speed.x + speed.y*speed.y);
+				velocity = Math.sqrt(speed.x*speed.x + speed.y*speed.y);
 				distance = Math.sqrt(Math.pow(to.y - pos.y, 2) + Math.pow(to.x - pos.x, 2));
 			}else if(this._v){
 				velocity = speed.y;

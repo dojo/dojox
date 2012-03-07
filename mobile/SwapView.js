@@ -97,18 +97,16 @@ define([
 			this.goTo(-1);
 		},
 
-		goTo: function(/*Number*/dir){
+		goTo: function(/*Number*/dir, /*String?*/moveTo){
 			// summary:
 			//		Moves to the next or previous view.
-			var w = this.domNode.offsetWidth;
-			var view = (dir == 1) ? this.nextView(this.domNode) : this.previousView(this.domNode);
-			if(!view){ return; }
-			view._beingFlipped = true;
-			view.scrollTo({x:w*dir});
-			view._beingFlipped = false;
-			view.domNode.style.display = "";
-			domClass.add(view.domNode, "mblIn");
-			this.slideTo({x:0}, 0.5, "ease-out", {x:-w*dir});
+			var view = moveTo ? registry.byId(moveTo) :
+				((dir == 1) ? this.nextView(this.domNode) : this.previousView(this.domNode));
+			if(view && view !== this){
+				this.performTransition(view.id, dir, "slide", null, function(){
+					connect.publish("/dojox/mobile/viewChanged", [view]);
+				});
+			}
 		},
 
 		isSwapView: function(node){
@@ -209,24 +207,26 @@ define([
 			// summary:
 			//		Overrides dojox.mobile.scrollable.onFlickAnimationEnd().
 			if(e && e.animationName && e.animationName !== "scrollableViewScroll2"){ return; }
-			// Hide all the views other than the currently showing one.
-			// Otherwise, when the orientation is changed, other views
-			// may appear unexpectedly.
-			var children = this.domNode.parentNode.childNodes;
-			for(var i = 0; i < children.length; i++){
-				var c = children[i];
-				if(this.isSwapView(c)){
-					domClass.remove(c, "mblIn");
-					if(!c._isShowing){
-						c.style.display = "none";
-					}
-				}
-			}
 			this.inherited(arguments);
-			if(this.getShowingView() === this){
+
+			if(this.domNode._isShowing){
+				// Hide all the views other than the currently showing one.
+				// Otherwise, when the orientation is changed, other views
+				// may appear unexpectedly.
+				array.forEach(this.domNode.parentNode.childNodes, function(c){
+					if(this.isSwapView(c)){
+						domClass.remove(c, "mblIn");
+						if(!c._isShowing){
+							c.style.display = "none";
+							c.style.webkitTransform = "";
+						}
+					}
+				}, this);
 				connect.publish("/dojox/mobile/viewChanged", [this]);
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
+			}else{
+				this.containerNode.style.left = "0px"; // compat mode needs this
 			}
 		}
 	});
