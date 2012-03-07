@@ -25,14 +25,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 		//		Include 0 on the axis rendering.  Default is false.
 		//	fixed: Boolean?
 		//		Force all axis labels to be fixed numbers.  Default is true.
-		//	majorLabels: Boolean?
-		//		Flag to draw all labels at major ticks. Default is true.
-		//	minorTicks: Boolean?
-		//		Flag to draw minor ticks on an axis.  Default is true.
-		//	minorLabels: Boolean?
-		//		Flag to draw labels on minor ticks. Default is true.
-		//	microTicks: Boolean?
-		//		Flag to draw micro ticks on an axis. Default is false.
 		//	min: Number?
 		//		The smallest value on an axis. Default is 0.
 		//	max: Number?
@@ -57,10 +49,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 		this.leftBottom = leftBottom;
 		this.includeZero = includeZero;
 		this.fixed = fixed;
-		this.majorLabels = majorLabels;
-		this.minorTicks = minorTicks;
-		this.minorLabels = minorLabels;
-		this.microTicks = microTicks;
 		this.min = min;
 		this.max = max;
 		this.from = from;
@@ -116,11 +104,7 @@ var Base = dojox.charting.axis2d.Base;
 			natural:     false,		// all tick marks should be made on natural numbers
 			leftBottom:  true,		// position of the axis, used with "vertical"
 			includeZero: false,		// 0 should be included
-			fixed:       true,		// all labels are fixed numbers
-			majorLabels: true,		// draw major labels
-			minorTicks:  true,		// draw minor ticks
-			minorLabels: true,		// draw minor labels
-			microTicks:  false		// draw micro ticks
+			fixed:       true		// all labels are fixed numbers
 		},
 		optionalParams: {
 			min:			0,	// minimal value on this axis
