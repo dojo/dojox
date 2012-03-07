@@ -55,7 +55,7 @@ define([
 		//		A name of html tag to create as domNode.
 		tag: "div",
 
-		/* internal properties */	
+		/* internal properties */
 		baseClass: "mblView",
 
 		constructor: function(params, node){
@@ -226,7 +226,7 @@ define([
 		},
 
 		performTransition: function(/*String*/moveTo, /*Number*/transitionDir, /*String*/transition,
-									/*Object|null*/context, /*String|Function*/method /*optional args*/){
+									/*Object|null*/context, /*String|Function*/method /*...*/){
 			// summary:
 			//		Function to perform the various types of view transitions, such as fade, slide, and flip.
 			// moveTo: String
@@ -487,7 +487,7 @@ define([
 				var li = e.target;
 				li.style.display = "none";
 				domClass.remove(li, "mblCloseContent");
-				
+
 				// If target is placed inside scrollable, need to call onTouchEnd
 				// to adjust scroll position
 				var p = viewRegistry.getEnclosingScrollable(this.domNode);

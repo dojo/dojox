@@ -1,9 +1,9 @@
 dojo.provide("dojox.drawing.Drawing");
 
 (function(){
-	
+
 	var _plugsInitialized = false;
-	
+
 	dojo.declare("dojox.drawing.Drawing", [], {
 		// summary:
 		//		Drawing is a project that sits on top of DojoX GFX and uses SVG and
@@ -113,7 +113,7 @@ dojo.provide("dojox.drawing.Drawing");
 				dojox.drawing.defaults =  dojo.getObject(def);
 			}
 			this.defaults =  dojox.drawing.defaults;
-			
+
 			this.id = node.id;
 			dojox.drawing.register(this, "drawing");
 			this.mode = (props.mode || dojo.attr(node, "mode") || "").toLowerCase();
@@ -125,7 +125,7 @@ dojo.provide("dojox.drawing.Drawing");
 			this.keys = dojox.drawing.manager.keys;
 			this.mouse = new dojox.drawing.manager.Mouse({util:this.util, keys:this.keys, id:this.mode=="ui"?"MUI":"mse"});
 			this.mouse.setEventMode(this.mode);
-			
+
 			this.tools = {};
 			this.stencilTypes = {};
 			this.stencilTypeMap = {};
@@ -136,7 +136,7 @@ dojo.provide("dojox.drawing.Drawing");
 			}else{
 				this.plugins = [];
 			}
-			
+
 			this.widgetId = this.id;
 			dojo.attr(this.domNode, "widgetId", this.widgetId);
 			// If Dijit is available in the page, register with it
@@ -158,7 +158,7 @@ dojo.provide("dojox.drawing.Drawing");
 				};
 				dijit.registry.add(this);
 			}
-			
+
 			var stencils = dojox.drawing.getRegistered("stencil");
 			for(var nm in stencils){
 				this.registerTool(stencils[nm].name);
@@ -172,9 +172,9 @@ dojo.provide("dojox.drawing.Drawing");
 				this.registerTool(plugs[nm].name);
 			}
 			this._createCanvas();
-			
+
 		},
-		
+
 		_createCanvas: function(){
 			console.info("drawing create canvas...");
 			this.canvas = new dojox.drawing.manager.Canvas({
@@ -185,7 +185,7 @@ dojo.provide("dojox.drawing.Drawing");
 			});
 			this.initPlugins();
 		},
-		
+
 		resize: function(/* Object */box){
 			// summary:
 			//		Resizes the canvas.
@@ -202,11 +202,11 @@ dojo.provide("dojox.drawing.Drawing");
 				this.canvas.resize(box.w, box.h);
 			}
 		},
-		
+
 		startup: function(){
 			//console.info("drawing startup")
 		},
-		
+
 		getShapeProps: function(/* Object */data, mode){
 			// summary:
 			// 		The common objects that are mixed into
@@ -224,7 +224,7 @@ dojo.provide("dojox.drawing.Drawing");
 				style:this.defaults.copy()
 			}, data || {});
 		},
-		
+
 		addPlugin: function(/* Object */plugin){
 			// summary:
 			//		Add a toolbar plugin object to plugins array
@@ -234,7 +234,7 @@ dojo.provide("dojox.drawing.Drawing");
 				this.initPlugins();
 			}
 		},
-		
+
 		initPlugins: function(){
 			// summary:
 			// 		Called from Toolbar after a plugin has been loaded
@@ -271,7 +271,7 @@ dojo.provide("dojox.drawing.Drawing");
 			// canvas position after everything has drawn. *sigh*
 			this.mouse.setCanvas();
 		},
-		
+
 		onSurfaceReady: function(){
 			// summary:
 			//		Event that to which can be connected.
@@ -298,9 +298,9 @@ dojo.provide("dojox.drawing.Drawing");
 			dojo.forEach(this.plugins, function(p){
 				p.onSurfaceReady && p.onSurfaceReady();
 			});
-		
+
 		},
-		
+
 		addUI: function(/* String */type, /* Object */options){
 			// summary:
 			//		Use this method to programmatically add Stencils that display on
@@ -336,8 +336,8 @@ dojo.provide("dojox.drawing.Drawing");
 			var s = this.uiStencils.register( new this.stencilTypes[type](this.getShapeProps(options, "ui")));
 			return s;
 		},
-		
-		
+
+
 		addStencil: function(/* String */type, /* Object */options){
 			// summary:
 			//		Use this method to programmatically add Stencils that display on
@@ -370,7 +370,7 @@ dojo.provide("dojox.drawing.Drawing");
 			this.currentStencil && this.currentStencil.moveToFront();
 			return s;
 		},
-		
+
 		removeStencil: function(/* Object */stencil){
 			// summary:
 			//		Use this method to programmatically remove Stencils from the canvas.
@@ -381,20 +381,20 @@ dojo.provide("dojox.drawing.Drawing");
 			this.stencils.unregister(stencil);
 			stencil.destroy();
 		},
-		
+
 		removeAll: function(){
 			// summary:
 			//		Deletes all Stencils on the canvas.
 			this.stencils.removeAll();
 		},
-		
+
 		selectAll: function(){
 			// summary:
 			//		Selects all stencils
 			this.stencils.selectAll();
 		},
-		
-		toSelected: function(/*String*/func /*[args, ...]*/){
+
+		toSelected: function(/*String*/func /*any...*/){
 			// summary:
 			//		Call a function within all selected Stencils
 			//		like attr()
@@ -403,7 +403,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//
 			this.stencils.toSelected.apply(this.stencils, arguments);
 		},
-		
+
 		exporter: function(){
 			// summary:
 			//		Collects all Stencil data and returns an
@@ -411,7 +411,7 @@ dojo.provide("dojox.drawing.Drawing");
 			console.log("this.stencils", this.stencils);
 			return this.stencils.exporter();  //Array
 		},
-		
+
 		importer: function(/* Array */objects){
 			// summary:
 			//		Handles an Array of stencil data and imports the objects
@@ -420,7 +420,7 @@ dojo.provide("dojox.drawing.Drawing");
 				this.addStencil(m.type, m);
 			}, this);
 		},
-		
+
 		changeDefaults: function(/*Object*/newStyle,/*boolean*/value){
 			// summary:
 			//		Change the defaults so that all Stencils from this
@@ -457,20 +457,20 @@ dojo.provide("dojox.drawing.Drawing");
 					}
 				}
 			}
-			
+
 			if(this.currentStencil!=undefined && (!this.currentStencil.created || this.defaults.clickMode)){
 				this.unSetTool();
 				this.setTool(this.currentType);
 			}
 		},
-		
+
 		onRenderStencil: function(/* Object */stencil){
 			// summary:
 			//		Event that fires when a stencil is drawn. Does not fire from
 			//		'addStencil'.
 			//
 			//console.info("--------------------------------------dojox.drawing.onRenderStencil:", stencil.id);
-			
+
 			this.stencils.register(stencil);
 			this.unSetTool();
 			if(!this.defaults.clickMode){
@@ -479,7 +479,7 @@ dojo.provide("dojox.drawing.Drawing");
 				this.defaults.clickable = true;
 			}
 		},
-		
+
 		onDeleteStencil: function(/* Object */stencil){
 			// summary:
 			//		Event fired from a stencil that has destroyed itself
@@ -488,7 +488,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//
 			this.stencils.unregister(stencil);
 		},
-		
+
 		registerTool: function(/* String */type){
 			// summary:
 			//		 Registers a tool that can be accessed. Internal.
@@ -500,14 +500,14 @@ dojo.provide("dojox.drawing.Drawing");
 			this.stencilTypes[abbr] = constr;
 			this.stencilTypeMap[abbr] = type;
 		},
-		
+
 		getConstructor: function(/*String*/abbr){
 			// summary:
 			//		Returns a Stencil constructor base on
 			//		abbreviation
 			return this.stencilTypes[abbr];
 		},
-		
+
 		setTool: function(/* String */type){
 			// summary:
 			//		Sets up a new class to be used to draw. Called from Toolbar,
@@ -525,10 +525,10 @@ dojo.provide("dojox.drawing.Drawing");
 			if(this.currentStencil){
 				this.unSetTool();
 			}
-			
+
 			this.currentType = this.tools[type] ? type : this.stencilTypeMap[type];
 			//console.log("new tool arg:", type, "curr:", this.currentType, "mode:", this.mode, "tools:", this.tools)
-			
+
 			try{
 				this.currentStencil = new this.tools[this.currentType]({container:this.canvas.surface.createGroup(), util:this.util, mouse:this.mouse, keys:this.keys});
 				console.log("new tool is:", this.currentStencil.id, this.currentStencil);
@@ -541,22 +541,22 @@ dojo.provide("dojox.drawing.Drawing");
 				//console.trace();
 			}
 		},
-		
+
 		set: function(name, value){
 			// summary:
 			//		Drawing registers as a widget and needs to support
 			//		widget's api.
 			console.info("Attempting to set ",name," to: ",value,". Set currently not fully supported in Drawing");
 		},
-		
+
 		unSetTool: function(){
 			// summary:
 			//		Destroys current tool
 			if(!this.currentStencil.created){
 				this.currentStencil.destroy();
 			}
-			
+
 		}
 	});
-	
+
 })();

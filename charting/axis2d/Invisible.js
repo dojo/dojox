@@ -1,9 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear", 
+define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 	"dojox/gfx", "dojox/lang/utils"],
 	function(lang, declare, Base, lin, g, du){
 
-	/*=====
-		dojox.charting.axis2d.__InvisibleAxisCtorArgs = function(
+/*=====
+	dojox.charting.axis2d.__InvisibleAxisCtorArgs = function(
 			vertical, fixUpper, fixLower, natural, leftBottom,
 			includeZero, fixed, majorLabels, minorTicks, minorLabels, microTicks,
 			min, max, from, to, majorTickStep, minorTickStep, microTickStep){
@@ -57,10 +57,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 		this.minorTickStep = minorTickStep;
 		this.microTickStep = microTickStep;
 	}
+=====*/
 
 /*=====
 var Base = dojox.charting.axis2d.Base;
-=====*/ 
+=====*/
 
 	return declare("dojox.charting.axis2d.Invisible", Base, {
 		//	summary:
