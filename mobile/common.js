@@ -157,7 +157,7 @@ define([
 		if(dm.disableResizeAll){ return; }
 		connect.publish("/dojox/mobile/resizeAll", [evt, root]); // back compat
 		connect.publish("/dojox/mobile/beforeResizeAll", [evt, root]);
-		if(dm._hiding === false){
+		if(dm._resetMinHeight){
 			win.body().style.minHeight = dm.getScreenSize().h + "px";
 		} 
 		dm.updateOrient();
@@ -205,12 +205,22 @@ define([
 		dm.deviceTheme.setDm(dm);
 	}
 
+	// flag for Android transition animation flicker workaround
+	has.add('mblAndroidWorkaround', 
+			config["mblAndroidWorkaround"] !== false && has('android') < 3, undefined, true);
+	has.add('mblAndroid3Workaround', 
+			config["mblAndroid3Workaround"] !== false && has('android') >= 3, undefined, true);
+
 	ready(function(){
 		dm.detectScreenSize(true);
 
 		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
 			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, win.doc.head, "first");
+		}
+		if(has('mblAndroidWorkaround')){
+			// add a css class to show view offscreen for android flicker workaround
+			domConstruct.create("style", {innerHTML:".mblView.mblAndroidWorkaround{position:absolute;top:-9999px !important;left:-9999px !important;}"}, win.doc.head, "last");
 		}
 
 		//	You can disable hiding the address bar with the following djConfig.
