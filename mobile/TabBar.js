@@ -131,6 +131,11 @@ define([
 			var bm = this._fixedButtonMargin;
 			var arr = dojo.map(this.getChildren(), function(w){ return w.domNode; });
 
+			domClass.toggle(this.domNode, "mblTabBarNoIcons",
+							!array.some(this.getChildren(), function(w){ return w.iconNode1; }));
+			domClass.toggle(this.domNode, "mblTabBarNoText",
+							!array.some(this.getChildren(), function(w){ return w.label; }));
+
 			var margin = 0;
 			if (this._barType == "tabBar"){
 				this.containerNode.style.paddingLeft = "";
@@ -166,11 +171,6 @@ define([
 				}
 				this.containerNode.style.paddingLeft = margin ? margin + "px" : "";
 			}
-
-			domClass.toggle(this.domNode, "mblTabBarNoIcons",
-							!array.some(this.getChildren(), function(w){ return w.iconNode1; }));
-			domClass.toggle(this.domNode, "mblTabBarNoText",
-							!array.some(this.getChildren(), function(w){ return w.label; }));
 		},
 
 		getSelectedTab: function(){
