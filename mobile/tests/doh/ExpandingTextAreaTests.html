@@ -24,7 +24,7 @@
 	var WIDGET_OFFSETHEIGHT1_FF = 43;
 	var WIDGET_OFFSETHEIGHT1_IE = 34;
 	var WIDGET_OFFSETHEIGHT2 = 90;
-	var WIDGET_OFFSETHEIGHT2_IE = "34";
+	var WIDGET_OFFSETHEIGHT2_IE = "123";
 
 	require([
 		"dojo/_base/connect",
@@ -90,15 +90,14 @@
 						var widget3 = _createExpandingTextAreaProgrammaticallyWithSourceNodeReference("view1-ExpandingTextArea3");
 
 						var d = new runner.Deferred();
-						var handle1 = connect.connect(widget3, "resize", this, d.getTestCallback(function(){
-							connect.disconnect(handle1);
+						setTimeout(d.getTestCallback(function(){
 							var widget1 = registry.byId("dojox_mobile_ExpandingTextArea_0");
 							var widget2 = registry.byId("view1-ExpandingTextArea2");
 							var widget3 = registry.byId("view1-ExpandingTextArea3");
 							_assertCorrectExpandingTextArea(widget1, styleHeight, offsetHeight1, offsetHeight2);
 							_assertCorrectExpandingTextArea(widget2, styleHeight, offsetHeight1, offsetHeight2);
 							_assertCorrectExpandingTextArea(widget3, styleHeight, offsetHeight1, offsetHeight2);
-						}));
+						}), 2000);
 						return d;
 					}
 				},
@@ -110,19 +109,16 @@
 						var widget2 = _createExpandingTextAreaProgrammatically("view2-ExpandingTextArea2place", "view2-ExpandingTextArea2", TEXTAREA_ROWS, TEXTAREA_COLS, TEXTAREA_INNERHTML);
 						var widget3 = _createExpandingTextAreaProgrammaticallyWithSourceNodeReference("view2-ExpandingTextArea3");
 
+						_showView2();
 						var d = new runner.Deferred();
-						var handle2 = connect.subscribe("/dojox/mobile/afterTransitionIn", d.getTestCallback(function(view){
-							if(view.id=="view2"){
-								connect.unsubscribe(handle2);
-							}
+						setTimeout(d.getTestCallback(function(){
 							var widget1 = registry.byId("dojox_mobile_ExpandingTextArea_1");
 							var widget2 = registry.byId("view2-ExpandingTextArea2");
 							var widget3 = registry.byId("view2-ExpandingTextArea3");
 							_assertCorrectExpandingTextArea(widget1, styleHeight, offsetHeight1, offsetHeight2);
 							_assertCorrectExpandingTextArea(widget2, styleHeight, offsetHeight1, offsetHeight2);
 							_assertCorrectExpandingTextArea(widget3, styleHeight, offsetHeight1, offsetHeight2);
-						}));
-						_showView2();
+						}), 2000);
 						return d;
 					}
 				}

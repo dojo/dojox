@@ -15,15 +15,15 @@
 	var WIDGET_CLASSNAME1 = "mblTextArea";
 	var WIDGET_OFFSETHEIGHT1 = 58;
 	var WIDGET_OFFSETHEIGHT1_FF = 75;
-	var WIDGET_OFFSETHEIGHT1_IE = 52;
+	var WIDGET_OFFSETHEIGHT1_IE = 58;
 	var WIDGET_OFFSETHEIGHT2 = 58;
 	var WIDGET_OFFSETHEIGHT2_IE = "34";
 	var WIDGET_SCROLLHEIGHT1 = 56;
+	var WIDGET_SCROLLHEIGHT1_IE = 24;
 	var WIDGET_SCROLLHEIGHT1_FF = 65;
 	var WIDGET_SCROLLHEIGHT2 = 88;
+	var WIDGET_SCROLLHEIGHT2_IE = 88;
 	var WIDGET_SCROLLHEIGHT2_FF = 80;
-	var WIDGET_SCROLLHEIGHT1_IE = 52;
-	var WIDGET_SCROLLHEIGHT2_IE = 52;
 
 	require([
 		"dojo/_base/connect",
@@ -100,14 +100,9 @@
 							var widget1 = registry.byId("view1-TextArea1");
 							var widget2 = registry.byId("view1-TextArea2");
 							var widget3 = registry.byId("view1-TextArea3");
-							var scrollHeight1a = scrollHeight1;
-							var scrollHeight2a = scrollHeight2;
-							if(has("ie")){
-								scrollHeight1a = scrollHeight2a = 24;
-							}
-							_assertCorrectTextArea(widget1, offsetHeight1, offsetHeight2, scrollHeight1a, scrollHeight2a);
-							_assertCorrectTextArea(widget2, offsetHeight1, offsetHeight2, scrollHeight1a, scrollHeight2a);
-							_assertCorrectTextArea(widget3, offsetHeight1, offsetHeight2, scrollHeight1a, scrollHeight2a);
+							_assertCorrectTextArea(widget1, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2);
+							_assertCorrectTextArea(widget2, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2);
+							_assertCorrectTextArea(widget3, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2);
 						}), 2000);
 						return d;
 					}
