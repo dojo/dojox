@@ -219,6 +219,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this.propagatable = true; // let touchstart event propagate up
 	this.dirLock = false; // disable the move handler if scroll starts in the unexpected direction
 	this.height = ""; // explicitly specified height of this widget (ex. "300px")
+	this.scrollType = 0; // 1: use -webkit-transform:translate3d(x,y,z) style,
+						 // 2: use top/left style,
+						 // 0: use default value (2 in case of Android, otherwise 1)
 
 //>>includeStart("standaloneScrollable", kwArgs.standaloneScrollable);
 	if(!dojo){ // namespace objects are not passed
@@ -245,17 +248,26 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this._ch.push(connect.connect(this.touchNode,
 			has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchStart"));
 		if(has("webkit")){
-			this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
-			this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
+			// flag for whether to use -webkit-transform:translate3d(x,y,z) or top/left style.
+			// top/left style works fine as a workaround for input fields auto-scrolling issue,
+			// so use top/left in case of Android by default.
+			this._useTopLeft = this.scrollType ? this.scrollType === 2 : has('android');
+			if(!this._useTopLeft){
+				this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
+				this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
 
-			// Creation of keyframes takes a little time. If they are created
-			// in a lazy manner, a slight delay is noticeable when you start
-			// scrolling for the first time. This is to create keyframes up front.
-			for(var i = 0; i < 3; i++){
-				this.setKeyframes(null, null, i);
-			}
-			if(dm.hasTranslate3d){ // workaround for flicker issue on iPhone and Android 3.x/4.0
-				domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
+				// Creation of keyframes takes a little time. If they are created
+				// in a lazy manner, a slight delay is noticeable when you start
+				// scrolling for the first time. This is to create keyframes up front.
+				for(var i = 0; i < 3; i++){
+					this.setKeyframes(null, null, i);
+				}
+				if(dm.hasTranslate3d){ // workaround for flicker issue on iPhone and Android 3.x/4.0
+					domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
+				}
+			}else{
+				this._ch.push(connect.connect(this.domNode, "webkitTransitionEnd", this, "onFlickAnimationEnd"));
+				this._ch.push(connect.connect(this.domNode, "webkitTransitionStart", this, "onFlickAnimationStart"));
 			}
 		}
 
@@ -389,6 +401,18 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
 			}
 			return;
+		}
+		if(this._useTopLeft){
+			var n = e.target;
+			if(n === this._scrollBarV || n === this._scrollBarH){
+				var cls = "mblScrollableScrollTo" + (n === this._scrollBarV ? "0" : "1");
+				if(domClass.contains(n, cls)){
+					domClass.remove(n, cls);
+				}else{
+					n.className = "";
+				}
+				return;
+			}
 		}
 		if(e && e.srcElement){
 			event.stop(e);
@@ -683,6 +707,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(this._scrollBarH){
 			this._scrollBarH.className = "";
 		}
+		if(this._useTopLeft){
+			this.containerNode.style.webkitTransition = "";
+			if(this._scrollBarV) { this._scrollBarV.style.webkitTransition = ""; }
+			if(this._scrollBarH) { this._scrollBarH.style.webkitTransition = ""; }
+		}
 	};
 
 	this.scrollIntoView = function(/*DOMNode*/node, /*Boolean?*/alignWithTop, /*number?*/duration){
@@ -727,7 +756,17 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		//		Scrolls to the given position.
 		var s = (node || this.containerNode).style;
 		if(has("webkit")){
-			s.webkitTransform = this.makeTranslateStr(to);
+			if(!this._useTopLeft){
+				s.webkitTransform = this.makeTranslateStr(to);
+			}else{
+				s.webkitTransition = "";
+				if(this._v){
+					s.top = to.y + "px";
+				}
+				if(this._h || this._f){
+					s.left = to.x + "px";
+				}
+			}
 		}else{
 			if(this._v){
 				s.top = to.y + "px";
@@ -759,12 +798,17 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		// summary:
 		//		Get the top position in the midst of animation
 		if(has("webkit")){
-			var m = win.doc.defaultView.getComputedStyle(this.containerNode, '')["-webkit-transform"];
-			if(m && m.indexOf("matrix") === 0){
-				var arr = m.split(/[,\s\)]+/);
-				return {y:arr[5] - 0, x:arr[4] - 0};
+			var s = win.doc.defaultView.getComputedStyle(this.containerNode, '');
+			if(!this._useTopLeft){
+				var m = s["-webkit-transform"];
+				if(m && m.indexOf("matrix") === 0){
+					var arr = m.split(/[,\s\)]+/);
+					return {y:arr[5] - 0, x:arr[4] - 0};
+				}
+				return {x:0, y:0};
+			}else{
+				return {x:parseInt(s.left) || 0, y:parseInt(s.top) || 0};
 			}
-			return {x:0, y:0};
 		}else{
 			// this.containerNode.offsetTop does not work here,
 			// because it adds the height of the top margin.
@@ -839,7 +883,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.hideScrollBar = function(){
-		var fadeRule;
 		if(this.fadeScrollBar && has("webkit")){
 			if(!dm._fadeRule){
 				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
@@ -852,7 +895,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 					"  to { opacity: 0; }}";
 				dm._fadeRule = node.sheet.cssRules[1];
 			}
-			fadeRule = dm._fadeRule;
 		}
 		if(!this.scrollBar){ return; }
 		var f = function(bar, self){
@@ -860,7 +902,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				opacity: 0,
 				webkitAnimationDuration: ""
 			});
-			bar.className = "mblScrollableFadeScrollBar";
+			// do not use fade animation in case of using top/left on Android
+			// since it causes screen flicker during adress bar's fading out
+			if(!(self._useTopLeft && has('android'))){
+				bar.className = "mblScrollableFadeScrollBar";
+			}
 		};
 		if(this._scrollBarV){
 			f(this._scrollBarV, this);
@@ -898,14 +944,28 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(!this.scrollBar){ return; }
 		if(this._v && this._scrollBarV && typeof to.y == "number"){
 			if(has("webkit")){
-				this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
+				if(!this._useTopLeft){
+					this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
+				}else{
+					domStyle.set(this._scrollBarV, {
+						webkitTransition: "",
+						top: to.y + "px"
+					});
+				}
 			}else{
 				this._scrollBarV.style.top = to.y + "px";
 			}
 		}
 		if(this._h && this._scrollBarH && typeof to.x == "number"){
 			if(has("webkit")){
-				this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
+				if(!this._useTopLeft){
+					this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
+				}else{
+					domStyle.set(this._scrollBarH, {
+						webkitTransition: "",
+						left: to.x + "px"
+					});
+				}
 			}else{
 				this._scrollBarH.style.left = to.x + "px";
 			}
@@ -927,16 +987,27 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	this._runSlideAnimation = function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, node, idx){
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
 		if(has("webkit")){
-			this.setKeyframes(from, to, idx);
-			domStyle.set(node, {
-				webkitAnimationDuration: duration + "s",
-				webkitAnimationTimingFunction: easing
-			});
-			domClass.add(node, "mblScrollableScrollTo"+idx);
-			if(idx == 2){
-				this.scrollTo(to, true, node);
+			if(!this._useTopLeft){
+				this.setKeyframes(from, to, idx);
+				domStyle.set(node, {
+					webkitAnimationDuration: duration + "s",
+					webkitAnimationTimingFunction: easing
+				});
+				domClass.add(node, "mblScrollableScrollTo"+idx);
+				if(idx == 2){
+					this.scrollTo(to, true, node);
+				}else{
+					this.scrollScrollBarTo(to);
+				}
 			}else{
-				this.scrollScrollBarTo(to);
+				domStyle.set(node, {
+					webkitTransitionProperty: "top, left",
+					webkitTransitionDuration: duration + "s",
+					webkitTransitionTimingFunction: easing,
+					top: (to.y || 0) + "px",
+					left: (to.x || 0) + "px"
+				});
+				domClass.add(node, "mblScrollableScrollTo"+idx);
 			}
 		}else if(dojo.fx && dojo.fx.easing && duration){
 			// If you want to support non-webkit browsers,

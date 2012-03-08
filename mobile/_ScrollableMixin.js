@@ -1,5 +1,6 @@
 define([
 	"dojo/_base/kernel",
+	"dojo/_base/config",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/window",
@@ -7,7 +8,7 @@ define([
 	"dojo/dom-class",
 	"dijit/registry",	// registry.byNode
 	"./scrollable"
-], function(dojo, declare, lang, win, dom, domClass, registry, Scrollable){
+], function(dojo, config, declare, lang, win, dom, domClass, registry, Scrollable){
 	// module:
 	//		dojox/mobile/_ScrollableMixin
 	// summary:
@@ -67,6 +68,7 @@ define([
 				}
 				params.fixedFooterHeight = node.offsetHeight;
 			}
+			this.scrollType = this.scrollType || config["mblScrollableScrollType"] || 0;
 			this.init(params);
 			if(this.allowNestedScrolls){
 				for(var p = this.getParent(); p; p = p.getParent()){
