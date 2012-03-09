@@ -124,7 +124,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 					}else if(angle < pi2 + pi4){
 						position = ["below", "above"];
 					}else if(angle < Math.PI + pi4){
-						position = ["before", "after"];
+						position = ["before-centered", "after-centered"];
 					}else if(angle < 2 * Math.PI - pi4){
 						position = ["above", "below"];
 					}
