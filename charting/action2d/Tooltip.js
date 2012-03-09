@@ -88,7 +88,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 					aroundRect.w = aroundRect.h = 2 * o.cr;
 					break;
 				case "column":
-					position = ["above", "below"];
+					position = ["above-centered", "below-centered"];
 					// intentional fall down
 				case "bar":
 					aroundRect = lang.clone(o.shape.getShape());
@@ -122,11 +122,11 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 					if(angle < pi4){
 						// do nothing: the position is right
 					}else if(angle < pi2 + pi4){
-						position = ["below", "above"];
+						position = ["below-centered", "above-centered"];
 					}else if(angle < Math.PI + pi4){
 						position = ["before-centered", "after-centered"];
 					}else if(angle < 2 * Math.PI - pi4){
-						position = ["above", "below"];
+						position = ["above-centered", "below-centered"];
 					}
 					/*
 					else{
