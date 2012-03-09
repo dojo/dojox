@@ -188,10 +188,7 @@ dojox.date.islamic.locale.parse= function(/*String*/value, /*Object?*/options){
 
 	var locale = dojo.i18n.normalizeLocale(options.locale);
 
-	if(!match){
-		console.debug("dojox.date.islamic.locale.parse: value  "+value+" doesn't match pattern   " + re);
-		return null;
-	} // null
+	if(!match){ return null; } // null
 	
 	var date, date1;
 	
