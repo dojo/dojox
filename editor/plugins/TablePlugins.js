@@ -1,31 +1,42 @@
 define([
-	"dojo",
-	"dijit",
-	"dojox",
-	"dijit/_base/popup",
-	"dijit/_Widget",
+	"dojo/_base/declare",
+	"dijit/_editor/_Plugin",
+	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
+	"dijit/Dialog",
 	"dijit/Menu",
 	"dijit/MenuItem",
 	"dijit/MenuSeparator",
-	"dijit/TooltipDialog",
-	"dijit/form/Button",
-	"dijit/form/DropDownButton",
-	"dijit/Dialog",
-	"dijit/form/TextBox",
-	"dijit/form/FilteringSelect",
+	"dojo/text!./resources/insertTable.html",
+	"dojo/text!./resources/modifyTable.html",
+	"dojo/i18n!./nls/TableDialog",
+	"dijit/_base/popup",
 	"dijit/popup",
-	"dijit/_editor/_Plugin",
 	"dijit/_editor/range",
 	"dijit/_editor/selection",
 	"dijit/ColorPalette",
 	"dojox/widget/ColorPicker",
 	"dojo/_base/connect",
-	"dojo/_base/declare",
-	"dojo/i18n",
-	"dojo/i18n!dojox/editor/plugins/nls/TableDialog"
-], function(dojo, dijit, dojox) {
+	"dijit/TooltipDialog",
+	"dijit/form/Button",
+	"dijit/form/DropDownButton",
+	"dijit/form/TextBox",
+	"dijit/form/FilteringSelect"
+], function(
+	declare,
+	_Plugin,
+	_WidgetBase,
+	_TemplatedMixin,
+	_WidgetsInTemplateMixin,
+	Dialog,
+	Menu,
+	MenuItem,
+	MenuSeparator,
+	insertTableTemplate,
+	modifyTableTemplate,
+	tableDialogStrings
+) {
 
 dojo.experimental("dojox.editor.plugins.TablePlugins");
 
@@ -53,7 +64,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 //			This affect the 'colorTableCell' plugin. Cells can still be
 //			colored individually or in rows.
 
-dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
+var TableHandler = declare(_Plugin, {
 	// summary:
 	//		A global object that handles common tasks for all the plugins. Since
 	//		there are several plugins that are all calling common methods, it's preferable
@@ -448,9 +459,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 	}
 });
 
-dojo.declare("dojox.editor.plugins.TablePlugins",
-	dijit._editor._Plugin,
-	{
+var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 		//summary:
 		//		A collection of Plugins for inserting and modifying tables in the Editor
 		//		See end of this document for all avaiable plugs
@@ -489,7 +498,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 				// Create it and init it off the editor.  This
 				// will create the _tablePluginHandler reference on
 				// the dijit.Editor instance.  This avoids a global.
-				var tablePluginHandler = new dojox.editor.plugins._TableHandler();
+				var tablePluginHandler = new TableHandler();
 				tablePluginHandler.initialize(this.editor);
 			}else{
 				this.editor._tablePluginHandler.initialize(this.editor);
@@ -728,9 +737,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 	}
 );
 
-dojo.declare("dojox.editor.plugins.TableContextMenu",
-	dojox.editor.plugins.TablePlugins,
-	{
+var TableContextMenu = declare(TablePlugins, {
 		constructor: function(){
 			// summary:
 			//		Initialize certain plugins
@@ -764,64 +771,60 @@ dojo.declare("dojox.editor.plugins.TableContextMenu",
 			//		Building context menu for right-click shortcuts within a table
 			//
 		
-			var pMenu = new dijit.Menu({targetNodeIds:[this.editor.iframe]});
-			var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
-			pMenu.addChild(new dijit.MenuItem({label: messages.selectTableLabel, onClick: dojo.hitch(this, "selectTable")}));
-			pMenu.addChild(new dijit.MenuSeparator());
+			var pMenu = new Menu({targetNodeIds:[this.editor.iframe]});
+			var messages = tableDialogStrings;
+			pMenu.addChild(new MenuItem({label: messages.selectTableLabel, onClick: dojo.hitch(this, "selectTable")}));
+			pMenu.addChild(new MenuSeparator());
 			
-			pMenu.addChild(new dijit.MenuItem({label: messages.insertTableRowBeforeLabel, onClick: dojo.hitch(this, "modTable", "insertTableRowBefore" )}));
-			pMenu.addChild(new dijit.MenuItem({label: messages.insertTableRowAfterLabel, onClick: dojo.hitch(this, "modTable", "insertTableRowAfter" )}));
-			pMenu.addChild(new dijit.MenuItem({label: messages.insertTableColumnBeforeLabel, onClick: dojo.hitch(this, "modTable", "insertTableColumnBefore" )}));
-			pMenu.addChild(new dijit.MenuItem({label: messages.insertTableColumnAfterLabel, onClick: dojo.hitch(this, "modTable", "insertTableColumnAfter" )}));
-			pMenu.addChild(new dijit.MenuSeparator());
-			pMenu.addChild(new dijit.MenuItem({label: messages.deleteTableRowLabel, onClick: dojo.hitch(this, "modTable", "deleteTableRow" )}));
-			pMenu.addChild(new dijit.MenuItem({label: messages.deleteTableColumnLabel, onClick: dojo.hitch(this, "modTable", "deleteTableColumn" )}));
+			pMenu.addChild(new MenuItem({label: messages.insertTableRowBeforeLabel, onClick: dojo.hitch(this, "modTable", "insertTableRowBefore" )}));
+			pMenu.addChild(new MenuItem({label: messages.insertTableRowAfterLabel, onClick: dojo.hitch(this, "modTable", "insertTableRowAfter" )}));
+			pMenu.addChild(new MenuItem({label: messages.insertTableColumnBeforeLabel, onClick: dojo.hitch(this, "modTable", "insertTableColumnBefore" )}));
+			pMenu.addChild(new MenuItem({label: messages.insertTableColumnAfterLabel, onClick: dojo.hitch(this, "modTable", "insertTableColumnAfter" )}));
+			pMenu.addChild(new MenuSeparator());
+			pMenu.addChild(new MenuItem({label: messages.deleteTableRowLabel, onClick: dojo.hitch(this, "modTable", "deleteTableRow" )}));
+			pMenu.addChild(new MenuItem({label: messages.deleteTableColumnLabel, onClick: dojo.hitch(this, "modTable", "deleteTableColumn" )}));
 
 			this.menu = pMenu;
 		}
 });
 
-dojo.declare("dojox.editor.plugins.InsertTable",
-	dojox.editor.plugins.TablePlugins,
-	{
-		alwaysAvailable: true,
-					
-		modTable: function(){
-			var w = new dojox.editor.plugins.EditorTableDialog({});
-			w.show();
-			var c = dojo.connect(w, "onBuildTable", this, function(obj){
-				dojo.disconnect(c);
-				
-				var res = this.editor.execCommand('inserthtml', obj.htmlText);
-				
-				// commenting this line, due to msg below
-				//var td = this.editor.query("td", this.editor.byId(obj.id));
-				
-				//HMMMM.... This throws a security error now. didn't used to.
-				//this.editor.selectElement(td);
-			});
-		}
+var InsertTable = declare("dojox.editor.plugins.InsertTable", TablePlugins, {
+	alwaysAvailable: true,
+
+	modTable: function(){
+		var w = new dojox.editor.plugins.EditorTableDialog({});
+		w.show();
+		var c = dojo.connect(w, "onBuildTable", this, function(obj){
+			dojo.disconnect(c);
+
+			var res = this.editor.execCommand('inserthtml', obj.htmlText);
+
+			// commenting this line, due to msg below
+			//var td = this.editor.query("td", this.editor.byId(obj.id));
+
+			//HMMMM.... This throws a security error now. didn't used to.
+			//this.editor.selectElement(td);
+		});
+	}
 });
 
-dojo.declare("dojox.editor.plugins.ModifyTable",
-	dojox.editor.plugins.TablePlugins,
-	{
-		modTable: function(){
-			if (!this.editor._tablePluginHandler.checkAvailable()) {return;}
+var ModifyTable = declare("dojox.editor.plugins.ModifyTable", TablePlugins, {
+	modTable: function(){
+		if (!this.editor._tablePluginHandler.checkAvailable()) {return;}
+		var o = this.getTableInfo();
+		//console.log("LAUNCH DIALOG");
+		var w = new EditorModifyTableDialog({table:o.tbl});
+		w.show();
+		this.connect(w, "onSetTable", function(color){
+			// uhm... not sure whats going on here...
 			var o = this.getTableInfo();
-			//console.log("LAUNCH DIALOG");
-			var w = new dojox.editor.plugins.EditorModifyTableDialog({table:o.tbl});
-			w.show();
-			this.connect(w, "onSetTable", function(color){
-				// uhm... not sure whats going on here...
-				var o = this.getTableInfo();
-				//console.log("set color:", color);
-				dojo.attr(o.td, "bgcolor", color);
-			});
-		}
+			//console.log("set color:", color);
+			dojo.attr(o.td, "bgcolor", color);
+		});
+	}
 });
 
-dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
 	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
 	//		passthroughs to the value of the color picker and convenient hook points.
@@ -850,8 +853,7 @@ dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._T
 		// summary:
 		//		Constructor over-ride so that the translated strings are mixsed in so
 		//		the template fills out.
-		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog");
-		dojo.mixin(this, strings);
+		dojo.mixin(this, tableDialogStrings);
 	},
 
 	startup: function(){
@@ -904,13 +906,13 @@ dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._T
 	}
 });
 
-dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePlugins, {
+var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins, {
 		constructor: function(){
 			// summary:
 			//		Initialize ColorTableCell plugin
 			this.closable = true;
 			this.buttonClass = dijit.form.DropDownButton;
-			var picker = new dojox.editor.plugins._CellColorDropDown();
+			var picker = new CellColorDropDown();
 			dojo.body().appendChild(picker.domNode);
 			picker.startup();
 			this.dropDown = picker.dialog;
@@ -976,17 +978,16 @@ dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePl
 		}
 });
 
-dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+declare("dojox.editor.plugins.EditorTableDialog", [Dialog, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
 	//		Dialog box with options for table creation
 
 	baseClass:"EditorTableDialog",
 				
-	templateString: dojo.cache("dojox.editor.plugins", "resources/insertTable.html"),
+	templateString: insertTableTemplate,
 
 	postMixInProperties: function(){
-		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
-		dojo.mixin(this, messages);
+		dojo.mixin(this, tableDialogStrings);
 		this.inherited(arguments);
 	},
 
@@ -1047,7 +1048,7 @@ dojo.declare("dojox.editor.plugins.EditorTableDialog", [dijit.Dialog, dijit._Tem
 	}
 });
 
-dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	
 	// summary:
 	//		Dialog box with options for editing a table
@@ -1057,11 +1058,10 @@ dojo.declare("dojox.editor.plugins.EditorModifyTableDialog", [dijit.Dialog, diji
 
 	table:null, //html table to be modified
 	tableAtts:{},
-	templateString: dojo.cache("dojox.editor.plugins", "resources/modifyTable.html"),
+	templateString: modifyTableTemplate,
 
 	postMixInProperties: function(){
-		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog", this.lang);
-		dojo.mixin(this, messages);
+		dojo.mixin(this, tableDialogStrings);
 		this.inherited(arguments);
 	},
 
@@ -1196,28 +1196,27 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			case "insertTableColumnAfter":
 			case "deleteTableRow":
 			case "deleteTableColumn":
-				o.plugin = new dojox.editor.plugins.TablePlugins({commandName: cmd});
+				o.plugin = new TablePlugins({commandName: cmd});
 				break;
 
 			case "colorTableCell":
-				o.plugin = new dojox.editor.plugins.ColorTableCell({commandName: cmd});
+				o.plugin = new ColorTableCell({commandName: cmd});
 				break;
 
 			case "modifyTable":
-				o.plugin = new dojox.editor.plugins.ModifyTable({commandName: cmd});
+				o.plugin = new ModifyTable({commandName: cmd});
 				break;
 
 			case "insertTable":
-				o.plugin = new dojox.editor.plugins.InsertTable({commandName: cmd});
+				o.plugin = new InsertTable({commandName: cmd});
 				break;
 
 			case "tableContextMenu":
-				o.plugin = new dojox.editor.plugins.TableContextMenu({commandName: cmd});
+				o.plugin = new TableContextMenu({commandName: cmd});
 				break;
 		}
 	}
 });
 
-return dojox.editor.plugins.TablePlugins;
-
+return TablePlugins;
 });
