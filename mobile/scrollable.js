@@ -251,7 +251,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			// flag for whether to use -webkit-transform:translate3d(x,y,z) or top/left style.
 			// top/left style works fine as a workaround for input fields auto-scrolling issue,
 			// so use top/left in case of Android by default.
-			this._useTopLeft = this.scrollType ? this.scrollType === 2 : has('android');
+			this._useTopLeft = this.scrollType ? this.scrollType === 2 : has('android') < 3;
 			if(!this._useTopLeft){
 				this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
 				this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
