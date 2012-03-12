@@ -1058,32 +1058,46 @@ dojo.require("dojox.gfx.gradient");
 			});
 		}
 	}
+	
+	var addPatch9624 = function(shape){
+		if(this != shape.getParent()){
+			// cleanup from old parent
+			var oldParent = shape.getParent();
+			if(oldParent) { oldParent.remove(shape); }
+			// then move the raw node
+			this.rawNode.appendChild(shape.rawNode);
+			C.add.apply(this, arguments);
+			// reapply visual attributes (slow..)
+			forEach(this, function(s){
+				if (typeof(s.getFont) == 'function'){ // text shapes need to be completely refreshed
+					s.setShape(s.getShape());
+					s.setFont(s.getFont());
+				}
+				if (typeof(s.setFill) == 'function'){ // if setFill is available a setStroke should be safe to assume also
+					s.setFill(s.getFill());
+					s.setStroke(s.getStroke());
+				}
+			});
+		}
+		return this;	// self
+	};
+	
+	var add15 = function(shape){
+		if(this != shape.getParent()){
+			this.rawNode.appendChild(shape.rawNode);
+			if(!shape.getParent()){ 
+				// reapply visual attributes 
+				shape.setFill(shape.getFill()); 
+				shape.setStroke(shape.getStroke()); 
+			} 
+			C.add.apply(this, arguments);
+		}
+		return this;	// self
+	};
 
 	var C = gs.Container, Container = {
-		add: function(shape){
-			// summary: adds a shape to a group/surface
-			// shape: dojox.gfx.Shape: an VML shape object
-			if(this != shape.getParent()){
-				// cleanup from old parent
-				var oldParent = shape.getParent();
-				if(oldParent) { oldParent.remove(shape); }
-				// then move the raw node
-				this.rawNode.appendChild(shape.rawNode);
-				C.add.apply(this, arguments);
-				// reapply visual attributes (slow..)
-				forEach(this, function(s){
-					if (typeof(s.getFont) == 'function'){ // text shapes need to be completely refreshed
-						s.setShape(s.getShape());
-						s.setFont(s.getFont());
-					}
-					if (typeof(s.setFill) == 'function'){ // if setFill is available a setStroke should be safe to assume also
-						s.setFill(s.getFill());
-						s.setStroke(s.getStroke());
-					}
-				});
-			}
-			return this;	// self
-		},
+		// fix bug #12456/#9624. For 1.6.1 backward compat, flag must be set explicitly falsy to revert to 1.5 behavior. 
+		add: dojo.config.fixVmlAdd === false ? add15 : addPatch9624,
 		remove: function(shape, silently){
 			// summary: remove a shape from a group/surface
 			// shape: dojox.gfx.Shape: an VML shape object
