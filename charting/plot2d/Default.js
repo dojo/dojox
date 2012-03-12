@@ -224,14 +224,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 					eventSeries = this._eventSeries[run.name] = new Array(run.data.length);
 				
 				// optim works only for index based case
-				var indexed = typeof run.data[0] == "number";
+				var indexed = arr.some(run.data, function(item){
+					return typeof item == "number";
+				});
 				var min = indexed?Math.max(0, Math.floor(this._hScaler.bounds.from - 1)):0, 
 						max = indexed?Math.min(run.data.length, Math.ceil(this._hScaler.bounds.to)):run.data.length;
 
 				// split the run data into dense segments (each containing no nulls)
-				// except if interpolates is null in which case ignore null between valid data
+				// except if interpolates is false in which case ignore null between valid data
 				for(var j = min; j < max; j++){
-					if((indexed && run.data[j] != null) || (!indexed && run.data[j] != null && run.data[j].y != null)){
+					if(run.data[j] != null && (indexed || run.data[j].y != null)){
 						if(!rseg){
 							rseg = [];
 							startindexes.push(j);
@@ -343,7 +345,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 						}
 					}
 					if(this.opt.markers){
-						var markerTheme = theme; //t.next("marker", [this.opt, run]);
+						var markerTheme = theme; 
 						frontMarkers = new Array(lpoly.length);
 						outlineMarkers = new Array(lpoly.length);
 						outline = null;

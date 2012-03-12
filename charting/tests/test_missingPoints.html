@@ -26,36 +26,38 @@
 
 		<script type="text/javascript">
 			var seriesA = [
-				{ x: 1, y : 1 },
+				{ x: 1, y : null },
 				{ x: 2, y : 2 },
-				{ x: 3, y: null },
+				{ x: 3, y : 2 },
 				{ x: 4, y: null },
-				{ x: 5, y: 3 },
-				{ x: 6, y: 4 },
-				{ x: 7, y: null },
-				{ x: 8, y: 5 },
-				{ x: 9, y: 6 }
+				{ x: 5, y: null },
+				{ x: 6, y: 3 },
+				{ x: 7, y: 4 },
+				{ x: 8, y: null },
+				{ x: 9, y: 5 },
+				{ x: 10, y: 6 }
 			];
-			var seriesB = [2, 3, null, null, 4, 5, null, 6, 7];
+			var seriesB = [null, 3, 3, null, null, 4, 5, null, 6, 7];
 			var seriesC = [
-				{ x: 1, y: 3 },
 				{ x: 2, y: 4 },
-				{ x: 5, y: 5 },
-				{ x: 6, y: 6 },
-				{ x: 8, y: 7 },
-				{ x: 9, y: 8 }
+				{ x: 3, y: 4 },
+				{ x: 6, y: 5 },
+				{ x: 7, y: 6 },
+				{ x: 9, y: 7 },
+				{ x: 10, y: 8 }
 			];
 			// in theory this should not happen, this is really invalid data set...
 			var seriesD = [
-				{ x: 1, y : 4 },
+				null,
 				{ x: 2, y : 5 },
+				{ x: 3, y : 5 },
 				null,
 				null,
-				{ x: 5, y: 6 },
-				{ x: 6, y: 7 },
+				{ x: 6, y: 6 },
+				{ x: 7, y: 7 },
 			    null,
-				{ x: 8, y: 8 },
-				{ x: 9, y: 9 }
+				{ x: 9, y: 8 },
+				{ x: 10, y: 9 }
 			];
 			require([
 			"dojox/charting/widget/Chart",
@@ -76,7 +78,7 @@
 						<div class="axis" name="y" vertical="true" fixUpper="major" includeZero="true" 
 							font="italic normal normal 8pt Tahoma"></div>
 						<div class="plot" name="default" type="Lines"></div>
-					    <div class="series" name="Run A" array="seriesA"></div>
+						<div class="series" name="Run A" array="seriesA"></div>
 						<div class="series" name="Run B" array="seriesB"></div>
 						<div class="series" name="Run C" array="seriesC"></div>
 						<div class="series" name="Run D" array="seriesD"></div>
