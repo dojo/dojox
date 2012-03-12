@@ -79,6 +79,15 @@ define([
 					}
 				}
 			}
+			// subscribe to afterResizeAll to scroll the focused input field into view
+			// so as not to break layout on orientation changes while keyboard is shown (#14991)
+			this._resizeHandle = this.subscribe("/dojox/mobile/afterResizeAll", function(){
+				if(this.domNode.style.display === 'none'){ return; }
+				var elem = win.doc.activeElement;
+				if(this.isFormElement(elem) && dom.isDescendant(elem, this.containerNode)){
+					this.scrollIntoView(elem);
+				}
+			});
 			this.inherited(arguments);
 		},
 
