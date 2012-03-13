@@ -16,6 +16,6 @@ define(
 	"pageCountIndication": " (${0} páginas)",
 	"dialogConfirm": "Ir",
 	"dialogCancel": "Cancelar",
-	"all": "Todas"
+	"all": "Todos"
 })
 );

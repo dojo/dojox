@@ -1,9 +1,8 @@
 define(
 ({
 	"clearFilterDialogTitle": "Rensa filter",
-	"filterDefDialogTitle": "Filtrera",
+	"filterDefDialogTitle": "Filter",
 	"ruleTitleTemplate": "Regel ${0}",
-	
 	"conditionEqual": "lika med",
 	"conditionNotEqual": "inte lika med",
 	"conditionLess": "mindre än",
@@ -22,7 +21,6 @@ define(
 	"conditionAfter": "efter",
 	"conditionRange": "intervall",
 	"conditionIsEmpty": "är tom",
-	
 	"all": "alla",
 	"any": "någon",
 	"relationAll": "alla regler",
@@ -33,53 +31,44 @@ define(
 	"relationMsgTail": "",
 	"and": "och",
 	"or": "eller",
-	
 	"addRuleButton": "Lägg till regel",
 	"waiAddRuleButton": "Lägg till ny regel",
 	"removeRuleButton": "Ta bort regel",
-	"waiRemoveRuleButtonTemplate": "Ta bort regeln ${0}",
-	
+	"waiRemoveRuleButtonTemplate": "Ta bort regel ${0}",
 	"cancelButton": "Avbryt",
-	"waiCancelButton": "Ständ dialogrutan",
+	"waiCancelButton": "Stäng dialogrutan",
 	"clearButton": "Rensa",
 	"waiClearButton": "Rensa filtret",
-	"filterButton": "Filter",
-	"waiFilterButton": "Använd filtret",
-	
+	"filterButton": "Filtrera",
+	"waiFilterButton": "Filtrera",
 	"columnSelectLabel": "Kolumn",
-	"waiColumnSelectTemplate": "Kolumn för regeln ${0}",
+	"waiColumnSelectTemplate": "Kolumn för regel ${0}",
 	"conditionSelectLabel": "Villkor",
-	"waiConditionSelectTemplate": "Villkor för regeln ${0}",
+	"waiConditionSelectTemplate": "Villkor för regel ${0}",
 	"valueBoxLabel": "Värde",
-	"waiValueBoxTemplate": "Filtervärde för regeln ${0}",
-	
+	"waiValueBoxTemplate": "Ange värde för filtrering efter regeln ${0}",
 	"rangeTo": "till",
 	"rangeTemplate": "från ${0} till ${1}",
-	
 	"statusTipHeaderColumn": "Kolumn",
 	"statusTipHeaderCondition": "Regler",
 	"statusTipTitle": "Filterfält",
-	"statusTipMsg": "Klicka på filterfältet för att filtrera värden i ${0}.",
-	"anycolumn": "någon kolumn",
+	"statusTipMsg": "Klicka på filterfältet om du vill filtrera värden i ${0}.",
+	"anycolumn": "alla kolumner",
 	"statusTipTitleNoFilter": "Filterfält",
 	"statusTipTitleHasFilter": "Filter",
 	"statusTipRelAny": "Matcha någon regel.",
 	"statusTipRelAll": "Matcha alla regler.",
-	
 	"defaultItemsName": "objekt",
 	"filterBarMsgHasFilterTemplate": "${0} av ${1} ${2} visas.",
-	"filterBarMsgNoFilterTemplate": "Inga filter tillämpas",
-	
+	"filterBarMsgNoFilterTemplate": "Inget filter tillämpat",
 	"filterBarDefButton": "Definiera filter",
 	"waiFilterBarDefButton": "Filtrera tabellen",
 	"a11yFilterBarDefButton": "Filter...",
 	"filterBarClearButton": "Rensa filter",
 	"waiFilterBarClearButton": "Rensa filtret",
-	"closeFilterBarBtn": "Stäng filterfältet",
-	
-	"clearFilterMsg": "Filtret tas bort och alla tillgängliga poster visas.",
+	"closeFilterBarBtn": "Stäng filterfält",
+	"clearFilterMsg": "Tar bort filtret och visar alla tillgängliga poster.",
 	"anyColumnOption": "Någon kolumn",
-	
 	"trueLabel": "Sant",
 	"falseLabel": "Falskt"
 })

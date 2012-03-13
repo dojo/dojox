@@ -1,6 +1,6 @@
 define(
 ({
-	"descTemplate": "${2} - ${3} af ${1} ${0}",
+	"descTemplate": "${2}-${3} af ${1} ${0}",
 	"firstTip": "Første side",
 	"lastTip": "Sidste side",
 	"nextTip": "Næste side",
@@ -14,7 +14,7 @@ define(
 	"dialogTitle": "Gå til side",
 	"dialogIndication": "Angiv sidenummeret",
 	"pageCountIndication": " (${0} sider)",
-	"dialogConfirm": "Gå",
+	"dialogConfirm": "Udfør",
 	"dialogCancel": "Annullér",
 	"all": "Alle"
 })

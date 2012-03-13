@@ -1,6 +1,6 @@
 define(
 ({
-	singleSort: "Tek Sıralama",
+	singleSort: "Tekli Sıralama",
 	nestedSort: "İç İçe Sıralama",
 	ascending: "Artan Sırada sıralamak için tıklatın",
 	descending: "Azalan Sırada sıralamak için tıklatın",

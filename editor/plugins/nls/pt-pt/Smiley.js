@@ -18,6 +18,7 @@ define(
 	emoticonYes: "sim",
 	emoticonNo: "não",
 	emoticonAngel: "anjo",
-	emoticonCrying: "a chorar"
+	emoticonCrying: "a chorar",
+	emoticonHappy: "feliz"
 })
 );

@@ -18,6 +18,7 @@ define(
 	emoticonYes: "نعم",
 	emoticonNo: "لا",
 	emoticonAngel: "ملاك",
-	emoticonCrying: "يبكي"
+	emoticonCrying: "يبكي",
+	emoticonHappy: "سعيد"
 })
 );

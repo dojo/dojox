@@ -19,6 +19,6 @@ define(
 	emoticonNo: "nee",
 	emoticonAngel: "engel",
 	emoticonCrying: "bedroefd",
-	emoticonHappy: "vrolijk"
+	emoticonHappy: "blij"
 })
 );

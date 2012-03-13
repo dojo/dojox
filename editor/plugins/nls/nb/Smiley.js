@@ -9,7 +9,7 @@ define(
 	emoticonAngry: "sint",
 	emoticonHalf: "halv",
 	emoticonEyebrow: "øyebryn",
-	emoticonFrown: "streng",
+	emoticonFrown: "trist",
 	emoticonShy: "sjenert",
 	emoticonGoofy: "tåpelig",
 	emoticonOops: "ops",

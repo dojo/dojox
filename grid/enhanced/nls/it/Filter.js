@@ -3,7 +3,6 @@ define(
 	"clearFilterDialogTitle": "Cancella filtro",
 	"filterDefDialogTitle": "Filtro",
 	"ruleTitleTemplate": "Regola ${0}",
-	
 	"conditionEqual": "uguale a",
 	"conditionNotEqual": "diverso da",
 	"conditionLess": "minore di",
@@ -22,7 +21,6 @@ define(
 	"conditionAfter": "dopo",
 	"conditionRange": "intervallo",
 	"conditionIsEmpty": "è vuoto",
-	
 	"all": "tutto",
 	"any": "qualsiasi",
 	"relationAll": "tutte le regole",
@@ -33,29 +31,24 @@ define(
 	"relationMsgTail": "",
 	"and": "e",
 	"or": "o",
-	
 	"addRuleButton": "Aggiungi regola",
 	"waiAddRuleButton": "Aggiungi una nuova regola",
 	"removeRuleButton": "Rimuovi regola",
 	"waiRemoveRuleButtonTemplate": "Rimuovi regola ${0}",
-	
 	"cancelButton": "Annulla",
 	"waiCancelButton": "Annulla questa finestra di dialogo",
 	"clearButton": "Elimina",
-	"waiClearButton": "Annulla il filtro",
+	"waiClearButton": "Cancella il filtro",
 	"filterButton": "Filtro",
 	"waiFilterButton": "Inoltra il filtro",
-	
 	"columnSelectLabel": "Colonna",
 	"waiColumnSelectTemplate": "Colonna per la regola ${0}",
 	"conditionSelectLabel": "Condizione",
 	"waiConditionSelectTemplate": "Condizione per la regola ${0}",
 	"valueBoxLabel": "Valore",
 	"waiValueBoxTemplate": "Immettere il valore da filtrare per la regola ${0}",
-	
 	"rangeTo": "a",
 	"rangeTemplate": "da ${0} a ${1}",
-	
 	"statusTipHeaderColumn": "Colonna",
 	"statusTipHeaderCondition": "Regole",
 	"statusTipTitle": "Barra filtro",
@@ -65,21 +58,17 @@ define(
 	"statusTipTitleHasFilter": "Filtro",
 	"statusTipRelAny": "Corrispondenza con qualsiasi regola.",
 	"statusTipRelAll": "Corrispondenza con tutte le regole.",
-	
 	"defaultItemsName": "elementi",
 	"filterBarMsgHasFilterTemplate": "${0} di ${1} ${2} mostrate.",
 	"filterBarMsgNoFilterTemplate": "Nessun filtro applicato",
-	
 	"filterBarDefButton": "Definisci filtro",
 	"waiFilterBarDefButton": "Filtra la tabella",
 	"a11yFilterBarDefButton": "Filtro...",
 	"filterBarClearButton": "Cancella filtro",
 	"waiFilterBarClearButton": "Cancella il filtro",
 	"closeFilterBarBtn": "Chiudi barra filtro",
-	
 	"clearFilterMsg": "Questa operazione rimuoverà il filtro e visualizzerà tutti i record disponibili.",
 	"anyColumnOption": "Qualsiasi colonna",
-	
 	"trueLabel": "Vero",
 	"falseLabel": "Falso"
 })

@@ -13,7 +13,7 @@ define(
 	"gotoButtonTitle": "转至特定页",
 	"dialogTitle": "转至页",
 	"dialogIndication": "指定页数",
-	"pageCountIndication": "（${0} 页）",
+	"pageCountIndication": "（共 ${0} 页）",
 	"dialogConfirm": "运行",
 	"dialogCancel": "取消",
 	"all": "全部"

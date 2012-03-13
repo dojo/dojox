@@ -1,9 +1,8 @@
 define(
 ({
 	"clearFilterDialogTitle": "Vymazat filtr",
-	"filterDefDialogTitle": "Filtrovat",
+	"filterDefDialogTitle": "Filtr",
 	"ruleTitleTemplate": "Pravidlo ${0}",
-	
 	"conditionEqual": "rovná se",
 	"conditionNotEqual": "nerovná se",
 	"conditionLess": "je menší než",
@@ -21,8 +20,7 @@ define(
 	"conditionBefore": "před",
 	"conditionAfter": "po",
 	"conditionRange": "rozsah",
-	"conditionIsEmpty": "je prázdný",
-	
+	"conditionIsEmpty": "je prázdné",
 	"all": "vše",
 	"any": "libovolné",
 	"relationAll": "všechna pravidla",
@@ -33,29 +31,24 @@ define(
 	"relationMsgTail": "",
 	"and": "a",
 	"or": "nebo",
-	
 	"addRuleButton": "Přidat pravidlo",
 	"waiAddRuleButton": "Přidat nové pravidlo",
 	"removeRuleButton": "Odebrat pravidlo",
 	"waiRemoveRuleButtonTemplate": "Odebrat pravidlo ${0}",
-	
 	"cancelButton": "Storno",
 	"waiCancelButton": "Zrušit toto dialogové okno",
 	"clearButton": "Vymazat",
 	"waiClearButton": "Vymazat tento filtr",
 	"filterButton": "Filtrovat",
 	"waiFilterButton": "Odeslat tento filtr",
-	
 	"columnSelectLabel": "Sloupec",
 	"waiColumnSelectTemplate": "Sloupec pravidla ${0}",
 	"conditionSelectLabel": "Podmínka",
 	"waiConditionSelectTemplate": "Podmínka pravidla ${0}",
 	"valueBoxLabel": "Hodnota",
 	"waiValueBoxTemplate": "Zadat hodnotu filtru pro pravidlo ${0}",
-	
 	"rangeTo": "do",
 	"rangeTemplate": "od ${0} do ${1}",
-	
 	"statusTipHeaderColumn": "Sloupec",
 	"statusTipHeaderCondition": "Pravidla",
 	"statusTipTitle": "Panel filtru",
@@ -65,21 +58,17 @@ define(
 	"statusTipTitleHasFilter": "Filtr",
 	"statusTipRelAny": "Vyhovovat libovolnému pravidlu",
 	"statusTipRelAll": "Vyhovovat všem pravidlům",
-	
 	"defaultItemsName": "položek",
 	"filterBarMsgHasFilterTemplate": "Zobrazeno ${0} z ${1} ${2}.",
 	"filterBarMsgNoFilterTemplate": "Není použit žádný filtr",
-	
 	"filterBarDefButton": "Definovat filtr",
 	"waiFilterBarDefButton": "Filtrovat tabulku",
 	"a11yFilterBarDefButton": "Filtrovat...",
 	"filterBarClearButton": "Vymazat filtr",
 	"waiFilterBarClearButton": "Vymazat tento filtr",
 	"closeFilterBarBtn": "Zavřít panel filtru",
-	
 	"clearFilterMsg": "Tato akce odebere filtr a zobrazí se všechny dostupné záznamy.",
 	"anyColumnOption": "Libovolné sloupec",
-	
 	"trueLabel": "Pravda",
 	"falseLabel": "Nepravda"
 })

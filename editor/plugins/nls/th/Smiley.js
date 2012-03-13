@@ -12,12 +12,12 @@ define(
 	emoticonFrown: "หน้าบึ้ง",
 	emoticonShy: "อาย",
 	emoticonGoofy: "โง่",
-	emoticonOops: "oops",
+	emoticonOops: "อุ๊ปส์",
 	emoticonTongue: "แลบลิ้น",
 	emoticonIdea: "ความคิด",
 	emoticonYes: "ใช่",
-	emoticonNo: "no",
-	emoticonAngel: "โมโห",
+	emoticonNo: "ไม่ใช่",
+	emoticonAngel: "เทวดา",
 	emoticonCrying: "ร้องไห้",
 	emoticonHappy: "มีความสุข"
 })

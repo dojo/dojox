@@ -3,12 +3,12 @@ define(
 	smiley: "Emoticon einfügen",
 	emoticonSmile: "Lächeln",
 	emoticonLaughing: "Lachen",
-	emoticonWink: "Augenzwinkern",
+	emoticonWink: "Zwinkern",
 	emoticonGrin: "Grinsen",
 	emoticonCool: "Cool",
-	emoticonAngry: "Zornig",
-	emoticonHalf: "Halb",
-	emoticonEyebrow: "Hochgezogene Augenbraue",
+	emoticonAngry: "Wütend",
+	emoticonHalf: "Halbes Lächeln",
+	emoticonEyebrow: "Augenbraue",
 	emoticonFrown: "Stirnrunzeln",
 	emoticonShy: "Schüchtern",
 	emoticonGoofy: "Albern",
@@ -19,6 +19,6 @@ define(
 	emoticonNo: "Nein",
 	emoticonAngel: "Engel",
 	emoticonCrying: "Weinen",
-	emoticonHappy: "Fröhlich"
+	emoticonHappy: "Glücklich"
 })
 );

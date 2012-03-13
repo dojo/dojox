@@ -3,7 +3,6 @@ define(
 	"clearFilterDialogTitle": "Сүзгіні тазалау",
 	"filterDefDialogTitle": "Сүзгі",
 	"ruleTitleTemplate": "${0} ережесі",
-	
 	"conditionEqual": "тең",
 	"conditionNotEqual": "тең емес",
 	"conditionLess": "аздау",
@@ -22,7 +21,6 @@ define(
 	"conditionAfter": "артында",
 	"conditionRange": "ауқым",
 	"conditionIsEmpty": "бос",
-	
 	"all": "барлығы",
 	"any": "кез келген",
 	"relationAll": "барлық ережелер",
@@ -33,29 +31,24 @@ define(
 	"relationMsgTail": "",
 	"and": "және",
 	"or": "немесе",
-	
 	"addRuleButton": "Ереже қосу",
 	"waiAddRuleButton": "Жаңа ереже қосу",
 	"removeRuleButton": "Ережені алып тастау",
 	"waiRemoveRuleButtonTemplate": "${0} ережесін алып тастау",
-	
 	"cancelButton": "Болдырмау",
 	"waiCancelButton": "Осы тілқатысу терезесін болдырмау",
 	"clearButton": "Тазалау",
 	"waiClearButton": "Сүзгіні тазалау",
 	"filterButton": "Сүзгі",
 	"waiFilterButton": "Сүзгіні жіберу",
-	
 	"columnSelectLabel": "Баған",
 	"waiColumnSelectTemplate": "${0} ережесінің бағаны",
 	"conditionSelectLabel": "Шарт",
 	"waiConditionSelectTemplate": "${0} ережесінің шарты",
 	"valueBoxLabel": "Мән",
 	"waiValueBoxTemplate": "${0} ережесін сүзу үшін мәнді енгізу",
-	
 	"rangeTo": "неге",
 	"rangeTemplate": "${0} мәнінен ${1} мәніне",
-	
 	"statusTipHeaderColumn": "Баған",
 	"statusTipHeaderCondition": "Ережелер",
 	"statusTipTitle": "Сүзгі тақтасы",
@@ -65,21 +58,17 @@ define(
 	"statusTipTitleHasFilter": "Сүзгі",
 	"statusTipRelAny": "Кез келген ережелерді сәйкестендіріңіз.",
 	"statusTipRelAll": "Барлық ережелерді сәйкестендіріңіз.",
-	
 	"defaultItemsName": "элементтер",
 	"filterBarMsgHasFilterTemplate": "${1} ${2} ішінен ${0} көрсетілді.",
 	"filterBarMsgNoFilterTemplate": "Сүзгі қолданылмады",
-	
 	"filterBarDefButton": "Сүзгіні анықтау",
 	"waiFilterBarDefButton": "Кестені сүзу",
 	"a11yFilterBarDefButton": "Сүзгі...",
 	"filterBarClearButton": "Сүзгіні тазалау",
 	"waiFilterBarClearButton": "Сүзгіні тазалау",
 	"closeFilterBarBtn": "Сүзгі тақтасын жабу",
-	
 	"clearFilterMsg": "Бұл сүзгіні жояды және барлық қол жетімді жазбаларды көрсетеді.",
 	"anyColumnOption": "Кез келген баған",
-	
 	"trueLabel": "Шын",
 	"falseLabel": "Жалған"
 })

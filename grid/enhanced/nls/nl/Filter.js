@@ -1,9 +1,8 @@
 define(
 ({
 	"clearFilterDialogTitle": "Filter wissen",
-	"filterDefDialogTitle": "Filteren",
+	"filterDefDialogTitle": "Filter",
 	"ruleTitleTemplate": "Regel ${0}",
-	
 	"conditionEqual": "gelijk aan",
 	"conditionNotEqual": "niet gelijk aan",
 	"conditionLess": "is kleiner dan",
@@ -13,7 +12,7 @@ define(
 	"conditionContains": "bevat",
 	"conditionIs": "is",
 	"conditionStartsWith": "begint met",
-	"conditionEndWith": "eindigt op",
+	"conditionEndWith": "eindigt met",
 	"conditionNotContain": "bevat niet",
 	"conditionIsNot": "is niet",
 	"conditionNotStartWith": "begint niet met",
@@ -22,7 +21,6 @@ define(
 	"conditionAfter": "na",
 	"conditionRange": "bereik",
 	"conditionIsEmpty": "is leeg",
-	
 	"all": "alle",
 	"any": "een of meer",
 	"relationAll": "alle regels",
@@ -33,53 +31,44 @@ define(
 	"relationMsgTail": "",
 	"and": "en",
 	"or": "of",
-	
 	"addRuleButton": "Regel toevoegen",
-	"waiAddRuleButton": "Nieuwe regel toevoegen",
+	"waiAddRuleButton": "Een nieuwe regel toevoegen",
 	"removeRuleButton": "Regel verwijderen",
 	"waiRemoveRuleButtonTemplate": "Regel ${0} verwijderen",
-	
 	"cancelButton": "Annuleren",
 	"waiCancelButton": "Dit dialoogvenster annuleren",
 	"clearButton": "Leegmaken",
 	"waiClearButton": "Het filter wissen",
-	"filterButton": "Filteren",
-	"waiFilterButton": "Filter activeren",
-	
+	"filterButton": "Filter",
+	"waiFilterButton": "Het filter verzenden",
 	"columnSelectLabel": "Kolom",
 	"waiColumnSelectTemplate": "Kolom voor regel ${0}",
 	"conditionSelectLabel": "Voorwaarde",
 	"waiConditionSelectTemplate": "Voorwaarde voor regel ${0}",
 	"valueBoxLabel": "Waarde",
 	"waiValueBoxTemplate": "Geef een filterwaarde op voor regel ${0}",
-	
 	"rangeTo": "tot",
 	"rangeTemplate": "van ${0} tot ${1}",
-	
 	"statusTipHeaderColumn": "Kolom",
 	"statusTipHeaderCondition": "Regels",
 	"statusTipTitle": "Filterbalk",
 	"statusTipMsg": "Klik hier op de filterbalk om te filteren op waarden in ${0}.",
 	"anycolumn": "een kolom",
 	"statusTipTitleNoFilter": "Filterbalk",
-	"statusTipTitleHasFilter": "Filteren",
-	"statusTipRelAny": "Voldoen aan een van de regels.",
+	"statusTipTitleHasFilter": "Filter",
+	"statusTipRelAny": "Voldoen aan een regel.",
 	"statusTipRelAll": "Voldoen aan alle regels.",
-	
 	"defaultItemsName": "items",
 	"filterBarMsgHasFilterTemplate": "${0} van ${1} ${2} afgebeeld.",
 	"filterBarMsgNoFilterTemplate": "Geen filter toegepast",
-	
 	"filterBarDefButton": "Filter definiëren",
 	"waiFilterBarDefButton": "De tabel filteren",
 	"a11yFilterBarDefButton": "Filteren...",
 	"filterBarClearButton": "Filter wissen",
 	"waiFilterBarClearButton": "Het filter wissen",
 	"closeFilterBarBtn": "Filterbalk sluiten",
-	
 	"clearFilterMsg": "Hiermee verwijdert u het filter en worden alle beschikbare records afgebeeld.",
 	"anyColumnOption": "Een kolom",
-	
 	"trueLabel": "Waar",
 	"falseLabel": "Onwaar"
 })

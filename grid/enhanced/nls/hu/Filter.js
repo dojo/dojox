@@ -3,7 +3,6 @@ define(
 	"clearFilterDialogTitle": "Szűrő törlése",
 	"filterDefDialogTitle": "Szűrő",
 	"ruleTitleTemplate": "${0} szabály",
-	
 	"conditionEqual": "egyenlő",
 	"conditionNotEqual": "nem egyenlő",
 	"conditionLess": "kisebb mint",
@@ -22,7 +21,6 @@ define(
 	"conditionAfter": "után",
 	"conditionRange": "tartomány",
 	"conditionIsEmpty": "üres",
-	
 	"all": "mind",
 	"any": "bármely",
 	"relationAll": "minden szabály",
@@ -33,29 +31,24 @@ define(
 	"relationMsgTail": "",
 	"and": "és",
 	"or": "vagy",
-	
 	"addRuleButton": "Szabály hozzáadása",
 	"waiAddRuleButton": "Új szabály hozzáadása",
 	"removeRuleButton": "Szabály eltávolítása",
 	"waiRemoveRuleButtonTemplate": "${0} szabály eltávolítása",
-	
 	"cancelButton": "Mégse",
 	"waiCancelButton": "A párbeszédablak bezárása",
 	"clearButton": "Törlés",
 	"waiClearButton": "A szűrő törlése",
 	"filterButton": "Szűrő",
 	"waiFilterButton": "A szűrő elküldése",
-	
 	"columnSelectLabel": "Oszlop",
 	"waiColumnSelectTemplate": "Oszlop a(z) ${0} szabályhoz",
 	"conditionSelectLabel": "Feltétel",
 	"waiConditionSelectTemplate": "Feltétel a(z) ${0} szabályhoz",
 	"valueBoxLabel": "Érték",
 	"waiValueBoxTemplate": "Írja be a szűrni kívánt értéket a(z) ${0} szabályhoz",
-	
 	"rangeTo": "-",
 	"rangeTemplate": "${0} - ${1}",
-	
 	"statusTipHeaderColumn": "Oszlop",
 	"statusTipHeaderCondition": "Szabályok",
 	"statusTipTitle": "Szűrősáv",
@@ -65,21 +58,17 @@ define(
 	"statusTipTitleHasFilter": "Szűrő",
 	"statusTipRelAny": "Bármely szabálynak megfelel.",
 	"statusTipRelAll": "Minden szabálynak megfelel.",
-	
 	"defaultItemsName": "elemek",
 	"filterBarMsgHasFilterTemplate": "${0} / ${1} ${2} megjelenítve.",
 	"filterBarMsgNoFilterTemplate": "Nincs szűrő alkalmazva.",
-	
 	"filterBarDefButton": "Szűrő meghatározása",
 	"waiFilterBarDefButton": "Táblázat szűrése",
 	"a11yFilterBarDefButton": "Szűrés...",
 	"filterBarClearButton": "Szűrő törlése",
 	"waiFilterBarClearButton": "A szűrő törlése",
 	"closeFilterBarBtn": "Szűrősáv bezárása",
-	
 	"clearFilterMsg": "Eltávolítja a szűrőt és megjeleníti az összes elérhető rekordot.",
 	"anyColumnOption": "Bármely oszlop",
-	
 	"trueLabel": "Igaz",
 	"falseLabel": "Hamis"
 })

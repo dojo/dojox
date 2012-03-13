@@ -6,8 +6,8 @@ define(
 	descending: "Clique para classificar de modo Decrescente",
 	sortingState: "${0} - ${1}",
 	unsorted: "Não classificar esta coluna",
-	indirectSelectionRadio: "Linha ${0}, seleção única, Radio box",
-	indirectSelectionCheckBox: "Linha ${0}, diversos seleções, caixa de seleção",
-	selectAll: "Selecionar Tudo"
+	indirectSelectionRadio: "Linha ${0}, seleção única, botão de seleção",
+	indirectSelectionCheckBox: "Linha ${0}, seleção múltipla, caixa de seleção",
+	selectAll: "Selecionar todos"
 })
 );

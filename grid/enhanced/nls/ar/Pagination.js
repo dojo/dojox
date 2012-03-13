@@ -5,16 +5,17 @@ define(
 	"lastTip": "الصفحة الأخيرة",
 	"nextTip": "الصفحة التالية",
 	"prevTip": "الصفحة السابقة",
-	"itemTitle": "بنود",
-	"pageStepLabelTemplate": "الصفحة ${0}",
-	"pageSizeLabelTemplate": "${0} بند/بنود بكل صفحة",
+	"itemTitle": "البنود",
+	"singularItemTitle": "بند",
+	"pageStepLabelTemplate": "صفحة ${0}",
+	"pageSizeLabelTemplate": "${0} بنود لكل صفحة",
 	"allItemsLabelTemplate": "كل البنود",
-	"gotoButtonTitle": "اذهب الى الصفحة المحددة",
-	"dialogTitle": "اذهب الى الصفحة",
-	"dialogIndication": "حدد رقم الصفحة",
+	"gotoButtonTitle": "اذهب الى صفحة خاصة",
+	"dialogTitle": "اذهب الى صفحة",
+	"dialogIndication": "تحديد رقم الصفحة",
 	"pageCountIndication": " (${0} صفحات)",
 	"dialogConfirm": "بدء",
 	"dialogCancel": "الغاء",
-	"all": "كل"
+	"all": "الكل"
 })
 );

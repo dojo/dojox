@@ -5,7 +5,7 @@ define(
 	ascending: "Faceţi clic pentru a sorta Crescător",
 	descending: "Faceţi clic pentru a sorta Descrescător",
 	sortingState: "${0} - ${1}",
-	unsorted: "Nu sortaţi această coloană",
+	unsorted: "Această coloană nu se sortează",
 	indirectSelectionRadio: "Rândul ${0}, selecţie singulară, casetă radio",
 	indirectSelectionCheckBox: "Rândul ${0}, selecţie multiplă, casetă de bifare",
 	selectAll: "Selectare tot"

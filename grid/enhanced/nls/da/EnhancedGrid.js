@@ -1,6 +1,6 @@
 define(
 ({
-	singleSort: "Enkelt sortering",
+	singleSort: "Enkel sortering",
 	nestedSort: "Indlejret sortering",
 	ascending: "Klik for at sortere stigende",
 	descending: "Klik for at sortere faldende",

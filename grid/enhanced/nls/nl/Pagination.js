@@ -14,7 +14,7 @@ define(
 	"dialogTitle": "Naar pagina gaan",
 	"dialogIndication": "Geef het paginanummer op:",
 	"pageCountIndication": " (${0} pagina's)",
-	"dialogConfirm": "Start",
+	"dialogConfirm": "Go",
 	"dialogCancel": "Annuleren",
 	"all": "Alles"
 })

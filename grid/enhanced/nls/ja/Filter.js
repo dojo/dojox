@@ -3,7 +3,6 @@ define(
 	"clearFilterDialogTitle": "フィルターのクリア",
 	"filterDefDialogTitle": "フィルター",
 	"ruleTitleTemplate": "ルール ${0}",
-	
 	"conditionEqual": "等しい",
 	"conditionNotEqual": "等しくない",
 	"conditionLess": "より小さい",
@@ -22,7 +21,6 @@ define(
 	"conditionAfter": "以後",
 	"conditionRange": "範囲",
 	"conditionIsEmpty": "空である",
-	
 	"all": "すべて",
 	"any": "いずれか",
 	"relationAll": "すべてのルール",
@@ -33,29 +31,24 @@ define(
 	"relationMsgTail": "",
 	"and": "かつ",
 	"or": "または ",
-	
 	"addRuleButton": "ルールの追加",
 	"waiAddRuleButton": "新規ルールの追加",
 	"removeRuleButton": "ルールの削除",
 	"waiRemoveRuleButtonTemplate": "ルール ${0} の削除",
-	
 	"cancelButton": "キャンセル",
 	"waiCancelButton": "このダイアログのキャンセル",
 	"clearButton": "クリア",
 	"waiClearButton": "フィルターのクリア",
 	"filterButton": "フィルター",
 	"waiFilterButton": "フィルターの送信",
-	
 	"columnSelectLabel": "列",
 	"waiColumnSelectTemplate": "ルール ${0} の列",
 	"conditionSelectLabel": "条件",
 	"waiConditionSelectTemplate": "ルール ${0} の条件",
 	"valueBoxLabel": "値",
 	"waiValueBoxTemplate": "ルール ${0} のフィルターの値を入力",
-	
 	"rangeTo": "上限",
 	"rangeTemplate": "${0} から ${1} まで",
-	
 	"statusTipHeaderColumn": "列",
 	"statusTipHeaderCondition": "ルール",
 	"statusTipTitle": "フィルター・バー",
@@ -65,21 +58,17 @@ define(
 	"statusTipTitleHasFilter": "フィルター",
 	"statusTipRelAny": "いずれかのルールに一致。",
 	"statusTipRelAll": "すべてのルールに一致。",
-	
 	"defaultItemsName": "項目",
 	"filterBarMsgHasFilterTemplate": "${1} ${2} 中 ${0} が表示されています。",
 	"filterBarMsgNoFilterTemplate": "フィルターが適用されていません",
-	
 	"filterBarDefButton": "フィルターの定義",
 	"waiFilterBarDefButton": "表のフィルター",
 	"a11yFilterBarDefButton": "フィルター...",
 	"filterBarClearButton": "フィルターのクリア",
 	"waiFilterBarClearButton": "フィルターのクリア",
 	"closeFilterBarBtn": "フィルター・バーを閉じる",
-	
 	"clearFilterMsg": "これによりフィルターが削除され、使用可能なすべてのレコードが表示されます。",
 	"anyColumnOption": "いずれかの列",
-	
 	"trueLabel": "真",
 	"falseLabel": "偽"
 })
