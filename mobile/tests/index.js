@@ -151,7 +151,6 @@ var tests = [
 	{ url: "test_RoundRectList-icons.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList-inherit.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList-variable.html", tags: "RoundRectList"},
-	{ url: "test_RoundRectList-variableHeight.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList-vh-icons.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectStoreList.html", tags: "RoundRectList" },
