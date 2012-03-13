@@ -107,7 +107,7 @@
 
 					var anchor = document.createElement("a");
 					anchor.className = "anchor";
-					anchor.href = url + "?theme="+theme;
+					anchor.href = url + (theme ? "?theme=" + theme : "");
 					anchor.target = "_blank";
 					anchor.innerHTML = label;
 					item.appendChild(anchor);
@@ -138,13 +138,14 @@
 			var nodes = document.getElementsByTagName("a");
 			for(var i = 0; i < nodes.length; i++){
 				var a = nodes[i];
-				a.href = a.href.replace(/theme=.*/, "theme="+theme);
+				a.href = a.href.replace(/(\?theme=.*)?$/, theme ? "?theme=" + theme : "");
 			}
 		}
 	</script>
 </head>
 <body onload="init()">
 	<select id="sel1" onchange="onThemeChange()">
+		<option value=""></option>
 		<option value="iPhone">iPhone</option>
 		<option value="Android">Android</option>
 		<option value="BlackBerry">BlackBerry</option>

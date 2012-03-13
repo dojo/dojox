@@ -59,8 +59,8 @@
 				widget.textbox.value = valueInt.toString()
 			};
 			
-			cansel = function(){
-				var widget = registry.byId("cansel");
+			cancel = function(){
+				var widget = registry.byId("cancel");
 				var opts = {moveTo: "view2", transition: "slide", transitionDir: -1};
 				var ev = new TransitionEvent(widget.domNode, opts);
 				ev.dispatch()
@@ -207,7 +207,7 @@
 				</table>
 			</div>
 			<div data-dojo-type="dojox.mobile.Pane">
-				<button id ="cansel"  data-dojo-type="dojox.mobile.Button" class="mblRedButton" onclick="cansel()" style="margin-top:10px;margin-left:5%;margin-right:5%;width:90%;height:40px;">Cansel</button>
+				<button id ="cancel"  data-dojo-type="dojox.mobile.Button" class="mblRedButton" onclick="cancel()" style="margin-top:10px;margin-left:5%;margin-right:5%;width:90%;height:40px;">Cancel</button>
 			</div>
 			<div data-dojo-type="dojox.mobile.Pane">
 				<button id="ok" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="ok()" style="margin-top:10px;margin-left:5%;margin-right:5%;width:90%;height:40px;">OK</button>
