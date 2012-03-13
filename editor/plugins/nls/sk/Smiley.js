@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	smiley: "Vložiť emotikon",
 	emoticonSmile: "úsmev",
@@ -22,6 +21,4 @@ define(
 	emoticonCrying: "plač",
 	emoticonHappy: "šťastný"
 })
-
-//end v1.x content
 );

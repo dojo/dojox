@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} de ${1} ${0}",
 	"firstTip": "Primera pàgina",
@@ -17,7 +16,6 @@ define(
 	"pageCountIndication": " (${0} pàgines)",
 	"dialogConfirm": "Vés-hi",
 	"dialogCancel": "Cancel·la",
-	"all": "tot"
+	"all": "Tots"
 })
-//end v1.x content
 );

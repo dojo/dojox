@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} / ${1} ${0}",
 	"firstTip": "İlk Sayfa",
@@ -17,7 +16,6 @@ define(
 	"pageCountIndication": " (${0} sayfa)",
 	"dialogConfirm": "Git",
 	"dialogCancel": "İptal",
-	"all": "tümü"
+	"all": "Tümü"
 })
-//end v1.x content
 );

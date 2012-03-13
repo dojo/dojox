@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	smiley: "Inserir Emoticon",
 	emoticonSmile: "sorriso",
@@ -22,5 +21,4 @@ define(
 	emoticonCrying: "chorando",
 	emoticonHappy: "feliz"
 })
-//end v1.x content
 );
