@@ -18,6 +18,11 @@
 			"dojox/mobile/compat"
 		]);
 	</script>
+	<style>
+	.textBox {
+		overflow: hidden;
+	}
+	</style>
 </head>
 <body style="visibility:hidden;">
 	<div id="home" data-dojo-type="dojox.mobile.View">
@@ -29,24 +34,30 @@
 				icon:"images/i-icon-2.png",
 				rightIcon:"images/i-icon-4.png",
 				rightIcon2:"images/i-icon-3.png"'>
-				Image Icon.<br>
-				Explores advanced topics in the new Java framework for implementing and consuming REST-based Web services, Part 1
+				<div class="textBox">
+					Image Icon.<br>
+					Explores advanced topics in the new Java framework for implementing and consuming REST-based Web services, Part 1
+				</div>
 			</li>
 			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true,
 				deleteIcon:"images/i-icon-all.png", deleteIconPos:"0,0,29,29",
 				icon:"images/i-icon-all.png", iconPos:"0,29,29,29",
 				rightIcon:"images/i-icon-all.png", rightIconPos:"0,87,29,29",
 				rightIcon2:"images/i-icon-all.png", rightIcon2Pos:"0,58,29,29"'>
-				Sprite Icon.<br>
-				Explores advanced topics in the new Java framework for implementing and consuming REST-based Web services, Part 2
+				<div class="textBox">
+					Sprite Icon.<br>
+					Explores advanced topics in the new Java framework for implementing and consuming REST-based Web services, Part 2
+				</div>
 			</li>
 			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true,
 				deleteIcon:"mblDomButtonRedCircleMinus",
 				icon:"mblDomButtonSilverCircleDownArrow",
 				rightIcon:"mblDomButtonSilverCircleGreenButton",
 				rightIcon2:"mblDomButtonSilverCircleOrangeButton"'>
-				Dom Button.<br>
-				Explores advanced topics in the new Java framework for implementing and consuming REST-based Web services, Part 3
+				<div class="textBox">
+					Dom Button.<br>
+					Explores advanced topics in the new Java framework for implementing and consuming REST-based Web services, Part 3
+				</div>
 			</li>
 		</ul>
 
