@@ -37,7 +37,7 @@ define([
 				if(t instanceof dd.Template) {
 					this._template = t;
 				}else{
-					node = t;
+					node = t.cloneNode(true);
 				}
 			}
 			if(!node){
