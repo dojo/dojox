@@ -393,9 +393,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		var an = e && e.animationName;
 		if(an && an.indexOf("scrollableViewScroll2") === -1){
 			if(an.indexOf("scrollableViewScroll0") !== -1){ // scrollBarV
-				domClass.remove(this._scrollBarNodeV, "mblScrollableScrollTo0");
+				if(this._scrollBarNodeV){ domClass.remove(this._scrollBarNodeV, "mblScrollableScrollTo0"); }
 			}else if(an.indexOf("scrollableViewScroll1") !== -1){ // scrollBarH
-				domClass.remove(this._scrollBarNodeH, "mblScrollableScrollTo1");
+				if(this._scrollBarNodeH){ domClass.remove(this._scrollBarNodeH, "mblScrollableScrollTo1"); }
 			}else{ // fade or others
 				if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
 				if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
