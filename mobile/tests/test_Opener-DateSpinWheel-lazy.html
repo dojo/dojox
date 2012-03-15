@@ -21,14 +21,14 @@
 
 		function getDate(node, v){
 			if(v === true){ // Done clicked
-				node.value = dijit.byId("spin1").getValue().join('-');
+				node.value = dijit.byId("spin1").get("values").join('-');
 			}
 		}
 		function setDate(node){
 			var v = node.value.split(/-/);
 			if(v.length == 3){
 				var w = dijit.byId("spin1");
-				w.setValue(v);
+				w.set("values", v);
 			}
 		}
 	</script>
