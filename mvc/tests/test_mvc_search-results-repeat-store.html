@@ -58,8 +58,10 @@ var results, savedData;
 				};
 
 				saveData = function(){
-					var ctl=registry.byId("listCtl");
-					var ind = ctl.get('cursorIndex');
+					//var ctl=registry.byId("listCtl");
+					var ctl=registry.byId("editCtl");
+					var ind = ctl.sourceModel.get('cursorIndex');
+					var ind2 = ctl.commitCurrent();
 					console.log(results[ind]);
 				};
 

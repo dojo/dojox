@@ -26,7 +26,7 @@
 				'dojo/ready',
 				'dojo/parser',
 				'dijit/form/TextBox'
-			], function (declare, at, EditModelRefController, ModelRefController, Stateful, Group, _TemplatedMixin, 
+				], function (declare, at, EditModelRefController, ModelRefController, Stateful, Group, _TemplatedMixin, 
 						_WidgetsInTemplateMixin, StatefulModel, ready, parser, TextBox) {
 				declare('test.TextBox', [TextBox], {
 					startup: function () {
@@ -42,7 +42,7 @@
 						console.log('started', this.id);
 					}
 				});
-				declare('test.Templated', [testGroup, at, _TemplatedMixin, _WidgetsInTemplateMixin], {
+				declare('test.Templated', [testGroup, _TemplatedMixin, _WidgetsInTemplateMixin], {
 					templateString: '<div><input data-dojo-type="test.TextBox" data-dojo-props="value: dojox.mvc.at(\'rel:\', \'fn\')"></div>'
 				});
 				

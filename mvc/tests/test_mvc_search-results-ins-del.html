@@ -12,6 +12,7 @@
 		<script type="text/javascript">
 			var data = [
 				{
+					id: "1",
 					Group: "Engineer",
 					First: "Anne",
 					Last: "Ackerman",
@@ -22,6 +23,7 @@
 					Fax: "123-764-8228"
 				},
 				{
+					id: "2",
 					Group: "Engineer",
 					First: "Ben",
 					Last : "Beckham",
@@ -32,6 +34,7 @@
 					Fax: "123-764-8600"
 				},
 				{
+					id: "3",
 					Group: "Engineer",
 					First: "Chad",
 					Last: "Chapman",
@@ -42,6 +45,7 @@
 					Fax: "408-764-8228"
 				},
 				{
+					id: "4",
 					Group: "Engineer",
 					First: "David",
 					Last: "Durham",
@@ -52,6 +56,7 @@
 					Fax: "514-764-8228"
 				},
 				{
+					id: "5",
 					Group: "Engineer",
 					First: "Emma",
 					Last: "Eklof",
@@ -62,6 +67,7 @@
 					Fax: "123-764-4321"
 				},
 				{
+					id: "6",
 					Group: "Manager",
 					First: "Fred",
 					Last: "Fisher",
@@ -72,6 +78,7 @@
 					Fax: "514-764-8000"
 				},
 				{
+					id: "7",
 					Group: "Manager",
 					First: "George",
 					Last: "Garnett",
@@ -82,6 +89,7 @@
 					Fax: "123-999-8600"
 				},
 				{
+					id: "8",
 					Group: "Accountant",
 					First: "Hunter",
 					Last: "Huffman",
@@ -92,6 +100,7 @@
 					Fax: "408-874-8228"
 				},
 				{
+					id: "9",
 					Group: "Accountant",
 					First: "Irene",
 					Last: "Ira",
@@ -102,6 +111,7 @@
 					Fax: "514-764-7300"
 				},
 				{
+					id: "10",
 					Group: "Accountant",
 					First: "John",
 					Last: "Jacklin",
@@ -119,27 +129,27 @@
 				"dojo/parser",
 				"dojo/Stateful",
 				"dojo/store/Memory",
-				"dojox/mvc/EditStoreRefController",
-				"dojox/mvc/ListController",
+				"dojox/mvc/EditStoreRefListController",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
+				"dijit/form/ComboBox",
 				"dojox/mvc/at",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(declare, Deferred, parser, Stateful, Memory, EditStoreRefController, ListController){
+			], function(declare, Deferred, parser, Stateful, Memory, EditStoreRefListController){
 				dojox.debugDataBinding = true;
 
 				var inited,
-				 ctrlClass = declare([EditStoreRefController, ListController], {
+				 ctrlClass = declare([EditStoreRefListController], {
 					cursorIndex: 0,
 					group: "",
 					groupTyped: "",
 					_refModelProp: "model",
 
 					addEmpty: function(){
-						this.model.push(new Stateful({First: "", Last: "", Location: "", Office: "", Email: "", Tel: "", Fax: ""}));
+						this.model.push(new Stateful({id:Math.random(), Group: this.groupTyped, First: "", Last: "", Location: "", Office: "", Email: "", Tel: "", Fax: ""}));
 						this.set("cursorIndex", this.get("length") - 1);
 					},
 
@@ -192,7 +202,12 @@
 						</div>
 						<div class="row">
 							<label class="cell" for="queryInput">Search for:</label>
-							<input class="cell" id="queryInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(ctrl, 'groupTyped')">
+				<!--		<input class="cell" id="queryInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(ctrl, 'groupTyped')"> -->
+							<select id="setvaluetest" data-dojo-type="dijit.form.ComboBox" data-dojo-props="value: dojox.mvc.at(ctrl, 'groupTyped')">
+								<option value="Engineer">Engineer</option>
+								<option value="Manager">Manager</option>
+								<option value="Accountant">Accountant</option>
+							</select>							
 							<button type="button" data-dojo-type="dijit.form.Button"
 							 data-dojo-props="onClick: function(){ ctrl.set('group', ctrl.get('groupTyped')); }">Search</button>
 						</div>
