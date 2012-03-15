@@ -156,6 +156,7 @@ define([
 					if(arr.length > 0){
 						arr[0].style.marginLeft = margin + bm + "px";
 					}
+					this.containerNode.style.padding = "0px";
 				}
 			}else{
 				for(i = 0; i < arr.length; i++){
