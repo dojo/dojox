@@ -57,8 +57,16 @@ define([
 		// summary:
 		//		A mixin for date picker widget.
 
+		// yearPattern: String
+		//		A pattern to be used to format year.
 		yearPattern: "yyyy",
+
+		// monthPattern: String
+		//		A pattern to be used to format month.
 		monthPattern: "MMM",
+
+		// dayPattern: String
+		//		A pattern to be used to format day.
 		dayPattern: "d",
 
 		initSlots: function(){
