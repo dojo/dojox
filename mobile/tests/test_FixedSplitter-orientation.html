@@ -2,6 +2,8 @@
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<title>FixedSplitter Test</title>
 
 	<link href="../../../dijit/themes/tundra/tundra.css" rel="stylesheet"/>
@@ -17,12 +19,13 @@
 			"dojo/dom-class",
 			"dojo/ready",
 			"dijit/registry",
+			"dojox/mobile/sniff",
 			"dojox/mobile/parser",
 			"dojox/mobile/FixedSplitter",
 			"dojox/mobile/Container",
 			"dojox/mobile/Pane",
 			"dijit/Calendar"
-		], function(connect, win, dom, domClass, ready, registry){
+		], function(connect, win, dom, domClass, ready, registry, has){
 			var change = function() {
 				var splitter = registry.byId("splitter1");
 				var h = win.global.innerHeight || win.doc.documentElement.clientHeight;
@@ -30,7 +33,7 @@
 				splitter.set("orientation", h > w ? "V" : "H");
 			};
 			ready(function(){
-				connect.connect(null, win.global.onorientationchange !== undefined
+				connect.connect(null, (win.global.onorientationchange !== undefined && !has('android'))
 					? "onorientationchange" : "onresize", null, change);
 				setTimeout(function(){
 					change();
@@ -52,7 +55,7 @@
 			width: 240px;
 		}
 		.mblFixedSplitterV > #pane2 {
-			height: 220px;
+			height: 240px;
 		}
 
 		#cal {
