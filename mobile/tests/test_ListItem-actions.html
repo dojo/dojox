@@ -41,16 +41,16 @@
 			};
 
 			// Update existing view content and make transition
-			myAction1 = function(li){
+			myAction1 = function(){
 				var rect = registry.byId("rect1");
 				rect.containerNode.innerHTML = new Date();
-				registry.byNode(li).transitionTo("view1");
+				this.transitionTo("view1");
 			}
 
 			// Load content into existing view and make transition
-			myAction2 = function(li){
+			myAction2 = function(){
 				var view2 = registry.byId("view2"); // destination view
-				var listItem = registry.byNode(li);
+				var listItem = this;
 				var prog = ProgressIndicator.getInstance();
 				win.body().appendChild(prog.domNode);
 				prog.start();
@@ -82,9 +82,9 @@
 			}
 
 			// Make transition and load content into existing view
-			myAction3 = function(li){
+			myAction3 = function(){
 				var view3 = registry.byId("view3"); // destination view
-				var listItem = registry.byNode(li);
+				var listItem = this;
 				var prog = ProgressIndicator.getInstance();
 				win.body().appendChild(prog.domNode);
 				prog.start();
@@ -115,7 +115,7 @@
 			}
 
 			// Create a new view and make transition
-			myAction4 = function(li){
+			myAction4 = function(){
 				if(!registry.byId("view4")){
 					var view4 = new dojox.mobile.View({
 						id: "view4",
@@ -128,15 +128,18 @@
 						back: "Home",
 						moveTo: "home"
 					});
-					view4.addChild(heading1);
+					heading1.placeAt(view4.containerNode);
+					heading1.startup();
 
 					var categ1 = new dojox.mobile.RoundRectCategory({
 						label: "Documents"
 					});
-					view4.addChild(categ1);
+					categ1.placeAt(view4.containerNode);
+					categ1.startup();
 
 					var list1 = new dojox.mobile.RoundRectList();
-					view4.addChild(list1);
+					list1.placeAt(view4.containerNode);
+					list1.startup();
 
 					var counter = 4;
 					for(var i = 1; i <= 3; i++){
@@ -144,34 +147,35 @@
 							icon: "images/i-icon-"+i+".png",
 							label: "Document 000"+counter
 						});
-						list1.addChild(item1);
+						item1.placeAt(list1.containerNode);
+						item1.startup();
 						counter++;
 					}
 				}
-				registry.byNode(li).transitionTo("view4");
+				this.transitionTo("view4");
 			}
 
 			// Update DataList
-			myAction5 = function(li){
+			myAction5 = function(){
 				var list1 = registry.byId("list1");
 				if(!list1.store){
 					var store1 = new ItemFileReadStore({data: static_data});
 					list1.setStore(store1, {label: '*e'}); // items whose label ends with 'e'
 				}
-				registry.byNode(li).transitionTo("view5");
+				this.transitionTo("view5");
 			}
 
 			// Partial Update using dojox.mobile.ContentPane
-			myAction6 = function(li){
+			myAction6 = function(){
 				var pane1 = registry.byId("pane1");
 				if(!pane1.domNode.innerHTML){ // nothing has been loaded yet
-					connect.connect(pane1, "onLoad", null, function(){
+					connect.connect(pane1, "onLoad", this, function(){
 						// onLoad fires when the content is ready
-						registry.byNode(li).transitionTo("view6");
+						this.transitionTo("view6");
 					});
 					pane1.set("href", "data/fragment1.html");
 				}else{
-					registry.byNode(li).transitionTo("view6");
+					this.transitionTo("view6");
 				}
 			}
 		});
@@ -182,22 +186,22 @@
 		<h1 data-dojo-type="dojox.mobile.Heading">Action and Transition</h1>
 		<h2 data-dojo-type="dojox.mobile.RoundRectCategory">ListItem Actions</h2>
 		<ul data-dojo-type="dojox.mobile.RoundRectList">
-			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-1.png", moveTo:"#", transition:"slide"' onclick="myAction1(this)">
+			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-1.png", moveTo:"#", transition:"slide", onClick:myAction1'>
 				Update View
 			</li>
-			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-2.png", moveTo:"#", transition:"slide"' onclick="myAction2(this)">
+			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-2.png", moveTo:"#", transition:"slide", onClick:myAction2'>
 				Load and Move (async)
 			</li>
-			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-3.png", moveTo:"#", transition:"slide"' onclick="myAction3(this)">
+			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-3.png", moveTo:"#", transition:"slide", onClick:myAction3'>
 				Move and Load (async)
 			</li>
-			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-4.png", moveTo:"#", transition:"slide"' onclick="myAction4(this)">
+			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-4.png", moveTo:"#", transition:"slide", onClick:myAction4'>
 				Create View
 			</li>
-			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-5.png", moveTo:"#", transition:"slide"' onclick="myAction5(this)">
+			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-5.png", moveTo:"#", transition:"slide", onClick:myAction5'>
 				Data List
 			</li>
-			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-6.png", moveTo:"#", transition:"slide"' onclick="myAction6(this)">
+			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-6.png", moveTo:"#", transition:"slide", onClick:myAction6'>
 				Partial Update (async)
 			</li>
 		</ul>
