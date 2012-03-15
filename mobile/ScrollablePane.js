@@ -89,6 +89,7 @@ define([
 			// description:
 			//		This function works only on WebKit-based browsers.
 			if(has("webkit")){
+				if(this.domNode.offsetHeight == 0){ return; } // in a hidden view
 				this.maskNode.style.height = this.domNode.offsetHeight + "px";
 				var child = this.getChildren()[0],
 					c = this.containerNode,

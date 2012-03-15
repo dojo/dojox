@@ -146,7 +146,10 @@ define([
 					x = to.x - this.domNode.offsetWidth;
 				}
 				if(newView){
-					newView.domNode.style.display = "";
+					if(newView.domNode.style.display === "none"){
+						newView.domNode.style.display = "";
+						newView.resize();
+					}
 					newView._beingFlipped = true;
 					newView.scrollTo({x:x});
 					newView._beingFlipped = false;
