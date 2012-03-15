@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/lang",
-	"dojo/Stateful",
+	"dojo/Stateful"
 ], function(array, lang, Stateful){
 	var getPlainValueOptions = /*===== dojox.mvc.getPlainValueOptions = =====*/ {
 		// summary:
@@ -13,7 +13,7 @@ define([
 			// v: Anything
 			//		The value.
 
-			return lang.isArray(v) ? "array" : (v || {}).isInstanceOf && v.isInstanceOf(Stateful) || {}.toString.call(v) == "[object Object]" ? "object" : "value";
+			return lang.isArray(v) ? "array" : (v || {}).isInstanceOf && v.isInstanceOf(Stateful) || v !== null && v !== void 0 && {}.toString.call(v) == "[object Object]" ? "object" : "value";
 		},
 
 		getPlainArray: function(/*Anything[]*/ a){
@@ -60,8 +60,8 @@ define([
 		// returns: Anything
 		//		 The converted value.
 
-		return (options || getPlainValueOptions)["getPlain" + (options || getPlainValueOptions).getType(value).replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](value); // Anything
+		return (options || getPlainValue)["getPlain" + (options || getPlainValue).getType(value).replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](value); // Anything
 	};
 
-	return lang.setObject("dojox.mvc.getPlainValue", getPlainValue);
+	return lang.setObject("dojox.mvc.getPlainValue", lang.mixin(getPlainValue, getPlainValueOptions));
 });

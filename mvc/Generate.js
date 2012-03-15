@@ -50,6 +50,11 @@ define([
 		//		The name of the property that is used by child widgets for relative data binding.
 		_relTargetProp : "children",
 
+		startup: function(){
+			this.inherited(arguments);
+			this._setChildrenAttr(this.children);
+		},
+
 		////////////////////// PRIVATE METHODS ////////////////////////
 
 		_setChildrenAttr: function(/*dojo.Stateful*/ value){
@@ -109,7 +114,7 @@ define([
 				if(isStatefulModel ? (value && lang.isFunction(value.toPlainObject)) : !lang.isFunction(value)){
 					if(lang.isArray(value)){
 						body.push(this._generateRepeat(value, prop));
-					}else if(isStatefulModel ? value.value : ({}.toString.call(value) != "[object Object]" && (!(value || {}).set || !(value || {}).watch))){
+					}else if(isStatefulModel ? value.value : ((value === void 0 || value === null || {}.toString.call(value) != "[object Object]") && (!(value || {}).set || !(value || {}).watch))){
 						// TODO: Data types based widgets
 						body.push(this._generateTextBox(prop, isStatefulModel));
 					}else{

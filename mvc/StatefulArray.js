@@ -181,7 +181,7 @@ define([
 				if(name == "length"){
 					var old = this.get("length");
 					if(old < value){
-						this.splice.apply(this, [old, 0].concat(new Array(value - old)))
+						this.splice.apply(this, [old, 0].concat(new Array(value - old)));
 					}else if(value > old){
 						this.splice.apply(this, [value, old - value]);
 					}

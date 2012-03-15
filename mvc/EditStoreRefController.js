@@ -8,9 +8,43 @@ define([
 ], function(declare, lang, Deferred, getPlainValue, EditModelRefController, StoreRefController){
 	return declare("dojox.mvc.EditStoreRefController", [StoreRefController, EditModelRefController], {
 		// summary:
-		//		A controller working with Dojo Object Store.
-		//		It does not store/model in sync unless queryStore()/getStore()/commit() is called.
+		//		A child class of dojox.mvc.StoreRefController, managing edits.
+		// description:
+		//		In addition to what dojox.mvc.StoreRefController does, the commit() method sends the data model as well as the removed entries in array to the data store.
 		//		NOTE - If this class is used with a widget by data-dojo-mixins, make sure putting the widget in data-dojo-type and putting this class to data-dojo-mixins.
+		// example:
+		//		The check box refers to "value" property in the controller (with "ctrl" ID).
+		//		The controller provides the "value" property, from the data coming from data store ("store" property in the controller), using the first one in array.
+		//		Two seconds later, the check box changes from unchecked to checked.
+		//		The change is committed to the data store, which is reflected to dojo.store.Observable callback. 
+		// |		<html>
+		// |			<head>
+		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
+		// |				<script type="text/javascript">
+		// |					require([
+		// |						"dojo/dom", "dojo/parser", "dojo/store/Observable", "dojo/store/Memory", "dijit/registry",
+		// |						"dijit/form/CheckBox", "dojox/mvc/at", "dojox/mvc/EditStoreRefController", "dojox/mvc/ListController", "dojo/domReady!"
+		// |					], function(ddom, parser, Observable, Memory, registry){
+		// |						store = Observable(new Memory({data: [{id: "Foo", value: false}]}));
+		// |						parser.parse();
+		// |						registry.byId("ctrl").queryStore().observe(function(object, previousIndex, newIndex){
+		// |							alert("ID: " + object.id + ", value: " + object.value);
+		// |						}, true);
+		// |						var count = 0;
+		// |						var h = setInterval(function(){
+		// |							ddom.byId("check").click();
+		// |							registry.byId("ctrl").commit();
+		// |							if(++count >= 2){ clearInterval(h); }
+		// |						}, 2000);
+		// |					});
+		// |				</script>
+		// |			</head>
+		// |			<body>
+		// |				<span id="ctrl" data-dojo-type="dojox.mvc.EditStoreRefController" data-dojo-mixins="dojox.mvc.ListController"
+		// |				 data-dojo-props="store: store, cursorIndex: 0"></span>
+		// |				<input id="check" type="checkbox" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: dojox.mvc.at('widget:ctrl', 'value')">
+		// |			</body>
+		// |		</html>
 
 		// getPlainValueOptions: dojox.mvc.getPlainValueOptions
 		//		The options to get plain value from stateful object.
@@ -23,6 +57,10 @@ define([
 		// _resultsWatchHandle: dojox.mvc.StatefulArray.watchElements.handle
 		//		The watch handle for model array elements.
 		_resultsWatchHandle: null,
+
+		// _refSourceModelProp: String
+		//		The property name for the data model, that serves as the data source.
+		_refSourceModelProp: "sourceModel",
 
 		queryStore: function(/*Object*/ query, /*dojo.store.api.Store.QueryOptions?*/ options){
 			// summary:
@@ -39,6 +77,7 @@ define([
 			this._removals = [];
 			var _self = this;
 			return Deferred.when(this.inherited(arguments), function(results){
+				if(_self._beingDestroyed){ return; }
 				if(lang.isArray(results)){
 					_self._resultsWatchHandle = results.watchElements(function(idx, removals, adds){
 						[].push.apply(_self._removals, removals);
@@ -72,7 +111,7 @@ define([
 				}
 				this._removals = [];
 			}
-			var data = getPlainValue(this.get(this._refModelProp), this.getPlainValueOptions);
+			var data = getPlainValue(this.get(this._refEditModelProp), this.getPlainValueOptions);
 			if(lang.isArray(data)){
 				for(var i = 0; i < data.length; i++){
 					this.store.put(data[i]);

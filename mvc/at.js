@@ -54,8 +54,24 @@ define([
 		// returns:
 		//		A handle of data binding target (a dojo.Stateful property), which is used for start synchronization with data binding source (another dojo.Stateful property).
 		// example:
-		//		Synchronize attrbinwidget attribute in my.widget with propertyname in stateful.
-		// |		<div data-dojo-type="my.widget" data-dojo-props="attribinwidget: dojox.mvc.at(stateful, 'propertyname')"></div>
+		//		Two seconds later, the text box changes from "Foo" to "Bar" as the "value" property in model changes.
+		// |		<html>
+		// |			<head>
+		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
+		// |				<script type="text/javascript">
+		// |					require([
+		// |						"dojo/parser", "dojo/Stateful", "dijit/form/TextBox", "dojox/mvc/at", "dojo/domReady!"
+		// |					], function(parser, Stateful){
+		// |						model = new Stateful({value: "Foo"});
+		// |						setTimeout(function(){ model.set("value", "Bar"); }, 2000);
+		// |						parser.parse();
+		// |					});
+		// |				</script>
+		// |			</head>
+		// |			<body>
+		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(model, 'value')">
+		// |			</body>
+		// |		</html>
 
 		return {
 			atsignature: "dojox.mvc.at",

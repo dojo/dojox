@@ -51,66 +51,66 @@
 		</script>
 	</head>
 	<body>
-		<h1 dojoType="dojox.mobile.Heading">iPhone Data Binding Ex.</h1>
-		<div class="row" dojoType="dojox.mvc.Group" ref="model">
+		<h1 data-dojo-type="dojox.mobile.Heading">iPhone Data Binding Ex.</h1>
+		<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="ref:'model'">
 			<div>
 				<label for="serialInput">Order #:</label>
 			</div>
 			<div>
-				<input	class="cell" id="serialInput" dojoType="dojox.mobile.TextBox"
-						ref="'rel:Serial'"/>
+				<input	class="cell" id="serialInput" data-dojo-type="dojox.mobile.TextBox"
+						data-dojo-props="ref:'rel:Serial'"/>
 			</div>
 			<div>
 				<label for="lastnameInput">Last:</label>
 			</div>
 			<div>
-				<input id="lastnameInput" dojoType="dojox.mobile.TextBox"
-					   ref="'rel:Last'"/>
+				<input id="lastnameInput" data-dojo-type="dojox.mobile.TextBox"
+					   data-dojo-props="ref:'rel:Last'"/>
 			</div>
 			<div>
 				<label for="emailInput">Email:</label>
 			</div>
 			<div>
-				<input id="emailInput" dojoType="dojox.mobile.TextBox"
-					   ref="'rel:Email'"/>
+				<input id="emailInput" data-dojo-type="dojox.mobile.TextBox"
+					   data-dojo-props="ref:'rel:Email'"/>
 			</div>
 		</div>
 		<div class="spacer"></div>
-		<button id="shipto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.ShipTo)">Ship To</button>
-		<button id="billto" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.BillTo)">Bill To</button>		
+		<button id="shipto" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.ShipTo)">Ship To</button>
+		<button id="billto" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="setRef('addrGroup', model.BillTo)">Bill To</button>		
 		<br/>
-		<div class="row" id="addrGroup" dojoType="dojox.mvc.Group" ref="model.ShipTo">
+		<div class="row" id="addrGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="ref:model.ShipTo">
 			<div>
 				<label for="streetInput">Street:</label>
 			</div>
 			<div>
-				<input	id="streetInput" dojoType="dojox.mobile.TextBox"
-						placeHolder="Street" ref="'rel:Street'"/>
+				<input	id="streetInput" data-dojo-type="dojox.mobile.TextBox"
+						placeHolder="Street" data-dojo-props="ref:'rel:Street'"/>
 			</div>
 			<div>
 				<label for="cityInput">City:</label>
 			</div>
 			<div>
-				<input id="cityInput" dojoType="dojox.mobile.TextBox"
-					   placeHolder="City" ref="'rel:City'"/>
+				<input id="cityInput" data-dojo-type="dojox.mobile.TextBox"
+					   placeHolder="City" data-dojo-props="ref:'rel:City'"/>
 			</div>
 			<div>
 				<label for="stateInput">State:</label>
 			</div>
 			<div>
-				<input id="stateInput" dojoType="dojox.mobile.TextBox"
-					   placeHolder="State" ref="'rel:State'"/>
+				<input id="stateInput" data-dojo-type="dojox.mobile.TextBox"
+					   placeHolder="State" data-dojo-props="ref:'rel:State'"/>
 			</div>
 			<div>
 				<label for="zipInput">ZIP Code:</label>
 			</div>
 			<div>
-				<input id="zipInput" dojoType="dojox.mobile.TextBox"
-					   placeHolder="ZIP Code" ref="'rel:Zip'"/>
+				<input id="zipInput" data-dojo-type="dojox.mobile.TextBox"
+					   placeHolder="ZIP Code" data-dojo-props="ref:'rel:Zip'"/>
 			</div>
 		</div>
 		<div class="spacer"></div>
-		<button id="reset" type="button" dojoType="dojox.mobile.Button" class="mblBlueButton" onclick="model.reset()">Reset</button>
+		<button id="reset" type="button" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="model.reset()">Reset</button>
 		<script type="text/javascript">
 			function setRef(id, addrRef) {
 				var widget = dijit.byId(id);

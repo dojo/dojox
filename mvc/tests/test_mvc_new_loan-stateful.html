@@ -49,7 +49,7 @@
 						url: "zips/" + model.get("Zip") + ".json",
 						content: {postalcode: model.get("Zip"), country: model.get("County")},
 						preventCache: true,
-						handleAs: "json",
+						handleAs: "json"
 					}).then(function(data){
 						model.set("City", data.postalcodes[0].placeName);
 						model.set("County", data.postalcodes[0].adminName2);
@@ -61,7 +61,7 @@
 						model.set("State", "");
 						model.set("isZipValid", false);
 					});	
-				}
+				};
 
 				function getNewValue(model, prop, name, value){
 					return prop == name ? value : model.get(prop);
@@ -97,8 +97,8 @@
 					TotalIncome: 0,
 					BaseIncome: 50000,
 					BonusIncome: 10000,
-					TotalHousing: 0,
-					HousingPercent: 0,
+					TotalHousing: 2700,
+					HousingPercent: 5,
 					Mortgage: 1000,
 					Taxes: 500,
 					OtherHousing: 1200,
@@ -124,14 +124,16 @@
 				new Chart("expenseChart")
 				 .setTheme(blue)
 				 .addPlot("default", {type: "Pie"})
-				 .addSeries("default", new StatefulSeries([at(loanModel, "Mortgage"), at(loanModel, "Taxes"), at(loanModel, "OtherHousing")])).render();
+				 .addSeries("default", new StatefulSeries([at(loanModel, "Mortgage"), 
+				                       at(loanModel, "Taxes"), at(loanModel, "OtherHousing")])).render();
 			});
 		</script>
 	</head>
 	<body class="claro" style="background-image: url(images/validating_form_pattern.png)">
 		<div id="wrapper">
-			<div id="addressLookupController" class="dijitDisplayNone" data-dojo-type="dojox.mvc.ModelRefController"
-			 data-dojo-props="model: loanModel, ownProps: {_setZipAttr: 1, _setCountyAttr: 1}">
+			<div id="addressLookupController" class="dijitDisplayNone" 
+				data-dojo-type="dojox.mvc.ModelRefController"
+			 	data-dojo-props="model: loanModel, ownProps: {_setZipAttr: 1, _setCountyAttr: 1}">
 				<script type="dojo/method" event="_setZipAttr" args="value">
 					var changed = this.model.Zip != value;
 					this.model._set("Zip", value);
@@ -159,40 +161,46 @@
 			</div>
 			<div id="main">
 				<div id="leftNav"></div>
-				<div id="mainContent" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('widget:addressLookupController')">
+				<div id="mainContent" data-dojo-type="dojox.mvc.Group" 
+						data-dojo-props="target: dojox.mvc.at('widget:addressLookupController')">
 					<h3>Borrower information</h3>
 					<hr size="6" class="rule"/>
 					<div class="spacer"></div>
 					<div class="row">
 						<div class="cell"><label for="borrowerInput">Name:</label></div>
 						<div class="cell">
-							<input id="borrowerInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Name')"/>
+							<input id="borrowerInput" data-dojo-type="dijit.form.TextBox" 
+									data-dojo-props="value: dojox.mvc.at('rel:', 'Name')"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="cell"><label for="zipInput">Zipcode (try 10706):</label></div>
 						<div class="cell">
 							<input id="zipInput" data-dojo-type="dijit.form.NumberTextBox"
-							 data-dojo-props="value: dojox.mvc.at('rel:', 'Zip'), valid: dojox.mvc.at('rel:', 'isZipValid')"
+							 data-dojo-props="value: dojox.mvc.at('rel:', 'Zip'), 
+							 				valid: dojox.mvc.at('rel:', 'isZipValid')"
 							 constraints="{pattern:'#'}" regExp="\d{5}" required="true" invalidMessage="Invalid Zip Code."/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="cell"><label for="cityInput">City:</label></div>
 						<div class="cell">
-							<input id="cityInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'City')"/>
+							<input id="cityInput" data-dojo-type="dijit.form.TextBox" 
+								data-dojo-props="value: dojox.mvc.at('rel:', 'City')"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="cell"><label for="countyInput">County:</label></div>
 						<div class="cell">
-							<input id="countyInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'County')"/>
+							<input id="countyInput" data-dojo-type="dijit.form.TextBox" 
+											data-dojo-props="value: dojox.mvc.at('rel:', 'County')"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="cell"><label for="stateInput">State:</label></div>
 						<div class="cell">
-							<input id="stateInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'State')"/>
+							<input id="stateInput" data-dojo-type="dijit.form.TextBox" 
+										data-dojo-props="value: dojox.mvc.at('rel:', 'State')"/>
 						</div>
 					</div>
 					<div class="spacer"></div>
@@ -205,7 +213,8 @@
 								<div class="row">
 									<div class="cell"><label for="housing">Mortgage:</label></div>
 									<div class="cell">
-										<input id="housing" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Mortgage')"/>
+										<input id="housing" data-dojo-type="dijit.form.NumberTextBox" 
+												data-dojo-props="value: dojox.mvc.at('rel:', 'Mortgage')"/>
 									</div>
 								</div>
 								<div class="row">
@@ -213,13 +222,15 @@
 										<label>Real Estate Taxes:</label>
 									</div>
 									<div class="cell">
-										<input id="taxes" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Taxes')"/>
+										<input id="taxes" data-dojo-type="dijit.form.NumberTextBox" 
+												data-dojo-props="value: dojox.mvc.at('rel:', 'Taxes')"/>
 									</div>
 								</div>
 								<div class="row">
 									<div class="cell"><label>Other Housing:</label></div>
 									<div class="cell">
-										<input id="otherHousing" type="text" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'OtherHousing')"/>
+										<input id="otherHousing" type="text" data-dojo-type="dijit.form.NumberTextBox" 
+												data-dojo-props="value: dojox.mvc.at('rel:', 'OtherHousing')"/>
 									</div>
 								</div>
 								<div class="row">
@@ -232,7 +243,7 @@
 								</div>
 							</td>
 							<td style="width:200px;">
-								<div id="expenseChart" width="150" height="150" style="display:block; width: 150px; height: 150px;"></div>
+								<div id="expenseChart" style="display:block; width: 150px; height: 150px;"></div>
 							</td>
 						</tr>
 					</table>
@@ -242,19 +253,22 @@
 					<div class="row">
 						<div class="cell"><label for="baseIncome">Base Income:</label></div>
 						<div class="cell">
-							<input id="baseIncome" type="text" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'BaseIncome')"/>
+							<input id="baseIncome" type="text" data-dojo-type="dijit.form.NumberTextBox" 
+									data-dojo-props="value: dojox.mvc.at('rel:', 'BaseIncome')"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="cell"><label>Bonus Income:</label></div>
 						<div class="cell">
-							<input id="bonusIncome" type="text" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'BonusIncome')"/>
+							<input id="bonusIncome" type="text" data-dojo-type="dijit.form.NumberTextBox" 
+									data-dojo-props="value: dojox.mvc.at('rel:', 'BonusIncome')"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="cell"><label for="total">Total Income:</label></div>
 						<div class="cell">
-							<input id="total" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'TotalIncome')"/>
+							<input id="total" data-dojo-type="dijit.form.NumberTextBox" 
+									data-dojo-props="value: dojox.mvc.at('rel:', 'TotalIncome')"/>
 						</div>
 					</div>
 					<h3>Analysis</h3>

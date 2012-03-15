@@ -57,7 +57,8 @@
 <body class="claro">
 	<h1 class="testTitle">Toolbar test</h1>
 
-	<span data-dojo-type="dijit.Declaration" data-dojo-props='widgetClass:"ToolbarSectionStart", defaults:{ label: "Label"}'>
+	<span data-dojo-type="dijit.Declaration" 
+			data-dojo-props='widgetClass:"ToolbarSectionStart", defaults:{ label: "Label"}'>
 		<span data-dojo-type="dijit.ToolbarSeparator"></span><i>${label}:</i>
 	</span>
 
@@ -66,17 +67,21 @@
 	<div id="toolbar1" data-dojo-type="dijit.Toolbar"
 			><div data-dojo-type="ToolbarSectionStart" data-dojo-props='label:"Buttons"'></div
 			><div id="toolbar1.cut" data-dojo-type="dijit.form.Button" data-dojo-props='showLabel:false, iconClass: dojox.mvc.at(cutItemModel, "iconClass")'>Cut</div
-			><div id="toolbar1.copy" data-dojo-type="dijit.form.Button" data-dojo-props='showLabel:true, "*": dojox.mvc.at(copyItemModel, "*")'>Copy</div
+			><div id="toolbar1.copy" data-dojo-type="dijit.form.Button" 
+					data-dojo-props='showLabel:true, "*": dojox.mvc.at(copyItemModel, "*")'>Copy</div
 
 			><div data-dojo-type="ToolbarSectionStart" data-dojo-props='label:"Toggles"'></div
-			><div id="toolbar1.bold" data-dojo-type="dijit.form.ToggleButton" data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconBold", showLabel:false, checked: dojox.mvc.at(boldItemModel, "checked")'>Bold</div
-			><div id="toolbar1.italic" data-dojo-type="dijit.form.ToggleButton" data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconItalic", showLabel: true'>Italic</div
+			><div id="toolbar1.bold" data-dojo-type="dijit.form.ToggleButton" 
+					data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconBold", showLabel:false, checked: dojox.mvc.at(boldItemModel, "checked")'>Bold</div
+			><div id="toolbar1.italic" data-dojo-type="dijit.form.ToggleButton" 
+					data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconItalic", showLabel: true'>Italic</div
 
 ></div>
 
 	<div style="margin-top:8px;">
 		Icon for "Cut":
-		<select data-dojo-type="dijit.form.Select" data-dojo-props="value: dojox.mvc.at(cutItemModel, 'iconClass')">
+		<select data-dojo-type="dijit.form.Select" 
+				data-dojo-props="value: dojox.mvc.at(cutItemModel, 'iconClass')">
 			<option value="dijitEditorIcon dijitEditorIconCut">Cut</option>
 			<option value="dijitFolderClosed">Folder</option>
 			<option value="noteIcon">Note</option>
@@ -86,7 +91,8 @@
 
 	<div style="margin-top:8px;">
 		Icon for "Copy":
-		<select data-dojo-type="dijit.form.Select" data-dojo-props="value: dojox.mvc.at(copyItemModel, 'iconClass')">
+		<select data-dojo-type="dijit.form.Select" 
+				data-dojo-props="value: dojox.mvc.at(copyItemModel, 'iconClass')">
 			<option value="dijitEditorIcon dijitEditorIconCopy">Copy</option>
 			<option value="dijitFolderClosed">Folder</option>
 			<option value="noteIcon">Note</option>
@@ -96,7 +102,8 @@
 
 	<div style="margin-top:8px;">
 		Label for "Copy":
-		<select data-dojo-type="dijit.form.Select" data-dojo-props="value: dojox.mvc.at(copyItemModel, 'label')">
+		<select data-dojo-type="dijit.form.Select" 
+				data-dojo-props="value: dojox.mvc.at(copyItemModel, 'label')">
 			<option value="Copy">Copy</option>
 			<option value="Copy to clipboard...">Copy to clipboard...</option>
 		</select>
@@ -104,12 +111,14 @@
 
 	<div style="margin-top:8px;">
 		Change the state for "Bold" (but this check box is free from change in the tool bar):
-		<input data-dojo-type="dijit.form.CheckBox" checked data-dojo-props="checked: dojox.mvc.at(boldItemModel, 'checked').direct(dojox.mvc.to)">
+		<input data-dojo-type="dijit.form.CheckBox" checked 
+				data-dojo-props="checked: dojox.mvc.at(boldItemModel, 'checked').direct(dojox.mvc.to)">
 	</div>
 
 	<div style="margin-top:8px;">
 		"Italic" should be unselected (directly bound to the tool bar item widget):
-		<input data-dojo-type="dijit.form.CheckBox" checked data-dojo-props="checked: dojox.mvc.at(dijit.byId('toolbar1.italic'), 'checked').attach(negativeConverter)">
+		<input data-dojo-type="dijit.form.CheckBox" checked 
+				data-dojo-props="checked: dojox.mvc.at(dijit.byId('toolbar1.italic'), 'checked').attach(negativeConverter)">
 	</div>
   </body>
 </html>

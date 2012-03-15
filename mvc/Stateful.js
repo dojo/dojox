@@ -18,7 +18,8 @@ define([
 			//		The property name.
 
 			var getterName = "_get" + name.replace(/^[a-z]/, function(c){ return c.toUpperCase(); }) + "Attr";
-			if(this[getterName]){
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(!this._applyAttributes && this[getterName]){
 				return this[name] = this[getterName]();
 			}
 			return this.inherited(arguments);
@@ -34,6 +35,10 @@ define([
 			// value: Anything
 			//		The value to set in the property.
 
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(this._applyAttributes){
+				return this.inherited(arguments);
+			}
 			var setterName = "_set" + name.replace(/^[a-z]/, function(c){ return c.toUpperCase(); }) + "Attr";
 			if(this[setterName]){
 				this[setterName](value);
@@ -53,6 +58,10 @@ define([
 			// value: Anything
 			//		The value to set in the property.
 
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			if(this._applyAttributes){
+				return this.inherited(arguments);
+			}
 			var oldValue = this[name];
 			this[name] = value;
 			if(this._watchCallbacks && value !== oldValue){

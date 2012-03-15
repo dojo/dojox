@@ -1,14 +1,49 @@
 define([
 	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"dojo/_base/Deferred",
 	"./getStateful",
 	"./ModelRefController"
-], function(declare, Deferred, getStateful, ModelRefController){
+], function(declare, lang, Deferred, getStateful, ModelRefController){
 	return declare("dojox.mvc.StoreRefController", ModelRefController, {
 		// summary:
-		//		A controller working with Dojo Object Store.
-		//		It does not store/model in sync unless queryStore()/getStore() is called.
+		//		A child class of dojox.mvc.ModelRefController, which keeps a reference to Dojo Object Store (in store property).
+		// description:
+		//		Has several methods to work with the store:
+		//
+		//			* queryStore(): Runs query() against the store, and creates a data model from retrieved data
+		//			* getStore(): Runs get() against the store, and creates a data model from retrieved data
+		//			* putStore(): Runs put() against the store
+		//			* addStore(): Runs add() against the store
+		//			* removeStore(): Runs remove() against the store
+		//
+		//		dojo.Stateful get()/set()/watch() interfaces in dojox.mvc.StoreRefController will work with the data model from queryStore() or getStore().
+		//
 		//		NOTE - If this class is used with a widget by data-dojo-mixins, make sure putting the widget in data-dojo-type and putting this class to data-dojo-mixins.
+		// example:
+		//		The text box refers to "value" property in the controller (with "ctrl" ID).
+		//		The controller provides the "value" property, from the data coming from data store ("store" property in the controller).
+		//		Two seconds later, the text box changes from "Foo" to "Bar" as the controller gets new data from data store.
+		// |		<html>
+		// |			<head>
+		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
+		// |				<script type="text/javascript">
+		// |					require([
+		// |						"dojo/parser", "dojo/store/Memory", "dijit/registry",
+		// |						"dijit/form/TextBox", "dojox/mvc/at", "dojox/mvc/StoreRefController", "dojo/domReady!"
+		// |					], function(parser, Memory, registry){
+		// |						store = new Memory({data: [{id: "Foo", value: "Foo"}, {id: "Bar", value: "Bar"}]});
+		// |						parser.parse();
+		// |						registry.byId("ctrl").getStore("Foo");
+		// |						setTimeout(function(){ registry.byId("ctrl").getStore("Bar"); }, 2000);
+		// |					});
+		// |				</script>
+		// |			</head>
+		// |			<body>
+		// |				<span id="ctrl" data-dojo-type="dojox.mvc.StoreRefController" data-dojo-props="store: store"></span>
+		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('widget:ctrl', 'value')">
+		// |			</body>
+		// |		</html>
 
 		// store: dojo.store.*
 		//		The Dojo Object Store in use.
@@ -20,7 +55,7 @@ define([
 
 		// _refSourceModelProp: String
 		//		The property name for the data model, that serves as the data source.
-		_refSourceModelProp: "sourceModel",
+		_refSourceModelProp: "model",
 
 		queryStore: function(/*Object*/ query, /*dojo.store.api.Store.QueryOptions?*/ options){
 			// summary:
@@ -35,12 +70,21 @@ define([
 			if(!(this.store || {}).query){ return; }
 			if(this._queryObserveHandle){ this._queryObserveHandle.cancel(); }
 
-			var _self = this;
-			return Deferred.when(this.store.query(query, options), function(results){
+			var _self = this,
+			 queryResult = this.store.query(query, options),
+			 result = Deferred.when(queryResult, function(results){
+				if(_self._beingDestroyed){ return; }
 				results = getStateful(results, _self.getStatefulOptions);
 				_self.set(_self._refSourceModelProp, results);
 				return results;
 			});
+			// For dojo.store.Observable, which adds a function to query result
+			for(var s in queryResult){
+				if(isNaN(s) && queryResult.hasOwnProperty(s) && lang.isFunction(queryResult[s])){
+					result[s] = queryResult[s];
+				}
+			}
+			return result;
 		},
 
 		getStore: function(/*Number*/ id, /*Object*/ options){
@@ -57,7 +101,8 @@ define([
 			if(this._queryObserveHandle){ this._queryObserveHandle.cancel(); }
 			var _self = this;
 			return Deferred.when(this.store.get(id, options), function(result){
-				_self.set(_self._refSourceModelProp, result);
+				if(_self._beingDestroyed){ return; }
+				_self.set(_self._refSourceModelProp, getStateful(result, _self.getStatefulOptions));
 			});
 		},
 

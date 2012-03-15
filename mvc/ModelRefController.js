@@ -7,9 +7,43 @@ define([
 ], function(array, declare, lang, Stateful, _Controller){
 	return declare("dojox.mvc.ModelRefController", _Controller, {
 		// summary:
-		//		A controller working with a data model as a reference.
-		//		Manages change in model as well as change in model properties.
+		//		A controller that keeps a reference to dojo.Stateful-based data model.
+		// description:
+		//		Does the following on behalf of such model:
+		//
+		//			* Provides data from model via dojo.Stateful get() interface
+		//			* Stores data to model via dojo.Stateful set() interface
+		//			* Watches for change in model via dojo.Stateful watch() interface (The callback is called when there is a change in data model, as well as when the data model itself is replaced with different one)
+		//
+		//		Can also be used to do some application-specific stuffs upon change in properties in model, by defining setter functions. 
+		//		Doing so will help keep models and widgets free from application-specific logic, and will help keep application logic free from specifics of models and widgets.
+		//		Such kind of setter functions can be defined in the same manner as widgets (_setXXXAttr()).
+		//
 		//		NOTE - If this class is used with a widget by data-dojo-mixins, make sure putting the widget in data-dojo-type and putting this class to data-dojo-mixins.
+		// example:
+		//		The text box refers to "value" property in the controller (with "ctrl" ID).
+		//		The controller provides the "value" property on behalf of the model ("model" property in the controller).
+		//		Two seconds later, the text box changes from "Foo" to "Bar" as the controller changes the data model it refers to.
+		// |		<html>
+		// |			<head>
+		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
+		// |				<script type="text/javascript">
+		// |					require([
+		// |						"dojo/parser", "dojo/Stateful", "dijit/registry",
+		// |						"dijit/form/TextBox", "dojox/mvc/at", "dojox/mvc/ModelRefController", "dojo/domReady!"
+		// |					], function(parser, Stateful, registry){
+		// |						modelFoo = new Stateful({value: "Foo"});
+		// |						modelBar = new Stateful({value: "Bar"});
+		// |						setTimeout(function(){ registry.byId("ctrl").set("model", modelBar); }, 2000);
+		// |						parser.parse();
+		// |					});
+		// |				</script>
+		// |			</head>
+		// |			<body>
+		// |				<span id="ctrl" data-dojo-type="dojox.mvc.ModelRefController" data-dojo-props="model: modelFoo"></span>
+		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('widget:ctrl', 'value')">
+		// |			</body>
+		// |		</html>
 
 		// ownProps: Object
 		//		List of property names owned by this controller, instead of the data model.
@@ -42,10 +76,9 @@ define([
 			// name: String
 			//		The property name.
 
-			var getterName = "_get" + name.replace(/^[a-z]/, function(c){ return c.toUpperCase(); }) + "Attr";
-			if(!this[getterName] && name != this._refModelProp && !(name in (this.ownProps || {})) && !(name in this.constructor.prototype)){
+			if(!this.hasControllerProperty(name)){
 				var model = this[this._refModelProp];
-				return model && (model.get ? model.get(name) : model[name]);
+				return !model ? void 0 : model.get ? model.get(name) : model[name];
 			}
 			return this.inherited(arguments);
 		},
@@ -58,7 +91,7 @@ define([
 			// value: Anything
 			//		The property value.
 
-			if(name != this._refModelProp && !(name in (this.ownProps || {})) && !(name in this.constructor.prototype)){
+			if(!this.hasControllerProperty(name)){
 				var model = this[this._refModelProp];
 				model && (model.set ? model.set(name, value) : (model[name] = value));
 				return this;
@@ -83,7 +116,7 @@ define([
 				name = null;
 			}
 
-			var hm = null, hp = null;
+			var hm = null, hp = null, _self = this;
 
 			function watchPropertiesInModel(/*dojo.Stateful*/ model){
 				// summary:
@@ -95,7 +128,7 @@ define([
 				if(hp){ hp.unwatch(); }
 				// Watch properties of newer model.
 				if(model && lang.isFunction(model.set) && lang.isFunction(model.watch)){
-					hp = model.watch.apply(model, (name ? [name] : []).concat([function(name, old, current){ callback(name, old, current); }]));
+					hp = model.watch.apply(model, (name ? [name] : []).concat([function(name, old, current){ callback.call(_self, name, old, current); }]));
 				}
 			}
 
@@ -112,16 +145,16 @@ define([
 				if(!name){
 					// If all properties are being watched, find out all properties from older model as well as from newer model.
 					array.forEach([old, current], function(model){
-						var props = model && model.get("properties");
-						if(props){
+						var list = model && model.get("properties");
+						if(list){
 							// If the model explicitly specifies the list of properties, use it.
-							array.forEach(props, function(item){
-								if(this.hasControllerProperty(item)){ props[item] = 1; }
+							array.forEach(list, function(item){
+								if(!_self.hasControllerProperty(item)){ props[item] = 1; }
 							});
 						}else{
 							// Otherwise, iterate through own properties.
 							for(var s in model){
-								if(model.hasOwnProperty(s) && this.hasControllerProperty(s)){ props[s] = 1; }
+								if(model.hasOwnProperty(s) && !_self.hasControllerProperty(s)){ props[s] = 1; }
 							}
 						}
 					});
@@ -131,7 +164,7 @@ define([
 
 				// Call watch callbacks for properties.
 				for(var s in props){
-					callback(s, old && (old.get ? old.get(s) : old[s]), current && (current.get ? current.get(s) : current[s]));
+					callback.call(_self, s, !old ? void 0 : old.get ? old.get(s) : old[s], !current ? void 0 : current.get ? current.get(s) : current[s]);
 				}
 			}
 
@@ -147,7 +180,7 @@ define([
 
 			return {
 				unwatch: function(){
-					if(hp){ hp.unwatch(); } if(hm){ hm.unwatch(); }
+					if(hp){ hp.unwatch(); hp = null; } if(hm){ hm.unwatch(); hm = null; }
 				}
 			};
 		},
@@ -158,7 +191,7 @@ define([
 			// name: String
 			//		The property name.
 
-			return name == this._refModelProp || (name in (this.ownProps || {})) || (name in this.constructor.prototype);
+			return name == "_watchCallbacks" || name == this._refModelProp || name == this._refInModelProp || (name in (this.ownProps || {})) || (name in this.constructor.prototype);
 		}
 	});
 });
