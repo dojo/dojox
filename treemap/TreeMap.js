@@ -765,12 +765,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 						}else{
 							bWidth += 1;
 						}
-						domStyle.set(div, {
-							left: (parseInt(rStyle["left"])+1)+"px",
-							top: (parseInt(rStyle["top"])+1)+"px",
-							width: (parseInt(rStyle["width"])-bWidth)+"px",
-							height: (parseInt(rStyle["height"])-bWidth)+"px"
-						});
+						// if we just drill down some renders might not be laid out?
+						if(rStyle["left"] != "auto"){
+							domStyle.set(div, {
+								left: (parseInt(rStyle["left"])+1)+"px",
+								top: (parseInt(rStyle["top"])+1)+"px",
+								width: (parseInt(rStyle["width"])-bWidth)+"px",
+								height: (parseInt(rStyle["height"])-bWidth)+"px"
+							});
+						}
 					}
 				}else{
 					if(ie && (has("quirks") || ie < 9)){
