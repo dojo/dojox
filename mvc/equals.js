@@ -14,7 +14,7 @@ define([
 			// v: Anything
 			//		The value.
 
-			return lang.isArray(v) ? "array" : lang.isFunction((v || {}).getTime) ? "date" : v !== null && v !== void 0 && {}.toString.call(v) == "[object Object]" ? "object" : "value";
+			return lang.isArray(v) ? "array" : lang.isFunction((v || {}).getTime) ? "date" : v != null && {}.toString.call(v) == "[object Object]" ? "object" : "value";
 		},
 
 		equalsArray: function(/*Anything[]*/ dst, /*Anything[]*/ src){
@@ -62,7 +62,7 @@ define([
 		// summary:
 		//		Compares two dojo.Stateful objects, by diving into the leaves.
 		// description:
-		//		Recursively iterates the raw value given, and convert them to stateful ones.
+		//		Recursively iterates and compares stateful values.
 		// dst: Anything
 		//		The stateful value to compare with.
 		// src: Anything

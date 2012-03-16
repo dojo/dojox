@@ -114,7 +114,7 @@ define([
 				if(isStatefulModel ? (value && lang.isFunction(value.toPlainObject)) : !lang.isFunction(value)){
 					if(lang.isArray(value)){
 						body.push(this._generateRepeat(value, prop));
-					}else if(isStatefulModel ? value.value : ((value === void 0 || value === null || {}.toString.call(value) != "[object Object]") && (!(value || {}).set || !(value || {}).watch))){
+					}else if(isStatefulModel ? value.value : ((value == null || {}.toString.call(value) != "[object Object]") && (!(value || {}).set || !(value || {}).watch))){
 						// TODO: Data types based widgets
 						body.push(this._generateTextBox(prop, isStatefulModel));
 					}else{

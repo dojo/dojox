@@ -13,7 +13,7 @@ define([
 			// v: Anything
 			//		The value.
 
-			return lang.isArray(v) ? "array" : (v || {}).isInstanceOf && v.isInstanceOf(Stateful) || v !== null && v !== void 0 && {}.toString.call(v) == "[object Object]" ? "object" : "value";
+			return lang.isArray(v) ? "array" : v != null && {}.toString.call(v) == "[object Object]" ? "object" : "value";
 		},
 
 		getPlainArray: function(/*Anything[]*/ a){
