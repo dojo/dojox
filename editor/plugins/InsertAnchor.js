@@ -423,7 +423,7 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 		// tags:
 		//		private
 		var ed = this.editor;
-		dojo.withGlobal(ed.window, function(){
+		if(node){	// avoid error when Editor.get("value") called before editor's iframe initialized
 			dojo.query("a", node).forEach(function(a){
 				if(dojo.attr(a, "name") && !dojo.attr(a, "href")){
 					if(dojo.hasClass(a,"dijitEditorPluginInsertAnchorStyle")){
@@ -431,7 +431,7 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 					}
 				}
 			});
-		});
+		}
 		return node;
 	}
 });
