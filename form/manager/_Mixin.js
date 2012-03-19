@@ -301,10 +301,10 @@ define([
 				if(isSetter){
 					array.forEach(elem, function(widget){
 						widget.set("checked", false, !this.watching);
-					});
+					}, this);
 					array.forEach(elem, function(widget){
 						widget.set("checked", widget.value === value, !this.watching);
-					});
+					}, this);
 					return this;	// self
 				}
 				// getter
