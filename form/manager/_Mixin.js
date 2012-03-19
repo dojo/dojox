@@ -289,10 +289,10 @@ dojo.require("dijit._Widget");
 				if(isSetter){
 					dojo.forEach(elem, function(widget){
 						widget.set("checked", false, !this.watching);
-					});
+					}, this);
 					dojo.forEach(elem, function(widget){
 						widget.set("checked", widget.value === value, !this.watching);
-					});
+					}, this);
 					return this;	// self
 				}
 				// getter
