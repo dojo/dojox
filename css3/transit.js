@@ -29,7 +29,7 @@ define(["dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
 				}
 				if(options.transitionDefs[to.id]){
 								options.transitionDefs[to.id].resolve(to);
-							}
+				}
 			}
 		}else{
 			var defs=[];

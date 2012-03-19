@@ -158,7 +158,7 @@ define(["dojo/_base/lang",
 			//		method to clear state after transition
 			this._beforeClear();
 			this._removeState(this.endState);
-			console.log(this.node.id + " clear.");
+			// console.log(this.node.id + " clear.");
 			this._onAfterEnd();
 		},
 		
