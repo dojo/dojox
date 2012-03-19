@@ -187,6 +187,9 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 			return this;	//	dojox.charting.plot2d.Columns
 		},
 		_animateColumn: function(shape, voffset, vsize){
+			if(vsize==0){
+				vsize = 1;
+			}
 			fx.animateTransform(lang.delegate({
 				shape: shape,
 				duration: 1200,

@@ -230,6 +230,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 			return this;	//	dojox.charting.plot2d.Bars
 		},
 		_animateBar: function(shape, hoffset, hsize){
+			if(hsize==0){
+				hsize = 1;
+			}
 			fx.animateTransform(lang.delegate({
 				shape: shape,
 				duration: 1200,
