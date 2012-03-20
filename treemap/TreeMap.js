@@ -215,7 +215,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 					this._data.splice(previousIndex, 1);
 				}else{
 					// this is a put, previous and new index identical
-					// we don't now what has change exactly with store API
+					// we don't know what has change exactly with store API
 					this._data[newIndex] = item;
 				}
 			}else if(newIndex!=-1){
