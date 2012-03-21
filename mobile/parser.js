@@ -70,7 +70,7 @@ define([
 							params[prop] = eval("(" + v + ")");
 						}else if(t === "function"){
 							params[prop] = lang.getObject(v, false) || new Function(v);
-//							n.removeAttribute(prop); TODO: uncomment this when dojo.parser is ready.
+							n.removeAttribute(prop);
 						}
 					}
 					params["class"] = n.className;
