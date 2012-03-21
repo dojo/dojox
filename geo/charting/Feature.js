@@ -114,7 +114,7 @@ return declare("dojox.geo.charting.Feature", null, {
 	_onmouseoverHandler: function(evt){
 		this.parent.onFeatureOver(this);
 		this._setFillWith(this._highlightFill);
-		this.mapObj.marker.show(this.id,evt);
+		this.mapObj.marker.show(this.id, evt);
 	},
 	_onmouseoutHandler: function(){
 		this._setFillWith(this._defaultFill);
@@ -123,9 +123,9 @@ return declare("dojox.geo.charting.Feature", null, {
 	},
 	_onmousemoveHandler: function(evt){
 		if(this.mapObj.marker._needTooltipRefresh){
-			this.mapObj.marker.show(this.id,evt);
+			this.mapObj.marker.show(this.id, evt);
 		}
-		if(this.isSelected){
+		if(this.isSelected && evt){
 			if(this.parent.enableFeatureZoom){
 				evt = event.fix(evt || window.event);
 				html.style("mapZoomCursor", "left", evt.pageX + 12 + "px");

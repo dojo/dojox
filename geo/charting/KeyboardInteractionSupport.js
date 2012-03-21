@@ -110,7 +110,7 @@ return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
 	onBlur: function(){
 		this._map.lastSelectedFeature = this._map.selectedFeature;
 	},
-	_directTo: function(up,down,left,right){
+	_directTo: function(up, down, left, right){
 		var currentSelected = this._map.selectedFeature,
 		centerX = currentSelected._center[0],
 		centerY = currentSelected._center[1],
