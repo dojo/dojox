@@ -28,7 +28,7 @@
 				doh.register("dojox.mobile.Settings mouse tests", [
 					{
 						name: "Settings mouse tests",
-						timeout: 40000,
+						timeout: 50000,
 						runTest: function(){
 							var d = new doh.Deferred();
 
@@ -88,7 +88,7 @@
 
 							doh.robot.sequence(d.getTestCallback(function(){
 								doh.assertEqual("",  dijit.registry.byId("general").domNode.style.display);
-							}), 500);
+							}), 1500);
 							return d;
 						}
 					}
