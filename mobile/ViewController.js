@@ -85,8 +85,8 @@ define([
 						|| (registry.byNode(c) && registry.byNode(c).fixed);
 					if(fixed === "bottom"){
 						refNode = c;
+						break;
 					}
-					break;
 				}
 			}
 
