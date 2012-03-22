@@ -119,5 +119,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 		}
 	});
 
+	// for compatibility
+	Theme.defaultMarkers = SimpleTheme.defaultMarkers;
+	Theme.defaultColors = SimpleTheme.defaultColors;
+	Theme.defaultTheme = SimpleTheme.defaultTheme;
+
 	return Theme;
 });
