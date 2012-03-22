@@ -2,6 +2,8 @@
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<title>GridLayout</title>
 
 	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','Button','EdgeToEdgeCategory','GridLayout','dojox/mobile/themes/common/domButtons.css']"></script>
@@ -78,7 +80,7 @@
 	<style>
 		.myPane {
 			width: 100%;
-			height: 100px;
+			height: 50px;
 		}
 		.line {
 			margin: 0;
@@ -88,38 +90,38 @@
 			height: 100%;
 		}
 		.myIcon {
-			margin-top:8px;
-			margin-left:4px;
+			margin-top:28px;
+			margin-left:2px;
 			border-radius: 10px;
-			width:100px;
-			height:84px;
+			width:50px;
+			height:42px;
 			float:left;
 		}
 		.price {
 			float:right;
 			border-radius: 4px;
 			margin-top:0px;
-			margin-right:10px;
+			margin-right:3px;
 			border: 2px groove #959da0;
-			padding: 0px 13px 0px 10px;
+			padding: 0px 7px 0px 5px;
 			background-image: -webkit-gradient(linear, left top, left bottom, from(#959da0), to(#515761));
 			color: white;
 			font-size: 18px;
 		}
 		.OrderItem {
 			margin-top:15px;
-			margin-left:20px;
-			font-size: 24px;
+			margin-left:3px;
+			font-size: 18px;
 		}
 		.SubCategory {
-			margin-top:35px;
-			margin-left:125px;
+			margin-top:38px;
+			margin-left:55px;
 			font-size: 24px;
 		}
 		.Discription {
-			margin-top:35px;
-			margin-left:25px;
-			font-size: 24px;
+			margin-top:17px;
+			margin-left:13px;
+			font-size: 18px;
 		}
 		.mybutton {
 			margin-top:30px;
@@ -192,17 +194,17 @@
 			<div data-dojo-type="dojox.mobile.Pane">
 				<div data-dojo-type="dojox.mobile.EdgeToEdgeCategory">Order</div>
 				<div id="pane7" style="width:100%;height:50px;position:relative"">
-					<div class="line"><div class="OrderItem"><span id="OrderItem">Cappuccino<span><div id="OrderPrice" class="price">5.00</div></div></div>
+					<div class="line"><div class="OrderItem"><span id="OrderItem">Espresso<span><div id="OrderPrice" class="price">5.00</div></div></div>
 				</div>
 			</div>
 			<div data-dojo-type="dojox.mobile.Pane">
 				<div data-dojo-type="dojox.mobile.EdgeToEdgeCategory">Count</div>
 
-				<table style="position:relative;">
+				<table style="position:relative;width:100%">
 					<tr>
-						<td><input id="num" data-dojo-type="dojox.mobile.TextBox" data-dojo-props='value:1, placeHolder:"Count"' style="height:40px;width:100%;text-align:right;font-size: 18px;"></td>
-						<td><div id ="Plus" class="mblDomButtonBluePlus" onclick="plus()"></div></td>
-						<td><div id ="Minus" class="mblDomButtonBlueMinus" onclick="minus()"></div></td>
+						<td><input id="num" data-dojo-type="dojox.mobile.TextBox" data-dojo-props='value:1, placeHolder:"Count", size:3' style="width:80%;height:40px;text-align:right;font-size: 18px;"></td>
+						<td><div id ="Plus" class="mblDomButtonBluePlus" onclick="plus()" style="margin:0 auto 0 auto;"></div></td>
+						<td><div id ="Minus" class="mblDomButtonBlueMinus" onclick="minus()" style="margin:0 auto 0 auto;"></div></td>
 					</tr>
 				</table>
 			</div>
@@ -212,7 +214,6 @@
 			<div data-dojo-type="dojox.mobile.Pane">
 				<button id="ok" data-dojo-type="dojox.mobile.Button" class="mblBlueButton" onclick="ok()" style="margin-top:10px;margin-left:5%;margin-right:5%;width:90%;height:40px;">OK</button>
 			</div>
-			
 		</div>
 	</div>
 </body>
