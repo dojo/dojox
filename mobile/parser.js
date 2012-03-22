@@ -116,13 +116,13 @@ define([
 					type = (n._type = n.getAttribute("dojoType") || n.getAttribute("data-dojo-type"));
 				if(type){
 					if(n._skip){
-						n._skip = undefined;
+						n._skip = "";
 						continue;
 					}
 					if(getCtor(type).prototype.stopParser && !(options && options.template)){
 						var arr = n.getElementsByTagName("*");
 						for(j = 0; j < arr.length; j++){
-							arr[j]._skip = 1;
+							arr[j]._skip = "1";
 						}
 					}
 					list.push(n);
