@@ -134,7 +134,7 @@ define([
 					win.global.open(detail.href, detail.hrefTarget);
 				}else{
 					var view; // find top level visible view
-					for(var v = viewRegistry.getEnclosingView(event.target); v; v = viewRegistry.getParentView(v)){
+					for(var v = viewRegistry.getEnclosingView(evt.target); v; v = viewRegistry.getParentView(v)){
 						view = v;
 					}
 					if(view){
