@@ -5,6 +5,7 @@
 
 .dojoxTreeMapLeaf {
 	border: 1px solid black;
+	padding: 3px;
 }
 
 .dojoxTreeMapGroup {
@@ -32,6 +33,18 @@
 	border-color: red;
 }
 
+.dojoxTreeMapSelected:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	border: 3px dashed red;
+	pointer-events: none;
+	z-index: 20;
+}
+
 .dojoxTreeMapGroup.dojoxTreeMapSelected:before {
 	content: '';
 	position: absolute;
@@ -42,6 +55,22 @@
 	border: 1px solid red;
 	pointer-events: none;
 	z-index: 20;
+}
+
+.dojoxTreeMapSelected:before {
+	content: '';
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	border: 2px dashed white;
+	pointer-events: none;
+	z-index: 20;
+}
+
+.dojoxTreeMapGroup.dojoxTreeMapSelected{
+	border:2px dashed red;
 }
 
 .dj_iequircks .dojoxTreeMapIEHack.dojoxTreeMapSelected,

@@ -111,6 +111,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 			this.connect(this.domNode, "mouseover", this._onMouseOver);
 			this.connect(this.domNode, "mouseout", this._onMouseOut);
 			this.connect(this.domNode, touch.release, this._onMouseUp);
+			this.domNode.setAttribute("role", "presentation");
+			this.domNode.setAttribute("aria-label", "treemap");
 		},
 		
 		buildRendering: function(){
