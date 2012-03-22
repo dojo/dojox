@@ -171,8 +171,8 @@ define([
 				if(c.nodeType === 1){
 					if(c.getAttribute("fixed") === "bottom"){
 						refNode = c;
+						break;
 					}
-					break;
 				}
 			}
 			if(text.charAt(0) === "<"){ // html markup
