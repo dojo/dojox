@@ -352,8 +352,10 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 			var clipNode, clipShape,
 				clipPathProp = domAttr.get(this.rawNode, "clip-path");
 			if(clipPathProp){
-				clipNode = win.doc.getElementById(clipPathProp.match(/gfx_clip[\d]+/)[0], this.rawNode.parentNode);
-				clipNode.removeChild(clipNode.childNodes[0]);
+				clipNode = dom.byId(clipPathProp.match(/gfx_clip[\d]+/)[0]);
+				if(clipNode){ // may be null if not in the DOM anymore
+					clipNode.removeChild(clipNode.childNodes[0]);
+				}
 			}
 			if(clip){
 				if(clipNode){
@@ -371,12 +373,24 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 					domAttr.set(clipNode, "id", clipId);
 				}
 				domAttr.set(clipShape, clip);
-			}else if(clipNode){
+			}else{
 				//remove clip-path
 				this.rawNode.removeAttribute("clip-path");
-				clipNode.parentNode.removeChild(clipNode);
+				if(clipNode){
+					clipNode.parentNode.removeChild(clipNode);
+				}
 			}
 			return this;
+		},
+		_removeClipNode: function(){
+			var clipNode, clipPathProp = domAttr.get(this.rawNode, "clip-path");
+			if(clipPathProp){
+				clipNode = dom.byId(clipPathProp.match(/gfx_clip[\d]+/)[0]);
+				if(clipNode){
+					clipNode.parentNode.removeChild(clipNode);
+				}
+			}
+			return clipNode;
 		}
 	});
 	
@@ -723,6 +737,8 @@ else
 					this.rawNode.appendChild(shape.rawNode);
 				}
 				C.add.apply(this, arguments);
+				// update clipnode with new parent
+				shape.setClip(shape.clip);
 			}
 			return this;	// self
 		},
@@ -737,6 +753,8 @@ else
 				if(this.fragment && this.fragment == shape.rawNode.parentNode){
 					this.fragment.removeChild(shape.rawNode);
 				}
+				// remove clip node from parent 
+				shape._removeClipNode();
 				C.remove.apply(this, arguments);
 			}
 			return this;	// self
