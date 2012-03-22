@@ -212,7 +212,8 @@ define([
 		},
 
 		_getBadgeAttr: function(){
-			return this.badgeObj ? this.badgeObj.getValue() : null;
+			return this.badgeObj && this.badgeObj.domNode.parentNode &&
+				this.badgeObj.domNode.parentNode.nodeType == 1 ? this.badgeObj.getValue() : null;
 		},
 
 		_setBadgeAttr: function(/*String*/value){
@@ -228,7 +229,9 @@ define([
 			if(value){
 				this.domNode.appendChild(this.badgeObj.domNode);
 			}else{
-				this.domNode.removeChild(this.badgeObj.domNode);
+				if(this.domNode === this.badgeObj.domNode.parentNode){
+					this.domNode.removeChild(this.badgeObj.domNode);
+				}
 			}
 		},
 

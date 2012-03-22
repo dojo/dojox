@@ -32,7 +32,7 @@ define([
 		},
 
 		getValue: function(){
-			return this.domNode.firstChild.innerHTML;
+			return this.domNode.firstChild.innerHTML || "";
 		},
 
 		setValue: function(/*String*/value){
