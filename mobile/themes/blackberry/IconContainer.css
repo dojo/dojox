@@ -33,6 +33,7 @@
   font-family: Helvetica;
   font-size: 12px;
   text-align: center;
+  margin-top: 5px;
   margin-bottom: 5px;
   width: 88px;
 }
@@ -47,8 +48,8 @@
 }
 .mblIconItemDeleteIcon {
   position: absolute;
-  top: -5px;
-  left: -2px;
+  top: -4px;
+  left: 2px;
 }
 .mblIconItemSpriteIcon {
   position: absolute;
