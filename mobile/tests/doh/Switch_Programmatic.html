@@ -47,9 +47,9 @@
 				var demoWidget = new dojox.mobile.Switch({value:"off"});
 				dojo.addClass(demoWidget.domNode, "float");
 //				roundRect.addChild(demoWidget);
-				demoWidget.placeAt(roundRect.domNode);
+				demoWidget.placeAt(roundRect.containerNode);
 				demoWidget = new dojox.mobile.Switch({value:"on", leftLabel:"Start", rightLabel:"Stop"});
-				demoWidget.placeAt(roundRect.domNode);
+				demoWidget.placeAt(roundRect.containerNode);
 //				roundRect.addChild(demoWidget);
 			});
 		</script>

@@ -88,7 +88,7 @@
 			dojo.doc.body.appendChild(view.domNode);
 			var roundRectList = new dojox.mobile.RoundRectList();
 //			view.addChild(roundRectList);
-			roundRectList.placeAt(view.domNode);
+			roundRectList.placeAt(view.containerNode);
 			roundRectList.startup();
 			var demoWidget = new dojox.mobile.ListItem({moveTo:"dojox_mobile_ScrollableView_0"});
 			roundRectList.addChild(demoWidget);
@@ -98,12 +98,12 @@
 			demoWidget = new dojox.mobile.Heading({fixed:"top", label:"Categories", back:"Back To", moveTo:"group1"});
 			dojo.doc.body.appendChild(view.domNode);
 //			view.addChild(demoWidget);
-			demoWidget.placeAt(view.domNode);
+			demoWidget.placeAt(view.containerNode);
 			demoWidget.startup();
 			view.domNode.appendChild(dojo.doc.createTextNode("bbbb"));
 			roundRectList = new dojox.mobile.EdgeToEdgeList();
 //			view.addChild(roundRectList);
-			demoWidget.placeAt(view.domNode);
+			demoWidget.placeAt(view.containerNode);
 			demoWidget.startup();
 			for(var i = 0;i<20;i++){
 				demoWidget = new dojox.mobile.ListItem({label:"Test" + i});

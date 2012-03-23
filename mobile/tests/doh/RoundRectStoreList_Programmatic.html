@@ -21,7 +21,7 @@
 			ready(function(){
 				var view = registry.byId("foo");
 				var demoWidget = new dojox.mobile.RoundRectStoreList({id:"list", store:store, query:{}});
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 			});
 		});

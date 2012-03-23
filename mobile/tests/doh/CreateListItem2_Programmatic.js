@@ -3,7 +3,7 @@ dojo.addOnLoad(function(){
 
 	var list = new dojox.mobile.RoundRectList({iconBase:"../images/i-icon-all.png"});
 //	view.addChild(list);
-	list.placeAt(view.domNode);
+	list.placeAt(view.containerNode);
 	list.startup();
 
 	var demoWidget = new dojox.mobile.ListItem({iconPos:"0,87,29,29", moveTo:"general", label:"Sounds"});
@@ -20,7 +20,7 @@ dojo.addOnLoad(function(){
 	list.addChild(demoWidget);
 
 //	view.addChild(list);
-	list.placeAt(view.domNode);
+	list.placeAt(view.containerNode);
 	list.startup();
 
 });

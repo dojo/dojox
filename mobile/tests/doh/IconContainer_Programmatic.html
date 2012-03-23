@@ -36,7 +36,7 @@
 				var demoWidget = new dojox.mobile.IconItem({label:"app1", icon:"../images/icon3.png", lazy:"true"});
 //This position works fine.
 //				view.addChild(container);
-				container.placeAt(view.domNode);
+				container.placeAt(view.containerNode);
 				container.startup();
 				container.addChild(demoWidget);
 				demoWidget.set("content", '<div class="box"></div>');
@@ -60,7 +60,7 @@
 				container.addChild(demoWidget);
 //This position makes error.
 //				view.addChild(container);
-//				container.placeAt(view.domNode);
+//				container.placeAt(view.containerNode);
 //				container.startup();
 			});
 		</script>

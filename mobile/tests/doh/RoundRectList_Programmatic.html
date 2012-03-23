@@ -19,7 +19,7 @@
 				var view = dijit.byId("foo");
 				var demoWidget = new dojox.mobile.RoundRectList();
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				var childWidget = new dojox.mobile.ListItem({id:"item1", icon:"../images/i-icon-1.png", rightText:"Off", moveTo:"bar", label:"u1space"});
@@ -34,7 +34,7 @@
 				view = dijit.byId("bar");
 				demoWidget = new dojox.mobile.RoundRectList();
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				childWidget = new dojox.mobile.ListItem({rightText:"Off", label:"Video", moveTo:"foo"});

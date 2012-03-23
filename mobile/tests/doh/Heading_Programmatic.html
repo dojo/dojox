@@ -21,31 +21,31 @@
 				var view = dijit.byId("general");
 				var demoWidget = new dojox.mobile.Heading({back:"Settings", moveTo:"settings", label:"General"});
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				demoWidget = new dojox.mobile.Heading({back:"Long Button", moveTo:"settings"});
 				demoWidget.set({label:"Very Very Long Title May Not Be Displayed in the Narrow Space"});
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				demoWidget = new dojox.mobile.Heading({label:"World Clock"});
-				dojo.doc.body.appendChild(demoWidget.domNode);
+				dojo.doc.body.appendChild(demoWidget.containerNode);
 				demoWidget.startup();
 
 				demoWidget = new dojox.mobile.Heading();
-				dojo.doc.body.appendChild(demoWidget.domNode);
+				dojo.doc.body.appendChild(demoWidget.containerNode);
 				demoWidget.startup();
 				var childWidget = new dojox.mobile.ToolBarButton({label:"Edit"});
 				childWidget.domNode.style.padding = "0px 14px";
 //				demoWidget.addChild(childWidget);
-				childWidget.placeAt(demoWidget.domNode);
+				childWidget.placeAt(demoWidget.containerNode);
 				childWidget.startup();
 				childWidget = new dojox.mobile.ToolBarButton({icon:"mblDomButtonWhitePlus"});
 				childWidget.domNode.style.float = "right";
 //				demoWidget.addChild(childWidget);
-				childWidget.placeAt(demoWidget.domNode);
+				childWidget.placeAt(demoWidget.containerNode);
 				childWidget.startup();
 				demoWidget.domNode.appendChild(dojo.doc.createTextNode("Alarm Clock"));
 

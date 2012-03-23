@@ -20,23 +20,23 @@
 				var view = dijit.byId("general");
 				var demoWidget = new dojox.mobile.Heading({back:"Settings", moveTo:"foo", label:"General"});
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				demoWidget = new dojox.mobile.Heading({back:"Go To", href:"http://dojotoolkit.org/", label:"Test"});
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				demoWidget = new dojox.mobile.Heading({back:"Settings", moveTo:"foo", label:"Test"});
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 
 				demoWidget = new dojox.mobile.Heading();
 				demoWidget.set({back:"Long Button", moveTo:"bar", label:"Very Very Long Title May Not Be Displayed in the Narrow Space"});
 //				view.addChild(demoWidget);
-				demoWidget.placeAt(view.domNode);
+				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 			});
 		</script>
