@@ -6,8 +6,9 @@ define([
 	"dojo/dom-class",
 	"dijit/registry",	// registry.byNode
 	"./View",
-	"./_ScrollableMixin"
-], function(array, connect, declare, dom, domClass, registry, View, ScrollableMixin){
+	"./_ScrollableMixin",
+	"./sniff"
+], function(array, connect, declare, dom, domClass, registry, View, ScrollableMixin, has){
 
 /*=====
 	var View = dojox.mobile.View;
@@ -103,6 +104,10 @@ define([
 			var view = moveTo ? registry.byId(moveTo) :
 				((dir == 1) ? this.nextView(this.domNode) : this.previousView(this.domNode));
 			if(view && view !== this){
+				this.stopAnimation(); // clean-up animation states
+				view.stopAnimation();
+				this.domNode._isShowing = false; // update isShowing flag
+				view.domNode._isShowing = true;
 				this.performTransition(view.id, dir, "slide", null, function(){
 					connect.publish("/dojox/mobile/viewChanged", [view]);
 				});
@@ -206,10 +211,17 @@ define([
 			this.inherited(arguments);
 		},
 
+		onAnimationEnd: function(e){
+			// summary:
+			//		Overrides dojox.mobile.View.onAnimationEnd().
+			if(e && e.target && domClass.contains(e.target, "mblScrollableScrollTo2")){ return; }
+			this.inherited(arguments);
+		},
+
 		onFlickAnimationEnd: function(e){
 			// summary:
 			//		Overrides dojox.mobile.scrollable.onFlickAnimationEnd().
-			if(e && e.animationName && e.animationName !== "scrollableViewScroll2"){ return; }
+			if(e && e.target && !domClass.contains(e.target, "mblScrollableScrollTo2")){ return; }
 			this.inherited(arguments);
 
 			if(this.domNode._isShowing){
@@ -222,13 +234,14 @@ define([
 						if(!c._isShowing){
 							c.style.display = "none";
 							c.style.webkitTransform = "";
+							c.style.left = "0px"; // top/left mode needs this
 						}
 					}
 				}, this);
 				connect.publish("/dojox/mobile/viewChanged", [this]);
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
-			}else{
+			}else if(!has("webkit")){
 				this.containerNode.style.left = "0px"; // compat mode needs this
 			}
 		}

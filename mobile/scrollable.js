@@ -1003,10 +1003,14 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 				domStyle.set(node, {
 					webkitTransitionProperty: "top, left",
 					webkitTransitionDuration: duration + "s",
-					webkitTransitionTimingFunction: easing,
-					top: (to.y || 0) + "px",
-					left: (to.x || 0) + "px"
+					webkitTransitionTimingFunction: easing
 				});
+				setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
+					domStyle.set(node, {
+						top: (to.y || 0) + "px",
+						left: (to.x || 0) + "px"
+					});
+				}, 0);
 				domClass.add(node, "mblScrollableScrollTo"+idx);
 			}
 		}else if(dojo.fx && dojo.fx.easing && duration){
