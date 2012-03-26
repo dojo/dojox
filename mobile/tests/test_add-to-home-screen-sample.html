@@ -51,12 +51,12 @@
 			setCookie = function(){
 				cookie("disable-AtHS-Notification", true, {expires:1});
 				if(cookie("disable-AtHS-Notification") != undefined){
-					dom.byId('clearBtn').disabled = false;
+					registry.byId('clearBtn').set("disabled", false);
 				}
 			}
 			clearCookie = function(){
 				cookie("disable-AtHS-Notification", null, {expires:-1});
-				dom.byId('clearBtn').disabled = true;
+				registry.byId('clearBtn').set("disabled", true);
 			}
 			ready(function(){
 				iconUtils.createDomButton(dom.byId('dlgClose'));
@@ -70,7 +70,7 @@
 						dlgHide();
 					});
 				}else{
-					dom.byId('clearBtn').disabled = false;
+					registry.byId('clearBtn').set("disabled", false);
 				}
 			});
 		});
