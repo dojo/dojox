@@ -539,9 +539,9 @@ define([
 			}
 			c = c || win.global;
 			if(typeof(m) == "string"){
-				c[m].apply(c, this._args);
+				c[m].apply(c, this._optArgs);
 			}else if(typeof(m) == "function"){
-				m.apply(c, this._args);
+				m.apply(c, this._optArgs);
 			}
 		},
 
