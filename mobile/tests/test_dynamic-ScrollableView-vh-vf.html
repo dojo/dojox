@@ -11,6 +11,7 @@
 
 	<script type="text/javascript">
 		require([
+			"dojo/ready",
 			"dojox/mobile/Heading",
 			"dojox/mobile/ScrollableView",
 			"dojox/mobile/RoundRectCategory",
@@ -19,56 +20,57 @@
 			"dojox/mobile/RoundRect",
 			"dojox/mobile/parser",
 			"dojox/mobile",
-			"dojox/mobile/compat",
-		], function(Heading, ScrollableView, RoundRectCategory, RoundRectList, ListItem, RoundRect){
+			"dojox/mobile/compat"
+		], function(ready, Heading, ScrollableView, RoundRectCategory, RoundRectList, ListItem, RoundRect){
+			ready(function(){
+				// ==== view1 ====
+				var view1 = new ScrollableView(null, "view1");
 
-			// ==== view1 ====
-			var view1 = new ScrollableView(null, "view1");
-
-			var heading2 = new Heading({
-				label: "Fixed View Footer",
-				fixed: "bottom"
-			});
-			view1.addFixedBar(heading2);
-
-			var categ1 = new RoundRectCategory({
-				label: "Documents"
-			});
-			categ1.placeAt(view1.containerNode);
-
-			var list1 = new RoundRectList();
-			list1.placeAt(view1.containerNode);
-
-			var counter = 4;
-			for(var i = 1; i <= 3; i++){
-				var item1 = new ListItem({
-					icon: "images/i-icon-"+i+".png",
-					label: "Document 000"+counter,
-					moveTo: "view2"
+				var heading2 = new Heading({
+					label: "Fixed View Footer",
+					fixed: "bottom"
 				});
-				list1.addChild(item1);
-				counter++;
-			}
+				view1.addFixedBar(heading2);
 
-			var heading1 = new Heading({
-				label: "Fixed View Header",
-				fixed: "top"
+				var categ1 = new RoundRectCategory({
+					label: "Documents"
+				});
+				categ1.placeAt(view1.containerNode);
+
+				var list1 = new RoundRectList();
+				list1.placeAt(view1.containerNode);
+
+				var counter = 4;
+				for(var i = 1; i <= 3; i++){
+					var item1 = new ListItem({
+						icon: "images/i-icon-"+i+".png",
+						label: "Document 000"+counter,
+						moveTo: "view2"
+					});
+					list1.addChild(item1);
+					counter++;
+				}
+
+				var heading1 = new Heading({
+					label: "Fixed View Header",
+					fixed: "top"
+				});
+				view1.addFixedBar(heading1);
+
+				view1.startup();
+
+				// ==== view2 ====
+				var view2 = new ScrollableView(null, "view2");
+
+				var rect1 = new RoundRect();
+				rect1.containerNode.innerHTML = "Go Back";
+				rect1.placeAt(view2.containerNode);
+				rect1.connect(rect1.domNode, "onclick", function(){
+					view2.performTransition("view1", -1, "slide");
+				});
+
+				view2.startup();
 			});
-			view1.addFixedBar(heading1);
-
-			view1.startup();
-
-			// ==== view2 ====
-			var view2 = new ScrollableView(null, "view2");
-
-			var rect1 = new RoundRect();
-			rect1.containerNode.innerHTML = "Go Back";
-			rect1.placeAt(view2.containerNode);
-			rect1.connect(rect1.domNode, "onclick", function(){
-				view2.performTransition("view1", -1, "slide");
-			});
-
-			view2.startup();
 		});
 	</script>
 </head>
