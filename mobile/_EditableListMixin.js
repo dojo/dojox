@@ -98,9 +98,9 @@ define([
 			if(!rightIconPressed){ return; }
 			var ref = item.getNextSibling();
 			ref = ref ? ref.domNode : null;
-			this.domNode.insertBefore(this._blankItem.domNode, ref);
+			this.containerNode.insertBefore(this._blankItem.domNode, ref);
 			this._setupMoveItem(item.domNode);
-			this.domNode.appendChild(item.domNode);
+			this.containerNode.appendChild(item.domNode);
 
 			if(!this._conn){
 				this._conn = [
@@ -142,8 +142,8 @@ define([
 		_onTouchEnd: function(e){
 			var ref = this._blankItem.getNextSibling();
 			ref = ref ? ref.domNode : null;
-			this.domNode.insertBefore(this._movingItem.domNode, ref);
-			this.domNode.removeChild(this._blankItem.domNode);
+			this.containerNode.insertBefore(this._movingItem.domNode, ref);
+			this.containerNode.removeChild(this._blankItem.domNode);
 			this._resetMoveItem(this._movingItem.domNode);
 
 			array.forEach(this._conn, connect.disconnect);
