@@ -130,6 +130,20 @@ define([
 				s = this.slots,
 				pat = s[0].pattern + "/" + s[1].pattern + "/" + s[2].pattern;
 				return datelocale.parse(v[0] + "/" + v[1] + "/" + v[2], {datePattern:pat, selector:"date"});
+		},
+
+		_setValuesAttr: function(/*Array*/a){
+			// summary:
+			//		Sets the slot values.
+			array.forEach(this.getSlots(), function(w, i){
+				var v = a[i];
+				if(!isNaN(v)){
+					var arr = [1970, 1, 1];
+					arr.splice(i, 1, v - 0);
+					v = w.format(new Date(arr));
+				}
+				w.set("value", v);
+			});
 		}
 	});
 });
