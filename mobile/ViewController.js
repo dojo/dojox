@@ -69,7 +69,9 @@ define([
 			var id = this.viewMap[transOpts.url];
 			if(id){
 				transOpts.moveTo = id;
-				if(!transOpts.noTransition){
+				if(transOpts.noTransition){
+					registry.byId(id).hide();
+				}else{
 					new TransitionEvent(win.body(), transOpts).dispatch();
 				}
 				d.resolve(true);
@@ -99,7 +101,9 @@ define([
 				handler.processData(contentType, lang.hitch(this, function(id){
 					if(id){
 						this.viewMap[transOpts.url] = transOpts.moveTo = id;
-						if(!transOpts.noTransition){
+						if(transOpts.noTransition){
+							registry.byId(id).hide();
+						}else{
 							new TransitionEvent(win.body(), transOpts).dispatch();
 						}
 						d.resolve(true);
