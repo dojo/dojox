@@ -1,9 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/date"], function(dojo, declare, dd){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"], function(lang, declare, dd){
 
-dojo.getObject("date.buddhist.Date", true, dojox);
-dojo.experimental("dojox.date.buddhist.Date");
-
-dojo.declare("dojox.date.islamic.Date", null, {
+	var IDate = declare("dojox.date.islamic.Date", null, {
 	// summary: The component defines the Islamic (Hijri) Calendar Object
 	//
 	// description:
@@ -278,12 +275,16 @@ dojo.declare("dojox.date.islamic.Date", null, {
 		// |		document.writeln(date1.toString());
 
 		//FIXME: TZ/DST issues?
-		var x = new Date();
-		x.setHours(this._hours);
-		x.setMinutes(this._minutes);
-		x.setSeconds(this._seconds);
-		x.setMilliseconds(this._milliseconds);
-		return this._month+" "+ this._date + " " + this._year + " " + x.toTimeString();
+		if(isNaN(this._date)){
+			return "Invalidate Date";
+		}else{
+			var x = new Date();
+			x.setHours(this._hours);
+			x.setMinutes(this._minutes);
+			x.setSeconds(this._seconds);
+			x.setMilliseconds(this._milliseconds);
+			return this._month+" "+ this._date + " " + this._year + " " + x.toTimeString();
+		}
 	},
 		
 		
@@ -417,8 +418,8 @@ dojo.declare("dojox.date.islamic.Date", null, {
 });
 
 //TODOC
-dojox.date.islamic.Date.getDaysInIslamicMonth = function(/*dojox.date.islamic.Date*/month){
-	return new dojox.date.islamic.Date().getDaysInIslamicMonth(month.getMonth(),month.getFullYear()); // dojox.date.islamic.Date
+IDate.getDaysInIslamicMonth = function(/*dojox.date.islamic.Date*/month){
+	return new IDate().getDaysInIslamicMonth(month.getMonth(),month.getFullYear()); // dojox.date.islamic.Date
 };
-return dojox.date.islamic.Date;
+return IDate;
 });

@@ -1,8 +1,7 @@
-define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
-	dojo.getObject("date.hebrew.numerals", true, dojox);
-	dojo.experimental("dojox.date.hebrew.numerals");
+define(["../..", "dojo/_base/lang", "dojo/_base/array"], function(dojox, lang, arr){
+	var hnumerals = lang.getObject("date.hebrew.numerals", true, dojox);
 
-//Conversion from "Hindi" numerals to Hebrew numerals and vice versa
+	//Conversion from "Hindi" numerals to Hebrew numerals and vice versa
 
 	var DIG="אבגדהוזחט";
 	var	TEN="יכלמנסעפצ";
@@ -24,7 +23,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 	 
 	var parseStrToNumber = function(str){
 		var num = 0;
-		dojo.forEach(str, function(ch){
+		arr.forEach(str, function(ch){
 			var i;
 			if((i = DIG.indexOf(ch)) != -1){
 				num += ++i;
@@ -61,7 +60,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		return str; //String
 	};
 
-	dojox.date.hebrew.numerals.getYearHebrewLetters = function(/*Number */ year){
+	hnumerals.getYearHebrewLetters = function(/*Number */ year){
 		// summary: converts the year from an integer to Hebrew numerals.
 		//
 		// example:
@@ -75,7 +74,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		return transformChars(convertNumberToStr(rem)); // String
 	};
 	
-	dojox.date.hebrew.numerals.parseYearHebrewLetters  = function(/*String hebrew year*/ year){
+	hnumerals.parseYearHebrewLetters  = function(/*String hebrew year*/ year){
 		// summary: converts the year written in Hebrew numerals to an integer
 		//
 		// example:
@@ -85,7 +84,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		return parseStrToNumber(year) + 5000; // int
 	};
 	
-	dojox.date.hebrew.numerals.getDayHebrewLetters =  function(day, /*boolean?*/ nogrsh){
+	hnumerals.getDayHebrewLetters =  function(day, /*boolean?*/ nogrsh){
 		// summary: converts an integer to a String representing the number in Hebrew numerals.   Can be formatted with or without geresh &#x05f3;
 		//
 		// example:
@@ -96,7 +95,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		return transformChars(convertNumberToStr(day), nogrsh); // String
 	};
 	
-	dojox.date.hebrew.numerals.parseDayHebrewLetters =  function(/*String hebrew*/ day){
+	hnumerals.parseDayHebrewLetters =  function(/*String hebrew*/ day){
 		// summary: converts the string containing a Hebrew numeral to an integer
 		//
 		// example:
@@ -106,7 +105,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		return parseStrToNumber(day); // int
 	};
 
-	dojox.date.hebrew.numerals.getMonthHebrewLetters =  function(/*int*/month){
+	hnumerals.getMonthHebrewLetters =  function(/*int*/month){
 		// summary: converts an integer representing a  month to a String written in Hebrew numerals
 		//
 		// example:
@@ -117,7 +116,7 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		return transformChars(convertNumberToStr(month+1)); // String
 	};
 
-	dojox.date.hebrew.numerals.parseMonthHebrewLetters = function(/*String*/monthStr){
+	hnumerals.parseMonthHebrewLetters = function(/*String*/monthStr){
 		// summary: converts a Hebrew numeral string representing
 		//	a month to an integer.  The returned value
 		//	is indexed in the month name array.  To use it for
@@ -129,12 +128,12 @@ define(["dojo/_base/kernel", "dojo/_base/array"], function(dojo){
 		// |		date.setMonth(number);
 			
 		//month number from 0 to 12
-		var monnum = dojox.date.hebrew.numerals.parseDayHebrewLetters(monthStr) - 1;
+		var monnum = hnumerals.parseDayHebrewLetters(monthStr) - 1;
 
 		if(monnum == -1 || monnum > 12){
 			throw new Error("The month name is incorrect , month = " + monnum);
 		}
 		return monnum;
 	};
-	return dojox.date.hebrew.numerals;
+	return hnumerals;
 });

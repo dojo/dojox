@@ -1,13 +1,10 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"./numerals"
-], function(dojo, declare, numerals){
+], function(lang, declare, numerals){
 
-dojo.getObject("date.hebrew.Date", true, dojox);
-dojo.experimental("dojox.date.hebrew.Date");
-
-dojo.declare("dojox.date.hebrew.Date", null, {
+var HDate = declare("dojox.date.hebrew.Date", null, {
 	// summary: A Date-like object which implements the Hebrew calendar
 	//
 	// description:
@@ -396,19 +393,19 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		var hours_arg_no = arguments.length;
 		var hours = 0;
 		if(hours_arg_no >= 1){
-			hours += +arguments[0];
+			hours = +arguments[0];
 		}
 
 		if(hours_arg_no >= 2){
-			this._minutes += +arguments[1];
+			this._minutes = +arguments[1];
 		}
 
 		if(hours_arg_no >= 3){
-			this._seconds += +arguments[2];
+			this._seconds = +arguments[2];
 		}
 
 		if(hours_arg_no == 4){
-			this._milliseconds += +arguments[3];
+			this._milliseconds = +arguments[3];
 		}
 
 		while(hours >= 24){
@@ -487,7 +484,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 		// |		var date1 = new dojox.date.hebrew.Date(5769, 6, 1);
 		// |		console.log(date1.toString());
 		// |		>>> "1, 6, 5769 0:0:0"
-		return this._date + ", " + this._month + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
+		return isNaN(this._date)?"Invalid Date":
+			this._date + ", " + this._month + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
 	},
 
 	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
@@ -713,8 +711,8 @@ dojo.declare("dojox.date.hebrew.Date", null, {
 	}
 });
 
-dojox.date.hebrew.Date.prototype.valueOf = function(){
+HDate.prototype.valueOf = function(){
 	return this.toGregorian().valueOf();
 };
-return dojox.date.hebrew.Date;
+return HDate;
 });

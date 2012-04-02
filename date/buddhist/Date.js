@@ -1,13 +1,10 @@
 define([
-	"dojo/_base/kernel",
+	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/date"
-], function(dojo, declare, dd){
+], function(lang, declare, dd){
 
-dojo.getObject("date.buddhist.Date", true, dojox);
-dojo.experimental("dojox.date.buddhist.Date");
-
-dojo.declare("dojox.date.buddhist.Date", null, {
+var BDate = declare("dojox.date.buddhist.Date", null, {
 
 	_date: 0,
 	_month: 0,
@@ -21,7 +18,7 @@ dojo.declare("dojox.date.buddhist.Date", null, {
  	constructor: function(){
 		// summary: This is the constructor
 		// description:
-		//	This fucntion initialize the date object values
+		//	This function initialize the date object values
 		//
 		// example:
 		// |		var date1 = new dojox.date.buddhist.Date();
@@ -247,7 +244,8 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 
 	toString: function(){
 		// summary: This returns a string representation of the date in "dd, MM, YYYY HH:MM:SS" format
-		return this._date + ", " + this._month + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
+		return isNaN(this._date)?"Invalid Date":
+			this._date + ", " + this._month + ", " + this._year + "  " + this._hours + ":" + this._minutes + ":" + this._seconds; // String
 	},
 
 //FIXME: remove this and replace usage with dojox.date.buddhist.getDaysInMonth?
@@ -280,9 +278,9 @@ dojo.declare("dojox.date.buddhist.Date", null, {
 	}
 });
 
-dojox.date.buddhist.Date.prototype.valueOf = function(){
+BDate.prototype.valueOf = function(){
 	return this.toGregorian().valueOf();
 };
 
-return dojox.date.buddhist.Date;
+return BDate;
 });
