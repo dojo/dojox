@@ -6,11 +6,10 @@ define([
 	"dojo/_base/lang",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
-	"dojo/touch",
 	"dijit/registry",
 	"./IconItem",
 	"./sniff"
-], function(array, connect, declare, event, lang, domGeometry, domStyle, touch, registry, IconItem, has){
+], function(array, connect, declare, event, lang, domGeometry, domStyle, registry, IconItem, has){
 
 	// module:
 	//		dojox/mobile/_EditableIconMixin
@@ -118,8 +117,8 @@ define([
 
 			if(!this._conn){
 				this._conn = [
-					this.connect(this.domNode, touch.move, "_onTouchMove"),
-					this.connect(this.domNode, touch.release, "_onTouchEnd")
+					this.connect(this.domNode, has('touch') ? "ontouchmove" : "onmousemove", "_onTouchMove"),
+					this.connect(this.domNode, has('touch') ? "ontouchend" : "onmouseup", "_onTouchEnd")
 				];
 			}
 			this._touchStartPosX = e.touches ? e.touches[0].pageX : e.pageX;
@@ -345,7 +344,7 @@ define([
 		_setEditableAttr: function(/*Boolean*/editable){
 			this._set("editable", editable);
 			if(editable && !this._touchStartHandle){ // Allow users to start editing by long press on IconItems
-				this._touchStartHandle = this.connect(this.domNode, touch.press, "_onTouchStart");
+				this._touchStartHandle = this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart");
 			}else if(!editable && this._touchStartHandle){
 				this.disconnect(this._touchStartHandle);
 				this._touchStartHandle = null;
