@@ -207,15 +207,17 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 				this.xaxis.to = this.displayRange;
 			}
 			// we don't want axis on Pie
-			if(kwArgs.type && kwArgs.type != "Pie" && kwArgs.type.prototype.declaredClass != "dojox.charting.plot2d.Pie"){
+			var cartesian = kwArgs.type && kwArgs.type != "Pie" && kwArgs.type.prototype.declaredClass != "dojox.charting.plot2d.Pie";
+			if(cartesian){
 				this.addAxis("x", this.xaxis);
 				this.addAxis("y", this.yaxis);
 			}
 			chartPlot.type = kwArgs.type || "Markers";
 			this.addPlot("default", lang.mixin(chartPlot, kwArgs.chartPlot));
-
-			this.addPlot("grid", lang.mixin(kwArgs.grid || {}, {type: "Grid", hMinorLines: true}));
-
+			if(cartesian){
+				this.addPlot("grid", lang.mixin(kwArgs.grid || {}, {type: "Grid", hMinorLines: true}));
+			}
+			
 			if(this.showing){
 				this.render();
 			}
