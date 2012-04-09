@@ -189,6 +189,8 @@ define([
 				this._handleClick = false;
 			}
 
+			this.inherited(arguments);
+			
 			if(domClass.contains(this.domNode, "mblVariableHeight")){
 				this.variableHeight = true;
 			}
@@ -197,7 +199,6 @@ define([
 				setTimeout(lang.hitch(this, "layoutVariableHeight"), 0);
 			}
 
-			this.inherited(arguments);
 			if(!this._isOnLine){
 				this._isOnLine = true;
 				this.set({ // retry applying the attribute
