@@ -3,8 +3,9 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/date",
-	"dojo/date/locale"
-], function(array, declare, lang, ddate, datelocale){
+	"dojo/date/locale",
+	"dojo/date/stamp"
+], function(array, declare, lang, ddate, datelocale, datestamp){
 
 	// module:
 	//		dojox/mobile/_DatePickerMixin
@@ -144,6 +145,27 @@ define([
 				}
 				w.set("value", v);
 			});
-		}
+		},
+		
+		_setValueAttr: function(/*String*/value){
+			// summary:
+			//		Sets the current date as an String formatted according to a subset of the ISO-8601 standard.
+			// description:
+			//		This method first converts the value argument by calling the fromISOString method of
+			//		the dojo/date/stamp module, then sets the values of the picker according to the resulting
+			//		Date object. If the string cannot be parsed by fromISOString, the method does nothing.
+			// value:
+			//		A string formatted as described in the dojo/date/stamp module.
+			var date = datestamp.fromISOString(value);
+			this.set("values", array.map(this.slots, function(w){ return w.format(date); }));
+		},
+		
+		_getValueAttr: function(){
+			// summary:
+			//		Gets the current date as a String formatted according to a subset of the ISO-8601 standard.
+			// returns:
+			//		A string formatted as described in the dojo/date/stamp module.
+			return datestamp.toISOString(this.get("date"), { selector: "date" });
+		}		
 	});
 });
