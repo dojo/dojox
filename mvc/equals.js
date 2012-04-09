@@ -76,5 +76,6 @@ define([
 		return types[0] != types[1] ? false : options["equals" + types[0].replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](dst, src); // Boolean
 	};
 
+	// lang.setObject() thing is for back-compat, remove it in 2.0
 	return lang.setObject("dojox.mvc.equals", lang.mixin(equals, equalsOptions));
 });

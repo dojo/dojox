@@ -104,13 +104,20 @@ define([
 		};
 	}
 
-	return declare("dojox.mvc._atBindingMixin", null, {
+	var _atBindingMixin = declare("dojox.mvc._atBindingMixin", null, {
+		// summary:
+		//		The mixin for dijit._WidgetBase to support data binding.
+
+		// dataBindAttr: String
+		//		The attribute name for data binding.
+		dataBindAttr: "data-mvc-bindings",
+
 		_dbpostscript: function(/*Object?*/ params, /*DomNode|String*/ srcNodeRef){
 			// summary:
 			//		See if any parameters for this widget are dojox.mvc.at handles.
 			//		If so, move them under this._refs to prevent widget implementations from referring them.
 
-			var refs = this._refs = {};
+			var refs = this._refs = (params || {}).refs || {};
 			for(var prop in params){
 				if((params[prop] || {}).atsignature == "dojox.mvc.at"){
 					var h = params[prop];
@@ -186,6 +193,21 @@ define([
 			}
 		},
 
+		_setBind: function(/*Object*/ value){
+			// summary:
+			//		Sets data binding described in data-mvc-bindings.
+
+			var list = eval("({" + value + "})");
+			for(var prop in list){
+				var h = list[prop];
+				if((h || {}).atsignature != "dojox.mvc.at"){
+					console.warn(prop + " in " + dataBindAttr + " is not a data binding handle.");
+				}else{
+					this._setAtWatchHandle(prop, h);
+				}
+			}
+		},
+
 		_getExcludesAttr: function(){
 			// summary:
 			//		Returns list of all properties that data binding is established with.
@@ -213,4 +235,7 @@ define([
 			return this.constructor._attribs = list; // String[]
 		}
 	});
+
+	_atBindingMixin.prototype[_atBindingMixin.prototype.dataBindAttr] = ""; // Let parser treat the attribute as string
+	return _atBindingMixin;
 });

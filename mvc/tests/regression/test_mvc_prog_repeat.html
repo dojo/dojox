@@ -45,7 +45,7 @@
 			'dojo/domReady!'
 		], function (parser, mvc, Memory, DateTextBox, Calendar, StatefulModel, Repeat, Group, 
 					at, registry, Button, Output, TextBox, dateStamp, dom, domconstruct) {
-
+			window.at = at;
 			dojox.debugDataBinding = true;
 
 			// *** Test1 setup begin: ***
@@ -179,10 +179,10 @@
 	<h2>Test 3: A programmatic repeat with the html inline using mvc.at.</h2>
 	<div  style="border-style: solid; border-width: 2px; width: 827px;">
 		<div id="test3_repeat">
-			<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+			<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:${this.index}')">
 				<label class="cell">Name:</label> 
-				<input  class="cell"  data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:First', 'value')"></input>
-				<input  class="cell"  data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:Last', 'value')"></input>
+				<input  class="cell"  data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:First', 'value')"></input>
+				<input  class="cell"  data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:Last', 'value')"></input>
 			</div>	
 		</div>
 	</div>

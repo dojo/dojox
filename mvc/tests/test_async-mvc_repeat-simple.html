@@ -20,13 +20,15 @@
 				"dojo/parser",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ListController",
+				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
-				"dojox/mvc/at",
 				"dojox/mvc/Group",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(parser, getStateful, ListController){
+			], function(parser, getStateful, ListController, at){
+				window.at = at;
+				dojox.debugDataBinding = true;
 				ctrl = new ListController({
 					model: getStateful([
 						{
@@ -93,10 +95,10 @@
 			<div id="main">
 				<div id="leftNav"></div>
 				<div id="mainContent">
-					<div data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: dojox.mvc.at(ctrl, 'model')">
+					<div data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: at(ctrl, 'model')">
 						<div>
 							<label class="cell" for="nameInput${this.index}">Name:</label>
-							<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" data-dojo-props="value: dojox.mvc.at('rel:${index}', 'First')">
+							<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" data-dojo-props="value: at('rel:${index}', 'First')">
 							<button type="button" data-dojo-type="dijit.form.Button"
 							 data-dojo-props="onClick: function(){ ctrl.set('cursorIndex', ${this.index}); }">Details</button>
 						</div>
@@ -105,32 +107,32 @@
 					<div id="detailsBanner">
 						Details for result index:
 						<span data-dojo-type="dijit._WidgetBase"
-						 data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: dojox.mvc.at(ctrl, 'cursorIndex')"></span>
+						 data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: at(ctrl, 'cursorIndex')"></span>
 					</div>
-					<div id="detailsGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'cursor')">
+					<div id="detailsGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'cursor')">
 						<div class="row">
 							<label class="cell" for="firstInput">First Name:</label>
-							<input class="cell" id="firstInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
+							<input class="cell" id="firstInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'First')">
 						</div>
 						<div class="row">
 							<label class="cell" for="lastInput">Last Name:</label>
-							<input class="cell" id="lastInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
+							<input class="cell" id="lastInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Last')">
 						</div>
 						<div class="row">
 							<label class="cell" for="officeInput">Office:</label>
-							<input class="cell" id="officeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Office')">
+							<input class="cell" id="officeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Office')">
 						</div>
 						<div class="row">
 							<label class="cell" for="emailInput">Email:</label>
-							<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Email')">
+							<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Email')">
 						</div>
 						<div class="row">
 							<label class="cell" for="telInput">Telephone:</label>
-							<input class="cell" id="telInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Tel')">
+							<input class="cell" id="telInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Tel')">
 						</div>
 						<div class="row">
 							<label class="cell" for="faxInput">Fax:</label>
-							<input class="cell" id="faxInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Fax')">
+							<input class="cell" id="faxInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Fax')">
 						</div>
 					</div>
 				</div>

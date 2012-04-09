@@ -14,11 +14,12 @@
 				"dojo/parser",
 				"dojo/Stateful",
 				"dijit/registry",
+				"dojox/mvc/at",
 				"dojox/mvc/ModelRefController",
 				"dijit/form/NumberTextBox",
-				"dojox/mvc/at",
 				"dojox/mvc/_TextBoxExtensions"
-			], function(doh, domClass, parser, Stateful, registry, ModelRefController){
+			], function(doh, domClass, parser, Stateful, registry, at, ModelRefController){
+				window.at = at;
 				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController({
@@ -107,16 +108,16 @@
 			<div>
 				<label for="num1">Number 1</label>
 				<input id="num1" data-dojo-type="dijit.form.NumberTextBox"
-				 data-dojo-props="value: dojox.mvc.at(ctrl, 'num1'),
-				                  disabled: dojox.mvc.at(ctrl, 'relation').attach(disabledConverter),
-				                  valid: dojox.mvc.at(ctrl, 'relation').attach(validConverter)">
+				 data-dojo-props="value: at(ctrl, 'num1'),
+				                  disabled: at(ctrl, 'relation').attach(disabledConverter),
+				                  valid: at(ctrl, 'relation').attach(validConverter)">
 			</div>
 			<div>
 				<label for="num2">Number 2</label>
 				<input id="num2" data-dojo-type="dijit.form.NumberTextBox"
-				 data-dojo-props="value: dojox.mvc.at(ctrl, 'num2'),
-				                  disabled: dojox.mvc.at(ctrl, 'relation').attach(disabledConverter),
-				                  valid: dojox.mvc.at(ctrl, 'relation').attach(validConverter)">
+				 data-dojo-props="value: at(ctrl, 'num2'),
+				                  disabled: at(ctrl, 'relation').attach(disabledConverter),
+				                  valid: at(ctrl, 'relation').attach(validConverter)">
 			</div>
 		</form>
 	</body>

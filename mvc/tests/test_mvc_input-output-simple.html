@@ -22,7 +22,9 @@
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
-			], function(parser, Stateful, EditModelRefController){
+			], function(parser, Stateful, EditModelRefController, at){
+				window.at = at;
+				dojox.debugDataBinding = true;
 				ctrl = new EditModelRefController({sourceModel: new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"})});
 				parser.parse();
 			});
@@ -42,19 +44,19 @@
 				<div id="mainContent">
 					<div class="row">
 						<label class="cell" for="firstnameInput">First:</label>
-						<input id="firstId" class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(ctrl, 'First')">
+						<input id="firstId" class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at(ctrl, 'First')">
 						<!-- Content in output below will always be in sync with value of textbox above -->
-						(first name is: <span data-dojo-type="dijit._WidgetBase" data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: dojox.mvc.at(ctrl, 'First')"></span>)
+						(first name is: <span data-dojo-type="dijit._WidgetBase" data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: at(ctrl, 'First')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="lastnameInput">Last:</label>
-						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(ctrl, 'Last')">
-						(last name is: <span data-dojo-type="dijit._WidgetBase" data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: dojox.mvc.at(ctrl, 'Last')"></span>)
+						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at(ctrl, 'Last')">
+						(last name is: <span data-dojo-type="dijit._WidgetBase" data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: at(ctrl, 'Last')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="emailInput">Email:</label>
-						<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(ctrl, 'Email')">
-						(email is: <span data-dojo-type="dijit._WidgetBase" data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: dojox.mvc.at(ctrl, 'Email')"></span>)
+						<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at(ctrl, 'Email')">
+						(email is: <span data-dojo-type="dijit._WidgetBase" data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, value: at(ctrl, 'Email')"></span>)
 					</div>
 					<br/>Model:
 					<button id="reset" type="button" data-dojo-type="dijit.form.Button"  data-dojo-props="onClick: function(){ ctrl.reset(); }">Reset</button>

@@ -28,6 +28,9 @@
 				'dijit/form/TextBox'
 				], function (declare, at, EditModelRefController, ModelRefController, Stateful, Group, _TemplatedMixin, 
 						_WidgetsInTemplateMixin, StatefulModel, ready, parser, TextBox) {
+				window.at = at;
+				dojox.debugDataBinding = true;
+
 				declare('test.TextBox', [TextBox], {
 					startup: function () {
 						console.log('starting...', this.id, this._refs.value.targetProp);
@@ -43,7 +46,7 @@
 					}
 				});
 				declare('test.Templated', [testGroup, _TemplatedMixin, _WidgetsInTemplateMixin], {
-					templateString: '<div><input data-dojo-type="test.TextBox" data-dojo-props="value: dojox.mvc.at(\'rel:\', \'fn\')"></div>'
+					templateString: '<div><input data-dojo-type="test.TextBox" data-dojo-props="value: at(\'rel:\', \'fn\')"></div>'
 				});
 				
 				// All 3 of these models work
@@ -104,7 +107,7 @@
 		<h1>late binding</h1>
 		<p>no template</p>
 		<div id="parsedGroup" data-dojo-type="test.Group" data-dojo-props="target : model">
-			<input data-dojo-type="test.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'fn')" id="parsedInput">
+			<input data-dojo-type="test.TextBox" data-dojo-props="value: at('rel:', 'fn')" id="parsedInput">
 		</div>
 		<p>Early parsed</p><div id="early" data-dojo-type="test.Templated" data-dojo-props="target : model"></div>
 		<p>Late parsed</p><div id="late" data-dojo-type="test.Templated"></div>

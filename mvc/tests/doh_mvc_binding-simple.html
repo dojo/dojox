@@ -23,13 +23,15 @@
 				"dojo/parser",
 				"dojo/Stateful",
 				"dijit/registry",
+				"dojox/mvc/at",
 				"dijit/form/TextBox",
 				"dijit/form/NumberTextBox",
 				"dijit/form/ValidationTextBox",
 				"dijit/form/Button",
-				"dojox/mvc/at",
 				"dojox/mvc/Output"
-			], function(doh, parser, Stateful, registry){
+			], function(doh, parser, Stateful, registry, at){
+				window.at = at;
+
 				model = new Stateful({
 					First: "John",
 					Last: "Doe",
@@ -203,18 +205,18 @@
 					<div class="row">
 						<label class="cell" for="firstnameInput">First:</label>
 						<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.ValidationTextBox"
-						 data-dojo-props="value: dojox.mvc.at(model, 'First'),
-										  readOnly: dojox.mvc.at(model, 'First').attach(readOnlyConverter),
-										  relevant: dojox.mvc.at(model, 'First').attach(relevanceConverter),
-										  valid: dojox.mvc.at(model, 'First').attach(numValidConverter)">
+						 data-dojo-props="value: at(model, 'First'),
+										  readOnly: at(model, 'First').attach(readOnlyConverter),
+										  relevant: at(model, 'First').attach(relevanceConverter),
+										  valid: at(model, 'First').attach(numValidConverter)">
 						<!-- Content in output below will always be in sync with value of textbox above -->
-						First name is: <span id="tout" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'First')"></span>
+						First name is: <span id="tout" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'First')"></span>
 					</div>
 					<div class="row">
 						<label class="cell" for="firstnameInput"></label>
-						ReadOnly is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'First').attach(readOnlyConverter)"></span>
-						Relevant is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'First').attach(relevanceConverter)"></span>
-						Valid is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'First').attach(numValidConverter)"></span>
+						ReadOnly is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'First').attach(readOnlyConverter)"></span>
+						Relevant is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'First').attach(relevanceConverter)"></span>
+						Valid is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'First').attach(numValidConverter)"></span>
 					</div>
 					<div class="row">
 						<label style="display:inline-block; width:100%; text-align:left;">Num: Enter 1 for Valid false</label>
@@ -222,9 +224,9 @@
 					<div class="row">
 						<label class="cell" for="numInput">Num:</label>
 						<input class="cell" id="numInput" data-dojo-type="dijit.form.NumberTextBox"
-						 data-dojo-props="value: dojox.mvc.at(model, 'Num'),
-										  valid: dojox.mvc.at(model, 'Num').attach(numValidConverter)">
-						Num is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Num')"></span>
+						 data-dojo-props="value: at(model, 'Num'),
+										  valid: at(model, 'Num').attach(numValidConverter)">
+						Num is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Num')"></span>
 					</div>
 					<h2>Bind Tests</h2>
 					<div class="row">
@@ -237,25 +239,25 @@
 
 					<div class="row">
 						<label class="cell" for="lastnameInput">Last:</label>
-						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(model, 'Last')">
-						Last name is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Last')"></span>
+						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at(model, 'Last')">
+						Last name is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Last')"></span>
 					</div>
 					<div class="row">
 						<label class="cell" for="emailInput">Email:</label>
 						<input class="cell" id="emailInput" data-dojo-type="dijit.form.ValidationTextBox"
-						 data-dojo-props="value: dojox.mvc.at(model, 'Email'),
-										  readOnly: dojox.mvc.at(model, 'Last').attach(readOnlyConverter),
-										  relevant: dojox.mvc.at(model, 'Last').attach(relevanceConverter),
-										  required: dojox.mvc.at(model, 'Last').attach(requiredConverter),
-										  valid: dojox.mvc.at(model, 'Last').attach(numValidConverter)">
-						Email is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Email')"></span>
+						 data-dojo-props="value: at(model, 'Email'),
+										  readOnly: at(model, 'Last').attach(readOnlyConverter),
+										  relevant: at(model, 'Last').attach(relevanceConverter),
+										  required: at(model, 'Last').attach(requiredConverter),
+										  valid: at(model, 'Last').attach(numValidConverter)">
+						Email is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Email')"></span>
 					</div>
 					<div class="row">
 						<label class="cell" for="emailInput"></label>
-						ReadOnly is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Last').attach(readOnlyConverter)"></span>
-						Relevant is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Last').attach(relevanceConverter)"></span>
-						Required is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Last').attach(requiredConverter)"></span>
-						Valid is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Last').attach(numValidConverter)"></span>
+						ReadOnly is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Last').attach(readOnlyConverter)"></span>
+						Relevant is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Last').attach(relevanceConverter)"></span>
+						Required is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Last').attach(requiredConverter)"></span>
+						Valid is: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Last').attach(numValidConverter)"></span>
 					</div>
 				</div>
 			</div>

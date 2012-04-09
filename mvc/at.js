@@ -89,5 +89,11 @@ define([
 		}; // dojox.mvc.at.handle
 	};
 
+	// Data binding directions
+	at.from = sync.from;
+	at.to = sync.to;
+	at.both = sync.both;
+
+	// lang.setObject() thing is for back-compat, remove it in 2.0
 	return lang.setObject("dojox.mvc.at", at);
 });

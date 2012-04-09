@@ -30,5 +30,6 @@ define([
 		return target; // dojo.Stateful
 	};
 
+	// lang.setObject() thing is for back-compat, remove it in 2.0
 	return lang.setObject("dojox.mvc.resolve", resolve);
 });

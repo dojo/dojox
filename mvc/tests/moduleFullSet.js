@@ -45,18 +45,9 @@ define([
 		doh.registerUrl("dojox.mvc.tests.regression.doh_mvc_date_test", require.toUrl("dojox/mvc/tests/regression/doh_mvc_date_test.html" + userArgs), 999999);
 		doh.registerUrl("dojox.mvc.tests.regression.doh_mvc_validation-test-simple", require.toUrl("dojox/mvc/tests/regression/doh_mvc_validation-test-simple.html" + userArgs), 999999);
 		doh.registerUrl("dojox.mvc.tests.regression.doh_new-mvc_input-output-simple.html", require.toUrl("dojox/mvc/tests/doh_new-mvc_input-output-simple.html" + userArgs), 999999);
-		// Robot regression
-		doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_loan-stateful", require.toUrl("dojox/mvc/tests/regression/robot/mvc_loan-stateful.html" + userArgs), 999999);
-		doh.registerUrl("dojox.mvc.tests.regression.robot.mobile-demo-test", require.toUrl("dojox/mvc/tests/regression/robot/mobile-demo-test.html" + userArgs), 999999);
-		doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_shipto-billto-simple", require.toUrl("dojox/mvc/tests/regression/robot/mvc_shipto-billto-simple.html" + userArgs), 999999);
-		doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_generate-view", require.toUrl("dojox/mvc/tests/regression/robot/mvc_generate-view.html" + userArgs), 999999);
-		doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_loan-stateful", require.toUrl("dojox/mvc/tests/regression/robot/mvc_loan-stateful.html" + userArgs), 999999);
-		//doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_ref-set-repeat", require.toUrl("dojox/mvc/tests/regression/robot/mvc_ref-set-repeat.html" + userArgs), 999999);
-		//doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_search-results-repeat", require.toUrl("dojox/mvc/tests/regression/robot/mvc_search-results-repeat.html" + userArgs), 999999);
-		doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_search-results-ins-del", require.toUrl("dojox/mvc/tests/regression/robot/mvc_search-results-ins-del.html" + userArgs), 999999);
-		//doh.registerUrl("dojox.mvc.tests.regression.robot.iphone_shipto-billto", require.toUrl("dojox/mvc/tests/regression/robot/iphone_shipto-billto.html" + userArgs), 999999);
-		//doh.registerUrl("dojox.mvc.tests.regression.robot.android_repeat-ins", require.toUrl("dojox/mvc/tests/regression/robot/android_repeat-ins.html" + userArgs), 999999);
-		//doh.registerUrl("dojox.mvc.tests.regression.robot.mvc_shipto-billto-hierarchical", require.toUrl("dojox/mvc/tests/regression/robot/mvc_shipto-billto-hierarchical.html" + userArgs), 999999);
+		// Robot regression tests have been removed, coverage is provided with the doh tests, and there 
+		// have been too many problems with the running of the robot tests.
+		// But the robot regression tests are available with the dojox/mvc/tests/regression/robot/runTestsFullSet.html
 	}catch(e){
 		doh.debug(e);
 	}

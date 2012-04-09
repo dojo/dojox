@@ -62,5 +62,6 @@ define([
 		return (options || getStateful)["getStateful" + (options || getStateful).getType(value).replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](value); // Anything
 	};
 
+	// lang.setObject() thing is for back-compat, remove it in 2.0
 	return lang.setObject("dojox.mvc.getStateful", lang.mixin(getStateful, getStatefulOptions));
 });

@@ -20,12 +20,15 @@
 				"dojo/parser",
 				"dojo/Stateful",
 				"dojox/mvc/EditModelRefController",
+				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
-				"dojox/mvc/at",
 				"dojox/mvc/Group",
+				"dojox/mvc/ParserExtension",
 				"dojo/domReady!"
-			], function(parser, Stateful, EditModelRefController){
+			], function(parser, Stateful, EditModelRefController, at){
+				window.at = at;
+				dojox.debugDataBinding = true;
 				ctrl = new EditModelRefController({sourceModel: new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"})});
 				parser.parse();
 			});
@@ -46,27 +49,21 @@
 					<div class="row">
 						<label class="cell" for="firstnameInput">First:</label>
 						<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
+								data-dojo-props="value: at('rel:', 'First')">
 						<!-- Content in output below will always be in sync with value of textbox above -->
-						(first name is: <span data-dojo-type="dijit._WidgetBase" 
-								data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, 
-														value: dojox.mvc.at('rel:', 'First')"></span>)
+						(first name is: <span data-mvc-bindings="value: at('rel:', 'First')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="lastnameInput">Last:</label>
 						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
-						(last name is: <span data-dojo-type="dijit._WidgetBase" 
-								data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, 
-														value: dojox.mvc.at('rel:', 'Last')"></span>)
+								data-dojo-props="value: at('rel:', 'Last')">
+						(last name is: <span data-mvc-bindings="value: at('rel:', 'Last')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="emailInput">Email:</label>
 						<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'Email')">
-						(email is: <span data-dojo-type="dijit._WidgetBase" 
-								data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, 
-													value: dojox.mvc.at('rel:', 'Email')"></span>)
+								data-dojo-props="value: at('rel:', 'Email')">
+						(email is: <span data-mvc-bindings="value: at('rel:', 'Email')"></span>)
 					</div>
 					<br/>Model:
 					<button id="reset" type="button" data-dojo-type="dijit.form.Button" 

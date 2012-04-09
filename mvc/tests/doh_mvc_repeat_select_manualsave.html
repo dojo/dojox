@@ -140,6 +140,7 @@
 			"dojox/mvc/Group",
 			"dojox/mvc/Repeat"
 		], function(doh, dojox, declare, lang, ddom, domClass, parser, Stateful, registry, Menu, at, getStateful){
+			window.at = at;
 			dojox.debugDataBinding = true;
 
 			var uniqueIdSeq = 3;
@@ -317,25 +318,25 @@
 				<div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="persist: false, gutters: false">
 					<div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'top'">
 						<div data-dojo-type="dojox.mvc.Repeat" data-dojo-mixins="dijit.MenuBar" data-dojo-props="children: ViewMenuBarData">
-							<div id="menubaritem0_${index}" data-dojo-type="dijit.MenuBarItem" data-dojo-props="'*': dojox.mvc.at('rel:${index}', '*')"></div>
+							<div id="menubaritem0_${index}" data-dojo-type="dijit.MenuBarItem" data-dojo-props="'*': at('rel:${index}', '*')"></div>
 						</div>
 					</div>
 					<div class="view" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'center'">
 						<table border="0" cellspacing="0" cellpadding="0">
-							<tbody data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: dojox.mvc.at('widget:listCtl', 'inModel')">
-								<tr data-dojo-type="dijit._WidgetBase" data-dojo-props="target: dojox.mvc.at('rel:', '${index}')">
+							<tbody data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: at('widget:listCtl', 'inModel')">
+								<tr data-dojo-type="dijit._WidgetBase" data-dojo-props="target: at('rel:', '${index}')">
 									<td class="dijitMenuItemIconCell">
 										<input id="viewcheckbox${index}" data-dojo-type="dijit.form.CheckBox"
-										 data-dojo-props="uniqueId: dojox.mvc.at('rel:', 'uniqueId'),
-										                  checked: dojox.mvc.at('widget:listCtl', 'cursor').attach(selectionStatusConverter)">
+										 data-dojo-props="uniqueId: at('rel:', 'uniqueId'),
+										                  checked: at('widget:listCtl', 'cursor').attach(selectionStatusConverter)">
 									</td>
 									<td class="dijitMenuItemIconCell">
 										<img id="viewiconimg${index}" src="../../../dojo/resources/blank.gif" data-dojo-type="dijit._WidgetBase"
-										 data-dojo-props="_setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: dojox.mvc.at('rel:', 'Priority').direct(dojox.mvc.from).attach(priorityConverter)">
+										 data-dojo-props="_setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: at('rel:', 'Priority').direct(dojox.mvc.from).attach(priorityConverter)">
 									</td>
 									<td id="viewtext${index}" data-dojo-type="dijit._WidgetBase"
-									 data-dojo-props="Subject: dojox.mvc.at('rel:', 'Subject').direct(dojox.mvc.from).attach(subjectConverter),
-									                  _setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: dojox.mvc.at('rel:', 'Completed').direct(dojox.mvc.from).attach(completeConverter),
+									 data-dojo-props="Subject: at('rel:', 'Subject').direct(dojox.mvc.from).attach(subjectConverter),
+									                  _setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: at('rel:', 'Completed').direct(dojox.mvc.from).attach(completeConverter),
 									                  _setSubjectAttr: {node: 'domNode', type: 'innerText'}">
 									</td>
 								</tr>
@@ -348,24 +349,24 @@
 				<div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="persist: false, gutters: false">
 					<div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'top'">
 						<div data-dojo-type="dojox.mvc.Repeat" data-dojo-mixins="dijit.MenuBar" data-dojo-props="children: DetailMenuBarData">
-							<div id="menubaritem1_${index}" data-dojo-type="dijit.MenuBarItem" data-dojo-props="'*': dojox.mvc.at('rel:${index}', '*')"></div>
+							<div id="menubaritem1_${index}" data-dojo-type="dijit.MenuBarItem" data-dojo-props="'*': at('rel:${index}', '*')"></div>
 						</div>
 					</div>
-					<div class="form" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'center', target: dojox.mvc.at('widget:listCtl', 'model')">
+					<div class="form" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'center', target: at('widget:listCtl', 'model')">
 						<div class="row">
 							<span class="cell">
 								<label for="completed">Completed:</label>
-								<input id="completed" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: dojox.mvc.at('rel:', 'Completed')">
+								<input id="completed" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: at('rel:', 'Completed')">
 							</span>
 						</div>
 						<div class="row">
 							<label class="cell" for="subject">Subject:</label>
-							<input class="cell" id="subject" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Subject')">
+							<input class="cell" id="subject" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Subject')">
 						</div>
 						<div class="row">
 							<label class="cell" for="priority">Priority:</label>
 							<span class="cell">
-								<select id="priority" data-dojo-type="dijit.form.Select" data-dojo-props="value: dojox.mvc.at('rel:', 'Priority')">
+								<select id="priority" data-dojo-type="dijit.form.Select" data-dojo-props="value: at('rel:', 'Priority')">
 									<option value="1">1</option>
 									<option value="2">2</option>
 									<option value="3">3</option>
@@ -376,13 +377,13 @@
 							<label class="cell" for="due">Due:</label>
 							<span class="cell">
 								<input id="due" data-dojo-type="dijit.form.DateTextBox"
-								 data-dojo-props="required: false, constraints: {datePattern: 'MMMM dd yyyy'}, value: dojox.mvc.at('rel:', 'Due')">
+								 data-dojo-props="required: false, constraints: {datePattern: 'MMMM dd yyyy'}, value: at('rel:', 'Due')">
 							</span>
 						</div>
 						<div class="row">
 							<span class="cell">Description:</span>
 							<div class="cell" data-dojo-type="dijit.Editor"
-							 data-dojo-props="plugins: ['bold', 'italic', 'underline'], height: '200', value: dojox.mvc.at('rel:', 'Description')"></div>
+							 data-dojo-props="plugins: ['bold', 'italic', 'underline'], height: '200', value: at('rel:', 'Description')"></div>
 						</div>
 					</div>
 				</div>

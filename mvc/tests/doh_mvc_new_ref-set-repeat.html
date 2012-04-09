@@ -22,16 +22,19 @@
 				"dojo/parser",
 				"dojo/store/Memory",
 				"dijit/registry",
+				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ModelRefController",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
-				"dojox/mvc/at",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, array, lang, Deferred, parser, MemoryStore, registry, getStateful, ModelRefController){
+			], function(doh, array, lang, Deferred, parser, MemoryStore, registry, at, getStateful, ModelRefController){
+				window.at = at;
+				dojox.debugDataBinding = true;
+
 				function runTests(){
 					doh.register("Tests", [
 						{
@@ -101,13 +104,11 @@
 					doh.run();
 				}
 
-				dojox.debugDataBinding = true;
-
 				ctrl = new ModelRefController({ownProps: {model1: 1, model2: 1, model3: 1}});
 
 				parser.parse();
 
-				Deferred.when((new dojo.store.Memory({data: data1 = [
+				Deferred.when((new MemoryStore({data: data1 = [
 					{
 						"Query": "Engineers1",
 						"Results": [
@@ -125,12 +126,12 @@
 							}
 						]
 					}
-				]}).query()), function(data){
-					ctrl.set("model1", getStateful(data)[0])
+				]})).query(), function(data){
+					ctrl.set("model1", getStateful(data)[0]);
 					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 
-				Deferred.when((new dojo.store.Memory({data: data2 = [
+				Deferred.when((new MemoryStore({data: data2 = [
 					{
 						"Query": "Engineers2",
 						"Results": [
@@ -149,7 +150,7 @@
 					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 
-				Deferred.when((new dojo.store.Memory({data: data3 = [
+				Deferred.when((new MemoryStore({data: data3 = [
 					{
 						"Query": "Engineers3",
 						"Results": [
@@ -178,47 +179,47 @@
 			<div id="main">
 				<div id="leftNav"></div>
 				<div id="mainContent">
-					<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: dojox.mvc.at(ctrl, 'Results')">
-						<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+					<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" data-dojo-props="children: at(ctrl, 'Results')">
+						<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:${this.index}')">
 							<label class="cell" for="nameInput${this.index}">Name:</label>
-							<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" data-dojo-props="value: dojox.mvc.at('rel:', 'First')"/>
+							<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" data-dojo-props="value: at('rel:', 'First')"/>
 						</div>
 					</div>
-					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model1')">
-						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Results')">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'model1')">
+						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Results')">
 							<span>
 								Model1 Output is ==> 
 							</span>
-							<span id="firstnameOutput10" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:0', 'First')">
+							<span id="firstnameOutput10" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:0', 'First')">
 								Name1 is "${this.value}" : 
 							</span>
-							<span id="firstnameOutput11" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:1', 'First')">
+							<span id="firstnameOutput11" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:1', 'First')">
 								Name2 is "${this.value}" : 
 							</span>
-							<span id="firstnameOutput12" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:2', 'First')">
+							<span id="firstnameOutput12" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:2', 'First')">
 								Name3 is "${this.value}"
 							</span>
 						</div>
 					</div>
-					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model2')">
-						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Results')">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'model2')">
+						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Results')">
 							<span>
 								Model2 Output is ==>
 							</span>
-							<span id="firstnameOutput20" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:0', 'First')">
+							<span id="firstnameOutput20" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:0', 'First')">
 								Name1 is "${this.value}" : 
 							</span>
-							<span id="firstnameOutput21" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:1', 'First')">
+							<span id="firstnameOutput21" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:1', 'First')">
 								Name2 is "${this.value}"
 							</span>
 						</div>
 					</div>
-					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model3')">
-						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Results')">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'model3')">
+						<div data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Results')">
 							<span>
 								Model3 Output is ==>
 							</span>
-							<span id="firstnameOutput30" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:0', 'First')">
+							<span id="firstnameOutput30" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:0', 'First')">
 								Name1 is "${this.value}"
 							</span>
 						</div>

@@ -310,10 +310,9 @@
 								doh.is("1987", dijit.byId("test1_cal2").get('value').getFullYear(),"test1_cal2 getFullYear should be 1987");
 								doh.is("7", dijit.byId("test1_cal2").get('value').getMonth(),"test1_cal2 getMonth should be 7");
 								doh.is("1", dijit.byId("test1_cal2").get('value').getDate(),"test1_cal2 getDate should be 1");
-								var date1 = "Sat Aug 01 1987 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sat Aug 1 00:00:00 EDT 1987"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_txt2").get('value'))),"test1_txt2 should be set");
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_output2").get('value'))),"test1_output2 should be set");
+								var date = new Date(1987, 7, 1, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test1_txt2").get("binding").get("value").getTime(), "test1_txt2 should be 8/1/87 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test1_output2").get("binding").get("value").getTime(), "test1_output2 should be 8/1/87 0:00 AM");
 							}
 						}]);
 
@@ -326,10 +325,9 @@
 								doh.is("2011", dijit.byId("test2_cal2").get('value').getFullYear(),"test2_cal2 getFullYear should be 1987");
 								doh.is("10", dijit.byId("test2_cal2").get('value').getMonth(),"test2_cal2 getMonth should be 10");
 								doh.is("6", dijit.byId("test2_cal2").get('value').getDate(),"test2_cal2 getDate should be 6");
-								var date1 = "Sun Nov 06 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sun Nov 6 00:00:00 EDT 2011"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_txt2").get('value'))),"test2_txt2 should be set");
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_output2").get('value'))),"test2_output2 should be set");
+								var date = new Date(2011, 10, 6, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test2_txt2").get("binding").get("value").getTime(), "test2_txt2 should be 11/6/11 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test2_output2").get("binding").get("value").getTime(), "test2_output2 should be 11/6/11 0:00 AM");
 							}
 						}]);
 
@@ -342,10 +340,9 @@
 								doh.is("2011", dijit.byId("test3_cal2").get('value').getFullYear(),"test3_cal2 getFullYear should be 1987");
 								doh.is("7", dijit.byId("test3_cal2").get('value').getMonth(),"test3_cal2 getMonth should be 7");
 								doh.is("27", dijit.byId("test3_cal2").get('value').getDate(),"test3_cal2 getDate should be 27");
-								var date1 = "Sat Aug 27 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sat Aug 27 00:00:00 EDT 2011"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_txt2").get('value'))),"test3_txt2 should be set-"+dijit.byId("test3_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_output2").get('value'))),"test3_output2 should be set");
+								var date = new Date(2011, 7, 27, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test3_txt2").get("binding").get("value").getTime(), "test3_txt2 should be 8/27/11 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test3_output2").get("binding").get("value").getTime(), "test3_output2 should be 8/27/11 0:00 AM");
 							}
 						}]);
 
@@ -360,10 +357,9 @@
 								doh.is("1989", dijit.byId("test1_cal2").get('value').getFullYear(),"test1_cal2 getFullYear should be 1989");
 								doh.is("8", dijit.byId("test1_cal2").get('value').getMonth(),"test1_cal2 getMonth should be 8");
 								doh.is("7", dijit.byId("test1_cal2").get('value').getDate(),"test1_cal2 getDate should be 7");
-								var date1 = "Thu Sep 07 1989 01:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Thu Sep 7 01:00:00 EDT 1989"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_txt2").get('value'))),"test1_txt2 should be set-"+dijit.byId("test3_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_output2").get('value'))),"test1_output2 should be set");
+								var date = new Date(1989, 8, 7, 1, 0, 0, 0); // Setting a date to dijit.CalendarLite-based widget will cause the value to become 1am (See dijit.CalenarLite._patchDate())
+								doh.t(date.getTime() == dijit.byId("test1_txt2").get("binding").get("value").getTime(), "test1_txt2 should be 9/7/89 1:00 AM");
+								doh.t(date.getTime() == dijit.byId("test1_output2").get("binding").get("value").getTime(), "test1_output2 should be 9/7/89 1:00 AM");
 							}
 						}]);
 
@@ -378,10 +374,9 @@
 								doh.is("1989", dijit.byId("test2_cal2").get('value').getFullYear(),"test2_cal2 getFullYear should be 1989");
 								doh.is("8", dijit.byId("test2_cal2").get('value').getMonth(),"test2_cal2 getMonth should be 8");
 								doh.is("7", dijit.byId("test2_cal2").get('value').getDate(),"test2_cal2 getDate should be 7");
-								var date1 = "Thu Sep 07 1989 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Thu Sep 7 00:00:00 EDT 1989"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_txt2").get('value'))),"test2_txt2 should be set");
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_output2").get('value'))),"test2_output2 should be set");
+								var date = new Date(1989, 8, 7, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test2_txt2").get("binding").get("value").getTime(), "test2_txt2 should be 9/7/89 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test2_output2").get("binding").get("value").getTime(), "test2_output2 should be 9/7/89 0:00 AM");
 							}
 						}]);
 
@@ -396,10 +391,9 @@
 								doh.is("1989", dijit.byId("test3_cal2").get('value').getFullYear(),"test3_cal2 getFullYear should be 1989");
 								doh.is("8", dijit.byId("test3_cal2").get('value').getMonth(),"test3_cal2 getMonth should be 8");
 								doh.is("7", dijit.byId("test3_cal2").get('value').getDate(),"test3_cal2 getDate should be 7");
-								var date1 = "Thu Sep 07 1989 01:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Thu Sep 7 01:00:00 EDT 1989"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_txt2").get('value'))),"test3_txt2 should be set - got "+dijit.byId("test3_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_output2").get('value'))),"test3_output2 should be set");
+								var date = new Date(1989, 8, 7, 1, 0, 0, 0); // Setting a date to dijit.CalendarLite-based widget will cause the value to become 1am (See dijit.CalenarLite._patchDate())
+								doh.t(date.getTime() == dijit.byId("test3_txt2").get("binding").get("value").getTime(), "test3_txt2 should be 9/7/89 1:00 AM");
+								doh.t(date.getTime() == dijit.byId("test3_output2").get("binding").get("value").getTime(), "test3_output2 should be 9/7/89 1:00 AM");
 							}
 						}]);
 
@@ -413,10 +407,9 @@
 								doh.is("1991", dijit.byId("test1_cal2").get('value').getFullYear(),"test1_cal2 getFullYear should be 1991");
 								doh.is("4", dijit.byId("test1_cal2").get('value').getMonth(),"test1_cal2 getMonth should be 4");
 								doh.is("5", dijit.byId("test1_cal2").get('value').getDate(),"test1_cal2 getDate should be 5");
-								var date1 = "Sun May 05 1991 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sun May 5 00:00:00 EDT 1991"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_txt2").get('value'))),"test1_txt2 should be set-"+dijit.byId("test1_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_output2").get('value'))),"test1_output2 should be set");
+								var date = new Date(1991, 4, 5, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test1_txt2").get("binding").get("value").getTime(), "test1_txt2 should be 5/5/91 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test1_output2").get("binding").get("value").getTime(), "test1_output2 should be 5/5/91 0:00 AM");
 							}
 						}]);
 
@@ -430,10 +423,9 @@
 								doh.is("1991", dijit.byId("test2_cal2").get('value').getFullYear(),"test2_cal2 getFullYear should be 1991");
 								doh.is("4", dijit.byId("test2_cal2").get('value').getMonth(),"test2_cal2 getMonth should be 4");
 								doh.is("5", dijit.byId("test2_cal2").get('value').getDate(),"test2_cal2 getDate should be 5");
-								var date1 = "Sun May 05 1991 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sun May 5 00:00:00 EDT 1991"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_txt2").get('value'))),"test2_txt2 should be set-"+dijit.byId("test2_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_output2").get('value'))),"test2_output2 should be set");
+								var date = new Date(1991, 4, 5, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test2_txt2").get("binding").get("value").getTime(), "test2_txt2 should be 5/5/91 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test2_output2").get("binding").get("value").getTime(), "test2_output2 should be 5/5/91 0:00 AM");
 							}
 						}]);
 
@@ -447,10 +439,9 @@
 								doh.is("1991", dijit.byId("test3_cal2").get('value').getFullYear(),"test3_cal2 getFullYear should be 1991");
 								doh.is("4", dijit.byId("test3_cal2").get('value').getMonth(),"test3_cal2 getMonth should be 4");
 								doh.is("5", dijit.byId("test3_cal2").get('value').getDate(),"test3_cal2 getDate should be 5");
-								var date1 = "Sun May 05 1991 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sun May 5 00:00:00 EDT 1991"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_txt2").get('value'))),"test3_txt2 should be set-"+dijit.byId("test3_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_output2").get('value'))),"test3_output2 should be set");
+								var date = new Date(1991, 4, 5, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test3_txt2").get("binding").get("value").getTime(), "test3_txt2 should be 5/5/91 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test3_output2").get("binding").get("value").getTime(), "test3_output2 should be 5/5/91 0:00 AM");
 							}
 						}]);
 
@@ -465,10 +456,9 @@
 								doh.is("1993", dijit.byId("test1_cal2").get('value').getFullYear(),"test1_cal2 getFullYear should be 1993");
 								doh.is("9", dijit.byId("test1_cal2").get('value').getMonth(),"test1_cal2 getMonth should be 9");
 								doh.is("28", dijit.byId("test1_cal2").get('value').getDate(),"test1_cal2 getDate should be 28");
-								var date1 = "Thu Oct 28 1993 01:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Thu Oct 28 01:00:00 EDT 1993"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_txt2").get('value'))),"test1_txt2 should be set-"+dijit.byId("test1_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_output2").get('value'))),"test1_output2 should be set");
+								var date = new Date(1993, 9, 28, 1, 0, 0, 0); // Setting a date to dijit.CalendarLite-based widget will cause the value to become 1am (See dijit.CalenarLite._patchDate())
+								doh.t(date.getTime() == dijit.byId("test1_txt2").get("binding").get("value").getTime(), "test1_txt2 should be 10/28/93 1:00 AM");
+								doh.t(date.getTime() == dijit.byId("test1_output2").get("binding").get("value").getTime(), "test1_output2 should be 10/28/93 1:00 AM");
 							}
 						}]);
 
@@ -483,10 +473,9 @@
 								doh.is("1993", dijit.byId("test2_cal2").get('value').getFullYear(),"test2_cal2 getFullYear should be 1993");
 								doh.is("9", dijit.byId("test2_cal2").get('value').getMonth(),"test2_cal2 getMonth should be 9");
 								doh.is("28", dijit.byId("test2_cal2").get('value').getDate(),"test2_cal2 getDate should be 28");
-								var date1 = "Thu Oct 28 1993 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Thu Oct 28 00:00:00 EDT 1993"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_txt2").get('value'))),"test2_txt2 should be set-"+dijit.byId("test2_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_output2").get('value'))),"test2_output2 should be set");
+								var date = new Date(1993, 9, 28, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test2_txt2").get("binding").get("value").getTime(), "test2_txt2 should be 10/28/93 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test2_output2").get("binding").get("value").getTime(), "test2_output2 should be 10/28/93 0:00 AM");
 							}
 						}]);
 
@@ -501,10 +490,9 @@
 								doh.is("1993", dijit.byId("test3_cal2").get('value').getFullYear(),"test3_cal2 getFullYear should be 1993");
 								doh.is("9", dijit.byId("test3_cal2").get('value').getMonth(),"test3_cal2 getMonth should be 9");
 								doh.is("28", dijit.byId("test3_cal2").get('value').getDate(),"test3_cal2 getDate should be 28");
-								var date1 = "Thu Oct 28 1993 01:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Thu Oct 28 01:00:00 EDT 1993"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_txt2").get('value'))),"test3_txt2 should be set-"+dijit.byId("test3_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_output2").get('value'))),"test3_output2 should be set");
+								var date = new Date(1993, 9, 28, 1, 0, 0, 0); // Setting a date to dijit.CalendarLite-based widget will cause the value to become 1am (See dijit.CalenarLite._patchDate())
+								doh.t(date.getTime() == dijit.byId("test3_txt2").get("binding").get("value").getTime(), "test3_txt2 should be 10/28/93 1:00 AM");
+								doh.t(date.getTime() == dijit.byId("test3_output2").get("binding").get("value").getTime(), "test3_output2 should be 10/28/93 1:00 AM");
 							}
 						}]);
 
@@ -518,10 +506,9 @@
 								doh.is("1987", dijit.byId("test1_cal2").get('value').getFullYear(),"test1_cal2 getFullYear should be 1987");
 								doh.is("7", dijit.byId("test1_cal2").get('value').getMonth(),"test1_cal2 getMonth should be 7");
 								doh.is("1", dijit.byId("test1_cal2").get('value').getDate(),"test1_cal2 getDate should be 1");
-								var date1 = "Sat Aug 01 1987 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sat Aug 1 00:00:00 EDT 1987"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_txt2").get('value'))),"test1_txt2 should be set");
-								doh.t((date1.substring(0,15)==(dijit.byId("test1_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test1_output2").get('value'))),"test1_output2 should be set");
+								var date = new Date(1987, 7, 1, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test1_txt2").get("binding").get("value").getTime(), "test1_txt2 should be 8/1/87 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test1_output2").get("binding").get("value").getTime(), "test1_output2 should be 8/1/87 0:00 AM");
 							}
 						}]);
 
@@ -535,10 +522,9 @@
 								doh.is("2011", dijit.byId("test2_cal2").get('value').getFullYear(),"test2_cal2 getFullYear should be 1987");
 								doh.is("10", dijit.byId("test2_cal2").get('value').getMonth(),"test2_cal2 getMonth should be 10");
 								doh.is("6", dijit.byId("test2_cal2").get('value').getDate(),"test2_cal2 getDate should be 6");
-								var date1 = "Sun Nov 06 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sun Nov 6 00:00:00 EDT 2011"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_txt2").get('value'))),"test2_txt2 should be set");
-								doh.t((date1.substring(0,15)==(dijit.byId("test2_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test2_output2").get('value'))),"test2_output2 should be set");
+								var date = new Date(2011, 10, 6, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test2_txt2").get("binding").get("value").getTime(), "test2_txt2 should be 11/6/11 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test2_output2").get("binding").get("value").getTime(), "test2_output2 should be 11/6/11 0:00 AM");
 							}
 						}]);
 
@@ -552,10 +538,9 @@
 								doh.is("2011", dijit.byId("test3_cal2").get('value').getFullYear(),"test3_cal2 getFullYear should be 1987");
 								doh.is("7", dijit.byId("test3_cal2").get('value').getMonth(),"test3_cal2 getMonth should be 7");
 								doh.is("27", dijit.byId("test3_cal2").get('value').getDate(),"test3_cal2 getDate should be 27");
-								var date1 = "Sat Aug 27 2011 00:00:00 GMT-0400 (Eastern Daylight Time)";
-								var date2 = "Sat Aug 27 00:00:00 EDT 2011"; // IE
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_txt2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_txt2").get('value'))),"test3_txt2 should be set-"+dijit.byId("test3_txt2").get('value'));
-								doh.t((date1.substring(0,15)==(dijit.byId("test3_output2").get('value').toString().substring(0,15)) || date2==(dijit.byId("test3_output2").get('value'))),"test3_output2 should be set");
+								var date = new Date(2011, 7, 27, 0, 0, 0, 0);
+								doh.t(date.getTime() == dijit.byId("test3_txt2").get("binding").get("value").getTime(), "test3_txt2 should be 8/27/11 0:00 AM");
+								doh.t(date.getTime() == dijit.byId("test3_output2").get("binding").get("value").getTime(), "test3_output2 should be 8/27/11 0:00 AM");
 							}
 						}]);
 

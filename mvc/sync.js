@@ -242,5 +242,6 @@ define([
 
 	lang.mixin(mvc, directions);
 
+	// lang.setObject() thing is for back-compat, remove it in 2.0
 	return lang.setObject("dojox.mvc.sync", lang.mixin(sync, {equals: equals}, directions));
 });

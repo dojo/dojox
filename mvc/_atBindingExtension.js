@@ -31,7 +31,9 @@ define([
 	// Monkey patch dijit._WidgetBase.set to establish data binding if a dojox.mvc.at() handle comes
 	var oldWidgetBaseSet = _WidgetBase.prototype.set;
 	_WidgetBase.prototype.set = function(/*String*/ name, /*Anything*/ value){
-		if((value || {}).atsignature == "dojox.mvc.at"){
+		if(name == _atBindingMixin.prototype.dataBindAttr){
+			return this._setBind(value);
+		}else if((value || {}).atsignature == "dojox.mvc.at"){
 			return this._setAtWatchHandle(name, value);
 		}
 		return oldWidgetBaseSet.apply(this, lang._toArray(arguments));

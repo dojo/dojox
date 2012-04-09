@@ -19,11 +19,13 @@
 			require([
 				"dojo/parser",
 				"dojo/Stateful",
+				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
-				"dojox/mvc/at",
 				"dojo/domReady!"
-			], function(parser, Stateful){
+			], function(parser, Stateful, at){
+				window.at = at;
+				dojox.debugDataBinding = true;
 				model = new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"});
 				parser.parse();
 			});
@@ -44,27 +46,27 @@
 					<div class="row">
 						<label class="cell" for="firstnameInput">First:</label>
 						<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox" 
-								data-dojo-props="value: dojox.mvc.at(model, 'First')">
+								data-dojo-props="value: at(model, 'First')">
 						<!-- Content in output below will always be in sync with value of textbox above -->
 						(first name is: <span data-dojo-type="dijit._WidgetBase" 
 								data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, 
-																value: dojox.mvc.at(model, 'First')"></span>)
+																value: at(model, 'First')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="lastnameInput">Last:</label>
 						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" 
-								data-dojo-props="value: dojox.mvc.at(model, 'Last')">
+								data-dojo-props="value: at(model, 'Last')">
 						(last name is: <span data-dojo-type="dijit._WidgetBase" 
 								data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, 
-																value: dojox.mvc.at(model, 'Last')"></span>)
+																value: at(model, 'Last')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="emailInput">Email:</label>
 						<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" 
-								data-dojo-props="value: dojox.mvc.at(model, 'Email')">
+								data-dojo-props="value: at(model, 'Email')">
 						(email is: <span data-dojo-type="dijit._WidgetBase" 
 								data-dojo-props="_setValueAttr: {node: 'domNode', type: 'innerText'}, 
-														value: dojox.mvc.at(model, 'Email')"></span>)
+														value: at(model, 'Email')"></span>)
 					</div>
 				</div>
 			</div>

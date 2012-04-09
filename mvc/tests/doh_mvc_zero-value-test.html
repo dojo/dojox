@@ -24,7 +24,8 @@
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojo/domReady!"
-			], function(doh, ddom, parser, Stateful, registry){
+			], function(doh, ddom, parser, Stateful, registry, at){
+				window.at = at;
 				models = new Stateful;
 
 				parser.parse();
@@ -73,28 +74,28 @@
 		</script>
 	</head>
 	<body>
-		<div data-dojo-type="dijit.form.Form" data-dojo-mixins="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(models, 'model')">
+		<div data-dojo-type="dijit.form.Form" data-dojo-mixins="dojox.mvc.Group" data-dojo-props="target: at(models, 'model')">
 			Working sample
 			<span> There should be "Priority : zero" here ===></span>
-			<span id="one" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:', 'First')">Priority: ${this.value}</span>
+			<span id="one" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:', 'First')">Priority: ${this.value}</span>
 			<span><== there should be "Priority : zero" here.</span>
 			<br>
 			Working sample 2
 			<span> There should be a zero here ===></span>
-			<span id="two" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:', 'First')"></span>
+			<span id="two" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:', 'First')"></span>
 			<span><== there should be a zero here.</span>
 			<br>
 			<br>
 			<ul>
 				<li>
 				<label for="FirstWork">Working</label>
-				<input name="FirstWork" id="FirstWork" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'First')" /></li>
+				<input name="FirstWork" id="FirstWork" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'First')" /></li>
 			</ul>
 			Here, id is the same as ref, this was not working before the fix for 14491
 			<ul>
 				<li>
 				<label for="First">Not working</label>
-				<input name="First" id="First" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'First')" /></li>
+				<input name="First" id="First" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'First')" /></li>
 				<!--	<input name="First" id="First" data-dojo-type="dijit.form.TextBox" /></li> -->
 			</ul>
 		</div>

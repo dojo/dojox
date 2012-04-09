@@ -16,6 +16,7 @@
 				"dojo/parser",
 				"dojo/Stateful",
 				"dojo/date/stamp",
+				"dojo/date/locale",
 				"dijit/registry",
 				"dijit/CalendarLite",
 				"dijit/form/Button",
@@ -25,12 +26,12 @@
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/Output",
 				"dojo/domReady!"
-			], function(doh, ddom, domStyle, parser, Stateful, dateStamp, registry, Calendar, Button, DateTextBox, TextBox, at, EditModelRefController, Output){
+			], function(doh, ddom, domStyle, parser, Stateful, dateStamp, dateLocale, registry, Calendar, Button, DateTextBox, TextBox, at, EditModelRefController, Output){
 				dojox.debugDataBinding = true;
 
 				parser.parse();
 
-				var dummyDateWid = new DateTextBox({});
+				var dummyDateWid = new DateTextBox({constraints:{datePattern:"MM-dd-yyyy h:mm a", strict:true}});
 
 				// *** Test1 setup begin: ***
 				test1_ctrl = new EditModelRefController({sourceModel: new Stateful({date: new Date(1987, 7, 1, 1, 0, 0, 0)})}); // Sets the time to 1am, see dijit._CalendarList._patchDate()
@@ -41,11 +42,12 @@
 				var test1_cal2 = new Calendar({value: at(test1_ctrl, "date")}, ddom.byId("test1_cal2"));
 				test1_cal2.startup();
 
-				var test1_txt2 = new TextBox({value: at(test1_ctrl, "date").attach(dummyDateWid.dateLocaleModule)}, ddom.byId("test1_txt2"));
+				var test1_txt2 = new TextBox({value: at(test1_ctrl, "date").attach(dummyDateWid.dateLocaleModule), constraints: dummyDateWid.constraints}, ddom.byId("test1_txt2"));
 				domStyle.set(test1_txt2.domNode, "width", "368px");
 				test1_txt2.startup();
 
-				var test1_out2 = new Output({value: at(test1_ctrl, "date").attach(dummyDateWid.dateLocaleModule)}, ddom.byId("test1_output2"));
+				var test1_out2 = new Output({value: at(test1_ctrl, "date").attach(dummyDateWid.dateLocaleModule), 
+					constraints: dummyDateWid.constraints}, ddom.byId("test1_output2"));
 				test1_out2.startup();
 
 				var test1_setday2 = new Button({
@@ -60,7 +62,7 @@
 				var test1_settext2 = new Button({
 					label: "Set TextBox to May 5, 1991",
 					onClick: function() {
-						test1_txt2.set("value", new Date(1991, 4, 5, 1, 0, 0, 0)); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						test1_txt2.set("value", dateLocale.format(new Date(1991, 4, 5, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"})); // Sets the time to 1am, see dijit._CalendarList._patchDate()
 					}
 				}, ddom.byId("test1_setdate2"));
 				test1_settext2.startup();
@@ -68,7 +70,7 @@
 				var test1_settext3 = new Button({
 					label: "Set TextBox to Nov 6, 2011",
 					onClick: function() {
-						test1_txt2.set("value", new Date(2011, 10, 7, 1, 0, 0, 0)); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						test1_txt2.set("value", dateLocale.format(new Date(2011, 10, 7, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"}));						
 					}
 				}, ddom.byId("test1_setdate3"));
 				test1_settext3.startup();
@@ -90,17 +92,18 @@
 				var test2_cal2 = new DateTextBox({value: at(test2_ctrl, "date")}, ddom.byId("test2_cal2"));
 				test2_cal2.startup();
 
-				var test2_txt2 = new TextBox({value: at(test2_ctrl, "date").attach(dummyDateWid.dateLocaleModule)}, ddom.byId("test2_txt2"));
+				var test2_txt2 = new TextBox({value: at(test2_ctrl, "date").attach(dummyDateWid.dateLocaleModule), constraints: dummyDateWid.constraints}, ddom.byId("test2_txt2"));
 				domStyle.set(test2_txt2.domNode, "width", "368px");
 				test2_txt2.startup();
 
-				var test2_out2 = new Output({value: at(test2_ctrl, "date").attach(dummyDateWid.dateLocaleModule)}, ddom.byId("test2_output2"));
+				var test2_out2 = new Output({value: at(test2_ctrl, "date").attach(dummyDateWid.dateLocaleModule), 
+					constraints: dummyDateWid.constraints}, ddom.byId("test2_output2"));
 				test2_out2.startup();
 
 				var test2_setday2 = new Button({
 					label: "Set DateTextBox to Oct 28, 1993",
 					onClick: function() {
-						var day2 = new Date(1993, 9, 28, 1, 0, 0, 0); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						var day2 = dateLocale.format(new Date(1993, 9, 28, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"}); // Sets the time to 1am, see dijit._CalendarList._patchDate()
 						test2_txt2.set("value", day2);
 					}
 				}, ddom.byId("test2_setdate1"));
@@ -109,7 +112,7 @@
 				var test2_settext2 = new Button({
 					label: "Set DateTextBox to Oct 14 1997",
 					onClick: function() {
-						test2_txt2.set("value", new Date(1997, 9, 14, 1, 0, 0, 0)); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						test2_txt2.set("value", dateLocale.format(new Date(1997, 9, 14, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"}));						
 					}
 				}, ddom.byId("test2_setdate2"));
 				test2_settext2.startup();
@@ -124,7 +127,7 @@
 				var test2_settext3 = new Button({
 					label: "Set TextBox to May 5, 1991",
 					onClick: function() {
-						test2_txt2.set("value", new Date(1991, 4, 5, 1, 0, 0, 0)); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						test2_txt2.set("value", dateLocale.format(new Date(1991, 4, 5, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"}));						
 					}
 				}, ddom.byId("test2_setdate3"));
 				test2_settext3.startup();
@@ -144,12 +147,14 @@
 
 				var test3_txt2 = new TextBox({
 					value: at(test3_ctrl, "date").attach(dummyDateWid.dateLocaleModule),
+					constraints: dummyDateWid.constraints,
 					disabled: true
 				}, ddom.byId("test3_txt2"));
 				domStyle.set(test3_txt2.domNode, "width", "368px");
 				test3_txt2.startup();
 
-				var test3_out2 = new Output({value: at(test3_ctrl, "date").attach(dummyDateWid.dateLocaleModule)}, ddom.byId("test3_output2"));
+				var test3_out2 = new Output({value: at(test3_ctrl, "date").attach(dummyDateWid.dateLocaleModule), 
+					constraints: dummyDateWid.constraints}, ddom.byId("test3_output2"));
 				test3_out2.startup();
 
 				var test3_setday2 = new Button({
@@ -164,7 +169,7 @@
 				var test3_settext2 = new Button({
 					label: "Set TextBox to Nov 6, 2011",
 					onClick: function() {
-						test3_txt2.set("value", new Date(2011, 10, 6, 1, 0, 0, 0)); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						test3_txt2.set("value", dateLocale.format(new Date(2011, 10, 6, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"})); // Sets the time to 1am, see dijit._CalendarList._patchDate()
 					}
 				}, ddom.byId("test3_setdate2"));
 				test3_settext2.startup();
@@ -172,7 +177,7 @@
 				var test3_settext3 = new Button({
 					label: "Set TextBox to May 5, 1991",
 					onClick: function() {
-						var d = new Date(1991, 4, 6, 1, 0, 0, 0); // Sets the time to 1am, see dijit._CalendarList._patchDate()
+						var d = dateLocale.format(new Date(1991, 4, 5, 1, 0, 0, 0), {datePattern: "MM-dd-yyyy h:mm a", selector: "date"}); // Sets the time to 1am, see dijit._CalendarList._patchDate()
 						test3_txt2.set("value", d); // 5/5/1991 YYYY-MM-DDThh:mm:ss via new Date
 					}
 				}, ddom.byId("test3_setdate3"));
@@ -210,8 +215,8 @@
 						doh.is("1987", registry.byId("test1_cal2").get("value").getFullYear(),"test1_cal2 getFullYear should be 1987");
 						doh.is("7", registry.byId("test1_cal2").get("value").getMonth(),"test1_cal2 getMonth should be 7");
 						doh.is("1", registry.byId("test1_cal2").get("value").getDate(),"test1_cal2 getDate should be 1");
-						doh.is("8/1/87 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 8/1/87 1:00 AM");
-						doh.is("8/1/87 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 8/1/87 1:00 AM");
+						doh.is("08-01-1987 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 08-01-1987 1:00 AM");
+						doh.is("08-01-1987 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 08-01-1987 1:00 AM");
 					}
 				}, {
 					name: "Initial-test2",
@@ -222,8 +227,8 @@
 						doh.is("2011", registry.byId("test2_cal2").get("value").getFullYear(),"test2_cal2 getFullYear should be 1987");
 						doh.is("10", registry.byId("test2_cal2").get("value").getMonth(),"test2_cal2 getMonth should be 10");
 						doh.is("6", registry.byId("test2_cal2").get("value").getDate(),"test2_cal2 getDate should be 6");
-						doh.is("11/6/11 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 11/6/11 1:00 AM");
-						doh.is("11/6/11 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 11/6/11 1:00 AM");
+						doh.is("11-06-2011 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 11-06-2011 1:00 AM");
+						doh.is("11-06-2011 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 11-06-2011 1:00 AM");
 					}
 				}, {
 					name: "Initial-test3",
@@ -234,8 +239,8 @@
 						doh.is("2011", registry.byId("test3_cal2").get("value").getFullYear(),"test3_cal2 getFullYear should be 1987");
 						doh.is("7", registry.byId("test3_cal2").get("value").getMonth(),"test3_cal2 getMonth should be 7");
 						doh.is("27", registry.byId("test3_cal2").get("value").getDate(),"test3_cal2 getDate should be 27");
-						doh.is("8/27/11 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 8/27/11 1:00 AM");
-						doh.is("8/27/11 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 8/27/11 1:00 AM");
+						doh.is("08-27-2011 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 08-27-2011 1:00 AM");
+						doh.is("08-27-2011 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 08-27-2011 1:00 AM");
 					}
 				}]);
 
@@ -250,8 +255,8 @@
 						doh.is("1989", registry.byId("test1_cal2").get("value").getFullYear(),"test1_cal2 getFullYear should be 1989");
 						doh.is("8", registry.byId("test1_cal2").get("value").getMonth(),"test1_cal2 getMonth should be 8");
 						doh.is("7", registry.byId("test1_cal2").get("value").getDate(),"test1_cal2 getDate should be 7");
-						doh.is("9/7/89 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 9/7/89 1:00 AM");
-						doh.is("9/7/89 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 9/7/89 1:00 AM");
+						doh.is("09-07-1989 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 09-07-1989 1:00 AM");
+						doh.is("09-07-1989 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 09-07-1989 1:00 AM");
 					}
 				}, {
 					name: "Update-First-Cal-test2",
@@ -264,8 +269,8 @@
 						doh.is("1989", registry.byId("test2_cal2").get("value").getFullYear(),"test2_cal2 getFullYear should be 1989");
 						doh.is("8", registry.byId("test2_cal2").get("value").getMonth(),"test2_cal2 getMonth should be 8");
 						doh.is("7", registry.byId("test2_cal2").get("value").getDate(),"test2_cal2 getDate should be 7");
-						doh.is("9/7/89 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 9/7/89 1:00 AM");
-						doh.is("9/7/89 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 9/7/89 1:00 AM");
+						doh.is("09-07-1989 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 09-07-1989 1:00 AM");
+						doh.is("09-07-1989 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 09-07-1989 1:00 AM");
 					}
 				}, {
 					name: "Update-First-Cal-test3",
@@ -278,49 +283,49 @@
 						doh.is("1989", registry.byId("test3_cal2").get("value").getFullYear(),"test3_cal2 getFullYear should be 1989");
 						doh.is("8", registry.byId("test3_cal2").get("value").getMonth(),"test3_cal2 getMonth should be 8");
 						doh.is("7", registry.byId("test3_cal2").get("value").getDate(),"test3_cal2 getDate should be 7");
-						doh.is("9/7/89 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 9/7/89 1:00 AM");
-						doh.is("9/7/89 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 9/7/89 1:00 AM");
+						doh.is("09-07-1989 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 09-07-1989 1:00 AM");
+						doh.is("09-07-1989 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 09-07-1989 1:00 AM");
 					}
 				}]);
 
 				doh.register("Update textbox", [{
 					name: "Update-TextBox-test1",
 					runTest: function(){
-						registry.byId(test1_txt2).set("value", "5/5/91 1:00AM");
+						registry.byId(test1_txt2).set("value", "05-05-1991 1:00 AM");
 						doh.is("1991", registry.byId("test1_cal").get("value").getFullYear(),"test1_cal getFullYear should be 1991");
 						doh.is("4", registry.byId("test1_cal").get("value").getMonth(),"test1_cal getMonth should be 4");
 						doh.is("5", registry.byId("test1_cal").get("value").getDate(),"test1_cal getDate should be 4");
 						doh.is("1991", registry.byId("test1_cal2").get("value").getFullYear(),"test1_cal2 getFullYear should be 1991");
 						doh.is("4", registry.byId("test1_cal2").get("value").getMonth(),"test1_cal2 getMonth should be 4");
 						doh.is("5", registry.byId("test1_cal2").get("value").getDate(),"test1_cal2 getDate should be 5");
-						doh.is("5/5/91 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 5/5/91 1:00 AM");
-						doh.is("5/5/91 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 5/5/91 1:00 AM");
+						doh.is("05-05-1991 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 05-05-1991 1:00 AM");
+						doh.is("05-05-1991 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 05-05-1991 1:00 AM");
 					}
 				}, {
 					name: "Update-TextBox-test2",
 					runTest: function(){
-						registry.byId(test2_txt2).set("value", "5/5/91 1:00AM");
+						registry.byId(test2_txt2).set("value", "05-05-1991 1:00 AM");
 						doh.is("1991", registry.byId("test2_cal").get("value").getFullYear(),"test2_cal getFullYear should be 1991");
 						doh.is("4", registry.byId("test2_cal").get("value").getMonth(),"test2_cal getMonth should be 4");
 						doh.is("5", registry.byId("test2_cal").get("value").getDate(),"test2_cal getDate should be 4");
 						doh.is("1991", registry.byId("test2_cal2").get("value").getFullYear(),"test2_cal2 getFullYear should be 1991");
 						doh.is("4", registry.byId("test2_cal2").get("value").getMonth(),"test2_cal2 getMonth should be 4");
 						doh.is("5", registry.byId("test2_cal2").get("value").getDate(),"test2_cal2 getDate should be 5");
-						doh.is("5/5/91 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 5/5/91 1:00 AM");
-						doh.is("5/5/91 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 5/5/91 1:00 AM");
+						doh.is("05-05-1991 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 05-05-1991 1:00 AM");
+						doh.is("05-05-1991 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 05-05-1991 1:00 AM");
 					}
 				}, {
 					name: "Update-TextBox-test3",
 					runTest: function(){
-						registry.byId(test3_txt2).set("value", "5/5/91 1:00AM");
+						registry.byId(test3_txt2).set("value", "05-05-1991 1:00 AM");
 						doh.is("1991", registry.byId("test3_cal").get("value").getFullYear(),"test3_cal getFullYear should be 1991");
 						doh.is("4", registry.byId("test3_cal").get("value").getMonth(),"test3_cal getMonth should be 4");
 						doh.is("5", registry.byId("test3_cal").get("value").getDate(),"test3_cal getDate should be 4");
 						doh.is("1991", registry.byId("test3_cal2").get("value").getFullYear(),"test3_cal2 getFullYear should be 1991");
 						doh.is("4", registry.byId("test3_cal2").get("value").getMonth(),"test3_cal2 getMonth should be 4");
 						doh.is("5", registry.byId("test3_cal2").get("value").getDate(),"test3_cal2 getDate should be 5");
-						doh.is("5/5/91 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 5/5/91 1:00 AM");
-						doh.is("5/5/91 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 5/5/91 1:00 AM");
+						doh.is("05-05-1991 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 05-05-1991 1:00 AM");
+						doh.is("05-05-1991 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 05-05-1991 1:00 AM");
 					}
 				}]);
 
@@ -337,8 +342,8 @@
 						doh.is("1993", registry.byId("test1_cal2").get("value").getFullYear(),"test1_cal2 getFullYear should be 1993");
 						doh.is("9", registry.byId("test1_cal2").get("value").getMonth(),"test1_cal2 getMonth should be 9");
 						doh.is("28", registry.byId("test1_cal2").get("value").getDate(),"test1_cal2 getDate should be 28");
-						doh.is("10/28/93 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 10/28/93 1:00 AM");
-						doh.is("10/28/93 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 10/28/93 1:00 AM");
+						doh.is("10-28-1993 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 10-28-1993 1:00 AM");
+						doh.is("10-28-1993 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 10-28-1993 1:00 AM");
 					}
 				}, {
 					name: "Update-withNewDate-test2",
@@ -351,8 +356,8 @@
 						doh.is("1993", registry.byId("test2_cal2").get("value").getFullYear(),"test2_cal2 getFullYear should be 1993");
 						doh.is("9", registry.byId("test2_cal2").get("value").getMonth(),"test2_cal2 getMonth should be 9");
 						doh.is("28", registry.byId("test2_cal2").get("value").getDate(),"test2_cal2 getDate should be 28");
-						doh.is("10/28/93 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 10/28/93 1:00 AM");
-						doh.is("10/28/93 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 10/28/93 1:00 AM");
+						doh.is("10-28-1993 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 10-28-1993 1:00 AM");
+						doh.is("10-28-1993 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 10-28-1993 1:00 AM");
 					}
 				}, {
 					name: "Update-withNewDate-test3",
@@ -365,8 +370,8 @@
 						doh.is("1993", registry.byId("test3_cal2").get("value").getFullYear(),"test3_cal2 getFullYear should be 1993");
 						doh.is("9", registry.byId("test3_cal2").get("value").getMonth(),"test3_cal2 getMonth should be 9");
 						doh.is("28", registry.byId("test3_cal2").get("value").getDate(),"test3_cal2 getDate should be 28");
-						doh.is("10/28/93 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 10/28/93 1:00 AM");
-						doh.is("10/28/93 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 10/28/93 1:00 AM");
+						doh.is("10-28-1993 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 10-28-1993 1:00 AM");
+						doh.is("10-28-1993 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 10-28-1993 1:00 AM");
 					}
 				}]);
 
@@ -380,8 +385,8 @@
 						doh.is("1987", registry.byId("test1_cal2").get("value").getFullYear(),"test1_cal2 getFullYear should be 1987");
 						doh.is("7", registry.byId("test1_cal2").get("value").getMonth(),"test1_cal2 getMonth should be 7");
 						doh.is("1", registry.byId("test1_cal2").get("value").getDate(),"test1_cal2 getDate should be 1");
-						doh.is("8/1/87 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 8/1/87 1:00 AM");
-						doh.is("8/1/87 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 8/1/87 1:00 AM");
+						doh.is("08-01-1987 1:00 AM", registry.byId("test1_txt2").get("value"), "test1_txt2 should be 08-01-1987 1:00 AM");
+						doh.is("08-01-1987 1:00 AM", registry.byId("test1_output2").get("value"), "test1_output2 should be 08-01-1987 1:00 AM");
 					}
 				}, {
 					name: "Reset-test2",
@@ -393,8 +398,8 @@
 						doh.is("2011", registry.byId("test2_cal2").get("value").getFullYear(),"test2_cal2 getFullYear should be 1987");
 						doh.is("10", registry.byId("test2_cal2").get("value").getMonth(),"test2_cal2 getMonth should be 10");
 						doh.is("6", registry.byId("test2_cal2").get("value").getDate(),"test2_cal2 getDate should be 6");
-						doh.is("11/6/11 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 11/6/11 1:00 AM");
-						doh.is("11/6/11 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 11/6/11 1:00 AM");
+						doh.is("11-06-2011 1:00 AM", registry.byId("test2_txt2").get("value"), "test2_txt2 should be 11-06-2011 1:00 AM");
+						doh.is("11-06-2011 1:00 AM", registry.byId("test2_output2").get("value"), "test2_output2 should be 11-06-2011 1:00 AM");
 					}
 				}, {
 					name: "Reset-test3",
@@ -406,8 +411,8 @@
 						doh.is("2011", registry.byId("test3_cal2").get("value").getFullYear(),"test3_cal2 getFullYear should be 1987");
 						doh.is("7", registry.byId("test3_cal2").get("value").getMonth(),"test3_cal2 getMonth should be 7");
 						doh.is("27", registry.byId("test3_cal2").get("value").getDate(),"test3_cal2 getDate should be 27");
-						doh.is("8/27/11 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 8/27/11 1:00 AM");
-						doh.is("8/27/11 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 8/27/11 1:00 AM");
+						doh.is("08-27-2011 1:00 AM", registry.byId("test3_txt2").get("value"), "test3_txt2 should be 08-27-2011 1:00 AM");
+						doh.is("08-27-2011 1:00 AM", registry.byId("test3_output2").get("value"), "test3_output2 should be 08-27-2011 1:00 AM");
 					}
 				}]);
 
