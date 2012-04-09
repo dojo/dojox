@@ -11,7 +11,6 @@
 	-webkit-transform: translate3d(0px,0%,-1px) !important;
 }
 .mblCoverv.mblIn {
-	z-index: 0;
 	-webkit-transform: translate3d(0px,100%,0px) !important;
 }
 .mblCoverv.mblIn.mblReverse {
