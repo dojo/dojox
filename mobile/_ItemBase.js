@@ -4,13 +4,13 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-class",
+	"dojo/touch",
 	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
 	"./TransitionEvent",
-	"./iconUtils",
-	"./sniff"
-], function(array, declare, lang, win, domClass, registry, Contained, WidgetBase, TransitionEvent, iconUtils, has){
+	"./iconUtils"
+], function(array, declare, lang, win, domClass, touch, registry, Contained, WidgetBase, TransitionEvent, iconUtils){
 
 /*=====
 	var Contained = dijit._Contained;
@@ -187,7 +187,7 @@ define([
 				this.inheritParams();
 			}
 			if(this._handleClick && this._selStartMethod === "touch"){
-				this._onTouchStartHandle = this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart");
+				this._onTouchStartHandle = this.connect(this.domNode, touch.press, "_onTouchStart");
 			}
 			this.inherited(arguments);
 		},
@@ -292,8 +292,8 @@ define([
 				// Connect to the entire window. Otherwise, fail to receive
 				// events if operation is performed outside this widget.
 				// Expose both connect handlers in case the user has interest.
-				this._onTouchMoveHandle = this.connect(win.body(), has('touch') ? "ontouchmove" : "onmousemove", "_onTouchMove");
-				this._onTouchEndHandle = this.connect(win.body(), has('touch') ? "ontouchend" : "onmouseup", "_onTouchEnd");
+				this._onTouchMoveHandle = this.connect(win.body(), touch.move, "_onTouchMove");
+				this._onTouchEndHandle = this.connect(win.body(), touch.release, "_onTouchEnd");
 			}
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 			this.touchStartY = e.touches ? e.touches[0].pageY : e.clientY;

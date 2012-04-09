@@ -9,10 +9,10 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
+	"dojo/touch",
 	"dijit/registry",
-	"./ListItem",
-	"./sniff"
-], function(array, connect, declare, event, domClass, domGeometry, domStyle, registry, ListItem, has){
+	"./ListItem"
+], function(array, connect, declare, event, domClass, domGeometry, domStyle, touch, registry, ListItem){
 
 	// module:
 	//		dojox/mobile/EditableRoundRectList
@@ -104,8 +104,8 @@ define([
 
 			if(!this._conn){
 				this._conn = [
-					this.connect(this.domNode, has('touch') ? "ontouchmove" : "onmousemove", "_onTouchMove"),
-					this.connect(this.domNode, has('touch') ? "ontouchend" : "onmouseup", "_onTouchEnd")
+					this.connect(this.domNode, touch.move, "_onTouchMove"),
+					this.connect(this.domNode, touch.release, "_onTouchEnd")
 				];
 			}
 			this._pos = [];
@@ -164,7 +164,7 @@ define([
 			}, this);
 			if(!this._handles){
 				this._handles = [
-					this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart"),
+					this.connect(this.domNode, touch.press, "_onTouchStart"),
 					this.connect(this.domNode, "onclick", "_onClick"),
 					this.connect(this.domNode, "onkeydown", "_onClick") // for desktop browsers
 				];

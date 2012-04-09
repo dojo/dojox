@@ -6,10 +6,10 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/touch",
 	"dijit/_WidgetBase",
-	"./iconUtils",
-	"./sniff"
-], function(array, declare, event, lang, win, domClass, domConstruct, WidgetBase, iconUtils, has){
+	"./iconUtils"
+], function(array, declare, event, lang, win, domClass, domConstruct, touch, WidgetBase, iconUtils){
 
 /*=====
 	var WidgetBase = dijit._WidgetBase;
@@ -115,8 +115,8 @@ define([
 		startup: function(){
 			if(this._started){ return; }
 			this._handlers = [
-				this.connect(this.plusBtnNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart"),
-				this.connect(this.minusBtnNode, has('touch') ? "ontouchstart" : "onmousedown", "_onTouchStart"),
+				this.connect(this.plusBtnNode, touch.press, "_onTouchStart"),
+				this.connect(this.minusBtnNode, touch.press, "_onTouchStart"),
 				this.connect(this.plusBtnNode, "onkeydown", "_onClick"), // for desktop browsers
 				this.connect(this.minusBtnNode, "onkeydown", "_onClick"), // for desktop browsers
 				this.connect(this.inputNode, "onchange", lang.hitch(this, function(e){
@@ -212,8 +212,8 @@ define([
 
 		_onTouchStart: function(e){
 			this._conn = [
-				this.connect(win.body(), has('touch') ? "ontouchmove" : "onmousemove", "_onTouchMove"),
-				this.connect(win.body(), has('touch') ? "ontouchend" : "onmouseup", "_onTouchEnd")
+				this.connect(win.body(), touch.move, "_onTouchMove"),
+				this.connect(win.body(), touch.release, "_onTouchEnd")
 			];
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 			this.touchStartY = e.touches ? e.touches[0].pageY : e.clientY;

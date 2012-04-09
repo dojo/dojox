@@ -7,10 +7,11 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/touch",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
 	"./sniff"
-], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, Contained, WidgetBase, has){
+], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, touch, Contained, WidgetBase, has){
 
 /*=====
 	Contained = dijit._Contained;
@@ -94,7 +95,7 @@ define([
 		postCreate: function(){
 			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
 			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
-			this._startHandle = this.connect(this.domNode, has('touch') ? "ontouchstart" : "onmousedown", "onTouchStart");
+			this._startHandle = this.connect(this.domNode, touch.press, "onTouchStart");
 			this._initialValue = this.value; // for reset()
 		},
 
@@ -185,8 +186,8 @@ define([
 			this.innerStartX = this.inner.offsetLeft;
 			if(!this._conn){
 				this._conn = [
-					this.connect(this.inner, has('touch') ? "ontouchmove" : "onmousemove", "onTouchMove"),
-					this.connect(this.inner, has('touch') ? "ontouchend" : "onmouseup", "onTouchEnd")
+					this.connect(this.inner, touch.move, "onTouchMove"),
+					this.connect(this.inner, touch.release, "onTouchEnd")
 				];
 			}
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
