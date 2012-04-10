@@ -76,9 +76,6 @@ var _WidgetBase = dijit._WidgetBase;
 				var t = s[0].chart.stack[0];
 				if(typeof t.run.data[0] == "number"){
 					var filteredRun = df.map(t.run.data, "Math.max(x, 0)");
-					if(df.every(filteredRun, "<= 0")){
-						return;
-					}
 					var slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
 					arrayUtil.forEach(slices, function(x, i){
 						this._addLabel(t.dyn[i], t._getLabel(x * 100) + "%");
