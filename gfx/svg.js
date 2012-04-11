@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare", "dojo/_base/array",
+define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom", "dojo/_base/declare", "dojo/_base/array",
   "dojo/dom-geometry", "dojo/dom-attr", "dojo/_base/Color", "./_base", "./shape", "./path"],
   function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 /*=====
@@ -98,6 +98,25 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 
 	declare("dojox.gfx.svg.Shape", gs.Shape, {
 		// summary: SVG-specific implementation of dojox.gfx.Shape methods
+
+		destroy: function(){
+			if(this.fillStyle && "type" in this.fillStyle){
+				var fill = this.rawNode.getAttribute("fill"),
+					ref  = svg.getRef(fill);
+				if(ref){
+					ref.parentNode.removeChild(ref);
+				}
+			}
+			if(this.clip){
+				var clipPathProp = this.rawNode.getAttribute("clip-path");
+				if(clipPathProp){
+					var clipNode = dom.byId(clipPathProp.match(/gfx_clip[\d]+/)[0]);
+					clipNode && clipNode.parentNode.removeChild(clipNode);
+				}
+			}
+			this.rawNode = null;
+			gs.Shape.prototype.destroy.apply(this, arguments);
+		},
 
 		setFill: function(fill){
 			// summary: sets a fill object (SVG)
@@ -408,6 +427,14 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 			// Bind GFX object with SVG node for ease of retrieval - that is to
 			// save code/performance to keep this association elsewhere
 			this.rawNode.__gfxObject__ = this.getUID();
+		},
+		destroy: function(){
+			// summary:
+			//		Releases all internal resources owned by this shape. Once this method has been called,
+			//		the instance is considered disposed and should not be used anymore.
+			this.clear(true);
+			// avoid this.inherited
+			svg.Shape.prototype.destroy.apply(this, arguments);
 		}
 	});
 	svg.Group.nodeType = "g";

@@ -17,18 +17,18 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 	// a simple set impl to map shape<->id
 	var registry = {};
 	
-	shape.register = function(/*dojox.gfx.shape.Shape*/shape){
+	shape.register = function(/*dojox.gfx.shape.Shape*/s){
 		// summary: 
 		//		Register the specified shape into the graphics registry.
-		// shape: dojox.gfx.shape.Shape
+		// s: dojox.gfx.shape.Shape
 		//		The shape to register.
 		// returns:
 		//		The unique id associated with this shape.
 		// the id pattern : type+number (ex: Rect0,Rect1,etc)
-		var t = shape.declaredClass.split('.').pop();
+		var t = s.declaredClass.split('.').pop();
 		var i = t in _ids ? ++_ids[t] : ((_ids[t] = 0));
 		var uid = t+i;
-		registry[uid] = shape;
+		registry[uid] = s;
 		return uid;
 	};
 	
@@ -40,12 +40,12 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 		return registry[id]; //dojox.gfx.shape.Shape
 	};
 	
-	shape.dispose = function(/*dojox.gfx.shape.Shape*/shape){
+	shape.dispose = function(/*dojox.gfx.shape.Shape*/s){
 		// summary: 
 		//		Removes the specified shape from the registry.
-		// shape: dojox.gfx.shape.Shape
+		// s: dojox.gfx.shape.Shape
 		//		The shape to unregister.
-		delete registry[shape.getUID()];
+		delete registry[s.getUID()];
 	};
 	
 	declare("dojox.gfx.shape.Shape", null, {
@@ -105,7 +105,14 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 			this.getUID = function(){
 				return uid;
 			}
-		},	
+		},
+		
+		destroy: function(){
+			// summary:
+			//		Releases all internal resources owned by this shape. Once this method has been called,
+			//		the instance is considered destroyed and should not be used anymore. 
+			shape.dispose(this);
+		},
 	
 		// trivial getters
 	
@@ -518,13 +525,18 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 			}
 			return this;	// self
 		},
-		clear: function(){
-			// summary: removes all shapes from a group/surface
+		clear: function(/*Boolean?*/ destroy){
+			// summary: removes all shapes from a group/surface.
+			// destroy: Boolean
+			//		Indicates whether the children should be destroyed. Optional.
 			var shape;
 			for(var i = 0; i < this.children.length;++i){
 				shape = this.children[i];
 				shape.parent = null;
 				shape.parentMatrix = null;
+				if(destroy){
+					shape.destroy();
+				}
 			}
 			this.children = [];
 			return this;	// self
@@ -595,7 +607,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 			return this;	// self
 		}
 	};
-	
+
 	declare("dojox.gfx.shape.Surface", null, {
 		// summary: a surface object to be used for drawings
 		constructor: function(){

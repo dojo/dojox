@@ -67,6 +67,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	declare("dojox.gfx.silverlight.Shape", gs.Shape, {
 		// summary: Silverlight-specific implementation of dojox.gfx.Shape methods
 
+		destroy: function(){
+			this.rawNode = null;
+			gs.Shape.prototype.destroy.apply(this, arguments);
+		},
+
 		setFill: function(fill){
 			// summary: sets a fill object (Silverlight)
 			// fill: Object: a fill object
@@ -324,6 +329,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			this.rawNode = rawNode;
 			this.rawNode.tag = this.getUID();						
 			
+		},
+		destroy: function(){
+			// summary:
+			//		Releases all internal resources owned by this shape. Once this method has been called,
+			//		the instance is considered disposed and should not be used anymore.
+			this.clear(true);
+			// avoid this.inherited
+			sl.Shape.prototype.destroy.apply(this, arguments);
 		}
 	});
 	sl.Group.nodeType = "Canvas";

@@ -262,7 +262,15 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 				this.children[i]._render(ctx);
 			}
 			ctx.restore();
-		}
+		},
+		destroy: function(){
+			// summary:
+			//		Releases all internal resources owned by this shape. Once this method has been called,
+			//		the instance is considered disposed and should not be used anymore.
+			this.clear(true);
+			// avoid this.inherited
+			canvas.Shape.prototype.destroy.apply(this, arguments);
+		}		
 	});
 
 	declare("dojox.gfx.canvas.Rect", [canvas.Shape, gs.Rect], {

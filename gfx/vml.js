@@ -55,6 +55,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 	declare("dojox.gfx.vml.Shape", gs.Shape, {
 		// summary: VML-specific implementation of dojox.gfx.Shape methods
 
+		destroy: function(){
+			this.rawNode = null;
+			gs.Shape.prototype.destroy.apply(this, arguments);
+		},
+
 		setFill: function(fill){
 			// summary: sets a fill object (VML)
 			// fill: Object: a fill object
@@ -386,7 +391,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 				nodeStyle.clip = "rect(" + r.y + "px " + (r.x + r.width) + "px " + (r.y + r.height) + "px " + r.x + "px)";
 			}
 			return this;
- 		}
+ 		},
+		destroy: function(){
+			// summary:
+			//		Releases all internal resources owned by this shape. Once this method has been called,
+			//		the instance is considered disposed and should not be used anymore.
+			this.clear(true);
+			// avoid this.inherited
+			vml.Shape.prototype.destroy.apply(this, arguments);
+		}
 	});
 	vml.Group.nodeType = "group";
 
