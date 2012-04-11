@@ -4,7 +4,7 @@ define([
 	"dijit/_Templated",
 	"dojo/dom-class",
 	"dojo/_base/event",
-	"dojo/text!./Calendar/CalendarMonth.html",
+	"dojo/text!./Calendar/CalendarMonth.html"
 ], function(declare, _CalendarView, _Templated, domClass, event, template){
 	return declare("dojox.widget._CalendarMonthView", [dojox.widget._CalendarView, dijit._Templated], {
 		// summary: A Calendar view listing the 12 months of the year

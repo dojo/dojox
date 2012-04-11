@@ -8,7 +8,7 @@ define([
 	"dojo/_base/event",
 	"dojo/_base/lang",
 	"dojo/date/locale",
-	"dojo/text!./Calendar/CalendarMonthYear.html",
+	"dojo/text!./Calendar/CalendarMonthYear.html"
 ], function(declare, _CalendarView, _Templated, query, domClass, connect, event, lang, dojoDateLocale, template){
 	return declare("dojox.widget._CalendarMonthYearView", [_CalendarView, _Templated], {
 
