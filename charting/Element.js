@@ -52,11 +52,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			this.destroyHtmlElements();
 			if(this.group){
 				// since 1.7.x we need dispose shape otherwise there is a memoryleak
-				utils.forEach(this.group, function(child){
-					shape.dispose(child);
-				});
-				this.group.clear();
 				this.group.removeShape();
+				this.group.destroy();
 				this.group = null;
 			}
 			this.dirty = true;
