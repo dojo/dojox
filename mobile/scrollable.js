@@ -1110,7 +1110,6 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.addCover = function(){
-//>>excludeStart("webkitMobile", kwArgs.webkitMobile);
 		if(!has('touch') && !this.noCover){
 			if(!dm._cover){
 				dm._cover = domConstruct.create("div", null, win.doc.body);
@@ -1133,17 +1132,14 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 			this.setSelectable(dm._cover, false);
 			this.setSelectable(this.domNode, false);
 		}
-//>>excludeEnd("webkitMobile");
 	};
 
 	this.removeCover = function(){
-//>>excludeStart("webkitMobile", kwArgs.webkitMobile);
 		if(!has('touch') && dm._cover){
 			dm._cover.style.display = "none";
 			this.setSelectable(dm._cover, true);
 			this.setSelectable(this.domNode, true);
 		}
-//>>excludeEnd("webkitMobile");
 	};
 
 	this.setKeyframes = function(/*Object*/from, /*Object*/to, /*Number*/idx){
