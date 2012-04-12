@@ -40,10 +40,7 @@ define([
 						item: item
 					});
 					list.addChild(listitem);
-					list.placeAt(this.containerNode);
-					if(this._started){
-						list.startup();
-					}
+					this.addChild(list);
 				})
 			)
 		},
@@ -92,8 +89,8 @@ define([
 					var newView = ScrollableView({
 						id: newViewId
 					}, domConstruct.create("div", null, win.body()));
-					heading.placeAt(newView.containerNode);
-					list.placeAt(newView.containerNode);
+					newView.addChild(heading);
+					newView.addChild(list);
 					newView.startup();
 					prog.stop();
 					registry.byNode(li.domNode).transitionTo(newView.id);

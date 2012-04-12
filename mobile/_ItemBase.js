@@ -7,13 +7,15 @@ define([
 	"dojo/touch",
 	"dijit/registry",
 	"dijit/_Contained",
+	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./TransitionEvent",
 	"./iconUtils"
-], function(array, declare, lang, win, domClass, touch, registry, Contained, WidgetBase, TransitionEvent, iconUtils){
+], function(array, declare, lang, win, domClass, touch, registry, Contained, Container, WidgetBase, TransitionEvent, iconUtils){
 
 /*=====
 	var Contained = dijit._Contained;
+	var Container = dijit._Container;
 	var WidgetBase = dijit._WidgetBase;
 	var TransitionEvent = dojox.mobile.TransitionEvent;
 =====*/
@@ -23,7 +25,7 @@ define([
 	// summary:
 	//		A base class for item classes (e.g. ListItem, IconItem, etc.)
 
-	return declare("dojox.mobile._ItemBase", [WidgetBase, Contained],{
+	return declare("dojox.mobile._ItemBase", [WidgetBase, Container, Contained],{
 		// summary:
 		//		A base class for item classes (e.g. ListItem, IconItem, etc.)
 		// description:

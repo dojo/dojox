@@ -208,10 +208,7 @@ define([
 						this._ws.push(widget);
 					}
 					if(parent){
-						widget.placeAt(parent.domNode);
-						if(parent._started){
-							widget.startup();
-						}
+						widget.placeAt(parent.containerNode || parent.domNode);
 					}
 					// process child widgets
 					if(!className){

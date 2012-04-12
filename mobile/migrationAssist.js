@@ -21,15 +21,11 @@ all you need to do is require this module as shown in the examples below.
 		]);
 	</script>
 
-If you application uses deprecated or no longer available functions,
+If your application uses deprecated or no longer available functions,
 this module detects them and displays messages in the browser console.
 
 Also, it tries to dynamically fix them as much as possible so that
 the target application can work somehow.
-For example, dojox.mobile.View is no longer a container-type widget,
-and thus you cannot use addChild to add a child widget to View.
-This module dynamically inserts the addChild method into View
-in case the application is using it.
 
 Note, however, that the purpose of migrationAssist is not to
 run the older applications as they are, but to assist migration.
@@ -43,14 +39,6 @@ Carousel
  - Carousel has no backward compatibility, since it was experimental in 1.7.
    The new Carousel supports dojo.store instead of dojo.data.
 
-Heading
--------
- - Heading is no longer a container.
-
-IconItem
---------
- - IconItem is no longer a container.
-
 FixedSplitter
 -------------
  - FixedSplitter.css is no longer in the themes/common folder.
@@ -62,14 +50,9 @@ FlippableView
 
 ListItem
 --------
- - ListItem is no longer a container.
  - The sync property is no longer supported. It always behaves in the async manner.
  - The btnClass property is no longer supported. Use rightIcon instead.
  - The btnClass2 property is no longer supported. Use rightIcon2 instead.
-
-RoundRect
----------
- - RoundRect is no longer a container.
 
 SpinWheel
 ---------
@@ -87,10 +70,6 @@ SpinWheelSlot
 Switch
 ------
  - When you place it in a ListItem, class="mblItemSwitch" is no longer necessary.
-
-View
-----
- - View is no longer a container.
 
 TabBar
 ------
@@ -113,14 +92,12 @@ TabBar
 
 TabBarButton
 -------------
- - TabBarButton is no longer a container.
  - Specifying a DOM Button with the class attribute like class="mblDomButtonWhitePlus"
    is no longer supported. Use icon="mblDomButtonWhitePlus" instead.
  - select() and deselect() are no longer supported. Use set("selected", boolean) instead.
 
 ToolBarButton
 -------------
- - ToolBarButton is no longer a container.
  - Specifying the button color style with the class attribute like class="mblColorBlue"
    is no longer supported. Use defaultColor="mblColorBlue" instead.
  - Specifying a DOM Button with the class attribute like class="mblDomButtonWhitePlus"
@@ -138,40 +115,6 @@ bookmarkable
 ------------
  - To enable the bookmarkable feature, require dojox.mobile.bookmarkable
    instead of dojo.hash
-
-
-How to add/remove a child widget to/from a non-container widget
-===============================================================
-
-View, ListItem, IconItem, TabBarButton, ToolBarButton, Heading, and RoundRect were
-container-type widgets until 1.7, but in 1.8, they are non-container widgets.
-This is because container-type dojo widget requires all the children to be dojo widgets.
-View, for example, is often used to place plain text or plain html fragments on it.
-To allow such plain children, it should be a non-container widget following the dijit API.
-Even if it becomes non-container widgets, you can still have child dojo widgets on it.
-One thing you need to be aware of, however, is that you no longer can use
-addChild/removeChild to manage child widgets, since they are implemented in dijit._Container.
-You can instead use placeAt to add a widget to a non-container widget. For example,
- 
-    parent.addChild(widget);
- 
-can be rewritten as below:
- 
-    widget.placeAt(parent.containerNode);
-    if(parent._started && !widget._started){
-        widget.startup();
-    }
- 
-Note that addChild calls startup() of the added child widget when necessary,
-but placeAt doesn't. You need to call startup() manually as above.
- 
-removeChild() can be replaced with a simple DOM operation.
- 
-    parent.removeChild(widget);
- 
-can be rewritten like this:
- 
-    widget.domNode.parentNode.removeChild(widget.domNode);
 
 */
 
@@ -362,36 +305,6 @@ define([
 		}, this);
 
 	};
-
-	extendContainerFunction = function(obj) {
-		lang.extend(obj, {
-			addChild: function(){
-				console.log('[MIG:fixed] ' + this.declaredClass + '(id='+this.id+'): Use placeAt() instead of addChild(), and call startup().');
-				Container.prototype.addChild.apply(this, arguments);
-			},
-			removeChild: function(){
-				console.log('[MIG:fixed] ' + this.declaredClass + '(id='+this.id+'): Use native removeChild() instead of removeChild().');
-				Container.prototype.removeChild.apply(this, arguments);
-			},
-			hasChildren: function(){
-				console.log('[MIG:fixed] ' + this.declaredClass + '(id='+this.id+'): Use getChildren().length instead of hasChildren().');
-				return Container.prototype.hasChildren.apply(this, arguments);
-			},
-			_getSiblingOfChild: function(){
-				console.log('[MIG:fixed] ' + this.declaredClass + '(id='+this.id+'): _getSiblingOfChild() is no longer supported.');
-				return Container.prototype._getSiblingOfChild.apply(this, arguments);
-			},
-			getIndexOfChild: function(){
-				console.log('[MIG:fixed] ' + this.declaredClass + '(id='+this.id+'): getIndexOfChild() is no longer supported.');
-				return Container.prototype.getIndexOfChild.apply(this, arguments);
-			}
-		});
-	};
-
-	extendContainerFunction(Heading);
-	extendContainerFunction(View);
-	extendContainerFunction(RoundRect);
-	extendContainerFunction(_ItemBase);
 
 
 	extendSelectFunction = function(obj) {

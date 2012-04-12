@@ -1,15 +1,15 @@
 define([
 	"dojo/_base/declare",
 	"dojo/dom-class",
-	"./Pane"
-], function(declare, domClass, Pane){
+	"./Container"
+], function(declare, domClass, Container){
 
 	// module:
 	//		dojox/mobile/RoundRect
 	// summary:
 	//		A simple round rectangle pane.
 
-	return declare("dojox.mobile.RoundRect", Pane, {
+	return declare("dojox.mobile.RoundRect", Container, {
 		// summary:
 		//		A simple round rectangle pane.
 		// description:

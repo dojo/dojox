@@ -121,14 +121,8 @@ define([
 										label: this._cv ? this._cv(this.label) : this.label,
 										moveTo: this.domNode.parentNode.id,
 										transition: this.transition == "zoomIn" ? "zoomOut" : this.transition});
-					heading.placeAt(view.domNode);
-					if(view._started){
-						heading.startup();
-					}
-					this.paneContainerWidget.placeAt(view.domNode);
-					if(view._started){
-						this.paneContainerWidget.startup();
-					}
+					view.addChild(heading);
+					view.addChild(this.paneContainerWidget);
 
 					var target;
 					for(var w = this.getParent(); w; w = w.getParent()){
