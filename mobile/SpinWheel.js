@@ -30,6 +30,13 @@ define([
 			if(this._started){ return; }
 			this.centerPos = Math.round(this.domNode.offsetHeight / 2);
 			this.inherited(arguments);
+		},
+
+		addChild: function(/*Widget*/ widget, /*int?*/ insertIndex){
+			this.inherited(arguments);
+			if(this._started){
+				widget.setInitialValue();
+			}
 		}
 	});
 });
