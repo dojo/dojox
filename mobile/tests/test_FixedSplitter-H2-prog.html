@@ -26,15 +26,13 @@
 				});
 				p0.domNode.style.backgroundColor = "yellow";
 				p0.domNode.style.width = "200px";
-				p0.placeAt(w.domNode);
-				p0.startup();
+				w.addChild(p0);
 
 				var p1 = new Pane({
 					innerHTML: "pane #2"
 				});
 				p1.domNode.style.backgroundColor = "pink";
-				p1.placeAt(w.domNode);
-				p1.startup();
+				w.addChild(p1);
 			});
 		});
 	</script>
