@@ -133,15 +133,25 @@ define([
 				return datelocale.parse(v[0] + "/" + v[1] + "/" + v[2], {datePattern:pat, selector:"date"});
 		},
 
-		_setValuesAttr: function(/*Array*/a){
+		_setValuesAttr: function(/*Array*/values){
 			// summary:
-			//		Sets the slot values.
+			//		Sets the current date as an array of values.
+			// description:
+			//		This method takes an array that consists of three values,
+			//		year, month, and day. If the values are integer, they are
+			//		formatted to locale-specific strings before setting them to
+			//		the slots. Month starts from 1 to 12 (Ex. 1 - Jan, 2 - Feb, etc.)
+			//		If the values are NOT integer, they are directly
+			//		passed to the setter of the slots without formatting.
+			//
+			// example:
+			//	|	set("values", [2012, 1, 20]); // January 20, 2012
 			array.forEach(this.getSlots(), function(w, i){
-				var v = a[i];
-				if(!isNaN(v)){
+				var v = values[i];
+				if(typeof v == "number"){
 					var arr = [1970, 1, 1];
 					arr.splice(i, 1, v - 0);
-					v = w.format(new Date(arr[0], arr[1], arr[2]));
+					v = w.format(new Date(arr[0], arr[1] - 1, arr[2]));
 				}
 				w.set("value", v);
 			});
@@ -156,6 +166,9 @@ define([
 			//		Date object. If the string cannot be parsed by fromISOString, the method does nothing.
 			// value:
 			//		A string formatted as described in the dojo/date/stamp module.
+			//
+			// example:
+			//	|	set("value", "2012-1-20"); // January 20, 2012
 			var date = datestamp.fromISOString(value);
 			this.set("values", array.map(this.slots, function(w){ return w.format(date); }));
 		},
