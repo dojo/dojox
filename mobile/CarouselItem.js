@@ -14,14 +14,33 @@ define([
 	// module:
 	//		dojox/mobile/CarouselItem
 	// summary:
-	//		An internal widget used from Carousel.
+	//		An item of dojox.mobile.Carousel.
 
 	return declare("dojox.mobile.CarouselItem", [WidgetBase, Contained], {
+		// summary:
+		//		An item of dojox.mobile.Carousel.
+		// description:
+		//		CarouselItem represents an item of dojox.mobile.Carousel. In
+		//		typical use cases, users do not use this widget alone. Instead,
+		//		it is used in conjunction with the Carousel widget.
+
+		// alt: String
+		//		An alt text for the carousel item image.
 		alt: "",
+
+		// src: String
+		//		A path for an image to be displayed as a carousel item.
 		src: "",
+
+		// headerText: String
+		//		A text that is displayed above the carousel item image.
 		headerText: "",
+
+		// footerText: String
+		//		A text that is displayed below the carousel item image.
 		footerText: "",
 
+		/* internal properties */	
 		baseClass: "mblCarouselItem",
 
 		buildRendering: function(){

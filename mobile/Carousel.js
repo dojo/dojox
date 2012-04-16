@@ -44,6 +44,14 @@ define([
 		//		available for generating the contents from data store.
 		//		To feed data into Carousel through dojo.data, use DataCarousel.
 		//		To feed data into Carousel through dojo.store, use StoreCarousel.
+		//
+		//		The Carousel widget loads and instantiates its item contents in
+		//		a lazy manner. For example, if the number of visible items
+		//		(=numVisible) is 2, the widget creates 4 items, 2 for the
+		//		initial pane and 2 for the next page, at startup time. If you
+		//		swipe the page to open the 2nd page, the widget creates 2 more
+		//		items for the 3rd page. If the item to create is a dojo widget,
+		//		its module is dynamically loaded automatically before instantiation.
 
 		// numVisible: Number
 		//		The number of visible items.
