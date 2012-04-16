@@ -152,12 +152,37 @@ define([
 	});
 
 	return declare("dojox.mobile.Accordion", [WidgetBase, Container, Contained], {
+		// summary:
+		//		A layout widget that allows the user to freely navigate between panes.
+		// description:
+		//		Accordion has no specific child widget. Any widgets can be its
+		//		children. Typically dojox.mobile.Pane, dojox.mobile.Container,
+		//		or dojox.mobile.ContentPane are used as children widgets.
+
+		// iconBase: String
+		//		The default icon path for child widgets.
 		iconBase: "",
+
+		// iconPos: String
+		//		The default icon position for child widgets.
 		iconPos: "",
+
+		// fixedHeight: Boolean
+		//		If true, the entire accordion widget has fixed height regardless
+		//		of the height of each pane.
 		fixedHeight: false,
+
+		// singleOpen: Boolean
+		//		If true, only one pane is open at a time. The current open pane
+		//		is collapsed, when another pane is opened.
 		singleOpen: false,
+
+		// animation: Boolean
+		//		If true, animation is used when a pane is opened or
+		//		collapsed. The animation works only on webkit browsers.
 		animation: true,
 
+		/* internal properties */
 		duration: .3, // [seconds]
 
 		baseClass: "mblAccordion",

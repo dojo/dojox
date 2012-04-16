@@ -11,8 +11,19 @@ define([
 	//		A thin wrapper around the html5 <audio> element.
 
 	return declare("dojox.mobile.Audio", [WidgetBase, Contained], {
+		// source: Array
+		//		An array of src and type,
+		//		ex. [{src:"a.mp3",type:"audio/mpeg"},{src:"a.ogg",type:"audio/ogg"},...]
+		//		The src gives the path of the media resource. The type gives the
+		//		type of the media resource.
 		source: null,
+
+		// width: String
+		//		The width of the embed element.
 		width: "200px",
+
+		// height: String
+		//		The height of the embed element.
 		height: "15px",
 
 		_playable: false,

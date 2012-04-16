@@ -11,8 +11,24 @@ define([
 	//		A utility to create/update a badge node.
 
 	return declare("dojox.mobile.Badge", null, {
+		// summary:
+		//		A utility to create/update a badge node.
+		// description:
+		//		Badge is not a widget, but just a convenient function. A badge
+		//		consists of a simple DOM button. It can be created even without
+		//		dojox.mobile.Badge.
+
+		// value: String
+		//		A text to show in a badge.
 		value: "0",
+
+		// className: String
+		//		A class name of a DOM button.
 		className: "mblDomButtonRedBadge",
+
+		// fontSize: Number
+		//		Font size in pixel. The other styles are determined by the DOM
+		//		button itself.
 		fontSize: 16, // [px]
 
 		constructor: function(params, node){
