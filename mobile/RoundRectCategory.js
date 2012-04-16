@@ -20,7 +20,8 @@ define([
 		//		A category header for a rounded rectangle list.
 
 		// label: String
-		//		A label text for the widget.
+		//		A label of the category. If the label is not specified,
+		//		innerHTML is used as a label.
 		label: "",
 
 		buildRendering: function(){

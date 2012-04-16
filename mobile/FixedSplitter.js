@@ -74,6 +74,7 @@ define([
 		//		A screen-size-aware module to load.
 		screenSizeAwareClass: "dojox/mobile/ScreenSizeAware",
 
+		/* internal properties */	
 		baseClass: "mblFixedSplitter",
 
 		startup: function(){

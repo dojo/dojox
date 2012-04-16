@@ -11,11 +11,15 @@ define([
 	// summary:
 	//		A wrapper for image icon, css sprite icon, or DOM Button.
 
-	return declare("dojox.mobile.Icon", null,{
+	return declare("dojox.mobile.Icon", null, {
 		// summary:
-		//		A DOM Button wrapper.
+		//		A wrapper for image icon, css sprite icon, or DOM Button.
 		// description:
-		//		This widget creates a specified DOM Button.
+		//		Icon is a utility for creating an image icon, a css sprite icon,
+		//		or a DOM Button. It calls iconUtils.createIcon() with given
+		//		parameters to create an icon.
+		//		Note that this module is not a widget, i.e., it does not inherit
+		//		from dijit._WidgetBase.
 		// example:
 		//		Image icon:
 		//	|	<div data-dojo-type="dojox.mobile.Icon"
@@ -29,9 +33,22 @@ define([
 		//	|	<div data-dojo-type="dojox.mobile.Icon"
 		//	|		data-dojo-props='icon:"mblDomButtonBlueCircleArrow"'></div>
 
+		// icon: String
+		//		An icon to display. The value can be either a path for an image
+		//		file or a class name of a DOM button.
 		icon: "",
+
+		// icon: String
+		//		The position of an aggregated icon. IconPos is comma separated
+		//		values like top,left,width,height (ex. "0,0,29,29").
 		iconPos: "",
+
+		// icon: String
+		//		An alt text for the icon image.
 		alt: "",
+
+		// icon: String
+		//		A name of html tag to create as this.domNode.
 		tag: "div",
 
 		constructor: function(args, node){

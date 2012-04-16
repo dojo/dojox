@@ -39,11 +39,12 @@ define([
 		parseOnLoad: true,
 
 		// prog: Boolean
-		//		If true, shows progress indicator.
+		//		If true, shows progress indicator while loading an HTML fragment
+		//		specified by href.
 		prog: true,
 
 		// executeScripts: Boolean
-		//		If true, executes scripts that is found in the content
+		//		If true, executes scripts that is found in the content.
 		executeScripts: true,
 
 		constructor: function(){

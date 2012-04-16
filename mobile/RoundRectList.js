@@ -43,9 +43,10 @@ define([
 
 		// select: String
 		//		Selection mode of the list. The check mark is shown for the
-		//		selected list item(s). The value can be "single", "multiple", or
-		//		"". If "single", there can be only one selected item at a time.
+		//		selected list item(s). The value can be "single", "multiple", or "".
+		//		If "single", there can be only one selected item at a time.
 		//		If "multiple", there can be multiple selected items at a time.
+		//		If "", the check mark is not shown.
 		select: "",
 
 		// stateful: Boolean
@@ -53,7 +54,7 @@ define([
 		stateful: false,
 
 		// syncWithViews: Boolean
-		//		True if this widget listens to view transition events to be
+		//		If true, this widget listens to view transition events to be
 		//		synchronized with view's visibility.
 		syncWithViews: false,
 
@@ -65,6 +66,7 @@ define([
 		//		A name of html tag to create as domNode.
 		tag: "ul",
 
+		/* internal properties */	
 		editableMixinClass: "dojox/mobile/_EditableListMixin",
 		baseClass: "mblRoundRectList",
 

@@ -19,12 +19,11 @@ define([
 		//		onComplete(/*Array*/items) to handle the retrieved data.
 
 		// store: Object
-		//		Reference to data provider object
+		//		Reference to data provider object used by this widget.
 		store: null,
 
 		// query: Object
-		//		A query that can be passed to 'store' to initially filter the
-		//		items.
+		//		A query that can be passed to 'store' to initially filter the items.
 		query: null,
 
 		// queryOptions: Object

@@ -17,12 +17,11 @@ define([
 		//		onComplete(/*Array*/items) to handle the retrieved data.
 
 		// store: Object
-		//		Reference to data provider object
+		//		Reference to data provider object used by this widget.
 		store: null,
 
 		// query: Object
-		//		A query that can be passed to 'store' to initially filter the
-		//		items.
+		//		A query that can be passed to 'store' to initially filter the items.
 		query: null,
 
 		// queryOptions: Object
@@ -30,11 +29,11 @@ define([
 		queryOptions: null,
 
 		// labelProperty: String
-		//		A property name (a property in the dojo.store item) that specifies that item's label
+		//		A property name (a property in the dojo.store item) that specifies that item's label.
 		labelProperty: "label",
 
 		// childrenProperty: String
-		//		A property name (a property in the dojo.store item) that specifies that item's children
+		//		A property name (a property in the dojo.store item) that specifies that item's children.
 		childrenProperty: "children",
 
 		setStore: function(store, query, queryOptions){
