@@ -21,7 +21,7 @@
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
 			], function(parser, ready, at, getStateful){
-
+			window.at = at;
 			dojox.debugDataBinding = true;
 			
 			// Initial data
@@ -88,17 +88,17 @@
 			<div class="row">
 				<label class="cell" for="serialInput">Order #:</label>
 				<input class="cell" id="serialInput" data-dojo-type="dijit.form.TextBox" 
-							data-dojo-props="value: dojox.mvc.at('rel:', 'Serial')">
+							data-dojo-props="value: at('rel:', 'Serial')">
 			</div>
 			<div class="row">
 				<label class="cell" for="lastnameInput">Last:</label>
 				<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
+					data-dojo-props="value: at('rel:', 'Last')">
 			</div>
 			<div class="row">
 				<label class="cell" for="emailInput">Email:</label>
 				<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: dojox.mvc.at('rel:', 'Email')">
+					data-dojo-props="value: at('rel:', 'Email')">
 			</div>
 		</div>
 		<br/>
@@ -119,22 +119,22 @@
 			<div class="row">
 				<label class="cell" for="streetInput">Street:</label>
 				<input class="cell" id="streetInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: dojox.mvc.at('rel:', 'Street')">
+					data-dojo-props="value: at('rel:', 'Street')">
 			</div>
 			<div class="row">
 				<label class="cell" for="cityInput">City:</label>
 				<input class="cell" id="cityInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: dojox.mvc.at('rel:', 'City')">
+					data-dojo-props="value: at('rel:', 'City')">
 			</div>
 			<div class="row">
 				<label class="cell" for="stateInput">State:</label>
 				<input class="cell" id="stateInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: dojox.mvc.at('rel:', 'State')">
+					data-dojo-props="value: at('rel:', 'State')">
 			</div>
 			<div class="row">
 				<label class="cell" for="zipInput">Zipcode:</label>
 				<input class="cell" id="zipInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: dojox.mvc.at('rel:', 'Zip')">
+					data-dojo-props="value: at('rel:', 'Zip')">
 			</div>
 		</div>
 		<br/>

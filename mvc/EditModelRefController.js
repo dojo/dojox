@@ -46,8 +46,9 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/dom", "dojo/parser", "dojo/Stateful", "dijit/registry", "dijit/form/CheckBox", "dojox/mvc/at", "dojox/mvc/EditModelRefController", "dojo/domReady!"
-		// |					], function(ddom, parser, Stateful, registry){
+		// |						"dojo/dom", "dojo/parser", "dojo/Stateful", "dijit/registry", "dojox/mvc/at", "dijit/form/CheckBox", "dojox/mvc/EditModelRefController", "dojo/domReady!"
+		// |					], function(ddom, parser, Stateful, registry, at){
+		// |						window.at = at;
 		// |						model = new Stateful({value: false});
 		// |						setTimeout(function(){
 		// |							ddom.byId("check").click();
@@ -65,7 +66,7 @@ define([
 		// |			</head>
 		// |			<body>
 		// |				<span id="ctrl" data-dojo-type="dojox.mvc.EditModelRefController" data-dojo-props="sourceModel: model"></span>
-		// |				<input id="check" type="checkbox" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: dojox.mvc.at('widget:ctrl', 'value')">
+		// |				<input id="check" type="checkbox" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: at('widget:ctrl', 'value')">
 		// |			</body>
 		// |		</html>
 		// example:
@@ -76,9 +77,10 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/dom", "dojo/parser", "dojo/Stateful", "dijit/registry",
-		// |						"dijit/form/CheckBox", "dojox/mvc/at", "dojox/mvc/ModelRefController", "dojox/mvc/EditModelRefController", "dojo/domReady!"
-		// |					], function(ddom, parser, Stateful, registry){
+		// |						"dojo/dom", "dojo/parser", "dojo/Stateful", "dijit/registry", "dojox/mvc/at",
+		// |						"dijit/form/CheckBox", "dojox/mvc/ModelRefController", "dojox/mvc/EditModelRefController", "dojo/domReady!"
+		// |					], function(ddom, parser, Stateful, registry, at){
+		// |						window.at = at;
 		// |						model = new Stateful({value: false});
 		// |						setTimeout(function(){
 		// |							ddom.byId("checkEdit").click();
@@ -93,13 +95,13 @@ define([
 		// |			<body>
 		// |				<span id="ctrlSource" data-dojo-type="dojox.mvc.ModelRefController" data-dojo-props="model: model"></span>
 		// |				<span id="ctrlEdit" data-dojo-type="dojox.mvc.EditModelRefController"
-		// |				 data-dojo-props="sourceModel: dojox.mvc.at('widget:ctrlSource', 'model'), holdModelUntilCommit: true"></span>
+		// |				 data-dojo-props="sourceModel: at('widget:ctrlSource', 'model'), holdModelUntilCommit: true"></span>
 		// |				Source:
 		// |				<input id="checkSource" type="checkbox" data-dojo-type="dijit.form.CheckBox"
-		// |				 data-dojo-props="checked: dojox.mvc.at('widget:ctrlSource', 'value')">
+		// |				 data-dojo-props="checked: at('widget:ctrlSource', 'value')">
 		// |				Edit:
 		// |				<input id="checkEdit" type="checkbox" data-dojo-type="dijit.form.CheckBox"
-		// |				 data-dojo-props="checked: dojox.mvc.at('widget:ctrlEdit', 'value')">
+		// |				 data-dojo-props="checked: at('widget:ctrlEdit', 'value')">
 		// |			</body>
 		// |		</html>
 

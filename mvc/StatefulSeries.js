@@ -1,8 +1,9 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dojo/_base/lang"
-], function(darray, declare, lang){
+	"dojo/_base/lang",
+	"dojox/mvc/at"
+], function(darray, declare, lang, at){
 	return declare("dojox.mvc.StatefulSeries", null, {
 		// summary:
 		//		Chart data plugin ("series") that watches for properties specified in dojox.mvc.at handles in the given data.
@@ -21,10 +22,10 @@ define([
 				if((item || {}).atsignature == "dojox.mvc.at"){
 					var target = item.target, targetProp = item.targetProp;
 					if(lang.isString(target)){
-						throw new Error("Literal-based dojox.mvc.at is not supported in dojox.mvc.StatefulSeries.");
+						throw new Error("Literal-based dojox/mvc/at is not supported in dojox.mvc.StatefulSeries.");
 					}
-					if(item.direction && !(item.direction & dojox.mvc.from)){
-						console.warn("Data binding direction option is ignored in dojox.mvc.StatefulSeries.");
+					if(item.bindDirection && !(item.bindDirection & at.from)){
+						console.warn("Data binding bindDirection option is ignored in dojox.mvc.StatefulSeries.");
 					}
 					if(targetProp && lang.isFunction(target.set) && lang.isFunction(target.watch)){
 						var converter = item.converter, formatFunc = (converter || {}).format && lang.hitch({target: target, source: this}, converter.format);

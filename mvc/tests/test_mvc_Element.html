@@ -63,7 +63,7 @@
 	<div>
 		<div>
 			Text:
-			<span data-mvc-bindings="class: at(boldTextModel, 'checked').direct(at.from).attach({format: function(value){ return value ? 'boldText' : ''; }}),
+			<span data-mvc-bindings="class: at(boldTextModel, 'checked').direction(at.from).transform({format: function(value){ return value ? 'boldText' : ''; }}),
 			                         value: at(titleModel, 'value')"></span>
 		</div>
 		<div>

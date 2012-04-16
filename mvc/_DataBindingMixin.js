@@ -11,7 +11,7 @@ define([
 	registry = dijit.registry;
 	=====*/
 
-	dojo.deprecated("dojox.mvc._DataBindingMixin", "Use dojox.mvc.at() for data binding.");
+	dojo.deprecated("dojox.mvc._DataBindingMixin", "Use dojox/mvc/at for data binding.");
 
 	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:

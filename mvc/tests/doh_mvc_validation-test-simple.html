@@ -109,15 +109,15 @@
 				<label for="num1">Number 1</label>
 				<input id="num1" data-dojo-type="dijit.form.NumberTextBox"
 				 data-dojo-props="value: at(ctrl, 'num1'),
-				                  disabled: at(ctrl, 'relation').attach(disabledConverter),
-				                  valid: at(ctrl, 'relation').attach(validConverter)">
+				                  disabled: at(ctrl, 'relation').transform(disabledConverter),
+				                  valid: at(ctrl, 'relation').transform(validConverter)">
 			</div>
 			<div>
 				<label for="num2">Number 2</label>
 				<input id="num2" data-dojo-type="dijit.form.NumberTextBox"
 				 data-dojo-props="value: at(ctrl, 'num2'),
-				                  disabled: at(ctrl, 'relation').attach(disabledConverter),
-				                  valid: at(ctrl, 'relation').attach(validConverter)">
+				                  disabled: at(ctrl, 'relation').transform(disabledConverter),
+				                  valid: at(ctrl, 'relation').transform(validConverter)">
 			</div>
 		</form>
 	</body>

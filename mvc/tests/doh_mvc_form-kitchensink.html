@@ -208,12 +208,12 @@
 				}, ddom.byId("datesel"));
 
 				var datetext = new TextBox({
-					value: at(datectrl, "number").attach(dummyDateWid.dateLocaleModule),
+					value: at(datectrl, "number").transform(dummyDateWid.dateLocaleModule),
 					constraints: dummyDateWid.constraints
 				}, ddom.byId("datetext"));
 
 				var dateoutput = new Output({
-					value: at(datectrl, "number").attach(dummyDateWid.dateLocaleModule),
+					value: at(datectrl, "number").transform(dummyDateWid.dateLocaleModule),
 					constraints: dummyDateWid.constraints
 				}, ddom.byId("dateoutput"));
 				dateoutput.startup();
@@ -237,9 +237,9 @@
 					value: at(sliderctrl, "number") // bind to model.number
 				}, ddom.byId("slidersel"));
 
-				var slidertext = new TextBox({value: at(sliderctrl, "number").attach(number)}, ddom.byId("slidertext"));
+				var slidertext = new TextBox({value: at(sliderctrl, "number").transform(number)}, ddom.byId("slidertext"));
 
-				var slideroutput = new Output({	value: at(sliderctrl, "number").attach(number)}, ddom.byId("slideroutput"));
+				var slideroutput = new Output({	value: at(sliderctrl, "number").transform(number)}, ddom.byId("slideroutput"));
 				slideroutput.startup();
 
 				var sliderreset = new Button({
@@ -255,9 +255,9 @@
 				// create the dijit.form.NumberSpinner, textbox, output and button
 				var numspinWid = new NumberSpinner({value: at(numspinctrl, "number")}, ddom.byId("numspinsel"));
 
-				var numspintext = new TextBox({value: at(numspinctrl, "number").attach(number)}, ddom.byId("numspintext"));
+				var numspintext = new TextBox({value: at(numspinctrl, "number").transform(number)}, ddom.byId("numspintext"));
 
-				var numspinoutput = new Output({value: at(numspinctrl, "number").attach(number)}, ddom.byId("numspinoutput"));
+				var numspinoutput = new Output({value: at(numspinctrl, "number").transform(number)}, ddom.byId("numspinoutput"));
 				numspinoutput.startup();
 
 				var numspinreset = new Button({
@@ -1021,12 +1021,12 @@
 								</td>
 								<td>
 									<input id="decdatetext" data-dojo-type="dijit.form.TextBox"
-									 data-dojo-props="value: at(decdatectrl, 'number').attach(dummyDateWid.dateLocaleModule),
+									 data-dojo-props="value: at(decdatectrl, 'number').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints"></input>
 								</td>
 								<td>
 									<span id="decdateOutput" data-dojo-type="dojox.mvc.Output"
-									 data-dojo-props="value: at(decdatectrl, 'number').attach(dummyDateWid.dateLocaleModule),
+									 data-dojo-props="value: at(decdatectrl, 'number').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints"></span><!--
 									--></td>
 								<td>
@@ -1046,11 +1046,11 @@
 								</td>
 								<td>
 									<input id="decslidertext" data-dojo-type="dijit.form.TextBox"
-									 data-dojo-props="value: at(decsliderctrl, 'number').attach(dojo.number)">
+									 data-dojo-props="value: at(decsliderctrl, 'number').transform(dojo.number)">
 								</td>
 								<td>
 									<span id="decsliderOutput" data-dojo-type="dojox.mvc.Output"
-									 data-dojo-props="value: at(decsliderctrl, 'number').attach(dojo.number)"></span><!--
+									 data-dojo-props="value: at(decsliderctrl, 'number').transform(dojo.number)"></span><!--
 								--></td>
 								<td>
 									<button id="decsliderReset" type="button" data-dojo-type="dijit.form.Button"
@@ -1065,11 +1065,11 @@
 								</td>
 								<td>
 									<input id="decnumspintext" data-dojo-type="dijit.form.TextBox"
-									 data-dojo-props="value: at(decnumspinctrl, 'number').attach(dojo.number)">
+									 data-dojo-props="value: at(decnumspinctrl, 'number').transform(dojo.number)">
 								</td>
 								<td>
 									<span id="decnumspinOutput" data-dojo-type="dojox.mvc.Output"
-									 data-dojo-props="value: at(decnumspinctrl, 'number').attach(dojo.number)"></span><!--
+									 data-dojo-props="value: at(decnumspinctrl, 'number').transform(dojo.number)"></span><!--
 								--></td>
 								<td>
 									<button id="decnumspinReset" type="button" data-dojo-type="dijit.form.Button"
@@ -1129,12 +1129,12 @@
 								</td>
 								<td>
 									<input class="cell" id="deccaltext" data-dojo-type="dijit.form.TextBox"
-									 data-dojo-props="value: at(deccalctrl, 'date').attach(dummyDateWid.dateLocaleModule),
+									 data-dojo-props="value: at(deccalctrl, 'date').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints">
 								</td>
 								<td>
 									<span id="deccalOutput" data-dojo-type="dojox.mvc.Output"
-									 data-dojo-props="value: at(deccalctrl, 'date').attach(dummyDateWid.dateLocaleModule),
+									 data-dojo-props="value: at(deccalctrl, 'date').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints"></span><!--
 								--></td>
 								<td>

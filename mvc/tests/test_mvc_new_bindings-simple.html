@@ -29,7 +29,7 @@
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
 			], function(dojo, parser, ready, at, sync, getStateful, EditModelRefController, mvc){
-
+			window.at = at;
 			dojox.debugDataBinding=true;
 
 			model = new EditModelRefController({sourceModel: getStateful({	"First" : "John", 
@@ -109,19 +109,19 @@
 			<div class="row">
 				<label class="cell" for="firstnameInput">First:</label>
 				<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.ValidationTextBox"
-									data-dojo-props="value: dojox.mvc.at(model, 'First'),
-													readOnly: dojox.mvc.at(model, 'First').attach(nameReadOnlyConverter),
-													disabled: dojox.mvc.at(model, 'First').attach(nameRelevanceConverter),
-													valid: dojox.mvc.at(model, 'First').attach(numValidConverter)"></input>
+									data-dojo-props="value: at(model, 'First'),
+													readOnly: at(model, 'First').transform(nameReadOnlyConverter),
+													disabled: at(model, 'First').transform(nameRelevanceConverter),
+													valid: at(model, 'First').transform(numValidConverter)"></input>
 				<!-- Content in output below will always be in sync with value of textbox above -->
-				<span id="tout" data-dojo-type="dojox.mvc.Output" data-dojo-props=""value: dojox.mvc.at(model, 'First')">
+				<span id="tout" data-dojo-type="dojox.mvc.Output" data-dojo-props=""value: at(model, 'First')">
 					(first name is: ${this.value})
 				</span>
 				
 			</div>
 		   <div class="row">
 				<label class="cell" for="firstnameInput"></label>
-	<!--  	<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'First')">
+	<!--  	<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'First')">
 					disable is:  ${this.ref.disable}, Valid is: ${this.ref.valid}, Read-only is: ${this.ref.readOnly})
 				</span>
 	-->								   
@@ -132,9 +132,9 @@
 			<div class="row">
 				<label class="cell" for="numInput">Num:</label>
 				<input class="cell" id="numInput" data-dojo-type="dijit.form.NumberTextBox"
-												data-dojo-props="value: dojox.mvc.at(model, 'Num'),
-												valid: dojox.mvc.at(model, 'Num').attach(numValidConverter)"></input>
-				<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Num')">
+												data-dojo-props="value: at(model, 'Num'),
+												valid: at(model, 'Num').transform(numValidConverter)"></input>
+				<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Num')">
 					(num is: ${this.value})
 				</span>
 			</div>
@@ -150,29 +150,29 @@
 			<div class="row">
 				<label class="cell" for="lastnameInput">Last:</label>
 				<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox"
-									data-dojo-props="value: dojox.mvc.at(model, 'Last')"></input>
-				<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Last')">
+									data-dojo-props="value: at(model, 'Last')"></input>
+				<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Last')">
 					(last name is: ${this.value})
 				</span>
 			</div>
 			<div class="row">
 				<label class="cell" for="emailInput">Email:</label>
 				<input class="cell" id="emailInput" data-dojo-type="dijit.form.ValidationTextBox"
-									data-dojo-props="value: dojox.mvc.at(model, 'Email'),
-													readOnly: dojox.mvc.at(model, 'Last').attach(nameReadOnlyConverter),
-													disabled: dojox.mvc.at(model, 'Last').attach(nameRelevanceConverter),
-													valid: dojox.mvc.at(model, 'Last').attach(numValidConverter),
-													required: dojox.mvc.at(model, 'Last').attach(nameRequiredConverter)"></input>
-				<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Email')">
+									data-dojo-props="value: at(model, 'Email'),
+													readOnly: at(model, 'Last').transform(nameReadOnlyConverter),
+													disabled: at(model, 'Last').transform(nameRelevanceConverter),
+													valid: at(model, 'Last').transform(numValidConverter),
+													required: at(model, 'Last').transform(nameRequiredConverter)"></input>
+				<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Email')">
 					(email is: ${this.value})
 				</span>
 			</div>
 	<!--    <div class="row">
 				<label class="cell" for="emailInput"></label>
-				<span id="emailOut" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model, 'Email'),
-													readOnly: dojox.mvc.at(model, 'Email'),
-													disabled: dojox.mvc.at(model, 'Email').attach(disabledDisplayConverter),
-													required: dojox.mvc.at(model, 'Email')">
+				<span id="emailOut" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'Email'),
+													readOnly: at(model, 'Email'),
+													disabled: at(model, 'Email').transform(disabledDisplayConverter),
+													required: at(model, 'Email')">
 					disabled is:  ${this.disabled}, Valid is: ${this.valid}, Read-only is: ${this.readOnly}, Required is: ${this.required})
 				</span>
 		   </div>

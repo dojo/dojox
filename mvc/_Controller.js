@@ -57,7 +57,7 @@ define([
 
 		set: function(/*String*/ name, /*Anything*/ value){
 			// summary:
-			//		If the value given is dojox.mvc.at handle, use it for data binding.
+			//		If the value given is dojox/mvc/at handle, use it for data binding.
 			//		Otherwise, if setter function is there, use it.
 			//		Otherwise, set the value to the data model or to this object.
 			// name: String

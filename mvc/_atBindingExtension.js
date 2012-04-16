@@ -7,7 +7,7 @@ define([
 	// Apply the at binding mixin to all dijits, see mixin class description for details
 	lang.extend(_WidgetBase, _atBindingMixin.prototype);
 
-	// Monkey patch dijit._WidgetBase.postscript to get the list of dojox.mvc.at() handles before startup
+	// Monkey patch dijit._WidgetBase.postscript to get the list of dojox/mvc/at handles before startup
 	var oldWidgetBasePostScript = _WidgetBase.prototype.postscript;
 	_WidgetBase.prototype.postscript = function(/*Object?*/ params, /*DomNode|String*/ srcNodeRef){
 		this._dbpostscript(params, srcNodeRef);
@@ -28,7 +28,7 @@ define([
 		oldWidgetBaseDestroy.apply(this, [preserveDom]);
 	};
 
-	// Monkey patch dijit._WidgetBase.set to establish data binding if a dojox.mvc.at() handle comes
+	// Monkey patch dijit._WidgetBase.set to establish data binding if a dojox/mvc/at handle comes
 	var oldWidgetBaseSet = _WidgetBase.prototype.set;
 	_WidgetBase.prototype.set = function(/*String*/ name, /*Anything*/ value){
 		if(name == _atBindingMixin.prototype.dataBindAttr){

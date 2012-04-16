@@ -42,11 +42,11 @@
 				var test1_cal2 = new Calendar({value: at(test1_ctrl, "date")}, ddom.byId("test1_cal2"));
 				test1_cal2.startup();
 
-				var test1_txt2 = new TextBox({value: at(test1_ctrl, "date").attach(dummyDateWid.dateLocaleModule), constraints: dummyDateWid.constraints}, ddom.byId("test1_txt2"));
+				var test1_txt2 = new TextBox({value: at(test1_ctrl, "date").transform(dummyDateWid.dateLocaleModule), constraints: dummyDateWid.constraints}, ddom.byId("test1_txt2"));
 				domStyle.set(test1_txt2.domNode, "width", "368px");
 				test1_txt2.startup();
 
-				var test1_out2 = new Output({value: at(test1_ctrl, "date").attach(dummyDateWid.dateLocaleModule), 
+				var test1_out2 = new Output({value: at(test1_ctrl, "date").transform(dummyDateWid.dateLocaleModule), 
 					constraints: dummyDateWid.constraints}, ddom.byId("test1_output2"));
 				test1_out2.startup();
 
@@ -92,11 +92,11 @@
 				var test2_cal2 = new DateTextBox({value: at(test2_ctrl, "date")}, ddom.byId("test2_cal2"));
 				test2_cal2.startup();
 
-				var test2_txt2 = new TextBox({value: at(test2_ctrl, "date").attach(dummyDateWid.dateLocaleModule), constraints: dummyDateWid.constraints}, ddom.byId("test2_txt2"));
+				var test2_txt2 = new TextBox({value: at(test2_ctrl, "date").transform(dummyDateWid.dateLocaleModule), constraints: dummyDateWid.constraints}, ddom.byId("test2_txt2"));
 				domStyle.set(test2_txt2.domNode, "width", "368px");
 				test2_txt2.startup();
 
-				var test2_out2 = new Output({value: at(test2_ctrl, "date").attach(dummyDateWid.dateLocaleModule), 
+				var test2_out2 = new Output({value: at(test2_ctrl, "date").transform(dummyDateWid.dateLocaleModule), 
 					constraints: dummyDateWid.constraints}, ddom.byId("test2_output2"));
 				test2_out2.startup();
 
@@ -146,14 +146,14 @@
 				test3_cal2.startup();
 
 				var test3_txt2 = new TextBox({
-					value: at(test3_ctrl, "date").attach(dummyDateWid.dateLocaleModule),
+					value: at(test3_ctrl, "date").transform(dummyDateWid.dateLocaleModule),
 					constraints: dummyDateWid.constraints,
 					disabled: true
 				}, ddom.byId("test3_txt2"));
 				domStyle.set(test3_txt2.domNode, "width", "368px");
 				test3_txt2.startup();
 
-				var test3_out2 = new Output({value: at(test3_ctrl, "date").attach(dummyDateWid.dateLocaleModule), 
+				var test3_out2 = new Output({value: at(test3_ctrl, "date").transform(dummyDateWid.dateLocaleModule), 
 					constraints: dummyDateWid.constraints}, ddom.byId("test3_output2"));
 				test3_out2.startup();
 

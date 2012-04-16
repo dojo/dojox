@@ -5,11 +5,11 @@ define([
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/registry",
 	"dojo/text!./test_mvc_widget_template.html",
-	"dijit/form/TextBox",
 	"dojox/mvc/at",
+	"dijit/form/TextBox",
 	"dojox/mvc/Group",
 	"dojox/mvc/Repeat"
-], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, registry, template){
+], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, registry, template, at){
 	return dojo.declare("dojox.mvc.tests.test_templatedWidget.myMvcTemplated", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		// summary:
 		//		A sample templated widget for dojox.mvc
@@ -26,6 +26,7 @@ define([
 
 		buildRendering: function(){
 			console.log("call myMvcTemplated buildRendering");
+			window.at = at;			
 			this.inherited(arguments);
 		},
 

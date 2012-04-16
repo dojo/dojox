@@ -21,7 +21,8 @@
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
-			], function(parser, ready, mvc){
+			], function(parser, ready, mvc, at){
+			window.at = at;
 			dojox.debugDataBinding = true;
 
 				// The dojox.mvc.StatefulModel class creates a data model instance
@@ -53,25 +54,25 @@
 					<div class="row">
 						<label class="cell" for="firstnameInput">First:</label>
 						<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox"
-							data-dojo-props="value: dojox.mvc.at(model.First, 'value')"></input>
+							data-dojo-props="value: at(model.First, 'value')"></input>
 						<!-- Content in output below will always be in sync with value of textbox above -->
-						<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model.First, 'value')">
+						<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model.First, 'value')">
 						(first name is: ${this.value})
 						</span>
 					</div>
 				<div class="row">
 					<label class="cell" for="lastnameInput">Last:</label>
 					<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox"
-									data-dojo-props="value: dojox.mvc.at(model.Last, 'value')"></input>
-					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model.Last, 'value')">
+									data-dojo-props="value: at(model.Last, 'value')"></input>
+					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model.Last, 'value')">
 						(last name is: ${this.value})
 					</span>
 				</div>
 				<div class="row">
 					<label class="cell" for="emailInput">Email:</label>
 					<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox"
-									data-dojo-props="value: dojox.mvc.at(model.Email, 'value')"></input>
-					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at(model.Email, 'value')">
+									data-dojo-props="value: at(model.Email, 'value')"></input>
+					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model.Email, 'value')">
 					(email is: ${this.value})
 					</span>
 				</div>

@@ -23,6 +23,8 @@
 		'dojo/parser',
 		'dijit/form/TextBox',
 		'dijit/form/Button'], function(parser, at, EditModelRefController, Stateful){
+			window.at = at;
+			dojox.debugDataBinding=true;
 
 			// The dojox.mvc.StatefulModel class creates a data model instance
 			// where each leaf within the data model is decorated with dojo.Stateful
@@ -134,26 +136,26 @@
 					<div class="row">
 						<label class="cell" for="First">First:</label>
 						<input class="cell" id="First" data-dojo-type="dijit.form.TextBox"
-									data-dojo-props="value: dojox.mvc.at('rel:', 'First')"></input>
+									data-dojo-props="value: at('rel:', 'First')"></input>
 						<!-- Content in output below will always be in sync with value of textbox above -->
 						<span data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
+								data-dojo-props="value: at('rel:', 'First')">
 						(first name is: ${this.value})
 						</span>
 					</div>
 				<div class="row">
 					<label class="cell" for="lastnameInput">Last:</label>
 					<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox"
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Last')"></input>
-					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
+									data-dojo-props="value: at('rel:', 'Last')"></input>
+					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:', 'Last')">
 						(last name is: ${this.value})
 					</span>
 				</div>
 				<div class="row">
 					<label class="cell" for="emailInput">Email:</label>
 					<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox"
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Email')"></input>
-					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: dojox.mvc.at('rel:', 'Email')">
+									data-dojo-props="value: at('rel:', 'Email')"></input>
+					<span data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at('rel:', 'Email')">
 					(email is: ${this.value})
 					</span>
 				</div>

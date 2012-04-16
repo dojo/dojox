@@ -22,9 +22,10 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/dom", "dojo/parser", "dojo/store/Observable", "dojo/store/Memory", "dijit/registry",
-		// |						"dijit/form/CheckBox", "dojox/mvc/at", "dojox/mvc/EditStoreRefListController", "dojox/mvc/ListController", "dojo/domReady!"
-		// |					], function(ddom, parser, Observable, Memory, registry){
+		// |						"dojo/dom", "dojo/parser", "dojo/store/Observable", "dojo/store/Memory", "dijit/registry", "dojox/mvc/at",
+		// |						"dijit/form/CheckBox", "dojox/mvc/EditStoreRefListController", "dojox/mvc/ListController", "dojo/domReady!"
+		// |					], function(ddom, parser, Observable, Memory, registry, at){
+		// |						window.at = at;
 		// |						store = Observable(new Memory({data: [{id: "Foo", value: false}]}));
 		// |						parser.parse();
 		// |						registry.byId("ctrl").queryStore().observe(function(object, previousIndex, newIndex){
@@ -42,13 +43,13 @@ define([
 		// |			<body>
 		// |				<span id="ctrl" data-dojo-type="dojox.mvc.EditStoreRefListController" 
 		// |				 data-dojo-props="store: store, cursorIndex: 0"></span>
-		// |				<input id="check" type="checkbox" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: dojox.mvc.at('widget:ctrl', 'value')">
+		// |				<input id="check" type="checkbox" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: at('widget:ctrl', 'value')">
 		// |			</body>
 		// |		</html>
 
 		commitCurrent: function(){
-			// summary:
-			//		Send the change back to the data source for the current index.
+		// summary:
+		//		Send the change back to the data source for the current index.
 
 			var id = this.cursor[this.idProperty];
 			for(var i = 0; i < this.originalModel.length; i++){

@@ -19,19 +19,20 @@
 			'dojo/parser',
 			"dojo/_base/lang",
 			'dojo/ready',
+			'dojox/mvc/at',
 			"dojo/Stateful",
 			"dojox/mvc/getStateful",
 			"dojox/mvc/getPlainValue",
 			"dojo/store/Memory",
 			'dijit/registry',			
 			"dojo/_base/Deferred",
-			'dojox/mvc/at',
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
-			], function(parser, lang, ready, Stateful, getStateful, getPlainValue, Memory, registry){
+			], function(parser, lang, ready, at, Stateful, getStateful, getPlainValue, Memory, registry){
+				window.at = at;
 				dojox.debugDataBinding = true;
 
 				//model = mvc.newStatefulModel({ data : { "First" : "John", "Last" : "Doe", "Email" : "jdoe@example.com" }});
@@ -126,9 +127,9 @@
   
 <h4>This will swap which model is used for the textboxes, so updates will effect the output for that model</h4>
 					<div class="row">
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',dojox.mvc.at(model1, 'current'));}">Swap Model1</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',dojox.mvc.at(model2, 'current'));}">Swap Model2</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',dojox.mvc.at(model3, 'current'));}">Swap Model3</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',at(model1, 'current'));}">Swap Model1</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',at(model2, 'current'));}">Swap Model2</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){dijit.byId('outergroupId').set('target',at(model3, 'current'));}">Swap Model3</button>
 					</div>
 
 					<h4>Replace Model 1 data with original data from the models listed below, this should keep the bindings to the Model1 Output</h4>
@@ -140,57 +141,57 @@
 					<h4>Replace Model 1 data with the current model data listed below, this should keep the bindings to the Model1 Output</h4>
 					<div class="row" style="width: 540px">						
 						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model2.current);}">Replace with Model2 data</button>
-						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model3.current);}"}">Replace with Model3 data</button>
+						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model3.current);}">Replace with Model3 data</button>
 					</div>
-					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model1, 'current')">
+					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(model1, 'current')">
 						<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" 
-											data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+											data-dojo-props="children: at('rel:', 'Results')">
 							<div class="row" data-dojo-type="dojox.mvc.Group" 
-											data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+											data-dojo-props="target: at('rel:${this.index}')">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
+									data-dojo-props="value: at('rel:', 'First')">
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<span>Model1 Output is ==>  </span>
-						<div id="outergroupId12"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model1, 'current')">
+						<span>Model1 Output is ==&gt;  </span>
+						<div id="outergroupId12"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(model1, 'current')">
 							<div id="repeatId12" data-dojo-type="dojox.mvc.Repeat" 
-											data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+											data-dojo-props="children: at('rel:', 'Results')">
 								<div data-dojo-type="dojox.mvc.Group" 
-											data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+											data-dojo-props="target: at('rel:${this.index}')">
 									<span>Model1 Name${this.index} is</span>
 									<span id="firstnameOutput12${this.index}" data-dojo-type="dojox.mvc.Output"
-										data-dojo-props="value: dojox.mvc.at('rel:', 'First')"></span>
+										data-dojo-props="value: at('rel:', 'First')"></span>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<span>Model2 Output is ==>  </span>
-						<div id="outergroupId22"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model2, 'current')">
+						<span>Model2 Output is ==&gt;  </span>
+						<div id="outergroupId22"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(model2, 'current')">
 							<div id="repeatId22" data-dojo-type="dojox.mvc.Repeat" 
-											data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+											data-dojo-props="children: at('rel:', 'Results')">
 								<div data-dojo-type="dojox.mvc.Group" 
-											data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+											data-dojo-props="target: at('rel:${this.index}')">
 									<span>Model2 Name${this.index} is</span>
 									<span id="firstnameOutput22${this.index}" data-dojo-type="dojox.mvc.Output"
-										data-dojo-props="value: dojox.mvc.at('rel:', 'First')"></span>
+										data-dojo-props="value: at('rel:', 'First')"></span>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<span>Model3 Output is ==>  </span>
-						<div id="outergroupId23"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model3, 'current')">
+						<span>Model3 Output is ==&gt;  </span>
+						<div id="outergroupId23"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(model3, 'current')">
 							<div id="repeatId23" data-dojo-type="dojox.mvc.Repeat" 
-											data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+											data-dojo-props="children: at('rel:', 'Results')">
 								<div data-dojo-type="dojox.mvc.Group" 
-											data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+											data-dojo-props="target: at('rel:${this.index}')">
 									<span>Model3 Name${this.index} is</span>
 									<span id="firstnameOutput23${this.index}" data-dojo-type="dojox.mvc.Output"
-										data-dojo-props="value: dojox.mvc.at('rel:', 'First')"></span>
+										data-dojo-props="value: at('rel:', 'First')"></span>
 								</div>
 							</div>
 						</div>

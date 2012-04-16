@@ -55,7 +55,7 @@
 			"dojox/mobile/deviceTheme"
 		], function(lang, declare, connect, registry, dom, parser, MemoryStore, ready, Deferred, Stateful, 
 					getStateful, ItemFileWriteStore, Memory, EditStoreRefController, ListController, at){
-
+			window.at = at;
 			dojox.debugDataBinding = true;
 			
 			_addNewItem = function(e){
@@ -407,14 +407,14 @@
 
 				<ul data-dojo-type="dojox.mobile.RoundRectList"   
 					data-dojo-mixins="dojox.mvc.Repeat" 
-					data-dojo-props="exprchar:'#', children: dojox.mvc.at(listsCtrl, 'model')">
+					data-dojo-props="exprchar:'#', children: at(listsCtrl, 'model')">
 							<li  class="mblVariableHeight" 
 								data-dojo-type="dojox.mobile.ListItem" clickable="true" 
-								data-dojo-props="label:dojox.mvc.at('rel:#{this.index}','title'), 
+								data-dojo-props="label:at('rel:#{this.index}','title'), 
 									onClick: function(){console.log('selected list ', '#{this.index}'); selectList('#{this.index}');}">  
 							<!-- <table><tr>
 									<td data-dojo-type="dojox.mvc.Output" 
-										data-dojo-props="value: dojox.mvc.at('rel:#{this.index}','title')"></td>
+										data-dojo-props="value: at('rel:#{this.index}','title')"></td>
 								</tr></table>
 							-->	
 							</li>
@@ -429,9 +429,9 @@
 				<div id="mainContent">
  			<div id="todomain" data-dojo-type="dojox.mobile.View" selected="true">
 				<div data-dojo-type="dojox.mvc.Group" 
-					data-dojo-props="target: dojox.mvc.at(listsCtrl, 'cursor')">
+					data-dojo-props="target: at(listsCtrl, 'cursor')">
 					<div data-dojo-type="dojox.mobile.Heading" region="top"
-						data-dojo-props="label: dojox.mvc.at('rel:','title')">
+						data-dojo-props="label: at('rel:','title')">
 					<span id="addbutton"  data-dojo-type="dojox.mobile.ToolBarButton" 
 							data-dojo-props='icon:"mblDomButtonWhitePlus"' style="float:right;" 
 							onclick="console.log('+ was clicked')"></span>
@@ -439,7 +439,7 @@
 				</div>				
 				<ul data-dojo-type="dojox.mobile.RoundRectList" id="listItems"   
 					data-dojo-mixins="dojox.mvc.Repeat" 
-					data-dojo-props="exprchar:'#', children: dojox.mvc.at(currentctrl, 'model')">
+					data-dojo-props="exprchar:'#', children: at(currentctrl, 'model')">
 							<li  class="mblVariableHeight"  moveTo="details" callback="function(){movedTo('#{this.index}')}" 
 								data-dojo-type="dojox.mobile.ListItem" clickable="true" 
 								data-dojo-props="onClick: function(){console.log('select item ', '#{this.index}'); window.selected_item = this.index;}"
@@ -447,9 +447,9 @@
 								<table><tr>
 									<td><input preventTouch='true' type='checkbox' 
 											data-dojo-type="dojox.mobile.CheckBox" 
-											data-dojo-props="checked: dojox.mvc.at('rel:#{this.index}','completed').attach(completeConverter)"/></td>
+											data-dojo-props="checked: at('rel:#{this.index}','completed').transform(completeConverter)"/></td>
 									<td data-dojo-type="dojox.mvc.Output" 
-										data-dojo-props="value: dojox.mvc.at('rel:#{this.index}','title')"></td>
+										data-dojo-props="value: at('rel:#{this.index}','title')"></td>
 								</tr></table>
 							</li>
 				</ul>
@@ -459,7 +459,7 @@
 	</h2>
 				<ul data-dojo-type="dojox.mobile.RoundRectList"   
 					data-dojo-mixins="dojox.mvc.Repeat" 
-					data-dojo-props="exprchar:'#', children: dojox.mvc.at(ctrlComplete, 'model')">
+					data-dojo-props="exprchar:'#', children: at(ctrlComplete, 'model')">
 							<li  class="mblVariableHeight"   moveTo="details" callback="function(){movedToCompleted('#{this.index}')}" 
 								data-dojo-type="dojox.mobile.ListItem" clickable="true" 
 								data-dojo-props="onClick: function(){console.log('select item ', '#{this.index}'); window.selected_item = this.index;}"
@@ -467,9 +467,9 @@
 								<table><tr>
 									<td><input preventTouch='true' type='checkbox' 
 											data-dojo-type="dojox.mobile.CheckBox" 
-											data-dojo-props="checked: dojox.mvc.at('rel:#{this.index}','completed').attach(completeConverter)"/></td>
+											data-dojo-props="checked: at('rel:#{this.index}','completed').transform(completeConverter)"/></td>
 									<td data-dojo-type="dojox.mvc.Output" 
-										data-dojo-props="value: dojox.mvc.at('rel:#{this.index}','title')"></td>
+										data-dojo-props="value: at('rel:#{this.index}','title')"></td>
 								</tr></table>
 							</li>
 				</ul>
@@ -479,13 +479,13 @@
 	<div id="details" data-dojo-type="dojox.mobile.ScrollableView">
 		<h1 id="detailsHeading" data-dojo-type="dojox.mobile.Heading" back="Back" moveTo="todomain">To-Do Details</h1>
 			<div id="detailsGroup" class="fieldset" data-dojo-type="dojox.mvc.Group" 
-								data-dojo-props="target: dojox.mvc.at(currentctrl, 'cursor')">
+								data-dojo-props="target: at(currentctrl, 'cursor')">
  				<h2 id="detailsHeading2">Completed Items</h2>
 				<div class="field-row">
 					<span>To Do</span>
 					<input id="todo" data-dojo-type="dojox.mobile.TextBox"
 						placeholder="To do placeholder"  
-						data-dojo-props="value: dojox.mvc.at('rel:', 'title')"/>
+						data-dojo-props="value: at('rel:', 'title')"/>
 				</div>
 
  	 			<ul data-dojo-type="dojox.mobile.RoundRectList">

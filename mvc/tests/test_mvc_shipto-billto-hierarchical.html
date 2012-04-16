@@ -19,15 +19,17 @@
 			require([
 				"dojo/_base/declare",
 				"dojo/parser",
+				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/ListController",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
-				"dojox/mvc/at",
 				"dojox/mvc/Output",
 				"dojox/mvc/Group"
-			], function(declare, parser, getStateful, EditModelRefController, ListController){
+			], function(declare, parser, at, getStateful, EditModelRefController, ListController){
+				window.at = at;
+				dojox.debugDataBinding = true;
 				var clz = declare([EditModelRefController, ListController], {});
 				ctrl = new clz({
 					sourceModel: getStateful({
@@ -92,18 +94,18 @@
 			<div id="main">
 				<div id="leftNav"></div>
 				<div id="mainContent">
-					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'model')">
+					<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'model')">
 						<div class="row">
 							<label class="cell" for="serialInput">Order #:</label>
-							<input class="cell" id="serialInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Serial')"/>
+							<input class="cell" id="serialInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Serial')"/>
 						</div>
 						<div class="row">
 							<label class="cell" for="lastnameInput">Last name:</label>
-							<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Last')"/>
+							<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Last')"/>
 						</div>
 						<div class="row">
 							<label class="cell" for="emailInput">Email:</label>
-							<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Email')"/>
+							<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Email')"/>
 						</div>
 					</div>
 					<br/>
@@ -113,50 +115,50 @@
 					<br/>
 					<div class="row">
 						<label class="cell" for="addrLabel">Selected Address:</label>
-						<div class="cell" data-dojo-type="dojox.mvc.Output" id="addrLabel" data-dojo-props="value: dojox.mvc.at(ctrl, 'cursorIndex')"/></div>
+						<div class="cell" data-dojo-type="dojox.mvc.Output" id="addrLabel" data-dojo-props="value: at(ctrl, 'cursorIndex')"/></div>
 					</div>
 					<br/>
-					<div id="addrGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(ctrl, 'cursor')">
+					<div id="addrGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'cursor')">
 						<div class="row">
 							<label class="cell" for="typeInput">Type:</label>
-							<input class="cell" id="typeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Type')"/>
+							<input class="cell" id="typeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Type')"/>
 						</div>
-						<div id="postalGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Address')">
+						<div id="postalGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Address')">
 							<div class="row">
 								<label class="cell" for="streetInput">Street:</label>
-								<input class="cell" id="streetInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Street')"/>
+								<input class="cell" id="streetInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Street')"/>
 							</div>
 							<div class="row">
 								<label class="cell" for="cityInput">City:</label>
-								<input class="cell" id="cityInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'City')"/>
+								<input class="cell" id="cityInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'City')"/>
 							</div>
 							<div class="row">
 								<label class="cell" for="stateInput">State:</label>
-								<input class="cell" id="stateInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'State')"/>
+								<input class="cell" id="stateInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'State')"/>
 							</div>
 							<div class="row">
 								<label class="cell" for="zipInput">Zipcode:</label>
-								<input class="cell" id="zipInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Zip')"/>
+								<input class="cell" id="zipInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Zip')"/>
 							</div>
 						</div>
-						<div id="telGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Telephone')">
+						<div id="telGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Telephone')">
 							<div class="row">
 								<label class="cell" for="areacodeInput">Area code:</label>
-								<input class="cell" id="areacodeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'AreaCode')"/>
+								<input class="cell" id="areacodeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'AreaCode')"/>
 							</div>
-							<div id="llGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Landline')">
+							<div id="llGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Landline')">
 								<div class="row">
 									<label class="cell" for="numberInput">Landline Number:</label>
-									<input class="cell" id="numberInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Number')"/>
+									<input class="cell" id="numberInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Number')"/>
 								</div>
 								<div class="row">
 									<label class="cell" for="extInput">Extension:</label>
-									<input class="cell" id="extInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Extension')"/>
+									<input class="cell" id="extInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Extension')"/>
 								</div>
 							</div>
-							<div class="row" id="cellGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at('rel:', 'Cell')">
+							<div class="row" id="cellGroup" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at('rel:', 'Cell')">
 								<label class="cell" for="cellInput">Cell Number:</label>
-								<input class="cell" id="cellInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Number')"/>
+								<input class="cell" id="cellInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Number')"/>
 							</div>
 						</div>
 						<br/>

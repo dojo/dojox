@@ -40,6 +40,7 @@
 				"dojox/mvc/Group",
 				"dojo/domReady!"
 			], function(array, declare, lang, Deferred, ddom, parser, Stateful, JsonRest, registry, _WidgetBase, at, getStateful, EditStoreRefController, ListController, Repeat, StatefulArray){
+				window.at = at;
 				dojox.debugDataBinding = true;
 
 				var ctrlClass = declare([_WidgetBase, EditStoreRefController, ListController], {
@@ -80,9 +81,9 @@
 				(ctrl = (new ctrlClass({srcNodeRef: ddom.byId("detailsGroup"), cursorIndex: 0}))).startup();
 
 				var repeatClass = declare("my.Repeat", Repeat, {
-					templateString: '<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(\'rel:\', \'${this.index}\')">'
+					templateString: '<div class="row" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(\'rel:\', \'${this.index}\')">'
 					 + '<label class="cell">Name:</label>'
-					 + '<input id="${id}_textbox${index}" class="cell" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at(\'rel:\', \'First\')"></input>'
+					 + '<input id="${id}_textbox${index}" class="cell" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at(\'rel:\', \'First\')"></input>'
 					 + '<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){ ctrl.set(\'cursorIndex\', \'${this.index}\'); }">Details</button>'
 					 + '</div>'
 				});
@@ -120,7 +121,7 @@
 								<td>
 									<div>
 										<div>Declarative Repeat using my.Repeat does not pass templateString: </div>
-										<div id="repeatId2" data-dojo-type="my.Repeat" data-dojo-props="children: dojox.mvc.at(ctrl, 'model')"></div>
+										<div id="repeatId2" data-dojo-type="my.Repeat" data-dojo-props="children: at(ctrl, 'model')"></div>
 									</div>
 								</td>
 							</tr>
@@ -131,31 +132,31 @@
 					<div id="detailsGroup">
 						<div class="row">
 							<label class="cell" for="firstInput">First Name:</label>
-							<input class="cell" id="firstInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'First')"></input>
+							<input class="cell" id="firstInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'First')"></input>
 						</div>
 						<div class="row">
 							<label class="cell" for="lastInput">Last Name:</label>
-							<input class="cell" id="lastInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Last')"></input>
+							<input class="cell" id="lastInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Last')"></input>
 						</div>
 						<div class="row">
 							<label class="cell" for="locationInput">Location:</label>
-							<input class="cell" id="locationInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Location')"></input>
+							<input class="cell" id="locationInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Location')"></input>
 						</div>
 						<div class="row">
 							<label class="cell" for="officeInput">Office:</label>
-							<input class="cell" id="officeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Office')"></input>
+							<input class="cell" id="officeInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Office')"></input>
 						</div>
 						<div class="row">
 							<label class="cell" for="emailInput">Email:</label>
-							<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Email')"></input>
+							<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Email')"></input>
 						</div>
 						<div class="row">
 							<label class="cell" for="telInput">Telephone:</label>
-							<input class="cell" id="telInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Tel')"></input>
+							<input class="cell" id="telInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Tel')"></input>
 						</div>
 						<div class="row">
 							<label class="cell" for="faxInput">Fax:</label>
-							<input class="cell" id="faxInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: dojox.mvc.at('rel:', 'Fax')"></input>
+							<input class="cell" id="faxInput" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('rel:', 'Fax')"></input>
 						</div>
 						<div class="row">
 						<div class="spacer"></div>

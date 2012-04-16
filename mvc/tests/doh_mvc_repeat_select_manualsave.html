@@ -328,15 +328,15 @@
 									<td class="dijitMenuItemIconCell">
 										<input id="viewcheckbox${index}" data-dojo-type="dijit.form.CheckBox"
 										 data-dojo-props="uniqueId: at('rel:', 'uniqueId'),
-										                  checked: at('widget:listCtl', 'cursor').attach(selectionStatusConverter)">
+										                  checked: at('widget:listCtl', 'cursor').transform(selectionStatusConverter)">
 									</td>
 									<td class="dijitMenuItemIconCell">
 										<img id="viewiconimg${index}" src="../../../dojo/resources/blank.gif" data-dojo-type="dijit._WidgetBase"
-										 data-dojo-props="_setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: at('rel:', 'Priority').direct(dojox.mvc.from).attach(priorityConverter)">
+										 data-dojo-props="_setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: at('rel:', 'Priority').direction(at.from).transform(priorityConverter)">
 									</td>
 									<td id="viewtext${index}" data-dojo-type="dijit._WidgetBase"
-									 data-dojo-props="Subject: at('rel:', 'Subject').direct(dojox.mvc.from).attach(subjectConverter),
-									                  _setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: at('rel:', 'Completed').direct(dojox.mvc.from).attach(completeConverter),
+									 data-dojo-props="Subject: at('rel:', 'Subject').direction(at.from).transform(subjectConverter),
+									                  _setDomClassAttr: {node: 'domNode', type: 'class'}, domClass: at('rel:', 'Completed').direction(at.from).transform(completeConverter),
 									                  _setSubjectAttr: {node: 'domNode', type: 'innerText'}">
 									</td>
 								</tr>

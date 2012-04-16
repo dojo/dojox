@@ -42,6 +42,9 @@ require(['dojo/has',
 		require(["dojox/mobile/compat"]);
 	}
 
+	window.at = at;
+	dojox.debugDataBinding = true;
+	
 	var names = [{
 	"id" 	 : "360324",
 	"Serial" : "360324",
@@ -98,8 +101,9 @@ var repeatData = [
 	//model = getStateful(names );
 	//nameCtl = new EditStoreRefController({store: new Memory({data: names})});
 	nameCtl = new EditStoreRefListController({store: new Memory({data: names})});
-	nameCtl.queryStore();
-	model = nameCtl.model[0];
+	//nameCtl.queryStore();
+	nameCtl.getStore("360324");
+	model = nameCtl.model;
 	
 	//listCtl = new EditStoreRefListController({model: getStateful(repeatData ), cursorIndex: 0});
 	listCtl = new EditStoreRefListController({store: new Memory({data: repeatData}), cursorIndex: 0});
@@ -160,7 +164,7 @@ var repeatData = [
 	var genmodel;
 	updateView = function() {
 		try {
-			registry.byId("view").set("children", at('widget:modelArea', 'value').direct(dojox.mvc.from).attach({format: dojo.fromJson}));
+			registry.byId("view").set("children", at('widget:modelArea', 'value').direction(at.from).transform({format: dojo.fromJson}));
 			dom.byId("outerModelArea").style.display = "none";
 			dom.byId("viewArea").style.display = "";              		
 		}catch(err){
@@ -200,6 +204,6 @@ function setRef(id, model, attr) {
 	         "dojox/mvc/at"
 	         ], function(registry, at){
 					var widget = registry.byId(id);
-					widget.set("target", model[attr]);
+					widget.set("target", at(model,attr));
 				});
 };

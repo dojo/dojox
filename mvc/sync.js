@@ -35,9 +35,9 @@ define([
 		// summary:
 		//		Data binding options.
 
-		// direction: Number
-		//		The data binding direction, choose from: dojox.mvc.Bind.from, dojox.mvc.Bind.to or dojox.mvc.Bind.both.
-		direction: dojox.mvc.both,
+		// bindDirection: Number
+		//		The data binding bindDirection, choose from: dojox.mvc.Bind.from, dojox.mvc.Bind.to or dojox.mvc.Bind.both.
+		bindDirection: dojox.mvc.both,
 
 		// converter: dojox.mvc.sync.converter
 		//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
@@ -165,7 +165,7 @@ define([
 		 excludes = [],
 		 list,
 		 constraints = lang.mixin({}, target.constraints, source.constraints),
-		 direction = (options || {}).direction || mvc.both,
+		 bindDirection = (options || {}).bindDirection || mvc.both,
 		 logContent = getLogContent(target, targetProp, source, sourceProp),
 		 debugDataBinding = dojox.debugDataBinding;
 
@@ -181,7 +181,7 @@ define([
 			list = [targetProp];
 		}
 
-		if(direction & mvc.from){
+		if(bindDirection & mvc.from){
 			// Start synchronization from target to source (e.g. from model to widget). For wildcard mode (targetProp == sourceProp == "*"), the 1st argument of watch() is omitted
 			if(lang.isFunction(target.set) && lang.isFunction(target.watch)){
 				_watchHandles.push(target.watch.apply(target, ((targetProp != "*") ? [targetProp] : []).concat([function(name, old, current){
@@ -201,8 +201,8 @@ define([
 			});
 		}
 
-		if(direction & mvc.to){
-			if(!(direction & mvc.from)){
+		if(bindDirection & mvc.to){
+			if(!(bindDirection & mvc.from)){
 				// Initial copy from target to source (e.g. from model to widget)
 				array.forEach(list, function(prop){
 					// In "all properties synchronization" case, copy is not done for properties in "exclude" list

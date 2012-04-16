@@ -239,7 +239,7 @@
 			</div>
 			<div class="row">
 				<label data-dojo-type="dojox.mvc.Output" class="cell" for="ageInput" id="ageOutput"
-					data-dojo-props="value: at('rel:', 'First').direct(dojox.mvc.from).attach(ageLabelConverter)"></label>
+					data-dojo-props="value: at('rel:', 'First').direction(at.from).transform(ageLabelConverter)"></label>
 				<input class="cell" id="ageInput" data-dojo-type="dijit.form.TextBox" 
 					data-dojo-props="value: at('rel:', 'Age')">
 			</div>
@@ -251,22 +251,22 @@
 			<div class="row">
 				<label class="cell" for="oneInput">Item one:</label>
 				<input class="cell" id="oneInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: at('rel:', 'one').attach(sumValuesConverter)">
+					data-dojo-props="value: at('rel:', 'one').transform(sumValuesConverter)">
 			</div>
 			<div class="row">
 				<label class="cell" for="twoInput">Item two:</label>
 				<input class="cell" id="twoInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: at('rel:', 'two').attach(sumValuesConverter)">
+					data-dojo-props="value: at('rel:', 'two').transform(sumValuesConverter)">
 			</div>
 			<div class="row">
 				<label class="cell" for="threeInput">Item three:</label>
 				<input class="cell" id="threeInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: at('rel:', 'three').attach(sumValuesConverter)">
+					data-dojo-props="value: at('rel:', 'three').transform(sumValuesConverter)">
 			</div>
 			<div class="row">
 				<label class="cell" for="fourInput">Item four:</label>
 				<input class="cell" id="fourInput" data-dojo-type="dijit.form.TextBox" 
-					data-dojo-props="value: at('rel:', 'four').attach(sumValuesConverter)">
+					data-dojo-props="value: at('rel:', 'four').transform(sumValuesConverter)">
 			</div>
 			<div class="row">
 			<label class="cell" for="totalOutput">Total:</label>
@@ -284,7 +284,7 @@
 				<div class="row">
 					<label class="cell" for="input${this.index}">Item ${this.index}:</label>
 					<input class="cell" id="input${this.index}" data-dojo-type="dijit.form.TextBox" 
-						data-dojo-props="value: at('rel:', 'item').attach(sumRepeatValuesConverter)">
+						data-dojo-props="value: at('rel:', 'item').transform(sumRepeatValuesConverter)">
 					</div>
 				</div>
 			</div>

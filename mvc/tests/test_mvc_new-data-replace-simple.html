@@ -19,6 +19,7 @@
 			'dojo/parser',
 			"dojo/_base/lang",
 			'dojo/ready',
+			'dojox/mvc/at',
 			"dojo/Stateful",
 			"dojox/mvc/getStateful",
 			"dojox/mvc/getPlainValue",
@@ -26,14 +27,14 @@
 			"dojo/store/Memory",
 			'dijit/registry',			
 			"dojo/_base/Deferred",
-			'dojox/mvc/at',
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
-			], function(parser, lang, ready, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
-				dojox.debugDataBinding = true;
+			], function(parser, lang, ready, at, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
+			window.at = at;
+			dojox.debugDataBinding = true;
 			
 			model1Data =
 			[{
@@ -95,37 +96,37 @@
 						<button type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){replaceData(model1, model3Data[0]);}">Replace with Orig. Model3 data</button>
 					</div>
 				
-					<div id="outergroupId1x"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model1, 'current')">
+					<div id="outergroupId1x"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(model1, 'current')">
 						<div class="row">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="fnameInput" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
+									data-dojo-props="value: at('rel:', 'First')">
 						</div>
 						<div class="row">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="lnameInput" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
+									data-dojo-props="value: at('rel:', 'Last')">
 						</div>
 						<div class="row">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="qnameInput" 
-									data-dojo-props="value: dojox.mvc.at('rel:', 'Query')">
+									data-dojo-props="value: at('rel:', 'Query')">
 						</div>
 					</div>
-					<div class="row" id="outputgroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: dojox.mvc.at(model1, 'current')">
+					<div class="row" id="outputgroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(model1, 'current')">
 							<span>
-								Model1 Output is ==>  
+								Model1 Output is ==&gt;  
 							</span>
 							<span id="firstnameOutput10" data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'First')">
+								data-dojo-props="value: at('rel:', 'First')">
 								Name1 is "${this.value}" : 
 							</span>
 							<span id="firstnameOutput11" data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'Last')">
+								data-dojo-props="value: at('rel:', 'Last')">
 								Name2 is "${this.value}" : 
 							</span>
 							<span id="firstnameOutput12" data-dojo-type="dojox.mvc.Output" 
-								data-dojo-props="value: dojox.mvc.at('rel:', 'Query')">
+								data-dojo-props="value: at('rel:', 'Query')">
 								Name3 is "${this.value}"  
 							</span>
 					</div>

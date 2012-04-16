@@ -45,7 +45,8 @@
 			"dijit/form/TextBox",
 			"dijit/form/Select",
 			"dijit/form/CheckBox"
-		], function(dojox, parser){
+		], function(dojox, parser, at){
+			window.at = at;
 			dojox.debugDataBinding = true;
 			(cutItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCut");
 			(copyItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCopy").set("label", "Copy");
@@ -66,13 +67,13 @@
 
 	<div id="toolbar1" data-dojo-type="dijit.Toolbar"
 			><div data-dojo-type="ToolbarSectionStart" data-dojo-props='label:"Buttons"'></div
-			><div id="toolbar1.cut" data-dojo-type="dijit.form.Button" data-dojo-props='showLabel:false, iconClass: dojox.mvc.at(cutItemModel, "iconClass")'>Cut</div
+			><div id="toolbar1.cut" data-dojo-type="dijit.form.Button" data-dojo-props='showLabel:false, iconClass: at(cutItemModel, "iconClass")'>Cut</div
 			><div id="toolbar1.copy" data-dojo-type="dijit.form.Button" 
-					data-dojo-props='showLabel:true, "*": dojox.mvc.at(copyItemModel, "*")'>Copy</div
+					data-dojo-props='showLabel:true, "*": at(copyItemModel, "*")'>Copy</div
 
 			><div data-dojo-type="ToolbarSectionStart" data-dojo-props='label:"Toggles"'></div
 			><div id="toolbar1.bold" data-dojo-type="dijit.form.ToggleButton" 
-					data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconBold", showLabel:false, checked: dojox.mvc.at(boldItemModel, "checked")'>Bold</div
+					data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconBold", showLabel:false, checked: at(boldItemModel, "checked")'>Bold</div
 			><div id="toolbar1.italic" data-dojo-type="dijit.form.ToggleButton" 
 					data-dojo-props='iconClass:"dijitEditorIcon dijitEditorIconItalic", showLabel: true'>Italic</div
 
@@ -81,7 +82,7 @@
 	<div style="margin-top:8px;">
 		Icon for "Cut":
 		<select data-dojo-type="dijit.form.Select" 
-				data-dojo-props="value: dojox.mvc.at(cutItemModel, 'iconClass')">
+				data-dojo-props="value: at(cutItemModel, 'iconClass')">
 			<option value="dijitEditorIcon dijitEditorIconCut">Cut</option>
 			<option value="dijitFolderClosed">Folder</option>
 			<option value="noteIcon">Note</option>
@@ -92,7 +93,7 @@
 	<div style="margin-top:8px;">
 		Icon for "Copy":
 		<select data-dojo-type="dijit.form.Select" 
-				data-dojo-props="value: dojox.mvc.at(copyItemModel, 'iconClass')">
+				data-dojo-props="value: at(copyItemModel, 'iconClass')">
 			<option value="dijitEditorIcon dijitEditorIconCopy">Copy</option>
 			<option value="dijitFolderClosed">Folder</option>
 			<option value="noteIcon">Note</option>
@@ -103,7 +104,7 @@
 	<div style="margin-top:8px;">
 		Label for "Copy":
 		<select data-dojo-type="dijit.form.Select" 
-				data-dojo-props="value: dojox.mvc.at(copyItemModel, 'label')">
+				data-dojo-props="value: at(copyItemModel, 'label')">
 			<option value="Copy">Copy</option>
 			<option value="Copy to clipboard...">Copy to clipboard...</option>
 		</select>
@@ -112,13 +113,13 @@
 	<div style="margin-top:8px;">
 		Change the state for "Bold" (but this check box is free from change in the tool bar):
 		<input data-dojo-type="dijit.form.CheckBox" checked 
-				data-dojo-props="checked: dojox.mvc.at(boldItemModel, 'checked').direct(dojox.mvc.to)">
+				data-dojo-props="checked: at(boldItemModel, 'checked').direction(at.to)">
 	</div>
 
 	<div style="margin-top:8px;">
 		"Italic" should be unselected (directly bound to the tool bar item widget):
 		<input data-dojo-type="dijit.form.CheckBox" checked 
-				data-dojo-props="checked: dojox.mvc.at(dijit.byId('toolbar1.italic'), 'checked').attach(negativeConverter)">
+				data-dojo-props="checked: at(dijit.byId('toolbar1.italic'), 'checked').transform(negativeConverter)">
 	</div>
   </body>
 </html>
