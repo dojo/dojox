@@ -40,9 +40,10 @@ define([
 		//		standard transition types, "slide", "fade", "flip", or from the
 		//		extended transition types, "cover", "coverv", "dissolve",
 		//		"reveal", "revealv", "scaleIn", "scaleOut", "slidev",
-		//		"swirl", "zoomIn", "zoomOut". If "none" is specified, transition
-		//		occurs immediately without animation. If "below" is specified,
-		//		the application contents are displayed below the icons.
+		//		"swirl", "zoomIn", "zoomOut", "cube", and "swap". If "none" is
+		//		specified, transition occurs immediately without animation. If
+		//		"below" is specified, the application contents are displayed
+		//		below the icons.
 		transition: "below",
 
 		// pressedIconOpacity: Number

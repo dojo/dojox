@@ -25,10 +25,10 @@ define([
 		//		ScrollableView is a subclass of View (=dojox.mobile.View).
 		//		Unlike the base View class, ScrollableView's domNode always stays
 		//		at the top of the screen and its height is "100%" of the screen.
-		//		In this fixed domNode, containerNode scrolls. Browser's default
-		//		scrolling behavior is disabled, and the scrolling machinery is
-		//		re-implemented with JavaScript. Thus the user does not need to use the
-		//		two-finger operation to scroll an inner DIV (containerNode).
+		//		Inside this fixed domNode, the containerNode scrolls. The browser's
+		//		default scrolling behavior is disabled, and the scrolling mechanism is
+		//		re-implemented in JavaScript. Thus the user does not need to use the
+		//		two-finger operation to scroll the inner DIV (containerNode).
 		//		The main purpose of this widget is to realize fixed-positioned header
 		//		and/or footer bars.
 

@@ -40,14 +40,16 @@ define([
 		//		is instantiated lazily. That is, only when the widget is opened
 		//		by the user, the required modules are loaded and the content
 		//		widgets are instantiated.
+		//		This option works both in the sync and async loader mode.
 		lazy: false,
 
 		// requires: String
 		//		Comma-separated required module names to be lazily loaded. This
-		//		is effective only when lazy=true. All the modules specified with
-		//		dojoType and their depending modules are automatically loaded
-		//		when the widget is opened. However, if you need other extra
-		//		modules to be loaded, use this parameter.
+		//		property is effective only when lazy=true. All the modules
+		//		specified with data-dojo-type and their depending modules are
+		//		automatically loaded by the IconItem when it is opened.
+		//		However, if you need other extra modules to be loaded, use this parameter.
+		//		This option works both in the sync and async loader mode.
 		requires: "",
 
 		// timeout: String
@@ -55,13 +57,28 @@ define([
 		timeout: 10,
 
 		// content: String
-		//		An html fragment to embed.
+		//		An html fragment to embed as icon content.
 		content: "",
 
+		// badge: String
+		//		A text to show in a badget. (ex. "55")
 		badge: "",
+
+		// badgeClass: String
+		//		A class name of a DOM button for a badge.
 		badgeClass: "mblDomButtonRedBadge",
 
+		// deletable: Boolean
+		//		If true, you can delete this IconItem by clicking on the delete
+		//		icon during edit mode.
+		//		If false, the delete icon is not displayed during edit mode so
+		//		that it cannot be deleted.
 		deletable: true,
+
+		// deleteIcon: String
+		//		A delete icon to display at the top left corner of the item
+		//		during edit mode. The value can be either a path for an image
+		//		file or a class name of a DOM button.
 		deleteIcon: "",
 
 		// tag: String

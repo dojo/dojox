@@ -18,6 +18,9 @@ define([
 		// summary:
 		//		A progress indication widget that shows the status of a task.
 		// description:
+		//		The current progress can be specified either in percent or by a
+		//		value between 0 and maximum. Setter for value can be used to
+		//		update the progress.
 
 		// value: String
 		//		Number ("0" to maximum) or percentage ("0%" to "100%")
@@ -25,8 +28,12 @@ define([
 		value: "0",
 
 		// maximum: Number
-		//		Max sample number
+		//		Max sample number.
 		maximum: 100,
+
+		// label: String
+		//		A text to be shown at the center of the progress bar.
+		label: "",
 
 		/* internal properties */	
 		baseClass: "mblProgressBar",

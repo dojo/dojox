@@ -12,21 +12,40 @@ define([
 	// module:
 	//		dojox/mobile/IconMenu
 	// summary:
-	//		TODOC
+	//		A pop-up menu.
 
 	return declare("dojox.mobile.IconMenu", [WidgetBase, Container, Contained], {
+		// summary:
+		//		A pop-up menu.
+		// description:
+		//		The dojox.mobile.IconMenu widget displays a pop-up menu just
+		//		like iPhone's call options menu that is shown while you are on a
+		//		call. Each menu item must be dojox.mobile.IconMenuItem.
+
+		// transition: String
+		//		The default animated transition effect for child items.
 		transition: "slide",
+
+		// iconBase: String
+		//		The default icon path for child items.
 		iconBase: "",
+
+		// iconPos: String
+		//		The default icon position for child items.
 		iconPos: "",
+
+		// cols: Number
+		//		The number of child items in a row.
 		cols: 3,
-		childItemClass: "mblIconMenuItem",
 
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "ul",
 
+		/* internal properties */
 		selectOne: false,
 		baseClass: "mblIconMenu",
+		childItemClass: "mblIconMenuItem",
 
 		_createTerminator: false,
 

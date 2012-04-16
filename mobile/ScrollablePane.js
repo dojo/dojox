@@ -20,7 +20,7 @@ define([
 		//		A pane that has the touch-scrolling capability.
 
 		// roundCornerMask: Boolean
-		//		If true, created a rounded corner mask to clip
+		//		If true, create a rounded corner mask to clip
 		//		corners of a child widget or dom node.
 		//		Works only on WebKit-based browsers.
 		roundCornerMask: false,

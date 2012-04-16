@@ -12,14 +12,26 @@ define([
 	//		An item of IconMenu.
 
 	return declare("dojox.mobile.IconMenuItem", ItemBase, { 
-		selColor: "mblIconMenuItemSel",
+		// summary:
+		//		An item of IconMenu.
+		// description:
+		//		IconMenuItem represents a menu item of
+		//		dojox.mobile.MenuItem. This widget inherits from
+		//		dojox.mobile._ItemBase. Basic usage is same as the other
+		//		subclasses such as dojox.mobile.ListItem.
+
+		// closeOnAction: Boolean
+		//		Calls the hide() method of the parent widget, which is typically
+		//		a SimpleDialog.
 		closeOnAction: false,
 
 		// tag: String
 		//		A name of html tag to create as domNode.
 		tag: "li",
 
+		/* internal properties */
 		baseClass: "mblIconMenuItem",
+		selColor: "mblIconMenuItemSel",
 
 		_selStartMethod: "touch",
 		_selEndMethod: "touch",

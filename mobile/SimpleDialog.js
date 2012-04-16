@@ -9,14 +9,48 @@ define([
 	// module:
 	//		dojox/mobile/SimpleDialog
 	// summary:
-	//		TODOC
+	//		A dialog box for mobile.
 
 	return declare("dojox.mobile.SimpleDialog", Pane, {
-		title: "",
+		// summary:
+		//		A dialog box for mobile.
+		// description:
+		//		When a SimpleDialog is created, it is initially hidden and not
+		//		displayed (display="none"). To show the dialog box, you need to
+		//		get a reference to the widget and call the show() method.
+		//
+		//		The contents can be arbitrary HTML, text, or widgets. Note,
+		//		however, that the widget is initially hidden. You need to be
+		//		careful when you place something that cannot be initialized
+		//		under the hidden state into a SimpleDialog.
+		//
+		//		This widget has only very little functionality, but the code
+		//		size is much smaller than dijit.Dialog.
+
+		// top: String
+		//		The top edge position of the widget. If "auto", the widget is
+		//		placed at the middle of the screen. Otherwise, the value
+		//		(ex. "20px") is used as the top style of widget's domNode.
 		top: "auto",
+
+		// left: String
+		//		The left edge position of the widget. If "auto", the widget is
+		//		placed at the center of the screen. Otherwise, the value
+		//		(ex. "20px") is used as the left style of widget's domNode.
 		left: "auto",
+
+		// modal: Boolean
+		//		If true, a translucent cover is added over the entire page to
+		//		prevent the user from interacting with elements on the page.
 		modal: true,
+
+		// closeButton: Boolean
+		//		If true, a button to close the dialog box is displayed at the
+		//		top-right corner.
 		closeButton: false,
+
+		// closeButtonClass: String
+		//		A class name of a DOM button to be used as a close button.
 		closeButtonClass: "mblDomButtonSilverCircleRedCross",
 
 		// tabIndex: String

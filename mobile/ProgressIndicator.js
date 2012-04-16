@@ -51,6 +51,7 @@ define([
 		//		(mblProg0Color - mblProg11Color) are used.
 		colors: null,
 
+		/* internal properties */	
 		baseClass: "mblProgressIndicator",
 
 		constructor: function(){

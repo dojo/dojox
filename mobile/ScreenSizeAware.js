@@ -15,7 +15,7 @@ define([
 	// summary:
 	//		A module to make a screen size aware application.
 
-	kernel.experimental("dojox.mobile.ScreenSizeAware"); // Don't start using this, still experimental.
+	kernel.experimental("dojox.mobile.ScreenSizeAware"); // should consider support for other UI layout patterns
 
 	var cls = declare("dojox.mobile.ScreenSizeAware", null, {
 		// summary:
@@ -30,43 +30,43 @@ define([
 		//		single view layout when the screen size is detected as phone size.
 		//
 		// example:
-		// |	<span dojoType="dojox.mobile.ScreenSizeAware"></span>
-		// |	<div dojoType="dojox.mobile.FixedSplitter" orientation="H">
-		// |	  <div dojoType="dojox.mobile.Container" style="width:300px;">
-		// |	    <div id="leftView" dojoType="dojox.mobile.ScrollableView">
-		// |	      <h1 dojoType="dojox.mobile.Heading" fixed="top">Left Pane</h1>
-		// |	      <ul dojoType="dojox.mobile.EdgeToEdgeList" stateful="true">
-		// |	        <li dojoType="dojox.mobile.ListItem" moveTo="view1" label="View1"></li>
+		// |	<span data-dojo-type="dojox.mobile.ScreenSizeAware"></span>
+		// |	<div data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='orientation:"H"'>
+		// |	  <div data-dojo-type="dojox.mobile.Container" style="width:300px;">
+		// |	    <div id="leftView" data-dojo-type="dojox.mobile.ScrollableView">
+		// |	      <h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='fixed:"top"'>Left Pane</h1>
+		// |	      <ul data-dojo-type="dojox.mobile.EdgeToEdgeList" data-dojo-props='stateful:true'>
+		// |	        <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='label:"View1", moveTo:"view1"'></li>
 		// |	        ....
 		// |	      </ul>
 		// |	    </div>
 		// |	  </div>
-		// |	  <div dojoType="dojox.mobile.Container">
-		// |	    <div id="view1" dojoType="dojox.mobile.ScrollableView">
-		// |	      <h1 dojoType="dojox.mobile.Heading" fixed="top" back="Home" moveTo="leftView">Right Pane</h1>
+		// |	  <div data-dojo-type="dojox.mobile.Container">
+		// |	    <div id="view1" data-dojo-type="dojox.mobile.ScrollableView">
+		// |	      <h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props='fixed:"top", back:"Home", moveTo:"leftView"'>Right Pane</h1>
 		// |	      ....
 		// |	    </div>
 		// |	  </div>
 		// |	</div>
 
-		// splitter: String
-		//		The id of the FixedSplitter
+		// splitterId: String
+		//		The id of the FixedSplitter.
 		splitterId: "",
 
-		// splitter: String
-		//		The id of the left pane
+		// leftPaneId: String
+		//		The id of the left pane.
 		leftPaneId: "",
 
-		// splitter: String
-		//		The id of the right pane
+		// rightPaneId: String
+		//		The id of the right pane.
 		rightPaneId: "",
 
-		// splitter: String
-		//		The id of the left View
+		// leftViewId: String
+		//		The id of the left View.
 		leftViewId: "",
 
-		// splitter: String
-		//		The id of the list widget in the left view
+		// leftListId: String
+		//		The id of the list widget in the left view.
 		leftListId: "",
 
 		constructor: function(options){
