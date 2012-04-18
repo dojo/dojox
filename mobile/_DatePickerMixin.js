@@ -94,9 +94,17 @@ define([
 			//		Goes to today.
 			var now = new Date();
 			var v = array.map(this.slots, function(w){ return w.format(now); });
-			this.set("values", v);
 			this.set("colors", v);
 			this.disableValues(this.onDaySet());
+			if(this.value){
+				this.set("value", this.value);
+				this.value = null;
+			}else if(this.values){
+				this.set("values", this.values);
+				this.values = null;
+			}else{
+				this.set("values", v);
+			}
 		},
 
 		onYearSet: function(){

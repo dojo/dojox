@@ -20,8 +20,13 @@ define([
 				h = now.getHours() + "",
 				m = now.getMinutes();
 			m = (m < 10 ? "0" : "") + m;
-			this.set("values", [h, m]);
 			this.set("colors", [h, m]);
+			if(this.values){
+				this.set("values", this.values);
+				this.values = null;
+			}else{
+				this.set("values", [h, m]);
+			}
 		},
 
 		_getDateAttr: function(){
