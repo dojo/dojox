@@ -1,22 +1,13 @@
 define([
-	"dojo/_base/declare",
-	"dojo/_base/lang"
-], function(declare, lang){
+	"./_PickerChooser!TimePicker"
+], function(TimePicker){
 
 	// module:
 	//		dojox/mobile/TimePicker
 	// summary:
-	//		
+	//		A wrapper widget around SpinWheelTimePicker or ValuePickerTimePicker.
+	//		Returns ValuePickerTimePicker when the current theme is "android".
+	//		Returns SpinWheelTimePicker otherwise.
 
-	var dm = lang.getObject("dojox.mobile", true);
-	var pickerClass = dm.currentTheme === "android" ?
-		"dojox/mobile/ValuePickerTimePicker" : "dojox/mobile/SpinWheelTimePicker";
-
-	var cls = declare("dojox.mobile.TimePicker", null, {});
-
-	require([pickerClass], lang.hitch(this, function(module){
-		cls.prototype = module.prototype;
-	}));
-
-	return cls;
+	return TimePicker;
 });

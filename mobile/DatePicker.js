@@ -1,22 +1,13 @@
 define([
-	"dojo/_base/declare",
-	"dojo/_base/lang"
-], function(declare, lang){
+	"./_PickerChooser!DatePicker"
+], function(DatePicker){
 
 	// module:
 	//		dojox/mobile/DatePicker
 	// summary:
-	//		
+	//		A wrapper widget around SpinWheelDatePicker or ValuePickerDatePicker.
+	//		Returns ValuePickerDatePicker when the current theme is "android".
+	//		Returns SpinWheelDatePicker otherwise.
 
-	var dm = lang.getObject("dojox.mobile", true);
-	var pickerClass = dm.currentTheme === "android" ?
-		"dojox/mobile/ValuePickerDatePicker" : "dojox/mobile/SpinWheelDatePicker";
-
-	var cls = declare("dojox.mobile.DatePicker", null, {});
-
-	require([pickerClass], lang.hitch(this, function(module){
-		cls.prototype = module.prototype;
-	}));
-
-	return cls;
+	return DatePicker;
 });
