@@ -776,21 +776,33 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 			// summary: returns an object with properties "width" and "height"
 			return this.rawNode ? {width:  this.rawNode.width, height: this.rawNode.height} : null;	// Object
 		},
-		_render: function(){
+		_render: function(force){
 			// summary: render the all shapes
-			if(this.pendingImageCount){ return; }
+			if(!force && this.pendingImageCount){ return; }
 			var ctx = this.rawNode.getContext("2d");
-			ctx.save();
 			ctx.clearRect(0, 0, this.rawNode.width, this.rawNode.height);
-			for(var i = 0; i < this.children.length; ++i){
-				this.children[i]._render(ctx);
-			}
-			ctx.restore();
+			this.render(ctx);
 			if("pendingRender" in this){
 				clearTimeout(this.pendingRender);
 				delete this.pendingRender;
 			}
 		},
+		render: function(ctx){
+			// summary:
+			//		Renders the gfx scene.
+			// description:
+			//		this method is called to render the gfx scene to the specified context.
+			//		This method should not be invoked directly but should be used instead
+			//		as an extension point on which user can connect to with aspect.before/aspect.after
+			//		to implement pre- or post- image processing jobs on the drawing surface.
+			// ctx: CanvasRenderingContext2D
+			//		The surface Canvas rendering context.
+			ctx.save();
+			for(var i = 0; i < this.children.length; ++i){
+				this.children[i]._render(ctx);
+			}
+			ctx.restore();
+		},		
 		makeDirty: function(){
 			// summary: internal method, which is called when we may need to redraw
 			if(!this.pendingImagesCount && !("pendingRender" in this)){
