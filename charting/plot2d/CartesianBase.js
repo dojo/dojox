@@ -28,6 +28,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			this._vAxis = null;
 			return this;	//	dojox.charting.plot2d.CartesianBase
 		},
+		cleanGroup: function(creator){
+			this.inherited(arguments, [creator || this.chart.plotGroup]);
+		},
 		setAxis: function(axis){
 			//	summary:
 			//		Set an axis for this plot.

@@ -157,6 +157,10 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			this.node = dom.byId(node);
 			var box = domGeom.getMarginBox(node);
 			this.surface = g.createSurface(this.node, box.w || 400, box.h || 300);
+			if(this.surface.declaredClass.indexOf("vml") == -1){
+				// except if vml use native clipping
+				this.plotGroup = this.surface.createGroup();
+			}
 		},
 		destroy: function(){
 			//	summary:
@@ -168,6 +172,9 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
 				domConstruct.destroy(this.chartTitle);
+			}
+			if(this.plotGroup){
+				this.plotGroup.destroy();
 			}
 			this.surface.destroy();
 		},
@@ -706,7 +713,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			arr.forEach(this.stack, function(plot){ plot.zoom = zoom; });
 			return this;	//	dojox.charting.Chart
 		},
-		zoomIn:	function(name, range){
+		zoomIn:	function(name, range, delayed){
 			//	summary:
 			//		Zoom the chart to a specific range on one axis.  This calls render()
 			//		directly as a convenience method.
@@ -715,6 +722,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			//	range: Array
 			//		The end points of the zoom range, measured in axis ticks.
 			var axis = this.axes[name];
+			console.log(range[0]+", "+range[1]);
 			if(axis){
 				var scale, offset, bounds = axis.getScaler().bounds;
 				var lower = Math.min(range[0],range[1]);
@@ -724,7 +732,11 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 				scale = (bounds.upper - bounds.lower) / (upper - lower);
 				offset = lower - bounds.lower;
 				this.setAxisWindow(name, scale, offset);
-				this.render();
+				if(delayed){
+					this.delayedRender();
+				}else{
+					this.render();
+				}
 			}
 		},
 		calculateGeometry: function(){
@@ -829,6 +841,13 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			//		chart has been changed.
 			//	returns: dojox.charting.Chart
 			//		A reference to the current chart for functional chaining.
+
+			// do we have a delayed renderer pending? If yes we need to clear it
+			if(this._delayedRenderHandle){
+				clearTimeout(this._delayedRenderHandle);
+				this._delayedRenderHandle = null;
+			}
+			
 			if(this.theme){
 				this.theme.clear();
 			}
@@ -862,7 +881,9 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 
 			// calculate geometry
 			this.fullGeometry();
-			var offsets = this.offsets, dim = this.dim, rect;
+			var offsets = this.offsets, dim = this.dim;
+			var w = Math.max(0, dim.width  - offsets.l - offsets.r),
+				h = Math.max(0, dim.height - offsets.t - offsets.b);
 
 			// get required colors
 			//var requiredColors = func.foldl(this.stack, "z + plot.getRequiredColors()", 0);
@@ -876,92 +897,28 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 				// destroy title if it is a DOM node
 			    domConstruct.destroy(this.chartTitle);
 			}
+			if(this.plotGroup){
+				this.plotGroup.clear();
+			}
 			this.surface.clear();
 			this.chartTitle = null;
 
-			// generate shapes
-
-			// draw a plot background
-			var t = this.theme,
-				fill   = t.plotarea && t.plotarea.fill,
-				stroke = t.plotarea && t.plotarea.stroke,
-				// size might be neg if offsets are bigger that chart size this happens quite often at 
-				// initialization time if the chart widget is used in a BorderContainer
-				// this will fail on IE/VML
-				w = Math.max(0, dim.width  - offsets.l - offsets.r),
-				h = Math.max(0, dim.height - offsets.t - offsets.b),
-				rect = {
-					x: offsets.l - 1, y: offsets.t - 1,
-					width:  w + 2,
-					height: h + 2
-				};
-			if(fill){
-				fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim, offsets), rect);
-				this.surface.createRect(rect).setFill(fill);
-			}
-			if(stroke){
-				this.surface.createRect({
-					x: offsets.l, y: offsets.t,
-					width:  w + 1,
-					height: h + 1
-				}).setStroke(stroke);
+			if(this.plotGroup){
+				this._renderChartBackground(dim, offsets);
+				this._renderPlotBackground(dim, offsets, w, h);
+				this.surface.add(this.plotGroup);
+				this.plotGroup.setClip({ x: offsets.l, y: offsets.t, width: w, height: h });
+			}else{
+				// VML
+				this._renderPlotBackground(dim, offsets, w, h);
 			}
 
 			// go over the stack backwards
 			func.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
 
-			// pseudo-clipping: matting
-			fill   = this.fill   !== undefined ? this.fill   : (t.chart && t.chart.fill);
-			stroke = this.stroke !== undefined ? this.stroke : (t.chart && t.chart.stroke);
-
-			//	TRT: support for "inherit" as a named value in a theme.
-			if(fill == "inherit"){
-				//	find the background color of the nearest ancestor node, and use that explicitly.
-				var node = this.node, fill = new Color(domStyle.get(node, "backgroundColor"));
-				while(fill.a==0 && node!=document.documentElement){
-					fill = new Color(domStyle.get(node, "backgroundColor"));
-					node = node.parentNode;
-				}
-			}
-
-			if(fill){
-				fill = Element.prototype._plotFill(fill, dim, offsets);
-				if(offsets.l){	// left
-					rect = {
-						width:  offsets.l,
-						height: dim.height + 1
-					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
-				}
-				if(offsets.r){	// right
-					rect = {
-						x: dim.width - offsets.r,
-						width:  offsets.r + 1,
-						height: dim.height + 2
-					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
-				}
-				if(offsets.t){	// top
-					rect = {
-						width:  dim.width + 1,
-						height: offsets.t
-					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
-				}
-				if(offsets.b){	// bottom
-					rect = {
-						y: dim.height - offsets.b,
-						width:  dim.width + 1,
-						height: offsets.b + 2
-					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
-				}
-			}
-			if(stroke){
-				this.surface.createRect({
-					width:  dim.width - 1,
-					height: dim.height - 1
-				}).setStroke(stroke);
+			if(!this.plotGroup){
+				// VML, matting-clipping
+				this._renderChartBackground(dim, offsets);
 			}
 
 			//create title: Whether to make chart title as a widget which extends dojox.charting.Element?
@@ -992,6 +949,96 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 
 			return this;	//	dojox.charting.Chart
 		},
+		_renderChartBackground: function(dim, offsets){
+			var t = this.theme, rect;
+			// chart background
+			var fill   = this.fill   !== undefined ? this.fill   : (t.chart && t.chart.fill);
+			var stroke = this.stroke !== undefined ? this.stroke : (t.chart && t.chart.stroke);
+
+			//	TRT: support for "inherit" as a named value in a theme.
+			if(fill == "inherit"){
+				//	find the background color of the nearest ancestor node, and use that explicitly.
+				var node = this.node;
+				fill = new Color(domStyle.get(node, "backgroundColor"));
+				while(fill.a==0 && node!=document.documentElement){
+					fill = new Color(domStyle.get(node, "backgroundColor"));
+					node = node.parentNode;
+				}
+			}
+
+			if(fill){
+				if(this.plotGroup){
+					fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim),
+						{ width: dim.width + 1, height: dim.height + 1 });
+					this.surface.createRect({ width: dim.width + 1, height: dim.height + 1 }).setFill(fill);
+				}else{
+					// VML
+					fill = Element.prototype._plotFill(fill, dim, offsets);
+					if(offsets.l){	// left
+						rect = {
+							width:  offsets.l,
+							height: dim.height + 1
+						};
+						this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					}
+					if(offsets.r){	// right
+						rect = {
+							x: dim.width - offsets.r,
+							width:  offsets.r + 1,
+							height: dim.height + 2
+						};
+						this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					}
+					if(offsets.t){	// top
+						rect = {
+							width:  dim.width + 1,
+							height: offsets.t
+						};
+						this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					}
+					if(offsets.b){	// bottom
+						rect = {
+							y: dim.height - offsets.b,
+							width:  dim.width + 1,
+							height: offsets.b + 2
+						};
+						this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					}
+				}
+			}
+			if(stroke){
+				this.surface.createRect({
+					width:  dim.width - 1,
+					height: dim.height - 1
+				}).setStroke(stroke);
+			}
+		},
+		_renderPlotBackground: function(dim, offsets, w, h){
+			var t = this.theme;
+
+			// draw a plot background
+			var fill   = t.plotarea && t.plotarea.fill;
+			var stroke = t.plotarea && t.plotarea.stroke;
+			// size might be neg if offsets are bigger that chart size this happens quite often at
+			// initialization time if the chart widget is used in a BorderContainer
+			// this will fail on IE/VML
+			var rect = {
+				x: offsets.l - 1, y: offsets.t - 1,
+				width:  w + 2,
+				height: h + 2
+			};
+			if(fill){
+				fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim, offsets), rect);
+				this.surface.createRect(rect).setFill(fill);
+			}
+			if(stroke){
+				this.surface.createRect({
+					x: offsets.l, y: offsets.t,
+					width:  w + 1,
+					height: h + 1
+				}).setStroke(stroke);
+			}
+		},
 		delayedRender: function(){
 			//	summary:
 			//		Delayed render, which is used to collect multiple updates
@@ -1002,8 +1049,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			if(!this._delayedRenderHandle){
 				this._delayedRenderHandle = setTimeout(
 					lang.hitch(this, function(){
-						clearTimeout(this._delayedRenderHandle);
-						this._delayedRenderHandle = null;
 						this.render();
 					}),
 					this.delayInMs

@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gfx", "dojox/gfx/utils", "dojox/gfx/shape"],
-	function(lang, arr, domConstruct, declare, gfx, utils, shape){
-	
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gfx", "dojox/gfx/shape"],
+	function(lang, arr, domConstruct, declare, gfx, shape){
+
 	return declare("dojox.charting.Element", null, {
 		//	summary:
 		//		A base class that is used to build other elements of a chart, such as
@@ -13,12 +13,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 		//		Any DOMNodes used as a part of this element (such as HTML-based labels).
 		//	dirty: Boolean
 		//		A flag indicating whether or not this element needs to be rendered.
-	
+
 		chart: null,
 		group: null,
 		htmlElements: null,
 		dirty: true,
-	
+
 		constructor: function(chart){
 			//	summary:
 			//		Creates a new charting element.
@@ -31,19 +31,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			this.trailingSymbol = "...";
 			this._events = [];
 		},
-		createGroup: function(creator){
-			//	summary:
-			//		Convenience function to create a new dojox.gfx.Group.
-			//	creator: dojox.gfx.Surface?
-			//		An optional surface in which to create this group.
-			//	returns: dojox.charting.Element
-			//		A reference to this object for functional chaining.
-			if(!creator){ creator = this.chart.surface; }
-			if(!this.group){
-				this.group = creator.createGroup();
-			}
-			return this;	//	dojox.charting.Element
-		},
 		purgeGroup: function(){
 			//	summary:
 			//		Clear any elements out of our group, and destroy the group.
@@ -53,7 +40,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			if(this.group){
 				// since 1.7.x we need dispose shape otherwise there is a memoryleak
 				this.group.removeShape();
-				this.group.destroy();
+				var children = this.group.children;
+				for(var i = 0; i < children.length;++i){
+					shape.dispose(children[i]);
+				}
+				this.group.clear();
 				this.group = null;
 			}
 			this.dirty = true;

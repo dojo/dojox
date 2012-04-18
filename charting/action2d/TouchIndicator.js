@@ -193,16 +193,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			if(event.touches.length==1){
 				this._onTouchSingle(event);
 			}else if(this.opt.dualIndicator && event.touches.length==2){
-				this._onTouchDual(event);	
+				this._onTouchDual(event);
 			}
 		},
 
 		_onTouchSingle: function(event, delayed){
-			// sync
 			if(this.chart._delayedRenderHandle && !delayed){
 				// we have pending rendering from a previous call, let's sync
-				clearTimeout(this.chart._delayedRenderHandle);
-				this.chart._delayedRenderHandle = null;
 				this.chart.render();
 			}
 			var plot = this.chart.getPlot(this._uName);
@@ -217,6 +214,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		},
 		
 		_onTouchDual: function(event){
+			// sync
+			if(this.chart._delayedRenderHandle){
+				// we have pending rendering from a previous call, let's sync
+				this.chart.render();
+			}
 			var plot = this.chart.getPlot(this._uName);
 			plot.pageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
 			plot.secondCoord = {x: event.touches[1].pageX, y: event.touches[1].pageY};

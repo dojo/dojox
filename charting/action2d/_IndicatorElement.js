@@ -87,7 +87,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../plot2d/Base", "../plot2d/co
 		},
 		_trackMove: function(){
 			// let's update the selector
-			this._updateIndicator(this.pageCoord);            
+			this._updateIndicator(this.pageCoord);
 			// if we reached that point once, then we don't stop until mouse up
 			if(this._initTrackPhase){
 				this._initTrackPhase = false;

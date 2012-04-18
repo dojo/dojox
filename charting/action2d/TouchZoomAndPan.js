@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
-	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"], 
+	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"],
 	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
 	var GlassView = declare("dojox.charting.action2d._GlassView", Element, {
 		//	summary: Private internal class used by TouchZoomAndPan actions.
@@ -13,16 +13,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			}
 			this.cleanGroup();
 			this.group.createRect({width: this.chart.dim.width, height: this.chart.dim.height}).setFill("rgba(0,0,0,0)");
-		},
-		cleanGroup: function(creator){
-			//	summary:
-			//		Clean any elements (HTML or GFX-based) out of our group, and create a new one.
-			//	creator: dojox.gfx.Surface?
-			//		An optional surface to work with.
-			//	returns: dojox.charting.Element
-			//		A reference to this object for functional chaining.
-			this.inherited(arguments);
-			return this;	//	dojox.charting.Element
 		},
 		clear: function(){
 			//	summary:
@@ -56,13 +46,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			return this.dirty;
 		}
 	});
-	
+
 	/*=====
-	
+
 	declare("dojox.charting.action2d.__TouchZoomAndPanCtorArgs", null, {
 		//	summary:
 		//		Additional arguments for mouse zoom and pan actions.
-		
+
 		//	axis: String?
 		//		Target axis name for this action.  Default is "x".
 		axis: "x",
@@ -81,23 +71,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	});
 	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
-	
+
 	return declare("dojox.charting.action2d.TouchZoomAndPan", ChartAction, {
 		//	summary:
-		//		Create a touch zoom and pan action. 
-		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture. 
+		//		Create a touch zoom and pan action.
+		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture.
 		//		Finally this is possible to navigate between a fit window and a zoom one using double tap gesture.
-	
+
 		// the data description block for the widget parser
 		defaultParams: {
 			axis: "x",
-			scaleFactor: 1.2,	
+			scaleFactor: 1.2,
 			maxScale: 100,
 			enableScroll: true,
 			enableZoom: true
 		},
 		optionalParams: {},	// no optional parameters
-	
+
 		constructor: function(chart, plot, kwArgs){
 			//	summary:
 			//		Create a new touch zoom and pan action and connect it.
@@ -119,7 +109,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			this._uName = "touchZoomPan"+this.axis;
 			this.connect();
 		},
-		
+
 		connect: function(){
 			//	summary:
 			//		Connect this action to the chart. On Safari this adds a new glass view plot
@@ -132,16 +122,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				this.chart.addPlot(this._uName, {type: GlassView});
 			}
 		},
-		
+
 		disconnect: function(){
 			//	summary:
-			//		Disconnect this action from the chart. 
+			//		Disconnect this action from the chart.
 			if(has("safari") && this.chart.surface.declaredClass.indexOf("svg")!=-1){
 				this.chart.removePlot(this._uName);
 			}
 			this.inherited(arguments);
 		},
-	
+
 		onTouchStart: function(event){
 			//	summary:
 			//		Called when touch is started on the chart.
@@ -151,8 +141,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			this._startPageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
 			if((this.enableZoom || this.enableScroll) && chart._delayedRenderHandle){
 				// we have pending rendering from a scroll, let's sync
-				clearTimeout(chart._delayedRenderHandle);
-				chart._delayedRenderHandle = null;
 				chart.render();
 			}
 			if(this.enableZoom && length >= 2){
@@ -171,26 +159,26 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				eventUtil.stop(event);
 			}
 		},
-	
+
 		onTouchMove: function(event){
 			//	summary:
 			//		Called when touch is moved on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			var length = event.touches.length;
-			var pAttr = axis.vertical?"pageY":"pageX", 
+			var pAttr = axis.vertical?"pageY":"pageX",
 					attr = axis.vertical?"y":"x";
 			if(this.enableZoom && length >= 2){
 				var newMiddlePageCoord = {x: (event.touches[1].pageX + event.touches[0].pageX) / 2,
-											y: (event.touches[1].pageY + event.touches[0].pageY) / 2};		
+											y: (event.touches[1].pageY + event.touches[0].pageY) / 2};
 				var scale = (this._endPageCoord[attr] - this._startPageCoord[attr]) /
 					(event.touches[1][pAttr] - event.touches[0][pAttr]);
-	
+
 				if(this._initScale / scale > this.maxScale){
 					return;
 				}
-	
+
 				var newMiddleCoord = this._initData(newMiddlePageCoord)[this.axis];
-	
+
 				var newStart = scale * (this._startCoord - newMiddleCoord)  + this._middleCoord,
 				newEnd = scale * (this._endCoord - newMiddleCoord) + this._middleCoord;
 				chart.zoomIn(this.axis, [newStart, newEnd]);
@@ -203,9 +191,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				chart.delayedRender();
 				// avoid browser pan
 				eventUtil.stop(event);
-			}		
+			}
 		},
-	
+
 		onTouchEnd: function(event){
 			//	summary:
 			//		Called when touch is ended on the chart.
@@ -217,16 +205,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 				this._startScroll(axis);
 			}
 		},
-		
+
 		_startScroll: function(axis){
 			var bounds = axis.getScaler().bounds;
 			this._initOffset = axis.getWindowOffset();
 			// we keep it because of delay rendering we might now always have access to the
 			// information to compute it
 			this._lastScale = axis.getWindowScale();
-			this._lastFactor = bounds.span / (bounds.upper - bounds.lower); 
+			this._lastFactor = bounds.span / (bounds.upper - bounds.lower);
 		},
-	
+
 		onDoubleTap: function(event){
 			//	summary:
 			//		Called when double tap is performed on the chart.
@@ -235,8 +223,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			// are we fit?
 			if(axis.getWindowScale()==1){
 				// fit => zoom
-				var scaler = axis.getScaler(), start = scaler.bounds.from, end = scaler.bounds.to, 
-				oldMiddle = (start + end) / 2, newMiddle = this.plot.toData(this._startPageCoord)[this.axis], 
+				var scaler = axis.getScaler(), start = scaler.bounds.from, end = scaler.bounds.to,
+				oldMiddle = (start + end) / 2, newMiddle = this.plot.toData(this._startPageCoord)[this.axis],
 				newStart = scale * (start - oldMiddle) + newMiddle, newEnd = scale * (end - oldMiddle) + newMiddle;
 				chart.zoomIn(this.axis, [newStart, newEnd]);
 			}else{
@@ -247,4 +235,4 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			eventUtil.stop(event);
 		}
 	});
-});		
+});
