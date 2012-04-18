@@ -866,10 +866,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 
 			this._makeClean();
 
-			// BEGIN FOR HTML CANVAS
-			if(this.surface.render){ this.surface.render(); };
-			// END FOR HTML CANVAS
-
 			return this;	//	dojox.charting.Chart
 		},
 		fullRender: function(){
@@ -942,10 +938,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			func.forIn(this.axes, function(axis){ axis.render(dim, offsets); });
 
 			this._makeClean();
-
-			// BEGIN FOR HTML CANVAS
-			if(this.surface.render){ this.surface.render(); };
-			// END FOR HTML CANVAS
 
 			return this;	//	dojox.charting.Chart
 		},
