@@ -63,7 +63,7 @@ define([
 			}), 100);
 			var skipReposition = false;
 
-			this._moveHandler = this.connect(win.doc.documentElement, has('touch') ? "ontouchmove" : "onmousemove",
+			this._moveHandle = this.connect(win.doc.documentElement, has('touch') ? "ontouchmove" : "onmousemove",
 				function(){
 					skipReposition = true;
 				}
