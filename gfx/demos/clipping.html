@@ -1,4 +1,9 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+﻿<!--[if lt IE 9]>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<![endif]-->
+<![if gte IE 9]>
+<!DOCTYPE HTML>
+<![endif]>
 <html>
 	<head>
 		<title>GFX Clipping Demo</title>
@@ -25,13 +30,13 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async:1"></script>
 		<script type="text/javascript">
 		
-			require(["dojox/gfx", "dojo/ready"], function(gfx, ready) {
+			require(["dojox/gfx","dojo/dom", "dojo/ready"], function(gfx, dom, ready) {
 				var surface, g, m = gfx.matrix, clip,
 					initial_matrix = m.translate(150, 150);
 								
 				
 				makeShapes = function() {
-					surface = dojox.gfx.createSurface(dojo.byId("gfx_holder"), 500, 500);
+					surface = gfx.createSurface(dom.byId("gfx_holder"), 500, 500);
 					surface.createRect({
 						x : 0,
 						y : 0,
@@ -816,7 +821,7 @@
 					s = "#000000";
 					g.createPath("M20.5 344.5C20.5 344.5 22 333.5 10.5 346.5").setFill(f).setStroke(s);
 				};
-				var sx = 100, sy = 80, startTime;
+				var vml, sx = 100, sy = 80, startTime;
 				
 				render = function(timestamp){
 					window.requestAnimationFrame(render);
@@ -824,30 +829,40 @@
             		var elapsed = timestamp - startTime,
 						vx = elapsed/1000*sx,
 						vy = elapsed/1000*sy,
-						clip = g.getClip(),
-						p = {x:clip.x, y:clip.y};
+						clip = g.getClip();
+					var clipr = vml ? clip : {x:clip.cx-clip.rx, y:clip.cy-clip.ry, width:2*clip.rx, height:2*clip.ry};
+					var p = {x:clipr.x, y:clipr.y};
 					p = m.multiplyPoint(initial_matrix, p);
-					if(p.x + vx <= 0 || p.x + vx +clip.width >= 500){
+					if(p.x + vx <= 0 || p.x + vx +clipr.width >= 500){
 						sx = -sx;
 						vx = elapsed/1000*sx;
 					}
-					if(p.y + vy <= 0 || p.y + vy + clip.height >= 500){
+					if(p.y + vy <= 0 || p.y + vy + clipr.height >= 500){
 						sy = -sy;
 						vy = elapsed/1000*sy;
 					}
 					p.x += vx;
 					p.y += vy;
 					p = m.multiplyPoint(m.invert(initial_matrix), p);
-					clip.x = Math.round(p.x);
-					clip.y = Math.round(p.y);
+					if(vml){
+						clip.x = Math.round(p.x); 
+						clip.y = Math.round(p.y);
+					}else{
+						clip.cx = Math.round(p.x)+clip.rx;
+						clip.cy = Math.round(p.y)+clip.ry;
+					}
+					
 					g.setClip(clip);
 					startTime = timestamp ;
 				};
 				
 				ready(function(){
 					makeShapes();
-					clip = {
+					vml = /\.vml/.test(surface.declaredClass); 
+					clip =  vml ? {
 						x:100, y:100, width:90, height:65
+					}: {
+						cx:160, cy:140, rx:60, ry:40
 					};
 					g.setClip(clip);
 					startTime = new Date().getTime();
