@@ -446,7 +446,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 					this._getProperLabelRadius(labeledSlices, labelHeight, circle.r * 1.1);
 					//draw label and wiring
 					arr.forEach(labeledSlices, function(slice, i){
-						if (!slice.omit) {
+						if(!slice.omit){
 							var leftColumn = circle.cx - circle.r * 2,
 								rightColumn = circle.cx + circle.r * 2,
 								labelWidth = g._base._getTextBox(labels[i], {font: taFont}).w,
@@ -455,13 +455,13 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 								jointX = (slice.left) ? (leftColumn + labelWidth) : (rightColumn - labelWidth),
 								labelX = (slice.left) ? leftColumn : jointX;
 							var wiring = s.createPath().moveTo(circle.cx + circle.r * Math.cos(slice.angle), circle.cy + circle.r * Math.sin(slice.angle));
-							if (Math.abs(slice.labelR * Math.cos(slice.angle)) < circle.r * 2 - labelWidth) {
+							if(Math.abs(slice.labelR * Math.cos(slice.angle)) < circle.r * 2 - labelWidth){
 								wiring.lineTo(x, y);
 							}
 							wiring.lineTo(jointX, y).setStroke(slice.theme.series.labelWiring);
 							var elem = da.createText[this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx"](
 								this.chart, s, labelX, y, "left", labels[i], slice.theme.series.font, slice.theme.series.fontColor);
-							if (this.opt.htmlLabels) {
+							if(this.opt.htmlLabels){
 								this.htmlElements.push(elem);
 							}
 						}
@@ -477,34 +477,35 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 		},
 		
 		_getProperLabelRadius: function(slices, labelHeight, minRidius){
-			var leftCenterSlice = {},rightCenterSlice = {},leftMinSIN = 1, rightMinSIN = 1;
-			if (slices.length == 1) {
+			var leftCenterSlice, rightCenterSlice,
+				leftMinSIN = 1, rightMinSIN = 1;
+			if(slices.length == 1){
 				slices[0].labelR = minRidius;
 				return;
 			}
-			for(var i = 0;i<slices.length;i++){
+			for(var i = 0; i < slices.length; i++){
 				var tempSIN = Math.abs(Math.sin(slices[i].angle));
 				if(slices[i].left){
-					if(leftMinSIN > tempSIN){
+					if(leftMinSIN >= tempSIN){
 						leftMinSIN = tempSIN;
 						leftCenterSlice = slices[i];
 					}
 				}else{
-					if(rightMinSIN > tempSIN){
+					if(rightMinSIN >= tempSIN){
 						rightMinSIN = tempSIN;
 						rightCenterSlice = slices[i];
 					}
 				}
 			}
 			leftCenterSlice.labelR = rightCenterSlice.labelR = minRidius;
-			this._calculateLabelR(leftCenterSlice,slices,labelHeight);
-			this._calculateLabelR(rightCenterSlice,slices,labelHeight);
+			this._calculateLabelR(leftCenterSlice, slices, labelHeight);
+			this._calculateLabelR(rightCenterSlice, slices, labelHeight);
 		},
-		_calculateLabelR: function(firstSlice,slices,labelHeight){
+		_calculateLabelR: function(firstSlice, slices, labelHeight){
 			var i = firstSlice.index,length = slices.length,
 				currentLabelR = firstSlice.labelR;
 			while(!(slices[i%length].left ^ slices[(i+1)%length].left)){
-				if (!slices[(i + 1) % length].omit) {
+				if(!slices[(i + 1) % length].omit){
 					var nextLabelR = (Math.sin(slices[i % length].angle) * currentLabelR + ((slices[i % length].left) ? (-labelHeight) : labelHeight)) /
 					Math.sin(slices[(i + 1) % length].angle);
 					currentLabelR = (nextLabelR < firstSlice.labelR) ? firstSlice.labelR : nextLabelR;
@@ -515,7 +516,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			i = firstSlice.index;
 			var j = (i == 0)?length-1 : i - 1;
 			while(!(slices[i].left ^ slices[j].left)){
-				if (!slices[j].omit) {
+				if(!slices[j].omit){
 					var nextLabelR = (Math.sin(slices[i].angle) * currentLabelR + ((slices[i].left) ? labelHeight : (-labelHeight))) /
 					Math.sin(slices[j].angle);
 					currentLabelR = (nextLabelR < firstSlice.labelR) ? firstSlice.labelR : nextLabelR;
