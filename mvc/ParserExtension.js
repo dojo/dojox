@@ -36,7 +36,7 @@ define([
 				var node = nodes[i], foundBindingInAttribs = false;
 				if(!node.getAttribute(dataDojoType) && !node.getAttribute(dojoType) && node.getAttribute(_atBindingMixin.prototype.dataBindAttr)){
 					list.push({
-						"type": /^select|input|textarea$/i.test(node.tagName) ? "dojox/mvc/FormElement" : "dojox/mvc/Element",
+						types: /^select|input|textarea$/i.test(node.tagName) ? ["dojox/mvc/FormElement"] : ["dojox/mvc/Element"],
 						node: node
 					});
 				}

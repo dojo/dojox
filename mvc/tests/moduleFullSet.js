@@ -30,6 +30,9 @@ define([
 		doh.registerUrl("dojox.mvc.tests.doh_mvc_repeat_select_manualsave", require.toUrl("dojox/mvc/tests/doh_mvc_repeat_select_manualsave.html" + userArgs), 999999);
 		doh.registerUrl("dojox.mvc.tests.doh_mvc_repeat_select_cancel", require.toUrl("dojox/mvc/tests/doh_mvc_repeat_select_cancel.html" + userArgs), 999999);
 		doh.registerUrl("doh_mvc_loan-stateful", require.toUrl("dojox/mvc/tests/doh_mvc_loan-stateful.html" + userArgs), 999999);
+		doh.registerUrl("doh_mvc_DOMNode_shipto-billto-simple", require.toUrl("dojox/mvc/tests/doh_mvc_DOMNode_shipto-billto-simple.html" + userArgs), 999999);
+		doh.registerUrl("doh_mvc_DOMNode-search-results-repeat", require.toUrl("dojox/mvc/tests/doh_mvc_DOMNode-search-results-repeat.html" + userArgs), 999999);
+		doh.registerUrl("doh_mvc_performance_search-results-repeat", require.toUrl("dojox/mvc/tests/doh_mvc_performance_search-results-repeat.html" + userArgs), 999999);
 		// DOH regression
 		doh.registerUrl("dojox.mvc.tests.regression.doh_mvc_shipto-billto-simple", require.toUrl("dojox/mvc/tests/regression/doh_mvc_shipto-billto-simple.html" + userArgs), 999999);
 		doh.registerUrl("dojox.mvc.tests.regression.doh_mvc_search-results-repeat", require.toUrl("dojox/mvc/tests/regression/doh_mvc_search-results-repeat.html" + userArgs), 999999);
