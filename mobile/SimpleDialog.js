@@ -88,6 +88,7 @@ define([
 		startup: function(){
 			if(this._started){ return; }
 			this.inherited(arguments);
+			win.body().appendChild(this.domNode);
 		},
 
 		addCover: function(){
