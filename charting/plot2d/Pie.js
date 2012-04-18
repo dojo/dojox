@@ -441,12 +441,12 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			for(var i = 0;i<slices.length;i++){
 				var tempSIN = Math.abs(Math.sin(slices[i].angle));
 				if(slices[i].left){
-					if(leftMinSIN > tempSIN){
+					if(leftMinSIN >= tempSIN){
 						leftMinSIN = tempSIN;
 						leftCenterSlice = slices[i];
 					}
 				}else{
-					if(rightMinSIN > tempSIN){
+					if(rightMinSIN >= tempSIN){
 						rightMinSIN = tempSIN;
 						rightCenterSlice = slices[i];
 					}
