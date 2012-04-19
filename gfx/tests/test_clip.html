@@ -35,23 +35,18 @@
 					surface.whenLoaded(function(){
 						drawGrid();
 						clipped.push(surface.createImage({src:img, width:200,height:200}).setClip({x:10,y:80,width:50,height:50}).setTransform(matrix.translate(200,200)));
-						new Moveable(clipped[clipped.length-1]);
 						surface.createRect({width:200,height:200}).setStroke("red").setTransform(matrix.translate(200,200));
 						// clip = ellipse
 						clipped.push(surface.createImage({src:img, x:100,y:50,width:200,height:200}).setClip({cx:200,cy:100,rx:20,ry:30}));
-						new Moveable(clipped[clipped.length-1]);
 						surface.createRect({x:100,y:50,width:200,height:200}).setStroke("green");
 						// clip = circle
 						clipped.push(surface.createImage({src:img, x:0,y:350,width:200,height:200}).setClip({cx:100,cy:425,rx:60,ry:60}));
-						new Moveable(clipped[clipped.length-1]);
 						surface.createRect({x:0,y:350,width:200,height:200}).setStroke("blue");
 						// clip = path
 						clipped.push(surface.createImage({src:img, x:300,y:350,width:200,height:200}).setClip({d:"M 350,350 C314,414 317,557 373,450.0000 z"}));
-						new Moveable(clipped[clipped.length-1]);
 						surface.createRect({x:300,y:350,width:200,height:200}).setStroke("#00FFFF");
 						// clip = polyline
 						clipped.push(surface.createImage({src:img, x:300,y:0,width:200,height:200}).setClip({points:[350,0,450,50,380,130,300,110]}));
-						new Moveable(clipped[clipped.length-1]);
 						surface.createRect({x:300,y:0,width:200,height:200}).setStroke("#FF00FF");
 						
 						var g1 = surface.createGroup().setTransform(matrix.translate(50,200)).setClip({x:20, y:20, width:90, height:150});
@@ -61,7 +56,6 @@
 						g.setClip({x:0,y:60,width:80,height:30});
 						g.createRect(g.getBoundingBox()).setStroke("#CDB79E");
 						clipped.push(g);
-						new Moveable(clipped[clipped.length-1]);
 						
 						g = g1.createGroup();
 						g.createRect({width:70, height:100}).setFill("#8B8878");
@@ -69,9 +63,21 @@
 						g.setClip({x:0,y:60,width:70,height:50}).setTransform(matrix.translate(50,50));
 						g.createRect(g.getBoundingBox()).setStroke("#CDB79E");
 						clipped.push(g);
-						new Moveable(clipped[clipped.length-1]);
 						surface.createRect(g1.getBoundingBox()).setStroke("#8B8878").setTransform(matrix.translate(50,200));
 						clipped.push(g1);
+						
+						clipped.push(surface.createRect({x:50,y:50,width:100, height:100}).setClip({x:50, y:50, width:50, height:50}).setFill("yellow").setTransform(matrix.scaleAt(2,2,50,50)));
+						g = surface.createGroup();
+						var gg = g.createGroup().setTransform(matrix.scaleAt(2,2,50,250)).setClip({x:100, y:300, width:50, height:50});
+						gg.createRect({x:50,y:250,width:100, height:100}).setFill("red");
+						clipped.push(gg);
+						clipped.push(surface.createRect({x:50,y:350,width:50, height:50}).setClip({x:75, y:375, width:25, height:25}).setFill("green"));
+
+
+						array.forEach(clipped, function(s){
+							new Moveable(s);
+						});
+						
 					});
 				};
 				
@@ -127,7 +133,6 @@
 		  <option value="silverlight">Silverlight (IE)</option>
 		  <option value="vml">VML (IE <9)</option>
 		</select>
-		<p/>			
 		<div id="gfx_holder" style="width: 600px; height: 550px; border: solid;background-color: #eeeeee"></div>			
 		<input type="button" value="Remove clip" id="noClip"/>
 	</body>
