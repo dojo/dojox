@@ -23,20 +23,6 @@ dojo.require("dojox.drawing.plugins._Plugin");
 	
 	dt.ZoomIn = dojox.drawing.util.oo.declare(
 		// summary:
-		//		A plugin that allows for zooming the canvas in and out. An
-		//		action-tool is added to the toolbar with plus, minus and 100%
-		//		buttons.
-		//
-		function(options){
-			// mix in private vars
-			
-		},
-		{}
-	);
-	
-	
-	dt.ZoomIn = dojox.drawing.util.oo.declare(
-		// summary:
 		dojox.drawing.plugins._Plugin,
 		function(options){
 			
