@@ -129,7 +129,7 @@ define([
 			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
-			var arr = dojo.map(this.getChildren(), function(w){ return w.domNode; });
+			var arr = array.map(this.getChildren(), function(w){ return w.domNode; });
 
 			domClass.toggle(this.domNode, "mblTabBarNoIcons",
 							!array.some(this.getChildren(), function(w){ return w.iconNode1; }));

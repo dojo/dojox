@@ -4,11 +4,12 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/event",
 	"dojo/_base/lang",
+	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"./sniff"
-], function(array, config, connect, event, lang, domClass, domConstruct, domStyle, has){
+], function(array, config, connect, event, lang, win, domClass, domConstruct, domStyle, has){
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -68,7 +69,7 @@ define([
 						var i, j;
 						if(!sheet){
 							var _dic = {};
-							var ss = dojo.doc.styleSheets;
+							var ss = win.doc.styleSheets;
 							for (i = 0; i < ss.length; i++){
 								ss[i] && findDomButtons(ss[i], _dic);
 							}
