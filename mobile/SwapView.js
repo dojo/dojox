@@ -222,10 +222,6 @@ define([
 					newView._beingFlipped = true;
 					newView.slideTo({x:newX}, duration, easing);
 					newView._beingFlipped = false;
-
-					if(newX === 0){ // moving to another view
-						dojox.mobile.currentView = newView;
-					}
 					newView.domNode._isShowing = (newView && newX === 0);
 				}
 				this.domNode._isShowing = !(newView && newX === 0);

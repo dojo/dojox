@@ -173,7 +173,6 @@ define([
 					});
 					anim.play();
 				}
-				dm.currentView = registry.byNode(toNode);
 			},
 
 			wakeUp: function(/*DomNode*/node){
