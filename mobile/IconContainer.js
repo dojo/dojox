@@ -21,14 +21,14 @@ define([
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:
-	//		A container widget that holds multiple icons.
+	//		A container widget which can hold multiple icons.
 
 	return declare("dojox.mobile.IconContainer", [WidgetBase, Container, Contained],{
 		// summary:
-		//		A container widget that holds multiple icons.
+		//		A container widget which can hold multiple icons.
 		// description:
-		//		IconContainer is a container widget that holds multiple icons
-		//		each of which represents application component.
+		//		IconContainer is a container widget which can hold multiple
+		//		icons. Each icon represents an application component.
 
 		// defaultIcon: String
 		//		The default fall-back icon, which is displayed only when the
@@ -71,7 +71,8 @@ define([
 		single: false,
 
 		// editable: Boolean
-		//		If true, the icons can be removed or re-ordered.
+		//		If true, the icons can be removed or re-ordered. You can enter
+		//		into edit mode by pressing on a child IconItem until it starts shaking.
 		editable: false,
 
 		// tag: String

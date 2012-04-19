@@ -69,6 +69,8 @@ define([
 		//		A name of html tag to create as domNode.
 		tag: "li",
 
+		// badge: String
+		//		A string to show on a badge. (ex. "12")
 		badge: "",
 
 		/* internal properties */	

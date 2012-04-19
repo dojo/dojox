@@ -28,6 +28,9 @@ define([
 		//		minus buttons can be used to change the values.
 		readOnly: false,
 
+		// is24h: Boolean
+		//		If true, the time is displayed in 24h format.
+		//		Otherwise, displayed in AM/PM mode.
 		is24h: false,
 
 		slotClasses: [
@@ -111,7 +114,7 @@ define([
 
 		_setValuesAttr: function(/*Array*/a){
 			// summary:
-			//		Sets an array of hour an minute in 24h format.
+			//		Sets an array of hour and minute in 24h format.
 			// a:
 			//		[hour24, minute]
 			if(this.is24h){

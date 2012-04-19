@@ -4,7 +4,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/dom",
 	"dojo/dom-class",
-	"dijit/registry",	// registry.byNode
+	"dijit/registry",
 	"./View",
 	"./_ScrollableMixin",
 	"./sniff"
@@ -18,18 +18,20 @@ define([
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:
-	//		A container that can be flipped horizontally.
+	//		A container that can be swiped horizontally.
 
 	return declare("dojox.mobile.SwapView", [View, ScrollableMixin], {
 		// summary:
-		//		A container that can be flipped horizontally.
+		//		A container that can be swiped horizontally.
 		// description:
 		//		SwapView is a container widget that represents entire mobile
 		//		device screen, and can be swiped horizontally. (In dojo-1.6, it
 		//		was called 'FlippableView'.) SwapView is a subclass of
 		//		dojox.mobile.View. SwapView allows the user to swipe the screen
 		//		left or right to move between the views. When SwapView is
-		//		swiped, it finds an adjacent SwapView to open it.
+		//		swiped, it finds an adjacent SwapView to open.
+		//		When the transition is done, a topic "/dojox/mobile/viewChanged"
+		//		is published.
 
 		/* internal properties */	
 		scrollDir: "f",

@@ -61,7 +61,7 @@ define([
 		content: "",
 
 		// badge: String
-		//		A text to show in a badget. (ex. "55")
+		//		A text to show in a badge. (ex. "55")
 		badge: "",
 
 		// badgeClass: String

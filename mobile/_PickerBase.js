@@ -19,19 +19,24 @@ define([
 		// summary:
 		//		dojox/mobile/_PickerBase
 
-		// slotClasses: Array
-		//		An array of slot classes.
+		/* internal properties */
+
+		// slotClasses: [protected] Array
+		//		An array of slot classes. This property is intended to be used
+		//		when you create a subclass of this widget that has specific slots.
 		slotClasses: [],
 
-		// slotProps: Array
+		// slotProps: [protected] Array
 		//		An array of property objects for each slot class specified in
-		//		slotClasses.
+		//		slotClasses. This property is intended to be used when you
+		//		create a subclass of this widget that has specific slots.
 		slotProps: [],
 
-		// slotOrder: Array
+		// slotOrder: [protected] Array
 		//		An array of index of slotClasses and slotProps.
 		//		If there are three slots and slotOrder=[2,1,0], the slots are
-		//		displayed in reverse order.
+		//		displayed in reverse order. This property is intended to be used
+		//		when you create a subclass of this widget that has specific slots.
 		slotOrder: [],
 
 		buildRendering: function(){

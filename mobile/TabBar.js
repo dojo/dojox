@@ -45,7 +45,7 @@ define([
 		barType: "tabBar",
 
 		// closable: Boolean
-		//		True if user can close (destroy) a child tab by clicking the X on the tab.
+		//		If true, user can close (destroy) a child tab by clicking the X on the tab.
 		//		This property is NOT effective for "tabBar" and "tallBar".
 		closable: false,
 
@@ -55,7 +55,7 @@ define([
 		center: true,
 
 		// syncWithViews: Boolean
-		//		True if this widget listens to view transition events to be
+		//		If true, this widget listens to view transition events to be
 		//		synchronized with view's visibility.
 		syncWithViews: false,
 
@@ -63,7 +63,7 @@ define([
 		//		A name of html tag to create as domNode.
 		tag: "ul",
 
-		/* internal properties */	
+		/* internal properties */
 		selectOne: true,
 		baseClass: "mblTabBar",
 		_fixedButtonWidth: 76,

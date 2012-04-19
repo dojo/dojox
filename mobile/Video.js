@@ -9,8 +9,14 @@ define([
 	//		A thin wrapper around the html5 <video> element.
 
 	return declare("dojox.mobile.Video", Audio, {
+		// width: String
+		//		The width of the embed element.
 		width: "200px",
+
+		// height: String
+		//		The height of the embed element.
 		height: "150px",
+
 		_tag: "video",
 
 		_getEmbedRegExp: function(){

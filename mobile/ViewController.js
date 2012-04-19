@@ -28,8 +28,8 @@ define([
 		// description:
 		//		This class listens to the "startTransition" events and performs
 		//		view transitions. If the transition destination is an external
-		//		view specified with the url parameter, retrieves the view
-		//		content and parses it to create a new target view.
+		//		view specified with the url parameter, the view content is
+		//		retrieved and parsed to create a new target view.
 
 		dataHandlerClass: "dojox/mobile/dh/DataHandler",
 		dataSourceClass: "dojox/mobile/dh/UrlDataSource",

@@ -50,7 +50,7 @@ define([
 		selected: false,
 
 		// keepScrollPos: Boolean
-		//		If true, the scroll position is kept between views.
+		//		If true, the scroll position is kept when transition occurs between views.
 		keepScrollPos: true,
 
 		// tag: String
@@ -251,10 +251,10 @@ define([
 			//		A type of animated transition effect. You can choose from
 			//		the standard transition types, "slide", "fade", "flip", or
 			//		from the extended transition types, "cover", "coverv",
-			//		"dissolve", "reveal", "revealv", "scaleIn",
-			//		"scaleOut", "slidev", "swirl", "zoomIn", "zoomOut". If
-			//		"none" is specified, transition occurs immediately without
-			//		animation.
+			//		"dissolve", "reveal", "revealv", "scaleIn", "scaleOut",
+			//		"slidev", "swirl", "zoomIn", "zoomOut", "cube", and
+			//		"swap". If "none" is specified, transition occurs
+			//		immediately without animation.
 			// context: Object
 			//		The object that the callback function will receive as "this".
 			// method: String|Function
