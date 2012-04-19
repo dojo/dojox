@@ -250,10 +250,10 @@ dojo.require("dojox.math.round");
 				if(!value && prop=="id" && elem.target){
 			
 					var n = elem.target;
-					while(!dojo.attr(n, "id")){
+					while(n && !dojo.attr(n, "id")){
 						n = n.parentNode;
 					}
-					return dojo.attr(n, "id");
+					return n && dojo.attr(n, "id");
 				}
 				
 				if(elem.rawNode || elem.target){

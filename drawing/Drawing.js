@@ -549,6 +549,10 @@ dojo.provide("dojox.drawing.Drawing");
 			console.info("Attempting to set ",name," to: ",value,". Set currently not fully supported in Drawing");
 		},
 
+		get: function(name){
+			return;
+		},
+
 		unSetTool: function(){
 			// summary:
 			//		Destroys current tool
