@@ -273,6 +273,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			if(this.fillStyle && this.fillStyle.type == "linear"){
 				this.setFill(this.fillStyle);
 			}
+			if(this.clip){
+				this.setClip(this.clip);
+			}
 			return this;
 		},
 
@@ -330,10 +333,21 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			var nodeStyle = this.rawNode.style;
 			if(!clip){
 				// remove clip
+				nodeStyle.position = "absolute";
 			    nodeStyle.clip = "rect(0px "+nodeStyle.width+" "+nodeStyle.height+" 0px)";
 			}else{
 				if("width" in clip){
-					nodeStyle.clip = "rect(" + clip.y + "px " + (clip.x + clip.width) + "px " + (clip.y + clip.height) + "px " + clip.x + "px)";
+					var matrix = this._getRealMatrix(),
+						l = parseFloat(nodeStyle.left),
+						t = parseFloat(nodeStyle.top);
+					if(isNaN(l)) l = 0;
+					if(isNaN(t)) t = 0;
+					// transform the clip with the shape transform to compute the correct w/h (e.g. after a scale)
+					var clipt = m.multiplyRectangle(matrix, clip);
+					var pt = m.multiplyPoint(matrix, {x:l,y:t});
+					// clip property is relative to the elt border box
+					nodeStyle.clip = "rect(" + Math.round(clipt.y-pt.y) + "px " + Math.round(clipt.x-pt.x + clipt.width ) + "px " + 
+											Math.round(clipt.y-pt.y + clipt.height ) + "px " + Math.round(clipt.x -pt.x) + "px)";
 				}
 			}
 			return this;
@@ -380,15 +394,29 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			// description: This method overrides the dojox.gfx.shape.Shape.setClip() method.
 			// clip: Object
 			//		an object that defines the clipping geometry, or null to remove clip.
-			this.inherited(arguments);
+			
+			this.clip = clip;
 			var nodeStyle = this.rawNode.style;
 			if(!clip){
 				// remove clip
+				nodeStyle.position = "absolute";
 			    nodeStyle.clip = "rect(0px "+nodeStyle.width+" "+nodeStyle.height+" 0px)";
 			}else if("width" in clip){
 				var matrix = this._getRealMatrix();
-				var r = m.multiplyRectangle(matrix, clip);
-				nodeStyle.clip = "rect(" + r.y + "px " + (r.x + r.width) + "px " + (r.y + r.height) + "px " + r.x + "px)";
+				// transform the clip with group transform
+				var clipt = m.multiplyRectangle(matrix, clip);
+				// vml feature :-( ): if the group rawNode bbox x/y are < 0,
+				// need to adjust clip accordingly
+				var bbox = this.getBoundingBox();
+				bbox = bbox ? m.multiplyRectangle(matrix, bbox) : null;
+				var offx = bbox && bbox.x < 0 ? bbox.x : 0,
+					offy = bbox && bbox.y < 0 ? bbox.y : 0;
+				nodeStyle.position = "absolute";
+				nodeStyle.clip = "rect(" + 
+					Math.round(clipt.y - offy) + "px " + 
+					Math.round(clipt.x + clipt.width - offx) + "px " + 
+					Math.round(clipt.y + clipt.height - offy)  + "px " + 
+					Math.round(clipt.x - offx) + "px)";
 			}
 			return this;
  		},
