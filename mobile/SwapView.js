@@ -165,6 +165,26 @@ define([
 			this.inherited(arguments);
 		},
 
+		findDisp: function(/*DomNode*/node){
+			// summary:
+			//		Overrides dojox.mobile.scrollable.findDisp().
+			// description:
+			//		When this function is called from scrollable.js, there are
+			//		two visible views, one is the current view, the other is the
+			//		next view. This function returns the current view, not the
+			//		next view, which has the mblIn class.
+			if(!node.parentNode){ return null; }
+			var nodes = node.parentNode.childNodes;
+			for(var i = 0; i < nodes.length; i++){
+				var n = nodes[i];
+				if(n.nodeType === 1 && domClass.contains(n, "mblSwapView")
+				    && !domClass.contains(n, "mblIn") && n.style.display !== "none"){
+					return n;
+				}
+			}
+			return node;
+		},
+
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing, fake_pos){
 			// summary:
 			//		Overrides dojox.mobile.scrollable.slideTo().
