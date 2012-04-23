@@ -8,7 +8,7 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" djConfig="parseOnLoad:1,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 
 		var model; 
@@ -114,7 +114,7 @@
 													disabled: at(model, 'First').transform(nameRelevanceConverter),
 													valid: at(model, 'First').transform(numValidConverter)"></input>
 				<!-- Content in output below will always be in sync with value of textbox above -->
-				<span id="tout" data-dojo-type="dojox.mvc.Output" data-dojo-props=""value: at(model, 'First')">
+				<span id="tout" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(model, 'First')">
 					(first name is: ${this.value})
 				</span>
 				

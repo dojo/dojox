@@ -31,7 +31,6 @@
 		require([
 				"doh/runner",
 				"dojo/_base/declare",
-				"dojo/_base/Deferred",
 				"dojo/dom",
 				"dojo/_base/array",
 				"dojo/_base/lang",
@@ -53,7 +52,7 @@
 				"dojox/mvc/ModelRefController",
 				"dojox/mvc/Output",
 				"dojo/domReady!"
-			], function(doh, declare, Deferred, ddom, array, lang, dxhr, parser, registry, Chart, blue, at, Stateful, StatefulSeries){
+			], function(doh, declare, ddom, array, lang, dxhr, parser, registry, Chart, blue, at, Stateful, StatefulSeries){
 				window.at = at;
 				dojox.debugDataBinding = true;
 

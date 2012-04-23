@@ -21,7 +21,7 @@
 			require([
 				"doh/runner",
 				"dojo/_base/declare",
-				"dojo/_base/Deferred",
+				"dojo/when",
 				"dojo/dom",
 				"dojo/parser",
 				"dojo/store/JsonRest",
@@ -36,7 +36,7 @@
 				"dojox/mvc/Group",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, declare, Deferred, ddom, parser, JsonRest, registry, _WidgetBase, at, getStateful, EditModelRefController, ListController){
+			], function(doh, declare, when, ddom, parser, JsonRest, registry, _WidgetBase, at, getStateful, EditModelRefController, ListController){
 				window.at = at;
 				dojox.debugDataBinding = true;
 
@@ -45,7 +45,7 @@
 
 				parser.parse();
 
-				Deferred.when(new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcRepeatData.json")}).query({}), function(result){
+				when(new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcRepeatData.json")}).query({}), function(result){
 					ctrl.set("sourceModel", getStateful(result.items));
 
 					 // should be able to verify all of the inputs

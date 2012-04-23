@@ -125,7 +125,7 @@
 
 			require([
 				"dojo/_base/declare",
-				"dojo/_base/Deferred",
+				"dojo/when",
 				"dojo/parser",
 				"dojo/Stateful",
 				"dojo/store/Memory",
@@ -138,7 +138,7 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(declare, Deferred, parser, Stateful, Memory, EditStoreRefListController, at){
+			], function(declare, when, parser, Stateful, Memory, EditStoreRefListController, at){
 				window.at = at;
 				dojox.debugDataBinding = true;
 
@@ -165,7 +165,7 @@
 						this.set("groupTyped", value);
 						var old = this.group;
 						if(old === value){ return; }
-						Deferred.when(this.queryStore({Group: value}), function(){
+						when(this.queryStore({Group: value}), function(){
 							if(!inited){
 								parser.parse();
 								inited = true;

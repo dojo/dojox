@@ -1,11 +1,10 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/_base/Deferred",
 	"./getPlainValue",
 	"./EditStoreRefController",
 	"./ListController"
-], function(declare, lang, Deferred, getPlainValue, EditStoreRefController, ListController){
+], function(declare, lang, getPlainValue, EditStoreRefController, ListController){
 	return declare("dojox.mvc.EditStoreRefListController", [EditStoreRefController, ListController], {
 		// summary:
 		//		A child class of dojox.mvc.EditStoreRefController, mixed with ListController.

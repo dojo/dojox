@@ -1,11 +1,11 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/_base/Deferred",
+	"dojo/when",
 	"./getPlainValue",
 	"./EditModelRefController",
 	"./StoreRefController"
-], function(declare, lang, Deferred, getPlainValue, EditModelRefController, StoreRefController){
+], function(declare, lang, when, getPlainValue, EditModelRefController, StoreRefController){
 	return declare("dojox.mvc.EditStoreRefController", [StoreRefController, EditModelRefController], {
 		// summary:
 		//		A child class of dojox.mvc.StoreRefController, managing edits.
@@ -77,7 +77,7 @@ define([
 			if(this._resultsWatchHandle){ this._resultsWatchHandle.unwatch(); }
 			this._removals = [];
 			var _self = this;
-			return Deferred.when(this.inherited(arguments), function(results){
+			return when(this.inherited(arguments), function(results){
 				if(_self._beingDestroyed){ return; }
 				if(lang.isArray(results)){
 					_self._resultsWatchHandle = results.watchElements(function(idx, removals, adds){

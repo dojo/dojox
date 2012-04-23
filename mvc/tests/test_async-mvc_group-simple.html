@@ -23,14 +23,13 @@
 				"dojox/mvc/EditStoreRefController",
 				"dojo/store/Memory",
 				"dojox/mvc/at",
-				"dojo/_base/Deferred",
 				"dojox/mvc/getStateful",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
 				"dojox/mvc/Group",
 				"dojox/mvc/ParserExtension",
 				"dojo/domReady!"
-			], function(parser, Stateful, EditModelRefController, EditStoreRefController, Memory, at, Deferred, getStateful){
+			], function(parser, Stateful, EditModelRefController, EditStoreRefController, Memory, at, getStateful){
 				window.at = at;
 				dojox.debugDataBinding = true;
 				var testmem = new Memory({data: {First: "John", Last: "Doe", Email: "jdoe@example.com"}});
@@ -47,7 +46,7 @@
 				//ctrl3 = new EditStoreRefController({store: new Memory({data: {First: "John", Last: "Doe", Email: "jdoe@example.com"}})});
 				ctrl3 = new EditStoreRefController({store: new Memory({data: {items: [{id: "emp0", First: "John", Last: "Doe", Email: "jdoe@example.com"}]}})});
 				ctrl3.queryStore({});
-/*				Deferred.when((new Memory({data: data3 = [
+/*				when((new Memory({data: data3 = [
 				                           					{First: "John", Last: "Doe", Email: "jdoe@example.com"}
 				                           				]}).query()), function(data){
 				                           					ctrl3.set("model", getStateful(data)[0]);
@@ -80,19 +79,19 @@
 						<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox" 
 								data-dojo-props="value: at('rel:', 'First')">
 						<!-- Content in output below will always be in sync with value of textbox above -->
-						(first name is: <span data-mvc-bindings="value: at('rel:', 'First')"></span>)
+						(first name is: <span data-mvc-bindings="innerText: at('rel:', 'First')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="lastnameInput">Last:</label>
 						<input class="cell" id="lastnameInput" data-dojo-type="dijit.form.TextBox" 
 								data-dojo-props="value: at('rel:', 'Last')">
-						(last name is: <span data-mvc-bindings="value: at('rel:', 'Last')"></span>)
+						(last name is: <span data-mvc-bindings="innerText: at('rel:', 'Last')"></span>)
 					</div>
 					<div class="row">
 						<label class="cell" for="emailInput">Email:</label>
 						<input class="cell" id="emailInput" data-dojo-type="dijit.form.TextBox" 
 								data-dojo-props="value: at('rel:', 'Email')">
-						(email is: <span data-mvc-bindings="value: at('rel:', 'Email')"></span>)
+						(email is: <span data-mvc-bindings="innerText: at('rel:', 'Email')"></span>)
 					</div>
 					<br/>Model:
 					<button id="reset" type="button" data-dojo-type="dijit.form.Button" 

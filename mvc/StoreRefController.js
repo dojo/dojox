@@ -1,10 +1,10 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/_base/Deferred",
+	"dojo/when",
 	"./getStateful",
 	"./ModelRefController"
-], function(declare, lang, Deferred, getStateful, ModelRefController){
+], function(declare, lang, when, getStateful, ModelRefController){
 	return declare("dojox.mvc.StoreRefController", ModelRefController, {
 		// summary:
 		//		A child class of dojox.mvc.ModelRefController, which keeps a reference to Dojo Object Store (in store property).
@@ -73,7 +73,7 @@ define([
 
 			var _self = this,
 			 queryResult = this.store.query(query, options),
-			 result = Deferred.when(queryResult, function(results){
+			 result = when(queryResult, function(results){
 				if(_self._beingDestroyed){ return; }
 				results = getStateful(results, _self.getStatefulOptions);
 				_self.set(_self._refSourceModelProp, results);
@@ -101,7 +101,7 @@ define([
 			if(!(this.store || {}).get){ return; }
 			if(this._queryObserveHandle){ this._queryObserveHandle.cancel(); }
 			var _self = this;
-			return Deferred.when(this.store.get(id, options), function(result){
+			return when(this.store.get(id, options), function(result){
 				if(_self._beingDestroyed){ return; }
 				_self.set(_self._refSourceModelProp, getStateful(result, _self.getStatefulOptions));
 			});

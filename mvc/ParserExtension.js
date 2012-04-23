@@ -7,8 +7,7 @@ define([
 	"dojo/has!dojo-mobile-parser?:dojo/parser",
 	"dojo/has!dojo-parser?:dojox/mobile/parser",
 	"dojox/mvc/_atBindingMixin",
-	"dojox/mvc/Element",
-	"dojox/mvc/FormElement"
+	"dojox/mvc/Element"
 ], function(require, kernel, lang, win, has, parser, mobileParser, _atBindingMixin){
 
 	// module:
@@ -25,7 +24,8 @@ define([
 
 		parser.scan = /*====== dojo.parser.scan = ======*/ function(/*DOMNode?*/ root, /*Object*/ options){
 			// summary:
-			//		TODOC
+			//		Find list of DOM nodes that has data-dojo-bind, but not data-dojo-type.
+			//		And add them to list of DOM nodes to instantiate widget (dojox/mvc/Element).
 
 			var list = oldScan.apply(this, lang._toArray(arguments)),
 			 dojoType = (options.scope || kernel._scopeName) + "Type",			// typically "dojoType"
@@ -36,7 +36,7 @@ define([
 				var node = nodes[i], foundBindingInAttribs = false;
 				if(!node.getAttribute(dataDojoType) && !node.getAttribute(dojoType) && node.getAttribute(_atBindingMixin.prototype.dataBindAttr)){
 					list.push({
-						types: /^select|input|textarea$/i.test(node.tagName) ? ["dojox/mvc/FormElement"] : ["dojox/mvc/Element"],
+						types: ["dojox/mvc/Element"],
 						node: node
 					});
 				}
@@ -51,7 +51,8 @@ define([
 
 		mobileParser.parse = /*====== dojox.mobile.parser.parse = ======*/ function(/*DOMNode?*/ root, /*Object*/ options){
 			// summary:
-			//		TODOC
+			//		Find list of DOM nodes that has data-dojo-bind, but not data-dojo-type.
+			//		Set dojox/mvc/Element to their data-dojo-type.
 
 			var dojoType = ((options || {}).scope || kernel._scopeName) + "Type",		// typically "dojoType"
 			 attrData = "data-" + ((options || {}).scope || kernel._scopeName) + "-",	// typically "data-dojo-"
@@ -61,7 +62,7 @@ define([
 			for(var i = 0, l = nodes.length; i < l; i++){
 				var node = nodes[i], foundBindingInAttribs = false, bindingsInAttribs = [];
 				if(!node.getAttribute(dataDojoType) && !node.getAttribute(dojoType) && node.getAttribute(_atBindingMixin.prototype.dataBindAttr)){
-					node.setAttribute(dataDojoType, /^select|input|textarea$/i.test(node.tagName) ? "dojox/mvc/FormElement" : "dojox/mvc/Element");
+					node.setAttribute(dataDojoType, "dojox/mvc/Element");
 				}
 			}
 

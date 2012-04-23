@@ -7,7 +7,7 @@
 			@import "../../../dojo/resources/dojo.css";
 			@import "css/app-format.css";
 		</style>
-		<script src="../../../dojo/dojo.js" type="text/javascript" djConfig="isDebug: true"></script>
+		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="isDebug: true"></script>
 		<script type="text/javascript" src="./helpers.js"></script>
 		<script type="text/javascript">
 
@@ -231,8 +231,8 @@
 								data-dojo-props="target: at('widget:listCtl', 'cursor')">
 				<div class="row">
 					<div style="display: inline-block;" id="detailsBanner">Details for result index: </div>
-					<span class="cell" id="indexOutput" data-dojo-type="dojox.mvc.Output" 
-							data-dojo-props="value: at('widget:listCtl', 'cursorIndex')"></span>
+					<span class="cell" id="indexOutput"  
+							data-mvc-bindings="innerText: at('widget:listCtl', 'cursorIndex')"></span>
 				</div>
 				<div class="row">
 					<label class="cell" for="firstInput">First Name:</label>

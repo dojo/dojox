@@ -4,8 +4,28 @@ define([
 ], function(declare, _WidgetBase){
 	return declare("dojox.mvc.Element", _WidgetBase, {
 		// summary:
-		//		A simple widget that maps "value" attribute to DOM text (working as a lightweight version of dojox.mvc.Output in this case), and other attributes to DOM attributes.
+		//		A widget implicitly created by dojox.mvc.ParserExtension.
+		//		Maps "value" attribute to form element value, innerText/innerHTML to element's innerText/innerHTML, and other attributes to DOM attributes.
+		//		Also, for form element, updates value (or checked for check box) as user edits.
 
-		_setValueAttr: {node: "domNode", type: "innerText"}
+		_setInnerTextAttr: {node: "domNode", type: "innerText"},
+		_setInnerHTMLAttr: {node: "domNode", type: "innerHTML"},
+
+		buildRendering: function(){
+			// summary:
+			//		Set onchange event handler for form elements.
+
+			this.inherited(arguments);
+			if(/select|input|textarea/i.test(this.domNode.tagName)){
+				var _self = this, node = this.focusNode = this.domNode;
+				this.on("change", function(e){
+					var attr = /^checkbox$/i.test(node.getAttribute("type")) ? "checked" : "value";
+					_self._set(attr, _self.get(attr));
+				});
+			}
+		},
+
+		_getCheckedAttr: function(){ return this.domNode.checked; },
+		_getValueAttr: function(){ return this.domNode.value; }
 	});
 });

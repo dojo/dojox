@@ -19,7 +19,7 @@
 			"dojox/mobile/parser",
 			"dojo/store/Memory",
 			"dojo/ready",
-			"dojo/_base/Deferred",
+			"dojo/when",
 			"dojox/mvc/getStateful",
 			"dojox/mvc/at",
 			"dojox/mvc/Group",
@@ -30,7 +30,7 @@
 			"dojox/mobile/TextBox",
 			"dojox/mobile/CheckBox",
 			"dojox/mobile/deviceTheme"
-		], function(lang, registry, parser, MemoryStore, ready, Deferred, getStateful, at){
+		], function(lang, registry, parser, MemoryStore, ready, when, getStateful, at){
 			window.at = at;
 			dojox.debugDataBinding = false;
 
@@ -81,7 +81,7 @@
 			//model1 = mvc.newStatefulModel({ store : memStore1 })[0];
 				dojox.debugDataBinding = true;
 
-				Deferred.when(memStore1.query(), function(data){
+				when(memStore1.query(), function(data){
 					model1 = getStateful(data)[0];
 					model1Orig = lang.clone(model1);
 					//if(model1 && model2 && model3){ runTests(); }
@@ -90,7 +90,7 @@
 
 		var memStore2 = new MemoryStore({data : search_results_init2});
 		//model2 = mvc.newStatefulModel({ store : memStore2 })[0];
-				Deferred.when(memStore2.query(), function(data){
+				when(memStore2.query(), function(data){
 					model2 = getStateful(data)[0];
 					model2Orig = lang.clone(model2);
 					//if(model1 && model2 && model3){ runTests(); }

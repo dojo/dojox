@@ -125,7 +125,7 @@
 
 			require([
 				"dojo/_base/declare",
-				"dojo/_base/Deferred",
+				"dojo/when",
 				"dojo/parser",
 				"dijit/registry",
 				"dojox/mvc/at",
@@ -143,7 +143,7 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(declare, Deferred, parser, registry, at, Stateful, Memory, Observable, 
+			], function(declare, when, parser, registry, at, Stateful, Memory, Observable, 
 						EditStoreRefListController, equals){
 				window.at = at;
 				dojox.debugDataBinding = true;
@@ -156,9 +156,11 @@
 					groupTyped: "",
 					_refModelProp: "model",
 
-					addEmpty: function(){
-						this.model.push(new Stateful({id:Math.random(), Group: this.groupTyped, First: "", Last: "", Location: "", Office: "", Email: "", Tel: "", Fax: ""}));
-						this.set("cursorIndex", this.get("length") - 1);
+					addEmpty: function(idx){
+						//this.model.push(new Stateful({id:Math.random(), Group: this.groupTyped, First: "", Last: "", Location: "", Office: "", Email: "", Tel: "", Fax: ""}));
+						this.model.splice(idx+1, 0, new Stateful({id:Math.random(), Group: this.groupTyped, First: "", Last: "", Location: "", Office: "", Email: "", Tel: "", Fax: ""}));
+						this.set("cursorIndex", idx+1);
+						//this.set("cursorIndex", this.get("length") - 1);
 					},
 
 					remove: function(idx){
@@ -173,7 +175,7 @@
 						this.set("groupTyped", value);
 						var old = this.group;
 						if(old === value){ return; }
-						Deferred.when(this.queryStore({Group: value}), function(){
+						when(this.queryStore({Group: value}), function(){
 							if(!inited){
 								parser.parse();
 								inited = true;
@@ -210,18 +212,18 @@
 					}else{
 						ctrl.set('group', ctrl.get('groupTyped'));
 					}
-				}
+				};
 
 				commitAndUpdate = function(){
 			        registry.byId("myFormDialog").hide();
 					ctrl.commit(); 
 					ctrl.set('group', ctrl.get('groupTyped'));
-			    }
+			   };
 
 			    justUpdate = function(){
 			        registry.byId("myFormDialog").hide();
 					ctrl.set('group', ctrl.get('groupTyped'));			        
-			    }
+			    };
 			    
 				storeAddIndex = 0;
 				// Add an item to the store, to see the Observable fire
@@ -288,7 +290,7 @@
 								<button type="button" data-dojo-type="dijit.form.Button"
 								 data-dojo-props="onClick: function(){ ctrl.set('cursorIndex', ${this.index}); }">Details</button>
 								<button type="button" data-dojo-type="dijit.form.Button"
-								 data-dojo-props="onClick: function(){ ctrl.addEmpty(); }">+</button>
+								 data-dojo-props="onClick: function(){ ctrl.addEmpty(${index}); }">+</button>
 								<button type="button" data-dojo-type="dijit.form.Button"
 								 data-dojo-props="onClick: function(){ ctrl.remove(${index}); }">-</button>
 							</div>

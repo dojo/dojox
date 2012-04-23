@@ -17,7 +17,6 @@
 		</style>
 		<script type="text/javascript">
 			require([
-				"dojo/_base/Deferred",
 				"dojo/parser",
 				"dojo/store/JsonRest",
 				"dojox/mvc/EditStoreRefController",
@@ -25,7 +24,7 @@
 				"dijit/form/Button",
 				"dijit/form/TextArea",
 				"dojox/mvc/Generate"
-			], function(Deferred, parser, JsonRest, EditStoreRefController, at){
+			], function(parser, JsonRest, EditStoreRefController, at){
 				window.at = at;
 				dojox.debugDataBinding = true;
 				ctrl = new EditStoreRefController({store: new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcGenerateData.json")})});

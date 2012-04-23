@@ -22,7 +22,7 @@
 			"dojox/mobile/parser",
 			"dojo/store/Memory",
 			"dojo/ready",
-			"dojo/_base/Deferred",
+			"dojo/when",
 			"dojo/Stateful",
 			"dojox/mvc/getStateful",
 			"dojo/data/ItemFileWriteStore",
@@ -53,7 +53,7 @@
 //			"dojox/mobile/RoundRectCategory",
 			"dojox/mobile/Heading",
 			"dojox/mobile/deviceTheme"
-		], function(lang, declare, connect, registry, dom, parser, MemoryStore, ready, Deferred, Stateful, 
+		], function(lang, declare, connect, registry, dom, parser, MemoryStore, ready, when, Stateful, 
 					getStateful, ItemFileWriteStore, Memory, EditStoreRefController, ListController, at){
 			window.at = at;
 			dojox.debugDataBinding = true;
@@ -170,7 +170,7 @@
 									"deleted": false
 								}
 							]
-				}
+			};
 
 			
 			var listData1 =
@@ -206,7 +206,7 @@
 									"deleted": false
 								}
 							]
-				}
+			};
 
 			var completedListData =
 			{
@@ -271,7 +271,7 @@
 					this.set("completedTyped", value);
 					console.log("_setCompletedAttr called for completedTyped="+this.completedTyped +" with value="+value);					
 				
-					Deferred.when(this.queryStore(), function(){
+					when(this.queryStore(), function(){
 						if(inited){
 							parser.parse();
 							//inited = true;
@@ -284,7 +284,7 @@
 			});
 			ctrlListsClass = declare([EditStoreRefController, ListController], {
 				cursorIndex: 0,
-				_refModelProp: "model",
+				_refModelProp: "model"
 			});
 
 			listsCtrls = [];
@@ -296,7 +296,7 @@
 			listsCtrls.push(ctrl1);
 
 			listsCtrl = new ctrlListsClass({store: new Memory({data: allListsData})});
-			Deferred.when(listsCtrl.queryStore(), function(){
+			when(listsCtrl.queryStore(), function(){
 					listsCtrls[0].set("completed", true);
 					//currentctrl.set("completed", false);
 					listsCtrls[1].set("completed", false);
@@ -311,7 +311,7 @@
 				console.log("movedTo called with index"+index);
 				currentctrl.set('cursorIndex', index);
 				var g = registry.byId("detailsGroup");
-				g.set("target", at(currentctrl, 'cursor'))
+				g.set("target", at(currentctrl, 'cursor'));
 				var h = registry.byId("detailsHeading");
 				h.set("label","To-Do Details");
 				var h2 = dom.byId("detailsHeading2");
@@ -323,7 +323,7 @@
 				console.log("movedToCompleted called with index"+index);
 				ctrlComplete.set('cursorIndex', index);
 				var g = registry.byId("detailsGroup");
-				g.set("target", at(ctrlComplete, 'cursor'))
+				g.set("target", at(ctrlComplete, 'cursor'));
 				var h = registry.byId("detailsHeading");
 				h.set("label","Completed To-Do");
 				var h2 = dom.byId("detailsHeading2");
@@ -359,7 +359,7 @@
 				//listsCtrl.set('cursorIndex', index);//listItems
 				var r = registry.byId("listItems");
 				currentctrl = listsCtrls[index];
-				r.set("children", at(currentctrl, 'model'))
+				r.set("children", at(currentctrl, 'model'));
 			};
 
 			// called to delete the selected item
@@ -373,10 +373,10 @@
 
 			showDlg = function(dlg){
 				registry.byId(dlg).show();
-			}
+			};
 			hideDlg = function(dlg){
 				registry.byId(dlg).hide();
-			}
+			};
 			
 			resetAll = function() {
 				console.log("resetAll called");

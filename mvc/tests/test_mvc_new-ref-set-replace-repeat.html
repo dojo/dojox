@@ -6,7 +6,7 @@
 
 		<script src="../../../dojo/dojo.js"
 				type="text/javascript"
-				djConfig="parseOnLoad: false, isDebug: true">
+				data-dojo-config="parseOnLoad: false, isDebug: true">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -19,19 +19,19 @@
 			'dojo/parser',
 			"dojo/_base/lang",
 			'dojo/ready',
+			'dojo/when',
 			'dojox/mvc/at',
 			"dojo/Stateful",
 			"dojox/mvc/getStateful",
 			"dojox/mvc/getPlainValue",
 			"dojo/store/Memory",
 			'dijit/registry',			
-			"dojo/_base/Deferred",
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
-			], function(parser, lang, ready, at, Stateful, getStateful, getPlainValue, Memory, registry){
+			], function(parser, lang, ready, when, at, Stateful, getStateful, getPlainValue, Memory, registry){
 				window.at = at;
 				dojox.debugDataBinding = true;
 
@@ -82,18 +82,18 @@
 				}];
 
 				var memStore1 = new Memory({data : model1Data});
-				dojo.Deferred.when(memStore1.query(), function(data){
+				when(memStore1.query(), function(data){
 					model1 = new Stateful({current: getStateful(data)[0]});
 				});
 
 				var memStore2 = new Memory({data : model2Data});
 				//model2 = mvc.newStatefulModel({ store : memStore2 })[0];
-				dojo.Deferred.when(memStore2.query(), function(data){
+				when(memStore2.query(), function(data){
 					model2 = new Stateful({current: getStateful(data)[0]});
 				});
 				var memStore3 = new Memory({data : model3Data});
 				//model3 = mvc.newStatefulModel({ store : memStore3 })[0];
-				dojo.Deferred.when(memStore3.query(), function(data){
+				when(memStore3.query(), function(data){
 					//model3 = getStateful(data)[0];
 					model3 = new Stateful({current: getStateful(data)[0]});
 				});
@@ -101,7 +101,7 @@
 				replaceData = function(dest, src){
 					src = getPlainValue(src);
 					dest.set("current", getStateful(src));
-				}
+				};
 				
 					
 				// when "dojo/ready" is ready call parser.parse

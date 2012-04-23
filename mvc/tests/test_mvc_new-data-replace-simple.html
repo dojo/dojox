@@ -6,7 +6,7 @@
 
 		<script src="../../../dojo/dojo.js"
 				type="text/javascript"
-				djConfig="parseOnLoad: false, isDebug: true">
+				data-dojo-config="parseOnLoad: false, isDebug: true">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -19,6 +19,7 @@
 			'dojo/parser',
 			"dojo/_base/lang",
 			'dojo/ready',
+			'dojo/when',
 			'dojox/mvc/at',
 			"dojo/Stateful",
 			"dojox/mvc/getStateful",
@@ -26,13 +27,12 @@
 			"dojox/mvc/EditModelRefController",
 			"dojo/store/Memory",
 			'dijit/registry',			
-			"dojo/_base/Deferred",
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
-			], function(parser, lang, ready, at, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
+			], function(parser, lang, ready, when, at, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
 			window.at = at;
 			dojox.debugDataBinding = true;
 			
@@ -59,14 +59,14 @@
 			//var memStore1 = new dojo.store.Memory({data : model1Data});
 			//var model1 = dojox.mvc.newStatefulModel({ store : memStore1 })[0];
 				var memStore1 = new Memory({data : model1Data});
-				dojo.Deferred.when(memStore1.query(), function(data){
+				when(memStore1.query(), function(data){
 					model1 = EditModelRefController({sourceModel : new Stateful({current: getStateful(data)[0]})});
 				});
 			
 				replaceData = function(dest, src){
 					src = getPlainValue(src);
 					dest.set("current", getStateful(src));
-				}
+				};
 				
 					
 				// when "dojo/ready" is ready call parser.parse

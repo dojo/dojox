@@ -12,7 +12,7 @@ require(['dojo/has',
 	'dojox/mvc/EditStoreRefListController',
 	'dojox/mvc/EditStoreRefController',
 	"dojo/store/Memory",
-	"dojo/_base/Deferred",
+	"dojo/when",
 	'dojox/mobile',
 	'dojox/mobile/ScrollableView',
 	'dojox/mobile/Button',
@@ -33,7 +33,7 @@ require(['dojo/has',
 	'dojo/_base/json',
 	'dojo/dom'
 ], function(has, parser, ready, registry, at, mvc, getStateful, EditStoreRefListController, 
-		EditStoreRefController, Memory, Deferred, mobile, ScrollableView, Button, 
+		EditStoreRefController, Memory, when, mobile, ScrollableView, Button, 
 		TextArea, Group, Output, Generate, Repeat, TextBox, CheckBox, ViewController,
 		FixedSplitter, EdgeToEdgeList, EdgeToEdgeCategory, deviceTheme, RoundRectCategory, 
 		Heading, json, dom){
@@ -107,7 +107,7 @@ var repeatData = [
 	
 	//listCtl = new EditStoreRefListController({model: getStateful(repeatData ), cursorIndex: 0});
 	listCtl = new EditStoreRefListController({store: new Memory({data: repeatData}), cursorIndex: 0});
-	Deferred.when(listCtl.queryStore(), function(model){
+	when(listCtl.queryStore(), function(model){
 		//repeatmodel = listCtl.model;
 		repeatmodel = model;
 		nextIndexToAdd = repeatmodel.length;

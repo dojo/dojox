@@ -18,7 +18,7 @@
 				"doh/runner",
 				"dojo/_base/array",
 				"dojo/_base/lang",
-				"dojo/_base/Deferred",
+				"dojo/when",
 				"dojo/parser",
 				"dojo/store/Memory",
 				"dijit/registry",
@@ -31,7 +31,7 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, array, lang, Deferred, parser, MemoryStore, registry, at, getStateful, ModelRefController){
+			], function(doh, array, lang, when, parser, MemoryStore, registry, at, getStateful, ModelRefController){
 				window.at = at;
 				dojox.debugDataBinding = true;
 
@@ -108,7 +108,7 @@
 
 				parser.parse();
 
-				Deferred.when((new MemoryStore({data: data1 = [
+				when((new MemoryStore({data: data1 = [
 					{
 						"Query": "Engineers1",
 						"Results": [
@@ -131,7 +131,7 @@
 					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 
-				Deferred.when((new MemoryStore({data: data2 = [
+				when((new MemoryStore({data: data2 = [
 					{
 						"Query": "Engineers2",
 						"Results": [
@@ -150,7 +150,7 @@
 					if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
 				});
 
-				Deferred.when((new MemoryStore({data: data3 = [
+				when((new MemoryStore({data: data3 = [
 					{
 						"Query": "Engineers3",
 						"Results": [
