@@ -66,6 +66,7 @@ define([
 		},
 
 		load: function(){
+			this.lazy = false;
 			this.set("href", this.href);
 		},
 
