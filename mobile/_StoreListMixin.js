@@ -81,7 +81,7 @@ define([
 		},
 
 		onUpdate: function(/*Object*/item, /*Number*/insertedInto){
-			//	summary:
+			// summary:
 			//		Add a new item or update an existing item.
 			if(insertedInto === this.getChildren().length){
 				this.addChild(this.createListItem(item)); // add a new ListItem
@@ -91,7 +91,7 @@ define([
 		},
 
 		onDelete: function(/*Object*/item, /*Number*/removedFrom){
-			//	summary:
+			// summary:
 			//		Delete an existing item.
 			this.getChildren()[removedFrom].destroyRecursive();
 		}

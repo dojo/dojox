@@ -145,6 +145,8 @@ define([
 		},
 
 		_setLabelAttr: function(/*String*/text){
+			// summary:
+			//		Sets the button label text.
 			this.inherited(arguments);
 			domClass.toggle(this.tableNode, "mblToolBarButtonText", text);
 		},

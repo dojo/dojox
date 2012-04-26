@@ -145,6 +145,12 @@ define([
 		},
 
 		_setOrientationAttr: function(/*String*/orientation){
+			// summary:
+			//		Sets the direction of split.
+			// description:
+			//		The value must be either "H" or "V".
+			//		If "H" is specified, panes are split horizontally.
+			//		If "V" is specified, panes are split vertically.
 			var s = this.baseClass;
 			domClass.replace(this.domNode, s + orientation, s + this.orientation);
 			this.orientation = orientation;

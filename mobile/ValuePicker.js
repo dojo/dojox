@@ -21,6 +21,12 @@ define([
 		baseClass: "mblValuePicker",
 
 		onValueChanged: function(/*Widget*/slot){
+			// summary:
+			//		Callback when the slot value is changed.
+			// slot:
+			//		The slot widget whose value has been changed.
+			// tags:
+			//		callback
 		}
 	});
 });

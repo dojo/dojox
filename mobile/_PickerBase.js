@@ -57,6 +57,8 @@ define([
 		},
 
 		getSlots: function(){
+			// summary:
+			//		Returns an array of child slot widgets.
 			return this.slots.length ? this.slots :
 				array.filter(this.getChildren(), function(c){
 					return c.declaredClass.indexOf("Slot") !== -1;

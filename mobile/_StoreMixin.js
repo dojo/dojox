@@ -100,12 +100,12 @@ define([
 		},
 
 		onUpdate: function(item, insertedInto){
-			//	summary:
+			// summary:
 			//		Add a new item or update an existing item.
 		},
 
 		onDelete: function(item, removedFrom){
-			//	summary:
+			// summary:
 			//		Delete an existing item.
 		}
 */

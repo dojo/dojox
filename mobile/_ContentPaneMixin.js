@@ -66,6 +66,8 @@ define([
 		},
 
 		load: function(){
+			// summary:
+			//		Loads external content specified with href.
 			this.lazy = false;
 			this.set("href", this.href);
 		},

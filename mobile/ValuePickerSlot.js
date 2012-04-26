@@ -277,7 +277,7 @@ define([
 
 		_setValueAttr: function(value){
 			// summary:
-			//		Sets the newValue to this slot.
+			//		Sets a new value to this slot.
 			this.inputNode.value = value;
 			this._set("value", value);
 			var parent = this.getParent();

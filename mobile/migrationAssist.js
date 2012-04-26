@@ -37,12 +37,14 @@ Changes from 1.6/1.7 to 1.8
 Carousel
 --------
  - Carousel has no backward compatibility, since it was experimental in 1.7.
-   The new Carousel supports dojo.store instead of dojo.data.
+   There are two subclasses that support data stores.
+   Use DataCarousel if you want to use carousel with dojo.data.
+   Use StoreCarousel if you want to use carousel with dojo.store.
 
 FixedSplitter
 -------------
  - FixedSplitter.css is no longer in the themes/common folder.
-   It is in a device theme folder. (e.g. themes/iphone/FixedSplitter.css)
+   It is in the device theme folder. (e.g. themes/iphone/FixedSplitter.css)
 
 FlippableView
 -------------
@@ -50,14 +52,14 @@ FlippableView
 
 ListItem
 --------
- - The sync property is no longer supported. It always behaves in the async manner.
+ - The sync property is no longer supported. It always behaves asynchronously.
  - The btnClass property is no longer supported. Use rightIcon instead.
  - The btnClass2 property is no longer supported. Use rightIcon2 instead.
 
 SpinWheel
 ---------
  - SpinWheel.css is no longer in the themes/common folder.
-   It is in a device theme folder. (e.g. themes/iphone/SpinWheel.css)
+   It is in the device theme folder. (e.g. themes/iphone/SpinWheel.css)
  - getValue() is no longer supported. Use get("values") instead.
  - setValue() is no longer supported. Use set("values", newValue) instead.
 
@@ -73,22 +75,22 @@ Switch
 
 TabBar
 ------
-- In 1.7 or older, barType="segmentedControl" produced different UI according to the
-  current theme. In the iphone theme, it was a segmented control. But in other themes,
+- In 1.7 or older, barType="segmentedControl" produced different UIs according to the
+  current theme. In the iphone theme, it was a segmented control, but in other themes,
   it was tabs with or without icons. In 1.8, however, barType="segmentedControl"
   always produces a segmented control UI regardless of the current theme.
   If you still need the old behavior,
       barType:{"iphone_theme":"segmentedControl","*":"tallTab"}
   should produce a segmented control for the iphone theme, and a tall tab bar for
   the other themes. You need to use deviceTheme.js to specify barType that way.
-  Also, if you want to hide tab icons on the segmented control in the iphone theme,
-  you could apply css like this:
+  Also, if you want to hide the tab icons on the segmented control in the iphone theme,
+  you could apply a css like this:
       <style>
       .iphone_theme .mblTabBarSegmentedControl .mblTabBarButtonIconArea {
           display: none;
       }
       </style>
-  See test_ScrollableView-demo.html for usage example.
+  See test_ScrollableView-demo.html for an example usage.
 
 TabBarButton
 -------------
@@ -166,7 +168,7 @@ define([
 
 		this.checkFixedSplitter = function(/*Widget*/ w){
 			// FixedSplitter.css has been moved from the themes/common folder
-			// to a device theme folder such as themes/android.
+			// to the device theme folder such as themes/android.
 			if(!this._fixedSplitter_css_checked){
 				this._fixedSplitter_css_checked = true;
 				var dummy = domConstruct.create("div", {
@@ -178,7 +180,7 @@ define([
 						type: "text/css",
 						rel: "stylesheet"
 					}, win.doc.getElementsByTagName('head')[0]);
-					console.log('[MIG:fixed] FixedSplitter.css does not seem to be loaded. Loaded it for you just now. It is in a device theme folder.');
+					console.log('[MIG:fixed] FixedSplitter.css does not seem to be loaded. Loaded it for you just now. It is in the device theme folder.');
 				}
 				win.body().removeChild(dummy);
 				setTimeout(function(){
@@ -192,7 +194,7 @@ define([
 		};
 		this.checkFixedSplitter = function(/*Widget*/ w){
 			// FixedSplitter.css has been moved from the themes/common folder
-			// to a device theme folder such as themes/android.
+			// to the device theme folder such as themes/android.
 			if(!this._fixedSplitter_css_checked){
 				this._fixedSplitter_css_checked = true;
 				var dummy = domConstruct.create("div", {
@@ -204,7 +206,7 @@ define([
 						type: "text/css",
 						rel: "stylesheet"
 					}, win.doc.getElementsByTagName('head')[0]);
-					console.log('[MIG:fixed] FixedSplitter.css does not seem to be loaded. Loaded it for you just now. It is in a device theme folder.');
+					console.log('[MIG:fixed] FixedSplitter.css does not seem to be loaded. Loaded it for you just now. It is in the device theme folder.');
 				}
 				win.body().removeChild(dummy);
 				setTimeout(function(){
@@ -403,7 +405,7 @@ define([
 		domClass.add(win.doc.documentElement, currentTheme + "_theme");
 
 		if(cssFiles[i].match(/themes\/common\/(FixedSplitter.css)|themes\/common\/(SpinWheel.css)/)){
-			console.log('[MIG:error] ' + (RegExp.$1 || RegExp.$2) + ' is no longer in the themes/common folder. It is in a device theme folder.');
+			console.log('[MIG:error] ' + (RegExp.$1 || RegExp.$2) + ' is no longer in the themes/common folder. It is in the device theme folder.');
 		}
 	}
 

@@ -82,24 +82,24 @@ define([
 		},
 
 		onSet: function(/*Object*/item, /*String*/attribute, /*Object|Array*/oldValue, /*Object|Array*/newValue){
-			//	summary:
+			// summary:
 			//		See dojo.data.api.Notification.onSet()
 		},
 
 		onNew: function(/*Object*/newItem, /*Object?*/parentInfo){
-			//	summary:
+			// summary:
 			//		See dojo.data.api.Notification.onNew()
 			this.addChild(this.createListItem(newItem));
 		},
 
 		onDelete: function(/*Object*/deletedItem){
-			//	summary:
+			// summary:
 			//		See dojo.data.api.Notification.onDelete()
 			registry.byId(deletedItem._widgetId).destroyRecursive();
 		},
 
 		onStoreClose: function(/*Object?*/request){
-			//	summary:
+			// summary:
 			//		Refresh list on close.
 			if(this.store.clearOnClose){
 				this.refresh();

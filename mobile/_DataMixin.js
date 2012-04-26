@@ -97,22 +97,22 @@ define([
 		},
 
 		onSet: function(item, attribute, oldValue, newValue){
-			//	summary:
+			// summary:
 			//		See dojo.data.api.Notification.onSet()
 		},
 
 		onNew: function(newItem, parentInfo){
-			//	summary:
+			// summary:
 			//		See dojo.data.api.Notification.onNew()
 		},
 
 		onDelete: function(deletedItem){
-			//	summary:
+			// summary:
 			//		See dojo.data.api.Notification.onDelete()
 		},
 
 		onStoreClose: function(request){
-			//	summary:
+			// summary:
 			//		Refresh list on close.
 		}
 */

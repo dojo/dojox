@@ -43,6 +43,8 @@ define([
 		},
 
 		disableValues: function(/*Number*/daysInMonth){
+			// summary:
+			//		Disables month end days that are not on the month.
 			var items = this.slots[2].items;
 			if(this._tail){
 				this.slots[2].items = items = items.concat(this._tail);

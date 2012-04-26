@@ -48,10 +48,14 @@ define([
 		},
 
 		getValue: function(){
+			// summary:
+			//		Returns the text shown in the badge.
 			return this.domNode.firstChild.innerHTML || "";
 		},
 
 		setValue: function(/*String*/value){
+			// summary:
+			//		Set a label text to the badge.
 			this.domNode.firstChild.innerHTML = value;
 		}
 	});

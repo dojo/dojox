@@ -91,17 +91,19 @@ define([
 			this.set("values12", v);
 		},
 
-		_setIs24hAttr: function(/*Boolean*/f){
+		_setIs24hAttr: function(/*Boolean*/is24h){
+			// summary:
+			//		Changes the time display mode, 24h or 12h.
 			var items = this.slots[0].items;
-			if(f && items.length != 24){ // 24h: 0 - 23
+			if(is24h && items.length != 24){ // 24h: 0 - 23
 				this.slots[0].items = this._zero.concat(items).concat(this._pm);
-			}else if(!f && items.length != 12){ // 12h: 1 - 12
+			}else if(!is24h && items.length != 12){ // 12h: 1 - 12
 				items.splice(0, 1);
 				items.splice(12);
 			}
 			var v = this.get("values");
-			this._set("is24h", f);
-			this.ampmButton.domNode.style.display = f ? "none" : "";
+			this._set("is24h", is24h);
+			this.ampmButton.domNode.style.display = is24h ? "none" : "";
 			this.set("values", v);
 		},
 
@@ -112,30 +114,32 @@ define([
 			return this.is24h ? v : this.to24h([v[0], v[1], this.ampmButton.get("label")]);
 		},
 
-		_setValuesAttr: function(/*Array*/a){
+		_setValuesAttr: function(/*Array*/values){
 			// summary:
 			//		Sets an array of hour and minute in 24h format.
-			// a:
-			//		[hour24, minute]
+			// values:
+			//		[hour24, minute] (ex. ["22","06"])
 			if(this.is24h){
 				this.inherited(arguments);
 			}else{
-				a = this.to12h(a);
-				this.ampmButton.set("label", a[2]);
+				values = this.to12h(values);
+				this.ampmButton.set("label", values[2]);
 				this.inherited(arguments);
 			}
 		},
 
 		_getValues12Attr: function(){
+			// summary:
+			//		Returns an array of hour an minute in 12h format.
 			return this.to12h(this._getValuesAttr());
 		},
 
-		_setValues12Attr: function(/*Array*/a){
+		_setValues12Attr: function(/*Array*/values){
 			// summary:
-			//		Sets an array of hour an minute in 12h format.
-			// a:
-			//		[hour12, minute, ampm]
-			this.set("values", this.to24h(a));
+			//		Sets an array of hour and minute in 12h format.
+			// values:
+			//		[hour12, minute, ampm] (ex. ["10","06","PM"])
+			this.set("values", this.to24h(values));
 		}
 	});
 });

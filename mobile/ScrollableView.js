@@ -81,7 +81,14 @@ define([
 			return (!parent || !parent.resize); // top level widget
 		},
 
-		addFixedBar: function(widget){
+		addFixedBar: function(/*Widget*/widget){
+			// summary:
+			//		Adds a vew local fixed bar to this widget.
+			// description:
+			//		This method can be used to programmatically add a view local
+			//		fixed bar to ScrollableView. The bar is appended to this
+			//		widget's domNode. The addChild API cannot be used for this
+			//		purpose, because it adds the given widget to containerNode.
 			var c = widget.domNode;
 			var fixed = this.checkFixedBar(c, true);
 			if(!fixed){ return; }
@@ -115,6 +122,9 @@ define([
 		},
 
 		onAfterTransitionIn: function(moveTo, dir, transition, context, method){
+			// summary:
+			//		Overrides View#onAfterTransitionIn to flash the scroll bar
+			//		after performing a view transition.
 			this.flashScrollBar();
 		},
 

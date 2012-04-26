@@ -51,7 +51,9 @@ define([
 			iconUtils.createIcon(this.image, null, img);
 		},
 
-		_setValueAttr: function(value){
+		_setValueAttr: function(/*Number*/value){
+			// summary:
+			//		Sets the value of the Rating.
 			this._set("value", value);
 			var h = this.imgNode.height;
 			if(h == 0){ return; } // loading of image has not been completed yet

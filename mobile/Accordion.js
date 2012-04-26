@@ -295,6 +295,12 @@ define([
 		},
 
 		expand: function(/*Widget*/pane, /*boolean*/noAnimation){
+			// summary:
+			//		Expand the given pane to make it visible.
+			// pane:
+			//		A pane widget to expand.
+			// noAnimation:
+			//		If true, the pane expands immediately without animation effect.
 			if(pane.lazy){
 				lazyLoadUtils.instantiateLazyWidgets(pane.containerNode, pane.requires);
 				pane.lazy = false;
@@ -327,6 +333,12 @@ define([
 		},
 
 		collapse: function(/*Widget*/pane, /*boolean*/noAnimation){
+			// summary:
+			//		Collapse the given pane to close it.
+			// pane:
+			//		A pane widget to collapse.
+			// noAnimation:
+			//		If true, the pane collapses immediately without animation effect.
 			if(pane.domNode.style.display === "none"){ return; } // already collapsed
 			pane.domNode.style.webkitTransition = noAnimation ? "" : "height "+this.duration+"s linear";
 			pane.domNode.style.height = "0px";
@@ -359,10 +371,18 @@ define([
 		},
 
 		select: function(/*Widget*/pane){
+			// summary:
+			//		Highlight the title bar of the given pane.
+			// pane:
+			//		A pane widget to highlight.
 			pane._at.set("selected", true);
 		},
 
 		deselect: function(/*Widget*/pane){
+			// summary:
+			//		Unhighlight the title bar of the given pane.
+			// pane:
+			//		A pane widget to unhighlight.
 			pane._at.set("selected", false);
 		}
 	});

@@ -258,7 +258,7 @@ define([
 			// context: Object
 			//		The object that the callback function will receive as "this".
 			// method: String|Function
-			//		A callback function that is called when the transition has been finished.
+			//		A callback function that is called when the transition has finished.
 			//		A function reference, or name of a function in context.
 			// tags:
 			//		public
@@ -469,9 +469,13 @@ define([
 		},
 
 		onAnimationStart: function(e){
+			// summary:
+			//		A handler that is called when transition animation starts.
 		},
 
 		onAnimationEnd: function(e){
+			// summary:
+			//		A handler that is called after transition animation ends.
 			var name = e.animationName || e.target.className;
 			if(name.indexOf("Out") === -1 &&
 				name.indexOf("In") === -1 &&
@@ -511,6 +515,9 @@ define([
 		},
 
 		invokeCallback: function(){
+			// summary:
+			//		A function to be called after performing a transition to
+			//		call a specified callback.
 			this.onAfterTransitionOut.apply(this, this._arguments);
 			connect.publish("/dojox/mobile/afterTransitionOut", [this].concat(this._arguments));
 			var toWidget = registry.byNode(this.toNode);
@@ -625,6 +632,8 @@ define([
 		},
 
 		hide: function(){
+			// summary:
+			//		Hides this view without a transition animation.
 			this.domNode.style.display = "none";
 		}
 	});

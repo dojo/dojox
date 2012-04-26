@@ -29,9 +29,21 @@ define([
 		// summary:
 		//		Automatic Theme Loader
 		// description:
-		//		Detects the User Agent of the browser and loads appropriate theme files.
-		//		Simply dojo.require this module to enable the automatic theme loading.
-		//		For simulations, the user agent may be overridden by setting djConfig.mblUserAgent.
+		//		This module detects the user agent of the browser and loads the
+		//		appropriate theme files.  It can be enabled by simply requiring
+		//		dojox.mobile.deviceTheme from your application.
+		//
+		//		You can also pass an additional query parameter string,
+		//		device={theme id} to force a specific theme through the browser
+		//		url input. The available theme ids are Android, BlackBerry,
+		//		Custom, iPhone, and iPad. They are case sensitive. If the given
+		//		id does not match, the iphone theme is used.
+		//
+		//	|	http://your.server.com/yourapp.html // automatic detection
+		//	|	http://your.server.com/yourapp.html?theme=Android // android theme
+		//
+		//		To simulate a particular device, the user agent may be
+		//		overridden by setting djConfig.mblUserAgent.
 		//
 		//		By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
 		//		loaded. The all-in-one theme files contain style sheets for all the
@@ -76,17 +88,17 @@ define([
 		//	|	dojox/mobile/themes/iphone/iphone.css
 		//	|	com/acme/themes/iphone/MyWidget.css
 		//
-		//		Note that the load of the theme files is performed asynchronously by
-		//		the browser, so you cannot assume the load has been completed
-		//		when your appliation is initialized. For example, if some widget in
+		//		Note that loading of the theme files is performed asynchronously by
+		//		the browser, so you cannot assume that the load has been completed
+		//		when your application is initialized. For example, if some widget in
 		//		your application uses node dimensions that cannot be determined
 		//		without CSS styles being applied to them to calculate its layout at
 		//		initialization, the layout calculation may fail.
 		//
-		//		Possible workaround for this problem is to use dojo.require to load
+		//		A possible workaround for this problem is to use dojo.require to load
 		//		deviceTheme.js and place it in a separate <script> block immediately
-		//		below a script tag that loads dojo.js as below. This may (or may
-		//		not) solve the problem.
+		//		below the script tag that loads dojo.js as below. However, this may
+		//		or may not solve the problem.
 		//
 		//	|	<script src="dojo.js"></script>
 		//	|	<script>

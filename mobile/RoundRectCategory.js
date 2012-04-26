@@ -42,6 +42,8 @@ define([
 		},
 
 		_setLabelAttr: function(/*String*/label){
+			// summary:
+			//		Sets the category header text.
 			this.label = label;
 			this.domNode.innerHTML = this._cv ? this._cv(label) : label;
 		}
