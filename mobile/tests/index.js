@@ -247,6 +247,7 @@ var tests = [
 	{ url: "test_bk_force-list.html", tags: "bookmarkable" },
 	{ url: "test_bk_force-split-views.html", tags: "bookmarkable" },
 	{ url: "test_bk_force-tablet-settings.html", tags: "bookmarkable" },
+	{ url: "test_data-handlers.html", tags: "transition" },
 	{ url: "test_domButtons.html", tags: "domButton" },
 	{ url: "test_domButtons16.html", tags: "domButton" },
 	{ url: "test_domButtonsBadge.html", tags: "domButton" },
