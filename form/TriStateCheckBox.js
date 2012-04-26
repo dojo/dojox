@@ -6,7 +6,8 @@ define([
 	"dojo/query",
 	"dojo/dom-attr",
 	"dojo/text!./resources/TriStateCheckBox.html",
-	"dijit/form/ToggleButton"
+	"dijit/form/ToggleButton",
+	"dojo/NodeList-dom" // NodeList.addClass/removeClass
 ], function(kernel, declare, array, event, query, domAttr, template, ToggleButton){
 //	module:
 //		dojox/form/TriStateCheckBox
