@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/window", "dojo/_base/json", "dojo/_base/xhr"], 
-  function(declare, lang, winUtil, jsonUtil, xhr) {
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/kernel", "dojo/_base/json", "dojo/_base/xhr"],
+  function(declare, lang, kernel, jsonUtil, xhr) {
 
 return declare("dojox.data.FileStore", null, {
 	constructor: function(/*Object*/args){
@@ -171,7 +171,7 @@ return declare("dojox.data.FileStore", null, {
 		//      See dojo.data.api.Read.loadItem()
 		var item = keywordArgs.item;
 		var self = this;
-		var scope = keywordArgs.scope || winUtil.global;
+		var scope = keywordArgs.scope || kernel.global;
 
 		var content = {};
 
@@ -272,7 +272,7 @@ return declare("dojox.data.FileStore", null, {
 			request.store = this;
 		}
 		var self = this;
-		var scope = request.scope || winUtil.global;
+		var scope = request.scope || kernel.global;
 
 		//Generate what will be sent over.
 		var reqParams = {};
@@ -323,7 +323,7 @@ return declare("dojox.data.FileStore", null, {
 		//      See dojo.data.api.Read.loadItem()
 		var path = keywordArgs.identity;
 		var self = this;
-		var scope = keywordArgs.scope || winUtil.global;
+		var scope = keywordArgs.scope || kernel.global;
 
 		var content = {};
 
@@ -358,7 +358,7 @@ return declare("dojox.data.FileStore", null, {
 	},
 
 	_processResult: function(data, request){
-		 var scope = request.scope || winUtil.global;
+		 var scope = request.scope || kernel.global;
 		 try{
 			 //If the data contains a path separator, set ours
 			 if(data.pathSeparator){

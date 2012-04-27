@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/xhr", "dojo/data/util/simpleFetch", 
-		"dojo/_base/query", "dojo/_base/array", "dojo/_base/window", "dojo/data/util/filter", "dojox/xml/parser",
+		"dojo/_base/query", "dojo/_base/array", "dojo/_base/kernel", "dojo/data/util/filter", "dojox/xml/parser",
 		"dojox/data/XmlItem"], 
-  function(lang, declare, xhr, simpleFetch, domQuery, array, winUtil, filter, xmlParser, XmlItem) {
+  function(lang, declare, xhr, simpleFetch, domQuery, array, kernel, filter, xmlParser, XmlItem) {
 
 var XmlStore = declare("dojox.data.XmlStore", null, {
 	//	summary:
@@ -1002,7 +1002,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 		}
 		if(!url){
 			if(keywordArgs.onError){
-				scope = keywordArgs.scope || winUtil.global;
+				scope = keywordArgs.scope || kernel.global;
 				keywordArgs.onError.call(scope, new Error("No URL for saving content: " + this._getPostContent(item)));
 			}
 			return;
@@ -1024,7 +1024,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 			saveArgs.postData = this._getPostContent(item);
 			saveHandler = xhr.post(saveArgs);
 		}
-		scope = (keywordArgs.scope || winUtil. global);
+		scope = (keywordArgs.scope || kernel. global);
 		var self = this;
 		saveHandler.addCallback(function(data){
 			self._forgetItem(item);
@@ -1324,7 +1324,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 						request.query[self.keyAttribute] = keywordArgs.identity;
 						request.queryOptions = {deep: true};
 						var items = self._getItems(data,request);
-						scope = keywordArgs.scope || winUtil.global;
+						scope = keywordArgs.scope || kernel.global;
 						if(items.length === 1){
 							if(keywordArgs.onItem){
 								keywordArgs.onItem.call(scope, items[0]);
@@ -1392,7 +1392,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 							}
 						}
 						if(keywordArgs.onItem){
-							scope = keywordArgs.scope || winUtil.global;
+							scope = keywordArgs.scope || kernel.global;
 							keywordArgs.onItem.call(scope, item);
 						}
 					}
@@ -1410,7 +1410,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 			getHandler.addCallback(handleDocument);
 			if(keywordArgs.onError){
 				getHandler.addErrback(function(error){
-					var s = keywordArgs.scope || winUtil.global;
+					var s = keywordArgs.scope || kernel.global;
 					keywordArgs.onError.call(s, error);
 				});
 			}
@@ -1429,13 +1429,13 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 							item = items[0];
 						}else{
 							if(keywordArgs.onError){
-								var scope = keywordArgs.scope || winUtil.global;
+								var scope = keywordArgs.scope || kernel.global;
 								keywordArgs.onError.call(scope, new Error("More than one item was returned from the server for the denoted identity"));
 							}
 						}
 					}
 					if(keywordArgs.onItem){
-						scope = keywordArgs.scope || winUtil.global;
+						scope = keywordArgs.scope || kernel.global;
 						keywordArgs.onItem.call(scope, item);
 					}
 				};
@@ -1451,13 +1451,13 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 				getHandler.addCallback(handleDocument);
 				if(keywordArgs.onError){
 					getHandler.addErrback(function(error){
-						var s = keywordArgs.scope || winUtil.global;
+						var s = keywordArgs.scope || kernel.global;
 						keywordArgs.onError.call(s, error);
 					});
 				}
 			}else{
 				if(keywordArgs.onError){
-					var s = keywordArgs.scope || winUtil.global;
+					var s = keywordArgs.scope || kernel.global;
 					keywordArgs.onError.call(s, new Error("XmlStore is not told that the server to provides identity support.  No keyAttribute specified."));
 				}
 			}

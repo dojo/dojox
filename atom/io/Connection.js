@@ -1,10 +1,11 @@
 define([
+	"dojo/_base/declare",
 	"dojo/_base/kernel",
 	"dojo/_base/xhr",
-	"dojo/_base/window",
-	"./model",
-	"dojo/_base/declare"], function (dojo, xhrUtil, windowUtil, model) {
-return dojo.declare("dojox.atom.io.Connection",null,{
+	"./model"
+], function (declare, kernel, xhrUtil, model){
+
+	return declare("dojox.atom.io.Connection",null,{
 	// summary: This object implements a transport layer for working with ATOM feeds and ATOM publishing protocols.
 	// description: This object implements a transport layer for working with ATOM feeds and ATOM publishing protocols.
 	//   Specifically, it provides a mechanism by which feeds can be fetched and entries can be fetched, created
@@ -101,7 +102,7 @@ return dojo.declare("dojox.atom.io.Connection",null,{
 		//	returns:
 		//		Nothing. The return is handled through the callback handler.
 		if(!scope){
-			scope = windowUtil.global;
+			scope = kernel.global;
 		}
 		var ae = this.alertsEnabled;
 		var xhrArgs = {
@@ -203,7 +204,7 @@ return dojo.declare("dojox.atom.io.Connection",null,{
 		//	returns:
 		//		Nothing. The return is handled through the callback handler.
 		if(!scope){
-			scope = windowUtil.global;
+			scope = kernel.global;
 		}
 		entry.updated = new Date();
 		var url = entry.getEditHref();
@@ -297,7 +298,7 @@ return dojo.declare("dojox.atom.io.Connection",null,{
 		//	returns:
 		//		Nothing. The return is handled through the callback handler.
 		if(!scope){
-			scope = windowUtil.global;
+			scope = kernel.global;
 		}
 
 		entry.published = new Date();
@@ -386,7 +387,7 @@ return dojo.declare("dojox.atom.io.Connection",null,{
 		//	returns:
 		//		Nothing. The return is handled through the callback handler.
 		if(!scope){
-			scope = windowUtil.global;
+			scope = kernel.global;
 		}
 
 		var url = null;

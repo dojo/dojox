@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/xhr", "dojo/_base/window", 
+define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/xhr", "dojo/_base/kernel",
 		"dojo/data/util/simpleFetch", "dojo/data/util/filter"], 
-  function(declare, lang, xhr, winUtil, simpleFetch, filterUtil) {
+  function(declare, lang, xhr, kernel, simpleFetch, filterUtil) {
 
 var KeyValueStore = declare("dojox.data.KeyValueStore", null, {
 	//	summary:
@@ -378,7 +378,7 @@ var KeyValueStore = declare("dojox.data.KeyValueStore", null, {
 	},
 	
 	_finishFetchItemByIdentity: function(/* Array */ items, /* object */ request){
-		var scope = request.scope || winUtil.global;
+		var scope = request.scope || kernel.global;
 		if(items.length){
 			request.oldOnItem.call(scope, items[0]);
 		}else{

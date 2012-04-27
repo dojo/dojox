@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/dom", "dojo/_base/xhr", "dojo/_base/window",
+define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/dom", "dojo/_base/xhr", "dojo/_base/kernel",
 		"dojo/data/util/simpleFetch", "dojo/data/util/filter", "dojox/xml/parser"], 
-  function(declare, array, lang, dom, xhr, winUtil, simpleFetch, filter, xmlParser) {
+  function(declare, array, lang, dom, xhr, kernel, simpleFetch, filter, xmlParser) {
 
 var HtmlStore = declare("dojox.data.HtmlStore", null, {
 	constructor: function(/*Object*/args){
@@ -496,7 +496,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 					}
 				}
 				if(keywordArgs.onItem){
-					scope = keywordArgs.scope?keywordArgs.scope:winUtil.global;
+					scope = keywordArgs.scope?keywordArgs.scope:kernel.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 
@@ -536,13 +536,13 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 						}
 					}
 					if(keywordArgs.onItem){
-						scope = keywordArgs.scope?keywordArgs.scope:winUtil.global;
+						scope = keywordArgs.scope?keywordArgs.scope:kernel.global;
 						keywordArgs.onItem.call(scope, item);
 					}
 				});
 				getHandler.addErrback(function(error){
 					if(keywordArgs.onError){
-						scope = keywordArgs.scope?keywordArgs.scope:winUtil.global;
+						scope = keywordArgs.scope?keywordArgs.scope:kernel.global;
 						keywordArgs.onError.call(scope, error);
 
 					}
@@ -552,7 +552,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 			if(this._rootNode.rows[identity+1]){
 				item = this._rootNode.rows[identity+1];
 				if(keywordArgs.onItem){
-					scope = keywordArgs.scope?keywordArgs.scope:winUtil.global;
+					scope = keywordArgs.scope?keywordArgs.scope:kernel.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 			}

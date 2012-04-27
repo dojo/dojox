@@ -1,6 +1,6 @@
-define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/sniff",
+define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel", "dojo/_base/sniff",
 	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix"], 
-  function(g, lang, declare, win, has, events, arr, domConstruct, Color, matrixLib){
+  function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
 
 /*===== 
 	dojox.gfx.shape = {
@@ -462,7 +462,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 			scope = null;
 		}
 		if(lang.isString(method)){
-			scope = scope || win.global;
+			scope = scope || kernel.global;
 			if(!scope[method]){ throw(['dojox.gfx.shape.fixCallback: scope["', method, '"] is null (scope="', scope, '")'].join('')); }
 			return function(e){  
 				return fixFunction(e,gfxElement) ? scope[method].apply(scope, arguments || []) : undefined; }; // Function

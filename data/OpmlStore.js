@@ -1,6 +1,6 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/xhr", "dojo/data/util/simpleFetch", "dojo/data/util/filter",
-		"dojo/_base/window"], 
-  function(declare, lang, xhr, simpleFetch, filterUtil, winUtil) {
+		"dojo/_base/kernel"],
+  function(declare, lang, xhr, simpleFetch, filterUtil, kernel) {
 
 var OpmlStore = declare("dojox.data.OpmlStore", null, {
 	/* summary:
@@ -434,7 +434,7 @@ var OpmlStore = declare("dojox.data.OpmlStore", null, {
 						};
 					var getHandler = xhr.get(getArgs);
 					getHandler.addCallback(function(data){
-						var scope = keywordArgs.scope ? keywordArgs.scope : winUtil.global;
+						var scope = keywordArgs.scope ? keywordArgs.scope : kernel.global;
 						try{
 							self._processRawXmlTree(data);
 							var item = self._identityMap[keywordArgs.identity];
@@ -454,7 +454,7 @@ var OpmlStore = declare("dojox.data.OpmlStore", null, {
 					getHandler.addErrback(function(error){
 						this._loadInProgress = false;
 						if(keywordArgs.onError){
-							var scope = keywordArgs.scope ? keywordArgs.scope : winUtil.global;
+							var scope = keywordArgs.scope ? keywordArgs.scope : kernel.global;
 							keywordArgs.onError.call(scope, error);
 						}
 					});
@@ -467,7 +467,7 @@ var OpmlStore = declare("dojox.data.OpmlStore", null, {
 					item = null;
 				}
 				if(keywordArgs.onItem){
-					var scope = keywordArgs.scope ? keywordArgs.scope : winUtil.global;
+					var scope = keywordArgs.scope ? keywordArgs.scope : kernel.global;
 					keywordArgs.onItem.call(scope, item);
 				}
 			}
@@ -478,7 +478,7 @@ var OpmlStore = declare("dojox.data.OpmlStore", null, {
 				item = null;
 			}
 			if(keywordArgs.onItem){
-				var scope = keywordArgs.scope ? keywordArgs.scope : winUtil.global;
+				var scope = keywordArgs.scope ? keywordArgs.scope : kernel.global;
 				keywordArgs.onItem.call(scope, item);
 			}
 		}

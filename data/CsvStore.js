@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/xhr", "dojo/_base/window","dojo/data/util/filter", "dojo/data/util/simpleFetch"], 
-  function(lang, declare, xhr, winUtil, filterUtil, simpleFetch) {
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/xhr", "dojo/_base/kernel","dojo/data/util/filter", "dojo/data/util/simpleFetch"],
+  function(lang, declare, xhr, kernel, filterUtil, simpleFetch) {
 
 var CsvStore = declare("dojox.data.CsvStore", null, {
 	// summary:
@@ -612,7 +612,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 		// tags:
 		//		public
 		var item;
-		var scope = keywordArgs.scope?keywordArgs.scope:winUtil.global;
+		var scope = keywordArgs.scope?keywordArgs.scope:kernel.global;
 		//Hasn't loaded yet, we have to trigger the load.
 		if(!this._loadFinished){
 			var self = this;

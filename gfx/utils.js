@@ -16,7 +16,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 			// object : The gfx container to iterate.
 			// f : The function to apply.
 			// o : The scope.
-			o = o || win.global;
+			o = o || kernel.global;
 			f.call(o, object);
 			if(object instanceof g.Surface || object instanceof g.Group){
 				arr.forEach(object.children, function(shape){

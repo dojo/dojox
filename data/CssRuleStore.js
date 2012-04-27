@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/json","dojo/_base/window", "dojo/_base/sniff", "dojo/data/util/sorter", "dojo/data/util/filter", "./css"],
- function(lang, declare, array, jsonUtil, winUtil, has, sorter, filter, css) {
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/json","dojo/_base/kernel", "dojo/_base/sniff", "dojo/data/util/sorter", "dojo/data/util/filter", "./css"],
+ function(lang, declare, array, jsonUtil, kernel, has, sorter, filter, css) {
 
 return declare("dojox.data.CssRuleStore", null, {
 	//	summary:
@@ -221,7 +221,7 @@ return declare("dojox.data.CssRuleStore", null, {
 			request.store = this;
 		}
 
-		var scope = request.scope || winUtil.global;
+		var scope = request.scope || kernel.global;
 		if(this._pending && this._pending.length > 0){
 			this._pending.push({request: request, fetch: true});
 		}else{
@@ -234,7 +234,7 @@ return declare("dojox.data.CssRuleStore", null, {
 	_fetch: function(request){
 		//	summary:
 		//		Populates the _allItems object with unique class names
-		var scope = request.scope || winUtil.global;
+		var scope = request.scope || kernel.global;
 		if(this._allItems === null){
 			this._allItems = {};
 			try{
@@ -315,7 +315,7 @@ return declare("dojox.data.CssRuleStore", null, {
 	_handleFetchReturn: function(/*Request */ request){
 		//	summary:
 		//		Handles a fetchByIdentity request by finding the correct items.
-		var scope = request.scope || winUtil.global;
+		var scope = request.scope || kernel.global;
 		var items = [];
 		//Check to see if we've looked this query up before
 		//If so, just reuse it, much faster.  Only regen if query changes.

@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base/Color", "dojo/_base/sniff",
-		"dojo/_base/config", "dojo/dom", "dojo/dom-geometry", "dojo/_base/window", 
+		"dojo/_base/config", "dojo/dom", "dojo/dom-geometry", "dojo/_base/kernel",
 		"./_base", "./shape", "./path", "./arc", "./gradient", "./matrix"],
-  function(lang, declare, arr, Color, has, config, dom, domGeom, win, g, gs, pathLib, arcLib, gradient, m){
+  function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pathLib, arcLib, gradient, m){
 /*===== 
 	dojox.gfx.vml = {
 	// module:
@@ -1160,7 +1160,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 	
 	// copied from dojox.gfx.utils
 	function forEach(object, f, o){
-		o = o || win.global;
+		o = o || kernel.global;
 		f.call(o, object);
 		if(object instanceof g.Surface || object instanceof g.Group){
 			arr.forEach(object.children, function(shape){

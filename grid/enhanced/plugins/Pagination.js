@@ -6,7 +6,6 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/html",
 	"dojo/_base/event",
-	"dojo/_base/window",
 	"dojo/query",
 	"dojo/string",
 	"dojo/i18n",
@@ -24,7 +23,7 @@ define([
 	"dijit/_WidgetsInTemplateMixin",
 	"dojox/html/metrics",
 	"dojo/i18n!../nls/Pagination"
-], function(kernel, declare, array, connect, lang, html, event, win, query, 
+], function(kernel, declare, array, connect, lang, html, event, query,
 	string, i18n, keys, template, Dialog, layers, _Plugin, EnhancedGrid,
 	Button, NumberTextBox, dijitFocus, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, metrics){
 		
@@ -110,7 +109,7 @@ var _ForcedPageStoreLayer = declare("dojox.grid.enhanced.plugins._ForcedPageStor
 		var _this = this,
 			plugin = _this._plugin,
 			grid = plugin.grid,
-			scope = request.scope || win.global,
+			scope = request.scope || kernel.global,
 			onBegin = request.onBegin;
 		request.start = (plugin._currentPage - 1) * plugin._currentPageSize + request.start;
 		_this.startIdx = request.start;

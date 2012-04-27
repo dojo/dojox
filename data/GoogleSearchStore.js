@@ -1,8 +1,8 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/query", 
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/query",
 		"dojo/dom-construct","dojo/io/script"], 
-  function(dojo, lang, declare, winUtil, domQuery, domConstruct, scriptIO) {
+  function(kernel, lang, declare, domQuery, domConstruct, scriptIO) {
 
-dojo.experimental("dojox.data.GoogleSearchStore");
+kernel.experimental("dojox.data.GoogleSearchStore");
 
 var SearchStore = declare("dojox.data.GoogleSearchStore",null,{
 	//	summary:
@@ -231,7 +231,7 @@ var SearchStore = declare("dojox.data.GoogleSearchStore",null,{
 		//		A function to call on error
 		request = request || {};
 
-		var scope = request.scope || winUtil.global;
+		var scope = request.scope || kernel.global;
 
 		if(!request.query){
 			if(request.onError){
@@ -369,7 +369,7 @@ var SearchStore = declare("dojox.data.GoogleSearchStore",null,{
 					//Process the items...
 					finished = true;
 					//Clean up the function, it should never be called again
-					winUtil.global[callbackFn] = null;
+					kernel.global[callbackFn] = null;
 					if(request.onItem){
 						request.onComplete.call(scope, null, request);
 					}else{
@@ -385,13 +385,13 @@ var SearchStore = declare("dojox.data.GoogleSearchStore",null,{
 		var lastCallback = firstRequest.start - 1;
 
 		// Attach a callback function to the global namespace, where Google can call it.
-		winUtil.global[callbackFn] = function(start, data, responseCode, errorMsg){
+		kernel.global[callbackFn] = function(start, data, responseCode, errorMsg){
 			try {
 				if(responseCode != 200){
 					if(request.onError){
 						request.onError.call(scope, new Error("Response from Google was: " + responseCode), request);
 					}
-					winUtil.global[callbackFn] = function(){};//an error occurred, do not return anything else.
+					kernel.global[callbackFn] = function(){};//an error occurred, do not return anything else.
 					return;
 				}
 	
