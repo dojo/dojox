@@ -761,10 +761,8 @@ dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent",dijit._editor._Plugin
 		// tags:
 		//		private
 		var editDoc = this.editor.document.body;
-		return dojo.withGlobal(this.editor.window, function(){
-			var cs = dojo.getComputedStyle(editDoc);
-			return cs ? cs.direction == "ltr" : true;
-		});
+		var cs = dojo.getComputedStyle(editDoc);
+		return cs ? cs.direction == "ltr" : true;
 	},
 
 	_isInlineFormat: function(tag){

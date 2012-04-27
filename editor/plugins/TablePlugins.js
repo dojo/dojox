@@ -95,11 +95,11 @@ var TableHandler = declare(_Plugin, {
 				this._sCall("selectElement", [elem]);
 			},
 			byId: function(id){
-				return dojo.withGlobal(this.window, "byId", dojo, [id]);
+				return dojo.byId(id, this.document);
 			},
 			query: function(arg, scope, returnFirstOnly){
 				// this shortcut is dubious - not sure scoping is necessary
-				var ar = dojo.withGlobal(this.window, "query", dojo, [arg, scope]);
+				var ar = dojo.query(arg, scope || this.document);
 				return (returnFirstOnly) ? ar[0] : ar;
 			}
 		});
@@ -248,7 +248,7 @@ var TableHandler = declare(_Plugin, {
 		var e = window.event;
 		var node = e.srcElement;
 		var id = node.id;
-		var win = this.editor.window;
+		var doc = this.editor.document;
 		//console.log("NODE:", node.tagName, node.id,  dojo.attr(node, "align"));
 		
 		// clearing a table's align attr
@@ -256,7 +256,7 @@ var TableHandler = declare(_Plugin, {
 		//	should move to its own method
 		if(node.tagName.toLowerCase()=="table"){
 			setTimeout(function(){
-				var node =  dojo.withGlobal(win, "byId", dojo, [id]);
+				var node = dojo.byId(id, doc);
 				dojo.removeAttr(node, "align");
 				//console.log("set", node.tagName, dojo.attr(node, "align"))
 			}, 100);

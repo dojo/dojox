@@ -17,6 +17,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/i18n",
 	"dojo/string",
+	"dojo/NodeList-dom",
 	"dojox/editor/plugins/ToolbarLineBreak",
 	"dojo/i18n!dojox/editor/plugins/nls/InsertAnchor",
 	"dojo/i18n!dijit/nls/common"
@@ -395,16 +396,8 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 		//		The node to search from.
 		// tags:
 		//		private
-		var ed = this.editor;
-		dojo.withGlobal(ed.window, function(){
-			dojo.query("a", ed.editNode).forEach(function(a){
-				if(dojo.attr(a, "name") && !dojo.attr(a, "href")){
-					if(!dojo.hasClass(a,"dijitEditorPluginInsertAnchorStyle")){
-						dojo.addClass(a, "dijitEditorPluginInsertAnchorStyle");
-					}
-				}
-			});
-		});
+
+		dojo.query("a[name]:not([href])", this.editor.editNode).addClass("dijitEditorPluginInsertAnchorStyle");
 	},
 
 	_postDomFilter: function(node){
@@ -416,15 +409,8 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 		//		The node to search from.
 		// tags:
 		//		private
-		var ed = this.editor;
 		if(node){	// avoid error when Editor.get("value") called before editor's iframe initialized
-			dojo.query("a", node).forEach(function(a){
-				if(dojo.attr(a, "name") && !dojo.attr(a, "href")){
-					if(dojo.hasClass(a,"dijitEditorPluginInsertAnchorStyle")){
-						dojo.removeClass(a, "dijitEditorPluginInsertAnchorStyle");
-					}
-				}
-			});
+			dojo.query("a[name]:not([href])", node).removeClass("dijitEditorPluginInsertAnchorStyle");
 		}
 		return node;
 	}

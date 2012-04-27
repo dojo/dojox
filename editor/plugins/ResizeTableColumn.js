@@ -180,7 +180,7 @@ dojo.declare("dojox.editor.plugins.ResizeTableColumn",	dojox.editor.plugins.Tabl
 				// b:
 				//		Indicate if the cell node is compared with the first coluln
 				//		or the last column
-				var nodes = dojo.withGlobal(editor.window, "query", dojo, ["> td", n.parentNode]);
+				var nodes = dojo.query("> td", n.parentNode);
 				switch(b){
 					case "first":
 						return nodes[0] == n;
@@ -221,7 +221,7 @@ dojo.declare("dojox.editor.plugins.ResizeTableColumn",	dojox.editor.plugins.Tabl
 				//		column with the node t.
 				// t:
 				//		The node of the table cell
-				var tds = dojo.withGlobal(editor.window, "query", dojo, ["td", getTable(t)]),
+				var tds = dojo.query("td", getTable(t)),
 					len = tds.length;
 				for(var i = 0; i < len; i++){
 					if(dojo.position(tds[i]).x == dojo.position(t).x){

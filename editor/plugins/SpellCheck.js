@@ -978,7 +978,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		// tags:
 		//		private
 		var ed = this._editor,
-			cps = dojo.withGlobal(ed.window, "query", dojo, ["." + this._cursorSelector]),
+			cps = dojo.query("." + this._cursorSelector, ed.document),
 			cursorSpan = cps && cps[0];
 		// Find the cursor place holder
 		if(cursorSpan){
@@ -1084,8 +1084,8 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		this._moveToBookmark();
 		
 		// Get the incorrect words <span>
-		spanList = this._spanList = dojo.withGlobal(editor.window, "query", dojo, ["." + this._selector]);
-		dojo.forEach(spanList, function(span, i){ span.id = selector + i; });
+		spanList = this._spanList = dojo.query("." + this._selector, editor.document);
+		spanList.forEach(function(span, i){ span.id = selector + i; });
 		
 		// Set them to the incorrect word style
 		if(!this.interactive){ delete nstyle.cursor; }
@@ -1113,7 +1113,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 					if(node.tagName.toLowerCase() == "iframe"){
 						iframe = node;
 						win = this._iframeContentWindow(iframe);
-						cn = dojo.withGlobal(win, dojo.body);
+						cn = dojo.body(ed.document)
 					}else{
 						
 						// To capture these events at the top level, attach to <html>, not <body>.
@@ -1226,7 +1226,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 							// access the <body> node because it's already gone, or at least in a state of limbo
 			
 							var win = this._iframeContentWindow(iframe);
-								cn = dojo.withGlobal(win, dojo.body);
+								cn = dojo.body(ed.document)
 							binding.connects = doConnects(cn);
 						});
 						if(iframe.addEventListener){
