@@ -284,8 +284,7 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 			if(a && (a.nodeName && a.nodeName.toLowerCase() !== "a")){
 				// Stll nothing, one last thing to try on IE, as it might be 'img'
 				// and thus considered a control.
-				a = dojo.withGlobal(this.editor.window,
-					"getSelectedElement", dijit._editor.selection, ["a"]);
+				a = this.editor._sCall("getSelectedElement", ["a"]);
 			}
 			if(a && (a.nodeName && a.nodeName.toLowerCase() === "a")){
 				// Okay, we do have a match.  IE, for some reason, sometimes pastes before
@@ -295,8 +294,7 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 				if(this.editor.queryCommandEnabled("unlink")){
 					// Select all the link childent, then unlink.  The following insert will
 					// then replace the selected text.
-					dojo.withGlobal(this.editor.window,
-						"selectElementChildren", dijit._editor.selection, [a]);
+					this.editor._sCall("selectElementChildren", [a]);
 					this.editor.execCommand("unlink");
 				}
 			}
@@ -324,9 +322,9 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 		if(a && a.tagName.toLowerCase() === "a" && dojo.attr(a, "name")){
 			anchor = dojo.attr(a, "name");
 			text = a.textContent || a.innerText;
-			dojo.withGlobal(this.editor.window, "selectElement", dijit._editor.selection, [a, true]);
+			this.editor._sCall("selectElement", [a, true]);
 		}else{
-			text = dojo.withGlobal(this.editor.window, dijit._editor.selection.getSelectedText);
+			text = this.editor._sCall("getSelectedText");
 		}
 		return {anchorInput: anchor || '', textInput: text || ''}; //Object;
 	},
@@ -351,12 +349,10 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 			if(a && (a.nodeName && a.nodeName.toLowerCase() !== "a")){
 				// Stll nothing, one last thing to try on IE, as it might be 'img'
 				// and thus considered a control.
-				a = dojo.withGlobal(this.editor.window,
-					"getSelectedElement", dijit._editor.selection, ["a"]);
+				a = this.editor._sCall("getSelectedElement", ["a"]);
 			}
 		}else{
-			a = dojo.withGlobal(this.editor.window,
-				"getAncestorElement", dijit._editor.selection, ["a"]);
+			a = this.editor._sCall("getAncestorElement", ["a"]);
 		}
 		this.dropDown.reset();
 		this._setButton.set("disabled", true);
@@ -377,9 +373,7 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 			var tg = t.tagName? t.tagName.toLowerCase() : "";
 			if(tg === "a" && dojo.attr(t, "name")){
 				this.editor.onDisplayChanged();
-				dojo.withGlobal(this.editor.window,
-					 "selectElement",
-					 dijit._editor.selection, [t]);
+				this.editor._sCall("selectElement", [t]);
 				setTimeout(dojo.hitch(this, function(){
 					// Focus shift outside the event handler.
 					// IE doesn't like focus changes in event handles.

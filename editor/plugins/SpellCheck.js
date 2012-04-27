@@ -1247,12 +1247,11 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		//		The index of the span list
 		// tags:
 		//		private
-		var list = this._spanList,
-			win = this._editor.window;
+		var list = this._spanList;
 		
 		if(index < list.length && list.length > 0){
-			dojo.withGlobal(win, "selectElement", dijit._editor.selection, [list[index]]);
-			dojo.withGlobal(win, "collapse", dijit._editor.selection, [true]);
+			ed._sCall("selectElement", [list[index]]);
+			ed._sCall("collapse", [true]);
 			this._findText(list[index].innerHTML, false, false);
 			if(dojo.isIE){
 				// Because the selection in the iframe will be lost when the outer window get the
