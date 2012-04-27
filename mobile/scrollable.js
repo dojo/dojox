@@ -231,6 +231,13 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 //>>includeEnd("standaloneScrollable");
 
 	this.init = function(/*Object?*/params){
+		// summary:
+		//		Initialize according to the given params.
+		// description:
+		//		Mixes in the given params into this instance. At least domNode
+		//		and containerNode have to be given.
+		//		Starts listening to the touchstart events.
+		//		Calls resize(), if this widget is a top level widget.
 		if(params){
 			for(var p in params){
 				if(params.hasOwnProperty(p)){
@@ -283,11 +290,16 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.isTopLevel = function(){
-		// subclass may want to override
+		// summary:
+		//		Returns true if this is a top-level widget.
+		// description:
+		//		Subclass may want to override.
 		return true;
 	};
 
 	this.cleanup = function(){
+		// summary:
+		//		Uninitialize the module.
 		if(this._ch){
 			for(var i = 0; i < this._ch.length; i++){
 				connect.disconnect(this._ch[i]);
@@ -431,7 +443,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 	};
 
-	this.isFormElement = function(node){
+	this.isFormElement = function(/*DOMNode*/node){
+		// summary:
+		//		Returns true if the given node is a form control.
 		if(node && node.nodeType !== 1){ node = node.parentNode; }
 		if(!node || node.nodeType !== 1){ return false; }
 		var t = node.tagName;
@@ -687,19 +701,40 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		this.slideTo(to, duration, easing);
 	};
 
-	this.adjustDestination = function(to, pos, dim){
+	this.adjustDestination = function(/*Object*/to, /*Object*/pos, /*Object*/dim){
+		// summary:
+		//		A stub function to be overridden by subclasses.
+		// to:
+		//		The destination position. An object with x and y.
+		// pos:
+		//		The current position. An object with x and y.
+		// dim:
+		//		Dimension information returned by getDim().
+		// description:
+		//		This function is called from onTouchEnd(). It is to give its
+		//		subclasses a chance to adjust the destination position. If this
+		//		function returns false, onTouchEnd() returns immediately without
+		//		performing scroll.
+
 		// subclass may want to implement
 		return true;
 	};
 
 	this.abort = function(){
+		// summary:
+		//		Aborts scrolling.
+		// description:
+		//		This function stops the scrolling animation that is currently
+		//		running. It is called when the user touches the screen while
+		//		scrolling.
 		this.scrollTo(this.getPos());
 		this.stopAnimation();
 		this._aborted = true;
 	};
 
 	this.stopAnimation = function(){
-		// stop the currently running animation
+		// summary:
+		//		Stop the currently running animation.
 		domClass.remove(this.containerNode, "mblScrollableScrollTo2");
 		if(this._scrollBarV){
 			this._scrollBarV.className = "";
@@ -714,7 +749,22 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 	};
 
-	this.scrollIntoView = function(/*DOMNode*/node, /*Boolean?*/alignWithTop, /*number?*/duration){
+	this.scrollIntoView = function(/*DOMNode*/node, /*Boolean?*/alignWithTop, /*Number?*/duration){
+		// summary:
+		//		Scrolls the pane until the searching node is in the view.
+		// node:
+		//		A DOM node to be searched for view.
+		// alignWithTop:
+		//		If true, aligns the node at the top of the pane.
+		//		If false, aligns the node at the bottom of the pane.
+		// duration:
+		//		Duration of scrolling in seconds. (ex. 0.3)
+		//		If not specified, scrolls without animation.
+		// description:
+		//		Just like the scrollIntoView method of DOM elements, this
+		//		function causes the given node to scroll into view, aligning it
+		//		either at the top or bottom of the pane.
+
 		if(!this._v){ return; } // cannot scroll vertically
 		
 		var c = this.containerNode,
@@ -735,6 +785,11 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.getSpeed = function(){
+		// summary:
+		//		Returns an object that indicates the scrolling speed.
+		// description:
+		//		From the position and elapsed time information, calculates the
+		//		scrolling speed, and returns an object with x and y.
 		var x = 0, y = 0, n = this._time.length;
 		// if the user holds the mouse or finger more than 0.5 sec, do not move.
 		if(n >= 2 && (new Date()).getTime() - this.startTime - this._time[n - 1] < 500){
@@ -747,13 +802,25 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		return {x:x, y:y};
 	};
 
-	this.calcSpeed = function(/*Number*/d, /*Number*/t){
-		return Math.round(d / t * 100) * 4;
+	this.calcSpeed = function(/*Number*/distance, /*Number*/time){
+		// summary:
+		//		Calculate the speed given the distance and time.
+		return Math.round(distance / time * 100) * 4;
 	};
 
-	this.scrollTo = function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node){ // to: {x, y}
+	this.scrollTo = function(/*Object*/to, /*Boolean?*/doNotMoveScrollBar, /*DomNode?*/node){
 		// summary:
-		//		Scrolls to the given position.
+		//		Scrolls to the given position immediately without animation.
+		// to:
+		//		The destination position. An object with x and y.
+		//		ex. {x:0, y:-5}
+		// doNotMoveScrollBar:
+		//		If true, the scroll bar will not be updated. If not specified,
+		//		it will be updated.
+		// node:
+		//		A DOM node to scroll. If not specified, defaults to
+		//		this.containerNode.
+
 		var s = (node || this.containerNode).style;
 		if(has("webkit")){
 			if(!this._useTopLeft){
@@ -782,12 +849,28 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 
 	this.slideTo = function(/*Object*/to, /*Number*/duration, /*String*/easing){
 		// summary:
-		//		Scrolls to the given position with slide animation.
+		//		Scrolls to the given position with the slide animation.
+		// to:
+		//		The scroll destination position. An object with x and/or y.
+		//		ex. {x:0, y:-5}, {y:-29}, etc.
+		// duration:
+		//		Duration of scrolling in seconds. (ex. 0.3)
+		// easing:
+		//		The name of easing effect which webkit supports.
+		//		"ease", "linear", "ease-in", "ease-out", etc.
+
 		this._runSlideAnimation(this.getPos(), to, duration, easing, this.containerNode, 2);
 		this.slideScrollBarTo(to, duration, easing);
 	};
 
-	this.makeTranslateStr = function(to){
+	this.makeTranslateStr = function(/*Object*/to){
+		// summary:
+		//		Constructs a string value that is passed to the -webkit-transform property.
+		// to:
+		//		The destination position. An object with x and/or y.
+		// description:
+		//		Return value example: "translate3d(0px,-8px,0px)"
+
 		var y = this._v && typeof to.y == "number" ? to.y+"px" : "0px";
 		var x = (this._h||this._f) && typeof to.x == "number" ? to.x+"px" : "0px";
 		return dm.hasTranslate3d ?
@@ -818,6 +901,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.getDim = function(){
+		// summary:
+		//		Returns various internal dimension information for calculation.
+
 		var d = {};
 		// content width/height
 		d.c = {h:this.containerNode.offsetHeight, w:this.containerNode.offsetWidth};
@@ -834,6 +920,13 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.showScrollBar = function(){
+		// summary:
+		//		Shows the scroll bar.
+		// description:
+		//		This function creates the scroll bar instance if it does not
+		//		exist yet, and calls resetScrollBar() to reset its length and
+		//		position.
+
 		if(!this.scrollBar){ return; }
 
 		var dim = this._dim;
@@ -883,6 +976,12 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.hideScrollBar = function(){
+		// summary:
+		//		Hides the scroll bar.
+		// description:
+		//		If the fadeScrollBar property is true, hides the scroll bar with
+		//		the fade animation.
+
 		if(this.fadeScrollBar && has("webkit")){
 			if(!dm._fadeRule){
 				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
@@ -918,7 +1017,16 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 	};
 
-	this.calcScrollBarPos = function(/*Object*/to){ // to: {x, y}
+	this.calcScrollBarPos = function(/*Object*/to){
+		// summary:
+		//		Calculates the scroll bar position.
+		// to:
+		//		The scroll destination position. An object with x and y.
+		//		ex. {x:0, y:-5}
+		// description:
+		//		Given the scroll destination position, calculates the top and/or
+		//		the left of the scroll bar(s). Returns an object with x and y.
+
 		var pos = {};
 		var dim = this._dim;
 		var f = function(wrapperH, barH, t, d, c){
@@ -940,7 +1048,13 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		return pos;
 	};
 
-	this.scrollScrollBarTo = function(/*Object*/to){ // to: {x, y}
+	this.scrollScrollBarTo = function(/*Object*/to){
+		// summary:
+		//		Moves the scroll bar(s) to the given position without animation.
+		// to:
+		//		The destination position. An object with x and/or y.
+		//		ex. {x:2, y:5}, {y:20}, etc.
+
 		if(!this.scrollBar){ return; }
 		if(this._v && this._scrollBarV && typeof to.y == "number"){
 			if(has("webkit")){
@@ -973,6 +1087,17 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.slideScrollBarTo = function(/*Object*/to, /*Number*/duration, /*String*/easing){
+		// summary:
+		//		Moves the scroll bar(s) to the given position with the slide animation.
+		// to:
+		//		The destination position. An object with x and y.
+		//		ex. {x:0, y:-5}
+		// duration:
+		//		Duration of the animation in seconds. (ex. 0.3)
+		// easing:
+		//		The name of easing effect which webkit supports.
+		//		"ease", "linear", "ease-in", "ease-out", etc.
+
 		if(!this.scrollBar){ return; }
 		var fromPos = this.calcScrollBarPos(this.getPos());
 		var toPos = this.calcScrollBarPos(to);
@@ -984,7 +1109,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 	};
 
-	this._runSlideAnimation = function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, node, idx){
+	this._runSlideAnimation = function(/*Object*/from, /*Object*/to, /*Number*/duration, /*String*/easing, /*DomNode*/node, /*Number*/idx){
 		// idx: 0:scrollbarV, 1:scrollbarH, 2:content
 		if(has("webkit")){
 			if(!this._useTopLeft){
@@ -1043,7 +1168,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.resetScrollBar = function(){
-		//	summary:
+		// summary:
 		//		Resets the scroll bar length, position, etc.
 		var f = function(wrapper, bar, d, c, hd, v){
 			if(!bar){ return; }
@@ -1064,7 +1189,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.createMask = function(){
-		//	summary:
+		// summary:
 		//		Creates a mask for a scroll bar edge.
 		// description:
 		//		This function creates a mask that hides corners of one scroll
@@ -1099,6 +1224,12 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.flashScrollBar = function(){
+		// summary:
+		//		Shows the scroll bar instantly.
+		// description:
+		//		This function shows the scroll bar, and then hides it 300ms
+		//		later. This is used to show the scroll bar to the user for a
+		//		short period of time when a hidden view is revealed.
 		if(this.disableFlashScrollBar || !this.domNode){ return; }
 		this._dim = this.getDim();
 		if(this._dim.d.h <= 0){ return; } // dom is not ready
@@ -1110,6 +1241,15 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.addCover = function(){
+		// summary:
+		//		Adds the transparent DIV cover.
+		// description:
+		//		The cover is to prevent DOM events from affecting the child
+		//		widgets such as a list widget. Without the cover, for example,
+		//		child widgets may receive a click event and respond to it
+		//		unexpectedly when the user flicks the screen to scroll.
+		//		Note that only the desktop browsers need the cover.
+
 		if(!has('touch') && !this.noCover){
 			if(!dm._cover){
 				dm._cover = domConstruct.create("div", null, win.doc.body);
@@ -1135,6 +1275,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.removeCover = function(){
+		// summary:
+		//		Removes the transparent DIV cover.
+
 		if(!has('touch') && dm._cover){
 			dm._cover.style.display = "none";
 			this.setSelectable(dm._cover, true);
@@ -1143,6 +1286,9 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 	};
 
 	this.setKeyframes = function(/*Object*/from, /*Object*/to, /*Number*/idx){
+		// summary:
+		//		Programmatically set key frames for the scroll animation.
+
 		if(!dm._rule){
 			dm._rule = [];
 		}
@@ -1169,7 +1315,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		}
 	};
 
-	this.setSelectable = function(node, selectable){
+	this.setSelectable = function(/*DomNode*/node, /*Boolean*/selectable){
 		// dojo.setSelectable has dependency on dojo.query. Re-define our own.
 		node.style.KhtmlUserSelect = selectable ? "auto" : "none";
 		node.style.MozUserSelect = selectable ? "" : "none";
