@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/asspect", "dojo/dom", "dojo/dom-attr", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-style", "dojo/dom-construct", "dojo/on", "dojo/_base/window", "dojo/mouse", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_Container", "./FisheyeListItem"],
+define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspect", "dojo/dom", "dojo/dom-attr", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-style", "dojo/dom-construct", "dojo/on", "dojo/_base/window", "dojo/mouse", "dijit/_WidgetBase", "dijit/_TemplatedMixin", "dijit/_Container", "./FisheyeListItem"],
 	function(declare, has, lang, aspect, dom, attr, domClass, geometry, style, construct, on, winUtil, mouse, _WidgetBase, _TemplatedMixin, _Container, FisheyeListItem){
 
 		return declare("dojox.widget.FisheyeList",
