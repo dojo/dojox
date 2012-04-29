@@ -14,7 +14,6 @@ var profile = (function(){
 			"secure",
 			"cometd",
 			"data/(demos|ItemExplorer|StoreExplorer|restListener)",
-			"drawing",
 			"editor/plugins/(ResizeTableColumn|SpellCheck)",
 			"embed/(IE)",
 			"flash",

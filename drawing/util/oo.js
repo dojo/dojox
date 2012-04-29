@@ -1,9 +1,8 @@
-dojo.provide("dojox.drawing.util.oo");
-
+define([], function(){
 // TODO:
 // allow a declare without a mixin
 
-dojox.drawing.util.oo = {
+return {
 	// summary:
 	//		Inheritance utilities used in DojoX Drawing
 	// description:
@@ -120,3 +119,4 @@ dojox.drawing.util.oo = {
 		return f; // Function
 	}
 };
+});

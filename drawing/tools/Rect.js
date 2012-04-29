@@ -1,10 +1,12 @@
-dojo.provide("dojox.drawing.tools.Rect");
+define(["dojo/_base/lang", "../util/oo", "../manager/_registry", "../stencil/Rect"],
+function(lang, oo, registry, StencilRect){
 
-dojox.drawing.tools.Rect = dojox.drawing.util.oo.declare(
+//dojox.drawing.tools.Rect 
+var Rect = oo.declare(
 	// summary:
 	// 		Class for a drawable rectangle
 	//
-	dojox.drawing.stencil.Rect,
+	StencilRect,
 	function(){
 		// summary: constructor
 	},
@@ -68,7 +70,8 @@ dojox.drawing.tools.Rect = dojox.drawing.util.oo.declare(
 	}
 );
 
-dojox.drawing.tools.Rect.setup = {
+lang.setObject("dojox.drawing.tools.Rect", Rect);
+Rect.setup = {
 	// summary: See stencil._Base ToolsSetup
 	//
 	name:"dojox.drawing.tools.Rect",
@@ -76,4 +79,7 @@ dojox.drawing.tools.Rect.setup = {
 		+ '<span class="drawingTipDesc">SHIFT - constrain to square</span>',
 	iconClass:"iconRect"
 };
-dojox.drawing.register(dojox.drawing.tools.Rect.setup, "tool");
+registry.register(Rect.setup, "tool");
+
+return Rect;
+});

@@ -1,6 +1,4 @@
-dojo.provide("dojox.drawing.defaults");
-
-dojox.drawing.defaults = {
+define({
 	// summary:
 	//		Styles and defaults used for Drawing stencils and text.
 	// description:
@@ -285,4 +283,4 @@ dojox.drawing.defaults = {
 		return o;
 	}
 
-};
+});

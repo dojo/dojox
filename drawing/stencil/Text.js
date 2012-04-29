@@ -1,6 +1,7 @@
-dojo.provide("dojox.drawing.stencil.Text");
+define(["dojo", "../util/oo", "./_Base", "../manager/_registry", "../util/typeset"], 
+function(dojo, oo, Base, registry, typeset){
 
-dojox.drawing.stencil.Text = dojox.drawing.util.oo.declare(
+var Text = oo.declare(
 	// summary:
 	//		Creates a dojox.gfx Text (SVG or VML) based on data provided.
 	// description:
@@ -10,7 +11,7 @@ dojox.drawing.stencil.Text = dojox.drawing.util.oo.declare(
 	//		Multiple lines can be acheived by inserting \n linebreaks
 	//		in the text.
 	//
-	dojox.drawing.stencil._Base,
+	Base,
 	function(options){
 		// summary:
 		//		constructor.
@@ -72,11 +73,12 @@ StencilPoints: [
 			//		Uses function dojox.drawing.stencil.Text.typeset
 			//		for typesetting, if it exists.
 			//
-			if(dojox.drawing.util.typeset){
+
+			//if(dojox.drawing.util.typeset){
 				this._rawText = text;
-				return dojox.drawing.util.typeset.convertLaTeX(text);
-			}
-			return text;
+				return typeset.convertLaTeX(text);
+			//}
+			//return text;
 		},
 
 		setText: function(text){
@@ -223,6 +225,10 @@ StencilPoints: [
 		}
 	}
 );
-dojox.drawing.register({
+
+dojo.setObject("dojox.drawing.stencil.Text", Text);
+registry.register({
 	name:"dojox.drawing.stencil.Text"
 }, "stencil");
+return Text;
+});

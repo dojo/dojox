@@ -1,6 +1,5 @@
-dojo.provide("dojox.drawing.manager.keys");
-
-(function(){
+define(["dojo", "../util/common"], 
+function(dojo, utilCommon){
 	
 	// Ref: isEdit allows events to happen in Drawing, like TextBlocks
 	var isEdit = false;
@@ -10,7 +9,8 @@ dojo.provide("dojox.drawing.manager.keys");
 	
 	var alphabet = "abcdefghijklmnopqrstuvwxyz";
 	
-	dojox.drawing.manager.keys = {
+	//dojox.drawing.manager.keys = 
+	var keys = {
 		// summary:
 		//		A singleton, master object that detects
 		//		keyboard keys and events
@@ -83,7 +83,7 @@ dojo.provide("dojox.drawing.manager.keys");
 			//		NOTE: Not really used in code, but should work.
 			//		See manager.mouse for similar usage
 			//
-			var _handle = dojox.drawing.util.common.uid("listener");
+			var _handle = utilCommon.uid("listener");
 			this.listeners.push({
 				handle:_handle,
 				scope: options.scope || window,
@@ -260,5 +260,6 @@ dojo.provide("dojox.drawing.manager.keys");
 			});
 		}
 	};
-	dojo.addOnLoad(dojox.drawing.manager.keys, "init");
-})();
+	dojo.addOnLoad(keys, "init");
+	return keys;
+});

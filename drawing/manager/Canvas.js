@@ -1,8 +1,8 @@
-dojo.provide("dojox.drawing.manager.Canvas");
+define(["dojo", "../util/oo", "dojox/gfx"], 
+function(dojo, oo, gfx){
 
-(function(){
-	
-	dojox.drawing.manager.Canvas = dojox.drawing.util.oo.declare(
+	//dojox.drawing.manager.Canvas = 
+	return oo.declare(
 		// summary:
 		//		Creates a dojox.gfx.surface to be used for Drawing. Note that
 		//		The 'surface' that Drawing uses is actually a dojox.gfx.group.
@@ -30,13 +30,13 @@ dojo.provide("dojox.drawing.manager.Canvas");
 			this.id = this.id || this.util.uid("surface");
 			
 			console.info("create canvas");
-			this.gfxSurface = dojox.gfx.createSurface(this.domNode, this.width, this.height);
+			this.gfxSurface = gfx.createSurface(this.domNode, this.width, this.height);
 			this.gfxSurface.whenLoaded(this, function(){
 				setTimeout(dojo.hitch(this, function(){
 					this.surfaceReady = true;
 					if(dojo.isIE){
 						//this.gfxSurface.rawNode.parentNode.id = this.id;
-					}else if(dojox.gfx.renderer == "silverlight"){
+					}else if(gfx.renderer == "silverlight"){
 						this.id = this.domNode.firstChild.id
 					}else{
 						//this.gfxSurface.rawNode.id = this.id;
@@ -158,4 +158,4 @@ dojo.provide("dojox.drawing.manager.Canvas");
 		}
 	);
 	
-})();
+});

@@ -1,4 +1,5 @@
-dojo.provide("dojox.drawing.stencil.Ellipse");
+define(["dojo/_base/lang", "../util/oo", "./_Base", "../manager/_registry"], 
+function(lang, oo, Base, registry){
 
 /*=====
 __StencilData = {
@@ -21,11 +22,11 @@ __StencilData = {
 }
 =====*/
 
-dojox.drawing.stencil.Ellipse = dojox.drawing.util.oo.declare(
+var Ellipse = oo.declare(
 	// summary:
 	//		Creates a dojox.gfx Ellipse based on data or points provided.
 	//
-	dojox.drawing.stencil._Base,
+	Base,
 	function(options){
 		// summary:
 		//		constructor
@@ -95,6 +96,10 @@ dojox.drawing.stencil.Ellipse = dojox.drawing.util.oo.declare(
 	}
 );
 
-dojox.drawing.register({
+lang.setObject("dojox.drawing.stencil.Ellipse", Ellipse);
+registry.register({
 	name:"dojox.drawing.stencil.Ellipse"
 }, "stencil");
+
+return Ellipse;
+});

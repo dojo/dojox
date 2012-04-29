@@ -1,9 +1,11 @@
-dojo.provide("dojox.drawing.tools.Line");
+define(["dojo/_base/lang", "../util/oo", "../manager/_registry", "../stencil/Line"],
+function(lang, oo, registry, StencilLine){
 
-dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
+//dojox.drawing.tools.Line 
+var Line = oo.declare(
 	// summary:
 	//		Class for a drawable Line
-	dojox.drawing.stencil.Line,
+	StencilLine,
 	function(){
 		// summary: constructor
 	},
@@ -107,7 +109,8 @@ dojox.drawing.tools.Line = dojox.drawing.util.oo.declare(
 	}
 );
 
-dojox.drawing.tools.Line.setup = {
+lang.setObject("dojox.drawing.tools.Line", Line);
+Line.setup = {
 	// summary: See stencil._Base ToolsSetup
 	//
 	name:"dojox.drawing.tools.Line",
@@ -115,4 +118,7 @@ dojox.drawing.tools.Line.setup = {
 	iconClass:"iconLine"
 };
 
-dojox.drawing.register(dojox.drawing.tools.Line.setup, "tool");
+registry.register(Line.setup, "tool");
+
+return Line;
+});

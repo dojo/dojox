@@ -1,8 +1,7 @@
-dojo.provide("dojox.drawing.tools.custom.Vector");
-dojo.require("dojox.drawing.tools.Arrow");
-dojo.require("dojox.drawing.util.positioning");
+define(["dojo", "../../util/oo", "../../manager/_registry", "../../util/positioning", "../Arrow"],
+function(dojo, oo, registry, positioning, Arrow){
 
-dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
+var Vector = oo.declare(
 	// summary:
 	//		Creates a Vector Stencil.
 	// description:
@@ -11,7 +10,7 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 	//		to allow for a 'zero vector' - one with no length.
 	//
 	//
-	dojox.drawing.tools.Arrow,
+	Arrow,
 	function(options){
 		this.minimumSize = this.style.arrows.length;
 		this.addShadow({size:3, mult:2});
@@ -163,7 +162,7 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 				};
 			}
 			var radius = this.util.length(obj);
-			var angle = this.util.angle(obj);
+			var angle = positioning.angle(obj);
 			angle<0 ? angle = 360 + angle : angle;
 			
 			angle = angle > 135 && angle < 315 ? this.style.zAngle : this.util.oppAngle(this.style.zAngle);
@@ -179,7 +178,7 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 			var obj = {start:{x:p[0].x, y:p[0].y}, x:p[1].x, y:p[1].y};
 			if(this.style.zAxis && (this.util.length(obj)>this.minimumSize)){
 				
-				var angle = this.util.angle(obj);
+				var angle = positioning.angle(obj);
 				angle<0 ? angle = 360 + angle : angle;
 				cosphi = angle > 135 && angle < 315 ? 1 : -1;
 			}
@@ -281,7 +280,8 @@ dojox.drawing.tools.custom.Vector = dojox.drawing.util.oo.declare(
 	
 );
 
-dojox.drawing.tools.custom.Vector.setup = {
+dojo.setObject("dojox.drawing.tools.custom.Vector", Vector);
+Vector.setup = {
 	// summary: See stencil._Base ToolsSetup
 	//
 	name:"dojox.drawing.tools.custom.Vector",
@@ -289,7 +289,8 @@ dojox.drawing.tools.custom.Vector.setup = {
 	iconClass:"iconVector"
 };
 
-if(dojox.drawing.defaults.zAxisEnabled){
+//TODO
+if(0 && dojox.drawing.defaults.zAxisEnabled){
 	dojox.drawing.tools.custom.Vector.setup.secondary = {
 		// summary:
 		//		Creates a secondary tool for the Vector Stencil.
@@ -385,4 +386,6 @@ if(dojox.drawing.defaults.zAxisEnabled){
 		}
 	};
 }
-dojox.drawing.register(dojox.drawing.tools.custom.Vector.setup, "tool");
+registry.register(Vector.setup, "tool");
+return Vector;
+});

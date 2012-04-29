@@ -1,10 +1,12 @@
-dojo.provide("dojox.drawing.tools.Pencil");
+define(["dojo/_base/lang", "../util/oo", "../manager/_registry", "../stencil/Path"],
+function(lang, oo, registry, StencilPath){
 
-dojox.drawing.tools.Pencil = dojox.drawing.util.oo.declare(
+//dojox.drawing.tools.Pencil 
+var Pencil = oo.declare(
 	// summary:
 	//		Class for a drawable, continous Path
 	//
-	dojox.drawing.stencil.Path,
+	StencilPath,
 	function(){
 		// summary: constructor
 		this._started = false;
@@ -72,7 +74,8 @@ dojox.drawing.tools.Pencil = dojox.drawing.util.oo.declare(
 	}
 );
 
-dojox.drawing.tools.Pencil.setup = {
+lang.setObject("dojox.drawing.tools.Pencil", Pencil);
+Pencil.setup = {
 	// summary: See Base ToolsSetup
 	//
 	name:"dojox.drawing.tools.Pencil",
@@ -80,4 +83,7 @@ dojox.drawing.tools.Pencil.setup = {
 	iconClass:"iconLine"
 };
 
-dojox.drawing.register(dojox.drawing.tools.Pencil.setup, "tool");
+registry.register(Pencil.setup, "tool");
+
+return Pencil;
+});

@@ -1,7 +1,7 @@
-dojo.provide("dojox.drawing.annotations.Label");
-dojo.require("dojox.drawing.stencil.Text");
+define(["exports", "dojo/_base/lang", "../util/oo", "../stencil/Text"],
+function(exports, lang, oo, Text){
 
-dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
+exports.Label = oo.declare(
 	// summary:
 	// 	An annotation called internally to label an Stencil.
 	// description:
@@ -9,7 +9,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 	//	That method should be overwritten for custom placement. Or,
 	//	add a 'setLabelCustom' method to the Stencil and it will be used.
 	//
-	dojox.drawing.stencil.Text,
+	Text,
 	function(/*Object*/options){
 		// arguments:
 		//	options: Object
@@ -17,7 +17,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 		//
 		this.master = options.stencil;
 		this.labelPosition = options.labelPosition || "BR"; // TL, TR, BR, BL, or function
-		if(dojo.isFunction(this.labelPosition)){
+		if(lang.isFunction(this.labelPosition)){
 			this.setLabel = this.setLabelCustom;
 		}
 		this.setLabel(options.text || "");
@@ -35,7 +35,7 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 			// summary:
 			//	Attaches to custom positioning within a Stencil
 			//
-			var d = dojo.hitch(this.master, this.labelPosition)();
+			var d = lang.hitch(this.master, this.labelPosition)();
 			this.setData({
 				x:d.x,
 				y:d.y,
@@ -110,3 +110,4 @@ dojox.drawing.annotations.Label = dojox.drawing.util.oo.declare(
 	}
 
 );
+});

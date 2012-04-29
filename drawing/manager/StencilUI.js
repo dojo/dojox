@@ -1,8 +1,8 @@
-dojo.provide("dojox.drawing.manager.StencilUI");
-
-(function(){
+define(["dojo", "../util/oo"],//, "../defaults"], 
+function(dojo, oo){
 	var surface, surfaceNode;
-	dojox.drawing.manager.StencilUI = dojox.drawing.util.oo.declare(
+	//dojox.drawing.manager.StencilUI = 
+	return oo.declare(
 		// summary:
 		//		Used for handling Stencils as UI components.
 		// description:
@@ -17,7 +17,7 @@ dojo.provide("dojox.drawing.manager.StencilUI");
 			surface = options.surface;
 			this.canvas = options.canvas;
 			
-			this.defaults = dojox.drawing.defaults.copy();
+			//this.defaults = defaults.copy();
 			this.mouse = options.mouse;
 			this.keys = options.keys;
 			this._mouseHandle = this.mouse.register(this);
@@ -62,4 +62,4 @@ dojo.provide("dojox.drawing.manager.StencilUI");
 		}
 	);
 	
-})();
+});

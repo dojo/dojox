@@ -1,5 +1,4 @@
-dojo.provide("dojox.drawing.util.typeset");
-dojo.require("dojox.drawing.library.greek");
+define(["../library/greek"], function(greeks){
 // Summary:
 //		Singleton used for converting characters and typsetting.  Required by _base.
 //
@@ -9,11 +8,9 @@ dojo.require("dojox.drawing.library.greek");
 //		canvas.  For now, we just generate Greek letters based on LaTeX style
 //		entity codes.
 
-(function(){
 	
-	var greeks = dojox.drawing.library.greek;
-	
-	dojox.drawing.util.typeset = {
+	//dojox.drawing.util.typeset = 
+	return {
 
 		convertHTML: function(inText){
 			if(inText){
@@ -64,4 +61,4 @@ dojo.require("dojox.drawing.library.greek");
 
 	};
 
-})();
+});

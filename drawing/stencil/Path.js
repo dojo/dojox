@@ -1,13 +1,12 @@
-dojo.provide("dojox.drawing.stencil.Path");
-
-
-dojox.drawing.stencil.Path = dojox.drawing.util.oo.declare(
+define(["dojo", "dojo/_base/array", "../util/oo", "./_Base", "../manager/_registry"], 
+function(lang, array, oo, Base, registry){
+//console.log('base is', lang.isFunction(Base));
+var Path = oo.declare(
 	// summary:
 	//		Creates a dojox.gfx Path based on points provided.
 	//
-	dojox.drawing.stencil._Base,
+	Base,
 	function(options){
-		dojo.disconnect(this._postRenderCon);
 	},
 	{
 		type:"dojox.drawing.stencil.Path",
@@ -44,7 +43,7 @@ StencilPoints: [
 				// In order to avoid the Safari d="" errors,
 				// we'll need to build a string and set that.
 				var strAr = [];
-				dojo.forEach(this.points, function(o, i){
+				array.forEach(this.points, function(o, i){
 					if(!o.skip){
 						if(i==0){
 							strAr.push("M " + o.x +" "+ o.y);
@@ -73,7 +72,7 @@ StencilPoints: [
 				
 				this.closePath && this[shp].setFill(sty.fill);
 				
-				dojo.forEach(this.points, function(o, i){
+				array.forEach(this.points, function(o, i){
 					if(!o.skip){
 						if(i==0 || o.t=="M"){
 							this[shp].moveTo(o.x, o.y);
@@ -110,7 +109,7 @@ StencilPoints: [
 			//	Overwriting _Base.getBounds. Not sure how absolute should
 			//	work for a path.
 			var minx = 10000, miny = 10000, maxx = 0, maxy = 0;
-			dojo.forEach(this.points, function(p){
+			array.forEach(this.points, function(p){
 				if(p.x!==undefined && !isNaN(p.x)){
 					minx = Math.min(minx, p.x);
 					miny = Math.min(miny, p.y);
@@ -164,6 +163,10 @@ StencilPoints: [
 	}
 );
 
-dojox.drawing.register({
+lang.setObject("dojox.drawing.stencil.Path", Path);
+registry.register({
 	name:"dojox.drawing.stencil.Path"
 }, "stencil");
+
+return Path;
+});

@@ -1,5 +1,6 @@
-dojo.provide("dojox.drawing.stencil._Base");
-dojo.require("dojo.fx.easing");
+define(["dojo", "dojo/fx/easing", "../util/oo", "../annotations/BoxShadow", 
+  "../annotations/Angle", "../annotations/Label", "../defaults"], 
+function(dojo, easing, oo, BoxShadow, Angle, LabelExports, defaults){
 
 /*=====
 StencilArgs = {
@@ -138,7 +139,7 @@ ToolsSetup = {
 }
 =====*/
 
-dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
+var Base = oo.declare(
 	// summary:
 	//		The base class used for all Stencils.
 	// description:
@@ -149,7 +150,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 		//console.log("______Base", this.type, options)
 		// clone style so changes are reflected in future shapes
 		dojo.mixin(this, options);
-		this.style = options.style || dojox.drawing.defaults.copy();
+		this.style = options.style || defaults.copy();
 		if(options.stencil){
 			this.stencil = options.stencil;
 			this.util = options.stencil.util;
@@ -264,7 +265,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			this._postRenderCon = dojo.connect(this, "render", this, "_onPostRender");
 		}
 		if(this.showAngle){
-			this.angleLabel = new dojox.drawing.annotations.Angle({stencil:this});
+			this.angleLabel = new Angle({stencil:this});
 		}
 
 		if(!this.enabled){
@@ -416,7 +417,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			console.warn("ANIMATE..........................")
 			var d = 	options.d || options.duration || 1000;
 			var ms = 	options.ms || 20;
-			var ease = 	options.ease || dojo.fx.easing.linear;
+			var ease = 	options.ease || easing.linear;
 			var steps = options.steps;
 			var ts = 	new Date().getTime();
 			var w = 	100;
@@ -831,7 +832,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 		addShadow: function(/*Object*/args){
 			args = args===true ? {} : args;
 			args.stencil = this;
-			this.shadow = new dojox.drawing.annotations.BoxShadow(args);
+			this.shadow = new BoxShadow(args);
 		},
 
 		removeShadow: function(){
@@ -849,7 +850,7 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 			//			The text to set as the label.
 			//
 			if(!this._label){
-				this._label = new dojox.drawing.annotations.Label({
+				this._label = new LabelExports.Label({
 					text:text,
 					util:this.util,
 					mouse:this.mouse,
@@ -1204,4 +1205,6 @@ dojox.drawing.stencil._Base = dojox.drawing.util.oo.declare(
 		}
 	}
 );
-
+dojo.setObject("dojox.drawing.stencil._Base", Base);
+return Base;
+});

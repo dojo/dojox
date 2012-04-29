@@ -1,7 +1,5 @@
-dojo.provide("dojox.drawing.plugins.tools.Zoom");
-dojo.require("dojox.drawing.plugins._Plugin");
-
-(function(){
+define(["dojo/_base/lang", "../../util/oo", "../_Plugin", "../../manager/_registry"],
+function(lang, oo, Plugin, registry){
 	//
 	// 	zoomInc: Float
 	//		The amount of zoom that will occur upon each click.
@@ -17,13 +15,17 @@ dojo.require("dojox.drawing.plugins._Plugin");
 	//
 	//	zoomFactor: [readonly] Float
 	//		The current zoom amount
-	zoomFactor = 1,
+	zoomFactor = 1, 
+	dt;
 	
+	if(!lang.getObject('dojox.drawing.plugins.tools')){
+		lang.setObject('dojox.drawing.plugins.tools', {});
+	}
 	dt = dojox.drawing.plugins.tools;
 	
-	dt.ZoomIn = dojox.drawing.util.oo.declare(
+	dt.ZoomIn = oo.declare(
 		// summary:
-		dojox.drawing.plugins._Plugin,
+		Plugin,
 		function(options){
 			
 		},
@@ -44,9 +46,9 @@ dojo.require("dojox.drawing.plugins._Plugin");
 		}
 	);
 	
-	dt.Zoom100 = dojox.drawing.util.oo.declare(
+	dt.Zoom100 = oo.declare(
 		// summary:
-		dojox.drawing.plugins._Plugin,
+		Plugin,
 		function(options){
 			
 		},
@@ -66,9 +68,9 @@ dojo.require("dojox.drawing.plugins._Plugin");
 		}
 	);
 	
-	dt.ZoomOut = dojox.drawing.util.oo.declare(
+	dt.ZoomOut = oo.declare(
 		// summary:
-		dojox.drawing.plugins._Plugin,
+		Plugin,
 		function(options){
 			
 		},
@@ -94,18 +96,20 @@ dojo.require("dojox.drawing.plugins._Plugin");
 		name:"dojox.drawing.plugins.tools.ZoomIn",
 		tooltip:"Zoom In"
 	};
-	dojox.drawing.register(dt.ZoomIn.setup, "plugin");
+	registry.register(dt.ZoomIn.setup, "plugin");
 	
 	dt.Zoom100.setup = {
 		name:"dojox.drawing.plugins.tools.Zoom100",
 		tooltip:"Zoom to 100%"
 	};
-	dojox.drawing.register(dt.Zoom100.setup, "plugin");
+	registry.register(dt.Zoom100.setup, "plugin");
 	
 	dt.ZoomOut.setup = {
 		name:"dojox.drawing.plugins.tools.ZoomOut",
 		tooltip:"Zoom In"
 	};
-	dojox.drawing.register(dt.ZoomOut.setup, "plugin");
+	registry.register(dt.ZoomOut.setup, "plugin");
 
-})();
+	return dt;
+
+});

@@ -1,6 +1,7 @@
-dojo.provide("dojox.drawing.annotations.BoxShadow");
+define(["dojo", "dojo/_base/Color", "../util/oo"], 
+function(dojo, Color, oo){
 
-dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
+return oo.declare(
 	// summary:
 	//		Creates a box shadow under solid objects. Can change the
 	//		shadow direction, color, size, and intensity. Can center
@@ -56,7 +57,7 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 		
 		delete options.stencil;
 		this.options = dojo.mixin(shadowDefaults, options);
-		this.options.color = new dojo.Color(this.options.color)
+		this.options.color = new Color(this.options.color)
 		this.options.color.a = this.options.alpha;
 		switch(this.stencil.shortType){
 			case "image":
@@ -305,3 +306,5 @@ dojox.drawing.annotations.BoxShadow = dojox.drawing.util.oo.declare(
 		}
 	}
 );
+
+});

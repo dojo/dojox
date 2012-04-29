@@ -1,7 +1,6 @@
-dojo.provide("dojox.drawing.tools.TextBlock");
-dojo.require("dojox.drawing.stencil.Text");
+define(["dojo", "dijit/registry", "../util/oo", "../manager/_registry", "../stencil/Text"],
+function(dojo, dijit, oo, registry, StencilText){
 
-(function(){
 	var conEdit;
 	dojo.addOnLoad(function(){
 		//		In order to use VML in IE, it's necessary to remove the
@@ -20,7 +19,7 @@ dojo.require("dojox.drawing.stencil.Text");
 		}
 	});
 	
-	dojox.drawing.tools.TextBlock = dojox.drawing.util.oo.declare(
+	var TextBlock = oo.declare(
 		// summary:
 		//		A tool to create text fields on a canvas.
 		// description:
@@ -38,7 +37,7 @@ dojo.require("dojox.drawing.stencil.Text");
 		//		Handles width: auto, align:middle, etc. but for
 		//		display only, edit is out of whack
 		//
-		dojox.drawing.stencil.Text,
+		StencilText,
 		function(options){
 			// summary: constructor
 			//
@@ -691,7 +690,6 @@ StencilData: {
 				//
 				var start, end;
 				if(dojo.doc.selection){
-					//debugger;
 					var r = dojo.doc.selection.createRange();
 					var rs = dojo.body().createTextRange();
 					rs.moveToElementText(node);
@@ -716,7 +714,6 @@ StencilData: {
 				//
 				console.warn("setSelection:");
 				if(dojo.doc.selection){ // IE
-					//debugger;
 					var rs = dojo.body().createTextRange();
 					rs.moveToElementText(node);
 					
@@ -790,14 +787,15 @@ StencilData: {
 			}
 		}
 	);
-	
-	dojox.drawing.tools.TextBlock.setup = {
+	dojo.setObject("dojox.drawing.tools.TextBlock", TextBlock);
+	TextBlock.setup = {
 		// summary: See stencil._Base ToolsSetup
 		//
 		name:"dojox.drawing.tools.TextBlock",
 		tooltip:"Text Tool",
 		iconClass:"iconText"
 	};
-	dojox.drawing.register(dojox.drawing.tools.TextBlock.setup, "tool");
-	
-})();
+	registry.register(TextBlock.setup, "tool");
+
+	return TextBlock;
+});

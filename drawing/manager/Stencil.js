@@ -1,8 +1,9 @@
-dojo.provide("dojox.drawing.manager.Stencil");
+define(["dojo", "../util/oo", "../defaults"], 
+function(dojo, oo, defaults){
 
-(function(){
 	var surface, surfaceNode;
-	dojox.drawing.manager.Stencil = dojox.drawing.util.oo.declare(
+	//dojox.drawing.manager.Stencil = 
+	return oo.declare(
 		// summary:
 		//		The main class for tracking Stencils that are cretaed, added,
 		//		selected, or deleted. Also handles selections, multiple
@@ -18,7 +19,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 			surface = options.surface;
 			this.canvas = options.canvas;
 			
-			this.defaults = dojox.drawing.defaults.copy();
+			//this.defaults = defaults.copy();
 			this.undo = options.undo;
 			this.mouse = options.mouse;
 			this.keys = options.keys;
@@ -498,7 +499,7 @@ dojo.provide("dojox.drawing.manager.Stencil");
 					var x = obj.x - obj.last.x,
 						y = obj.y - obj.last.y,
 						c = this.constrain,
-						mz = this.defaults.anchors.marginZero;
+						mz = defaults.anchors.marginZero;
 					
 					
 					x = obj.x - this._offx;
@@ -637,4 +638,4 @@ dojo.provide("dojox.drawing.manager.Stencil");
 		}
 		
 	);
-})();
+});

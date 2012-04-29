@@ -1,10 +1,8 @@
-dojo.provide("dojox.drawing.Drawing");
-
-(function(){
-
-	var _plugsInitialized = false;
-
-	dojo.declare("dojox.drawing.Drawing", [], {
+define(["dojo", "./defaults", "./manager/_registry", "./manager/keys", "./manager/Mouse",
+"./manager/Canvas","./manager/Undo","./manager/Anchors","./manager/Stencil","./manager/StencilUI",
+  "./util/common"], 
+function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, StencilUI, utilCommon){
+	return dojo.declare("dojox.drawing.Drawing", [], {
 		// summary:
 		//		Drawing is a project that sits on top of DojoX GFX and uses SVG and
 		//		VML vector graphics to draw and display.
@@ -109,21 +107,16 @@ dojo.provide("dojox.drawing.Drawing");
 			//			Will change when Drawing can be created programmatically.
 			//
 			var def = dojo.attr(node, "defaults");
-			if(def){
-				dojox.drawing.defaults =  dojo.getObject(def);
-			}
-			this.defaults =  dojox.drawing.defaults;
+			this.defaults =  def ? (typeof def === 'string' ? dojo.getObject(def) : def) : defaults;
 
 			this.id = node.id;
-			dojox.drawing.register(this, "drawing");
+			registry.register(this, "drawing");
 			this.mode = (props.mode || dojo.attr(node, "mode") || "").toLowerCase();
 			var box = dojo.contentBox(node);
 			this.width = box.w;
 			this.height = box.h;
-			this.util = dojox.drawing.util.common;
-			this.util.register(this); // So Toolbar can find this Drawing DEPRECATED
-			this.keys = dojox.drawing.manager.keys;
-			this.mouse = new dojox.drawing.manager.Mouse({util:this.util, keys:this.keys, id:this.mode=="ui"?"MUI":"mse"});
+			utilCommon.register(this); // So Toolbar can find this Drawing DEPRECATED
+			this.mouse = new Mouse({util:utilCommon, keys:keys, id:this.mode=="ui"?"MUI":"mse"});
 			this.mouse.setEventMode(this.mode);
 
 			this.tools = {};
@@ -159,15 +152,15 @@ dojo.provide("dojox.drawing.Drawing");
 				dijit.registry.add(this);
 			}
 
-			var stencils = dojox.drawing.getRegistered("stencil");
+			var stencils = registry.getRegistered("stencil");
 			for(var nm in stencils){
 				this.registerTool(stencils[nm].name);
 			}
-			var tools = dojox.drawing.getRegistered("tool");
+			var tools = registry.getRegistered("tool");
 			for(nm in tools){
 				this.registerTool(tools[nm].name);
 			}
-			var plugs = dojox.drawing.getRegistered("plugin");
+			var plugs = registry.getRegistered("plugin");
 			for(nm in plugs){
 				this.registerTool(plugs[nm].name);
 			}
@@ -177,9 +170,9 @@ dojo.provide("dojox.drawing.Drawing");
 
 		_createCanvas: function(){
 			console.info("drawing create canvas...");
-			this.canvas = new dojox.drawing.manager.Canvas({
+			this.canvas = new Canvas({
 				srcRefNode:this.domNode,
-				util:this.util,
+				util:utilCommon,
 				mouse:this.mouse,
 				callback: dojo.hitch(this, "onSurfaceReady")
 			});
@@ -216,8 +209,8 @@ dojo.provide("dojox.drawing.Drawing");
 			var ui = this.mode=="ui" || mode=="ui";
 			return dojo.mixin({
 				container: ui && !surface ? this.canvas.overlay.createGroup() : this.canvas.surface.createGroup(),
-				util:this.util,
-				keys:this.keys,
+				util:utilCommon,
+				keys:keys,
 				mouse:this.mouse,
 				drawing:this,
 				drawingType: ui && !surface ? "ui" : "stencil",
@@ -249,8 +242,8 @@ dojo.provide("dojox.drawing.Drawing");
 			}
 			dojo.forEach(this.plugins, function(p, i){
 				var props = dojo.mixin({
-					util:this.util,
-					keys:this.keys,
+					util:utilCommon,
+					keys:keys,
 					mouse:this.mouse,
 					drawing:this,
 					stencils:this.stencils,
@@ -266,7 +259,6 @@ dojo.provide("dojox.drawing.Drawing");
 				}
 			}, this);
 			this.plugins = [];
-			_plugsInitialized = true;
 			// In IE, because the timing is different we have to get the
 			// canvas position after everything has drawn. *sigh*
 			this.mouse.setCanvas();
@@ -280,17 +272,17 @@ dojo.provide("dojox.drawing.Drawing");
 			this.ready = true;
 			//console.info("Surface ready")
 			this.mouse.init(this.canvas.domNode);
-			this.undo = new dojox.drawing.manager.Undo({keys:this.keys});
-			this.anchors = new dojox.drawing.manager.Anchors({drawing:this, mouse:this.mouse, undo:this.undo, util:this.util});
+			this.undo = new Undo({keys:keys});
+			this.anchors = new Anchors({drawing:this, mouse:this.mouse, undo:this.undo, util:utilCommon});
 			if(this.mode == "ui"){
-				this.uiStencils = new dojox.drawing.manager.StencilUI({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, keys:this.keys});
+				this.uiStencils = new StencilUI({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, keys:keys});
 			}else{
-				this.stencils = new dojox.drawing.manager.Stencil({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, undo:this.undo, keys:this.keys, anchors:this.anchors});
-				this.uiStencils = new dojox.drawing.manager.StencilUI({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, keys:this.keys});
+				this.stencils = new Stencil({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, undo:this.undo, keys:keys, anchors:this.anchors});
+				this.uiStencils = new StencilUI({canvas:this.canvas, surface:this.canvas.surface, mouse:this.mouse, keys:keys});
 			}
 			if(dojox.gfx.renderer=="silverlight"){
 				try{
-				new dojox.drawing.plugins.drawing.Silverlight({util:this.util, mouse:this.mouse, stencils:this.stencils, anchors:this.anchors, canvas:this.canvas});
+				new dojox.drawing.plugins.drawing.Silverlight({util:utilCommon, mouse:this.mouse, stencils:this.stencils, anchors:this.anchors, canvas:this.canvas});
 				}catch(e){
 					throw new Error("Attempted to install the Silverlight plugin, but it was not found.");
 				}
@@ -496,7 +488,7 @@ dojo.provide("dojox.drawing.Drawing");
 			var constr = dojo.getObject(type);
 			//console.log("constr:", type)
 			this.tools[type] = constr;
-			var abbr = this.util.abbr(type);
+			var abbr = utilCommon.abbr(type);
 			this.stencilTypes[abbr] = constr;
 			this.stencilTypeMap[abbr] = type;
 		},
@@ -530,7 +522,7 @@ dojo.provide("dojox.drawing.Drawing");
 			//console.log("new tool arg:", type, "curr:", this.currentType, "mode:", this.mode, "tools:", this.tools)
 
 			try{
-				this.currentStencil = new this.tools[this.currentType]({container:this.canvas.surface.createGroup(), util:this.util, mouse:this.mouse, keys:this.keys});
+				this.currentStencil = new this.tools[this.currentType]({container:this.canvas.surface.createGroup(), util:utilCommon, mouse:this.mouse, keys:keys});
 				console.log("new tool is:", this.currentStencil.id, this.currentStencil);
 				if(this.defaults.clickMode){ this.defaults.clickable = false; }
 				this.currentStencil.connect(this.currentStencil, "onRender", this, "onRenderStencil");
@@ -563,4 +555,4 @@ dojo.provide("dojox.drawing.Drawing");
 		}
 	});
 
-})();
+});

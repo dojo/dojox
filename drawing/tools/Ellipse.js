@@ -1,10 +1,12 @@
-dojo.provide("dojox.drawing.tools.Ellipse");
+define(["dojo/_base/lang", "../util/oo", "../manager/_registry", "../stencil/Ellipse"],
+function(lang, oo, registry, StencilEllipse){
 
-dojox.drawing.tools.Ellipse = dojox.drawing.util.oo.declare(
+//dojox.drawing.tools.Ellipse = 
+var Ellipse = oo.declare(
 	// summary:
 	//		A drawable Ellipse.
 	//
-	dojox.drawing.stencil.Ellipse,
+	StencilEllipse,
 	function(){
 		// summary: constructor
 	},
@@ -68,7 +70,8 @@ dojox.drawing.tools.Ellipse = dojox.drawing.util.oo.declare(
 	}
 );
 
-dojox.drawing.tools.Ellipse.setup = {
+lang.setObject("dojox.drawing.tools.Ellipse", Ellipse);
+Ellipse.setup = {
 	// summary: See stencil._Base ToolsSetup
 	//
 	name:"dojox.drawing.tools.Ellipse",
@@ -76,4 +79,7 @@ dojox.drawing.tools.Ellipse.setup = {
 	iconClass:"iconEllipse"
 };
 
-dojox.drawing.register(dojox.drawing.tools.Ellipse.setup, "tool");
+registry.register(Ellipse.setup, "tool");
+
+return Ellipse;
+});

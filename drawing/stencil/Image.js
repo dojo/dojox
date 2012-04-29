@@ -1,12 +1,12 @@
-dojo.provide("dojox.drawing.stencil.Image");
+define(["dojo", "../util/oo", "./_Base", "../manager/_registry"], 
+function(dojo, oo, Base, registry){
 
-
-dojox.drawing.stencil.Image = dojox.drawing.util.oo.declare(
+var Image = oo.declare(
 	// summary:
 	//		Creates an dojox.gfx Image based on the data
 	//		provided.
 	//
-	dojox.drawing.stencil._Base,
+	Base,
 	function(options){
 		// summary:
 		//		constructor
@@ -149,7 +149,10 @@ StencilPoints: [
 	}
 );
 
-
-dojox.drawing.register({
+dojo.setObject("dojox.drawing.stencil.Image", Image);
+registry.register({
 	name:"dojox.drawing.stencil.Image"
 }, "stencil");
+
+return Image;
+});

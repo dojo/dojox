@@ -1,7 +1,7 @@
-dojo.provide("dojox.drawing.plugins.drawing.Grid");
-dojo.require("dojox.drawing.plugins._Plugin");
+define(["dojo", "../../util/oo", "../_Plugin"],
+function(dojo, oo, Plugin){
 
-dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
+var Grid = oo.declare(
 	// summary:
 	//		Plugin that displays a grid on the Drawing canvas.
 	// example:
@@ -9,7 +9,7 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 	//		|		plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:50}}]">
 	//		|	</div>
 	//
-	dojox.drawing.plugins._Plugin,
+	Plugin,
 	function(options){
 		if(options.gap){
 			this.major = options.gap;
@@ -96,3 +96,7 @@ dojox.drawing.plugins.drawing.Grid = dojox.drawing.util.oo.declare(
 		}
 	}
 );
+
+dojo.setObject("dojox.drawing.plugins.drawing.Grid", Grid);
+return Grid;
+});
