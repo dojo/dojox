@@ -145,7 +145,7 @@ var tests = [
 	{ url: "test_Rating-setter.html", tags: "Rating" },
 	{ url: "test_Rating.html", tags: "Rating" },
 	{ url: "test_RoundRect.html", tags: "RoundRect" },
-	{ url: "test_RoundRectCategory.html", tags: "RoundRect" },
+	{ url: "test_RoundRectCategory.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectDataList.html", tags: "RoundRectDataList" },
 	{ url: "test_RoundRectList-check.html", tags: "RoundRectList" },
 	{ url: "test_RoundRectList-editable-sv.html", tags: "RoundRectList" },
