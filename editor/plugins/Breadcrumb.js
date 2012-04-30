@@ -223,7 +223,7 @@ dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 				var range = sel.getRangeAt(0);
                 
 				// Check the getSelectedElement call.  Needed when dealing with img tags.
-				var node = ed._sCall("getSelectedElement") || range.startContainer;
+				var node = ed._sCall("getSelectedElement", []) || range.startContainer;
 				//var node = range.startContainer;
 				var bcList = [];
 
