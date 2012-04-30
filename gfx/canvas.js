@@ -827,7 +827,18 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 			img.src = url;
 		},
 		onImageLoad: function(){
-			if(!--this.pendingImageCount){ this._render(); }
+			if(!--this.pendingImageCount){
+				this.onImagesLoaded();
+				this._render();
+			}
+		},
+		onImagesLoaded: function(){
+			// summary:
+			//		An extension point called when all pending images downloads have been completed.
+			// description:
+			//		This method is invoked when all pending images downloads have been completed, just before
+			//		the gfx scene is redrawn. User can connect to this method to get notified when a
+			//		gfx scene containing images is fully resolved.
 		},
 
 		// events are not implemented
