@@ -16,7 +16,7 @@ return oo.declare(
 	},
 	{
 		onKeyDown: function(evt){
-			if(!evt.cmmd){ return; }
+			if(!evt.cmmd && !evt.ctrl){ return; }
 			
 			if(evt.keyCode==90 && !evt.shift){
 				this.undo();

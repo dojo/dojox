@@ -1,9 +1,7 @@
-dojo.provide("dojox.drawing.ui.dom.Toolbar");
+define(["dojo", "../../util/common"], function(dojo, commonUtil){
 dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 1.4 release.", 1.4);
 
-(function(){
-	
-	dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
+return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		// NOTE:
 		//			dojox.drawing.Toolbar is DEPRECATED.
 		//			The intention never was to use HTML as buttons for a Drawing.
@@ -138,11 +136,14 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 			//	children for tools and plugins.
 			//
 			var drawingId = dojo.attr(this.domNode, "drawingId");
-			this.drawing = dojox.drawing.util.common.byId(drawingId);
+			this.drawing = commonUtil.byId(drawingId);
 			!this.drawing && console.error("Drawing not found based on 'drawingId' in Toolbar. ");
 			this.toolNodes = {};
 			var _sel;
-			dojo.query(">", this.domNode).forEach(function(node, i){
+			dojo.forEach(this.domNode.childNodes, function(node, i){
+				if(node.nodeType!==1){
+					return;
+				}
 				node.className = this.buttonClass;
 				var tool = dojo.attr(node, "tool");
 				var action = dojo.attr(node, "action");
@@ -154,10 +155,6 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 					this.createTool(node);
 					
 				}else if(plugin){
-					
-					
-					
-					
 					var p = {name:plugin, options:{}},
 						opt = dojo.attr(node, "options");
 					if(opt){
@@ -165,12 +162,7 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 					}
 					p.options.node = node;
 					node.innerHTML = "";
-			this.drawing.addPlugin(p);
-					
-					
-					
-					
-					
+					this.drawing.addPlugin(p);
 					this.createIcon(node, dojo.getObject(dojo.attr(node, "plugin")));
 				}
 				
@@ -204,4 +196,4 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 		}
 	});
 	
-})();
+});

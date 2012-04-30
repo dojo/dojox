@@ -106,6 +106,7 @@ function(dojo, utilCommon){
 			evt.shift = this.shift;
 			evt.alt = this.alt;
 			evt.cmmd = this.cmmd;
+			evt.ctrl = this.ctrl;
 			evt.letter = this._getLetter(evt);
 			return evt;
 		},

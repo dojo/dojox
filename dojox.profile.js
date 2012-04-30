@@ -15,7 +15,6 @@ var profile = (function(){
 			"cometd",
 			"data/(demos|ItemExplorer|StoreExplorer|restListener)",
 			"drawing/plugins/drawing/Silverlight",
-			"drawing/ui/dom/(Zoom|Pan|Toolbar)",
 			"editor/plugins/(ResizeTableColumn|SpellCheck)",
 			"embed/(IE)",
 			"flash",

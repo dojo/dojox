@@ -1,7 +1,7 @@
-dojo.provide("dojox.drawing.ui.dom.Zoom");
-dojo.require("dojox.drawing.plugins._Plugin");
+define(["dojo", "../../util/oo", "../../plugins/_Plugin"], 
+function(dojo, oo, Plugin){
 
-dojox.drawing.ui.dom.Zoom = dojox.drawing.util.oo.declare(
+var Zoom = oo.declare(
 	// NOTE:
 	//			dojox.drawing.ui.dom.Zoom is DEPRECATED.
 	//			This was a temporary DOM solution. Use the non-dom
@@ -17,7 +17,7 @@ dojox.drawing.ui.dom.Zoom = dojox.drawing.util.oo.declare(
 	//		|		<div plugin="dojox.drawing.ui.dom.Zoom" options="{zoomInc:.1,minZoom:.5,maxZoom:2}">Zoom</div>
 	//		|	</div>
 	//
-	dojox.drawing.plugins._Plugin,
+	Plugin,
 	function(options){
 		var cls = options.node.className;
 		var txt = options.node.innerHTML;
@@ -124,6 +124,8 @@ dojox.drawing.ui.dom.Zoom = dojox.drawing.util.oo.declare(
 	}
 );
 
-
+dojo.setObject("dojox.drawing.ui.dom.Zoom", Zoom);
 //dojox.drawing.register(dojox.drawing.plugins.tools.Pan, "plugin");
 
+return Zoom;
+});
