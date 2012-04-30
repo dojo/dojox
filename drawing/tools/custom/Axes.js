@@ -28,7 +28,7 @@ var Axes = oo.declare(
 			this.data.cosphi = 1;
 			var ops = {};
 			lang.mixin(ops,options);
-			lang..mixin(ops,{
+			lang.mixin(ops,{
 				container:this.container.createGroup(),
 				style: this.style,
 				showAngle: false,
@@ -52,7 +52,7 @@ var Axes = oo.declare(
 				[this.zAxis, "onBeforeRender", this, "zSet"],
 				[this, "_onPostRender", this.zAxis, "render"]
 			]);
-			
+
 		}
 
 		if(this.points && this.points.length){
@@ -72,7 +72,7 @@ var Axes = oo.declare(
 		closePath:false,
 		baseRender:false,
 		zScale:.5,
-		
+
 		zPoint: function(obj){
 			// summary:
 			//		Finds the point for the z axis.
@@ -80,7 +80,7 @@ var Axes = oo.declare(
 			var pt = this.util.pointOnCircle(obj.start.x, obj.start.y, obj.radius*this.zScale, this.style.zAngle);
 			return {x:pt.x, y:pt.y, skip:true, noAnchor:true};
 		},
-		
+
 		zSet: function(){
 			if(!this.zAxis){ return; };
 			var c = this.points[1];
@@ -93,7 +93,7 @@ var Axes = oo.declare(
 			len > this.zAxis.minimumSize ? this.zAxis.setPoints(p) : false;
 			this.zAxis.cosphi = 1;
 		},
-		
+
 		createLabels: function(){
 			// summary:
 			//		Creates the label for each axis.
@@ -162,7 +162,7 @@ var Axes = oo.declare(
 			//
 			var c = this.points[1];
 			var z = this.points[3];
-			
+
 			var dist = 40;
 			var offdist = 20;
 			var pt, px, py, pt2;
@@ -170,7 +170,7 @@ var Axes = oo.declare(
 			px = pt.x + (pt.y - z.y);
 			py = pt.y + (z.x - pt.x);
 			pt2 = this.util.lineSub(pt.x, pt.y, px, py, (dist-offdist));
-			
+
 			return {
 				x:pt2.x,
 				y:pt2.y,
@@ -309,7 +309,7 @@ var Axes = oo.declare(
 			}
 
 			// we're outside of the constraint. Set to the low or high.
-			this.points[0].x = pt.x
+			this.points[0].x = pt.x;
 			this.points[0].y = pt.y;
 			o = this.points[0];
 
@@ -431,9 +431,9 @@ var Axes = oo.declare(
 				d.cosphi = 1;
 			}
 			return d;
-			
+
 		},
-		
+
 		getRadius: function(){
 			//summary:
 			//		Possibility of z-axis makes bounds unreliable.
