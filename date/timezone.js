@@ -30,11 +30,6 @@ define(["dojo", "dojo/date", "dojo/date/locale", "dojo/_base/array", "dojo/_base
 		_loadedRanges = {},
 		_rules = {};
 	
-	// timezoneFileBasePath: String
-	//		A different location to pull zone files from
-	var timezoneFileBasePath = cfg.timezoneFileBasePath ||
-								dojo.moduleUrl("dojox.date", "zoneinfo");
-	
 	// loadingScheme: String
 	//		One of "preloadAll", "lazyLoad" (Defaults "lazyLoad")
 	var loadingScheme = cfg.timezoneLoadingScheme || "preloadAll";
@@ -121,7 +116,7 @@ define(["dojo", "dojo/date", "dojo/date/locale", "dojo/_base/array", "dojo/_base
 		//		Using dojo.xhrGet?
 		_loadedZones[fileName] = true;
 		dojo.xhrGet({
-			url: timezoneFileBasePath + "/" + fileName,
+			url: require.toUrl((cfg.timezoneFileBasePath || "dojox/date/zoneinfo") + "/" + fileName),
 			sync: true, // Needs to be synchronous so we can return values
 			handleAs: "olson-zoneinfo",
 			load: loadZoneData,
