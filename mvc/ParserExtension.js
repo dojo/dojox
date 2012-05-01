@@ -27,22 +27,23 @@ define([
 			//		Find list of DOM nodes that has data-dojo-bind, but not data-dojo-type.
 			//		And add them to list of DOM nodes to instantiate widget (dojox/mvc/Element).
 
-			var list = oldScan.apply(this, lang._toArray(arguments)),
-			 dojoType = (options.scope || kernel._scopeName) + "Type",			// typically "dojoType"
-			 attrData = "data-" + (options.scope || kernel._scopeName) + "-",	// typically "data-dojo-"
-			 dataDojoType = attrData + "type";									// typically "data-dojo-type"
+			return oldScan.apply(this, lang._toArray(arguments)).then(function(list){
+				var dojoType = (options.scope || kernel._scopeName) + "Type",			// typically "dojoType"
+				 attrData = "data-" + (options.scope || kernel._scopeName) + "-",	// typically "data-dojo-"
+				 dataDojoType = attrData + "type";									// typically "data-dojo-type"
 
-			for(var nodes = has("dom-qsa") ? root.querySelectorAll("[" + _atBindingMixin.prototype.dataBindAttr + "]") : root.getElementsByTagName("*"), i = 0, l = nodes.length; i < l; i++){
-				var node = nodes[i], foundBindingInAttribs = false;
-				if(!node.getAttribute(dataDojoType) && !node.getAttribute(dojoType) && node.getAttribute(_atBindingMixin.prototype.dataBindAttr)){
-					list.push({
-						types: ["dojox/mvc/Element"],
-						node: node
-					});
+				for(var nodes = has("dom-qsa") ? root.querySelectorAll("[" + _atBindingMixin.prototype.dataBindAttr + "]") : root.getElementsByTagName("*"), i = 0, l = nodes.length; i < l; i++){
+					var node = nodes[i], foundBindingInAttribs = false;
+					if(!node.getAttribute(dataDojoType) && !node.getAttribute(dojoType) && node.getAttribute(_atBindingMixin.prototype.dataBindAttr)){
+						list.push({
+							types: ["dojox/mvc/Element"],
+							node: node
+						});
+					}
 				}
-			}
 
-			return list;
+				return list;
+			});
 		};
 	}
 
