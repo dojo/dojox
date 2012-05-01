@@ -44,7 +44,7 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 					BOTTOM: 4
 				},
 
-				templateString: '<div class="dojoxFisheyeListBar" dojoAttachPoint="containerNode"></div>',
+				templateString: '<div class="dojoxFisheyeListBar" data-dojo-attach-point="containerNode"></div>',
 
 				snarfChildDomOutput: true,
 
@@ -170,21 +170,22 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 					this._initializePositioning();
 
 					//
-					// in liberal trigger mode, activate menu whenever mouse is close
+					// in liberal trigger mode, activate menu whenever mouse is close, in conservative mode, pause until needed
 					//
-					if(!this.conservativeTrigger){
-						this._onMouseMoveHandle = this._adoptHandles(on.pausable(winUtil.doc.documentElement, "mousemove", lang.hitch(this, "_onMouseMove")))[0];
+					this._onMouseMoveHandle = on.pausable(winUtil.doc.documentElement, "mousemove", lang.hitch(this, "_onMouseMove"));
+					if(this.conservativeTrigger){
+						this._onMouseMoveHandle.pause();
 					}
 					if(this.isFixed){
 						this._adoptHandles(on(winUtil.doc,"scroll", lang.hitch(this, this._onScroll)));
 					}
 
 					// Deactivate the menu if mouse is moved off screen (doesn't work for FF?)
-                    this._adoptHandles(
-                        on(winUtil.doc.documentElement, mouse.leave, lang.hitch(this, "_onBodyOut")),
-                        aspect.after(this, "addChild", lang.hitch(this, "_initializePositioning"), true),
-                        aspect.after(winUtil.global, "onresize", lang.hitch(this, "_initializePositioning"), true)
-                    );
+					this._adoptHandles(
+						on(winUtil.doc.documentElement, mouse.leave, lang.hitch(this, "_onBodyOut")),
+						aspect.after(this, "addChild", lang.hitch(this, "_initializePositioning"), true),
+						aspect.after(winUtil.global, "onresize", lang.hitch(this, "_initializePositioning"), true)
+					);
 				},
 
 				_initializePositioning: function(){
