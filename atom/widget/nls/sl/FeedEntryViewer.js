@@ -7,7 +7,7 @@ define(
 	id: "ID",
 	close: "[zapri]",
 	updated: "Posodobljeno",
-	summary: "Povzetek",
+	summary: "Seštevek",
 	content: "Vsebina"
 })
 );

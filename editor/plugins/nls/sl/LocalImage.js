@@ -1,12 +1,12 @@
 define(
 ({
 	insertImageTitle: "Vstavi sliko",
-	url: "Slika ",
-	browse: "Prebrskaj ... ",
-	text: "Opis ",
-	set: "Vstavi ",
-	invalidMessage: "Neveljavna vrsta slikovne datoteke ",
-	prePopuTextUrl: "Vnesite URL slike",
-	prePopuTextBrowse: " ali prebrskajte in izberite lokalno datoteko. "
+	url: "Slika",
+	browse: "Prebrskaj ...",
+	text: "Opis",
+	set: "Vstavi",
+	invalidMessage: "Neveljaven tip slikovne datoteke",
+	prePopuTextUrl: "Vnesi URL slike",
+	prePopuTextBrowse: " ali prebrskajte in izberite lokalno datoteko."
 })
 );

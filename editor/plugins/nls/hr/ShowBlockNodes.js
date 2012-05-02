@@ -1,5 +1,5 @@
 define(
 ({
-	"showBlockNodes": "Prikaži elemente HTML bloka"
+	"showBlockNodes": "Pokaži elemente HTML bloka"
 })
 );

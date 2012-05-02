@@ -21,11 +21,11 @@ define(
 	buttonInsert: "Umetni",
 	buttonCancel: "Opoziv",
 	selectTableLabel: "Označi tablicu",
-	insertTableRowBeforeLabel: "Dodaj redak prije",
-	insertTableRowAfterLabel: "Dodaj redak nakon",
+	insertTableRowBeforeLabel: "Dodaj red prije",
+	insertTableRowAfterLabel: "Dodaj red nakon",
 	insertTableColumnBeforeLabel: "Dodaj stupac prije",
 	insertTableColumnAfterLabel: "Dodaj stupac nakon",
-	deleteTableRowLabel: "Izbriši redak",
+	deleteTableRowLabel: "Izbriši red",
 	deleteTableColumnLabel: "Izbriši stupac"
 })
 );

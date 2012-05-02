@@ -12,7 +12,7 @@ define(
 	"allItemsLabelTemplate": "Vse postavke",
 	"gotoButtonTitle": "Pojdi na specifično stran",
 	"dialogTitle": "Pojdi na stran",
-	"dialogIndication": "Podajte številko strani",
+	"dialogIndication": "Podaj številko strani",
 	"pageCountIndication": " (${0} strani)",
 	"dialogConfirm": "Pojdi",
 	"dialogCancel": "Prekliči",

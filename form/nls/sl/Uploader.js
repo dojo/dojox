@@ -1,5 +1,5 @@
 define(
 ({
-	label: "Izberite datoteke ..."
+	label: "Izberi datoteke ..."
 })
 );
