@@ -259,7 +259,7 @@ define([
 				),
 				function(name){
 					if(name){
-						this.unregisterNode(name);
+						this.unregisterWidget(name);
 					}
 				},
 				this
