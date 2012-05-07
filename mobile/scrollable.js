@@ -312,6 +312,12 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		// summary:
 		//		Finds the currently displayed view node from my sibling nodes.
 		if(!node.parentNode){ return null; }
+
+		// the given node is the first candidate
+		if(node.nodeType === 1 && domClass.contains(node, "mblView") && node.style.display !== "none"){
+			return node;
+		}
+
 		var nodes = node.parentNode.childNodes;
 		for(var i = 0; i < nodes.length; i++){
 			var n = nodes[i];
