@@ -253,7 +253,7 @@ define([
 					this.set("selected", false);
 				}else if(this._selEndMethod === "timer"){
 					var _this = this;
-					setTimeout(function(){
+					this.defer(function(){
 						_this.set("selected", false);
 					}, this._duration);
 				}
