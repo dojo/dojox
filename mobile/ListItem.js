@@ -11,10 +11,6 @@ define([
 	"./ProgressIndicator"
 ], function(array, declare, lang, domClass, domConstruct, domStyle, registry, iconUtils, ItemBase, ProgressIndicator){
 
-/*=====
-	var ItemBase = dojox.mobile._ItemBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/ListItem
 	// summary:

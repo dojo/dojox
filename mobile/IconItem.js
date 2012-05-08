@@ -16,10 +16,6 @@ define([
 	"./viewRegistry"
 ], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry){
 
-/*=====
-	var ItemBase = dojox.mobile._ItemBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/IconItem
 	// summary:

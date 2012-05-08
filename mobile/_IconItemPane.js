@@ -5,10 +5,6 @@ define([
 	"./iconUtils"
 ], function(declare, domConstruct, Pane, iconUtils){
 
-/*=====
-	var IconItemPane = dojox.mobile._IconItemPane
-=====*/
-
 	// module:
 	//		dojox/mobile/_IconItemPane
 	// summary:

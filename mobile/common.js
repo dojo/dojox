@@ -12,11 +12,6 @@ define([
 	"./uacss" // (no direct references)
 ], function(array, config, connect, lang, win, domClass, domConstruct, ready, registry, has){
 
-	var dm = lang.getObject("dojox.mobile", true);
-/*=====
-	var dm = dojox.mobile;
-=====*/
-
 	// module:
 	//		dojox/mobile/common
 	// summary:
@@ -26,6 +21,8 @@ define([
 	//		dojox.mobile widgets. Also, it provides functions that are commonly
 	//		necessary for mobile web applications, such as the hide address bar
 	//		function.
+
+	var dm = lang.getObject("dojox.mobile", true);
 
 	dm.getScreenSize = function(){
 		// summary:

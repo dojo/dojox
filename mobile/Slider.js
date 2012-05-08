@@ -14,10 +14,6 @@ define([
 ],
 	function(array, connect, declare, lang, win, domClass, domConstruct, domGeometry, domStyle, keys, WidgetBase, FormValueMixin){
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		FormValueMixin = dijit.form._FormValueMixin;
-	=====*/
 	return declare("dojox.mobile.Slider", [WidgetBase, FormValueMixin], {
 		// summary:
 		//		A non-templated Slider widget similar to the HTML5 INPUT type=range.

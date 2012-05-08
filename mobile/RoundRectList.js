@@ -10,12 +10,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(array, declare, event, lang, win, domConstruct, Contained, Container, WidgetBase){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/RoundRectList
 	// summary:

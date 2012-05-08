@@ -6,10 +6,6 @@ define([
 	"./iconUtils"
 ], function(declare, lang, domConstruct, WidgetBase, iconUtils){
 
-/*=====
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/Rating
 	// summary:

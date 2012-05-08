@@ -4,11 +4,6 @@ define([
 	"./_StoreListMixin"
 ], function(declare, EdgeToEdgeList, StoreListMixin){
 
-/*=====
-	var EdgeToEdgeList = dojox.mobile.EdgeToEdgeList;
-	var StoreListMixin = dojox.mobile._StoreListMixin;
-=====*/
-
 	// module:
 	//		dojox/mobile/EdgeToEdgeStoreList
 	// summary:

@@ -17,18 +17,12 @@ define([
 	"./View"
 ], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View){
 
-	var dm = lang.getObject("dojox.mobile", true);
-
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/Heading
 	// summary:
 	//		A widget that represents a navigation bar.
+
+	var dm = lang.getObject("dojox.mobile", true);
 
 	return declare("dojox.mobile.Heading", [WidgetBase, Container, Contained],{
 		// summary:

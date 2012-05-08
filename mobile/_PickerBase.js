@@ -6,10 +6,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(array, declare, Contained, Container, WidgetBase){
 
-/*=====
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/_PickerBase
 	// summary:

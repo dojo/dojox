@@ -14,12 +14,6 @@ define([
 	"require"
 ], function(array, declare, lang, has, dom, domClass, domConstruct, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, require){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/Accordion
 	// summary:

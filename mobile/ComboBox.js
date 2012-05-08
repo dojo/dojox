@@ -15,10 +15,6 @@ define([
 ], function(kernel, declare, lang, win, domGeometry, domStyle, windowUtils, touch, AutoCompleterMixin, popup, ComboBoxMenu, TextBox, has){
 	kernel.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
-	/*=====
-		TextBox = dojox.mobile.TextBox;
-		AutoCompleterMixin = dijit.form._AutoCompleterMixin;
-	=====*/
 	return declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
 		// summary:
 		//		A non-templated auto-completing text box widget

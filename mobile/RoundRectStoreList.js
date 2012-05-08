@@ -4,11 +4,6 @@ define([
 	"./_StoreListMixin"
 ], function(declare, RoundRectList, StoreListMixin){
 
-/*=====
-	var RoundRectList = dojox.mobile.RoundRectList;
-	var StoreListMixin = dojox.mobile._StoreListMixin;
-=====*/
-
 	// module:
 	//		dojox/mobile/RoundRectStoreList
 	// summary:

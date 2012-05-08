@@ -8,10 +8,6 @@ define([
 	"./sniff"
 ], function(declare, lang, SearchMixin, TextBox, domClass, keys, has){
 
-	/*=====
-		SearchMixin = dijit.form._SearchMixin;
-		TextBox = dojox.mobile.TextBox;
-	=====*/
 	return declare("dojox.mobile.SearchBox", [TextBox, SearchMixin], {
 		// summary:
 		//		A non-templated base class for INPUT type="search"

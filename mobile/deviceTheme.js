@@ -12,16 +12,12 @@ define([
 	"require"
 ], function(config, lang, win, require){
 
-	var dm = lang && lang.getObject("dojox.mobile", true) || {};
-/*=====
-	var dm = dojox.mobile
-=====*/
-
-
 	// module:
 	//		dojox/mobile/deviceTheme
 	// summary:
 	//		Automatic Theme Loader
+
+	var dm = lang && lang.getObject("dojox.mobile", true) || {};
 
 	var deviceTheme = new function(){
 		// module:

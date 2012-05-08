@@ -6,10 +6,6 @@ define([
 	"./SpinWheelSlot"
 ], function(declare, domClass, TimePickerMixin, SpinWheel, SpinWheelSlot){
 
-/*=====
-	var SpinWheel = dojox.mobile.SpinWheel;
-=====*/
-
 	// module:
 	//		dojox/mobile/SpinWheelTimePicker
 	// summary:

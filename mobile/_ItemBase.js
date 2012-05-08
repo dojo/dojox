@@ -13,13 +13,6 @@ define([
 	"./iconUtils"
 ], function(array, declare, lang, win, domClass, touch, registry, Contained, Container, WidgetBase, TransitionEvent, iconUtils){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-	var TransitionEvent = dojox.mobile.TransitionEvent;
-=====*/
-
 	// module:
 	//		dojox/mobile/_ItemBase
 	// summary:

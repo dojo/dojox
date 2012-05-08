@@ -7,10 +7,6 @@ define([
 	"./ValuePickerSlot"
 ], function(declare, domClass, TimePickerMixin, ToolBarButton, ValuePicker, ValuePickerSlot){
 
-/*=====
-	var ValuePicker = dojox.mobile.ValuePicker;
-=====*/
-
 	// module:
 	//		dojox/mobile/ValuePickerTimePicker
 	// summary:

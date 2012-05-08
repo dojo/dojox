@@ -18,14 +18,6 @@ define([
 	"require"
 ], function(array, connect, declare, event, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-	var PageIndicator = dojox.mobile.PageIndicator;
-	var SwapView = dojox.mobile.SwapView;
-=====*/
-
 	// module:
 	//		dojox/mobile/Carousel
 	// summary:

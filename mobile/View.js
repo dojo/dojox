@@ -22,13 +22,6 @@ define([
 	"./viewRegistry"
 ], function(array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domConstruct, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, common, transitDeferred, viewRegistry){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-	var ViewController = dojox.mobile.ViewController;
-=====*/
-
 	// module:
 	//		dojox/mobile/View
 	// summary:

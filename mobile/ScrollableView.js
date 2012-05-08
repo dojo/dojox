@@ -8,11 +8,6 @@ define([
 	"./_ScrollableMixin"
 ], function(array, declare, domClass, domConstruct, registry, View, ScrollableMixin){
 
-	/*=====
-		var View = dojox.mobile.View;
-		var ScrollableMixin = dojox.mobile._ScrollableMixin;
-	=====*/
-
 	// module:
 	//		dojox/mobile/ScrollableView
 	// summary:

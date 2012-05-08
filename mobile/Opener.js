@@ -12,10 +12,6 @@ define([
 	"./lazyLoadUtils"
 ], function(declare, Deferred, lang, win, domClass, domConstruct, domStyle, domGeometry, Tooltip, Overlay, lazyLoadUtils){
 
-	/*=====
-		Tooltip = dojox.mobile.Tooltip;
-		Overlay = dojox.mobile.Overlay;
-	=====*/
 	var isOverlay = domClass.contains(win.doc.documentElement, "dj_phone");
 	var cls = declare("dojox.mobile.Opener", isOverlay ? Overlay : Tooltip, {
 		// summary:

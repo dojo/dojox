@@ -9,12 +9,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(array, declare, win, domClass, domGeometry, Contained, Container, WidgetBase){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/FixedSplitter
 	// summary:

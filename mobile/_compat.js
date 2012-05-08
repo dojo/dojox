@@ -28,17 +28,6 @@ define([
 	"require"
 ], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domGeometry, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, ProgressIndicator, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
 
-/*=====
-	var EdgeToEdgeList = dojox.mobile.EdgeToEdgeList;
-	var IconContainer = dojox.mobile.IconContainer;
-	var ProgressIndicator = dojox.mobile.ProgressIndicator;
-	var RoundRect = dojox.mobile.RoundRect;
-	var RoundRectList = dojox.mobile.RoundRectList;
-	var ScrollableView = dojox.mobile.ScrollableView;
-	var Switch = dojox.mobile.Switch;
-	var View = dojox.mobile.View;
-=====*/
-
 	// module:
 	//		dojox/mobile/compat
 	// summary:
@@ -64,9 +53,6 @@ define([
 	//		this module will not load the already loaded file.
 
 	var dm = lang.getObject("dojox.mobile", true);
-	/*=====
-	dm = dojox.mobile
-	=====*/
 
 	if(!has("webkit")){
 		lang.extend(View, {

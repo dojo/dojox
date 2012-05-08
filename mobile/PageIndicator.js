@@ -9,11 +9,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(connect, declare, dom, domClass, domConstruct, registry, Contained, WidgetBase){
 
-/*=====
-	var Contained = dijit._Contained;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/PageIndicator
 	// summary:

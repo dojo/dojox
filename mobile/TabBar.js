@@ -12,12 +12,6 @@ define([
 	"./TabBarButton" // to load TabBarButton for you (no direct references)
 ], function(array, declare, win, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, TabBarButton){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/TabBar
 	// summary:

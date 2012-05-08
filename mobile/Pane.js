@@ -5,11 +5,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(array, declare, Contained, WidgetBase){
 
-/*=====
-	var Contained = dijit._Contained;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/Pane
 	// summary:

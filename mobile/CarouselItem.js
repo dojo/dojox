@@ -7,10 +7,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(declare, domConstruct, domGeometry, domStyle, Contained, WidgetBase, iconUtils){
 
-/*=====
-	var CarouselItem = dojox.mobile.CarouselItem
-=====*/
-
 	// module:
 	//		dojox/mobile/CarouselItem
 	// summary:

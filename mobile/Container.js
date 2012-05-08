@@ -4,10 +4,6 @@ define([
 	"./Pane"
 ], function(declare, Container, Pane){
 
-/*=====
-	var Container = dijit._Container;
-=====*/
-
 	// module:
 	//		dojox/mobile/Container
 	// summary:

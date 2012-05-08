@@ -12,12 +12,6 @@ define([
 	"./View"
 ], function(array, declare, lang, win, domConstruct, Contained, Container, WidgetBase, IconItem, Heading, View){
 
-/*=====
-	var Contained = dijit._Contained;
-	var Container = dijit._Container;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/IconContainer
 	// summary:

@@ -10,11 +10,6 @@ define([
 	"./sniff"
 ], function(array, connect, declare, dom, domClass, registry, View, ScrollableMixin, has){
 
-/*=====
-	var View = dojox.mobile.View;
-	var ScrollableMixin = dojox.mobile._ScrollableMixin;
-=====*/
-
 	// module:
 	//		dojox/mobile/SwapView
 	// summary:

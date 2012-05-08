@@ -11,10 +11,6 @@ define([
 	"./iconUtils"
 ], function(array, declare, event, lang, win, domClass, domConstruct, touch, WidgetBase, iconUtils){
 
-/*=====
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/ValuePickerSlot
 	// summary:

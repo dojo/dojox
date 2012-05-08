@@ -12,9 +12,6 @@ define([
 	"dijit/registry"
 ], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry){
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-	=====*/
 	return declare("dojox.mobile.Overlay", WidgetBase, {
 		// summary:
 		//		A non-templated widget that animates up from the bottom, overlaying the current content

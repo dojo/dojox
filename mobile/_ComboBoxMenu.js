@@ -10,11 +10,6 @@ define([
 ],
 	function(dojo, declare, domClass, domConstruct, ComboBoxMenuMixin, WidgetBase, ListTouchMixin, Scrollable){
 
-	/*=====
-		ComboBoxMenuMixin = dijit.form._ComboBoxMenuMixin;
-		WidgetBase = dijit._WidgetBase;
-		ListTouchMixin = dojox.mobile._ListTouchMixin;
-	=====*/
 	return declare("dojox.mobile._ComboBoxMenu", [WidgetBase, ListTouchMixin, ComboBoxMenuMixin], {
 		// summary:
 		//		Focus-less menu for internal use in `dijit.form.ComboBox`

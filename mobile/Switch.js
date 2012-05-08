@@ -13,11 +13,6 @@ define([
 	"./sniff"
 ], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, touch, Contained, WidgetBase, has){
 
-/*=====
-	Contained = dijit._Contained;
-	WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/Switch
 	// summary:

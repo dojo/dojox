@@ -6,9 +6,6 @@ define([
 	"./sniff",
 	"./_ItemBase"
 ], function(declare, domClass, domConstruct, domStyle, has, ItemBase){
-/*=====
-	var ItemBase = dojox.mobile._ItemBase;
-=====*/
 
 	// module:
 	//		dojox/mobile/ToolBarButton

@@ -13,10 +13,6 @@ define([
 	"./sniff"
 ], function(connect, declare, event, lang, dom, domClass, domConstruct, domStyle, iconUtils, ItemBase, Badge, has){
 
-/*=====
-	var ItemBase = dojox.mobile._ItemBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/TabBarButton
 	// summary:

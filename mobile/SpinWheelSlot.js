@@ -10,11 +10,6 @@ define([
 	"./scrollable"
 ], function(array, declare, lang, win, domClass, domConstruct, Contained, WidgetBase, Scrollable){
 
-/*=====
-	var Contained = dijit._Contained;
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/SpinWheelSlot
 	// summary:

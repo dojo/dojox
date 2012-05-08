@@ -5,10 +5,6 @@ define([
 	"dijit/_WidgetBase"
 ], function(declare, domClass, domConstruct, WidgetBase){
 
-/*=====
-	var WidgetBase = dijit._WidgetBase;
-=====*/
-
 	// module:
 	//		dojox/mobile/ProgressBar
 	// summary:

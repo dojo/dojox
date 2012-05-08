@@ -7,11 +7,6 @@ define([
 	"./SpinWheelSlot"
 ], function(array, declare, domClass, DatePickerMixin, SpinWheel, SpinWheelSlot){
 
-/*=====
-	var SpinWheel = dojox.mobile.SpinWheel;
-	var SpinWheelSlot = dojox.mobile.SpinWheelSlot;
-=====*/
-
 	// module:
 	//		dojox/mobile/SpinWheelDatePicker
 	// summary:

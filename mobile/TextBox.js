@@ -6,11 +6,6 @@ define([
 	"dijit/form/_TextBoxMixin"
 ], function(declare, domConstruct, WidgetBase, FormValueMixin, TextBoxMixin){
 
-	/*=====
-		WidgetBase = dijit._WidgetBase;
-		FormValueMixin = dijit.form._FormValueMixin;
-		TextBoxMixin = dijit.form._TextBoxMixin;
-	=====*/
 	return declare("dojox.mobile.TextBox",[WidgetBase, FormValueMixin, TextBoxMixin],{
 		// summary:
 		//		A non-templated base class for textbox form inputs
