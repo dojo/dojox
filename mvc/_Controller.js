@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"./Stateful",
+	"dojo/Stateful",
 	"./_atBindingMixin"
 ], function(declare, lang, Stateful, _atBindingMixin){
 	return declare("dojox.mvc._Controller", [Stateful, _atBindingMixin], {
@@ -12,15 +12,18 @@ define([
 
 			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			if(this._applyAttributes){
-				return this.inherited(arguments);
+				this.inherited(arguments);
 			}
+			// Look for dojox/mvc/at handles in the parameters
 			this._dbpostscript(params, srcNodeRef);
+			// Merge the parameters to this
 			if(params){
 				this.params = params;
 				for(var s in params){
 					this.set(s, params[s]);
 				}
 			}
+			// Add this instance to dijit/registry, if it's available
 			var registry;
 			try{
 				// Usage of dijit/registry module is optional. Do not use it if it's not already loaded.
@@ -28,6 +31,7 @@ define([
 				this.id = this.id || (srcNodeRef || {}).id || registry.getUniqueId(this.declaredClass.replace(/\./g, "_"));
 				registry.add(this);
 			}catch(e){}
+			// If this instance is not created via Dojo parser, start this up right away
 			if(!srcNodeRef){
 				this.startup();
 			}
@@ -37,10 +41,10 @@ define([
 			// summary:
 			//		Starts up data binding as this object starts up.
 
-			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			if(!this._applyAttributes){
 				this._startAtWatchHandles();
 			}
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			this.inherited(arguments);
 		},
 
@@ -48,10 +52,10 @@ define([
 			// summary:
 			//		Stops data binding as this object is destroyed.
 
-			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			if(!this._applyAttributes){
 				this._stopAtWatchHandles();
 			}
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			this.inherited(arguments);
 		},
 
@@ -65,10 +69,50 @@ define([
 			// value: Anything
 			//		The property value.
 
-			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
-			if(!this._applyAttributes && (value || {}).atsignature == "dojox.mvc.at"){
-				return this._setAtWatchHandle(name, value);
+			// If an object is used, iterate through object
+			if(typeof name === "object"){
+				for(var x in name){
+					if(name.hasOwnProperty(x)){
+						this.set(x, name[x]);
+					}
+				}
+				return this;
 			}
+
+			if(!this._applyAttributes){
+				if((value || {}).atsignature == "dojox.mvc.at"){
+					// If dojox/mvc/at handle is given, use it for data binding
+					return this._setAtWatchHandle(name, value);
+				}else{
+					// Otherwise align the setter interface to _WidgetBase
+					var setterName = "_set" + name.replace(/^[a-z]/, function(c){ return c.toUpperCase(); }) + "Attr";
+					if(this[setterName]){
+						this[setterName](value);
+					}else{
+						this._set(name, value);
+					}
+					return this;
+				}
+			}
+
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
+			return this.inherited(arguments);
+		},
+
+		_set: function(/*String*/ name, /*Anything*/ value){
+			// summary:
+			//		Implement _set() interface so that _set() behavior is consistent whether the instance inherits _WidgetBase or not.
+			//		If the instance does not inherit _WidgetBase, use dojo.Stateful._changeAttrValue() that's equivalent to dijit._WidgetBase._set().
+			// name: String
+			//		The property name.
+			// value: Anything
+			//		The property value.
+
+			if(!this._applyAttributes){
+				// Call dojo.Stateful._changeAttrValue() that's equivalent to dijit._WidgetBase._set()
+				return this._changeAttrValue(name, value);
+			}
+			// If there is dijit._WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			return this.inherited(arguments);
 		}
 	});

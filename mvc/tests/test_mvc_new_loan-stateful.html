@@ -28,7 +28,7 @@
 				"dojox/charting/Chart",
 				"dojox/charting/themes/PlotKit/blue",
 				"dojox/mvc/at",
-				"dojox/mvc/Stateful",
+				"dojo/Stateful",
 				"dojox/mvc/StatefulSeries",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
@@ -84,7 +84,7 @@
 					model.set("TotalHousing", totalHousing);
 					model.set("TotalIncome", totalIncome);
 			
-					model._set(name, value);
+					model[name] = value;
 				}
 
 				loanModel = new Stateful({
@@ -103,19 +103,19 @@
 					Mortgage: 1000,
 					Taxes: 500,
 					OtherHousing: 1200,
-					_setMortgageAttr: function(value){
+					_MortgageSetter: function(value){
 						recomputeTotalAndPercentages(this, "Mortgage", value);
 					},
-					_setTaxesAttr: function(value){
+					_TaxesSetter: function(value){
 						recomputeTotalAndPercentages(this, "Taxes", value);
 					},
-					_setOtherHousingAttr: function(value){
+					_OtherHousingSetter: function(value){
 						recomputeTotalAndPercentages(this, "OtherHousing", value);
 					},
-					_setBaseIncomeAttr: function(value){
+					_BaseIncomeSetter: function(value){
 						recomputeTotalAndPercentages(this, "BaseIncome", value);
 					},
-					_setBonusIncomeAttr: function(value){
+					_BonusIncomeSetter: function(value){
 						recomputeTotalAndPercentages(this, "BonusIncome", value);
 					}
 				});
@@ -137,7 +137,7 @@
 			 	data-dojo-props="model: loanModel, ownProps: {_setZipAttr: 1, _setCountyAttr: 1}">
 				<script type="dojo/method" event="_setZipAttr" args="value">
 					var changed = this.model.Zip != value;
-					this.model._set("Zip", value);
+					this.model._changeAttrValue("Zip", value);
 					if(changed){
 						lookup(this.model);
 					}
@@ -145,7 +145,7 @@
 				</script>
 				<script type="dojo/method" event="_setCountyAttr" args="value">
 					var changed = this.model.County != value;
-					this.model._set("County", value);
+					this.model._changeAttrValue("County", value);
 					if(changed){
 						lookup(this.model);
 					}

@@ -36,11 +36,12 @@
 				"dojo/_base/lang",
 				"dojo/_base/xhr",
 				"dojo/parser",
+				"dojo/when",
 				"dijit/registry",				
 				"dojox/charting/Chart",
 				"dojox/charting/themes/PlotKit/blue",
 				"dojox/mvc/at",
-				"dojox/mvc/Stateful",
+				"dojo/Stateful",
 				"dojox/mvc/StatefulSeries",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
@@ -52,8 +53,7 @@
 				"dojox/mvc/ModelRefController",
 				"dojox/mvc/Output",
 				"dojo/domReady!"
-			], function(doh, declare, ddom, array, lang, dxhr, parser, registry, Chart, blue, at, Stateful, StatefulSeries){
-				window.at = at;
+			], function(doh, declare, ddom, array, lang, dxhr, parser, when, registry, Chart, blue, at, Stateful, StatefulSeries){
 				dojox.debugDataBinding = true;
 
 				lookup = function(model){
@@ -96,7 +96,7 @@
 					model.set("TotalHousing", totalHousing);
 					model.set("TotalIncome", totalIncome);
 			
-					model._set(name, value);
+					model[name] = value;
 				}
 
 				loanModel = new Stateful({
@@ -115,29 +115,28 @@
 					Mortgage: 1000,
 					Taxes: 500,
 					OtherHousing: 1200,
-					_setMortgageAttr: function(value){
+					_MortgageSetter: function(value){
 						recomputeTotalAndPercentages(this, "Mortgage", value);
 					},
-					_setTaxesAttr: function(value){
+					_TaxesSetter: function(value){
 						recomputeTotalAndPercentages(this, "Taxes", value);
 					},
-					_setOtherHousingAttr: function(value){
+					_OtherHousingSetter: function(value){
 						recomputeTotalAndPercentages(this, "OtherHousing", value);
 					},
-					_setBaseIncomeAttr: function(value){
+					_BaseIncomeSetter: function(value){
 						recomputeTotalAndPercentages(this, "BaseIncome", value);
 					},
-					_setBonusIncomeAttr: function(value){
+					_BonusIncomeSetter: function(value){
 						recomputeTotalAndPercentages(this, "BonusIncome", value);
 					}
 				});
 
-				parser.parse();
-
-				new Chart("expenseChart")
-				 .setTheme(blue)
-				 .addPlot("default", {type: "Pie"})
-				 .addSeries("default", new StatefulSeries([at(loanModel, "Mortgage"), at(loanModel, "Taxes"), at(loanModel, "OtherHousing")])).render();
+				when(parser.parse(), function(){
+					new Chart("expenseChart")
+					 .setTheme(blue)
+					 .addPlot("default", {type: "Pie"})
+					 .addSeries("default", new StatefulSeries([at(loanModel, "Mortgage"), at(loanModel, "Taxes"), at(loanModel, "OtherHousing")])).render();
 
 					 // should be able to verify all of the inputs
 					doh.register("Check values and bindings", [
@@ -154,29 +153,56 @@
 							runTest: function(){
 								registry.byId("zipInput").focus();
 								registry.byId("zipInput").set('value', "11111");
-								registry.byId("cityInput").focus();
-								setTimeout(function(){  
-									doh.is("", registry.byId("cityInput").get('value'),"bad zip should not display the city");
-									doh.is(false, registry.byId("zipInput").isValid(), "zipInput should be invalid");
-									// now try a good one
-									registry.byId("zipInput").focus();
-									registry.byId("zipInput").set('value', "10706");
-									registry.byId("cityInput").focus();
-									setTimeout(function(){  
-										doh.is("Hastings On Hudson", registry.byId("cityInput").get('value'),"good zip 10706 should display the city");
-									}, 1000);							
-								}, 1000);							
-							}
+								var dfd = new doh.Deferred();
+								setTimeout(function(){
+									try{
+										registry.byId("cityInput").focus();
+									}catch(e){
+										return dfd.errback(e);
+									}
+									setTimeout(function(){
+										try{
+											doh.t(/^\s*$/.test(registry.byId("cityInput").get('value')), "bad zip should not display the city");
+											doh.is(false, registry.byId("zipInput").isValid(), "zipInput should be invalid");
+											// now try a good one
+											registry.byId("zipInput").focus();
+											registry.byId("zipInput").set('value', "10706");
+											registry.byId("cityInput").focus();
+										}catch(e){
+											return dfd.errback(e);
+										}
+										setTimeout(function(){
+											try{
+												doh.is("Hastings On Hudson", registry.byId("cityInput").get('value'),"good zip 10706 should display the city");
+												return dfd.callback(true);
+											}catch(e){
+												return dfd.errback(e);
+											}
+										}, 2000);							
+									}, 2000);
+								}, 1000);
+								return dfd;							
+							},
+							timeout: 10000
 						}, {
 							name: "setMortgageTest",
 							runTest: function(){
 								registry.byId("housing").focus();
 								registry.byId("housing").set('value', "10000");
 								registry.byId("totalHousing").focus();
-									doh.is("20", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
-									doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
-									doh.is("10000", registry.byId("housing").get('value'),"housing should be 10000");
-									doh.is("11700", registry.byId("totalHousing").get('value'),"totalHousing should be 11700");
+								var dfd = new doh.Deferred();
+								setTimeout(function(){
+									try{
+										doh.is("20", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
+										doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
+										doh.is("10000", registry.byId("housing").get('value'),"housing should be 10000");
+										doh.is("11700", registry.byId("totalHousing").get('value'),"totalHousing should be 11700");
+										dfd.callback(true);
+									}catch(e){
+										dfd.errback(e);
+									}
+								}, 500);
+								return dfd;
 							}
 						}, {
 							name: "setMortgageTest2",
@@ -184,10 +210,19 @@
 								registry.byId("housing").focus();
 								registry.byId("housing").set('value', "20000");
 								registry.byId("totalHousing").focus();
-									doh.is("36", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
-									doh.is(false, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should not be valid");
-									doh.is("20000", registry.byId("housing").get('value'),"housing should be 10000");
-									doh.is("21700", registry.byId("totalHousing").get('value'),"totalHousing should be 11700");
+								var dfd = new doh.Deferred();
+								setTimeout(function(){
+									try{
+										doh.is("36", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
+										doh.is(false, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should not be valid");
+										doh.is("20000", registry.byId("housing").get('value'),"housing should be 10000");
+										doh.is("21700", registry.byId("totalHousing").get('value'),"totalHousing should be 11700");
+										return dfd.callback(true);
+									}catch(e){
+										return dfd.errback(e);
+									}
+								}, 500);
+								return dfd;
 							}
 						}, {
 							name: "setHousingZero",
@@ -199,14 +234,23 @@
 								registry.byId("otherHousing").focus();
 								registry.byId("otherHousing").set('value', "0");
 								registry.byId("totalHousing").focus();
-									doh.is("0", registry.byId("housing").get('value'),"housing should be 0");
-									doh.is("0", registry.byId("taxes").get('value'),"taxes should be 0");
-									doh.is("0", registry.byId("otherHousing").get('value'),"otherHousing should be 0");
-									doh.is("0", registry.byId("totalHousing").get('value'),"totalHousing should be 0");
-									doh.is(true, registry.byId("totalHousing").get("disabled"), "disabled()","totalHousing should be disabled");
-									doh.is(true, registry.byId("percentHousing").get("disabled"), "disabled()","percentHousing should disabled");
-									doh.is("0", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
-									doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
+								var dfd = new doh.Deferred();
+								setTimeout(function(){
+									try{
+										doh.is("0", registry.byId("housing").get('value'),"housing should be 0");
+										doh.is("0", registry.byId("taxes").get('value'),"taxes should be 0");
+										doh.is("0", registry.byId("otherHousing").get('value'),"otherHousing should be 0");
+										doh.is("0", registry.byId("totalHousing").get('value'),"totalHousing should be 0");
+										doh.is(true, registry.byId("totalHousing").get("disabled"), "disabled()","totalHousing should be disabled");
+										doh.is(true, registry.byId("percentHousing").get("disabled"), "disabled()","percentHousing should disabled");
+										doh.is("0", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
+										doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
+										return dfd.callback(true);
+									}catch(e){
+										return dfd.errback(e);
+									}
+								}, 500);
+								return dfd;
 							}
 						}, {
 							name: "setHousingBack",
@@ -218,29 +262,40 @@
 								registry.byId("otherHousing").focus();
 								registry.byId("otherHousing").set('value', "1200");
 								registry.byId("totalHousing").focus();
-								doh.is("5", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
-								doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
-								doh.is("1000", registry.byId("housing").get('value'),"housing should be 1000");
-								doh.is("2700", registry.byId("totalHousing").get('value'),"totalHousing should be 2700");
-								doh.is(false, registry.byId("totalHousing").get("disabled"), "disabled()","totalHousing should be disabled");
-								doh.is(false, registry.byId("percentHousing").get("disabled"), "disabled()","percentHousing should disabled");
-								doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
+								var dfd = new doh.Deferred();
+								setTimeout(function(){
+									try{
+										doh.is("5", registry.byId("percentHousing").get('value'),"percentHousing should be 5");
+										doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
+										doh.is("1000", registry.byId("housing").get('value'),"housing should be 1000");
+										doh.is("2700", registry.byId("totalHousing").get('value'),"totalHousing should be 2700");
+										doh.is(false, registry.byId("totalHousing").get("disabled"), "disabled()","totalHousing should be disabled");
+										doh.is(false, registry.byId("percentHousing").get("disabled"), "disabled()","percentHousing should disabled");
+										doh.is(true, registry.byId("percentHousing").isValid(), "isValid()","percentHousing should be valid");
+										return dfd.callback(true);
+									}catch(e){
+										return dfd.errback(e);
+									}
+								}, 500);
+								return dfd;
 							}
 						}
 					]);
 
 					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body class="claro" style="background-image: url(images/validating_form_pattern.png)">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<h1 class="testTitle">doh_mvc_loan-stateful.html automated tests (non-robot)</h1>
 		<div id="wrapper">
 			<div id="addressLookupController" class="dijitDisplayNone" data-dojo-type="dojox.mvc.ModelRefController"
 			 data-dojo-props="model: loanModel, ownProps: {_setZipAttr: 1, _setCountyAttr: 1}">
 				<script type="dojo/method" event="_setZipAttr" args="value">
 					var changed = this.model.Zip != value;
-					this.model._set("Zip", value);
+					this.model._changeAttrValue("Zip", value);
 					if(changed){
 						lookup(this.model);
 					}
@@ -248,7 +303,7 @@
 				</script>
 				<script type="dojo/method" event="_setCountyAttr" args="value">
 					var changed = this.model.County != value;
-					this.model._set("County", value);
+					this.model._changeAttrValue("County", value);
 					if(changed){
 						lookup(this.model);
 					}
