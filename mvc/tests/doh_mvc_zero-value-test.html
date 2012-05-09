@@ -14,9 +14,9 @@
 				"doh/runner",
 				"dojo/dom",
 				"dojo/parser",
+				"dojo/when",
 				"dojo/Stateful",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output",
 				"dojo/parser",
@@ -24,56 +24,56 @@
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojo/domReady!"
-			], function(doh, ddom, parser, Stateful, registry, at){
-				window.at = at;
+			], function(doh, ddom, parser, when, Stateful, registry){
 				models = new Stateful;
 
-				parser.parse();
+				when(parser.parse(), function(){
+					models.set("model", new Stateful({First: 0}));
 
-				models.set("model", new Stateful({First: 0}));
-
-				doh.register("Check values and bindings", [{
-					name: "Initial",
-					runTest: function(){
-						doh.is("Priority: 0", ddom.byId("one").innerHTML, "One should be set to Priority: 0");
-						doh.is("0", ddom.byId("two").innerHTML, "One should be set to Priority: 0");
-						doh.is("0", registry.byId("FirstWork").get("value"), "FirstWork should be 0");
-						doh.is("0", registry.byId("First").get("value"), "First should be 0");
-					}
-				}, {
-					name: "Update-First-Name",
-					runTest: function(){
-						var first1;
-						first1 = registry.byId("First");
-						first1.set("value", 2);
-						if (first1) {
-							doh.is("Priority: 2", ddom.byId("one").innerHTML, "One should be set to Priority: 2");
-							doh.is("2", ddom.byId("two").innerHTML, "One should be set to Priority: 2");
-							doh.is("2",  registry.byId("FirstWork").get("value"), "FirstWork should be 2");
-							doh.is("2",  registry.byId("First").get("value"), "First should be 2");
-						}
-					}
-				}, {
-					name: "Test-ref-set-0",
-					runTest: function(){
-						var first1;
-						//test first relevant false
-						first1 = registry.byId("First");
-						first1.set("value", 0);
-						if (first1) {
+					doh.register("Check values and bindings", [{
+						name: "Initial",
+						runTest: function(){
 							doh.is("Priority: 0", ddom.byId("one").innerHTML, "One should be set to Priority: 0");
 							doh.is("0", ddom.byId("two").innerHTML, "One should be set to Priority: 0");
 							doh.is("0", registry.byId("FirstWork").get("value"), "FirstWork should be 0");
 							doh.is("0", registry.byId("First").get("value"), "First should be 0");
 						}
-					}
-				}]);
+					}, {
+						name: "Update-First-Name",
+						runTest: function(){
+							var first1;
+							first1 = registry.byId("First");
+							first1.set("value", 2);
+							if (first1) {
+								doh.is("Priority: 2", ddom.byId("one").innerHTML, "One should be set to Priority: 2");
+								doh.is("2", ddom.byId("two").innerHTML, "One should be set to Priority: 2");
+								doh.is("2",  registry.byId("FirstWork").get("value"), "FirstWork should be 2");
+								doh.is("2",  registry.byId("First").get("value"), "First should be 2");
+							}
+						}
+					}, {
+						name: "Test-ref-set-0",
+						runTest: function(){
+							var first1;
+							//test first relevant false
+							first1 = registry.byId("First");
+							first1.set("value", 0);
+							if (first1) {
+								doh.is("Priority: 0", ddom.byId("one").innerHTML, "One should be set to Priority: 0");
+								doh.is("0", ddom.byId("two").innerHTML, "One should be set to Priority: 0");
+								doh.is("0", registry.byId("FirstWork").get("value"), "FirstWork should be 0");
+								doh.is("0", registry.byId("First").get("value"), "First should be 0");
+							}
+						}
+					}]);
 
-				doh.run();
+					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body>
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div data-dojo-type="dijit.form.Form" data-dojo-mixins="dojox.mvc.Group" data-dojo-props="target: at(models, 'model')">
 			Working sample
 			<span> There should be "Priority : zero" here ===></span>

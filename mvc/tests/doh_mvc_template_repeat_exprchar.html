@@ -21,12 +21,13 @@
 			require([
 				"doh/runner",
 				"dojo/parser",
+				"dojo/when",
 				"dijit/registry",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ModelRefController",
 				"dojox/mvc/tests/test_templatedWidget/myMvcTemplated",
 				"dojo/domReady!"
-			], function(doh, parser, registry, getStateful, ModelRefController, myMvcTemplated){
+			], function(doh, parser, when, registry, getStateful, ModelRefController, myMvcTemplated){
 				ctrl = new ModelRefController({model: getStateful([
 					{
 						First: "Anne",
@@ -55,39 +56,38 @@
 					}
 				])});
 
-				parser.parse();
-
-				// should be able to verify all of the inputs
-				doh.register("Check values", [
-					{
-						name : "Input0",
-						runTest: function(){
-							doh.is("Anne", registry.byId("nameInput0").value, "nameInput0 should be Anne");
-							doh.is("Anne", registry.byId("anameInput0").value, "anameInput0 should be Anne");
-							doh.is("Anne", registry.byId("bnameInput0").value, "bnameInput0 should be Anne");
-							doh.is("Anne", registry.byId("9nameInput0").value, "9nameInput0 should be Anne");
+				when(parser.parse(), function(){
+					// should be able to verify all of the inputs
+					doh.register("Check values", [
+						{
+							name : "Input0",
+							runTest: function(){
+								doh.is("Anne", registry.byId("nameInput0").value, "nameInput0 should be Anne");
+								doh.is("Anne", registry.byId("anameInput0").value, "anameInput0 should be Anne");
+								doh.is("Anne", registry.byId("bnameInput0").value, "bnameInput0 should be Anne");
+								doh.is("Anne", registry.byId("9nameInput0").value, "9nameInput0 should be Anne");
+							}
+						}, {
+							name : "Input1",
+							runTest: function(){
+								doh.is("Ben", registry.byId("nameInput1").value, "nameInput1 should be Ben");
+								doh.is("Ben", registry.byId("anameInput1").value, "anameInput1 should be Ben");
+								doh.is("Ben", registry.byId("bnameInput1").value, "bnameInput1 should be Ben");
+								doh.is("Ben", registry.byId("9nameInput1").value, "9nameInput1 should be Ben");
+							}
+						}, {
+							name : "Input2",
+							runTest: function(){
+								doh.is("John", registry.byId("nameInput2").value, "nameInput2 should be John");
+								doh.is("John", registry.byId("anameInput2").value, "anameInput2 should be John");
+								doh.is("John", registry.byId("bnameInput2").value, "bnameInput2 should be John");
+								doh.is("John", registry.byId("9nameInput2").value, "9nameInput2 should be John");
+							}
 						}
-					}, {
-						name : "Input1",
-						runTest: function(){
-							doh.is("Ben", registry.byId("nameInput1").value, "nameInput1 should be Ben");
-							doh.is("Ben", registry.byId("anameInput1").value, "anameInput1 should be Ben");
-							doh.is("Ben", registry.byId("bnameInput1").value, "bnameInput1 should be Ben");
-							doh.is("Ben", registry.byId("9nameInput1").value, "9nameInput1 should be Ben");
-						}
-					}, {
-						name : "Input2",
-						runTest: function(){
-							doh.is("John", registry.byId("nameInput2").value, "nameInput2 should be John");
-							doh.is("John", registry.byId("anameInput2").value, "anameInput2 should be John");
-							doh.is("John", registry.byId("bnameInput2").value, "bnameInput2 should be John");
-							doh.is("John", registry.byId("9nameInput2").value, "9nameInput2 should be John");
-						}
-					}
-				]);
+					]);
 
-				doh.run();
-
+					doh.run();
+				});
 			});
 		</script>
 	</head>

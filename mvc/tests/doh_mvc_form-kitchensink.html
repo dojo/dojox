@@ -22,6 +22,7 @@
 				"dojo/dom",
 				"dojo/number",
 				"dojo/parser",
+				"dojo/when",
 				"dojo/Stateful",
 				"dojo/data/ItemFileReadStore",
 				"dojo/date/locale",
@@ -42,11 +43,10 @@
 				"dojox/mvc/at",
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/Output"
-			], function(doh, ddom, number, parser, Stateful, ItemFileReadStore, locale, registry, Button, 
+			], function(doh, ddom, number, parser, when, Stateful, ItemFileReadStore, locale, registry, Button, 
 					ComboBox, DateTextBox, FilteringSelect, HorizontalSlider, NumberSpinner, NumberTextBox, 
 					TextBox, Select, SimpleTextarea, Textarea, Calendar, ColorPalette, at, 
 					EditModelRefController, Output){
-				window.at = at;
 				dojox.debugDataBinding = true;
 
 				store = new ItemFileReadStore({
@@ -134,737 +134,738 @@
 
 				dummyDateWid = new DateTextBox({constraints:{datePattern:"MM-dd-yyyy", strict:true}});
 
-				parser.parse();
+				when(parser.parse(), function(){
+					// Handle the programmatic creation of widgets here:
 
-				// Handle the programmatic creation of widgets here:
+					// create the select, textbox, output and button
+					var sel = new Select({
+						store: store,
+						loadChildrenOnOpen: true,
+						value: at(selctrl, "number")
+					}, ddom.byId("sel"));
 
-				// create the select, textbox, output and button
-				var sel = new Select({
-					store: store,
-					loadChildrenOnOpen: true,
-					value: at(selctrl, "number")
-				}, ddom.byId("sel"));
+					(new TextBox({value: at(selctrl, "number")}, ddom.byId("seltext"))).startup();
 
-				(new TextBox({value: at(selctrl, "number")}, ddom.byId("seltext"))).startup();
+					var selOutput = new Output({value: at(selctrl, "number")}, ddom.byId("selOutput"));
+					selOutput.startup();
 
-				var selOutput = new Output({value: at(selctrl, "number")}, ddom.byId("selOutput"));
-				selOutput.startup();
+					var reset1 = new Button({
+						onClick: function(){ selctrl.reset(); },
+						id: "selReset",
+						label: "Reset"
+					}, ddom.byId("reset1"));
+					reset1.startup();
 
-				var reset1 = new Button({
-					onClick: function(){ selctrl.reset(); },
-					id: "selReset",
-					label: "Reset"
-				}, ddom.byId("reset1"));
-				reset1.startup();
+					sel.startup();
 
-				sel.startup();
+					// create the filtering select, textbox, output and button
+					var filsel = new FilteringSelect({
+						store: store,
+						value: at(filctrl, "number")
+					}, ddom.byId("filsel"));
 
-				// create the filtering select, textbox, output and button
-				var filsel = new FilteringSelect({
-					store: store,
-					value: at(filctrl, "number")
-				}, ddom.byId("filsel"));
+					var filtext = new TextBox({value: at(filctrl, "number")}, ddom.byId("filtext"));
 
-				var filtext = new TextBox({value: at(filctrl, "number")}, ddom.byId("filtext"));
+					var filoutput = new Output({value: at(filctrl, "number")}, ddom.byId("filoutput"));
+					filoutput.startup();
 
-				var filoutput = new Output({value: at(filctrl, "number")}, ddom.byId("filoutput"));
-				filoutput.startup();
+					var filreset = new Button({
+						onClick: function(){ filctrl.reset(); },
+						id: "filReset",
+						label: "Reset"
+					}, ddom.byId("filreset"));
+					filreset.startup();
 
-				var filreset = new Button({
-					onClick: function(){ filctrl.reset(); },
-					id: "filReset",
-					label: "Reset"
-				}, ddom.byId("filreset"));
-				filreset.startup();
+					filtext.startup();
+					filsel.startup();
 
-				filtext.startup();
-				filsel.startup();
+					// create the comboBox, textbox, output and button
+					var combo = new ComboBox({
+						store: store,
+						value: at(comboctrl, "number")
+					}, ddom.byId("combosel"));
 
-				// create the comboBox, textbox, output and button
-				var combo = new ComboBox({
-					store: store,
-					value: at(comboctrl, "number")
-				}, ddom.byId("combosel"));
+					var combotext = new TextBox({value: at(comboctrl, "number")}, ddom.byId("combotext"));
 
-				var combotext = new TextBox({value: at(comboctrl, "number")}, ddom.byId("combotext"));
+					var combooutput = new Output({value: at(comboctrl, "number")}, ddom.byId("combooutput"));
+					combooutput.startup();
 
-				var combooutput = new Output({value: at(comboctrl, "number")}, ddom.byId("combooutput"));
-				combooutput.startup();
+					var comboreset = new Button({
+						onClick: function(){ comboctrl.reset(); },
+						id: "comboReset",
+						label: "Reset"
+					}, ddom.byId("comboreset"));
+					comboreset.startup();
 
-				var comboreset = new Button({
-					onClick: function(){ comboctrl.reset(); },
-					id: "comboReset",
-					label: "Reset"
-				}, ddom.byId("comboreset"));
-				comboreset.startup();
+					combotext.startup();
+					combo.startup();
 
-				combotext.startup();
-				combo.startup();
+					// create the dijit.form.DateTextBox, textbox, output and button
+					var dateWid = new DateTextBox({
+						value: at(datectrl, "number"),
+						constraints: dummyDateWid.constraints
+					}, ddom.byId("datesel"));
 
-				// create the dijit.form.DateTextBox, textbox, output and button
-				var dateWid = new DateTextBox({
-					value: at(datectrl, "number"),
-					constraints: dummyDateWid.constraints
-				}, ddom.byId("datesel"));
+					var datetext = new TextBox({
+						value: at(datectrl, "number").transform(dummyDateWid.dateLocaleModule),
+						constraints: dummyDateWid.constraints
+					}, ddom.byId("datetext"));
 
-				var datetext = new TextBox({
-					value: at(datectrl, "number").transform(dummyDateWid.dateLocaleModule),
-					constraints: dummyDateWid.constraints
-				}, ddom.byId("datetext"));
+					var dateoutput = new Output({
+						value: at(datectrl, "number").transform(dummyDateWid.dateLocaleModule),
+						constraints: dummyDateWid.constraints
+					}, ddom.byId("dateoutput"));
+					dateoutput.startup();
 
-				var dateoutput = new Output({
-					value: at(datectrl, "number").transform(dummyDateWid.dateLocaleModule),
-					constraints: dummyDateWid.constraints
-				}, ddom.byId("dateoutput"));
-				dateoutput.startup();
+					var datereset = new Button({
+						onClick: function(){ datectrl.reset(); },
+						id: "dateReset",
+						label: "Reset"
+					}, ddom.byId("datereset"));
+					datereset.startup();
 
-				var datereset = new Button({
-					onClick: function(){ datectrl.reset(); },
-					id: "dateReset",
-					label: "Reset"
-				}, ddom.byId("datereset"));
-				datereset.startup();
+					datetext.startup();
+					dateWid.startup();
 
-				datetext.startup();
-				dateWid.startup();
+					// create the dijit.form.HorizontalSlider, textbox, output and button
+					var sliderWid = new HorizontalSlider({
+						style: {width: "190px"},
+						minimum: 0,
+						maximum: 100,
+						discreteValues: 21,
+						value: at(sliderctrl, "number") // bind to model.number
+					}, ddom.byId("slidersel"));
 
-				// create the dijit.form.HorizontalSlider, textbox, output and button
-				var sliderWid = new HorizontalSlider({
-					style: {width: "190px"},
-					minimum: 0,
-					maximum: 100,
-					discreteValues: 21,
-					value: at(sliderctrl, "number") // bind to model.number
-				}, ddom.byId("slidersel"));
+					var slidertext = new TextBox({value: at(sliderctrl, "number").transform(number)}, ddom.byId("slidertext"));
 
-				var slidertext = new TextBox({value: at(sliderctrl, "number").transform(number)}, ddom.byId("slidertext"));
+					var slideroutput = new Output({	value: at(sliderctrl, "number").transform(number)}, ddom.byId("slideroutput"));
+					slideroutput.startup();
 
-				var slideroutput = new Output({	value: at(sliderctrl, "number").transform(number)}, ddom.byId("slideroutput"));
-				slideroutput.startup();
+					var sliderreset = new Button({
+						onClick: function(){ sliderctrl.reset(); },
+						id: "sliderReset",
+						label: "Reset"
+					}, ddom.byId("sliderreset"));
+					sliderreset.startup();
 
-				var sliderreset = new Button({
-					onClick: function(){ sliderctrl.reset(); },
-					id: "sliderReset",
-					label: "Reset"
-				}, ddom.byId("sliderreset"));
-				sliderreset.startup();
+					slidertext.startup();
+					sliderWid.startup();
 
-				slidertext.startup();
-				sliderWid.startup();
+					// create the dijit.form.NumberSpinner, textbox, output and button
+					var numspinWid = new NumberSpinner({value: at(numspinctrl, "number")}, ddom.byId("numspinsel"));
 
-				// create the dijit.form.NumberSpinner, textbox, output and button
-				var numspinWid = new NumberSpinner({value: at(numspinctrl, "number")}, ddom.byId("numspinsel"));
+					var numspintext = new TextBox({value: at(numspinctrl, "number").transform(number)}, ddom.byId("numspintext"));
 
-				var numspintext = new TextBox({value: at(numspinctrl, "number").transform(number)}, ddom.byId("numspintext"));
+					var numspinoutput = new Output({value: at(numspinctrl, "number").transform(number)}, ddom.byId("numspinoutput"));
+					numspinoutput.startup();
 
-				var numspinoutput = new Output({value: at(numspinctrl, "number").transform(number)}, ddom.byId("numspinoutput"));
-				numspinoutput.startup();
+					var numspinreset = new Button({
+						onClick: function(){ numspinctrl.reset(); },
+						id: "numspinReset",
+						label: "Reset"
+					}, ddom.byId("numspinreset"));
+					numspinreset.startup();
 
-				var numspinreset = new Button({
-					onClick: function(){ numspinctrl.reset(); },
-					id: "numspinReset",
-					label: "Reset"
-				}, ddom.byId("numspinreset"));
-				numspinreset.startup();
+					numspintext.startup();
+					numspinWid.startup();
 
-				numspintext.startup();
-				numspinWid.startup();
+					// create the dijit.form.SimpleTextarea, textbox, output and button
+					var simpTAWid = new SimpleTextarea({
+						style: {height: "20px", width: "180px"},
+						value: at(simpTActrl, "number")
+					}, ddom.byId("simpTAsel"));
 
-				// create the dijit.form.SimpleTextarea, textbox, output and button
-				var simpTAWid = new SimpleTextarea({
-					style: {height: "20px", width: "180px"},
-					value: at(simpTActrl, "number")
-				}, ddom.byId("simpTAsel"));
+					var simpTAtext = new TextBox({value: at(simpTActrl, "number")}, ddom.byId("simpTAtext"));
 
-				var simpTAtext = new TextBox({value: at(simpTActrl, "number")}, ddom.byId("simpTAtext"));
+					var simpTAoutput = new Output({value: at(simpTActrl, "number")}, ddom.byId("simpTAoutput"));
+					simpTAoutput.startup();
 
-				var simpTAoutput = new Output({value: at(simpTActrl, "number")}, ddom.byId("simpTAoutput"));
-				simpTAoutput.startup();
+					var simpTAreset = new Button({
+						onClick: function(){ simpTActrl.reset(); },
+						id: "simpTAReset",
+						label: "Reset"
+					}, ddom.byId("simpTAreset"));
+					simpTAreset.startup();
 
-				var simpTAreset = new Button({
-					onClick: function(){ simpTActrl.reset(); },
-					id: "simpTAReset",
-					label: "Reset"
-				}, ddom.byId("simpTAreset"));
-				simpTAreset.startup();
+					simpTAtext.startup();
+					simpTAWid.startup();
 
-				simpTAtext.startup();
-				simpTAWid.startup();
+					// create the dijit.form.Textarea, textbox, output and button
+					var textareaWid = new Textarea({value: at(textareactrl, "number")}, ddom.byId("textareasel"));
 
-				// create the dijit.form.Textarea, textbox, output and button
-				var textareaWid = new Textarea({value: at(textareactrl, "number")}, ddom.byId("textareasel"));
+					var textareatext = new TextBox({value: at(textareactrl, "number")}, ddom.byId("textareatext"));
 
-				var textareatext = new TextBox({value: at(textareactrl, "number")}, ddom.byId("textareatext"));
+					var textareaoutput = new Output({value: at(textareactrl, "number")}, ddom.byId("textareaoutput"));
+					textareaoutput.startup();
 
-				var textareaoutput = new Output({value: at(textareactrl, "number")}, ddom.byId("textareaoutput"));
-				textareaoutput.startup();
+					var textareareset = new Button({
+						onClick: function(){ textareactrl.reset(); },
+						id: "textareaReset",
+						label: "Reset"
+					}, ddom.byId("textareareset"));
+					textareareset.startup();
 
-				var textareareset = new Button({
-					onClick: function(){ textareactrl.reset(); },
-					id: "textareaReset",
-					label: "Reset"
-				}, ddom.byId("textareareset"));
-				textareareset.startup();
+					textareatext.startup();
+					textareaWid.startup();
 
-				textareatext.startup();
-				textareaWid.startup();
+					var numBox = new dijit.form.NumberTextBox({value: at(nanmodel, "num")}, ddom.byId("nannb"));
 
-				var numBox = new dijit.form.NumberTextBox({value: at(nanmodel, "num")}, ddom.byId("nannb"));
+					numBox.startup();
 
-				numBox.startup();
-
-/*
-				doh.register("Check initial programatic values and bindings for select widget only", [
-					{
-						name: "InitialSelectOnly",
-						runTest: function(){
-							console.log("This test is commented out because it will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
-							// Test Select
-							doh.is("1",wid.get("value"),"This test will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
-							doh.is(registry.byId("seltext").value,registry.byId("sel").get("value"),"wid.get(\"value\") should be set same as textboxval");
-							doh.is(registry.byId("selOutput").value,registry.byId("sel").get("value"),"wid.get(\"value\") should be set same as outputval");
+	/*
+					doh.register("Check initial programatic values and bindings for select widget only", [
+						{
+							name: "InitialSelectOnly",
+							runTest: function(){
+								console.log("This test is commented out because it will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
+								// Test Select
+								doh.is("1",wid.get("value"),"This test will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
+								doh.is(registry.byId("seltext").value,registry.byId("sel").get("value"),"wid.get(\"value\") should be set same as textboxval");
+								doh.is(registry.byId("selOutput").value,registry.byId("sel").get("value"),"wid.get(\"value\") should be set same as outputval");
+							}
 						}
-					}
-				]);
-*/
+					]);
+	*/
 
-				doh.register("Check initial values and bindings widgets other than select", [
-					{
-						name: "InitialOtherThanSelect",
-						runTest: function(){
-							// Test FilteringSelect
-							var wid, textboxval, outputval;
-							wid = registry.byId("filsel");
-							textboxval = registry.byId("filtext").value;
-							outputval = registry.byId("filoutput").value;
-							doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.ComboBox
-							wid = registry.byId("combosel");
-							textboxval = registry.byId("combotext").value;
-							outputval = registry.byId("combooutput").value;
-							doh.is("three", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("three", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.DateTextBox
-							wid = registry.byId("datesel");
-							textboxval = registry.byId("datetext").value;
-							outputval = registry.byId("dateoutput").value;
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set it is:" + wid.get("value"));
-							doh.is("04-04-2011", wid.displayedValue, "wid.displayedValue should be set it is:" + wid.displayedValue);
-							doh.is("04-04-2011", textboxval, "textboxval should be set it is:" + textboxval);
-							doh.is("04-04-2011", outputval, "outputval should be set it is:" + outputval);
-							// Test dijit.form.HorizontalSlider
-							wid = registry.byId("slidersel");
-							textboxval = registry.byId("slidertext").value;
-							outputval = registry.byId("slideroutput").value;
-							doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.NumberSpinner
-							wid = registry.byId("numspinsel");
-							textboxval = registry.byId("numspintext").value;
-							outputval = registry.byId("numspinoutput").value;
-							doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
-							doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
-							// Test dijit.form.SimpleTextarea
-							wid = registry.byId("simpTAsel");
-							textboxval = registry.byId("simpTAtext").value;
-							outputval = registry.byId("simpTAoutput").value;
-							doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.Textarea
-							wid = registry.byId("textareasel");
-							textboxval = registry.byId("textareatext").value;
-							outputval = registry.byId("textareaoutput").value;
-							doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+					doh.register("Check initial values and bindings widgets other than select", [
+						{
+							name: "InitialOtherThanSelect",
+							runTest: function(){
+								// Test FilteringSelect
+								var wid, textboxval, outputval;
+								wid = registry.byId("filsel");
+								textboxval = registry.byId("filtext").value;
+								outputval = registry.byId("filoutput").value;
+								doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.ComboBox
+								wid = registry.byId("combosel");
+								textboxval = registry.byId("combotext").value;
+								outputval = registry.byId("combooutput").value;
+								doh.is("three", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("three", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.DateTextBox
+								wid = registry.byId("datesel");
+								textboxval = registry.byId("datetext").value;
+								outputval = registry.byId("dateoutput").value;
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set it is:" + wid.get("value"));
+								doh.is("04-04-2011", wid.displayedValue, "wid.displayedValue should be set it is:" + wid.displayedValue);
+								doh.is("04-04-2011", textboxval, "textboxval should be set it is:" + textboxval);
+								doh.is("04-04-2011", outputval, "outputval should be set it is:" + outputval);
+								// Test dijit.form.HorizontalSlider
+								wid = registry.byId("slidersel");
+								textboxval = registry.byId("slidertext").value;
+								outputval = registry.byId("slideroutput").value;
+								doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.NumberSpinner
+								wid = registry.byId("numspinsel");
+								textboxval = registry.byId("numspintext").value;
+								outputval = registry.byId("numspinoutput").value;
+								doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
+								doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
+								// Test dijit.form.SimpleTextarea
+								wid = registry.byId("simpTAsel");
+								textboxval = registry.byId("simpTAtext").value;
+								outputval = registry.byId("simpTAoutput").value;
+								doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.Textarea
+								wid = registry.byId("textareasel");
+								textboxval = registry.byId("textareatext").value;
+								outputval = registry.byId("textareaoutput").value;
+								doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
+						}, {
+							name: "Initial-declarative",
+							runTest: function(){
+								var wid, textboxval, outputval;
+								// Test Select
+								wid = registry.byId("decsel");
+								textboxval = registry.byId("decseltext").value;
+								outputval = registry.byId("decselOutput").value;
+								doh.is("1", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test FilteringSelect
+								wid = registry.byId("decfilsel");
+								textboxval = registry.byId("decfiltext").value;
+								outputval = registry.byId("decfilOutput").value;
+								doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.ComboBox
+								wid = registry.byId("deccombosel");
+								textboxval = registry.byId("deccombotext").value;
+								outputval = registry.byId("deccomboOutput").value;
+								doh.is("three",wid.get("value"),"wid.get(\"value\") should be set");
+								doh.is("three",wid.displayedValue,"wid.displayedValue should be set");
+								doh.is(textboxval,wid.get("value"),"wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval,wid.get("value"),"wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.DateTextBox
+								wid = registry.byId("decdatesel");
+								textboxval = registry.byId("decdatetext").value;
+								outputval = registry.byId("decdateOutput").value;
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set it is:" + wid.get("value"));
+								doh.is("04-04-2011", wid.displayedValue, "wid.displayedValue should be set it is:" + wid.displayedValue);
+								doh.is("04-04-2011", textboxval, "textboxval should be set it is:" + textboxval);
+								doh.is("04-04-2011", outputval, "outputval should be set it is:" + outputval);
+								// Test dijit.form.HorizontalSlider
+								wid = registry.byId("decslidersel");
+								textboxval = registry.byId("decslidertext").value;
+								outputval = registry.byId("decsliderOutput").value;
+								doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.NumberSpinner
+								wid = registry.byId("decnumspinsel");
+								textboxval = registry.byId("decnumspintext").value;
+								outputval = registry.byId("decnumspinOutput").value;
+								doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
+								doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
+								// Test dijit.form.SimpleTextarea
+								wid = registry.byId("decsimpTAsel");
+								textboxval = registry.byId("decsimpTAtext").value;
+								outputval = registry.byId("decsimpTAOutput").value;
+								doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.Textarea
+								wid = registry.byId("dectextareasel");
+								textboxval = registry.byId("dectextareatext").value;
+								outputval = registry.byId("dectextareaOutput").value;
+								doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
 						}
-					}, {
-						name: "Initial-declarative",
-						runTest: function(){
-							var wid, textboxval, outputval;
-							// Test Select
-							wid = registry.byId("decsel");
-							textboxval = registry.byId("decseltext").value;
-							outputval = registry.byId("decselOutput").value;
-							doh.is("1", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test FilteringSelect
-							wid = registry.byId("decfilsel");
-							textboxval = registry.byId("decfiltext").value;
-							outputval = registry.byId("decfilOutput").value;
-							doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.ComboBox
-							wid = registry.byId("deccombosel");
-							textboxval = registry.byId("deccombotext").value;
-							outputval = registry.byId("deccomboOutput").value;
-							doh.is("three",wid.get("value"),"wid.get(\"value\") should be set");
-							doh.is("three",wid.displayedValue,"wid.displayedValue should be set");
-							doh.is(textboxval,wid.get("value"),"wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval,wid.get("value"),"wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.DateTextBox
-							wid = registry.byId("decdatesel");
-							textboxval = registry.byId("decdatetext").value;
-							outputval = registry.byId("decdateOutput").value;
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set it is:" + wid.get("value"));
-							doh.is("04-04-2011", wid.displayedValue, "wid.displayedValue should be set it is:" + wid.displayedValue);
-							doh.is("04-04-2011", textboxval, "textboxval should be set it is:" + textboxval);
-							doh.is("04-04-2011", outputval, "outputval should be set it is:" + outputval);
-							// Test dijit.form.HorizontalSlider
-							wid = registry.byId("decslidersel");
-							textboxval = registry.byId("decslidertext").value;
-							outputval = registry.byId("decsliderOutput").value;
-							doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.NumberSpinner
-							wid = registry.byId("decnumspinsel");
-							textboxval = registry.byId("decnumspintext").value;
-							outputval = registry.byId("decnumspinOutput").value;
-							doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
-							doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
-							// Test dijit.form.SimpleTextarea
-							wid = registry.byId("decsimpTAsel");
-							textboxval = registry.byId("decsimpTAtext").value;
-							outputval = registry.byId("decsimpTAOutput").value;
-							doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.Textarea
-							wid = registry.byId("dectextareasel");
-							textboxval = registry.byId("dectextareatext").value;
-							outputval = registry.byId("dectextareaOutput").value;
-							doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-						}
-					}
-				]);
+					]);
 
-				doh.register("Check initial/updated calendar and colorpalette values", [
-					{
-						name: "Initial-calendar-and-color",
-						runTest: function(){
-							var wid, textboxval, outputval;
-							// Test Calendar
-							wid = registry.byId("deccal");
-							textboxval = registry.byId("deccaltext").value;
-							outputval = registry.byId("deccalOutput").value;
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set it is:" + wid.get("value"));
-							doh.is("04-04-2011", textboxval, "1-textboxval should be set");
-							doh.is("04-04-2011", outputval, "1-textboxval should be set");
-							// Test dijit.ColorPalette
-							wid = registry.byId("deccolor");
-							textboxval = registry.byId("deccolortext").value;
-							outputval = registry.byId("deccolorOutput").value;
-							doh.is("#000000", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-						}
-					}, {
-						name: "Updated-test-calendar-and-color",
-						runTest: function(){
-							var wid, textboxval, outputval;
-							// Test Update calendar
-							var d = new Date(2011, 10, 10);
-							wid = registry.byId("deccal");
-							wid.set("value", d);
-							textboxval = registry.byId("deccaltext").value;
-							outputval = registry.byId("deccalOutput").value;
-							doh.is(d.getTime(), wid.get("value").getTime(), "2-wid.get(\"value\") should be set " + wid.get("value"));
-							doh.is("11-10-2011", textboxval, "2-textboxval should be set" + textboxval);
-							doh.is("11-10-2011", outputval, "2-textboxval should be set" + outputval);
-							// Test dijit.ColorPalette
-							// update the text field
-							registry.byId("deccolortext").set("value", "#ffffff");
-							wid = registry.byId("deccolor");
-							textboxval = registry.byId("deccolortext").value;
-							outputval = registry.byId("deccolorOutput").value;
-							doh.is("#ffffff", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+					doh.register("Check initial/updated calendar and colorpalette values", [
+						{
+							name: "Initial-calendar-and-color",
+							runTest: function(){
+								var wid, textboxval, outputval;
+								// Test Calendar
+								wid = registry.byId("deccal");
+								textboxval = registry.byId("deccaltext").value;
+								outputval = registry.byId("deccalOutput").value;
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set it is:" + wid.get("value"));
+								doh.is("04-04-2011", textboxval, "1-textboxval should be set");
+								doh.is("04-04-2011", outputval, "1-textboxval should be set");
+								// Test dijit.ColorPalette
+								wid = registry.byId("deccolor");
+								textboxval = registry.byId("deccolortext").value;
+								outputval = registry.byId("deccolorOutput").value;
+								doh.is("#000000", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
+						}, {
+							name: "Updated-test-calendar-and-color",
+							runTest: function(){
+								var wid, textboxval, outputval;
+								// Test Update calendar
+								var d = new Date(2011, 10, 10);
+								wid = registry.byId("deccal");
+								wid.set("value", d);
+								textboxval = registry.byId("deccaltext").value;
+								outputval = registry.byId("deccalOutput").value;
+								doh.is(d.getTime(), wid.get("value").getTime(), "2-wid.get(\"value\") should be set " + wid.get("value"));
+								doh.is("11-10-2011", textboxval, "2-textboxval should be set" + textboxval);
+								doh.is("11-10-2011", outputval, "2-textboxval should be set" + outputval);
+								// Test dijit.ColorPalette
+								// update the text field
+								registry.byId("deccolortext").set("value", "#ffffff");
+								wid = registry.byId("deccolor");
+								textboxval = registry.byId("deccolortext").value;
+								outputval = registry.byId("deccolorOutput").value;
+								doh.is("#ffffff", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
 
-							// Test Reset Calendar
-							button = registry.byId("deccalReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("deccal");
-							textboxval = registry.byId("deccaltext").value;
-							outputval = registry.byId("deccalOutput").value;
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "3-wid.get(\"value\") should be set " + wid.get("value"));
-							doh.is("04-04-2011", textboxval, "3-textboxval should be set" + textboxval);
-							doh.is("04-04-2011", outputval, "3-textboxval should be set" + outputval);
-							// Test reset the dijit.ColorPalette
-							button = registry.byId("deccolorReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("deccolor");
-							textboxval = registry.byId("deccolortext").value;
-							outputval = registry.byId("deccolorOutput").value;
-							doh.is("#000000", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test Reset Calendar
+								button = registry.byId("deccalReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("deccal");
+								textboxval = registry.byId("deccaltext").value;
+								outputval = registry.byId("deccalOutput").value;
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "3-wid.get(\"value\") should be set " + wid.get("value"));
+								doh.is("04-04-2011", textboxval, "3-textboxval should be set" + textboxval);
+								doh.is("04-04-2011", outputval, "3-textboxval should be set" + outputval);
+								// Test reset the dijit.ColorPalette
+								button = registry.byId("deccolorReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("deccolor");
+								textboxval = registry.byId("deccolortext").value;
+								outputval = registry.byId("deccolorOutput").value;
+								doh.is("#000000", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
 						}
-					}
-				]);
+					]);
 
-				// Update and Test all fields
-				doh.register("Test update for all values and bindings", [
-					{
-						name: "Update-programatic",
-						runTest: function(){
-							// update the text field
-							registry.byId("seltext").set("value", "10");
-							var wid, textboxval, outputval;
-							// Test Select
-							wid = registry.byId("sel");
-							textboxval = registry.byId("seltext").value;
-							outputval = registry.byId("selOutput").value;
-							doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test FilteringSelect
-							// update the text field
-							registry.byId("filtext").set("value", "10");
-							wid = registry.byId("filsel");
-							textboxval = registry.byId("filtext").value;
-							outputval = registry.byId("filoutput").value;
-							doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("ten", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.ComboBox
-							registry.byId("combotext").set("value", "ten");
-							wid = registry.byId("combosel");
-							textboxval = registry.byId("combotext").value;
-							outputval = registry.byId("combooutput").value;
-							doh.is("ten", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("ten", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.DateTextBox
-							// update the text field
-							registry.byId("datetext").set("value", "10-10-2011");
-							wid = registry.byId("datesel");
-							textboxval = registry.byId("datetext").value;
-							outputval = registry.byId("dateoutput").value;
-							doh.is((new Date(2011, 9, 10)).getTime(), wid.get("value").getTime(), "wid.get(value) should be set " + wid.get("value"));
-							doh.is("10-10-2011", textboxval, "2-textboxval should be set" + textboxval);
-							doh.is("10-10-2011", outputval, "2-textboxval should be set" + outputval);
-							// Test dijit.form.HorizontalSlider
-							// update the text field
-							registry.byId("slidertext").set("value", "10");
-							wid = registry.byId("slidersel");
-							textboxval = registry.byId("slidertext").value;
-							outputval = registry.byId("slideroutput").value;
-							doh.is("10", wid.get("value"), "wid.get(value) should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.NumberSpinner
-							registry.byId("numspintext").set("value", "10");
-							wid = registry.byId("numspinsel");
-							textboxval = registry.byId("numspintext").value;
-							outputval = registry.byId("numspinoutput").value;
-							doh.is("10", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
-							doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
-							// Test dijit.form.SimpleTextarea
-							registry.byId("simpTAtext").set("value", "10");
-							wid = registry.byId("simpTAsel");
-							textboxval = registry.byId("simpTAtext").value;
-							outputval = registry.byId("simpTAoutput").value;
-							doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.Textarea
-							registry.byId("textareatext").set("value", "10");
-							wid = registry.byId("textareasel");
-							textboxval = registry.byId("textareatext").value;
-							outputval = registry.byId("textareaoutput").value;
-							doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+					// Update and Test all fields
+					doh.register("Test update for all values and bindings", [
+						{
+							name: "Update-programatic",
+							runTest: function(){
+								// update the text field
+								registry.byId("seltext").set("value", "10");
+								var wid, textboxval, outputval;
+								// Test Select
+								wid = registry.byId("sel");
+								textboxval = registry.byId("seltext").value;
+								outputval = registry.byId("selOutput").value;
+								doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test FilteringSelect
+								// update the text field
+								registry.byId("filtext").set("value", "10");
+								wid = registry.byId("filsel");
+								textboxval = registry.byId("filtext").value;
+								outputval = registry.byId("filoutput").value;
+								doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("ten", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.ComboBox
+								registry.byId("combotext").set("value", "ten");
+								wid = registry.byId("combosel");
+								textboxval = registry.byId("combotext").value;
+								outputval = registry.byId("combooutput").value;
+								doh.is("ten", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("ten", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.DateTextBox
+								// update the text field
+								registry.byId("datetext").set("value", "10-10-2011");
+								wid = registry.byId("datesel");
+								textboxval = registry.byId("datetext").value;
+								outputval = registry.byId("dateoutput").value;
+								doh.is((new Date(2011, 9, 10)).getTime(), wid.get("value").getTime(), "wid.get(value) should be set " + wid.get("value"));
+								doh.is("10-10-2011", textboxval, "2-textboxval should be set" + textboxval);
+								doh.is("10-10-2011", outputval, "2-textboxval should be set" + outputval);
+								// Test dijit.form.HorizontalSlider
+								// update the text field
+								registry.byId("slidertext").set("value", "10");
+								wid = registry.byId("slidersel");
+								textboxval = registry.byId("slidertext").value;
+								outputval = registry.byId("slideroutput").value;
+								doh.is("10", wid.get("value"), "wid.get(value) should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.NumberSpinner
+								registry.byId("numspintext").set("value", "10");
+								wid = registry.byId("numspinsel");
+								textboxval = registry.byId("numspintext").value;
+								outputval = registry.byId("numspinoutput").value;
+								doh.is("10", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
+								doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
+								// Test dijit.form.SimpleTextarea
+								registry.byId("simpTAtext").set("value", "10");
+								wid = registry.byId("simpTAsel");
+								textboxval = registry.byId("simpTAtext").value;
+								outputval = registry.byId("simpTAoutput").value;
+								doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.Textarea
+								registry.byId("textareatext").set("value", "10");
+								wid = registry.byId("textareasel");
+								textboxval = registry.byId("textareatext").value;
+								outputval = registry.byId("textareaoutput").value;
+								doh.is("10", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
+						}, {
+							name: "Update-declarative",
+							runTest: function(){
+								registry.byId("decsel").set("value", "4");
+								var wid, textboxval, outputval;
+								// Test Select
+								wid = registry.byId("decsel");
+								textboxval = registry.byId("decseltext").value;
+								outputval = registry.byId("decselOutput").value;
+								doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test FilteringSelect
+								wid = registry.byId("decfilsel");
+								wid.set("value", "4");
+								textboxval = registry.byId("decfiltext").value;
+								outputval = registry.byId("decfilOutput").value;
+								doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("four", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.ComboBox
+								wid = registry.byId("deccombosel");
+								wid.set("value", "four");
+								textboxval = registry.byId("deccombotext").value;
+								outputval = registry.byId("deccomboOutput").value;
+								doh.is("four", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("four", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.DateTextBox
+								wid = registry.byId("decdatesel");
+								wid.set("value", new Date(2011, 8, 9));
+								textboxval = registry.byId("decdatetext").value;
+								outputval = registry.byId("decdateOutput").value;
+								doh.is((new Date(2011, 8, 9)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
+								doh.is("09-09-2011", textboxval, "textboxval should be set" + textboxval);
+								doh.is("09-09-2011", outputval, "textboxval should be set" + outputval);
+								// Test dijit.form.HorizontalSlider
+								wid = registry.byId("decslidersel");
+								wid.set("value", "4");
+								textboxval = registry.byId("decslidertext").value;
+								outputval = registry.byId("decsliderOutput").value;
+								doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.NumberSpinner
+								wid = registry.byId("decnumspinsel");
+								wid.set("displayedValue", "4");
+								textboxval = registry.byId("decnumspintext").value;
+								outputval = registry.byId("decnumspinOutput").value;
+								doh.is("4", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
+								doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
+								// Test dijit.form.SimpleTextarea
+								wid = registry.byId("decsimpTAsel");
+								wid.set("value", "4");
+								textboxval = registry.byId("decsimpTAtext").value;
+								outputval = registry.byId("decsimpTAOutput").value;
+								doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.Textarea
+								wid = registry.byId("dectextareasel");
+								wid.set("value","4");   // update widget value
+								textboxval = registry.byId("dectextareatext").value;
+								outputval = registry.byId("dectextareaOutput").value;
+								doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
 						}
-					}, {
-						name: "Update-declarative",
-						runTest: function(){
-							registry.byId("decsel").set("value", "4");
-							var wid, textboxval, outputval;
-							// Test Select
-							wid = registry.byId("decsel");
-							textboxval = registry.byId("decseltext").value;
-							outputval = registry.byId("decselOutput").value;
-							doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test FilteringSelect
-							wid = registry.byId("decfilsel");
-							wid.set("value", "4");
-							textboxval = registry.byId("decfiltext").value;
-							outputval = registry.byId("decfilOutput").value;
-							doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("four", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.ComboBox
-							wid = registry.byId("deccombosel");
-							wid.set("value", "four");
-							textboxval = registry.byId("deccombotext").value;
-							outputval = registry.byId("deccomboOutput").value;
-							doh.is("four", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("four", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.DateTextBox
-							wid = registry.byId("decdatesel");
-							wid.set("value", new Date(2011, 8, 9));
-							textboxval = registry.byId("decdatetext").value;
-							outputval = registry.byId("decdateOutput").value;
-							doh.is((new Date(2011, 8, 9)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
-							doh.is("09-09-2011", textboxval, "textboxval should be set" + textboxval);
-							doh.is("09-09-2011", outputval, "textboxval should be set" + outputval);
-							// Test dijit.form.HorizontalSlider
-							wid = registry.byId("decslidersel");
-							wid.set("value", "4");
-							textboxval = registry.byId("decslidertext").value;
-							outputval = registry.byId("decsliderOutput").value;
-							doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.NumberSpinner
-							wid = registry.byId("decnumspinsel");
-							wid.set("displayedValue", "4");
-							textboxval = registry.byId("decnumspintext").value;
-							outputval = registry.byId("decnumspinOutput").value;
-							doh.is("4", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
-							doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
-							// Test dijit.form.SimpleTextarea
-							wid = registry.byId("decsimpTAsel");
-							wid.set("value", "4");
-							textboxval = registry.byId("decsimpTAtext").value;
-							outputval = registry.byId("decsimpTAOutput").value;
-							doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.Textarea
-							wid = registry.byId("dectextareasel");
-							wid.set("value","4");   // update widget value
-							textboxval = registry.byId("dectextareatext").value;
-							outputval = registry.byId("dectextareaOutput").value;
-							doh.is("4", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-						}
-					}
-				]);
+					]);
 
-				// Test RESET for all fields
-				doh.register("Test reset for all values and bindings", [
-					{
-						name: "Reset-programatic",
-						runTest: function(){
-							// reset the model
-							var button = registry.byId("selReset");
-							button.onClick();
-							var wid, textboxval, outputval;
-							// Test Select
-							wid = registry.byId("sel");
-							textboxval = registry.byId("seltext").value;
-							outputval = registry.byId("selOutput").value;
-							doh.is("1", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test FilteringSelect
-							button = registry.byId("filReset");
-							button.onClick();
-							wid = registry.byId("filsel");
-							textboxval = registry.byId("filtext").value;
-							outputval = registry.byId("filoutput").value;
-							doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.ComboBox
-							button = registry.byId("comboReset");
-							button.onClick();
-							wid = registry.byId("combosel");
-							textboxval = registry.byId("combotext").value;
-							outputval = registry.byId("combooutput").value;
-							doh.is("three", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("three", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.DateTextBox
-							button = registry.byId("dateReset");
-							button.onClick();
-							wid = registry.byId("datesel");
-							textboxval = registry.byId("datetext").value;
-							outputval = registry.byId("dateoutput").value;
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
-							doh.is("04-04-2011", textboxval, "textboxval should be set" + textboxval);
-							doh.is("04-04-2011", outputval, "textboxval should be set" + outputval);
-							// test a second reset...
-							button.onClick();
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
-							doh.is("04-04-2011", textboxval, "textboxval should be set" + textboxval);
-							doh.is("04-04-2011", outputval, "textboxval should be set" + outputval);
-							// Test dijit.form.HorizontalSlider
-							button = registry.byId("sliderReset");
-							button.onClick();
-							wid = registry.byId("slidersel");
-							textboxval = registry.byId("slidertext").value;
-							outputval = registry.byId("slideroutput").value;
-							doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.NumberSpinner
-							button = registry.byId("numspinReset");
-							button.onClick();
-							wid = registry.byId("numspinsel");
-							textboxval = registry.byId("numspintext").value;
-							outputval = registry.byId("numspinoutput").value;
-							doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
-							doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
-							// Test dijit.form.SimpleTextarea
-							button = registry.byId("simpTAReset");
-							button.onClick();
-							wid = registry.byId("simpTAsel");
-							textboxval = registry.byId("simpTAtext").value;
-							outputval = registry.byId("simpTAoutput").value;
-							doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.Textarea
-							button = registry.byId("textareaReset");
-							button.onClick();
-							wid = registry.byId("textareasel");
-							textboxval = registry.byId("textareatext").value;
-							outputval = registry.byId("textareaoutput").value;
-							doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+					// Test RESET for all fields
+					doh.register("Test reset for all values and bindings", [
+						{
+							name: "Reset-programatic",
+							runTest: function(){
+								// reset the model
+								var button = registry.byId("selReset");
+								button.onClick();
+								var wid, textboxval, outputval;
+								// Test Select
+								wid = registry.byId("sel");
+								textboxval = registry.byId("seltext").value;
+								outputval = registry.byId("selOutput").value;
+								doh.is("1", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test FilteringSelect
+								button = registry.byId("filReset");
+								button.onClick();
+								wid = registry.byId("filsel");
+								textboxval = registry.byId("filtext").value;
+								outputval = registry.byId("filoutput").value;
+								doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.ComboBox
+								button = registry.byId("comboReset");
+								button.onClick();
+								wid = registry.byId("combosel");
+								textboxval = registry.byId("combotext").value;
+								outputval = registry.byId("combooutput").value;
+								doh.is("three", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("three", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.DateTextBox
+								button = registry.byId("dateReset");
+								button.onClick();
+								wid = registry.byId("datesel");
+								textboxval = registry.byId("datetext").value;
+								outputval = registry.byId("dateoutput").value;
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
+								doh.is("04-04-2011", textboxval, "textboxval should be set" + textboxval);
+								doh.is("04-04-2011", outputval, "textboxval should be set" + outputval);
+								// test a second reset...
+								button.onClick();
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
+								doh.is("04-04-2011", textboxval, "textboxval should be set" + textboxval);
+								doh.is("04-04-2011", outputval, "textboxval should be set" + outputval);
+								// Test dijit.form.HorizontalSlider
+								button = registry.byId("sliderReset");
+								button.onClick();
+								wid = registry.byId("slidersel");
+								textboxval = registry.byId("slidertext").value;
+								outputval = registry.byId("slideroutput").value;
+								doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.NumberSpinner
+								button = registry.byId("numspinReset");
+								button.onClick();
+								wid = registry.byId("numspinsel");
+								textboxval = registry.byId("numspintext").value;
+								outputval = registry.byId("numspinoutput").value;
+								doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
+								doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
+								// Test dijit.form.SimpleTextarea
+								button = registry.byId("simpTAReset");
+								button.onClick();
+								wid = registry.byId("simpTAsel");
+								textboxval = registry.byId("simpTAtext").value;
+								outputval = registry.byId("simpTAoutput").value;
+								doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.Textarea
+								button = registry.byId("textareaReset");
+								button.onClick();
+								wid = registry.byId("textareasel");
+								textboxval = registry.byId("textareatext").value;
+								outputval = registry.byId("textareaoutput").value;
+								doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
+						}, {
+							name: "Reset-declarative",
+							runTest: function(){
+								var button = registry.byId("decselReset"); // reset the model
+								button.onClick();
+								var wid, textboxval, outputval;
+								// Test Select
+								wid = registry.byId("decsel");
+								textboxval = registry.byId("decseltext").value;
+								outputval = registry.byId("decselOutput").value;
+								doh.is("1", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test FilteringSelect
+								button = registry.byId("decfilReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("decfilsel");
+								textboxval = registry.byId("decfiltext").value;
+								outputval = registry.byId("decfilOutput").value;
+								doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.ComboBox
+								button = registry.byId("deccomboReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("deccombosel");
+								textboxval = registry.byId("deccombotext").value;
+								outputval = registry.byId("deccomboOutput").value;
+								doh.is("three", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is("three", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.DateTextBox
+								button = registry.byId("decdateReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("decdatesel");
+								textboxval = registry.byId("decdatetext").value;
+								outputval = registry.byId("decdateOutput").value;
+								doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
+								doh.is("04-04-2011", textboxval, "textboxval should be set" + textboxval);
+								doh.is("04-04-2011", outputval, "textboxval should be set" + outputval);
+								// Test dijit.form.HorizontalSlider
+								button = registry.byId("decsliderReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("decslidersel");
+								textboxval = registry.byId("decslidertext").value;
+								outputval = registry.byId("decsliderOutput").value;
+								doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.NumberSpinner
+								button = registry.byId("decnumspinReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("decnumspinsel");
+								textboxval = registry.byId("decnumspintext").value;
+								outputval = registry.byId("decnumspinOutput").value;
+								doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
+								doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
+								doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
+								// Test dijit.form.SimpleTextarea
+								button = registry.byId("decsimpTAReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("decsimpTAsel");
+								textboxval = registry.byId("decsimpTAtext").value;
+								outputval = registry.byId("decsimpTAOutput").value;
+								doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+								// Test dijit.form.Textarea
+								button = registry.byId("dectextareaReset"); // reset the model
+								button.onClick();
+								wid = registry.byId("dectextareasel");
+								textboxval = registry.byId("dectextareatext").value;
+								outputval = registry.byId("dectextareaOutput").value;
+								doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
+								doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+							}
 						}
-					}, {
-						name: "Reset-declarative",
-						runTest: function(){
-							var button = registry.byId("decselReset"); // reset the model
-							button.onClick();
-							var wid, textboxval, outputval;
-							// Test Select
-							wid = registry.byId("decsel");
-							textboxval = registry.byId("decseltext").value;
-							outputval = registry.byId("decselOutput").value;
-							doh.is("1", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test FilteringSelect
-							button = registry.byId("decfilReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("decfilsel");
-							textboxval = registry.byId("decfiltext").value;
-							outputval = registry.byId("decfilOutput").value;
-							doh.is("2", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("two", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.ComboBox
-							button = registry.byId("deccomboReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("deccombosel");
-							textboxval = registry.byId("deccombotext").value;
-							outputval = registry.byId("deccomboOutput").value;
-							doh.is("three", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is("three", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.DateTextBox
-							button = registry.byId("decdateReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("decdatesel");
-							textboxval = registry.byId("decdatetext").value;
-							outputval = registry.byId("decdateOutput").value;
-							doh.is((new Date(2011, 3, 4)).getTime(), wid.get("value").getTime(), "wid.get(\"value\") should be set " + wid.get("value"));
-							doh.is("04-04-2011", textboxval, "textboxval should be set" + textboxval);
-							doh.is("04-04-2011", outputval, "textboxval should be set" + outputval);
-							// Test dijit.form.HorizontalSlider
-							button = registry.byId("decsliderReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("decslidersel");
-							textboxval = registry.byId("decslidertext").value;
-							outputval = registry.byId("decsliderOutput").value;
-							doh.is("5", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.NumberSpinner
-							button = registry.byId("decnumspinReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("decnumspinsel");
-							textboxval = registry.byId("decnumspintext").value;
-							outputval = registry.byId("decnumspinOutput").value;
-							doh.is("6", wid.displayedValue, "wid.displayedValue should be set");
-							doh.is(textboxval, wid.displayedValue, "wid.displayedValue should be set same as textboxval");
-							doh.is(outputval, wid.displayedValue, "wid.displayedValue should be set same as outputval");
-							// Test dijit.form.SimpleTextarea
-							button = registry.byId("decsimpTAReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("decsimpTAsel");
-							textboxval = registry.byId("decsimpTAtext").value;
-							outputval = registry.byId("decsimpTAOutput").value;
-							doh.is("7", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
-							// Test dijit.form.Textarea
-							button = registry.byId("dectextareaReset"); // reset the model
-							button.onClick();
-							wid = registry.byId("dectextareasel");
-							textboxval = registry.byId("dectextareatext").value;
-							outputval = registry.byId("dectextareaOutput").value;
-							doh.is("8", wid.get("value"), "wid.get(\"value\") should be set");
-							doh.is(textboxval, wid.get("value"), "wid.get(\"value\") should be set same as textboxval");
-							doh.is(outputval, wid.get("value"), "wid.get(\"value\") should be set same as outputval");
+					]);
+
+					// Test reset all declarative
+					doh.register("Test NaN values and bindings", [
+						{
+							name: "NaN-test",
+							runTest: function(){
+								var button = registry.byId("decselReset"); // reset the model
+								button.onClick();
+								var wid, wid2;
+
+								// test for NaN stuff here, uses nanmodel, without fix for ticket 14190 FF crashes
+								wid = registry.byId("nannb");
+								wid.focus();
+								wid2 = registry.byId("textareatext");
+								wid2.focus();
+								wid = registry.byId("nannb");
+								wid.focus();
+								wid2.focus();
+								doh.t(isNaN(wid.get("value")), "isNaN(wid.get(\"value\") should be true");
+							}
 						}
-					}
-				]);
+					]);
 
-				// Test reset all declarative
-				doh.register("Test NaN values and bindings", [
-					{
-						name: "NaN-test",
-						runTest: function(){
-							var button = registry.byId("decselReset"); // reset the model
-							button.onClick();
-							var wid, wid2;
-
-							// test for NaN stuff here, uses nanmodel, without fix for ticket 14190 FF crashes
-							wid = registry.byId("nannb");
-							wid.focus();
-							wid2 = registry.byId("textareatext");
-							wid2.focus();
-							wid = registry.byId("nannb");
-							wid.focus();
-							wid2.focus();
-							doh.t(isNaN(wid.get("value")), "isNaN(wid.get(\"value\") should be true");
-						}
-					}
-				]);
-
-				doh.run();
+					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header" style="margin-top: 0px;">
 				<div id="navigation"  style="margin-top: 0px;"></div>

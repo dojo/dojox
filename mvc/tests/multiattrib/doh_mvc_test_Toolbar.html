@@ -8,8 +8,7 @@
 		@import "../../../../dijit/tests/css/dijitTests.css";
 
 		.flatScreen {
-			background-image: url(../../../../dijit/tests/images/flatScreen.gif); height: 32px; width: 32px;
-		}
+			background-image: url(../../../../dijit/tests/images/flatScreen.gif); height: 32px; width: 32px;		
 	</style>
 	<link id="themeStyles" rel="stylesheet" href="../../../../dijit/themes/claro/claro.css"/>
 <script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../../dojo/dojo.js"></script>
@@ -23,7 +22,7 @@
 		require([
 			"dojox/mvc",
 			"dojo/parser",
-			"dojox/mvc/at",
+			"dojo/when",
 			"dojox/mvc/_patches",
 			"dijit/Declaration",
 			"dijit/Toolbar",
@@ -40,8 +39,7 @@
 			"dijit/form/TextBox",
 			"dijit/form/Select",
 			"dijit/form/CheckBox"
-		], function(mvc, parser, at){
-			window.at = at;
+		], function(mvc, parser, when){
 			(cutItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCut");
 			(copyItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCopy").set("label", "Copy");
 			boldItemModel = mvc.newStatefulModel({ data : { "checked" : false}});
@@ -54,7 +52,11 @@
 						dojox.debugDataBinding = true;
 
 						doh.register("parse", function() {
-							dojo.parser.parse();
+							var dfd = new doh.Deferred();
+							when(dojo.parser.parse(), function(){
+								dfd.callback(true);
+							});
+							return dfd;
 						});
 						// should be able to verify all of the inputs 
 						doh.register("check initial values and bindings", [{
@@ -113,6 +115,7 @@
 
 
 	<body class="claro">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<h1 class="testTitle">Toolbar test</h1>
 
 	<span data-dojo-type="dijit.Declaration" data-dojo-props='widgetClass:"ToolbarSectionStart", defaults:{ label: "Label"}'>

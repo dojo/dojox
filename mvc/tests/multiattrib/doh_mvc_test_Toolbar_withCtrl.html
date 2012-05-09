@@ -8,8 +8,7 @@
 			@import "../../../../dijit/tests/css/dijitTests.css";
 	
 			.flatScreen {
-				background-image: url(../../../../dijit/tests/images/flatScreen.gif); height: 32px; width: 32px;
-			}
+				background-image: url(../../../../dijit/tests/images/flatScreen.gif); height: 32px; width: 32px;		
 		</style>
 		<link id="themeStyles" rel="stylesheet" href="../../../../dijit/themes/claro/claro.css"/>
 		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../../dojo/dojo.js"></script>
@@ -23,9 +22,9 @@
 			require([
 				"doh/runner",
 				"dojo/parser",
+				"dojo/when",
 				"dojo/Stateful",
 				"dojox/mvc/ModelRefController",
-				"dojox/mvc/at",
 				"dojox/mvc/_patches",
 				"dijit/Declaration",
 				"dijit/Toolbar",
@@ -43,73 +42,74 @@
 				"dijit/form/Select",
 				"dijit/form/CheckBox",
 				"dojo/domReady!"
-			], function(doh, parser, Stateful, ModelRefController, at){
-				window.at = at;
+			], function(doh, parser, when, Stateful, ModelRefController){
 				dojox.debugDataBinding = true;
 	
 				cutItemCtrl = new ModelRefController();
 				copyItemCtrl = new ModelRefController();
 				boldItemCtrl = new ModelRefController();
 
-				parser.parse();
+				when(parser.parse(), function(){
+					cutItemCtrl.set("model", new Stateful({iconClass: "dijitEditorIcon dijitEditorIconCut"}));
+					copyItemCtrl.set("model", new Stateful({iconClass: "dijitEditorIcon dijitEditorIconCopy", label: "Copy"}));
+					boldItemCtrl.set("model", new Stateful({checked: false}));
+		
+					// should be able to verify all of the inputs 
+					doh.register("check initial values and bindings", [{
+						name : "initial",
+						runTest : function() {
+							doh.is("Copy", dijit.byId("selCopy").get('value'),"value should be Copy");
+							doh.is("Copy",  dijit.byId("toolbar1.copy").get('label'),"label should be Copy");
+							doh.t(dijit.byId("toolbar1.copy").get('showLabel'),"label should be shown");
 
-				cutItemCtrl.set("model", new Stateful({iconClass: "dijitEditorIcon dijitEditorIconCut"}));
-				copyItemCtrl.set("model", new Stateful({iconClass: "dijitEditorIcon dijitEditorIconCopy", label: "Copy"}));
-				boldItemCtrl.set("model", new Stateful({checked: false}));
-	
-				// should be able to verify all of the inputs 
-				doh.register("check initial values and bindings", [{
-					name : "initial",
-					runTest : function() {
-						doh.is("Copy", dijit.byId("selCopy").get('value'),"value should be Copy");
-						doh.is("Copy",  dijit.byId("toolbar1.copy").get('label'),"label should be Copy");
-						doh.t(dijit.byId("toolbar1.copy").get('showLabel'),"label should be shown");
-
-						doh.f(dijit.byId("checkBold").get('checked'),"bold checkbox should be false");
-						doh.f(dijit.byId("toolbar1.bold").get('checked'),"bold toolbar should be false");
-
-						doh.t(dijit.byId("checkItalic").get('checked'),"italic checkbox should be true");
-						doh.f(dijit.byId("toolbar1.italic").get('checked'),"italic toolbar should be false");
-					}
-				}]);
-
-				doh.register("update Copy Label", [{
-					name : "Update-First-Name",
-					runTest : function() {
-						var copyLabel, boldToolbar, bold, italic;
-						//test first relevant false
-						copyLabel = dijit.byId("selCopy");
-						if (copyLabel) {
-							copyItemCtrl.set("label","Copy to clipboard...");
-							doh.is("Copy to clipboard...", dijit.byId("selCopy").get('value'),"value should be Copy to clipboard...");
-							doh.is("Copy to clipboard...",  dijit.byId("toolbar1.copy").get('label'),"label should be Copy to clipboard...");
-						}
-						boldToolbar = dijit.byId("boldtoolbar1.copy");
-						if (boldToolbar) {
-							boldToolbar.set("checked", true);
-							doh.f(dijit.byId("checkBold").get('checked'),"bold checkbox should be false");
-							doh.t(dijit.byId("toolbar1.bold").get('checked'),"bold toolbar should be true");
-						}
-						bold = dijit.byId("checkBold");
-						if (bold) {
-							bold.set("checked",false);
 							doh.f(dijit.byId("checkBold").get('checked'),"bold checkbox should be false");
 							doh.f(dijit.byId("toolbar1.bold").get('checked'),"bold toolbar should be false");
-						}
-						italic = dijit.byId("checkItalic");
-						if (italic) {
-							italic.set("checked",true);
-							doh.t(dijit.byId("checkItalic").get('checked'),"italic checkbox should be false");
+
+							doh.t(dijit.byId("checkItalic").get('checked'),"italic checkbox should be true");
 							doh.f(dijit.byId("toolbar1.italic").get('checked'),"italic toolbar should be false");
 						}
-					}
-				}]);
-				doh.run();
+					}]);
+
+					doh.register("update Copy Label", [{
+						name : "Update-First-Name",
+						runTest : function() {
+							var copyLabel, boldToolbar, bold, italic;
+							//test first relevant false
+							copyLabel = dijit.byId("selCopy");
+							if (copyLabel) {
+								copyItemCtrl.set("label","Copy to clipboard...");
+								doh.is("Copy to clipboard...", dijit.byId("selCopy").get('value'),"value should be Copy to clipboard...");
+								doh.is("Copy to clipboard...",  dijit.byId("toolbar1.copy").get('label'),"label should be Copy to clipboard...");
+							}
+							boldToolbar = dijit.byId("boldtoolbar1.copy");
+							if (boldToolbar) {
+								boldToolbar.set("checked", true);
+								doh.f(dijit.byId("checkBold").get('checked'),"bold checkbox should be false");
+								doh.t(dijit.byId("toolbar1.bold").get('checked'),"bold toolbar should be true");
+							}
+							bold = dijit.byId("checkBold");
+							if (bold) {
+								bold.set("checked",false);
+								doh.f(dijit.byId("checkBold").get('checked'),"bold checkbox should be false");
+								doh.f(dijit.byId("toolbar1.bold").get('checked'),"bold toolbar should be false");
+							}
+							italic = dijit.byId("checkItalic");
+							if (italic) {
+								italic.set("checked",true);
+								doh.t(dijit.byId("checkItalic").get('checked'),"italic checkbox should be false");
+								doh.f(dijit.byId("toolbar1.italic").get('checked'),"italic toolbar should be false");
+							}
+						}
+					}]);
+
+					doh.run();
+				});
 			}); 
 		</script>
 	</head>
 
 	<body class="claro">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<h1 class="testTitle">Toolbar test</h1>
 
 	<span data-dojo-type="dijit.Declaration" data-dojo-props='widgetClass:"ToolbarSectionStart", defaults:{ label: "Label"}'>

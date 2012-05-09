@@ -29,10 +29,9 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/parser", "dojo/store/Memory", "dijit/registry", "dojox/mvc/at",
+		// |						"dojo/parser", "dojo/store/Memory", "dijit/registry",
 		// |						"dijit/form/TextBox", "dojox/mvc/StoreRefController", "dojo/domReady!"
-		// |					], function(parser, Memory, registry, at){
-		// |						window.at = at;
+		// |					], function(parser, Memory, registry){
 		// |						store = new Memory({data: [{id: "Foo", value: "Foo"}, {id: "Bar", value: "Bar"}]});
 		// |						parser.parse();
 		// |						registry.byId("ctrl").getStore("Foo");
@@ -41,6 +40,7 @@ define([
 		// |				</script>
 		// |			</head>
 		// |			<body>
+		// |				<script type="dojo/require">at: "dojox/mvc/at"</script>
 		// |				<span id="ctrl" data-dojo-type="dojox.mvc.StoreRefController" data-dojo-props="store: store"></span>
 		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('widget:ctrl', 'value')">
 		// |			</body>

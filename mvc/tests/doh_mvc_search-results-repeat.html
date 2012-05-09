@@ -16,8 +16,8 @@
 			require([
 				"doh/runner",
 				"dojo/parser",
+				"dojo/when",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
@@ -28,7 +28,7 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, parser, registry, at, getStateful){
+			], function(doh, parser, when, registry, getStateful){
 				function runTests(){
 					// should be able to verify all of the inputs 
 					doh.register("Check initial values and bindings", [
@@ -74,120 +74,119 @@
 					doh.run();
 				}
 
-				window.at = at;
 				dojox.debugDataBinding = true;
 
-				parser.parse();
+				when(parser.parse(), function(){
+					setDetailsContext = function(index){
+						var ctl = registry.byId("listCtl");
+						ctl.set("cursorIndex", index);
+					};
 
-				setDetailsContext = function(index){
-					var ctl = registry.byId("listCtl");
-					ctl.set("cursorIndex", index);
-				};
-					
-				searchRecords = getStateful(
-					{
-						"Query" : "Engineers",
-						"Results" : [
-							{
-								"First"	  : "Anne",
-								"Last"	  : "Ackerman",
-								"Location": "NY",
-								"Office"  : "1S76",
-								"Email"	  : "a.a@test.com",
-								"Tel"	  : "123-764-8237",
-								"Fax"	  : "123-764-8228"
-							},
-							{
-								"First"	  : "Ben",
-								"Last"	  : "Beckham",
-								"Location": "NY",
-								"Office"  : "5N47",
-								"Email"	  : "b.b@test.com",
-								"Tel"	  : "123-764-8599",
-								"Fax"	  : "123-764-8600"
-							},
-							{
-								"First"	  : "Chad",
-								"Last"	  : "Chapman",
-								"Location": "CA",
-								"Office"  : "1278",
-								"Email"	  : "c.c@test.com",
-								"Tel"	  : "408-764-8237",
-								"Fax"	  : "408-764-8228"
-							},
-							{
-								"First"	  : "David",
-								"Last"	  : "Durham",
-								"Location": "NJ",
-								"Office"  : "C12",
-								"Email"	  : "d.d@test.com",
-								"Tel"	  : "514-764-8237",
-								"Fax"	  : "514-764-8228"
-							},
-							{
-								"First"	  : "Emma",
-								"Last"	  : "Eklof",
-								"Location": "NY",
-								"Office"  : "4N76",
-								"Email"	  : "e.e@test.com",
-								"Tel"	  : "123-764-1234",
-								"Fax"	  : "123-764-4321"
-							},
-							{
-								"First"	  : "Fred",
-								"Last"	  : "Fisher",
-								"Location": "NJ",
-								"Office"  : "V89",
-								"Email"	  : "f.f@test.com",
-								"Tel"	  : "514-764-8567",
-								"Fax"	  : "514-764-8000"
-							},
-							{
-								"First"	  : "George",
-								"Last"	  : "Garnett",
-								"Location": "NY",
-								"Office"  : "7S11",
-								"Email"	  : "gig@test.com",
-								"Tel"	  : "123-999-8599",
-								"Fax"	  : "123-999-8600"
-							},
-							{
-								"First"	  : "Hunter",
-								"Last"	  : "Huffman",
-								"Location": "CA",
-								"Office"  : "6532",
-								"Email"	  : "h.h@test.com",
-								"Tel"	  : "408-874-8237",
-								"Fax"	  : "408-874-8228"
-							},
-							{
-								"First"	  : "Irene",
-								"Last"	  : "Ira",
-								"Location": "NJ",
-								"Office"  : "F09",
-								"Email"	  : "i.i@test.com",
-								"Tel"	  : "514-764-6532",
-								"Fax"	  : "514-764-7300"
-							},
-							{
-								"First"	  : "John",
-								"Last"	  : "Jacklin",
-								"Location": "CA",
-								"Office"  : "6701",
-								"Email"	  : "j.j@test.com",
-								"Tel"	  : "408-764-1234",
-								"Fax"	  : "408-764-4321"
-							}
-						]
-					});
+					searchRecords = getStateful(
+						{
+							"Query" : "Engineers",
+							"Results" : [
+								{
+									"First"	  : "Anne",
+									"Last"	  : "Ackerman",
+									"Location": "NY",
+									"Office"  : "1S76",
+									"Email"	  : "a.a@test.com",
+									"Tel"	  : "123-764-8237",
+									"Fax"	  : "123-764-8228"
+								},
+								{
+									"First"	  : "Ben",
+									"Last"	  : "Beckham",
+									"Location": "NY",
+									"Office"  : "5N47",
+									"Email"	  : "b.b@test.com",
+									"Tel"	  : "123-764-8599",
+									"Fax"	  : "123-764-8600"
+								},
+								{
+									"First"	  : "Chad",
+									"Last"	  : "Chapman",
+									"Location": "CA",
+									"Office"  : "1278",
+									"Email"	  : "c.c@test.com",
+									"Tel"	  : "408-764-8237",
+									"Fax"	  : "408-764-8228"
+								},
+								{
+									"First"	  : "David",
+									"Last"	  : "Durham",
+									"Location": "NJ",
+									"Office"  : "C12",
+									"Email"	  : "d.d@test.com",
+									"Tel"	  : "514-764-8237",
+									"Fax"	  : "514-764-8228"
+								},
+								{
+									"First"	  : "Emma",
+									"Last"	  : "Eklof",
+									"Location": "NY",
+									"Office"  : "4N76",
+									"Email"	  : "e.e@test.com",
+									"Tel"	  : "123-764-1234",
+									"Fax"	  : "123-764-4321"
+								},
+								{
+									"First"	  : "Fred",
+									"Last"	  : "Fisher",
+									"Location": "NJ",
+									"Office"  : "V89",
+									"Email"	  : "f.f@test.com",
+									"Tel"	  : "514-764-8567",
+									"Fax"	  : "514-764-8000"
+								},
+								{
+									"First"	  : "George",
+									"Last"	  : "Garnett",
+									"Location": "NY",
+									"Office"  : "7S11",
+									"Email"	  : "gig@test.com",
+									"Tel"	  : "123-999-8599",
+									"Fax"	  : "123-999-8600"
+								},
+								{
+									"First"	  : "Hunter",
+									"Last"	  : "Huffman",
+									"Location": "CA",
+									"Office"  : "6532",
+									"Email"	  : "h.h@test.com",
+									"Tel"	  : "408-874-8237",
+									"Fax"	  : "408-874-8228"
+								},
+								{
+									"First"	  : "Irene",
+									"Last"	  : "Ira",
+									"Location": "NJ",
+									"Office"  : "F09",
+									"Email"	  : "i.i@test.com",
+									"Tel"	  : "514-764-6532",
+									"Fax"	  : "514-764-7300"
+								},
+								{
+									"First"	  : "John",
+									"Last"	  : "Jacklin",
+									"Location": "CA",
+									"Office"  : "6701",
+									"Email"	  : "j.j@test.com",
+									"Tel"	  : "408-764-1234",
+									"Fax"	  : "408-764-4321"
+								}
+							]
+						});
 
-				registry.byId("listCtl").set("model", searchRecords.Results);
-				runTests();
-
+					registry.byId("listCtl").set("model", searchRecords.Results);
+					runTests();
+				});
 			});
 		</script>
 	</head>
 <body class="claro" style="width:100%;height:100%;margin:0;padding:0;">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<span id="listCtl"  data-dojo-type="dojox.mvc.ListController" 
 							data-dojo-props="cursorIndex: 0"></span>
 		<div id="header">

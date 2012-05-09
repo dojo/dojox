@@ -17,16 +17,15 @@
 				"doh/runner",
 				"dojo/dom",
 				"dojo/parser",
+				"dojo/when",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Repeat",
 				"dojox/mvc/Output"
-			], function(doh, ddom, parser, registry, at, getStateful){
-				window.at = at;
+			], function(doh, ddom, parser, when, registry, getStateful){
 				dojox.debugDataBinding = true;
 
 				// Order data
@@ -110,104 +109,104 @@
 				//model = mvc.newStatefulModel({ data : order });
 				model = getStateful(orderData);
 				
-				parser.parse();
-				recomputeTotal();
-
-
 				function recomputeTotal() {
-						require([
-						         "dijit/registry",
-						         "dojox/mvc/at"
-						         ], function(registry, at){
-										var total = 0;			
-										var wone = parseInt(registry.byId("oneInput").get("value")) || 0;
-					   					var wtwo = parseInt(registry.byId("twoInput").get("value")) || 0;
-										var wthree = parseInt(registry.byId("threeInput").get("value")) || 0;
-					   					var wfour = parseInt(registry.byId("fourInput").get("value")) || 0;
-					   					total = wone + wtwo + wthree + wfour;
-					   					var wtotal = registry.byId("totalOutput");
-					   					wtotal.set("value", total);			   					
-									});
-					};
+					require([
+					         "dijit/registry",
+					         "dojox/mvc/at"
+					         ], function(registry, at){
+									var total = 0;			
+									var wone = parseInt(registry.byId("oneInput").get("value")) || 0;
+				   					var wtwo = parseInt(registry.byId("twoInput").get("value")) || 0;
+									var wthree = parseInt(registry.byId("threeInput").get("value")) || 0;
+				   					var wfour = parseInt(registry.byId("fourInput").get("value")) || 0;
+				   					total = wone + wtwo + wthree + wfour;
+				   					var wtotal = registry.byId("totalOutput");
+				   					wtotal.set("value", total);			   					
+								});
+				}
 
+				function recomputeRepeatTotal() {
+					require([
+					         "dijit/registry",
+					         "dojox/mvc/at"
+					         ], function(registry, at){
+									var total = 0;
+									for(var i=0;i<sumrepeatmodel.list.length;i++){
+										console.log("sumrepeatmodel.list[i].item = "+sumrepeatmodel.list[i].item);
+										var item = parseInt(sumrepeatmodel.list[i].item) || 0;
+										total = total + item;
+									}
+				   					var wtotal = registry.byId("totalrepeatOutput");
+				   					wtotal.set("value", total);			   					
+								});
+				}
 
-					function recomputeRepeatTotal() {
-						require([
-						         "dijit/registry",
-						         "dojox/mvc/at"
-						         ], function(registry, at){
-										var total = 0;
-										for(var i=0;i<sumrepeatmodel.list.length;i++){
-											console.log("sumrepeatmodel.list[i].item = "+sumrepeatmodel.list[i].item);
-											var item = parseInt(sumrepeatmodel.list[i].item) || 0;
-											total = total + item;
-										}
-					   					var wtotal = registry.byId("totalrepeatOutput");
-					   					wtotal.set("value", total);			   					
-									});
-					};
-				
-				doh.register("Synchronize text box and label", [{
-					name: "Check first value",
-					runTest: function(){
-						doh.is("", registry.byId("firstInput").get("value"), "First should reflect initial data");
-						doh.is("last", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
-						doh.is("email", registry.byId("emailInput").get("value"), "Email should reflect initial data");
-						doh.t(/\s*\(Enter Age\)\s*/, registry.byId("ageOutput").innerHTML, "First should reflect initial data");
-						doh.is("10", registry.byId("totalOutput").get("value"), "totalOutput should reflect initial data");
-						doh.is("10", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect initial data");						
-					}
-				}, {
-					name: "Change first and check age label",
-					runTest: function(){
-						model.set("First", "John");
-						doh.is("John", registry.byId("firstInput").get("value"), "First should reflect initial data");
-						doh.t(/\s*\(Enter John's Age\)\s*/, registry.byId("ageOutput").innerHTML, "First should reflect initial data");
-					}
-				}, {
-					name: "Change oneInput and item 0 and check totalOutput and totalrepeatOutput",
-					runTest: function(){
-						summodel.set("one", 11);
-						doh.is("20", registry.byId("totalOutput").get("value"), "totalOutput should reflect updated value");
-						sumrepeatmodel.list[0].set("item", 211);
-						doh.is("220", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect updated value");
-					}
-				}, {
-					name: "blank oneInput and item 0 and check totalOutput and totalrepeatOutput",
-					runTest: function(){
-						summodel.set("one", "");
-						doh.is("9", registry.byId("totalOutput").get("value"), "totalOutput should reflect updated value");
-						doh.is("0", registry.byId("oneInput").get("value"), "oneInput should reflect updated value");
-						sumrepeatmodel.list[0].set("item", "");
-						doh.is("9", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect updated value");
-						doh.is("0", registry.byId("input0").get("value"), "input0 should reflect updated value");
-					}
-				}, {
-					name: "Check model reset",
-					setUp: function(){
-						//model.reset();
-						//summodel.reset();
-						//sumrepeatmodel.reset();
-						summodel.set(sumData);
-						sumrepeatmodel.set(sumRepeatData);
-						model.set(orderData);
-					},
-					runTest: function(){
-						doh.is("", registry.byId("firstInput").get("value"), "First should reflect initial data");
-						doh.is("last", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
-						doh.is("email", registry.byId("emailInput").get("value"), "Email should reflect initial data");
-						doh.t(/\s*\(Enter Age\)\s*/, registry.byId("ageOutput").innerHTML, "First should reflect initial data");
-						doh.is("10", registry.byId("totalOutput").get("value"), "totalOutput should reflect initial data");
-						doh.is("10", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect initial data");						
-					}
-					
-				}]);
+				when(parser.parse(), function(){
+					recomputeTotal();
 
-				doh.run();
+					doh.register("Synchronize text box and label", [{
+						name: "Check first value",
+						runTest: function(){
+							doh.is("", registry.byId("firstInput").get("value"), "First should reflect initial data");
+							doh.is("last", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
+							doh.is("email", registry.byId("emailInput").get("value"), "Email should reflect initial data");
+							doh.t(/\s*\(Enter Age\)\s*/, registry.byId("ageOutput").innerHTML, "First should reflect initial data");
+							doh.is("10", registry.byId("totalOutput").get("value"), "totalOutput should reflect initial data");
+							doh.is("10", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect initial data");						
+						}
+					}, {
+						name: "Change first and check age label",
+						runTest: function(){
+							model.set("First", "John");
+							doh.is("John", registry.byId("firstInput").get("value"), "First should reflect initial data");
+							doh.t(/\s*\(Enter John's Age\)\s*/, registry.byId("ageOutput").innerHTML, "First should reflect initial data");
+						}
+					}, {
+						name: "Change oneInput and item 0 and check totalOutput and totalrepeatOutput",
+						runTest: function(){
+							summodel.set("one", 11);
+							doh.is("20", registry.byId("totalOutput").get("value"), "totalOutput should reflect updated value");
+							sumrepeatmodel.list[0].set("item", 211);
+							doh.is("220", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect updated value");
+						}
+					}, {
+						name: "blank oneInput and item 0 and check totalOutput and totalrepeatOutput",
+						runTest: function(){
+							summodel.set("one", "");
+							doh.is("9", registry.byId("totalOutput").get("value"), "totalOutput should reflect updated value");
+							doh.is("0", registry.byId("oneInput").get("value"), "oneInput should reflect updated value");
+							sumrepeatmodel.list[0].set("item", "");
+							doh.is("9", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect updated value");
+							doh.is("0", registry.byId("input0").get("value"), "input0 should reflect updated value");
+						}
+					}, {
+						name: "Check model reset",
+						setUp: function(){
+							//model.reset();
+							//summodel.reset();
+							//sumrepeatmodel.reset();
+							summodel.set(sumData);
+							sumrepeatmodel.set(sumRepeatData);
+							model.set(orderData);
+						},
+						runTest: function(){
+							doh.is("", registry.byId("firstInput").get("value"), "First should reflect initial data");
+							doh.is("last", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
+							doh.is("email", registry.byId("emailInput").get("value"), "Email should reflect initial data");
+							doh.t(/\s*\(Enter Age\)\s*/, registry.byId("ageOutput").innerHTML, "First should reflect initial data");
+							doh.is("10", registry.byId("totalOutput").get("value"), "totalOutput should reflect initial data");
+							doh.is("10", registry.byId("totalrepeatOutput").get("value"), "totalrepeatOutput should reflect initial data");						
+						}
+						
+					}]);
+
+					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body class="claro">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<div id="wrapper">
 	<div id="header">
 		<div id="navigation">

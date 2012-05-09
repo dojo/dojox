@@ -15,64 +15,64 @@
 				"dojo/parser",
 				"dojo/Stateful",
 				"dojo/dom",
-				"dojox/mvc/at",
+				"dojo/when",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ModelRefController",
 				"dojox/mvc/Group",
-				"dojox/mvc/ParserExtension"
-			], function(doh, parser, Stateful, dom, at, getStateful, ModelRefController){
-				window.at = at;
+				"dojox/mvc/ParserExtension",
+				"dojo/domReady!"
+			], function(doh, parser, Stateful, dom, when, getStateful, ModelRefController){
 				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController();
 				ctrlDetail = new ModelRefController();
 
-				parser.parse();
+				when(parser.parse(), function(){
+					data = {
+						"Serial": "360324",
+						"First": "John",
+						"Last": "Doe",
+						"Email": "jdoe@example.com",
+						"ShipTo": {
+							"Street": "123 Valley Rd-ShipTo",
+							"City": "Katonah",
+							"State": "NY",
+							"Zip": "10536"
+						},
+						"BillTo": {
+							"Street": "17 Skyline Dr-BillTo",
+							"City": "Hawthorne",
+							"State": "NY",
+							"Zip": "10532"
+						}
+					};
 
-				data = {
-					"Serial": "360324",
-					"First": "John",
-					"Last": "Doe",
-					"Email": "jdoe@example.com",
-					"ShipTo": {
-						"Street": "123 Valley Rd-ShipTo",
-						"City": "Katonah",
-						"State": "NY",
-						"Zip": "10536"
-					},
-					"BillTo": {
-						"Street": "17 Skyline Dr-BillTo",
-						"City": "Hawthorne",
-						"State": "NY",
-						"Zip": "10532"
-					}
-				};
+					ctrl.set("model", getStateful(data));
+					ctrlDetail.set("model", ctrl.model.get("ShipTo"));
 
-				ctrl.set("model", getStateful(data));
-				ctrlDetail.set("model", ctrl.model.get("ShipTo"));
+					doh.register("Switch between ShipTo and BillTo", [{
+						name: "Switch-to-BillTo",
+						runTest: function(){
+							ctrlDetail.set("model", ctrl.model.get("BillTo"));
+							doh.is("17 Skyline Dr-BillTo", dom.byId("streetInput").value, "Street should be of BillTo");
+							doh.is("Hawthorne", dom.byId("cityInput").value, "City should be of BillTo");
+						}
+					}, {
+						name: "Switch-to-ShipTo",
+						runTest: function(){
+							ctrlDetail.set("model", ctrl.model.get("ShipTo"));
+							doh.is("123 Valley Rd-ShipTo", dom.byId("streetInput").value, "Street should be of ShipTo");
+							doh.is("Katonah", dom.byId("cityInput").value, "City should be of ShipTo");
+						}
+					}]);
 
-				doh.register("Switch between ShipTo and BillTo", [{
-					name: "Switch-to-BillTo",
-					runTest: function(){
-						ctrlDetail.set("model", ctrl.model.get("BillTo"));
-						doh.is("17 Skyline Dr-BillTo", dom.byId("streetInput").value, "Street should be of BillTo");
-						doh.is("Hawthorne", dom.byId("cityInput").value, "City should be of BillTo");
-					}
-				}, {
-					name: "Switch-to-ShipTo",
-					runTest: function(){
-						ctrlDetail.set("model", ctrl.model.get("ShipTo"));
-						doh.is("123 Valley Rd-ShipTo", dom.byId("streetInput").value, "Street should be of ShipTo");
-						doh.is("Katonah", dom.byId("cityInput").value, "City should be of ShipTo");
-					}
-				}]);
-
-				doh.run();
-				
+					doh.run();
+				});
 			});	
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 		<div id="header">
 			<div id="navigation">

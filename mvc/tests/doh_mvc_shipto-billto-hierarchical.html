@@ -15,7 +15,7 @@
 			require([
 				"doh/runner",
 				"dojo/parser",
-				"dojox/mvc/at",
+				"dojo/when",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ListController",
 				"dijit/registry",
@@ -23,8 +23,7 @@
 				"dijit/form/TextBox",
 				"dojox/mvc/Group",
 				"dojo/domReady!"
-			], function(doh, parser, at, getStateful, ListController, registry){
-				window.at = at;
+			], function(doh, parser, when, getStateful, ListController, registry){
 				dojox.debugDataBinding = true;
 
 				ctrl = new ListController({model: getStateful({
@@ -73,52 +72,53 @@
 
 				}), cursorIndex: "ShipTo"});
 
-				parser.parse();
+				when(parser.parse(), function(){
+					// should be able to verify all of the inputs
+					doh.register("Check values and bindings", [{
+						name: "Initial",
+						runTest: function(){
+							doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
+							doh.is("ShipTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
+							doh.is("123 Valley Rd", registry.byId("streetInput").get("value"), "street1 should be set");
+						}
+					}, {
+						name: "TestBillTo",
+						runTest: function(){
+							ctrl.set("cursorIndex", "BillTo");
+							doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
+							doh.is("BillTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
+							doh.is("17 Skyline Dr", registry.byId("streetInput").get("value"), "street1 should be set");
+						}
+					}, {
+						name: "TestShipTo",
+						runTest: function(){
+							ctrl.set("cursorIndex", "ShipTo");
+							doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
+							doh.is("ShipTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
+							doh.is("123 Valley Rd", registry.byId("streetInput").get("value"), "street1 should be set");
+						}
+					}, {
+						name: "ChangeShipTo",
+						runTest: function(){
+							ctrl.set("cursorIndex", "ShipTo");
+							registry.byId("streetInput").set("value","456 Mountain Rd");
+							ctrl.set("cursorIndex", "BillTo");
+							ctrl.set("cursorIndex", "ShipTo");
+							doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
+							doh.is("ShipTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
+							doh.is("456 Mountain Rd", registry.byId("streetInput").get("value"), "street1 should be set");
+							doh.is("Katonah", registry.byId("cityInput").get("value"), "city1 should be set");
+						}
+					}]);
 
-				// should be able to verify all of the inputs
-				doh.register("Check values and bindings", [{
-					name: "Initial",
-					runTest: function(){
-						doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
-						doh.is("ShipTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
-						doh.is("123 Valley Rd", registry.byId("streetInput").get("value"), "street1 should be set");
-					}
-				}, {
-					name: "TestBillTo",
-					runTest: function(){
-						ctrl.set("cursorIndex", "BillTo");
-						doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
-						doh.is("BillTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
-						doh.is("17 Skyline Dr", registry.byId("streetInput").get("value"), "street1 should be set");
-					}
-				}, {
-					name: "TestShipTo",
-					runTest: function(){
-						ctrl.set("cursorIndex", "ShipTo");
-						doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
-						doh.is("ShipTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
-						doh.is("123 Valley Rd", registry.byId("streetInput").get("value"), "street1 should be set");
-					}
-				}, {
-					name: "ChangeShipTo",
-					runTest: function(){
-						ctrl.set("cursorIndex", "ShipTo");
-						registry.byId("streetInput").set("value","456 Mountain Rd");
-						ctrl.set("cursorIndex", "BillTo");
-						ctrl.set("cursorIndex", "ShipTo");
-						doh.is("360324", registry.byId("serialInput").get("value"), "serial1 should be set");
-						doh.is("ShipTo", registry.byId("addrLabel").get("value"), "addr1 should be set");
-						doh.is("456 Mountain Rd", registry.byId("streetInput").get("value"), "street1 should be set");
-						doh.is("Katonah", registry.byId("cityInput").get("value"), "city1 should be set");
-					}
-				}]);
-
-				doh.run();
+					doh.run();
+				});
 			});
 
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

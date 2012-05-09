@@ -29,10 +29,9 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/parser", "dojo/Stateful", "dijit/registry", "dojox/mvc/at",
+		// |						"dojo/parser", "dojo/Stateful", "dijit/registry",
 		// |						"dijit/form/TextBox", "dojox/mvc/ModelRefController", "dojo/domReady!"
-		// |					], function(parser, Stateful, registry, at){
-		// |						window.at = at;
+		// |					], function(parser, Stateful, registry){
 		// |						modelFoo = new Stateful({value: "Foo"});
 		// |						modelBar = new Stateful({value: "Bar"});
 		// |						setTimeout(function(){ registry.byId("ctrl").set("model", modelBar); }, 2000);
@@ -41,6 +40,7 @@ define([
 		// |				</script>
 		// |			</head>
 		// |			<body>
+		// |				<script type="dojo/require">at: "dojox/mvc/at"</script>
 		// |				<span id="ctrl" data-dojo-type="dojox.mvc.ModelRefController" data-dojo-props="model: modelFoo"></span>
 		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('widget:ctrl', 'value')">
 		// |			</body>

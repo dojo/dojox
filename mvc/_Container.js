@@ -1,9 +1,10 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
+	"dojo/when",
 	"dijit/_WidgetBase",
 	"dojo/regexp"
-], function(declare, lang, _WidgetBase, regexp){
+], function(declare, lang, when, _WidgetBase, regexp){
 	/*=====
 		declare = dojo.declare;
 		_WidgetBase = dijit._WidgetBase;
@@ -62,12 +63,17 @@ define([
 					}
 				}
 			}
+
+			var _self = this;
+
 			if(this._parser){
-				this._containedWidgets = this._parser.parse(this.srcNodeRef,{
+				return when(this._parser.parse(this.srcNodeRef,{
 					template: true,
 					inherited: {dir: this.dir, lang: this.lang},
 					propsThis: this,
 					scope: "dojo"
+				}), function(widgets){
+					_self._containedWidgets = widgets;
 				});
 			}
 		},

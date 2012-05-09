@@ -7,9 +7,10 @@ define([
 	"dojo/dom-construct",
 	"dojo/_base/array",
 	"dojo/query",
+	"dojo/when",
 	"dijit/registry",
 	"./_Container"
-], function(declare, lang, has, win, dom, domconstruct, array, query, registry, _Container){
+], function(declare, lang, has, win, dom, domconstruct, array, query, when, registry, _Container){
 	/*=====
 		declare = dojo.declare;
 		dom = dojo.dom;
@@ -171,14 +172,16 @@ define([
 			// from this.domNode we need to set srcNodeRef from repeatNode
 			this.srcNodeRef = repeatNode;
 
-			this._createBody();
+			var _self = this;
 
-			if(this.removeRepeatNode){				
-				var repeatnode = this.domNode;
-				if(!this.savedParentId && this.domNode.parentNode && this.domNode.parentNode.id){
-					this.savedParentId = this.domNode.parentNode.id;
+			when(this._createBody(), function(){
+				if(!_self.removeRepeatNode){ return; }
+				
+				var repeatnode = _self.domNode;
+				if(!_self.savedParentId && _self.domNode.parentNode && _self.domNode.parentNode.id){
+					_self.savedParentId = _self.domNode.parentNode.id;
 				}
-				var repeatParent = dom.byId(this.savedParentId);			
+				var repeatParent = dom.byId(_self.savedParentId);			
 				if(repeatnode && repeatnode.children){
 					var t3 = registry.findWidgets(repeatnode);
 					var parentcnt = t3.length;
@@ -196,7 +199,7 @@ define([
 					}
 					domconstruct.destroy(repeatnode);
 				}
-			}			
+			});
 		},
 
 		_updateAddRemoveWatch: function(/*dojo.Stateful*/ children){

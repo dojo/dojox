@@ -16,7 +16,7 @@
 				"dojo/parser",
 				"dijit/registry",
 				"dojo/dom",
-				"dojox/mvc/at",
+				"dojo/when",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/_atBindingExtension",
 				"dojox/mvc/ListController",
@@ -26,7 +26,7 @@
 				"dojox/mvc/Repeat",
 				"dojox/mvc/ParserExtension",
 				"dojo/domReady!"
-			], function(doh, parser, registry, dom, at, getStateful){
+			], function(doh, parser, registry, dom, when, getStateful){
 				function runTests(){
 					// should be able to verify all of the inputs 
 					doh.register("Check initial values and bindings", [
@@ -72,16 +72,13 @@
 					doh.run();
 				}
 
-				window.at = at;
 				dojox.debugDataBinding = true;
-
-				parser.parse();
 
 				setDetailsContext = function(index){
 					var ctl = registry.byId("listCtl");
 					ctl.set("cursorIndex", index);
 				};
-					
+
 				searchRecords = getStateful(
 					{
 						"Query" : "Engineers",
@@ -179,13 +176,15 @@
 						]
 					});
 
-				registry.byId("listCtl").set("model", searchRecords.Results);
-				runTests();
-
+				when(parser.parse(), function(){
+					registry.byId("listCtl").set("model", searchRecords.Results);
+					runTests();
+				});
 			});
 		</script>
 	</head>
 <body class="claro" style="width:100%;height:100%;margin:0;padding:0;">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<span id="listCtl"  data-dojo-type="dojox.mvc.ListController" 
 							data-dojo-props="cursorIndex: 0"></span>
 		<div id="header">

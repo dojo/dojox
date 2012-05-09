@@ -97,10 +97,9 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/parser", "dijit/registry", "dojox/mvc/StatefulArray", "dojox/mvc/at",
+		// |						"dojo/parser", "dijit/registry", "dojox/mvc/StatefulArray",
 		// |						"dijit/form/TextBox", "dojox/mvc/ListController", "dojo/domReady!"
-		// |					], function(parser, registry, StatefulArray, at){
-		// |						window.at = at;
+		// |					], function(parser, registry, StatefulArray){
 		// |						var count = 0;
 		// |						model = new StatefulArray([{value: "First"}, {value: "Second"}, {value: "Third"}, {value: "Fourth"}, {value: "Fifth"}]);
 		// |						setInterval(function(){ registry.byId("ctrl").set("cursorIndex", ++count % 5); }, 2000);
@@ -109,6 +108,7 @@ define([
 		// |				</script>
 		// |			</head>
 		// |			<body>
+		// |				<script type="dojo/require">at: "dojox/mvc/at"</script>
 		// |				<span id="ctrl" data-dojo-type="dojox.mvc.ListController" data-dojo-props="model: model"></span>
 		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('widget:ctrl', 'value')">
 		// |			</body>

@@ -21,17 +21,15 @@
 			require([
 				"doh/runner",
 				"dojo/parser",
+				"dojo/when",
 				"dojo/Stateful",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dijit/form/TextBox",
 				"dijit/form/NumberTextBox",
 				"dijit/form/ValidationTextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Output"
-			], function(doh, parser, Stateful, registry, at){
-				window.at = at;
-
+			], function(doh, parser, when, Stateful, registry){
 				model = new Stateful({
 					First: "John",
 					Last: "Doe",
@@ -78,112 +76,113 @@
 					parse: noParse
 				};
 
-				parser.parse();
+				when(parser.parse(), function(){
+					doh.register("Check values and bindings", [{
+						name: "Initial",
+						runTest: function(){
+							var first1 = registry.byId("firstnameInput");
+							doh.f(first1.get("readOnly"), "readOnly should be false");
+							doh.t(first1.get("relevant"), "relevant should be true");
+							doh.t(first1.get("valid"), "valid should be true");
+							var addr1 = registry.byId("emailInput");
+							doh.f(addr1.get("readOnly"), "readOnly should be false");
+							doh.t(addr1.get("relevant"), "relevant should be true");
+							doh.f(addr1.get("required"), "required should be false");
+							doh.t(addr1.get("valid"), "valid should be true");
+						}
+					}, {
+						name: "TestFirstUpdate",
+						runTest: function(){
+							var first1 = registry.byId("firstnameInput");
+							first1.set("value", "0");
+							doh.f(first1.get("readOnly"), "readOnly should be false");
+							doh.f(first1.get("relevant"), "relevant should be false");
+							doh.f(first1.get("required"), "required should be false");
+							doh.t(first1.get("valid"), "valid should be true");
+							first1.set("value", "1");
+							doh.f(first1.get("readOnly"), "readOnly should be false for value = 1");
+							doh.t(first1.get("relevant"), "relevant should be true for value = 1");
+							doh.f(first1.get("required"), "required should be false for value = 1");
+							doh.f(first1.get("valid"), "valid should be false for value = 1");
+							first1.set("value", "2");
+							doh.t(first1.get("relevant"), "relevant should be true for value = 2");
+							doh.f(first1.get("required"), "required should be false for value = 2");
+							doh.t(first1.get("valid"), "valid should be true for value = 2");
+							doh.t(first1.get("readOnly"), "readOnly should be true for value = 2");
+							first1.set("value", "3");
+							doh.t(first1.get("readOnly"), "readOnly should be true for value = 3");
+							doh.t(first1.get("relevant"), "relevant should be true for value = 3");
+							doh.f(first1.get("required"), "required should be false for value = 3");
+							doh.f(first1.get("valid"), "valid should be false for value = 3");
+							first1.set("value", "5");
+							doh.f(first1.get("readOnly"), "readOnly should be false for value = 5");
+							doh.t(first1.get("relevant"), "relevant should be true for value = 5");
+							doh.f(first1.get("required"), "required should be false for value = 5");
+							doh.t(first1.get("valid"), "valid should be ture for value = 5");
+						}
+					}, {
+						name: "TestNumUpdate",
+						runTest: function(){
+							var num1 = registry.byId("numInput");
+							num1.set("value", 1);
+							doh.f(num1.get("readOnly"), "readOnly should be false for value = 1");
+							doh.f(num1.get("required"), "required should be false for value = 1");
+							doh.f(num1.get("valid"), "valid should be false for value = 1");
+							num1.set("value",5);
+							doh.f(num1.get("readOnly"), "readOnly should be false for value = 5");
+							doh.f(num1.get("required"), "required should be false for value = 5");
+							doh.t(num1.get("valid"), "valid should be true for value = 5");
+						}
+					}, {
+						name: "TestNumUpdate",
+						runTest: function(){
+							var last1 = registry.byId("lastnameInput");
+							var email1 = registry.byId("emailInput");
+							last1.set("value", "5");
+							doh.f(email1.get("readOnly"), "readOnly should be false for email value = 5");
+							doh.t(email1.get("relevant"), "relevant should be true for email value = 5");
+							doh.f(email1.get("required"), "required should be false for email value = 5");
+							doh.t(email1.get("valid"), "valid should be true for email value = 5");
+							last1.set("value", "0");
+							doh.f(email1.get("readOnly"), "readOnly should be false for email value = 0");
+							doh.f(email1.get("relevant"), "relevant should be false for email value = 0");
+							doh.f(email1.get("required"), "required should be false for email value = 0");
+							doh.t(email1.get("valid"), "valid should be true for email value = 0");
+							last1.set("value", "1");
+							doh.f(email1.get("readOnly"), "readOnly should be false for email value = 1");
+							doh.t(email1.get("relevant"), "relevant should be true for email value = 1");
+							doh.f(email1.get("required"), "required should be false for email value = 1");
+							doh.f(email1.get("valid"), "valid should be false for email value = 1");
+							last1.set("value", "2");
+							doh.t(email1.get("readOnly"), "readOnly should be true for email value = 2");
+							doh.t(email1.get("relevant"), "relevant should be true for email value = 2");
+							doh.f(email1.get("required"), "required should be false for email value = 2");
+							doh.t(email1.get("valid"), "valid should be true for email value = 2");
+							last1.set("value", "3");
+							doh.t(email1.get("readOnly"), "readOnly should be true for email value = 3");
+							doh.t(email1.get("relevant"), "relevant should be true for email value = 3");
+							doh.f(email1.get("required"), "required should be false for email value = 3");
+							doh.f(email1.get("valid"), "valid should be false for email value = 3");
+							last1.set("value", "4");
+							doh.f(email1.get("readOnly"), "readOnly should be false for email value = 4");
+							doh.t(email1.get("relevant"), "relevant should be true for email value = 4");
+							doh.t(email1.get("required"), "required should be true for email value = 4");
+							doh.t(email1.get("valid"), "valid should be true for email value = 4");
+							last1.set("value","5");
+							doh.f(email1.get("readOnly"), "readOnly should be false for email value = 5");
+							doh.t(email1.get("relevant"), "relevant should be true for email value = 5");
+							doh.f(email1.get("required"), "required should be false for email value = 5");
+							doh.t(email1.get("valid"), "valid should be true for email value = 5");
+						}
+					}]);
 
-				doh.register("Check values and bindings", [{
-					name: "Initial",
-					runTest: function(){
-						var first1 = registry.byId("firstnameInput");
-						doh.f(first1.get("readOnly"), "readOnly should be false");
-						doh.t(first1.get("relevant"), "relevant should be true");
-						doh.t(first1.get("valid"), "valid should be true");
-						var addr1 = registry.byId("emailInput");
-						doh.f(addr1.get("readOnly"), "readOnly should be false");
-						doh.t(addr1.get("relevant"), "relevant should be true");
-						doh.f(addr1.get("required"), "required should be false");
-						doh.t(addr1.get("valid"), "valid should be true");
-					}
-				}, {
-					name: "TestFirstUpdate",
-					runTest: function(){
-						var first1 = registry.byId("firstnameInput");
-						first1.set("value", "0");
-						doh.f(first1.get("readOnly"), "readOnly should be false");
-						doh.f(first1.get("relevant"), "relevant should be false");
-						doh.f(first1.get("required"), "required should be false");
-						doh.t(first1.get("valid"), "valid should be true");
-						first1.set("value", "1");
-						doh.f(first1.get("readOnly"), "readOnly should be false for value = 1");
-						doh.t(first1.get("relevant"), "relevant should be true for value = 1");
-						doh.f(first1.get("required"), "required should be false for value = 1");
-						doh.f(first1.get("valid"), "valid should be false for value = 1");
-						first1.set("value", "2");
-						doh.t(first1.get("relevant"), "relevant should be true for value = 2");
-						doh.f(first1.get("required"), "required should be false for value = 2");
-						doh.t(first1.get("valid"), "valid should be true for value = 2");
-						doh.t(first1.get("readOnly"), "readOnly should be true for value = 2");
-						first1.set("value", "3");
-						doh.t(first1.get("readOnly"), "readOnly should be true for value = 3");
-						doh.t(first1.get("relevant"), "relevant should be true for value = 3");
-						doh.f(first1.get("required"), "required should be false for value = 3");
-						doh.f(first1.get("valid"), "valid should be false for value = 3");
-						first1.set("value", "5");
-						doh.f(first1.get("readOnly"), "readOnly should be false for value = 5");
-						doh.t(first1.get("relevant"), "relevant should be true for value = 5");
-						doh.f(first1.get("required"), "required should be false for value = 5");
-						doh.t(first1.get("valid"), "valid should be ture for value = 5");
-					}
-				}, {
-					name: "TestNumUpdate",
-					runTest: function(){
-						var num1 = registry.byId("numInput");
-						num1.set("value", 1);
-						doh.f(num1.get("readOnly"), "readOnly should be false for value = 1");
-						doh.f(num1.get("required"), "required should be false for value = 1");
-						doh.f(num1.get("valid"), "valid should be false for value = 1");
-						num1.set("value",5);
-						doh.f(num1.get("readOnly"), "readOnly should be false for value = 5");
-						doh.f(num1.get("required"), "required should be false for value = 5");
-						doh.t(num1.get("valid"), "valid should be true for value = 5");
-					}
-				}, {
-					name: "TestNumUpdate",
-					runTest: function(){
-						var last1 = registry.byId("lastnameInput");
-						var email1 = registry.byId("emailInput");
-						last1.set("value", "5");
-						doh.f(email1.get("readOnly"), "readOnly should be false for email value = 5");
-						doh.t(email1.get("relevant"), "relevant should be true for email value = 5");
-						doh.f(email1.get("required"), "required should be false for email value = 5");
-						doh.t(email1.get("valid"), "valid should be true for email value = 5");
-						last1.set("value", "0");
-						doh.f(email1.get("readOnly"), "readOnly should be false for email value = 0");
-						doh.f(email1.get("relevant"), "relevant should be false for email value = 0");
-						doh.f(email1.get("required"), "required should be false for email value = 0");
-						doh.t(email1.get("valid"), "valid should be true for email value = 0");
-						last1.set("value", "1");
-						doh.f(email1.get("readOnly"), "readOnly should be false for email value = 1");
-						doh.t(email1.get("relevant"), "relevant should be true for email value = 1");
-						doh.f(email1.get("required"), "required should be false for email value = 1");
-						doh.f(email1.get("valid"), "valid should be false for email value = 1");
-						last1.set("value", "2");
-						doh.t(email1.get("readOnly"), "readOnly should be true for email value = 2");
-						doh.t(email1.get("relevant"), "relevant should be true for email value = 2");
-						doh.f(email1.get("required"), "required should be false for email value = 2");
-						doh.t(email1.get("valid"), "valid should be true for email value = 2");
-						last1.set("value", "3");
-						doh.t(email1.get("readOnly"), "readOnly should be true for email value = 3");
-						doh.t(email1.get("relevant"), "relevant should be true for email value = 3");
-						doh.f(email1.get("required"), "required should be false for email value = 3");
-						doh.f(email1.get("valid"), "valid should be false for email value = 3");
-						last1.set("value", "4");
-						doh.f(email1.get("readOnly"), "readOnly should be false for email value = 4");
-						doh.t(email1.get("relevant"), "relevant should be true for email value = 4");
-						doh.t(email1.get("required"), "required should be true for email value = 4");
-						doh.t(email1.get("valid"), "valid should be true for email value = 4");
-						last1.set("value","5");
-						doh.f(email1.get("readOnly"), "readOnly should be false for email value = 5");
-						doh.t(email1.get("relevant"), "relevant should be true for email value = 5");
-						doh.f(email1.get("required"), "required should be false for email value = 5");
-						doh.t(email1.get("valid"), "valid should be true for email value = 5");
-					}
-				}]);
-
-				doh.run();
+					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

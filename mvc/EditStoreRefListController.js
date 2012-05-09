@@ -21,10 +21,9 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/dom", "dojo/parser", "dojo/store/Observable", "dojo/store/Memory", "dijit/registry", "dojox/mvc/at",
+		// |						"dojo/dom", "dojo/parser", "dojo/store/Observable", "dojo/store/Memory", "dijit/registry",
 		// |						"dijit/form/CheckBox", "dojox/mvc/EditStoreRefListController", "dojox/mvc/ListController", "dojo/domReady!"
-		// |					], function(ddom, parser, Observable, Memory, registry, at){
-		// |						window.at = at;
+		// |					], function(ddom, parser, Observable, Memory, registry){
 		// |						store = Observable(new Memory({data: [{id: "Foo", value: false}]}));
 		// |						parser.parse();
 		// |						registry.byId("ctrl").queryStore().observe(function(object, previousIndex, newIndex){
@@ -40,6 +39,7 @@ define([
 		// |				</script>
 		// |			</head>
 		// |			<body>
+		// |				<script type="dojo/require">at: "dojox/mvc/at"</script>
 		// |				<span id="ctrl" data-dojo-type="dojox.mvc.EditStoreRefListController" 
 		// |				 data-dojo-props="store: store, cursorIndex: 0"></span>
 		// |				<input id="check" type="checkbox" data-dojo-type="dijit.form.CheckBox" data-dojo-props="checked: at('widget:ctrl', 'value')">

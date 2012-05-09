@@ -24,10 +24,10 @@
 				"dojo/when",
 				"dojo/dom",
 				"dojo/parser",
+				"dojo/promise/all",
 				"dojo/store/JsonRest",
 				"dijit/registry",
 				"dijit/_WidgetBase",
-				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/ListController",
@@ -36,17 +36,14 @@
 				"dojox/mvc/Group",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(doh, declare, when, ddom, parser, JsonRest, registry, _WidgetBase, at, getStateful, EditModelRefController, ListController){
-				window.at = at;
+			], function(doh, declare, when, ddom, parser, all, JsonRest, registry, _WidgetBase, getStateful, EditModelRefController, ListController){
 				dojox.debugDataBinding = true;
 
 				var ctrlClass = declare([_WidgetBase, EditModelRefController, ListController], {});
 				(ctrl = (new ctrlClass({srcNodeRef: ddom.byId("detailsGroup"), cursorIndex: 0}))).startup();
 
-				parser.parse();
-
-				when(new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcRepeatData.json")}).query({}), function(result){
-					ctrl.set("sourceModel", getStateful(result.items));
+				when(all([parser.parse(), new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcRepeatData.json")}).query({})]), function(a){
+					ctrl.set("sourceModel", getStateful(a[1].items));
 
 					 // should be able to verify all of the inputs
 					doh.register("Check values and bindings", [
@@ -103,6 +100,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<h1 class="testTitle">doh_mvc_programmatic-repeat-store.html automated tests (non-robot)</h1>
 		<div id="wrapper">
 			<div id="header">

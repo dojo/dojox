@@ -14,6 +14,7 @@
 			require([
 				"doh/runner",
 				"dojo/parser",
+				"dojo/when",
 				"dojo/Stateful",
 				"dijit/registry",
 				"dojox/mvc/at",
@@ -23,80 +24,80 @@
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
-			], function(doh, parser, Stateful, registry, at, getStateful, ModelRefController){
-				window.at = at;
+			], function(doh, parser, when, Stateful, registry, at, getStateful, ModelRefController){
 				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController();
 				ctrlDetail = new ModelRefController();
 
-				parser.parse();
+				when(parser.parse(), function(){
+					data = {
+						"Serial": "360324",
+						"First": "John",
+						"Last": "Doe",
+						"Email": "jdoe@example.com",
+						"ShipTo": {
+							"Street": "123 Valley Rd-ShipTo",
+							"City": "Katonah",
+							"State": "NY",
+							"Zip": "10536"
+						},
+						"BillTo": {
+							"Street": "17 Skyline Dr-BillTo",
+							"City": "Hawthorne",
+							"State": "NY",
+							"Zip": "10532"
+						}
+					};
 
-				data = {
-					"Serial": "360324",
-					"First": "John",
-					"Last": "Doe",
-					"Email": "jdoe@example.com",
-					"ShipTo": {
-						"Street": "123 Valley Rd-ShipTo",
-						"City": "Katonah",
-						"State": "NY",
-						"Zip": "10536"
-					},
-					"BillTo": {
-						"Street": "17 Skyline Dr-BillTo",
-						"City": "Hawthorne",
-						"State": "NY",
-						"Zip": "10532"
-					}
-				};
+					ctrl.set("model", getStateful(data));
+					ctrlDetail.set("model", ctrl.model.get("ShipTo"));
 
-				ctrl.set("model", getStateful(data));
-				ctrlDetail.set("model", ctrl.model.get("ShipTo"));
+					doh.register("Switch between ShipTo and BillTo", [{
+						name: "Switch-to-BillTo",
+						runTest: function(){
+							ctrlDetail.set("model", ctrl.model.get("BillTo"));
+							doh.is("17 Skyline Dr-BillTo", registry.byId("streetInput").get("value"), "Street should be of BillTo");
+							doh.is("Hawthorne", registry.byId("cityInput").get("value"), "City should be of BillTo");
+						}
+					}, {
+						name: "Switch-to-ShipTo",
+						runTest: function(){
+							ctrlDetail.set("model", ctrl.model.get("ShipTo"));
+							doh.is("123 Valley Rd-ShipTo", registry.byId("streetInput").get("value"), "Street should be of ShipTo");
+							doh.is("Katonah", registry.byId("cityInput").get("value"), "City should be of ShipTo");
+						}
+					}]);
 
-				doh.register("Switch between ShipTo and BillTo", [{
-					name: "Switch-to-BillTo",
-					runTest: function(){
-						ctrlDetail.set("model", ctrl.model.get("BillTo"));
-						doh.is("17 Skyline Dr-BillTo", registry.byId("streetInput").get("value"), "Street should be of BillTo");
-						doh.is("Hawthorne", registry.byId("cityInput").get("value"), "City should be of BillTo");
-					}
-				}, {
-					name: "Switch-to-ShipTo",
-					runTest: function(){
-						ctrlDetail.set("model", ctrl.model.get("ShipTo"));
-						doh.is("123 Valley Rd-ShipTo", registry.byId("streetInput").get("value"), "Street should be of ShipTo");
-						doh.is("Katonah", registry.byId("cityInput").get("value"), "City should be of ShipTo");
-					}
-				}]);
+					doh.register("Setting a plain object to group", [{
+						name: "Switch-to-BillTo",
+						setUp: function(){
+							registry.byId("streetInput").set("value", at("rel:", "Street"));
+							registry.byId("cityInput").set("value", at("rel:", "City"));
+							registry.byId("stateInput").set("value", at("rel:", "State"));
+							registry.byId("zipInput").set("value", at("rel:", "Zip"));
+						},
+						runTest: function(){
+							ctrlDetail.set("model", data.BillTo);
+							doh.is("17 Skyline Dr-BillTo", registry.byId("streetInput").get("value"), "Street should be of BillTo");
+							doh.is("Hawthorne", registry.byId("cityInput").get("value"), "City should be of BillTo");
+						}
+					}, {
+						name: "Switch-to-ShipTo",
+						runTest: function(){
+							ctrlDetail.set("model", data.ShipTo);
+							doh.is("123 Valley Rd-ShipTo", registry.byId("streetInput").get("value"), "Street should be of ShipTo");
+							doh.is("Katonah", registry.byId("cityInput").get("value"), "City should be of ShipTo");
+						}
+					}]);
 
-				doh.register("Setting a plain object to group", [{
-					name: "Switch-to-BillTo",
-					setUp: function(){
-						registry.byId("streetInput").set("value", at("rel:", "Street"));
-						registry.byId("cityInput").set("value", at("rel:", "City"));
-						registry.byId("stateInput").set("value", at("rel:", "State"));
-						registry.byId("zipInput").set("value", at("rel:", "Zip"));
-					},
-					runTest: function(){
-						ctrlDetail.set("model", data.BillTo);
-						doh.is("17 Skyline Dr-BillTo", registry.byId("streetInput").get("value"), "Street should be of BillTo");
-						doh.is("Hawthorne", registry.byId("cityInput").get("value"), "City should be of BillTo");
-					}
-				}, {
-					name: "Switch-to-ShipTo",
-					runTest: function(){
-						ctrlDetail.set("model", data.ShipTo);
-						doh.is("123 Valley Rd-ShipTo", registry.byId("streetInput").get("value"), "Street should be of ShipTo");
-						doh.is("Katonah", registry.byId("cityInput").get("value"), "City should be of ShipTo");
-					}
-				}]);
-
-				doh.run();
+					doh.run();
+				});
 			});	
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 		<div id="header">
 			<div id="navigation">

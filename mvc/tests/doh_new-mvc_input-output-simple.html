@@ -16,15 +16,14 @@
 				"doh/runner",
 				"dojo/dom",
 				"dojo/parser",
+				"dojo/when",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
-			], function(doh, ddom, parser, registry, at, getStateful){
-				window.at = at;
+			], function(doh, ddom, parser, when, registry, getStateful){
 				dojox.debugDataBinding = true;
 				// The dojox.mvc.StatefulModel class creates a data model instance
 				// where each leaf within the data model is decorated with dojo.Stateful
@@ -33,46 +32,47 @@
 				model = getStateful({"First": "John", "Last": "Doe", "Email": "jdoe@example.com"});
 				// the StatefulModel created above is initialized with 
 				// model.First set to "John", model.Last set to "Doe" and model.Email set to "jdoe@example.com"
-				parser.parse();
+				when(parser.parse(), function(){
+					doh.register("Synchronize text box and label", [{
+						name: "Check first value",
+						runTest: function(){
+							doh.is("John", registry.byId("firstnameInput").get("value"), "First should reflect initial data");
+							doh.is("Doe", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
+							doh.is("jdoe@example.com", registry.byId("emailInput").get("value"), "Email should reflect initial data");
+							doh.t(/\s*\(first name is: John\)\s*/, registry.byId("firstnameOut").innerHTML, "First should reflect initial data");
+							doh.t(/\s*\(last name is: Doe\)\s*/, registry.byId("lastnameOut").innerHTML, "Last should reflect initial data");
+							doh.t(/\s*\(email is: Doe\)\s*/, registry.byId("emailOut").innerHTML, "Email should reflect initial data");
+						}
+					}, {
+						name: "Check value sync",
+						runTest: function(){
+							model.set("First", "JohnJohn");
+							doh.t(/\s*\(first name is: JohnJohn\)\s*/, registry.byId("firstnameOut").innerHTML, "First should reflect the change");
+						}
+					}, {
+						name: "Check model reset",
+						setUp: function(){
+							model.set({"First": "John", "Last": "Doe", "Email": "jdoe@example.com"});
+							
+							//model.reset();
+						},
+						runTest: function(){
+							doh.is("John", registry.byId("firstnameInput").get("value"), "First should reflect initial data");
+							doh.is("Doe", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
+							doh.is("jdoe@example.com", registry.byId("emailInput").get("value"), "Email should reflect initial data");
+							doh.t(/\s*\(first name is: John\)\s*/, registry.byId("firstnameOut").innerHTML, "First should reflect initial data");
+							doh.t(/\s*\(last name is: Doe\)\s*/, registry.byId("lastnameOut").innerHTML, "Last should reflect initial data");
+							doh.t(/\s*\(email is: Doe\)\s*/, registry.byId("emailOut").innerHTML, "Email should reflect initial data");
+						}
+					}]);
 
-				doh.register("Synchronize text box and label", [{
-					name: "Check first value",
-					runTest: function(){
-						doh.is("John", registry.byId("firstnameInput").get("value"), "First should reflect initial data");
-						doh.is("Doe", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
-						doh.is("jdoe@example.com", registry.byId("emailInput").get("value"), "Email should reflect initial data");
-						doh.t(/\s*\(first name is: John\)\s*/, registry.byId("firstnameOut").innerHTML, "First should reflect initial data");
-						doh.t(/\s*\(last name is: Doe\)\s*/, registry.byId("lastnameOut").innerHTML, "Last should reflect initial data");
-						doh.t(/\s*\(email is: Doe\)\s*/, registry.byId("emailOut").innerHTML, "Email should reflect initial data");
-					}
-				}, {
-					name: "Check value sync",
-					runTest: function(){
-						model.set("First", "JohnJohn");
-						doh.t(/\s*\(first name is: JohnJohn\)\s*/, registry.byId("firstnameOut").innerHTML, "First should reflect the change");
-					}
-				}, {
-					name: "Check model reset",
-					setUp: function(){
-						model.set({"First": "John", "Last": "Doe", "Email": "jdoe@example.com"});
-						
-						//model.reset();
-					},
-					runTest: function(){
-						doh.is("John", registry.byId("firstnameInput").get("value"), "First should reflect initial data");
-						doh.is("Doe", registry.byId("lastnameInput").get("value"), "Last should reflect initial data");
-						doh.is("jdoe@example.com", registry.byId("emailInput").get("value"), "Email should reflect initial data");
-						doh.t(/\s*\(first name is: John\)\s*/, registry.byId("firstnameOut").innerHTML, "First should reflect initial data");
-						doh.t(/\s*\(last name is: Doe\)\s*/, registry.byId("lastnameOut").innerHTML, "Last should reflect initial data");
-						doh.t(/\s*\(email is: Doe\)\s*/, registry.byId("emailOut").innerHTML, "Email should reflect initial data");
-					}
-				}]);
-
-				doh.run();
+					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

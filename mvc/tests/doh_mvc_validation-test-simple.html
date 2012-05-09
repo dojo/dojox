@@ -12,14 +12,13 @@
 				"doh/runner",
 				"dojo/dom-class",
 				"dojo/parser",
+				"dojo/when",
 				"dojo/Stateful",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dojox/mvc/ModelRefController",
 				"dijit/form/NumberTextBox",
 				"dojox/mvc/_TextBoxExtensions"
-			], function(doh, domClass, parser, Stateful, registry, at, ModelRefController){
-				window.at = at;
+			], function(doh, domClass, parser, when, Stateful, registry, ModelRefController){
 				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController({
@@ -54,56 +53,57 @@
 					}
 				};
 
-				parser.parse();
+				when(parser.parse(), function(){
+					// should be able to verify all of the inputs
+					doh.register("Check values and bindings", [
+						{
+							name: "initial",
+							runTest: function(){
+								var num1 = registry.byId("num1");
+								var num2 = registry.byId("num2");
+								doh.is(10, num1.get("value"), "num1 should be 10");
+								doh.is(20, num2.get("value"), "num2 should be 20");
+								doh.t(num1.isValid(), "num1.isValid() should be true");
+								doh.t(num2.isValid(), "num2.isValid() should be true");
+								doh.f(num2.disabled, "num2.disabled should be false");
+								doh.f(num1.disabled, "num1.disabled should be false");
+							}
+						}, {
+							name: "Update-Num1-invalid",
+							runTest: function(){
+								var num1 = registry.byId("num1");
+								var num2 = registry.byId("num2");
+								num1.set("displayedValue", "30");
+								doh.is(30, num1.get("value"), "num1 should be 30");
+								doh.f(num1.disabled, "num1.disabled should be false");
+								doh.is(20, num2.get("value"), "num2 should be 20");
+								doh.f(num2.isValid(), "num2.isValid() should be false");
+								doh.f(num2.disabled, "num2.disabled should be false");
+								doh.t(domClass.contains(num1.domNode, "dijitNumberTextBoxError"), "num1 should have the dijitNumberTextBoxError class");
+								doh.t(domClass.contains(num2.domNode, "dijitNumberTextBoxError"), "num2 should have the dijitNumberTextBoxError class");
+							}
+						}, {
+							name: "Update-Num1-disabled2",
+							runTest: function(){
+								var num1 = registry.byId("num1");
+								var num2 = registry.byId("num2");
+								num1.set("displayedValue", "21");
+								num2.set("displayedValue", "21");
+								doh.is(21, num1.get("value"), "num1 should be 21");
+								doh.is(21, num2.get("value"), "num2 should be 21");
+								doh.t(registry.byId("num2").disabled, "num2.disabled should be true");
+								doh.t(registry.byId("num1").disabled, "num1.disabled should be true");
+							}
+						}
+					]);
 
-				// should be able to verify all of the inputs
-				doh.register("Check values and bindings", [
-					{
-						name: "initial",
-						runTest: function(){
-							var num1 = registry.byId("num1");
-							var num2 = registry.byId("num2");
-							doh.is(10, num1.get("value"), "num1 should be 10");
-							doh.is(20, num2.get("value"), "num2 should be 20");
-							doh.t(num1.isValid(), "num1.isValid() should be true");
-							doh.t(num2.isValid(), "num2.isValid() should be true");
-							doh.f(num2.disabled, "num2.disabled should be false");
-							doh.f(num1.disabled, "num1.disabled should be false");
-						}
-					}, {
-						name: "Update-Num1-invalid",
-						runTest: function(){
-							var num1 = registry.byId("num1");
-							var num2 = registry.byId("num2");
-							num1.set("displayedValue", "30");
-							doh.is(30, num1.get("value"), "num1 should be 30");
-							doh.f(num1.disabled, "num1.disabled should be false");
-							doh.is(20, num2.get("value"), "num2 should be 20");
-							doh.f(num2.isValid(), "num2.isValid() should be false");
-							doh.f(num2.disabled, "num2.disabled should be false");
-							doh.t(domClass.contains(num1.domNode, "dijitNumberTextBoxError"), "num1 should have the dijitNumberTextBoxError class");
-							doh.t(domClass.contains(num2.domNode, "dijitNumberTextBoxError"), "num2 should have the dijitNumberTextBoxError class");
-						}
-					}, {
-						name: "Update-Num1-disabled2",
-						runTest: function(){
-							var num1 = registry.byId("num1");
-							var num2 = registry.byId("num2");
-							num1.set("displayedValue", "21");
-							num2.set("displayedValue", "21");
-							doh.is(21, num1.get("value"), "num1 should be 21");
-							doh.is(21, num2.get("value"), "num2 should be 21");
-							doh.t(registry.byId("num2").disabled, "num2.disabled should be true");
-							doh.t(registry.byId("num1").disabled, "num1.disabled should be true");
-						}
-					}
-				]);
-
-				doh.run();
+					doh.run();
+				});
 			});
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<form method="post">
 			<div>
 				<label for="num1">Number 1</label>
