@@ -78,7 +78,7 @@
 	</style>
 
 	<script type="text/javascript">
-		dojoConfig = {async: 1, isDebug: 1};
+		dojoConfig = {async: 1, isDebug: 1, mvc: {debugBindings: 1}};
 	</script>
 	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
 
@@ -140,8 +140,6 @@
 			"dojox/mvc/Group",
 			"dojox/mvc/Repeat"
 		], function(doh, dojox, declare, lang, ddom, domClass, parser, Stateful, registry, Menu, at, getStateful){
-			window.at = at;
-			dojox.debugDataBinding = true;
 
 			var uniqueIdSeq = 3;
 
@@ -303,6 +301,7 @@
 	</script>
 </head>
 <body class="claro" style="width:100%;height:100%;margin:0;padding:0;overflow:hidden;">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<table id="loading" style="width:100%;height:100%;" border="0" cellpadding="0" cellspacing="0">
 		<tbody>
 			<tr>

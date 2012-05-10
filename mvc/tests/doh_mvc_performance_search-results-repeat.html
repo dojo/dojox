@@ -13,10 +13,7 @@
 	<script type="text/javascript">
 		require = {
 			isDebug: 1,
-			async: 1,
-			has: {
-				"dojox-mvc-binding-in-props-only": 0
-			}
+			async: 1
 		};
 	</script>
 
@@ -45,7 +42,7 @@
 				"dojox/mvc/Group",
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
-		//		"dojox/mvc/ParserExtension",
+		//		"dojox/mvc/parserExtension",
 				"dojo/domReady!"
 			], function(doh, parser, registry, at, getStateful, Memory, EditStoreRefListController, dom){
 				function runTests(){
@@ -77,7 +74,6 @@
 				}
 
 				window.at = at;
-				dojox.debugDataBinding = false;
 
 				//parser.parse();
 
@@ -317,6 +313,5 @@
 			</div>
 		   </div>
 		 </div>
-		</div>
 </body>
 </html>

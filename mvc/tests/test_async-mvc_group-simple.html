@@ -11,7 +11,8 @@
 			require = {
 				async: 1,
 				parseOnLoad: 0,
-				isDebug: 1
+				isDebug: 1, 
+				mvc: {debugBindings: 1}
 			};
 		</script>
 		<script type="text/javascript" src="../../../dojo/dojo.js"></script>
@@ -22,16 +23,13 @@
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/EditStoreRefController",
 				"dojo/store/Memory",
-				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
 				"dojox/mvc/Group",
-				"dojox/mvc/ParserExtension",
+				"dojox/mvc/parserExtension",
 				"dojo/domReady!"
-			], function(parser, Stateful, EditModelRefController, EditStoreRefController, Memory, at, getStateful){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser, Stateful, EditModelRefController, EditStoreRefController, Memory, getStateful){
 				var testmem = new Memory({data: {First: "John", Last: "Doe", Email: "jdoe@example.com"}});
 				var testdata = testmem.query();
 				console.log("testdata = ",testdata);
@@ -39,22 +37,11 @@
 				var testdata2 = testmem2.query();
 				console.log("testdata2 = ",testdata2);
 				
-				//ctrl = new EditModelRefController({sourceModel: new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"})});
 				ctrl1 = new EditStoreRefController({sourceModel: new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"})});
 				ctrl2 = new EditStoreRefController({sourceModel: new Stateful(testdata)});
 				console.log("ctrl2 = ",ctrl2);
-				//ctrl3 = new EditStoreRefController({store: new Memory({data: {First: "John", Last: "Doe", Email: "jdoe@example.com"}})});
 				ctrl3 = new EditStoreRefController({store: new Memory({data: {items: [{id: "emp0", First: "John", Last: "Doe", Email: "jdoe@example.com"}]}})});
 				ctrl3.queryStore({});
-/*				when((new Memory({data: data3 = [
-				                           					{First: "John", Last: "Doe", Email: "jdoe@example.com"}
-				                           				]}).query()), function(data){
-				                           					ctrl3.set("model", getStateful(data)[0]);
-				                           					console.log("inside data = ",data);
-				                           					//if(ctrl.get("model1") && ctrl.get("model2") && ctrl.get("model3")){ runTests(); }
-				                           				});
-*/	
-			//	ctrl = new EditStoreRefController({store: new Memory({data: {identifier: "id", items: [{id: "emp0", First: "John", Last: "Doe", Email: "jdoe@example.com"}]}})});
 				ctrl = new EditStoreRefController({store: new Memory({data: {identifier: "id", items: [{id: "emp0", First: "John", Last: "Doe", Email: "jdoe@example.com"}]}})});
 				ctrl.getStore("emp0");				
 				console.log("ctrl = ",ctrl);
@@ -63,6 +50,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>
@@ -73,7 +61,7 @@
 			</div>
 			<div id="main">
 				<div id="leftNav"></div>
-				<div id="mainContent" dojoType="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'model')">
+				<div id="mainContent" data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(ctrl, 'model')">
 					<div class="row">
 						<label class="cell" for="firstnameInput">First:</label>
 						<input class="cell" id="firstnameInput" data-dojo-type="dijit.form.TextBox" 

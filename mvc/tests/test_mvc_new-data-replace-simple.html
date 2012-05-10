@@ -6,7 +6,7 @@
 
 		<script src="../../../dojo/dojo.js"
 				type="text/javascript"
-				data-dojo-config="parseOnLoad: false, isDebug: true">
+				data-dojo-config="parseOnLoad: false, isDebug: true, mvc: {debugBindings: true}">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -20,7 +20,6 @@
 			"dojo/_base/lang",
 			'dojo/ready',
 			'dojo/when',
-			'dojox/mvc/at',
 			"dojo/Stateful",
 			"dojox/mvc/getStateful",
 			"dojox/mvc/getPlainValue",
@@ -32,9 +31,7 @@
 			'dojox/mvc/Group',
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
-			], function(parser, lang, ready, when, at, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
-			window.at = at;
-			dojox.debugDataBinding = true;
+			], function(parser, lang, ready, when, Stateful, getStateful, getPlainValue, EditModelRefController, Memory, registry){
 			
 			model1Data =
 			[{
@@ -77,6 +74,7 @@
 	</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

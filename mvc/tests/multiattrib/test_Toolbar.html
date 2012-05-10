@@ -18,7 +18,7 @@
 
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../../dojo/dojo.js"
-		data-dojo-config="isDebug: true, async: true"></script>
+		data-dojo-config="isDebug: true, async: true, mvc: {debugBindings: true}"></script>
 
 	<script type="text/javascript">
 		negativeConverter = {
@@ -29,7 +29,6 @@
 		require([
 			"dojox",
 			"dojo/parser",
-			"dojox/mvc/at",
 			"dijit/Declaration",
 			"dijit/Toolbar",
 			"dijit/ToolbarSeparator",
@@ -45,9 +44,7 @@
 			"dijit/form/TextBox",
 			"dijit/form/Select",
 			"dijit/form/CheckBox"
-		], function(dojox, parser, at){
-			window.at = at;
-			dojox.debugDataBinding = true;
+		], function(dojox, parser){
 			(cutItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCut");
 			(copyItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCopy").set("label", "Copy");
 			(boldItemModel = new dojo.Stateful).set("checked", false);
@@ -56,6 +53,7 @@
 	</script>
 </head>
 <body class="claro">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<h1 class="testTitle">Toolbar test</h1>
 
 	<span data-dojo-type="dijit.Declaration" 

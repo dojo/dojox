@@ -7,7 +7,8 @@
 			require = {
 				parseOnLoad: 0,
 				isDebug: 1,
-				async: 1
+				async: 1, 
+				mvc: {debugBindings: 1}
 			};
 		</script>
 		<script src="../../../dojo/dojo.js" type="text/javascript"></script>
@@ -18,18 +19,16 @@
 		<script type="text/javascript">
 			require([
 				"dojo/parser",
-				"dojox/mvc/at",
 				"dojo/_base/json",
 				"dijit/form/Textarea",
 				"dojox/mvc/Generate"
-			], function(parser, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser){
 				parser.parse();
 			});
 	   </script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>
@@ -75,6 +74,7 @@
 				<div data-dojo-type="dojox.mvc.Generate"
 				 data-dojo-props="children: at('widget:textarea', 'value').direction(at.from).transform({format: dojo.fromJson}), idNameMapping: {String: 'view_t'}"></div>
 			</div>
+		</div>
 		</div>
 	</body>
 </html>

@@ -7,7 +7,8 @@
 			require = {
 				isDebug: 1,
 				parseOnLoad: 0,
-				async: 1
+				async: 1, 
+				mvc: {debugBindings: 1}
 			};
 		</script>
 		<script src="../../../dojo/dojo.js" type="text/javascript"></script>
@@ -20,13 +21,10 @@
 				"dojo/parser",
 				"dojo/store/JsonRest",
 				"dojox/mvc/EditStoreRefController",
-				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextArea",
 				"dojox/mvc/Generate"
-			], function(parser, JsonRest, EditStoreRefController, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser, JsonRest, EditStoreRefController){
 				ctrl = new EditStoreRefController({store: new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcGenerateData.json")})});
 				parser.parse();
 				ctrl.queryStore({});
@@ -35,6 +33,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 		<div id="header">
 			<div id="navigation"></div>

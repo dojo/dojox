@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="../../../dojo/resources/dojo.css">
 		<link rel="stylesheet" href="../../../dijit/themes/dijit.css">
 		<link rel="stylesheet" href="../../../dijit/themes/claro/claro.css">
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1, mvc: {debugBindings: 1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
 				"doh/runner",
@@ -19,7 +19,6 @@
 				"dijit/form/NumberTextBox",
 				"dojox/mvc/_TextBoxExtensions"
 			], function(doh, domClass, parser, when, Stateful, registry, ModelRefController){
-				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController({
 					ownProps: {relation: 1, _setNum1Attr: 1, _setNum2Attr: 1},

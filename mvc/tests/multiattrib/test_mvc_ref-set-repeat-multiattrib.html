@@ -14,7 +14,7 @@
 
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../../dojo/dojo.js"
-		data-dojo-config="isDebug: true, async: true"></script>
+		data-dojo-config="isDebug: true, async: true, mvc: {debugBindings: true}"></script>
 
 	<script type="text/javascript">
 		require([
@@ -43,8 +43,7 @@
 			//(cutItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCut");
 			//(copyItemModel = new dojo.Stateful).set("iconClass", "dijitEditorIcon dijitEditorIconCopy").set("label", "Copy");
 			//(boldItemModel = new dojo.Stateful).set("checked", false);
-			window.at = at;
-			dojox.debugDataBinding = true;
+//			window.at = at;
 
 			var search_results_init1 =
 			[{
@@ -107,6 +106,7 @@
 	</script>
 </head>
 <body class="claro">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

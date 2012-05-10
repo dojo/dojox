@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>Static Master/Detail Pattern -- Multiple Address Detail example</title>
 
-		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="parseOnLoad: 0, isDebug: true">
+		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="parseOnLoad: 0, isDebug: true, mvc: {debugBindings: true}">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -43,7 +43,6 @@
 			require([
 				"dojo/parser",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dijit/_Container",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
@@ -51,9 +50,7 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(parser, registry, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser, registry){
 
 				refreshOutput = function(){
 					registry.byId("out1").set("target", model1.slice());
@@ -66,6 +63,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

@@ -10,27 +10,25 @@
 			.cell { width: 20%;  display:inline-block; }
 			.textcell { width: 30%;  display:inline-block; }
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
 				"dojo/parser",
 				"dojo/Stateful",
 				"dojox/mvc/EditModelRefController",
-				"dojox/mvc/at",
 				"dijit/registry",
 				"dijit/form/TextBox",
 				"dijit/form/Button",
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
-			], function(parser, Stateful, EditModelRefController, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser, Stateful, EditModelRefController){
 				ctrl = new EditModelRefController({sourceModel: new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"})});
 				parser.parse();
 			});
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

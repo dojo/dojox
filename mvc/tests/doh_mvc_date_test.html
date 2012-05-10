@@ -7,7 +7,7 @@
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
 				"doh/runner",
@@ -27,7 +27,6 @@
 				"dojox/mvc/Output",
 				"dojo/domReady!"
 			], function(doh, ddom, domStyle, parser, Stateful, dateStamp, dateLocale, registry, Calendar, Button, DateTextBox, TextBox, at, EditModelRefController, Output){
-				dojox.debugDataBinding = true;
 
 				parser.parse();
 

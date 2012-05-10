@@ -14,7 +14,7 @@
 		<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/claro/claro.css"/>
 
 		<!-- required: dojo.js -->
-		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: 1"></script>
+		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: 1, mvc: {debugBindings: 1}"></script>
 		<script type="text/javascript" src="./helpers.js"></script>
 
 		<script type="text/javascript">
@@ -38,7 +38,6 @@
 				"dojox/mvc/Group",
 				"dojo/domReady!"
 			], function(doh, declare, when, ddom, parser, all, JsonRest, registry, _WidgetBase, at, getStateful, EditModelRefController, ListController, Repeat){
-				dojox.debugDataBinding = true;
 
 				var ctrlClass = declare([_WidgetBase, EditModelRefController, ListController], {});
 				(ctrl = (new ctrlClass({srcNodeRef: ddom.byId("detailsGroup"), cursorIndex: 0}))).startup();

@@ -8,7 +8,7 @@
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
 
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1, mvc: {debugBindings: 1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			var model;
 
@@ -24,7 +24,6 @@
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
 			], function(doh, ddom, parser, when, registry, getStateful){
-				dojox.debugDataBinding = true;
 				// The dojox.mvc.StatefulModel class creates a data model instance
 				// where each leaf within the data model is decorated with dojo.Stateful
 				// properties that widgets can bind to and watch for their changes.

@@ -11,7 +11,8 @@
 			require = {
 				parseOnLoad: 0,
 				isDebug: 1,
-				async: 1
+				async: 1, 
+				mvc: {debugBindings: true}
 			};
 		</script>
 		<script type="text/javascript" src="../../../dojo/dojo.js"></script>
@@ -19,19 +20,17 @@
 			require([
 				"dojo/parser",
 				"dojo/Stateful",
-				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
 				"dojo/domReady!"
-			], function(parser, Stateful, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser, Stateful){
 				model = new Stateful({First: "John", Last: "Doe", Email: "jdoe@example.com"});
 				parser.parse();
 			});
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

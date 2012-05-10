@@ -18,13 +18,12 @@
 
 <!-- required: dojo.js -->
 <script type="text/javascript" src="../../../dojo/dojo.js"
-	data-dojo-config="isDebug: true, async: true"></script>
+	data-dojo-config="isDebug: true, async: true, mvc: {debugBindings: true}"></script>
 
 <script type="text/javascript">
 	require([
 			"dojo/parser", 
 			"dijit/registry", 
-			"dojox/mvc/at",
 			"dojox/mvc/getStateful", 
 			"dojox/mvc/_atBindingExtension", 
 			"dojox/mvc/ListController", 
@@ -35,9 +34,7 @@
 			"dijit/form/Button", 
 			"dijit/form/TextBox"
 			],
-			function(parser, registry, at, getStateful){
-				window.at = at;
-				dojox.debugDataBinding=true;
+			function(parser, registry, getStateful){
 
 				setDetailsContext=function(index){
 					var ctl=registry.byId("listCtl");
@@ -135,6 +132,7 @@
 </head>
 <body class="claro"
 	style="width: 100%; height: 100%; margin: 0; padding: 0;">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<span id="listCtl" data-dojo-type="dojox.mvc.ListController"
 		data-dojo-props="model: searchRecords.Results, cursorIndex: 0"></span>
 	<div id="header">

@@ -11,7 +11,7 @@
 				width: 100%;
 			}
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 
 		var store, selctrl, decselctrl, numspinctrl; 
@@ -54,8 +54,7 @@
 			], function(kernel, declare, parser, ready, mvc, at, _WidgetBase, TextBox, Button, Select, FilteringSelect, ComboBox, DateTextBox, 
 						HorizontalSlider, NumberSpinner, SimpleTextarea, Textarea, ItemFileReadStore, Stateful, getStateful, EditModelRefController, 
 						Calendar, ColorPalette){
-			window.at = at;
-			dojox.debugDataBinding = true;
+			//window.at = at;
 
 			var alreadyset = false;	
 			var data = [
@@ -361,6 +360,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header" style="margin-top: 0px;">
 				<div id="navigation"  style="margin-top: 0px;"></div>

@@ -18,7 +18,7 @@
 
 <!-- required: dojo.js -->
 <script type="text/javascript" src="../../../dojo/dojo.js"
-	data-dojo-config="isDebug: true, async: true, parseOnLoad: false"></script>
+	data-dojo-config="isDebug: true, async: true, parseOnLoad: false, mvc: {debugBindings: true}"></script>
 
 <script type="text/javascript">
 var results, savedData;
@@ -42,8 +42,6 @@ var results, savedData;
 			"dijit/form/TextBox"
 			],
 			function(parser, registry, at, getStateful, ItemFileWriteStore, DataStore, kernel){
-				window.at = at;
-				dojox.debugDataBinding=true;
 				var writeStore = new ItemFileWriteStore({url: kernel.moduleUrl("dojox.mvc.tests.regression._data", "mvcRepeatData.json")});
 				var modelPromise = new DataStore({store: writeStore}).query(); 
 				modelPromise.then(function(data){ 
@@ -84,6 +82,7 @@ var results, savedData;
 </head>
 <body class="claro"
 	style="width: 100%; height: 100%; margin: 0; padding: 0;">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<span id="listCtl" data-dojo-type="dojox.mvc.ListController"
 		data-dojo-props="model: results, cursorIndex: 0"></span>
 	<div id="header">

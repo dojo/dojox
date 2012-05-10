@@ -8,7 +8,7 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 
 		var model; 
@@ -17,20 +17,15 @@
 			'dojo/_base/kernel',
 			'dojo/parser',
 			'dojo/ready',
-			"dojox/mvc/at",
-			"dojox/mvc/sync",
 			"dojox/mvc/getStateful", 
 			"dojox/mvc/EditModelRefController",
-			'dojox/mvc',
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dijit/form/ValidationTextBox',
 			'dijit/form/NumberTextBox',
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
-			], function(dojo, parser, ready, at, sync, getStateful, EditModelRefController, mvc){
-			window.at = at;
-			dojox.debugDataBinding=true;
+			], function(dojo, parser, ready, getStateful, EditModelRefController){
 
 			model = new EditModelRefController({sourceModel: getStateful({	"First" : "John", 
 					"Last" : "Doe", 
@@ -87,6 +82,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 		<div id="header">
 		  <div id="navigation">

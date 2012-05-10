@@ -9,7 +9,7 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 <script type="text/javascript">
  		var model;
  
@@ -23,7 +23,6 @@
 		'dojo/parser',
 		'dijit/form/TextBox',
 		'dijit/form/Button'], function(parser, when, EditModelRefController, Stateful){
-			dojox.debugDataBinding=true;
 
 			// The dojox.mvc.StatefulModel class creates a data model instance
 			// where each leaf within the data model is decorated with dojo.Stateful

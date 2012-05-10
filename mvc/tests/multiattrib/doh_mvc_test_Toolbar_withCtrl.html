@@ -11,7 +11,7 @@
 				background-image: url(../../../../dijit/tests/images/flatScreen.gif); height: 32px; width: 32px;		
 		</style>
 		<link id="themeStyles" rel="stylesheet" href="../../../../dijit/themes/claro/claro.css"/>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../../dojo/dojo.js"></script>
 	
 		<script type="text/javascript">
 			negativeConverter = {
@@ -43,7 +43,6 @@
 				"dijit/form/CheckBox",
 				"dojo/domReady!"
 			], function(doh, parser, when, Stateful, ModelRefController){
-				dojox.debugDataBinding = true;
 	
 				cutItemCtrl = new ModelRefController();
 				copyItemCtrl = new ModelRefController();

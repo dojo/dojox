@@ -9,7 +9,7 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1, mvc: {debugBindings: 1}" src="../../../dojo/dojo.js"></script>
 <script type="text/javascript">
  		var model;
  
@@ -28,8 +28,6 @@
 				'dijit/form/TextBox'
 				], function (declare, at, EditModelRefController, ModelRefController, Stateful, Group, _TemplatedMixin, 
 						_WidgetsInTemplateMixin, StatefulModel, ready, parser, TextBox) {
-				window.at = at;
-				dojox.debugDataBinding = true;
 
 				declare('test.TextBox', [TextBox], {
 					startup: function () {
@@ -104,6 +102,7 @@
 		</script>
 </head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<h1>late binding</h1>
 		<p>no template</p>
 		<div id="parsedGroup" data-dojo-type="test.Group" data-dojo-props="target : model">

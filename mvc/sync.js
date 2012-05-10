@@ -1,7 +1,9 @@
 define([
 	"dojo/_base/lang",
-	"dojo/_base/array"
-], function(lang, array){
+	"dojo/_base/config",
+	"dojo/_base/array",
+	"dojo/has"
+], function(lang, config, array, has){
 	var mvc = lang.getObject("dojox.mvc", true);
 	/*=====
 		mvc = dojox.mvc;
@@ -55,13 +57,17 @@ define([
 	};
 	=====*/
 
+	has.add("mvc-bindings-log-api", (config["mvc"] || {}).debugBindings);
+
 	var sync;
 
-	function getLogContent(/*dojo.Stateful*/ target, /*String*/ targetProp, /*dojo.Stateful*/ source, /*String*/ sourceProp){
-		return [
-			[source._setIdAttr || !source.declaredClass ? source : source.declaredClass, sourceProp].join(":"),
-			[target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":")
-		];
+	if(has("mvc-bindings-log-api")){
+		function getLogContent(/*dojo.Stateful*/ target, /*String*/ targetProp, /*dojo.Stateful*/ source, /*String*/ sourceProp){
+			return [
+				[source._setIdAttr || !source.declaredClass ? source : source.declaredClass, sourceProp].join(":"),
+				[target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":")
+			];
+		}
 	}
 
 	function equals(/*Anything*/ dst, /*Anything*/ src){
@@ -106,18 +112,21 @@ define([
 		 || targetProp == "*" && array.indexOf(target.get("properties") || [sourceProp], sourceProp) < 0
 		 || targetProp == "*" && sourceProp in (excludes || {})){ return; }
 
-		var prop = targetProp == "*" ? sourceProp : targetProp, logContent = getLogContent(target, prop, source, sourceProp);
+		var prop = targetProp == "*" ? sourceProp : targetProp;
+		if(has("mvc-bindings-log-api")){
+			var logContent = getLogContent(target, prop, source, sourceProp);
+		}
 
 		try{
 			current = convertFunc ? convertFunc(current, constraints) : current;
 		}catch(e){
-			if(dojox.debugDataBinding){
+			if(has("mvc-bindings-log-api")){
 				console.log("Copy from" + logContent.join(" to ") + " was not done as an error is thrown in the converter.");
 			}
 			return;
 		}
 
-		if(dojox.debugDataBinding){
+		if(has("mvc-bindings-log-api")){
 			console.log(logContent.reverse().join(" is being copied from: ") + " (Value: " + current + " from " + old + ")");
 		}
 
@@ -165,9 +174,11 @@ define([
 		 excludes = [],
 		 list,
 		 constraints = lang.mixin({}, target.constraints, source.constraints),
-		 bindDirection = (options || {}).bindDirection || mvc.both,
-		 logContent = getLogContent(target, targetProp, source, sourceProp),
-		 debugDataBinding = dojox.debugDataBinding;
+		 bindDirection = (options || {}).bindDirection || mvc.both;
+
+		if(has("mvc-bindings-log-api")){
+			var logContent = getLogContent(target, targetProp, source, sourceProp);
+		}
 
 		if(sourceProp == "*"){
 			if(targetProp != "*"){ throw new Error("Unmatched wildcard is specified between target and source."); }
@@ -187,7 +198,7 @@ define([
 				_watchHandles.push(target.watch.apply(target, ((targetProp != "*") ? [targetProp] : []).concat([function(name, old, current){
 					copy(formatFunc, constraints, source, sourceProp, target, name, old, current, excludes);
 				}])));
-			}else if(debugDataBinding){
+			}else if(has("mvc-bindings-log-api")){
 				console.log(logContent.reverse().join(" is not a stateful property. Its change is not reflected to ") + ".");
 			}
 
@@ -219,12 +230,12 @@ define([
 				_watchHandles.push(source.watch.apply(source, ((sourceProp != "*") ? [sourceProp] : []).concat([function(name, old, current){
 					copy(parseFunc, constraints, target, targetProp, source, name, old, current, excludes);
 				}])));
-			}else if(debugDataBinding){
+			}else if(has("mvc-bindings-log-api")){
 				console.log(logContent.join(" is not a stateful property. Its change is not reflected to ") + ".");
 			}
 		}
 
-		if(debugDataBinding){
+		if(has("mvc-bindings-log-api")){
 			console.log(logContent.join(" is bound to: "));
 		}
 
@@ -232,7 +243,7 @@ define([
 			unwatch: function(){
 				for(var h = null; h = _watchHandles.pop();){
 					h.unwatch();
-					if(debugDataBinding){
+					if(has("mvc-bindings-log-api")){
 						console.log(logContent.join(" is unbound from: "));
 					}
 				}

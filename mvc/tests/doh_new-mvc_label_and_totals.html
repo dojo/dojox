@@ -9,7 +9,7 @@
 			.cell { width: 30%;  display:inline-block; }
 		</style>
 
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			var model;
 
@@ -26,7 +26,6 @@
 				"dojox/mvc/Repeat",
 				"dojox/mvc/Output"
 			], function(doh, ddom, parser, when, registry, getStateful){
-				dojox.debugDataBinding = true;
 
 				// Order data
 				orderData = {
@@ -91,11 +90,13 @@
 						format: function(value){
 							console.log("in sumRepeatValuesConverter format value ="+value);
 							value = value || 0;
-							recomputeRepeatTotal();
 							return value;
+	//						recomputeRepeatTotal();
+	//						return value;
 						},
 						parse: function(value){
 							console.log("in sumRepeatValuesConverter parse value ="+value);
+							recomputeRepeatTotal();
 							return value;
 						}
 				};
@@ -132,8 +133,8 @@
 					         ], function(registry, at){
 									var total = 0;
 									for(var i=0;i<sumrepeatmodel.list.length;i++){
-										console.log("sumrepeatmodel.list[i].item = "+sumrepeatmodel.list[i].item);
-										var item = parseInt(sumrepeatmodel.list[i].item) || 0;
+										var item = parseInt(registry.byId("input"+i).get("value")) || 0;
+										console.log("sumrepeatmodel item = "+item);
 										total = total + item;
 									}
 				   					var wtotal = registry.byId("totalrepeatOutput");
@@ -298,6 +299,6 @@
 	Model:
 	<button id="reset" type="button" data-dojo-type="dijit.form.Button" 
 			data-dojo-props="onClick: function(){model.set(orderData);summodel.set(sumData);sumrepeatmodel.set(sumRepeatData);}">Reset</button>
-	</div></div></div>
+	</div></div></div></div>
 	</body>
 </html>

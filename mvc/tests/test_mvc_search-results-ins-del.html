@@ -3,7 +3,8 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>Static Master/Detail Pattern -- Search Results example</title>
-		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: true">
+		<script src="../../../dojo/dojo.js" type="text/javascript" 
+				data-dojo-config="parseOnLoad: 0, isDebug: true, mvc: {debugBindings: true}">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -130,7 +131,6 @@
 				"dojo/Stateful",
 				"dojo/store/Memory",
 				"dojox/mvc/EditStoreRefListController",
-				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
 				"dijit/form/ComboBox",
@@ -138,9 +138,7 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(declare, when, parser, Stateful, Memory, EditStoreRefListController, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(declare, when, parser, Stateful, Memory, EditStoreRefListController){
 
 				var inited,
 				 ctrlClass = declare([EditStoreRefListController], {
@@ -181,6 +179,7 @@
 		 </script>
 	</head>
 	<body class="claro" style="background-image: url(images/master_detail.png)">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

@@ -7,7 +7,7 @@
 			@import "../../../dojo/resources/dojo.css";
 			@import "css/app-format.css";
 		</style>
-		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="isDebug: true"></script>
+		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="isDebug: true, mvc: {debugBindings: true}"></script>
 		<script type="text/javascript" src="./helpers.js"></script>
 		<script type="text/javascript">
 
@@ -24,7 +24,7 @@
 				"dojox/mvc/Group",
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
-				"dojox/mvc/ParserExtension",
+				"dojox/mvc/parserExtension",
 				"dojo/domReady!"
 			], function(doh, parser, registry, dom, when, getStateful){
 				function runTests(){
@@ -71,8 +71,6 @@
 
 					doh.run();
 				}
-
-				dojox.debugDataBinding = true;
 
 				setDetailsContext = function(index){
 					var ctl = registry.byId("listCtl");

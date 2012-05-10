@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>Static Master/Detail Pattern -- Search Results example</title>
-		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: true">
+		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: true, mvc: {debugBindings: true}">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -128,7 +128,6 @@
 				"dojo/when",
 				"dojo/parser",
 				"dijit/registry",
-				"dojox/mvc/at",
 				"dojo/Stateful",
 				"dojo/store/Memory",
 				"dojo/store/Observable",
@@ -143,10 +142,8 @@
 				"dojox/mvc/Output",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(declare, when, parser, registry, at, Stateful, Memory, Observable, 
+			], function(declare, when, parser, registry, Stateful, Memory, Observable, 
 						EditStoreRefListController, equals){
-				window.at = at;
-				dojox.debugDataBinding = true;
 
 				var inited,
 				 ctrlClass = declare([EditStoreRefListController], {
@@ -246,6 +243,7 @@
 		 </script>
 	</head>
 	<body class="claro" style="background-image: url(images/master_detail.png)">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>
@@ -334,7 +332,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 		<div data-dojo-type="dijit/Dialog" id="myFormDialog" title="Changing the search will cause you to lose your updates, do you want to save your changes?">
     		<h3>Save Updates?</h3>
     		<h5>

@@ -14,7 +14,7 @@
 		<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/claro/claro.css"/>
 
 		<!-- required: dojo.js -->
-		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: 1"></script>
+		<script src="../../../dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0, isDebug: 1, mvc:{debugBindings:1}"></script>
 		<script type="text/javascript" src="./helpers.js"></script>
 
 		<script type="text/javascript">
@@ -39,8 +39,6 @@
 				"dojox/mvc/Group",
 				"dojo/domReady!"
 			], function(array, declare, lang, ddom, parser, Stateful, JsonRest, registry, _WidgetBase, at, getStateful, EditStoreRefController, ListController, Repeat, StatefulArray){
-				window.at = at;
-				dojox.debugDataBinding = true;
 
 				var ctrlClass = declare([_WidgetBase, EditStoreRefController, ListController], {
 					idProperty: "Serial",
@@ -96,6 +94,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation">

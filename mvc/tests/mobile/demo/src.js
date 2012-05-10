@@ -43,7 +43,6 @@ require(['dojo/has',
 	}
 
 	window.at = at;
-	dojox.debugDataBinding = true;
 	
 	var names = [{
 	"id" 	 : "360324",

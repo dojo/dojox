@@ -8,7 +8,7 @@
 			@import "../../../dijit/themes/claro/claro.css";
 			.cell { width: 30%;  display:inline-block; }			
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 		var model;
  
@@ -23,8 +23,6 @@
 			'dojox/mvc/Repeat',
 			'dojox/mvc/Output'
 			], function(parser, ready, getStateful, at){
-			window.at = at;
-			dojox.debugDataBinding = true;
 
 			// Order data
 			orderData = {
@@ -150,10 +148,10 @@
 			
 			
 		</script>
-		
-		
+				
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 		<div id="header">
 			<div id="navigation">

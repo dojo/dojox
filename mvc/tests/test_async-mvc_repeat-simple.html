@@ -11,7 +11,8 @@
 			require = {
 				parseOnLoad: 0,
 				isDebug: 1,
-				async: 1
+				async: 1, 
+				mvc: {debugBindings: 1}
 			};
 		</script>
 		<script type="text/javascript" src="../../../dojo/dojo.js"></script>
@@ -20,15 +21,12 @@
 				"dojo/parser",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ListController",
-				"dojox/mvc/at",
 				"dijit/form/Button",
 				"dijit/form/TextBox",
 				"dojox/mvc/Group",
 				"dojox/mvc/Repeat",
 				"dojo/domReady!"
-			], function(parser, getStateful, ListController, at){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(parser, getStateful, ListController){
 				ctrl = new ListController({
 					model: getStateful([
 						{
@@ -85,6 +83,7 @@
 		</script>
 	</head>
 	<body class="claro" style="background-image: url(images/master_detail.png)">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

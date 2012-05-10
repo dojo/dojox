@@ -7,7 +7,7 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1, mvc: {debugBindings: 1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			var ctrl, ctrlDetail, model, data;
 
@@ -25,7 +25,6 @@
 				"dojox/mvc/Group",
 				"dojox/mvc/Output"
 			], function(doh, parser, when, Stateful, registry, at, getStateful, ModelRefController){
-				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController();
 				ctrlDetail = new ModelRefController();

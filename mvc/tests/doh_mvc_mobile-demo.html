@@ -14,7 +14,7 @@
 				background-color: #DBDDE2;
 			}
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1, mvc: {debugBindings: 1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			var ctrl, listCtrl;
 			var updateView, updateModel;
@@ -54,7 +54,6 @@
 				"dojo/domReady!"
 			], function(doh, declare, djson, when, ddom, JsonRest, Memory, registry, parser, getPlainValue, getStateful, EditModelRefController, ListController, StoreRefController, at){
 				window.at = at;
-				dojox.debugDataBinding = true;
 
 				ctrlClass = declare([EditModelRefController, ListController], {});
 				ctrl = new ctrlClass({sourceModel: getStateful({

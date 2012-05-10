@@ -10,7 +10,7 @@
 
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../../dojo/dojo.js"
-		data-dojo-config="isDebug: true, async: true, parseOnLoad: false"></script>
+		data-dojo-config="isDebug: true, async: true, parseOnLoad: false, mvc: {debugBindings: true}"></script>
 
 	<script type="text/javascript">
 		require([
@@ -56,7 +56,6 @@
 		], function(lang, declare, connect, registry, dom, parser, MemoryStore, ready, when, Stateful, 
 					getStateful, ItemFileWriteStore, Memory, EditStoreRefController, ListController, at){
 			window.at = at;
-			dojox.debugDataBinding = true;
 			
 			_addNewItem = function(e){
 				console.log("_addNewItem called");
@@ -389,6 +388,7 @@
 	</script>
 </head>
 <body style="visibility:hidden;">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<div data-dojo-type="dojox.mobile.FixedSplitter" data-dojo-props='orientation:"H"'>
 		<div data-dojo-type="dojox.mobile.Container" style="width:300px;border-right:1px solid black;">
 			<div id="settings" data-dojo-type="dojox.mobile.ScrollableView">

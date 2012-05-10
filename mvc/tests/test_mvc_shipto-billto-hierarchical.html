@@ -7,7 +7,8 @@
 			require = {
 				parseOnLoad: 0,
 				isDebug: 1,
-				async: 1
+				async: 1, 
+				mvc: {debugBindings: 1}
 			};
 		</script>
 		<script src="../../../dojo/dojo.js" type="text/javascript"></script>
@@ -19,7 +20,6 @@
 			require([
 				"dojo/_base/declare",
 				"dojo/parser",
-				"dojox/mvc/at",
 				"dojox/mvc/getStateful",
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/ListController",
@@ -27,9 +27,7 @@
 				"dijit/form/TextBox",
 				"dojox/mvc/Output",
 				"dojox/mvc/Group"
-			], function(declare, parser, at, getStateful, EditModelRefController, ListController){
-				window.at = at;
-				dojox.debugDataBinding = true;
+			], function(declare, parser, getStateful, EditModelRefController, ListController){
 				var clz = declare([EditModelRefController, ListController], {});
 				ctrl = new clz({
 					sourceModel: getStateful({
@@ -83,6 +81,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

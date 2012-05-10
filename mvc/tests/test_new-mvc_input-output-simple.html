@@ -8,7 +8,8 @@
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
 
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" 
+				src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 		var model;
  
@@ -16,14 +17,11 @@
 			'dojo/parser',
 			'dojo/ready',
 			'dojox/mvc',
-			'dojox/mvc/at',
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
-			], function(parser, ready, mvc, at){
-			window.at = at;
-			dojox.debugDataBinding = true;
+			], function(parser, ready, mvc){
 
 				// The dojox.mvc.StatefulModel class creates a data model instance
 				// where each leaf within the data model is decorated with dojo.Stateful
@@ -40,6 +38,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>

@@ -6,7 +6,7 @@
 		<style type="text/css">
 			@import "css/app-format.css";
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			var ctrl, ctrlDetail, model, data;
 
@@ -19,10 +19,9 @@
 				"dojox/mvc/getStateful",
 				"dojox/mvc/ModelRefController",
 				"dojox/mvc/Group",
-				"dojox/mvc/ParserExtension",
+				"dojox/mvc/parserExtension",
 				"dojo/domReady!"
 			], function(doh, parser, Stateful, dom, when, getStateful, ModelRefController){
-				dojox.debugDataBinding = true;
 
 				ctrl = new ModelRefController();
 				ctrlDetail = new ModelRefController();

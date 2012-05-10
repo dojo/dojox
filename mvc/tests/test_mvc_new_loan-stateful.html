@@ -7,7 +7,7 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:0,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			var lookup, loanModel, validHousingPercentConverter = {
 				format: function(value){
@@ -41,8 +41,6 @@
 				"dojox/mvc/Output",
 				"dojo/domReady!"
 			], function(array, declare, lang, dxhr, parser, Chart, blue, at, Stateful, StatefulSeries){
-				window.at = at;
-				dojox.debugDataBinding = true;
 
 				lookup = function(model){
 					if(isNaN(model.get("Zip"))){ return; }
@@ -131,6 +129,7 @@
 		</script>
 	</head>
 	<body class="claro" style="background-image: url(images/validating_form_pattern.png)">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="addressLookupController" class="dijitDisplayNone" 
 				data-dojo-type="dojox.mvc.ModelRefController"

@@ -6,7 +6,7 @@
 
 		<script src="../../../dojo/dojo.js"
 				type="text/javascript"
-				data-dojo-config="parseOnLoad: true, isDebug: true">
+				data-dojo-config="parseOnLoad: true, isDebug: true, mvc: {debugBindings: true}">
 		</script>
 		<style type="text/css">
 			@import "css/app-format.css";
@@ -15,7 +15,6 @@
 		<script type="text/javascript" >
 			dojo.require("dojox.mvc");
 			dojo.require("dojox.mvc.Output");
-			dojo.require("dojox.mvc.at");
 			dojo.require("dojox.mvc.Group");
 			dojo.require("dojox.mvc.Repeat");
 			dojo.require("dijit.form.TextBox");
@@ -23,7 +22,6 @@
 			dojo.require("dojo.store.Memory");
 			dojo.require("dojo.parser");
 
-			dojox.debugDataBinding = true;
 			
 			var model1Data =
 			[{
@@ -77,6 +75,7 @@
 		</script>
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>
@@ -100,12 +99,12 @@
 					</div>
 					<div id="outergroupId"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: model1">
 						<div id="repeatId" data-dojo-type="dojox.mvc.Repeat" 
-											data-dojo-props="children: dojox.mvc.at('rel:', 'Results')">
+											data-dojo-props="children: at('rel:', 'Results')">
 							<div class="row" data-dojo-type="dojox.mvc.Group" 
-											data-dojo-props="target: dojox.mvc.at('rel:${this.index}')">
+											data-dojo-props="target: at('rel:${this.index}')">
 								<label class="cell" for="nameInput${this.index}">Name:</label>
 								<input class="cell" data-dojo-type="dijit.form.TextBox" id="nameInput${this.index}" 
-									data-dojo-props="value: dojox.mvc.at('rel:First', 'value')">
+									data-dojo-props="value: at('rel:First', 'value')">
 							</div>
 						</div>
 					</div>

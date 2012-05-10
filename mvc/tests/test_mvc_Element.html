@@ -32,9 +32,7 @@
 		require = {
 			isDebug: 1,
 			async: 1,
-			has: {
-				"dojox-mvc-binding-in-props-only": 0
-			}
+			mvc: {debugBindings: 1}
 		};
 	</script>
 
@@ -46,12 +44,9 @@
 			"dojox",
 			"dojo/Stateful",
 			"dojo/parser",
-			"dojox/mvc/at",
-			"dojox/mvc/ParserExtension",
+			"dojox/mvc/parserExtension",
 			"dojo/domReady!"
-		], function(dojox, Stateful, parser, at){
-			window.at = at;
-			dojox.debugDataBinding = true;
+		], function(dojox, Stateful, parser){
 
 			titleModel = new Stateful({value: "Foo"});
 			colorModel = new Stateful({value: "bgRed"});
@@ -61,6 +56,7 @@
 	</script>
 </head>
 <body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<div>
 		<div>
 			Text:

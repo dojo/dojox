@@ -7,22 +7,19 @@
 			@import "css/app-format.css";
 			@import "../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript" data-dojo-config="parseOnLoad:1,isDebug:1,async:1,mvc:{debugBindings:1}" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 		var model;
  
 		require([
 			'dojo/parser',
 			'dojo/ready',
-			'dojox/mvc/at',
 			"dojox/mvc/getStateful",
 			'dijit/form/TextBox',
 			'dijit/form/Button',
 			'dojox/mvc/Group',
 			'dojox/mvc/Output'
-			], function(parser, ready, at, getStateful){
-			window.at = at;
-			dojox.debugDataBinding = true;
+			], function(parser, ready, getStateful){
 			
 			// Initial data
 			var order = {
@@ -65,6 +62,7 @@
 		
 	</head>
 	<body class="claro">
+		<script type="dojo/require">at: "dojox/mvc/at"</script>
 		<div id="wrapper">
 		<div id="header">
 			<div id="navigation">

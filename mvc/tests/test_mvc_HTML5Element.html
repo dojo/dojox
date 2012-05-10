@@ -32,9 +32,7 @@
 		require = {
 			isDebug: 1,
 			async: 1,
-			has: {
-				"dojox-mvc-binding-in-props-only": 0
-			}
+			mvc: {debugBindings: 1}
 		};
 	</script>
 
@@ -47,13 +45,10 @@
 			"dojo/Stateful",
 			"dojo/parser",
 			"dojo/date/stamp",
-			"dojox/mvc/at",
 			"dojo/date/locale",
-			"dojox/mvc/ParserExtension",
+			"dojox/mvc/parserExtension",
 			"dojo/domReady!"
-		], function(dojox, Stateful, parser, stamp, at){
-			window.at = at;
-			dojox.debugDataBinding = true;
+		], function(dojox, Stateful, parser, stamp){
 
 			progressModel = new Stateful({value: 0});
 			datetimeModel = new Stateful({value: new Date});
@@ -104,6 +99,7 @@
 	</script>
 </head>
 <body class="claro">
+	<script type="dojo/require">at: "dojox/mvc/at"</script>
 	<h1>Progress elements</h1>
 	<div>
 		Progress:
