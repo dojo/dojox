@@ -153,7 +153,7 @@ define([
 			var ds = transOpts.dataSourceClass || this.dataSourceClass;
 			var ft = transOpts.fileTypeMapClass || this.fileTypeMapClass;
 			require([dh, ds, ft], lang.hitch(this, function(DataHandler, DataSource, FileTypeMap){
-				var handler = new DataHandler(new DataSource(transOpts.url || transOpts.data), target, refNode);
+				var handler = new DataHandler(new DataSource(transOpts.data || transOpts.url), target, refNode);
 				var contentType = transOpts.contentType || FileTypeMap.getContentType(transOpts.url) || "html";
 				handler.processData(contentType, lang.hitch(this, function(id){
 					if(id){
