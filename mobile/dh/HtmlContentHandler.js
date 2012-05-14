@@ -22,12 +22,20 @@ define([
 		//		data. If widgets used in the HTML data are not available, they
 		//		are loaded automatically before instantiation.
 
-		parse: function(/*String*/ text, /*DomNode*/ target, /*DomNode*/ refNode){
+		parse: function(/*String*/ content, /*DomNode*/ target, /*DomNode?*/ refNode){
+			// summary:
+			//		Parses the given data and creates a new view at the given position.
+			// content:
+			//		Content data for a new view.
+			// target:
+			//		A DOM node under which a new view is created.
+			// refNode:
+			//		An optional reference DOM node before which a new view is created.
 			if(this.execScript){
-				text = this.execScript(text);
+				content = this.execScript(content);
 			}
 			var container = domConstruct.create("div", {
-				innerHTML: text,
+				innerHTML: content,
 				style: {visibility: "hidden"}
 			});
 			target.insertBefore(container, refNode);

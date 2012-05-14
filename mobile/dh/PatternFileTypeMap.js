@@ -2,6 +2,12 @@ define([
 	"dojo/_base/lang"
 ], function(lang){
 
+	// module:
+	//		dojox/mobile/dh/PatternFileTypeMap
+	// summary:
+	//		A component that provides a map for determining content-type from
+	//		the pattern of the URL.
+
 	var o = lang.getObject("dojox.mobile.dh.PatternFileTypeMap", true);
 
 	o.map = {

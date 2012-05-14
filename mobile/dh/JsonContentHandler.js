@@ -108,12 +108,20 @@ define([
 		// |	  ]
 		// |	}
 
-		parse: function(/*String*/ text, /*DomNode*/ target, /*DomNode*/ refNode){
+		parse: function(/*Object*/ content, /*DomNode*/ target, /*DomNode?*/ refNode){
+			// summary:
+			//		Parses the given data and creates a new view at the given position.
+			// content:
+			//		Content data for a new view.
+			// target:
+			//		A DOM node under which a new view is created.
+			// refNode:
+			//		An optional reference DOM node before which a new view is created.
 			var view, container = domConstruct.create("DIV");
 			target.insertBefore(container, refNode);
 			this._ws = [];
 			this._req = [];
-			var root = json.parse(text);
+			var root = json.parse(content);
 			return Deferred.when(this._loadPrereqs(root), lang.hitch(this, function(){
 				view = this._instantiate(root, container);
 				view.style.visibility = "hidden";

@@ -4,6 +4,11 @@ define([
 	"dojo/_base/xhr"
 ], function(declare, lang, xhr){
 
+	// module:
+	//		dojox/mobile/dh/UrlDataSource
+	// summary:
+	//		A component that accesses the given URL, and fetches the data as text.
+
 	return declare("dojox.mobile.dh.UrlDataSource", null, {
 		text: "",
 

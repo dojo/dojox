@@ -2,6 +2,12 @@ define([
 	"dojo/_base/lang"
 ], function(lang){
 
+	// module:
+	//		dojox/mobile/dh/ContentTypeMap
+	// summary:
+	//		A component that provides a map for determining content handler
+	//		class from a content-type.
+
 	var o = lang.getObject("dojox.mobile.dh.ContentTypeMap", true);
 
 	o.map = {
