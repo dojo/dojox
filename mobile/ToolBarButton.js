@@ -1,11 +1,12 @@
 define([
 	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"./sniff",
 	"./_ItemBase"
-], function(declare, domClass, domConstruct, domStyle, has, ItemBase){
+], function(declare, lang, domClass, domConstruct, domStyle, has, ItemBase){
 
 	// module:
 	//		dojox/mobile/ToolBarButton
@@ -50,6 +51,7 @@ define([
 			if(!this.label && this.srcNodeRef){
 				this.label = this.srcNodeRef.innerHTML;
 			}
+			this.label = lang.trim(this.label);
 			this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
 				this.srcNodeRef : domConstruct.create("span");
 			this.inherited(arguments);
