@@ -314,7 +314,7 @@ var scrollable = function(/*Object?*/dojo, /*Object?*/dojox){
 		if(!node.parentNode){ return null; }
 
 		// the given node is the first candidate
-		if(node.nodeType === 1 && domClass.contains(node, "mblView") && node.style.display !== "none"){
+		if(node.nodeType === 1 && domClass.contains(node, "mblSwapView") && node.style.display !== "none"){
 			return node;
 		}
 
