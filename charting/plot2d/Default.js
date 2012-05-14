@@ -172,6 +172,31 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			return path;
 		},
 
+		buildSegments: function(i, indexed){
+			var run = this.series[i],
+				min = indexed?Math.max(0, Math.floor(this._hScaler.bounds.from - 1)):0,
+				max = indexed?Math.min(run.data.length, Math.ceil(this._hScaler.bounds.to)):run.data.length,
+				rseg = null, segments = [];
+
+			// split the run data into dense segments (each containing no nulls)
+			// except if interpolates is false in which case ignore null between valid data
+			for(var j = min; j < max; j++){
+				if(run.data[j] != null && (indexed || run.data[j].y != null)){
+					if(!rseg){
+						rseg = [];
+						segments.push({index: j, rseg: rseg});
+					}
+					rseg.push(run.data[j]);
+				}else{
+					if(!this.opt.interpolate || indexed){
+						// we break the line only if not interpolating or if we have indexed data
+						rseg = null;
+					}
+				}
+			}
+			return segments;
+		},
+
 		render: function(dim, offsets){
 			//	summary:
 			//		Render/draw everything on this plot.
@@ -189,12 +214,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 
 			this.resetEvents();
 			this.dirty = this.isDirty();
+			var s = this.group;
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
 				this.group.setTransform(null);
-				var s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, stroke, outline, marker, events = this.events();
@@ -218,47 +243,31 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				}
 
 				var theme = t.next(this.opt.areas ? "area" : "line", [this.opt, run], true),
-					s = run.group, rsegments = [], startindexes = [], rseg = null, lpoly,
+					lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 					eventSeries = this._eventSeries[run.name] = new Array(run.data.length);
+
+				s = run.group;
 				
 				// optim works only for index based case
 				var indexed = arr.some(run.data, function(item){
 					return typeof item == "number";
 				});
-				var min = indexed?Math.max(0, Math.floor(this._hScaler.bounds.from - 1)):0, 
-						max = indexed?Math.min(run.data.length, Math.ceil(this._hScaler.bounds.to)):run.data.length;
 
-				// split the run data into dense segments (each containing no nulls)
-				// except if interpolates is false in which case ignore null between valid data
-				for(var j = min; j < max; j++){
-					if(run.data[j] != null && (indexed || run.data[j].y != null)){
-						if(!rseg){
-							rseg = [];
-							startindexes.push(j);
-							rsegments.push(rseg);
-						}
-						rseg.push(run.data[j]);
-					}else{
-						if(!this.opt.interpolate || indexed){
-							// we break the line only if not interpolating or if we have indexed data
-							rseg = null;
-						}
-					}
-				}
-
+				var rsegments = this.buildSegments(i, indexed);
 				for(var seg = 0; seg < rsegments.length; seg++){
-					if(typeof rsegments[seg][0] == "number"){
-						lpoly = arr.map(rsegments[seg], function(v, i){
+					var rsegment = rsegments[seg];
+					if(typeof rsegment.rseg[0] == "number"){
+						lpoly = arr.map(rsegment.rseg, function(v, i){
 							return {
-								x: ht(i + startindexes[seg] + 1) + offsets.l,
+								x: ht(i + rsegment.index + 1) + offsets.l,
 								y: dim.height - offsets.b - vt(v),
 								data: v
 							};
 						}, this);
 					}else{
-						lpoly = arr.map(rsegments[seg], function(v){
+						lpoly = arr.map(rsegment.rseg, function(v){
 							return {
 								x: ht(v.x) + offsets.l,
 								y: dim.height - offsets.b - vt(v.y),
@@ -271,13 +280,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 					if(indexed && this.opt.interpolate){
 						while(seg < rsegments.length) {
 							seg++;
-							lpoly = lpoly.concat(arr.map(rsegments[seg], function(v, i){
-								return {
-									x: ht(i + startindexes[seg] + 1) + offsets.l,
-									y: dim.height - offsets.b - vt(v),
-									data: v
-								};
-							}, this));
+							rsegment = rsegments[seg];
+							if(rsegment){
+								lpoly = lpoly.concat(arr.map(rsegment.rseg, function(v, i){
+									return {
+										x: ht(i + rsegment.index + 1) + offsets.l,
+										y: dim.height - offsets.b - vt(v),
+										data: v
+									};
+								}, this));
+							}
 						}
 					} 
 
@@ -375,7 +387,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 							arr.forEach(frontMarkers, function(s, i){
 								var o = {
 									element: "marker",
-									index:   i + startindexes[seg],
+									index:   i + rsegment.index,
 									run:     run,
 									shape:   s,
 									outline: outlineMarkers[i] || null,
@@ -383,15 +395,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 									cx:      lpoly[i].x,
 									cy:      lpoly[i].y
 								};
-								if(typeof rsegments[seg][0] == "number"){
-									o.x = i + startindexes[seg] + 1;
-									o.y = rsegments[seg][i];
+								if(typeof rsegment.rseg[0] == "number"){
+									o.x = i + rsegment.index + 1;
+									o.y = rsegment.rseg[i];
 								}else{
-									o.x = rsegments[seg][i].x;
-									o.y = rsegments[seg][i].y;
+									o.x = rsegment.rseg[i].x;
+									o.y = rsegment.rseg[i].y;
 								}
 								this._connectEvents(o);
-								eventSeries[i + startindexes[seg]] = o;
+								eventSeries[i + rsegment.index] = o;
 							}, this);
 						}else{
 							delete this._eventSeries[run.name];
