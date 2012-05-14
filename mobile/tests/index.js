@@ -236,6 +236,8 @@ var tests = [
 	{ url: "test_ajax-json-sync.html", tags: "misc" },
 	{ url: "test_ajax-json.html", tags: "misc" },
 	{ url: "test_anchor-label.html", tags: "misc" },
+	{ url: "test_bg-view.html", tags: "misc" },
+	{ url: "test_bg.html", tags: "misc" },
 	{ url: "test_bk-ContantView.html", tags: "bookmarkable" },
 	{ url: "test_bk-ScrollableView-demo.html", tags: "bookmarkable" },
 	{ url: "test_bk-grouped-views.html", tags: "bookmarkable" },
