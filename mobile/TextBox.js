@@ -17,7 +17,10 @@ define([
 		_setTypeAttr: null,
 
 		// Map widget attributes to DOMNode attributes.
-		_setPlaceHolderAttr: "textbox",
+		_setPlaceHolderAttr: function(/*String*/value){
+			value = this._cv ? this._cv(value) : value;
+			this.textbox.setAttribute("placeholder", value);
+		},
 
 		buildRendering: function(){
 			if(!this.srcNodeRef){
