@@ -176,6 +176,11 @@ define([
 		//		collapsed. The animation works only on webkit browsers.
 		animation: true,
 
+		// roundRect: Boolean
+		//		If true, the widget shows rounded corners.
+		//		Adding the "mblAccordionRoundRect" class to domNode has the same effect.
+		roundRect: false,
+
 		/* internal properties */
 		duration: .3, // [seconds]
 
@@ -185,6 +190,12 @@ define([
 
 		startup: function(){
 			if(this._started){ return; }
+
+			if(domClass.contains(this.domNode, "mblAccordionRoundRect")){
+				this.roundRect = true;
+			}else if(this.roundRect){
+				domClass.add(this.domNode, "mblAccordionRoundRect");
+			}
 
 			if(this.fixedHeight){
 				this.singleOpen = true;
