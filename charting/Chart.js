@@ -961,13 +961,15 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			if(fill){
 				if(this.plotGroup){
 					fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim),
-						{ width: dim.width + 1, height: dim.height + 1 });
+						{ x:0, y: 0, width: dim.width + 1, height: dim.height + 1 });
 					this.surface.createRect({ width: dim.width + 1, height: dim.height + 1 }).setFill(fill);
 				}else{
 					// VML
 					fill = Element.prototype._plotFill(fill, dim, offsets);
 					if(offsets.l){	// left
 						rect = {
+							x: 0,
+							y: 0,
 							width:  offsets.l,
 							height: dim.height + 1
 						};
@@ -976,6 +978,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 					if(offsets.r){	// right
 						rect = {
 							x: dim.width - offsets.r,
+							y: 0,
 							width:  offsets.r + 1,
 							height: dim.height + 2
 						};
@@ -983,6 +986,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 					}
 					if(offsets.t){	// top
 						rect = {
+							x: 0,
+							y: 0,
 							width:  dim.width + 1,
 							height: offsets.t
 						};
@@ -990,6 +995,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 					}
 					if(offsets.b){	// bottom
 						rect = {
+							x: 0,
 							y: dim.height - offsets.b,
 							width:  dim.width + 1,
 							height: offsets.b + 2
