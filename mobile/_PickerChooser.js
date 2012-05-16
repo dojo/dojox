@@ -1,6 +1,7 @@
 define([
-	"dojo/_base/lang"
-], function(lang){
+	"dojo/_base/lang",
+	"dojo/_base/window"
+], function(lang, win){
 
 	// module:
 	//		dojox/mobile/_PickerChooser
@@ -11,7 +12,7 @@ define([
 
 	return{
 		load: function (id, parentRequire, loaded){
-			var dm = lang.getObject("dojox.mobile", true);
+			var dm = win.global._no_dojo_dm || lang.getObject("dojox.mobile", true);
 			parentRequire([(dm.currentTheme === "android" ? "./ValuePicker" : "./SpinWheel") + id], loaded);
 		}
 	};
