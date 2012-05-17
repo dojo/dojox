@@ -639,6 +639,10 @@ doh.register("dojox.dtl.text.filter",
 
 			var tpl = new dd.Template('{{ "http://homepage.com/~user"|urlencode }}');
 			t.is("http%3A//homepage.com/%7Euser", tpl.render());
+
+			// see http://bugs.dojotoolkit.org/ticket/12932
+			tpl = new dd.Template('{{ "\t"|urlencode }}');
+			t.is("\t", decodeURIComponent(tpl.render()));
 		},
 		function test_filter_urlize(t){
 			var dd = dojox.dtl;
