@@ -722,7 +722,6 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			//	range: Array
 			//		The end points of the zoom range, measured in axis ticks.
 			var axis = this.axes[name];
-			console.log(range[0]+", "+range[1]);
 			if(axis){
 				var scale, offset, bounds = axis.getScaler().bounds;
 				var lower = Math.min(range[0],range[1]);
