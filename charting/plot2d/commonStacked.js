@@ -12,7 +12,7 @@ define([
 				for(var j = 0; j < run.data.length; j++){
 					var x, y;
 					if(run.data[j] !== null){
-						if(typeof run.data[j] == "number"){
+						if(typeof run.data[j] == "number" || !run.data[j].x){
 							y = commonStacked.getIndexValue(series, i, j),
 							x = j+1;
 						}else{
@@ -36,8 +36,8 @@ define([
 			var value = 0, v, j;
 			for(j = 0; j <= i; ++j){
 				v = series[j].data[index];
-				if(v !== null){
-					if(isNaN(v)){ v = 0; }
+				if(v != null){
+					if(isNaN(v)){ v = v.y ? v.y: 0; }
 					value += v;
 				}
 			}

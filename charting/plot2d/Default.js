@@ -186,7 +186,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 						rseg = [];
 						segments.push({index: j, rseg: rseg});
 					}
-					rseg.push(run.data[j]);
+					rseg.push((indexed && run.data[j].y != undefined)?run.data[j].y:run.data[j]);
 				}else{
 					if(!this.opt.interpolate || indexed){
 						// we break the line only if not interpolating or if we have indexed data
@@ -214,12 +214,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 
 			this.resetEvents();
 			this.dirty = this.isDirty();
-			var s = this.group;
+			var s;
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
 				this.group.setTransform(null);
+				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, stroke, outline, marker, events = this.events();
@@ -252,13 +253,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				
 				// optim works only for index based case
 				var indexed = arr.some(run.data, function(item){
-					return typeof item == "number";
+					return typeof item == "number" || (item && !item.x);
 				});
 
 				var rsegments = this.buildSegments(i, indexed);
 				for(var seg = 0; seg < rsegments.length; seg++){
 					var rsegment = rsegments[seg];
-					if(typeof rsegment.rseg[0] == "number"){
+					if(indexed){
 						lpoly = arr.map(rsegment.rseg, function(v, i){
 							return {
 								x: ht(i + rsegment.index + 1) + offsets.l,
@@ -395,7 +396,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 									cx:      lpoly[i].x,
 									cy:      lpoly[i].y
 								};
-								if(typeof rsegment.rseg[0] == "number"){
+								if(indexed){
 									o.x = i + rsegment.index + 1;
 									o.y = rsegment.rseg[i];
 								}else{
