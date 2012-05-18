@@ -13,7 +13,7 @@ define([
 					var x, y;
 					if(run.data[j] !== null){
 						if(typeof run.data[j] == "number" || !run.data[j].x){
-							y = commonStacked.getIndexValue(series, i, j),
+							y = commonStacked.getIndexValue(series, i, j);
 							x = j+1;
 						}else{
 							x = run.data[j].x;
