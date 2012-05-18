@@ -143,15 +143,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, f, gap, height,
+			var t = this.chart.theme,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				baseline = Math.max(0, this._hScaler.bounds.lower),
 				baselineWidth = ht(baseline),
 				events = this.events();
-			f = dc.calculateBarSize(this._vScaler.bounds.scale, this.opt);
-			gap = f.gap;
-			height = f.size;
+			var bar = this.getBarProperties();
+			
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -167,13 +166,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 				var theme = t.next("bar", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
 				s = run.group;
-				for(var j = 0; j < run.data.length; ++j){
+				var l = this.getDataLength(run);
+				var indexed = arr.some(run.data, function(item){
+					return typeof item == "number" || (item && !item.x);
+				});
+				for(var j = 0; j < l; ++j){
 					var value = run.data[j];
-					if(value !== null){
-						var v = typeof value == "number" ? value : value.y,
-							hv = ht(v),
-							width = hv - baselineWidth,
-							w = Math.abs(width), finalTheme;
+					if(value != null){
+						var val = this.getValue(value, j, i, indexed),
+							hv = ht(val.y),
+							w = Math.abs(hv - baselineWidth),
+							finalTheme,
+							sshape;
 						if(this.opt.styleFunc || typeof value != "number"){
 							var tMixin = typeof value != "number" ? [value] : [];
 							if(this.opt.styleFunc){
@@ -183,18 +187,18 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 						}else{
 							finalTheme = t.post(theme, "bar");
 						}
-						if(w >= 0 && height >= 1){
+						if(w >= 0 && bar.height >= 1){
 							var rect = {
-								x: offsets.l + (v < baseline ? hv : baselineWidth),
-								y: dim.height - offsets.b - vt(j + 1.5) + gap,
-								width: w, height: height
+								x: offsets.l + (val.y < baseline ? hv : baselineWidth),
+								y: dim.height - offsets.b - vt(val.x + 1.5) + bar.gap + bar.thickness * (this.series.length - i - 1),
+								width: w,
+								height: bar.height
 							};
-							var sshape;
 							if(finalTheme.series.shadow){
 								var srect = lang.clone(rect);
 								srect.x += finalTheme.series.shadow.dx;
 								srect.y += finalTheme.series.shadow.dy;
-								sshape = this.createRect(run, s,  srect).setFill(finalTheme.series.shadow.color).setStroke(finalTheme.series.shadow);
+								sshape = this.createRect(run, s, srect).setFill(finalTheme.series.shadow.color).setStroke(finalTheme.series.shadow);
 								if(this.animate){
 									this._animateBar(sshape, offsets.l + baselineWidth, -w);
 								}
@@ -211,8 +215,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 									run:     run,
 									shape:   shape,
 									shadow:	 sshape,
-									x:       v,
-									y:       j + 1.5
+									x:       val.y,
+									y:       val.x + 1.5
 								};
 								this._connectEvents(o);
 								eventSeries[j] = o;
@@ -228,6 +232,28 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 			}
 			this.dirty = false;
 			return this;	//	dojox.charting.plot2d.Bars
+		},
+		getDataLength: function(run){
+			return Math.min(run.data.length, Math.ceil(this._vScaler.bounds.to));
+		},
+		getValue: function(value, j, seriesIndex, indexed){
+			var y,x;
+			if(indexed){
+				if(typeof value == "number"){
+					y = value;
+				}else{
+					y = value.y;
+				}
+				x = j;
+			}else{
+				y = value.y;
+				x = value.x ? value.x -1: j;
+			}
+			return {y:y, x:x};
+		},
+		getBarProperties: function(){
+			var f = dc.calculateBarSize(this._vScaler.bounds.scale, this.opt);
+			return {gap: f.gap, height: f.size, thickness: 0};
 		},
 		_animateBar: function(shape, hoffset, hsize){
 			if(hsize==0){

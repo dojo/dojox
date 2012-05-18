@@ -98,16 +98,15 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, f, gap, width,
+			var t = this.chart.theme,
 				ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				baseline = Math.max(0, this._vScaler.bounds.lower),
 				baselineHeight = vt(baseline),
-				min = Math.max(0, Math.floor(this._hScaler.bounds.from - 1)), max = Math.ceil(this._hScaler.bounds.to),
+				min = Math.max(0, Math.floor(this._hScaler.bounds.from - 1)),
 				events = this.events();
-			f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
-			gap = f.gap;
-			width = f.size;
+			var bar = this.getBarProperties();
+			
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -123,14 +122,19 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 				var theme = t.next("column", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
 				s = run.group;
-				var l = Math.min(run.data.length, max);
+				var l = this.getDataLength(run);
+				var indexed = arr.some(run.data, function(item){
+					return typeof item == "number" || (item && !item.x);
+				});
 				for(var j = min; j < l; ++j){
 					var value = run.data[j];
-					if(value !== null){
-						var v = typeof value == "number" ? value : value.y,
-							vv = vt(v),
-							height = vv - baselineHeight,
-							h = Math.abs(height), finalTheme;
+					if(value != null){
+						var val = this.getValue(value, j, i, indexed),
+							vv = vt(val.y),
+							h = Math.abs(vv - baselineHeight), 
+							finalTheme,
+							sshape;
+						
 						if(this.opt.styleFunc || typeof value != "number"){
 							var tMixin = typeof value != "number" ? [value] : [];
 							if(this.opt.styleFunc){
@@ -140,22 +144,24 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 						}else{
 							finalTheme = t.post(theme, "column");
 						}
-						if(width >= 1 && h >= 0){
+						
+						if(bar.width >= 1 && h >= 0){
 							var rect = {
-								x: offsets.l + ht(j + 0.5) + gap,
-								y: dim.height - offsets.b - (v > baseline ? vv : baselineHeight),
-								width: width, height: h
+								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * i,
+								y: dim.height - offsets.b - (val.y > baseline ? vv : baselineHeight),
+								width: bar.width, 
+								height: h
 							};
-							var sshape;
 							if(finalTheme.series.shadow){
 								var srect = lang.clone(rect);
 								srect.x += finalTheme.series.shadow.dx;
 								srect.y += finalTheme.series.shadow.dy;
-								sshape = this.createRect(run, s,  srect).setFill(finalTheme.series.shadow.color).setStroke(finalTheme.series.shadow);
+								sshape = this.createRect(run, s, srect).setFill(finalTheme.series.shadow.color).setStroke(finalTheme.series.shadow);
 								if(this.animate){
 									this._animateColumn(sshape, dim.height - offsets.b + baselineHeight, h);
 								}
 							}
+							
 							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 							specialFill = this._shapeFill(specialFill, rect);
 							var shape = this.createRect(run, s, rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
@@ -168,8 +174,8 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 									run:     run,
 									shape:   shape,
 									shadow:  sshape,
-									x:       j + 0.5,
-									y:       v
+									x:       val.x + 0.5,
+									y:       val.y
 								};
 								this._connectEvents(o);
 								eventSeries[j] = o;
@@ -186,6 +192,30 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 			this.dirty = false;
 			return this;	//	dojox.charting.plot2d.Columns
 		},
+		
+		getDataLength: function(run){
+			return Math.min(run.data.length, Math.ceil(this._hScaler.bounds.to));
+		},
+		getValue: function(value, j, seriesIndex, indexed){
+			var y,x;
+			if(indexed){
+				if(typeof value == "number"){
+					y = value;
+				}else{
+					y = value.y;
+				}
+				x = j;
+			}else{
+				y = value.y;
+				x = value.x ? value.x - 1: j;
+			}
+			return {y:y, x:x};
+		},
+		getBarProperties: function(){
+			var f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
+			return {gap: f.gap, width: f.size, thickness: 0};
+		},
+		
 		_animateColumn: function(shape, voffset, vsize){
 			if(vsize==0){
 				vsize = 1;
@@ -200,5 +230,6 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 				]
 			}, this.animate)).play();
 		}
+		
 	});
 });
