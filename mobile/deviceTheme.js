@@ -234,7 +234,7 @@ define([
 					win.doc.documentElement.className = cls;
 					dm.currentTheme = theme;
 					var files = [].concat(m[i][2]);
-					for(j = t.length - 1; j >= 0; j--){
+					for(j = 0; j < t.length; j++){ 
 						var isArray = (t[j] instanceof Array || typeof t[j] == "array");
 						var path;
 						if(!isArray && t[j].indexOf('/') !== -1){
