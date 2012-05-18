@@ -25,7 +25,7 @@ var Default = dojox.charting.plot2d.Default;
 				rseg = null, segments = [];
 			// split the run data into dense segments (each containing no nulls)
 			// except if interpolates is false in which case ignore null between valid data
-			for(var j = min; j <= max; j++){
+			for(var j = min; j < max; j++){
 				var value = indexed ? commonStacked.getIndexValue(this.series, i, j) : commonStacked.getValue(this.series, i, j);
 				if(value != null && (indexed || value.y != null)){
 					if(!rseg){
