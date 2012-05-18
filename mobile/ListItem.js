@@ -415,23 +415,24 @@ define([
 		_setBusyAttr: function(/*Boolean*/busy){
 			var prog = this._prog;
 			if(busy){
-				if(!this.iconNode){
-					this.iconNode = domConstruct.create("div", {className:"mblListItemIcon"},
-						this._findRef("icon"), "before");
-				}
-				if(!prog){
+				if(!this._progNode){
+					this._progNode = domConstruct.create("div", {className:"mblListItemIcon"});
 					prog = this._prog = new ProgressIndicator({size:25, center:false});
 					domClass.add(prog.domNode, this.progStyle);
+					this._progNode.appendChild(prog.domNode);
 				}
-				array.forEach(this.iconNode.childNodes, function(child){
-					child.style.display = "none";
-				});
-				this.iconNode.appendChild(prog.domNode);
+				if(this.iconNode){
+					this.domNode.replaceChild(this._progNode, this.iconNode);
+				}else{
+					domConstruct.place(this._progNode, this._findRef("icon"), "before");
+				}
 				prog.start();
 			}else{
-				array.forEach(this.iconNode.childNodes, function(child){
-					child.style.display = "";
-				});
+				if(this.iconNode){
+					this.domNode.replaceChild(this.iconNode, this._progNode);
+				}else{
+					this.domNode.removeChild(this._progNode);
+				}
 				prog.stop();
 			}
 			this._set("busy", busy);
