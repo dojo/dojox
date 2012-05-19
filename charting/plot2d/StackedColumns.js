@@ -27,7 +27,7 @@ var Columns = dojox.charting.plot2d.Columns;
 				x = index;
 				y = commonStacked.getIndexValue(this.series, seriesIndex, x);
 			}else{
-				x =  value.x ? value.x - 1: index;
+				x = value.x - 1;
 				y = commonStacked.getValue(this.series, seriesIndex, value.x);
 				y = y ? y.y: null;
 			}

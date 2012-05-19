@@ -37,7 +37,7 @@ define([
 			for(j = 0; j <= i; ++j){
 				v = series[j].data[index];
 				if(v != null){
-					if(isNaN(v)){ v = v.y ? v.y: 0; }
+					if(isNaN(v)){ v = v.y || 0; }
 					value += v;
 				}
 			}
@@ -54,7 +54,7 @@ define([
 							if(!value){
 								value = {x: x};
 							}
-							if(v.y !=null){
+							if(v.y != null){
 								if(value.y == null){
 									value.y = 0;
 								}

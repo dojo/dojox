@@ -124,7 +124,7 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 				s = run.group;
 				var l = this.getDataLength(run);
 				var indexed = arr.some(run.data, function(item){
-					return typeof item == "number" || (item && !item.x);
+					return typeof item == "number" || (item && !item.hasOwnProperty("x"));
 				});
 				for(var j = min; j < l; ++j){
 					var value = run.data[j];
@@ -207,7 +207,7 @@ var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 				x = j;
 			}else{
 				y = value.y;
-				x = value.x ? value.x - 1: j;
+				x = value.x - 1;
 			}
 			return {y:y, x:x};
 		},

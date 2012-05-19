@@ -186,7 +186,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 						rseg = [];
 						segments.push({index: j, rseg: rseg});
 					}
-					rseg.push((indexed && run.data[j].y != undefined)?run.data[j].y:run.data[j]);
+					rseg.push((indexed && run.data[j].hasOwnProperty("y"))?run.data[j].y:run.data[j]);
 				}else{
 					if(!this.opt.interpolate || indexed){
 						// we break the line only if not interpolating or if we have indexed data
@@ -253,7 +253,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				
 				// optim works only for index based case
 				var indexed = arr.some(run.data, function(item){
-					return typeof item == "number" || (item && !item.x);
+					return typeof item == "number" || (item && !item.hasOwnProperty("x"));
 				});
 
 				var rsegments = this.buildSegments(i, indexed);
