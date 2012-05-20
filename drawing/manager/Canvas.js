@@ -17,8 +17,8 @@ function(dojo, oo, gfx){
 			dojo.mixin(this, options);
 			
 			var dim = dojo.contentBox(this.srcRefNode);
-			this.height = this.parentHeight = dim.h;
-			this.width = this.parentWidth = dim.w;
+			this.height = this.parentHeight = options.height || dim.h;
+			this.width = this.parentWidth = options.width || dim.w;
 			this.domNode = dojo.create("div", {id:"canvasNode"}, this.srcRefNode);
 			dojo.style(this.domNode, {
 				width:this.width,

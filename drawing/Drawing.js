@@ -109,12 +109,12 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			var def = dojo.attr(node, "defaults");
 			this.defaults =  def ? (typeof def === 'string' ? dojo.getObject(def) : def) : defaults;
 
-			this.id = node.id;
+			this.id = node.id || dijit.getUniqueId('dojox_drawing_Drawing');
 			registry.register(this, "drawing");
 			this.mode = (props.mode || dojo.attr(node, "mode") || "").toLowerCase();
 			var box = dojo.contentBox(node);
-			this.width = box.w;
-			this.height = box.h;
+			this.width = props.width || box.w;
+			this.height = props.height || box.h;
 			utilCommon.register(this); // So Toolbar can find this Drawing DEPRECATED
 			this.mouse = new Mouse({util:utilCommon, keys:keys, id:this.mode=="ui"?"MUI":"mse"});
 			this.mouse.setEventMode(this.mode);
@@ -174,6 +174,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 				srcRefNode:this.domNode,
 				util:utilCommon,
 				mouse:this.mouse,
+				width: this.width, height: this.height,
 				callback: dojo.hitch(this, "onSurfaceReady")
 			});
 			this.initPlugins();
