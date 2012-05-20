@@ -24,6 +24,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		//		The shape to register.
 		// returns:
 		//		The unique id associated with this shape.
+		
 		// the id pattern : type+number (ex: Rect0,Rect1,etc)
 		var t = s.declaredClass.split('.').pop();
 		var i = t in _ids ? ++_ids[t] : ((_ids[t] = 0));
@@ -50,20 +51,20 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 	declare("dojox.gfx.shape.Shape", null, {
 		// summary: a Shape object, which knows how to apply
-		// graphical attributes and transformations
+		//     graphical attributes and transformations
 	
 		constructor: function(){
 			//	rawNode: Node
 			//		underlying graphics-renderer-specific implementation object (if applicable)
 			this.rawNode = null;
 			//	shape: Object: an abstract shape object
-			//	(see dojox.gfx.defaultPath,
-			//	dojox.gfx.defaultPolyline,
-			//	dojox.gfx.defaultRect,
-			//	dojox.gfx.defaultEllipse,
-			//	dojox.gfx.defaultCircle,
-			//	dojox.gfx.defaultLine,
-			//	or dojox.gfx.defaultImage)
+			//		(see dojox.gfx.defaultPath,
+			//		dojox.gfx.defaultPolyline,
+			//		dojox.gfx.defaultRect,
+			//		dojox.gfx.defaultEllipse,
+			//		dojox.gfx.defaultCircle,
+			//		dojox.gfx.defaultLine,
+			//		or dojox.gfx.defaultImage)
 			this.shape = null;
 	
 			//	matrix: dojox.gfx.Matrix2D
@@ -188,6 +189,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		getEventSource: function(){
 			// summary: returns a Node, which is used as
 			//	a source of events for this shape
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			return this.rawNode;	// Node
 		},
@@ -241,6 +243,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//	dojox.gfx.defaultCircle,
 			//	dojox.gfx.defaultLine,
 			//	or dojox.gfx.defaultImage)
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			this.shape = g.makeParameters(this.shape, shape);
 			this.bbox = null;
@@ -255,6 +258,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//	dojox.gfx.defaultRadialGradient,
 			//	dojox.gfx.defaultPattern,
 			//	or dojo.Color)
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			if(!fill){
 				// don't fill
@@ -288,6 +292,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// stroke: Object
 			//	a stroke object
 			//	(see dojox.gfx.defaultStroke)
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			if(!stroke){
 				// don't stroke
@@ -308,6 +313,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//	a matrix or a matrix-like object
 			//	(see an argument of dojox.gfx.Matrix2D
 			//	constructor for a list of acceptable arguments)
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			this.matrix = matrixLib.clone(matrix ? matrixLib.normalize(matrix) : matrixLib.identity);
 			return this._applyTransform();	// self
@@ -315,6 +321,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 		_applyTransform: function(){
 			// summary: physically sets a matrix
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			return this;	// self
 		},
@@ -341,10 +348,12 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		},
 		_moveToFront: function(){
 			// summary: renderer-specific hook, see dojox.gfx.shape.Shape.moveToFront()
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 		},
 		_moveToBack: function(){
 			// summary: renderer-specific hook, see dojox.gfx.shape.Shape.moveToFront()
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 		},
 	
@@ -425,6 +434,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	shape._eventsProcessing = {
 		connect: function(name, object, method){
 			// summary: connects a handler to an event on this shape
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			// redirect to fixCallback to normalize events and add the gfxTarget to the event. The latter
 			// is done by dojox.gfx.fixTarget which is defined by each renderer
@@ -433,6 +443,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		},
 		disconnect: function(token){
 			// summary: connects a handler by token from an event on this shape
+			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 	
 			events.disconnect(token);
@@ -648,8 +659,8 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		isLoaded: true,
 		onLoad: function(/*dojox.gfx.Surface*/ surface){
 			// summary: local event, fired once when the surface is created
-			// asynchronously, used only when isLoaded is false, required
-			// only for Silverlight.
+			//     asynchronously, used only when isLoaded is false, required
+			//     only for Silverlight.
 		},
 		whenLoaded: function(/*Object|Null*/ context, /*Function|String*/ method){
 			var f = lang.hitch(context, method);

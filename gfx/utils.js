@@ -13,9 +13,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 			//		Takes a shape or a surface and applies a function "f" to in the context of "o" 
 			//		(or global, if missing). If "shape" was a surface or a group, it applies the same 
 			//		function to all children recursively effectively visiting all shapes of the underlying scene graph.
-			// object : The gfx container to iterate.
-			// f : The function to apply.
-			// o : The scope.
+			// object: The gfx container to iterate.
+			// f: The function to apply.
+			// o: The scope.
 			o = o || kernel.global;
 			f.call(o, object);
 			if(object instanceof g.Surface || object instanceof g.Group){
