@@ -444,7 +444,8 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 		// Here, we need the fillstyle or strokestyle to be set before calling fillText/strokeText.
 		_render: function(/* Object */ctx){
 			// summary: render the shape
-			// ctx : Object: the drawing context.
+			// ctx: Object
+			//		the drawing context.
 			ctx.save();
 			this._renderTransform(ctx);
 			this._renderFill(ctx, false);
@@ -455,7 +456,8 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", 
 		
 		_renderShape: function(ctx){
 			// summary: a text shape (Canvas)
-			// ctx : Object: the drawing context.
+			// ctx:
+			//		Object: the drawing context.
 			var ta, s = this.shape;
 			if(!s.text || s.text.length == 0){
 				return;

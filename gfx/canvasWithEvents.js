@@ -280,7 +280,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		
 		connect: function(/*String*/name, /*Object*/object, /*Function|String*/method){
 			// summary: connects a handler to an event on this surface
-			// name : String
+			// name: String
 			//		The event name
 			// object: Object
 			//		The object that method will receive as "this".
@@ -397,6 +397,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_oncontextmenu: function(e){
 			// summary: triggers onclick
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
 				this._invokeHandler(this._pick.curr, 'oncontextmenu', e);
@@ -404,6 +405,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_ondblclick: function(e){
 			// summary: triggers onclick
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pickOfMouseUp){
 				this._invokeHandler(this._pickOfMouseUp, 'ondblclick', e);
@@ -411,6 +413,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_onclick: function(e){
 			// summary: triggers onclick
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pickOfMouseUp && this._pickOfMouseUp == this._pickOfMouseDown){
 				this._invokeHandler(this._pickOfMouseUp, 'onclick', e);
@@ -426,6 +429,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_ontouchstart: function(e){
 			// summary: triggers ontouchstart			
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr) {
 				this._fireTouchEvent(e);
@@ -433,6 +437,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_onmouseup: function(e){
 			// summary: triggers onmouseup
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			this._pickOfMouseUp = this._pick.curr;
 			if(this._pick.curr){
@@ -441,6 +446,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_ontouchend: function(e){
 			// summary: triggers ontouchend
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
 				for(var i = 0; i < this._pick.curr.length; ++i){
@@ -453,6 +459,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		_onmousemove: function(e){
 			// summary: triggers onmousemove, onmouseenter, onmouseleave
+			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.last && this._pick.last != this._pick.curr){
 				this._invokeHandler(this._pick.last, 'onmouseleave', e);

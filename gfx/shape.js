@@ -956,16 +956,34 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		},
 		createObject: function(shapeType, rawShape){
 			// summary: creates an instance of the passed shapeType class
-			// SHOULD BE RE-IMPLEMENTED BY THE RENDERER!
 			// shapeType: Function
 			//		a class constructor to create an instance of
 			// rawShape: Object 
 			//		properties to be passed in to the classes 'setShape' method
 	
+			// SHOULD BE RE-IMPLEMENTED BY THE RENDERER!
 			return null;	// dojox.gfx.Shape
 		}
 	};
 	
+	/*=====
+		g.Group = declare(g.shape.Shape, {
+			// summary: a group shape, which can be used
+			//	to logically group shapes (e.g, to propagate matricies)
+		});
+		g.Rect = g.shape.Rect;
+		g.Ellipse = g.shape.Ellipse;
+		g.Circle = g.shape.Circle;
+		g.Line = g.shape.Line;
+		g.Polyline = g.shape.Polyline;
+		g.Image = g.shape.Image;
+		g.Text = g.shape.Text;
+		g.Path = g.shape.Path;
+		g.TextPath = declare([ g.shape.Shape, g.path.TextPath ]);
+		g.Surface = g.shape.Surface;
+		g.createSurface = function(){};
+		g.fixTarget = function(){};
+	=====*/
+
 	return shape;
 });
-

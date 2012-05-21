@@ -630,6 +630,7 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sn
 			//		object to switch to.
 			var ns = typeof renderer == "string" ? g[renderer] : renderer;
 			if(ns){
+				// If more options are added, update the docblock at the end of shape.js!
 				arr.forEach(["Group", "Rect", "Ellipse", "Circle", "Line",
 						"Polyline", "Image", "Text", "Path", "TextPath",
 						"Surface", "createSurface", "fixTarget"], function(name){
