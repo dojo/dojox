@@ -32,7 +32,7 @@ define([
 			renderFeature : function(/* Feature */f){
 				//	summary:
 				//		Called when rendering a feature is necessary.
-				//	f : Feature
+				//	f: Feature
 				//		The feature to draw.
 				f.render();
 			},
@@ -44,7 +44,7 @@ define([
 			addFeature : function(/* Feature | Array */f){
 				//	summary:
 				//		Add a feature or an array of features to the layer.
-				//	f : Feature or Array
+				//	f: Feature or Array
 				//		The Feature or array of features to add.
 				if (lang.isArray(f)) {
 					array.forEach(f, function(item){
@@ -59,9 +59,9 @@ define([
 			},
 
 			removeFeature : function(/* Feature | Array */f){
-				//	summary :
+				//	summary:
 				//		Removes a feature or an array of features from the layer.
-				//	f : Feature or Array
+				//	f: Feature or Array
 				//		The Feature or array of features to remove.
 				var ft = this._features;
 				if (ft == null)
@@ -107,9 +107,9 @@ define([
 			getFeatureAt : function(i){
 				//	summary:
 				//		Returns the i-th feature of this layer.
-				//	i : int
+				//	i: int
 				//		The index of the feature to return.
-				//	returns : ibm_maps.maps.Layer
+				//	returns: ibm_maps.maps.Layer
 				//		The i-th feature of this layer.
 				if (this._features == null)
 					return undefined;

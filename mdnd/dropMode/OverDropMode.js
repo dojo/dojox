@@ -184,7 +184,7 @@ define(["dojo/_base/kernel",
 			//		coordinates [x,y] of the dragItem (see getDragPoint())
 			// currentIndexArea:
 			//		an index representing the active D&D area
-			//returns:
+			// returns:
 			//		the index of the D&D area
 	
 			//console.log("dojox.mdnd.dropMode.OverDropMode ::: getTargetArea");

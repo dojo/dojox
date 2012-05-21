@@ -11,8 +11,8 @@ define([
 			//		Create a geodetic line as an array of OpenLayers.Point.
 			//	descritpion:
 			//		Create a geodetic line as an array of OpenLayers.Point between the point p1
-			//	and the point p2. Result is a polyline approximation for which a new point is 
-			//	calculated every <em>increment</em> degrees.
+			//		and the point p2. Result is a polyline approximation for which a new point is 
+			//		calculated every <em>increment</em> degrees.
 			//	p1: Point
 			//		The first point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
@@ -76,7 +76,7 @@ define([
 			// 		calculated every <em>increment</em> degrees.
 			//	p1: Point
 			//		The first point of the geodetic line. x and y fields are longitude and
-			//	latitude in decimal degrees.
+			//		latitude in decimal degrees.
 			//	p2: Point
 			//		The second point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.

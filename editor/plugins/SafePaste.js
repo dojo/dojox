@@ -72,6 +72,7 @@ dojo.declare("dojox.editor.plugins.SafePaste", [dojox.editor.plugins.PasteFromWo
 		//		Overrides _Plugin.updateState(). 
 		// tags:
 		//		protected
+		
 		// Do nothing.
 	},
 	

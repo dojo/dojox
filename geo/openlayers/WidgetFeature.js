@@ -16,16 +16,18 @@ define([
 			//		This class allows to add a widget in a `dojox.geo.openlayers.Layer`.
 			//		Parameters are passed to the constructor. These parameters describe the widget
 			//		and provide geo-localisation of this widget.
-			//		parameters can be: 
-			//	* _createWidget_: Function for widget creation. Must return a `dijit._Widget`.
-			//	* _dojoType_: The class of a widget to create;
-			//	* _dijitId_: The digitId of an existing widget.
-			//	* _widget_: An already created widget.
-			//	* _width_: The width of the widget.
-			//	* _height_: The height of the widget.
-			//	* _longitude_: The longitude, in decimal degrees where to place the widget.
-			//	* _latitude_: The latitude, in decimal degrees where to place the widget.
-			//	You must define a least one widget retrieval parameter and the geo-localization parameters.
+			//		parameters can be:
+			//		
+			//		* _createWidget_: Function for widget creation. Must return a `dijit._Widget`.
+			//		* _dojoType_: The class of a widget to create;
+			//		* _dijitId_: The digitId of an existing widget.
+			//		* _widget_: An already created widget.
+			//		* _width_: The width of the widget.
+			//		* _height_: The height of the widget.
+			//		* _longitude_: The longitude, in decimal degrees where to place the widget.
+			//		* _latitude_: The latitude, in decimal degrees where to place the widget.
+			//		
+			//		You must define a least one widget retrieval parameter and the geo-localization parameters.
 			_widget : null,
 			_bbox : null,
 
@@ -163,6 +165,7 @@ define([
 				//		Places the widget with the computed x and y values
 				//	tags:
 				//		private
+				
 				//	var box = this._params;
 
 				var w = this._widget;

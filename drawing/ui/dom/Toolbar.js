@@ -183,7 +183,7 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		},
 		onSetTool: function(/*String*/type){
 			// summary:
-			// handles buttons clicks and selects or deselects
+			//	handles buttons clicks and selects or deselects
 			for(var n in this.toolNodes){
 				if(n == type){
 					dojo.addClass(this.toolNodes[type], "selected");

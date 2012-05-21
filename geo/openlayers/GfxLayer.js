@@ -16,7 +16,7 @@ define([
 		//	description:
 		//		A layer class for rendering geometries as dojox.gfx.Shape objects.
 		//		This layer class accepts Features which encapsulates graphic objects to be added to the map.
-		//	All objects should be added to this group.
+		//		All objects should be added to this group.
 		//	tags:
 		//		private
 		_viewport : null,
@@ -59,15 +59,15 @@ define([
 		onMapResize : function(){
 			//	summary:
 			//		Called when map is resized.
-			//	tag:
-			//	protected
+			//	tags:
+			//		protected
 			this._surfaceSize();
 		},
 
 		setMap : function(map){
 			//	summary:
 			//		Sets the map for this layer.
-			//	tag:
+			//	tags:
 			//		protected
 			this.inherited(arguments);
 			this._surfaceSize();

@@ -51,50 +51,50 @@ var SearchStore = declare("dojox.data.GoogleSearchStore",null,{
 		this._id = dojox.data.GoogleSearchStore.prototype._id++;
 	},
 
-	// _id: Integer
-	// A unique identifier for this store.
+	//	_id: Integer
+	//		A unique identifier for this store.
 	_id: 0,
 
-	// _requestCount: Integer
-	// A counter for the number of requests made. This is used to define
-	// the callback function that GoogleSearchStore will use.
+	//	_requestCount: Integer
+	//		A counter for the number of requests made. This is used to define
+	//		the callback function that GoogleSearchStore will use.
 	_requestCount: 0,
 
-	// _googleUrl: String
-	// The URL to Googles search web service.
+	//	_googleUrl: String
+	//		The URL to Googles search web service.
 	_googleUrl: "http://ajax.googleapis.com/ajax/services/search/",
 
-	// _storeRef: String
-	// The internal reference added to each item pointing at the store which owns it.
+	//	_storeRef: String
+	//		The internal reference added to each item pointing at the store which owns it.
 	_storeRef: "_S",
 
-	// _attributes: Array
-	// The list of attributes that this store supports
+	//	_attributes: Array
+	//		The list of attributes that this store supports
 	_attributes: [	"unescapedUrl", "url", "visibleUrl", "cacheUrl", "title",
 			"titleNoFormatting", "content", "estimatedResultCount"],
 
-	// _aggregtedAttributes: Hash
-	// Maps per-query aggregated attributes that this store supports to the result keys that they come from.
+	//	_aggregtedAttributes: Hash
+	//		Maps per-query aggregated attributes that this store supports to the result keys that they come from.
 	_aggregatedAttributes: {
 		estimatedResultCount: "cursor.estimatedResultCount"
 	},
 
-	// label: String
-	// The default attribute which acts as a label for each item.
+	//	label: String
+	//		The default attribute which acts as a label for each item.
 	label: "titleNoFormatting",
 
-	// type: String
-	// The type of search. Valid values are "web", "local", "video", "blogs", "news", "books", "images".
-	// This should not be set directly. Instead use one of the child classes.
+	//	type: String
+	//		The type of search. Valid values are "web", "local", "video", "blogs", "news", "books", "images".
+	//		This should not be set directly. Instead use one of the child classes.
 	_type: "web",
 
-	// urlPreventCache: boolean
-	// Sets whether or not to pass preventCache to dojo.io.script.
+	//	urlPreventCache: boolean
+	//		Sets whether or not to pass preventCache to dojo.io.script.
 	urlPreventCache: true,
 
 
-	// _queryAttrs: Hash
-	// Maps query hash keys to Google query parameters.
+	//	_queryAttrs: Hash
+	//		Maps query hash keys to Google query parameters.
 	_queryAttrs: {
 		text: 'q'
 	},

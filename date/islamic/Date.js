@@ -377,7 +377,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"], function(lang, de
 	
 	valueOf:function(){
 		// summary: This function returns The stored time value in milliseconds
-		// since midnight, January 1, 1970 UTC
+		//	since midnight, January 1, 1970 UTC
 
 		return this.toGregorian().valueOf();
 	},

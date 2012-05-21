@@ -216,6 +216,7 @@ EventObject: function(){
 			// summary:
 			// 		Create on[xx]Down event and send to broadcaster.
 			//		Could be connected to.
+			
 			//console.info("onDown:", this.eventName("down"))
 			this._broadcastEvent(this.eventName("down"), obj);
 		},
@@ -269,7 +270,7 @@ EventObject: function(){
 			// summary:
 			// 		Create on[xx]Up event and send to broadcaster.
 			//		Could be connected to.
-			//
+			
 			// 	blocking first click-off (deselect), largely for TextBlock
 			// 	TODO: should have param to make this optional?
 			var nm = this.eventName("up");

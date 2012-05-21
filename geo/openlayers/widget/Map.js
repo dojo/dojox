@@ -20,20 +20,19 @@ define([
 		//		The `dojox.geo.openlayers.widget.Map` widget is the widget 
 		//		version of the `dojox.geo.openlayers.Map` component. 
 		//		With this widget, user can specify some attributes in the markup suach as
-		// 
-		//	* `baseLayerType`: The type of the base layer. Permitted values are 
-		//	* `initialLocation`: The initial location as for the dojox.geo.openlayers.Map.fitTo method
-		//	* `touchHandler`: Tells if we attach touch handler or not.
-		//	
+		//		
+		//		* `baseLayerType`: The type of the base layer. Permitted values are 
+		//		* `initialLocation`: The initial location as for the dojox.geo.openlayers.Map.fitTo method
+		//		* `touchHandler`: Tells if we attach touch handler or not.
+		//
 		//	example:
-		//	
 		//	| <div id="map" dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="Google" initialLocation="{
 		//	|   position : [7.154126, 43.651748],
 		//	|   extent : 0.2 }"
 		//	| style="background-color: #b5d0d0; width: 100%; height: 100%;">
 		//
 
-		//	summay:
+		//	summary:
 		//		Base layer type as defined in `dojox.geo.openlayer.BaseLayerType
 		//	description:
 		//		baseLayerType can be either 
@@ -43,7 +42,7 @@ define([
 		//		* `VirtualEarth`
 		//		* `Yahoo`
 		//		* `ArcGIS`
-		//	baseLayerType : String
+		//	baseLayerType: String
 		//		Base layer type property.
 		baseLayerType : openlayers.BaseLayerType.OSM,
 

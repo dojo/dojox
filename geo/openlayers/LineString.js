@@ -3,9 +3,6 @@ define([
 	"dojox/geo/openlayers/Geometry"], 
 	function(declare,Geometry){
 
-		/* ===== 
-		var Geometry = dojox.geo.openlayers.Geometry; 
-		=====*/
 	return declare("dojox.geo.openlayers.LineString", Geometry, {
 		//	summary:
 		//		The `dojox.geo.openlayers.LineString` geometry. This geometry holds an array
@@ -14,7 +11,7 @@ define([
 		setPoints : function(p){
 			//	summary:
 			//		Sets the points for this geometry.
-			//	p : Array
+			//	p: Array
 			//		An array of {x, y} objects
 			this.coordinates = p;
 		},

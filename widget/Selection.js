@@ -148,7 +148,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			//		Whether an event must be dispatched or not.
 			//	returns: Boolean
 			//		Returns true if the selection has changed and false otherwise.
-			//	tags
+			//	tags:
 			//		protected
 			
 			if(this.selectionMode == "none"){

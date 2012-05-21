@@ -93,7 +93,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//	enableCache: Boolean?
 		//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
-		enableCache: false
+		enableCache: false,
 
 		//	interpolate: Boolean?
 		//		Whether when there is a null data point in the data the plot interpolates it or if the lines is split at that

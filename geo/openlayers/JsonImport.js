@@ -22,12 +22,12 @@ define([
 			//	description:
 			//		Construct a new JSON importer with the specified parameters. These parameters are
 			//		passed through an Object and include:
-			//	<ul>
-			//		<li> url : <em>url</em> </li> The url pointing to the JSON file to load.
-			//		<li> nextFeature : <em>function</em> </li> The function called each time a feature is read.
-			//		The function is called with a GeometryFeature as argument.
-			//		<li> error : <em>function</em> </li> Error function called if something goes wrong.
-			//	</ul>
+			//		<ul>
+			//			<li> url : <em>url</em> </li> The url pointing to the JSON file to load.
+			//			<li> nextFeature : <em>function</em> </li> The function called each time a feature is read.
+			//			The function is called with a GeometryFeature as argument.
+			//			<li> error : <em>function</em> </li> Error function called if something goes wrong.
+			//		</ul>
 			this._params = params;
 		},
 

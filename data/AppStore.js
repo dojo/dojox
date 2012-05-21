@@ -383,6 +383,7 @@ dojo.declare("dojox.data.AppStore",
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
 		// summary:
 		//		See dojo.data.api.Read.close()
+		
 		// nothing to do here!
 		this._feed = null;
 	},

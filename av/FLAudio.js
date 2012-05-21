@@ -95,9 +95,8 @@ dojo.declare("dojox.av.FLAudio", null, {
 
 	init: function(){
 		// summary:
-		// Initialize the media.
-		//
-		//
+		//		Initialize the media.
+
 		this._subs = [];
 		this.initialVolume = this._normalizeVolume(this.initialVolume);
 
@@ -339,7 +338,7 @@ dojo.declare("dojox.av.FLAudio", null, {
 
 	_sub: function(topic, method){
 		// summary:
-		// helper for subscribing to topics
+		//		helper for subscribing to topics
 		dojo.subscribe(this.id+"/"+topic, this, method);
 	},
 

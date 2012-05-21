@@ -333,20 +333,20 @@ var Base = oo.declare(
 		onModify: function(/*Object*/stencil){
 			// summary:
 			//		Stub - fires on change of any property,
-			// including style properties
+			//		including style properties
 
 		},
 
 		onChangeData: function(/*Object*/ stencil){
 			// summary:
 			//		Stub - fires on change of dimensional
-			//	properties or a text change
+			//		properties or a text change
 		},
 
 		onChangeText: function(value){ // value or 'this' ?
 			// summary:
 			//		Stub - fires on change of text in a
-			//	TextBlock tool only
+			//		TextBlock tool only
 		},
 
 		onRender: function(/*Object*/ stencil){

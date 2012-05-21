@@ -30,15 +30,15 @@ var out = function(o, x){
 declare("dojox.gfx3d.Object", null, {
 	constructor: function(){
 		// summary: a Object object, which knows how to map
-		// 3D objects to 2D shapes.
+		//	3D objects to 2D shapes.
 
 		// object: Object: an abstract Object object
-		// (see dojox.gfx3d.defaultEdges,
-		// dojox.gfx3d.defaultTriangles,
-		// dojox.gfx3d.defaultQuads
-		// dojox.gfx3d.defaultOrbit
-		// dojox.gfx3d.defaultCube
-		// or dojox.gfx3d.defaultCylinder)
+		//	(see dojox.gfx3d.defaultEdges,
+		//	dojox.gfx3d.defaultTriangles,
+		//	dojox.gfx3d.defaultQuads
+		//	dojox.gfx3d.defaultOrbit
+		//	dojox.gfx3d.defaultCube
+		//	or dojox.gfx3d.defaultCylinder)
 		this.object = null;
 
 		// matrix: dojox.gfx3d.matrix: world transform
@@ -61,12 +61,12 @@ declare("dojox.gfx3d.Object", null, {
 	setObject: function(newObject){
 		// summary: sets a Object object
 		// object: Object: an abstract Object object
-		// (see dojox.gfx3d.defaultEdges,
-		// dojox.gfx3d.defaultTriangles,
-		// dojox.gfx3d.defaultQuads
-		// dojox.gfx3d.defaultOrbit
-		// dojox.gfx3d.defaultCube
-		// or dojox.gfx3d.defaultCylinder)
+		//	(see dojox.gfx3d.defaultEdges,
+		//	dojox.gfx3d.defaultTriangles,
+		//	dojox.gfx3d.defaultQuads
+		//	dojox.gfx3d.defaultOrbit
+		//	dojox.gfx3d.defaultCube
+		//	or dojox.gfx3d.defaultCylinder)
 		this.object = gfx.makeParameters(this.object, newObject);
 		return this;
 	},
@@ -109,8 +109,8 @@ declare("dojox.gfx3d.Object", null, {
 	
 	setFill: function(fill){
 		// summary: sets a fill object
-		// (the default implementation is to delegate to
-		// the underlying 2D shape).
+		//	(the default implementation is to delegate to
+		//	the underlying 2D shape).
 		// fill: Object: a fill object
 		//	(see dojox.gfx.defaultLinearGradient,
 		//	dojox.gfx.defaultRadialGradient,
@@ -173,6 +173,7 @@ declare("dojox.gfx3d.Object", null, {
 
 declare("dojox.gfx3d.Scene", gfx3d.Object, {
 	// summary: the Scene is just a containter.
+	
 	// note: we have the following assumption:
 	// all objects in the Scene are not overlapped with other objects
 	// outside of the scene.
@@ -846,7 +847,7 @@ declare("dojox.gfx3d.Cylinder", gfx3d.Object, {
 declare("dojox.gfx3d.Viewport", gfx.Group, {
 	constructor: function(){
 		// summary: a viewport/container for 3D objects, which knows
-		// the camera and lightings
+		//	the camera and lightings
 
 		// matrix: dojox.gfx3d.matrix: world transform
 		// dimension: Object: the dimension of the canvas
@@ -910,7 +911,7 @@ declare("dojox.gfx3d.Viewport", gfx.Group, {
 		/* Color, optional */ specular){
 		// summary: set the lights
 		// lights: Array: an array of light object
-		// or lights object
+		//	or lights object
 		// ambient: Color: an ambient object
 		// specular: Color: an specular object
 		this.lights = (lights instanceof Array) ? 

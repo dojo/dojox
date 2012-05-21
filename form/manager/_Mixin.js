@@ -12,7 +12,7 @@ define([
 	"dijit/form/CheckBox",
 	"dojo/_base/declare"
 ], function(win, lang, array, connect, domAttr, domClass, manager, Widget, FormWidget, Button, CheckBox, declare){
-	// XXX: This class is loading a bunch of extra widgets just to perform isInstanceOf operations,
+	// TODO: This class is loading a bunch of extra widgets just to perform isInstanceOf operations,
 	// which is wasteful
 
 	var fm = lang.getObject("dojox.form.manager", true),

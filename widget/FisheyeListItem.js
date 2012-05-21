@@ -81,7 +81,7 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/dom", "dojo/dom-attr", "
 
 		onMouseOver: function(/*Event*/ e){
 			// summary: callback when user moves mouse over this menu item
-			// in conservative mode, don't activate the menu until user mouses over an icon
+			//  in conservative mode, don't activate the menu until user mouses over an icon
 			if(!this.parent.isOver){
 				this.parent._setActive(e);
 			}

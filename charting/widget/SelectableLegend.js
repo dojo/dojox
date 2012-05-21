@@ -116,6 +116,7 @@ var Legend = dojox.charting.widget.Legend;
 			// summary:
 			//		Apply click-event on checkbox and hover-event on legend icon,
 			//		highlight data series or toggle it.
+			
 			// if the chart has not yet been refreshed it will crash here (targetData.group == null)
 			if(this.chart.dirty){
 				return;

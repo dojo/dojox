@@ -187,6 +187,7 @@ var formCheckedMultiSelectMenu = declare("dojox.form._CheckedMultiSelectMenu", M
 		//		Handle clicks on an item.
 		// tags:
 		//		private
+		
 		// this can't be done in _onFocus since the _onFocus events occurs asynchronously
 		if(typeof this.isShowingNow == 'undefined'){ // non-popup menu
 			this._markActive();

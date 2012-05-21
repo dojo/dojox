@@ -470,6 +470,7 @@ function(dojo, oo, defaults){
 				//		Event fired on mousedown of a stencil's label
 				//		Because it's an annotation the id will be the
 				//		master stencil.
+				
 				//console.info("===============>>>Label click: ",obj, " evt: ",evt);
 				this.onStencilDown(obj,evt);
 			},
@@ -550,6 +551,7 @@ function(dojo, oo, defaults){
 				// summary:
 				//		This changes the cursor when hovering over
 				//		a selectable stencil.
+				
 				//console.log("OVER")
 				dojo.style(obj.id, "cursor", "move");
 			},
@@ -557,6 +559,7 @@ function(dojo, oo, defaults){
 			onStencilOut: function(obj){
 				// summary:
 				//		This restores the cursor.
+				
 				//console.log("OUT")
 				dojo.style(obj.id, "cursor", "crosshair");
 			},

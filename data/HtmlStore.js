@@ -471,6 +471,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 	getIdentityAttributes: function(/* item */ item){
 		 //	summary:
 		 //		See dojo.data.api.Identity.getIdentityAttributes()
+		 
 		 //Identity isn't taken from a public attribute.
 		 return null;
 	},

@@ -772,7 +772,7 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		//		An integer identifying the number of rows per page. If the size
 		//		is an Infinity, all rows will be displayed; if an invalid value pssed
 		//		in, the current page size will be returned.
-		//	return
+		//	returns:
 		//		Current size of items per page.  
 		if(!isNaN(size)){
 			var g = this.grid,

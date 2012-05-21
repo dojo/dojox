@@ -11,17 +11,17 @@ var _WidgetBase = dijit._WidgetBase;
 
 	return declare("dojox.charting.widget.Legend", _WidgetBase, {
 		// summary: A legend for a chart. A legend contains summary labels for
-		// each series of data contained in the chart.
-		//
-		// Set the horizontal attribute to boolean false to layout legend labels vertically.
-		// Set the horizontal attribute to a number to layout legend labels in horizontal
-		// rows each containing that number of labels (except possibly the last row).
-		//
-		// (Line or Scatter charts (colored lines with shape symbols) )
-		// -o- Series1		-X- Series2		-v- Series3
-		//
-		// (Area/Bar/Pie charts (letters represent colors))
-		// [a] Series1		[b] Series2		[c] Series3
+		//		each series of data contained in the chart.
+		//		
+		//		Set the horizontal attribute to boolean false to layout legend labels vertically.
+		//		Set the horizontal attribute to a number to layout legend labels in horizontal
+		//		rows each containing that number of labels (except possibly the last row).
+		//		
+		//		(Line or Scatter charts (colored lines with shape symbols) )
+		//		-o- Series1		-X- Series2		-v- Series3
+		//		
+		//		(Area/Bar/Pie charts (letters represent colors))
+		//		[a] Series1		[b] Series2		[c] Series3
 
 		chartRef:   "",
 		horizontal: true,

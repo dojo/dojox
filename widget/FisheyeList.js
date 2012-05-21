@@ -90,13 +90,13 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				// attachEdge: String
 				//	controls the border that the menu items don't expand past;
 				//	for example, if set to "top", then the menu items will drop downwards as they expand.
-				// values
+				//  values
 				//	"center", "left", "right", "top", "bottom".
 				attachEdge: 'center',
 
 				// labelEdge: String
 				//	controls were the labels show up in relation to the menu item icons
-				// values
+				//  values
 				//	"center", "left", "right", "top", "bottom".
 				labelEdge: 'bottom',
 

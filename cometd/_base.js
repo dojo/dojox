@@ -675,7 +675,7 @@ dojox.cometd = {
 	
 		this._connectTimeout = function(){
 			// summary: Return the connect timeout in ms, calculated as the minimum of the advised timeout
-			// and the configured timeout. Else 0 to indicate no client side timeout
+			//  and the configured timeout. Else 0 to indicate no client side timeout
 			var advised=0;
 			if(this._advice && this._advice.timeout && this.expectedNetworkDelay > 0){
 				advised = this._advice.timeout + this.expectedNetworkDelay;

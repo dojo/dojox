@@ -28,28 +28,27 @@ define([
 		//		Parameters can be passed as argument at construction time to define the base layer
 		//		type and the base layer parameters such as url or options depending on the type
 		//		specified. These parameters can be any of :
-		//	<br />
-		//	_baseLayerType_: type of the base layer. Can be any of
-		//	
-		//	* `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
-		//	* `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
-		//	* `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
-		//	* `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
-		//	* `dojox.geo.openlayers.BaseLayerType.BING`: Bing layer
-		//	* `dojox.geo.openlayers.BaseLayerType.YAHOO`: Yahoo layer
-		//	* `dojox.geo.openlayers.BaseLayerType.ARCGIS`: ESRI ArgGIS layer
-		//
-		//	Note that access to commercial server such as Google, Virtual Earth or Yahoo may need specific licencing.
-		// 
-		//	The parameters value also include :
-		// 
-		//	* `baseLayerName`: The name of the base layer.
-		//	* `baseLayerUrl`: Some layer may need an url such as Web Map Server
-		//	* `baseLayerOptions`: Addtional specific options passed to OpensLayers layer,  
-		//	such as The list of layer to display, for Web Map Server layer.
+		//		<br />
+		//		_baseLayerType_: type of the base layer. Can be any of
+		//		
+		//		* `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
+		//		* `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
+		//		* `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
+		//		* `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
+		//		* `dojox.geo.openlayers.BaseLayerType.BING`: Bing layer
+		//		* `dojox.geo.openlayers.BaseLayerType.YAHOO`: Yahoo layer
+		//		* `dojox.geo.openlayers.BaseLayerType.ARCGIS`: ESRI ArgGIS layer
+		//		
+		//		Note that access to commercial server such as Google, Virtual Earth or Yahoo may need specific licencing.
+		//		
+		//		The parameters value also include :
+		//		
+		//		* `baseLayerName`: The name of the base layer.
+		//		* `baseLayerUrl`: Some layer may need an url such as Web Map Server
+		//		* `baseLayerOptions`: Addtional specific options passed to OpensLayers layer,  
+		//		such as The list of layer to display, for Web Map Server layer.
 		//
 		//	example:
-		// 
 		//	|	var map = new dojox.geo.openlayers.widget.Map(div, {
 		//	|		baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
 		//	|		baseLayerName : 'Open Street Map Layer'
@@ -213,7 +212,7 @@ define([
 		getOLMap : function(){
 			//	summary:
 			//		gets the underlying OpenLayers map object.
-			//	returns : OpenLayers.Map
+			//	returns: OpenLayers.Map
 			//		The underlying OpenLayers map object.
 			return this.olMap;
 		},
@@ -492,7 +491,7 @@ define([
 			//	description:
 			//		Transforms the point passed as argument without modifying it. The point is supposed to be expressed
 			//		in the <em>from</em> coordinate system and is transformed to the map coordinate system.
-			//	p : Object {x, y}
+			//	p: Object {x, y}
 			//		The point to transform
 			//	from: OpenLayers.Projection
 			//		The projection in which the point is expressed.
@@ -506,9 +505,9 @@ define([
 			//	description:
 			//		Transforms the coordinates passed as argument. The coordinate are supposed to be expressed
 			//		in the <em>from</em> coordinate system and are transformed to the map coordinate system.
-			//	x : Number 
+			//	x: Number 
 			//		The longitude coordinate to transform.
-			//	y : Number
+			//	y: Number
 			//		The latitude coordinate to transform.
 			//	from: OpenLayers.Projection
 			//		The projection in which the point is expressed.

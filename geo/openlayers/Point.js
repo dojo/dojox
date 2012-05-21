@@ -12,7 +12,7 @@ define([
 		setPoint : function(p){
 			//	summary:
 			//		Sets the point for this geometry.
-			//	p : {x, y} Object
+			//	p: {x, y} Object
 			//		The point geometry.
 			this.coordinates = p;
 		},

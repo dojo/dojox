@@ -56,7 +56,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 	
 		//	radius: Number?
 		//		The size of the radial gradient.  Default is 0.
-		radius:		0
+		radius:		0,
 
 		//	shadow: dojox.gfx.Stroke?
 		//		An optional stroke to use to draw any shadows for a series on a plot.
@@ -68,7 +68,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 
 		//	styleFunc: Function?
 		//		A function that returns a styling object for the a given data item.
-		styleFunc:	null,
+		styleFunc:	null
 	});
 	=====*/
 

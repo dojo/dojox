@@ -468,6 +468,7 @@ return declare("dojox.grid.enhanced._FocusManager", _FocusManager, {
 	_delayedCellFocus: function(){
 		// summary:
 		//		Overwritten
+		
 		//If focus header here, the page will scroll to grid when the grid is created.
 		//this.focusArea("header");
 	},
