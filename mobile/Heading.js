@@ -140,7 +140,7 @@ define([
 				var children = this.containerNode.childNodes;
 				for(var i = children.length - 1; i >= 0; i--){
 					var c = children[i];
-					if(c.nodeType === 1){
+					if(c.nodeType === 1 && domStyle.get(c, "display") !== "none"){
 						if(!rightBtn && domStyle.get(c, "float") === "right"){
 							rightBtn = c;
 						}
