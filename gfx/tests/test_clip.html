@@ -64,7 +64,6 @@
 						g.createRect(g.getBoundingBox()).setStroke("#CDB79E");
 						clipped.push(g);
 						surface.createRect(g1.getBoundingBox()).setStroke("#8B8878").setTransform(matrix.translate(50,200));
-						clipped.push(g1);
 						
 						clipped.push(surface.createRect({x:50,y:50,width:100, height:100}).setClip({x:50, y:50, width:50, height:50}).setFill("yellow").setTransform(matrix.scaleAt(2,2,50,50)));
 						g = surface.createGroup();
