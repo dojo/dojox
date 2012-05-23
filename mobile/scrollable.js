@@ -4,6 +4,9 @@
 // several dojo APIs that are used in this module for non-dojo applications.
 // For dojo applications, this code block is removed by the build tool.
 
+/*=====
+var __def = define;
+=====*/
 if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 	dojo = {doc:document, global:window};
 	dojox = {mobile:{}};
@@ -126,6 +129,9 @@ if(typeof define === "undefined"){ // assumes dojo.js is not loaded
 		);
 	};
 }
+/*=====
+define = __def;
+=====*/
 //>>includeEnd("standaloneScrollable");
 
 
