@@ -93,7 +93,7 @@ var dxc = dojox.collections;
 		};
 		this.removeAt=function(/* int */ i){
 			//	summary
-			//	return an array with function applied to all elements
+			//	Remove the element located at the given index.
 			items.splice(i,1);
 			this.count=items.length;
 		};
