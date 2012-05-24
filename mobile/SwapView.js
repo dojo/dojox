@@ -168,6 +168,9 @@ define([
 			//		two visible views, one is the current view, the other is the
 			//		next view. This function returns the current view, not the
 			//		next view, which has the mblIn class.
+			if(!domClass.contains(node, "mblSwapView")){
+				return this.inherited(arguments);
+			}
 			if(!node.parentNode){ return null; }
 			var nodes = node.parentNode.childNodes;
 			for(var i = 0; i < nodes.length; i++){
