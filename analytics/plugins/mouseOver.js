@@ -1,9 +1,5 @@
 define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window", "dojo/on"
 ], function(lang, dxa, config, window, on){
-	/*=====
-		dxa = dojox.analytics;
-		on = dojo.on;
-	=====*/	
 
 	return (dxa.plugins.mouseOver = new (function(){
 		this.watchMouse = config["watchMouseOver"] || true;
@@ -19,7 +15,7 @@ define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window",
 				return;
 			}
 			on(window.doc, "mousemove", lang.hitch(this, "sampleMouse"));
-		}
+		};
 
 		if(this.watchMouse){
 			on(window.doc, "mouseover", lang.hitch(this, "toggleWatchMouse"));
@@ -41,7 +37,7 @@ define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window",
 			}
 			this._lastMouseEvent = e;
 			return e;
-		}
+		};
 
 		this.trimMouseEvent = function(e){
 			var t = {};
@@ -89,6 +85,6 @@ define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window",
 				}
 			}
 			return t;
-		}
+		};
 	})());
 });

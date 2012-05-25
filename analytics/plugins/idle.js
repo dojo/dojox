@@ -1,11 +1,6 @@
 define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/ready", 
 		"dojo/aspect", "dojo/_base/window"
 ], function(lang, dxa, config, ready, aspect, window){
-	/*=====
-		dxa = dojox.analytics;
-		ready = dojo.ready;
-		aspect = dojo/aspect;
-	=====*/
 
 	// window startup data
 	return (dxa.plugins.idle = new (function(){

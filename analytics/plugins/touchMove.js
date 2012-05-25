@@ -1,10 +1,6 @@
 define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window", "dojo/on", "dojo/touch"
 ], function(lang, dxa, config, window, on, touch){
-	/*=====
-		dxa = dojox.analytics;
-		on = dojo.on;
-		touch = dojo.touch;
-	=====*/	
+
 
 	return (dxa.plugins.touchMove = new (function(){
 		if(config["watchTouch"] !== undefined && !config["watchTouch"]){
@@ -36,7 +32,7 @@ define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window",
 			}
 			this._lastTouchEvent = e;
 			return e;
-		}
+		};
 
 		on(window.doc, touch.move, lang.hitch(this, "sampleTouchMove"));
 
@@ -108,6 +104,6 @@ define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/_base/window",
 				}
 			}
 			return t;
-		}
+		};
 	})());
 });

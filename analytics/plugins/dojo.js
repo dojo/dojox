@@ -1,16 +1,10 @@
 define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/ready"
 ], function(lang, dxa, config, ready){
 	var plugins = lang.getObject("dojox.analytics.plugins", true);
-	/*=====
-		dxa = dojox.analytics;
-		ready = dojo.ready;
-		plugins = dojox.analytics.plugins; 
-		plugins.dojo = dojox.analytics.plugins.dojo;
-	=====*/	
 
 	return (plugins.dojo = new (function(){
 		// summary:
-		//	plugin to have analyitcs return the base info dojo collects
+		//		plugin to have analyitcs return the base info dojo collects
 		this.addData = lang.hitch(dxa, "addData", "dojo");
 		ready(lang.hitch(this, function(){
 			var data = {};

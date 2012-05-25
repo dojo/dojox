@@ -2,13 +2,6 @@ define(["dojo/_base/lang","../_base", "dojo/_base/window", "dojo/on", "dojo/_bas
 		"dojox/gesture/tap", "dojox/gesture/swipe"
 
 ], function(lang, dxa, window, on, config, touch, tap, swipe){
-	/*=====
-		dxa = dojox.analytics;
-		on = dojo.on;
-		touch = dojo.touch;
-		tap = dojox.gesture.tap;
-		swipe = dojox.gesture.swipe;
-	=====*/	
 
 	// window startup data
 	return (dxa.plugins.gestureEvents = new (function(){

@@ -1,10 +1,5 @@
 define(["dojo/_base/lang","../_base", "dojo/ready", "dojo/_base/config", "dojo/aspect"
 ], function(lang, dxa, ready, config, aspect){
-	/*=====
-		dxa = dojox.analytics;
-		ready = dojo.ready;
-		aspect = dojo.aspect;
-	=====*/	
 
 	// window startup data
 	return (dxa.plugins.window = new (function(){

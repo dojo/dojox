@@ -1,10 +1,5 @@
 define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/_base/window", "dojo/on", "dojo/touch"
 ], function(lang, dxa, config, window, on, touch){
-	/*=====
-		dxa = dojox.analytics;
-		on = dojo.on;
-		touch = dojo.touch;
-	=====*/	
 
 	// window startup data
 	return (dxa.plugins.touchPress = new (function(){
@@ -19,12 +14,12 @@ define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/_base/window", 
 		this.addData = lang.hitch(dxa, "addData", "touch.press");
 		this.onTouchPress = function(e){
 			this.addData(this.trimEvent(e));
-		}
+		};
 
 		this.addDataRelease = lang.hitch(dxa, "addData", "touch.release");
 		this.onTouchRelease = function(e){
 			this.addDataRelease(this.trimEvent(e));
-		}
+		};
 
 		on(window.doc, touch.press, lang.hitch(this, "onTouchPress"));
 		on(window.doc, touch.release, lang.hitch(this, "onTouchRelease"));
@@ -91,6 +86,6 @@ define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/_base/window", 
 				}
 			}
 			return t;
-		}
+		};
 	})());
 });
