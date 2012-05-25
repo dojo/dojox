@@ -1,6 +1,6 @@
 define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_base/event",
-	"dojo/_base/connect", "./ChartAction", "dojo/_base/sniff", "dojo/dom-prop", "dojo/keys"], 
-	function(declare, win, arr, eventUtil, connect, ChartAction, has, domProp, keys){
+	"dojo/_base/connect", "dojo/mouse", "./ChartAction", "dojo/_base/sniff", "dojo/dom-prop", "dojo/keys"],
+	function(declare, win, arr, eventUtil, connect, mouse, ChartAction, has, domProp, keys){
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
@@ -32,7 +32,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
-	var sUnit = has("mozilla") ? -3 : 120;
+	var sUnit = has("mozilla") ? 3 : 120;
 	var keyTests = {
 		none: function(event){
 			return !event.ctrlKey && !event.altKey && !event.shiftKey;
@@ -73,7 +73,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 			//		The chart this action applies to.
 			//	kwArgs: dojox.charting.action2d.__MouseZoomAndPanCtorArgs?
 			//		Optional arguments for the chart action.
-			this._listeners = [{eventName: !has("mozilla") ? "onmousewheel" : "DOMMouseScroll", methodName: "onMouseWheel"}];
+			this._listeners = [{eventName: mouse.wheel, methodName: "onMouseWheel"}];
 			if(!kwArgs){ kwArgs = {}; }
 			this.axis = kwArgs.axis ? kwArgs.axis : "x";
 			this.scaleFactor = kwArgs.scaleFactor ? kwArgs.scaleFactor : 1.2;
@@ -180,7 +180,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		onMouseWheel: function(event){
 			//	summary:
 			//		Called when mouse wheel is used on the chart.
-			var scroll = event[(has("mozilla") ? "detail" : "wheelDelta")] / sUnit;
+			var scroll = event.wheelDelta / sUnit;
 			// on Mozilla the sUnit might actually not always be 3
 			// make sure we never have -1 < scroll < 1
 			if(scroll > -1 && scroll < 0){
