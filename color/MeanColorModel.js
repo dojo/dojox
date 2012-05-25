@@ -10,15 +10,15 @@ define(["dojo/_base/array", "dojo/_base/declare", "./NeutralColorModel"],
 		},
 			
 		computeNeutral: function(min, max, sum, values){
-			//	summary:
+			// summary:
 			//		Return the neutral value in this case the mean value of the data values.
-			//	min: Number
+			// min: Number
 			//		The minimal value.
-			//	max: Number
+			// max: Number
 			//		The maximum value.
-			//	sum: Number
+			// sum: Number
 			//		The sum of all values.
-			//	values: Number[]
+			// values: Number[]
 			//		The sorted array of values used to compute colors.			
 			var median = min;
 			if(values.length != 0){

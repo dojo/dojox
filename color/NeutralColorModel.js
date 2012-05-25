@@ -14,12 +14,12 @@ define(["dojo/_base/array", "dojo/_base/declare", "./SimpleColorModel"],
 		},
 	
 		initialize: function(items, colorFunc){
-			//	summary:
+			// summary:
 			//		Initialize the color model from a list of data items and using a function
 			//		that returns the value used to compute the color for a given item.
-			//	items: Object[]
+			// items: Object[]
 			//		The data items. 
-			//	colorFunc: Function
+			// colorFunc: Function
 			//		The function that returns the value used to compute the color for particular data item.
 			var values = [];
 			var sum = 0;
@@ -44,25 +44,25 @@ define(["dojo/_base/array", "dojo/_base/declare", "./SimpleColorModel"],
 		},
 		
 		computeNeutral: function(min, max, sum, values){
-			//	summary:
+			// summary:
 			//		Return the neutral value. This can be for example the mean or average value.
 			//		This function must be implemented by implementations.
-			//	min: Number
+			// min: Number
 			//		The minimal value.
-			//	max: Number
+			// max: Number
 			//		The maximum value.
-			//	sum: Number
+			// sum: Number
 			//		The sum of all values.
-			//	values: Number[]
+			// values: Number[]
 			//		The sorted array of values used to compute colors.
 		},
 		
 		getNormalizedValue: function(value){
-			//	summary:
+			// summary:
 			//		Return the normalized (between 0 and 1) value for a given data value.
 			//		This implementation uses an power function to map neutral value to 0.5
 			//		and distribute other values around it.
-			//	value: Number
+			// value: Number
 			//		The data value			
 			if(this._e < 0){
 				return 0;

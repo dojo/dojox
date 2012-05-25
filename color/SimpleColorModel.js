@@ -10,13 +10,13 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color"],
 		_endColor: null, 
 	
 		constructor: function(startColor, endColor){
-			//	summary:
+			// summary:
 			//		Construct a color model interpolating between start and end color.
 			//		If only start color is provided use it to compute reasonable start and end
 			//		colors from it.
-			//	startColor: Color
+			// startColor: Color
 			//		The start color. 
-			//	endColor: Color?
+			// endColor: Color?
 			//		The end color.
 			if(endColor != undefined){
 				this._startColor = startColor;
@@ -42,17 +42,17 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojox/color"],
 		},
 	
 		getNormalizedValue: function(value){
-			//	summary:
+			// summary:
 			//		Return the normalized (between 0 and 1) value for a given data value.
 			//		This function must be implemented by implementations.
-			//	value: Number
+			// value: Number
 			//		The data value. 			
 		},
 	
 		getColor: function(value){
-			//	summary:
+			// summary:
 			//		return the color for a given data value.
-			//	value: Number
+			// value: Number
 			//		The data value. 			
 			var completion = this.getNormalizedValue(value);
 			var hslFrom = this._startColor.toHsl();
