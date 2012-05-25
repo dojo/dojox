@@ -44,7 +44,8 @@ var categories = [
 	{ tag: "misc", label: "misc"},
 	{ tag: "no-dojo", label: "no-dojo"},
 	{ tag: "pageTurn", label: "pageTurn"},
-	{ tag: "transition", label: "transition"}
+	{ tag: "transition", label: "transition"},
+	{ tag: "SearchBox", label: "SearchBox"}
 ];
 var tests = [
 	{ url: "test_Accordion-demo.html", tags: "Accordion" },
@@ -290,5 +291,6 @@ var tests = [
 	{ url: "test_transition-animations.html", tags: "transition" },
 	{ url: "test_transition-animations2.html", tags: "transition" },
 	{ url: "test_transition-connect.html", tags: "transition" },
-	{ url: "test_transition-pubsub.html", tags: "transition" }
+	{ url: "test_transition-pubsub.html", tags: "transition" },
+	{ url: "test_SearchBox-demo.html", tags: "SearchBox" }
 ];
