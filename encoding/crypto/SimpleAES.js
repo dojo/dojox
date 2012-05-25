@@ -1,10 +1,6 @@
 define(["../base64", "./_base"], 
  function(base64, crypto){
 
-	/*=====
-		crypto = dojox.encoding.crypto;
-	=====*/
-
 	// Sbox is pre-computed multiplicative inverse in GF(2^8) used in SubBytes and KeyExpansion [5.1.1]
 	var Sbox =	[0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
 				 0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
@@ -46,7 +42,7 @@ define(["../base64", "./_base"],
 	 *
 	 *	 returns byte-array encrypted value (16 bytes)
 	 */
-	function Cipher(input, w) {	   // main Cipher function [®ª5.1]
+	function Cipher(input, w) {	   // main Cipher function [ï¿½ï¿½5.1]
 	  var Nb = 4;				// block size (in words): no of columns in state (fixed at 4 for AES)
 	  var Nr = w.length/Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
 
@@ -93,12 +89,12 @@ define(["../base64", "./_base"],
 	function MixColumns(s, Nb) {   // combine bytes of each col of state S [5.1.3]
 	  for (var c=0; c<4; c++) {
 		var a = new Array(4);  // 'a' is a copy of the current column from 's'
-		var b = new Array(4);  // 'b' is a‰Þ{02} in GF(2^8)
+		var b = new Array(4);  // 'b' is aï¿½Þ{02} in GF(2^8)
 		for (var i=0; i<4; i++) {
 		  a[i] = s[i][c];
 		  b[i] = s[i][c]&0x80 ? s[i][c]<<1 ^ 0x011b : s[i][c]<<1;
 		}
-		// a[n] ^ b[n] is a‰Þ{03} in GF(2^8)
+		// a[n] ^ b[n] is aï¿½Þ{03} in GF(2^8)
 		s[0][c] = b[0] ^ a[1] ^ b[1] ^ a[2] ^ a[3]; // 2*a0 + 3*a1 + a2 + a3
 		s[1][c] = a[0] ^ b[1] ^ a[2] ^ b[2] ^ a[3]; // a0 * 2*a1 + 3*a2 + a3
 		s[2][c] = a[0] ^ a[1] ^ b[2] ^ a[3] ^ b[3]; // a0 + a1 + 2*a2 + 3*a3
@@ -321,13 +317,13 @@ define(["../base64", "./_base"],
 		// 		4) The passed key will be padded (as opposed to enforcing a strict
 		// 		length) with null bytes.
 		this.encrypt = function(/* String */plaintext, /* String */key){
-			//	summary:
+			// summary:
 			//		Encrypt the passed plaintext using the key, with a
 			//		hardcoded bit depth of 256.
 			return AESEncryptCtr(plaintext, key, 256);	//	String
 		};
 		this.decrypt = function(/* String */ciphertext, /* String */key){
-			//	summary:
+			// summary:
 			//		Decrypt the passed ciphertext using the key at a fixed
 			//		bit depth of 256.
 			return AESDecryptCtr(ciphertext, key, 256);	//	String
