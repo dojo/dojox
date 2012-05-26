@@ -44,10 +44,10 @@ define([
 	var cssPaths = /(?:(?:@import\s*(['"])(?![a-z]+:|\/)([^\r\n;{]+?)\1)|url\(\s*(['"]?)(?![a-z]+:|\/)([^\r\n;]+?)\3\s*\))([a-z, \s]*[;}]?)/g;
 
 	var adjustCssPaths = html._adjustCssPaths = function(cssUrl, cssText){
-		//	summary:
+		// summary:
 		//		adjusts relative paths in cssText to be relative to cssUrl
 		//		a path is considered relative if it doesn't start with '/' and not contains ':'
-		//	description:
+		// description:
 		//		Say we fetch a HTML page from level1/page.html
 		//		It has some inline CSS:
 		//			@import "css/page.css" tv, screen;
@@ -141,11 +141,11 @@ define([
 	};
 
 	var snarfScripts = html._snarfScripts = function(cont, byRef){
-		// summary
+		// summary:
 		//		strips out script tags from cont
-		// invoke with
-		//	byRef = {errBack:function(){/*add your download error code here*/, downloadRemote: true(default false)}}
-		//	byRef will have {code: 'jscode'} when this scope leaves
+		// byRef:
+		//		byRef = {errBack:function(){/*add your download error code here*/, downloadRemote: true(default false)}}
+		//		byRef will have {code: 'jscode'} when this scope leaves
 		byRef.code = "";
 
 		//Update script tags nested in comments so that the script tag collector doesn't pick
@@ -251,7 +251,7 @@ define([
 		},
 
 		onBegin: function() {
-			// summary
+			// summary:
 			//		Called after instantiation, but before set();
 			//		It allows modification of any of the object properties - including the node and content
 			//		provided - before the set operation actually takes place
@@ -291,7 +291,7 @@ define([
 		},
 
 		onEnd: function() {
-			// summary
+			// summary:
 			//		Called after set(), when the new content has been pushed into the node
 			//		It provides an opportunity for post-processing before handing back the node to the caller
 			//		This implementation extends that of dojo.html._ContentSetter
@@ -364,14 +364,14 @@ define([
 		// TODO: add all the other options
 			// summary:
 			//		inserts (replaces) the given content into the given node
-			//	node:
+			// node:
 			//		the parent element that will receive the content
-			//	cont:
+			// cont:
 			//		the content to be set on the parent element.
 			//		This can be an html string, a node reference or a NodeList, dojo.NodeList, Array or other enumerable list of nodes
-			//	params:
+			// params:
 			//		Optional flags/properties to configure the content-setting. See dojo.html._ContentSetter
-			//	example:
+			// example:
 			//		A safe string/node/nodelist content replacement/injection with hooks for extension
 			//		Example Usage:
 			//		dojo.html.set(node, "some string");
