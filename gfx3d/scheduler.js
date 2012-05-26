@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/lang",
 	"dojo/_base/array",	// dojo.forEach, dojo.every
-	"dojo/_base/declare",	// dojo.declare
+	"dojo/_base/declare",	// declare
 	"./_base",
 	"./vector"
 ], function(lang, arrayUtil, declare, gfx3d, vectorUtil){
@@ -35,7 +35,8 @@ gfx3d.scheduler = {
 
 var BST = declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 	constructor: function(obj, outline){
-		// summary: build the binary search tree, using binary space partition algorithm.
+		// summary:
+		//		build the binary search tree, using binary space partition algorithm.
 		//		The idea is for any polygon, for example, (a, b, c), the space is divided by
 		//		the plane into two space: plus and minus.
 		//		
@@ -46,7 +47,7 @@ var BST = declare("dojox.gfx3d.scheduler.BinarySearchTree", null, {
 		//		
 		//		in this implementation, n is declared as normal, ,a is declared as orient.
 		//
-		// obj: object: dojox.gfx3d.Object
+		// obj: dojox.gfx3d.Object
 		this.plus = null;
 		this.minus = null;
 		this.object = obj;
@@ -140,7 +141,7 @@ gfx3d.drawer = {
 			item.draw(viewport.lighting);
 		});
 	}
-	// More aggrasive optimization may re-order the DOM nodes using the order
+	// More aggressive optimization may re-order the DOM nodes using the order
 	// of objects, and only elements of todos call setShape.
 };
 
