@@ -981,8 +981,6 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		g.Path = g.shape.Path;
 		g.TextPath = declare([ g.shape.Shape, g.path.TextPath ]);
 		g.Surface = g.shape.Surface;
-		g.createSurface = function(){};
-		g.fixTarget = function(){};
 	=====*/
 
 	return shape;

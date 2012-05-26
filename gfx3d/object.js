@@ -10,6 +10,7 @@ define([
 	"./vector",
 	"./matrix",
 	"./lighting"
+	/*===== , "dojox/gfx/shape" =====*/
 ], function(arrayUtil,declare,lang,gfx,matrixUtil2d,gfx3d,schedulerExtensions,Gradient,VectorUtil,matrixUtil,lightUtil){
 
 var scheduler = schedulerExtensions.scheduler;

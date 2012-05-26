@@ -639,5 +639,11 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sn
 			}
 		}
 	});
+	
+	/*=====
+	 	g.createSurface = function(){};
+		g.fixTarget = function(){};
+	=====*/
+	
 	return g; // defaults object api
 });
