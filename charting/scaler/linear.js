@@ -101,13 +101,14 @@ define(["dojo/_base/lang", "./common"],
 	};
 	
 	return lang.mixin(linear, {
-		buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs, /*Number?*/delta){
+		buildScaler: function(/*Number*/ min, /*Number*/ max, /*Number*/ span, /*Object*/ kwArgs, /*Number?*/ delta, /*Number?*/ minorDelta){
 			var h = {fixUpper: "none", fixLower: "none", natural: false};
 			if(kwArgs){
 				if("fixUpper" in kwArgs){ h.fixUpper = String(kwArgs.fixUpper); }
 				if("fixLower" in kwArgs){ h.fixLower = String(kwArgs.fixLower); }
 				if("natural"  in kwArgs){ h.natural  = Boolean(kwArgs.natural); }
 			}
+			minorDelta = !minorDelta || minorDelta < deltaLimit ? deltaLimit : minorDelta;
 			
 			// update bounds
 			if("min" in kwArgs){ min = kwArgs.min; }
@@ -149,17 +150,17 @@ define(["dojo/_base/lang", "./common"],
 					minor = major / 10;
 					if(!h.natural || minor > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, 0, span);
-						if(ticks.bounds.scale * ticks.minor.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.minor.tick > minorDelta){ break; }
 					}
 					minor = major / 5;
 					if(!h.natural || minor > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, 0, span);
-						if(ticks.bounds.scale * ticks.minor.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.minor.tick > minorDelta){ break; }
 					}
 					minor = major / 2;
 					if(!h.natural || minor > 0.9){
 						ticks = calcTicks(min, max, h, major, minor, 0, span);
-						if(ticks.bounds.scale * ticks.minor.tick > deltaLimit){ break; }
+						if(ticks.bounds.scale * ticks.minor.tick > minorDelta){ break; }
 					}
 					return calcTicks(min, max, h, major, 0, 0, span);	// Object
 				}while(false);
