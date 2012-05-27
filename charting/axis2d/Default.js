@@ -138,8 +138,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 	var Invisible = dojox.charting.axis2d.Invisible
 	=====*/
 
-	var labelGap = 4,			// in pixels
-		centerAnchorLimit = 45;	// in degrees
+	var centerAnchorLimit = 45;	// in degrees
 
 	return declare("dojox.charting.axis2d.Default", Invisible, {
 		//	summary:
@@ -348,11 +347,15 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 				this._oldSpan = span;
 				var o = this.opt;
 				var ta = this.chart.theme.axis, rotation = o.rotation % 360,
+					labelGap = this.chart.theme.axis.tick.labelGap,
 					// TODO: we use one font --- of major tick, we need to use major and minor fonts
 					font = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
-					size = font?g.normalizedLength(g.splitFontString(font).size):0;
-				// even if we don't drop label we need to compute max size for offsets
-				var labelW = this._getMaxLabelSize(min, max, span, rotation, font, size);
+					size = font ? g.normalizedLength(g.splitFontString(font).size) : 0,
+					// even if we don't drop label we need to compute max size for offsets
+					labelW = this._getMaxLabelSize(min, max, span, rotation, font, size);
+				if(typeof labelGap != "number"){
+					labelGap = 4; // in pixels
+				}
 				if(labelW && o.dropLabels){
 					var cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
 						sinr = Math.abs(Math.sin(rotation * Math.PI / 180));
@@ -426,6 +429,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 				gl = scommon.getNumericLabel,
 				offset = 0, ma = s.major, mi = s.minor,
 				ta = this.chart.theme.axis,
+				labelGap = this.chart.theme.axis.tick.labelGap,
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
 				taTitleFont = o.titleFont || (ta.title && ta.title.font),
 				taTitleGap = (o.titleGap==0) ? 0 : o.titleGap || (ta.title && ta.title.gap),
@@ -435,7 +439,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 				rotation = o.rotation % 360, leftBottom = o.leftBottom,
 				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
 				sinr = Math.abs(Math.sin(rotation * Math.PI / 180));
-			this.trailingSymbol = (o.trailingSymbol === undefined || o.trailingSymbol === null) ? this.trailingSymbol : o.trailingSymbol;
+			this.trailingSymbol = (o.trailingSymbol === undefined || o.trailingSymbol === null) ?
+				this.trailingSymbol : o.trailingSymbol;
+			if(typeof labelGap != "number"){
+				labelGap = 4; // in pixels
+			}
 			if(rotation < 0){
 				rotation += 360;
 			}
@@ -588,7 +596,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			// prepare variable
 			var o = this.opt, ta = this.chart.theme.axis, leftBottom = o.leftBottom, rotation = o.rotation % 360,
 				start, stop, titlePos, titleRotation=0, titleOffset, axisVector, tickVector, anchorOffset, labelOffset, labelAlign,
-
+				labelGap = this.chart.theme.axis.tick.labelGap,
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
 				taFont = o.font || (ta.majorTick && ta.majorTick.font) || (ta.tick && ta.tick.font),
 				taTitleFont = o.titleFont || (ta.title && ta.title.font),
@@ -607,6 +615,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
 				sinr = Math.abs(Math.sin(rotation * Math.PI / 180)),
 				tsize = taTitleFont ? g.normalizedLength(g.splitFontString(taTitleFont).size) : 0;
+			if(typeof labelGap != "number"){
+				labelGap = 4; // in pixels
+			}
 			if(rotation < 0){
 				rotation += 360;
 			}

@@ -506,7 +506,8 @@ lang.mixin(SimpleTheme, {
 				color:     "#666",
 				position:  "center",
 				font:      "normal normal normal 7pt Tahoma",	// labels on axis
-				fontColor: "#333"								// color of labels
+				fontColor: "#333",								// color of labels
+				labelGap:  4                                    // gap between a tick and its label in pixels
 			},
 			majorTick:	{ // major ticks on axis, and used for major gridlines
 				width:  1,
