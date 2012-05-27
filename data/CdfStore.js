@@ -77,9 +77,8 @@ dojo.declare("dojox.data.CdfStore", null, {
 	getValues: function(/* jsx3.xml.Entity */ item, /* String */ property){
 		//	summary:
 		//		Return an array of values
-		//
+
 		//	TODO!!! Can't find an example of an array in any CDF files
-		//
 		var v = this.getValue(item, property, []);
 		return dojo.isArray(v) ? v : [v];
 	},

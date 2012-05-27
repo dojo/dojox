@@ -17,12 +17,12 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		//		Although not Drawing and Toolbar, all other objects are created with a custom
 		//		declare. See dojox.drawing.util.oo
 		//
-		//The files are laid out as such:
+		//		The files are laid out as such:
 		//		- Drawing
 		//			The master class. More than one instance of a Drawing can be placed
 		//			on a page at one time (although this has not yet been tested). Plugins
 		//			can be added in markup.
-		// 	- Toolbar
+		//		- Toolbar
 		//			Like Drawing, Toolbar is a psudeo Dijit that does not need Dijit. It is
 		//			optional. It can be oriented horizontal or vertical by placing one of
 		//			those params in the class (at least one is required).  Plugins
@@ -436,7 +436,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//		|			color:"#ffff00"
 			//		|		}
 			//		|	});
-			//
+
 			//console.log("----->>> changeDefault: ",newStyle, " value?: ",value);
 			if(value!=undefined && value){
 				for(var nm in newStyle){
@@ -461,7 +461,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// summary:
 			//		Event that fires when a stencil is drawn. Does not fire from
 			//		'addStencil'.
-			//
+
 			//console.info("--------------------------------------dojox.drawing.onRenderStencil:", stencil.id);
 
 			this.stencils.register(stencil);

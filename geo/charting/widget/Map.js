@@ -15,12 +15,12 @@ return declare("dojox.geo.charting.widget.Map", Widget, {
 	// 
 	//	The parameters are :
 	//	
-	// * `shapeData`: The json object containing map data or the name of the file containing map data.
-	// * `dataStore`: the dataStore to fetch the charting data from
-	// * `dataBindingAttribute`: property name of the dataStore items to use as value for charting
-	// * `markerData`: tooltips to display for map features, handled as json style.
-	// * `adjustMapCenterOnResize`: if true, the center of the map remains the same when resizing the widget   
-	// * `adjustMapScaleOnResize`: if true, the map scale is adjusted to leave the visible portion of the map identical as much as possible 
+	//	* `shapeData`: The json object containing map data or the name of the file containing map data.
+	//	* `dataStore`: the dataStore to fetch the charting data from
+	//	* `dataBindingAttribute`: property name of the dataStore items to use as value for charting
+	//	* `markerData`: tooltips to display for map features, handled as json style.
+	//	* `adjustMapCenterOnResize`: if true, the center of the map remains the same when resizing the widget   
+	//	* `adjustMapScaleOnResize`: if true, the map scale is adjusted to leave the visible portion of the map identical as much as possible 
 	//
 	//	example:
 	//

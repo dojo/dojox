@@ -47,7 +47,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			//			Manager.Mouse event.
 			// 		snap: Float
 			//			Returns nearest angle within snap limits
-			//
+
 			//obj = this.argsToObj.apply(this, arguments);
 			if(snap){
 				snap = snap/180;
@@ -71,7 +71,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			// summary:
 			//		Return the radians derived from the coordinates
 			//		in the Mouse object.
-			//
+
 			//var o = this.argsToObj.apply(this, arguments);
 			return Math.atan2(o.start.y-o.y,o.x-o.start.x);
 		},

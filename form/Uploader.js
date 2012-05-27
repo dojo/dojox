@@ -213,7 +213,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 	onError: function(/* Object or String */evtObject){
 		// summary:
 		//		Fires on errors
-		//
+
 		//FIXME: Unsure of a standard form of error events
 	},
 

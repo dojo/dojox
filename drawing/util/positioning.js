@@ -35,7 +35,7 @@ define(['./common'], function(common){
 	positioning.angle = function(/*Object*/start, /*Object*/end){
 		// summary:
 		//		Returns the optimal position for annotations.Angle.
-		//
+
 		// angle at first third of vector
 	        var x = 0.7*start.x+0.3*end.x;
 	        var y = 0.7*start.y+0.3*end.y;

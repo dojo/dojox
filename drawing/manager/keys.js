@@ -155,7 +155,7 @@ function(dojo, utilCommon){
 		init: function(){
 			// summary:
 			//		Initialize the keys object
-			//
+
 			// a little extra time is needed in some browsers
 			setTimeout(dojo.hitch(this, "scanForFields"), 500);
 			

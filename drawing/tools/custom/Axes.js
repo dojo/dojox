@@ -258,7 +258,7 @@ var Axes = oo.declare(
 		onTransformBegin: function(/*manager.Anchor*/anchor){
 			// summary:
 			//		Overwrites _Base.onTransformBegin
-			//
+
 			// called from anchor point up mouse down
 			this._isBeingModified = true;
 		},
@@ -266,7 +266,7 @@ var Axes = oo.declare(
 		onTransformEnd: function(/*manager.Anchor*/anchor){
 			// summary:
 			//		Overwrites _Base.onTransformEnd
-			//
+
 			// Gets called on anchor mouseup
 			//	also gets called by checkBounds - we don't want that.
 			if(!anchor){ return; }
@@ -392,7 +392,7 @@ var Axes = oo.declare(
 		onTransform: function(/*Number*/anchor){
 			// summary:
 			//		Overwrites _Base.onTransform
-			//
+
 			// the xaxis point has changed - the center will not.
 			// need to find the yaxis point.
 			var o = this.points[0];

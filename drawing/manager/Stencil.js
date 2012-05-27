@@ -202,7 +202,7 @@ function(dojo, oo, defaults){
 				// summary:
 				//		Deletes a stencil.
 				//		NOTE: supports limited undo.
-				//
+
 				// manipulating the selection to fire onDelete properly
 				if(this.hasSelected()){
 					// there is a selection
@@ -321,7 +321,7 @@ function(dojo, oo, defaults){
 			onSelect: function(/*Object*/stencil){
 				// summary:
 				//		Event fired on selection of a stencil
-				//
+
 				//console.log("stencil.onSelect", stencil);
 				if(!stencil){
 					console.error("null stencil is not selected:", this.stencils)

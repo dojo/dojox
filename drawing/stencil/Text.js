@@ -84,7 +84,7 @@ StencilPoints: [
 		setText: function(text){
 			// summary:
 			//		Setter for text.
-			//
+
 			// Only apply typesetting to objects that the user can modify.
 			// Else, it is assumed that typesetting is done elsewhere.
 			if(this.enabled){

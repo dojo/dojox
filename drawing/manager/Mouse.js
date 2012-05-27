@@ -75,10 +75,10 @@ EventObject: function(){
 	// summary:
 	//		The custom event object that is sent to registered objects
 	//		and their respective methods.
-	//	NOTE: Most event objects are the same with the exception
-	//		of the onDown events, which have fewer.
+	//		NOTE: Most event objects are the same with the exception
+	//			of the onDown events, which have fewer.
 	//
-	// All event properties included onDown:
+	//	All event properties included onDown:
 	//
 	//	id: String
 	//		Id of the focused object
@@ -95,7 +95,7 @@ EventObject: function(){
 	//		The Y coordinate of the mouse from the top
 	//		of the canvas
 	//
-	// These event properties are *not* in onDown:
+	//	These event properties are *not* in onDown:
 	//
 	//	last:	Object
 	//		The x and y coordinates of the last mousemove
@@ -205,7 +205,7 @@ EventObject: function(){
 		_broadcastEvent:function(strEvt, obj){
 			// summary:
 			//		Fire events to all registered objects.
-			//
+
 			//console.log("mouse.broadcast:", strEvt, obj)
 			for(var nm in this.registered){
 				if(this.registered[nm][strEvt]) this.registered[nm][strEvt](obj);

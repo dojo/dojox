@@ -302,7 +302,7 @@ return oo.declare(
 		onReset: function(/*Stencil*/stencil){
 			// summary:
 			//		Event fires when an anchor's reset method is called
-			//
+
 			// a desperate hack in order to get the anchor point to reset.
 			// FIXME: Is this still used? I think its item.deselect();item.select();
 			var st = this.util.byId("drawing").stencils;

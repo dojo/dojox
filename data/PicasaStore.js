@@ -257,8 +257,8 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 		// str: String.
 		//   The string to un-escape
 		// returns: HTML String converted back to the normal text (unescaped) characters (<,>,&, ", etc,).
-		//
-		//TODO: Check to see if theres already compatible escape() in dojo.string or dojo.html
+
+		// TODO: Check to see if theres already compatible escape() in dojo.string or dojo.html
 		if(str){
 			str = str.replace(/&amp;/gm, "&").replace(/&lt;/gm, "<").replace(/&gt;/gm, ">").replace(/&quot;/gm, "\"");
 			str = str.replace(/&#39;/gm, "'");

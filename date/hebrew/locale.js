@@ -470,7 +470,7 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 		//	override locale used to find the names
 		// date:
 		//	required for item=months to determine leap month name
-		//
+
 		// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he', new hebrewDate(5768, 2, 12));
 
 		var label,

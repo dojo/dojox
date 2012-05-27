@@ -230,11 +230,11 @@ var HDate = declare("dojox.date.hebrew.Date", null, {
 		//	8. Iyar
 		//	9. Sivan
 		//	10. Tammuz
-		//	11.	Av
+		//	11. Av
 		//	12. Elul - 12
-		// For non leap years, for months after Shevat, the actual position of
-		// the month in the year (used for short format) is less than
-		// the "absolute" index by 1.
+		//	For non leap years, for months after Shevat, the actual position of
+		//	the month in the year (used for short format) is less than
+		//	the "absolute" index by 1.
 		//
 		// example:
 		// |		var date1 = new dojox.date.hebrew.Date(5769, 6, 1);
@@ -548,10 +548,10 @@ var HDate = declare("dojox.date.hebrew.Date", null, {
 
 	// ported from the Java class com.ibm.icu.util.HebrewCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
 	isLeapYear: function(/*Number*/year){
-	//	summary:
-	//		Determines if the year (argument) is a leap year
-	//	description: The Leap year contains additional month adar sheni
-	//
+		//	summary:
+		//		Determines if the year (argument) is a leap year
+		//	description: The Leap year contains additional month adar sheni
+
 		//return (year * 12 + 17) % 19 >= 12;
 		var x = (year*12 + 17) % 19;
 		return x >= ((x < 0) ? -7 : 12);

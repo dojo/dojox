@@ -53,7 +53,7 @@ exports.Label = oo.declare(
 			// summary:
 			//	Sets the text of the label. Not called directly. Should
 			//	be called within Stencil. See stencil._Base
-			//
+
 			// onTransform will pass an object here
 			var x, y, box = this.master.getBounds();
 			

@@ -53,7 +53,7 @@ var Rect = oo.declare(
 			//		Creates a dojox.gfx.shape based on passed arguments.
 			//		Can be called many times by implementation to create
 			//		multiple shapes in one stencil.
-			//
+
 			//console.log("render rect", d)
 			//console.log("rect sty:", sty)
 			this.remove(this[shp]);

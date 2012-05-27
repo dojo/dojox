@@ -697,7 +697,7 @@ var Base = oo.declare(
 			//	arguments:
 			//		useDelay: Boolean
 			//			Adds  slight delay before the style is set.
-			//
+
 			// should not have to render here because the deselection
 			// re-renders after the transform
 			// but... oh well.
@@ -778,7 +778,7 @@ var Base = oo.declare(
 			//		Moves object to a new X Y location
 			//		mx is additive. So mx.dx=1 will move the stencil
 			//		1 pixel to the right from wherever it was.
-			//
+
 			// An attempt is made to prevent < 0 errors, but
 			// this won't work on all shapes (like Axes)
 			//
@@ -959,7 +959,7 @@ var Base = oo.declare(
 			// summary:
 			//		Internal. Prevent item from being drawn/rendered less
 			//		than zero on the X or Y.
-			//
+
 			// if being modified anchors will prevent less than zero.
 			if(this._isBeingModified){ return; }
 			// FIXME: why is this sometimes empty?
@@ -1042,10 +1042,11 @@ var Base = oo.declare(
 		destroy: function(){
 			// summary:
 			//		Destroys this Stencil
+
 			// Note:
 			//		Can connect to this, but it's better to
 			//		connect to onDelete
-			//
+
 			// prevent loops:
 			if(this.destroyed){ return; }
 			if(this.data || this.points && this.points.length){
@@ -1064,7 +1065,7 @@ var Base = oo.declare(
 			//		Removes shape(s), typically before a re-render
 			// 		No args defaults to this.shape
 			//		Pass in multiple args to remove multiple shapes
-			//
+
 			// FIXME: Use an Array of all shapes
 			//
 			var a = arguments;
@@ -1179,7 +1180,7 @@ var Base = oo.declare(
 		onDown: function(/*EventObject*/obj){
 			// summary:
 			//		Mouse event, fired on mousedown on canvas
-			//
+
 			// by default, object is ready to accept data
 			// turn this off for dragging or onRender will
 			// keep firing and register the shape

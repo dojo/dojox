@@ -114,6 +114,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/
 		//		reference. Href can be the name of the file.
 		//		If no argument, the assumed created dynamic style
 		//		sheet is used.
+
 		// try dynamic sheets first
 		if(dynamicStyleMap[styleSheetName || "default"]){
 			return dynamicStyleMap[styleSheetName || "default"];

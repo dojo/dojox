@@ -78,7 +78,7 @@ function(dojo, oo, gfx){
 				// summary:
 				//		Internal. Changes canvas size and sets scroll position.
 				//		Do not call this, use resize().
-				//
+
 				// changing the size of the surface and setting scroll
 				// if items are off screen
 				var sw = this.getScrollWidth(); //+ 10;

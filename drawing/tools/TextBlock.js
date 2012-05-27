@@ -200,7 +200,7 @@ StencilData: {
 				// summary:
 				//		Internal. Inserts the contenteditable HTML node
 				//		into its parent node, and styles it.
-				//
+
 				// style parent
 				var d = this.style.textMode.edit;
 				this._box.border = d.width+"px "+d.style+" "+d.color;

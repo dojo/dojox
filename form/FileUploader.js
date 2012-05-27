@@ -577,7 +577,7 @@ declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	onError: function(/* Object or String */evtObject){
 		// summary:
 		//		Fires on errors
-		//
+
 		//FIXME: Unsure of a standard form for receiving errors
 	},
 
@@ -948,7 +948,7 @@ declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 		// summary:
 		//		Internal. You could use this, but you should use upload() or submit();
 		//		which can also handle the post data.
-		//
+
 		// NOTE on deferredUploading:
 		// 		This is not enabled for HTML. Workaround would be to force
 		//		singleFile uploads.

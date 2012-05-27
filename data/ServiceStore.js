@@ -29,35 +29,35 @@ return declare("dojox.data.ServiceStore",
 			//
 			// options:
 			// 		Keyword arguments
-			// The *schema* parameter
-			//		This is a schema object for this store. This should be JSON Schema format.
+			//		The *schema* parameter
+			//			This is a schema object for this store. This should be JSON Schema format.
 			//
-			// The *service* parameter
-			// 		This is the service object that is used to retrieve lazy data and save results
-			// 		The function should be directly callable with a single parameter of an object id to be loaded
+			//		The *service* parameter
+			// 			This is the service object that is used to retrieve lazy data and save results
+			// 			The function should be directly callable with a single parameter of an object id to be loaded
 			//
-			// The *idAttribute* parameter
-			//		Defaults to 'id'. The name of the attribute that holds an objects id.
-			//		This can be a preexisting id provided by the server.
-			//		If an ID isn't already provided when an object
-			//		is fetched or added to the store, the autoIdentity system
-			//		will generate an id for it and add it to the index.
+			//		The *idAttribute* parameter
+			//			Defaults to 'id'. The name of the attribute that holds an objects id.
+			//			This can be a preexisting id provided by the server.
+			//			If an ID isn't already provided when an object
+			//			is fetched or added to the store, the autoIdentity system
+			//			will generate an id for it and add it to the index.
 			//
-			// The *estimateCountFactor* parameter
-			// 		This parameter is used by the ServiceStore to estimate the total count. When
-			//		paging is indicated in a fetch and the response includes the full number of items
-			//	 	requested by the fetch's count parameter, then the total count will be estimated
-			//		to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
-			//		does not support paging, and the response is the full set of items, where the
-			// 		total count is equal to the numer of items returned. If the server does support
-			//		paging, an estimateCountFactor of 2 is a good value for estimating the total count
-			//		It is also possible to override _processResults if the server can provide an exact
-			// 		total count.
+			//		The *estimateCountFactor* parameter
+			// 			This parameter is used by the ServiceStore to estimate the total count. When
+			//			paging is indicated in a fetch and the response includes the full number of items
+			//	 		requested by the fetch's count parameter, then the total count will be estimated
+			//			to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
+			//			does not support paging, and the response is the full set of items, where the
+			// 			total count is equal to the numer of items returned. If the server does support
+			//			paging, an estimateCountFactor of 2 is a good value for estimating the total count
+			//			It is also possible to override _processResults if the server can provide an exact
+			// 			total count.
 			//
-			// The *syncMode* parameter
-			//		Setting this to true will set the store to using synchronous calls by default.
-			//		Sync calls return their data immediately from the calling function, so
-			//		callbacks are unnecessary. This will only work with a synchronous capable service.
+			//		The *syncMode* parameter
+			//			Setting this to true will set the store to using synchronous calls by default.
+			//			Sync calls return their data immediately from the calling function, so
+			//			callbacks are unnecessary. This will only work with a synchronous capable service.
 			//
 			// description:
 			//		ServiceStore can do client side caching and result set updating if
@@ -68,10 +68,10 @@ return declare("dojox.data.ServiceStore",
 			//		client side and server side components by putting client side actions in
 			//		clientFilter property in fetch calls. For example you could override fetch:
 			//	|	fetch: function(args){
-				//	|		// do the sorting and paging on the client side
-	 			//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
-	 			//	|		// args.query will be passed to the service object for the server side handling
-	 			//	|		return this.inherited(arguments);
+			//	|		// do the sorting and paging on the client side
+	 		//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
+	 		//	|		// args.query will be passed to the service object for the server side handling
+	 		//	|		return this.inherited(arguments);
 			//	|	}
 			//		When extending this class, if you would like to create lazy objects, you can follow
 			//		the example from dojox.data.tests.stores.ServiceStore:
@@ -271,15 +271,15 @@ return declare("dojox.data.ServiceStore",
 			// summary:
 			//		See dojo.data.api.Read.fetch
 			//
-			// The *queryOptions.cache* parameter
-			//		If true, indicates that the query result should be cached for future use. This is only available
-			// 		if dojox.data.ClientFilter has been loaded before the ServiceStore
+			//		The *queryOptions.cache* parameter
+			//			If true, indicates that the query result should be cached for future use. This is only available
+			// 			if dojox.data.ClientFilter has been loaded before the ServiceStore
 			//
-			//	The *syncMode* parameter
-			//		Indicates that the call should be fetch synchronously if possible (this is not always possible)
+			//		The *syncMode* parameter
+			//			Indicates that the call should be fetch synchronously if possible (this is not always possible)
 			//
-			// The *clientFetch* parameter
-			//		This is a fetch keyword argument for explicitly doing client side filtering, querying, and paging
+			//		The *clientFetch* parameter
+			//			This is a fetch keyword argument for explicitly doing client side filtering, querying, and paging
 
 			args = args || {};
 
@@ -336,7 +336,7 @@ return declare("dojox.data.ServiceStore",
 		},
 
 		getLabel: function(item){
-			// summary
+			// summary:
 			//		returns the label for an item. Just gets the "label" attribute.
 			//
 			return this.getValue(item,this.labelAttribute);
