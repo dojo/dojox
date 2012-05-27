@@ -5,12 +5,6 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	function(arr, lang, declare, event, Color, touch, when, on, query, domConstruct, domGeom, domClass, domStyle,
 		utils, _WidgetBase, _Invalidating, Selection, has){
 
-	/*=====
-	var _WidgetBase = dijit._WidgetBase;
-	var Selection = dojox.widget.Selection;
-	var _Invalidating = dojox.widget._Invalidating;
-	=====*/ 	
-	
 	return declare("dojox.treemap.TreeMap", [_WidgetBase, _Invalidating, Selection], {
 		//	summary:
 		//		A treemap widget.

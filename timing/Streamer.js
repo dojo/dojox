@@ -18,7 +18,7 @@ define(["./_base"], function(){
 		//		the function executed on internal tick
 		// interval:
 		//		the interval in ms at which the output function is fired.
-		//minimum:
+		// minimum:
 		//		the minimum number of elements in the internal queue.
 
 		var self = this;
