@@ -130,6 +130,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			styleFunc: null,
 			font:		"",
 			fontColor:	"",
+			marker:             "",
 			markerStroke:		{},
 			markerOutline:		{},
 			markerShadow:		{},
@@ -297,8 +298,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 					var lpath = this.opt.tension ? dc.curve(lpoly, this.opt.tension) : "";
 
 					if(this.opt.areas && lpoly.length > 1){
-						var fill = theme.series.fill;
-						var apoly = lang.clone(lpoly);
+						var fill = this._plotFill(theme.series.fill, dim, offsets), apoly = lang.clone(lpoly);
 						if(this.opt.tension){
 							var apath = "L" + apoly[apoly.length-1].x + "," + (dim.height - offsets.b) +
 								" L" + apoly[0].x + "," + (dim.height - offsets.b) +

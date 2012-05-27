@@ -807,7 +807,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 			calculateAxes(this.stack, dim);
 
 			// assumption: we don't have stacked axes yet
-			var offsets = this.offsets = { l: 0, r: 0, t: 0, b: 0 };
+			var offsets = this.offsets = {l: 0, r: 0, t: 0, b: 0};
 			func.forIn(this.axes, function(axis){
 				func.forIn(axis.getOffsets(), function(o, i){ offsets[i] = Math.max(o, offsets[i]); });
 			});
@@ -818,7 +818,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 				this.titleFont = this.titleFont || this.theme.chart.titleFont;
 				this.titleFontColor = this.titleFontColor || this.theme.chart.titleFontColor || "black";
 				var tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
-				offsets[this.titlePos=="top" ? "t":"b"] += (tsize + this.titleGap);
+				offsets[this.titlePos == "top" ? "t" : "b"] += (tsize + this.titleGap);
 			}
 			// add margins
 			func.forIn(this.margins, function(o, i){ offsets[i] += o; });
