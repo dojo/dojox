@@ -8,27 +8,28 @@ define([
 	"dijit/form/_FormWidget"
 ], function(declare, lang, domAttr, domClass, string, query, FormWidget){
 
-	/*=====
-	 FormWidget = dijit.form._FormWidget;
-	 =====*/
+
 	return declare("dojox.form.Rating", FormWidget, {
 		// summary:
 		//		A widget for rating using stars.
-		//
+
+		/*=====
 		// required: Boolean
 		//		TODO: Can be true or false, default is false.
-		// required: false,
+		required: false,
+		=====*/
 
 		templateString:null,
 
 		// numStars: Integer/Float
 		//		The number of stars to show, default is 3.
 		numStars:3,
+
 		// value: Integer/Float
 		//		The current value of the Rating
 		value:0,
 
-		constructor:function(/*Object*/params){
+		constructor:function(/*Object*/ params){
 			// Build the templateString. The number of stars is given by this.numStars,
 			// which is normally an attribute to the widget node.
 			lang.mixin(this, params);
@@ -67,7 +68,8 @@ define([
 		},
 
 		_renderStars:function(value, hover){
-			// summary: Render the stars depending on the value.
+			// summary:
+			//		Render the stars depending on the value.
 			query(".dojoxRatingStar", this.domNode).forEach(function(star, i){
 				if(i + 1 > value){
 					domClass.remove(star, "dojoxRatingStarHover");
@@ -79,21 +81,25 @@ define([
 			});
 		},
 
-		onStarClick:function(/* Event */evt){
-			// summary: Connect on this method to get noticed when a star was clicked.
-			// example: connect(widget, "onStarClick", function(event){ ... })
+		onStarClick:function(/*Event*/ evt){
+			// summary:
+			//		Connect on this method to get noticed when a star was clicked.
+			// example:
+			//	|	connect(widget, "onStarClick", function(event){ ... })
 			var newVal = +domAttr.get(evt.target, "value");
 			this.setAttribute("value", newVal == this.value ? 0 : newVal);
 			this._renderStars(this.value);
 			this.onChange(this.value); // Do I have to call this by hand?
 		},
 
-		onMouseOver:function(/*evt, value*/){
-			// summary: Connect here, the value is passed to this function as the second parameter!
+		onMouseOver:function(/*=====evt, value=====*/ ){
+			// summary:
+			//		Connect here, the value is passed to this function as the second parameter!
 		},
 
 		setAttribute:function(/*String*/ key, /*Number*/ value){
-			// summary: When calling setAttribute("value", 4), set the value and render the stars accordingly.
+			// summary:
+			//		When calling setAttribute("value", 4), set the value and render the stars accordingly.
 			this.set(key, value);
 			if(key == "value"){
 				this._renderStars(this.value);

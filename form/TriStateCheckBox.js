@@ -11,20 +11,13 @@ define([
 	"dijit/form/_ToggleButtonMixin",
 	"dojo/NodeList-dom" // NodeList.addClass/removeClass
 ], function(kernel, declare, array, lang, event, query, domAttr, template, Button, _ToggleButtonMixin){
-//	module:
-//		dojox/form/TriStateCheckBox
-//	summary:
-//		Checkbox with three states
-//
 
-	/*=====
-		ToggleButton = dijit.form.ToggleButton;
-	=====*/
-return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin],
-	{
-		// summary:
-		//		Checkbox with three states
+	// module:
+	//		dojox/form/TriStateCheckBox
+	// summary:
+	//		Checkbox with three states
 
+	return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 		templateString: template,
 
 		baseClass: "dojoxTriStateCheckBox",
@@ -34,14 +27,16 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin],
 		//		Overrides `dijit.form.Button.type`.  Users should not change this value.
 		type: "checkbox",
 
+
+		states: "",
 		/*=====
 		// states: Array
 		//		States of TriStateCheckBox.
 		//		The value of This.checked should be one of these three states.
 		states: [false, true, "mixed"],
 		=====*/
-		states: "",
-		
+
+		_stateLabels: null,
 		/*=====
 		// _stateLabels: Object
 		//		These characters are used to replace the image to show
@@ -52,8 +47,8 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin],
 				"Mixed": '&#9632'
 		},
 		=====*/
-		_stateLabels: null,
-		
+
+		stateValues: null,
 		/*=====
 		// stateValues: Object
 		//		The values of the TriStateCheckBox in corresponding states.
@@ -63,7 +58,6 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin],
 				"Mixed": "mixed"
 		},
 		=====*/
-		stateValues: null,
 
 		// _currentState: Integer
 		//		The current state of the TriStateCheckBox
@@ -300,7 +294,7 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin],
 		},
 		
 		_getStateType: function(/*String|Boolean*/ state){
-			//	summary:
+			// summary:
 			//		Internal function to return the type of a certain state
 			//		false: False
 			//		true: True
@@ -311,7 +305,6 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin],
 		_onMouseDown: function(){
 			this.mouseFocus = true;
 		}
-	}
-);
+	});
 
 });
