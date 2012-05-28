@@ -2,7 +2,6 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 		"./utils", "./shape", "dojox/string/BidiEngine"], 
   function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 	lang.getObject("dojox.gfx._gfxBidiSupport", true);
-	/*===== g = dojox.gfx; =====*/
 	switch (g.renderer){
 		case 'vml':
 			g.isVml = true;

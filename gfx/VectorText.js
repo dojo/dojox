@@ -1,8 +1,16 @@
 define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/loader" /* dojo._getText */,
 	    "dojo/_base/xhr","./_base", "dojox/xml/DomParser", "dojox/html/metrics","./matrix"],
   function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,HtmlMetrics,Matrix){
-/*===== 
-	gfx = dojox.gfx;
+	var _getText = function(url){
+		var result;
+		xhr.get({url:url, sync:true, load:function(text){ // Note synchronous!
+			result = text;
+		}});
+		return result;
+	};
+	 
+
+	/*=====
 	dojox.gfx.VectorText = {
 		// summary:
 		//		An implementation of the SVG Font 1.1 spec, using dojox.gfx.
@@ -31,16 +39,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		//
 		//		Note that this will only render IF and WHEN you set the font.
 	};
- =====*/ 
-	var _getText = function(url){
-		var result;
-		xhr.get({url:url, sync:true, load:function(text){ // Note synchronous!
-			result = text;
-		}});
-		return result;
-	};
-	 
+	=====*/
+
 	lang.getObject("dojox.gfx.VectorText", true);
+	
 	lang.mixin(gfx, {
 		vectorFontFitting: {
 			NONE: 0,	//	render text according to passed size.

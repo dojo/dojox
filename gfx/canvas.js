@@ -1,40 +1,19 @@
 define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/window", "dojo/dom-geometry", 
 		"dojo/dom", "./_base", "./shape", "./path", "./arc", "./matrix", "./decompose"], 
   function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, decompose ){
-/*===== 
-	dojox.gfx.canvas = {
-	// module:
-	//		dojox/gfx/canvas
-	// summary:
-	//		This the graphics rendering bridge for W3C Canvas compliant browsers.
-	//		Since Canvas is an immediate mode graphics api, with no object graph or
-	//		eventing capabilities, use of this module alone will only add in drawing support.
-	//		The additional module, canvasWithEvents extends this module with additional support
-	//		for handling events on Canvas.  By default, the support for events is now included 
-	//		however, if only drawing capabilities are needed, canvas event module can be disabled
-	//		using the dojoConfig option, canvasEvents:true|false.
-	//		The id of the Canvas renderer is 'canvas'.  This id can be used when switch Dojo's
-	//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
-	//		API.
+	var canvas = g.canvas = {
+		// summary:
+		//		This the graphics rendering bridge for W3C Canvas compliant browsers.
+		//		Since Canvas is an immediate mode graphics api, with no object graph or
+		//		eventing capabilities, use of this module alone will only add in drawing support.
+		//		The additional module, canvasWithEvents extends this module with additional support
+		//		for handling events on Canvas.  By default, the support for events is now included
+		//		however, if only drawing capabilities are needed, canvas event module can be disabled
+		//		using the dojoConfig option, canvasEvents:true|false.
+		//		The id of the Canvas renderer is 'canvas'.  This id can be used when switch Dojo's
+		//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
+		//		API.
 	};
-	g = dojox.gfx;
-	gs = dojox.gfx.shape;
-	pathLib.Path = dojox.gfx.path.Path;
-	pathLib.TextPath = dojox.gfx.path.TextPath;
-	canvas = dojox.gfx.canvas;
-	canvas.Shape = dojox.gfx.canvas.Shape;
-	gs.Shape = dojox.gfx.shape.Shape;
-	gs.Rect = dojox.gfx.shape.Rect;
-	gs.Ellipse = dojox.gfx.shape.Ellipse;
-	gs.Circle = dojox.gfx.shape.Circle;
-	gs.Line = dojox.gfx.shape.Line;
-	gs.PolyLine = dojox.gfx.shape.PolyLine;
-	gs.Image = dojox.gfx.shape.Image;
-	gs.Text = dojox.gfx.shape.Text;
-	gs.Surface = dojox.gfx.shape.Surface;
-  =====*/
-
-	var canvas = g.canvas = {};
 	var pattrnbuffer = null,
 		mp = m.multiplyPoint, 
 		pi = Math.PI, 

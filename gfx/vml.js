@@ -2,16 +2,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		"dojo/_base/config", "dojo/dom", "dojo/dom-geometry", "dojo/_base/kernel",
 		"./_base", "./shape", "./path", "./arc", "./gradient", "./matrix"],
   function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pathLib, arcLib, gradient, m){
-/*===== 
-	dojox.gfx.vml = {
-	// module:
-	//		dojox/gfx/vml
-	// summary:
-	//		This the default graphics rendering bridge for IE6-7.
-	//		This renderer is very slow.  For best performance on IE6-8, use Silverlight plugin.
-	//		IE9+ defaults to the standard W3C SVG renderer.
+	var vml = g.vml = {
+		// summary:
+		//		This the default graphics rendering bridge for IE6-7.
+		//		This renderer is very slow.  For best performance on IE6-8, use Silverlight plugin.
+		//		IE9+ defaults to the standard W3C SVG renderer.
 	};
-	g = dojox.gfx;
+
+	/*=====
 	pathLib.Path = dojox.gfx.path.Path;
 	pathLib.TextPath = dojox.gfx.path.TextPath;
 	vml.Shape = dojox.gfx.canvas.Shape;
@@ -24,8 +22,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 	gs.Image = dojox.gfx.shape.Image;
 	gs.Text = dojox.gfx.shape.Text;
 	gs.Surface = dojox.gfx.shape.Surface;
-  =====*/
-	var vml = g.vml = {};
+	=====*/
 
 	// dojox.gfx.vml.xmlns: String: a VML's namespace
 	vml.xmlns = "urn:schemas-microsoft-com:vml";

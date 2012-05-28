@@ -7,13 +7,13 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sn
 	//		This module contains common core Graphics API used by different graphics renderers.
 	var g = lang.getObject("dojox.gfx", true),
 		b = g._base = {};
-	/*===== g = dojox.gfx; b = dojox.gfx._base; =====*/
 	
 	// candidates for dojox.style (work on VML and SVG nodes)
 	g._hasClass = function(/*DomNode*/node, /*String*/classStr){
 		//	summary:
 		//		Returns whether or not the specified classes are a portion of the
 		//		class list currently applied to the node.
+		
 		// return (new RegExp('(^|\\s+)'+classStr+'(\\s+|$)')).test(node.className)	// Boolean
 		var cls = node.getAttribute("className");
 		return cls && (" " + cls + " ").indexOf(" " + classStr + " ") >= 0;  // Boolean
@@ -641,7 +641,7 @@ define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sn
 	});
 	
 	/*=====
-	 	g.createSurface = function(){};
+		g.createSurface = function(){};
 		g.fixTarget = function(){};
 	=====*/
 	

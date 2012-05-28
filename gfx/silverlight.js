@@ -2,15 +2,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		"dojo/_base/array", "dojo/dom-geometry", "dojo/dom", "dojo/_base/sniff", 
 		"./_base", "./shape", "./path"], 
   function(kernel,lang,declare,color,arr,domGeom,dom,has,g,gs,pathLib){
-/*===== 
-	dojox.gfx.silverlight = {
-	// module:
-	//		dojox/gfx/silverlight
-	// summary:
-	//		This the graphics rendering bridge for the Microsoft Silverlight plugin.
-	//		Silverlight is a faster implementation on IE6-8 than the default 2d graphics, VML
+	var sl = g.silverlight = {
+		// summary:
+		//		This the graphics rendering bridge for the Microsoft Silverlight plugin.
+		//		Silverlight is a faster implementation on IE6-8 than the default 2d graphics, VML
 	};
-	g = dojox.gfx;
+	kernel.experimental("dojox.gfx.silverlight");
+
+	/*=====
 	pathLib.Path = dojox.gfx.path.Path;
 	pathLib.TextPath = dojox.gfx.path.TextPath;
 	sl.Shape = dojox.gfx.canvas.Shape;
@@ -23,10 +22,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	gs.Image = dojox.gfx.shape.Image;
 	gs.Text = dojox.gfx.shape.Text;
 	gs.Surface = dojox.gfx.shape.Surface;
-  =====*/
-
-	var sl = g.silverlight = {};
-	kernel.experimental("dojox.gfx.silverlight");
+	=====*/
 
 	var dasharray = {
 			solid:				"none",

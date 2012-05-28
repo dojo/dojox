@@ -2,16 +2,13 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix" /*===== , "./path" =====*/ ], 
   function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
 
-/*===== 
-	dojox.gfx.shape = {
+	var shape = g.shape = {
 		// summary:
 		//		This module contains the core graphics Shape API.
-		//		Different graphics renderer implementation modules (svg, canvas, vml, silverlight, etc.) extend this 
+		//		Different graphics renderer implementation modules (svg, canvas, vml, silverlight, etc.) extend this
 		//		basic api to provide renderer-specific implementations for each shape.
 	};
-  =====*/
-
-	var shape = g.shape = {};
+	
 	// a set of ids (keys=type)
 	var _ids = {};
 	// a simple set impl to map shape<->id

@@ -1,7 +1,6 @@
 define(["./_base","dojo/_base/lang"], 
   function(g, lang){
 	var m = g.matrix = {};
-	/*===== g = dojox.gfx; m = dojox.gfx.matrix =====*/
 
 	// candidates for dojox.math:
 	var _degToRadCache = {};

@@ -1,14 +1,14 @@
 define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom", "dojo/_base/declare", "dojo/_base/array",
   "dojo/dom-geometry", "dojo/dom-attr", "dojo/_base/Color", "./_base", "./shape", "./path"],
   function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
-/*=====
-	dojox.gfx.svg = {
-	// module:
-	//		dojox/gfx/svg
-	// summary:
-	//		This the graphics rendering bridge for browsers compliant with W3C SVG1.0.
-	//		This is the preferred renderer to use for interactive and accessible graphics.
+	var svg = g.svg = {
+		// summary:
+		//		This the graphics rendering bridge for browsers compliant with W3C SVG1.0.
+		//		This is the preferred renderer to use for interactive and accessible graphics.
 	};
+	svg.useSvgWeb = (typeof window.svgweb != "undefined");
+
+	/*=====
 	pathLib.Path = dojox.gfx.path.Path;
 	pathLib.TextPath = dojox.gfx.path.TextPath;
 	svg.Shape = dojox.gfx.canvas.Shape;
@@ -21,10 +21,9 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom", "dojo/_base/declare"
 	gs.Image = dojox.gfx.shape.Image;
 	gs.Text = dojox.gfx.shape.Text;
 	gs.Surface = dojox.gfx.shape.Surface;
-  =====*/
-  var svg = g.svg = {};
-	svg.useSvgWeb = (typeof window.svgweb != "undefined");
+	=====*/
 
+	
 	// Need to detect iOS in order to workaround bug when
 	// touching nodes with text
 	var uagent = navigator.userAgent.toLowerCase(),
