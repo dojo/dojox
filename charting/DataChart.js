@@ -280,7 +280,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		Collects the item calls and when
 			//		done (after 200ms), sends item
 			//		array to onData().
-			//
+
 			// FIXME: Using labels instead of IDs for item
 			//	identifiers here and in the chart series. This
 			//	is obviously short sighted, but currently used
@@ -343,7 +343,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		or when store items change.
 			//		On first run, sets the chart data,
 			//		then updates chart and legends.
-			//
+
 			//console.log("Store:", store);console.log("items: (", items.length+")", items);console.log("Chart:", this);
 			if(!items || !items.length){ return; }
 
