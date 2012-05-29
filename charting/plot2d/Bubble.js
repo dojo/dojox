@@ -6,7 +6,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.Bubble", [CartesianBase, _PlotEvents], {
-		//	summary:
+		// summary:
 		//		A plot representing bubbles.  Note that data for Bubbles requires 3 parameters,
 		//		in the form of:  { x, y, size }, where size determines the size of the bubble.
 		defaultParams: {
@@ -26,11 +26,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		Create a plot of bubbles.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
-			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
+			// kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		Optional keyword arguments object to help define plot parameters.
 			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
@@ -43,13 +43,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 
 		//	override the render so that we are plotting only circles.
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Run the calculations for any axes for this plot.
-			//	dim: Object
+			// dim: Object
 			//		An object in the form of { width, height }
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b}.
-			//	returns: dojox.charting.plot2d.Bubble
+			// returns: dojox.charting.plot2d.Bubble
 			//		A reference to this plot for functional chaining.
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);

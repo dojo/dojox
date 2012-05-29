@@ -2,8 +2,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"],
 	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
 	var GlassView = declare("dojox.charting.action2d._GlassView", Element, {
-		//	summary: Private internal class used by TouchZoomAndPan actions.
-		//	tags:
+		// summary:
+		//		Private internal class used by TouchZoomAndPan actions.
+		// tags:
 		//		private
 		constructor: function(chart){
 		},
@@ -15,9 +16,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			this.group.createRect({width: this.chart.dim.width, height: this.chart.dim.height}).setFill("rgba(0,0,0,0)");
 		},
 		clear: function(){
-			//	summary:
+			// summary:
 			//		Clear out any parameters set on this plot.
-			//	returns: dojox.charting.action2d._IndicatorElement
+			// returns: dojox.charting.action2d._IndicatorElement
 			//		The reference to this plot for functional chaining.
 			this.dirty = true;
 			// glass view needs to be above
@@ -27,21 +28,21 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			return this;	//	dojox.charting.plot2d._IndicatorElement
 		},
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Returns default stats (irrelevant for this type of plot).
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(common.defaultStats);
 		},
 		initializeScalers: function(){
-			//	summary:
+			// summary:
 			//		Does nothing (irrelevant for this type of plot).
 			return this;
 		},
 		isDirty: function(){
-			//	summary:
+			// summary:
 			//		Return whether or not this plot needs to be redrawn.
-			//	returns: Boolean
+			// returns: Boolean
 			//		If this plot needs to be rendered, this will return true.
 			return this.dirty;
 		}
@@ -50,29 +51,29 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	/*=====
 
 	declare("dojox.charting.action2d.__TouchZoomAndPanCtorArgs", null, {
-		//	summary:
+		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
 
-		//	axis: String?
+		// axis: String?
 		//		Target axis name for this action.  Default is "x".
 		axis: "x",
-		//	scaleFactor: Number?
+		// scaleFactor: Number?
 		//		The scale factor applied on double tap.  Default is 1.2.
 		scaleFactor: 1.2,
-		//	maxScale: Number?
+		// maxScale: Number?
 		//		The max scale factor accepted by this action.  Default is 100.
 		maxScale: 100,
-		//	enableScroll: Boolean?
+		// enableScroll: Boolean?
 		//		Whether touch drag gesture should scroll the chart.  Default is true.
 		enableScroll: true,
-		//	enableZoom: Boolean?
+		// enableZoom: Boolean?
 		//		Whether touch pinch and spread gesture should zoom out or in the chart.  Default is true.
 		enableZoom: true,
 	});
 	=====*/
 
 	return declare("dojox.charting.action2d.TouchZoomAndPan", ChartAction, {
-		//	summary:
+		// summary:
 		//		Create a touch zoom and pan action.
 		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture.
 		//		Finally this is possible to navigate between a fit window and a zoom one using double tap gesture.
@@ -88,11 +89,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		optionalParams: {},	// no optional parameters
 
 		constructor: function(chart, plot, kwArgs){
-			//	summary:
+			// summary:
 			//		Create a new touch zoom and pan action and connect it.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart this action applies to.
-			//	kwArgs: dojox.charting.action2d.__TouchZoomAndPanCtorArgs?
+			// kwArgs: dojox.charting.action2d.__TouchZoomAndPanCtorArgs?
 			//		Optional arguments for the action.
 			this._listeners = [
 				{eventName: "ontouchstart", methodName: "onTouchStart"},{eventName: "ontouchmove", methodName: "onTouchMove"},
@@ -110,7 +111,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 
 		connect: function(){
-			//	summary:
+			// summary:
 			//		Connect this action to the chart. On Safari this adds a new glass view plot
 			//		to the chart that's why Chart.render() must be called after connect.
 			this.inherited(arguments);
@@ -123,7 +124,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 
 		disconnect: function(){
-			//	summary:
+			// summary:
 			//		Disconnect this action from the chart.
 			if(has("safari") && this.chart.surface.declaredClass.indexOf("svg")!=-1){
 				this.chart.removePlot(this._uName);
@@ -132,7 +133,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 
 		onTouchStart: function(event){
-			//	summary:
+			// summary:
 			//		Called when touch is started on the chart.
 			// we always want to be above regular plots and not clipped
 			var chart = this.chart, axis = chart.getAxis(this.axis);
@@ -160,7 +161,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 
 		onTouchMove: function(event){
-			//	summary:
+			// summary:
 			//		Called when touch is moved on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			var length = event.touches.length;
@@ -194,7 +195,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 
 		onTouchEnd: function(event){
-			//	summary:
+			// summary:
 			//		Called when touch is ended on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			if(event.touches.length == 1 && this.enableScroll){
@@ -215,7 +216,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		},
 
 		onDoubleTap: function(event){
-			//	summary:
+			// summary:
 			//		Called when double tap is performed on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			var scale = 1 / this.scaleFactor;

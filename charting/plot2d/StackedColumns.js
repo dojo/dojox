@@ -2,12 +2,12 @@ define(["dojo/_base/declare", "./Columns", "./commonStacked"],
 	function( declare, Columns, commonStacked){
 
 	return declare("dojox.charting.plot2d.StackedColumns", Columns, {
-		//	summary:
+		// summary:
 		//		The plot object representing a stacked column chart (vertical bars).
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Calculate the min/max on all attached series in both directions.
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			var stats = commonStacked.collectStats(this.series);
 			this._maxRunLength = stats.hmax;

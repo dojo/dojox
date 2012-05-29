@@ -8,38 +8,38 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 			includeZero, fixed, majorLabels, minorTicks, minorLabels, microTicks,
 			min, max, from, to, majorTickStep, minorTickStep, microTickStep){
 
-		//	summary:
+		// summary:
 		//		Optional arguments used in the definition of an invisible axis.
 		//
-		//	vertical: Boolean?
+		// vertical: Boolean?
 		//		A flag that says whether an axis is vertical (i.e. y axis) or horizontal. Default is false (horizontal).
-		//	fixUpper: String?
+		// fixUpper: String?
 		//		Align the greatest value on the axis with the specified tick level. Options are "major", "minor", "micro", or "none".  Defaults to "none".
-		//	fixLower: String?
+		// fixLower: String?
 		//		Align the smallest value on the axis with the specified tick level. Options are "major", "minor", "micro", or "none".  Defaults to "none".
-		//	natural: Boolean?
+		// natural: Boolean?
 		//		Ensure tick marks are made on "natural" numbers. Defaults to false.
-		//	leftBottom: Boolean?
+		// leftBottom: Boolean?
 		//		The position of a vertical axis; if true, will be placed against the left-bottom corner of the chart.  Defaults to true.
-		//	includeZero: Boolean?
+		// includeZero: Boolean?
 		//		Include 0 on the axis rendering.  Default is false.
-		//	fixed: Boolean?
+		// fixed: Boolean?
 		//		Force all axis labels to be fixed numbers.  Default is true.
-		//	min: Number?
+		// min: Number?
 		//		The smallest value on an axis. Default is 0.
-		//	max: Number?
+		// max: Number?
 		//		The largest value on an axis. Default is 1.
-		//	from: Number?
+		// from: Number?
 		//		Force the chart to render data visible from this value. Default is 0.
-		//	to: Number?
+		// to: Number?
 		//		Force the chart to render data visible to this value. Default is 1.
-		//	majorTickStep: Number?
+		// majorTickStep: Number?
 		//		The amount to skip before a major tick is drawn. When not set the major ticks step is computed from
 		//		the data range.
-		//	minorTickStep: Number?
+		// minorTickStep: Number?
 		//		The amount to skip before a minor tick is drawn. When not set the minor ticks step is computed from
 		//		the data range.
-		//	microTickStep: Number?
+		// microTickStep: Number?
 		//		The amount to skip before a micro tick is drawn. When not set the micro ticks step is computed from
 
 		this.vertical = vertical;
@@ -60,31 +60,31 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 =====*/
 
 	return declare("dojox.charting.axis2d.Invisible", Base, {
-		//	summary:
+		// summary:
 		//		A axis object used in dojox.charting.  You can use that axis if you want the axis to be invisible.
 		// 		See dojox.charting.Chart.addAxis for details.
 		//
-		//	defaultParams: Object
+		// defaultParams: Object
 		//		The default parameters used to define any axis.
-		//	optionalParams: Object
+		// optionalParams: Object
 		//		Any optional parameters needed to define an axis.
 
 		/*
-		//	TODO: the documentation tools need these to be pre-defined in order to pick them up
+		// TODO: the documentation tools need these to be pre-defined in order to pick them up
 		//	correctly, but the code here is partially predicated on whether or not the properties
 		//	actually exist.  For now, we will leave these undocumented but in the code for later. -- TRT
 
-		//	opt: Object
+		// opt: Object
 		//		The actual options used to define this axis, created at initialization.
-		//	scaler: Object
+		// scaler: Object
 		//		The calculated helper object to tell charts how to draw an axis and any data.
-		//	ticks: Object
+		// ticks: Object
 		//		The calculated tick object that helps a chart draw the scaling on an axis.
-		//	dirty: Boolean
+		// dirty: Boolean
 		//		The state of the axis (whether it needs to be redrawn or not)
-		//	scale: Number
+		// scale: Number
 		//		The current scale of the axis.
-		//	offset: Number
+		// offset: Number
 		//		The current offset of the axis.
 
 		opt: null,
@@ -114,25 +114,25 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		The constructor for an invisible axis.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart the axis belongs to.
-			//	kwArgs: dojox.charting.axis2d.__InvisibleAxisCtorArgs?
+			// kwArgs: dojox.charting.axis2d.__InvisibleAxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
 			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 		},
 		dependOnData: function(){
-			//	summary:
+			// summary:
 			//		Find out whether or not the axis options depend on the data in the axis.
 			return !("min" in this.opt) || !("max" in this.opt);	//	Boolean
 		},
 		clear: function(){
-			//	summary:
+			// summary:
 			//		Clear out all calculated properties on this axis;
-			//	returns: dojox.charting.axis2d.Default
+			// returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			delete this.scaler;
 			delete this.ticks;
@@ -140,45 +140,45 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 			return this;	//	dojox.charting.axis2d.Default
 		},
 		initialized: function(){
-			//	summary:
+			// summary:
 			//		Finds out if this axis has been initialized or not.
-			//	returns: Boolean
+			// returns: Boolean
 			//		Whether a scaler has been calculated and if the axis is not dirty.
 			return "scaler" in this && !(this.dirty && this.dependOnData());
 		},
 		setWindow: function(scale, offset){
-			//	summary:
+			// summary:
 			//		Set the drawing "window" for the axis.
-			//	scale: Number
+			// scale: Number
 			//		The new scale for the axis.
-			//	offset: Number
+			// offset: Number
 			//		The new offset for the axis.
-			//	returns: dojox.charting.axis2d.Default
+			// returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			this.scale  = scale;
 			this.offset = offset;
 			return this.clear();	//	dojox.charting.axis2d.Default
 		},
 		getWindowScale: function(){
-			//	summary:
+			// summary:
 			//		Get the current windowing scale of the axis.
 			return "scale" in this ? this.scale : 1;	//	Number
 		},
 		getWindowOffset: function(){
-			//	summary:
+			// summary:
 			//		Get the current windowing offset for the axis.
 			return "offset" in this ? this.offset : 0;	//	Number
 		},
 		calculate: function(min, max, span){
-			//	summary:
+			// summary:
 			//		Perform all calculations needed to render this axis.
-			//	min: Number
+			// min: Number
 			//		The smallest value represented on this axis.
-			//	max: Number
+			// max: Number
 			//		The largest value represented on this axis.
-			//	span: Number
+			// span: Number
 			//		The span in pixels over which axis calculations are made.
-			//	returns: dojox.charting.axis2d.Default
+			// returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			if(this.initialized()){
 				return this;
@@ -231,12 +231,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 			return this;	//	dojox.charting.axis2d.Default
 		},
 		getScaler: function(){
-			//	summary:
+			// summary:
 			//		Get the pre-calculated scaler object.
 			return this.scaler;	//	Object
 		},
 		getTicks: function(){
-			//	summary:
+			// summary:
 			//		Get the pre-calculated ticks object.
 			return this.ticks;	//	Object
 		}

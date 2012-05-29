@@ -3,14 +3,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 
 	return declare("dojox.charting.DataSeries", null, {
 		constructor: function(store, kwArgs, value){
-			//	summary:
+			// summary:
 			//		Series adapter for dojo.data stores.
-			//	store: Object:
+			// store: Object
 			//		A dojo.data store object.
-			//	kwArgs: Object:
+			// kwArgs: Object
 			//		A store-specific keyword parameters used for fetching items.
 			//		See dojo.data.api.Read.fetch().
-			//	value: Function|Object|String|Null:
+			// value: Function|Object|String|Null
 			//		Function, which takes a store, and an object handle, and
 			//		produces an output possibly inspecting the store's item. Or
 			//		a dictionary object, which tells what names to extract from
@@ -50,15 +50,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		},
 	
 		destroy: function(){
-			//	summary:
+			// summary:
 			//		Clean up before GC.
 			ArrayUtil.forEach(this._events, connect.disconnect);
 		},
 	
 		setSeriesObject: function(series){
-			//	summary:
+			// summary:
 			//		Sets a dojox.charting.Series object we will be working with.
-			//	series: dojox.charting.Series:
+			// series: dojox.charting.Series
 			//		Our interface to the chart.
 			this.series = series;
 		},
@@ -84,7 +84,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		// store fetch loop
 	
 		fetch: function(){
-			//	summary:
+			// summary:
 			//		Fetches data from the store and updates a chart.
 			if(!this._inFlight){
 				this._inFlight = true;
@@ -106,7 +106,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		},
 	
 		onFetchError: function(errorData, request){
-			//	summary:
+			// summary:
 			//		As stub to process fetch errors. Provide so user can attach to
 			//		it with dojo.connect(). See dojo.data.api.Read fetch() for
 			//		details: onError property.

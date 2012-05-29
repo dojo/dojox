@@ -40,13 +40,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	};
 
 	return declare("dojox.charting.DataChart", Chart, {
-		//	summary:
+		// summary:
 		//		DataChart
 		//		Extension to the 2D chart that connects to a data store in
 		//		a simple manner. Convenience methods have been added for
 		//		connecting store item labels to the chart labels.
 		//
-		//	description:
+		// description:
 		//		This code should be considered very experimental and the APIs subject
 		//		to change. This is currently an alpha version and will need some testing
 		//		and review.
@@ -66,7 +66,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//		a new store query will have no effect (although using setStore
 		//		may work but its untested).
 		//
-		//	example:
+		// example:
 		//
 		//	|	var chart = new dojox.charting.DataChart("myNode", {
 		//	|		displayRange:8,
@@ -76,12 +76,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//	|		type: dojox.charting.plot2d.Columns
 		//	|	});
 
-		//	scroll: Boolean
+		// scroll: Boolean
 		//		Whether live data updates and changes display, like columns moving
 		//		up and down, or whether it scrolls to the left as data is added
 		scroll:true,
 
-		//	comparative: Boolean
+		// comparative: Boolean
 		//		If false, all items are each their own series.
 		//		If true, the items are combined into one series
 		//		so that their charted properties can be compared.
@@ -96,11 +96,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		queryOptions: "",
 
 		/*=====
-			//	start:Number
+			// start:Number
 			//		first item to fetch from store
-			//	count:Number
+			// count:Number
 			//		Total amount of items to fetch from store
-			//	sort:Object
+			// sort:Object
 			//		Parameters to sort the fetched items from store
 		=====*/
 
@@ -145,7 +145,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		Set up properties and initialize chart build.
 			// node: DomNode
 			//			The node to attach the chart to.
-			// kwArgs:	Object
+			// kwArgs: Object
 			//			xaxis: Object
 			//				optional parameters for xaxis (see above)
 			//			yaxis: Object
@@ -269,7 +269,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		},
 
 		onSet: function(/*storeObject*/item){
-			//	summary:
+			// summary:
 			//		Fired when a store item changes.
 			//		Collects the item calls and when
 			//		done (after 200ms), sends item
@@ -332,7 +332,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			return value;
 		},
 		onData: function(/*Array*/items){
-			//	summary:
+			// summary:
 			//		Called after a completed fetch
 			//		or when store items change.
 			//		On first run, sets the chart data,
@@ -504,7 +504,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		},
 
 		resizeChart: function(/*Object*/dim){
-			//	summary:
+			// summary:
 			//		Call this function to change the chart size.
 			//		Can be connected to a layout widget that calls
 			//		resize.

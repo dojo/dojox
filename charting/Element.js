@@ -2,16 +2,16 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 	function(lang, arr, domConstruct, declare, gfx, shape){
 
 	return declare("dojox.charting.Element", null, {
-		//	summary:
+		// summary:
 		//		A base class that is used to build other elements of a chart, such as
 		//		a series.
-		//	chart: dojox.charting.Chart
+		// chart: dojox.charting.Chart
 		//		The parent chart for this element.
-		//	group: dojox.gfx.Group
+		// group: dojox.gfx.Group
 		//		The visual GFX group representing this element.
-		//	htmlElement: Array
+		// htmlElement: Array
 		//		Any DOMNodes used as a part of this element (such as HTML-based labels).
-		//	dirty: Boolean
+		// dirty: Boolean
 		//		A flag indicating whether or not this element needs to be rendered.
 
 		chart: null,
@@ -20,9 +20,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 		dirty: true,
 
 		constructor: function(chart){
-			//	summary:
+			// summary:
 			//		Creates a new charting element.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart that this element belongs to.
 			this.chart = chart;
 			this.group = null;
@@ -32,9 +32,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			this._events = [];
 		},
 		purgeGroup: function(){
-			//	summary:
+			// summary:
 			//		Clear any elements out of our group, and destroy the group.
-			//	returns: dojox.charting.Element
+			// returns: dojox.charting.Element
 			//		A reference to this object for functional chaining.
 			this.destroyHtmlElements();
 			if(this.group){
@@ -57,11 +57,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			return this;	//	dojox.charting.Element
 		},
 		cleanGroup: function(creator){
-			//	summary:
+			// summary:
 			//		Clean any elements (HTML or GFX-based) out of our group, and create a new one.
-			//	creator: dojox.gfx.Surface?
+			// creator: dojox.gfx.Surface?
 			//		An optional surface to work with.
-			//	returns: dojox.charting.Element
+			// returns: dojox.charting.Element
 			//		A reference to this object for functional chaining.
 			this.destroyHtmlElements();
 			if(!creator){ creator = this.chart.surface; }
@@ -74,7 +74,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			return this;	//	dojox.charting.Element
 		},
 		destroyHtmlElements: function(){
-			//	summary:
+			// summary:
 			//		Destroy any DOMNodes that may have been created as a part of this element.
 			if(this.htmlElements.length){
 				arr.forEach(this.htmlElements, domConstruct.destroy);
@@ -82,7 +82,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			}
 		},
 		destroy: function(){
-			//	summary:
+			// summary:
 			//		API addition to conform to the rest of the Dojo Toolkit's standard.
 			this.purgeGroup();
 		},
@@ -91,17 +91,17 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			return gfx._base._getTextBox(s, {font: font}).w || 0;
 		},
 		getTextWithLimitLength: function(s, font, limitWidth, truncated){
-			//	summary:
+			// summary:
 			//		Get the truncated string based on the limited width in px(dichotomy algorithm)
-			//	s: String?
+			// s: String?
 			//		candidate text.
-			//	font: String?
+			// font: String?
 			//		text's font style.
-			//	limitWidth: Number?
+			// limitWidth: Number?
 			//		text limited width in px.
-			//	truncated: Boolean?
+			// truncated: Boolean?
 			//		whether the input text(s) has already been truncated.
-			//	returns: Object
+			// returns: Object
 			//		{
 			//			text: processed text, maybe truncated or not
 			//			truncated: whether text has been truncated
@@ -161,17 +161,17 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			}
 		},
 		getTextWithLimitCharCount: function(s, font, wcLimit, truncated){
-			//	summary:
+			// summary:
 			//		Get the truncated string based on the limited character count(dichotomy algorithm)
-			//	s: String?
+			// s: String?
 			//		candidate text.
-			//	font: String?
+			// font: String?
 			//		text's font style.
-			//	wcLimit: Number?
+			// wcLimit: Number?
 			//		text limited character count.
-			//	truncated: Boolean?
+			// truncated: Boolean?
 			//		whether the input text(s) has already been truncated.
-			//	returns: Object
+			// returns: Object
 			//		{
 			//			text: processed text, maybe truncated or not
 			//			truncated: whether text has been truncated

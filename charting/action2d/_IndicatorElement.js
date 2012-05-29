@@ -66,9 +66,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../plot2d/Base", "../plot2d/co
 	};
 
 	return declare("dojox.charting.action2d._IndicatorElement", Base, {
-		//	summary:
+		// summary:
 		//		Internal element used by indicator actions.
-		//	tags:
+		// tags:
 		//		private
 		constructor: function(chart, kwArgs){
 			if(!kwArgs){ kwArgs = {}; }
@@ -328,11 +328,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../plot2d/Base", "../plot2d/co
 			return {x: x, y: y};
 		},
 		cleanGroup: function(creator){
-			//	summary:
+			// summary:
 			//		Clean any elements (HTML or GFX-based) out of our group, and create a new one.
-			//	creator: dojox.gfx.Surface?
+			// creator: dojox.gfx.Surface?
 			//		An optional surface to work with.
-			//	returns: dojox.charting.Element
+			// returns: dojox.charting.Element
 			//		A reference to this object for functional chaining.
 			this.inherited(arguments);
 			// we always want to be above regular plots and not clipped
@@ -340,16 +340,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "../plot2d/Base", "../plot2d/co
 			return this;	//	dojox.charting.Element
 		},
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Returns default stats (irrelevant for this type of plot).
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(dcpc.defaultStats);
 		},
 		isDirty: function(){
-			//	summary:
+			// summary:
 			//		Return whether or not this plot needs to be redrawn.
-			//	returns: Boolean
+			// returns: Boolean
 			//		If this plot needs to be rendered, this will return true.
 			return !this._noDirty && (this.dirty || this.inter.plot.isDirty());
 		}

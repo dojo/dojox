@@ -4,98 +4,98 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
-		//	summary:
+		// summary:
 		//		The arguments used for any/most plots.
 	
-		//	hAxis: String?
+		// hAxis: String?
 		//		The horizontal axis name.
 		hAxis: "x",
 	
-		//	vAxis: String?
+		// vAxis: String?
 		//		The vertical axis name
 		vAxis: "y",
 	
-		//	lines: Boolean?
+		// lines: Boolean?
 		//		Whether or not to draw lines on this plot.  Defaults to true.
 		lines:   true,
 	
-		//	areas: Boolean?
+		// areas: Boolean?
 		//		Whether or not to draw areas on this plot. Defaults to false.
 		areas:   false,
 	
-		//	markers: Boolean?
+		// markers: Boolean?
 		//		Whether or not to draw markers at data points on this plot. Default is false.
 		markers: false,
 	
-		//	tension: Number|String?
+		// tension: Number|String?
 		//		Whether or not to apply 'tensioning' to the lines on this chart.
 		//		Options include a number, "X", "x", or "S"; if a number is used, the
 		//		simpler bezier curve calculations are used to draw the lines.  If X, x or S
 		//		is used, the more accurate smoothing algorithm is used.
 		tension: "",
 	
-		//	animate: Boolean?
+		// animate: Boolean?
 		//		Whether or not to animate the chart to place.
 		animate: false,
 	
-		//	stroke: dojox.gfx.Stroke?
+		// stroke: dojox.gfx.Stroke?
 		//		An optional stroke to use for any series on the plot.
 		stroke:		{},
 	
-		//	outline: dojox.gfx.Stroke?
+		// outline: dojox.gfx.Stroke?
 		//		An optional stroke used to outline any series on the plot.
 		outline:	{},
 	
-		//	shadow: dojox.gfx.Stroke?
+		// shadow: dojox.gfx.Stroke?
 		//		An optional stroke to use to draw any shadows for a series on a plot.
 		shadow:		{},
 	
-		//	fill: dojox.gfx.Fill?
+		// fill: dojox.gfx.Fill?
 		//		Any fill to be used for elements on the plot (such as areas).
 		fill:		{},
 
-		//	styleFunc: Function?
+		// styleFunc: Function?
 		//		A function that returns a styling object for the a given data item.
 		styleFunc:	null,
 	
-		//	font: String?
+		// font: String?
 		//		A font definition to be used for labels and other text-based elements on the plot.
 		font:		"",
 	
-		//	fontColor: String|dojo.Color?
+		// fontColor: String|dojo.Color?
 		//		The color to be used for any text-based elements on the plot.
 		fontColor:	"",
 	
-		//	markerStroke: dojo.gfx.Stroke?
+		// markerStroke: dojo.gfx.Stroke?
 		//		An optional stroke to use for any markers on the plot.
 		markerStroke:		{},
 	
-		//	markerOutline: dojo.gfx.Stroke?
+		// markerOutline: dojo.gfx.Stroke?
 		//		An optional outline to use for any markers on the plot.
 		markerOutline:		{},
 	
-		//	markerShadow: dojo.gfx.Stroke?
+		// markerShadow: dojo.gfx.Stroke?
 		//		An optional shadow to use for any markers on the plot.
 		markerShadow:		{},
 	
-		//	markerFill: dojo.gfx.Fill?
+		// markerFill: dojo.gfx.Fill?
 		//		An optional fill to use for any markers on the plot.
 		markerFill:			{},
 	
-		//	markerFont: String?
+		// markerFont: String?
 		//		An optional font definition to use for any markers on the plot.
 		markerFont:			"",
 	
-		//	markerFontColor: String|dojo.Color?
+		// markerFontColor: String|dojo.Color?
 		//		An optional color to use for any marker text on the plot.
 		markerFontColor:	"",
 		
-		//	enableCache: Boolean?
+		// enableCache: Boolean?
 		//		Whether the markers are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false,
 
-		//	interpolate: Boolean?
+		// interpolate: Boolean?
 		//		Whether when there is a null data point in the data the plot interpolates it or if the lines is split at that
 		//		point.	Default false.
 		interpolate: false
@@ -137,11 +137,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		Return a new plot.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
-			//	kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
+			// kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional arguments object to help define this plot.
 			this.opt = lang.clone(this.defaultParams);
             du.updateWithObject(this.opt, kwArgs);
@@ -196,13 +196,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		},
 
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Render/draw everything on this plot.
-			//	dim: Object
+			// dim: Object
 			//		An object of the form { width, height }
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b }
-			//	returns: dojox.charting.plot2d.Default
+			// returns: dojox.charting.plot2d.Default
 			//		A reference to this plot for functional chaining.
 
 			// make sure all the series is not modified

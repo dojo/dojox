@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 	function(lang, declare, Color, SimpleTheme, colorX, Palette){
 	
 	var Theme = declare("dojox.charting.Theme", SimpleTheme, {
-	//	summary:
+	// summary:
 	//		A Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
 	//		style a chart. It extends SimpleTheme with additional features like color definition by
 	// 		palettes and gradients definition.
@@ -11,23 +11,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 
 	/*=====
 	dojox.charting.Theme.__DefineColorArgs = function(num, colors, hue, saturation, low, high, base, generator){
-		//	summary:
+		// summary:
 		//		The arguments object that can be passed to define colors for a theme.
-		//	num: Number?
+		// num: Number?
 		//		The number of colors to generate.  Defaults to 5.
-		//	colors: String[]|dojo.Color[]?
+		// colors: String[]|dojo.Color[]?
 		//		A pre-defined set of colors; this is passed through to the Theme directly.
-		//	hue: Number?
+		// hue: Number?
 		//		A hue to base the generated colors from (a number from 0 - 359).
-		//	saturation: Number?
+		// saturation: Number?
 		//		If a hue is passed, this is used for the saturation value (0 - 100).
-		//	low: Number?
+		// low: Number?
 		//		An optional value to determine the lowest value used to generate a color (HSV model)
-		//	high: Number?
+		// high: Number?
 		//		An optional value to determine the highest value used to generate a color (HSV model)
-		//	base: String|dojo.Color?
+		// base: String|dojo.Color?
 		//		A base color to use if we are defining colors using dojox.color.Palette
-		//	generator: String?
+		// generator: String?
 		//		The generator function name from dojox.color.Palette.
 		this.num = num;
 		this.colors = colors;
@@ -42,21 +42,21 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 	lang.mixin(Theme, {
 
 		defineColors: function(kwArgs){
-			//	summary:
+			// summary:
 			//		Generate a set of colors for the theme based on keyword
 			//		arguments.
-			//	kwArgs: dojox.charting.Theme.__DefineColorArgs
+			// kwArgs: dojox.charting.Theme.__DefineColorArgs
 			//		The arguments object used to define colors.
-			//	returns: dojo.Color[]
+			// returns: dojo.Color[]
 			//		An array of colors for use in a theme.
 			//
-			//	example:
+			// example:
 			//	|	var colors = dojox.charting.Theme.defineColors({
 			//	|		base: "#369",
 			//	|		generator: "compound"
 			//	|	});
 			//
-			//	example:
+			// example:
 			//	|	var colors = dojox.charting.Theme.defineColors({
 			//	|		hue: 60,
 			//	|		saturation: 90,

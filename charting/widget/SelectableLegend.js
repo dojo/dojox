@@ -6,7 +6,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 			 Highlight, df, fx, keys, event, dom, domProp){
 
 	var FocusManager = declare(null, {
-		//	summary:
+		// summary:
 		//		It will take legend as a tab stop, and using
 		//		cursor keys to navigate labels within the legend.
 		constructor: function(legend){
@@ -79,7 +79,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 	});
 			
 	declare("dojox.charting.widget.SelectableLegend", Legend, {
-		//	summary:
+		// summary:
 		//		An enhanced chart legend supporting interactive events on data series
 		
 		//	theme component
@@ -223,7 +223,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 			return null;
 		},
 		_getFilledShape: function(shapes){
-			//	summary:
+			// summary:
 			//		Get filled shape in legend icon which would be highlighted when hovered
 			var i = 0;
 			while(shapes[i]){

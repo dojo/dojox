@@ -1,7 +1,8 @@
 define(["dojo/_base/lang"], function(lang){
 
 	var eq = function(/*Number*/ a, /*Number*/ b){
-		// summary: compare two FP numbers for equality
+		// summary:
+		//		compare two FP numbers for equality
 		return Math.abs(a - b) <= 1e-6 * (Math.abs(a) + Math.abs(b));	// Boolean
 	};
 	

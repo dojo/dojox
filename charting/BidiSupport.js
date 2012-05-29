@@ -34,7 +34,7 @@ define(["dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sni
 			// text:
 			//		Used in case textDir is "auto", this case the direction is according to the first
 			//		strong (directionally - which direction is strong defined) letter.
-			//	tags:
+			// tags:
 			//		protected.
 			var textDir = this.textDir == "auto" ? bidiEngine.checkContextual(text) : this.textDir;
 			// providing default value

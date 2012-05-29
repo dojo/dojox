@@ -10,7 +10,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
 	var Spider = declare("dojox.charting.plot2d.Spider", [Base, PlotEvents], {
-		//	summary:
+		// summary:
 		//		The plot that represents a typical Spider chart.
 		defaultParams: {
 			labels:			true,
@@ -44,7 +44,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		Create a Spider plot.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -56,9 +56,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			this.animations = {};
 		},
 		clear: function(){
-			//	summary:
+			// summary:
 			//		Clear out all of the information tied to this plot.
-			//	returns: dojox.charting.plot2d.Spider
+			// returns: dojox.charting.plot2d.Spider
 			//		A reference to this plot for functional chaining.
 			this.inherited(arguments);
 			this.dyn = [];
@@ -70,9 +70,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return this;	//	dojox.charting.plot2d.Spider
 		},
 		setAxis: function(axis){
-			//	summary:
+			// summary:
 			//		Optionally set axis min and max property.
-			//	returns: dojox.charting.plot2d.Spider
+			// returns: dojox.charting.plot2d.Spider
 			//		The reference to this plot for functional chaining.
 			// override the computed min/max with provided values if any
 			if(axis){
@@ -86,11 +86,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return this;	//	dojox.charting.plot2d.Spider
 		},
 		addSeries: function(run){
-			//	summary:
+			// summary:
 			//		Add a data series to this plot.
-			//	run: dojox.charting.Series
+			// run: dojox.charting.Series
 			//		The series to be added.
-			//	returns: dojox.charting.plot2d.Base
+			// returns: dojox.charting.plot2d.Base
 			//		A reference to this plot for functional chaining.
 			var matched = false;
 			this.series.push(run);
@@ -116,20 +116,20 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return this;	//	dojox.charting.plot2d.Base
 		},
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Calculate the min/max on all attached series in both directions.
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return dc.collectSimpleStats(this.series);
 		},
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Render the plot on the chart.
-			//	dim: Object
+			// dim: Object
 			//		An object of the form { width, height }.
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.plot2d.Spider
+			// returns: dojox.charting.plot2d.Spider
 			//		A reference to this plot for functional chaining.
 			if(!this.dirty){ return this; }
 			this.dirty = false;
@@ -426,9 +426,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return {group :ts, poly: spoly, circles: scircle};
 		},
 		plotEvent: function(o){
-			//	summary:
+			// summary:
 			//		Stub function for use by specific plots.
-			//	o: Object
+			// o: Object
 			//		An object intended to represent event parameters.
 			var runName = o.id ? o.id : "default", a;
 			if(runName in this.animations){

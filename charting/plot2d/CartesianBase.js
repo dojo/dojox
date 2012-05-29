@@ -5,11 +5,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 
 	return declare("dojox.charting.plot2d.CartesianBase", Base, {
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		Create a cartesian base plot for cartesian charts.
-			//	chart: dojox.chart.Chart
+			// chart: dojox.chart.Chart
 			//		The chart this plot belongs to.
-			//	kwArgs: dojox.charting.plot2d.__PlotCtorArgs?
+			// kwArgs: dojox.charting.plot2d.__PlotCtorArgs?
 			//		An optional arguments object to help define the plot.
 			this.axes = ["hAxis", "vAxis"];
 			this.zoom = null,
@@ -17,9 +17,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
 		},
 		clear: function(){
-			//	summary:
+			// summary:
 			//		Clear out all of the information tied to this plot.
-			//	returns: dojox.charting.plot2d.CartesianBase
+			// returns: dojox.charting.plot2d.CartesianBase
 			//		A reference to this plot for functional chaining.
 			this.inherited(arguments);
 			this._hAxis = null;
@@ -30,11 +30,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			this.inherited(arguments, [creator || this.chart.plotGroup]);
 		},
 		setAxis: function(axis){
-			//	summary:
+			// summary:
 			//		Set an axis for this plot.
-			//	axis: dojox.charting.axis2d.Base
+			// axis: dojox.charting.axis2d.Base
 			//		The axis to set.
-			//	returns: dojox.charting.plot2d.CartesianBase
+			// returns: dojox.charting.plot2d.CartesianBase
 			//		A reference to this plot for functional chaining.
 			if(axis){
 				this[axis.vertical ? "_vAxis" : "_hAxis"] = axis;
@@ -42,13 +42,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			return this;	//	dojox.charting.plot2d.CartesianBase
 		},
 		toPage: function(coord){
-			//	summary:
+			// summary:
 			//		Compute page coordinates from plot axis data coordinates.
-			//	coord: Object?
+			// coord: Object?
 			//		The coordinates in plot axis data coordinate space. For cartesian charts that is of the following form:
 			//			`{ hAxisName: 50, vAxisName: 200 }`
 			//		If not provided return the tranform method instead of the result of the transformation.
-			//	returns: Object
+			// returns: Object
 			//		The resulting page pixel coordinates. That is of the following form:
 			//			`{ x: 50, y: 200 }`
 			var ah = this._hAxis, av = this._vAxis,
@@ -68,13 +68,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			return coord?t(coord):t;
 		},
 		toData: function(coord){
-			//	summary:
+			// summary:
 			//		Compute plot axis data coordinates from page coordinates.
-			//	coord: Object
+			// coord: Object
 			//		The pixel coordinate in page coordinate space. That is of the following form:
 			//			`{ x: 50, y: 200 }`
 			//		If not provided return the tranform method instead of the result of the transformation.
-			//	returns: Object
+			// returns: Object
 			//		The resulting plot axis data coordinates. For cartesian charts that is of the following form:
 			//			`{ hAxisName: 50, vAxisName: 200 }`
 			var ah = this._hAxis, av = this._vAxis,
@@ -94,20 +94,20 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			return coord?t(coord):t;
 		},
 		isDirty: function(){
-			//	summary:
+			// summary:
 			//		Returns whether or not this plot needs to be rendered.
-			//	returns: Boolean
+			// returns: Boolean
 			//		The state of the plot.
 			return this.dirty || this._hAxis && this._hAxis.dirty || this._vAxis && this._vAxis.dirty;	//	Boolean
 		},
 		performZoom: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Create/alter any zooming windows on this plot.
-			//	dim: Object
+			// dim: Object
 			//		An object of the form { width, height }.
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.plot2d.CartesianBase
+			// returns: dojox.charting.plot2d.CartesianBase
 			//		A reference to this plot for functional chaining.
 
 			// get current zooming various
@@ -155,13 +155,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			return this;	//	dojox.charting.plot2d.CartesianBase
 		},
 		initializeScalers: function(dim, stats){
-			//	summary:
+			// summary:
 			//		Initializes scalers using attached axes.
-			//	dim: Object:
+			// dim: Object
 			//		Size of a plot area in pixels as {width, height}.
-			//	stats: Object:
+			// stats: Object
 			//		Min/max of data in both directions as {hmin, hmax, vmin, vmax}.
-			//	returns: dojox.charting.plot2d.CartesianBase
+			// returns: dojox.charting.plot2d.CartesianBase
 			//		A reference to this plot for functional chaining.
 			if(this._hAxis){
 				if(!this._hAxis.initialized()){

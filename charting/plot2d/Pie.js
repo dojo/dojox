@@ -5,66 +5,66 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
-		//	summary:
+		// summary:
 		//		Specialized keyword arguments object for use in defining parameters on a Pie chart.
 	
-		//	labels: Boolean?
+		// labels: Boolean?
 		//		Whether or not to draw labels for each pie slice.  Default is true.
 		labels:			true,
 	
-		//	ticks: Boolean?
+		// ticks: Boolean?
 		//		Whether or not to draw ticks to labels within each slice. Default is false.
 		ticks:			false,
 	
-		//	fixed: Boolean?
+		// fixed: Boolean?
 		//		TODO
 		fixed:			true,
 	
-		//	precision: Number?
+		// precision: Number?
 		//		The precision at which to sum/add data values. Default is 1.
 		precision:		1,
 	
-		//	labelOffset: Number?
+		// labelOffset: Number?
 		//		The amount in pixels by which to offset labels.  Default is 20.
 		labelOffset:	20,
 	
-		//	labelStyle: String?
+		// labelStyle: String?
 		//		Options as to where to draw labels.  Values include "default", and "columns".	Default is "default".
 		labelStyle:		"default",	// default/columns
 		
-		//	omitLabels: Boolean?
+		// omitLabels: Boolean?
 		//		Whether labels of slices small to the point of not being visible are omitted.	Default false.
 		omitLabels: false,
 		
-		//	htmlLabels: Boolean?
+		// htmlLabels: Boolean?
 		//		Whether or not to use HTML to render slice labels. Default is true.
 		htmlLabels:		true,
 	
-		//	radGrad: String?
+		// radGrad: String?
 		//		The type of radial gradient to use in rendering.  Default is "native".
 		radGrad:        "native",
 	
-		//	fanSize: Number?
+		// fanSize: Number?
 		//		The amount for a radial gradient.  Default is 5.
 		fanSize:		5,
 	
-		//	startAngle: Number?
+		// startAngle: Number?
 		//		Where to being rendering gradients in slices, in degrees.  Default is 0.
 		startAngle:     0,
 	
-		//	radius: Number?
+		// radius: Number?
 		//		The size of the radial gradient.  Default is 0.
 		radius:		0,
 
-		//	shadow: dojox.gfx.Stroke?
+		// shadow: dojox.gfx.Stroke?
 		//		An optional stroke to use to draw any shadows for a series on a plot.
 		shadow:		{},
 
-		//	fill: dojox.gfx.Fill?
+		// fill: dojox.gfx.Fill?
 		//		Any fill to be used for elements on the plot.
 		fill:		{},
 
-		//	styleFunc: Function?
+		// styleFunc: Function?
 		//		A function that returns a styling object for the a given data item.
 		styleFunc:	null
 	});
@@ -73,7 +73,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
 	return declare("dojox.charting.plot2d.Pie", [Base, PlotEvents], {
-		//	summary:
+		// summary:
 		//		The plot that represents a typical pie chart.
 		defaultParams: {
 			labels:			true,
@@ -102,7 +102,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		Create a pie plot.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -112,9 +112,9 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			this.dyn = [];
 		},
 		clear: function(){
-			//	summary:
+			// summary:
 			//		Clear out all of the information tied to this plot.
-			//	returns: dojox.charting.plot2d.Pie
+			// returns: dojox.charting.plot2d.Pie
 			//		A reference to this plot for functional chaining.
 			this.inherited(arguments);
 			this.dyn = [];
@@ -122,40 +122,40 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			return this;	//	dojox.charting.plot2d.Pie
 		},
 		setAxis: function(axis){
-			//	summary:
+			// summary:
 			//		Dummy method, since axes are irrelevant with a Pie chart.
-			//	returns: dojox.charting.plot2d.Pie
+			// returns: dojox.charting.plot2d.Pie
 			//		The reference to this plot for functional chaining.
 			return this;	//	dojox.charting.plot2d.Pie
 		},
 		addSeries: function(run){
-			//	summary:
+			// summary:
 			//		Add a series of data to this plot.
-			//	returns: dojox.charting.plot2d.Pie
+			// returns: dojox.charting.plot2d.Pie
 			//		The reference to this plot for functional chaining.
 			this.run = run;
 			return this;	//	dojox.charting.plot2d.Pie
 		},
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Returns default stats (irrelevant for this type of plot).
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(dc.defaultStats);
 		},
 		getRequiredColors: function(){
-			//	summary:
+			// summary:
 			//		Return the number of colors needed to draw this plot.
 			return this.run ? this.run.data.length : 0;
 		},
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Render the plot on the chart.
-			//	dim: Object
+			// dim: Object
 			//		An object of the form { width, height }.
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.plot2d.Pie
+			// returns: dojox.charting.plot2d.Pie
 			//		A reference to this plot for functional chaining.
 			if(!this.dirty){ return this; }
 			this.resetEvents();

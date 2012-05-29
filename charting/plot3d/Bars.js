@@ -3,8 +3,9 @@ define(["dojox/gfx3d", "dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/Co
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
-		// summary: repeatedly applies a binary function to an array from left
-		//	to right; returns the final value.
+		// summary:
+		//		repeatedly applies a binary function to an array from left
+		//		to right; returns the final value.
 		a = typeof a == "string" ? a.split("") : a; o = o || kernel.global;
 		var z = a[0];
 		for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));

@@ -7,7 +7,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dijit/_WidgetBase", "dojox/gfx
 	var REVERSED_SERIES = /\.(StackedColumns|StackedAreas|ClusteredBars)$/;
 
 	return declare("dojox.charting.widget.Legend", _WidgetBase, {
-		// summary: A legend for a chart. A legend contains summary labels for
+		// summary:
+		//		A legend for a chart. A legend contains summary labels for
 		//		each series of data contained in the chart.
 		//		
 		//		Set the horizontal attribute to boolean false to layout legend labels vertically.
@@ -44,7 +45,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dijit/_WidgetBase", "dojox/gfx
 			this.inherited(arguments);
 		},
 		refresh: function(){
-			// summary: regenerates the legend to reflect changes to the chart
+			// summary:
+			//		regenerates the legend to reflect changes to the chart
 
 			// cleanup
 			if(this._surfaces){

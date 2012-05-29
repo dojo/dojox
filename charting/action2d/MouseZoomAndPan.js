@@ -4,28 +4,28 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 
 	/*=====
 	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
-		//	summary:
+		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
 	
-		//	axis: String?
+		// axis: String?
 		//		Target axis name for this action.  Default is "x".
 		axis: "x",
-		//	scaleFactor: Number?
+		// scaleFactor: Number?
 		//		The scale factor applied on mouse wheel zoom.  Default is 1.2.
 		scaleFactor: 1.2,
-		//	maxScale: Number?
+		// maxScale: Number?
 		//		The max scale factor accepted by this chart action.  Default is 100.
 		maxScale: 100,
-		//	enableScroll: Boolean?
+		// enableScroll: Boolean?
 		//		Whether mouse drag gesture should scroll the chart.  Default is true.
 		enableScroll: true,
-		//	enableDoubleClickZoom: Boolean?
+		// enableDoubleClickZoom: Boolean?
 		//		Whether a double click gesture should toggle between fit and zoom on the chart.  Default is true.
 		enableDoubleClickZoom: true,
-		//	enableKeyZoom: Boolean?
+		// enableKeyZoom: Boolean?
 		//		Whether a keyZoomModifier + + or keyZoomModifier + - key press should zoom in our out on the chart.  Default is true.
 		enableKeyZoom: true,
-		//	keyZoomModifier: String?
+		// keyZoomModifier: String?
 		//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
 		keyZoomModifier: "ctrl"
 	});
@@ -48,7 +48,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 	};
 
 	return declare("dojox.charting.action2d.MouseZoomAndPan", ChartAction, {
-		//	summary:
+		// summary:
 		//		Create an mouse zoom and pan action.
 		//		You can zoom in or out the data window with mouse wheel. You can scroll using mouse drag gesture. 
 		//		You can toggle between zoom and fit view using double click on the chart.
@@ -66,11 +66,11 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		optionalParams: {}, // no optional parameters
 		
 		constructor: function(chart, plot, kwArgs){
-			//	summary:
+			// summary:
 			//		Create an mouse zoom and pan action and connect it.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart this action applies to.
-			//	kwArgs: dojox.charting.action2d.__MouseZoomAndPanCtorArgs?
+			// kwArgs: dojox.charting.action2d.__MouseZoomAndPanCtorArgs?
 			//		Optional arguments for the chart action.
 			this._listeners = [{eventName: mouse.wheel, methodName: "onMouseWheel"}];
 			if(!kwArgs){ kwArgs = {}; }
@@ -103,7 +103,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 		
 		connect: function(){
-			//	summary:
+			// summary:
 			//		Connect this action to the chart.
 			this.inherited(arguments);
 			if(this.enableKeyZoom){
@@ -115,7 +115,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 		
 		disconnect: function(){
-			//	summary:
+			// summary:
 			//		Disconnect this action from the chart.
 			this.inherited(arguments);
 			if(this.enableKeyZoom){
@@ -127,7 +127,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 	
 		onMouseDown: function(event){
-			//	summary:
+			// summary:
 			//		Called when mouse is down on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			if(!axis.vertical){
@@ -153,7 +153,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 	
 		onMouseMove: function(event){
-			//	summary:
+			// summary:
 			//		Called when mouse is moved on the chart.
 			if(this._isPanning){
 				var chart = this.chart, axis = chart.getAxis(this.axis);
@@ -170,14 +170,14 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 	
 		onMouseUp: function(event){
-			//	summary:
+			// summary:
 			//		Called when mouse is up on the chart.
 			this._isPanning = false;
 			this._disconnectHandles();
 		},
 		
 		onMouseWheel: function(event){
-			//	summary:
+			// summary:
 			//		Called when mouse wheel is used on the chart.
 			var scroll = event.wheelDelta / sUnit;
 			// on Mozilla the sUnit might actually not always be 3
@@ -191,7 +191,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 		
 		onKeyPress: function(event){
-			//	summary:
+			// summary:
 			//		Called when a key is pressed on the chart.
 			if(keyTests[this.keyZoomModifier](event)){
 				if(event.keyChar == "+" || event.keyCode == keys.NUMPAD_PLUS){
@@ -203,7 +203,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		},
 		
 		onDoubleClick: function(event){
-			//	summary:
+			// summary:
 			//		Called when the mouse is double is double clicked on the chart. Toggle between zoom and fit chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			var scale = 1 / this.scaleFactor;

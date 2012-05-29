@@ -13,92 +13,92 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			stroke, majorTick, minorTick, microTick, tick,
 			font, fontColor, titleGap, titleFont, titleFontColor, titleOrientation, enableCache, dropLabels, labelSizeChange){
 	
-		//	summary:
+		// summary:
 		//		Optional arguments used in the definition of an axis.
 		//
-		//	vertical: Boolean?
+		// vertical: Boolean?
 		//		A flag that says whether an axis is vertical (i.e. y axis) or horizontal. Default is false (horizontal).
-		//	fixUpper: String?
+		// fixUpper: String?
 		//		Align the greatest value on the axis with the specified tick level. Options are "major", "minor", "micro", or "none".  Defaults to "none".
-		//	fixLower: String?
+		// fixLower: String?
 		//		Align the smallest value on the axis with the specified tick level. Options are "major", "minor", "micro", or "none".  Defaults to "none".
-		//	natural: Boolean?
+		// natural: Boolean?
 		//		Ensure tick marks are made on "natural" numbers. Defaults to false.
-		//	leftBottom: Boolean?
+		// leftBottom: Boolean?
 		//		The position of a vertical axis; if true, will be placed against the left-bottom corner of the chart.  Defaults to true.
-		//	includeZero: Boolean?
+		// includeZero: Boolean?
 		//		Include 0 on the axis rendering.  Default is false.
-		//	fixed: Boolean?
+		// fixed: Boolean?
 		//		Force all axis labels to be fixed numbers.  Default is true.
-		//	majorLabels: Boolean?
+		// majorLabels: Boolean?
 		//		Flag to draw labels at major ticks. Default is true.
-		//	minorTicks: Boolean?
+		// minorTicks: Boolean?
 		//		Flag to draw minor ticks on an axis.  Default is true.
-		//	minorLabels: Boolean?
+		// minorLabels: Boolean?
 		//		Flag to labels on minor ticks when there is enough space. Default is true.
-		//	microTicks: Boolean?
+		// microTicks: Boolean?
 		//		Flag to draw micro ticks on an axis. Default is false.
-		//	htmlLabels: Boolean?
+		// htmlLabels: Boolean?
 		//		Flag to use HTML (as opposed to the native vector graphics engine) to draw labels. Default is true.
-		//	min: Number?
+		// min: Number?
 		//		The smallest value on an axis. Default is 0.
-		//	max: Number?
+		// max: Number?
 		//		The largest value on an axis. Default is 1.
-		//	from: Number?
+		// from: Number?
 		//		Force the chart to render data visible from this value. Default is 0.
-		//	to: Number?
+		// to: Number?
 		//		Force the chart to render data visible to this value. Default is 1.
-		//	majorTickStep: Number?
+		// majorTickStep: Number?
 		//		The amount to skip before a major tick is drawn. When not set the major ticks step is computed from
 		//		the data range.
-		//	minorTickStep: Number?
+		// minorTickStep: Number?
 		//		The amount to skip before a minor tick is drawn. When not set the minor ticks step is computed from
 		//		the data range.
-		//	microTickStep: Number?
+		// microTickStep: Number?
 		//		The amount to skip before a micro tick is drawn. When not set the micro ticks step is computed from
-		//	labels: Object[]?
+		// labels: Object[]?
 		//		An array of labels for major ticks, with corresponding numeric values, ordered by value.
-		//	labelFunc: Function?
+		// labelFunc: Function?
 		//		An optional function to use to compute label text. It takes precedence over
 		//		the default text when available. The function must be of the following form:
 		//	|		function labelFunc(text, value, precision) {}
 		//		`text` is the already pre-formatted text. Pre-formatting is done using `dojo/number` is available, `Date.toFixed` otherwise.
 		//		`value`  is the raw axis value.
 		//		`precision` is the requested precision to be applied.
-		//	maxLabelSize: Number?
+		// maxLabelSize: Number?
 		//		The maximum size, in pixels, for a label.  To be used with the optional label function.
-		//	stroke: dojox.gfx.Stroke?
+		// stroke: dojox.gfx.Stroke?
 		//		An optional stroke to be used for drawing an axis.
-		//	majorTick: Object?
+		// majorTick: Object?
 		//		An object containing a dojox.gfx.Stroke, and a length (number) for a major tick.
-		//	minorTick: Object?
+		// minorTick: Object?
 		//		An object containing a dojox.gfx.Stroke, and a length (number) for a minor tick.
-		//	microTick: Object?
+		// microTick: Object?
 		//		An object containing a dojox.gfx.Stroke, and a length (number) for a micro tick.
-		//	tick: Object?
+		// tick: Object?
 		//		An object containing a dojox.gfx.Stroke, and a length (number) for a tick.
-		//	font: String?
+		// font: String?
 		//		An optional font definition (as used in the CSS font property) for labels.
-		//	fontColor: String|dojo.Color?
+		// fontColor: String|dojo.Color?
 		//		An optional color to be used in drawing labels.
-		//	titleGap: Number?
+		// titleGap: Number?
 		//		An optional grap between axis title and axis label
-		//	titleFont: String?
+		// titleFont: String?
 		// 		An optional font definition for axis title
-		//	titleFontColor:	 String?
+		// titleFontColor: String?
 		// 		An optional axis title color
-		//	titleOrientation: String?
+		// titleOrientation: String?
 		// 		An optional orientation for axis title. "axis" means the title facing the axis, "away" means facing away.
 		//		If no value is set "axis" is used.
-		//	enableCache: Boolean?
+		// enableCache: Boolean?
 		//		Whether the ticks and labels are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering. For labels it is only working with gfx labels
 		//		not html ones.  Default false.
-		//	dropLabels: Boolean?
+		// dropLabels: Boolean?
 		//		Whether the axis automatically drops labels at regular interval or not to avoid labels overlapping.
 		//		This gives better results but require more computations.  You can disable it to save computation
 		//		time when you know your labels won't overlap. Default is true.
-		//	labelSizeChange: Boolean?
+		// labelSizeChange: Boolean?
 		//		Indicates to the axis whether the axis labels are changing their size on zoom. If false this allows to
 		//		optimize the axis by avoiding recomputing labels maximum size on zoom actions. Default is false.
 	
@@ -140,30 +140,30 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 	var centerAnchorLimit = 45;	// in degrees
 
 	return declare("dojox.charting.axis2d.Default", Invisible, {
-		//	summary:
+		// summary:
 		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
 		//
-		//	defaultParams: Object
+		// defaultParams: Object
 		//		The default parameters used to define any axis.
-		//	optionalParams: Object
+		// optionalParams: Object
 		//		Any optional parameters needed to define an axis.
 
 		/*
-		 //	TODO: the documentation tools need these to be pre-defined in order to pick them up
+		 // TODO: the documentation tools need these to be pre-defined in order to pick them up
 		 //	correctly, but the code here is partially predicated on whether or not the properties
 		 //	actually exist.  For now, we will leave these undocumented but in the code for later. -- TRT
 
-		 //	opt: Object
+		 // opt: Object
 		 //		The actual options used to define this axis, created at initialization.
-		 //	scaler: Object
+		 // scaler: Object
 		 //		The calculated helper object to tell charts how to draw an axis and any data.
-		 //	ticks: Object
+		 // ticks: Object
 		 //		The calculated tick object that helps a chart draw the scaling on an axis.
-		 //	dirty: Boolean
+		 // dirty: Boolean
 		 //		The state of the axis (whether it needs to be redrawn or not)
-		 //	scale: Number
+		 // scale: Number
 		 //		The current scale of the axis.
-		 //	offset: Number
+		 // offset: Number
 		 //		The current offset of the axis.
 
 		 opt: null,
@@ -226,11 +226,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		The constructor for an axis.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart the axis belongs to.
-			//	kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
+			// kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -244,13 +244,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			this._invalidMaxLabelSize = true;
 		},
 		setWindow: function(scale, offset){
-			//	summary:
+			// summary:
 			//		Set the drawing "window" for the axis.
-			//	scale: Number
+			// scale: Number
 			//		The new scale for the axis.
-			//	offset: Number
+			// offset: Number
 			//		The new offset for the axis.
-			//	returns: dojox.charting.axis2d.Default
+			// returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			if(scale != this.scale){
 				// if scale changed we need to recompute new max label size
@@ -415,10 +415,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		},
 
 		getOffsets: function(){
-			//	summary:
+			// summary:
 			//		Get the physical offset values for this axis (used in drawing data series). This method is not
 			//		supposed to be called by the users but internally.
-			//	returns: Object
+			// returns: Object
 			//		The calculated offsets in the form of { l, r, t, b } (left, right, top, bottom).
 			var s = this.scaler, offsets = { l: 0, r: 0, t: 0, b: 0 };
 			if(!s){
@@ -581,13 +581,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			return line;
 		},
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Render/draw the axis.
-			//	dim: Object
+			// dim: Object
 			//		An object of the form { width, height}.
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.axis2d.Default
+			// returns: dojox.charting.axis2d.Default
 			//		The reference to the axis for functional chaining.
 			if(!this.dirty || !this.scaler){
 				return this;	//	dojox.charting.axis2d.Default

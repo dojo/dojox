@@ -4,54 +4,54 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
-		//	summary:
+		// summary:
 		//		A special keyword arguments object that is specific to a grid "plot".
 
-		//	majorHLine: dojox.gfx.Stroke?
+		// majorHLine: dojox.gfx.Stroke?
 		//		An optional dojox.gfx.Stroke for a major horizontal line. By default major lines use major tick stroke.
 		majorHLine:undefined,
 
-		//	minorHLine: dojox.gfx.Stroke?
+		// minorHLine: dojox.gfx.Stroke?
 		//		An optional dojox.gfx.Stroke for a minor horizontal line. By default minor lines use minor tick stroke.
 		minorHLine:undefined,
 
-		//	majorVLine: dojox.gfx.Stroke?
+		// majorVLine: dojox.gfx.Stroke?
 		//		An optional dojox.gfx.Stroke for a major vertical line. By default major lines use major tick stroke.
 		majorVLine:undefined,
 
-		//	minorVLine: dojox.gfx.Stroke?
+		// minorVLine: dojox.gfx.Stroke?
 		//		An optional dojox.gfx.Stroke for a minor vertical line. By default major lines use major tick stroke.
 		minorVLine:undefined,
 
-		//	hMajorLines: Boolean?
+		// hMajorLines: Boolean?
 		//		Whether to show lines at the major ticks along the horizontal axis. Default is true.
 		hMajorLines: true,
 
-		//	hMinorLines: Boolean?
+		// hMinorLines: Boolean?
 		//		Whether to show lines at the minor ticks along the horizontal axis. Default is false.
 		hMinorLines: false,
 
-		//	vMajorLines: Boolean?
+		// vMajorLines: Boolean?
 		//		Whether to show lines at the major ticks along the vertical axis. Default is true.
 		vMajorLines: true,
 
-		//	vMinorLines: Boolean?
+		// vMinorLines: Boolean?
 		//		Whether to show lines at the major ticks along the vertical axis. Default is false.
 		vMinorLines: false,
 
-		//	enableCache: Boolean?
+		// enableCache: Boolean?
 		//		Whether the grid lines are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false,
 
-		//	renderOnAxis: Boolean?
+		// renderOnAxis: Boolean?
 		//		Whether or not the grid is rendered when drawn at horizontal or vertical axis position. Default is true.
 		renderOnAxis: true
 	});
 	=====*/
 
 	return declare("dojox.charting.plot2d.Grid", CartesianBase, {
-		//	summary:
+		// summary:
 		//		A "faux" plot that can be placed behind other plots to represent
 		//		a grid against which other plots can be easily measured.
 		defaultParams: {
@@ -76,11 +76,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		Create the faux Grid plot.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
-			//	kwArgs: dojox.charting.plot2d.__GridCtorArgs?
+			// kwArgs: dojox.charting.plot2d.__GridCtorArgs?
 			//		An optional keyword arguments object to help define the parameters of the underlying grid.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -94,16 +94,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		addSeries: function(run){
-			//	summary:
+			// summary:
 			//		Ignored but included as a dummy method.
-			//	returns: dojox.charting.plot2d.Grid
+			// returns: dojox.charting.plot2d.Grid
 			//		The reference to this plot for functional chaining.
 			return this;	//	dojox.charting.plot2d.Grid
 		},
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Returns default stats (irrelevant for this type of plot).
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			return lang.delegate(dc.defaultStats);
 		},
@@ -130,13 +130,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return line;
 		},
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Render the plot on the chart.
-			//	dim: Object
+			// dim: Object
 			//		An object of the form { width, height }.
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b }.
-			//	returns: dojox.charting.plot2d.Grid
+			// returns: dojox.charting.plot2d.Grid
 			//		A reference to this plot for functional chaining.
 			if(this.zoom){
 				return this.performZoom(dim, offsets);

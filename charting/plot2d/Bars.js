@@ -4,46 +4,46 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		
 	/*=====
 	dojo.declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
-		//	summary:
+		// summary:
 		//		Additional keyword arguments for bar charts.
 	
-		//	minBarSize: Number?
+		// minBarSize: Number?
 		//		The minimum size for a bar in pixels.  Default is 1.
 		minBarSize: 1,
 	
-		//	maxBarSize: Number?
+		// maxBarSize: Number?
 		//		The maximum size for a bar in pixels.  Default is 1.
 		maxBarSize: 1,
 
-		//	stroke: dojox.gfx.Stroke?
+		// stroke: dojox.gfx.Stroke?
 		//		An optional stroke to use for any series on the plot.
 		stroke:		{},
 
-		//	outline: dojox.gfx.Stroke?
+		// outline: dojox.gfx.Stroke?
 		//		An optional stroke used to outline any series on the plot.
 		outline:	{},
 
-		//	shadow: dojox.gfx.Stroke?
+		// shadow: dojox.gfx.Stroke?
 		//		An optional stroke to use to draw any shadows for a series on a plot.
 		shadow:		{},
 
-		//	fill: dojox.gfx.Fill?
+		// fill: dojox.gfx.Fill?
 		//		Any fill to be used for elements on the plot.
 		fill:		{},
 
-		//	styleFunc: Function?
+		// styleFunc: Function?
 		//		A function that returns a styling object for the a given data item.
 		styleFunc:	null,
 
-		//	font: String?
+		// font: String?
 		//		A font definition to be used for labels and other text-based elements on the plot.
 		font:		"",
 
-		//	fontColor: String|dojo.Color?
+		// fontColor: String|dojo.Color?
 		//		The color to be used for any text-based elements on the plot.
 		fontColor:	"",
 		
-		//	enableCache: Boolean?
+		// enableCache: Boolean?
 		//		Whether the bars rect are cached from one rendering to another. This improves the rendering performance of
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
@@ -52,7 +52,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 
 	return declare("dojox.charting.plot2d.Bars", [CartesianBase, _PlotEvents], {
-		//	summary:
+		// summary:
 		//		The plot object representing a bar chart (horizontal bars).
 		defaultParams: {
 			hAxis: "x",		// use a horizontal axis named "x"
@@ -75,11 +75,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		},
 
 		constructor: function(chart, kwArgs){
-			//	summary:
+			// summary:
 			//		The constructor for a bar chart.
-			//	chart: dojox.charting.Chart
+			// chart: dojox.charting.Chart
 			//		The chart this plot belongs to.
-			//	kwArgs: dojox.charting.plot2d.__BarCtorArgs?
+			// kwArgs: dojox.charting.plot2d.__BarCtorArgs?
 			//		An optional keyword arguments object to help define the plot.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -91,9 +91,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		},
 
 		getSeriesStats: function(){
-			//	summary:
+			// summary:
 			//		Calculate the min/max on all attached series in both directions.
-			//	returns: Object
+			// returns: Object
 			//		{hmin, hmax, vmin, vmax} min/max in both directions.
 			var stats = dc.collectSimpleStats(this.series), t;
 			stats.hmin -= 0.5;
@@ -120,13 +120,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		},
 
 		render: function(dim, offsets){
-			//	summary:
+			// summary:
 			//		Run the calculations for any axes for this plot.
-			//	dim: Object
+			// dim: Object
 			//		An object in the form of { width, height }
-			//	offsets: Object
+			// offsets: Object
 			//		An object of the form { l, r, t, b}.
-			//	returns: dojox.charting.plot2d.Bars
+			// returns: dojox.charting.plot2d.Bars
 			//		A reference to this plot for functional chaining.
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
