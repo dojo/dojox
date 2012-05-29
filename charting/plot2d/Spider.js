@@ -74,6 +74,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		Optionally set axis min and max property.
 			// returns: dojox.charting.plot2d.Spider
 			//		The reference to this plot for functional chaining.
+
 			// override the computed min/max with provided values if any
 			if(axis){
 				if(axis.opt.min != undefined){

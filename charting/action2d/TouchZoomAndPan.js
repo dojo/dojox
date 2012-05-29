@@ -135,6 +135,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		onTouchStart: function(event){
 			// summary:
 			//		Called when touch is started on the chart.
+
 			// we always want to be above regular plots and not clipped
 			var chart = this.chart, axis = chart.getAxis(this.axis);
 			var length = event.touches.length;
