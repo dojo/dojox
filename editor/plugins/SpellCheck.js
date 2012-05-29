@@ -21,7 +21,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 	widgetsInTemplate: true,
 	
 	templateString:
-		"<table class='dijitEditorSpellCheckTable'>" +
+		"<table role='presentation' class='dijitEditorSpellCheckTable'>" +
 			"<tr><td colspan='3' class='alignBottom'><label for='${textId}' id='${textId}_label'>${unfound}</label>" +
 				"<div class='dijitEditorSpellCheckBusyIcon' id='${id}_progressIcon'></div></td></tr>" +
 			"<tr>" +

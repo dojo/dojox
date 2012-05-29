@@ -43,7 +43,7 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 	// linkDialogTemplate: [private] String
 	//		Template for contents of TooltipDialog to pick URL
 	_template: [
-		"<table><tr><td>",
+		"<table role='presentation'><tr><td>",
 		"<label for='${id}_anchorInput'>${anchor}</label>",
 		"</td><td>",
 		"<input dojoType='dijit.form.ValidationTextBox' required='true' " +
