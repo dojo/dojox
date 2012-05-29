@@ -69,7 +69,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		//		Whether touch pinch and spread gesture should zoom out or in the chart.  Default is true.
 		enableZoom: true,
 	});
-	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
 	return declare("dojox.charting.action2d.TouchZoomAndPan", ChartAction, {

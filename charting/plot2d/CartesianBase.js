@@ -2,9 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 		"./Base",
 		"../scaler/primitive", "dojox/gfx/fx"],
 	function(lang, declare, hub, Base, primitive, fx){
-	/*=====
-	var Base = dojox.charting.plot2d.CartesianBase;
-	=====*/
+
 	return declare("dojox.charting.plot2d.CartesianBase", Base, {
 		constructor: function(chart, kwArgs){
 			//	summary:

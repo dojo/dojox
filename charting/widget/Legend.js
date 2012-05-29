@@ -3,9 +3,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dijit/_WidgetBase", "dojox/gfx
 		"dojo/dom", "dojo/dom-construct", "dojo/dom-class","dijit/registry"],
 		function(lang, declare, _WidgetBase, gfx, arrayUtil, df, dfa, dff,
 				dom, domFactory, domClass, registry){
-/*=====
-var _WidgetBase = dijit._WidgetBase;
-=====*/
 
 	var REVERSED_SERIES = /\.(StackedColumns|StackedAreas|ClusteredBars)$/;
 

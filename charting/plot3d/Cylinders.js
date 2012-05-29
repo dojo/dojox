@@ -10,9 +10,7 @@ define(["dojox/gfx3d", "dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/C
 		for(var i = 1; i < a.length; z = f.call(o, z, a[i++]));
 		return z;	// Object
 	};
-	/*=====
-	var Base = dojox.charting.plot3d.Base;
-	=====*/
+
 	return declare("dojox.charting.plot3d.Cylinders", Base, {
 		constructor: function(width, height, kwArgs){
 			this.depth = "auto";

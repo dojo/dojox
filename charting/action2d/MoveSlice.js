@@ -15,7 +15,6 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 		//		The amount in pixels to shift the pie slice.  Default is 7.
 		shift: 7
 	});
-	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SCALE = 1.05,

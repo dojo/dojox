@@ -1,9 +1,6 @@
 define(["dojo/_base/declare", "./Bars", "./commonStacked"], 
 	function(declare, Bars, commonStacked){
 
-/*=====
-var bars = dojox.charting.plot2d.Bars;
-=====*/
 	return declare("dojox.charting.plot2d.StackedBars", Bars, {
 		//	summary:
 		//		The plot object representing a stacked bar chart (horizontal bars).

@@ -48,8 +48,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/
 		//		successive rendering but penalize the first rendering.  Default false.
 		enableCache: false
 	});
-	var CarstesianBase = dojox.charting.plot2d.CartesianBase;
-	var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 	=====*/
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
 

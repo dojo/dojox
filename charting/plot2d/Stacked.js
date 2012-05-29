@@ -1,8 +1,6 @@
 define(["dojo/_base/declare", "./Default", "./commonStacked"], 
 	function(declare, Default, commonStacked){
-/*=====
-var Default = dojox.charting.plot2d.Default;
-=====*/
+
 	return declare("dojox.charting.plot2d.Stacked", Default, {
 		//	summary:
 		//		Like the default plot, Stacked sets up lines, areas and markers

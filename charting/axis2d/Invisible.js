@@ -56,11 +56,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 		this.majorTickStep = majorTickStep;
 		this.minorTickStep = minorTickStep;
 		this.microTickStep = microTickStep;
-	}
-=====*/
-
-/*=====
-var Base = dojox.charting.axis2d.Base;
+	};
 =====*/
 
 	return declare("dojox.charting.axis2d.Invisible", Base, {

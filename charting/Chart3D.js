@@ -18,8 +18,8 @@ define(["dojo/_base/array", "dojo/dom","dojo/_base/declare", "dojox/gfx", "dojox
 		//		Camera properties describing the viewing camera position.
 		//	theme: Object
 		//		Charting theme to use for coloring chart elements.
-	}
-	 =====*/
+	};
+	=====*/
 	var observerVector = {x: 0, y: 0, z: 1}, v = gfx3d.vector, n = gfx.normalizedLength;
 
 	return declare("dojox.charting.Chart3D", null, {

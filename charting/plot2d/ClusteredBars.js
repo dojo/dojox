@@ -1,8 +1,6 @@
 define(["dojo/_base/declare", "./Bars", "./common"], 
 	function(declare, Bars, dc){
-/*=====
-var Bars = dojox.charting.plot2d.Bars;
-=====*/
+
 	return declare("dojox.charting.plot2d.ClusteredBars", Bars, {
 		//	summary:
 		//		A plot representing grouped or clustered bars (horizontal bars)

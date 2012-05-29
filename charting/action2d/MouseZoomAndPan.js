@@ -29,7 +29,6 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
 		keyZoomModifier: "ctrl"
 	});
-	var ChartAction = dojox.charting.action2d.ChartAction;
 	=====*/
 
 	var sUnit = has("mozilla") ? 3 : 120;

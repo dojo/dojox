@@ -3,10 +3,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 	function(lang, arr, declare, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");
-/*=====
-var CartesianBase = dojox.charting.plot2d.CartesianBase;
-var _PlotEvents = dojox.charting.plot2d._PlotEvents;
-=====*/
 
 	return declare("dojox.charting.plot2d.Columns", [CartesianBase, _PlotEvents], {
 		//	summary:

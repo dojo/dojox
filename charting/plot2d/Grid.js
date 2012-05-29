@@ -48,7 +48,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		Whether or not the grid is rendered when drawn at horizontal or vertical axis position. Default is true.
 		renderOnAxis: true
 	});
-	var CartesianBase = dojox.charting.plot2d.CartesianBase;
 	=====*/
 
 	return declare("dojox.charting.plot2d.Grid", CartesianBase, {

@@ -17,9 +17,7 @@ define(["dojo/_base/declare", "../Element"],
 		this.vertical = vertical;
 		this.min = min;
 		this.max = max;
-	}
-
-var Element = dojox.charting.Element;
+	};
 =====*/
 return declare("dojox.charting.axis2d.Base", Element, {
 	//	summary:

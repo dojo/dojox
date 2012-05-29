@@ -4,9 +4,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		"dojo/dom-prop"], 
 	function(lang, arrayUtil, declare, query, hub, Color, Legend, CheckBox,
 			 Highlight, df, fx, keys, event, dom, domProp){
-/*=====
-var Legend = dojox.charting.widget.Legend;
-=====*/
+
 	var FocusManager = declare(null, {
 		//	summary:
 		//		It will take legend as a tab stop, and using

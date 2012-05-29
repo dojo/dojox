@@ -12,7 +12,6 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 		//		set by the plot in question, by returning the value of the element.
 		text: null
 	});
-	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 
 	var DEFAULT_TEXT = function(o){

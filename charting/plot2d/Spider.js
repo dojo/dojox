@@ -6,10 +6,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	function(lang, declare, hub, arr, domGeom, baseFx, coreFx, has,
 			Base, PlotEvents, Color, dxcolor, dc, da, primitive,
 			g, m, gfxfx, df, du, easing){
-/*=====
-var Base = dojox.charting.plot2d.Base;
-var PlotEvents = dojox.charting.plot2d._PlotEvents;
-=====*/
+
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
 	var Spider = declare("dojox.charting.plot2d.Spider", [Base, PlotEvents], {

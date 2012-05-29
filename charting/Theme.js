@@ -37,7 +37,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 		this.high = high;
 		this.base = base;
 		this.generator = generator;
-	}
+	};
 	=====*/
 	lang.mixin(Theme, {
 

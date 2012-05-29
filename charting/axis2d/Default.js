@@ -134,8 +134,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		this.enableCache = enableCache;
 		this.dropLabels = dropLabels;
 		this.labelSizeChange = labelSizeChange;
-	}
-	var Invisible = dojox.charting.axis2d.Invisible
+	};
 	=====*/
 
 	var centerAnchorLimit = 45;	// in degrees

@@ -1,9 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-attr","dojo/_base/declare", "dojo/query",
 	"dijit/_WidgetBase", "../Chart", "dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda"],
 	function(kernel, lang, arr, domAttr, declare, query, _WidgetBase, Chart, du, df, dfl){
-/*=====
-var _WidgetBase = dijit._WidgetBase;
-=====*/
+
 	var collectParams, collectAxisParams, collectPlotParams,
 		collectActionParams, collectDataParams,
 		notNull = function(o){ return o; },

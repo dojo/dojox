@@ -100,9 +100,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//		point.	Default false.
 		interpolate: false
 	});
-	
-	var CartesianBase = dojox.charting.plot2d.CartesianBase;
-	var _PlotEvents = dojox.charting.plot2d._PlotEvents;
 =====*/
 
 	var purgeGroup = dfr.lambda("item.purgeGroup()");

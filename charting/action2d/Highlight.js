@@ -11,7 +11,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//		Either a color or a function that creates a color when highlighting happens.
 		highlight: null
 	});
-	var PlotAction = dojox.charting.action2d.PlotAction;
 	=====*/
 	
 	var DEFAULT_SATURATION  = 100,	// %

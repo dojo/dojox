@@ -38,9 +38,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		tension:2,
 		gap:2
 	};
-	/*=====
-	var Chart = dojox.charting.Chart;
-	=====*/
+
 	return declare("dojox.charting.DataChart", Chart, {
 		//	summary:
 		//		DataChart
@@ -77,68 +75,66 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//	|		fieldName:"price"
 		//	|		type: dojox.charting.plot2d.Columns
 		//	|	});
-		//
-		//	properties:
-		//
+
 		//	scroll: Boolean
 		//		Whether live data updates and changes display, like columns moving
 		//		up and down, or whether it scrolls to the left as data is added
 		scroll:true,
-		//
+
 		//	comparative: Boolean
 		//		If false, all items are each their own series.
 		//		If true, the items are combined into one series
 		//		so that their charted properties can be compared.
 		comparative:false,
-		//
+
 		//		query: String
 		//			Used for fetching items. Will vary depending upon store.
 		query: "*",
-		//
+
 		//		queryOptions: String
 		//			Option used for fetching items
 		queryOptions: "",
-		//
+
 		/*=====
 			//	start:Number
 			//		first item to fetch from store
 			//	count:Number
 			//		Total amount of items to fetch from store
 			//	sort:Object
-			//		Paramaters to sort the fetched items from store
+			//		Parameters to sort the fetched items from store
 		=====*/
-		//
+
 		//		fieldName: String
 		//			The field in the store item that is getting charted
 		fieldName: "value",
-		//
+
 		//		chartTheme: dojox.charting.themes.*
 		//			The theme to style the chart. Defaults to PlotKit.blue.
 		chartTheme: blue,
-		//
+
 		//		displayRange: Number
 		//			The number of major ticks to show on the xaxis
 		displayRange:0,
-		//
+
 		// 		stretchToFit: Boolean
 		//			If true, chart is sized to data. If false, chart is a
 		//			fixed size. Note, is overridden by displayRange.
 		//			TODO: Stretch for the y-axis?
 		stretchToFit:true,
-		//
+
 		//		minWidth: Number
 		//			The the smallest the chart width can be
 		minWidth:200,
-		//
+
 		//		minHeight: Number
 		//			The the smallest the chart height can be
 		minHeight:100,
-		//
+
 		//		showing: Boolean
 		//			Whether the chart is showing (default) on
 		//			initialization or hidden.
 		showing: true,
-		//
+
 		//		label: String
 		//			The name field of the store item
 		//			DO NOT SET: Set from store.labelAttribute
@@ -147,11 +143,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		constructor: function(node, kwArgs){
 			// summary:
 			//		Set up properties and initialize chart build.
-			//
-			//	arguments:
-			//		node: DomNode
+			// node: DomNode
 			//			The node to attach the chart to.
-			//		kwArgs:	Object
+			// kwArgs:	Object
 			//			xaxis: Object
 			//				optional parameters for xaxis (see above)
 			//			yaxis: Object
@@ -233,13 +227,13 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		},
 
 		setStore: function(/*Object*/store, /* ? String*/query, /* ? String*/fieldName, /* ? Object */queryOptions){
-			//	 summary:
+			// summary:
 			//		Sets the chart store and query
 			//		then does the first fetch and
 			//		connects to subsequent changes.
-			//
+
 			// TODO: Not handling resetting store
-			//
+
 			this.firstRun = true;
 			this.store = store || this.store;
 			this.query = query || this.query;
