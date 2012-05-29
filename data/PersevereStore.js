@@ -4,7 +4,7 @@ define(["dojo", "dojox", "require", "dojox/data/JsonQueryRestStore", "dojox/rpc/
 
 dojox.json.ref.serializeFunctions = true; // Persevere supports persisted functions
 
-dojo.declare("dojox.data.PersevereStore",dojox.data.JsonQueryRestStore,{
+declare("dojox.data.PersevereStore",dojox.data.JsonQueryRestStore,{
 	useFullIdInQueries: true, // in JSONQuerys use the full id
 	jsonQueryPagination: false // use the Range headers instead
 });

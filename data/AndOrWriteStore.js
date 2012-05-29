@@ -5,8 +5,6 @@ define(["dojo/_base/declare", "dojo/data/ItemFileWriteStore", "./AndOrReadStore"
 	  // summary:
 	  //		TODOC
 
-/*===== var ItemFileWriteStore = dojo.data.ItemFileWriteStore; =====*/
-/*===== var AndOrReadStore = dojox.data.AndOrReadStore; =====*/
 return declare("dojox.data.AndOrWriteStore", [ItemFileWriteStore, AndOrReadStore], {});
 
 });

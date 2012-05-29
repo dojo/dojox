@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/kernel", // dojo.experimental
 	"dojo/_base/lang", // dojo.extend
-	"dojo/_base/declare", // dojo.declare
+	"dojo/_base/declare", // declare
 	"dojo/_base/xhr", // dojo.xhrGet
 	"dojo/_base/array", // dojo.forEach
 	"dojo/_base/window", // dojo.doc
@@ -12,9 +12,9 @@ kernel.experimental("dojox.data.OpenSearchStore");
 
 var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	constructor: function(/*Object*/args){
-		//	summary:
+		// summary:
 		//		Initializer for the OpenSearchStore store.
-		//	description:
+		// description:
 		//		The OpenSearchStore is a Datastore interface to any search
 		//		engine that implements the open search specifications.
 		if(args){
@@ -56,9 +56,9 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	XML_CONTENT_TYPE_STRING: "xml",
 
 	_assertIsItem: function(/* item */ item){
-		//	summary:
+		// summary:
 		//      This function tests whether the item passed in is indeed an item in the store.
-		//	item:
+		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
 			throw new Error("dojox.data.OpenSearchStore: a function was passed an item argument that was not an item");
@@ -66,9 +66,9 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	_assertIsAttribute: function(/* attribute-name-string */ attribute){
-		//	summary:
+		// summary:
 		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
-		//	attribute:
+		// attribute:
 		//		The attribute to test for being contained by the store.
 		if(typeof attribute !== "string"){
 			throw new Error("dojox.data.OpenSearchStore: a function was passed an attribute argument that was not an attribute name string");
@@ -76,7 +76,7 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	getFeatures: function(){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
@@ -84,7 +84,7 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	getValue: function(item, attribute, defaultValue){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values){
@@ -94,13 +94,13 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	getAttributes: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getAttributes()
 		return ["content"];
 	},
 
 	hasAttribute: function(item, attribute){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.hasAttributes()
 		if(this.getValue(item,attribute)){
 			return true;
@@ -109,30 +109,30 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	isItemLoaded: function(item){
-		 //	summary:
+		 // summary:
 		 //      See dojo.data.api.Read.isItemLoaded()
 		 return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.loadItem()
 	},
 
 	getLabel: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getLabel()
 		return undefined;
 	},
 	
 	getLabelAttributes: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getLabelAttributes()
 		return null;
 	},
 
 	containsValue: function(item, attribute, value){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.containsValue()
 		var values = this.getValues(item,attribute);
 		for(var i = 0; i < values.length; i++){
@@ -144,7 +144,7 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	getValues: function(item, attribute){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getValue()
 
 		this._assertIsItem(item);
@@ -157,7 +157,7 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	isItem: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.isItem()
 		if(item && item[this._storeRef] === this){
 			return true;
@@ -166,7 +166,7 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 	
 	close: function(request){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.close()
 	},
 	
@@ -203,13 +203,13 @@ var OpenSearchStore = declare("dojox.data.OpenSearchStore", null, {
 	},
 
 	_fetchItems: function(request, fetchHandler, errorHandler){
-		//	summary:
+		// summary:
 		//		Fetch OpenSearch items that match to a query
-		//	request:
+		// request:
 		//		A request object
-		//	fetchHandler:
+		// fetchHandler:
 		//		A function to call for fetched items
-		//	errorHandler:
+		// errorHandler:
 		//		A function to call on error
 
 		if(!request.query){

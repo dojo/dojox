@@ -4,7 +4,7 @@ dojo.require("dojox.data.ItemExplorer");
 dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.ContentPane");
 
-dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
+declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 	constructor: function(options){
 		dojo.mixin(this, options);
 	},

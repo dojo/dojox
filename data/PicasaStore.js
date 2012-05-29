@@ -3,9 +3,9 @@ define(["dojo/_base/lang","dojo/_base/declare", "dojo/_base/connect", "dojo/io/s
 
 var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	constructor: function(/*Object*/args){
-		//	summary:
+		// summary:
 		//		Initializer for the PicasaStore store.
-		//	description:
+		// description:
 		//		The PicasaStore is a Datastore interface to one of the basic services
 		//		of the Picasa service, the public photo feed.  This does not provide
 		//		access to all the services of Picasa.
@@ -41,9 +41,9 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	maxResults: 20,
 
 	_assertIsItem: function(/* item */ item){
-		//	summary:
+		// summary:
 		//      This function tests whether the item passed in is indeed an item in the store.
-		//	item:
+		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
 			throw new Error("dojox.data.PicasaStore: a function was passed an item argument that was not an item");
@@ -51,9 +51,9 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	_assertIsAttribute: function(/* attribute-name-string */ attribute){
-		//	summary:
+		// summary:
 		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
-		//	attribute:
+		// attribute:
 		//		The attribute to test for being contained by the store.
 		if(typeof attribute !== "string"){
 			throw new Error("dojox.data.PicasaStore: a function was passed an attribute argument that was not an attribute name string");
@@ -61,7 +61,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	getFeatures: function(){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
@@ -69,7 +69,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	getValue: function(item, attribute, defaultValue){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values && values.length > 0){
@@ -79,7 +79,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	getAttributes: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getAttributes()
 		 return ["id", "published", "updated", "category", "title$type", "title",
 			 "summary$type", "summary", "rights$type", "rights", "link", "author",
@@ -88,7 +88,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	hasAttribute: function(item, attribute){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.hasAttributes()
 		if(this.getValue(item,attribute)){
 			return true;
@@ -97,30 +97,30 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	isItemLoaded: function(item){
-		 //	summary:
+		 // summary:
 		 //      See dojo.data.api.Read.isItemLoaded()
 		 return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.loadItem()
 	},
 
 	getLabel: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getLabel()
 		return this.getValue(item,this.label);
 	},
 	
 	getLabelAttributes: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getLabelAttributes()
 		return [this.label];
 	},
 
 	containsValue: function(item, attribute, value){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.containsValue()
 		var values = this.getValues(item,attribute);
 		for(var i = 0; i < values.length; i++){
@@ -132,7 +132,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	getValues: function(item, attribute){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getValue()
 
 		this._assertIsItem(item);
@@ -164,7 +164,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	isItem: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.isItem()
 		if(item && item[this._storeRef] === this){
 			return true;
@@ -173,18 +173,18 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 	
 	close: function(request){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.close()
 	},
 
 	_fetchItems: function(request, fetchHandler, errorHandler){
-		//	summary:
+		// summary:
 		//		Fetch picasa items that match to a query
-		//	request:
+		// request:
 		//		A request object
-		//	fetchHandler:
+		// fetchHandler:
 		//		A function to call for fetched items
-		//	errorHandler:
+		// errorHandler:
 		//		A function to call on error
 
 		if(!request.query){
@@ -252,11 +252,14 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	},
 
 	_unescapeHtml: function(str){
-		// summary: Utility function to un-escape XML special characters in an HTML string.
-		// description: Utility function to un-escape XML special characters in an HTML string.
-		// str: String.
+		// summary:
+		//		Utility function to un-escape XML special characters in an HTML string.
+		// description:
+		//		Utility function to un-escape XML special characters in an HTML string.
+		// str: String
 		//   The string to un-escape
-		// returns: HTML String converted back to the normal text (unescaped) characters (<,>,&, ", etc,).
+		// returns:
+		//		HTML String converted back to the normal text (unescaped) characters (<,>,&, ", etc,).
 
 		// TODO: Check to see if theres already compatible escape() in dojo.string or dojo.html
 		if(str){

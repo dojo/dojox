@@ -3,9 +3,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/kernel", "dojo/_bas
 
 return declare("dojox.data.FileStore", null, {
 	constructor: function(/*Object*/args){
-		//	summary:
+		// summary:
 		//		A simple store that provides a datastore interface to a filesystem.
-		//	description:
+		// description:
 		//		A simple store that provides a datastore interface to a filesystem.  It takes a few parameters
 		//		for initialization:
 		//			url:	The URL of the service which provides the file store serverside implementation.
@@ -69,7 +69,7 @@ return declare("dojox.data.FileStore", null, {
 
 	// _attributes: [private] string
 	//		Internal variable of attributes all file items should have.
-	_attributes: ["children", "directory", "name", "path", "modified", "size", "parentDir"], //
+	_attributes: ["children", "directory", "name", "path", "modified", "size", "parentDir"],
 	
 	// pathSeparator: [public] string
 	//		The path separator to use when chaining requests for children
@@ -157,7 +157,7 @@ return declare("dojox.data.FileStore", null, {
 
 
 	isItemLoaded: function(item){
-		 //	summary:
+		 // summary:
 		 //      See dojo.data.api.Read.isItemLoaded()
 		 var loaded = this.isItem(item);
 		 if(loaded && typeof item._loaded == "boolean" && !item._loaded){
@@ -391,7 +391,7 @@ return declare("dojox.data.FileStore", null, {
 	},
 	
 	_processItemArray: function(itemArray){
-		 //	summary:
+		 // summary:
 		 //		Internal function for processing an array of items for return.
 		 var i;
 		 for(i = 0; i < itemArray.length; i++){
@@ -401,7 +401,7 @@ return declare("dojox.data.FileStore", null, {
 	},
 	
 	_processItem: function(item){
-		//	summary:
+		// summary:
 		//		Internal function for processing an item returned from the store.
 		//		It sets up the store ref as well as sets up the attributes necessary
 		//		to invoke a lazy load on a child, if there are any.

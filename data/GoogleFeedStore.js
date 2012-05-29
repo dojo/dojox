@@ -3,7 +3,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojox/dat
 
 dojo.experimental("dojox.data.GoogleFeedStore");
 
-/*===== var Search = dojox.data.GoogleSearchStore =====*/
 var Search = GoogleSearchStore.Search;
 
 return declare("dojox.data.GoogleFeedStore", Search,{

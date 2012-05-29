@@ -14,7 +14,6 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array"],
 // And this object has accessed using the dojo.data API:
 // var obj = serviceStore.getValue(myObject,"lazyLoadedObject");
 // The object would automatically be requested from the server (with an object id of "obj2").
-//
 
 return declare("dojox.data.ServiceStore",
 	// ClientFilter is intentionally not required, ServiceStore does not need it, and is more
@@ -22,13 +21,13 @@ return declare("dojox.data.ServiceStore",
 	lang.getObject("dojox.data.ClientFilter", 0)||null,{
 		service: null,
 		constructor: function(options){
-			//summary:
+			// summary:
 			//		ServiceStore constructor, instantiate a new ServiceStore
 			// 		A ServiceStore can be configured from a JSON Schema. Queries are just
 			// 		passed through to the underlying services
-			//
 			// options:
 			// 		Keyword arguments
+			//
 			//		The *schema* parameter
 			//			This is a schema object for this store. This should be JSON Schema format.
 			//
@@ -82,6 +81,7 @@ return declare("dojox.data.ServiceStore",
 			// |			callback(this);
 			// |		}
 			// |	};
+
 			//setup a byId alias to the api call
 			this.byId=this.fetchItemByIdentity;
 			this._index = {};
@@ -106,13 +106,12 @@ return declare("dojox.data.ServiceStore",
 
 		getValue: function(/*Object*/ item, /*String*/property, /*value?*/defaultValue){
 			// summary:
-			//	Gets the value of an item's 'property'
-			//
-			//	item:
+			//		Gets the value of an item's 'property'
+			// item:
 			//		The item to get the value from
-			//	property:
+			// property:
 			//		property to look up value for
-			//	defaultValue:
+			// defaultValue:
 			//		the default value
 
 			var value = item[property];
@@ -128,9 +127,8 @@ return declare("dojox.data.ServiceStore",
 			//		Gets the value of an item's 'property' and returns
 			//		it.	If this value is an array it is just returned,
 			//		if not, the value is added to an array and that is returned.
-			//
-			//	item: /* object */
-			//	property: /* string */
+			// item: Object
+			// property: String
 			//		property to look up value for
 
 			var val = this.getValue(item,property);
@@ -139,10 +137,9 @@ return declare("dojox.data.ServiceStore",
 
 		getAttributes: function(item){
 			// summary:
-			//	Gets the available attributes of an item's 'property' and returns
-			//	it as an array.
-			//
-			//	item: /* object */
+			//		Gets the available attributes of an item's 'property' and returns
+			//		it as an array.
+			// item: Object
 
 			var res = [];
 			for(var i in item){
@@ -156,19 +153,17 @@ return declare("dojox.data.ServiceStore",
 		hasAttribute: function(item,attribute){
 			// summary:
 			//		Checks to see if item has attribute
-			//
-			//	item: /* object */
-			//	attribute: /* string */
+			// item: Object
+			// attribute: String
 			return attribute in item;
 		},
 
 		containsValue: function(item, attribute, value){
 			// summary:
 			//		Checks to see if 'item' has 'value' at 'attribute'
-			//
-			//	item: /* object */
-			//	attribute: /* string */
-			//	value: /* anything */
+			// item: Object
+			// attribute: String
+			// value: Anything
 			return array.indexOf(this.getValues(item,attribute),value) > -1;
 		},
 
@@ -176,20 +171,16 @@ return declare("dojox.data.ServiceStore",
 		isItem: function(item){
 			// summary:
 			//		Checks to see if the argument is an item
-			//
-			//	item: /* object */
-			//	attribute: /* string */
+			// item: Object
 
 			// we have no way of determining if it belongs, we just have object returned from
 			// 	service queries
 			return (typeof item == 'object') && item && !(item instanceof Date);
 		},
 
-		isItemLoaded: function(item){
+		isItemLoaded: function(/* object */ item){
 			// summary:
 			//		Checks to see if the item is loaded.
-			//
-			//		item: /* object */
 
 			return item && !item._loadObject;
 		},
@@ -201,14 +192,13 @@ return declare("dojox.data.ServiceStore",
 			// 		that an item is loaded is situations when the item may or may not be loaded yet.
 			// 		If you access a value directly through property access, you can use this to load
 			// 		a lazy value as well (doesn't need to be an item).
-			//
-			//	example:
-			//		store.loadItem({
-			//			item: item, // this item may or may not be loaded
-			//			onItem: function(item){
-			// 				// do something with the item
-			//			}
-			//		});
+			// example:
+			//	|	store.loadItem({
+			//	|		item: item, // this item may or may not be loaded
+			//	|		onItem: function(item){
+			// 	|			// do something with the item
+			//	|		}
+			//	|	});
 
 			var item;
 			if(args.item._loadObject){
@@ -270,7 +260,7 @@ return declare("dojox.data.ServiceStore",
 		fetch: function(args){
 			// summary:
 			//		See dojo.data.api.Read.fetch
-			//
+			// args:
 			//		The *queryOptions.cache* parameter
 			//			If true, indicates that the query result should be cached for future use. This is only available
 			// 			if dojox.data.ClientFilter has been loaded before the ServiceStore
@@ -338,7 +328,7 @@ return declare("dojox.data.ServiceStore",
 		getLabel: function(item){
 			// summary:
 			//		returns the label for an item. Just gets the "label" attribute.
-			//
+
 			return this.getValue(item,this.labelAttribute);
 		},
 

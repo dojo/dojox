@@ -5,9 +5,8 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/data/ItemFileReadStore", 
 	  // summary:
 	  //		TODOC
 
-/*===== var ItemFileReadStore = dojo.data.ItemFileReadStore; =====*/
 return declare("dojox.data.AndOrReadStore", [ItemFileReadStore], {
-	//	summary:
+	// summary:
 	//		AndOrReadStore uses ItemFileReadStore as a base, modifying only the query (_fetchItems) section.
 	//		Supports queries of the form: query:"id:1* OR dept:'Sales Department' || (id:2* && NOT dept:S*)"
 	//		Includes legacy/widget support via:
@@ -21,23 +20,21 @@ return declare("dojox.data.AndOrReadStore", [ItemFileReadStore], {
 	//		]}
 	//		Note that it can also contain an 'identifer' property that specified which attribute on the items
 	//		in the array of items that acts as the unique identifier for that item.
-	//
 
 	_containsValue: function(	/* item */ item, /* attribute-name-string */ attribute, /* anything */ value, /* String? | RegExp? */ regexp){
-		//	summary:
+		// summary:
 		//		Internal function for looking at the values contained by the item.
-		//	description:
+		// description:
 		//		Internal function for looking at the values contained by the item.  This
 		//		function allows for denoting if the comparison should be case sensitive for
 		//		strings or not (for handling filtering cases where string case should not matter)
-		//
-		//	item:
+		// item:
 		//		The data item to examine for attribute values.
-		//	attribute:
+		// attribute:
 		//		The attribute to inspect.
-		//	value:
+		// value:
 		//		The value to match.
-		//	regexp:
+		// regexp:
 		//		Optional string or regular expression generated off value if value was of string type to handle wildcarding.
 		//		If present and attribute values are string, then it can be used for comparison instead of 'value'
 		//		If RegExp is a string, it is treated as an comparison statement and eval for number comparisons

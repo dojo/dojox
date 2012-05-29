@@ -25,9 +25,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  Fetch_One",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of a basic fetch on AtomReadStore of a single item.
-				//	description:
+				// description:
 				//		Simple test of a basic fetch on AtomReadStore of a single item.
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -51,9 +51,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  Fetch_5_Streaming",
 			timeout:	5000, //1 second.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of a basic fetch on AtomReadStore.
-				//	description:
+				// description:
 				//		Simple test of a basic fetch on AtomReadStore.
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 
@@ -87,9 +87,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  Fetch_Paging",
 			timeout:	5000, //1 second.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Test of multiple fetches on a single result.  Paging, if you will.
-				//	description:
+				// description:
 				//		Test of multiple fetches on a single result.  Paging, if you will.
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -166,9 +166,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getLabel",
 			timeout:	5000, //1 second.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getLabel function against a store set that has a label defined.
-				//	description:
+				// description:
 				//		Simple test of the getLabel function against a store set that has a label defined.
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -194,9 +194,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getLabelAttributes",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getLabelAttributes function against a store set that has a label defined.
-				//	description:
+				// description:
 				//		Simple test of the getLabelAttributes function against a store set that has a label defined.
 				
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -224,9 +224,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getValue",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getValue function of the store.
-				//	description:
+				// description:
 				//		Simple test of the getValue function of the store.
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 
@@ -256,9 +256,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getValue_Failure",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getValue function of the store.
-				//	description:
+				// description:
 				//		Simple test of the getValue function of the store.
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 				var passed = false;
@@ -274,9 +274,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getValues",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getValue function of the store.
-				//	description:
+				// description:
 				//		Simple test of the getValue function of the store.
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 
@@ -313,9 +313,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getValues_Failure",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getValue function of the store.
-				//	description:
+				// description:
 				//		Simple test of the getValue function of the store.
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 				var passed = false;
@@ -331,9 +331,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  isItem",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the isItem function of the store
-				//	description:
+				// description:
 				//		Simple test of the isItem function of the store
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
 
@@ -361,9 +361,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  hasAttribute",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the hasAttribute function of the store
-				//	description:
+				// description:
 				//		Simple test of the hasAttribute function of the store
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -421,9 +421,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  containsValue",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the containsValue function of the store
-				//	description:
+				// description:
 				//		Simple test of the containsValue function of the store
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -452,9 +452,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  getAttributes",
 			timeout:	5000, //1 second
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of the getAttributes function of the store
-				//	description:
+				// description:
 				//		Simple test of the getAttributes function of the store
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -485,9 +485,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  fetch_Category",
 			timeout:	5000, //1 second.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Retrieve items from the store by category
-				//	description:
+				// description:
 				//		Simple test of the getAttributes function of the store
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -525,9 +525,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  fetch_byID",
 			timeout:	5000, //1 second.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Retrieve items from the store by category
-				//	description:
+				// description:
 				//		Simple test of the getAttributes function of the store
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -560,9 +560,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			name: "ReadAPI:  fetch_alternate",
 			timeout:	5000, //1 second.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Retrieve items from the store by category
-				//	description:
+				// description:
 				//		Simple test of the getAttributes function of the store
 
 				var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -590,9 +590,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			}
 		},
 		function testReadAPI_getFeatures(t){
-			//	summary:
+			// summary:
 			//		Simple test of the getFeatures function of the store
-			//	description:
+			// description:
 			//		Simple test of the getFeatures function of the store
 
 			var atomStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();
@@ -606,9 +606,9 @@ doh.register("dojox.data.tests.stores.AtomReadStore",
 			t.assertTrue(count === 1);
 		},
 		function testReadAPI_functionConformance(t){
-			//	summary:
+			// summary:
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
-			//	description:
+			// description:
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
 
 			var testStore = dojox.data.tests.stores.AtomReadStore.getBlog1Store();

@@ -199,7 +199,6 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 		//		Internal function for looking at the values contained by the item.  This
 		//		function allows for denoting if the comparison should be case sensitive for
 		//		strings or not (for handling filtering cases where string case should not matter)
-		//
 		// item:
 		//		The data item to examine for attribute values.
 		// attribute:
@@ -413,7 +412,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	},
 	
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
-		 //	summary:
+		 // summary:
 		 //		See dojo.data.api.Read.close()
 	},
 	
@@ -688,8 +687,8 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 		// tags:
 		//		public
 		 
-		//Identity isn't a public attribute in the item, it's the row position index.
-		//So, return null.
+		// Identity isn't a public attribute in the item, it's the row position index.
+		// So, return null.
 		if(this.identifier){
 			return [this.identifier];
 		}else{
@@ -703,7 +702,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 		// tags:
 		//		private
 
-		//Execute any deferred fetches now.
+		// Execute any deferred fetches now.
 		if(this._queuedFetches.length > 0){
 			for(var i = 0; i < this._queuedFetches.length; i++){
 				var fData = this._queuedFetches[i];

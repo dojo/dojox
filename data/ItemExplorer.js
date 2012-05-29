@@ -618,7 +618,6 @@ dojo.declare("dojox.data.ItemExplorer", dijit.Tree, {
 			}else{
 				showDialog();
 			}
-//
 		}
 	}
 });

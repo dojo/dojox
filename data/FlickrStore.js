@@ -4,9 +4,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/data/
 
 var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	constructor: function(/*Object*/args){
-		//	summary:
+		// summary:
 		//		Initializer for the FlickrStore store.
-		//	description:
+		// description:
 		//		The FlickrStore is a Datastore interface to one of the basic services
 		//		of the Flickr service, the public photo feed.  This does not provide
 		//		access to all the services of Flickr.
@@ -28,9 +28,9 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	urlPreventCache: true,
 
 	_assertIsItem: function(/* item */ item){
-		//	summary:
+		// summary:
 		//      This function tests whether the item passed in is indeed an item in the store.
-		//	item:
+		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
 			throw new Error("dojox.data.FlickrStore: a function was passed an item argument that was not an item");
@@ -38,9 +38,9 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	_assertIsAttribute: function(/* attribute-name-string */ attribute){
-		//	summary:
+		// summary:
 		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
-		//	attribute:
+		// attribute:
 		//		The attribute to test for being contained by the store.
 		if(typeof attribute !== "string"){
 			throw new Error("dojox.data.FlickrStore: a function was passed an attribute argument that was not an attribute name string");
@@ -48,7 +48,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	getFeatures: function(){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
@@ -56,7 +56,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	getValue: function(item, attribute, defaultValue){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values && values.length > 0){
@@ -66,7 +66,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	getAttributes: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getAttributes()
 		return [
 			"title", "description", "author", "datePublished", "dateTaken",
@@ -75,7 +75,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	hasAttribute: function(item, attribute){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.hasAttributes()
 		var v = this.getValue(item,attribute);
 		if(v || v === "" || v === false){
@@ -85,30 +85,30 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	isItemLoaded: function(item){
-		 //	summary:
+		 // summary:
 		 //      See dojo.data.api.Read.isItemLoaded()
 		 return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.loadItem()
 	},
 
 	getLabel: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getLabel()
 		return this.getValue(item,this.label);
 	},
 	
 	getLabelAttributes: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getLabelAttributes()
 		return [this.label];
 	},
 
 	containsValue: function(item, attribute, value){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.containsValue()
 		var values = this.getValues(item,attribute);
 		for(var i = 0; i < values.length; i++){
@@ -120,7 +120,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	getValues: function(item, attribute){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.getValue()
 
 		this._assertIsItem(item);
@@ -154,7 +154,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 
 	isItem: function(item){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.isItem()
 		if(item && item[this._storeRef] === this){
 			return true;
@@ -163,18 +163,18 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 	},
 	
 	close: function(request){
-		//	summary:
+		// summary:
 		//      See dojo.data.api.Read.close()
 	},
 
 	_fetchItems: function(request, fetchHandler, errorHandler){
-		//	summary:
+		// summary:
 		//		Fetch flickr items that match to a query
-		//	request:
+		// request:
 		//		A request object
-		//	fetchHandler:
+		// fetchHandler:
 		//		A function to call for fetched items
-		//	errorHandler:
+		// errorHandler:
 		//		A function to call on error
 
 		var rq = request.query = request.query || {};
@@ -241,7 +241,7 @@ var FlickrStore = declare("dojox.data.FlickrStore", null, {
 		// summary:
 		//		Utility function to un-escape XML special characters in an
 		//		HTML string.
-		//	str: String.
+		// str: String.
 		//		The string to un-escape
 		// returns:
 		//		HTML String converted back to the normal text (unescaped)
