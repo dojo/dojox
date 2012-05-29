@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	function(lang, declare, hub, win, has, ChartAction, IndicatorElement, du, eventUtil, arr){ 
 
 	/*=====
-	dojo.declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
+	declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
 		// summary:
 		//		Additional arguments for mouse indicator.
 		

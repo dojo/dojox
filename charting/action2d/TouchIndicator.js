@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 	function(lang, declare, eventUtil, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
-	dojo.declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
+	declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
 		// summary:
 		//		Additional arguments for Touch indicator.
 		

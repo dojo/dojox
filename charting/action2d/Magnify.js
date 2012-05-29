@@ -4,7 +4,7 @@ define(["dojo/_base/connect", "dojo/_base/declare",
 	function(Hub, declare, PlotAction, m, gf, df, dfe){
 
 	/*=====
-	dojo.declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
+	declare("dojox.charting.action2d.__MagnifyCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
 		// summary:
 		//		Additional arguments for highlighting actions.
 	

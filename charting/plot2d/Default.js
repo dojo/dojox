@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 	function(lang, declare, arr, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 
 	/*=====
-	dojo.declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
+	declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
 		// summary:
 		//		The arguments used for any/most plots.
 	

@@ -4,7 +4,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 	function(lang, arr, declare, Base, PlotEvents, dc, da, g, m, df, du){
 
 	/*=====
-	dojo.declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
+	declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
 		// summary:
 		//		Specialized keyword arguments object for use in defining parameters on a Pie chart.
 	

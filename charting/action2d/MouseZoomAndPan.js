@@ -3,7 +3,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 	function(declare, win, arr, eventUtil, connect, mouse, ChartAction, has, domProp, keys){
 
 	/*=====
-	dojo.declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
+	declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
 		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
 	

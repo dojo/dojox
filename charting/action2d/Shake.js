@@ -3,7 +3,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 	function(hub, declare, PlotAction, df, dfe, m, gf){
 
 	/*=====
-	dojo.declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
+	declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
 		// summary:
 		//		Additional arguments for highlighting actions.
 	
