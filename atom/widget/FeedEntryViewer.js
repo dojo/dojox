@@ -206,7 +206,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//
 		if(entry.title && entry.title.value && entry.title.value !== null){
 			var _nlsResources = i18nViewer;
-			var titleHeader = new widget.EntryHeader({title: _nlsResources.title});
+			var titleHeader = new EntryHeader({title: _nlsResources.title});
 			titleHeaderNode.appendChild(titleHeader.domNode);
 		}
 	},
@@ -251,7 +251,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		The Feed Entry to work with.
 		if(entry.authors && entry.authors.length > 0){
 			var _nlsResources = i18nViewer;
-			var authorHeader = new widget.EntryHeader({title: _nlsResources.authors});
+			var authorHeader = new EntryHeader({title: _nlsResources.authors});
 			authorHeaderNode.appendChild(authorHeader.domNode);
 		}
 	},
@@ -307,7 +307,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		The Feed Entry to work with.
 		if(entry.contributors && entry.contributors.length > 0){
 			var _nlsResources = i18nViewer;
-			var contributorHeader = new widget.EntryHeader({title: _nlsResources.contributors});
+			var contributorHeader = new EntryHeader({title: _nlsResources.contributors});
 			contributorsHeaderNode.appendChild(contributorHeader.domNode);
 		}
 	},
@@ -351,7 +351,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		The Feed Entry to work with.
 		if(entry.id && entry.id !== null){
 			var _nlsResources = i18nViewer;
-			var idHeader = new widget.EntryHeader({title: _nlsResources.id});
+			var idHeader = new EntryHeader({title: _nlsResources.id});
 			idHeaderNode.appendChild(idHeader.domNode);
 		}
 	},
@@ -390,7 +390,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		The Feed Entry to work with.
 		if(entry.updated && entry.updated !== null){
 			var _nlsResources = i18nViewer;
-			var updatedHeader = new widget.EntryHeader({title: _nlsResources.updated});
+			var updatedHeader = new EntryHeader({title: _nlsResources.updated});
 			updatedHeaderNode.appendChild(updatedHeader.domNode);
 		}
 	},
@@ -428,7 +428,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		The Feed Entry to work with.
 		if(entry.summary && entry.summary.value && entry.summary.value !== null){
 			var _nlsResources = i18nViewer;
-			var summaryHeader = new widget.EntryHeader({title: _nlsResources.summary});
+			var summaryHeader = new EntryHeader({title: _nlsResources.summary});
 			summaryHeaderNode.appendChild(summaryHeader.domNode);
 		}
 	},
@@ -469,7 +469,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		The Feed Entry to work with.
 		if(entry.content && entry.content.value && entry.content.value !== null){
 			var _nlsResources = i18nViewer;
-			var contentHeader = new widget.EntryHeader({title: _nlsResources.content});
+			var contentHeader = new EntryHeader({title: _nlsResources.content});
 			contentHeaderNode.appendChild(contentHeader.domNode);
 		}
 	},
@@ -756,7 +756,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 	}
 });
 
-declare("dojox.atom.widget.EntryHeader", [_Widget, _Templated, _Container],{
+var EntryHeader = FeedEntryViewer.EntryHeader = declare("dojox.atom.widget.EntryHeader", [_Widget, _Templated, _Container],{
 	// summary:
 	//		Widget representing a header in a FeedEntryViewer/Editor
 	// description:

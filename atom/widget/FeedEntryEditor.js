@@ -81,7 +81,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		}else{
 			leaveMenuState = true;
 		}
-		widget.FeedEntryEditor.superclass.setEntry.call(this, entry, feed);
+		FeedEntryEditor.superclass.setEntry.call(this, entry, feed);
 		this._editable = this._isEditable(entry);
 		if(!leaveMenuState && !this._editable){
 			domStyle.set(this.entryEditButton, 'display', 'none');
@@ -131,7 +131,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 			entrySelectionEvent.entry && entrySelectionEvent.entry == this._entry){
 				domStyle.set(this.entryEditButton, 'display', 'none');
 		}
-		widget.FeedEntryEditor.superclass._handleEvent.call(this, entrySelectionEvent);
+		FeedEntryEditor.superclass._handleEvent.call(this, entrySelectionEvent);
 	},
 
 	_isEditable: function(/*object*/entry){
@@ -175,7 +175,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		//		The Feed Entry to work with.
 		//
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setTitle.call(this, titleAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setTitle.call(this, titleAnchorNode, editMode, entry);
 			if(entry.title && entry.title.value && entry.title.value !== null){
 				this.setFieldValidity("title", true);
 			}
@@ -209,7 +209,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// entry:
 		// 		The Feed Entry to work with.
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setAuthors.call(this, authorsAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setAuthors.call(this, authorsAnchorNode, editMode, entry);
 			if(entry.authors && entry.authors.length > 0){
 				this.setFieldValidity("authors", true);
 			}
@@ -236,7 +236,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// entry:
 		//		The Feed Entry to work with.
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setContributors.call(this, contributorsAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setContributors.call(this, contributorsAnchorNode, editMode, entry);
 			if(entry.contributors && entry.contributors.length > 0){
 				this.setFieldValidity("contributors", true);
 			}
@@ -263,7 +263,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// entry:
 		//		The Feed Entry to work with.
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setId.call(this, idAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setId.call(this, idAnchorNode, editMode, entry);
 			if(entry.id && entry.id !== null){
 				this.setFieldValidity("id", true);
 			}
@@ -289,7 +289,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// entry:
 		//		The Feed Entry to work with.
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setUpdated.call(this, updatedAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setUpdated.call(this, updatedAnchorNode, editMode, entry);
 			if(entry.updated && entry.updated !== null){
 				this.setFieldValidity("updated", true);
 			}
@@ -316,7 +316,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// entry:
 		//		The Feed Entry to work with.
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setSummary.call(this, summaryAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setSummary.call(this, summaryAnchorNode, editMode, entry);
 			if(entry.summary && entry.summary.value && entry.summary.value !== null){
 				this.setFieldValidity("summary", true);
 			}
@@ -350,7 +350,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// 	entry:
 		//		The Feed Entry to work with.
 		if(!editMode){
-			widget.FeedEntryEditor.superclass.setContent.call(this, contentAnchorNode, editMode, entry);
+			FeedEntryEditor.superclass.setContent.call(this, contentAnchorNode, editMode, entry);
 			if(entry.content && entry.content.value && entry.content.value !== null){
 				this.setFieldValidity("content",true);
 			}
@@ -557,7 +557,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		// returns: A new People Editor object.
 		var viewNode = document.createElement("div");
 		anchorNode.appendChild(viewNode);
-		return new widget.PeopleEditor(node,viewNode);
+		return new PeopleEditor(node,viewNode);
 	},
 
 	saveEdits: function(){
@@ -808,7 +808,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		//		Clears the editor, destorys all editors, leaving the editor completely clear
 		this._editable=false;
 		this.clearEditors();
-		widget.FeedEntryEditor.superclass.clear.apply(this);
+		FeedEntryEditor.superclass.clear.apply(this);
 		if(this._contentEditor){
 			// Note that the superclass clear destroys the widget since it's in the child widget list,
 			// so this is just ref clearing.
@@ -916,44 +916,44 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		
 		var _nlsResources = i18nViewer;
 		// Create all headers and editors.
-		var titleHeader = new widget.EntryHeader({title: _nlsResources.title});
+		var titleHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.title});
 		this.entryTitleHeader.appendChild(titleHeader.domNode);
 		
 		this._editors.title = this._createEditor(this.entryTitleNode, null);
 		this.setFieldValidity("title",true);
 		
-		var authorHeader = new widget.EntryHeader({title: _nlsResources.authors});
+		var authorHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.authors});
 		this.entryAuthorHeader.appendChild(authorHeader.domNode);
 
 		this._editors.authors = this._createPeopleEditor(this.entryAuthorNode, {name: "Author"});
 		this.setFieldValidity("authors", true);
 		
-		var contributorHeader = new widget.EntryHeader({title: _nlsResources.contributors});
+		var contributorHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.contributors});
 		this.entryContributorHeader.appendChild(contributorHeader.domNode);
 
 		this._editors.contributors = this._createPeopleEditor(this.entryContributorNode, {name: "Contributor"});
 		this.setFieldValidity("contributors", true);
 		
-		var idHeader = new widget.EntryHeader({title: _nlsResources.id});
+		var idHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.id});
 		this.entryIdHeader.appendChild(idHeader.domNode);
 		
 		this._editors.id = this._createEditor(this.entryIdNode, null);
 		this.setFieldValidity("id",true);
 
-		var updatedHeader = new widget.EntryHeader({title: _nlsResources.updated});
+		var updatedHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.updated});
 		this.entryUpdatedHeader.appendChild(updatedHeader.domNode);
 		
 		this._editors.updated = this._createEditor(this.entryUpdatedNode, null);
 		this.setFieldValidity("updated",true);
 
-		var summaryHeader = new widget.EntryHeader({title: _nlsResources.summary});
+		var summaryHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.summary});
 		this.entrySummaryHeader.appendChild(summaryHeader.domNode);
 		
 		this._editors.summary = this._createEditor(this.entrySummaryNode, null, true);
 		this.setFieldValidity("summaryedit",true);
 		this.setFieldValidity("summary",true);
 
-		var contentHeader = new widget.EntryHeader({title: _nlsResources.content});
+		var contentHeader = new FeedEntryViewer.EntryHeader({title: _nlsResources.content});
 		this.entryContentHeader.appendChild(contentHeader.domNode);
 		
 		this._editors.content = this._createEditor(this.entryContentNode, null, true);
@@ -984,7 +984,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 			domStyle.set(this.entryTitleSelect, 'display', '');
 		}
 		// Call super's _displaySections.
-		widget.FeedEntryEditor.superclass._displaySections.apply(this);
+		FeedEntryEditor.superclass._displaySections.apply(this);
 		
 		// If we have editors to load after the nodes are created on the page, execute those now.
 		if(this._toLoad){
@@ -1003,7 +1003,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 	}
 });
 
-var PeopleEditor = dojo.declare("dojox.atom.widget.PeopleEditor", [_Widget, _Templated, _Container],{
+var PeopleEditor = declare("dojox.atom.widget.PeopleEditor", [_Widget, _Templated, _Container],{
 		// summary:
 		//		An editor for dojox.atom.io.model.Person objects.
 		// description:

@@ -612,7 +612,7 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	}
 });
 
-var FeedViewerEntry = declare("dojox.atom.widget.FeedViewerEntry", [_Widget, _Templated],{
+var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.FeedViewerEntry", [_Widget, _Templated],{
 	// summary:
 	//		Widget for handling the display of an entry and specific events associated with it.
 	//		description: Widget for handling the display of an entry and specific events associated with it.
@@ -715,7 +715,7 @@ var FeedViewerEntry = declare("dojox.atom.widget.FeedViewerEntry", [_Widget, _Te
 	}
 });
 
-var FeedViewerGrouping = declare("dojox.atom.widget.FeedViewerGrouping", [_Widget, _Templated],{
+var FeedViewerGrouping = FeedViewer.FeedViewerGrouping = declare("dojox.atom.widget.FeedViewerGrouping", [_Widget, _Templated],{
 	// summary:
 	//		Grouping of feed entries.
 	// description:
