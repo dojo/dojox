@@ -30,25 +30,22 @@
 	dojo = {doc:document, global:window};
 	dojox = {mobile:{}};
 
+	var ua = navigator.userAgent, android = parseFloat(ua.split("Android ")[1]) || undefined;
+	var cache = {
+		webkit: ua.indexOf("WebKit") != -1,
+		android: android,
+		iphone: ua.match(/(iPhone|iPod|iPad)/),
+		ie: parseFloat(ua.split("MSIE ")[1]) || undefined,
+		touch: (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
+			navigator.appVersion.indexOf("Mobile") != -1) || !!android
+	};
+
 	dojo.has = function(name){
-		var ua = navigator.userAgent;
-		if(name === "webkit"){
-			return ua.indexOf("WebKit") != -1;
-		}
-		if(name === "android"){
-			return parseFloat(ua.split("Android ")[1]) || undefined;
-		}
-		if(name === "iphone"){
-			return ua.match(/(iPhone|iPod|iPad)/);
-		}
-		if(name === "ie"){
-			return parseFloat(ua.split("MSIE ")[1]) || undefined;
-		}
-		if(name === "touch"){
-			return (typeof dojo.doc.documentElement.ontouchstart != "undefined" &&
-				navigator.appVersion.indexOf("Mobile") != -1) || !!dojo.has("android");
-		}
-		return null;
+		return typeof cache[name] == "function" ? (cache[name] = cache[name]()) : cache[name]; // Boolean
+	};
+	dojo.has.add = function(name, test, now, force){
+		(typeof cache[name]=="undefined" || force) && (cache[name]= test);
+		return now && has(name);
 	};
 
 	dojo.stopEvent = function(evt){
@@ -130,7 +127,13 @@
 				stop: dojo.stopEvent
 			},
 			{ // lang
-				getObject: function(){ return dojox.mobile; }
+				getObject: function(){ return dojox.mobile; },
+				setObject: function(name, val){ return dojox.mobile.scrollable = val; },
+				extend: function(Cls, hash){
+					for(var key in hash){
+						Cls.prototype[key] = hash[key];
+					}
+				}
 			},
 			dojo, // win
 			{ // domClass

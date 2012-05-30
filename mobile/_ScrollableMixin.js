@@ -14,14 +14,7 @@ define([
 	// summary:
 	//		Mixin for widgets to have a touch scrolling capability.
 
-	var cls = declare("dojox.mobile._ScrollableMixin", null, {
-		// summary:
-		//		Mixin for widgets to have a touch scrolling capability.
-		// description:
-		//		Actual implementation is in scrollable.js.
-		//		scrollable.js is not a dojo class, but just a collection
-		//		of functions. This module makes scrollable.js a dojo class.
-
+	var cls = declare("dojox.mobile._ScrollableMixin", Scrollable, {
 		// fixedHeader: String
 		//		Id of the fixed header.
 		fixedHeader: "",
@@ -131,6 +124,5 @@ define([
 			return null;
 		}
 	});
-	lang.extend(cls, new Scrollable(dojo, dojox));
 	return cls;
 });

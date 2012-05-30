@@ -68,7 +68,7 @@ define([
 
 		postCreate: function(){
 			this.inherited(arguments);
-			this.scrollable = new Scrollable(dojo, dojox);
+			this.scrollable = new Scrollable();
 			this.scrollable.resize = function(){}; // resize changes the height rudely
 		}
 	});

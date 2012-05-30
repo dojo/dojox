@@ -16,10 +16,7 @@ define([
 	// summary:
 	//		A slot of a SpinWheel.
 
-	var cls = declare("", null, {});
-	lang.extend(cls, new Scrollable(dojo, dojox));
-
-	return declare("dojox.mobile.SpinWheelSlot", [WidgetBase, Contained, cls], {
+	return declare("dojox.mobile.SpinWheelSlot", [WidgetBase, Contained, Scrollable], {
 		// summary:
 		//		A slot of a SpinWheel.
 		// description:
