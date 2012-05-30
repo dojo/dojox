@@ -1,14 +1,14 @@
 define([
-	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"./_PickerChooser!TimePicker"
-], function(declare, TimePicker){
+], function(lang, TimePicker){
 
 	// module:
 	//		dojox/mobile/TimePicker
 	// summary:
 	//		A wrapper widget around SpinWheelTimePicker or ValuePickerTimePicker.
-	//		Returns a wrapper class derived from ValuePickerTimePicker when the current theme is "android".
-	//		Returns a wrapper class derived from SpinWheelTimePicker otherwise.
+	//		Returns ValuePickerTimePicker when the current theme is "android".
+	//		Returns SpinWheelTimePicker otherwise.
 
-	return declare("dojox.mobile.TimePicker", [TimePicker]);
+	return lang.setObject("dojox.mobile.TimePicker", TimePicker);
 });
