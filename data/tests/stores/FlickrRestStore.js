@@ -4,10 +4,10 @@ dojo.require("dojo.data.api.Read");
 
 
 dojox.data.tests.stores.FlickrRestStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
-}
+};
 
 doh.register("dojox.data.tests.stores.FlickrRestStore",
 	[

@@ -171,7 +171,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 	getLabelAttributes: function(/* jsx3.xml.Entity */ item){
 		// summary:
 		//		returns an array of what properties of the item that were used
-		//      to generate its label
+		//		to generate its label
 		//		See dojo.data.api.Read.getLabelAttributes()
 
 		if(this.label !== ""){
@@ -407,8 +407,8 @@ dojo.declare("dojox.data.CdfStore", null, {
 	},
 
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
-		 // summary:
-		 //		See dojo.data.api.Read.close()
+		// summary:
+		//		See dojo.data.api.Read.close()
 	},
 
 /* dojo.data.api.Write */

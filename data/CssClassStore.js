@@ -133,8 +133,8 @@ return declare("dojox.data.CssClassStore", CssRuleStore, {
 	},
 
 	getIdentityAttributes: function(/* item */ item){
-		 // summary:
-		 //		See dojo.data.api.Identity.getIdentityAttributes()
+		// summary:
+		//		See dojo.data.api.Identity.getIdentityAttributes()
 		this._assertIsItem(item);
 		return [this._idAttribute];
 	},

@@ -88,7 +88,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 	
 	_assertIsItem: function(/* item */ item){
 		// summary:
-		//      This function tests whether the item passed in is indeed an item in the store.
+		//		This function tests whether the item passed in is indeed an item in the store.
 		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
@@ -98,7 +98,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	_assertIsAttribute: function(/* String */ attribute){
 		// summary:
-		//      This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
+		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
 		// attribute:
 		//		The attribute to test for being contained by the store.
 		// returns:
@@ -118,7 +118,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 						/* attribute-name-string */ attribute,
 						/* value? */ defaultValue){
 		// summary:
-		//      See dojo.data.api.Read.getValue()
+		//		See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		return (values.length > 0)?values[0]:defaultValue; //Object || int || Boolean
 	},
@@ -384,11 +384,11 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 	},
 
 	getIdentityAttributes: function(/* item */ item){
-		 // summary:
-		 //		See dojo.data.api.Identity.getIdentityAttributes()
-		 
-		 //Identity isn't taken from a public attribute.
-		 return null;
+		// summary:
+		//		See dojo.data.api.Identity.getIdentityAttributes()
+
+		//Identity isn't taken from a public attribute.
+		return null;
 	},
 
 	fetchItemByIdentity: function(keywordArgs){

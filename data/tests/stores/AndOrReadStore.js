@@ -24,7 +24,7 @@ dojo.declare("dojox.data.tests.Wrapper", null, {
 	},
 
 	toString: function(){
-		 return "WRAPPER: [" + this._wrapped + "]";
+		return "WRAPPER: [" + this._wrapped + "]";
 	}
 });
 
@@ -153,7 +153,7 @@ dojox.data.tests.stores.AndOrReadStore.getTestData = function(name){
 							{ count: 10,   value: false  },
 							{ count: 11,   value: [false, false]},
 							{ count: "12", value: [false, "true"]}
-					   ]
+						]
 					}
 				};
 	}else if (name === "countries_references"){

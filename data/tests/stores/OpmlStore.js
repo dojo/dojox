@@ -4,9 +4,9 @@ dojo.require("dojo.data.api.Read");
 dojo.require("dojo.data.api.Identity");
 
 dojox.data.tests.stores.OpmlStore.getDatasource = function(filepath){
-	//  summary:
+	// summary:
 	//		A simple helper function for getting the sample data used in each of the tests.
-	//  description:
+	// description:
 	//		A simple helper function for getting the sample data used in each of the tests.
 	
 	var dataSource = {};
@@ -128,10 +128,10 @@ dojox.data.tests.stores.OpmlStore.getDatasource = function(filepath){
 		dataSource.data = opmlData;
 	}
 	return dataSource; //Object
-}
+};
 
 dojox.data.tests.stores.OpmlStore.verifyItems = function(opmlStore, items, attribute, compareArray){
-	//  summary:
+	// summary:
 	//		A helper function for validating that the items array is ordered
 	//		the same as the compareArray
 	if(items.length != compareArray.length){ return false; }
@@ -141,13 +141,13 @@ dojox.data.tests.stores.OpmlStore.verifyItems = function(opmlStore, items, attri
 		}
 	}
 	return true; //Boolean
-}
+};
 
 dojox.data.tests.stores.OpmlStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
-}
+};
 
 doh.register("dojox.data.tests.stores.OpmlStore",
 	[

@@ -153,9 +153,9 @@ var SearchStore = declare("dojox.data.GoogleSearchStore",null,{
 	},
 
 	isItemLoaded: function(item){
-		 // summary:
-		 //		See dojo.data.api.Read.isItemLoaded()
-		 return this.isItem(item);
+		// summary:
+		//		See dojo.data.api.Read.isItemLoaded()
+		return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
@@ -596,7 +596,7 @@ var NewsSearchStore = declare("dojox.data.GoogleNewsSearchStore", SearchStore,{
 });
 
 var BookSearchStore = declare("dojox.data.GoogleBookSearchStore", SearchStore,{
-	// 	summary:
+	// summary:
 	//		A data store for retrieving search results from Google.
 	//		The following attributes are supported on each item:
 	//		<ul>

@@ -4,7 +4,7 @@ dojo.require("dojox.data.ItemExplorer");
 dojo.require("dijit.layout.BorderContainer");
 dojo.require("dijit.layout.ContentPane");
 
-declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
+dojo.declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 	constructor: function(options){
 		dojo.mixin(this, options);
 	},
@@ -173,8 +173,8 @@ declare("dojox.data.StoreExplorer", dijit.layout.BorderContainer, {
 			var retValue = defaultOnComplete.apply(this, arguments);
 
 		}
- 		grid.setStore(store);
- 		this.queryOptions = {cache:true};
+		grid.setStore(store);
+		this.queryOptions = {cache:true};
 		this.tree.setStore(store);
 	},
 	createNew: function(){

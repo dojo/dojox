@@ -63,9 +63,9 @@ dojo.declare("dojox.data.QueryReadStore",
 		// This will contain the items we have loaded from the server.
 		// The contents of this array is optimized to satisfy all read-api requirements
 		// and for using lesser storage, so the keys and their content need some explaination:
-		// 		this._items[0].i - the item itself
+		//		this._items[0].i - the item itself
 		//		this._items[0].r - a reference to the store, so we can identify the item
-		//			securly. We set this reference right after receiving the item from the
+		//			securely. We set this reference right after receiving the item from the
 		//			server.
 		_items:[],
 		
@@ -334,8 +334,8 @@ dojo.declare("dojox.data.QueryReadStore",
 		
 		_fetchItems: function(request, fetchHandler, errorHandler){
 			// summary:
-			// 		The request contains the data as defined in the Read-API.
-			// 		Additionally there is following keyword "serverQuery".
+			//		The request contains the data as defined in the Read-API.
+			//		Additionally there is following keyword "serverQuery".
 			//
 			//		The *serverQuery* parameter, optional.
 			//			This parameter contains the data that will be sent to the server.
@@ -350,7 +350,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			//			  does it, it compares if the query has changed
 			//			- request.query is required by the Read-API
 			//
-			// 		I.e. the following examples might be sent via GET:
+			//		I.e. the following examples might be sent via GET:
 			//		  fetch({query:{name:"abc"}, queryOptions:{ignoreCase:true}})
 			//		  the URL will become:   /url.php?name=abc
 			//

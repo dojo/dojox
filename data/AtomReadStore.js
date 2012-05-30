@@ -122,7 +122,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 	getAttributes: function(/* item */ item){
 		// summary:
 		//		Return an array of attribute names
-		// 	description:
+		// description:
 		//		'item' must be have been created by the AtomReadStore instance.
 		//		tag names of child elements and XML attribute names of attributes
 		//		specified to the element are returned along with special attribute
@@ -186,7 +186,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		//		Check whether the object is an item (XML element)
 		// item:
 		//		An object to check
-		// 	returns:
+		// returns:
 		//		True if the object is an XML element, otherwise false
 		if(something && something.element && something.store && something.store === this){
 			return true; //boolean
@@ -415,8 +415,8 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 	},
 
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
-		 // summary:
-		 //		See dojo.data.api.Read.close()
+		// summary:
+		//		See dojo.data.api.Read.close()
 	},
 
 /* internal API */

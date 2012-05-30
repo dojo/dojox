@@ -3,10 +3,10 @@ dojo.require("dojox.data.ClientFilter");
 dojo.require("dojox.data.JsonQueryRestStore");
 
 dojox.data.tests.stores.JsonQueryRestStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
-}
+};
 testService = function(query){
 	lastQuery = query;
 	var deferred = new dojo.Deferred();

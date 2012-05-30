@@ -9,28 +9,28 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//		JsonRestStore is a Dojo Data store interface to JSON HTTP/REST web
 			//		storage services that support read and write through GET, PUT, POST, and DELETE.
 			// options:
-			// 		Keyword arguments
+			//		Keyword arguments
 			//
 			//		The *schema* parameter
 			//			This is a schema object for this store. This should be JSON Schema format.
 			//
 			//		The *service* parameter
-			// 			This is the service object that is used to retrieve lazy data and save results
-			// 			The function should be directly callable with a single parameter of an object id to be loaded
-			// 			The function should also have the following methods:
-			// 				- put(id,value) - puts the value at the given id
-			// 				- post(id,value) - posts (appends) the value at the given id
-			// 				- delete(id) - deletes the value corresponding to the given id
+			//			This is the service object that is used to retrieve lazy data and save results
+			//			The function should be directly callable with a single parameter of an object id to be loaded
+			//			The function should also have the following methods:
+			//				- put(id,value) - puts the value at the given id
+			//				- post(id,value) - posts (appends) the value at the given id
+			//				- delete(id) - deletes the value corresponding to the given id
 			//			Note that it is critical that the service parses responses as JSON.
 			//			If you are using dojox.rpc.Service, the easiest way to make sure this
-			// 			happens is to make the responses have a content type of
-			// 			application/json. If you are creating your own service, make sure you
+			//			happens is to make the responses have a content type of
+			//			application/json. If you are creating your own service, make sure you
 			//			use handleAs: "json" with your XHR requests.
 			//
 			//		The *target* parameter
-			// 			This is the target URL for this Service store. This may be used in place
-			// 			of a service parameter to connect directly to RESTful URL without
-			// 			using a dojox.rpc.Service object.
+			//			This is the target URL for this Service store. This may be used in place
+			//			of a service parameter to connect directly to RESTful URL without
+			//			using a dojox.rpc.Service object.
 			//
 			//		The *idAttribute* parameter
 			//			Defaults to 'id'. The name of the attribute that holds an objects id.
@@ -45,31 +45,31 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//			callbacks are unnecessary
 			// description:
 			//		The JsonRestStore will cause all saved modifications to be sent to the server using Rest commands (PUT, POST, or DELETE).
-			// 		When using a Rest store on a public network, it is important to implement proper security measures to
+			//		When using a Rest store on a public network, it is important to implement proper security measures to
 			//		control access to resources.
 			//		On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.
 			//		GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a
-			// 			query (like /table/?name=foo).
+			//			query (like /table/?name=foo).
 			//		PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will
-			// 			provide the modified object
+			//			provide the modified object
 			//		POST - This should create a new object. The URL will correspond to the target store (like /table/)
-			// 			and the body should be the properties of the new object. The server's response should include a
-			// 			Location header that indicates the id of the newly created object. This id will be used for subsequent
-			// 			PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
+			//			and the body should be the properties of the new object. The server's response should include a
+			//			Location header that indicates the id of the newly created object. This id will be used for subsequent
+			//			PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
 			//			the temporary randomly generated id used by client, and this location is used for subsequent
-			// 			PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior
-			// 			to receiving a response from the server.
-			// 		DELETE - This should delete an object by id.
-			// 		These articles include more detailed information on using the JsonRestStore:
+			//			PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior
+			//			to receiving a response from the server.
+			//		DELETE - This should delete an object by id.
+			//		These articles include more detailed information on using the JsonRestStore:
 			//		http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/
 			//		http://blog.medryx.org/2008/07/24/jsonreststore-overview/
 			// example:
-			// 		A JsonRestStore takes a REST service or a URL and uses it the remote communication for a
-			// 		read/write dojo.data implementation. A JsonRestStore can be created with a simple URL like:
-			// 	|	new JsonRestStore({target:"/MyData/"});
+			//		A JsonRestStore takes a REST service or a URL and uses it the remote communication for a
+			//		read/write dojo.data implementation. A JsonRestStore can be created with a simple URL like:
+			//	|	new JsonRestStore({target:"/MyData/"});
 			// example:
-			// 		To use a JsonRestStore with a service, you should create a
-			// 		service with a REST transport. This can be configured with an SMD:
+			//		To use a JsonRestStore with a service, you should create a
+			//		service with a REST transport. This can be configured with an SMD:
 			//	|	{
 			//	|		services: {
 			//	|			jsonRestStore: {
@@ -83,14 +83,14 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//	|			}
 			//	|		}
 			//	|	}
-			// 		The SMD can then be used to create service, and the service can be passed to a JsonRestStore. For example:
+			//		The SMD can then be used to create service, and the service can be passed to a JsonRestStore. For example:
 			//	|	var myServices = new dojox.rpc.Service(dojo.moduleUrl("dojox.rpc.tests.resources", "test.smd"));
 			//	|	var jsonStore = new dojox.data.JsonRestStore({service:myServices.jsonRestStore});
 			// example:
 			//		The JsonRestStore also supports lazy loading. References can be made to objects that have not been loaded.
 			//		For example if a service returned:
 			//	|	{"name":"Example","lazyLoadedObject":{"$ref":"obj2"}}
-			// 		And this object has accessed using the dojo.data API:
+			//		And this object has accessed using the dojo.data API:
 			//	|	var obj = jsonStore.getValue(myObject,"lazyLoadedObject");
 			//		The object would automatically be requested from the server (with an object id of "obj2").
 
@@ -138,9 +138,9 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 		referenceIntegrity: true,
 		target:"",
 		// summary:
-		// 		Allow no trailing slash on target paths. This is generally discouraged since
-		// 		it creates prevents simple scalar values from being used a relative URLs.
-		// 		Disabled by default.
+		//		Allow no trailing slash on target paths. This is generally discouraged since
+		//		it creates prevents simple scalar values from being used a relative URLs.
+		//		Disabled by default.
 		allowNoTrailingSlash: false,
 		//Write API Support
 		newItem: function(data, parentInfo){
@@ -241,7 +241,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 		},
 		cancelChanging : function(object){
 			// summary:
-			// 		Removes an object from the list of dirty objects
+			//		Removes an object from the list of dirty objects
 			//		This will prevent that object from being saved to the server on the next save
 			// object:
 			//		The item to cancel changes on
@@ -306,18 +306,18 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//	kwArgs:
 			//		global:
 			//			This will cause the save to commit the dirty data for all
-			// 			JsonRestStores as a single transaction.
+			//			JsonRestStores as a single transaction.
 			//		revertOnError:
 			//			This will cause the changes to be reverted if there is an
 			//			error on the save. By default a revert is executed unless
 			//			a value of false is provide for this parameter.
 			//		incrementalUpdates:
 			//			For items that have been updated, if this is enabled, the server will be sent a POST request
-			// 			with a JSON object containing the changed properties. By default this is
-			// 			not enabled, and a PUT is used to deliver an update, and will include a full
-			// 			serialization of all the properties of the item/object.
+			//			with a JSON object containing the changed properties. By default this is
+			//			not enabled, and a PUT is used to deliver an update, and will include a full
+			//			serialization of all the properties of the item/object.
 			//			If this is true, the POST request body will consist of a JSON object with
-			// 			only the changed properties. The incrementalUpdates parameter may also
+			//			only the changed properties. The incrementalUpdates parameter may also
 			//			be a function, in which case it will be called with the updated and previous objects
 			//			and an object update representation can be returned.
 			//		alwaysPostNewItems:
@@ -345,7 +345,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//	kwArgs:
 			//		global:
 			//			This will cause the revert to undo all the changes for all
-			// 			JsonRestStores in a single operation.
+			//			JsonRestStores in a single operation.
 			rpcJsonRest.revert(kwArgs && kwArgs.global && this.service);
 		},
 
@@ -404,7 +404,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 
 		getConstructor: function(){
 			// summary:
-			// 		Gets the constructor for objects from this store
+			//		Gets the constructor for objects from this store
 			return this._constructor;
 		},
 		getIdentity: function(item){
@@ -432,11 +432,11 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 
 		onSet: function(){},
 		onNew: function(){},
-		onDelete: 	function(){},
+		onDelete: function(){},
 
 		getFeatures: function(){
 			// summary:
-			// 		return the store feature set
+			//		return the store feature set
 			var features = this.inherited(arguments);
 			features["dojo.data.api.Write"] = true;
 			features["dojo.data.api.Notification"] = true;
@@ -463,7 +463,7 @@ JsonRestStore.getStore = function(options, Class){
 	//		See the JsonRestStore constructor
 	// Class:
 	//		Constructor to use (for creating stores from JsonRestStore subclasses).
-	// 		This is optional and defaults to JsonRestStore.
+	//		This is optional and defaults to JsonRestStore.
 	if(typeof options.target == 'string'){
 		options.target = options.target.match(/\/$/) || options.allowNoTrailingSlash ?
 				options.target : (options.target + '/');

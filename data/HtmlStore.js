@@ -101,7 +101,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 	urlPreventCache: false,
 	
 	// fetchOnCreate: [public] boolean
-	// 		Flag to denote if it should try to load from a data id (nested in the page)
+	//		Flag to denote if it should try to load from a data id (nested in the page)
 	//		The moment the store is created, instead of waiting for first
 	//		fetch call.
 	fetchOnCreate: false,
@@ -135,7 +135,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 		// summary:
 		//		Function to load the attribute names from the table header so that the
 		//		attributes (cells in a row), can have a reasonable name.
-		//      For list items, returns single implicit heading, ["name"]
+		//		For list items, returns single implicit heading, ["name"]
 		this._headings = [];
 		if(this._rootNode.tHead){
 			array.forEach(this._rootNode.tHead.rows[0].cells, lang.hitch(this, function(th){
@@ -168,7 +168,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 	
 	_assertIsItem: function(/* item */ item){
 		// summary:
-		//      This function tests whether the item passed in is indeed an item in the store.
+		//		This function tests whether the item passed in is indeed an item in the store.
 		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
@@ -178,7 +178,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 
 	_assertIsAttribute: function(/* String */ attribute){
 		// summary:
-		//      This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
+		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
 		// attribute:
 		//		The attribute to test for being contained by the store.
 		// returns:
@@ -198,7 +198,7 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 						/* attribute-name-string */ attribute,
 						/* value? */ defaultValue){
 		// summary:
-		//      See dojo.data.api.Read.getValue()
+		//		See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		return (values.length > 0)?values[0]:defaultValue; //Object || int || Boolean
 	},
@@ -461,18 +461,18 @@ var HtmlStore = declare("dojox.data.HtmlStore", null, {
 		//		See dojo.data.api.Identity.getIdentity()
 		this._assertIsItem(item);
 		if(this.hasAttribute(item, "name")){
-		 	return this.getValue(item,"name");
+			return this.getValue(item,"name");
 		}else{
 			return item._ident;
 		}
 	},
 
 	getIdentityAttributes: function(/* item */ item){
-		 // summary:
-		 //		See dojo.data.api.Identity.getIdentityAttributes()
-		 
-		 //Identity isn't taken from a public attribute.
-		 return null;
+		// summary:
+		//		See dojo.data.api.Identity.getIdentityAttributes()
+
+		//Identity isn't taken from a public attribute.
+		return null;
 	},
 
 	fetchItemByIdentity: function(keywordArgs){

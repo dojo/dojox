@@ -7,8 +7,9 @@ dojox.data.tests.stores.GoogleFeedStore.getStore = function(){
 };
 
 dojox.data.tests.stores.GoogleFeedStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
+
 	//console.trace();
 	d.errback(errData);
 };

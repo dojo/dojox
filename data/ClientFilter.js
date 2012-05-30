@@ -66,9 +66,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				// request:
 				//		This object follows the same meaning as the keywordArgs passed to a dojo.data.api.Read.fetch.
 				// description:
-				// 		This will attempt to update the provide result based on previous notification, adding new items
-				// 		from onNew calls, removing deleted items, and updating modified items, and properly removing
-				//  	and adding items as required by the query and sort parameters. This function will return:
+				//		This will attempt to update the provide result based on previous notification, adding new items
+				//		from onNew calls, removing deleted items, and updating modified items, and properly removing
+				//		and adding items as required by the query and sort parameters. This function will return:
 				//		0: Indicates it could not successfully update the result set
 				//		1: Indicates it could successfully handle all the notifications, but no changes were made to the result set
 				//		2: Indicates it successfully handled all the notifications and result set has been updated.
@@ -177,7 +177,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 						fetchCache.push(args);
 					}
 					defResult= args._loading = this._doQuery(args);
-					 
+
 					defResult.addErrback(function(){
 						fetchCache.splice(array.indexOf(fetchCache, args), 1);
 					});

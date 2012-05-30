@@ -5,10 +5,10 @@ dojo.require("dojox.rpc.Rest");
 dojo.require("dojox.data.ServiceStore");
 dojo.require("dojo.data.api.Read");
 dojox.data.tests.stores.ServiceStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
-}
+};
 var testServices = new dojox.rpc.Service(require.toUrl("dojox/rpc/tests/resources/test.smd"));
 var jsonStore = new dojox.data.ServiceStore({service:testServices.jsonRestStore});
 

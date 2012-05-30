@@ -157,7 +157,7 @@ dojo.declare("dojox.data.AppStore",
 						/* attribute-name-string */ attribute,
 						/* value? */ defaultValue){
 		// summary:
-		//      See dojo.data.api.Read.getValue()
+		//		See dojo.data.api.Read.getValue()
 		var values = this.getValues(item, attribute);
 		return (values.length > 0)?values[0]:defaultValue; //Object || int || Boolean
 	},
@@ -407,9 +407,9 @@ dojo.declare("dojox.data.AppStore",
 	},
 
 	getIdentityAttributes: function(/* item */ item){
-		 // summary:
-		 //		See dojo.data.api.Identity.getIdentityAttributes()
-		 return ["id"];
+		// summary:
+		//		See dojo.data.api.Identity.getIdentityAttributes()
+		return ["id"];
 	},
 
 	fetchItemByIdentity: function(keywordArgs){

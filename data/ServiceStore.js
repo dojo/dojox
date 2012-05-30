@@ -23,17 +23,17 @@ return declare("dojox.data.ServiceStore",
 		constructor: function(options){
 			// summary:
 			//		ServiceStore constructor, instantiate a new ServiceStore
-			// 		A ServiceStore can be configured from a JSON Schema. Queries are just
-			// 		passed through to the underlying services
+			//		A ServiceStore can be configured from a JSON Schema. Queries are just
+			//		passed through to the underlying services
 			// options:
-			// 		Keyword arguments
+			//		Keyword arguments
 			//
 			//		The *schema* parameter
 			//			This is a schema object for this store. This should be JSON Schema format.
 			//
 			//		The *service* parameter
-			// 			This is the service object that is used to retrieve lazy data and save results
-			// 			The function should be directly callable with a single parameter of an object id to be loaded
+			//			This is the service object that is used to retrieve lazy data and save results
+			//			The function should be directly callable with a single parameter of an object id to be loaded
 			//
 			//		The *idAttribute* parameter
 			//			Defaults to 'id'. The name of the attribute that holds an objects id.
@@ -43,15 +43,15 @@ return declare("dojox.data.ServiceStore",
 			//			will generate an id for it and add it to the index.
 			//
 			//		The *estimateCountFactor* parameter
-			// 			This parameter is used by the ServiceStore to estimate the total count. When
+			//			This parameter is used by the ServiceStore to estimate the total count. When
 			//			paging is indicated in a fetch and the response includes the full number of items
-			//	 		requested by the fetch's count parameter, then the total count will be estimated
+			//			requested by the fetch's count parameter, then the total count will be estimated
 			//			to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
 			//			does not support paging, and the response is the full set of items, where the
-			// 			total count is equal to the numer of items returned. If the server does support
+			//			total count is equal to the numer of items returned. If the server does support
 			//			paging, an estimateCountFactor of 2 is a good value for estimating the total count
 			//			It is also possible to override _processResults if the server can provide an exact
-			// 			total count.
+			//			total count.
 			//
 			//		The *syncMode* parameter
 			//			Setting this to true will set the store to using synchronous calls by default.
@@ -60,7 +60,7 @@ return declare("dojox.data.ServiceStore",
 			//
 			// description:
 			//		ServiceStore can do client side caching and result set updating if
-			// 		dojox.data.ClientFilter is loaded. Do this add:
+			//		dojox.data.ClientFilter is loaded. Do this add:
 			//	|	dojo.require("dojox.data.ClientFilter")
 			//		prior to loading the ServiceStore (ClientFilter must be loaded before ServiceStore).
 			//		To utilize client side filtering with a subclass, you can break queries into
@@ -68,9 +68,9 @@ return declare("dojox.data.ServiceStore",
 			//		clientFilter property in fetch calls. For example you could override fetch:
 			//	|	fetch: function(args){
 			//	|		// do the sorting and paging on the client side
-	 		//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
-	 		//	|		// args.query will be passed to the service object for the server side handling
-	 		//	|		return this.inherited(arguments);
+			//	|		args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
+			//	|		// args.query will be passed to the service object for the server side handling
+			//	|		return this.inherited(arguments);
 			//	|	}
 			//		When extending this class, if you would like to create lazy objects, you can follow
 			//		the example from dojox.data.tests.stores.ServiceStore:
@@ -174,7 +174,7 @@ return declare("dojox.data.ServiceStore",
 			// item: Object
 
 			// we have no way of determining if it belongs, we just have object returned from
-			// 	service queries
+			// service queries
 			return (typeof item == 'object') && item && !(item instanceof Date);
 		},
 
@@ -187,16 +187,16 @@ return declare("dojox.data.ServiceStore",
 
 		loadItem: function(args){
 			// summary:
-			// 		Loads an item and calls the callback handler. Note, that this will call the callback
-			// 		handler even if the item is loaded. Consequently, you can use loadItem to ensure
-			// 		that an item is loaded is situations when the item may or may not be loaded yet.
-			// 		If you access a value directly through property access, you can use this to load
-			// 		a lazy value as well (doesn't need to be an item).
+			//		Loads an item and calls the callback handler. Note, that this will call the callback
+			//		handler even if the item is loaded. Consequently, you can use loadItem to ensure
+			//		that an item is loaded is situations when the item may or may not be loaded yet.
+			//		If you access a value directly through property access, you can use this to load
+			//		a lazy value as well (doesn't need to be an item).
 			// example:
 			//	|	store.loadItem({
 			//	|		item: item, // this item may or may not be loaded
 			//	|		onItem: function(item){
-			// 	|			// do something with the item
+			//	|			// do something with the item
 			//	|		}
 			//	|	});
 
@@ -263,7 +263,7 @@ return declare("dojox.data.ServiceStore",
 			// args:
 			//		The *queryOptions.cache* parameter
 			//			If true, indicates that the query result should be cached for future use. This is only available
-			// 			if dojox.data.ClientFilter has been loaded before the ServiceStore
+			//			if dojox.data.ClientFilter has been loaded before the ServiceStore
 			//
 			//		The *syncMode* parameter
 			//			Indicates that the call should be fetch synchronously if possible (this is not always possible)
@@ -316,7 +316,7 @@ return declare("dojox.data.ServiceStore",
 		},
 		getFeatures: function(){
 			// summary:
-			// 		return the store feature set
+			//		return the store feature set
 
 			return {
 				"dojo.data.api.Read": true,

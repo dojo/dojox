@@ -26,7 +26,7 @@ return declare("dojox.data.XmlItem", null, {
 	toString: function(){
 		// summary:
 		//		Return a value of the first text child of the element
-		// 	returns:
+		// returns:
 		//		a value of the first text child of the element
 		var str = "";
 		if(this.element){

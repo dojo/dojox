@@ -21,12 +21,12 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 		//						client side fetchItemBIdentity, as it will use an XPath-like
 		//						structure if keyAttribute was not specified.  Recommended to always
 		//						set this, though, for consistent identity behavior.
-		// 		attributeMap:   An anonymous object contains properties for attribute mapping,
+		//		attributeMap:   An anonymous object contains properties for attribute mapping,
 		//						{"tag_name.item_attribute_name": "@xml_attribute_name", ...}
 		//		sendQuery:		A boolean indicate to add a query string to the service URL.
 		//						Default is false.
 		//		urlPreventCache: Parameter to indicate whether or not URL calls should apply
-		//		                 the preventCache option to the xhr request.
+		//						 the preventCache option to the xhr request.
 		if(args){
 			this.url = args.url;
 			this.rootItem = (args.rootItem || args.rootitem || this.rootItem);
@@ -98,7 +98,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 		//		An XML element that holds the attribute
 		// attribute:
 		//		A tag name of a child element, An XML attribute name or one of
-		// 		special names
+		//		special names
 		// defaultValue:
 		//		A default value
 		// returns:
@@ -216,7 +216,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	getAttributes: function(/* item */ item){
 		// summary:
 		//		Return an array of attribute names
-		// 	description:
+		// description:
 		//		'item' must be an instance of a dojox.data.XmlItem from the store instance.
 		//		tag names of child elements and XML attribute names of attributes
 		//		specified to the element are returned along with special attribute
@@ -316,7 +316,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 		//		Check whether the object is an item (XML element)
 		// item:
 		//		An object to check
-		// 	returns:
+		// returns:
 		//		True if the object is an XML element, otherwise false
 		if(something && something.element && something.store && something.store === this){
 			return true; //boolean
@@ -590,7 +590,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	},
 
 	_flattenNodes: function(nodes){
-		// Summary:
+		// summary:
 		//		Function used to flatten a hierarchy of XML nodes into a single list for
 		//		querying over.  Used when deep = true;
 		var flattened = [];
@@ -608,8 +608,8 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	},
 
 	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
-		 // summary:
-		 //		See dojo.data.api.Read.close()
+		// summary:
+		//		See dojo.data.api.Read.close()
 	},
 
 /* dojo.data.api.Write */
@@ -622,7 +622,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 		//		the new	element.
 		//		Other attributes in 'keywordArgs' are set to the new element,
 		//		including "text()", but excluding "childNodes".
-		// 	keywordArgs:
+		// keywordArgs:
 		//		An object containing initial attributes
 		// returns:
 		//		An XML element
@@ -814,9 +814,9 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 		// notify:
 		//		A non-API optional argument, used to indicate if notification API should be called
 		//		or not.
-
 		// returns:
 		//		False for "tagName", otherwise true
+
 		if(attribute === "tagName"){
 			return false; //boolean
 		}
@@ -926,10 +926,10 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	save: function(/* object */ keywordArgs){
 		// summary:
 		//		Save new and/or modified items (XML elements)
-		// 	description:
+		// description:
 		//		'url' is used to save XML documents for new, modified and/or
 		//		deleted XML elements.
-		// 	keywordArgs:
+		// keywordArgs:
 		//		An object for callbacks
 		if(!keywordArgs){
 			keywordArgs = {};
@@ -1068,14 +1068,14 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	_getDeleteUrl: function(item){
 		// summary:
 		//		Generate a URL for delete
-		// 	description:
+		// description:
 		//		This default implementation returns 'url' with 'keyAttribute'
 		//		as a query string.
 		//		Sub-classes may override this method for the custom URL based on
 		//		changes (new, deleted, or modified).
-		// 	item:
+		// item:
 		//		An item to delete
-		// 	returns:
+		// returns:
 		//		A delete URL
 		var url = this.url;
 		if(item && this.keyAttribute !== ""){
@@ -1092,7 +1092,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	_getPostContent: function(item){
 		// summary:
 		//		Generate a content to post
-		// 	description:
+		// description:
 		//		This default implementation generates an XML document for one
 		//		(the first only) new or modified element.
 		//		Sub-classes may override this method for the custom post content
@@ -1107,7 +1107,7 @@ var XmlStore = declare("dojox.data.XmlStore", null, {
 	_getPutContent: function(item){
 		// summary:
 		//		Generate a content to put
-		// 	description:
+		// description:
 		//		This default implementation generates an XML document for one
 		//		(the first only) new or modified element.
 		//		Sub-classes may override this method for the custom put content

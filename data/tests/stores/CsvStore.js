@@ -4,9 +4,9 @@ dojo.require("dojo.data.api.Read");
 dojo.require("dojo.data.api.Identity");
 
 dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
-	//  summary:
+	// summary:
 	//		A simple helper function for getting the sample data used in each of the tests.
-	//  description:
+	// description:
 	//		A simple helper function for getting the sample data used in each of the tests.
 
 	var dataSource = {};
@@ -109,7 +109,7 @@ dojox.data.tests.stores.CsvStore.getDatasource = function(filepath){
 };
 
 dojox.data.tests.stores.CsvStore.verifyItems = function(csvStore, items, attribute, compareArray){
-	//  summary:
+	// summary:
 	//		A helper function for validating that the items array is ordered
 	//		the same as the compareArray
 	if(items.length != compareArray.length){ return false; }
@@ -122,7 +122,7 @@ dojox.data.tests.stores.CsvStore.verifyItems = function(csvStore, items, attribu
 };
 
 dojox.data.tests.stores.CsvStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	for (var i in errData) {
 		console.log(errData[i]);

@@ -13,8 +13,8 @@ return declare("dojox.data.CssRuleStore", null, {
 	//			style:					The actual DOM CSSStyleDeclaration object.
 	//			cssText:				The cssText string provided on the rule object.
 	//			styleSheet:				The originating DOM Stylesheet object.
-	//			parentStyleSheet: 		The parent stylesheet to the sheet this rule originates from.
-	//			parentStyleSheetHref: 	The href of the parent stylesheet.
+	//			parentStyleSheet:		The parent stylesheet to the sheet this rule originates from.
+	//			parentStyleSheetHref:	The href of the parent stylesheet.
 	//		AND every style attribute denoted as style.*, such as style.textAlign or style.backgroundColor
 
 	_storeRef: '_S',
@@ -408,7 +408,7 @@ return declare("dojox.data.CssRuleStore", null, {
 	
 	_assertIsItem: function(/* item */ item){
 		// summary:
-		//      This function tests whether the item passed in is indeed an item in the store.
+		//		This function tests whether the item passed in is indeed an item in the store.
 		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){

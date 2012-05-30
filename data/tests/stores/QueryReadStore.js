@@ -16,7 +16,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 		/*
 		function testDocTests(t) {
 			// summary:
-			// 		Run all the doc comments.
+			//		Run all the doc comments.
 			var doctest = new dojox.testing.DocTest();
 			doctest.run("dojox.data.QueryReadStore");
 			t.assertTrue(doctest.errors.length==0);

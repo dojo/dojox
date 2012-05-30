@@ -6,10 +6,10 @@ dojo.require("dojox.json.schema");
 dojo.require("dojo.data.api.Read");
 
 dojox.data.tests.stores.JsonRestStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
-}
+};
 testServices = new dojox.rpc.Service(require.toUrl("dojox/rpc/tests/resources/test.smd"));
 testServices.jsonRestStore.servicePath = "/jsonRest.Store/"; // this makes the regex more challenging
 jsonStore = new dojox.data.JsonRestStore({service:testServices.jsonRestStore});

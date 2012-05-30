@@ -49,7 +49,7 @@ var KeyValueStore = declare("dojox.data.KeyValueStore", null, {
 	
 	_assertIsItem: function(/* item */ item){
 		// summary:
-		//      This function tests whether the item passed in is indeed an item in the store.
+		//		This function tests whether the item passed in is indeed an item in the store.
 		// item:
 		//		The item to test for being contained by the store.
 		if(!this.isItem(item)){
@@ -59,7 +59,7 @@ var KeyValueStore = declare("dojox.data.KeyValueStore", null, {
 	
 	_assertIsAttribute: function(/* item */ item, /* String */ attribute){
 		// summary:
-		//      This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
+		//		This function tests whether the item passed in is indeed a valid 'attribute' like type for the store.
 		// attribute:
 		//		The attribute to test for being contained by the store.
 		if(!lang.isString(attribute)){
@@ -93,8 +93,8 @@ var KeyValueStore = declare("dojox.data.KeyValueStore", null, {
 						/* attribute-name-string */ attribute){
 		// summary:
 		//		See dojo.data.api.Read.getValues()
-		// 		Key/Value syntax does not support multi-valued attributes, so this is just a
-		// 		wrapper function for getValue().
+		//		Key/Value syntax does not support multi-valued attributes, so this is just a
+		//		wrapper function for getValue().
 		var value = this.getValue(item, attribute);
 		return (value ? [value] : []); //Array
 	},

@@ -7,10 +7,10 @@ dojox.data.tests.stores.SnapLogicStore.pipelineSize = 14;
 dojox.data.tests.stores.SnapLogicStore.attributes = ["empno", "ename", "job", "hiredate", "sal", "comm", "deptno"];
 
 dojox.data.tests.stores.SnapLogicStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
-}
+};
 
 doh.register("dojox.data.tests.stores.SnapLogicStore",
 	[
