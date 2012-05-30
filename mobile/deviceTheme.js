@@ -1,11 +1,4 @@
-var _define;
-if(typeof define === "undefined"){ // assumes dojo.js is not loaded
-	define = _define = function(module, deps, def){
-		((arguments.length === 2) ? arguments[1] : arguments[2])();
-	};
-}
-
-define([
+(typeof define === "undefined" ? function(deps, def) { def(); } : define)([
 	"dojo/_base/config",
 	"dojo/_base/lang",
 	"dojo/_base/window",
@@ -268,8 +261,5 @@ define([
 	}();
 	deviceTheme.loadDeviceTheme();
 	window.deviceTheme = dm.deviceTheme = deviceTheme;
-	if(typeof _define !== "undefined"){
-		define = _define = undefined;
-	}
 	return deviceTheme;
 });
