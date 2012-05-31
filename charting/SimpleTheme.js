@@ -34,8 +34,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//		to be rendered.
 	//
 	//		A note on colors:
-	//		The Theme constructor was on the use of dojox.color.Palette (in general) for creating a visually distinct
-	//		set of colors for usage in a chart.  A palette is usually comprised of 5 different color definitions, and
+	//		A theme palette is usually comprised of 5 different color definitions, and
 	//		no more.  If you have a need to render a chart with more than 5 data elements, you can simply "push"
 	//		new color definitions into the theme's .color array.  Make sure that you do that with the actual
 	//		theme object from a Chart, and not in the theme itself (i.e. either do that before using .setTheme
