@@ -1,5 +1,6 @@
-define(["dojo/_base/lang", "../../util/oo", "../../manager/_registry", "../../stencil/Path"],
-function(lang, oo, registry, StencilPath){
+define(["dojo/_base/lang", "../../util/oo", "../../manager/_registry", "../../stencil/Path",
+	"../../annotations/Arrow", "../../annotations/Label", "../../tools/custom/Vector"],
+function(lang, oo, registry, StencilPath, Arrow, Label, Vector){
 
 var Axes = oo.declare(
 	// summary:
@@ -14,8 +15,8 @@ var Axes = oo.declare(
 	function(options){
 		this.closePath = false;
 
-		this.xArrow = new dojox.drawing.annotations.Arrow({stencil:this, idx1:0, idx2:1});
-		this.yArrow = new dojox.drawing.annotations.Arrow({stencil:this, idx1:2, idx2:1});
+		this.xArrow = new Arrow({stencil:this, idx1:0, idx2:1});
+		this.yArrow = new Arrow({stencil:this, idx1:2, idx2:1});
 		if(options.data){
 			//Allows import of z-axis in non-enabled canvas and xy-axis in
 			//enabled canvas
@@ -39,7 +40,7 @@ var Axes = oo.declare(
 				ops.data.y2 = ops.data.y4;
 			}
 			ops.style.zAxis = true;
-			this.zAxis = new dojox.drawing.tools.custom.Vector(ops);
+			this.zAxis = new Vector(ops);
 			this.zAxis.minimumSize = 5;
 			//console.log("-----constructing axes: ",this.zAxis);
 			this.connectMult([
@@ -100,14 +101,14 @@ var Axes = oo.declare(
 			//
 			// NOTE: Not passing style into text because it's changing it
 			var props = {align:"middle", valign:"middle", util:this.util, annotation:true, container:this.container, mouse:this.mouse, stencil:this};
-			this.labelX = new dojox.drawing.annotations.Label(lang.mixin(props,{
+			this.labelX = new Label(lang.mixin(props,{
 				labelPosition:this.setLabelX
 			}));
-			this.labelY = new dojox.drawing.annotations.Label(lang.mixin(props,{
+			this.labelY = new Label(lang.mixin(props,{
 				labelPosition:this.setLabelY
 			}));
 			if(this.style.zAxisEnabled){
-				this.labelZ = new dojox.drawing.annotations.Label(lang.mixin(props,{
+				this.labelZ = new Label(lang.mixin(props,{
 					labelPosition:this.setLabelZ
 				}));
 			}
