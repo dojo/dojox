@@ -8,7 +8,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 		//		A collection of common methods used for DojoX Drawing.
 		//		This singleton is accessible in most Drawing classes
 		//		as this.util
-		//
+
 		// NOTE:
 		//		A lot of functions use a EventObject
 		//		as an argument. An attempt was made to accept
@@ -25,28 +25,27 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 		//				x: Number,		// end x
 		//				y:Number		// end y
 		//			}
-		//
-		//
-		radToDeg: function(/*Numer*/n){
+
+
+		radToDeg: function(/*Number*/n){
 			// summary:
 			//		Convert the passed number to degrees.
 			return (n*180)/Math.PI;	//	Number
 		},
 		
-		degToRad: function(/*Numer*/n){
+		degToRad: function(/*Number*/n){
 			// summary:
 			//		Convert the passed number to radians.
 			return (n*Math.PI)/180;	// Number
 		},
 		
-		angle: function(/*EventObject*/obj, /* ? Float */snap){
+		angle: function(/*EventObject*/obj, /*Float?*/snap){
 			// summary:
 			//		Return angle based on mouse object
-			// arguments:
-			//		obj: EventObject
-			//			Manager.Mouse event.
-			// 		snap: Float
-			//			Returns nearest angle within snap limits
+			// obj:
+			//		Manager.Mouse event.
+			// snap:
+			//		Returns nearest angle within snap limits
 
 			//obj = this.argsToObj.apply(this, arguments);
 			if(snap){
@@ -80,7 +79,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			// summary:
 			//		Return the length derived from the coordinates
 			//		in the Mouse object.
-			//
+
 			return Math.sqrt(Math.pow(o.start.x-o.x, 2)+Math.pow(o.start.y-o.y, 2));
 		},
 		
@@ -90,7 +89,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			// description:
 			//		x1,y1,x2,y2 represents the Line. 'amt' represents the amount
 			//		to subtract from it.
-			//
+
 			var len = this.distance(this.argsToObj.apply(this, arguments));
 			len = len < amt ? amt : len;
 			var pc = (len-amt)/len;
@@ -104,7 +103,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			//		Attempts to determine in a Mouse Object
 			//		was passed or indiviual numbers. Returns
 			//		an object.
-			//
+
 			var a = arguments;
 			if(a.length < 4){ return a[0]; }
 			return {
@@ -123,7 +122,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			//		Return the length derived from the coordinates
 			//		in the Mouse object. Different from util.length
 			//		in that this always returns an absolute value.
-			//
+
 			var o = this.argsToObj.apply(this, arguments);
 			return Math.abs(Math.sqrt(Math.pow(o.start.x-o.x, 2)+Math.pow(o.start.y-o.y, 2))); // Number
 		},
@@ -140,7 +139,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			//		A *very* helpful method. If you know the center
 			//		(or starting) point, length and angle, find the
 			//		x,y point at the end of that line.
-			//
+
 			var radians =  angle * Math.PI / 180.0;
 			var x = radius * Math.cos(radians);
 			var y = radius * Math.sin(radians);
@@ -155,7 +154,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			//		Ensures the angle in the Mouse Object is within the
 			//		min and max limits. If not one of those limits is used.
 			//		Returns an x,y point for the angle used.
-			//
+
 			var angle = this.angle(obj);
 			if(angle >= min && angle <= max){
 				return obj;	 // Object
@@ -174,7 +173,7 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 			//				.5 would snap to 90 degrees
 			//				.25  would snap to 45 degrees
 			//				.125 would snap to 22.5 degrees, etc.
-			//
+
 			var radians = this.radians(obj),
 				radius = this.length(obj),
 				seg = Math.PI * ca,
@@ -193,11 +192,10 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 		uid: function(/* ? String */str){
 			// summary:
 			//		Creates a unique ID.
-			// arguments:
-			//		str: String
-			//			If provided, kept in a map, incremented
-			//			and used in the id. Otherwise 'shape' is used.
-			//
+			// str: String
+			//		If provided, kept in a map, incremented
+			//		and used in the id. Otherwise 'shape' is used.
+
 			str = str || "shape";
 			uidMap[str] = uidMap[str]===undefined ? start : uidMap[str] + 1;
 			return str + uidMap[str]; // String
@@ -228,13 +226,13 @@ define(["dojo", "dojox/math/round"], function(dojo, round){
 		byId: function(/*String*/id){
 			// summary:
 			//		Get an object that was registered with util.register
-			//
+
 			return this.objects[id];
 		},
 		attr: function(/* Object */ elem, /* property */ prop, /* ? value */ value, squelchErrors){
 			// summary:
 			//		Helper function to attach attributes to SVG and VML raw nodes.
-			//
+
 			
 			if(!elem){ return false; }
 			try{

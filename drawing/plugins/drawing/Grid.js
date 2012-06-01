@@ -8,7 +8,7 @@ var Grid = oo.declare(
 	//		|	<div dojoType="dojox.drawing.Drawing" id="drawingNode"
 	//		|		plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:50}}]">
 	//		|	</div>
-	//
+
 	Plugin,
 	function(options){
 		if(options.gap){
@@ -22,21 +22,21 @@ var Grid = oo.declare(
 	},
 	{
 		type:"dojox.drawing.plugins.drawing.Grid",
-		//
+
 		// gap: Number
 		//		How far apart to set the grid lines
 		gap:100,
 		major:100,
 		minor:0,
-		//
+
 		// majorColor: String
 		//		Major lines color
 		majorColor: "#00ffff",
-		//
+
 		// minorColor: String
 		//		Minor lines color
 		minorColor: "#d7ffff",
-		//
+
 		// zoom: [readonly] Number
 		//		The current zoom of the grid
 		zoom:1,
@@ -50,11 +50,11 @@ var Grid = oo.declare(
 		setGrid: function(options){
 			// summary:
 			//		Renders grid
-			//
+
 			// TODO: major minor lines
-			//	minors dont show on zoom out
+			//	minors don't show on zoom out
 			//	draw minors first
-			//
+
 			var mjr = Math.floor(this.major * this.zoom);
 			var mnr = this.minor ? Math.floor(this.minor * this.zoom) : mjr;
 			
@@ -74,8 +74,8 @@ var Grid = oo.declare(
 			
 			// horz
 			for(i=1,len = h/mnr; i<len; i++){
-				x1 = 0, x2 = w;
-				y1 = mnr*i, y2 = y1;
+				x1 = 0; x2 = w;
+				y1 = mnr*i; y2 = y1;
 				
 				
 				clr = y1%mjr ? mn : mj;
@@ -83,8 +83,8 @@ var Grid = oo.declare(
 			}
 			// vert
 			for(i=1,len = w/mnr; i<len; i++){
-				y1 = 0, y2 = h;
-				x1 = mnr*i, x2 = x1;
+				y1 = 0; y2 = h;
+				x1 = mnr*i; x2 = x1;
 				clr = x1%mjr ? mn : mj;
 				createGridLine(x1,y1,x2,y2, clr);
 			}

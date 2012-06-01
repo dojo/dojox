@@ -13,9 +13,6 @@ var Line = oo.declare(
 		draws:true,
 		showAngle:true,
 		onTransformEnd: function(/*manager.Anchor*/anchor){
-			// summary:
-			//	Overwrites _Base.onTransformEnd
-			//
 			this._toggleSelected();
 			if(this.getRadius()<this.minimumSize){
 				var p = this.points;
@@ -38,8 +35,6 @@ var Line = oo.declare(
 		},
 		
 		onDrag: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onDrag
-			//
 			if(this.created){ return; }
 			var x1 = obj.start.x,
 				y1 = obj.start.y,
@@ -74,8 +69,6 @@ var Line = oo.declare(
 		},
 		
 		onUp: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onUp
-			//
 			if(this.created || !this._downOnCanvas){ return; }
 			this._downOnCanvas = false;
 			//Default shape on single click
@@ -111,8 +104,6 @@ var Line = oo.declare(
 
 lang.setObject("dojox.drawing.tools.Line", Line);
 Line.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
 	name:"dojox.drawing.tools.Line",
 	tooltip:"Line Tool",
 	iconClass:"iconLine"

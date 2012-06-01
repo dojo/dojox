@@ -1,23 +1,23 @@
 define(["dojo", "../util/oo", "../util/positioning"], 
 function(dojo, oo, positioning){
 
+// summary:
+//		When initiated, an HTML box will hover near the Stencil,
+//		displaying it's angle while drawn or modified. Currently
+//		only works with Vector, Line, Arrow, and Axes.
+// description:
+//		Annotation is positioned with dojox.drawing.util.positioning.angle
+//		That method should be overwritten for custom placement.
+//		Called internally.
+
 //dojox.drawing.annotations.Angle = 
 return oo.declare(
-	// summary:
-	//	When initiated, an HTML box will hover near the Stencil,
-	//	displaying it's angle while drawn or modified. Currently
-	//	only works with Vector, Line, Arrow, and Axes.
-	// description:
-	//	Annotation is positioned with dojox.drawing.util.positioning.angle
-	//	That method should be overwritten for custom placement.
-	//	Called internally. To initiaize:
 	//	TODO: currently always on
-	//
-	function(/*Object*/options){
-		// arguments:
-		//	options: Object
+
+	function(/*Object*/ options){
+		// options: Object
 		//		One key value: the stencil that called this.
-		//
+
 		this.stencil = options.stencil;
 		this.util = options.stencil.util;
 		this.mouse = options.stencil.mouse;
@@ -35,9 +35,9 @@ return oo.declare(
 		angle:0,
 
 		showAngle: function(){
-			//	summary:
+			// summary:
 			//		Called to display angle
-			//
+
 			if(!this.stencil.selected && this.stencil.created){ return; }
 			if(this.stencil.getRadius() < this.stencil.minimumSize){
 				this.hideAngle();
@@ -88,7 +88,7 @@ return oo.declare(
 		hideAngle: function(){
 			//	summary:
 			//		Turns display off.
-			//
+
 			if(this._angleNode && dojo.style(this._angleNode, "opacity")>0.9){
 
 				dojo.fadeOut({node:this._angleNode,

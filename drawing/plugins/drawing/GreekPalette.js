@@ -23,7 +23,7 @@ var Greeks = dojo.declare(null,
 	getValue: function(){
 		// summary:
 		//   Returns HTML representing the character, like &amp;
-		//
+
 		return this._alias;
 	},
 
@@ -55,7 +55,6 @@ return dojo.declare("dojox.drawing.plugins.drawing.GreekPalette",
 	//		so it calls show (all actual popup management happens here).
 	//		In order to activate the plugin require it and then include the
 	//		markup in the example:
-	//
 	// example:
 	// |	<!--Because this is a widget it is included in markup and NOT like the other plugins-->
 	// |	<div dojoType="dojox.drawing.plugins.drawing.GreekPalette" id="greekPalette"></div>

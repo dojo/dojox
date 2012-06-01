@@ -5,7 +5,7 @@ var Equation = oo.declare(
 	// summary:
 	//		Essentially the same as the TextBlock tool, but
 	//		allows for a different icon and tooltip title.
-	//
+
 	dojox.drawing.tools.TextBlock,
 	function(options){
 	
@@ -18,8 +18,9 @@ var Equation = oo.declare(
 
 lang.setObject("dojox.drawing.tools.custom.Equation", Equation);
 Equation.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
+	// summary:
+	//		See stencil._Base ToolsSetup
+
 	name:"dojox.drawing.tools.custom.Equation",
 	tooltip:"Equation Tool",
 	iconClass:"iconEq"

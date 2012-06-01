@@ -5,17 +5,16 @@ function(lang, oo, registry, StencilRect){
 var Rect = oo.declare(
 	// summary:
 	// 		Class for a drawable rectangle
-	//
+
 	StencilRect,
 	function(){
-		// summary: constructor
+		// summary:
+		//		constructor
 	},
 	{
 		draws:true,
 		
 		onDrag: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onDrag
-			//
 			var s = obj.start, e = obj;
 			var	x = s.x < e.x ? s.x : e.x,
 				y = s.y < e.y ? s.y : e.y,
@@ -39,8 +38,6 @@ var Rect = oo.declare(
 		},
 		
 		onUp: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onUp
-			//
 			if(this.created || !this._downOnCanvas){ return; }
 			this._downOnCanvas = false;
 			
@@ -72,8 +69,6 @@ var Rect = oo.declare(
 
 lang.setObject("dojox.drawing.tools.Rect", Rect);
 Rect.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
 	name:"dojox.drawing.tools.Rect",
 	tooltip:'<span class="drawingTipTitle">Rectangle Tool</span><br/>'
 		+ '<span class="drawingTipDesc">SHIFT - constrain to square</span>',

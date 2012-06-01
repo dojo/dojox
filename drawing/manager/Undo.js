@@ -3,11 +3,11 @@ function(dojo, oo){
 
 //dojox.drawing.manager.Undo = 
 return oo.declare(
-	// summary
-	//	Handles the Undo in drawing.
-	//	NOTE: Only partially implemented!!! There is very
+	// summary:
+	//		Handles the Undo in drawing.
+	//		NOTE: Only partially implemented!!! There is very
 	//		little actual undo functionality!
-	//
+
 	function(options){
 		this.keys = options.keys;
 		this.undostack = [];

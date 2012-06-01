@@ -4,7 +4,7 @@ function(lang, oo, Base, registry){
 var Rect = oo.declare(
 	// summary:
 	//		Creates a dojox.gfx rectangle based on data or points provided.
-	//
+
 	Base,
 	function(options){
 		// summary:
@@ -69,7 +69,7 @@ var Rect = oo.declare(
 			//		Renders the 'hit' object (the shape used for an expanded
 			//		hit area and for highlighting) and the'shape' (the actual
 			//		display object).
-			//
+
 			this.onBeforeRender(this);
 			this.renderHit && this._create("hit", this.data, this.style.currentHit);
 			this._create("shape", this.data, this.style.current);

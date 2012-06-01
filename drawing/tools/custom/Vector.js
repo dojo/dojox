@@ -8,8 +8,8 @@ var Vector = oo.declare(
 	//		Generally the same as an arrow, except that the arrow
 	//		head is only at the end. There is additionaly functionality
 	//		to allow for a 'zero vector' - one with no length.
-	//
-	//
+
+
 	Arrow,
 	function(options){
 		this.minimumSize = this.style.arrows.length;
@@ -47,7 +47,7 @@ var Vector = oo.declare(
 		_createZeroVector: function(shp, d, sty){
 			// summary:
 			//		Special creation function for the zero-vector shape
-			//
+
 			var s = shp=="hit" ? this.minimumSize : this.minimumSize/6;
 			var f = shp=="hit" ? sty.fill : null;
 			d = {
@@ -69,7 +69,7 @@ var Vector = oo.declare(
 			//		Creates a dojox.gfx.shape based on passed arguments.
 			//		Can be called many times by implementation to create
 			//		multiple shapes in one stencil.
-			//
+
 			this.remove(this[shp]);
 			this[shp] = this.container.createLine(d)
 				.setStroke(sty);
@@ -77,8 +77,9 @@ var Vector = oo.declare(
 		},
 		
 		onDrag: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onDrag
-			//
+			// summary:
+			//		See stencil._Base.onDrag
+
 			if(this.created){ return; }
 			
 			var x1 = obj.start.x,
@@ -94,7 +95,7 @@ var Vector = oo.declare(
 			
 			if(this.keys.alt){
 				// FIXME:
-				//	should double the length of the line
+				// should double the length of the line
 				// FIXME:
 				//	if alt dragging past ZERO it seems to work
 				//	but select/deselect shows bugs
@@ -228,7 +229,7 @@ var Vector = oo.declare(
 			//		hit area and for highlighting) and the'shape' (the actual
 			//		display object). Additionally checks if Vector should be
 			//		drawn as an arrow or a circle (zero-length)
-			//
+
 			this.onBeforeRender(this);
 			if(this.getRadius() >= this.minimumSize){
 				this._create("hit", this.data, this.style.currentHit);
@@ -241,8 +242,9 @@ var Vector = oo.declare(
 			}
 		},
 		onUp: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onUp
-			//
+			// summary:
+			//		See stencil._Base.onUp
+
 			if(this.created || !this._downOnCanvas){ return; }
 			this._downOnCanvas = false;
 			//Default vector for single click
@@ -282,8 +284,9 @@ var Vector = oo.declare(
 
 dojo.setObject("dojox.drawing.tools.custom.Vector", Vector);
 Vector.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
+	// summary:
+	//		See stencil._Base ToolsSetup
+
 	name:"dojox.drawing.tools.custom.Vector",
 	tooltip:"Vector Tool",
 	iconClass:"iconVector"

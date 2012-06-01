@@ -5,7 +5,7 @@ function(lang, oo, registry, StencilEllipse){
 var Ellipse = oo.declare(
 	// summary:
 	//		A drawable Ellipse.
-	//
+
 	StencilEllipse,
 	function(){
 		// summary: constructor
@@ -13,8 +13,6 @@ var Ellipse = oo.declare(
 	{
 		draws:true,
 		onDrag: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onDrag
-			//
 			var s = obj.start, e = obj;
 			var	x = s.x < e.x ? s.x : e.x,
 				y = s.y < e.y ? s.y : e.y,
@@ -39,8 +37,6 @@ var Ellipse = oo.declare(
 		},
 		
 		onUp: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onUp
-			//
 			if(this.created || !this._downOnCanvas){ return; }
 			this._downOnCanvas = false;
 			//Default shape on single click
@@ -72,8 +68,6 @@ var Ellipse = oo.declare(
 
 lang.setObject("dojox.drawing.tools.Ellipse", Ellipse);
 Ellipse.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
 	name:"dojox.drawing.tools.Ellipse",
 	tooltip:"Ellipse Tool",
 	iconClass:"iconEllipse"

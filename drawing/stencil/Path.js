@@ -4,7 +4,7 @@ function(lang, array, oo, Base, registry){
 var Path = oo.declare(
 	// summary:
 	//		Creates a dojox.gfx Path based on points provided.
-	//
+
 	Base,
 	function(options){
 	},
@@ -23,9 +23,6 @@ StencilData: {
 StencilPoints: [
 	// summary:
 	//		An Array of StencilPoint objects that describe the Stencil
-	// 	0: Object
-	//		First point
-	// 	[1, 2, 3...] more points
 ],
 =====*/
 		
@@ -34,7 +31,7 @@ StencilPoints: [
 			//		Creates a dojox.gfx.shape based on passed arguments.
 			//		Can be called many times by implementation to create
 			//		multiple shapes in one stencil.
-			//
+
 			this.remove(this[shp]);
 			if(!this.points.length){ return; }
 	
@@ -95,7 +92,7 @@ StencilPoints: [
 			//		Renders the 'hit' object (the shape used for an expanded
 			//		hit area and for highlighting) and the'shape' (the actual
 			//		display object).
-			//
+
 			this.onBeforeRender(this);
 			this.renderHit && this._create("hit", this.style.currentHit);
 			this._create("shape", this.style.current);
@@ -106,8 +103,8 @@ StencilPoints: [
 		},
 		getBounds: function(/* ? Boolean*/absolute){
 			// summary:
-			//	Overwriting _Base.getBounds. Not sure how absolute should
-			//	work for a path.
+			//		Overwriting _Base.getBounds. Not sure how absolute should
+			//		work for a path.
 			var minx = 10000, miny = 10000, maxx = 0, maxy = 0;
 			array.forEach(this.points, function(p){
 				if(p.x!==undefined && !isNaN(p.x)){
@@ -139,7 +136,7 @@ StencilPoints: [
 			//		drawable tools that extend it. Note that those tools
 			//		need to remove the shape created: this.closeGuide, or
 			//		add arg: remove
-			//
+
 			var dist = this.util.distance(firstPt.x, firstPt.y, currPt.x, currPt.y);
 			if(this.points.length>1){
 				if(dist<this.closeRadius && !this.closeGuide && !remove){

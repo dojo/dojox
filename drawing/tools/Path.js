@@ -5,10 +5,11 @@ function(lang, oo, registry, StencilPath){
 var Path = oo.declare(
 	// summary:
 	//		Class for a drawable Path
-	//
+
 	StencilPath,
 	function(){
-		// summary: constructor
+		// summary:
+		//		constructor
 		
 		this.pathMode = "";
 		this.currentPathMode = "";
@@ -196,8 +197,6 @@ var Path = oo.declare(
 
 lang.setObject("dojox.drawing.tools.Path", Path);
 Path.setup = {
-	// summary: See Base ToolsSetup
-	//
 	name:"dojox.drawing.tools.Path",
 	tooltip:"Path Tool",
 	iconClass:"iconLine"

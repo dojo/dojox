@@ -1,20 +1,21 @@
 define(["exports", "dojo/_base/lang", "../util/oo", "../stencil/Text"],
 function(exports, lang, oo, Text){
 
+// TODO: why not just return Label?
+
 exports.Label = oo.declare(
 	// summary:
-	// 	An annotation called internally to label an Stencil.
+	//		An annotation called internally to label an Stencil.
 	// description:
-	//	Annotation is positioned with dojox.drawing.util.positioning.label
-	//	That method should be overwritten for custom placement. Or,
-	//	add a 'setLabelCustom' method to the Stencil and it will be used.
-	//
+	//		Annotation is positioned with dojox.drawing.util.positioning.label
+	//		That method should be overwritten for custom placement. Or,
+	//		add a 'setLabelCustom' method to the Stencil and it will be used.
+
 	Text,
 	function(/*Object*/options){
-		// arguments:
-		//	options: Object
+		// options: Object
 		//		One key value: the stencil that called this.
-		//
+
 		this.master = options.stencil;
 		this.labelPosition = options.labelPosition || "BR"; // TL, TR, BR, BL, or function
 		if(lang.isFunction(this.labelPosition)){
@@ -33,8 +34,8 @@ exports.Label = oo.declare(
 		
 		setLabelCustom: function(/* ? String */text){
 			// summary:
-			//	Attaches to custom positioning within a Stencil
-			//
+			//		Attaches to custom positioning within a Stencil
+
 			var d = lang.hitch(this.master, this.labelPosition)();
 			this.setData({
 				x:d.x,
@@ -51,8 +52,8 @@ exports.Label = oo.declare(
 		
 		setLabel: function(/* String */text){
 			// summary:
-			//	Sets the text of the label. Not called directly. Should
-			//	be called within Stencil. See stencil._Base
+			//		Sets the text of the label. Not called directly. Should
+			//		be called within Stencil. See stencil._Base
 
 			// onTransform will pass an object here
 			var x, y, box = this.master.getBounds();

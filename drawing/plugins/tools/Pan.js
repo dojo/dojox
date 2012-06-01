@@ -13,7 +13,7 @@ var Pan = oo.declare(
 	//		|		<div tool="dojox.drawing.tools.Line" selected="true">Line</div>
 	//		|		<div plugin="dojox.drawing.plugins.tools.Pan" options="{}">Pan</div>
 	//		|	</div>
-	//
+
 	Plugin,
 	function(options){
 		this.domNode = options.node;

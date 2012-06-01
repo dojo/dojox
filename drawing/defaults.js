@@ -7,16 +7,18 @@ define({
 	//		To change all these styles, create a copy of this file
 	//		and point to it in the Drawing properties:
 	//		|	<div dojoType="dojox.drawing.Drawing" id="drawing" defaults="MyCustom.defaults"></div>
-	// See:
-	//		Drawing.changeDefaults
-	//
-	//  Determines whether in draw or edit mode (whether stencils
-	//  are clickable.  If clickMode is false, the original
-	//  functionality of silently switching between select modes
-	//  is enabled.  If clickMode is true, it allows powerpoint-
-	//  like functionality.  Clickable is used by powerpoint to
-	//  distinguish when things can be selected and when they can't
+	//		See:
+	//			Drawing.changeDefaults
+
+	// clickMode: Boolean
+	//		Determines whether in draw or edit mode (whether stencils
+	//		are clickable.  If clickMode is false, the original
+	//		functionality of silently switching between select modes
+	//		is enabled.  If clickMode is true, it allows powerpoint-
+	//		like functionality.  Clickable is used by powerpoint to
+	//		distinguish when things can be selected and when they can't
 	clickMode:true,
+
 	clickable:true,
 
 	// current: Object
@@ -45,7 +47,7 @@ define({
 	//		If true, renders a second, larger layer for lines to make
 	// 		them more easily clickable.
 	renderHitLines: true,
-	//
+
 	// renderHitLayer:
 	// 		If true, renders a second layer for each Stencil, one
 	// 		acting as a 'hit' object for a wider mouse-click area.
@@ -58,7 +60,6 @@ define({
 	//		Stencil's line color.
 	labelSameColor:false,
 
-	//
 	useSelectedStyle: true,
 
 	norm:{
@@ -107,7 +108,6 @@ define({
 	// that is usually larger than the object to give a
 	// larger 'target' to click upon. These hit objects
 	// double as highlights.
-	//
 	hitNorm:{
 		// summary:
 		//		Normal style of a hit area
@@ -247,11 +247,11 @@ define({
 	},
 
 	copy: function(){
-		// summary
+		// summary:
 		//		Each shape gets its own copy
 		//		of these styles so that instances
 		// 		do not change each other's styles
-		//
+
 		var cpy = function(obj){
 				if(typeof(obj)!="object" || obj===null || obj===undefined){
 					return obj;
@@ -275,7 +275,7 @@ define({
 				}
 			}
 			return o;
-		}
+		};
 		var o = cpy(this);
 		o.current = o.norm;
 		o.currentHit = o.hitNorm;

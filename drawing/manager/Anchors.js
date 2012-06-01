@@ -6,13 +6,13 @@ var Anchor = oo.declare(
 	//		An anchor point that is attached to (usually) one of the
 	//		corners of a Stencil.
 	//		Used internally.
-	function(/* Object */options){
+	function(/* Object */ options){
 		// summary:
 		//		constructor.
-		//		arguments:
+		// options:
 		//			dojox.__stencilArgs plus some additional
 		//			data, like which point this is (pointIdx)
-		//
+
 		this.defaults = defaults.copy();
 		this.mouse = options.mouse;
 		this.point = options.point;
@@ -38,7 +38,7 @@ var Anchor = oo.declare(
 			// summary:
 			//		Creates the anchor point. Unlike most render methods
 			//		in Drawing, this is only called once.
-			//
+
 			this.shape && this.shape.removeShape();
 			var d = this.defaults.anchors,
 				z = this.mouse.zoom,
@@ -157,10 +157,7 @@ var Anchor = oo.declare(
 						y = conT;
 					}
 				}
-				
-				
-				
-				
+
 				if(this.x_anchor){
 					// prevent x overlap of opposite anchor
 					
@@ -285,7 +282,6 @@ return oo.declare(
 	//		to the point.
 	
 	function(/* dojox.__stencilArgs */options){
-		// arguments: See stencil._Base
 		this.mouse = options.mouse;
 		this.undo = options.undo;
 		this.util = options.util;
@@ -313,7 +309,7 @@ return oo.declare(
 		onRenderStencil: function(){
 			// summary:
 			//		Event fires when an anchor calls a Stencil's render method
-			//
+
 			for(var nm in this.items){
 				dojo.forEach(this.items[nm].anchors, function(a){
 					a.shape.moveToFront();
@@ -324,15 +320,13 @@ return oo.declare(
 		onTransformPoint: function(/*Anchor*/anchor){
 			// summary:
 			//		Event fired on anchor drag
-			//
-			//		If anchors are a "group", it's corresponding anchor
-			//		is set. All anchors then moved to front.
+
+			// If anchors are a "group", it's corresponding anchor
+			// is set. All anchors then moved to front.
 			var anchors = this.items[anchor.stencil.id].anchors;
 			var item = this.items[anchor.stencil.id].item;
 			var pts = [];
 			dojo.forEach(anchors, function(a, i){
-				
-				
 				if(anchor.id == a.id || anchor.stencil.anchorType!="group"){
 					// nothing
 				}else{
@@ -394,7 +388,7 @@ return oo.declare(
 			// summary:
 			//		Creates anchor points on a Stencil, based on the
 			//		Stencil's points.
-			//
+
 			this.items[item.id] = {
 				item:item,
 				anchors:[]
@@ -451,7 +445,7 @@ return oo.declare(
 		remove: function(/*Stencil*/item){
 			// summary:
 			//		Destroys the anchor points for a Stencil.
-			//
+
 			if(!this.items[item.id]){
 				return;
 			}

@@ -78,34 +78,36 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		//		|		<div plugin="dojox.drawing.plugins.tools.Pan" options="{}">Pan</div>
 		//		|		<div plugin="dojox.drawing.plugins.tools.Zoom" options="{zoomInc:.1,minZoom:.5,maxZoom:2}">Zoom</div>
 		//		|	</div>
-		//
-		//
+
 		// ready: Boolean
-		//	Whether or not the canvas has been created and Stencils can be added
+		//		Whether or not the canvas has been created and Stencils can be added
 		ready:false,
+
 		// mode: [optional] String
 		//		Changes the functionality of the drawing
 		mode: "",
+
 		// width: Number
 		//		Width of the canvas
 		width:0,
-		//
+
 		// height: Number
 		//		Height of the canvas
 		height:0,
-		//
+
 		// defaults : Object
 		//		Optional replacements for native defaults.
+
 		// plugins: Object
 		//		Key values of plugins that apply to canvas.
-		//
+
 		constructor: function(/* Object */props, /* HTMLNode */node){
 			// summary:
 			//		Drawing is not a Dijit. This is the master method.
 			//		NOTE:
 			// 			props is always null since this is not a real widget
 			//			Will change when Drawing can be created programmatically.
-			//
+
 			var def = dojo.attr(node, "defaults");
 			this.defaults =  def ? (typeof def === 'string' ? dojo.getObject(def) : def) : defaults;
 
@@ -185,7 +187,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//		Resizes the canvas.
 			//		If within a ContentPane this will get called automatically.
 			//		Can also be called directly.
-			//
+
 			box && dojo.style(this.domNode, {
 				width:box.w+"px",
 				height:box.h+"px"
@@ -205,7 +207,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// summary:
 			// 		The common objects that are mixed into
 			//		a new Stencil. Mostly internal, but could be used.
-			//
+
 			var surface = data.stencilType;
 			var ui = this.mode=="ui" || mode=="ui";
 			return dojo.mixin({
@@ -269,7 +271,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// summary:
 			//		Event that to which can be connected.
 			//		Fired when the canvas is ready and can be drawn to.
-			//
+
 			this.ready = true;
 			//console.info("Surface ready")
 			this.mouse.init(this.canvas.domNode);
@@ -302,14 +304,13 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//			which is items in the toolbar, and the additional Stencils at the
 			//			end of onSurfaceReady. This covers all Stencils, but you can't
 			//			use 'display only' Stencils for Line, Rect, and Ellipse.
-			//		arguments:
-			//			type: String
-			//				The final name of the tool, lower case: 'image', 'line', 'textBlock'
-			//		options:
-			//			type: Object
-			//				The parameters used to draw the object. See stencil._Base and each
-			//				tool for specific parameters of teh data or points objects.
-			//
+			// type: String
+			//		The final name of the tool, lower case: 'image', 'line', 'textBlock'
+			// options:
+			//		type: Object
+			//		The parameters used to draw the object. See stencil._Base and each
+			//		tool for specific parameters of teh data or points objects.
+
 			if(!this.ready){
 				var c = dojo.connect(this, "onSurfaceReady", this, function(){
 					dojo.disconnect(c);
@@ -339,14 +340,12 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//			which is items in the toolbar, and the additional Stencils at the
 			//			end of onSurfaceReady. This covers all Stencils, but you can't
 			//			use 'display only' Stencils for Line, Rect, and Ellipse.
-			//		arguments:
-			//			type: String
-			//				The final name of the tool, lower case: 'image', 'line', 'textBlock'
-			//		options:
-			//			type: Object
-			//				The parameters used to draw the object. See stencil._Base and each
-			//				tool for specific parameters of teh data or points objects.
-			//
+			// type: String
+			//		The final name of the tool, lower case: 'image', 'line', 'textBlock'
+			// options: Object
+			//		The parameters used to draw the object. See stencil._Base and each
+			//		tool for specific parameters of teh data or points objects.
+
 			if(!this.ready){
 				var c = dojo.connect(this, "onSurfaceReady", this, function(){
 					dojo.disconnect(c);
@@ -367,10 +366,9 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		removeStencil: function(/* Object */stencil){
 			// summary:
 			//		Use this method to programmatically remove Stencils from the canvas.
-			// 	arguments:
-			//		Stencil: Object
-			//			The Stencil to be removed
-			//
+			// stencil: Object
+			//		The Stencil to be removed
+
 			this.stencils.unregister(stencil);
 			stencil.destroy();
 		},
@@ -393,7 +391,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//		like attr()
 			// example:
 			//		|	myDrawing.toSelected('attr', {x:10})
-			//
+
 			this.stencils.toSelected.apply(this.stencils, arguments);
 		},
 
@@ -414,20 +412,19 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			}, this);
 		},
 
-		changeDefaults: function(/*Object*/newStyle,/*boolean*/value){
+		changeDefaults: function(/*Object*/newStyle,/*Boolean*/value){
 			// summary:
 			//		Change the defaults so that all Stencils from this
 			// 		point on will use the newly changed style.
-			// arguments:
-			//		newStyle: Object
-			//			An object that represents one of the objects in
-			//			drawing.style that will be mixed in. Not all
-			//			properties are necessary. Only one object may
-			//			be changed at a time. The object boolean parameter
-			//			is not required and if not set objects will automatically
-			//			be changed.
-			//			Changing non-objects like angleSnap requires value
-			//			to be true.
+			// newStyle: Object
+			//		An object that represents one of the objects in
+			//		drawing.style that will be mixed in. Not all
+			//		properties are necessary. Only one object may
+			//		be changed at a time. The object boolean parameter
+			//		is not required and if not set objects will automatically
+			//		be changed.
+			//		Changing non-objects like angleSnap requires value
+			//		to be true.
 			// example:
 			//		|	myDrawing.changeDefaults({
 			//		|		norm:{
@@ -478,7 +475,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//		Event fired from a stencil that has destroyed itself
 			//	 	will also be called when it is removed by "removeStencil"
 			//	 	or stencils.onDelete.
-			//
+
 			this.stencils.unregister(stencil);
 		},
 
@@ -506,7 +503,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			//		Sets up a new class to be used to draw. Called from Toolbar,
 			//		and this class... after a tool is used a new one of the same
 			//		type is initialized. Could be called externally.
-			//
+
 			if(this.mode=="ui"){ return; }
 			if(!this.canvas || !this.canvas.surface){
 				var c = dojo.connect(this, "onSurfaceReady", this, function(){

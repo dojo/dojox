@@ -4,8 +4,8 @@ function(lang, oo, registry, StencilPath){
 //dojox.drawing.tools.Pencil 
 var Pencil = oo.declare(
 	// summary:
-	//		Class for a drawable, continous Path
-	//
+	//		Class for a drawable, continuous Path
+
 	StencilPath,
 	function(){
 		// summary: constructor
@@ -76,8 +76,6 @@ var Pencil = oo.declare(
 
 lang.setObject("dojox.drawing.tools.Pencil", Pencil);
 Pencil.setup = {
-	// summary: See Base ToolsSetup
-	//
 	name:"dojox.drawing.tools.Pencil",
 	tooltip:"Pencil Tool",
 	iconClass:"iconLine"

@@ -7,7 +7,7 @@ var Pan = oo.declare(
 	//			dojox.drawing.ui.dom.Pan is DEPRECATED.
 	//			This was a temporary DOM solution. Use the non-dom
 	//			tools for Toobar and Plugins.
-	//
+
 	// summary:
 	//		A plugin that allows for a scrolling canvas. An action
 	//		tool is added to the toolbar that allows for panning. Holding
@@ -19,7 +19,7 @@ var Pan = oo.declare(
 	//		|		<div tool="dojox.drawing.tools.Line" selected="true">Line</div>
 	//		|		<div plugin="dojox.drawing.ui.dom.Pan" options="{}">Pan</div>
 	//		|	</div>
-	//
+
 	Plugin,
 	function(options){
 		

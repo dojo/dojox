@@ -24,8 +24,8 @@ return dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	//
 	//		| <div dojoType="dojox.drawing.ui.Toolbar" id="gfxToolbarNode" drawingId="drawingNode"
 	//		|		class="gfxToolbar" tools="all" plugs="all" selected="ellipse" orient="H"></div>
-	//
-	//
+
+
 	constructor: function(props, node){
 		//console.warn("GFX Toolbar:", props, node)
 		
@@ -64,7 +64,7 @@ return dojo.declare("dojox.drawing.ui.Toolbar", [], {
 			var c = dojo.connect(this.toolDrawing, "onSurfaceReady", this, function(){
 				//console.log("TB built")
 				dojo.disconnect(c);
-				this.drawing = registry.getRegistered("drawing", dojo.attr(node, "drawingId")); //
+				this.drawing = registry.getRegistered("drawing", dojo.attr(node, "drawingId"));
 				this.makeButtons();
 				if(!this.strSelected && this.drawing.defaults.clickMode){
 					var c = dojo.connect(this.drawing, "onSurfaceReady", this, function(){
@@ -89,19 +89,21 @@ return dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	// radius: Number
 	//		The size of the button's rounded corner
 	radius:3,
-	//
+
 	// toolPlugGap: number
-	//		The distnce between the tool buttons and plug buttons
+	//		The distance between the tool buttons and plug buttons
 	toolPlugGap:20,
 	
-	//	strSlelected | selected: String
+	// strSelected | selected: String
 	//		The button that should be selected at startup.
 	strSelected:"",
-	//	strTools | tools: String
+
+	// strTools | tools: String
 	//		A comma delineated list of the Stencil-tools to include in the Toolbar.
 	//		If "all" is used, all registered tools are included.
 	strTools:"",
-	//	strPlugs | plugs: String
+
+	// strPlugs | plugs: String
 	//		A comma delineated list of the plugins to include in the Toolbar.
 	//		If "all" is used, all registered plugins are included.
 	strPlugs:"",
@@ -247,7 +249,7 @@ return dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	onToolClick: function(/*Object*/button){
 		// summary:
 		//		Tool click event. May be connected to.
-		//
+
 		if(this.drawing.defaults.clickMode){ this.drawing.mouse.setCursor("crosshair"); }
 		dojo.forEach(this.buttons, function(b){
 			if(b.id==button.id){

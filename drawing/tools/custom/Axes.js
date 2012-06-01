@@ -10,7 +10,7 @@ var Axes = oo.declare(
 	//		is one continuous piece. Arrow heads are placed at the end
 	// 		of each axis. The Axes can be rotated. There are custom
 	// 		label methods.
-	//
+
 	StencilPath,
 	function(options){
 		this.closePath = false;
@@ -98,7 +98,7 @@ var Axes = oo.declare(
 		createLabels: function(){
 			// summary:
 			//		Creates the label for each axis.
-			//
+
 			// NOTE: Not passing style into text because it's changing it
 			var props = {align:"middle", valign:"middle", util:this.util, annotation:true, container:this.container, mouse:this.mouse, stencil:this};
 			this.labelX = new Label(lang.mixin(props,{
@@ -118,7 +118,7 @@ var Axes = oo.declare(
 		setLabelX: function(){
 			// summary:
 			//		Custom placement for x-axis label
-			//
+
 			var ax = this.points[0];
 			var c =  this.points[1];
 
@@ -140,7 +140,7 @@ var Axes = oo.declare(
 		setLabelY: function(){
 			// summary:
 			//		Custom placement for y-axis label
-			//
+
 			var c =  this.points[1];
 			var ay = this.points[2];
 
@@ -160,7 +160,7 @@ var Axes = oo.declare(
 		setLabelZ: function(){
 			// summary:
 			//		Custom placement for z-axis label
-			//
+
 			var c = this.points[1];
 			var z = this.points[3];
 
@@ -182,13 +182,12 @@ var Axes = oo.declare(
 			// summary:
 			//		Set the text of the labels. The text would be
 			//		broken up into the two labels.
-			// arguments:
-			//		value: [optional] String
-			//			If no argument is passed, defaults to two labels
-			//			'x' and 'y'. If an argument is passed, that
-			//			text will be split on the word 'and' to determine
-			//			the two labels.
-			//
+			// value: [optional] String
+			//		If no argument is passed, defaults to two labels
+			//		'x' and 'y'. If an argument is passed, that
+			//		text will be split on the word 'and' to determine
+			//		the two labels.
+
 			if(this._labelsCreated){ return; }
 			!this.labelX && this.createLabels();
 			var x = "x";
@@ -224,7 +223,7 @@ var Axes = oo.declare(
 		getLabel: function(){
 			// summary:
 			//		Getter for the labels. returns an object.
-			//
+
 			if(!this.labelX){ return null; }
 			return {
 				x:this.labelX.getText(),
@@ -238,7 +237,7 @@ var Axes = oo.declare(
 			//		Gets called from anchor to check if its current
 			//		position is ok. If not, its x or y transform will
 			// 		be changed until this passes.
-			//
+
 			var pm = this.container.getParent().getTransform();
 			var am = anchor.shape.getTransform();
 
@@ -269,10 +268,10 @@ var Axes = oo.declare(
 			//		Overwrites _Base.onTransformEnd
 
 			// Gets called on anchor mouseup
-			//	also gets called by checkBounds - we don't want that.
+			// also gets called by checkBounds - we don't want that.
 			if(!anchor){ return; }
 
-			//	tell anchor to go to prev point if wrong
+			// tell anchor to go to prev point if wrong
 			// called from anchor point up mouse up
 
 			this._isBeingModified = false;
@@ -338,7 +337,7 @@ var Axes = oo.declare(
 		getBounds: function(/*Boolean*/absolute){
 			// summary:
 			//		Custom getBounds overwrites _Base.getBounds
-			//
+
 			var px = this.points[0],
 			    pc = this.points[1],
 			    py = this.points[2];
@@ -383,7 +382,7 @@ var Axes = oo.declare(
 			// summary:
 			// 		Because Axes only has one anchor,
 			// 		we substitute a special setPoints method
-			//
+
 			this.points[0] = pts[0];
 			if(this.pointsToData){
 				this.data = this.pointsToData();
@@ -483,8 +482,9 @@ var Axes = oo.declare(
 		},
 
 		onDrag: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onDrag
-			//
+			// summary:
+			//		See stencil._Base.onDrag
+
 			var pt = this.util.constrainAngle(obj, 0, 89);
 			obj.x = pt.x;
 			obj.y = pt.y;
@@ -505,8 +505,9 @@ var Axes = oo.declare(
 		},
 
 		onUp: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onUp
-			//
+			// summary:
+			//		See stencil._Base.onUp
+
 			if(!this._downOnCanvas){ return; }
 			this._downOnCanvas = false;
 			var p = this.points;
@@ -565,8 +566,9 @@ var Axes = oo.declare(
 
 lang.setObject("dojox.drawing.tools.custom.Axes", Axes);
 Axes.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
+	// summary:
+	//		See stencil._Base ToolsSetup
+
 	name:"dojox.drawing.tools.custom.Axes",
 	tooltip:"Axes Tool",
 	iconClass:"iconAxes"

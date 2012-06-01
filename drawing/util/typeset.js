@@ -1,8 +1,7 @@
 define(["../library/greek"], function(greeks){
-// Summary:
+// summary:
 //		Singleton used for converting characters and typsetting.  Required by _base.
-//
-// Description:
+// description:
 //		Eventually, this is supposed to turn input strings of mathematical
 //		expressions into typeset expressions that can be displayed on the
 //		canvas.  For now, we just generate Greek letters based on LaTeX style

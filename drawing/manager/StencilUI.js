@@ -9,11 +9,11 @@ function(dojo, oo){
 		//		Replaces manager.Stencil. Handles basic UI mouse
 		//		events like onmouseover. Does not handle selections
 		//		or support delete, etc.
-		//
+
 		function(options){
-			//
+
 			// TODO: mixin props
-			//
+
 			surface = options.surface;
 			this.canvas = options.canvas;
 			
@@ -31,28 +31,28 @@ function(dojo, oo){
 			onUiDown: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on mousedown on a stencil
-				//
+
 				if(!this._isStencil(obj)){ return; }
 				this.stencils[obj.id].onDown(obj);
 			},
 			onUiUp: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on mousedown on a stencil
-				//
+
 				if(!this._isStencil(obj)){ return; }
 				this.stencils[obj.id].onUp(obj);
 			},
 			onOver: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on mousedown on a stencil
-				//
+
 				if(!this._isStencil(obj)){ return; }
 				this.stencils[obj.id].onOver(obj);
 			},
 			onOut: function(/*EventObject*/obj){
 				// summary:
 				//		Event fired on mousedown on a stencil
-				//
+
 				if(!this._isStencil(obj)){ return; }
 				this.stencils[obj.id].onOut(obj);
 			},

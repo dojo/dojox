@@ -4,7 +4,7 @@ function(dojo, oo, Plugin, registry){
 	//	summary:
 	//		Used for UI tooltips. Buttons in the toolbar.
 	// 		This file is not complete.
-	//
+
 	var master = null;
 	var MasterC = oo.declare(
 		Plugin,

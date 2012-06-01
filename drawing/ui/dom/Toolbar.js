@@ -8,18 +8,18 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		//			This was implemented in order to finish the project for which
 		//			Drawing was developed.
 		//			Instead use: drawing/ui/Toolbar.js
-		//
+
 		// summary:
-		//	Creates a Toolbar to be used with a DojoX Drawing.
+		//		Creates a Toolbar to be used with a DojoX Drawing.
 		// description:
-		//	Currently works in markup only. A class is required with
-		//	either horizontal or vertical as a class (IE prevented using
-		//	either as a default). Assign an attribute of 'drawingId' with
-		//	the id of the DojoX Drawing to which this is assigned.
-		//	The node children will be assigned as the Tools in the toolbar.
-		//	Plugins can also be assigned.
-		//	The Toolbar is largely self contained and has no real public
-		//	methods or events. the Drawing object should be used.
+		//		Currently works in markup only. A class is required with
+		//		either horizontal or vertical as a class (IE prevented using
+		//		either as a default). Assign an attribute of 'drawingId' with
+		//		the id of the DojoX Drawing to which this is assigned.
+		//		The node children will be assigned as the Tools in the toolbar.
+		//		Plugins can also be assigned.
+		//		The Toolbar is largely self contained and has no real public
+		//		methods or events. the Drawing object should be used.
 		//
 		// example:
 		//	|	<div dojoType="dojox.drawing.Toolbar" drawingId="drawing" class="drawingToolbar vertical">
@@ -27,21 +27,23 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		//	|		<div tool="dojox.drawing.tools.Rect" 				selected="true">	Rect</div>
 		//	|		<div plugin="dojox.drawing.plugins.tools.Zoom" options="{zoomInc:.1,minZoom:.5,maxZoom:2}">Zoom</div>
 		//	|	</div>
-		//
+
 		// TODO: Toolbar works in markup only. Need programmatic.
 		// NOTE: There are plans to make the toolbar out of dojox.gfx vectors.
 		//		 This may change the APIs in the future.
-		//
+
 		//	baseClass:String
 		//		The CSS style to apply to the toolbar node
 		baseClass:"drawingToolbar",
+
 		//	buttonClass:String
 		//		The CSS style to apply to each button node
 		buttonClass:"drawingButton",
+
 		//	iconClass:String
 		//		The CSS style to apply to each button icon node
 		iconClass:"icon",
-		//
+
 		constructor: function(props, node){
 			// props is null from markup
 			dojo.addOnLoad(this, function(){
@@ -51,18 +53,17 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 			});
 		},
 		
-		createIcon: function(/*HTMLNode*/node, /* ? Function*/constr){
+		createIcon: function(/*HTMLNode*/node, /*Function?*/constr){
 			// summary:
-			//	Internal. Creates an icon node for each button.
-			// arguments:
-			//	node: HTMLNode
+			//		Internal. Creates an icon node for each button.
+			// node:
 			//		The button node.
-			//	constr: [optional] Function
+			// constr:
 			//		Optional. If not supplied, an icon is not created.
 			//		Information for each icon is derived from
 			//		the ToolsSetup object defined at the end
 			//		of each tool. See: stencil._Base
-			//
+
 			var setup = constr && constr.setup ? constr.setup : {};
 			if(setup.iconClass){
 				var icon = setup.iconClass ? setup.iconClass : "iconNone";
@@ -94,13 +95,12 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		
 		createTool: function(/*HTMLNode*/node){
 			// summary:
-			//	Creates a button on the Toolbar that is
-			//  a Tool, not a Plugin. Tools draw Stencils,
-			//	Plugins do actions.
-			// arguments:
-			//	node: HTMLNode
+			//		Creates a button on the Toolbar that is
+			//		a Tool, not a Plugin. Tools draw Stencils,
+			//		Plugins do actions.
+			// node: HTMLNode
 			//		The button node.
-			//
+
 			node.innerHTML = "";
 			var type = dojo.attr(node, "tool");
 			this.toolNodes[type] = node;
@@ -132,9 +132,9 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		
 		parse: function(){
 			// summary:
-			//	Initializing method that reads the dom node and its
-			//	children for tools and plugins.
-			//
+			//		Initializing method that reads the dom node and its
+			//		children for tools and plugins.
+
 			var drawingId = dojo.attr(this.domNode, "drawingId");
 			this.drawing = commonUtil.byId(drawingId);
 			!this.drawing && console.error("Drawing not found based on 'drawingId' in Toolbar. ");
@@ -173,17 +173,16 @@ return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		},
 		onClick: function(/*String*/type){
 			// summary:
-			//	Event fired from clicking a Tool, not a PLugin.
-			//	Plugin clicks are handled within the plugin's class.
-			// arguments:
-			//	type: Fully qualified name of class. ex:
-			//			dojox.drawing.tools.Ellipse
-			//
+			//		Event fired from clicking a Tool, not a PLugin.
+			//		Plugin clicks are handled within the plugin's class.
+			// type:
+			//		Fully qualified name of class. ex: dojox.drawing.tools.Ellipse
+
 			this.drawing.setTool(type);
 		},
 		onSetTool: function(/*String*/type){
 			// summary:
-			//	handles buttons clicks and selects or deselects
+			//		handles buttons clicks and selects or deselects
 			for(var n in this.toolNodes){
 				if(n == type){
 					dojo.addClass(this.toolNodes[type], "selected");

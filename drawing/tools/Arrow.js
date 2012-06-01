@@ -6,7 +6,7 @@ var Arrow = oo.declare(
 	// summary:
 	//		Extends stencil.Line and adds an arrow head
 	//		to the end and or start.
-	//
+
 	Line,
 	function(options){
 		// summary: constructor
@@ -32,7 +32,7 @@ var Arrow = oo.declare(
 		// arrowStart: Boolean
 		//		Whether or not to place an arrow on start.
 		arrowStart:false,
-		//
+
 		// arrowEnd: Boolean
 		//		Whether or not to place an arrow on end.
 		arrowEnd:true,
@@ -40,7 +40,7 @@ var Arrow = oo.declare(
 		labelPosition: function(){
 			// summary:
 			//		The custom position used for the label
-			//
+
 			var d = this.data;
 			var pt = positioning.label({x:d.x1,y:d.y1},{x:d.x2,y:d.y2});
 			return {
@@ -50,8 +50,6 @@ var Arrow = oo.declare(
 		},
 		
 		onUp: function(/*EventObject*/obj){
-			// summary: See stencil._Base.onUp
-			//
 			if(this.created || !this.shape){ return; }
 			
 			// if too small, need to reset
@@ -76,8 +74,6 @@ var Arrow = oo.declare(
 
 lang.setObject("dojox.drawing.tools.Arrow", Arrow);
 Arrow.setup = {
-	// summary: See stencil._Base ToolsSetup
-	//
 	name:"dojox.drawing.tools.Arrow",
 	tooltip:"Arrow Tool",
 	iconClass:"iconArrow"

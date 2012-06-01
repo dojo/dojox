@@ -37,8 +37,9 @@ define(['./common'], function(common){
 		//		Returns the optimal position for annotations.Angle.
 
 		// angle at first third of vector
-	        var x = 0.7*start.x+0.3*end.x;
-	        var y = 0.7*start.y+0.3*end.y;
+		var x = 0.7*start.x+0.3*end.x;
+		var y = 0.7*start.y+0.3*end.y;
+
 		// move label a set distance from the line
 		var slope = common.slope(start, end);
 		var deltay = textOffset/Math.sqrt(1.0+slope*slope);
@@ -54,7 +55,7 @@ define(['./common'], function(common){
 	        y += end.x > start.x ? 0.5*textYOffset :  -0.5*textYOffset;
 		
 		return { x:x, y:y, align:align}; // Object
-	}
+	};
 	
 	return positioning;
 });

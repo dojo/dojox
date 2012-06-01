@@ -16,7 +16,7 @@ var Button = oo.declare(
 		this.width = options.data.width || options.data.rx*2;
 		this.height = options.data.height || options.data.ry*2;
 		this.y = options.data.y || options.data.cy - options.data.ry;
-		//
+
 		this.id = this.id || this.util.uid(this.type);
 		this.util.attr(this.container, "id", this.id);
 		if(this.callback){

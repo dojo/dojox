@@ -10,9 +10,9 @@ function(dojo, oo, gfx){
 		//
 		//		Called internally from a dojox.Drawing.
 		//
-		//		Note: Surface creation is asynchrous. Connect to
-		//  		onSurfaceReady in Drawing.
-		//
+		//		Note: Surface creation is asynchronous. Connect to
+		//  	onSurfaceReady in Drawing.
+
 		function(/*Object*/options){
 			dojo.mixin(this, options);
 			
@@ -57,7 +57,7 @@ function(dojo, oo, gfx){
 		},
 		{
 			// zoom: [readonly] Number
-			//	The amount the canvas is zoomed
+			//		The amount the canvas is zoomed
 			zoom:1,
 						
 			useScrollbars: true,
@@ -68,7 +68,7 @@ function(dojo, oo, gfx){
 				//		Method used to change size of canvas. Potentially
 				//		called from a container like ContentPane. May be
 				//		called directly.
-				//
+
 				this.parentWidth = width;
 				this.parentHeight = height;
 				this.setDimensions(width, height);
@@ -141,7 +141,7 @@ function(dojo, oo, gfx){
 				// summary:
 				//		Special method used to detect the width (and height)
 				// 		of the browser scrollbars. Becomes memoized.
-				//
+
 				var p = dojo.create('div');
 				p.innerHTML = '<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:0;left:-1000px;"><div style="height:100px;"></div>';
 				var div = p.firstChild;
