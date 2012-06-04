@@ -96,7 +96,6 @@ define(["dojo", "dojo/date", "dojo/date/locale", "dojo/_base/array", "dojo/_base
 	function loadZoneData(/* Object */ data){
 		// summary:
 		//		Loads the given data object into the zone database
-		//
 		// data: Object
 		//		The data to load - contains "zones" and "rules" parameters
 		data = data || {};
@@ -597,42 +596,38 @@ define(["dojo", "dojo/date", "dojo/date/locale", "dojo/_base/array", "dojo/_base
 /*=====
 dojox.date.timezone = function(){
 	// summary:
-	//	mix-in to dojo.date to provide timezones based on
-	//	the Olson timezone data
-	//
+	//		mix-in to dojo.date to provide timezones based on
+	//		the Olson timezone data
 	// description:
-	//	mix-in to dojo.date to provide timezones based on
-	//	the Olson timezone data.
-	//	If you pass "timezone" as a parameter to your format options,
-	//	then you get the date formatted (and offset) for that timezone
+	//		mix-in to dojo.date to provide timezones based on
+	//		the Olson timezone data.
+	//		If you pass "timezone" as a parameter to your format options,
+	//		then you get the date formatted (and offset) for that timezone
 
 //TODOC
 };
 
 dojox.date.timezone.getTzInfo = function(dt, tz){
 	// summary:
-	//	Returns the timezone information for the given date and
-	//	timezone string
-	//
+	//		Returns the timezone information for the given date and
+	//		timezone string
 	// dt: Date
-	//	The Date - a "proxyDate"
-	//
+	//		The Date - a "proxyDate"
 	// tz: String
-	//	String representation of the timezone you want to get info
-	//	for date
+	//		String representation of the timezone you want to get info
+	//		for date
 };
 
 dojox.date.timezone.loadZoneData = function(data){
 	// summary:
 	//		Loads the given data object into the zone database
-	//
 	// data: Object
 	//		The data to load - contains "zones" and "rules" parameters
 };
 
 dojox.date.timezone.getAllZones = function(){
 	// summary:
-	//	Returns an array of zones that have been loaded
+	//		Returns an array of zones that have been loaded
 };
 =====*/
 	dojo.setObject("dojox.date.timezone", {

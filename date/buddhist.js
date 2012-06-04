@@ -13,24 +13,25 @@ dbuddhist.isLeapYear = function(/*buddhist.Date*/dateObject){
 
 //FIXME: reduce compare, add, diff also
 dbuddhist.compare = function(/*buddhist.Date*/date1, /*buddhist.Date*/date2, /*String?*/portion){
-	//	summary:
+	// summary:
 	//		Compare two buddhist date objects by date, time, or both.
 	return dd.compare(date1,date2, portion); // int
 };
 
 
 dbuddhist.add = function(/*dojox.date.buddhist.Date*/date, /*String*/interval, /*int*/amount){
-	//	based on and similar to dojo.date.add
-	//	summary:
+	// summary:
 	//		Add to a Date in intervals of different size, from milliseconds to years
-	//	date: buddhist.Date
+	// date: buddhist.Date
 	//		Date object to start with
-	//	interval:
+	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",
 	//			"millisecond", "week", "weekday"
-	//	amount:
+	// amount:
 	//		How much to add to the date.
+
+	//	based on and similar to dojo.date.add
 
 	var newBuddDate = new BDate(date);
 
@@ -98,16 +99,17 @@ dbuddhist.add = function(/*dojox.date.buddhist.Date*/date, /*String*/interval, /
 };
 
 dbuddhist.difference = function(/*dojox.date.buddhist.Date*/date1, /*dojox.date.buddhist.Date?*/date2, /*String?*/interval){
-	//	based on and similar to dojo.date.difference
-	//	summary:
+	// summary:
 	//        date2 - date1
-	//	 date2 is hebrew.Date object.  If not specified, the current hebrew.Date is used.
-	//	interval:
+	//		 date2 is hebrew.Date object.  If not specified, the current hebrew.Date is used.
+	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",
 	//			"millisecond",  "week", "weekday"
 	//		Defaults to "day".
-	
+
+	//	based on and similar to dojo.date.difference
+
 	date2 = date2 || new BDate();
 	interval = interval || "day";
 	var yearDiff = date2.getFullYear() - date1.getFullYear();

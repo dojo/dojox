@@ -133,9 +133,11 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	ilocale.regexp = function(/*object?*/options){
-		//	based on and similar to dojo.date.locale.regexp
 		// summary:
 		//		Builds the regular needed to parse a islamic.Date
+
+		//	based on and similar to dojo.date.locale.regexp
+
 		return ilocale._parseInfo(options).regexp; // String
 	};
 
@@ -165,9 +167,11 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	ilocale.parse = function(/*String*/value, /*Object?*/options){
+		// summary:
+		//		This function parse string date value according to options
+
 		// based on and similar to dojo.date.locale.parse
-		// summary: This function parse string date value according to options
-	
+
 		value =  value.replace(/[\u200E\u200F\u202A\u202E]/g, ""); //remove bidi non-printing chars
 
 		if(!options){ options={}; }
@@ -271,7 +275,8 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	function _processPattern(pattern, applyPattern, applyLiteral, applyAll){
-		//summary: Process a pattern with literals in it
+		// summary:
+		//		Process a pattern with literals in it
 
 		// Break up on single quotes, treat every other one as a literal, except '' which becomes '
 		var identity = function(x){return x;};
@@ -296,9 +301,8 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	}
 
 	function _buildDateTimeRE  (tokens, bundle, options, pattern){
-			// based on and similar to dojo.date.locale._buildDateTimeRE
-			//
-	
+		// based on and similar to dojo.date.locale._buildDateTimeRE
+
 		pattern = regexp.escapeString(pattern);
 		var locale = i18n.normalizeLocale(options.locale);
 	

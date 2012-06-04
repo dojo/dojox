@@ -12,15 +12,15 @@ dhebrew.getDaysInMonth = function(/*hebrew.Date*/month){
 //TODO: define hebrew.isLeapYear?  Or should it be invalid, since it has different meaning?
 
 dhebrew.compare = function(/*hebrew.Date*/dateheb1, /*hebrew.Date*/dateheb2, /*String?*/portion){
-	//	summary:
+	// summary:
 	//		Compare two hebrew date objects by date, time, or both.
-	//	description:
+	// description:
 	//  	Returns 0 if equal, positive if a > b, else negative.
-	//	date1:
+	// date1:
 	//		hebrew.Date object
-	//	date2:
+	// date2:
 	//		hebrew.Date object.  If not specified, the current hebrew.Date is used.
-	//	portion:
+	// portion:
 	//		A string indicating the "date" or "time" portion of a Date object.
 	//		Compares both "date" and "time" by default.  One of the following:
 	//		"date", "time", "datetime"
@@ -37,17 +37,18 @@ dhebrew.compare = function(/*hebrew.Date*/dateheb1, /*hebrew.Date*/dateheb2, /*S
 
 
 dhebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/interval, /*int*/amount){
-	//	based on and similar to dojo.date.add
-	//	summary:
+	// summary:
 	//		Add to a Date in intervals of different size, from milliseconds to years
-	//	date: hebrew.Date
+	// date: hebrew.Date
 	//		Date object to start with
-	//	interval:
+	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",
 	//			"millisecond", "week", "weekday"
-	//	amount:
+	// amount:
 	//		How much to add to the date.
+
+	//	based on and similar to dojo.date.add
 
 	var newHebrDate = new HDate(date);
 
@@ -106,15 +107,16 @@ dhebrew.add = function(/*dojox.date.hebrew.Date*/date, /*String*/interval, /*int
 };
 
 dhebrew.difference = function(/*dojox.date.hebrew.Date*/date1, /*dojox.date.hebrew.Date?*/date2, /*String?*/interval){
-	//	based on and similar to dojo.date.difference
-	//	summary:
+	// summary:
 	//        date2 - date1
 	//	 date2 is hebrew.Date object.  If not specified, the current hebrew.Date is used.
-	//	interval:
+	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",
 	//			"millisecond",  "week", "weekday"
 	//		Defaults to "day".
+
+	//	based on and similar to dojo.date.difference
 
 	date2 = date2 || new HDate();
 	interval = interval || "day";

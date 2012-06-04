@@ -101,19 +101,18 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	}
 	
 	hlocale.format = function(/*hebrew.Date*/dateObject, /*object?*/options){
-		// based on and similar to dojo.date.locale.format
-		//summary:
+		// summary:
 		//		Format a Date object as a String, using  settings.
-		//
 		// description:
 		//		Create a string from a hebrew.Date object using a known pattern.
 		//		By default, this method formats both date and time from dateObject.
 		//		Default formatting lengths is 'short'
-		//
 		// dateObject:
 		//		the date and/or time to be formatted.  If a time only is formatted,
 		//		the values in the year, month, and day fields are irrelevant.  The
 		//		opposite is true when formatting only dates.
+
+		// based on and similar to dojo.date.locale.format
 
 		options = options || {};
 
@@ -142,9 +141,10 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	hlocale.regexp = function(/*object?*/options){
-		//	based on and similar to dojo.date.locale.regexp
 		// summary:
 		//		Builds the regular needed to parse a hebrew.Date
+
+		//	based on and similar to dojo.date.locale.regexp
 
 		return hlocale._parseInfo(options).regexp; // String
 	};
@@ -176,23 +176,25 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	hlocale.parse = function(/*String*/value, /*Object?*/options){
-			// based on and similar to dojo.date.locale.parse
-			// summary: This function parse string date value according to options
-			// example:
-			// |		var dateHebrew = dojox.date.hebrew.locale.parse('11/10/5740', {datePattern:'dd/MM/yy', selector:'date'});
-			// |		in Hebrew locale string for parsing contains Hebrew Numerals
-			// |
-			// |  options = {datePattern:'dd MMMM yy', selector:'date'};
-			// |
-			// |   y - year
-			// |   M, MM  - short month
-			// |  MMM, MMMM - long month
-			// |  d - date
-			// |  a - am, pm
-			// |   E, EE, EEE, EEEE  - week day
-			// |
-			// |    h, H, k, K, m, s, S,  -  time format
-		
+		// summary:
+		//		This function parse string date value according to options
+		// example:
+		//	|	var dateHebrew = dojox.date.hebrew.locale.parse('11/10/5740', {datePattern:'dd/MM/yy', selector:'date'});
+		//	|	in Hebrew locale string for parsing contains Hebrew Numerals
+		//	|
+		//	|	  options = {datePattern:'dd MMMM yy', selector:'date'};
+		//	|
+		//	|	   y - year
+		//	|	   M, MM  - short month
+		//	|	  MMM, MMMM - long month
+		//	|	  d - date
+		//	|	  a - am, pm
+		//	|	   E, EE, EEE, EEEE  - week day
+		//	|
+		//	|	    h, H, k, K, m, s, S,  -  time format
+
+		// based on and similar to dojo.date.locale.parse
+
 		value =  value.replace(/[\u200E\u200F\u202A-\u202E]/g, ""); //remove special chars
 
 		if(!options){options={};}
@@ -322,7 +324,8 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 
 
 	function _processPattern(pattern, applyPattern, applyLiteral, applyAll){
-		//summary: Process a pattern with literals in it
+		// summary:
+		//		Process a pattern with literals in it
 
 		// Break up on single quotes, treat every other one as a literal, except '' which becomes '
 		var identity = function(x){return x;};
@@ -347,9 +350,8 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	}
 
 	function _buildDateTimeRE  (tokens, bundle, options, pattern){
-			// based on and similar to dojo.date.locale._buildDateTimeRE
-			//
-	
+		// based on and similar to dojo.date.locale._buildDateTimeRE
+
 		pattern = regexp.escapeString(pattern);
 		var locale = i18n.normalizeLocale(options.locale);
 	
@@ -434,7 +436,6 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 		// summary:
 		//		Add a reference to a bundle containing localized custom formats to be
 		//		used by date/time formatting and parsing routines.
-		//
 		// description:
 		//		The user may add custom localized formats where the bundle has properties following the
 		//		same naming convention used by dojo.cldr: `dateFormat-xxxx` / `timeFormat-xxxx`
@@ -459,17 +460,16 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	hlocale.getNames = function(/*String*/item, /*String*/type, /*String?*/context, /*String?*/locale, /*dojox.date.hebrew.Date?*/date){
 		// summary:
 		//		Used to get localized strings from dojo.cldr for day or month names.
-		//
 		// item:
-		//	'months' || 'days'
+		//		'months' || 'days'
 		// type:
-		//	'wide' || 'narrow' || 'abbr' (e.g. "Monday", "Mon", or "M" respectively, in English)
+		//		'wide' || 'narrow' || 'abbr' (e.g. "Monday", "Mon", or "M" respectively, in English)
 		// use:
-		//	'standAlone' || 'format' (default)
+		//		'standAlone' || 'format' (default)
 		// locale:
-		//	override locale used to find the names
+		//		override locale used to find the names
 		// date:
-		//	required for item=months to determine leap month name
+		//		required for item=months to determine leap month name
 
 		// using  var monthNames = dojox.date.hebrew.locale.getNames('months', 'wide', 'format', 'he', new hebrewDate(5768, 2, 12));
 

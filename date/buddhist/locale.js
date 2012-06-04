@@ -102,9 +102,11 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	}
 	
 	blocale.format = function(/*buddhist.Date*/dateObject, /*object?*/options){
-		// based on and similar to dojo.date.locale.format
 		// summary:
 		//		Format a Date object as a String, using  settings.
+
+		// based on and similar to dojo.date.locale.format
+
 		options = options || {};
 
 		var locale = i18n.normalizeLocale(options.locale);
@@ -131,9 +133,11 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	blocale.regexp = function(/*Object?*/options){
-		//	based on and similar to dojo.date.locale.regexp
 		// summary:
 		//		Builds the regular needed to parse a buddhist.Date
+
+		//	based on and similar to dojo.date.locale.regexp
+
 		return blocale._parseInfo(options).regexp; // String
 	};
 
@@ -163,8 +167,11 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 	};
 
 	blocale.parse = function(/*String*/value, /*Object?*/options){
+		// summary:
+		//		This function parses string date value according to options
+
 		// based on and similar to dojo.date.locale.parse
-		// summary: This function parses string date value according to options
+
 		value =  value.replace(/[\u200E\u200F\u202A-\u202E]/g, ""); //remove special chars
 	
 		if(!options){options={};}
@@ -268,7 +275,8 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 
 
 	function _processPattern(pattern, applyPattern, applyLiteral, applyAll){
-		// summary: Process a pattern with literals in it
+		// summary:
+		//		Process a pattern with literals in it
 
 		// Break up on single quotes, treat every other one as a literal, except '' which becomes '
 		var identity = function(x){return x;};
