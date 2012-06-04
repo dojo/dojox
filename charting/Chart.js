@@ -1,8 +1,8 @@
-define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-style",
+define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-style",
 	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/_base/sniff",
 	"./Element", "./SimpleTheme", "./Series", "./axis2d/common",
 	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
-	function(lang, arr, declare, domStyle,
+	function(dojox, lang, arr, declare, domStyle,
 	 		 dom, domGeom, domConstruct, Color, has,
 	 		 Element, SimpleTheme, Series, common,
 	 		 g, func, funcFold, funcReversed){
@@ -25,7 +25,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-st
 		this.delayInMs = delayInMs;
 	}
 	 =====*/
-	var dc = dojox.charting,
+	var dc = lang.getObject("charting", true, dojox),
 		clear = func.lambda("item.clear()"),
 		purge = func.lambda("item.purgeGroup()"),
 		destroy = func.lambda("item.destroy()"),
