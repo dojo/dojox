@@ -1,10 +1,6 @@
 define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/Stateful"], 
 	function(declare, arr, lang, Stateful){
 		
-	/*=====
-	var Stateful = dojo.Stateful;
-	=====*/		
-	
 	return declare("dojox.widget.Selection", Stateful, {
 		// summary:
 		//		Base class for widgets that manage a list of selected data items.

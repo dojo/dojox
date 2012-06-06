@@ -1,10 +1,6 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "dojo/Stateful"], 
 	function(declare, lang, Stateful){
 		
-	/*=====
-	var Stateful = dojo.Stateful;
-	=====*/
-	
 	return declare("dojox.widget._Invalidating", Stateful, {
 		// summary:
 		//		Base class for classes (usually widgets) that watch invalidated properties and delay the rendering
