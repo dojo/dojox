@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<title>Dojox Calendar Test</title>
@@ -15,38 +14,39 @@
 			}
 		</style>
 
-		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="async:true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../dojo/dojo.js"
+        		data-dojo-config="async:true, transparentColor: [ 255, 255, 255 ]"></script>
 
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 
 		<script type="text/javascript">
 			require([
+			    "dojo/_base/declare",
 				"dojo/parser",
+				"dojo/query",
 				"dojox/fx/_base",
 				"dojox/widget/Calendar",
+				"dojo/dom",
 				"dojox/widget/DailyCalendar",
 				"dojox/widget/MonthAndYearlyCalendar",
 				"dojox/widget/MonthlyCalendar",
-				"dojo/dom",
-				//"dojox/widget/FisheyeList",
-				//"dojox/widget/CalendarFx",
+				"dojox/widget/CalendarFisheye",
 				"dojo/domReady!"
-			], function(parser, fx, Calendar, DailyCalendar, MonthAndYearlyCalendar, MonthlyCalendar, dom){
+			], function(declare, parser, query, xFx, Calendar, dom){
 
-/*			dojo.declare(
-				"test.CalendarCustomFx",
-			 	[dojox.widget.Calendar], {
+				declare("test.CalendarCustomFx", [Calendar], {
 
-				addFx: function(query, fromNode){
-					dojo.query(query, fromNode).onmouseover(function(evt){
-						dojox.fx.highlight({node: evt.target}).play();
-					});
-				}
-			});
-			function log(str){
-					dojo.byId("report").innerHTML = str;
-				}
-*/			}
+					addFx: function(theQuery, fromNode){
+						query(theQuery, fromNode).onmouseover(function(evt){
+							xFx.highlight({node: evt.target}).play();
+						});
+					}
+				});
+				window['log'] = function(str){
+					dom.byId("report").innerHTML = str;
+                }
+                parser.parse();
+            });
 		</script>
 	</head>
 	<body>
@@ -61,7 +61,7 @@
 		<div>
 			<span style="width:33%;float:left;">
 				<div class="title">Typical Calendar usage, with day, and month/year views</div>
-				<div dojoType="dojox.widget.Calendar" id="cal">
+				<div data-dojo-type="dojox.widget.Calendar" id="cal">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Date Value selected: " + value);
 					</script>
@@ -80,7 +80,7 @@
 			<span style="width:33%;float:left;">
 				<div class="title">With day only view, no month/year view</div>
 
-				<div dojoType="dojox.widget.DailyCalendar" id="calDayOnly">
+				<div data-dojo-type="dojox.widget.DailyCalendar" id="calDayOnly">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Day Value selected: " + value);
 					</script>
@@ -98,7 +98,7 @@
 			<span style="width:33%;float:left;">
 				<div class="title">With day only view, no month/year view</div>
 
-				<div dojoType="dojox.widget.MonthAndYearlyCalendar" id="calMonthAndYearOnly">
+				<div data-dojo-type="dojox.widget.MonthAndYearlyCalendar" id="calMonthAndYearOnly">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Date Value selected from Month and Year Only Calendar: " + value);
 					</script>
@@ -118,7 +118,7 @@
     <div>
 			<span style="width:33%;float:left;">
 				<div class="title">Typical calendar, with min/max constraints = {min:'2008-12-12',max:'2009-01-15'}</div>
-				<div dojoType="dojox.widget.Calendar" id="calLimits" value="2008-12-25"
+				<div data-dojo-type="dojox.widget.Calendar" id="calLimits" value="2008-12-25"
 						constraints="{min:'2008-12-12',max:'2009-01-15'}">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Date Value selected: " + value);
@@ -136,7 +136,7 @@
 			</span>
 			<span style="width:33%;float:left;">
 				<div class="title">Typical calendar, with min/max constraints a week before and after the current date</div>
-				<div dojoType="dojox.widget.Calendar" id="calLimitsWeek">
+				<div data-dojo-type="dojox.widget.Calendar" id="calLimitsWeek">
 					<script type="dojo/method" event="postMixInProperties">						
 						// This runs after the constructor, before properties are mixed in
 						var currentDate = new Date();
@@ -162,7 +162,7 @@
 			</span>
 			<span style="width:33%;float:left;">
 				<div class="title">Typical calendar, initial date set in HTML to December 25th, 2007</div>
-				<div dojoType="dojox.widget.Calendar" id="calXmas" value="2007-12-25">
+				<div data-dojo-type="dojox.widget.Calendar" id="calXmas" value="2007-12-25">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Date Value selected: " + value);
 					</script>
@@ -183,7 +183,7 @@
 			<span style="width:50%;float:left;">
 				<div class="title">Standard calendar, with FisheyeLite effects (in development, just here to show that FX can be applied)</div>
 
-				<div dojoType="dojox.widget.CalendarFisheye" id="calFisheye">
+				<div data-dojo-type="dojox.widget.CalendarFisheye" id="calFisheye">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Date Value selected from Fisheye Calendar: " + value);
 					</script>
@@ -201,7 +201,7 @@
 			<span style="width:50%;float:left;">
 				<div class="title">With custom Highlighting effects (in development, just here to show that FX can be applied)</div>
 
-				<div dojoType="test.CalendarCustomFx" id="calCustomFx">
+				<div data-dojo-type="test.CalendarCustomFx" id="calCustomFx">
 					<script type="dojo/connect" event="onValueSelected" args="value">
 						log("Date Value selected in FX Calendar: " + value);
 					</script>

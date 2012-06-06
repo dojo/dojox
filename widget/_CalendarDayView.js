@@ -5,9 +5,11 @@ define([
 	"dojo/query",
 	"dojo/dom-class",
 	"dojo/_base/event",
+	"dojo/date",
+	"dojo/date/locale",
 	"dojo/text!./Calendar/CalendarDay.html",
 	"dojo/cldr/supplemental"
-], function(declare, _CalendarView, _Templated, query, domClass, event, template, supplemental){
+], function(declare, _CalendarView, _Templated, query, domClass, event, date, locale, template, supplemental){
 	return declare("dojox.widget._CalendarDayView", [_CalendarView, dijit._Templated], {
 		// summary: View class for the dojox/widget/Calendar.
 		//		Adds a view showing every day of a single month to the calendar.
@@ -63,21 +65,21 @@ define([
 			// cell, ignore it.
 			if(typeof(e.target._date) == "undefined"){return;}
 
-			var date = new Date(this.get("displayMonth"));
+			var displayMonth = new Date(this.get("displayMonth"));
 
 			var p = e.target.parentNode;
 			var c = "dijitCalendar";
 			var d = domClass.contains(p, c + "PreviousMonth") ? -1 :
 								(domClass.contains(p, c + "NextMonth") ? 1 : 0);
-			if(d){date = date.add(date, "month", d);}
-			date.setDate(e.target._date);
+			if(d){displayMonth = date.add(displayMonth, "month", d);}
+			displayMonth.setDate(e.target._date);
 
 			// If the day is disabled, ignore it
-			if(this.isDisabledDate(date)){
+			if(this.isDisabledDate(displayMonth)){
 				event.stop(e);
 				return;
 			}
-			this.parent._onDateSelected(date);
+			this.parent._onDateSelected(displayMonth);
 		},
 
 		_setValueAttr: function(value){
@@ -126,7 +128,7 @@ define([
 			// Iterate through dates in the calendar and fill in date numbers and style info
 			query(templateCls, this.domNode).forEach(function(template, i){
 				i += dayOffset;
-				var date = new Date(currentDate);
+				var eachDate = new Date(currentDate);
 				var number, clazz = "dijitCalendar", adj = 0;
 
 				if(i < firstDay){
@@ -143,36 +145,36 @@ define([
 				}
 
 				if(adj){
-					date = date.add(date, "month", adj);
+					eachDate = date.add(eachDate, "month", adj);
 				}
-				date.setDate(number);
+				eachDate.setDate(number);
 
-				if(!compareDate(date, today, "date")){
+				if(!compareDate(eachDate, today, "date")){
 					clazz = "dijitCalendarCurrentDate " + clazz;
 				}
 
-				if(!compareDate(date, selected, "date")
-						&& !compareDate(date, selected, "month")
-						&& !compareDate(date, selected, "year") ){
+				if(!compareDate(eachDate, selected, "date")
+						&& !compareDate(eachDate, selected, "month")
+						&& !compareDate(eachDate, selected, "year") ){
 					clazz = selectedCls + " " + clazz;
 				}
 
-				if(this.isDisabledDate(date, this.getLang())){
+				if(this.isDisabledDate(eachDate, this.getLang())){
 					clazz = " dijitCalendarDisabledDate " + clazz;
 				}
 
-				var clazz2 = this.getClassForDate(date, this.getLang());
+				var clazz2 = this.getClassForDate(eachDate, this.getLang());
 				if(clazz2){
 					clazz = clazz2 + " " + clazz;
 				}
 
 				template.className = clazz + "Month dijitCalendarDateTemplate";
-				template.dijitDateValue = date.valueOf();
+				template.dijitDateValue = eachDate.valueOf();
 				var label = query(".dijitCalendarDateLabel", template)[0];
 
-				this._setText(label, date.getDate());
+				this._setText(label, eachDate.getDate());
 
-				label._date = label.parentNode._date = date.getDate();
+				label._date = label.parentNode._date = eachDate.getDate();
 			}, this);
 
 			// Fill in localized month name
