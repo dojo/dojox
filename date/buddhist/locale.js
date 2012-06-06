@@ -408,4 +408,5 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 		return (label || lookup[props.join('-')]).concat(); /*Array*/
 	};
 
+	return blocale;
 });
