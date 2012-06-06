@@ -54,11 +54,16 @@
 				(new repeatClass({children: at(ctrl, "model")}).placeAt('repeat2')).startup();
 
 				when(all([parser.parse(), new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcRepeatData.json")}).query({})]), function(a){
-					ctrl.set("sourceModel", getStateful(a[1].items));
+	//				ctrl.set("sourceModel", getStateful(a[1].items));
 
 					 // should be able to verify all of the inputs
 					doh.register("Check values and bindings", [
 						{
+							name: "setup",
+							runTest: function(){
+								ctrl.set("sourceModel", getStateful(a[1].items));
+							}
+						}, {
 							name: "Initial",
 							runTest: function(){
 								doh.is("Anne", registry.byId("my_Repeat_0_textbox0").value, "textbox0 should be Anne");

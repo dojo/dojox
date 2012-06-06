@@ -11,7 +11,7 @@ define([
 ], function(require, kernel, lang, win, has, parser, mobileParser, _atBindingMixin){
 
 	// module:
-	//		dojox/mvc/ParserExtension
+	//		dojox/mvc/parserExtension
 	// summary:
 	//		A extension of Dojo parser that allows data binding without specifying data-dojo-type.
 

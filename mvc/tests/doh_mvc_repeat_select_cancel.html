@@ -84,12 +84,12 @@
 		var ViewMenuBarData, DetailMenuBarData, initialRows;
 		var selectionStatusConverter = {
 			format: function(value){
-				return this.source.uniqueId == (value || {}).uniqueId;
+				return this.target.uniqueId == (value || {}).uniqueId;
 			},
 			parse: function(value){
 				if(!value){ throw new Error(); } // Stop copying the new value for unchecked case
-				for(var a = this.target.inModel, i = 0; i < a.length; i++){
-					if(a[i].uniqueId == this.source.uniqueId){
+				for(var a = this.source.inModel, i = 0; i < a.length; i++){
+					if(a[i].uniqueId == this.target.uniqueId){
 						return a[i];
 					}
 				}

@@ -104,10 +104,10 @@
 						//return "dijitMenuItemLabel" + (value ? " complete" : "");
 						//ctrl.set("completed", false);
 						//ctrlComplete.set("completed", true);
-						//for(var a = this.target.inModel, i = 0; i < a.length; i++){
-						//	if(a[i].id == this.source.id){
-								console.log("****in completeConverter format this.target.id = "+this.target.id);
-								console.log(this.target);							
+						//for(var a = this.source.inModel, i = 0; i < a.length; i++){
+						//	if(a[i].id == this.target.id){
+								console.log("****in completeConverter format this.source.id = "+this.source.id);
+								console.log(this.source);							
 								//return a[i];
 						//	}
 						//}						
@@ -115,14 +115,14 @@
 					},
 					parse: function(value){
 						console.log("****in completeConverter parse value = "+value);
-						console.log("****in completeConverter parse this.target.id = "+this.target.id);						
-						console.log(this.target);
+						console.log("****in completeConverter parse this.source.id = "+this.source.id);						
+						console.log(this.source);
 						var model = ctrlComplete.model;
 						if(value){
 							model = currentctrl.model;
 						}
 						for(var a = model, i = 0; i < a.length; i++){
-							if(a[i].id == this.target.id){
+							if(a[i].id == this.source.id){
 								if(value){ // remove from list and move to completed
 									window.setTimeout(moveToComplete(currentctrl.model, ctrlComplete.model, i, value), 500);						
 								}else{

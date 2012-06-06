@@ -78,7 +78,7 @@
 				},
 				parse: function(value){
 					var utcDate = stamp.fromISOString(value + "T00:00:00Z"),
-					 current = this.target.value;
+					 current = this.source.value;
 					return new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate(), current.getHours(), current.getMinutes(), current.getSeconds(), current.getMilliseconds());
 				}
 			};
@@ -89,7 +89,7 @@
 				},
 				parse: function(value){
 					var utcTime = stamp.fromISOString("1970-01-01T" + value + "Z"),
-					 current = this.target.value;
+					 current = this.source.value;
 					return new Date(current.getFullYear(), current.getMonth(), current.getDate(), utcTime.getUTCHours(), utcTime.getUTCMinutes(), utcTime.getUTCSeconds(), utcTime.getUTCMilliseconds());
 				}
 			};
