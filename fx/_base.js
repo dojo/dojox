@@ -4,53 +4,52 @@ define(["dojo/_base/array","dojo/_base/lang", "dojo/_base/fx", "dojo/fx", "dojo/
 // summary: Experimental and extended Animations beyond Dojo Core / Base functionality.
 //	Provides advanced Lines, Animations, and convenience aliases.
 var dojoxFx = lang.getObject("dojox.fx", true);
-/*
+
 lang.mixin(dojox.fx, {
 
 	// anim: Function
 	//	Alias of `dojo.anim` - the shorthand `dojo.animateProperty` with auto-play
-	anim: dojo.fx.anim,
+	anim: baseFx.anim,
 
 	// animateProperty: Function
 	//	Alias of `dojo.animateProperty` - animate any CSS property
-	animateProperty: dojox.fx.animateProperty,
+	animateProperty: baseFx.animateProperty,
 
 	// fadeTo: Function
 	//		Fade an element from an opacity to an opacity.
 	//		Omit `start:` property to detect. `end:` property is required.
 	//		Ultimately an alias to `dojo._fade`
-	fadeTo: dojo._fade,
+	fadeTo: baseFx._fade,
 
 	// fadeIn: Function
 	//	Alias of `dojo.fadeIn` - Fade a node in.
-	fadeIn: dojo.fadeIn,
+	fadeIn: baseFx.fadeIn,
 	
 	// fadeOut: Function
 	//	Alias of `dojo.fadeOut` - Fades a node out.
-	fadeOut: dojo.fadeOut,
+	fadeOut: baseFx.fadeOut,
 
 	// combine: Function
 	//	Alias of `dojo.fx.combine` - Run an array of animations in parallel
-	combine: dojo.fx.combine,
+	combine: coreFx.combine,
 
 	// chain: Function
 	//	Alias of `dojo.fx.chain` - Run an array of animations in sequence
-	chain: dojo.fx.chain,
+	chain: coreFx.chain,
 
 	// slideTo: Function
 	//	Alias of `dojo.fx.slideTo` - Slide a node to a defined top/left coordinate
-	slideTo: dojo.fx.slideTo,
+	slideTo: coreFx.slideTo,
 
 	// wipeIn: Function
 	//	Alias of `dojo.fx.wipeIn` - Wipe a node to visible
-	wipeIn: dojo.fx.wipeIn,
+	wipeIn: coreFx.wipeIn,
 
 	// wipeOut: Function
 	//	Alias of `dojo.fx.wipeOut` - Wipe a node to non-visible
-	wipeOut: dojo.fx.wipeOut
-
+	wipeOut: coreFx.wipeOut
 });
-*/
+
 
 dojoxFx.sizeTo = function(/* Object */args){
 	// summary:
