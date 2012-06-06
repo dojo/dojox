@@ -21,14 +21,14 @@
 				var url = dojo.moduleUrl("dojox", "gfx/resources/Gillius.svg");
 				var f = new dojox.gfx.VectorFont(url);
 
-				//	draw out the glyphs for testing.
+				//		draw out the glyphs for testing.
 				var surface = dojox.gfx.createSurface("test", 600, 400);
 	/* SVGWEB { */
 	surface.whenLoaded(function() {
 				var rect = surface.createRect({ x: 0, y: 0, width: 600, height: 400 })
 					.setFill(bg);
 
-				//	draw it up.
+				//		draw it up.
 				var txtArgs = {
 					text: "Now is the time for all good men to come to a rest.  Plus, the rain in Spain falls mainly on the plain!",
 					x: 0, y: 0,

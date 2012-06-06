@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/dom", 
 		"dojo/dom-geometry", "./_base","./canvas", "./shape", "./matrix"], 
-  function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
+function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 	var canvasEvent = g.canvasWithEvents = {
 		// summary:
 		//		This the graphics rendering bridge for W3C Canvas compliant browsers which extends
@@ -17,23 +17,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		API.
 	};
 
-	/*=====
-	canvas.Shape = dojox.gfx.canvas.Shape;
-	canvas.Group = dojox.gfx.canvas.Group;
-	canvas.Image = dojox.gfx.canvas.Image;
-	canvas.Text = dojox.gfx.canvas.Text;
-	canvas.Rect = dojox.gfx.canvas.Rect;
-	canvas.Circle = dojox.gfx.canvas.Circle;
-	canvas.Ellipse = dojox.gfx.canvas.Ellipse;
-	canvas.Line = dojox.gfx.canvas.Line;
-	canvas.PolyLine = dojox.gfx.canvas.PolyLine;
-	canvas.TextPath = dojox.gfx.canvas.TextPath;
-	canvas.Path = dojox.gfx.canvas.Path;
-	canvas.Surface = dojox.gfx.canvas.Surface;
-	canvasEvent.Shape = dojox.gfx.canvasWithEvents.Shape;
-	=====*/
-
-	declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
+	canvasWithEvents.Shape = declare(canvas.Shape, {
 		
 		_testInputs: function(/* Object */ctx, /* Array */ pos){
 			if(this.clip || (!this.canvasFill && this.strokeStyle)){
@@ -109,11 +93,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		// events
 		
 		getEventSource: function(){
-			// summary: returns this gfx shape event source, which is the surface rawnode in the case of canvas.			
+			// summary:
+			//		returns this gfx shape event source, which is the surface rawnode in the case of canvas.
 			return this.surface.getEventSource();
 		},		
 		connect: function(name, object, method){
-			// summary: connects a handler to an event on this shape
+			// summary:
+			//		connects a handler to an event on this shape
 			this.surface._setupEvents(name); // setup events on demand
 			// No need to fix callback. The listeners registered by
 			// '_setupEvents()' are always invoked first and they
@@ -122,7 +108,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					 hub.connect(this, name, object, method) : hub.connect(this, name, object);
 		},
 		disconnect: function(token){
-			// summary: disconnects an event handler
+			// summary:
+			//		disconnects an event handler
 			hub.disconnect(token);
 		},
 		
@@ -147,8 +134,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		onkeydown:      function(){},
 		onkeyup:        function(){}
 	});
-	
-	declare("dojox.gfx.canvasWithEvents.Group", [canvasEvent.Shape, canvas.Group], {
+
+	canvasWithEvents.Group = declare([canvasEvent.Shape, canvas.Group], {
 		_testInputs: function(/*Object*/ctx, /*Array*/ pos){
 			var children = this.children, t = this.getTransform(), i, j, input;
 			if(children.length === 0){
@@ -210,8 +197,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		}	
 	});
-	
-	declare("dojox.gfx.canvasWithEvents.Image", [canvasEvent.Shape, canvas.Image], {
+
+	canvasWithEvents.Image = declare([canvasEvent.Shape, canvas.Image], {
 		_renderShape: function(/* Object */ ctx){
 			// summary:
 			//		render image
@@ -230,20 +217,20 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return x >= s.x && x <= s.x + s.width && y >= s.y && y <= s.y + s.height ? this : null;
 		}
 	});
-	
-	declare("dojox.gfx.canvasWithEvents.Text", [canvasEvent.Shape, canvas.Text], {
+
+	canvasWithEvents.Text = declare([canvasEvent.Shape, canvas.Text], {
 		_testInputs: function(ctx, pos){
 			return this._hitTestPixel(ctx, pos);
 		}
 	});
 
-	declare("dojox.gfx.canvasWithEvents.Rect", [canvasEvent.Shape, canvas.Rect], {});
-	declare("dojox.gfx.canvasWithEvents.Circle", [canvasEvent.Shape, canvas.Circle], {});
-	declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasEvent.Shape, canvas.Ellipse],{});
-	declare("dojox.gfx.canvasWithEvents.Line", [canvasEvent.Shape, canvas.Line],{});
-	declare("dojox.gfx.canvasWithEvents.Polyline", [canvasEvent.Shape, canvas.Polyline],{});
-	declare("dojox.gfx.canvasWithEvents.Path", [canvasEvent.Shape, canvas.Path],{});
-	declare("dojox.gfx.canvasWithEvents.TextPath", [canvasEvent.Shape, canvas.TextPath],{});
+	canvasWithEvents.Rect = declare([canvasEvent.Shape, canvas.Rect], {});
+	canvasWithEvents.Circle = declare([canvasEvent.Shape, canvas.Circle], {});
+	canvasWithEvents.Ellipse = declare([canvasEvent.Shape, canvas.Ellipse],{});
+	canvasWithEvents.Line = declare([canvasEvent.Shape, canvas.Line],{});
+	canvasWithEvents.Polyline = declare([canvasEvent.Shape, canvas.Polyline],{});
+	canvasWithEvents.Path = declare([canvasEvent.Shape, canvas.Path],{});
+	canvasWithEvents.TextPath = declare([canvasEvent.Shape, canvas.TextPath],{});
 
 	
 	// a map that redirects shape-specific events to the canvas event handler that deals with these events
@@ -266,8 +253,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		isiOS = uagent.search('iphone') > -1 || 
 			    uagent.search('ipad') > -1 || 
 				uagent.search('ipod') > -1;
-	
-	declare("dojox.gfx.canvasWithEvents.Surface", canvas.Surface, {
+
+	canvasWithEvents.Surface = declare(canvas.Surface, {
 		constructor:function(){
 			this._pick = { curr: null, last: null };
 			this._pickOfMouseDown = null;
@@ -275,7 +262,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		
 		connect: function(/*String*/name, /*Object*/object, /*Function|String*/method){
-			// summary: connects a handler to an event on this surface
+			// summary:
+			//		connects a handler to an event on this surface
 			// name: String
 			//		The event name
 			// object: Object
@@ -317,7 +305,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 
 		_setupEvents: function(eventName){
-			// summary: 
+			// summary:
 			//		setup event listeners if not yet
 
 			// onmouseenter and onmouseleave shape events are handled in the onmousemove surface handler
@@ -349,7 +337,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		},
 		
 		destroy: function(){
-			// summary: stops the move, deletes all references, so the object can be garbage-collected
+			// summary:
+			//		stops the move, deletes all references, so the object can be garbage-collected
 			shapeLib.Surface.prototype.destroy.apply(this);
 			// destroy events and objects
 			for(var i in this._eventsH){
@@ -360,7 +349,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		
 		// events
 		getEventSource: function(){
-			// summary: returns the canvas DOM node for surface-level events
+			// summary:
+			//		returns the canvas DOM node for surface-level events
 			return this.rawNode;
 		},
 
@@ -392,7 +382,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_oncontextmenu: function(e){
-			// summary: triggers onclick
+			// summary:
+			//		triggers onclick
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
@@ -400,7 +391,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_ondblclick: function(e){
-			// summary: triggers onclick
+			// summary:
+			//		triggers onclick
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pickOfMouseUp){
@@ -408,7 +400,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_onclick: function(e){
-			// summary: triggers onclick
+			// summary:
+			//		triggers onclick
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pickOfMouseUp && this._pickOfMouseUp == this._pickOfMouseDown){
@@ -416,7 +409,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_onmousedown: function(e){
-			// summary: triggers onmousedown
+			// summary:
+			//		triggers onmousedown
 			this._pickOfMouseDown = this._pick.curr;
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
@@ -424,7 +418,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_ontouchstart: function(e){
-			// summary: triggers ontouchstart			
+			// summary:
+			//		triggers ontouchstart
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr) {
@@ -432,7 +427,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}			
 		},
 		_onmouseup: function(e){
-			// summary: triggers onmouseup
+			// summary:
+			//		triggers onmouseup
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			this._pickOfMouseUp = this._pick.curr;
@@ -441,7 +437,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_ontouchend: function(e){
-			// summary: triggers ontouchend
+			// summary:
+			//		triggers ontouchend
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.curr){
@@ -454,7 +451,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_onmousemove: function(e){
-			// summary: triggers onmousemove, onmouseenter, onmouseleave
+			// summary:
+			//		triggers onmousemove, onmouseenter, onmouseleave
 			
 			// this._pick.curr = an array of target for touch event, one target instance for mouse events
 			if(this._pick.last && this._pick.last != this._pick.curr){
@@ -471,7 +469,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			}
 		},
 		_ontouchmove: function(e){
-			// summary: triggers ontouchmove
+			// summary:
+			//		triggers ontouchmove
 			if(this._pick.curr){
 				this._fireTouchEvent(e);
 			}
@@ -531,8 +530,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		_onkeyup:   function(){},	// needed?
 
 		_whatsUnderEvent: function(evt){
-			// summary:	returns the shape under the mouse event
-			// evt:		mouse event
+			// summary:
+			//		returns the shape under the mouse event
+			// evt:
+			//		mouse event
 			
 			var surface = this, i,
 				pos = domGeom.position(surface.rawNode, true),
@@ -593,10 +594,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	});
 	
 	canvasEvent.createSurface = function(parentNode, width, height){
-		// summary: creates a surface (Canvas)
-		// parentNode: Node: a parent node
-		// width: String: width of surface, e.g., "100px"
-		// height: String: height of surface, e.g., "100px"
+		// summary:
+		//		creates a surface (Canvas)
+		// parentNode: Node
+		//		a parent node
+		// width: String
+		//		width of surface, e.g., "100px"
+		// height: String
+		//		height of surface, e.g., "100px"
 
 		if(!width && !height){
 			var pos = domGeom.position(parentNode);
@@ -638,7 +643,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	};
 	
 	canvasEvent.fixTarget = function(event, gfxElement){
-		// summary: 
+		// summary:
 		//     Adds the gfxElement to event.gfxTarget if none exists. This new 
 		//     property will carry the GFX element associated with this event.
 		// event: Object 

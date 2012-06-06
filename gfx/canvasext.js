@@ -9,7 +9,7 @@ define([
 		
 		getImageData: function(rect){
 			// summary:
-			//		Returns the canvas pixel buffer. 
+			//		Returns the canvas pixel buffer.
 			// rect: dojox.gfx.Rectangle
 			//		The canvas area.
 			
@@ -22,7 +22,7 @@ define([
 		
 		getContext: function(){
 			// summary:
-			//		Returns the surface CanvasRenderingContext2D. 
+			//		Returns the surface CanvasRenderingContext2D.
 			return this.rawNode.getContext("2d");
 		}
 	});		
