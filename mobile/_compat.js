@@ -59,6 +59,7 @@ define([
 			_doTransition: function(fromNode, toNode, transition, dir){
 				var anim;
 				this.wakeUp(toNode);
+				var s1, s2;
 				if(!transition || transition == "none"){
 					toNode.style.display = "";
 					fromNode.style.display = "none";
@@ -66,13 +67,13 @@ define([
 					this.invokeCallback();
 				}else if(transition == "slide" || transition == "cover" || transition == "reveal"){
 					var w = fromNode.offsetWidth;
-					var s1 = fx.slideTo({
+					s1 = fx.slideTo({
 						node: fromNode,
 						duration: 400,
 						left: -w*dir,
 						top: domStyle.get(fromNode, "top")
 					});
-					var s2 = fx.slideTo({
+					s2 = fx.slideTo({
 						node: toNode,
 						duration: 400,
 						left: 0,
@@ -96,13 +97,13 @@ define([
 					anim.play();
 				}else if(transition == "slidev" || transition == "coverv" || transition == "reavealv"){
 					var h = fromNode.offsetHeight;
-					var s1 = fx.slideTo({
+					s1 = fx.slideTo({
 						node: fromNode,
 						duration: 400,
 						left: 0,
 						top: -h*dir
 					});
-					var s2 = fx.slideTo({
+					s2 = fx.slideTo({
 						node: toNode,
 						duration: 400,
 						left: 0,
@@ -529,7 +530,14 @@ define([
 			var paths = dm.getCssPaths();
 			for(var i = 0; i < paths.length; i++){
 				var href = paths[i];
-				if((href.match(dm.loadCompatPattern) || location.href.indexOf("mobile/tests/") !== -1) && href.indexOf("-compat.css") === -1){
+				// Load the -compat.css only for css files that belong to a theme. For that, by default
+				// we match on directories containing "mobile/themes". If a custom theme is located
+				// outside a "mobile/themes" directory, the dojoConfig needs to specify a custom 
+				// pattern using the "mblLoadCompatPattern" configuration parameter, for instance:
+				//   data-dojo-config="mblLoadCompatPattern: /\/mycustom\/.*\.css$/"
+				// Additionally, compat css files are loaded for css in the mobile/tests directory.
+				if((href.match(config.mblLoadCompatPattern || dm.loadCompatPattern) || 
+					location.href.indexOf("mobile/tests/") !== -1) && href.indexOf("-compat.css") === -1){
 					var compatCss = href.substring(0, href.length-4)+"-compat.css";
 					dm.loadCss(compatCss);
 				}
