@@ -100,7 +100,7 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 		});
 	}
 	
-	hlocale.format = function(/*hebrew.Date*/dateObject, /*object?*/options){
+	hlocale.format = function(/*dojox.date.hebrew.Date*/dateObject, /*object?*/options){
 		// summary:
 		//		Format a Date object as a String, using  settings.
 		// description:
