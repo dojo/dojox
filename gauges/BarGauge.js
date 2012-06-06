@@ -2,10 +2,6 @@ define(["dojo/_base/declare","dojo/_base/lang","dojo/_base/array","dojo/_base/ht
 		"./_Gauge","./BarLineIndicator", "dojo/dom-geometry"],
  function(declare, lang, arr, html, event, gfx, Gauge, BarLineIndicator, domGeometry) {
 
-/*=====
-	Gauge = dojox.gauges._Gauge;
-=====*/
-
 return declare("dojox.gauges.BarGauge", Gauge, {
 	// summary:
 	//		a bar graph built using the dojox.gfx package.

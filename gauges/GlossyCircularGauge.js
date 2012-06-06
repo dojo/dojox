@@ -1,10 +1,6 @@
 define(["dojo/_base/declare","dojo/_base/Color","./GlossyCircularGaugeBase"],
   function(declare, Color, GlossyCircularGaugeBase) {
 
-/*=====
-	GlossyCircularGaugeBase = dojox.gauges.GlossyCircularGaugeBase;
-=====*/
-
 return declare("dojox.gauges.GlossyCircularGauge", [GlossyCircularGaugeBase], {
 	// summary:
 	//		Represents a circular gauge with a glossy appearance.
