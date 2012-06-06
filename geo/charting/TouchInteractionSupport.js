@@ -7,9 +7,9 @@ define([
 ], function(lang,declare,event,connect,win){
 
 	return declare("dojox.geo.charting.TouchInteractionSupport",null, {
-		//	summary: 
+		// summary: 
 		//		A class to handle touch interactions on a dojox.geo.charting.Map component.
-		//	tags:
+		// tags:
 		//		private
 		
 		_map : null,
@@ -240,11 +240,11 @@ define([
 		},
 	
 		_touchEndHandler: function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a touch end was triggered 
 			// touchEvent: TouchEvent
 			//		a touch event
-			//	tags:
+			// tags:
 			//		private
 			event.stop(touchEvent);
 			var touches = touchEvent.touches;

@@ -19,22 +19,22 @@ define([
 		   Feature, Marker, number, has){
 
 	return declare("dojox.geo.charting.Map", null, {
-		//	summary:
+		// summary:
 		//		Map widget interacted with charting.
-		//	description:
+		// description:
 		//		Support rendering Americas, AsiaPacific, ContinentalEurope, EuropeMiddleEastAfrica,
 		//		USStates, WorldCountries, and WorldCountriesMercator by default.
-		//	example:
+		// example:
 		//	|	var usaMap = new dojox.geo.charting.Map(srcNode, "dojotoolkit/dojox/geo/charting/resources/data/USStates.json");
 		//	|	<div id="map" style="width:600px;height:400px;"></div>
 	
-		//	defaultColor: String
+		// defaultColor: String
 		//		Default map feature color, e.g: "#B7B7B7"
 		defaultColor:"#B7B7B7",
-		//	highlightColor: String
+		// highlightColor: String
 		//		Map feature color when mouse over it, e.g: "#"
 		highlightColor:"#D5D5D5",
-		//	series: Array
+		// series: Array
 		//		stack to data range, e.g: [{name:'label 1', min:20, max:70, color:'#DDDDDD'},{...},...]
 		series:[],
 		
@@ -49,10 +49,12 @@ define([
 		_onNewListener:null,
 		_onDeleteListener:null,
 		constructor: function(/*Node*/container, /*String|Object*/shapeData){
+			// summary:
+			//		Constructs a new Map instance.
 			// container:
-			//		map container html node/id
+			//		map container html node/id.
 			// shapeData:
-			//		map shape data json object, or url to json file
+			//		map shape data json object, or url to json file.
 	
 			html.style(container, "display", "block");
 	
@@ -186,7 +188,7 @@ define([
 		},
 	
 		setDataBindingValueFunction: function(/* function */valueFunction){
-			//  summary:
+			// summary:
 			//		sets the function that extracts values from dataStore items,to use as Feature values (see Feature.setValue function)
 			// prop:
 			//		the function
@@ -583,7 +585,6 @@ define([
 		},
 	
 		_init: function(shapeData){
-	
 			// summary:
 			//		inits this Map component.
 	

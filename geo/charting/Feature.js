@@ -54,7 +54,7 @@ define([
 			this.unsetColor();
 		},
 		unsetColor:function(){
-			//	summary:
+			// summary:
 			//		clears the colors on this Feature object.
 	
 			this._defaultFill = this.parent.defaultColor;

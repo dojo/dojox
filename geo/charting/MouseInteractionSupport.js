@@ -27,9 +27,9 @@ define([
 	 =====*/
 
 	return declare("dojox.geo.charting.MouseInteractionSupport", null, {
-		//	summary: 
+		// summary: 
 		//		class to handle mouse interactions on a dojox.geo.charting.Map widget
-		//	tags:
+		// tags:
 		//		private
 		
 		_map : null,
@@ -114,7 +114,7 @@ define([
 		},
 	
 		disconnect: function(){
-			//	summary: 
+			// summary: 
 			//		disconnects any installed listeners
 			
 			// store zoomPan state
@@ -143,10 +143,11 @@ define([
 		},
 	
 		_mouseClickHandler: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a mouse click was performed
-			//	mouseEvent: the mouse event
-			//	tags:
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// tags:
 			//		private
 			
 			var feature = this._getFeatureFromMouseEvent(mouseEvent);
@@ -165,10 +166,11 @@ define([
 		},
 	
 		_mouseDownHandler: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a mouse down was performed
-			//	mouseEvent: the mouse event
-			//	tags:
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// tags:
 			//		private
 			
 			
@@ -213,10 +215,11 @@ define([
 		},
 	
 		_mouseUpHandler: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a mouse up was performed
-			//	mouseEvent: the mouse event
-			//	tags:
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// tags:
 			//		private
 			
 			event.stop(mouseEvent);
@@ -243,12 +246,13 @@ define([
 		},
 	
 		_getFeatureFromMouseEvent: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		utility function to return the feature located at this mouse event location
-			//	mouseEvent: the mouse event
-			//	returns: dojox.geo.charting.Feature
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// returns: dojox.geo.charting.Feature
 			//		the feature found if any, null otherwise.
-			//	tags:
+			// tags:
 			//		private
 			var feature = null;
 			if(mouseEvent.gfxTarget && mouseEvent.gfxTarget.getParent){
@@ -258,10 +262,11 @@ define([
 		},
 	
 		_mouseMoveHandler: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a mouse move was performed
-			//	mouseEvent: the mouse event
-			//	tags:
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// tags:
 			//		private
 	
 			
@@ -292,10 +297,11 @@ define([
 		},
 	
 		_mouseDragHandler: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a mouse drag was performed
-			//	mouseEvent: the mouse event
-			//	tags:
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// tags:
 			//		private
 			
 			// prevent browser interaction
@@ -333,10 +339,11 @@ define([
 		},
 	
 		_mouseWheelHandler: function(mouseEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a mouse wheel up/down was performed
-			//	mouseEvent: the mouse event
-			//	tags:
+			// mouseEvent: MouseEvent:
+			//		the mouse event
+			// tags:
 			//		private
 			
 	

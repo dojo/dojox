@@ -10,22 +10,22 @@ define([
 ], function(lang, declare, event, connect, html, dom, functional, keys) {
 
 	return declare("dojox.geo.charting.KeyboardInteractionSupport", null, {
-		//	summary: 
+		// summary: 
 		//		class to handle keyboard interactions on a dojox.geo.charting.Map component.
 		//
 		//		The sections on the leading edge should receive the focus in response to a TAB event. 
 		//		Then use cursor keys to the peer sections. The cursor event should go the adjacent section 
 		//		in that direction. With the focus, the section zooms in upon SPACE. The map should zoom out 
 		//		on ESC. Finally, while it has the focus, the map should lose the focus on TAB.
-		//	tags:
+		// tags:
 		//		private
 		_map: null,
 		_zoomEnabled: false,
 		
 		constructor: function(/*dojox.geo.charting.Map*/ map, /*Object?*/ options){
-			//	summary: 
+			// summary: 
 			//		Constructs a new _KeyboardInteractionSupport instance
-			//	map: dojox.geo.charting.Map
+			// map: dojox.geo.charting.Map
 			//		the Map component this class provides touch navigation for.
 			// options: Object?
 			//		An object defining additional configuration properties. Currently,
@@ -37,7 +37,7 @@ define([
 			}
 		},
 		connect: function(){
-			//	summary: 
+			// summary: 
 			//		connects this keyboard support class to the Map component		
 			var container = dom.byId(this._map.container);
 			//	tab accessing enable
@@ -52,7 +52,7 @@ define([
 			this._onBlurListener = connect.connect(container, "blur", this, "onBlur");
 		},
 		disconnect: function(){
-			//	summary: 
+			// summary: 
 			//		disconnects any installed listeners
 			connect.disconnect(this._keydownListener);
 			this._keydownListener = null;
