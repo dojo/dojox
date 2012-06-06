@@ -1,6 +1,14 @@
-define(["dojo/_base/lang","dojo/_base/array","../../main", "dojo/_base/html","dojo/dom-geometry",
-		"dojox/gfx/matrix","dijit/Tooltip","dojo/_base/NodeList","dojo/NodeList-traverse"],
-  function(lang, arr, dojox, html, domGeom, matrix, Tooltip, NodeList, NodeListTraverse) {
+define([
+	"dojo/_base/lang",
+	"dojo/_base/array",
+	"../../main",
+	"dojo/_base/html",
+	"dojo/dom-geometry",
+	"dojox/gfx/matrix",
+	"dijit/Tooltip",
+	"dojo/_base/NodeList",
+	"dojo/NodeList-traverse"
+], function(lang, arr, dojox, html, domGeom, matrix, Tooltip, NodeList, NodeListTraverse) {
 	var dgc = lang.getObject("geo.charting", true, dojox); 
 
 	dgc.showTooltip = function(/*String*/innerHTML, /*dojox.gfx.shape*/ gfxObject, /*String[]?*/ positions){
@@ -51,4 +59,6 @@ define(["dojo/_base/lang","dojo/_base/array","../../main", "dojo/_base/html","do
 		}
 		return bboxObject;
 	};
+	
+	return dgc;
 });
