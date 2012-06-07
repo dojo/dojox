@@ -62,7 +62,7 @@
 			<span style="width:33%;float:left;">
 				<div class="title">Typical Calendar usage, with day, and month/year views</div>
 				<div data-dojo-type="dojox.widget.Calendar" id="cal">
-					<script type="dojo/connect" event="onValueSelected" args="value">
+					<script type="dojo/on" event="valueselected" args="value">
 						console.log("Date Value selected: " + value);
 					</script>
 				</div>

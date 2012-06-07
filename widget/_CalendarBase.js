@@ -9,12 +9,12 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/_base/fx",
-	"dojo/_base/connect",
+	"dojo/on",
 	"dojo/_base/array",
 	"dojo/_base/lang",
 	"dojo/text!./Calendar/Calendar.html",
 	"dijit/typematic"
-], function(_Widget, _Templated, _Container, declare, dojoDate, dojoDateLocale, domStyle, domClass, domConstruct, fx, connect, array, lang, template){
+], function(_Widget, _Templated, _Container, declare, dojoDate, dojoDateLocale, domStyle, domClass, domConstruct, fx, on, array, lang, template){
 	return declare("dojox.widget._CalendarBase", [_Widget, _Templated, _Container], {
 		// summary:
 		//		The Root class for all _Calendar extensions
@@ -123,7 +123,7 @@ define([
 				domStyle.set(widget.domNode, "visibility", "hidden");
 
 				//Listen for the values in a view to be selected
-				connect.connect(widget, "onValueSelected", this, "_onDateSelected");
+				widget.on("valueselected", lang.hitch(this, "_onDateSelected"))
 				widget.set("value", this.get('value'));
 			}, this);
 
@@ -147,7 +147,7 @@ define([
 					selector:'date',
 					locale:this.lang});
 
-			connect.connect(this.footer, "onclick", this, "goToToday");
+			on(this.footer, "click", lang.hitch(this, "goToToday"))
 
 			var first = this._children[0];
 
