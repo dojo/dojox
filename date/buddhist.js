@@ -3,26 +3,26 @@ define(["..", "dojo/_base/lang", "dojo/date", "./buddhist/Date"], function(dojox
 
 // Utility methods to do arithmetic calculations with buddhist.Dates
 
-dbuddhist.getDaysInMonth = function(/*dojox.date.buddhist.Date*/dateObject){
+dbuddhist.getDaysInMonth = function(/*dojox/date/buddhist/Date*/dateObject){
 	return dd.getDaysInMonth(dateObject.toGregorian());
 };
 
-dbuddhist.isLeapYear = function(/*dojox.date.buddhist.Date*/dateObject){
+dbuddhist.isLeapYear = function(/*dojox/date/buddhist/Date*/dateObject){
 	return dd.isLeapYear(dateObject.toGregorian());
 };
 
 //FIXME: reduce compare, add, diff also
-dbuddhist.compare = function(/*dojox.date.buddhist.Date*/date1, /*dojox.buddhist.date.Date*/date2, /*String?*/portion){
+dbuddhist.compare = function(/*dojox/date/buddhist/Date*/date1, /*dojox/buddhist/date/Date*/date2, /*String?*/portion){
 	// summary:
 	//		Compare two buddhist date objects by date, time, or both.
 	return dd.compare(date1,date2, portion); // int
 };
 
 
-dbuddhist.add = function(/*dojox.date.buddhist.Date*/date, /*String*/interval, /*int*/amount){
+dbuddhist.add = function(/*dojox/date/buddhist/Date*/date, /*String*/interval, /*int*/amount){
 	// summary:
 	//		Add to a Date in intervals of different size, from milliseconds to years
-	// date: dojox.date.buddhist.Date
+	// date: dojox/date/buddhist/Date
 	//		Date object to start with
 	// interval:
 	//		A string representing the interval.  One of the following:
@@ -98,11 +98,11 @@ dbuddhist.add = function(/*dojox.date.buddhist.Date*/date, /*String*/interval, /
 	return newBuddDate; // dojox.date.buddhist.Date
 };
 
-dbuddhist.difference = function(/*dojox.date.buddhist.Date*/date1, /*dojox.date.buddhist.Date?*/date2, /*String?*/interval){
+dbuddhist.difference = function(/*dojox/date/buddhist/Date*/date1, /*dojox/date/buddhist/Date?*/date2, /*String?*/interval){
 	// summary:
 	//        date2 - date1
-	// date1: dojox.date.dbuddhist.Date
-	// date2: dojox.date.dbuddhist.Date
+	// date1: dojox/date/dbuddhist.Date
+	// date2: dojox/date/dbuddhist/Date
 	// 		If not specified, the current dojox.date.dbuddhist.Date is used.
 	// interval:
 	//		A string representing the interval.  One of the following:

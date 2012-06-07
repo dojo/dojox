@@ -100,7 +100,7 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 		});
 	}
 	
-	hlocale.format = function(/*dojox.date.hebrew.Date*/dateObject, /*object?*/options){
+	hlocale.format = function(/*dojox/date/hebrewDate*/dateObject, /*object?*/options){
 		// summary:
 		//		Format a Date object as a String, using  settings.
 		// description:
@@ -457,7 +457,7 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 
 	hlocale.addCustomFormats("dojo.cldr","hebrew");
 
-	hlocale.getNames = function(/*String*/item, /*String*/type, /*String?*/context, /*String?*/locale, /*dojox.date.hebrew.Date?*/date){
+	hlocale.getNames = function(/*String*/item, /*String*/type, /*String?*/context, /*String?*/locale, /*dojox/date/hebrew/Date?*/date){
 		// summary:
 		//		Used to get localized strings from dojo.cldr for day or month names.
 		// item:

@@ -424,7 +424,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"], function(lang, de
 });
 
 //TODOC
-IDate.getDaysInIslamicMonth = function(/*dojox.date.islamic.Date*/month){
+IDate.getDaysInIslamicMonth = function(/*dojox/date/islamic.Date*/month){
 	return new IDate().getDaysInIslamicMonth(month.getMonth(),month.getFullYear()); // dojox.date.islamic.Date
 };
 return IDate;

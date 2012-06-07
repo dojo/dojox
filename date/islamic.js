@@ -5,13 +5,13 @@ var dislamic = lang.getObject("date.islamic", true, dojox);
 // Utility methods to do arithmetic calculations with islamic.Dates
 
 	// added for compat to date
-dislamic.getDaysInMonth = function(/*dojox.date.islamic.Date*/month){
+dislamic.getDaysInMonth = function(/*dojox/date/islamic/Date*/month){
 	return month.getDaysInIslamicMonth(month.getMonth(), month.getFullYear());
 };
 
 //TODO: define islamic.isLeapYear?  Or should it be invalid, since it has different meaning?
 
-dislamic.compare = function(/*dojox.date.islamic.Date*/date1, /*dojox.date.islamic.Date*/date2, /*String?*/portion){
+dislamic.compare = function(/*dojox/date/islamic/Date*/date1, /*dojox/date/islamic/Date*/date2, /*String?*/portion){
 	// summary:
 	//		Compare two islamic date objects by date, time, or both.
 	// description:
@@ -35,10 +35,10 @@ dislamic.compare = function(/*dojox.date.islamic.Date*/date1, /*dojox.date.islam
 	return dd.compare.apply(null, arguments);
 };
 
-dislamic.add = function(/*dojox.date.islamic.Date*/date, /*String*/interval, /*int*/amount){
+dislamic.add = function(/*dojox/date/islamic/Date*/date, /*String*/interval, /*int*/amount){
 	// summary:
 	//		Add to a Date in intervals of different size, from milliseconds to years
-	// date: dojox.date.islamic.Date
+	// date: dojox/date/islamic/Date
 	//		Date object to start with
 	// interval:
 	//		A string representing the interval.  One of the following:
@@ -107,11 +107,11 @@ dislamic.add = function(/*dojox.date.islamic.Date*/date, /*String*/interval, /*i
 	return newIslamDate; // dojox.date.islamic.Date
 };
 
-dislamic.difference = function(/*dojox.date.islamic.Date*/date1, /*dojox.date.islamic.Date?*/date2, /*String?*/interval){
+dislamic.difference = function(/*dojox/date/islamic/Date*/date1, /*dojox/date/islamic/Date?*/date2, /*String?*/interval){
 	// summary:
 	//        date2 - date1
-	// date1: dojox.date.islamic.Date
-	// date2: dojox.date.islamic.Date
+	// date1: dojox/date/islamic/Date
+	// date2: dojox/date/islamic/Date
 	// 		If not specified, the current dojox.date.islamic.Date is used.
 	// interval:
 	//		A string representing the interval.  One of the following:
