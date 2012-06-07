@@ -63,7 +63,7 @@
 				<div class="title">Typical Calendar usage, with day, and month/year views</div>
 				<div data-dojo-type="dojox.widget.Calendar" id="cal">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected: " + value);
+						console.log("Date Value selected: " + value);
 					</script>
 				</div>
 
@@ -82,7 +82,7 @@
 
 				<div data-dojo-type="dojox.widget.DailyCalendar" id="calDayOnly">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Day Value selected: " + value);
+						console.log("Day Value selected: " + value);
 					</script>
 				</div>
 
@@ -100,7 +100,7 @@
 
 				<div data-dojo-type="dojox.widget.MonthAndYearlyCalendar" id="calMonthAndYearOnly">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected from Month and Year Only Calendar: " + value);
+						console.log("Date Value selected from Month and Year Only Calendar: " + value);
 					</script>
 				</div>
 
@@ -121,7 +121,7 @@
 				<div data-dojo-type="dojox.widget.Calendar" id="calLimits" value="2008-12-25"
 						constraints="{min:'2008-12-12',max:'2009-01-15'}">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected: " + value);
+						console.log("Date Value selected: " + value);
 					</script>
 				</div>
 
@@ -137,7 +137,7 @@
 			<span style="width:33%;float:left;">
 				<div class="title">Typical calendar, with min/max constraints a week before and after the current date</div>
 				<div data-dojo-type="dojox.widget.Calendar" id="calLimitsWeek">
-					<script type="dojo/method" event="postMixInProperties">						
+<!--					<script type="dojo/method" event="postMixInProperties">						
 						// This runs after the constructor, before properties are mixed in
 						var currentDate = new Date();
 						this.constraints = {
@@ -147,9 +147,9 @@
 						dojox.widget.Calendar.prototype.postMixInProperties.call(this);
 					</script>
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected: " + value);
+						console.log("Date Value selected: " + value);
 					</script>
-				</div>
+-->				</div>
 
 				<p>
 				Lorem ipsum dolor sit amet, <a href="#">consectetuer</a> adipiscing elit. Aenean
@@ -164,7 +164,7 @@
 				<div class="title">Typical calendar, initial date set in HTML to December 25th, 2007</div>
 				<div data-dojo-type="dojox.widget.Calendar" id="calXmas" value="2007-12-25">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected: " + value);
+						console.log("Date Value selected: " + value);
 					</script>
 				</div>
 
@@ -185,7 +185,7 @@
 
 				<div data-dojo-type="dojox.widget.CalendarFisheye" id="calFisheye">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected from Fisheye Calendar: " + value);
+						console.log("Date Value selected from Fisheye Calendar: " + value);
 					</script>
 				</div>
 
@@ -203,7 +203,7 @@
 
 				<div data-dojo-type="test.CalendarCustomFx" id="calCustomFx">
 					<script type="dojo/connect" event="onValueSelected" args="value">
-						log("Date Value selected in FX Calendar: " + value);
+						console.log("Date Value selected in FX Calendar: " + value);
 					</script>
 				</div><p>
 				Lorem ipsum dolor sit amet, <a href="#">consectetuer</a> adipiscing elit. Aenean
