@@ -398,7 +398,7 @@ dcolor.Colorspace = new (function(){
 			xg:m[5], yg:m[6], Yg:m[7],
 			xb:m[8], yb:m[9], Yb:m[10]
 		};
-		
+
 		//	convert for the whitepoint
 		if(kwArgs.whitepoint!=primary.whitepoint){
 			var r=this.convert(
@@ -512,12 +512,12 @@ dcolor.Colorspace = new (function(){
 	};
 })();
 
-//	More dojox.color and dojox.color.Color extensions
+//	More dcolor and dojox.color.Color extensions
 dojo.mixin(dcolor, {
 	fromXYZ: function(/* Object */xyz, /* Object?*/kwArgs){
 		kwArgs=kwArgs||{};
-		var p=dojox.color.Colorspace.primaries(kwArgs);
-		var m=dojox.color.Colorspace.matrix("RGB", p);
+		var p=dcolor.Colorspace.primaries(kwArgs);
+		var m=dcolor.Colorspace.matrix("RGB", p);
 		var rgb=dojox.math.matrix.multiply([[ xyz.X, xyz.Y, xyz.Z ]], m);
 		var r=rgb[0][0], g=rgb[0][1], b=rgb[0][2];
 		if(p.profile=="sRGB"){
@@ -527,15 +527,15 @@ dojo.mixin(dcolor, {
 		}else{
 			var R=Math.pow(r, 1/p.gamma), G=Math.pow(g, 1/p.gamma), B=Math.pow(b, 1/p.gamma);
 		}
-		return new dojox.color.Color({ r:Math.floor(R*255), g:Math.floor(G*255), b:Math.floor(B*255) });
+		return new dcolor.Color({ r:Math.floor(R*255), g:Math.floor(G*255), b:Math.floor(B*255) });
 	}
 });
 
 dojo.extend(dcolor.Color, {
 	toXYZ: function(/* Object */kwArgs){
 		kwArgs=kwArgs||{};
-		var p=dojox.color.Colorspace.primaries(kwArgs);
-		var m=dojox.color.Colorspace.matrix("XYZ", p);
+		var p=dcolor.Colorspace.primaries(kwArgs);
+		var m=dcolor.Colorspace.matrix("XYZ", p);
 		var _r=this.r/255, _g=this.g/255, _b=this.b/255;
 		if(p.profile=="sRGB"){
 			var r=(_r>0.04045) ? Math.pow(((_r+0.055)/1.055), 2.4):_r/12.92;
@@ -544,7 +544,7 @@ dojo.extend(dcolor.Color, {
 		} else {
 			var r=Math.pow(_r, p.gamma), g=Math.pow(_g, p.gamma), b=Math.pow(_b, p.gamma);
 		}
-		var xyz=dojox.math.matrix([[ r, g, b ]], m);
+		var xyz=dxm([[ r, g, b ]], m);
 		return { X: xyz[0][0], Y: xyz[0][1], Z: xyz[0][2] };	//	Object
 	}
 });

@@ -7,6 +7,10 @@ define(["dojo/_base/array", "dojo/_base/declare", "./NeutralColorModel"],
 		//		using an interpolation between two extremum colors around the mean value.
 			
 		constructor: function(startColor, endColor){
+			// startColor: dojo/_base/Color
+			//		The start color.
+			// endColor: dojo/_base/Color?
+			//		The end color.
 		},
 			
 		computeNeutral: function(min, max, sum, values){

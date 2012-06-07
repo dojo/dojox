@@ -1,7 +1,7 @@
-define(["dojo/_base/kernel", "../main", "dojo/_base/lang", "dojo/_base/Color", "dojo/colors"], 
-	function(dojo, dojox, lang, Color, colors){
+define(["../main", "dojo/_base/lang", "dojo/_base/Color", "dojo/colors"],
+	function(dojox, lang, Color, colors){
 
-var cx = lang.getObject("dojox.color", true);
+var cx = lang.getObject("color", true, dojox);
 /*===== cx = dojox.color =====*/
 		
 //	alias all the dojo.Color mechanisms

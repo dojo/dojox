@@ -11,6 +11,10 @@ define(["dojo/_base/array", "dojo/_base/declare", "./SimpleColorModel"],
 		_e: 0,
 	
 		constructor: function(startColor, endColor){
+			// startColor: dojo/_base/Color
+			//		The start color.
+			// endColor: dojo/_base/Color?
+			//		The end color.
 		},
 	
 		initialize: function(items, colorFunc){
