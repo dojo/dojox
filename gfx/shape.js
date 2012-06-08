@@ -17,7 +17,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	shape.register = function(/*dojox.gfx.shape.Shape*/s){
 		// summary:
 		//		Register the specified shape into the graphics registry.
-		// s: dojox.gfx.shape.Shape
+		// s: dojox/gfx/shape.Shape
 		//		The shape to register.
 		// returns: Number
 		//		The unique id associated with this shape.
@@ -35,7 +35,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		//		Returns the shape that matches the specified id.
 		// id: String
 		//		The unique identifier for this Shape.
-		return registry[id]; //dojox.gfx.shape.Shape
+		return registry[id]; //dojox/gfx/shape.Shape
 	};
 	
 	shape.dispose = function(/*dojox.gfx.shape.Shape*/s){
@@ -46,7 +46,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		delete registry[s.getUID()];
 	};
 	
-	shape.Shape = declare(null, {
+	shape.Shape = declare("dojox.gfx.shape.Shape", null, {
 		// summary:
 		//		a Shape object, which knows how to apply
 		//		graphical attributes and transformations
@@ -657,7 +657,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		}
 	};
 
-	shape.Surface = declare(null, {
+	shape.Surface = declare("dojox.gfx.shape.Surface", null, {
 		// summary:
 		//		a surface object to be used for drawings
 		constructor: function(){
@@ -736,7 +736,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		//		You should use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
 	});
 	
-	shape.Rect = declare(shape.Shape, {
+	shape.Rect = declare("dojox.gfx.shape.Rect", shape.Shape, {
 		// summary:
 		//		a generic rectangle
 		constructor: function(rawNode){
@@ -752,7 +752,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		}
 	});
 	
-	shape.Ellipse = declare(shape.Shape, {
+	shape.Ellipse = declare("dojox.gfx.shape.Ellipse", shape.Shape, {
 		// summary:
 		//		a generic ellipse
 		constructor: function(rawNode){
@@ -773,7 +773,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		}
 	});
 	
-	shape.Circle = declare(shape.Shape, {
+	shape.Circle = declare("dojox.gfx.shape.Circle", shape.Shape, {
 		// summary:
 		//		a generic circle
 		//		(this is a helper object, which is defined for convenience)
@@ -795,7 +795,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		}
 	});
 	
-	shape.Line = declare(shape.Shape, {
+	shape.Line = declare("dojox.gfx.shape.Line", shape.Shape, {
 		// summary:
 		//		a generic line
 		//		(this is a helper object, which is defined for convenience)
@@ -821,7 +821,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		}
 	});
 	
-	shape.Polyline = declare(shape.Shape, {
+	shape.Polyline = declare("dojox.gfx.shape.Polyline", shape.Shape, {
 		// summary:
 		//		a generic polyline/polygon
 		//		(this is a helper object, which is defined for convenience)
@@ -886,7 +886,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		}
 	});
 	
-	shape.Image = declare(shape.Shape, {
+	shape.Image = declare("dojox.gfx.shape.Image", shape.Shape, {
 		// summary:
 		//		a generic image
 		//		(this is a helper object, which is defined for convenience)
@@ -1051,6 +1051,14 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		to logically group shapes (e.g, to propagate matricies)
 		});
 		g.TextPath = declare([ shape.Shape, g.path.TextPath ]);
+		g.Rect = declare(shape.Shape, {});
+		g.Circle = declare(shape.Shape, {});
+		g.Ellipse = declare(shape.Shape,{});
+		g.Line = declare(shape.Shape,{});
+		g.Polyline = declare(shape.Shape,{});
+		g.Path = declare(shape.Shape,{});
+		g.Text = declare(shape.Shape, {});
+		g.Surface = declare(shape.Surface, {});
 	=====*/
 
 	return shape;

@@ -4,7 +4,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"
 //		This module contains the core graphics Path API.
 //		Path command format follows the W3C SVG 1.0 Path api.
 
-	var Path = declare(shapeLib.Shape, {
+	var Path = declare("dojox.gfx.path.Path", shapeLib.Shape, {
 		// summary:
 		//		a generalized path shape
 
@@ -415,7 +415,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"
 		_2PI: Math.PI * 2
 	});
 
-	var TextPath = declare(Path, {
+	var TextPath = declare("dojox.gfx.path.TextPath", Path, {
 		// summary:
 		//		a generalized TextPath shape
 

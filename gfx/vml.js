@@ -35,7 +35,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 
 	vml._bool = {"t": 1, "true": 1};
 
-	vml.Shape = declare(gs.Shape, {
+	vml.Shape = declare("dojox.gfx.vml.Shape", gs.Shape, {
 		// summary:
 		//		VML-specific implementation of dojox.gfx.Shape methods
 
@@ -350,7 +350,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
  		}
 	});
 
-	  vml.Group = declare(vml.Shape, {
+	  vml.Group = declare("dojox.gfx.vml.Group", vml.Shape, {
 		// summary:
 		//		a group shape (VML), which can be used
 		//		to logically group shapes (e.g, to propagate matricies)
@@ -434,7 +434,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Group.nodeType = "group";
 
-	  vml.Rect = declare([vml.Shape, gs.Rect], {
+	  vml.Rect = declare("dojox.gfx.vml.Rect", [vml.Shape, gs.Rect], {
 		// summary:
 		//		a rectangle shape (VML)
 		setShape: function(newShape){
@@ -485,7 +485,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Rect.nodeType = "roundrect"; // use a roundrect so the stroke join type is respected
 
-	vml.Ellipse = declare([vml.Shape, gs.Ellipse], {
+	vml.Ellipse = declare("dojox.gfx.vml.Ellipse", [vml.Shape, gs.Ellipse], {
 		// summary:
 		//		an ellipse shape (VML)
 		setShape: function(newShape){
@@ -505,7 +505,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Ellipse.nodeType = "oval";
 
-	vml.Circle = declare([vml.Shape, gs.Circle], {
+	vml.Circle = declare("dojox.gfx.vml.Circle", [vml.Shape, gs.Circle], {
 		// summary:
 		//		a circle shape (VML)
 		setShape: function(newShape){
@@ -525,7 +525,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Circle.nodeType = "oval";
 
-	vml.Line = declare([vml.Shape, gs.Line], {
+	vml.Line = declare("dojox.gfx.vml.Line", [vml.Shape, gs.Line], {
 		// summary:
 		//		a line shape (VML)
 		constructor: function(rawNode){
@@ -545,7 +545,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Line.nodeType = "shape";
 
-	vml.Polyline = declare([vml.Shape, gs.Polyline], {
+	vml.Polyline = declare("dojox.gfx.vml.Polyline", [vml.Shape, gs.Polyline], {
 		// summary:
 		//		a polyline/polygon shape (VML)
 		constructor: function(rawNode){
@@ -584,7 +584,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Polyline.nodeType = "shape";
 
-	vml.Image = declare([vml.Shape, gs.Image], {
+	vml.Image = declare("dojox.gfx.vml.Image", [vml.Shape, gs.Image], {
 		// summary:
 		//		an image (VML)
 		setShape: function(newShape){
@@ -659,7 +659,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Image.nodeType = "rect";
 
-	vml.Text = declare([vml.Shape, gs.Text], {
+	vml.Text = declare("dojox.gfx.vml.Text", [vml.Shape, gs.Text], {
 		// summary:
 		//		an anchored text (VML)
 		constructor: function(rawNode){
@@ -754,7 +754,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Text.nodeType = "shape";
 
-	vml.Path = declare([vml.Shape, pathLib.Path], {
+	vml.Path = declare("dojox.gfx.vml.Path", [vml.Shape, pathLib.Path], {
 		// summary:
 		//		a path shape (VML)
 		constructor: function(rawNode){
@@ -1013,7 +1013,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.Path.nodeType = "shape";
 
-	vml.TextPath = declare([vml.Path, pathLib.TextPath], {
+	vml.TextPath = declare("dojox.gfx.vml.TextPath", [vml.Path, pathLib.TextPath], {
 		// summary:
 		//		a textpath shape (VML)
 		constructor: function(rawNode){
@@ -1092,7 +1092,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	});
 	vml.TextPath.nodeType = "shape";
 
-	vml.Surface = declare(gs.Surface, {
+	vml.Surface = declare("dojox.gfx.vml.Surface", gs.Surface, {
 		// summary:
 		//		a surface object to be used for drawings (VML)
 		constructor: function(){

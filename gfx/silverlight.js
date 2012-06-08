@@ -46,7 +46,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		return "#" + (a.length < 2 ? "0" + a : a) + t.slice(1);	// String
 	}
 
-	sl.Shape = declare(gs.Shape, {
+	sl.Shape = declare("dojox.gfx.silverlight.Shape", gs.Shape, {
 		// summary:
 		//		Silverlight-specific implementation of dojox.gfx.Shape methods
 
@@ -309,7 +309,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		}
 	});
 
-	sl.Group = declare(sl.Shape, {
+	sl.Group = declare("dojox.gfx.silverlight.Group", sl.Shape, {
 		// summary:
 		//		a group shape (Silverlight), which can be used
 		//		to logically group shapes (e.g, to propagate matricies)
@@ -336,7 +336,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Group.nodeType = "Canvas";
 
-	sl.Rect = declare([sl.Shape, gs.Rect], {
+	sl.Rect = declare("dojox.gfx.silverlight.Rect", [sl.Shape, gs.Rect], {
 		// summary:
 		//		a rectangle shape (Silverlight)
 		setShape: function(newShape){
@@ -361,7 +361,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Rect.nodeType = "Rectangle";
 
-	sl.Ellipse = declare([sl.Shape, gs.Ellipse], {
+	sl.Ellipse = declare("dojox.gfx.silverlight.Ellipse", [sl.Shape, gs.Ellipse], {
 		// summary:
 		//		an ellipse shape (Silverlight)
 		setShape: function(newShape){
@@ -385,7 +385,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Ellipse.nodeType = "Ellipse";
 
-	sl.Circle = declare([sl.Shape, gs.Circle], {
+	sl.Circle = declare("dojox.gfx.silverlight.Circle", [sl.Shape, gs.Circle], {
 		// summary:
 		//		a circle shape (Silverlight)
 		setShape: function(newShape){
@@ -408,7 +408,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Circle.nodeType = "Ellipse";
 
-	sl.Line = declare([sl.Shape, gs.Line], {
+	sl.Line = declare("dojox.gfx.silverlight.Line", [sl.Shape, gs.Line], {
 		// summary:
 		//		a line shape (Silverlight)
 		setShape: function(newShape){
@@ -425,7 +425,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Line.nodeType = "Line";
 
-	sl.Polyline = declare([sl.Shape, gs.Polyline], {
+	sl.Polyline = declare("dojox.gfx.silverlight.Polyline", [sl.Shape, gs.Polyline], {
 		// summary:
 		//		a polyline/polygon shape (Silverlight)
 		setShape: function(points, closed){
@@ -453,7 +453,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Polyline.nodeType = "Polyline";
 
-	sl.Image = declare([sl.Shape, gs.Image], {
+	sl.Image = declare("dojox.gfx.silverlight.Image", [sl.Shape, gs.Image], {
 		// summary:
 		//		an image (Silverlight)
 		setShape: function(newShape){
@@ -486,7 +486,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Image.nodeType = "Image";
 
-	sl.Text = declare([sl.Shape, gs.Text], {
+	sl.Text = declare("dojox.gfx.silverlight.Text", [sl.Shape, gs.Text], {
 		// summary:
 		//		an anchored text (Silverlight)
 		setShape: function(newShape){
@@ -566,7 +566,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Text.nodeType = "TextBlock";
 
-	sl.Path = declare([sl.Shape, pathLib.Path], {
+	sl.Path = declare("dojox.gfx.silverlight.Path", [sl.Shape, pathLib.Path], {
 		// summary:
 		//		a path shape (Silverlight)
 		_updateWithSegment: function(segment){
@@ -593,7 +593,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	});
 	sl.Path.nodeType = "Path";
 
-	sl.TextPath = declare([sl.Shape, pathLib.TextPath], {
+	sl.TextPath = declare("dojox.gfx.silverlight.TextPath", [sl.Shape, pathLib.TextPath], {
 		// summary:
 		//		a textpath shape (Silverlight)
 		_updateWithSegment: function(segment){
@@ -615,7 +615,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 	var surfaces = {}, nullFunc = new Function;
 
-	sl.Surface = declare(gs.Surface, {
+	sl.Surface = declare("dojox.gfx.silverlight.Surface", gs.Surface, {
 		// summary:
 		//		a surface object to be used for drawings (Silverlight)
 		constructor: function(){

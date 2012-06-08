@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/Color", "dojo/dom", 
 		"dojo/dom-geometry", "./_base","./canvas", "./shape", "./matrix"], 
 function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
-	var canvasEvent = g.canvasWithEvents = {
+	var canvasWithEvents = g.canvasWithEvents = {
 		// summary:
 		//		This the graphics rendering bridge for W3C Canvas compliant browsers which extends
 		//		the basic canvas drawing renderer bridge to add additional support for graphics events
@@ -17,7 +17,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		//		API.
 	};
 
-	canvasWithEvents.Shape = declare(canvas.Shape, {
+	canvasWithEvents.Shape = declare("dojox.gfx.canvasWithEvents.Shape", canvas.Shape, {
 		
 		_testInputs: function(/* Object */ctx, /* Array */ pos){
 			if(this.clip || (!this.canvasFill && this.strokeStyle)){
@@ -135,7 +135,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		onkeyup:        function(){}
 	});
 
-	canvasWithEvents.Group = declare([canvasEvent.Shape, canvas.Group], {
+	canvasWithEvents.Group = declare("dojox.gfx.canvasWithEvents.Group", [canvasWithEvents.Shape, canvas.Group], {
 		_testInputs: function(/*Object*/ctx, /*Array*/ pos){
 			var children = this.children, t = this.getTransform(), i, j, input;
 			if(children.length === 0){
@@ -198,7 +198,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		}	
 	});
 
-	canvasWithEvents.Image = declare([canvasEvent.Shape, canvas.Image], {
+	canvasWithEvents.Image = declare("dojox.gfx.canvasWithEvents.Image", [canvasWithEvents.Shape, canvas.Image], {
 		_renderShape: function(/* Object */ ctx){
 			// summary:
 			//		render image
@@ -218,19 +218,19 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		}
 	});
 
-	canvasWithEvents.Text = declare([canvasEvent.Shape, canvas.Text], {
+	canvasWithEvents.Text = declare("dojox.gfx.canvasWithEvents.Text", [canvasWithEvents.Shape, canvas.Text], {
 		_testInputs: function(ctx, pos){
 			return this._hitTestPixel(ctx, pos);
 		}
 	});
 
-	canvasWithEvents.Rect = declare([canvasEvent.Shape, canvas.Rect], {});
-	canvasWithEvents.Circle = declare([canvasEvent.Shape, canvas.Circle], {});
-	canvasWithEvents.Ellipse = declare([canvasEvent.Shape, canvas.Ellipse],{});
-	canvasWithEvents.Line = declare([canvasEvent.Shape, canvas.Line],{});
-	canvasWithEvents.Polyline = declare([canvasEvent.Shape, canvas.Polyline],{});
-	canvasWithEvents.Path = declare([canvasEvent.Shape, canvas.Path],{});
-	canvasWithEvents.TextPath = declare([canvasEvent.Shape, canvas.TextPath],{});
+	canvasWithEvents.Rect = declare("dojox.gfx.canvasWithEvents.Rect", [canvasWithEvents.Shape, canvas.Rect], {});
+	canvasWithEvents.Circle = declare("dojox.gfx.canvasWithEvents.Circle", [canvasWithEvents.Shape, canvas.Circle], {});
+	canvasWithEvents.Ellipse = declare("dojox.gfx.canvasWithEvents.Ellipse", [canvasWithEvents.Shape, canvas.Ellipse],{});
+	canvasWithEvents.Line = declare("dojox.gfx.canvasWithEvents.Line", [canvasWithEvents.Shape, canvas.Line],{});
+	canvasWithEvents.Polyline = declare("dojox.gfx.canvasWithEvents.Polyline", [canvasWithEvents.Shape, canvas.Polyline],{});
+	canvasWithEvents.Path = declare("dojox.gfx.canvasWithEvents.Path", [canvasWithEvents.Shape, canvas.Path],{});
+	canvasWithEvents.TextPath = declare("dojox.gfx.canvasWithEvents.TextPath", [canvasWithEvents.Shape, canvas.TextPath],{});
 
 	
 	// a map that redirects shape-specific events to the canvas event handler that deals with these events
@@ -254,7 +254,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 			    uagent.search('ipad') > -1 || 
 				uagent.search('ipod') > -1;
 
-	canvasWithEvents.Surface = declare(canvas.Surface, {
+	canvasWithEvents.Surface = declare("dojox.gfx.canvasWithEvents.Surface", canvas.Surface, {
 		constructor:function(){
 			this._pick = { curr: null, last: null };
 			this._pickOfMouseDown = null;
@@ -593,7 +593,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		}		
 	});
 	
-	canvasEvent.createSurface = function(parentNode, width, height){
+	canvasWithEvents.createSurface = function(parentNode, width, height){
 		// summary:
 		//		creates a surface (Canvas)
 		// parentNode: Node
@@ -615,7 +615,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 			height = height + "px";
 		}
 
-		var s = new canvasEvent.Surface(),
+		var s = new canvasWithEvents.Surface(),
 			p = dom.byId(parentNode),
 			c = p.ownerDocument.createElement("canvas");
 
@@ -642,7 +642,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		return false;
 	};
 	
-	canvasEvent.fixTarget = function(event, gfxElement){
+	canvasWithEvents.fixTarget = function(event, gfxElement){
 		// summary:
 		//     Adds the gfxElement to event.gfxTarget if none exists. This new 
 		//     property will carry the GFX element associated with this event.
@@ -663,5 +663,5 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		return true;
 	};
 
-	return canvasEvent;
+	return canvasWithEvents;
 });

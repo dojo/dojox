@@ -21,7 +21,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		halfPI = pi /2,
 		extend = lang.extend;
 
-	canvas.Shape = declare(gs.Shape, {
+	canvas.Shape = declare("dojox.gfx.canvas.Shape", gs.Shape, {
 		_render: function(/* Object */ ctx){
 			// summary:
 			//		render the shape
@@ -229,7 +229,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 	modifyMethod(canvas.Shape, "setStroke");
 	modifyMethod(canvas.Shape, "setShape");
 
-	canvas.Group = declare(canvas.Shape, {
+	canvas.Group = declare("dojox.gfx.canvas.Group", canvas.Shape, {
 		// summary:
 		//		a group shape (Canvas), which can be used
 		//		to logically group shapes (e.g, to propagate matricies)
@@ -257,7 +257,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}		
 	});
 
-	canvas.Rect = declare([canvas.Shape, gs.Rect], {
+	canvas.Rect = declare("dojox.gfx.canvas.Rect", [canvas.Shape, gs.Rect], {
 		// summary:
 		//		a rectangle shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
@@ -306,7 +306,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		return r;
 	};
 
-	canvas.Ellipse = declare([canvas.Shape, gs.Ellipse], {
+	canvas.Ellipse = declare("dojox.gfx.canvas.Ellipse", [canvas.Shape, gs.Ellipse], {
 		// summary:
 		//		an ellipse shape (Canvas)
 		setShape: function(){
@@ -325,7 +325,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}
 	});
 
-	canvas.Circle = declare([canvas.Shape, gs.Circle], {
+	canvas.Circle = declare("dojox.gfx.canvas.Circle", [canvas.Shape, gs.Circle], {
 		// summary:
 		//		a circle shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
@@ -335,7 +335,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}
 	});
 
-	canvas.Line = declare([canvas.Shape, gs.Line], {
+	canvas.Line = declare("dojox.gfx.canvas.Line", [canvas.Shape, gs.Line], {
 		// summary:
 		//		a line shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
@@ -346,7 +346,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}
 	});
 
-	canvas.Polyline = declare([canvas.Shape, gs.Polyline], {
+	canvas.Polyline = declare("dojox.gfx.canvas.Polyline", [canvas.Shape, gs.Polyline], {
 		// summary:
 		//		a polyline/polygon shape (Canvas)
 		setShape: function(){
@@ -386,7 +386,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}
 	});
 
-	canvas.Image = declare([canvas.Shape, gs.Image], {
+	canvas.Image = declare("dojox.gfx.canvas.Image", [canvas.Shape, gs.Image], {
 		// summary:
 		//		an image shape (Canvas)
 		setShape: function(){
@@ -403,7 +403,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}
 	});
 
-	canvas.Text = declare([canvas.Shape, gs.Text], {
+	canvas.Text = declare("dojox.gfx.canvas.Text", [canvas.Shape, gs.Text], {
 		_setFont:function(){
 			if(this.fontStyle){
 				this.canvasFont = g.makeFontString(this.fontStyle);
@@ -501,7 +501,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 			Z: "_closePath", z: "_closePath"
 		};
 
-	canvas.Path = declare([canvas.Shape, pathLib.Path], {
+	canvas.Path = declare("dojox.gfx.canvas.Path", [canvas.Shape, pathLib.Path], {
 		// summary:
 		//		a path shape (Canvas)
 		constructor: function(){
@@ -727,7 +727,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		function(method){ modifyMethod(canvas.Path, method); }
 	);
 
-	canvas.TextPath = declare([canvas.Shape, pathLib.TextPath], {
+	canvas.TextPath = declare("dojox.gfx.canvas.TextPath", [canvas.Shape, pathLib.TextPath], {
 		// summary:
 		//		a text shape (Canvas)
 		_renderShape: function(/* Object */ ctx){
@@ -742,7 +742,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		}
 	});
 
-	canvas.Surface = declare(gs.Surface, {
+	canvas.Surface = declare("dojox.gfx.canvas.Surface", gs.Surface, {
 		// summary:
 		//		a surface object to be used for drawings (Canvas)
 		constructor: function(){

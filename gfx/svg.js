@@ -82,7 +82,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 
 	var clipCount = 0;
 
-	svg.Shape = declare(gs.Shape, {
+	svg.Shape = declare("dojox.gfx.svg.Shape", gs.Shape, {
 		// summary:
 		//		SVG-specific implementation of dojox.gfx.Shape methods
 
@@ -409,7 +409,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	});
 
 
-	svg.Group = declare(svg.Shape, {
+	svg.Group = declare("dojox.gfx.svg.Group", svg.Shape, {
 		// summary:
 		//		a group shape (SVG), which can be used
 		//		to logically group shapes (e.g, to propagate matricies)
@@ -437,7 +437,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	});
 	svg.Group.nodeType = "g";
 
-	svg.Rect = declare([svg.Shape, gs.Rect], {
+	svg.Rect = declare("dojox.gfx.svg.Rect", [svg.Shape, gs.Rect], {
 		// summary:
 		//		a rectangle shape (SVG)
 		setShape: function(newShape){
@@ -461,16 +461,16 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	});
 	svg.Rect.nodeType = "rect";
 
-	svg.Ellipse = declare([svg.Shape, gs.Ellipse], {});
+	svg.Ellipse = declare("dojox.gfx.svg.Ellipse", [svg.Shape, gs.Ellipse], {});
 	svg.Ellipse.nodeType = "ellipse";
 
-	svg.Circle = declare([svg.Shape, gs.Circle], {});
+	svg.Circle = declare("dojox.gfx.svg.Circle", [svg.Shape, gs.Circle], {});
 	svg.Circle.nodeType = "circle";
 
-	svg.Line = declare([svg.Shape, gs.Line], {});
+	svg.Line = declare("dojox.gfx.svg.Line", [svg.Shape, gs.Line], {});
 	svg.Line.nodeType = "line";
 
-	svg.Polyline = declare([svg.Shape, gs.Polyline], {
+	svg.Polyline = declare("dojox.gfx.svg.Polyline", [svg.Shape, gs.Polyline], {
 		// summary:
 		//		a polyline/polygon shape (SVG)
 		setShape: function(points, closed){
@@ -498,7 +498,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	});
 	svg.Polyline.nodeType = "polyline";
 
-	svg.Image = declare([svg.Shape, gs.Image], {
+	svg.Image = declare("dojox.gfx.svg.Image", [svg.Shape, gs.Image], {
 		// summary:
 		//		an image (SVG)
 		setShape: function(newShape){
@@ -524,7 +524,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	});
 	svg.Image.nodeType = "image";
 
-	svg.Text = declare([svg.Shape, gs.Text], {
+	svg.Text = declare("dojox.gfx.svg.Text", [svg.Shape, gs.Text], {
 		// summary:
 		//		an anchored text (SVG)
 		setShape: function(newShape){
@@ -580,7 +580,7 @@ else
 	});
 	svg.Text.nodeType = "text";
 
-	svg.Path = declare([svg.Shape, pathLib.Path], {
+	svg.Path = declare("dojox.gfx.svg.Path", [svg.Shape, pathLib.Path], {
 		// summary:
 		//		a path shape (SVG)
 		_updateWithSegment: function(segment){
@@ -609,7 +609,7 @@ else
 	});
 	svg.Path.nodeType = "path";
 
-	svg.TextPath = declare([svg.Shape, pathLib.TextPath], {
+	svg.TextPath = declare("dojox.gfx.svg.TextPath", [svg.Shape, pathLib.TextPath], {
 		// summary:
 		//		a textpath shape (SVG)
 		_updateWithSegment: function(segment){
@@ -691,7 +691,7 @@ else
 	});
 	svg.TextPath.nodeType = "text";
 
-	svg.Surface = declare(gs.Surface, {
+	svg.Surface = declare("dojox.gfx.svg.Surface", gs.Surface, {
 		// summary:
 		//		a surface object to be used for drawings (SVG)
 		constructor: function(){
