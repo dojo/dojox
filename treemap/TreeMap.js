@@ -73,7 +73,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 
 		// groupFuncs: Array
 		//		An array of grouping functions used to group data in the treemap.
-        //		When null, groupAttrs is to compute grouping functions.
+		//		When null, groupAttrs is to compute grouping functions.
 		//		Default is null.
 		groupFuncs: null,
 
