@@ -2,21 +2,22 @@ define([
 	"dojo/_base/declare", 
 	"dojo/_base/lang", 
 	"dojo/_base/array", 
-	"dojo/_base/sniff"],
-	function(declare, lang, array, sniff){
+	"dojo/_base/sniff",
+	"./Feature"
+], function(declare, lang, array, sniff, Feature){
 
 		return declare("dojox.geo.openlayers.Layer", null, {
-			//	summary: 
+			// summary: 
 			//		Base layer class for dojox.geo.openlayers.Map specific layers extending OpenLayers.Layer class.
 			//		This layer class accepts Features which encapsulates graphic objects to be added to the map.
 			//		This layer class encapsulates an OpenLayers.Layer.
 			//		This class provides Feature management such as add, remove and feature access.
 			constructor : function(name, options){
-				//	summary:
+				// summary:
 				//		Constructs a new Layer.
-				//	name: String
+				// name: String
 				//		The name of the layer.
-				//	options: Object
+				// options: Object
 				//		Options passed to the underlying OpenLayers.Layer object.
 
 				var ol = options ? options.olLayer : null;
@@ -30,9 +31,9 @@ define([
 			},
 
 			renderFeature : function(/* Feature */f){
-				//	summary:
+				// summary:
 				//		Called when rendering a feature is necessary.
-				//	f: Feature
+				// f: Feature
 				//		The feature to draw.
 				f.render();
 			},
@@ -41,10 +42,10 @@ define([
 				return this.dojoMap;
 			},
 
-			addFeature : function(/* Feature | Array */f){
-				//	summary:
+			addFeature : function(/* Feature|Feature[] */f){
+				// summary:
 				//		Add a feature or an array of features to the layer.
-				//	f: Feature or Array
+				// f: Feature|Feature[]
 				//		The Feature or array of features to add.
 				if (lang.isArray(f)) {
 					array.forEach(f, function(item){
@@ -58,10 +59,10 @@ define([
 				f._setLayer(this);
 			},
 
-			removeFeature : function(/* Feature | Array */f){
-				//	summary:
+			removeFeature : function(/* Feature | Feature[]*/f){
+				// summary:
 				//		Removes a feature or an array of features from the layer.
-				//	f: Feature or Array
+				// f: Feature|Feature[]
 				//		The Feature or array of features to remove.
 				var ft = this._features;
 				if (ft == null)
@@ -80,12 +81,10 @@ define([
 				f.remove();
 			},
 
-			removeFeatureAt : function(index){
-				//	summary:
+			removeFeatureAt : function(/*int*/index){
+				// summary:
 				//		Remove the feature at the specified index.
-				//	description:
-				//		Remove the feature at the specified index.
-				//	index: Number
+				// index: int
 				//		The index of the feature to remove.
 				var ft = this._features;
 				var f = ft[index];
@@ -97,46 +96,46 @@ define([
 			},
 
 			getFeatures : function(){
-				//	summary:
-				//		Retrieves the feature hold by this layer.
-				//	returns: Array
+				// summary:
+				//		Returns the feature hold by this layer.
+				// returns:
 				//		The untouched array of features hold by this layer.
-				return this._features;
+				return this._features; //  Feature[]
 			},
 
-			getFeatureAt : function(i){
-				//	summary:
+			getFeatureAt : function(/*int*/i){
+				// summary:
 				//		Returns the i-th feature of this layer.
-				//	i: int
+				// i: int
 				//		The index of the feature to return.
-				//	returns: ibm_maps.maps.Layer
+				// returns:
 				//		The i-th feature of this layer.
 				if (this._features == null)
 					return undefined;
-				return this._features[i];
+				return this._features[i]; // Feature
 			},
 
 			getFeatureCount : function(){
-				//	summary:
+				// summary:
 				//		Returns the number of the features contained by this layer.
-				//	returns: int
+				// returns:
 				//		The number of the features contained by this layer.
 				if (this._features == null)
 					return 0;
-				return this._features.length;
+				return this._features.length; // Number
 			},
 
 			clear : function(){
-				//	summary:
+				// summary:
 				//		Removes all the features from this layer.
 				var fa = this.getFeatures();
 				this.removeFeature(fa);
 			},
 
 			moveTo : function(event){
-				//	summary:
+				// summary:
 				//		Called when the layer is panned or zoomed.
-				//	event: Object
+				// event: MouseEvent
 				//		The event
 				if (event.zoomChanged) {
 					if (this._features == null)
@@ -148,7 +147,7 @@ define([
 			},
 
 			redraw : function(){
-				//	summary:
+				// summary:
 				//		Redraws this layer
 				if (sniff.isIE)
 					setTimeout(lang.hitch(this, function(){
@@ -159,7 +158,7 @@ define([
 			},
 
 			added : function(){
-			//	summary:
+			// summary:
 			//		Called when the layer is added to the map
 			}
 

@@ -3,31 +3,29 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/lang",
 	"dojox/gfx/matrix",
-	"dojox/geo/openlayers/Point",
-	"dojox/geo/openlayers/LineString",
-	"dojox/geo/openlayers/Collection",
-	"dojox/geo/openlayers/Feature"], 
-	function(declare, array, lang, matrix, Point, LineString, Collection, Feature){
-	/*===== 
-	var Feature = dojox.geo.openlayers.Feature; 
-	=====*/
+	"./Point",
+	"./LineString",
+	"./Collection",
+	"./Feature"
+], function(declare, array, lang, matrix, Point, LineString, Collection, Feature){
+
 	return declare("dojox.geo.openlayers.GeometryFeature", Feature, {
-		//	summary:
+		// summary:
 		//		A Feature encapsulating a geometry.
-		//	description:
+		// description:
 		//		This Feature renders a geometry such as a Point or LineString geometry. This Feature
 		//		is responsible for reprojecting the geometry before creating a gfx shape to display it.
 		//		By default the shape created is a circle for a Point geometry and a polyline for a 
 		//		LineString geometry. User can change these behavior by overriding the createShape 
 		//		method to create the desired shape.
-		//	example:
+		// example:
 		//	|  var geom = new dojox.geo.openlayers.Point({x:0, y:0});
 		//	|  var gf = new dojox.geo.openlayers.GeometryFeature(geom);
 
-		constructor : function(/* dojox.geo.openlayers.Geometry */geometry){
-			//	summary:
+		constructor : function(/* dojox/geo/openlayers/Geometry */geometry){
+			// summary:
 			//		Constructs a GeometryFeature for the specified geometry.
-			//	geometry: OpenLayer.Geometry
+			// geometry: dojox/geo/openlayers/Geometry
 			//		The geometry to render.
 			this._geometry = geometry;
 			this._shapeProperties = {};
@@ -35,10 +33,10 @@ define([
 			this._stroke = null;
 		},
 
-		_createCollection : function(/* dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		_createCollection : function(/* dojox/geo/openlayers/Geometry */g){
+			// summary:
 			//		Create collection shape and add it to the viewport.
-			//	tags:
+			// tags:
 			//		private
 			var layer = this.getLayer();
 			var s = layer.getSurface();
@@ -48,10 +46,10 @@ define([
 			return c;
 		},
 
-		_getCollectionShape : function(/* dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		_getCollectionShape : function(/* dojox/geo/openlayers/Geometry */g){
+			// summary:
 			//		Get the collection shape, create it if necessary
-			//	tags:
+			// tags:
 			//		private
 			var s = g.shape;
 			if (s == null) {
@@ -61,10 +59,10 @@ define([
 			return s;
 		},
 
-		renderCollection : function(/* undefined | dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		renderCollection : function(/* dojox/geo/openlayers/Geometry? */g){
+			// summary:
 			//		Renders a geometry collection.
-			//	g: undefined | dojox.geo.openlayers.Geometry
+			// g: dojox.geo.openlayers.Geometry?
 			//		The geometry to render.
 			if (g == undefined)
 				g = this._geometry;
@@ -86,11 +84,11 @@ define([
 			this._applyStyle(g);
 		},
 
-		render : function(/* undefined || dojox.geo.openlayer.Geometry */g){
-			//	summary:
+		render : function(/* dojox/geo/openlayer/Geometry? */g){
+			// summary:
 			//		Render a geometry. 
 			//		Called by the Layer on which the feature is added. 
-			//	g: undefined || dojox.geo.openlayer.Geometry
+			// g: dojox/geo/openlayer/Geometry?
 			//		The geometry to draw
 			if (g == undefined)
 				g = this._geometry;
@@ -106,33 +104,33 @@ define([
 		},
 
 		getShapeProperties : function(){
-			//	summary:
+			// summary:
 			//		Returns the shape properties. 
-			//	returns: Object
+			// returns:
 			//		The shape properties.
-			return this._shapeProperties;
+			return this._shapeProperties; // Object
 		},
 
 		setShapeProperties : function(/* Object */s){
-			//	summary:
+			// summary:
 			//		Sets the shape properties. 
-			//	s: Object
+			// s: Object
 			//		The shape properties to set.
 			this._shapeProperties = s;
 			return this;
 		},
 
-		createShape : function(/* Surface */s, /* dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		createShape : function(/* dojox/gfx/Surface */s, /* dojox/geo/openlayers/Geometry? */g){
+			// summary:
 			//		Called when the shape rendering the geometry has to be created.
 			//		This default implementation creates a circle for a point geometry, a polyline for
 			//		a LineString geometry and is recursively called when creating a collection.
 			//		User may replace this method to produce a custom shape.
-			//	s: dojox.gfx.Surface
+			// s: dojox/gfx/Surface
 			//		The surface on which the method create the shapes.
-			//	g: dojox.geo.openlayers.Geometry
+			// g: dojox/geo/openlayers/Geometry?
 			//		The reference geometry 
-			//	returns: dojox.gfx.Shape
+			//	returns:
 			//		The resulting shape.
 			if (!g)
 				g = this._geometry;
@@ -151,13 +149,13 @@ define([
 				shape = grp;
 			} else
 				throw new Error();
-			return shape;
+			return shape; // dojox.gfx.shape.Shape
 		},
 
 		getShape : function(){
-			//	summary:
-			//		Retrieves the shape rendering the geometry
-			//	returns: Shape
+			// summary:
+			//		Returns the shape rendering the geometry
+			// returns:
 			//		The shape used to render the geometry.
 			var g = this._geometry;
 			if (!g)
@@ -165,13 +163,13 @@ define([
 			if (g.shape)
 				return g.shape;
 			this.render();
-			return g.shape;
+			return g.shape; // dojox.gfx.shape.Shape
 		},
 
-		_createPoint : function(/* dojox.geo.openlayer.Geometry */g){
-			//	summary:
+		_createPoint : function(/* dojox/geo/openlayer/Geometry */g){
+			// summary:
 			//		Create a point shape
-			//	tags:
+			// tags:
 			//		private
 			var layer = this.getLayer();
 			var s = layer.getSurface();
@@ -181,10 +179,10 @@ define([
 			return c;
 		},
 
-		_getPointShape : function(/* dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		_getPointShape : function(/* dojox/geo/openlayers/Geometry */g){
+			// summary:
 			//		get the point geometry shape, create it if necessary
-			//	tags:
+			// tags:
 			//		private
 			var s = g.shape;
 			if (s == null) {
@@ -194,11 +192,11 @@ define([
 			return s;
 		},
 
-		renderPoint : function(/* undefined | dojox.geo.openlayers.Point */g){
-			//	summary:
+		renderPoint : function(/*dojox/geo/openlayers/Point? */g){
+			// summary:
 			//		Renders a point geometry.
-			//	g: undefined | dojox.geo.openlayers.Point
-			//		The geometry to render.
+			// g: dojox/geo/openlayers/Point?
+			//		The geometry to render, or the current instance geometry if not specified.
 			if (g == undefined)
 				g = this._geometry;
 			var layer = this.getLayer();
@@ -222,10 +220,10 @@ define([
 			this._applyStyle(g);
 		},
 
-		_createLineString : function(/* dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		_createLineString : function(/* dojox/geo/openlayers/Geometry */g){
+			// summary:
 			//		Create polyline shape and add it to the viewport.
-			//	tags:
+			// tags:
 			//		private
 			var layer = this.getLayer();
 			var s = layer._surface;
@@ -236,10 +234,10 @@ define([
 			return shape;
 		},
 
-		_getLineStringShape : function(/* dojox.geo.openlayers.Geometry */g){
-			//	summary:
+		_getLineStringShape : function(/* dojox/geo/openlayers/Geometry */g){
+			// summary:
 			//		Get the line string geometry shape, create it if necessary
-			//	tags:
+			// tags:
 			//		private
 			var s = g.shape;
 			if (s == null) {
@@ -249,10 +247,10 @@ define([
 			return s;
 		},
 
-		renderLineString : function(/* undefined | dojox.geo.openlayers.geometry */g){
-			//	summary:
+		renderLineString : function(/* dojox/geo/openlayers/Geometry? */g){
+			// summary:
 			//		Renders a line string geometry.
-			//	g: undefined | dojox.geo.openlayers.Geometry
+			// g: dojox/geo/openlayers/Geometry?
 			//		The geometry to render.
 			if (g == undefined)
 				g = this._geometry;
@@ -283,12 +281,12 @@ define([
 			this._applyStyle(g);
 		},
 
-		_applyStyle : function(/* Geometry */g){
-			//	summary:
+		_applyStyle : function(/* dojox/geo/openlayers/Geometry */g){
+			// summary:
 			//		Apply the style on the geometry's shape.
-			//	g: dojox.geo.openlayers.Geometry
+			// g: Geometry
 			//		The geometry.
-			//	tags:
+			// tags:
 			//		private
 			if (!g || !g.shape)
 				return;
@@ -316,15 +314,15 @@ define([
 		},
 
 		_applyRecusiveStyle : function(g, stroke, fill){
-			//	summary:
+			// summary:
 			//		Apply the style on the geometry's shape recursively.
-			//	g: dojox.geo.openlayers.Geometry
+			// g: dojox.geo.openlayers.Geometry
 			//		The geometry.
-			//	stroke: Object
+			// stroke: Object
 			//		The stroke
-			//	fill:Object
+			// fill:Object
 			//		The fill
-			//	tags:
+			// tags:
 			//		private
 			var shp = g.shape;
 
@@ -342,41 +340,41 @@ define([
 		},
 
 		setStroke : function(/* Object */s){
-			//	summary:
+			// summary:
 			//		Set the stroke style to be applied on the rendered shape.
-			//	s: Object
+			// s: Object
 			//		The stroke style
 			this._stroke = s;
 			return this;
 		},
 
 		getStroke : function(){
-			//	summary:
-			//		Retrieves the stroke style
-			//	returns: Object
+			// summary:
+			//		Returns the stroke style
+			// returns:
 			//		The stroke style
 			return this._stroke;
 		},
 
 		setFill : function(/* Object */f){
-			//	summary:
+			// summary:
 			//		Set the fill style to be applied on the rendered shape.
-			//	f: Object
+			// f: Object
 			//		The fill style
 			this._fill = f;
 			return this;
 		},
 
 		getFill : function(){
-			//	summary:
-			//		Retrieves the fill style
-			//	returns: Object
+			// summary:
+			//		Returns the fill style
+			// returns:
 			//		The fill style
 			return this._fill;
 		},
 
 		remove : function(){
-			//	summary:
+			// summary:
 			//		Removes the shape from the Surface. 
 			//		Called when the feature is removed from the layer.
 			var g = this._geometry;

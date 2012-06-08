@@ -22,10 +22,10 @@ define([
 		_map: null,
 		_zoomEnabled: false,
 		
-		constructor: function(/*dojox.geo.charting.Map*/ map, /*Object?*/ options){
+		constructor: function(/*dojox/geo/charting/Map*/ map, /*Object?*/ options){
 			// summary: 
 			//		Constructs a new _KeyboardInteractionSupport instance
-			// map: dojox.geo.charting.Map
+			// map: dojox/geo/charting/Map
 			//		the Map component this class provides touch navigation for.
 			// options: Object?
 			//		An object defining additional configuration properties. Currently,

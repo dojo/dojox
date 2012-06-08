@@ -3,62 +3,79 @@ define([
 	"dojo/dom-style",
 	"dojo/_base/lang",
 	"dijit/registry",
-	"dojox/geo/openlayers/Feature"],
-	function(declare, style, lang, registry, Feature){
-		/*===== 
-		var Feature = dojox.geo.openlayers.Feature; 
-		=====*/
+	"./Feature"
+], function(declare, style, lang, registry, Feature){
+	/*=====
+	dojox.geo.openlayers.__WidgetFeatureArgs = function(createWidget, dojoType, dijitId, widget, width, height, longitude, latitude){
+		// summary:
+		//		The keyword arguments that can be passed in a WidgetFeature constructor.
+		//		You must define a least one widget retrieval parameter and the geo-localization parameters.
+		//
+		// createWidget: Function?
+		//		Function for widget creation. Must return a `dijit._Widget.
+		// dojoType: String?
+		//		The class of a widget to create.
+		// dijitId: String?
+		//		The digitId of an existing widget.
+		// widget: dijit._Widget?
+		//		An already created widget.
+		// width: Number?
+		//		The width of the widget.
+		// height: Number?
+		//		The height of the widget.
+		// longitude: Number
+		//		The longitude, in decimal degrees where to place the widget.
+		// latitude: Number
+		//		The latitude, in decimal degrees where to place the widget.
+		this.createWidget = createWidget;
+		this.dojoType = dojoType;
+		this.dijitId = dijitId;
+		this.widget = widget;
+		this.width = width;
+		this.height = height;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+	 =====*/
+
 		return declare("dojox.geo.openlayers.WidgetFeature", Feature, {
-			//	summary:
+			// summary:
 			//		Wraps a Dojo widget, provide geolocalisation of the widget and interface
 			//		to Layer class.
-			//	description:
+			// description:
 			//		This class allows to add a widget in a `dojox.geo.openlayers.Layer`.
-			//		Parameters are passed to the constructor. These parameters describe the widget
-			//		and provide geo-localisation of this widget.
-			//		parameters can be:
-			//		
-			//		* _createWidget_: Function for widget creation. Must return a `dijit._Widget`.
-			//		* _dojoType_: The class of a widget to create;
-			//		* _dijitId_: The digitId of an existing widget.
-			//		* _widget_: An already created widget.
-			//		* _width_: The width of the widget.
-			//		* _height_: The height of the widget.
-			//		* _longitude_: The longitude, in decimal degrees where to place the widget.
-			//		* _latitude_: The latitude, in decimal degrees where to place the widget.
-			//		
-			//		You must define a least one widget retrieval parameter and the geo-localization parameters.
+			
 			_widget : null,
 			_bbox : null,
 
 			constructor : function(params){
-				//	summary:
+				// summary:
 				//		Constructs a new `dojox.geo.openlayers.WidgetFeature`
-				//	params: Object
+				// params: dojox.geo.openlayers.__WidgetFeatureArgs
 				//		The parameters describing the widget.
 				this._params = params;
 			},
 
 			setParameters : function(params){
-				//	summary:
+				// summary:
 				//		Sets the parameters describing the widget.
-				//	params: Object
+				// params: dojox.geo.openlayers.__WidgetFeatureArgs
 				//		The parameters describing the widget.
 				this._params = params;
 			},
 
 			getParameters : function(){
-				//	summary:
+				// summary:
 				//		Retreives the parameters describing the widget.
-				//	returns: Object
+				// returns: dojox.geo.openlayers.__WidgetFeatureArgs
 				//		The parameters describing the widget.
 				return this._params;
 			},
 
 			_getWidget : function(){
-				//	summary:
+				// summary:
 				//		Creates, if necessary the widget and returns it;
-				//	tags:
+				// tags:
 				//		private
 				var params = this._params;
 
@@ -93,9 +110,9 @@ define([
 			},
 
 			_getWidgetWidth : function(){
-				//	summary:
+				// summary:
 				//		gets the widget width
-				//	tags:
+				// tags:
 				//		private
 				var p = this._params;
 				if (p.width)
@@ -107,9 +124,9 @@ define([
 			},
 
 			_getWidgetHeight : function(){
-				//	summary:
+				// summary:
 				//		gets the widget height
-				//	tags:
+				// tags:
 				//		private
 				var p = this._params;
 				if (p.height)
@@ -121,9 +138,9 @@ define([
 			},
 
 			render : function(){
-				//	summary:
+				// summary:
 				//		renders the widget.
-				//	descrption:
+				// descrption:
 				//		Places the widget accordingly to longitude and latitude defined in parameters.
 				//		This function is called when the center of the maps or zoom factor changes.
 				var layer = this.getLayer();
@@ -161,12 +178,12 @@ define([
 			},
 
 			_updateWidgetPosition : function(box){
-				//	summary:
+				// summary:
 				//		Places the widget with the computed x and y values
-				//	tags:
+				// tags:
 				//		private
 				
-				//	var box = this._params;
+				// var box = this._params;
 
 				var w = this._widget;
 				var dom = w.domNode;
@@ -197,9 +214,9 @@ define([
 			},
 
 			remove : function(){
-				//	summary:
+				// summary:
 				//		removes this feature.
-				//	description:
+				// description:
 				//		Remove this feature by disconnecting the widget from the dom.
 				var w = this.getWidget();
 				if (!w)

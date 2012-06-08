@@ -12,10 +12,10 @@ define([
 
 		patchMethod : function(/*Object*/type, /*String*/method, /*Function*/execBefore, /*Function*/
 		execAfter){
-			//	summary:
+			// summary:
 			//		Patches the specified method of the given type so that the 'execBefore' (resp. 'execAfter') function is 
 			//		called before (resp. after) invoking the legacy implementation.
-			//	description:
+			// description:
 			//		The execBefore function is invoked with the following parameter:
 			//		execBefore(method, arguments) where 'method' is the patched method name and 'arguments' the arguments received
 			//		by the legacy implementation.
@@ -26,7 +26,7 @@ define([
 			//	method: String: the method name.
 			//	execBefore: Function: the function to execute before the legacy implementation. 
 			//	execAfter: Function: the function to execute after the legacy implementation.
-			//	tags:
+			// tags:
 			//		private
 			var old = type.prototype[method];
 			type.prototype[method] = function(){

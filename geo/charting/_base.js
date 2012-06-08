@@ -11,12 +11,12 @@ define([
 ], function(lang, arr, dojox, html, domGeom, matrix, Tooltip, NodeList, NodeListTraverse) {
 	var dgc = lang.getObject("geo.charting", true, dojox); 
 
-	dgc.showTooltip = function(/*String*/innerHTML, /*dojox.gfx.shape.Shape*/ gfxObject, /*String[]?*/ positions){
+	dgc.showTooltip = function(/*String*/innerHTML, /*dojox/gfx/shape.Shape*/ gfxObject, /*String[]?*/ positions){
 		// summary:
 		//		Show a Tooltip displaying the given HTML message around the given gfx shape.
 		// innerHTML: String
 		//		The message to display as a HTML string.
-		// gfxObject: dojox.gfx.shape.Shape
+		// gfxObject: dojox/gfx/shape.Shape
 		//		The gfx shape around which the tooltip will be placed.
 		// position: String[]?
 		//		The tooltip position.
@@ -24,7 +24,7 @@ define([
 		return Tooltip.show(innerHTML, arroundNode, positions);
 	};
 
-	dgc.hideTooltip = function( /*dojox.gfx.shape.Shape*/gfxObject){
+	dgc.hideTooltip = function( /*dojox/gfx/shape.Shape*/gfxObject){
 		// summary:
 		//		Hides the tooltip displayed around the given shape.
 		// gfxObject: dojox.gfx.shape.Shape

@@ -3,36 +3,46 @@ define([
 	"dojo/_base/xhr",
 	"dojo/_base/lang",
 	"dojo/_base/array",
-	"dojox/geo/openlayers/LineString",
-	"dojox/geo/openlayers/Collection",
-	"dojox/geo/openlayers/GeometryFeature"], 
-	function(declare, xhr, lang, array, LineString, Collection, GeometryFeature){
+	"./LineString",
+	"./Collection",
+	"./GeometryFeature"
+], function(declare, xhr, lang, array, LineString, Collection, GeometryFeature){
+
+	/*=====
+	dojox.geo.openlayers.__JsonImportArgs = function(url, nextFeature, error){
+		// summary:
+		//		The keyword arguments that can be passed in a JsonImport constructor.
+		//
+		// url: String
+		//		The url pointing to the JSON file to load.
+		// nextFeature: function
+		//		The function called each time a feature is read. The function is called with a GeometryFeature as argument.
+		// error: function
+		//		Error callback called if something fails.
+		this.url = url;
+		this.nextFeature = nextFeature;
+		this.error = error;
+	}
+	 =====*/
 
 	return declare("dojox.geo.openlayers.JsonImport", null, {
-		//	summary:
+		// summary:
 		//		Class to load JSON formated ShapeFile as output of the JSon Custom Map Converter.
-		//	description:
+		// description:
 		//		This class loads JSON formated ShapeFile produced by the JSon Custom Map Converter.
 		//		When loading the JSON file, it calls a iterator function each time a feature is read.
 		//		This iterator function is provided as parameter to the constructor.
 		//
-		constructor : function(/* Object */params){
-			//	summary:
+		constructor : function(/* dojox.geo.openlayers.__JsonImportArgs */params){
+			// summary:
 			//		Construct a new JSON importer.
-			//	description:
-			//		Construct a new JSON importer with the specified parameters. These parameters are
-			//		passed through an Object and include:
-			//		<ul>
-			//			<li> url : <em>url</em> </li> The url pointing to the JSON file to load.
-			//			<li> nextFeature : <em>function</em> </li> The function called each time a feature is read.
-			//			The function is called with a GeometryFeature as argument.
-			//			<li> error : <em>function</em> </li> Error function called if something goes wrong.
-			//		</ul>
+			// params: dojox.geo.openlayers.__JsonImportArgs
+			//		The parameters to initialize this JsonImport instance.
 			this._params = params;
 		},
 
 		loadData : function(){
-			//	summary:
+			// summary:
 			//		Triggers the loading.
 			var p = this._params;
 			xhr.get({
@@ -45,9 +55,9 @@ define([
 		},
 
 		_gotData : function(/* Object */items){
-			//	summary:
+			// summary:
 			//		Called when loading is complete.
-			//	tags:
+			// tags:
 			//		private
 			var nf = this._params.nextFeature;
 			if (!lang.isFunction(nf))
@@ -99,9 +109,9 @@ define([
 
 		_makeGeometry : function(/* Array */s, /* Float */ulx, /* Float */uly, /* Float */lrx, /* Float */
 		lry, /* Float */ulxLL, /* Float */ulyLL, /* Float */lrxLL, /* Float */lryLL){
-			//	summary:
+			// summary:
 			//		Make a geometry with the specified points.
-			//	tags:
+			// tags:
 			//		private
 			var a = [];
 			var k = 0.0;
@@ -122,24 +132,24 @@ define([
 
 			}
 			var ls = new LineString(a);
-			return ls;
+			return ls; // LineString
 		},
 
 		_makeFeature : function(/* Array */s, /* Float */ulx, /* Float */uly, /* Float */lrx, /* Float */
 		lry, /* Float */ulxLL, /* Float */ulyLL, /* Float */lrxLL, /* Float */lryLL){
-			//	summary:
+			// summary:
 			//		Make a GeometryFeature with the specified points.
-			//	tags:
+			// tags:
 			//		private
 			var ls = this._makeGeometry(s, ulx, uly, lrx, lry, ulxLL, ulyLL, lrxLL, lryLL);
 			var gf = new GeometryFeature(ls);
-			return gf;
+			return gf; // GeometryFeature
 		},
 
 		_loadError : function(){
-			//	summary:
+			// summary:
 			//		Called when an error occurs. Calls the error function is provided in the parameters.
-			//	tags:
+			// tags:
 			//		private
 			var f = this._params.error;
 			if (lang.isFunction(f))

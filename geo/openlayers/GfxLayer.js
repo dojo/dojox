@@ -4,25 +4,23 @@ define([
 	"dojo/dom-style",
 	"dojox/gfx",
 	"dojox/gfx/matrix",
-	"dojox/geo/openlayers/Feature",
-	"dojox/geo/openlayers/Layer"], 
-	function(declare, connect, style, gfx, matrix, Feature, Layer){
-	/*===== 
-	var Layer = dojox.geo.openlayers.Layer; 
-	=====*/
+	"./Feature",
+	"./Layer"
+], function(declare, connect, style, gfx, matrix, Feature, Layer){
+
 	return declare("dojox.geo.openlayers.GfxLayer", Layer, {
-		//	summary: 
+		// summary: 
 		//		A layer dedicated to render dojox.geo.openlayers.GeometryFeature
-		//	description:
+		// description:
 		//		A layer class for rendering geometries as dojox.gfx.Shape objects.
 		//		This layer class accepts Features which encapsulates graphic objects to be added to the map.
 		//		All objects should be added to this group.
-		//	tags:
+		// tags:
 		//		private
 		_viewport : null,
 
 		constructor : function(name, options){
-			//	summary:
+			// summary:
 			//		Constructs a new GFX layer.
 			var s = gfx.createSurface(this.olLayer.div, 100, 100);
 			this._surface = s;
@@ -37,18 +35,18 @@ define([
 		},
 
 		getViewport : function(){
-			//	summary:
+			// summary:
 			//		Gets the viewport
-			//	tags:
+			// tags:
 			//		internal
 			return this._viewport;
 		},
 
 		setViewport : function(g){
-			//	summary:
+			// summary:
 			//		Sets the viewport
-			//	g: dojox.gfx.Group
-			//	tags:
+			// g: dojox.gfx.Group
+			// tags:
 			//		internal
 			if (this._viewport)
 				this._viewport.removeShape();
@@ -57,43 +55,43 @@ define([
 		},
 
 		onMapResize : function(){
-			//	summary:
+			// summary:
 			//		Called when map is resized.
-			//	tags:
+			// tags:
 			//		protected
 			this._surfaceSize();
 		},
 
 		setMap : function(map){
-			//	summary:
+			// summary:
 			//		Sets the map for this layer.
-			//	tags:
+			// tags:
 			//		protected
 			this.inherited(arguments);
 			this._surfaceSize();
 		},
 
 		getDataExtent : function(){
-			//	summary:
+			// summary:
 			//		Get data extent
-			//	tags:
+			// tags:
 			//		private
 			var ret = this._surface.getDimensions();
 			return ret;
 		},
 
 		getSurface : function(){
-			//	summary:
+			// summary:
 			//		Get the underlying dojox.gfx.Surface
-			//	returns: dojox.gfx.Surface 
+			// returns:
 			//		The dojox.gfx.Surface this layer uses to draw its GFX rendering.
-			return this._surface;
+			return this._surface; // dojox.gfx.Surface
 		},
 
 		_surfaceSize : function(){
-			//	summary:
+			// summary:
 			//		Recomputes the surface size when being resized.
-			//	tags:
+			// tags:
 			//		private
 			var s = this.olLayer.map.getSize();
 			this._surface.setDimensions(s.w, s.h);
@@ -102,7 +100,7 @@ define([
 		moveTo : function(event){
 			// summary:
 			//   Called when this layer is moved or zoommed.
-			//	event:
+			// event:
 			//		The event
 			var s = style.get(this.olLayer.map.layerContainerDiv);
 			var left = parseInt(s.left);
@@ -128,7 +126,7 @@ define([
 		},
 
 		added : function(){
-			//	summary:
+			// summary:
 			//		Called when added to a map.
 			this.inherited(arguments);
 			this._surfaceSize();

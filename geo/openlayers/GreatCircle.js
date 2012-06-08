@@ -1,25 +1,25 @@
 define([
 	"dojo/_base/lang",
-	"dojox/geo/openlayers/_base",
-	"dojox/geo/openlayers/GeometryFeature"], 
-	function(lang, openlayers, GeometryFeature){
+	"./_base",
+	"./GeometryFeature"
+], function(lang, openlayers, GeometryFeature){
 
 	var gc = openlayers.GreatCircle = {
 
 		toPointArray : function(p1, p2, increment){
-			//	summary:
+			// summary:
 			//		Create a geodetic line as an array of OpenLayers.Point.
-			//	descritpion:
+			// descritpion:
 			//		Create a geodetic line as an array of OpenLayers.Point between the point p1
 			//		and the point p2. Result is a polyline approximation for which a new point is 
 			//		calculated every <em>increment</em> degrees.
-			//	p1: Point
+			// p1: Point
 			//		The first point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
-			//	p2: Point
+			// p2: Point
 			//		The second point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
-			//	increment: Float
+			// increment: Float
 			//		The value at which a new point is computed. 
 			var startLon = p1.x;
 			var endLon = p2.x;
@@ -68,19 +68,19 @@ define([
 		},
 
 		toLineString : function(p1, p2, increment){
-			//	summary:
+			// summary:
 			//		Create a geodetic line as an array of OpenLayers.Geometry.LineString.
-			//	descritpion:
+			// descritpion:
 			//		Create a geodetic line as a OpenLayers.Geometry.LineString between the point p1
 			//		and the point p2. Result is a polyline approximation for which a new point is 
 			// 		calculated every <em>increment</em> degrees.
-			//	p1: Point
+			// p1: Point
 			//		The first point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
-			//	p2: Point
+			// p2: Point
 			//		The second point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
-			//	increment: Float
+			// increment: Float
 			//		The value at which a new point is computed. 
 			var wp = this.toPointArray(p1, p2, increment);
 			var ls = new OpenLayers.Geometry.LineString(wp);
@@ -88,25 +88,25 @@ define([
 		},
 
 		toGeometryFeature : function(p1, p2, increment){
-			//	summary:
+			// summary:
 			//		Create a geodetic line as an array of dojox.geo.openlayers.GeometryFeature.
-			//	description:
+			// description:
 			// 		Create a geodetic line as a dojox.geo.openlayers.GeometryFeature between the point p1
 			//		ant the point p2. Result is a polyline approximation for which a new point is 
 			//		calculated every <em>increment</em> degrees.
-			//	p1: Point
+			// p1: Point
 			//		The first point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
-			//	p2: Point
+			// p2: Point
 			//		The second point of the geodetic line. x and y fields are longitude and
 			//		latitude in decimal degrees.
-			//	increment: Float
+			// increment: Float
 			//		The value at which a new point is computed. 
-			//	returns: GeometryFeature
+			// returns:
 			//		The geodetic line as a GeometryFeature
 
 			var ls = this.toLineString(p1, p2, increment);
-			return new GeometryFeature(ls);
+			return new GeometryFeature(ls); // GeometryFeature
 		},
 
 		DEG2RAD : Math.PI / 180,

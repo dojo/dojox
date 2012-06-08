@@ -6,22 +6,50 @@ define([
 	"dojo/_base/json",
 	"dojo/dom",
 	"dojo/dom-style",
-	"dojox/geo/openlayers/_base",
-	"dojox/geo/openlayers/TouchInteractionSupport",
-	"dojox/geo/openlayers/Layer",
-	"dojox/geo/openlayers/Patch"], 
-	function(kernel, declare, lang, array, json, dom, style, openlayers, TouchInteractionSupport, Layer, Patch){
+	"./_base",
+	"./TouchInteractionSupport",
+	"./Layer",
+	"./Patch"
+], function(kernel, declare, lang, array, json, dom, style, openlayers, TouchInteractionSupport, Layer, Patch){
 
 	kernel.experimental("dojox.geo.openlayers.Map");
 
 
 	Patch.patchGFX();
 
+	/*=====
+	dojox.geo.openlayers.__MapArgs = function(baseLayerType, baseLayerName, baseLayerUrl, baseLayerOptions){
+		// summary:
+		//		The keyword arguments that can be passed in a Map constructor.
+		//
+		// baseLayerType: String
+		//		 type of the base layer. Can be any of
+		//		
+		//		* `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
+		//		* `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
+		//		* `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
+		//		* `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
+		//		* `dojox.geo.openlayers.BaseLayerType.BING`: Bing layer
+		//		* `dojox.geo.openlayers.BaseLayerType.YAHOO`: Yahoo layer
+		//		* `dojox.geo.openlayers.BaseLayerType.ARCGIS`: ESRI ArgGIS layer
+		// baseLayerName: String
+		//		The name of the base layer.
+		// baseLayerUrl: String
+		//		Some layer may need an url such as Web Map Server.
+		// baseLayerOptions: String
+		//		Addtional specific options passed to OpensLayers layer, such as The list of layer to display, for Web Map Server layer.
+		this.baseLayerType = baseLayerType;
+		this.baseLayerName = baseLayerName;
+		this.baseLayerUrl = baseLayerUrl;
+		this.baseLayerOptions = baseLayerOptions;
+	}
+	 =====*/
+
 	return declare("dojox.geo.openlayers.Map", null, {
-		//	summary:
+		// summary:
 		//		A map viewer based on the OpenLayers library.
 		//
-		//	description:
+		// description:
 		//		The `dojox.geo.openlayers.Map` object allows to view maps from various map providers. 
 		//		It encapsulates  an `OpenLayers.Map` object on which most operations are delegated.
 		//		GFX layers can be added to display GFX georeferenced shapes as well as Dojo widgets.
@@ -48,13 +76,13 @@ define([
 		//		* `baseLayerOptions`: Addtional specific options passed to OpensLayers layer,  
 		//		such as The list of layer to display, for Web Map Server layer.
 		//
-		//	example:
+		// example:
 		//	|	var map = new dojox.geo.openlayers.widget.Map(div, {
 		//	|		baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
 		//	|		baseLayerName : 'Open Street Map Layer'
 		//	|	});
 
-		//	summary:
+		// olMap: OpenLayers.Map
 		//		The underlying OpenLayers.Map object.
 		//		Should be accessed on read mode only.
 		olMap : null,
@@ -62,7 +90,7 @@ define([
 		_tp : null,
 
 		constructor : function(div, options){
-			//	summary: 
+			// summary: 
 			//		Constructs a new Map object
 			if (!options)
 				options = {};
@@ -117,22 +145,25 @@ define([
 		},
 
 		initialFit : function(params){
+			// summary:
+			//		Performs an initial fit to contents.
+			// tags:
+			//		protected
 			var o = params.initialLocation;
 			if (!o)
 				o = [-160, 70, 160, -70];
 			this.fitTo(o);
 		},
 
-		setBaseLayerType : function(
-		/* dojox.geo.openlayers.Map.BaseLayerType */type){
-			//	summary: 
+		setBaseLayerType : function(/* dojox/geo/openlayers.BaseLayerType */type){
+			// summary: 
 			//		Set the base layer type, replacing the existing base layer
-			//	type: dojox.geo.openlayers.BaseLayerType
+			// type: dojox/geo/openlayers.BaseLayerType
 			//		base layer type
-			//	returns: OpenLayers.Layer
+			// returns:
 			//		The newly created layer.
 			if (type == this.baseLayerType)
-				return null;
+				return null; // Layer
 
 			var o = null;
 			if (typeof type == "string") {
@@ -174,53 +205,51 @@ define([
 					}
 				}
 			}
-			return bl;
+			return bl; // Layer
 		},
 
 		getBaseLayerType : function(){
-			//	summary:
-			//		Retrieves the base layer type.
-			//	returns: dojox.geo.openlayers.BaseLayerType
+			// summary:
+			//		Returns the base layer type.
+			// returns:
 			//		The current base layer type.
-			return this.baseLayerType;
+			return this.baseLayerType; // openlayers.BaseLayerType
 		},
 
 		getScale : function(geodesic){
-			//	summary: 
+			// summary: 
 			//		Returns the current scale
-			//	geodesic: Boolean
+			// geodesic: Boolean
 			//		Tell if geodesic calculation should be performed. If set to
 			//		true, the scale will be calculated based on the horizontal size of the
 			//		pixel in the center of the map viewport.
-			//	returns: Number
-			//		The current scale.
-			var scale;
+			var scale = null;
 			var om = this.olMap;
 			if (geodesic) {
 				var units = om.getUnits();
 				if (!units) {
-					return null;
+					return null;	// Number
 				}
 				var inches = OpenLayers.INCHES_PER_UNIT;
 				scale = (om.getGeodesicPixelSize().w || 0.000001) * inches["km"] * OpenLayers.DOTS_PER_INCH;
 			} else {
 				scale = om.getScale();
 			}
-			return scale;
+			return scale;	// Number
 		},
 
 		getOLMap : function(){
-			//	summary:
+			// summary:
 			//		gets the underlying OpenLayers map object.
-			//	returns: OpenLayers.Map
+			// returns:
 			//		The underlying OpenLayers map object.
-			return this.olMap;
+			return this.olMap;	// OpenLayers.Map
 		},
 
 		_createBaseLayer : function(params){
-			//	summary:
+			// summary:
 			//		Creates the base layer.
-			//	tags:
+			// tags:
 			//		private
 			var base = null;
 			var type = params.baseLayerType;
@@ -293,10 +322,10 @@ define([
 			return base;
 		},
 
-		removeLayer : function(/* dojox.geo.openlayers.Layer */layer){
-			//	summary: 
+		removeLayer : function(/* Layer */layer){
+			// summary: 
 			//		Remove the specified layer from the map.
-			//	layer: dojox.geo.openlayers.Layer
+			// layer: Layer
 			//		The layer to remove from the map.
 			var om = this.olMap;
 			var i = array.indexOf(this._layerDictionary.layers, layer);
@@ -309,17 +338,19 @@ define([
 			om.removeLayer(oll, false);
 		},
 
-		layerIndex : function(/* dojox.geo.openlayers.Layer */layer, index){
-			//	summary:
+		layerIndex : function(/* Layer */layer, index){
+			// summary:
 			//		Set or retrieve the layer index.
-			//	description:
+			// description:
 			//		Set or get the layer index, that is the z-order of the layer.
 			//		if the index parameter is provided, the layer index is set to
 			//		this value. If the index parameter is not provided, the index of 
 			//		the layer is returned.
-			//	index: undefined | int
+			// layer: Layer
+			//		the layer to retrieve the index.
+			// index: int?
 			//		index of the layer
-			// 	returns: int
+			// returns:
 			//		the index of the layer.
 			var olm = this.olMap;
 			if (!index)
@@ -334,13 +365,13 @@ define([
 				return olm.getLayerIndex(l1) - olm.getLayerIndex(l2);
 			});
 
-			return index;
+			return index; // Number
 		},
 
-		addLayer : function(/* dojox.geo.openlayers.Layer */layer){
-			//	summary: 
+		addLayer : function(/* Layer */layer){
+			// summary: 
 			//		Add the specified layer to the map.
-			//	layer: dojox.geo.openlayer.Layer
+			// layer: Layer
 			//		The layer to add to the map.
 			layer.dojoMap = this;
 			var om = this.olMap;
@@ -352,9 +383,9 @@ define([
 		},
 
 		_getLayer : function(/*OpenLayer.Layer */ol){
-			//	summary:
+			// summary:
 			//		Retrieve the dojox.geo.openlayer.Layer from the OpenLayer.Layer
-			//	tags:
+			// tags:
 			//		private
 			var i = array.indexOf(this._layerDictionary.olLayers, ol);
 			if (i != -1)
@@ -363,16 +394,16 @@ define([
 		},
 
 		getLayer : function(property, value){
-			//	summary: 
+			// summary: 
 			//		Returns the layer whose property matches the value.
-			//	property: String
+			// property: String
 			//		The property to check
-			//	value: Object
+			// value: Object
 			//		The value to match
-			//	returns: dojox.geo.openlayer.Layer | Array
+			// returns:
 			//		The layer(s) matching the property's value. Since multiple layers
 			//		match the property's value the return value is an array. 
-			//	example: 
+			// example: 
 			//		var layers = map.getLayer("name", "Layer Name");
 			var om = this.olMap;
 			var ols = om.getBy("layers", property, value);
@@ -380,28 +411,28 @@ define([
 			array.forEach(ols, function(ol){
 				ret.push(this._getLayer(ol));
 			}, this);
-			return ret;
+			return ret; // Layer[]
 		},
 
 		getLayerCount : function(){
-			//	summary: 
+			// summary: 
 			//		Returns the count of layers of this map.
-			//	returns: int 
+			// returns: 
 			//		The number of layers of this map. 
 			var om = this.olMap;
 			if (om.layers == null)
 				return 0;
-			return om.layers.length;
+			return om.layers.length; // Number
 		},
 
 		fitTo : function(o){
-			//	summary: 
+			// summary: 
 			//		Fits the map on a point,or an area
-			//	description: 
+			// description: 
 			//		Fits the map on the point or extent specified as parameter. 
-			//	o: Object
+			// o: Object
 			//		Object with key values fit parameters or a JSON string.
-			//	example:
+			// example:
 			//		Examples of arguments passed to the fitTo function :
 			//	|	null
 			//		The map is fit on full extent
@@ -485,32 +516,36 @@ define([
 		},
 
 		transform : function(p, from, to){
-			//	summary:
+			// summary:
 			//		Transforms the point passed as argument, expressed in the <em>from</em> 
 			//		coordinate system to the map coordinate system.
-			//	description:
+			// description:
 			//		Transforms the point passed as argument without modifying it. The point is supposed to be expressed
 			//		in the <em>from</em> coordinate system and is transformed to the map coordinate system.
-			//	p: Object {x, y}
+			// p: Object {x, y}
 			//		The point to transform
-			//	from: OpenLayers.Projection
+			// from: OpenLayers.Projection
 			//		The projection in which the point is expressed.
 			return this.transformXY(p.x, p.y, from, to);
 		},
 
 		transformXY : function(x, y, from, to){
-			//	summary
+			// summary
 			//		Transforms the coordinates passed as argument, expressed in the <em>from</em> 
 			//		coordinate system to the map coordinate system.
-			//	description:
+			// description:
 			//		Transforms the coordinates passed as argument. The coordinate are supposed to be expressed
 			//		in the <em>from</em> coordinate system and are transformed to the map coordinate system.
-			//	x: Number 
+			// x: Number 
 			//		The longitude coordinate to transform.
-			//	y: Number
+			// y: Number
 			//		The latitude coordinate to transform.
-			//	from: OpenLayers.Projection
-			//		The projection in which the point is expressed.
+			// from: OpenLayers.Projection?
+			//		The projection in which the point is expressed, or EPSG4326 is not specified.
+			// to: OpenLayers.Projection?
+			//		The projection in which the point is converted to. In not specifed, the map projection is used.
+			// returns:
+			//		The transformed coordinate as an {x,y} Object.
 
 			var tp = this._tp;
 			tp.x = x;
@@ -520,7 +555,7 @@ define([
 			if (!to)
 				to = this.olMap.getProjectionObject();
 			tp = OpenLayers.Projection.transform(tp, from, to);
-			return tp;
+			return tp; // Object
 		}
 
 	});

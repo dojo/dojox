@@ -5,7 +5,7 @@ define([
 	"dojo/_base/html",
 	"dojo/dom-geometry",
 	"dijit/_Widget",
-	"dojox/geo/charting/Map"
+	"../Map"
 ], function(dojo, lang, declare, html,domGeom, Widget, Map){
 
 	return declare("dojox.geo.charting.widget.Map", Widget, {
@@ -65,10 +65,6 @@ define([
 		},
 	
 		startup : function(){
-			// summary:
-			//		inherited Widget startup function		
-			// tags:
-			//		protected
 			this.inherited(arguments);
 			if(this.map){
 				this.map.fitToMapContents();
@@ -77,33 +73,21 @@ define([
 		},
 	
 		postMixInProperties : function(){
-			// summary:
-			//		inherited Widget postMixInProperties function		
-			// tags:
-			//		protected
 			this.inherited(arguments);
 		},
 	
 		create : function(/*Object?*/params, /*DomNode|String?*/srcNodeRef){
-			// summary:
-			//		inherited Widget create function		
-			// tags:
-			//		protected
 			this.inherited(arguments);
 		},
 		
 		getInnerMap: function(){
 			// summary:
 			//		Returns the inner dojox.geo.charting.Map component.
-			return this.map; // dojox.geo.charting.Map
+			return this.map; // dojox/geo/charting/Map
 		},
 		
 	
 		buildRendering : function(){
-			// summary:
-			//		Construct the UI for this widget, creates the underlying real dojox.geo.charting.Map object.		
-			// tags:
-			//		protected
 			this.inherited(arguments);
 			if(this.shapeData){
 				this.map = new Map(this.domNode, this.shapeData);

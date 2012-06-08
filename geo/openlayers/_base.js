@@ -4,31 +4,32 @@ define(["dojo/_base/lang"], function(lang){
 	/*===== openlayers = dojox.geo.openlayers; =====*/
 	
 	openlayers.BaseLayerType = {
-		//	summary:
+		// summary:
 		//		Defines the base layer types to be used at Map construction time or
 		//		with the setBaseLayerType function.
-		//	description:
+		// description:
 		//		This object defines the base layer types to be used at Map construction
 		//		time or with the setBaseLayerType function.
-		//	OSM: String
+		
+		// OSM: String
 		//		The Open Street Map base layer type selector.
-		OSM : "OSM",
-		//	WMS: String
+		OSM : "OSM",		
+		// WMS: String
 		//		The Web Map Server base layer type selector.
 		WMS : "WMS",
-		//	GOOGLE: String
+		// GOOGLE: String
 		//		The Google base layer type selector.
 		GOOGLE : "Google",
-		//	VIRTUAL_EARTH: String
+		// VIRTUAL_EARTH: String
 		//		The Virtual Earth base layer type selector.
 		VIRTUAL_EARTH : "VirtualEarth",
-		//	BING: String
+		// BING: String
 		//		Same as Virtual Earth
 		BING : "VirtualEarth",
-		//	YAHOO: String
+		// YAHOO: String
 		//		The Yahoo base layer type selector.
 		YAHOO : "Yahoo",
-		//	ARCGIS: String
+		// ARCGIS: String
 		//		The ESRI ARCGis base layer selector.
 		ARCGIS : "ArcGIS"
 	};
@@ -37,16 +38,16 @@ define(["dojo/_base/lang"], function(lang){
 
 	var re = /^\s*(\d{1,3})[D°]\s*(\d{1,2})[M']\s*(\d{1,2}\.?\d*)\s*(S|"|'')\s*([NSEWnsew]{0,1})\s*$/i;
 	openlayers.parseDMS = function(v, toDecimal){
-		//	summary: 
+		// summary: 
 		//		Parses the specified string and returns degree minute second or decimal degree.
-		//	description: 
+		// description: 
 		//		Parses the specified string and returns degree minute second or decimal degree.
-		//	v: String
+		// v: String
 		//		The string to parse
-		//	toDecimal: Boolean
+		// toDecimal: Boolean
 		//		Specifies if the result should be returned in decimal degrees or in an array
 		//		containg the degrees, minutes, seconds values.
-		//	returns: Float | Array
+		// returns: Float | Array
 		//		the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
 
 		var res = re.exec(v);

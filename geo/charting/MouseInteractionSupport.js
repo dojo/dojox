@@ -51,10 +51,10 @@ define([
 	
 		mouseClickThreshold: 2,
 	
-		constructor : function(/* Map */map,/*dojox.geo.charting.__MouseInteractionSupportCtorArgs?*/options){
+		constructor : function(/*dojox/geo/charting/Map*/ map,/*dojox.geo.charting.__MouseInteractionSupportCtorArgs?*/ options){
 			// summary: 
 			//		Constructs a new _MouseInteractionSupport instance
-			// map: Map
+			// map: dojox/geo/charting/Map
 			//		the Map widget this class provides touch navigation for.
 			// options: Object?
 			//		An object defining additional configuration properties.
@@ -250,7 +250,7 @@ define([
 			//		utility function to return the feature located at this mouse event location
 			// mouseEvent: MouseEvent:
 			//		the mouse event
-			// returns: dojox.geo.charting.Feature
+			// returns:
 			//		the feature found if any, null otherwise.
 			// tags:
 			//		private
@@ -258,7 +258,7 @@ define([
 			if(mouseEvent.gfxTarget && mouseEvent.gfxTarget.getParent){
 				feature = this._map.mapObj.features[mouseEvent.gfxTarget.getParent().id];
 			}
-			return feature;
+			return feature; // dojox/geo/charting/Feature
 		},
 	
 		_mouseMoveHandler: function(mouseEvent){

@@ -5,51 +5,43 @@ define([
 	"dojo/dom-geometry",
 	"dojo/query",
 	"dijit/_Widget",
-	"dojox/geo/openlayers/_base",
-	"dojox/geo/openlayers/Map",
-	"dojox/geo/openlayers/Layer",
-	"dojox/geo/openlayers/GfxLayer"], 
-	function(lang, declare, array, domgeo, query, Widget, openlayers, Map, Layer, GfxLayer){
-		/*===== 
-		var Widget = dijit.Widget; 
-		=====*/
+	"../_base",
+	"../Map",
+	"../Layer",
+	"../GfxLayer"
+], function(lang, declare, array, domgeo, query, Widget, openlayers, Map, Layer, GfxLayer){
+
 	return declare("dojox.geo.openlayers.widget.Map", Widget, {
-		//	summary: 
+		// summary: 
 		//		A widget version of the `dojox.geo.openlayers.Map` component.
-		//	description: 
+		// description: 
 		//		The `dojox.geo.openlayers.widget.Map` widget is the widget 
 		//		version of the `dojox.geo.openlayers.Map` component. 
-		//		With this widget, user can specify some attributes in the markup suach as
+		//		With this widget, user can specify some attributes in the markup such as
 		//		
 		//		* `baseLayerType`: The type of the base layer. Permitted values are 
 		//		* `initialLocation`: The initial location as for the dojox.geo.openlayers.Map.fitTo method
 		//		* `touchHandler`: Tells if we attach touch handler or not.
 		//
-		//	example:
+		// example:
 		//	| <div id="map" dojoType="dojox.geo.openlayers.widget.Map" baseLayerType="Google" initialLocation="{
 		//	|   position : [7.154126, 43.651748],
 		//	|   extent : 0.2 }"
 		//	| style="background-color: #b5d0d0; width: 100%; height: 100%;">
 		//
 
-		//	summary:
-		//		Base layer type as defined in `dojox.geo.openlayer.BaseLayerType
-		//	description:
-		//		baseLayerType can be either 
+		// baseLayerType: String
+		//		Base layer type as defined in `dojox.geo.openlayer.BaseLayerType. Can be either 
 		//		* `OSM`
 		//		* `WMS`
 		//		* `Google`
 		//		* `VirtualEarth`
 		//		* `Yahoo`
 		//		* `ArcGIS`
-		//	baseLayerType: String
-		//		Base layer type property.
 		baseLayerType : openlayers.BaseLayerType.OSM,
 
-		//	summary:
-		//		The part of the map shown at startup time.
-		//	description:
-		//		initial location is the string description of the location shown at 
+		// initialLocation String:
+		//		The part of the map shown at startup time. It is the string description of the location shown at 
 		//		startup time. Format is the same as for the `dojox.geo.openlayers.widget.Map.fitTo`
 		//		method.
 		//	|	{
@@ -62,25 +54,23 @@ define([
 		//	|	position : [longitude, latitude],
 		//	|	extent : degrees
 		//	|	}
-		//	The map is fit on the specified position showing the extent <extent> around
-		//	the specified center position.
+		//		The map is fit on the specified position showing the extent <extent> around
+		//		the specified center position.
 		initialLocation : null,
 
-		//	summary:
-		//		Tells if the touch handler should be attached to the map or not.
-		//	description:
+		// touchHandler: Boolean
 		//		Tells if the touch handler should be attached to the map or not.
 		//		Touch handler handles touch events so that the widget can be used
 		//		on mobile applications.
 		touchHandler : false,
 
-		//	summary:
+		// map: Map
 		//		The underlying `dojox.geo.openlayers.Map` object.
 		//		This is s readonly member.
 		map : null,
 
 		startup : function(){
-			//	summary:
+			// summary:
 			//		Processing after the DOM fragment is added to the document
 			this.inherited(arguments);
 			this.map.initialFit({
@@ -89,9 +79,9 @@ define([
 		},
 
 		buildRendering : function(){
-			//	summary:
+			// summary:
 			//		Construct the UI for this widget, creates the real dojox.geo.openlayers.Map object.		
-			//	tags:
+			// tags:
 			//		protected
 			this.inherited(arguments);
 			var div = this.domNode;
@@ -105,9 +95,9 @@ define([
 		},
 
 		_makeLayers : function(){
-			//	summary:
+			// summary:
 			//		Creates layers defined as markup.
-			//	tags:
+			// tags:
 			//		private
 			var n = this.domNode;
 			var layers = /* ?? query. */query("> .layer", n);
@@ -124,16 +114,18 @@ define([
 			}, this);
 		},
 
-		resize : function(b){
-			//	summary:
+		resize : function(b,h){
+			// summary:
 			//		Resize the widget.
-			//	description:
+			// description:
 			//		Resize the domNode and the widget to the dimensions of a box of the following form:
 			//			`{ l: 50, t: 200, w: 300: h: 150 }`
-			//	b: undefined | Box | width, height
+			// b: Object|Number?
 			//		If passed, denotes the new size of the widget.
 			// 		Can be either nothing (widget adapts to the div),
-			// 		a box, or a width and a height.
+			// 		an Object describing a box, or a Number representing the width.
+			// h: Number?
+			//		The new height. Requires that a width has been specified in the first parameter.
 
 			var olm = this.map.getOLMap();
 

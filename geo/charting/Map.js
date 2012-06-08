@@ -10,13 +10,12 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/window", 
 	"dojox/gfx",
-	"dojox/geo/charting/_base",
-	"dojox/geo/charting/Feature",
-	"dojox/geo/charting/_Marker",
+	"./_base",
+	"./Feature",
+	"./_Marker",
 	"dojo/number",
 	"dojo/_base/sniff"
-], function(lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base,
-		   Feature, Marker, number, has){
+], function(lang, arr, declare, html, dom, domGeom, domClass, xhr, connect, win, gfx, base, Feature, Marker, number, has){
 
 	return declare("dojox.geo.charting.Map", null, {
 		// summary:
@@ -74,7 +73,7 @@ define([
 			if(typeof shapeData == "object"){
 				this._init(shapeData);
 			}else{
-		        // load map shape file
+				// load map shape file
 				if(typeof shapeData == "string" && shapeData.length > 0){
 					xhr.get({
 						url: shapeData,
@@ -177,7 +176,7 @@ define([
 		setDataBindingAttribute: function(/*String*/prop){
 			// summary:
 			//		sets the property name of the dataStore items to use as value (see Feature.setValue function)
-			// prop:
+			// prop: String
 			//		the property
 			this.dataBindingAttribute = prop;
 	
@@ -190,7 +189,7 @@ define([
 		setDataBindingValueFunction: function(/* function */valueFunction){
 			// summary:
 			//		sets the function that extracts values from dataStore items,to use as Feature values (see Feature.setValue function)
-			// prop:
+			// valueFunction:
 			//		the function
 			this.dataBindingValueFunction = valueFunction;
 	
@@ -267,10 +266,10 @@ define([
 			}
 		},
 	
-		setDataStore: function(/*ItemFileReadStore*/ dataStore, /*String*/ dataBindingProp){
+		setDataStore: function(/*dojo/data/ItemFileReadStore*/ dataStore, /*String*/ dataBindingProp){
 			// summary:
 			//		populate data for each map feature from fetched data store
-			// dataStore:
+			// dataStore: dojo/data/ItemFileReadStore
 			//		the dataStore to fetch the information from
 			// dataBindingProp:
 			//		sets the property name of the dataStore items to use as value
@@ -306,7 +305,7 @@ define([
 			if(typeof series == "object"){
 				this._addSeriesImpl(series);
 			}else{
-		        // load series file
+				// load series file
 				if(typeof series == "string" && series.length > 0){
 					xhr.get({
 						url: series,
@@ -333,11 +332,11 @@ define([
 		},
 	
 	
-		fitToMapArea: function(/*{x,y,w,h}*/mapArea,pixelMargin,animate,/* callback function */onAnimationEnd){
+		fitToMapArea: function(mapArea, pixelMargin, animate, onAnimationEnd){
 			// summary:
 			//		set this component's transformation so that the specified area fits in the component (centered)
-			// mapArea:
-			//		the map area that needs to fill the component
+			// mapArea: Object
+			//		the map area that needs to fill the component expressed as {x,y,w,h}
 			// pixelMargin: int
 			//		a margin (in pixels) from the borders of the Map component.
 			// animate: boolean
@@ -500,7 +499,7 @@ define([
 	
 		setMapScaleAt: function(scale,fixedMapX,fixedMapY,animate,/* callback function */onAnimationEnd){
 			// summary:
-		    //		set this component's transformation so that the map is scaled to the specified scale, and the specified
+			//		set this component's transformation so that the map is scaled to the specified scale, and the specified
 			//		point (in map coordinates) stays fixed on this Map component
 			// scale: Number
 			//		the scale ratio.

@@ -29,10 +29,6 @@ define([
 		swatchSize:18,
 		map:null,
 		postCreate: function(){
-			// summary:
-			//		inherited Dijit's postCreate function		
-			// tags:
-			//		protected
 			if(!this.map){return;}
 			this.series = this.map.series;
 			if (!this.domNode.parentNode) {
@@ -42,11 +38,7 @@ define([
 			this.refresh();
 		},
 		buildRendering: function(){ 
-			// summary:
-			//		Construct the UI for this widget, creates the underlying real dojox.geo.charting.Map object.		
-			// tags:
-			//		protected
-			this.domNode = domConstruct.create("table",   
+			this.domNode = domConstruct.create("table",
 						{role: "group", "class": "dojoxLegendNode"});  
 			this.legendBody = domConstruct.create("tbody", null, this.domNode);  
 			this.inherited(arguments);  

@@ -8,7 +8,7 @@ define([
 
 	return declare("dojox.geo.charting.TouchInteractionSupport",null, {
 		// summary: 
-		//		A class to handle touch interactions on a dojox.geo.charting.Map component.
+		//		A class to handle touch interactions on a dojox/geo/charting/Map component.
 		// tags:
 		//		private
 		
@@ -27,10 +27,10 @@ define([
 		_oneFingerTouch:false,
 		_tapCancel:false,
 		
-		constructor : function(/* Map */map){
+		constructor : function(/* dojox/geo/charting/Map */map){
 			// summary: 
 			//		Constructs a new _TouchInteractionSupport instance
-			// map: Map
+			// map: dojox/geo/charting/Map 
 			//		the Map component this class provides touch navigation for.
 			this._map = map;
 			this._centerTouchLocation = {x: 0,y: 0};		
@@ -60,7 +60,7 @@ define([
 			//		returns the midpoint of the two first fingers (or the first finger location if only one)
 			// touchEvent: TouchEvent
 			//		a touch event
-			// returns: dojox.gfx.Point
+			// returns:
 			//		the midpoint
 			// tags:
 			//		private
@@ -83,7 +83,7 @@ define([
 			//		computes the distance between the first two fingers
 			// touchEvent: TouchEvent
 			//		a touch event
-			// returns: float
+			// returns:
 			//		a distance. -1 if less than 2 fingers
 			// tags:
 			//		private
@@ -103,7 +103,7 @@ define([
 			//		(i.e. follows closely a previous touchStart at approximately the same location)
 			// touchEvent: TouchEvent
 			//		a touch event
-			// returns: boolean
+			// returns:
 			//		true if this event is considered a double tap
 			// tags:
 			//		private
@@ -156,7 +156,7 @@ define([
 			//		utility function to return the feature located at this touch event location
 			// touchEvent: TouchEvent
 			//		a touch event
-			// returns: dojox.geo.charting.Feature
+			// returns:
 			//		the feature found if any, null otherwise.
 			// tags:
 			//		private

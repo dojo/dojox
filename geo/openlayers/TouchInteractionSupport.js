@@ -4,13 +4,13 @@ define([
 	"dojo/_base/html",
 	"dojo/_base/lang",
 	"dojo/_base/event",
-	"dojo/_base/window"], 
-	function(declare, connect, html, lang, event, win){
+	"dojo/_base/window"
+], function(declare, connect, html, lang, event, win){
 
 	return declare("dojox.geo.openlayers.TouchInteractionSupport", null, {
-		//	summary: 
+		// summary: 
 		//		class to handle touch interactions on a OpenLayers.Map widget
-		//	tags:
+		// tags:
 		//		private
 
 		_map : null,
@@ -24,9 +24,9 @@ define([
 		_lastTap : null,
 
 		constructor : function(/* OpenLayers.Map */map){
-			//	summary: 
+			// summary: 
 			//		Constructs a new TouchInteractionSupport instance
-			//	map: OpenLayers.Map
+			// map: OpenLayers.Map
 			//		the Map widget this class provides touch navigation for.
 			this._map = map;
 			this._centerTouchLocation = new OpenLayers.LonLat(0, 0);
@@ -48,13 +48,13 @@ define([
 		},
 
 		_getTouchBarycenter : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		returns the midpoint of the two first fingers (or the first finger location if only one)
-			//	touchEvent: Event
+			// touchEvent: TouchEvent
 			//		a touch event
-			//	returns: dojox.gfx.Point
-			//		the midpoint
-			//	tags:
+			// returns:
+			//		the midpoint as an {x,y} object.
+			// tags:
 			//		private
 			var touches = touchEvent.touches;
 			var firstTouch = touches[0];
@@ -73,18 +73,18 @@ define([
 			return {
 				x : middleX,
 				y : middleY
-			};
+			}; //  Object
 
 		},
 
 		_getFingerSpacing : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		computes the distance between the first two fingers
-			//	touchEvent: Event
+			// touchEvent: Event
 			//		a touch event
-			//	returns: float
+			// returns: float
 			//		a distance. -1 if less that 2 fingers
-			//	tags:
+			// tags:
 			//		private
 			var touches = touchEvent.touches;
 			var spacing = -1;
@@ -97,14 +97,14 @@ define([
 		},
 
 		_isDoubleTap : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		checks whether the specified touchStart event is a double tap 
 			//		(i.e. follows closely a previous touchStart at approximately the same location)
-			//	touchEvent: Event
+			// touchEvent: TouchEvent
 			//		a touch event
-			//	returns: boolean
+			// returns: boolean
 			//		true if this event is considered a double tap
-			//	tags:
+			// tags:
 			//		private
 			var isDoubleTap = false;
 			var touches = touchEvent.touches;
@@ -130,12 +130,13 @@ define([
 		},
 
 		_doubleTapHandler : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a double tap was triggered 
-			//	touchEvent: Event 
+			// touchEvent: TouchEvent 
 			//		a touch event
-			//	tags:
+			// tags:
 			//		private
+			
 			// perform a basic 2x zoom on touch
 			var touches = touchEvent.touches;
 			var marginBox = html.marginBox(this._map.div);
@@ -148,11 +149,11 @@ define([
 		},
 
 		_touchStartHandler : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a touch start was triggered 
-			//	touchEvent: Event 
-			// 		a touch event
-			//	tags:
+			// touchEvent: Event 
+			//		a touch event
+			// tags:
 			//		private
 			event.stop(touchEvent);
 
@@ -182,11 +183,11 @@ define([
 		},
 
 		_touchEndHandler : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a touch end was triggered 
-			//	touchEvent: Event 
+			// touchEvent: Event 
 			//		a touch event
-			//	tags:
+			// tags:
 			//		private
 			event.stop(touchEvent);
 
@@ -211,11 +212,11 @@ define([
 		},
 
 		_touchMoveHandler : function(touchEvent){
-			//	summary: 
+			// summary: 
 			//		action performed on the map when a touch move was triggered 
-			//	touchEvent: Event
+			// touchEvent: Event
 			//		a touch event
-			//	tags:
+			// tags:
 			//		private
 
 			// prevent browser interaction
