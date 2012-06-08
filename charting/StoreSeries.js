@@ -52,7 +52,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 			// summary:
 			//		Clean up before GC.
 			if(this.observeHandle){
-				this.observeHandle.dismiss();
+				this.observeHandle.remove();
 			}
 		},
 	
@@ -72,7 +72,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 			var objects = this.objects = [];
 			var self = this;
 			if(this.observeHandle){
-				this.observeHandle.dismiss();
+				this.observeHandle.remove();
 			}
 			var results = this.store.query(this.kwArgs.query, this.kwArgs);
 			Deferred.when(results, function(objects){
