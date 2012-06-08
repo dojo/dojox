@@ -15,10 +15,10 @@ dhebrew.compare = function(/*dojox/date/hebrew/Date*/dateheb1, /*dojox/date/hebr
 	// summary:
 	//		Compare two hebrew date objects by date, time, or both.
 	// description:
-	//  	Returns 0 if equal, positive if a > b, else negative.
-	// date1: hebrew.Date
-	// date2: hebrew.Date
-	// 		If not specified, the current hebrew.Date is used.
+	//		Returns 0 if equal, positive if a > b, else negative.
+	// date1: dojox/date/hebrew/Date
+	// date2: dojox/date/hebrew/Date
+	//		If not specified, the current hebrew.Date is used.
 	// portion:
 	//		A string indicating the "date" or "time" portion of a Date object.
 	//		Compares both "date" and "time" by default.  One of the following:
@@ -107,10 +107,10 @@ dhebrew.add = function(/*dojox/date/hebrew/Date*/date, /*String*/interval, /*int
 
 dhebrew.difference = function(/*dojox/date/hebrew/Date*/date1, /*dojox/date/hebrew/Date?*/date2, /*String?*/interval){
 	// summary:
-	//        date2 - date1
+	//		date2 - date1
 	// date1: dojox/date/hebrew/Date
 	// date2: dojox/date/hebrew/Date
-	// 		If not specified, the current dojox.date.hebrew.Date is used.
+	//		If not specified, the current dojox.date.hebrew.Date is used.
 	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",

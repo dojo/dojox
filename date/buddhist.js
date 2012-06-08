@@ -100,10 +100,10 @@ dbuddhist.add = function(/*dojox/date/buddhist/Date*/date, /*String*/interval, /
 
 dbuddhist.difference = function(/*dojox/date/buddhist/Date*/date1, /*dojox/date/buddhist/Date?*/date2, /*String?*/interval){
 	// summary:
-	//        date2 - date1
-	// date1: dojox/date/dbuddhist.Date
+	//		date2 - date1
+	// date1: dojox/date/dbuddhist/Date
 	// date2: dojox/date/dbuddhist/Date
-	// 		If not specified, the current dojox.date.dbuddhist.Date is used.
+	//		If not specified, the current dojox.date.dbuddhist.Date is used.
 	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",

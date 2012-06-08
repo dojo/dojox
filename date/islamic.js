@@ -15,11 +15,10 @@ dislamic.compare = function(/*dojox/date/islamic/Date*/date1, /*dojox/date/islam
 	// summary:
 	//		Compare two islamic date objects by date, time, or both.
 	// description:
-	//  	Returns 0 if equal, positive if a > b, else negative.
-	// date1:
-	//		dojox.date.islamic.Date object
-	// date2:
-	//		dojox.date.islamic.Date object.  If not specified, the current islamic.Date is used.
+	//		Returns 0 if equal, positive if a > b, else negative.
+	// date1: dojox/date/islamic/Date
+	// date2: dojox/date/islamic/Date
+	//		If not specified, the current islamic.Date is used.
 	// portion:
 	//		A string indicating the "date" or "time" portion of a Date object.
 	//		Compares both "date" and "time" by default.  One of the following:
@@ -109,10 +108,10 @@ dislamic.add = function(/*dojox/date/islamic/Date*/date, /*String*/interval, /*i
 
 dislamic.difference = function(/*dojox/date/islamic/Date*/date1, /*dojox/date/islamic/Date?*/date2, /*String?*/interval){
 	// summary:
-	//        date2 - date1
+	//		date2 - date1
 	// date1: dojox/date/islamic/Date
 	// date2: dojox/date/islamic/Date
-	// 		If not specified, the current dojox.date.islamic.Date is used.
+	//		If not specified, the current dojox.date.islamic.Date is used.
 	// interval:
 	//		A string representing the interval.  One of the following:
 	//			"year", "month", "day", "hour", "minute", "second",
