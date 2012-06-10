@@ -21,12 +21,13 @@ define([
 	"dijit/form/NumberTextBox",
 	"dijit/form/CurrencyTextBox",
 	"dijit/form/HorizontalSlider",
+	"dijit/form/_TextBoxMixin",
 	"dijit/Editor",
 	"../util",
 	"./_base"
 ], function(dojo, dojox, declare, array, lang, json, connect, has, dom, domAttr, domConstruct,
 	domGeometry, ItemFileReadStore, DateTextBox, TimeTextBox, ComboBox, CheckBox, TextBox,
-	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, Editor, util, BaseCell){
+	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, _TextBoxMixin, Editor, util, BaseCell){
 		
 // TODO: shouldn't it be the test file's job to require these modules,
 // if it is using them?  Most of these modules aren't referenced by this file.
@@ -112,6 +113,9 @@ define([
 			if(this.widget){
 				setTimeout(lang.hitch(this.widget, function(){
 					util.fire(this, "focus");
+					if(this.focusNode && this.focusNode.tagName === "INPUT"){
+						_TextBoxMixin.selectInputText(this.focusNode);
+					}
 				}), 0);
 			}
 		},
