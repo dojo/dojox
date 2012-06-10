@@ -123,7 +123,7 @@ define([
 				domStyle.set(widget.domNode, "visibility", "hidden");
 
 				//Listen for the values in a view to be selected
-				widget.on("valueselected", lang.hitch(this, "_onDateSelected"))
+				widget.on("valueselected", lang.hitch(this, "_onDateSelected"));
 				widget.set("value", this.get('value'));
 			}, this);
 
@@ -147,7 +147,7 @@ define([
 					selector:'date',
 					locale:this.lang});
 
-			on(this.footer, "click", lang.hitch(this, "goToToday"))
+			on(this.footer, "click", lang.hitch(this, "goToToday"));
 
 			var first = this._children[0];
 
