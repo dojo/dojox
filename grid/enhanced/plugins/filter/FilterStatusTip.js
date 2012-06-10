@@ -42,7 +42,7 @@ define([
 			this._rules = [];
 			this.statusPane = new FilterStatusPane();
 			this._dlg = new TooltipDialog({
-				"class": "dojoxGridFStatusTipDialog",
+				"class": "dijitTooltipBelow dojoxGridFStatusTipDialog",
 				content: this.statusPane,
 				autofocus: false
 			});
@@ -141,7 +141,4 @@ define([
 			p.filterDefDialog.showDialog(p.filterBar.getColumnIdx(this._pos.x));
 		}
 	});
-	
-
-	return FilterStatusTip;
 });
