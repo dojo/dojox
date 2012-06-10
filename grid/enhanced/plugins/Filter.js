@@ -10,7 +10,7 @@ define([
 	"./filter/ClearFilterConfirm",
 	"../../EnhancedGrid",
 	"dojo/i18n!../nls/Filter"
-], function(declare, lang, _Plugin, Dialog, layers, FilterBar, FilterDefDialog, FilterStatusTip, ClearFilterConfirm, EnhancedGrid, filterStrings){
+], function(declare, lang, _Plugin, Dialog, layers, FilterBar, FilterDefDialog, FilterStatusTip, ClearFilterConfirm, EnhancedGrid, nls){
 
 	var Filter = declare("dojox.grid.enhanced.plugins.Filter", _Plugin, {
 		// summary:
@@ -87,7 +87,7 @@ define([
 			// summary:
 			//		See constructor of dojox.grid.enhanced._Plugin.
 			this.grid = grid;
-			this.nls = filterStrings;
+			this.nls = nls;
 			
 			args = this.args = lang.isObject(args) ? args : {};
 			if(typeof args.ruleCount != 'number' || args.ruleCount < 0){
