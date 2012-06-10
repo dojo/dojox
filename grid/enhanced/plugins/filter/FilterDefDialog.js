@@ -467,13 +467,14 @@ var CriteriaBox = declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[_Wid
 		if(obj.column){
 			this._colSelect.set("value", obj.column);
 		}
-		if(obj.condition){
-			this._condSelect.set("value", obj.condition);
-		}
 		if(obj.type){
+			this._setConditionsByType(obj.type);
 			this._setValueBoxByType(obj.type);
 		}else{
 			obj.type = this.dlg.getColumnType(this._colSelect.get("value"));
+		}
+		if(obj.condition){
+			this._condSelect.set("value", obj.condition);
 		}
 		var value = obj.value || "";
 		if(value || (obj.type != "date" && obj.type != "time")){
@@ -611,21 +612,24 @@ var CriteriaBox = declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[_Wid
 			};
 		if(type == "string"){
 			if(cell && (cell.suggestion || cell.autoComplete)){
-				html.mixin(res, {
+				lang.mixin(res, {
 					store: g.store,
 					searchAttr: cell.field || cell.name,
+					query: g.query || {},
 					fetchProperties: {
 						sort: [{"attribute": cell.field || cell.name}],
-						query: g.query,
-						queryOptions: g.queryOptions
+						queryOptions: lang.mixin({
+							ignoreCase: true,
+							deep: true
+						}, g.queryOptions || {})
 					}
 				});
 			}
 		}else if(type == "boolean"){
-			html.mixin(res, this.dlg.builder.defaultArgs["boolean"]);
+			lang.mixin(res, this.dlg.builder.defaultArgs["boolean"]);
 		}
 		if(cell && cell.dataTypeArgs){
-			html.mixin(res, cell.dataTypeArgs);
+			lang.mixin(res, cell.dataTypeArgs);
 		}
 		return res;
 	},
