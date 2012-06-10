@@ -77,6 +77,7 @@ define([
 				this.widgetProps||{},
 				{
 					constraints: lang.mixin({}, this.constraint) || {}, //TODO: really just for ValidationTextBoxes
+					required: (this.constraint || {}).required,
 					value: this._unescapeHTML(inDatum)
 				}
 			);
