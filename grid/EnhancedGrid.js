@@ -7,14 +7,13 @@ define([
 	"dojo/_base/sniff",
 	"dojo/dom",
 	"dojo/dom-geometry",
-	"dojo/i18n",
 	"./DataGrid",
 	"./DataSelection",
 	"./enhanced/_PluginManager",
 	"./enhanced/plugins/_SelectionPreserver",//default loaded plugin
 	"dojo/i18n!./enhanced/nls/EnhancedGrid"
-], function(dojo, dojox, declare, lang, array, has, dom, domGeometry, i18n,
-	DataGrid, DataSelection, _PluginManager, _SelectionPreserver){
+], function(dojo, dojox, declare, lang, array, has, dom, domGeometry,
+	DataGrid, DataSelection, _PluginManager, _SelectionPreserver, nls){
 
 dojo.experimental("dojox.grid.EnhancedGrid");
 
@@ -77,8 +76,7 @@ var EnhancedGrid = declare("dojox.grid.EnhancedGrid", DataGrid, {
 	_pluginMgrClass: _PluginManager,
 
 	postMixInProperties: function(){
-		//load nls bundle
-		this._nls = i18n.getLocalization("dojox.grid.enhanced", "EnhancedGrid", this.lang);
+		this._nls = nls;
 		this.inherited(arguments);
 	},
 	postCreate: function(){

@@ -8,7 +8,6 @@ define([
 	"dojo/_base/event",
 	"dojo/query",
 	"dojo/string",
-	"dojo/i18n",
 	"dojo/keys",
 	"dojo/text!../templates/Pagination.html",
 	"./Dialog",
@@ -24,8 +23,8 @@ define([
 	"dojox/html/metrics",
 	"dojo/i18n!../nls/Pagination"
 ], function(kernel, declare, array, connect, lang, html, event, query,
-	string, i18n, keys, template, Dialog, layers, _Plugin, EnhancedGrid,
-	Button, NumberTextBox, dijitFocus, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, metrics){
+	string, keys, template, Dialog, layers, _Plugin, EnhancedGrid,
+	Button, NumberTextBox, dijitFocus, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, metrics, nls){
 		
 var _GotoPagePane = declare("dojox.grid.enhanced.plugins.pagination._GotoPagePane", [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	templateString: "<div>" + 
@@ -888,7 +887,6 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		this.defaultPageSize = this.option.defaultPageSize >= 1 ? parseInt(this.option.defaultPageSize, 10) : this.pageSizes[0];
 		this.option.maxPageStep = this.option.maxPageStep > 0 ? this.option.maxPageStep : this.maxPageStep;
 		this.option.position = lang.isString(this.option.position) ? this.option.position.toLowerCase() : this.position;
-		var nls = i18n.getLocalization("dojox.grid.enhanced", "Pagination");
 		this._nls = [
 			nls.descTemplate,
 			nls.allItemsLabelTemplate,
