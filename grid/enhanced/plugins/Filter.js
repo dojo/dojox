@@ -1,7 +1,6 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/i18n",
 	"../_Plugin",
 	"./Dialog",
 	"./filter/FilterLayer",
@@ -11,7 +10,7 @@ define([
 	"./filter/ClearFilterConfirm",
 	"../../EnhancedGrid",
 	"dojo/i18n!../nls/Filter"
-], function(declare, lang, i18n, _Plugin, Dialog, layers, FilterBar, FilterDefDialog, FilterStatusTip, ClearFilterConfirm, EnhancedGrid){
+], function(declare, lang, _Plugin, Dialog, layers, FilterBar, FilterDefDialog, FilterStatusTip, ClearFilterConfirm, EnhancedGrid, filterStrings){
 
 	var Filter = declare("dojox.grid.enhanced.plugins.Filter", _Plugin, {
 		// summary:
@@ -88,7 +87,7 @@ define([
 			// summary:
 			//		See constructor of dojox.grid.enhanced._Plugin.
 			this.grid = grid;
-			this.nls = i18n.getLocalization("dojox.grid.enhanced", "Filter");
+			this.nls = filterStrings;
 			
 			args = this.args = lang.isObject(args) ? args : {};
 			if(typeof args.ruleCount != 'number' || args.ruleCount < 0){
@@ -132,7 +131,6 @@ define([
 				this.filterDefDialog.destroy();
 				this.filterDefDialog = null;
 				this.grid = null;
-				this.nls = null;
 				this.args = null;
 			}catch(e){
 				console.warn("Filter.destroy() error:",e);
