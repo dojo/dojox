@@ -362,10 +362,11 @@ var Rearrange = declare("dojox.grid.enhanced.plugins.Rearrange", _Plugin, {
 				rowCnt = g.rowCount,
 				mapping = {},
 				obj = {idx: 0},
-				newRows = [], i,
-				emptyTarget = targetPos < 0;
-				_this = this;
-			var len = rowsToMove.length;
+				newRows = [],
+				i,
+				emptyTarget = targetPos < 0,
+				_this = this,
+				len = rowsToMove.length;
 			if(emptyTarget){
 				targetPos = 0;
 			}else{
