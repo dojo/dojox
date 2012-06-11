@@ -1,10 +1,10 @@
 define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-style",
 	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/_base/sniff",
-	"./Element", "./SimpleTheme", "./Series", "./axis2d/common",
+	"./Element", "./SimpleTheme", "./Series", "./axis2d/common", "dojox/gfx/shape",
 	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
 	function(dojox, lang, arr, declare, domStyle,
 	 		 dom, domGeom, domConstruct, Color, has,
-	 		 Element, SimpleTheme, Series, common,
+	 		 Element, SimpleTheme, Series, common, shape,
 	 		 g, func, funcFold, funcReversed){
 	/*=====
 	var __ChartCtorArgs = function(margins, stroke, fill, delayInMs){
@@ -922,6 +922,10 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			arr.forEach(this.series, purge);
 			func.forIn(this.axes, purge);
 			arr.forEach(this.stack,  purge);
+			var children = this.surface.children;
+			for(var i = 0; i < children.length;++i){
+				shape.dispose(children[i]);
+			}
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
 			    domConstruct.destroy(this.chartTitle);

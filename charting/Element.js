@@ -66,6 +66,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			this.destroyHtmlElements();
 			if(!creator){ creator = this.chart.surface; }
 			if(this.group){
+				var children = this.group.children;
+				for(var i = 0; i < children.length;++i){
+					shape.dispose(children[i]);
+				}
 				this.group.clear();
 			}else{
 				this.group = creator.createGroup();
@@ -199,7 +203,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			if(!fill || !fill.type || !fill.space){
 				return fill;
 			}
-			var space = fill.space;
+			var space = fill.space, span;
 			switch(fill.type){
 				case "linear":
 					if(space === "plot" || space === "shapeX" || space === "shapeY"){
@@ -209,13 +213,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 						// process dimensions
 						if(space === "plot" || space === "shapeX"){
 							// process Y
-							var span = dim.height - offsets.t - offsets.b;
+							span = dim.height - offsets.t - offsets.b;
 							fill.y1 = offsets.t + span * fill.y1 / 100;
 							fill.y2 = offsets.t + span * fill.y2 / 100;
 						}
 						if(space === "plot" || space === "shapeY"){
 							// process X
-							var span = dim.width - offsets.l - offsets.r;
+							span = dim.width - offsets.l - offsets.r;
 							fill.x1 = offsets.l + span * fill.x1 / 100;
 							fill.x2 = offsets.l + span * fill.x2 / 100;
 						}
@@ -243,13 +247,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 						// process dimensions
 						if(space === "plot" || space === "shapeX"){
 							// process Y
-							var span = dim.height - offsets.t - offsets.b;
+							span = dim.height - offsets.t - offsets.b;
 							fill.y = offsets.t + span * fill.y / 100;
 							fill.height = span * fill.height / 100;
 						}
 						if(space === "plot" || space === "shapeY"){
 							// process X
-							var span = dim.width - offsets.l - offsets.r;
+							span = dim.width - offsets.l - offsets.r;
 							fill.x = offsets.l + span * fill.x / 100;
 							fill.width = span * fill.width / 100;
 						}
@@ -263,7 +267,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			if(!fill || !fill.space){
 				return fill;
 			}
-			var space = fill.space;
+			var space = fill.space, span;
 			switch(fill.type){
 				case "linear":
 					if(space === "shape" || space === "shapeX" || space === "shapeY"){
@@ -273,13 +277,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 						// process dimensions
 						if(space === "shape" || space === "shapeX"){
 							// process X
-							var span = bbox.width;
+							span = bbox.width;
 							fill.x1 = bbox.x + span * fill.x1 / 100;
 							fill.x2 = bbox.x + span * fill.x2 / 100;
 						}
 						if(space === "shape" || space === "shapeY"){
 							// process Y
-							var span = bbox.height;
+							span = bbox.height;
 							fill.y1 = bbox.y + span * fill.y1 / 100;
 							fill.y2 = bbox.y + span * fill.y2 / 100;
 						}
@@ -305,13 +309,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 						// process dimensions
 						if(space === "shape" || space === "shapeX"){
 							// process X
-							var span = bbox.width;
+							span = bbox.width;
 							fill.x = bbox.x + span * fill.x / 100;
 							fill.width = span * fill.width / 100;
 						}
 						if(space === "shape" || space === "shapeY"){
 							// process Y
-							var span = bbox.height;
+							span = bbox.height;
 							fill.y = bbox.y + span * fill.y / 100;
 							fill.height = span * fill.height / 100;
 						}
