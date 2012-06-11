@@ -7,7 +7,7 @@ define(["dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sni
 	
 	lang.extend(Chart, {
 		// summary:
-		//		Add support for bidi scripts.
+		//		Add support for bidi scripts to dojox/charting classes.
 		// description:
 		//		Bidi stands for support for languages with a bidirectional script. 
 		//		There's a special need for displaying BIDI text in rtl direction 
@@ -264,7 +264,7 @@ define(["dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sni
 	/*=====
 	return {
 		// summary:
-		//		Add support for bidi scripts.
+		//		Add support to dojox/charting for bidi scripts.
 		// description:
 		//		Bidi stands for support for languages with a bidirectional script.
 		//		There's a special need for displaying BIDI text in rtl direction

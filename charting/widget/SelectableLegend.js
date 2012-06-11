@@ -9,6 +9,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		// summary:
 		//		It will take legend as a tab stop, and using
 		//		cursor keys to navigate labels within the legend.
+		// tags:
+		//		private
 		constructor: function(legend){
 			this.legend = legend;
 			this.index = 0;
