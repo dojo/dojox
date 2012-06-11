@@ -78,6 +78,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			this.destroyHtmlElements();
 			if(!creator){ creator = this.chart.surface; }
 			if(this.group){
+				utils.forEach(this.group, function(child){
+					shape.dispose(child);
+				});
 				this.group.clear();
 			}else{
 				this.group = creator.createGroup();
