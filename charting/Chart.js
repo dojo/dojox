@@ -1,10 +1,10 @@
 define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/html", 
 	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/_base/sniff",
-	"./Element", "./Theme", "./Series", "./axis2d/common",
-	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
+	"./Element", "./Theme", "./Series", "./axis2d/common", "dojox/gfx/shape",
+	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"],
 	function(lang, arr, declare, html, 
 	 		 dom, domGeom, domConstruct, Color, has,
-	 		 Element, Theme, Series, common, 
+	 		 Element, Theme, Series, common, shape,
 	 		 g, func, funcFold, funcReversed){
 	/*=====
 	dojox.charting.__ChartCtorArgs = function(margins, stroke, fill, delayInMs){
@@ -156,6 +156,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 			this.dirty = true;
 			this.coords = null;
 
+			this._clearRects = [];
+
 			// create a surface
 			this.node = dom.byId(node);
 			var box = domGeom.getMarginBox(node);
@@ -172,6 +174,9 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 				// destroy title if it is a DOM node
 				domConstruct.destroy(this.chartTitle);
 			}
+			arr.forEach(this._clearRects, function(child){
+				shape.dispose(child);
+			});
 			this.surface.destroy();
 		},
 		getCoords: function(){
@@ -865,6 +870,10 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 			arr.forEach(this.series, purge);
 			func.forIn(this.axes, purge);
 			arr.forEach(this.stack,  purge);
+			arr.forEach(this._clearRects, function(child){
+				shape.dispose(child);
+			});
+			this._clearRects = [];
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
 			    domConstruct.destroy(this.chartTitle);
@@ -890,14 +899,14 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 				};
 			if(fill){
 				fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim, offsets), rect);
-				this.surface.createRect(rect).setFill(fill);
+				this._clearRects.push(this.surface.createRect(rect).setFill(fill));
 			}
 			if(stroke){
-				this.surface.createRect({
+				this._clearRects.push(this.surface.createRect({
 					x: offsets.l, y: offsets.t,
 					width:  w + 1,
 					height: h + 1
-				}).setStroke(stroke);
+				}).setStroke(stroke));
 			}
 
 			// go over the stack backwards
@@ -924,7 +933,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 						width:  offsets.l,
 						height: dim.height + 1
 					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					this._clearRects.push(this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect)));
 				}
 				if(offsets.r){	// right
 					rect = {
@@ -932,14 +941,14 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 						width:  offsets.r + 1,
 						height: dim.height + 2
 					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					this._clearRects.push(this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect)));
 				}
 				if(offsets.t){	// top
 					rect = {
 						width:  dim.width + 1,
 						height: offsets.t
 					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					this._clearRects.push(this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect)));
 				}
 				if(offsets.b){	// bottom
 					rect = {
@@ -947,14 +956,14 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/_base/
 						width:  dim.width + 1,
 						height: offsets.b + 2
 					};
-					this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect));
+					this._clearRects.push(this.surface.createRect(rect).setFill(Element.prototype._shapeFill(fill, rect)));
 				}
 			}
 			if(stroke){
-				this.surface.createRect({
+				this._clearRects.push(this.surface.createRect({
 					width:  dim.width - 1,
 					height: dim.height - 1
-				}).setStroke(stroke);
+				}).setStroke(stroke));
 			}
 
 			//create title: Whether to make chart title as a widget which extends dojox.charting.Element?
