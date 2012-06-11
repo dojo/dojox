@@ -143,8 +143,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					}
 				}, this);
 				if(frontMarkers.length){
-					run.dyn.stroke = frontMarkers[frontMarkers.length - 1].getStroke();
-					run.dyn.fill   = frontMarkers[frontMarkers.length - 1].getFill();
+					run.dyn.marker = theme.symbol;
+					run.dyn.markerStroke = frontMarkers[frontMarkers.length - 1].getStroke();
+					run.dyn.markerFill   = frontMarkers[frontMarkers.length - 1].getFill();
 				}
 
 				if(events){
