@@ -42,54 +42,54 @@ define([
 		}
 	}
 
-	function bind(/*dojo.Stateful|String*/ target, /*String*/ targetProp, /*dijit._WidgetBase*/ source, /*String*/ sourceProp, /*dojox.mvc.sync.options*/ options){
+	function bind(/*dojo.Stateful|String*/ source, /*String*/ sourceProp, /*dijit._WidgetBase*/ target, /*String*/ targetProp, /*dojox.mvc.sync.options*/ options){
 		// summary:
 		//		Resolves the data binding literal, and starts data binding.
-		// target: dojo.Stateful|String
-		//		Target data binding literal or dojo.Stateful to be synchronized.
-		// targetProp: String
-		//		The property name in target to be synchronized.
-		// source: dijit._WidgetBase
-		//		Source dojo.Stateful to be synchronized.
+		// source: dojo.Stateful|String
+		//		Source data binding literal or dojo.Stateful to be synchronized.
 		// sourceProp: String
 		//		The property name in source to be synchronized.
+		// target: dijit._WidgetBase
+		//		Target dojo.Stateful to be synchronized.
+		// targetProp: String
+		//		The property name in target to be synchronized.
 		// options: dojox.mvc.sync.options
 		//		Data binding options.
 
-		var _handles = {}, parent = getParent(source), relTargetProp = parent && parent._relTargetProp || "target";
+		var _handles = {}, parent = getParent(target), relTargetProp = parent && parent._relTargetProp || "target";
 
 		function resolveAndBind(){
 			_handles["Two"] && _handles["Two"].unwatch();
 			delete _handles["Two"];
 
 			var relTarget = parent && (lang.isFunction(parent.get) ? parent.get(relTargetProp) : parent[relTargetProp]),
-			 resolvedTarget = resolve(target, relTarget),
-			 resolvedSource = resolve(source, relTarget);
+			 resolvedSource = resolve(source, relTarget),
+			 resolvedTarget = resolve(target, relTarget);
 
-			if(has("mvc-bindings-log-api") && (!resolvedTarget || /^rel:/.test(target) && !parent)){ logResolveFailure(target, targetProp); }
 			if(has("mvc-bindings-log-api") && (!resolvedSource || /^rel:/.test(source) && !parent)){ logResolveFailure(source, sourceProp); }
-			if(!resolvedTarget || !resolvedSource || (/^rel:/.test(target) || /^rel:/.test(source)) && !parent){ return; }
-			if((!resolvedTarget.set || !resolvedTarget.watch) && targetProp == "*"){
-				if(has("mvc-bindings-log-api")){ logResolveFailure(target, targetProp); }
+			if(has("mvc-bindings-log-api") && (!resolvedTarget || /^rel:/.test(target) && !parent)){ logResolveFailure(target, targetProp); }
+			if(!resolvedSource || !resolvedTarget || (/^rel:/.test(source) || /^rel:/.test(target)) && !parent){ return; }
+			if((!resolvedSource.set || !resolvedSource.watch) && sourceProp == "*"){
+				if(has("mvc-bindings-log-api")){ logResolveFailure(source, sourceProp); }
 				return;
 			}
 
-			if(targetProp == null){
-				// If target property is not specified, it means this handle is just for resolving data binding target.
+			if(sourceProp == null){
+				// If source property is not specified, it means this handle is just for resolving data binding target.
 				// (For dojox.mvc.Group and dojox.mvc.Repeat)
 				// Do not perform data binding synchronization in such case.
-				lang.isFunction(resolvedSource.set) ? resolvedSource.set(sourceProp, resolvedTarget) : (resolvedSource[sourceProp] = resolvedTarget);
+				lang.isFunction(resolvedTarget.set) ? resolvedTarget.set(targetProp, resolvedSource) : (resolvedTarget[targetProp] = resolvedSource);
 				if(has("mvc-bindings-log-api")){
-					console.log("dojox.mvc._atBindingMixin set " + resolvedTarget + " to: " + getLogContent(resolvedSource, sourceProp));
+					console.log("dojox.mvc._atBindingMixin set " + resolvedSource + " to: " + getLogContent(resolvedTarget, targetProp));
 				}
 			}else{
 				// Start data binding
-				_handles["Two"] = sync(resolvedTarget, targetProp, resolvedSource, sourceProp, options); // dojox.mvc.sync.handle
+				_handles["Two"] = sync(resolvedSource, sourceProp, resolvedTarget, targetProp, options); // dojox.mvc.sync.handle
 			}
 		}
 
 		resolveAndBind();
-		if(parent && /^rel:/.test(target) || /^rel:/.test(source) && lang.isFunction(parent.set) && lang.isFunction(parent.watch)){
+		if(parent && /^rel:/.test(source) || /^rel:/.test(target) && lang.isFunction(parent.set) && lang.isFunction(parent.watch)){
 			_handles["rel"] = parent.watch(relTargetProp, function(name, old, current){
 				if(old !== current){
 					if(has("mvc-bindings-log-api")){ console.log("Change in relative data binding target: " + parent); }

@@ -963,7 +963,7 @@
 								<td><label for="decsel">Select:</label></td>
 								<td>
 									<select id="decsel" style="width: 188px;"
-									 data-dojo-id="decsel" data-dojo-type="dijit.form.Select"
+									 data-dojo-id="decsel" data-dojo-type="dijit/form/Select"
 									 data-dojo-props="name: 'decsel', value: at(decselctrl, 'number')">
 										<option value="1">one</option>
 										<option value="2">two</option>
@@ -972,72 +972,72 @@
 									</select>
 								</td>
 								<td>
-									<input class="cell" id="decseltext" data-dojo-type="dijit.form.TextBox"
+									<input class="cell" id="decseltext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(decselctrl, 'number')"></input>
 								</td>
-								<td><span id="decselOutput" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(decselctrl, 'number')"></span></td>
+								<td><span id="decselOutput" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at(decselctrl, 'number')"></span></td>
 								<td>
-									<button id="decselReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="decselReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){decselctrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="decfilsel">FilteringSelect:</label></td>
 								<td>
-									<input id="decfilsel" data-dojo-type="dijit.form.FilteringSelect"
+									<input id="decfilsel" data-dojo-type="dijit/form/FilteringSelect"
 									 data-dojo-props="store: store, value: at(decfilctrl, 'number')">
 								</td>
 								<td>
-									<input id="decfiltext" data-dojo-type="dijit.form.TextBox"
+									<input id="decfiltext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(decfilctrl, 'number')"></input>
 								</td>
-								<td><span id="decfilOutput" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(decfilctrl, 'number')"></span></td>
+								<td><span id="decfilOutput" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at(decfilctrl, 'number')"></span></td>
 								<td>
-									<button id="decfilReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="decfilReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){decfilctrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="deccombosel">ComboBox:</label></td>
 								<td>
-									<input id="deccombosel" data-dojo-type="dijit.form.ComboBox"
+									<input id="deccombosel" data-dojo-type="dijit/form/ComboBox"
 									 data-dojo-props="store: store, value: at(deccomboctrl, 'number')">
 								</td>
 								<td>
-									<input id="deccombotext" data-dojo-type="dijit.form.TextBox"
+									<input id="deccombotext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(deccomboctrl, 'number')"></input>
 								</td>
-								<td><span id="deccomboOutput" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(deccomboctrl, 'number')"></span></td>
+								<td><span id="deccomboOutput" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at(deccomboctrl, 'number')"></span></td>
 								<td>
-									<button id="deccomboReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="deccomboReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){deccomboctrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="datesel">DateTextBox:</label></td>
 								<td>
-									<input id="decdatesel" data-dojo-type="dijit.form.DateTextBox"
+									<input id="decdatesel" data-dojo-type="dijit/form/DateTextBox"
 									 data-dojo-props="store: store, value: at(decdatectrl, 'number'), constraints: dummyDateWid.constraints">
 								</td>
 								<td>
-									<input id="decdatetext" data-dojo-type="dijit.form.TextBox"
+									<input id="decdatetext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(decdatectrl, 'number').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints"></input>
 								</td>
 								<td>
-									<span id="decdateOutput" data-dojo-type="dojox.mvc.Output"
+									<span id="decdateOutput" data-dojo-type="dojox/mvc/Output"
 									 data-dojo-props="value: at(decdatectrl, 'number').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints"></span><!--
 									--></td>
 								<td>
-									<button id="decdateReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="decdateReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){decdatectrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="decslidersel">Slider:</label></td>
 								<td>
-									<input id="decslidersel" data-dojo-type="dijit.form.HorizontalSlider"
+									<input id="decslidersel" data-dojo-type="dijit/form/HorizontalSlider"
 									 data-dojo-props="store: store, value: at(decsliderctrl, 'number'),
 									                  style: {width: '190px'},
 									                  minimum: 0,
@@ -1045,66 +1045,66 @@
 									                  discreteValues: 21">
 								</td>
 								<td>
-									<input id="decslidertext" data-dojo-type="dijit.form.TextBox"
+									<input id="decslidertext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(decsliderctrl, 'number').transform(dojo.number)">
 								</td>
 								<td>
-									<span id="decsliderOutput" data-dojo-type="dojox.mvc.Output"
+									<span id="decsliderOutput" data-dojo-type="dojox/mvc/Output"
 									 data-dojo-props="value: at(decsliderctrl, 'number').transform(dojo.number)"></span><!--
 								--></td>
 								<td>
-									<button id="decsliderReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="decsliderReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){decsliderctrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="decnumspinsel">NumberSpinner:</label></td>
 								<td>
-									<input id="decnumspinsel" data-dojo-type="dijit.form.NumberSpinner"
+									<input id="decnumspinsel" data-dojo-type="dijit/form/NumberSpinner"
 									 data-dojo-props="store:store, value: at(decnumspinctrl, 'number')">
 								</td>
 								<td>
-									<input id="decnumspintext" data-dojo-type="dijit.form.TextBox"
+									<input id="decnumspintext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(decnumspinctrl, 'number').transform(dojo.number)">
 								</td>
 								<td>
-									<span id="decnumspinOutput" data-dojo-type="dojox.mvc.Output"
+									<span id="decnumspinOutput" data-dojo-type="dojox/mvc/Output"
 									 data-dojo-props="value: at(decnumspinctrl, 'number').transform(dojo.number)"></span><!--
 								--></td>
 								<td>
-									<button id="decnumspinReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="decnumspinReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){decnumspinctrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="decsimpTAsel">SimpleTextArea:</label></td>
 								<td>
-									<input id="decsimpTAsel" data-dojo-type="dijit.form.Textarea"
+									<input id="decsimpTAsel" data-dojo-type="dijit/form/Textarea"
 									 data-dojo-props="store:store, value: at(decsimpTActrl, 'number')">
 								</td>
 								<td>
-									<input id="decsimpTAtext" data-dojo-type="dijit.form.TextBox"
+									<input id="decsimpTAtext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(decsimpTActrl, 'number')">
 								</td>
-								<td><span id="decsimpTAOutput" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(decsimpTActrl, 'number')"></span></td>
+								<td><span id="decsimpTAOutput" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at(decsimpTActrl, 'number')"></span></td>
 								<td>
-									<button id="decsimpTAReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="decsimpTAReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){decsimpTActrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="dectextareasel">TextArea:</label></td>
 								<td>
-									<input id="dectextareasel" data-dojo-type="dijit.form.Textarea"
+									<input id="dectextareasel" data-dojo-type="dijit/form/Textarea"
 									 data-dojo-props="store:store, value: at(dectextareactrl, 'number')">
 								</td>
 								<td>
-									<input id="dectextareatext" data-dojo-type="dijit.form.TextBox"
+									<input id="dectextareatext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(dectextareactrl, 'number')">
 								</td>
-								<td><span id="dectextareaOutput" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(dectextareactrl, 'number')"></span></td>
+								<td><span id="dectextareaOutput" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at(dectextareactrl, 'number')"></span></td>
 								<td>
-									<button id="dectextareaReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="dectextareaReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){dectextareactrl.reset();}">Reset</button>
 								</td>
 							</tr>
@@ -1124,38 +1124,38 @@
 							<tr>
 								<td><label for="deccal">Calendar:</label></td>
 								<td>
-									<input class="cell"  id="deccal" data-dojo-id="deccal" data-dojo-type="dijit.Calendar"
+									<input class="cell"  id="deccal" data-dojo-id="deccal" data-dojo-type="dijit/Calendar"
 									 data-dojo-props="value: at(deccalctrl, 'date')">
 								</td>
 								<td>
-									<input class="cell" id="deccaltext" data-dojo-type="dijit.form.TextBox"
+									<input class="cell" id="deccaltext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(deccalctrl, 'date').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints">
 								</td>
 								<td>
-									<span id="deccalOutput" data-dojo-type="dojox.mvc.Output"
+									<span id="deccalOutput" data-dojo-type="dojox/mvc/Output"
 									 data-dojo-props="value: at(deccalctrl, 'date').transform(dummyDateWid.dateLocaleModule),
 									                  constraints: dummyDateWid.constraints"></span><!--
 								--></td>
 								<td>
-									<button id="deccalReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="deccalReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){deccalctrl.reset();}">Reset</button>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="deccolor">ColorPalette:</label></td>
 								<td>
-									<div id="deccolor" data-dojo-type="dijit.ColorPalette"
+									<div id="deccolor" data-dojo-type="dijit/ColorPalette"
 									 data-dojo-props="palette: '3x4', value: at(deccolorctrl, 'code')">
 									</div>
 								</td>
 								<td>
-									<input class="cell" id="deccolortext" data-dojo-type="dijit.form.TextBox"
+									<input class="cell" id="deccolortext" data-dojo-type="dijit/form/TextBox"
 									 data-dojo-props="value: at(deccolorctrl, 'code')"></input>
 								</td>
-								<td><span id="deccolorOutput" data-dojo-type="dojox.mvc.Output" data-dojo-props="value: at(deccolorctrl, 'code')"></span></td>
+								<td><span id="deccolorOutput" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at(deccolorctrl, 'code')"></span></td>
 								<td>
-									<button id="deccolorReset" type="button" data-dojo-type="dijit.form.Button"
+									<button id="deccolorReset" type="button" data-dojo-type="dijit/form/Button"
 									 data-dojo-props="onClick: function(){deccolorctrl.reset();}">Reset</button>
 								</td>
 							</tr>
