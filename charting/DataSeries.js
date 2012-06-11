@@ -10,7 +10,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			// kwArgs: Object
 			//		A store-specific keyword parameters used for fetching items.
 			//		See dojo.data.api.Read.fetch().
-			// value: Function|Object|String|Null
+			// value: Function|Object|String
 			//		Function, which takes a store, and an object handle, and
 			//		produces an output possibly inspecting the store's item. Or
 			//		a dictionary object, which tells what names to extract from

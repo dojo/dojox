@@ -3,7 +3,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 	function(declare, win, arr, eventUtil, connect, mouse, ChartAction, has, domProp, keys){
 
 	/*=====
-	declare("dojox.charting.action2d.__MouseZoomAndPanCtorArgs", null, {
+	var __MouseZoomAndPanCtorArgs = declare({
 		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
 	
@@ -68,9 +68,9 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create an mouse zoom and pan action and connect it.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action applies to.
-			// kwArgs: dojox.charting.action2d.__MouseZoomAndPanCtorArgs?
+			// kwArgs: __MouseZoomAndPanCtorArgs?
 			//		Optional arguments for the chart action.
 			this._listeners = [{eventName: mouse.wheel, methodName: "onMouseWheel"}];
 			if(!kwArgs){ kwArgs = {}; }

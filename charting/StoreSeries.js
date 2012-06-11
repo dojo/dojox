@@ -10,7 +10,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 			// kwArgs: Object
 			//		A store-specific keyword parameters used for querying objects.
 			//		See dojo.store docs
-			// value: Function|Object|String|Null
+			// value: Function|Object|String
 			//		Function, which takes an object handle, and
 			//		produces an output possibly inspecting the store's item. Or
 			//		a dictionary object, which tells what names to extract from
@@ -59,7 +59,7 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 		setSeriesObject: function(series){
 			// summary:
 			//		Sets a dojox.charting.Series object we will be working with.
-			// series: dojox.charting.Series
+			// series: dojox/charting/Series
 			//		Our interface to the chart.
 			this.series = series;
 		},

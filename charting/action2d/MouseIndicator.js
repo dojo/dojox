@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	function(lang, declare, hub, win, has, ChartAction, IndicatorElement, du, eventUtil, arr){ 
 
 	/*=====
-	declare("dojox.charting.action2d.__MouseIndicatorCtorArgs", null, {
+	var __MouseIndicatorCtorArgs = declare({
 		// summary:
 		//		Additional arguments for mouse indicator.
 		
@@ -27,15 +27,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		The precision at which to round data values for display. Default is 1.
 		precision:		0,
 		
-		// lineStroke: dojo.gfx.Stroke?
+		// lineStroke: dojo/gfx/Stroke?
 		//		An optional stroke to use for indicator line.
 		lineStroke:		{},
 	
-		// lineOutline: dojo.gfx.Stroke?
+		// lineOutline: dojo/gfx/Stroke?
 		//		An optional outline to use for indicator line.
 		lineOutline:		{},
 	
-		// lineShadow: dojo.gfx.Stroke?
+		// lineShadow: dojo/gfx/Stroke?
 		//		An optional shadow to use for indicator line.
 		lineShadow:		{},
 		
@@ -134,9 +134,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create an mouse indicator action and connect it.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action applies to.
-			// kwArgs: dojox.charting.action2d.__MouseIndicatorCtorArgs?
+			// kwArgs: __MouseIndicatorCtorArgs?
 			//		Optional arguments for the chart action.
 			this._listeners = [{eventName: "onmousedown", methodName: "onMouseDown"}];
 			this.opt = lang.clone(this.defaultParams);

@@ -3,11 +3,17 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	function(dojo, lang, declare, Color, hub, c, PlotAction, dfe, dgf){
 
 	/*=====
-	declare("dojox.charting.action2d.__HighlightCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
+	var __HighlightCtorArgs = declare({
 		// summary:
 		//		Additional arguments for highlighting actions.
-	
-		// highlight: String|dojo.Color|Function?
+		// duration: Number?
+		//		The amount of time in milliseconds for an animation to last.  Default is 400.
+		duration: 400,
+		// easing: dojo/fx/easing/*?
+		//		An easing object (see dojo.fx.easing) for use in an animation.  The
+		//		default is dojo.fx.easing.backOut.
+		easing: null,
+		// highlight: String|dojo/_base/Color|Function?
 		//		Either a color or a function that creates a color when highlighting happens.
 		highlight: null
 	});
@@ -57,11 +63,11 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create the highlighting action and connect it to the plot.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action belongs to.
 			// plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
-			// kwArgs: charting.action2d.__HighlightCtorArgs?
+			// kwArgs: __HighlightCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			var a = kwArgs && kwArgs.highlight;
 			this.colorFun = a ? (lang.isFunction(a) ? a : cc(a)) : hl;
@@ -72,7 +78,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		process: function(o){
 			// summary:
 			//		Process the action on the given object.
-			// o: dojox.gfx.Shape
+			// o: dojox/gfx/shape.Shape
 			//		The object on which to process the highlighting action.
 			if(!o.shape || !(o.type in this.overOutEvents)){ return; }
 

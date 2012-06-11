@@ -2,7 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 	function(lang, declare, eventUtil, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
-	declare("dojox.charting.action2d.__TouchIndicatorCtorArgs", null, {
+	var __TouchIndicatorCtorArgs = declare({
 		// summary:
 		//		Additional arguments for Touch indicator.
 		
@@ -77,19 +77,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		//		A font definition to use for indicator label background.
 		font:		"",
 	
-		// fontColor: String|dojo.Color?
+		// fontColor: String|dojo/_base/Color?
 		//		The color to use for indicator label background.
 		fontColor:	"",
 	
-		// markerStroke: dojo.gfx.Stroke?
+		// markerStroke: dojox.gfx.Stroke?
 		//		An optional stroke to use for indicator marker.
 		markerStroke:		{},
 	
-		// markerOutline: dojo.gfx.Stroke?
+		// markerOutline: dojox.gfx.Stroke?
 		//		An optional outline to use for indicator marker.
 		markerOutline:		{},
 	
-		// markerShadow: dojo.gfx.Stroke?
+		// markerShadow: dojox.gfx.Stroke?
 		//		An optional shadow to use for indicator marker.
 		markerShadow:		{},
 	
@@ -138,9 +138,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create a new touch indicator action and connect it.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action applies to.
-			// kwArgs: dojox.charting.action2d.__TouchIndicatorCtorArgs?
+			// kwArgs: __TouchIndicatorCtorArgs?
 			//		Optional arguments for the chart action.
 			this._listeners = [
 				{eventName: "ontouchstart", methodName: "onTouchStart"},

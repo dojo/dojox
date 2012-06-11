@@ -5,9 +5,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 		// summary:
 		//		A base class that is used to build other elements of a chart, such as
 		//		a series.
-		// chart: dojox.charting.Chart
+		// chart: dojox/charting/Chart
 		//		The parent chart for this element.
-		// group: dojox.gfx.Group
+		// group: dojox/gfx/shape.Group
 		//		The visual GFX group representing this element.
 		// htmlElement: Array
 		//		Any DOMNodes used as a part of this element (such as HTML-based labels).
@@ -22,7 +22,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 		constructor: function(chart){
 			// summary:
 			//		Creates a new charting element.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart that this element belongs to.
 			this.chart = chart;
 			this.group = null;
@@ -34,7 +34,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 		purgeGroup: function(){
 			// summary:
 			//		Clear any elements out of our group, and destroy the group.
-			// returns: dojox.charting.Element
+			// returns: dojox/charting/Element
 			//		A reference to this object for functional chaining.
 			this.destroyHtmlElements();
 			if(this.group){
@@ -59,9 +59,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 		cleanGroup: function(creator){
 			// summary:
 			//		Clean any elements (HTML or GFX-based) out of our group, and create a new one.
-			// creator: dojox.gfx.Surface?
+			// creator: dojox/gfx/shape.Surface?
 			//		An optional surface to work with.
-			// returns: dojox.charting.Element
+			// returns: dojox/charting/Element
 			//		A reference to this object for functional chaining.
 			this.destroyHtmlElements();
 			if(!creator){ creator = this.chart.surface; }

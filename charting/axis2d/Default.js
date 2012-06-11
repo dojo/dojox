@@ -5,7 +5,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			lin, acommon, g, du, df){
 
 	/*=====
-		dojox.charting.axis2d.__AxisCtorArgs = function(
+	var __AxisCtorArgs = function(
 			vertical, fixUpper, fixLower, natural, leftBottom,
 			includeZero, fixed, majorLabels, minorTicks, minorLabels, microTicks, htmlLabels,
 			min, max, from, to, majorTickStep, minorTickStep, microTickStep,
@@ -228,9 +228,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		constructor: function(chart, kwArgs){
 			// summary:
 			//		The constructor for an axis.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart the axis belongs to.
-			// kwArgs: dojox.charting.axis2d.__AxisCtorArgs?
+			// kwArgs: __AxisCtorArgs?
 			//		Any optional keyword arguments to be used to define this axis.
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -250,7 +250,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			//		The new scale for the axis.
 			// offset: Number
 			//		The new offset for the axis.
-			// returns: dojox.charting.axis2d.Default
+			// returns: dojox/charting/axis2d/Default
 			//		The reference to the axis for functional chaining.
 			if(scale != this.scale){
 				// if scale changed we need to recompute new max label size
@@ -587,10 +587,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			//		An object of the form { width, height}.
 			// offsets: Object
 			//		An object of the form { l, r, t, b }.
-			// returns: dojox.charting.axis2d.Default
+			// returns: dojox/charting/axis2d/Default
 			//		The reference to the axis for functional chaining.
 			if(!this.dirty || !this.scaler){
-				return this;	//	dojox.charting.axis2d.Default
+				return this;	//	dojox/charting/axis2d/Default
 			}
 			// prepare variable
 			var o = this.opt, ta = this.chart.theme.axis, leftBottom = o.leftBottom, rotation = o.rotation % 360,
@@ -929,7 +929,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			}, this);
 
 			this.dirty = false;
-			return this;	//	dojox.charting.axis2d.Default
+			return this;	//	dojox/charting/axis2d/Default
 		},
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
 			var modules = ["dijit/Tooltip"];

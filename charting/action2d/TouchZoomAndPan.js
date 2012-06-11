@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
 	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"],
 	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
-	var GlassView = declare("dojox.charting.action2d._GlassView", Element, {
+	var GlassView = declare(Element, {
 		// summary:
 		//		Private internal class used by TouchZoomAndPan actions.
 		// tags:
@@ -18,14 +18,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		clear: function(){
 			// summary:
 			//		Clear out any parameters set on this plot.
-			// returns: dojox.charting.action2d._IndicatorElement
+			// returns: GlassView
 			//		The reference to this plot for functional chaining.
 			this.dirty = true;
 			// glass view needs to be above
 			if(this.chart.stack[0] != this){
 				this.chart.movePlotToFront(this.name);
 			}
-			return this;	//	dojox.charting.plot2d._IndicatorElement
+			return this;	//	GlassView
 		},
 		getSeriesStats: function(){
 			// summary:
@@ -49,8 +49,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	});
 
 	/*=====
-
-	declare("dojox.charting.action2d.__TouchZoomAndPanCtorArgs", null, {
+	var __TouchZoomAndPanCtorArgs = declare({
 		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
 
@@ -91,9 +90,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create a new touch zoom and pan action and connect it.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action applies to.
-			// kwArgs: dojox.charting.action2d.__TouchZoomAndPanCtorArgs?
+			// kwArgs: __TouchZoomAndPanCtorArgs?
 			//		Optional arguments for the action.
 			this._listeners = [
 				{eventName: "ontouchstart", methodName: "onTouchStart"},{eventName: "ontouchmove", methodName: "onTouchMove"},

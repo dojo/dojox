@@ -3,10 +3,17 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 	function(hub, declare, PlotAction, df, dfe, m, gf){
 
 	/*=====
-	declare("dojox.charting.action2d.__ShakeCtorArgs", dojox.charting.action2d.__PlotActionCtorArgstorArgs, {
+	var __ShakeCtorArgs = declare({
 		// summary:
 		//		Additional arguments for highlighting actions.
-	
+
+		// duration: Number?
+		//		The amount of time in milliseconds for an animation to last.  Default is 400.
+		duration: 400,
+		// easing: dojo/fx/easing/*?
+		//		An easing object (see dojo.fx.easing) for use in an animation.  The
+		//		default is dojo.fx.easing.backOut.
+		easing: null,
 		// shift: Number?
 		//		The amount in pixels to shift the pie slice.  Default is 3.
 		shift: 3
@@ -31,11 +38,11 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create the shaking action and connect it to the plot.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action belongs to.
 			// plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
-			// kwArgs: dojox.charting.action2d.__ShakeCtorArgs?
+			// kwArgs: __ShakeCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			if(!kwArgs){ kwArgs = {}; }
 			this.shiftX = typeof kwArgs.shiftX == "number" ? kwArgs.shiftX : DEFAULT_SHIFT;
@@ -47,7 +54,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 		process: function(o){
 			// summary:
 			//		Process the action on the given object.
-			// o: dojox.gfx.Shape
+			// o: dojox/gfx/shape.Shape
 			//		The object on which to process the slice moving action.
 			if(!o.shape || !(o.type in this.overOutEvents)){ return; }
 

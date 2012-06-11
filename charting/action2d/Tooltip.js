@@ -3,10 +3,17 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 	function(dojo, Tooltip, lang, declare, domStyle, PlotAction, m, df, dfs, dff){
 	
 	/*=====
-	declare("dojox.charting.action2d.__TooltipCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
+	var __TooltipCtorArgs = declare({
 		// summary:
 		//		Additional arguments for tooltip actions.
-	
+
+		// duration: Number?
+		//		The amount of time in milliseconds for an animation to last.  Default is 400.
+		duration: 400,
+		// easing: dojo/fx/easing/*?
+		//		An easing object (see dojo.fx.easing) for use in an animation.  The
+		//		default is dojo.fx.easing.backOut.
+		easing: null,
 		// text: Function?
 		//		The function that produces the text to be shown within a tooltip.  By default this will be
 		//		set by the plot in question, by returning the value of the element.
@@ -46,11 +53,11 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create the tooltip action and connect it to the plot.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action belongs to.
 			// plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
-			// kwArgs: dojox.charting.action2d.__TooltipCtorArgs?
+			// kwArgs: __TooltipCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			this.text = kwArgs && kwArgs.text ? kwArgs.text : DEFAULT_TEXT;
 			
@@ -60,7 +67,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 		process: function(o){
 			// summary:
 			//		Process the action on the given object.
-			// o: dojox.gfx.Shape
+			// o: dojox/gfx/shape.Shape
 			//		The object on which to process the highlighting action.
 			if(o.type === "onplotreset" || o.type === "onmouseout"){
                 Tooltip.hide(this.aroundRect);

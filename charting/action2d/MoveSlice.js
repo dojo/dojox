@@ -3,14 +3,20 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 	function(hub, declare, PlotAction, dfe, m, gf, df, dfs, dff){
 
 	/*=====
-	declare("dojox.charting.action2d.__MoveSliceCtorArgs", dojox.charting.action2d.__PlotActionCtorArgs, {
+	var __MoveSliceCtorArgs = declare({
 		// summary:
 		//		Additional arguments for highlighting actions.
-	
+
+		// duration: Number?
+		//		The amount of time in milliseconds for an animation to last.  Default is 400.
+		duration: 400,
+		// easing: dojo/fx/easing/*?
+		//		An easing object (see dojo.fx.easing) for use in an animation.  The
+		//		default is dojo.fx.easing.backOut.
+		easing: null,
 		// scale: Number?
 		//		The amount to scale the pie slice.  Default is 1.05.
 		scale: 1.05,
-	
 		// shift: Number?
 		//		The amount in pixels to shift the pie slice.  Default is 7.
 		shift: 7
@@ -36,11 +42,11 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 		constructor: function(chart, plot, kwArgs){
 			// summary:
 			//		Create the slice moving action and connect it to the plot.
-			// chart: dojox.charting.Chart
+			// chart: dojox/charting/Chart
 			//		The chart this action belongs to.
 			// plot: String?
 			//		The plot this action is attached to.  If not passed, "default" is assumed.
-			// kwArgs: dojox.charting.action2d.__MoveSliceCtorArgs?
+			// kwArgs: __MoveSliceCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			if(!kwArgs){ kwArgs = {}; }
 			this.scale = typeof kwArgs.scale == "number" ? kwArgs.scale : DEFAULT_SCALE;
@@ -52,7 +58,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 		process: function(o){
 			// summary:
 			//		Process the action on the given object.
-			// o: dojox.gfx.Shape
+			// o: dojox/gfx/shape.Shape
 			//		The object on which to process the slice moving action.
 			if(!o.shape || o.element != "slice" || !(o.type in this.overOutEvents)){ return; }
 
