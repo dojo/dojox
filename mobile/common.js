@@ -239,6 +239,18 @@ define([
 					_f(e);
 				});
 			};
+			var curSize = dm.getScreenSize();
+			// Watch for resize events when the virtual keyboard is shown/hidden,
+			// the heuristic to detect this is that the screen width does not change
+			// and the height changes by more than 100 pixels.
+			connect.connect(null, "onresize", null, function(e){
+				var newSize = dm.getScreenSize();
+				if(newSize.w == curSize.w && Math.abs(newSize.h - curSize.h) >= 100){
+					// keyboard has been shown/hidden
+					_f(e);
+				}
+				curSize = newSize;
+			});
 		}
 		connect.connect(null, win.global.onorientationchange !== undefined
 			? "onorientationchange" : "onresize", null, f);
