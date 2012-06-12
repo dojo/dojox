@@ -37,11 +37,11 @@ define([
 		viewportPadding: 35,
 
 		// dimensions: Array
-		//		A two-element array of [widht,height] to animate the Dialog to if sizeToViewport="false"
+		//		A two-element array of [width,height] to animate the Dialog to if sizeToViewport="false"
 		//		Defaults to [300,300]
 		dimensions: null,
 
-		// easing: Function?|String?
+		// easing: Function|String?
 		//		An easing function to apply to the sizing animation.
 		easing: null,
 

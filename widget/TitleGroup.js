@@ -54,7 +54,7 @@ define(["dojo", "dijit/registry", "dijit/_Widget", "dijit/TitlePane"], function(
 			//
 			// widget: dijit.TitlePane
 			//		A widget reference to add
-			// position: String?|Int?
+			// position: String|Int?
 			//		An optional index or position to pass. defaults to "last"
 			return widget.placeAt(this.domNode, position); // dijit.TitlePane
 		},
