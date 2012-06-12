@@ -17,13 +17,11 @@ define([
 		//		The coordinates of the geometry.
 		coordinates : null,
 
-		// shape: dojox/gfx/shape.Shape
+		// shape: [private] dojox/gfx/shape.Shape
 		//		The associated shape when rendered
-		// tags:
-		//		internal
-		shape : null,
+		shape: null,
 
-		constructor : function(coords){
+		constructor: function(coords){
 			// summary:
 			//		Constructs a new geometry
 			// coords: Object

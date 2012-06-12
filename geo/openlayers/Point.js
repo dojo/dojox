@@ -7,7 +7,7 @@ define([
 		// summary:
 		//		A Point geometry handles description of points to be rendered in a GfxLayer
 
-		setPoint : function(p){
+		setPoint: function(p){
 			// summary:
 			//		Sets the point for this geometry.
 			// p: Object
@@ -15,7 +15,7 @@ define([
 			this.coordinates = p;
 		},
 
-		getPoint : function(){
+		getPoint: function(){
 			// summary:
 			//		Gets the point defining this geometry.
 			// returns:

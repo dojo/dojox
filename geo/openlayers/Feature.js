@@ -10,14 +10,14 @@ define([
 		//		This class is not attended to be used as it, but serve as a base class
 		//		for specific features such as GeometryFeature which can display georeferenced 
 		//		geometries and WidgetFeature which can display georeferenced widgets. 
-		constructor : function(){
+		constructor: function(){
 			// summary:
 			//		Construct a new Feature
 			this._layer = null;
 			this._coordSys = openlayers.EPSG4326;
 		},
 
-		getCoordinateSystem : function(){
+		getCoordinateSystem: function(){
 			// summary:
 			//		Returns the coordinate system in which coordinates of this feature are expressed.
 			// returns:
@@ -25,7 +25,7 @@ define([
 			return this._coordSys; // OpenLayers.Projection
 		},
 
-		setCoordinateSystem : function(/* OpenLayers.Projection */cs){
+		setCoordinateSystem: function(/* OpenLayers.Projection */cs){
 			// summary:
 			//		Set the coordinate system in which coordinates of this feature are expressed.
 			// cs: OpenLayers.Projection
@@ -33,15 +33,15 @@ define([
 			this._coordSys = cs;
 		},
 
-		getLayer : function(){
+		getLayer: function(){
 			// summary:
 			//		Returns the Layer to which this feature belongs.
-			//	returns:
+			// returns:
 			//		The layer to which this feature belongs.
 			return this._layer; // dojox/geo/openlayers/Layer
 		},
 
-		_setLayer : function(/* dojox/geo/openlayers/Layer */l){
+		_setLayer: function(/* dojox/geo/openlayers/Layer */l){
 			// summary:
 			//		Sets the layer to which this Feature belongs
 			// description:
@@ -51,21 +51,21 @@ define([
 			this._layer = l;
 		},
 
-		render : function(){
+		render: function(){
 		// summary:
 		//		subclasses implements drawing specific behavior.
 		},
 
-		remove : function(){
+		remove: function(){
 		// summary:
 		//		Subclasses implements specific behavior.
 		//		Called when removed from the layer.
 		},
 
-		_getLocalXY : function(p){
+		_getLocalXY: function(p){
 			// summary:
 			//		From projected coordinates to screen coordinates
-			// p: Object 
+			// p: Object
 			//		Object with x and y fields
 			// tags:
 			//		private

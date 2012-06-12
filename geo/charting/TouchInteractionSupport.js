@@ -7,13 +7,13 @@ define([
 ], function(lang,declare,event,connect,win){
 
 	return declare("dojox.geo.charting.TouchInteractionSupport",null, {
-		// summary: 
+		// summary:
 		//		A class to handle touch interactions on a dojox/geo/charting/Map component.
 		// tags:
 		//		private
-		
-		_map : null,
-		_centerTouchLocation : null,
+
+		_map: null,
+		_centerTouchLocation: null,
 		_touchMoveListener: null,
 		_touchEndListener: null,
 		_touchEndTapListener: null,
@@ -26,37 +26,37 @@ define([
 		_doubleTapPerformed:false,
 		_oneFingerTouch:false,
 		_tapCancel:false,
-		
-		constructor : function(/* dojox/geo/charting/Map */map){
-			// summary: 
+
+		constructor: function(map){
+			// summary:
 			//		Constructs a new _TouchInteractionSupport instance
-			// map: dojox/geo/charting/Map 
-			//		the Map component this class provides touch navigation for.
+			// map: dojox.geo.charting.Map
+			//		the Map widget this class provides touch navigation for.
 			this._map = map;
-			this._centerTouchLocation = {x: 0,y: 0};		
-					
+			this._centerTouchLocation = {x: 0,y: 0};
+
 			this._tapCount = 0;
 			this._lastTap = {x: 0,y: 0};
 			this._tapThreshold = 100; // square distance in pixels
 		},
-	
+
 		connect: function(){
-			// summary: 
+			// summary:
 			//		install touch listeners
 			this._touchStartListener = this._map.surface.connect("touchstart", this, this._touchStartHandler);
 		},
-	
+
 		disconnect: function(){
-			// summary: 
-			//		disconnects any installed listeners. Must be called only when disposing of this instance 
+			// summary:
+			//		disconnects any installed listeners. Must be called only when disposing of this instance
 			if(this._touchStartListener){
 				connect.disconnect(this._touchStartListener);
 				this._touchStartListener = null;
 			}
 		},
-	
+
 		_getTouchBarycenter: function(touchEvent){
-			// summary: 
+			// summary:
 			//		returns the midpoint of the two first fingers (or the first finger location if only one)
 			// touchEvent: TouchEvent
 			//		a touch event
@@ -75,14 +75,13 @@ define([
 			var containerBounds = this._map._getContainerBounds();
 			var middleX = (firstTouch.pageX + secondTouch.pageX) / 2.0 - containerBounds.x;
 			var middleY = (firstTouch.pageY + secondTouch.pageY) / 2.0 - containerBounds.y;
-			return {x: middleX,y: middleY}; // dojox.gfx.Point
+			return {x: middleX,y: middleY}; // dojox/gfx/Point
 		},
-	
+
 		_getFingerSpacing: function(touchEvent){
-			// summary: 
+			// summary:
 			//		computes the distance between the first two fingers
-			// touchEvent: TouchEvent
-			//		a touch event
+			// touchEvent: a touch event
 			// returns:
 			//		a distance. -1 if less than 2 fingers
 			// tags:
@@ -96,10 +95,10 @@ define([
 			}
 			return spacing;
 		},
-	
+
 		_isDoubleTap: function(touchEvent){
-			// summary: 
-			//		checks whether the specified touchStart event is a double tap 
+			// summary:
+			//		checks whether the specified touchStart event is a double tap
 			//		(i.e. follows closely a previous touchStart at approximately the same location)
 			// touchEvent: TouchEvent
 			//		a touch event
@@ -127,10 +126,10 @@ define([
 				this._tapCount = 0;}),300);
 			return isDoubleTap;
 		},
-	
+
 		_doubleTapHandler: function(touchEvent){
-			// summary: 
-			//		action performed on the map when a double tap was triggered 
+			// summary:
+			//		action performed on the map when a double tap was triggered
 			// touchEvent: TouchEvent
 			//		a touch event
 			// tags:
@@ -150,9 +149,9 @@ define([
 				this._map.setMapCenterAndScale(mapPoint.x, mapPoint.y,this._map.getMapScale()*2,true);
 			}
 		},
-	
+
 		_getFeatureFromTouchEvent: function(touchEvent){
-			// summary: 
+			// summary:
 			//		utility function to return the feature located at this touch event location
 			// touchEvent: TouchEvent
 			//		a touch event
@@ -164,12 +163,12 @@ define([
 			if(touchEvent.gfxTarget && touchEvent.gfxTarget.getParent){
 				feature = this._map.mapObj.features[touchEvent.gfxTarget.getParent().id];
 			}
-			return feature;
+			return feature;	// dojox/geo/charting/Feature
 		},
-	
+
 		_touchStartHandler: function(touchEvent){
-			// summary: 
-			//		action performed on the map when a touch start was triggered 
+			// summary:
+			//		action performed on the map when a touch start was triggered
 			// touchEvent: TouchEvent
 			//		a touch event
 			// tags:
@@ -185,7 +184,7 @@ define([
 				this._doubleTapPerformed = true;
 				return;
 			}
-			// compute map midpoint between fingers		
+			// compute map midpoint between fingers
 			var middlePoint = this._getTouchBarycenter(touchEvent);
 			var mapPoint = this._map.screenCoordsToMapCoords(middlePoint.x,middlePoint.y);
 			this._centerTouchLocation.x = mapPoint.x;
@@ -205,17 +204,17 @@ define([
 				this._touchEndListener = connect.connect(win.global,"touchend",this, this._touchEndHandler);
 			}
 		},
-	
+
 		_touchEndTapHandler: function(touchEvent){
-			// summary: 
-			//		action performed on the map when a tap was triggered 
+			// summary:
+			//		action performed on the map when a tap was triggered
 			// touchEvent: TouchEvent
 			//		a touch event
 			// tags:
 			//		private
 			var touches = touchEvent.touches;
 			if(touches.length == 0){
-				
+
 				// test potential tap ?
 				if(this._oneFingerTouch && !this._tapCancel){
 					this._oneFingerTouch = false;
@@ -232,16 +231,16 @@ define([
 								// single tap ok
 								this._singleTapHandler(touchEvent);
 							}
-						}					
-					}),350);
+						}
+					}), 350);
 				}
 				this._tapCancel = false;
 			}
 		},
-	
+
 		_touchEndHandler: function(touchEvent){
-			// summary: 
-			//		action performed on the map when a touch end was triggered 
+			// summary:
+			//		action performed on the map when a touch end was triggered
 			// touchEvent: TouchEvent
 			//		a touch event
 			// tags:
@@ -266,10 +265,10 @@ define([
 				this._centerTouchLocation.y = mapPoint.y;
 			}
 		},
-		
+
 		_singleTapHandler: function(touchEvent){
-			// summary: 
-			//		action performed on the map when a single tap was triggered 
+			// summary:
+			//		action performed on the map when a single tap was triggered
 			// touchEvent: TouchEvent
 			//		a touch event
 			// tags:
@@ -286,18 +285,18 @@ define([
 				this._map.onFeatureClick(null);
 			}
 		},
-	
+
 		_touchMoveHandler: function(touchEvent){
-			// summary: 
-			//		action performed on the map when a touch move was triggered 
+			// summary:
+			//		action performed on the map when a touch move was triggered
 			// touchEvent: TouchEvent
 			//		a touch event
 			// tags:
 			//		private
-	
+
 			// prevent browser interaction
 			event.stop(touchEvent);
-	
+
 			// cancel tap if moved too far from first touch location
 			if(!this._tapCancel){
 				var dx = (touchEvent.touches[0].pageX - this._lastTap.x),

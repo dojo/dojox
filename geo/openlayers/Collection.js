@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"./Geometry"
-], function(declare, Geometry) {
+], function(declare, Geometry){
 
 	return declare("dojox.geo.openlayers.Collection", Geometry, {
 		// summary:
@@ -11,7 +11,7 @@ define([
 		//		An array of geometries.
 		coordinates:null,
 
-		setGeometries: function(/* Array */g){
+		setGeometries: function(g){
 			// summary:
 			//		Sets the geometries
 			// g: Array

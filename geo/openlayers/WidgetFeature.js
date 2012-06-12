@@ -35,8 +35,8 @@ define([
 		this.height = height;
 		this.longitude = longitude;
 		this.latitude = latitude;
-	}
-	 =====*/
+	};
+	=====*/
 
 		return declare("dojox.geo.openlayers.WidgetFeature", Feature, {
 			// summary:
@@ -44,11 +44,11 @@ define([
 			//		to Layer class.
 			// description:
 			//		This class allows to add a widget in a `dojox.geo.openlayers.Layer`.
-			
-			_widget : null,
-			_bbox : null,
 
-			constructor : function(params){
+			_widget: null,
+			_bbox: null,
+
+			constructor: function(params){
 				// summary:
 				//		Constructs a new `dojox.geo.openlayers.WidgetFeature`
 				// params: dojox.geo.openlayers.__WidgetFeatureArgs
@@ -56,7 +56,7 @@ define([
 				this._params = params;
 			},
 
-			setParameters : function(params){
+			setParameters: function(params){
 				// summary:
 				//		Sets the parameters describing the widget.
 				// params: dojox.geo.openlayers.__WidgetFeatureArgs
@@ -64,90 +64,97 @@ define([
 				this._params = params;
 			},
 
-			getParameters : function(){
+			getParameters: function(){
 				// summary:
-				//		Retreives the parameters describing the widget.
+				//		Returns the parameters describing the widget.
 				// returns: dojox.geo.openlayers.__WidgetFeatureArgs
 				//		The parameters describing the widget.
 				return this._params;
 			},
 
-			_getWidget : function(){
+			_getWidget: function(){
 				// summary:
-				//		Creates, if necessary the widget and returns it;
+				//		Creates, if necessary the widget and returns it
 				// tags:
 				//		private
 				var params = this._params;
 
-				if ((this._widget == null) && (params != null)) {
+				if((this._widget == null) && (params != null)){
 					var w = null;
 
-					if (typeof (params.createWidget) == "function") {
+					if(typeof (params.createWidget) == "function"){
 						w = params.createWidget.call(this);
-					} else if (params.dojoType) {
+					}else if(params.dojoType){
 						dojo["require"](params.dojoType);
 						var c = lang.getObject(params.dojoType);
 						w = new c(params);
-					} else if (params.dijitId) {
+					}else if(params.dijitId){
 						w = registry.byId(params.dijitId);
-					} else if (params.widget) {
+					}else if(params.widget){
 						w = params.widget;
 					}
 
-					if (w != null) {
+					if(w != null){
 						this._widget = w;
-						if (typeof (w.startup) == "function")
+						if(typeof (w.startup) == "function"){
 							w.startup();
+						}
 						var n = w.domNode;
-						if (n != null)
+						if(n != null){
 							style.set(n, {
-								position : "absolute"
+								position: "absolute"
 							});
+						}
 					}
 					this._widget = w;
 				}
 				return this._widget;
 			},
 
-			_getWidgetWidth : function(){
+			_getWidgetWidth: function(){
 				// summary:
 				//		gets the widget width
 				// tags:
 				//		private
 				var p = this._params;
-				if (p.width)
+				if(p.width){
 					return p.width;
+				}
 				var w = this._getWidget();
-				if (w)
+				if(w){
 					return style.get(w.domNode, "width");
+				}
 				return 10;
 			},
 
-			_getWidgetHeight : function(){
+			_getWidgetHeight: function(){
 				// summary:
 				//		gets the widget height
 				// tags:
 				//		private
 				var p = this._params;
-				if (p.height)
+				if(p.height){
 					return p.height;
+				}
 				var w = this._getWidget();
-				if (w)
+				if(w){
 					return style.get(w.domNode, "height");
+				}
 				return 10;
 			},
 
-			render : function(){
+			render: function(){
 				// summary:
 				//		renders the widget.
-				// descrption:
+				// description:
 				//		Places the widget accordingly to longitude and latitude defined in parameters.
 				//		This function is called when the center of the maps or zoom factor changes.
 				var layer = this.getLayer();
 
 				var widget = this._getWidget();
-				if (widget == null)
+				if(widget == null){
 					return;
+				}
 				var params = this._params;
 				var lon = params.longitude;
 				var lat = params.latitude;
@@ -164,20 +171,21 @@ define([
 				var dom = widget.domNode;
 
 				var pa = layer.olLayer.div;
-				if (dom.parentNode != pa) {
-					if (dom.parentNode)
+				if(dom.parentNode != pa){
+					if(dom.parentNode){
 						dom.parentNode.removeChild(dom);
+					}
 					pa.appendChild(dom);
 				}
 				this._updateWidgetPosition({
-					x : x,
-					y : y,
-					width : width,
-					height : height
+					x: x,
+					y: y,
+					width: width,
+					height: height
 				});
 			},
 
-			_updateWidgetPosition : function(box){
+			_updateWidgetPosition: function(box){
 				// summary:
 				//		Places the widget with the computed x and y values
 				// tags:
@@ -189,41 +197,44 @@ define([
 				var dom = w.domNode;
 
 				style.set(dom, {
-					position : "absolute",
-					left : box.x + "px",
-					top : box.y + "px",
-					width : box.width + "px",
-					height : box.height + "px"
+					position: "absolute",
+					left: box.x + "px",
+					top: box.y + "px",
+					width: box.width + "px",
+					height: box.height + "px"
 				});
 
-				if (w.srcNodeRef) {
+				if(w.srcNodeRef){
 					style.set(w.srcNodeRef, {
-						position : "absolute",
-						left : box.x + "px",
-						top : box.y + "px",
-						width : box.width + "px",
-						height : box.height + "px"
+						position: "absolute",
+						left: box.x + "px",
+						top: box.y + "px",
+						width: box.width + "px",
+						height: box.height + "px"
 					});
 				}
 
-				if (lang.isFunction(w.resize))
+				if(lang.isFunction(w.resize)){
 					w.resize({
-						w : box.width,
-						h : box.height
+						w: box.width,
+						h: box.height
 					});
+				}
 			},
 
-			remove : function(){
+			remove: function(){
 				// summary:
 				//		removes this feature.
 				// description:
 				//		Remove this feature by disconnecting the widget from the dom.
 				var w = this.getWidget();
-				if (!w)
+				if(!w){
 					return;
+				}
 				var dom = w.domNode;
-				if (dom.parentNode)
+				if(dom.parentNode){
 					dom.parentNode.removeChild(dom);
+				}
 			}
 		});
 	});

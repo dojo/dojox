@@ -1,14 +1,14 @@
 define([
-	"dojo/_base/declare", 
+	"dojo/_base/declare",
 	"./Geometry"
-], function(declare,Geometry){
+], function(declare, Geometry){
 
 	return declare("dojox.geo.openlayers.LineString", Geometry, {
 		// summary:
 		//		The `dojox.geo.openlayers.LineString` geometry. This geometry holds an array
 		//		of coordinates.
 
-		setPoints : function(p){
+		setPoints: function(p){
 			// summary:
 			//		Sets the points for this geometry.
 			// p: Object[]
@@ -16,7 +16,7 @@ define([
 			this.coordinates = p;
 		},
 
-		getPoints : function(){
+		getPoints: function(){
 			// summary:
 			//		Gets the points of this geometry.
 			// returns:

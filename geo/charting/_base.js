@@ -8,7 +8,7 @@ define([
 	"dijit/Tooltip",
 	"dojo/_base/NodeList",
 	"dojo/NodeList-traverse"
-], function(lang, arr, dojox, html, domGeom, matrix, Tooltip, NodeList, NodeListTraverse) {
+], function(lang, arr, dojox, html, domGeom, matrix, Tooltip, NodeList, NodeListTraverse){
 	var dgc = lang.getObject("geo.charting", true, dojox); 
 
 	dgc.showTooltip = function(/*String*/innerHTML, /*dojox/gfx/shape.Shape*/ gfxObject, /*String[]?*/ positions){
@@ -47,9 +47,9 @@ define([
 	};
 
 	dgc._getGfxContainer = function(gfxObject){
-		if (gfxObject.surface) {
+		if(gfxObject.surface){
 			return (new NodeList(gfxObject.surface.rawNode)).parents("div")[0];
-		} else {
+		}else{
 			return (new NodeList(gfxObject.rawNode)).parents("div")[0];
 		}
 	};

@@ -24,7 +24,7 @@ define([
 		//
 		// baseLayerType: String
 		//		 type of the base layer. Can be any of
-		//		
+		//
 		//		* `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
 		//		* `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
 		//		* `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
@@ -42,8 +42,8 @@ define([
 		this.baseLayerName = baseLayerName;
 		this.baseLayerUrl = baseLayerUrl;
 		this.baseLayerOptions = baseLayerOptions;
-	}
-	 =====*/
+	};
+	=====*/
 
 	return declare("dojox.geo.openlayers.Map", null, {
 		// summary:
@@ -55,7 +55,7 @@ define([
 		//		GFX layers can be added to display GFX georeferenced shapes as well as Dojo widgets.
 		//		Parameters can be passed as argument at construction time to define the base layer
 		//		type and the base layer parameters such as url or options depending on the type
-		//		specified. These parameters can be any of :
+		//		specified. These parameters can be any of:
 		//		<br />
 		//		_baseLayerType_: type of the base layer. Can be any of
 		//		
@@ -69,74 +69,78 @@ define([
 		//		
 		//		Note that access to commercial server such as Google, Virtual Earth or Yahoo may need specific licencing.
 		//		
-		//		The parameters value also include :
+		//		The parameters value also include:
 		//		
 		//		* `baseLayerName`: The name of the base layer.
 		//		* `baseLayerUrl`: Some layer may need an url such as Web Map Server
-		//		* `baseLayerOptions`: Addtional specific options passed to OpensLayers layer,  
+		//		* `baseLayerOptions`: Additional specific options passed to OpensLayers layer,
 		//		such as The list of layer to display, for Web Map Server layer.
 		//
 		// example:
 		//	|	var map = new dojox.geo.openlayers.widget.Map(div, {
-		//	|		baseLayerType : dojox.geo.openlayers.BaseLayerType.OSM,
-		//	|		baseLayerName : 'Open Street Map Layer'
+		//	|		baseLayerType: dojox.geo.openlayers.BaseLayerType.OSM,
+		//	|		baseLayerName: 'Open Street Map Layer'
 		//	|	});
 
 		// olMap: OpenLayers.Map
 		//		The underlying OpenLayers.Map object.
 		//		Should be accessed on read mode only.
-		olMap : null,
+		olMap: null,
 
-		_tp : null,
+		_tp: null,
 
-		constructor : function(div, options){
-			// summary: 
+		constructor: function(div, options){
+			// summary:
 			//		Constructs a new Map object
-			if (!options)
+			if(!options){
 				options = {};
+			}
 
 			div = dom.byId(div);
 
 			this._tp = {
-				x : 0,
-				y : 0
+				x: 0,
+				y: 0
 			};
 
 			var opts = options.openLayersMapOptions;
 
-			if (!opts) {
+			if(!opts){
 				opts = {
-					controls : [new OpenLayers.Control.ScaleLine({
-						maxWidth : 200
+					controls: [new OpenLayers.Control.ScaleLine({
+						maxWidth: 200
 					}), new OpenLayers.Control.Navigation()]
 				};
 			}
-			if (options.accessible) {
+			if(options.accessible){
 				var kbd = new OpenLayers.Control.KeyboardDefaults();
-				if (!opts.controls)
+				if(!opts.controls){
 					opts.controls = [];
+				}
 				opts.controls.push(kbd);
 			}
 			var baseLayerType = options.baseLayerType;
-			if (!baseLayerType)
+			if(!baseLayerType){
 				baseLayerType = openlayers.BaseLayerType.OSM;
+			}
 
 			style.set(div, {
-				width : "100%",
-				height : "100%",
-				dir : "ltr"
+				width: "100%",
+				height: "100%",
+				dir: "ltr"
 			});
 
 			var map = new OpenLayers.Map(div, opts);
 			this.olMap = map;
 
 			this._layerDictionary = {
-				olLayers : [],
-				layers : []
+				olLayers: [],
+				layers: []
 			};
 
-			if (options.touchHandler)
+			if(options.touchHandler){
 				this._touchControl = new TouchInteractionSupport(map);
+			}
 
 			var base = this._createBaseLayer(options);
 			this.addLayer(base);
@@ -144,71 +148,76 @@ define([
 			this.initialFit(options);
 		},
 
-		initialFit : function(params){
+		initialFit: function(params){
 			// summary:
 			//		Performs an initial fit to contents.
 			// tags:
 			//		protected
 			var o = params.initialLocation;
-			if (!o)
+			if(!o){
 				o = [-160, 70, 160, -70];
+			}
 			this.fitTo(o);
 		},
 
-		setBaseLayerType : function(/* dojox/geo/openlayers.BaseLayerType */type){
-			// summary: 
+		setBaseLayerType: function(type){
+			// summary:
 			//		Set the base layer type, replacing the existing base layer
 			// type: dojox/geo/openlayers.BaseLayerType
 			//		base layer type
 			// returns:
 			//		The newly created layer.
-			if (type == this.baseLayerType)
+			if(type == this.baseLayerType){
 				return null; // Layer
+			}
 
 			var o = null;
-			if (typeof type == "string") {
+			if(typeof type == "string"){
 				o = {
-					baseLayerName : type,
-					baseLayerType : type
+					baseLayerName: type,
+					baseLayerType: type
 				};
 				this.baseLayerType = type;
-			} else if (typeof type == "object") {
+			}else if(typeof type == "object"){
 				o = type;
 				this.baseLayerType = o.baseLayerType;
 			}
 			var bl = null;
-			if (o != null) {
+			if(o != null){
 				bl = this._createBaseLayer(o);
-				if (bl != null) {
+				if(bl != null){
 					var olm = this.olMap;
 					var ob = olm.getZoom();
 					var oc = olm.getCenter();
 					var recenter = !!oc && !!olm.baseLayer && !!olm.baseLayer.map;
 
-					if (recenter) {
+					if(recenter){
 						var proj = olm.getProjectionObject();
-						if (proj != null)
+						if(proj != null){
 							oc = oc.transform(proj, openlayers.EPSG4326);
+						}
 					}
 					var old = olm.baseLayer;
-					if (old != null) {
+					if(old != null){
 						var l = this._getLayer(old);
 						this.removeLayer(l);
 					}
-					if (bl != null)
+					if(bl != null){
 						this.addLayer(bl);
-					if (recenter) {
+					}
+					if(recenter){
 						proj = olm.getProjectionObject();
-						if (proj != null)
+						if(proj != null){
 							oc = oc.transform(openlayers.EPSG4326, proj);
+						}
 						olm.setCenter(oc, ob);
 					}
 				}
 			}
-			return bl; // Layer
+			return bl;
 		},
 
-		getBaseLayerType : function(){
+		getBaseLayerType: function(){
 			// summary:
 			//		Returns the base layer type.
 			// returns:
@@ -216,8 +225,8 @@ define([
 			return this.baseLayerType; // openlayers.BaseLayerType
 		},
 
-		getScale : function(geodesic){
-			// summary: 
+		getScale: function(geodesic){
+			// summary:
 			//		Returns the current scale
 			// geodesic: Boolean
 			//		Tell if geodesic calculation should be performed. If set to
@@ -225,20 +234,20 @@ define([
 			//		pixel in the center of the map viewport.
 			var scale = null;
 			var om = this.olMap;
-			if (geodesic) {
+			if(geodesic){
 				var units = om.getUnits();
-				if (!units) {
+				if(!units){
 					return null;	// Number
 				}
 				var inches = OpenLayers.INCHES_PER_UNIT;
 				scale = (om.getGeodesicPixelSize().w || 0.000001) * inches["km"] * OpenLayers.DOTS_PER_INCH;
-			} else {
+			}else{
 				scale = om.getScale();
 			}
 			return scale;	// Number
 		},
 
-		getOLMap : function(){
+		getOLMap: function(){
 			// summary:
 			//		gets the underlying OpenLayers map object.
 			// returns:
@@ -246,7 +255,7 @@ define([
 			return this.olMap;	// OpenLayers.Map
 		},
 
-		_createBaseLayer : function(params){
+		_createBaseLayer: function(params){
 			// summary:
 			//		Creates the base layer.
 			// tags:
@@ -257,63 +266,67 @@ define([
 			var name = params.baseLayerName;
 			var options = params.baseLayerOptions;
 
-			if (!name)
+			if(!name){
 				name = type;
-			if (!options)
+			}
+			if(!options){
 				options = {};
-			switch (type) {
+			}
+			switch(type){
 				case openlayers.BaseLayerType.OSM:
 					options.transitionEffect = "resize";
 					//				base = new OpenLayers.Layer.OSM(name, url, options);
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.OSM(name, url, options)
+						olLayer: new OpenLayers.Layer.OSM(name, url, options)
 					});
 				break;
 				case openlayers.BaseLayerType.WMS:
-					if (!url) {
+					if(!url){
 						url = "http://labs.metacarta.com/wms/vmap0";
-						if (!options.layers)
+						if(!options.layers){
 							options.layers = "basic";
+						}
 					}
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.WMS(name, url, options, {
-							transitionEffect : "resize"
+						olLayer: new OpenLayers.Layer.WMS(name, url, options, {
+							transitionEffect: "resize"
 						})
 					});
 				break;
 				case openlayers.BaseLayerType.GOOGLE:
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.Google(name, options)
+						olLayer: new OpenLayers.Layer.Google(name, options)
 					});
 				break;
 				case openlayers.BaseLayerType.VIRTUAL_EARTH:
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.VirtualEarth(name, options)
+						olLayer: new OpenLayers.Layer.VirtualEarth(name, options)
 					});
 				break;
 				case openlayers.BaseLayerType.YAHOO:
 					//				base = new OpenLayers.Layer.Yahoo(name);
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.Yahoo(name, options)
+						olLayer: new OpenLayers.Layer.Yahoo(name, options)
 					});
 				break;
 				case openlayers.BaseLayerType.ARCGIS:
-					if (!url)
+					if(!url){
 						url = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer/export";
+					}
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.ArcGIS93Rest(name, url, options, {})
+						olLayer: new OpenLayers.Layer.ArcGIS93Rest(name, url, options, {})
 					});
 
 				break;
 			}
 
-			if (base == null) {
-				if (type instanceof OpenLayers.Layer)
+			if(base == null){
+				if(type instanceof OpenLayers.Layer){
 					base = type;
-				else {
+				}else{
 					options.transitionEffect = "resize";
 					base = new Layer(name, {
-						olLayer : new OpenLayers.Layer.OSM(name, url, options)
+						olLayer: new OpenLayers.Layer.OSM(name, url, options)
 					});
 					this.baseLayerType = openlayers.BaseLayerType.OSM;
 				}
@@ -322,23 +335,25 @@ define([
 			return base;
 		},
 
-		removeLayer : function(/* Layer */layer){
-			// summary: 
+		removeLayer: function(layer){
+			// summary:
 			//		Remove the specified layer from the map.
 			// layer: Layer
 			//		The layer to remove from the map.
 			var om = this.olMap;
 			var i = array.indexOf(this._layerDictionary.layers, layer);
-			if (i > 0)
+			if(i > 0){
 				this._layerDictionary.layers.splice(i, 1);
+			}
 			var oll = layer.olLayer;
 			var j = array.indexOf(this._layerDictionary.olLayers, oll);
-			if (j > 0)
+			if(j > 0){
 				this._layerDictionary.olLayers.splice(i, j);
+			}
 			om.removeLayer(oll, false);
 		},
 
-		layerIndex : function(/* Layer */layer, index){
+		layerIndex: function(layer, index){
 			// summary:
 			//		Set or retrieve the layer index.
 			// description:
@@ -353,8 +368,9 @@ define([
 			// returns:
 			//		the index of the layer.
 			var olm = this.olMap;
-			if (!index)
+			if(!index){
 				return olm.getLayerIndex(layer.olLayer);
+			}
 			//olm.raiseLayer(layer.olLayer, index);
 			olm.setLayerIndex(layer.olLayer, index);
 
@@ -368,8 +384,8 @@ define([
 			return index; // Number
 		},
 
-		addLayer : function(/* Layer */layer){
-			// summary: 
+		addLayer: function(layer){
+			// summary:
 			//		Add the specified layer to the map.
 			// layer: Layer
 			//		The layer to add to the map.
@@ -382,19 +398,20 @@ define([
 			layer.added();
 		},
 
-		_getLayer : function(/*OpenLayer.Layer */ol){
+		_getLayer: function(/*OpenLayer.Layer */ol){
 			// summary:
 			//		Retrieve the dojox.geo.openlayer.Layer from the OpenLayer.Layer
 			// tags:
 			//		private
 			var i = array.indexOf(this._layerDictionary.olLayers, ol);
-			if (i != -1)
+			if(i != -1){
 				return this._layerDictionary.layers[i];
+			}
 			return null;
 		},
 
-		getLayer : function(property, value){
-			// summary: 
+		getLayer: function(property, value){
+			// summary:
 			//		Returns the layer whose property matches the value.
 			// property: String
 			//		The property to check
@@ -403,7 +420,7 @@ define([
 			// returns:
 			//		The layer(s) matching the property's value. Since multiple layers
 			//		match the property's value the return value is an array. 
-			// example: 
+			// example:
 			//		var layers = map.getLayer("name", "Layer Name");
 			var om = this.olMap;
 			var ols = om.getBy("layers", property, value);
@@ -414,38 +431,39 @@ define([
 			return ret; // Layer[]
 		},
 
-		getLayerCount : function(){
-			// summary: 
+		getLayerCount: function(){
+			// summary:
 			//		Returns the count of layers of this map.
-			// returns: 
+			// returns:
 			//		The number of layers of this map. 
 			var om = this.olMap;
-			if (om.layers == null)
+			if(om.layers == null){
 				return 0;
+			}
 			return om.layers.length; // Number
 		},
 
-		fitTo : function(o){
-			// summary: 
+		fitTo: function(o){
+			// summary:
 			//		Fits the map on a point,or an area
-			// description: 
+			// description:
 			//		Fits the map on the point or extent specified as parameter. 
 			// o: Object
 			//		Object with key values fit parameters or a JSON string.
 			// example:
-			//		Examples of arguments passed to the fitTo function :
+			//		Examples of arguments passed to the fitTo function:
 			//	|	null
 			//		The map is fit on full extent
 			//
 			//	|	{
-			//	|	bounds : [ulx, uly, lrx, lry]
+			//	|		bounds: [ulx, uly, lrx, lry]
 			//	|	}
 			//		The map is fit on the specified bounds expressed as decimal degrees latitude and longitude.
 			//		The bounds are defined with their upper left and lower right corners coordinates.
 			// 
 			//	|	{
-			//	|	position : [longitude, latitude],
-			//	|	extent : degrees
+			//	|		position: [longitude, latitude],
+			//	|		extent: degrees
 			//	|	}
 			//		The map is fit on the specified position showing the extent <extent> around
 			//		the specified center position.
@@ -453,19 +471,20 @@ define([
 			var map = this.olMap;
 			var from = openlayers.EPSG4326;
 
-			if (o == null) {
+			if(o == null){
 				var c = this.transformXY(0, 0, from);
 				map.setCenter(new OpenLayers.LonLat(c.x, c.y));
 				return;
 			}
 			var b = null;
-			if (typeof o == "string")
+			if(typeof o == "string"){
 				var j = json.fromJson(o);
-			else
+			}else{
 				j = o;
+			}
 			var ul;
 			var lr;
-			if (j.hasOwnProperty("bounds")) {
+			if(j.hasOwnProperty("bounds")){
 				var a = j.bounds;
 				b = new OpenLayers.Bounds();
 				ul = this.transformXY(a[0], a[1], from);
@@ -475,12 +494,13 @@ define([
 				b.right = lr.x;
 				b.bottom = lr.y;
 			}
-			if (b == null) {
-				if (j.hasOwnProperty("position")) {
+			if(b == null){
+				if(j.hasOwnProperty("position")){
 					var p = j.position;
 					var e = j.hasOwnProperty("extent") ? j.extent : 1;
-					if (typeof e == "string")
+					if(typeof e == "string"){
 						e = parseFloat(e);
+					}
 					b = new OpenLayers.Bounds();
 					ul = this.transformXY(p[0] - e, p[1] + e, from);
 					b.left = ul.x;
@@ -490,17 +510,17 @@ define([
 					b.bottom = lr.y;
 				}
 			}
-			if (b == null) {
-				if (o.length == 4) {
+			if(b == null){
+				if(o.length == 4){
 					b = new OpenLayers.Bounds();
 					// TODO Choose the correct method
-					if (false) {
+					if(false){
 						b.left = o[0];
 						b.top = o[1];
 
 						b.right = o[2];
 						b.bottom = o[3];
-					} else {
+					}else{
 						ul = this.transformXY(o[0], o[1], from);
 						b.left = ul.x;
 						b.top = ul.y;
@@ -510,12 +530,12 @@ define([
 					}
 				}
 			}
-			if (b != null) {
+			if(b != null){
 				map.zoomToExtent(b, true);
 			}
 		},
 
-		transform : function(p, from, to){
+		transform: function(p, from, to){
 			// summary:
 			//		Transforms the point passed as argument, expressed in the <em>from</em> 
 			//		coordinate system to the map coordinate system.
@@ -529,14 +549,14 @@ define([
 			return this.transformXY(p.x, p.y, from, to);
 		},
 
-		transformXY : function(x, y, from, to){
-			// summary
+		transformXY: function(x, y, from, to){
+			// summary:
 			//		Transforms the coordinates passed as argument, expressed in the <em>from</em> 
 			//		coordinate system to the map coordinate system.
 			// description:
 			//		Transforms the coordinates passed as argument. The coordinate are supposed to be expressed
 			//		in the <em>from</em> coordinate system and are transformed to the map coordinate system.
-			// x: Number 
+			// x: Number
 			//		The longitude coordinate to transform.
 			// y: Number
 			//		The latitude coordinate to transform.
@@ -550,10 +570,12 @@ define([
 			var tp = this._tp;
 			tp.x = x;
 			tp.y = y;
-			if (!from)
+			if(!from){
 				from = openlayers.EPSG4326;
-			if (!to)
+			}
+			if(!to){
 				to = this.olMap.getProjectionObject();
+			}
 			tp = OpenLayers.Projection.transform(tp, from, to);
 			return tp; // Object
 		}

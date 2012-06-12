@@ -4,7 +4,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/sniff",
 	"./_base"
-], function(lang, arr, declare, has) {
+], function(lang, arr, declare, has){
 	return declare("dojox.geo.charting._Marker", null, {
 		
 		_needTooltipRefresh: null,
@@ -52,7 +52,7 @@ define([
 			if(has("ff") == 3.5){
 				arround.x = coords.x;
 				arround.y = coords.y;
-			}else if(has("chrome")) {
+			}else if(has("chrome")){
 				arround.x = containerSize.x + toLeft;
 				arround.y = containerSize.y + toTop;
 			}else{

@@ -23,17 +23,17 @@ define([
 		this.enableZoom = enableZoom;
 		this.enablePan = enablePan;
 		this.mouseClickThreshold = mouseClickThreshold;
-	}
-	 =====*/
+	};
+	=====*/
 
 	return declare("dojox.geo.charting.MouseInteractionSupport", null, {
-		// summary: 
+		// summary:
 		//		class to handle mouse interactions on a dojox.geo.charting.Map widget
 		// tags:
 		//		private
-		
-		_map : null,
-		_mapClickLocation : null,
+
+		_map: null,
+		_mapClickLocation: null,
 		_screenClickLocation: null,
 		_mouseDragListener: null,
 		_mouseUpListener: null,
@@ -47,16 +47,16 @@ define([
 		_panEnabled: false,
 		_onDragStartListener: null,
 		_onSelectStartListener: null,
-	
-	
+
+
 		mouseClickThreshold: 2,
-	
-		constructor : function(/*dojox/geo/charting/Map*/ map,/*dojox.geo.charting.__MouseInteractionSupportCtorArgs?*/ options){
-			// summary: 
+
+		constructor : function(map, options){
+			// summary:
 			//		Constructs a new _MouseInteractionSupport instance
 			// map: dojox/geo/charting/Map
 			//		the Map widget this class provides touch navigation for.
-			// options: Object?
+			// options: dojox.geo.charting.__MouseInteractionSupportCtorArgs?
 			//		An object defining additional configuration properties.
 			this._map = map;
 			this._mapClickLocation = {x: 0,y: 0};
@@ -70,9 +70,9 @@ define([
 				}
 			}
 		},
-	
+
 		setEnableZoom: function(enable){
-			// summary: 
+			// summary:
 			//		enables mouse zoom on the map
 			// enable: Boolean
 			//		Indicates whether mouse zoom is enabled.
@@ -87,45 +87,45 @@ define([
 			}
 			this._zoomEnabled = enable;
 		},
-	
+
 		setEnablePan: function(enable){
-			// summary: 
+			// summary:
 			//		enables mouse panning on the map
 			// enable: Boolean
 			//		Indicates whether mouse zoom is enabled.
 			this._panEnabled = enable;
 		},
-	
+
 		connect: function(){
-			// summary: 
+			// summary:
 			//		connects this mouse support class to the Map component
-			
+
 			// install mouse listeners
 			this._mouseMoveListener = this._map.surface.connect("onmousemove", this, this._mouseMoveHandler);
 			this._mouseDownListener = this._map.surface.connect("onmousedown", this, this._mouseDownHandler);
-			
+
 			if(has("ie")){
 				_onDragStartListener = connect.connect(win.doc,"ondragstart",this,event.stop);
-				_onSelectStartListener = connect.connect(win.doc,"onselectstart",this,event.stop);			
+				_onSelectStartListener = connect.connect(win.doc,"onselectstart",this,event.stop);
 			}
-			
+
 			this.setEnableZoom(this._zoomEnabled);
 			this.setEnablePan(this._panEnabled);
 		},
-	
+
 		disconnect: function(){
-			// summary: 
+			// summary:
 			//		disconnects any installed listeners
-			
+
 			// store zoomPan state
 			var isZoom = this._zoomEnabled;
-			
+
 			// disable zoom (disconnects listeners..)
 			this.setEnableZoom(false);
-			
+
 			// restore value
 			this._zoomEnabled = isZoom;
-			
+
 			// disconnect remaining listeners
 			if(this._mouseMoveListener){
 				connect.disconnect(this._mouseMoveListener);
@@ -139,19 +139,19 @@ define([
 				connect.disconnect(this._onSelectStartListener);
 				this._onSelectStartListener = null;
 			}
-			
+
 		},
-	
+
 		_mouseClickHandler: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		action performed on the map when a mouse click was performed
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// tags:
 			//		private
-			
+
 			var feature = this._getFeatureFromMouseEvent(mouseEvent);
-			
+
 			if(feature){
 				// call feature handler
 				feature._onclickHandler(mouseEvent);
@@ -162,26 +162,26 @@ define([
 				}
 				this._map.onFeatureClick(null);
 			}
-				
+
 		},
-	
+
 		_mouseDownHandler: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		action performed on the map when a mouse down was performed
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// tags:
 			//		private
-			
-			
+
+
 			event.stop(mouseEvent);
-			
+
 			this._map.focused = true;
 			// set various status parameters
 			this._cancelMouseClick = false;
 			this._screenClickLocation.x =  mouseEvent.pageX;
 			this._screenClickLocation.y =  mouseEvent.pageY;
-	
+
 			// store map location where mouse down occurred
 			var containerBounds = this._map._getContainerBounds();
 			var offX = mouseEvent.pageX	- containerBounds.x,
@@ -189,7 +189,7 @@ define([
 			var mapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 			this._mapClickLocation.x = mapPoint.x;
 			this._mapClickLocation.y = mapPoint.y;
-	
+
 			// install drag listener if pan is enabled
 			if(!has("ie")){
 				this._mouseDragListener = connect.connect(win.doc,"onmousemove",this,this._mouseDragHandler);
@@ -203,29 +203,29 @@ define([
 				this._map.surface.rawNode.setCapture();
 			}
 		},
-	
+
 		_mouseUpClickHandler: function(mouseEvent){
-			
+
 			if(!this._cancelMouseClick){
 				// execute mouse click handler
 				this._mouseClickHandler(mouseEvent);
 			}
 			this._cancelMouseClick = false;
-			
+
 		},
-	
+
 		_mouseUpHandler: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		action performed on the map when a mouse up was performed
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// tags:
 			//		private
-			
+
 			event.stop(mouseEvent);
-			
+
 			this._map.mapObj.marker._needTooltipRefresh = true;
-			
+
 			// disconnect listeners
 			if(this._mouseDragListener){
 				connect.disconnect(this._mouseDragListener);
@@ -239,16 +239,16 @@ define([
 				connect.disconnect(this._mouseUpListener);
 				this._mouseUpListener = null;
 			}
-			
+
 			if(has("ie")){
 				this._map.surface.rawNode.releaseCapture();
 			}
 		},
-	
+
 		_getFeatureFromMouseEvent: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		utility function to return the feature located at this mouse event location
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// returns:
 			//		the feature found if any, null otherwise.
@@ -260,24 +260,24 @@ define([
 			}
 			return feature; // dojox/geo/charting/Feature
 		},
-	
+
 		_mouseMoveHandler: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		action performed on the map when a mouse move was performed
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// tags:
 			//		private
-	
-			
+
+
 			// do nothing more if dragging
 			if(this._mouseDragListener && this._panEnabled){
 				return;
 			}
-			
+
 			// hover and highlight
 			var feature = this._getFeatureFromMouseEvent(mouseEvent);
-	
+
 			// set/unset highlight
 			if(feature != this._currentFeature){
 				if(this._currentFeature){
@@ -285,29 +285,29 @@ define([
 					this._currentFeature._onmouseoutHandler();
 				}
 				this._currentFeature = feature;
-				
+
 				if(feature){
 					feature._onmouseoverHandler();
 				}
 			}
-	
+
 			if(feature){
 				feature._onmousemoveHandler(mouseEvent);
 			}
 		},
-	
+
 		_mouseDragHandler: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		action performed on the map when a mouse drag was performed
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// tags:
 			//		private
-			
+
 			// prevent browser interaction
 			event.stop(mouseEvent);
-			
-			
+
+
 			// find out if this the movement discards the "mouse click" gesture
 			var dx = Math.abs(mouseEvent.pageX - this._screenClickLocation.x);
 			var dy = Math.abs(mouseEvent.pageY - this._screenClickLocation.y);
@@ -318,49 +318,48 @@ define([
 					this._map.mapObj.marker.hide();
 				}
 			}
-			
+
 			if(!this._panEnabled){
 				return;
 			}
-	
+
 			var cBounds = this._map._getContainerBounds();
 			var offX = mouseEvent.pageX - cBounds.x,
 			offY = mouseEvent.pageY - cBounds.y;
-			
+
 			// compute map offset
 			var mapPoint = this._map.screenCoordsToMapCoords(offX,offY);
 			var mapOffsetX = mapPoint.x - this._mapClickLocation.x;
 			var mapOffsetY = mapPoint.y - this._mapClickLocation.y;
-	
+
 			// adjust map center
 			var currentMapCenter = this._map.getMapCenter();
 			this._map.setMapCenter(currentMapCenter.x - mapOffsetX, currentMapCenter.y - mapOffsetY);
-			
+
 		},
-	
+
 		_mouseWheelHandler: function(mouseEvent){
-			// summary: 
+			// summary:
 			//		action performed on the map when a mouse wheel up/down was performed
-			// mouseEvent: MouseEvent:
+			// mouseEvent: MouseEvent
 			//		the mouse event
 			// tags:
 			//		private
-			
-	
+
 			// prevent browser interaction
 			event.stop(mouseEvent);
-			
+
 			// hide tooltip
 			this._map.mapObj.marker.hide();
-			
+
 			// event coords within component
 			var containerBounds = this._map._getContainerBounds();
 			var offX = mouseEvent.pageX - containerBounds.x,
 				offY = mouseEvent.pageY - containerBounds.y;
-			
+
 			// current map point before zooming
 			var invariantMapPoint = this._map.screenCoordsToMapCoords(offX,offY);
-	
+
 			// zoom increment power
 			var power  = mouseEvent[(has("mozilla") ? "detail" : "wheelDelta")] / (has("mozilla") ? - 3 : 120) ;
 			var scaleFactor = Math.pow(1.2,power);

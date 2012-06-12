@@ -7,21 +7,21 @@ define([
 	"dojo/_base/event",
 	"dojox/gfx/fx",
 	"dojox/color"
-], function(lang, declare,arr, html,dom, event, fx,color) {
+], function(lang, declare,arr, html,dom, event, fx,color){
 
 	return declare("dojox.geo.charting.Feature", null, {
-		// summary: 
+		// summary:
 		//		A class to encapsulate a map element.
 		// tags:
 		//		private
-	
+
 		_isZoomIn: false,
 		isSelected: false,
 		markerText:null,
-	
-	
+
+
 		constructor: function(parent, name, shapeData){
-			// summary: 
+			// summary:
 			//		constructs a new Feature.
 			// tags:
 			//		private
@@ -39,7 +39,7 @@ define([
 				width: this._normalizeStrokeWeight(.5),
 				color: "white"
 			};
-			
+
 			var shapes = (lang.isArray(shapeData.shape[0])) ? shapeData.shape : [shapeData.shape];
 			arr.forEach(shapes, function(points){
 				this.shape.createPolyline(points).setStroke(this._defaultStroke);
@@ -49,14 +49,14 @@ define([
 		unsetValue:function(){
 			// summary:
 			//		clears the numeric value on this Feature object (removes color).
-			
+
 			this.value = null;
 			this.unsetColor();
 		},
 		unsetColor:function(){
 			// summary:
 			//		clears the colors on this Feature object.
-	
+
 			this._defaultFill = this.parent.defaultColor;
 			var col = new color.Color(this.parent.defaultColor).toHsl();
 			col.l = 1.2 * col.l;
@@ -64,11 +64,11 @@ define([
 			this._setFillWith(this._defaultFill);
 		},
 		setValue:function(value){
-			// summary: 
+			// summary:
 			//		sets a numeric value on this Feature object (used together with series to apply a color).
 			// value: Number
 			//		A numeric value.
-			
+
 			this.value = value;
 			if(value == null){
 				this.unsetValue();
@@ -162,13 +162,13 @@ define([
 				}
 			}
 		},
-		
-		select: function(selected) {
+
+		select: function(selected){
 			// summary:
 			//		Sets the selected state of this feature to the given value.
 			// selected: Boolean
 			//		A Boolean value indicating the selected state.
-			
+
 			if(selected){
 				this.shape.moveToFront();
 				this._setStrokeWith({color:"black",width:this._normalizeStrokeWeight(2)});
@@ -182,7 +182,7 @@ define([
 				this._isZoomIn = false;
 			}
 		},
-		
+
 		_zoomIn: function(){
 			var marker = this.mapObj.marker;
 			marker.hide();
@@ -205,11 +205,11 @@ define([
 			this._isZoomIn = false;
 			dom.byId("mapZoomCursor").className = "";
 		},
-		
+
 		init: function(){
 			// summary:
 			//		Initializes this feature.
-			
+
 			this.shape.id = this.id;
 			this.tooltip = null;
 		}

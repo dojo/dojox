@@ -12,35 +12,35 @@ define([
 		// summary:
 		//		A map viewer widget based on the dojox.geo.charting.Map component
 		//
-		//	description:
-		//		The `dojox.geo.charting.widget.Map` widget combines map display together with charting capabilities. 
+		// description:
+		//		The `dojox.geo.charting.widget.Map` widget combines map display together with charting capabilities.
 		//		It encapsulates  an `dojox.geo.charting.Map` object on which most operations are delegated.
 		//		Parameters can be passed as argument at construction time to specify map data file (json shape format)
-		//		as well as charting data. 
-		// 
-		//	The parameters are :
-		//	
-		//	* `shapeData`: The json object containing map data or the name of the file containing map data.
-		//	* `dataStore`: the dataStore to fetch the charting data from
-		//	* `dataBindingAttribute`: property name of the dataStore items to use as value for charting
-		//	* `markerData`: tooltips to display for map features, handled as json style.
-		//	* `adjustMapCenterOnResize`: if true, the center of the map remains the same when resizing the widget   
-		//	* `adjustMapScaleOnResize`: if true, the map scale is adjusted to leave the visible portion of the map identical as much as possible 
+		//		as well as charting data.
 		//
-		//	example:
+		//		The parameters are:
+		//
+		//		* `shapeData`: The json object containing map data or the name of the file containing map data.
+		//		* `dataStore`: the dataStore to fetch the charting data from
+		//		* `dataBindingAttribute`: property name of the dataStore items to use as value for charting
+		//		* `markerData`: tooltips to display for map features, handled as json style.
+		//		* `adjustMapCenterOnResize`: if true, the center of the map remains the same when resizing the widget
+		//		* `adjustMapScaleOnResize`: if true, the map scale is adjusted to leave the visible portion of the map identical as much as possible
+		//
+		// example:
 		//
 		// |	var map = new dojox.geo.charting.widget.Map({
-		// |		shapeData : 'map.json',
-		// |		adjustMapCenterOnresize : true,
-		// |		adjustMapScaleOnresize : true,
+		// |		shapeData: 'map.json',
+		// |		adjustMapCenterOnresize: true,
+		// |		adjustMapScaleOnresize: true,
 		// |	});
-	
-		shapeData : "",
-		dataStore : null,
-		dataBindingAttribute : "",
+
+		shapeData: "",
+		dataStore: null,
+		dataBindingAttribute: "",
 		dataBindingValueFunction: null,
-		markerData : "",
-		series : "",
+		markerData: "",
+		series: "",
 		adjustMapCenterOnResize: null,
 		adjustMapScaleOnResize: null,
 		animateOnResize: null,
@@ -58,54 +58,52 @@ define([
 		_mouseInteractionSupport:null,
 		_touchInteractionSupport:null,
 		_keyboardInteractionSupport:null,
-		constructor : function(/* Object */options, /* HtmlNode */div){
-			// summary: 
+		constructor: function(/* Object */options, /* HtmlNode */div){
+			// summary:
 			//		Constructs a new Map widget
 			this.map = null;
 		},
-	
-		startup : function(){
+
+		startup: function(){
 			this.inherited(arguments);
 			if(this.map){
 				this.map.fitToMapContents();
 			}
-			
+
 		},
-	
-		postMixInProperties : function(){
+
+		postMixInProperties: function(){
 			this.inherited(arguments);
 		},
-	
-		create : function(/*Object?*/params, /*DomNode|String?*/srcNodeRef){
+
+		create: function(/*Object?*/params, /*DomNode|String?*/srcNodeRef){
 			this.inherited(arguments);
 		},
-		
+
 		getInnerMap: function(){
-			// summary:
-			//		Returns the inner dojox.geo.charting.Map component.
-			return this.map; // dojox/geo/charting/Map
+			return this.map;
 		},
-		
-	
-		buildRendering : function(){
+
+
+		buildRendering: function(){
 			this.inherited(arguments);
 			if(this.shapeData){
 				this.map = new Map(this.domNode, this.shapeData);
 				if(this.markerData && (this.markerData.length > 0)){
 					this.map.setMarkerData(this.markerData);
 				}
-				
+
 				if(this.dataStore){
 					if(this.dataBindingValueFunction){
 						this.map.setDataBindingValueFunction(this.dataBindingValueFunction);
 					}
 					this.map.setDataStore(this.dataStore,this.dataBindingAttribute);
 				}
-				
+
 				if(this.series && (this.series.length > 0)){
 					this.map.addSeries(this.series);
 				}
-				
+
 				if(this.onFeatureClick){
 					this.map.onFeatureClick = this.onFeatureClick;
 				}
@@ -123,28 +121,27 @@ define([
 					this._mouseInteractionSupport = new dojox.geo.charting.MouseInteractionSupport(this.map,options);
 					this._mouseInteractionSupport.connect();
 				}
-				
+
 				if(this.enableTouchSupport){
 					if(!dojox.geo.charting.TouchInteractionSupport){
 						throw Error("Can't find dojox.geo.charting.TouchInteractionSupport. Didn't you forget to dojo" + ".require() it?");
 					}
 					this._touchInteractionSupport = new dojox.geo.charting.TouchInteractionSupport(this.map,{});
-					this._touchInteractionSupport.connect(); 
+					this._touchInteractionSupport.connect();
 				}
 				if(this.enableKeyboardSupport){
 					if(!dojox.geo.charting.KeyboardInteractionSupport){
 						throw Error("Can't find dojox.geo.charting.KeyboardInteractionSupport. Didn't you forget to dojo" + ".require() it?");
 					}
 					this._keyboardInteractionSupport = new dojox.geo.charting.KeyboardInteractionSupport(this.map,{});
-					this._keyboardInteractionSupport.connect(); 
+					this._keyboardInteractionSupport.connect();
 				}
 				this.map.showTooltips = this.showTooltips;
 				this.map.enableFeatureZoom = this.enableFeatureZoom;
 				this.map.colorAnimationDuration = this.colorAnimationDuration;
 			}
 		},
-		
-	
+
 		resize : function(/*Object|Number?*/ b, /*Number?*/ height){
 			// summary:
 			//		Resize the widget.
@@ -156,7 +153,7 @@ define([
 			//      respectively; or a number representing the new width.
 			// height: Number?
 			//		A number representing the new height.
-	
+
 			var box;
 			switch(arguments.length){
 				case 0:
@@ -170,13 +167,13 @@ define([
 				case 2:
 					// two argument, width, height
 					box = {
-						w : arguments[0],
-						h : arguments[1]
+						w: arguments[0],
+						h: arguments[1]
 					};
 					domGeom.setMarginBox(this.domNode, box);
 					break;
 			}
-			
+
 			if(this.map){
 				this.map.resize(this.adjustMapCenterOnResize,this.adjustMapScaleOnResize,this.animateOnResize);
 			}
