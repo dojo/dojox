@@ -191,7 +191,7 @@ var EnhancedGrid = declare("dojox.grid.EnhancedGrid", DataGrid, {
 	},
 	onMouseUp: function(e){	},
 	createView: function(){
-		// summary
+		// summary:
 		//		Overwrite: rewrite getCellX of view.header
 		var view = this.inherited(arguments);
 		if(has('mozilla')){

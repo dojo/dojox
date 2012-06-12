@@ -29,14 +29,14 @@ return declare("dojox.grid.enhanced._Plugin", null, {
 	//
 	// example:
 	//		1. Customize default DnD plugin
-	// |	dojo.declare("mygrid.MyDnD", dojox.grid.enhanced.plugins.DnD, {
+	// |	declare("mygrid.MyDnD", dojox.grid.enhanced.plugins.DnD, {
 	// |		name:"dnd" //still reuse the plugin name
 	// |		constructor: function(inGrid, option){ ... }
 	// |	});
 	// |	dojox.grid.EnhancedGrid.registerPlugin("dnd", mygrid.MyDnD);
 	//
 	//		2. Add new plugin - PluginA
-	// |	dojo.declare("mygrid.PluginA", dojox.grid.enhanced._Plugin, {
+	// |	declare("mygrid.PluginA", dojox.grid.enhanced._Plugin, {
 	// |		name: "pA",
 	// |		constructor: function(inGrid, option){ ... }
 	// |	});

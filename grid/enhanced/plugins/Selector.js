@@ -17,11 +17,11 @@ define([
 ], function(dojo, lang, declare, array, event, keys, query, html, win, dijitFocus, _RowSelector, _Plugin, EnhancedGrid){
 
 /*=====
-dojo.declare("__SelectItem", null,{
+declare("__SelectItem", null,{
 	// summary:
 	//		An abstract representation of an item.
 });
-dojo.declare("__SelectCellItem", __SelectItem,{
+declare("__SelectCellItem", __SelectItem,{
 	// summary:
 	//		An abstract representation of a cell.
 	
@@ -33,7 +33,7 @@ dojo.declare("__SelectCellItem", __SelectItem,{
 	//		Column index of this cell
 	col: 0
 });
-dojo.declare("__SelectRowItem", __SelectItem,{
+declare("__SelectRowItem", __SelectItem,{
 	// summary:
 	//		An abstract representation of a row.
 	
@@ -45,7 +45,7 @@ dojo.declare("__SelectRowItem", __SelectItem,{
 	//		An array of column indexes of all the unselected cells in this row.
 	except: []
 });
-dojo.declare("__SelectColItem", __SelectItem,{
+declare("__SelectColItem", __SelectItem,{
 	// summary:
 	//		An abstract representation of a column.
 	
