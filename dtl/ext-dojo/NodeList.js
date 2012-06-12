@@ -7,10 +7,11 @@ define([
 
 	lang.extend(Nodelist, {
 		dtl: function(template, context){
-			// summary: Renders the specified template in each of the Nodelist entries.
-			// template: dojox.dtl.__StringArgs|String
+			// summary: 
+			//		Renders the specified template in each of the Nodelist entries.
+			// template: dojox/dtl/__StringArgs|String
 			//		The template string or location
-			// context: dojox.dtl.__ObjectArgs|Object
+			// context: dojox/dtl/__ObjectArgs|Object
 			//		The context object or location
 			var d = dd, self = this;
 			
