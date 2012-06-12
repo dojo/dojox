@@ -14,7 +14,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	// a simple set impl to map shape<->id
 	var registry = {};
 	
-	shape.register = function(/*dojox.gfx.shape.Shape*/s){
+	shape.register = function(/*dojox/gfx/shape.Shape*/s){
 		// summary:
 		//		Register the specified shape into the graphics registry.
 		// s: dojox/gfx/shape.Shape
@@ -38,10 +38,10 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		return registry[id]; //dojox/gfx/shape.Shape
 	};
 	
-	shape.dispose = function(/*dojox.gfx.shape.Shape*/s){
+	shape.dispose = function(/*dojox/gfx/shape.Shape*/s){
 		// summary:
 		//		Removes the specified shape from the registry.
-		// s: dojox.gfx.shape.Shape
+		// s: dojox/gfx/shape.Shape
 		//		The shape to unregister.
 		delete registry[s.getUID()];
 	};
@@ -67,19 +67,19 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		or dojox.gfx.defaultImage)
 			this.shape = null;
 	
-			// matrix: dojox.gfx.Matrix2D
+			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a transformation matrix
 			this.matrix = null;
 	
-			// fillStyle: Object
+			// fillStyle: dojox.gfx.Fill
 			//		a fill object
 			//		(see dojox.gfx.defaultLinearGradient,
 			//		dojox.gfx.defaultRadialGradient,
 			//		dojox.gfx.defaultPattern,
-			//		or dojo.Color)
+			//		or dojo/Color)
 			this.fillStyle = null;
 	
-			// strokeStyle: Object
+			// strokeStyle: dojox.gfx.Stroke
 			//		a stroke object
 			//		(see dojox.gfx.defaultStroke)
 			this.strokeStyle = null;
@@ -93,12 +93,12 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 			// parent: Object
 			//		a parent or null
-			//		(see dojox.gfx.Surface,
+			//		(see dojox/gfx/shape.Surface,
 			//		dojox.gfx.shape.VirtualGroup,
 			//		or dojox.gfx.Group)
 			this.parent = null;
 	
-			// parentMatrix: dojox.gfx.Matrix2D
+			// parentMatrix: dojox/gfx/matrix.Matrix2D
 			//		a transformation matrix inherited from the parent
 			this.parentMatrix = null;
 			
@@ -141,7 +141,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		getTransform: function(){
 			// summary:
 			//		Returns the current transformation matrix applied to this Shape or null
-			return this.matrix;	// dojox.gfx.Matrix2D
+			return this.matrix;	// dojox/gfx/matrix.Matrix2D
 		},
 		getFill: function(){
 			// summary:
@@ -149,7 +149,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		(see dojox.gfx.defaultLinearGradient,
 			//		dojox.gfx.defaultRadialGradient,
 			//		dojox.gfx.defaultPattern,
-			//		or dojo.Color)
+			//		or dojo/Color)
 			return this.fillStyle;	// Object
 		},
 		getStroke: function(){
@@ -161,7 +161,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		getParent: function(){
 			// summary:
 			//		Returns the parent Shape, Group or VirtualGroup or null if this Shape is unparented.
-			//		(see dojox.gfx.Surface,
+			//		(see dojox/gfx/shape.Surface,
 			//		dojox.gfx.shape.VirtualGroup,
 			//		or dojox.gfx.Group)
 			return this.parent;	// Object
@@ -323,9 +323,9 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		setTransform: function(matrix){
 			// summary:
 			//		sets a transformation matrix
-			// matrix: dojox.gfx.Matrix2D
+			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a matrix or a matrix-like object
-			//		(see an argument of dojox.gfx.Matrix2D
+			//		(see an argument of dojox/gfx/matrix.Matrix2D
 			//		constructor for a list of acceptable arguments)
 			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
@@ -365,13 +365,13 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		},
 		_moveToFront: function(){
 			// summary:
-			//		renderer-specific hook, see dojox.gfx.shape.Shape.moveToFront()
+			//		renderer-specific hook, see dojox/gfx/shape.Shape.moveToFront()
 			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 		},
 		_moveToBack: function(){
 			// summary:
-			//		renderer-specific hook, see dojox.gfx.shape.Shape.moveToFront()
+			//		renderer-specific hook, see dojox/gfx/shape.Shape.moveToFront()
 			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 		},
@@ -382,9 +382,9 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// summary:
 			//		multiplies the existing matrix with an argument on right side
 			//		(this.matrix * matrix)
-			// matrix: dojox.gfx.Matrix2D
+			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a matrix or a matrix-like object
-			//		(see an argument of dojox.gfx.Matrix2D
+			//		(see an argument of dojox/gfx/matrix.Matrix2D
 			//		constructor for a list of acceptable arguments)
 			return matrix ? this.setTransform([this.matrix, matrix]) : this;	// self
 		},
@@ -392,18 +392,18 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// summary:
 			//		multiplies the existing matrix with an argument on left side
 			//		(matrix * this.matrix)
-			// matrix: dojox.gfx.Matrix2D
+			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a matrix or a matrix-like object
-			//		(see an argument of dojox.gfx.Matrix2D
+			//		(see an argument of dojox/gfx/matrix.Matrix2D
 			//		constructor for a list of acceptable arguments)
 			return matrix ? this.setTransform([matrix, this.matrix]) : this;	// self
 		},
 		applyTransform: function(matrix){
 			// summary:
-			//		a shortcut for dojox.gfx.Shape.applyRightTransform
-			// matrix: dojox.gfx.Matrix2D
+			//		a shortcut for dojox/gfx/shape.Shape.applyRightTransform
+			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a matrix or a matrix-like object
-			//		(see an argument of dojox.gfx.Matrix2D
+			//		(see an argument of dojox/gfx/matrix.Matrix2D
 			//		constructor for a list of acceptable arguments)
 			return matrix ? this.setTransform([this.matrix, matrix]) : this;	// self
 		},
@@ -425,10 +425,10 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		sets a parent
 			// parent: Object
 			//		a parent or null
-			//		(see dojox.gfx.Surface,
+			//		(see dojox/gfx/shape.Surface,
 			//		dojox.gfx.shape.VirtualGroup,
 			//		or dojox.gfx.Group)
-			// matrix: dojox.gfx.Matrix2D
+			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a 2D matrix or a matrix-like object
 			this.parent = parent;
 			return this._updateParentMatrix(matrix);	// self
@@ -436,7 +436,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		_updateParentMatrix: function(matrix){
 			// summary:
 			//		updates the parent matrix with new matrix
-			// matrix: dojox.gfx.Matrix2D
+			// matrix: dojox/gfx/Matrix2D
 			//		a 2D matrix or a matrix-like object
 			this.parentMatrix = matrix ? matrixLib.clone(matrix) : null;
 			return this._applyTransform();	// self
@@ -453,7 +453,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 				}
 				p = p.parent;
 			}
-			return m;	// dojox.gfx.Matrix2D
+			return m;	// dojox/gfx/matrix.Matrix2D
 		}
 	});
 	
@@ -540,7 +540,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		add: function(shape){
 			// summary:
 			//		adds a shape to the list
-			// shape: dojox.gfx.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		the shape to add to the list
 			var oldParent = shape.getParent();
 			if(oldParent){
@@ -552,7 +552,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		remove: function(shape, silently){
 			// summary:
 			//		removes a shape from the list
-			// shape: dojox.gfx.shape.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		the shape to remove
 			// silently: Boolean
 			//		if true, do not redraw a picture yet
@@ -630,7 +630,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		_moveChildToFront: function(shape){
 			// summary:
 			//		moves a shape to front of the list of shapes
-			// shape: dojox.gfx.shape.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		one of the child shapes to move to the front
 			for(var i = 0; i < this.children.length; ++i){
 				if(this.children[i] == shape){
@@ -644,7 +644,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		_moveChildToBack: function(shape){
 			// summary:
 			//		moves a shape to back of the list of shapes
-			// shape: dojox.gfx.shape.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		one of the child shapes to move to the front
 			for(var i = 0; i < this.children.length; ++i){
 				if(this.children[i] == shape){
@@ -696,10 +696,10 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		_getRealMatrix: function(){
 			// summary:
 			//		always returns the identity matrix
-			return null;	// dojox.gfx.Matrix2D
+			return null;	// dojox/gfx/Matrix2D
 		},
 		isLoaded: true,
-		onLoad: function(/*dojox.gfx.Surface*/ surface){
+		onLoad: function(/*dojox/gfx/shape.Surface*/ surface){
 			// summary:
 			//		local event, fired once when the surface is created
 			//		asynchronously, used only when isLoaded is false, required
@@ -965,35 +965,35 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		createGroup: function(){
 			// summary:
 			//		creates a group shape
-			return this.createObject(g.Group);	// dojox.gfx.Group
+			return this.createObject(g.Group);	// dojox/gfx/Group
 		},
 		createRect: function(rect){
 			// summary:
 			//		creates a rectangle shape
 			// rect: Object
 			//		a path object (see dojox.gfx.defaultRect)
-			return this.createObject(g.Rect, rect);	// dojox.gfx.Rect
+			return this.createObject(g.Rect, rect);	// dojox/gfx/shape.Rect
 		},
 		createEllipse: function(ellipse){
 			// summary:
 			//		creates an ellipse shape
 			// ellipse: Object
 			//		an ellipse object (see dojox.gfx.defaultEllipse)
-			return this.createObject(g.Ellipse, ellipse);	// dojox.gfx.Ellipse
+			return this.createObject(g.Ellipse, ellipse);	// dojox/gfx/shape.Ellipse
 		},
 		createCircle: function(circle){
 			// summary:
 			//		creates a circle shape
 			// circle: Object
 			//		a circle object (see dojox.gfx.defaultCircle)
-			return this.createObject(g.Circle, circle);	// dojox.gfx.Circle
+			return this.createObject(g.Circle, circle);	// dojox/gfx/shape.Circle
 		},
 		createLine: function(line){
 			// summary:
 			//		creates a line shape
 			// line: Object
 			//		a line object (see dojox.gfx.defaultLine)
-			return this.createObject(g.Line, line);	// dojox.gfx.Line
+			return this.createObject(g.Line, line);	// dojox/gfx/shape.Line
 		},
 		createPolyline: function(points){
 			// summary:
@@ -1001,35 +1001,35 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// points: Object
 			//		a points object (see dojox.gfx.defaultPolyline)
 			//		or an Array of points
-			return this.createObject(g.Polyline, points);	// dojox.gfx.Polyline
+			return this.createObject(g.Polyline, points);	// dojox/gfx/shape.Polyline
 		},
 		createImage: function(image){
 			// summary:
 			//		creates a image shape
 			// image: Object
 			//		an image object (see dojox.gfx.defaultImage)
-			return this.createObject(g.Image, image);	// dojox.gfx.Image
+			return this.createObject(g.Image, image);	// dojox/gfx/shape.Image
 		},
 		createText: function(text){
 			// summary:
 			//		creates a text shape
 			// text: Object
 			//		a text object (see dojox.gfx.defaultText)
-			return this.createObject(g.Text, text);	// dojox.gfx.Text
+			return this.createObject(g.Text, text);	// dojox/gfx/shape.Text
 		},
 		createPath: function(path){
 			// summary:
 			//		creates a path shape
 			// path: Object
 			//		a path object (see dojox.gfx.defaultPath)
-			return this.createObject(g.Path, path);	// dojox.gfx.Path
+			return this.createObject(g.Path, path);	// dojox/gfx/shape.Path
 		},
 		createTextPath: function(text){
 			// summary:
 			//		creates a text shape
 			// text: Object
 			//		a textpath object (see dojox.gfx.defaultTextPath)
-			return this.createObject(g.TextPath, {}).setText(text);	// dojox.gfx.TextPath
+			return this.createObject(g.TextPath, {}).setText(text);	// dojox/gfx/shape.TextPath
 		},
 		createObject: function(shapeType, rawShape){
 			// summary:
@@ -1040,7 +1040,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		properties to be passed in to the classes 'setShape' method
 	
 			// SHOULD BE RE-IMPLEMENTED BY THE RENDERER!
-			return null;	// dojox.gfx.Shape
+			return null;	// dojox/gfx/shape.Shape
 		}
 	};
 	

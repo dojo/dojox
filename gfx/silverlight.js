@@ -37,7 +37,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			courier: "Courier New"
 		};
 
-	function hexColor(/*String|Array|dojo.Color*/ color){
+	function hexColor(/*String|Array|dojo/Color*/ color){
 		// summary:
 		//		converts a color object to a Silverlight hex color string (#aarrggbb)
 		var c = g.normalizeColor(color),
@@ -48,7 +48,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 	sl.Shape = declare("dojox.gfx.silverlight.Shape", gs.Shape, {
 		// summary:
-		//		Silverlight-specific implementation of dojox.gfx.Shape methods
+		//		Silverlight-specific implementation of dojox/gfx/shape.Shape methods
 
 		destroy: function(){
 			this.rawNode = null;

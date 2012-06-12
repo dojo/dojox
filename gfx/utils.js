@@ -5,7 +5,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 
 	lang.mixin(gu, {
 		forEach: function(
-			/*dojox.gfx.Surface|dojox.gfx.Shape*/ object,
+			/*dojox/gfx/shape.Surface|dojox/gfx/shape.Shape*/ object,
 			/*Function|String|Array*/ f, /*Object?*/ o
 		){
 			// summary:
@@ -28,7 +28,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		},
 
 		serialize: function(
-			/* dojox.gfx.Surface|dojox.gfx.Shape */ object
+			/* dojox/gfx/shape.Surface|dojox/gfx/shape.Shape */ object
 		){
 			// summary:
 			//		Takes a shape or a surface and returns a DOM object, which describes underlying shapes.
@@ -61,7 +61,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		},
 
 		toJson: function(
-			/* dojox.gfx.Surface|dojox.gfx.Shape */ object,
+			/* dojox/gfx/shape.Surface|dojox/gfx/shape.Shape */ object,
 			/* Boolean? */ prettyPrint
 		){
 			// summary:
@@ -70,8 +70,8 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		},
 
 		deserialize: function(
-			/* dojox.gfx.Surface|dojox.gfx.Shape */ parent,
-			/* dojox.gfx.Shape|Array */ object
+			/* dojox/gfx/shape.Surface|dojox/gfx/shape.Shape */ parent,
+			/* dojox/gfx/shape.Shape|Array */ object
 		){
 			// summary:
 			//		Takes a surface or a shape and populates it with an object produced by serialize().
@@ -94,18 +94,18 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 			if("children" in object){
 				arr.forEach(object.children, lang.hitch(null, gu.deserialize, shape));
 			}
-			return shape;	// dojox.gfx.Shape
+			return shape;	// dojox/gfx/shape.Shape
 		},
 
 		fromJson: function(
-			/* dojox.gfx.Surface|dojox.gfx.Shape */ parent,
+			/* dojox/gfx/shape.Surface|dojox/gfx/shape.Shape */ parent,
 			/* String */ json){
 			// summary:
 			//		Works just like deserialize() but takes a JSON representation of the object.
-			return gu.deserialize(parent, jsonLib.fromJson(json));	// Array || dojox.gfx.Shape
+			return gu.deserialize(parent, jsonLib.fromJson(json));	// Array || dojox/gfx/shape.Shape
 		},
 
-		toSvg: function(/*GFX object*/surface){
+		toSvg: function(/*dojox/gfx/shape.Surface*/surface){
 			// summary:
 			//		Function to serialize a GFX surface to SVG text.
 			// description:

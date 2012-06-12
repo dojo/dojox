@@ -5,7 +5,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 		constructor: function(shape, params){
 			// summary:
 			//		an object, which makes a shape moveable
-			// shape: dojox.gfx.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		a shape object to be moved
 			// params: Object
 			//		an optional object with additional parameters;
@@ -71,26 +71,26 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 		},
 	
 		// local events
-		onMoveStart: function(/* dojox.gfx.Mover */ mover){
+		onMoveStart: function(/* dojox/gfx/Mover */ mover){
 			// summary:
 			//		called before every move operation
 			connect.publish("/gfx/move/start", [mover]);
 			domClass.add(win.body(), "dojoMove");
 		},
-		onMoveStop: function(/* dojox.gfx.Mover */ mover){
+		onMoveStop: function(/* dojox/gfx/Mover */ mover){
 			// summary:
 			//		called after every move operation
 			connect.publish("/gfx/move/stop", [mover]);
 			domClass.remove(win.body(), "dojoMove");
 		},
-		onFirstMove: function(/* dojox.gfx.Mover */ mover){
+		onFirstMove: function(/* dojox/gfx/Mover */ mover){
 			// summary:
 			//		called during the very first move notification,
 			//		can be used to initialize coordinates, can be overwritten.
 	
 			// default implementation does nothing
 		},
-		onMove: function(/* dojox.gfx.Mover */ mover, /* Object */ shift){
+		onMove: function(/* dojox/gfx/Mover */ mover, /* Object */ shift){
 			// summary:
 			//		called during every move notification,
 			//		should actually move the node, can be overwritten.
@@ -98,14 +98,14 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			this.shape.applyLeftTransform(shift);
 			this.onMoved(mover, shift);
 		},
-		onMoving: function(/* dojox.gfx.Mover */ mover, /* Object */ shift){
+		onMoving: function(/* dojox/gfx/Mover */ mover, /* Object */ shift){
 			// summary:
 			//		called before every incremental move,
 			//		can be overwritten.
 	
 			// default implementation does nothing
 		},
-		onMoved: function(/* dojox.gfx.Mover */ mover, /* Object */ shift){
+		onMoved: function(/* dojox/gfx/Mover */ mover, /* Object */ shift){
 			// summary:
 			//		called after every incremental move,
 			//		can be overwritten.

@@ -110,13 +110,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		disconnect:		function(){},
 		
 		canvasClip:null,
-		setClip: function(/*String||Object*/clip){
-			// summary:
-			//		sets the clipping area of this shape.
-			// description:
-			//		This method overrides the dojox.gfx.shape.Shape.setClip() method.
-			// clip: Object
-			//		an object that defines the clipping geometry, or null to remove clip.
+		setClip: function(/*Object*/clip){
 			this.inherited(arguments);
 			var clipType = clip ? "width" in clip ? "rect" : 
 							"cx" in clip ? "ellipse" : 
