@@ -117,6 +117,7 @@
 			"dojo/_base/lang",
 			"dojo/dom",
 			"dojo/dom-class",
+			"dojo/query",
 			"dojo/parser",
 			"dojo/Stateful",
 			"dijit/registry",
@@ -139,7 +140,7 @@
 			"dojox/mvc/StatefulArray",
 			"dojox/mvc/Group",
 			"dojox/mvc/Repeat"
-		], function(doh, dojox, declare, lang, ddom, domClass, parser, Stateful, registry, Menu, at, getStateful){
+		], function(doh, dojox, declare, lang, ddom, domClass, query, parser, Stateful, registry, Menu, at, getStateful){
 
 			var uniqueIdSeq = 3;
 
@@ -240,7 +241,7 @@
 						ddom.byId("viewcheckbox1").click();
 						doh.is("Take dojox.mvc learning course", ddom.byId("subject").value, "The subject field should be of the second row");
 						ddom.byId("viewcheckbox2").click();
-						doh.is("3", ddom.byId("priority").getElementsByTagName("input")[0].value, "The due field should be of the third row");
+						doh.is("3", ((query("#priority input[data-dojo-attach-point='valueNode']") || [])[0] || {}).value, "The priority field should be of the third row");
 					}
 				},
 				{
