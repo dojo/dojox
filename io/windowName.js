@@ -9,13 +9,13 @@ dojox.io.windowName = {
 		// 		Sends a request using an iframe (POST or GET) and reads the response through the
 		// 		frame's window.name.
 		//
-		//	method:
+		// method:
 		//		The method to use to send the request, GET or POST
 		//
-		//	args:
+		// args:
 		//		See dojo.xhr
 		//
-		//	args.authElement: DOMNode?
+		// args.authElement: DOMNode?
 		//		By providing an authElement, this indicates that windowName should use the
 		// 		authorized window.name protocol, relying on
 		//		the loaded XD resource to return to the provided return URL on completion
@@ -23,7 +23,7 @@ dojox.io.windowName = {
 		//		the iframe in, so the user can interact with the server resource for authentication
 		//		and/or authorization to access the resource.
 		//
-		//	args.onAuthLoad: Function?
+		// args.onAuthLoad: Function?
 		//		When using authorized access to resources, this function will be called when the
 		// 		authorization page has been loaded. (When authorization is actually completed,
 		// 		the deferred callback function is called with the result). The primary use for this
@@ -31,7 +31,7 @@ dojox.io.windowName = {
 		// 		(this can be preferable to showing the iframe while the resource is loading
 		// 		since it may not require authorization, it may simply return the resource).
 		//
-		//	description:
+		// description:
 		//		In order to provide a windowname transport accessible resources/web services, a server
 		// 		should check for the presence of a parameter window.name=true and if a request includes
 		// 		such a parameter, it should respond to the request with an HTML
@@ -68,7 +68,7 @@ dojox.io.windowName = {
 			}catch(e){}
 			(authElement || dojo.body()).removeChild(dfd.ioArgs.outerFrame); // clean up
 			return result;
-		}
+		};
 		var dfd = dojo._ioSetArgs(args,cleanup,cleanup,cleanup);
 		if(args.timeout){
 			setTimeout(function(){
