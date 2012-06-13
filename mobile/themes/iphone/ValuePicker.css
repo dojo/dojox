@@ -1,26 +1,33 @@
 @import url("../common/domButtons/DomButtonGrayPlus.css");
 
 @import url("../common/domButtons/DomButtonGrayMinus.css");
-/* dojox.mobile.ValuePickerSlot */
+/* dojox.mobile.ValuePicker */
 .mblValuePicker {
   height: 126px;
+  float: left;
+  border-left: solid 3px #000000;
+  border-right: solid 3px #000000;
+  border-radius: 3px;
 }
+/* dojox.mobile.ValuePickerSlot */
 .mblValuePicker > .mblValuePickerSlot {
   float: left;
-  margin: 0 5px;
+  margin: 0 0;
+  border-left: solid 2px #000000;
+  border-right: solid 2px #000000;
 }
 .mblValuePickerSlotButton {
   position: relative;
   height: 38px;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#d6d7d6), color-stop(0.5, #d6d3d6), color-stop(0.9, #bdbebd));
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #313137), color-stop(0.16, #dfe0e4), color-stop(0.35, #fbfcfc), color-stop(0.5, #fbfcfc), color-stop(0.65, #fbfcfc), color-stop(0.84, #dfe0e4), color-stop(1, #313137));
 }
 .mblValuePickerSlotPlusButton {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 .mblValuePickerSlotMinusButton {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 .mblValuePickerSlotButtonSelected {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#7c87a4), to(#263e6c), color-stop(0.5, #394d77), color-stop(0.5, #243b69));
@@ -41,12 +48,22 @@
   width: 90%;
   height: 90%;
   margin: 5% auto;
-  font-size: 28px;
   text-align: center;
   border-style: none;
   background-color: transparent;
+  font: bold 24px/44px Helvetica, sans-serif;
 }
 /* dojox.mobile.ValuePickerTimePicker */
-.mblValuePickerTimePicker .mblToolBarButton {
+.mblValuePickerTimePicker {
+  border-left: solid 3px #000000;
+  border-right: solid 0 #000000;
+  border-radius: 3px;
+}
+.mblValuePickerTimePicker > .mblToolBarButton {
   top: 45px;
+}
+.mblValuePickerTimePicker > .mblValuePickerTimePickerMinuteSlot {
+  border-right: solid 5px #000000;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }

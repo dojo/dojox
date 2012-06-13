@@ -62,6 +62,8 @@ define([
 			this._pm = items.slice(13);
 
 			domClass.add(this.domNode, "mblValuePickerTimePicker");
+			domClass.add(this.slots[0].domNode, "mblValuePickerTimePickerHourSlot");
+			domClass.add(this.slots[1].domNode, "mblValuePickerTimePickerMinuteSlot");
 
 			this.ampmButton = new ToolBarButton();
 			this.addChild(this.ampmButton);
