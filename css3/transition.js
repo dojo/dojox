@@ -136,7 +136,9 @@ define(["dojo/_base/lang",
 			// summary:
 			//		Method to start the transition.
 			this._beforeStart();
-			
+			this._startTime = new Date().getTime(); // set transition start timestamp
+			this._cleared = false; // set clear flag to false
+
 			var self = this;
 			//change the transition duration
 			self.node.style[transitionPrefix + "ransitionProperty"] = "all";
@@ -155,6 +157,11 @@ define(["dojo/_base/lang",
 		clear: function(){
 			// summary:
 			//		Method to clear the state after a transition.
+			if(this._cleared) {
+				return;
+			}
+			this._cleared = true; // set clear flag to true
+
 			this._beforeClear();
 			this._removeState(this.endState);
 			// console.log(this.node.id + " clear.");
@@ -331,7 +338,24 @@ define(["dojo/_base/lang",
 			setTimeout(function(){
 				array.forEach(args, function(item){
 					item.start();
-				});			   
+				});
+
+				// check and clear node if the node not cleared.
+				// 1. on Android2.2/2.3, the "fade out" transitionEnd event will be lost if the soft keyboard popup, so we need to check nodes' clear status.
+				// 2. The "fade in" transitionEnd event will before or after "fade out" transitionEnd event and it always occurs.
+				//	  We can check fade out node status in the last "fade in" node transitionEnd event callback, if node transition timeout, we clear it.
+				// NOTE: the last "fade in" transitionEnd event will always fired, so we bind on this event and check other nodes.
+				on.once(args[args.length-1].node, transitionEndEventName, function(){
+					var timeout;
+					for(var i=0; i<args.length-1; i++){
+						if(args[i].deferred.fired !== 0){
+							timeout = new Date().getTime() - args[i]._startTime;
+							if(timeout >= args[i].duration){
+								args[i].clear();
+							}
+						}
+					}
+				});
 			}, 33);
 		});		   
 	};
