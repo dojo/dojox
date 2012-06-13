@@ -7,13 +7,13 @@ define([
 	// module:
 	//		dojox/mobile/StoreCarousel
 	// summary:
-	//		A dojo.store enabled Carousel.
+	//		A dojo/store enabled Carousel.
 
 	return declare("dojox.mobile.StoreCarousel", [Carousel, StoreMixin], {
 		// summary:
-		//		A dojo.store enabled Carousel.
+		//		A dojo/store enabled Carousel.
 		// description:
-		//		StoreCarousel is an enhanced version of dojox.mobile.Carousel. It
-		//		can generate contents according to the given dojo.store store.
+		//		StoreCarousel is an enhanced version of dojox/mobile/Carousel. It
+		//		can generate contents according to the given dojo/store store.
 	});
 });

@@ -27,5 +27,11 @@ define([
 			navigator.appVersion.indexOf("Mobile") != -1) || !!has('android'), undefined, true);
 	}
 
+	/*=====
+    return {
+		// summary:
+		//		This module sets has() flags based on the userAgent of the current browser.
+    };
+    =====*/
 	return has;
 });

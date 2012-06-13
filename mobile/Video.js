@@ -6,9 +6,12 @@ define([
 	// module:
 	//		dojox/mobile/Video
 	// summary:
-	//		A thin wrapper around the html5 <video> element.
+	//		A thin wrapper around the HTML5 <video> element.
 
 	return declare("dojox.mobile.Video", Audio, {
+		// summary:
+		//		A thin wrapper around the HTML5 <video> element.
+		
 		// width: String
 		//		The width of the embed element.
 		width: "200px",

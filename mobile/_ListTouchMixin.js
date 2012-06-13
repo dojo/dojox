@@ -6,11 +6,11 @@ define([
 
 	return declare( "dojox.mobile._ListTouchMixin", ListBase, {
 		// summary:
-		//		Focus-less menu to handle touch events consistently
-		//		Abstract methods that must be defined externally:
+		//		Focus-less menu to handle touch events consistently.
+		// description:
+		//		Focus-less menu to handle touch events consistently. Abstract 
+		//		method that must be defined externally:
 		//			onClick: item was chosen (mousedown somewhere on the menu and mouseup somewhere on the menu)
-		// tags:
-		//		private
 	
 		postCreate: function(){
 			this.inherited(arguments);

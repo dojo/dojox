@@ -17,7 +17,7 @@ define([
 		//		A ValuePicker-based time picker widget.
 		// description:
 		//		ValuePickerTimePicker is a time picker widget. It is a subclass of
-		//		dojox.mobile.ValuePicker. It has the hour and minute slots.
+		//		dojox.mobile.ValuePicker. It has two slots: hour and minute.
 
 		// readOnly: Boolean
 		//		If true, slot input fields are read-only. Only the plus and
@@ -28,6 +28,20 @@ define([
 		//		If true, the time is displayed in 24h format.
 		//		Otherwise, displayed in AM/PM mode.
 		is24h: false,
+
+		// values: Array
+		//		The time value, as an array in 24h format: [hour24, minute] (ex. ["22","06"]).
+		//		Warning: Do not use this property directly, make sure to call set() or get() methods.
+		/*=====
+		values: null,
+		=====*/
+
+		// values12: Array
+		//		The time value, as an array in 12h format: [hour12, minute, ampm] (ex. ["10","06","PM"]).
+		//		Warning: Do not use this property directly, make sure to call set() or get() methods.
+		/*=====
+		values12: null,
+		=====*/
 
 		slotClasses: [
 			ValuePickerSlot,
@@ -58,7 +72,14 @@ define([
 		},
 
 		to12h: function(a){
-			// a = [hour24, minute]
+			// summary:
+			//		Converts a 24h time to a 12h time.
+			// a: Array
+			//		[hour24, minute] (ex. ["22","06"])
+			// returns: Array
+			//		[hour12, minute, ampm] (ex. ["10","06","PM"])
+			// tags:
+			//		private
 			var h = a[0] - 0;
 			var ampm = h < 12 ? "AM" : "PM";
 			if(h == 0){
@@ -70,7 +91,14 @@ define([
 		},
 
 		to24h: function(a){
-			// a = [hour12, minute, ampm]
+			// summary:
+			//		Converts a 12h time to a 24h time.
+			// a: Array
+			//		[hour12, minute, ampm] (ex. ["10","06","PM"])
+			// returns: Array
+			//		[hour24, minute] (ex. ["22","06"])
+			// tags:
+			//		private
 			var h = a[0] - 0;
 			if(a[2] == "AM"){
 				h = h == 12 ? 0 : h; // 12AM is 0h
@@ -81,6 +109,8 @@ define([
 		},
 
 		onBtnClick: function(e){
+			// summary:
+			//		The handler for the AM/PM button.
 			var ampm = this.ampmButton.get("label") == "AM" ? "PM" : "AM";
 			var v = this.get("values12");
 			v[2] = ampm;
@@ -105,7 +135,7 @@ define([
 
 		_getValuesAttr: function(){
 			// summary:
-			//		Returns an array of hour an minute in 24h format.
+			//		Returns an array of hour and minute in 24h format.
 			var v = this.inherited(arguments); // [hour, minute]
 			return this.is24h ? v : this.to24h([v[0], v[1], this.ampmButton.get("label")]);
 		},
@@ -126,7 +156,7 @@ define([
 
 		_getValues12Attr: function(){
 			// summary:
-			//		Returns an array of hour an minute in 12h format.
+			//		Returns an array of hour and minute in 12h format.
 			return this.to12h(this._getValuesAttr());
 		},
 
