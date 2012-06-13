@@ -14,7 +14,7 @@ define([
 			// v: Anything
 			//		The value.
 
-			return lang.isArray(v) ? "array" : lang.isFunction((v || {}).getTime) ? "date" : v != null && {}.toString.call(v) == "[object Object]" ? "object" : "value";
+			return lang.isArray(v) ? "array" : lang.isFunction((v || {}).getTime) ? "date" : v != null && ({}.toString.call(v) == "[object Object]" || lang.isFunction((v || {}).set) && lang.isFunction((v || {}).watch)) ? "object" : "value";
 		},
 
 		equalsArray: function(/*Anything[]*/ dst, /*Anything[]*/ src){
@@ -72,8 +72,8 @@ define([
 		// returns: Boolean
 		//		True if dst equals to src, false otherwise.
 
-		var options = options || equals, types = [options.getType(dst), options.getType(src)];
-		return types[0] != types[1] ? false : options["equals" + types[0].replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](dst, src); // Boolean
+		var opts = options || equals, types = [opts.getType(dst), opts.getType(src)];
+		return types[0] != types[1] ? false : opts["equals" + types[0].replace(/^[a-z]/, function(c){ return c.toUpperCase(); })](dst, src); // Boolean
 	};
 
 	// lang.setObject() thing is for back-compat, remove it in 2.0
