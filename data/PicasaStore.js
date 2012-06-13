@@ -37,7 +37,8 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	//		Flag denoting if preventCache should be passed to io.script.
 	urlPreventCache: false,
 
-	//maxResults:  Define out how many results to return for a fetch.
+	// maxResults: Number
+	//		Define out how many results to return for a fetch.
 	maxResults: 20,
 
 	_assertIsItem: function(/* item */ item){

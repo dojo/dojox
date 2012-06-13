@@ -673,31 +673,40 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 	//		The typical pagination way to deal with huge dataset
 	//		an alternative for the default virtual scrolling manner.
 	name: "pagination",
+
 	// defaultPageSize: Integer
 	//		Number of rows in a page, 25 by default.
 	defaultPageSize: 25,
+
 	// defaultPage: Integer
 	//		Which page will be displayed initially, 1st page by default.
 	defaultPage: 1,
+
 	// description: boolean
 	//		Whether the description information will be displayed, true by default.
 	description: true,
+
 	// sizeSwitch: boolean
 	//		Whether the page size switch options will be displayed, true by default.
 	sizeSwitch: true,
+
 	// pageStepper: boolean
 	//		Whether the page switch options will be displayed, true by default.
 	pageStepper: true,
+
 	// gotoButton: boolean
 	//		Whether the goto page button will be displayed, false by default.
 	gotoButton: false,
+
 	// pageSizes: Array
 	//		Array of page sizes for switching, e.g. [10, 25, 50, 100, Infinity] by default,
 	//		Infinity or any NaN value will be treated as "all".
 	pageSizes: [10, 25, 50, 100, Infinity],
+
 	// maxPageStep: Integer
 	//		The max number of page sizes to be displayed, 7 by default.
 	maxPageStep: 7,
+
 	// position: string
 	//		The position of the pagination bar - "top"|"bottom", "bottom" by default.
 	position: 'bottom',
@@ -733,9 +742,9 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		// summary:
 		//		Shift to the given page, return current page number. If there 
 		//		is no valid page was passed in, just return current page num.
-		//	page: Integer
+		// page: Integer
 		//		The page to go to, starting at 1.
-		//	return:
+		// returns:
 		//		Current page number
 		if(page <= this.getTotalPageNum() && page > 0 && this._currentPage !== page){
 			this._currentPage = page;
@@ -765,13 +774,13 @@ var Pagination = declare("dojox.grid.enhanced.plugins.Pagination", _Plugin, {
 		this.currentPage(this.getTotalPageNum());
 	},
 	currentPageSize: function(size){
-		//	summary:
+		// summary:
 		//		Change the size of current page or return the current page size.
-		//	size: Integer || null
+		// size: Integer || null
 		//		An integer identifying the number of rows per page. If the size
 		//		is an Infinity, all rows will be displayed; if an invalid value pssed
 		//		in, the current page size will be returned.
-		//	returns:
+		// returns:
 		//		Current size of items per page.  
 		if(!isNaN(size)){
 			var g = this.grid,

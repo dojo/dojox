@@ -6,8 +6,8 @@ dojo.mixin(dojox.math.matrix, {
 	iDF:0,
 	ALMOST_ZERO: 1e-10,
 	multiply: function(/* Array */a, /* Array */b){
-		//	summary
-		//	Multiply matrix a by matrix b.
+		// summary:
+		//		Multiply matrix a by matrix b.
 		var ay=a.length, ax=a[0].length, by=b.length, bx=b[0].length;
 		if(ax!=by){
 			console.warn("Can't multiply matricies of sizes " + ax + "," + ay + " and " + bx + "," + by);
@@ -26,8 +26,8 @@ dojo.mixin(dojox.math.matrix, {
 		return c;	//	Array
 	},
 	product: function(/* Array... */){
-		//	summary
-		//	Return the product of N matrices
+		// summary:
+		//		Return the product of N matrices
 		if (arguments.length==0){
 			console.warn("can't multiply 0 matrices!");
 			return 1;
@@ -39,8 +39,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	sum: function(/* Array... */){
-		//	summary
-		//	Return the sum of N matrices
+		// summary:
+		//		Return the sum of N matrices
 		if(arguments.length==0){
 			console.warn("can't sum 0 matrices!");
 			return 0;	//	Number
@@ -71,8 +71,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	inverse: function(/* Array */a){
-		//	summary
-		//	Return the inversion of the passed matrix
+		// summary:
+		//		Return the inversion of the passed matrix
 		if(a.length==1 && a[0].length==1){
 			return [[1/a[0][0]]];	//	Array
 		}
@@ -91,8 +91,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	determinant: function(/* Array */a){
-		//	summary
-		//	Calculate the determinant of the passed square matrix.
+		// summary:
+		//		Calculate the determinant of the passed square matrix.
 		if(a.length!=a[0].length){
 			console.warn("Can't calculate the determinant of a non-squre matrix!");
 			return 0;
@@ -109,8 +109,8 @@ dojo.mixin(dojox.math.matrix, {
 		return det;	//	Number
 	},
 	upperTriangle: function(/* Array */m){
-		//	Summary
-		//	Find the upper triangle of the passed matrix and return it.
+		// summary:
+		//		Find the upper triangle of the passed matrix and return it.
 		m=this.copy(m);
 		var f1=0, temp=0, tms=m.length, v=1;
 		this.iDF=1;
@@ -152,8 +152,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	create: function(/* Number */a, /* Number */b, /* Number? */value){
-		//	summary
-		//	Create a new matrix with rows a and cols b, and pre-populate with value.
+		// summary:
+		//		Create a new matrix with rows a and cols b, and pre-populate with value.
 		value=value||0;
 		var m=[];
 		for (var i=0; i<b; i++){
@@ -165,18 +165,18 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	ones: function(/* Number */a, /* Number */b){
-		//	summary
-		//	Create a matrix pre-populated with ones
+		// summary:
+		//		Create a matrix pre-populated with ones
 		return this.create(a, b, 1);	//	Array
 	},
 	zeros: function(/* Number */a, /* Number */b){
-		//	summary
-		//	Create a matrix pre-populated with zeros
+		// summary:
+		//		Create a matrix pre-populated with zeros
 		return this.create(a, b);	// Array
 	},
 	identity: function(/* Number */size, /* Number? */scale){
-		//	summary
-		//	Create an identity matrix based on the size and scale.
+		// summary:
+		//		Create an identity matrix based on the size and scale.
 		scale=scale||1;
 		var m=[];
 		for(var i=0; i<size; i++){
@@ -188,8 +188,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	adjoint: function(/* Array */a){
-		//	summary
-		//	Find the adjoint of the passed matrix
+		// summary:
+		//		Find the adjoint of the passed matrix
 		var tms=a.length;
 		if(tms<=1){
 			console.warn("Can't find the adjoint of a matrix with a dimension less than 2");
@@ -225,8 +225,8 @@ dojo.mixin(dojox.math.matrix, {
 		return this.transpose(m);	//	Array
 	},
 	transpose: function(/* Array */a){
-		//	summary
-		//	Transpose the passed matrix (i.e. rows to columns)
+		// summary:
+		//		Transpose the passed matrix (i.e. rows to columns)
 		var m=this.create(a.length, a[0].length);
 		for(var i=0; i<a.length; i++){
 			for(var j=0; j<a[i].length; j++){
@@ -236,8 +236,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	//	Array
 	},
 	format: function(/* Array */a, /* Number? */points){
-		//	summary
-		//	Return a string representation of the matrix, rounded to points (if needed)
+		// summary:
+		//		Return a string representation of the matrix, rounded to points (if needed)
 		points=points||5;
 		function format_int(x, dp){
 			var fac=Math.pow(10, dp);
@@ -267,8 +267,8 @@ dojo.mixin(dojox.math.matrix, {
 		return buffer;	//	string
 	},
 	copy: function(/* Array */a){
-		//	summary
-		//	Create a copy of the passed matrix
+		// summary:
+		//		Create a copy of the passed matrix
 		var ya=a.length, xa=a[0].length, m=this.create(xa, ya);
 		for(var y=0; y<ya; y++){
 			for(var x=0; x<xa; x++){
@@ -278,8 +278,8 @@ dojo.mixin(dojox.math.matrix, {
 		return m;	// Array
 	},
 	scale: function(/* Array */a, /* Number */factor){
-		//	summary
-		//	Create a copy of passed matrix and scale each member by factor.
+		// summary:
+		//		Create a copy of passed matrix and scale each member by factor.
 		a=this.copy(a);
 		var ya=a.length, xa=a[0].length;
 		for(var y=0; y<ya; y++){

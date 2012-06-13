@@ -52,28 +52,28 @@ return declare("dojox.grid.enhanced._Plugin", null, {
 	// |		grid.startup();
 	// |	</script>
 
-	//name: String
+	// name: String
 	//		Plugin name, e.g. 'nestedSorting', 'dnd'...
 	name: 'plugin',
 	
-	//grid: Object
+	// grid: Object
 	//		Grid that the plugin belongs to
 	grid: null,
 
-	//option: Object
+	// option: Object
 	//		Plugin properties - leveraged with default and user specified properties.
 	//		e.g. for dnd plugin, it may look like {"class": dojox.grid.enhanced.plugins.DnD, "dependency": ["nestedSorting"], ...}
 	option: {},
 
-	//_connects: Array
+	// _connects: Array
 	//		List of all connections.
 	_connects: [],
 	
-	//_subscribes: Array
+	// _subscribes: Array
 	//		List of all subscribes.
 	_subscribes: [],
 
-	//privates: Object
+	// privates: Object
 	//		Private properties/methods shouldn't be mixin-ed anytime.
 	privates: {},
 	

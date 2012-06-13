@@ -9,68 +9,69 @@ kernel.experimental("dojox.layout.ResizeHandle");
 
 var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	{
-	// summary: A dragable handle used to resize an attached node.
+	// summary:
+	//		A draggable handle used to resize an attached node.
 	//
 	// description:
-	//	The handle on the bottom-right corner of FloatingPane or other widgets that allows
-	//	the widget to be resized.
-	//	Typically not used directly.
-	//
+	//		The handle on the bottom-right corner of FloatingPane or other widgets that allows
+	//		the widget to be resized.
+	//		Typically not used directly.
+
 	// targetId: String
-	//	id of the Widget OR DomNode that I will size
+	//		id of the Widget OR DomNode that I will size
 	targetId: "",
 	
 	// targetContainer: DomNode
-	//	over-ride targetId and attch this handle directly to a reference of a DomNode
+	//		over-ride targetId and attch this handle directly to a reference of a DomNode
 	targetContainer: null,
 	
 	// resizeAxis: String
-	//	one of: x|y|xy limit resizing to a single axis, default to xy ...
+	//		one of: x|y|xy limit resizing to a single axis, default to xy ...
 	resizeAxis: "xy",
 	
 	// activeResize: Boolean
-	// 	if true, node will size realtime with mouse movement,
-	//	if false, node will create virtual node, and only resize target on mouseUp
+	// 		if true, node will size realtime with mouse movement,
+	//		if false, node will create virtual node, and only resize target on mouseUp
 	activeResize: false,
 	
 	// activeResizeClass: String
-	//	css class applied to virtual resize node.
+	//		css class applied to virtual resize node.
 	activeResizeClass: "dojoxResizeHandleClone",
 	
 	// animateSizing: Boolean
-	//	only applicable if activeResize = false. onMouseup, animate the node to the
-	//	new size
+	//		only applicable if activeResize = false. onMouseup, animate the node to the
+	//		new size
 	animateSizing: true,
 	
 	// animateMethod: String
-	// 	one of "chain" or "combine" ... visual effect only. combine will "scale"
-	// 	node to size, "chain" will alter width, then height
+	// 		one of "chain" or "combine" ... visual effect only. combine will "scale"
+	// 		node to size, "chain" will alter width, then height
 	animateMethod: "chain",
 
 	// animateDuration: Integer
-	//	time in MS to run sizing animation. if animateMethod="chain", total animation
-	//	playtime is 2*animateDuration
+	//		time in MS to run sizing animation. if animateMethod="chain", total animation
+	//		playtime is 2*animateDuration
 	animateDuration: 225,
 
 	// minHeight: Integer
-	//	smallest height in px resized node can be
+	//		smallest height in px resized node can be
 	minHeight: 100,
 
 	// minWidth: Integer
-	//	smallest width in px resize node can be
+	//		smallest width in px resize node can be
 	minWidth: 100,
 
 	// constrainMax: Boolean
-	//	Toggle if this widget cares about the maxHeight and maxWidth
-	//	parameters.
+	//		Toggle if this widget cares about the maxHeight and maxWidth
+	//		parameters.
 	constrainMax: false,
 
 	// maxHeight: Integer
-	//	Largest height size in px the resize node can become.
+	//		Largest height size in px the resize node can become.
 	maxHeight:0,
 	
 	// maxWidth: Integer
-	//	Largest width size in px the reize node can become.
+	//		Largest width size in px the resize node can become.
 	maxWidth:0,
 
 	// fixedAspect: Boolean

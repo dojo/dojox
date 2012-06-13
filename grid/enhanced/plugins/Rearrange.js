@@ -468,7 +468,7 @@ var Rearrange = declare("dojox.grid.enhanced.plugins.Rearrange", _Plugin, {
 	_getPageInfo: function(){
 		// summary:
 		//		Find pages that contain visible rows
-		// return: Object
+		// returns: Object
 		//		{topPage: xx, bottomPage: xx, invalidPages: [xx,xx,...]}
 		var scroller = this.grid.scroller,
 			topPage = scroller.page,

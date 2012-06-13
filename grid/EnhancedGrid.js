@@ -63,15 +63,15 @@ var EnhancedGrid = declare("dojox.grid.EnhancedGrid", DataGrid, {
 	//		- dojox.grid.enhanced._Plugin
 	//		- dojox.grid.enhanced.plugins.*
 
-	//plugins: Object
+	// plugins: Object
 	//		Plugin properties, e.g. {nestedSorting: true, dnd: true, ...}
 	plugins: null,
 
-	//pluginMgr: Object
+	// pluginMgr: Object
 	//		Singleton plugin manager
 	pluginMgr: null,
 
-	//_pluginMgrClass: Object
+	// _pluginMgrClass: Object
 	//		Default plugin manager class
 	_pluginMgrClass: _PluginManager,
 

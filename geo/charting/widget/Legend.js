@@ -44,9 +44,10 @@ define([
 			this.inherited(arguments);
 		},
 
-		refresh:function(){
+		refresh: function(){
 			// summary:
 			//		Refreshes this legend contents when Map series has changed.
+
 			// cleanup
 			while(this.legendBody.lastChild){
 				domConstruct.destroy(this.legendBody.lastChild);
