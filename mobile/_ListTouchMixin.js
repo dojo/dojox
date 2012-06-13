@@ -1,8 +1,7 @@
 define([
 	"dojo/_base/declare",
-	"dojo/_base/event",
 	"dijit/form/_ListBase"
-], function(declare, event, ListBase){
+], function(declare, ListBase){
 
 	return declare( "dojox.mobile._ListTouchMixin", ListBase, {
 		// summary:
@@ -14,16 +13,13 @@ define([
 	
 		postCreate: function(){
 			this.inherited(arguments);
-			this.connect(this.domNode, "onclick", "_onClick");
+
+			this._listConnect("click", "_onClick");
 		},
 	
-		_onClick: function(/*Event*/ evt){
-			event.stop(evt);
-			var target = this._getTarget(evt);
-			if(target){
-				this._setSelectedAttr(target);
-				this.onClick(target);
-			}
+		_onClick: function(/*Event*/ evt, /*DomNode*/ target){
+			this._setSelectedAttr(target);
+			this.onClick(target);
 		}
 	});
 });
