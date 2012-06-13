@@ -2,7 +2,7 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/array"
 ], function(lang, array){
-	var mvc = lang.getObject("dojox/mvc", true);
+	var mvc = lang.getObject("dojox.mvc", true);
 
 	return lang.mixin(mvc, {
 		bind: function(/*dojo/Stateful*/ source, /*String*/ sourceProp,

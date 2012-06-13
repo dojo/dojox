@@ -14,7 +14,7 @@ define([
 	//		data binds, a data model and data binding mixin for dijits.
 	kernel.experimental("dojox.mvc");
 
-	var mvc = lang.getObject("dojox/mvc", true);
+	var mvc = lang.getObject("dojox.mvc", true);
 	/*=====
 		mvc = dojox.mvc;
 	=====*/

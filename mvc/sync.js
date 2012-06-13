@@ -4,7 +4,7 @@ define([
 	"dojo/_base/array",
 	"dojo/has"
 ], function(lang, config, array, has){
-	var mvc = lang.getObject("dojox/mvc", true);
+	var mvc = lang.getObject("dojox.mvc", true);
 	/*=====
 	mvc = {};
 	=====*/
