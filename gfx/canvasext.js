@@ -2,6 +2,14 @@ define([
 	"./_base",
 	"./canvas"],
 	function(gfx, canvas){
+
+	/*=====
+	 return {
+	 	// summary:
+	 	//		A module that adds canvas-specific features to the gfx api. You should require this module
+	 	//		when your application specifically targets the HTML5 Canvas renderer.
+	 }
+	 =====*/
 	
 	var ext = gfx.canvasext = {};
 	

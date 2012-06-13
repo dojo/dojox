@@ -2,6 +2,14 @@ define([
 	"./_base",
 	"./svg"], 
 	function(g, svg){
+		
+	/*=====
+	 return {
+	 	// summary:
+	 	//		A module that adds svg-specific features to the gfx api. You should require this module
+	 	//		when your application specifically targets the SVG renderer.
+	 }
+	 =====*/
 	
 	var svgext = g.svgext = {};
 
