@@ -29,12 +29,12 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	_storeRef: "_S",
 
-	//label: string
-	//The attribute to use from the picasa item as its label.
+	// label: string
+	//		The attribute to use from the picasa item as its label.
 	label: "title",
 
-	//urlPreventCache: boolean
-	//Flag denoting if preventCache should be passed to io.script.
+	// urlPreventCache: boolean
+	//		Flag denoting if preventCache should be passed to io.script.
 	urlPreventCache: false,
 
 	//maxResults:  Define out how many results to return for a fetch.

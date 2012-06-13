@@ -4,13 +4,6 @@ define(["dojo/_base/declare","dojo/_base/html","dojo/_base/connect","dojo/_base/
 ],function(declare,html,connect,lang,array,baseFx,coreFx,manager,
 	StackContainer,StackController,Widget,Templated,Contained){
 
-/*===== 
-	var Widget = dijit._Widget, 
-		Templated = dijit._Templated,
-		Contained = dijit._Contained,
-		StackContainer = dijit.layout.StackContainer,
-		StackController = dijit.layout.StackController;
-=====*/
 var RotatorContainer = declare("dojox.layout.RotatorContainer",[StackContainer, Templated], {
 	// summary:
 	//		Extends a StackContainer to automatically transition between children

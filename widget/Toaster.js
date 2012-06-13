@@ -68,7 +68,7 @@ define([
 		//    to slide in more slowly.
 		slideDuration: 500,
 
-		//separator: String
+		// separator: String
 		//		String used to separate messages if consecutive calls are made to setContent before previous messages go away
 		separator: "<hr></hr>",
 

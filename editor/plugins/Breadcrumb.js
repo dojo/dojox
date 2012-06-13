@@ -46,11 +46,11 @@ dojo.declare("dojox.editor.plugins._BreadcrumbMenuTitle",[dijit._Widget, dijit._
 
 dojo.declare("dojox.editor.plugins.Breadcrumb",dijit._editor._Plugin,{
 	// summary:
-	//		This plugin provides Breadcrumb cabability to the editor.  When
-	//		As you move around the editor, it updates with your current indention
+	//		This plugin provides Breadcrumb cabability to the editor. As you move
+	//		around the editor, it updates with your current indention depth.
 	//		depth.
 
-	//	_menu: [private]
+	// _menu: [private] Object
 	//		The popup menu that is displayed.
 	_menu: null,
 

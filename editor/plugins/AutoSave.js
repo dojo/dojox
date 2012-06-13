@@ -182,24 +182,24 @@ dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
 	//		the save action is performed, the document in the editor frame
 	//		will be posted to the URL provided, or none, if none provided.
 	
-	// url [public]	String
+	// url: [public] String
 	//		The URL to POST the content back to.  Used by the save function.
 	url: "",
 
-	// logErrors [public] boolean
+	// logResults: [public] Boolean
 	//		Boolean flag to indicate that the default action for save and
 	//		error handlers is to just log to console.  Default is true.
 	logResults: true,
 	
-	// interval [public] Number
+	// interval: [public] Number
 	//		The interval to perform the save action.
 	interval: 0,
 	
-	// _iconClassPrefix [private] String
+	// _iconClassPrefix: [private] String
 	//		This prefix of the CSS class
 	_iconClassPrefix: "dijitEditorIconAutoSave",
 	
-	// _MIN [private const] Number
+	// _MIN: [private const] Number
 	//		Default 1 minute
 	_MIN: 60000,
 	

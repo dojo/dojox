@@ -12,10 +12,18 @@ define([
 
 var _BusyButtonMixin = declare("dojox.form._BusyButtonMixin", null, {
 
+	// isBusy: Boolean
 	isBusy: false,
-	busyLabel: "", // text while button is busy
+	
+	// busyLabel: String
+	//		text while button is busy
+	busyLabel: "",
+	
 	timeout: null, // timeout, should be controlled by xhr call
-	useIcon: true, // use a busy icon
+	
+	// useIcon: Boolean
+	//		use a busy icon
+	useIcon: true,
 
 	postMixInProperties: function(){
 		this.inherited(arguments);

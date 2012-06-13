@@ -7,10 +7,6 @@ define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/connect","dojo/_base/a
 
 kernel.experimental("dojox.layout.ResizeHandle");
 
-/*===== 
-	var Widget = dijit._Widget;
-	var TemplatedMixin = dijit._TemplatedMixin;
-=====*/
 var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	{
 	// summary: A dragable handle used to resize an attached node.

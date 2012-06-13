@@ -6,11 +6,6 @@ function(kernel,declare,html,baseFx,Templated,ContentPane,domClass,template){
 kernel.experimental("dojox.layout.ScrollPane");
 
 // FIXME: need to adust the _line somehow, it stops scrolling
-	
-/*===== 
-	var ContentPane = dijit.layout.ContentPane,
-		Templated = dijit._Templated;
-=====*/
 
 declare("dojox.layout.ScrollPane",[ContentPane, Templated],{
 	// summary: A pane that "scrolls" its content based on the mouse poisition inside

@@ -77,7 +77,7 @@ var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 	_isLoaded: false,
 	_isLoading: false,
 	
-	//keepSelection: Boolean
+	// keepSelection: Boolean
 	//		Whether keep selection after sort, filter etc.
 	keepSelection: false,	
 	

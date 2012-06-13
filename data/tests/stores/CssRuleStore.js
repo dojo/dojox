@@ -123,6 +123,7 @@ doh.register("dojox.data.tests.stores.CssRuleStore",
 			//		Simple test of a basic fetch on CssRuleStore.
 			// description:
 			//		Simple test of a basic fetch on CssRuleStore.
+		
 			//dojox.data.tests.stores.CssRuleStore.loadStylesheets();
 			var cssRuleStore = dojox.data.tests.stores.CssRuleStore.createStore(['dojox/data/tests/stores/test1.css']);
 			
@@ -145,6 +146,7 @@ doh.register("dojox.data.tests.stores.CssRuleStore",
 			//		Simple test of a basic fetch on CssRuleStore.
 			// description:
 			//		Simple test of a basic fetch on CssRuleStore.
+			
 			//dojox.data.tests.stores.CssRuleStore.loadStylesheets();
 			var cssRuleStore = dojox.data.tests.stores.CssRuleStore.createStore(['dojox/data/tests/stores/test1.css', 'dojox/data/tests/stores/test2.css']);
 			
@@ -167,6 +169,7 @@ doh.register("dojox.data.tests.stores.CssRuleStore",
 			//		Simple test of a basic fetch on CssRuleStore.
 			// description:
 			//		Simple test of a basic fetch on CssRuleStore.
+		
 			//dojox.data.tests.stores.CssRuleStore.loadStylesheets();
 			var cssRuleStore = dojox.data.tests.stores.CssRuleStore.createStore(['dojox/data/tests/stores/test1.css', 'dojox/data/tests/stores/test2.css']);
 			

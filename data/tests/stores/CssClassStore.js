@@ -124,6 +124,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			//		Simple test of a basic fetch on CssClassStore.
 			// description:
 			//		Simple test of a basic fetch on CssClassStore.
+			
 			//dojox.data.tests.stores.CssClassStore.loadStylesheets();
 			var cssClassStore = dojox.data.tests.stores.CssClassStore.createStore(['dojox/data/tests/stores/test1.css']);
 			
@@ -146,6 +147,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			//		Simple test of a basic fetch on CssClassStore.
 			// description:
 			//		Simple test of a basic fetch on CssClassStore.
+		
 			//dojox.data.tests.stores.CssClassStore.loadStylesheets();
 			var cssClassStore = dojox.data.tests.stores.CssClassStore.createStore(['dojox/data/tests/stores/test1.css', 'dojox/data/tests/stores/test2.css']);
 			
@@ -168,6 +170,7 @@ doh.register("dojox.data.tests.stores.CssClassStore",
 			//		Simple test of a basic fetch on CssClassStore.
 			// description:
 			//		Simple test of a basic fetch on CssClassStore.
+			
 			//dojox.data.tests.stores.CssClassStore.loadStylesheets();
 			var cssClassStore = dojox.data.tests.stores.CssClassStore.createStore(['dojox/data/tests/stores/test1.css', 'dojox/data/tests/stores/test2.css']);
 			

@@ -1,3 +1,4 @@
+dojo.provide("dojox.widget.tests.test_PortletInGridContainer");
 dojo.require("dijit.dijit");
 dojo.require("dojo.date.locale");
 dojo.require("dojo.cookie");

@@ -70,7 +70,7 @@ var PlaceholderMenuItem = declare("dojox.widget.PlaceholderMenuItem", MenuItem, 
 		this._replacedWith = [];
 		this._replaced = false;
 
-		return r; // dijit.MenuItem[]
+		return r; // dijit/MenuItem[]
 	}
 });
 

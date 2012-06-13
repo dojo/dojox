@@ -1316,7 +1316,7 @@ doh.register("dojox.data.tests.stores.CsvStore",
 				//		Simple test of a basic fetch abort on CsvStore.
 				// description:
 				//		Simple test of a basic fetch abort on CsvStore.
-				//Can only async abort in a browser, so disable this test from rhino
+				//		Can only async abort in a browser, so disable this test from rhino
 				if(dojo.isBrowser){
 					var args = dojox.data.tests.stores.CsvStore.getDatasource("stores/movies.csv");
 					var store = new dojox.data.CsvStore(args);
