@@ -32,6 +32,8 @@ define(["dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
 								options.transitionDefs[to.id].resolve(to);
 				}
 			}
+			// return a fired DeferredList if the options.transition="none"
+			return new DeferredList([]);
 		}else{
 			var defs=[];
 			var transit=[];
