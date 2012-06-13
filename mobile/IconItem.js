@@ -269,6 +269,7 @@ define([
 
 		scrollIntoView: function(/*DomNode*/node){
 			// summary:
+			//		Scrolls until the given node is in the view.
 			var s = viewRegistry.getEnclosingScrollable(node);
 			if(s){ // this node is placed inside scrollable
 				s.scrollIntoView(node, true);
