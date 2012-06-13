@@ -258,11 +258,13 @@ define([
 		},
 
 		onSelect: function(/*Event*/e){
-			// summary: callback for when user clicks the message
+			// summary:
+			//		callback for when user clicks the message
 		},
 
 		show: function(){
-			// summary: show the Toaster
+			// summary:'
+			//		show the Toaster
 			domStyle.set(this.domNode, 'display', 'block');
 
 			this._placeClip();
@@ -273,7 +275,8 @@ define([
 		},
 
 		hide: function(){
-			// summary: hide the Toaster
+			// summary: 
+			//		hide the Toaster
 
 			domStyle.set(this.domNode, 'display', 'none');
 

@@ -10,10 +10,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		},
 		
 		// selectionMode: String
-		//		Valid values are "none", "single", "multiple".
-		//		- "none": No selection can be done.
-		//		- "single": Only one item can be selected at a time.
-		//		- "multiple": Several item can be selected using the control key modifier.
+		//		Valid values are:
+		//		1. "none": No selection can be done.
+		//		2. "single": Only one item can be selected at a time.
+		//		3. "multiple": Several item can be selected using the control key modifier.
 		//		Default value is "single".
 		selectionMode: "single",
 		
@@ -194,10 +194,10 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 			// summary:
 			//		Dispatch a selection change event.
 			// oldSelectedItem: Object
-			//		The previously selectedItem
+			//		The previously selectedItem.
 			// newSelectedItem: Object
 			//		The new selectedItem.
-			// render: Object
+			// renderer: Object
 			//		The visual renderer of the selected/deselected item.
 			// triggerEvent: Event
 			//		The event that lead to the selection of the item. 			

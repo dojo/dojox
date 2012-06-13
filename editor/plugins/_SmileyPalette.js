@@ -29,7 +29,7 @@ dojo.declare("dojox.editor.plugins._SmileyPalette",
 	// |	var picker = new dojox.editor.plugins._SmileyPalette({ },srcNode);
 	// |	picker.startup();
 
-	//		The template of this widget.
+	//templateString: The template of this widget.
 	templateString:
 		'<table class="dijitInline dijitEditorSmileyPalette dijitPaletteTable"' +
 		' cellSpacing=0 cellPadding=0><tbody dojoAttachPoint="gridNode"></tbody></table>',

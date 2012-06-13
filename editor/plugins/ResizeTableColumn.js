@@ -3,7 +3,8 @@ dojo.provide("dojox.editor.plugins.ResizeTableColumn");
 dojo.require("dojox.editor.plugins.TablePlugins");
 
 dojo.declare("dojox.editor.plugins.ResizeTableColumn",	dojox.editor.plugins.TablePlugins, {
-		
+
+			
 		constructor: function(){
 			// summary:
 			//		Because IE will ignore the cursor style when the editMode of the document is on,

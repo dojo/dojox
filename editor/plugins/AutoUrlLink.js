@@ -12,12 +12,12 @@ define([
 ], function(dojo, dijit, dojox) {
 
 dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
-	//summary:
+	// summary:
 	//		This plugin can recognize a URL like string
 	//		(such as http://www.website.com) and turn it into
 	//		a hyperlink that points to that URL.
 	
-	// _template [private] String
+	// _template: [private] String
 	//		The link template
 	_template: "<a _djrealurl='${url}' href='${url}'>${url}</a>",
 	

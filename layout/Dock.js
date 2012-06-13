@@ -104,3 +104,4 @@ var DockNode = declare("dojox.layout._DockNode",[Widget, TemplatedMixin],{
 
 return Dock;
 });
+

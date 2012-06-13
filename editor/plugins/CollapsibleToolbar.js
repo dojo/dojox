@@ -52,7 +52,7 @@ dojo.declare("dojox.editor.plugins.CollapsibleToolbar",dijit._editor._Plugin,{
 	//		of the editor toolbars.  This plugin should be registered first in most cases to
 	//		avoid conflicts in toolbar construction.
 
-	// _myWidgets: [private] array
+	// _myWidgets: [private] Array
 	//		Container for widgets I allocate that will need to be destroyed.
 	_myWidgets: null,
 

@@ -57,7 +57,7 @@ define([
 		},
 
 		// TODO: This method needs serious work
-		_onDayClick: function(e){
+		_onDayClick: function(/*Event*/ e){
 			// summary:
 			//		Executed when a day value is clicked.
 

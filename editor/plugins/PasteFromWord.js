@@ -78,10 +78,10 @@ dojo.declare("dojox.editor.plugins.PasteFromWord",dijit._editor._Plugin,{
 	],
 
 	_initButton: function(){
-		this._filters = this._filters.slice(0); 
-		
 		// summary:
 		//		Over-ride for creation of the save button.
+		this._filters = this._filters.slice(0); 
+			
 		var strings = dojo.i18n.getLocalization("dojox.editor.plugins", "PasteFromWord");
 		dojo.mixin(strings, dojo.i18n.getLocalization("dijit", "common"));
 		dojo.mixin(strings, dojo.i18n.getLocalization("dijit._editor", "commands"));

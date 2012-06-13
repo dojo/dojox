@@ -19,7 +19,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 	//		exposed/extracted when the editor value is obtained, it is purely for help
 	//		while working on the page.
 
-	// useDefaultCommand [protected] boolean
+	// useDefaultCommand: [protected] boolean
 	//		Over-ride indicating that the command processing is done all by this plugin.
 	useDefaultCommand: false,
 
@@ -27,7 +27,7 @@ dojo.declare("dojox.editor.plugins.ShowBlockNodes",dijit._editor._Plugin,{
 	//		The CSS class name for the button node is formed from `iconClassPrefix` and `command`
 	iconClassPrefix: "dijitAdditionalEditorIcon",
 
-	// _styled [private] boolean
+	// _styled: [private] boolean
 	//		Flag indicating the document has had the style updates applied.
 	_styled: false,
 

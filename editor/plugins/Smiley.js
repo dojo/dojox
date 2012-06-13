@@ -27,10 +27,11 @@ dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
 	//		The CSS class name for the button node is formed from `iconClassPrefix` and `command`
 	iconClassPrefix: "dijitAdditionalEditorIcon",
 
-	// a marker for emoticon wrap like [:-)] for regexp convienent
-	// when a message which contains an emoticon stored in a database or view source, this marker include also
-	// but when user enter an emoticon by key board, user don't need to enter this marker.
-	// also emoticon definition character set can not contains this marker
+	// emoticonMarker:
+	// 		a marker for emoticon wrap like [:-)] for regexp convienent
+	//		when a message which contains an emoticon stored in a database or view source, this marker include also
+	//		but when user enter an emoticon by key board, user don't need to enter this marker.
+	// 		also emoticon definition character set can not contains this marker
 	emoticonMarker: '[]',
 
 	emoticonImageClass: 'dojoEditorEmoticon',
@@ -98,11 +99,13 @@ dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
 		}
 	},
 
-	_preFilterEntities: function(/*String content passed in*/ value){
+	_preFilterEntities: function(/*String*/ value){
 		// summary:
 		//		A function to filter out emoticons into their UTF-8 character form
 		//		displayed in the editor.  It gets registered with the preFilters
 		//		of the editor.
+		// value: String
+		//		content passed in
 		// tags:
 		//		private.
 		//
@@ -110,11 +113,13 @@ dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
 		return value.replace(/\[([^\]]*)\]/g, dojo.hitch(this, this._decode));
 	},
 
-	_postFilterEntities: function(/*String content passed in*/ value){
+	_postFilterEntities: function(/*String*/ value){
 		// summary:
 		//		A function to filter out emoticons into encoded form so they
 		//		are properly displayed in the editor.  It gets registered with the
 		//		postFilters of the editor.
+		// value: String
+		//		content passed in
 		// tags:
 		//		private.
 		return value.replace(/<img [^>]*>/gi, dojo.hitch(this, this._encode));

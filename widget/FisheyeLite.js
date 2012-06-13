@@ -38,7 +38,7 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 		//	|			height:{ end: 200 }, width:2.3
 		//	|		}
 		//	|	}, "someNode");
-		//
+		
 		// duationIn: Integer
 		//		The time (in ms) the run the show animation
 		durationIn: 350,

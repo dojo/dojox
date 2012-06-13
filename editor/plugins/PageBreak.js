@@ -17,7 +17,7 @@ dojo.declare("dojox.editor.plugins.PageBreak",dijit._editor._Plugin,{
 	//		the document.
 	//		This plugin registers the hotkey command: CTRL-SHIFT-ENTER
 
-	//	useDefaultCommand [protected]
+	//	useDefaultCommand: [protected]
 	//		Over-ride indicating that the command processing is done all by this plugin.
 	useDefaultCommand: false,
 

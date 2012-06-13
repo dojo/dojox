@@ -54,7 +54,7 @@ dojo.declare("dojox.widget.DynamicTooltip", dijit.Tooltip,
 			//		Hook so attr("href", ...) works.
 			// description:
 			//		resets so next show loads new href
-			//	href:
+			// href:
 			//		url to the content you want to show, must be within the same domain as your mainpage
 		
 			this.href = href;

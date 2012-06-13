@@ -16,7 +16,7 @@ dojo.declare("dojox.editor.plugins.Preview",dijit._editor._Plugin,{
 	//		clicked, the document in the editor frame will displayed in a separate
 	//		window/tab
 
-	//	useDefaultCommand [protected]
+	//	useDefaultCommand: [protected]
 	//		Over-ride indicating that the command processing is done all by this plugin.
 	useDefaultCommand: false,
 

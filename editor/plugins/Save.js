@@ -23,11 +23,11 @@ dojo.declare("dojox.editor.plugins.Save",dijit._editor._Plugin,{
 	//		and `command`
 	iconClassPrefix: "dijitAdditionalEditorIcon",
 
-	// url [public]	String
+	// url: [public] String
 	//		The URL to POST the content back to.  Used by the save function.
 	url: "",
 
-	// logErrors [public] boolean
+	// logResults: [public] boolean
 	//		Boolean flag to indicate that the default action for save and
 	//		error handlers is to just log to console.  Default is true.
 	logResults: true,

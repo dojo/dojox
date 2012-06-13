@@ -61,7 +61,8 @@ dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
 	].join(""),
 
 	_initButton: function(){
-		// Override _Plugin._initButton() to initialize DropDownButton and TooltipDialog.
+		// summary:
+		//		Override _Plugin._initButton() to initialize DropDownButton and TooltipDialog.
 		var _this = this;
 		var messages = dojo.i18n.getLocalization("dojox.editor.plugins", "InsertAnchor", this.lang);
 

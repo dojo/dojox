@@ -16,12 +16,12 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
 	//		incoming content to the proper one expected by the browser as well so
 	//		that the native styling buttons work.
 
-	// mode [public] String
+	// mode: [public] String
 	//		A String variable indicating if it should use semantic tags 'b', 'i', etc, or
 	//		CSS styling.  The default is semantic.
 	mode: "semantic",
 
-	// condenseSpans [public] Boolean
+	// condenseSpans: [public] Boolean
 	//		A boolean variable indicating if it should try to condense
 	//		'span''span''span' styles  when in css mode
 	//		The default is true, it will try to combine where it can.

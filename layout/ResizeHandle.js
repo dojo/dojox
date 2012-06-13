@@ -96,7 +96,8 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	templateString: '<div dojoAttachPoint="resizeHandle" class="dojoxResizeHandle"><div></div></div>',
 
 	postCreate: function(){
-		// summary: setup our one major listener upon creation
+		// summary:
+		//		setup our one major listener upon creation
 		this.connect(this.resizeHandle, "onmousedown", "_beginSizing");
 		if(!this.activeResize){
 			// there shall be only a single resize rubberbox that at the top
@@ -142,7 +143,8 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	},
 
 	_beginSizing: function(/*Event*/ e){
-		// summary: setup movement listeners and calculate initial size
+		// summary: 
+		//		setup movement listeners and calculate initial size
 		
 		if(this._isSizing){ return; }
 
@@ -187,8 +189,9 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	},
 
 	_updateSizing: function(/*Event*/ e){
-		// summary: called when moving the ResizeHandle ... determines
-		//	new size based on settings/position and sets styles.
+		// summary: 
+		//		called when moving the ResizeHandle ... determines
+		//		new size based on settings/position and sets styles.
 
 		if(this.activeResize){
 			this._changeSizing(e);
@@ -235,7 +238,8 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	},
 	
 	_checkConstraints: function(newW, newH){
-		// summary: filter through the various possible constaint possibilities.
+		// summary: 
+		//		filter through the various possible constaint possibilities.
 				
 		// minimum size check
 		if(this.minSize){
@@ -273,7 +277,8 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	},
 		
 	_changeSizing: function(/*Event*/ e){
-		// summary: apply sizing information based on information in (e) to attached node
+		// summary:
+		//		apply sizing information based on information in (e) to attached node
 		
 		var isWidget = this.targetWidget && lang.isFunction(this.targetWidget.resize),
 			tmp = this._getNewCoords(e, isWidget && 'margin');
@@ -313,7 +318,8 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	},
 
 	_endSizing: function(/*Event*/ e){
-		// summary: disconnect listenrs and cleanup sizing
+		// summary:
+		//		disconnect listenrs and cleanup sizing
 		arrayUtil.forEach(this._pconnects, connect.disconnect);
 		var pub = lang.partial(connect.publish, this.endTopic, [ this ]);
 		if(!this.activeResize){
@@ -328,29 +334,34 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 	},
 	
 	onResize: function(e){
-		// summary: Stub fired when sizing is done. Fired once
-		//	after resize, or often when `intermediateChanges` is
-		//	set to true.
+		// summary: 
+		//		Stub fired when sizing is done. Fired once
+		//		after resize, or often when `intermediateChanges` is
+		//		set to true.
 	}
 	
 });
 
 var _ResizeHelper = dojo.declare("dojox.layout._ResizeHelper", Widget, {
-	// summary: A global private resize helper shared between any
+	// summary: 
+	//		A global private resize helper shared between any
 	//		`dojox.layout.ResizeHandle` with activeSizing off.
 	
 	show: function(){
-		// summary: show helper to start resizing
+		// summary: 
+		//		show helper to start resizing
 		domStyle.set(this.domNode, "display", "");
 	},
 	
 	hide: function(){
-		// summary: hide helper after resizing is complete
+		// summary:
+		//		hide helper after resizing is complete
 		domStyle.set(this.domNode, "display", "none");
 	},
 	
 	resize: function(/* Object */dim){
-		// summary: size the widget and place accordingly
+		// summary:
+		//		size the widget and place accordingly
 		domGeometry.setMarginBox(this.domNode, dim);
 	}
 	

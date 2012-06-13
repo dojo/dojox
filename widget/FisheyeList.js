@@ -23,7 +23,7 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				// |		</div>
 				// |		...
 				// |	</div>
-				//
+
 				constructor: function(){
 					//
 					// TODO
@@ -164,7 +164,8 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				},
 
 				startup: function(){
-					// summary: create our connections and setup our FisheyeList
+					// summary:
+					//	create our connections and setup our FisheyeList
 					this.children = this.getChildren();
 					//original postCreate() --tk
 					this._initializePositioning();
@@ -249,10 +250,11 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 					this._calcHitGrid();
 				},
 
-				_overElement: function(/* DomNode|String */node, /* Event */e){
+				_overElement: function(/* DomNode|String */ node, /* Event */ e){
 					// summary:
-					//	Returns whether the mouse is over the passed element.
-					// Node: Must must be display:block (ie, not a <span>)
+					//		Returns whether the mouse is over the passed element.
+					// node:
+					//		Must must be display:block (ie, not a <span>)
 					node = dom.byId(node);
 					var mouse = {x: e.pageX, y: e.pageY},
 						absolute = geometry.position(node, true),
@@ -277,7 +279,8 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				},
 
 				_setDormant: function(/*Event*/ e){
-					// summary: called when mouse moves out of menu's range
+					// summary: 
+					//		called when mouse moves out of menu's range
 
 					if(!this.isOver){ return; }	// already dormant?
 					this.isOver = false;
@@ -291,7 +294,8 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				},
 
 				_setActive: function(/*Event*/ e){
-					// summary: called when mouse is moved into menu's range
+					// summary:
+					//		called when mouse is moved into menu's range
 
 					if(this.isOver){ return; }	// already activated?
 					this.isOver = true;
@@ -312,7 +316,8 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				},
 
 				_onMouseMove: function(/*Event*/ e){
-					// summary: called when mouse is moved
+					// summary:
+					//		called when mouse is moved
 					if(	(e.pageX >= this.hitX1) && (e.pageX <= this.hitX2) &&
 						(e.pageY >= this.hitY1) && (e.pageY <= this.hitY2)	){
 						if(!this.isOver){
@@ -335,7 +340,8 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				},
 
 				_onGridMouseMove: function(x, y){
-					// summary: called when mouse is moved in the vicinity of the menu
+					// summary:
+					//		called when mouse is moved in the vicinity of the menu
 					this.pos = {x:x, y:y};
 					this._paint();
 				},
@@ -576,7 +582,8 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 				},
 
 				_expandSlowly: function(){
-					// summary: slowly expand the image to user specified max size
+					// summary:
+					//		slowly expand the image to user specified max size
 					if(!this.isOver){ return; }
 					this.timerScale += 0.2;
 					this._paint();

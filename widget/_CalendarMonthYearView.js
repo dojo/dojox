@@ -12,7 +12,7 @@ define([
 ], function(declare, _CalendarView, _Templated, query, domClass, connect, event, lang, dojoDateLocale, template){
 	return declare("dojox.widget._CalendarMonthYearView", [_CalendarView, _Templated], {
 
-		// summary:fojo
+		// summary:
 		//		A Calendar view listing the 12 months of the year
 
 		// templateString: String
