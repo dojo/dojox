@@ -7,7 +7,7 @@ define([
 	"./sync"
 ], function(array, lang, declare, has, resolve, sync){
 	if(has("mvc-bindings-log-api")){
-		function getLogContent(/*dojo.Stateful*/ target, /*String*/ targetProp){
+		function getLogContent(/*dojo/Stateful*/ target, /*String*/ targetProp){
 			return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
 		}
 
@@ -16,10 +16,10 @@ define([
 		}
 	}
 
-	function getParent(/*dijit._WidgetBase*/ w){
+	function getParent(/*dijit/_WidgetBase*/ w){
 		// summary:
 		//		Returns parent widget having data binding target for relative data binding.
-		// w: dijit._WidgetBase
+		// w: dijit/_WidgetBase
 		//		The widget.
 
 		// Usage of dijit/registry module is optional. Return null if it's not already loaded.
@@ -35,25 +35,25 @@ define([
 			if(pw){
 				var relTargetProp = pw._relTargetProp || "target", pt = lang.isFunction(pw.get) ? pw.get(relTargetProp) : pw[relTargetProp];
 				if(pt || relTargetProp in pw.constructor.prototype){
-					return pw; // dijit._WidgetBase
+					return pw; // dijit/_WidgetBase
 				}
 			}
 			pn = pw && pw.domNode.parentNode;
 		}
 	}
 
-	function bind(/*dojo.Stateful|String*/ source, /*String*/ sourceProp, /*dijit._WidgetBase*/ target, /*String*/ targetProp, /*dojox.mvc.sync.options*/ options){
+	function bind(/*dojo/Stateful|String*/ source, /*String*/ sourceProp, /*dijit/_WidgetBase*/ target, /*String*/ targetProp, /*dojox/mvc/sync.options*/ options){
 		// summary:
 		//		Resolves the data binding literal, and starts data binding.
-		// source: dojo.Stateful|String
-		//		Source data binding literal or dojo.Stateful to be synchronized.
+		// source: dojo/Stateful|String
+		//		Source data binding literal or dojo/Stateful to be synchronized.
 		// sourceProp: String
 		//		The property name in source to be synchronized.
-		// target: dijit._WidgetBase
-		//		Target dojo.Stateful to be synchronized.
+		// target: dijit/_WidgetBase
+		//		Target dojo/Stateful to be synchronized.
 		// targetProp: String
 		//		The property name in target to be synchronized.
-		// options: dojox.mvc.sync.options
+		// options: dojox/mvc/sync.options
 		//		Data binding options.
 
 		var _handles = {}, parent = getParent(target), relTargetProp = parent && parent._relTargetProp || "target";
@@ -76,15 +76,15 @@ define([
 
 			if(sourceProp == null){
 				// If source property is not specified, it means this handle is just for resolving data binding target.
-				// (For dojox.mvc.Group and dojox.mvc.Repeat)
+				// (For dojox/mvc/Group and dojox/mvc/Repeat)
 				// Do not perform data binding synchronization in such case.
 				lang.isFunction(resolvedTarget.set) ? resolvedTarget.set(targetProp, resolvedSource) : (resolvedTarget[targetProp] = resolvedSource);
 				if(has("mvc-bindings-log-api")){
-					console.log("dojox.mvc._atBindingMixin set " + resolvedSource + " to: " + getLogContent(resolvedTarget, targetProp));
+					console.log("dojox/mvc/_atBindingMixin set " + resolvedSource + " to: " + getLogContent(resolvedTarget, targetProp));
 				}
 			}else{
 				// Start data binding
-				_handles["Two"] = sync(resolvedSource, sourceProp, resolvedTarget, targetProp, options); // dojox.mvc.sync.handle
+				_handles["Two"] = sync(resolvedSource, sourceProp, resolvedTarget, targetProp, options); // dojox/mvc/sync.handle
 			}
 		}
 
@@ -107,9 +107,9 @@ define([
 		};
 	}
 
-	var _atBindingMixin = declare("dojox.mvc._atBindingMixin", null, {
+	var _atBindingMixin = declare("dojox/mvc/_atBindingMixin", null, {
 		// summary:
-		//		The mixin for dijit._WidgetBase to support data binding.
+		//		The mixin for dijit/_WidgetBase to support data binding.
 
 		// dataBindAttr: String
 		//		The attribute name for data binding.
@@ -215,7 +215,9 @@ define([
 			// summary:
 			//		Returns list of all properties that data binding is established with.
 
-			if(this._excludes){ return this._excludes; }
+			if(this._excludes){ 
+				return this._excludes;  // String[] 
+			}
 			var list = [];
 			for(var s in this._atWatchHandles){
 				if(s != "*"){ list.push(s); }
@@ -226,9 +228,11 @@ define([
 		_getPropertiesAttr: function(){
 			// summary:
 			//		Returns list of all properties in this widget, except "id".
+			// returns: String[]
+			//		 The list of all properties in this widget, except "id"..
 
 			if(this.constructor._attribs){
-				return this.constructor._attribs;
+				return this.constructor._attribs; // String[]
 			}
 			var list = ["onClick"].concat(this.constructor._setterAttrs);
 			array.forEach(["id", "excludes", "properties", "ref", "binding"], function(s){

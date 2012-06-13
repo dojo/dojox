@@ -4,9 +4,9 @@ define([
 	"dojo/Stateful",
 	"./StatefulArray"
 ], function(array, lang, Stateful, StatefulArray){
-	var equalsOptions = /*===== dojox.mvc.equalsOptions = =====*/ {
+	var equalsOptions = {
 		// summary:
-		//		Options used for dojox.mvc.equals().
+		//		Options used for dojox/mvc/equals().
 
 		getType: function(/*Anything*/ v){
 			// summary:
@@ -58,16 +58,16 @@ define([
 		}
 	};
 
-	var equals = /*===== dojox.mvc.equals = =====*/ function(/*Anything*/ dst, /*Anything*/ src, /*dojox.mvc.equalsOptions*/ options){
+	var equals = function(/*Anything*/ dst, /*Anything*/ src, /*dojox/mvc/equalsOptions*/ options){
 		// summary:
-		//		Compares two dojo.Stateful objects, by diving into the leaves.
+		//		Compares two dojo/Stateful objects, by diving into the leaves.
 		// description:
 		//		Recursively iterates and compares stateful values.
 		// dst: Anything
 		//		The stateful value to compare with.
 		// src: Anything
 		//		The stateful value to compare with.
-		// options: dojox.mvc.equalsOptions
+		// options: dojox/mvc/equalsOptions
 		//		The object that defines how two stateful values are compared.
 		// returns: Boolean
 		//		True if dst equals to src, false otherwise.

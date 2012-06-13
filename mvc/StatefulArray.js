@@ -14,10 +14,10 @@ define([
 	};
 	=====*/
 
-	function update(/*dojox.mvc.StatefulArray*/ a){
+	function update(/*dojox/mvc/StatefulArray*/ a){
 		// summary:
 		//		Set all array elements as stateful so that watch function runs.
-		// a: dojox.mvc.StatefulArray
+		// a: dojox/mvc/StatefulArray
 		//		The array.
 
 		// Notify change of elements.
@@ -25,12 +25,12 @@ define([
 			a._watchElementCallbacks();
 		}
 
-		return a; // dojox.mvc.StatefulArray
+		return a; // dojox/mvc/StatefulArray
 	}
 
-	var StatefulArray = /*===== dojox.mvc.StatefulArray = =====*/ function(/*Anything[]*/ a){
+	var StatefulArray = function(/*Anything[]*/ a){
 		// summary:
-		//		An inheritance of native JavaScript array, that adds dojo.Stateful capability.
+		//		An inheritance of native JavaScript array, that adds dojo/Stateful capability.
 		// description:
 		//		Supported methods are:
 		//
@@ -78,7 +78,7 @@ define([
 				//		How many elements to be removed at idx.
 				// varargs: Anything[]
 				//		The elements to be added to idx.
-				// returns: dojox.mvc.StatefulArray
+				// returns: dojox/mvc/StatefulArray
 				//		The removed elements.
 
 				var l = this.get("length"),
@@ -105,7 +105,7 @@ define([
 					this._watchCallbacks("length", l, l - removals.length + adds.length);
 				}
 
-				return removals; // dojox.mvc.StatefulArray
+				return removals; // dojox/mvc/StatefulArray
 			},
 			unshift: function(){
 				this.splice.apply(this, [0, 0].concat(lang._toArray(arguments)));
@@ -138,7 +138,7 @@ define([
 				for(var i = start || 0; i < Math.min(end, this.get("length")); i++){
 					slice.push(this.get(i));
 				}
-				return new StatefulArray(slice); // dojox.mvc.StatefuArray
+				return new StatefulArray(slice); // dojox/mvc/StatefuArray
 			},
 			watchElements: function(/*Function*/ callback){
 				// summary:
@@ -158,7 +158,7 @@ define([
 
 				callbacks.list.push(callback);
 
-				return {
+				return { // dojox/mvc/StatefulArray/watchElements/handle
 					unwatch: function(){
 						for(var list = callbacks.list, i = 0; i < list.length; i++){
 							if(list[i] == callback){
@@ -167,7 +167,7 @@ define([
 							}
 						}
 					}
-				}; // dojox.mvc.StatefulArray.watchElements.handle
+				}; 
 			}
 		}, Stateful.prototype, {
 			set: function(/*Number|String*/ name, /*Anything*/ value){

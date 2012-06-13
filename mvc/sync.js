@@ -4,11 +4,11 @@ define([
 	"dojo/_base/array",
 	"dojo/has"
 ], function(lang, config, array, has){
-	var mvc = lang.getObject("dojox.mvc", true);
+	var mvc = lang.getObject("dojox/mvc", true);
 	/*=====
-		mvc = dojox.mvc;
+	mvc = {};
 	=====*/
-
+	
 	/*=====
 	dojox.mvc.sync.converter = {
 		// summary:
@@ -39,9 +39,9 @@ define([
 
 		// bindDirection: Number
 		//		The data binding bindDirection, choose from: dojox.mvc.Bind.from, dojox.mvc.Bind.to or dojox.mvc.Bind.both.
-		bindDirection: dojox.mvc.both,
+		bindDirection: dojox/mvc.both,
 
-		// converter: dojox.mvc.sync.converter
+		// converter: dojox/mvc/sync.converter
 		//		Class/object containing the converter functions used when the data goes between data binding source (e.g. data model or controller) to data binding origin (e.g. widget).
 		converter: null
 	};
@@ -62,7 +62,7 @@ define([
 	var sync;
 
 	if(has("mvc-bindings-log-api")){
-		function getLogContent(/*dojo.Stateful*/ source, /*String*/ sourceProp, /*dojo.Stateful*/ target, /*String*/ targetProp){
+		function getLogContent(/*dojo/Stateful*/ source, /*String*/ sourceProp, /*dojo/Stateful*/ target, /*String*/ targetProp){
 			return [
 				[target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":"),
 				[source._setIdAttr || !source.declaredClass ? source : source.declaredClass, sourceProp].join(":")
@@ -80,22 +80,22 @@ define([
 		 || (lang.isFunction((dst || {}).equals) ? dst.equals(src) : lang.isFunction((src || {}).equals) ? src.equals(dst) : false);
 	}
 
-	function copy(/*Function*/ convertFunc, /*Object?*/ constraints, /*dojo.Stateful*/ source, /*String*/ sourceProp, /*dojo.Stateful*/ target, /*String*/ targetProp, /*Anything*/ old, /*Anything*/ current, /*Object?*/ excludes){
+	function copy(/*Function*/ convertFunc, /*Object?*/ constraints, /*dojo/Stateful*/ source, /*String*/ sourceProp, /*dojo/Stateful*/ target, /*String*/ targetProp, /*Anything*/ old, /*Anything*/ current, /*Object?*/ excludes){
 		// summary:
-		//		Watch for change in property in dojo.Stateful object.
+		//		Watch for change in property in dojo/Stateful object.
 		// description:
-		//		Called when targetProp property in target is changed. (This is mainly used as a callback function of dojo.Stateful.watch())
+		//		Called when targetProp property in target is changed. (This is mainly used as a callback function of dojo/Stateful.watch())
 		//		When older value and newer value are different, copies the newer value to sourceProp property in source.
 		// convertFunc: Function
 		//		The data converter function.
 		// constraints: Object?
 		//		The data converter options.
-		// source: dojo.Stateful
-		//		The dojo.Stateful of copy source.
+		// source: dojo/Stateful
+		//		The dojo/Stateful of copy source.
 		// sourceProp: String
 		//		The property of copy source, specified in data binding. May be wildcarded.
-		// target: dojo.Stateful
-		//		The dojo.Stateful of copy target.
+		// target: dojo/Stateful
+		//		The dojo/Stateful of copy target.
 		// targetProp: String
 		//		The property of copy target, being changed. For wildcard-based data binding, this is used as the property to be copied.
 		// old: Anything
@@ -141,24 +141,24 @@ define([
 		// Data binding goes from the target to the source
 		to: 2,
 
-		// Data binding goes in both directions (dojox.mvc.Bind.from | dojox.mvc.Bind.to)
+		// Data binding goes in both directions (dojox/mvc/Bind.from | dojox/mvc/Bind.to)
 		both: 3
 	}, undef;
 
-	sync = /*===== dojox.mvc.sync = =====*/ function(/*dojo.Stateful*/ source, /*String*/ sourceProp, /*dojo.Stateful*/ target, /*String*/ targetProp, /*dojox.mvc.sync.options*/ options){
+	sync = function(/*dojo/Stateful*/ source, /*String*/ sourceProp, /*dojo/Stateful*/ target, /*String*/ targetProp, /*dojox/mvc/sync.options*/ options){
 		// summary:
-		//		Synchronize two dojo.Stateful properties.
+		//		Synchronize two dojo/Stateful properties.
 		// description:
-		//		Synchronize two dojo.Stateful properties.
-		// source: dojo.Stateful
-		//		Source dojo.Stateful to be synchronized.
+		//		Synchronize two dojo/Stateful properties.
+		// source: dojo/Stateful
+		//		Source dojo/Stateful to be synchronized.
 		// sourceProp: String
 		//		The property name in source to be synchronized.
-		// target: dojo.Stateful
-		//		Target dojo.Stateful to be synchronized.
+		// target: dojo/Stateful
+		//		Target dojo/Stateful to be synchronized.
 		// targetProp: String
 		//		The property name in target to be synchronized.
-		// options: dojox.mvc.sync.options
+		// options: dojox/mvc/sync.options
 		//		Data binding options.
 		// returns:
 		//		The handle of data binding synchronization.
@@ -248,7 +248,7 @@ define([
 					}
 				}
 			}
-		}; // dojox.mvc.sync.handle
+		}; // dojox/mvc/sync.handle
 	};
 
 	lang.mixin(mvc, directions);

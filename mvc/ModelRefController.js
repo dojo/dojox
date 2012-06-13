@@ -7,13 +7,13 @@ define([
 ], function(array, declare, lang, Stateful, _Controller){
 	return declare("dojox.mvc.ModelRefController", _Controller, {
 		// summary:
-		//		A controller that keeps a reference to dojo.Stateful-based data model.
+		//		A controller that keeps a reference to dojo/Stateful-based data model.
 		// description:
 		//		Does the following on behalf of such model:
 		//
-		//			* Provides data from model via dojo.Stateful get() interface
-		//			* Stores data to model via dojo.Stateful set() interface
-		//			* Watches for change in model via dojo.Stateful watch() interface (The callback is called when there is a change in data model, as well as when the data model itself is replaced with different one)
+		//			* Provides data from model via dojo/Stateful get() interface
+		//			* Stores data to model via dojo/Stateful set() interface
+		//			* Watches for change in model via dojo/Stateful watch() interface (The callback is called when there is a change in data model, as well as when the data model itself is replaced with different one)
 		//
 		//		Can also be used to do some application-specific stuffs upon change in properties in model, by defining setter functions. 
 		//		Doing so will help keep models and widgets free from application-specific logic, and will help keep application logic free from specifics of models and widgets.
@@ -41,8 +41,8 @@ define([
 		// |			</head>
 		// |			<body>
 		// |				<script type="dojo/require">at: "dojox/mvc/at"</script>
-		// |				<span id="ctrl" data-dojo-type="dojox.mvc.ModelRefController" data-dojo-props="model: modelFoo"></span>
-		// |				<input type="text" data-dojo-type="dijit.form.TextBox" data-dojo-props="value: at('widget:ctrl', 'value')">
+		// |				<span id="ctrl" data-dojo-type="dojox/mvc/ModelRefController" data-dojo-props="model: modelFoo"></span>
+		// |				<input type="text" data-dojo-type="dijit/form/TextBox" data-dojo-props="value: at('widget:ctrl', 'value')">
 		// |			</body>
 		// |		</html>
 
@@ -59,7 +59,7 @@ define([
 		//		Used when this controller needs data model (as input) that is different from the data model this controller provides.
 		_refInModelProp: "model",
 
-		// model: dojo.Stateful
+		// model: dojo/Stateful
 		//		The data model.
 		model: null,
 
@@ -119,10 +119,10 @@ define([
 
 			var hm = null, hp = null, _self = this;
 
-			function watchPropertiesInModel(/*dojo.Stateful*/ model){
+			function watchPropertiesInModel(/*dojo/Stateful*/ model){
 				// summary:
 				//		Watch properties in referred model.
-				// model: dojo.Stateful
+				// model: dojo/Stateful
 				//		The model to watch for.
 
 				// Unwatch properties of older model.
@@ -133,12 +133,12 @@ define([
 				}
 			}
 
-			function reflectChangeInModel(/*dojo.Stateful*/ old, /*dojo.Stateful*/ current){
+			function reflectChangeInModel(/*dojo/Stateful*/ old, /*dojo/Stateful*/ current){
 				// summary:
 				//		Upon change in model, detect change in properties, and call watch callbacks.
-				// old: dojo.Stateful
+				// old: dojo/Stateful
 				//		The older model.
-				// current: dojo.Stateful
+				// current: dojo/Stateful
 				//		The newer model.
 
 				// Gather list of properties to notify change in value as model changes.

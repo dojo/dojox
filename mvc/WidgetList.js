@@ -16,7 +16,7 @@ define([
 		return eval("({" + params + "})");
 	}
 
-	function unwatchElements(/*dojox.mvc.WidgetList*/ w){
+	function unwatchElements(/*dojox/mvc/WidgetList*/ w){
 		for(var h = null; h = (w._handles || []).pop();){
 			h.unwatch();
 		}
@@ -105,11 +105,11 @@ define([
 		//			target - The data item in children.
 		childParams: null,
 
-		// childBindings: Obejct
+		// childBindings: Object
 		//		Data bindings for child widget.
 		childBindings: null,
 
-		// children: dojox.mvc.StatefulArray
+		// children: dojox/mvc/StatefulArray
 		//		The array of data model that is used to render child nodes.
 		children: null,
 
@@ -139,7 +139,7 @@ define([
 			this._setChildrenAttr(this.children);
 		},
 
-		_setChildrenAttr: function(/*dojo.Stateful*/ value){
+		_setChildrenAttr: function(/*dojo/Stateful*/ value){
 			// summary:
 			//		Handler for calls to set("children", val).
 
@@ -164,7 +164,7 @@ define([
 			}
 		},
 
-		_buildChildren: function(/*dojox.mvc.StatefulArray*/ children){
+		_buildChildren: function(/*dojox/mvc/StatefulArray*/ children){
 			// summary:
 			//		Create child widgets upon children and inserts them into the container node.
 

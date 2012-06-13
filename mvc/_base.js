@@ -14,7 +14,7 @@ define([
 	//		data binds, a data model and data binding mixin for dijits.
 	kernel.experimental("dojox.mvc");
 
-	var mvc = lang.getObject("dojox.mvc", true);
+	var mvc = lang.getObject("dojox/mvc", true);
 	/*=====
 		mvc = dojox.mvc;
 	=====*/
@@ -28,7 +28,7 @@ define([
 		//		The mixin properties.
 		// description:
 		//		Factory method that returns a client-side data model, which is a
-		//		tree of dojo.Stateful objects matching the initial data structure
+		//		tree of dojo/Stateful objects matching the initial data structure
 		//		passed as input:
 		//		- The mixin property "data" is used to provide a plain JavaScript
 		//		  object directly representing the data structure.
