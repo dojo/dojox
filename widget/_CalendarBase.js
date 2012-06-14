@@ -53,8 +53,10 @@ define([
 			this.value = new Date();
 		},
 
-		postMixInProperties: function(){
-			var c = this.constraints;
+		_setConstraintsAttr: function(constraints){
+			// summary:
+			//		Sets minimum and maximum constraints
+			var c = this.constraints = constraints;
 			if(c){
 				if(typeof c.min == "string"){
 					c.min = dojoDate.stamp.fromISOString(c.min);
@@ -64,6 +66,9 @@ define([
 				}
 			}
 			this.value = this.parseInitialValue(this.value);
+		},
+		postMixInProperties: function(){
+			
 		},
 
 		parseInitialValue: function(value){

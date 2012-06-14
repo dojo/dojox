@@ -139,13 +139,12 @@
 				<div data-dojo-type="dojox/widget/Calendar" id="calLimitsWeek">
 					<script type="dojo/on" event="postMixInProperties">						
 						require(["dojox/widget/Calendar", "dojo/date"], function(Calendar, date){
-    						// This runs after the constructor, before properties are mixed in
     						var currentDate = new Date();
-    						//this.constraints = {
-    						//    min: date.add(currentDate, 'week', -1),
-    						//	max: date.add(currentDate, 'week', +1)
-    						//};
-    						//Calendar.postMixInProperties.call(this);
+    						var constraints = {
+    						    min: date.add(currentDate, 'week', -1),
+    							max: date.add(currentDate, 'week', +1)
+    						};
+    						Calendar._setConstraintsAttr(constraints);
 						});
 					</script>
 					<script type="dojo/on" event="onValueSelected" args="value">
