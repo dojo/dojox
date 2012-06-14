@@ -1,12 +1,12 @@
 define([
 	"dojo/_base/declare",
 	"dojox/widget/_CalendarView",
-	"dijit/_Templated",
+	"dijit/_TemplatedMixin",
 	"dojo/dom-class",
 	"dojo/_base/event",
 	"dojo/text!./Calendar/CalendarMonth.html"
-], function(declare, _CalendarView, _Templated, domClass, event, template){
-	return declare("dojox.widget._CalendarMonthView", [dojox.widget._CalendarView, dijit._Templated], {
+], function(declare, _CalendarView, _TemplatedMixin, domClass, event, template){
+	return declare("dojox.widget._CalendarMonthView", [_CalendarView, _TemplatedMixin], {
 		// summary: A Calendar view listing the 12 months of the year
 
 		// templateString: String

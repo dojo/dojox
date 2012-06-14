@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"dojox/widget/_CalendarView",
-	"dijit/_Templated",
+	"dijit/_TemplatedMixin",
 	"dojo/query",
 	"dojo/dom-class",
 	"dojo/_base/connect",
@@ -9,8 +9,8 @@ define([
 	"dojo/_base/lang",
 	"dojo/date/locale",
 	"dojo/text!./Calendar/CalendarMonthYear.html"
-], function(declare, _CalendarView, _Templated, query, domClass, connect, event, lang, dojoDateLocale, template){
-	return declare("dojox.widget._CalendarMonthYearView", [_CalendarView, _Templated], {
+], function(declare, _CalendarView, _TemplatedMixin, query, domClass, connect, event, lang, dojoDateLocale, template){
+	return declare("dojox.widget._CalendarMonthYearView", [_CalendarView, _TemplatedMixin], {
 
 		// summary:
 		//		A Calendar view listing the 12 months of the year

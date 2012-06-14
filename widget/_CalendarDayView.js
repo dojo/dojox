@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"dojox/widget/_CalendarView",
-	"dijit/_Templated",
+	"dijit/_TemplatedMixin",
 	"dojo/query",
 	"dojo/dom-class",
 	"dojo/_base/event",
@@ -9,8 +9,8 @@ define([
 	"dojo/date/locale",
 	"dojo/text!./Calendar/CalendarDay.html",
 	"dojo/cldr/supplemental"
-], function(declare, _CalendarView, _Templated, query, domClass, event, date, locale, template, supplemental){
-	return declare("dojox.widget._CalendarDayView", [_CalendarView, dijit._Templated], {
+], function(declare, _CalendarView, _TemplatedMixin, query, domClass, event, date, locale, template, supplemental){
+	return declare("dojox.widget._CalendarDayView", [_CalendarView, _TemplatedMixin], {
 		// summary: View class for the dojox/widget/Calendar.
 		//		Adds a view showing every day of a single month to the calendar.
 		//		This should not be mixed in directly with dojox/widget._CalendarBase.

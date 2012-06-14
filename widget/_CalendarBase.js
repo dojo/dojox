@@ -1,6 +1,6 @@
 define([
-	"dijit/_Widget",
-	"dijit/_Templated",
+	"dijit/_WidgetBase",
+	"dijit/_TemplatedMixin",
 	"dijit/_Container",
 	"dojo/_base/declare",
 	"dojo/date",
@@ -15,8 +15,8 @@ define([
 	"dojo/_base/lang",
 	"dojo/text!./Calendar/Calendar.html",
 	"dijit/typematic"
-], function(_Widget, _Templated, _Container, declare, dojoDate, stamp, dojoDateLocale, domStyle, domClass, domConstruct, fx, on, array, lang, template){
-	return declare("dojox.widget._CalendarBase", [_Widget, _Templated, _Container], {
+], function(_WidgetBase, _TemplatedMixin, _Container, declare, dojoDate, stamp, dojoDateLocale, domStyle, domClass, domConstruct, fx, on, array, lang, template){
+	return declare("dojox.widget._CalendarBase", [_WidgetBase, _TemplatedMixin, _Container], {
 		// summary:
 		//		The Root class for all _Calendar extensions
 
