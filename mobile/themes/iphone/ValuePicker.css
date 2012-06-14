@@ -4,17 +4,14 @@
 /* dojox.mobile.ValuePicker */
 .mblValuePicker {
   height: 126px;
-  float: left;
-  border-left: solid 3px #000000;
-  border-right: solid 3px #000000;
-  border-radius: 3px;
 }
 /* dojox.mobile.ValuePickerSlot */
 .mblValuePicker > .mblValuePickerSlot {
   float: left;
-  margin: 0 0;
+  margin: 0 3px;
   border-left: solid 2px #000000;
   border-right: solid 2px #000000;
+  border-radius: 3px;
 }
 .mblValuePickerSlotButton {
   position: relative;
@@ -54,16 +51,6 @@
   font: bold 24px/44px Helvetica, sans-serif;
 }
 /* dojox.mobile.ValuePickerTimePicker */
-.mblValuePickerTimePicker {
-  border-left: solid 3px #000000;
-  border-right: solid 0 #000000;
-  border-radius: 3px;
-}
 .mblValuePickerTimePicker > .mblToolBarButton {
   top: 45px;
-}
-.mblValuePickerTimePicker > .mblValuePickerTimePickerMinuteSlot {
-  border-right: solid 5px #000000;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
 }

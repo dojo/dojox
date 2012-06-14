@@ -734,28 +734,14 @@
 
 // ValuePicker.less
 @mbl-value-picker-slot-button-background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #313137), color-stop(0.16, #dfe0e4), color-stop(0.35, #fbfcfc), color-stop(0.5, #fbfcfc), color-stop(0.65, #fbfcfc), color-stop(0.84, #dfe0e4), color-stop(1, #313137));
+@mbl-value-picker-slot-button-background-image-gecko: -moz-linear-gradient(top, #313137 0%, #dfe0e4 16%, #fbfcfc 35%, #fbfcfc 50%, #fbfcfc 65%, #dfe0e4 84%, #313137 100%);
 @mbl-value-picker-slot-button-radius: 0;
-.mblValuePicker-style () {
-  float: left;
-  border-left: solid 3px #000000;
-  border-right: solid 3px #000000;
-  border-radius: 3px;  
-}
 .mblValuePickerSlot-style () {
-  margin:  0 0;
+  margin: 0 3px;
   border-left: solid 2px #000000;
   border-right: solid 2px #000000;
+  border-radius: 3px;
 }
 .mblValuePickerSlot-input-style () {
   font: bold 24px/44px Helvetica, sans-serif;
-}
-.mblValuePickerTimePicker-style () {
-  border-left: solid 3px #000000;
-  border-right: solid 0 #000000;
-  border-radius: 3px;
-}
-.mblValuePickerTimePickerMinuteSlot-style () {
-  border-right: solid 5px #000000;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
 }
