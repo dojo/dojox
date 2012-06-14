@@ -10,7 +10,7 @@ define([
 	"dojox/mvc/Group",
 	"dojox/mvc/Repeat"
 ], function(declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, registry, template, at){
-	return dojo.declare("dojox.mvc.tests.test_templatedWidget.myMvcTemplated", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+	return declare("dojox.mvc.tests.test_templatedWidget.myMvcTemplated", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 		// summary:
 		//		A sample templated widget for dojox.mvc
 		// description:
