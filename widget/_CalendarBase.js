@@ -56,12 +56,11 @@ define([
 		postMixInProperties: function(){
 			var c = this.constraints;
 			if(c){
-				var fromISO = dojoDate.stamp.fromISOString;
 				if(typeof c.min == "string"){
-					c.min = fromISO(c.min);
+					c.min = dojoDate.stamp.fromISOString(c.min);
 				}
 				if(typeof c.max == "string"){
-					c.max = fromISO(c.max);
+					c.max = dojoDate.stamp.fromISOString(c.max);
 				}
 			}
 			this.value = this.parseInitialValue(this.value);
