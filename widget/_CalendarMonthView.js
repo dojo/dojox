@@ -2,10 +2,11 @@ define([
 	"dojo/_base/declare",
 	"dojox/widget/_CalendarView",
 	"dijit/_TemplatedMixin",
+	"dojox/widget/_CalendarMonthYearView",
 	"dojo/dom-class",
 	"dojo/_base/event",
 	"dojo/text!./Calendar/CalendarMonth.html"
-], function(declare, _CalendarView, _TemplatedMixin, domClass, event, template){
+], function(declare, _CalendarView, _TemplatedMixin, _CalendarMonthYearView, domClass, event, template){
 	return declare("dojox.widget._CalendarMonthView", [_CalendarView, _TemplatedMixin], {
 		// summary: A Calendar view listing the 12 months of the year
 
@@ -36,9 +37,9 @@ define([
 			this.header.innerHTML = value.getFullYear();
 		},
 
-		_getMonthNames: dojox.widget._CalendarMonthYearView.prototype._getMonthNames,
+		_getMonthNames: _CalendarMonthYearView.prototype._getMonthNames,
 
-		_populateMonths: dojox.widget._CalendarMonthYearView.prototype._populateMonths,
+		_populateMonths: _CalendarMonthYearView.prototype._populateMonths,
 
 		onClick: function(evt){
 			// summary: Handles clicks on month names
