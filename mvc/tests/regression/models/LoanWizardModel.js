@@ -4,12 +4,6 @@ define([
 	"dojox/mvc/StatefulModel",
 	"dojo/data/ItemFileWriteStore"
 ], function(declare, mvc, StatefulModel, ItemFileWriteStore){
-	/*=====
-		declare = dojo.declare;
-		mvc = dojox.mvc;
-		StatefulModel = dojox.mvc.StatefulModel;
-		ItemFileWriteStore = dojo.data.ItemFileWriteStore;
-	=====*/
 
 	return declare("dojox.mvc.tests.models.LoanWizardModel", [StatefulModel], {
 
