@@ -23,23 +23,28 @@ dojox.html.ellipsis = {
 				delay = 1;
 			}
 		}
-		
-		// Create our stub XUL elements for cloning later
-		var sNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
-		var xml = document.createElementNS(sNS, 'window');
-		var label = document.createElementNS(sNS, 'description');
-		label.setAttribute('crop', 'end');
-		xml.appendChild(label);
-		
-		var createXULEllipsis = function(/* Node */ n){
-			// Summary:
-			//		Given a node, it creates the XUL and sets its
-			//		content so that it will have an ellipsis
-			var x = xml.cloneNode(true);
-			x.firstChild.setAttribute('value', n.textContent);
-			n.innerHTML = '';
-			n.appendChild(x);
-		};
+		try{
+			var createXULEllipsis = (function(){
+				// Create our stub XUL elements for cloning later
+				// NOTE: this no longer works as of FF 4.0:
+				// https://developer.mozilla.org/En/Firefox_4_for_developers#Remote_XUL_support_removed
+				var sNS = 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+				var xml = document.createElementNS(sNS, 'window');
+				var label = document.createElementNS(sNS, 'description');
+				label.setAttribute('crop', 'end');
+				xml.appendChild(label);
+
+				return function(/* Node */ n){
+					// Summary:
+					//		Given a node, it creates the XUL and sets its
+					//		content so that it will have an ellipsis
+					var x = xml.cloneNode(true);
+					x.firstChild.setAttribute('value', n.textContent);
+					n.innerHTML = '';
+					n.appendChild(x);
+				};
+			})();
+		}catch(e){}
 		
 		// Create our iframe elements for cloning later
 		var create = d.create;
@@ -156,7 +161,7 @@ dojox.html.ellipsis = {
 			d.forEach(s[fn].apply(s, [opt]), function(n){
 				if(!n || n._djx_ellipsis_done){ return; }
 				n._djx_ellipsis_done = true;
-				if(n.textContent == n.innerHTML && !hc(n, "dojoxEllipsisSelectable")){
+				if(createXULEllipsis && n.textContent == n.innerHTML && !hc(n, "dojoxEllipsisSelectable")){
 					// We can do the faster XUL version, instead of calculating
 					createXULEllipsis(n);
 				}else{

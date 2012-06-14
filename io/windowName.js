@@ -126,7 +126,15 @@ dojox.io.windowName = {
 			frameContainer = doc.body;
 		}
 
-		var frame = ioArgs.frame = frame = doc.createElement(dojo.isIE ? '<iframe name="' + frameName + '" onload="dojox.io.windowName['+frameNum+']()">' : 'iframe');
+		var frame;
+		if(dojo.isIE){
+			var div = doc.createElement("div");
+			div.innerHTML = '<iframe name="' + frameName + '" onload="dojox.io.windowName['+frameNum+']()">';
+			frame = div.firstChild; 
+		}else{
+			frame = doc.createElement('iframe');
+		}
+		ioArgs.frame = frame;
 		styleFrame(frame);
 		ioArgs.outerFrame = outerFrame = outerFrame || frame;
 		if(!authTarget){

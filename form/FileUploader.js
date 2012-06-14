@@ -397,7 +397,7 @@ dojo.destroy(temp);
 			//		It's easier to turn it on and off here in one place.
 			//		Also helpful if there are multiple uploaders on one page.
 			if(this.isDebug){
-				console.log.apply(console, arguments);
+				console["log"](Array.prototype.slice.call(arguments).join(" "));
 			}
 		},
 		
@@ -848,7 +848,7 @@ dojo.destroy(temp);
 			//
 			if(display === true){
 				if(this.uploaderType == "flash"){
-					dojo.style(this.insideNode,"left", "-2500px");
+					dojo.style(this.insideNode,"top", "-2500px");
 				}else{
 					dojo.style(this.insideNode,"display", "none");	
 				}
@@ -1212,18 +1212,21 @@ dojo.destroy(temp);
 		_buildForm: function(){
 			// summary:
 			//		Build the form that holds the fileInput
-			//
+			
 			if(this._formNode){ return; }
 			
-			if(dojo.isIE){
+			if(dojo.isIE < 9 || (dojo.isIE && dojo.isQuirks)){
 				this._formNode = document.createElement('<form enctype="multipart/form-data" method="post">');
 				this._formNode.encoding = "multipart/form-data";
-			}else{
-				this._formNode = document.createElement('form');
-				this._formNode.setAttribute("enctype", "multipart/form-data");
-			}
 			this._formNode.id = dijit.getUniqueId("FileUploaderForm"); // needed for dynamic style
 			this.domNode.appendChild(this._formNode);
+			}else{
+				this._formNode = dojo.create('form', {
+					enctype:"multipart/form-data",
+					method:"post",
+					id:dijit.getUniqueId("FileUploaderForm")
+				}, this.domNode);
+			}
 		},
 		
 		_buildFileInput: function(){
