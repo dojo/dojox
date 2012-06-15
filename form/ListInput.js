@@ -21,6 +21,17 @@ define([
 ], function(kernel, lang, array, jsonUtil, fx, win, connect, domClass, domStyle, domConstruct, domGeometry, keys, Widget, TemplatedMixin, FormValueWidget, ValidationTextBox, InlineEditBox, i18nCommon, declare){
 kernel.experimental("dojox.form.ListInput");
 
+    /*=====
+     var __Constraints = function(){
+     // locale: String
+     //		locale used for validation, picks up value from this widget's lang attribute
+     // _flags_: anything
+     //		various flags passed to pattern function
+     this.locale = "";
+     this._flags_ = "";
+     };
+     =====*/
+
 var ListInput = declare("dojox.form.ListInput", [FormValueWidget],
 	{
 	// summary:
@@ -95,7 +106,7 @@ var ListInput = declare("dojox.form.ListInput", [FormValueWidget],
 	//		The string can contain only one delimiter.
 	delimiter: ",",
 
-	// constraints: ValidationTextBox/__Constraints
+	// constraints: __Constraints
 	//		user-defined object needed to pass parameters to the validator functions
 	constraints: {},
 
@@ -499,7 +510,7 @@ var ListInput = declare("dojox.form.ListInput", [FormValueWidget],
 		return newValue;
 	},
 
-	regExpGen: function(/*ValidationTextBox/__Constraints*/ constraints){
+	regExpGen: function(/*__Constraints*/ constraints){
 		// summary:
 		//		Overridable function used to generate regExp when dependent on constraints.
 		//		Do not specify both regExp and regExpGen.

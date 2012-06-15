@@ -19,7 +19,7 @@ return declare("dojox.data.CssClassStore", CssRuleStore, {
 
 	getFeatures: function(){
 		// summary:
-		//		See dojo.data.api.Read.getFeatures()
+		//		See dojo/data/api/Read.getFeatures()
 		return {
 			"dojo.data.api.Read" : true,
 			"dojo.data.api.Identity" : true
@@ -28,14 +28,14 @@ return declare("dojox.data.CssClassStore", CssRuleStore, {
 
 	getAttributes: function(item){
 		// summary:
-		//		See dojo/data/api/Read/getAttributes()
+		//		See dojo/data/api/Read.getAttributes()
 		this._assertIsItem(item);
 		return ['class', 'classSans'];
 	},
 
 	getValue: function(item, attribute, defaultValue){
 		// summary:
-		//		See dojo/data/api/Read/getValue()
+		//		See dojo/data/api/Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values && values.length > 0){
 			return values[0];
