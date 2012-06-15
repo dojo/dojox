@@ -149,7 +149,7 @@ define([
 				unwatchElements(this);
 				this._builtOnce = true;
 				this._buildChildren(value);
-				if(value){
+				if(lang.isArray(value)){
 					var _self = this;
 					!this.partialRebuild && lang.isFunction(value.watchElements) && (this._handles = this._handles || []).push(value.watchElements(function(idx, removals, adds){
 						_self._buildChildren(value);
@@ -169,7 +169,7 @@ define([
 			//		Create child widgets upon children and inserts them into the container node.
 
 			for(var cw = this.getChildren(), w = null; w = cw.pop();){ this.removeChild(w); w.destroy(); }
-			if(!children){ return; }
+			if(!lang.isArray(children)){ return; }
 
 			var createAndWatch = lang.hitch(this, function(seq){
 				if(this._buildChildrenSeq > seq){ return; } // If newer _buildChildren call comes during lazy loading, bail
@@ -178,7 +178,7 @@ define([
 				function create(children, startIndex){
 					array.forEach(array.map(children, function(child, idx){
 						var params = {
-							// ownerDocument: _self.ownerDocument, // Disabling passing around ownerDocument for now, due to a bug in _WidgetBase.set()
+							ownerDocument: _self.ownerDocument,
 							target: child,
 							parent: _self,
 							indexAtStartup: startIndex + idx // Won't be updated even if there are removals/adds of repeat items after startup
