@@ -1,9 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query", 
+define(["dojo/_base/array", "dojo/_base/declare", "dojo/query",
 		"dojo/_base/connect", "dojo/_base/Color", "./Legend", "dijit/form/CheckBox", "../action2d/Highlight",
-		"dojox/lang/functional", "dojox/gfx/fx", "dojo/keys", "dojo/_base/event", "dojo/dom-construct",
+		"dojox/lang/functional", "dojox/gfx/fx", "dojo/keys", "dojo/dom-construct",
 		"dojo/dom-prop"], 
-	function(lang, arrayUtil, declare, query, hub, Color, Legend, CheckBox,
-			 Highlight, df, fx, keys, event, dom, domProp){
+	function(arrayUtil, declare, query, hub, Color, Legend, CheckBox,
+			 Highlight, df, fx, keys, dom, domProp){
 
 	var FocusManager = declare(null, {
 		// summary:
@@ -92,13 +92,21 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		postCreate: function(){
 			this.legends = [];
 			this.legendAnim = {};
+			this._cbs = [];
 			this.inherited(arguments);
 		},
 		refresh: function(){
 			this.legends = [];
+			this._clearLabels();
 			this.inherited(arguments);
 			this._applyEvents();
 			new FocusManager(this);
+		},
+		_clearLabels: function(){
+			var cbs = this._cbs;
+			while(cbs.length){
+				cbs.pop().destroyRecursive();
+			}
 		},
 		_addLabel: function(dyn, label){
 			this.inherited(arguments);
@@ -107,6 +115,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 			var currentLegendNode = legendNodes[legendNodes.length - 1];
 			this.legends.push(currentLegendNode);
 			var checkbox = new CheckBox({checked: true});
+			this._cbs.push(checkbox);
 			dom.place(checkbox.domNode, currentLegendNode, "first");
 			// connect checkbox and existed label
 			var clabel = query("label", currentLegendNode)[0];
@@ -236,6 +245,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/query
 		},
 		_isPie: function(){
 			return this.chart.stack[0].declaredClass == "dojox.charting.plot2d.Pie";
+		},
+		destroy: function(){
+			this._clearLabels();
+			this.inherited(arguments);
 		}
 	});
 	
