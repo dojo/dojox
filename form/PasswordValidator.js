@@ -186,7 +186,8 @@ return declare("dojox.form.PasswordValidator", FormValueWidget, {
 	},
 
 	reset: function(){
-		// summary: Resetting this widget resets all our children
+		// summary:
+		//		Resetting this widget resets all our children
 		this._hasBeenBlurred = false;
 		array.forEach(this._inputWidgets, function(i){
 			if(i && i.reset){ i.reset(); }

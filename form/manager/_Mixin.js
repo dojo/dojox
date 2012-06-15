@@ -173,7 +173,7 @@ define([
 		registerWidget: function(widget){
 			// summary:
 			//		Register a widget with the form manager
-			// widget: String|Node|dijit.form._FormWidget
+			// widget: String|Node|dijit/form/_FormWidget
 			//		A widget, or its widgetId, or its DOM node
 			// returns: Object
 			//		Returns self
@@ -237,7 +237,7 @@ define([
 		unregisterWidgetDescendants: function(widget){
 			// summary:
 			//		Unregister widget's descendants with the form manager
-			// widget: String|Node|dijit._Widget
+			// widget: String|Node|dijit/_Widget
 			//		A widget, or its widgetId, or its DOM node
 			// returns: Object
 			//		Returns self
