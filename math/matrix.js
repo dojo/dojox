@@ -23,7 +23,7 @@ dojo.mixin(dojox.math.matrix, {
 				}
 			}
 		}
-		return c;	//	Array
+		return c;	// Array
 	},
 	product: function(/* Array... */){
 		// summary:
@@ -36,14 +36,14 @@ dojo.mixin(dojox.math.matrix, {
 		for(var i=1; i<arguments.length; i++){
 			m=this.multiply(m, arguments[i]);
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	sum: function(/* Array... */){
 		// summary:
 		//		Return the sum of N matrices
 		if(arguments.length==0){
 			console.warn("can't sum 0 matrices!");
-			return 0;	//	Number
+			return 0;	// Number
 		}
 		var m=this.copy(arguments[0]);
 		var rows=m.length;
@@ -68,13 +68,13 @@ dojo.mixin(dojox.math.matrix, {
 				}
 			}
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	inverse: function(/* Array */a){
 		// summary:
 		//		Return the inversion of the passed matrix
 		if(a.length==1 && a[0].length==1){
-			return [[1/a[0][0]]];	//	Array
+			return [[1/a[0][0]]];	// Array
 		}
 		var tms=a.length, m=this.create(tms, tms), mm=this.adjoint(a), det=this.determinant(a), dd=0;
 		if(det==0){
@@ -88,7 +88,7 @@ dojo.mixin(dojox.math.matrix, {
 				m[i][j]=dd*mm[i][j];
 			}
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	determinant: function(/* Array */a){
 		// summary:
@@ -101,12 +101,12 @@ dojo.mixin(dojox.math.matrix, {
 		for (var i=0; i<tms; i++){
 			var bii=b[i][i];
 			if (Math.abs(bii)<this.ALMOST_ZERO) {
-				return 0;	//	Number
+				return 0;	// Number
 			}
 			det*=bii;
 		}
 		det*=this.iDF;
-		return det;	//	Number
+		return det;	// Number
 	},
 	upperTriangle: function(/* Array */m){
 		// summary:
@@ -149,7 +149,7 @@ dojo.mixin(dojox.math.matrix, {
 				}
 			}
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	create: function(/* Number */a, /* Number */b, /* Number? */value){
 		// summary:
@@ -162,12 +162,12 @@ dojo.mixin(dojox.math.matrix, {
 				m[i][j]=value;
 			}
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	ones: function(/* Number */a, /* Number */b){
 		// summary:
 		//		Create a matrix pre-populated with ones
-		return this.create(a, b, 1);	//	Array
+		return this.create(a, b, 1);	// Array
 	},
 	zeros: function(/* Number */a, /* Number */b){
 		// summary:
@@ -185,7 +185,7 @@ dojo.mixin(dojox.math.matrix, {
 				m[i][j]=(i==j?scale:0);
 			}
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	adjoint: function(/* Array */a){
 		// summary:
@@ -222,7 +222,7 @@ dojo.mixin(dojox.math.matrix, {
 				m[i][j]=Math.pow(-1, (i+j))*det;
 			}
 		}
-		return this.transpose(m);	//	Array
+		return this.transpose(m);	// Array
 	},
 	transpose: function(/* Array */a){
 		// summary:
@@ -233,7 +233,7 @@ dojo.mixin(dojox.math.matrix, {
 				m[j][i]=a[i][j];
 			}
 		}
-		return m;	//	Array
+		return m;	// Array
 	},
 	format: function(/* Array */a, /* Number? */points){
 		// summary:
@@ -264,7 +264,7 @@ dojo.mixin(dojox.math.matrix, {
 			}
 			buffer+="|\n";
 		}
-		return buffer;	//	string
+		return buffer;	// string
 	},
 	copy: function(/* Array */a){
 		// summary:
