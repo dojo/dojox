@@ -69,7 +69,7 @@ define([
 			this.value = this.parseInitialValue(this.value);
 		},
 		postMixInProperties: function(){
-			
+
 		},
 
 		parseInitialValue: function(value){
