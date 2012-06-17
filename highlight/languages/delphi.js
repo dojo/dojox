@@ -39,7 +39,8 @@ define(["dojox/main", "../_base"], function(dojox){
 
 	var dh = dojox.highlight, dhc = dh.constants;
 	dh.languages.delphi = {
-		// summary: Delphi highlight definitions
+		// summary:
+		//		Delphi highlight definitions
 		defaultMode: {
 			lexems: [dhc.IDENT_RE],
 			illegal: '("|\\$[G-Zg-z]|\\/\\*|</)',

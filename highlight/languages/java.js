@@ -16,7 +16,8 @@ define(["dojox/main", "../_base"], function(dojox){
 				'try': 1, 'this': 1, 'switch': 1, 'continue': 1
 			}
 	dh.languages.java = {
-		// summary: Java highlight definitions
+		// summary:
+		//		Java highlight definitions
 		defaultMode: {
 			lexems: [dhc.UNDERSCORE_IDENT_RE],
 			illegal: '</',

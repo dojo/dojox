@@ -2,7 +2,8 @@ define(["dojox/main", "../_base", "./html"], function(dojox, dh, html){
 	
 	var dhc = dh.constants;
 	return dh.languages.css = {
-		// summary: CSS Language definition file. 
+		// summary:
+		//		CSS Language definition file.
 		defaultMode: {
 			contains: ['id', 'class', 'attr_selector', 'rules', 'comment'],
 			keywords: html.HTML_TAGS,

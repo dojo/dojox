@@ -64,7 +64,8 @@ define(["dojo", "dijit", "dijit/_Widget", "dijit/_Templated", "dojox/highlight"]
 	
 		// FIXME: user _setRangeAttr pattern? so you can code.set('range', [1, 100]);
 		setRange: function(/* Array */range){
-			// summary: update the view to a new passed range
+			// summary:
+			//		update the view to a new passed range
 			if(dojo.isArray(range)){
 				this.range = range;
 				this._updateView();
@@ -72,7 +73,8 @@ define(["dojo", "dijit", "dijit/_Widget", "dijit/_Templated", "dojox/highlight"]
 		},
 	
 		_updateView: function(){
-			// summary: set the list to the current range
+			// summary:
+			//		set the list to the current range
 			if(this.range){
 				var r = this.range;
 				this._lines
