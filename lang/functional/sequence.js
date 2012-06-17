@@ -9,15 +9,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./lambda"], function(kernel, la
 // Defined methods:
 //	- take any valid lambda argument as the functional argument
 
-/*=====
-	var df = dojox.lang.functional;
- =====*/
-
 	lang.mixin(df, {
 		// sequence generators
 		repeat: function(/*Number*/ n, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
-			// summary: builds an array by repeatedly applying a unary function N times
-			//	with a seed value Z. N should be greater than 0.
+			// summary:
+			//		builds an array by repeatedly applying a unary function N times
+			//		with a seed value Z. N should be greater than 0.
 			o = o || kernel.global; f = df.lambda(f);
 			var t = new Array(n), i = 1;
 			t[0] = z;
@@ -25,8 +22,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./lambda"], function(kernel, la
 			return t;	// Array
 		},
 		until: function(/*Function|String|Array*/ pr, /*Function|String|Array*/ f, /*Object*/ z, /*Object?*/ o){
-			// summary: builds an array by repeatedly applying a unary function with
-			//	a seed value Z until the predicate is satisfied.
+			// summary:
+			//		builds an array by repeatedly applying a unary function with
+			//		a seed value Z until the predicate is satisfied.
 			o = o || kernel.global; f = df.lambda(f); pr = df.lambda(pr);
 			var t = [];
 			for(; !pr.call(o, z); t.push(z), z = f.call(o, z));
