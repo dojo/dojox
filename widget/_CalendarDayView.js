@@ -8,7 +8,8 @@ define([
 	"dojo/date",
 	"dojo/date/locale",
 	"dojo/text!./Calendar/CalendarDay.html",
-	"dojo/cldr/supplemental"
+	"dojo/cldr/supplemental",
+	"dojo/NodeList-dom"
 ], function(declare, _CalendarView, _TemplatedMixin, query, domClass, event, date, locale, template, supplemental){
 	return declare("dojox.widget._CalendarDayView", [_CalendarView, _TemplatedMixin], {
 		// summary: View class for the dojox/widget/Calendar.
