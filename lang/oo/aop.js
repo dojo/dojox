@@ -24,7 +24,7 @@ dojo.require("dojox.lang.oo.general");
 
 	ooa.around = md(function(name, newValue, oldValue){
 		// summary:
-		/		creates an "around" advise,
+		//		creates an "around" advise,
 		//  	the previous value is passed as a first argument and can be null,
 		//  	arguments are passed as a second argument
 
