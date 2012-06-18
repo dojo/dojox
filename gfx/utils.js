@@ -293,6 +293,8 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 				if(svg.indexOf("xlink:href") === -1){
 					svg = svg.replace(/href\s*=/g, "xlink:href=");
 				}
+				// in IE, <image are serialized as <img>
+				svg = svg.replace(/<img\b([^>]*)>/gi,"<image $1 />");
 				//Do some other cleanup, like stripping out the
 				//dojoGfx attributes and quoting ids.
 				svg = svg.replace(/\bdojoGfx\w*\s*=\s*(['"])\w*\1/g, "");

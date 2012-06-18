@@ -27,6 +27,14 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 			return win.doc.createElement(nodeType);
 		}
 	}
+	
+	function _setAttributeNS(node, ns, attr, value){
+		if(node.setAttributeNS){
+			return node.setAttributeNS(ns, attr, value);
+		}else{
+			return node.setAttribute(attr, value);
+		}
+	}
 
 	function _createTextNode(text){
 		if(svg.useSvgWeb){
@@ -255,7 +263,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 				img.setAttribute("y", 0);
 				img.setAttribute("width",  f.width .toFixed(8));
 				img.setAttribute("height", f.height.toFixed(8));
-				img.setAttributeNS(svg.xmlns.xlink, "xlink:href", f.src);
+				_setAttributeNS(img, svg.xmlns.xlink, "xlink:href", f.src);
 				fill.appendChild(img);
 			}else{
 				fill.setAttribute("gradientUnits", "userSpaceOnUse");
@@ -515,7 +523,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 				}
 			}
 			rawNode.setAttribute("preserveAspectRatio", "none");
-			rawNode.setAttributeNS(svg.xmlns.xlink, "xlink:href", this.shape.src);
+			_setAttributeNS(rawNode, svg.xmlns.xlink, "xlink:href", this.shape.src);
 			// Bind GFX object with SVG node for ease of retrieval - that is to
 			// save code/performance to keep this association elsewhere
 			rawNode.__gfxObject__ = this.getUID();
@@ -648,7 +656,7 @@ else
 					var id = g._base._getUniqueId();
 					path.setAttribute("id", id);
 					defs.appendChild(path);
-					r.firstChild.setAttributeNS(svg.xmlns.xlink, "xlink:href", "#" + id);
+					_setAttributeNS(r.firstChild, svg.xmlns.xlink, "xlink:href", "#" + id);
 				}
 			}
 			if(path){

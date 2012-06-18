@@ -133,6 +133,7 @@
 									doh.assertTrue(low.indexOf("xmlns:xlink=\"http://www.w3.org/1999/xlink\"") !== -1, "Checking the xmlns:xlink attribute.");
 									doh.assertFalse(/\s+href\s*=/g.test(low), "Checking there's no href attributes.");
 									doh.assertTrue(low.indexOf("xlink:href=") !== -1, "Checking the xlink:href attribute.");
+									doh.assertTrue(low.indexOf("<img") === -1, "Checking the <img> cleanup.");
 									doh.assertTrue(svg.indexOf("__gfxObject__") === -1, "Checking __gfxObject__ attribute cleanup.");
 									d.callback(true);
 								}catch(e){
