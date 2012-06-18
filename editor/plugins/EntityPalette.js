@@ -9,12 +9,12 @@ define([
 	"dojo/_base/declare",
 	"dojo/i18n",
 	"dojo/i18n!dojox/editor/plugins/nls/latinEntities"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, _Widget, _TemplatedMixin, _PaletteMixin) {
 
 dojo.experimental("dojox.editor.plugins.EntityPalette");
 
 dojo.declare("dojox.editor.plugins.EntityPalette",
-	[dijit._Widget, dijit._TemplatedMixin, dijit._PaletteMixin],
+	[_Widget, _TemplatedMixin, _PaletteMixin],
 	{
 	// summary:
 	//		A keyboard accessible HTML entity-picking widget (for inserting symbol characters)

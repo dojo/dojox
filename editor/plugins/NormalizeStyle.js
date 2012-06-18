@@ -2,15 +2,15 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
-	"dijit/_editor/html",
 	"dijit/_editor/_Plugin",
+	"dijit/_editor/html",
 	"dojo/_base/connect",
 	"dojo/_base/declare"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, _Plugin) {
 
-dojo.declare("dojox.editor.plugins.NormalizeStyle",dijit._editor._Plugin,{
+dojo.declare("dojox.editor.plugins.NormalizeStyle", _Plugin,{
 	// summary:
-	//		This plugin provides NormalizeStyle cabability to the editor.  It is
+	//		This plugin provides NormalizeStyle capability to the editor.  It is
 	//		a headless plugin that tries to normalize how content is styled when
 	//		it comes out of th editor ('b' or css).   It also auto-converts
 	//		incoming content to the proper one expected by the browser as well so

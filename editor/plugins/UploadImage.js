@@ -7,12 +7,12 @@ define([
 	"dojo/_base/declare",
 	"dojox/form/FileUploader",
 	"dijit/_editor/_Plugin"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, _Plugin) {
 
 dojo.experimental("dojox.editor.plugins.UploadImage");
 
 dojo.declare("dojox.editor.plugins.UploadImage",
-	dijit._editor._Plugin,
+	_Plugin,
 	{
 		// summary:
 		// 	Adds an icon to the Editor toolbar that when clicked, opens a system dialog

@@ -2,6 +2,7 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
+	"dijit/_editor/_Plugin",
 	"dijit/_base/manager",	// TODO: change to dijit/registry, and change dijit.byId to registry.byId
 	"dijit/_editor/range",
 	"dijit/_Templated",
@@ -12,7 +13,6 @@ define([
 	"dijit/form/DropDownButton",
 	"dijit/_editor/range",
 	"dijit/_editor/selection",
-	"dijit/_editor/_Plugin",
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/i18n",
@@ -21,9 +21,9 @@ define([
 	"dojox/editor/plugins/ToolbarLineBreak",
 	"dojo/i18n!dojox/editor/plugins/nls/InsertAnchor",
 	"dojo/i18n!dijit/nls/common"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, _Plugin ) {
 
-dojo.declare("dojox.editor.plugins.InsertAnchor", dijit._editor._Plugin, {
+dojo.declare("dojox.editor.plugins.InsertAnchor", _Plugin, {
 	// summary:
 	//		This plugin provides the basis for an insert anchor dialog for the
 	//		dijit.Editor

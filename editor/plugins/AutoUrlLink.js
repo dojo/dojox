@@ -9,9 +9,9 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/string"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, range, selection, _Plugin) {
 
-dojo.declare("dojox.editor.plugins.AutoUrlLink", [dijit._editor._Plugin], {
+dojo.declare("dojox.editor.plugins.AutoUrlLink", [_Plugin], {
 	// summary:
 	//		This plugin can recognize a URL like string
 	//		(such as http://www.website.com) and turn it into

@@ -10,11 +10,11 @@ define([
 	"dojox/editor/plugins/_SmileyPalette",
 	"dojox/html/format",
 	"dojo/i18n!dojox/editor/plugins/nls/Smiley"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, _Plugin) {
 
 dojo.experimental("dojox.editor.plugins.Smiley");
 
-dojo.declare("dojox.editor.plugins.Smiley", dijit._editor._Plugin, {
+dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 	// summary:
 	//		This plugin allows the user to select from emoticons or "smileys"
 	//		to insert at the current cursor position.

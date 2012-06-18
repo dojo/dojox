@@ -468,7 +468,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 
 dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 	//	summary:
-	//		This plugin provides a spelling check cabability for the editor.
+	//		This plugin provides a spelling check capability for the editor.
 	
 	// url: [public] String
 	//		The url of the spelling check service

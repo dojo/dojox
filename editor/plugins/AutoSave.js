@@ -24,11 +24,13 @@ define([
 	"dojo/string",
 	"dojox/editor/plugins/Save",
 	"dojo/i18n!dojox/editor/plugins/nls/AutoSave"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, manager, popup, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin,
+	Dialog, MenuItem, Menu, Button, ComboButton, ComboBox, _TextBoxMixin, TextBox, TooltipDialog, _Plugin,
+	connect, declare, locale, i18n, string, Save) {
 
 dojo.experimental("dojox.editor.plugins.AutoSave");
 
-dojo.declare("dojox.editor.plugins._AutoSaveSettingDialog", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
+dojo.declare("dojox.editor.plugins._AutoSaveSettingDialog", [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	
 	// dialogTitle [public] String
 	//		The tile of the Auto-Save setting dialog
@@ -99,7 +101,7 @@ dojo.declare("dojox.editor.plugins._AutoSaveSettingDialog", [dijit._Widget, diji
 	},
 	
 	hide: function(){
-		// summray:
+		// summary:
 		//		Hide the setting dialog.
 		// tags:
 		//		public
@@ -148,7 +150,7 @@ dojo.declare("dojox.editor.plugins._AutoSaveSettingDialog", [dijit._Widget, diji
 		//	summary:
 		//		Set the value attribute if it is acceptable
 		// val:
-		//		The invertal value
+		//		The interval value
 		// tags:
 		//		private
 		if(this._isValidValue(val)){
@@ -175,7 +177,7 @@ dojo.declare("dojox.editor.plugins._AutoSaveSettingDialog", [dijit._Widget, diji
 	}
 });
 
-dojo.declare("dojox.editor.plugins.AutoSave", dojox.editor.plugins.Save, {
+dojo.declare("dojox.editor.plugins.AutoSave", Save, {
 	// summary:
 	//		This plugin provides the auto save capability to the editor. The
 	//		plugin saves the content of the editor in interval. When

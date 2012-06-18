@@ -9,12 +9,12 @@ define([
 	"dojo/_base/declare",
 	"dojo/i18n",
 	"dojo/i18n!dojox/editor/plugins/nls/Smiley"
-], function(dojo, dijit, dojox) {
+], function(dojo, dijit, dojox, _Widget, _TemplatedMixin, _PaletteMixin) {
 
 dojo.experimental("dojox.editor.plugins._SmileyPalette");
 
 dojo.declare("dojox.editor.plugins._SmileyPalette",
-	[dijit._Widget, dijit._TemplatedMixin, dijit._PaletteMixin],
+	[_Widget, _TemplatedMixin, _PaletteMixin],
 	{
 	// summary:
 	//		A keyboard accessible emoticon-picking widget (for inserting smiley characters)
