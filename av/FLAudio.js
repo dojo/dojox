@@ -2,7 +2,7 @@ define(['dojo', 'dojox/embed/Flash', 'dojox/timing/doLater'],function(dojo, diji
 
 dojo.experimental("dojox.av.FLVideo");
 
-dojo.declare("dojox.av.FLAudio", null, {
+return dojo.declare("dojox.av.FLAudio", null, {
 
 	// summary:
 	//		Play MP3 files through the Flash SWF built in the
@@ -371,5 +371,5 @@ dojo.declare("dojox.av.FLAudio", null, {
 	}
 
 });
-return dojox.av.FLAudio;
+
 });

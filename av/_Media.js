@@ -1,11 +1,11 @@
 define(['dojo'],function(dojo){
 
-dojo.experimental("dojox.av.FLVideo");
+	dojo.experimental("dojox.av.FLVideo");
 
 	return dojo.declare("dojox.av._Media", null, {
 		// summary:
 		//		Used as a mixin for dojox and AIR media
-		//	description:
+		// description:
 		//		Calculates the current status of the playing media and fires
 		//		the appropriate events.
 
@@ -27,7 +27,7 @@ dojo.experimental("dojox.av.FLVideo");
 		bufferTime: 2000,
 
 		// minBufferTime: Number
-		//		Time in milliseconds bwteen the playhead time and loaded time that
+		//		Time in milliseconds between the playhead time and loaded time that
 		//		will trigger the buffer. When buffer is triggered, video will pause
 		//		until the bufferTime amount is buffered.
 		//		Note: Should be a small number, greater than zero.
@@ -313,9 +313,8 @@ dojo.experimental("dojox.av.FLVideo");
 		_normalizeUrl: function(_url){
 			// summary:
 			//		Checks that path is relative to HTML file or
-			//		convertes it to an absolute path.
-			//
-	
+			//		converts it to an absolute path.
+
 			console.log("  url:", _url);
 	
 			if(_url && (_url.toLowerCase().indexOf("http")<0 || _url.indexOf("/") == 0)){
