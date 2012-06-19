@@ -5,7 +5,7 @@ define([
 	"dijit/form/TextBox",
 	"dijit/form/_DateTimeTextBox",
 	"dojox/form/DateTextBox",
-	"dojo/_base/declare",
+	"dojo/_base/declare"
 	], function(kernel, lang, YearlyCalendar, TextBox, _DateTimeTextBox, DateTextBox, declare){
 		kernel.experimental("dojox/form/DateTextBox");
 		return declare("dojox.form.YearTextBox", [YearlyCalendar, TextBox, _DateTimeTextBox, DateTextBox],
