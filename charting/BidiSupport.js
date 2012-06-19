@@ -1,9 +1,11 @@
-define(["dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sniff",
+define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sniff",
 	"dojo/dom","dojo/dom-construct",
 	"dojox/gfx", "dojox/gfx/_gfxBidiSupport", "./Chart", "./axis2d/common", "dojox/string/BidiEngine", "dojox/lang/functional"], 
-	function(lang, domStyle, arr, has, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
+	function(dojox, lang, domStyle, arr, has, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
 
 	var bidiEngine = new BidiEngine();
+
+	var dc = lang.getObject("charting", true, dojox);
 	
 	lang.extend(Chart, {
 		// summary:
@@ -244,8 +246,8 @@ define(["dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sni
 
 	// connect labelPreprocess to run before labelTooltip.
 	// patch it only is available
-	if(dojox.charting.axis2d && dojox.charting.axis2d.Default){
-		extendMethod(dojox.charting.axis2d.Default,"labelTooltip",true, labelPreprocess, null);
+	if(dc.axis2d && dc.axis2d.Default){
+		extendMethod(dc.axis2d.Default, "labelTooltip", true, labelPreprocess, null);
 		//extendMethod(dijit,"showTooltip",false, labelPreprocess, null);
 	}
 
