@@ -16,7 +16,7 @@
 
 	<script type="text/javascript">
 
-		require(['dojox/gfx','dojo/domReady!'], function(gfx){
+		require(['dojox/gfx', 'dojo/dom', 'dojo/domReady!'], function(gfx, dom){
 
 		var gTestContainer = null;
 		var gTests = {};
@@ -102,7 +102,7 @@
 
 		var runTest = dojo.config.isDebug ? runTest_debug : runTest_nodebug;
 
-			gTestContainer = dojo.byId('testcontainer');
+			gTestContainer = dom.byId('testcontainer');
 			var rect = { x: 0, y: 0, width: 100, height: 100 };
 
 			addTest('rect', function(testName, surface){
