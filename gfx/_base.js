@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/html", "dojo/_base/Color", "dojo/_base/sniff", "dojo/_base/window",
+define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "dojo/_base/sniff", "dojo/_base/window",
 	    "dojo/_base/array","dojo/dom", "dojo/dom-construct","dojo/dom-geometry"], 
-function(lang, html, Color, has, win, arr, dom, domConstruct, domGeom){
+function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 	// module:
 	//		dojox/gfx
 	// summary:
@@ -147,7 +147,7 @@ function(lang, html, Color, has, win, arr, dom, domConstruct, domGeom){
 		//		returns a unique string for use with any DOM element
 		var id;
 		do{
-			id = dojo._scopeName + "xUnique" + (++uniqueId);
+			id = kernel._scopeName + "xUnique" + (++uniqueId);
 		}while(dom.byId(id));
 		return id;
 	};
