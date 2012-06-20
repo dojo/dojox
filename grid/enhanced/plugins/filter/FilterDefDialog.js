@@ -93,7 +93,7 @@ var FilterAccordionContainer = declare("dojox.grid.enhanced.plugins.filter.Accor
 		if(parseInt(has('ie'), 10) == 7){
 			//IE7 will fire a lot of "onresize" event during initialization.
 			array.some(this._connects, function(cnnt){
-				if(cnnt[0][1] == "onresize"){
+				if((cnnt[0] || {})[1] == "onresize"){
 					this.disconnect(cnnt);
 					return true;
 				}
