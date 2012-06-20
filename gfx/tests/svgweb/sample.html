@@ -10,10 +10,10 @@
 		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="async: true, isDebug: true, forceGfxRenderer: 'svg'"></script>
 
 		<script type="text/javascript">
-			require(["dojox/gfx", "dojox/gfx/move"], function(){
+			require(["dojo/dom", "dojox/gfx", "dojox/gfx/move"], function(dom){
 			
 			function testSurface() {
-				var node = dojo.byId("surface");
+				var node = dom.byId("surface");
 				var surface = dojox.gfx.createSurface(node, 600, 550);
 				
 				surface.whenLoaded(
