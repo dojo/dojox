@@ -160,6 +160,9 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 			var c = domGeometry.position(this.targetDomNode, true);
 			this._resizeHelper.resize({l: c.x, t: c.y, w: c.w, h: c.h});
 			this._resizeHelper.show();
+			if(!this.isLeftToRight()){
+				this._resizeHelper.startPosition = {l: c.x, t: c.y};
+			}
 		}
 
 		this._isSizing = true;
@@ -180,6 +183,10 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 				//width/height as well
 				pbw: padborder.w, pbh: padborder.h,
 				mw: margin.w, mh: margin.h};
+		if(!this.isLeftToRight() && dojo.style(this.targetDomNode, "position") == "absolute"){
+			var p = domGeometry.position(this.targetDomNode, true);
+			this.startPosition = {l: p.x, t: p.y};
+		}
 		
 		this._pconnects = [
 			connect.connect(windowBase.doc,"onmousemove",this,"_updateSizing"),
@@ -197,14 +204,14 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 		if(this.activeResize){
 			this._changeSizing(e);
 		}else{
-			var tmp = this._getNewCoords(e, 'border');
+			var tmp = this._getNewCoords(e, 'border', this._resizeHelper.startPosition);
 			if(tmp === false){ return; }
 			this._resizeHelper.resize(tmp);
 		}
 		e.preventDefault();
 	},
 
-	_getNewCoords: function(/* Event */ e, /* String */ box){
+	_getNewCoords: function(/* Event */ e, /* String */ box, /* Object */startPosition){
 		
 		// On IE, if you move the mouse above/to the left of the object being resized,
 		// sometimes clientX/Y aren't set, apparently.  Just ignore the event.
@@ -223,6 +230,16 @@ var ResizeHandle = declare("dojox.layout.ResizeHandle",[Widget, TemplatedMixin],
 			r = this._checkConstraints(newW, newH)
 		;
 		
+		startPosition = (startPosition || this.startPosition);
+		if(startPosition && this._resizeX){
+			// adjust x position for RtoL
+			r.l = startPosition.l + dx;
+			if(r.w != newW){
+				r.l += (newW - r.w);
+			}
+			r.t = startPosition.t;
+		}
+
 		switch(box){
 			case 'margin':
 				r.w += this.startSize.mw;
