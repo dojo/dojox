@@ -4,7 +4,7 @@ define(["dojo/_base/lang", "dojo/_base/kernel", "dojo/fx/easing"],
 	var fxExt = lang.getObject("dojox.fx",true);
 	fxExt.easing = easing;
 /*=====
-	dojox.fx.easing = {
+	return {
 		// summary:
 		//		An Alias to `dojo.fx.easing`. Moved to Core in Dojo 1.2.
 	};
