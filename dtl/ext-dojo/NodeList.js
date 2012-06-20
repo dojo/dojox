@@ -1,14 +1,16 @@
 define([
 	"dojo/_base/lang",
-	"dojo/_base/NodeList",
+	"dojo/query",
 	"../_base"
-], function(lang,Nodelist,dd){
+], function(lang, query, dd){
 	var nl = lang.getObject("dojox.dtl.ext-dojo.NodeList", true);
 
-	lang.extend(Nodelist, {
+	var NodeList = query.NodeList;
+
+	lang.extend(NodeList, {
 		dtl: function(template, context){
 			// summary: 
-			//		Renders the specified template in each of the Nodelist entries.
+			//		Renders the specified template in each of the NodeList entries.
 			// template: dojox/dtl/__StringArgs|String
 			//		The template string or location
 			// context: dojox/dtl/__ObjectArgs|Object
@@ -20,7 +22,7 @@ define([
 				self.forEach(function(node){
 					node.innerHTML = content;
 				});
-			}
+			};
 
 			d.text._resolveTemplateArg(template).addCallback(function(templateString){
 				template = new d.Template(templateString);
@@ -32,5 +34,5 @@ define([
 			return this;
 		}
 	});
-	return nl;
+	return NodeList;
 });

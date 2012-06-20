@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/NodeList","dojo/NodeList-fx", "dojo/fx", "../style"],
-	function(lang, NodeList, NodeListFx, coreFx, styleX){
+define(["dojo/_base/lang", "dojo/query", "dojo/NodeList-fx", "dojo/fx", "../style"],
+	function(lang, query, NodeListFx, coreFx, styleX){
 
 /*=====
 return {
@@ -12,6 +12,7 @@ return {
 };
 =====*/
 
+var NodeList = query.NodeList;
 
 lang.extend(NodeList, {
 
