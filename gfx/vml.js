@@ -8,7 +8,8 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		//		This renderer is very slow.  For best performance on IE6-8, use Silverlight plugin.
 		//		IE9+ defaults to the standard W3C SVG renderer.
 	};
-	// dojox.gfx.vml.xmlns: String: a VML's namespace
+	// dojox.gfx.vml.xmlns: String
+	//		a VML's namespace
 	vml.xmlns = "urn:schemas-microsoft-com:vml";
 
 	document.namespaces.add("v", vml.xmlns);
@@ -22,7 +23,8 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		s.addRule("v\\:" + vmlElems[i], "behavior:url(#default#VML); display:inline-block");
 	}
 
-	// dojox.gfx.vml.text_alignment: Object: mapping from SVG alignment to VML alignment
+	// dojox.gfx.vml.text_alignment: Object
+	//		mapping from SVG alignment to VML alignment
 	vml.text_alignment = {start: "left", middle: "center", end: "right"};
 
 	vml._parseFloat = function(str) {
