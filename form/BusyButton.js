@@ -130,7 +130,16 @@ var _BusyButtonMixin = declare("dojox.form._BusyButtonMixin", null, {
 	}
 });
 
-var BusyButton = declare("dojox.form.BusyButton", [Button, _BusyButtonMixin], {});
+var BusyButton = declare("dojox.form.BusyButton", [Button, _BusyButtonMixin], {
+	// summary:
+	//		BusyButton is a simple widget which provides implementing more 
+	//		user friendly form submission.
+	// description:
+	//		When a form gets submitted by a user, many times it is recommended to disable
+	//		the submit buttons to prevent double submission. BusyButton provides a simple set
+	//		of features for this purpose
+
+});
 declare("dojox.form.BusyComboButton", [ComboButton, _BusyButtonMixin], {});
 declare("dojox.form.BusyDropDownButton", [DropDownButton, _BusyButtonMixin], {});
 return BusyButton;
