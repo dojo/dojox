@@ -123,13 +123,13 @@ define([
 			if(!baseLayerType){
 				baseLayerType = openlayers.BaseLayerType.OSM;
 			}
-
+/*
 			style.set(div, {
 				width: "100%",
 				height: "100%",
 				dir: "ltr"
 			});
-
+*/			
 			var map = new OpenLayers.Map(div, opts);
 			this.olMap = map;
 
