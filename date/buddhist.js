@@ -12,7 +12,7 @@ dbuddhist.isLeapYear = function(/*dojox/date/buddhist/Date*/dateObject){
 };
 
 //FIXME: reduce compare, add, diff also
-dbuddhist.compare = function(/*dojox/date/buddhist/Date*/date1, /*dojox/buddhist/date/Date*/date2, /*String?*/portion){
+dbuddhist.compare = function(/*dojox/date/buddhist/Date*/date1, /*dojox/date/buddhist/Date*/date2, /*String?*/portion){
 	// summary:
 	//		Compare two buddhist date objects by date, time, or both.
 	return dd.compare(date1,date2, portion); // int
