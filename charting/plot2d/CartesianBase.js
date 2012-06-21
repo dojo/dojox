@@ -4,6 +4,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 	function(lang, declare, hub, Base, primitive, fx){
 
 	return declare("dojox.charting.plot2d.CartesianBase", Base, {
+		// summary:
+		//		Base class for cartesian plot types.
 		constructor: function(chart, kwArgs){
 			// summary:
 			//		Create a cartesian base plot for cartesian charts.

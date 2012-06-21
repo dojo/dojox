@@ -12,6 +12,8 @@ dojox.charting.plot2d.__PlotCtorArgs = function(){
 };
 =====*/
 return declare("dojox.charting.plot2d.Base", Element, {
+	// summary:
+	//		Base class for all plot types.
 	constructor: function(chart, kwArgs){
 		// summary:
 		//		Create a base plot for charting.
