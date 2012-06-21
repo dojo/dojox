@@ -9,7 +9,7 @@ textFx._split = function(/*Object*/ args){
 	//		of pieces that move independently.
 	//		NOTE:
 	//			In some rendering engines, the text will appear to "jump" from its initial position
-	//			when the animation begins.	To work around this bug, enclose the node's text in a <p> or <div>.
+	//			when the animation begins.	To work around this bug, enclose the node's text in a `<p>` or `<div>`.
 	// args:
 	//		- args.crop: Boolean - If true, pieces will be positioned relatively rather than absolutely
 	//		- args.text: String - Text to place inside the node (otherwise node.innerHTML is used)

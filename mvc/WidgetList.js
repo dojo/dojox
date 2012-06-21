@@ -33,7 +33,7 @@ define([
 		// |		 data-mvc-child-type="dijit/form/TextBox"
 		// |		 data-mvc-child-props="value: at(this.target, 'First')"></div>
 		// example:
-		//		Create multiple instances of widgets-in-template based on the HTML written in <script type="dojox/mvc/InlineTemplate">.
+		//		Create multiple instances of widgets-in-template based on the HTML written in `<script type="dojox/mvc/InlineTemplate">`.
 		//		The label refers to Serial property in the array item, and the text box refers to First property in the array item.
 		// |		<div data-dojo-type="dojox/mvc/WidgetList"
 		// |		 data-dojo-mixins="dojox/mvc/_InlineTemplateMixin"

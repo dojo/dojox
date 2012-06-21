@@ -248,7 +248,7 @@ return declare("dojox.form.PasswordValidator", FormValueWidget, {
 	postCreate: function(){
 		// summary:
 		//		Sets up the correct widgets.  You *MUST* specify one child
-		//		text box (a simple HTML <input> element) with pwType="new"
+		//		text box (a simple HTML `<input>` element) with pwType="new"
 		//		*and* one child text box with pwType="verify".  You *MAY*
 		//		specify a third child text box with pwType="old" in order to
 		//		prompt the user to enter in their old password before the

@@ -97,7 +97,7 @@ define([
 			//
 			// example:
 			//		This example loads view1.html, creates a new view under
-			//		<body>, and performs a transition to the new view with the
+			//		`<body>`, and performs a transition to the new view with the
 			//		slide animation.
 			//		
 			//	|	var vc = ViewController.getInstance();

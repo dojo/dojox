@@ -9,9 +9,9 @@ define([
 return declare("dojox.layout.ContentPane", ContentPane, {
 	// summary:
 	//		An extended version of dijit.layout.ContentPane.
-	//		Supports infile scripts and external ones declared by <script src=''
+	//		Supports infile scripts and external ones declared by `<script src=''...>`
 	//		relative path adjustments (content fetched from a different folder)
-	//		<style> and <link rel='stylesheet' href='..'> tags,
+	//		`<style>` and `<link rel='stylesheet' href='..'>` tags,
 	//		css paths inside cssText is adjusted (if you set adjustPaths = true)
 	//
 	//		NOTE that dojo.require in script in the fetched file isn't recommended

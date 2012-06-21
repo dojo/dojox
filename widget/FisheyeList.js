@@ -254,7 +254,7 @@ define(["dojo/_base/declare", "dojo/_base/sniff", "dojo/_base/lang", "dojo/aspec
 					// summary:
 					//		Returns whether the mouse is over the passed element.
 					// node:
-					//		Must must be display:block (ie, not a <span>)
+					//		Must must be display:block (ie, not a `<span>`)
 					node = dom.byId(node);
 					var mouse = {x: e.pageX, y: e.pageY},
 						absolute = geometry.position(node, true),

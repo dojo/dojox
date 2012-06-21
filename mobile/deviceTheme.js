@@ -240,7 +240,7 @@
 		//		initialization, the layout calculation may fail.
 		//
 		//		A possible workaround for this problem is to use dojo.require to load
-		//		deviceTheme.js and place it in a separate <script> block immediately
+		//		deviceTheme.js and place it in a separate `<script>` block immediately
 		//		below the script tag that loads dojo.js as below. However, this is not 
 		//		guaranteed to solve the problem.
 		//
@@ -260,8 +260,8 @@
 		//	|		 data-dojo-config="mblThemeFiles:['base','Button']"></script>
 		//	|	<script src="dojo/dojo.js" data-dojo-config="parseOnLoad: true"></script>
 		//
-		//		A safer solution would be to not use deviceTheme and use <link>
-		//		or @import instead to load the theme files.
+		//		A safer solution would be to not use deviceTheme and use `<link>`
+		//		or `@import` instead to load the theme files.
     };
     =====*/
 	return deviceTheme;

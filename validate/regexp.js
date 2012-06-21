@@ -147,7 +147,7 @@ dxregexp = dojox.validate.regexp = {
 		// summary:
 		//		Builds a regular expression that matches an email address
 		// flags: Object?
-		//		- flags.allowCruft  Allow address like <mailto:foo@yahoo.com>.  Default is false.
+		//		- flags.allowCruft  Allow address like `<mailto:foo@yahoo.com>`.  Default is false.
 		//		- flags in regexp.host can be applied.
 		//		- flags in regexp.ipAddress can be applied.
 

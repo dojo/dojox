@@ -766,7 +766,7 @@ var _ListInputInputItem = declare("dojox.form._ListInputInputItem", [Widget, Tem
 	// summary:
 	//		Item created by ListInputInput when delimiter is found
 	// description:
-	//		Simple <li> with close button added to ListInputInput when delimiter is found
+	//		Simple `<li>` with close button added to ListInputInput when delimiter is found
 
 	templateString: "<li class=\"dijit dijitReset dijitLeft dojoxListInputItem\" dojoAttachEvent=\"onclick: onClick\" ><span dojoAttachPoint=\"labelNode\"></span></li>",
 

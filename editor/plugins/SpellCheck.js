@@ -931,8 +931,8 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		// summary:
 		//		Substitute the tag with white charactors so that the server
 		//		can easily process the text. For example:
-		//		"<a src="sample.html">Hello, world!</a>" ==>
-		//		"                     Hello, world!    "
+		// |	"<a src="sample.html">Hello, world!</a>" ==>
+		// |	"                     Hello, world!    "
 		// html:
 		//		The html code
 		// tags:

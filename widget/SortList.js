@@ -26,11 +26,11 @@ dojo.declare("dojox.widget.SortList",
 	descending: true,
 
 	// selected: Array
-	//		A list of the selected <li> nodes at any given time.
+	//		A list of the selected `<li>` nodes at any given time.
 	selected: null,
 
 	// sortable: Boolean
-	//	toggle to enable/disable sorting
+	//		toggle to enable/disable sorting
 	sortable: true,
 
 	// FIXME: this is really simple store support

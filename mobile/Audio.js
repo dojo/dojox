@@ -7,12 +7,10 @@ define([
 ], function(declare, domConstruct, has, Contained, WidgetBase){
 	// module:
 	//		dojox/mobile/Audio
-	// summary:
-	//		A thin wrapper around the HTML5 <audio> element.
 
 	return declare("dojox.mobile.Audio", [WidgetBase, Contained], {
 		// summary:
-		//		A thin wrapper around the HTML5 <audio> element.
+		//		A thin wrapper around the HTML5 `<audio>` element.
 		
 		// source: Array
 		//		An array of src and type,

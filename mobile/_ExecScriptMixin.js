@@ -20,7 +20,7 @@ define([
 			// summary:
 			//		Finds script tags and executes the script.
 			// returns:
-			//		The given HTML text from which <script> blocks are removed.
+			//		The given HTML text from which `<script>` blocks are removed.
 			var s = html.replace(/\f/g, " ").replace(/<\/script>/g, "\f");
 			s = s.replace(/<script [^>]*src=['"]([^'"]+)['"][^>]*>([^\f]*)\f/ig, function(ignore, path){
 				domConstruct.create("script", {

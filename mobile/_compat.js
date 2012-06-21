@@ -50,11 +50,11 @@ define([
 	//		|	});
 	//
 	//		This module also loads compatibility CSS files, which have a -compat.css
-	//		suffix. You can use either the <link> tag or @import to load theme
+	//		suffix. You can use either the `<link>` tag or `@import` to load theme
 	//		CSS files. Then, this module searches for the loaded CSS files and loads
 	//		compatibility CSS files. For example, if you load dojox/mobile/themes/iphone/iphone.css
 	//		in a page, this module automatically loads dojox/mobile/themes/iphone/iphone-compat.css.
-	//		If you explicitly load iphone-compat.css with <link> or @import,
+	//		If you explicitly load iphone-compat.css with `<link>` or `@import`,
 	//		this module will not load again the already loaded file.
 	//
 	//		Note that, by default, compatibility CSS files are only loaded for CSS files located

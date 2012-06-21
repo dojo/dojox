@@ -127,14 +127,14 @@ dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 
 	_decode: function(str, ascii){
 		// summary:
-		//		Pre-filter for editor to convert strings like [:-)] into an <img> of the corresponding smiley
+		//		Pre-filter for editor to convert strings like [:-)] into an `<img>` of the corresponding smiley
 		var emoticon = dojox.editor.plugins.Emoticon.fromAscii(ascii);
 		return emoticon ? emoticon.imgHtml(this.emoticonImageClass) : str;
 	},
 
 	_encode: function(str){
 		// summary:
-		//		Post-filter for editor to convert <img> nodes of smileys into strings like [:-)]
+		//		Post-filter for editor to convert `<img>` nodes of smileys into strings like [:-)]
 		
 		// Each <img> node has an alt tag with it's ascii representation, so just use that.
 		// TODO: wouldn't this be easier as a postDomFilter ?

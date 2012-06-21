@@ -44,7 +44,7 @@ validate.isEmailAddress = function(value, flags) {
 	//		Checks if a string could be a valid email address
 	// value: String
 	// flags: Object?
-	//		- flags.allowCruft  Allow address like <mailto:foo@yahoo.com>.  Default is false.
+	//		- flags.allowCruft  Allow address like `<mailto:foo@yahoo.com>`.  Default is false.
 	//		- flags in regexp.host can be applied.
 	//		- flags in regexp.ipAddress can be applied.
 	//		- flags in regexp.tld can be applied.

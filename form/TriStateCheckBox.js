@@ -21,8 +21,8 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 		baseClass: "dojoxTriStateCheckBox",
 
 		// type: [private] String
-		//		type attribute on <input> node.
-		//		Overrides `dijit.form.Button.type`.  Users should not change this value.
+		//		type attribute on `<input>` node.
+		//		Overrides `dijit/form/Button.type`.  Users should not change this value.
 		type: "checkbox",
 
 
@@ -116,7 +116,7 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 			//		true, false or 'mixed'
 			// description:
 			//		Controls the state of the TriStateCheckBox. Set this.checked,
-			//		this._currentState, value attribute of the <input type=checkbox>
+			//		this._currentState, value attribute of the `<input type=checkbox>`
 			//		according to the value of 'checked'.			
 			var stateIndex = array.indexOf(this.states, checked), changed = false;
 			if(stateIndex >= 0){
@@ -177,7 +177,7 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 			//		Handler for value = attribute to constructor, and also calls to
 			//		set('value', val).
 			// description:
-			//		During initialization, just saves as attribute to the <input type=checkbox>.
+			//		During initialization, just saves as attribute to the `<input type=checkbox>`.
 			//
 			//		After initialization,
 			//		when passed a boolean or the string 'mixed', controls the state of the

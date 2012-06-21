@@ -123,9 +123,9 @@ dojo.declare("dojox.editor.plugins.AutoUrlLink", [_Plugin], {
 	
 	_inLink: function(/*DomNode*/ node){
 		// summary:
-		//		Check if the node is already embraced within a <a>...</a> tag.
+		//		Check if the node is already embraced within a `<a>...</a>` tag.
 		// node:
-		//		The node to be examed.
+		//		The node to be examined.
 		// tags:
 		//		private
 		var editNode = this.editor.editNode,

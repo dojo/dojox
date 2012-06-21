@@ -19,7 +19,7 @@ define([
 		//		|  </span>
 		//
 		//		The output widget being data-bound, if the balance changes in the
-		//		dojox/mvc/StatefulModel, the content within the <span> will be
+		//		dojox/mvc/StatefulModel, the content within the `<span>` will be
 		//		updated accordingly.
 
 		// exprchar:  Character

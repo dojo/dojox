@@ -25,7 +25,7 @@ define([
 			// summary:
 			//		Constructs a new geometry
 			// coords: Object
-			//		Coordinates of the geometry. {x:<x>, y:<y>} object for a point geometry, array of {x:<x>, y:<y>} 
+			//		Coordinates of the geometry. {x:``x``, y:``y``} object for a point geometry, array of {x:``x``, y:``y``}
 			//		objects for line string geometry, array of geometries for collection geometry.
 			this.coordinates = coords;
 		}

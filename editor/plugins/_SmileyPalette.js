@@ -89,7 +89,7 @@ dojo.declare("dojox.editor.plugins.Emoticon",
 
 		imgHtml: function(/*String*/ clazz){
 			// summary:
-			//		Return the HTML string for an <img> node that shows this smiley
+			//		Return the HTML string for an `<img>` node that shows this smiley
 			var eId = "emoticon" + this.id.substr(0,1).toUpperCase() + this.id.substr(1),
 				src = dojo.moduleUrl("dojox.editor.plugins", "resources/emoticons/" + eId + ".gif"),
 				label = dojo.i18n.getLocalization("dojox.editor.plugins", "Smiley")[eId],

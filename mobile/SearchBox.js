@@ -17,7 +17,7 @@ define([
 		baseClass: "mblTextBox mblSearchBox",
 
 		// type: String
-		//		Corresponds to the type attribute of the HTML <input> element. 
+		//		Corresponds to the type attribute of the HTML `<input>` element.
 		//		The value is "search".
 		type: "search",
 

@@ -550,8 +550,9 @@ var IndirectSelection = declare("dojox.grid.enhanced.plugins.IndirectSelection",
 	//		For better rendering performance, div(images) are used to simulate radio button|check boxes
 	//
 	// example:
-	//		<div dojoType="dojox.grid.EnhancedGrid" plugins="{indirectSelection: true}" ...></div>
-	//		or <div dojoType="dojox.grid.EnhancedGrid" plugins="{indirectSelection: {name: 'xxx', width:'30px', styles:'text-align: center;'}}" ...></div>
+	// |	<div dojoType="dojox.grid.EnhancedGrid" plugins="{indirectSelection: true}" ...></div>
+	// 		or
+	// |	<div dojoType="dojox.grid.EnhancedGrid" plugins="{indirectSelection: {name: 'xxx', width:'30px', styles:'text-align: center;'}}" ...></div>
 
 	// name: String
 	//		Plugin name

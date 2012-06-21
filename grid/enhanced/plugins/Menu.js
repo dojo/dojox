@@ -13,10 +13,10 @@ var Menu = declare("dojox.grid.enhanced.plugins.Menu", _Plugin, {
 	// summary:
 	//		 Provides context menu support, including header menu, row menu, cell menu and selected region menu
 	// example:
-	//		<div dojoType="dojox.grid.EnhancedGrid"
-	//			plugins="{menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",
-	//							   selectedRegionMenu:"selectedRegionMenuId"}}" ...>
-	//		</div>
+	// |	<div dojoType="dojox.grid.EnhancedGrid"
+	// |		plugins="{menus:{headerMenu:"headerMenuId", rowMenu:"rowMenuId", cellMenu:"cellMenuId",
+	// |						   selectedRegionMenu:"selectedRegionMenuId"}}" ...>
+	// |	</div>
 	
 	// name: String
 	//		Plugin name

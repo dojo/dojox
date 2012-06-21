@@ -54,7 +54,7 @@ define([
 		//	|		position: [longitude, latitude],
 		//	|		extent: degrees
 		//	|	}
-		//		The map is fit on the specified position showing the extent <extent> around
+		//		The map is fit on the specified position showing the extent `<extent>` around
 		//		the specified center position.
 		initialLocation: null,
 
@@ -65,7 +65,7 @@ define([
 		touchHandler: false,
 
 		// map: [readonly] Map
-		//		The underlying `dojox.geo.openlayers.Map` object.
+		//		The underlying `dojox/geo/openlayers/Map` object.
 		map : null,
 
 		startup: function(){

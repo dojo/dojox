@@ -56,7 +56,7 @@ define([
 		//		Parameters can be passed as argument at construction time to define the base layer
 		//		type and the base layer parameters such as url or options depending on the type
 		//		specified. These parameters can be any of:
-		//		<br />
+		//
 		//		_baseLayerType_: type of the base layer. Can be any of
 		//		
 		//		* `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
@@ -74,7 +74,7 @@ define([
 		//		* `baseLayerName`: The name of the base layer.
 		//		* `baseLayerUrl`: Some layer may need an url such as Web Map Server
 		//		* `baseLayerOptions`: Additional specific options passed to OpensLayers layer,
-		//		such as The list of layer to display, for Web Map Server layer.
+		//		  such as The list of layer to display, for Web Map Server layer.
 		//
 		// example:
 		//	|	var map = new dojox.geo.openlayers.widget.Map(div, {
@@ -465,7 +465,7 @@ define([
 			//	|		position: [longitude, latitude],
 			//	|		extent: degrees
 			//	|	}
-			//		The map is fit on the specified position showing the extent <extent> around
+			//		The map is fit on the specified position showing the extent `<extent>` around
 			//		the specified center position.
 
 			var map = this.olMap;
