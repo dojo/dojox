@@ -3,22 +3,21 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 	function(dojo, Tooltip, lang, declare, domStyle, PlotAction, m, df, dfs, dff){
 	
 	/*=====
-	var __TooltipCtorArgs = declare({
-		// summary:
-		//		Additional arguments for tooltip actions.
-
-		// duration: Number?
-		//		The amount of time in milliseconds for an animation to last.  Default is 400.
-		duration: 400,
-		// easing: dojo/fx/easing/*?
-		//		An easing object (see dojo.fx.easing) for use in an animation.  The
-		//		default is dojo.fx.easing.backOut.
-		easing: null,
-		// text: Function?
-		//		The function that produces the text to be shown within a tooltip.  By default this will be
-		//		set by the plot in question, by returning the value of the element.
-		text: null
-	});
+	var __TooltipCtorArgs = function(duration, easing, text){
+			// summary:
+			//		Additional arguments for tooltip actions.
+			// duration: Number?
+			//		The amount of time in milliseconds for an animation to last.  Default is 400.
+			this.duration = 400;
+			// easing: dojo/fx/easing/*?
+			//		An easing object (see dojo.fx.easing) for use in an animation.  The
+			//		default is dojo.fx.easing.backOut.
+			this.easing = null;
+			// text: Function?
+			//		The function that produces the text to be shown within a tooltip.  By default this will be
+			//		set by the plot in question, by returning the value of the element.
+			text = null;
+	};
 	=====*/
 
 	var DEFAULT_TEXT = function(o){

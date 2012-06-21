@@ -3,24 +3,23 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 	function(hub, declare, PlotAction, dfe, m, gf, df, dfs, dff){
 
 	/*=====
-	var __MoveSliceCtorArgs = declare({
-		// summary:
-		//		Additional arguments for highlighting actions.
-
-		// duration: Number?
-		//		The amount of time in milliseconds for an animation to last.  Default is 400.
-		duration: 400,
-		// easing: dojo/fx/easing/*?
-		//		An easing object (see dojo.fx.easing) for use in an animation.  The
-		//		default is dojo.fx.easing.backOut.
-		easing: null,
-		// scale: Number?
-		//		The amount to scale the pie slice.  Default is 1.05.
-		scale: 1.05,
-		// shift: Number?
-		//		The amount in pixels to shift the pie slice.  Default is 7.
-		shift: 7
-	});
+	var __MoveSliceCtorArgs = function(duration, easing, scale, shift){
+			// summary:
+			//		Additional arguments for move slice actions.
+			// duration: Number?
+			//		The amount of time in milliseconds for an animation to last.  Default is 400.
+			this.duration = 400;
+			// easing: dojo/fx/easing/*?
+			//		An easing object (see dojo.fx.easing) for use in an animation.  The
+			//		default is dojo.fx.easing.backOut.
+			this.easing = null;
+			// scale: Number?
+			//		The amount to scale the pie slice.  Default is 1.05.
+			this.scale = 1.05;
+			// shift: Number?
+			//		The amount in pixels to shift the pie slice.  Default is 7.
+			this.shift = 7;
+	};
 	=====*/
 	
 	var DEFAULT_SCALE = 1.05,

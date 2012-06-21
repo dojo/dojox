@@ -3,20 +3,20 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	function(dojo, lang, declare, Color, hub, c, PlotAction, dfe, dgf){
 
 	/*=====
-	var __HighlightCtorArgs = declare({
+	var __HighlightCtorArgs = function(duration, easing, highlight){
 		// summary:
 		//		Additional arguments for highlighting actions.
 		// duration: Number?
 		//		The amount of time in milliseconds for an animation to last.  Default is 400.
-		duration: 400,
+		this.duration = 400;
 		// easing: dojo/fx/easing/*?
 		//		An easing object (see dojo.fx.easing) for use in an animation.  The
 		//		default is dojo.fx.easing.backOut.
-		easing: null,
+		this.easing = null;
 		// highlight: String|dojo/_base/Color|Function?
 		//		Either a color or a function that creates a color when highlighting happens.
-		highlight: null
-	});
+		this.highlight = null;
+	};
 	=====*/
 	
 	var DEFAULT_SATURATION  = 100,	// %
