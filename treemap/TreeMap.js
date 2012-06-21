@@ -255,7 +255,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		},
 	
 		// areaFunc: Function
-		//		A function that returns the value use to compute the area of cell from a store item.	
+		//		A function that returns the value use to compute the area of cell from a store item.
 		//		Default implementation is using areaAttr.	
 		areaFunc: function(/*Object*/ item, /*dojo/store/api/Store*/ store){
 			return (this.areaAttr && this.areaAttr.length > 0)?parseFloat(item[this.areaAttr]):1;
