@@ -205,7 +205,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				// request:
 				//		See dojo.data.api.Read.fetch request
 				
-				return !request.query && typeof request.query == "object";
+				return !request.query || typeof request.query == "object";
 			},
 			clientSideFetch: function(/*Object*/ request,/*Array*/ baseResults){
 				// summary:
