@@ -2,18 +2,6 @@ define([
 	"dojo/_base/lang",
 	"dojo/Stateful"
 ], function(lang, Stateful){
-	/*=====
-	dojox.mvc.StatefulArray.watchElements.handle = {
-		// summary:
-		//		A handle of setting watch callback for array elements.
-
-		unwatch: function(){
-			// summary:
-			//		Stops watching for array elements.
-		}
-	};
-	=====*/
-
 	function update(/*dojox/mvc/StatefulArray*/ a){
 		// summary:
 		//		Set all array elements as stateful so that watch function runs.
@@ -158,16 +146,16 @@ define([
 
 				callbacks.list.push(callback);
 
-				return { // dojox/mvc/StatefulArray/watchElements/handle
-					unwatch: function(){
-						for(var list = callbacks.list, i = 0; i < list.length; i++){
-							if(list[i] == callback){
-								list.splice(i, 1);
-								break;
-							}
+				var h = {};
+				h.unwatch = h.remove = function(){
+					for(var list = callbacks.list, i = 0; i < list.length; i++){
+						if(list[i] == callback){
+							list.splice(i, 1);
+							break;
 						}
 					}
 				}; 
+				return h; // dojo/handle
 			}
 		}, Stateful.prototype, {
 			set: function(/*Number|String*/ name, /*Anything*/ value){

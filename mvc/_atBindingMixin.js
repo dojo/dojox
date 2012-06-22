@@ -97,14 +97,14 @@ define([
 				}
 			});
 		}
-		return {
-			unwatch: function(){
-				for(var s in _handles){
-					_handles[s] && _handles[s].unwatch();
-					delete _handles[s];
-				}
+		var h = {};
+		h.unwatch = h.remove = function(){
+			for(var s in _handles){
+				_handles[s] && _handles[s].unwatch();
+				delete _handles[s];
 			}
 		};
+		return h;
 	}
 
 	var _atBindingMixin = declare("dojox/mvc/_atBindingMixin", null, {

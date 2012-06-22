@@ -23,7 +23,7 @@ define([
 		//		updated accordingly.
 
 		// exprchar:  Character
-		//		Character to use for a substitution expression, for a substitution string like ${this.index}
+		//		Character to use for a substitution expression, for a substitution string like ${this.value}
 		exprchar: '$',
 	
 		// templateString: [private] String

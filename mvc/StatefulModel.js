@@ -11,6 +11,7 @@ define([
 
 	var StatefulModel = declare("dojox.mvc.StatefulModel", [Stateful], {
 		// summary:
+		//		Deprecated.  Use dojox/mvc/getStateful, dojox/mvc/getPlainValue, dojox/mvc/StatefulArray or one of the dojox/mvc/*RefControllers instead.
 		//		The first-class native JavaScript data model based on dojo/Stateful
 		//		that wraps any data structure(s) that may be relevant for a view,
 		//		a view portion, a dijit or any custom view layer component.

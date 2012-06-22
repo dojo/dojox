@@ -126,6 +126,7 @@ define([
 		_relTargetProp : "children",
 
 		postMixInProperties: function(){
+			this.inherited(arguments);
 			if(this[childTypeAttr]){
 				this.childType = this[childTypeAttr];
 			}
@@ -214,6 +215,7 @@ define([
 
 		destroy: function(){
 			unwatchElements(this);
+			this.inherited(arguments);
 		}
 	});
 

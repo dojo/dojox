@@ -179,11 +179,11 @@ define([
 			// Watch for properties in model.
 			watchPropertiesInModel(this.get(this._refModelProp));
 
-			return {
-				unwatch: function(){
-					if(hp){ hp.unwatch(); hp = null; } if(hm){ hm.unwatch(); hm = null; }
-				}
+			var h = {};
+			h.unwatch = h.remove = function(){
+				if(hp){ hp.unwatch(); hp = null; } if(hm){ hm.unwatch(); hm = null; }
 			};
+			return h; // dojo/handle
 		},
 
 		hasControllerProperty: function(/*String*/ name){

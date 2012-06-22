@@ -45,16 +45,6 @@ define([
 		//		Class/object containing the converter functions used when the data goes between data binding source (e.g. data model or controller) to data binding origin (e.g. widget).
 		converter: null
 	};
-
-	dojox.mvc.sync.handle = {
-		// summary:
-		//		A handle of data binding synchronization.
-
-		unwatch: function(){
-			// summary:
-			//		Stops data binding synchronization.
-		}
-	};
 	=====*/
 
 	has.add("mvc-bindings-log-api", (config["mvc"] || {}).debugBindings);
@@ -239,16 +229,16 @@ define([
 			console.log(logContent.join(" is bound to: "));
 		}
 
-		return {
-			unwatch: function(){
-				for(var h = null; h = _watchHandles.pop();){
-					h.unwatch();
-					if(has("mvc-bindings-log-api")){
-						console.log(logContent.join(" is unbound from: "));
-					}
+		var handle = {};
+		handle.unwatch = handle.remove = function(){
+			for(var h = null; h = _watchHandles.pop();){
+				h.unwatch();
+				if(has("mvc-bindings-log-api")){
+					console.log(logContent.join(" is unbound from: "));
 				}
 			}
-		}; // dojox/mvc/sync.handle
+		};
+		return handle; // dojo/handle
 	};
 
 	lang.mixin(mvc, directions);

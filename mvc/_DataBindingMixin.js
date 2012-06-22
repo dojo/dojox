@@ -11,6 +11,7 @@ define([
 
 	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:
+		//		Deprecated.  Use dojox/mvc/at for data binding.
 		//		Provides the ability for dijits or custom view components to become
 		//		data binding aware.
 		//
