@@ -286,6 +286,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		constructor: function(/* String|dojo._Url */url){
 			// summary:
 			//		Create this font object based on the SVG Font definition at url.
+			// url:
+			//		An url pointing to the SVG Font definition.
 			this._defaultLeading = 1.5;
 			if(url!==undefined){
 				this.load(url);
@@ -294,6 +296,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		load: function(/* String|dojo._Url */url){
 			// summary:
 			//		Load the passed SVG and send it to the parser for parsing.
+			// url:
+			//		The svg to parse.
 			this.onLoadBegin(url.toString());
 			this._parse(
 				gfx._svgFontCache[url.toString()]||_getText(url.toString()),
@@ -491,6 +495,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		getWidth: function(/* String */text, /* Float? */scale){
 			// summary:
 			//		Get the width of the rendered text without actually rendering it.
+			// text:
+			//		The string to measure.
+			// scale:
+			//		an optional scaling factor.
 			return this._getWidth(arr.map(this._normalize(text).split(""), function(chr){
 				return this.glyphs[chr] || { xAdvance: this.advance.missing.x };
 			}, this)) * (scale || 1);	//		Float
@@ -498,6 +506,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		getLineHeight: function(/* Float? */scale){
 			// summary:
 			//		return the height of a single line, sans leading, based on scale.
+			// scale:
+			//		an optional scaling factor.
 			return this.viewbox.height * (scale || 1);	//		Float
 		},
 
@@ -508,11 +518,15 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 		getCenterline: function(/* Float? */scale){
 			// summary:
 			//		return the y coordinate that is the center of the viewbox.
+			// scale:
+			//		an optional scaling factor.
 			return (scale||1) * (this.viewbox.height/2);
 		},
 		getBaseline: function(/* Float? */scale){
 			// summary:
 			//		Find the baseline coord for alignment; adjust for scale if passed.
+			// scale:
+			//		an optional scaling factor.
 			return (scale||1) * (this.viewbox.height+this.descent);	//		Float
 		},
 

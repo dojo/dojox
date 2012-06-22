@@ -138,6 +138,8 @@ define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_bas
 	fxg.animateStroke = function(/*Object*/ args){
 		// summary:
 		//		Returns an animation which will change stroke properties over time.
+		// args:
+		//		an object defining the animation setting.
 		// example:
 		//	|	dojox.gfx.fx.animateStroke{{
 		//	|		shape: shape,
@@ -188,6 +190,8 @@ define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_bas
 		// summary:
 		//		Returns an animation which will change fill color over time.
 		//		Only solid fill color is supported at the moment
+		// args:
+		//		an object defining the animation setting.
 		// example:
 		//	|	dojox.gfx.fx.animateFill{{
 		//	|		shape: shape,
@@ -210,6 +214,8 @@ define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_bas
 	fxg.animateFont = function(/*Object*/ args){
 		// summary:
 		//		Returns an animation which will change font properties over time.
+		// args:
+		//		an object defining the animation setting.
 		// example:
 		//	|	dojox.gfx.fx.animateFont{{
 		//	|		shape: shape,
@@ -252,6 +258,8 @@ define(["dojo/_base/lang", "./_base", "./matrix", "dojo/_base/Color", "dojo/_bas
 	fxg.animateTransform = function(/*Object*/ args){
 		// summary:
 		//		Returns an animation which will change transformation over time.
+		// args:
+		//		an object defining the animation setting.
 		// example:
 		//	|	dojox.gfx.fx.animateTransform{{
 		//	|		shape: shape,

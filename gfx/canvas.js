@@ -937,6 +937,8 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 	
 	// no event support -> nothing to fix. 
 	canvas.fixTarget = function(event, gfxElement){
+		// tags:
+		//		private
 		return true;
 	};
 	 

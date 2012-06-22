@@ -32,6 +32,9 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		){
 			// summary:
 			//		Takes a shape or a surface and returns a DOM object, which describes underlying shapes.
+			// object:
+			//		The container to serialize.
+			
 			var t = {}, v, isSurface = object instanceof g.Surface;
 			if(isSurface || object instanceof g.Group){
 				t.children = arr.map(object.children, gu.serialize);
@@ -66,6 +69,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		){
 			// summary:
 			//		Works just like serialize() but returns a JSON string. If prettyPrint is true, the string is pretty-printed to make it more human-readable.
+			// object:
+			//		The container to serialize.
+			// prettyPrint
+			//		Indicates whether the output string should be formatted.
+			
 			return jsonLib.toJson(gu.serialize(object), prettyPrint);	// String
 		},
 
@@ -75,6 +83,11 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 		){
 			// summary:
 			//		Takes a surface or a shape and populates it with an object produced by serialize().
+			// parent:
+			//		The destination container for the deserialized shapes.
+			// object:
+			//		The shapes to deserialize.
+			 
 			if(object instanceof Array){
 				return arr.map(object, lang.hitch(null, gu.deserialize, parent));	// Array
 			}
@@ -102,6 +115,10 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 			/* String */ json){
 			// summary:
 			//		Works just like deserialize() but takes a JSON representation of the object.
+			// parent:
+			//		The destination container for the deserialized shapes.
+			// json:
+			//		The shapes to deserialize.
 			return gu.deserialize(parent, jsonLib.fromJson(json));	// Array || dojox/gfx/shape.Shape
 		},
 

@@ -1,19 +1,31 @@
 define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/_base/connect",
 	"dojo/dom-class","dojo/_base/window","./Mover"], 
   function(lang,declare,arr,event,connect,domClass,win,Mover){
+
+	/*=====
+	declare("dojox.gfx.__MoveableCtorArgs", null, {
+		// summary:
+		//		The arguments used for dojox/gfx/Moveable constructor.
+	
+		// delay: Number
+		//		delay move by this number of pixels
+		delay:0,
+		
+		// mover: Object
+		//		a constructor of custom Mover
+		mover:Mover
+	});
+	=====*/
+	
 	return declare("dojox.gfx.Moveable", null, {
 		constructor: function(shape, params){
 			// summary:
 			//		an object, which makes a shape moveable
 			// shape: dojox/gfx/shape.Shape
-			//		a shape object to be moved
-			// params: Object
-			//		an optional object with additional parameters;
-			//		following parameters are recognized:
-			// delay: Number
-			//		delay move by this number of pixels
-			// mover: Object
-			//		a constructor of custom Mover
+			//		a shape object to be moved.
+			// params: dojox.gfx.__MoveableCtorArgs
+			//		an optional configuration object.
+			
 			this.shape = shape;
 			this.delay = (params && params.delay > 0) ? params.delay : 0;
 			this.mover = (params && params.mover) ? params.mover : Mover;
@@ -74,12 +86,16 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 		onMoveStart: function(/* dojox/gfx/Mover */ mover){
 			// summary:
 			//		called before every move operation
+			// mover:
+			//		A Mover instance that fired the event.
 			connect.publish("/gfx/move/start", [mover]);
 			domClass.add(win.body(), "dojoMove");
 		},
 		onMoveStop: function(/* dojox/gfx/Mover */ mover){
 			// summary:
 			//		called after every move operation
+			// mover:
+			//		A Mover instance that fired the event.
 			connect.publish("/gfx/move/stop", [mover]);
 			domClass.remove(win.body(), "dojoMove");
 		},
@@ -87,6 +103,8 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			// summary:
 			//		called during the very first move notification,
 			//		can be used to initialize coordinates, can be overwritten.
+			// mover:
+			//		A Mover instance that fired the event.
 	
 			// default implementation does nothing
 		},
@@ -94,6 +112,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			// summary:
 			//		called during every move notification,
 			//		should actually move the node, can be overwritten.
+			// mover:
+			//		A Mover instance that fired the event.
+			// shift:
+			//		An object as {dx,dy} that represents the shift.
 			this.onMoving(mover, shift);
 			this.shape.applyLeftTransform(shift);
 			this.onMoved(mover, shift);
@@ -102,6 +124,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			// summary:
 			//		called before every incremental move,
 			//		can be overwritten.
+			// mover:
+			//		A Mover instance that fired the event.
+			// shift:
+			//		An object as {dx,dy} that represents the shift.
 	
 			// default implementation does nothing
 		},
@@ -109,6 +135,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			// summary:
 			//		called after every incremental move,
 			//		can be overwritten.
+			// mover:
+			//		A Mover instance that fired the event.
+			// shift:
+			//		An object as {dx,dy} that represents the shift.
 	
 			// default implementation does nothing
 		}

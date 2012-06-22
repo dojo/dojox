@@ -667,6 +667,8 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			// summary:
 			//		converts any legal color representation to normalized
 			//		dojo/Color object
+			// color:
+			//		A color representation.
 			return (color instanceof Color) ? color : new Color(color); // dojo/Color
 		},
 		normalizeParameters: function(existed, update){
@@ -828,10 +830,14 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 
 		// pathVmlRegExp: RegExp
 		//		a constant regular expression used to split a SVG/VML path into primitive components
+		// tags:
+		//		private
 		pathVmlRegExp: /([A-Za-z]+)|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
 
 		// pathVmlRegExp: RegExp
 		//		a constant regular expression used to split a SVG/VML path into primitive components
+		// tags:
+		//		private
 		pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
 
 		equalSources: function(/*Object*/ a, /*Object*/ b){
@@ -864,7 +870,10 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 	
 	/*=====
 		g.createSurface = function(){};
-		g.fixTarget = function(){};
+		g.fixTarget = function(){
+			// tags:
+			//		private
+		};
 	=====*/
 	
 	return g; // defaults object api
