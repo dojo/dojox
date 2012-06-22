@@ -6,7 +6,7 @@ define([
 	"dojox/widget/CalendarViews",
 	"dijit/form/_DateTimeTextBox",
 	"dijit/form/TextBox",
-	"dojo/_base/declare",
+	"dojo/_base/declare"
 	], function(kernel, lang, domStyle, Calendar, CalendarViews, _DateTimeTextBox, 
 		TextBox, declare){
 	kernel.experimental("dojox/form/DateTextBox");
