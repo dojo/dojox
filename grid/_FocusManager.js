@@ -436,7 +436,7 @@ return declare("dojox.grid._FocusManager", null, {
 					}
 					return;
 				}else if((!n || html.style(n, "display") === "none") && inColDelta){
-					if((col + inRowDelta) >= 0 && (col + inRowDelta) <= cc){
+					if((col + inColDelta) >= 0 && (col + inColDelta) <= cc){
 						this.move(inRowDelta, inColDelta > 0 ? ++inColDelta : --inColDelta);
 					}
 					return;
