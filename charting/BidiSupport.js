@@ -19,7 +19,7 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 		// textDir: String
 		//		Bi-directional support,	the main variable which is responsible for the direction of the text.
 		//		The text direction can be different than the GUI direction by using this parameter.
-		// 		Allowed values:
+		//		Allowed values:
 		//			1. "ltr"
 		//			2. "rtl"
 		//			3. "auto" - contextual the direction of a text defined by first strong letter.
@@ -30,7 +30,7 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 			// summary:
 			//		Return direction of the text. 
 			// description:
-			// 		If textDir is ltr or rtl returns the value.
+			//		If textDir is ltr or rtl returns the value.
 			//		If it's auto, calls to another function that responsible 
 			//		for checking the value, and defining the direction.			
 			// text:

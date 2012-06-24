@@ -6,7 +6,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 	// summary:
 	//		A Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
 	//		style a chart. It extends SimpleTheme with additional features like color definition by
-	// 		palettes and gradients definition.
+	//		palettes and gradients definition.
 	});
 
 	/*=====
