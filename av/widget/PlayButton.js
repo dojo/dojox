@@ -3,9 +3,9 @@ define(['dojo', 'dijit', 'dijit/_Widget', 'dijit/_TemplatedMixin'],function(dojo
 return dojo.declare("dojox.av.widget.PlayButton", [_Widget, _TemplatedMixin], {
 	// summary:
 	//		A Play/Pause button widget to use with dojox.av.widget.Player
-	//
+
 	templateString: dojo.cache("dojox.av.widget","resources/PlayButton.html"),
-	//
+
 	postCreate: function(){
 		// summary:
 		//		Initialize button.
