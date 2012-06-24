@@ -73,7 +73,7 @@ define([
 			return {
 				x: middleX,
 				y: middleY
-			}; //  Object
+			}; // Object
 
 		},
 

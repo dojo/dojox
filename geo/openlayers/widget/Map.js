@@ -122,8 +122,8 @@ define([
 			//			`{ l: 50, t: 200, w: 300: h: 150 }`
 			// b: Object|Number?
 			//		If passed, denotes the new size of the widget.
-			// 		Can be either nothing (widget adapts to the div),
-			// 		an Object describing a box, or a Number representing the width.
+			//		Can be either nothing (widget adapts to the div),
+			//		an Object describing a box, or a Number representing the width.
 			// h: Number?
 			//		The new height. Requires that a width has been specified in the first parameter.
 

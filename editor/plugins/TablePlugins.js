@@ -461,7 +461,7 @@ var TableHandler = declare(_Plugin, {
 var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 		// summary:
 		//		A collection of Plugins for inserting and modifying tables in the Editor
-		//		See end of this document for all avaiable plugs
+		//		See end of this document for all available plugs
 		//		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
 		//
 		//		NOT IMPLEMENTED: Not handling cell merge, span or split
@@ -477,7 +477,7 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 		
 		onDisplayChanged: function(withinTable){
 			// summary:
-			//	 subscribed to from the global object's publish method
+			//	 	subscribed to from the global object's publish method
 			
 			//console.log("onDisplayChanged", this.commandName);
 			if(!this.alwaysAvailable){
@@ -532,7 +532,7 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 			//		Editor as query-able plugins, I was not able to find any evidence
 			//		that they are supported (especially in NOT IE). If they are
 			//		supported in other browsers, it may help with the undo problem.
-			//
+
 			this.begEdit();
 			var o = this.getTableInfo();
 			var sw = (dojo.isString(cmd))?cmd : this.commandName;
@@ -825,7 +825,7 @@ var ModifyTable = declare("dojox.editor.plugins.ModifyTable", TablePlugins, {
 
 var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
-	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
+	//		A simple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
 	//		passthroughs to the value of the color picker and convenient hook points.
 	// tags:
 	//		private

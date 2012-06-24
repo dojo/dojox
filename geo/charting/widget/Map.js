@@ -150,7 +150,7 @@ define([
 			//			`{ l: 50, t: 200, w: 300: h: 150 }`
 			// b: Object|Number?
 			//		An hash with optional "l", "t", "w", and "h" properties for "left", "right", "width", and "height"
-			//      respectively; or a number representing the new width.
+			//		respectively; or a number representing the new width.
 			// height: Number?
 			//		A number representing the new height.
 

@@ -328,7 +328,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 	extendMethod(g.Group, "createGroup", null, groupTextDir);
 
 	var textDirPreprocess =  function(text){
-		//  inherit from surface / group  if textDir is defined there
+		// inherit from surface / group  if textDir is defined there
 		if(text){
 			var textDir = text.textDir ? validateTextDir(text.textDir) : this.textDir;
 			if(textDir){

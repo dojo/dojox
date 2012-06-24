@@ -1392,12 +1392,12 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 	// Mouse/Touch event
 	vml.fixTarget = function(event, gfxElement){
 		// summary:
-		//     Adds the gfxElement to event.gfxTarget if none exists. This new 
-		//     property will carry the GFX element associated with this event.
+		//		Adds the gfxElement to event.gfxTarget if none exists. This new
+		//		property will carry the GFX element associated with this event.
 		// event: Object 
-		//     The current input event (MouseEvent or TouchEvent)
+		//		The current input event (MouseEvent or TouchEvent)
 		// gfxElement: Object
-		//     The GFX target element
+		//		The GFX target element
 		if (!event.gfxTarget) {
 			event.gfxTarget = gs.byId(event.target.__gfxObject__);
 		}

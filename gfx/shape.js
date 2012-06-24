@@ -196,7 +196,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		},
 		getEventSource: function(){
 			// summary:
-			// 		returns a Node, which is used as
+			//		returns a Node, which is used as
 			//		a source of events for this shape
 			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
@@ -414,7 +414,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// summary:
 			//		removes the shape from its parent's list of shapes
 			// silently: Boolean
-			// 		if true, do not redraw a picture yet
+			//		if true, do not redraw a picture yet
 			if(this.parent){
 				this.parent.remove(this, silently);
 			}

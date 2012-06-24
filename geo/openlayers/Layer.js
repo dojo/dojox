@@ -105,7 +105,7 @@ define([
 				//		Returns the feature hold by this layer.
 				// returns:
 				//		The untouched array of features hold by this layer.
-				return this._features; //  Feature[]
+				return this._features; // Feature[]
 			},
 
 			getFeatureAt: function(i){

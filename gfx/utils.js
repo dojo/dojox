@@ -71,7 +71,7 @@ define(["dojo/_base/kernel","dojo/_base/lang","./_base", "dojo/_base/html","dojo
 			//		Works just like serialize() but returns a JSON string. If prettyPrint is true, the string is pretty-printed to make it more human-readable.
 			// object:
 			//		The container to serialize.
-			// prettyPrint
+			// prettyPrint:
 			//		Indicates whether the output string should be formatted.
 			
 			return jsonLib.toJson(gu.serialize(object), prettyPrint);	// String
