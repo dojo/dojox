@@ -17,10 +17,9 @@ define([
 dojo.experimental("dojox.atom.widget.FeedViewer");
 
 var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _Container],{
-	//	summary:
+	// summary:
 	//		An ATOM feed viewer that allows for viewing a feed, deleting entries, and editing entries.
-	//	description:
-	//		An ATOM feed viewer that allows for viewing a feed, deleting entries, and editing entries.
+
 	feedViewerTableBody: null,	//The body of the feed viewer table so we can access it and populate it.  Will be assigned via template.
 	feedViewerTable: null,		//The overal table container which contains the feed viewer table.  Will be assigned via template.
 	entrySelectionTopic: "",	//The topic to broadcast when any entry is clicked so that a listener can pick up it and display it.
@@ -39,9 +38,9 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	alertsEnabled: false,
 
 	postCreate: function(){
-		//	summary:
+		// summary:
 		//		The postCreate function.
-		//	description:
+		// description:
 		//		The postCreate function.  Creates our AtomIO object for future interactions and subscribes to the
 		//		event given in markup/creation.
 		this._includeFilters = [];
@@ -54,9 +53,9 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 	
 	startup: function(){
-		//	summary:
+		// summary:
 		//		The startup function.
-		//	description:
+		// description:
 		//		The startup function.  Parses the filters and sets the feed based on the given url.
 		this.containerNode = this.feedViewerTableBody;
 		var children = this.getDescendants();
@@ -74,26 +73,19 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	clear: function(){
-		//	summary:
+		// summary:
 		//		Function clearing all current entries in the feed view.
-		//	description:
-		//		Function clearing all current entries in the feed view.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		this.destroyDescendants();
 	},
 
 	setFeedFromUrl: function(/*string*/url){
-		//	summary:
+		// summary:
 		//		Function setting the feed from a URL which to get the feed.
-		//	description:
-		//		Function setting the dojox.atom.io.model.Feed data into the view.
-		//
-		//	url:
+		// url:
 		//		The URL to the feed to load.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if(url !== ""){
 			if(this._isRelativeURL(url)){
@@ -112,15 +104,11 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 
 
 	setFeed: function(/*object*/feed){
-		//	summary:
+		// summary:
 		//		Function setting the dojox.atom.io.model.Feed data into the view.
-		//	description:
-		//		Function setting the dojox.atom.io.model.Feed data into the view.
-		//
-		//	entry:
+		// entry:
 		//		The dojox.atom.io.model.Feed object to process
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		this._feed = feed;
 		this.clear();
@@ -169,14 +157,11 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	_displayDateForEntry: function(/*object*/entry){
-		//	summary:
+		// summary:
 		//		Internal function for determining the appropriate date to display.
-		//		description: Internal function for determining of a particular entry is editable.
-		//
-		//	entry:
+		// entry:
 		//		The dojox.atom.io.model.Entry object to examine.
-		//
-		//	returns:
+		// returns:
 		//		An appropriate date for the feed viewer display.
 		if(entry.updated){return entry.updated;}
 		if(entry.modified){return entry.modified;}
@@ -185,15 +170,11 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	appendGrouping: function(/*string*/titleText){
-		//	summary:
+		// summary:
 		//		Function for appending a new grouping of entries to the feed view.
-		//	description:
-		//		Function for appending a grouping of entries to the feed view.
-		//
-		//	entry:
+		// entry:
 		//		The title of the new grouping to create on the view.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		var entryWidget = new FeedViewerGrouping({});
 		entryWidget.setText(titleText);
@@ -202,15 +183,11 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	appendEntry: function(/*object*/entry){
-		//	summary:
+		// summary:
 		//		Function for appending an entry to the feed view.
-		//	description:
-		//		Function for appending an entry to the feed view.
-		//
-		//	entry:
+		// entry:
 		//		The dojox.atom.io.model.Entry object to append
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		var entryWidget = new FeedViewerEntry({"xmethod": this.xmethod});
 		entryWidget.setTitle(entry.title.value);
@@ -228,9 +205,7 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 	
 	deleteEntry: function(/*object*/entryRow){
-		//	summary:
-		//		Function for deleting a row from the view
-		//	description:
+		// summary:
 		//		Function for deleting a row from the view
 		if(!this.localSaveOnly){
 			this.atomIO.deleteEntry(entryRow.entry, lang.hitch(this, this._removeEntry, entryRow), null, this.xmethod);
@@ -241,9 +216,7 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	_removeEntry: function(/*FeedViewerEntry*/ entry, /* boolean */success){
-		//	summary:
-		//		callback for when an entry is deleted from a feed.
-		//	description:
+		// summary:
 		//		callback for when an entry is deleted from a feed.
 		if(success){
 			/* Check if this is the last Entry beneath the given date */
@@ -261,15 +234,11 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 	
 	_rowSelected: function(/*object*/evt){
-		//	summary:
+		// summary:
 		//		Internal function for handling the selection of feed entries.
-		//	description:
-		//		Internal function for handling the selection of feed entries.
-		//
-		//	evt:
+		// evt:
 		//		The click event that triggered a selection.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		var selectedNode = evt.target;
 		while(selectedNode){
@@ -308,12 +277,9 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	_deselectCurrentSelection: function(){
-		//	summary:
+		// summary:
 		//		Internal function for unselecting the current selection.
-		//	description:
-		//		Internal function for unselecting the current selection.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if(this._currentSelection){
 			domClass.add(this._currentSelection._entryWidget.timeNode, "feedViewerEntryUpdated");
@@ -326,16 +292,14 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 
 
 	_isEditable: function(/*object*/entry){
-		//	summary:
+		// summary:
 		//		Internal function for determining of a particular entry is editable.
-		//	description:
+		// description:
 		//		Internal function for determining of a particular entry is editable.
 		//		This is used for determining if the delete action should be displayed or not.
-		//
-		//	entry:
+		// entry:
 		//		The dojox.atom.io.model.Entry object to examine
-		//
-		//	returns:
+		// returns:
 		//		Boolean denoting if the entry seems editable or not..
 		var retVal = false;
 		if(entry && entry !== null && entry.links && entry.links !== null){
@@ -350,30 +314,24 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	onEntrySelected: function(/*object*/entry){
-		//	summary:
+		// summary:
 		//		Function intended for over-riding/replacement as an attachpoint to for other items to recieve
 		//		selection notification.
-		//	description: Function intended for over0-riding/replacement as an attachpoint to for other items to recieve
-		//		selection notification.
-		//
-		//	entry:
+		// entry:
 		//		The dojox.atom.io.model.Entry object selected.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 	},
 
 	_isRelativeURL: function(/*string*/url){
-		//	summary:
+		// summary:
 		//		Method to determine if the URL is relative or absolute.
-		//	description:
+		// description:
 		//		Method to determine if the URL is relative or absolute.  Basic assumption is if it doesn't start
 		//		with http:// or file://, it's relative to the current document.
-		//
-		//	url:
+		// url:
 		//		The URL to inspect.
-		//
-		//	returns:
+		// returns:
 		//		boolean indicating whether it's a relative url or not.
 		var isFileURL = function(url){
 			var retVal = false;
@@ -381,7 +339,7 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 				retVal = true;
 			}
 			return retVal;
-		}
+		};
 
 		var isHttpURL = function(url){
 			var retVal = false;
@@ -389,7 +347,7 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 				retVal = true;
 			}
 			return retVal;
-		}
+		};
 
 		var retVal = false;
 		if(url !== null){
@@ -401,17 +359,13 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	_calculateBaseURL: function(/*string*/fullURL, /*boolean*/currentPageRelative){
-		//	summary:
+		// summary:
 		//		Internal function to calculate a baseline URL from the provided full URL.
-		//	description:
-		//		Internal function to calculate a baseline URL from the provided full URL.
-		//
-		//	fullURL:
+		// fullURL:
 		//		The full URL as a string.
-		//	currentPageRelative:
+		// currentPageRelative:
 		//		Flag to denote of the base URL should be calculated as just the server base, or relative to the current page/location in the URL.
-		//
-		//	returns:
+		// returns:
 		//		String of the baseline URL
 		var baseURL = null;
 		if(fullURL !== null){
@@ -453,12 +407,9 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	_isFilterAccepted: function(/*object*/entry) {
-		//	summary:
+		// summary:
 		//		Internal function to do matching of category filters to widgets.
-		//	description:
-		//		Internal function to do matching of category filters to widgets.
-		//
-		//	returns:
+		// returns:
 		//		boolean denoting if this entry matched one of the accept filters.
 		var accepted = false;
 		if (this._includeFilters && (this._includeFilters.length > 0)) {
@@ -477,16 +428,12 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	addCategoryIncludeFilter: function(/*object*/filter) {
-		//	summary:
+		// summary:
 		//		Function to add a filter for entry inclusion in the feed view.
-		//	description:
-		//		Function to add a filter for entry inclusion in the feed view.
-		//
-		//	filter:
+		// filter:
 		//		The basic items to filter on and the values.
 		//		Should be of format: {scheme: ``some text or null``, term: ``some text or null``, label: ``some text or null``}
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if (filter) {
 			var scheme = filter.scheme;
@@ -522,16 +469,12 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	removeCategoryIncludeFilter: function(/*object*/filter) {
-		//	summary:
+		// summary:
 		//		Function to remove a filter for entry inclusion in the feed view.
-		//	description:
-		//		Function to remove a filter for entry inclusion in the feed view.
-		//
-		//	filter:
+		// filter:
 		//		The basic items to identify the filter that is present.
 		//		Should be of format: {scheme: ``some text or null``, term: ``some text or null``, label: ``some text or null``}
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if (filter) {
 			var scheme = filter.scheme;
@@ -563,15 +506,11 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	_handleEvent: function(/*object*/entrySelectionEvent) {
-		//	summary:
+		// summary:
 		//		Internal function for listening to a topic that will handle entry notification.
-		//	description:
-		//		Internal function for listening to a topic that will handle entry notification.
-		//
-		//	entrySelectionEvent:
+		// entrySelectionEvent:
 		//		The topic message containing the entry that was selected for view.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if(entrySelectionEvent.source != this) {
 			if(entrySelectionEvent.action == "update" && entrySelectionEvent.entry) {
@@ -592,9 +531,9 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 	
 	_addEntry: function(/*object*/entry) {
-		//	summary:
+		// summary:
 		//		callback function used when adding an entry to the feed.
-		//	description:
+		// description:
 		//		callback function used when adding an entry to the feed.  After the entry has been posted to the feed,
 		//		we add it to our feed representation (to show it on the page) and publish an event to update any entry viewers.
 		this._feed.addEntry(entry);
@@ -603,9 +542,7 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 	},
 
 	destroy: function(){
-		//	summary:
-		//		Destroys this widget, including all descendants and subscriptions.
-		//	description:
+		// summary:
 		//		Destroys this widget, including all descendants and subscriptions.
 		this.clear();
 		arrayUtil.forEach(this._subscriptions, dojo.unsubscribe);
@@ -631,15 +568,11 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 	},
 
 	setTitle: function(/*string*/text){
-		//	summary:
+		// summary:
 		//		Function to set the title of the entry.
-		//	description:
-		//		Function to set the title of the entry.
-		//
-		//	text:
+		// text:
 		//		The title.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if (this.titleNode.lastChild){this.titleNode.removeChild(this.titleNode.lastChild);}
 		
@@ -649,15 +582,11 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 	},
 
 	setTime: function(/*string*/timeText){
-		//	summary:
+		// summary:
 		//		Function to set the time of the entry.
-		//	description:
-		//		Function to set the time of the entry.
-		//
-		//	timeText:
+		// timeText:
 		//		The string form of the date.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if (this.timeNode.lastChild){this.timeNode.removeChild(this.timeNode.lastChild);}
 		var timeTextNode = document.createTextNode(timeText);
@@ -665,12 +594,9 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 	},
 
 	enableDelete: function(){
-		//	summary:
+		// summary:
 		//		Function to enable the delete action on this entry.
-		//	description:
-		//		Function to enable the delete action on this entry.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		if (this.deleteButton !== null) {
 			//TODO Fix this
@@ -679,12 +605,9 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 	},
 
 	disableDelete: function(){
-		//	summary:
+		// summary:
 		//		Function to disable the delete action on this entry.
-		//	description:
-		//		Function to disable the delete action on this entry.
-		//
-		// 	returns:
+		// returns:
 		//		Nothing.
 		if (this.deleteButton !== null) {
 			this.deleteButton.style.display = 'none';
@@ -692,12 +615,9 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 	},
 
 	deleteEntry: function(/*object*/event) {
-		//	summary:
+		// summary:
 		//		Function to handle the delete event and delete the entry.
-		// 	description:
-		//		Function to handle the delete event and delete the entry.
-		//
-		//	returns:
+		// returns:
 		//		Nothing.
 		event.preventDefault();
 		event.stopPropagation();
@@ -705,12 +625,9 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 	},
 
 	onClick: function(/*object*/e){
-		//	summary:
+		// summary:
 		//		Attach point for when a row is clicked on.
-		// 	description:
-		//		Attach point for when a row is clicked on.
-		//
-		// 	e:
+		// e:
 		//		The event generated by the click.
 	}
 });
@@ -718,20 +635,16 @@ var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.Fe
 var FeedViewerGrouping = FeedViewer.FeedViewerGrouping = declare("dojox.atom.widget.FeedViewerGrouping", [_Widget, _Templated],{
 	// summary:
 	//		Grouping of feed entries.
-	// description:
-	//		Grouping of feed entries.
+
 	templateString: groupingTemplate,
 	
 	groupingNode: null,
 	titleNode: null,
 
 	setText: function(text){
-		//	summary:
+		// summary:
 		//		Sets the text to be shown above this grouping.
-		//	description:
-		//		Sets the text to be shown above this grouping.
-		//
-		//	text:
+		// text:
 		//		The text to show.
 		if (this.titleNode.lastChild){this.titleNode.removeChild(this.titleNode.lastChild);}
 		var textNode = document.createTextNode(text);
@@ -740,9 +653,7 @@ var FeedViewerGrouping = FeedViewer.FeedViewerGrouping = declare("dojox.atom.wid
 });
 
 FeedViewer.AtomEntryCategoryFilter = declare("dojox.atom.widget.AtomEntryCategoryFilter",  null,{
-	//	summary:
-	//		A filter to be applied to the list of entries.
-	//	description:
+	// summary:
 	//		A filter to be applied to the list of entries.
 	scheme: "",
 	term: "",
@@ -752,9 +663,7 @@ FeedViewer.AtomEntryCategoryFilter = declare("dojox.atom.widget.AtomEntryCategor
 
 FeedViewer.CategoryIncludeFilter = declare("dojox.atom.widget.FeedViewer.CategoryIncludeFilter", null,{
 	constructor: function(scheme, term, label){
-		//	summary:
-		//		The initializer function.
-		//	description:
+		// summary:
 		//		The initializer function.
 		this.scheme = scheme;
 		this.term = term;
@@ -762,12 +671,9 @@ FeedViewer.CategoryIncludeFilter = declare("dojox.atom.widget.FeedViewer.Categor
 	},
 
 	match: function(entry) {
-		//	summary:
+		// summary:
 		//		Function to determine if this category filter matches against a category on an atom entry
-		//	description:
-		//		Function to determine if this category filter matches against a category on an atom entry
-		//
-		//	returns:
+		// returns:
 		//		boolean denoting if this category filter matched to this entry.
 		var matched = false;
 		if (entry !== null) {
