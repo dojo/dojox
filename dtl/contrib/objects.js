@@ -2,9 +2,7 @@ define([
 	"dojo/_base/lang",
 	"../_base"	
 ], function(lang,dd){
-	/*=====
-		dd = dojox.dtl;
-	=====*/
+
 	lang.getObject("dojox.dtl.contrib.objects", true);
 
 	lang.mixin(dd.contrib.objects, {

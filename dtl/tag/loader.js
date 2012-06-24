@@ -4,9 +4,7 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/connect"
 ], function(lang,dd,array,connect){
-	/*=====
-		dd = dojox.dtl;
-	=====*/
+
 	lang.getObject("dojox.dtl.tag.loader", true);
 
 	var ddtl = dd.tag.loader;

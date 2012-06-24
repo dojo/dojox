@@ -7,9 +7,7 @@ define([
 	"../_base",
 	"../dom"
 ], function(kernel,lang,connect,domStyle,domConstruct,dd,dddom){
-	/*=====
-		dd = dojox.dtl;
-	=====*/
+
 	var ddch = lang.getObject("dojox.dtl.contrib.dom", true);
 
 	var simple = {render: function(){ return this.contents; }};
@@ -114,7 +112,7 @@ define([
 		buffer: function(parser, token){
 			// summary:
 			//		Buffer large DOM manipulations during re-render.
-			//	description:
+			// description:
 			//		When using DomTemplate, wrap any content
 			//		that you expect to change often during
 			//		re-rendering. It will then remove its parent

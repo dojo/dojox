@@ -5,10 +5,7 @@ define([
 	"../_base",
 	"dojox/string/tokenize"
 ], function(lang,array,json,dd,Tokenize){
-	/*=====
-		Tokenize = dojox.string.tokenize;
-		dd = dojox.dtl;
-	=====*/
+
 	lang.getObject("dojox.dtl.tag.loop", true);
 
 	var ddtl = dd.tag.loop;
@@ -135,7 +132,8 @@ define([
 
 	lang.mixin(ddtl, {
 		cycle: function(parser, token){
-			// summary: Cycle among the given strings each time this tag is encountered
+			// summary:
+			//		Cycle among the given strings each time this tag is encountered
 			var args = token.split_contents();
 
 			if(args.length < 2){

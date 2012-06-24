@@ -4,10 +4,7 @@ define([
 	"./_base",
 	"dijit/_WidgetBase"
 ], function(lang,ddd,dd,Widget){
-	/*=====
-		dd = dojox.dtl;
-		Widget = dijit._WidgetBase;
-	=====*/ 
+
 	dd.DomInline = lang.extend(function(args, node){
 			this.create(args, node);
 		},
