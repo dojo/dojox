@@ -277,12 +277,12 @@ dojo.declare("dojox.editor.plugins._FindReplaceToolbar", Toolbar, {
 });
 
 dojo.declare("dojox.editor.plugins.FindReplace",[_Plugin],{
-	//	summary:
+	// summary:
 	//		This plugin provides a Find/Replace capability for the editor.
 	//		Note that this plugin is NOT supported on Opera currently, as opera
 	//		does not implement a window.find or equiv function.
 
-	//	buttonClass: [protected]
+	// buttonClass: [protected]
 	//		Define the class of button the editor uses.
 	buttonClass: dijit.form.ToggleButton,
 
@@ -345,7 +345,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[_Plugin],{
 	_strings: null,
 
 	_initButton: function(){
-		//	summary:
+		// summary:
 		//		Over-ride for creation of the resize button.
 		this._strings = dojo.i18n.getLocalization("dojox.editor.plugins", "FindReplace");
 		this.button = new dijit.form.ToggleButton({
@@ -772,7 +772,7 @@ dojo.declare("dojox.editor.plugins.FindReplace",[_Plugin],{
 		//				To use a \ as a character in the string, it must be escaped.  So in the pattern it should be
 		//				represented by \\ to be treated as an ordinary \ character instead of an escape.
 		//
-		//	ignoreCase:
+		// ignoreCase:
 		//		An optional flag to indicate if the pattern matching should be treated as case-sensitive or not when comparing
 		//		By default, it is assumed case sensitive.
 		// tags:

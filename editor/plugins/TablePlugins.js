@@ -767,9 +767,8 @@ var TableContextMenu = declare(TablePlugins, {
 		},
 		
 		_createContextMenu: function(){
-			// summary
+			// summary:
 			//		Building context menu for right-click shortcuts within a table
-			//
 		
 			var pMenu = new Menu({targetNodeIds:[this.editor.iframe]});
 			var messages = tableDialogStrings;
@@ -958,13 +957,13 @@ var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins
 		},
         
 		modTable: function(cmd, args){
-			// summary
-			//	Where each plugin performs its action
-			//	Note: not using execCommand. In spite of their presence in the
-			//	Editor as query-able plugins, I was not able to find any evidence
-			//	that they are supported (especially in NOT IE). If they are
-			//	supported in other browsers, it may help with the undo problem.
-			//
+			// summary:
+			//		Where each plugin performs its action
+			//		Note: not using execCommand. In spite of their presence in the
+			//		Editor as query-able plugins, I was not able to find any evidence
+			//		that they are supported (especially in NOT IE). If they are
+			//		supported in other browsers, it may help with the undo problem.
+
 			this.begEdit();
 			var o = this.getTableInfo();
 			// The one plugin that really needs use of the very verbose

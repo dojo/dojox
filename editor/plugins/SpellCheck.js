@@ -467,7 +467,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 });
 
 dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
-	//	summary:
+	// summary:
 	//		This plugin provides a spelling check capability for the editor.
 	
 	// url: [public] String
@@ -547,8 +547,8 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		this._spanList = [];
 		// The cache that stores all the words. It looks like the following
 		// {
-		//   "word": [],
-		//   "wrd": ["word", "world"]
+		//	 "word": [],
+		//	 "wrd": ["word", "world"]
 		// }
 		this._cache = {};
 		// Indicate if this plugin is enabled or not

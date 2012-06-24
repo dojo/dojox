@@ -83,7 +83,7 @@ dojo.declare("dojox.editor.plugins.Emoticon",
 
 		getValue: function(){
 			// summary:
-			//   Returns a emoticon string in ascii representation, ex: :-)
+			//		Returns a emoticon string in ascii representation, ex: :-)
 			return dojox.editor.plugins.Emoticon.ascii[this.id];
 		},
 

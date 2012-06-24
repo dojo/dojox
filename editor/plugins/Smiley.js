@@ -28,10 +28,10 @@ dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 	iconClassPrefix: "dijitAdditionalEditorIcon",
 
 	// emoticonMarker:
-	// 		a marker for emoticon wrap like [:-)] for regexp convienent
+	//		a marker for emoticon wrap like [:-)] for regexp convienent
 	//		when a message which contains an emoticon stored in a database or view source, this marker include also
 	//		but when user enter an emoticon by key board, user don't need to enter this marker.
-	// 		also emoticon definition character set can not contains this marker
+	//		also emoticon definition character set can not contains this marker
 	emoticonMarker: '[]',
 
 	emoticonImageClass: 'dojoEditorEmoticon',
