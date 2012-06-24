@@ -373,13 +373,13 @@ textFx.backspace = function(/*Object*/ args){
 	//		or characters that appear as if they were being backspaced (or typed) in real-time.
 	// args:
 	//		- args.interval: Float - The number of milliseconds between each piece's animation
-	//							     (default is determined by text length and args.duration);
+	//		  (default is determined by text length and args.duration);
 	//		- args.wordDelay: Integer - The number of milliseconds between each word
-	//								    (only effective when args.unhide = true)
+	//		  (only effective when args.unhide = true)
 	//		- args.fixed: Boolean - If true, only style.opacity changes; otherwise, style.display
-	//							    changes between none and inline, adding realism (default = false)
+	//		  changes between none and inline, adding realism (default = false)
 	//		- args.random: Float - If true, pieces have a random delay. The value defines how much
-	//							   randomness is introduced (only effective when args.unhide = true)
+	//		  randomness is introduced (only effective when args.unhide = true)
 	//		- args.unhide: Boolean - If true, the animation is reversed
 
 	var node = args.node = dom.byId(args.node);

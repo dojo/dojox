@@ -94,8 +94,8 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 
 		getValue: function(/*Float*/r){
 			// summary:
-			// 		Returns a string with teh same integrity as the
-			// 		original star and end, but with the modified units.
+			//		Returns a string with teh same integrity as the
+			//		original star and end, but with the modified units.
 			var str = this.strProp, u;
 			for(var nm in this._properties){
 				var v, o = this._properties[nm];

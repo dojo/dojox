@@ -16,7 +16,7 @@ define([
 			//		A validating, serializable, range-bound date text box with a popup calendar
 
 			// popupClass: String
-			//  	The popup widget to use. In this case, a calendar with Day, Month and Year views.
+			//		The popup widget to use. In this case, a calendar with Day, Month and Year views.
 			popupClass: "dojox/widget/Calendar",
 
 			_selector: "date",

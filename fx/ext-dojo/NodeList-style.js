@@ -5,7 +5,7 @@ define(["dojo/_base/lang", "dojo/query", "dojo/NodeList-fx", "dojo/fx", "../styl
 return {
 	// summary:
 	//		Core extensions to `dojo.NodeList` providing additional fx to `dojo.NodeList-fx`
-	// 		from `dojox.fx.style`
+	//		from `dojox.fx.style`
 	// description:
 	//		A Package to extend dojo base NodeList with fx provided by the `dojox.fx` project.
 	//		These are experimental animations, in an experimental

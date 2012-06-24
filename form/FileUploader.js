@@ -38,7 +38,7 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	// version:
 	//		1.5 (deprecated)
 	// summary:
-	// 		Handles File Uploading to a server (PHP script included for testing)
+	//		Handles File Uploading to a server (PHP script included for testing)
 	//
 	//		FileUploader is now a WIDGET. You do not have to pass a button
 	//		in. Passing a button is still supported until version 1.5 to maintain
@@ -217,9 +217,9 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	flashFieldName:"flashUploadFiles",
 
 	// fileMask:  Array[ Array[Description, FileTypes], Array[...]...]
-	// 		(an array, or an array of arrays)
+	//		(an array, or an array of arrays)
 	//		Restrict file selection to certain file types
-	// 		Empty array defaults to "All Files"
+	//		Empty array defaults to "All Files"
 	//		example:
 	//			|	fileMask = ["Images", "*.jpg;*.jpeg;*.gif;*.png"]
 	//			or
@@ -268,7 +268,7 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	progressWidgetId:"",
 
 	// skipServerCheck: Boolean
-	// 		If true, will not verify that the server was sent the correct format.
+	//		If true, will not verify that the server was sent the correct format.
 	//		This can be safely set to true. The purpose of the server side check
 	//		is mainly to show the dev if they've implemented the different returns
 	//		correctly.
@@ -542,31 +542,31 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 
 	onChange: function(dataArray){
 		// summary:
-		// 		stub to connect
-		// 		Fires when files are selected
-		// 		Event is an array of last files selected
+		//		stub to connect
+		//		Fires when files are selected
+		//		Event is an array of last files selected
 	},
 
 	onProgress: function(dataArray){
 		// summary:
-		// 		Stub to connect
-		// 		Fires as progress returns from SWF
-		// 		Event is an array of all files uploading
+		//		Stub to connect
+		//		Fires as progress returns from SWF
+		//		Event is an array of all files uploading
 		//		Can be connected to for HTML uploader,
 		//		but will not return anything.
 	},
 
 	onComplete: function(dataArray){
 		// summary:
-		// 		stub to connect
-		// 		Fires when all files have uploaded
-		// 		Event is an array of all files
+		//		stub to connect
+		//		Fires when all files have uploaded
+		//		Event is an array of all files
 	},
 
 	onCancel: function(){
 		// summary:
-		// 		Stub to connect
-		// 		Fires when dialog box has been closed
+		//		Stub to connect
+		//		Fires when dialog box has been closed
 		//		without a file selection
 	},
 
@@ -603,7 +603,7 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	},
 	upload: function(/*Object ? */ data){
 		// summary:
-		// 		When called, begins file upload
+		//		When called, begins file upload
 		// data: Object
 		//		postData to be sent to server
 
@@ -946,7 +946,7 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 		//		which can also handle the post data.
 
 		// NOTE on deferredUploading:
-		// 		This is not enabled for HTML. Workaround would be to force
+		//		This is not enabled for HTML. Workaround would be to force
 		//		singleFile uploads.
 		// TODO:
 		//		Investigate removing fileInputs and resending form

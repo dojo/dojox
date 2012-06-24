@@ -26,31 +26,31 @@ dojoxFx.animateTimeline = function(options, node){
 	//		  The string name of a dojo.fx.easing ease. Defaults to "linear". Use
 	//		  the suffix name of the ease, like: "quadIn", not: "dojo.fx.quadIn".
 	// options: Object
-	// 		The parameters passed to the timeline animation. Includes:
-	// 			keys: Array
-	// 				An array of objects, with style properties and values.
-	// 			duration:
-	// 				Duration of the animation in milliseconds.
-	// 				Defaults to 1000.
+	//		The parameters passed to the timeline animation. Includes:
+	//			- keys: Array
+	//				An array of objects, with style properties and values.
+	//			- duration:
+	//				Duration of the animation in milliseconds.
+	//				Defaults to 1000.
 	// node: DomNode|String
-	// 		The DomNode or id to be animated.
+	//		The DomNode or id to be animated.
 	// example:
-	// 		|	var keys = [
-	// 		|	{
-	// 		|		step:"0px",
-	// 		|		ease:"quadInOut",
-	// 		|		width:"50px",
-	// 		|		height:"50px",
-	// 		|	},{
-	// 		|		step:"25%",
-	// 		|		width:"190px"
-	// 		|	},{
-	// 		|		step:"100%",
-	// 		|		width:"10px",
-	// 		|		height:"200px",
-	// 		|	}
-	// 		|	];
-	// 		|	ani = dojox.fx.animateTimeline({keys:keys, duration:2000}, "myDiv").play();
+	//	|	var keys = [
+	//	|	{
+	//	|		step:"0px",
+	//	|		ease:"quadInOut",
+	//	|		width:"50px",
+	//	|		height:"50px",
+	//	|	},{
+	//	|		step:"25%",
+	//	|		width:"190px"
+	//	|	},{
+	//	|		step:"100%",
+	//	|		width:"10px",
+	//	|		height:"200px",
+	//	|	}
+	//	|	];
+	//	|	ani = dojox.fx.animateTimeline({keys:keys, duration:2000}, "myDiv").play();
 
 	var _curve = new Timeline(options.keys);
 	var ani = baseFx.animateProperty({
@@ -78,7 +78,7 @@ dojoxFx.animateTimeline = function(options, node){
 		_curve.ani = ani;
 	})
 	return ani; // dojo.Animation
-}
+};
 
 var Timeline = function(/* Array */keys){
 	// summary:
@@ -87,7 +87,7 @@ var Timeline = function(/* Array */keys){
 	// tags:
 	//		private
 	this.keys = lang.isArray(keys) ? this.flatten(keys) : keys;
-}
+};
 
 Timeline.prototype.flatten = function(keys){
 	// summary:
@@ -101,7 +101,7 @@ Timeline.prototype.flatten = function(keys){
 			return idx==0 ? 0 : idx / (keys.length - 1)
 		}
 		return parseInt(str, 10) * .01
-	}
+	};
 	var p = {}, o = {};
 	arrayUtil.forEach(keys, function(k, i){
 		var step = getPercent(k.step, i);
@@ -145,7 +145,7 @@ Timeline.prototype.flatten = function(keys){
 	this._properties = p;
 	return o; // Object
 	
-}
+};
 
 Timeline.prototype.getValue = function(/*float*/ p){
 	// summary:
@@ -159,7 +159,7 @@ Timeline.prototype.getValue = function(/*float*/ p){
 		return self._properties[nm].units!="isColor" ?
 			self.keys[nm].values[i] + self._properties[nm].units :
 			self.keys[nm].values[i].toCss();
-	}
+	};
 	
 	for(var nm in this.keys){
 		var k = this.keys[nm];
