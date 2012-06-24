@@ -2,10 +2,6 @@ define(["dojo", "../util/oo", "../defaults"],
 function(dojo, oo, defaults){
 
 var Anchor = oo.declare(
-	// summary:
-	//		An anchor point that is attached to (usually) one of the
-	//		corners of a Stencil.
-	//		Used internally.
 	function(/* Object */ options){
 		// summary:
 		//		constructor.
@@ -32,6 +28,11 @@ var Anchor = oo.declare(
 		this.connectMouse();
 	},
 	{
+		// summary:
+		//		An anchor point that is attached to (usually) one of the
+		//		corners of a Stencil.
+		//		Used internally.
+
 		y_anchor:null,
 		x_anchor:null,
 		render: function(){
@@ -374,8 +375,8 @@ return oo.declare(
 		
 		onChangeStyle: function(/*Object*/stencil){
 			// summary:
-			// 		if the Stencil changes color while were's selected
-			// 		this moves the anchors to the back. Fix it.
+			//		if the Stencil changes color while were's selected
+			//		this moves the anchors to the back. Fix it.
 			
 			for(var nm in this.items){
 				dojo.forEach(this.items[nm].anchors, function(a){

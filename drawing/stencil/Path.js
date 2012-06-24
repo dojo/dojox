@@ -2,13 +2,13 @@ define(["dojo", "dojo/_base/array", "../util/oo", "./_Base", "../manager/_regist
 function(lang, array, oo, Base, registry){
 //console.log('base is', lang.isFunction(Base));
 var Path = oo.declare(
-	// summary:
-	//		Creates a dojox.gfx Path based on points provided.
-
 	Base,
 	function(options){
 	},
 	{
+		// summary:
+		//		Creates a dojox.gfx Path based on points provided.
+
 		type:"dojox.drawing.stencil.Path",
 		closePath: true,
 		baseRender:true,

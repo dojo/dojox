@@ -93,17 +93,16 @@ var Pan = oo.declare(
 		},
 		
 		checkBounds: function(){
-			
-			//watch("CHECK BOUNDS DISABLED", true); return;
-			
-			
 			// summary:
 			//		Scans all items on the canvas and checks if they are out of
-			// 		bounds. If so, a scroll bar (in Canvas) is shown. If the position
-			// 		is left or top, the canvas is scrolled all items are relocated
-			// 		the distance of the scroll. Ideally, it should look as if the
-			// 		items do not move.
-			
+			//		bounds. If so, a scroll bar (in Canvas) is shown. If the position
+			//		is left or top, the canvas is scrolled all items are relocated
+			//		the distance of the scroll. Ideally, it should look as if the
+			//		items do not move.
+
+			//watch("CHECK BOUNDS DISABLED", true); return;
+
+
 			// logging stuff here so it can be turned on and off. This method is
 			// very high maintenance.
 			var log = function(){

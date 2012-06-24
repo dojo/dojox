@@ -13,7 +13,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		//		a Dijit to keep the file size light. But if Dijit is available, Drawing
 		//		will register itself with it and can be accessed dijit.byId('myDrawing')
 		//
-		//	NOTES:
+		//		NOTES:
 		//		Although not Drawing and Toolbar, all other objects are created with a custom
 		//		declare. See dojox.drawing.util.oo
 		//
@@ -68,7 +68,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		//		|		plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:100}}]">
 		//		|   </div>
 		//
-		//	example:
+		// example:
 		//		|	<div dojoType="dojox.drawing.Toolbar" drawingId="drawing" class="drawingToolbar vertical">
 		//		|		<div tool="dojox.drawing.tools.Line" selected="false">Line</div>
 		//		|		<div tool="dojox.drawing.tools.Rect" selected="false">Rect</div>
@@ -105,7 +105,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// summary:
 			//		Drawing is not a Dijit. This is the master method.
 			//		NOTE:
-			// 			props is always null since this is not a real widget
+			//			props is always null since this is not a real widget
 			//			Will change when Drawing can be created programmatically.
 
 			var def = dojo.attr(node, "defaults");
@@ -205,7 +205,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 
 		getShapeProps: function(/* Object */data, mode){
 			// summary:
-			// 		The common objects that are mixed into
+			//		The common objects that are mixed into
 			//		a new Stencil. Mostly internal, but could be used.
 
 			var surface = data.stencilType;
@@ -233,8 +233,8 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 
 		initPlugins: function(){
 			// summary:
-			// 		Called from Toolbar after a plugin has been loaded
-			// 		The call to this coming from toobar is a bit funky as the timing
+			//		Called from Toolbar after a plugin has been loaded
+			//		The call to this coming from toobar is a bit funky as the timing
 			//		of IE for canvas load is different than other browsers
 			if(!this.canvas || !this.canvas.surfaceReady){
 				var c = dojo.connect(this, "onSurfaceReady", this, function(){
@@ -415,7 +415,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		changeDefaults: function(/*Object*/newStyle,/*Boolean*/value){
 			// summary:
 			//		Change the defaults so that all Stencils from this
-			// 		point on will use the newly changed style.
+			//		point on will use the newly changed style.
 			// newStyle: Object
 			//		An object that represents one of the objects in
 			//		drawing.style that will be mixed in. Not all

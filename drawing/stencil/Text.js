@@ -2,21 +2,21 @@ define(["dojo", "../util/oo", "./_Base", "../manager/_registry", "../util/typese
 function(dojo, oo, Base, registry, typeset){
 
 var Text = oo.declare(
-	// summary:
-	//		Creates a dojox.gfx Text (SVG or VML) based on data provided.
-	// description:
-	//		There are two text classes. TextBlock extends this one and
-	//		adds editable functionality, discovers text width etc.
-	//		This class displays text only. There is no line wrapping.
-	//		Multiple lines can be achieved by inserting \n linebreaks
-	//		in the text.
-
 	Base,
 	function(options){
 		// summary:
 		//		constructor.
 	},
 	{
+		// summary:
+		//		Creates a dojox.gfx Text (SVG or VML) based on data provided.
+		// description:
+		//		There are two text classes. TextBlock extends this one and
+		//		adds editable functionality, discovers text width etc.
+		//		This class displays text only. There is no line wrapping.
+		//		Multiple lines can be achieved by inserting \n linebreaks
+		//		in the text.
+
 		type:"dojox.drawing.stencil.Text",
 		anchorType:"none",
 		baseRender:true,
