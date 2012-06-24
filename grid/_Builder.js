@@ -269,10 +269,6 @@ define([
 					m = cell.markup; cc = cell.customClasses = []; cs = cell.customStyles = [];
 					// content (format can fill in cc and cs as side-effects)
 					m[5] = cell.format(inRowIndex, item);
-					if(has('ie') < 8 && (m[5] === null || m[5] === '' || /^\s+$/.test(m[5]))){
-						//fix IE 6/7 quirks - border style not effective for empty td
-						m[5] = '&nbsp;'
-					}
 					// classes
 					m[1] = cc.join(' ');
 					// styles
