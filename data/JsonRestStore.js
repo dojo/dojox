@@ -346,7 +346,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 		revert: function(kwArgs){
 			// summary:
 			//		returns any modified data to its original state prior to a save();
-			//	kwArgs:
+			// kwArgs:
 			//		global:
 			//			This will cause the revert to undo all the changes for all
 			//			JsonRestStores in a single operation.

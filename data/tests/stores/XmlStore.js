@@ -472,7 +472,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			// summary:
 			//		Simple test of the getValue text() special attribute.
 			// description:
-			//      Simple test of the getValue text() special attribute.
+			//		Simple test of the getValue text() special attribute.
 			var store = dojox.data.tests.stores.XmlStore.getCDataTestStore();
 
 			var d = new doh.Deferred();
@@ -502,7 +502,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			// summary:
 			//		Simple test of the getValues text() special attribute.
 			// description:
-			//      Simple test of the getValues text() special attribute.
+			//		Simple test of the getValues text() special attribute.
 			var store = dojox.data.tests.stores.XmlStore.getCDataTestStore();
 
 			var d = new doh.Deferred();
@@ -531,7 +531,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			// summary:
 			//		Simple test of the getValue and toString of the resulting 'XmlItem' API
 			// description:
-			//      Simple test of the getValue and toString of the resulting 'XmlItem' API
+			//		Simple test of the getValue and toString of the resulting 'XmlItem' API
 			var store = dojox.data.tests.stores.XmlStore.getCDataTestStore();
 
 			var d = new doh.Deferred();

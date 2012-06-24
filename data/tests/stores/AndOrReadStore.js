@@ -30,16 +30,16 @@ dojo.declare("dojox.data.tests.Wrapper", null, {
 
 
 //The test data-sets and tests are taken from ItemFileReadStore, to show
-//  backwards compatibility.
+//	backwards compatibility.
 //Additionally, where appropriate (fetch/query), the AndOrReadStore test is immediately
-//  followed by the same query (with ", complex" in the description), but with the query
-//  being a string rather than a json object.
+//	followed by the same query (with ", complex" in the description), but with the query
+//	being a string rather than a json object.
 //Below all those tests are new ones that test the use of AND, OR, NOT, ||, &&, (, ), and ","
-//  in queries, as well as a mix of string and json object queries.
+//	in queries, as well as a mix of string and json object queries.
 //Since some widgets expect the query to be in json object form, in addition to the
-//  query="id:1234 || dept:'Sales Department' || (dept:Auto && id:2*)" programmatic syntax,
-//  query="{complexQuery:'id:1234 || dept:\"Sales Department\" || (dept:Auto && id:2*)" is
-//  tested/supported.
+//	query="id:1234 || dept:'Sales Department' || (dept:Auto && id:2*)" programmatic syntax,
+//	query="{complexQuery:'id:1234 || dept:\"Sales Department\" || (dept:Auto && id:2*)" is
+//	tested/supported.
 
 //-----------------------------------------------------
 // test data-sets

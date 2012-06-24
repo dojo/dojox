@@ -11,7 +11,7 @@ return declare("dojox.data.ServiceStore",
 		//
 		//		The ServiceStore also supports lazy loading. References can be made to objects that have not been loaded.
 		//		For example if a service returned:
-		// 		|		{"name":"Example","lazyLoadedObject":{"$ref":"obj2"}}
+		//		|		{"name":"Example","lazyLoadedObject":{"$ref":"obj2"}}
 		//
 		//		And this object has accessed using the dojo.data API:
 		//		|		var obj = serviceStore.getValue(myObject,"lazyLoadedObject");

@@ -23,7 +23,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 	//		document. Should not be changed.
 	identity: "jsxid",
 
-	//	url : String
+	// url : String
 	//		The location from which to fetch the XML (CDF) document.
 	url: "",
 

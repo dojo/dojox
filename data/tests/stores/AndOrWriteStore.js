@@ -9,18 +9,18 @@ dojo.require("dojo.data.api.Notification");
 
 
 //The test data-sets and tests are taken from ItemFileReadStore, to show
-//  backwards compatibility, and from ItemFileWriteStore.
+//	backwards compatibility, and from ItemFileWriteStore.
 //Since no new write capabilities are included in AndOrWriteStore (just those from
-//  ItemFileWriteStore), no new write tests were added.
+//	ItemFileWriteStore), no new write tests were added.
 //Additionally, where appropriate (fetch/query), the ItemFileReadStore test is immediately
-//  followed by the same query (with ", complex" in the description), but with the query
-//  being a string rather than a json object.
+//	followed by the same query (with ", complex" in the description), but with the query
+//	being a string rather than a json object.
 //Below all those tests are new ones that test the use of AND, OR, NOT, ||, &&, (, ), and ","
-//  in queries, as well as a mix of string and json object queries.
+//	in queries, as well as a mix of string and json object queries.
 //Since some widgets expect the query to be in json object form, in addition to the
-//  query="id:1234 || dept:'Sales Department' || (dept:Auto && id:2*)" programmatic syntax,
-//  query="{complexQuery:'id:1234 || dept:\"Sales Department\" || (dept:Auto && id:2*)" is
-//  tested/supported.
+//	query="id:1234 || dept:'Sales Department' || (dept:Auto && id:2*)" programmatic syntax,
+//	query="{complexQuery:'id:1234 || dept:\"Sales Department\" || (dept:Auto && id:2*)" is
+//	tested/supported.
 
 //-----------------------------------------------------
 // test data-sets
@@ -3436,15 +3436,15 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 					t.assertTrue(store.containsValue(item, "capital", "Cairo"));
 					
 					// FIXME:
-					//    Okay, so this seems very odd.  Maybe I'm just being dense.
-					//    These tests works:
+					//	  Okay, so this seems very odd.  Maybe I'm just being dense.
+					//	  These tests works:
 					t.assertEqual(store.isDirty(item), false);
 					t.assertTrue(store.isDirty(item) === false);
-					//    But these seemingly equivalent tests will not work:
+					//	  But these seemingly equivalent tests will not work:
 					// t.assertFalse(store.isDirty(item));
 					// t.assertTrue(!(store.isDirty(item)));
 					//
-					//    All of which seems especially weird, given that this *does* work:
+					//	  All of which seems especially weird, given that this *does* work:
 					t.assertFalse(store.isDirty());
 					
 					
@@ -4057,7 +4057,7 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 			runTest: function(t){
 				// summary:
 				//		Test for bug #5357.  Ensure that the revert properly nulls the identity position
-				//      for a new item after revert.
+				//		for a new item after revert.
 				var args = {data: {
 					label:"name",
 					items:[
