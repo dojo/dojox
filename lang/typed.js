@@ -42,7 +42,7 @@
 		}
 	}
 	function validate(instance, schema, property){
-		//	summary:
+		// summary:
 		//		This checks to ensure that the result is valid and will throw an appropriate error message if it is not
 		// result:
 		//		the result returned from checkPropertyChange or validate

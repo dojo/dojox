@@ -3,7 +3,7 @@ dojo.require("dojox.json.query");
 
 
 dojox.json.tests.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
 };

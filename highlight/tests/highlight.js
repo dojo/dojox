@@ -16,7 +16,7 @@ doh.register("dojox.highlight.tests.highlight", [
 	function test_invalidjavascript(){
 		//summary: Test an invalid javascript block with partial result
 		var unformatted = "console.debug('hello);\n /*Hi*/";
-		//                               ^_ unmatched quote
+		//			                     ^_ unmatched quote
 		var expected = "console.debug(<span class=\"string\">";
 		var result = dojox.highlight.processString(unformatted, "javascript");
 		doh.assertEqual(unformatted, result.result);

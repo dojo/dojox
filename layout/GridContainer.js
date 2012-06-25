@@ -61,7 +61,7 @@ define([
 		minColWidth: 20,
 
 		// minChildWidth: Integer
-		// 		Minimum children width in pixel (only used for IE6 which doesn't handle min-width css property)
+		//		Minimum children width in pixel (only used for IE6 which doesn't handle min-width css property)
 		minChildWidth: 150,
 
 		// mode: String
@@ -111,7 +111,7 @@ define([
 			// targetArea:
 			//		AreaManager Object containing information of targetArea
 			// indexChild:
-			// 		Index where the dropped widget has been placed
+			//		Index where the dropped widget has been placed
 
 			if(this.inherited(arguments)){
 				this._placeGrips();
@@ -140,7 +140,7 @@ define([
 			//		IE6 calls method resize itself.
 			//		If the GridContainer is not visible at this time,
 			//		the method _placeGrips can return a negative value with
-			// 		contentBox method. (see method _placeGrip() with Fix Ie6 for the height)
+			//		contentBox method. (see method _placeGrip() with Fix Ie6 for the height)
 			if(this._isShown() && this.hasResizableColumns){
 				this._placeGrips();
 			}

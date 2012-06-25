@@ -93,7 +93,8 @@ define(["dojo", "dijit", "dijit/_Widget", "dijit/_Templated", "dojox/highlight"]
 		},
 	
 		_loadError: function(error){
-			// summary: a generic error handler for the url=""
+			// summary:
+			//		a generic error handler for the url=""
 			console.warn("loading: ", this.url, " FAILED", error);
 		}
 

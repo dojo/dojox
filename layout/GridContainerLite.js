@@ -30,12 +30,12 @@ define([
 		[_LayoutWidget, _TemplatedMixin],
 	{
 		// summary:
-		// 		The GridContainerLite is a container of child elements that are placed in a kind of grid.
+		//		The GridContainerLite is a container of child elements that are placed in a kind of grid.
 		//
 		// description:
 		//		GridContainerLite displays the child elements by column
 		//		(ie: the children widths are fixed by the column width of the grid but
-		//              the children heights are free).
+		//		the children heights are free).
 		//		Each child is movable by drag and drop inside the GridContainer.
 		//		The position of other children is automatically calculated when a child is moved.
 		//
@@ -70,7 +70,7 @@ define([
 		// 	|		widget.startup();
 		// 	|	});
 
-		//	autoRefresh: Boolean
+		// autoRefresh: Boolean
 		//		Enable the refresh of registered areas on drag start.
 		autoRefresh: true,
 
@@ -179,7 +179,7 @@ define([
 			// targetArea:
 			//		AreaManager Object containing information of targetArea
 			// indexChild:
-			// 		Index where the dropped widget has been placed
+			//		Index where the dropped widget has been placed
 			// returns:
 			//		True if resized.
 
@@ -218,7 +218,7 @@ define([
 			// sourceArea:
 			//		AreaManager Object containing information of sourceArea
 			// indexChild:
-			// 		Index where the dragged widget has been placed
+			//		Index where the dragged widget has been placed
 
 			//console.log("dojox.layout.GridContainerLite ::: resizeChildAfterDragStart");
 			if(this._disabled){
@@ -361,7 +361,7 @@ define([
 
 		_getZonesAttr: function(){
 			// summary:
-			//   return array of zone (domNode)
+			//		return array of zone (domNode)
 			return query(".gridContainerZone",  this.containerNode);
 		},
 

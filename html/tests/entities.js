@@ -6,9 +6,9 @@ doh.register("dojox.html.tests.entities",
 		{
 			name: "Encode:  Basic HTML Entities",
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of basic encoding of characters considered HTML entities
-				//	description:
+				// description:
 				//		Simple test of basic encoding of characters considered HTML entities
 				var txt = "This is some \" text \" with & entities inside it that <need to be escaped>";
 				var expected = "This is some &quot; text &quot; with &amp; entities inside it that &lt;need to be escaped&gt;";
@@ -19,9 +19,9 @@ doh.register("dojox.html.tests.entities",
 		{
 			name: "Decode:  Basic HTML Entities",
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of basic encoding of characters considered HTML entities
-				//	description:
+				// description:
 				//		Simple test of basic encoding of characters considered HTML entities
 				var txt = "This is some &quot; text &quot; with &amp; entities inside it that &lt;need to be escaped&gt;";
 				var expected = "This is some \" text \" with & entities inside it that <need to be escaped>";
@@ -32,9 +32,9 @@ doh.register("dojox.html.tests.entities",
 		{
 			name: "Encode:  Basic Latin Entities",
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of basic encoding of characters considered Latin type entities
-				//	description:
+				// description:
 				//		Simple test of basic encoding of characters considered Latin type entities
 				var txt = "";
 				var expected = "";
@@ -51,9 +51,9 @@ doh.register("dojox.html.tests.entities",
 		{
 			name: "Decode:  Basic Latin Entities",
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of basic decoding of characters considered Latin type entities
-				//	description:
+				// description:
 				//		Simple test of basic decoding of characters considered Latin type entities
 					  var txt = "";
 					  var expected = "";
@@ -70,9 +70,9 @@ doh.register("dojox.html.tests.entities",
 		{
 			name: "Encode:  Custom entity map",
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of basic encoding using a custom map instead of the default ones.
-				//	description:
+				// description:
 				//		Simple test of basic encoding using a custom map instead of the default ones.
 				var txt = "This is some \" text with & entities inside it that <need to be escaped>";
 				var expected = "This is some &quot; text with & entities inside it that <need to be escaped>";
@@ -83,9 +83,9 @@ doh.register("dojox.html.tests.entities",
 		{
 			name: "Decode:  Custom entity map",
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of basic decoding using a custom map instead of the default ones.
-				//	description:
+				// description:
 				//		Simple test of basic decoding using a custom map instead of the default ones.
 				var txt = "This is some &quot; text with & entities inside it that <need to be escaped>";
 				var expected = "This is some \" text with & entities inside it that <need to be escaped>";

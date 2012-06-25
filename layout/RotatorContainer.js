@@ -225,9 +225,9 @@ var RotatorContainer = declare("dojox.layout.RotatorContainer",[StackContainer, 
 	},
 
 	_manualChange: function(){
-		// summary: 
+		// summary:
 		//		This function is only called when a manual change occurs in which
-		//  	case we may need to stop playing and we need to reset the cycle counter
+		//		case we may need to stop playing and we need to reset the cycle counter
 		if(this.pauseOnManualChange){
 			this._playing = false;
 		}
@@ -435,13 +435,14 @@ declare("dojox.layout.RotatorPager", [Widget, Templated, Contained], {
 	},
 
 	destroy: function(){
-		// summary: Unsubscribe to all of our topics
+		// Unsubscribe to all of our topics
 		array.forEach(this._subscriptions, connect.unsubscribe);
 		this.inherited(arguments);
 	},
 
 	_state: function(/*boolean*/playing){
-		// summary: Updates the display of the play/pause button
+		// summary:
+		//		Updates the display of the play/pause button
 		if(this.playPause && this.playPause.checked != playing){
 			this.playPause.set("label", playing ? "Pause" : "Play");
 			this.playPause.set("checked", playing);
@@ -449,7 +450,8 @@ declare("dojox.layout.RotatorPager", [Widget, Templated, Contained], {
 	},
 
 	_update: function(/*boolean*/playing, /*int*/current, /*int*/total){
-		// summary: Updates the pager's play/pause button, current child, and total number of children.
+		// summary:
+		//		Updates the pager's play/pause button, current child, and total number of children.
 		this._state(playing);
 		if(this.current && current){
 			this.current.innerHTML = current;

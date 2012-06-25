@@ -5,25 +5,25 @@ dojo.provide("dojox.lang.tests.declare-old");
 // this file courtesy of the TurboAjax Group, licensed under a Dojo CLA
 
 dojox.lang.tests.declareOld = function(/*String*/ className, /*Function|Function[]*/ superclass, /*Object*/ props){
-	//	summary:
+	// summary:
 	//		Create a feature-rich constructor from compact notation
 	//
-	//	description:
+	// description:
 	//		Create a feature-rich constructor from compact notation
 	//
-	//	className:
+	// className:
 	//		The name of the constructor (loosely, a "class")
 	//		stored in the "declaredClass" property in the created prototype
-	//	superclass:
+	// superclass:
 	//		May be null, a Function, or an Array of Functions. If an array,
 	//		the first element is used as the prototypical ancestor and
 	//		any following Functions become mixin ancestors.
-	//	props:
+	// props:
 	//		An object whose properties are copied to the
 	//		created prototype.
 	//		Add an instance-initialization function by making it a property
 	//		named "constructor".
-	//	description:
+	// description:
 	//		Create a constructor using a compact notation for inheritance and
 	//		prototype extension.
 	//
@@ -35,7 +35,7 @@ dojox.lang.tests.declareOld = function(/*String*/ className, /*Function|Function
 	//
 	//		"className" is cached in "declaredClass" property of the new class.
 	//
-	//	example:
+	// example:
 	//		Declare a class with no ancestors.
 	//	|	dojo.declare("my.ClassyThing", null, {
 	//	|		aProperty:"string",
@@ -44,7 +44,7 @@ dojox.lang.tests.declareOld = function(/*String*/ className, /*Function|Function
 	//	|		}
 	//	|	});
 	//
-	//	example:
+	// example:
 	//		Declare a class inheriting from my.classed.Foo
 	//	|	dojo.declare("my.classes.Bar", my.classes.Foo, {
 	//	|		// properties to be added to the class prototype
@@ -59,7 +59,7 @@ dojox.lang.tests.declareOld = function(/*String*/ className, /*Function|Function
 	//	|		}
 	//	|	);
 	//
-	//	example:
+	// example:
 	//		Declare a class inherting from two mixins, handling multiple constructor args
 	//	|	dojo.declare("my.ComplexMix", [my.BaseClass, my.MixedClass],{
 	//	|		constructor: function(a, b){

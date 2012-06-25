@@ -19,12 +19,11 @@ define([
 kernel.experimental("dojox.layout.ExpandoPane"); // just to show it can be done?
 
 return declare("dojox.layout.ExpandoPane", [ContentPane, TemplatedMixin, Contained, Container],{
-	// summary: An experimental collapsing-pane for dijit.layout.BorderContainer
-	//
+	// summary:
+	//		An experimental collapsing-pane for dijit.layout.BorderContainer
 	// description:
 	//		Works just like a ContentPane inside of a borderContainer. Will expand/collapse on
 	//		command, and supports having Layout Children as direct descendants
-	//
 
 	//maxHeight: "",
 	//maxWidth: "",

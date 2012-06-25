@@ -91,11 +91,11 @@ dojo.require("dojox.lang.observable");
 					// summary:
 					//	Gets the value of an item's 'property'
 					//
-					//	item: /* object */
-					//	property: /* string */
+					// item: /* object */
+					// property: /* string */
 					//		property to look up value for
 					// lazyCallback: /* function*/
-					// 		not part of the API, but if you are using lazy loading properties, you may provide a callback to resume, in order to have asynchronous loading
+					//		not part of the API, but if you are using lazy loading properties, you may provide a callback to resume, in order to have asynchronous loading
 					var value = item[property];
 					if(value instanceof dojo.Deferred){
 						dojox.rpc._sync = !lazyCallback; // tell the service to operate synchronously (I have some concerns about the "thread" safety with FF3, as I think it does event stacking on sync calls)

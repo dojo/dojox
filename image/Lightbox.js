@@ -6,29 +6,25 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 	dojo.declare("dojox.image.Lightbox", dijit._Widget, {
 		// summary:
 		//		A dojo-based Lightbox implementation.
-		//
 		// description:
-		//	An Elegant, keyboard accessible, markup and store capable Lightbox widget to show images
-		//	in a modal dialog-esque format. Can show individual images as Modal dialog, or can group
-		//	images with multiple entry points, all using a single "master" Dialog for visualization
+		//		An Elegant, keyboard accessible, markup and store capable Lightbox widget to show images
+		//		in a modal dialog-esque format. Can show individual images as Modal dialog, or can group
+		//		images with multiple entry points, all using a single "master" Dialog for visualization
 		//
-		//	key controls:
-		//		ESC - close
-		//		Down Arrow / Rt Arrow / N - Next Image
-		//		Up Arrow / Lf Arrow / P - Previous Image
-		//
+		//		key controls:
+		//			- ESC - close
+		//			- Down Arrow / Rt Arrow / N - Next Image
+		//			- Up Arrow / Lf Arrow / P - Previous Image
 		// example:
 		// |	<a href="image1.jpg" dojoType="dojox.image.Lightbox">show lightbox</a>
-		//
 		// example:
 		// |	<a href="image2.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
 		// |	<a href="image3.jpg" dojoType="dojox.image.Lightbox" group="one">show group lightbox</a>
-		//
 		// example:
 		// |	not implemented fully yet, though works with basic datastore access. need to manually call
 		// |	widget._attachedDialog.addImage(item,"fromStore") for each item in a store result set.
 		// |	<div dojoType="dojox.image.Lightbox" group="fromStore" store="storeName"></div>
-		//
+
 		// group: String
 		//		Grouping images in a page with similar tags will provide a 'slideshow' like grouping of images
 		group: "",
@@ -56,7 +52,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		//		Privately set this to disable/enable natural link of anchor tags
 		_allowPassthru: false,
 
-		// _attachedDialg: dojox.image._LightboxDialog
+		// _attachedDialog: dojox.image._LightboxDialog
 		//		The pointer to the global lightbox dialog for this widget
 		_attachedDialog: null, // try to share a single underlay per page?
 
@@ -80,7 +76,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_addSelf: function(){
-			// summary: Add this instance to the master LightBoxDialog
+			// summary:
+			//		Add this instance to the master LightBoxDialog
 			this._attachedDialog.addImage({
 				href: this.href,
 				title: this.title
@@ -88,30 +85,35 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_handleClick: function(/* Event */e){
-			// summary: Handle the click on the link
+			// summary:
+			//		Handle the click on the link
 			if(!this._allowPassthru){ e.preventDefault(); }
 			else{ return; }
 			this.show();
 		},
 
 		show: function(){
-			// summary: Show the Lightbox with this instance as the starting point
+			// summary:
+			//		Show the Lightbox with this instance as the starting point
 			this._attachedDialog.show(this);
 		},
 
 		hide: function(){
-			// summary: Hide the Lightbox currently showing
+			// summary:
+			//		Hide the Lightbox currently showing
 			this._attachedDialog.hide();
 		},
 
 		// FIXME: switch to .attr, deprecate eventually.
 		disable: function(){
-			// summary: Disables event clobbering and dialog, and follows natural link
+			// summary:
+			//		Disables event clobbering and dialog, and follows natural link
 			this._allowPassthru = true;
 		},
 
 		enable: function(){
-			// summary: Enables the dialog (prevents default link)
+			// summary:
+			//		Enables the dialog (prevents default link)
 			this._allowPassthru = false;
 		},
 
@@ -131,10 +133,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		dijit.Dialog, {
 		// summary:
 		//		The "dialog" shared	 between any Lightbox instances on the page, publically available
-		//		for programatic manipulation.
-		//
+		//		for programmatic manipulation.
 		// description:
-		//
 		//		A widget that intercepts anchor links (typically around images)
 		//		and displays a modal Dialog. this is the actual Dialog, which you can
 		//		create and populate manually, though should use simple Lightbox's
@@ -142,13 +142,12 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		//
 		//		There should only be one of these on a page, so all dojox.image.Lightbox's will us it
 		//		(the first instance of a Lightbox to be show()'n will create me If i do not exist)
-		//
-		//	example:
+		// example:
 		//	|	// show a single image from a url
 		//	|	var url = "http://dojotoolkit.org/logo.png";
 		//	|	var dialog = new dojox.image.LightboxDialog().startup();
 		//	|	dialog.show({ href: url, title:"My Remote Image"});
-		//
+
 		// title: String
 		//		The current title, read from object passed to show()
 		title: "",
@@ -199,8 +198,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		startup: function(){
-			// summary: Add some extra event handlers, and startup our superclass.
-			//
+			// summary:
+			//		Add some extra event handlers, and startup our superclass.
 			// returns: dijit._Widget
 			//		Perhaps the only `dijit._Widget` that returns itself to allow
 			//		'chaining' or var referencing with .startup()
@@ -217,14 +216,13 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		show: function(/* Object */groupData){
-			// summary: Show the Master Dialog. Starts the chain of events to show
+			// summary:
+			//		Show the Master Dialog. Starts the chain of events to show
 			//		an image in the dialog, including showing the dialog if it is
 			//		not already visible
-			//
 			// groupData: Object
 			//		needs href and title attributes. the values for this image.
-			//
-			//
+
 			var _t = this; // size
 			this._lastGroup = groupData;
 
@@ -293,7 +291,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_ready: function(src){
-			// summary: A function to trigger all 'real' showing of some src
+			// summary:
+			//		A function to trigger all 'real' showing of some src
 
 			var _t = this;
 
@@ -323,7 +322,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_nextImage: function(){
-			// summary: Load next image in group
+			// summary:
+			//		Load next image in group
 			if(!this.inGroup){ return; }
 			if(this._index + 1 < this.inGroup.length){
 				this._index++;
@@ -334,7 +334,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_prevImage: function(){
-			// summary: Load previous image in group
+			// summary:
+			//		Load previous image in group
 			if(this.inGroup){
 				if(this._index == 0){
 					this._index = this.inGroup.length - 1;
@@ -346,12 +347,14 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_loadImage: function(){
-			// summary: Do the prep work before we can show another image
+			// summary:
+			//		Do the prep work before we can show another image
 			this._loadingAnim.play(1);
 		},
 
 		_prepNodes: function(){
-			// summary: A localized hook to accompany _loadImage
+			// summary:
+			//		A localized hook to accompany _loadImage
 			this._imageReady = false;
 			if(this.inGroup && this.inGroup[this._index]){
 				this.show({
@@ -373,7 +376,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		resizeTo: function(/* Object */size, forceTitle){
-			// summary: Resize our dialog container, and fire _showImage
+			// summary:
+			//		Resize our dialog container, and fire _showImage
 
 			var adjustSize = dojo.boxModel == "border-box" ?
 				dojo._getBorderExtents(this.domNode).w : 0,
@@ -403,7 +407,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_scaleToFit: function(/* Object */size){
-			// summary: resize an image to fit within the bounds of the viewport
+			// summary:
+			//		resize an image to fit within the bounds of the viewport
 			// size: Object
 			//		The 'size' object passed around for this image
 
@@ -435,7 +440,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_setImageSize: function(size){
-			// summary: Reset the image size to some actual size.
+			// summary:
+			//		Reset the image size to some actual size.
 			var s = this.imgNode;
 			s.height = size.h;
 			s.width = size.w;
@@ -445,7 +451,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		_size: function(){},
 
 		_position: function(/* Event */e){
-			// summary: we want to know the viewport size any time it changes
+			// summary:
+			//		we want to know the viewport size any time it changes
 			this._vp = dojo.window.getBox();
 			this.inherited(arguments);
 
@@ -465,12 +472,14 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_showImage: function(){
-			// summary: Fade in the image, and fire showNav
+			// summary:
+			//		Fade in the image, and fire showNav
 			this._showImageAnim.play(1);
 		},
 
 		_showNav: function(){
-			// summary: Fade in the footer, and setup our connections.
+			// summary:
+			//		Fade in the footer, and setup our connections.
 			var titleSizeNow = dojo.marginBox(this.titleNode);
 			if(titleSizeNow.h > this._lastTitleSize.h){
 				this.resizeTo(this._wasStyled ? this._lastSize : this._currentSize, titleSizeNow);
@@ -480,7 +489,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		hide: function(){
-			// summary: Hide the Master Lightbox
+			// summary:
+			//		Hide the Master Lightbox
 			dojo.fadeOut({
 				node: this.titleNode,
 				duration: 200,
@@ -498,15 +508,15 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		addImage: function(child, group){
-			// summary: Add an image to this Master Lightbox
-			//
+			// summary:
+			//		Add an image to this Master Lightbox
 			// child: Object
 			//		The image information to add.
 			//		href: String - link to image (required)
 			//		title: String - title to display
-			//
 			// group: String?
 			//		attach to group of similar tag or null for individual image instance
+
 			var g = group;
 			if(!child.href){ return; }
 			if(g){
@@ -518,7 +528,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		removeImage: function(/* Widget */child){
-			// summary: Remove an image instance from this LightboxDialog.
+			// summary:
+			//		Remove an image instance from this LightboxDialog.
 			// child: Object
 			//		A reference to the Lightbox child that was added (or an object literal)
 			//		only the .href member is compared for uniqueness. The object may contain
@@ -535,12 +546,14 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		removeGroup: function(group){
-			// summary: Remove all images in a passed group
+			// summary:
+			//		Remove all images in a passed group
 			if(this._groups[group]){ this._groups[group] = []; }
 		},
 
 		_handleKey: function(/* Event */e){
-			// summary: Handle keyboard navigation internally
+			// summary:
+			//		Handle keyboard navigation internally
 			if(!this.open){ return; }
 
 			var dk = dojo.keys;
@@ -565,7 +578,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		_makeAnims: function(){
-			// summary: make and cleanup animation and animation connections
+			// summary:
+			//		make and cleanup animation and animation connections
 
 			dojo.forEach(this._animConnects, dojo.disconnect);
 			this._animConnects = [];
@@ -583,7 +597,8 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		},
 
 		onClick: function(groupData){
-			// summary: a stub function, called with the currently displayed image as the only argument
+			// summary:
+			//		a stub function, called with the currently displayed image as the only argument
 		},
 
 		_onImageClick: function(e){
