@@ -12,7 +12,7 @@ define([
 	
 	kernel.experimental("dojox.mobile.pageTurningUtils");
 
-	var PageTurningUtils = function(){
+	return function(){
 		// summary:
 		//		Utilities to provide page turning effects just like turning a real book.
 		// example:
@@ -587,7 +587,4 @@ define([
 			childNodes[2] && domStyle.set(childNodes[2], "display", "none"); // shadowNode
 		};
 	};
-
-	// Return singleton.  (TODO: can we replace PageTurningUtils class and singleton w/a simple hash of functions?)
-	return new PageTurningUtils();
 });
