@@ -1213,7 +1213,7 @@ define([
 		},
 
 		setSelectable: function(/*DomNode*/node, /*Boolean*/selectable){
-			// summary
+			// summary:
 			//		Sets the given node as selectable or unselectable.
 			 
 			// dojo.setSelectable has dependency on dojo.query. Redefine our own.

@@ -46,7 +46,7 @@ define(["dojo/_base/kernel",
 		_moveUpHandler: null,
 	
 		// _draggedNode: DOMNode
-		// 		The current dragged node
+		//		The current dragged node
 		_draggedNode: null,
 	
 		constructor: function(){
@@ -115,9 +115,9 @@ define(["dojo/_base/kernel",
 			// summary:
 			//		Register a target dojo.
 			//		The target is represented by an object containing :
-			// 			- the dojo area node
-			// 			- the type reference to identify a group node
-			// 			- the coords of the area to enable refresh position
+			//			- the dojo area node
+			//			- the type reference to identify a group node
+			//			- the coords of the area to enable refresh position
 			// area:
 			//		The DOM node which has to be registered.
 			// type:
@@ -483,7 +483,7 @@ define(["dojo/_base/kernel",
 	dojox.mdnd.adapter._dndToDojo = null;
 	dojox.mdnd.adapter.dndToDojo = function(){
 		// summary:
-		// 		returns the current areaManager, creates one if it is not created yet
+		//		returns the current areaManager, creates one if it is not created yet
 		if(!dojox.mdnd.adapter._dndToDojo){
 			dojox.mdnd.adapter._dndToDojo = new dojox.mdnd.adapter.DndToDojo();
 		}

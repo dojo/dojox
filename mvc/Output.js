@@ -44,9 +44,9 @@ define([
 		set: function(name, value){
 			// summary:
 			//		Override and refresh output on value change.
-			//	name:
+			// name:
 			//		The property to set.
-			//	value:
+			// value:
 			//		The value to set in the property.
 			this.inherited(arguments);
 			if(name === "value"){

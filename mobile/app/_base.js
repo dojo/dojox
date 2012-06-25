@@ -131,7 +131,7 @@ dojo.require("dojox.mobile.app.ImageThumbView");
 	dojo.mixin(dojox.mobile.app, {
 		init: function(node){
 			// summary:
-			//    Initializes the mobile app. Creates the
+			//		Initializes the mobile app. Creates the
 
 			rootNode = node || dojo.body();
 			dojox.mobile.app.STAGE_CONTROLLER_ACTIVE = true;

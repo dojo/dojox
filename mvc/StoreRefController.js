@@ -141,7 +141,7 @@ define([
 			// options: Object
 			//		The options for dojo/store/*.remove().
 			// returns: Boolean
-			// 		Returns true if an object was removed, falsy (undefined) if no object matched the id.
+			//		Returns true if an object was removed, falsy (undefined) if no object matched the id.
 
 			if(!(this.store || {}).remove){ return; }
 			return this.store.remove(id, options);

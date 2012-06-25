@@ -16,7 +16,7 @@ dojo.require("dijit._WidgetBase");
 		//		can be provided for when the list is empty.
 
 		// items: Array
-		//    The array of data items that will be rendered.
+		//		The array of data items that will be rendered.
 		items: null,
 
 		// itemTemplate: String
@@ -29,14 +29,14 @@ dojo.require("dijit._WidgetBase");
 		//		are no data items. This is optional.
 		emptyTemplate: "",
 
-		//  dividerTemplate: String
-		//    The URL to the HTML file containing the markup for the dividers
-		//    between groups of list items
+		// dividerTemplate: String
+		//		The URL to the HTML file containing the markup for the dividers
+		//		between groups of list items
 		dividerTemplate: "",
 
 		// dividerFunction: Function
-		//    Function to create divider elements. This should return a divider
-		//    value for each item in the list
+		//		Function to create divider elements. This should return a divider
+		//		value for each item in the list
 		dividerFunction: null,
 
 		// labelDelete: String
@@ -69,7 +69,7 @@ dojo.require("dijit._WidgetBase");
 		_templateLoadCount: 0,
 
 		// _mouseDownPos: Object
-		//    The coordinates of where a mouseDown event was detected
+		//		The coordinates of where a mouseDown event was detected
 		_mouseDownPos: null,
 
 		baseClass: "list",
@@ -245,7 +245,7 @@ dojo.require("dijit._WidgetBase");
 
 		preDelete: function(currentLeftPos){
 			// summary:
-			//    Slides the row offscreen before it is deleted
+			//		Slides the row offscreen before it is deleted
 
 			// TODO: do this with CSS3!
 			var self = this;
@@ -374,7 +374,7 @@ dojo.require("dijit._WidgetBase");
 
 		onDelete: function(data, index, array){
 			// summary:
-			//    Called when a row is deleted
+			//		Called when a row is deleted
 			// data:
 			//		The data related to the row being deleted
 			// index:
@@ -432,8 +432,8 @@ dojo.require("dijit._WidgetBase");
 
 		_setDataInfo: function(rowNode, event){
 			// summary:
-			//    Attaches the data item and index for each row to any event
-			//    that occurs on that row.
+			//		Attaches the data item and index for each row to any event
+			//		that occurs on that row.
 			event.item = rowNode._data;
 			event.index = rowNode._idx;
 		},
@@ -614,13 +614,13 @@ dojo.require("dijit._WidgetBase");
 
 		_setFormattersAttr: function(formatters){
 			// summary:
-			//    Sets the data items, and causes a rerender of the list
+			//		Sets the data items, and causes a rerender of the list
 			this.formatters = formatters;
 		},
 
 		_setItemsAttr: function(items){
 			// summary:
-			//    Sets the data items, and causes a rerender of the list
+			//		Sets the data items, and causes a rerender of the list
 
 			this.items = items || [];
 

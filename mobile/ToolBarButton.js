@@ -33,9 +33,9 @@ define([
 
 		// light: Boolean
 		//		If true, this widget produces only a single `<span>` node when it
-		// 		has only an icon or only a label, and has no arrow. In that
-		// 		case, you cannot have both icon and label, or arrow even if you
-		// 		try to set them.
+		//		has only an icon or only a label, and has no arrow. In that
+		//		case, you cannot have both icon and label, or arrow even if you
+		//		try to set them.
 		light: true,
 
 		/* internal properties */

@@ -147,14 +147,14 @@ define([
 				sin32 = Math.sin(32 * Math.PI/180),
 				tan32 = Math.tan(32 * Math.PI/180),
 				w = this.w,
-				h = this.h
+				h = this.h,
 				page = this.page,
 				turnfrom = this.turnfrom,
 				params = this._styleParams;
 			
 			// Calculate each div size and position based on the page turning algorithm
-			//   fw: frontWidth, fh: frontHeight, dw: dogear, cx: posX, cy: posY, 
-			//   dx: dogearX, dy: dogearY, fy:actualPagePos
+			//	 fw: frontWidth, fh: frontHeight, dw: dogear, cx: posX, cy: posY,
+			//	 dx: dogearX, dy: dogearY, fy:actualPagePos
 			var Q = fold = w * tan58,
 				fw = Q * sin32 + Q * cos32 * tan58,
 				fh = fold + w + w/tan58,

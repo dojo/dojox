@@ -139,7 +139,7 @@ define([
 			// summary:
 			//		Calculate and set the dojo/Stateful data binding for the
 			//		associated dijit or custom view component.
-			//	parentBinding:
+			// parentBinding:
 			//		The binding of this widget/view component's data-bound parent,
 			//		if available.
 			// description:
@@ -246,11 +246,11 @@ define([
 			// summary:
 			//		Set the data binding to the supplied value, which must be a
 			//		dojo/Stateful node of a data model.
-			//	name:
+			// name:
 			//		The name of the binding property (always "binding").
-			//	old:
+			// old:
 			//		The old dojo/Stateful binding node of the data model.
-			//	current:
+			// current:
 			//		The new dojo/Stateful binding node of the data model.
 			// description:
 			//		Applies the specified data binding to the attached widget.
@@ -307,19 +307,19 @@ define([
 		_updateProperty: function(name, old, current, defaultValue, setPropName, setPropValue){
 			// summary:
 			//		Update a binding property of the bound widget.
-			//	name:
+			// name:
 			//		The binding property name.
-			//	old:
+			// old:
 			//		The old value of the binding property.
-			//	current:
+			// current:
 			//		The new or current value of the binding property.
-			//	defaultValue:
+			// defaultValue:
 			//		The optional value to be applied as the current value of the
 			//		binding property if the current value is null.
-			//	setPropName:
+			// setPropName:
 			//		The optional name of a stateful property to set on the bound
 			//		widget.
-			//	setPropValue:
+			// setPropValue:
 			//		The value, if an optional name is provided, for the stateful
 			//		property of the bound widget.
 			// tags:
@@ -343,9 +343,9 @@ define([
 			//		Update this widget's value based on the current binding and
 			//		set up the bindings of all contained widgets so as to refresh
 			//		any relative binding references. 
-			// 		findWidgets does not return children of widgets so need to also
+			//		findWidgets does not return children of widgets so need to also
 			//		update children of widgets which are not bound but may hold widgets which are.
-			//	parentBind:
+			// parentBind:
 			//		The binding on the parent of a widget whose children may have bindings 
 			//		which need to be updated.
 			// tags:
@@ -387,7 +387,7 @@ define([
 		_unwatchArray: function(watchHandles){
 			// summary:
 			//		Given an array of watch handles, unwatch all.
-			//	watchHandles:
+			// watchHandles:
 			//		The array of watch handles.
 			// tags:
 			//		private

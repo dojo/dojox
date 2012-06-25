@@ -88,12 +88,12 @@ dojo.declare("MainAssistant", dojox.mobile.app.SceneAssistant, {
 			}
 		});
 //
-//    this.connect(dijit.byId("listWidget").domNode, "onmousedown", function(event){
-//      _this.controller.showAlertDialog({
-//        title: "MDown",
-//        text: "type: " + dojox.mobile.app.isIPhone//event.target.className
-//      })
-//    });
+//	  this.connect(dijit.byId("listWidget").domNode, "onmousedown", function(event){
+//		_this.controller.showAlertDialog({
+//		  title: "MDown",
+//		  text: "type: " + dojox.mobile.app.isIPhone//event.target.className
+//		})
+//	  });
 
 	},
 

@@ -16,7 +16,7 @@ define([
 		//		that wraps any data structure(s) that may be relevant for a view,
 		//		a view portion, a dijit or any custom view layer component.
 		//
-		//  description:
+		// description:
 		//		A data model is effectively instantiated with a plain JavaScript
 		//		object which specifies the initial data structure for the model.
 		//
@@ -78,10 +78,10 @@ define([
 		//		|
 		//		|	// The created dojo/Stateful tree is illustrated below (all nodes are dojo/Stateful objects)
 		//		|	//
-		//		|	//	                o  (root node)
-		//		|	//	               / \
+		//		|	//		            o  (root node)
+		//		|	//		           / \
 		//		|	//	 (prop1 node) o   o (prop2 node)
-		//		|	//	                 / \
+		//		|	//		             / \
 		//		|	//	   (leaf1 node)	o   o (leaf2 node)
 		//		|	//
 		//		|	// The root node is accessed using the expression "model" (the var name above). The prop1
@@ -188,7 +188,7 @@ define([
 			//		  undo any prior changes.
 			//		- Persists client-side changes to the data store, if a store
 			//		  has been supplied as a parameter or at instantiation.
-			//	store:
+			// store:
 			//		dojo/store/DataStore
 			//		Optional dojo/store/DataStore to use for this commit, if none
 			//		provided but one was provided at instantiation time, that store
@@ -235,10 +235,10 @@ define([
 			// summary:
 			//		Adds a dojo/Stateful tree represented by the given
 			//		dojox/mvc/StatefulModel at the given property name.
-			//	name:
+			// name:
 			//		The property name to use whose value will become the given
 			//		dijit/Stateful tree.
-			//	stateful:
+			// stateful:
 			//		The dojox/mvc/StatefulModel to insert.
 			// description:
 			//		In case of arrays, the property names are indices passed
@@ -258,7 +258,7 @@ define([
 		remove: function(/*String*/ name){
 			// summary:
 			//		Removes the dojo/Stateful tree at the given property name.
-			//	name:
+			// name:
 			//		The property name from where the tree will be removed.
 			// description:
 			//		In case of arrays, the property names are indices passed
@@ -308,7 +308,7 @@ define([
 			//		Instantiates a new data model that view components may bind to.
 			//		This is a private constructor, use the factory method
 			//		instead: dojox/mvc/newStatefulModel(args)
-			//	args:
+			// args:
 			//		The mixin properties.
 			// description:
 			//		Creates a tree of dojo/Stateful objects matching the initial
@@ -360,7 +360,7 @@ define([
 			//		Commit the current values to the data store:
 			//		- remove() any deleted entries
 			//		- put() any new or updated entries
-			//	store:
+			// store:
 			//		dojo/store/DataStore to use for this commit.
 			// tags:
 			//		private

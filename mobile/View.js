@@ -88,9 +88,9 @@ define([
 
 			// Determine which view among the siblings should be visible.
 			// Priority:
-			//   1. fragment id in the url (ex. #view1,view2)
-			//   2. this.selected
-			//   3. the first view
+			//	 1. fragment id in the url (ex. #view1,view2)
+			//	 2. this.selected
+			//	 3. the first view
 			if(this._visible === undefined){
 				var views = this.getSiblingViews();
 				var ids = location.hash && location.hash.substring(1).split(/,/);

@@ -24,7 +24,7 @@ define([
 		// summary:
 		//		Factory method that instantiates a new data model that view
 		//		components may bind to.
-		//	args:
+		// args:
 		//		The mixin properties.
 		// description:
 		//		Factory method that returns a client-side data model, which is a

@@ -107,11 +107,11 @@ dojo.declare("FlickrImageViewAssistant", dojox.mobile.app.SceneAssistant, {
 					"flickr.groups.pools.getPhotos";
 					
 //		"http://api.flickr.com/services/rest/?method=flickr.groups.pools.getPhotos"
-//      + "&api_key=" + lib.API_KEY
-//      + "&group_id=" + group.id
-//      + "&extras=owner_name"
-//      + "&per_page=" + (perPage || 10)
-//      + "&format=json&nojsoncallback=1"
+//		+ "&api_key=" + lib.API_KEY
+//		+ "&group_id=" + group.id
+//		+ "&extras=owner_name"
+//		+ "&per_page=" + (perPage || 10)
+//		+ "&format=json&nojsoncallback=1"
 
 		var deferred = dojo.io.script.get({
 			url: url,
