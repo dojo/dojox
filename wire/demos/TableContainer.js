@@ -5,7 +5,7 @@ dojo.require("dijit._Widget");
 dojo.require("dijit._Templated");
 
 dojo.declare("dojox.wire.demos.TableContainer", [ dijit._Widget, dijit._Templated, dijit._Container ], {
-	//	summary:
+	// summary:
 	//		Extremely simple 'widget' that is a table generator with an addRow function that takes an array
 	//		as the row to add, where each entry is a cell in the row.  This demo widget is for use with the
 	//		wire demos.
@@ -14,9 +14,9 @@ dojo.declare("dojox.wire.demos.TableContainer", [ dijit._Widget, dijit._Template
 	rowCount: 0,
 	headers: "",
 	addRow: function(array){
-		//	summary:
+		// summary:
 		//		Function to add in a new row from the elements in the array map to cells in the row.
-		//	array:
+		// array:
 		//		Array of row values to add.
 		try{
 			var row = document.createElement("tr");
@@ -36,7 +36,7 @@ dojo.declare("dojox.wire.demos.TableContainer", [ dijit._Widget, dijit._Template
 	},
 
 	clearTable: function(){
-		//	summary:
+		// summary:
 		//		Function to clear all the current rows in the table, except for the header.
 
 		//Always leave the first row, which is the table header.
@@ -47,7 +47,7 @@ dojo.declare("dojox.wire.demos.TableContainer", [ dijit._Widget, dijit._Template
 	},
 
 	postCreate: function(){
-		//	summary:
+		// summary:
 		//		Widget lifecycle function to handle generation of the header elements in the table.
 		var headers = this.headers.split(",");
 		var tr = document.createElement("tr");

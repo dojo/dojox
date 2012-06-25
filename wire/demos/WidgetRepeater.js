@@ -6,16 +6,16 @@ dojo.require("dijit._Templated");
 dojo.require("dijit._Container");
 
 dojo.declare("dojox.wire.demos.WidgetRepeater", [ dijit._Widget, dijit._Templated, dijit._Container ], {
-	//	summary:
+	// summary:
 	//		Simple widget that does generation of widgets repetatively, based on calls to
 	//		the createNew function and contains them as child widgets.
 	templateString: "<div class='WidgetRepeater' dojoAttachPoint='repeaterNode'></div>",
 	widget: null,
 	repeater: null,
 	createNew: function(obj){
-		//	summary:
+		// summary:
 		//		Function to handle the creation of a new widget and appending it into the widget tree.
-		//	obj:
+		// obj:
 		//		The parameters to pass to the widget.
 		try{
 			if(dojo.isString(this.widget)){
