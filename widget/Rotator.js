@@ -11,10 +11,10 @@ dojo.require("dojo.parser");
 		_zIndex = "zIndex";
 
 	d.declare("dojox.widget.Rotator", null, {
-		//	summary:
+		// summary:
 		//		A widget for rotating through child nodes using transitions.
 		//
-		//	description:
+		// description:
 		//		A small, fast, extensible, awesome rotator that cycles, with transitions,
 		//		through panes (child nodes) displaying only one at a time and ties into
 		//		controllers used to change state.
@@ -50,13 +50,13 @@ dojo.require("dojo.parser");
 		//			onBeforeOut - Fired before the transition out starts.
 		//			onAfterOut  - Fired after the transition out ends.
 		//
-		//	example:
+		// example:
 		//	|	<div dojoType="dojox.widget.Rotator">
 		//	|		<div>Pane 1!</div>
 		//	|		<div>Pane 2!</div>
 		//	|	</div>
 		//
-		//	example:
+		// example:
 		//	|	<script type="text/javascript">
 		//	|		dojo.require("dojox.widget.rotator.Fade");
 		//	|	</script>
@@ -65,24 +65,24 @@ dojo.require("dojo.parser");
 		//	|		<div>Pane 2!</div>
 		//	|	</div>
 
-		//	transition: string
+		// transition: string
 		//		The name of a function that is passed two panes nodes and a duration,
 		//		then returns a dojo.Animation object. The default value is
 		//		"dojox.widget.rotator.swap".
 		transition: _defaultTransition,
 
-		//	transitionParams: string
+		// transitionParams: string
 		//		Parameters for the transition. The string is read in and eval'd as an
 		//		object.  If the duration is absent, the default value will be used.
 		transitionParams: "duration:" + _defaultTransitionDuration,
 
-		//	panes: array
+		// panes: array
 		//		Array of panes to be created in the Rotator. Each array element
 		//		will be passed as attributes to a dojo.create() call.
 		panes: null,
 
 		constructor: function(/*Object*/params, /*DomNode|string*/node){
-			//	summary:
+			// summary:
 			//		Initializes the panes and events.
 			d.mixin(this, params);
 
@@ -180,26 +180,26 @@ dojo.require("dojo.parser");
 		},
 
 		destroy: function(){
-			//	summary:
+			// summary:
 			//		Destroys the Rotator and its DOM node.
 			d.forEach([this._controlSub, this.wfe], d.unsubscribe);
 			d.destroy(this._domNode);
 		},
 
 		next: function(){
-			//	summary:
+			// summary:
 			//		Transitions the Rotator to the next pane.
 			return this.go(this.idx + 1);
 		},
 
 		prev: function(){
-			//	summary:
+			// summary:
 			//		Transitions the Rotator to the previous pane.
 			return this.go(this.idx - 1);
 		},
 
 		go: function(/*int|string?*/p){
-			//	summary:
+			// summary:
 			//		Transitions the Rotator to the specified pane index.
 			var _t = this,
 				i = _t.idx,
@@ -297,13 +297,13 @@ dojo.require("dojo.parser");
 		},
 
 		onUpdate: function(/*string*/type, /*object?*/params){
-			//	summary:
+			// summary:
 			//		Send a notification to all controllers with the state of the rotator.
 			d.publish(this.id + "/rotator/update", [type, this, params || {}]);
 		},
 
 		_resetWaitForEvent: function(){
-			//	summary:
+			// summary:
 			//		If there is a waitForEvent pending, kill it.
 			if(this.wfe){
 				d.unsubscribe(this.wfe);
@@ -312,7 +312,7 @@ dojo.require("dojo.parser");
 		},
 
 		control: function(/*string*/action){
-			//	summary:
+			// summary:
 			//		Dispatches an action, first to this engine, then to the Rotator.
 			var args = d._toArray(arguments),
 				_t = this;
@@ -344,13 +344,13 @@ dojo.require("dojo.parser");
 		},
 
 		onManualChange: function(){
-			//	summary:
+			// summary:
 			//		Stub function that can be overriden or connected to.
 		}
 	});
 
 	d.setObject(_defaultTransition, function(/*Object*/args){
-		//	summary:
+		// summary:
 		//		The default rotator transition which swaps two panes.
 		return new d._Animation({ // dojo.Animation
 			play: function(){

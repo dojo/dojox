@@ -6,13 +6,13 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 	return dojo.declare("dojox.widget.FisheyeLite",
 		dijit._Widget,
 		{
-		// summary:  A Light-weight Fisheye Component, or an exhanced version
+		// summary:
+		//		A Light-weight Fisheye Component, or an exhanced version
 		//		of dojo.fx.Toggler ...
-		//
 		// description:
 		//		A Simple FisheyeList-like widget which (in the interest of
 		//		performance) relies on well-styled content for positioning,
-		// 		and natural page layout for rendering.
+		//		and natural page layout for rendering.
 		//
 		//		use position:absolute/relative nodes to prevent layout
 		//		changes, and use caution when seleting properties to
@@ -39,7 +39,7 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 		//	|		}
 		//	|	}, "someNode");
 		
-		// duationIn: Integer
+		// durationIn: Integer
 		//		The time (in ms) the run the show animation
 		durationIn: 350,
 
@@ -52,15 +52,15 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 		durationOut: 1420,
 
 		// easeOut: Function
-		// 		An easing function to use for the hide animation
+		//		An easing function to use for the hide animation
 		easeOut: easing.elasticOut,
 
-		//	properties: Object
-		//			An object of "property":scale pairs, or "property":{} pairs.
-		//			defaults to font-size with a scale of 2.75
-		//			If a named property is an integer or float, the "scale multiplier"
-		//			is used. If the named property is an object, that object is mixed
-		//			into the animation directly. eg: height:{ end:20, units:"em" }
+		// properties: Object
+		//		An object of "property":scale pairs, or "property":{} pairs.
+		//		defaults to font-size with a scale of 2.75
+		//		If a named property is an integer or float, the "scale multiplier"
+		//		is used. If the named property is an object, that object is mixed
+		//		into the animation directly. eg: height:{ end:20, units:"em" }
 		properties: null,
 
 		// units: String
@@ -136,13 +136,15 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 		},
 
 		onClick: function(/* Event */e){
-			// summary: stub function fired when target is clicked
+			// summary:
+			//		stub function fired when target is clicked
 			//		connect or override to use.
 		},
 
 		onSelected: function(/* Object */e){
-			// summary: stub function fired when Fisheye Item is fully visible and
-			// 		hovered. connect or override use.
+			// summary:
+			//		stub function fired when Fisheye Item is fully visible and
+			//		hovered. connect or override use.
 		}
 
 	});

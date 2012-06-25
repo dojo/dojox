@@ -10,10 +10,9 @@ dojo.provide("dojox.widget.rotator.Controller");
 		_selected = _dojoxRotator + "Selected";
 
 	d.declare("dojox.widget.rotator.Controller", null, {
-		//	summary:
+		// summary:
 		//		A controller that manipulates a Rotator or AutoRotator.
-		//
-		//	description:
+		// description:
 		//		Displays a series of controls that send actions to a Rotator or
 		//		AutoRotator.  The Controller supports the following controls:
 		//
@@ -29,31 +28,28 @@ dojo.provide("dojox.widget.rotator.Controller");
 		//
 		//		The Controller's DOM node may also be styled for positioning or
 		//		other styled preferences.
-		//
-		//	example:
+		// example:
 		//	|	<div dojoType="dojox.widget.rotator.Controller"
 		//	|		rotator="myRotator"
 		//	|	></div>
-		//
-		//	example:
+		// example:
 		//	|	<div dojoType="dojox.widget.rotator.Controller"
 		//	|		rotator="myRotator"
 		//	|		controls="prev,#,next"
 		//	|		class="myCtrl"
 		//	|	></div>
-		//
-		//	example:
+		// example:
 		//	|	<div dojoType="dojox.widget.rotator.Controller"
 		//	|		rotator="myRotator"
 		//	|		controls="titles"
 		//	|		class="myCtrl"
 		//	|	></div>s
 
-		//	rotator: dojox.widget.Rotator
+		// rotator: dojox.widget.Rotator
 		//		An instance of a Rotator widget.
 		rotator: null,
 
-		//	commands: string
+		// commands: string
 		//		A comma-separated list of commands. Valid commands are:
 		//		  prev			An icon button to go to the previous pane.
 		//		  next			An icon button to go to the next pane.
@@ -64,7 +60,7 @@ dojo.provide("dojox.widget.rotator.Controller");
 		commands: "prev,play/pause,info,next",
 
 		constructor: function(/*Object*/params, /*DomNode|string*/node){
-			//	summary:
+			// summary:
 			//		Initializes the pager and connect to the rotator.
 
 			d.mixin(this, params);
@@ -138,14 +134,14 @@ dojo.provide("dojox.widget.rotator.Controller");
 		},
 
 		destroy: function(){
-			//	summary:
+			// summary:
 			//		Disconnect from the rotator.
 			d.disconnect(this._con);
 			d.destroy(this._domNode);
 		},
 
 		_togglePlay: function(/*boolean*/playing){
-			//	summary:
+			// summary:
 			//		Toggles the play/pause button, if it exists.
 
 			var p = this.rotator.playing;
@@ -154,13 +150,13 @@ dojo.provide("dojox.widget.rotator.Controller");
 		},
 
 		_buildInfo: function(/*dojox.widget.Rotator*/r){
-			//	summary:
+			// summary:
 			//		Return a string containing the current pane number and the total number of panes.
 			return '<span>' + (r.idx+1) + ' / ' + r.panes.length + '</span>'; /*string*/
 		},
 
 		_onUpdate: function(/*string*/type){
-			//	summary:
+			// summary:
 			//		Updates various pager controls when the rotator updates.
 
 			var r = this.rotator; // no need to test if this is null since _onUpdate is only fired by the rotator

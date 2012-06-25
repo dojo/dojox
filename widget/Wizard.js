@@ -123,7 +123,7 @@ var Wizard = declare("dojox.widget.Wizard", [StackContainer, _TemplatedMixin, _W
 	},
 	
 	done: function(){
-		// summary: 
+		// summary:
 		//		Finish the wizard's operation
 		this.selectedChildWidget.done();
 	},

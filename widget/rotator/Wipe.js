@@ -29,14 +29,14 @@ dojo.provide("dojox.widget.rotator.Wipe");
 	}
 
 	function _setClip(/*DomNode*/n, /*int*/type, /*int*/w, /*int*/h, /*number*/x){
-		//	summary:
+		// summary:
 		//		Sets the clip region of the node. If a type is passed in then we
 		//		return a rect(), otherwise return "auto".
 		d.style(n, "clip", type == null ? "auto" : "rect(" + _clipArray(type, w, h, x).join("px,") + "px)");
 	}
 
 	function _wipe(/*int*/type, /*Object*/args){
-		//	summary:
+		// summary:
 		//		Handles the preparation of the dom node and creates the dojo.Animation object.
 		var node = args.next.node,
 			w = args.rotatorBox.w,
@@ -60,25 +60,25 @@ dojo.provide("dojox.widget.rotator.Wipe");
 
 	d.mixin(dojox.widget.rotator, {
 		wipeDown: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that wipes in the next rotator pane from the top.
 			return _wipe(DOWN, args); /*dojo.Animation*/
 		},
 
 		wipeRight: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that wipes in the next rotator pane from the right.
 			return _wipe(RIGHT, args); /*dojo.Animation*/
 		},
 
 		wipeUp: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that wipes in the next rotator pane from the bottom.
 			return _wipe(UP, args); /*dojo.Animation*/
 		},
 
 		wipeLeft: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that wipes in the next rotator pane from the left.
 			return _wipe(LEFT, args); /*dojo.Animation*/
 		}

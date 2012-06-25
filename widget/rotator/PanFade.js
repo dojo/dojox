@@ -10,7 +10,7 @@ dojo.require("dojo.fx");
 		LEFT = 3;
 
 	function _pan(/*int*/type, /*Object*/args){
-		//	summary:
+		// summary:
 		//		Handles the preparation of the dom node and creates the dojo.Animation object.
 		var j = {
 				node: args.current.node,
@@ -53,14 +53,14 @@ dojo.require("dojo.fx");
 	}
 
 	function _setZindex(/*DomNode*/n, /*int*/z){
-		//	summary:
+		// summary:
 		//		Helper function for continuously panning.
 		d.style(n, "zIndex", z);
 	}
 
 	d.mixin(dojox.widget.rotator, {
 		panFade: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that either pans left or right to the next pane.
 			//		The actual direction depends on the order of the panes.
 			//
@@ -184,25 +184,25 @@ dojo.require("dojo.fx");
 		},
 
 		panFadeDown: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that pans in the next rotator pane from the top.
 			return _pan(DOWN, args); /*dojo.Animation*/
 		},
 
 		panFadeRight: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that pans in the next rotator pane from the right.
 			return _pan(RIGHT, args); /*dojo.Animation*/
 		},
 
 		panFadeUp: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that pans in the next rotator pane from the bottom.
 			return _pan(UP, args); /*dojo.Animation*/
 		},
 
 		panFadeLeft: function(/*Object*/args){
-			//	summary:
+			// summary:
 			//		Returns a dojo.Animation that pans in the next rotator pane from the left.
 			return _pan(LEFT, args); /*dojo.Animation*/
 		}

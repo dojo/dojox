@@ -153,7 +153,6 @@ define([
 			var min = constraints && constraints.min ? constraints.min.getFullYear() : firstYear -10000;
 			firstYear = Math.max(min, firstYear);
 
-			// summary: Writes the years to display to the view
 			this._displayedYear = dispYear;
 
 			var yearLabels = query(".dojoxCalendarYearLabel", this.yearContainer);

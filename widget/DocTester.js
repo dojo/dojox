@@ -9,8 +9,9 @@ dojo.require("dojox.testing.DocTest");
 dojo.declare('dojox.widget.DocTester',
 	[dijit._Widget, dijit._Templated],
 	{
-		// summary: A widget to run DocTests inside an HTML page.
-		//
+		// summary:
+		//		A widget to run DocTests inside an HTML page.
+
 		templateString: dojo.cache('dojox.widget','DocTester/DocTester.html'),
 		widgetsInTemplate: true,
 	
@@ -66,8 +67,8 @@ dojo.declare('dojox.widget.DocTester',
 		},
 		
 		reset:function(){
-			// summary: 
-			//	Reset the DocTester visuals and enable the "Run tests" button again.
+			// summary:
+			//		Reset the DocTester visuals and enable the "Run tests" button again.
 			dojo.style(this.runButtonNode.domNode, "display", "");
 			dojo.style(this.resetButtonNode.domNode, "display", "none");
 			this.numTestsOkNode.innerHTML = "0";
@@ -78,7 +79,7 @@ dojo.declare('dojox.widget.DocTester',
 		
 		_unescapeHtml:function(/* String */ str){
 			// summary:
-			//	Adds escape sequences for special characters in XML: &<>"'
+			//		Adds escape sequences for special characters in XML: &<>"'
 			str = String(str).replace(/&amp;/gm, "&").replace(/&lt;/gm, "<")
 				.replace(/&gt;/gm, ">").replace(/&quot;/gm, '"');
 			// TODO Should become dojo.html.unentities() or so, when exists use instead

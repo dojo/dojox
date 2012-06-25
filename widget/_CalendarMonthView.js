@@ -8,23 +8,25 @@ define([
 	"dojo/text!./Calendar/CalendarMonth.html"
 ], function(declare, _CalendarView, _TemplatedMixin, _CalendarMonthYearView, domClass, event, template){
 	return declare("dojox.widget._CalendarMonthView", [_CalendarView, _TemplatedMixin], {
-		// summary: A Calendar view listing the 12 months of the year
+		// summary:
+		//		A Calendar view listing the 12 months of the year
 
 		// templateString: String
-		//	The template to be used to construct the widget.
+		//		The template to be used to construct the widget.
 		templateString: template,
 
 		// datePart: String
-		//	Specifies how much to increment the displayed date when the user
-		//	clicks the array button to increment of decrement the view.
+		//		Specifies how much to increment the displayed date when the user
+		//		clicks the array button to increment of decrement the view.
 		datePart: "year",
 
 		// headerClass: String
-		//	Specifies the CSS class to apply to the header node for this view.
+		//		Specifies the CSS class to apply to the header node for this view.
 		headerClass: "dojoxCalendarMonthHeader",
 
 		postCreate: function(){
-			// summary: Constructs the view
+			// summary:
+			//		Constructs the view
 			this.cloneClass(".dojoxCalendarMonthTemplate", 3);
 			this.cloneClass(".dojoxCalendarMonthGroupTemplate", 2);
 			this._populateMonths();
@@ -42,7 +44,8 @@ define([
 		_populateMonths: _CalendarMonthYearView.prototype._populateMonths,
 
 		onClick: function(evt){
-			// summary: Handles clicks on month names
+			// summary:
+			//		Handles clicks on month names
 			if(!domClass.contains(evt.target, "dojoxCalendarMonthLabel")){event.stop(evt); return;}
 			var parentNode = evt.target.parentNode;
 			var month = parentNode.cellIndex + (parentNode.parentNode.rowIndex * 4);

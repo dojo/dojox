@@ -257,7 +257,7 @@ define([
 
 		onHeaderClick: function(e){
 			// summary:
-			//	Transitions to the next view.
+			//		Transitions to the next view.
 			this._transitionVert(1);
 		},
 
@@ -296,7 +296,8 @@ define([
 			var height2 = 0;
 			domStyle.set(nextWidget.domNode, "top", (height1 * -1) + "px");
 
-			// summary: Slides two nodes vertically.
+			// summary:
+			//		Slides two nodes vertically.
 			var anim1 = fx.animateProperty({
 				node: curWidget.domNode,
 				properties: {top: height1},

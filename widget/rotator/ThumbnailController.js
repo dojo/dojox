@@ -6,30 +6,28 @@ dojo.provide("dojox.widget.rotator.ThumbnailController");
 		_selected = _css + "Selected";
 
 	d.declare("dojox.widget.rotator.ThumbnailController", null, {
-		//	summary:
+		// summary:
 		//		A rotator controller that displays thumbnails of each rotator pane.
-		//
-		//	description:
+		// description:
 		//		The ThumbnailController will look at each of the rotator's panes and
 		//		only if the node is an `<img>` tag, then it will create an thumbnail of
 		//		the pane's image using the `<img>` tag's "thumbsrc" or "src" attribute.
 		//
 		//		The size of the thumbnails and the style of the selected thumbnail is
 		//		controlled using CSS.
-		//
-		//	example:
+		// example:
 		//	|	<div dojoType="dojox.widget.Rotator" jsId="myRotator">
 		//	|		<img src="/path/to/image1.jpg" thumbsrc="/path/to/thumb1.jpg" alt="Image 1"/>
 		//	|		<img src="/path/to/image2.jpg" thumbsrc="/path/to/thumb2.jpg" alt="Image 2"/>
 		//	|	</div>
 		//	|	<div dojoType="dojox.widget.rotator.ThumbnailController" rotator="myRotator"></div>
 
-		//	rotator: dojox/widget/Rotator
+		// rotator: dojox/widget/Rotator
 		//		An instance of a Rotator widget.
 		rotator: null,
 
 		constructor: function(/*Object*/params, /*DomNode|string*/node){
-			//	summary:
+			// summary:
 			//		Initializes the thumbnails and connect to the rotator.
 
 			d.mixin(this, params);
@@ -72,7 +70,7 @@ dojo.provide("dojox.widget.rotator.ThumbnailController");
 		},
 
 		destroy: function(){
-			//	summary:
+			// summary:
 			//		Disconnect from the rotator.
 
 			d.disconnect(this._con);
@@ -80,7 +78,7 @@ dojo.provide("dojox.widget.rotator.ThumbnailController");
 		},
 
 		_onUpdate: function(/*string*/type){
-			//	summary:
+			// summary:
 			//		Updates various pager controls when the rotator updates.
 
 			var r = this.rotator; // no need to test if this is null since _onUpdate is only fired by the rotator

@@ -1,17 +1,15 @@
 define(["dojo/_base/declare","dojox/widget/Rotator"], function(declare,Rotator){
 
 return declare("dojox.widget.AutoRotator", Rotator,{
-	//	summary:
+	// summary:
 	//		A rotator that automatically transitions between child nodes.
-	//
-	//	description:
+	// description:
 	//		Adds automatic rotating to the dojox.widget.Rotator.  The
 	//		AutoRotator has parameters that control how user input can
 	//		affect the rotator including a suspend when hovering over the
 	//		rotator and pausing when the user manually advances to another
 	//		pane.
-	//
-	//	example:
+	// example:
 	//	|	<div dojoType="dojox.widget.AutoRotator" duration="3000">
 	//	|		<div>
 	//	|			Pane 1!
@@ -34,7 +32,7 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 	//		Starts the timer to transition children upon creation.
 	autoStart: true,
 	
-	//	pauseOnManualChange: Boolean
+	// pauseOnManualChange: Boolean
 	//		Pause the rotator when the pane is changed or a controller's next or
 	//		previous buttons are clicked.
 	pauseOnManualChange: false,
@@ -43,11 +41,11 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 	//		Number of cycles before pausing.
 	cycles: -1,
 
-	//	random: Boolean
+	// random: Boolean
 	//		Determines if the panes should cycle randomly.
 	random: false,
 
-	//	reverse: Boolean
+	// reverse: Boolean
 	//		Causes the rotator to rotate in reverse order.
 	reverse: false,
 
@@ -102,14 +100,14 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 		},
 
 		destroy: function(){
-			//	summary:
+			// summary:
 			//		Disconnect the AutoRotator's events.
 			dojo.forEach(this._connects, dojo.disconnect);
 			this.inherited(arguments);
 		},
 
 		play: function(/*Boolean?*/skipCycleDecrement, /*Boolean?*/skipDuration){
-			//	summary:
+			// summary:
 			//		Sets the state to "playing" and schedules the next cycle to run.
 			this.playing = true;
 			this._resetTimer();
@@ -140,7 +138,7 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 		},
 
 		pause: function(){
-			//	summary:
+			// summary:
 			//		Sets the state to "not playing" and clears the cycle timer.
 			this.playing = this._suspended = false;
 			this.cycles = -1;
@@ -151,19 +149,19 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 		},
 
 		_now: function(){
-			//	summary:
+			// summary:
 			//		Helper function to return the current system time in milliseconds.
 			return (new Date()).getTime(); // int
 		},
 
 		_resetTimer: function(){
-			//	summary:
+			// summary:
 			//		Resets the timer used to schedule the next transition.
 			clearTimeout(this._timer);
 		},
 
 		_cycle: function(/*Boolean|int?*/manual){
-			//	summary:
+			// summary:
 			//		Cycles the rotator to the next/previous pane.
 			var _t = this,
 				i = _t.idx,
@@ -192,7 +190,7 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 		},
 
 		onManualChange: function(/*string*/action){
-			//	summary:
+			// summary:
 			//		Override the Rotator's onManualChange so we can pause.
 
 			this.cycles = -1;
