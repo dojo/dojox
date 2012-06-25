@@ -3,24 +3,25 @@ dojo.provide("dojox.storage.manager");
 // FIXME: refactor this to use an AdapterRegistry
 
 dojox.storage.manager = new function(){
-	// summary: A singleton class in charge of the dojox.storage system
+	// summary:
+	//		A singleton class in charge of the dojox.storage system
 	// description:
 	//		Initializes the storage systems and figures out the best available
 	//		storage options on this platform.
 
 	// currentProvider: Object
-	//	The storage provider that was automagically chosen to do storage
-	//	on this platform, such as dojox.storage.FlashStorageProvider.
+	//		The storage provider that was automagically chosen to do storage
+	//		on this platform, such as dojox.storage.FlashStorageProvider.
 	this.currentProvider = null;
 
 	// available: Boolean
-	//	Whether storage of some kind is available.
+	//		Whether storage of some kind is available.
 	this.available = false;
 
-  // providers: Array
-  //  Array of all the static provider instances, useful if you want to
-  //  loop through and see what providers have been registered.
-  this.providers = [];
+	// providers: Array
+	//		Array of all the static provider instances, useful if you want to
+	//		loop through and see what providers have been registered.
+	this.providers = [];
 
 	this._initialized = false;
 
@@ -122,7 +123,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.isAvailable = function(){ /*Boolean*/
-		// summary: Returns whether any storage options are available.
+		// summary:
+		//		Returns whether any storage options are available.
 		return this.available;
 	};
 
@@ -145,7 +147,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.removeOnLoad = function(func){ /* void */
-		// summary: Removes the given onLoad listener
+		// summary:
+		//		Removes the given onLoad listener
 		for(var i = 0; i < this._onLoadListeners.length; i++){
 			if(func == this._onLoadListeners[i]){
 				this._onLoadListeners.splice(i, 1);
@@ -173,7 +176,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.supportsProvider = function(/*string*/ storageClass){ /* Boolean */
-		// summary: Determines if this platform supports the given storage provider.
+		// summary:
+		//		Determines if this platform supports the given storage provider.
 		// description:
 		//		Example-
 		//			dojox.storage.manager.supportsProvider(
@@ -193,7 +197,8 @@ dojox.storage.manager = new function(){
 	};
 
 	this.getProvider = function(){ /* Object */
-		// summary: Gets the current provider
+		// summary:
+		//		Gets the current provider
 		return this.currentProvider;
 	};
 

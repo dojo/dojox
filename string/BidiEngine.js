@@ -182,7 +182,7 @@ declare("dojox.string.BidiEngine", null, {
 		}
 	},
 	checkContextual: function(/*String*/text){
-		// summary: 	
+		// summary:
 		//		Determine the base direction of a bidi text according
 		//		to its first strong directional character.
 		// text: 
@@ -235,12 +235,12 @@ declare("dojox.string.BidiEngine", null, {
 
 function doBidiReorder(/*String*/text, /*String*/inFormat,
 						/*String*/outFormat, /*String*/swap){
-	// summary: 	
+	// summary:
 	//		Reorder the source text according to the bidi attributes
 	//		of source and result.
-	//	text:
+	// text:
 	//		The text to reorder.
-	//	inFormat:	
+	// inFormat:
 	//		Ordering scheme and base direction of the source text.
 	//		Can be "LLTR", "LRTL", "LCLR", "LCRL", "VLTR", "VRTL",
 	//		"VCLR", "VCRL".
@@ -252,11 +252,11 @@ function doBidiReorder(/*String*/text, /*String*/inFormat,
 	//		"CRL" means contextual direction defaulting to RTL if
 	//		there is no strong letter.
 	//		The initial value is "LLTR", if none, the initial value is used.
-	//	outFormat:	
+	// outFormat:
 	//		Required ordering scheme and base direction of the
 	//		result. Has the same format as inFormat.
 	//		If none, the initial value "VLTR" is used.
-	//	swap:
+	// swap:
 	//		Symmetric swapping attributes of source and result.
 	//		The allowed values can be "YN", "NY", "YY" and "NN".
 	//		The first letter reflects the symmetric swapping attribute

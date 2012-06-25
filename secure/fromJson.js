@@ -7,9 +7,9 @@ dojo.provide("dojox.secure.fromJson");
 
 
 dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :
-//	summary:
+// summary:
 //		Parses a string of well-formed JSON text.
-//	description:
+// description:
 //		Parses a string of well-formed JSON text. If the input is not well-formed,
 //		then behavior is undefined, but it is
 //		deterministic and is guaranteed not to modify any object other than its
@@ -28,19 +28,19 @@ dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :
 //		looks like JSON, but that executes arbitrary javascript.
 //
 //		To configure dojox.secure.fromJson as the JSON parser for all Dojo
-// 		JSON parsing, simply do:
+//		JSON parsing, simply do:
 //		|	dojo.require("dojox.secure.fromJson");
 //		|	dojo.fromJson = dojox.secure.fromJson;
 //		or alternately you could configure dojox.secure.fromJson to only handle
-// 		XHR responses:
+//		XHR responses:
 //		|	dojo._contentHandlers.json = function(xhr){
 //		|		return dojox.secure.fromJson.fromJson(xhr.responseText);
 //		|	};
 //
-//	json: String
-// 		per RFC 4627
-//	optReviver: Function (this:Object, string, *)
-// 		optional function
+// json: String
+//		per RFC 4627
+// optReviver: Function (this:Object, string, *)
+//		optional function
 //				that reworks JSON objects post-parse per Chapter 15.12 of EcmaScript3.1.
 //				If supplied, the function is called with a string key, and a value.
 //				The value is the property of 'this'.	The reviver should return
@@ -57,7 +57,7 @@ dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :
 //				If the reviver returns {@code undefined} then the property named by key
 //				will be deleted from its container.
 //				{@code this} is bound to the object containing the specified property.
-//	returns: {Object|Array}
+// returns: Object|Array
 (function () {
 	var number
 			= '(?:-?\\b(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b)';

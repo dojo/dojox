@@ -5,7 +5,7 @@ dojo.require("dojo.data.api.Read");
 dojo.require("dojox.rpc.Service");
 
 dojox.rpc.tests.stores.JsonRestStore.error = function(t, d, errData){
-	//  summary:
+	// summary:
 	//		The error callback function to be used for all of the tests.
 	d.errback(errData);
 }
@@ -18,7 +18,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "Fetch some items",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of a basic fetch on JsonRestStore of a simple query.
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"query",
@@ -34,7 +34,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "fetch by id",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Simple test of a basic fetch on JsonRestStore of a single item.
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"obj1",
@@ -53,7 +53,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "Modify,save, check by id",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		Fetch an item from a query, modify and save it, and check to see if it was modified correctly
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"query",
@@ -82,7 +82,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "Post, delete, and put",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		append/post an item, delete it, sort the lists, resort the list, saving each time.
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"obj1",
@@ -108,7 +108,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "Revert",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		append/post an item, delete it, sort the lists, resort the list, saving each time.
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"obj1",
@@ -133,7 +133,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "Lazy loading",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		test lazy loading
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"query",
@@ -153,7 +153,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "Array manipulation",
 			timeout:	10000, //10 seconds.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		test array manipulation
 				var d = new doh.Deferred();
 				jsonStore.fetch({query:"obj1",
@@ -177,7 +177,7 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			name: "ReadAPI:  Fetch_20_Streaming",
 			timeout:	10000, //10 seconds.  Json can sometimes be slow.
 			runTest: function(t) {
-				//	summary:
+				// summary:
 				//		fetching with paging
 
 				var d = new doh.Deferred();
@@ -206,9 +206,9 @@ doh.register("dojox.rpc.tests.stores.JsonRestStore",
 			}
 		},
 		function testReadAPI_functionConformance(t){
-			//	summary:
+			// summary:
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
-			//	description:
+			// description:
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
 
 			var readApi = new dojo.data.api.Read();

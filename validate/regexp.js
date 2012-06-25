@@ -198,7 +198,7 @@ dxregexp = dojox.validate.regexp = {
 		//		Use this method for phone numbers, social security numbers, zip-codes, etc.
 		//		The RE can match one format or one of multiple formats.
 		//
-		//  	Format
+		//		Format
 		//			- #        Stands for a digit, 0-9.
 		//			- ?        Stands for an optional digit, 0-9 or nothing.
 		//			- All other characters must appear literally in the expression.
@@ -234,12 +234,14 @@ dxregexp = dojox.validate.regexp = {
 	ca: {
 
 		postalCode: function(){
-			// summary: String regular Express to match Canadain Postal Codes
+			// summary:
+			//		String regular Express to match Canadain Postal Codes
 			return "([A-Z][0-9][A-Z] [0-9][A-Z][0-9])";
 		},
 
 		province: function(){
-			// summary: a regular expression to match Canadian Province Abbreviations
+			// summary:
+			//		a regular expression to match Canadian Province Abbreviations
 			return "(AB|BC|MB|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)";
 		}
 

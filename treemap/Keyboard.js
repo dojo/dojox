@@ -3,7 +3,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 	function(arr, lang, event, declare, on, keys, domAttr, utils, _FocusMixin){
 
 	return declare("dojox.treemap.Keyboard", _FocusMixin, {
-		//	summary:
+		// summary:
 		//		Specializes TreeMap to support keyboard navigation and accessibility.
 		
 		// tabIndex: Integer

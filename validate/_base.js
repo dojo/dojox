@@ -93,7 +93,7 @@ validate.isNumberFormat = function(value, flags){
 	//	|	// returns true:
 	//	|	dojox.validate.isNumberFormat("123-45", { format:"###-##" });
 	// example:
-	// 		Check Multiple formats:
+	//		Check Multiple formats:
 	// |	dojox.validate.isNumberFormat("123-45", {
 	// |		format:["### ##","###-##","## ###"]
 	// |	});
