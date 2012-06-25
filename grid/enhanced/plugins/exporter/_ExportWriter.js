@@ -75,7 +75,7 @@ return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		//		passed to the user in argObj. So the column index (cell.index) will appear shifted
 		//		(start from 1 instead of 0). This colOffset is provided to remove this shift.
 		//
-		// 		usage:
+		//		usage:
 		//		|	var correctColIndex = argObj.cell.index + argObj.colOffset;
 		colOffset: 0
 	},

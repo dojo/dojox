@@ -452,21 +452,21 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 		this.inherited(arguments);
 	},
 	expand: function(itemId){
-		//	summary:
+		// summary:
 		//		Expand the row with the given itemId.
-		//	id: string?
+		// itemId: String?
 		this._fold(itemId, true);
 	},
 	collapse: function(itemId){
-		//	summary:
+		// summary:
 		//		Collapse the row with the given itemId.
-		//	id: string?
+		// itemId: String?
 		this._fold(itemId, false);
 	},
 	refresh: function(keepState){
-		//	summary:
+		// summary:
 		//		Refresh, and persist the expand/collapse state when keepState equals true
-		//	keepState: boolean
+		// keepState: Boolean
 		if(!keepState){
 			this._cleanup();
 		}

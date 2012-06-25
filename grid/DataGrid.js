@@ -13,11 +13,11 @@ define([
 /*=====
 declare("dojox.grid.__DataCellDef", dojox.grid.__CellDef, {
 	constructor: function(){
-		//	field: String?
+		// field: String?
 		//		The attribute to read from the dojo.data item for the row.
-		//  fields: String[]?
+		// fields: String[]?
 		//		An array of fields to grab the values of and pass as an array to the grid
-		//	get: Function?
+		// get: Function?
 		//		function(rowIndex, item?){} rowIndex is of type Integer, item is of type
 		//		Object.  This function will be called when a cell requests data.  Returns
 		//		the unformatted data for the cell.
@@ -28,9 +28,9 @@ declare("dojox.grid.__DataCellDef", dojox.grid.__CellDef, {
 /*=====
 declare("dojox.grid.__DataViewDef", dojox.grid.__ViewDef, {
 	constructor: function(){
-		//	cells: dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]?
+		// cells: dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]?
 		//		The structure of the cells within this grid.
-		//	defaultCell: dojox.grid.__DataCellDef?
+		// defaultCell: dojox.grid.__DataCellDef?
 		//		A cell definition with default values for all cells in this view.  If
 		//		a property is defined in a cell definition in the "cells" array and
 		//		this property, the cell definition's property will override this
@@ -55,7 +55,7 @@ var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 
 /*=====
 	// structure: dojox.grid.__DataViewDef|dojox.grid.__DataViewDef[]|dojox.grid.__DataCellDef[]|Array[dojox.grid.__DataCellDef[]]
-	//		View layout defintion.
+	//		View layout definition.
 	structure: '',
 =====*/
 
@@ -103,7 +103,8 @@ var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 	},
 
 	get: function(inRowIndex, inItem){
-		// summary: Default data getter.
+		// summary:
+		//		Default data getter.
 		// description:
 		//		Provides data to display in a grid cell. Called in grid cell context.
 		//		So this.cell.index is the column index.
@@ -534,7 +535,8 @@ var DataGrid = declare("dojox.grid.DataGrid", _Grid, {
 	},
 
 	styleRowState: function(inRow){
-		// summary: Perform row styling
+		// summary:
+		//		Perform row styling
 		if(this.store && this.store.getState){
 			var states=this.store.getState(inRow.index), c='';
 			for(var i=0, ss=["inflight", "error", "inserting"], s; s=ss[i]; i++){

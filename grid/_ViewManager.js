@@ -294,7 +294,8 @@ return declare('dojox.grid._ViewManager', null, {
 	},
 	
 	getFirstScrollingView: function(){
-		// summary: Returns the first grid view with a scroll bar
+		// summary:
+		//		Returns the first grid view with a scroll bar
 		for(var i=0, v; (v=this.views[i]); i++){
 			if(v.hasHScrollbar() || v.hasVScrollbar()){
 				return v;

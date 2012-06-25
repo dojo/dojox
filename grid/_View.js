@@ -39,7 +39,7 @@ define([
 		defaultWidth: "18em",
 
 		// viewWidth: String
-		// 		Width for the view, in valid css unit
+		//		Width for the view, in valid css unit
 		viewWidth: "",
 
 		templateString: template,

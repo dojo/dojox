@@ -669,7 +669,8 @@ define([
 		map: null,
 
 		mapRows: function(inRows){
-			// summary: Map table topography
+			// summary:
+			//		Map table topography
 
 			//console.log('mapRows');
 			// # of rows
@@ -709,7 +710,8 @@ define([
 		},
 
 		getMapCoords: function(inRow, inCol){
-			// summary: Find node's map coords by it's structure coords
+			// summary:
+			//		Find node's map coords by it's structure coords
 			for(var j=0, row; (row=this.map[j]); j++){
 				for(var i=0, cell; (cell=row[i]); i++){
 					if(cell.c==inCol && cell.r == inRow){
@@ -722,7 +724,8 @@ define([
 		},
 		
 		getNode: function(inTable, inRow, inCol){
-			// summary: Find a node in inNode's table with the given structure coords
+			// summary:
+			//		Find a node in inNode's table with the given structure coords
 			var row = inTable && inTable.rows[inRow];
 			return row && row.cells[inCol];
 		},
