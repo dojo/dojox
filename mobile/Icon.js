@@ -8,8 +8,6 @@ define([
 
 	// module:
 	//		dojox/mobile/Icon
-	// summary:
-	//		A wrapper for image icon, CSS sprite icon, or DOM Button.
 
 	return declare("dojox.mobile.Icon", null, {
 		// summary:

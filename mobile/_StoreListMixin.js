@@ -7,9 +7,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_StoreListMixin
-	// summary:
-	//		Mixin for widgets to generate the list items corresponding to the
-	//		dojo/store data provider object.
 
 	return declare("dojox.mobile._StoreListMixin", StoreMixin, {
 		// summary:

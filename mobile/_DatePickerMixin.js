@@ -9,8 +9,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_DatePickerMixin
-	// summary:
-	//		A mixin for date picker widget.
 
 	var slotMixin = {
 		format: function(/*Date*/d){

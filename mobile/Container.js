@@ -6,8 +6,6 @@ define([
 
 	// module:
 	//		dojox/mobile/Container
-	// summary:
-	//		A simple container-type widget.
 
 	return declare("dojox.mobile.Container", [Pane, Container], {
 		// summary:

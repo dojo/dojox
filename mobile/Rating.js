@@ -8,8 +8,6 @@ define([
 
 	// module:
 	//		dojox/mobile/Rating
-	// summary:
-	//		A widget that shows rating with stars.
 
 	return declare("dojox.mobile.Rating", WidgetBase, {
 		// summary:

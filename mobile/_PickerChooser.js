@@ -5,10 +5,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_PickerChooser
-	// summary:
-	//		This widget chooses a picker class according to the current theme.
-	//		Returns ValuePicker-based date/time picker when the current theme is "android".
-	//		Returns SpinWheel-based date/time picker otherwise.
 
 	return{
 		// summary:

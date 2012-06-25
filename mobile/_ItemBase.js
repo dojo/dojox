@@ -15,8 +15,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_ItemBase
-	// summary:
-	//		A base class for item classes (e.g. ListItem, IconItem, etc.).
 
 	return declare("dojox.mobile._ItemBase", [WidgetBase, Container, Contained],{
 		// summary:

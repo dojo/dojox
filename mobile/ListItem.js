@@ -13,8 +13,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ListItem
-	// summary:
-	//		An item of either RoundRectList or EdgeToEdgeList.
 
 	lang.extend(dijit._WidgetBase, {
 		layout: "",

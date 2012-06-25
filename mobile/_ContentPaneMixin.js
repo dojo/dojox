@@ -11,8 +11,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_ContentPaneMixin
-	// summary:
-	//		Mixin for a very simple content pane to embed an HTML fragment.
 
 	return declare("dojox.mobile._ContentPaneMixin", ExecScriptMixin, {
 		// summary:

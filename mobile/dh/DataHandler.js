@@ -7,8 +7,6 @@ define([
 
 	// module:
 	//		dojox/mobile/dh/DataHandler
-	// summary:
-	//		A component that provides an interface between data and handlers.
 
 	return declare("dojox.mobile.dh.DataHandler", null, {
 		// summary:

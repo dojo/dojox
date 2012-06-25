@@ -16,8 +16,6 @@ define([
 
 	// module:
 	//		dojox/mobile/Accordion
-	// summary:
-	//		A layout widget that allows the user to freely navigate between panes.
 
 	// inner class
 	var _AccordionTitle = declare([WidgetBase, Contained], {

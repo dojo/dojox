@@ -11,8 +11,6 @@ define([
 
 	// module:
 	//		dojox/mobile/PageIndicator
-	// summary:
-	//		A current page indicator.
 
 	return declare("dojox.mobile.PageIndicator", [WidgetBase, Contained],{
 		// summary:

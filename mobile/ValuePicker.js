@@ -6,8 +6,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ValuePicker
-	// summary:
-	//		A value picker that has stepper.
 
 	return declare("dojox.mobile.ValuePicker", PickerBase, {
 		// summary:

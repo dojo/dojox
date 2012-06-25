@@ -24,8 +24,6 @@ define([
 
 	// module:
 	//		dojox/mobile/View
-	// summary:
-	//		A widget that represents a view that occupies the full screen
 
 	var dm = lang.getObject("dojox.mobile", true);
 

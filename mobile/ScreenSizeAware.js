@@ -12,8 +12,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ScreenSizeAware
-	// summary:
-	//		A module to make a screen size aware application.
 
 	kernel.experimental("dojox.mobile.ScreenSizeAware"); // should consider support for other UI layout patterns
 

@@ -10,8 +10,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ScrollableView
-	// summary:
-	//		A container that has a touch scrolling capability.
 
 	return declare("dojox.mobile.ScrollableView", [View, ScrollableMixin], {
 		// summary:

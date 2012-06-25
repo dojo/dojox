@@ -6,8 +6,6 @@ define([
 ], function(kernel, declare, win, domConstruct){
 	// module:
 	//		dojox/mobile/_ExecScriptMixin
-	// summary:
-	//		Mixin for content handler to have a script execution capability.
 
 	return declare("dojox.mobile._ExecScriptMixin", null, {
 		// summary:

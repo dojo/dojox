@@ -10,8 +10,6 @@ define([
 
 	// module:
 	//		dojox/mobile/dh/JsonContentHandler
-	// summary:
-	//		A JSON content handler.
 
 	return declare("dojox.mobile.dh.JsonContentHandler", null, {
 		// summary:

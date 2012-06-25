@@ -7,8 +7,6 @@ define([
 
 	// module:
 	//		dojox/mobile/SpinWheel
-	// summary:
-	//		A value picker widget that has spin wheels.
 
 	return declare("dojox.mobile.SpinWheel", PickerBase, {
 		// summary:

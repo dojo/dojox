@@ -7,8 +7,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ProgressBar
-	// summary:
-	//		A widget that shows the progress of a task.
 
 	return declare("dojox.mobile.ProgressBar", WidgetBase, {
 		// summary:

@@ -6,8 +6,6 @@ define([
 
 	// module:
 	//		dojox/mobile/RoundRectStoreList
-	// summary:
-	//		A dojo/store-enabled version of RoundRectList.
 
 	return declare("dojox.mobile.RoundRectStoreList", [RoundRectList, StoreListMixin], {
 		// summary:

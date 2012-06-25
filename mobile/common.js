@@ -14,13 +14,6 @@ define([
 
 	// module:
 	//		dojox/mobile/common
-	// summary:
-	//		A common module for dojox/mobile.
-	// description:
-	//		This module includes common utility functions that are used by
-	//		dojox/mobile widgets. Also, it provides functions that are commonly
-	//		necessary for mobile web applications, such as the hide address bar
-	//		function.
 
 	var dm = lang.getObject("dojox.mobile", true);
 
@@ -268,6 +261,9 @@ define([
 		//		dojox/mobile widgets. Also, it provides functions that are commonly
 		//		necessary for mobile web applications, such as the hide address bar
 		//		function.
+
+		// TODO: return functions declared above in this hash, rather than
+		// dojox.mobile.
     };
     =====*/
 	return dm;

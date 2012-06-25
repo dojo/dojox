@@ -14,7 +14,6 @@ define([
 	return declare("dojox.mobile.Tooltip", WidgetBase, {
 		// summary:
 		//		A non-templated popup bubble widget
-		//
 
 		baseClass: "mblTooltip mblTooltipHidden",
 

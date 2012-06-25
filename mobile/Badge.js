@@ -7,8 +7,6 @@ define([
 ], function(declare, lang, domClass, domConstruct, iconUtils){
 	// module:
 	//		dojox/mobile/Badge
-	// summary:
-	//		A utility to create/update a badge node.
 
 	return declare("dojox.mobile.Badge", null, {
 		// summary:

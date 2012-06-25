@@ -13,8 +13,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ProgressIndicator
-	// summary:
-	//		A progress indication widget.
 
 	var cls = declare("dojox.mobile.ProgressIndicator", [WidgetBase, Contained], {
 		// summary:

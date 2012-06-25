@@ -14,8 +14,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_EditableIconMixin
-	// summary:
-	//		A mixin for IconContainer to make it editable.
 
 	return declare("dojox.mobile._EditableIconMixin", null, {
 		// summary:

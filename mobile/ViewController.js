@@ -19,8 +19,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ViewController
-	// summary:
-	//		A singleton class that controls view transition.
 
 	var Controller = declare("dojox.mobile.ViewController", null, {
 		// summary:

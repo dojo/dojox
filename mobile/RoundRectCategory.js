@@ -8,8 +8,6 @@ define([
 
 	// module:
 	//		dojox/mobile/RoundRectCategory
-	// summary:
-	//		A category header for a rounded rectangle list.
 
 	return declare("dojox.mobile.RoundRectCategory", [WidgetBase, Contained], {
 		// summary:

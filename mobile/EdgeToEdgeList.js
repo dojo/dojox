@@ -5,8 +5,6 @@ define([
 
 	// module:
 	//		dojox/mobile/EdgeToEdgeCategory
-	// summary:
-	//		An edge-to-edge layout list.
 
 	return declare("dojox.mobile.EdgeToEdgeList", RoundRectList, {
 		// summary:

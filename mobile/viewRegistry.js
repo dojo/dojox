@@ -6,8 +6,6 @@ define([
 
 	// module:
 	//		dojox/mobile/viewRegistry
-	// summary:
-	//		A registry of existing views.
 
 	var viewRegistry = {
 		// summary:

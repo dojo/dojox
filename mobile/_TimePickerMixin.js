@@ -6,8 +6,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_TimePickerMixin
-	// summary:
-	//		A mixin for time picker widget.
 
 	return declare("dojox.mobile._TimePickerMixin", null, {
 		// summary:

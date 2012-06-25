@@ -5,8 +5,6 @@ define([
 
 	// module:
 	//		dojox/mobile/_StoreMixin
-	// summary:
-	//		Mixin for widgets to enable dojo/store data store.
 
 	return declare("dojox.mobile._StoreMixin", null, {
 		// summary:

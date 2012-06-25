@@ -15,8 +15,6 @@ define([
 
 	// module:
 	//		dojox/mobile/EditableRoundRectList
-	// summary:
-	//		A rounded rectangle list.
 
 	return declare("dojox.mobile._EditableListMixin", null, {
 		// summary:

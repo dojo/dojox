@@ -10,8 +10,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ToolBarButton
-	// summary:
-	//		A button widget which is placed in the Heading widget.
 
 	return declare("dojox.mobile.ToolBarButton", ItemBase, {
 		// summary:
