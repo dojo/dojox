@@ -6,10 +6,11 @@ define([
 
 	// module:
 	//		dojox/mobile/dh/UrlDataSource
-	// summary:
-	//		A component that accesses the given URL and fetches the data as text.
 
 	return declare("dojox.mobile.dh.UrlDataSource", null, {
+		// summary:
+		//		A component that accesses the given URL and fetches the data as text.
+
 		text: "",
 
 		_url: "",

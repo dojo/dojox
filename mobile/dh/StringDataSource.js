@@ -4,10 +4,11 @@ define([
 
 	// module:
 	//		dojox/mobile/dh/StringDataSource
-	// summary:
-	//		A component that simply returns the given text.
 
 	return declare("dojox.mobile.dh.StringDataSource", null, {
+		// summary:
+		//		A component that simply returns the given text.
+
 		text: "",
 
 		constructor: function(/*String*/ text){

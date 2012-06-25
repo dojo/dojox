@@ -6,21 +6,23 @@ define([
 
 	// module:
 	//		dojox/mobile/i18n
-	// summary:
-	//		An internationalization utility for applications based on dojox/mobile.
 
-	var i18n = lang.getObject("dojox.mobile.i18n", true);
+	var i18n = {
+		// summary:
+		//		An internationalization utility for applications based on dojox/mobile.
+	};
+	lang.setObject("dojox.mobile.i18n", i18n);
 
 	i18n.load = function(/*String*/packageName, /*String*/bundleName, /*String?*/locale){
 		// summary:
-		//		Loads an nls resouce bundle and returns an array of localized
+		//		Loads an nls resource bundle and returns an array of localized
 		//		resources.
 		return i18n.registerBundle(di18n.getLocalization(packageName, bundleName, locale));
 	};
 
 	i18n.registerBundle = function(/*Array*/bundle){
 		// summary:
-		//		Accumulates the given localized resouces in an array and returns
+		//		Accumulates the given localized resources in an array and returns
 		//		it.
 		if(!i18n.bundle){ i18n.bundle = []; }
 		return lang.mixin(i18n.bundle, bundle);
@@ -33,12 +35,6 @@ define([
 			return i18n.bundle[lang.trim(s)] || s;
 		}
 	});
-	
-	/*=====
-    return {
-		// summary:
-		//		An internationalization utility for applications based on dojox/mobile.
-    };
-    =====*/
+
 	return i18n;
 });

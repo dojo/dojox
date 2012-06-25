@@ -12,25 +12,8 @@ define([
 
 	// module:
 	//		dojox/mobile/scrollable
-	// summary:
-	//		Mixin for enabling touch scrolling capability.
-	// description:
-	//		Mobile WebKit browsers do not allow scrolling inner DIVs. (For instance, 
-	//		on iOS you need the two-finger operation to scroll them.)
-	//		That means you cannot have fixed-positioned header/footer bars.
-	//		To solve this issue, this module disables the browsers default scrolling
-	//		behavior, and rebuilds its own scrolling machinery by handling touch
-	//		events. In this module, this.domNode has height "100%" and is fixed to
-	//		the window, and this.containerNode scrolls. If you place a bar outside
-	//		of this.containerNode, then it will be fixed-positioned while
-	//		this.containerNode is scrollable.
-	//
-	//		This module has the following features:
-	//		- Scrolls inner DIVs vertically, horizontally, or both.
-	//		- Vertical and horizontal scroll bars.
-	//		- Flashes the scroll bars when a view is shown.
-	//		- Simulates the flick operation using animation.
-	//		- Respects header/footer bars if any.
+
+	// TODO: rename to Scrollable.js (capital S) for 2.0
 
 	// TODO: shouldn't be referencing this dojox/mobile variable, would be better to require the mobile.js module
 	var dm = lang.getObject("dojox.mobile", true);
@@ -48,7 +31,27 @@ define([
 		}
 	});
 
-	var Scrollable = function(){};
+	var Scrollable = function(){
+		// summary:
+		//		Mixin for enabling touch scrolling capability.
+		// description:
+		//		Mobile WebKit browsers do not allow scrolling inner DIVs. (For instance,
+		//		on iOS you need the two-finger operation to scroll them.)
+		//		That means you cannot have fixed-positioned header/footer bars.
+		//		To solve this issue, this module disables the browsers default scrolling
+		//		behavior, and rebuilds its own scrolling machinery by handling touch
+		//		events. In this module, this.domNode has height "100%" and is fixed to
+		//		the window, and this.containerNode scrolls. If you place a bar outside
+		//		of this.containerNode, then it will be fixed-positioned while
+		//		this.containerNode is scrollable.
+		//
+		//		This module has the following features:
+		//		- Scrolls inner DIVs vertically, horizontally, or both.
+		//		- Vertical and horizontal scroll bars.
+		//		- Flashes the scroll bars when a view is shown.
+		//		- Simulates the flick operation using animation.
+		//		- Respects header/footer bars if any.
+	};
 
 	lang.extend(Scrollable, {
 		// fixedHeaderHeight: Number
@@ -1232,28 +1235,5 @@ define([
 
 	lang.setObject("dojox.mobile.scrollable", Scrollable);
 
-	/*=====
-    return {
-		// summary:
-		//		Mixin for enabling touch scrolling capability.
-		// description:
-		//		Mobile WebKit browsers do not allow scrolling inner DIVs. (For instance, 
-		//		on iOS you need the two-finger operation to scroll them.)
-		//		That means you cannot have fixed-positioned header/footer bars.
-		//		To solve this issue, this module disables the browsers default scrolling
-		//		behavior, and rebuilds its own scrolling machinery by handling touch
-		//		events. In this module, this.domNode has height "100%" and is fixed to
-		//		the window, and this.containerNode scrolls. If you place a bar outside
-		//		of this.containerNode, then it will be fixed-positioned while
-		//		this.containerNode is scrollable.
-		//
-		//		This module has the following features:
-		//		- Scrolls inner DIVs vertically, horizontally, or both.
-		//		- Vertical and horizontal scroll bars.
-		//		- Flashes the scroll bars when a view is shown.
-		//		- Simulates the flick operation using animation.
-		//		- Respects header/footer bars if any.
-	};
-    =====*/
 	return Scrollable;
 });
