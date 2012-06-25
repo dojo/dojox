@@ -9,10 +9,11 @@ define([
 
 	// module:
 	//		dojox/mobile/lazyLoadUtils
-	// summary:
-	//		Utilities to lazy-loading of Dojo widgets.
 
-	var lazyLoadUtils = new function(){
+	var LazyLoadUtils = function(){
+		// summary:
+		//		Utilities to lazy-loading of Dojo widgets.
+
 		this._lazyNodes = [];
 		var _this = this;
 		if(config.parseOnLoad){
@@ -88,13 +89,8 @@ define([
 			return d;
 		}	
 	};
-	
-	/*=====
-    return {
-		// summary:
-		//		Utilities to lazy-loading of Dojo widgets.
-    };
-    =====*/
-	return lazyLoadUtils;
+
+	// Return singleton.  (TODO: can we replace LazyLoadUtils class and singleton w/a simple hash of functions?)
+	return new LazyLoadUtils();
 });
 

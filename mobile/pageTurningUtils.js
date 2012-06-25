@@ -9,38 +9,10 @@ define([
 ], function(kernel, array, connect, event, domClass, domConstruct, domStyle){
 	// module:
 	//		dojox/mobile/pageTurningUtils
-	// summary:
-	//		Utilities to provide page turning effects just like turning a real book.
-	// example:
-	// |	require([
-	// |		"dojo/ready",
-	// |		"dojox/mobile/pageTurningUtils"
-	// |	], function(ready, pageTurningUtils){
-	// |		var utils = new pageTurningUtils();
-	// |		ready(function(){
-	// |			utils.init(300, 400); // Specify width and height by pixels
-	// |			utils.initCatalog(document.getElementById("catalog"));
-	// |		});
-	// |	);
-	// |	<div id="catalog">
-	// |		<div id="page1">
-	// |			<div id="front1"><img src="img1.png"></div>
-	// |			<div id="back1"><img src="img2.png"></div>
-	// |		</div>
-	// |		<div id="page2">
-	// |			<div id="front2"><img src="img3.png"></div>
-	// |			<div id="back2"><img src="img4.png"></div>
-	// |		</div>
-	// |		<div id="page3">
-	// |			<div id="front3"><img src="img5.png"></div>
-	// |			<div id="back3"></div>
-	// |		</div>
-	// |	</div>
 	
 	kernel.experimental("dojox.mobile.pageTurningUtils");
 
-	/*=====
-    return {
+	var PageTurningUtils = function(){
 		// summary:
 		//		Utilities to provide page turning effects just like turning a real book.
 		// example:
@@ -68,9 +40,7 @@ define([
 		// |			<div id="back3"></div>
 		// |		</div>
 		// |	</div>
-    };
-    =====*/
-	return function(){
+
 		this.w = 0;
 		this.h = 0;
 		this.turnfrom = "top";
@@ -617,4 +587,7 @@ define([
 			childNodes[2] && domStyle.set(childNodes[2], "display", "none"); // shadowNode
 		};
 	};
+
+	// Return singleton.  (TODO: can we replace PageTurningUtils class and singleton w/a simple hash of functions?)
+	return new PageTurningUtils();
 });

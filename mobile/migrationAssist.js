@@ -147,12 +147,13 @@ define([
 
 	// module:
 	//		dojox/mobile/migrationAssist
-	// summary:
-	//		Dojo Mobile 1.6/1.7 to 1.8 migration assistance.
 
 	var currentTheme;
 
-	var migrationAssist = new function(){
+	var MigrationAssist = function(){
+		// summary:
+		//		Dojo Mobile 1.6/1.7 to 1.8 migration assistance.
+
 		var get = function(w, key){
 			return w[key] || w.srcNodeRef && w.srcNodeRef.getAttribute(key);
 		};
@@ -420,11 +421,6 @@ define([
 		}
 	});
 
-	/*=====
-    return {
-		// summary:
-		//		Dojo Mobile 1.6/1.7 to 1.8 migration assistance.
-    };
-    =====*/
-	return migrationAssist;
+	// Return singleton.  (TODO: can we replace LazyLoadUtils class and singleton w/a simple hash of functions?)
+	return new MigrationAssist();
 });
