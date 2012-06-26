@@ -504,7 +504,7 @@ define([
 		},
 
 		onMoveColumn: function(){
-			this.render();
+			this.update();
 		},
 		
 		onResizeColumn: function(/*int*/ cellIdx){
