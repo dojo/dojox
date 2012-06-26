@@ -333,13 +333,22 @@ define([
 			}
 
 			// Call onEnd() in the superclass, for parsing, but only after any require() calls from above executeScripts
-			// code block have executed.  If there were no require() calls the superclass call will execute immediately.
+			// code block have executed.  If there were no require() calls the superclass call will execute immediately,
+			// unless this function is being called from the parser in which case the parser needs to finish running
+			// first before ready() fires the callback.
+			// For 2.0, remove the call to ready() since the parser can do loading for us.
 			var superClassOnEndMethod = this.getInherited(arguments),
-				args = arguments;
+				args = arguments,
+				d = new Deferred();
 			ready(lang.hitch(this, function(){
 				superClassOnEndMethod.apply(this, args);
+				this.parseDeferred.then(function(){ d.resolve(); })
 			}));
+
+			// Return a promise that resolves after the ready() call completes, and after the parser finishes running.
+			return d.promise;
 		},
+
 		tearDown: function() {
 			this.inherited(arguments);
 			delete this._styles;

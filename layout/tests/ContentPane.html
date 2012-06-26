@@ -24,7 +24,7 @@
 			behaviour: expression(fixPngIE6.call(this));
 		}
 	</style>
-	<script src='../../../dojo/dojo.js' djConfig='isDebug:true, parseOnLoad:true'></script>
+	<script src='../../../dojo/dojo.js' djConfig='isDebug:true'></script>
 	<script>
 		dojo.require('doh.runner');
 		dojo.require('dojox.layout.ContentPane');
@@ -50,13 +50,21 @@
 
 		var pane1, pane2;
 
-		dojo.addOnLoad(function(){
-
-			pane1 = dijit.byId('parsedPane');
+		dojo.ready(function(){
 
 			function ieTrimSpaceBetweenTags(str){
 				return str.replace(/(<[a-z]*[^>]*>)\s*/ig, "$1");
 			}
+
+			doh.register({
+				name: 'parse',
+				timeout: 5000,
+				runTest: function(t){
+					dojo.parser.parse().then(function(){
+						pane1 = dijit.byId('parsedPane');
+					});
+				}
+			});
 
 			doh.register("basicChecks", [
 					{
@@ -92,6 +100,9 @@
 							t.assertFalse(cont.toLowerCase() == pane1.domNode.innerHTML.toLowerCase());
 							t.assertEqual(1, pane1.getChildren().length);
 						}
+					},
+					function startupCalled(){
+						doh.t(select._started, "select widget was created, and startup was called");
 					},
 					{
 						name: 'changeContentTRHead',
@@ -335,7 +346,7 @@
 							pane1._contentSetter._renderStyles = function(styles){
 								console.log("in replaced _renderStyles");
 								adjustedCss = styles.join();
-							}
+							};
 							console.log("in cssPathAdjustments, calling set");
 							pane1.attr('content', '<style>'+cssText+'</style>');
 							console.log("in cssPathAdjustments, done calling set");
@@ -976,7 +987,7 @@
 						pane1._contentSetter._renderStyles = function(styles){ adjustedCss = styles.join(''); };
 						pane1._contentSetter.setContent = function(){
 							adjustedHtml = this.content;
-						}
+						};
 
 						var start = new Date();
 						pane1.attr('content', html);
@@ -1089,5 +1100,11 @@
 			</tr>
 		<tbody>
 	</table>
+
+	<div data-dojo-type="dojox/layout/ContentPane" data-dojo-id="startupTest">
+		<select data-dojo-type="dijit/form/Select" data-dojo-id="select">
+			<option>hi</option>
+		</select>
+	</div>
 </body>
 </html>
