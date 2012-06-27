@@ -335,7 +335,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 				(kwArgs = kwArgs || {}).service = this.service;
 			}
 			if("syncMode" in kwArgs ? kwArgs.syncMode : this.syncMode){
-				rpcConfig._sync = true;
+				dojox.rpc._sync = true;
 			}
 
 			var actions = rpcJsonRest.commit(kwArgs);
