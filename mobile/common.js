@@ -42,10 +42,13 @@ define([
 		// summary:
 		//		Detects the screen size and determines if the screen is like
 		//		phone or like tablet. If the result is changed,
-		//		it sets either of the following css class to `<html>`
+		//		it sets either of the following css class to `<html>`:
+		//
 		//			- 'dj_phone'
 		//			- 'dj_tablet'
-		//		and it publishes either of the following events.
+		//
+		//		and it publishes either of the following events:
+		//
 		//			- '/dojox/mobile/screenSize/phone'
 		//			- '/dojox/mobile/screenSize/tablet'
 		var dim = dm.getScreenSize();

@@ -29,6 +29,10 @@ define([
 		fontSize: 16, // [px]
 
 		constructor: function(params, node){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			if (params){
 				lang.mixin(this, params);
 			}

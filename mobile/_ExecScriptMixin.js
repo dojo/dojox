@@ -17,8 +17,10 @@ define([
 		execScript: function(/*String*/ html){
 			// summary:
 			//		Finds script tags and executes the script.
-			// returns:
-			//		The given HTML text from which `<script>` blocks are removed.
+			// html: String
+			//		The HTML to be 
+			// returns: String
+			//		The given HTML text from which &lt;script&gt; blocks are removed.
 			var s = html.replace(/\f/g, " ").replace(/<\/script>/g, "\f");
 			s = s.replace(/<script [^>]*src=['"]([^'"]+)['"][^>]*>([^\f]*)\f/ig, function(ignore, path){
 				domConstruct.create("script", {

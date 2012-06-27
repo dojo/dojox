@@ -36,6 +36,10 @@ define([
 		_tag: "audio",
 
 		constructor: function(){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			this.source = [];
 		},
 

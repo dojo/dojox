@@ -344,7 +344,7 @@ define([
 			//		callback
 		},
 
-		deleteItem: function(item){
+		deleteItem: function(/*Widget*/item){
 			// summary:
 			//		Deletes the given item.
 			if(item._deleteHandle){

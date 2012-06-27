@@ -35,6 +35,7 @@ define([
 		// summary:
 		//		Mixin for enabling touch scrolling capability.
 		// description:
+		//		Mixin for enabling touch scrolling capability.
 		//		Mobile WebKit browsers do not allow scrolling inner DIVs. (For instance,
 		//		on iOS you need the two-finger operation to scroll them.)
 		//		That means you cannot have fixed-positioned header/footer bars.
@@ -46,11 +47,12 @@ define([
 		//		this.containerNode is scrollable.
 		//
 		//		This module has the following features:
-		//		- Scrolls inner DIVs vertically, horizontally, or both.
-		//		- Vertical and horizontal scroll bars.
-		//		- Flashes the scroll bars when a view is shown.
-		//		- Simulates the flick operation using animation.
-		//		- Respects header/footer bars if any.
+		//
+		//			- Scrolls inner DIVs vertically, horizontally, or both.
+		//			- Vertical and horizontal scroll bars.
+		//			- Flashes the scroll bars when a view is shown.
+		//			- Simulates the flick operation using animation.
+		//			- Respects header/footer bars if any.
 	};
 
 	lang.extend(Scrollable, {

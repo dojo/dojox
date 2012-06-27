@@ -52,6 +52,10 @@ define([
 		baseClass: "mblView",
 
 		constructor: function(params, node){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			if(node){
 				dom.byId(node).style.visibility = "hidden";
 			}

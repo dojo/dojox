@@ -46,6 +46,10 @@ define([
 		fileTypeMapClass: "dojox/mobile/dh/SuffixFileTypeMap",
 
 		constructor: function(){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			this.viewMap = {};
 			ready(lang.hitch(this, function(){
 				on(win.body(), "startTransition", lang.hitch(this, "onStartTransition"));

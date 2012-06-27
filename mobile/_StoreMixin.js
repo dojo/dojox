@@ -13,9 +13,10 @@ define([
 		//		By mixing this class into a widget, it can get data through a
 		//		dojo/store data store. The widget must implement the following
 		//		methods to handle the retrieved data:
-		//		onComplete(/*Array*/items), onError(/*Object*/errorData),
-		//		onUpdate(/*Object*/item, /*Number*/insertedInto), and 
-		//		onDelete(/*Object*/item, /*Number*/removedFrom).
+		//
+		//			- onComplete(/*Array*/items), onError(/*Object*/errorData),
+		//			- onUpdate(/*Object*/item, /*Number*/insertedInto), and 
+		//			- onDelete(/*Object*/item, /*Number*/removedFrom).
 	
 		// store: Object
 		//		Reference to data provider object used by this widget.

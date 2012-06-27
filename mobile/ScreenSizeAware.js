@@ -68,6 +68,10 @@ define([
 		leftListId: "",
 
 		constructor: function(options){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			if (options){
 				lang.mixin(this, options);
 			}

@@ -50,6 +50,10 @@ define([
 		tag: "div",
 
 		constructor: function(args, node){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			if(args){
 				lang.mixin(this, args);
 			}

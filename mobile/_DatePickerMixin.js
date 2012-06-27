@@ -204,7 +204,7 @@ define([
 		_getValueAttr: function(){
 			// summary:
 			//		Gets the current date as a String formatted according to a subset of the ISO-8601 standard.
-			// returns:
+			// returns: String
 			//		A string formatted as described in the dojo/date/stamp module.
 			// tags:
 			//		private			

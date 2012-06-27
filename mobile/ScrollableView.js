@@ -34,6 +34,10 @@ define([
 		keepScrollPos: false,
 
 		constructor: function(){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			this.scrollableParams = {noResize: true};
 		},
 

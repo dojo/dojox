@@ -56,6 +56,10 @@ define([
 		baseClass: "mblProgressIndicator",
 
 		constructor: function(){
+			// summary:
+			//		Runs when creating a new instance of the class.
+			// tags:
+			//		private
 			this.colors = [];
 			this._bars = [];
 		},
