@@ -49,11 +49,13 @@ define([
 		//		A name of html tag to create as this.domNode.
 		tag: "div",
 
-		constructor: function(args, node){
+		constructor: function(/*Object?*/args, /*DomNode?*/node){
 			// summary:
-			//		Runs when creating a new instance of the class.
-			// tags:
-			//		private
+			//		Creates a new instance of the class.
+			// args:
+			//		Contains properties to be set.
+			// node:
+			//		The DOM node. If none is specified, it is automatically created. 
 			if(args){
 				lang.mixin(this, args);
 			}

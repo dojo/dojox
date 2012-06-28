@@ -28,6 +28,8 @@ define([
 		refNode: null,
 
 		constructor: function(/*DataSource*/ ds, /*DomNode*/ target, /*DomNode?*/ refNode){
+			// summary:
+			//		Creates a new instance of the class.
 			this.ds = ds;
 			this.target = target;
 			this.refNode = refNode;

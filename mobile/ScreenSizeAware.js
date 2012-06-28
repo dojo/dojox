@@ -67,11 +67,11 @@ define([
 		//		The id of the list widget in the left view.
 		leftListId: "",
 
-		constructor: function(options){
+		constructor: function(/*Object?*/options){
 			// summary:
-			//		Runs when creating a new instance of the class.
-			// tags:
-			//		private
+			//		Creates a new instance of the class.
+			// options:
+			//		Contains properties to be set.
 			if (options){
 				lang.mixin(this, options);
 			}

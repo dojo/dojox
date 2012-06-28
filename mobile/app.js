@@ -3,12 +3,12 @@ define([
 ], function(appBase){
 	
 	/*=====
-    return {
+	return {
 		// summary:
 		//		Loads dojox/mobile/app/_base. 
 		// tags:
 		//		private
-    };
-    =====*/
+	};
+	=====*/
 	return appBase;
 });

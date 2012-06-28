@@ -12,6 +12,8 @@ define([
 		text: "",
 
 		constructor: function(/*String*/ text){
+			// summary:
+			//		Creates a new instance of the class.
 			this.text = text;
 		},
 

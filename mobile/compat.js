@@ -12,7 +12,7 @@ define([
 	}
 	
 	/*=====
-    return {
+	return {
 		// summary:
 		//		CSS3 compatibility module.
 		// description:
@@ -46,7 +46,7 @@ define([
 		//		in a directory containing this path, the data-dojo-config needs to specify a custom 
 		//		pattern using the "mblLoadCompatPattern" configuration parameter, for instance:
 		// |	data-dojo-config="mblLoadCompatPattern: /\/mycustomtheme\/.*\.css$/"
-    };
-    =====*/
+	};
+	=====*/
 	return dm;
 });

@@ -28,11 +28,13 @@ define([
 		//		button itself.
 		fontSize: 16, // [px]
 
-		constructor: function(params, node){
+		constructor: function(/*Object?*/params, /*DomNode?*/node){
 			// summary:
-			//		Runs when creating a new instance of the class.
-			// tags:
-			//		private
+			//		Creates a new instance of the class.
+			// params:
+			//		Contains properties to be set.
+			// node:
+			//		The DOM node. If none is specified, it is automatically created. 
 			if (params){
 				lang.mixin(this, params);
 			}

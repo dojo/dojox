@@ -45,17 +45,19 @@ define([
 		keepScrollPos: true,
 
 		// tag: String
-		//		A name of html tag to create as domNode.
+		//		A name of the HTML tag to create as domNode.
 		tag: "div",
 
 		/* internal properties */
 		baseClass: "mblView",
 
-		constructor: function(params, node){
+		constructor: function(/*Object*/params, /*DomNode?*/node){
 			// summary:
-			//		Runs when creating a new instance of the class.
-			// tags:
-			//		private
+			//		Creates a new instance of the class.
+			// params:
+			//		Contains the parameters.
+			// node:
+			//		The DOM node. If none is specified, it is automatically created. 
 			if(node){
 				dom.byId(node).style.visibility = "hidden";
 			}

@@ -37,9 +37,7 @@ define([
 
 		constructor: function(){
 			// summary:
-			//		Runs when creating a new instance of the class.
-			// tags:
-			//		private
+			//		Creates a new instance of the class.
 			this.source = [];
 		},
 

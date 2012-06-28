@@ -16,6 +16,8 @@ define([
 		_url: "",
 
 		constructor: function(/*String*/ url){
+			// summary:
+			//		Creates a new instance of the class.
 			this._url = url;
 		},
 

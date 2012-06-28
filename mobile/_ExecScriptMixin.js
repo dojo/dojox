@@ -18,7 +18,7 @@ define([
 			// summary:
 			//		Finds script tags and executes the script.
 			// html: String
-			//		The HTML to be 
+			//		The HTML input.
 			// returns: String
 			//		The given HTML text from which &lt;script&gt; blocks are removed.
 			var s = html.replace(/\f/g, " ").replace(/<\/script>/g, "\f");

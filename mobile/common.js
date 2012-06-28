@@ -255,8 +255,11 @@ define([
 		win.body().style.visibility = "visible";
 	});
 
+	// TODO: return functions declared above in this hash, rather than
+	// dojox.mobile.
+
 	/*=====
-    return {
+	return {
 		// summary:
 		//		A common module for dojox/mobile.
 		// description:
@@ -264,10 +267,7 @@ define([
 		//		dojox/mobile widgets. Also, it provides functions that are commonly
 		//		necessary for mobile web applications, such as the hide address bar
 		//		function.
-
-		// TODO: return functions declared above in this hash, rather than
-		// dojox.mobile.
-    };
-    =====*/
+	};
+	=====*/
 	return dm;
 });

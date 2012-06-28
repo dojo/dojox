@@ -14,16 +14,16 @@ define([
 	].join(" ").replace(/ +/g," "));
 	
 	/*=====
-    return {
+	return {
 		// summary:
-		//		Requiring this module adds CSS classes to your document’s `<html`> tag:
+		//		Requiring this module adds CSS classes to your documentâ€™s `<html`> tag:
 		//
 		//		- "dj_android" when running on Android;
 		//		- "dj_bb" when running on BlackBerry;
 		//		- "dj_iphone" when running on iPhone;
 		//		- "dj_ipod" when running on iPod;
 		//		- "dj_ipad" when running on iPad.
-    };
-    =====*/
+	};
+	=====*/
 	return dojo;
 });
