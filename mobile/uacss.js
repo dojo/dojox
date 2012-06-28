@@ -16,7 +16,7 @@ define([
 	/*=====
 	return {
 		// summary:
-		//		Requiring this module adds CSS classes to your documentâ€™s `<html`> tag:
+		//		Requiring this module adds CSS classes to your document's `<html`> tag:
 		//
 		//		- "dj_android" when running on Android;
 		//		- "dj_bb" when running on BlackBerry;
