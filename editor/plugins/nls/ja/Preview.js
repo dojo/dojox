@@ -1,5 +1,5 @@
 define(
 ({
-	"preview": "プリビュー"
+	"preview": "プレビュー"
 })
 );
