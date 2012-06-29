@@ -182,7 +182,7 @@ define([
 		}
 
 		// match <script>, <script type="text/..., but not <script type="dojo(/method)...
-		return cont.replace(/<script\s*(?![^>]*type=['"]?(?:dojo\/|text\/html\b))(?:[^>]*?(?:src=(['"]?)([^>]*?)\1[^>]*)?)*>([\s\S]*?)<\/script>/gi,
+		return cont.replace(/<script\s*(?![^>]*type=['"]?(?:dojo\/|text\/html\b))[^>]*?(?:src=(['"]?)([^>]*?)\1[^>]*)?>([\s\S]*?)<\/script>/gi,
 			function(ignore, delim, src, code){
 				if(src){
 					download(src);
