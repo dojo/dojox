@@ -92,7 +92,7 @@ define(["dojo/_base/connect", "dojo/_base/declare",
 			if(o.shape){
 				vector.push(gf.animateTransform(kwArgs));
 			}
-			if(o.oultine){
+			if(o.outline){
 				kwArgs.shape = o.outline;
 				vector.push(gf.animateTransform(kwArgs));
 			}
