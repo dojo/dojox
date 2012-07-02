@@ -10,10 +10,10 @@ define([
 	"dojo/_base/url",
 	"dojo/_base/xhr",
 	"dojo/_base/window"
-], function (declare, Deferred, domConstruct, htmlUtil, kernel, lang, ready, has, _Url, xhrUtil, windowUtil) {
+], function(declare, Deferred, domConstruct, htmlUtil, kernel, lang, ready, has, _Url, xhrUtil, windowUtil){
 
 /*
-	Status: dont know where this will all live exactly
+	Status: don't know where this will all live exactly
 	Need to pull in the implementation of the various helper methods
 	Some can be static method, others maybe methods of the ContentSetter (?)
 
@@ -50,20 +50,20 @@ define([
 		// description:
 		//		Say we fetch a HTML page from level1/page.html
 		//		It has some inline CSS:
-		//			@import "css/page.css" tv, screen;
-		//			...
-		//			background-image: url(images/aplhaimage.png);
+		//	|		@import "css/page.css" tv, screen;
+		//	|		...
+		//	|		background-image: url(images/aplhaimage.png);
 		//
 		//		as we fetched this HTML and therefore this CSS
 		//		from level1/page.html, these paths needs to be adjusted to:
-		//			@import 'level1/css/page.css' tv, screen;
-		//			...
-		//			background-image: url(level1/images/alphaimage.png);
+		//	|		@import 'level1/css/page.css' tv, screen;
+		//	|		...
+		//	|		background-image: url(level1/images/alphaimage.png);
 		//
 		//		In IE it will also adjust relative paths in AlphaImageLoader()
-		//			filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/alphaimage.png');
+		//	|		filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/alphaimage.png');
 		//		will be adjusted to:
-		//			filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='level1/images/alphaimage.png');
+		//	|		filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='level1/images/alphaimage.png');
 		//
 		//		Please note that any relative paths in AlphaImageLoader in external css files wont work, as
 		//		the paths in AlphaImageLoader is MUST be declared relative to the HTML page,
@@ -383,9 +383,9 @@ define([
 			// example:
 			//		A safe string/node/nodelist content replacement/injection with hooks for extension
 			//		Example Usage:
-			//		dojo.html.set(node, "some string");
-			//		dojo.html.set(node, contentNode, {options});
-			//		dojo.html.set(node, myNode.childNodes, {options});
+			//	|	dojo.html.set(node, "some string");
+			//	|	dojo.html.set(node, contentNode, {options});
+			//	|	dojo.html.set(node, myNode.childNodes, {options});
 
 		if(!params){
 			// simple and fast
