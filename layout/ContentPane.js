@@ -43,16 +43,14 @@ return declare("dojox.layout.ContentPane", ContentPane, {
 	//		NOTE this name might change in the near future
 	scriptHasHooks: false,
 
-	constructor: function(){
-		// init per instance properties, initializer doesn't work here because how things is hooked up in dijit._Widget
-		this.ioArgs = {};
-		this.ioMethod = xhrUtil.get;
-	},
+	ioMethod: xhrUtil.get,
+
+	ioArgs: {},
 
 	onExecError: function(/*Event*/ e){
 		// summary:
 		//		event callback, called on script error or on java handler error
-		//		overide and return your own html string if you want a some text
+		//		override and return your own html string if you want a some text
 		//		displayed within the ContentPane
 	},
 
