@@ -81,10 +81,12 @@ define([
 			// description:
 			//		This function is meant to provide an API bridge to the dijit API.
 			//		Validity of data-bound dijits is a function of multiple concerns:
+			//
 			//		- The validity of the value as ascertained by the data binding
 			//		  and constraints specified in the data model (usually semantic).
 			//		- The validity of the value as ascertained by the widget itself
 			//		  based on widget constraints (usually syntactic).
+			//
 			//		In order for dijits to function correctly in data-bound
 			//		environments, it is imperative that their isValid() functions
 			//		assess the model validity of the data binding via the
@@ -145,12 +147,14 @@ define([
 			// description:
 			//		The declarative data binding reference may be specified in two
 			//		ways via markup:
+			//
 			//		- For older style documents (non validating), controls may use
 			//		  the "ref" attribute to specify the data binding reference
 			//		  (String).
 			//		- For validating documents using the new Dojo parser, controls
 			//		  may specify the data binding reference (String) as the "ref"
 			//		  property specified in the data-dojo-props attribute.
+			//
 			//		Once the ref value is obtained using either of the above means,
 			//		the binding is set up for this control and its required, readOnly
 			//		etc. properties are refreshed.
@@ -159,6 +163,7 @@ define([
 			//		parent or another widget.
 			//		There are three ways in which the data binding node reference is
 			//		calculated when specified as a string:
+			//
 			//		- If an explicit parent widget is specified, the binding is
 			//		  calculated relative to the parent widget's data binding.
 			//		- For any dijits that specify a data binding reference,
@@ -169,7 +174,9 @@ define([
 			//		  dijits that specify a data binding reference, the binding is
 			//		  calculated by treating the reference String as an expression and
 			//		  evaluating it to obtain the dojo/Stateful node in the datamodel.
+			//
 			//		This method calls console.warn in these two conditions:
+			//
 			//		- The ref is an expression i.e. outermost bound dijit, but the
 			//		  expression evaluation fails.
 			//		- The calculated binding turns out to not be an instance of a

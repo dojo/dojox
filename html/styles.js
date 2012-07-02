@@ -97,7 +97,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/
 		//		Not implemented - it seems to have some merit for changing some complex
 		//		selectors. It's not much use for changing simple ones like "span".
 		//		For now, simply write a new rule which will cascade over the first.
-		//		-
+		//
 		//		Modifies an existing cssRule
 	};
 

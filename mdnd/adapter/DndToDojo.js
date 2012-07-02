@@ -115,6 +115,7 @@ define(["dojo/_base/kernel",
 			// summary:
 			//		Register a target dojo.
 			//		The target is represented by an object containing :
+			//
 			//			- the dojo area node
 			//			- the type reference to identify a group node
 			//			- the coords of the area to enable refresh position

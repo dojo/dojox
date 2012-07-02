@@ -172,6 +172,7 @@ define([
 			//		return coordinates of the draggable item
 			// description:
 			//		return for:
+			//
 			//			- X point : the middle
 			//	  		- Y point : search if the user goes up or goes down with his mouse.
 			//	  		- Up : top of the draggable item

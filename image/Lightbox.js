@@ -12,6 +12,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		//		images with multiple entry points, all using a single "master" Dialog for visualization
 		//
 		//		key controls:
+		//
 		//			- ESC - close
 		//			- Down Arrow / Rt Arrow / N - Next Image
 		//			- Up Arrow / Lf Arrow / P - Previous Image

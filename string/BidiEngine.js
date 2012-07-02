@@ -385,7 +385,8 @@ function shape(/*boolean*/rtl, /*String*/text, /*boolean*/compress){
 	// compress:
 	//		A flag indicates to insert extra space after the lam alef compression
 	//		to preserve the buffer size or not insert an extra space which will lead
-	//		to decrease the buffer size. this option can be:
+	//		to decrease the buffer size. This option can be:
+	//
 	//		- true (default) to not insert extra space after compressing Lam+Alef into one character Lamalef
 	//		- false to insert an extra space after compressed Lamalef to preserve the buffer size
 	// returns:

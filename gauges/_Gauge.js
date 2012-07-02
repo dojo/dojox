@@ -57,6 +57,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 	// majorTicks: Object
 	//		An object representing the tick marks that should be added to the gauge. Major tick marks have a text label
 	//		indicating the value.  The object can have the following attributes (required are marked with a *):
+	//
 	//		- offset: the distance from the 'center' of the gauge.  Used differently for Analog vs. Bar
 	//		- width: The width of the mark
 	//		- length: The length of the mark

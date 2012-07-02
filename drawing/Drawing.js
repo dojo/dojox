@@ -18,50 +18,40 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		//		declare. See dojox.drawing.util.oo
 		//
 		//		The files are laid out as such:
-		//		- Drawing
-		//			The master class. More than one instance of a Drawing can be placed
+		//
+		//		- Drawing: The master class. More than one instance of a Drawing can be placed
 		//			on a page at one time (although this has not yet been tested). Plugins
 		//			can be added in markup.
-		//		- Toolbar
-		//			Like Drawing, Toolbar is a psudeo Dijit that does not need Dijit. It is
+		//		- Toolbar: Like Drawing, Toolbar is a psudeo Dijit that does not need Dijit. It is
 		//			optional. It can be oriented horizontal or vertical by placing one of
 		//			those params in the class (at least one is required).  Plugins
 		//			can be added in markup. A drawingId is required to point toolbar to
 		//			the drawing.
-		//		- defaults
-		//			Contains the default styles and dimensions for Stencils. An individual
+		//		- defaults: Contains the default styles and dimensions for Stencils. An individual
 		//			Stencil can be changed by calling stencil.att({color obj}); To change
 		//			all styles, a custom defaults file should be used.
-		//		-Stencils
-		//			Drawing uses a concept of 'Stencils' to avoid confusion between a
+		//		- Stencils: Drawing uses a concept of 'Stencils' to avoid confusion between a
 		//			Dojox Shape and a Drawing Shape. The classes in the 'stencils' package
 		//			are display only, they are not used for actually drawing (see 'tools').
 		//			This package contains _Base from which stencils inherit most of their
-		//			methods.(Path and Image are display only and not found in Tools)
-		//		- Tools
-		//			The Tools package contains Stencils that are attached to mouse events
+		//			methods. (Path and Image are display only and not found in Tools)
+		//		- Tools: The Tools package contains Stencils that are attached to mouse events
 		//			and can be used for drawing. Items in this package can also be selected
 		//			and modified.
-		//		- Tools / Custom
-		//			Holds tools that do not directly extend Stencil base classes and often
+		//		- Tools / Custom: Holds tools that do not directly extend Stencil base classes and often
 		//			have very custom code.
-		//		- Library (not implemented)
-		//			The Library package, which is not yet implemented, will be the place to
+		//		- Library (not implemented): The Library package, which is not yet implemented, will be the place to
 		//			hold stencils that have very specific data points that result in a picture.
 		//			Flag-like-banners, fancy borders, or other complex shapes would go here.
-		//		- Annotations
-		//			Annotations 'decorate' and attach to other Stencils, such as a 'Label'
+		//		- Annotations: Annotations 'decorate' and attach to other Stencils, such as a 'Label'
 		//			that can show text on a stencil, or an 'Angle' that shows while dragging
 		//			or modifying a Vector, or an Arrow head that is attached to the beginning
 		//			or end of a line.
-		//		- Manager
-		//			Contains classes that control functionality of a Drawing.
-		//		- Plugins
-		//			Contains optional classes that are 'plugged into' a Drawing. There are two
+		//		- Manager: Contains classes that control functionality of a Drawing.
+		//		- Plugins: Contains optional classes that are 'plugged into' a Drawing. There are two
 		//			types: 'drawing' plugins that modify the canvas, and 'tools' which would
 		//			show in the toolbar.
-		//		- Util
-		//			A collection of common tasks.
+		//		- Util: A collection of common tasks.
 		//
 		// example:
 		//		|	<div dojoType="dojox.drawing.Drawing" id="drawing" defaults="myCustom.defaults"

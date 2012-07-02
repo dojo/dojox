@@ -12,6 +12,7 @@ dxregexp = dojox.validate.regexp = {
 		//		Supports 2 formats for Ipv6.
 		// flags: Object?
 		//		All flags are boolean with default = true.
+		//
 		//		- flags.allowDottedDecimal  Example, 207.142.131.235.  No zero padding.
 		//		- flags.allowDottedHex  Example, 0x18.0x11.0x9b.0x28.  Case insensitive.  Zero padding allowed.
 		//		- flags.allowDottedOctal  Example, 0030.0021.0233.0050.  Zero padding allowed.
@@ -199,6 +200,7 @@ dxregexp = dojox.validate.regexp = {
 		//		The RE can match one format or one of multiple formats.
 		//
 		//		Format
+		//
 		//			- #        Stands for a digit, 0-9.
 		//			- ?        Stands for an optional digit, 0-9 or nothing.
 		//			- All other characters must appear literally in the expression.
@@ -252,6 +254,7 @@ dxregexp = dojox.validate.regexp = {
 			// summary:
 			//		A regular expression to match US state and territory abbreviations
 			// flags: Object?
+			//
 			//		- flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
 			//		- flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
 

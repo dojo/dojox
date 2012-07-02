@@ -20,7 +20,8 @@ return declare("dojox.grid.enhanced._Plugin", null, {
 	// |												dojox.grid.enhanced.plugins.DnD /*full class name of a plugin*/
 	// |												{"preInit": false, "dependency": ["nestedSorting"]} /*properties*/);
 	//
-	//		[Keywords] of plugin properties(case sensitive)
+	//		[Keywords] of plugin properties (case sensitive):
+	//
 	//		- "preInit": boolean, whether a plugin should be created before EnhancedGrid.postCreate(),
 	//		   false by default(plugins are created after EnhancedGrid.postCreate()).
 	//		- "dependency": array or string, plugin(s) indicated by "dependency" will be created before the current one.

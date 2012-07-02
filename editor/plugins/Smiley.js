@@ -21,7 +21,8 @@ dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 	//
 	// description:
 	//		The commands provided by this plugin are:
-	//		* smiley - inserts the selected emoticon
+	//
+	//		- smiley - inserts the selected emoticon
 
 	// iconClassPrefix: [const] String
 	//		The CSS class name for the button node is formed from `iconClassPrefix` and `command`

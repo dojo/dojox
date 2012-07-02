@@ -155,6 +155,7 @@ define(["dojo/_base/kernel",
 		getDragPoint: function(/*Object*/coords, /*Object*/size, /*Object*/mousePosition){
 			// summary:
 			//		return coordinates of the draggable item.
+			//
 			//		- For X point : the x position of mouse
 			//		- For Y point : the y position of mouse
 			// returns:

@@ -67,23 +67,23 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	//			See requires for JavaScript dependencies.
 	//
 	//		NEW FEATURES -
-	//			There are a ton of features and fixes in this version.
-	//				Disabled: Can be toggled with widget.set("disabled", true|false)
-	//				Submit: A convenience method has been added for if the uploader is in a form.
-	//					Instead of submitting the form, call uploader.submit(theForm), and the
-	//					Uploader will handle all of the form values and post the data.
-	//				Selected List: If passing the ID of a container, the Uploaders will populate it
-	//					with the selected files.
-	//				Deleting Files: You can now delete pending files.
-	//				Progress Built in: showProgress:true will change the button to a progress
-	//					bar on upload.
-	//				Progress Attach: Passing progressWidgetId will tell the Uploader of a progress
-	//					widget. If the Progress widget is initially hidden, it will change to
-	//					visible and then restored after upload.
-	//				A11Y: The Flash button can be accessed with the TAB key. (The HTML cannot due
-	//					to browser limtations)
-	//				Deferred Uploading: (Flash only) throttles the upload to one file at a time
+	//			There are a ton of features and fixes in this version:
 	//
+	//			- Disabled: Can be toggled with widget.set("disabled", true|false)
+	//			- Submit: A convenience method has been added for if the uploader is in a form.
+	//				Instead of submitting the form, call uploader.submit(theForm), and the
+	//				Uploader will handle all of the form values and post the data.
+	//			- Selected List: If passing the ID of a container, the Uploaders will populate it
+	//				with the selected files.
+	//			- Deleting Files: You can now delete pending files.
+	//			- Progress Built in: showProgress:true will change the button to a progress
+	//				bar on upload.
+	//			- Progress Attach: Passing progressWidgetId will tell the Uploader of a progress
+	//				widget. If the Progress widget is initially hidden, it will change to
+	//				visible and then restored after upload.
+	//			- A11Y: The Flash button can be accessed with the TAB key. (The HTML cannot due
+	//				to browser limtations)
+	//			- Deferred Uploading: (Flash only) throttles the upload to one file at a time
 	//
 	//		CDN USERS -
 	//			FileUpload now works with the CDN but with limitations. The SWF must
@@ -94,6 +94,7 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	//			access to your server, and the logistics to that is impossible.
 	//
 	//		LIMITATIONS
+	//
 	//			- This is not designed to be a part of a form, it contains its own. (See submit())
 	//			- Currently does not in a Dialog box or a Tab where it is not initially visible,
 	//			- The default style inherits font sizes - but a parent container should have a font size

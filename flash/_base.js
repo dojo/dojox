@@ -54,17 +54,16 @@ dojox.flash = {
 	//		this file wraps Flash's normal ExternalInterface but correct various
 	//		serialization bugs that ExternalInterface has.
 	//
-	//		Note that dojox.flash is not meant to be a generic Flash embedding
+	// 		Notes:
+	//
+	//		- dojox.flash is not meant to be a generic Flash embedding
 	//		mechanism; it is as generic as necessary to make Dojo Storage's
 	//		Flash Storage Provider as clean and modular as possible. If you want
 	//		a generic Flash embed mechanism see [SWFObject](http://blog.deconcept.com/swfobject/).
-	//
-	// 		Notes:
-	//		Note that dojox.flash can currently only work with one Flash object
+	//		- dojox.flash can currently only work with one Flash object
 	//		on the page; it does not yet support multiple Flash objects on
 	//		the same page.
-	//
-	//		Your code can detect whether the Flash player is installing or having
+	//		- Your code can detect whether the Flash player is installing or having
 	//		its version revved in two ways. First, if dojox.flash detects that
 	//		Flash installation needs to occur, it sets dojox.flash.info.installing
 	//		to true. Second, you can detect if installation is necessary with the
@@ -80,14 +79,14 @@ dojox.flash = {
 	//		Todo/Known Issues
 	//		-------------------
 	//
-	//		* On Internet Explorer, after doing a basic install, the page is
+	//		- On Internet Explorer, after doing a basic install, the page is
 	//		not refreshed or does not detect that Flash is now available. The way
 	//		to fix this is to create a custom small Flash file that is pointed to
 	//		during installation; when it is finished loading, it does a callback
 	//		that says that Flash installation is complete on IE, and we can proceed
 	//		to initialize the dojox.flash subsystem.
-	//		* Things aren't super tested for sending complex objects to Flash
-	//		methods, since Dojo Storage only needs strings
+	//		- Things aren't super tested for sending complex objects to Flash
+	//		methods, since Dojo Storage only needs strings.
 	//
 	//		Author- Brad Neuberg, http://codinginparadise.org
 

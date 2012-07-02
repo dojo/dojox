@@ -427,6 +427,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//		an array of objects describing the data series to be included
 		//		in the data presentation. Each object may contain the
 		//		following fields:
+		//
 		//			- datapoints: the name of the field from the source data which
 		//				contains an array of the data points for this data series.
 		//				If not supplied, the source data is assumed to be an array

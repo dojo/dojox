@@ -105,6 +105,7 @@ dojo.declare("dojox.editor.plugins.TextColor", _Plugin, {
 	//
 	// description:
 	//		The commands provided by this plugin are:
+	//
 	//		* foreColor - sets the text color
 	//		* hiliteColor - sets the background color
 	

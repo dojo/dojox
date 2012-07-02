@@ -15,10 +15,12 @@ textFx._split = function(/*Object*/ args){
 	//		- args.text: String - Text to place inside the node (otherwise node.innerHTML is used)
 	//		- args.words: Boolean - If true, the text will be split into words rather than characters
 	//		- args.pieceAnimation: Function(piece, pieceCoords, nodeCoords, number, numPieces)
-	//			- Returns either the dojo.Animation or an array of dojo.Animation objects for the piece;
-	//			  * pieceCoords is the result of dojo.coords(piece, true);
-	//			  * nodeCoords is the result of dojo.coords(args.node, true);
-	//			  * number is the piece's position in the array of pieces, and numPieces is the array.length
+	//			Returns either the dojo.Animation or an array of dojo.Animation objects for the piece.
+	//			The arguments:
+	//
+	//			  - pieceCoords is the result of dojo.coords(piece, true);
+	//			  - nodeCoords is the result of dojo.coords(args.node, true);
+	//			  - number is the piece's position in the array of pieces, and numPieces is the array.length
 
 	var node = args.node = dom.byId(args.node),
 		s = node.style,

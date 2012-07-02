@@ -15,6 +15,7 @@ dojox.json.schema.validate = function(/*Any*/instance,/*Object*/schema){
 	//		The schema to use to validate
 	// description:
 	//		The validate method will return an object with two properties:
+	//
 	//			- valid: A boolean indicating if the instance is valid by the schema
 	//			- errors: An array of validation errors. If there are no errors, then an
 	//					  empty list will be returned. A validation error will have two properties:

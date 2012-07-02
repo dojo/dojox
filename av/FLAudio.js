@@ -238,10 +238,8 @@ return dojo.declare("dojox.av.FLAudio", null, {
 		//		Set media pan, based on identifier in
 		//		the options passed.
 		// options:
-		//		pan:Number
-		//			-1 to 1
-		//		index:Number OR id:String OR url:String
-		//			See doPlay()
+		//		- pan:Number (from -1 to 1)
+		//		- index:Number OR id:String OR url:String (see doPlay())
 
 		this.flashMedia.setPan(options);
 	},

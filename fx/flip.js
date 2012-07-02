@@ -415,6 +415,7 @@ define([
 		//		An extension to `dojox.fx.flip` providing a page flip effect.
 		//		Behaves the same as `dojox.fx.flip`, using the same attributes and
 		//		other standard `dojo.Animation` properties and
+		//
 		//		- cols: Integer columns
 		//		- rows: Integer rows
 		//		- duration: the single flip duration

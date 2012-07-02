@@ -341,6 +341,7 @@ dojo.declare("dojox.data.QueryReadStore",
 			//			This parameter contains the data that will be sent to the server.
 			//			If this parameter is not given the parameter "query"'s
 			//			data are sent to the server. This is done for some reasons:
+			//
 			//			- to specify explicitly which data are sent to the server, they
 			//			  might also be a mix of what is contained in "query", "queryOptions"
 			//			  and the paging parameters "start" and "count" or may be even

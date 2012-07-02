@@ -22,6 +22,7 @@ define([
 		//
 		// description:
 		//		This component inherits of all features of gridContainerLite plus :
+		//
 		//			- Resize colums
 		//			- Add / remove columns
 		//			- Fix columns at left or at right.

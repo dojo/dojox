@@ -51,9 +51,11 @@ define([
 		//		- It enables dijits or custom components in the view to "bind" to
 		//		  data within the model. A bind creates a bi-directional update
 		//		  mechanism between the bound view and the underlying data:
-		//			- The data model is "live" data i.e. it maintains any updates
+		//
+		//			a) The data model is "live" data i.e. it maintains any updates
 		//			  driven by the view on the underlying data.
-		//			- The data model issues updates to portions of the view if the
+		//
+		//			b) The data model issues updates to portions of the view if the
 		//			  data they bind to is updated in the model. For example, if two
 		//			  dijits are bound to the same part of a data model, updating the
 		//			  value of one in the view will cause the data model to issue an
@@ -184,6 +186,7 @@ define([
 		commit: function(/*"dojo/store/DataStore?"*/ store){
 			// summary:
 			//		Commits this data model:
+			//
 			//		- Saves the current state such that a subsequent reset will not
 			//		  undo any prior changes.
 			//		- Persists client-side changes to the data store, if a store
@@ -358,6 +361,7 @@ define([
 		_saveToStore: function(/*"dojo/store/DataStore"*/ store){
 			// summary:
 			//		Commit the current values to the data store:
+			//
 			//		- remove() any deleted entries
 			//		- put() any new or updated entries
 			// store:

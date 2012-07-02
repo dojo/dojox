@@ -50,14 +50,16 @@ var UpgradeBar = declare("dojox.widget.UpgradeBar", [_WidgetBase, _TemplatedMixi
 
 	// notifications: Array
 	//		An array of objects that hold the criteria for upgrades:
-	//			- message: String
+	//
+	//		- message: String
 	//				The message to display in the bar. Can be HTML.
-	//			- validate:Function
+	//		- validate:Function
 	//				The expression to evaluate to determine if the
 	//				bar should show or not. Should be a simple expression
 	//				if used in HTML:
-	//				|	<div validate="!google.gears">
-	//				|	<div validate="has('ie')<8">
+	//
+	//	|	<div validate="!google.gears">
+	//	|	<div validate="has('ie')<8">
 	notifications:[],
 
 	// buttonCancel:String

@@ -16,6 +16,7 @@ dojoxFx.animateTimeline = function(options, node){
 	//		keyframe to the third. "width" is transitioned from the first
 	//		to the second to the third.
 	//		Each keyframe can accept the following custom properties:
+	//
 	//		- step: String
 	//		  The start, finish or percentage that this keyframe represents.
 	//		  Allowed parameters are:
@@ -27,6 +28,7 @@ dojoxFx.animateTimeline = function(options, node){
 	//		  the suffix name of the ease, like: "quadIn", not: "dojo.fx.quadIn".
 	// options: Object
 	//		The parameters passed to the timeline animation. Includes:
+	//
 	//			- keys: Array
 	//				An array of objects, with style properties and values.
 	//			- duration:

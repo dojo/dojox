@@ -18,9 +18,11 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//			This is the service object that is used to retrieve lazy data and save results
 			//			The function should be directly callable with a single parameter of an object id to be loaded
 			//			The function should also have the following methods:
+			//
 			//				- put(id,value) - puts the value at the given id
 			//				- post(id,value) - posts (appends) the value at the given id
 			//				- delete(id) - deletes the value corresponding to the given id
+			//
 			//			Note that it is critical that the service parses responses as JSON.
 			//			If you are using dojox.rpc.Service, the easiest way to make sure this
 			//			happens is to make the responses have a content type of
@@ -47,22 +49,26 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//		The JsonRestStore will cause all saved modifications to be sent to the server using Rest commands (PUT, POST, or DELETE).
 			//		When using a Rest store on a public network, it is important to implement proper security measures to
 			//		control access to resources.
+			//
 			//		On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.
-			//		GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a
+			//
+			//		- GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a
 			//			query (like /table/?name=foo).
-			//		PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will
+			//		- PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will
 			//			provide the modified object
-			//		POST - This should create a new object. The URL will correspond to the target store (like /table/)
+			//		- POST - This should create a new object. The URL will correspond to the target store (like /table/)
 			//			and the body should be the properties of the new object. The server's response should include a
 			//			Location header that indicates the id of the newly created object. This id will be used for subsequent
 			//			PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
 			//			the temporary randomly generated id used by client, and this location is used for subsequent
 			//			PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior
 			//			to receiving a response from the server.
-			//		DELETE - This should delete an object by id.
+			//		- DELETE - This should delete an object by id.
+			//
 			//		These articles include more detailed information on using the JsonRestStore:
-			//		http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/
-			//		http://blog.medryx.org/2008/07/24/jsonreststore-overview/
+			//
+			//		- http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/
+			//		- http://blog.medryx.org/2008/07/24/jsonreststore-overview/
 			// example:
 			//		A JsonRestStore takes a REST service or a URL and uses it the remote communication for a
 			//		read/write dojo.data implementation. A JsonRestStore can be created with a simple URL like:
@@ -308,14 +314,14 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			// summary:
 			//		Saves the dirty data using REST Ajax methods. See dojo.data.api.Write for API.
 			// kwArgs:
-			//		global:
+			//		- global:
 			//			This will cause the save to commit the dirty data for all
 			//			JsonRestStores as a single transaction.
-			//		revertOnError:
+			//		- revertOnError:
 			//			This will cause the changes to be reverted if there is an
 			//			error on the save. By default a revert is executed unless
 			//			a value of false is provide for this parameter.
-			//		incrementalUpdates:
+			//		- incrementalUpdates:
 			//			For items that have been updated, if this is enabled, the server will be sent a POST request
 			//			with a JSON object containing the changed properties. By default this is
 			//			not enabled, and a PUT is used to deliver an update, and will include a full
@@ -324,7 +330,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			//			only the changed properties. The incrementalUpdates parameter may also
 			//			be a function, in which case it will be called with the updated and previous objects
 			//			and an object update representation can be returned.
-			//		alwaysPostNewItems:
+			//		- alwaysPostNewItems:
 			//			If this is true, new items will always be sent with a POST request. By default
 			//			this is not enabled, and the JsonRestStore will send a POST request if
 			//			the item does not include its identifier (expecting server assigned location/

@@ -88,6 +88,7 @@ validate.isNumberFormat = function(value, flags){
 	//
 	// value: String
 	// flags: Object?
+	//
 	//		- flags.format  A string or an Array of strings for multiple formats.
 	// example:
 	//	|	// returns true:
