@@ -11,6 +11,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		
 		// selectionMode: String
 		//		Valid values are:
+		//
 		//		1. "none": No selection can be done.
 		//		2. "single": Only one item can be selected at a time.
 		//		3. "multiple": Several item can be selected using the control key modifier.

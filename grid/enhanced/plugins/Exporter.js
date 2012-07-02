@@ -15,6 +15,7 @@ var Exporter = declare("dojox.grid.enhanced.plugins.Exporter", _Plugin, {
 	//		Provide functions to export the grid data into a given format.
 	//
 	//		Acceptable plugin parameters:
+	//
 	//		1. exportFormatter: function(data, cell, rowIndex, item)
 	//				Provide a way to customize how data should look in exported string.
 	//				Note that usually the formatter of grid cell should not be used here (it can return HTML or even widget).

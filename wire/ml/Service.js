@@ -52,6 +52,7 @@ dojo.declare("dojox.wire.ml.Service", dijit._Widget, {
 		//		Create a service handler
 		// description:
 		//		A service handler class is determined by:
+		//
 		//		1. 'handlerClass' attribute
 		//		2. 'serviceType' attribute
 		//		3. 'serviceType' property in a service description

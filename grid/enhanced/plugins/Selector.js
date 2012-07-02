@@ -124,6 +124,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	//			The whole plugin parameter object is a config object passed to the setupConfig function.
 	//
 	//		Acceptable cell parameters defined in layout:
+	//
 	//		1. notselectable: boolean
 	//			Whether this column is (and all the cells in it are) selectable.
 	

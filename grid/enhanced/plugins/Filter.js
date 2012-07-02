@@ -17,6 +17,7 @@ define([
 		//		Provide filter functionality for grid.
 		//
 		//		Acceptable plugin parameters:
+		//
 		//		1. itemsName: string
 		//			the name shown on the filter bar.
 		//		2. statusTipTimeout: number
@@ -40,6 +41,7 @@ define([
 		//			Default value is 2.
 		//
 		//		Acceptable cell parameters defined in layout:
+		//
 		//		1. filterable: boolean
 		//			The column is not filterable only when this is set to false explicitly.
 		//		2. datatype: string
@@ -52,10 +54,12 @@ define([
 		//			Different data type arguments can be provided to different data types.
 		//			For date/time, this is a dojo.date.locale.__FormatOptions, so the DataTimeBox can understand the store data.
 		//			For boolean, this object contains:
-		//				trueLabel: string
-		//					A label to display in the filter definition dialog for true value. Default to "True".
-		//				falseLable: string
-		//					A label to display in the filter definition dialog for false value. Default to "False".
+		//
+		//			- trueLabel: string
+		//			A label to display in the filter definition dialog for true value. Default to "True".
+		//			- falseLabel: string
+		//			A label to display in the filter definition dialog for false value. Default to "False".
+		//
 		//		5. disabledConditions: object
 		//			If you don't need all of the conditions provided by the filter UI on this column, you can explicitly say it out here.
 		//			e.g.: disabledConditions: ["contains", "is"]

@@ -22,15 +22,16 @@ declare("dojox.string.BidiEngine", null, {
 	//				http://www.ibm.com/developerworks/websphere/library/techarticles/bidi/bidigen.html
 	//
 	//		As of February 2011, Bidi engine has following limitations:
-	//			1. No support for following numeric shaping options: 
-	//				H - Hindi, 
-	//				C - Contextual, 
-	//				N - Nominal.
-	//			2. No support for following shaping options: 
-	//				I - Initial shaping, 
-	//				M - Middle shaping, 
-	//				F - Final shaping, 
-	//				B - Isolated shaping.
+	//
+	//			1. No support for following numeric shaping options:
+	//			    - H - Hindi,
+	//			    - C - Contextual,
+	//			    - N - Nominal.
+	//			2. No support for following shaping options:
+	//			    - I - Initial shaping,
+	//			    - M - Middle shaping,
+	//			    - F - Final shaping,
+	//			    - B - Isolated shaping.
 	//			3. No support for source-to-target or/and target-to-source maps.
 	//			4. No support for LRE/RLE/LRO/RLO/PDF (they are handled like neutrals).
 	//			5. No support for Windows compatibility.
@@ -53,59 +54,64 @@ declare("dojox.string.BidiEngine", null, {
 		//		Possible and default values for each one of the letters are provided below:
 		//
 		//		First letter:
-		//			Letter position/index:	
+		//
+		//			- Letter position/index:
 		//				1
-		//			Letter meaning:			
+		//			- Letter meaning:
 		//				Ordering Schema.
-		//			Possible values:
-		//				I - Implicit (Logical).
-		//				V - Visual.
-		//			Default value:
+		//			- Possible values:
+		//				- I - Implicit (Logical).
+		//				- V - Visual.
+		//			- Default value:
 		//				I
 		//
 		//		Second letter:
-		//			Letter position/index:	
+		//
+		//			- Letter position/index:
 		//				2
-		//			Letter meaning:			
+		//			- Letter meaning:
 		//				Orientation.
-		//			Possible values:
-		//				L - Left To Right.
-		//				R - Right To Left.
-		//				C - Contextual Left to Right.
-		//				D - Contextual Right to Left.
-		//			Default value:
+		//			- Possible values:
+		//				- L - Left To Right.
+		//				- R - Right To Left.
+		//				- C - Contextual Left to Right.
+		//				- D - Contextual Right to Left.
+		//			- Default value:
 		//				L		
 		//
 		//		Third letter:
-		//			Letter position/index:	
+		//
+		//			- Letter position/index:
 		//				3
-		//			Letter meaning:			
+		//			- Letter meaning:
 		//				Symmetric Swapping.
-		//			Possible values:
-		//				Y - Symmetric swapping is on.
-		//				N - Symmetric swapping is off.
-		//			Default value:
+		//			- Possible values:
+		//				- Y - Symmetric swapping is on.
+		//				- N - Symmetric swapping is off.
+		//			- Default value:
 		//				Y		
 		//
 		//		Fourth letter:
-		//			Letter position/index:	
+		//
+		//			- Letter position/index:
 		//				4
-		//			Letter meaning:			
+		//			- Letter meaning:
 		//				Shaping.
-		//			Possible values:
-		//				S - Text is shaped.
-		//				N - Text is not shaped.
-		//			Default value:
+		//			- Possible values:
+		//				- S - Text is shaped.
+		//				- N - Text is not shaped.
+		//			- Default value:
 		//				N				
 		//
 		//		Fifth letter:
-		//			Letter position/index:	
+		//
+		//			- Letter position/index:
 		//				5
-		//			Letter meaning:			
+		//			- Letter meaning:
 		//				Numeric Shaping.
-		//			Possible values:
+		//			- Possible values:
 		//				N - Nominal.
-		//			Default value:
+		//			- Default value:
 		//				N				
 		//
 		//		The output of this function is original text (passed via first argument) transformed from input Bidi layout (second argument)

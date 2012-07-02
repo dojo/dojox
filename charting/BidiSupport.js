@@ -20,10 +20,12 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 		//		Bi-directional support,	the main variable which is responsible for the direction of the text.
 		//		The text direction can be different than the GUI direction by using this parameter.
 		//		Allowed values:
+		//
 		//			1. "ltr"
 		//			2. "rtl"
 		//			3. "auto" - contextual the direction of a text defined by first strong letter.
-		//		By default is as the page direction.		
+		//
+		//		By default is as the page direction.
 		textDir:"",
 		
 		getTextDir: function(/*String*/text){
@@ -273,7 +275,7 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 		//		in ltr GUI, sometimes needed auto support.
 		//		dojox.charting does not support control over base text direction provided in Dojo.
 	};
-	 =====*/
+	=====*/
 
 	return Chart;
 		
