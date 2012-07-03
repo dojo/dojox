@@ -31,10 +31,10 @@ define([
 			// positions:
 			//		Ordered list of positions to try matching up.
 			//
-			//		* before: places drop down before the aroundNode
-			//		* after: places drop down after the aroundNode
-			//		* above-centered: drop down goes above aroundNode
-			//		* below-centered: drop down goes below aroundNode
+			//		- before: places drop down before the aroundNode
+			//		- after: places drop down after the aroundNode
+			//		- above-centered: drop down goes above aroundNode
+			//		- below-centered: drop down goes below aroundNode
 
 			var domNode = this.domNode;
 			var connectorClasses = {

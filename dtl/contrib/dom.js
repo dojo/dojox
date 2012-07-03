@@ -128,9 +128,9 @@ define([
 			// example:
 			//		You can explicitly declare options:
 			//
-			//		* node: Watch node removal/addition
-			//		* class: Watch for a classname to be changed
-			//		* text: Watch for any text to be changed
+			//		- node: Watch node removal/addition
+			//		- class: Watch for a classname to be changed
+			//		- text: Watch for any text to be changed
 			//
 			//	|	{% buffer node class %}{% for item in items %}<li>{{ item }}</li>{% endfor %}{% endbuffer %}
 			var parts = token.contents.split().slice(1);

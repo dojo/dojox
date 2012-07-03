@@ -216,10 +216,10 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		support path clipping.
 			//		The clip parameter defines the clipping area geometry, and should be an object with the following properties:
 			//
-			//		* {x:Number, y:Number, width:Number, height:Number} for rectangular clip
-			//		* {cx:Number, cy:Number, rx:Number, ry:Number} for ellipse clip
-			//		* {points:Array} for polyline clip
-			//		* {d:String} for a path clip.
+			//		- {x:Number, y:Number, width:Number, height:Number} for rectangular clip
+			//		- {cx:Number, cy:Number, rx:Number, ry:Number} for ellipse clip
+			//		- {points:Array} for polyline clip
+			//		- {d:String} for a path clip.
 			//
 			//		The clip geometry coordinates are expressed in the coordinate system used to draw the shape. In other
 			//		words, the clipping area is defined in the shape parent coordinate system and the shape transform is automatically applied.

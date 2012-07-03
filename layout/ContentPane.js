@@ -27,8 +27,8 @@ return declare("dojox.layout.ContentPane", ContentPane, {
 	//		Useful if you send ContentPane a complete page, instead of a html fragment
 	//		scans for:
 	//
-	//		* title Node, remove
-	//		* DOCTYPE tag, remove
+	//		- title Node, remove
+	//		- DOCTYPE tag, remove
 	cleanContent: false,
 
 	// renderStyles: Boolean

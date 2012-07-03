@@ -16,12 +16,12 @@ dojo.provide("dojox.widget.rotator.Controller");
 		//		Displays a series of controls that send actions to a Rotator or
 		//		AutoRotator.  The Controller supports the following controls:
 		//
-		//		* Next pane
-		//		* Previous pane
-		//		* Play/Pause toggler
-		//		* Numbered tabs
-		//		* Titled tabs
-		//		* Information
+		//		- Next pane
+		//		- Previous pane
+		//		- Play/Pause toggler
+		//		- Numbered tabs
+		//		- Titled tabs
+		//		- Information
 		//
 		//		You may specify any of these controls in any order.  You may also
 		//		have multiple Controllers tied to a single Rotator instance.

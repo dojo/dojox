@@ -339,26 +339,26 @@ declare("dojox.layout.RotatorPager", [Widget, Templated, Contained], {
 	// description:
 	//		A pager can be defined one of two ways:
 	//
-	//		* Externally of the RotatorContainer's template and tell the
+	//		- Externally of the RotatorContainer's template and tell the
 	//		RotatorPager the rotatorId of the RotatorContainer
-	//		* As a direct descendant of the RotatorContainer (i.e. inside the
+	//		- As a direct descendant of the RotatorContainer (i.e. inside the
 	//		RotatorContainer's template)
 	//
 	//		The pager can contain the following components:
 	//
-	//		* Previous button
+	//		- Previous button
 	//			- Must be a dijit.form.Button
 	//			- dojoAttachPoint must be named "previous"
-	//		* Next button
+	//		- Next button
 	//			- Must be a dijit.form.Button
 	//			- dojoAttachPoint must be named "next"
-	//		* Play/Pause toggle button
+	//		- Play/Pause toggle button
 	//			- Must be a dijit.form.ToggleButton
 	//			- dojoAttachPoint must be named "playPause"
 	//			- Use iconClass to specify toggled state
-	//		* Current child #
+	//		- Current child #
 	//			- dojoAttachPoint must be named "current"
-	//		* Total # of children
+	//		- Total # of children
 	//			- dojoAttachPoint must be named "total"
 	//
 	//		You can choose to exclude specific controls as well as add elements
