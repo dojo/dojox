@@ -503,7 +503,7 @@
 					};
 					
 					ready(function(){
-						var width = 700, height = 700;
+						var threshold = 92, width = 700, height = 700;
 						surface = gfx.createSurface("slideTarget", width, height);
 						drawTiger();
 						// button callback for edges detection
@@ -514,18 +514,29 @@
 								w = input.width, h = input.height,
 								inputData = input.data,
 								outputData = output.data;
-							// edge detection. code from whatwg canvas spec.
-							// http://www.w3.org/TR/2dcontext/#pixel-manipulation
-							for(var y = 1; y < h - 1; ++y) {
-								for(var x = 1; x < w - 1; ++x) {
-									for(var c = 0; c < 3; ++c) {
-										var i = (y*w + x)*4 + c;
-										outputData[i] = 127 + 
-														-inputData[i - w * 4 - 4] -inputData[i - w * 4] -inputData[i - w * 4 + 4] + 
-														-inputData[i - 4] + 8 * inputData[i] - inputData[i + 4] + 
-														-inputData[i + w * 4 - 4] - inputData[i + w * 4] - inputData[i + w * 4 + 4];
+							// diff edge detection. 
+							for(var y = 1; y < h - 1; ++y){
+								for(var x = 1; x < w - 1; ++x){
+									var i = (y*w + x)*4;
+									// compute diff for each pair of adjacent pixels around pixel i
+									for (var c=0; c<3;++c){ // iterate over color comp.
+										var p1 = inputData[i - w * 4 - 4 + c];
+										var p2 = inputData[i + w * 4 + 4 + c];
+										var max = Math.abs(p2-p1);
+										p1 = inputData[i - w * 4 + 4 + c];
+										p2 = inputData[i + w * 4 - 4 + c];
+										max = Math.max(max, Math.abs(p2-p1));
+										p1 = inputData[i + 4 + c];
+										p2 = inputData[i - 4 + c];
+										max = Math.max(max, Math.abs(p2-p1));
+										p1 = inputData[i - w * 4 + c];
+										p2 = inputData[i + w * 4 + c];
+										max = Math.max(max, Math.abs(p2-p1));
+										if(max<threshold)
+											max = 0;
+										outputData[i + c] = max;
 									}
-									outputData[(y*w + x)*4 + 3] = 255;
+									outputData[i + 3] = 255; //alpha
 								}
 							}
 							// put the image data back after manipulation
