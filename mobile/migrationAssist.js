@@ -299,6 +299,8 @@ define([
 
 	dojox.mobile.FlippableView = SwapView;
 
+	var migrationAssist = new MigrationAssist();
+
 	WidgetBase.prototype.postMixInProperties = function(){
 		migrationAssist.dispatch(this.declaredClass, this);
 		dojo.forEach([FixedSplitterPane, Heading, RoundRect, SpinWheel, TabBarButton, ToolBarButton, View], function(module){
@@ -422,5 +424,5 @@ define([
 	});
 
 	// Return singleton.  (TODO: can we replace LazyLoadUtils class and singleton w/a simple hash of functions?)
-	return new MigrationAssist();
+	return migrationAssist;
 });
