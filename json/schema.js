@@ -16,12 +16,12 @@ dojox.json.schema.validate = function(/*Any*/instance,/*Object*/schema){
 	// description:
 	//		The validate method will return an object with two properties:
 	//
-	//			- valid: A boolean indicating if the instance is valid by the schema
-	//			- errors: An array of validation errors. If there are no errors, then an
-	//					  empty list will be returned. A validation error will have two properties:
-	//					  property: which indicates which property had the error
-	//					  message: which indicates what the error was
-	//
+	//		- valid: A boolean indicating if the instance is valid by the schema
+	//		- errors: An array of validation errors. If there are no errors, then an
+	//		  empty list will be returned. A validation error will have two properties:
+	//		- property: which indicates which property had the error
+	//		- message: which indicates what the error was
+
 	return this._validate(instance,schema,false);
 };
 dojox.json.schema.checkPropertyChange = function(/*Any*/value,/*Object*/schema, /*String*/ property){
@@ -37,7 +37,7 @@ dojox.json.schema.checkPropertyChange = function(/*Any*/value,/*Object*/schema, 
 	//		The schema to use to validate
 	// returns:
 	//		see dojox.validate.jsonSchema.validate
-	//
+
 	return this._validate(value,schema, property || "property");
 };
 dojox.json.schema.mustBeValid = function(result){

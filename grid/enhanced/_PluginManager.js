@@ -15,12 +15,12 @@ var _PluginManager = declare("dojox.grid.enhanced._PluginManager", null, {
 	// description:
 	//		Plugin manager is responsible for:
 	//
-	//			1. Loading required plugins
-	//			2. Handling collaboration and dependencies among plugins
+	//		1. Loading required plugins
+	//		2. Handling collaboration and dependencies among plugins
 	//
 	//		Some plugin dependencies:
 	//
-	//			- "columnReordering" attribute won't work when either DnD or Indirect Selections plugin is on.
+	//		- "columnReordering" attribute won't work when either DnD or Indirect Selections plugin is on.
 		
 	// _options: Object
 	//		Normalized plugin options

@@ -199,11 +199,11 @@ dxregexp = dojox.validate.regexp = {
 		//		Use this method for phone numbers, social security numbers, zip-codes, etc.
 		//		The RE can match one format or one of multiple formats.
 		//
-		//		Format
+		//		Format:
 		//
-		//			- #        Stands for a digit, 0-9.
-		//			- ?        Stands for an optional digit, 0-9 or nothing.
-		//			- All other characters must appear literally in the expression.
+		//		- #        Stands for a digit, 0-9.
+		//		- ?        Stands for an optional digit, 0-9 or nothing.
+		//		- All other characters must appear literally in the expression.
 		//
 		// example:
 		//		- "(###) ###-####"		-    ->   (510) 542-9742

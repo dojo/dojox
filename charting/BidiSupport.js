@@ -21,9 +21,9 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 		//		The text direction can be different than the GUI direction by using this parameter.
 		//		Allowed values:
 		//
-		//			1. "ltr"
-		//			2. "rtl"
-		//			3. "auto" - contextual the direction of a text defined by first strong letter.
+		//		1. "ltr"
+		//		2. "rtl"
+		//		3. "auto" - contextual the direction of a text defined by first strong letter.
 		//
 		//		By default is as the page direction.
 		textDir:"",

@@ -173,10 +173,10 @@ define([
 			// description:
 			//		return for:
 			//
-			//			- X point : the middle
-			//	  		- Y point : search if the user goes up or goes down with his mouse.
-			//	  		- Up : top of the draggable item
-			//	  		- Down : bottom of the draggable item
+			//		- X point : the middle
+			//	  	- Y point : search if the user goes up or goes down with his mouse.
+			//	  	- Up : top of the draggable item
+			//	  	- Down : bottom of the draggable item
 			// coords:
 			//		an object encapsulating X and Y position
 			// size:

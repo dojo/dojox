@@ -336,26 +336,28 @@ declare("dojox.layout.RotatorPager", [Widget, Templated, Contained], {
 	//
 	// description:
 	//		A pager can be defined one of two ways:
-	//			* Externally of the RotatorContainer's template and tell the
-	//			RotatorPager the rotatorId of the RotatorContainer
-	//			* As a direct descendant of the RotatorContainer (i.e. inside the
-	//			RotatorContainer's template)
+	//
+	//		* Externally of the RotatorContainer's template and tell the
+	//		RotatorPager the rotatorId of the RotatorContainer
+	//		* As a direct descendant of the RotatorContainer (i.e. inside the
+	//		RotatorContainer's template)
 	//
 	//		The pager can contain the following components:
-	//			* Previous button
-	//				- Must be a dijit.form.Button
-	//				- dojoAttachPoint must be named "previous"
-	//			* Next button
-	//				- Must be a dijit.form.Button
-	//				- dojoAttachPoint must be named "next"
-	//			* Play/Pause toggle button
-	//				- Must be a dijit.form.ToggleButton
-	//				- dojoAttachPoint must be named "playPause"
-	//				- Use iconClass to specify toggled state
-	//			* Current child #
-	//				- dojoAttachPoint must be named "current"
-	//			* Total # of children
-	//				- dojoAttachPoint must be named "total"
+	//
+	//		* Previous button
+	//			- Must be a dijit.form.Button
+	//			- dojoAttachPoint must be named "previous"
+	//		* Next button
+	//			- Must be a dijit.form.Button
+	//		- dojoAttachPoint must be named "next"
+	//		* Play/Pause toggle button
+	//			- Must be a dijit.form.ToggleButton
+	//			- dojoAttachPoint must be named "playPause"
+	//			- Use iconClass to specify toggled state
+	//		* Current child #
+	//			- dojoAttachPoint must be named "current"
+	//		* Total # of children
+	//			- dojoAttachPoint must be named "total"
 	//
 	//		You can choose to exclude specific controls as well as add elements
 	//		for styling.
@@ -366,11 +368,12 @@ declare("dojox.layout.RotatorPager", [Widget, Templated, Contained], {
 	//		Notifications are received from and sent to the RotatorContainer as
 	//		well as other RotatorPagers.
 	//
-	//	published topics:
-	//			[widgetId]-cycle - Notify that the next or previous button was pressed.
+	//		####published topics:
+	//
+	//		- [widgetId]-cycle - Notify that the next or previous button was pressed.
 	//				Parameters:
 	//					/*boolean*/ next - true if next, false if previous
-	//			[widgetId]-state - Notify that the play/pause button was toggled.
+	//		- [widgetId]-state - Notify that the play/pause button was toggled.
 	//				Parameters:
 	//					/*boolean*/ playing - true if playing, false if paused
 	//

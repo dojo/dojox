@@ -23,9 +23,9 @@ define([
 		// description:
 		//		This component inherits of all features of gridContainerLite plus :
 		//
-		//			- Resize colums
-		//			- Add / remove columns
-		//			- Fix columns at left or at right.
+		//		- Resize colums
+		//		- Add / remove columns
+		//		- Fix columns at left or at right.
 		// example:
 		// 	|	<div dojoType="dojox.layout.GridContainer" nbZones="3" isAutoOrganized="true">
 		// 	|		<div dojoType="dijit.layout.ContentPane">Content Pane 1 : Drag Me !</div>
@@ -284,7 +284,7 @@ define([
 					}
 				});
 				return width;
-			}
+			};
 			var currentColumnMinWidth = calculateChildMinWidth(this._currentColumn.childNodes, this.minChildWidth);
 
 			var nextColumnMinWidth = calculateChildMinWidth(this._nextColumn.childNodes, this.minChildWidth);

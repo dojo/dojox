@@ -26,8 +26,9 @@ return declare("dojox.layout.ContentPane", ContentPane, {
 	//		Cleans content to make it less likely to generate DOM/JS errors.
 	//		Useful if you send ContentPane a complete page, instead of a html fragment
 	//		scans for:
-	//			* title Node, remove
-	//			* DOCTYPE tag, remove
+	//
+	//		* title Node, remove
+	//		* DOCTYPE tag, remove
 	cleanContent: false,
 
 	// renderStyles: Boolean

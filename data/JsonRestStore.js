@@ -11,40 +11,45 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 			// options:
 			//		Keyword arguments
 			//
-			//		The *schema* parameter
-			//			This is a schema object for this store. This should be JSON Schema format.
+			//		####The *schema* parameter
 			//
-			//		The *service* parameter
-			//			This is the service object that is used to retrieve lazy data and save results
-			//			The function should be directly callable with a single parameter of an object id to be loaded
-			//			The function should also have the following methods:
+			//		This is a schema object for this store. This should be JSON Schema format.
 			//
-			//				- put(id,value) - puts the value at the given id
-			//				- post(id,value) - posts (appends) the value at the given id
-			//				- delete(id) - deletes the value corresponding to the given id
+			//		####The *service* parameter
 			//
-			//			Note that it is critical that the service parses responses as JSON.
-			//			If you are using dojox.rpc.Service, the easiest way to make sure this
-			//			happens is to make the responses have a content type of
-			//			application/json. If you are creating your own service, make sure you
-			//			use handleAs: "json" with your XHR requests.
+			//		This is the service object that is used to retrieve lazy data and save results
+			//		The function should be directly callable with a single parameter of an object id to be loaded
+			//		The function should also have the following methods:
 			//
-			//		The *target* parameter
-			//			This is the target URL for this Service store. This may be used in place
-			//			of a service parameter to connect directly to RESTful URL without
-			//			using a dojox.rpc.Service object.
+			//		- put(id,value) - puts the value at the given id
+			//		- post(id,value) - posts (appends) the value at the given id
+			//		- delete(id) - deletes the value corresponding to the given id
 			//
-			//		The *idAttribute* parameter
-			//			Defaults to 'id'. The name of the attribute that holds an objects id.
-			//			This can be a preexisting id provided by the server.
-			//			If an ID isn't already provided when an object
-			//			is fetched or added to the store, the autoIdentity system
-			//			will generate an id for it and add it to the index.
+			//		Note that it is critical that the service parses responses as JSON.
+			//		If you are using dojox.rpc.Service, the easiest way to make sure this
+			//		happens is to make the responses have a content type of
+			//		application/json. If you are creating your own service, make sure you
+			//		use handleAs: "json" with your XHR requests.
 			//
-			//		The *syncMode* parameter
-			//			Setting this to true will set the store to using synchronous calls by default.
-			//			Sync calls return their data immediately from the calling function, so
-			//			callbacks are unnecessary
+			//		####The *target* parameter
+			//
+			//		This is the target URL for this Service store. This may be used in place
+			//		of a service parameter to connect directly to RESTful URL without
+			//		using a dojox.rpc.Service object.
+			//
+			//		####The *idAttribute* parameter
+			//
+			//		Defaults to 'id'. The name of the attribute that holds an objects id.
+			//		This can be a preexisting id provided by the server.
+			//		If an ID isn't already provided when an object
+			//		is fetched or added to the store, the autoIdentity system
+			//		will generate an id for it and add it to the index.
+			//
+			//		####The *syncMode* parameter
+			//
+			//		Setting this to true will set the store to using synchronous calls by default.
+			//		Sync calls return their data immediately from the calling function, so
+			//		callbacks are unnecessary
 			// description:
 			//		The JsonRestStore will cause all saved modifications to be sent to the server using Rest commands (PUT, POST, or DELETE).
 			//		When using a Rest store on a public network, it is important to implement proper security measures to

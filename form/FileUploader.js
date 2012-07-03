@@ -44,7 +44,6 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	//		in. Passing a button is still supported until version 1.5 to maintain
 	//		backwards compatibility, but it is not recommended. Just create your
 	//		uploader like any other widget.
-	//
 	// description:
 	//		If the correct version of Flash Player is available (> 9.0) , a SWF
 	//		is used. If Flash Player is not installed or is outdated, a typical
@@ -62,56 +61,61 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	//		The HTML button is created in a new way and it is now inline as is the
 	//		FLash button. Styling is much easier and more versatile.
 	//
-	//		Dependencies:
-	//			FileUploader no longer uses FileInput.css. It now uses FileUploader.css
-	//			See requires for JavaScript dependencies.
+	//		###Dependencies
 	//
-	//		NEW FEATURES -
-	//			There are a ton of features and fixes in this version:
+	//		FileUploader no longer uses FileInput.css. It now uses FileUploader.css
+	//		See requires for JavaScript dependencies.
 	//
-	//			- Disabled: Can be toggled with widget.set("disabled", true|false)
-	//			- Submit: A convenience method has been added for if the uploader is in a form.
-	//				Instead of submitting the form, call uploader.submit(theForm), and the
-	//				Uploader will handle all of the form values and post the data.
-	//			- Selected List: If passing the ID of a container, the Uploaders will populate it
-	//				with the selected files.
-	//			- Deleting Files: You can now delete pending files.
-	//			- Progress Built in: showProgress:true will change the button to a progress
-	//				bar on upload.
-	//			- Progress Attach: Passing progressWidgetId will tell the Uploader of a progress
-	//				widget. If the Progress widget is initially hidden, it will change to
-	//				visible and then restored after upload.
-	//			- A11Y: The Flash button can be accessed with the TAB key. (The HTML cannot due
-	//				to browser limtations)
-	//			- Deferred Uploading: (Flash only) throttles the upload to one file at a time
+	//		###NEW FEATURES
 	//
-	//		CDN USERS -
-	//			FileUpload now works with the CDN but with limitations. The SWF must
-	//			be from the same domain as the HTML page. 'swfPath' has been exposed
-	//			so that you may link to that file (could of course be the same SWF in
-	//			dojox resource folder). The SWF will *NOT* work from the
-	//			CDN server. This would require a special XML file that would allow
-	//			access to your server, and the logistics to that is impossible.
+	//		There are a ton of features and fixes in this version:
 	//
-	//		LIMITATIONS
+	//		- Disabled: Can be toggled with widget.set("disabled", true|false)
+	//		- Submit: A convenience method has been added for if the uploader is in a form.
+	//			Instead of submitting the form, call uploader.submit(theForm), and the
+	//			Uploader will handle all of the form values and post the data.
+	//		- Selected List: If passing the ID of a container, the Uploaders will populate it
+	//			with the selected files.
+	//		- Deleting Files: You can now delete pending files.
+	//		- Progress Built in: showProgress:true will change the button to a progress
+	//			bar on upload.
+	//		- Progress Attach: Passing progressWidgetId will tell the Uploader of a progress
+	//			widget. If the Progress widget is initially hidden, it will change to
+	//			visible and then restored after upload.
+	//		- A11Y: The Flash button can be accessed with the TAB key. (The HTML cannot due
+	//			to browser limitations)
+	//		- Deferred Uploading: (Flash only) throttles the upload to one file at a time
 	//
-	//			- This is not designed to be a part of a form, it contains its own. (See submit())
-	//			- Currently does not in a Dialog box or a Tab where it is not initially visible,
-	//			- The default style inherits font sizes - but a parent container should have a font size
-	//				set somewhere of the results could be inconsistent.
+	//		###CDN USERS
 	//
-	//		OPERA USERS -
-	//			It works better than the 1.3 version. fileInputs apperantly can't have opacity
-	//			set to zero. The Flash uploader works but files are auto-uploaded. Must be a
-	//			flashVar problem.
+	//		FileUpload now works with the CDN but with limitations. The SWF must
+	//		be from the same domain as the HTML page. 'swfPath' has been exposed
+	//		so that you may link to that file (could of course be the same SWF in
+	//		dojox resource folder). The SWF will *NOT* work from the
+	//		CDN server. This would require a special XML file that would allow
+	//		access to your server, and the logistics to that is impossible.
 	//
-	//		Safari Bug note:
+	//		###LIMITATIONS
+	//
+	//		- This is not designed to be a part of a form, it contains its own. (See submit())
+	//		- Currently does not in a Dialog box or a Tab where it is not initially visible,
+	//		- The default style inherits font sizes - but a parent container should have a font size
+	//			set somewhere of the results could be inconsistent.
+	//
+	//		###OPERA USERS
+	//
+	//		It works better than the 1.3 version. fileInputs apperantly can't have opacity
+	//		set to zero. The Flash uploader works but files are auto-uploaded. Must be a
+	//		flashVar problem.
+	//
+	//		###Safari Bug note:
+	//
 	//		The bug is in the way Safari handles the connection:
-	//			https://bugs.webkit.org/show_bug.cgi?id=5760
-	//			I added this to the virtual host in the Apache conf file, and now it
-	//			works like a charm:
-	//			BrowserMatch Safari nokeepalive
-	//
+	//		https://bugs.webkit.org/show_bug.cgi?id=5760
+	//		I added this to the virtual host in the Apache conf file, and now it
+	//		works like a charm:
+	//	|	BrowserMatch Safari nokeepalive
+
 	swfPath: config.uploaderPath || require.toUrl("dojox/form/resources/fileuploader.swf"),
 
 

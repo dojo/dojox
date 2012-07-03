@@ -13,9 +13,9 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		//
 		//		key controls:
 		//
-		//			- ESC - close
-		//			- Down Arrow / Rt Arrow / N - Next Image
-		//			- Up Arrow / Lf Arrow / P - Previous Image
+		//		- ESC - close
+		//		- Down Arrow / Rt Arrow / N - Next Image
+		//		- Up Arrow / Lf Arrow / P - Previous Image
 		// example:
 		// |	<a href="image1.jpg" dojoType="dojox.image.Lightbox">show lightbox</a>
 		// example:

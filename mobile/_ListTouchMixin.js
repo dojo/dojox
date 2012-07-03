@@ -10,7 +10,7 @@ define([
 		//		Focus-less menu to handle touch events consistently. Abstract 
 		//		method that must be defined externally:
 		//
-		//			- onClick: item was chosen (mousedown somewhere on the menu and mouseup somewhere on the menu).
+		//		- onClick: item was chosen (mousedown somewhere on the menu and mouseup somewhere on the menu).
 	
 		postCreate: function(){
 			this.inherited(arguments);

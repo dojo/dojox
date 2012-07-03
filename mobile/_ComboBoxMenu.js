@@ -17,8 +17,8 @@ define([
 		//		Focus-less menu for internal use in dojox/mobile/ComboBox.
 		//		Abstract methods that must be defined externally:
 		//
-		//			- onChange: item was explicitly chosen (mousedown somewhere on the menu and mouseup somewhere on the menu);
-		//			- onPage: next(1) or previous(-1) button pressed.
+		//		- onChange: item was explicitly chosen (mousedown somewhere on the menu and mouseup somewhere on the menu);
+		//		- onPage: next(1) or previous(-1) button pressed.
 		// tags:
 		//		private
 

@@ -428,27 +428,27 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//		in the data presentation. Each object may contain the
 		//		following fields:
 		//
-		//			- datapoints: the name of the field from the source data which
-		//				contains an array of the data points for this data series.
-		//				If not supplied, the source data is assumed to be an array
-		//				of data points to be used.
-		//			- field: the name of the field within each data point which
-		//				contains the data for this data series. If not supplied,
-		//				each data point is assumed to be the value for the series.
-		//			- name: a name for the series, used in the legend and grid headings
-		//			- namefield:
-		//				the name of the field from the source data which
-		//				contains the name the series, used in the legend and grid
-		//				headings. If both name and namefield are supplied, name takes
-		//			    precedence. If neither are supplied, a default name is used.
-		//			- chart: true if the series should be included in a chart presentation (default: true)
-		//			- charttype: the type of presentation of the series in the chart, which can be
-		//				"range", "line", "bar" (default: "bar")
-		//			- linestyle: the stroke style for lines (if applicable) (default: "Solid")
-		//			- axis: the dependant axis to which the series will be attached in the chart,
-		//			    which can be "primary" or "secondary"
-		//			- grid: true if the series should be included in a data grid presentation (default: true)
-		//			- gridformatter: an optional formatter to use for this series in the data grid
+		//		- datapoints: the name of the field from the source data which
+		//			contains an array of the data points for this data series.
+		//			If not supplied, the source data is assumed to be an array
+		//			of data points to be used.
+		//		- field: the name of the field within each data point which
+		//			contains the data for this data series. If not supplied,
+		//			each data point is assumed to be the value for the series.
+		//		- name: a name for the series, used in the legend and grid headings
+		//		- namefield:
+		//			the name of the field from the source data which
+		//			contains the name the series, used in the legend and grid
+		//			headings. If both name and namefield are supplied, name takes
+		//		    precedence. If neither are supplied, a default name is used.
+		//		- chart: true if the series should be included in a chart presentation (default: true)
+		//		- charttype: the type of presentation of the series in the chart, which can be
+		//			"range", "line", "bar" (default: "bar")
+		//		- linestyle: the stroke style for lines (if applicable) (default: "Solid")
+		//		- axis: the dependant axis to which the series will be attached in the chart,
+		//		    which can be "primary" or "secondary"
+		//		- grid: true if the series should be included in a data grid presentation (default: true)
+		//		- gridformatter: an optional formatter to use for this series in the data grid
 		//
 		//		a call-back function may alternatively be supplied. The function takes
 		//		a single parameter, which will be the data (from the 'data' field or
@@ -494,11 +494,13 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//		a string pattern defining the tooltip text to be applied to chart
 		//		data points, or a function which takes a single parameter and returns
 		//		the tooltip text to be applied to chart data points. The string pattern
-		// will have the following substitutions applied:
-		//		 {0} - the type of chart element ('bar', 'surface', etc)
-		//		 {1} - the name of the data series
-		//		 {2} - the independent axis value at the tooltip data point
-		//		 {3} - the series value at the tooltip data point point
+		//		will have the following substitutions applied:
+		//
+		//		- {0} - the type of chart element ('bar', 'surface', etc)
+		//		- {1} - the name of the data series
+		//		- {2} - the independent axis value at the tooltip data point
+		//		- {3} - the series value at the tooltip data point point
+		//
 		//		The function, if supplied, will receive a single parameter exactly
 		//		as per the dojox.charting.action2D.Tooltip class. The default value
 		//		is to apply the default tooltip as defined by the

@@ -14,9 +14,9 @@ define([
 		//		dojo/store data store. The widget must implement the following
 		//		methods to handle the retrieved data:
 		//
-		//			- onComplete(/*Array*/items), onError(/*Object*/errorData),
-		//			- onUpdate(/*Object*/item, /*Number*/insertedInto), and 
-		//			- onDelete(/*Object*/item, /*Number*/removedFrom).
+		//		- onComplete(/*Array*/items), onError(/*Object*/errorData),
+		//		- onUpdate(/*Object*/item, /*Number*/insertedInto), and
+		//		- onDelete(/*Object*/item, /*Number*/removedFrom).
 	
 		// store: Object
 		//		Reference to data provider object used by this widget.
@@ -90,10 +90,10 @@ define([
 			return promise;
 		}
 
-/*
+/*=====
 		// Subclass MUST implement the following methods.
 
-		onComplete: function(items){
+		, onComplete: function(items){
 			// summary:
 			//		An handler that is called after the fetch completes.
 		},
@@ -112,6 +112,6 @@ define([
 			// summary:
 			//		Deletes an existing item.
 		}
-*/
+=====*/
 	});
 });

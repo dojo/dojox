@@ -44,13 +44,14 @@ define([
 		//		phone or like tablet. If the result is changed,
 		//		it sets either of the following css class to `<html>`:
 		//
-		//			- 'dj_phone'
-		//			- 'dj_tablet'
+		//		- 'dj_phone'
+		//		- 'dj_tablet'
 		//
 		//		and it publishes either of the following events:
 		//
-		//			- '/dojox/mobile/screenSize/phone'
-		//			- '/dojox/mobile/screenSize/tablet'
+		//		- '/dojox/mobile/screenSize/phone'
+		//		- '/dojox/mobile/screenSize/tablet'
+
 		var dim = dm.getScreenSize();
 		var sz = Math.min(dim.w, dim.h);
 		var from, to;

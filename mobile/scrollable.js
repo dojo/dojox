@@ -48,11 +48,11 @@ define([
 		//
 		//		This module has the following features:
 		//
-		//			- Scrolls inner DIVs vertically, horizontally, or both.
-		//			- Vertical and horizontal scroll bars.
-		//			- Flashes the scroll bars when a view is shown.
-		//			- Simulates the flick operation using animation.
-		//			- Respects header/footer bars if any.
+		//		- Scrolls inner DIVs vertically, horizontally, or both.
+		//		- Vertical and horizontal scroll bars.
+		//		- Flashes the scroll bars when a view is shown.
+		//		- Simulates the flick operation using animation.
+		//		- Respects header/footer bars if any.
 	};
 
 	lang.extend(Scrollable, {

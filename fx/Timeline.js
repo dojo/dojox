@@ -29,11 +29,11 @@ dojoxFx.animateTimeline = function(options, node){
 	// options: Object
 	//		The parameters passed to the timeline animation. Includes:
 	//
-	//			- keys: Array
-	//				An array of objects, with style properties and values.
-	//			- duration:
-	//				Duration of the animation in milliseconds.
-	//				Defaults to 1000.
+	//		- keys: Array
+	//			An array of objects, with style properties and values.
+	//		- duration:
+	//			Duration of the animation in milliseconds.
+	//			Defaults to 1000.
 	// node: DomNode|String
 	//		The DomNode or id to be animated.
 	// example:

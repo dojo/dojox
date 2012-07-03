@@ -102,8 +102,8 @@ define(["dojo/_base/kernel",
 			if(area){
 				var position = geom.position(area, true),
 					coords = {};
-				coords.x = position.x
-				coords.y = position.y
+				coords.x = position.x;
+				coords.y = position.y;
 				coords.x1 = position.x + position.w;
 				coords.y1 = position.y + position.h;
 				return coords;	// 	Object
@@ -111,19 +111,19 @@ define(["dojo/_base/kernel",
 			return null;
 		},
 	
-		register: function(/*DOMNode*/area, /*String*/ type,/*Boolean*/ dojoTarget){
+		register: function(/*DOMNode*/area, /*String*/ type, /*Boolean*/ dojoTarget){
 			// summary:
 			//		Register a target dojo.
 			//		The target is represented by an object containing :
 			//
-			//			- the dojo area node
-			//			- the type reference to identify a group node
-			//			- the coords of the area to enable refresh position
+			//		- the dojo area node
+			//		- the type reference to identify a group node
+			//		- the coords of the area to enable refresh position
 			// area:
 			//		The DOM node which has to be registered.
 			// type:
 			//		A String to identify the node.
-			// dojoTarger:
+			// dojoTarget:
 			//		True if the dojo D&D have to be enable when mouse is hover the registered target dojo.
 	
 			//console.log("dojox.mdnd.adapter.DndToDojo ::: registerDojoArea", area, type, dojoTarget);

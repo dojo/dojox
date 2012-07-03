@@ -11,11 +11,11 @@ define([
 		// description:
 		//		Has several methods to work with the store:
 		//
-		//			* queryStore(): Runs query() against the store, and creates a data model from retrieved data
-		//			* getStore(): Runs get() against the store, and creates a data model from retrieved data
-		//			* putStore(): Runs put() against the store
-		//			* addStore(): Runs add() against the store
-		//			* removeStore(): Runs remove() against the store
+		//		* queryStore(): Runs query() against the store, and creates a data model from retrieved data
+		//		* getStore(): Runs get() against the store, and creates a data model from retrieved data
+		//		* putStore(): Runs put() against the store
+		//		* addStore(): Runs add() against the store
+		//		* removeStore(): Runs remove() against the store
 		//
 		//		dojo.Stateful get()/set()/watch() interfaces in dojox.mvc.StoreRefController will work with the data model from queryStore() or getStore().
 		//
@@ -46,7 +46,7 @@ define([
 		// |			</body>
 		// |		</html>
 
-		// store: dojo/store.*
+		// store: dojo/store/*
 		//		The Dojo Object Store in use.
 		store: null,
 
