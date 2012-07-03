@@ -101,8 +101,9 @@ define([
 		//		The mixin properties for child widget.
 		//		Can be specified via data-mvc-child-props attribute of widget declaration.
 		//		"this" in data-mvc-child-props will have the following properties:
-		//			parent - This widget's instance.
-		//			target - The data item in children.
+		//
+		//		- parent - This widget's instance.
+		//		- target - The data item in children.
 		childParams: null,
 
 		// childBindings: Object

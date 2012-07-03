@@ -14,12 +14,12 @@ declare("dojox.string.BidiEngine", null, {
 	//		Unicode Bidi Algorithm is not invoked or is not properly applied. This may occur in situation in which software
 	//		responsible for rendering the text is not leveraging Unicode Bidi Algorithm implemented by OS (e.g. dojox.GFX renderers).
 	//
-	//		Bidi engine provided in this class implements Unicode Bidi Algorithm as specified at:
-	//			http://www.unicode.org/reports/tr9/. 
+	//		Bidi engine provided in this class implements Unicode Bidi Algorithm as specified at
+	//		http://www.unicode.org/reports/tr9/.
 	//
-	//		For more information on basic Bidi concepts please read following article:
-	//			"Bidirectional script support - A primer" available from:
-	//				http://www.ibm.com/developerworks/websphere/library/techarticles/bidi/bidigen.html
+	//		For more information on basic Bidi concepts please read
+	//		"Bidirectional script support - A primer" available from
+	//		http://www.ibm.com/developerworks/websphere/library/techarticles/bidi/bidigen.html.
 	//
 	//		As of February 2011, Bidi engine has following limitations:
 	//
@@ -60,8 +60,8 @@ declare("dojox.string.BidiEngine", null, {
 		//		- Letter meaning:
 		//			Ordering Schema.
 		//		- Possible values:
-		//		- I - Implicit (Logical).
-		//		- V - Visual.
+		//			- I - Implicit (Logical).
+		//			- V - Visual.
 		//		- Default value:
 		//			I
 		//
@@ -72,10 +72,10 @@ declare("dojox.string.BidiEngine", null, {
 		//		- Letter meaning:
 		//			Orientation.
 		//		- Possible values:
-		//		- L - Left To Right.
-		//		- R - Right To Left.
-		//		- C - Contextual Left to Right.
-		//		- D - Contextual Right to Left.
+		//			- L - Left To Right.
+		//			- R - Right To Left.
+		//			- C - Contextual Left to Right.
+		//			- D - Contextual Right to Left.
 		//		- Default value:
 		//			L		
 		//
@@ -86,8 +86,8 @@ declare("dojox.string.BidiEngine", null, {
 		//		- Letter meaning:
 		//			Symmetric Swapping.
 		//		- Possible values:
-		//		- Y - Symmetric swapping is on.
-		//		- N - Symmetric swapping is off.
+		//			- Y - Symmetric swapping is on.
+		//			- N - Symmetric swapping is off.
 		//		- Default value:
 		//			Y		
 		//
@@ -98,8 +98,8 @@ declare("dojox.string.BidiEngine", null, {
 		//		- Letter meaning:
 		//			Shaping.
 		//		- Possible values:
-		//		- S - Text is shaped.
-		//		- N - Text is not shaped.
+		//			- S - Text is shaped.
+		//			- N - Text is not shaped.
 		//		- Default value:
 		//			N				
 		//
@@ -110,7 +110,7 @@ declare("dojox.string.BidiEngine", null, {
 		//		- Letter meaning:
 		//			Numeric Shaping.
 		//		- Possible values:
-		//			N - Nominal.
+		//			- N - Nominal.
 		//		- Default value:
 		//			N				
 		//
@@ -121,7 +121,7 @@ declare("dojox.string.BidiEngine", null, {
 		//	|	mytext = bidiTransform("HELLO WORLD", "ILYNN", "VLYNN");
 		//		In this case, "HELLO WORLD" text is transformed from Logical - LTR to Visual - LTR Bidi layout with 
 		//		default values for symmetric swapping (Yes), shaping (Not shaped) and numeric shaping (Nominal).
-		// returns: /*String*/ or throws an exception.
+		// returns: String
 		//		Original text transformed from input Bidi layout (second argument)
 		//		to output Bidi layout (last argument).
 		//		Throws an exception if the bidi layout strings are not valid.
@@ -378,7 +378,7 @@ function doBidiReorder(/*String*/text, /*String*/inFormat,
 		return text;
 	}
 
-};
+}
 
 function shape(/*boolean*/rtl, /*String*/text, /*boolean*/compress){
 	// summary:
@@ -471,7 +471,8 @@ function shape(/*boolean*/rtl, /*String*/text, /*boolean*/compress){
 		}
 	}
 	return outBuf;
-};
+}
+
 function firstStrongDir(/*String*/text){
 	// summary:
 	//		Return the first strong character direction
@@ -482,7 +483,7 @@ function firstStrongDir(/*String*/text){
 	//		searching for first "strong" character. 
 	//		Returns if strong character was found with the direction defined by this 
 	//		character, if no strong character was found returns an empty string.
-	// returns: /*String*/
+	// returns: String
 	//		"ltr" - if the first strong character is Latin.
 	//		"rtl" - if the first strong character is RTL directed character.
 	//		"" - if the strong character wasn't found.
@@ -505,7 +506,8 @@ function firstStrongDir(/*String*/text){
 		}
 	}
 	return "";
-};
+}
+
 function lastStrongDir(text){
 	// summary:
 	//		Return the last strong character direction
@@ -532,7 +534,8 @@ function lastStrongDir(text){
 		}
 	}
 	return "";
-};
+}
+
 function deshape(/*String*/text, /*boolean*/rtl, /*boolean*/consume_next_space){
 	// summary:
 	//		deshape the source text.
@@ -546,7 +549,8 @@ function deshape(/*String*/text, /*boolean*/rtl, /*boolean*/consume_next_space){
 	//		the lam alef if there is a space followed the Lamalef character to preserve the buffer size. 
 	//		In case there is no space next to the lam alef the buffer size will be increased due to the
 	//		expansion of the lam alef one character into lam+alef two characters
-	// returns:	text deshaped.
+	// returns:
+	//		text deshaped.
 	if(text.length == 0){
 		return;
 	}
@@ -603,7 +607,8 @@ function deshape(/*String*/text, /*boolean*/rtl, /*boolean*/consume_next_space){
 		}
 	}
 	return outBuf;
-};
+}
+
 function doReorder(str){
 	// summary:
 	//		Helper to the doBidiReorder. Manages the UBA.
@@ -620,7 +625,8 @@ function doReorder(str){
 	invertLevel(2, chars, levels);
 	invertLevel(1, chars, levels);
 	return chars.join("");
-};
+}
+
 function computeLevels(chars, levels){
 	var len = chars.length
 		, impTab = bdx.dir ? impTab_RTL : impTab_LTR
@@ -686,7 +692,8 @@ function computeLevels(chars, levels){
 			}
 		}
 	}
-};
+}
+
 function swapChars(chars, levels){
 	// summary:
 	//		Swap characters with symmetrical mirroring as all kinds of parenthesis.
@@ -704,13 +711,14 @@ function swapChars(chars, levels){
 
 	if(bdx.hiLevel == 0 || bdx.swap.substr(0, 1) == bdx.swap.substr(1, 2)){
 		return;
-	};
+	}
 
 	//console.log("bdx.hiLevel == 0: " + bdx.hiLevel + "bdx.swap[0]: "+ bdx.swap[0] +" bdx.swap[1]: " +bdx.swap[1]);
 	for(var i = 0; i < chars.length; i++){
 		if(levels[i] == 1){chars[i] = getMirror(chars[i]);}
 	}
-};
+}
+
 function getCharacterType(ch){
 	// summary:
 	//		Return the type of the character.
@@ -725,7 +733,8 @@ function getCharacterType(ch){
 	var uc = ch.charCodeAt(0)
 		, hi = MasterTable[uc >> 8];
 	return (hi < TBBASE) ? hi : UnicodeTable[hi - TBBASE][uc & 0xFF];
-};
+}
+
 function invertStr(str){
 	// summary:
 	//		Return the reversed string.
@@ -738,7 +747,8 @@ function invertStr(str){
 	var chars = str.split("");
 	chars.reverse();
 	return chars.join("");
-};
+}
+
 function indexOf(cArray, cLength, idx){
 	var counter = -1;
 	for(var i = 0; i < cLength; i++){
@@ -747,7 +757,8 @@ function indexOf(cArray, cLength, idx){
 		}
 	}
 	return -1;
-};
+}
+
 function isArabicAlefbet(c){
 	for(var i = 0; i < ArabicAlefBetIntervalsBegine.length; i++){
 		if(c >= ArabicAlefBetIntervalsBegine[i] && c <= ArabicAlefBetIntervalsEnd[i]){
@@ -755,7 +766,8 @@ function isArabicAlefbet(c){
 		}
 	}
 	return false;
-};
+}
+
 function isNextArabic(str06, index, step, nIEnd){
 	while(((index) * step) < nIEnd && isArabicDiacritics(str06[index])){
 		index += step;
@@ -764,7 +776,8 @@ function isNextArabic(str06, index, step, nIEnd){
 		return true;
 	}
 	return false;
-};
+}
+
 function isNextAlef(str06, index, step, nIEnd){
 	while(((index) * step) < nIEnd && isArabicDiacritics(str06[index])){
 		index += step;
@@ -781,7 +794,8 @@ function isNextAlef(str06, index, step, nIEnd){
 		}
 	}
 	return false;
-};
+}
+
 function invertLevel(lev, chars, levels){
 	if(bdx.hiLevel < lev){
 		return;
@@ -806,7 +820,8 @@ function invertLevel(lev, chars, levels){
 		}
 		start++;
 	}
-};
+}
+
 function getCharClass(chars, types, classes, ix){
 	// summary:
 	//		Return the class if ix character in chars.
@@ -903,7 +918,8 @@ function getCharClass(chars, types, classes, ix){
 		case UBAT_BN:
 			return UBAT_ON;
 	}
-};
+}
+
 function getMirror(c){
 	// summary:
 	//		Calculates the mirrored character of c
@@ -924,7 +940,8 @@ function getMirror(c){
 		}
 	}
 	return c;
-};
+}
+
 function isStandAlonCharacter(c){
 	for(var i = 0; i < StandAlonForm.length; i++){
 		if(StandAlonForm[i] == c){
@@ -932,7 +949,8 @@ function isStandAlonCharacter(c){
 		}
 	}
 	return false;
-};
+}
+
 function getMedialFormCharacterFE(c){
 	for(var i = 0; i < BaseForm.length; i++){
 		if(c == BaseForm[i]){
@@ -940,7 +958,8 @@ function getMedialFormCharacterFE(c){
 		}
 	}
 	return c;
-};
+}
+
 function getFormCharacterFE(/*char*/ c, /*char[]*/formArr){
 	for(var i = 0; i < BaseForm.length; i++){
 		if(c == BaseForm[i]){
@@ -948,10 +967,12 @@ function getFormCharacterFE(/*char*/ c, /*char[]*/formArr){
 		}
 	}
 	return c;
-};
+}
+
 function isArabicDiacritics(c){
 	return	(c >= '\u064b' && c <= '\u0655') ? true : false;
-};
+}
+
 function getOrientation(/*Char*/ oc){
 	if(oc == 'L'){
 		return "LTR";
@@ -965,7 +986,8 @@ function getOrientation(/*Char*/ oc){
 	if(oc == 'D'){
 		return "CRL";
 	}
-};
+}
+
 function setAlefToSpace(str06, index, step, nIEnd){
 	while(((index) * step) < nIEnd && isArabicDiacritics(str06[index])){
 		index += step;
@@ -975,7 +997,8 @@ function setAlefToSpace(str06, index, step, nIEnd){
 		return true;
 	}
 	return false;
-};
+}
+
 function getLamAlefFE(alef06, LamAlefForm){
 	for(var i = 0; i < AlefTable.length; i++){
 		if(alef06 == AlefTable[i]){
@@ -983,7 +1006,8 @@ function getLamAlefFE(alef06, LamAlefForm){
 		}
 	}
 	return alef06;
-};
+}
+
 function LamAlef(alef){
 	// summary:
 	//		If the alef variable is an ARABIC ALEF letter,
@@ -1002,7 +1026,7 @@ function LamAlef(alef){
 		}
 	}
 	return 0;
-};
+}
 
 var	bdx = {
 		dir: 0,

@@ -82,7 +82,7 @@ dojo.declare("dojox.wire.ml.Transfer", dojox.wire.ml.Action, {
 		//		including '*Store' (for 'dataStore'), '*Attribute'
 		//		(for 'attribute), '*Path' (for 'path'), 'type' and 'converter'.
 		//		'source' or 'target' attribute is parsed as:
-		//			"object_id.property_name[.sub_property_name...]"
+		// |		"object_id.property_name[.sub_property_name...]"
 		//		If 'source' or 'target' starts with "arguments", 'object'
 		//		argument for a Wire is set to null, so that the root object is
 		//		given as an event or topic arguments.
@@ -342,7 +342,7 @@ dojo.declare("dojox.wire.ml.SegmentWire", dojox.wire.ml.ChildWire, {
 
 	_addWire: function(/*Transfer*/parent, /*Object*/args){
 		// summary:
-		//		Add a segument Wire to Wire arguments
+		//		Add a segment Wire to Wire arguments
 		// description:
 		//		A segment Wire is added to 'segments' array of 'args'.
 		//		If 'parent' has 'delimiter' attribute, it is used for

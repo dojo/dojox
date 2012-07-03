@@ -82,7 +82,7 @@ define([
 			//		11 percent of the page width (= 0.11 * w).
 			//		This parameter should be a float number between 0 and 1. Defaults to 1.
 			//		The actual dog-ear width is calculated by the following formula:
-			//			0.11 * w * dogear.
+			// |		0.11 * w * dogear.
 			//		This parameter is ignored if "bottom" is specified to turnfrom parameter.
 			// duration: Number?
 			//		The duration of page turning animations by seconds. (ex. 1.5, 3, etc)

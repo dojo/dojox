@@ -13,7 +13,7 @@ dojo.declare("dojox.wire.TextAdapter", dojox.wire.CompositeWire, {
 	
 	_wireClass: "dojox.wire.TextAdapter",
 	
-	constructor: function(/*Object*/args){
+	constructor: function(/*Object*/ args){
 		// summary:
 		//		Initialize properties
 		// description:
@@ -21,11 +21,10 @@ dojo.declare("dojox.wire.TextAdapter", dojox.wire.CompositeWire, {
 		//		are created from them as arguments, with 'parent' property set
 		//		to this Wire instance.
 		// args:
-		//		Arguments to initialize properties
-		//		segments:
-		//			An array containing child Wires for text segment values
-		//		delimiter:
-		//			A delimiter string
+		//		Arguments to initialize properties:
+		//
+		//		- segments: An array containing child Wires for text segment values
+		//		- delimiter: A delimiter string
 		this._initializeChildren(this.segments);
 		if(!this.delimiter){
 			this.delimiter = "";

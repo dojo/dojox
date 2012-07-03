@@ -9,8 +9,7 @@ dojo.declare("dojox.storage.Provider", null, {
 	//		dojox.storage.get(), etc.
 	//
 	//		For more details on dojox.storage, see the primary documentation
-	//		page at
-	//			http://manual.dojotoolkit.org/storage.html
+	//		page at http://manual.dojotoolkit.org/storage.html.
 	//
 	//		Note for storage provider developers who are creating subclasses-
 	//		This is the base class for all storage providers Specific kinds of
@@ -83,23 +82,12 @@ dojo.declare("dojox.storage.Provider", null, {
 					/*string?*/ namespace){
 		// summary:
 		//		Puts a key and value into this storage system.
+		// example:
+		// |	var resultsHandler = function(status, key, message, namespace){
+		// |	  alert("status="+status+", key="+key+", message="+message);
+		// |	};
+		// |	dojox.storage.put("test", "hello world", resultsHandler);
 		// description:
-		//		Example-
-		//			var resultsHandler = function(status, key, message, namespace){
-		//			  alert("status="+status+", key="+key+", message="+message);
-		//			};
-		//			dojox.storage.put("test", "hello world", resultsHandler);
-		//
-		//			Arguments:
-		//
-		//			status - The status of the put operation, given by
-		//								dojox.storage.FAILED, dojox.storage.SUCCEEDED, or
-		//								dojox.storage.PENDING
-		//			key - The key that was used for the put
-		//			message - An optional message if there was an error or things failed.
-		//			namespace - The namespace of the key. This comes at the end since
-		//									it was added later.
-		//
 		//		Important note: if you are using Dojo Storage in conjunction with
 		//		Dojo Offline, then you don't need to provide
 		//		a resultsHandler; this is because for Dojo Offline we
@@ -214,13 +202,12 @@ dojo.declare("dojox.storage.Provider", null, {
 							/*string?*/ namespace){
 		// summary:
 		//		Puts multiple keys and values into this storage system.
+		// example:
+		// |	var resultsHandler = function(status, key, message){
+		// |	  alert("status="+status+", key="+key+", message="+message);
+		// |	};
+		// |	dojox.storage.put(["test"], ["hello world"], resultsHandler);
 		// description:
-		//		Example-
-		//			var resultsHandler = function(status, key, message){
-		//			  alert("status="+status+", key="+key+", message="+message);
-		//			};
-		//			dojox.storage.put(["test"], ["hello world"], resultsHandler);
-		//
 		//		Important note: if you are using Dojo Storage in conjunction with
 		//		Dojo Offline, then you don't need to provide
 		//		a resultsHandler; this is because for Dojo Offline we

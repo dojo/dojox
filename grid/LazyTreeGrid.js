@@ -353,11 +353,14 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 	defaultState: null,
 	// colSpans: Object
 	//		a json object that defines column span of each level rows
+	//
 	//		attributes:
-	//			0/1/..: which level need to colspan
-	//			start: start column index of colspan
-	//			end: end column index of colspan
-	//			primary: index of column which content will be displayed (default is value of start).
+	//
+	//		- 0/1/..: which level need to colspan
+	//		- start: start column index of colspan
+	//		- end: end column index of colspan
+	//		- primary: index of column which content will be displayed (default is value of start).
+	//
 	//		example:
 	//		|	colSpans = {
 	//		|	0:	[

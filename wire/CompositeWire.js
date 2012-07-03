@@ -24,9 +24,9 @@ dojo.declare("dojox.wire.CompositeWire", dojox.wire.Wire, {
 		//		property are not Wires, Wires are created from them as
 		//		arguments, with 'parent' property set to this Wire instance.
 		// args:
-		//		Arguments to initialize properties
-		//		children:
-		//			An object or array containing child Wires
+		//		Arguments to initialize properties.
+		//
+		//		- children: An object or array containing child Wires
 		this._initializeChildren(this.children);
 	},
 	_getValue: function(/*Object||Array*/object){

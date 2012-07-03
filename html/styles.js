@@ -2,13 +2,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/
 	function(lang, ArrayUtil, Window, has) {
 	// summary:
 	//		Methods for creating and manipulating dynamic CSS Styles and Style Sheets
-	//
 	// example:
-	//		| dojox.html.createStyle("#myDiv input", "font-size:24px");
-	//			Creates Style #myDiv input, which can now be applied to myDiv, and
-	//			the inner input will be targeted
-	//		| dojox.html.createStyle(".myStyle", "color:#FF0000");
-	//			Now the class myStyle can be assigned to a node's className
+	//	|		dojox.html.createStyle("#myDiv input", "font-size:24px");
+	//		Creates Style #myDiv input, which can now be applied to myDiv, and
+	//		the inner input will be targeted
+	//	|		dojox.html.createStyle(".myStyle", "color:#FF0000");
+	//		Now the class myStyle can be assigned to a node's className
 
 	var dh = lang.getObject("dojox.html", true);
 	var dynamicStyleMap = {};
@@ -143,9 +142,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/
 		//		Creates and returns a dynamically created style sheet
 		//		used for dynamic styles
 		// styleSheetName:
-		//			The name given the style sheet so that multiple
-		//			style sheets can be created and referenced. If
-		//			no argument is given, the name "default" is used.
+		//		The name given the style sheet so that multiple
+		//		style sheets can be created and referenced. If
+		//		no argument is given, the name "default" is used.
 
 		if(!styleSheetName){ styleSheetName="default"; }
 		if(!dynamicStyleMap[styleSheetName]){

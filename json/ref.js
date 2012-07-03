@@ -30,24 +30,24 @@ return dojox.json.ref = {
 		// args:
 		//		Object with additional arguments:
 		//
-		//		The *index* parameter.
+		//		- The *index* parameter:
 		//			This is the index object (map) to use to store an index of all the objects.
 		//			If you are using inter-message referencing, you must provide the same object for each call.
-		//		The *defaultId* parameter.
+		//		- The *defaultId* parameter:
 		//			This is the default id to use for the root object (if it doesn't define it's own id)
-		//		The *idPrefix* parameter.
+		//		- The *idPrefix* parameter:
 		//			This the prefix to use for the ids as they enter the index. This allows multiple tables
 		//			to use ids (that might otherwise collide) that enter the same global index.
 		//			idPrefix should be in the form "/Service/".  For example,
 		//			if the idPrefix is "/Table/", and object is encountered {id:"4",...}, this would go in the
 		//			index as "/Table/4".
-		//		The *idAttribute* parameter.
+		//		- The *idAttribute* parameter:
 		//			This indicates what property is the identity property. This defaults to "id"
-		//		The *assignAbsoluteIds* parameter.
+		//		- The *assignAbsoluteIds* parameter:
 		//			This indicates that the resolveJson should assign absolute ids (__id) as the objects are being parsed.
-		//		The *schemas* parameter
+		//		- The *schemas* parameter:
 		//			This provides a map of schemas, from which prototypes can be retrieved
-		//		The *loader* parameter
+		//		- The *loader* parameter:
 		//			This is a function that is called added to the reference objects that can't be resolved (lazy objects)
 		// returns:
 		//		An object, the result of the processing

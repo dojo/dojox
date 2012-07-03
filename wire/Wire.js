@@ -29,15 +29,12 @@ dojo.declare("dojox.wire.Wire", null, {
 		//		a converter class, an instanceof the converter class is
 		//		created.
 		// args:
-		//		Arguments to initialize properties
-		//		object:
-		//			A root object (or another Wire to access a root object)
-		//		property:
-		//			A dotted notation to a descendant property
-		//		type:
-		//			A type of the return value (for the source Wire)
-		//		converter:
-		//			A converter object (or class name) to convert the return
+		//		Arguments to initialize properties:
+		//
+		//		- object: A root object (or another Wire to access a root object)
+		//		- property: A dotted notation to a descendant property
+		//		- type: A type of the return value (for the source Wire)
+		//		- converter: A converter object (or class name) to convert the return
 		//			value (for the source Wire)
 		dojo.mixin(this, args);
 
@@ -86,14 +83,16 @@ dojo.declare("dojox.wire.Wire", null, {
 		// summary:
 		//		Return a value of an object
 		// description:
-		//		This method first determins a root object as follows:
-		//		1. If 'object' property specified,
-		//		1.1 If 'object' is a Wire, its getValue() method is called to
+		//		This method first determines a root object as follows:
+		//
+		//			1. If 'object' property specified,
+		//			1.1 If 'object' is a Wire, its getValue() method is called to
 		//			obtain a root object.
-		//		1.2 Otherwise, use 'object' as a root object.
-		//		2. Otherwise, use 'defaultObject' argument.
-		//		3. If 'property' is specified, it is used to get a property
-		//			value.
+		//			1.2 Otherwise, use 'object' as a root object.
+		//			2. Otherwise, use 'defaultObject' argument.
+		//			3. If 'property' is specified, it is used to get a property
+		//				value.
+		//
 		//		Then, if a sub-class implements _getValue() method, it is
 		//		called with the root object to get the return value.
 		//		Otherwise, the root object (typically, a property valye) is
@@ -156,14 +155,16 @@ dojo.declare("dojox.wire.Wire", null, {
 		// summary:
 		//		Set a value to an object
 		// description:
-		//		This method first determins a root object as follows:
-		//		1. If 'object' property specified,
-		//		1.1 If 'object' is a Wire, its getValue() method is called to
-		//			obtain a root object.
-		//		1.2 Otherwise, use 'object' as a root object.
-		//		2. Otherwise, use 'defaultObject' argument.
-		//		3. If 'property' is specified, it is used to get a property
-		//			value.
+		//		This method first determines a root object as follows:
+		//
+		//			1. If 'object' property specified,
+		//			1.1 If 'object' is a Wire, its getValue() method is called to
+		//				obtain a root object.
+		//			1.2 Otherwise, use 'object' as a root object.
+		//			2. Otherwise, use 'defaultObject' argument.
+		//			3. If 'property' is specified, it is used to get a property
+		//				value.
+		//
 		//		Then, if a sub-class implements _setValue() method, it is
 		//		called with the root object and 'value' argument to set
 		//		the value.

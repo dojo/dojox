@@ -64,7 +64,7 @@ return declare("dojox.gauges._Gauge",[Widget],{
 	//		- interval: The interval the ticks should be added on
 	//		- color: The color of the mark and text
 	//		- font: an object with any/all of the following parameters:
-	//			{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
+	// |	{family: "Helvetica", style: "italic", variant: 'small-caps', weight: 'bold', size: "18pt"}
 	majorTicks: null,
 	
 	// minorTicks: Object
@@ -380,10 +380,9 @@ return declare("dojox.gauges._Gauge",[Widget],{
 		//		as the original background argument.
 		// background: Object
 		//		An object in one of the two forms:
-		//			{'color': 'color-name'}
-		//				OR
-		//			(for a gradient:)
-		//			{'type': 'linear', 'colors': [{offset: 0, color:'#C0C0C0'}, {offset: 1, color: '#E0E0E0'}] }
+		// |		{'color': 'color-name'}
+		//		OR (for a gradient:)
+		// |		{'type': 'linear', 'colors': [{offset: 0, color:'#C0C0C0'}, {offset: 1, color: '#E0E0E0'}] }
 		//		If background is null or undefined, this will set the fill to this._backgroundDefault
 		if(!background){ background = this._backgroundDefault; }
 		this.background = background.color || background;

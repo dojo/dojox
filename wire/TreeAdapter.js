@@ -16,22 +16,22 @@ dojo.declare("dojox.wire.TreeAdapter", dojox.wire.CompositeWire, {
 	//		'children' Wires in 'nodes' property is used to iterate over child
 	//		node objects.
 	//		The node values are returned in an array as follows:
-	//			[
-	//				{title: title1,
-	//		  	 	children: [
-	//					{title: title2,
-	//					 child: ...},
-	//					{title: title3,
-	//					 child: ...},
-	//					...
-	//				]},
-	//				...
-	//			]
+	// |		[
+	// |			{title: title1,
+	// |	  	 	children: [
+	// |				{title: title2,
+	// |				 child: ...},
+	// |				{title: title3,
+	// |				 child: ...},
+	// |				...
+	// |			]},
+	// |			...
+	// |		]
 	//		This class only supports getValue(), but not setValue().
 	
 	_wireClass: "dojox.wire.TreeAdapter",
 	
-	constructor: function(/*Object*/args){
+	constructor: function(/*Object*/ args){
 		// summary:
 		//		Initialize properties
 		// description:
@@ -40,9 +40,9 @@ dojo.declare("dojox.wire.TreeAdapter", dojox.wire.CompositeWire, {
 		//		created from them as arguments, with 'parent' property set to
 		//		this Wire instance.
 		// args:
-		//		Arguments to initialize properties
-		//		nodes:
-		//			An array containing objects for child Wires for node values
+		//		Arguments to initialize properties:
+		//
+		//		- nodes: An array containing objects for child Wires for node values
 		this._initializeChildren(this.nodes);
 	},
 	_getValue: function(/*Array*/object){
@@ -51,7 +51,7 @@ dojo.declare("dojox.wire.TreeAdapter", dojox.wire.CompositeWire, {
 		// description:
 		//		This method iterates over an array specified to 'object'
 		//		argument and calls getValue() method of 'node' Wires with each
-		//		element of the array to get object(s) that represetns nodes.
+		//		element of the array to get object(s) that represents nodes.
 		//		(If 'node' Wires are omitted, the array element is used for
 		//		further processing.)
 		//		Then, getValue() method of 'title' Wires are called to get

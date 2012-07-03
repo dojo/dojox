@@ -36,27 +36,25 @@ dojox.secure.fromJson = typeof JSON != "undefined" ? JSON.parse :
 //		|	dojo._contentHandlers.json = function(xhr){
 //		|		return dojox.secure.fromJson.fromJson(xhr.responseText);
 //		|	};
-//
 // json: String
 //		per RFC 4627
 // optReviver: Function (this:Object, string, *)
 //		optional function
-//				that reworks JSON objects post-parse per Chapter 15.12 of EcmaScript3.1.
-//				If supplied, the function is called with a string key, and a value.
-//				The value is the property of 'this'.	The reviver should return
-//				the value to use in its place.	So if dates were serialized as
-//				{@code { "type": "Date", "time": 1234 }}, then a reviver might look like
-//				{@code
-//				function (key, value) {
-//					if (value && typeof value === 'object' && 'Date' === value.type) {
-//						return new Date(value.time);
-//					} else {
-//						return value;
-//					}
-//				}}.
-//				If the reviver returns {@code undefined} then the property named by key
-//				will be deleted from its container.
-//				{@code this} is bound to the object containing the specified property.
+//		that reworks JSON objects post-parse per Chapter 15.12 of EcmaScript3.1.
+//		If supplied, the function is called with a string key, and a value.
+//		The value is the property of 'this'.	The reviver should return
+//		the value to use in its place.	So if dates were serialized as
+//		`{ "type": "Date", "time": 1234 }`, then a reviver might look like
+// |	function (key, value) {
+// |		if (value && typeof value === 'object' && 'Date' === value.type) {
+// |			return new Date(value.time);
+// |		} else {
+// |			return value;
+// |		}
+// |	}}.
+//		If the reviver returns {@code undefined} then the property named by key
+//		will be deleted from its container.
+//		`this` is bound to the object containing the specified property.
 // returns: Object|Array
 (function () {
 	var number

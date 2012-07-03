@@ -69,7 +69,7 @@ declare("dojox.gfx3d.Object", null, {
 		this.fillStyle = null;
 
 		// shape: dojox.gfx.Shape
-		//			an underlying 2D shape
+		//		an underlying 2D shape
 		this.shape = null;
 	},
 

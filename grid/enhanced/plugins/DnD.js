@@ -242,13 +242,15 @@ var DnD = declare("dojox.grid.enhanced.plugins.DnD", _Plugin, {
 	// summary:
 	//		Provide drag and drop for grid columns/rows/cells within grid and out of grid.
 	//		The store of grid must implement dojo.data.api.Write.
-	//		DnD selected columns:
-	//			Support moving within grid, moving/copying out of grid to a non-grid DnD target.
-	//		DnD selected rows:
-	//			Support moving within grid, moving/copying out of grid to any DnD target.
-	//		DnD selected cells (in rectangle shape only):
-	//			Support moving/copying within grid, moving/copying out of grid to any DnD target.
 	//
+	//		DnD selected columns:
+	//		Support moving within grid, moving/copying out of grid to a non-grid DnD target.
+	//
+	//		DnD selected rows:
+	//		Support moving within grid, moving/copying out of grid to any DnD target.
+	//
+	//		DnD selected cells (in rectangle shape only):
+	//		Support moving/copying within grid, moving/copying out of grid to any DnD target.
 	
 	// name: String,
 	//		plugin name;

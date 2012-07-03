@@ -63,8 +63,8 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 		// summary:
 		//		This is a helper function used to determine the position that represents
 		//		a given value on the bar graph
-		// value:	Number
-		//			A value to be converted to a position for this bar graph.
+		// value: Number
+		//		A value to be converted to a position for this bar graph.
 
 		return this.dataX + Math.floor((value - this.min)/(this.max - this.min)*this.dataWidth);
 	},
@@ -73,8 +73,8 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 		// summary:
 		//		This is a helper function used to determine the value represented by
 		//		a position on the bar graph
-		// pos:		Number
-		//			A position to be converted to a value.
+		// pos:	Number
+		//		A position to be converted to a value.
 		return (pos - this.dataX)*(this.max - this.min)/this.dataWidth + this.min;
 	},
 
@@ -130,8 +130,8 @@ return declare("dojox.gauges.BarGauge", Gauge, {
 	getRangeUnderMouse: function(/*Object*/e){
 		// summary:
 		//		Determines which range the mouse is currently over
-		// e:	Object
-		//			The event object as received by the mouse handling functions below.
+		// e: Object
+		//		The event object as received by the mouse handling functions below.
 		var range = null;
 		var pos = domGeometry.getContentBox(this.gaugeContent);
 		var x = e.clientX - pos.x;

@@ -398,10 +398,11 @@ define(["dojo", "dojox/main"], function(dojo, dojox){
 		//		highlight a string of text
 		// returns: Object
 		//		Object containing:
-		//		   result - string of html with spans to apply formatting
-		//		   partialResult - if the formatting failed: string of html
-		//			       up to the point of the failure, otherwise: undefined
-		//		   langName - the language used to do the formatting
+		//
+		//		- result - string of html with spans to apply formatting
+		//		- partialResult - if the formatting failed: string of html
+		//		  up to the point of the failure, otherwise: undefined
+		//		- langName - the language used to do the formatting
 		return lang ? highlightStringLanguage(lang, str) : highlightStringAuto(str);
 	};
 

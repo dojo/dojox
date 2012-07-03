@@ -26,9 +26,9 @@ dojo.declare("dojox.wire.XmlWire", dojox.wire.Wire, {
 		// description:
 		//		'args' is just mixed in with no further processing.
 		// args:
-		//		Arguments to initialize properties
-		//		path:
-		//			A simplified XPath to an attribute, a text or elements
+		//		Arguments to initialize properties:
+		//
+		//		- path: A simplified XPath to an attribute, a text or elements
 	},
 	_getValue: function(/*Node*/object){
 		// summary:

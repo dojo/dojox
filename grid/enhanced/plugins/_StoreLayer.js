@@ -315,7 +315,7 @@ define([
 			// summary:
 			//		If you only want to modify the user request, instead of sending a separate command
 			//		to server before fetch, just call:
-			//			this.useCommand(false);
+			// |		this.useCommand(false);
 			// tags:
 			//		public
 			// toUse: Boolean?

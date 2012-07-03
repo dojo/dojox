@@ -119,7 +119,7 @@ define([
 			//		Resize the widget.
 			// description:
 			//		Resize the domNode and the widget to the dimensions of a box of the following form:
-			//			`{ l: 50, t: 200, w: 300: h: 150 }`
+			//		`{ l: 50, t: 200, w: 300: h: 150 }`
 			// b: Object|Number?
 			//		If passed, denotes the new size of the widget.
 			//		Can be either nothing (widget adapts to the div),

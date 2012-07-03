@@ -52,14 +52,14 @@ define([
 		//		  data within the model. A bind creates a bi-directional update
 		//		  mechanism between the bound view and the underlying data:
 		//
-		//			a) The data model is "live" data i.e. it maintains any updates
-		//			  driven by the view on the underlying data.
+		//		a) The data model is "live" data i.e. it maintains any updates
+		//		driven by the view on the underlying data.
 		//
-		//			b) The data model issues updates to portions of the view if the
-		//			  data they bind to is updated in the model. For example, if two
-		//			  dijits are bound to the same part of a data model, updating the
-		//			  value of one in the view will cause the data model to issue an
-		//			  update to the other containing the new value.
+		//		b) The data model issues updates to portions of the view if the
+		//		data they bind to is updated in the model. For example, if two
+		//		dijits are bound to the same part of a data model, updating the
+		//		value of one in the view will cause the data model to issue an
+		//		update to the other containing the new value.
 		//
 		//		- The data model internally creates a tree of dojo/Stateful
 		//		  objects that matches the input, which is effectively a plain

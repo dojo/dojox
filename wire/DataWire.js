@@ -18,18 +18,17 @@ dojo.declare("dojox.wire.DataWire", dojox.wire.Wire, {
 	
 	_wireClass: "dojox.wire.DataWire",
 
-	constructor: function(/*Object*/args){
+	constructor: function(/*Object*/ args){
 		// summary:
 		//		Initialize properties
 		// description:
 		//		If 'dataStore' property is not specified, but 'parent' property
 		//		is specified, 'dataStore' property is copied from the parent.
 		// args:
-		//		Arguments to initialize properties
-		//		dataStore:
-		//			A data store
-		//		attribute:
-		//			A dotted notation to a descendant attribute
+		//		Arguments to initialize properties:
+		//
+		//		- dataStore: A data store
+		//		- attribute: A dotted notation to a descendant attribute
 		if(!this.dataStore && this.parent){
 			this.dataStore = this.parent.dataStore;
 		}

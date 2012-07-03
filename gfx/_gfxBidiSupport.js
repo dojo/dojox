@@ -197,10 +197,12 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 			// description:
 			//		Finds the right transformation that should be applied on the text, according to renderer.
 			//		Was tested in:
+			//
 			//		Renderers:
-			//			canvas (FF, Chrome, Safari), vml (IE), svg (FF, Chrome, Safari, Opera), silverlight (IE8), svgWeb(FF, Chrome, Safari, Opera, IE).
+			//		canvas (FF, Chrome, Safari), vml (IE), svg (FF, Chrome, Safari, Opera), silverlight (IE8), svgWeb(FF, Chrome, Safari, Opera, IE).
+			//
 			//		Browsers:
-			//			IE [6,7,8], FF [3.6], Chrome (latest for February 2011), Safari [5.0.3], Opera [11.01].
+			//		IE [6,7,8], FF [3.6], Chrome (latest for February 2011), Safari [5.0.3], Opera [11.01].
 
 			if(textDir && text && text.length > 1){
 				var sourceDir = "ltr", targetDir = textDir;

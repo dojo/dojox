@@ -12,9 +12,8 @@ var CellMerge = declare("dojox.grid.enhanced.plugins.CellMerge", _Plugin, {
 	//		This plugin provides functions to merge(un-merge) adjacent cells within one row.
 	//		Acceptable plugin parameters:
 	//
-	//		- mergedCells: Array
+	//		- mergedCells: Array: An array of objects with structure:
 	//
-	//			An array of objects with structure:
 	// |		{
 	// |			row: function(Integer)|Integer
 	// |				If it's a function, it's a predicate to decide which rows are to be merged.
@@ -97,13 +96,13 @@ var CellMerge = declare("dojox.grid.enhanced.plugins.CellMerge", _Plugin, {
 		// returns: Array
 		//		An array of records for merged-cells.
 		//		The record has the following structure:
-		//		{
-		//			"row": 1, //the row index
-		//			"start": 2, //the start column index
-		//			"end": 4, //the end column index
-		//			"major": 3, //the major column index
-		//			"handle": someHandle, //The handler that covers this merge cell record.
-		//		}
+		// |	{
+		// |		"row": 1, //the row index
+		// |		"start": 2, //the start column index
+		// |		"end": 4, //the end column index
+		// |		"major": 3, //the major column index
+		// |		"handle": someHandle, //The handler that covers this merge cell record.
+		// |	}
 		var res = [];
 		for(var i in this._merged){
 			res = res.concat(this._merged[i]);

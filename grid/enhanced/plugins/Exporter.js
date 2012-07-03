@@ -17,8 +17,8 @@ var Exporter = declare("dojox.grid.enhanced.plugins.Exporter", _Plugin, {
 	//		Acceptable plugin parameters:
 	//
 	//		1. exportFormatter: function(data, cell, rowIndex, item)
-	//				Provide a way to customize how data should look in exported string.
-	//				Note that usually the formatter of grid cell should not be used here (it can return HTML or even widget).
+	//			Provide a way to customize how data should look in exported string.
+	//			Note that usually the formatter of grid cell should not be used here (it can return HTML or even widget).
 	// example:
 	//	|	function onExported(exported_text){
 	//	|		//custom code here...
@@ -66,17 +66,17 @@ var Exporter = declare("dojox.grid.enhanced.plugins.Exporter", _Plugin, {
 		//		then pass the exported text to a given function(onExported).
 		// tags:
 		//		public
-		// type: string
+		// type: String
 		//		A registered export format name
-		// args: object?
+		// args: Object?
 		//		includes:
-		//		{
-		//			fetchArgs: object?
-		//				Any arguments for store.fetch
-		//			writerArgs: object?
-		//				Arguments for the given format writer
-		//		}
-		// onExported: function(string)
+		// |	{
+		// |		fetchArgs: object?
+		// |			Any arguments for store.fetch
+		// |		writerArgs: object?
+		// |			Arguments for the given format writer
+		// |	}
+		// onExported: Function(string)
 		//		Call back function when export result is ready
 		if(lang.isFunction(args)){
 			onExported = args;

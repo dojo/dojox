@@ -18,7 +18,7 @@ dojo.declare("dojox.wire.TableAdapter", dojox.wire.CompositeWire, {
 	
 	_wireClass: "dojox.wire.TableAdapter",
 	
-	constructor: function(/*Object*/args){
+	constructor: function(/*Object*/ args){
 		// summary:
 		//		Initialize properties
 		// description:
@@ -26,9 +26,9 @@ dojo.declare("dojox.wire.TableAdapter", dojox.wire.CompositeWire, {
 		//		property are not Wires, Wires are created from them as
 		//		arguments, with 'parent' property set to this Wire instance.
 		// args:
-		//		Arguments to initialize properties
-		//		columns:
-		//			An object or array containing child Wires for column values
+		//		Arguments to initialize properties:
+		//
+		//		- columns: An object or array containing child Wires for column values
 		this._initializeChildren(this.columns);
 	},
 

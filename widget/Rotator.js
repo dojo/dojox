@@ -31,24 +31,28 @@ dojo.require("dojo.parser");
 		//		Note: When the Rotator begins, it does not transition the first pane.
 		//
 		//		subscribed topics:
+		//
 		//			[id]/rotator/control - Controls the Rotator
-		//				Parameters:
-		//					/*string*/ action        - The name of a method of the Rotator to run
-		//					/*anything?*/ args       - One or more arguments to pass to the action
+		//			Parameters:
+		//
+		//			- /*string*/ action        - The name of a method of the Rotator to run
+		//			- /*anything?*/ args       - One or more arguments to pass to the action
 		//
 		//		published topics:
-		//			[id]/rotator/update - Notifies controllers that a pane or state has changed.
-		//				Parameters:
-		//					/*string*/ type          - the type of notification
-		//					/*dojox.widget.Rotator*/ rotator
-		//											 - the rotator instance
-		//					/*object?*/ params		 - params
+		//
+		//		[id]/rotator/update - Notifies controllers that a pane or state has changed.
+		//		Parameters:
+		//
+		//		- /*string*/ type          - the type of notification
+		//		- /*dojox.widget.Rotator*/ rotator - the rotator instance
+		//		- /*object?*/ params		 - params
 		//
 		//		declarative dojo/method events (per pane):
-		//			onBeforeIn  - Fired before the transition in starts.
-		//			onAfterIn   - Fired after the transition in ends.
-		//			onBeforeOut - Fired before the transition out starts.
-		//			onAfterOut  - Fired after the transition out ends.
+		//
+		//		- onBeforeIn  - Fired before the transition in starts.
+		//		- onAfterIn   - Fired after the transition in ends.
+		//		- onBeforeOut - Fired before the transition out starts.
+		//		- onAfterOut  - Fired after the transition out ends.
 		//
 		// example:
 		//	|	<div dojoType="dojox.widget.Rotator">

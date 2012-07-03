@@ -15,21 +15,23 @@ dojox.io.windowName = {
 		// args:
 		//		See dojo.xhr
 		//
-		//		args.authElement: DOMNode?
-		//			By providing an authElement, this indicates that windowName should use the
-		//			authorized window.name protocol, relying on
-		//			the loaded XD resource to return to the provided return URL on completion
-		//			of authorization/authentication. The provided authElement will be used to place
-		//			the iframe in, so the user can interact with the server resource for authentication
-		//			and/or authorization to access the resource.
+		//		####args.authElement: DOMNode?
 		//
-		//		args.onAuthLoad: Function?
-		//			When using authorized access to resources, this function will be called when the
-		//			authorization page has been loaded. (When authorization is actually completed,
-		//			the deferred callback function is called with the result). The primary use for this
-		//			is to make the authElement visible to the user once the resource has loaded
-		//			(this can be preferable to showing the iframe while the resource is loading
-		//			since it may not require authorization, it may simply return the resource).
+		//		By providing an authElement, this indicates that windowName should use the
+		//		authorized window.name protocol, relying on
+		//		the loaded XD resource to return to the provided return URL on completion
+		//		of authorization/authentication. The provided authElement will be used to place
+		//		the iframe in, so the user can interact with the server resource for authentication
+		//		and/or authorization to access the resource.
+		//
+		//		####args.onAuthLoad: Function?
+		//
+		//		When using authorized access to resources, this function will be called when the
+		//		authorization page has been loaded. (When authorization is actually completed,
+		//		the deferred callback function is called with the result). The primary use for this
+		//		is to make the authElement visible to the user once the resource has loaded
+		//		(this can be preferable to showing the iframe while the resource is loading
+		//		since it may not require authorization, it may simply return the resource).
 		//
 		// description:
 		//		In order to provide a windowname transport accessible resources/web services, a server

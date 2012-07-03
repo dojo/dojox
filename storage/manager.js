@@ -60,10 +60,9 @@ dojox.storage.manager = new function(){
 		// summary:
 		//		Instructs the storageManager to use the given storage class for
 		//		all storage requests.
-		// description:
-		//		Example-
-		//			dojox.storage.setProvider(
-		//				dojox.storage.IEStorageProvider)
+		// example:
+		//	|	dojox.storage.setProvider(
+		//	|		dojox.storage.IEStorageProvider)
 
 	};
 
@@ -178,10 +177,9 @@ dojox.storage.manager = new function(){
 	this.supportsProvider = function(/*string*/ storageClass){ /* Boolean */
 		// summary:
 		//		Determines if this platform supports the given storage provider.
-		// description:
-		//		Example-
-		//			dojox.storage.manager.supportsProvider(
-		//				"dojox.storage.InternetExplorerStorageProvider");
+		// example:
+		// |	dojox.storage.manager.supportsProvider(
+		// |		"dojox.storage.InternetExplorerStorageProvider");
 
 		// construct this class dynamically
 		try{
@@ -210,15 +208,14 @@ dojox.storage.manager = new function(){
 		//		system. You can either use dojo.connect to connect to this
 		//		function, or can use dojox.storage.manager.addOnLoad() to add
 		//		a listener that does not depend on the dojo.event package.
-		// description:
-		//		Example 1-
-		//			if(dojox.storage.manager.isInitialized() == false){
-		//				dojo.connect(dojox.storage.manager, "loaded", TestStorage, "initialize");
-		//			}else{
-		//				dojo.connect(dojo, "loaded", TestStorage, "initialize");
-		//			}
-		//		Example 2-
-		//			dojox.storage.manager.addOnLoad(someFunction);
+		// example:
+		// |	if(dojox.storage.manager.isInitialized() == false){
+		// |		dojo.connect(dojox.storage.manager, "loaded", TestStorage, "initialize");
+		// |	}else{
+		// |		dojo.connect(dojo, "loaded", TestStorage, "initialize");
+		// |	}
+		// example:
+		// |	dojox.storage.manager.addOnLoad(someFunction);
 
 
 		// FIXME: we should just provide a Deferred for this. That way you
