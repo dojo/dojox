@@ -303,25 +303,25 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	// delimiter [public] String
 	//		A token that is used to identify the end of a word (a complete unit). It prevents the service from
 	//		cutting a single word into two parts. For example:
-	//			"Dojo toolkit is a ajax framework. It helps the developers buid their web applications."
+	// |		"Dojo toolkit is a ajax framework. It helps the developers buid their web applications."
 	//		Without the delimiter, the sentence might be split into the follow pieces which is absolutely
 	//		not the result we want.
-	//			"Dojo toolkit is a ajax fram", "ework It helps the developers bu", "id their web applications"
+	// |		"Dojo toolkit is a ajax fram", "ework It helps the developers bu", "id their web applications"
 	//		Having " " as the delimiter, we get the following correct pieces.
-	//			"Dojo toolkit is a ajax framework", " It helps the developers buid", " their web applications"
+	// |		"Dojo toolkit is a ajax framework", " It helps the developers buid", " their web applications"
 	delimiter: " ",
 	
 	// label [public] String
 	//		The leading label of the JSON response. The service will return the result like this:
-	//		{response: [
-	//				{
-	//					text: "teest",
-	//					suggestion: ["test","treat"]
-	//				}
-	//			]}
+	// |	{response: [
+	// |		{
+	// |			text: "teest",
+	// |			suggestion: ["test","treat"]
+	// |		}
+	// |	]}
 	label: "response",
 	
-	// _timeout [private] Number
+	// _timeout: [private] Number
 	//		Set JSONP timeout period
 	_timeout: 30000,
 	SEC: 1000,
@@ -361,7 +361,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 			timeout = this._timeout,
 			l = 0, r = 0;
 		
-		// Temparary list that holds the result returns from the service, which will be
+		// Temporary list that holds the result returns from the service, which will be
 		// assembled into a completed one.
 		if(!this._result) {
 			this._result = [];

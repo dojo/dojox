@@ -17,23 +17,20 @@ dojoxFx.animateTimeline = function(options, node){
 	//		to the second to the third.
 	//		Each keyframe can accept the following custom properties:
 	//
-	//		- step: String
+	//		- step: String:
 	//		  The start, finish or percentage that this keyframe represents.
 	//		  Allowed parameters are:
-	//			0%-100%
-	//			from (same as 0%, used to conform with the Webkit animation spec)
-	//			to (same as 100%, used to conform with the Webkit animation spec)
-	//		- ease: String
+	//			- 0%-100%
+	//			- from (same as 0%, used to conform with the Webkit animation spec)
+	//			- to (same as 100%, used to conform with the Webkit animation spec)
+	//		- ease: String:
 	//		  The string name of a dojo.fx.easing ease. Defaults to "linear". Use
 	//		  the suffix name of the ease, like: "quadIn", not: "dojo.fx.quadIn".
 	// options: Object
 	//		The parameters passed to the timeline animation. Includes:
 	//
-	//		- keys: Array
-	//			An array of objects, with style properties and values.
-	//		- duration:
-	//			Duration of the animation in milliseconds.
-	//			Defaults to 1000.
+	//		- keys: Array: An array of objects, with style properties and values.
+	//		- duration: Duration of the animation in milliseconds.  Defaults to 1000.
 	// node: DomNode|String
 	//		The DomNode or id to be animated.
 	// example:

@@ -176,13 +176,13 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		//		Fires on upload progress. Event is a normalized object of common properties
 		//		from HTML5 uploaders and the Flash uploader. Will not fire for IFrame.
 		// customEvent:
-		//		bytesLoaded: Number
+		//		- bytesLoaded: Number:
 		//			Amount of bytes uploaded so far of entire payload (all files)
-		//		bytesTotal: Number
+		//		- bytesTotal: Number:
 		//			Amount of bytes of entire payload (all files)
-		//		type: String
+		//		- type: String:
 		//			Type of event (progress or load)
-		//		timeStamp: Number
+		//		- timeStamp: Number:
 		//			Timestamp of when event occurred
 	},
 

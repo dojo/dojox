@@ -802,16 +802,16 @@ var Base = oo.declare(
 		applyTransform: function(mx){
 			// summary:
 			//		Applies the transform to the stencil
-			//		NOTE: PARTIALLY IMPLEMENTED
-			//			Only applies x y coords
+			//
+			//		NOTE: PARTIALLY IMPLEMENTED.  Only applies x y coords.
 			this.transformPoints(mx);
 		},
 
 		setTransform: function(/*Object*/mx){
 			// summary:
 			//		Sets the transform to the stencil
-			//		NOTE: PARTIALLY IMPLEMENTED
-			//			Only applies x y coords
+			//
+			//		NOTE: PARTIALLY IMPLEMENTED.  Only applies x y coords.
 			this.attr({
 				x:mx.dx,
 				y:mx.dy
@@ -907,7 +907,7 @@ var Base = oo.declare(
 			//		canvas. Therefore Lines could get flipped. Use absolute
 			//		to prevent this.
 			// absolute: Boolean
-			//			Keeps lines from flipping (see note).
+			//		Keeps lines from flipping (see note).
 
 			var p = this.points, x1, y1, x2, y2;
 			if(p.length==2){

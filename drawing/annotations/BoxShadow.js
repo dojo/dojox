@@ -39,11 +39,13 @@ return oo.declare(
 
 			// place: String
 			//		Tells the position of the shadow:
-			//			B: bottom
-			//			T: top
-			//			L: left
-			//			R: right
-			//			C: center, or a glow
+			//
+			//		- B: bottom
+			//		- T: top
+			//		- L: left
+			//		- R: right
+			//		- C: center, or a glow
+			//
 			//		Can be used in combinations such as BR, BL, L, T, etc. 'C' should
 			//		be used by itself.
 			place:"BR",

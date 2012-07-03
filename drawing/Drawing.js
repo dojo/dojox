@@ -94,9 +94,10 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		constructor: function(/* Object */props, /* HTMLNode */node){
 			// summary:
 			//		Drawing is not a Dijit. This is the master method.
+			//
 			//		NOTE:
-			//			props is always null since this is not a real widget
-			//			Will change when Drawing can be created programmatically.
+			//		props is always null since this is not a real widget
+			//		Will change when Drawing can be created programmatically.
 
 			var def = dojo.attr(node, "defaults");
 			this.defaults =  def ? (typeof def === 'string' ? dojo.getObject(def) : def) : defaults;
@@ -224,7 +225,7 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 		initPlugins: function(){
 			// summary:
 			//		Called from Toolbar after a plugin has been loaded
-			//		The call to this coming from toobar is a bit funky as the timing
+			//		The call to this coming from toolbar is a bit funky as the timing
 			//		of IE for canvas load is different than other browsers
 			if(!this.canvas || !this.canvas.surfaceReady){
 				var c = dojo.connect(this, "onSurfaceReady", this, function(){
@@ -290,10 +291,11 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// summary:
 			//		Use this method to programmatically add Stencils that display on
 			//		the canvas.
+			//
 			//		FIXME: Currently only supports Stencils that have been registered,
-			//			which is items in the toolbar, and the additional Stencils at the
-			//			end of onSurfaceReady. This covers all Stencils, but you can't
-			//			use 'display only' Stencils for Line, Rect, and Ellipse.
+			//		which is items in the toolbar, and the additional Stencils at the
+			//		end of onSurfaceReady. This covers all Stencils, but you can't
+			//		use 'display only' Stencils for Line, Rect, and Ellipse.
 			// type: String
 			//		The final name of the tool, lower case: 'image', 'line', 'textBlock'
 			// options:
@@ -326,10 +328,11 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// summary:
 			//		Use this method to programmatically add Stencils that display on
 			//		the canvas.
+			//
 			//		FIXME: Currently only supports Stencils that have been registered,
-			//			which is items in the toolbar, and the additional Stencils at the
-			//			end of onSurfaceReady. This covers all Stencils, but you can't
-			//			use 'display only' Stencils for Line, Rect, and Ellipse.
+			//		which is items in the toolbar, and the additional Stencils at the
+			//		end of onSurfaceReady. This covers all Stencils, but you can't
+			//		use 'display only' Stencils for Line, Rect, and Ellipse.
 			// type: String
 			//		The final name of the tool, lower case: 'image', 'line', 'textBlock'
 			// options: Object

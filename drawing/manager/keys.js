@@ -45,7 +45,7 @@ function(dojo, utilCommon){
 
 		// meta: [readonly] Boolean
 		//		Indicates whether any 'meta' key is currently pressed:
-		//			shift || ctrl || cmmd || alt
+		//		shift || ctrl || cmd || alt
 		meta:false, // any meta key
 		
 		onDelete: function(/* Event */evt){

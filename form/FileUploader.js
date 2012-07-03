@@ -31,8 +31,8 @@ kernel.deprecated("dojox.form.FileUploader", "Use dojox.form.Uploader", "2.0");
 
 	//	Usage Notes:
 	//		To center text vertically, use vertical-align:middle;
-	//			which emulates a boxModel button. Using line-height to center text
-	//			can cause height problems in IE6
+	//		which emulates a boxModel button. Using line-height to center text
+	//		can cause height problems in IE6
 
 return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	// version:
@@ -225,19 +225,21 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	//		(an array, or an array of arrays)
 	//		Restrict file selection to certain file types
 	//		Empty array defaults to "All Files"
+	//
 	//		example:
-	//			|	fileMask = ["Images", "*.jpg;*.jpeg;*.gif;*.png"]
-	//			or
-	//		|	fileMask = [
-	//		|		["Jpeg File", 	"*.jpg;*.jpeg"],
-	//		|		["GIF File", 	"*.gif"],
-	//		|		["PNG File", 	"*.png"],
-	//		|		["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"],
-	//		|	]
+	//
+	//	|	fileMask = ["Images", "*.jpg;*.jpeg;*.gif;*.png"]
+	//		or
+	//	|	fileMask = [
+	//	|		["Jpeg File", 	"*.jpg;*.jpeg"],
+	//	|		["GIF File", 	"*.gif"],
+	//	|		["PNG File", 	"*.png"],
+	//	|		["All Images", 	"*.jpg;*.jpeg;*.gif;*.png"],
+	//	|	]
 	//
 	//		NOTE: MacType is not supported, as it does not work very well.
-	//			fileMask will work on a Mac, but differently than
-	//			Windows.
+	//		fileMask will work on a Mac, but differently than
+	//		Windows.
 	fileMask: null,
 
 	// minFlashVersion: Number

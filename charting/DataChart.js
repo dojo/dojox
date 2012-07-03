@@ -144,20 +144,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		Set up properties and initialize chart build.
 			// node: DomNode
-			//			The node to attach the chart to.
+			//		The node to attach the chart to.
 			// kwArgs: Object
-			//			xaxis: Object
-			//				optional parameters for xaxis (see above)
-			//			yaxis: Object
-			//				optional parameters for yaxis (see above)
-			//			store: Object
-			//				dojo.data store (currently nly supports Persevere)
-			//			xaxis: Object
-			//				First query for store
-			//			grid: Object
-			//				Options for the grid plot
-			//			chartPlot: Object
-			//				Options for chart elements (lines, bars, etc)
+			//		- xaxis: Object: optional parameters for xaxis (see above)
+			//		- yaxis: Object: optional parameters for yaxis (see above)
+			//		- store: Object: dojo.data store (currently nly supports Persevere)
+			//		- xaxis: Object: First query for store
+			//		- grid: Object: Options for the grid plot
+			//		- chartPlot: Object: Options for chart elements (lines, bars, etc)
 
 			this.domNode = dom.byId(node);
 

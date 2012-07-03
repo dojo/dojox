@@ -56,7 +56,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 // TODO:
 //		Currently not supporting merging or splitting cells
 //
-// FIXME:	Undo is very buggy, and therefore unimeplented in all browsers
+// FIXME:	Undo is very buggy, and therefore unimplemented in all browsers
 //			except IE - which itself has only been lightly tested.
 //
 // FIXME:	Selecting multiple table cells in Firefox looks to be impossible.

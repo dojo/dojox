@@ -3,9 +3,9 @@ function(dojo, oo, Plugin){
 
 var Zoom = oo.declare(
 	// NOTE:
-	//			dojox.drawing.ui.dom.Zoom is DEPRECATED.
-	//			This was a temporary DOM solution. Use the non-dom
-	//			tools for Toobar and Plugins.
+	//		dojox.drawing.ui.dom.Zoom is DEPRECATED.
+	//		This was a temporary DOM solution. Use the non-dom
+	//		tools for Toolbar and Plugins.
 
 	// summary:
 	//		A plugin that allows for zooming the canvas in and out. An

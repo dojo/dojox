@@ -160,15 +160,19 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 			//		Enables bidi support for truncated labels.
 			// description:
 			//		Can be two types of labels: html or gfx.
-			//		gfx labels: 
-			//			Need to be stored in registry to be used when the textDir will be set dynamically.
-			//			Additional work on truncated labels is needed for case as 111111A (A stands for "bidi" character rtl directioned).
-			//			let say in this case the truncation is "111..." If the textDir is auto, the display should be: "...111" but in gfx
-			//			case we will get "111...". Because this.surface.setTextDir will calculate the dir of truncated
-			//			label, which value is "111..." but th real is "111111A".
-			//			each time we created a gfx truncated label we store it in the truncatedLabelsRegistry.
-			//		html labels:
-			//			no need for repository (stored in another place). Here we only need to update the current dir according to textDir.
+			//
+			//		####gfx labels:
+			//
+			//		Need to be stored in registry to be used when the textDir will be set dynamically.
+			//		Additional work on truncated labels is needed for case as 111111A (A stands for "bidi" character rtl directioned).
+			//		let's say in this case the truncation is "111..." If the textDir is auto, the display should be: "...111" but in gfx
+			//		case we will get "111...". Because this.surface.setTextDir will calculate the dir of truncated
+			//		label, which value is "111..." but th real is "111111A".
+			//		each time we created a gfx truncated label we store it in the truncatedLabelsRegistry.
+			//
+			//		####html labels:
+			//
+			//		no need for repository (stored in another place). Here we only need to update the current dir according to textDir.
 			// tags:
 			//		private
 		

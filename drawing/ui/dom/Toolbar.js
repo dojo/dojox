@@ -3,11 +3,11 @@ dojo.deprecated("dojox.drawing.ui.dom.Toolbar", "It may not even make it to the 
 
 return dojo.declare("dojox.drawing.ui.dom.Toolbar", [], {
 		// NOTE:
-		//			dojox.drawing.Toolbar is DEPRECATED.
-		//			The intention never was to use HTML as buttons for a Drawing.
-		//			This was implemented in order to finish the project for which
-		//			Drawing was developed.
-		//			Instead use: drawing/ui/Toolbar.js
+		//		dojox.drawing.Toolbar is DEPRECATED.
+		//		The intention never was to use HTML as buttons for a Drawing.
+		//		This was implemented in order to finish the project for which
+		//		Drawing was developed.
+		//		Instead use: drawing/ui/Toolbar.js
 
 		// summary:
 		//		Creates a Toolbar to be used with a DojoX Drawing.

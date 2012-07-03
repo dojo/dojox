@@ -38,8 +38,7 @@ dojox.flash = {
 	//		setSwf can take an optional 'visible' attribute to control whether
 	//		the Flash object is visible or not on the page; the default is visible:
 	//
-	// |	dojox.flash.setSwf(dojo.moduleUrl("dojox", "_storage/storage.swf"),
-	//						false);
+	// |	dojox.flash.setSwf(dojo.moduleUrl("dojox", "_storage/storage.swf"), false);
 	//
 	//		Once finished, you can query Flash version information:
 	//

@@ -7,8 +7,8 @@ define({
 	//		To change all these styles, create a copy of this file
 	//		and point to it in the Drawing properties:
 	//		|	<div dojoType="dojox.drawing.Drawing" id="drawing" defaults="MyCustom.defaults"></div>
-	//		See:
-	//			Drawing.changeDefaults
+	//
+	//		See: Drawing.changeDefaults
 
 	// clickMode: Boolean
 	//		Determines whether in draw or edit mode (whether stencils

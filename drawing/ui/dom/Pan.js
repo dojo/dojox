@@ -4,9 +4,9 @@ dojo.deprecated("dojox.drawing.ui.dom.Pan", "It may not even make it to the 1.4 
 
 var Pan = oo.declare(
 	// NOTE:
-	//			dojox.drawing.ui.dom.Pan is DEPRECATED.
-	//			This was a temporary DOM solution. Use the non-dom
-	//			tools for Toobar and Plugins.
+	//		dojox.drawing.ui.dom.Pan is DEPRECATED.
+	//		This was a temporary DOM solution. Use the non-dom
+	//		tools for Toolbar and Plugins.
 
 	// summary:
 	//		A plugin that allows for a scrolling canvas. An action

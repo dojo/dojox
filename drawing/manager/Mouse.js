@@ -51,8 +51,8 @@ return oo.declare(
 			//		will be sent a EventObject event object.
 			//
 			//		NOTE:
-			//			Events happen anywhere in the document unless
-			//			otherwise noted.
+			//		Events happen anywhere in the document unless
+			//		otherwise noted.
 
 			// onMove: Function
 			//		Fires on mousemove when mouse is up
@@ -77,8 +77,9 @@ return oo.declare(
 			// summary:
 			//		The custom event object that is sent to registered objects
 			//		and their respective methods.
+			//
 			//		NOTE: Most event objects are the same with the exception
-			//			of the onDown events, which have fewer.
+			//		of the onDown events, which have fewer.
 
 			// id: String
 			//		Id of the focused object (included in onDown)

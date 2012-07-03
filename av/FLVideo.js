@@ -176,11 +176,13 @@ dojo.declare("dojox.av.FLVideo", [_Widget, _Media], {
 	onMetaData: function(data, evt){
 		// summary:
 		//		The video properties. Width, height, duration, etc.
-		//		NOTE: 	if data is empty, this is an older FLV with no meta data.
-		//				Duration cannot be determined. In original FLVs, duration
-		//				could only be obtained with Flash Media Server.
-		//		NOTE: 	Older FLVs can still return width and height
-		//				and will do so on a second event call
+		//
+		//		NOTE: if data is empty, this is an older FLV with no meta data.
+		//		Duration cannot be determined. In original FLVs, duration
+		//		could only be obtained with Flash Media Server.
+		//
+		//		NOTE: Older FLVs can still return width and height
+		//		and will do so on a second event call
 	},
 
 	onPosition: function( time){

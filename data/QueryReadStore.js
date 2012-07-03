@@ -15,10 +15,10 @@ dojo.declare("dojox.data.QueryReadStore",
 		//		letters "ac" it returns only items like "action", "acting", etc.
 		//
 		//		note:
-		//			The field name "id" in a query is reserved for looking up data
-		//			by id. This is necessary as before the first fetch, the store
-		//			has no way of knowing which field the server will declare as
-		//			identifier.
+		//		The field name "id" in a query is reserved for looking up data
+		//		by id. This is necessary as before the first fetch, the store
+		//		has no way of knowing which field the server will declare as
+		//		identifier.
 		//
 		// example:
 		// |	// The parameter "query" contains the data that are sent to the server.

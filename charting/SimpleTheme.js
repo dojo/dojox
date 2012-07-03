@@ -40,8 +40,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//		theme object from a Chart, and not in the theme itself (i.e. either do that before using .setTheme
 	//		on a chart).
 	//
-	//		example:
-	//			The default theme (and structure) looks like so:
+	// example:
+	//		The default theme (and structure) looks like so:
 	//	|	// all objects are structs used directly in dojox.gfx
 	//	|	chart:{
 	//	|		stroke: null,

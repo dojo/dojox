@@ -6,8 +6,8 @@ var Anchor = oo.declare(
 		// summary:
 		//		constructor.
 		// options:
-		//			dojox.__stencilArgs plus some additional
-		//			data, like which point this is (pointIdx)
+		//		dojox.__stencilArgs plus some additional
+		//		data, like which point this is (pointIdx)
 
 		this.defaults = defaults.copy();
 		this.mouse = options.mouse;
