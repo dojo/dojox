@@ -164,7 +164,7 @@
 }
 
 /* cells */
-.claro .dojoxGridCell {
+.claro .dojoxGrid .dojoxGridCell {
 	outline: none;
 	padding: 3px 5px;
 	word-wrap: break-word;
