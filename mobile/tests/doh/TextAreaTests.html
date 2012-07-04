@@ -15,14 +15,14 @@
 	var WIDGET_CLASSNAME1 = "mblTextArea";
 	var WIDGET_OFFSETHEIGHT1 = 58;
 	var WIDGET_OFFSETHEIGHT1_FF = 75;
-	var WIDGET_OFFSETHEIGHT1_IE = 58;
+	var WIDGET_OFFSETHEIGHT1_IE = 55; // IE9
 	var WIDGET_OFFSETHEIGHT2 = 58;
-	var WIDGET_OFFSETHEIGHT2_IE = "34";
+	var WIDGET_OFFSETHEIGHT2_IE = "34"; // IE9
 	var WIDGET_SCROLLHEIGHT1 = 56;
-	var WIDGET_SCROLLHEIGHT1_IE = 24;
+	var WIDGET_SCROLLHEIGHT1_IE = 23; // IE9
 	var WIDGET_SCROLLHEIGHT1_FF = 65;
 	var WIDGET_SCROLLHEIGHT2 = 88;
-	var WIDGET_SCROLLHEIGHT2_IE = 88;
+	var WIDGET_SCROLLHEIGHT2_IE = 113; // IE9
 	var WIDGET_SCROLLHEIGHT2_FF = 80;
 
 	require([
@@ -63,6 +63,9 @@
 		};
 
 		function _assertCorrectTextArea(widget, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2){
+			if(offsetHeight1 < 0){
+				return; // Skip for IE<9 (a negative offsetHeight1 is the convention we use for skipping) 
+			}
 			runner.assertNotEqual(null, widget, "TextArea: Did not instantiate.");
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
 			runner.assertEqual(offsetHeight1, widget.domNode.offsetHeight, "offsetHeight1 id=" + widget.domNode.id);
@@ -86,6 +89,10 @@
 			var offsetHeight2 = offsetHeight1;
 			var scrollHeight1 = has("ie") ? WIDGET_SCROLLHEIGHT1_IE:has("ff") ? WIDGET_SCROLLHEIGHT1_FF:WIDGET_SCROLLHEIGHT1;
 			var scrollHeight2 = has("ie") ? WIDGET_SCROLLHEIGHT2_IE:has("ff") ? WIDGET_SCROLLHEIGHT2_FF:WIDGET_SCROLLHEIGHT2;
+			// Skip the checks for IE<9
+			if(has("ie") < 9){
+				offsetHeight1 = -1; // negative value as convention for skipping tests
+			} 
 			runner.register("dojox.mobile.test.doh.TextArea", [
 				{
 					name: "TextArea Verification1",

@@ -11,9 +11,9 @@
 	var BUTTON_LABEL = "Button";
 	var BUTTON_WIDTH = 58;
 	var BUTTON_WIDTH_FF = 64;
-	var BUTTON_WIDTH_IE = 81;
+	var BUTTON_WIDTH_IE = 58; // IE9
 	var BUTTON_HEIGHT = 27;
-	var BUTTON_HEIGHT_IE = 25;
+	var BUTTON_HEIGHT_IE = 27; // IE9
 
 	require([
 		"dojo/_base/sniff",
@@ -41,6 +41,9 @@
 			return new Button({label:BUTTON_LABEL}, buttonId);
 		}
 		function _assertCorrectButton(width, height, button){
+			if(width < 0){
+				return; // Skip for IE<9 (a negative width is the convention we use for skipping) 
+			}
 			runner.assertNotEqual(null, button);
 			runner.assertEqual(width, button.domNode.clientWidth, "width id=" + button.domNode.id);
 			runner.assertEqual(height, button.domNode.clientHeight, "height id=" + button.domNode.id);
@@ -52,6 +55,10 @@
 		ready(function(){
 			var buttonWidth = has("ie") ? BUTTON_WIDTH_IE : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
 			var buttonHeight = has("ie") ? BUTTON_HEIGHT_IE : BUTTON_HEIGHT;
+			// Skip the checks for IE<9
+			if(has("ie") < 9){
+				buttonWidth = -1; // negative value as convention for skipping tests
+			} 
 			runner.register("dojox.mobile.test.doh.ButtonTests", [
 				function testInView1(){
 					var button1 = _createButtonDeclaratively("view1-button1");

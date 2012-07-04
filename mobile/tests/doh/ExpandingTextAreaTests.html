@@ -17,14 +17,15 @@
 	var WIDGET_CLASSNAME2 = "mblExpandingTextArea";
 	var WIDGET_HEIGHT1 = "16px";
 	var WIDGET_HEIGHT1_FF = "33px";
-//	var WIDGET_HEIGHT1_IE = "104px";
 //	var WIDGET_HEIGHT1_IE6 = "24px";
-	var WIDGET_HEIGHT1_IE = "24px";
+//	var WIDGET_HEIGHT1_IE8 = "26px";
+	var WIDGET_HEIGHT1_IE = "25px"; // IE9
 	var WIDGET_OFFSETHEIGHT1 = 26;
 	var WIDGET_OFFSETHEIGHT1_FF = 43;
-	var WIDGET_OFFSETHEIGHT1_IE = 34;
+	var WIDGET_OFFSETHEIGHT1_IE = 35; // IE9
 	var WIDGET_OFFSETHEIGHT2 = 90;
-	var WIDGET_OFFSETHEIGHT2_IE = "123";
+//	var WIDGET_OFFSETHEIGHT2_IE8 = "133";
+	var WIDGET_OFFSETHEIGHT2_IE = "125"; // IE9
 
 	require([
 		"dojo/_base/connect",
@@ -59,6 +60,9 @@
 			return r;
 		}
 		function _assertCorrectExpandingTextArea(widget, styleHeight, offsetHeight1, offsetHeight2){
+			if(styleHeight < 0){
+				return; // Skip for IE<9 (a negative styleHeight is the convention we use for skipping) 
+			}
 			runner.assertNotEqual(null, widget, "IconItem: Did not instantiate.");
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME2), WIDGET_CLASSNAME2 + " id=" + widget.domNode.id);
@@ -77,9 +81,12 @@
 		}
 		ready(function(){
 			var styleHeight =  has("ie") ? WIDGET_HEIGHT1_IE:has("ff") ? WIDGET_HEIGHT1_FF:WIDGET_HEIGHT1;
-//			var styleHeight =  has("ie") === 6 ? WIDGET_HEIGHT1_IE6:(dojo.isIE ? WIDGET_HEIGHT1_IE:WIDGET_HEIGHT1);
 			var offsetHeight1 = has("ie") ? WIDGET_OFFSETHEIGHT1_IE:has("ff") ? WIDGET_OFFSETHEIGHT1_FF:WIDGET_OFFSETHEIGHT1;
 			var offsetHeight2 = has("ie") ? WIDGET_OFFSETHEIGHT2_IE:WIDGET_OFFSETHEIGHT2;
+			// Skip the checks for IE<9
+			if(has("ie") < 9){
+				styleHeight = -1; // negative value as convention for skipping tests
+			} 
 			runner.register("dojox.mobile.test.doh.ExpandingTextArea", [
 				{
 					name: "ExpandingTextArea Verification1",

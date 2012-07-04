@@ -26,22 +26,35 @@
 				var view = registry.byId("view1");
 				var demoWidget = new SpinWheel({id:"spin1"});
 				demoWidget.placeAt(view.containerNode);
-				var slot1 = new SpinWheelSlot({labels:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'], style:"text-align:center;width:40px;"});
+				
+				// No initial value specified
+				var slot0 = new SpinWheelSlot({labels:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'], 
+					style:"text-align:center;width:40px;"});
+				demoWidget.addChild(slot0);
+				
+				// Initial value: C
+				var slot1 = new SpinWheelSlot({labels:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'], 
+					value:'C', style:"text-align:center;width:40px;"});
 				demoWidget.addChild(slot1);
 
+				// No initial value specified
 				var slot2 = new SpinWheelSlot({labelFrom:3000, labelTo:3100, style:"width:70px;"});
 				demoWidget.addChild(slot2);
+				
+				// Initial value: 3009 
+				var slot3 = new SpinWheelSlot({labelFrom:3000, labelTo:3100, value:3009, style:"width:70px;"});
+				demoWidget.addChild(slot3);
 
 				domConst.create("div", {className: "mblSpinWheelSlot", id:"pt"}, demoWidget.containerNode);
 				domConst.create("div", {className: "mblSpinWheelSlot", id:"txt", innerHTML:"."}, demoWidget.containerNode);
 
-				var slot3 = new SpinWheelSlot({labelFrom:0, labelTo:9, style:"width:30px;"});
-				demoWidget.addChild(slot3);
-
-				var slot4 = new SpinWheelSlot({labels:['pt','px','cm'], style:"width:50px;"});
+				var slot4 = new SpinWheelSlot({labelFrom:0, labelTo:9, style:"width:30px;"});
 				demoWidget.addChild(slot4);
 
-				var slot5 = new SpinWheelSlot({
+				var slot5 = new SpinWheelSlot({labels:['pt','px','cm'], style:"width:50px;"});
+				demoWidget.addChild(slot5);
+
+				var slot6 = new SpinWheelSlot({
 					labels:[
 					'<img src=../images/i-icon-1.png>',
 					'<img src=../images/i-icon-2.png>',
@@ -56,7 +69,7 @@
 					],
 					style:"width:70px;text-align: center;"
 				});
-				demoWidget.addChild(slot5);
+				demoWidget.addChild(slot6);
 
 				demoWidget.reset();
 			});
@@ -86,10 +99,12 @@
 								var demoWidget = registry.byId("spin1");
 								var slots = demoWidget.getSlots();
 								doh.assertEqual('A', slots[0].get("value"));
-								doh.assertEqual('3000', slots[1].get("value"));
-								doh.assertEqual('0', slots[2].get("value"));
-								doh.assertEqual('pt', slots[3].get("value"));
-								doh.assertEqual('<img src=../images/i-icon-1.png>', slots[4].get("value"));
+								doh.assertEqual('C', slots[1].get("value"));
+								doh.assertEqual('3000', slots[2].get("value"));
+								doh.assertEqual('3009', slots[3].get("value"));
+								doh.assertEqual('0', slots[4].get("value"));
+								doh.assertEqual('pt', slots[5].get("value"));
+								doh.assertEqual('<img src=../images/i-icon-1.png>', slots[6].get("value"));
 							}),2000);
 							return d;
 						}

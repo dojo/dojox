@@ -61,7 +61,6 @@
 			r = new ContentPane({id:widgetIds[4]});
 			domConst.place(r.domNode, placeHolderId[4], "replace");
 			r.startup();
-
 		}
 		function _createContentPaneProgrammaticallyWithSourceNodeReference(widgetIds){
 			new ContentPane({content:"<div data-dojo-type='dojox.mobile.RoundRect' shadow='true'>Pane 1 : Thank you!</div>"}, widgetIds[0]);
@@ -87,8 +86,12 @@
 			runner.assertNotEqual(null, widget, "ContentPane: Did not instantiate.");
 			runner.assertTrue(dojo.hasClass(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
 			var c = widget.getChildren();
-			runner.assertNotEqual(null, c, "ContentPane: Does not have children.");
-			runner.assertNotEqual(null, c[0], "ContentPane: Did not instantiate first child. id=" + widget.domNode.id);
+			runner.assertNotEqual(null, c, "ContentPane: Does not have children (null).");
+			runner.assertNotEqual(undefined, c, "ContentPane: Does not have children (undefined).");
+			runner.assertNotEqual(null, c[0], "ContentPane: Did not instantiate first child (null). id=" + 
+				widget.domNode.id + " c=" + c + " c[0]=" + c[0]);
+			runner.assertNotEqual(undefined, c[0], "ContentPane: Did not instantiate first child (undefined). id=" + 
+				widget.domNode.id + " c=" + c + " c[0]=" + c[0]);
 			runner.assertTrue(dojo.hasClass(c[0].domNode, WIDGET2_CLASSNAME1), WIDGET2_CLASSNAME1 + " id=" + c[0].domNode.id);
 			runner.assertTrue(dojo.hasClass(c[0].domNode, WIDGET2_CLASSNAME2), WIDGET2_CLASSNAME2 + " id=" + c[0].domNode.id);
 			runner.assertEqual(titleText, string.trim(c[0].domNode.innerHTML.replace(/\r\n/g,"")), "id=" + c[0].domNode.id);
@@ -99,13 +102,16 @@
 		}
 		ready(function(){
 			_initContentPane(["view1-pane3","view1-pane4","view1-pane5"]);
-			_createContentPaneProgrammatically(["view1-pane6","view1-pane7","view1-pane8","view1-pane9","view1-pane10"], ["view1-pane6place","view1-pane7place","view1-pane8place","view1-pane9place","view1-pane10place"]);
+			_createContentPaneProgrammatically(["view1-pane6","view1-pane7","view1-pane8","view1-pane9","view1-pane10"], 
+				["view1-pane6place","view1-pane7place","view1-pane8place","view1-pane9place","view1-pane10place"]);
 			_initContentPane(["view1-pane8","view1-pane9","view1-pane10"]);
 			_createContentPaneProgrammaticallyWithSourceNodeReference(["view1-pane11","view1-pane12","view1-pane13","view1-pane14","view1-pane15"]);
 			_initContentPane(["view1-pane13","view1-pane14","view1-pane15"]);
 
+			_showView2();
 			_initContentPane(["view2-pane3","view2-pane4","view2-pane5"]);
-			_createContentPaneProgrammatically(["view2-pane6","view2-pane7","view2-pane8","view2-pane9","view2-pane10"], ["view2-pane6place","view2-pane7place","view2-pane8place","view2-pane9place","view2-pane10place"]);
+			_createContentPaneProgrammatically(["view2-pane6","view2-pane7","view2-pane8","view2-pane9","view2-pane10"], 
+				["view2-pane6place","view2-pane7place","view2-pane8place","view2-pane9place","view2-pane10place"]);
 			_initContentPane(["view2-pane8","view2-pane9","view2-pane10"]);
 			_createContentPaneProgrammaticallyWithSourceNodeReference(["view2-pane11","view2-pane12","view2-pane13","view2-pane14","view2-pane15"]);
 			_initContentPane(["view2-pane13","view2-pane14","view2-pane15"]);
@@ -119,9 +125,14 @@
 						var d = new runner.Deferred();
 						var handle1 = connect.connect(widget, "loadHandler", this, d.getTestCallback(function(){
 							connect.disconnect(handle1);
-							_assertCorrectContentPanes(["view1-pane1","view1-pane2","view1-pane3","view1-pane4","view1-pane5"]);
-							_assertCorrectContentPanes(["view1-pane6","view1-pane7","view1-pane8","view1-pane9","view1-pane10"]);
-							_assertCorrectContentPanes(["view1-pane11","view1-pane12","view1-pane13","view1-pane14","view1-pane15"]);
+							// The loading of the content of the different ContentPane instances is performed 
+							// asynchronously in an undefined order. Hence the use of setTimeout such that the
+							// checks are performed after the loading of all ContentPanes in view1.
+							setTimeout(function() {
+								_assertCorrectContentPanes(["view1-pane1","view1-pane2","view1-pane3","view1-pane4","view1-pane5"]);
+								_assertCorrectContentPanes(["view1-pane6","view1-pane7","view1-pane8","view1-pane9","view1-pane10"]);
+								_assertCorrectContentPanes(["view1-pane11","view1-pane12","view1-pane13","view1-pane14","view1-pane15"]);
+							}, 500);
 						}));
 						return d;
 					}
@@ -134,15 +145,23 @@
 						var d = new runner.Deferred();
 						var handle2 = connect.connect(widget, "loadHandler", this, d.getTestCallback(function(){
 							connect.disconnect(handle2);
-							_assertCorrectContentPanes(["view2-pane1","view2-pane2","view2-pane3","view2-pane4","view2-pane5"]);
-							_assertCorrectContentPanes(["view2-pane6","view2-pane7","view2-pane8","view2-pane9","view2-pane10"]);
-							_assertCorrectContentPanes(["view2-pane11","view2-pane12","view2-pane13","view2-pane14","view2-pane15"]);
+							// The loading of the content of the different ContentPane instances is performed 
+							// asynchronously in an undefined order. Hence the use of setTimeout such that the
+							// checks are performed after the loading of all ContentPanes in view2.
+							setTimeout(function() {
+								_assertCorrectContentPanes(["view2-pane1","view2-pane2","view2-pane3","view2-pane4","view2-pane5"]);
+								_assertCorrectContentPanes(["view2-pane6","view2-pane7","view2-pane8","view2-pane9","view2-pane10"]);
+								_assertCorrectContentPanes(["view2-pane11","view2-pane12","view2-pane13","view2-pane14","view2-pane15"]);
+							}, 1500);
 						}));
-						_showView2();
+						// Transitioning to the view before filling it avoids errors in Chrome when testing the 
+						// presence of children. Double-checking need about what are the expectations.
+						// _showView2();
 						return d;
 					}
 				}
 			]);
+			
 			runner.run();
 
 		});
