@@ -115,8 +115,11 @@ define([
 			array.forEach(this._views, function(widgetType){
 				var widget = new widgetType(mixin, domConstruct.create('div'));
 				this.addChild(widget);
-
+				
 				var header = widget.getHeader();
+				// FIXME: When using dojox/form/DateTextBox and others, this.header isn't found...
+				// FIXME: The AMD conversion appears to have broken the fairly complex inheritance that made this possible
+				// FIXME: Simiar issue exists and should be solved for this.footer 
 				if(header){
 				//place the views's header node in the header of the main widget
 					this.header.appendChild(header);
