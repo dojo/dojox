@@ -2,6 +2,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojox/rp
 		"dojox/rpc/JsonRest", "dojox/json/schema", "dojox/data/ServiceStore"], 
   function(lang, declare, connect, rpcRest, rpcJsonRest, jsonSchema, ServiceStore) {
 
+var rpc = lang.getObject("dojox.rpc", true);
+
 /*=====
 var ServiceStore = dojox.data.ServiceStore;
 =====*/
@@ -344,7 +346,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 				(kwArgs = kwArgs || {}).service = this.service;
 			}
 			if("syncMode" in kwArgs ? kwArgs.syncMode : this.syncMode){
-				rpcConfig._sync = true;
+				rpc._sync = true;
 			}
 
 			var actions = rpcJsonRest.commit(kwArgs);
