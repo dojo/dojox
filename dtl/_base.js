@@ -249,7 +249,7 @@ define([
 		update: function(node, context){
 			// summary:
 			//		Updates this template according to the given context.
-			// node: DOMNode|String|dojo/query.NodeList
+			// node: DOMNode|String|dojo/NodeList
 			//		A node reference or set of nodes
 			// context: dojo/base/url|String|Object
 			//		The context object or location

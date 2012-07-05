@@ -58,7 +58,7 @@ lang.extend(NodeList, {
 			if(closest.length){
 				fn.call(closest[0], evt);
 			}
-		}); //dojo.NodeList
+		}); //dojo/NodeList
 	}
 });
 

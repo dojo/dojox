@@ -377,7 +377,7 @@ define([
 			//		the parent element that will receive the content
 			// cont:
 			//		the content to be set on the parent element.
-			//		This can be an html string, a node reference or a NodeList, dojo.NodeList, Array or other enumerable list of nodes
+			//		This can be an html string, a node reference or a NodeList, dojo/NodeList, Array or other enumerable list of nodes
 			// params:
 			//		Optional flags/properties to configure the content-setting. See dojo.html._ContentSetter
 			// example:
