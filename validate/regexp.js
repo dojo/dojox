@@ -254,11 +254,10 @@ dxregexp = dojox.validate.regexp = {
 			// summary:
 			//		A regular expression to match US state and territory abbreviations
 			// flags: Object?
-			//
 			//		- flags.allowTerritories  Allow Guam, Puerto Rico, etc.  Default is true.
 			//		- flags.allowMilitary  Allow military 'states', e.g. Armed Forces Europe (AE).  Default is true.
 
-			// assign default values to missing paramters
+			// assign default values to missing parameters
 			flags = (typeof flags == "object") ? flags : {};
 			if(typeof flags.allowTerritories != "boolean"){ flags.allowTerritories = true; }
 			if(typeof flags.allowMilitary != "boolean"){ flags.allowMilitary = true; }

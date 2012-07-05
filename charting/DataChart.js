@@ -41,11 +41,9 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 	return declare("dojox.charting.DataChart", Chart, {
 		// summary:
-		//		DataChart
 		//		Extension to the 2D chart that connects to a data store in
 		//		a simple manner. Convenience methods have been added for
 		//		connecting store item labels to the chart labels.
-		//
 		// description:
 		//		This code should be considered very experimental and the APIs subject
 		//		to change. This is currently an alpha version and will need some testing
@@ -65,9 +63,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//		Currently, plot lines can only be set at initialization. Setting
 		//		a new store query will have no effect (although using setStore
 		//		may work but its untested).
-		//
 		// example:
-		//
 		//	|	var chart = new dojox.charting.DataChart("myNode", {
 		//	|		displayRange:8,
 		//	|		store:dataStore,
@@ -367,7 +363,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 			}else{
 
-				// each item is a seperate series.
+				// each item is a separate series.
 				arr.forEach(items, function(m, i){
 					var nm = this.store.getLabel(m);
 					if(!this.seriesData[nm]){
@@ -502,7 +498,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		Call this function to change the chart size.
 			//		Can be connected to a layout widget that calls
 			//		resize.
-			//
+
 			var w = Math.max(dim.w, this.minWidth);
 			var h = Math.max(dim.h, this.minHeight);
 			this.resize(w, h);

@@ -48,7 +48,6 @@ dojo.require("dijit._WidgetBase");
 		labelCancel: "Cancel",
 
 		// controller: Object
-		//
 		controller: null,
 
 		// autoDelete: Boolean

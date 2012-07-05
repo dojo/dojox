@@ -258,8 +258,6 @@ return oo.declare(
 		},
 		
 		onOut: function(obj){
-			// summary:
-			//
 			this._broadcastEvent(this.overName(obj,"out"), obj);
 		},
 		

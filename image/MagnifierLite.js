@@ -3,9 +3,10 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dijit/_Widget", "dojo/dom-co
 	kernel.experimental("dojox.image.MagnifierLite");
 	
 	return declare("dojox.image.MagnifierLite", _Widget, {
-		// summary:	Adds magnification on a portion of an image element
-		//
-		// description: An unobtrusive way to add an unstyled overlay
+		// summary:
+		//		Adds magnification on a portion of an image element
+		// description:
+		//		An unobtrusive way to add an unstyled overlay
 		//		above the srcNode image element. The overlay/glass is a
 		//		scaled version of the src image (so larger images sized down
 		//		are clearer).

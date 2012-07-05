@@ -202,12 +202,8 @@ define([
 			this.__enabled = true;
 		},
 		initialize: function(store){
-			// summary:
-			//
 		},
 		uninitialize: function(store){
-			// summary:
-			//
 		},
 		invalidate: function(){
 			

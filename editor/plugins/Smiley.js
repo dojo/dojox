@@ -18,7 +18,6 @@ dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 	// summary:
 	//		This plugin allows the user to select from emoticons or "smileys"
 	//		to insert at the current cursor position.
-	//
 	// description:
 	//		The commands provided by this plugin are:
 	//
@@ -38,8 +37,6 @@ dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 	emoticonImageClass: 'dojoEditorEmoticon',
 
 	_initButton: function(){
-		// summary:
-		//
 		this.dropDown = new dojox.editor.plugins._SmileyPalette();
 		this.connect(this.dropDown, "onChange", function(ascii){
 			this.button.closeDropDown();
@@ -109,8 +106,7 @@ dojo.declare("dojox.editor.plugins.Smiley", _Plugin, {
 		//		content passed in
 		// tags:
 		//		private.
-		//
-		//
+
 		return value.replace(/\[([^\]]*)\]/g, dojo.hitch(this, this._decode));
 	},
 
