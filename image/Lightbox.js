@@ -46,7 +46,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		// modal: Boolean
 		//		If true, this Dialog instance will be truly modal and prevent closing until
 		//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
-		//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
+		//		to preserve previous behaviors. (aka: enable click-to-close on the underlay)
 		modal: false,
 
 		// _allowPassthru: Boolean
@@ -178,8 +178,12 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 		// modal: Boolean
 		//		If true, this Dialog instance will be truly modal and prevent closing until
 		//		explicitly told to by calling hide() or clicking the (x) - Defaults to false
-		//		to preserve previous behaviors. (aka: enable click-to-click on the underlay)
+		//		to preserve previous behaviors. (aka: enable click-to-close on the underlay)
 		modal: false,
+		
+		// imageClass: String
+		//		The classname to apply to the image node in the dialog (for extra styling)
+		imageClass: "dojoxLightboxImage",
 
 	/*=====
 		// _groups: Object
@@ -246,7 +250,9 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 				// ugly fix for IE being stupid. place the new image relative to the old
 				// image to allow for overriden templates to adjust the location of the
 				// titlebar. DOM will remain "unchanged" between views.
-				var tmpImg = dojo.create("img", null, _t.imgNode, "after");
+				var tmpImg = dojo.create("img", {
+					className: _t.imageClass
+				}, _t.imgNode, "after");
 				dojo.destroy(_t.imgNode);
 				_t.imgNode = tmpImg;
 				_t._makeAnims();
