@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarBase",
-	"dojox/widget/_CalendarYear"
+	"./_CalendarBase",
+	"./_CalendarYear"
 ], function(declare, _CalendarBase, _CalendarYear){
 	return declare("dojox.widget.YearlyCalendar", [_CalendarBase, _CalendarYear], {
 		// summary:

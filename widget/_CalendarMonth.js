@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarMonthView"
+	"./_CalendarMonthView"
 ], function(declare, _CalendarMonthView){
 	return declare("dojox.widget._CalendarMonth", null, {
 		// summary:

@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarView",
+	"./_CalendarView",
 	"dijit/_TemplatedMixin",
 	"dojo/query",
 	"dojo/dom-class",
@@ -163,17 +163,15 @@ define([
 			yearLabels.forEach(lang.hitch(this, function(node, cnt){
 				if(cnt <= max){
 					this._setText(node, firstYear + cnt);
-					domClass.remove(node, disabledClass);
-				}else{
-					domClass.add(node, disabledClass);
 				}
+				domClass.toggle(node, disabledClass, cnt > max);
 			}));
 
 			if(this._incBtn){
-				domClass[max < yearLabels.length ? "add" : "remove"](this._incBtn, disabledClass);
+				domClass.toggle(this._incBtn, disabledClass, max < yearLabels.length);
 			}
 			if(this._decBtn){
-				domClass[min >= firstYear ? "add" : "remove"](this._decBtn, disabledClass);
+				domClass.toggle(this._decBtn, disabledClass, min >= firstYear);
 			}
 
 			var h = this.getHeader();
@@ -184,7 +182,7 @@ define([
 
 		_updateSelectedYear: function(){
 			this._year = String((this._cachedDate || this.get("value")).getFullYear());
-			this._updateSelectedNode(".dojoxCalendarYearLabel", lang.hitch(this, function(node, idx){
+			this._updateSelectedNode(".dojoxCalendarYearLabel", lang.hitch(this, function(node){
 				return this._year !== null && node.innerHTML == this._year;
 			}));
 		},
@@ -201,7 +199,7 @@ define([
 			var sel = "dijitCalendarSelectedDate";
 			query(queryNode, this.domNode)
 				.forEach(function(node, idx, array){
-					domClass[filter(node, idx, array) ? "add" : "remove"](node.parentNode, sel);
+					domClass.toggle(node.parentNode, sel, filter(node, idx, array));
 			});
 			var selMonth = query('.dojoxCal-MY-M-Template div', this.myContainer)
 				.filter(function(node){
@@ -210,15 +208,13 @@ define([
 			if(!selMonth){return;}
 			var disabled = domClass.contains(selMonth, 'dijitCalendarDisabledDate');
 
-			domClass[disabled ? 'add' : 'remove'](this.okBtn, "dijitDisabled");
+			domClass.toggle(this.okBtn, "dijitDisabled", disabled);
 		},
 
 		onClick: function(evt){
 			// summary:
 			//		Handles clicks on month names
 			var clazz;
-			var _this = this;
-			var sel = "dijitCalendarSelectedDate";
 			function hc(c){
 				return domClass.contains(evt.target, c);
 			}

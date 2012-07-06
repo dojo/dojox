@@ -1,9 +1,9 @@
 define([
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarBase",
-	"dojox/widget/_CalendarDay",
-	"dojox/widget/_CalendarMonthYear"
+	"./_CalendarBase",
+	"./_CalendarDay",
+	"./_CalendarMonthYear"
 ], function(kernel, declare, _CalendarBase, _CalendarDay, _CalendarMonthYear){
 	kernel.experimental("dojox/widget/Calendar");
 

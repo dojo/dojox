@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarBase",
-	"dojox/widget/_CalendarMonth"
+	"./_CalendarBase",
+	"./_CalendarMonth"
 ], function(declare, _CalendarBase, _CalendarMonth){
 	return declare("dojox.widget.MonthlyCalendar", [_CalendarBase, _CalendarMonth], {
 		// summary:
@@ -13,4 +13,3 @@ define([
 		}
 	});
 });
-

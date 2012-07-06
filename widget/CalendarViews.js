@@ -1,7 +1,6 @@
 define([
-	"dojo/_base/kernel",
-	"dojox/widget/Calendar"
-], function(kernel, Calendar){
+	"dojo/_base/kernel"
+], function(kernel){
 	kernel.experimental("dojox/widget/CalendarViews");
 	return {};
 });

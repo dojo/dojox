@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/kernel",
 	"dojo/_base/declare",
-	"dojox/widget/CalendarFisheye",
-	"dojox/widget/_FisheyeFX"
+	"./CalendarFisheye",
+	"./_FisheyeFX"
 ], function(kernel, declare, CalendarFisheye, _FisheyeFX){
 	kernel.experimental("dojox/widget/CalendarFx");
 

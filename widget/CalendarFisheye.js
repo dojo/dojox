@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/Calendar",
-	"dojox/widget/_FisheyeFX"
+	"./Calendar",
+	"./_FisheyeFX"
 ], function(declare, Calendar, _FisheyeFX) {
 	return declare("dojox.widget.CalendarFisheye", [ Calendar, _FisheyeFX ], {
 		// summary:

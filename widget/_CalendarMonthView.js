@@ -1,8 +1,8 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarView",
+	"./_CalendarView",
 	"dijit/_TemplatedMixin",
-	"dojox/widget/_CalendarMonthYearView",
+	"./_CalendarMonthYearView",
 	"dojo/dom-class",
 	"dojo/_base/event",
 	"dojo/text!./Calendar/CalendarMonth.html"

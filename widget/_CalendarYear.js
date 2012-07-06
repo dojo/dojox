@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarYearView"
+	"./_CalendarYearView"
 ], function(declare, _CalendarYearView){
 	return declare("dojox.widget._CalendarYear", null, {
 		// summary:

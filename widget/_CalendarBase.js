@@ -2,21 +2,22 @@ define([
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_Container",
+	"dijit/_WidgetsInTemplateMixin",
+	"dijit/typematic",
 	"dojo/_base/declare",
 	"dojo/date",
 	"dojo/date/stamp",
 	"dojo/date/locale",
 	"dojo/dom-style",
 	"dojo/dom-class",
-	"dojo/dom-construct",
 	"dojo/_base/fx",
 	"dojo/on",
 	"dojo/_base/array",
 	"dojo/_base/lang",
-	"dojo/text!./Calendar/Calendar.html",
-	"dijit/typematic"
-], function(_WidgetBase, _TemplatedMixin, _Container, declare, dojoDate, stamp, dojoDateLocale, domStyle, domClass, domConstruct, fx, on, array, lang, template){
-	return declare("dojox.widget._CalendarBase", [_WidgetBase, _TemplatedMixin, _Container], {
+	"dojo/text!./Calendar/Calendar.html"
+], function(_WidgetBase, _TemplatedMixin, _Container, _WidgetsInTemplateMixin, dijitTypematic,
+		declare, dojoDate, stamp, dojoDateLocale, domStyle, domClass, fx, on, array, lang, template){
+	return declare("dojox.widget._CalendarBase", [_WidgetBase, _TemplatedMixin, _Container, _WidgetsInTemplateMixin], {
 		// summary:
 		//		The Root class for all _Calendar extensions
 
@@ -33,10 +34,6 @@ define([
 		//		The default behavior of the widget does not contain any effects.
 		//		The dojox.widget.CalendarFx package is needed for these.
 		useFx: true,
-
-		// widgetsInTemplate: Boolean
-		//		This widget is a container of other widgets, so this is true.
-		widgetsInTemplate: true,
 
 		// value: Date
 		//		The currently selected Date
@@ -66,10 +63,11 @@ define([
 					c.max = stamp.fromISOString(c.max);
 				}
 			}
-			this.value = this.parseInitialValue(this.value);
 		},
-		postMixInProperties: function(){
 
+		postMixInProperties: function () {
+			this.inherited(arguments);
+			this.value = this.parseInitialValue(this.value);
 		},
 
 		parseInitialValue: function(value){
@@ -113,13 +111,9 @@ define([
 
 			//Add the mixed in views.
 			array.forEach(this._views, function(widgetType){
-				var widget = new widgetType(mixin, domConstruct.create('div'));
-				this.addChild(widget);
-				
+				var widget = new widgetType(mixin).placeAt(this);
+
 				var header = widget.getHeader();
-				// FIXME: When using dojox/form/DateTextBox and others, this.header isn't found...
-				// FIXME: The AMD conversion appears to have broken the fairly complex inheritance that made this possible
-				// FIXME: Simiar issue exists and should be solved for this.footer 
 				if(header){
 				//place the views's header node in the header of the main widget
 					this.header.appendChild(header);
@@ -131,7 +125,7 @@ define([
 				domStyle.set(widget.domNode, "visibility", "hidden");
 
 				//Listen for the values in a view to be selected
-				widget.on("valueselected", lang.hitch(this, "_onDateSelected"));
+				widget.on("valueSelected", lang.hitch(this, "_onDateSelected"));
 				widget.set("value", this.get('value'));
 			}, this);
 
@@ -167,14 +161,14 @@ define([
 				domStyle.set(first.getHeader(), "display", "");
 			}
 
-			domClass[first.useHeader ? "remove" : "add"](this.container, "no-header");
+			domClass.toggle(this.container, "no-header", !first.useHeader);
 
 			first.onDisplay();
 
 			var _this = this;
 
 			var typematic = function(nodeProp, dateProp, adj){
-				dijit.typematic.addMouseListener(_this[nodeProp], _this, function(count){
+				dijitTypematic.addMouseListener(_this[nodeProp], _this, function(count){
 					if(count >= 0){	_this._adjustDisplay(dateProp, adj);}
 				}, 0.8, 500);
 			};
@@ -316,7 +310,7 @@ define([
 				}
 			});
 
-			domClass[nextWidget.useHeader ? "remove" : "add"](this.container, "no-header");
+			domClass.toggle(this.container, "no-header", !nextWidget.useHeader);
 
 			anim1.play();
 			anim2.play();
@@ -328,7 +322,7 @@ define([
 		},
 
 		_updateTitleStyle: function(){
-			domClass[this._currentChild < this._children.length -1 ? "add" : "remove"](this.header, "navToPanel");
+			domClass.toggle(this.header, "navToPanel", this._currentChild < this._children.length -1);
 		},
 
 		_slideTable: function(/*String*/widget, /*Number*/direction, /*Function*/callback){

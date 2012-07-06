@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"dojox/widget/_CalendarView",
+	"./_CalendarView",
 	"dijit/_TemplatedMixin",
 	"dojo/query",
 	"dojo/dom-class",
