@@ -54,8 +54,10 @@ define([
 		//		will cause an update of the value in the data model at location
 		//		"hello" which will in turn cause a matching update of the value in
 		//		the other textbox.
+		// tags:
+		//		deprecated
 	
-		// ref: String||dojox/mvc/StatefulModel
+		// ref: [deprecated] String||dojox/mvc/StatefulModel
 		//		The value of the data binding expression passed declaratively by
 		//		the developer. This usually references a location within an
 		//		existing datamodel and may be a relative reference based on the

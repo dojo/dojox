@@ -9,6 +9,8 @@ define([
 	"./StatefulArray"
 ], function(kernel, lang, array, declare, Stateful, getStateful, getPlainValue, StatefulArray){
 
+	kernel.deprecated("dojox/mvc/StatefulModel", "Use dojox/mvc/getStateful, dojox/mvc/getPlainValue, dojox/mvc/StatefulArray or one of the dojox/mvc/*RefControllers instead");
+
 	var StatefulModel = declare("dojox.mvc.StatefulModel", [Stateful], {
 		// summary:
 		//		Deprecated.  Use dojox/mvc/getStateful, dojox/mvc/getPlainValue, dojox/mvc/StatefulArray or one of the dojox/mvc/*RefControllers instead.
@@ -142,6 +144,9 @@ define([
 		//		outlined above support the flexible development of a number of MVC
 		//		patterns on the client. As an example, CRUD operations can be
 		//		supported with minimal application code.
+		//
+		// tags:
+		//		deprecated
 	
 		// data: Object
 		//		The plain JavaScript object / data structure used to initialize
@@ -320,10 +325,9 @@ define([
 			//		the data structure.
 			// tags:
 			//		private
-			var data = (args && "data" in args) ? args.data : this.data; 
+			var data = (args && "data" in args) ? args.data : this.data;
 
 			if(data != null){
-				kernel.deprecated("To create dojox/mvc/StatefulModel from data, dojox/mvc/getStateful() should be used.");
 				data = getStateful(data, StatefulModel.getStatefulOptions);
 				if(lang.isArray(data)){
 					// Some consumers of dojox/mvc/StatefulModel inherits it via dojo/declare(), where we cannot use array inheritance technique

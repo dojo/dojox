@@ -34,7 +34,7 @@
 				"dojo/dom",
 				"dojo/_base/array",
 				"dojo/_base/lang",
-				"dojo/_base/xhr",
+				"dojo/request/xhr",
 				"dojo/parser",
 				"dojo/when",
 				"dijit/registry",				
@@ -57,8 +57,7 @@
 
 				lookup = function(model){
 					if(isNaN(model.get("Zip"))){ return; }
-					dxhr.get({
-						url: "zips/" + model.get("Zip") + ".json",
+					dxhr.get("zips/" + model.get("Zip") + ".json", {
 						content: {postalcode: model.get("Zip"), country: model.get("County")},
 						preventCache: true,
 						handleAs: "json"
