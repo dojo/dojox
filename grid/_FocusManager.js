@@ -99,7 +99,7 @@ return declare("dojox.grid._FocusManager", null, {
 			if(inBork){
 				var sl = this.scrollIntoView();
 				try{
-					if(!this.grid.edit.isEditing()){
+					if(has("webkit") || !this.grid.edit.isEditing()){
 						util.fire(n, "focus");
 						if(sl){ this.cell.view.scrollboxNode.scrollLeft = sl; }
 					}
