@@ -43,8 +43,7 @@ define([
 		viewWidth: "",
 
 		templateString: template,
-		
-		themeable: false,
+
 		classTag: 'dojoxGrid',
 		marginBottom: 0,
 		rowPad: 2,

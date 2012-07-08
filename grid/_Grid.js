@@ -332,9 +332,10 @@ define([
 		summary: '',
 		_setSummaryAttr: 'domNode',
 		
-		// private
+		// sortInfo: [private] Number
 		sortInfo: 0,
-		themeable: true,
+
+		// _placeholders: [private] Array
 		_placeholders: null,
 
 		// _layoutClass: Object
@@ -797,7 +798,10 @@ define([
 		},
 
 		adaptWidth: function() {
-			// private: sets width and position for views and update grid width if necessary
+			// summary:
+			//		sets width and position for views and update grid width if necessary
+			// tags:
+			//		private
 			var doAutoWidth = (!this.initialWidth && this.autoWidth);
 			var w = doAutoWidth ? 0 : this.domNode.clientWidth || (this.domNode.offsetWidth - this._getPadBorder().w),
 				vw = this.views.arrange(1, w);
@@ -897,13 +901,17 @@ define([
 
 		renderRow: function(inRowIndex, inNodes){
 			// summary:
-			//		private, used internally to render rows
+			//		used internally to render rows
+			// tags:
+			//		private
 			this.views.renderRow(inRowIndex, inNodes, this._skipRowRenormalize);
 		},
 
 		rowRemoved: function(inRowIndex){
 			// summary:
-			//		private, used internally to remove rows
+			//		used internally to remove rows
+			// tags:
+			//		private
 			this.views.rowRemoved(inRowIndex);
 		},
 
@@ -1102,8 +1110,11 @@ define([
 			this.setScrollTop(this.scroller.findScrollTop(inRowIndex) + 1);
 		},
 
-		// styling (private, used internally to style individual parts of a row)
 		styleRowNode: function(inRowIndex, inRowNode){
+			// summary:
+			//		styling (used internally to style individual parts of a row)
+			// tags:
+			//		private
 			if(inRowNode){
 				this.rows.styleRowNode(inRowIndex, inRowNode);
 			}
