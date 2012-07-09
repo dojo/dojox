@@ -37,6 +37,15 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 
 	vml._bool = {"t": 1, "true": 1};
 
+	vml._reparentEvents = function(dst, src){
+		for(var name in src){
+			if(name.substr(0, 2).toLowerCase() == "on"){
+				dst[name] = src[name];
+				src[name] = null;
+			}
+		}
+	};
+
 	vml.Shape = declare("dojox.gfx.vml.Shape", gs.Shape, {
 		// summary:
 		//		VML-specific implementation of dojox.gfx.Shape methods
@@ -464,6 +473,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 				var node = this.rawNode.ownerDocument.createElement("v:roundrect");
 				node.arcsize = r;
 				node.style.display = "inline-block";
+				vml._reparentEvents(node, this.rawNode);
 				this.rawNode = node;
 				this.rawNode.__gfxObject__ = this.getUID();						
 			}else{
