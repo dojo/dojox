@@ -184,12 +184,14 @@ dojo.declare('dojox.grid._ViewManager', null, {
 
 			if(!dojo._isBodyLtr()){
 				ds.right = l + 'px';
-				// fixed rtl, the scrollbar is on the right side in FF
-				if (dojo.isMoz) {
+				// fixed rtl, the scrollbar is on the right side in FF < 4
+				if (dojo.isFF < 4) {
 					hs.right = l + v.getScrollbarWidth() + 'px';
-					hs.width = parseInt(hs.width, 10) - v.getScrollbarWidth() + 'px';
 				}else{
 					hs.right = l + 'px';
+				}
+				if(!dojo.isWebKit){
+					hs.width = parseInt(hs.width, 10) - v.getScrollbarWidth() + 'px';					
 				}
 			}else{
 				ds.left = l + 'px';
