@@ -188,12 +188,14 @@ return declare('dojox.grid._ViewManager', null, {
 
 			if(!self.grid.isLeftToRight()){
 				ds.right = l + 'px';
-				// fixed rtl, the scrollbar is on the right side in FF or WebKit
-				if (has('ff') < 4 || has('webkit')){
+				// fixed rtl, the scrollbar is on the right side in FF < 4
+				if(has('ff') < 4){
 					hs.right = l + v.getScrollbarWidth() + 'px';
-					hs.width = parseInt(hs.width, 10) - v.getScrollbarWidth() + 'px';
 				}else{
 					hs.right = l + 'px';
+				}
+				if(!has('webkit')){
+					hs.width = parseInt(hs.width, 10) - v.getScrollbarWidth() + 'px';					
 				}
 			}else{
 				ds.left = l + 'px';
