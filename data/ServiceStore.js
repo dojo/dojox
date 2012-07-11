@@ -135,6 +135,9 @@ return declare("dojox.data.ServiceStore",
 		estimateCountFactor: 1,
 		
 		getSchema: function(){
+			// summary:
+			//		Returns a reference to the JSON Schema
+			// returns: Object
 			return this.schema;
 		},
 
