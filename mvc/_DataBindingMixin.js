@@ -9,6 +9,8 @@ define([
 
 	kernel.deprecated("dojox.mvc._DataBindingMixin", "Use dojox/mvc/at for data binding.");
 
+	// Note: This should be a plain Object, not a Class.
+	// But no need to change it since it's deprecated.
 	return declare("dojox.mvc._DataBindingMixin", null, {
 		// summary:
 		//		Deprecated.  Use dojox/mvc/at for data binding.
