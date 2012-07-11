@@ -301,7 +301,8 @@ define([
 
 	var migrationAssist = new MigrationAssist();
 
-	WidgetBase.prototype.postMixInProperties = function(){
+	// Hide from the API doc tool, we want to get the documentation for the normal WidgetBase.postMixInProperties()
+	WidgetBase.prototype.postMixInProperties = /*===== WidgetBase.prototype.postMixInProperties || =====*/ function(){
 		migrationAssist.dispatch(this.declaredClass, this);
 		dojo.forEach([FixedSplitterPane, Heading, RoundRect, SpinWheel, TabBarButton, ToolBarButton, View], function(module){
 			if(this.declaredClass !== module.prototype.declaredClass && this instanceof module){
