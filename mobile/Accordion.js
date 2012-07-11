@@ -172,7 +172,9 @@ define([
 		}
 	});
 
-	lang.extend(dijit._WidgetBase, {
+	// Add these properties to _WidgetBase, but hide from doc viewer.
+	// TODO: document all of these, see dijit/layout/BorderContainer for example.
+	lang.extend(WidgetBase, /*===== {} || =====*/ {
 		alt: "",
 		label: "",
 		icon1: "",

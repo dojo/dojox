@@ -6,15 +6,18 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"dijit/registry",
+	"dijit/_WidgetBase",
 	"./iconUtils",
 	"./_ItemBase",
 	"./ProgressIndicator"
-], function(array, declare, lang, domClass, domConstruct, domStyle, registry, iconUtils, ItemBase, ProgressIndicator){
+], function(array, declare, lang, domClass, domConstruct, domStyle, registry, WidgetBase, iconUtils, ItemBase, ProgressIndicator){
 
 	// module:
 	//		dojox/mobile/ListItem
 
-	lang.extend(dijit._WidgetBase, {
+	// TODO: document these, see dojox/layout/BorderContainer for an example.
+	// For now hiding from API doc viewer.
+	lang.extend(WidgetBase, /*===== {} || =====*/ {
 		layout: "",
 		preventTouch: false
 	});

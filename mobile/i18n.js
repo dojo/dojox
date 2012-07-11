@@ -28,7 +28,9 @@ define([
 		return lang.mixin(i18n.bundle, bundle);
 	};
 
-	lang.extend(WidgetBase, {
+	// Add these functions to _WidgetBase, but hide from API doc parser because they don't seem very useful to
+	// document.
+	lang.extend(WidgetBase, /*===== {} || =====*/ {
 		mblNoConv: false,
 		_cv: function(s){
 			if(this.mblNoConv || !i18n.bundle){ return s; }

@@ -827,7 +827,9 @@ define([
 		}
 	});
 
-	lang.extend(_WidgetBase, {
+	gcl.ChildWidgetProperties = {
+		// summary:
+		//		Properties set on children of a GridContainerLite
 
 		// column: String
 		//		Column of the grid to place the widget.
@@ -838,6 +840,10 @@ define([
 		//		If true, the widget can not be draggable.
 		//		Defined only if dojo.require("dojox.layout.GridContainerLite") is done.
 		dragRestriction: false
-	});
+	};
+
+	// Add to widget base for benefit of parser.   Remove for 2.0.   Also, hide from doc viewer.
+	lang.extend(_WidgetBase, /*===== {} || =====*/ gcl.ChildWidgetProperties);
+
 	return gcl;
 });
