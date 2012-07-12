@@ -4,42 +4,7 @@ define([
 	"./sync",
 	"./_atBindingExtension"
 ], function(kernel, lang, sync){
-	/*=====
-	dojox.mvc.at.handle = {
-		// summary:
-		//		A handle of data binding target (a dojo/Stateful property), which is used for start synchronization with data binding source (another dojo/Stateful property).
 
-		// target: dojo/Stateful|String
-		//		The data binding literal or dojo/Stateful to be synchronized.
-		target: new dojo/Stateful(),
-
-		// targetProp: String
-		//		The property name in target to be synchronized.
-		targetProp: "",
-
-		// bindDirection: Number
-		//		The data binding bindDirection, choose from: dojox/mvc/sync.from, dojox/mvc/sync.to or dojox/mvc/sync.both.
-		bindDirection: dojox/mvc/sync.both,
-
-		// converter: dojox/mvc/sync.converter
-		//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
-		converter: null,
-
-		direction: function(bindDirection){
-			// summary:
-			//		Sets data binding bindDirection.
-			// bindDirection: Number
-			//		The data binding bindDirection, choose from: dojox/mvc/sync.from, dojox/mvc/sync.to or dojox/mvc/sync.both.
-		},
-
-		transform: function(converter){
-			// summary:
-			//		Attach a data converter.
-			// converter: dojox/mvc/sync.converter
-			//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
-		}
-	};
-	=====*/
 	kernel.experimental("dojox.mvc");
 
 	var at = function(/*dojo/Stateful|String*/ target, /*String*/ targetProp){
@@ -94,7 +59,7 @@ define([
 		// |			</body>
 		// |		</html>
 
-		return {
+		return { // dojox/mvc/at.handle
 			atsignature: "dojox.mvc.at",
 			target: target,
 			targetProp: targetProp,
@@ -107,8 +72,45 @@ define([
 				this.converter = converter;
 				return this;
 			}
-		}; // dojox/mvc/at handle
+		};
 	};
+
+	/*=====
+	at.handle = {
+		// summary:
+		//		A handle of data binding target (a dojo/Stateful property), which is used for start synchronization with data binding source (another dojo/Stateful property).
+
+		// target: dojo/Stateful|String
+		//		The data binding literal or dojo/Stateful to be synchronized.
+		target: new dojo/Stateful(),
+
+		// targetProp: String
+		//		The property name in target to be synchronized.
+		targetProp: "",
+
+		// bindDirection: Number
+		//		The data binding bindDirection, choose from: dojox/mvc/sync.from, dojox/mvc/sync.to or dojox/mvc/sync.both.
+		bindDirection: dojox/mvc/sync.both,
+
+		// converter: dojox/mvc/sync.converter
+		//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
+		converter: null,
+
+		direction: function(bindDirection){
+			// summary:
+			//		Sets data binding bindDirection.
+			// bindDirection: Number
+			//		The data binding bindDirection, choose from: dojox/mvc/sync.from, dojox/mvc/sync.to or dojox/mvc/sync.both.
+		},
+
+		transform: function(converter){
+			// summary:
+			//		Attach a data converter.
+			// converter: dojox/mvc/sync.converter
+			//		Class/object containing the converter functions used when the data goes between data binding target (e.g. data model or controller) to data binding origin (e.g. widget).
+		}
+	};
+	=====*/
 
 	// Data binding bindDirections
 	at.from = sync.from;
