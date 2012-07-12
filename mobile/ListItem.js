@@ -15,14 +15,7 @@ define([
 	// module:
 	//		dojox/mobile/ListItem
 
-	// TODO: document these, see dojox/layout/BorderContainer for an example.
-	// For now hiding from API doc viewer.
-	lang.extend(WidgetBase, /*===== {} || =====*/ {
-		layout: "",
-		preventTouch: false
-	});
-
-	return declare("dojox.mobile.ListItem", ItemBase, {
+	var ListItem = declare("dojox.mobile.ListItem", ItemBase, {
 		// summary:
 		//		An item of either RoundRectList or EdgeToEdgeList.
 		// description:
@@ -472,4 +465,23 @@ define([
 			domClass.toggle(this.domNode, this._selClass, selected);
 		}
 	});
+	
+	ListItem.ChildWidgetProperties = {
+		// summary:
+		//		These properties can be specified for the children of a dojox/mobile/ListItem.
+
+		// layout: String
+		//		Specifies the position of the ListItem child ("left", "center" or "right").
+		layout: "",
+		// preventTouch: Boolean
+		//		Disables touch events on the ListItem child.
+		preventTouch: false
+	};
+	
+	// Since any widget can be specified as a ListItem child, mix ChildWidgetProperties
+	// into the base widget class.  (This is a hack, but it's effective.)
+	// This is for the benefit of the parser.   Remove for 2.0.  Also, hide from doc viewer.
+	lang.extend(WidgetBase, /*===== {} || =====*/ ListItem.ChildWidgetProperties);
+
+	return ListItem;
 });

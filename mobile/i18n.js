@@ -28,10 +28,22 @@ define([
 		return lang.mixin(i18n.bundle, bundle);
 	};
 
-	// Add these functions to _WidgetBase, but hide from API doc parser because they don't seem very useful to
-	// document.
-	lang.extend(WidgetBase, /*===== {} || =====*/ {
-		mblNoConv: false,
+	i18n.I18NProperties = {
+		// summary:
+		//		These properties can be specified for any widget once the dojox/mobile/i18n module is loaded.
+
+		// mblNoConv: Boolean
+		//		Disables localization by dojox/mobile/i18n for the widget on which the property is set.
+		mblNoConv: false
+	};
+
+	// Since any widget can have properties localized by dojox/mobile/i18n, mix I18NProperties
+	// into the base widget class.  (This is a hack, but it's effective.)
+	// This is for the benefit of the parser.   Remove for 2.0.  Also, hide from doc viewer.
+	lang.extend(WidgetBase, /*===== {} || =====*/ i18n.I18NProperties);
+
+	// Mixin the _cv method which is called by property setters.
+	lang.extend(WidgetBase, {
 		_cv: function(s){
 			if(this.mblNoConv || !i18n.bundle){ return s; }
 			return i18n.bundle[lang.trim(s)] || s;

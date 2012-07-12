@@ -172,20 +172,7 @@ define([
 		}
 	});
 
-	// Add these properties to _WidgetBase, but hide from doc viewer.
-	// TODO: document all of these, see dijit/layout/BorderContainer for example.
-	lang.extend(WidgetBase, /*===== {} || =====*/ {
-		alt: "",
-		label: "",
-		icon1: "",
-		icon2: "",
-		iconPos1: "",
-		iconPos2: "",
-		selected: false,
-		lazy: false
-	});
-
-	return declare("dojox.mobile.Accordion", [WidgetBase, Container, Contained], {
+	var Accordion = declare("dojox.mobile.Accordion", [WidgetBase, Container, Contained], {
 		// summary:
 		//		A layout widget that allows the user to freely navigate between panes.
 		// description:
@@ -438,4 +425,41 @@ define([
 			pane._at.set("selected", false);
 		}
 	});
+	
+	Accordion.ChildWidgetProperties = {
+		// summary:
+		//		These properties can be specified for the children of a dojox/mobile/Accordion.
+
+		// alt: String
+		//		The alternate text of the Accordion title.
+		alt: "",
+		// label: String
+		//		The label of the Accordion title.
+		label: "",
+		// icon1: String
+		//		The unselected icon of the Accordion title.
+		icon1: "",
+		// icon2: String
+		//		The selected icon of the Accordion title.
+		icon2: "",
+		// iconPos1: String
+		//		The position ("top,left,width,height") of the unselected aggregated icon of the Accordion title.
+		iconPos1: "",
+		// iconPos2: String
+		//		The position ("top,left,width,height") of the selected aggregated icon of the Accordion title.
+		iconPos2: "",
+		// selected: Boolean
+		//		The selected state of the Accordion title.
+		selected: false,
+		// lazy: Boolean
+		//		Specifies that the Accordion child must be lazily loaded.
+		lazy: false
+	};
+
+	// Since any widget can be specified as an Accordion child, mix ChildWidgetProperties
+	// into the base widget class.  (This is a hack, but it's effective.)
+	// This is for the benefit of the parser.   Remove for 2.0.  Also, hide from doc viewer.
+	lang.extend(WidgetBase, /*===== {} || =====*/ Accordion.ChildWidgetProperties);
+	
+	return Accordion;
 });
