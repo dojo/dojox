@@ -25,7 +25,7 @@
 	        pieChart1.addPlot("default", {
 	            type:       "Pie",
 	            omitLabels: true,
-	            radius:     100,
+	            radius:     100
 	        });
 	        pieChart1.addSeries("test",chartData);
 	        pieChart1.render();
@@ -34,7 +34,7 @@
 	        pieChart2.setTheme(dojox.charting.themes.PrimaryColors);
 	        pieChart2.addPlot("default", {
 	            type:       "Pie",
-	            radius:     100,
+	            radius:     100
 	        });
 	        pieChart2.addSeries("test",chartData);
 	        pieChart2.render();
@@ -45,7 +45,7 @@
 	            type:       "Pie",
 	        	labelStyle: "columns",
 	        	omitLabels: true,
-	        	radius:     100,
+	        	radius:     100
 	        });
 	        pieChart3.addSeries("test",chartData);
 	        pieChart3.render();
@@ -55,15 +55,19 @@
 	        pieChart4.addPlot("default", {
 	            type:       "Pie",
 	        	labelStyle: "columns",
-	        	radius:     100,
+	        	radius:     100
 	        });
 	        pieChart4.addSeries("test",chartData);
 	        pieChart4.render();
 	    });
 	    </script>
+		<p>Omit true</p>
 		<div id="chartNode1" style="width: 400px; height: 300px;"></div>
+		<p>Omit false<p>
 		<div id="chartNode2" style="width: 400px; height: 300px;"></div>
+		<p>Omit true</p>
 		<div id="chartNode3" style="width: 400px; height: 300px;"></div>
+		<p>Omit false</p>
 		<div id="chartNode4" style="width: 400px; height: 300px;"></div>
 	
 	</body>
