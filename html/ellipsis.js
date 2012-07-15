@@ -50,7 +50,7 @@ define("dojox/html/ellipsis",["dojo/_base/kernel", "dojo/_base/lang", "dojo/_bas
 		var dd = d.doc;
 		var dp = d.place;
 		var iFrame = create("iframe", {className: "dojoxEllipsisIFrame",
-					src: "javascript:'<html><head><script>if(\"loadFirebugConsole\" in window){window.loadFirebugConsole();}</script></head><body></body></html>'"});
+					src: "javascript:'<html><head><script>if(\"loadFirebugConsole\" in window){window.loadFirebugConsole();}</script></head><body></body></html>'", style: {display: "none"}});
 		var rollRange = function(/* W3C Range */ r, /* int? */ cnt){
 			// summary:
 			//		Rolls the given range back one character from the end
