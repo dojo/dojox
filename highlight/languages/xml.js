@@ -1,4 +1,4 @@
-define(["dojox/main", "../_base"], function(dojox){
+define(["../_base"], function(dh){
 
 	var XML_COMMENT = {
 		className: 'comment',
@@ -16,7 +16,7 @@ define(["dojox/main", "../_base"], function(dojox){
 		begin: '"', end: '"'
 	};
 	
-	var dh = dojox.highlight, dhc = dh.constants;
+	var dhc = dh.constants;
 	dh.languages.xml = {
 		defaultMode: {
 			contains: ['pi', 'comment', 'cdata', 'tag']

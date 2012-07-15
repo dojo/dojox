@@ -1,6 +1,6 @@
-define(["dojox/main", "../../_base", "../xml"], function(dojox){
+define(["../../_base", "../xml"], function(dh){
 
-	var dxml = dojox.highlight.languages.xml = {
+	var dxml = dh.languages.xml = {
 		defaultMode: {
 			contains: [
 				"name entity",

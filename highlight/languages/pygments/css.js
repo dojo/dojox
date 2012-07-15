@@ -1,6 +1,6 @@
-define(["dojox/main", "../../_base", "./_html"], function(dojox){
+define(["../../_base", "./_html"], function(dh){
 
-	var dh = dojox.highlight, dhl = dh.languages;
+	var dhl = dh.languages;
 	dhl.css = {
 		defaultMode: {
 			lexems: ["\\b[a-zA-Z0-9]+\\b", "\\b@media\b"],

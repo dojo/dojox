@@ -1,6 +1,6 @@
-define(["dojox/main", "../../_base", "./_html"], function(dojox){
+define(["../../_base", "./_html"], function(dh){
 
-	var dh = dojox.highlight, dhl = dh.languages, tags = [],
+	var dhl = dh.languages, tags = [],
 		ht = dhl.pygments._html.tags;
 	
 	for(var key in ht){

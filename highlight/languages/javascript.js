@@ -1,6 +1,6 @@
-define(["dojox/main", "../_base"], function(dojox){
+define(["../_base"], function(dh){
 
-	var dh = dojox.highlight, dhc = dh.constants;
+	var dhc = dh.constants;
 	dh.languages.javascript = {
 		defaultMode: {
 			lexems: [dhc.UNDERSCORE_IDENT_RE],

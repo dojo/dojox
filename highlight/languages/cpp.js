@@ -1,6 +1,6 @@
-define(["dojo", "dojox/main", "../_base"], function(dojo, dojox){
+define(["../_base"], function(dh){
 	
-	var dh = dojox.highlight, dhc = dh.constants;
+	var dhc = dh.constants;
 	dh.languages.cpp = {
 		// summary:
 		//		C++ highlight definitions

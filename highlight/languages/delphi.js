@@ -1,4 +1,4 @@
-define(["dojox/main", "../_base"], function(dojox){
+define(["../_base"], function(dh){
 
 	var DELPHI_KEYWORDS = {
 		'and': 1, 'safecall': 1, 'cdecl': 1, 'then': 1, 'string': 1,
@@ -37,7 +37,7 @@ define(["dojox/main", "../_base"], function(dojox){
 		'class': 1, 'register': 1, 'xorwrite': 1, 'inline': 1
 	};
 
-	var dh = dojox.highlight, dhc = dh.constants;
+	var dhc = dh.constants;
 	dh.languages.delphi = {
 		// summary:
 		//		Delphi highlight definitions

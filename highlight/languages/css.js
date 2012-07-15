@@ -1,4 +1,4 @@
-define(["dojox/main", "../_base", "./html"], function(dojox, dh, html){
+define(["../_base", "./html"], function(dh, html){
 	
 	var dhc = dh.constants;
 	return dh.languages.css = {
