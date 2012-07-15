@@ -7,7 +7,7 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/i18n",
-	"dijit/_Widget",
+	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/registry",
