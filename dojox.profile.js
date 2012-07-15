@@ -31,7 +31,7 @@ var profile = (function(){
 			"socket/Reconnect",
 			"storage",
 			"sql",
-			"widget/(AnalogGauge|AutoRotator|BarGauge|DataPresentation|DocTester|DynamicTooltip|FeedPortlet|FilePicker|FisheyeList|gauge|Iterator|Loader|Pager|RollingList|Rotator|rotator|SortList)",
+			"widget/(AnalogGauge|BarGauge|DataPresentation|DocTester|DynamicTooltip|FeedPortlet|FilePicker|gauge|Iterator|Loader|RollingList|Rotator|rotator|SortList)",
 			"wire",
 			"xmpp"
 		],
