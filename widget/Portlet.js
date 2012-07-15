@@ -174,10 +174,10 @@ define([
 			//		calls their toggle() method.
 
 			dojo.forEach(this.getChildren(), dojo.hitch(this, function(child){
-				if(child.portletIconClass && child.toggle && !child.attr("portlet")){
+				if(child.portletIconClass && child.toggle && !child.get("portlet")){
 					this._createIcon(child.portletIconClass, child.portletIconHoverClass, dojo.hitch(child, "toggle"));
 					dojo.place(child.domNode, this.containerNode, "before");
-					child.attr("portlet", this);
+					child.set("portlet", this);
 					this._settingsWidget = child;
 				}
 			}));
