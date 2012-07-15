@@ -61,99 +61,109 @@
 	<script type="text/javascript">
 		var djConfig = { isDebug:true, parseOnLoad:true };
 	</script>
-	<script type="text/javascript" src="../../../dojo/dojo.js"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async:true"></script>
 	<script type="text/javascript">
-		dojo.require("dojo.parser");
-		dojo.require("dojox.widget.FisheyeLite");
+        require([
+            "dijit/registry",
+            "dojox/widget/FisheyeLite",
+            "dojo/parser",
+            "dojo/query",
+            "dojo/fx/easing",
+            "dojo/on",
+            "dojo/_base/Deferred",
+            "dojo/domReady!"
+        ], function(registry, FisheyeLite, parser, query, easing, on, Deferred){
 
-		var beenDestroyed = false;
-		var hasInit = false;
-		var init = function(e){
+    		var beenDestroyed = false;
+    		var hasInit = false;
+    		var init = function(e){
 			
-			if(e && !beenDestroyed){ return; }
-			e && e.preventDefault();
+    			if(e && !beenDestroyed){ return; }
+    			e && e.preventDefault();
 			
-			// turn li's in this page into fisheye items, presumtiously:	
-			dojo.query("li.bounce").instantiate(dojox.widget.FisheyeLite,{});
+    			// turn li's in this page into fisheye items, presumtiously:	
+    			query("li.bounce").instantiate(dojox.widget.FisheyeLite,{});
 
-			var l = dojo.query("span.line")
-				.instantiate(dojox.widget.FisheyeLite,{
-				// make a widget from each of the lines in the lineHeightTest
-					properties: {
-						fontSize:1.75
-					},
-					easeOut: dojo.fx.easing.backInOut,
-					durationOut: 500
-				});
+    			var l = query("span.line")
+    				.instantiate(dojox.widget.FisheyeLite,{
+    				// make a widget from each of the lines in the lineHeightTest
+    					properties: {
+    						fontSize:1.75
+    					},
+    					easeOut: easing.backInOut,
+    					durationOut: 500
+    				});
 				
-			if(!hasInit){
-				l.connect("onclick",function(e){
-				// you can still access the onclick of the real node
-					alert(e.target.innerHTML);
-				});
-			}
+    			if(!hasInit){
+    				on(l, "click",function(e){
+    				// you can still access the onclick of the real node
+    					alert(e.target.innerHTML);
+    				});
+    			}
 
-			var lm = dojo.query("a").instantiate(dojox.widget.FisheyeLite,{
-				properties:{
-					fontSize:1.15,
-					letterSpacing:2.85
-				}
-			});
-			if(!hasInit){
-			// stop anchors from doing _anything_	
-				lm.connect("onclick",dojo,"stopEvent");
-			}
+    			var lm = query("a").instantiate(dojox.widget.FisheyeLite,{
+    				properties:{
+    					fontSize:1.15,
+    					letterSpacing:2.85
+    				}
+    			});
+    			if(!hasInit){
+    			// stop anchors from doing _anything_	
+    				on(lm, "click", function(){
+    				  //TODO: stop event  
+    				});
+    			}
 
-			dojo.query(".imgBounce").instantiate(dojox.widget.FisheyeLite,{
-				// all the images need a width and a height (well, not need,
-				// but to scale you do)				
-				properties: {
-					height:1.75,
-					width:1.75
-				}
-			});
+    			query(".imgBounce").instantiate(dojox.widget.FisheyeLite,{
+    				// all the images need a width and a height (well, not need,
+    				// but to scale you do)				
+    				properties: {
+    					height:1.75,
+    					width:1.75
+    				}
+    			});
 			
-			// show the new non-numeric multiplier version of fisheyelite
-			dojo.query(".advancedProps").instantiate(dojox.widget.FisheyeLite,{
-				properties:{
-					height: {
-						end: 100
-					}
-				}
-			})
+    			// show the new non-numeric multiplier version of fisheyelite
+    			query(".advancedProps").instantiate(dojox.widget.FisheyeLite,{
+    				properties:{
+    					height: {
+    						end: 100
+    					}
+    				}
+    			})
 			
-			// 
-			var vv = 0;
-			var r = dijit.registry.byClass("dojox.widget.FisheyeLite")._hash;
-			for(var l in r){
-				vv++;
-			}
+    			// 
+    			var vv = 0;
+    			var r = registry.byClass("dojox.widget.FisheyeLite")._hash;
+    			for(var l in r){
+    				vv++;
+    			}
 			
-			// a few in markup, mostly from the query()'ies:
-			console.log("fisheyes on this page: ", vv);
+    			// a few in markup, mostly from the query()'ies:
+    			console.log("fisheyes on this page: ", vv);
 				
-			beenDestroyed = false;
-			hasInit = true;
-		};
-		dojo.addOnLoad(init);
+    			beenDestroyed = false;
+    			hasInit = true;
+    		};
 		
-		dojo.addOnLoad(function(){
-			dojo.query("#restore").connect("onclick",init);
-			dojo.query("#destroy").connect("onclick",destroyAll);
+    		var destroyAll = function(e){
+    			e && e.preventDefault();
+    			if(confirm("really?")){
+    				dijit.registry.filter(function(w){
+    					return w && w.declaredClass == "dojox.widget.FisheyeLite";
+    				}).forEach(function(w){
+    					w.destroy(true);
+    				});
+    				beenDestroyed = true;
+    			}
+    		};
+    		
+    		Deferred.when(parser.parse(), function(){
+			    init();
+    			query("#restore").on("click",init);
+    			query("#destroy").on("click",destroyAll);
+			});
 		});
-		
-		var destroyAll = function(e){
-			e && e.preventDefault();
-			if(confirm("really?")){
-				dijit.registry.filter(function(w){
-					return w && w.declaredClass == "dojox.widget.FisheyeLite";
-				}).forEach(function(w){
-					w.destroy(true);
-				});
-				beenDestroyed = true;
-			}
-		};
-			
 	</script>
     </head>
     <body class="tundra">
@@ -202,10 +212,10 @@
 				</div>
 
 				<div>
-					<div dojoType="dojox.widget.FisheyeLite" properties="{ fontSize:1.25 }" style="padding:3px"
+					<div data-dojo-type="dojox/widget/FisheyeLite" data-dojo-props="fontSize:1.25" style="padding:3px"
 					><a id='destroy' href="#" class="fisheyeTarget">test destroy()</a></div>
 
-					<div dojoType="dojox.widget.FisheyeLite" properties="{ fontSize:1.25 }" style="padding:3px"
+					<div data-dojo-type="dojox/widget/FisheyeLite" data-dojo-props="fontSize:1.25" style="padding:3px"
 					><a id='restore' href="#" class="fisheyeTarget">restore</a></div>
 				</div>
 
@@ -275,8 +285,8 @@
 					<img src="images/fisheye_1.png" class="imgBounce" onClick="alert('clicked img 1')"/>
 				</div>
 				
-				<p dojoType="dojox.widget.FisheyeLite"
-				   properties="{ padding:1.55 }"
+				<p data-dojo-type="dojox/widget/FisheyeLite"
+				   data-dojo-props="padding:1.55"
 				   style="padding:12px; text-align:justify;">
 					
 				Aliquam vitae enim. Duis scelerisque metus auctor est venenatis
@@ -295,12 +305,9 @@
 				</p>
 				
 				<p class="advancedProps" style="height:25px; background:#000">Lorem</p>
-				<p class="advancedPropsToo" dojoType="dojox.widget.FisheyeLite"
+				<p class="advancedPropsToo" data-dojo-type="dojox/widget/FisheyeLite"
 					style="height:25px; background:#000"
-					properties="{ height:{ end: 150 } }"
-					easeIn="dojo._defaultEasing"
-					easeOut="dojo._defaultEasing"
-					durationOut="175"
+					data-dojo-props="height:{end:150}, /*easeIn: fx._defaultEasing, easeOut: fx._defaultEasing,*/ durationOut: 175"
 				>Lorem</p>
 				
 				<p>the end</p>

@@ -1,14 +1,23 @@
-define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojox, widget, easing){
+define([
+	"dojo/_base/kernel",
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/on",
+	"dojo/query",
+	"dojo/dom-style",
+	"dojo/_base/fx",
+	"dijit/_WidgetBase",
+	"dojo/fx/easing"
 	
-	dojo.getObject("widget", true, dojox);
-	dojo.experimental("dojox.widget.FisheyeLite");
+], function(kernel, declare, lang, on, query, domStyle, fx, _WidgetBase, easing){
+	
+	lang.getObject("widget", true, dojox);
+	kernel.experimental("dojox/widget/FisheyeLite");
 
-	return dojo.declare("dojox.widget.FisheyeLite",
-		dijit._Widget,
-		{
+	return dojo.declare("dojox.widget.FisheyeLite", [_WidgetBase], {
 		// summary:
 		//		A Light-weight Fisheye Component, or an exhanced version
-		//		of dojo.fx.Toggler ...
+		//		of dojo/fx/Toggler ...
 		// description:
 		//		A Simple FisheyeList-like widget which (in the interest of
 		//		performance) relies on well-styled content for positioning,
@@ -26,18 +35,23 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 		//
 		// example:
 		//	|	// make all the LI's in a node Fisheye's:
-		//	|   dojo.query("#node li").forEach(function(n){
-		// 	|		new dojox.widget.FisheyeLite({},n);
+		//	|	require(["dojo/query", "dojox/widget/FisheyeLite"],
+		//	|		function(query, FisheyeLite){
+		//	|   	query("#node li").forEach(function(n){
+		// 	|			new FisheyeLite({},n);
+		//	|		});
 		//	|	});
 		//
 		//
 		// example:
-		//	|	new dojox.widget.FisheyeLite({
-		//	|		properties:{
-		//	|			// height is literal, width is multiplied
-		//	|			height:{ end: 200 }, width:2.3
-		//	|		}
-		//	|	}, "someNode");
+		//	|	require(["dojox/widget/FisheyeLite"], function(FisheyeLite){
+		//	|		new FisheyeLite({
+		//	|			properties:{
+		//	|				// height is literal, width is multiplied
+		//	|				height:{ end: 200 }, width:2.3
+		//	|			}
+		//	|		}, "someNode");
+		//	|	});
 		
 		// durationIn: Integer
 		//		The time (in ms) the run the show animation
@@ -77,7 +91,7 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 		postCreate: function(){
 
 			this.inherited(arguments);
-			this._target = dojo.query(".fisheyeTarget", this.domNode)[0] || this.domNode;
+			this._target = query(".fisheyeTarget", this.domNode)[0] || this.domNode;
 			this._makeAnims();
 
 			this.connect(this.domNode, "onmouseover", "show");
@@ -105,34 +119,34 @@ define(["dojo", "dojox", "dijit/_Widget", "dojo/fx/easing"], function(dojo, dojo
 			//		Pre-generate the animations
 
 			// create two properties: objects, one for each "state"
-			var _in = {}, _out = {}, cs = dojo.getComputedStyle(this._target);
+			var _in = {}, _out = {}, cs = domStyle.getComputedStyle(this._target);
 			for(var p in this.properties){
 				var prop = this.properties[p],
-					deep = dojo.isObject(prop),
+					deep = lang.isObject(prop),
 					v = parseInt(cs[p])
 				;
 				// note: do not set negative scale for [a list of properties] for IE support
 				// note: filter:'s are your own issue, too ;)
-				// FIXME: this.unit here is bad, likely. d._toPixelValue ?
+				// FIXME: this.units here is bad, likely. d._toPixelValue ?
 				_out[p] = { end: v, units:this.units };
 				_in[p] = deep ? prop : { end: prop * v, units:this.units };
 			}
 
-			this._runningIn = dojo.animateProperty({
+			this._runningIn = fx.animateProperty({
 				node: this._target,
 				easing: this.easeIn,
 				duration: this.durationIn,
 				properties: _in
 			});
 
-			this._runningOut = dojo.animateProperty({
+			this._runningOut = fx.animateProperty({
 				node: this._target,
 				duration: this.durationOut,
 				easing: this.easeOut,
 				properties: _out
 			});
 
-			this.connect(this._runningIn, "onEnd", dojo.hitch(this, "onSelected", this));
+			this.connect(this._runningIn, "onEnd", lang.hitch(this, "onSelected", this));
 		},
 
 		onClick: function(/* Event */e){
