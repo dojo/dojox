@@ -147,7 +147,9 @@ var _ForcedPageStoreLayer = declare("dojox.grid.enhanced.plugins._ForcedPageStor
 
 var stopEvent = function(evt){
 	try{
-		event.stop(evt);
+		if(evt){
+			event.stop(evt);
+		}
 	}catch(e){}
 };
 
