@@ -143,7 +143,9 @@ define([
 		},
 		// edit support
 		applyEdit: function(inValue, inRowIndex){
-			this.grid.edit.applyCellEdit(inValue, this, inRowIndex);
+			if(inValue){
+				this.grid.edit.applyCellEdit(inValue, this, inRowIndex);
+			}
 		},
 		cancelEdit: function(inRowIndex){
 			this.grid.doCancelEdit(inRowIndex);
