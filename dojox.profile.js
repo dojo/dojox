@@ -12,7 +12,6 @@ var profile = (function(){
 
 		excludes = [
 			"secure",
-			"cometd",
 			"data/(demos|ItemExplorer|StoreExplorer|restListener)",
 			"drawing/plugins/drawing/Silverlight",
 			"editor/plugins/(ResizeTableColumn|SpellCheck)",
