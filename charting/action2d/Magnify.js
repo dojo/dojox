@@ -7,15 +7,16 @@ define(["dojo/_base/connect", "dojo/_base/declare",
 	var __MagnifyCtorArgs = function(duration, easing, scale){
 		// summary:
 		//		Additional arguments for magnifying actions.
+		//
 		// duration: Number?
 		//		The amount of time in milliseconds for an animation to last.  Default is 400.
-		this.duration = 400;
 		// easing: dojo/fx/easing/*?
 		//		An easing object (see dojo.fx.easing) for use in an animation.  The
 		//		default is dojo.fx.easing.backOut.
-		this.easing = null;
 		// scale: Number?
 		//		The amount to magnify the given object to.  Default is 2.
+		this.duration = 400;
+		this.easing = null;
 		this.scale = 2;
 	};
 	=====*/

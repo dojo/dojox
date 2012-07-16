@@ -6,12 +6,13 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", 
 	var __PlotActionCtorArgs = function(duration, easing){
 	 	// summary:
 		//		The base keyword arguments object for creating an action2d.
+		//
 		// duration: Number?
 		//		The amount of time in milliseconds for an animation to last.  Default is 400.
-		this.duration = duration;
 		// easing: dojo/fx/easing/*?
 		//		An easing object (see dojo.fx.easing) for use in an animation.  The
 		//		default is dojo.fx.easing.backOut.
+		this.duration = duration;
 		this.easing = easing;
 	};
 	=====*/
