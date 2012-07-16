@@ -13,10 +13,10 @@ define([
 	"dojo/dnd/Avatar",
 	"../_Plugin",
 	"../../EnhancedGrid",
+	"dojo/dnd/Manager",
 	"./Selector",
-	"./Rearrange",
-	"dojo/dnd/Manager"
-], function(dojo, declare, connect, array, lang, html, json, win, query, keys, Source, Avatar, _Plugin, EnhancedGrid){
+	"./Rearrange"
+], function(dojo, declare, connect, array, lang, html, json, win, query, keys, Source, Avatar, _Plugin, EnhancedGrid, Manager){
 
 var _devideToArrays = function(a){
 		a.sort(function(v1, v2){
@@ -649,7 +649,7 @@ var DnD = declare("dojox.grid.enhanced.plugins.DnD", _Plugin, {
 	},
 	_createSource: function(evt){
 		this._elem.createDnDNodes(this._dndRegion);
-		var m = dojo.dnd.manager();
+		var m = Manager.manager();
 		var oldMakeAvatar = m.makeAvatar;
 		m._dndPlugin = this;
 		m.makeAvatar = function(){
