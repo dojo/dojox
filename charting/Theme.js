@@ -10,7 +10,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 	});
 
 	/*=====
-	__DefineColorArgs = function(num, colors, hue, saturation, low, high, base, generator){
+	var __DefineColorArgs = function(num, colors, hue, saturation, low, high, base, generator){
 		// summary:
 		//		The arguments object that can be passed to define colors for a theme.
 		// num: Number?
