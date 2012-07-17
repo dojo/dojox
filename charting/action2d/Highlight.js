@@ -13,9 +13,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		//		default is dojo.fx.easing.backOut.
 		// highlight: String|dojo/_base/Color|Function?
 		//		Either a color or a function that creates a color when highlighting happens.
-		this.duration = 400;
-		this.easing = null;
-		this.highlight = null;
 	};
 	=====*/
 	
