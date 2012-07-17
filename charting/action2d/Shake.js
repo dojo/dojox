@@ -3,7 +3,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 	function(hub, declare, PlotAction, df, dfe, m, gf){
 
 	/*=====
-	var __ShakeCtorArgs = function(duration, easing, shift){
+	var __ShakeCtorArgs = {
 			// summary:
 			//		Additional arguments for shaking actions.
 			// duration: Number?

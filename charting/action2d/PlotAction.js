@@ -3,7 +3,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", 
 	function(hub, declare, Base, dfe, df, dlfo){
 	
 	/*=====
-	var __PlotActionCtorArgs = function(duration, easing){
+	var __PlotActionCtorArgs = {
 	 	// summary:
 		//		The base keyword arguments object for creating an action2d.
 		// duration: Number?

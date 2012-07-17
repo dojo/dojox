@@ -3,9 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 	function(lang, declare, hub, win, has, ChartAction, IndicatorElement, du, eventUtil, arr){ 
 
 	/*=====
-	var __MouseIndicatorCtorArgs = function(series, autoScroll, vertical, fixed, precision, lineStroke, lineOutline, lineShadow,
-		stroke, outline, shadow, fill, fillFunc, labelFunc, font, fontColor, markerStroke, markerOutline, markerShadow,
-		markerFill, markerSymbol){
+	var __MouseIndicatorCtorArgs = {
 		// summary:
 		//		Additional arguments for mouse indicator.
 		// series: String

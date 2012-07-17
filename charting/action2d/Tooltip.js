@@ -3,7 +3,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 	function(dojo, Tooltip, lang, declare, domStyle, PlotAction, m, df, dfs, dff){
 	
 	/*=====
-	var __TooltipCtorArgs = function(duration, easing, text){
+	var __TooltipCtorArgs = {
 			// summary:
 			//		Additional arguments for tooltip actions.
 			// duration: Number?

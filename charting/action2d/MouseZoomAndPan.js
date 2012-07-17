@@ -3,7 +3,7 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 	function(declare, win, arr, eventUtil, connect, mouse, ChartAction, has, domProp, keys){
 
 	/*=====
-	var __MouseZoomAndPanCtorArgs = function(axis, scaleFactor, maxScale, enableScroll, enableDoubleClickZooom, enableKeyZoom, keyZoomModifier){
+	var __MouseZoomAndPanCtorArgs = {
 		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
 		// axis: String?

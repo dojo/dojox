@@ -49,7 +49,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	});
 
 	/*=====
-	var __TouchZoomAndPanCtorArgs = function(axis, scaleFactor, maxScale, enableScroll, enableZoom){
+	var __TouchZoomAndPanCtorArgs = {
 			// summary:
 			//		Additional arguments for touch zoom and pan actions.
 			// axis: String?

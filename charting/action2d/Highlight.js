@@ -3,7 +3,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	function(dojo, lang, declare, Color, hub, c, PlotAction, dfe, dgf){
 
 	/*=====
-	var __HighlightCtorArgs = function(duration, easing, highlight){
+	var __HighlightCtorArgs = {
 		// summary:
 		//		Additional arguments for highlighting actions.
 		// duration: Number?

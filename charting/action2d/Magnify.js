@@ -4,7 +4,7 @@ define(["dojo/_base/connect", "dojo/_base/declare",
 	function(Hub, declare, PlotAction, m, gf, df, dfe){
 
 	/*=====
-	var __MagnifyCtorArgs = function(duration, easing, scale){
+	var __MagnifyCtorArgs = {
 		// summary:
 		//		Additional arguments for magnifying actions.
 		// duration: Number?

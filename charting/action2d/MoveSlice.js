@@ -3,7 +3,7 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 	function(hub, declare, PlotAction, dfe, m, gf, df, dfs, dff){
 
 	/*=====
-	var __MoveSliceCtorArgs = function(duration, easing, scale, shift){
+	var __MoveSliceCtorArgs = {
 			// summary:
 			//		Additional arguments for move slice actions.
 			// duration: Number?

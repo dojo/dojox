@@ -2,9 +2,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 	function(lang, declare, eventUtil, ChartAction, IndicatorElement, du){ 
 	
 	/*=====
-	var __TouchIndicatorCtorArgs = function(series, autoScroll, vertical, fixed, precision, lineStroke, lineOutline, lineShadow,
-			stroke, outline, shadow, fill, fillFunc, labelFunc, font, fontColor, markerStroke, markerOutline, markerShadow,
-			markerFill, markerSymbol){
+	var __TouchIndicatorCtorArgs = {
 			// summary:
 			//		Additional arguments for touch indicator.
 			// series: String
