@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 		"http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html lang="en">
 <head>
 	
 	<title>Dojox ColorPicker Test</title>
@@ -42,7 +42,7 @@
 		});
 	</script>
 </head>
-<body class="tundra">
+<body class="tundra" role="main">
 
 	<h1 class="testTitle">Dojox ColorPicker test</h1>
 
@@ -51,7 +51,7 @@
 		value="#9ebf6c"
 		onChange="handler(arguments[0],'onchangeOne')"
 	></div>
-	<p>Current value: <input readonly="true" id="onchangeOne" value="???" /></p>
+	<p><label for="onchangeOne">Current value: </label><input readonly="true" id="onchangeOne" value="???" /></p>
 	
 	<h3>no animation, no hsv, no rgb, no webSafe info:</h3>
 	<div id="pickerToo" dojoType="dojox.widget.ColorPicker"
@@ -61,7 +61,7 @@
 		webSafe="false"
 		onChange="handler(arguments[0],'onchangeTwo')"
 	></div>
-	<p>Current value: <input readonly="true" id="onchangeTwo" value="???" /></p>
+	<p><label for="onchangeTwo">Current value: </label><input readonly="true" id="onchangeTwo" value="???" /></p>
 	
 	<h3>Fires onChange a lot:</h3>
 	<div id="pickerLive" dojoType="dojox.widget.ColorPicker"
@@ -69,7 +69,7 @@
 		liveUpdate="true"
 		onChange="handler(arguments[0],'onchangeThree')"
 	></div>
-	<p>Current value: <input readonly="true" id="onchangeThree" value="???" /></p>
+	<p><label for="onchangeThree">Current value: </label><input readonly="true" id="onchangeThree" value="???" /></p>
 	
 	<div id="absolutey">
 		<h3>To See how it positions in an absolute node (editor plugin, input popup)</h3>
@@ -79,6 +79,6 @@
 	<button id="testFocusButton" type="button" dojoType="dijit.form.Button">Click to focus first widget</button>
 	
 	<p>that's all folks!</p>
-	
+
 </body>
 </html>
