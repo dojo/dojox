@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html lang="en">
 <head>
 	<title>dojox.layout.ExpandoPane</title>
 
@@ -57,17 +57,19 @@
 		#pane0 { background:yellow; }
 	</style>
 </head>
-<body class="tundra">
+<body class="tundra" role="main">
 		<div id="bc" style="width:100%; height:100%;" dojoType="dijit.layout.BorderContainer">
 			<div region="center" style="height:65px; border-bottom:1px solid #666">
-				<button dojoType="dijit.form.Button">
+				<button data-dojo-type="dijit.form.Button" type="button" region="top">
 					Set 3-pane
-					<script type="dojo/method" event="onClick">
+					<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="evt">
 						_clearPane();
 						var bc = dijit.byId("bc");
 						
-						var cp = new dijit.layout.ContentPane({
+					//	var cp = new dijit.layout.ContentPane({
+						var cp = new dojox.layout.ExpandoPane({
 							region:"left",
+							duration:125,
 							style:"width:125px; height:100%",
 							splitter:true
 						});

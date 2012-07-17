@@ -60,6 +60,11 @@ return declare("dojox.layout.ExpandoPane", [ContentPane, TemplatedMixin, Contain
 	//		If false, a double-click will cause the preview to popup
 	previewOnDblClick: false,
 
+	// tabIndex: String
+	//		Order fields are traversed when user hits the tab key
+	tabIndex: "0",
+	_setTabIndexAttr: "iconNode",
+
 	baseClass: "dijitExpandoPane",
 
 	postCreate: function(){
@@ -106,6 +111,8 @@ return declare("dojox.layout.ExpandoPane", [ContentPane, TemplatedMixin, Contain
 		
 		this.connect(this.domNode, "ondblclick", this.previewOnDblClick ? "preview" : "toggle");
 		
+		this.iconNode.setAttribute("aria-controls", this.id);
+		
 		if(this.previewOnDblClick){
 			this.connect(this.getParent(), "_layoutChildren", lang.hitch(this, function(){
 				this._isonlypreview = false;
@@ -141,6 +148,7 @@ return declare("dojox.layout.ExpandoPane", [ContentPane, TemplatedMixin, Contain
 			this._hideAnim.gotoPercent(99,true);
 		}
 		
+		this.domNode.setAttribute("aria-expanded", this._showing);
 		this._hasSizes = true;
 	},
 	
@@ -241,6 +249,7 @@ return declare("dojox.layout.ExpandoPane", [ContentPane, TemplatedMixin, Contain
 			this._showAnim.play();
 		}
 		this._showing = !this._showing;
+		this.domNode.setAttribute("aria-expanded", this._showing);
 	},
 	
 	_hideWrapper: function(){

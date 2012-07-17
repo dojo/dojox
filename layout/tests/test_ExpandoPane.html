@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>dojox.layout.ExpandoPane</title>
 
@@ -179,7 +179,7 @@
 
 	</script>
 </head>
-<body class="claro">
+<body class="claro" role="main">
 		<div id="bc" style="width:100%; height:100%; padding: 5px;" dojoType="dijit.layout.BorderContainer">
 			<div id="header" dojoType="dijit.layout.ContentPane" region="top" splitter="true">Dojo Expando Pane Test</div>
 			<div dojoType="dojox.layout.ExpandoPane" 
@@ -195,10 +195,10 @@
 					<div dojoType="dijit.layout.ContentPane" title="Search">
 						<div class="searchBar">
 							<p>
-								<span style="float: left;">Search:</span>
+								<label for="searchBox" style="float: left;">Search:</label>
 								<input id="searchBox" name="searchBox" style="float: left;">
 								<span id="runSearchIcon" style="border: none; floast: left; padding: 3px;">
-									<img src="../../presentation/resources/icons/next.png" style="height:12px; width:12px;">
+									<img src="../../presentation/resources/icons/next.png" alt="run search" style="height:12px; width:12px;">
 								</span>
 							</p>
 						</div>
@@ -252,8 +252,8 @@
 				<div dojoType="dijit.layout.AccordionContainer" id="rightAccordion" style="width:275px;" attachParent="true">
 					<div dojoType="dijit.layout.ContentPane" title="Easing Selection">
 						<div class="wrap">
-							<p>This select modifies the left Expando's easing function. An Expando can have an easeIn and an easeOut parameter. This sets both.</p> 
-							<select id="easingSelect" name="easingSelect">
+							<p id="easingSelectLabel">This select modifies the left Expando's easing function. An Expando can have an easeIn and an easeOut parameter. This sets both.</p> 
+							<select id="easingSelect" name="easingSelect" aria-labelledby="easingSelectLabel">
 								<option value="dojo._DefaultEasing">Default</option>
 							</select>
 							<p><label for="durationBox">Duration: </label> <input id="durationBox" name="durationBox" value="1000" /></p>
