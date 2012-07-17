@@ -6,7 +6,6 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 	var __MouseZoomAndPanCtorArgs = function(axis, scaleFactor, maxScale, enableScroll, enableDoubleClickZooom, enableKeyZoom, keyZoomModifier){
 		// summary:
 		//		Additional arguments for mouse zoom and pan actions.
-		//
 		// axis: String?
 		//		Target axis name for this action.  Default is "x".
 		// scaleFactor: Number?
@@ -21,13 +20,6 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 		//		Whether a keyZoomModifier + + or keyZoomModifier + - key press should zoom in our out on the chart.  Default is true.
 		// keyZoomModifier: String?
 		//		Which keyboard modifier should used for keyboard zoom in and out. This should be one of "alt", "ctrl", "shift" or "none" for no modifier. Default is "ctrl".
-		this.axis = "x";
-		this.scaleFactor = 1.2;
-		this.maxScale = 100;
-		this.enableScroll = true;
-		this.enableDoubleClickZoom = true;
-		this.enableKeyZoom = true;
-		this.keyZoomModifier = "ctrl";
 	};
 	=====*/
 

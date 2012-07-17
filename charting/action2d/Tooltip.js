@@ -6,7 +6,6 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 	var __TooltipCtorArgs = function(duration, easing, text){
 			// summary:
 			//		Additional arguments for tooltip actions.
-			//
 			// duration: Number?
 			//		The amount of time in milliseconds for an animation to last.  Default is 400.
 			// easing: dojo/fx/easing/*?
@@ -15,9 +14,6 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 			// text: Function?
 			//		The function that produces the text to be shown within a tooltip.  By default this will be
 			//		set by the plot in question, by returning the value of the element.
-			this.duration = 400;
-			this.easing = null;
-			this.text = null;
 	};
 	=====*/
 

@@ -6,7 +6,6 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 	var __ShakeCtorArgs = function(duration, easing, shift){
 			// summary:
 			//		Additional arguments for shaking actions.
-			//
 			// duration: Number?
 			//		The amount of time in milliseconds for an animation to last.  Default is 400.
 			// easing: dojo/fx/easing/*?
@@ -14,9 +13,6 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction",
 			//		default is dojo.fx.easing.backOut.
 			// shift: Number?
 			//		The amount in pixels to shift the pie slice.  Default is 3.
-			this.duration = 400;
-			this.easing = null;
-			this.shift = 3;
 	};
 	=====*/
 

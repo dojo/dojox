@@ -8,7 +8,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		markerFill, markerSymbol){
 		// summary:
 		//		Additional arguments for mouse indicator.
-		//
 		// series: String
 		//		Target series name for this action.
 		// autoScroll: Boolean?
@@ -58,27 +57,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 		//		An optional fill to use for indicator marker.
 		// markerSymbol: String?
 		//		An optional symbol string to use for indicator marker.
-		this.series = "";
-		this.autoScroll = true;
-		this.vertical = true;
-		this.fixed = true;
-		this.precision = 0;
-		this.lineStroke = {};
-		this.lineOutline = {};
-		this.lineShadow = {};
-		this.stroke = {};
-		this.outline = {};
-		this.shadow = {};
-		this.fill = {};
-		this.fillFunc = null;
-		this.labelFunc = {};
-		this.font = "";
-		this.fontColor = "";
-		this.markerStroke = {};
-		this.markerOutline = {};
-		this.markerShadow = {};
-		this.markerFill = {};
-		this.markerSymbol= "";
 	};
 	=====*/
 

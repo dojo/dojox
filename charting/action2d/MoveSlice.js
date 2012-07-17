@@ -6,7 +6,6 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 	var __MoveSliceCtorArgs = function(duration, easing, scale, shift){
 			// summary:
 			//		Additional arguments for move slice actions.
-			//
 			// duration: Number?
 			//		The amount of time in milliseconds for an animation to last.  Default is 400.
 			// easing: dojo/fx/easing/*?
@@ -16,10 +15,6 @@ define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/eas
 			//		The amount to scale the pie slice.  Default is 1.05.
 			// shift: Number?
 			//		The amount in pixels to shift the pie slice.  Default is 7.
-			this.duration = 400;
-			this.easing = null;
-			this.scale = 1.05;
-			this.shift = 7;
 	};
 	=====*/
 	

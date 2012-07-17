@@ -52,7 +52,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 	var __TouchZoomAndPanCtorArgs = function(axis, scaleFactor, maxScale, enableScroll, enableZoom){
 			// summary:
 			//		Additional arguments for touch zoom and pan actions.
-			//
 			// axis: String?
 			//		Target axis name for this action.  Default is "x".
 			// scaleFactor: Number?
@@ -63,11 +62,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base
 			//		Whether touch drag gesture should scroll the chart.  Default is true.
 			// enableZoom: Boolean?
 			//		Whether touch pinch and spread gesture should zoom out or in the chart.  Default is true.
-			this.axis = "x";
-			this.scaleFactor = 1.2;
-			this.maxScale = 100;
-			this.enableScroll = true;
-			this.enableZoom = true;
 	};
 	=====*/
 

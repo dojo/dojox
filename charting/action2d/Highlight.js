@@ -6,7 +6,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	var __HighlightCtorArgs = function(duration, easing, highlight){
 		// summary:
 		//		Additional arguments for highlighting actions.
-		//
 		// duration: Number?
 		//		The amount of time in milliseconds for an animation to last.  Default is 400.
 		// easing: dojo/fx/easing/*?
