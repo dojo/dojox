@@ -6,7 +6,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/event", "dojo/_base/d
 		// summary:
 		//		Specializes TreeMap to support keyboard navigation and accessibility.
 		
-		// tabIndex: Integer
+		// tabIndex: String
 		//		Order fields are traversed when user hits the tab key
 		tabIndex: "0",
 		_setTabIndexAttr: "domNode",
