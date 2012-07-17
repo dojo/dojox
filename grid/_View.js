@@ -683,8 +683,12 @@ dojo.require("dojo.dnd.Manager");
 		// scrolling
 		lastTop: 0,
 		firstScroll:0,
+		_nativeScroll: false,
 
 		doscroll: function(inEvent){
+			if(dojo.isFF >= 13){
+				this._nativeScroll = true;
+			}
 			//var s = dojo.marginBox(this.headerContentNode.firstChild);
 			var isLtr = dojo._isBodyLtr();
 			if(this.firstScroll < 2){
@@ -710,12 +714,16 @@ dojo.require("dojo.dnd.Manager");
 			if(top !== this.lastTop){
 				this.grid.scrollTo(top);
 			}
+			this._nativeScroll = false;
 		},
 
 		setScrollTop: function(inTop){
 			// 'lastTop' is a semaphore to prevent feedback-loop with doScroll above
 			this.lastTop = inTop;
-			this.scrollboxNode.scrollTop = inTop;
+			if(!this._nativeScroll){
+				//fix #15487
+				this.scrollboxNode.scrollTop = inTop;
+			}
 			return this.scrollboxNode.scrollTop;
 		},
 
