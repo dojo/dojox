@@ -89,6 +89,13 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 					aroundRect.y = o.cy - o.cr;
 					aroundRect.w = aroundRect.h = 2 * o.cr;
 					break;
+				case "spider_circle":
+					aroundRect.x = o.cx;
+					aroundRect.y = o.cy ;
+					aroundRect.w = aroundRect.h = 1;
+					break;
+				case "spider_plot":
+					return;
 				case "column":
 					position = ["above-centered", "below-centered"];
 					// intentional fall down
