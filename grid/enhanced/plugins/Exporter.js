@@ -110,7 +110,7 @@ var Exporter = declare("dojox.grid.enhanced.plugins.Exporter", _Plugin, {
 			onExported(this._goThroughGridData(items, writer));
 		}
 	},
-	exportSelected: function(type, writerArgs){
+	exportSelected: function(type, writerArgs, onExported){
 		// summary:
 		//		Only export selected rows.
 		// tags:
@@ -125,7 +125,7 @@ var Exporter = declare("dojox.grid.enhanced.plugins.Exporter", _Plugin, {
 			return "";
 		}
 		var writer = this._getExportWriter(type, writerArgs);
-		return this._goThroughGridData(this.grid.selection.getSelected(), writer);	//String
+		return onExported(this._goThroughGridData(this.grid.selection.getSelected(), writer));	//String
 	},
 	_buildRow: function(/* object */arg_obj,/* ExportWriter */writer){
 		// summary:
