@@ -1,2 +1,9 @@
-dojo.provide("dojox.jsonPath");
-dojo.require("dojox.jsonPath.query");
+define(['./jsonPath/query'],function(){
+	/*=====
+	 return {
+	 // summary:
+	 //		Deprecated.  Should require dojox/jsonPath modules directly rather than trying to access them through
+	 //		this module.
+	 };
+	 =====*/
+});

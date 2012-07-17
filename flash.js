@@ -1,2 +1,9 @@
-dojo.provide("dojox.flash");
-dojo.require("dojox.flash._base");
+define(['./flash/_base'],function(){
+	/*=====
+	 return {
+	 // summary:
+	 //		Deprecated.  Should require dojox/flash modules directly rather than trying to access them through
+	 //		this module.
+	 };
+	 =====*/
+});
