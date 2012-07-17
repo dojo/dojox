@@ -50,9 +50,17 @@ define([
 			});
 
 			this._movableMax = new Moveable(this.sliderHandleMax,{ mover: mover });
-			this.focusNodeMax.setAttribute("aria-valuemin", this.minimum);
-			this.focusNodeMax.setAttribute("aria-valuemax", this.maximum);
 
+			//The valuenow of the sliderHandle (min) usually determines the valuemin of sliderHandleMax
+			//and valuenow of sliderHandleMax usually determines the valueMax of sliderHandle
+			//However, in our RangeSlider dragging one handle past the other one causes both to
+			//'snap' together and move so both sliders will have the same min, max values			
+
+			this.sliderHandle.setAttribute("aria-valuemin", this.minimum);
+			this.sliderHandle.setAttribute("aria-valuemax", this.maximum);
+			this.sliderHandleMax.setAttribute("aria-valuemin", this.minimum);
+			this.sliderHandleMax.setAttribute("aria-valuemax", this.maximum);
+			
 			// a dnd for the bar!
 			var barMover = declare(SliderBarMover, {
 				constructor: function(){
@@ -60,7 +68,13 @@ define([
 				}
 			});
 			this._movableBar = new Moveable(this.progressBar,{ mover: barMover });
-		},
+				
+			// Remove these from the progress bar since it isn't a slider
+			this.focusNode.removeAttribute("aria-valuemin");
+			this.focusNode.removeAttribute("aria-valuemax");
+			this.focusNode.removeAttribute("aria-valuenow");
+
+		},		
 
 		destroy: function(){
 			this.inherited(arguments);
@@ -225,11 +239,12 @@ define([
 			// we have to reset this values. don't know the reason for that
 			this._lastValueReported = "";
 			this.valueNode.value = this.value = value = actValue;
-			this.focusNode.setAttribute("aria-valuenow", actValue[0]);
-			this.focusNodeMax.setAttribute("aria-valuenow", actValue[1]);
 
 			this.value.sort(this._isReversed() ? sortReversed : sortForward);
 
+			this.sliderHandle.setAttribute("aria-valuenow", actValue[0]);
+			this.sliderHandleMax.setAttribute("aria-valuenow", actValue[1]);
+			
 			// not calling the _setValueAttr-function of Slider, but the super-super-class (needed for the onchange-event!)
 			FormValueWidget.prototype._setValueAttr.apply(this, arguments);
 			this._printSliderBar(priorityChange, isMaxVal);

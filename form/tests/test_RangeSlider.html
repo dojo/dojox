@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<html lang="en">
 <head>
 	<title>Dojox RangeSlider Test</title>
 	<style type="text/css">
@@ -48,7 +48,7 @@
 	</script>
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 </head>
-<body class="tundra">
+<body class="tundra" role="main">
 	<h1 class="testTitle">Dojox RangeSlider test</h1>
 	Just try to drag the slider endpoints and the bar in the middle. You can also use the bumper and the arrows on the left and right to manipulate the range. It's also possible to tab through the slider parts and move the handlers or bar with left/right/up/down-button. 
 	<h2>Horizontal slider</h2>
@@ -65,8 +65,8 @@
 		<div dojoType="dijit.form.HorizontalRule" container="topDecoration" count=7 style="height:10px;margin-bottom:-5px;"></div>
 	</div>
 	</center>
-	Horizontal Slider Min Value:<input readonly id="minValue" size="10" value="20.0%"/><br/>
-	Horizontal Slider Max Value:<input readonly id="maxValue" size="10" value="80.0%"/><br/>
+	<label for="minValue">Horizontal Slider Min Value:</label><input readonly id="minValue" size="10" value="20.0%"/><br/>
+	<label for="maxValue">Horizontal Slider Max Value:</label><input readonly id="maxValue" size="10" value="80.0%"/><br/>
 	<button id="disableButton" dojoType="dijit.form.Button" onClick="dijit.byId('hrSlider').set('disabled', true);dijit.byId('disableButton').set('disabled',true);dijit.byId('enableButton').set('disabled',false);">Disable previous slider</button>
 	<button id="enableButton"  dojoType="dijit.form.Button" onClick="dijit.byId('hrSlider').set('disabled', false);dijit.byId('disableButton').set('disabled',false);dijit.byId('enableButton').set('disabled', true);" disabled>Enable previous slider</button>
 	
@@ -97,8 +97,8 @@
 		></ol>
 	</div>
 	<p>
-	Vertical Slider Max Value:<input readonly id="vMaxValue" size="10" value="50.0"/><br/>
-	Vertical Slider Min Value:<input readonly id="vMinValue" size="10" value="20.0"/><br/>
+	<label for="vMaxValue">Vertical Slider Max Value:</label><input readonly id="vMaxValue" size="10" value="50.0"/><br/>
+	<label for="vMinValue">Vertical Slider Min Value:</label><input readonly id="vMinValue" size="10" value="20.0"/><br/>
 	</p>
 </body>
 </html>
