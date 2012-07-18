@@ -1033,10 +1033,10 @@ dojo.declare("dojox.widget.RollingList",
 				if(!widgetItem._started){
 					var c = widgetItem.connect(widgetItem, "startup", function(){
 						this.disconnect(c);
-						dojo.style(this.arrowWrapper, "display", "");
+						dojo.style(this.arrowWrapper, "visibility", "");
 					});
 				}else{
-					dojo.style(widgetItem.arrowWrapper, "display", "");
+					dojo.style(widgetItem.arrowWrapper, "visibility", "");
 				}
 			}else{
 				widgetItem = this.getMenuItemForItem(item, parentPane, null);
