@@ -143,7 +143,7 @@ define([
 		},
 		// edit support
 		applyEdit: function(inValue, inRowIndex){
-			if(inValue){
+			if(this.getNode(inRowIndex)){
 				this.grid.edit.applyCellEdit(inValue, this, inRowIndex);
 			}
 		},
