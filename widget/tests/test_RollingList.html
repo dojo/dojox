@@ -162,7 +162,7 @@
 	<div dojoType="dojox.widget.RollingList" jsId="myList" id="myList" store="continentStore"
 		query="{type:'continent'}">
 		<script type="dojo/method" event="onChange" args="value">
-			console.debug("Set Value:", value);
+			console.log("Set Value:", value);
 			if(value){
 				dijit.byId("clickWatch").attr("value", this.store.getIdentity(value));
 			}else{
