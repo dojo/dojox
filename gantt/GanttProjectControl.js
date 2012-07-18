@@ -757,8 +757,7 @@ define([
 					parentTask.cldTasks.push(task);
 				}
 				if(parentTask.cldTasks.length == 1){
-					var treeImg = _parentTask.createTreeImg();
-					_parentTask.cTaskNameItem[2] = treeImg;
+					_parentTask.cTaskNameItem[2] = _parentTask.createTreeImg();
 				}
 				_task = new GanttTaskControl(task, this, this.ganttChart);
 				_task.create();

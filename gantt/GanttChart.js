@@ -88,10 +88,8 @@ define([
 			var widthPred = this.getWidthOnDuration(predTask.duration);
 			var posPred = this.getPosOnDate(predTask.startTime);
 			var posChild = this.getPosOnDate(task.startTime);
-			if((widthPred + posPred) > posChild){
-				return false;
-			}
-			return true;
+			return (widthPred + posPred) <= posChild;
+
 		},
 		correctPosPreviousTask: function(predTask, ctask, ctaskObj){
 			var newDate = new Date(predTask.startTime);

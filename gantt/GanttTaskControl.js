@@ -437,8 +437,7 @@ define([
 			if((this.taskItemWidth != parseInt(taskItem.childNodes[0].firstChild.width))){
 				var posXL = taskItem.offsetLeft;
 				var posXR = taskItem.offsetLeft + parseInt(taskItem.childNodes[0].firstChild.width);
-				var countHours = Math.round((posXR - posXL) / this.ganttChart.pixelsPerWorkHour);
-				this.taskItem.duration = countHours;
+				this.taskItem.duration = Math.round((posXR - posXL) / this.ganttChart.pixelsPerWorkHour);
 				if(this.childPredTask.length > 0){
 					for(var j = 0; j < this.childPredTask.length; j++){
 						var cpctItem = this.childPredTask[j].cTaskItem[1],
@@ -1023,7 +1022,7 @@ define([
 			var containerNames = this.ganttChart.panelNames.firstChild;
 			var previousTask = this.taskItem.previousTask;
 			var parentTask = this.taskItem.parentTask;
-			var isCParentTask = (this.taskItem.cldTasks.length > 0) ? true : false;
+			var isCParentTask = (this.taskItem.cldTasks.length > 0);
 			this.cTaskItem = [];
 			this.cTaskNameItem = [];
 			//creation arrTasks
