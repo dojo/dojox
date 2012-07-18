@@ -135,15 +135,16 @@ dojo.declare("dojox.widget._RollingListPane",
 			}
 		}
 	},
-	
+
 	_onShow: function(){
 		// summary:
 		//		checks that the store is loaded
+		this.inherited(arguments);
 		if((this.store || this.items) && ((this.refreshOnShow && this.domNode) || (!this.isLoaded && this.domNode))){
 			this.refresh();
 		}
 	},
-	
+
 	_load: function(){
 		// summary:
 		//		sets the "loading" message and then kicks off a query asyncronously
