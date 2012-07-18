@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<title>Dojox Calendar Views Test</title>
@@ -8,7 +7,6 @@
 			@import "../../../dijit/themes/tundra/tundra.css";
 			@import "../../../dijit/themes/soria/soria.css";
 			@import "../../../dijit/themes/nihilo/nihilo.css";
-			@import "../../../dijit/themes/dijit.css";
 			@import "../../../dijit/tests/css/dijitTests.css";
 			@import "../Calendar/Calendar.css";
 
@@ -18,7 +16,7 @@
 		</style>
 
 		<script type="text/javascript" src="../../../dojo/dojo.js" 
-		    data-dojo-config="async:true, transparentColor: [ 255, 255, 255 ]"></script>
+		    data-dojo-config="async:1, transparentColor: [ 255, 255, 255 ]"></script>
 
 		<!-- not needed, for testing alternate themes -->
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -26,19 +24,8 @@
 		<script type="text/javascript">
 		require([
 			"dojo/parser",
-			"dojox/fx/_base",
-			"dojox/widget/Calendar",
-			"dojox/widget/CalendarViews",
-			"dojox/widget/DailyCalendar",
-			"dojox/widget/MonthAndYearlyCalendar",
-			"dojox/widget/MonthlyCalendar",
-			"dojox/widget/YearlyCalendar",
-			"dojo/dom",
-			"dojo/aspect",
-			//"dojox/widget/FisheyeList",
-			//"dojox/widget/CalendarFx",
 			"dojo/domReady!"
-		], function(parser, fx, Calendar, CalendarViews, DailyCalendar, MonthAndYearlyCalendar, MonthlyCalendar, YearlyCalendar, dom, aspect){
+		], function(parser){
 			
 			//window['log'] = function(str){
 				//dom.byId("report").innerHTML = str;

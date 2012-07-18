@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
+	    <meta charset="utf-8">
 		<title>Dojox Calendar Test</title>
 		<style type="text/css">
 			@import "../../../dojo/resources/dojo.css";
@@ -15,7 +16,7 @@
 		</style>
 
 		<script type="text/javascript" src="../../../dojo/dojo.js"
-        		data-dojo-config="async:true, transparentColor: [ 255, 255, 255 ]"></script>
+        		data-dojo-config="async:1, transparentColor: [ 255, 255, 255 ]"></script>
 
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 
@@ -38,7 +39,7 @@
 				declare("test/CalendarCustomFx", [Calendar], {
 
 					addFx: function(theQuery, fromNode){
-						query(theQuery, fromNode).onmouseover(function(evt){
+						query(theQuery, fromNode).on("mouseover", function(evt){
 							xFx.highlight({node: evt.target}).play();
 						});
 					}

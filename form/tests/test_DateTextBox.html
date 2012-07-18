@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-	"http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 	<head>
+	    <meta charset="utf-8">
 		<title>Test DateTextBox Widget</title>
 
 		<!-- required: a default theme file -->
@@ -36,26 +36,11 @@
 
 		<!-- required: dojo.js -->
     	<script type="text/javascript" src="../../../dojo/dojo.js"
-        	data-dojo-config="async:true, transparentColor: [ 255, 255, 255 ], extraLocale: ['de-de', 'en-us']"></script>
+        	data-dojo-config="async:1, parseOnLoad:1, transparentColor: [ 255, 255, 255 ], extraLocale: ['de-de', 'en-us']"></script>
 
 
 		<!-- do not use, only for dynamic themes -->
 		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
-
-		<script type="text/javascript">
-			require([
-				"dojo/parser",
-				"dojox/form/DateTextBox",
-				"dojox/form/DayTextBox",
-				"dojox/form/MonthTextBox",
-				"dojox/form/YearTextBox",
-				"dijit/form/Form",
-				"dojo/date/locale",
-				"dojo/domReady!"
-			], function(parser, DateTextBox, DayTextBox, MonthTextBox, YearTextBox, Form, locale){
-                parser.parse();
-            });
-		</script>
 	</head>
 
 	<body class="tundra">
@@ -91,7 +76,7 @@
 
 			<div class="testExample">
 				Year Only
-				<input id="q1Year" name="q1Year" type="text" data-dojo-type="dojox.form.YearTextBox"
+				<input id="q1Year" name="q1Year" type="text" data-dojo-type="dojox/form/YearTextBox"
 				         onChange="dojo.byId('oc1year').value=arguments[0]"
 				>
 				onChange:<input id="oc1year" size="34" disabled value="not fired yet!" autocomplete="off">
@@ -103,7 +88,7 @@
 			</div>
 			<div class="testExample">
 				<input id="q2" type="text" name="date1" class="medium" value="2005-12-30"
-					data-dojo-type="dojox.form.DateTextBox"
+					data-dojo-type="dojox/form/DateTextBox"
 					constraints="{min:'2004-01-01',max:'2006-12-31',formatLength:'long'}"
 					required="true"
 					trim="true"
@@ -120,7 +105,7 @@
 			</div>
 			<div class="testExample">
 				<input id="q3" type="text" name="date2" class="medium" value="2005-12-30"
-					data-dojo-type="dojox.form.DateTextBox"
+					data-dojo-type="dojox/form/DateTextBox"
 					constraints="{min:'2004-01-01',max:'2006-12-31'}"
 					lang="en-us"
 					required="true"
@@ -193,7 +178,6 @@
 				<input type="submit" name="submit" />
 				<input type="reset" name="reset" />
 			</div>
-
 		</form>
 	</body>
 </html>
