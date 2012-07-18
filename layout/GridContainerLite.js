@@ -691,7 +691,7 @@ define([
 									focus.focus(focusNode);
 								}
 								else{
-									topic.publish("/dojox/layout/gridContainer/moveRestriction", [this]);
+									topic.publish("/dojox/layout/gridContainer/moveRestriction", this);
 								}
 							}
 							else{
@@ -758,7 +758,7 @@ define([
 									focus.focus(r);
 								}
 								else{
-									topic.publish("/dojox/layout/gridContainer/moveRestriction", [this]);
+									topic.publish("/dojox/layout/gridContainer/moveRestriction", this);
 								}
 							}
 							else{
