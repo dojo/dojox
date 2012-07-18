@@ -17,7 +17,6 @@ var profile = (function(){
 			"editor/plugins/(ResizeTableColumn|SpellCheck)",
 			"embed/(IE)",
 			"flash",
-			"gantt",
 			"help",
 			"image/(Gallery|SlideShow|ThumbnailPicker)",
 			"jq",

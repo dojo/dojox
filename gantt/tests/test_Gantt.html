@@ -5,63 +5,72 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<style type="text/css">
 			@import "../../../dojo/resources/dojo.css";
+			@import "../../../dijit/themes/dijit.css";
+			@import "../../../dijit/themes/claro/claro.css";
 			@import "../../../dijit/tests/css/dijitTests.css";
+			@import "../resources/gantt.css";
 		</style>
-		<!-- required: the default dijit theme: -->
-		<link id="themeStyles" rel="stylesheet" href="../../../dijit/themes/claro/claro.css"/>
-		<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad: true">
-		</script>
-		<link type="text/css" rel="stylesheet" href="../resources/gantt.css">
-		<script type="text/javascript" language="JavaScript">
-			dojo.require("dojo.parser"); // scan page for widgets and instantiate them
-			dojo.require("dojox.gantt.GanttChart");
-			
-			dojo.addOnLoad(function(){
-				var projectDev = new dojox.gantt.GanttProjectItem({
+		<script type="text/javascript" src="../../../dojo/dojo.js"
+        		data-dojo-config="async:true, transparentColor: [ 255, 255, 255 ]"></script>
+
+		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+
+		<script type="text/javascript">
+			require([
+			    "dojo/_base/declare",
+				"dojo/parser",
+				"dojo/query",
+				"dojox/gantt/GanttChart",
+				"dojox/gantt/GanttProjectItem",
+				"dojox/gantt/GanttTaskItem",
+				"dojo/dom",
+				"dojo/domReady!"
+			], function(declare, parser, query, GanttChart, GanttProjectItem, GanttTaskItem, dom){
+			    var projectDev = new GanttProjectItem({
 					id: 1,
 					name: "Development Project",
-					startDate: new Date(2006, 5, 11)
+					startDate: new Date(2012, 5, 11)
 				});
 				
-				var taskRequirement = new dojox.gantt.GanttTaskItem({
+				var taskRequirement = new GanttTaskItem({
 					id: 1,
 					name: "Requirement",
-					startTime: new Date(2006, 5, 11),
+					startTime: new Date(2012, 5, 11),
 					duration: 50,
 					percentage: 50,
 					taskOwner: "Jack"
 				});
-				var taskAnalysis = new dojox.gantt.GanttTaskItem({
+				var taskAnalysis = new GanttTaskItem({
 					id: 2,
 					name: "Analysis",
-					startTime: new Date(2006, 5, 18),
+					startTime: new Date(2012, 5, 18),
 					duration: 40,
 					percentage: 80,
 					previousTaskId: "1",
 					taskOwner: "Michael"
 				});
-				var taskDesign = new dojox.gantt.GanttTaskItem({
+				var taskDesign = new GanttTaskItem({
 					id: 3,
 					name: "Design",
-					startTime: new Date(2006, 5, 18),
+					startTime: new Date(2012, 5, 18),
 					duration: 60,
 					percentage: 80,
 					previousTaskId: "1",
 					taskOwner: "Jason"
 				});
-				var taskDetailDesign = new dojox.gantt.GanttTaskItem({
+				var taskDetailDesign = new GanttTaskItem({
 					id: 4,
 					name: "Detail design",
-					startTime: new Date(2006, 5, 18),
+					startTime: new Date(2012, 5, 18),
 					duration: 30,
 					percentage: 50,
 					previousTaskId: "1",
 					taskOwner: "Michael"
 				});
-				var taskDevelopmentDoc = new dojox.gantt.GanttTaskItem({
+				var taskDevelopmentDoc = new GanttTaskItem({
 					id: 5,
 					name: "Development doc",
-					startTime: new Date(2006, 5, 20),
+					startTime: new Date(2012, 5, 20),
 					duration: 20,
 					percentage: 10,
 					previousTaskId: "1",
@@ -74,46 +83,46 @@
 				projectDev.addTask(taskDetailDesign);
 				projectDev.addTask(taskDevelopmentDoc);
 				
-				var taskSketch = new dojox.gantt.GanttTaskItem({
+				var taskSketch = new GanttTaskItem({
 					id: 6,
 					name: "Sketch",
-					startTime: new Date(2006, 6, 1),
+					startTime: new Date(2012, 6, 1),
 					duration: 20,
 					percentage: 50,
 					previousTaskId: "3",
 					taskOwner: "Rock"
 				});
-				var taskPrototype = new dojox.gantt.GanttTaskItem({
+				var taskPrototype = new GanttTaskItem({
 					id: 7,
 					name: "Prototype",
-					startTime: new Date(2006, 6, 6),
+					startTime: new Date(2012, 6, 6),
 					duration: 60,
 					percentage: 80,
 					previousTaskId: "6",
 					taskOwner: "Rock"
 				});
-				var taskImplementation = new dojox.gantt.GanttTaskItem({
+				var taskImplementation = new GanttTaskItem({
 					id: 8,
 					name: "Implementation",
-					startTime: new Date(2006, 6, 6),
+					startTime: new Date(2012, 6, 6),
 					duration: 30,
 					percentage: 80,
 					previousTaskId: "6",
 					taskOwner: "Jason"
 				});
-				var taskDetailImplement = new dojox.gantt.GanttTaskItem({
+				var taskDetailImplement = new GanttTaskItem({
 					id: 9,
 					name: "Detail Implement",
-					startTime: new Date(2006, 6, 17),
+					startTime: new Date(2012, 6, 17),
 					duration: 120,
 					percentage: 50,
 					previousTaskId: "7",
 					taskOwner: "Jason"
 				});
-				var taskDeliver = new dojox.gantt.GanttTaskItem({
+				var taskDeliver = new GanttTaskItem({
 					id: 10,
 					name: "Deliver",
-					startTime: new Date(2006, 6, 18),
+					startTime: new Date(2012, 6, 18),
 					duration: 100,
 					percentage: 30,
 					previousTaskId: "8",
@@ -127,7 +136,7 @@
 				projectDev.addTask(taskDeliver);
 				
 				// Create Gantt control
-				var ganttChart = new dojox.gantt.GanttChart({
+				var ganttChart = new GanttChart({
 					//readOnly: true,			//optional: gantt chart editable
 					//dataFilePath: "gnt.json",	//optional: json data file path for load and save, default is "gantt_default.json"
 					//withTaskId: false,		//optional: if true, task id will be on the right of task name, default value is !readOnly.
@@ -142,8 +151,8 @@
 				
 				// Initialize and Render
 				ganttChart.init();
-				
 			});
+		</script>
 		</script>
 	</head>
 	<body class="claro">
