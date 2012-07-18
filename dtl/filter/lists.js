@@ -78,7 +78,7 @@ define([
 			//		Returns a slice of the list.
 			// description:
 			//		Uses the same syntax as Python's list slicing; see
-			//		http://diveintopython.org/native_data_types/lists.html#odbchelper.list.slice
+			//		http://www.diveintopython.net/native_data_types/lists.html#odbchelper.list.slice
 			//		for an introduction.
 			//		Also uses the optional third value to denote every X item.
 			arg = arg || "";
