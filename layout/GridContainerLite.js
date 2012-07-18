@@ -134,13 +134,10 @@ define([
 					h: has("ie") ? geom.getBorderExtents(this.gridContainerTable).h : 0,
 					w: (has("ie") == 6) ? 1 : 0
 				}
-			}
-			else{
+			}else{
 				domStyle.set(this.domNode, "overflowY", "hidden");
 				domStyle.set(this.gridContainerTable, "height", "auto");
 			}
-			// Call postCreate of dijit.layout._LayoutWidget.
-			this.inherited(arguments);
 		},
 
 		startup: function(){
