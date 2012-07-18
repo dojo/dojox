@@ -534,7 +534,7 @@ define([
 			var _this = this;
 			_this.dataFilePath = (fileName && lang.trim(fileName).length > 0) ? fileName : this.dataFilePath;
 			try {
-				var td = request.post(_this.saveProgramPath, {
+				request.post(_this.saveProgramPath, {
 					query: {filename: _this.dataFilePath, data: JSON.stringify(_this.getJSONData())}
 				}).response.then(function(response){
 					if((util.checkStatus(response.options.status))||
@@ -580,7 +580,6 @@ define([
 			this.pixelsPerHour = this.pixelsPerDay / 24;
 		},
 		createPanelNamesTasksHeader: function(){
-			var _this = this;
 			var panelHeader = domConstruct.create("div", {className: "ganttPanelHeader"});
 			var tblHeader = domConstruct.create("table", {
 				cellPadding: "0px",

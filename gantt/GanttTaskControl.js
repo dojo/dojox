@@ -78,7 +78,6 @@ define([
 		createConnectingLinesDS: function(){
 			var contentData = this.ganttChart.contentData.firstChild;
 			var arrLines = [];
-			var arrowImg = new Image();
 			var arrowImg = domConstruct.create("div", {
 				className: "ganttImageArrow"
 			});
@@ -91,7 +90,6 @@ define([
 			var posXChildTask = domStyle.set(this.cTaskItem[0], "left");
 			var posYChildTask = this.posY + 2;
 			//width task item
-			var widthChildTask = parseInt(this.predTask.cTaskItem[0].firstChild.firstChild.width);
 			var widthPreviousTask = parseInt(this.predTask.cTaskItem[0].firstChild.firstChild.width);
 			if(posYPreviousTask < posYChildTask){
 				domClass.add(lineVerticalRight, "ganttTaskLineVerticalRight");
@@ -146,7 +144,7 @@ define([
 					var cTask = task.childTask[i],
 						cTaskItem0 = cTask.cTaskItem[0], cTaskName0 = cTask.cTaskNameItem[0],
 						cTaskItem1 = cTask.cTaskItem[1], cTaskName1 = cTask.cTaskNameItem[1],
-						cTaskItem2 = cTask.cTaskItem[2], cTaskName2 = cTask.cTaskNameItem[2];
+						cTaskName2 = cTask.cTaskNameItem[2];
 					if(cTaskItem0.style.display == "none"){
 						cTaskItem0.style.display = "inline";
 						cTaskName0.style.display = "inline";
@@ -176,7 +174,7 @@ define([
 				var cTask = task.childTask[i],
 					cTaskItem0 = cTask.cTaskItem[0], cTaskName0 = cTask.cTaskNameItem[0],
 					cTaskItem1 = cTask.cTaskItem[1], cTaskName1 = cTask.cTaskNameItem[1],
-					cTaskItem2 = cTask.cTaskItem[2], cTaskName2 = cTask.cTaskNameItem[2];
+					cTaskName2 = cTask.cTaskNameItem[2];
 				if(cTaskItem0.style.display != "none"){
 					cTaskItem0.style.display = "none";
 					cTaskName0.style.display = "none";
@@ -207,7 +205,7 @@ define([
 			task.posY = task.posY + height;
 			var taskItem0 = task.cTaskItem[0], taskName0 = task.cTaskNameItem[0],
 				taskItem1 = task.cTaskItem[1], taskName1 = task.cTaskNameItem[1],
-				taskItem2 = task.cTaskItem[2], taskName2 = task.cTaskNameItem[2];
+				taskName2 = task.cTaskNameItem[2];
 			taskName0.style.top = parseInt(taskName0.style.top) + height + "px";
 			if(taskName2){
 				taskName2.style.top = parseInt(taskName2.style.top) + height + "px";
@@ -398,9 +396,7 @@ define([
 		},
 		resizeItem: function(event){
 			if(this.checkResize){
-				var taskItem = this.cTaskItem[0];
 				var mouseX = event.screenX;
-				var width = (mouseX - this.mouseX);
 				var widthTaskItem = this.taskItemWidth + (mouseX - this.mouseX);
 				if(widthTaskItem >= this.taskItemWidth){
 					if((widthTaskItem <= this.maxWidthResize) || (this.maxWidthResize == -1)){
@@ -718,13 +714,8 @@ define([
 					height: this.ganttChart.heightTaskItem + "px",
 					width: this.taskItem.duration * this.ganttChart.pixelsPerWorkHour + "px"
 				}, divTaskInfo);
-				var rowTaskInfo = tblTaskInfo.insertRow(0);
-				var cellTaskInfo = domConstruct.create("td", {
-					align: "center",
-					vAlign: "top",
-					height: this.ganttChart.heightTaskItem + "px",
-					className: "ganttMoveInfo"
-				}, rowTaskInfo);
+
+
 				var divTaskName = domConstruct.create("div", {className: "ganttTaskDivTaskName"}, itemControl);
 				var divMove = domConstruct.create("div", {}, divTaskName);
 				domConstruct.create("input", {
@@ -968,7 +959,7 @@ define([
 			var posXChildTask = domStyle.set(this.cTaskItem[0], "left");
 			var posYChildTask = this.posY + 2;
 			//width task item
-			var widthChildTask = parseInt(this.predTask.cTaskItem[0].firstChild.firstChild.width);
+
 			var widthPreviousTask = parseInt(this.predTask.cTaskItem[0].firstChild.firstChild.width);
 			if(posYPreviousTask < posYChildTask){
 				domStyle.set(lineVerticalRight, {
@@ -1011,7 +1002,7 @@ define([
 			this.refreshTaskItem(this.cTaskItem[0]);
 			this.refreshTaskDesc(this.cTaskItem[0].nextSibling);
 			//Create Connecting Lines
-			var arrConnectingLines = [];
+
 			if(this.taskItem.previousTask && this.predTask){
 				this.refreshConnectingLinesDS(this.cTaskItem[1]);
 			}
@@ -1019,7 +1010,7 @@ define([
 		},
 		create: function(){
 			var containerTasks = this.ganttChart.contentData.firstChild;
-			var containerNames = this.ganttChart.panelNames.firstChild;
+
 			var previousTask = this.taskItem.previousTask;
 			var parentTask = this.taskItem.parentTask;
 			var isCParentTask = (this.taskItem.cldTasks.length > 0);

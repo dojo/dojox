@@ -109,7 +109,6 @@ define([
 			//TODO e.g. project relative info...
 		},
 		refresh: function(){
-			var containerTasks = this.ganttChart.contentData.firstChild;
 			this.posX = (this.project.startDate - this.ganttChart.startDate) / (60 * 60 * 1000) * this.ganttChart.pixelsPerHour;
 			this.refreshProjectItem(this.projectItem[0]);
 			this.refreshDescrProject(this.projectItem[0].nextSibling);
@@ -171,8 +170,6 @@ define([
 			var posItemL = null;
 			var posItemR = null;
 			var posProjectItemL = parseInt(this.projectItem[0].style.left);
-			var posProjectItemR = parseInt(this.projectItem[0].firstChild.style.width) + parseInt(this.projectItem[0].style.left);
-			var widthProjectItem = parseInt(this.projectItem[0].firstChild.style.width);
 			for(var i = 0; i < this.arrTasks.length; i++){
 				var aTask = this.arrTasks[i];
 				var tmpPosItemL = parseInt(aTask.cTaskItem[0].style.left);
@@ -332,7 +329,7 @@ define([
 				width: ((this.duration * this.ganttChart.pixelsPerWorkHour == 0) ? 1 : this.duration * this.ganttChart.pixelsPerWorkHour) + "px"
 			}, divTaskInfo);
 			var rowTaskInfo = tblTaskInfo.insertRow(0);
-			var cellTaskInfo = domConstruct.create("td", {
+			domConstruct.create("td", {
 				align: "center",
 				vAlign: "top",
 				height: this.ganttChart.heightTaskItem + "px",
@@ -545,7 +542,7 @@ define([
 			if(task){
 				var tItem0 = task.cTaskItem[0], tNameItem0 = task.cTaskNameItem[0],
 					tItem1 = task.cTaskItem[1], tNameItem1 = task.cTaskNameItem[1],
-					tItem2 = task.cTaskItem[2], tNameItem2 = task.cTaskNameItem[2];
+					tNameItem2 = task.cTaskNameItem[2];
 				if(tItem0.style.display == "none"){
 					this.ganttChart.openTree(task.parentTask);
 				}
@@ -852,7 +849,7 @@ define([
 		shiftTask: function(task, height){
 			task.posY = task.posY + height;
 			var tNameItem0 = task.cTaskNameItem[0], tNameItem1 = task.cTaskNameItem[1], tNameItem2 = task.cTaskNameItem[2],
-				tItem0 = task.cTaskItem[0], tItem1 = task.cTaskItem[1], tItem2 = task.cTaskItem[2];
+				tItem1 = task.cTaskItem[1];
 			tNameItem0.style.top = parseInt(tNameItem0.style.top) + height + "px";
 			if(tNameItem2){
 				tNameItem2.style.top = parseInt(tNameItem2.style.top) + height + "px";

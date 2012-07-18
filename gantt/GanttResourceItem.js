@@ -164,8 +164,6 @@ define([
 			var previousOwner = this.ownerItem[this.ownerItem.length - 1];
 			this.ownerTaskNodeMapping[owner] = {};
 			this.ownerTaskNodeMapping[owner][owner] = [];
-			//create nodes
-			var pos = domGeometry.position(containerOwner);
 			//creation arrTasks
 			var posY = (previousOwner ? parseInt(previousOwner.style.top) : (6 - 23)) + this.ganttChart.heightTaskItem + 11;
 			//creation task item
@@ -179,8 +177,7 @@ define([
 				this.ownerNameItem.push(oNameItem);
 				this.ownerTaskNodeMapping[owner][owner].push(oNameItem);
 			}
-			var currentOwnerNode = this.ownerItem[this.ownerNameItem.length - 1],
-				currentOwnerNameNode = this.ownerNameItem[this.ownerNameItem.length - 1];
+			var currentOwnerNameNode = this.ownerNameItem[this.ownerNameItem.length - 1];
 			//adjust nodes
 			if(this.panelNames){
 				this.checkWidthTaskNameItem(currentOwnerNameNode);
@@ -208,7 +205,7 @@ define([
 		},
 		refreshOwnerItem: function(owner){
 			var item = this.ownerTaskNodeMapping[owner][owner][0],
-				start = this.ownerTimeConsume[owner].min, end = this.ownerTimeConsume[owner].max, dur = this.ownerTimeConsume[owner].dur,
+				start = this.ownerTimeConsume[owner].min, dur = this.ownerTimeConsume[owner].dur,
 				posX = this.ganttChart.getPosOnDate(start); // should be task start date
 			item.style.left = posX + "px";
 			item.style.width = dur * this.ganttChart.pixelsPerWorkHour + "px";
@@ -221,7 +218,7 @@ define([
 			}, this);
 		},
 		createOwnerItem: function(owner, posY){
-			var start = this.ownerTimeConsume[owner].min, end = this.ownerTimeConsume[owner].max, dur = this.ownerTimeConsume[owner].dur;
+			var start = this.ownerTimeConsume[owner].min, dur = this.ownerTimeConsume[owner].dur;
 			var posX = this.ganttChart.getPosOnDate(start); // should be task start date
 			var ownerControl = domConstruct.create("div", {
 				id: owner,
