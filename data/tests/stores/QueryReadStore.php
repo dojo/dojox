@@ -77,8 +77,11 @@ if (array_key_exists("q", $_REQUEST)) {
 	$q = $_REQUEST['name'];
 }
 
-// Support wildcard search like "a*" to find all elements beginning with a
-if ($q && strlen($q) && $q[strlen($q)-1]=="*") {
+// Support wildcard search like "a*" to find all elements beginning with a, or "*" to find all elements
+// (same as no query at all)
+if ($q === "*") {
+	$q = null;	// treat it the same as no query at all
+}else if ($q && strlen($q) && $q[strlen($q)-1]=="*") {
 	$q = substr($q, 0, strlen($q)-1);
 	$wildcard = true;
 }
