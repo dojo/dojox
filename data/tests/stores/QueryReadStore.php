@@ -67,7 +67,10 @@ $allItems = array(
 	array('id'=>61, 'name'=>"Special chars !\"$%&/()=? <a >#'+*-_.:,; <", 'label'=>"Special chars !\"$%&/()=? <a >#'+*-_.:,;<", 'abbreviation'=>":-)", 'capital'=>'/dev/null'),
 );
 
-$q = "";
+
+// Query.   Null means no query at all (return all records), whereas any string, even the empty string,
+// is a filter.
+$q = null;
 if (array_key_exists("q", $_REQUEST)) {
 	$q = $_REQUEST['q'];
 }else if (array_key_exists("name", $_REQUEST)) {
@@ -75,7 +78,7 @@ if (array_key_exists("q", $_REQUEST)) {
 }
 
 // Support wildcard search like "a*" to find all elements beginning with a
-if (strlen($q) && $q[strlen($q)-1]=="*") {
+if ($q && strlen($q) && $q[strlen($q)-1]=="*") {
 	$q = substr($q, 0, strlen($q)-1);
 	$wildcard = true;
 }
@@ -85,21 +88,22 @@ foreach ($allItems as $item) {
 	$foundPos = -1;
 
 	// flag if item matches the query or not
-	$foundWord = false;
+	$matches = true;
 
-	// If there's a query, run it, and set $foundWord if item matches
-	if ($q) {
+	// If there's a query, run it, and set $matches if item matches.
+	// Allow query for empty string too, that's why it has the explicit test for null.
+	if ($q !== null) {
 		if($wildcard){
 			// query like "a*", check if item starts with "a"
 			$foundPos = strpos(strtolower($item['name']), strtolower($q));
-			$foundWord = $foundPos===0;
+			$matches = $foundPos===0;
 		}else{
 			// query like "alabama", check if item matches query string exactly
-			$foundWord = strtolower($item['name']) == strtolower($q);
+			$matches = strtolower($item['name']) == strtolower($q);
 		}
 	}
 
-	if (!$q || $foundWord) {
+	if ($matches) {
 		// Add item to result list
 		$ret[] = $item;
 	}
