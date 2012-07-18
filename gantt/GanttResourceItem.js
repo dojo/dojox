@@ -124,7 +124,7 @@ define([
 				if(_this.panelNames){
 					_this.panelNames.scrollTop = this.scrollTop;
 				}
-			}
+			};
 			this.contentData.scrollLeft = this.ganttChart.contentData.scrollLeft;
 			for(var owner in this.resourceInfo){
 				this.createOwnerEntry(owner);

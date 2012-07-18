@@ -95,7 +95,7 @@ define([
 		},
 		correctPosPreviousTask: function(predTask, ctask, ctaskObj){
 			var newDate = new Date(predTask.startTime);
-			newDate.setHours(newDate.getHours() + (predTask.duration / this.hsPerDay * 24))
+			newDate.setHours(newDate.getHours() + (predTask.duration / this.hsPerDay * 24));
 			if(newDate.getHours() > 0){
 				newDate.setHours(0);
 				newDate.setDate(newDate.getDate() + 1);
@@ -104,7 +104,7 @@ define([
 			if(ctask.parentTask){
 				if(!this.checkPosParentTask(ctask.parentTask, ctask)){
 					var newDate2 = new Date(ctask.parentTask.startTime);
-					newDate2.setHours(newDate2.getHours() + (ctask.parentTask.duration / this.hsPerDay * 24))
+					newDate2.setHours(newDate2.getHours() + (ctask.parentTask.duration / this.hsPerDay * 24));
 					ctask.duration = parseInt((parseInt((newDate2 - ctask.startTime) / (1000 * 60 * 60))) * this.hsPerDay / 24);
 				}
 			}
@@ -437,7 +437,7 @@ define([
 				arrayUtil.forEach(tItems, function(tItem){
 					var id = tItem.id,
 						name = tItem.name,
-						starttime = tItem.starttime.split("-");
+						starttime = tItem.starttime.split("-"),
 						duration = tItem.duration,
 						percentage = tItem.percentage,
 						previousTaskId = tItem.previousTaskId,
@@ -537,7 +537,7 @@ define([
 			_this.dataFilePath = (fileName && lang.trim(fileName).length > 0) ? fileName : this.dataFilePath;
 			try {
 				var td = request.post(_this.saveProgramPath, {
-					query: {filename: _this.dataFilePath, data: JSON.stringify(_this.getJSONData())},
+					query: {filename: _this.dataFilePath, data: JSON.stringify(_this.getJSONData())}
 				}).response.then(function(response){
 					if((util.checkStatus(response.options.status))||
 						(response.options.status == 405)
@@ -766,7 +766,8 @@ define([
 			}, panelTime);
 			this.totalDays = this.countDays;
 			//year
-			var newYearRow = tblTime.insertRow(tblTime.rows.length), newYear = oldYear = new Date(this.startDate).getFullYear(), ycount = 0;
+			var newYearRow = tblTime.insertRow(tblTime.rows.length), oldYear, newYear, ycount = 0;
+			newYear = oldYear = new Date(this.startDate).getFullYear();
 			for(var i = 0; i < this.countDays; i++, ycount++){
 				var date = new Date(this.startDate);
 				date.setDate(date.getDate() + i);
@@ -780,7 +781,8 @@ define([
 			this.addYearInPanelTime(newYearRow, ycount, newYear);
 			domStyle.set(newYearRow, "display", "none");
 			//month
-			var newMonthRow = tblTime.insertRow(tblTime.rows.length), newMonth = oldMonth = new Date(this.startDate).getMonth(), mcount = 0, lastYear = 1970;
+			var newMonthRow = tblTime.insertRow(tblTime.rows.length), oldMonth, newMonth, mcount = 0, lastYear = 1970;
+			newMonth = oldMonth = new Date(this.startDate).getMonth();
 			for(var i = 0; i < this.countDays; i++, mcount++){
 				var date = new Date(this.startDate);
 				date.setDate(date.getDate() + i);
@@ -794,7 +796,8 @@ define([
 			}
 			this.addMonthInPanelTime(newMonthRow, mcount, newMonth, lastYear);
 			//week
-			var newWeekRow = tblTime.insertRow(tblTime.rows.length), newWeek = oldWeek = locale._getWeekOfYear(new Date(this.startDate)), mcount = 0;
+			var newWeekRow = tblTime.insertRow(tblTime.rows.length), oldWeek, newWeek, mcount = 0;
+			newWeek = oldWeek = locale._getWeekOfYear(new Date(this.startDate));
 			for(var i = 0; i < this.countDays; i++, mcount++){
 				var date = new Date(this.startDate);
 				date.setDate(date.getDate() + i);
@@ -829,11 +832,12 @@ define([
 				var prows = this.panelTime.firstChild.firstChild.rows;
 				for(var i = 0; i <= 4; i++){//prows.length
 					this.removeCell(prows[i]);
-				};
+				}
 				var countDays = Math.round((maxEndPos+this.panelTimeExpandDelta) / this.pixelsPerDay);
 				this.totalDays = countDays;
 				//year
-				var newYear = oldYear = new Date(this.startDate).getFullYear(), ycount = 0;
+				var oldYear, newYear, ycount = 0;
+				newYear = oldYear = new Date(this.startDate).getFullYear();
 				for(var i = 0; i < countDays; i++, ycount++){
 					var date = new Date(this.startDate);
 					date.setDate(date.getDate() + i);
@@ -846,7 +850,8 @@ define([
 				}
 				this.addYearInPanelTime(prows[0], ycount, newYear);
 				//month
-				var newMonth = oldMonth = new Date(this.startDate).getMonth(), mcount = 0, lastYear = 1970;
+				var oldMonth, newMonth, mcount = 0, lastYear = 1970;
+				newMonth = oldMonth = new Date(this.startDate).getMonth();
 				for(var i = 0; i < countDays; i++, mcount++){
 					var date = new Date(this.startDate);
 					date.setDate(date.getDate() + i);
@@ -860,7 +865,8 @@ define([
 				}
 				this.addMonthInPanelTime(prows[1], mcount, newMonth, lastYear);
 				//week
-				var newWeek = oldWeek = locale._getWeekOfYear(new Date(this.startDate)), mcount = 0;
+				var oldWeek, newWeek, mcount = 0;
+				newWeek = oldWeek = locale._getWeekOfYear(new Date(this.startDate));
 				for(var i = 0; i < countDays; i++, mcount++){
 					var date = new Date(this.startDate);
 					date.setDate(date.getDate() + i);
@@ -1149,7 +1155,7 @@ define([
 				if(_this.resource){
 					_this.resource.contentData.scrollLeft = this.scrollLeft;
 				}
-			}
+			};
 			this.project.sort(this.sortProjStartDate);
 			for(var i = 0; i < this.project.length; i++){
 				var proj = this.project[i];
