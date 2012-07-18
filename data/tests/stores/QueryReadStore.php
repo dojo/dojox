@@ -74,37 +74,34 @@ if (array_key_exists("q", $_REQUEST)) {
 	$q = $_REQUEST['name'];
 }
 
+// Support wildcard search like "a*" to find all elements beginning with a
 if (strlen($q) && $q[strlen($q)-1]=="*") {
 	$q = substr($q, 0, strlen($q)-1);
+	$wildcard = true;
 }
+
 $ret = array();
 foreach ($allItems as $item) {
 	$foundPos = -1;
+
+	// flag if item matches the query or not
 	$foundWord = false;
+
+	// If there's a query, run it, and set $foundWord if item matches
 	if ($q) {
-		$foundPos = strpos(strtolower($item['name']), strtolower($q));
-		$foundWord = $foundPos===0;
-		if (!$foundWord) {
-			$foundPos = strpos(strtolower($item['name']), ' '.strtolower($q));
-			if ($foundPos!==false) {
-				$foundPos += 1; // It was found, so subtract the offset the space occupied.
-				$foundWord = true;
-			}
+		if($wildcard){
+			// query like "a*", check if item starts with "a"
+			$foundPos = strpos(strtolower($item['name']), strtolower($q));
+			$foundWord = $foundPos===0;
+		}else{
+			// query like "alabama", check if item matches query string exactly
+			$foundWord = strtolower($item['name']) == strtolower($q);
 		}
 	}
+
 	if (!$q || $foundWord) {
-		// Put a span around the searched characters to highlight them.
-		$resultItem = $item;
-		// Currently we dont need custom highlighting, its implemented in the client too.
-		//if ($foundWord) {
-		//	$resultItem['highlightedLabel'] = substr($item['name'], 0, $foundPos) .
-		//		'<span class="searchResult">' .
-		//		substr($item['name'], $foundPos, strlen($q)) . '</span>' .
-		//		substr($item['name'], $foundPos+strlen($q));
-		//} else {
-		//	$resultItem['highlightedLabel'] = $item['name'];
-		//}
-		$ret[] = $resultItem;
+		// Add item to result list
+		$ret[] = $item;
 	}
 }
 

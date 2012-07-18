@@ -24,8 +24,6 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 		*/
 		
 		function testReadApi_getValue(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -44,16 +42,15 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				// the item is not an item or when the attribute is not a string.
 				t.assertError(Error, store, "getValue", ["not an item", "NOT THERE"]);
 				t.assertError(Error, store, "getValue", [item, {}]);
-				
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alabama"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_getValues(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -77,15 +74,15 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 					errThrown = true;
 				}
 				t.assertTrue(errThrown);
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alabama"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 		
 		function testReadApi_getAttributes(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -94,10 +91,11 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				// The good case(s).
 				t.assertEqual(['id', 'name', 'label', 'abbreviation', 'capital'], store.getAttributes(item));
 				t.assertError(Error, store, "getAttributes", [{}]);
-				
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alabama"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
@@ -108,15 +106,15 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				var item = items[0];
 				// The good cases.
 				t.assertEqual(["<img src='images/Alabama.jpg'/>Alabama"], store.getLabel(item));
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alabama"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_hasAttribute(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -134,31 +132,30 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				t.assertEqual(false, store.hasAttribute({}, "abbreviation"));
 				// pass in something that looks like the item with the attribute.
 				t.assertEqual(false, store.hasAttribute({name:"yo"}, "name"));
-				
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alaska"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alaska"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_containsValue(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request){
 				var item = items[0];
 				t.assertTrue(store.containsValue(item, "name", "Alaska"));
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alaska"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alaska"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_isItem(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -169,15 +166,15 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				t.assertEqual(false, store.isItem({}));
 				// Try to look like an item.
 				t.assertEqual(false, store.isItem({name:"Alaska", label:"Alaska", abbreviation:"AK"}));
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alaska"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alaska"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_isItemLoaded(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
@@ -185,10 +182,11 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				var item = items[0];
 				// The good case(s).
 				t.assertTrue(store.isItemLoaded(item));
-				
-				d.callback(true);
 			}
-			store.fetch({query:{q:"Alabama"}, onComplete: onComplete});
+			store.fetch({
+				query:{q:"Alabama"},
+				onComplete: d.getTestCallback(onComplete)
+			});
 			return d; //Object
 		},
 
@@ -201,129 +199,128 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 		function testReadApi_fetch_all(t){
 			// summary:
 			//		Simple test of fetching all items.
-			// description:
-			//		Simple test of fetching all items.
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-				t.assertEqual(12, items.length);
-				d.callback(true);
+				t.assertEqual(9, items.length);
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			store.fetch({query:{q:"m"}, onComplete: onComplete, onError: onError});
+			store.fetch({
+				query:{q:"m*"},
+				onComplete: d.getTestCallback(onComplete),
+				onError: d.getTestErrback(onError)
+			});
 			return d; //Object
 		},
 		
 		function testReadApi_fetch_onBegin(t){
 			// summary:
 			//		Simple test of fetching items, checking that onBegin size is all items matched, and page is just the items asked for.
-			// description:
-			//		Simple test of fetching items, checking that onBegin size is all items matched, and page is just the items asked for.
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 
 			var d = new doh.Deferred();
-			var passed = false;
 			function onBegin(size, request){
-				t.assertEqual(12, size);
-				passed = true;
+				t.assertEqual(9, size);
 			}
 			function onComplete(items, request) {
 				t.assertEqual(5, items.length);
-				if(passed){
-					d.callback(true);
-				}else{
-					d.errback(new Error("Store did not return proper number of rows, regardless of page size"));
-				}
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			store.fetch({query:{q:"m"}, start: 0, count: 5, onBegin: onBegin, onComplete: onComplete, onError: onError});
+			store.fetch({
+				query:{q:"m*"},
+				start: 0,
+				count: 5,
+				onBegin: d.getTestErrback(onBegin),
+				onComplete: d.getTestCallback(onComplete),
+				onError: d.getTestErrback(onError)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_fetch_onBegin_ServersidePaging(t){
 			// summary:
 			//		Simple test of fetching items, checking that onBegin size is all items matched, and page is just the items asked for.
-			// description:
-			//		Simple test of fetching items, checking that onBegin size is all items matched, and page is just the items asked for.
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 
 			var d = new doh.Deferred();
-			var passed = false;
+			var began = false;
 			function onBegin(size, request){
-				t.assertEqual(12, size);
-				passed = true;
+				t.assertEqual(9, size);
+				began = true;
 			}
 			function onComplete(items, request) {
-				t.assertEqual(5, items.length);
-				if(passed){
-					d.callback(true);
-				}else{
-					d.errback(new Error("Store did not return proper number of rows, regardless of page size"));
-				}
+				t.t(began, "onBegin was called");
+				t.assertEqual(4, items.length);	// 9 total, starting at 5, 4 left.
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			store.fetch({query:{q:"m"}, start: 5, count: 5, onBegin: onBegin, onComplete: onComplete, onError: onError});
+
+			store.fetch({
+				query:{q:"m*"},
+				start: 5,
+				count: 5,
+				onBegin: d.getTestErrback(onBegin),
+				onComplete: d.getTestCallback(onComplete),
+				onError: d.getTestErrback(onError)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_fetch_onBegin_ClientsidePaging(t){
 			// summary:
 			//		Simple test of fetching items, checking that onBegin size is all items matched, and page is just the items asked for.
-			// description:
-			//		Simple test of fetching items, checking that onBegin size is all items matched, and page is just the items asked for.
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			store.doClientPaging = true;
 
 			var d = new doh.Deferred();
-			var passed = false;
 			function onBegin(size, request){
-				t.assertEqual(12, size);
-				passed = true;
+				t.assertEqual(9, size);
 			}
 			function onComplete(items, request) {
 				t.assertEqual(5, items.length);
-				if(passed){
-					d.callback(true);
-				}else{
-					d.errback(new Error("Store did not return proper number of rows, regardless of page size"));
-				}
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			store.fetch({query:{q:"m"}, start: 0, count: 5, onBegin: onBegin, onComplete: onComplete, onError: onError});
+			store.fetch({
+				query:{q:"m*"},
+				start: 0,
+				count: 5,
+				onBegin: d.getTestErrback(onBegin),
+				onComplete: d.getTestCallback(onComplete),
+				onError: d.getTestErrback(onError)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_fetch_one(t){
-			// summary:
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			
 			var d = new doh.Deferred();
 			function onComplete(items, request){
 				t.assertEqual(1, items.length);
-				d.callback(true);
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			store.fetch({query:{q:"Alaska"}, onComplete: onComplete, onError: onError});
+			store.fetch({
+				query:{q:"Alaska"},
+				onComplete: d.getTestCallback(onComplete),
+				onError: d.getTestErrback(onError)
+			});
 			return d; //Object
 		},
 
 		function testReadApi_fetch_client_paging(t){
 			// summary:
-			//		Lets test that paging on the same request does not trigger
+			//		Let's test that paging on the same request does not trigger
 			//		server requests.
-			// description:
 			var store = dojox.data.tests.stores.QueryReadStore.getStore();
 			store.doClientPaging = true;
 
@@ -331,27 +328,32 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 			var firstItems = [];
 			var d = new doh.Deferred();
 			function onComplete(items, request) {
-				t.assertEqual(5, items.length);
+				t.assertEqual(5, items.length, "length of first fetch");
 				lastRequestHash = store.lastRequestHash;
 				firstItems = items;
 				
 				// Do the next request AFTER the previous one, so we are sure its sequential.
 				// We need to be sure so we can compare to the data from the first request.
 				function onComplete1(items, request) {
-					t.assertEqual(5, items.length);
-					t.assertEqual(lastRequestHash, store.lastRequestHash);
-					t.assertEqual(firstItems[1], items[0]);
-					d.callback(true);
+					t.assertEqual(5, items.length, "length of second fetch");
+					t.assertEqual(lastRequestHash, store.lastRequestHash, "lastRequestHash");
+					t.assertEqual(firstItems[1], items[0], "items[0]");
 				}
 				req.start = 1;
-				req.onComplete = onComplete1;
+				req.onComplete = d.getTestCallback(onComplete1);
 				store.fetch(req);
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			var req = {query:{q:"m"}, start:0, count:5,
-						onComplete: onComplete, onError: onError};
+			var req = {
+				query:{q:"m*"},
+				start:0,
+				count:5,
+				onComplete: d.getTestErrback(onComplete),
+				onError: d.getTestErrback(onError)
+			};
+
 			store.fetch(req);
 			return d; //Object
 		},
@@ -386,16 +388,21 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 					t.assertEqual(store.getValue(firstItems[7], "name"), store.getValue(items[2], "name"));
 					t.assertEqual(store.getValue(firstItems[8], "name"), store.getValue(items[3], "name"));
 					t.assertEqual(store.getValue(firstItems[9], "name"), store.getValue(items[4], "name"));
-					d.callback(true);
 				}
 				// Init a new store, or it will use the old data, since the query has not changed.
 				store.doClientPaging = false;
 				store.fetch({start:5, count:5, onComplete: onComplete1, onError: onError});
 			}
 			function onError(error, request) {
-				d.errback(error);
+				throw new Error(error);
 			}
-			store.fetch({query:{}, start:0, count:10, onComplete: onComplete, onError: onError});
+			store.fetch({
+				query:{},
+				start:0,
+				count:10,
+				onComplete: d.getTestCallback(onComplete),
+				onError: d.getTestErrback(onError)
+			});
 			return d; //Object
 		},
 		
@@ -412,8 +419,6 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 		},
 		function testReadAPI_functionConformance(t){
 			// summary:
-			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
-			// description:
 			//		Simple test read API conformance.  Checks to see all declared functions are actual functions on the instances.
 
 			var testStore = dojox.data.tests.stores.QueryReadStore.getStore();
