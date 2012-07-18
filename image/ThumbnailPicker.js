@@ -113,11 +113,16 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	//		markImageLoaded function.
 	_loadedImages: {},
 
+	baseClass: "ThumbnailPicker",
+
+	cellClass: "Thumbnail",
+
 	postCreate: function(){
 		// summary:
 		//		Initializes styles and listeners
-		this.widgetid = this.id;
+
 		this.inherited(arguments);
+		
 		this.pageSize = Number(this.pageSize);
 
 		this._scrollerSize = this.size - (51 * 2);
@@ -195,7 +200,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		//		Returns the name of the dojo topic that can be
 		//		subscribed to in order to receive notifications on
 		//		which thumbnail was selected.
-		return (this.widgetId || this.id) + "/select"; // String
+		return this.id + "/select"; // String
 	},
 
 	getShowTopicName: function(){
@@ -203,7 +208,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		//		Returns the name of the dojo topic that can be
 		//		subscribed to in order to receive notifications on
 		//		which thumbnail is now visible
-		return (this.widgetId || this.id) + "/show"; // String
+		return this.id + "/show"; // String
 	},
 
 	setDataStore: function(dataStore, request, /*optional*/paramNames){
@@ -409,7 +414,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		//		If 'useLoadNotifier' is set to true, then a visual cue is
 		//		given to state whether the image is loaded or not.	Calling this function
 		//		marks an image as loaded.
-		var thumbNotifier = dojo.byId("loadingDiv_"+this.widgetid+"_"+index);
+		var thumbNotifier = dojo.byId("loadingDiv_"+this.id+"_"+index);
 		if(thumbNotifier){this._setThumbClass(thumbNotifier, "thumbLoaded");}
 		this._loadedImages[index] = true;
 	},
@@ -482,7 +487,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		
 		//Execute the request for data.
 		this.imageStore.fetch(this.request);
-	
 	},
 
 	_loadImage: function(data, index, callback){
@@ -493,8 +497,10 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var url = store.getValue(data,this.imageThumbAttr);
 		
 		var imgContainer = dojo.create("div", {
-			id: "img_" + this.widgetid + "_" + index
+			id: "img_" + this.id + "_" + index,
+			"class": this.cellClass
 		});
+		
 		var img = dojo.create("img", {}, imgContainer);
 		img._index = index;
 		img._data = data;
@@ -503,7 +509,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var loadingDiv;
 		if(this.useLoadNotifier){
 			loadingDiv = dojo.create("div", {
-				id: "loadingDiv_" + this.widgetid+"_" + index
+				id: "loadingDiv_" + this.id+"_" + index
 			}, imgContainer);
 	
 			//If this widget was previously told that the main image for this
@@ -553,6 +559,9 @@ dojo.declare("dojox.image.ThumbnailPicker",
 				title: this.imageStore.getValue(data,this.titleAttr),
 				link: this.imageStore.getValue(data,this.linkAttr)
 			}]);
+			//
+			dojo.query("." + this.cellClass, this.thumbsNode).removeClass(this.cellClass + "Selected");
+			dojo.addClass(evt.target.parentNode, this.cellClass + "Selected");
 			return false;
 		});
 		dojo.addClass(img, "imageGalleryThumb");
@@ -567,7 +576,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		// summary:
 		//		Updates the navigation controls to hide/show them when at
 		//		the first or last images.
-		var cells = [];
 		var change = function(node, add){
 			var fn = add ? "addClass" : "removeClass";
 			dojo[fn](node,"enabled");
@@ -578,7 +586,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var size = this.isHorizontal ? "offsetWidth" : "offsetHeight";
 		change(this.navPrev, (this.thumbScroller[pos] > 0));
 		
-		var last = this._thumbs[this._thumbs.length - 1];
 		var addClass = (this.thumbScroller[pos] + this._scrollerSize < this.thumbsNode[size]);
 		change(this.navNext, addClass);
 	}
