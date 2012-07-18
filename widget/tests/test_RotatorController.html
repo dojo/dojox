@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>dojox.widget.rotator.Controller Test</title>
@@ -212,13 +212,18 @@
 	}
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, selectorEngine:'acme'"></script>
 	<script type="text/javascript">
-	dojo.require("dojo.parser");
-	dojo.require("dojox.widget.AutoRotator");
-	dojo.require("dojox.widget.rotator.Controller");
-	dojo.require("dojox.widget.rotator.Fade");
-	dojo.require("dojox.widget.rotator.Pan");
+		require([
+			"dojo/parser",
+			"dojox/widget/AutoRotator",
+			"dojox/widget/rotator/Controller",
+			"dojox/widget/rotator/Fade",
+			"dojox/widget/rotator/Pan",
+			"dojo/domReady!"
+		], function(parser) {
+			parser.parse()
+		})
 	</script>
 </head>
 <body>
@@ -229,7 +234,9 @@
 	
 	<div class="test1">
 		
-		<div dojoType="dojox.widget.AutoRotator" class="rotator" jsId="myRotator" duration="1000" transition="dojox.widget.rotator.crossFade">
+		<div data-dojo-type="dojox.widget.AutoRotator" class="rotator"
+			 data-dojo-id="myRotator"
+			 data-dojo-props="duration: 1000, transition: 'dojox.widget.rotator.crossFade'">
 			<div class="pane" title="Nexaweb/Renkoo">
 				<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 				<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -268,36 +275,44 @@
 			<tr>
 				<td>
 					<h3>Default</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator"></div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator"></div>
 				</td>
 				<td>
 					<h3>Prev, Next</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="prev,next"></div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator, commands: 'prev,next'"></div>
 				</td>
 				<td>
 					<h3>Prev, Play/Pause, Next</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="prev,play/pause,next"></div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator, commands: 'prev,play/pause,next'"></div>
 				</td>
 				<td>
 					<h3>Prev, Numbers, Next</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="prev,#,next"></div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator, commands: 'prev,#,next'"></div>
 				</td>
 				<td>
 					<h3>Titles</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="titles"></div>
-					<div>Note: Last pane has no title and<br>uses default.</div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator, commands: 'titles'"></div>
+					<div>Note: Last pane has no title and<br>uses default/</div>
 				</td>
 				<td>
 					<h3>Play/Pause, Info</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="play/pause,info"></div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator, commands: 'play/pause,info'"></div>
 				</td>
 				<td>
 					<h3>Numbers, Info</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="#,info"></div>
+					<div data-dojo-type="dojox.widget.rotator.Controller"
+						 data-dojo-props="rotator: myRotator, commands: '#,info'"></div>
 				</td>
 				<td>
 					<h3>Info</h3>
-					<div dojoType="dojox.widget.rotator.Controller" rotator="myRotator" commands="info"></div>
+					<div data-dojo-type="dojox/widget/rotator/Controller"
+						 data-dojo-props="rotator: myRotator, commands: 'info'"></div>
 				</td>
 			</tr>
 		</table>
@@ -310,8 +325,9 @@
 	
 		<div class="rotatorContainer">
 			
-			<div dojoType="dojox.widget.AutoRotator" class="rotator" jsId="myRotator2" duration="1000" transition="dojox.widget.rotator.pan"
-					transitionParams="quick:true,continuous:true" pauseOnManualChange="true" suspendOnHover="true">
+			<div data-dojo-type="dojox/widget/AutoRotator" class="rotator"
+				 data-dojo-id="myRotator2"
+				 data-dojo-props="duration: 1000, transition: 'dojox.widget.rotator.pan', transitionParams: 'quick:true,continuous:true,pauseOnManualChange:true,suspendOnHover:true'">
 				<div class="pane" title="Nexaweb/Renkoo">
 					<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 					<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -330,13 +346,17 @@
 				</div>
 			</div>
 			
-			<div dojoType="dojox.widget.rotator.Controller" class="tabs" rotator="myRotator2" commands="titles"></div>
+			<div data-dojo-type="dojox/widget/rotator/Controller" class="tabs"
+				 data-dojo-props="rotator: myRotator2, commands: 'titles'"></div>
 			
-			<div dojoType="dojox.widget.rotator.Controller" class="dots" rotator="myRotator2" commands="#"></div>
+			<div data-dojo-type="dojox/widget/rotator/Controller" class="dots"
+				 data-dojo-props="rotator: myRotator2, commands: '#'"></div>
 			
-			<div dojoType="dojox.widget.rotator.Controller" class="pager1" rotator="myRotator2" commands="prev,#,next"></div>
+			<div data-dojo-type="dojox/widget/rotator/Controller" class="pager1"
+				 data-dojo-props="rotator: myRotator2, commands: 'prev,#,next'"></div>
 			
-			<div dojoType="dojox.widget.rotator.Controller" class="pager2" rotator="myRotator2" commands="prev,play/pause,info,next"></div>
+			<div data-dojo-type="dojox/widget/rotator/Controller" class="pager2"
+				 data-dojo-props="rotator: myRotator2, commands: 'prev,play/pause,info,next'"></div>
 			
 		</div>
 		

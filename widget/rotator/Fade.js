@@ -1,7 +1,9 @@
-dojo.provide("dojox.widget.rotator.Fade");
-dojo.require("dojo.fx");
-
-(function(d){
+define([
+	"dojo/_base/lang",
+	"dojo/_base/fx",
+	"dojo/dom-style",
+	"dojo/fx"
+], function(lang, baseFx, domStyle, fx) {
 
 	function _fade(/*Object*/args, /*string*/action){
 		// summary:
@@ -9,20 +11,20 @@ dojo.require("dojo.fx");
 		//		panes.  It will either chain (fade) or combine (crossFade) the fade
 		//		animations.
 		var n = args.next.node;
-		d.style(n, {
+		domStyle.set(n, {
 			display: "",
 			opacity: 0
 		});
 
 		args.node = args.current.node;
 
-		return d.fx[action]([ /*dojo.Animation*/
-			d.fadeOut(args),
-			d.fadeIn(d.mixin(args, { node: n }))
+		return fx[action]([ /*dojo.Animation*/
+			baseFx.fadeOut(args),
+			baseFx.fadeIn(lang.mixin(args, { node: n }))
 		]);
 	}
 
-	d.mixin(dojox.widget.rotator, {
+	var exports = {
 		fade: function(/*Object*/args){
 			// summary:
 			//		Returns a dojo.Animation that fades out the current pane, then fades in
@@ -35,6 +37,10 @@ dojo.require("dojo.fx");
 			//		Returns a dojo.Animation that cross fades two rotator panes.
 			return _fade(args, "combine"); /*dojo.Animation*/
 		}
-	});
+	};
 
-})(dojo);
+	// back-compat, remove for 2.0
+	lang.mixin(lang.getObject("dojox.widget.rotator"), exports);
+
+	return exports;
+});

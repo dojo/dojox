@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>dojox.widget.rotator.ThumbnailController Test</title>
@@ -35,12 +35,17 @@
 	}
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, selectorEngine: 'acme'"></script>
 	<script type="text/javascript">
-	dojo.require("dojo.parser");
-	dojo.require("dojox.widget.AutoRotator");
-	dojo.require("dojox.widget.rotator.Fade");
-	dojo.require("dojox.widget.rotator.ThumbnailController");
+		require([
+			"dojo/parser",
+			"dojo/domReady!",
+			"dojox/widget/AutoRotator",
+			"dojox/widget/rotator/Fade",
+			"dojox/widget/rotator/ThumbnailController"
+		], function(parser) {
+			parser.parse();
+		})
 	</script>
 </head>
 <body>
@@ -49,13 +54,16 @@
 	
 	<div class="test1">
 		
-		<div dojoType="dojox.widget.AutoRotator" class="rotator" jsId="myRotator" duration="1000" transition="dojox.widget.rotator.crossFade">
+		<div data-dojo-type="dojox/widget/AutoRotator" class="rotator"
+			 data-dojo-id="myRotator"
+			 data-dojo-props="duration: 1000, transition: 'dojox.widget.rotator.crossFade'">
 			<img src="../../image/tests/images/chris1_lg.jpg" thumbsrc="../../image/tests/images/chris1_sm.jpg" alt="Image 1"/>
 			<img src="../../image/tests/images/chris2_lg.jpg" thumbsrc="../../image/tests/images/chris2_sm.jpg" alt="Image 2"/>
 			<img src="../../image/tests/images/chris3_lg.jpg" thumbsrc="../../image/tests/images/chris3_sm.jpg" alt="Image 3"/>
 		</div>
 
-		<div dojoType="dojox.widget.rotator.ThumbnailController" rotator="myRotator"></div>
+		<div data-dojo-type="dojox/widget/rotator/ThumbnailController"
+			 data-dojo-props="rotator: myRotator"></div>
 		
 	</div>
 	

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>dojox.widget.AutoRotator Test</title>
@@ -32,16 +32,20 @@
 	}
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, selectorEngine: 'acme'"></script>
 	<script type="text/javascript">
-	dojo.require("dojo.parser");
-	dojo.require("dojox.widget.AutoRotator");
-	dojo.require("dojox.widget.rotator.Fade");
-	dojo.require("dojox.widget.rotator.Pan");
-	dojo.require("dojox.widget.rotator.Slide");
-	dojo.require("dojox.widget.rotator.Wipe");
+		require([
+			"dojo/parser",
+			"dojo/domReady!",
+			"dojox/widget/AutoRotator",
+			"dojox/widget/rotator/Fade",
+			"dojox/widget/rotator/Pan",
+			"dojox/widget/rotator/Slide",
+			"dojox/widget/rotator/Wipe"
+		], function(parser) {
 
-	dojo.addOnLoad(function(){
+		parser.parse();
+
 		// programmatic example
 		var contributors = [
 			[ "http://www.nexaweb.com",		"nexaweb.png",		"Nexaweb" ],
@@ -110,7 +114,8 @@
 	<button onclick="dojo.publish('myRotator/rotator/control', ['test']);">Bad Action</button>
 	</p>
 	
-	<div dojoType="dojox.widget.AutoRotator" class="rotator" id="myRotator" duration="2000">
+	<div data-dojo-type="dojox/widget/AutoRotator" class="rotator" id="myRotator"
+		 data-dojo-props="duration: 2000">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -163,7 +168,9 @@
 	<button onclick="myRotator2.go(8);">Goto 8 (bad)</button>
 	</p>
 	
-	<div dojoType="dojox.widget.AutoRotator" class="rotator" jsId="myRotator2" random="true" duration="2000" cycles="4">
+	<div data-dojo-type="dojox/widget/AutoRotator" class="rotator"
+		 data-dojo-id="myRotator2"
+		 data-dojo-props="random: true, duration: 2000, cycles: 4">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -202,7 +209,9 @@
 	
 	<p>The 2nd pane will wait for a event to be published by the button before proceeding.</p>
 	
-	<div dojoType="dojox.widget.AutoRotator" class="rotator" jsId="myRotator3" duration="2000" transition="dojox.widget.rotator.crossFade">
+	<div data-dojo-type="dojox/widget/AutoRotator" class="rotator"
+		 data-dojo-id="myRotator3"
+		 data-dojo-props="duration: 2000, transition: 'dojox.widget.rotator.crossFade'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -251,7 +260,9 @@
 	</p>
 
 	<div class="rotator" style="position:relative;">
-		<div dojoType="dojox.widget.AutoRotator" class="rotatorStacked" style="z-index:100;" jsId="myRotator3_3" duration="1500" transition="dojox.widget.rotator.panLeft">
+		<div data-dojo-type="dojox/widget/AutoRotator" class="rotatorStacked" style="z-index:100;"
+			 data-dojo-id="myRotator3_3"
+			 data-dojo-props="duration: 1500, transition: 'dojox.widget.rotator.panLeft'">
 			<div class="pane">
 				<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 				<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -269,7 +280,9 @@
 				<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>
 			</div>
 		</div>
-		<div dojoType="dojox.widget.AutoRotator" class="rotatorStacked" style="z-index:50;" jsId="myRotator3_4" duration="1500" transition="dojox.widget.rotator.crossFade">
+		<div data-dojo-type="dojox/widget/AutoRotator" class="rotatorStacked" style="z-index:50;"
+			 data-dojo-id="myRotator3_4"
+			 data-dojo-props="duration: 1500, transition: 'dojox.widget.rotator.crossFade'">
 			<div class="pane" style="background-color:red;"></div>
 			<div class="pane" style="background-color:yellow;"></div>
 			<div class="pane" style="background-color:green;"></div>
@@ -296,7 +309,8 @@
 	<button onclick="dojo.publish('myRotator5/rotator/control', ['test']);">Bad Action</button>
 	</p>
 	
-	<div dojoType="dojox.widget.AutoRotator" class="rotator" id="myRotator5" suspendOnHover="true" duration="1000">
+	<div data-dojo-type="dojox/widget/AutoRotator" class="rotator" id="myRotator5"
+		 data-dojo-props="suspendOnHover: true, duration: 1000">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -350,7 +364,8 @@
 	<button onclick="dojo.publish('myRotator6/rotator/control', ['test']);">Bad Action</button>
 	</p>
 	
-	<div dojoType="dojox.widget.AutoRotator" class="rotator" id="myRotator6" pauseOnManualChange="true" duration="1000">
+	<div data-dojo-type="dojox/widget/AutoRotator" class="rotator" id="myRotator6"
+		 data-dojo-props="pauseOnManualChange: true, duration: 1000">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>

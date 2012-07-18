@@ -1,4 +1,11 @@
-define(["dojo/_base/declare","dojox/widget/Rotator"], function(declare,Rotator){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/_base/lang",
+	"dojo/on",
+	"dojo/mouse",
+	"dojox/widget/Rotator"
+], function(declare, array, lang, on, mouse, Rotator) {
 
 return declare("dojox.widget.AutoRotator", Rotator,{
 	// summary:
@@ -64,8 +71,8 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 			}
 
 			// wire up the mouse hover events
-			_t._connects = [
-				dojo.connect(_t._domNode, "onmouseover", function(){
+			_t._signals = [
+				on(_t._domNode, mouse.enter, function(){
 					// temporarily suspend the cycling, but don't officially pause
 					// it and don't allow suspending if we're transitioning
 					if(_t.suspendOnHover && !_t.anim && !_t.wfe){
@@ -77,7 +84,7 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 					}
 				}),
 
-				dojo.connect(_t._domNode, "onmouseout", function(){
+				on(_t._domNode, mouse.leave, function(){
 					// if we were playing, resume playback unless were in the
 					// middle of a transition
 					if(_t.suspendOnHover && !_t.anim){
@@ -102,6 +109,8 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 		destroy: function(){
 			// summary:
 			//		Disconnect the AutoRotator's events.
+			array.forEach(this._signals, function(signal) { signal.remove(); });
+			delete this._signals;
 			dojo.forEach(this._connects, dojo.disconnect);
 			this.inherited(arguments);
 		},
@@ -132,7 +141,7 @@ return declare("dojox.widget.AutoRotator", Rotator,{
 					// call _cycle() after a duration and pass in false so it isn't manual
 					this._resumeDuration = 0;
 					this._endTime = this._now() + u;
-					this._timer = setTimeout(dojo.hitch(this, "_cycle", false), u);
+					this._timer = setTimeout(lang.hitch(this, "_cycle", false), u);
 				}
 			}
 		},

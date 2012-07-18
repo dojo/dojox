@@ -1,6 +1,12 @@
-dojo.provide("dojox.widget.rotator.Controller");
-
-(function(d){
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dojo/_base/html",
+	"dojo/_base/event",
+	"dojo/_base/array",
+	"dojo/_base/connect",
+	"dojo/query"
+], function(declare, lang, html, event, array, connect, query) {
 
 	var _dojoxRotator = "dojoxRotator",
 		_play = _dojoxRotator + "Play",
@@ -9,7 +15,7 @@ dojo.provide("dojox.widget.rotator.Controller");
 		_tab = _dojoxRotator + "Tab",
 		_selected = _dojoxRotator + "Selected";
 
-	d.declare("dojox.widget.rotator.Controller", null, {
+	return declare("dojox.widget.rotator.Controller", null, {
 		// summary:
 		//		A controller that manipulates a Rotator or AutoRotator.
 		// description:
@@ -63,7 +69,7 @@ dojo.provide("dojox.widget.rotator.Controller");
 			// summary:
 			//		Initializes the pager and connect to the rotator.
 
-			d.mixin(this, params);
+			lang.mixin(this, params);
 
 			// check if we have a valid rotator
 			var r = this.rotator;
@@ -73,16 +79,16 @@ dojo.provide("dojox.widget.rotator.Controller");
 					node.removeChild(node.firstChild);
 				}
 
-				var ul = this._domNode = d.create("ul", null, node),
+				var ul = this._domNode = html.create("ul", null, node),
 					icon = " " + _dojoxRotator + "Icon",
 
 					// helper function for creating a button
 					cb = function(/*string*/label, /*string*/css, /*array*/action){
-						d.create("li", {
+						html.create("li", {
 							className: css,
 							innerHTML: '<a href="#"><span>' + label + '</span></a>',
 							onclick: function(/*event*/e){
-								d.stopEvent(e);
+								event.stop(e);
 								if(r){
 									r.control.apply(r, action);
 								}
@@ -91,7 +97,7 @@ dojo.provide("dojox.widget.rotator.Controller");
 					};
 
 				// build out the commands
-				d.forEach(this.commands.split(','), function(b, i){
+				array.forEach(this.commands.split(','), function(b, i){
 					switch(b){
 						case "prev":
 							cb("Prev", _dojoxRotator + "Prev" + icon, ["prev"]);
@@ -101,7 +107,7 @@ dojo.provide("dojox.widget.rotator.Controller");
 							cb("Pause", _pause + icon, ["pause"]);
 							break;
 						case "info":
-							this._info = d.create("li", {
+							this._info = html.create("li", {
 								className: _dojoxRotator + "Info",
 								innerHTML: this._buildInfo(r)
 							}, ul);
@@ -123,21 +129,21 @@ dojo.provide("dojox.widget.rotator.Controller");
 				}, this);
 
 				// add the first/last classes for styling
-				d.query("li:first-child", ul).addClass(_dojoxRotator + "First");
-				d.query("li:last-child", ul).addClass(_dojoxRotator + "Last");
+				query("li:first-child", ul).addClass(_dojoxRotator + "First");
+				query("li:last-child", ul).addClass(_dojoxRotator + "Last");
 
 				// set the initial state of the play/pause toggle button
 				this._togglePlay();
 
-				this._con = d.connect(r, "onUpdate", this, "_onUpdate");
+				this._con = connect.connect(r, "onUpdate", this, "_onUpdate");
 			}
 		},
 
 		destroy: function(){
 			// summary:
 			//		Disconnect from the rotator.
-			d.disconnect(this._con);
-			d.destroy(this._domNode);
+			connect.disconnect(this._con);
+			html.destroy(this._domNode);
 		},
 
 		_togglePlay: function(/*boolean*/playing){
@@ -145,8 +151,8 @@ dojo.provide("dojox.widget.rotator.Controller");
 			//		Toggles the play/pause button, if it exists.
 
 			var p = this.rotator.playing;
-			d.query('.'+_play, this._domNode).style("display", p ? "none" : "");
-			d.query('.'+_pause, this._domNode).style("display", p ? "" : "none");
+			query('.'+_play, this._domNode).style("display", p ? "none" : "");
+			query('.'+_pause, this._domNode).style("display", p ? "" : "none");
 		},
 
 		_buildInfo: function(/*dojox.widget.Rotator*/r){
@@ -174,15 +180,14 @@ dojo.provide("dojox.widget.rotator.Controller");
 					// helper function for selecting the current tab
 					var s = function(/*NodeList*/n){
 						if(r.idx < n.length){
-							d.addClass(n[r.idx], _selected);
+							html.addClass(n[r.idx], _selected);
 						}
 					};
 
-					s(d.query('.' + _number, this._domNode).removeClass(_selected));
-					s(d.query('.' + _tab, this._domNode).removeClass(_selected));
+					s(query('.' + _number, this._domNode).removeClass(_selected));
+					s(query('.' + _tab, this._domNode).removeClass(_selected));
 					break;
 			}
 		}
 	});
-
-})(dojo);
+});

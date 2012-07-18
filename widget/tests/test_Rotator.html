@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<title>dojox.widget.Rotator Test</title>
@@ -39,23 +39,34 @@
 	}
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="parseOnLoad:true, isDebug:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js"
+		data-dojo-config="async: true, selectorEngine:'acme'"></script>
 	<script type="text/javascript">
-	dojo.require("dojo.parser");
-	dojo.require("dojo.fx.easing");
-	dojo.require("dojox.widget.Rotator");
-	dojo.require("dojox.widget.rotator.Fade");
-	dojo.require("dojox.widget.rotator.Pan");
-	dojo.require("dojox.widget.rotator.Slide");
-	dojo.require("dojox.widget.rotator.Wipe");
-	
-	function log(id, msg){
-		var e = dojo.byId(id);
-		e.innerHTML += msg + "<br>";
-		e.scrollTop = 9999;
-	}
-	
-	dojo.addOnLoad(function(){
+	require([
+		"dojo/parser",
+		"dojo/_base/html",
+		"dojo/dom",
+		"dojox/widget/Rotator",
+		"dojo/fx/easing",
+		"dojo/domReady!",
+		"dojox/widget/rotator/Fade",
+		"dojox/widget/rotator/Pan",
+		"dojox/widget/rotator/PanFade",
+		"dojox/widget/rotator/Slide",
+		"dojox/widget/rotator/Wipe"
+	], function(parser, html, dom, Rotator, e) {
+
+		// Set global variable used in transitionParams
+		easing = e;
+
+		parser.parse();
+
+		log = function(id, msg){
+			var e = dom.byId(id);
+			e.innerHTML += msg + "<br>";
+			e.scrollTop = 9999;
+		};
+
 		// programmatic example
 		var contributors = [
 			[ "http://www.nexaweb.com",		"nexaweb.png",		"Nexaweb" ],
@@ -75,7 +86,7 @@
 			[ "http://www.wavemaker.com",	"wavemaker.png",	"WaveMaker" ],
 			[ "http://www.aptana.com",		"aptana.png",		"Aptana" ]
 		];
-		
+
 		var panes = [];
 		for(var i=0; i<contributors.length; i++){
 			var html = '<a href="' + contributors[i][0] + '" target="_new"><img src="images/rotator_'
@@ -90,15 +101,15 @@
 			}
 		}
 
-		var r = new dojox.widget.Rotator({
+		var r = new Rotator({
 				id: "myRotator13",
 				duration: 2000,
 				transition: "dojox.widget.rotator.fade",
 				panes: panes
 			},
-			dojo.byId("myRotator13")
+			dom.byId("myRotator13")
 		);
-	});
+	})
 	</script>
 </head>
 <body>
@@ -122,7 +133,7 @@
 	<button onclick="dojo.publish('myRotator/rotator/control', ['test']);">Bad Action</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" id="myRotator">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" id="myRotator">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -157,7 +168,7 @@
 		</div>
 	</div>
 
-	<h2>Controlled By jsId Reference, Default Swap Transition</h2>
+	<h2>Controlled By data-dojo-id Reference, Default Swap Transition</h2>
 	
 	<p>
 	<button onclick="myRotator2.prev();">Prev</button>
@@ -173,7 +184,7 @@
 	<button onclick="myRotator2.go(8);">Goto 8 (bad)</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator2">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator2">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -223,7 +234,8 @@
 	<button onclick="myRotator3.go(7);">Goto 7 (WaveMaker, Aptana)</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator3" transition="dojox.widget.rotator.crossFade">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator3"
+		 data-dojo-props="transition: 'dojox.widget.rotator.crossFade'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -269,7 +281,8 @@
 	<button onclick="myRotator3_2.go(3);">Goto 3 (Sun, Google)</button>
 	</p>
 
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator3_2" transition="dojox.widget.rotator.crossFade">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator3_2"
+		 data-dojo-props="transition: 'dojox.widget.rotator.crossFade'">
 		<div class="pane" style="background-color:red;"></div>
 		<div class="pane" style="background-color:yellow;"></div>
 		<div class="pane" style="background-color:green;"></div>
@@ -287,7 +300,8 @@
 	<button onclick="myRotator4.go(3);">Goto 3 (Sun, Google) [pan up]</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator4" transition="dojox.widget.rotator.panLeft">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator4"
+		 data-dojo-props="transition: 'dojox.widget.rotator.panLeft'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -324,8 +338,110 @@
 	<button onclick="myRotator5.go(7);">Goto 7 (WaveMaker, Aptana)</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator5" transition="dojox.widget.rotator.pan"
-			transitionParams="continuous:true,wrap:true,quick:true,duration:1000">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator5"
+		 data-dojo-props="transition: 'dojox.widget.rotator.pan', transitionParams: 'continuous:true,wrap:true,quick:true,duration:1000'">
+		<div class="pane">
+			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
+			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.sitepen.com" target="_new"><img src="images/rotator_sitepen.png" width="130" alt="Sitepen"/></a>
+			<a href="http://www.tibco.com" target="_new"><img src="images/rotator_tibco.png" width="130" alt="Tibco"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.webtide.com/" target="_new"><img src="images/rotator_webtide.png" width="130" alt="Webtide"/></a>
+			<a href="http://www.openlaszlo.com" target="_new"><img src="images/rotator_openlaszlo.png" width="150" alt="OpenLaszlo"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.sun.com" target="_new"><img src="images/rotator_sun.png" width="130" alt="Sun"/></a>
+			<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.aptana.com" target="_new"><img src="images/rotator_aptana.png" width="130" alt="Aptana"/></a>
+			<a href="http://www.aol.com" target="_new"><img src="images/rotator_aol.png" width="130" alt="AOL"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.ibm.com" target="_new"><img src="images/rotator_ibm.png" width="100" alt="IBM"/></a>
+			<a href="http://www.zend.com/" target="_new"><img src="images/rotator_zend.png" width="130" alt="Zend"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.bea.com" target="_new"><img src="images/rotator_bea.png" width="80" alt="BEA"/></a>
+			<a href="http://www.uxebu.com" target="_new"><img src="images/rotator_uxebu.png" width="120" alt="Uxebu"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.wavemaker.com" target="_new"><img src="images/rotator_wavemaker.png" width="130" alt="WaveMaker"/></a>
+			<a href="http://www.aptana.com" target="_new"><img src="images/rotator_aptana.png" width="130" alt="Aptana"/></a>
+		</div>
+	</div>
+
+	<h2>PanFade Transition</h2>
+	
+	<p>
+	<button onclick="myRotatorPanFade.prev();">Prev</button>
+	<button onclick="myRotatorPanFade.next();">Next</button>
+	<button onclick="myRotatorPanFade.go(0);">Goto 0 (Nexaweb, Renkoo)</button>
+	<button onclick="myRotatorPanFade.go(1);">Goto 1 (Sitepen, Tibco)</button>
+	<button onclick="myRotatorPanFade.go(2);">Goto 2 (Webtide, OpenLaszlo)</button>
+	<button onclick="myRotatorPanFade.go(3);">Goto 3 (Sun, Google)</button>
+	<button onclick="myRotatorPanFade.go(4);">Goto 4 (Aptana, AOL)</button>
+	<button onclick="myRotatorPanFade.go(5);">Goto 5 (IBM, Zend)</button>
+	<button onclick="myRotatorPanFade.go(6);">Goto 6 (BEA, Uxebu)</button>
+	<button onclick="myRotatorPanFade.go(7);">Goto 7 (WaveMaker, Aptana)</button>
+	</p>
+	
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotatorPanFade"
+		 data-dojo-props="transition: 'dojox.widget.rotator.panFade'">
+		<div class="pane">
+			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
+			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.sitepen.com" target="_new"><img src="images/rotator_sitepen.png" width="130" alt="Sitepen"/></a>
+			<a href="http://www.tibco.com" target="_new"><img src="images/rotator_tibco.png" width="130" alt="Tibco"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.webtide.com/" target="_new"><img src="images/rotator_webtide.png" width="130" alt="Webtide"/></a>
+			<a href="http://www.openlaszlo.com" target="_new"><img src="images/rotator_openlaszlo.png" width="150" alt="OpenLaszlo"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.sun.com" target="_new"><img src="images/rotator_sun.png" width="130" alt="Sun"/></a>
+			<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.aptana.com" target="_new"><img src="images/rotator_aptana.png" width="130" alt="Aptana"/></a>
+			<a href="http://www.aol.com" target="_new"><img src="images/rotator_aol.png" width="130" alt="AOL"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.ibm.com" target="_new"><img src="images/rotator_ibm.png" width="100" alt="IBM"/></a>
+			<a href="http://www.zend.com/" target="_new"><img src="images/rotator_zend.png" width="130" alt="Zend"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.bea.com" target="_new"><img src="images/rotator_bea.png" width="80" alt="BEA"/></a>
+			<a href="http://www.uxebu.com" target="_new"><img src="images/rotator_uxebu.png" width="120" alt="Uxebu"/></a>
+		</div>
+		<div class="pane">
+			<a href="http://www.wavemaker.com" target="_new"><img src="images/rotator_wavemaker.png" width="130" alt="WaveMaker"/></a>
+			<a href="http://www.aptana.com" target="_new"><img src="images/rotator_aptana.png" width="130" alt="Aptana"/></a>
+		</div>
+	</div>
+
+	<h2>PanFade Continuous Transition</h2>
+	
+	<p>
+	<button onclick="myRotatorPanFadeCont.prev();">Prev</button>
+	<button onclick="myRotatorPanFadeCont.next();">Next</button>
+	<button onclick="myRotatorPanFadeCont.go(0);">Goto 0 (Nexaweb, Renkoo)</button>
+	<button onclick="myRotatorPanFadeCont.go(1);">Goto 1 (Sitepen, Tibco)</button>
+	<button onclick="myRotatorPanFadeCont.go(2);">Goto 2 (Webtide, OpenLaszlo)</button>
+	<button onclick="myRotatorPanFadeCont.go(3);">Goto 3 (Sun, Google)</button>
+	<button onclick="myRotatorPanFadeCont.go(4);">Goto 4 (Aptana, AOL)</button>
+	<button onclick="myRotatorPanFadeCont.go(5);">Goto 5 (IBM, Zend)</button>
+	<button onclick="myRotatorPanFadeCont.go(6);">Goto 6 (BEA, Uxebu)</button>
+	<button onclick="myRotatorPanFadeCont.go(7);">Goto 7 (WaveMaker, Aptana)</button>
+	</p>
+	
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotatorPanFadeCont"
+		 data-dojo-props="transition: 'dojox.widget.rotator.panFade', transitionParams: 'continuous:true,wrap:true,quick:true,duration:1000'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -371,8 +487,8 @@
 	<button onclick="myRotator6.go(3);">Goto 3 (Sun, Google) [pan up]</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator6" transition="dojox.widget.rotator.panLeft"
-			transitionParams="easing:dojo.fx.easing.cubicInOut">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator6"
+		 data-dojo-props="transition: 'dojox.widget.rotator.panLeft', transitionParams: 'easing: easing.cubicInOut'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -408,8 +524,8 @@
 	<button onclick="myRotator7.go(7);">Goto 7 (WaveMaker, Aptana)</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator7" transition="dojox.widget.rotator.pan"
-			transitionParams="continuous:true,quick:true,duration:500,easing:dojo.fx.easing.cubicInOut">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator7"
+		 data-dojo-props="transition: 'dojox.widget.rotator.pan', transitionParams: 'continuous:true,quick:true,duration:500,easing: easing.cubicInOut'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -457,7 +573,8 @@
 	<button onclick="myRotator8.resize(384, 90);">Resize to 384 x 90</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator8" transition="dojox.widget.rotator.slideLeft">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator8"
+		 data-dojo-props="transition: 'dojox.widget.rotator.slideLeft'">
 		<div class="pane" style="background-color:#fff799;">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -487,8 +604,8 @@
 	<button onclick="myRotator9.go(3);">Goto 3 (Sun, Google) [slide up]</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator9" transition="dojox.widget.rotator.slideLeft"
-			transitionParams="duration:1000,easing:dojo.fx.easing.cubicInOut">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator9"
+		 data-dojo-props="transition: 'dojox.widget.rotator.slideLeft', transitionParams: 'duration:1000, easing: easing.cubicInOut'">
 		<div class="pane" style="background-color:#fff799;">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -518,7 +635,8 @@
 	<button onclick="myRotator10.go(3);">Goto 3 (Sun, Google) [wipe up]</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator10" transition="dojox.widget.rotator.wipeLeft">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator10"
+		 data-dojo-props="transition: 'dojox.widget.rotator.wipeLeft'">
 		<div class="pane" style="background-color:#fff799;">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -548,8 +666,8 @@
 	<button onclick="myRotator11.go(3);">Goto 3 (Sun, Google) [wipe up]</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator11" transition="dojox.widget.rotator.wipeLeft"
-			transitionParams="duration:500,easing:dojo.fx.easing.cubicInOut">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator11"
+		 data-dojo-props="transition: 'dojox.widget.rotator.wipeLeft', transitionParams: 'duration:500, easing: easing.cubicInOut'">
 		<div class="pane" style="background-color:#fff799;">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -583,7 +701,8 @@
 	
 	<table><tr><td>
 	
-		<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator12" transition="dojox.widget.rotator.panLeft">
+		<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator12"
+			 data-dojo-props="transition: 'dojox.widget.rotator.panLeft'">
 			<div class="pane">
 				<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 				<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -647,7 +766,8 @@
 	</p>
 
 	<div class="rotator" style="position:relative;">
-		<div dojoType="dojox.widget.Rotator" class="rotatorStacked" style="z-index:100;" jsId="myRotator3_3" transition="dojox.widget.rotator.panLeft">
+		<div data-dojo-type="dojox/widget/Rotator" class="rotatorStacked" style="z-index:100;" data-dojo-id="myRotator3_3"
+			 data-dojo-props="transition: 'dojox.widget.rotator.panLeft'">
 			<div class="pane">
 				<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 				<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
@@ -665,7 +785,7 @@
 				<a href="http://www.google.com" target="_new"><img src="images/rotator_google.png" width="130" alt="Google"/></a>
 			</div>
 		</div>
-		<div dojoType="dojox.widget.Rotator" class="rotatorStacked" style="z-index:50;" jsId="myRotator3_4" transition="dojox.widget.rotator.crossFade">
+		<div data-dojo-type="dojox/widget/Rotator" class="rotatorStacked" style="z-index:50;" data-dojo-id="myRotator3_4" transition="dojox.widget.rotator.crossFade">
 			<div class="pane" style="background-color:red;"></div>
 			<div class="pane" style="background-color:yellow;"></div>
 			<div class="pane" style="background-color:green;"></div>
@@ -686,7 +806,8 @@
 	<button onclick="myRotator14.go(3);">Goto 3 (Sun, Google)</button>
 	</p>
 	
-	<div dojoType="dojox.widget.Rotator" class="rotator" jsId="myRotator14" transition="dojox.widget.rotator.doesNotExist">
+	<div data-dojo-type="dojox/widget/Rotator" class="rotator" data-dojo-id="myRotator14"
+		 data-dojo-props="transition: 'dojox.widget.rotator.doesNotExist'">
 		<div class="pane">
 			<a href="http://www.nexaweb.com" target="_new"><img src="images/rotator_nexaweb.png" width="130" alt="Nexaweb"/></a>
 			<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>

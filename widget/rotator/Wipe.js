@@ -1,6 +1,8 @@
-dojo.provide("dojox.widget.rotator.Wipe");
-
-(function(d){
+define([
+	"dojo/_base/lang",
+	"dojo/_base/fx",
+	"dojo/dom-style"
+], function(lang, fx, domStyle) {
 
 	// Constants used to identify which clip edge is being wiped. The values are
 	// the index of the clip array that is changed during the animation.
@@ -32,24 +34,24 @@ dojo.provide("dojox.widget.rotator.Wipe");
 		// summary:
 		//		Sets the clip region of the node. If a type is passed in then we
 		//		return a rect(), otherwise return "auto".
-		d.style(n, "clip", type == null ? "auto" : "rect(" + _clipArray(type, w, h, x).join("px,") + "px)");
+		domStyle.set(n, "clip", type == null ? "auto" : "rect(" + _clipArray(type, w, h, x).join("px,") + "px)");
 	}
 
 	function _wipe(/*int*/type, /*Object*/args){
 		// summary:
-		//		Handles the preparation of the dom node and creates the dojo.Animation object.
+		//		Handles the preparation of the dom node and creates the Animation object.
 		var node = args.next.node,
 			w = args.rotatorBox.w,
 			h = args.rotatorBox.h;
 
-		d.style(node, {
+		domStyle.set(node, {
 			display: "",
-			zIndex: (d.style(args.current.node, "zIndex") || 1) + 1
+			zIndex: (domStyle.get(args.current.node, "zIndex") || 1) + 1
 		});
 
 		_setClip(node, type, w, h);
 
-		return new d.Animation(d.mixin({ /*dojo.Animation*/
+		return new fx.Animation(lang.mixin({
 			node: node,
 			curve: [0, type % 2 ? w : h],
 			onAnimate: function(x){
@@ -58,7 +60,7 @@ dojo.provide("dojox.widget.rotator.Wipe");
 		}, args));
 	}
 
-	d.mixin(dojox.widget.rotator, {
+	var exports = {
 		wipeDown: function(/*Object*/args){
 			// summary:
 			//		Returns a dojo.Animation that wipes in the next rotator pane from the top.
@@ -82,6 +84,10 @@ dojo.provide("dojox.widget.rotator.Wipe");
 			//		Returns a dojo.Animation that wipes in the next rotator pane from the left.
 			return _wipe(LEFT, args); /*dojo.Animation*/
 		}
-	});
+	};
 
-})(dojo);
+	// back-compat, remove for 2.0
+	lang.mixin(lang.getObject("dojox.widget.rotator"), exports);
+
+	return exports;
+});
