@@ -289,8 +289,13 @@ define([
 			}
 		},
 
-		removeChild: function(/*Widget*/ widget){
-			child._at.destroy();
+		removeChild: function(/*Widget|int*/ widget){
+			if(typeof widget == "number"){
+				widget = this.getChildren()[widget];
+			}
+			if(widget){
+				widget._at.destroy();
+			}
 			this.inherited(arguments);
 		},
 
