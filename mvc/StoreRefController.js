@@ -29,13 +29,13 @@ define([
 		// |				<script src="/path/to/dojo-toolkit/dojo/dojo.js" type="text/javascript" data-dojo-config="parseOnLoad: 0"></script>
 		// |				<script type="text/javascript">
 		// |					require([
-		// |						"dojo/parser", "dojo/store/Memory", "dijit/registry",
-		// |						"dijit/form/TextBox", "dojox/mvc/StoreRefController", "dojo/domReady!"
-		// |					], function(parser, Memory, registry){
+		// |						"dojo/parser", "dojo/when", "dojo/store/Memory", "dijit/registry", "dojo/domReady!"
+		// |					], function(parser, when, Memory, registry){
 		// |						store = new Memory({data: [{id: "Foo", value: "Foo"}, {id: "Bar", value: "Bar"}]});
-		// |						parser.parse();
-		// |						registry.byId("ctrl").getStore("Foo");
-		// |						setTimeout(function(){ registry.byId("ctrl").getStore("Bar"); }, 2000);
+		// |						when(parser.parse(), function(){
+		// |							registry.byId("ctrl").getStore("Foo");
+		// |							setTimeout(function(){ registry.byId("ctrl").getStore("Bar"); }, 2000);
+		// |						});
 		// |					});
 		// |				</script>
 		// |			</head>

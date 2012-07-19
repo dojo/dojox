@@ -67,23 +67,6 @@
 						</tr>
 					</table>
 
-<!--  
-				<div class="field-row">
-					<span>Order #</span>
-					<input id="lastnameInput" data-dojo-type="dojox/mobile/TextBox"						 
-						data-dojo-props="value: at('rel:', 'Serial'), placeholder:'Order #'">
-				</div>
-				<div class="field-row">
-					<span>Last</span>
-					<input  id="serialInput" data-dojo-type="dojox/mobile/TextBox" 
-						data-dojo-props="value: at('rel:', 'Last'), placeholder:'Last'">
-				</div>
-				<div class="field-row">
-					<span>Email</span>
-					<input  id="emailInput1" data-dojo-type="dojox/mobile/TextBox"
-						data-dojo-props="value: at('rel:', 'Email'), placeholder:'Email'">
-				</div>
--->
 			<div class="spacer"></div>
 			<button id="shipto" type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton" onclick="setRef('addrGroup', 'rel:', 'ShipTo');">Ship To</button>
 			<button id="billto" type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton" onclick="setRef('addrGroup', 'rel:', 'BillTo');">Bill To</button>		
@@ -127,12 +110,9 @@
 		<button id="reset1" type="button" data-dojo-type="dojox/mobile/Button" class="mblBlueButton" onclick="nameCtl.reset()">Reset</button>
 		</form>
 	</div>
-<!--  
-	<span id="listCtl" data-dojo-type="dojox/mvc/EditStoreRefListController"
-		data-dojo-props="model: repeatmodel, cursorIndex: 0"></span>
--->
+
 	<div id="repeat" data-dojo-type="dojox/mobile/ScrollableView">
-		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="back:'Back', moveTo:'foo', callback:function(){console.log('in callback function for repeat');}">Repeat Data
+		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="back:'Back', moveTo:'foo'">Repeat Data
 				<span id="addbutton"  data-dojo-type="dojox/mobile/ToolBarButton" 
 							data-dojo-props='icon:"mblDomButtonWhitePlus", onClick: function(){ addEmpty(); }' 
 							style="float:right;"></span>
@@ -160,14 +140,11 @@
 	</div>
 
 	<div id="repeatdetails" data-dojo-type="dojox/mobile/ScrollableView">
-		<h1 id="detailsHeading" data-dojo-type="dojox/mobile/Heading" 
-				data-dojo-props='back:"Back", moveTo:"repeat",
-		 		callback:function(){console.log("in callback function for Details");}'>Details</h1>
-<!-- 			
-					data-dojo-props="target: at('widget:listCtl', 'cursor')">
-							data-dojo-props="value: at('widget:listCtl', 'cursorIndex')"></span>
- -->
- 
+ 		<h1 id="detailsHeading" data-dojo-type="dojox/mobile/Heading" data-dojo-props="label: 'Details'" data-app-region="top">
+			<div id="detail_back" data-dojo-type="dojox/mobile/ToolBarButton" 
+				data-dojo-props="onClick: function(e){forceFocus();}, moveTo:'repeat', arrow: 'left', label: 'Back'" style="float:left"></div>
+		</h1>
+
 			<div id="detailsGroup" class="fieldset" data-dojo-type="dojox/mvc/Group" 
 					data-dojo-props="target: at(listCtl, 'cursor')">
 					<div class="row">
@@ -247,12 +224,6 @@
 					<div id="viewArea" style="display:none">
 						<div id="generateView">Generated View</div>
 							<div class="fieldset">
-							<!--  
-							<div id="view" data-dojo-type="dojox/mvc/Generate" 
-								data-dojo-props="widgetMapping:{'String' : 'dojox/mobile/TextBox'}, 
-								idNameMapping:{'String' : 'TB'}">
-							</div>
-							-->
 							<div id="view" data-dojo-type="dojox/mvc/Generate"
 				 				data-dojo-props="widgetMapping:{'String' : 'dojox/mobile/TextBox'},
 				 					idNameMapping: {String: 'TB'},

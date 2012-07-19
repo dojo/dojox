@@ -1,5 +1,5 @@
-var listCtl, repeatModel, setRef, nextIndexToAdd, selectedIndex, nameCtl;
-var setRef, setDetailsContext, insertResult, updateView, updateModel, addEmpty, remove;
+var listCtl, repeatModel, setRef, nextIndexToAdd, selectedIndex, nameCtl, genmodel;
+var setDetailsContext, updateView, updateModel, addEmpty, remove, forceFocus;
 
 require(['dojo/has',
 	'dojox/mobile/parser',
@@ -7,10 +7,8 @@ require(['dojo/has',
 	'dojo/ready',
 	'dijit/registry', 
 	'dojox/mvc/at',
-	'dojox/mvc',
 	'dojox/mvc/getStateful',
 	'dojox/mvc/EditStoreRefListController',
-	'dojox/mvc/EditStoreRefController',
 	"dojo/store/Memory",
 	"dojo/when",
 	'dojox/mobile',
@@ -22,21 +20,13 @@ require(['dojo/has',
 	'dojox/mvc/Generate',
 	'dojox/mvc/Repeat',
 	'dojox/mobile/TextBox',
-	'dojox/mobile/CheckBox',
-	'dojox/mobile/ViewController',
-	'dojox/mobile/FixedSplitter',
-	'dojox/mobile/EdgeToEdgeList',
-	'dojox/mobile/EdgeToEdgeCategory',
 	'dojox/mobile/deviceTheme',
-	'dojox/mobile/RoundRectCategory',
 	'dojox/mobile/Heading',
 	'dojo/_base/json',
 	'dojo/dom'
-], function(has, parser, ready, registry, at, mvc, getStateful, EditStoreRefListController, 
-		EditStoreRefController, Memory, when, mobile, ScrollableView, Button, 
-		TextArea, Group, Output, Generate, Repeat, TextBox, CheckBox, ViewController,
-		FixedSplitter, EdgeToEdgeList, EdgeToEdgeCategory, deviceTheme, RoundRectCategory, 
-		Heading, json, dom){
+], function(has, parser, ready, registry, at, getStateful, EditStoreRefListController, 
+		Memory, when, mobile, ScrollableView, Button, TextArea, Group, Output, Generate, 
+		Repeat, TextBox, deviceTheme, Heading, json, dom){
 
 	if(!has("webkit")){
 		require(["dojox/mobile/compat"]);
@@ -97,32 +87,33 @@ var repeatData = [
 
 	selectedIndex = 0;
 
-	//model = getStateful(names );
-	//nameCtl = new EditStoreRefController({store: new Memory({data: names})});
 	nameCtl = new EditStoreRefListController({store: new Memory({data: names})});
-	//nameCtl.queryStore();
 	nameCtl.getStore("360324");
 	model = nameCtl.model;
 	
-	//listCtl = new EditStoreRefListController({model: getStateful(repeatData ), cursorIndex: 0});
 	listCtl = new EditStoreRefListController({store: new Memory({data: repeatData}), cursorIndex: 0});
 	when(listCtl.queryStore(), function(model){
-		//repeatmodel = listCtl.model;
 		repeatmodel = model;
 		nextIndexToAdd = repeatmodel.length;
 	});
 	
 	
-
-
-	// used in the Repeat Data binding demo
 	setDetailsContext=function(index){
+		// summary:
+		//		Called to move to the repeatdetails page when an item is selected on the Repeat Data Binding page. 
+		//
+		// index: string
+		//		The index of the item to show in the repeatdetails page. 
+		//
 		listCtl.set("cursorIndex", index);
 		registry.byId("firstInput").focus();
 	};
 
 
 	addEmpty = function(){
+		// summary:
+		//		Called to add an empty item when the white plus icon is pressed on the Repeat Data Binding page. 
+		//
 		var data = {id:Math.random(), "First": "", "Last": "", "Location": "CA", "Office": "", "Email": "",
 					"Tel": "", "Fax": ""};
 		repeatmodel.push(new getStateful(data));
@@ -132,36 +123,29 @@ var repeatData = [
 	},
 
 	remove = function(idx){
+		// summary:
+		//		Called to remove an item when the red circle minus icon is pressed on the Repeat Data Binding page. 
+		//
+		// idx: string
+		//		The index of the item to remove. 
+		//
 		repeatmodel.splice(idx, 1);
 		if(listCtl.get("cursorIndex") > repeatmodel.length-1){
 			listCtl.set("cursorIndex", repeatmodel.length - 1);
 		}
 	},
 
+	forceFocus = function(){
+		// summary:
+		//		Called to set the focus to force the update of the field when going back to the repeat list Repeat Data Binding page. 
+		//
+		registry.byId("telInput").focus();
+	},
 	
-	// used in the Repeat Data binding demo
-	insertResult = function(index){
-		if (repeatmodel[index-1].First.value !== ""){ // TODO: figure out why we are getting called twice for each click
-			var insert = mvc.newStatefulModel({ "data" : {
-			"First"   : "",
-			"Last"    : "",
-			"Location": "CA",
-			"Office"  : "",
-			"Email"   : "",
-			"Tel"     : "",
-			"Fax"     : ""} 
-			});
-			repeatmodel.add(index, insert);
-			setDetailsContext(index);
-			nextIndexToAdd++;
-		}else{
-			setDetailsContext(index-1);                 
-		}
-	};
-
-	// used in the Generate View demo
-	var genmodel;
 	updateView = function() {
+		// summary:
+		//		Called when the "Update View" button is pressed on the Generate Simple Form. 
+		//
 		try {
 			registry.byId("view").set("children", at('widget:modelArea', 'value').direction(at.from).transform({format: dojo.fromJson}));
 			dom.byId("outerModelArea").style.display = "none";
@@ -173,6 +157,9 @@ var repeatData = [
 
 	// used in the Generate View demo
 	updateModel = function() {
+		// summary:
+		//		Called when the "Update Model" button is pressed on the Generate View page. 
+		//
 		dom.byId("outerModelArea").style.display = "";
 		try {
 			dom.byId("modelArea").focus(); // hack: do this to force focus off of the textbox, bug on mobile?
@@ -198,6 +185,16 @@ var repeatData = [
 }); // end function
 
 function setRef(id, model, attr) {
+		// summary:
+		//		Called when the "Ship To" or "Bill To" button is pressed on the Simple Data binding. 
+		//
+		// id: string
+		//		The id of the widget, in our test it will be 'addrGroup' 
+		// model: string
+		//		The name of the "model", in our test it will be 'rel:' since it is a relative binding
+		// attr: string
+		//		The attr to bind, in our test it will be 'ShipTo' or 'BillTo'
+		//
 	require([
 	         "dijit/registry",
 	         "dojox/mvc/at"

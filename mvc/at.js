@@ -9,7 +9,7 @@ define([
 
 	var at = function(/*dojo/Stateful|String*/ target, /*String*/ targetProp){
 		// summary:
-		//		Returns a handle of data binding target (a dojo/Stateful property), which is used for start synchronization with data binding source (another dojo/Stateful property).
+		//		Returns a pointer to data binding target (a dojo/Stateful property), called at handle, which is used for start synchronization with data binding source (another dojo/Stateful property).
 		// description:
 		//		Typically used in data-dojo-props so that a widget can synchronize its attribute with another dojo/Stateful, like shown in the example.
 		// target: dojo/Stateful|String
@@ -17,7 +17,7 @@ define([
 		// targetProp: String
 		//		The property name in target to be synchronized.
 		// returns:
-		//		A handle of data binding target (a dojo/Stateful property), which is used for start synchronization with data binding source (another dojo/Stateful property).
+		//		A pointer to data binding target (a dojo/Stateful property), called at handle, which is used for start synchronization with data binding source (another dojo/Stateful property).
 		// example:
 		//		Two seconds later, the text box changes from "Foo" to "Bar" as the "value" property in model changes.
 		// |		<html>
