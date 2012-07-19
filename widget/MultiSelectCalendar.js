@@ -602,7 +602,7 @@ dojo.declare(
 			// summary:
 			//		Provides keyboard navigation of calendar.
 			// description:
-			//		Called from _onKeyPress() to handle keypress on a stand alone Calendar,
+			//		Called from _onKeyDown() to handle keypress on a stand alone Calendar,
 			//		and also from `dijit.form._DateTimeTextBox` to pass a keypress event 
 			//		from the `dijit.form.DateTextBox` to be handled in this widget
 			// returns:
@@ -675,7 +675,7 @@ dojo.declare(
 			return false;
 		},
 
-		_onKeyPress: function(/*Event*/ evt){
+		_onKeyDown: function(/*Event*/ evt){
 			// summary:
 			//		For handling keypress events on a stand alone calendar
 			if(!this.handleKey(evt)){

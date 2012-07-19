@@ -1161,11 +1161,11 @@ dojo.declare("dojox.widget.RollingList",
 		// summary:
 		//		handle the key for the given event - called by dropdown
 		//		widgets
-		if(e.charOrCode == dojo.keys.DOWN_ARROW){
+		if(e.keyCode == dojo.keys.DOWN_ARROW){
 			delete this._savedFocus;
 			this.focus();
 			return false;
-		}else if(e.charOrCode == dojo.keys.ESCAPE){
+		}else if(e.keyCode == dojo.keys.ESCAPE){
 			this._onCancel();
 			return false;
 		}
