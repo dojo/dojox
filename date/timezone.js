@@ -594,6 +594,10 @@ define(["dojo", "dojo/date", "dojo/date/locale", "dojo/_base/array", "dojo/_base
 	}
 	
 /*=====
+
+// TODO: none of this is AMD friendly.   It's setting global variables in dojox,and not returning anything from the module.
+// Plus, the override of dojo/date/locale's format() and _getZone() below.   This needs to be refactored.
+
 dojox.date.timezone = function(){
 	// summary:
 	//		mix-in to dojo.date to provide timezones based on
@@ -706,4 +710,11 @@ dojox.date.timezone.getAllZones = function(){
 		}
 		return oGetZone.call(this, dateObject, getName, options);
 	};
+
+	/*=====
+	// Hide these enhancements from the doc parser because they obscure the original definition of _getZone() and
+	// format.   TODO: change above overrides to around() advice so that original definitions aren't changed.
+	 _ddl.format = oLocaleFmt;
+	 _ddl._getZone = oGetZone;
+	=====*/
 });
