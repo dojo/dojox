@@ -2,7 +2,32 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 	"dojo/_base/Color", "dojo/_base/fx", "dojo/fx"], 
 	function(dojo, lang, arrayUtil, declare, connectUtil, Color, baseFx, coreFx){
 	lang.getObject("dojox.fx.ext-dojo.complex", true);
-	
+
+	/*=====
+	return {
+		// summary:
+		//		Extends dojo/_base/fx.animateProperty to animate a "complex property". The primary example is the
+		//		clip style: rect(10px 30px 10px 50px).
+		//		Note this can also be used with (and is actually intended for)
+		//		CSS3 properties, such as transform:
+		//		transform: rotate(10deg) translateX(0px)
+		// description:
+		//		The standard animation doesn't know what to do with something like
+		//		rect(...). This class identifies complex properties by they being a
+		//		string and having parenthesis. If so, that property is made into a
+		//		dojox.fx._Complex object and the getValue() is obtained from
+		//		there.
+		// example:
+		//		|	var ani = dojo.animateProperty({
+		//		|		node:dojo.byId("myDiv"),
+		//		|		duration:600,
+		//		|		properties:{
+		//		|			clip:{start:'rect(0px 50px 50px 0px)', end:'rect(10px 30px 30px 10px)'}
+		//		|		}
+		//		|	}).play();
+	};
+	=====*/
+
 	var da = baseFx.animateProperty;
 	dojo.animateProperty = baseFx.animateProperty = function(options){
 		// summary:
@@ -65,7 +90,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/_base/d
 
 		});
 		return ani; // dojo.Animation
-	}
+	};
+	/*=====
+	// Hide this override from the doc parser because it obscures the original definition of animateProperty()
+	// TODO: rewrite override as around advice, so we don't need faux-return value above.
+	dojo.animateProperty = baseFx.animateProperty = da;
+	=====*/
 
 	return declare("dojox.fx._Complex", null, {
 		// summary:
