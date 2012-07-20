@@ -7,10 +7,9 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 	 		 Element, SimpleTheme, Series, common, shape,
 	 		 g, func, funcFold, funcReversed){
 	/*=====
-	var __ChartCtorArgs = function(margins, stroke, fill, delayInMs){
+	var __ChartCtorArgs = {
 		// summary:
 		//		The keyword arguments that can be passed in a Chart constructor.
-		//
 		// margins: Object?
 		//		Optional margins for the chart, in the form of { l, t, r, b}.
 		// stroke: dojox.gfx.Stroke?
@@ -19,37 +18,28 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 		//		An optional fill for the chart.
 		// delayInMs: Number
 		//		Delay in ms for delayedRender(). Default: 200.
-		this.margins = margins;
-		this.stroke = stroke;
-		this.fill = fill;
-		this.delayInMs = delayInMs;
-	}
-	 =====*/
-
-	/*=====
-	var __SeriesCtorArgs = function(plot){
-		// summary:
-		//		An optional arguments object that can be used in the Series constructor.
-		// plot: String?
-		//		The plot (by name) that this series belongs to.
-		this.plot = plot;
 	};
 	=====*/
 
 	/*=====
-	var __BaseAxisCtorArgs = function(vertical, min, max, from, to){
+	var __SeriesCtorArgs = {
+		// summary:
+		//		An optional arguments object that can be used in the Series constructor.
+		// plot: String?
+		//		The plot (by name) that this series belongs to.
+	};
+	=====*/
+
+	/*=====
+	var __BaseAxisCtorArgs = {
 		// summary:
 		//		Optional arguments used in the definition of an invisible axis.
-		//
 		// vertical: Boolean?
 		//		A flag that says whether an axis is vertical (i.e. y axis) or horizontal. Default is false (horizontal).
 		// min: Number?
 		//		The smallest value on an axis. Default is 0.
 		// max: Number?
 		//		The largest value on an axis. Default is 1.
-		this.vertical = vertical;
-		this.min = min;
-		this.max = max;
 	};
 	=====*/
 

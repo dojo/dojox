@@ -6,11 +6,10 @@ define([
 	"./Feature"
 ], function(declare, style, lang, registry, Feature){
 	/*=====
-	dojox.geo.openlayers.__WidgetFeatureArgs = function(createWidget, dojoType, dijitId, widget, width, height, longitude, latitude){
+	dojox.geo.openlayers.__WidgetFeatureArgs = {
 		// summary:
 		//		The keyword arguments that can be passed in a WidgetFeature constructor.
 		//		You must define a least one widget retrieval parameter and the geo-localization parameters.
-		//
 		// createWidget: Function?
 		//		Function for widget creation. Must return a `dijit._Widget.
 		// dojoType: String?
@@ -27,14 +26,6 @@ define([
 		//		The longitude, in decimal degrees where to place the widget.
 		// latitude: Number
 		//		The latitude, in decimal degrees where to place the widget.
-		this.createWidget = createWidget;
-		this.dojoType = dojoType;
-		this.dijitId = dijitId;
-		this.widget = widget;
-		this.width = width;
-		this.height = height;
-		this.longitude = longitude;
-		this.latitude = latitude;
 	};
 	=====*/
 

@@ -9,21 +9,17 @@ define([
 ], function(declare, xhr, lang, array, LineString, Collection, GeometryFeature){
 
 	/*=====
-	dojox.geo.openlayers.__JsonImportArgs = function(url, nextFeature, error){
+	dojox.geo.openlayers.__JsonImportArgs = {
 		// summary:
 		//		The keyword arguments that can be passed in a JsonImport constructor.
-		//
 		// url: String
 		//		The url pointing to the JSON file to load.
 		// nextFeature: function
 		//		The function called each time a feature is read. The function is called with a GeometryFeature as argument.
 		// error: function
 		//		Error callback called if something fails.
-		this.url = url;
-		this.nextFeature = nextFeature;
-		this.error = error;
-	}
-	 =====*/
+	};
+	=====*/
 
 	return declare("dojox.geo.openlayers.JsonImport", null, {
 		// summary:

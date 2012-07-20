@@ -109,7 +109,7 @@ define([
 	}
 
 	/*=====
-	var __QTArgs = function(path, id, width, height, params, redirect){
+	var __QTArgs = {
 		// path: String
 		//		The URL of the movie to embed.
 		// id: String?
@@ -123,12 +123,6 @@ define([
 		//		A set of key/value pairs that you want to define in the resultant markup.
 		// redirect: String?
 		//		A url to redirect the browser to if the current QuickTime version is not supported.
-		this.id=id;
-		this.path=path;
-		this.width=width;
-		this.height=height;
-		this.params=params;
-		this.redirect=redirect;
 	};
 	=====*/
 

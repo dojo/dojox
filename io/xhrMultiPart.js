@@ -8,7 +8,7 @@ define([
 	dojo.getObject("io.xhrMultiPart", true, dojox);
 
 	/*=====
-	var __xhrContentArgs = function(){
+	var __xhrContentArgs = {
 		// name: String
 		//		Name of the form value.
 		// content: String
@@ -22,12 +22,6 @@ define([
 		//		Optional charset to pass, for the server to interpret the file correctly.
 		// contentTransferEncoding: String?
 		//		Optional transfer encoding header value.
-		this.name = name;
-		this.content = content;
-		this.filename = filename;
-		this.contentType = contentType;
-		this.charset = charset;
-		this.contentTransferEncoding = contentTransferEncoding;
 	};
 	=====*/
 	function _createPart(/*__xhrContentArgs */args, /* String */boundary){
@@ -75,7 +69,7 @@ define([
 	}
 
 	/*=====
-	var __xhrMultiArgs = function(){
+	var __xhrMultiArgs = {
 		// url: String
 		//		URL to server endpoint.
 		// content: Object?
@@ -111,16 +105,6 @@ define([
 		//		function(response, ioArgs){}. response is an Object, ioArgs
 		//		is of type dojo.__IoCallbackArgs. The handle function will
 		//		be called in either the successful or error case.
-		this.url = url;
-		this.content = content;
-		this.file = file;
-		this.timeout = timeout;
-		this.form = form;
-		this.preventCache = preventCache;
-		this.handleAs = handleAs;
-		this.load = load;
-		this.error = error;
-		this.handle = handle;
 	};
 	=====*/
 	dojox.io.xhrMultiPart = function(/* __xhrMultiArgs */args){

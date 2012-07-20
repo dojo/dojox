@@ -3,16 +3,13 @@ define(["..", "dojo/_base/lang", "dojo/date/locale", "dojo/i18n"], function(dojo
 var drelative = lang.getObject("date.relative", true, dojox);
 
 /*=====
-var __FormatOptions = function(){
+var __FormatOptions = {
 	// locale: String
 	//		override the locale used to determine formatting rules
 	// relativeDate: Date
 	//		Date to calculate relation to (defaults to new Date())
 	// weekCheck: boolean
 	//		Whether or not to display the day of week (defaults true)
-	this.locale = locale;
-	this.relativeDate = relativeDate;
-	this.weekCheck = weekCheck;
 };
 =====*/
 

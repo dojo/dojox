@@ -21,16 +21,14 @@ define([
 ], function(kernel, lang, array, jsonUtil, fx, win, connect, domClass, domStyle, domConstruct, domGeometry, keys, Widget, TemplatedMixin, FormValueWidget, ValidationTextBox, InlineEditBox, i18nCommon, declare){
 kernel.experimental("dojox.form.ListInput");
 
-    /*=====
-     var __Constraints = function(){
-     // locale: String
-     //		locale used for validation, picks up value from this widget's lang attribute
-     // _flags_: anything
-     //		various flags passed to pattern function
-     this.locale = "";
-     this._flags_ = "";
-     };
-     =====*/
+/*=====
+var __Constraints = {
+	 // locale: String
+	 //		locale used for validation, picks up value from this widget's lang attribute
+	 // _flags_: anything
+	 //		various flags passed to pattern function
+};
+=====*/
 
 var ListInput = declare("dojox.form.ListInput", [FormValueWidget],
 	{

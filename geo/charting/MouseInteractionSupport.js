@@ -10,19 +10,15 @@ define([
 ], function(lang, declare, event, connect, win, html, dom, has){
 
 	/*=====
-	dojox.geo.charting.__MouseInteractionSupportCtorArgs = function(enableZoom, enablePan, mouseClickThreshold){
+	dojox.geo.charting.__MouseInteractionSupportCtorArgs = {
 		// summary:
 		//		The keyword arguments that can be passed in a MouseInteractionSupport constructor.
-		//
 		// enableZoom: Boolean?
 		//		Indicates whether zooming is enabled.
 		// enablePan: Boolean?
 		//		Indicates whether panning is enabled.
 		// mouseClickThreshold: Number?
 		//		The threshold (in pixel) that differentiates a drag from a click.
-		this.enableZoom = enableZoom;
-		this.enablePan = enablePan;
-		this.mouseClickThreshold = mouseClickThreshold;
 	};
 	=====*/
 

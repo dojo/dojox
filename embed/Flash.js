@@ -152,7 +152,7 @@ define(["dojo"], function(dojo) {
 
 
 /*=====
-var __flashArgs = function(path, id, width, height, style, params, vars, expressInstall, redirect){
+var __flashArgs = {
 	// path: String
 	//		The URL of the movie to embed.
 	// id: String?
@@ -162,7 +162,7 @@ var __flashArgs = function(path, id, width, height, style, params, vars, express
 	//		The width of the embedded movie; the default value is 320px.
 	// height: Number?
 	//		The height of the embedded movie; the default value is 240px
-	// minimumVersion: Number ?
+	// minimumVersion: Number?
 	//		The minimum targeted version of the Flash Player (defaults to 9)
 	// style: String?
 	//		Any CSS style information (i.e. style="background-color:transparent") you want
@@ -175,16 +175,6 @@ var __flashArgs = function(path, id, width, height, style, params, vars, express
 	//		Whether or not to include any kind of expressInstall info. Default is false.
 	// redirect: String?
 	//		A url to redirect the browser to if the current Flash version is not supported.
-	this.id=id;
-	this.path=path;
-	this.width=width;
-	this.minimumVersion=minimumVersion;
-	this.height=height;
-	this.style=style;
-	this.params=params;
-	this.vars=vars;
-	this.expressInstall=expressInstall;
-	this.redirect=redirect;
 };
 =====*/
 

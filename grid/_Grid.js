@@ -35,7 +35,7 @@ define([
 		dojo.isCopyKey = dojo.dnd.getCopyKeyState;
 	}
 	/*=====
-	dojox.grid.__CellDef = function(){
+	dojox.grid.__CellDef = {
 		// name: String?
 		//		The text to use in the header of the grid for this cell.
 		// get: Function?
@@ -89,28 +89,11 @@ define([
 		// attrs: String?
 		//		A space separated string of attribute='value' pairs to add to
 		//		the header cell element and main grid cell elements.
-		this.name = name;
-		this.value = value;
-		this.get = get;
-		this.formatter = formatter;
-		this.type = type;
-		this.editable = editable;
-		this.hidden = hidden;
-		this.width = width;
-		this.colSpan = colSpan;
-		this.rowSpan = rowSpan;
-		this.styles = styles;
-		this.headerStyles = headerStyles;
-		this.cellStyles = cellStyles;
-		this.classes = classes;
-		this.headerClasses = headerClasses;
-		this.cellClasses = cellClasses;
-		this.attrs = attrs;
 	};
 	=====*/
 
 	/*=====
-	dojox.grid.__ViewDef = function(){
+	dojox.grid.__ViewDef = {
 		// noscroll: Boolean?
 		//		If true, no scrollbars will be rendered without scrollbars.
 		// width: Integer|String?
@@ -141,13 +124,6 @@ define([
 		//		header is rendered, rowIndex will be -1.  "cells" is a reference to the
 		//		internal structure of this view's cells so any changes you make to
 		//		it will persist between calls.
-		this.noscroll = noscroll;
-		this.width = width;
-		this.cells = cells;
-		this.type = type;
-		this.defaultCell = defaultCell;
-		this.onBeforeRow = onBeforeRow;
-		this.onAfterRow = onAfterRow;
 	};
 	=====*/
 

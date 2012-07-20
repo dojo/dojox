@@ -10,7 +10,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 	});
 
 	/*=====
-	var __DefineColorArgs = function(num, colors, hue, saturation, low, high, base, generator){
+	var __DefineColorArgs = {
 		// summary:
 		//		The arguments object that can be passed to define colors for a theme.
 		// num: Number?
@@ -28,15 +28,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "./SimpleTh
 		// base: String|dojo/_base/Color?
 		//		A base color to use if we are defining colors using dojox.color.Palette
 		// generator: String?
-		//		The generator function name from dojox.color.Palette.
-		this.num = num;
-		this.colors = colors;
-		this.hue = hue;
-		this.saturation = saturation;
-		this.low = low;
-		this.high = high;
-		this.base = base;
-		this.generator = generator;
+		//		The generator function name from dojox/color/Palette.
 	};
 	=====*/
 	lang.mixin(Theme, {

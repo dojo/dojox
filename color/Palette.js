@@ -144,14 +144,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "./_base"],
 	}
 
 /*=====
-var __transformArgs = function(use, dr, dg, db, da, dc, dm, dy, dk, dh, ds, dv, dl){
+var __transformArgs = {
 	// summary:
 	//		The keywords argument to be passed to the dojox.color.Palette.transform function.  Note that
 	//		while all arguments are optional, *some* arguments must be passed.  The basic concept is that
 	//		you pass a delta value for a specific aspect of a color model (or multiple aspects of the same
 	//		color model); for instance, if you wish to transform a palette based on the HSV color model,
 	//		you would pass one of "dh", "ds", or "dv" as a value.
-	//
 	// use: String?
 	//		Specify the color model to use for the transformation.  Can be "rgb", "rgba", "hsv", "hsl", "cmy", "cmyk".
 	// dr: Number?
@@ -178,56 +177,34 @@ var __transformArgs = function(use, dr, dg, db, da, dc, dm, dy, dk, dh, ds, dv, 
 	//		The delta to be applied to the luminosity aspect of the HSL color model.
 	// dv: Number?
 	//		The delta to be applied to the value aspect of the HSV color model.
-	this.use = use;
-	this.dr = dr;
-	this.dg = dg;
-	this.db = db;
-	this.da = da;
-	this.dc = dc;
-	this.dm = dm;
-	this.dy = dy;
-	this.dk = dk;
-	this.dh = dh;
-	this.ds = ds;
-	this.dl = dl;
-	this.dv = dv;
-}
-var __generatorArgs = function(base){
+};
+var __generatorArgs = {
 	// summary:
 	//		The keyword arguments object used to create a palette based on a base color.
-	//
 	// base: dojo/_base/Color
 	//		The base color to be used to generate the palette.
-	this.base = base;
-}
-var __analogousArgs = function(base, high, low){
+};
+var __analogousArgs = {
 	// summary:
 	//		The keyword arguments object that is used to create a 5 color palette based on the
 	//		analogous rules as implemented at http://kuler.adobe.com, using the HSV color model.
-	//
 	// base: dojo/_base/Color
 	//		The base color to be used to generate the palette.
 	// high: Number?
 	//		The difference between the hue of the base color and the highest hue.  In degrees, default is 60.
 	// low: Number?
 	//		The difference between the hue of the base color and the lowest hue.  In degrees, default is 18.
-	this.base = base;
-	this.high = high;
-	this.low = low;
-}
-var __splitComplementaryArgs = function(base, da){
+};
+var __splitComplementaryArgs = {
 	// summary:
 	//		The keyword arguments object used to create a palette based on the split complementary rules
 	//		as implemented at http://kuler.adobe.com.
-	//
 	// base: dojo/_base/Color
 	//		The base color to be used to generate the palette.
 	// da: Number?
 	//		The delta angle to be used to determine where the split for the complementary rules happen.
 	//		In degrees, the default is 30.
-	this.base = base;
-	this.da = da;
-}
+};
 =====*/
 
 	//	object methods ---------------------------------------------------------------

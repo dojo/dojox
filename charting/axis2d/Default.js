@@ -5,17 +5,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 			lin, acommon, g, du, df){
 
 	/*=====
-	var __AxisCtorArgs = function(
-			vertical, fixUpper, fixLower, natural, leftBottom,
-			includeZero, fixed, majorLabels, minorTicks, minorLabels, microTicks, htmlLabels,
-			min, max, from, to, majorTickStep, minorTickStep, microTickStep,
-			labels, labelFunc, maxLabelSize,
-			stroke, majorTick, minorTick, microTick, tick,
-			font, fontColor, titleGap, titleFont, titleFontColor, titleOrientation, enableCache, dropLabels, labelSizeChange){
-	
+	var __AxisCtorArgs = {
 		// summary:
 		//		Optional arguments used in the definition of an axis.
-		//
 		// vertical: Boolean?
 		//		A flag that says whether an axis is vertical (i.e. y axis) or horizontal. Default is false (horizontal).
 		// fixUpper: String?
@@ -101,39 +93,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 		// labelSizeChange: Boolean?
 		//		Indicates to the axis whether the axis labels are changing their size on zoom. If false this allows to
 		//		optimize the axis by avoiding recomputing labels maximum size on zoom actions. Default is false.
-	
-		this.vertical = vertical;
-		this.fixUpper = fixUpper;
-		this.fixLower = fixLower;
-		this.natural = natural;
-		this.leftBottom = leftBottom;
-		this.includeZero = includeZero;
-		this.fixed = fixed;
-		this.majorLabels = majorLabels;
-		this.minorTicks = minorTicks;
-		this.minorLabels = minorLabels;
-		this.microTicks = microTicks;
-		this.htmlLabels = htmlLabels;
-		this.min = min;
-		this.max = max;
-		this.from = from;
-		this.to = to;
-		this.majorTickStep = majorTickStep;
-		this.minorTickStep = minorTickStep;
-		this.microTickStep = microTickStep;
-		this.labels = labels;
-		this.labelFunc = labelFunc;
-		this.maxLabelSize = maxLabelSize;
-		this.stroke = stroke;
-		this.majorTick = majorTick;
-		this.minorTick = minorTick;
-		this.microTick = microTick;
-		this.tick = tick;
-		this.font = font;
-		this.fontColor = fontColor;
-		this.enableCache = enableCache;
-		this.dropLabels = dropLabels;
-		this.labelSizeChange = labelSizeChange;
 	};
 	=====*/
 
@@ -142,37 +101,37 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/sniff", "dojo/_base/d
 	return declare("dojox.charting.axis2d.Default", Invisible, {
 		// summary:
 		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
-		//
+
 		// defaultParams: Object
 		//		The default parameters used to define any axis.
 		// optionalParams: Object
 		//		Any optional parameters needed to define an axis.
 
-		/*
-		 // TODO: the documentation tools need these to be pre-defined in order to pick them up
-		 //	correctly, but the code here is partially predicated on whether or not the properties
-		 //	actually exist.  For now, we will leave these undocumented but in the code for later. -- TRT
+		/*=====
+		// TODO: the documentation tools need these to be pre-defined in order to pick them up
+		//	correctly, but the code here is partially predicated on whether or not the properties
+		//	actually exist.  For now, we will leave these undocumented but in the code for later. -- TRT
 
-		 // opt: Object
-		 //		The actual options used to define this axis, created at initialization.
-		 // scaler: Object
-		 //		The calculated helper object to tell charts how to draw an axis and any data.
-		 // ticks: Object
-		 //		The calculated tick object that helps a chart draw the scaling on an axis.
-		 // dirty: Boolean
-		 //		The state of the axis (whether it needs to be redrawn or not)
-		 // scale: Number
-		 //		The current scale of the axis.
-		 // offset: Number
-		 //		The current offset of the axis.
+		// opt: Object
+		//		The actual options used to define this axis, created at initialization.
+		// scaler: Object
+		//		The calculated helper object to tell charts how to draw an axis and any data.
+		// ticks: Object
+		//		The calculated tick object that helps a chart draw the scaling on an axis.
+		// dirty: Boolean
+		//		The state of the axis (whether it needs to be redrawn or not)
+		// scale: Number
+		//		The current scale of the axis.
+		// offset: Number
+		//		The current offset of the axis.
 
-		 opt: null,
-		 scaler: null,
-		 ticks: null,
-		 dirty: true,
-		 scale: 1,
-		 offset: 0,
-		 */
+		opt: null,
+		scaler: null,
+		ticks: null,
+		dirty: true,
+		scale: 1,
+		offset: 0,
+		=====*/
 		defaultParams: {
 			vertical:	false,		// true for vertical axis
 			fixUpper:	"none",	// align the upper on ticks: "major", "minor", "micro", "none"

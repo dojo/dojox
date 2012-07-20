@@ -35,7 +35,7 @@ dojo.require("dojox.lang.oo.Decorator");
 		};
 
 	/*=====
-	dojox.lang.oo.__MixinDefaults = function(){
+	dojox.lang.oo.__MixinDefaults = {
 		// summary:
 		//		a dict of default parameters for dojox.lang.oo._mixin
 		// decorator: Function
@@ -44,9 +44,6 @@ dojo.require("dojox.lang.oo.Decorator");
 		//		a filter function to be used in absence of other filters
 		// mixer: Function
 		//		a mixer function to be used to mix in new properties
-		this.decorator = decorator;
-		this.filter = filter;
-		this.mixer = mixer;
 	};
 	=====*/
 

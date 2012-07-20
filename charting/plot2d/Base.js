@@ -3,7 +3,7 @@ define(["dojo/_base/declare",
 	    "./common"],
 	function(declare, Element, arr,  common){
 /*=====
-dojox.charting.plot2d.__PlotCtorArgs = function(){
+dojox.charting.plot2d.__PlotCtorArgs = {
 	// summary:
 	//		The base keyword arguments object for plot constructors.
 	//		Note that the parameters for this may change based on the
