@@ -106,8 +106,8 @@ return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		// tags:
 		//		protected extension
 		// returns:
-		//		true: go on handling the header row and then call afterHeader.
-		//		false: skip the header row, won't call afterHeader.
+		//		- true: go on handling the header row and then call afterHeader.
+		//		- false: skip the header row, won't call afterHeader.
 		return true;	//Boolean
 	},
 	afterHeader: function(){
@@ -126,8 +126,8 @@ return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		// items:
 		//		All the items fetched from the store
 		// returns:
-		//		true: go on handling the contents and then call afterContent.
-		//		false: skip all the contents, won't call afterContent.
+		//		- true: go on handling the contents and then call afterContent.
+		//		- false: skip all the contents, won't call afterContent.
 		return true;	//Boolean
 	},
 	afterContent: function(){
@@ -152,8 +152,8 @@ return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		// |		spCols
 		// |	}
 		// returns:
-		//		true: go on handling the current data row and then call afterContentRow.
-		//		false: skip the current data row, won't call afterContentRow.
+		//		- true: go on handling the current data row and then call afterContentRow.
+		//		- false: skip the current data row, won't call afterContentRow.
 		return true;	//Boolean
 	},
 	afterContentRow: function(/* object */argObj){
@@ -184,8 +184,8 @@ return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		// |		spCols(if isHeader==false)
 		// |	}
 		// returns:
-		//		true: go on handling the current view and then call afterView.
-		//		false: skip the current view, won't call afterView.
+		//		- true: go on handling the current view and then call afterView.
+		//		- false: skip the current view, won't call afterView.
 		return true;	//Boolean
 	},
 	afterView: function(/* object */argObj){
@@ -220,8 +220,8 @@ return declare("dojox.grid.enhanced.plugins.exporter._ExportWriter", null, {
 		// |		spCols(if isHeader==false)
 		// |	}
 		// returns:
-		//		true: go on handling the current subrow and then call afterSubrow.
-		//		false: skip the current subrow, won't call afterSubrow.
+		//		- true: go on handling the current subrow and then call afterSubrow.
+		//		- false: skip the current subrow, won't call afterSubrow.
 		return true;	//Boolean
 	},
 	afterSubrow: function(/* object */argObj){

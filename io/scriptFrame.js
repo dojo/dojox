@@ -24,12 +24,14 @@ define(["dojo/main", "dojo/io/script", "dojo/io/iframe"], function(dojo, ioScrip
 		},
 
 		_fixAttachUrl: function(/*String*/url){
-			//summary: fixes the URL so that
+			// summary:
+			//		fixes the URL so that
 		},
 
 		_loaded: function(/*String*/frameId){
-			//summary: callback used when waiting for a frame to load (related to the usage of
-			//the frameId argument to dojo.io.script.get().
+			// summary:
+			//		callback used when waiting for a frame to load (related to the usage of
+			//		the frameId argument to dojo.io.script.get().
 			var waiters = this._getWaiters(frameId);
 			this._loadedIds[frameId] = true;
 			this._waiters[frameId] = null;
@@ -48,10 +50,11 @@ define(["dojo/main", "dojo/io/script", "dojo/io/iframe"], function(dojo, ioScrip
 
 	//Define frame-aware _canAttach method on dojo.io.script
 	ioScript._canAttach = function(/*Object*/ioArgs){
-		//summary: provides an override of dojo.io.script._canAttach to check for
-		//the existence of a the args.frameDoc property. If it is there, and it is a string,
-		//not a document, then create the iframe with an ID of frameDoc, and use that for the calls.
-		//If frameDoc is a document, then dojox.io.scriptFrame should not get involved.
+		// summary:
+		//		provides an override of dojo.io.script._canAttach to check for
+		//		the existence of a the args.frameDoc property. If it is there, and it is a string,
+		//		not a document, then create the iframe with an ID of frameDoc, and use that for the calls.
+		//		If frameDoc is a document, then dojox.io.scriptFrame should not get involved.
 		var fId = ioArgs.args.frameDoc;
 
 		if(fId && dojo.isString(fId)){

@@ -299,7 +299,8 @@ function(dojo, defaults, registry, keys, Mouse, Canvas, Undo, Anchors, Stencil, 
 			// type: String
 			//		The final name of the tool, lower case: 'image', 'line', 'textBlock'
 			// options:
-			//		type: Object
+			//		- type: Object
+			//
 			//		The parameters used to draw the object. See stencil._Base and each
 			//		tool for specific parameters of teh data or points objects.
 

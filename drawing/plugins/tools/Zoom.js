@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "../../util/oo", "../_Plugin", "../../manager/_registry"],
 function(lang, oo, Plugin, registry){
 
-	// 	zoomInc: Float
+	// zoomInc: Float
 	//		The amount of zoom that will occur upon each click.
 	var zoomInc = Math.pow(2.0,0.25),
 

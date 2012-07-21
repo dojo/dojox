@@ -13,7 +13,8 @@ var OpmlStore = declare("dojox.data.OpmlStore", null, {
 		// summary:
 		//		constructor
 		// keywordParameters:
-		//		{url: String, label: String}
+		//		- {url: String, label: String}
+		//
 		//		Where label is optional and configures what should be used as the return from getLabel()
 		this._xmlData = null;
 		this._arrayOfTopLevelItems = [];

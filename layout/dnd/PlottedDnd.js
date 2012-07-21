@@ -506,7 +506,7 @@ dojo.extend(dojo.dnd.Manager, {
 	},
 	
 	makeAvatar: function(){
-		//summary:
+		// summary:
 		//		Makes the avatar, it is separate to be overwritten dynamically, if needed.
 		return (this.source.declaredClass == "dojox.layout.dnd.PlottedDnd") ?
 			new dojox.layout.dnd.Avatar(this, this.source.opacity) :

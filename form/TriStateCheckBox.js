@@ -287,10 +287,11 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 		
 		_getStateType: function(/*String|Boolean*/ state){
 			// summary:
-			//		Internal function to return the type of a certain state
-			//		false: False
-			//		true: True
-			//		"mixed": Mixed
+			//		Internal function to return the type of a certain state:
+			//
+			//		- false: False
+			//		- true: True
+			//		- "mixed": Mixed
 			return state ? (state == "mixed" ? "Mixed" : "True") : "False";
 		},
 		

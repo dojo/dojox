@@ -20,8 +20,8 @@ define([
 		//		An item of either RoundRectList or EdgeToEdgeList.
 		// description:
 		//		ListItem represents an item of either RoundRectList or
-		//		EdgeToEdgeList. There are three ways to move to a different
-		//		view: moveTo, href, and url. You can choose only one of them.
+		//		EdgeToEdgeList. There are three ways to move to a different view:
+		//		moveTo, href, and url. You can choose only one of them.
 		//
 		//		A child DOM node (or widget) can have the layout attribute,
 		//		whose value is "left", "right", or "center". Such nodes will be

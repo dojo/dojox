@@ -366,7 +366,7 @@ var __flashArgs = {
 			}
 		},
 		byId: function (movieName, doc){
-			// 	summary:
+			// summary:
 			//		Gets Flash movie by id.
 			// description:
 			//		Probably includes methods for outdated

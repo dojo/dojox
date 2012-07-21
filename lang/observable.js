@@ -12,7 +12,7 @@ dojo.experimental("dojox.lang.observable");
 // Only properties with primitive values can be wrapped.
 // This has performance implications as well.
 dojox.lang.observable = function(/*Object*/wrapped,/*function*/onRead,/*function*/onWrite,/*function*/onInvoke){
-	// 	summary:
+	// summary:
 	//		Creates a wrapper object, which can be observed. The wrapper object
 	//		is a proxy to the wrapped object. If you will be making multiple wrapper
 	//		objects with the same set of listeners, it is recommended that you

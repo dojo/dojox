@@ -888,7 +888,8 @@ var Base = oo.declare(
 		},
 		getRadius: function(){
 			// summary:
-			//		Gets radius (length) of Stencil
+			//		Gets radius (length) of Stencil.
+			//
 			//		NOTE: Only works for Lines, Arrows and Vectors
 			//		(not for Ellipse, Axes has its own version)
 			var box = this.getBounds(true);

@@ -72,7 +72,8 @@ var _FocusArea = declare("dojox.grid.enhanced._FocusArea", null, {
 		getRegions: function(){
 			// summary:
 			//		Define the small regions (dom nodes) in this area.
-			//		returns: Array of dom nodes.
+			// returns:
+			//		Array of dom nodes.
 		},
 		
 		onRegionFocus: function(event){

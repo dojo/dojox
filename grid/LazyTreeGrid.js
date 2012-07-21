@@ -352,9 +352,7 @@ var LazyTreeGrid = declare("dojox.grid.LazyTreeGrid", TreeGrid, {
 	//		This object should ONLY be obtained from `LazyTreeGrid.getState()`.
 	defaultState: null,
 	// colSpans: Object
-	//		a json object that defines column span of each level rows
-	//
-	//		attributes:
+	//		A json object that defines column span of each level rows.  Attributes:
 	//
 	//		- 0/1/..: which level need to colspan
 	//		- start: start column index of colspan

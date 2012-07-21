@@ -111,9 +111,9 @@ define([
 		height: "",
 
 		// scrollType: Number
-		//		1: use -webkit-transform:translate3d(x,y,z) style,
-		//		2: use top/left style,
-		//		0: use default value (2 in case of Android, otherwise 1)
+		//		- 1: use -webkit-transform:translate3d(x,y,z) style,
+		//		- 2: use top/left style,
+		//		- 0: use default value (2 in case of Android, otherwise 1)
 		scrollType: 0,
 
 		init: function(/*Object?*/params){

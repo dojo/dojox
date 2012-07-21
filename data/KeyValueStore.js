@@ -18,9 +18,9 @@ var KeyValueStore = declare("dojox.data.KeyValueStore", null, {
 		// summary:
 		//		constructor
 		// keywordParameters:
-		//		{url: String}
-		//		{data: string}
-		//		{dataVar: jsonObject}
+		//		- {url: String}
+		//		- {data: string}
+		//		- {dataVar: jsonObject}
 		if(keywordParameters.url){
 			this.url = keywordParameters.url;
 		}

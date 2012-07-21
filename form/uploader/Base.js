@@ -20,7 +20,6 @@ return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTem
 	// summary:
 	//		The Base class used for dojox.form.Uploader and dojox.form.uploader.FileList.
 	//
-	// 	description:
 	//		Should not be used as a standalone. To be mixed in with other classes.
 	//
 	//		Version: 1.6

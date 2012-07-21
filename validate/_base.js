@@ -41,6 +41,7 @@ validate.isInRange = function(value, flags){
 	// value: String
 	// flags: Object?
 	//		{max:Number, min:Number, decimal:String}
+	//
 	//		- flags.max  A number, which the value must be less than or equal to for the validation to be true.
 	//		- flags.min  A number, which the value must be greater than or equal to for the validation to be true.
 	//		- flags.decimal  The character used for the decimal point.  Default is ".".

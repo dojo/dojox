@@ -13,9 +13,10 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		//		Constructor for the AtomRead store.
 		// args:
 		//		An anonymous object to initialize properties.	It expects the following values:
-		//		url:			The url to a service or an XML document that represents the store
-		//		unescapeHTML:	A boolean to specify whether or not to unescape HTML text
-		//		sendQuery:		A boolean indicate to add a query string to the service URL
+		//
+		//		- url:			The url to a service or an XML document that represents the store
+		//		- unescapeHTML:	A boolean to specify whether or not to unescape HTML text
+		//		- sendQuery:	A boolean indicate to add a query string to the service URL
 
 		if(args){
 			this.url = args.url;

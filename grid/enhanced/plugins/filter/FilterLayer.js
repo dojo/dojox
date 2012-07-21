@@ -32,8 +32,8 @@ define([
 			// tags:
 			//		public
 			// filter: (_ConditionExpr|null)?
-			//		null: clear filter definition
-			//		undefined: it's getter
+			//		- null: clear filter definition
+			//		- undefined: it's getter
 			// returns:
 			//		A filter definition if it's getter.
 		},

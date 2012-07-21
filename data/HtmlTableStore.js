@@ -34,10 +34,13 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 		// |		</table>
 		// args:
 		//		An anonymous object to initialize properties.  It expects the following values:
-		//		tableId:	The id of the HTML table to use.
+		//
+		//		- tableId:	The id of the HTML table to use.
+		//
 		//		OR
-		//		url:		The url of the remote page to load
-		//		tableId:	The id of the table element in the remote page
+		//
+		//		- url:		The url of the remote page to load
+		//		- tableId:	The id of the table element in the remote page
 		
 		if(args.url){
 			if(!args.tableId)

@@ -9,8 +9,9 @@ dojox.jsonPath.query = function(/*Object*/ obj, /*String*/ expr, /*Object*/ arg)
 	//		jsonPath expression (string) to be evaluated
 	// arg:
 	//		{} special arguments.
-	//		resultType: "VALUE"||"BOTH"||"PATH"} (defaults to value)
-	//		evalType: "RESULT"||"ITEM"} (defaults to ?)
+	//
+	//		- resultType: "VALUE"||"BOTH"||"PATH"} (defaults to value)
+	//		- evalType: "RESULT"||"ITEM"} (defaults to ?)
 
 	var re = dojox.jsonPath._regularExpressions;
 	if (!arg){arg={};}

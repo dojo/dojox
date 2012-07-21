@@ -106,10 +106,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			// truncated: Boolean?
 			//		whether the input text(s) has already been truncated.
 			// returns: Object
-			//		{
-			//			text: processed text, maybe truncated or not
-			//			truncated: whether text has been truncated
-			//		}
+			// |	{
+			// |		text: processed text, maybe truncated or not,
+			// |		truncated: whether text has been truncated
+			// |	}
 			if(!s || s.length <= 0){
 				return {
 					text: "",
@@ -176,10 +176,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			// truncated: Boolean?
 			//		whether the input text(s) has already been truncated.
 			// returns: Object
-			//		{
-			//			text: processed text, maybe truncated or not
-			//			truncated: whether text has been truncated
-			//		}
+			// |	{
+			// |		text: processed text, maybe truncated or not,
+			// |		truncated: whether text has been truncated
+			// |	}
 			if (!s || s.length <= 0) {
 				return {
 					text: "",

@@ -24,6 +24,7 @@ var LocalImage = dojo.declare("dojox.editor.plugins.LocalImage", LinkDialog.ImgL
 	//		This plugin provides an enhanced image link dialog that
 	//		not only insert the online images, but upload the local image files onto
 	//		to server then insert them as well.
+	//
 	//		Dependencies:
 	//		This plugin depends on dojox.form.FileUploader to upload the images on the local driver.
 	//		Do the regression test whenever FileUploader is upgraded.

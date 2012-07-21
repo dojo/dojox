@@ -133,7 +133,7 @@ dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ n
 	// description:
 	//		Removes all children of node and appends newChild. All the existing
 	//		children will be destroyed.
-	// 	node:
+	// node:
 	//		The node to modify the children on
 	// newChildren:
 	//		The children to add to the node.  It can either be a single Node or an

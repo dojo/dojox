@@ -19,7 +19,7 @@ var Rect = oo.declare(
 		baseRender:true,
 		
 		dataToPoints: function(/*Object*/d){
-			//summary:
+			// summary:
 			//		Converts data to points.
 			d = d || this.data;
 			this.points = [

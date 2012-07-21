@@ -69,10 +69,11 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				// description:
 				//		This will attempt to update the provide result based on previous notification, adding new items
 				//		from onNew calls, removing deleted items, and updating modified items, and properly removing
-				//		and adding items as required by the query and sort parameters. This function will return:
-				//		0: Indicates it could not successfully update the result set
-				//		1: Indicates it could successfully handle all the notifications, but no changes were made to the result set
-				//		2: Indicates it successfully handled all the notifications and result set has been updated.
+				//		and adding items as required by the query and sort parameters.
+				// returns:
+				//		- 0: Indicates it could not successfully update the result set
+				//		- 1: Indicates it could successfully handle all the notifications, but no changes were made to the result set
+				//		- 2: Indicates it successfully handled all the notifications and result set has been updated.
 				if(this.isUpdateable(request)){
 					// we try to avoid rerunning notification updates more than once on the same object for performance
 					for(var i = request._version || 0; i < this._updates.length;i++){

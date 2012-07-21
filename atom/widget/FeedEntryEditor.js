@@ -327,7 +327,7 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 		//		The DOM node to attach the content data to.
 		// editMode:
 		//		Boolean to indicate if the display should be in edit mode or not.
-		// 	entry:
+		// entry:
 		//		The Feed Entry to work with.
 		if(!editMode){
 			FeedEntryEditor.superclass.setContent.call(this, contentAnchorNode, editMode, entry);
@@ -793,9 +793,9 @@ var FeedEntryEditor = declare("dojox.atom.widget.FeedEntryEditor", FeedEntryView
 	_enforceXhtml: function(/*string*/html){
 		// summary:
 		//		Function for cleaning up/enforcing the XHTML standard in HTML returned from the editor2 widget.
-		// 	html:
+		// html:
 		//		HTML string to be enforced as xhtml.
-		// 	returns:
+		// returns:
 		//		string of cleaned up HTML.
 		var xhtml = null;
 		if(html){
@@ -1075,11 +1075,11 @@ var PeopleEditor = declare("dojox.atom.widget.PeopleEditor", [_Widget, _Template
 		_createEditor: function(/*string*/value, /*string*/id, /*string*/name, /*DOM node*/labelNode, /*DOM node*/node){
 			// summary:
 			//		Creates an individual editor widget (textbox) for a value.
-			// 	value:
+			// value:
 			//		The initial value of the textbox
-			// 	id:
+			// id:
 			//		The id the textbox should have.
-			// 	name:
+			// name:
 			//		The text to put in the label element for this textbox.
 			// labelNode:
 			//		The node to attach the label to.

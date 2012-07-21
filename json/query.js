@@ -91,7 +91,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojox", "dojo/_base/array"], fu
 		//		according to the provided query.
 		// query:
 		//		Query string
-		// 	obj:
+		// obj:
 		//		Target of the JSONQuery
 		// description:
 		//		JSONQuery provides a comprehensive set of data querying tools including filtering,

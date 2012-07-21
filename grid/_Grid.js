@@ -980,10 +980,10 @@ define([
 		},
 
 		updateRowCount: function(inRowCount){
-			//summary:
-			//	Change the number of rows.
+			// summary:
+			//		Change the number of rows.
 			// inRowCount: int
-			//	Number of rows in the grid.
+			//		Number of rows in the grid.
 			if(this.updating){
 				this.invalidated.rowCount = inRowCount;
 			}else{

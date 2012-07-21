@@ -34,8 +34,9 @@ dojo.declare("dojox.data.AppStore",
 		//		url of the Collection to be used.
 		// args:
 		//		An anonymous object to initialize properties.  It expects the following values:
-		//		url:		The url of the Collection to load.
-		//		urlPreventCache:	Whether or not to append on cache prevention params (as defined by dojo.xhr*)
+		//
+		//		- url:				The url of the Collection to load.
+		//		- urlPreventCache:	Whether or not to append on cache prevention params (as defined by dojo.xhr*)
 		
 		if(args && args.url){
 			this.url = args.url;

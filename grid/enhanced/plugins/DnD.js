@@ -323,10 +323,11 @@ var DnD = declare("dojox.grid.enhanced.plugins.DnD", _Plugin, {
 		//		Combination of any item from type set ("row", "col", "cell")
 		//		and any item from mode set("within", "in", "out") is configurable.
 		//
-		//		"row", "col", "cell" are straitforward, while the other 3 are explained below:
-		//		"within": DnD within grid, that is, column/row reordering and cell moving/copying.
-		//		"in": Whether allowed to accept rows/cells (currently not support columns) from another grid.
-		//		"out": Whether allowed to drag out of grid, to another grid or even to any other DnD target.
+		//		"row", "col", "cell" are straightforward, while the other 3 are explained below:
+		//
+		//		- "within": DnD within grid, that is, column/row reordering and cell moving/copying.
+		//		- "in": Whether allowed to accept rows/cells (currently not support columns) from another grid.
+		//		- "out": Whether allowed to drag out of grid, to another grid or even to any other DnD target.
 		//
 		//		If not provided in the config, will use the default.
 		//		When declared together, Mode set has higher priority than type set.

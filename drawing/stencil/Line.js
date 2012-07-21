@@ -49,7 +49,7 @@ StencilPoints: [
 =====*/
 		
 		dataToPoints: function(o){
-			//summary:
+			// summary:
 			//		Converts data to points.
 			o = o || this.data;
 			if(o.radius || o.angle){

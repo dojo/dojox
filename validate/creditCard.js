@@ -14,16 +14,15 @@ validate._cardInfo = {
 	// description:
 	//		A hash of valid CC abbreviations and regular expressions
 	//
-	//		mc: Mastercard
-	//		ec: Eurocard
-	//		vi: Visa
-	//		ax: American Express
-	//		dc: Diners Club
-	//		bl: Carte Blanch
-	//		di: Discover
-	//		jcb: JCB
-	//		er: Enroute
-	//
+	//		- mc: Mastercard
+	//		- ec: Eurocard
+	//		- vi: Visa
+	//		- ax: American Express
+	//		- dc: Diners Club
+	//		- bl: Carte Blanch
+	//		- di: Discover
+	//		- jcb: JCB
+	//		- er: Enroute
 	// example:
 	//		Define your own card, gift-card, whatever. Starts with 7,
 	//		is 15 total length.

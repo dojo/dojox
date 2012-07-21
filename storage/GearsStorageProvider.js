@@ -16,8 +16,7 @@ if(dojo.gears.available){
 			//		to store data (it is saved into the local SQL database
 			//		provided by Gears, using dojox.sql)
 			// description:
-			//		You can disable this storage provider with the following djConfig
-			//		variable:
+			//		You can disable this storage provider with the following djConfig variable:
 			// |		var djConfig = { disableGearsStorage: true };
 			//
 			//		Authors of this storage provider-

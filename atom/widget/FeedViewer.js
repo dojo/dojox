@@ -552,7 +552,6 @@ var FeedViewer = declare("dojox.atom.widget.FeedViewer", [_Widget, _Templated, _
 var FeedViewerEntry = FeedViewer.FeedViewerEntry = declare("dojox.atom.widget.FeedViewerEntry", [_Widget, _Templated],{
 	// summary:
 	//		Widget for handling the display of an entry and specific events associated with it.
-	//		description: Widget for handling the display of an entry and specific events associated with it.
 
 	templateString: entryTemplate,
 

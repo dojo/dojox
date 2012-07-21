@@ -91,7 +91,7 @@ define(["dojo/_base/lang"],
 		};
 		
 		this.replace = function(/* String */oldStr, /* String */ newStr){
-			// 	summary:
+			// summary:
 			//		Replace instances of one string with another in the buffer.
 			b = b.replace(oldStr,newStr);
 			this.length = b.length;

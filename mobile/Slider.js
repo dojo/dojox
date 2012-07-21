@@ -46,9 +46,10 @@ define([
 
 		// orientation: [const] String
 		//		The slider direction.
-		//		"H": horizontal
-		//		"V": vertical
-		//		"auto": use width/height comparison at instantiation time (default is "H" if width/height are 0)
+		//
+		//		- "H": horizontal
+		//		- "V": vertical
+		//		- "auto": use width/height comparison at instantiation time (default is "H" if width/height are 0)
 		orientation: "auto",
 
 		// halo: Number

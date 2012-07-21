@@ -199,7 +199,7 @@ dojoxFx.crossFade = function(/* Object */args){
 	// summary:
 	//		Returns an animation cross fading two element simultaneously
 	// args:
-	//		args.nodes: Array - two element array of domNodes, or id's
+	//		- args.nodes: Array - two element array of domNodes, or id's
 	//
 	//		all other standard animation args mixins apply. args.node ignored.
 

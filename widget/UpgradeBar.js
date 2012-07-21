@@ -99,7 +99,7 @@ var UpgradeBar = declare("dojox.widget.UpgradeBar", [_WidgetBase, _TemplatedMixi
 	},
 
 	checkNotifications: function(){
-		// 	summary:
+		// summary:
 		//		Internal. Go through the notifications Array
 		//		and check for any that evaluate to true.
 		// tags:
@@ -155,7 +155,7 @@ var UpgradeBar = declare("dojox.widget.UpgradeBar", [_WidgetBase, _TemplatedMixi
 	},
 
 	notify: function(msg){
-		// 	summary:
+		// summary:
 		//		Triggers the bar to display. An internal function,
 		//		but could be called externally for fun.
 		// tags:

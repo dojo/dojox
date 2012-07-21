@@ -31,7 +31,7 @@ var Zoom = oo.declare(
 	{
 		type:"dojox.drawing.ui.dom.Zoom",
 
-		// 	zoomInc: Float
+		// zoomInc: Float
 		//		The amount of zoom that will occur upon each click.
 		zoomInc:.1,
 

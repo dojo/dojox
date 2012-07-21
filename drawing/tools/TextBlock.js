@@ -108,16 +108,16 @@ function(dojo, dijit, oo, registry, StencilText){
 StencilData: {
 	// summary:
 	//		The data used to create the dojox.gfx Text
-	// 	x: Number
+	// x: Number
 	//		Left point x
-	// 	y: Number
+	// y: Number
 	//		Top point y
-	// 	width: ? Number|String
-	//		Optional width of Text. Not required but reccommended.
+	// width: Number|String?
+	//		Optional width of Text. Not required but recommended.
 	//		for auto-sizing, use 'auto'
-	// 	height: ? Number
+	// height: Number?
 	//		Optional height of Text. If not provided, _lineHeight is used.
-	// 	text: String
+	// text: String
 	//		The string content. If not provided, may auto-delete depending on defaults.
 },
 =====*/

@@ -414,7 +414,7 @@ var Axes = oo.declare(
 		},
 
 		pointsToData: function(){
-			//summary:
+			// summary:
 			//		Converts points to data.
 			var p = this.points;
 			var d = {
@@ -435,7 +435,7 @@ var Axes = oo.declare(
 		},
 
 		getRadius: function(){
-			//summary:
+			// summary:
 			//		Possibility of z-axis makes bounds unreliable.
 			//		Use these points instead.
 			var p = this.points;
@@ -444,7 +444,7 @@ var Axes = oo.declare(
 		},
 
 		dataToPoints: function(/* ? Object*/o){
-			//summary:
+			// summary:
 			//		Converts data to points.
 			o = o || this.data;
 			if(o.radius || o.angle){

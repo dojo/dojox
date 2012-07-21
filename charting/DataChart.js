@@ -249,7 +249,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			}
 		},
 		hide: function(){
-			// 	summary:
+			// summary:
 			//		If chart is showing, hide it
 			//		Prevents rendering while hidden
 			if(this.showing){

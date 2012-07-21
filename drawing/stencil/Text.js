@@ -97,7 +97,7 @@ var Text = oo.declare(
 		},
 
 		dataToPoints: function(/*Object*/o){
-			//summary:
+			// summary:
 			//		Converts data to points.
 			o = o || this.data;
 			var w = o.width =="auto" ? 1 : o.width;

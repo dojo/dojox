@@ -351,7 +351,7 @@ var FeedEntryViewer = declare("dojox.atom.widget.FeedEntryViewer", [_Widget, _Te
 		//		This exists specifically so users can over-ride how the title data is filled out from an entry.
 		// idAnchorNode:
 		//		The DOM node to attach the ID data to.
-		// 	editMode:
+		// editMode:
 		//		Boolean to indicate if the display should be in edit mode or not.
 		// entry:
 		//		The Feed Entry to work with.

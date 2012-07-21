@@ -223,7 +223,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//
 			//		The clip geometry coordinates are expressed in the coordinate system used to draw the shape. In other
 			//		words, the clipping area is defined in the shape parent coordinate system and the shape transform is automatically applied.
-			//		example:
+			// example:
 			//		The following example shows how to clip a gfx image with all the possible clip geometry: a rectangle,
 			//		an ellipse, a circle (using the ellipse geometry), a polyline and a path:
 			//

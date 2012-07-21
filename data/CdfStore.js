@@ -467,7 +467,8 @@ dojo.declare("dojox.data.CdfStore", null, {
 		
 	setValues: function(/* jsx3.xml.Entity */ item, /* String */ property, /*array*/ values){
 		// summary:
-		//		Set property values
+		//		Set property values.
+
 		//		TODO: Needs to be fully implemented.
 
 		this._makeDirty(item);
@@ -578,7 +579,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 
 	fetchItemByIdentity: function(/* Object || String */ args){
 		// summary:
-		//		See dojo.data.api.Identity.fetchItemByIdentity(keywordArgs)
+		//		See dojo.data.api.Identity.fetchItemByIdentity(keywordArgs).
 		//
 		//		Note:
 		//		This method can be synchronous if mode is set.

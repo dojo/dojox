@@ -170,7 +170,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 		setStroke: function(stroke){
 			// summary:
 			//		sets a stroke object (SVG)
-			//		stroke: Object
+			// stroke: Object
 			//		a stroke object (see dojox.gfx.defaultStroke)
 
 			var rn = this.rawNode;

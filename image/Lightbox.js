@@ -519,8 +519,9 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 			//		Add an image to this Master Lightbox
 			// child: Object
 			//		The image information to add.
-			//		href: String - link to image (required)
-			//		title: String - title to display
+			//
+			//		- href: String - link to image (required)
+			//		- title: String - title to display
 			// group: String?
 			//		attach to group of similar tag or null for individual image instance
 

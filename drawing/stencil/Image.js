@@ -20,15 +20,15 @@ var Image = oo.declare(
 		StencilData: {
 			// summary:
 			//		The data used to create the dojox.gfx Shape
-			// 	x: Number
+			// x: Number
 			//		Left point x
-			// 	y: Number
+			// y: Number
 			//		Top point y
-			// 	width: ? Number
+			// width: Number?
 			//		Optional width of Image. If not provided, it is obtained
-			// 	height: ? Number
+			// height: Number?
 			//		Optional height of Image. If not provided, it is obtained
-			// 	src: String
+			// src: String
 			//		The location of the source image
 		},
 
@@ -40,7 +40,7 @@ var Image = oo.declare(
 		=====*/
 		
 		dataToPoints: function(/*Object*/o){
-			//summary:
+			// summary:
 			//		Converts data to points.
 			o = o || this.data;
 			this.points = [

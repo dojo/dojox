@@ -527,7 +527,7 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 		
 		modTable: function(cmd, args){
 			// summary:
-			//		Where each plugin performs its action
+			//		Where each plugin performs its action.
 			//		Note: not using execCommand. In spite of their presence in the
 			//		Editor as query-able plugins, I was not able to find any evidence
 			//		that they are supported (especially in NOT IE). If they are
@@ -667,8 +667,9 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 		
 		getSelectedCells: function(){
 			// summary:
-			//		Gets the selected cells from the passed table
-			//		Returns: array of TDs or empty array
+			//		Gets the selected cells from the passed table.
+			// returns:
+			//		array of TDs or empty array
 			var cells = [];
 			var tbl = this.getTableInfo().tbl;
 			this.editor._tablePluginHandler._prepareTable(tbl);
@@ -958,7 +959,7 @@ var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins
         
 		modTable: function(cmd, args){
 			// summary:
-			//		Where each plugin performs its action
+			//		Where each plugin performs its action.
 			//		Note: not using execCommand. In spite of their presence in the
 			//		Editor as query-able plugins, I was not able to find any evidence
 			//		that they are supported (especially in NOT IE). If they are

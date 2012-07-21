@@ -1285,11 +1285,11 @@ return declare("dojox.form.FileUploader", [Widget, TemplatedMixin, Contained], {
 	},
 
 	_connectFlash: function(){
-		// 	summary:
+		// summary:
 		//		Subscribing to published topics coming from the
 		//		Flash uploader.
-		// 	description:
-		//		Sacrificing some readbilty for compactness. this.id
+		//
+		//		Sacrificing some readability for compactness. this.id
 		//		will be on the beginning of the topic, so more than
 		//		one uploader can be on a page and can have unique calls.
 
