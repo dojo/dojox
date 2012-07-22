@@ -9,8 +9,9 @@ define([
 	"dojo/_base/sniff",
 	"dojo/_base/url",
 	"dojo/_base/xhr",
+	"dojo/when",
 	"dojo/_base/window"
-], function(declare, Deferred, domConstruct, htmlUtil, kernel, lang, ready, has, _Url, xhrUtil, windowUtil){
+], function(declare, Deferred, domConstruct, htmlUtil, kernel, lang, ready, has, _Url, xhrUtil, when, windowUtil){
 
 /*
 	Status: don't know where this will all live exactly
@@ -342,7 +343,9 @@ define([
 				d = new Deferred();
 			ready(lang.hitch(this, function(){
 				superClassOnEndMethod.apply(this, args);
-				this.parseDeferred.then(function(){ d.resolve(); })
+
+				// If parser ran (parseContent == true), wait for it to finish, otherwise call d.resolve() immediately
+				when(this.parseDeferred, function(){ d.resolve(); });
 			}));
 
 			// Return a promise that resolves after the ready() call completes, and after the parser finishes running.
