@@ -58,8 +58,10 @@ dojo.query differences that cause some tests to fail:
 */
 
 (function(){
-	//Enable io topic publishing
+	//Enable io topic publishing.   But don't mask the original definition of ioPublish from the doc parser.
+	/*===== var ioPublish = dojo.config.ioPublish; =====*/
 	dojo.config.ioPublish = true;
+	/*===== dojo.config.ioPublish = ioPublish; =====*/
 
 	//Support stuff for toDom
 	var selfClosedTags = "|img|meta|hr|br|input|";
