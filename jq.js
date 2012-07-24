@@ -1425,7 +1425,7 @@ dojo.query differences that cause some tests to fail:
 		if(dojo.isString(speed)){
 			if(speed == "slow"){
 				speed = 700;
-			}else if(speed = "fast"){
+			}else if(speed == "fast"){
 				speed = 300;
 			}else{
 				//Everything else is considered normal speed.
