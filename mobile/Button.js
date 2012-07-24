@@ -13,19 +13,19 @@ define([
 		// summary:
 		//		Non-templated BUTTON widget with a thin API wrapper for click 
 		//		events and for setting the label.
-		// description:
+		//
 		//		Buttons can display a label, an icon, or both.
 		//		A label should always be specified (through innerHTML) or the label
 		//		attribute.  It can be hidden via showLabel=false.
 		// example:
-		//	|	<button data-dojo-type="dijit.form.Button" onClick="...">Hello world</button>
+		//	|	<button data-dojo-type="dojox/mobile/Button" onClick="...">Hello world</button>
 
 		// baseClass: String
 		//		The name of the CSS class of this widget.
 		baseClass: "mblButton",
 
 		// _setTypeAttr: [private] Function 
-		//		Overrides the automatic assignement of type to nodes, because it causes 
+		//		Overrides the automatic assignment of type to nodes, because it causes
 		//		exception on IE. Instead, the type must be specified as this.type
 		//		when the node is created, as part of the original DOM.
 		_setTypeAttr: null,
