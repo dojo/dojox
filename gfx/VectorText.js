@@ -611,6 +611,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array", "dojo/_base/l
 			//		Always make sure that you are legally allowed to use any fonts that you
 			//		convert to SVG format; we claim no responsibility for any licensing
 			//		infractions that may be caused by the use of this code.
+			// returns: dojox.gfx.Group
 			if(!this.initialized()){
 				throw new Error("dojox.gfx.VectorFont.draw(): we have not been initialized yet.");
 			}

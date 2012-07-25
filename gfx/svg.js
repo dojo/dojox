@@ -59,9 +59,11 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 
 	svg.getRef = function(name){
 		// summary:
-		//		returns a DOM Node specified by the name argument or null
+		//		looks up a node by its external name
 		// name: String
 		//		an SVG external reference
+		// returns: Node | Null
+		//      returns a DOM Node specified by the name argument or null
 		if(!name || name == "none") return null;
 		if(name.match(/^url\(#.+\)$/)){
 			return dom.byId(name.slice(5, -1));	// Node
@@ -736,10 +738,12 @@ else
 		//		creates a surface (SVG)
 		// parentNode: Node
 		//		a parent node
-		// width: String
-		//		width of surface, e.g., "100px"
-		// height: String
-		//		height of surface, e.g., "100px"
+		// width: String | Number
+		//		width of surface, e.g., "100px" or 100
+		// height: String | NUmber
+		//		height of surface, e.g., "100px" or 100
+		// returns: dojox/gfx/shape.Surface
+		//     newly created surface
 
 		var s = new svg.Surface();
 		s.rawNode = _createElementNS(svg.xmlns.svg, "svg");

@@ -78,6 +78,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x coordinate value, or a point-like object, which specifies offsets for both dimensions
 			// b: Number?
 			//		a y coordinate value
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 1){
 				return new m.Matrix2D({dx: a, dy: b}); // dojox.gfx.matrix.Matrix2D
 			}
@@ -95,6 +96,7 @@ define(["./_base","dojo/_base/lang"],
 			//		a point-like object, which specifies scale factors for both dimensions
 			// b: Number?
 			//		a scaling factor used for the y coordinate
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 1){
 				return new m.Matrix2D({xx: a, yy: b}); // dojox.gfx.matrix.Matrix2D
 			}
@@ -111,6 +113,7 @@ define(["./_base","dojo/_base/lang"],
 			//		around the origin of coordinates (0, 0) by specified angle.
 			// angle: Number
 			//		an angle of rotation in radians (>0 for CW)
+			// returns: dojox.gfx.matrix.Matrix2D
 			var c = Math.cos(angle);
 			var s = Math.sin(angle);
 			return new m.Matrix2D({xx: c, xy: -s, yx: s, yy: c}); // dojox.gfx.matrix.Matrix2D
@@ -124,6 +127,7 @@ define(["./_base","dojo/_base/lang"],
 			//		See dojox.gfx.matrix.rotate() for comparison.
 			// degree: Number
 			//		an angle of rotation in degrees (>0 for CW)
+			// returns: dojox.gfx.matrix.Matrix2D
 			return m.rotate(m._degToRad(degree)); // dojox.gfx.matrix.Matrix2D
 		},
 		skewX: function(angle) {
@@ -134,6 +138,7 @@ define(["./_base","dojo/_base/lang"],
 			//		around the origin of coordinates (0, 0) by specified angle.
 			// angle: Number
 			//		a skewing angle in radians
+			// returns: dojox.gfx.matrix.Matrix2D
 			return new m.Matrix2D({xy: Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
 		},
 		skewXg: function(degree){
@@ -145,6 +150,7 @@ define(["./_base","dojo/_base/lang"],
 			//		See dojox.gfx.matrix.skewX() for comparison.
 			// degree: Number
 			//		a skewing angle in degrees
+			// returns: dojox.gfx.matrix.Matrix2D
 			return m.skewX(m._degToRad(degree)); // dojox.gfx.matrix.Matrix2D
 		},
 		skewY: function(angle){
@@ -155,6 +161,7 @@ define(["./_base","dojo/_base/lang"],
 			//		around the origin of coordinates (0, 0) by specified angle.
 			// angle: Number
 			//		a skewing angle in radians
+			// returns: dojox.gfx.matrix.Matrix2D
 			return new m.Matrix2D({yx: Math.tan(angle)}); // dojox.gfx.matrix.Matrix2D
 		},
 		skewYg: function(degree){
@@ -166,6 +173,7 @@ define(["./_base","dojo/_base/lang"],
 			//		See dojox.gfx.matrix.skewY() for comparison.
 			// degree: Number
 			//		a skewing angle in degrees
+			// returns: dojox.gfx.matrix.Matrix2D
 			return m.skewY(m._degToRad(degree)); // dojox.gfx.matrix.Matrix2D
 		},
 		reflect: function(a, b){
@@ -174,15 +182,15 @@ define(["./_base","dojo/_base/lang"],
 			// description:
 			//		The resulting matrix is used to reflect points around a vector,
 			//		which goes through the origin.
-			// a: dojox.gfx.Point, or an x coordinate value
-			//		a point-like object, which specifies a vector of reflection
+			// a: dojox.gfx.Point | Number
+			//		a point-like object, which specifies a vector of reflection, or an X value
 			// b: Number?
-			//		a y coordinate value
+			//		a Y value
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length == 1){
 				b = a.y;
 				a = a.x;
 			}
-
 			// make a unit vector
 			var a2 = a * a, b2 = b * b, n2 = a2 + b2, xy = 2 * a * b / n2;
 			return new m.Matrix2D({xx: 2 * a2 / n2 - 1, xy: xy, yx: xy, yy: 2 * b2 / n2 - 1}); // dojox.gfx.matrix.Matrix2D
@@ -198,11 +206,11 @@ define(["./_base","dojo/_base/lang"],
 			//		an x coordinate value
 			// b: Number?
 			//		a y coordinate value
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length == 1){
 				b = a.y;
 				a = a.x;
 			}
-
 			// make a unit vector
 			var a2 = a * a, b2 = b * b, n2 = a2 + b2, xy = a * b / n2;
 			return new m.Matrix2D({xx: a2 / n2, xy: xy, yx: xy, yy: b2 / n2}); // dojox.gfx.matrix.Matrix2D
@@ -217,6 +225,7 @@ define(["./_base","dojo/_base/lang"],
 			//		such objects to a valid dojox.gfx.matrix.Matrix2D object.
 			// matrix: Object
 			//		an object, which is converted to a matrix, if necessary
+			// returns: dojox.gfx.matrix.Matrix2D
 			return (matrix instanceof m.Matrix2D) ? matrix : new m.Matrix2D(matrix); // dojox.gfx.matrix.Matrix2D
 		},
 
@@ -227,6 +236,7 @@ define(["./_base","dojo/_base/lang"],
 			//		returns whether the specified matrix is the identity.
 			// matrix: dojox.gfx.matrix.Matrix2D
 			//		a 2D matrix object to be tested
+			// returns: Boolean
 			return matrix.xx == 1 && matrix.xy == 0 && matrix.yx == 0 && matrix.yy == 1 && matrix.dx == 0 && matrix.dy == 0; // Boolean
 		},
 		clone: function(matrix){
@@ -234,6 +244,7 @@ define(["./_base","dojo/_base/lang"],
 			//		creates a copy of a 2D matrix
 			// matrix: dojox.gfx.matrix.Matrix2D
 			//		a 2D matrix-like object to be cloned
+			// returns: dojox.gfx.matrix.Matrix2D
 			var obj = new m.Matrix2D();
 			for(var i in matrix){
 				if(typeof(matrix[i]) == "number" && typeof(obj[i]) == "number" && obj[i] != matrix[i]) obj[i] = matrix[i];
@@ -245,6 +256,7 @@ define(["./_base","dojo/_base/lang"],
 			//		inverts a 2D matrix
 			// matrix: dojox.gfx.matrix.Matrix2D
 			//		a 2D matrix-like object to be inverted
+			// returns: dojox.gfx.matrix.Matrix2D
 			var M = m.normalize(matrix),
 				D = M.xx * M.yy - M.xy * M.yx;
 				M = new m.Matrix2D({
@@ -264,6 +276,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x coordinate of a point
 			// y: Number
 			//		a y coordinate of a point
+			// returns: dojox.gfx.Point
 			return {x: matrix.xx * x + matrix.xy * y + matrix.dx, y: matrix.yx * x + matrix.yy * y + matrix.dy}; // dojox.gfx.Point
 		},
 		multiplyPoint: function(matrix, /* Number||Point */ a, /* Number? */ b){
@@ -271,10 +284,11 @@ define(["./_base","dojo/_base/lang"],
 			//		applies a matrix to a point
 			// matrix: dojox.gfx.matrix.Matrix2D
 			//		a 2D matrix object to be applied
-			// a: Number|dojox.gfx.Point
+			// a: Number | dojox.gfx.Point
 			//		an x coordinate of a point, or a point
 			// b: Number?
 			//		a y coordinate of a point
+			// returns: dojox.gfx.Point
 			var M = m.normalize(matrix);
 			if(typeof a == "number" && typeof b == "number"){
 				return m._multiplyPoint(M, a, b); // dojox.gfx.Point
@@ -292,6 +306,7 @@ define(["./_base","dojo/_base/lang"],
 			//		a 2D matrix object to be applied.
 			// rect: Rectangle
 			//		the rectangle to transform.
+			// returns: Rectangle
 			var M = m.normalize(matrix);
 			rect = rect || {x:0, y:0, width:0, height:0}; 
 			if(m.isIdentity(M))
@@ -358,7 +373,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// d: Number
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			switch(arguments.length){
 				case 4:
 					// a and b are scale factor components, c and d are components of a point
@@ -382,7 +397,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// b: Number?
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 2){
 				return m._sandwich(m.rotate(angle), a, b); // dojox.gfx.matrix.Matrix2D
 			}
@@ -399,11 +414,10 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// b: Number?
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 2){
 				return m._sandwich(m.rotateg(degree), a, b); // dojox.gfx.matrix.Matrix2D
 			}
-
 			return m._sandwich(m.rotateg(degree), a.x, a.y); // dojox.gfx.matrix.Matrix2D
 		},
 		skewXAt: function(angle, a, b){
@@ -417,7 +431,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// b: Number?
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 2){
 				return m._sandwich(m.skewX(angle), a, b); // dojox.gfx.matrix.Matrix2D
 			}
@@ -434,11 +448,10 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// b: Number?
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 2){
 				return m._sandwich(m.skewXg(degree), a, b); // dojox.gfx.matrix.Matrix2D
 			}
-
 			return m._sandwich(m.skewXg(degree), a.x, a.y); // dojox.gfx.matrix.Matrix2D
 		},
 		skewYAt: function(angle, a, b){
@@ -452,7 +465,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// b: Number?
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 2){
 				return m._sandwich(m.skewY(angle), a, b); // dojox.gfx.matrix.Matrix2D
 			}
@@ -469,7 +482,7 @@ define(["./_base","dojo/_base/lang"],
 			//		an x component of a central point, or a central point
 			// b: Number?
 			//		a y component of a central point
-
+			// returns: dojox.gfx.matrix.Matrix2D
 			if(arguments.length > 2){
 				return m._sandwich(m.skewYg(degree), a, b); // dojox.gfx.matrix.Matrix2D
 			}

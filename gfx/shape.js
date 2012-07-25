@@ -35,6 +35,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		//		Returns the shape that matches the specified id.
 		// id: String
 		//		The unique identifier for this Shape.
+		// returns: dojox/gfx/shape.Shape
 		return registry[id]; //dojox/gfx/shape.Shape
 	};
 	
@@ -485,6 +486,8 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		// summary:
 		//		Wraps the callback to allow for tests and event normalization
 		//		before it gets invoked. This is where 'fixTarget' is invoked.
+		// tags:
+		//      private
 		// gfxElement: Object
 		//		The GFX object that triggers the action (ex.:
 		//		dojox.gfx.Surface and dojox.gfx.Shape). A new event property

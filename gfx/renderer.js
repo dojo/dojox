@@ -8,6 +8,8 @@ define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "d
 		//		implementation based on detected environment and current configuration settings.
 		
 		load: function(id, require, load){
+			// tags:
+			//      private
 			if(currentRenderer && id != "force"){
 				load(currentRenderer);
 				return;

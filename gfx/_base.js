@@ -699,6 +699,8 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			//		the object to be cloned before updating
 			// update: Object
 			//		the object, which properties are to be cloned during updating
+			// returns: Object
+			//      new object with new and default properties
 			var i = null;
 			if(!update){
 				// return dojo.clone(defaults);
@@ -719,6 +721,8 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			//		number to be converted
 			// addSpace: Boolean
 			//		whether to add a space before a positive number
+			// returns: String
+			//      the formatted value
 			var val = x.toString();
 			if(val.indexOf("e") >= 0){
 				val = x.toFixed(4);
@@ -752,6 +756,8 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			//		ignored), and family. Note that the Font.size attribute is limited to numeric CSS length.
 			// str: String
 			//		a CSS font string.
+			// returns: Object
+			//      object in dojox/gfx.defaultFont format
 			var font = g.getDefault("Font");
 			var t = str.split(/\s+/);
 			do{
@@ -812,6 +818,8 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			//		converts any length value to pixels
 			// len: String
 			//		a length, e.g., '12pc'
+			// returns: Number
+			//      pixels
 			if(len.length === 0){ return 0; }
 			if(len.length > 2){
 				var px_in_pt = g.px_in_pt();
@@ -840,13 +848,15 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 		//		private
 		pathSvgRegExp: /([A-Za-z])|(\d+(\.\d+)?)|(\.\d+)|(-\d+(\.\d+)?)|(-\.\d+)/g,
 
-		equalSources: function(/*Object*/ a, /*Object*/ b){
+		equalSources: function(a, b){
 			// summary:
 			//		compares event sources, returns true if they are equal
-			// a:
+			// a: Object
 			//		first event source
-			// b:
+			// b: Object
 			//		event source to compare against a
+			// returns: Boolean
+			//      true, if objects are truthy and the same
 			return a && b && a === b;
 		},
 
@@ -869,7 +879,18 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 	});
 	
 	/*=====
-		g.createSurface = function(){};
+		g.createSurface = function(parentNode, width, height){
+			 // summary:
+			 //		creates a surface
+			 // parentNode: Node
+			 //		a parent node
+			 // width: String | Number
+			 //		width of surface, e.g., "100px" or 100
+			 // height: String | NUmber
+			 //		height of surface, e.g., "100px" or 100
+			 // returns: dojox/gfx/shape.Surface
+			 //     newly created surface
+		 };
 		g.fixTarget = function(){
 			// tags:
 			//		private

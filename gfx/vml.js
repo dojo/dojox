@@ -1156,10 +1156,12 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		//		creates a surface (VML)
 		// parentNode: Node
 		//		a parent node
-		// width: String
-		//		width of surface, e.g., "100px"
-		// height: String
-		//		height of surface, e.g., "100px"
+		// width: String | Number
+		//		width of surface, e.g., "100px" or 100
+		// height: String | NUmber
+		//		height of surface, e.g., "100px" or 100
+		// returns: dojox/gfx/shape.Surface
+		//     newly created surface
 
 		if(!width && !height){
 			var pos = domGeom.position(parentNode);
