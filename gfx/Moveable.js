@@ -1,6 +1,6 @@
-define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/topic",
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/topic","dojo/touch",
 	"dojo/dom-class","dojo/_base/window","./Mover"], 
-  function(lang,declare,arr,event,topic,domClass,win,Mover){
+  function(lang,declare,arr,event,topic,touch,domClass,win,Mover){
 
 	/*=====
 	declare("dojox.gfx.__MoveableCtorArgs", null, {
@@ -30,8 +30,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			this.delay = (params && params.delay > 0) ? params.delay : 0;
 			this.mover = (params && params.mover) ? params.mover : Mover;
 			this.events = [
-				this.shape.connect("onmousedown", this, "onMouseDown"),
-				this.shape.connect("touchstart", this, "onMouseDown")
+				this.shape.connect(touch.press, this, "onMouseDown")
 				// cancel text selection and text dragging
 				//, dojo.connect(this.handle, "ondragstart",   dojo, "stopEvent")
 				//, dojo.connect(this.handle, "onselectstart", dojo, "stopEvent")
@@ -52,33 +51,27 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			//		event processor for onmousedown, creates a Mover for the shape
 			// e: Event
 			//		mouse event
-			var eOrig = e;
-			e = e.touches ? e.touches[0] : e;
 			if(this.delay){
 				this.events.push(
-					this.shape.connect("onmousemove", this, "onMouseMove"),
-					this.shape.connect("onmouseup", this, "onMouseUp"),
-					this.shape.connect("touchmove", this, "onMouseMove"),
-					this.shape.connect("touchend", this, "onMouseUp"));
+					this.shape.connect(touch.move, this, "onMouseMove"),
+					this.shape.connect(touch.release, this, "onMouseUp"));
 				this._lastX = e.clientX;
 				this._lastY = e.clientY;
 			}else{
-				new this.mover(this.shape, eOrig, this);
+				new this.mover(this.shape, e, this);
 			}
-			event.stop(eOrig);
+			event.stop(e);
 		},
 		onMouseMove: function(e){
 			// summary:
 			//		event processor for onmousemove, used only for delayed drags
 			// e: Event
 			//		mouse event
-			var eOrig = e;
-			e = e.touches ? e.touches[0] : e;
 			if(Math.abs(e.clientX - this._lastX) > this.delay || Math.abs(e.clientY - this._lastY) > this.delay){
 				this.onMouseUp(e);
 				new this.mover(this.shape, e, this);
 			}
-			event.stop(eOrig);
+			event.stop(e);
 		},
 		onMouseUp: function(e){
 			// summary:
