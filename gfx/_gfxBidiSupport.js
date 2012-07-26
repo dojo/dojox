@@ -3,17 +3,12 @@ define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base
 function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 	lang.getObject("dojox.gfx._gfxBidiSupport", true);
 
-/*=====
-// Prevent changes here from masking the definitions in _base.js from the doc parser
-g = {
-	Group: {},
-	shape: {
-		Surface: {},
-	},
-	Text: {},
-	TextPath: {}
-};
-=====*/
+	/*=====
+	// Prevent changes here from masking the definitions in _base.js from the doc parser
+	var origG = g;
+	g = {};
+	=====*/
+
 	switch (g.renderer){
 		case 'vml':
 			g.isVml = true;
@@ -39,6 +34,8 @@ g = {
 		RLM : '\u200f',
 		RLE : '\u202B'
 	};
+
+	/*===== g = origG; =====*/
 
 	// the object that performs text transformations.
 	var bidiEngine = new BidiEngine();
@@ -370,6 +367,11 @@ g = {
 	extendMethod(g.Group,"createText", textDirPreprocess, null);
 	extendMethod(g.Group,"createTextPath", textDirPreprocess, null);
 
+	/*=====
+	// don't mask definition of original createSurface() function from doc parser
+	g = {};
+	=====*/
+
 	g.createSurface = function(parentNode, width, height, textDir) {
 		var s = g[g.renderer].createSurface(parentNode, width, height);
 		var tDir = validateTextDir(textDir);
@@ -391,6 +393,7 @@ g = {
 		
 		return s;
 	};
+	/*===== g = origG; =====*/
 
 	// some helper functions
 	
