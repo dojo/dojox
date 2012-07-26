@@ -108,7 +108,6 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 		//		Returns the index (column) that the attribute resides in the row.
 		if(typeof attribute !== "string"){
 			throw new Error("dojo.data.HtmlTableStore: a function was passed an attribute argument that was not an attribute name string");
-			return -1;
 		}
 		return array.indexOf(this._headings, attribute); //int
 	},

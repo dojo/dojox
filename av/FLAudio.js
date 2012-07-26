@@ -163,7 +163,6 @@ return dojo.declare("dojox.av.FLAudio", null, {
 		if(dojox.timing.doLater(this.flashMedia, this)){ return false; }
 		if(!options.url){
 			throw new Error("An url is required for loading media");
-			return false;
 		}else{
 			options.url = this._normalizeUrl(options.url);
 		}
