@@ -23,7 +23,7 @@ define([
 		Dialog, Button, Form,
 		registry, declare, arrayUtil, lang, locale, request, on,
 		dom, domClass, domConstruct, domStyle, domAttr, domGeometry, keys, parser){
-	return declare("dojox.gantt.GanttTaskControl", [], {
+	return declare("dojox.gantt.TabMenu", [], {
 		constructor: function(chart){
 			this.ganttChart = chart;
 			this.menuPanel = null;
