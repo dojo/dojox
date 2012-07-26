@@ -12,7 +12,7 @@ return declare("dojox.data.AndOrReadStore", [ItemFileReadStore], {
 	//		Supports queries of the form: query:"id:1* OR dept:'Sales Department' || (id:2* && NOT dept:S*)"
 	//		Includes legacy/widget support via:
 	// |		query:{complexQuery:"id:1* OR dept:'Sales Department' || (id:2* && NOT dept:S*)"}
-	//		The ItemFileReadStore implements the dojo.data.api.Read API and reads
+	//		The ItemFileReadStore implements the dojo/data/api/Read API and reads
 	//		data from JSON files that have contents in this format --
 	// |	{ items: [
 	// |		{ name:'Kermit', color:'green', age:12, friends:['Gonzo', {_reference:{name:'Fozzie Bear'}}]},
@@ -22,7 +22,8 @@ return declare("dojox.data.AndOrReadStore", [ItemFileReadStore], {
 	//		Note that it can also contain an 'identifier' property that specified which attribute on the items
 	//		in the array of items that acts as the unique identifier for that item.
 
-	_containsValue: function(	/* item */ item, /* attribute-name-string */ attribute, /* anything */ value, /* String? | RegExp? */ regexp){
+	_containsValue: function(/*dojo/data/api/Item*/ item, /*attribute-name-string */ attribute, /*anything*/ value,
+			/*String|RegExp?*/ regexp){
 		// summary:
 		//		Internal function for looking at the values contained by the item.
 		// description:

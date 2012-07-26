@@ -48,9 +48,9 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 	//		Configurable preventCache option for the URL.
 	urlPreventCache: false,
 
-	/* dojo.data.api.Read */
+	/* dojo/data/api/Read */
 
-	getValue: function(/* item */ item, /* attribute || attribute-name-string */ attribute, /* value? */ defaultValue){
+	getValue: function(/*dojo/data/api/Item*/ item, /*attribute|attribute-name-string*/ attribute, /*anything?*/ defaultValue){
 		// summary:
 		//		Return an attribute value
 		// description:
@@ -96,7 +96,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return retVal ? dojo.isArray(retVal) ? retVal[0]: retVal : defaultValue;
 	},
 
-	getValues: function(/* item */ item, /* attribute || attribute-name-string */ attribute){
+	getValues: function(/*dojo/data/api/Item*/ item, /*attribute|attribute-name-string*/ attribute){
 		// summary:
 		//		Return an attribute value
 		// description:
@@ -121,7 +121,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return retVal ? ((retVal.length !== undefined && typeof(retVal) !== "string") ? retVal : [retVal]) : undefined;
 	},
 
-	getAttributes: function(/* item */ item){
+	getAttributes: function(/*dojo/data/api/Item*/ item){
 		// summary:
 		//		Return an array of attribute names
 		// description:
@@ -148,7 +148,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return attrNames; //array
 	},
 
-	hasAttribute: function(/* item */ item, /* attribute || attribute-name-string */ attribute){
+	hasAttribute: function(/*dojo/data/api/Item*/ item, /*attribute|attribute-name-string*/ attribute){
 		// summary:
 		//		Check whether an element has the attribute
 		// item:
@@ -160,7 +160,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return (this.getValue(item, attribute) !== undefined); //boolean
 	},
 
-	containsValue: function(/* item */ item, /* attribute || attribute-name-string */ attribute, /* anything */ value){
+	containsValue: function(/*dojo/data/api/Item*/ item, /*attribute|attribute-name-string*/ attribute, /* anything */ value){
 		// summary:
 		//		Check whether the attribute values contain the value
 		// item:
@@ -210,7 +210,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		// summary:
 		//		Load an item (XML element)
 		// keywordArgs:
-		//		object containing the args for loadItem.	See dojo.data.api.Read.loadItem()
+		//		object containing the args for loadItem.	See dojo/data/api/Read.loadItem()
 	},
 
 	getFeatures: function(){
@@ -224,9 +224,9 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return features; //array
 	},
 
-	getLabel: function(/* item */ item){
+	getLabel: function(/*dojo/data/api/Item*/ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabel()
+		//		See dojo/data/api/Read.getLabel()
 		if((this.label !== "") && this.isItem(item)){
 			var label = this.getValue(item,this.label);
 			if(label && label.text){
@@ -240,9 +240,9 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return undefined; //undefined
 	},
 
-	getLabelAttributes: function(/* item */ item){
+	getLabelAttributes: function(/*dojo/data/api/Item*/ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo/data/api/Read.getLabelAttributes()
 		if(this.label !== ""){
 			return [this.label]; //array
 		}
@@ -416,9 +416,9 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return items;
 	},
 
-	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+	close: function(/*dojo/data/api/Request|Object?*/ request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 	},
 
 /* internal API */
@@ -526,7 +526,7 @@ dojo.declare("dojox.data.AtomReadStore", null, {
 		return text;
 	},
 
-	_assertIsItem: function(/* item */ item){
+	_assertIsItem: function(/*dojo/data/api/Item*/ item){
 		// summary:
 		//		This function tests whether the item passed in is indeed an item in the store.
 		// item:

@@ -3,7 +3,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/xhr", "dojo/_base/k
 
 var CsvStore = declare("dojox.data.CsvStore", null, {
 	// summary:
-	//		The CsvStore implements the dojo.data.api.Read API and reads
+	//		The CsvStore implements the dojo/data/api/Read API and reads
 	//		data from files in CSV (Comma Separated Values) format.
 	//		All values are simple string values. References to other items
 	//		are not supported as attribute values in this datastore.
@@ -113,13 +113,13 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	},
 
 /***************************************
-     dojo.data.api.Read API
+     dojo/data/api/Read API
 ***************************************/
 	getValue: function(	/* item */ item,
-						/* attribute || attribute-name-string */ attribute,
+						/* attribute|attribute-name-string */ attribute,
 						/* value? */ defaultValue){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 		//		Note that for the CsvStore, an empty string value is the same as no value,
 		//		so the defaultValue would be returned instead of an empty string.
 		this._assertIsItem(item);
@@ -137,9 +137,9 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	},
 
 	getValues: function(/* item */ item,
-						/* attribute || attribute-name-string */ attribute){
+						/* attribute|attribute-name-string */ attribute){
 		// summary:
-		//		See dojo.data.api.Read.getValues()
+		//		See dojo/data/api/Read.getValues()
 		//		CSV syntax does not support multi-valued attributes, so this is just a
 		//		wrapper function for getValue().
 		var value = this.getValue(item, attribute);
@@ -148,7 +148,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	getAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.getAttributes()
+		//		See dojo/data/api/Read.getAttributes()
 		this._assertIsItem(item);
 		var attributes = [];
 		var itemData = this._dataArray[this._getIndex(item)];
@@ -164,7 +164,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	hasAttribute: function(	/* item */ item,
 							/* attribute-name-string */ attribute){
 		// summary:
-		//		See dojo.data.api.Read.hasAttribute()
+		//		See dojo/data/api/Read.hasAttribute()
 		//		The hasAttribute test is true if attribute has an index number within the item's array length
 		//		AND if the item has a value for that attribute. Note that for the CsvStore, an
 		//		empty string value is the same as no value.
@@ -179,10 +179,10 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	},
 
 	containsValue: function(/* item */ item,
-							/* attribute || attribute-name-string */ attribute,
+							/* attribute|attribute-name-string */ attribute,
 							/* anything */ value){
 		// summary:
-		//		See dojo.data.api.Read.containsValue()
+		//		See dojo/data/api/Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
 			regexp = filterUtil.patternToRegExp(value, false);
@@ -191,7 +191,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	},
 
 	_containsValue: function(	/* item */ item,
-								/* attribute || attribute-name-string */ attribute,
+								/* attribute|attribute-name-string */ attribute,
 								/* anything */ value,
 								/* RegExp?*/ regexp){
 		// summary:
@@ -228,7 +228,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	isItem: function(/* anything */ something){
 		// summary:
-		//		See dojo.data.api.Read.isItem()
+		//		See dojo/data/api/Read.isItem()
 		if(something && something[this._storeProp] === this){
 			var identity = something[this._idProp];
 			//If an identifier was specified, we have to look it up via that and the mapping,
@@ -249,18 +249,18 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	isItemLoaded: function(/* anything */ something){
 		// summary:
-		//		See dojo.data.api.Read.isItemLoaded()
+		//		See dojo/data/api/Read.isItemLoaded()
 		//		The CsvStore always loads all items, so if it's an item, then it's loaded.
 		return this.isItem(something); //Boolean
 	},
 
 	loadItem: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.loadItem()
+		//		See dojo/data/api/Read.loadItem()
 		// description:
 		//		The CsvStore always loads all items, so if it's an item, then it's loaded.
 		//
-		//		From the dojo.data.api.Read.loadItem docs:
+		//		From the dojo/data/api/Read.loadItem docs:
 		//			If a call to isItemLoaded() returns true before loadItem() is even called,
 		//			then loadItem() need not do any work at all and will not even invoke
 		//			the callback handlers.
@@ -268,13 +268,13 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	getFeatures: function(){
 		// summary:
-		//		See dojo.data.api.Read.getFeatures()
+		//		See dojo/data/api/Read.getFeatures()
 		return this._features; //Object
 	},
 
 	getLabel: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabel()
+		//		See dojo/data/api/Read.getLabel()
 		if(this.label && this.isItem(item)){
 			return this.getValue(item,this.label); //String
 		}
@@ -283,7 +283,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	getLabelAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo/data/api/Read.getLabelAttributes()
 		if(this.label){
 			return [this.label]; //array
 		}
@@ -291,7 +291,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	},
 
 
-	// The dojo.data.api.Read.fetch() function is implemented as
+	// The dojo/data/api/Read.fetch() function is implemented as
 	// a mixin from dojo.data.util.simpleFetch.
 	// That mixin requires us to define _fetchItems().
 	_fetchItems: function(	/* Object */ keywordArgs,
@@ -413,9 +413,9 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 		}
 	},
 	
-	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+	close: function(/*dojo/data/api/Request|Object?*/  request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 	},
 	
 	
@@ -594,11 +594,11 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 	
 	
 /***************************************
-     dojo.data.api.Identity API
+     dojo/data/api/Identity API
 ***************************************/
 	getIdentity: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Identity.getIdentity()
+		//		See dojo/data/api/Identity.getIdentity()
 		// tags:
 		//		public
 		if(this.isItem(item)){
@@ -609,7 +609,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	fetchItemByIdentity: function(/* Object */ keywordArgs){
 		// summary:
-		//		See dojo.data.api.Identity.fetchItemByIdentity()
+		//		See dojo/data/api/Identity.fetchItemByIdentity()
 		// tags:
 		//		public
 		var item;
@@ -685,7 +685,7 @@ var CsvStore = declare("dojox.data.CsvStore", null, {
 
 	getIdentityAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Identity.getIdentifierAttributes()
+		//		See dojo/data/api/Identity.getIdentifierAttributes()
 		// tags:
 		//		public
 

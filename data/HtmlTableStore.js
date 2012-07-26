@@ -114,22 +114,22 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 	},
 
 /***************************************
-     dojo.data.api.Read API
+     dojo/data/api/Read API
 ***************************************/
 	
 	getValue: function(	/* item */ item,
 						/* attribute-name-string */ attribute,
 						/* value? */ defaultValue){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 		var values = this.getValues(item, attribute);
-		return (values.length > 0)?values[0]:defaultValue; //Object || int || Boolean
+		return (values.length > 0)?values[0]:defaultValue; // Object|Number|Boolean
 	},
 
 	getValues: function(/* item */ item,
 						/* attribute-name-string */ attribute){
 		// summary:
-		//		See dojo.data.api.Read.getValues()
+		//		See dojo/data/api/Read.getValues()
 
 		this._assertIsItem(item);
 		var index = this._assertIsAttribute(attribute);
@@ -142,7 +142,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	getAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.getAttributes()
+		//		See dojo/data/api/Read.getAttributes()
 		this._assertIsItem(item);
 		var attributes = [];
 		for(var i=0; i<this._headings.length; i++){
@@ -155,7 +155,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 	hasAttribute: function(	/* item */ item,
 							/* attribute-name-string */ attribute){
 		// summary:
-		//		See dojo.data.api.Read.hasAttribute()
+		//		See dojo/data/api/Read.hasAttribute()
 		return this.getValues(item, attribute).length > 0;
 	},
 
@@ -163,7 +163,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 							/* attribute-name-string */ attribute,
 							/* anything */ value){
 		// summary:
-		//		See dojo.data.api.Read.containsValue()
+		//		See dojo/data/api/Read.containsValue()
 		var regexp = undefined;
 		if(typeof value === "string"){
 			regexp = filter.patternToRegExp(value, false);
@@ -207,7 +207,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	isItem: function(/* anything */ something){
 		// summary:
-		//		See dojo.data.api.Read.isItem()
+		//		See dojo/data/api/Read.isItem()
 		if(something && something.store && something.store === this){
 			return true; //boolean
 		}
@@ -216,13 +216,13 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	isItemLoaded: function(/* anything */ something){
 		// summary:
-		//		See dojo.data.api.Read.isItemLoaded()
+		//		See dojo/data/api/Read.isItemLoaded()
 		return this.isItem(something);
 	},
 
 	loadItem: function(/* Object */ keywordArgs){
 		// summary:
-		//		See dojo.data.api.Read.loadItem()
+		//		See dojo/data/api/Read.loadItem()
 		this._assertIsItem(keywordArgs.item);
 	},
 	
@@ -340,23 +340,23 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	getFeatures: function(){
 		// summary:
-		//		See dojo.data.api.Read.getFeatures()
+		//		See dojo/data/api/Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true,
 			'dojo.data.api.Identity': true
 		};
 	},
 	
-	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+	close: function(/*dojo/data/api/Request|Object?*/ request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 
 		// nothing to do here!
 	},
 
 	getLabel: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabel()
+		//		See dojo/data/api/Read.getLabel()
 		if(this.isItem(item))
 			return "Table Row #" + this.getIdentity(item);
 		return undefined;
@@ -364,17 +364,17 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	getLabelAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo/data/api/Read.getLabelAttributes()
 		return null;
 	},
 
 /***************************************
-     dojo.data.api.Identity API
+     dojo/data/api/Identity API
 ***************************************/
 
 	getIdentity: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Identity.getIdentity()
+		//		See dojo/data/api/Identity.getIdentity()
 		this._assertIsItem(item);
 		//Opera doesn't support the sectionRowIndex,
 		//So, have to call the indexOf to locate it.
@@ -388,7 +388,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	getIdentityAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Identity.getIdentityAttributes()
+		//		See dojo/data/api/Identity.getIdentityAttributes()
 
 		//Identity isn't taken from a public attribute.
 		return null;
@@ -396,7 +396,7 @@ var HtmlTableStore = declare("dojox.data.HtmlTableStore", null, {
 
 	fetchItemByIdentity: function(keywordArgs){
 		// summary:
-		//		See dojo.data.api.Identity.fetchItemByIdentity()
+		//		See dojo/data/api/Identity.fetchItemByIdentity()
 		var identity = keywordArgs.identity;
 		var self = this;
 		var item = null;

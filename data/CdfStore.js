@@ -42,8 +42,8 @@ dojo.declare("dojox.data.CdfStore", null, {
 	//		The property within each item used to define the item.
 	label: "",
 
-	//	mode [const]: dojox.data.ASYNC_MODE | dojox.data.SYNC_MODE
-	//		This store supports syncronous fetches if this property is set to dojox.data.SYNC_MODE.
+	//	mode [const]: dojox.data.ASYNC_MODE|dojox.data.SYNC_MODE
+	//		This store supports synchronous fetches if this property is set to dojox.data.SYNC_MODE.
 	mode:dojox.data.ASYNC_MODE,
 	
 	constructor: function(/* Object */ args){
@@ -64,7 +64,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 		this.byId = this.fetchItemByIdentity;
 	},
 	
-	/* dojo.data.api.Read */
+	/* dojo/data/api/Read */
 
 	getValue: function(/* jsx3.xml.Entity */ item, /* String */ property, /* value? */ defaultValue){
 		// summary:
@@ -157,7 +157,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 
 	getLabel: function(/* jsx3.xml.Entity */ item){
 		// summary:
-		//		See dojo.data.api.Read.getLabel()
+		//		See dojo/data/api/Read.getLabel()
 
 		if((this.label !== "") && this.isItem(item)){
 			var label = this.getValue(item,this.label);
@@ -172,7 +172,7 @@ dojo.declare("dojox.data.CdfStore", null, {
 		// summary:
 		//		returns an array of what properties of the item that were used
 		//		to generate its label
-		//		See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo/data/api/Read.getLabelAttributes()
 
 		if(this.label !== ""){
 			return [this.label]; //array
@@ -414,12 +414,12 @@ dojo.declare("dojox.data.CdfStore", null, {
 		return items;
 	},
 
-	close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+	close: function(/*dojo/data/api/Request|Object?*/ request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 	},
 
-/* dojo.data.api.Write */
+/* dojo/data/api/Write */
 
 	newItem: function(/* object? */ keywordArgs, /* Object|String? */ parentInfo){
 		// summary:
@@ -577,9 +577,9 @@ dojo.declare("dojox.data.CdfStore", null, {
 	},
 
 
-	fetchItemByIdentity: function(/* Object || String */ args){
+	fetchItemByIdentity: function(/* Object|String */ args){
 		// summary:
-		//		See dojo.data.api.Identity.fetchItemByIdentity(keywordArgs).
+		//		See dojo/data/api/Identity.fetchItemByIdentity(keywordArgs).
 		//
 		//		Note:
 		//		This method can be synchronous if mode is set.
@@ -594,9 +594,9 @@ dojo.declare("dojox.data.CdfStore", null, {
 			if(!args.mode){args.mode = this.mode;}
 		}
 		args.byId = true;
-		return this.fetch(args); // dojo.Deferred || Array
+		return this.fetch(args); // dojo/_base/Deferred|Array
 	},
-	byId: function(/* Object || String */ args){
+	byId: function(/* Object|String */ args){
 		// stub. See fetchItemByIdentity
 	}
 	

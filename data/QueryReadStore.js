@@ -142,7 +142,7 @@ dojo.declare("dojox.data.QueryReadStore",
 	
 		hasAttribute: function(/* item */ item,	/* attribute-name-string */ attribute){
 			// summary:
-			//		See dojo.data.api.Read.hasAttribute()
+			//		See dojo/data/api/Read.hasAttribute()
 			return this.isItem(item) && typeof item.i[attribute]!="undefined";
 		},
 		
@@ -267,13 +267,13 @@ dojo.declare("dojox.data.QueryReadStore",
 			return this._features;
 		},
 	
-		close: function(/*dojo.data.api.Request || keywordArgs || null */ request){
+		close: function(/*dojo/data/api/Request|Object?*/ request){
 			// I have no idea if this is really needed ...
 		},
 	
 		getLabel: function(/* item */ item){
 			// summary:
-			//		See dojo.data.api.Read.getLabel()
+			//		See dojo/data/api/Read.getLabel()
 			if(this._labelAttr && this.isItem(item)){
 				return this.getValue(item, this._labelAttr); //String
 			}
@@ -282,7 +282,7 @@ dojo.declare("dojox.data.QueryReadStore",
 	
 		getLabelAttributes: function(/* item */ item){
 			// summary:
-			//		See dojo.data.api.Read.getLabelAttributes()
+			//		See dojo/data/api/Read.getLabelAttributes()
 			if(this._labelAttr){
 				return [this._labelAttr]; //array
 			}
@@ -440,7 +440,7 @@ dojo.declare("dojox.data.QueryReadStore",
 	
 		fetchItemByIdentity: function(/* Object */ keywordArgs){
 			// summary:
-			//		See dojo.data.api.Identity.fetchItemByIdentity()
+			//		See dojo/data/api/Identity.fetchItemByIdentity()
 	
 			// See if we have already loaded the item with that id
 			// In case there hasn't been a fetch yet, _itemsByIdentity is null
@@ -496,7 +496,7 @@ dojo.declare("dojox.data.QueryReadStore",
 		
 		getIdentity: function(/* item */ item){
 			// summary:
-			//		See dojo.data.api.Identity.getIdentity()
+			//		See dojo/data/api/Identity.getIdentity()
 			var identifier = null;
 			if(this._identifier === Number){
 				identifier = item.n; // Number
@@ -508,7 +508,7 @@ dojo.declare("dojox.data.QueryReadStore",
 		
 		getIdentityAttributes: function(/* item */ item){
 			// summary:
-			//		See dojo.data.api.Identity.getIdentityAttributes()
+			//		See dojo/data/api/Identity.getIdentityAttributes()
 			return [this._identifier];
 		}
 	}
