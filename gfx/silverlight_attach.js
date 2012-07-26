@@ -16,7 +16,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./silverlight"],
 		//		creates a surface from a Node
 		// node: Node
 		//		a Silverlight node
-		return null;	// dojox.gfx.Surface
+		return null;	// dojox/gfx.Surface
 	};
 	
 	return sl; // return augmented silverlight api

@@ -18,7 +18,7 @@ define([
 		getImageData: function(rect){
 			// summary:
 			//		Returns the canvas pixel buffer.
-			// rect: dojox.gfx.Rectangle
+			// rect: dojox/gfx.Rectangle
 			//		The canvas area.
 			
 			// flush pending renders queue, if any

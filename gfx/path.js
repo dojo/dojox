@@ -43,7 +43,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"
 			// summary:
 			//		returns the bounding box {x, y, width, height} or null
 			this._confirmSegmented();
-			return (this.bbox && ("l" in this.bbox)) ? {x: this.bbox.l, y: this.bbox.t, width: this.bbox.r - this.bbox.l, height: this.bbox.b - this.bbox.t} : null; // dojox.gfx.Rectangle
+			return (this.bbox && ("l" in this.bbox)) ? {x: this.bbox.l, y: this.bbox.t, width: this.bbox.r - this.bbox.l, height: this.bbox.b - this.bbox.t} : null; // dojox/gfx.Rectangle
 		},
 
 		_getRealBBox: function(){
@@ -248,7 +248,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"
 			// array: Array
 			//		an output argument (array of numbers)
 			// args: Array
-			//		an input argument (can be values of Boolean, Number, dojox.gfx.Point, or an embedded array of them)
+			//		an input argument (can be values of Boolean, Number, dojox/gfx.Point, or an embedded array of them)
 			for(var i = 0; i < args.length; ++i){
 				var t = args[i];
 				if(typeof t == "boolean"){
@@ -400,7 +400,7 @@ define(["./_base", "dojo/_base/lang","dojo/_base/declare", "./matrix", "./shape"
 			// summary:
 			//		forms a path using a shape
 			// newShape: Object
-			//		an SVG path string or a path object (see dojox.gfx.defaultPath)
+			//		an SVG path string or a path object (see dojox/gfx.defaultPath)
 			this.inherited(arguments, [typeof newShape == "string" ? {path: newShape} : newShape]);
 
 			this.segmented = false;

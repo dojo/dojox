@@ -3,27 +3,27 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
   function(lang,declare,arr,event,topic,touch,domClass,win,Mover){
 
 	/*=====
-	declare("dojox.gfx.__MoveableCtorArgs", null, {
+	var __MoveableCtorArgs = declare("dojox.gfx.__MoveableCtorArgs", null, {
 		// summary:
 		//		The arguments used for dojox/gfx/Moveable constructor.
-	
+
 		// delay: Number
 		//		delay move by this number of pixels
 		delay:0,
-		
+
 		// mover: Object
 		//		a constructor of custom Mover
 		mover:Mover
 	});
 	=====*/
-	
+
 	return declare("dojox.gfx.Moveable", null, {
 		constructor: function(shape, params){
 			// summary:
 			//		an object, which makes a shape moveable
 			// shape: dojox/gfx/shape.Shape
 			//		a shape object to be moved.
-			// params: dojox.gfx.__MoveableCtorArgs
+			// params: __MoveableCtorArgs
 			//		an optional configuration object.
 			
 			this.shape = shape;

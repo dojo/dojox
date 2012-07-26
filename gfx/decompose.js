@@ -22,7 +22,7 @@ define(["./_base", "dojo/_base/lang", "./matrix"],
 		// matrix: dojox/gfx/matrix.Matrix2D
 		//		a 2D matrix-like object
 		var M = new m.Matrix2D(matrix);
-		return lang.mixin(M, {dx: 0, dy: 0, xy: M.yx, yx: M.xy});	// dojox.gfx.matrix.Matrix2D
+		return lang.mixin(M, {dx: 0, dy: 0, xy: M.yx, yx: M.xy});	// dojox/gfx/matrix.Matrix2D
 	}
 
 	function scaleSign(/* dojox/gfx/matrix.Matrix2D */ matrix){

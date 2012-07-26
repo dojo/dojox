@@ -72,7 +72,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 				attachTransform(s);
 			}
 		}
-		return s;	// dojox.gfx.Shape
+		return s;	// dojox/gfx/shape.Shape
 	};
 
 	vml.attachSurface = function(node){
@@ -85,16 +85,16 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 		var r = s.rawNode = node.firstChild;
 		var b = r.firstChild;
 		if(!b || b.tagName != "rect"){
-			return null;	// dojox.gfx.Surface
+			return null;	// dojox/gfx.Surface
 		}
 		s.bgNode = r;
-		return s;	// dojox.gfx.Surface
+		return s;	// dojox/gfx.Surface
 	};
 
 	var attachFill = function(object){
 		// summary:
 		//		deduces a fill style from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var fillStyle = null, r = object.rawNode, fo = r.fill, stops, i, t;
 		if(fo.on && fo.type == "gradient"){
@@ -140,7 +140,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachStroke = function(object) {
 		// summary:
 		//		deduces a stroke style from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var r = object.rawNode;
 		if(!r.stroked){
@@ -160,7 +160,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachTransform = function(object) {
 		// summary:
 		//		deduces a transformation matrix from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var s = object.rawNode.skew, sm = s.matrix, so = s.offset;
 		object.matrix = m.normalize({
@@ -176,7 +176,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachGroup = function(object){
 		// summary:
 		//		reconstructs all group shape parameters from a node (VML).
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		
 		// attach the background
@@ -186,7 +186,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachRect = function(object){
 		// summary:
 		//		builds a rectangle shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		
 		// a workaround for the VML's arcsize bug: cannot read arcsize of an instantiated node
@@ -206,7 +206,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachEllipse = function(object){
 		// summary:
 		//		builds an ellipse shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var style = object.rawNode.style,
 			rx = parseInt(style.width ) / 2,
@@ -222,7 +222,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachCircle = function(object){
 		// summary:
 		//		builds a circle shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var style = object.rawNode.style, r = parseInt(style.width) / 2;
 		object.shape = g.makeParameters(g.defaultCircle, {
@@ -235,7 +235,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachLine = function(object){
 		// summary:
 		//		builds a line shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var shape = object.shape = lang.clone(g.defaultLine),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp);
@@ -251,7 +251,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachPolyline = function(object){
 		// summary:
 		//		builds a polyline/polygon shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var shape = object.shape = lang.clone(g.defaultPolyline),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp);
@@ -273,7 +273,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachImage = function(object){
 		// summary:
 		//		builds an image shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		object.shape = lang.clone(g.defaultImage);
 		object.shape.src = object.rawNode.firstChild.src;
@@ -282,7 +282,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachImageTransform = function(object) {
 		// summary:
 		//		deduces a transformation matrix from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var mm = object.rawNode.filters["DXImageTransform.Microsoft.Matrix"];
 		object.matrix = m.normalize({
@@ -298,7 +298,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachText = function(object){
 		// summary:
 		//		builds a text shape from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var shape = object.shape = lang.clone(g.defaultText),
 			r = object.rawNode, p = r.path.v.match(g.pathVmlRegExp);
@@ -335,7 +335,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachFont = function(object){
 		// summary:
 		//		deduces a font style from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var fontStyle = object.fontStyle = lang.clone(g.defaultFont),
 			c = object.rawNode.childNodes, i = 0;
@@ -355,7 +355,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachTextTransform = function(object) {
 		// summary:
 		//		deduces a transformation matrix from a node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		attachTransform(object);
 		var matrix = object.matrix, fs = object.fontStyle;
@@ -368,7 +368,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "./_base", "./matrix", "./path",
 	var attachPath = function(object){
 		// summary:
 		//		builds a path shape from a Node.
-		// object: dojox.gfx.Shape
+		// object: dojox/gfx/shape.Shape
 		//		a VML shape
 		var shape = object.shape = lang.clone(g.defaultPath),
 			p = object.rawNode.path.v.match(g.pathVmlRegExp),

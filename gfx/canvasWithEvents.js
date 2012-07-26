@@ -13,7 +13,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		//		however, if only drawing capabilities are needed, canvas event module can be disabled
 		//		using the dojoConfig option, canvasEvents:true|false.
 		//		The id of the Canvas renderer is 'canvasWithEvents'.  This id can be used when switch Dojo's
-		//		graphics context between renderer implementations.  See dojox.gfx._base switchRenderer
+		//		graphics context between renderer implementations.  See dojox/gfx/_base.switchRenderer
 		//		API.
 	};
 
@@ -626,7 +626,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		s.rawNode = c;
 		s._parent = p;
 		s.surface = s;
-		return s;	// dojox.gfx.Surface
+		return s;	// dojox/gfx.Surface
 	};
 
 

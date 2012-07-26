@@ -33,7 +33,7 @@ define(["./_base", "dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 		//		sample a color from a gradient using a point
 		// fill: Object
 		//		fill object
-		// pt: dojox.gfx.Point
+		// pt: dojox/gfx.Point
 		//		point where to sample a color
 		var o;
 		if(fill){
@@ -53,10 +53,10 @@ define(["./_base", "dojo/_base/lang", "./matrix", "dojo/_base/Color"],
 					o = Math.sqrt(dx * dx + dy * dy) / fill.r;
 					break;
 			}
-			return findColor(o, fill.colors);	// dojo.Color
+			return findColor(o, fill.colors);	// dojo/_base/Color
 		}
 		// simple color
-		return new Color(fill || [0, 0, 0, 0]);	// dojo.Color
+		return new Color(fill || [0, 0, 0, 0]);	// dojo/_base/Color
 	};
 
 	gradutils.reverse = function(fill){

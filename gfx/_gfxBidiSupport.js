@@ -84,7 +84,7 @@ function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 	
 	lang.extend(g.Text, {  
 		// summary:
-		//		Overrides some of dojox.gfx.Text properties, and adds some
+		//		Overrides some of dojox/gfx.Text properties, and adds some
 		//		for bidi support.
 		
 		// textDir: String
@@ -336,7 +336,7 @@ function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 			textDir = validateTextDir(args[0]);
 		}
 		group.setTextDir(textDir ? textDir : this.textDir);
-		return group;	// dojox.gfx.Group				
+		return group;	// dojox/gfx.Group
 	};
 
 	// In creation of Group there's a need to update it's textDir,

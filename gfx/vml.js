@@ -7,9 +7,17 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		//		This the default graphics rendering bridge for IE6-7.
 		//		This renderer is very slow.  For best performance on IE6-8, use Silverlight plugin.
 		//		IE9+ defaults to the standard W3C SVG renderer.
+
+		// TODO: Everything exported from this file should be inside these braces.
+		// For now, I'll just put the declarations needed for documentation.
+
+		// xmlns: String
+		//		a VML's namespace
+
+		// text_alignment: Object
+		//		mapping from SVG alignment to VML alignment
 	};
-	// dojox.gfx.vml.xmlns: String
-	//		a VML's namespace
+
 	vml.xmlns = "urn:schemas-microsoft-com:vml";
 
 	document.namespaces.add("v", vml.xmlns);
@@ -23,8 +31,6 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		s.addRule("v\\:" + vmlElems[i], "behavior:url(#default#VML); display:inline-block");
 	}
 
-	// dojox.gfx.vml.text_alignment: Object
-	//		mapping from SVG alignment to VML alignment
 	vml.text_alignment = {start: "left", middle: "center", end: "right"};
 
 	vml._parseFloat = function(str) {
@@ -48,7 +54,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 
 	vml.Shape = declare("dojox.gfx.vml.Shape", gs.Shape, {
 		// summary:
-		//		VML-specific implementation of dojox.gfx.Shape methods
+		//		VML-specific implementation of dojox/gfx/shape.Shape methods
 
 		destroy: function(){
 			this.rawNode = null;
@@ -60,10 +66,10 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			//		sets a fill object (VML)
 			// fill: Object
 			//		a fill object
-			//		(see dojox.gfx.defaultLinearGradient,
-			//		dojox.gfx.defaultRadialGradient,
-			//		dojox.gfx.defaultPattern,
-			//		or dojo.Color)
+			//		(see dojox/gfx.defaultLinearGradient,
+			//		dojox/gfx.defaultRadialGradient,
+			//		dojox/gfx.defaultPattern,
+			//		or dojo/_base/Color)
 
 			if(!fill){
 				// don't fill
@@ -195,7 +201,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			//		sets a stroke object (VML)
 			// stroke: Object
 			//		a stroke object
-			//		(see dojox.gfx.defaultStroke)
+			//		(see dojox/gfx.defaultStroke)
 
 			if(!stroke){
 				// don't stroke
@@ -326,14 +332,14 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			// summary:
 			//		returns the cumulative ("real") transformation matrix
 			//		by combining the shape's matrix with its parent's matrix
-			return this.parentMatrix ? new m.Matrix2D([this.parentMatrix, this.matrix]) : this.matrix;	// dojox.gfx.Matrix2D
+			return this.parentMatrix ? new m.Matrix2D([this.parentMatrix, this.matrix]) : this.matrix;	// dojox/gfx/matrix.Matrix2D
 		},
 		
 		setClip: function(clip){
 			// summary:
 			//		sets the clipping area of this shape.
 			// description:
-			//		This method overrides the dojox.gfx.shape.Shape.setClip() method. Only rectangular geometry is supported.
+			//		This method overrides the dojox/gfx/shape.Shape.setClip() method. Only rectangular geometry is supported.
 			// clip: Object
 			//		an object that defines the clipping geometry, or null to remove clip.
 			this.inherited(arguments);
@@ -405,7 +411,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			// summary:
 			//		sets the clipping area of this shape.
 			// description:
-			//		This method overrides the dojox.gfx.shape.Shape.setClip() method.
+			//		This method overrides the dojox/gfx/shape.Shape.setClip() method.
 			// clip: Object
 			//		an object that defines the clipping geometry, or null to remove clip.
 
@@ -752,7 +758,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 				matrix = m.multiply(matrix,
 					{dy: -g.normalizedLength(this.fontStyle ? this.fontStyle.size : "10pt") * 0.35});
 			}
-			return matrix;	// dojox.gfx.Matrix2D
+			return matrix;	// dojox/gfx/matrix.Matrix2D
 		},
 		getTextWidth: function(){
 			// summary:
@@ -797,7 +803,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			// summary:
 			//		forms a path using a shape (VML)
 			// newShape: Object
-			//		a VML path string or a path object (see dojox.gfx.defaultPath)
+			//		a VML path string or a path object (see dojox/gfx.defaultPath)
 			this.vmlPath = [];
 			this.lastControl.type = "";	// no prior control point
 			this.inherited(arguments);
@@ -1156,11 +1162,11 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		//		creates a surface (VML)
 		// parentNode: Node
 		//		a parent node
-		// width: String | Number
+		// width: String|Number
 		//		width of surface, e.g., "100px" or 100
-		// height: String | NUmber
+		// height: String|NUmber
 		//		height of surface, e.g., "100px" or 100
-		// returns: dojox/gfx/shape.Surface
+		// returns:
 		//     newly created surface
 
 		if(!width && !height){
@@ -1215,12 +1221,12 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		s.width  = g.normalizedLength(width);	// in pixels
 		s.height = g.normalizedLength(height);	// in pixels
 
-		return s;	// dojox.gfx.Surface
+		return s;	// dojox/gfx/shape.Surface
 	};
 
 	// Extenders
 	
-	// copied from dojox.gfx.utils
+	// copied from dojox/gfx/utils
 	function forEach(object, f, o){
 		o = o || kernel.global;
 		f.call(o, object);
@@ -1272,7 +1278,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		remove: function(shape, silently){
 			// summary:
 			//		remove a shape from a group/surface
-			// shape: dojox.gfx.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		a VML shape object
 			// silently: Boolean?
 			//		if true, regenerate a picture
@@ -1309,7 +1315,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		createGroup: function(){
 			// summary:
 			//		creates a VML group shape
-			var node = this.createObject(vml.Group, null);	// dojox.gfx.Group
+			var node = this.createObject(vml.Group, null);	// dojox/gfx.Group
 			// create a background rectangle, which is required to show all other shapes
 			var r = node.rawNode.ownerDocument.createElement("v:rect");
 			r.style.left = r.style.top = 0;
@@ -1318,13 +1324,13 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			r.filled = r.stroked = "f";
 			node.rawNode.appendChild(r);
 			node.bgNode = r;
-			return node;	// dojox.gfx.Group
+			return node;	// dojox/gfx.Group
 		},
 		createImage: function(image){
 			// summary:
 			//		creates a VML image shape
 			// image: Object
-			//		an image object (see dojox.gfx.defaultImage)
+			//		an image object (see dojox/gfx.defaultImage)
 			if(!this.rawNode) return null;
 			var shape = new vml.Image(),
 				doc = this.rawNode.ownerDocument,
@@ -1338,13 +1344,13 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			this.rawNode.appendChild(node);
 			shape.setShape(image);
 			this.add(shape);
-			return shape;	// dojox.gfx.Image
+			return shape;	// dojox/gfx/shape.Image
 		},
 		createRect: function(rect){
 			// summary:
 			//		creates a rectangle shape
 			// rect: Object
-			//		a path object (see dojox.gfx.defaultRect)
+			//		a path object (see dojox/gfx.defaultRect)
 			if(!this.rawNode) return null;
 			var shape = new vml.Rect,
 				node = this.rawNode.ownerDocument.createElement("v:roundrect");
@@ -1355,7 +1361,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			this.rawNode.appendChild(node);
 			shape.setShape(rect);
 			this.add(shape);
-			return shape;	// dojox.gfx.Rect
+			return shape;	// dojox/gfx.Rect
 		},
 		createObject: function(shapeType, rawShape) {
 			// summary:
@@ -1383,7 +1389,7 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 			}
 			shape.setShape(rawShape);
 			this.add(shape);
-			return shape;	// dojox.gfx.Shape
+			return shape;	// dojox/gfx/shape.Shape
 		},
 		_overrideSize: function(node){
 			var s = this.rawNode.style, w = s.width, h = s.height;

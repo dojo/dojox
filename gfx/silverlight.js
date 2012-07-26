@@ -60,10 +60,10 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		sets a fill object (Silverlight)
 			// fill: Object
 			//		a fill object
-			//		(see dojox.gfx.defaultLinearGradient,
-			//		dojox.gfx.defaultRadialGradient,
-			//		dojox.gfx.defaultPattern,
-			//		or dojo.Color)
+			//		(see dojox/gfx.defaultLinearGradient,
+			//		dojox/gfx.defaultRadialGradient,
+			//		dojox/gfx.defaultPattern,
+			//		or dojo/_base/Color)
 
 			var p = this.rawNode.getHost().content, r = this.rawNode, f;
 			if(!fill){
@@ -131,7 +131,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		sets a stroke object (Silverlight)
 			// stroke: Object
 			//		a stroke object
-			//		(see dojox.gfx.defaultStroke)
+			//		(see dojox/gfx.defaultStroke)
 
 			var p = this.rawNode.getHost().content, r = this.rawNode;
 			if(!stroke){
@@ -249,14 +249,14 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		_getAdjustedMatrix: function(){
 			// summary:
 			//		returns the adjusted ("real") transformation matrix
-			return this.matrix;	// dojox.gfx.Matrix2D
+			return this.matrix;	// dojox/gfx/matrix.Matrix2D
 		},
 		
 		setClip: function(clip){
 			// summary:
 			//		sets the clipping area of this shape.
 			// description:
-			//		This method overrides the dojox.gfx.shape.Shape.setClip() method.
+			//		This method overrides the dojox/gfx/shape.Shape.setClip() method.
 			// clip: Object
 			//		an object that defines the clipping geometry, or null to remove clip.
 			this.inherited(arguments);
@@ -356,7 +356,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		returns the adjusted ("real") transformation matrix
 			var matrix = this.matrix, s = this.shape, delta = {dx: s.x, dy: s.y};
-			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox.gfx.Matrix2D
+			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox/gfx/matrix.Matrix2D
 		}
 	});
 	sl.Rect.nodeType = "Rectangle";
@@ -380,7 +380,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		returns the adjusted ("real") transformation matrix
 			var matrix = this.matrix, s = this.shape, delta = {dx: s.cx - s.rx, dy: s.cy - s.ry};
-			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox.gfx.Matrix2D
+			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox/gfx/matrix.Matrix2D
 		}
 	});
 	sl.Ellipse.nodeType = "Ellipse";
@@ -403,7 +403,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		returns the adjusted ("real") transformation matrix
 			var matrix = this.matrix, s = this.shape, delta = {dx: s.cx - s.r, dy: s.cy - s.r};
-			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox.gfx.Matrix2D
+			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox/gfx/matrix.Matrix2D
 		}
 	});
 	sl.Circle.nodeType = "Ellipse";
@@ -473,7 +473,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		returns the adjusted ("real") transformation matrix
 			var matrix = this.matrix, s = this.shape, delta = {dx: s.x, dy: s.y};
-			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox.gfx.Matrix2D
+			return new g.Matrix2D(matrix ? [matrix, delta] : delta);	// dojox/gfx/matrix.Matrix2D
 		},
 		setRawNode: function(rawNode){
 			// summary:
@@ -584,7 +584,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		forms a path using a shape (Silverlight)
 			// newShape: Object
-			//		an SVG path string or a path object (see dojox.gfx.defaultPath)
+			//		an SVG path string or a path object (see dojox/gfx.defaultPath)
 			this.inherited(arguments);
 			var p = this.shape.path;
 			this.rawNode.data = p ? p : null;
@@ -606,7 +606,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		forms a path using a shape (Silverlight)
 			// newShape: Object
-			//		an SVG path string or a path object (see dojox.gfx.defaultPath)
+			//		an SVG path string or a path object (see dojox/gfx.defaultPath)
 		},
 		_setText: function(){
 		}
@@ -740,7 +740,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		s.width  = g.normalizedLength(width);	// in pixels
 		s.height = g.normalizedLength(height);	// in pixels
 
-		return s;	// dojox.gfx.Surface
+		return s;	// dojox/gfx.Surface
 	};
 
 	// the function below is meant to be global, it is called from
@@ -790,7 +790,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		add: function(shape){
 			// summary:
 			//		adds a shape to a group/surface
-			// shape: dojox.gfx.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		a Silverlight shape object
 			if(this != shape.getParent()){
 				C.add.apply(this, arguments);
@@ -801,7 +801,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		remove: function(shape, silently){
 			// summary:
 			//		remove a shape from a group/surface
-			// shape: dojox.gfx.Shape
+			// shape: dojox/gfx/shape.Shape
 			//		a Silverlight shape object
 			// silently: Boolean?
 			//		if true, regenerate a picture
@@ -839,7 +839,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			shape.setRawNode(node);
 			shape.setShape(rawShape);
 			this.add(shape);
-			return shape;	// dojox.gfx.Shape
+			return shape;	// dojox/gfx/shape.Shape
 		}
 	};
 
@@ -942,7 +942,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	lang.extend(sl.Shape, eventsProcessing);
 	lang.extend(sl.Surface, eventsProcessing);
 	
-	// patch dojox.gfx
+	// patch dojox/gfx
 	g.equalSources = function(a, b){
 		// summary:
 		//		compares event sources, returns true if they are equal

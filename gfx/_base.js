@@ -181,7 +181,7 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 	g.Fill = {
 		// summary:
 		//		Defines how to fill a shape. Four types of fills can be used: solid, linear gradient, radial gradient and pattern.
-		//		See dojox.gfx.LinearGradient, dojox.gfx.RadialGradient and dojox.gfx.Pattern respectively for more information about the properties supported by each type.
+		//		See dojox/gfx.LinearGradient, dojox/gfx.RadialGradient and dojox/gfx.Pattern respectively for more information about the properties supported by each type.
 		
 		// type: String?
 		//		The type of fill. One of 'linear', 'radial', 'pattern' or undefined. If not specified, a solid fill is assumed.
@@ -742,7 +742,7 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			// summary:
 			//		converts a font object to a CSS font string
 			// font: Object
-			//		font object (see dojox.gfx.defaultFont)
+			//		font object (see dojox/gfx.defaultFont)
 			return font.style + " " + font.variant + " " + font.weight + " " + font.size + " " + font.family; // Object
 		},
 		splitFontString: function(str){
@@ -884,9 +884,9 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			 //		creates a surface
 			 // parentNode: Node
 			 //		a parent node
-			 // width: String | Number
+			 // width: String|Number
 			 //		width of surface, e.g., "100px" or 100
-			 // height: String | NUmber
+			 // height: String|Number
 			 //		height of surface, e.g., "100px" or 100
 			 // returns: dojox/gfx/shape.Surface
 			 //     newly created surface
