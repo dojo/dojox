@@ -220,7 +220,7 @@ define([
 			//		Implement _StoreLayer._fetch
 			// tags:
 			//		private callback
-			// filterRequest: dojo.data.api.Request
+			// filterRequest: dojo/data/api/Request
 			//		The actual request used in store.fetch.
 			//		This function is called recursively to fill the result store items
 			//		until the user specified item count is reached. Only in recursive calls,

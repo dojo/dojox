@@ -14,8 +14,8 @@ define([
 		//		an array of {x, y} objects
 		//		- A collection geometry of type dojox.geo.openlayers.Collection. Coordinates are an array of geometries.
 
-		// coordinates: {x, y} | Array 
-		//		The coordinates of the geometry.
+		// coordinates: Object|Array
+		//		The coordinates of the geometry, Object like {x, y} or Array.
 		coordinates : null,
 
 		// shape: [private] dojox/gfx/shape.Shape

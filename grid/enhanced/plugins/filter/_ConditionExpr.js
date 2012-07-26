@@ -135,7 +135,7 @@ var _OperatorExpr = declare("dojox.grid.enhanced.plugins.filter._OperatorExpr", 
 	//		An operator expression is a _ConditionExpr that represents an operation.
 	_name: "operator",
 
-	constructor: function(/* Array | operand1,operand2,... */){
+	constructor: function(/* Array|operand1,operand2,... */){
 		// summary:
 		//		The arguments are operands (or an array of operands, if the first argument
 		//		is an Array) of this operator, ordering from left to right.

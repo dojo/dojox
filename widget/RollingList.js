@@ -221,8 +221,8 @@ dojo.declare("dojox.widget._RollingListPane",
 	
 	_onSetItem: function(/* item */ item,
 					/* attribute-name-string */ attribute,
-					/* object | array */ oldValue,
-					/* object | array */ newValue){
+					/* Object|Array */ oldValue,
+					/* Object|Array */ newValue){
 		// summary:
 		//		called when an item in the store has changed
 		if(this._hasItem(item)){
@@ -1085,7 +1085,7 @@ dojo.declare("dojox.widget.RollingList",
 		}
 	},
 	
-	_setStore: function(/* dojo.data.api.Read */ store){
+	_setStore: function(/* dojo/data/api/Read */ store){
 		// summary:
 		//		sets the store for this widget */
 		if(store === this.store && this._started){ return; }

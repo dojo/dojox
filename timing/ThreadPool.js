@@ -73,7 +73,7 @@ define(["./_base"], function(){
 		this.getMaxThreads=function(){ return maxThreads; };
 		this.getAvailableThreads=function(){ return availableThreads; };
 		this.getTickInterval=function(){ return interval; };
-		this.queueUserWorkItem=function(/* Function || dojox.timing.Thread */fn){
+		this.queueUserWorkItem=function(/* Function|dojox/timing/Thread */fn){
 			var item=fn;
 			if(item instanceof Function){
 				item=new t.Thread(item);
@@ -92,7 +92,7 @@ define(["./_base"], function(){
 			}
 			return true;
 		};
-		this.removeQueuedUserWorkItem=function(/* Function || dojox.timing.Thread */item){
+		this.removeQueuedUserWorkItem=function(/* Function|dojox/timing/Thread */item){
 			if(item instanceof Function){
 				var idx=-1;
 				for(var i=0; i<queue.length; i++){

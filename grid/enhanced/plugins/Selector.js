@@ -280,10 +280,10 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
-		// start: Integer | Object
+		// start: Integer|Object
 		//		If type is "row" or "col", this is the index of the starting row or column.
 		//		If type if "cell", this is the left-top cell of the range.
-		// end: Integer | Object
+		// end: Integer|Object
 		//		If type is "row" or "col", this is the index of the ending row or column.
 		//		If type if "cell", this is the right-bottom cell of the range.
 		this.grid._selectingRange = true;
@@ -324,8 +324,8 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 		// tag:
 		//		public
 		// toEnable: Boolean?
-		//		To enable or not. Optional.
-		// returns: Boolean | undefined
+		//		To enable or not.
+		// returns: Boolean|undefined
 		//		Enabled or not.
 		if(typeof toEnable != "undefined" && !this.isSelecting()){
 			this._enabled = !!toEnable;

@@ -41,7 +41,7 @@ var Menu = declare("dojox.grid.enhanced.plugins.Menu", _Plugin, {
 			}
 		}
 	},
-	_initMenu: function(/*String*/menuType, /*String | Widget(dijit.Menu)*/menu){
+	_initMenu: function(/*String*/ menuType, /*String|dijit/Menu*/ menu){
 		var g = this.grid;
 		if(!g[menuType]){//in case already created in _Grid.postCreate()
 			var m = this._getMenuWidget(menu);

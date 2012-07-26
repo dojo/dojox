@@ -55,7 +55,7 @@ return declare("dojox.widget.Pager",
 	//		TODOC
 	resizeChildren: true,
 
-	// itemClass: String || Widget
+	// itemClass: String|Widget
 	//		The full dotted named of a Class or Widget constructor to use for the internal Pager Items.
 	itemClass: PagerItem,
 

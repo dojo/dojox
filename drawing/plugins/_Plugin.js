@@ -30,7 +30,7 @@ return oo.declare(
 		connect: function(){
 			this._cons.push(dojo.connect.apply(dojo, arguments));
 		},
-		disconnect: function(/*handle | Array*/handles){
+		disconnect: function(/*Handle|Array*/ handles){
 			// summary:
 			//		Removes connections based on passed
 			//		handles arguments

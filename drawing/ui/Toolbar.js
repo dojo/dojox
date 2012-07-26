@@ -94,16 +94,16 @@ return dojo.declare("dojox.drawing.ui.Toolbar", [], {
 	//		The distance between the tool buttons and plug buttons
 	toolPlugGap:20,
 	
-	// strSelected | selected: String
+	// strSelected: String
 	//		The button that should be selected at startup.
 	strSelected:"",
 
-	// strTools | tools: String
+	// strTools: String
 	//		A comma delineated list of the Stencil-tools to include in the Toolbar.
 	//		If "all" is used, all registered tools are included.
 	strTools:"",
 
-	// strPlugs | plugs: String
+	// strPlugs: String
 	//		A comma delineated list of the plugins to include in the Toolbar.
 	//		If "all" is used, all registered plugins are included.
 	strPlugs:"",
@@ -267,7 +267,7 @@ return dojo.declare("dojox.drawing.ui.Toolbar", [], {
 		//		Plugin click event. May be connected to.
 	},
 	
-	_mixprops: function(/*Array*/props, /*Object | Node*/objNode){
+	_mixprops: function(/*Array*/ props, /*Object|Node*/ objNode){
 		// summary:
 		//		Internally used for mixing in props from an object or
 		//		from a dom node.

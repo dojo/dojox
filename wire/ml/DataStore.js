@@ -50,7 +50,7 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		// summary:
 		//		Call getFeatures() method of a data store
 		// description:
-		//		See dojo.data.api.Read.getFeatures().
+		//		See dojo/data/api/Read.getFeatures().
 		// returns:
 		//		A features object
 		return this.store.getFeatures(); //Object
@@ -60,7 +60,7 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		// summary:
 		//		Call fetch() method of a data store
 		// description:
-		//		See dojo.data.api.Read.fetch().
+		//		See dojo/data/api/Read.fetch().
 		// request:
 		//		A request object
 		// returns:
@@ -72,7 +72,7 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		// summary:
 		//		Call save() method of a data store
 		// description:
-		//		See dojo.data.api.Write.save().
+		//		See dojo/data/api/Write.save().
 		// args:
 		//		A save arguments object
 		this.store.save(args);
@@ -82,7 +82,7 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		// summary:
 		//		Call newItem() method of a data store
 		// description:
-		//		See dojo.data.api.Write.newItem().
+		//		See dojo/data/api/Write.newItem().
 		// args:
 		//		A new item arguments object
 		// returns:
@@ -94,7 +94,7 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		// summary:
 		//		Call deleteItem() method of a data store
 		// description:
-		//		See dojo.data.api.Write.deleteItem().
+		//		See dojo/data/api/Write.deleteItem().
 		// returns:
 		//		A boolean
 		return this.store.deleteItem(item); //Boolean
@@ -104,7 +104,7 @@ dojo.declare("dojox.wire.ml.DataStore", dijit._Widget, {
 		// summary:
 		//		Call revert() method of a data store
 		// description:
-		//		See dojo.data.api.Write.revert().
+		//		See dojo/data/api/Write.revert().
 		// returns:
 		//		A boolean
 		return this.store.revert(); //Boolean

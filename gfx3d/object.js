@@ -973,7 +973,7 @@ declare("dojox.gfx3d.Viewport", gfx.Group, {
 		return this.applyCameraRightTransform(matrix); // self
 	},
 
-	setLights: function(/* Array || Object */lights, /* Color? */ ambient,
+	setLights: function(/* Array|Object */lights, /* Color? */ ambient,
 		/* Color? */ specular){
 		// summary:
 		//		set the lights
@@ -998,7 +998,7 @@ declare("dojox.gfx3d.Viewport", gfx.Group, {
 	addLights: function(lights){
 		// summary:
 		//		add new light/lights to the viewport.
-		// lights: Array || light object
+		// lights: Array|Object
 		//		light object(s)
 		return this.setLights(this.lights.sources.concat(lights));
 	},

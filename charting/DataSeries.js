@@ -9,7 +9,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 			//		A dojo.data store object.
 			// kwArgs: Object
 			//		A store-specific keyword parameters used for fetching items.
-			//		See dojo.data.api.Read.fetch().
+			//		See dojo/data/api/Read.fetch().
 			// value: Function|Object|String
 			//		Function, which takes a store, and an object handle, and
 			//		produces an output possibly inspecting the store's item. Or
@@ -108,7 +108,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/_base
 		onFetchError: function(errorData, request){
 			// summary:
 			//		As stub to process fetch errors. Provide so user can attach to
-			//		it with dojo.connect(). See dojo.data.api.Read fetch() for
+			//		it with dojo.connect(). See dojo/data/api/Read fetch() for
 			//		details: onError property.
 			this._inFlight = false;
 		},

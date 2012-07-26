@@ -5,7 +5,7 @@ define([
 	"dojo/_base/xhr"
 ], function(declare, array, lang, xhr){
 	// summary:
-	//		The dojo.data.api.Read API is powerful, but it's difficult to give the store some special commands before
+	//		The dojo/data/api/Read API is powerful, but it's difficult to give the store some special commands before
 	//		fetch, so that the store content can be temporarily modified or transformed, and acts as another store. The
 	//		parameter *query* or *queryOptions* in keywordArgs for *fetch* is not enough because:
 	//
@@ -340,7 +340,7 @@ define([
 				this.onCommandLoad("", userRequest);
 				this.originFetch(userRequest);
 			}
-			return userRequest;	//dojo.data.api.Request
+			return userRequest;	// dojo/data/api/Request
 		},
 		command: function(/* string */cmdName,/* (string|number|bool|...)? */cmdContent){
 			// summary:
@@ -368,7 +368,7 @@ define([
 			//		callback extension
 			// response: string
 			//		server response
-			// userRequest: [in|out] dojo.data.api.Request
+			// userRequest: [in|out] dojo/data/api/Request
 			//		The request object for *fetch*. You can modify this object according to the *response*
 			//		so as to change the behavior of *fetch*
 			this._onUserCommandLoad(this.__cmds, userRequest, response);

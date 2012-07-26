@@ -126,7 +126,7 @@ dojox.xml.parser.textContent = function(/*Node*/node, /*String?*/text){
 	}
 };
 
-dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node || Array*/ newChildren){
+dojox.xml.parser.replaceChildren = function(/*Element*/node, /*Node|Array*/ newChildren){
 	// summary:
 	//		Removes all children of node and appends newChild. All the existing
 	//		children will be destroyed.

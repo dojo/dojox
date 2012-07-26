@@ -53,7 +53,7 @@ define(["dojo/_base/lang"], function(lang){
 		// toDecimal: Boolean
 		//		Specifies if the result should be returned in decimal degrees or in an array
 		//		containing the degrees, minutes, seconds values.
-		// returns: Float | Array
+		// returns: Float|Array
 		//		the parsed value in decimal degrees or an array containing the degrees, minutes, seconds values.
 
 		var res = re.exec(v);

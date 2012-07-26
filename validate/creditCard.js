@@ -84,7 +84,7 @@ validate.isValidCreditCardNumber = function(value, ccType){
 			results.push(p);
 		}
 	}
-	return results.length ? results.join('|') : false; // String | boolean
+	return results.length ? results.join('|') : false; // String|Boolean
 };
 
 validate.isValidCvv = function(/* String|Int */value, /* String */ccType) {

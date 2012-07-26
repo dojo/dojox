@@ -117,10 +117,10 @@ dojo.declare("dojox.image.Gallery",
 		// summary:
 		//		Sets the data store and request objects to read data from.
 		// dataStore:
-		//		An implementation of the dojo.data.api.Read API. This accesses the image
+		//		An implementation of the dojo/data/api/Read API. This accesses the image
 		//		data.
 		// request:
-		//		An implementation of the dojo.data.api.Request API. This specifies the
+		//		An implementation of the dojo/data/api/Request API. This specifies the
 		//		query and paging information to be used by the data store
 		// paramNames:
 		//		An object defining the names of the item attributes to fetch from the

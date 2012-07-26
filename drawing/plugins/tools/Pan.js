@@ -79,7 +79,7 @@ var Pan = oo.declare(
 			},evt), this.interval);
 		},
 		
-		onSetPan: function(/*Boolean | Event*/ bool){
+		onSetPan: function(/*Boolean|Event*/ bool){
 			if(bool === true || bool === false){
 				this.selected = !bool;
 			}

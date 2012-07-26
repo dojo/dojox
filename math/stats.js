@@ -22,7 +22,7 @@ define(["dojo", "../main"], function(dojo, dojox) {
 			return (squares/a.length)-Math.pow(mean/a.length, 2);	// Number
 		},
 
-		bestFit: function(/* Object[] || Number[] */a, /* String? */xProp, /* String? */yProp){
+		bestFit: function(/* Object[]|Number[] */ a, /* String? */ xProp, /* String? */ yProp){
 			// summary:
 			//		Calculate the slope and intercept in a linear fashion.  An array
 			//		of objects is expected; optionally you can pass in the property
@@ -75,7 +75,7 @@ define(["dojo", "../main"], function(dojo, dojox) {
 			};
 		},
 
-		forecast: function(/* Object[] || Number[] */a, /* Number */x, /* String? */xProp, /* String? */yProp){
+		forecast: function(/* Object[]|Number[] */a, /* Number */x, /* String? */xProp, /* String? */yProp){
 			// summary:
 			//		Using the bestFit algorithm above, find y for the given x.
 			var fit = st.bestFit(a, xProp, yProp);

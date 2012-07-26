@@ -29,7 +29,7 @@ var Printer = declare("dojox.grid.enhanced.plugins.Printer", _Plugin, {
 		// title: String
 		//		A title of the printed page can be specified. Optional.
 		//		If given, it's shown in an <h1> tag at the top of the page.
-		// cssFiles: Array | String
+		// cssFiles: Array|String
 		//		CSS file paths. Optional.
 		//		Every row and column is given CSS classes, including:
 		//
@@ -39,8 +39,8 @@ var Printer = declare("dojox.grid.enhanced.plugins.Printer", _Plugin, {
 		//		- Row classes are for <thead> and <tbody> tags.
 		//		- Column classes are for <th> and <td> tags.
 		//		- Users can use these classes in the CSS files, but cannot define their own.
-		// writerArgs: Object (Association Array)
-		//		Arguments for TableWriter.
+		// writerArgs: Object
+		//		 Associative Array, arguments for TableWriter.
 		// fetchArgs: object?
 		//		Any arguments for store.fetch
 	},

@@ -215,7 +215,7 @@ var _PluginManager = declare("dojox.grid.enhanced._PluginManager", null, {
 	getPluginClazz: function(clazz){
 		// summary:
 		//		Load target plugin which must be already required (require(..))
-		// clazz: class | String
+		// clazz: Class|String
 		//		Plugin class
 		if(lang.isFunction(clazz)){
 			return clazz;//return if it's already a clazz

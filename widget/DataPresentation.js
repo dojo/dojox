@@ -490,7 +490,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//		independent axis. 1=every label. 0=no labels. The default is 1.
 		labelMod: 1,
 
-		// tooltip: String | Function
+		// tooltip: String|Function
 		//		a string pattern defining the tooltip text to be applied to chart
 		//		data points, or a function which takes a single parameter and returns
 		//		the tooltip text to be applied to chart data points. The string pattern
@@ -506,7 +506,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 		//		is to apply the default tooltip as defined by the
 		//		dojox.charting.action2D.Tooltip class.
 
-		// legendHorizontal: Boolean | Number
+		// legendHorizontal: Boolean|Number
 		//		true if the legend should be rendered horizontally, or a number if
 		//		the legend should be rendered as horizontal rows with that number of
 		//		items in each row, or false if the legend should be rendered

@@ -478,7 +478,7 @@ var Base = oo.declare(
 			}), ms);
 		},
 
-		attr: function(/*String | Object*/key, /* ? String | Number */value){
+		attr: function(/*String|Object*/ key, /*String|Number?*/value){
 			// summary:
 			//		Changes properties in the style or disabled styles,
 			//		depending on whether the object is enabled.
@@ -1133,7 +1133,7 @@ var Base = oo.declare(
 			return c;
 		},
 
-		disconnect: function(/*handle | Array*/handles){
+		disconnect: function(/*Handle|Array*/handles){
 			// summary:
 			//		Removes connections based on passed
 			//		handles arguments
