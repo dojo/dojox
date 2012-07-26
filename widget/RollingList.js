@@ -451,7 +451,7 @@ dojo.declare("dojox.widget._RollingListGroupPane",
 			},
 			_moveToPopup: function(/*Event*/ evt){
 				if(this.focusedChild && !this.focusedChild.disabled){
-					this.focusedChild._onClick(evt);
+					this.onItemClick(this.focusedChild, evt);
 				}
 			}
 		}, this.menuNode);
