@@ -235,7 +235,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	isSelected: function(type, rowIndex, colIndex){
 		// summary:
 		//		Check whether a location (a cell, a column or a row) is selected.
-		// tag:
+		// tags:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -255,7 +255,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	select: function(type, rowIndex, colIndex){
 		// summary:
 		//		Select a location (a cell, a column or a row).
-		// tag:
+		// tags:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -276,7 +276,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	selectRange: function(type, start, end, toSelect){
 		// summary:
 		//		Select a continuous range (a block of cells, a set of continuous columns or rows)
-		// tag:
+		// tags:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -297,7 +297,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	clear: function(type){
 		// summary:
 		//		Clear all selections.
-		// tag:
+		// tags:
 		//		public
 		// type: String?
 		//		"row" or "col" or "cell". If omitted, clear all.
@@ -306,7 +306,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	isSelecting: function(type){
 		// summary:
 		//		Check whether the user is currently selecting something.
-		// tag:
+		// tags:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -321,7 +321,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 		// summary:
 		//		Turn on/off this selection functionality if *toEnable* is provided.
 		//		Check whether this selection functionality is enabled if nothing is passed in.
-		// tag:
+		// tags:
 		//		public
 		// toEnable: Boolean?
 		//		To enable or not.
@@ -335,7 +335,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	getSelected: function(type, includeExceptions){
 		// summary:
 		//		Get an array of selected locations.
-		// tag:
+		// tags:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -358,7 +358,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	getSelectedCount: function(type, includeExceptions){
 		// summary:
 		//		Get the number of selected items.
-		// tag:
+		// tags:
 		//		public
 		// type: String
 		//		"row" or "col" or "cell"
@@ -380,7 +380,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	getSelectedType: function(){
 		// summary:
 		//		Get the type of selected items.
-		// tag:
+		// tags:
 		//		public
 		// returns: String
 		//		"row" or "col" or "cell", or any mix of these (separator is | ).
@@ -392,7 +392,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	getLastSelectedRange: function(type){
 		// summary:
 		//		Get last selected range of the given type.
-		// tag:
+		// tags:
 		//		public
 		// returns: Object
 		//		{start: __SelectItem, end: __SelectItem}
@@ -923,7 +923,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 		// summary:
 		//		Clear selection for given type and fire events, but retain the highlight for *reservedItem*,
 		//		thus avoid "flashing".
-		// tag:
+		// tags:
 		//		private
 		// type: String
 		//		"row", "col", or "cell
@@ -959,7 +959,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	_startSelect: function(type, start, extending, isRange, mandatarySelect, toSelect){
 		// summary:
 		//		Start selection, setup start point and current point, fire events.
-		// tag:
+		// tags:
 		//		private
 		// type: String
 		//		"row", "col", or "cell"
@@ -1019,7 +1019,7 @@ var Selector = declare("dojox.grid.enhanced.plugins.Selector", _Plugin, {
 	_endSelect: function(type){
 		// summary:
 		//		End selection. Keep records, fire events and cleanup status.
-		// tag:
+		// tags:
 		//		private
 		// type: String
 		//		"row", "col", or "cell"

@@ -48,7 +48,7 @@ var Rearrange = declare("dojox.grid.enhanced.plugins.Rearrange", _Plugin, {
 	moveColumns: function(colsToMove, targetPos){
 		// summary:
 		//		Move a set of columns to a given position.
-		// tag:
+		// tags:
 		//		public
 		// colsToMove: Integer[]
 		//		Array of column indexes.
@@ -113,7 +113,7 @@ var Rearrange = declare("dojox.grid.enhanced.plugins.Rearrange", _Plugin, {
 	moveRows: function(rowsToMove, targetPos){
 		// summary:
 		//		Move a set of rows to a given position
-		// tag:
+		// tags:
 		//		public
 		// rowsToMove: Integer[]
 		//		Array of row indexes.
