@@ -50,7 +50,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 	getFeatures: function(){
 		// summary:
-		//		See dojo.data.api.Read.getFeatures()
+		//		See dojo/data/api/Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
 		};
@@ -58,7 +58,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 	getValue: function(item, attribute, defaultValue){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 		var i = dojo.indexOf(item.attributes, attribute);
@@ -70,14 +70,14 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 	getAttributes: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getAttributes()
+		//		See dojo/data/api/Read.getAttributes()
 		this._assertIsItem(item);
 		return item.attributes;
 	},
 
 	hasAttribute: function(item, attribute){
 		// summary:
-		//		See dojo.data.api.Read.hasAttributes()
+		//		See dojo/data/api/Read.hasAttributes()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 		for(var i = 0; i < item.attributes.length; ++i){
@@ -90,36 +90,36 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 	isItemLoaded: function(item){
 		// summary:
-		//		See dojo.data.api.Read.isItemLoaded()
+		//		See dojo/data/api/Read.isItemLoaded()
 		return this.isItem(item);		// Boolean
 	},
 
 	loadItem: function(keywordArgs){
 		// summary:
-		//		See dojo.data.api.Read.loadItem()
+		//		See dojo/data/api/Read.loadItem()
 	},
 
 	getLabel: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getLabel()
+		//		See dojo/data/api/Read.getLabel()
 		return undefined;
 	},
 	
 	getLabelAttributes: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo/data/api/Read.getLabelAttributes()
 		return null;
 	},
 
 	containsValue: function(item, attribute, value){
 		// summary:
-		//		See dojo.data.api.Read.containsValue()
+		//		See dojo/data/api/Read.containsValue()
 		return this.getValue(item, attribute) === value;		// Boolean
 	},
 
 	getValues: function(item, attribute){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 		var i = dojo.indexOf(item.attributes, attribute);
@@ -131,7 +131,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 	isItem: function(item){
 		// summary:
-		//		See dojo.data.api.Read.isItem()
+		//		See dojo/data/api/Read.isItem()
 		if(item && item._store === this){
 			return true;
 		}
@@ -140,7 +140,7 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 	
 	close: function(request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 	},
 
 	_fetchHandler: function(/*Object*/ request){
@@ -243,9 +243,9 @@ dojo.declare("dojox.data.SnapLogicStore", null, {
 
 	fetch: function(/*Object*/ request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 		// request:
-		//		See dojo.data.api.Read.close() for generic interface.
+		//		See dojo/data/api/Read.close() for generic interface.
 		//
 		//		In addition to the standard Read API fetch support, this store supports an optimization for
 		//		for retrieving the total count of records in the Pipeline without retrieving the data. To

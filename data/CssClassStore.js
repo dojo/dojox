@@ -131,21 +131,21 @@ return declare("dojox.data.CssClassStore", CssRuleStore, {
 	/* Identity API */
 	getIdentity: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Identity.getIdentity()
+		//		See dojo/data/api/Identity.getIdentity()
 		this._assertIsItem(item);
 		return this.getValue(item, this._idAttribute);
 	},
 
 	getIdentityAttributes: function(/* item */ item){
 		// summary:
-		//		See dojo.data.api.Identity.getIdentityAttributes()
+		//		See dojo/data/api/Identity.getIdentityAttributes()
 		this._assertIsItem(item);
 		return [this._idAttribute];
 	},
 
 	fetchItemByIdentity: function(/* request */ request){
 		// summary:
-		//		See dojo.data.api.Identity.fetchItemByIdentity()
+		//		See dojo/data/api/Identity.fetchItemByIdentity()
 		request = request || {};
 		if(!request.store){
 			request.store = this;

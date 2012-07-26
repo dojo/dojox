@@ -298,7 +298,7 @@ return declare("dojox.data.ServiceStore",
 		},
 		fetch: function(args){
 			// summary:
-			//		See dojo.data.api.Read.fetch
+			//		See dojo/data/api/Read.fetch
 			// args:
 			//		####The *queryOptions.cache* parameter
 			//

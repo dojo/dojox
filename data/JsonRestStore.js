@@ -319,7 +319,7 @@ var JsonRestStore = declare("dojox.data.JsonRestStore", ServiceStore,
 		},
 		save: function(kwArgs){
 			// summary:
-			//		Saves the dirty data using REST Ajax methods. See dojo.data.api.Write for API.
+			//		Saves the dirty data using REST Ajax methods. See dojo/data/api/Write for API.
 			// kwArgs:
 			//		- global:
 			//			This will cause the save to commit the dirty data for all

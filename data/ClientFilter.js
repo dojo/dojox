@@ -65,7 +65,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				// resultSet:
 				//		The result set array that should be updated
 				// request:
-				//		This object follows the same meaning as the keywordArgs passed to a dojo.data.api.Read.fetch.
+				//		This object follows the same meaning as the keywordArgs passed to a dojo/data/api/Read.fetch.
 				// description:
 				//		This will attempt to update the provide result based on previous notification, adding new items
 				//		from onNew calls, removing deleted items, and updating modified items, and properly removing
@@ -205,7 +205,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				// summary:
 				//		Returns whether the provide fetch arguments can be used to update an existing list
 				// request:
-				//		See dojo.data.api.Read.fetch request
+				//		See dojo/data/api/Read.fetch request
 				
 				return !request.query || typeof request.query == "object";
 			},
@@ -213,7 +213,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "dojo/_base/array", "dojo/_base
 				// summary:
 				//		Performs a query on the client side and returns the results as an array
 				// request:
-				//		See dojo.data.api.Read.fetch request
+				//		See dojo/data/api/Read.fetch request
 				// baseResults:
 				//		This provides the result set to start with for client side querying
 				if(request.queryOptions && request.queryOptions.results){

@@ -376,7 +376,7 @@ var FlickrRestStore = declare("dojox.data.FlickrRestStore",
 
 	getAttributes: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getAttributes()
+		//		See dojo/data/api/Read.getAttributes()
 		return [
 			"title", "author", "imageUrl", "imageUrlSmall", "imageUrlMedium",
 			"imageUrlThumb", "imageUrlLarge", "imageUrlOriginal", "link", "dateTaken", "datePublished"
@@ -385,7 +385,7 @@ var FlickrRestStore = declare("dojox.data.FlickrRestStore",
 
 	getValues: function(item, attribute){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
 

@@ -63,7 +63,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	getFeatures: function(){
 		// summary:
-		//		See dojo.data.api.Read.getFeatures()
+		//		See dojo/data/api/Read.getFeatures()
 		return {
 			'dojo.data.api.Read': true
 		};
@@ -71,7 +71,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	getValue: function(item, attribute, defaultValue){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 		var values = this.getValues(item, attribute);
 		if(values && values.length > 0){
 			return values[0];
@@ -81,7 +81,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	getAttributes: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getAttributes()
+		//		See dojo/data/api/Read.getAttributes()
 		return ["id", "published", "updated", "category", "title$type", "title",
 			"summary$type", "summary", "rights$type", "rights", "link", "author",
 			"gphoto$id", "gphoto$name", "location", "imageUrlSmall", "imageUrlMedium",
@@ -90,7 +90,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	hasAttribute: function(item, attribute){
 		// summary:
-		//		See dojo.data.api.Read.hasAttributes()
+		//		See dojo/data/api/Read.hasAttributes()
 		if(this.getValue(item,attribute)){
 			return true;
 		}
@@ -99,30 +99,30 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	isItemLoaded: function(item){
 		// summary:
-		//		See dojo.data.api.Read.isItemLoaded()
+		//		See dojo/data/api/Read.isItemLoaded()
 		return this.isItem(item);
 	},
 
 	loadItem: function(keywordArgs){
 		// summary:
-		//		See dojo.data.api.Read.loadItem()
+		//		See dojo/data/api/Read.loadItem()
 	},
 
 	getLabel: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getLabel()
+		//		See dojo/data/api/Read.getLabel()
 		return this.getValue(item,this.label);
 	},
 	
 	getLabelAttributes: function(item){
 		// summary:
-		//		See dojo.data.api.Read.getLabelAttributes()
+		//		See dojo/data/api/Read.getLabelAttributes()
 		return [this.label];
 	},
 
 	containsValue: function(item, attribute, value){
 		// summary:
-		//		See dojo.data.api.Read.containsValue()
+		//		See dojo/data/api/Read.containsValue()
 		var values = this.getValues(item,attribute);
 		for(var i = 0; i < values.length; i++){
 			if(values[i] === value){
@@ -134,7 +134,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	getValues: function(item, attribute){
 		// summary:
-		//		See dojo.data.api.Read.getValue()
+		//		See dojo/data/api/Read.getValue()
 
 		this._assertIsItem(item);
 		this._assertIsAttribute(attribute);
@@ -166,7 +166,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 
 	isItem: function(item){
 		// summary:
-		//		See dojo.data.api.Read.isItem()
+		//		See dojo/data/api/Read.isItem()
 		if(item && item[this._storeRef] === this){
 			return true;
 		}
@@ -175,7 +175,7 @@ var PicasaStore = declare("dojox.data.PicasaStore", null, {
 	
 	close: function(request){
 		// summary:
-		//		See dojo.data.api.Read.close()
+		//		See dojo/data/api/Read.close()
 	},
 
 	_fetchItems: function(request, fetchHandler, errorHandler){
