@@ -1,10 +1,10 @@
 // FIXME: documentation
 define([
-    "dojox/gantt/GanttProjectItem",
-    "dojox/gantt/GanttResourceItem",
-    "dojox/gantt/GanttProjectControl",
-    "dojox/gantt/GanttTaskControl",
-    "dojox/gantt/TabMenu",
+    "./GanttProjectItem",
+    "./GanttResourceItem",
+    "./GanttProjectControl",
+    "./GanttTaskControl",
+    "./TabMenu",
     "dijit/Tooltip",
     "dojo/_base/declare",
 	"dojo/_base/array",

@@ -1,5 +1,5 @@
 define([
-	"dojox/gantt/contextMenuTab",
+	"./contextMenuTab",
 	"dijit/Dialog",
 	"dijit/form/Button",
 	"dijit/form/Form",

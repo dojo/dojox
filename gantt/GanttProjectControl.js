@@ -1,5 +1,5 @@
 define([
-	"dojox/gantt/GanttTaskItem",
+	"./GanttTaskItem",
 	"dijit/focus",
 	"dojo/_base/declare",
 	"dojo/_base/array",
