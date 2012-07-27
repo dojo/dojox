@@ -1,6 +1,6 @@
 define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel", "dojo/_base/sniff",
 	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix" /*===== , "./path" =====*/ ], 
-  function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
+	function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
 
 	var shape = g.shape = {
 		// summary:
@@ -704,6 +704,23 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		always returns the identity matrix
 			return null;	// dojox/gfx/Matrix2D
 		},
+		/*=====
+		 setDimensions: function(width, height){
+			 // summary:
+			 //		sets the width and height of the rawNode
+			 // width: String
+			 //		width of surface, e.g., "100px"
+			 // height: String
+			 //		height of surface, e.g., "100px"
+			 return this;	// self
+		 },
+		 getDimensions: function(){
+			 // summary:
+			 //     gets current width and height in pixels
+			 // returns: Object
+			 //     object with properties "width" and "height"
+		 },
+		 =====*/
 		isLoaded: true,
 		onLoad: function(/*dojox/gfx/shape.Surface*/ surface){
 			// summary:
@@ -723,26 +740,26 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			}
 		}
 	});
-	
 	lang.extend(shape.Surface, shape._eventsProcessing);
 
-	/*===== g.Point = =====*/ declare("dojox/gfx.Point", null, {
+	/*=====
+	g.Point = declare("dojox/gfx.Point", null, {
 		// summary:
-		//		a hypothetical 2D point to be used for drawings - {x, y}
+		//		2D point for drawings - {x, y}
 		// description:
-		//		This object is defined for documentation purposes.
-		//		You should use the naked object instead: {x: 1, y: 2}.
+		//		Do not use this object directly!
+		//		Use the naked object instead: {x: 1, y: 2}.
 	});
 
-	/*===== g.Rectangle = =====*/ declare("dojox.gfx.Rectangle", null, {
+	g.Rectangle = declare("dojox.gfx.Rectangle", null, {
 		// summary:
-		//		a hypothetical rectangle - {x, y, width, height}
+		//		rectangle - {x, y, width, height}
 		// description:
-		//		This object is defined for documentation purposes.
-		//		You should use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
-
-		// there's no reason for this to be a real class, it can be completely enclosed in a doc comment
+		//		Do not use this object directly!
+		//		Use the naked object instead: {x: 1, y: 2, width: 100, height: 200}.
 	});
+	 =====*/
+
 
 	shape.Rect = declare("dojox.gfx.shape.Rect", shape.Shape, {
 		// summary:
@@ -784,7 +801,6 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	shape.Circle = declare("dojox.gfx.shape.Circle", shape.Shape, {
 		// summary:
 		//		a generic circle
-		//		(this is a helper object, which is defined for convenience)
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
@@ -805,8 +821,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 	shape.Line = declare("dojox.gfx.shape.Line", shape.Shape, {
 		// summary:
-		//		a generic line
-		//		(this is a helper object, which is defined for convenience)
+		//		a generic line (do not instantiate it directly)
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
@@ -831,8 +846,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 	shape.Polyline = declare("dojox.gfx.shape.Polyline", shape.Shape, {
 		// summary:
-		//		a generic polyline/polygon
-		//		(this is a helper object, which is defined for convenience)
+		//		a generic polyline/polygon (do not instantiate it directly)
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
@@ -896,8 +910,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 	shape.Image = declare("dojox.gfx.shape.Image", shape.Shape, {
 		// summary:
-		//		a generic image
-		//		(this is a helper object, which is defined for convenience)
+		//		a generic image (do not instantiate it directly)
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
@@ -923,7 +936,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	
 	shape.Text = declare(shape.Shape, {
 		// summary:
-		//		a generic text
+		//		a generic text (do not instantiate it directly)
 		constructor: function(rawNode){
 			// rawNode: Node
 			//		a DOM Node
@@ -957,11 +970,13 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		by group-like objects
 			// shape: Object
 			//		a shape descriptor object
+			// returns: dojox/gfx/shape.Shape | Null
+			//      a fully instantiated surface-specific Shape object
 			switch(shape.type){
 				case g.defaultPath.type:		return this.createPath(shape);
 				case g.defaultRect.type:		return this.createRect(shape);
-				case g.defaultCircle.type:	return this.createCircle(shape);
-				case g.defaultEllipse.type:	return this.createEllipse(shape);
+				case g.defaultCircle.type:	    return this.createCircle(shape);
+				case g.defaultEllipse.type:	    return this.createEllipse(shape);
 				case g.defaultLine.type:		return this.createLine(shape);
 				case g.defaultPolyline.type:	return this.createPolyline(shape);
 				case g.defaultImage.type:		return this.createImage(shape);
@@ -1053,21 +1068,28 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	};
 	
 	/*=====
-		g.Group = declare(shape.Shape, {
-			// summary:
-			//		a group shape, which can be used
-			//		to logically group shapes (e.g, to propagate matricies)
-		});
-		g.TextPath = declare([ shape.Shape, g.path.TextPath ]);
+	 lang.extend(shape.Surface, shape.Container);
+	 lang.extend(shape.Surface, shape.Creator);
 
-		g.Rect = declare(shape.Shape, {});
-		g.Circle = declare(shape.Shape, {});
-		g.Ellipse = declare(shape.Shape,{});
-		g.Line = declare(shape.Shape,{});
-		g.Polyline = declare(shape.Shape,{});
-		g.Path = declare(shape.Shape,{});
-		g.Text = declare(shape.Shape, {});
-		g.Surface = declare(shape.Surface, {});
+	 g.Group = declare(shape.Shape, {
+		// summary:
+		//		a group shape, which can be used
+		//		to logically group shapes (e.g, to propagate matricies)
+	});
+	lang.extend(g.Group, shape.Container);
+	lang.extend(g.Group, shape.Creator);
+
+	g.Rect     = shape.Rect;
+	g.Circle   = shape.Circle;
+	g.Ellipse  = shape.Ellipse;
+	g.Line     = shape.Line;
+	g.Polyline = shape.Polyline;
+	g.Path     = shape.Path;
+	g.Text     = shape.Text;
+	g.Surface  = shape.Surface;
+
+	g.Path = g.path.Path;
+	g.TextPath = g.path.TextPath;
 	=====*/
 
 	return shape;
