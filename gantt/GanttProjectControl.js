@@ -1,5 +1,6 @@
 define([
 	"./GanttTaskItem",
+	"./GanttTaskControl",
 	"dijit/focus",
 	"dojo/_base/declare",
 	"dojo/_base/array",
@@ -15,7 +16,7 @@ define([
 	"dojo/dom-geometry",
 	"dojo/keys",
 	"dojo/domReady!"
-], function(GanttTaskItem, focus,
+], function(GanttTaskItem, GanttTaskControl, focus,
 		declare, arrayUtil, lang, locale, request, on,
 		dom, domClass, domConstruct, domStyle, domAttr, domGeometry, keys){
 	return declare("dojox.gantt.GanttProjectControl", [], {

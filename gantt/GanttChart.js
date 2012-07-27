@@ -4,6 +4,7 @@ define([
     "./GanttResourceItem",
     "./GanttProjectControl",
     "./GanttTaskControl",
+    "./GanttTaskItem",
     "./TabMenu",
     "dijit/Tooltip",
     "dojo/_base/declare",
@@ -24,7 +25,8 @@ define([
 	"dojo/_base/window",
 	"dojo/json",
 	"dojo/domReady!"
-], function(GanttProjectItem, GanttResourceItem, GanttProjectControl, GanttTaskControl, TabMenu,
+], function(GanttProjectItem, GanttResourceItem, GanttProjectControl, 
+		GanttTaskControl, GanttTaskItem, TabMenu,
 		Tooltip, 
 		declare, arrayUtil, lang, locale, request, util, on,
 		dom, domClass, domConstruct, domStyle, domAttr, domGeometry, keys, has, win, JSON){

@@ -1,4 +1,5 @@
 define([
+	"./GanttTaskControl",
 	"dijit/Menu",
 	"dijit/Dialog",
 	"dijit/form/NumberSpinner",
@@ -18,7 +19,7 @@ define([
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/domReady!"
-], function(Menu, Dialog, NumberSpinner, Button, CheckBox, DateTextBox, TimeTextBox, TextBox, Form,
+], function(GanttTaskControl, Menu, Dialog, NumberSpinner, Button, CheckBox, DateTextBox, TimeTextBox, TextBox, Form,
 		registry, declare, arrayUtil, lang, html, locale, request, 
 		dom, domClass){
 	return declare("dojox.gantt.contextMenuTab", [], {
