@@ -1,5 +1,7 @@
 define([
 	"./contextMenuTab",
+	"./GanttTaskControl",
+	"./GanttProjectControl",
 	"dijit/Dialog",
 	"dijit/form/Button",
 	"dijit/form/Form",
@@ -19,7 +21,7 @@ define([
 	"dojo/keys",
 	"dojo/parser",
 	"dojo/domReady!"
-], function(contextMenuTab,
+], function(contextMenuTab, GanttTaskControl, GanttProjectControl,
 		Dialog, Button, Form,
 		registry, declare, arrayUtil, lang, locale, request, on,
 		dom, domClass, domConstruct, domStyle, domAttr, domGeometry, keys, parser){
