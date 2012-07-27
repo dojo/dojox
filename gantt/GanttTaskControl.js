@@ -708,7 +708,7 @@ define([
 			}
 			if(this.ganttChart.isContentEditable){
 				var divTaskInfo = domConstruct.create("div", {className: "ganttTaskDivTaskInfo"}, itemControl);
-				var tblTaskInfo = domConstruct.create("table", {
+				domConstruct.create("table", {
 					cellPadding: "0",
 					cellSpacing: "0",
 					height: this.ganttChart.heightTaskItem + "px",
@@ -747,7 +747,7 @@ define([
 						this.moveMoveConn = on(document, "mousemove", lang.hitch(this, function(e){
 							this.checkMove && this.moveItem(e);
 						}));
-						this.moveUpConn = on(document, "mouseup", lang.hitch(this, function(e){
+						this.moveUpConn = on(document, "mouseup", lang.hitch(this, function(){
 							if(this.checkMove){
 								this.endMove();
 								this.ganttChart.isMoving = false;
@@ -777,7 +777,7 @@ define([
 						this.resizeMoveConn = on(document, "mousemove", lang.hitch(this, function(e){
 							this.checkResize && this.resizeItem(e);
 						}));
-						this.resizeUpConn = on(document, "mouseup", lang.hitch(this, function(e){
+						this.resizeUpConn = on(document, "mouseup", lang.hitch(this, function(){
 							if(this.checkResize){
 								this.endResizeItem();
 								this.ganttChart.isResizing = false;
@@ -837,7 +837,7 @@ define([
 					}))
 				);
 				this.ganttChart._events.push(
-					on(divName, "mouseout", lang.hitch(this, function(event){
+					on(divName, "mouseout", lang.hitch(this, function(){
 						domClass.remove(divName, "ganttTaskTaskNameItemHover");
 						clearTimeout(this.ganttChart.menuTimer);
 						this.ganttChart.menuTimer = setTimeout(lang.hitch(this, function(){
@@ -846,7 +846,7 @@ define([
 					}))
 				);
 				this.ganttChart._events.push(
-					on(this.ganttChart.tabMenu.menuPanel, "mouseover", lang.hitch(this, function(event){
+					on(this.ganttChart.tabMenu.menuPanel, "mouseover", lang.hitch(this, function(){
 						clearTimeout(this.ganttChart.menuTimer);
 					}))
 				);
@@ -858,7 +858,7 @@ define([
 					}))
 				);
 				this.ganttChart._events.push(
-					on(this.ganttChart.tabMenu.menuPanel, "mouseout", lang.hitch(this, function(event){
+					on(this.ganttChart.tabMenu.menuPanel, "mouseout", lang.hitch(this, function(){
 						clearTimeout(this.ganttChart.menuTimer);
 						this.ganttChart.menuTimer = setTimeout(lang.hitch(this, function(){
 							this.ganttChart.tabMenu.hide();

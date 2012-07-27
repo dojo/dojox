@@ -366,7 +366,7 @@ define([
 								}else{
 									if(owner == ownerNameItem.id){
 										reachTarget = true;
-										arrayUtil.forEach(ownerItem.tasks, function(tItems, i){
+										arrayUtil.forEach(ownerItem.tasks, function(tItems){
 											arrayUtil.forEach(tItems, function(tItem){
 												this.styleOwnerItem(tItem, ownerItem[owner][0], "none", 0);
 											}, this);

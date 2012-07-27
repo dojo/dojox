@@ -413,7 +413,7 @@ define([
 				_this.loadJSONString(response.text);
 				_this.buildUIContent();
 				console.log("Successfully! Loaded data from: " + _this.dataFilePath);
-			}, function(err){	
+			}, function(){
 				console.log("Failed! Load error: " + _this.dataFilePath);
 			});
 		},
@@ -819,7 +819,7 @@ define([
 			domStyle.set(newHourRow, "display", "none");
 			return panelTime;
 		},
-		adjustPanelTime: function(width){
+		adjustPanelTime: function(){
 			var maxEndPos = arrayUtil.map(this.arrProjects, function(project){
 				return (parseInt(project.projectItem[0].style.left) + parseInt(project.projectItem[0].firstChild.style.width)
 					+ project.descrProject.offsetWidth + this.panelTimeExpandDelta);

@@ -376,7 +376,7 @@ define([
 					}))
 				);
 				this.ganttChart._events.push(
-					on(divName, "mouseout", lang.hitch(this, function(event){
+					on(divName, "mouseout", lang.hitch(this, function(){
 						domClass.remove(divName, "ganttProjectNameItemHover");
 						clearTimeout(this.ganttChart.menuTimer);
 						this.ganttChart.menuTimer = setTimeout(lang.hitch(this, function(){
@@ -385,19 +385,19 @@ define([
 					}))
 				);
 				this.ganttChart._events.push(
-					on(this.ganttChart.tabMenu.menuPanel, "mouseover", lang.hitch(this, function(event){
+					on(this.ganttChart.tabMenu.menuPanel, "mouseover", lang.hitch(this, function(){
 						clearTimeout(this.ganttChart.menuTimer);
 					}))
 				);
 				this.ganttChart._events.push(
-					on(this.ganttChart.tabMenu.menuPanel, "keydown", lang.hitch(this, function(event){
+					on(this.ganttChart.tabMenu.menuPanel, "keydown", lang.hitch(this, function(){
 						if(this.ganttChart.tabMenu.isShow && event.keyCode == keys.ESCAPE){
 							this.ganttChart.tabMenu.hide();
 						}
 					}))
 				);
 				this.ganttChart._events.push(
-					on(this.ganttChart.tabMenu.menuPanel, "mouseout", lang.hitch(this, function(event){
+					on(this.ganttChart.tabMenu.menuPanel, "mouseout", lang.hitch(this, function(){
 						clearTimeout(this.ganttChart.menuTimer);
 						this.ganttChart.menuTimer = setTimeout(lang.hitch(this, function(){
 							this.ganttChart.tabMenu.hide();
@@ -408,14 +408,14 @@ define([
 			return divName;
 		},
 		getPercentCompleted: function(){
-			var sum = 0, percentage = 0;
+			var sum = 0;
 			arrayUtil.forEach(this.project.parentTasks, function(ppTask){
 				sum += parseInt(ppTask.percentage);
 			}, this);
 			if(this.project.parentTasks.length != 0){
-				return percentage = Math.round(sum / this.project.parentTasks.length);
+				return Math.round(sum / this.project.parentTasks.length);
 			}else{
-				return percentage = -1;
+				return -1;
 			}
 		},
 		getDuration: function(){
