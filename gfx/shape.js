@@ -95,7 +95,6 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// parent: Object
 			//		a parent or null
 			//		(see dojox/gfx/shape.Surface,
-			//		dojox/gfx/shape.VirtualGroup,		// TODO: no such class
 			//		or dojox/gfx.Group)
 			this.parent = null;
 	
@@ -161,9 +160,8 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		},
 		getParent: function(){
 			// summary:
-			//		Returns the parent Shape, Group or VirtualGroup or null if this Shape is unparented.
+			//		Returns the parent Shape, Group or null if this Shape is unparented.
 			//		(see dojox/gfx/shape.Surface,
-			//		dojox/gfx/shape.VirtualGroup,	// TODO: no such class
 			//		or dojox/gfx.Group)
 			return this.parent;	// Object
 		},
@@ -430,7 +428,6 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// parent: Object
 			//		a parent or null
 			//		(see dojox/gfx/shape.Surface,
-			//		dojox/gfx/shape.VirtualGroup,	// TODO: no such class
 			//		or dojox/gfx.Group)
 			// matrix: dojox/gfx/matrix.Matrix2D
 			//		a 2D matrix or a matrix-like object
