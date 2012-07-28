@@ -888,7 +888,7 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			 //		width of surface, e.g., "100px" or 100
 			 // height: String|Number
 			 //		height of surface, e.g., "100px" or 100
-			 // returns: dojox/gfx/shape.Surface
+			 // returns: dojox/gfx.Surface
 			 //     newly created surface
 		 };
 		g.fixTarget = function(){

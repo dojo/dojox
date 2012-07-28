@@ -5,7 +5,7 @@ define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare", "dojo/on", "
 			// summary:
 			//		an object, which makes a shape follow the mouse,
 			//		used as a default mover, and as a base class for custom movers
-			// shape: dojox/gfx/shape.Shape
+			// shape: dojox/gfx.Shape
 			//		a shape object to be moved
 			// e: Event
 			//		a mouse event, which started the move;

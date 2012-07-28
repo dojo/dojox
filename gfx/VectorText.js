@@ -533,7 +533,7 @@ function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,HtmlMetrics,Matrix){
 
 		// TODO: no such classes as __TextArgs, __FontArgs, __FillArgs, __StrokeArgs
 
-		draw: function(/* dojox/gfx/shape.Container */group, /* dojox/gfx.__TextArgs */textArgs, /* dojox/gfx.__FontArgs */fontArgs, /* dojox/gfx.__FillArgs */fillArgs, /* dojox/gfx.__StrokeArgs? */strokeArgs){
+		draw: function(/* dojox/gfx.Container */group, /* dojox/gfx.__TextArgs */textArgs, /* dojox/gfx.__FontArgs */fontArgs, /* dojox/gfx.__FillArgs */fillArgs, /* dojox/gfx.__StrokeArgs? */strokeArgs){
 			// summary:
 			//		based on the passed parameters, draw the given text using paths
 			//		defined by this font.

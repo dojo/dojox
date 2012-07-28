@@ -21,7 +21,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 		constructor: function(shape, params){
 			// summary:
 			//		an object, which makes a shape moveable
-			// shape: dojox/gfx/shape.Shape
+			// shape: dojox/gfx.Shape
 			//		a shape object to be moved.
 			// params: __MoveableCtorArgs
 			//		an optional configuration object.
