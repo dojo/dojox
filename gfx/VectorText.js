@@ -35,8 +35,9 @@ function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,HtmlMetrics,Matrix){
 		  }
 	 });
 
-	/*=====
-	return {
+	// TODO: Make up your mind.   Module is called VectorText but it's creating and returning a global called VectorFont
+
+	return declare("dojox.gfx.VectorFont", null, {
 		// summary:
 		//		An implementation of the SVG Font 1.1 spec, using dojox/gfx.
 		//
@@ -63,12 +64,7 @@ function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,HtmlMetrics,Matrix){
 		//		by the font object itself.
 		//
 		//		Note that this will only render IF and WHEN you set the font.
-	};
-	=====*/
 
-	// TODO: Make up your mind.   Module is called VectorText but it's creating and returning a global called VectorFont
-
-	return declare("dojox.gfx.VectorFont", null, {  // EARLY RETURN
 		_entityRe: /&(quot|apos|lt|gt|amp|#x[^;]+|#\d+);/g,
 		_decodeEntitySequence: function(str){
 			//		unescape the unicode sequences
@@ -531,9 +527,12 @@ function (lang,declare,arr,loader,xhr,gfx,xmlDomParser,HtmlMetrics,Matrix){
 			return (scale||1) * (this.viewbox.height+this.descent);	//		Float
 		},
 
-		// TODO: no such classes as __TextArgs, __FontArgs, __FillArgs, __StrokeArgs
-
-		draw: function(/* dojox/gfx.Container */group, /* dojox/gfx.__TextArgs */textArgs, /* dojox/gfx.__FontArgs */fontArgs, /* dojox/gfx.__FillArgs */fillArgs, /* dojox/gfx.__StrokeArgs? */strokeArgs){
+		draw: function(
+				/* dojox/gfx.Container */group,
+				/* dojox/gfx.Text */ textArgs,
+				/* dojox/gfx.Font */fontArgs,
+				/* dojox/gfx.Fill */fillArgs,
+				/* dojox/gfx.Stroke */strokeArgs){
 			// summary:
 			//		based on the passed parameters, draw the given text using paths
 			//		defined by this font.

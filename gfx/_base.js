@@ -1,5 +1,5 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/Color", "dojo/_base/sniff", "dojo/_base/window",
-	    "dojo/_base/array","dojo/dom", "dojo/dom-construct","dojo/dom-geometry"], 
+	    "dojo/_base/array","dojo/dom", "dojo/dom-construct","dojo/dom-geometry"],
 function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 	// module:
 	//		dojox/gfx
@@ -280,7 +280,63 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 		//		A url specifying the image to use for the pattern.
 		src: ""
 	};
-	 =====*/
+
+	g.Text = {
+		//	summary:
+		//		A keyword argument object defining both the text to be rendered in a VectorText shape,
+		//		and specifying position, alignment, and fitting.
+		//	text: String
+		//		The text to be rendered.
+		//	x: Number?
+		//		The left coordinate for the text's bounding box.
+		//	y: Number?
+		//		The top coordinate for the text's bounding box.
+		//	width: Number?
+		//		The width of the text's bounding box.
+		//	height: Number?
+		//		The height of the text's bounding box.
+		//	align: String?
+		//		The alignment of the text, as defined in SVG. Can be "start", "end" or "middle".
+		//	fitting: Number?
+		//		How the text is to be fitted to the bounding box. Can be 0 (no fitting), 1 (fitting based on
+		//		passed width of the bounding box and the size of the font), or 2 (fit text to the bounding box,
+		//		and ignore any size parameters).
+		//	leading: Number?
+		//		The leading to be used between lines in the text.
+		//	decoration: String?
+		//		Any text decoration to be used.
+	};
+
+	g.Font = {
+		// summary:
+		//		An object specifying the properties for a Font used in text operations.
+	
+		// type: String
+		//		Specifies this object is a Font, value 'font'.
+		type: "font",
+	
+		// style: String
+		//		The font style, one of 'normal', 'bold', default value 'normal'.
+		style: "normal",
+	
+		// variant: String
+		//		The font variant, one of 'normal', ... , default value 'normal'.
+		variant: "normal",
+	
+		// weight: String
+		//		The font weight, one of 'normal', ..., default value 'normal'.
+		weight: "normal",
+	
+		// size: String
+		//		The font size (including units), default value '10pt'.
+		size: "10pt",
+	
+		// family: String
+		//		The font family, one of 'serif', 'sanserif', ..., default value 'serif'.
+		family: "serif"
+	};
+
+	=====*/
 
 	lang.mixin(g, {
 		// summary:
@@ -880,17 +936,17 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 	
 	/*=====
 		g.createSurface = function(parentNode, width, height){
-			 // summary:
-			 //		creates a surface
-			 // parentNode: Node
-			 //		a parent node
-			 // width: String|Number
-			 //		width of surface, e.g., "100px" or 100
-			 // height: String|Number
-			 //		height of surface, e.g., "100px" or 100
-			 // returns: dojox/gfx.Surface
-			 //     newly created surface
-		 };
+			// summary:
+			//		creates a surface
+			// parentNode: Node
+			//		a parent node
+			// width: String|Number
+			//		width of surface, e.g., "100px" or 100
+			// height: String|Number
+			//		height of surface, e.g., "100px" or 100
+			// returns: dojox/gfx.Surface
+			//     newly created surface
+		};
 		g.fixTarget = function(){
 			// tags:
 			//		private
