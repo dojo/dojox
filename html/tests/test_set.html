@@ -885,6 +885,63 @@
 					}
 				},
 				{
+					name: 'testCommentedStyleTags',
+					setUp: function() {
+						remoteScriptsSetter = new html._ContentSetter({
+							renderStyles: true, 
+							cleanContent: true,
+							executeScripts: true,
+							node: dom.byId("node4")
+						});
+						previousContent = dom.byId("node4").innerHTML;
+					},
+					tearDown: function(){
+						dom.byId("node4").innerHTML = previousContent;    
+					},
+					timeout: 10000,
+					runTest: function(t){
+						var deferred = new doh.Deferred(); 
+						var xhrDef = xhr.get({
+							url: "remote/commentedStyles.html",
+							preventCache: true,
+							handleAs: "text"
+						});
+						xhrDef.then(
+							function(text){
+								remoteScriptsSetter.set(text);
+								var intv = setInterval(function(){
+									if(window.__remotePaneLoaded){
+										clearInterval(intv);
+										window.__remotePaneLoaded = null;
+										try{
+											var n1 = dojo.byId("n1");
+											var n2 = dojo.byId("n2");
+											var n3 = dojo.byId("n3");
+			
+											doh.assertTrue(domStyle.get(n1, "display") === "none", "No commented out inline styles");
+											doh.assertTrue(domStyle.get(n2, "display") === "none", "No commented out inline links");
+											doh.assertTrue(domStyle.get(n3, "display") === "none", "No commented out inline imports");
+											
+											//Test that entity characters in a src url for a script
+											//are properly converted to correct form
+											var node = document.getElementById("should_not_be_here");
+											doh.assertTrue(node == null);
+											deferred.callback(true);
+										}catch(e){
+											deferred.errback(new Error(e));
+										}
+									}
+								}, 500);
+							},
+							function(e){
+								deferred.errback(e);
+							}
+						);
+
+						return deferred;
+					}
+				},				
+				{
 					name: 'testEntityChars',
 					setUp: function() {
 						remoteScriptsSetter = new html._ContentSetter({

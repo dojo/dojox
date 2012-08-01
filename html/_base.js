@@ -117,6 +117,11 @@ define([
 		// if cssUrl is set it will adjust paths accordingly
 		styles.attributes = [];
 
+		cont = cont.replace(/<[!][-][-](.|\s)*?[-][-]>/g,
+			function(comment){
+				return comment.replace(/<(\/?)style\b/ig,"&lt;$1Style").replace(/<(\/?)link\b/ig,"&lt;$1Link").replace(/@import "/ig,"@ import \"");
+			}
+		);
 		return cont.replace(/(?:<style([^>]*)>([\s\S]*?)<\/style>|<link\s+(?=[^>]*rel=['"]?stylesheet)([^>]*?href=(['"])([^>]*?)\4[^>\/]*)\/?>)/gi,
 			function(ignore, styleAttr, cssText, linkAttr, delim, href){
 				// trim attribute
