@@ -27,6 +27,15 @@
 		color: #0B5199;
 		text-decoration: none;
 	}
+	.mblColorPink {
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#ff9DE9), to(#cc62DD), color-stop(0.5, #ff6EDF), color-stop(0.5, #ff5FDC));
+		background-image: -moz-linear-gradient(top, #ff9DE9 0%, #ff6EDF 50%, #ff5FDC 50%, #cc62DD 100%);
+		background-color: pink;
+	}
+	.mblColorPink45 {
+		background-image: -webkit-gradient(linear, left top, right bottom, from(#ff9DE9), to(#cc62DD), color-stop(0.5, #ff6EDF), color-stop(0.5, #ff5FDC));
+		background-image: -moz-linear-gradient(top left, #ff9DE9 0%, #ff6EDF 50%, #ff5FDC 50%, #cc62DD 100%);
+	}
 	</style>
 </head>
 <body style="visibility:hidden;">
@@ -40,6 +49,10 @@
 				<li data-dojo-type="dojox.mobile.TabBarButton" style="width:80px" onclick="change('Custom')">Custom</li>
 			</ul>
 		</div>
+	<div data-dojo-type="dojox.mobile.Heading" data-dojo-props='label:"Arrow"'>
+		<span data-dojo-type="dojox.mobile.ToolBarButton" arrow="left" defaultColor="mblColorBlue" selColor="mblColorPink">MMMM</span>
+		<span data-dojo-type="dojox.mobile.ToolBarButton" arrow="right">MMMM</span>
+	</div>
 		<h2 data-dojo-type="dojox.mobile.RoundRectCategory">Dynamic Theme Switch</h2>
 		<ul data-dojo-type="dojox.mobile.RoundRectList">
 			<li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='icon:"images/i-icon-1.png", moveTo:"bar", transition:"slide"'>
