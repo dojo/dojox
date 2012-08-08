@@ -133,7 +133,7 @@ define(["dojo", "dojox"], function(dojo, dojox) {
 	  else if(b == 2) k = 1;
 	  else if(b == 32) k = 5;
 	  else if(b == 4) k = 2;
-	  else { this.fromRadix(s,b); return; }
+	  else { this._fromRadix(s,b); return; }
 	  this.t = 0;
 	  this.s = 0;
 	  var i = s.length, mi = false, sh = 0;
