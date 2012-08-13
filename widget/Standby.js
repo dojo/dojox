@@ -719,7 +719,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 			 this._overflowDisabled = true;
 			 var body = baseWindow.body();
 			 if(body.style && body.style.overflow){
-				 this._oldOverflow = domStyle.set(body, "overflow");
+				 this._oldOverflow = domStyle.get(body, "overflow");
 			 }else{
 				 this._oldOverflow = "";
 			 }
@@ -733,7 +733,7 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 					 this._oldBodyParentOverflow = body.parentNode.style.overflow;
 				 }else{
 					 try{
-						this._oldBodyParentOverflow = domStyle.set(body.parentNode, "overflow");
+						this._oldBodyParentOverflow = domStyle.get(body.parentNode, "overflow");
 					 }catch(e){
 						 this._oldBodyParentOverflow = "scroll";
 					 }
