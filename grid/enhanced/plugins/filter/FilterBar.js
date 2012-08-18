@@ -7,7 +7,6 @@ define([
 	"dojo/_base/event",
 	"dojo/_base/html",
 	"dojo/_base/window",
-	"dojo/cache",
 	"dojo/query",
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
@@ -15,8 +14,10 @@ define([
 	"dojo/fx",
 	"dojo/_base/fx",
 	"dojo/string",
-	"dijit/focus"
-], function(declare, array, connect, lang, has, event, html, win, cache, query, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, fx, baseFx, string, dijitFocus){
+	"dijit/focus",
+	"dojo/text!../../templates/FilterBar.html"
+], function(declare, array, connect, lang, has, event, html, win, query, _Widget,
+	_TemplatedMixin, _WidgetsInTemplateMixin, fx, baseFx, string, dijitFocus, template){
 
 var _focusClass = "dojoxGridFBarHover",
 	_filteredClass = "dojoxGridFBarFiltered",
@@ -31,7 +32,7 @@ var _focusClass = "dojoxGridFBarHover",
 return declare("dojox.grid.enhanced.plugins.filter.FilterBar", [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin],{
 	// summary:
 	//		The filter bar UI.
-	templateString: cache("dojox.grid","enhanced/templates/FilterBar.html"),
+	templateString: template,
 
 	widgetsInTemplate: true,
 	
