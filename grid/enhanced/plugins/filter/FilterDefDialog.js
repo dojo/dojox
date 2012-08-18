@@ -6,7 +6,6 @@ define([
 	"dojo/_base/event",
 	"dojo/_base/html",
 	"dojo/_base/sniff",
-	"dojo/cache",
 	"dojo/keys",
 	"dojo/string",
 	"dojo/window",
@@ -27,14 +26,18 @@ define([
 	"dijit/focus",
 	"dojox/html/metrics",
 	"dijit/a11y",
+	"dojo/text!../../templates/FilterDefPane.html",
+	"dojo/text!../../templates/CriteriaBox.html",
+	"dojo/text!../../templates/FilterBoolValueBox.html",	
 	"dijit/Tooltip",
 	"dijit/form/Select",
 	"dijit/form/RadioButton",
 	"dojox/html/ellipsis",
 	"../../../cells/dijit"
-], function(declare, array, connect, lang, event, html, has, cache, keys, string, win, dateLocale, 
+], function(declare, array, connect, lang, event, html, has, keys, string, win, dateLocale, 
 	FilterBuilder, Dialog, ComboBox, TextBox, NumberTextBox, DateTextBox, TimeTextBox, Button, 
-	AccordionContainer, ContentPane, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, dijitFocus, metrics, dijitA11y){
+	AccordionContainer, ContentPane, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, dijitFocus,
+	metrics, dijitA11y, defPaneTemplate, criteriaTemplate, boolValueTemplate){
 		
 var _tabIdxes = {
 		// summary:
@@ -200,7 +203,7 @@ var FilterAccordionContainer = declare("dojox.grid.enhanced.plugins.filter.Accor
 	}
 });
 var FilterDefPane = declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[_Widget, _TemplatedMixin, _WidgetsInTemplateMixin],{
-	templateString: cache("dojox.grid","enhanced/templates/FilterDefPane.html"),
+	templateString: defPaneTemplate,
 	widgetsInTemplate: true,
 	dlg: null,
 	postMixInProperties: function(){
@@ -265,7 +268,7 @@ var FilterDefPane = declare("dojox.grid.enhanced.plugins.filter.FilterDefPane",[
 	}
 });
 var CriteriaBox = declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[_Widget, _TemplatedMixin, _WidgetsInTemplateMixin],{
-	templateString: cache("dojox.grid","enhanced/templates/CriteriaBox.html"),
+	templateString: criteriaTemplate,
 	widgetsInTemplate: true,
 	dlg: null,
 	postMixInProperties: function(){
@@ -685,7 +688,7 @@ var UniqueComboBox = declare("dojox.grid.enhanced.plugins.filter.UniqueComboBox"
 	}
 });
 var BooleanValueBox = declare("dojox.grid.enhanced.plugins.filter.BooleanValueBox", [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
-	templateString: cache("dojox.grid","enhanced/templates/FilterBoolValueBox.html"),
+	templateString: boolValueTemplate,
 	widgetsInTemplate: true,
 	constructor: function(args){
 		var nls = args.cbox.plugin.nls;
