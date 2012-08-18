@@ -1,16 +1,16 @@
 define([
 	"dojo/_base/declare",
-	"dojo/cache",
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
-	"dijit/_WidgetsInTemplateMixin"
-], function(declare, cache, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin){
+	"dijit/_WidgetsInTemplateMixin",
+	"dojo/text!../../templates/ClearFilterConfirmPane.html"
+], function(declare, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template){
 
 return declare("dojox.grid.enhanced.plugins.filter.ClearFilterConfirm",
 	[_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
 	//		The UI for user to confirm the operation of clearing filter.
-	templateString: cache("dojox.grid", "enhanced/templates/ClearFilterConfirmPane.html"),
+	templateString: template,
 
 	widgetsInTemplate: true,
 
