@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload", 
-        "dojo/_base/sniff", "dojo/_base/xhr", "dojo/_base/json", "dojo/io-query", "dojo/io/script"
-], function(lang, config, ready, unload, has, xhr, json, ioQuery, scriptIO){
+        "dojo/_base/sniff", "dojo/_base/xhr", "dojo/json", "dojo/io-query", "dojo/io/script"
+], function(lang, config, ready, unload, has, xhr, JSON, ioQuery, scriptIO){
 
 	var Analytics = function(){
 		// summary:
@@ -82,7 +82,7 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 							url:this.dataUrl,
 							content:{
 								id: this._id++,
-								data: json.toJson(this._inTransit)
+								data: JSON.stringify(this._inTransit)
 							}
 						});
 						break;
@@ -98,7 +98,7 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 			while(true){
 				var content = {
 					id: this._id++,
-					data: json.toJson(this._inTransit)
+					data: JSON.stringify(this._inTransit)
 				};
 				
 				// FIXME would like a much better way to get the query down to length
