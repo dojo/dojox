@@ -63,6 +63,8 @@ define(
 	"anycolumn": "כל עמודה",
 	"statusTipTitleNoFilter": "סרגל סינון",
 	"statusTipTitleHasFilter": "מסנן",
+	"statusTipRelAny": "התאמה לכלל כלשהו. ",
+	"statusTipRelAll": "התאמה לכל הכללים. ",
 	
 	"defaultItemsName": "פריטים",
 	"filterBarMsgHasFilterTemplate": "מוצג ${0} מתוך ${1} ${2}.",

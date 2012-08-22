@@ -6,6 +6,7 @@ define(
 	"nextTip": "העמוד הבא",
 	"prevTip": "העמוד הקודם",
 	"itemTitle": "פריטים",
+	"singularItemTitle": "פריט",
 	"pageStepLabelTemplate": "עמוד ${0}",
 	"pageSizeLabelTemplate": "${0} פריטים לעמוד",
 	"allItemsLabelTemplate": "כל הפריטים",

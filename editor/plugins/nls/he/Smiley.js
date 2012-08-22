@@ -18,6 +18,7 @@ define(
 	emoticonYes: "כן",
 	emoticonNo: "לא",
 	emoticonAngel: "מלאך ",
-	emoticonCrying: "בוכה"
+	emoticonCrying: "בוכה",
+	emoticonHappy: "שמח"
 })
 );
