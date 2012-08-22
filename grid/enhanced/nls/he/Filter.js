@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"clearFilterDialogTitle": "ניקוי מסנן",
 	"filterDefDialogTitle": "מסנן",
@@ -64,6 +63,8 @@ define(
 	"anycolumn": "כל עמודה",
 	"statusTipTitleNoFilter": "סרגל סינון",
 	"statusTipTitleHasFilter": "מסנן",
+	"statusTipRelAny": "התאמה לכלל כלשהו. ",
+	"statusTipRelAll": "התאמה לכל הכללים. ",
 	
 	"defaultItemsName": "פריטים",
 	"filterBarMsgHasFilterTemplate": "מוצג ${0} מתוך ${1} ${2}.",
@@ -82,8 +83,4 @@ define(
 	"trueLabel": "True",
 	"falseLabel": "False"
 })
-//end v1.x content
 );
-
-
-

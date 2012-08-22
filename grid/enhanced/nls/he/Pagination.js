@@ -1,5 +1,4 @@
 define(
-//begin v1.x content
 ({
 	"descTemplate": "${2} - ${3} מתוך ${1} ${0}",
 	"firstTip": "עמוד ראשון",
@@ -7,6 +6,7 @@ define(
 	"nextTip": "העמוד הבא",
 	"prevTip": "העמוד הקודם",
 	"itemTitle": "פריטים",
+	"singularItemTitle": "פריט",
 	"pageStepLabelTemplate": "עמוד ${0}",
 	"pageSizeLabelTemplate": "${0} פריטים לעמוד",
 	"allItemsLabelTemplate": "כל הפריטים",
@@ -18,6 +18,4 @@ define(
 	"dialogCancel": "ביטול",
 	"all": "הכל"
 })
-//end v1.x content
 );
-
