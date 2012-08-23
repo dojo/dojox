@@ -109,6 +109,7 @@ define([
 						domConstruct.create("div", {
 							className: "mblSpinWheelSlotLabel",
 							name: this.items[i][0],
+							val: this.items[i][1],
 							innerHTML: this._cv ? this._cv(this.items[i][1]) : this.items[i][1]
 						}, this.panelNodes[k]);
 					}
@@ -245,8 +246,8 @@ define([
 		_getValueAttr: function(){
 			// summary:
 			//		Gets the currently selected value.
-			var item = this.items[this.get("key")];
-			return item && item[1];
+			var item = this.getCenterItem();
+			return (item && item.getAttribute("val"));
 		},
 
 		_setValueAttr: function(value){
@@ -281,6 +282,13 @@ define([
 			}
 			this.spin(m);
 		},
+
+		stopAnimation: function(){
+			// summary:
+			//		Stops the currently running animation.
+  			this.inherited(arguments);
+  			this._set("value", this.get("value")); // ensure the watches are notified
+		},	
 
 		spin: function(/*Number*/steps){
 			// summary:
