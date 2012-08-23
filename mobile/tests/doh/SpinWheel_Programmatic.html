@@ -71,6 +71,16 @@
 				});
 				demoWidget.addChild(slot6);
 
+				var slot7 = new SpinWheelSlot({
+					items:[
+						['key1', 'value1'], 
+						['key2', 'value2'],
+						['key2', 'value2']
+					],
+					value:'value2',
+					style:"text-align:center;width:40px;"});
+				demoWidget.addChild(slot7);
+
 				demoWidget.reset();
 			});
 		})
@@ -105,6 +115,7 @@
 								doh.assertEqual('0', slots[4].get("value"));
 								doh.assertEqual('pt', slots[5].get("value"));
 								doh.assertEqual('<img src=../images/i-icon-1.png>', slots[6].get("value"));
+								doh.assertEqual('value2', slots[7].get("value"));
 							}),2000);
 							return d;
 						}
