@@ -97,8 +97,8 @@ var _PluginManager = declare("dojox.grid.enhanced._PluginManager", null, {
 				this._normalize(p, plugins, registry, loading);
 			}
 		}
-		//"columnReordering" attribute won't work when either DnD or Indirect Selections plugin is used.
-		if(options.dnd || options.indirectSelection){
+		//"columnReordering" attribute won't work when DnD plugin is turned on.
+		if(options.dnd){
 			options.columnReordering = false;
 		}
 		
