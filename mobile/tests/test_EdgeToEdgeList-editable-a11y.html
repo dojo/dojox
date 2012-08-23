@@ -20,7 +20,8 @@
 			"dijit/registry",
 			"dojox/mobile/parser",
 			"dojox/mobile",
-			"dojox/mobile/compat"
+			"dojox/mobile/compat",
+			"dojox/mobile/ScrollableView"
 		], function(connect, domClass, domConstruct, ready, registry){
 			var delItem, handler, btn1, list1;
 
@@ -129,7 +130,7 @@
 	</style>
 </head>
 <body style="visibility:hidden;">
-	<div id="view1" data-dojo-type="dojox.mobile.View">
+	<div id="view1" data-dojo-type="dojox.mobile.ScrollableView">
 		<div data-dojo-type="dojox.mobile.Heading" data-dojo-props='label:"Editable EdgeToEdgeList"'>
 			<span id="btn1" data-dojo-type="dojox.mobile.ToolBarButton" data-dojo-props='toggle:true' style="padding: 0px 14px;float:left" onclick="edit">Edit</span>
 		</div>
