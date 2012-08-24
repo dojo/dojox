@@ -319,7 +319,22 @@ define([
 				this._renderStyles(styles);
 			}
 
+			// Deferred to signal when this function is complete
+			var d = new Deferred();
+
+			// Setup function to call onEnd() in the superclass, for parsing, and resolve the above Deferred when
+			// parsing is complete.
+			var superClassOnEndMethod = this.getInherited(arguments),
+				args = arguments,
+				callSuperclass = lang.hitch(this, function(){
+					superClassOnEndMethod.apply(this, args);
+
+					// If parser ran (parseContent == true), wait for it to finish, otherwise call d.resolve() immediately
+					when(this.parseDeferred, function(){ d.resolve(); });
+				});
+
 			if(this.executeScripts && code){
+				// Evaluate any <script> blocks in the content
 				if(this.cleanContent){
 					// clean JS from html comments and other crap that browser
 					// parser takes care of in a normal page load
@@ -336,22 +351,16 @@ define([
 				}catch(e){
 					this._onError('Exec', 'Error eval script in '+this.id+', '+e.message, e);
 				}
+
+				// Finally, use ready() to wait for any require() calls from the <script> blocks to complete,
+				// then call onEnd() in the superclass, for parsing, and when that is done resolve the Deferred.
+				// For 2.0, remove the call to ready() (or this whole if() branch?) since the parser can do loading for us.
+				ready(callSuperclass);
+			}else{
+				// There were no <script>'s to execute, so immediately call onEnd() in the superclass, and
+				// when the parser finishes running, resolve the Deferred.
+				callSuperclass();
 			}
-
-			// Call onEnd() in the superclass, for parsing, but only after any require() calls from above executeScripts
-			// code block have executed.  If there were no require() calls the superclass call will execute immediately,
-			// unless this function is being called from the parser in which case the parser needs to finish running
-			// first before ready() fires the callback.
-			// For 2.0, remove the call to ready() since the parser can do loading for us.
-			var superClassOnEndMethod = this.getInherited(arguments),
-				args = arguments,
-				d = new Deferred();
-			ready(lang.hitch(this, function(){
-				superClassOnEndMethod.apply(this, args);
-
-				// If parser ran (parseContent == true), wait for it to finish, otherwise call d.resolve() immediately
-				when(this.parseDeferred, function(){ d.resolve(); });
-			}));
 
 			// Return a promise that resolves after the ready() call completes, and after the parser finishes running.
 			return d.promise;
