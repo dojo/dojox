@@ -326,6 +326,18 @@ define([
 			// tags:
 			//		private
 			var data = (args && "data" in args) ? args.data : this.data;
+			this._createModel(data);
+		},
+
+		//////////////////////// PRIVATE METHODS ////////////////////////
+
+		_createModel: function(/*Object*/ data){
+			// summary:
+			//		Create this data model from provided input data.
+			//	obj:
+			//		The input for the model, as a plain JavaScript object.
+			// tags:
+			//		private
 
 			if(data != null){
 				data = getStateful(data, StatefulModel.getStatefulOptions);
@@ -345,8 +357,6 @@ define([
 				}
 			}
 		},
-
-		//////////////////////// PRIVATE METHODS ////////////////////////
 
 		_commit: function(){
 			// summary:
