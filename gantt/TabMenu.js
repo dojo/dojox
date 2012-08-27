@@ -209,7 +209,7 @@ define([
 			//make sure menu box inside gantt's bounding box
 			var menuBox = domGeometry.position(this.menuPanel, true),
 				bBox = domGeometry.position(this.ganttChart.content, true),
-				pos = domGeometry.getMarginBox(elem, true);
+				pos = domGeometry.position(elem, true);
 			if((pos.y + menuBox.h) > (bBox.y + bBox.h + 50)){
 				this.menuPanel.style.top = pos.y - menuBox.h + pos.h + "px";
 			}else{

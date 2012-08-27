@@ -267,7 +267,7 @@ define([
 				taskItems.push(taskNameItem);
 			}
 			if(this.panelNames){
-				this.ownerNameItem[this.ownerNameItem.length - 1].style.left = domStyle.set(parentNode, "left") + 15 + "px";
+				this.ownerNameItem[this.ownerNameItem.length - 1].style.left = domStyle.get(parentNode, "left") + 15 + "px";
 				var arrConnectingLinesNames = this.createConnectingLinesPN(parentNode, this.ownerNameItem[this.ownerNameItem.length - 1]);
 				arrayUtil.forEach(arrConnectingLinesNames, function(lineName){
 					lineName.style.display = "none";
@@ -338,11 +338,11 @@ define([
 			});
 			domAttr.set(treeImg, "tabIndex", 0);
 			var currentItem = this.ownerTaskNodeMapping[ownerNameItem.id];
-			arrayUtil.forEach(["onclick", "onkeydown"], function(e){
+			arrayUtil.forEach(["click", "keydown"], function(e){
 				this.ganttChart._events.push(
 					on(treeImg, e, lang.hitch(this, function(evt){
 						var reachTarget = false, owner, ownerItem;
-						if(e == "onkeydown" && evt.keyCode != keys.ENTER){ return; }
+						if(e == "keydown" && evt.keyCode != keys.ENTER){ return; }
 						//TODO: perhaps the following conditional can be collapsed?  Duplicate code.
 						if(currentItem.isOpen){
 							domClass.remove(treeImg, "ganttImageTreeCollapse");
@@ -353,13 +353,13 @@ define([
 								ownerItem = this.ownerTaskNodeMapping[owner];
 								if(reachTarget){
 									arrayUtil.forEach(ownerItem[owner], function(tItem){
-										domStyle.set(tItem, "top", domStyle.set(tItem, "top") - currentItem.taskCount * 23 + "px");
+										domStyle.set(tItem, "top", domStyle.get(tItem, "top") - currentItem.taskCount * 23 + "px");
 									});
 									arrayUtil.forEach(ownerItem.tasks, function(tItems){
 										arrayUtil.forEach(tItems, function(tItem){
 											var item = !tItem.v && !tItem.h ? [tItem] : [tItem.v, tItem.h];
 											arrayUtil.forEach(item, function(t){
-												domStyle.set(t, "top", domStyle.set(t, "top") - currentItem.taskCount * 23 + "px");
+												domStyle.set(t, "top", domStyle.get(t, "top") - currentItem.taskCount * 23 + "px");
 											});
 										});
 									});
@@ -383,13 +383,13 @@ define([
 								ownerItem = this.ownerTaskNodeMapping[owner];
 								if(reachTarget){
 									arrayUtil.forEach(ownerItem[owner], function(tItem){
-										domStyle.set(tItem, "top", domStyle.set(tItem, "top") + currentItem.taskCount * 23 + "px");
+										domStyle.set(tItem, "top", domStyle.get(tItem, "top") + currentItem.taskCount * 23 + "px");
 									});
 									arrayUtil.forEach(ownerItem.tasks, function(tItems){
 										arrayUtil.forEach(tItems, function(tItem){
 											var item = !tItem.v && !tItem.h ? [tItem] : [tItem.v, tItem.h];
 											arrayUtil.forEach(item, function(t){
-												domStyle.set(t, "top", domStyle.set(t, "top") + currentItem.taskCount * 23 + "px");
+												domStyle.set(t, "top", domStyle.get(t, "top") + currentItem.taskCount * 23 + "px");
 											});
 										});
 									});
@@ -410,8 +410,8 @@ define([
 			}, this);
 			domClass.add(treeImg, "ganttResourceTreeImage");
 			domStyle.set(treeImg, {
-				left: (domStyle.set(ownerNameItem, "left") - 12) + "px",
-				top: (domStyle.set(ownerNameItem, "top") + 3) + "px"
+				left: (domStyle.get(ownerNameItem, "left") - 12) + "px",
+				top: (domStyle.get(ownerNameItem, "top") + 3) + "px"
 			});
 			return treeImg;
 		},

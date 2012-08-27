@@ -85,9 +85,9 @@ define([
 			var lineVerticalRight = document.createElement("div");
 			//horizontal line
 			var lineHorizontal = document.createElement("div");
-			var posXPreviousTask = domStyle.set(this.predTask.cTaskItem[0], "left");
-			var posYPreviousTask = domStyle.set(this.predTask.cTaskItem[0], "top");
-			var posXChildTask = domStyle.set(this.cTaskItem[0], "left");
+			var posXPreviousTask = domStyle.get(this.predTask.cTaskItem[0], "left");
+			var posYPreviousTask = domStyle.get(this.predTask.cTaskItem[0], "top");
+			var posXChildTask = domStyle.get(this.cTaskItem[0], "left");
 			var posYChildTask = this.posY + 2;
 			//width task item
 			var widthPreviousTask = parseInt(this.predTask.cTaskItem[0].firstChild.firstChild.width);
@@ -256,8 +256,8 @@ define([
 		},
 		endMove: function(){
 			var cTask0 = this.cTaskItem[0];
-			var width = domStyle.set(cTask0, "left") - this.posX;
-			var startTime = this.getDateOnPosition(domStyle.set(cTask0, "left"));
+			var width = domStyle.get(cTask0, "left") - this.posX;
+			var startTime = this.getDateOnPosition(domStyle.get(cTask0, "left"));
 			startTime = this.checkPos(startTime);
 			if(this.checkMove){
 				width = this.ganttChart.getPosOnDate(startTime) - this.posX;
@@ -306,7 +306,7 @@ define([
 		},
 		getMaxPosPredChildTaskItemInTree: function(task){
 			var cTask0 = task.cTaskItem[0];
-			var currentPos = parseInt(cTask0.firstChild.firstChild.width) + domStyle.set(cTask0, "left");
+			var currentPos = parseInt(cTask0.firstChild.firstChild.width) + domStyle.get(cTask0, "left");
 			var posPredChildTaskItem = 0;
 			var nextPosPredChildTaskItem = 0;
 			arrayUtil.forEach(task.childPredTask, function(cpTask){
@@ -708,14 +708,19 @@ define([
 			}
 			if(this.ganttChart.isContentEditable){
 				var divTaskInfo = domConstruct.create("div", {className: "ganttTaskDivTaskInfo"}, itemControl);
-				domConstruct.create("table", {
+				var tblTaskInfo = domConstruct.create("table", {
 					cellPadding: "0",
 					cellSpacing: "0",
 					height: this.ganttChart.heightTaskItem + "px",
 					width: this.taskItem.duration * this.ganttChart.pixelsPerWorkHour + "px"
 				}, divTaskInfo);
-
-
+				var rowTaskInfo = tblTaskInfo.insertRow(0);
+				var cellTaskInfo = domConstruct.create("td", {
+					align: "center",
+					vAlign: "top",
+					height: this.ganttChart.heightTaskItem + "px",
+					className: "ganttMoveInfo"
+				}, rowTaskInfo);
 				var divTaskName = domConstruct.create("div", {className: "ganttTaskDivTaskName"}, itemControl);
 				var divMove = domConstruct.create("div", {}, divTaskName);
 				domConstruct.create("input", {
@@ -954,9 +959,9 @@ define([
 			var lineVerticalRight = arrLines[0];
 			//horizontal line
 			var lineHorizontal = arrLines[2];
-			var posXPreviousTask = domStyle.set(this.predTask.cTaskItem[0], "left");
-			var posYPreviousTask = domStyle.set(this.predTask.cTaskItem[0], "top");
-			var posXChildTask = domStyle.set(this.cTaskItem[0], "left");
+			var posXPreviousTask = domStyle.get(this.predTask.cTaskItem[0], "left");
+			var posYPreviousTask = domStyle.get(this.predTask.cTaskItem[0], "top");
+			var posXChildTask = domStyle.get(this.cTaskItem[0], "left");
 			var posYChildTask = this.posY + 2;
 			//width task item
 
@@ -1036,11 +1041,11 @@ define([
 				if(this.taskItem.previousChildTask){
 					this.previousChildTask = this.project.getTaskById(this.taskItem.previousChildTask.id);
 					var lastChildTask = this.ganttChart.getLastChildTask(this.previousChildTask);
-					this.posY = domStyle.set(lastChildTask.cTaskItem[0], "top")
+					this.posY = domStyle.get(lastChildTask.cTaskItem[0], "top")
 						+ this.ganttChart.heightTaskItem + this.ganttChart.heightTaskItemExtra;
 					this.previousChildTask.nextChildTask = this;
 				}else{
-					this.posY = domStyle.set(task.cTaskItem[0], "top")
+					this.posY = domStyle.get(task.cTaskItem[0], "top")
 						+ this.ganttChart.heightTaskItem + this.ganttChart.heightTaskItemExtra;
 				}
 				task.childTask.push(this);
@@ -1068,7 +1073,7 @@ define([
 				//Create Connecting Lines
 				var arrConnectingLinesNames = [];
 				if(parentTask){
-					this.cTaskNameItem[0].style.left = domStyle.set(this.parentTask.cTaskNameItem[0], "left") + 15 + "px";
+					this.cTaskNameItem[0].style.left = domStyle.get(this.parentTask.cTaskNameItem[0], "left") + 15 + "px";
 					arrConnectingLinesNames = this.createConnectingLinesPN();
 				}
 				this.checkWidthTaskNameItem();
@@ -1119,10 +1124,10 @@ define([
 				className: "ganttImageTreeCollapse"
 			});
 			domAttr.set(treeImg, "tabIndex", 0);
-			arrayUtil.forEach(["onclick", "onkeydown"], function(e){
+			arrayUtil.forEach(["click", "keydown"], function(e){
 				this.ganttChart._events.push(
-					on(treeImg, e, this, lang.hitch(this, function(evt){
-						if(e == "onkeydown" && evt.keyCode != keys.ENTER){ return; }
+					on(treeImg, e, lang.hitch(this, function(evt){
+						if(e == "keydown" && evt.keyCode != keys.ENTER){ return; }
 						if(this.isExpanded){
 							domClass.remove(treeImg, "ganttImageTreeCollapse");
 							domClass.add(treeImg, "ganttImageTreeExpand");
@@ -1145,8 +1150,8 @@ define([
 			this.ganttChart.panelNames.firstChild.appendChild(treeImg);
 			domClass.add(treeImg, "ganttTaskTreeImage");
 			domStyle.set(treeImg, {
-				left: (domStyle.set(this.cTaskNameItem[0], "left") - 12) + "px",
-				top: (domStyle.set(this.cTaskNameItem[0], "top") + 3) + "px"
+				left: (domStyle.get(this.cTaskNameItem[0], "left") - 12) + "px",
+				top: (domStyle.get(this.cTaskNameItem[0], "top") + 3) + "px"
 			});
 			return treeImg;
 		},
