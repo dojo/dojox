@@ -38,7 +38,7 @@ Documentation
 Installation instructions
 
 Grab the following from the Dojo SVN Repository:
-http://svn.dojotoolkit.org/var/src/dojo/dojox/trunk/gantt/*
+http://svn.dojotoolkit.org/src/dojox/trunk/gantt/*
 
 Install into the following directory structure:
 /dojox/gantt/
