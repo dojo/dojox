@@ -240,6 +240,13 @@ define([
 		handleSelection: function(/*Event*/e){
 			// summary:
 			//		Handles this items selection state.
+
+			// Before transitioning, we want the visual effect of selecting the item.
+			// To ensure this effect happens even if _delayedSelection is true:
+			if(this._delayedSelection){
+				this.set("selected", true);
+			} // the item will be deselected after transition.
+
 			if(this._onTouchEndHandle){
 				this.disconnect(this._onTouchEndHandle);
 				this._onTouchEndHandle = null;
