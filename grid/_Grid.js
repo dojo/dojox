@@ -742,7 +742,7 @@ define([
 				this.height = this.domNode.style.height;
 				delete this.fitTo;
 			}else if(this.fitTo == "parent"){
-				h = this._parentContentBoxHeight = this._parentContentBoxHeight || html._getContentBox(pn).h;
+				h = this._parentContentBoxHeight = (this._parentContentBoxHeight > 0 ? this._parentContentBoxHeight : html._getContentBox(pn).h);
 				this.domNode.style.height = Math.max(0, h) + "px";
 			}
 			
