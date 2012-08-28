@@ -498,7 +498,9 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 			this._focusRegion(this._getCurrentRegion());
 		}
 		try{
-			evt.stop(e);
+			if(e){
+				evt.stop(e);
+			}
 		}catch(e){}
 		return true;
 	},
