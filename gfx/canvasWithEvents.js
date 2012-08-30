@@ -339,7 +339,7 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		destroy: function(){
 			// summary:
 			//		stops the move, deletes all references, so the object can be garbage-collected
-			shapeLib.Surface.prototype.destroy.apply(this);
+			this.inherited(arguments);
 			// destroy events and objects
 			for(var i in this._eventsH){
 				hub.disconnect(this._eventsH[i]);

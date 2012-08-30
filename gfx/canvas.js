@@ -744,6 +744,10 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 			this.pendingImageCount = 0;
 			this.makeDirty();
 		},
+		destroy: function(){
+			gs.Container.clear.call(this, true); // avoid makeDirty() from canvas.Container.clear impl.
+			this.inherited(arguments);
+		},
 		setDimensions: function(width, height){
 			// summary:
 			//		sets the width and height of the rawNode
