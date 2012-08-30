@@ -190,10 +190,10 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			// summary:
 			//		Cleanup when a chart is to be destroyed.
 			// returns: void
-			this.surface.destroy();
 			arr.forEach(this.series, destroy);
 			arr.forEach(this.stack,  destroy);
 			func.forIn(this.axes, destroy);
+			this.surface.destroy();
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
 				domConstruct.destroy(this.chartTitle);
