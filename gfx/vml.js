@@ -1116,6 +1116,10 @@ function(lang, declare, arr, Color, has, config, dom, domGeom, kernel, g, gs, pa
 		constructor: function(){
 			gs.Container._init.call(this);
 		},
+		destroy: function(){
+			this.clear(true); 
+			this.inherited(arguments);
+		},
 		setDimensions: function(width, height){
 			// summary:
 			//		sets the width and height of the rawNode

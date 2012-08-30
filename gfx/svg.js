@@ -708,6 +708,9 @@ else
 			gs.Container._init.call(this);
 		},
 		destroy: function(){
+			// no need to call svg.Container.clear to remove the children raw
+			// nodes since the surface raw node will be removed. So, only dispose at gfx level	
+			gs.Container.clear.call(this, true); 
 			this.defNode = null;	// release the external reference
 			this.inherited(arguments);
 		},

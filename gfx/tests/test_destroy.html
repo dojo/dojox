@@ -25,6 +25,7 @@ createSurface = function(){
 
 makeShapes = function(){
 	var path = surface.createPath("");
+	
 	// form concentric circles
 	var center = {x: 250, y: 250};
 	for(var r = 200; r > 0; r -= 30){
@@ -39,14 +40,19 @@ makeShapes = function(){
 
 cleanUp = function(){
 	if(surface){
+		var id = surface.children[0].getUID();
 		surface.destroy();
 		surface = null;
 		var t = dojo.byId("test").innerHTML;
 		if(t){
 			console.error("Garbage detected: " + t);
-		}else{
-			console.log("The parent node was cleaned up properly.");
+			return;
 		}
+		if (dojox.gfx.shape.byId(id)){
+			console.log("Shape not disposed.");
+			return;
+		}
+		console.log("The parent node was cleaned up properly.");
 	}
 	createSurface();
 }
