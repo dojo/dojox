@@ -44,6 +44,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dijit/_WidgetBase", "dojox/gfx
 			this.legendBody = domFactory.create("tbody", null, this.domNode);
 			this.inherited(arguments);
 		},
+		destroy: function(){
+			if(this._surfaces){
+				arrayUtil.forEach(this._surfaces, function(surface){
+					surface.destroy();
+				});
+			}
+			this.inherited(arguments);
+		},
 		refresh: function(){
 			// summary:
 			//		regenerates the legend to reflect changes to the chart
