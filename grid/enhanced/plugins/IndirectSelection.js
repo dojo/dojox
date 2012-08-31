@@ -267,7 +267,7 @@ var SingleRowSelector = declare("dojox.grid.cells.SingleRowSelector", RowSelecto
 		//		Event fired on the target row
 		var index = e.rowIndex;
 		if(this.disabledMap[index]){ return; }
-		this._focusEndingCell(index, 0);
+		this._focusEndingCell(index, e.cellIndex);
 		this._nativeSelect(index, !this.grid.selection.selected[index]);
 	}
 });
