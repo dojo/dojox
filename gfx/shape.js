@@ -538,6 +538,19 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 		destroy: function(){
 			// summary: destroy all relevant external resources and release all
 			//	external references to make this object garbage-collectible
+			
+			// dispose children from registry
+			var _dispose = function(s){
+				shape.dispose(s);
+				s.parent = null;
+				if(s.children && s.children.length){
+					arr.forEach(s.children, _dispose);
+					s.children = null;
+				}
+			};
+			arr.forEach(this.children, _dispose);
+			this.children = null;
+			// destroy dom construct
 			arr.forEach(this._nodes, domConstruct.destroy);
 			this._nodes = [];
 			arr.forEach(this._events, events.disconnect);
