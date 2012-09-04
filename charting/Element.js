@@ -57,6 +57,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 				});
 				this.group.clear();
 				this.group.removeShape();
+				shape.dispose(this.group);
 				this.group = null;
 			}
 			this.dirty = true;
