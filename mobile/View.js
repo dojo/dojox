@@ -112,8 +112,12 @@ define([
 				// correctly initialized.
 				this.show(true, true);
 
-				this.onStartView();
-				connect.publish("/dojox/mobile/startView", [this]);
+				// Defer firing events to let user connect to events just after creation
+				// TODO: revisit this for 2.0
+				this.defer(function(){
+					this.onStartView();
+					connect.publish("/dojox/mobile/startView", [this]);
+				});
 			}
 
 			if(this.domNode.style.visibility != "visible"){ // this check is to avoid screen flickers
