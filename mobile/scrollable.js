@@ -496,7 +496,11 @@ define([
 					// form element (input, select, etc.) is clicked.
 					// Otherwise, in particular, when checkbox is clicked, its state
 					// is reversed again by the generated event.
-					if(has('touch') && !this.isFormElement(e.target)){
+					// #15878 The reason we send this synthetic click event is that we assume that the OS
+					// will not send the click because we prevented/stopped the touchstart.
+					// However, this does not seem true any more in Android 4.1 where the click is
+					// actually sent by the OS. So we must not send it a second time.
+					if(has('touch') && !this.isFormElement(e.target) && !(has("android") >= 4.1)){
 						var elem = e.target;
 						if(elem.nodeType != 1){
 							elem = elem.parentNode;
