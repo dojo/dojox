@@ -1,5 +1,5 @@
 define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-style",
-	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/_base/sniff",
+	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/sniff",
 	"./Element", "./SimpleTheme", "./Series", "./axis2d/common", "dojox/gfx/shape",
 	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
 	function(dojox, lang, arr, declare, domStyle,

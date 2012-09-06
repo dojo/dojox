@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/_base/sniff",
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff",
 	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"],
 	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
 	var GlassView = declare(Element, {

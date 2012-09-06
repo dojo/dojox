@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", "dojo/_base/sniff",
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/window", "dojo/sniff",
 	"./ChartAction", "./_IndicatorElement", "dojox/lang/utils", "dojo/_base/event","dojo/_base/array"],
 	function(lang, declare, hub, win, has, ChartAction, IndicatorElement, du, eventUtil, arr){ 
 

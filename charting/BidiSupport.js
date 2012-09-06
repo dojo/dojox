@@ -1,4 +1,4 @@
-define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/_base/sniff",
+define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/sniff",
 	"dojo/dom","dojo/dom-construct",
 	"dojox/gfx", "dojox/gfx/_gfxBidiSupport", "./Chart", "./axis2d/common", "dojox/string/BidiEngine", "dojox/lang/functional"], 
 	function(dojox, lang, domStyle, arr, has, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
@@ -142,7 +142,7 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 						);
 					}				
 				}else{
-				// case of pies, spiders etc.
+					// case of pies, spiders etc.
 					arr.forEach(this.htmlElementsRegistry, function(elem, index, arr){
 						var tDir = newTextDir == "auto" ? this.getTextDir(elem[4]) : newTextDir;
 						if(elem[0].children[0] && elem[0].children[0].dir != tDir){
@@ -202,8 +202,9 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 		//		If defined this function will be executed before the original method.
 		// after: function
 		//		If defined this function will be executed after the original method.
+		var old;
 		if(bundleByPrototype){
-			var old = obj.prototype[method];
+			old = obj.prototype[method];
 			obj.prototype[method] = 
 				function(){
 					var rBefore;
@@ -217,7 +218,7 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 					return r;
 				};
 		}else{
-			var old = lang.clone(obj[method]);
+			old = lang.clone(obj[method]);
 			obj[method] = 
 				function(){
 					var rBefore;

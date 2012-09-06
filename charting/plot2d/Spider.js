@@ -1,5 +1,5 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
-	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/_base/sniff", 
+	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/sniff",
 	"./Base", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common",
 	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
 	"dojox/lang/utils", "dojo/fx/easing"],
