@@ -14,7 +14,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			// kwArgs: dojox.charting.plot2d.__PlotCtorArgs?
 			//		An optional arguments object to help define the plot.
 			this.axes = ["hAxis", "vAxis"];
-			this.zoom = null,
+			this.zoom = null;
 			this.zoomQueue = [];	// zooming action task queue
 			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
 		},
