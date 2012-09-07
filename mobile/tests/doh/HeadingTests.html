@@ -19,6 +19,7 @@
 	var WIDGET_DIVTITLE_CLASSNAME = "mblHeadingDivTitle";
 	var WIDGET_BUTTON_CLASSNAME = "mblToolBarButton mblToolBarButtonHasLeftArrow";
 	var WIDGET_BUTTON_HEAD_CLASSNAME = "mblToolBarButtonArrow mblToolBarButtonLeftArrow mblColorDefault mblColorDefault45";
+	var WIDGET_BUTTON_HEAD_CLASSNAME_IE = "mblToolBarButtonArrow mblToolBarButtonLeftArrow";
 	var WIDGET_BUTTON_BODY_CLASSNAME = "mblToolBarButtonBody mblColorDefault";
 	var WIDGET_TITLE_TEXT1 = "View 1";
 	var WIDGET_TITLE_TEXT2 = "View 2";
@@ -28,17 +29,19 @@
 	var WIDGET_OFFSETHEIGHT2 = 90;
 
 	require([
+		"dojo/sniff",
 		"dojo/dom-construct", // dojo.place
 		"dojo/dom-class", // dojo.hasClass
 		"dojo/ready", // dojo.ready
+		"dojo/_base/lang", // lang.trim
 		"dijit/registry",  // dijit.byId
-		"doh/runner",	//doh functions
+		"doh/runner",	// doh functions
 		"dojox/mobile/Heading",
 		"dojox/mobile",				// This is a mobile app.
 		"dojox/mobile/View",		// This mobile app uses mobile view
 		"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
 		"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-	], function(domConst, domClass, ready, registry, runner, Heading){
+	], function(has, domConst, domClass, ready, lang, registry, runner, Heading){
 
 		function _createHeadingDeclaratively(widgetId) {
 			return registry.byId(widgetId);
@@ -72,7 +75,9 @@
 			runner.assertEqual(titleText, widget.labelNode.innerHTML, "widget.labelNode.innerHTML");
 			runner.assertEqual(titleText, widget.labelDivNode.innerHTML, "widget.labelDivNode.innerHTML");
 			runner.assertEqual(backClassName, widget.backButton.domNode.className);
-			runner.assertEqual(WIDGET_BUTTON_HEAD_CLASSNAME, widget.backButton.arrowNode.className);
+			runner.assertEqual(has("ie") ? WIDGET_BUTTON_HEAD_CLASSNAME_IE : WIDGET_BUTTON_HEAD_CLASSNAME,
+			    // calling trim() because of a blank that ToolBarButton.js adds at the end of widget's className attribute value 
+				lang.trim(widget.backButton.arrowNode.className));
 			runner.assertEqual(WIDGET_BUTTON_BODY_CLASSNAME, widget.backButton.bodyNode.className);
 			runner.assertEqual(backText, widget.backButton.labelNode.innerHTML, "widget.labelDivNode.innerHTML");
 		};
