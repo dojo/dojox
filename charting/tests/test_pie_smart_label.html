@@ -27,8 +27,6 @@
         <script type="text/javascript">
             dojo.require("dojox.charting.Chart");
             dojo.require("dojox.charting.plot2d.Pie");
-            dojo.require("dojox.charting.action2d.Highlight");
-            dojo.require("dojox.charting.action2d.MoveSlice");
             dojo.require("dojox.charting.action2d.Tooltip");
 			dojo.require("dojox.charting.themes.Tom");
             dojo.require("dojox.charting.widget.Legend");
@@ -112,7 +110,6 @@
                     text: "Egypt",
                     tooltip: "64 million"
                 }]);
-                var anim_b = new dc.action2d.Highlight(pieChart, "default");
                 var anim_c = new dc.action2d.Tooltip(pieChart, "default");
                 pieChart.render();
                 legend = new dojox.charting.widget.Legend({
