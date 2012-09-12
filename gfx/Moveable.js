@@ -81,10 +81,6 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			//		event processor for onmouseup, used only for delayed delayed drags
 			// e: Event
 			//		mouse event
-			console.log(this.events.length);
-			this.shape.disconnect(this.events.pop());
-			this.shape.disconnect(this.events.pop());
-			this.shape.disconnect(this.events.pop());
 			this.shape.disconnect(this.events.pop());
 		},
 	
