@@ -41,15 +41,15 @@
 </style>
 <script src="../../../dojo/dojo.js" data-dojo-config="isDebug: false, async: true"></script>
 <script>
-	require(["dojox/charting/Chart", "dojox/charting/StoreSeries", "dojox/charting/themes/ThreeD",
+	require(["dojo/ready", "dojox/charting/Chart", "dojox/charting/StoreSeries", "dojox/charting/themes/ThreeD",
 	"dojox/charting/widget/Legend", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Markers",
 	"dojox/charting/plot2d/Columns", "dojox/charting/plot2d/Pie", "dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/MoveSlice", "dojox/charting/action2d/Magnify", "dojox/charting/action2d/Shake",
 	"dojo/store/Memory", "dojo/store/Observable","dijit/form/NumberSpinner", "dojo/_base/lang", "dojo/_base/array",
-	"dojo/_base/xhr", "dojo/dom-construct", "dojo/aspect"],
-	function(Chart, StoreSeries, ThreeD, Legend, Default, Markers, Columns, Pie, Tooltip, MoveSlice, Magnify, Shake,
+	"dojo/_base/xhr", "dojo/dom-construct", "dojo/dom", "dojo/aspect"],
+	function(ready, Chart, StoreSeries, ThreeD, Legend, Default, Markers, Columns, Pie, Tooltip, MoveSlice, Magnify, Shake,
 		Memory, Observable, NumberSpinner,
-		lang, arr, xhr, domConstruct, aspect){
+		lang, arr, xhr, domConstruct, dom, aspect){
 	
 	xhr.get({
 		url: "stock.json",
@@ -91,11 +91,11 @@
 				addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", includeZero: true}).
 				addPlot("default", {type: Markers}).
 				addSeries("Price", new StoreSeries(
-					store, {query: {}}, "price")).
-				render();
-		addLegend(chartL, "lines_legend");
+					store, {query: {}}, "price"));
 		new Magnify(chartL);
 		new Tooltip(chartL);
+		chartL.render();
+		addLegend(chartL, "lines_legend");
 
 		chartC = new Chart("cols").
 				setTheme(ThreeD).
@@ -107,21 +107,21 @@
 				addSeries("Price", new StoreSeries(
 					store, {query: {}}, lang.hitch(null, valTrans, "price"))).
 				addSeries("High", new StoreSeries(
-					store, {query: {}}, lang.hitch(null, valTrans, "high"))).
-				render();
+					store, {query: {}}, lang.hitch(null, valTrans, "high")));
+		new Shake(chartC, "default", {shiftY: 0});
+		new Tooltip(chartC);
+		chartC.render();
 		addLegend(chartC, "cols_legend");
-		new dojox.charting.action2d.Shake(chartC, "default", {shiftY: 0});
-		new dojox.charting.action2d.Tooltip(chartC);
 		
 		chartP = new dojox.charting.Chart("pie").
 				setTheme(ThreeD).
 				addPlot("default", {type: Pie, radius: 125}).
 				addSeries("Price", new StoreSeries(
-					store, {query: {}}, {y: "price", text: "symbol", tooltip: "price"})).
-				render();
-		addLegend(chartP, "pie_legend");
+					store, {query: {}}, {y: "price", text: "symbol", tooltip: "price"}));
 		new Tooltip(chartP);
 		new MoveSlice(chartP);
+		chartP.render();
+		addLegend(chartP, "pie_legend");
 	};
 
 	makeSpinners = function(objects){
@@ -143,7 +143,7 @@
 				className: "myField",
 				intermediateChanges: true
 			});
-			domConstruct.place('<label>'+nm+'</label>', dojo.byId("spinners"), "last")
+			domConstruct.place('<label>'+nm+'</label>', dom.byId("spinners"), "last")
 			domConstruct.place(w.domNode, "spinners", "last")
 		});
 		
@@ -155,9 +155,11 @@
 			});
 		chartC.addAxis("x", {natural: true, labels: labels}).render();
 	};
-	
-	makeCharts();
-	makeSpinners(store.query({}));
+
+	ready(function(){
+		makeCharts();
+		makeSpinners(store.query({}));
+	});
 });
 </script>
 
