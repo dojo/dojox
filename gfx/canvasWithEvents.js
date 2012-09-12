@@ -100,6 +100,14 @@ function(lang, declare, hub, Color, dom, domGeom, g, canvas, shapeLib, m){
 		connect: function(name, object, method){
 			// summary:
 			//		connects a handler to an event on this shape
+			
+			// mouse events *must* start with "on" but touch events *must not* start with on
+			if(name.indexOf("mouse") === 0){
+				name = "on" + name;
+			}else if(name.indexOf("ontouch") === 0){
+				name = name.slice(2);
+			}
+			
 			this.surface._setupEvents(name); // setup events on demand
 			// No need to fix callback. The listeners registered by
 			// '_setupEvents()' are always invoked first and they

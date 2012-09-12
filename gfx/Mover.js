@@ -1,5 +1,5 @@
-define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare", "dojo/on", "dojo/touch", "dojo/_base/event"],
-  function(lang, arr, declare, on, touch, event){
+define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare", "dojo/on", "dojo/has", "dojo/_base/event"],
+  function(lang, arr, declare, on, has, event){
 	return declare("dojox.gfx.Mover", null, {
 		constructor: function(shape, e, host){
 			// summary:
@@ -14,13 +14,13 @@ define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare", "dojo/on", "
 			//		object which implements the functionality of the move,
 			//		 and defines proper events (onMoveStart and onMoveStop)
 			this.shape = shape;
-			this.lastX = e.clientX;
-			this.lastY = e.clientY;
+			this.lastX = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientX : e.clientX;
+			this.lastY = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientY : e.clientY;
 			var h = this.host = host, d = document,
-				firstEvent = on(d, touch.move, lang.hitch(this, "onFirstMove"));
+				firstEvent = on(d, has("touch") ? "touchmove" : "mousemove", lang.hitch(this, "onFirstMove"));
 			this.events = [
-				on(d, touch.move,    lang.hitch(this, "onMouseMove")),
-				on(d, touch.release, lang.hitch(this, "destroy")),
+				on(d, has("touch") ? "touchmove" : "mousemove",    lang.hitch(this, "onMouseMove")),
+				on(d, has("touch") ? "touchend" : "mouseup", lang.hitch(this, "destroy")),
 				// cancel text selection and text dragging
 				on(d, "dragstart",   lang.hitch(event, "stop")),
 				on(d, "selectstart", lang.hitch(event, "stop")),
@@ -37,8 +37,8 @@ define(["dojo/_base/lang","dojo/_base/array", "dojo/_base/declare", "dojo/on", "
 			//		event processor for onmousemove
 			// e: Event
 			//		mouse event
-			var x = e.clientX;
-			var y = e.clientY;
+			var x = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientX : e.clientX;
+			var y = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientY : e.clientY;
 			this.host.onMove(this, {dx: x - this.lastX, dy: y - this.lastY});
 			this.lastX = x;
 			this.lastY = y;

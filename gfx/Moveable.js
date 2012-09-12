@@ -1,6 +1,6 @@
-define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/topic","dojo/touch",
+define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/event","dojo/topic","dojo/has",
 	"dojo/dom-class","dojo/_base/window","./Mover"], 
-  function(lang,declare,arr,event,topic,touch,domClass,win,Mover){
+  function(lang,declare,arr,event,topic,has,domClass,win,Mover){
 
 	/*=====
 	var __MoveableCtorArgs = declare("dojox.gfx.__MoveableCtorArgs", null, {
@@ -30,7 +30,7 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			this.delay = (params && params.delay > 0) ? params.delay : 0;
 			this.mover = (params && params.mover) ? params.mover : Mover;
 			this.events = [
-				this.shape.connect(touch.press, this, "onMouseDown")
+				this.shape.connect(has("touch") ? "touchstart" : "mousedown", this, "onMouseDown")
 				// cancel text selection and text dragging
 				//, dojo.connect(this.handle, "ondragstart",   dojo, "stopEvent")
 				//, dojo.connect(this.handle, "onselectstart", dojo, "stopEvent")
@@ -53,10 +53,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			//		mouse event
 			if(this.delay){
 				this.events.push(
-					this.shape.connect(touch.move, this, "onMouseMove"),
-					this.shape.connect(touch.release, this, "onMouseUp"));
-				this._lastX = e.clientX;
-				this._lastY = e.clientY;
+					this.shape.connect(has("touch") ? "touchmove" : "mousemove", this, "onMouseMove"),
+					this.shape.connect(has("touch") ? "touchend" : "mouseup", this, "onMouseUp"));
+				this._lastX = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientX : e.clientX;
+				this._lastY = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientY : e.clientY;
 			}else{
 				new this.mover(this.shape, e, this);
 			}
@@ -67,7 +67,10 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			//		event processor for onmousemove, used only for delayed drags
 			// e: Event
 			//		mouse event
-			if(Math.abs(e.clientX - this._lastX) > this.delay || Math.abs(e.clientY - this._lastY) > this.delay){
+			var clientX = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientX : e.clientX,
+				clientY = has("touch") ? (e.changedTouches ? e.changedTouches[0] : e).clientY : e.clientY;
+			
+			if(Math.abs(clientX - this._lastX) > this.delay || Math.abs(clientY - this._lastY) > this.delay){
 				this.onMouseUp(e);
 				new this.mover(this.shape, e, this);
 			}
@@ -78,9 +81,6 @@ define(["dojo/_base/lang","dojo/_base/declare","dojo/_base/array","dojo/_base/ev
 			//		event processor for onmouseup, used only for delayed delayed drags
 			// e: Event
 			//		mouse event
-			this.shape.disconnect(this.events.pop());
-			this.shape.disconnect(this.events.pop());
-			this.shape.disconnect(this.events.pop());
 			this.shape.disconnect(this.events.pop());
 		},
 	
