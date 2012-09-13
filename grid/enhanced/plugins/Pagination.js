@@ -354,7 +354,7 @@ var _Paginator = declare("dojox.grid.enhanced.plugins._Paginator", [_Widget, _Te
 		}
 		var padBorder = g._getPadBorder().h;
 		if(!this.plugin.gh){
-			this.plugin.gh = html.contentBox(g.domNode).h + 2 * padBorder;
+			this.plugin.gh = (g.domNode.clientHeight || html.style(g.domNode, 'height')) + 2 * padBorder;
 		}
 		if(resultSize){
 			changeSize = resultSize;
