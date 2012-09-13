@@ -139,6 +139,9 @@ dojo.declare("dojox.grid._EditManager", null, {
 		if(!this._isValidInput()){
 			return;
 		}
+		if(dojo.isIE && this.grid._autoHeight){
+			this._avoidUpdate();//workaround for #11101
+		}
 		this.grid.beginUpdate();
 		this.editorApply();
 		if(this.isEditing() && !this.isEditRow(inRowIndex)){
@@ -248,5 +251,18 @@ dojo.declare("dojox.grid._EditManager", null, {
 		}		
 		w.focused = true;
 		return w.isValid(true);
+	},
+	
+	_avoidUpdate: function(){
+		// Use a flag to temporarily skip grid.update() so that dijit.form.Form.resize()
+		// or similar containers will not result into a deadlock(see #11101)
+		var self = this;
+		self._noUpdate = true;
+		if(self._avoidUpdateHandler){
+			clearTimeout(self._avoidUpdateHandler);
+		}
+		self._avoidUpdateHandler = setTimeout(function(){
+			self._noUpdate = false;
+		}, 100);
 	}
 });

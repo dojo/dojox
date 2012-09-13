@@ -909,7 +909,7 @@ dojo.requireLocalization("dijit", "loading");
 		// update
 		defaultUpdate: function(){
 			// note: initial update calls render and subsequently this function.
-			if(!this.domNode){return;}
+			if(!this.domNode || this.edit._noUpdate){return;}
 			if(this.updating){
 				this.invalidated.all = true;
 				return;
