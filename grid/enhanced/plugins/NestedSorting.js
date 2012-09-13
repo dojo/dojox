@@ -558,7 +558,10 @@ dojo.declare("dojox.grid.enhanced.plugins.NestedSorting", dojox.grid.enhanced._P
 		}else if(dojo.hasClass(region, 'dojoxGridSortBtn')){
 			dojo.addClass(region, 'dojoxGridSortBtnFocus');
 		}
-		region.focus();
+		//For invisible nodes, IE will throw error when calling focus().
+		try{
+			region.focus();
+		}catch(e){}
 		this.focus.currentArea('header');
 		this._currRegionIdx = dojo.indexOf(this._focusRegions, region);
 	},
