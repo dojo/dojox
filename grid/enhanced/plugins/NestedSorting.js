@@ -575,7 +575,10 @@ var NestedSorting = declare("dojox.grid.enhanced.plugins.NestedSorting", _Plugin
 		}else if(html.hasClass(region, 'dojoxGridSortBtn')){
 			html.addClass(region, 'dojoxGridSortBtnFocus');
 		}
-		region.focus();
+		//For invisible nodes, IE will throw error when calling focus().
+		try{
+			region.focus();
+		}catch(e){}
 		this.focus.currentArea('header');
 		this._currRegionIdx = array.indexOf(this._focusRegions, region);
 	},
