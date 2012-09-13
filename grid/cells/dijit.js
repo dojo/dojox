@@ -86,10 +86,8 @@ dojo.require("dijit.Editor");
 			return undefined;
 		},
 		sizeWidget: function(inNode, inDatum, inRowIndex){
-			var
-				p = this.getNode(inRowIndex),
-				box = dojo.contentBox(p);
-			dojo.marginBox(this.widget.domNode, {w: box.w});
+			var p = this.getNode(inRowIndex);
+			dojo.marginBox(this.widget.domNode, {w: dojo.style(p, 'width')});
 		},
 		focus: function(inRowIndex, inNode){
 			if(this.widget){

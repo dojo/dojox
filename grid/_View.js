@@ -186,7 +186,7 @@ dojo.require("dojo.dnd.Manager");
 
 		getColumnsWidth: function(){
 			var h = this.headerContentNode;
-			return h && h.firstChild ? h.firstChild.offsetWidth : 0; // Integer
+			return h && h.firstChild ? (h.firstChild.offsetWidth || dojo.style(h.firstChild, 'width')) : 0; // Integer
 		},
 
 		setColumnsWidth: function(width){
