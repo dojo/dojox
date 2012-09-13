@@ -10,6 +10,7 @@ define([
 	"dojo/dom",
 	"dojo/dom-attr",
 	"dojo/dom-construct",
+	"dojo/dom-style",
 	"dojo/dom-geometry",
 	"dojo/data/ItemFileReadStore",
 	"dijit/form/DateTextBox",
@@ -25,7 +26,7 @@ define([
 	"dijit/Editor",
 	"../util",
 	"./_base"
-], function(dojo, dojox, declare, array, lang, json, connect, has, dom, domAttr, domConstruct,
+], function(dojo, dojox, declare, array, lang, json, connect, has, dom, domAttr, domConstruct, domStyle,
 	domGeometry, ItemFileReadStore, DateTextBox, TimeTextBox, ComboBox, CheckBox, TextBox,
 	NumberSpinner, NumberTextBox, CurrencyTextBox, HorizontalSlider, _TextBoxMixin, Editor, util, BaseCell){
 		
@@ -105,10 +106,8 @@ define([
 			return undefined;
 		},
 		sizeWidget: function(inNode, inDatum, inRowIndex){
-			var
-				p = this.getNode(inRowIndex),
-				box = dojo.contentBox(p);
-			dojo.marginBox(this.widget.domNode, {w: box.w});
+			var p = this.getNode(inRowIndex);
+			dojo.marginBox(this.widget.domNode, {w: domStyle.get(p, 'width')});
 		},
 		focus: function(inRowIndex, inNode){
 			if(this.widget){
