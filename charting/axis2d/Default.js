@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare",
 	"dojo/_base/connect", "dojo/dom-geometry", "./Invisible",
-	"../scaler/common", "../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils", "dojox/lang/functional"],
-	function(lang, arr, has, declare, connect, domGeom, Invisible, scommon,
+	"../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils", "dojox/lang/functional"],
+	function(lang, arr, has, declare, connect, domGeom, Invisible,
 			lin, acommon, g, du, df){
 
 	/*=====
@@ -383,9 +383,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 			if(!s){
 				return offsets;
 			}
-			var o = this.opt, a, b, c, d,
-				gl = scommon.getNumericLabel,
-				offset = 0, ma = s.major, mi = s.minor,
+			var o = this.opt,
 				ta = this.chart.theme.axis,
 				labelGap = this.chart.theme.axis.tick.labelGap,
 				// TODO: we use one font --- of major tick, we need to use major and minor fonts
@@ -567,7 +565,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 				taMinorTick = this.chart.theme.getTick("minor", o),
 				taMicroTick = this.chart.theme.getTick("micro", o),
 
-				tickSize = Math.max(taMajorTick.length, taMinorTick.length, taMicroTick.length),
 				taStroke = "stroke" in o ? o.stroke : ta.stroke,
 				size = taFont ? g.normalizedLength(g.splitFontString(taFont).size) : 0,
 				cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
@@ -877,7 +874,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 			dx = tickVector.x * taMicroTick.length;
 			dy = tickVector.y * taMicroTick.length;
 			arr.forEach(t.micro, function(tick){
-				var offset = f(tick.value), elem,
+				var offset = f(tick.value),
 					x = start.x + axisVector.x * offset,
 					y = start.y + axisVector.y * offset;
 					this.createLine(s, {

@@ -1,6 +1,5 @@
-define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional", 
-		"dojox/lang/functional/object"], 
-	function(hub, declare, Base, dfe, df, dlfo){
+define(["dojo/_base/connect", "dojo/_base/declare", "./Base", "dojo/fx/easing", "dojox/lang/functional"],
+	function(hub, declare, Base, dfe, df){
 	
 	/*=====
 	var __PlotActionCtorArgs = {

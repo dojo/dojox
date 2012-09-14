@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/connect", "dojox/color/_base", 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/connect", "dojox/color/_base",
 		"./PlotAction", "dojo/fx/easing", "dojox/gfx/fx"], 
-	function(dojo, lang, declare, Color, hub, c, PlotAction, dfe, dgf){
+	function(lang, declare, Color, hub, c, PlotAction, dfe, dgf){
 
 	/*=====
 	var __HighlightCtorArgs = {
@@ -79,7 +79,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		The object on which to process the highlighting action.
 			if(!o.shape || !(o.type in this.overOutEvents)){ return; }
 
-			var runName = o.run.name, index = o.index, anim, startFill, endFill;
+			var runName = o.run.name, index = o.index, anim;
 
 			if(runName in this.anim){
 				anim = this.anim[runName][index];
