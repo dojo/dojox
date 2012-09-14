@@ -1,5 +1,5 @@
-define(["dojox/gfx3d", "dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/kernel", "./Base"],
-	function(gfx3d, matrix3d, declare, Color, kernel, Base) {
+define(["dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/kernel", "./Base"],
+	function(matrix3d, declare, Color, kernel, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
