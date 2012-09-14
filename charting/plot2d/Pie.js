@@ -228,7 +228,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 					slices = df.map(filteredRun, "/this", df.foldl(filteredRun, "+", 0));
 					if(this.opt.labels){
 						labels = arr.map(slices, function(x, i){
-							if(x <= 0){ return ""; }
+							if(x < 0){ return ""; }
 							var v = run[i];
 							return "text" in v ? v.text : this._getLabel(x * 100) + "%";
 						}, this);
