@@ -209,7 +209,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle", _Plugin,{
 									size = 3;
 								}
 								sTag = doc.createElement("font");
-								font.setAttribute("size", size);
+								sTag.setAttribute("size", size);
 								cNode.style.fontSize = "";
 							}
 							cNode = wrapNodes(sTag, cNode);
@@ -256,6 +256,7 @@ dojo.declare("dojox.editor.plugins.NormalizeStyle", _Plugin,{
 		// tags:
 		//		Protected.
 		var w = this.editor.window;
+		var doc = this.editor.document;
 		dojo.query("em,s,strong", node).forEach(function(n){
 			var tag = n.tagName?n.tagName.toLowerCase():"";
 			var tTag;
