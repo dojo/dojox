@@ -351,7 +351,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 				y2: center.y + fill.r * radius * Math.sin(angle) / 100,
 				colors: fill.colors
 			};
-			return fill;
 		}
 	});
 });
