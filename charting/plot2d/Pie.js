@@ -175,7 +175,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				labelFont = "font" in this.opt ? this.opt.font : t.series.font,
 				size,
 				startAngle = m._degToRad(this.opt.startAngle),
-				start = startAngle, step, filteredRun, slices, labels, shift, labelR,
+				start = startAngle, filteredRun, slices, labels, shift, labelR,
 				run = this.run.data,
 				events = this.events();
 
@@ -320,8 +320,8 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 						var fansx = j == 0 ? x1 : circle.cx + r * Math.cos(start + (j - FUDGE_FACTOR) * delta),
 							fansy = j == 0 ? y1 : circle.cy + r * Math.sin(start + (j - FUDGE_FACTOR) * delta),
 							fanex = j == nfans - 1 ? x2 : circle.cx + r * Math.cos(start + (j + 1 + FUDGE_FACTOR) * delta),
-							faney = j == nfans - 1 ? y2 : circle.cy + r * Math.sin(start + (j + 1 + FUDGE_FACTOR) * delta),
-							fan = group.createPath().
+							faney = j == nfans - 1 ? y2 : circle.cy + r * Math.sin(start + (j + 1 + FUDGE_FACTOR) * delta);
+						group.createPath().
 								moveTo(circle.cx, circle.cy).
 								lineTo(fansx, fansy).
 								arcTo(r, r, 0, delta > Math.PI, true, fanex, faney).

@@ -45,7 +45,7 @@ define([
 		},
 		
 		getValue: function(series, i, x){
-			var value = null, j, z;
+			var value = null, j, z, v;
 			for(j = 0; j <= i; ++j){
 				for(z = 0; z < series[j].data.length; z++){
 					v = series[j].data[z];

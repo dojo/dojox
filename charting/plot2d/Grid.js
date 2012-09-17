@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		"./CartesianBase", "./common", "dojox/lang/utils", "dojox/gfx/fx"],
-	function(lang, declare, hub, arr, CartesianBase, dc, du, fx){
+	function(lang, declare, arr, CartesianBase, dc, du, fx){
 
 	/*=====
 	declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {

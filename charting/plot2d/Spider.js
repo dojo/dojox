@@ -1,10 +1,10 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
 	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/sniff",
 	"./Base", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common",
-	"../scaler/primitive", "dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional", 
+	"dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional",
 	"dojox/lang/utils", "dojo/fx/easing"],
 	function(lang, declare, hub, arr, domGeom, baseFx, coreFx, has,
-			Base, PlotEvents, Color, dxcolor, dc, da, primitive,
+			Base, PlotEvents, Color, dxcolor, dc, da,
 			g, m, gfxfx, df, du, easing){
 
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
@@ -97,7 +97,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		The series to be added.
 			// returns: dojox/charting/plot2d/Base
 			//		A reference to this plot for functional chaining.
-			var matched = false;
 			this.series.push(run);
 			for(var key in run.data){
 				var val = run.data[key],
@@ -162,17 +161,18 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				seriesWidth = o.seriesWidth || (ta.stroke && ta.stroke.width) || 2,
 				asize = g.normalizedLength(g.splitFontString(axisFont).size),
 				startAngle = m._degToRad(o.startAngle),
-				start = startAngle, step, filteredRun, slices, labels, shift, labelR,
+				start = startAngle, labels, shift, labelR,
 				outerPoints, innerPoints, divisionPoints, divisionRadius, labelPoints,
 				ro = o.spiderOrigin, dv = o.divisions >= 3 ? o.divisions : 3, ms = o.markerSize,
 				spt = o.spiderType, at = o.animationType, lboffset = o.labelOffset < -10 ? o.labelOffset : -10,
-				axisExtra = 0.2;
+				axisExtra = 0.2,
+				i, j, point, len, fontWidth, render, serieEntry, run, data, min, max, distance;
 			
 			if(o.labels){
 				labels = arr.map(this.series, function(s){
 					return s.name;
 				}, this);
-				shift = df.foldl1(df.map(labels, function(label, i){
+				shift = df.foldl1(df.map(labels, function(label){
 					var font = t.series.font;
 					return g._base._getTextBox(label, {
 						font: font
@@ -192,16 +192,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				r: r
 			};
 			
-			for (var i = this.series.length - 1; i >= 0; i--){
-				var serieEntry = this.series[i];
+			for (i = this.series.length - 1; i >= 0; i--){
+				serieEntry = this.series[i];
 				if(!this.dirty && !serieEntry.dirty){
 					t.skip();
 					continue;
 				}
 				serieEntry.cleanGroup();
-				var run = serieEntry.data;
+				run = serieEntry.data;
 				if(run !== null){
-					var len = this._getObjectLength(run);
+					len = this._getObjectLength(run);
 					//construct connect points
 					if(!outerPoints || outerPoints.length <= 0){
 						outerPoints = [], innerPoints = [], labelPoints = [];
@@ -210,7 +210,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 						this._buildPoints(labelPoints, len, circle, labelR, start);
 						if(dv > 2){
 							divisionPoints = [], divisionRadius = [];
-							for (var j = 0; j < dv - 2; j++){
+							for (j = 0; j < dv - 2; j++){
 								divisionPoints[j] = [];
 								this._buildPoints(divisionPoints[j], len, circle, r*(ro + (1-ro)*(j+1)/(dv-1)), start, true);
 								divisionRadius[j] = r*(ro + (1-ro)*(j+1)/(dv-1));
@@ -224,9 +224,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//axis
 			var axisGroup = s.createGroup(), axisStroke = {color: axisColor, width: axisWidth},
 				spiderStroke = {color: spiderColor, width: spiderWidth};
-			for (var j = outerPoints.length - 1; j >= 0; --j){
-				var point = outerPoints[j],
-					st = {
+			for (j = outerPoints.length - 1; j >= 0; --j){
+				point = outerPoints[j];
+				var st = {
 						x: point.x + (point.x - circle.cx) * axisExtra,
 						y: point.y + (point.y - circle.cy) * axisExtra
 					},
@@ -246,11 +246,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			
 			// draw the label
 			var labelGroup = s.createGroup();
-			for (var j = labelPoints.length - 1; j >= 0; --j){
-				var point = labelPoints[j],
-					fontWidth = g._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0,
-					render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx",
-					elem = da.createText[render](this.chart, labelGroup, (!domGeom.isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
+			for (j = labelPoints.length - 1; j >= 0; --j){
+				point = labelPoints[j];
+				fontWidth = g._base._getTextBox(this.labelKey[j], {font: axisFont}).w || 0;
+				render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx";
+				var elem = da.createText[render](this.chart, labelGroup, (!domGeom.isBodyLtr() && render == "html") ? (point.x + fontWidth - dim.width) : point.x, point.y,
 							"middle", this.labelKey[j], axisFont, axisFontColor);
 				if(this.opt.htmlLabels){
 					this.htmlElements.push(elem);
@@ -263,29 +263,33 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				spiderGroup.createPolyline(outerPoints).setStroke(spiderStroke);
 				spiderGroup.createPolyline(innerPoints).setStroke(spiderStroke);
 				if(divisionPoints.length > 0){
-					for (var j = divisionPoints.length - 1; j >= 0; --j){
+					for (j = divisionPoints.length - 1; j >= 0; --j){
 						spiderGroup.createPolyline(divisionPoints[j]).setStroke(spiderStroke);
 					}
 				}
 			}else{//circle
-				var ccount = this._getObjectLength(this.datas);
 				spiderGroup.createCircle({cx: circle.cx, cy: circle.cy, r: r}).setStroke(spiderStroke);
 				spiderGroup.createCircle({cx: circle.cx, cy: circle.cy, r: r*ro}).setStroke(spiderStroke);
 				if(divisionRadius.length > 0){
-					for (var j = divisionRadius.length - 1; j >= 0; --j){
+					for (j = divisionRadius.length - 1; j >= 0; --j){
 						spiderGroup.createCircle({cx: circle.cx, cy: circle.cy, r: divisionRadius[j]}).setStroke(spiderStroke);
 					}
 				}
 			}
 			//text
-			var textGroup = s.createGroup(), len = this._getObjectLength(this.datas), k = 0;
+			len = this._getObjectLength(this.datas);
+			var textGroup = s.createGroup(), k = 0;
 			for(var key in this.datas){
-				var data = this.datas[key], min = data.min, max = data.max, distance = max - min,
+				data = this.datas[key];
+				min = data.min;
+				max = data.max;
+				distance = max - min;
 					end = start + 2 * Math.PI * k / len;
-				for (var i = 0; i < dv; i++){
-					var text = min + distance*i/(dv-1), point = this._getCoordinate(circle, r*(ro + (1-ro)*i/(dv-1)), end);
+				for (i = 0; i < dv; i++){
+					var text = min + distance*i/(dv-1);
+					point = this._getCoordinate(circle, r*(ro + (1-ro)*i/(dv-1)), end);
 					text = this._getLabel(text);
-					var fontWidth = g._base._getTextBox(text, {font: axisTickFont}).w || 0,
+					fontWidth = g._base._getTextBox(text, {font: axisTickFont}).w || 0;
 						render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx";
 					if(this.opt.htmlLabels){
 						this.htmlElements.push(da.createText[render]
@@ -298,15 +302,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			
 			//draw series (animation)
 			this.chart.seriesShapes = {};
-			var animationConnections = [];
-			for (var i = this.series.length - 1; i >= 0; i--){
-				var serieEntry = this.series[i], run = serieEntry.data;
+			for (i = this.series.length - 1; i >= 0; i--){
+				serieEntry = this.series[i];
+				run = serieEntry.data;
 				if(run !== null){
 					//series polygon
-					var seriePoints = [], k = 0, tipData = [];
-					for(var key in run){
-						var data = this.datas[key], min = data.min, max = data.max, distance = max - min,
-							entry = run[key], end = start + 2 * Math.PI * k / len,
+					var seriePoints = [], tipData = [];
+					k = 0;
+					for(key in run){
+						data = this.datas[key];
+						min = data.min;
+						max = data.max;
+						distance = max - min;
+						var entry = run[key], end = start + 2 * Math.PI * k / len;
 							point = this._getCoordinate(circle, r*(ro + (1-ro)*(entry-min)/distance), end);
 						seriePoints.push(point);
 						tipData.push({sname: serieEntry.name, key: key, data: entry});
@@ -353,8 +361,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					this._connectEvents(so);
 					
 					arr.forEach(cs.circles, function(c, i){
-						var shape = c.getShape(),
-							co = {
+						var co = {
 								element: "spider_circle",
 								index:	 i,
 								id:		 "spider_circle_"+serieEntry.name+i,

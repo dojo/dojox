@@ -356,7 +356,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 
 				this.seriesData[nm] = [];
 				this.seriesDataBk[nm] = [];
-				arr.forEach(items, function(m, i){
+				arr.forEach(items, function(m){
 					var field = this.getProperty(m, this.fieldName);
 					this.seriesData[nm].push(field);
 				}, this);

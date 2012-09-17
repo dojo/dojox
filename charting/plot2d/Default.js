@@ -227,7 +227,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
-			var t = this.chart.theme, stroke, outline, marker, events = this.events();
+			var t = this.chart.theme, stroke, outline, events = this.events();
 
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];

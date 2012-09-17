@@ -51,6 +51,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			//		An object of the form { l, r, t, b}.
 			// returns: dojox/charting/plot2d/Bubble
 			//		A reference to this plot for functional chaining.
+			var s;
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
@@ -60,7 +61,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
-				var s = this.group;
+				s = this.group;
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 
@@ -88,8 +89,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 					continue;
 				}
 
-				var theme = t.next("circle", [this.opt, run]), s = run.group,
-					points = arr.map(run.data, function(v, i){
+				s = run.group;
+				var theme = t.next("circle", [this.opt, run]),
+					points = arr.map(run.data, function(v){
 						return v ? {
 							x: ht(v.x) + offsets.l,
 							y: dim.height - offsets.b - vt(v.y),

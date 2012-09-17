@@ -180,7 +180,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 		buildRendering: function(){
 			this.inherited(arguments);
 			
-			n = this.domNode;
+			var n = this.domNode;
 			
 			// collect chart parameters
 			var axes    = query("> .axis", n).map(collectAxisParams).filter(notNull),
