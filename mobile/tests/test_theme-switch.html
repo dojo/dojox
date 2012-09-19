@@ -36,17 +36,26 @@
 		background-image: -webkit-gradient(linear, left top, right bottom, from(#ff9DE9), to(#cc62DD), color-stop(0.5, #ff6EDF), color-stop(0.5, #ff5FDC));
 		background-image: -moz-linear-gradient(top left, #ff9DE9 0%, #ff6EDF 50%, #ff5FDC 50%, #cc62DD 100%);
 	}
+	#themeHeading {
+		overflow: visible;
+		height: auto;
+	}
+	#themeHeading .mblTabBarSlimTab {
+  		display: inline;
+  		float: left;
+  		height: auto;
+	}
 	</style>
 </head>
 <body style="visibility:hidden;">
 	<div id="foo" data-dojo-type="dojox.mobile.View">
-		<div data-dojo-type="dojox.mobile.Heading">
-			<ul data-dojo-type="dojox.mobile.TabBar" data-dojo-props='barType:"segmentedControl"' style="float:left;margin-left:6px;">
-				<li data-dojo-type="dojox.mobile.TabBarButton" style="width:80px" data-dojo-props='selected:true' onclick="change('iPhone')">iPhone</li>
-				<li data-dojo-type="dojox.mobile.TabBarButton" style="width:80px" onclick="change('iPad')">iPad</li>
-				<li data-dojo-type="dojox.mobile.TabBarButton" style="width:80px" onclick="change('Android')">Android</li>
-				<li data-dojo-type="dojox.mobile.TabBarButton" style="width:80px" onclick="change('BlackBerry')">BlackBerry</li>
-				<li data-dojo-type="dojox.mobile.TabBarButton" style="width:80px" onclick="change('Custom')">Custom</li>
+		<div id="themeHeading" data-dojo-type="dojox.mobile.Heading">
+			<ul data-dojo-type="dojox.mobile.TabBar" data-dojo-props='barType:"slimTab"' style="float:left">
+				<li data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='selected:true' onclick="change('iPhone')">iPhone</li>
+				<li data-dojo-type="dojox.mobile.TabBarButton" onclick="change('iPad')">iPad</li>
+				<li data-dojo-type="dojox.mobile.TabBarButton" onclick="change('Android')">Android</li>
+				<li data-dojo-type="dojox.mobile.TabBarButton" onclick="change('BlackBerry')">BlackBerry</li>
+				<li data-dojo-type="dojox.mobile.TabBarButton" onclick="change('Custom')">Custom</li>
 			</ul>
 		</div>
 	<div data-dojo-type="dojox.mobile.Heading" data-dojo-props='label:"Arrow"'>
