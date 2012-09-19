@@ -32,6 +32,7 @@
 				var view1 = registry.byId("view1");
 				connect.connect(view1, "onStartView", null, function(){
 					console.log("startView: view="+this);
+					_testInitCallback = true;
 				});
 				connect.connect(view1, "onBeforeTransitionOut", null, function(moveTo, dir, transition, context, method){
 					print("onBeforeTransitionOut", this, moveTo, dir, transition, context, method);
