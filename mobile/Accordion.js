@@ -190,7 +190,8 @@ define([
 
 		// fixedHeight: Boolean
 		//		If true, the entire accordion widget has fixed height regardless
-		//		of the height of each pane.
+		//		of the height of each pane; in this mode, there is always an open pane and
+		//		collapsing a pane can only be done by opening a different pane.
 		fixedHeight: false,
 
 		// singleOpen: Boolean
