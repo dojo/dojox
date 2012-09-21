@@ -978,7 +978,7 @@ dojo.declare("dojox.grid.enhanced.plugins.Selector", dojox.grid.enhanced._Plugin
 			if(type === "row"){
 				this._isUsingRowSelector = true;
 			}
-			this._startPoint[type] = this._lastEndPoint[type];
+			this._startPoint[type] = this._lastAnchorPoint[type];
 			this._highlight(type, this._startPoint[type]);
 			this._isUsingRowSelector = false;
 		}else{
