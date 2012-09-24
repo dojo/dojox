@@ -70,6 +70,12 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 			type = kernel._scopeName + "x.charting.plot2d.Default";
 		}
 		collectParams(node, type, kw);
+		// TODO
+		// we have factorized axis management in CartesianBase and thus is is not anymore
+		// accessible to the default collect mechanism. Longer term we must get rid of that
+		// and levarage dojo/parser
+		kw["hAxis"] = node.getAttribute("hAxis");
+		kw["vAxis"] = node.getAttribute("vAxis");
 		return o;
 	};
 

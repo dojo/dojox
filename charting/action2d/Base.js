@@ -1,7 +1,7 @@
-define(["dojo/_base/lang", "dojo/_base/declare"], 
-	function(lang, declare){
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/Evented"],
+	function(lang, declare, Evented){
 
-	return declare("dojox.charting.action2d.Base", null, {
+	return declare("dojox.charting.action2d.Base", Evented, {
 		// summary:
 		//		Base action class for plot and chart actions.
 	

@@ -117,6 +117,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		lineStroke:  {width: 1.5, color: "#333"},		// line
 	//	|		lineOutline: {width: 0.1, color: "#ccc"},		// line outline
 	//	|		lineShadow: null,								// no line shadow
+	//	|		lineFill: null,									// fill between lines for dual indicators
 	//	|		stroke:  {width: 1.5, color: "#333"},			// label background stroke
 	//	|		outline: {width: 0.1, color: "#ccc"},			// label background outline
 	//	|		shadow: null,									// no label background shadow
@@ -551,6 +552,7 @@ lang.mixin(SimpleTheme, {
 			lineStroke:  {width: 1.5, color: "#333"},		
 			lineOutline: {width: 0.1, color: "#ccc"},		
 			lineShadow: null,
+			lineFill: null,
 			stroke:  {width: 1.5, color: "#333"},		
 			outline: {width: 0.1, color: "#ccc"},		
 			shadow: null,								

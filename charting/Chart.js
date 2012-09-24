@@ -1,11 +1,11 @@
 define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-style",
 	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/sniff",
 	"./Element", "./SimpleTheme", "./Series", "./axis2d/common", "dojox/gfx/shape",
-	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"], 
+	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"],
 	function(dojox, lang, arr, declare, domStyle,
 	 		 dom, domGeom, domConstruct, Color, has,
 	 		 Element, SimpleTheme, Series, common, shape,
-	 		 g, func, funcFold, funcReversed){
+	 		 g, func){
 	/*=====
 	var __ChartCtorArgs = {
 		// summary:
@@ -183,7 +183,7 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			this.surface = g.createSurface(this.node, box.w || 400, box.h || 300);
 			if(this.surface.declaredClass.indexOf("vml") == -1){
 				// except if vml use native clipping
-				this.plotGroup = this.surface.createGroup();
+				this._nativeClip = true;
 			}
 		},
 		destroy: function(){
@@ -917,17 +917,12 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 				// destroy title if it is a DOM node
 			    domConstruct.destroy(this.chartTitle);
 			}
-			if(this.plotGroup){
-				this.plotGroup.clear();
-			}
 			this.surface.clear();
 			this.chartTitle = null;
 
-			if(this.plotGroup){
-				this._renderChartBackground(dim, offsets);
+			this._renderChartBackground(dim, offsets);
+			if(this._nativeClip){
 				this._renderPlotBackground(dim, offsets, w, h);
-				this.surface.add(this.plotGroup);
-				this.plotGroup.setClip({ x: offsets.l, y: offsets.t, width: w, height: h });
 			}else{
 				// VML
 				this._renderPlotBackground(dim, offsets, w, h);
@@ -936,7 +931,7 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			// go over the stack backwards
 			func.foldr(this.stack, function(z, plot){ return plot.render(dim, offsets), 0; }, 0);
 
-			if(!this.plotGroup){
+			if(!this._nativeClip){
 				// VML, matting-clipping
 				this._renderChartBackground(dim, offsets);
 			}
@@ -983,7 +978,7 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			}
 
 			if(fill){
-				if(this.plotGroup){
+				if(this._nativeClip){
 					fill = Element.prototype._shapeFill(Element.prototype._plotFill(fill, dim),
 						{ x:0, y: 0, width: dim.width + 1, height: dim.height + 1 });
 					this.surface.createRect({ width: dim.width + 1, height: dim.height + 1 }).setFill(fill);

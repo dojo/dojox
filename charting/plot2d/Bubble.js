@@ -10,8 +10,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//		A plot representing bubbles.  Note that data for Bubbles requires 3 parameters,
 		//		in the form of:  { x, y, size }, where size determines the size of the bubble.
 		defaultParams: {
-			hAxis: "x",		// use a horizontal axis named "x"
-			vAxis: "y",		// use a vertical axis named "y"
 			animate: null   // animate bars into place
 		},
 		optionalParams: {
@@ -35,9 +33,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.series = [];
-			this.hAxis = this.opt.hAxis;
-			this.vAxis = this.opt.vAxis;
 			this.animate = this.opt.animate;
 		},
 
@@ -60,8 +55,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
-				this.cleanGroup();
-				s = this.group;
+				this.cleanGroup(null, dim, offsets);
+				s = this.getGroup();
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 

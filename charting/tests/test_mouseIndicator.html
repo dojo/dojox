@@ -38,7 +38,7 @@
 					majorTick: {color: "red", length: 4}, minorTick: {color: "blue", length: 2}});
 				chart.addAxis("y", {vertical: true, min: 0, max: 100, majorTickStep: 10, minorTickStep: 5, stroke: "gray",
 					majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
-				chart.addPlot("default", {type: "Default",markers: false});
+				chart.addPlot("default", {type: "Default", markers: false});
 				chart.addSeries("Series A", [
 					 8,  7,  3,  2,  5,  7,  9, 10,  2, 10,
 					14, 16, 18, 13, 16, 15, 20, 19, 15, 12,
@@ -51,7 +51,7 @@
 					84, 83, 85, 86, 86, 89, 89, 85, 86, 86,
 					98, 97, 93, 91, 92, 92, 99, 93, 94, 92
 				]);
-				new dojox.charting.action2d.MouseIndicator(chart, "default", { series : "Series A" });
+				new dojox.charting.action2d.MouseIndicator(chart, "default", { series : "Series A", mouseOver: true  });
 				chart.render();
 			};
 		

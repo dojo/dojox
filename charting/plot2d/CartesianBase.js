@@ -1,7 +1,17 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", 
-		"./Base",
-		"../scaler/primitive", "dojox/gfx/fx"],
-	function(lang, declare, hub, Base, primitive, fx){
+		"./Base", "../scaler/primitive", "dojox/gfx/fx", "dojox/gfx/shape"],
+	function(lang, declare, hub, Base, primitive, fx, shape){
+	/*=====
+	declare("dojox.charting.plot2d.__CartesianCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
+		// hAxis: String?
+		//		The horizontal axis name.
+		hAxis: "x",
+
+		// vAxis: String?
+		//		The vertical axis name
+		vAxis: "y"
+	});
+	=====*/
 
 	return declare("dojox.charting.plot2d.CartesianBase", Base, {
 		// summary:
@@ -11,12 +21,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			//		Create a cartesian base plot for cartesian charts.
 			// chart: dojox/chart/Chart
 			//		The chart this plot belongs to.
-			// kwArgs: dojox.charting.plot2d.__PlotCtorArgs?
+			// kwArgs: dojox.charting.plot2d.__CartesianCtorArgs?
 			//		An optional arguments object to help define the plot.
 			this.axes = ["hAxis", "vAxis"];
 			this.zoom = null;
 			this.zoomQueue = [];	// zooming action task queue
 			this.lastWindow = {vscale: 1, hscale: 1, xoffset: 0, yoffset: 0};
+			this.hAxis = (kwArgs && kwArgs.hAxis) || "x";
+			this.vAxis = (kwArgs && kwArgs.vAxis) || "y";
+			this.series = [];
 		},
 		clear: function(){
 			// summary:
@@ -28,8 +41,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			this._vAxis = null;
 			return this;	//	dojox/charting/plot2d/CartesianBase
 		},
-		cleanGroup: function(creator){
-			this.inherited(arguments, [creator || this.chart.plotGroup]);
+		cleanGroup: function(creator, dim, offsets, noClip){
+			this.inherited(arguments);
+			if(!noClip && this.chart._nativeClip){
+				var w = Math.max(0, dim.width  - offsets.l - offsets.r),
+					h = Math.max(0, dim.height - offsets.t - offsets.b);
+				this.group.setClip({ x: offsets.l, y: offsets.t, width: w, height: h });
+				if(!this._clippedGroup){
+					this._clippedGroup = this.group.createGroup();
+				}
+			}
+		},
+		purgeGroup: function(){
+			this.inherited(arguments);
+			this._clippedGroup = null;
+		},
+		getGroup: function(){
+			return this._clippedGroup || this.group;
 		},
 		setAxis: function(axis){
 			// summary:
@@ -128,7 +156,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 				rYOffset = (yOffset - this.lastWindow.yoffset)/
 					((this.lastWindow.vscale == 1)? vs : this.lastWindow.vscale),
 
-				shape = this.group,
+				shape = this.getGroup(),
 				anim = fx.animateTransform(lang.delegate({
 					shape: shape,
 					duration: 1200,

@@ -1,9 +1,9 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff",
 		"./CartesianBase", "./common", "dojox/lang/utils", "dojox/gfx/fx"],
-	function(lang, declare, arr, CartesianBase, dc, du, fx){
+	function(lang, declare, arr, has, CartesianBase, dc, du, fx){
 
 	/*=====
-	declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
+	declare("dojox.charting.plot2d.__GridCtorArgs", dojox.charting.plot2d.__CartesianCtorArgs, {
 		// summary:
 		//		A special keyword arguments object that is specific to a grid "plot".
 
@@ -55,8 +55,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//		A "faux" plot that can be placed behind other plots to represent
 		//		a grid against which other plots can be easily measured.
 		defaultParams: {
-			hAxis: "x",			// use a horizontal axis named "x"
-			vAxis: "y",			// use a vertical axis named "y"
 			hMajorLines: true,	// draw horizontal major lines
 			hMinorLines: false,	// draw horizontal minor lines
 			vMajorLines: true,	// draw vertical major lines
@@ -85,8 +83,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.hAxis = this.opt.hAxis;
-			this.vAxis = this.opt.vAxis;
 			this.animate = this.opt.animate;
 			if(this.opt.enableCache){
 				this._lineFreePool = [];
@@ -143,9 +139,16 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			}
 			this.dirty = this.isDirty();
 			if(!this.dirty){ return this; }
-			this.cleanGroup();
-			var s = this.group, ta = this.chart.theme, lineStroke;
+			this.cleanGroup(null, dim, offsets);
+			var s = this.getGroup(), ta = this.chart.theme, lineStroke;
 			var renderOnAxis = this.opt.renderOnAxis;
+			if(has("ios") < 6 || has("android")){
+				// clipping seems buggy in some mobile Webkit browser
+				// it does not clip correctly if only lines are present => create a invisible rectangle...
+				var w = Math.max(0, dim.width  - offsets.l - offsets.r),
+					h = Math.max(0, dim.height - offsets.t - offsets.b);
+				s.createRect({ x: offsets.l, y: offsets.t, width: w, height: h});
+			}
 			if(this._vAxis){
 				var vScaler = this._vAxis.getScaler();
 				if(vScaler){

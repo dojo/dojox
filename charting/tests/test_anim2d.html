@@ -26,6 +26,8 @@
         dojo.require("dojox.charting.axis2d.Default");
         dojo.require("dojox.charting.plot2d.ClusteredColumns");
         dojo.require("dojox.charting.plot2d.StackedAreas");
+		dojo.require("dojox.charting.plot2d.Grid");
+		dojo.require("dojox.charting.plot2d.Indicator");
 
 		dojo.require("dojox.charting.themes.Shrooms");
 		dojo.require("dojox.charting.themes.PlotKit.blue");
@@ -39,6 +41,23 @@
 		dojo.require("dojox.dtl");
 		dojo.require("dojox.dtl.Context");
 		charts = [
+			{
+				description: "Columns, grid and indicators.",
+				makeChart: function(node){
+					(new dojox.charting.Chart(node)).
+						setTheme(dojox.charting.themes.Tufte).
+						addAxis("x", { fixLower: "minor", fixUpper: "minor", natural: true }).
+						addAxis("y", { vertical: true, fixLower: "major", fixUpper: "major", includeZero: true }).
+						addPlot("default", { type: "ClusteredColumns", gap: 10, animate: { duration: 1000 } }).
+						addPlot("indicator", { type: "Indicator", values: 1.5, lineStroke: { color: "red" }, precision: 1, animate: { duration: 1000 } }).
+						addPlot("grid", { type: "Grid", animate: { duration: 1000 } }).
+						addSeries("Series A", [ 2, 1, 0.5, -1, -2 ] ).
+						addSeries("Series B", [ -2, -1, -0.5, 1, 2 ] ).
+						addSeries("Series C", [ 1, 0.5, -1, -2, -3 ] ).
+						addSeries("Series D", [ 0.7, 1.5, -1.2, -1.25, 3 ] ).
+						render();
+				}
+			},
 			{
 				description: "Clustered columns with positive and negative values, readable theme, 1-second animate-in.",
 				makeChart: function(node){
@@ -70,6 +89,8 @@
 						render();
 				}
 			}
+
+
 		];
 		var now = function(){
 			return (new Date()).getTime();

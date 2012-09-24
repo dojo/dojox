@@ -3,17 +3,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 	function(lang, declare, arr, CartesianBase, _PlotEvents, dc, df, dfr, du, fx){
 
 	/*=====
-	declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__PlotCtorArgs, {
+	declare("dojox.charting.plot2d.__DefaultCtorArgs", dojox.charting.plot2d.__CartesianCtorArgs, {
 		// summary:
 		//		The arguments used for any/most plots.
-	
-		// hAxis: String?
-		//		The horizontal axis name.
-		hAxis: "x",
-	
-		// vAxis: String?
-		//		The vertical axis name
-		vAxis: "y",
 	
 		// lines: Boolean?
 		//		Whether or not to draw lines on this plot.  Defaults to true.
@@ -34,8 +26,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		//		is used, the more accurate smoothing algorithm is used.
 		tension: "",
 	
-		// animate: Boolean?
-		//		Whether or not to animate the chart to place.
+		// animate: Boolean?|Number?
+		//		Whether or not to animate the chart to place. When a Number it specifies the duration of the animation.
+		//		Default is false.
 		animate: false,
 	
 		// stroke: dojox.gfx.Stroke?
@@ -111,8 +104,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 		// defaultParams:
 		//		The default parameters of this plot.
 		defaultParams: {
-			hAxis: "x",		// use a horizontal axis named "x"
-			vAxis: "y",		// use a vertical axis named "y"
 			lines:   true,	// draw lines
 			areas:   false,	// draw areas
 			markers: false,	// draw markers
@@ -152,10 +143,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
-			this.series = [];
-			this.hAxis = this.opt.hAxis;
-			this.vAxis = this.opt.vAxis;
-
 			// animation properties
 			this.animate = this.opt.animate;
 		},
@@ -222,9 +209,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
-				this.cleanGroup();
-				this.group.setTransform(null);
-				s = this.group;
+				this.cleanGroup(null, dim, offsets);
+				this.getGroup().setTransform(null);
+				s = this.getGroup();
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, stroke, outline, events = this.events();
@@ -418,7 +405,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			}
 			if(this.animate){
 				// grow from the bottom
-				var plotGroup = this.group;
+				var plotGroup = this.getGroup();
 				fx.animateTransform(lang.delegate({
 					shape: plotGroup,
 					duration: DEFAULT_ANIMATION_LENGTH,
