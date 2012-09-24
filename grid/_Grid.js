@@ -346,6 +346,9 @@ define([
 			if(!this.isLeftToRight()){
 				html.addClass(this.domNode, this.classTag+"Rtl");
 			}
+			if(this.rowHeight > 0){
+				html.addClass(this.viewsNode, this.classTag + "FixedRowHeight");
+			}
 		},
 		
 		postMixInProperties: function(){
