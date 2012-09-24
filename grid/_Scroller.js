@@ -151,10 +151,9 @@ define([
 		},
 		measurePage: function(inPageIndex){
 			if(this.grid.rowHeight){
-				var height = this.grid.rowHeight + 1;
 				return ((inPageIndex + 1) * this.rowsPerPage > this.rowCount ?
 					this.rowCount - inPageIndex * this.rowsPerPage :
-					this.rowsPerPage) * height;
+					this.rowsPerPage) * this.grid.rowHeight;
 					 
 			}
 			var n = this.getDefaultPageNode(inPageIndex);
