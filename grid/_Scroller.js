@@ -80,7 +80,7 @@ define([
 				case 1: this.rowCount = inRowCount;
 				default: break;
 			}
-			this.defaultPageHeight = this.defaultRowHeight * this.rowsPerPage;
+			this.defaultPageHeight = (this.grid.rowHeight > 0 ? this.grid.rowHeight : this.defaultRowHeight) * this.rowsPerPage;
 			this.pageCount = this._getPageCount(this.rowCount, this.rowsPerPage);
 			this.setKeepInfo(this.keepRows);
 			this.invalidate();
