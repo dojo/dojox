@@ -86,7 +86,7 @@
 								r = drawing.createGroup();
 								var t2 = r.createGroup();
 								c = t2.createRect();
-								
+								r.removeShape();
 								r.destroy();
 								doh.assertTrue(!dojox.gfx.shape.byId(r.getUID()), "Unexpected shape.byId return value.");
 								doh.assertTrue(r.children.length == 0, "Unexpected children length on disposed group.");
