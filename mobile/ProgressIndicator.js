@@ -149,6 +149,13 @@ define([
 				}
 				this.spinnerNode.style.display = "";
 			}
+		},
+
+		destroy: function(){
+			this.inherited(arguments);
+			if(this === cls._instance){
+				cls._instance = null;
+			}
 		}
 	});
 
