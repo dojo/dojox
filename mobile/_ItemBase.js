@@ -318,7 +318,9 @@ define([
 
 			if(this._delayedSelection){
 				// so as not to make selection when the user flicks on ScrollableView
-				this._selTimer = setTimeout(lang.hitch(this, function(){ this.set("selected", true); }), 100);
+				this._selTimer = this.defer(function(){
+					lang.hitch(this, function(){ this.set("selected", true); });
+				}, 100);
 			}else{
 				this.set("selected", true);
 			}
@@ -360,7 +362,7 @@ define([
 			// summary:
 			//		Cancels an ongoing selection (if any).
 			if(this._selTimer){
-				clearTimeout(this._selTimer);
+				this._selTimer.remove(); 
 				this._selTimer = null;
 			}
 			this._disconnect();
