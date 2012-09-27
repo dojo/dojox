@@ -1,5 +1,6 @@
 /* Claro styles for DataGrid */
 @import url("Grid.css");
+@import url("Grid_rtl.css");
 
 .claro .dojoxGrid {
 	margin:0px;
