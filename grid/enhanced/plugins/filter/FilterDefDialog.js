@@ -605,7 +605,7 @@ var CriteriaBox = declare("dojox.grid.enhanced.plugins.filter.CriteriaBox",[_Wid
 		this.valueNode.appendChild(this._curValueBox.domNode);
 		
 		//Can not move to setAriaInfo, 'cause the value box is created after the defpane is loaded.
-		this._curValueBox.domNode.setAttribute("aria-label", string.substitute(this.plugin.nls.waiValueBoxTemplate,[this._index]));
+		this._curValueBox.focusNode.setAttribute("aria-label", string.substitute(this.plugin.nls.waiValueBoxTemplate,[this._index]));
 		//Now our cbox is completely ready
 		this.dlg.onRendered(this);
 	},
