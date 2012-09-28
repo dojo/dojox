@@ -2,6 +2,7 @@ define([
 	"doh/runner",
 	"dojo/_base/sniff",
 	"./equals",
+	"./wildcard",
 	"./WidgetList"
 ], function(doh, has){
 	try{
