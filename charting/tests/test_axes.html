@@ -37,7 +37,7 @@ makeObjects = function(){
 
 	var chart1 = new dojox.charting.Chart("test1").
             setTheme(customTheme).
-            addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, includeZero: true}).
+            addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, includeZero: true, majorTick: { length: -10}}).
             addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true, includeZero: true}).
             addPlot("default", {type: "Markers"}).
             addSeries("Series A", [{x: 1, y: 1}, {x: 2, y: 2}, {x: 3, y: 1}]).
@@ -47,8 +47,8 @@ makeObjects = function(){
 
 	var chart2 = new dojox.charting.Chart("test2").
             setTheme(customTheme).
-            addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, includeZero: true}).
-            addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true, includeZero: true}).
+            addAxis("x", {fixLower: "major", fixUpper: "major", natural: true, includeZero: true, majorTick: { length: 10}}).
+            addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", natural: true, includeZero: true, majorTick: {length: -5}, minorTicks: false}).
             addPlot("p1", {type: "Markers"}).
             addPlot("p2", {type: "Markers"}).
             addPlot("p3", {type: "Markers"}).
