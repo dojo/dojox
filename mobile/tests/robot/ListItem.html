@@ -25,17 +25,18 @@
 				doh.register("dojox.mobile.ListItem mouse tests", [
 					{
 						name: "ListItem mouse tests",
-						timeout: 4000,
+						timeout: 7000,
 						runTest: function(){
 							var d = new doh.Deferred();
+							var reg=dojo.global.dijit.registry;
 
-							doh.robot.mouseMoveAt(dijit.registry.byId("dojox_mobile_ListItem_0").domNode, 2000);
+							doh.robot.mouseMoveAt(reg.byId("dojox_mobile_ListItem_0").domNode, 2000);
 							doh.robot.mouseClick({left: true}, 500);
 
-
+							// FIXME: this animation can be very slow on mobile, it would be nice to register an event handler.
 							doh.robot.sequence(d.getTestCallback(function(){
-								doh.is("view1.html", dijit.registry.byId("dojox_mobile_Heading_1").get("label"));
-							}), 500);
+								doh.is("view1.html", reg.byId("dojox_mobile_Heading_1").get("label"));
+							}), 2000);
 							return d;
 						}
 					}
