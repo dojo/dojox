@@ -111,9 +111,10 @@ define([
 		height: "",
 
 		// scrollType: Number
-		//		- 1: use -webkit-transform:translate3d(x,y,z) style,
+		//		- 1: use -webkit-transform:translate3d(x,y,z) style, use -webkit-animation for slide anim
 		//		- 2: use top/left style,
-		//		- 0: use default value (2 in case of Android, otherwise 1)
+		//		- 3: use -webkit-transform:translate3d(x,y,z) style, use -webkit-transition for slide anim
+		//		- 0: use default value (2 in case of Android < 3, 3 if iOS6, otherwise 1)
 		scrollType: 0,
 
 		init: function(/*Object?*/params){
@@ -145,15 +146,25 @@ define([
 				// top/left style works fine as a workaround for input fields auto-scrolling issue,
 				// so use top/left in case of Android by default.
 				this._useTopLeft = this.scrollType ? this.scrollType === 2 : has('android') < 3;
+				// Flag for using webkit transition on transform, instead of animation + keyframes.
+				// (keyframes create a slight delay before the slide animation...)
 				if(!this._useTopLeft){
-					this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
-					this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
-
-					// Creation of keyframes takes a little time. If they are created
-					// in a lazy manner, a slight delay is noticeable when you start
-					// scrolling for the first time. This is to create keyframes up front.
-					for(var i = 0; i < 3; i++){
-						this.setKeyframes(null, null, i);
+					this._useTransformTransition = this.scrollType ? this.scrollType === 3 : has("iphone") >= 6;
+				}
+				if(!this._useTopLeft){
+					if(this._useTransformTransition){
+						this._ch.push(connect.connect(this.domNode, "webkitTransitionEnd", this, "onFlickAnimationEnd"));
+						this._ch.push(connect.connect(this.domNode, "webkitTransitionStart", this, "onFlickAnimationStart"));
+					}else{
+						this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
+						this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
+	
+						// Creation of keyframes takes a little time. If they are created
+						// in a lazy manner, a slight delay is noticeable when you start
+						// scrolling for the first time. This is to create keyframes up front.
+						for(var i = 0; i < 3; i++){
+							this.setKeyframes(null, null, i);
+						}
 					}
 					if(has("translate3d")){ // workaround for flicker issue on iPhone and Android 3.x/4.0
 						domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
@@ -306,7 +317,7 @@ define([
 				}
 				return;
 			}
-			if(this._useTopLeft){
+			if(this._useTransformTransition || this._useTopLeft){
 				var n = e.target;
 				if(n === this._scrollBarV || n === this._scrollBarH){
 					var cls = "mblScrollableScrollTo" + (n === this._scrollBarV ? "0" : "1");
@@ -644,7 +655,7 @@ define([
 			if(this._scrollBarH){
 				this._scrollBarH.className = "";
 			}
-			if(this._useTopLeft){
+			if(this._useTransformTransition || this._useTopLeft){
 				this.containerNode.style.webkitTransition = "";
 				if(this._scrollBarV) { this._scrollBarV.style.webkitTransition = ""; }
 				if(this._scrollBarH) { this._scrollBarH.style.webkitTransition = ""; }
@@ -726,6 +737,9 @@ define([
 			var s = (node || this.containerNode).style;
 			if(has("webkit")){
 				if(!this._useTopLeft){
+					if(this._useTransformTransition){
+						s.webkitTransition = "";	
+					}
 					s.webkitTransform = this.makeTranslateStr(to);
 				}else{
 					s.webkitTransition = "";
@@ -961,6 +975,9 @@ define([
 			if(this._v && this._scrollBarV && typeof to.y == "number"){
 				if(has("webkit")){
 					if(!this._useTopLeft){
+						if(this._useTransformTransition){
+							this._scrollBarV.style.webkitTransition = "";
+						}
 						this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
 					}else{
 						domStyle.set(this._scrollBarV, {
@@ -975,6 +992,9 @@ define([
 			if(this._h && this._scrollBarH && typeof to.x == "number"){
 				if(has("webkit")){
 					if(!this._useTopLeft){
+						if(this._useTransformTransition){
+							this._scrollBarH.style.webkitTransition = "";
+						}
 						this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
 					}else{
 						domStyle.set(this._scrollBarH, {
@@ -1018,16 +1038,42 @@ define([
 			// idx: 0:scrollbarV, 1:scrollbarH, 2:content
 			if(has("webkit")){
 				if(!this._useTopLeft){
-					this.setKeyframes(from, to, idx);
-					domStyle.set(node, {
-						webkitAnimationDuration: duration + "s",
-						webkitAnimationTimingFunction: easing
-					});
-					domClass.add(node, "mblScrollableScrollTo"+idx);
-					if(idx == 2){
-						this.scrollTo(to, true, node);
+					if(this._useTransformTransition){
+						// for iOS6 (maybe others?): use -webkit-transform + -webkit-transition
+						if(to.x === undefined){ to.x = from.x; }
+						if(to.y === undefined){ to.y = from.y; }
+						 // make sure we actually change the transform, otherwise no webkitTransitionEnd is fired.
+						if(to.x !== from.x || to.y !== from.y){
+							domStyle.set(node, {
+								webkitTransitionProperty: "-webkit-transform",
+								webkitTransitionDuration: duration + "s",
+								webkitTransitionTimingFunction: easing
+							});
+							var t = this.makeTranslateStr(to);
+							setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
+								domStyle.set(node, {
+									webkitTransform: t
+								});
+							}, 0);
+							domClass.add(node, "mblScrollableScrollTo"+idx);
+						} else {
+							// transform not changed, just hide the scrollbar
+							this.hideScrollBar();
+							this.removeCover();
+						}
 					}else{
-						this.scrollScrollBarTo(to);
+						// use -webkit-transform + -webkit-animation
+						this.setKeyframes(from, to, idx);
+						domStyle.set(node, {
+							webkitAnimationDuration: duration + "s",
+							webkitAnimationTimingFunction: easing
+						});
+						domClass.add(node, "mblScrollableScrollTo"+idx);
+						if(idx == 2){
+							this.scrollTo(to, true, node);
+						}else{
+							this.scrollScrollBarTo(to);
+						}
 					}
 				}else{
 					domStyle.set(node, {
