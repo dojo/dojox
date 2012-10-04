@@ -230,7 +230,7 @@ define([
 				f = dm.hideAddressBar;
 			}
 		}
-		if(has('android') && win.global.onorientationchange !== undefined){
+		if((has('android') || has('iphone') >= 6) && win.global.onorientationchange !== undefined){
 			var _f = f;
 			f = function(evt){
 				var _conn = connect.connect(null, "onresize", null, function(e){
@@ -239,18 +239,30 @@ define([
 				});
 			};
 			var curSize = dm.getScreenSize();
-			// Watch for resize events when the virtual keyboard is shown/hidden,
-			// the heuristic to detect this is that the screen width does not change
+			var threshold = has('android') ? 100 : 20;
+			// Android: Watch for resize events when the virtual keyboard is shown/hidden.
+			// The heuristic to detect this is that the screen width does not change
 			// and the height changes by more than 100 pixels.
+			//
+			// iOS >= 6: Watch for resize events when entering or existing the new iOS6 
+			// full-screen mode. The heuristic to detect this is that the screen width does not
+			// change and the height changes by more than 20 pixels (the actual value depends on
+			// whether the address bar is hidden or shown). Note that there are 2 resize events 
+			// when entering the full-screen mode; the height is already changed when we get
+			// the first event; no further height change at the second event (that we skip 
+			// thanks to the height change test). Differently, there is only one resize event
+			// when exiting the full-screen mode. (Tested on iPhone 4S under iOS 6.0.)
 			connect.connect(null, "onresize", null, function(e){
 				var newSize = dm.getScreenSize();
-				if(newSize.w == curSize.w && Math.abs(newSize.h - curSize.h) >= 100){
-					// keyboard has been shown/hidden
+				if(newSize.w == curSize.w && Math.abs(newSize.h - curSize.h) >= threshold){
+					// keyboard has been shown/hidden (Android), or full-screen mode has
+					// been entered/exited (iOS >= 6). 
 					_f(e);
 				}
 				curSize = newSize;
 			});
 		}
+		
 		connect.connect(null, win.global.onorientationchange !== undefined
 			? "onorientationchange" : "onresize", null, f);
 		win.body().style.visibility = "visible";
