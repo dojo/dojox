@@ -41,9 +41,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			this._vAxis = null;
 			return this;	//	dojox/charting/plot2d/CartesianBase
 		},
-		cleanGroup: function(creator, dim, offsets, noClip){
+		cleanGroup: function(creator, noClip){
 			this.inherited(arguments);
 			if(!noClip && this.chart._nativeClip){
+				var offsets = this.chart.offsets, dim = this.chart.dim;
 				var w = Math.max(0, dim.width  - offsets.l - offsets.r),
 					h = Math.max(0, dim.height - offsets.t - offsets.b);
 				this.group.setClip({ x: offsets.l, y: offsets.t, width: w, height: h });

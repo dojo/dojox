@@ -139,7 +139,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 			}
 			this.dirty = this.isDirty();
 			if(!this.dirty){ return this; }
-			this.cleanGroup(null, dim, offsets);
+			this.cleanGroup();
 			var s = this.getGroup(), ta = this.chart.theme, lineStroke;
 			var renderOnAxis = this.opt.renderOnAxis;
 			if(has("ios") < 6 || has("android")){

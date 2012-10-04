@@ -261,7 +261,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 				return;
 			}
 
-			this.cleanGroup(null, dim, offsets, true);
+			this.cleanGroup(null, true);
 
 			if(!this.opt.values){
 				return;
