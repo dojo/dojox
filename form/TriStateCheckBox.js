@@ -70,6 +70,9 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 		//		Current check state of the check box.
 		checked: "",
 		
+		// aria-pressed for toggle buttons, and aria-checked for checkboxes
+		_aria_attr: "aria-checked",
+
 		constructor: function(){
 			// summary:
 			//		Runs on widget initialization to setup arrays etc.
@@ -82,9 +85,9 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 				"True": '&#8730;',
 				"Mixed": '&#9632;'
 			};
-			this.stateValues = { 
+			this.stateValues = {
 				"False": false,
-				"True": "on", 
+				"True": "on",
 				"Mixed": "mixed"
 			};
 		},
@@ -121,22 +124,10 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 			var stateIndex = array.indexOf(this.states, checked), changed = false;
 			if(stateIndex >= 0){
 				this._currentState = stateIndex;
-				if(checked != this.get("checked")){
-					changed = true;
-				}
-				this._set("checked", checked);
 				this._stateType = this._getStateType(checked);
-				if(checked == "mixed"){
-					domAttr.set(this.focusNode || this.domNode, "checked", true);
-				}else{
-					domAttr.set(this.focusNode || this.domNode, "checked", checked);
-				}
 				domAttr.set(this.focusNode, "value", this.stateValues[this._stateType]);
 				domAttr.set(this.stateLabelNode, 'innerHTML', this._stateLabels[this._stateType]);
-				(this.focusNode || this.domNode).setAttribute("aria-checked", checked);
-				if(changed){
-					this._handleOnChange(checked, priorityChange);
-				}
+				this.inherited(arguments);
 			}else{
 				console.warn("Invalid state!");
 			}
@@ -169,7 +160,6 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 		_setReadOnlyAttr: function(/*Boolean*/ value){
 			this._set("readOnly", value);
 			domAttr.set(this.focusNode, "readOnly", value);
-			this.focusNode.setAttribute("aria-readonly", value);
 		},
 
 		_setValueAttr: function(/*String|Boolean*/ newValue, /*Boolean*/ priorityChange){
@@ -262,7 +252,7 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 
 		click: function(){
 			// summary:
-			//		Emulate a click on the check box, but will not trigger the 
+			//		Emulate a click on the check box, but will not trigger the
 			//		onClick method.
 			if(this._currentState >= this.states.length - 1){
 				this._currentState = 0;
