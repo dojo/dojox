@@ -17,9 +17,9 @@ dojo.experimental("dojox.editor.plugins.SpellCheck");
 dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._Templated], {
 	// summary:
 	//		The widget that is used for the UI of the batch spelling check
-	
+
 	widgetsInTemplate: true,
-	
+
 	templateString:
 		"<table role='presentation' class='dijitEditorSpellCheckTable'>" +
 			"<tr><td colspan='3' class='alignBottom'><label for='${textId}' id='${textId}_label'>${unfound}</label>" +
@@ -51,7 +51,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 				"<td></td>" +
 			"</tr>" +
 		"</table>",
-	
+
 	/*************************************************************************/
 	/**                      Framework Methods                              **/
 	/*************************************************************************/
@@ -65,16 +65,16 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		// Indicate if the dialog can be closed
 		this.closable = true;
 	},
-	
+
 	postMixInProperties: function(){
 		this.id = dijit.getUniqueId(this.declaredClass.replace(/\./g,"_"));
 		this.textId = this.id + "_textBox";
 		this.selectId = this.id + "_select";
 	},
-	
+
 	postCreate: function(){
 		var select = this.suggestionSelect;
-		
+
 		// Customize multi-select to single select
 		dojo.removeAttr(select.domNode, "multiple");
 		select.addItems = function(/*Array*/ items){
@@ -102,7 +102,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 			//		public
 			dojo.empty(this.domNode);
 		};
-	
+
 		select.deselectAll = function(){
 			// summary:
 			//		De-select all the selected items
@@ -110,7 +110,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 			//		public
 			this.containerNode.selectedIndex = -1;
 		};
-		
+
 		// Connect up all the controls with their event handler
 		this.connect(this, "onKeyPress", "_cancel");
 		this.connect(this.unfoundTextBox, "onKeyPress", "_enter");
@@ -123,39 +123,39 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		this.connect(this.replaceAllButton, "onClick", "onReplaceAll");
 		this.connect(this.cancelButton, "onClick", "onCancel");
 	},
-	
+
 	/*************************************************************************/
 	/**                      Public Methods                                 **/
 	/*************************************************************************/
-	
+
 	onSkip: function(){
 		// Stub for the click event of the skip button.
 	},
-	
+
 	onSkipAll: function(){
 		// Stub for the click event of the skipAll button.
 	},
-	
+
 	onAddToDic: function(){
 		// Stub for the click event of the toDic button.
 	},
-	
+
 	onReplace: function(){
 		// Stub for the click event of the replace button.
 	},
-	
+
 	onReplaceAll: function(){
 		// Stub for the click event of the replaceAll button.
 	},
-	
+
 	onCancel: function(){
 		// Stub for the click event of the cancel button.
 	},
-	
+
 	onEnter: function(){
 		// Stub for the enter event of the unFound textbox.
 	},
-	
+
 	focus: function(){
 		// summary:
 		//		Set the focus of the control
@@ -163,11 +163,11 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		//		public
 		this.unfoundTextBox.focus();
 	},
-	
+
 	/*************************************************************************/
 	/**                      Private Methods                                **/
 	/*************************************************************************/
-	
+
 	_cancel: function(/*Event*/ evt){
 		// summary:
 		//		Handle the cancel event
@@ -180,7 +180,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 			dojo.stopEvent(evt);
 		}
 	},
-	
+
 	_enter: function(/*Event*/ evt){
 		// summary:
 		//		Handle the enter event
@@ -193,7 +193,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 			dojo.stopEvent(evt);
 		}
 	},
-	
+
 	_unfoundTextBoxChange: function(){
 		// summary:
 		//		Indicate that the Not Found textbox is changed or not
@@ -208,7 +208,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 			dojo.byId(id).innerHTML = this["unfound"];
 		}
 	},
-	
+
 	_setUnfoundWordAttr: function(/*String*/ value){
 		// summary:
 		//		Set the value of the Not Found textbox
@@ -219,7 +219,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		value = value || "";
 		this.unfoundTextBox.set("value", value);
 	},
-	
+
 	_getUnfoundWordAttr: function(){
 		// summary:
 		//		Get the value of the Not Found textbox
@@ -227,7 +227,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		//		private
 		return this.unfoundTextBox.get("value");
 	},
-	
+
 	_setSuggestionListAttr: function(/*Array*/ values){
 		// summary:
 		//		Set the items of the suggestion list
@@ -240,7 +240,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		select.removeItems();
 		select.addItems(values);
 	},
-	
+
 	_getSelectedWordAttr: function(){
 		// summary:
 		//		Get the suggested word.
@@ -255,7 +255,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 			return this.unfoundTextBox.get("value");
 		}
 	},
-	
+
 	_setDisabledAttr: function(/*Boolean*/ disabled){
 		// summary:
 		//		Enable/disable the control
@@ -267,7 +267,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		this.replaceButton.set("disabled", disabled);
 		this.replaceAllButton.set("disabled", disabled);
 	},
-	
+
 	_setInProgressAttr: function(/*Boolean*/ show){
 		// summary:
 		//		Set the visibility of the progress icon
@@ -275,7 +275,7 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		//		private
 		var id = this.id + "_progressIcon",
 			cmd = show ? "removeClass" : "addClass";
-			dojo[cmd](id, "hidden");
+		dojo[cmd](id, "hidden");
 	}
 });
 
@@ -286,20 +286,20 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	//		them out one by one so that it can handle the case when the service has a limitation of
 	//		the capability.
 	//		The encoding is UTF-8.
-	
+
 	// ACTION [public const] String
 	//		Actions for the server-side piece to take
 	ACTION_QUERY: "query",
 	ACTION_UPDATE: "update",
-	
+
 	// callbackHandle [public] String
 	//		The callback name of JSONP
 	callbackHandle: "callback",
-	
+
 	// maxBufferLength [public] Number
-	//		The max number of charactors that send to the service at one time.
+	//		The max number of characters that send to the service at one time.
 	maxBufferLength: 100,
-	
+
 	// delimiter [public] String
 	//		A token that is used to identify the end of a word (a complete unit). It prevents the service from
 	//		cutting a single word into two parts. For example:
@@ -310,7 +310,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	//		Having " " as the delimiter, we get the following correct pieces.
 	// |		"Dojo toolkit is a ajax framework", " It helps the developers buid", " their web applications"
 	delimiter: " ",
-	
+
 	// label [public] String
 	//		The leading label of the JSON response. The service will return the result like this:
 	// |	{response: [
@@ -320,12 +320,12 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	// |		}
 	// |	]}
 	label: "response",
-	
+
 	// _timeout: [private] Number
 	//		Set JSONP timeout period
 	_timeout: 30000,
 	SEC: 1000,
-	
+
 	constructor: function(){
 		// The URL of the target service
 		this.serviceEndPoint = "";
@@ -340,7 +340,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 		// assemble the final result.
 		this._counter = 0;
 	},
-	
+
 	send: function(/*String*/ content, /*String?*/ action){
 		// summary:
 		//		Send the content to the service port with the specified action
@@ -360,7 +360,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 			comms = this.exArgs,
 			timeout = this._timeout,
 			l = 0, r = 0;
-		
+
 		// Temporary list that holds the result returns from the service, which will be
 		// assembled into a completed one.
 		if(!this._result) {
@@ -428,14 +428,14 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 				});
 			}
 		};
-	
+
 		if(!_this.isWorking){
 			batchSend();
 		}else{
 			_this._queue.push(batchSend);
 		}
 	},
-	
+
 	_finalizeCollection: function(action){
 		// summary:
 		//		Assemble the responses into one result.
@@ -456,11 +456,11 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 		this._counter = 0;
 		this._result = [];
 	},
-	
+
 	onLoad: function(/*String*/ data){
 		// Stub method for a sucessful call
 	},
-	
+
 	setWaitingTime: function(/*Number*/ seconds){
 		this._timeout = seconds * this.SEC;
 	}
@@ -469,78 +469,78 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 	// summary:
 	//		This plugin provides a spelling check capability for the editor.
-	
+
 	// url: [public] String
 	//		The url of the spelling check service
 	url: "",
-	
+
 	// bufferLength: [public] Number
 	//		The max length of each XHR request. It is used to divide the large
 	//		text into pieces so that the server-side piece can hold.
 	bufferLength: 100,
-	
+
 	// interactive: [public] Boolean
 	//		Indicate if the interactive spelling check is enabled
 	interactive: false,
-	
+
 	// timeout: [public] Number
 	//		The minutes to waiting for the response. The default value is 30 seconds.
 	timeout: 30,
-	
+
 	// button: [protected] dijit/form/DropDownButton
 	//		The button displayed on the editor's toolbar
 	button: null,
-	
+
 	// _editor: [private] dijit/Editor
 	//		The reference to the editor the plug-in belongs to.
 	_editor: null,
-	
+
 	// exArgs: [private] Object
 	//		The object that holds all the parametes passed into the constructor
 	exArgs: null,
-	
+
 	// _cursorSpan: [private] String
 	//		The span that holds the current position of the cursor
 	_cursorSpan:
 		"<span class=\"cursorPlaceHolder\"></span>",
-	
+
 	// _cursorSelector: [private] String
 	//		The CSS selector of the cursor span
 	_cursorSelector:
 		"cursorPlaceHolder",
-	
+
 	// _incorrectWordsSpan: [private] String
 	//		The wrapper that marks the incorrect words
 	_incorrectWordsSpan:
 		"<span class='incorrectWordPlaceHolder'>${text}</span>",
-		
+
 	// _ignoredIncorrectStyle: [private] Object
 	//		The style of the ignored incorrect words
 	_ignoredIncorrectStyle:
 		{"cursor": "inherit", "borderBottom": "none", "backgroundColor": "transparent"},
-		
+
 	// _normalIncorrectStyle: [private] Object
 	//		The style of the marked incorrect words.
 	_normalIncorrectStyle:
 		{"cursor": "pointer", "borderBottom": "1px dotted red", "backgroundColor": "yellow"},
-	
+
 	// _highlightedIncorrectStyle: [private] Object
 	//		The style of the highlighted incorrect words
 	_highlightedIncorrectStyle:
 		{"borderBottom": "1px dotted red", "backgroundColor": "#b3b3ff"},
-	
+
 	// _selector: [private] String
 	//		An empty CSS class that identifies the incorrect words
 	_selector: "incorrectWordPlaceHolder",
-	
+
 	// _maxItemNumber: [private] Number
 	//		The max number of the suggestion list items
 	_maxItemNumber: 3,
-	
+
 	/*************************************************************************/
 	/**                      Framework Methods                              **/
 	/*************************************************************************/
-	
+
 	constructor: function(){
 		// A list that holds all the spans that contains the incorrect words
 		// It is used to select/replace the specified word.
@@ -556,18 +556,18 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		// The index of the _spanList
 		this._iterator = 0;
 	},
-	
+
 	setEditor: function(/*dijit.Editor*/ editor){
 		this._editor = editor;
 		this._initButton();
 		this._setNetwork();
 		this._connectUp();
 	},
-	
+
 	/*************************************************************************/
 	/**                      Private Methods                                **/
 	/*************************************************************************/
-	
+
 	_initButton: function(){
 		// summary:
 		//		Initialize the button displayed on the editor's toolbar
@@ -576,7 +576,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var _this = this,
 			strings = (this._strings = dojo.i18n.getLocalization("dojox.editor.plugins", "SpellCheck")),
 			dialogPane = (this._dialog = new dijit.TooltipDialog());
-		
+
 		dialogPane.set("content", (this._dialogContent = new dojox.editor.plugins._spellCheckControl({
 			unfound: strings["unfound"],
 			skip: strings["skip"],
@@ -588,7 +588,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			replaceAll: strings["replaceAll"],
 			cancel: strings["cancel"]
 		})));
-		
+
 		this.button = new dijit.form.DropDownButton({
 			label: strings["widgetLabel"],
 			showLabel: false,
@@ -616,17 +616,17 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			}
 		});
 		_this._dialogContent.isOpen = false;
-		
+
 		dialogPane.domNode.setAttribute("aria-label", this._strings["widgetLabel"]);
 	},
-	
+
 	_setNetwork: function(){
 		// summary:
 		//		Set up the underlying network service
 		// tags:
 		//		private
 		var comms = this.exArgs;
-		
+
 		if(!this._service){
 			var service = (this._service = new dojox.editor.plugins._SpellCheckScriptMultiPart());
 			service.serviceEndPoint = this.url;
@@ -642,7 +642,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			}
 		}
 	},
-	
+
 	_connectUp: function(){
 		// summary:
 		//		Connect up all the events with their event handlers
@@ -650,7 +650,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		//		private
 		var editor = this._editor,
 			cont = this._dialogContent;
-		
+
 		this.connect(this.button, "set", "_disabled");
 		this.connect(this._service, "onLoad", "_loadData");
 		this.connect(this._dialog, "onOpen", "_openDialog");
@@ -663,7 +663,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		this.connect(cont, "onReplaceAll", "_replaceAll");
 		this.connect(cont, "onCancel", "_cancel");
 		this.connect(cont, "onEnter", "_enter");
-		
+
 		editor.contentPostFilters.push(this._spellCheckFilter); // Register the filter
 		dojo.publish(dijit._scopeName + ".Editor.plugin.SpellCheck.getParser", [this]); // Get the language parser
 		if(!this.parser){
@@ -674,7 +674,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 	/*************************************************************************/
 	/**                      Event Handlers                                 **/
 	/*************************************************************************/
-	
+
 	_disabled: function(name, disabled){
 		// summary:
 		//		When the plugin is disabled (the button is disabled), reset all to their initial status.
@@ -695,7 +695,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			this._enabled = !disabled;
 		}
 	},
-	
+
 	_keyPress: function(evt){
 		// summary:
 		//		The handler of the onKeyPress event of the editor
@@ -711,7 +711,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			}
 		}
 	},
-	
+
 	_loadData: function(/*Array*/ data){
 		// summary:
 		//		Apply the query result to the content
@@ -722,9 +722,9 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var cache = this._cache,
 			html = this._editor.get("value"),
 			cont = this._dialogContent;
-		
+
 		this._iterator = 0;
-		
+
 		// Update the local cache
 		dojo.forEach(data, function(d){
 			cache[d.text] = d.suggestion;
@@ -736,34 +736,34 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			cont.closable = false;
 			this._markIncorrectWords(html, cache);
 			cont.closable = true;
-			
+
 			if(this._dialogContent.isOpen){
 				this._iterator = -1;
 				this._skip();
 			}
 		}
 	},
-	
+
 	_openDialog: function(){
 		// summary:
 		//		The handler of the onOpen event
 		var cont = this._dialogContent;
-		
+
 		// Clear dialog content and disable it first
 		cont.ignoreChange = true;
 		cont.set("unfoundWord", "");
 		cont.set("suggestionList", null);
 		cont.set("disabled", true);
 		cont.set("inProgress", true);
-		
+
 		cont.isOpen = true; // Indicate that the dialog is open
 		cont.closable = false;
-		
+
 		this._submitContent();
-		
+
 		cont.closable = true;
 	},
-	
+
 	_skip: function(/*Event?*/ evt, /*Boolean?*/ noUpdate){
 		// summary:
 		//		Ignore this word and move to the next unignored one.
@@ -777,16 +777,16 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			list = this._spanList || [],
 			len = list.length,
 			iter = this._iterator;
-		
+
 		cont.closable = false;
 		cont.isChanged = false;
 		cont.ignoreChange = true;
-		
+
 		// Skip the current word
 		if(!noUpdate && iter >= 0 && iter < len){
 			this._skipWord(iter);
 		}
-		
+
 		// Move to the next
 		while(++iter < len && list[iter].edited == true){ /* do nothing */}
 		if(iter < len){
@@ -801,7 +801,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			cont.set("disabled", true);
 			cont.set("inProgress", false);
 		}
-		
+
 		setTimeout(function(){
 			// When moving the focus out of the iframe in WebKit browsers, we
 			// need to focus something else first. So the textbox
@@ -812,7 +812,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			cont.closable = true;
 		}, 0);
 	},
-	
+
 	_skipAll: function(){
 		// summary:
 		//		Ignore all the same words
@@ -822,20 +822,20 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		this._skipWordAll(this._iterator);
 		this._skip();
 	},
-	
+
 	_add: function(){
 		// summary:
 		//		Add the unrecognized word into the dictionary
 		// tags:
 		//		private
 		var cont = this._dialogContent;
-		
+
 		cont.closable = false;
 		cont.isOpen = true;
 		this._addWord(this._iterator, cont.get("unfoundWord"));
 		this._skip();
 	},
-	
+
 	_replace: function(){
 		// summary:
 		//		Replace the incorrect word with the selected one,
@@ -845,12 +845,12 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var cont = this._dialogContent,
 			iter = this._iterator,
 			targetWord = cont.get("selectedWord");
-		
+
 		cont.closable = false;
 		this._replaceWord(iter, targetWord);
 		this._skip(null, true);
 	},
-	
+
 	_replaceAll: function(){
 		// summary:
 		//		Replace all the words with the same text
@@ -861,7 +861,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			len = list.length,
 			word = list[this._iterator].innerHTML.toLowerCase(),
 			targetWord = cont.get("selectedWord");
-		
+
 		cont.closable = false;
 		for(var iter = 0; iter < len; iter++){
 			// If this word is not ignored and is the same as the source word,
@@ -870,10 +870,10 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 				this._replaceWord(iter, targetWord);
 			}
 		}
-		
+
 		this._skip(null, true);
 	},
-	
+
 	_cancel: function(){
 		// summary:
 		//		Cancel this check action
@@ -882,7 +882,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		this._dialogContent.closable = true;
 		this._editor.focus();
 	},
-	
+
 	_enter: function(){
 		// summary:
 		//		Handle the ENTER event
@@ -894,11 +894,11 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			this._skip();
 		}
 	},
-	
+
 	/*************************************************************************/
 	/**                              Utils                                  **/
 	/*************************************************************************/
-	
+
 	_query: function(/*String*/ html){
 		// summary:
 		//		Send the query text to the service. The query text is a string of words
@@ -926,7 +926,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			this._loadData([]);
 		}
 	},
-	
+
 	_html2Text: function(html){
 		// summary:
 		//		Substitute the tag with white charactors so that the server
@@ -940,7 +940,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var text = [],
 			isTag = false,
 			len = html ? html.length : 0;
-		
+
 		for(var i = 0; i < len; i++){
 			if(html.charAt(i) == "<"){ isTag = true; }
 			if(isTag == true){
@@ -949,11 +949,11 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 				text.push(html.charAt(i));
 			}
 			if(html.charAt(i) == ">"){ isTag = false; }
-			
+
 		}
 		return text.join("");
 	},
-	
+
 	_getBookmark: function(/*String*/ eValue){
 		// summary:
 		//		Get the cursor position. It is the index of the characters
@@ -971,7 +971,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		while(++i < index && eValue.charAt(i) == nv.charAt(i)){ /* do nothing */}
 		return i;
 	},
-	
+
 	_moveToBookmark: function(){
 		// summary:
 		//		Move to the position when the cursor was.
@@ -988,7 +988,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			if(parent){ parent.removeChild(cursorSpan); }
 		}
 	},
-	
+
 	_submitContent: function(/*Boolean?*/ delay){
 		// summary:
 		//		Functions to submit the content of the editor
@@ -1008,7 +1008,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			this._query(this._editor.get("value"));
 		}
 	},
-	
+
 	_populateDialog: function(index){
 		// summary:
 		//		Populate the content of the dailog
@@ -1019,7 +1019,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var list = this._spanList,
 			cache = this._cache,
 			cont = this._dialogContent;
-		
+
 		cont.set("disabled", false);
 		if(index < list.length && list.length > 0){
 			var word = list[index].innerHTML;
@@ -1028,7 +1028,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			cont.set("inProgress", false);
 		}
 	},
-	
+
 	_markIncorrectWords: function(/*String*/ html, /*Object*/ cache){
 		// summary:
 		//		Mark the incorrect words and set up menus if available
@@ -1052,7 +1052,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			bmMarked = false,
 			cArray = html.split(""),
 			spanList = null;
-		
+
 		// Mark the incorrect words and cursor position
 		for(var i = words.length - 1; i >= 0; i--){
 			var word = words[i];
@@ -1077,20 +1077,20 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			cArray.splice(bmpos, 0, bookmark);
 			bmMarked = true;
 		}
-		
+
 		editor.set("value", cArray.join(""));
 		editor._cursorToStart = false; // HACK! But really necessary here.
-		
+
 		this._moveToBookmark();
-		
+
 		// Get the incorrect words <span>
 		spanList = this._spanList = dojo.query("." + this._selector, editor.document);
 		spanList.forEach(function(span, i){ span.id = selector + i; });
-		
+
 		// Set them to the incorrect word style
 		if(!this.interactive){ delete nstyle.cursor; }
 		spanList.style(nstyle);
-		
+
 		if(this.interactive){
 			// Build the context menu
 			if(_this._contextMenu){
@@ -1099,40 +1099,40 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			}
 			_this._contextMenu = new dijit.Menu({
 				targetNodeIds: [editor.iframe],
-				
+
 				bindDomNode: function(/*String|DomNode*/ node){
 					// summary:
 					//		Attach menu to given node
 					node = dojo.byId(node);
-			
+
 					var cn;	// Connect node
-			
+
 					// Support context menus on iframes.   Rather than binding to the iframe itself we need
 					// to bind to the <body> node inside the iframe.
 					var iframe, win;
 					if(node.tagName.toLowerCase() == "iframe"){
 						iframe = node;
 						win = this._iframeContentWindow(iframe);
-						cn = dojo.body(ed.document)
+						cn = dojo.body(editor.document)
 					}else{
-						
+
 						// To capture these events at the top level, attach to <html>, not <body>.
 						// Otherwise right-click context menu just doesn't work.
 						cn = (node == dojo.body() ? dojo.doc.documentElement : node);
 					}
-			
-			
+
+
 					// "binding" is the object to track our connection to the node (ie, the parameter to bindDomNode())
 					var binding = {
 						node: node,
 						iframe: iframe
 					};
-			
+
 					// Save info about binding in _bindings[], and make node itself record index(+1) into
 					// _bindings[] array.   Prefix w/_dijitMenu to avoid setting an attribute that may
 					// start with a number, which fails on FF/safari.
 					dojo.attr(node, "_dijitMenu" + this.id, this._bindings.push(binding));
-			
+
 					// Setup the connections to monitor click etc., unless we are connecting to an iframe which hasn't finished
 					// loading yet, in which case we need to wait for the onload event first, and then connect
 					// On linux Shift-F10 produces the oncontextmenu event, but on Windows it doesn't, so
@@ -1147,14 +1147,14 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 								// Schedule context menu to be opened unless it's already been scheduled from onkeydown handler
 								if(dojo.hasClass(target, selector) && !target.edited){ // Click on the incorrect word
 									dojo.stopEvent(evt);
-									
+
 									// Build the on-demand menu items
 									var maxNumber = _this._maxItemNumber,
 										id = target.id,
 										index = id.substring(selector.length),
 										suggestions = cache[target.innerHTML.toLowerCase()],
 										slen = suggestions.length;
-										
+
 									// Add the suggested words menu items
 									this.destroyDescendants();
 									if(slen == 0){
@@ -1176,7 +1176,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 											}));
 										}
 									}
-									
+
 									//Add the other action menu items
 									this.addChild(new dijit.MenuSeparator());
 									this.addChild(new dijit.MenuItem({
@@ -1201,7 +1201,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 											editor.focus();
 										}
 									}));
-									
+
 									this._scheduleOpen(target, iframe, {x: evt.pageX, y: evt.pageY});
 								}
 							}),
@@ -1214,19 +1214,19 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 						];
 					});
 					binding.connects = cn ? doConnects(cn) : [];
-			
+
 					if(iframe){
 						// Setup handler to [re]bind to the iframe when the contents are initially loaded,
 						// and every time the contents change.
 						// Need to do this b/c we are actually binding to the iframe's <body> node.
 						// Note: can't use dojo.connect(), see #9609.
-			
+
 						binding.onloadHandler = dojo.hitch(this, function(){
 							// want to remove old connections, but IE throws exceptions when trying to
 							// access the <body> node because it's already gone, or at least in a state of limbo
-			
-							var win = this._iframeContentWindow(iframe);
-								cn = dojo.body(ed.document)
+
+							var win = this._iframeContentWindow(iframe),
+								cn = dojo.body(editor.document);
 							binding.connects = doConnects(cn);
 						});
 						if(iframe.addEventListener){
@@ -1239,7 +1239,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			});
 		}
 	},
-	
+
 	_selectWord: function(index){
 		// summary:
 		//		Select the incorrect word. Move to it and highlight it
@@ -1247,8 +1247,9 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		//		The index of the span list
 		// tags:
 		//		private
-		var list = this._spanList;
-		
+		var ed = this._editor,
+			list = this._spanList;
+
 		if(index < list.length && list.length > 0){
 			ed._sCall("selectElement", [list[index]]);
 			ed._sCall("collapse", [true]);
@@ -1260,7 +1261,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			}
 		}
 	},
-	
+
 	_replaceWord: function(index, text){
 		// summary:
 		//		Replace the word at the given index with the text
@@ -1271,12 +1272,12 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		// tags:
 		//		private
 		var list = this._spanList;
-		
+
 		list[index].innerHTML = text;
 		dojo.style(list[index], this._ignoredIncorrectStyle);
 		list[index].edited = true;
 	},
-	
+
 	_skipWord: function(index){
 		// summary:
 		//		Skip the word at the index
@@ -1285,12 +1286,12 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		// tags:
 		//		private
 		var list = this._spanList;
-		
+
 		dojo.style(list[index], this._ignoredIncorrectStyle);
 		this._cache[list[index].innerHTML.toLowerCase()].correct = true;
 		list[index].edited = true;
 	},
-	
+
 	_skipWordAll: function(index, /*String?*/word){
 		// summary:
 		//		Skip the all the word that have the same text as the word at the index
@@ -1305,14 +1306,14 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var list = this._spanList,
 			len = list.length;
 		word = word || list[index].innerHTML.toLowerCase();
-			
+
 		for(var i = 0; i < len; i++){
 			if(!list[i].edited && list[i].innerHTML.toLowerCase() == word){
 				this._skipWord(i);
 			}
 		}
 	},
-	
+
 	_addWord: function(index, /*String?*/word){
 		// summary:
 		//		Add the word at the index to the dictionary
@@ -1327,7 +1328,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		service.send(word || this._spanList[index].innerHTML.toLowerCase(), service.ACTION_UPDATE);
 		this._skipWordAll(index, word);
 	},
-	
+
 	_findText: function(/*String*/ txt, /*Boolean*/ caseSensitive, /*Boolean*/ backwards){
 		// summary:
 		//		This function invokes a find with specific options
@@ -1377,7 +1378,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		}
 		return found;
 	},
-	
+
 	_spellCheckFilter: function(/*String*/ value){
 		// summary:
 		//		Filter out the incorrect word style so that the value of the edtior
