@@ -2,7 +2,9 @@ define([
 	"doh/runner",
 	"dojo/_base/sniff",
 	"./equals",
+	"./wildcard",
 	"./WidgetList",
+	"./StatefulArray",
 	"./StatefulModelOptions"
 ], function(doh, has){
 	try{

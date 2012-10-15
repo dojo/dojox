@@ -69,8 +69,11 @@ define([
 				// returns: dojox/mvc/StatefulArray
 				//		The removed elements.
 
-				var l = this.get("length"),
-				 p = Math.min(idx, l),
+				var l = this.get("length");
+
+				idx += idx < 0 ? l : 0;
+
+				var p = Math.min(idx, l),
 				 removals = this.slice(idx, idx + n),
 				 adds = lang._toArray(arguments).slice(2);
 
@@ -122,7 +125,12 @@ define([
 				// end: Number
 				//		The index to end at. (a[end] won't be picked up)
 
-				var slice = [], end = typeof end === "undefined" ? this.get("length") : end;
+				var l = this.get("length");
+
+				start += start < 0 ? l : 0;
+				end = (end === void 0 ? l : end) + (end < 0 ? l : 0);
+
+				var slice = [];
 				for(var i = start || 0; i < Math.min(end, this.get("length")); i++){
 					slice.push(this.get(i));
 				}
