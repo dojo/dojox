@@ -25,32 +25,23 @@ return declare("dojox.form.TriStateCheckBox", [Button, _ToggleButtonMixin], {
 		//		Overrides `dijit/form/Button.type`.  Users should not change this value.
 		type: "checkbox",
 
-
-		states: "",
-
 		// states: Array
 		//		States of TriStateCheckBox.
 		//		The value of This.checked should be one of these three states:
 		//		[false, true, "mixed"]
-		states: [false, true, "mixed"],
+		states: "",
 
-		_stateLabels: null,
 		// _stateLabels: Object
 		//		These characters are used to replace the image to show
-		//		current state of TriStateCheckBox in high contrast mode.
-		_stateLabels: {
-				"False": '&#9633',
-				"True": '&#8730;',
-				"Mixed": '&#9632'
-		},
+		//		current state of TriStateCheckBox in high contrast mode. This is an associate array of
+		//      states with their corresponding replacing characters. State can either be "False", "True" or "Mixed".
+		 _stateLabels: null,
 
 		// stateValues: Object
-		//		The values of the TriStateCheckBox in corresponding states.
-		stateValues:	{
-				"False": false,
-				"True": "on",
-				"Mixed": "mixed"
-		},
+		//		The values of the TriStateCheckBox in corresponding states. This is an associate array of
+		//      states with their corresponding values. State can either be "False", "True" or "Mixed".
+		stateValue: null,
+
 		// _currentState: Integer
 		//		The current state of the TriStateCheckBox
 		_currentState: 0,
