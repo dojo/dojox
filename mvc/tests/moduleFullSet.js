@@ -4,6 +4,7 @@ define([
 	"./equals",
 	"./wildcard",
 	"./WidgetList",
+	"./StatefulArray",
 	"./StatefulModelOptions"
 ], function(doh, has){
 	try{

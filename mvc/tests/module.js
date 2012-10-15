@@ -3,7 +3,9 @@ define([
 	"dojo/_base/sniff",
 	"./equals",
 	"./wildcard",
-	"./WidgetList"
+	"./WidgetList",
+	"./StatefulArray",
+	"./StatefulModelOptions"
 ], function(doh, has){
 	try{
 		var userArgs = window.location.search.replace(/[\?&](dojoUrl|testUrl|testModule)=[^&]*/g, "").replace(/^&/, "?");
