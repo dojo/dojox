@@ -191,15 +191,28 @@ define([
 
 			if(!this._isOnLine){
 				this._isOnLine = true;
-				this.set({ // retry applying the attribute
-					icon: this.icon,
-					deleteIcon: this.deleteIcon,
-					rightIcon: this.rightIcon,
-					rightIcon2: this.rightIcon2
+				this.set({ 
+					// retry applying the attributes for which the custom setter delays the actual 
+					// work until _isOnLine is true
+					icon: this._pending_icon !== undefined ? this._pending_icon : this.icon,
+					deleteIcon: this._pending_deleteIcon !== undefined ? this._pending_deleteIcon : this.deleteIcon,
+					rightIcon: this._pending_rightIcon !== undefined ? this._pending_rightIcon : this.rightIcon,
+					rightIcon2: this._pending_rightIcon2 !== undefined ? this._pending_rightIcon2 : this.rightIcon2,
+					uncheckIcon: this._pending_uncheckIcon !== undefined ? this._pending_uncheckIcon : this.uncheckIcon 
 				});
+				// Not needed anymore (this code executes only once per life cycle):
+				delete this._pending_icon;
+				delete this._pending_deleteIcon;
+				delete this._pending_rightIcon;
+				delete this._pending_rightIcon2;
+				delete this._pending_uncheckIcon;
 			}
 			if(parent && parent.select){
-				this.set("checked", this.checked); // retry applying the attribute
+				// retry applying the attributes for which the custom setter delays the actual 
+				// work until _isOnLine is true. 
+				this.set("checked", this._pendingChecked !== undefined ? this._pendingChecked : this.checked);
+				// Not needed anymore (this code executes only once per life cycle):
+				delete this._pendingChecked; 
 			}
 			this.setArrow();
 			this.layoutChildren();
@@ -346,11 +359,15 @@ define([
 			}
 			return this.domNode.firstChild;
 		},
-
+		
 		_setIcon: function(/*String*/icon, /*String*/type){
 			// tags:
 			//		private
-			if(!this._isOnLine){ return; } // icon may be invalid because inheritParams is not called yet
+			if(!this._isOnLine){
+				// record the value to be able to reapply it (see the code in the startup method)
+				this["_pending_" + type] = icon;
+				return; 
+			} // icon may be invalid because inheritParams is not called yet
 			this._set(type, icon);
 			this[type + "Node"] = iconUtils.setIcon(icon, this[type + "Pos"],
 				this[type + "Node"], this[type + "Title"] || this.alt, this.domNode, this._findRef(type), "before");
@@ -407,7 +424,11 @@ define([
 		_setCheckedAttr: function(/*Boolean*/checked){
 			// tags:
 			//		private
-			if(!this._isOnLine){ return; } // icon may be invalid because inheritParams is not called yet
+			if(!this._isOnLine){
+				// record the value to be able to reapply it (see the code in the startup method)
+				this._pendingChecked = checked; 
+				return; 
+			} // icon may be invalid because inheritParams is not called yet
 			var parent = this.getParent();
 			if(parent && parent.select === "single" && checked){
 				array.forEach(parent.getChildren(), function(child){
