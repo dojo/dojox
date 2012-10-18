@@ -1,5 +1,5 @@
 define(["dojo/_base/connect", "dojo/_base/declare", "./PlotAction", "dojo/fx/easing", "dojox/gfx/matrix", 
-	"dojox/gfx/fx", "dojox/lang/functional"],
+	"dojox/gfx/fx", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"],
 	function(hub, declare, PlotAction, dfe, m, gf, df){
 
 	/*=====
