@@ -74,7 +74,7 @@ define([
 		postCreate: function(){
 			if(this.editable){
 				require([this.editableMixinClass], lang.hitch(this, function(module){
-					lang.mixin(this, new module());
+					declare.safeMixin(this, new module());
 				}));
 			}
 			this.connect(this.domNode, "onselectstart", event.stop);
