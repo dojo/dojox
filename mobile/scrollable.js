@@ -411,9 +411,16 @@ define([
 						return;
 					}
 				}
-				if(this._v && Math.abs(dy) < this.threshold ||
-					(this._h || this._f) && Math.abs(dx) < this.threshold){
-					return;
+				if(this._v && this._h){ // scrollDir="hv"
+					if(dy < this.threshold &&
+					   dx < this.threshold){
+						return;
+					}
+				}else{
+					if(this._v && dy < this.threshold ||
+					   (this._h || this._f) && dx < this.threshold){
+						return;
+					}
 				}
 				this.addCover();
 				this.showScrollBar();
