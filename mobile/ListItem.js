@@ -456,7 +456,7 @@ define([
 			if(busy){
 				if(!this._progNode){
 					this._progNode = domConstruct.create("div", {className:"mblListItemIcon"});
-					prog = this._prog = new ProgressIndicator({size:25, center:false});
+					prog = this._prog = new ProgressIndicator({size:25, center:false, removeOnStop:false});
 					domClass.add(prog.domNode, this.progStyle);
 					this._progNode.appendChild(prog.domNode);
 				}
