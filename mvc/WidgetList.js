@@ -10,7 +10,8 @@ define([
 	var childTypeAttr = "data-mvc-child-type",
 	 childMixinsAttr = "data-mvc-child-mixins",
 	 childParamsAttr = "data-mvc-child-props",
-	 childBindingsAttr = "data-mvc-child-bindings";
+	 childBindingsAttr = "data-mvc-child-bindings",
+	 undef;
 
 	function evalParams(params){
 		return eval("({" + params + "})");
@@ -209,7 +210,14 @@ define([
 			if(this.childClz){
 				createAndWatch(this.childClz);
 			}else if(this.childType){
-				require([this.childType].concat(this.childMixins && this.childMixins.split(",") || []), createAndWatch);
+				var types = [this.childType].concat(this.childMixins && this.childMixins.split(",") || []),
+				 mids = array.filter(array.map(types, function(type){ return lang.getObject(type) ? undef : type; }), function(mid){ return mid !== undef; }),
+				 _self = this;
+				require(mids, function(){
+					if(!self._beingDestroyed){
+						createAndWatch.apply(this, array.map(types, function(type){ return lang.getObject(type) || require(type); }));
+					}
+				});
 			}else{
 				createAndWatch(Templated);
 			}
