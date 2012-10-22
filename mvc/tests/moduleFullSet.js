@@ -3,6 +3,8 @@ define([
 	"dojo/_base/sniff",
 	"./equals",
 	"./wildcard",
+	"./_Controller",
+	"./ModelRefController",
 	"./WidgetList",
 	"./StatefulArray",
 	"./StatefulModelOptions"
