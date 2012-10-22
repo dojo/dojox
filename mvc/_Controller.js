@@ -31,9 +31,12 @@ define([
 				this.id = this.id || (srcNodeRef || {}).id || registry.getUniqueId(this.declaredClass.replace(/\./g, "_"));
 				registry.add(this);
 			}catch(e){}
-			// If this instance is not created via Dojo parser, start this up right away
 			if(!srcNodeRef){
+				// If this instance is not created via Dojo parser, start this up right away
 				this.startup();
+			}else{
+				// If this is created via Dojo parser, set widgetId attribute so that destroyDescendants() of parent widget works
+				srcNodeRef.setAttribute("widgetId", this.id); 
 			}
 		},
 
@@ -52,11 +55,20 @@ define([
 			// summary:
 			//		Stops data binding as this object is destroyed.
 
+			this._beingDestroyed = true;
 			if(!this._applyAttributes){
 				this._stopAtWatchHandles();
 			}
 			// If there is dijit/_WidgetBase in upper class hierarchy (happens when this descendant is mixed into a widget), let _WidgetBase do all work
 			this.inherited(arguments);
+			if(!this._applyAttributes){
+				try{
+					// Remove this instance from dijit/registry
+					// Usage of dijit/registry module is optional. Do not use it if it's not already loaded.
+					require("dijit/registry").remove(this.id);
+				}catch(e){}
+			}
+			this._destroyed = true;
 		},
 
 		set: function(/*String*/ name, /*Anything*/ value){
