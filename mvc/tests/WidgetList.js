@@ -1,12 +1,20 @@
 define([
 	"doh",
+	"dojo/_base/array",
 	"dojo/_base/config",
+	"dojo/_base/declare",
+	"dijit/_WidgetBase",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"dijit/_Container",
+	"dijit/form/TextBox",
 	"dojox/mvc/at",
 	"dojox/mvc/getStateful",
 	"dojox/mvc/WidgetList",
+	"dojo/text!dojox/mvc/tests/test_WidgetList_WidgetListInTemplate.html",
 	"dojo/text!dojox/mvc/tests/test_WidgetList_childTemplate.html",
 	"dojo/text!dojox/mvc/tests/test_WidgetList_childBindings.json"
-], function(doh, config, at, getStateful, WidgetList, childTemplate, childBindings){
+], function(doh, array, config, declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _Container, _TextBox, at, getStateful, WidgetList, template, childTemplate, childBindings){
 	var a = getStateful([
 		{
 			Serial: "A111",
@@ -165,6 +173,27 @@ define([
 			wl0.set("children", "foo");
 			children = wl0.getChildren();
 			doh.is(0, children.length, "The widget list should be empty");
+		},
+		function objectInChildType(){
+			var data = [{idx: 0}, {idx: 1}, {idx: 2}, {idx: 3}];
+
+			declare("My.Widget", _WidgetBase, {
+				isMyWidget: true
+			});
+			declare("My.Mixin", null, {
+				isMyMixin: true
+			});
+
+			var w = new (declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {templateString: template}))({childData: data});
+			w.startup();
+
+			var simpleChildren = w.simpleWidgetList.getChildren(),
+			 simpleChildrenWithRegularDijit = w.simpleWidgetListWithRegularDijit.getChildren(),
+			 simpleChildrenWithRegularDijitInMixin = w.simpleWidgetListWithRegularDijitInMixin.getChildren()
+
+			doh.t(array.every(simpleChildren, function(child){ return child.isMyWidget && child.isMyMixin && !child.addChild && !child._setValueAttr; }), "simpleChildren should be created by My.Widget and My.Mixin");
+			doh.t(array.every(simpleChildrenWithRegularDijit, function(child){ return !child.isMyWidget && child.isMyMixin && !child.addChild && child._setValueAttr; }), "simpleChildrenWithRegularDijit should be created by dijit/form/TextBox and My.Mixin");
+			doh.t(array.every(simpleChildrenWithRegularDijitInMixin, function(child){ return child.isMyWidget && child.isMyMixin && child.addChild && !child._setValueAttr; }), "simpleChildrenWithRegularDijitInMixin should be created by My.Widget, My.Mixin and dijit/_Container");
 		}
 	]);
 });
