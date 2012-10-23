@@ -5,6 +5,7 @@ define([
 	"./wildcard",
 	"./_Controller",
 	"./ModelRefController",
+	"./StoreRefControllerTest",
 	"./WidgetList",
 	"./StatefulArray",
 	"./StatefulModelOptions"
