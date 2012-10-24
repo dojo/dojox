@@ -86,7 +86,7 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 						break;
 				}
 				promise.then(function(response){
-					this.onPushComplete();
+					lang.hitch(this, this.onPushComplete);
 				});
 				return promise;
 			}
