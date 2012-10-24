@@ -110,7 +110,7 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 					aroundRect.w = o.width;
 					aroundRect.h = o.height;
 					break;
-				default:
+                default:
 				//case "slice":
 					if(!this.angles){
 						// calculate the running total of slice angles
@@ -127,12 +127,16 @@ define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/decl
 					aroundRect.x = o.cx + o.cr * Math.cos(angle);
 					aroundRect.y = o.cy + o.cr * Math.sin(angle);
 					aroundRect.w = aroundRect.h = 1;
+                    // depending on startAngle we might go out of the 0-2*PI range, normalize that
+                    if(startAngle && (angle < 0 || angle > 2 * Math.PI)){
+                        angle = Math.abs(2 * Math.PI  - Math.abs(angle));
+                    }
 					// calculate the position
 					if(angle < pi4){
 						// do nothing: the position is right
 					}else if(angle < pi2 + pi4){
 						position = ["below-centered", "above-centered"];
-					}else if(angle < Math.PI + pi4){
+			    	}else if(angle < Math.PI + pi4){
 						position = ["before-centered", "after-centered"];
 					}else if(angle < 2 * Math.PI - pi4){
 						position = ["above-centered", "below-centered"];
