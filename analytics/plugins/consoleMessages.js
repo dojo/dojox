@@ -1,4 +1,4 @@
-define(["dojo/_base/lang","../_base", "dojo/_base/config", "dojo/aspect"
+define(["dojo/_base/lang", "../_base", "dojo/_base/config", "dojo/aspect"
 ], function(lang, dxa, config, aspect){
 
 	var consoleMessages = lang.getObject("dojox.analytics.plugins.consoleMessages", true);

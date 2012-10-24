@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload", 
-        "dojo/_base/sniff", "dojo/_base/xhr", "dojo/json", "dojo/io-query", "dojo/io/script"
-], function(lang, config, ready, unload, has, xhr, JSON, ioQuery, scriptIO){
+        "dojo/_base/sniff", "dojo/request", "dojo/json", "dojo/io-query", "dojo/request/script"
+], function(lang, config, ready, unload, has, request, JSON, ioQuery, script){
 
 	var Analytics = function(){
 		// summary:
@@ -67,28 +67,28 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 				// clear the queue
 				this._inTransit = this._data;
 				this._data = [];
-				var def;
+				var promise;
 				switch(this.sendMethod){
 					case "script":
-						def = scriptIO.get({
-							url: this.getQueryPacket(),
+						promise = script.get(this.getQueryPacket(), {
 							preventCache: 1,
 							callbackParamName: "callback"
 						});
 						break;
 					case "xhrPost":
 					default:
-						def = xhr.post({
-							url:this.dataUrl,
-							content:{
+						promise = request.post(this.dataUrl, {
+							data:{
 								id: this._id++,
 								data: JSON.stringify(this._inTransit)
 							}
 						});
 						break;
 				}
-				def.addCallback(this, "onPushComplete");
-				return def;
+				promise.then(function(response){
+					this.onPushComplete();
+				});
+				return promise;
 			}
 			return false;
 		},
