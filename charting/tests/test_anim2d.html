@@ -50,7 +50,7 @@
 						addAxis("y", { vertical: true, fixLower: "major", fixUpper: "major", includeZero: true }).
 						addPlot("default", { type: "ClusteredColumns", gap: 10, animate: { duration: 1000 } }).
 						addPlot("indicator", { type: "Indicator", values: 1.5, lineStroke: { color: "red" }, precision: 1, animate: { duration: 1000 } }).
-						addPlot("grid", { type: "Grid", animate: { duration: 1000 } }).
+						addPlot("grid", { type: "Grid", vStripes: true, vFill: [200, 0, 0, 0.6], vAlternateFill: [0, 200, 0, 0.6], animate: { duration: 1000 } }).
 						addSeries("Series A", [ 2, 1, 0.5, -1, -2 ] ).
 						addSeries("Series B", [ -2, -1, -0.5, 1, 2 ] ).
 						addSeries("Series C", [ 1, 0.5, -1, -2, -3 ] ).

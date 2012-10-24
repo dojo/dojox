@@ -111,7 +111,9 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|			color:     "#666",
 	//	|			width:  0.8,
 	//	|			length: 3
-	//	|		}
+	//	|		},
+	//	|		fill: "grey",  // every other stripe
+	//	|		alternateFill: "grey" // alternate stripe
 	//	|	},
 	//	|	indicator: {
 	//	|		lineStroke:  {width: 1.5, color: "#333"},		// line
