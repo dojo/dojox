@@ -205,15 +205,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 				if(ticks != null && vScaler != null){
 					var vt = vScaler.scaler.getTransformerFromModel(vScaler);
 					if(this.opt.hStripes){
-						this.drawHRect(ticks, ta.grid, dim, offsets, vScaler, vt);
+						this._renderHRect(ticks, ta.grid, dim, offsets, vScaler, vt);
 					}
 					if(this.opt.hMinorLines){
 						lineStroke = this.opt.minorHLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;
-						this.drawHLines(ticks.minor, lineStroke, dim, offsets, vScaler, vt);
+						this._renderHLines(ticks.minor, lineStroke, dim, offsets, vScaler, vt);
 					}
 					if(this.opt.hMajorLines){
 						lineStroke = this.opt.majorHLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;
-						this.drawHLines(ticks.major, lineStroke, dim, offsets, vScaler, vt);
+						this._renderHLines(ticks.major, lineStroke, dim, offsets, vScaler, vt);
 					}
 				}
 				
@@ -225,15 +225,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 				if(ticks != null && hScaler != null){
 					var ht = hScaler.scaler.getTransformerFromModel(hScaler);
 					if(this.opt.vStripes){
-						this.drawVRect(ticks, ta.grid, dim, offsets, hScaler, ht);
+						this._renderVRect(ticks, ta.grid, dim, offsets, hScaler, ht);
 					}
 					if(ticks && this.opt.vMinorLines){
 						lineStroke = this.opt.minorVLine || (ta.grid && ta.grid.minorLine) || ta.axis.minorTick;
-						this.drawVLines(ticks.minor, lineStroke, dim, offsets, hScaler, ht);
+						this._renderVLines(ticks.minor, lineStroke, dim, offsets, hScaler, ht);
 					}
 					if(ticks && this.opt.vMajorLines){
 						lineStroke = this.opt.majorVLine || (ta.grid && ta.grid.majorLine) || ta.axis.majorTick;
-						this.drawVLines(ticks.major, lineStroke, dim, offsets, hScaler, ht);
+						this._renderVLines(ticks.major, lineStroke, dim, offsets, hScaler, ht);
 					}
 
 				}
@@ -241,7 +241,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 			this.dirty = false;
 			return this;	//	dojox/charting/plot2d/Grid
 		},
-		drawHLines: function(ticks, lineStroke, dim, offsets, vScaler, vt){
+		_renderHLines: function(ticks, lineStroke, dim, offsets, vScaler, vt){
 			var s = this.getGroup();
 			arr.forEach(ticks, function(tick){
 				if(!this.opt.renderOnAxis && tick.value == (this._vAxis.opt.leftBottom?vScaler.bounds.from:vScaler.bounds.to)){
@@ -259,7 +259,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 				}
 			}, this);
 		},
-		drawVLines: function(ticks, lineStroke, dim, offsets, hScaler, ht){
+		_renderVLines: function(ticks, lineStroke, dim, offsets, hScaler, ht){
 			var s = this.getGroup();
 			arr.forEach(ticks, function(tick){
 				if(!this.opt.renderOnAxis && tick.value == (this._hAxis.opt.leftBottom?hScaler.bounds.from:hScaler.bounds.to)){
@@ -277,7 +277,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 				}
 			}, this);
 		},
-		drawHRect: function(ticks, theme, dim, offsets, vScaler, vt){
+		_renderHRect: function(ticks, theme, dim, offsets, vScaler, vt){
 			var fill, tick, y, y2, hStripe;
 			var allTicks = ticks.major.concat(ticks.minor);
 			allTicks.sort(sortTicks);
@@ -308,7 +308,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 				}
 			}
 		},
-		drawVRect: function(ticks, theme, dim, offsets, hScaler, ht){
+		_renderVRect: function(ticks, theme, dim, offsets, hScaler, ht){
 			var fill, tick, x, x2, vStripe;
 			var allTicks = ticks.major.concat(ticks.minor);
 			allTicks.sort(sortTicks);
@@ -339,7 +339,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 				}
 			}
 		},
-		
 		_animateGrid: function(shape, type, offset, size){
 			var transStart = type == "h" ? [offset, 0] : [0, offset];
 			var scaleStart = type == "h" ? [1/size, 1] : [1, 1/size];
