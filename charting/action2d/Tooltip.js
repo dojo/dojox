@@ -1,6 +1,6 @@
-define(["dojo/_base/kernel", "dijit/Tooltip","dojo/_base/lang", "dojo/_base/declare", "dojo/dom-style", "./PlotAction",
+define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-style", "./PlotAction",
 	"dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"],
-	function(dojo, Tooltip, lang, declare, domStyle, PlotAction, m, df){
+	function(Tooltip, lang, declare, domStyle, PlotAction, m, df){
 	
 	/*=====
 	var __TooltipCtorArgs = {
