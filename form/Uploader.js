@@ -296,7 +296,7 @@ declare("dojox.form.Uploader", [uploader, Button], {
 	_setDisabledAttr: function(disabled){
 		// summary:
 		//		Internal. To set disabled use: uploader.set("disabled", true);
-		if(this._disabled == disabled){ return; }
+		if(this.disabled == disabled || !this.inputNode){ return; } 
 		this.inherited(arguments);
 		domStyle.set(this.inputNode, "display", disabled ? "none" : "");
 	},
