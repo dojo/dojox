@@ -19,7 +19,7 @@
 			sendInterval: 5000,
 			// the line below can be used to override the sampleDelay for mouseOver and targetProps and textContentMaxChars
 			//sampleDelay : 2000, targetProps : ['id','className'], textContentMaxChars : 12,
-			analyticsUrl: 'http://dojotoolkit.org/~dmachi/dojo-1.0/dojox/analytics/logger/dojoxAnalytics.php'">
+			analyticsUrl: 'http://dojo.localdomain/dojox/analytics/logger/dojoxAnalytics.php'">
 		</script>
 
 		<!-- do not use: only for testing alternate themes -->
@@ -37,7 +37,7 @@
 				"dojox/analytics/plugins/idle",
 				"dijit/TitlePane",
 				"dojo/parser",
-				"dojo/io/script",
+				"dojo/request/script",
 				"dijit/form/Button",
 				"dijit/form/ComboBox"],
 			function(ready, analytics, dojoplugin, windowplugin, consolemsgplugin, mouseoverplugin, mouseclickplugin,
