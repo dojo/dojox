@@ -1,6 +1,6 @@
-define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-style", "./PlotAction",
-	"dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"],
-	function(Tooltip, lang, declare, domStyle, PlotAction, m, df){
+define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/connect", "dojo/dom-style",
+	"./PlotAction", "dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"],
+	function(Tooltip, lang, declare, win, hub, domStyle, PlotAction, m, df){
 	
 	/*=====
 	var __TooltipCtorArgs = {
@@ -14,6 +14,8 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-styl
 			// text: Function?
 			//		The function that produces the text to be shown within a tooltip.  By default this will be
 			//		set by the plot in question, by returning the value of the element.
+			// mouseOver: Boolean?
+            //		Whether the tooltip is enabled on mouse over or on mouse click / touch down. Default is true.
 	};
 	=====*/
 
@@ -42,7 +44,8 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-styl
 
 		// the data description block for the widget parser
 		defaultParams: {
-			text: DEFAULT_TEXT	// the function to produce a tooltip from the object
+			text: DEFAULT_TEXT,	// the function to produce a tooltip from the object
+            mouseOver: true
 		},
 		optionalParams: {},	// no optional parameters
 
@@ -56,7 +59,7 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-styl
 			// kwArgs: __TooltipCtorArgs?
 			//		Optional keyword arguments object for setting parameters.
 			this.text = kwArgs && kwArgs.text ? kwArgs.text : DEFAULT_TEXT;
-			
+			this.mouseOver = kwArgs && kwArgs.mouseOver != undefined ? kwArgs.mouseOver : true;
 			this.connect();
 		},
 		
@@ -74,7 +77,7 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-styl
 				return;
 			}
 			
-			if(!o.shape || o.type !== "onmouseover"){ return; }
+			if(!o.shape || (this.mouseOver && o.type !== "onmouseover") || (!this.mouseOver && o.type !== "onclick")){ return; }
 			
 			// calculate relative coordinates and the position
 			var aroundRect = {type: "rect"}, position = ["after-centered", "before-centered"];
@@ -174,6 +177,12 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/dom-styl
 					Tooltip.show(tooltip, this.aroundRect, position);
 				}
 			}
+			if(!this.mouseOver){
+				this._handle = hub.connect(win.doc, "onclick", this, "onClick");
+			}
+		},
+		onClick: function(){
+			this.process({ type: "onmouseout"});
 		}
 	});
 });
