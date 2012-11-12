@@ -1,6 +1,6 @@
 define(["../main", "dojo/_base/lang", "./_Builder", "dijit/_BidiSupport",
 "./_Grid", "./cells/_base", "./cells/dijit"],
-	function(dojox, lang, _Builder, _BidiSupport, _Grid){
+	function(dojox, lang, _Builder, _BidiSupport, _Grid, BaseCell, cellsDijit){
 		// module:
 		//		dojox/grid/BidiSupport
 		
@@ -86,7 +86,7 @@ define(["../main", "dojo/_base/lang", "./_Builder", "dijit/_BidiSupport",
 			}
 		});
 
-		lang.extend(dojox.grid.cells.Cell, {
+		lang.extend(BaseCell.Cell, {
 			// text direction UCC constants
 			LRE: '\u202A',
 			RLE: '\u202B',
@@ -125,7 +125,7 @@ define(["../main", "dojo/_base/lang", "./_Builder", "dijit/_BidiSupport",
 			}
 		});
 
-		lang.extend(dojox.grid.cells.Select, {
+		lang.extend(BaseCell.Select, {
 			_getValueCallOrig: dojox.grid.cells.Select.prototype.getValue,
 			getValue: function(inRowIndex){
 				var ret = this._getValueCallOrig(inRowIndex);
@@ -150,7 +150,7 @@ define(["../main", "dojo/_base/lang", "./_Builder", "dijit/_BidiSupport",
 			}
 		});
 
-		lang.extend(dojox.grid.cells.ComboBox, {
+		lang.extend(cellsDijit.ComboBox, {
 			getWidgetPropsCallOrig: dojox.grid.cells.ComboBox.prototype.getWidgetProps,
 			getWidgetProps: function(inDatum){
 				var ret = this.getWidgetPropsCallOrig(inDatum);
@@ -161,7 +161,7 @@ define(["../main", "dojo/_base/lang", "./_Builder", "dijit/_BidiSupport",
 			}
 		});
 
-		lang.extend(dojox.grid.cells._Widget, {
+		lang.extend(cellsDijit._Widget, {
 			getWidgetPropsCallOrig: dojox.grid.cells._Widget.prototype.getWidgetProps,
 			getWidgetProps: function(inDatum){
 				var ret = this.getWidgetPropsCallOrig(inDatum);
