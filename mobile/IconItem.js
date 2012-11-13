@@ -257,6 +257,8 @@ define([
 		},
 
 		_open_1: function(){
+			// summary:
+			//		Opens the icon content for the 'below' transition.
 			// tags:
 			//		private
 			this.paneWidget.show();
@@ -274,7 +276,10 @@ define([
 			//		Scrolls until the given node is in the view.
 			var s = viewRegistry.getEnclosingScrollable(node);
 			if(s){ // this node is placed inside scrollable
-				s.scrollIntoView(node, true);
+				var dim = s.getDim();
+				if(dim.c.h >= dim.d.h){ // #16306: only if the content is larger than the display area 
+					s.scrollIntoView(node, true);
+				}
 			}else{
 				win.global.scrollBy(0, domGeometry.position(node, false).y);
 			}
