@@ -188,6 +188,15 @@ define([
 			}
 			this.resize();
 		},
+		
+		_setMoveToAttr: function(/*String*/moveTo){
+			// tags:
+			//		private
+			this._set("moveTo", moveTo);
+			if(this.backButton){
+				this.backButton.set("moveTo", moveTo);
+			}
+		},
 
 		_setLabelAttr: function(/*String*/label){
 			// tags:
