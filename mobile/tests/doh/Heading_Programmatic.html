@@ -80,6 +80,15 @@
 						
 						demoWidget = dijit.byId("dojox_mobile_Heading_4");
 						doh.assertTrue(demoWidget.backButton.get("moveTo") == "view2", "when changing Heading.moveTo afterwards");
+						
+						// Test case for #16313 
+						var noError = true; 
+						try{ 
+							demoWidget.set("busy", false); 
+						}catch(err){ 
+							noError = false;  
+						} 
+						doh.assertTrue(noError, "Setting busy to false before ever being set to true shouldn't throw an exception!"); 
 					}
 				]);
 				doh.run();

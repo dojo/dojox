@@ -216,7 +216,7 @@ define([
 				}
 				domConstruct.place(prog.domNode, this.domNode, "first");
 				prog.start();
-			}else{
+			}else if(prog){
 				prog.stop();
 			}
 			this._set("busy", busy);
