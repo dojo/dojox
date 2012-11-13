@@ -113,6 +113,21 @@ dojo.addOnLoad(function(){
 				verifyListItem("dojox_mobile_ListItem_11", txt, '', "mblDomButtonCheckboxOn", false, true, false, true);
 //							doh.assertEqual("mblDomButtonCheckboxOn", demoWidget.get("icon"));
 			}
+		},
+		{
+			name: "ListItem set",
+			timeout: 1000,
+			runTest: function(){
+				var demoWidget = dijit.byId("dojox_mobile_ListItem_11");
+				// Test case for #16314
+				var noError = true;
+				try{
+					demoWidget.set("busy", false);
+				}catch(err){
+					noError = false; 
+				}
+				doh.assertTrue(noError, "Setting busy to false before ever being set to true shouldn't throw an exception!");
+			}
 		}
 	]);
 	doh.run();

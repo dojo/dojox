@@ -466,7 +466,7 @@ define([
 					domConstruct.place(this._progNode, this._findRef("icon"), "before");
 				}
 				prog.start();
-			}else{
+			}else if(this._progNode){
 				if(this.iconNode){
 					this.domNode.replaceChild(this.iconNode, this._progNode);
 				}else{
