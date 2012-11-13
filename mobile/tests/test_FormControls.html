@@ -180,7 +180,7 @@
 				</tr>
 				<tr>
 					<td style="vertical-align:top"><span class="bold">TextBox</span></td>
-					<td style="text-align:right"><input data-dojo-type="dojox.mobile.TextBox" maxLength="9" selectOnClick="true" placeHolder="max 9 chars"></td>
+					<td style="text-align:right"><input data-dojo-type="dojox.mobile.TextBox" intermediateChanges="true" maxLength="9" selectOnClick="true" placeHolder="max 9 chars" onChange="console.log('onChange fired with ' + arguments[0])"></td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top"><span class="bold">SearchBox</span></td>
