@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload", 
+define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload",
         "dojo/_base/sniff", "dojo/request", "dojo/json", "dojo/io-query", "dojo/request/script"
 ], function(lang, config, ready, unload, has, request, JSON, ioQuery, script){
 
@@ -23,7 +23,9 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 		// we're not going to schedule pushing data to the server until after the page
 		// has completed loading
 		ready(this, "schedulePusher");
-		unload.addOnUnload(this, "pushData", true);
+		unload.addOnUnload(this, function(){
+			this.pushData();
+		});
 	};
 
 	lang.extend(Analytics, {
@@ -40,7 +42,7 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 
 			if(arguments.length > 2){
 				// FIXME: var c = dojo._toArray(arguments) ?
-				data = Array.prototype.slice.call(arguments,1);				
+				data = Array.prototype.slice.call(arguments,1);
 			}
 
 			this._data.push({ plugin: dataType, data: data });
@@ -53,7 +55,7 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 				this.schedulePusher(this.inTransitRetry);
 				return;
 			}
-			
+
 			if(this.pushData()){ return; }
 			this.schedulePusher();
 		},
@@ -98,7 +100,7 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 					id: this._id++,
 					data: JSON.stringify(this._inTransit)
 				};
-				
+
 				// FIXME would like a much better way to get the query down to length
 				var query = this.dataUrl + '?' + ioQuery.objectToQuery(content);
 				if(query.length > this.maxRequestSize){
