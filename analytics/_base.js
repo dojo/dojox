@@ -23,7 +23,9 @@ define(["dojo/_base/lang", "dojo/_base/config", "dojo/ready", "dojo/_base/unload
 		// we're not going to schedule pushing data to the server until after the page
 		// has completed loading
 		ready(this, "schedulePusher");
-		unload.addOnUnload(this, "pushData", true);
+		unload.addOnUnload(this, function(){
+			this.pushData();
+		});
 	};
 
 	lang.extend(Analytics, {
