@@ -76,11 +76,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 
 			if (!this.pageCoord){
 				this.opt.values = null;
+				this.inter.onChange({});
 			}else{
 				// let's create a fake coordinate to not block parent render method
 				// actual coordinate will be computed in _updateCoordinates
 				this.opt.values = [];
-				this.opt.labels = inter.opt.labels && (this.secondCoord?"trend":"marker");
+				this.opt.labels = this.secondCoord?"trend":"marker";
 			}
 
 			// take axis on the interactor plot and forward them onto the indicator plot
@@ -108,7 +109,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 			this.inherited(arguments);
 		},
 		_renderText: function(g, text, t, x, y, index, values, data){
-			this.inherited(arguments);
+			// render only if labels is true
+			if(this.inter.opt.labels){
+				this.inherited(arguments);
+			}
+			// send the event in all cases
 			var coords = getXYCoordinates(this.opt.vertical, values, data);
 			this.inter.onChange({
 				start: coords[0],
