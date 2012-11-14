@@ -183,6 +183,11 @@
 				[]
 			],
 			[
+				"BB10",
+				"blackberry",
+				[]
+			],
+			[
 				"iPhone",
 				"iphone",
 				[]
