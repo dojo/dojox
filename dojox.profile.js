@@ -5,9 +5,10 @@ var profile = (function(){
 			var list = {
 				"dojox/dojox.profile":1,
 				"dojox/package.json":1,
-				"dojox/mobile/themes/common/compile":1
+				"dojox/mobile/themes/common/compile":1,
+				"dojox/app/tests/layoutApp/build.profile": 1
 			};
-			return (mid in list) || /^dojox\/resources\//.test(mid) || /(png|jpg|jpeg|gif|tiff)$/.test(filename);
+			return (mid in list) || /^dojox\/resources\//.test(mid) || /(png|jpg|jpeg|gif|tiff)$/.test(filename) || /dojox\/app\/build\//.test(mid);
 		},
 
 		excludes = [
