@@ -295,7 +295,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 				this._renderText(this.getGroup(), text, this.chart.theme, v?(results[0].x+results[length - 1].x)/2:results[1].x,
 					v?results[0].y:(results[1].y+results[length - 1].y)/2, -1, this.opt.values, this._data);
 			}
-			var lineFill = this.opt.hasOwnProperty("lineFill")?this.opt.lineFill:t.indicator.lineFill;
+			var lineFill = this.opt.lineFill!=undefined?this.opt.lineFill:t.indicator.lineFill;
 			if(lineFill && length > 1){
 				var x0 = Math.min(results[0].x1, results[length - 1].x1);
 				var y0 =  Math.min(results[0].y1, results[length - 1].y1);
@@ -348,9 +348,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 							cy = mark.y - c.y;
 							var ms = this.opt.markerSymbol?this.opt.markerSymbol:t.indicator.markerSymbol,
 								path = "M" + cx + " " + cy + " " + ms;
-							sh = this.opt.hasOwnProperty("markerShadow")?this.opt.markerShadow:t.indicator.markerShadow;
-							ls = this.opt.hasOwnProperty("markerStroke")?this.opt.markerStroke:t.indicator.markerStroke;
-							ol = this.opt.hasOwnProperty("markerOutline")?this.opt.markerOutline:t.indicator.markerOutline;
+							sh = this.opt.markerShadow!=undefined?this.opt.markerShadow:t.indicator.markerShadow;
+							ls = this.opt.markerStroke!=undefined?this.opt.markerStroke:t.indicator.markerStroke;
+							ol = this.opt.markerOutline!=undefined?this.opt.markerOutline:t.indicator.markerOutline;
 							if(sh){
 								var sp = "M" + (cx + sh.dx) + " " + (cy + sh.dy) + " " + ms;
 								g.createPath(sp).setFill(sh.color).setStroke(sh);
@@ -362,7 +362,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 							}
 
 							var shape = g.createPath(path);
-							var sf = this._shapeFill(this.opt.hasOwnProperty("markerFill")?this.opt.markerFill:t.indicator.markerFill, shape.getBoundingBox());
+							var sf = this._shapeFill(this.opt.markerFill != undefined?this.opt.markerFill:t.indicator.markerFill, shape.getBoundingBox());
 							shape.setFill(sf).setStroke(ls);
 						}
 						return value;
@@ -449,9 +449,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					text, this.opt.font?this.opt.font:t.indicator.font, this.opt.fontColor?this.opt.fontColor:t.indicator.fontColor);
 			var b = getBoundingBox(label);
 			b.x-=2; b.y-=1; b.width+=4; b.height+=2; b.r = this.opt.radius?this.opt.radius:t.indicator.radius;
-			var sh = this.opt.hasOwnProperty("shadow")?this.opt.shadow:t.indicator.shadow,
-				ls = this.opt.hasOwnProperty("stroke")?this.opt.stroke:t.indicator.stroke,
-				ol = this.opt.hasOwnProperty("outline")?this.opt.outline:t.indicator.outline;
+			var sh = this.opt.shadow!=undefined?this.opt.shadow:t.indicator.shadow,
+				ls = this.opt.stroke!=undefined?this.opt.stroke:t.indicator.stroke,
+				ol = this.opt.outline!=undefined?this.opt.outline:t.indicator.outline;
 			if(sh){
 				g.createRect(b).setFill(sh.color).setStroke(sh);
 			}
@@ -460,7 +460,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 				ol.width = 2 * ol.width + (ls?ls.width:0);
 				g.createRect(b).setStroke(ol);
 			}
-			var f = this.opt.fillFunc?this.opt.fillFunc(index, values, data):(this.opt.hasOwnProperty("fill")?this.opt.fill:t.indicator.fill);
+			var f = this.opt.fillFunc?this.opt.fillFunc(index, values, data):(this.opt.fill!=undefined?this.opt.fill:t.indicator.fill);
 			g.createRect(b).setFill(this._shapeFill(f, b)).setStroke(ls);
 			label.moveToFront();
 		},
