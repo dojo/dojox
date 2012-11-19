@@ -6,6 +6,7 @@ try{
 	dojo.require("dojox.date.tests.relative");
 	dojo.require("dojox.date.tests.hebrew.Date");
 	dojo.require("dojox.date.tests.islamic.Date");
+	dojo.require("dojox.date.tests.umalqura.Date");
 	dojo.require("dojox.date.tests.buddhist.Date");
 	dojo.require("dojox.date.tests.posix");
 }catch(e){

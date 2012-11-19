@@ -3,8 +3,6 @@ define(["../..", "dojo/_base/lang", "dojo/_base/array", "dojo/date", "dojo/i18n"
 
 	var ilocale = lang.getObject("date.islamic.locale", true, dojox);
 
-	//	dojo.requireLocalization("dojo.cldr", "islamic");
-
 	// Format a pattern without literals
 	function formatPattern(dateObject, bundle, locale, fullYear,  pattern){
 
