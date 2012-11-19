@@ -42,7 +42,7 @@ var results, savedData;
 			"dijit/form/TextBox"
 			],
 			function(parser, registry, at, getStateful, ItemFileWriteStore, DataStore, kernel){
-				var writeStore = new ItemFileWriteStore({url: kernel.moduleUrl("dojox.mvc.tests.regression._data", "mvcRepeatData.json")});
+				var writeStore = new ItemFileWriteStore({url: kernel.moduleUrl("dojox.mvc.tests._data", "mvcRepeatData.json")});
 				var modelPromise = new DataStore({store: writeStore}).query(); 
 				modelPromise.then(function(data){ 
 					savedData = data;

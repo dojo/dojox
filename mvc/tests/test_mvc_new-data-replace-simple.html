@@ -58,6 +58,9 @@
 				var memStore1 = new Memory({data : model1Data});
 				when(memStore1.query(), function(data){
 					model1 = EditModelRefController({sourceModel : new Stateful({current: getStateful(data)[0]})});
+					vfaModel = new Stateful();
+					vfaModel.set('session', new Stateful());
+					vfaModel.session.set("user","FirstUser");
 				});
 			
 				replaceData = function(dest, src){
@@ -75,6 +78,7 @@
 	</head>
 	<body class="claro">
 		<script type="dojo/require">at: "dojox/mvc/at"</script>
+		<script type="dojo/require">Stateful: "dojo/Stateful"</script>
 		<div id="wrapper">
 			<div id="header">
 				<div id="navigation"></div>
@@ -130,6 +134,16 @@
 					</div>
 					<br/>Model:
 					<button id="reset" type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){model1.reset();}">Reset all</button>
+
+					<div id="outergroupId2x"	 data-dojo-type="dojox.mvc.Group" data-dojo-props="target: at(vfaModel, 'session')">
+						<div class="row">
+								<label class="cell" for="configurationId">Session:</label>
+								<input class="cell" data-dojo-type="dijit.form.TextBox" id="configurationId" 
+									data-dojo-props="value: at('rel:', 'user')">
+						</div>
+					<button id="resetses" type="button" data-dojo-type="dijit.form.Button" data-dojo-props="onClick: function(){vfaModel.set('session', new Stateful());}">Reset session</button>
+					</div>
+
 				</div>
 			</div>
 		</div>

@@ -25,7 +25,7 @@
 				"dijit/form/TextArea",
 				"dojox/mvc/Generate"
 			], function(parser, JsonRest, EditStoreRefController){
-				ctrl = new EditStoreRefController({store: new JsonRest({target: require.toUrl("dojox/mvc/tests/regression/_data/mvcGenerateData.json")})});
+				ctrl = new EditStoreRefController({store: new JsonRest({target: require.toUrl("dojox/mvc/tests/_data/mvcGenerateData.json")})});
 				parser.parse();
 				ctrl.queryStore({});
 				console.log("test",ctrl);
