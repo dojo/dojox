@@ -56,47 +56,22 @@ define([
 		})
 	});
 	when(ctrl.getStore("A111"), function(value) {
-		doh.register("dojox.mvc.tests.StoreRefControllerTest", [{
-			name : "getStore",
-			runTest : function() {
+		doh.register("dojox.mvc.tests.StoreRefControllerTest", [
+			function getStore(){
 				doh.is(value.Serial, "A111", "Serial should be set");
 				doh.is(value.First, "Anne", "First should be set");
 				doh.is(value.Last, "Ackerman", "Last should be set");
 				doh.is(value.Email, "a.a@test.com", "Email should be set");
-			}
-		}, {
-			name : "queryStore",
-			runTest : function() {
+			},
+			function queryStore(){
 				when(ctrl.queryStore(), function(results) {
 					doh.is(results[0].Serial, "A111", "Serial should be set");
 					doh.is(results[0].First, "Anne", "First should be set");
 					doh.is(results[0].Last, "Ackerman", "Last should be set");
 					doh.is(results[0].Email, "a.a@test.com", "Email should be set");
 				});
-			}
-		}, {
-			name : "putStore",
-			runTest : function() {
-				var newId1 = "newObj111-" + Math.random();
-				var newObj = {
-					"Serial" : newId1,
-					"First" : "newObj",
-					"Last" : "newObj Last",
-					"Email" : "new.obj@test.com"
-				};
-				when(ctrl.putStore(newObj), function(results) {
-					doh.is(results, newId1, "id should be returned");
-					when(ctrl.getStore(results), function(value) {
-						doh.is(value.Serial, newId1, "Serial should be set");
-						doh.is(value.First, "newObj", "First should be set");
-						doh.is(value.Last, "newObj Last", "Last should be set");
-						doh.is(value.Email, "new.obj@test.com", "Email should be set");
-					});
-				});
-			}
-		}, {
-			name : "addStore",
-			runTest : function() {
+			},
+			function addStore(){
 				var newId2 = "newObj222-" + Math.random();
 				var newObj2 = {
 					"Serial" : newId2,
@@ -113,19 +88,33 @@ define([
 						doh.is(value.Email, "new.obj2@test.com", "Email should be set");
 					});
 				});
-			}
-		}, {
-			name : "removeStore",
-			runTest : function() {
+			},
+			function putStore(){
+				var newId1 = "newObj111-" + Math.random();
+				var newObj = {
+					"Serial" : newId1,
+					"First" : "newObj",
+					"Last" : "newObj Last",
+					"Email" : "new.obj@test.com"
+				};
+				when(ctrl.putStore(newObj), function(results) {
+					doh.is(results, newId1, "id should be returned");
+					when(ctrl.getStore(results), function(value) {
+						doh.is(value.Serial, newId1, "Serial should be set");
+						doh.is(value.First, "newObj", "First should be set");
+						doh.is(value.Last, "newObj Last", "Last should be set");
+						doh.is(value.Email, "new.obj@test.com", "Email should be set");
+					});
+				});
+			},
+			function removeStore(){
 				when(ctrl.queryStore(), function(results) {
 					var remObjId = results[1].Serial;
 					when(ctrl.removeStore(remObjId), function(results) {
 						doh.is(results, true, "should return true from removeStore");
 					});
 				});
-
 			}
-		}]);
-		doh.run();
+		]);
 	}); 
 });
