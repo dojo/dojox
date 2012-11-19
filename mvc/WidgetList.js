@@ -214,7 +214,7 @@ define([
 				 mids = array.filter(array.map(types, function(type){ return lang.getObject(type) ? undef : type; }), function(mid){ return mid !== undef; }),
 				 _self = this;
 				require(mids, function(){
-					if(!self._beingDestroyed){
+					if(!_self._beingDestroyed){
 						createAndWatch.apply(this, array.map(types, function(type){ return lang.getObject(type) || require(type); }));
 					}
 				});
