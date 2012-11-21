@@ -42,10 +42,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 				this.group.removeShape();
 				var children = this.group.children;
 				for(var i = 0; i < children.length;++i){
-					shape.dispose(children[i]);
+					shape.dispose(children[i], true);
 				}
 				this.group.clear();
-				shape.dispose(this.group);
+				shape.dispose(this.group, true);
 				this.group = null;
 			}
 			this.dirty = true;
@@ -69,7 +69,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			if(this.group){
 				var children = this.group.children;
 				for(var i = 0; i < children.length;++i){
-					shape.dispose(children[i]);
+					shape.dispose(children[i], true);
 				}
 				this.group.clear();
 			}else{
