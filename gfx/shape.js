@@ -39,11 +39,16 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		return registry[id]; //dojox/gfx/shape.Shape
 	};
 	
-	shape.dispose = function(/*dojox/gfx/shape.Shape*/s){
+	shape.dispose = function(/*dojox/gfx/shape.Shape*/s, /*Boolean?*/recurse){
 		// summary:
 		//		Removes the specified shape from the registry.
 		// s: dojox/gfx/shape.Shape
 		//		The shape to unregister.
+		if(recurse && s.children){
+			for(var i=0; i< s.children.length; ++i){
+				shape.dispose(s.children[i], true);
+			}
+		}
 		delete registry[s.getUID()];
 	};
 	

@@ -39,7 +39,34 @@
 							obj.getUID =function(){return id;};
 							dojox.gfx.shape.dispose(obj);
 							ret = dojox.gfx.shape.byId(id);
-							t.t(!ret, "Checking dojox.gfx.shape.dispose().");							
+							t.t(!ret, "Checking dojox.gfx.shape.dispose().");
+							// optional recursive dispose
+						}
+					},
+					{
+						name:"recursive dispose",
+						runTest: function(t){
+
+							var obj = {
+								declaredClass: 'module.sub.foo',
+								children:[
+									{ declaredClass: "foo.bar" },
+									{ declaredClass: "bar.foo" }
+								]
+							};
+							var id1 = dojox.gfx.shape.register(obj);
+							obj.getUID =function(){return id1;};
+							var id2 = dojox.gfx.shape.register(obj.children[0]);
+							obj.children[0].getUID =function(){return id2;};
+							var id3 = dojox.gfx.shape.register(obj.children[1]);
+							obj.children[1].getUID =function(){return id3;};
+							dojox.gfx.shape.dispose(obj, true);
+							var ret = dojox.gfx.shape.byId(id1);
+							t.t(!ret, "Shape id1 not disposed (recursive dispose).");
+							ret = dojox.gfx.shape.byId(id2);
+							t.t(!ret, "Child id2 not disposed (recursive dispose).");
+							ret = dojox.gfx.shape.byId(id3);
+							t.t(!ret, "Child id3 not disposed (recursive dispose).");
 						}
 					},
 					{
