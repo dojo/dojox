@@ -42,14 +42,14 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 				this.getGroup().removeShape();
 				var children = this.getGroup().children;
 				for(var i = 0; i < children.length;++i){
-					shape.dispose(children[i]);
+					shape.dispose(children[i], true);
 				}
 				this.getGroup().clear();
-				shape.dispose(this.getGroup());
+				shape.dispose(this.getGroup(), true);
 				if(this.getGroup() != this.group){
 					// we do have an intermediary clipping group (see CartesianBase)
 					this.group.clear();
-					shape.dispose(this.group);
+					shape.dispose(this.group, true);
 				}
 				this.group = null;
 			}
@@ -74,7 +74,7 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 			if(this.group){
 				var children = this.getGroup().children;
 				for(var i = 0; i < children.length;++i){
-					shape.dispose(children[i]);
+					shape.dispose(children[i], true);
 				}
 				this.getGroup().clear();
 			}else{
