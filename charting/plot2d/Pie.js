@@ -1,7 +1,7 @@
 define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare", 
-		"./Base", "./_PlotEvents", "./common", "../axis2d/common",
+		"./Base", "./_PlotEvents", "./common",
 		"dojox/gfx", "dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/utils"],
-	function(lang, arr, declare, Base, PlotEvents, dc, da, g, m, df, du){
+	function(lang, arr, declare, Base, PlotEvents, dc, g, m, df, du){
 
 	/*=====
 	declare("dojox.charting.plot2d.__PieCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -17,11 +17,11 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 		ticks:			false,
 	
 		// fixed: Boolean?
-		//		TODO
+		//		Whether a fixed precision must be applied to data values for display. Default is true.
 		fixed:			true,
 	
 		// precision: Number?
-		//		The precision at which to sum/add data values. Default is 1.
+		//		The precision at which to round data values for display. Default is 0.
 		precision:		1,
 	
 		// labelOffset: Number?
@@ -381,22 +381,17 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			}, this);
 			// draw labels
 			if(this.opt.labels){
-				if(this.opt.labelStyle == "default"){
+				if(this.opt.labelStyle == "default"){ // inside or outside based on labelOffset
 					start = startAngle;
 					arr.some(slices, function(slice, i){
 						if(slice <= 0){
 							// degenerated slice
 							return false;	// continue
 						}
-						var theme = themes[i], elem;
+						var theme = themes[i];
 						if(slice >= 1){
 							// whole pie
-							elem = da.createText[this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx"](
-									this.chart, s, circle.cx, circle.cy + size / 2, "middle", labels[i],
-									theme.series.font, theme.series.fontColor);
-							if(this.opt.htmlLabels){
-								this.htmlElements.push(elem);
-							}
+                            this.renderLabel(s, circle.cx, circle.cy + size / 2, labels[i], theme, this.opt.labelOffset > 0);
 							return true;	// stop iteration
 						}
 						// calculate the geometry of the slice
@@ -411,11 +406,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 							x = circle.cx + labelR * Math.cos(labelAngle),
 							y = circle.cy + labelR * Math.sin(labelAngle) + size / 2;
 						// draw the label
-						elem = da.createText[this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx"]
-								(this.chart, s, x, y, "middle", labels[i], theme.series.font, theme.series.fontColor);
-						if(this.opt.htmlLabels){
-							this.htmlElements.push(elem);
-						}
+                        this.renderLabel(s, x, y, labels[i], theme, this.opt.labelOffset > 0);
 						start = end;
 						return false;	// continue
 					}, this);
@@ -457,11 +448,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 								wiring.lineTo(x, y);
 							}
 							wiring.lineTo(jointX, y).setStroke(slice.theme.series.labelWiring);
-							var elem = da.createText[this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx"](
-								this.chart, s, labelX, y, "left", labels[i], slice.theme.series.font, slice.theme.series.fontColor);
-							if(this.opt.htmlLabels){
-								this.htmlElements.push(elem);
-							}
+                            this.renderLabel(s, labelX, y, labels[i], slice.theme, false, "left");
 						}
 					},this);
 				}
@@ -524,10 +511,6 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				i = (i < 0)?i+slices.length:i;
 				j = (j < 0)?j+slices.length:j;
 			}
-		},
-		// utilities
-		_getLabel: function(number){
-			return dc.getLabel(number, this.opt.fixed, this.opt.precision);
 		}
 	});
 });

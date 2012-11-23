@@ -140,7 +140,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			//		The chart this plot belongs to.
 			// kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional arguments object to help define this plot.
-			this.opt = lang.clone(this.defaultParams);
+			this.opt = lang.clone(lang.mixin(this.opt, this.defaultParams));
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			// animation properties
@@ -347,6 +347,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 							run.dyn.stroke = s.createPolyline(lpoly).setStroke(stroke).getStroke();
 						}
 					}
+					var markerBox = null;
 					if(this.opt.markers){
 						var markerTheme = theme; 
 						frontMarkers = new Array(lpoly.length);
@@ -374,6 +375,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 						}, this);
 						run.dyn.markerFill = markerTheme.marker.fill;
 						run.dyn.markerStroke = markerTheme.marker.stroke;
+						if(!markerBox){
+							markerBox = frontMarkers[i].getBoundingBox();
+						}
 						if(events){
 							arr.forEach(frontMarkers, function(s, i){
 								var o = {
@@ -399,6 +403,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 						}else{
 							delete this._eventSeries[run.name];
 						}
+					}
+					if(this.opt.labels){
+						var labelBoxW = markerBox?markerBox.width:2;
+						var labelBoxH = markerBox?markerBox.height:2;
+						arr.forEach(lpoly, function(c, i){
+							if(this.opt.styleFunc || typeof c.data != "number"){
+								var tMixin = typeof c.data != "number" ? [c.data] : [];
+								if(this.opt.styleFunc){
+									tMixin.push(this.opt.styleFunc(c.data));
+								}
+								markerTheme = t.addMixin(theme, "marker", tMixin, true);
+							}else{
+								markerTheme = t.post(theme, "marker");
+							}
+							this.createLabel(s, rsegment.rseg[i], { x: c.x - labelBoxW / 2, y: c.y - labelBoxH / 2,
+								width: labelBoxW , height: labelBoxH }, markerTheme);
+						}, this);
 					}
 				}
 				run.dirty = false;

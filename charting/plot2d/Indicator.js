@@ -162,7 +162,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 		// labelFunc: Function?
 		//		An optional function to use to compute label text. It takes precedence over
 		//		the default text when available.
-		//	|		function labelFunc(firstDataPoint, secondDataPoint, fixed, precision) {}
+		//	|		function labelFunc(index, values, data, fixed, precision, labels) {}
 		//		`index` is the index in the values array of the label being drawn.
 		//		`values` is the entire array of values.
 		//		`data` is the entire array of marker values.
@@ -258,16 +258,17 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			}
 
 			if(!this.isDirty()){
-				return;
+				return this;
 			}
 
 			this.cleanGroup(null, true);
 
 			if(!this.opt.values){
-				return;
+				return this;
 			}
 
 			this._updateIndicator();
+			return this;
 		},
 		_updateIndicator: function(){
 			var t = this.chart.theme;

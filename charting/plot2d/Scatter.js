@@ -29,7 +29,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			//		The chart this plot belongs to.
 			// kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		An optional keyword arguments object to help define this plot's parameters.
-			this.opt = lang.clone(this.defaultParams);
+			this.opt = lang.clone(lang.mixin(this.opt, this.defaultParams));
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.animate = this.opt.animate;
@@ -49,11 +49,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			}
 			this.resetEvents();
 			this.dirty = this.isDirty();
+			var s;
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
-				var s = this.getGroup();
+				s = this.getGroup();
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, events = this.events();
@@ -71,9 +72,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					continue;
 				}
 
-				var theme = t.next("marker", [this.opt, run]), s = run.group, lpoly,
+				var theme = t.next("marker", [this.opt, run]), lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
+				s = run.group;
 				if(typeof run.data[0] == "number"){
 					lpoly = arr.map(run.data, function(v, i){
 						return {
@@ -132,6 +134,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 						frontMarkers[i] = s.createPath(path).setStroke(stroke).setFill(color);
 					}else{
 						frontMarkers[i] = s.createPath(path).setStroke(stroke).setFill(fill);
+					}
+					if(this.opt.labels){
+						var markerBox = frontMarkers[i].getBoundingBox();
+						this.createLabel(s, value, markerBox, finalTheme);
 					}
 					if(this.animate){
 						this._animateScatter(frontMarkers[i], dim.height - offsets.b);

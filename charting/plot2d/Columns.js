@@ -32,7 +32,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			//		The chart this plot belongs to.
 			// kwArgs: dojox.charting.plot2d.__BarCtorArgs?
 			//		An optional keyword arguments object to help define the plot.
-			this.opt = lang.clone(this.defaultParams);
+			this.opt = lang.clone(lang.mixin(this.opt, this.defaultParams));
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.animate = this.opt.animate;
@@ -77,8 +77,6 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			if(this.zoom && !this.isDataDirty()){
 				return this.performZoom(dim, offsets);
 			}
-			// TODO do we need to call this? This is not done in Bars.js
-			this.getSeriesStats();
 			this.resetEvents();
 			this.dirty = this.isDirty();
 			var s;
@@ -173,6 +171,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 								this._connectEvents(o);
 								eventSeries[j] = o;
 							}
+							// if val.py is here, this means we are stacking and we need to subtract previous
+							// value to get the high in which we will lay out the label
+							if(!isNaN(val.py) && val.py > baseline){
+								rect.height = vv - vt(val.py);
+							}
+							this.createLabel(s, value, rect, finalTheme);
 							if(this.animate){
 								this._animateColumn(shape, dim.height - offsets.b - baselineHeight, h);
 							}
@@ -198,13 +202,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 				y = value.y;
 				x = value.x - 1;
 			}
-			return {y:y, x:x};
+			return { x: x, y: y };
 		},
 		getBarProperties: function(){
 			var f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
 			return {gap: f.gap, width: f.size, thickness: 0};
 		},
-		
 		_animateColumn: function(shape, voffset, vsize){
 			if(vsize==0){
 				vsize = 1;

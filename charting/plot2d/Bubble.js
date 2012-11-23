@@ -30,9 +30,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 			//		The chart this plot belongs to.
 			// kwArgs: dojox.charting.plot2d.__DefaultCtorArgs?
 			//		Optional keyword arguments object to help define plot parameters.
-			this.opt = lang.clone(this.defaultParams);
+			this.opt = lang.clone(lang.mixin(this.opt, this.defaultParams));
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
+			if(!this.opt.labelFunc){
+				this.opt.labelFunc = function(value, fixed, precision){
+					return this._getLabel(value.size, fixed, precision);
+				};
+			}
 			this.animate = this.opt.animate;
 		},
 
@@ -164,6 +169,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 						if(this.animate){
 							this._animateBubble(shape, dim.height - offsets.b, item.radius);
 						}
+						this.createLabel(s, run.data[i], rect, finalTheme);
 						return shape;
 					}
 					return null;

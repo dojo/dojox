@@ -79,7 +79,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			//		The chart this plot belongs to.
 			// kwArgs: dojox.charting.plot2d.__BarCtorArgs?
 			//		An optional keyword arguments object to help define the plot.
-			this.opt = lang.clone(this.defaultParams);
+			this.opt = lang.clone(lang.mixin(this.opt, this.defaultParams));
 			du.updateWithObject(this.opt, kwArgs);
 			du.updateWithPattern(this.opt, kwArgs, this.optionalParams);
 			this.animate = this.opt.animate;
@@ -112,6 +112,16 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 				run._rectUsePool.push(rect);
 			}
 			return rect;
+		},
+
+		createLabel: function(group, value, bbox, theme){
+			if(this.opt.labels && this.opt.labelStyle == "outside"){
+				var y = bbox.y + bbox.height / 2;
+				var x = bbox.x + bbox.width + this.opt.labelOffset;
+				this.renderLabel(group, x, y, this._getLabel(isNaN(value.y)?value:value.y), theme, "start");
+          	}else{
+				this.inherited(arguments);
+			}
 		},
 
 		render: function(dim, offsets){
@@ -217,6 +227,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 								this._connectEvents(o);
 								eventSeries[j] = o;
 							}
+							// if val.py is here, this means we are stacking and we need to subtract previous
+							// value to get the high in which we will lay out the label
+							if(!isNaN(val.py) && val.py > baseline){
+								rect.x += ht(val.py);
+								rect.width -= ht(val.py);
+							}
+							this.createLabel(s, value, rect, finalTheme);
 							if(this.animate){
 								this._animateBar(shape, offsets.l + baselineWidth, -w);
 							}

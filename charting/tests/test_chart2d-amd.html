@@ -80,7 +80,7 @@
 				makeChart: function(node){
 					(new Chart(node)).
 						setTheme(SageToLime).
-						addPlot("default", { type: "Bubble", shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]} }).
+						addPlot("default", { type: "Bubble", shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]}, labels: true }).
 						addAxis("x", {
 							min: 0,
 							max: 6,
@@ -490,7 +490,7 @@
 				description: "Columns, no axes, custom strokes and fills.",
 				makeChart: function(node){
 					(new Chart(node)).
-						addPlot("default", {type: "Columns"}).
+						addPlot("default", {type: "Columns" }).
 						addSeries("Series A", [ 1, 2, 3, 4, 5 ], { stroke: { color: "red" }, fill: "lightpink" }).
 						addSeries("Series B", [ 5, 4, 3, 2, 1 ], { stroke: {color: "blue"}, fill: "lightblue" }).
 						render();
@@ -555,7 +555,7 @@
 						addAxis("y", {
 							vertical: true, fixLower: "major", fixUpper: "major", includeZero: true
 						}).
-						addPlot("default", {type: "ClusteredColumns", gap: 10}).
+						addPlot("default", {type: "ClusteredColumns", gap: 10, labels: true}).
 						addSeries("Series A",
 							[ 1, 2, 3, 4, 5 ],
 							{ stroke: {color: "red"}, fill: "lightpink" }

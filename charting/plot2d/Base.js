@@ -1,7 +1,6 @@
-define(["dojo/_base/declare",
-		"../Element", "dojo/_base/array",
-	    "./common"],
-	function(declare, Element, arr,  common){
+define(["dojo/_base/declare", "dojo/_base/array", "dojox/gfx",
+		"../Element", "./common", "../axis2d/common"],
+	function(declare, arr, gfx, Element, common, ac){
 /*=====
 dojox.charting.plot2d.__PlotCtorArgs = {
 	// summary:
@@ -104,12 +103,39 @@ return declare("dojox.charting.plot2d.Base", Element, {
 		//		A reference to this plot for functional chaining.
 		return this;	//	dojox/charting/plot2d/Base
 	},
+    renderLabel: function(group, x, y, label, theme, block, align){
+        var elem = ac.createText[this.opt.htmlLabels && gfx.renderer != "vml" ? "html" : "gfx"]
+            (this.chart, group, x, y, align?align:"middle", label, theme.series.font, theme.series.fontColor);
+		// if the label is inside we need to avoid catching events on it this would prevent action on
+		// chart elements
+		if(block){
+			// TODO this won't work in IE neither in VML nor in HTML
+			// a solution would be to catch the event on the label and refire it to the element
+			// possibly using elementFromPoint or having it already available
+			if(this.opt.htmlLabels && gfx.renderer != "vml"){
+				// we have HTML labels, let's use pointEvents on the HTML node
+				elem.style.pointerEvents = "none";
+			}else if(elem.rawNode){
+				// we have SVG labels, let's use pointerEvents on the SVG or VML node
+				elem.rawNode.style.pointerEvents = "none";
+			}
+			// else we have Canvas, we need do nothing, as Canvas text won't catch events
+		}
+        if(this.opt.htmlLabels && gfx.renderer != "vml"){
+            this.htmlElements.push(elem);
+        }
+
+        return elem;
+    },
 	getRequiredColors: function(){
 		// summary:
 		//		Get how many data series we have, so we know how many colors to use.
 		// returns: Number
 		//		The number of colors needed.
 		return this.series.length;	//	Number
+	},
+	_getLabel: function(number){
+		return common.getLabel(number, this.opt.fixed, this.opt.precision);
 	}
 });
 });

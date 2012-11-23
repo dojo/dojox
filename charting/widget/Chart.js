@@ -71,11 +71,16 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 		}
 		collectParams(node, type, kw);
 		// TODO
-		// we have factorized axis management in CartesianBase and thus is is not anymore
+		// we have factorized axis & label management in CartesianBase and thus is is not anymore
 		// accessible to the default collect mechanism. Longer term we must get rid of that
-		// and levarage dojo/parser
-		kw["hAxis"] = node.getAttribute("hAxis");
-		kw["vAxis"] = node.getAttribute("vAxis");
+		// and leverage dojo/parser
+		var dp = eval("(" + type + ".prototype.baseParams)");
+		var x, attr;
+		for(x in dp){
+			if(x in kw){ continue; }
+			attr = node.getAttribute(x);
+			kw[x] = du.coerceType(dp[x], attr == null || typeof attr == "undefined" ? dp[x] : attr);
+		}
 		return o;
 	};
 
