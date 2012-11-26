@@ -298,7 +298,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 						eventSeries[i] = o;
 					}
 
-					return true;	// stop iteration
+					return false;	// we continue because we want to collect null data points for legend
 				}
 				// calculate the geometry of the slice
 				var end = start + slice * 2 * Math.PI;
