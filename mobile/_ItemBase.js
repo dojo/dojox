@@ -301,28 +301,6 @@ define([
 			// summary:
 			//		Subclasses may want to implement it.
 		},
-		
-		getParent: function(){
-			if(has("iphone") >= 6){
-				// #16199: workaround for a strange behavior on iOS 6 where the original getParent 
-				// sometimes returns null (only reproduced in a dojox/app + dojox/mvc context).
-				// The code below is a merge of the code from _WidgetBase.getParent and dijit/registry.getEnclosingWidget
-				// Although it should behave equivalently to the original getParent, on iOS6 it avoids
-				// the situations when getParent returns null.
-				var node = this.domNode.parentNode;
-				while(node){
-					var id = node.getAttribute && node.getAttribute("widgetId");
-					if(id){
-						// direct access to dijit/registry's internal hash
-						return registry._hash[id]; 
-					}
-					node = node.parentNode;
-				}
-				return null;
-			}else{
-				return this.inherited(arguments);
-			}
-		},
 
 		_onTouchStart: function(e){
 			// tags:
