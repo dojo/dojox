@@ -243,6 +243,7 @@ define([
 			var curSize = dm.getScreenSize();
 			var heightChangeThreshold = ios6 ? 20 : 100;
 			var lastKeyUpTime = null;
+			var isFormElement = null;
 			if(ios6){
 				// Surprisingly, on iOS 6, Mobile Safari fires a resize event when entering
 				// characters using the virtual keyboard. Hence, to avoid inappropriately reacting 
@@ -251,6 +252,12 @@ define([
 				connect.connect(null, "onkeyup", null, function(e){
 					lastKeyUpTime = (new Date()).getTime();
 				});
+				isFormElement = function(/*DOMNode*/node){ // returns true if the given node is a form control
+					if(node && node.nodeType !== 1){ node = node.parentNode; }
+					if(!node || node.nodeType !== 1){ return false; }
+					var t = node.tagName;
+					return (t === "SELECT" || t === "INPUT" || t === "TEXTAREA" || t === "BUTTON");
+				};
 			}
 			// Android: Watch for resize events when the virtual keyboard is shown/hidden.
 			// The heuristic to detect this is that the screen width does not change
@@ -267,8 +274,11 @@ define([
 			connect.connect(null, "onresize", null, function(e){
 				var newSize = dm.getScreenSize();
 				if(newSize.w == curSize.w && Math.abs(newSize.h - curSize.h) >= heightChangeThreshold &&
-					// do not react on resize events fired shortly after a keyup event (#16202)
-					!(ios6 && lastKeyUpTime && ((new Date()).getTime() - lastKeyUpTime) < 400)){
+					!(ios6 && 
+						// do not react on resize events fired shortly after a keyup event (#16202)
+						((lastKeyUpTime && ((new Date()).getTime() - lastKeyUpTime) < 400) ||
+						// do not react on resize events fired while a form element is active (#16361)
+						isFormElement(win.doc.activeElement)))){
 					// keyboard has been shown/hidden (Android), or full-screen mode has
 					// been entered/exited (iOS6+).
 					if(ios6 && pageYOffset > 1){
