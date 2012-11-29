@@ -272,6 +272,8 @@ define([
 			//		Transition forward to a blank view, and then open another page.
 			//	|	performTransition(null, 1, "slide", null, function(){location.href = href;});
 
+			if(this._detail){ return; } // transition is in progress
+			
 			// normalize the arg
 			var detail, optArgs;
 			if(moveTo && typeof(moveTo) === "object"){
@@ -542,17 +544,19 @@ define([
 			}
 
 			var c = this._detail.context, m = this._detail.method;
-			if(!c && !m){ return; }
-			if(!m){
-				m = c;
-				c = null;
+			if(c || m){
+				if(!m){
+					m = c;
+					c = null;
+				}
+				c = c || win.global;
+				if(typeof(m) == "string"){
+					c[m].apply(c, this._optArgs);
+				}else if(typeof(m) == "function"){
+					m.apply(c, this._optArgs);
+				}
 			}
-			c = c || win.global;
-			if(typeof(m) == "string"){
-				c[m].apply(c, this._optArgs);
-			}else if(typeof(m) == "function"){
-				m.apply(c, this._optArgs);
-			}
+			this._detail = this._optArgs = this._arguments = undefined;
 		},
 
 		isVisible: function(/*Boolean?*/checkAncestors){
