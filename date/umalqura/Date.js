@@ -3,12 +3,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
 
 	var IDate = declare("dojox.date.umalqura.Date", null, {	
 	
-	// summary: The component defines the UmAlqura (Hijri) Calendar Object according to Umalqura calculations
-    //
-    // description:
-    //	This module is similar to the Date() object provided by JavaScript
-    //
-    // |		
+	// summary:
+	//		The component defines the UmAlqura (Hijri) Calendar Object according to Umalqura calculations
+    //		This module is similar to the Date() object provided by JavaScript
+    // example:
     // |	var date = new dojox.date.umalqura.Date();
     // |	document.writeln(date.getFullYear()+'\'+date.getMonth()+'\'+date.getDate());
 
@@ -61,9 +59,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
     _day: 0,
 
     constructor: function(){
-        // summary: This is the constructor
-        // description:
-        //	This function initialize the date object values
+        // summary:
+        //		This function initialize the date object values
 
         var len = arguments.length;
         if(!len){// use the current date value, added "" to the similarity to date
@@ -101,74 +98,80 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
     },
 
     getDate: function(){
-        // summary: This function returns the date value (1 - 30)
-        //
+        // summary:
+        //		This function returns the date value (1 - 30)
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
+        // |	var date1 = new dojox.date.umalqura.Date();
         // |
-        // |		document.writeln(date1.getDate);		
+        // |	document.writeln(date1.getDate);
         return this._date;
     },
 
     getMonth: function(){
-        // summary: This function return the month value ( 0 - 11 )
-        //
+        // summary:
+        //		This function return the month value ( 0 - 11 )
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
+        // |	var date1 = new dojox.date.umalqura.Date();
         // |
-        // |		document.writeln(date1.getMonth()+1);
+        // |	document.writeln(date1.getMonth()+1);
 
         return this._month;
     },
 
     getFullYear: function(){
-        // summary: This function return the Year value 
-        //
+        // summary:
+        //		This function return the year value
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
+        // |	var date1 = new dojox.date.umalqura.Date();
         // |
-        // |		document.writeln(date1.getFullYear());
+        // |	document.writeln(date1.getFullYear());
 
         return this._year;
     },
 
     getDay: function(){
-        // summary: This function return Week Day value ( 0 - 6 )
-        // sunday is 0, monday is 1,...etc
+        // summary:
+        //		This function returns the week day value ( 0 - 6 )
+        //		sunday is 0, monday is 1,...etc
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
+        // |	var date1 = new dojox.date.umalqura.Date();
         // |
-        // |		document.writeln(date1.getDay());
+        // |	document.writeln(date1.getDay());
         var d = this.toGregorian();
         var dd = d.getDay();
         return dd;
     },
 
     getHours: function(){
-        //summary: returns the Hour value
+        // summary:
+        //		returns the hour value
         return this._hours;
     },
 
     getMinutes: function(){
-        //summary: returns the Minuites value
+        // summary:
+        //		returns the minutes value
         return this._minutes;
     },
 
     getSeconds: function(){
-        //summary: returns the seconde value
+        // summary:
+        //		returns the seconds value
         return this._seconds;
     },
 
     getMilliseconds: function(){
-        //summary: returns the Milliseconds value
+        // summary:
+        //		returns the milliseconds value
         return this._milliseconds;
     },
 
-    setDate: function(/*number*/date){
-        // summary: This function sets the Date
+    setDate: function(/*number*/ date){
+        // summary:
+        //		This function sets the date
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
-        // |		date1.setDate(2);
+        // |	var date1 = new dojox.date.umalqura.Date();
+        // |	date1.setDate(2);
 
         date = parseInt(date);
 
@@ -200,22 +203,22 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
         return this;
     },
 
-    setFullYear: function(/*number*/year){
-        // summary: This function set Year
-        //
+    setFullYear: function(/*number*/ year){
+        // summary:
+        //		This function set Year
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
-        // |		date1.setYear(1429);
+        // |	var date1 = new dojox.date.umalqura.Date();
+        // |	date1.setYear(1429);
 
         this._year = +year;
     },
 
-    setMonth: function(/*number*/month){
-        // summary: This function set Month
-        //
+    setMonth: function(/*number*/ month){
+        // summary:
+        //		This function sets the month
         // example:
-        // |		var date1 = new dojox.date.umalqura.Date();
-        // |		date1.setMonth(2);
+        // |	var date1 = new dojox.date.umalqura.Date();
+        // |	date1.setMonth(2);
 
         this._year += Math.floor(month / 12);
         if(month > 0){
@@ -226,7 +229,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
     },
 
     setHours: function(){
-        //summary: set the Hours
+        // summary:
+        //		set the hours
         var hours_arg_no = arguments.length;
         var hours = 0;
         if(hours_arg_no >= 1){
@@ -258,29 +262,30 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
         this._hours = hours;
     },
 
-	_addMinutes: function(/*Number*/minutes){
+	_addMinutes: function(/*Number*/ minutes){
 		minutes += this._minutes;
 		this.setMinutes(minutes);
 		this.setHours(this._hours + parseInt(minutes / 60));
 		return this;
 	},
 
-	_addSeconds: function(/*Number*/seconds){
+	_addSeconds: function(/*Number*/ seconds){
 		seconds += this._seconds;
 		this.setSeconds(seconds);
 		this._addMinutes(parseInt(seconds / 60));
 		return this;
 	},
 
-	_addMilliseconds: function(/*Number*/milliseconds){
+	_addMilliseconds: function(/*Number*/ milliseconds){
 		milliseconds += this._milliseconds;
 		this.setMilliseconds(milliseconds);
 		this._addSeconds(parseInt(milliseconds / 1000));
 		return this;
 	},
 
-    setMinutes: function(/*number*/minutes){
-        //summary: set the Minutes
+    setMinutes: function(/*number*/ minutes){
+        // summary:
+        //		set the minutes
 
         while (minutes >= 60){
             this._hours++;
@@ -300,8 +305,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
     },
 
 
-    setSeconds: function(/*number*/seconds){
-        //summary: set Seconds
+    setSeconds: function(/*number*/ seconds){
+        // summary:
+        //		set seconds
         while (seconds >= 60){
             this._minutes++;
             if(this._minutes >= 60){
@@ -323,8 +329,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
         this._seconds = seconds;
     },
 
-    setMilliseconds: function(/*number*/milliseconds){
-        //summary: set the Millisconds
+    setMilliseconds: function(/*number*/ milliseconds){
+        // summary:
+        //		set the milliseconds
         while (milliseconds >= 1000){
             this.setSeconds++;
             if(this.setSeconds >= 60){
@@ -352,7 +359,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
 
 
     toString: function(){
-        // summary: This returns a string representation of the date in "DDDD MMMM DD YYYY HH:MM:SS" format
+        // summary:
+        //		This returns a string representation of the date in "DDDD MMMM DD YYYY HH:MM:SS" format
         // example:
         // |		var date1 = new dojox.date.umalqura.Date();
         // |		document.writeln(date1.toString());
@@ -368,10 +376,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
 
 
     toGregorian: function(){
-        // summary: This returns the equevalent Grogorian date value in Date object
+        // summary:
+        //		This returns the equivalent gregorian date value in Date object
         // example:
-        // |		var dateIslamic = new dojox.date.umalqura.Date(1429,11,20);
-        // |		var dateGregorian = dateIslamic.toGregorian();
+        // |	var dateIslamic = new dojox.date.umalqura.Date(1429,11,20);
+        // |	var dateGregorian = dateIslamic.toGregorian();
 
 
 
@@ -443,8 +452,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
     },
 
     //TODO: would it make more sense to make this a constructor option? or a static?
-    fromGregorian: function(/*Date*/gdate){
-        // summary: This function returns the equivalent UmAlqura Date value for the Gregorian Date
+    fromGregorian: function(/*Date*/ gdate){
+        // summary:
+        //		This function returns the equivalent UmAlqura Date value for the Gregorian Date
         // example:
         // |		var dateIslamic = new dojox.date.umalqura.Date();
         // |		var dateGregorian = new Date(2008,10,12);
@@ -639,34 +649,39 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/date"],
     },
 
     valueOf: function(){
-        // summary: This function returns The stored time value in milliseconds 
-        // since midnight, January 1, 1970 UTC
+        // summary:
+        //		This function returns the stored time value in milliseconds
+        //		since midnight, January 1, 1970 UTC
 
         return (this.toGregorian()).valueOf();
     },
 
     // ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
     _yearStart: function(/*Number*/year){
-        //summary: return start of Islamic year
+        // summary:
+        //		return start of Islamic year
         return (year - 1) * 354 + Math.floor((3 + 11 * year) / 30.0); //1078
     },
 
     // ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
     _monthStart: function(/*Number*/year, /*Number*/month){
-        //summary: return the start of Islamic Month
+        // summary:
+        //		return the start of Islamic Month
         return Math.ceil(29.5 * month) +
 			(year - 1) * 354 + Math.floor((3 + 11 * year) / 30.0);
     },
 
     // ported from the Java class com.ibm.icu.util.IslamicCalendar from ICU4J v3.6.1 at http://www.icu-project.org/
     _civilLeapYear: function(/*Number*/year){
-        //summary: return Boolean value if Islamic leap year
+        // summary:
+        //		return Boolean value if Islamic leap year
         return (14 + 11 * year) % 30 < 11;
     },
 
 
-    getDaysInIslamicMonth: function(/*Number*/month, /*Number*/year){
-        //summary: returns the number of days in the given Islamic Month  
+    getDaysInIslamicMonth: function(/*Number*/ month, /*Number*/ year){
+        // summary:
+        //		returns the number of days in the given Islamic month
         if(year >= this._hijriBegin && year <= this._hijriEnd){
             var pos = year - this._hijriBegin;
             var length = 0;
