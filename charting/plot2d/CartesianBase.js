@@ -9,7 +9,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 
 		// vAxis: String?
 		//		The vertical axis name
-		vAxis: "y"
+		vAxis: "y",
 
         // labels: Boolean?
         //		For plots that support labels, whether or not to draw labels for each data item.  Default is false.
