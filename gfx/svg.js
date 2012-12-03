@@ -14,7 +14,9 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	var uagent = navigator.userAgent.toLowerCase(),
 		safMobile = uagent.search('iphone') > -1 ||
 					uagent.search('ipad') > -1 ||
-					uagent.search('ipod') > -1;
+					uagent.search('ipod') > -1,
+		android = parseFloat(uagent.split("Android ")[1]),
+		textRenderingFix = (!android || android<4) ? "optimizeLegibility" : "auto";// #16099
 
 	function _createElementNS(ns, nodeType){
 		// summary:
@@ -551,7 +553,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 			r.setAttribute("text-decoration", s.decoration);
 			r.setAttribute("rotate", s.rotated ? 90 : 0);
 			r.setAttribute("kerning", s.kerning ? "auto" : 0);
-			r.setAttribute("text-rendering", "optimizeLegibility");
+			r.setAttribute("text-rendering", textRenderingFix);
 
 			// update the text content
 			if(r.firstChild){
