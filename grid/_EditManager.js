@@ -19,6 +19,7 @@ return declare("dojox.grid._EditManager", null, {
 		}else{
 			this.connections = [connect.connect(this.grid, 'onBlur', this, 'apply')];
 		}
+		this.connections.push(connect.connect(this.grid, 'prerender', this, '_onPreRender'));
 	},
 	
 	info: {},
@@ -253,6 +254,13 @@ return declare("dojox.grid._EditManager", null, {
 		}		
 		w.focused = true;
 		return w.isValid(true);
+	},
+	
+	_onPreRender: function(){
+		if(this.isEditing()){
+			//cache the current editing value before render
+			this.info.value = this.info.cell.getValue();
+		}
 	}
 });
 });
