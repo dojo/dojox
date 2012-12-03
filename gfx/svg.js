@@ -30,7 +30,10 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 	var uagent = navigator.userAgent.toLowerCase(),
 		safMobile = uagent.search('iphone') > -1 ||
 					uagent.search('ipad') > -1 ||
-					uagent.search('ipod') > -1;
+					uagent.search('ipod') > -1,
+		android = parseFloat(uagent.split("Android ")[1]),
+		textRenderingFix = (!android || android<4) ? "optimizeLegibility" : "auto";// #16099
+
 
 	function _createElementNS(ns, nodeType){
 		// summary:
@@ -444,7 +447,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 			r.setAttribute("text-decoration", s.decoration);
 			r.setAttribute("rotate", s.rotated ? 90 : 0);
 			r.setAttribute("kerning", s.kerning ? "auto" : 0);
-			r.setAttribute("text-rendering", "optimizeLegibility");
+			r.setAttribute("text-rendering", textRenderingFix);
 
 			// update the text content
 			if(r.firstChild){
