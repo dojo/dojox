@@ -13,7 +13,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 	// touching nodes with text
 	var uagent = navigator.userAgent,
 		safMobile = uagent.match(/(iPhone|iPod|iPad)/),
-		android = parseFloat(uagent.split("Android ")[1]);
+		android = parseFloat(uagent.split("Android ")[1]),
 		textRenderingFix = (!android || android<4) ? "optimizeLegibility" : "auto";// #16099
 
 	function _createElementNS(ns, nodeType){
