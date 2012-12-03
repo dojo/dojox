@@ -19,7 +19,7 @@ dojo.require("dojox.gfx");
 
 var ROTATION = 30;
 
-var surface = null, t1, t2, t3, t4, t5;
+var surface = null, t1, t2, t3, t4, t5, t6, t7;
 
 var placeAnchor = function(surface, x, y){
 	surface.createLine({x1: x - 2, y1: y, x2: x + 2, y2: y}).setStroke("blue");
@@ -71,7 +71,7 @@ makeShapes = function(){
 getSizes = function(){
 	if (!surface.children.length){return;}
 	var t = [];
-	dojo.forEach(["t1", "t2", "t3", "t4", "t5","t6","t7"], function(name){
+	dojo.forEach(["t1", "t2", "t3", "t4", "t5", "t6", "t7"], function(name){
 		var node = eval("(" + name + ")");
 		t.push(node.getShape().text + " = " + node.getTextWidth());
 	});
