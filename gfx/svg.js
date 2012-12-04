@@ -15,7 +15,7 @@ function(lang, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, pathLib){
 		safMobile = uagent.search('iphone') > -1 ||
 					uagent.search('ipad') > -1 ||
 					uagent.search('ipod') > -1,
-		android = parseFloat(uagent.split("Android ")[1]),
+		android = parseFloat(uagent.split("android ")[1]),
 		textRenderingFix = (!android || android<4) ? "optimizeLegibility" : "auto";// #16099
 
 	function _createElementNS(ns, nodeType){
