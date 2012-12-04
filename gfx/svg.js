@@ -31,7 +31,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 		safMobile = uagent.search('iphone') > -1 ||
 					uagent.search('ipad') > -1 ||
 					uagent.search('ipod') > -1,
-		android = parseFloat(uagent.split("Android ")[1]),
+		android = parseFloat(uagent.split("android ")[1]),
 		textRenderingFix = (!android || android<4) ? "optimizeLegibility" : "auto";// #16099
 
 
