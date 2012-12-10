@@ -221,8 +221,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 									run:     run,
 									shape:   shape,
 									shadow:	 sshape,
-									x:       val.y,
-									y:       val.x + 1.5
+									cx:      val.y,
+									cy:      val.x + 1.5,
+									x:	     indexed?j:run.data[j].x,
+									y:	 	 indexed?run.data[j]:run.data[j].y
 								};
 								this._connectEvents(o);
 								eventSeries[j] = o;
@@ -247,7 +249,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			return this;	//	dojox/charting/plot2d/Bars
 		},
 		getValue: function(value, j, seriesIndex, indexed){
-			var y,x;
+			var y, x;
 			if(indexed){
 				if(typeof value == "number"){
 					y = value;

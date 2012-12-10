@@ -165,8 +165,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 									run:     run,
 									shape:   shape,
 									shadow:  sshape,
-									x:       val.x + 0.5,
-									y:       val.y
+									cx:      val.x + 0.5,
+									cy:      val.y,
+									x:	     indexed?j:run.data[j].x,
+									y:	 	 indexed?run.data[j]:run.data[j].y
 								};
 								this._connectEvents(o);
 								eventSeries[j] = o;
