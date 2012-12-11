@@ -54,8 +54,8 @@ define([
 	if(has("mvc-bindings-log-api")){
 		function getLogContent(/*dojo/Stateful*/ source, /*String*/ sourceProp, /*dojo/Stateful*/ target, /*String*/ targetProp){
 			return [
-				[target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":"),
-				[source._setIdAttr || !source.declaredClass ? source : source.declaredClass, sourceProp].join(":")
+				[target.canConvertToLoggable || !target.declaredClass ? target : target.declaredClass, targetProp].join(":"),
+				[source.canConvertToLoggable || !source.declaredClass ? source : source.declaredClass, sourceProp].join(":")
 			];
 		}
 	}
@@ -236,9 +236,9 @@ define([
 		handle.unwatch = handle.remove = function(){
 			for(var h = null; h = _watchHandles.pop();){
 				h.unwatch();
-				if(has("mvc-bindings-log-api")){
-					console.log(logContent.join(" is unbound from: "));
-				}
+			}
+			if(has("mvc-bindings-log-api")){
+				console.log(logContent.join(" is unbound from: "));
 			}
 		};
 		return handle; // dojo/handle

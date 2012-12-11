@@ -3,9 +3,10 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/declare",
 	"dojo/has",
+	"dojo/Stateful",
 	"./resolve",
 	"./sync"
-], function(array, lang, declare, has, resolve, sync){
+], function(array, lang, declare, has, Stateful, resolve, sync){
 	if(has("mvc-bindings-log-api")){
 		function getLogContent(/*dojo/Stateful*/ target, /*String*/ targetProp){
 			return [target._setIdAttr || !target.declaredClass ? target : target.declaredClass, targetProp].join(":");
@@ -129,11 +130,27 @@ define([
 					refs[prop] = h;
 				}
 			}
+
+			var dbParams = new Stateful(),
+			 _self = this;
+			dbParams.toString = function(){ return '[Mixin value of widget ' + _self.declaredClass + ', ' + (_self.id || 'NO ID') + ']'; };
+			dbParams.canConvertToLoggable = true;
+			this._startAtWatchHandles(dbParams);
+			for(var prop in refs){
+				if(dbParams[prop] !== void 0){
+					(params = params || {})[prop] = dbParams[prop];
+				}
+			}
+			this._stopAtWatchHandles();
 		},
 
-		_startAtWatchHandles: function(){
+		_startAtWatchHandles: function(/*dojo/Stateful*/ bindWith){
 			// summary:
 			//		Establish data bindings based on dojox/mvc/at handles.
+			// bindWith: dojo/Stateful
+			//		The dojo/Stateful to bind properties with.
+
+			this.canConvertToLoggable = true;
 
 			var refs = this._refs;
 			if(refs){
@@ -145,12 +162,12 @@ define([
 				// First, establish non-wildcard data bindings
 				for(var prop in refs){
 					if(!refs[prop] || prop == "*"){ continue; }
-					atWatchHandles[prop] = bind(refs[prop].target, refs[prop].targetProp, this, prop, {bindDirection: refs[prop].bindDirection, converter: refs[prop].converter});
+					atWatchHandles[prop] = bind(refs[prop].target, refs[prop].targetProp, bindWith || this, prop, {bindDirection: refs[prop].bindDirection, converter: refs[prop].converter});
 				}
 
 				// Then establish wildcard data bindings
 				if((refs["*"] || {}).atsignature == "dojox.mvc.at"){
-					atWatchHandles["*"] = bind(refs["*"].target, refs["*"].targetProp, this, "*", {bindDirection: refs["*"].bindDirection, converter: refs["*"].converter});
+					atWatchHandles["*"] = bind(refs["*"].target, refs["*"].targetProp, bindWith || this, "*", {bindDirection: refs["*"].bindDirection, converter: refs["*"].converter});
 				}
 			}
 		},
