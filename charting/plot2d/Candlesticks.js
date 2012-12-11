@@ -104,11 +104,12 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./Cartesia
 			}
 			this.resetEvents();
 			this.dirty = this.isDirty();
+			var s;
 			if(this.dirty){
 				arr.forEach(this.series, purgeGroup);
 				this._eventSeries = {};
 				this.cleanGroup();
-				var s = this.getGroup();
+				s = this.getGroup();
 				df.forEachRev(this.series, function(item){ item.cleanGroup(s); });
 			}
 			var t = this.chart.theme, f, gap, width,
@@ -126,7 +127,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./Cartesia
 					continue;
 				}
 				run.cleanGroup();
-				var theme = t.next("candlestick", [this.opt, run]), s = run.group,
+				s = run.group;
+				var theme = t.next("candlestick", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];
@@ -203,6 +205,17 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "./Cartesia
 			this.dirty = false;
 			return this;	//	dojox/charting/plot2d/Candlesticks
 		},
+
+		tooltipFunc: function(o){
+			return '<table cellpadding="1" cellspacing="0" border="0" style="font-size:0.9em;">'
+						+ '<tr><td>Open:</td><td align="right"><strong>' + o.data.open + '</strong></td></tr>'
+						+ '<tr><td>High:</td><td align="right"><strong>' + o.data.high + '</strong></td></tr>'
+						+ '<tr><td>Low:</td><td align="right"><strong>' + o.data.low + '</strong></td></tr>'
+						+ '<tr><td>Close:</td><td align="right"><strong>' + o.data.close + '</strong></td></tr>'
+						+ (o.data.mid !== undefined ? '<tr><td>Mid:</td><td align="right"><strong>' + o.data.mid + '</strong></td></tr>' : '')
+						+ '</table>';
+		},
+
 		_animateCandlesticks: function(shape, voffset, vsize){
 			fx.animateTransform(lang.delegate({
 				shape: shape,

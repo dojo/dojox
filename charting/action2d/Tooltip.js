@@ -19,21 +19,16 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 	};
 	=====*/
 
-	var DEFAULT_TEXT = function(o){
+	var DEFAULT_TEXT = function(o, plot){
 		var t = o.run && o.run.data && o.run.data[o.index];
 		if(t && typeof t != "number" && (t.tooltip || t.text)){
 			return t.tooltip || t.text;
 		}
-		if(o.element == "candlestick"){
-			return '<table cellpadding="1" cellspacing="0" border="0" style="font-size:0.9em;">'
-				+ '<tr><td>Open:</td><td align="right"><strong>' + o.data.open + '</strong></td></tr>'
-				+ '<tr><td>High:</td><td align="right"><strong>' + o.data.high + '</strong></td></tr>'
-				+ '<tr><td>Low:</td><td align="right"><strong>' + o.data.low + '</strong></td></tr>'
-				+ '<tr><td>Close:</td><td align="right"><strong>' + o.data.close + '</strong></td></tr>'
-				+ (o.data.mid !== undefined ? '<tr><td>Mid:</td><td align="right"><strong>' + o.data.mid + '</strong></td></tr>' : '')
-				+ '</table>';
+		if(plot.tooltipFunc){
+			return plot.tooltipFunc(o);
+		}else{
+			return o.y;
 		}
-		return o.element == "bar" ? o.x : o.y;
 	};
 
 	var pi4 = Math.PI / 4, pi2 = Math.PI / 2;
@@ -162,7 +157,7 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			aroundRect.h = Math.ceil(aroundRect.h);
 			this.aroundRect = aroundRect;
 
-			var tooltip = this.text(o);
+			var tooltip = this.text(o, this.plot);
 			if(this.chart.getTextDir){
 				var isChartDirectionRtl = (domStyle.get(this.chart.node, "direction") == "rtl");
 				var isBaseTextDirRtl = (this.chart.getTextDir(tooltip) == "rtl");

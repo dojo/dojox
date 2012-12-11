@@ -55,6 +55,11 @@ define(["dojo/_base/connect", "dojo/_base/declare",
 			if(!o.shape || !(o.type in this.overOutEvents) ||
 				!("cx" in o) || !("cy" in o)){ return; }
 
+			// if spider deal only with circle
+			if(o.element == "spider_plot" || o.element == "spider_poly"){
+				return;
+			}
+
 			var runName = o.run.name, index = o.index, vector = [], anim, init, scale;
 
 			if(runName in this.anim){

@@ -1,11 +1,10 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_base/array",
 	"dojo/dom-geometry", "dojo/_base/fx", "dojo/fx", "dojo/sniff",
-	"./Base", "./_PlotEvents", "dojo/_base/Color", "dojox/color/_base", "./common", "../axis2d/common",
+	"./Base", "./_PlotEvents", "./common", "../axis2d/common",
 	"dojox/gfx", "dojox/gfx/matrix", "dojox/gfx/fx", "dojox/lang/functional",
 	"dojox/lang/utils", "dojo/fx/easing"],
 	function(lang, declare, hub, arr, domGeom, baseFx, coreFx, has,
-			Base, PlotEvents, Color, dxcolor, dc, da,
-			g, m, gfxfx, df, du, easing){
+			Base, PlotEvents, dc, da, g, m, gfxfx, df, du, easing){
 
 	var FUDGE_FACTOR = 0.2; // use to overlap fans
 
@@ -98,7 +97,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			// returns: dojox/charting/plot2d/Base
 			//		A reference to this plot for functional chaining.
 			this.series.push(run);
-			for(var key in run.data){
+			var key;
+			for(key in run.data){
 				var val = run.data[key],
 					data = this.datas[key];
 				if(data){
@@ -113,7 +113,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				}
 			}
 			if(this.labelKey.length <= 0){
-				for (var key in run.data){
+				for(key in run.data){
 					this.labelKey.push(key);
 				}
 			}
@@ -442,83 +442,22 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			//		Stub function for use by specific plots.
 			// o: Object
 			//		An object intended to represent event parameters.
-			var runName = o.id ? o.id : "default", a;
-			if(runName in this.animations){
-				a = this.animations[runName];
-				a.anim && a.anim.stop(true);
-			}else{
-				a = this.animations[runName] = {};
-			}
-			if(o.element == "spider_poly"){
-				if(!a.color){
-					var color = o.shape.getFill();
-					if(!color || !(color instanceof Color)){
-						return;
-					}
-					a.color = {
-						start: color,
-						end:   transColor(color)
-					};
-				}
-				var start = a.color.start, end = a.color.end;
-				if(o.type == "onmouseout"){
-					// swap colors
-					var t = start; start = end; end = t;
-				}
-				a.anim = gfxfx.animateFill({
-					shape:	  o.shape,
-					duration: 800,
-					easing:	  easing.backOut,
-					color:	  {start: start, end: end}
-				});
-				a.anim.play();
-			}else if(o.element == "spider_circle"){
-				var init, scale, defaultScale = 1.5;
-				if(o.type == "onmouseover"){
-					init  = m.identity;
-					scale = defaultScale;
-					//show tooltip
-					var aroundRect = {type: "rect"};
-					aroundRect.x = o.cx;
-					aroundRect.y = o.cy;
-					aroundRect.w = aroundRect.h = 1;
-					var lt = this.chart.getCoords();
-					aroundRect.x += lt.x;
-					aroundRect.y += lt.y;
-					aroundRect.x = Math.round(aroundRect.x);
-					aroundRect.y = Math.round(aroundRect.y);
-					this.aroundRect = aroundRect;
-					var position = ["after-centered", "before-centered"];
-					dc.doIfLoaded("dijit/Tooltip", lang.hitch(this, function(Tooltip){
-						Tooltip.show(o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data, this.aroundRect, position);
-					}));
-				}else{
-					init  = m.scaleAt(defaultScale, o.cx, o.cy);
-					scale = 1/defaultScale;
-					dc.doIfLoaded("dijit/Tooltip", lang.hitch(this, function(Tooltip){
-						this.aroundRect && Tooltip.hide(this.aroundRect);
-					}));
-				}
-				var cs = o.shape.getShape(),
-					init = m.scaleAt(defaultScale, cs.cx, cs.cy),
-					kwArgs = {
-						shape: o.shape,
-						duration: 200,
-						easing:	  easing.backOut,
-						transform: [
-							{name: "scaleAt", start: [1, cs.cx, cs.cy], end: [scale, cs.cx, cs.cy]},
-							init
-						]
-					};
-				a.anim = gfxfx.animateTransform(kwArgs);
-				a.anim.play();
-			}else if(o.element == "spider_plot"){
+			if(o.element == "spider_plot"){
 				//dojo gfx function "moveToFront" not work in IE
 				if(o.type == "onmouseover" && !has("ie")){
 					o.shape.moveToFront();
 				}
 			}
 		},
+
+		tooltipFunc: function(o){
+			if(o.element == "spider_circle"){
+				return o.tdata.sname + "<br/>" + o.tdata.key + "<br/>" + o.tdata.data;
+			}else{
+				return null;
+			}
+		},
+
 		_getBoundary: function(points){
 			var xmax = points[0].x,
 				xmin = points[0].x,
@@ -579,27 +518,6 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			return dc.getLabel(number, this.opt.fixed, this.opt.precision);
 		}
 	});
-	
-	function transColor(color){
-		var a = new dxcolor.Color(color),
-			x = a.toHsl();
-		if(x.s == 0){
-			x.l = x.l < 50 ? 100 : 0;
-		}else{
-			x.s = 100;
-			if(x.l < 50){
-				x.l = 75;
-			}else if(x.l > 75){
-				x.l = 50;
-			}else{
-				x.l = x.l - 50 > 75 - x.l ?
-					50 : 75;
-			}
-		}
-		var color = dxcolor.fromHsl(x);
-		color.a = 0.7;
-		return color;
-	}
-	
+
 	return Spider; // dojox/plot2d/Spider
 });

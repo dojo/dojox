@@ -55,73 +55,37 @@
 </style>
 <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true"></script>
 <script type="text/javascript">
-	dojo.require("dojox.charting.Chart");
-	dojo.require("dojox.charting.plot2d.Spider");
-	dojo.require("dojox.charting.themes.PlotKit.blue");
-	dojo.require("dijit.Tooltip");
-	dojo.require("dijit.form.CheckBox");
-	dojo.require("dijit.form.RadioButton");
-	dojo.require("dijit.form.Form");
-	dojo.require("dojo.fx.easing");
-	dojo.require("dojox.gfx.fx");
-	dojo.require("dojox.charting.widget.SelectableLegend");
-	
-	var dc = dojox.charting,
-		divisions = 7,
+	var switchData, switchSpider, switchDivisions, switchAnimation;
+
+	require(["dojo/_base/kernel", "dojo/dom", "dojo/dom-construct", "dojo/ready", "dojox/charting/Chart", "dojox/charting/plot2d/Spider", "dojox/charting/themes/PlotKit/blue",
+		"dojox/charting/action2d/Tooltip", "dojox/charting/action2d/Highlight", "dojox/charting/action2d/Magnify",
+		"dijit/form/CheckBox", "dijit/form/RadioButton", "dijit/form/Form", "dojox/charting/widget/SelectableLegend",
+		"dojo/fx/easing"],
+			function(kernel, dom, domConstruct, ready, Chart, Spider, blue, Tooltip, Highlight, Magnify, CheckBox,
+					 RadioButton, Form, SelectableLegend, easing){
+
+	var divisions = 7,
 		stype = "polygon",
-		easing = dojo.fx.easing.backOut;
+		easing = easing.backOut;
 	var empty = {};
     var populateSelect = function(from, select){
-        var module = dojo.getObject(from);
+        var module = kernel.getObject(from);
         for(var name in module){
             if(name in empty){ continue; }
             var fun = module[name];
-            if(dojo.isFunction(fun)){
-                dojo.create("option", {
-                    value:     from + "." + name,
-                    selected:  name == "backOut",
-                    innerHTML: from + "." + name
-                }, select);
+            if(kernel.isFunction(fun)){
+				domConstruct.create("option", {
+					value:     from + "." + name,
+					selected:  name == "backOut",
+					innerHTML: from + "." + name
+				}, select);
+			}
             }
         }
-    };
-	
+
 	var chart1, legend1;
-	makeObjects = function(){
-		chart1 = new dojox.charting.Chart("test1");
-		chart1.setTheme(dojox.charting.themes.PlotKit.blue);
-		chart1.addPlot("default", {
-			type: "Spider",
-			labelOffset: -10,
-			divisions: divisions,
-			axisColor:      "lightgray",
-			spiderColor:    "silver",
-            seriesFillAlpha: 0.2,
-			spiderOrigin:	 0.16,
-			markerSize:  	 3,
-			precision:		 0,
-			spiderType:	 	 stype
-		});
-		chart1.addSeries("China", {data: {"GDP": 2,"area": 6,"population": 2000,"inflation": 15,"growth": 12}}, { fill: "blue" });
-		chart1.addSeries("France", {data: {"GDP": 6,"area": 15,"population": 500,"inflation": 5,"growth": 6}}, { fill: "red" });
-		chart1.addSeries("USA", {data: {"GDP": 3,"area": 20,"population": 1500,"inflation": 10,"growth": 3}}, { fill: "green" });
-		chart1.addSeries("Japan", {data: {"GDP": 4,"area": 2,"population": 1000,"inflation": 20,"growth": 2}}, { fill: "yellow" });
-		chart1.addSeries("Korean", {data: {"GDP": 10,"area": 10,"population": 800,"inflation": 2,"growth": 18}}, { fill: "orange" });
-		chart1.addSeries("Canada", {data: {"GDP": 1,"area": 18,"population": 300,"inflation": 3,"growth": 15}}, { fill: "purple" });
-		chart1.render();
-		
-		legend1 = new dc.widget.SelectableLegend({chart: chart1, horizontal: true}, "legend1");
-		
-		// prepare and enable controls
-        populateSelect("dojo.fx.easing", "easing");
-	};
-	
-	dojo.addOnLoad(makeObjects);
 
-</script>
-
-<script type="text/javascript">
-	function switchData(val){
+	switchData = function(val){
 		if(val == "b1"){
 			chart1.updateSeries("China", {data: {"GDP": 2,"area": 6,"population": 2000,"inflation": 15,"growth": 12}}, { fill: "blue" });
 			chart1.updateSeries("France", {data: {"GDP": 6,"area": 15,"population": 500,"inflation": 5,"growth": 6}}, { fill: "red" });
@@ -141,10 +105,7 @@
 		legend1 && legend1.refresh && legend1.refresh();
 	}
 
-</script>
-
-<script type="text/javascript">
-	function switchSpider(val){
+	switchSpider = function(val){
 		stype = document.getElementById("b11").checked ? "polygon" : "circle";
 		if(val == "b11"){
 			chart1.addPlot("default", {
@@ -163,10 +124,7 @@
 		legend1 && legend1.refresh && legend1.refresh();
 	}
 
-</script>
-
-<script type="text/javascript">
-	function switchDivisions(val){
+	switchDivisions = function(val){
 		if(val == "b111"){
 			divisions = 7;
 			chart1.addPlot("default", {
@@ -186,10 +144,8 @@
 		legend1 && legend1.refresh && legend1.refresh();
 	}
 
-</script>
-<script type="text/javascript">
-	function switchAnimation(val){
-		easing = dojo.getObject(dojo.byId("easing").value);
+	switchAnimation = function(val){
+		easing = kernel.getObject(dom.byId("easing").value);
 		chart1.addPlot("default", {
 			type: "Spider",
 			divisions: 		divisions,
@@ -199,6 +155,42 @@
 		chart1.render();
 		legend1 && legend1.refresh && legend1.refresh();
 	}
+
+	ready(function(){
+		chart1 = new Chart("test1");
+		chart1.setTheme(blue);
+		chart1.addPlot("default", {
+			type: Spider,
+			labelOffset: -10,
+			divisions: divisions,
+			axisColor:      "lightgray",
+			spiderColor:    "silver",
+            seriesFillAlpha: 0.2,
+			spiderOrigin:	 0.16,
+			markerSize:  	 3,
+			precision:		 0,
+			spiderType:	 	 stype
+		});
+		chart1.addSeries("China", {data: {"GDP": 2,"area": 6,"population": 2000,"inflation": 15,"growth": 12}}, { fill: "blue" });
+		chart1.addSeries("France", {data: {"GDP": 6,"area": 15,"population": 500,"inflation": 5,"growth": 6}}, { fill: "red" });
+		chart1.addSeries("USA", {data: {"GDP": 3,"area": 20,"population": 1500,"inflation": 10,"growth": 3}}, { fill: "green" });
+		chart1.addSeries("Japan", {data: {"GDP": 4,"area": 2,"population": 1000,"inflation": 20,"growth": 2}}, { fill: "yellow" });
+		chart1.addSeries("Korean", {data: {"GDP": 10,"area": 10,"population": 800,"inflation": 2,"growth": 18}}, { fill: "orange" });
+		chart1.addSeries("Canada", {data: {"GDP": 1,"area": 18,"population": 300,"inflation": 3,"growth": 15}}, { fill: "purple" });
+		new Tooltip(chart1);
+		new Highlight(chart1);
+		new Magnify(chart1, "default", {duration: 800, scale: 1.5});
+		chart1.render();
+		
+		legend1 = new SelectableLegend({chart: chart1, horizontal: true}, "legend1");
+		
+		// prepare and enable controls
+        populateSelect("dojo.fx.easing", "easing");
+	});
+});
+</script>
+
+<script type="text/javascript">
 
 </script>
 
