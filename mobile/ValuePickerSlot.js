@@ -8,13 +8,15 @@ define([
 	"dojo/dom-construct",
 	"dojo/touch",
 	"dijit/_WidgetBase",
-	"./iconUtils"
-], function(array, declare, event, lang, win, domClass, domConstruct, touch, WidgetBase, iconUtils){
+	"./iconUtils",
+	"dojo/has",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/ValuePickerSlot"
+], function(array, declare, event, lang, win, domClass, domConstruct, touch, WidgetBase, iconUtils, has, BidiValuePickerSlot){
 
 	// module:
 	//		dojox/mobile/ValuePickerSlot
 
-	return declare("dojox.mobile.ValuePickerSlot", WidgetBase, {
+	var ValuePickerSlot = declare(has("dojo-bidi") ?  "dojox.mobile.NonBidiValuePickerSlot" : "dojox.mobile.ValuePickerSlot", WidgetBase, {
 		// summary:
 		//		A widget representing one slot of a ValuePicker widget.
 		
@@ -307,4 +309,6 @@ define([
 			this.minusBtnNode.setAttribute("tabIndex", tabIndex);
 		}
 	});
+	
+	return has("dojo-bidi") ? declare("dojox.mobile.ValuePickerSlot", [ValuePickerSlot, BidiValuePickerSlot]) : ValuePickerSlot;
 });

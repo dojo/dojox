@@ -3,12 +3,14 @@ define([
 	"dojo/_base/lang",
 	"dojo/dom-class",
 	"dojo/dom-construct",
-	"./iconUtils"
-], function(declare, lang, domClass, domConstruct, iconUtils){
+	"./iconUtils",
+	"dojo/has",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Badge"
+], function(declare, lang, domClass, domConstruct, iconUtils, has, BidiBadge){
 	// module:
 	//		dojox/mobile/Badge
 
-	return declare("dojox.mobile.Badge", null, {
+	var Badge = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiBadge" : "dojox.mobile.Badge", null, {
 		// summary:
 		//		A utility to create/update a badge node.
 		// description:
@@ -62,4 +64,6 @@ define([
 			this.domNode.firstChild.innerHTML = value;
 		}
 	});
+	
+	return has("dojo-bidi") ? declare("dojox.mobile.Badge", [Badge, BidiBadge]) : Badge;
 });

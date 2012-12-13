@@ -14,15 +14,17 @@ define([
 	"dijit/_WidgetBase",
 	"./ProgressIndicator",
 	"./ToolBarButton",
-	"./View"
-], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View){
+	"./View",
+	"dojo/has",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Heading"
+], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View, has, BidiHeading){
 
 	// module:
 	//		dojox/mobile/Heading
 
 	var dm = lang.getObject("dojox.mobile", true);
 
-	return declare("dojox.mobile.Heading", [WidgetBase, Container, Contained],{
+	var Heading = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiHeading" : "dojox.mobile.Heading", [WidgetBase, Container, Contained],{
 		// summary:
 		//		A widget that represents a navigation bar.
 		// description:
@@ -222,4 +224,6 @@ define([
 			this._set("busy", busy);
 		}	
 	});
+	
+	return has("dojo-bidi") ? declare("dojox.mobile.Heading", [Heading, BidiHeading]) : Heading;
 });

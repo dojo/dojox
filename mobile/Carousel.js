@@ -15,13 +15,14 @@ define([
 	"./CarouselItem",
 	"./PageIndicator",
 	"./SwapView",
-	"require"
-], function(array, connect, declare, event, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require){
+	"require",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Carousel"
+], function(array, connect, declare, event, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel){
 
 	// module:
 	//		dojox/mobile/Carousel
 
-	return declare("dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
+	var Carousel = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiCarousel" : "dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
 		// summary:
 		//		A carousel widget that manages a list of images.
 		// description:
@@ -445,4 +446,5 @@ define([
 			this._set("title", title);
 		}
 	});
+	return has("dojo-bidi") ? declare("dojox.mobile.Carousel", [Carousel, BidiCarousel]) : Carousel;	
 });

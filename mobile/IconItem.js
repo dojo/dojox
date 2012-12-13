@@ -13,13 +13,15 @@ define([
 	"./TransitionEvent",
 	"./iconUtils",
 	"./lazyLoadUtils",
-	"./viewRegistry"
-], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry){
+	"./viewRegistry",
+	"dojo/has",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/IconItem"
+], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry, has, BidiIconItem){
 
 	// module:
 	//		dojox/mobile/IconItem
 
-	return declare("dojox.mobile.IconItem", ItemBase, {
+	var IconItem = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiIconItem" : "dojox.mobile.IconItem", ItemBase, {
 		// summary:
 		//		An icon item widget.
 		// description:
@@ -401,4 +403,6 @@ define([
 						 selected ? this.getParent().pressedIconOpacity : 1);
 		}
 	});
+
+	return has("dojo-bidi") ? declare("dojox.mobile.IconItem", [IconItem, BidiIconItem]) : IconItem;		
 });

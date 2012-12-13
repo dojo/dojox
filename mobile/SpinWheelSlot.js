@@ -8,13 +8,15 @@ define([
 	"dojo/dom-construct",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
-	"./scrollable"
-], function(dojo, array, declare, lang, win, domClass, domConstruct, Contained, WidgetBase, Scrollable){
+	"./scrollable",
+	"dojo/has", 
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/SpinWheelSlot"	
+], function(dojo, array, declare, lang, win, domClass, domConstruct, Contained, WidgetBase, Scrollable, has, BidiSpinWheelSlot){
 
 	// module:
 	//		dojox/mobile/SpinWheelSlot
 
-	return declare("dojox.mobile.SpinWheelSlot", [WidgetBase, Contained, Scrollable], {
+	var SpinWheelSlot = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiSpinWheelSlot" : "dojox.mobile.SpinWheelSlot", [WidgetBase, Contained, Scrollable], {
 		// summary:
 		//		A slot of a SpinWheel.
 		// description:
@@ -379,4 +381,6 @@ define([
 			this.inherited(arguments, [to, duration, easing]); // 2nd arg is to avoid excessive optimization by closure compiler
 		}
 	});
+
+	return has("dojo-bidi") ? declare("dojox.mobile.SpinWheelSlot", [SpinWheelSlot, BidiSpinWheelSlot]) : SpinWheelSlot;	
 });

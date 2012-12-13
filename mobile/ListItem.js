@@ -9,13 +9,15 @@ define([
 	"dijit/_WidgetBase",
 	"./iconUtils",
 	"./_ItemBase",
-	"./ProgressIndicator"
-], function(array, declare, lang, domClass, domConstruct, domStyle, registry, WidgetBase, iconUtils, ItemBase, ProgressIndicator){
+	"./ProgressIndicator",
+	"dojo/has",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/ListItem"
+], function(array, declare, lang, domClass, domConstruct, domStyle, registry, WidgetBase, iconUtils, ItemBase, ProgressIndicator, has,  BidiListItem){
 
 	// module:
 	//		dojox/mobile/ListItem
 
-	var ListItem = declare("dojox.mobile.ListItem", ItemBase, {
+	var ListItem = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiListItem" : "dojox.mobile.ListItem", ItemBase, {
 		// summary:
 		//		An item of either RoundRectList or EdgeToEdgeList.
 		// description:
@@ -504,5 +506,5 @@ define([
 	// This is for the benefit of the parser.   Remove for 2.0.  Also, hide from doc viewer.
 	lang.extend(WidgetBase, /*===== {} || =====*/ ListItem.ChildWidgetProperties);
 
-	return ListItem;
+	return has("dojo-bidi") ? declare("dojox.mobile.ListItem", [ListItem, BidiListItem]) : ListItem;	
 });
