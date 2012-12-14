@@ -19,7 +19,7 @@ dojo.require("dojox.gfx");
 
 var ROTATION = 30;
 
-var surface = null, t1, t2, t3, t4, t5;
+var surface = null, t1, t2, t3, t4, t5, t6, t7, t8;
 
 var placeAnchor = function(surface, x, y){
 	surface.createLine({x1: x - 2, y1: y, x2: x + 2, y2: y}).setStroke("blue");
@@ -65,13 +65,15 @@ makeShapes = function(){
 	t7 = makeText(surface, {x: 0, y: 0, text: "Middle", align: "middle"}, 
 		{family: "sans serif", size: "24pt"}, "red", "black")
 		.setTransform(m.translate(250, 340));
-		
+    t8 = makeText(surface, {x: 250, y: 390, text: "Number: \u200E\u202A20\u202C", align: "middle"},
+            {family: "sans serif", size: "24pt"}, "red", "black");
+
 };
 
 getSizes = function(){
 	if (!surface.children.length){return;}
 	var t = [];
-	dojo.forEach(["t1", "t2", "t3", "t4", "t5","t6","t7"], function(name){
+	dojo.forEach(["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8"], function(name){
 		var node = eval("(" + name + ")");
 		t.push(node.getShape().text + " = " + node.getTextWidth());
 	});
