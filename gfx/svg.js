@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare", "dojo/_base/array",
+define(["dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "dojo/dom","dojo/_base/declare", "dojo/_base/array",
   "dojo/dom-geometry", "dojo/_base/Color", "./_base", "./shape", "./path"],
-  function(lang, win, dom, declare, arr, domGeom, Color, g, gs, pathLib){
+  function(lang, has, win, dom, declare, arr, domGeom, Color, g, gs, pathLib){
 /*=====
 	dojox.gfx.svg = {
 	// module:
@@ -27,12 +27,9 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom","dojo/_base/declare",
 
 	// Need to detect iOS in order to workaround bug when
 	// touching nodes with text
-	var uagent = navigator.userAgent.toLowerCase(),
-		safMobile = uagent.search('iphone') > -1 ||
-					uagent.search('ipad') > -1 ||
-					uagent.search('ipod') > -1,
-		android = parseFloat(uagent.split("android ")[1]),
-		textRenderingFix = (!android || android<4) ? "optimizeLegibility" : "auto";// #16099
+	var safMobile = has("ios"),
+		android = has("android"),
+		textRenderingFix = has("chrome") || (android && android>=4) ? "auto" : "optimizeLegibility";// #16099, #16461
 
 
 	function _createElementNS(ns, nodeType){
