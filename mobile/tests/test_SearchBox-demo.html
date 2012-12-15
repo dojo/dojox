@@ -9,8 +9,8 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
 		data-dojo-config="async: true, parseOnLoad: true"></script>
 
-	<!-- This test shows a dojox.mobile.SearchBox used for filtering a data store
-		which content is displayed by a dojox.mobile.EdgeToEdgeDataList. --> 
+	<!-- This test shows a dojox/mobile/SearchBox used for filtering a data store
+		which content is displayed by a dojox.mobile.EdgeToEdgeStoreList. --> 
 
 	<script type="text/javascript">
 		require([
@@ -20,18 +20,17 @@
 			"dojox/mobile/SearchBox",
 			"dojo/ready",
 			"dijit/registry",
-			"dojo/data/ItemFileReadStore",
-			"dojo/store/DataStore",
+			"dojo/store/Memory",
 			"dojox/mobile/ScrollableView",
-			"dojox/mobile/EdgeToEdgeDataList",
+			"dojox/mobile/EdgeToEdgeStoreList",
 			"dojox/mobile/SimpleDialog",
 			"dojox/mobile/RoundRect",
 			"dojox/mobile/Button",
 			"dojox/mobile/RadioButton",
 			"dojox/mobile/Switch"
 			], function(parser, mobile, compat, SearchBox, ready, registry, 
-						ItemFileReadStore, DataStore, ScrollableView, 
-						EdgeToEdgeDataList, RoundRect, Button, RadioButton, Switch){
+						Memory, ScrollableView, EdgeToEdgeStoreList, 
+						RoundRect, Button, RadioButton, Switch){
 							
 			var static_data = { 
 				items: [ 
@@ -99,10 +98,8 @@
 				]
 			};
 			
-			// dojo.data store for dojox.mobile.EdgeToEdgeDataList
-			dataStore = new ItemFileReadStore({data: static_data});
-			// dojo.store for dojox.mobile.SearchBox
-			store = new DataStore({store: dataStore});
+			// store shared by dojox/mobile/EdgeToEdgeStoreList and dojox/mobile/SearchBox
+			store = new Memory({idProperty:"label", data: static_data});
 		    
 			searchBox = null;
 			list = null;
@@ -125,9 +122,9 @@
 					searchBox.set("incremental", registry.byId("incrementalSwitch").value == "on");
 					if (registry.byId("radioStartsWith").checked){
 						searchBox.queryExpr = "${0}*";
-					}else if(registry.byId("radioContains").checked) {
+					}else if(registry.byId("radioContains").checked){
 						searchBox.queryExpr = "*${0}*";
-					}else if(registry.byId("radioIs").checked) {
+					}else if(registry.byId("radioIs").checked){
 						searchBox.queryExpr = "${0}";
 					}
 				}
@@ -168,63 +165,63 @@
 </head>
 
 <body style="visibility:hidden;background-color:#424142;">
-	<div data-dojo-type="dojox.mobile.View" selected="true">
-		<h1 data-dojo-type="dojox.mobile.Heading" fixed="top">SearchBox</h1>
+	<div data-dojo-type="dojox/mobile/View" selected="true">
+		<h1 data-dojo-type="dojox/mobile/Heading" fixed="top">SearchBox</h1>
 		
-		<input data-dojo-type="dojox.mobile.SearchBox" type="search" id="searchBox"
+		<input data-dojo-type="dojox/mobile/SearchBox" type="search" id="searchBox"
 			style="width:50%" 
 			selectOnClick="true" placeHolder="Search" 
 			data-dojo-props='store:store, searchAttr: "label", ignoreCase: true, incremental: true, pageSize:1, onSearch:onSearch'>
 		<button style="float:right" onclick="showOptions('dlg_options')">Options</button>
 		
-		<div data-dojo-type="dojox.mobile.ScrollableView">
-			<ul data-dojo-type="dojox.mobile.EdgeToEdgeDataList" id="list" 
-				data-dojo-props='store:dataStore, query:{label: "*"}'></ul>
+		<div data-dojo-type="dojox/mobile/ScrollableView">
+			<ul data-dojo-type="dojox/mobile/EdgeToEdgeStoreList" id="list" 
+				data-dojo-props='store:store, query:{}'></ul>
 		</div>
 	</div>
 	
-	<div id="dlg_options" data-dojo-type="dojox.mobile.SimpleDialog">
+	<div id="dlg_options" data-dojo-type="dojox/mobile/SimpleDialog">
 		<div class="mblSimpleDialogTitle">Search Options</div>
 		<table style="width:100%">
 			<tr>
 				<td><span class="bold">Ignore case</span></td>
 				<td style="text-align:left">
-					<input type="checkbox" data-dojo-type="dojox.mobile.Switch" 
+					<input type="checkbox" data-dojo-type="dojox/mobile/Switch" 
 						id="ignoreCaseSwitch" value="on"></td>
 			</tr>
 			<tr>
 				<td><span class="bold">Incremental</span></td>
 				<td style="text-align:left">
-					<input type="checkbox" data-dojo-type="dojox.mobile.Switch" 
+					<input type="checkbox" data-dojo-type="dojox/mobile/Switch" 
 						id="incrementalSwitch" value="on">
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
-					<input type="radio" id="radioStartsWith" data-dojo-type="dojox.mobile.RadioButton" 
+					<input type="radio" id="radioStartsWith" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Starts with" checked>
 					<label for="rb1">Starts with</label>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
-					<input type="radio" id="radioContains" data-dojo-type="dojox.mobile.RadioButton" 
+					<input type="radio" id="radioContains" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Contains">
 					<label for="rb2">Contains</label>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
-					<input type="radio" id="radioIs" data-dojo-type="dojox.mobile.RadioButton" 
+					<input type="radio" id="radioIs" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Is">
 					<label for="rb3">Is</label>
 				</td>
 			</tr>
 		</table>
 
-		<button data-dojo-type="dojox.mobile.Button" class="mblSimpleDialogButton2l" 
+		<button data-dojo-type="dojox/mobile/Button" class="mblSimpleDialogButton2l" 
 			onclick="hideOptions('dlg_options', false)">Cancel</button>
-		<button data-dojo-type="dojox.mobile.Button" class="mblSimpleDialogButton2r mblBlueButton" 
+		<button data-dojo-type="dojox/mobile/Button" class="mblSimpleDialogButton2r mblBlueButton" 
 			onclick="hideOptions('dlg_options', true)">OK</button>
 	</div>
 </body>
