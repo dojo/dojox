@@ -45,7 +45,7 @@ var categories = [
 	{ tag: "no-dojo", label: "no-dojo"},
 	{ tag: "pageTurn", label: "pageTurn"},
 	{ tag: "transition", label: "transition"},
-	{ tag: "SearchBox", label: "SearchBox"}
+	{ tag: "FilteredLists", label: "FilteredLists"}
 ];
 var tests = [
 	{ url: "test_Accordion-demo.html", tags: "Accordion" },
@@ -292,5 +292,12 @@ var tests = [
 	{ url: "test_transition-animations2.html", tags: "transition" },
 	{ url: "test_transition-connect.html", tags: "transition" },
 	{ url: "test_transition-pubsub.html", tags: "transition" },
-	{ url: "test_SearchBox-demo.html", tags: "SearchBox" }
+	{ url: "test_FilteredList-EdgeToEdgeDataList-demo.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-EdgeToEdgeStoreList-auto.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-EdgeToEdgeStoreList-auto-prog.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-EdgeToEdgeStoreList-demo.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-EdgeToEdgeStoreList-prog.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-EdgeToEdgeStoreList-simple.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-RoundRectList-auto.html", tags: "FilteredLists" },
+	{ url: "test_FilteredList-RoundRectList-demo.html", tags: "FilteredLists" }
 ];
