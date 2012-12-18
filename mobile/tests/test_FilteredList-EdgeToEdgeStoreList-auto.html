@@ -15,6 +15,7 @@
 		data-dojo-config="async: true, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
+		var store;
 		require([
 			"dojox/mobile/parser",
 			"dojox/mobile",
@@ -92,7 +93,7 @@
 			};
 			
 			// store for the dojox/mobile/EdgeToEdgeStoreList
-			store = new Memory({idProperty:"label", data: static_data});
+			store = new Memory({idProperty: "label", data: static_data});
 		});
 	</script>
 </head>

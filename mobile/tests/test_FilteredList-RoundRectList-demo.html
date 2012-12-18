@@ -19,6 +19,7 @@
 			"dojox/mobile/parser",
 			"dojox/mobile",
 			"dojox/mobile/compat",
+			"dojo/ready",
 			"dijit/registry",
 			"dojox/mobile/FilteredListMixin",
 			"dojox/mobile/ScrollableView",
@@ -27,8 +28,10 @@
 			"dojox/mobile/Button",
 			"dojox/mobile/RadioButton",
 			"dojox/mobile/Switch"
-			], function(parser, mobile, compat, registry, 
+			], function(parser, mobile, compat, ready, registry, 
 						FilteredListMixin, ScrollableView, SimpleDialog, RoundRect, Button, RadioButton, Switch){
+			
+			var filterBox;
 			
 			// Shows the Search Options dialog.
 			showOptions = function(dlg){
@@ -50,6 +53,10 @@
 					}
 				}
 			};
+			
+			ready(function(){
+				filterBox = registry.byId("filterBox");
+			});
 		});
 	</script>
 	
@@ -191,21 +198,21 @@
 				<td style="text-align:left">
 					<input type="radio" id="radioStartsWith" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Starts with" checked>
-					<label for="rb1">Starts with</label>
+					<label for="radioStartsWith">Starts with</label>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
 					<input type="radio" id="radioContains" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Contains">
-					<label for="rb2">Contains</label>
+					<label for="radioContains">Contains</label>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
 					<input type="radio" id="radioIs" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Is">
-					<label for="rb3">Is</label>
+					<label for="radioIs">Is</label>
 				</td>
 			</tr>
 		</table>

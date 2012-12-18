@@ -15,6 +15,7 @@
 		data-dojo-config="async: true, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
+		var store;
 		require([
 			"dojox/mobile/parser",
 			"dojox/mobile",
@@ -35,6 +36,7 @@
 						Memory, ScrollableView, EdgeToEdgeStoreList, FilteredListMixin,
 						SearchBox, SimpleDialog, RoundRect, Button, RadioButton, Switch){
 							
+			var filterBox;
 			var static_data = { 
 				items: [ 
 					{label: "Alabama"},
@@ -97,16 +99,13 @@
 					{label: "Washington"},
 					{label: "West Virginia"},
 					{label: "Wisconsin"},
-					{label: "Wyoming"},
+					{label: "Wyoming"}
 				]
 			};
 			
 			// store for the dojox/mobile/EdgeToEdgeStoreList
-			store = new Memory({idProperty:"label", data: static_data});
+			store = new Memory({idProperty: "label", data: static_data});
 		    
-			filterBox = null;
-			list = null;
-			
 			// Shows the Search Options dialog.
 			showOptions = function(dlg){
 				registry.byId(dlg).show();
@@ -129,8 +128,7 @@
 			};
 			
 			ready(function(){
-				list = registry.byId("list");
-				filterBox = list.getFilterBox();
+				filterBox = registry.byId("list").getFilterBox();
 			});
 		});
 	</script>
@@ -195,21 +193,21 @@
 				<td style="text-align:left">
 					<input type="radio" id="radioStartsWith" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Starts with" checked>
-					<label for="rb1">Starts with</label>
+					<label for="radioStartsWith">Starts with</label>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
 					<input type="radio" id="radioContains" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Contains">
-					<label for="rb2">Contains</label>
+					<label for="radioContains">Contains</label>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left">
 					<input type="radio" id="radioIs" data-dojo-type="dojox/mobile/RadioButton" 
 						name="mobileRadio" value="Is">
-					<label for="rb3">Is</label>
+					<label for="radioIs">Is</label>
 				</td>
 			</tr>
 		</table>
