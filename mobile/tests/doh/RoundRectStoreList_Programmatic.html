@@ -12,15 +12,16 @@
 		require([
 			"dojo/ready", // dojo.ready
 			"dijit/registry",  // dijit.byId
+			"dojox/mobile/tests/doh/CustomListItem",
 			"dojox/mobile/RoundRectStoreList",
 			"dojox/mobile",				// This is a mobile app.
 			"dojox/mobile/View",		// This mobile app uses mobile view
 			"dojox/mobile/compat",		// This mobile app supports running on desktop browsers
 			"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-		], function(ready, registry, RoundRectStoreList){
+		], function(ready, registry, CustomListItem, RoundRectStoreList){
 			ready(function(){
 				var view = registry.byId("foo");
-				var demoWidget = new dojox.mobile.RoundRectStoreList({id:"list", store:store, query:{}});
+				var demoWidget = new RoundRectStoreList({id:"list", store:store, query:{}, itemRenderer: CustomListItem});
 				demoWidget.placeAt(view.containerNode);
 				demoWidget.startup();
 			});

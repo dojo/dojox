@@ -1,4 +1,5 @@
 require([
+	"dojo/parser",
 	"dojo/_base/Deferred",
 	"dojo/store/Cache",
 	"dojo/store/JsonRest",
@@ -9,10 +10,11 @@ require([
 	"doh/runner",	//doh functions
 	"dojox/mobile/EdgeToEdgeStoreList",
 	"dojox/mobile/RoundRectStoreList",
-	"dojox/mobile/parser",
+	"dojox/mobile/tests/doh/CustomListItem",
+	/*"dojox/mobile/parser",*/
 	"dojox/mobile",
 	"dojox/mobile/compat"
-], function(Deferred, Cache, JsonRest, Memory, Observable, ready, registry, runner, EdgeToEdgeStoreList, RoundRectStoreList){
+], function(parser, Deferred, Cache, JsonRest, Memory, Observable, ready, registry, runner, EdgeToEdgeStoreList, RoundRectStoreList){
 
 	var CLASS_NAME;
 	var DataList;
@@ -74,6 +76,8 @@ require([
 					var d = new runner.Deferred();
 					setTimeout(d.getTestCallback(function(){
 						var demoWidget = registry.byId("dojox_mobile_ListItem_0");
+						// check whether we correctly constructed a custom item
+						runner.assertTrue(demoWidget.customProp);
 						runner.assertEqual('mblListItem', demoWidget.domNode.className);
 						runner.assertEqual('mblImageIcon mblListItemIcon', demoWidget.iconNode.className);
 						runner.assertTrue(demoWidget.iconNode.src.search(/i-icon-1.png/i) != -1);

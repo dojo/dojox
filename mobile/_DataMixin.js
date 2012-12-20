@@ -1,12 +1,15 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/array",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/Deferred"
-], function(array, declare, lang, Deferred){
+], function(kernel, array, declare, lang, Deferred){
 
 	// module:
 	//		dojox/mobile/_DataMixin
+
+	kernel.deprecated("DataMixin", "Use StoreMixin instead", "2.0");
 
 	return declare("dojox.mobile._DataMixin", null, {
 		// summary:

@@ -30,6 +30,10 @@ define([
 		//		Example: itemMap:{text:'label', profile_image_url:'icon'}
 		itemMap: null,
 
+		// itemRenderer: ListItem class or subclass
+		//		The class used to create list items. Default is dojox/mobile/ListItem.
+		itemRenderer: ListItem,
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(!this.store){ return; }
@@ -48,7 +52,7 @@ define([
 			for(var name in item){
 				props[(this.itemMap && this.itemMap[name]) || name] = item[name];
 			}
-			return new ListItem(props);
+			return new this.itemRenderer(props);
 		},
 
 		generateList: function(/*Array*/items){

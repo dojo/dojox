@@ -30,6 +30,10 @@ define([
 		//	|	itemMap:{text:'label', profile_image_url:'icon' }
 		itemMap: null,
 
+		// itemRenderer: ListItem class or subclass
+		//		The class used to create list items. Default is dojox/mobile/ListItem.
+		itemRenderer: ListItem,
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(!this.store){ return; }
@@ -51,7 +55,7 @@ define([
 					attr[(this.itemMap && this.itemMap[name]) || name] = this.store.getValue(item, name);
 				}
 			}, this);
-			var w = new ListItem(attr);
+			var w = new this.itemRenderer(attr);
 			item._widgetId = w.id;
 			return w;
 		},
