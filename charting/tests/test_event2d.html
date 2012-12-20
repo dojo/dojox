@@ -194,13 +194,13 @@ makeObjects = function(){
 		fontColor: "black", 
 		labelOffset: -30,
 		radius: 80,
-		startAngle: 170
+		startAngle: 45
 	});
 	chart10.addSeries("Series A", [
-		{y: 40, text: "Red",   color: "red",   stroke: "black", tooltip: "Red is 50%"},
-		{y: 20, text: "Green", color: "green", stroke: "black", tooltip: "Green is 25%"},
-		{y: 10, text: "Blue",  color: "blue",  stroke: "black", tooltip: "I am feeling Blue!"},
-		{y: 10, text: "Other", color: "white", stroke: "black", tooltip: "Mighty <strong>strong</strong><br>With two lines!"}
+		{y: 4, text: "Red",   color: "red",   stroke: "black", tooltip: "Red is 50%"},
+		{y: 2, text: "Green", color: "green", stroke: "black", tooltip: "Green is 25%"},
+		{y: 1, text: "Blue",  color: "blue",  stroke: "black", tooltip: "I am feeling Blue!"},
+		{y: 1, text: "Other", color: "white", stroke: "black", tooltip: "Mighty <strong>strong</strong><br>With two lines!"}
 	]);
 	var anim10a = new dc.action2d.MoveSlice(chart10, "default");
 	var anim10b = new dc.action2d.Highlight(chart10, "default");
