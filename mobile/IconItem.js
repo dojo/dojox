@@ -14,9 +14,8 @@ define([
 	"./iconUtils",
 	"./lazyLoadUtils",
 	"./viewRegistry",
-	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/IconItem"
-], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry, has, BidiIconItem){
+], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry, BidiIconItem){
 
 	// module:
 	//		dojox/mobile/IconItem

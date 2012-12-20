@@ -7,10 +7,9 @@ define([
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
-	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/IconMenu",
 	"./IconMenuItem"
-], function(declare, has, domClass, domConstruct, domStyle, Contained, Container, WidgetBase, has, BidiIconMenu){
+], function(declare, has, domClass, domConstruct, domStyle, Contained, Container, WidgetBase, BidiIconMenu){
 	// module:
 	//		dojox/mobile/IconMenu
 
