@@ -265,7 +265,6 @@ dojo.declare("dojox.grid._Events", null, {
 			event = e;
 		}
 		this.focus.setFocusCell(event.cell, event.rowIndex);
-		this.onRowClick(event);
 		this.edit.setEditCell(event.cell, event.rowIndex);
 		this.onRowDblClick(e);
 	},
