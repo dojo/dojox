@@ -1,17 +1,8 @@
 define([
 	"dojo/_base/lang",
 	"dojo/_base/declare",
-	"dojo/_base/connect",
-	"dijit/layout/StackContainer",
-	"dijit/layout/ContentPane",
-	"dijit/form/Button",
-	"dijit/_TemplatedMixin",
-	"dijit/_WidgetsInTemplateMixin",
-	"dojo/i18n",
-	"dojo/text!./Wizard/Wizard.html",
-	"dojo/i18n!dijit/nls/common",
-	"dojo/i18n!./nls/Wizard"
-], function (lang, declare, connect, StackContainer, ContentPane, Button, _TemplatedMixin, _WidgetsInTemplateMixin, i18n, template) {
+	"dijit/layout/ContentPane"
+], function(lang, declare, ContentPane){
   
 return declare("dojox.widget.WizardPane", ContentPane, {
 	// summary:
