@@ -10,11 +10,10 @@ define([
 	"dojo/i18n",
 	"dojo/text!./Wizard/Wizard.html",
 	"dojo/i18n!dijit/nls/common",
-	"dojo/i18n!./nls/Wizard",
-	"dojox/widget/WizardPane"
-], function (lang, declare, connect, StackContainer, ContentPane, Button, _TemplatedMixin, _WidgetsInTemplateMixin, i18n, template, wizardPane) {
+	"dojo/i18n!./nls/Wizard"
+], function (lang, declare, connect, StackContainer, ContentPane, Button, _TemplatedMixin, _WidgetsInTemplateMixin, i18n, template) {
   
-var WizardPane = declare("dojox.widget.WizardPane", ContentPane, {
+return declare("dojox.widget.WizardPane", ContentPane, {
 	// summary:
 	//		A panel in a `dojox.widget.Wizard`
 	// description:
@@ -81,6 +80,6 @@ var WizardPane = declare("dojox.widget.WizardPane", ContentPane, {
 		if(this.doneFunction && lang.isFunction(this.doneFunction)){ this.doneFunction(); }
 	}
 });
-	return WizardPane;
+
 });
 
