@@ -191,8 +191,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/sniff
 			if(!this.dirty){ return this; }
 			this.cleanGroup();
 			var s = this.getGroup(), ta = this.chart.theme, lineStroke, ticks;
-			if((has("ios6") && has("ios") < 6) || has("android")){
-				// clipping seems buggy in some mobile Webkit browser
+			if((has("ios") && has("ios") < 6) || has("android") || (has("safari") && !has("ios"))){
+				// clipping seems buggy in some mobile Webkit browser and Safari desktop
 				// it does not clip correctly if only lines are present => create a invisible rectangle...
 				var w = Math.max(0, dim.width  - offsets.l - offsets.r),
 					h = Math.max(0, dim.height - offsets.t - offsets.b);
