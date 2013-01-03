@@ -391,7 +391,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 						var theme = themes[i];
 						if(slice >= 1){
 							// whole pie
-                            this.renderLabel(s, circle.cx, circle.cy + size / 2, labels[i], theme, this.opt.labelOffset > 0);
+							this.renderLabel(s, circle.cx, circle.cy + size / 2, labels[i], theme, this.opt.labelOffset > 0);
 							return true;	// stop iteration
 						}
 						// calculate the geometry of the slice
@@ -406,7 +406,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 							x = circle.cx + labelR * Math.cos(labelAngle),
 							y = circle.cy + labelR * Math.sin(labelAngle) + size / 2;
 						// draw the label
-                        this.renderLabel(s, x, y, labels[i], theme, this.opt.labelOffset > 0);
+						this.renderLabel(s, x, y, labels[i], theme, this.opt.labelOffset > 0);
 						start = end;
 						return false;	// continue
 					}, this);
@@ -448,7 +448,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 								wiring.lineTo(x, y);
 							}
 							wiring.lineTo(jointX, y).setStroke(slice.theme.series.labelWiring);
-                            this.renderLabel(s, labelX, y, labels[i], slice.theme, false, "left");
+							this.renderLabel(s, labelX, y, labels[i], slice.theme, false, "left");
 						}
 					},this);
 				}

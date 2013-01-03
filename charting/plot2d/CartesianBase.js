@@ -11,31 +11,31 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 		//		The vertical axis name
 		vAxis: "y",
 
-        // labels: Boolean?
-        //		For plots that support labels, whether or not to draw labels for each data item.  Default is false.
-        labels:			false,
+		// labels: Boolean?
+		//		For plots that support labels, whether or not to draw labels for each data item.  Default is false.
+		labels:			false,
 
-        // fixed: Boolean?
-		//		Whether a fixed precision must be applied to data values for display. Default is true.
-        fixed:			true,
+		// fixed: Boolean?
+        //		Whether a fixed precision must be applied to data values for display. Default is true.
+		fixed:			true,
 
-        // precision: Number?
-		//		The precision at which to round data values for display. Default is 0.
-        precision:		1,
+		// precision: Number?
+        //		The precision at which to round data values for display. Default is 0.
+		precision:		1,
 
-        // labelOffset: Number?
-        //		The amount in pixels by which to offset labels when using "outside" labelStyle.  Default is 10.
-        labelOffset:	10,
+		// labelOffset: Number?
+		//		The amount in pixels by which to offset labels when using "outside" labelStyle.  Default is 10.
+		labelOffset:	10,
 
-        // labelStyle: String?
-        //		Options as to where to draw labels.  This must be either "inside" or "outside". By default
-        //      the labels are drawn "inside" the shape representing the data point (a column rectangle for a Columns plot
-        //      or a marker for a Line plot for instance). When "outside" is used the labels are drawn above the data point shape.
-        labelStyle:		"inside",
+		// labelStyle: String?
+		//		Options as to where to draw labels.  This must be either "inside" or "outside". By default
+		//      the labels are drawn "inside" the shape representing the data point (a column rectangle for a Columns plot
+		//      or a marker for a Line plot for instance). When "outside" is used the labels are drawn above the data point shape.
+		labelStyle:		"inside",
 
-        // htmlLabels: Boolean?
-        //		Whether or not to use HTML to render slice labels. Default is true.
-        htmlLabels:		true,
+		// htmlLabels: Boolean?
+		//		Whether or not to use HTML to render slice labels. Default is true.
+		htmlLabels:		true,
 
 		// omitLabels: Boolean?
 		//		Whether labels that do not fit in an item render are omitted or not.	This applies only when labelStyle
@@ -54,13 +54,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 	=====*/
 
 	return declare("dojox.charting.plot2d.CartesianBase", Base, {
-        baseParams: {
-            labels:			false,
+		baseParams: {
+			hAxis: 			"x",
+			vAxis: 			"y",
+			labels:			false,
 			labelOffset:    10,
-            fixed:			true,
-            precision:		1,
-            labelStyle:		"inside",
-            htmlLabels:		true,		// use HTML to draw labels
+			fixed:			true,
+			precision:		1,
+			labelStyle:		"inside",
+			htmlLabels:		true,		// use HTML to draw labels
 			omitLabels:		true
         },
 
@@ -80,8 +82,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 			this.hAxis = (kwArgs && kwArgs.hAxis) || "x";
 			this.vAxis = (kwArgs && kwArgs.vAxis) || "y";
 			this.series = [];
-            this.opt = lang.clone(this.baseParams);
-            du.updateWithObject(this.opt, kwArgs);
+			this.opt = lang.clone(this.baseParams);
+			du.updateWithObject(this.opt, kwArgs);
 		},
 		clear: function(){
 			// summary:
@@ -190,7 +192,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect",
 				if(this.opt.labelStyle == "inside"){
 					var lbox = gfx._base._getTextBox(label, { font: theme.series.font } );
 					x = bbox.x + bbox.width / 2;
-                    y = bbox.y + bbox.height / 2 + lbox.h / 4;
+					y = bbox.y + bbox.height / 2 + lbox.h / 4;
 					if(lbox.w > bbox.width || lbox.h > bbox.height){
 						return;
 					}
