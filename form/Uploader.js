@@ -77,7 +77,8 @@ declare("dojox.form.Uploader", [uploader, Button], {
 	//		The name attribute needs to end with square brackets: [] as this is the standard way
 	//		of handling an attribute "array". This requires a slightly different technique on the
 	//		server.
-	name:"uploadedfile",
+	name: "uploadedfile",
+	_setNameAttr: null,		// avoid dijit/form/Button trying to assign name to this.focusNode, since there is no focusNode
 
 	// flashFieldName: String
 	//		If set, this will be the name of the field of the flash uploaded files that the server
