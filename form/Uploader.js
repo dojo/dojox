@@ -30,7 +30,7 @@ define([
 	//		Make it so URL can change (current set to Flash on build)
 	//
 
-declare("dojox.form.Uploader", [uploader, Button], {
+var UploaderOrg = declare("dojox.form.Uploader", [uploader, Button], {
 	// summary:
 	//		A widget that creates a stylable file-input button, with optional multi-file selection,
 	//		using only HTML elements. Non-HTML5 browsers have fallback options of Flash or an iframe.
@@ -376,9 +376,8 @@ declare("dojox.form.Uploader", [uploader, Button], {
 	}
 });
 
-	dojox.form.UploaderOrg = dojox.form.Uploader;
-	var extensions = [dojox.form.UploaderOrg];
-	dojox.form.addUploaderPlugin = function(plug){
+	var extensions = [UploaderOrg];
+	UploaderOrg.addUploaderPlugin = function(plug){
 		// summary:
 		//		Handle Uploader plugins. When the dojox.form.addUploaderPlugin() function is called,
 		//		the dojox.form.Uploader is recreated using the new plugin (mixin).
@@ -387,5 +386,9 @@ declare("dojox.form.Uploader", [uploader, Button], {
 		declare("dojox.form.Uploader", extensions, {});
 	};
 
-	return dojox.form.Uploader;
+	// For back-compat with 1.8.  Maybe we don't need it since this is DojoX.
+	lang.setObject("dojox.form.UploaderOrg", UploaderOrg);
+	lang.setObject("dojox.form.addUploaderPlugin", UploaderOrg.addUploaderPlugin);
+
+	return UploaderOrg;
 });
