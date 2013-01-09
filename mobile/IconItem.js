@@ -291,7 +291,7 @@ define([
 			//		Closes the icon content.
 			if(!this.isOpen()){ return; }
 			this.set("selected", false);
-			if(has("webkit") && !noAnimation){
+			if(has("css3-animations") && !noAnimation){
 				var contentNode = this.paneWidget.domNode;
 				if(this.getParent().transition == "below"){
 					domClass.add(contentNode, "mblCloseContent mblShrink");

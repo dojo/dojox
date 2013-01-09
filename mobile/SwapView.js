@@ -7,8 +7,9 @@ define([
 	"dijit/registry",
 	"./View",
 	"./_ScrollableMixin",
-	"./sniff"
-], function(array, connect, declare, dom, domClass, registry, View, ScrollableMixin, has){
+	"./sniff",
+	"./_css3"
+], function(array, connect, declare, dom, domClass, registry, View, ScrollableMixin, has, css3){
 
 	// module:
 	//		dojox/mobile/SwapView
@@ -251,7 +252,7 @@ define([
 						domClass.remove(c, "mblIn");
 						if(!c._isShowing){
 							c.style.display = "none";
-							c.style.webkitTransform = "";
+							c.style[css3.name("transform")] = "";
 							c.style.left = "0px"; // top/left mode needs this
 						}
 					}
@@ -259,7 +260,7 @@ define([
 				connect.publish("/dojox/mobile/viewChanged", [this]);
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
-			}else if(!has("webkit")){
+			}else if(!has("css3-animations")){
 				this.containerNode.style.left = "0px"; // compat mode needs this
 			}
 		}

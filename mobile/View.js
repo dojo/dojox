@@ -19,8 +19,9 @@ define([
 	"./ViewController", // to load ViewController for you (no direct references)
 	"./common",
 	"./transition",
-	"./viewRegistry"
-], function(array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domConstruct, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, common, transitDeferred, viewRegistry){
+	"./viewRegistry",
+	"./_css3"
+], function(array, config, connect, declare, lang, has, win, Deferred, dom, domClass, domConstruct, domGeometry, domStyle, registry, Contained, Container, WidgetBase, ViewController, common, transitDeferred, viewRegistry, css3){
 
 	// module:
 	//		dojox/mobile/View
@@ -71,16 +72,16 @@ define([
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
 
-			this._animEndHandle = this.connect(this.domNode, "webkitAnimationEnd", "onAnimationEnd");
-			this._animStartHandle = this.connect(this.domNode, "webkitAnimationStart", "onAnimationStart");
+			this._animEndHandle = this.connect(this.domNode, css3.name("animationEnd"), "onAnimationEnd");
+			this._animStartHandle = this.connect(this.domNode, css3.name("animationStart"), "onAnimationStart");
 			if(!config['mblCSS3Transition']){
-				this._transEndHandle = this.connect(this.domNode, "webkitTransitionEnd", "onAnimationEnd");
+				this._transEndHandle = this.connect(this.domNode, css3.name("transitionEnd"), "onAnimationEnd");
 			}
 			if(has('mblAndroid3Workaround')){
 				// workaround for the screen flicker issue on Android 3.x/4.0
 				// applying "-webkit-transform-style:preserve-3d" to domNode can avoid
 				// transition animation flicker
-				domStyle.set(this.domNode, "webkitTransformStyle", "preserve-3d");
+				domStyle.set(this.domNode, css3.name("transformStyle"), "preserve-3d");
 			}
 
 			viewRegistry.add(this);
@@ -349,8 +350,8 @@ define([
 				// workaround for the screen flicker issue on Android 2.2/2.3
 				// apply "-webkit-transform-style:preserve-3d" to both toNode and fromNode
 				// to make them 3d-transition-ready state just before transition animation
-				domStyle.set(toNode, "webkitTransformStyle", "preserve-3d");
-				domStyle.set(fromNode, "webkitTransformStyle", "preserve-3d");
+				domStyle.set(toNode, css3.name("transformStyle"), "preserve-3d");
+				domStyle.set(fromNode, css3.name("transformStyle"), "preserve-3d");
 				// show toNode offscreen to avoid flicker when switching "display" and "visibility" styles
 				domClass.add(toNode, "mblAndroidWorkaround");
 			}
@@ -513,7 +514,7 @@ define([
 
 			if(name.indexOf("Cube") !== -1 &&
 				name.indexOf("In") !== -1 && has('iphone')){
-				this.domNode.parentNode.style.webkitPerspective = "";
+				this.domNode.parentNode.style[css3.name("perspective")] = "";
 			}
 		},
 
@@ -538,8 +539,8 @@ define([
 				// to avoid side effects such as input field auto-scrolling issue
 				// use setTimeout to avoid flicker in case of ScrollableView
 				setTimeout(lang.hitch(this, function(){
-					if(toWidget){ domStyle.set(this.toNode, "webkitTransformStyle", ""); }
-					domStyle.set(this.domNode, "webkitTransformStyle", "");
+					if(toWidget){ domStyle.set(this.toNode, css3.name("transformStyle"), ""); }
+					domStyle.set(this.domNode, css3.name("transformStyle"), "");
 				}), 0);
 			}
 

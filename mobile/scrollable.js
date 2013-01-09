@@ -7,8 +7,10 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
-	"./sniff"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has){
+	"./sniff",
+	"./_css3",
+	"./_maskUtils"
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has, css3, maskUtils){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -20,11 +22,11 @@ define([
 
 	// feature detection
 	has.add("translate3d", function(){
-		if(has("webkit")){
+		if(has("css3-animations")){
 			var elem = win.doc.createElement("div");
-			elem.style.webkitTransform = "translate3d(0px,1px,0px)";
+			elem.style[css3.name("transform")] = "translate3d(0px,1px,0px)";
 			win.doc.documentElement.appendChild(elem);
-			var v = win.doc.defaultView.getComputedStyle(elem, '')["-webkit-transform"];
+			var v = win.doc.defaultView.getComputedStyle(elem, '')[css3.name("transform", true)];
 			var hasTranslate3d = v && v.indexOf("matrix") === 0;
 			win.doc.documentElement.removeChild(elem);
 			return hasTranslate3d;
@@ -141,7 +143,7 @@ define([
 			this._ch = []; // connect handlers
 			this._ch.push(connect.connect(this.touchNode,
 				has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchStart"));
-			if(has("webkit")){
+			if(has("css3-animations")){
 				// flag for whether to use -webkit-transform:translate3d(x,y,z) or top/left style.
 				// top/left style works fine as a workaround for input fields auto-scrolling issue,
 				// so use top/left in case of Android by default.
@@ -153,11 +155,11 @@ define([
 				}
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
-						this._ch.push(connect.connect(this.domNode, "webkitTransitionEnd", this, "onFlickAnimationEnd"));
-						this._ch.push(connect.connect(this.domNode, "webkitTransitionStart", this, "onFlickAnimationStart"));
+						this._ch.push(connect.connect(this.domNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
+						this._ch.push(connect.connect(this.domNode, css3.name("transitionStart"), this, "onFlickAnimationStart"));
 					}else{
-						this._ch.push(connect.connect(this.domNode, "webkitAnimationEnd", this, "onFlickAnimationEnd"));
-						this._ch.push(connect.connect(this.domNode, "webkitAnimationStart", this, "onFlickAnimationStart"));
+						this._ch.push(connect.connect(this.domNode, css3.name("animationEnd"), this, "onFlickAnimationEnd"));
+						this._ch.push(connect.connect(this.domNode, css3.name("animationStart"), this, "onFlickAnimationStart"));
 	
 						// Creation of keyframes takes a little time. If they are created
 						// in a lazy manner, a slight delay is noticeable when you start
@@ -167,11 +169,11 @@ define([
 						}
 					}
 					if(has("translate3d")){ // workaround for flicker issue on iPhone and Android 3.x/4.0
-						domStyle.set(this.containerNode, "webkitTransform", "translate3d(0,0,0)");
+						domStyle.set(this.containerNode, css3.name("transform"), "translate3d(0,0,0)");
 					}
 				}else{
-					this._ch.push(connect.connect(this.domNode, "webkitTransitionEnd", this, "onFlickAnimationEnd"));
-					this._ch.push(connect.connect(this.domNode, "webkitTransitionStart", this, "onFlickAnimationStart"));
+					this._ch.push(connect.connect(this.domNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
+					this._ch.push(connect.connect(this.domNode, css3.name("transitionStart"), this, "onFlickAnimationStart"));
 				}
 			}
 
@@ -663,9 +665,9 @@ define([
 				this._scrollBarH.className = "";
 			}
 			if(this._useTransformTransition || this._useTopLeft){
-				this.containerNode.style.webkitTransition = "";
-				if(this._scrollBarV) { this._scrollBarV.style.webkitTransition = ""; }
-				if(this._scrollBarH) { this._scrollBarH.style.webkitTransition = ""; }
+				this.containerNode.style[css3.name("transition")] = "";
+				if(this._scrollBarV) { this._scrollBarV.style[css3.name("transition")] = ""; }
+				if(this._scrollBarH) { this._scrollBarH.style[css3.name("transition")] = ""; }
 			}
 		},
 
@@ -742,14 +744,14 @@ define([
 			//		this.containerNode.
 
 			var s = (node || this.containerNode).style;
-			if(has("webkit")){
+			if(has("css3-animations")){
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
-						s.webkitTransition = "";	
+						s[css3.name("transition")] = "";	
 					}
-					s.webkitTransform = this.makeTranslateStr(to);
+					s[css3.name("transform")] = this.makeTranslateStr(to);
 				}else{
-					s.webkitTransition = "";
+					s[css3.name("transition")] = "";
 					if(this._v){
 						s.top = to.y + "px";
 					}
@@ -803,13 +805,15 @@ define([
 		getPos: function(){
 			// summary:
 			//		Gets the top position in the midst of animation.
-			if(has("webkit")){
+			if(has("css3-animations")){
 				var s = win.doc.defaultView.getComputedStyle(this.containerNode, '');
 				if(!this._useTopLeft){
-					var m = s["-webkit-transform"];
+					var m = s[css3.name("transform")];
 					if(m && m.indexOf("matrix") === 0){
 						var arr = m.split(/[,\s\)]+/);
-						return {y:arr[5] - 0, x:arr[4] - 0};
+						// IE10 returns a matrix3d
+						var i = m.indexOf("matrix3d") === 0 ? 12 : 4;
+						return {y:arr[i+1] - 0, x:arr[i] - 0};
 					}
 					return {x:0, y:0};
 				}else{
@@ -874,16 +878,17 @@ define([
 					self["_scrollBarWrapper"+dir] = wrapper;
 
 					bar = domConstruct.create("div", null, wrapper);
-					domStyle.set(bar, {
+					domStyle.set(bar, css3.add({
 						opacity: 0.6,
 						position: "absolute",
 						backgroundColor: "#606060",
 						fontSize: "1px",
-						webkitBorderRadius: "2px",
 						MozBorderRadius: "2px",
-						webkitTransformOrigin: "0 0",
 						zIndex: 2147483647 // max of signed 32-bit integer
-					});
+					}, {
+						borderRadius: "2px",
+						transformOrigin: "0 0"
+					}));
 					domStyle.set(bar, dir == "V" ? {width: "5px"} : {height: "5px"});
 					self["_scrollBarNode" + dir] = bar;
 				}
@@ -905,14 +910,14 @@ define([
 			//		If the fadeScrollBar property is true, hides the scroll bar with
 			//		the fade animation.
 
-			if(this.fadeScrollBar && has("webkit")){
+			if(this.fadeScrollBar && has("css3-animations")){
 				if(!dm._fadeRule){
 					var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 					node.textContent =
 						".mblScrollableFadeScrollBar{"+
-						"  -webkit-animation-duration: 1s;"+
-						"  -webkit-animation-name: scrollableViewFadeScrollBar;}"+
-						"@-webkit-keyframes scrollableViewFadeScrollBar{"+
+						"  " + css3.name("animation-duration", true) + ": 1s;"+
+						"  " + css3.name("animation-name", true) + ": scrollableViewFadeScrollBar;}"+
+						"@" + css3.name("keyframes", true) + " scrollableViewFadeScrollBar{"+
 						"  from { opacity: 0.6; }"+
 						"  to { opacity: 0; }}";
 					dm._fadeRule = node.sheet.cssRules[1];
@@ -920,10 +925,11 @@ define([
 			}
 			if(!this.scrollBar){ return; }
 			var f = function(bar, self){
-				domStyle.set(bar, {
-					opacity: 0,
-					webkitAnimationDuration: ""
-				});
+				domStyle.set(bar, css3.add({
+					opacity: 0
+				}, {
+					animationDuration: ""
+				}));
 				// do not use fade animation in case of using top/left on Android
 				// since it causes screen flicker during adress bar's fading out
 				if(!(self._useTopLeft && has('android'))){
@@ -980,34 +986,36 @@ define([
 
 			if(!this.scrollBar){ return; }
 			if(this._v && this._scrollBarV && typeof to.y == "number"){
-				if(has("webkit")){
+				if(has("css3-animations")){
 					if(!this._useTopLeft){
 						if(this._useTransformTransition){
-							this._scrollBarV.style.webkitTransition = "";
+							this._scrollBarV.style[css3.name("transition")] = "";
 						}
-						this._scrollBarV.style.webkitTransform = this.makeTranslateStr({y:to.y});
+						this._scrollBarV.style[css3.name("transform")] = this.makeTranslateStr({y:to.y});
 					}else{
-						domStyle.set(this._scrollBarV, {
-							webkitTransition: "",
+						domStyle.set(this._scrollBarV, css3.add({
 							top: to.y + "px"
-						});
+						}, {
+							transition: ""
+						}));
 					}
 				}else{
 					this._scrollBarV.style.top = to.y + "px";
 				}
 			}
 			if(this._h && this._scrollBarH && typeof to.x == "number"){
-				if(has("webkit")){
+				if(has("css3-animations")){
 					if(!this._useTopLeft){
 						if(this._useTransformTransition){
-							this._scrollBarH.style.webkitTransition = "";
+							this._scrollBarH.style[css3.name("transition")] = "";
 						}
-						this._scrollBarH.style.webkitTransform = this.makeTranslateStr({x:to.x});
+						this._scrollBarH.style[css3.name("transform")] = this.makeTranslateStr({x:to.x});
 					}else{
-						domStyle.set(this._scrollBarH, {
-							webkitTransition: "",
+						domStyle.set(this._scrollBarH, css3.add({
 							left: to.x + "px"
-						});
+						}, {
+							transition: ""
+						}));
 					}
 				}else{
 					this._scrollBarH.style.left = to.x + "px";
@@ -1043,7 +1051,7 @@ define([
 			//		private
 			
 			// idx: 0:scrollbarV, 1:scrollbarH, 2:content
-			if(has("webkit")){
+			if(has("css3-animations")){
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
 						// for iOS6 (maybe others?): use -webkit-transform + -webkit-transition
@@ -1051,16 +1059,16 @@ define([
 						if(to.y === undefined){ to.y = from.y; }
 						 // make sure we actually change the transform, otherwise no webkitTransitionEnd is fired.
 						if(to.x !== from.x || to.y !== from.y){
-							domStyle.set(node, {
-								webkitTransitionProperty: "-webkit-transform",
-								webkitTransitionDuration: duration + "s",
-								webkitTransitionTimingFunction: easing
-							});
+							domStyle.set(node, css3.add({}, {
+								transitionProperty: css3.name("transform"),
+								transitionDuration: duration + "s",
+								transitionTimingFunction: easing
+							}));
 							var t = this.makeTranslateStr(to);
 							setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
-								domStyle.set(node, {
-									webkitTransform: t
-								});
+								domStyle.set(node, css3.add({}, {
+									transform: t
+								}));
 							}, 0);
 							domClass.add(node, "mblScrollableScrollTo"+idx);
 						} else {
@@ -1071,10 +1079,10 @@ define([
 					}else{
 						// use -webkit-transform + -webkit-animation
 						this.setKeyframes(from, to, idx);
-						domStyle.set(node, {
-							webkitAnimationDuration: duration + "s",
-							webkitAnimationTimingFunction: easing
-						});
+						domStyle.set(node, css3.add({}, {
+							animationDuration: duration + "s",
+							animationTimingFunction: easing
+						}));
 						domClass.add(node, "mblScrollableScrollTo"+idx);
 						if(idx == 2){
 							this.scrollTo(to, true, node);
@@ -1083,11 +1091,11 @@ define([
 						}
 					}
 				}else{
-					domStyle.set(node, {
-						webkitTransitionProperty: "top, left",
-						webkitTransitionDuration: duration + "s",
-						webkitTransitionTimingFunction: easing
-					});
+					domStyle.set(node, css3.add({}, {
+						transitionProperty: "top, left",
+						transitionDuration: duration + "s",
+						transitionTimingFunction: easing
+					}));
 					setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
 						domStyle.set(node, {
 							top: (to.y || 0) + "px",
@@ -1154,31 +1162,15 @@ define([
 			//		This function creates a mask that hides corners of one scroll
 			//		bar edge to make it round edge. The other side of the edge is
 			//		always visible and round shaped with the border-radius style.
-			if(!has("webkit")){ return; }
-			var ctx;
+			if(!(has("webkit")||has("svg"))){ return; }
+			//var ctx;
 			if(this._scrollBarWrapperV){
 				var h = this._scrollBarWrapperV.offsetHeight;
-				ctx = win.doc.getCSSCanvasContext("2d", "scrollBarMaskV", 5, h);
-				ctx.fillStyle = "rgba(0,0,0,0.5)";
-				ctx.fillRect(1, 0, 3, 2);
-				ctx.fillRect(0, 1, 5, 1);
-				ctx.fillRect(0, h - 2, 5, 1);
-				ctx.fillRect(1, h - 1, 3, 2);
-				ctx.fillStyle = "rgb(0,0,0)";
-				ctx.fillRect(0, 2, 5, h - 4);
-				this._scrollBarWrapperV.style.webkitMaskImage = "-webkit-canvas(scrollBarMaskV)";
+				maskUtils.createRoundMask(this._scrollBarWrapperV, 0, 0, 0, 0, 5, h, 2, 2, 0.5);
 			}
 			if(this._scrollBarWrapperH){
 				var w = this._scrollBarWrapperH.offsetWidth;
-				ctx = win.doc.getCSSCanvasContext("2d", "scrollBarMaskH", w, 5);
-				ctx.fillStyle = "rgba(0,0,0,0.5)";
-				ctx.fillRect(0, 1, 2, 3);
-				ctx.fillRect(1, 0, 1, 5);
-				ctx.fillRect(w - 2, 0, 1, 5);
-				ctx.fillRect(w - 1, 1, 2, 3);
-				ctx.fillStyle = "rgb(0,0,0)";
-				ctx.fillRect(2, 0, w - 4, 5);
-				this._scrollBarWrapperH.style.webkitMaskImage = "-webkit-canvas(scrollBarMaskH)";
+				maskUtils.createRoundMask(this._scrollBarWrapperH, 0, 0, 0, 0, w, 5, 2, 2, 0.5);
 			}
 		},
 
@@ -1255,21 +1247,21 @@ define([
 			if(!dm._rule[idx]){
 				var node = domConstruct.create("style", null, win.doc.getElementsByTagName("head")[0]);
 				node.textContent =
-					".mblScrollableScrollTo"+idx+"{-webkit-animation-name: scrollableViewScroll"+idx+";}"+
-					"@-webkit-keyframes scrollableViewScroll"+idx+"{}";
+					".mblScrollableScrollTo"+idx+"{" + css3.name("animation-name", true) + ": scrollableViewScroll"+idx+";}"+
+					"@" + css3.name("keyframes", true) + " scrollableViewScroll"+idx+"{}";
 				dm._rule[idx] = node.sheet.cssRules[1];
 			}
 			var rule = dm._rule[idx];
 			if(rule){
 				if(from){
-					rule.deleteRule("from");
-					rule.insertRule("from { -webkit-transform: "+this.makeTranslateStr(from)+"; }");
+					rule.deleteRule(has("webkit")?"from":0);
+					(rule.insertRule||rule.appendRule).call(rule, "from { " + css3.name("transform", true) + ": "+this.makeTranslateStr(from)+"; }");
 				}
 				if(to){
 					if(to.x === undefined){ to.x = from.x; }
 					if(to.y === undefined){ to.y = from.y; }
-					rule.deleteRule("to");
-					rule.insertRule("to { -webkit-transform: "+this.makeTranslateStr(to)+"; }");
+					rule.deleteRule(has("webkit")?"to":1);
+					(rule.insertRule||rule.appendRule).call(rule, "to { " + css3.name("transform", true) + ": "+this.makeTranslateStr(to)+"; }");
 				}
 			}
 		},

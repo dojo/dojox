@@ -9,8 +9,9 @@ define([
 	"dojo/window",
 	"dijit/_WidgetBase",
 	"dojo/_base/array",
-	"dijit/registry"
-], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry){
+	"dijit/registry",
+	"./_css3"
+], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry, css3){
 
 	return declare("dojox.mobile.Overlay", WidgetBase, {
 		// summary:
@@ -55,7 +56,7 @@ define([
 			var _domNode = this.domNode;
 			domClass.replace(_domNode, ["mblCoverv", "mblIn"], ["mblOverlayHidden", "mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
 			setTimeout(lang.hitch(this, function(){
-				var handler = this.connect(_domNode, "webkitTransitionEnd", function(){
+				var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 					this.disconnect(handler);
 					domClass.remove(_domNode, ["mblCoverv", "mblIn", "mblTransition"]);
 					this._reposition();
@@ -89,10 +90,10 @@ define([
 				clearInterval(this._repositionTimer);
 				this._repositionTimer = null;
 			}
-			if(has("webkit")){
+			if(has("css3-animations")){
 				domClass.replace(_domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn", "mblOverlayHidden", "mblTransition"]);
 				setTimeout(lang.hitch(this, function(){
-					var handler = this.connect(_domNode, "webkitTransitionEnd", function(){
+					var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 						this.disconnect(handler);
 						domClass.replace(_domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
 					});

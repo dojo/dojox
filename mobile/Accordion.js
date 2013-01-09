@@ -11,9 +11,10 @@ define([
 	"dijit/_WidgetBase",
 	"./iconUtils",
 	"./lazyLoadUtils",
+	"./_css3",
 	"require",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Accordion"
-], function(array, declare, lang, has, dom, domClass, domConstruct, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, require, BidiAccordion){
+], function(array, declare, lang, has, dom, domClass, domConstruct, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, css3, require, BidiAccordion){
 
 	// module:
 	//		dojox/mobile/Accordion
@@ -324,7 +325,7 @@ define([
 				});
 				this._openSpace = openSpace > 0 ? openSpace : 0;
 				var sel = this.getSelectedPanes()[0];
-				sel.domNode.style.webkitTransition = "";
+				sel.domNode.style[css3.name("transition")] = "";
 				sel.domNode.style.height = this._openSpace + "px";
 			}
 		},
@@ -353,7 +354,7 @@ define([
 			}
 			var children = this.getChildren();
 			array.forEach(children, function(c, i){
-				c.domNode.style.webkitTransition = noAnimation ? "" : "height "+this.duration+"s linear";
+				c.domNode.style[css3.name("transition")] = noAnimation ? "" : "height "+this.duration+"s linear";
 				if(c === pane){
 					c.domNode.style.display = "";
 					var h;
@@ -386,9 +387,9 @@ define([
 			// noAnimation:
 			//		If true, the pane collapses immediately without animation effect.
 			if(pane.domNode.style.display === "none"){ return; } // already collapsed
-			pane.domNode.style.webkitTransition = noAnimation ? "" : "height "+this.duration+"s linear";
+			pane.domNode.style[css3.name("transition")] = noAnimation ? "" : "height "+this.duration+"s linear";
 			pane.domNode.style.height = "0px";
-			if(!has("webkit") || noAnimation){
+			if(!has("css3-animations") || noAnimation){
 				pane.domNode.style.display = "none";
 				this._updateLast();
 			}else{

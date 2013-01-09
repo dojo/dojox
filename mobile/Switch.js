@@ -11,8 +11,9 @@ define([
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
 	"./sniff", 
+	"./_maskUtils",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"	
-], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, touch, Contained, WidgetBase, has, BidiSwitch){
+], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, touch, Contained, WidgetBase, has, maskUtils, BidiSwitch){
 
 	// module:
 	//		dojox/mobile/Switch
@@ -60,7 +61,6 @@ define([
 		// role: [private] String
 		//		The accessibility role.
 		role: "", // a11y
-		_createdMasks: [],
 
 		buildRendering: function(){
 			this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
@@ -115,46 +115,24 @@ define([
 		},
 
 		_createMaskImage: function(){
+			if(this._timer){
+				 clearTimeout(this._timer);
+				 delete this._timer;
+			}
 			if(this._hasMaskImage){ return; }
 			this._width = this.domNode.offsetWidth - this.knob.offsetWidth;
 			this._hasMaskImage = true;
-			if(!has("webkit")){ return; }
+			if(!(has("webkit")||has("svg"))){ return; }
 			var rDef = domStyle.get(this.left, "borderTopLeftRadius");
 			if(rDef == "0px"){ return; }
 			var rDefs = rDef.split(" ");
 			var rx = parseFloat(rDefs[0]), ry = (rDefs.length == 1) ? rx : parseFloat(rDefs[1]);
 			var w = this.domNode.offsetWidth, h = this.domNode.offsetHeight;
 			var id = (this.shape+"Mask"+w+h+rx+ry).replace(/\./,"_");
-			if(!this._createdMasks[id]){
-				this._createdMasks[id] = 1;
-				var ctx = win.doc.getCSSCanvasContext("2d", id, w, h);
-				ctx.fillStyle = "#000000";
-				ctx.beginPath();
-				if(rx == ry){
-					// round arc
-					ctx.moveTo(rx, 0);
-					ctx.arcTo(0, 0, 0, rx, rx);
-					ctx.lineTo(0, h - rx);
-					ctx.arcTo(0, h, rx, h, rx);
-					ctx.lineTo(w - rx, h);
-					ctx.arcTo(w, h, w, rx, rx);
-					ctx.lineTo(w, rx);
-					ctx.arcTo(w, 0, w - rx, 0, rx);
-				}else{
-					// elliptical arc
-					var pi = Math.PI;
-					ctx.scale(1, ry/rx);
-					ctx.moveTo(rx, 0);
-					ctx.arc(rx, rx, rx, 1.5 * pi, 0.5 * pi, true);
-					ctx.lineTo(w - rx, 2 * rx);
-					ctx.arc(w - rx, rx, rx, 0.5 * pi, 1.5 * pi, true);
-				}
-				ctx.closePath();
-				ctx.fill();
-			}
-			this.domNode.style.webkitMaskImage = "-webkit-canvas(" + id + ")";
+			
+			maskUtils.createRoundMask(this.domNode, 0, 0, 0, 0, w, h, rx, ry, 1);
 		},
-
+		
 		_onClick: function(e){
 			// summary:
 			//		Internal handler for click events.

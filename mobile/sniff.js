@@ -1,7 +1,8 @@
 define([
 	"dojo/_base/window",
-	"dojo/_base/sniff"
-], function(win, has){
+	"dojo/_base/sniff",
+	"dojo/_base/array"
+], function(win, has, arr){
 
 	var ua = navigator.userAgent;
 
@@ -27,6 +28,24 @@ define([
 			navigator.appVersion.indexOf("Mobile") != -1) || !!has('android'), undefined, true);
 	}
 
+	// Does the browser support CSS3 animations?
+		
+	// We just test webkit prefix for now since our themes only have standard and webkit
+	// (see dojox/mobile/themes/common/css3.less)
+	// More prefixes can be added if/when we add them to css3.less.
+	var prefixes = ["webkit"];
+		
+	has.add("css3-animations", function(global, document, element){
+		var style = element.style;
+		return (style["animation"] !== undefined && style["transition"] !== undefined) ||
+			arr.some(prefixes, function(p){
+				return style[p+"Animation"] !== undefined && style[p+"Transition"] !== undefined;
+			});
+	});
+	
+	// Does the browser support SVG?
+	has.add("svg", "SVGAngle" in win.global);
+	
 	/*=====
 	return {
 		// summary:

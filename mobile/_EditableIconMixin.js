@@ -10,8 +10,9 @@ define([
 	"dijit/registry",
 	"./IconItem",
 	"./sniff",
-	"./viewRegistry"
-], function(array, connect, declare, event, lang, domGeometry, domStyle, touch, registry, IconItem, has, viewRegistry){
+	"./viewRegistry",
+	"./_css3"
+], function(array, connect, declare, event, lang, domGeometry, domStyle, touch, registry, IconItem, has, viewRegistry, css3){
 
 	// module:
 	//		dojox/mobile/_EditableIconMixin
@@ -40,8 +41,8 @@ define([
 			this.isEditing = true;
 			if(!this._handles){
 				this._handles = [
-					this.connect(this.domNode, "webkitTransitionStart", "_onTransitionStart"),
-					this.connect(this.domNode, "webkitTransitionEnd", "_onTransitionEnd")
+					this.connect(this.domNode, css3.name("transitionStart"), "_onTransitionStart"),
+					this.connect(this.domNode, css3.name("transitionEnd"), "_onTransitionEnd")
 				];
 			}
 
@@ -106,7 +107,7 @@ define([
 			event.stop(e);
 			var w = registry.getEnclosingWidget(e.target);
 			w._moving = false;
-			domStyle.set(w.domNode, "webkitTransition", "");
+			domStyle.set(w.domNode, css3.name("transition"), "");
 		},
 
 		_onTouchStart: function(e){
