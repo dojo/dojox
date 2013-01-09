@@ -5,6 +5,7 @@
   border-style: outset;
   border-width: 1px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e2e2e2));
+  background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%);
   font-family: Helvetica;
   line-height: 29px;
   cursor: pointer;
@@ -17,9 +18,11 @@
 }
 .mblButtonSelected {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
   color: white;
 }
-.mblButtonDisabled, .mblButton:disabled {
+.mblButtonDisabled,
+.mblButton:disabled {
   border-color: grey;
   background-image: none;
   color: grey;
@@ -27,15 +30,19 @@
 }
 .mblBlueButton {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#7a9de9), to(#2362dd));
+  background-image: linear-gradient(to bottom, #7a9de9 0%, #2362dd 100%);
   color: white;
 }
 .mblBlueButtonSelected {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
 }
 .mblRedButton {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#fa9d58), to(#ee4115));
+  background-image: linear-gradient(to bottom, #fa9d58 0%, #ee4115 100%);
   color: white;
 }
 .mblRedButtonSelected {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
 }
