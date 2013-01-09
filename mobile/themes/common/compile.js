@@ -4,7 +4,8 @@ var path = require("path");
 var less = require("less");
 
 // collect files
-var folders = ["../android", "../android/dijit",
+var folders = ["../common/domButtons", "../common/transitions",
+               "../android", "../android/dijit",
                "../blackberry", "../blackberry/dijit",
 			   "../custom", "../custom/dijit",
                "../iphone", "../iphone/dijit"];
