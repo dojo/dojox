@@ -13,7 +13,7 @@ define([
 	return function(){
 		// summary:
 		//		A wrapper widget around SpinWheelDatePicker or ValuePickerDatePicker.
-		//		Returns ValuePickerDatePicker when the current theme is "android".
+		//		Returns ValuePickerDatePicker when the current theme is "android" or "holodark".
 		//		Returns SpinWheelDatePicker otherwise.
 	};
 	=====*/

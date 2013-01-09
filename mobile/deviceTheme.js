@@ -20,8 +20,8 @@
 		//
 		//		You can also pass an additional query parameter string,
 		//		device={theme id} to force a specific theme through the browser
-		//		URL input. The available theme ids are Android, BlackBerry,
-		//		Custom, iPhone, and iPad. The names are case-sensitive. If the given
+		//		URL input. The available theme ids are Android, Holodark (Theme introduced in Android 3.0), 
+		//		BlackBerry, Custom, iPhone, and iPad. The names are case-sensitive. If the given
 		//		id does not match, the iPhone theme is used.
 		//
 		//	|	http://your.server.com/yourapp.html // automatic detection
@@ -172,6 +172,21 @@
 			//
 			//		The matching is performed in the array order, and stops after the
 			//		first match.
+			[
+				"Holodark",
+				"holodark",
+				[]
+			],
+			[
+				"Android 3",
+				"holodark",
+				[]
+			],
+			[
+				"Android 4",
+				"holodark",
+				[]
+			],
 			[
 				"Android",
 				"android",
