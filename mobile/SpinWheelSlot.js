@@ -91,6 +91,7 @@ define([
 			this.inherited(arguments);
 
 			this.initLabels();
+			var i, j;
 			if(this.labels.length > 0){
 				this.items = [];
 				for(i = 0; i < this.labels.length; i++){
@@ -212,10 +213,10 @@ define([
 
 		disableValues: function(/*Number*/n){
 			// summary:
-			//		Makes the specified items grayed out.
+			//		Grays out the items with an index higher or equal to the specified number.
 			array.forEach(this.panelNodes, function(panel){
-				for(var i = 27; i < 31; i++){
-					domClass.toggle(panel.childNodes[i], "mblSpinWheelSlotLabelGray", i >= nDays);
+				for(var i = 0; i < panel.childNodes.length; i++){
+					domClass.toggle(panel.childNodes[i], "mblSpinWheelSlotLabelGray", i >= n);
 				}
 			});
 		},
@@ -333,7 +334,6 @@ define([
 			//		Overrides dojox/mobile/scrollable.adjustDestination().
 			var h = this._itemHeight;
 			var j = to.y + Math.round(h/2);
-			var a = Math.abs(j);
 			var r = j >= 0 ? j % h : j % h + h;
 			to.y = j - r;
 			return true;
