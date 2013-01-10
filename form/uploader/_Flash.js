@@ -130,6 +130,7 @@ define([
 			//		private
 			this.onBegin(this.getFileList());
 			formData.returnType = "F";
+			formData.uploadType = this.uploadType;
 			this.flashMovie.doUpload(formData);
 		},
 	

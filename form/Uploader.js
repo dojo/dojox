@@ -246,6 +246,7 @@ define([
 		upload: function(/*Object?*/ formData){				
 			// summary:
 			//		When called, begins file upload. Only supported with plugins.
+			formData.uploadType = this.uploadType;
 			this.inherited(arguments);
 		},
 	
@@ -255,6 +256,7 @@ define([
 			//		this instead of form submit.
 			form = !!form ? form.tagName ? form : this.getForm() : this.getForm();
 			var data = domForm.toObject(form);
+			data.uploadType = this.uploadType;
 			this.upload(data);
 		},
 	

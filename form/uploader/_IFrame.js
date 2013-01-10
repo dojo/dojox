@@ -31,6 +31,7 @@ define([
 			//		which can also handle the post data.
 	
 			var form, destroyAfter = false;
+			data.uploadType = this.uploadType;
 			if(!this.getForm()){
 				//enctype can't be changed once a form element is created
 				form = domConstruct.place('<form enctype="multipart/form-data" method="post"></form>', this.domNode);
