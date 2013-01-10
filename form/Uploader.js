@@ -148,7 +148,7 @@ define([
 		},
 		_buildDisplay: function(){
 			if(this.showInput){
-				this.displayInput = dojo.create('input', {
+				this.displayInput = domConstruct.create('input', {
 					  'class':'dijitUploadDisplayInput',
 					  'tabIndex':-1, 'autocomplete':'off'},
 					this.containerNode, this.showInput);
