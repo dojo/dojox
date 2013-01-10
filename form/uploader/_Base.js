@@ -16,14 +16,12 @@ has.add('xhr-sendAsBinary', function(){var xhr=window.XMLHttpRequest && new wind
 has.add('file-multiple', function(){return !!({'true':1,'false':1}[domAttr.get(document.createElement('input',{type:"file"}), 'multiple')]);});
 
 
-return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTemplateMixin], {
+return declare("dojox.form.uploader._Base", [Widget, TemplatedMixin, WidgetsInTemplateMixin], {
 	// summary:
-	//		The Base class used for dojox.form.Uploader and dojox.form.uploader.FileList.
+	//		The Base class used for dojox/form/Uploader and dojox/form/uploader/FileList.
 	//
 	//		Should not be used as a standalone. To be mixed in with other classes.
 	//
-	//		Version: 1.6
-
 	getForm: function(){
 		// summary:
 		//		Finds the parent form of the Uploader, if it exists.
@@ -61,6 +59,7 @@ return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTem
 		if(!this._fcon && !!this.getForm()){
 			this._fcon = true;
 			this.connect(this.form, "onsubmit", function(evt){
+				console.log('SUBMIT')
 				event.stop(evt);
 				this.submit(this.form);
 			});
@@ -86,7 +85,6 @@ return declare("dojox.form.uploader.Base", [Widget, TemplatedMixin, WidgetsInTem
 		// summary:
 		//		Returns the mime type that should be used in an HTML5 upload form. Return result
 		//		may change as the current use is very generic.
-
 		return "application/octet-stream"; //image/gif
 	},
 	getFileType: function(/*String*/ name){

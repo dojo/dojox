@@ -108,11 +108,35 @@
 		}
 	</script>
 	<script src="../../../dojo/dojo.js"></script>
+	
+
+</head>
+<body class="claro">
+    <h1>Test dojox.form.Uploader Programmatic</h1>
+
+	<div id="parent"></div>
+
+	<form method="post" action="UploadFile.php" id="myForm" enctype="multipart/form-data" >
+		<input class="browseButton" name="uploadedfile" multiple="false" type="file" dojoType="dojox.form.Uploader" uploadOnSelect="true" label="Upload via Markup" isDebug="true" id="uploader">
+	</form>
+
+	<form method="post" action="UploadFile.php" id="parent" enctype="multipart/form-data" ></form>
+
+	<form method="post" action="UploadFile.php" id="myForm2" enctype="multipart/form-data" >
+		<fieldset>
+			<legend>Form Post Test</legend>
+			<input class="browseButton" name="uploadedfile" multiple="true" type="file" dojoType="dojox.form.Uploader" label="Select Some Files" isDebug="true" id="uploader2">
+			<input type="submit" label="Submit" dojoType="dijit.form.Button" />
+			<div id="files" dojoType="dojox.form.uploader.FileList" uploaderId="uploader2"></div>
+		</fieldset>
+	</form>
+	<div id="skp"></div>
+	<div id="colImages"></div>
 	<script>
-		require(['dojo', 'dojo/domReady!', 'dojo/parser', 'dijit/form/Button', 'dijit/Dialog', 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/form/uploader/plugins/Flash'],
-				function(dojo, dr, parser, Button, Dialog, Uploader, FileList, uFlash){
+		require(['dojo', 'dojo/parser', 'dijit/form/Button', 'dijit/Dialog', 'dojox/form/Uploader', 'dojox/form/uploader/FileList', 'dojox/form/uploader/plugins/Flash'],
+				function(dojo, parser, Button, Dialog, Uploader, FileList, uFlash){
 					console.log('ready')
-					parser.parse();
+					//parser.parse();
 
 					makeSKP = function(){
 
@@ -141,7 +165,7 @@
 
 						myUploader = new dojox.form.Uploader({
 							label: 'Prog Browse',
-							url:"abc.php",
+							url:'abc.php',
 							id:"programmatic",
 							multiple: true
 						});
@@ -182,32 +206,6 @@
 					makeSKP();
 
 				});
-
-
-
 	</script>
-</head>
-<body class="claro">
-    <h1>Test dojox.form.Uploader Programmatic</h1>
-
-	<div id="parent"></div>
-
-	<form method="post" action="UploadFile.php" id="myForm" enctype="multipart/form-data" >
-		<input class="browseButton" name="uploadedfile" multiple="false" type="file" dojoType="dojox.form.Uploader" uploadOnSelect="true" label="Upload via Markup" isDebug="true" id="uploader">
-	</form>
-
-	<form method="post" action="UploadFile.php" id="parent" enctype="multipart/form-data" ></form>
-
-	<form method="post" action="UploadFile.php" id="myForm2" enctype="multipart/form-data" >
-		<fieldset>
-			<legend>Form Post Test</legend>
-			<input class="browseButton" name="uploadedfile" multiple="true" type="file" dojoType="dojox.form.Uploader" label="Select Some Files" isDebug="true" id="uploader2">
-			<input type="submit" label="Submit" dojoType="dijit.form.Button" />
-			<div id="files" dojoType="dojox.form.uploader.FileList" uploaderId="uploader2"></div>
-		</fieldset>
-	</form>
-	<div id="skp"></div>
-	<div id="colImages"></div>
-
 </body>
 </html>
