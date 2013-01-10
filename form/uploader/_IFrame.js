@@ -56,6 +56,7 @@ define([
 					self.onComplete(result);
 				}
 			}, function(err){
+				console.error('error parsing server result', err);
 				if(destroyAfter){ domConstruct.destroy(form); }
 				self.onError(err);
 			});

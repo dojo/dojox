@@ -385,11 +385,9 @@ define([
 				this.inputNode.tabIndex = this.tabIndex;
 	
 				this._cons.push(connect.connect(this.inputNode, "focus", this, function(){
-					//this.titleNode.style.outline= "1px dashed #ccc";
 					domClass.add(this.domNode, this.focusedClass);
 				}));
 				this._cons.push(connect.connect(this.inputNode, "blur", this, function(){
-					//this.titleNode.style.outline = "";
 					domClass.remove(this.domNode, this.focusedClass);
 				}));
 			}
