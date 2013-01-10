@@ -81,7 +81,8 @@ define([
 				}
 				
 				if(!n){
-					throw new Error("CSS3 property not supported: " + p);
+					// The property is not supported, just return it unchanged, it will be ignored.
+					n = p;
 				}
 
 				(hyphen?hnames:cnames)[p] = n;
