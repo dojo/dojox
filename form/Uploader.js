@@ -6,6 +6,7 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/window",
 	"dojo/dom-style",
+	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-attr",
 	"dojo/dom-construct",
@@ -18,7 +19,7 @@ define([
 	"./uploader/_Flash",
 	"dojo/i18n!./nls/Uploader",
 	"dojo/text!./resources/Uploader.html"
-],function(kernel, declare, lang, array, connect, win, domStyle, domGeometry, domAttr, domConstruct,
+],function(kernel, declare, lang, array, connect, win, domStyle, domClass, domGeometry, domAttr, domConstruct,
 		   domForm, dijit, Button, Base, HTML5, IFrame, Flash, res, template){
 
 	// TODO:
@@ -111,6 +112,10 @@ define([
 		//		shown). Specify showInput="before" to mimic the look&feel of a
 		//		native file input element.
 		showInput: "",
+		
+		//	focusedClass: String
+		//		The class applied to the button when it is focused (via TAB key)
+		focusedClass:"dijitButtonHover",
 	
 		_nameIndex:0,
 	
@@ -380,10 +385,12 @@ define([
 				this.inputNode.tabIndex = this.tabIndex;
 	
 				this._cons.push(connect.connect(this.inputNode, "focus", this, function(){
-					this.titleNode.style.outline= "1px dashed #ccc";
+					//this.titleNode.style.outline= "1px dashed #ccc";
+					domClass.add(this.domNode, this.focusedClass);
 				}));
 				this._cons.push(connect.connect(this.inputNode, "blur", this, function(){
-					this.titleNode.style.outline = "";
+					//this.titleNode.style.outline = "";
+					domClass.remove(this.domNode, this.focusedClass);
 				}));
 			}
 		},
