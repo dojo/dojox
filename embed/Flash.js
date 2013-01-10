@@ -87,7 +87,8 @@ define(["dojo"], function(dojo) {
 		})();
 
 		//	attach some cleanup for IE, thanks to deconcept :)
-		dojo.addOnUnload(function(){
+		dojo.addOnWindowUnload(function(){
+			console.warn('***************UNLOAD');
 			var dummy = function(){};
 			var objs = dojo.query("object").
 				reverse().
