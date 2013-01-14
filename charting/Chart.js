@@ -829,9 +829,15 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 
 			// assumption: we don't have stacked axes yet
 			var offsets = this.offsets = {l: 0, r: 0, t: 0, b: 0};
+			// chart mirroring starts
+			var isRTL = this.isRightToLeft ? this.isRightToLeft() : false;
 			func.forIn(this.axes, function(axis){
+				if(axis.vertical && isRTL){
+					axis.opt.leftBottom = !axis.opt.leftBottom;
+				}
 				func.forIn(axis.getOffsets(), function(o, i){ offsets[i] = Math.max(o, offsets[i]); });
 			});
+			// chart mirroring ends
 			// add title area
 			if(this.title){
 				this.titleGap = (this.titleGap==0) ? 0 : this.titleGap || this.theme.chart.titleGap || 20;

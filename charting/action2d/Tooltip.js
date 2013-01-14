@@ -76,14 +76,19 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			
 			// calculate relative coordinates and the position
 			var aroundRect = {type: "rect"}, position = ["after-centered", "before-centered"];
+			// chart mirroring starts
+			var shift = this.chart.offsets.l - this.chart.offsets.r;
+			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false;
+			var isColumn = false;   //check chart type (column/bars)
+			// chart mirroring ends
 			switch(o.element){
 				case "marker":
-					aroundRect.x = o.cx;
+					aroundRect.x = isRTL ? this.chart.dim.width - o.cx+shift : o.cx; // chart mirroring
 					aroundRect.y = o.cy;
 					aroundRect.w = aroundRect.h = 1;
 					break;
 				case "circle":
-					aroundRect.x = o.cx - o.cr;
+					aroundRect.x = isRTL ? this.chart.dim.width-o.cx - o.cr+shift : o.cx - o.cr; // chart mirroring
 					aroundRect.y = o.cy - o.cr;
 					aroundRect.w = aroundRect.h = 2 * o.cr;
 					break;
@@ -96,14 +101,23 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 					return;
 				case "column":
 					position = ["above-centered", "below-centered"];
+					isColumn = true;  // chart mirroring
 					// intentional fall down
 				case "bar":
 					aroundRect = lang.clone(o.shape.getShape());
 					aroundRect.w = aroundRect.width;
 					aroundRect.h = aroundRect.height;
+					// chart mirroring starts
+					 if(isRTL){
+						aroundRect.x = this.chart.dim.width - aroundRect.width - aroundRect.x + shift;
+						if(!isColumn){
+							position = ["before-centered", "after-centered"];
+						}
+					}
+					// chart mirroring ends
 					break;
 				case "candlestick":
-					aroundRect.x = o.x;
+					aroundRect.x = isRTL ? this.chart.dim.width + shift - o.x : o.x; // chart Mirroring
 					aroundRect.y = o.y;
 					aroundRect.w = o.width;
 					aroundRect.h = o.height;

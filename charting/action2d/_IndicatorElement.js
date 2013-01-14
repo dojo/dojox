@@ -122,6 +122,17 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 			});
 		},
 		_updateCoordinates: function(cp1, cp2){
+			// chart mirroring starts
+			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false;
+			if(isRTL){
+				if(cp1){
+					cp1.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp1.x;
+				}
+				if(cp2){
+					cp2.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp2.x;
+				}
+			}
+			// chart mirroring ends
 			var inter = this.inter, plot = inter.plot, v = inter.opt.vertical;
 			var hAxis = this.chart.getAxis(plot.hAxis), vAxis = this.chart.getAxis(plot.vAxis);
 			var hn = hAxis.name, vn = vAxis.name, hb = hAxis.getScaler().bounds, vb = vAxis.getScaler().bounds;

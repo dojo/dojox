@@ -424,6 +424,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				}
 				run.dirty = false;
 			}
+			// chart mirroring starts
+			if(this.chart.isRightToLeft && this.chart.isRightToLeft()){
+				this.chart.applyMirroring(this.group, dim, offsets);
+			}
+			// chart mirroring ends
 			if(this.animate){
 				// grow from the bottom
 				var plotGroup = this.getGroup();

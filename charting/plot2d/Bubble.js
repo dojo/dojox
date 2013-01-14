@@ -209,6 +209,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array",
 				run.dirty = false;
 			}
 			this.dirty = false;
+			// chart mirroring starts
+			if(this.chart.isRightToLeft && this.chart.isRightToLeft()){
+				this.chart.applyMirroring(this.group, dim, offsets);
+			}
+			// chart mirroring ends
 			return this;	//	dojox/charting/plot2d/Bubble
 		},
 		_animateBubble: function(shape, offset, size){

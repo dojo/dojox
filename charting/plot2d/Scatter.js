@@ -179,6 +179,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 				run.dirty = false;
 			}
 			this.dirty = false;
+			// chart mirroring starts
+			if(this.chart.isRightToLeft && this.chart.isRightToLeft()){
+				this.chart.applyMirroring(this.group, dim, offsets);
+			}
+			// chart mirroring ends
 			return this;	//	dojox/charting/plot2d/Scatter
 		},
 		_animateScatter: function(shape, offset){

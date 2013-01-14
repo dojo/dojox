@@ -181,6 +181,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			}else if(this.enableScroll){
 				var delta = axis.vertical?(this._startPageCoord[attr] - event.touches[0][pAttr]):
 					(event.touches[0][pAttr] - this._startPageCoord[attr]);
+				if(this.chart.isRightToLeft && this.chart.isRightToLeft()){  // chart mirroring
+					delta *= -1;
+				}	
 				chart.setAxisWindow(this.axis, this._lastScale, this._initOffset - delta / this._lastFactor / this._lastScale);
 				chart.delayedRender();
 				// avoid browser pan

@@ -310,10 +310,14 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			var t = this.chart.theme, c = this.chart.getCoords(), v = this.opt.vertical;
 
 			var g = this.getGroup().createGroup();
-
+			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false; // chart mirroring
+			var xMax = this.chart.axes.x.scaler.bounds.to + this.chart.axes.x.scaler.bounds.from; // chart mirroring
 			var mark = {};
 			mark[hn] = v?coord:0;
 			mark[vn] = v?0:coord;
+			if(isRTL){ //chart mirroring
+				mark.x = xMax - mark.x ;
+			}
 			mark = this.toPage(mark);
 			var visible = v?mark.x >= min.x && mark.x <= max.x:mark.y >= max.y && mark.y <= min.y;
 
@@ -343,6 +347,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 					data = array.map(d, function(value, index){
 						mark[hn] = v?coord:value;
 						mark[vn] = v?value:coord;
+						if(isRTL){
+							mark.x = xMax - mark.x ; //chart mirroring
+						}
 						mark = this.toPage(mark);
 						if(v?mark.y <= min.y && mark.y >= max.y:mark.x >= min.x && mark.x <= max.x){
 							cx = mark.x - c.x

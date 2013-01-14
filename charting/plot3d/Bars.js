@@ -55,6 +55,9 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/Color", "./Base"]
 					})
 					.setFill(this.material);
 			}
+			if(chart.isRightToLeft && chart.isRightToLeft()){// chart mirroring
+				chart.applyMirroring(chart.view, {width: this.width, height: this.height}, {l: 0, r: 0, t: 0, b: 0});
+			}
 		}
 	});
 });

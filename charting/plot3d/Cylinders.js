@@ -58,6 +58,9 @@ define(["dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_b
 					.setTransform(matrix3d.rotateXg(-90))
 					.setFill(this.material).setStroke(this.outline);
 			}
+			if(chart.isRightToLeft && chart.isRightToLeft()){ // chart mirroring
+				chart.applyMirroring(chart.view, {width: this.width, height: this.height}, {l: 0, r: 0, t: 0, b: 0});
+			}
 		}
 	});
 });

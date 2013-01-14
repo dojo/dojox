@@ -1,12 +1,14 @@
 define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "dojo/sniff",
 	"dojo/dom","dojo/dom-construct",
-	"dojox/gfx", "dojox/gfx/_gfxBidiSupport", "./Chart", "./axis2d/common", "dojox/string/BidiEngine", "dojox/lang/functional"], 
-	function(dojox, lang, domStyle, arr, has, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df){
+	"dojox/gfx", "dojox/gfx/_gfxBidiSupport", "./Chart", "./axis2d/common", "dojox/string/BidiEngine", "dojox/lang/functional","dojo/dom-attr","./_bidiutils"], 
+	function(dojox, lang, domStyle, arr, has, dom, domConstruct, g, gBidi, Chart, da, BidiEngine, df, domAttr,utils){
 
 	var bidiEngine = new BidiEngine();
 
 	var dc = lang.getObject("charting", true, dojox);
-	
+
+	// chart mirroring starts
+
 	lang.extend(Chart, {
 		// summary:
 		//		Add support for bidi scripts to dojox/charting classes.
@@ -27,6 +29,16 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 		//
 		//		By default is as the page direction.
 		textDir:"",
+		
+		// dir: String
+		//		Mirroring support,	the main variable which is responsible for the direction of the chart.
+		//
+		//		Allowed values:
+		//		1. "ltr"
+		//		2. "rtl"
+		//
+		//		By default is ltr.
+		dir: "",
 		
 		getTextDir: function(/*String*/text){
 			// summary:
@@ -68,6 +80,13 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 			// textDir dynamically
 			this.htmlElementsRegistry = [];
 			this.truncatedLabelsRegistry = [];
+			// chart mirroring starts
+			var chartDir = "ltr";
+			if(domAttr.has(node, "direction")){
+				chartDir = domAttr.get(node, "direction");
+			}
+			this.dir = args ? (args.dir ? args.dir: chartDir) : chartDir;
+			// chart mirroring ends
 		},
 
 		setTextDir: function(/*String*/ newTextDir, obj){
@@ -154,6 +173,40 @@ define(["../main", "dojo/_base/lang", "dojo/dom-style", "dojo/_base/array", "doj
 				}
 			}
 		},
+		// chart mirroring starts
+		setDir : function(/*String*/dir){
+			// summary:
+			//		Setter for the dir attribute.
+			// description:
+			//		Allows dynamically set the dri attribute, which will used to
+			//		updates the chart rendering direction.
+			//	dir : the desired chart direction [rtl: for right to left ,ltr: for left to right]
+ 
+			if(dir == "rtl" || dir == "ltr"){
+				this.dir = dir;
+			}
+			return this; 
+		},
+		isRightToLeft: function(){
+			// summary:
+			//		check the direction of the chart.
+			// description:
+			//		check the dir attribute to determine the rendering direction
+			//		of the chart.
+			return this.dir == "rtl";
+        },
+		applyMirroring: function(plot, dim, offsets){
+			// summary:
+			//		apply the mirroring operation to the current chart plots.
+			//
+			if(this.isRightToLeft()){
+				utils.reverseMatrix(plot, dim, offsets);
+			}
+			//force the direction of the node to be ltr to properly render the axes and the plots labels.
+			domStyle.set(this.node, "direction", "ltr");
+			return this;
+		},
+		// chart mirroring ends
 
 		truncateBidi: function(elem, label, labelType){
 			// summary:

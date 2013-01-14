@@ -155,7 +155,9 @@ define(["dojo/_base/declare", "dojo/_base/window", "dojo/_base/array", "dojo/_ba
 					s = bounds.span / (bounds.upper - bounds.lower);
 		
 				var scale = axis.getWindowScale();
-		
+				if(this.chart.isRightToLeft && this.chart.isRightToLeft()){  // chart mirroring
+					delta *= -1;
+				}
 				chart.setAxisWindow(this.axis, scale, this._startOffset - delta / s / scale);
 				chart.render();
 			}
