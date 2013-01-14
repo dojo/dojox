@@ -149,12 +149,12 @@ define([
 			this.inherited(arguments);
 			if(selected){
 				domClass.replace(this.bodyNode, this.selColor, this.defaultColor);
-				if(!has("ie") < 10 && this.arrowNode){
+				if(!(has("ie") < 10) && this.arrowNode){
 					replace(this.arrowNode, this.selColor, this.defaultColor);
 				}
 			}else{
 				domClass.replace(this.bodyNode, this.defaultColor, this.selColor);
-				if(!has("ie") < 10 && this.arrowNode){
+				if(!(has("ie") < 10) && this.arrowNode){
 					replace(this.arrowNode, this.defaultColor, this.selColor);
 				}
 			}
