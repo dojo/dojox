@@ -19,12 +19,14 @@
 			"dojox/mobile/Heading",
 			"dojox/mobile/ScrollableView",
 			"dojox/mobile/EdgeToEdgeDataList",
+			"dojox/mobile/ScreenSizeAware",
 			"dojox/mobile/parser",
 			"dojox/mobile",
 			"dojox/mobile/compat",
 			"dojox/mobile/FixedSplitter",
 			"dojox/mobile/Container"
-		], function(connect, ItemFileWriteStore, domConstruct, ready, registry, Heading, ScrollableView, EdgeToEdgeDataList){
+		], function(connect, ItemFileWriteStore, domConstruct, ready, registry, Heading,
+					ScrollableView, EdgeToEdgeDataList, ScreenSizeAware){
 			var viewCache = {};
 			function leftItemSelected(e){
 				var item = e ? registry.getEnclosingWidget(e.target) : registry.byId("list1").getChildren()[0];
@@ -66,7 +68,7 @@
 				}
 			}
 			ready(function(){
-				ssa = dojox.mobile.ScreenSizeAware.getInstance();
+				ssa = ScreenSizeAware.getInstance();
 				connect.connect(registry.byId("list1").domNode, "onclick", ssa, leftItemSelected);
 				connect.connect(registry.byId("list1"), "onComplete", null, leftItemsLoaded);
 				connect.connect(ssa, "leftItemSelected", ssa, leftItemSelected);
