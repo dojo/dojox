@@ -4,4 +4,5 @@
 	-o-border-radius: 5px;
 	-ms-border-radius: 5px;
 	border-radius: 5px;
+	overflow: auto;
 }
