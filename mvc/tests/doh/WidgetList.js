@@ -4,17 +4,17 @@ define([
 	"dojo/_base/config",
 	"dojo/_base/declare",
 	"dijit/_WidgetBase",
+	"dojox/mvc/at",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
 	"dijit/_Container",
 	"dijit/form/TextBox",
-	"dojox/mvc/at",
 	"dojox/mvc/getStateful",
 	"dojox/mvc/WidgetList",
 	"dojo/text!dojox/mvc/tests/test_WidgetList_WidgetListInTemplate.html",
 	"dojo/text!dojox/mvc/tests/test_WidgetList_childTemplate.html",
 	"dojo/text!dojox/mvc/tests/test_WidgetList_childBindings.json"
-], function(doh, array, config, declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _Container, _TextBox, at, getStateful, WidgetList, template, childTemplate, childBindings){
+], function(doh, array, config, declare, _WidgetBase, at, _TemplatedMixin, _WidgetsInTemplateMixin, _Container, _TextBox, getStateful, WidgetList, template, childTemplate, childBindings){
 	var a = getStateful([
 		{
 			Serial: "A111",

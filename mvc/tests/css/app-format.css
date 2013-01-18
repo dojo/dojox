@@ -21,8 +21,16 @@ tbody { display: inline-block; width: 100%; }
 .cell { width: 20%;  display:inline-block; }
 .fullrow { width: 100%; display: inline-block; margin: 5px; }
 .fixedcell { width: 170px;  display:inline-block; }
+.buttoncell { display:inline-block; }
 .widerow { width: 900px; display: inline-block; margin: 5px; }
 .narrowcell { width: 5%;  display:inline-block; }
+.namecell { margin-right: 2px;  display:inline-block; }
+.radioLabel {text-align: left; display:inline-block;  width: 20%; }
+.boldnamecell { font-weight: bold; margin-right: 2px;  display:inline-block; }
+
+.hiderow {  width: 100%; display: none; margin: 5px;  }
+
+
 label { text-align: right; width: 98%; display: inline-block; font-weight: bold; }
 
 .generate-heading { font-size:1.2em; font-weight:bold; }

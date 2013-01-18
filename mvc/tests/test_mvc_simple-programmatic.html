@@ -20,11 +20,11 @@
 				"dojo/dom",
 				"dojo/parser",
 				"dojo/Stateful",
+				"dojox/mvc/at",
 				"dijit/registry",
 				"dijit/form/TextBox",
-				"dojox/mvc/at",
 				"dijit/form/Button"
-			], function(ddom, parser, Stateful, registry, TextBox, at){
+			], function(ddom, parser, Stateful, at, registry, TextBox){
 				var model = new Stateful({first: "John", last: "Doe"});
 
 				var fn = (new TextBox({id: "fn", value: at(model, 'first')})).placeAt(ddom.byId("mainContent"));

@@ -26,6 +26,7 @@
 				"dojo/Stateful",
 				"dojo/data/ItemFileReadStore",
 				"dojo/date/locale",
+				"dojox/mvc/at",  // at requires _atBindingExtension which extends _WidgetBase so it should come before dijit widgets
 				"dijit/registry",
 				"dijit/form/Button",
 				"dijit/form/ComboBox",
@@ -40,12 +41,11 @@
 				"dijit/form/Textarea",
 				"dijit/Calendar",
 				"dijit/ColorPalette",
-				"dojox/mvc/at",
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/Output"
-			], function(doh, ddom, number, parser, when, Stateful, ItemFileReadStore, locale, registry, Button, 
+			], function(doh, ddom, number, parser, when, Stateful, ItemFileReadStore, locale, at, registry, Button, 
 					ComboBox, DateTextBox, FilteringSelect, HorizontalSlider, NumberSpinner, NumberTextBox, 
-					TextBox, Select, SimpleTextarea, Textarea, Calendar, ColorPalette, at, 
+					TextBox, Select, SimpleTextarea, Textarea, Calendar, ColorPalette, 
 					EditModelRefController, Output){
 
 				store = new ItemFileReadStore({

@@ -32,15 +32,15 @@
 			"dojo/parser",
 			"dojo/promise/all",
 			"dojo/store/Memory",
+			"dojox/mvc/at",
 			"dijit/registry",
 			"dijit/_WidgetBase",
-			"dojox/mvc/at",
 			"dojox/mvc/EditStoreRefListController",
 			"dojox/mvc/WidgetList",
 			"dijit/form/TextBox",
 			"dojox/mvc/Group",
 			"dojo/domReady!"
-		], function(declare, when, ddom, parser, all, Memory, registry, _WidgetBase, at, EditStoreRefListController, WidgetList){
+		], function(declare, when, ddom, parser, all, Memory, at, registry, _WidgetBase, EditStoreRefListController, WidgetList){
 
         // Initial data
 		var data = {
@@ -75,7 +75,7 @@
 
 			ctrl = new EditStoreRefListController({store: new Memory({data: data})});
 
-			// Programatic WidgetList using childBindings and a templateString using attach-points
+			// Programmatic WidgetList using childBindings and a templateString using attach-points
 			(new WidgetList({templateString: templateString2, 
 							children: at(ctrl, "model"),
 							childBindings: {

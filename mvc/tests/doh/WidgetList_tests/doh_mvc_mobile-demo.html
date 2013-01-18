@@ -27,6 +27,7 @@
 				"dojo/dom",
 				"dojo/store/JsonRest",
 				"dojo/store/Memory",
+				"dojox/mvc/at",
 				"dijit/registry",
 				"dojox/mobile/parser",
 				"dojox/mvc/getPlainValue",
@@ -34,7 +35,6 @@
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/ListController",
 				"dojox/mvc/StoreRefController",
-				"dojox/mvc/at",
 				"dojox/mobile",
 				"dojox/mobile/compat",
 				"dojox/mobile/ScrollableView",
@@ -53,7 +53,7 @@
 				"dojox/mvc/WidgetList",
 				"dojox/mvc/_InlineTemplateMixin",
 				"dojo/domReady!"
-			], function(doh, declare, djson, when, ddom, JsonRest, Memory, registry, parser, getPlainValue, getStateful, EditModelRefController, ListController, StoreRefController, at){
+			], function(doh, declare, djson, when, ddom, JsonRest, Memory, at, registry, parser, getPlainValue, getStateful, EditModelRefController, ListController, StoreRefController){
 				window.at = at;
 
 				ctrlClass = declare([EditModelRefController, ListController], {});

@@ -43,13 +43,13 @@
 			"dojo/dom",
 			"dojo/parser",	// scan page for widgets and instantiate them
 			"dojo/when",
+			"dojox/mvc/at",
 			"dijit/Menu",
 			"dijit/MenuItem",
 			"dijit/PopupMenuItem",
 			"dijit/PopupMenuBarItem",
 			"dijit/CheckedMenuItem",
 			"dijit/MenuSeparator",
-			"dojox/mvc/at",
 			"dojox/mvc/getStateful",
 			"dojox/mvc/WidgetList",
 			"dijit/MenuBar",
@@ -58,7 +58,7 @@
 			"dijit/form/TextBox",
 			"dijit/dijit", // optimize: load dijit layer
 			"dojo/domReady!"
-		], function(declare, lang, aspect, dom, parser, when, Menu, MenuItem, PopupMenuItem, PopupMenuBarItem, CheckedMenuItem, MenuSeparator, at, getStateful, WidgetList){
+		], function(declare, lang, aspect, dom, parser, when, at, Menu, MenuItem, PopupMenuItem, PopupMenuBarItem, CheckedMenuItem, MenuSeparator, getStateful, WidgetList){
 			var mixin = declare(null, {
 				_getPropertiesAttr: function(){
 					var list = this.inherited(arguments);
