@@ -271,7 +271,7 @@
 	<div id="colspanTest">
 		<h2>This table tests the use of the 'colspan' attribute with labels enabled</h2>
 		<div dojoType="dojox.layout.TableContainer" cols="3" customClass="greyBlueLNF" labelWidth="-1">
-			<script type="dojo/connect" event="startup">
+			<script type="dojo/connect" data-dojo-event="startup">
 				// Show the actual colspan in each cell
 				dojo.query(".greyBlueLNF-valueCell", this.domNode).forEach(function(cell){
 				  cell.firstChild.innerHTML += " - <i>actual colspan = " + dojo.attr(cell, "colspan") + "</i>";
@@ -291,7 +291,7 @@
 		
 		<h2>This table tests the use of the 'colspan' attribute with labels disabled</h2>
 		<div dojoType="dojox.layout.TableContainer" cols="3" customClass="greyBlueLNF" labelWidth="-1" showLabels="false">
-			<script type="dojo/connect" event="startup">
+			<script type="dojo/connect" data-dojo-event="startup">
 				// Show the actual colspan in each cell
 				dojo.query(".greyBlueLNF-valueCell", this.domNode).forEach(function(cell){
 				  cell.firstChild.innerHTML += " - <i>actual colspan = " + dojo.attr(cell, "colspan") + "</i>";
@@ -324,23 +324,23 @@
 		<div dojoType="dijit.layout.ContentPane" region="center">
 			<div dojoType="dojox.layout.TableContainer" region="center" data-dojo-id="tblContainerResize" cols="3" customClass="greyBlueLNF" labelWidth="-1">
 				<div dojoType="dijit.layout.ContentPane" label="Col 1 Label">
-					<script type="dojo/connect" event="resize">
+					<script type="dojo/connect" data-dojo-event="resize">
 						this.domNode.innerHTML = "<strong>Width: " + dojo.contentBox(this.domNode).w + "</strong>";
 					</script>
 				</div>
 				<div dojoType="dijit.layout.ContentPane" label="Col 2 Label">
-					<script type="dojo/connect" event="resize">
+					<script type="dojo/connect" data-dojo-event="resize">
 						this.domNode.innerHTML = "<strong>Width: " + dojo.contentBox(this.domNode).w + "</strong>";
 					</script>
 				</div>
 				<div dojoType="dijit.layout.BorderContainer" label="Col 1 Label" colspan="2" style="height: 50px">
 					<div dojoType="dijit.layout.ContentPane" region="left" style="width: 50%">
-						<script type="dojo/connect" event="resize">
+						<script type="dojo/connect" data-dojo-event="resize">
 							this.domNode.innerHTML = "<strong>Nested BC region width: " + dojo.contentBox(this.domNode).w + "</strong>";
 						</script>
 					</div>
 					<div dojoType="dijit.layout.ContentPane" region="center" style="width: 50%">
-						<script type="dojo/connect" event="resize">
+						<script type="dojo/connect" data-dojo-event="resize">
 							this.domNode.innerHTML = "<strong>Nested BC region width: " + dojo.contentBox(this.domNode).w + "</strong>";
 							console.log(this.id + " resize");
 						</script>

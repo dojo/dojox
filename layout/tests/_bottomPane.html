@@ -2,7 +2,7 @@
 	Bottom Pane Content:
 	<button dojoType="dijit.form.Button">
 		Setup Toggler
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			// only do this once:
 			this.setAttribute('disabled',true);
 			var pane = dijit.getEnclosingWidget(this.domNode.parentNode);
@@ -42,7 +42,7 @@
 
 	<button dojoType="dijit.form.Button">
 		Minimize
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			// simplified version of above:
 			var pane = dijit.getEnclosingWidget(this.domNode.parentNode);
 			pane.domNode.style.height = "1px";

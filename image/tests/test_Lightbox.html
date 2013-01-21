@@ -227,7 +227,7 @@
 
 		<button dojoType="dijit.form.Button" id="flickrButton" disabled="disabled">
 			Show Flickr lightbox
-			<script type="dojo/connect" event="onClick">
+			<script type="dojo/connect" data-dojo-event="onClick">
 				dijit.byId('fromStore').show({ group:"flickrStore" });
 			</script>
 		</button>

@@ -708,16 +708,16 @@
 				<a href="http://www.renkoo.com" target="_new"><img src="images/rotator_renkoo.png" width="130" alt="Renkoo"/></a>
 			</div>
 			<div class="pane" transition="dojox.widget.rotator.panDown">
-				<script type="dojo/method" event="onBeforeIn" args="args">
+				<script type="dojo/method" data-dojo-event="onBeforeIn" data-dojo-args="args">
 					log("myRotator12Log", "onBeforeIn - get dom nodes ready to be displayed, wire events");
 				</script>
-				<script type="dojo/method" event="onAfterIn" args="args">
+				<script type="dojo/method" data-dojo-event="onAfterIn" data-dojo-args="args">
 					log("myRotator12Log", "onAfterIn - this pane is now visible, so do cool stuff!");
 				</script>
-				<script type="dojo/method" event="onBeforeOut" args="args">
+				<script type="dojo/method" data-dojo-event="onBeforeOut" data-dojo-args="args">
 					log("myRotator12Log", "onBeforeOut - stop any animations, disconnect events, etc");
 				</script>
-				<script type="dojo/method" event="onAfterOut" args="args">
+				<script type="dojo/method" data-dojo-event="onAfterOut" data-dojo-args="args">
 					log("myRotator12Log", "onAfterOut - clean up dom, reset state, disconnect events, etc");
 				</script>
 				<a href="http://www.sitepen.com" target="_new"><img src="images/rotator_sitepen.png" width="130" alt="Sitepen"/></a>

@@ -112,7 +112,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		Fade In/Out
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.fadeOut({ node:"testSlide",
 				onEnd:function(){
 					dojo.fadeIn({ node:"testSlide", delay:300 }).play();	
@@ -123,7 +123,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		animateProperty: height
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.animateProperty({
 				node:"testSlide",
 				properties:{ height:{ end:1 } },
@@ -140,7 +140,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		animateProperty: width
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.animateProperty({
 				node:"testSlide",
 				properties:{ width:1 },
@@ -166,7 +166,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		marginLeft
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.animateProperty({
 				node:"lorem",
 				properties:{
@@ -187,7 +187,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		left / paddingTop
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.animateProperty({
 				node:"lorem",
 				properties:{
@@ -213,7 +213,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		fontSize / width
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.animateProperty({
 				node:"lorem",
 				properties:{
@@ -250,7 +250,7 @@
 
 	<button dojoType="dijit.form.Button">
 		Slide
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			// we're 175px, slide to containerWidth - 195
 			var left = dojo.marginBox("testSlideWrapper").w - 195;
 			// make and play the animation
@@ -268,7 +268,7 @@
 
 	<button dojoType="dijit.form.Button">
 		Combine Slide / Fade
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			var anim1 = dojo.fx.slideTo({
 				top: 10,
 				left: dojo.marginBox("testSlideWrapper").w - 195,
@@ -292,7 +292,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		Chain (4)
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			var anim1 = dojo.fadeOut({ node:"testSlideToo",
 				// so anim1 is over, making this onEnd and anim2 basically
 				// a combine() (depending on the duration: )
@@ -325,7 +325,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		fade .even
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.query(".even","queryUl").fadeOut({
 				onEnd:function(){
 					dojo.query(".even","queryUl").fadeIn({ delay: 300 }).play();	
@@ -336,7 +336,7 @@
 
 	<button dojoType="dijit.form.Button">
 		fade .odd
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.query(".odd","queryUl").fadeOut({
 				onEnd:function(){
 					dojo.query(".odd","queryUl").fadeIn({ delay: 300 }).play();	
@@ -347,7 +347,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		shift .odd
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.query(".odd","queryUl").animateProperty({
 				properties:{
 					marginLeft:34
@@ -367,7 +367,7 @@
 
 	<button dojoType="dijit.form.Button">
 		mmm, easing
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.query(".odd","queryUl").animateProperty({
 				easing:dojo.fx.easing.backOut,
 				properties:{
@@ -390,7 +390,7 @@
 	
 	<button dojoType="dijit.form.Button">
 		Setup FisheyeList
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			this.setAttribute("disabled",true);
 			dojo.query("li","fisheyeList").forEach(function(n){
 				new dojox.widget.FisheyeLite({

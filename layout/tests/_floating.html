@@ -4,7 +4,7 @@
 	<br>
 	<button dojoType="dijit.form.Button">
 		Dock To Tab
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			this.setAttribute("disabled",true);
 			var c = dijit.getEnclosingWidget(this.domNode.parentNode);
 			dojo.style(c.focusNode,"display","none");
@@ -21,7 +21,7 @@
 	<br>
 	<button dojoType="dijit.form.Button">
 		Dock To Accordion
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			this.setAttribute("disabled",true);
 			var n = dijit.getEnclosingWidget(this.domNode.parentNode);
 			dojo.style(n.focusNode,"display","none");

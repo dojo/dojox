@@ -91,21 +91,21 @@
 				</td>
 				<td>
 					<button dojoType="dijit.form.Button">
-						<script type="dojo/method" event="onClick">
+						<script type="dojo/method" data-dojo-event="onClick">
 							ms1.invertSelection(true);
 							return false;
 						</script>
 						Invert Selection
 					</button>
 					<button dojoType="dijit.form.Button">
-						<script type="dojo/method" event="onClick">
+						<script type="dojo/method" data-dojo-event="onClick">
 							ms1.set("disabled", !ms1.disabled);
 							return false;
 						</script>
 						Toggle Disabled
 					</button>
 					<button dojoType="dijit.form.Button">
-						<script type="dojo/method" event="onClick">
+						<script type="dojo/method" data-dojo-event="onClick">
 							console.log(ms1.get("displayedValue"));
 							return false;
 						</script>
@@ -126,7 +126,7 @@
 					</td>
 					<td>
 						<button dojoType="dijit.form.Button">
-							<script type="dojo/method" event="onClick">
+							<script type="dojo/method" data-dojo-event="onClick">
 								ms2.set("readOnly", !ms2.readOnly);
 								return false;
 							</script>
@@ -141,7 +141,7 @@
 					</td>
 					<td>
 						<button dojoType="dijit.form.Button">
-							<script type="dojo/method" event="onClick">
+							<script type="dojo/method" data-dojo-event="onClick">
 								checkOptions++;
 								ms3.addOption({value: checkOptions + "", label: "Option " + (checkOptions)});
 								return false;
@@ -149,7 +149,7 @@
 							Add Check Option
 						</button>
 						<button dojoType="dijit.form.Button">
-							<script type="dojo/method" event="onClick">
+							<script type="dojo/method" data-dojo-event="onClick">
 								if(checkOptions > 0){
 									checkOptions--;
 									ms3.removeOption(checkOptions);
@@ -175,7 +175,7 @@
 			</select>
 			<button dojoType="dijit.form.Button">
 				Validate
-				<script type='dojo/method' event='onClick'>
+				<script type='dojo/method' data-dojo-event='onClick'>
 					var isvalid = rq1.isValid();
 					console.warn("isvalid?", isvalid, form, form.validate);
 					try{
@@ -189,7 +189,7 @@
 			</button>
 			<hr><h2>Output values in console</h2>
 			<button dojoType="dijit.form.Button">
-				<script type="dojo/method" event="onClick">
+				<script type="dojo/method" data-dojo-event="onClick">
 					console.dir(form.get("value"));
 					return false;
 				</script>

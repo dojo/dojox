@@ -147,16 +147,16 @@
 						<button type="submit" dojoType="dijit.form.Button" name="w11" observer="showValues">w11 typesubmit</button>
 					</div>
 				</fieldset>
-				<script type="dojo/method" event="onSubmit">
+				<script type="dojo/method" data-dojo-event="onSubmit">
 					// do not submit this form
 					return false;
 				</script>
-				<script type="dojo/method" event="logRadio">
+				<script type="dojo/method" data-dojo-event="logRadio">
 					// sample observer: logs radio buttons by name
 					var values = this.gatherFormValues(["e02", "w02"]);
 					console.log("e02: " + values.e02 + ", w02: " + values.w02);
 				</script>
-				<script type="dojo/method" event="showValues" args="value,name">
+				<script type="dojo/method" data-dojo-event="showValues" data-dojo-args="value,name">
 					if(name){
 						// first time this method is called with no parameters
 						// show the name and the value otherwise

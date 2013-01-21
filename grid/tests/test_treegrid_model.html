@@ -118,14 +118,14 @@
         <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level</h4>
         <button dojoType="dijit.form.Button">
             Add Belgium
-            <script type="dojo/connect" event="onClick">
+            <script type="dojo/connect" data-dojo-event="onClick">
                 add_item({ id: 'EU_BE', name: 'Belgium', type: 'country' }, "EU");
 				this.set("disabled", true);
             </script>
         </button>
         <button dojoType="dijit.form.Button">
             Delete Italy
-            <script type="dojo/connect" event="onClick">
+            <script type="dojo/connect" data-dojo-event="onClick">
 				jsonStore.fetchItemByIdentity({
 					identity: 'IT',
 					onItem: function(item){
@@ -139,7 +139,7 @@
         </button>
         <button dojoType="dijit.form.Button">
             Add California
-            <script type="dojo/connect" event="onClick">
+            <script type="dojo/connect" data-dojo-event="onClick">
                 add_item({ id: 'US_CA', name: 'California', type: 'state' }, "US");
 				delCal.attr("disabled", false);
 				this.set("disabled", true);
@@ -147,7 +147,7 @@
         </button>
         <button dojoType="dijit.form.Button" disabled data-dojo-id="delCal">
             Delete California
-            <script type="dojo/connect" event="onClick">
+            <script type="dojo/connect" data-dojo-event="onClick">
 				jsonStore.fetchItemByIdentity({
 					identity: 'US_CA',
 					onItem: function(item){
@@ -161,7 +161,7 @@
         </button>
         <button dojoType="dijit.form.Button" data-dojo-id="delEU">
             Delete Europe
-            <script type="dojo/connect" event="onClick">
+            <script type="dojo/connect" data-dojo-event="onClick">
 				jsonStore.fetchItemByIdentity({
 					identity: 'EU',
 					onItem: function(item){
@@ -175,7 +175,7 @@
         </button>
         <button dojoType="dijit.form.Button" data-dojo-id="empty">
             Empty
-            <script type="dojo/connect" event="onClick">
+            <script type="dojo/connect" data-dojo-event="onClick">
 				jsonStore.fetch({
 					query: { id: '*' },
 					queryOptions: { deep: true },

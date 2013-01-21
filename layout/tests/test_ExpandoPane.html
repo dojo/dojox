@@ -227,7 +227,7 @@
 				<div dojoType="dijit.layout.ContentPane" title="tab 1">a</div>
 				<div dojoType="dijit.layout.ContentPane" title="tab 2">
 					<button dojoType="dijit.form.Button">Preview left
-						<script type="dojo/method" event="onClick">
+						<script type="dojo/method" data-dojo-event="onClick">
 							dijit.byId("leftPane").preview();
 						</script>
 				</div>
@@ -269,7 +269,7 @@
 							<p>
 							<button dojoType="dijit.form.Button">
 								Make Floater
-								<script type="dojo/connect" event="onClick">
+								<script type="dojo/connect" data-dojo-event="onClick">
 									var div = dojo.doc.createElement('div');
 									dojo.body().appendChild(div);
 									var fp = new dojox.layout.FloatingPane({
@@ -307,7 +307,7 @@
 					<div dojoType="dijit.layout.ContentPane" title="Search">
 						<button dojoType="dijit.form.Button">
 							Change Title
-							<script type="dojo/method" event="onClick">
+							<script type="dojo/method" data-dojo-event="onClick">
 								dijit.byId("bottomPane").set("title", new Date())
 							</script>
 						</button>

@@ -38,21 +38,21 @@
 
 	<button dojoType="dijit.form.Button">
 			spacing test
-			<script type="dojo/method" event="onClick">
+			<script type="dojo/method" data-dojo-event="onClick">
 				dojo.query("li.baseFont").toggleClassFx("spacedHorizontal").play(5);
 			</script>
 	</button>
 
 	<button dojoType="dijit.form.Button">
 			line-height test
-			<script type="dojo/method" event="onClick">
+			<script type="dojo/method" data-dojo-event="onClick">
 				dojo.query("li.baseFont").toggleClassFx("spacedVertical").play(5);
 			</script>
 	</button>
 
 	<button dojoType="dijit.form.Button">
 			font-size test
-			<script type="dojo/method" event="onClick">
+			<script type="dojo/method" data-dojo-event="onClick">
 				dojo.query("li.baseFont").toggleClassFx("fontSizeTest").play(5);
 			</script>
 	</button>
@@ -61,7 +61,7 @@
 
 	<button dojoType="dijit.form.Button" id="addTall">
 		add .tall
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				var delay = 500;
 				var _anims = [];
 				dojo.query("#colorTest > .testBox").forEach(function(n){
@@ -77,7 +77,7 @@
 	</button>
 	<button dojoType="dijit.form.Button" id="removeTall" disabled="true">
 		remove .tall
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				var delay = 500;
 				var _anims = [];
 				dojo.query("#colorTest > .testBox").forEach(function(n){
@@ -93,7 +93,7 @@
 	</button>		 
 	<button dojoType="dijit.form.Button" id="addWide">
 		add .wide
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				var delay = 500;
 				var _anims = [];
 				dojo.query("#colorTest > .testBox").forEach(function(n){
@@ -109,7 +109,7 @@
 	</button>
 	<button dojoType="dijit.form.Button" id="removeWide" disabled="true">
 		remove .wide
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				var delay = 500;
 				var _anims = [];
 				dojo.query("#colorTest > .testBox").forEach(function(n){
@@ -125,7 +125,7 @@
 	</button>
 	<button dojoType="dijit.form.Button">
 		toggle .tiny
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				var _anims = [];
 				// until dojox.fx.NodeList-fx is ready:
 				dojo.query("#colorTest > .testBox").forEach(function(node){
@@ -137,13 +137,13 @@
 
 	<button dojoType="dijit.form.Button">
 		query add tall
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.query("#colorTest > .testBox").addClassFx("tall").play();
 		</script>		
 	</button>
 	<button dojoType="dijit.form.Button">
 		query remove tall
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 			dojo.query("#colorTest > .testBox").removeClassFx("tall").play();
 		</script>
 	</button>
@@ -166,19 +166,19 @@
 	
 	<button dojoType="dijit.form.Button">
 		.offsetSome
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				dojox.fx.toggleClass("positionTest","offsetSome").play();		 
 		</script>
 	</button>
 	<button dojoType="dijit.form.Button">
 		.topLeft
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				dojox.fx.toggleClass("positionTest","topLeft").play();		  
 		</script>
 	</button>
 	<button dojoType="dijit.form.Button">
 		.bottomRight
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				dojox.fx.toggleClass("positionTest","bottomRight").play();		  
 		</script>
 	</button>
@@ -189,19 +189,19 @@
 			
 	<button dojoType="dijit.form.Button">
 		toggle .green
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				dojox.fx.toggleClass("positionTest","green").play();
 		</script>
 	</button>
 	<button dojoType="dijit.form.Button">
 		toggle .black
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				dojox.fx.toggleClass("positionTest","black").play();
 		</script>
 	</button>
 	<button dojoType="dijit.form.Button">
 		toggle .blue
-		<script type="dojo/method" event="onClick">
+		<script type="dojo/method" data-dojo-event="onClick">
 				dojox.fx.toggleClass("positionTest","blue").play();
 		</script>
 	</button>

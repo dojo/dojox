@@ -59,10 +59,10 @@
 	The attribute "numStars" is set to 10, so we see ten stars.
 	<div id="rating1Box">
 		<span id="rating1" dojoType="dojox.form.Rating" numStars="10">
-			<script type="dojo/event" event="onChange">
+			<script type="dojo/event" data-dojo-event="onChange">
 				dojo.query('#rating1Value')[0].innerHTML = this.value;
 			</script>
-			<script type="dojo/event" event="onMouseOver" args="evt,value">
+			<script type="dojo/event" data-dojo-event="onMouseOver" data-dojo-args="evt,value">
 				dojo.query('#rating1HoverValue')[0].innerHTML = value;
 			</script>
 		</span>

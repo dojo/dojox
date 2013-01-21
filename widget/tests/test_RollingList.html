@@ -161,7 +161,7 @@
 	<h3>Rolling List - <input dojoType="dijit.form.TextBox" type="text" id="clickWatch" disabled value="None Selected..."></h3>
 	<div dojoType="dojox.widget.RollingList" data-dojo-id="myList" id="myList" store="continentStore"
 		query="{type:'continent'}">
-		<script type="dojo/method" event="onChange" args="value">
+		<script type="dojo/method" data-dojo-event="onChange" data-dojo-args="value">
 			console.log("Set Value:", value);
 			if(value){
 				dijit.byId("clickWatch").attr("value", this.store.getIdentity(value));
@@ -169,7 +169,7 @@
 				dijit.byId("clickWatch").attr("value", "None Selected...");
 			}
 		</script>
-		<script type="dojo/method" event="getPaneForItem" args="item,parentPane,children">
+		<script type="dojo/method" data-dojo-event="getPaneForItem" data-dojo-args="item,parentPane,children">
 			var ret = dojox.widget.RollingList.prototype.getPaneForItem.apply(this, arguments);
 
 			if(!ret){

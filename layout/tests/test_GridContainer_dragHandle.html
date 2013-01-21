@@ -81,7 +81,7 @@
 				<div dojoType="dojox.widget.Portlet" title="Portlet with Dialog Settings" id="portlet2">
 				<div dojoType="dojox.widget.PortletDialogSettings" title="Settings in a Dialog">
 					Use Bold Text: <div dojoType="dijit.form.CheckBox">
-						<script type="dojo/connect" event="onClick">
+						<script type="dojo/connect" data-dojo-event="onClick">
 						  dojo.style(dijit.byId('portlet2').containerNode, "fontWeight", this.checked ? "bold" : "normal");
 						</script>
 					</div>

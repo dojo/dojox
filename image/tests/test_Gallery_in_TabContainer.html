@@ -41,7 +41,7 @@
 	<div dojoType="dojox.data.FlickrRestStore" data-dojo-id="flickrStore"></div>
 
 	<div dojoType="dijit.layout.TabContainer" style="width:800px;height:1000px;">
-		<script type="dojo/connect" event="startup">
+		<script type="dojo/connect" data-dojo-event="startup">
 			// When the TabContainer has finished constructing, set the data store on each Gallery
 			dojo.forEach(["gallery1", "gallery2", "gallery3"], function(galleryId){
 				var req = {

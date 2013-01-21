@@ -44,7 +44,7 @@
 	</span>
 	<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ Title: '*' }"
 		rowsPerPage="5" store="csvStore" structure="layoutMovies" autoRender="false">
-		<script type="dojo/connect" event="onFetchError" args="error">
+		<script type="dojo/connect" data-dojo-event="onFetchError" data-dojo-args="error">
 			alert("Error was encountered when store was queried: " + dojo.toJson(error, true));
 		</script>
 	</div>

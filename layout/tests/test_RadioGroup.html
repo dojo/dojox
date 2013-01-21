@@ -76,7 +76,7 @@
 
 	<div>
 		<button dojoType="dijit.form.Button">add children
-			<script type="dojo/method" event="onClick">
+			<script type="dojo/method" data-dojo-event="onClick">
 				dojo.forEach(["firstGroup","firstFade","firstSlide"], function(id){
 					var w = dijit.byId(id);
 					w.addChild(
@@ -90,7 +90,7 @@
 		</button>
 		
 		<button dojoType="dijit.form.Button">remove one from each
-			<script type="dojo/method" event="onClick">
+			<script type="dojo/method" data-dojo-event="onClick">
 				dijit.registry.filter(function(w){
 					return w.declaredClass.match(/dojox\.layout\.RadioGroup/);
 				}).forEach(function(w){

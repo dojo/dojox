@@ -101,7 +101,7 @@
 	<div dojoType="dijit.tree.ForestStoreModel" data-dojo-id="fileModel"
 		store="fileStore" query="{}"
 		rootId="DojoFiles" rootLabel="Dojo Files" childrenAttrs="children">
-		<script type="dojo/method" event="getChildren" args="parent, callback">
+		<script type="dojo/method" data-dojo-event="getChildren" data-dojo-args="parent, callback">
 			if (!this._allItems) {
 			  this._allItems = [];
 			}
@@ -200,7 +200,7 @@
 						  <div dojoType="dijit.form.Button" onClick="dijit.byId('lineChartSettings').toggle();">OK</div>
 						</div>
 					</div>
-					<script type="dojo/connect" event="onUpdateSize">
+					<script type="dojo/connect" data-dojo-event="onUpdateSize">
 						if(window.chart){chart.resize();}
 					</script>
 					<div>
@@ -311,7 +311,7 @@
 						<script type="dojo/connect">
 							this.set("selectedIndex", dojo.cookie(this.id + "-selectedIndex") || 0);
 						</script>
-						<script type="dojo/connect" event="attr" args="name, value">
+						<script type="dojo/connect" data-dojo-event="attr" data-dojo-args="name, value">
 							if(name == "selectedIndex"){
 								dojo.cookie(this.id + "-selectedIndex", value);
 
@@ -420,7 +420,7 @@
 					model="fileModel"
 					persist="false"
 					style="overflow-y: auto;height: 100%;max-width: 230px;">
-					<script type="dojo/method" event="onClick" args="item">
+					<script type="dojo/method" data-dojo-event="onClick" data-dojo-args="item">
 						if (fileStore.isItem(item)){
 							dojo.publish("/fileinfo", [fileStore, item]);
 						}
@@ -475,7 +475,7 @@
 						<div dojoType="dojox.widget.Portlet" dndType="Portlet" title="File Contents"
 							id="fileContentPortlet"
 								style="max-height: 350px;">
-							<script type="dojo/connect" event="startup">
+							<script type="dojo/connect" data-dojo-event="startup">
 								var widget = dijit.byId("fileContents");
 								dojo.style(this.containerNode, {
 								  height: "310px",
@@ -498,7 +498,7 @@
 								});
 							</script>
 							<div dojoType="dijit.layout.ContentPane" id="fileContents" parseOnLoad="false">
-								<script type="dojo/method" event="_setContent" args="data, isFake">
+								<script type="dojo/method" data-dojo-event="_setContent" data-dojo-args="data, isFake">
 									var text = typeof data == "string" ? data : data.textContent;
 									if (text.indexOf("<img") != 0 && text.indexOf("<span") != 0) {
 									  text = text.replace(/</gm, "&lt;").replace(/>/gm, "&gt;")
@@ -525,7 +525,7 @@
 								}));
 
 							</script>
-							<script type="dojo/connect" event="startup">
+							<script type="dojo/connect" data-dojo-event="startup">
 								dojo.require("dojox.charting.themes.Bahamation");
 								var dc = dojox.charting;
 
@@ -545,7 +545,7 @@
 								});
 								this.updateChart();
 							</script>
-							<script type="dojo/method" event="updateChart">
+							<script type="dojo/method" data-dojo-event="updateChart">
 								var extensions = {};
 								var items = this._items;
 								var dc = dojox.charting;
