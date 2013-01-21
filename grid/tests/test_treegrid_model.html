@@ -13,7 +13,7 @@
                 height: 40em;
             }
         </style>
-        <script type="text/javascript" src="../../../dojo/dojo.js"  djConfig="isDebug:true, parseOnLoad: true"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"  data-dojo-config="isDebug:true, parseOnLoad: true"></script>
         <script type="text/javascript">
             dojo.require("dojox.grid.TreeGrid");
             dojo.require("dijit.tree.ForestStoreModel");
@@ -108,10 +108,10 @@
     <body class="claro">
         <h1 class="testTitle">Test: dojox.grid.TreeGrid - Model-based</h1>
         <span dojoType="dojo.data.ItemFileWriteStore"
-              jsId="jsonStore" data="dataItems">
+              data-dojo-id="jsonStore" data="dataItems">
         </span>
 
-        <div dojoType="dijit.tree.ForestStoreModel" jsId="continentModel"
+        <div dojoType="dijit.tree.ForestStoreModel" data-dojo-id="continentModel"
         store="jsonStore" query="{type:'continent'}"
         rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
 
@@ -145,7 +145,7 @@
 				this.set("disabled", true);
             </script>
         </button>
-        <button dojoType="dijit.form.Button" disabled jsId="delCal">
+        <button dojoType="dijit.form.Button" disabled data-dojo-id="delCal">
             Delete California
             <script type="dojo/connect" event="onClick">
 				jsonStore.fetchItemByIdentity({
@@ -159,7 +159,7 @@
 				this.set("disabled", true);
             </script>
         </button>
-        <button dojoType="dijit.form.Button" jsId="delEU">
+        <button dojoType="dijit.form.Button" data-dojo-id="delEU">
             Delete Europe
             <script type="dojo/connect" event="onClick">
 				jsonStore.fetchItemByIdentity({
@@ -173,7 +173,7 @@
 				this.set("disabled", true);
             </script>
         </button>
-        <button dojoType="dijit.form.Button" jsId="empty">
+        <button dojoType="dijit.form.Button" data-dojo-id="empty">
             Empty
             <script type="dojo/connect" event="onClick">
 				jsonStore.fetch({
@@ -191,7 +191,7 @@
 				this.set("disabled", true);
             </script>
         </button>
-        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
+        <table data-dojo-id="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
             <thead>
                 <tr>
                     <th field="name" width="auto">Name</th>

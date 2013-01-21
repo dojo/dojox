@@ -11,7 +11,7 @@
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js"
-		djConfig="isDebug: true, parseOnLoad: true, defaultTestTheme: 'soria'"></script>
+		data-dojo-config="isDebug: true, parseOnLoad: true, defaultTestTheme: 'soria'"></script>
 	<script type="text/javascript" src="../../../dijit/tests/tests/_testCommon.js"></script>
 	<script type="text/javascript">
 		// Use profile builds, if available. Since we use pretty much all of
@@ -110,7 +110,7 @@
 <body class="soria">
 	<script type="text/xml" dojoType="dojox.xml.Script">
 		<ui xmlns:dojo="dojo" xmlns="html">
-			<dojo:data.ItemFileWriteStore jsId="mailStore" url="mail/mail.json"/>
+			<dojo:data.ItemFileWriteStore data-dojo-id="mailStore" url="mail/mail.json"/>
 		</ui>
 	</script>
 
@@ -311,7 +311,7 @@
 			<dijit:Tooltip connectId="options">Set various options</dijit:Tooltip>
 		</dijit:Toolbar>
 
-		<dijit:layout.TabContainer dojoType="dijit.layout.TabContainer" id="tabs" jsId="tabs" layoutAlign="client">
+		<dijit:layout.TabContainer dojoType="dijit.layout.TabContainer" id="tabs" data-dojo-id="tabs" layoutAlign="client">
 			<!-- main section with tree, table, and preview -->
 			<dijit:layout.SplitContainer
 				orientation="horizontal"
@@ -377,7 +377,7 @@
 					<dijit:layout.ContentPane id="listPane" sizeMin="20" sizeShare="20">
 						<span dojoType="demo.Table" store="mailStore"
 							query="{ query: { type: 'message' }, sort: [ { attribute: 'label' } ]  }"
-							id="foo" jsId="table" style="width: 100%">
+							id="foo" data-dojo-id="table" style="width: 100%">
 							<html:script type="dojo/method" event="onClick" args="item">
 							var sender = this.store.getValue(item, "sender");
 								var subject = this.store.getValue(item, "label");

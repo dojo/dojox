@@ -13,7 +13,7 @@
                 height: 40em;
             }
         </style>
-        <script type="text/javascript" src="../../../dojo/dojo.js"  djConfig="isDebug:true, parseOnLoad: false"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"  data-dojo-config="isDebug:true, parseOnLoad: false"></script>
         <script type="text/javascript">
             dojo.require("dojox.grid.TreeGrid");
             dojo.require("dijit.tree.ForestStoreModel");
@@ -88,14 +88,14 @@
     <body class="tundra">
         <h1 class="testTitle">Test: dojox.grid.TreeGrid - Model-based lazy loading</h1>
 
-        <div dojoType="dijit.tree.ForestStoreModel" jsId="continentModel"
+        <div dojoType="dijit.tree.ForestStoreModel" data-dojo-id="continentModel"
 			store="jsonStore" query="{type:'continent'}"
 			deferItemLoadingUntilExpand="true"
 			rootId="continentRoot" rootLabel="Continents" childrenAttrs="children">
 		</div>
 
         <h4 class="testSubtitle">dojox.grid.TreeGrid n-Level</h4>
-        <table jsid="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
+        <table data-dojo-id="grid" dojoType="dojox.grid.TreeGrid" class="grid" treeModel="continentModel">
             <thead>
                 <tr>
                     <th field="name" width="auto">Name</th>

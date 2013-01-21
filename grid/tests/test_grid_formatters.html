@@ -28,7 +28,7 @@
 	</style>
 	<script type="text/javascript" 
 		src="../../../dojo/dojo.js"
-		djConfig="isDebug: true, parseOnLoad: true">
+		data-dojo-config="isDebug: true, parseOnLoad: true">
 	</script>
 	<script type="text/javascript">
 		dojo.require("doh.runner");
@@ -129,9 +129,9 @@
 	</head>	
 	<body class="tundra">
 		<h1 class="testTitle">Test: dojox.tests.grid.Grid Formatters</h1>
-		<div dojoType="dojo.data.ItemFileReadStore" jsId="readStore" url="support/countryStore.json?"></div>
-		<div dojoType="dojox.grid.formatterScopeObj" store="readStore" jsId="myObject"></div>
-		<table dojoType="dojox.grid.DataGrid" jsId="grid" formatterScope="myObject" 
+		<div dojoType="dojo.data.ItemFileReadStore" data-dojo-id="readStore" url="support/countryStore.json?"></div>
+		<div dojoType="dojox.grid.formatterScopeObj" store="readStore" data-dojo-id="myObject"></div>
+		<table dojoType="dojox.grid.DataGrid" data-dojo-id="grid" formatterScope="myObject"
 				style="width: 65em;height: 25em;" store="readStore" queryOptions="{deep:true}" rowsPerPage="100">
 			<thead>
 				<tr>

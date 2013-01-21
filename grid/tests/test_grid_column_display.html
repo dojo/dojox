@@ -27,7 +27,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dijit.ColorPalette");
@@ -64,7 +64,7 @@
 <body class="tundra">
 	<div class="heading">dojox.grid.Grid Column Display Toggling Test</div>
 	<div style="margin-top:20px;">Use header menu to change display of columns</div>
-	<div dojoType="dijit.Menu" jsid="gridMenu" id="gridMenu" style="display: none;">
+	<div dojoType="dijit.Menu" data-dojo-id="gridMenu" id="gridMenu" style="display: none;">
 		<div dojoType="dijit.MenuItem" onClick="alert('Hello world');">Enabled Item</div>
 		<div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
 		<div dojoType="dijit.MenuSeparator"></div>
@@ -94,7 +94,7 @@
 			<span>Different popup</span>
 			<div dojoType="dijit.ColorPalette"></div>
 		</div>
-		<div dojoType="dijit.PopupMenuItem" jsid="popupItem1">
+		<div dojoType="dijit.PopupMenuItem" data-dojo-id="popupItem1">
 			<span>Show Columns</span>
 			<div dojoType="dijit.Menu" id="submenu4">
 				<div dojoType="dojox.widget.PlaceholderMenuItem" label="GridColumns"></div>
@@ -102,7 +102,7 @@
 		</div>
 	</div>
 
-	<div jsid="grid" id="grid" dojoType="dojox.grid.DataGrid" 
+	<div data-dojo-id="grid" id="grid" dojoType="dojox.grid.DataGrid"
 		columnToggling="true" store="test_store" query="{ id: '*' }" 
 		structure="layout" rowSelector="20px" headerMenu="gridMenu"></div>
 
@@ -110,7 +110,7 @@
 		Destroy third popup item
 	</button>
 	<div class="heading" style="margin-top:50px;">dojox.DataGrid with locked columns</div>
-	<div dojoType="dijit.Menu" jsid="gridMenu2" id="gridMenu2" style="display: none;">
+	<div dojoType="dijit.Menu" data-dojo-id="gridMenu2" id="gridMenu2" style="display: none;">
 		<div dojoType="dijit.MenuItem" onClick="alert('Hello world');">Enabled Item</div>
 		<div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
 		<div dojoType="dijit.MenuSeparator"></div>
@@ -140,7 +140,7 @@
 			<span>Different popup</span>
 			<div dojoType="dijit.ColorPalette"></div>
 		</div>
-		<div dojoType="dijit.PopupMenuItem" jsid="popupItemX1">
+		<div dojoType="dijit.PopupMenuItem" data-dojo-id="popupItemX1">
 			<span>Show Columns</span>
 			<div dojoType="dijit.Menu" id="submenuX4">
 				<div dojoType="dojox.widget.PlaceholderMenuItem" label="GridColumns"></div>
@@ -149,7 +149,7 @@
 	</div>
 
 		<span dojoType="dojo.data.ItemFileReadStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	
 

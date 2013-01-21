@@ -26,7 +26,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -73,7 +73,7 @@
 </head>
 <body class="tundra">
 	<div class="heading" tabindex="0">dojox.grid.Grid Basic Test</div>
-	<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" 
+	<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid"
 		store="test_store" structure="layout">
 		<script type="dojo/connect" event="onKeyDown" args="e">
 			keyDown(e);

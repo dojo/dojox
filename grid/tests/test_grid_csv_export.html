@@ -25,7 +25,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -85,7 +85,7 @@
 	<button dojoType="dijit.form.Button" onClick="export_all">Export All</button>
 	<button dojoType="dijit.form.Button" onClick="export_selected">Export Selected</button>
 
-	<div jsId="grid" id="grid" dojoType="dojox.grid.DataGrid" 
+	<div data-dojo-id="grid" id="grid" dojoType="dojox.grid.DataGrid"
 		store="test_store" query="{ id: '*' }" 
 		structure="layout" rowSelector="20px"></div>
 

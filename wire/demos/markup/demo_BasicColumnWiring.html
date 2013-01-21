@@ -19,7 +19,7 @@
 		@import "../TableContainer.css";
 	</style>
 
-	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojox.wire.ml.Invocation");
@@ -48,7 +48,7 @@
 		The store that is queried in this demo 
 	-->    
 	<div dojoType="dojo.data.ItemFileReadStore"
-		jsId="DataStore1"
+		data-dojo-id="DataStore1"
 		url="countries.json">
 	</div>
 
@@ -63,7 +63,7 @@
 	<!--
 		Simple container widget for creating a 'table from rows defined by an array
 	-->    
-	<div dojoType="dojox.wire.demos.TableContainer" jsId="r1" headers="Name,Location Type"></div>
+	<div dojoType="dojox.wire.demos.TableContainer" data-dojo-id="r1" headers="Name,Location Type"></div>
 
 	<!-- 
 		On the call of the onItem function of 'dataHolder', trigger a binding/mapping of the

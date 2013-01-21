@@ -32,7 +32,7 @@
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
 		dojo.require("dojox.grid.DataGrid");
@@ -82,7 +82,7 @@
 	<p>While this test should work, dojox.layout.ResizeHandle is experimental.</p>
 	
 	<div id="bar" style="position:relative">
-		<div jsId="aGrid" id="grid" dojoType="dojox.grid.DataGrid" 
+		<div data-dojo-id="aGrid" id="grid" dojoType="dojox.grid.DataGrid"
 			store="test_store" rowSelector="20px" 
 			structure="structure" elasticView="2"></div>
 		<div id="hand0"></div>
@@ -90,7 +90,7 @@
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container" style="position:relative">
-		<div jsId="theGrid" id="grid1" dojoType="dojox.grid._Grid" 
+		<div data-dojo-id="theGrid" id="grid1" dojoType="dojox.grid._Grid"
 			get="get" rowSelector="20px" structure="structure" 
 			rowCount="75" elasticView="2"></div>
 		<div id="hand1" dojoType="dojox.layout.ResizeHandle" 

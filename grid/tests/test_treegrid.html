@@ -13,7 +13,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.TreeGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
@@ -88,7 +88,7 @@
 <body class="claro">
 	<h1 class="testTitle">Test: dojox.tests.grid.TreeGrid</h1>
 	<span dojoType="dojo.data.ItemFileWriteStore" 
-		jsId="jsonStore" url="support/gamedata.json">
+		data-dojo-id="jsonStore" url="support/gamedata.json">
 	</span>
 
 	<h4 class="testSubtitle">dojox.grid.TreeGrid 1-Level</h4>
@@ -206,7 +206,7 @@
 
 	<h4 class="testSubtitle">dojox.grid.TreeGrid Large 4-Level - calculated totals and openAtLevels</h4>
 	<table dojoType="dojox.grid.TreeGrid" class="grid" style="height: 45em;width: 100%;"
-		store="jsonStore" rowsPerPage="20" jsId="grid4" rowSelector="true" openAtLevels="false,true,3">
+		store="jsonStore" rowsPerPage="20" data-dojo-id="grid4" rowSelector="true" openAtLevels="false,true,3">
 		<thead>
 			<tr>
 				<th field="label" relWidth="2">Player</th>

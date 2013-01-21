@@ -17,7 +17,7 @@
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -137,7 +137,7 @@
 	<button onclick="grid.edit.cancel()">Cancel Edit</button>&nbsp;&nbsp;
 	<button onclick="grid.render()">Refresh</button>
 	<br><br>
-	<div jsId="grid" class="grid" structure="gridLayout" dojoType="dojox.grid.Grid" 
+	<div data-dojo-id="grid" class="grid" structure="gridLayout" dojoType="dojox.grid.Grid"
 		store="model" singleClickEdit="true" autoWidth="true"></div>
 	<div id="rowCount"></div>
 	<p>Note: This test requires MySql and PHP and works with the database table available in support/testtbl.sql.</p>

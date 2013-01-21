@@ -27,7 +27,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -68,12 +68,12 @@
 <body>
 <div class="heading">dojox.grid.Grid Backwards Compatibility Test</div>
 	<div>A new grid</div>
-	<div jsid="grid" id="grid" dojoType="dojox.grid.DataGrid" store="test_store" query="{ id: '*' }" structure="layout" rowSelector="20px"></div>
+	<div data-dojo-id="grid" id="grid" dojoType="dojox.grid.DataGrid" store="test_store" query="{ id: '*' }" structure="layout" rowSelector="20px"></div>
 	<span dojoType="dojo.data.ItemFileReadStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<span dojoType="dojox.grid.data.DojoData" 
-		jsId="dataModel2" 
+		data-dojo-id="dataModel2"
 		rowsPerPage="20"
 		store="jsonStore" 
 		query="{ name : '*' }">

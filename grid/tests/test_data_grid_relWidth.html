@@ -23,7 +23,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -45,10 +45,10 @@
 <body class="tundra">
 	<div class="heading">dojox.grid.DataGrid Relative Width Test</div>
 	<span dojoType="dojo.data.ItemFileWriteStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid" id="grid" class="grid"
+		data-dojo-id="grid" id="grid" class="grid"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
@@ -60,7 +60,7 @@
 	</table>
 	<div class="heading">Relwidth mixed with %</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid1" id="grid1" class="grid"
+		data-dojo-id="grid1" id="grid1" class="grid"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
@@ -72,7 +72,7 @@
 	</table>	
 	<div class="heading">Relwidth mixed with static values</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid2" id="grid2" class="grid"
+		data-dojo-id="grid2" id="grid2" class="grid"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
@@ -84,7 +84,7 @@
 	</table>	
 	<div class="heading">Relwidth mixed with auto (relwidth not used)</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid3" id="grid3" class="grid"
+		data-dojo-id="grid3" id="grid3" class="grid"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
@@ -96,7 +96,7 @@
 	</table>	
 	<div class="heading">Relwidth with colspans</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid4" id="grid4" class="grid"
+		data-dojo-id="grid4" id="grid4" class="grid"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>

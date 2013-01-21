@@ -14,7 +14,7 @@
 		@import "./flickrDemo.css";
 	</style>
 
-	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dijit.form.TextBox");
@@ -83,7 +83,7 @@
 					<b>Status:</b>
 				</td>
 				<td>
-					<div dojoType="dijit.form.TextBox" size="50" id="status" jsId="statusWidget" disabled="true"></div>
+					<div dojoType="dijit.form.TextBox" size="50" id="status" data-dojo-id="statusWidget" disabled="true"></div>
 				</td>
 			</tr>
 			<tr>
@@ -91,7 +91,7 @@
 					<b>ID:</b>
 				</td>
 				<td>
-					<div dojoType="dijit.form.TextBox" size="50" id="userid" jsId="idWidget"></div>
+					<div dojoType="dijit.form.TextBox" size="50" id="userid" data-dojo-id="idWidget"></div>
 				</td>
 			</tr>
 			<tr>
@@ -99,7 +99,7 @@
 					<b>Tags:</b>
 				</td>
 				<td>
-					<div dojoType="dijit.form.TextBox" size="50" id="tags" jsId="tagsWidget" value="3dny"></div>
+					<div dojoType="dijit.form.TextBox" size="50" id="tags" data-dojo-id="tagsWidget" value="3dny"></div>
 				</td>
 			</tr>
 			<tr>
@@ -108,7 +108,7 @@
 				</td>
 				<td>
 					<select id="tagmode"
-							jsId="tagmodeWidget"
+							data-dojo-id="tagmodeWidget"
 							dojoType="dijit.form.ComboBox"
 							autocomplete="false"
 							value="any"
@@ -125,7 +125,7 @@
 				<td>
 					<div   
 						id="count"
-						jsId="countWidget"
+						data-dojo-id="countWidget"
 						dojoType="dijit.form.NumberSpinner"
 						value="20"
 						constraints="{min:1,max:20,places:0}" 
@@ -136,7 +136,7 @@
 				<td>
 				</td>
 				<td>
-					<div dojoType="dijit.form.Button" label="Search" id="searchButton" jsId="searchButtonWidget"></div>
+					<div dojoType="dijit.form.Button" label="Search" id="searchButton" data-dojo-id="searchButtonWidget"></div>
 				</td>
 			</tr>
 		</tbody>
@@ -145,8 +145,8 @@
 	<!--
 		The store instance used by this demo.
 	-->
-	<div dojoType="dojox.data.FlickrStore" jsId="flickrStore" label="title"></div>
-	<div dojoType="dojox.data.demos.widgets.FlickrViewList" store="flickrStore" id="flickrViews" jsId="flickrViewsWidget"></div>
+	<div dojoType="dojox.data.FlickrStore" data-dojo-id="flickrStore" label="title"></div>
+	<div dojoType="dojox.data.demos.widgets.FlickrViewList" store="flickrStore" id="flickrViews" data-dojo-id="flickrViewsWidget"></div>
 
 	<!-------------------------------- Using dojox.wire, declaratively wire up the widgets. --------------------------->
 
@@ -157,7 +157,7 @@
 	-->
 	<div dojoType="dojox.wire.ml.Data"
 		id="messageData"
-		jsId="messageData">
+		data-dojo-id="messageData">
 		<div dojoType="dojox.wire.ml.DataProperty"
 			name="processingStart"
 			value="PROCESSING REQUEST">

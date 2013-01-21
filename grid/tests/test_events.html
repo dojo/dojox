@@ -38,7 +38,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid._Grid");
@@ -183,9 +183,9 @@
 </head>
 <body>
 	<h3>dojox.grid.Grid Event Tracking</h3>
-	<div id="eventGrid" jsId="eventGrid" autoWidth="true" autoHeight="true" 
+	<div id="eventGrid" data-dojo-id="eventGrid" autoWidth="true" autoHeight="true"
 		structure="eventLayout" dojoType="dojox.grid._Grid"></div>
-	<div id="grid" jsId="grid" rowCount="100" structure="layout" 
+	<div id="grid" data-dojo-id="grid" rowCount="100" structure="layout"
 		rowSelector="20px" dojoType="dojox.grid._Grid"></div>
 </body>
 </html>

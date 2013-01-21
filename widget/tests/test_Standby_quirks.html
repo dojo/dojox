@@ -16,7 +16,7 @@
 		}
 	</style>
 	
-	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="parseOnLoad:true, isDebug: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="parseOnLoad:true, isDebug: true"></script>
 
 	<script type="text/javascript">
 		dojo.require("dojox.widget.Standby");
@@ -277,7 +277,7 @@
 	<button id ="overlay8Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
 	<br>
 	<button id ="overlay8Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
-	<div jsId="ifsStore" dojoType="dojo.data.ItemFileReadStore", url="../../../dijit/tests/_data/countries.json"></div>
+	<div data-dojo-id="ifsStore" dojoType="dojo.data.ItemFileReadStore", url="../../../dijit/tests/_data/countries.json"></div>
 	<table id ="overlayTarget8" dojoType="dojox.grid.DataGrid", style="width: 500px; height: 300px; margin: auto" store="ifsStore", query="{}">
 		<thead>
 			<tr>
@@ -294,8 +294,8 @@
 	<button id ="overlay9Button1" dojoType="dijit.form.Button">Click to show the standby overlay</button>
 	<br>
 	<button id ="overlay9Button2" dojoType="dijit.form.Button">Click to hide the standby overlay</button>
-	<div jsId="ifsStore2" dojoType="dojo.data.ItemFileReadStore", url="../../../dijit/tests/_data/countries.json"></div>
-	<div dojoType="dijit.tree.ForestStoreModel" jsId="continentModel" store="ifsStore2" query="{type:'continent'}" rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
+	<div data-dojo-id="ifsStore2" dojoType="dojo.data.ItemFileReadStore", url="../../../dijit/tests/_data/countries.json"></div>
+	<div dojoType="dijit.tree.ForestStoreModel" data-dojo-id="continentModel" store="ifsStore2" query="{type:'continent'}" rootId="continentRoot" rootLabel="Continents" childrenAttrs="children"></div>
 	<div id ="overlayTarget9" dojoType="dijit.Tree", style="width: 30%" model="continentModel", query="{}"></div>
 	<div id ="standby9" target="overlayTarget9" dojoType="dojox.widget.Standby"></div>
 	<hr>

@@ -17,7 +17,7 @@
 	
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../../dojo/dojo.js"
-		djConfig="isDebug: true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 
 	<!-- only needed for alternate theme testing: do NOT use in your code! -->
 	<script type="text/javascript" src="../../../../dijit/tests/_testCommon.js"></script>
@@ -49,7 +49,7 @@
 
 	<h1 dojoType="dojo.dnd.Target" class="testTitle">dojox.grid.DataGrid tests</h1>
 	<input id="initialfocus"></input>
-		<div dojoType="dijit.Menu" jsid="gridMenu" id="gridMenu" style="display: none;">
+		<div dojoType="dijit.Menu" data-dojo-id="gridMenu" id="gridMenu" style="display: none;">
 				<div dojoType="dijit.MenuItem" >Item One</div>
 				<div dojoType="dijit.MenuItem" >Item Two</div>
 				<div dojoType="dijit.MenuItem" >Item Three</div>

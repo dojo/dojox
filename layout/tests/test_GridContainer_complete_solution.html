@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="../resources/GridContainer.css" type="text/css" />
 	<link rel="stylesheet" href="../../../dijit/tests/css/dijitTests.css" type="text/css"/>
 	
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true,  parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true,  parseOnLoad: true"></script>
 	
 	<script type="text/javascript">
 		dojo.require("dojox.layout.GridContainerLite");
@@ -35,7 +35,7 @@
 <body class="tundra">
 	<div style="position:absolute;width:200px;left:5px;top:50px;">
 		<H2>Pure Source Dojo</H2>
-		<div dojoType="dojox.mdnd.PureSource" jsId="c1" class="container" >
+		<div dojoType="dojox.mdnd.PureSource" data-dojo-id="c1" class="container" >
 			<div class="dojoDndItem" dndType="ContentPane"><strong>ContentPane</strong></div>
 			<div class="dojoDndItem" dndType="Portlet"><strong>Portlet</strong></div>
 			<div class="dojoDndItem" dndType="TitlePane"><strong>TitlePane</strong></div>
@@ -43,7 +43,7 @@
 	</div>
 	<div style="position:absolute;width:200px;left:5px;top:220px;">
 		<H2>Source/Target Dojo</H2>
-		<div dojoType="dojo.dnd.Source" accept="rss, TitlePane, News" jsId="c2" class="container">
+		<div dojoType="dojo.dnd.Source" accept="rss, TitlePane, News" data-dojo-id="c2" class="container">
 			<div class="dojoDndItem" dndType="rss">RSS <strong>1</strong></div>
 			<div class="dojoDndItem" dndType="TitlePane"><strong>TitlePane</strong></div>
 			<div class="dojoDndItem" dndType="ContentPane"><strong>ContentPane</strong></div>
@@ -70,7 +70,7 @@
 				style="height:150px;"
 				dndType="Portlet" >
 				<b>Source/Target OAF (drop only rss)</b><br>
-				<div dojoType="dojo.dnd.Source" jsId="cp1" accept="rss">
+				<div dojoType="dojo.dnd.Source" data-dojo-id="cp1" accept="rss">
 					<div class="dojoDndItem" dndType="News">News <strong>1</strong></div>
 					<div class="dojoDndItem" dndType="News">News <strong>2</strong></div>
 					<div class="dojoDndItem" dndType="News">News <strong>3</strong></div>

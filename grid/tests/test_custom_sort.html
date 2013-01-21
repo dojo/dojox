@@ -22,7 +22,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -64,6 +64,6 @@
 <br />
 <b>Column 1</b>'s data field has a custom sorter that sorts by the status level rather than alphebetically
 <br /><br />
-<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout"></div>
+<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid" store="test_store" structure="layout"></div>
 </body>
 </html>

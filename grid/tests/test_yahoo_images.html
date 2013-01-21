@@ -18,7 +18,7 @@
 		#info { width: 700px; }
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="debugAtAllCosts: false, isDebug:false, parseOnLoad: true">
+		data-dojo-config="debugAtAllCosts: false, isDebug:false, parseOnLoad: true">
 	</script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
@@ -68,7 +68,7 @@
 	<input id="searchInput" type="text" value="apple">
 	<button onclick="doSearch()" style="clear: both;">Search</button>
 	<div dojoType="dojox.grid.DataGrid" 
-		id="grid" jsId="grid" class="grid" structure="imageLayout" 
+		id="grid" data-dojo-id="grid" class="grid" structure="imageLayout"
 		store="store" elasticView="1" query="{ query: 'apple' }" 
 		rowSelector="20px">
 	</div>

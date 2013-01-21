@@ -26,7 +26,7 @@
 		}
 	</style>
 
-	<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojox.wire.ml.Invocation");
@@ -70,16 +70,16 @@
 			<table style="width: 90%;">
 				<tr>
 					<td align="left">
-						<div dojoType="dijit.form.Button" jsId="searchButton">Search Datastore</div>
+						<div dojoType="dijit.form.Button" data-dojo-id="searchButton">Search Datastore</div>
 					</td>
 					<td align="right">
-						<div dojoType="dijit.form.TextBox" jsId="inputField" value="*" intermediateChanges="true"></div>
+						<div dojoType="dijit.form.TextBox" data-dojo-id="inputField" value="*" intermediateChanges="true"></div>
 					</td>
 				</tr>
 			</table>
 		</div>
 		<div dojoType="dijit.layout.ContentPane" region="right" style="width: 50%; overflow: auto;">
-			<div class="dataTable" dojoType="dojox.wire.demos.TableContainer" jsId="dataTable" headers="Name,Location Type"></div>
+			<div class="dataTable" dojoType="dojox.wire.demos.TableContainer" data-dojo-id="dataTable" headers="Name,Location Type"></div>
 		</div>
 	</div>
 
@@ -87,7 +87,7 @@
 
 	<!-- The store that is queried in this demo -->    
 	<div dojoType="dojo.data.ItemFileReadStore"
-		jsId="DataStore1"
+		data-dojo-id="DataStore1"
 		url="countries.json">
 	</div>
 

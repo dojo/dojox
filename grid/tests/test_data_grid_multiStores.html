@@ -18,7 +18,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -136,7 +136,7 @@
 	<h2>dojo.data.ItemFileReadStore:</h2>
 	<i>Displays a list of countries through ItemFileReadStore format.</i>
 	<span dojoType="dojo.data.ItemFileReadStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<div id="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ name: '*' }" rowsPerPage="20"
 		store="jsonStore" structure="layoutCountries" rowSelector="20px">
@@ -146,7 +146,7 @@
 	<h2>dojox.data.CsvStore:</h2>
 	<i>Displays a list of movies that were stored in CSV format.</i>
 	<span dojoType="dojox.data.CsvStore" 
-		jsId="csvStore" url="support/movies.csv">
+		data-dojo-id="csvStore" url="support/movies.csv">
 	</span>
 	<div id="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ Title: '*' }" rowsPerPage="5"
 		store="csvStore" structure="layoutMovies" rowSelector="20px">
@@ -155,7 +155,7 @@
 	<h2>dojox.data.XmlStore:</h2>
 	<i>Displays a list of books that were stored in XML format.</i>
 	<span dojoType="dojox.data.XmlStore" 
-		jsId="xmlStore" url="support/books.xml">
+		data-dojo-id="xmlStore" url="support/books.xml">
 	</span>
 	<div id="grid3" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ title: '*' }" rowsPerPage="5"
 		store="xmlStore" structure="layoutBooks" rowSelector="20px">
@@ -165,7 +165,7 @@
 	<h2>dojox.data.FlickrStore:</h2>
 	<i>Displays Flickr imformation on 3DNY (Dojo Developer Days, New York) from the flickr public photo feed, accessed via the FlickrStore dojo.data implementation.</i>
 	<span dojoType="dojox.data.FlickrStore" 
-		jsId="flickrStore">
+		data-dojo-id="flickrStore">
 	</span>
 	<div id="grid4" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ tags: '3dny' }"
 		rowsPerPage="5"
@@ -175,7 +175,7 @@
 	<h2>dojox.data.OpmlStore:</h2>
 	<i>Scans an Opml based document for all items of type 'country'</i> 
 	<span dojoType="dojox.data.OpmlStore" 
-		jsId="opmlStore" url="support/geography.xml">
+		data-dojo-id="opmlStore" url="support/geography.xml">
 	</span>
 	<div id="grid5" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ type: 'country' }"
 		queryOptions="{ deep: true }" rowsPerPage="5"
@@ -226,7 +226,7 @@
 		</tbody>
 	</table>
 	<span dojoType="dojox.data.HtmlStore" 
-		jsId="htmlStore" dataId="tableExample">
+		data-dojo-id="htmlStore" dataId="tableExample">
 	</span>
 	<div id="grid6" dojoType="dojox.grid.DataGrid" elasticView="2" query="{}"
 		store="htmlStore" rowsPerPage="5" structure="layoutHtmlTable" rowSelector="20px">

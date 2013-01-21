@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="../resources/ScrollPane.css">	
 
 	<!-- required: dojo.js -->
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true"></script>
 
 	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -322,7 +322,7 @@
 	<div dojoType="dijit.layout.BorderContainer" style="height:100px; border: solid #ccc 1px;">
 		<div dojoType="dijit.layout.ContentPane" region="left" style="width:20%" splitter="true">(left)</div>
 		<div dojoType="dijit.layout.ContentPane" region="center">
-			<div dojoType="dojox.layout.TableContainer" region="center" jsId="tblContainerResize" cols="3" customClass="greyBlueLNF" labelWidth="-1">
+			<div dojoType="dojox.layout.TableContainer" region="center" data-dojo-id="tblContainerResize" cols="3" customClass="greyBlueLNF" labelWidth="-1">
 				<div dojoType="dijit.layout.ContentPane" label="Col 1 Label">
 					<script type="dojo/connect" event="resize">
 						this.domNode.innerHTML = "<strong>Width: " + dojo.contentBox(this.domNode).w + "</strong>";

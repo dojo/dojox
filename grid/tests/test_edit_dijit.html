@@ -21,7 +21,7 @@
 		}
 		</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug: true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
@@ -105,7 +105,7 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>
 	</div>
 	<br />
-	<div id="grid" jsId="grid" dojoType="dojox.grid.DataGrid" store="test_store" rowSelector="20px" structure="gridLayout" escapeHTMLInData="false"></div>
+	<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid" store="test_store" rowSelector="20px" structure="gridLayout" escapeHTMLInData="false"></div>
 	<br />
 	<div id="rowCount"></div>
 </body>

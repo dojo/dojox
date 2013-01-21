@@ -23,7 +23,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -53,7 +53,7 @@
 <body class="tundra">
 	<div class="heading">dojox.grid.DataGrid Large Data Set Test</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid" id="grid" 
+		data-dojo-id="grid" id="grid"
 		store="test_store" query="{ id: '*' }" rowsPerPage="20" structure="layout" rowSelector="20px">
 		<thead>
 			<tr>

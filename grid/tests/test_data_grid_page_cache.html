@@ -8,7 +8,7 @@
 		@import "../resources/tundraGrid.css";
 	</style>
 
-	<script type="text/javascript" src="../../../dojo/dojo.js" djconfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojo.parser");
 		dojo.require("dojo.data.ItemFileWriteStore");
@@ -40,6 +40,6 @@
 <body class="tundra">
 	Scroll trough some pages and then count the number of row nodes. We are instantiating the grid with 10 rows per page, and <b>caching at most 20 rows</b>. So if this policy works, you should never see a number bigger than 20! <br>
 	<button onclick="query()">Get number of row nodes</button>
-	<div jsid="grid1" dojoType="dojox.grid.DataGrid" store="test_store" query="{ id: '*' }" rowsPerPage="10" keepRows="20" structure="layout" style="height: 200px; width: 75%;">
+	<div data-dojo-id="grid1" dojoType="dojox.grid.DataGrid" store="test_store" query="{ id: '*' }" rowsPerPage="10" keepRows="20" structure="layout" style="height: 200px; width: 75%;">
 	</div>
 </body></html>

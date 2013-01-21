@@ -22,7 +22,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: false"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: false"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -81,7 +81,7 @@
 <body class="tundra">
 	<div class="heading">dojox.grid.DataGrid Large Data Set Test with Flex Cells</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid" id="grid" columnReordering="true" 
+		data-dojo-id="grid" id="grid" columnReordering="true"
 		store="test_store" query="{ id: '*' }" rowsPerPage="20" structure="layout">
 		<thead>
 			<tr>

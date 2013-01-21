@@ -30,7 +30,7 @@
 				border: 1px solid #333333;
             }
         </style>
-        <script type="text/javascript" src="../../../dojo/dojo.js"  djConfig="isDebug:true, parseOnLoad: true"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"  data-dojo-config="isDebug:true, parseOnLoad: true"></script>
         <script type="text/javascript">
             dojo.require("dojox.grid.LazyTreeGrid");
 			dojo.require("dojo.data.ItemFileWriteStore");
@@ -150,11 +150,11 @@
     <body class="claro">
         <h1 class="title">Test: dojox.grid.TreeGrid - Lazy-loading for children items</h1>
 		<h2>grid 1</h2>
-		<div id='grid1' jsid='grid1' dojoType='dojox.grid.LazyTreeGrid' summary="A customized tree grid summary"
+		<div id='grid1' data-dojo-id='grid1' dojoType='dojox.grid.LazyTreeGrid' summary="A customized tree grid summary"
 				structure='layout' treeModel='model1' rowSelector='true'></div>
 				
 		<h2>grid 2</h2>
-		<div id='grid2' jsid='grid2' dojoType='dojox.grid.LazyTreeGrid'
+		<div id='grid2' data-dojo-id='grid2' dojoType='dojox.grid.LazyTreeGrid'
 				structure='layout' treeModel='model2' 
 				keepSelection='true' rowSelector='true'></div>
 		

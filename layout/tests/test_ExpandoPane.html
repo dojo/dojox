@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="_expando.css">	
 
 	<!-- required: dojo.js -->
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true, popup:true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad: true, popup:true"></script>
 
 	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -216,7 +216,7 @@
 						</div>
 					</div>
 					<div dojoType="dijit.layout.ContentPane" title="Tree View">
-						<div dojoType="dojo.data.ItemFileReadStore" jsId="continentStore"
+						<div dojoType="dojo.data.ItemFileReadStore" data-dojo-id="continentStore"
 							url="../../../dijit/tests/_data/countries.json"></div>
 						<div dojoType="dijit.Tree" store="continentStore" query="{type:'continent'}"
 							labelAttr="name" typeAttr="type" label="Toolkit API"></div>

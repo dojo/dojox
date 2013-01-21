@@ -26,7 +26,7 @@
 			}
 		</style>
 		<script type="text/javascript" src="../../../dojo/dojo.js" 
-			djConfig="isDebug: false, parseOnLoad: true"></script>
+			data-dojo-config="isDebug: false, parseOnLoad: true"></script>
 		<script type="text/javascript">
             dojo.require("dojox.charting.plot2d.Lines");
             dojo.require("dojox.charting.plot2d.Areas");
@@ -44,7 +44,7 @@
 		<p><em>This is a particularly brutal example with <strong>lots and lots</strong> of data. 
 			It may cause laggyness in lesser browsers.</em></p>
 		
-		<div dojoType="dojox.data.HtmlStore" dataId="tableExample" jsId="tableStore"></div>
+		<div dojoType="dojox.data.HtmlStore" dataId="tableExample" data-dojo-id="tableStore"></div>
 		<table id="tableExample" style="display: none;">
 			<thead>
 				<tr><th>value</th></tr>
@@ -84,7 +84,7 @@
 				</td>
 				<td>
 
-					<div dojoType="dojox.data.CsvStore" jsId="googStore" 
+					<div dojoType="dojox.data.CsvStore" data-dojo-id="googStore"
 						url="data/goog_prices.csv"></div>
 					<div dojoType="dojox.charting.widget.Chart" 
 						theme="dojox.charting.themes.Tufte" 
@@ -123,7 +123,7 @@
 				</td>
 				<td>
 
-					<div dojoType="dojox.data.CsvStore" jsId="yahooStore" 
+					<div dojoType="dojox.data.CsvStore" data-dojo-id="yahooStore"
 						url="data/yahoo_prices.csv"></div>
 					<div dojoType="dojox.charting.widget.Chart" 
 						theme="dojox.charting.themes.Tufte" 
@@ -160,7 +160,7 @@
 					<a href="http://finance.google.com/finance?q=Microsoft">Microsoft</a> Closing Price &amp; <span class="volume">Volume</span>:
 				</td>
 				<td>
-					<div dojoType="dojox.data.CsvStore" jsId="msftStore" 
+					<div dojoType="dojox.data.CsvStore" data-dojo-id="msftStore"
 						url="data/msft_prices.csv"></div>
 					<div dojoType="dojox.charting.widget.Chart" 
 						theme="dojox.charting.themes.Tufte" 

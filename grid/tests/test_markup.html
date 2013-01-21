@@ -16,7 +16,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug: true, debugAtAllCosts: false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -28,7 +28,7 @@
 <body class="tundra">
 	<h5>dojox.grid.Grid structure from markup</h5>
 	<span dojoType="dojox.data.CsvStore" 
-		jsId="csvStore" url="support/movies.csv">
+		data-dojo-id="csvStore" url="support/movies.csv">
 	</span>
 
 	<table dojoType="dojox.grid.DataGrid"
@@ -49,7 +49,7 @@
 
 
 	<span dojoType="dojo.data.ItemFileReadStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<h5>Locked views specified with tables and colgroups</h5>
 

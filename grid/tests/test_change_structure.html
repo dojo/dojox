@@ -24,7 +24,7 @@
 			text-align: center;
 		}
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid._Grid");
@@ -108,7 +108,7 @@
 <p>
 	<button onclick="toggleStructure()">Change Structure</button>
 </p>	
-<div id="grid" jsid="grid" dojoType="dojox.grid._Grid" structure="structure" rowSelector="20px" rowCount="100000" elasticView="2"></div>
+<div id="grid" data-dojo-id="grid" dojoType="dojox.grid._Grid" structure="structure" rowSelector="20px" rowCount="100000" elasticView="2"></div>
 
 </body>
 </html>

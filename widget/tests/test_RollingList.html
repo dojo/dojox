@@ -17,7 +17,7 @@
 	
 	<!-- required: dojo.js -->
 	<script type="text/javascript" src="../../../dojo/dojo.js"
-		djConfig="parseOnLoad: true, isDebug: true"></script>
+		data-dojo-config="parseOnLoad: true, isDebug: true"></script>
 	
 	<!-- not needed, for testing alternate themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -154,12 +154,12 @@
 
 	<h1 class="testTitle">Dojox Rolling List Test</h1>
 
-	<div dojoType="dojox.widget.RollingStore" jsId="continentStore" 
+	<div dojoType="dojox.widget.RollingStore" data-dojo-id="continentStore"
 		url="../../../dijit/tests/_data/countries.json">
 	</div>
 	
 	<h3>Rolling List - <input dojoType="dijit.form.TextBox" type="text" id="clickWatch" disabled value="None Selected..."></h3>
-	<div dojoType="dojox.widget.RollingList" jsId="myList" id="myList" store="continentStore"
+	<div dojoType="dojox.widget.RollingList" data-dojo-id="myList" id="myList" store="continentStore"
 		query="{type:'continent'}">
 		<script type="dojo/method" event="onChange" args="value">
 			console.log("Set Value:", value);

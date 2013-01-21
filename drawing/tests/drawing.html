@@ -69,7 +69,7 @@
 			myDrawing.removeAll();
 		}
 
-			// myDrawing referenced by jsId
+			// myDrawing referenced by data-dojo-id
 			dojo.connect(myDrawing, "onSurfaceReady", function(){
 
 				var rect = myDrawing.addStencil("rect", {data:{x:50, y:275, width:100, height:100}});
@@ -150,7 +150,7 @@
 
 		</div>
 
-		<div dojoType="dojox.drawing.Drawing" id="drawingNode" jsId="myDrawing" drawingType="canvas" class="drawing"
+		<div dojoType="dojox.drawing.Drawing" id="drawingNode" data-dojo-id="myDrawing" drawingType="canvas" class="drawing"
 			 plugins="[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:100}}]">
 
 		</div>

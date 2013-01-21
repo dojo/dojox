@@ -34,7 +34,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -87,12 +87,12 @@
 		<button onclick="grid.singleClickEdit = !grid.singleClickEdit">Toggle singleClickEdit</button>&nbsp;
 	</div>
 	<span dojoType="dojo.data.ItemFileWriteStore" 
-		 jsId="jsonStore" url="support/numbers.json">
+		 data-dojo-id="jsonStore" url="support/numbers.json">
 	</span>
-	<div id="grid" jsId="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ id: '*' }"
+	<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ id: '*' }"
 		 rowsPerPage="20" store="jsonStore" structure="layoutNumbers" rowSelector="20px">
 	</div>
-	<div id="grid2" jsId="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ id: '*' }"
+	<div id="grid2" data-dojo-id="grid2" dojoType="dojox.grid.DataGrid" elasticView="2" query="{ id: '*' }"
 		 rowsPerPage="20" store="jsonStore" structure="layoutNumbers" rowSelector="20px">
 	</div>
 </body>

@@ -25,7 +25,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -51,19 +51,19 @@
 <body class="tundra">
 	<h2>dojox.grid.Grid Selection Models Test</h2>
 	<h3>none</h3>
-	<div jsid="grid1" id="grid1" dojoType="dojox.grid.DataGrid" selectionMode="none"
+	<div data-dojo-id="grid1" id="grid1" dojoType="dojox.grid.DataGrid" selectionMode="none"
 		store="test_store" query="{ id: '*' }" structure="layout">
 	</div>
 	<h3>Single</h3>
-	<div jsid="grid2" id="grid2" dojoType="dojox.grid.DataGrid" selectionMode="single"
+	<div data-dojo-id="grid2" id="grid2" dojoType="dojox.grid.DataGrid" selectionMode="single"
 		store="test_store" query="{ id: '*' }" structure="layout">
 	</div>
 	<h3>Multiple</h3>
-	<div jsid="grid3" id="grid3" dojoType="dojox.grid.DataGrid" selectionMode="multiple"
+	<div data-dojo-id="grid3" id="grid3" dojoType="dojox.grid.DataGrid" selectionMode="multiple"
 		store="test_store" query="{ id: '*' }" structure="layout">
 	</div>
 	<h3>Extended</h3>
-	<div jsid="grid4" id="grid4" dojoType="dojox.grid.DataGrid" selectionMode="extended"
+	<div data-dojo-id="grid4" id="grid4" dojoType="dojox.grid.DataGrid" selectionMode="extended"
 		store="test_store" query="{ id: '*' }" structure="layout">
 	</div>
 </body>

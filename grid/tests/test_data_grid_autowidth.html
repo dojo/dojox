@@ -23,7 +23,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -41,10 +41,10 @@
 <body class="tundra">
 	<div class="heading">dojox.grid.DataGrid Automatic Width Test</div>
 	<span dojoType="dojo.data.ItemFileWriteStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid" id="grid" class="grid" autoWidth="true"
+		data-dojo-id="grid" id="grid" class="grid" autoWidth="true"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
@@ -56,7 +56,7 @@
 	</table>
 	<div class="heading">Auto Width with % column widths (and fixed initial grid width)</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid1" id="grid1" class="grid" autoWidth="true" initialWidth="50em"
+		data-dojo-id="grid1" id="grid1" class="grid" autoWidth="true" initialWidth="50em"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>
@@ -68,7 +68,7 @@
 	</table>
 	<div class="heading">Auto Width with % column widths (and % initial grid width)</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid2" id="grid2" class="grid" autoWidth="true" initialWidth="85%"
+		data-dojo-id="grid2" id="grid2" class="grid" autoWidth="true" initialWidth="85%"
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>

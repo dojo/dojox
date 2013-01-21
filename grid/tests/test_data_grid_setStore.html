@@ -28,7 +28,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit"); // optimize: load dijit layer
 		dojo.require("dojox.grid.DataGrid");
@@ -87,11 +87,11 @@
 		<button onclick="createStore('error');">Error Store</button>
 	</p>
 	<span dojoType="dojo.data.ItemFileWriteStore" 
-		jsId="jsonStore" url="../../../dijit/tests/_data/countries.json">
+		data-dojo-id="jsonStore" url="../../../dijit/tests/_data/countries.json">
 	</span>
 	<div class="heading">Grid Test</div>
 	<table dojoType="dojox.grid.DataGrid"
-		jsid="grid" id="grid" class="grid" autoHeight="15" noDataMessage="Sorry, there is no data available."
+		data-dojo-id="grid" id="grid" class="grid" autoHeight="15" noDataMessage="Sorry, there is no data available."
 		store="jsonStore" query="{ name: '*' }" rowsPerPage="20" rowSelector="20px">
 		<thead>
 			<tr>

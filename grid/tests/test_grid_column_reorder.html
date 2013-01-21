@@ -26,7 +26,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -54,7 +54,7 @@
 <body class="tundra">
 	<div class="heading">dojox.grid.Grid Column Reordering Test</div>
 
-	<div jsid="grid" id="grid" dojoType="dojox.grid.DataGrid" 
+	<div data-dojo-id="grid" id="grid" dojoType="dojox.grid.DataGrid"
 		columnReordering="true" store="test_store" query="{ id: '*' }" 
 		structure="layout" rowSelector="20px"></div>
 </body>

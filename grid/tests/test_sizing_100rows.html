@@ -29,7 +29,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug: true, parseOnLoad: true"></script>
+		data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -121,13 +121,13 @@
 	<button onclick="fitHeight()">Fit Data Height</button>&nbsp;
 	<button onclick="fitBoth()">Fit Data Width &amp; Height</button>
 	<button onclick="sizeDefault()">DefaultSize</button><br><br>
-	<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" 
+	<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid"
 		autoWidth="true" autoHeight="true" store="test_store" 
 		structure="structure" rowSelector="20px" elasticView="2"></div>
 	
 	<p>Grid fits to a sized container by default:</p>
 	<div id="container">
-		<div id="grid1" jsid="grid1" dojoType="dojox.grid._Grid" 
+		<div id="grid1" data-dojo-id="grid1" dojoType="dojox.grid._Grid"
 			get="get" structure="structure" rowCount="10" 
 			rowSelector="20px" elasticView="2"></div>
 	</div>

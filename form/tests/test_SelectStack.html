@@ -2,7 +2,7 @@
 	<head>
 	    <script type="text/javascript" 
 	        src="../../../dojo/dojo.js"
-	        djConfig="isDebug: true, parseOnLoad: true">
+	        data-dojo-config="isDebug: true, parseOnLoad: true">
 	    </script>
 	    <script type="text/javascript">
 			dojo.require("doh.runner");
@@ -78,7 +78,7 @@
 	</head>	
 	<body class="tundra">
 		<h1 class="testTitle">Test: dojox.form.SelectStack</h1>
-		<form dojoType="dijit.form.Form" jsId="form">
+		<form dojoType="dijit.form.Form" data-dojo-id="form">
 			<h4 class="testSubtitle">DropDown-based Select</h4>
 			<select dojoType="dojox.form.DropDownStack" name="dropDown" 
 				stackId="dropDownStack"></select>

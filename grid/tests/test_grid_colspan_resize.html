@@ -24,7 +24,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="debugAtAllCosts: false, isDebug: false, parseOnLoad: true"></script>
+		data-dojo-config="debugAtAllCosts: false, isDebug: false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojo.data.ItemFileReadStore");
@@ -72,7 +72,7 @@
 </head>
 <body class="tundra">
 	<div dojoType="dojo.data.ItemFileReadStore"
-		jsId="jsonStore" url="support/test_resize_data.json">
+		data-dojo-id="jsonStore" url="support/test_resize_data.json">
 	</div>
 	<div class="heading">No Colspan</div>
 	<div id="grid" dojoType="dojox.grid.DataGrid" 

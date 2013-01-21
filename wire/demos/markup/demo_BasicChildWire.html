@@ -16,7 +16,7 @@
 			@import "../../../../dijit/tests/css/dijitTests.css";
 		</style>
 
-		<script type="text/javascript" src="../../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("dijit.form.Button");
@@ -47,7 +47,7 @@
 			The store that is queried in this demo 
 		-->    
 		<div dojoType="dojo.data.ItemFileReadStore"
-			jsId="DataStore1"
+			data-dojo-id="DataStore1"
 			url="countries.json">
 		</div>
 
@@ -56,7 +56,7 @@
 			As defined by the widget type it contains.
 		-->
 		<div dojoType="dojox.wire.demos.WidgetRepeater"
-			widget="dijit.form.Button" jsId="r1">
+			widget="dijit.form.Button" data-dojo-id="r1">
 		</div>
 
 		<!-- 

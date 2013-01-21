@@ -35,7 +35,7 @@
 		border: 1px solid silver;
 	}
 </style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.DataGrid");
 		dojo.require("dojo.data.ItemFileWriteStore");
@@ -109,7 +109,7 @@ Amount3, and detail field are not editable.  Once in edit mode you can tab and s
 editable fields and remain in edit mode.  Pressing escape leaves edit mode and arrow keys will again move 
 between cells.  </p>
 <div id="grid" dojoType="dojox.grid.DataGrid" 
-	jsId="grid"
+	data-dojo-id="grid"
 	rowSelector="20px"
 	store="test_store" structure="gridLayout"></div>
 <br />

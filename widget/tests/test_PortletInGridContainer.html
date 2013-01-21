@@ -78,7 +78,7 @@
 	</style>
 
 	<!-- required: dojo.js -->
-	<script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: false"></script>
+	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:false, parseOnLoad: false"></script>
 
 	<!-- do not use! only for testing dynamic themes -->
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
@@ -92,13 +92,13 @@
 	<div id="masker"></div>
 
 	<span dojoType="dojox.data.HtmlStore"
-		jsId="htmlStore" dataId="gridDataTable">
+		data-dojo-id="htmlStore" dataId="gridDataTable">
 	</span>
 
 	<div dojoType="dojox.data.FileStore" url="../../data/demos/stores/filestore_dojotree.php"
-					jsId="fileStore" pathAsQueryParam="true"></div>
+					data-dojo-id="fileStore" pathAsQueryParam="true"></div>
 
-	<div dojoType="dijit.tree.ForestStoreModel" jsId="fileModel"
+	<div dojoType="dijit.tree.ForestStoreModel" data-dojo-id="fileModel"
 		store="fileStore" query="{}"
 		rootId="DojoFiles" rootLabel="Dojo Files" childrenAttrs="children">
 		<script type="dojo/method" event="getChildren" args="parent, callback">
@@ -115,7 +115,7 @@
 
 	</div>
 
-	<div dojoType="dijit.Menu" id="gridCols" jsId="gridCols" style="display: none">
+	<div dojoType="dijit.Menu" id="gridCols" data-dojo-id="gridCols" style="display: none">
 		<div dojoType="dojox.widget.PlaceholderMenuItem" label="GridColumns"></div>
 	</div>
 

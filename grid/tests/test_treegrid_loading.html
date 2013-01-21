@@ -13,7 +13,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: false"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: false"></script>
 	<script type="text/javascript">
 		dojo.require("dojox.grid.TreeGrid");
 		dojo.require("dojox.data.JsonRestStore");
@@ -116,7 +116,7 @@
 	<h1 class="testTitle">Test: dojox.tests.grid.TreeGrid</h1>
 	<h4 class="testSubtitle">dojox.grid.TreeGrid Large 4-Level - calculated totals and openAtLevels</h4>
 	<table dojoType="dojox.grid.TreeGrid" class="grid" style="height: 45em;width: 100%;"
-		store="store" rowsPerPage="20" jsId="grid" rowSelector="true" openAtLevels="false,true,3">
+		store="store" rowsPerPage="20" data-dojo-id="grid" rowSelector="true" openAtLevels="false,true,3">
 			<thead>
 				<tr>
 					<th field="label" relWidth="2" formatter="seasonSummary">Players</th>

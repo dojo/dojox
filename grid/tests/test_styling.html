@@ -73,7 +73,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -121,7 +121,7 @@
 </head>
 <body>
 	<div class="heading">dojox.grid.Grid Styling Example</div>
-	<div id="grid" jsid="grid" dojoType="dojox.grid.DataGrid" 
+	<div id="grid" data-dojo-id="grid" dojoType="dojox.grid.DataGrid"
 		onStyleRow="onStyleRow" store="test_store" structure="structure"></div>
 </body>
 </html>

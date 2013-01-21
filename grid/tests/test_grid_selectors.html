@@ -25,7 +25,7 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../../dojo/dojo.js" 
-		djConfig="isDebug:false, parseOnLoad: true"></script>
+		data-dojo-config="isDebug:false, parseOnLoad: true"></script>
 	<script type="text/javascript">
 		dojo.require("dijit.dijit");
 		dojo.require("dojox.grid.DataGrid");
@@ -70,15 +70,15 @@
 </head>
 <body class="tundra">
 	<div class="heading">dojox.grid.Grid CheckBox Selector</div>
-	<div jsId="grid_check" id="grid_check" dojoType="dojox.grid.DataGrid" 
+	<div data-dojo-id="grid_check" id="grid_check" dojoType="dojox.grid.DataGrid"
 		store="test_store" query="{ id: '*' }" 
 		structure="layout_check"></div>
 	<div class="heading">dojox.grid.Grid Radio Selector</div>
-	<div jsId="grid_radio" id="grid_radio" dojoType="dojox.grid.DataGrid" 
+	<div data-dojo-id="grid_radio" id="grid_radio" dojoType="dojox.grid.DataGrid"
 		store="test_store" query="{ id: '*' }" 
 		structure="layout_radio"></div>
 	<div class="heading">dojox.grid.Grid CheckBox Selector - no data</div>
-	<div jsId="grid_empty" id="grid_empty" dojoType="dojox.grid.DataGrid" 
+	<div data-dojo-id="grid_empty" id="grid_empty" dojoType="dojox.grid.DataGrid"
 		store="test_store" query="{ id: 'abc' }" 
 		structure="layout_check"></div>
 </body>
