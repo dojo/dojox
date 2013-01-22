@@ -647,7 +647,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			var title = this._strings[str+"Title"] || this._strings[str+"Label"];
 			if(!title){
 				if(str == "colorTableCell"){
-					title = this._strings["backgroundColor"];
+					title = this._strings["backgroundColor"].slice(0, - 1);  // use the translation for backgreoundColor, but remove the ending :
 				}else{
 					var ns = [];
 					dojo.forEach(str, function(c, i){
