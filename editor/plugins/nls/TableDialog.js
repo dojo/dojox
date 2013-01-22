@@ -28,7 +28,11 @@ define({ root:
 	insertTableColumnBeforeLabel: "Add Column Before",
 	insertTableColumnAfterLabel: "Add Column After",
 	deleteTableRowLabel: "Delete Row",
-	deleteTableColumnLabel: "Delete Column"
+	deleteTableColumnLabel: "Delete Column",
+	
+	colorTableCellTitle: "Background Color Table Cell",
+	tableContextMenuTitle: "Table Context Menu"
+	
 })
 //end v1.x content
 ,

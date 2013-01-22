@@ -650,17 +650,10 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 			return this.editor._tablePluginHandler.getTableInfo(forceNewData);
 		},
 		_makeTitle: function(str){
-			// Parses the commandName into a Title
-			//	based on camelCase
-			var ns = [];
-			dojo.forEach(str, function(c, i){
-				if(c.charCodeAt(0)<91 && i>0 && ns[i-1].charCodeAt(0)!=32){
-					ns.push(" ");
-				}
-				if(i===0){ c = c.toUpperCase();}
-				ns.push(c);
-			});
-			return ns.join("");
+			// Uses the commandName to get the localized Title
+			this._strings = dojo.i18n.getLocalization("dojox.editor.plugins", "TableDialog");
+			var title = this._strings[str+"Title"] || this._strings[str+"Label"] || str;
+			return title;
 		},
 		
 		
