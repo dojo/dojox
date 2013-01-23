@@ -81,7 +81,7 @@ define([
 			this.initLabels();
 			if(this.labels.length > 0){
 				this.items = [];
-				for(i = 0; i < this.labels.length; i++){
+				for(var i = 0; i < this.labels.length; i++){
 					this.items.push([i, this.labels[i]]);
 				}
 			}
@@ -296,8 +296,23 @@ define([
 		_setValueAttr: function(value){
 			// summary:
 			//		Sets a new value to this slot.
+			this._spinToValue(value, true);
+		},
+		
+		_spinToValue: function(value, applyValue){
+			// summary:
+			//		Sets a new value to this slot.
+			// tags:
+			//		private
+			if(this.get("value") == value){
+				return; // no change; avoid notification
+			}
 			this.inputNode.value = value;
-			this._set("value", value);
+			// to avoid unnecessary notifications, applyValue is undefined when 
+			// _spinToValue is called by _DatePickerMixin.
+			if(applyValue){
+				this._set("value", value);
+			}
 			var parent = this.getParent();
 			if(parent && parent.onValueChanged){
 				parent.onValueChanged(this);

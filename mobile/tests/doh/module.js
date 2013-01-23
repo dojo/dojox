@@ -46,6 +46,8 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.URLProperty", dojo.moduleUrl("dojox.mobile", "tests/doh/TestURLProp.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.URLProperty", dojo.moduleUrl("dojox.mobile", "tests/doh/TestURLProp2.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.SpinWheel", dojo.moduleUrl("dojox.mobile", "tests/doh/SpinWheel_Programmatic.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.SpinWheelDatePicker", dojo.moduleUrl("dojox.mobile", "tests/doh/SpinWheelDatePicker.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.ValuePickerDatePicker", dojo.moduleUrl("dojox.mobile", "tests/doh/ValuePickerDatePicker.html"),999999);
 
 	doh.registerUrl("dojox.mobile.tests.doh.Button", dojo.moduleUrl("dojox.mobile", "tests/doh/ButtonTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.CheckBox", dojo.moduleUrl("dojox.mobile", "tests/doh/CheckBoxTests.html"),999999);

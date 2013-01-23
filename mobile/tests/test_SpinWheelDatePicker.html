@@ -10,6 +10,8 @@
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 
 	<script type="text/javascript">
+		var changeLocale, gotoToday, showSelectedValue;
+		var onYearSet, onMonthSet, onDaySet;
 		require([
 			"dojo/_base/kernel"
 		], function(dojo){
@@ -26,8 +28,6 @@
 				"dojox/mobile/compat",
 				"dojox/mobile/SpinWheelDatePicker"
 			], function(win, dom, ready, registry){
-				var picker, yearSlot, monthSlot, daySlot;
-				
 				changeLocale = function(){
 					win.doc.forms[0].submit();
 				}
@@ -40,39 +40,34 @@
 						w.slots[0].get("value")+ ":" + w.slots[1].get("value") + ":" + w.slots[2].get("value");
 				}
 				onYearSet = function(){
-					if(!picker) picker = registry.byId("picker1");
-					if(!yearSlot) yearSlot = picker.slots[0];
-					console.log("onYearSet value: " + yearSlot.get("value"));
+					console.log("onYearSet value: " + this.slots[0].get("value"));
 				}
 				onMonthSet = function(){
-					if(!picker) picker = registry.byId("picker1");
-					if(!monthSlot) monthSlot = picker.slots[1];
-					console.log("onMonthSet value: " + monthSlot.get("value"));
+					console.log("onMonthSet value: " + this.slots[1].get("value"));
 				}
 				onDaySet = function(){
-					if(!picker) picker = registry.byId("picker1");
-					if(!daySlot) daySlot = picker.slots[2];
-					console.log("onDaySet value: " + daySlot.get("value"));
+					console.log("onDaySet value: " + this.slots[2].get("value"));
 				}
 				ready(function(){
 					dom.byId("sel").value = lang;
 								
-					picker = registry.byId("picker1");
-					yearSlot = picker.slots[0];
-					monthSlot = picker.slots[1];
-					daySlot = picker.slots[2];
+					var picker = registry.byId("picker1"),
+						yearSlot = picker.slots[0],
+						monthSlot = picker.slots[1],
+						daySlot = picker.slots[2];
 
 					yearSlot.watch("value", function(name, oldVal, newVal){
+						console.log("watch value of year slot: oldVal: " + oldVal + " newVal: " + newVal);
   						document.getElementById("msg").innerHTML = 
   							"watch value of year slot: oldVal: " + oldVal + " newVal: " + newVal;
 					});
-					var monthSlot = picker.slots[1];
 					monthSlot.watch("value", function(name, oldVal, newVal){
+						console.log("watch value of month slot: oldVal: " + oldVal + " newVal: " + newVal);
   						document.getElementById("msg").innerHTML = 
   							"watch value of month slot: oldVal: " + oldVal + " newVal: " + newVal;
 					});
-					var daySlot = picker.slots[2];
 					daySlot.watch("value", function(name, oldVal, newVal){
+						console.log("watch value of day slot: oldVal: " + oldVal + " newVal: " + newVal);
   						document.getElementById("msg").innerHTML = 
   							"watch value of day slot: oldVal: " + oldVal + " newVal: " + newVal;
 					});
@@ -133,7 +128,7 @@
 				</select>
 			</div>
 			<div id="picker1" data-dojo-type="dojox.mobile.SpinWheelDatePicker"
-				onYearSet="onYearSet()" onMonthSet="onMonthSet()" onDaySet="onDaySet()">
+				data-dojo-props="onYearSet: onYearSet, onMonthSet: onMonthSet, onDaySet: onDaySet">
 			</div>
 			<div id="msg"></div>
 		</form>

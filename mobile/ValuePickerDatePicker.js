@@ -40,15 +40,16 @@ define([
 			this.inherited(arguments);
 			domClass.add(this.domNode, "mblValuePickerDatePicker");
 			this._conn = [
-				this.connect(this.slots[0], "_setValueAttr", "onYearSet"),
-				this.connect(this.slots[1], "_setValueAttr", "onMonthSet"),
-				this.connect(this.slots[2], "_setValueAttr", "onDaySet")
+				this.connect(this.slots[0], "_spinToValue", "_onYearSet"),
+				this.connect(this.slots[1], "_spinToValue", "_onMonthSet"),
+				this.connect(this.slots[2], "_spinToValue", "_onDaySet")
 			];
 		},
 
 		disableValues: function(/*Number*/daysInMonth){
 			// summary:
-			//		Disables month end days that are not on the month.
+			//		Disables the end days of the month to match the specified
+			//		number of days of the month.
 			var items = this.slots[2].items;
 			if(this._tail){
 				this.slots[2].items = items = items.concat(this._tail);

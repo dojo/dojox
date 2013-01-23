@@ -256,14 +256,29 @@ define([
 		_setValueAttr: function(value){
 			// summary:
 			//		Sets the value to this slot.
+			this._spinToValue(value, true);
+		},
+		
+		_spinToValue: function(value, applyValue){
+			// summary:
+			//		Spins the slot to the specified value.
+			// tags:
+			//		private
 			var idx0, idx1;
 			var curValue = this.get("value");
 			if(!curValue){
-				this._penddingValue = value;
+				this._pendingValue = value;
 				return;
 			}
-			this._penddingValue = undefined;
-			this._set("value", value);
+			if(curValue == value){
+				return; // no change; avoid notification
+			}
+			this._pendingValue = undefined;
+			// to avoid unnecessary notifications, applyValue is false when 
+			// _spinToValue is called by _DatePickerMixin.
+			if(applyValue){
+				this._set("value", value);
+			}
 			var n = this.items.length;
 			for(var i = 0; i < n; i++){
 				if(this.items[i][1] === String(curValue)){
@@ -285,13 +300,6 @@ define([
 			}
 			this.spin(m);
 		},
-
-		stopAnimation: function(){
-			// summary:
-			//		Stops the currently running animation.
-  			this.inherited(arguments);
-  			this._set("value", this.get("value")); // ensure the watches are notified
-		},	
 
 		spin: function(/*Number*/steps){
 			// summary:
@@ -340,8 +348,8 @@ define([
 		},
 
 		resize: function(e){
-			if(this._penddingValue){
-				this.set("value", this._penddingValue);
+			if(this._pendingValue){
+				this.set("value", this._pendingValue);
 			}
 		},
 
