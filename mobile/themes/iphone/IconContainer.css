@@ -1,8 +1,6 @@
 @import url("../common/domButtons/DomButtonColorButtons.css");
 
 @import url("../common/domButtons/DomButtonBlackCircleCross.css");
-
-@import url("../common/IconContainer_keyframes.css");
 /* dojox.mobile.IconContainer */
 .mblIconContainer {
   margin: 20px 10px;
@@ -68,6 +66,7 @@ table.mblClose {
   -webkit-animation-timing-function: ease-in-out;
   animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
   -webkit-animation-name: mblVibrate;
   animation-name: mblVibrate;
   -webkit-transform: rotate(0deg);
@@ -123,4 +122,138 @@ table.mblClose {
   position: absolute;
   top: -2px;
   left: 1px;
+}
+@-webkit-keyframes mblVibrate {
+  0% {
+    -webkit-transform: rotate(-2deg);
+    bottom: -1px;
+    left: -1px;
+  }
+  25% {
+    -webkit-transform: rotate(1deg);
+    bottom: 2px;
+    left: 1px;
+  }
+  50% {
+    -webkit-transform: rotate(-1deg);
+    bottom: -2px;
+    left: -1px;
+  }
+  75% {
+    -webkit-transform: rotate(2deg);
+    bottom: 2px;
+    left: 1px;
+  }
+  100% {
+    -webkit-transform: rotate(-2deg);
+    bottom: -1px;
+    left: -1px;
+  }
+}
+@keyframes mblVibrate {
+  0% {
+    transform: rotate(-2deg);
+    bottom: -1px;
+    left: -1px;
+  }
+  25% {
+    transform: rotate(1deg);
+    bottom: 2px;
+    left: 1px;
+  }
+  50% {
+    transform: rotate(-1deg);
+    bottom: -2px;
+    left: -1px;
+  }
+  75% {
+    transform: rotate(2deg);
+    bottom: 2px;
+    left: 1px;
+  }
+  100% {
+    transform: rotate(-2deg);
+    bottom: -1px;
+    left: -1px;
+  }
+}
+@-webkit-keyframes mblShrink {
+  from {
+    -webkit-transform: scale(1);
+  }
+  to {
+    -webkit-transform: scale(0.01);
+  }
+}
+@keyframes mblShrink {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.01);
+  }
+}
+@-webkit-keyframes mblShrink0 {
+  from {
+    -webkit-transform: scale(1);
+  }
+  to {
+    -webkit-transform: translate(-40%, -70%) scale(0.01);
+  }
+}
+@keyframes mblShrink0 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: translate(-40%, -70%) scale(0.01);
+  }
+}
+@-webkit-keyframes mblShrink1 {
+  from {
+    -webkit-transform: scale(1);
+  }
+  to {
+    -webkit-transform: translate(-14%, -70%) scale(0.01);
+  }
+}
+@keyframes mblShrink1 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: translate(-14%, -70%) scale(0.01);
+  }
+}
+@-webkit-keyframes mblShrink2 {
+  from {
+    -webkit-transform: scale(1);
+  }
+  to {
+    -webkit-transform: translate(14%, -70%) scale(0.01);
+  }
+}
+@keyframes mblShrink2 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: translate(14%, -70%) scale(0.01);
+  }
+}
+@-webkit-keyframes mblShrink3 {
+  from {
+    -webkit-transform: scale(1);
+  }
+  to {
+    -webkit-transform: translate(40%, -70%) scale(0.01);
+  }
+}
+@keyframes mblShrink3 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: translate(40%, -70%) scale(0.01);
+  }
 }

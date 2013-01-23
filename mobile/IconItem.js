@@ -14,8 +14,9 @@ define([
 	"./iconUtils",
 	"./lazyLoadUtils",
 	"./viewRegistry",
+	"./_css3",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/IconItem"
-], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry, BidiIconItem){
+], function(declare, event, lang, has, win, domClass, domConstruct, domGeometry, domStyle, ItemBase, Badge, TransitionEvent, iconUtils, lazyLoadUtils, viewRegistry, css3, BidiIconItem){
 
 	// module:
 	//		dojox/mobile/IconItem
@@ -298,7 +299,7 @@ define([
 					var nodePos = domGeometry.position(contentNode, true);
 					var targetPos = domGeometry.position(this.domNode, true);
 					var origin = (targetPos.x + targetPos.w/2 - nodePos.x) + "px " + (targetPos.y + targetPos.h/2 - nodePos.y) + "px";
-					domStyle.set(contentNode, { webkitTransformOrigin:origin });
+					domStyle.set(contentNode, css3.add({}, { transformOrigin:origin }));
 				}else{
 					domClass.add(contentNode, "mblCloseContent mblShrink0");
 				}

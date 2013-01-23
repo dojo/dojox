@@ -467,8 +467,8 @@ define([
 					fromOrigin = posX + "px " + posY + "px";
 					toOrigin = posX + "px " + posY + "px";
 				}
-				domStyle.set(fromNode, {webkitTransformOrigin:fromOrigin});
-				domStyle.set(toNode, {webkitTransformOrigin:toOrigin});
+				domStyle.set(fromNode, css3.add({}, {transformOrigin:fromOrigin}));
+				domStyle.set(toNode, css3.add({}, {transformOrigin:toOrigin}));
 			}
 		},
 
@@ -493,7 +493,7 @@ define([
 				// Reset the temporary padding
 				this.containerNode.style.paddingTop = "";
 			}
-			domStyle.set(this.domNode, {webkitTransformOrigin:""});
+			domStyle.set(this.domNode, css3.add({}, {transformOrigin:""}));
 			if(name.indexOf("Shrink") !== -1){
 				var li = e.target;
 				li.style.display = "none";

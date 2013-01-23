@@ -89,10 +89,10 @@ define([
 		scaleItem: function(/*Widget*/widget, /*Number*/ratio){
 			// summary:
 			//		Scales an item according to the specified ratio.
-			domStyle.set(widget.domNode, {
-				webkitTransition: has("android") ? "" : "-webkit-transform .1s ease-in-out",
-				webkitTransform: ratio == 1 ? "" : "scale(" + ratio + ")"
-			});			
+			domStyle.set(widget.domNode, css3.add({}, {
+				transition: has("android") ? "" : css3.name("transform", true) + " .1s ease-in-out",
+				transform: ratio == 1 ? "" : "scale(" + ratio + ")"
+			}));			
 		},
 
 		_onTransitionStart: function(e){
@@ -305,11 +305,12 @@ define([
 					left: posArray[j].l
 				});
 				setTimeout(lang.hitch(w, function(){
-					domStyle.set(this.domNode, {
-						webkitTransition: "top .3s ease-in-out, left .3s ease-in-out",
+					domStyle.set(this.domNode, css3.add({
 						top: "0px",
 						left: "0px"
-					});
+					}, {
+						transition: "top .3s ease-in-out, left .3s ease-in-out",
+					}));
 				}), j*10);
 			}
 		},
