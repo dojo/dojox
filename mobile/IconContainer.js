@@ -145,6 +145,13 @@ define([
 
 		addChild: function(widget, /*Number?*/insertIndex){
 			this.inherited(arguments);
+			// #16597: if removeChild(item) was called to remove the item, it also removes the paneWidget from its container,
+			// But then calling addChild(item) again does not re-add it as it should: it was added the first time through startup
+			// called by addChild, but startup is not called any more the subsequent times.
+			// So we add the pane explicitly if it is orphan.
+			if(this._started && widget.paneWidget && !widget.paneWidget.getParent()){
+				this.paneContainerWidget.addChild(widget.paneWidget, insertIndex);
+			}
 			this.domNode.appendChild(this._terminator); // to ensure that _terminator is always the last node
 		},
 

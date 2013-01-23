@@ -60,6 +60,29 @@ dojo.addOnLoad(function(){
 				doh.assertEqual("../images/icon1.png", demoWidget.get("icon"));
 				doh.assertTrue(demoWidget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(/icon1.png/i) != -1);
 			}
+		},
+		{
+			name: "IconItem add/removeChild and pane widgets consistency",
+			timeout: 1000,
+			runTest: function(){
+				// Checks that pane widgets are added/removed to the pane container by addChild/removeChild
+				
+				var container = dijit.byId("dojox_mobile_IconContainer_0");
+				var item = dijit.byId("dojox_mobile_IconItem_1");
+				
+				doh.assertEqual(container.paneContainerWidget, item.paneWidget.getParent(), "wrong pane parent at startup");
+				doh.assertEqual(item.getIndexInParent(), item.paneWidget.getIndexInParent(), "wrong pane index at startup");
+
+				var index = item.getIndexInParent();				
+				container.removeChild(item);
+
+				doh.assertEqual(null, item.paneWidget.getParent(), "wrong pane parent after remove");
+				
+				container.addChild(item, index);
+
+				doh.assertEqual(container.paneContainerWidget, item.paneWidget.getParent(), "wrong pane parent after add");
+				doh.assertEqual(item.getIndexInParent(), item.paneWidget.getIndexInParent(), "wrong pane index after add");
+			}
 		}
 	]);
 	doh.run();
