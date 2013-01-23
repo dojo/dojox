@@ -9,9 +9,10 @@ define([
 	"dojo/aspect",
 	"dijit/registry",
 	"./SearchBox",
-	"./ScrollableView"
+	"./ScrollableView",
+	"./viewRegistry"
 ], function(require, array, declare, lang, dom, domClass, domConstruct,  
-			aspect, registry, SearchBox, ScrollableView){
+			aspect, registry, SearchBox, ScrollableView, viewRegistry){
 
 	// module:
 	//		dojox/mobile/FilteredListMixin
@@ -39,7 +40,10 @@ define([
 		//		entered in the SearchBox.
 		//
 		//		The filtering works for lists backed by a store (dojo/store or dojo/data), as well 
-		//		as for lists not backed by a store.
+		//		as for lists not backed by a store. When filtering a list backed by a store 
+		//		containing hierarchical data (data items that are children of a parent data item), 
+		//		the store must support recursive search queries such that the filtering can match 
+		//		child items.
 		//
 		//		For configuration purposes, the instance of dojox/mobile/SearchBox can be retrieved
 		//		using the method getFilterBox(). If a dojox/mobile/ScrollableView is created by
@@ -161,7 +165,7 @@ define([
 		//		A flag which allows to show or hide the dojox/mobile/SearchBox associated with
 		//		the list.
 		filterBoxVisible: true,
-
+		
 		// _filterBox: [private] dojox/mobile/SearchBox
 		//		The instance of dojox/mobile/SearchBox used by this mixin. 
 		//		Stored for getFilterBox().
@@ -202,14 +206,13 @@ define([
 				}
 			}else{ 
 				// Case #2: automatic mode. The mixin creates a SearchBox and a ScrollableView.
-				this._filterBox = 
+				this._filterBox =
 					new SearchBox({
 						// If the list is backed by a dojox/mobile/_StoreListMixin, it
 						// has a labelProperty which is given precedence. 
 						searchAttr: this.labelProperty ? this.labelProperty : "label",
 						ignoreCase: true,
 						incremental: true,
-						pageSize: 1,
 						onSearch: lang.hitch(this, "_onFilter"),
 						selectOnClick: true,
 						placeHolder: this.placeHolder
@@ -219,8 +222,8 @@ define([
 				this._createdFilterBox = this._filterBox; 
 				this._createdScrollableView = new ScrollableView();
 				
-				var currentDomNode = this.domNode;
-				var listParentNode = this.domNode.parentNode;
+				var currentDomNode = this.domNode,
+					listParentNode = this.domNode.parentNode;
 				listParentNode.replaceChild(this._createdScrollableView.domNode, this.domNode);
 				// Put the list inside the ScrollableView:
 				domConstruct.place(currentDomNode, this._createdScrollableView.containerNode);
@@ -240,7 +243,21 @@ define([
 				this._createdScrollableView.startup();
 				this._createdScrollableView.resize();
 			}
-				
+			
+			// Do not use this.getScrollableView() here, because this doesn't cover the
+			// use-case when the scrollable is not created by this mixin.
+			var sv = viewRegistry.getEnclosingScrollable(this.domNode);
+			if(sv){
+				this.connect(sv, "onFlickAnimationEnd", lang.hitch(this, function(){
+					if(!this._filterBox.focusNode.value){ // if search criteria is empty
+						// store the scroll position such that we can reset the 
+						// initial scroll when the user goes back to the unfiltered
+						// list (as done by some native mobile apps). 
+						this._previousUnfilteredScrollPos = sv.getPos();
+					}
+				}));
+			}
+			
 			if(!this.store){
 				this._createStore(this._initStore);
 			}else{
@@ -357,6 +374,19 @@ define([
 			//		private
 			if(this.onFilter(results, query, options) === false){ return; } // user's filtering action
 			this.setQuery(query);
+			
+			// Do not use this.getScrollableView() because this doesn't cover the
+			// use-case when the scrollable is not created by this mixin.
+			var sv = viewRegistry.getEnclosingScrollable(this.domNode);
+			if(sv){
+				// When the user goes back to the unfiltered list, restore the previous 
+				// scroll position stored for unfiltered list (as done by some native mobile apps).
+				// Otherwise, reset the scroll position, to ensure that the new subset of 
+				// items is visible. 
+				sv.scrollTo(this._filterBox.focusNode.value ?
+					{x:0, y:0} :
+					this._previousUnfilteredScrollPos || {x:0, y:0});
+			}
 		},
 		
 		onFilter: function(/*===== results, query, options =====*/){
