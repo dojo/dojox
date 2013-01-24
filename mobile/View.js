@@ -418,6 +418,8 @@ define([
 					domStyle.set(toNode, "position", "absolute");
 					Deferred.when(transit(fromNode, toNode, {transition: transition, reverse: (transitionDir===-1)?true:false}),lang.hitch(this,function(){
 						domStyle.set(toNode, "position", toPosition);
+						// Reset the temporary padding on toNode
+						toNode.style.paddingTop = "";
 						this.invokeCallback();
 					}));
 				}));

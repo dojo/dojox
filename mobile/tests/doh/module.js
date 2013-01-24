@@ -87,6 +87,7 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.Slider", dojo.moduleUrl("dojox.mobile", "tests/doh/SliderTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Switch", dojo.moduleUrl("dojox.mobile", "tests/doh/SwitchTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.FilteredListTests", dojo.moduleUrl("dojox.mobile", "tests/doh/FilteredListTests.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.MBLCSS3TransitionTests", dojo.moduleUrl("dojox.mobile", "tests/doh/MBLCSS3TransitionTests.html"),999999);
 }catch(e){
 	doh.debug(e);
 }
