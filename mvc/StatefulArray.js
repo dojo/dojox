@@ -35,7 +35,7 @@ define([
 		//		- Setting an element to this array via set() - Stateful update is done for the new element as well as the new length.
 		//		- Setting a length to this array via set() - Stateful update is done for the removed/added elements as well as the new length.
 
-		var array = lang._toArray(a);
+		var array = lang._toArray(a || []);
 		var ctor = StatefulArray;
 		ctor._meta = {bases: [Stateful]}; // For isInstanceOf()
 		array.constructor = ctor;
