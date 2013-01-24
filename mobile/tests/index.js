@@ -42,7 +42,6 @@ var categories = [
 	{ tag: "domButton", label: "domButton"},
 	{ tag: "dynamic", label: "dynamic"},
 	{ tag: "misc", label: "misc"},
-	{ tag: "no-dojo", label: "no-dojo"},
 	{ tag: "pageTurn", label: "pageTurn"},
 	{ tag: "transition", label: "transition"},
 	{ tag: "FilteredLists", label: "FilteredLists"}
@@ -276,10 +275,6 @@ var tests = [
 	{ url: "test_pageTurningUtils-pageType.html", tags: "pageTurn" },
 	{ url: "test_pageTurningUtils.html", tags: "pageTurn" },
 	{ url: "test_phone-settings.html", tags: "misc" },
-	{ url: "test_scrollable-no-dojo-af.html", tags: "no-dojo" },
-	{ url: "test_scrollable-no-dojo-ah-af.html", tags: "no-dojo" },
-	{ url: "test_scrollable-no-dojo-ah.html", tags: "no-dojo" },
-	{ url: "test_scrollable-no-dojo.html", tags: "no-dojo" },
 	{ url: "test_tablet-settings.html", tags: "misc" },
 	{ url: "test_theme-switch.html", tags: "misc" },
 	{ url: "test_transition-animations-extended1.html", tags: "transition" },
