@@ -18,6 +18,10 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		// query: Object
 		//		A query that can be passed to when querying the store.
 		query: {},
+
+		// queryOptions: dojo/store/api/Store.QueryOptions?
+		//		Options to be applied when querying the store.
+		queryOptions: null,
 		
 		// itemToRenderer: [protected] Object
 		//		The associated array item to renderer list.
@@ -182,7 +186,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_setStoreAttr: function(value){
 			var r;
 			if(value != null){
-				var results = value.query(this.query);
+				var results = value.query(this.query, this.queryOptions);
 				if(results.observe){
 					// user asked us to observe the store
 					results.observe(lang.hitch(this, this._updateItem), true);
