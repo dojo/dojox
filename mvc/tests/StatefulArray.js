@@ -34,6 +34,12 @@ define([
 			var a = new StatefulArray([0, 1, 2, 3]);
 			doh.is([1, 2], a.slice(-3, 3), "Index 1 and index 2 should be returned");
 			doh.is([1], a.slice(-3, -2), "Index 1 should be returned");
+		},
+		function concat(){
+			var a = new StatefulArray([0, 1, 2, 3]);
+			doh.is([0, 1, 2, 3], a.concat(), "concat() with empty args should end up with the same array");
+			doh.is([0, 1, 2, 3, 4, 5, 6, 7, 8], a.concat([4, 5], [6, 7, 8]), "concat() should support multiple args");
+			doh.is([0, 1, 2, 3, 4, 5, 6, 7, 8], a.concat(4, 5, [6, 7, 8]), "concat() should non-array values");
 		}
 	]);
 });
