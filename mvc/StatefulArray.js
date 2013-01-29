@@ -103,7 +103,7 @@ define([
 				return this.get("length");
 			},
 			concat: function(/*Array*/ a){
-				return new StatefulArray([].concat(this).concat(a));
+				return new StatefulArray([].concat.apply(this, arguments));
 			},
 			join: function(/*String*/ sep){
 				// summary:
