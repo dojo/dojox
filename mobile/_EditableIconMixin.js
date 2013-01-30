@@ -309,7 +309,7 @@ define([
 						top: "0px",
 						left: "0px"
 					}, {
-						transition: "top .3s ease-in-out, left .3s ease-in-out",
+						transition: "top .3s ease-in-out, left .3s ease-in-out"
 					}));
 				}), j*10);
 			}
