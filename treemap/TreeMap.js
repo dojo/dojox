@@ -185,11 +185,15 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 	
 		_setStoreAttr: function(value){
 			var r;
+			if(this._observeHandler){
+				this._observeHandler.remove();
+				this._observeHandler = null;
+			}
 			if(value != null){
 				var results = value.query(this.query, this.queryOptions);
 				if(results.observe){
 					// user asked us to observe the store
-					results.observe(lang.hitch(this, this._updateItem), true);
+					this._observeHandler = results.observe(lang.hitch(this, this._updateItem), true);
 				}				
 				r = when(results, lang.hitch(this, this._initItems));
 			}else{
