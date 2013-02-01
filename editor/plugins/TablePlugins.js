@@ -31,7 +31,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 
 // summary:
 //		A series of plugins that give the Editor the ability to create and edit
-//		HTML tables. See the end of this document for all avaiable plugins
+//		HTML tables. See the end of this document for all available plugins
 //		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
 //
 // example:
@@ -46,7 +46,7 @@ dojo.experimental("dojox.editor.plugins.TablePlugins");
 // TODO:
 //		Currently not supporting merging or splitting cells
 //
-// FIXME:	Undo is very buggy, and therefore unimeplented in all browsers
+// FIXME:	Undo is very buggy, and therefore unimplemented in all browsers
 //			except IE - which itself has only been lightly tested.
 //
 // FIXME:	Selecting multiple table cells in Firefox looks to be impossible.
@@ -121,10 +121,18 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 			
 			// RichText should have a mouseup connection to recognize drag-selections
 			// Example would be selecting multiple table cells
-			this._myListeners = [];
-			this._myListeners.push(dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick"));
-			this._myListeners.push(dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"));
-			this._myListeners.push(dojo.connect(this.editor, "onBlur", this, "checkAvailable"));
+			this._myListeners = [
+				dojo.connect(this.editorDomNode , "mouseup", this.editor, "onClick"),
+				dojo.connect(this.editor, "onDisplayChanged", this, "checkAvailable"),
+				dojo.connect(this.editor, "onBlur", this, "checkAvailable"),
+				dojo.connect(this.editor, "_saveSelection", this, function(){
+					// because on IE, the selection is lost when the iframe goes out of focus
+					this._savedTableInfo = this.getTableInfo();
+				}),
+				dojo.connect(this.editor, "_restoreSelection", this, function(){
+					delete this._savedTableInfo;
+				})
+			];
 			this.doMixins();
 			this.connectDraggable();
 		}));
@@ -135,6 +143,12 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 		//		Gets the table in focus
 		//		Collects info on the table - see return params
 		//
+
+		if(this._savedTableInfo){
+			// Avoid trying to query the table info when the iframe is blurred; doesn't work on IE.
+			return this._savedTableInfo;
+		}
+
 		if(forceNewData){ this._tempStoreTableData(false); }
 		if(this.tableData){
 			// tableData is set for a short amount of time, so that all
@@ -142,7 +156,7 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 			//console.log("returning current tableData:", this.tableData);
 			return this.tableData;
 		}
-		var tr, trs, td, tds, tbl, cols, tdIndex, trIndex;
+		var tr, trs, td, tds, tbl, cols, tdIndex, trIndex, o;
 
 		td = this.editor.getAncestorElement("td");
 		if(td){ tr = td.parentNode; }
@@ -150,27 +164,33 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 		tbl = this.editor.getAncestorElement("table");
 		//console.log("td:", td);console.log("tr:", tr);console.log("tbl:", tbl)
 		
-		tds = dojo.query("td", tbl);
-		tds.forEach(function(d, i){
-			if(td==d){tdIndex = i;}
-		});
-		trs = dojo.query("tr", tbl);
-		trs.forEach(function(r, i){
-			if(tr==r){trIndex = i;}
-		});
-		cols = tds.length/trs.length;
-		var o = {
-			tbl:tbl,		// focused table
-			td:td,			// focused TD
-			tr:tr,			// focused TR
-			trs:trs,		// rows
-			tds:tds,		// cells
-			rows:trs.length,// row amount
-			cols:cols,		// column amount
-			tdIndex:tdIndex,// index of focused cell
-			trIndex:trIndex,	// index of focused row
-			colIndex:tdIndex%cols
-		};
+		if(tbl){
+			tds = dojo.query("td", tbl);
+			tds.forEach(function(d, i){
+				if(td==d){tdIndex = i;}
+			});
+			trs = dojo.query("tr", tbl);
+			trs.forEach(function(r, i){
+				if(tr==r){trIndex = i;}
+			});
+			cols = tds.length/trs.length;
+
+			o = {
+				tbl:tbl,		// focused table
+				td:td,			// focused TD
+				tr:tr,			// focused TR
+				trs:trs,		// rows
+				tds:tds,		// cells
+				rows:trs.length,// row amount
+				cols:cols,		// column amount
+				tdIndex:tdIndex,// index of focused cell
+				trIndex:trIndex,	// index of focused row
+				colIndex:tdIndex%cols
+			};
+		}else{
+			// Means there's no table in focus.   Use {} not null so that this._savedTableInfo is non-null
+			o = {};
+		}
 		//console.log("NEW tableData:",o);
 		this.tableData = o;
 		this._tempStoreTableData(500);
@@ -275,7 +295,8 @@ dojo.declare("dojox.editor.plugins._TableHandler", dijit._editor._Plugin,{
 		}
 		
 		// Only return available if the editor is focused.
-		this.currentlyAvailable = this.editor.focused ? this.editor.hasAncestorElement("table") : false;
+		this.currentlyAvailable = this.editor.focused && (this._savedTableInfo ? this._savedTableInfo.tbl :
+			this.editor.hasAncestorElement("table"));
 		
 		if(this.currentlyAvailable){
 			this.connectTableKeys();
@@ -453,7 +474,7 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 	{
 		//summary:
 		//		A collection of Plugins for inserting and modifying tables in the Editor
-		//		See end of this document for all avaiable plugs
+		//		See end of this document for all available plugs
 		//		and dojox/editorPlugins/tests/editorTablePlugs.html for an example
 		//
 		//		NOT IMPLEMENTED: Not handling cell merge, span or split
@@ -523,7 +544,13 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			//		Editor as query-able plugins, I was not able to find any evidence
 			//		that they are supported (especially in NOT IE). If they are
 			//		supported in other browsers, it may help with the undo problem.
-			//
+
+			if(dojo.isIE){
+				// IE can lose selections on focus changes, so focus back
+				// in order to restore it.
+				this.editor.focus();
+			}
+
 			this.begEdit();
 			var o = this.getTableInfo();
 			var sw = (dojo.isString(cmd))?cmd : this.commandName;
@@ -531,11 +558,6 @@ dojo.declare("dojox.editor.plugins.TablePlugins",
 			var adjustColWidth = false;
 			//console.log("modTable:", sw)
 
-			if(dojo.isIE){
-				// IE can lose selections on focus changes, so focus back
-				// in order to restore it.
-				this.editor.focus();
-			}
 			switch(sw){
 				case "insertTableRowBefore":
 					r = o.tbl.insertRow(o.trIndex);
@@ -832,7 +854,7 @@ dojo.declare("dojox.editor.plugins.ModifyTable",
 
 dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._TemplatedMixin, dijit._WidgetsInTemplateMixin], {
 	// summary:
-	//		A smple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
+	//		A simple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
 	//		passthroughs to the value of the color picker and convenient hook points.
 	// tags:
 	//		private
@@ -844,7 +866,7 @@ dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._T
 			"<div dojoType='dijit.TooltipDialog' dojoAttachPoint='dialog' class='dojoxEditorColorPicker'>" +
 				"<div dojoType='dojox.widget.ColorPicker' dojoAttachPoint='_colorPicker'></div>" +
 				"<div style='margin: 0.5em 0em 0em 0em'>" +
-					"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_setButton'>${buttonSet}</button>" +
+					"<button dojoType='dijit.form.Button' type='submit' dojoAttachPoint='_setButton'>${buttonSet}</button>" +
 					"&nbsp;" +
 					"<button dojoType='dijit.form.Button' type='button' dojoAttachPoint='_cancelButton'>${buttonCancel}</button>" +
 				"</div>" +
@@ -868,14 +890,15 @@ dojo.declare("dojox.editor.plugins._CellColorDropDown", [dijit._Widget, dijit._T
 		//		Over-ride of startup to do the basic connect setups and such.
 		if(!this._started){
 			this.inherited(arguments);
-			this.connect(this._setButton, "onClick", function(){
+			this.connect(this.dialog, "execute", function(){
 				this.onChange(this.get("value"));
 			});
 			this.connect(this._cancelButton, "onClick", function(){
 				dijit.popup.close(this.dialog);
-				this.onCancel();
 			});
-			// Fully statred, so go ahead and remove the hide.
+			this.connect(this.dialog, "onCancel", "onCancel");
+
+			// Fully started, so go ahead and remove the hide.
 			dojo.style(this.domNode, "display", "block");
 		}
 	},
@@ -924,10 +947,10 @@ dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePl
 			picker.startup();
 			this.dropDown = picker.dialog;
 			this.connect(picker, "onChange", function(color){
-				this.modTable(null, color);
 				this.editor.focus();
+				this.modTable(null, color);
 			});
-			this.connect(picker, "onCancel", function(color){
+			this.connect(picker, "onCancel", function(){
 				this.editor.focus();
 			});
 			this.connect(picker.dialog, "onOpen", function(){
@@ -936,10 +959,9 @@ dojo.declare("dojox.editor.plugins.ColorTableCell", dojox.editor.plugins.TablePl
 				if(tds && tds.length > 0){
 					var t = tds[0] == this.lastObject ? tds[0] : tds[tds.length - 1],
 						color;
-					while(t && ((color = dojo.style(t, "backgroundColor")) == "transparent" || color.indexOf("rgba") == 0)){
+					while(t && t !== this.editor.document && ((color = dojo.style(t, "backgroundColor")) == "transparent" || color.indexOf("rgba") == 0)){
 						t = t.parentNode;
 					}
-					color = dojo.style(t, "backgroundColor");
 					if(color != "transparent" && color.indexOf("rgba") != 0){
 						picker.setColor(color);
 					}
