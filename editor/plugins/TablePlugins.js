@@ -945,10 +945,9 @@ var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins
 				if(tds && tds.length > 0){
 					var t = tds[0] == this.lastObject ? tds[0] : tds[tds.length - 1],
 						color;
-					while(t && ((color = dojo.style(t, "backgroundColor")) == "transparent" || color.indexOf("rgba") == 0)){
+					while(t && t !== this.editor.document && ((color = dojo.style(t, "backgroundColor")) == "transparent" || color.indexOf("rgba") == 0)){
 						t = t.parentNode;
 					}
-					color = dojo.style(t, "backgroundColor");
 					if(color != "transparent" && color.indexOf("rgba") != 0){
 						picker.setColor(color);
 					}
