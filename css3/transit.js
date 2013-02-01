@@ -1,5 +1,5 @@
-define(["dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
-	function(darray, domStyle, DeferredList, transition){
+define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"],
+	function(darray, domStyle, all, transition){
 	// module: 
 	//		dojox/css3/transit
 	
@@ -28,23 +28,28 @@ define(["dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
 					options.transitionDefs[from.id].resolve(from);
 				}
 				if(options.transitionDefs[to.id]){
-								options.transitionDefs[to.id].resolve(to);
+					options.transitionDefs[to.id].resolve(to);
 				}
 			}
-			// return a fired DeferredList if the options.transition="none"
-			return new DeferredList([]);
+			// return any empty promise/all if the options.transition="none"
+			return new all([]);
 		}else{
-			var defs=[];
-			var transit=[];
-			var duration = 250;
-			if(options.transition === "fade"){
-				duration = 600;
-			}else if (options.transition === "flip"){
-				duration = 200;
+			var defs = [];
+			var transit = [];
+			var duration;
+			if(!options.duration){
+				duration = 250;
+				if(options.transition === "fade"){
+					duration = 600;
+				}else if (options.transition === "flip"){
+					duration = 200;
+				}
+			}else{
+				duration = options.duration;
 			}
-			domStyle.set(from, "display", ""); 
+			domStyle.set(from, "display", "");
 			domStyle.set(to, "display", "");
-			if (from){
+			if(from){
 				//create transition to transit "from" out
 				var fromTransit = transition[options.transition](from, {
 					"in": false,
@@ -73,7 +78,7 @@ define(["dojo/_base/array","dojo/dom-style","dojo/DeferredList","./transition"],
 				transition.groupedPlay(transit);
 			}
 
-			return new DeferredList(defs);
+			return all(defs);
 		}
 	};
 	
