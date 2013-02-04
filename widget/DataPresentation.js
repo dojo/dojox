@@ -792,7 +792,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 			
 			if(this.preparedstore){
 				if(this.chartNode){
-					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.animate, this.labelMod, this.theme, this.tooltip, this.preparedstore, this.query, this,queryOptions);
+					this.chartWidget = setupChart(this.chartNode, this.chartWidget, this.chartType, this.reverse, this.animate, this.labelMod, this.theme, this.tooltip, this.preparedstore, this.query, this.queryOptions);
 					this.renderChartWidget();
 				}
 				if(this.legendNode){
