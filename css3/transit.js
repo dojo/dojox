@@ -21,7 +21,9 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 		//		reverse direction to the default direction.
 		var rev = (options && options.reverse) ? -1 : 1;
 		if(!options || !options.transition || !transition[options.transition]){
-			domStyle.set(from,"display","none");
+			if(from){
+				domStyle.set(from,"display","none");
+			}
 			domStyle.set(to, "display", "");
 			if(options.transitionDefs){
 				if(options.transitionDefs[from.id]){
@@ -36,7 +38,7 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 		}else{
 			var defs = [];
 			var transit = [];
-			var duration;
+			var duration = 2000;
 			if(!options.duration){
 				duration = 250;
 				if(options.transition === "fade"){
@@ -49,7 +51,7 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 			}
 			domStyle.set(to, "display", "");
 			if(from){
-				domStyle.set(from, "display", "");
+				//domStyle.set(from, "display", "");
 				//create transition to transit "from" out
 				var fromTransit = transition[options.transition](from, {
 					"in": false,
