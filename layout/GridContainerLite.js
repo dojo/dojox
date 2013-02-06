@@ -224,7 +224,7 @@ define([
 			if(registry.getEnclosingWidget(sourceArea.node) == this){
 				this._draggedNode = node;
 				if(this.doLayout){
-					geom.getMarginBox(this.gridContainerTable, {
+					geom.setMarginBox(this.gridContainerTable, {
 						h: geom.getContentBox(this.gridContainerDiv).h - this._border.h
 					});
 				}
@@ -275,10 +275,10 @@ define([
 			//console.log("dojox.layout.GridContainerLite ::: layout");
 			if(this.doLayout){
 				var contentBox = this._contentBox;
-				geom.getMarginBox(this.gridContainerTable, {
+				geom.setMarginBox(this.gridContainerTable, {
 					h: contentBox.h - this._border.h
 				});
-				geom.getContentBox(this.domNode, {
+				geom.setContentBox(this.domNode, {
 					w: contentBox.w - this._border.w
 				});
 			}
