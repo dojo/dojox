@@ -65,6 +65,10 @@ define([
 		buildRendering: function(){
 			this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
 				this.srcNodeRef : domConstruct.create("span");
+			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
+			if(typeof this.domNode.style.msTouchAction != "undefined"){
+				this.domNode.style.msTouchAction = "none";
+			}
 			this.inherited(arguments);
 			var c = (this.srcNodeRef && this.srcNodeRef.className) || this.className || this["class"];
 			if((c = c.match(/mblSw.*Shape\d*/))){ this.shape = c; }
@@ -204,7 +208,7 @@ define([
 				// actually sent by the OS. So we must not send it a second time.
 				if(has('touch') && !(has("android") >= 4.1)){
 					var ev = win.doc.createEvent("MouseEvents");
-					ev.initEvent("click", true, true);
+					ev.initMouseEvent("click", true, true, win.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
 					this.inner.dispatchEvent(ev);
 				}
 				return;

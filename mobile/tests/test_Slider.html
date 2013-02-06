@@ -7,47 +7,77 @@
 	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','Slider']"></script>
 	<script src="../../../dojo/dojo.js" data-dojo-config="parseOnLoad:true, isDebug: true"></script>
 	<script type="text/javascript">
-		dojo.require("doh.runner");
-		dojo.require("dojox.mobile");		// This is a mobile app.
-		dojo.require("dojox.mobile.parser");	// This mobile app uses declarative programming with fast mobile parser
-		dojo.require("dojox.mobile.compat");	// This mobile app supports running on desktop browsers
-		dojo.require("dojox.mobile.Slider");
-		dojo.addOnLoad(function(){
-			var hasTouch = !!dojox.mobile.hasTouch;
+		require([
+			"doh/runner",
+			"dojo/sniff",
+			"dojo/ready",
+			"dojo/_base/window",
+			"dojo/dom",
+			"dojo/dom-style",
+			"dojo/dom-geometry",
+			"dijit/registry",
+			"dojox/mobile",
+			"dojox/mobile/parser",
+			"dojox/mobile/compat",
+			"dojox/mobile/Slider"
+		], function(doh, has, ready, win, dom, domStyle, domGeometry, registry) {	
+		ready(function(){
+			var hasTouch = has("touch");
+			var msPointer = navigator.msPointerEnabled;
+			var touchstart = msPointer?"MSPointerDown":"touchstart";
+			var touchmove = msPointer?"MSPointerMove":"touchmove";
+			var touchend = msPointer?"MSPointerUp":"touchend";
+			var transitionDuration = has("webkit")?"WebkitTransitionDuration":"transitionDuration";
+			function getZoom(widget){
+				var node = widget.domNode;
+				var bodyZoom = domStyle.get(win.body(), "zoom") || 1;
+				var nodeZoom = (has("ie") ? parseFloat(domStyle.get(node).getPropertyValue("zoom"))/100 : domStyle.get(node, "zoom")) || 1;
+				return nodeZoom * bodyZoom;
+			}
 			function fireTouchEvent(type, widget, x, y, delay){
 				function doit(){
 					var node = widget.domNode;
 					var handle = widget.handle;
-					var bodyZoom = dojo.style(dojo.body(), "zoom") || 1;
-					var nodeZoom = dojo.style(node, "zoom") || 1;
-					var scroll = dojo._docScroll();
-					var pos = dojo.position(node, false);
-					var handlePos = dojo.position(handle, false);
-					handlePos.l = handlePos.x * nodeZoom * bodyZoom + scroll.x;
-					handlePos.t = handlePos.y * nodeZoom * bodyZoom + scroll.y;
-					handlePos.r = handlePos.l + (handlePos.w - 1) * nodeZoom * bodyZoom;
-					handlePos.b = handlePos.t + (handlePos.h - 1) * nodeZoom * bodyZoom;
-					var touchX = (x + pos.x) * nodeZoom * bodyZoom + scroll.x;
-					var touchY = (y + pos.y) * nodeZoom * bodyZoom + scroll.y;
+					var zoom = getZoom(widget);
+					if(has("ie")){
+						x *= zoom;
+						y *= zoom;
+						zoom = 1;
+					}
+					var scroll = domGeometry.docScroll();
+					var pos = domGeometry.position(node, false);
+					var handlePos = domGeometry.position(handle, false);
+					handlePos.l = handlePos.x * zoom + scroll.x;
+					handlePos.t = handlePos.y * zoom + scroll.y;
+					handlePos.r = handlePos.l + (handlePos.w - 1) * zoom;
+					handlePos.b = handlePos.t + (handlePos.h - 1) * zoom;
+					var touchX = (x + pos.x) * zoom + scroll.x;
+					var touchY = (y + pos.y) * zoom + scroll.y;
 					var target = widget.touchBox;
 					// see if handle is under the touch pos
 					if(touchX >= handlePos.l && touchX <= handlePos.r && touchY >= handlePos.t && touchY <= handlePos.b){
 						target = handle;
 					}
-					var e = document.createEvent('Events');
-					if(!hasTouch){
+					var e = document.createEvent ? document.createEvent('Events') : document.createEventObject();
+					if(!hasTouch&&!msPointer){
 						switch(type){
-							case 'touchstart': type = 'mousedown'; break;
-							case 'touchmove': type = 'mousemove'; break;
-							case 'touchend': type = 'mouseup'; break;
+							case touchstart: type = 'mousedown'; break;
+							case touchmove: type = 'mousemove'; break;
+							case touchend: type = 'mouseup'; break;
 						}
 					}
-					e.initEvent(type, true, true);
+					if(document.createEvent){
+						e.initEvent(type, true, true);
+					}
 					e.touches = [ { pageX: touchX, pageY: touchY } ];
 					e.pageX = touchX;
 					e.pageY = touchY;
 					e.changedTouches = e.touches;
-					target.dispatchEvent(e);
+					if(document.createEvent){
+						target.dispatchEvent(e);
+					}else{
+						target.fireEvent("on"+type, e);
+					}
 				}
 				if(delay){
 					setTimeout(doit, delay);
@@ -55,20 +85,20 @@
 					doit();
 				}
 			}
-			var sh = dijit.byId('sh');
+			var sh = registry.byId('sh');
 			var sh_width = sh.domNode.offsetWidth;
 			var sh_height = sh.domNode.offsetHeight;
 			var sh_handle_width = sh.handle.offsetWidth;
 			var sh_handle_height = sh.handle.offsetHeight;
-			var sv = dijit.byId('sv');
+			var sv = registry.byId('sv');
 			var sv_width = sv.domNode.offsetWidth;
 			var sv_height = sv.domNode.offsetHeight;
 			var sv_handle_width = sv.handle.offsetWidth;
 			var sv_handle_height = sv.handle.offsetHeight;
 			var handle;
 			var speed = 0; // should be 0 unless it's a demo
-			dojo.style(sh.handle, "WebkitTransitionDuration", (speed >> 1) + "ms");
-			dojo.style(sv.handle, "WebkitTransitionDuration", (speed >> 1) + "ms");
+			domStyle.set(sh.handle, transitionDuration, (speed >> 1) + "ms");
+			domStyle.set(sv.handle, transitionDuration, (speed >> 1) + "ms");
 
 			doh.register("tap", [
 				{
@@ -82,11 +112,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sh.connect(sh, 'onChange', onChange);
-						fireTouchEvent('touchstart', sh, sh_width, sh_height >> 1, speed);
+						fireTouchEvent(touchstart, sh, sh_width, sh_height >> 1, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sh, sh_width, sh_height >> 1);
+						fireTouchEvent(touchend, sh, sh_width, sh_height >> 1);
 						sh.disconnect(handle);
 					}
 				},
@@ -101,11 +131,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sh.connect(sh, 'onChange', onChange);
-						fireTouchEvent('touchstart', sh, 0, sh_height >> 1, speed);
+						fireTouchEvent(touchstart, sh, 0, sh_height >> 1, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sh, 0, sh_height >> 1);
+						fireTouchEvent(touchend, sh, 0, sh_height >> 1);
 						sh.disconnect(handle);
 					}
 				},
@@ -120,11 +150,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sh.connect(sh, 'onChange', onChange);
-						fireTouchEvent('touchstart', sh, sh_width >> 1, sh_height >> 1, speed);
+						fireTouchEvent(touchstart, sh, sh_width >> 1, sh_height >> 1, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sh, sh_width >> 1, sh_height >> 1);
+						fireTouchEvent(touchend, sh, sh_width >> 1, sh_height >> 1);
 						sh.disconnect(handle);
 					}
 				},
@@ -139,11 +169,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sv.connect(sv, 'onChange', onChange);
-						fireTouchEvent('touchstart', sv, sv_width >> 1, 0, speed);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, 0, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sv, sv_width >> 1, 0);
+						fireTouchEvent(touchend, sv, sv_width >> 1, 0);
 						sv.disconnect(handle);
 					}
 				},
@@ -158,11 +188,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sv.connect(sv, 'onChange', onChange);
-						fireTouchEvent('touchstart', sv, sv_width >> 1, sv_height, speed);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, sv_height, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sv, sv_width >> 1, sv_height);
+						fireTouchEvent(touchend, sv, sv_width >> 1, sv_height);
 						sv.disconnect(handle);
 					}
 				},
@@ -177,11 +207,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sv.connect(sv, 'onChange', onChange);
-						fireTouchEvent('touchstart', sv, sv_width >> 1, sv_height >> 1, speed);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, sv_height >> 1, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sv, sv_width >> 1, sv_height >> 1);
+						fireTouchEvent(touchend, sv, sv_width >> 1, sv_height >> 1);
 						sv.disconnect(handle);
 					}
 				}
@@ -199,9 +229,9 @@
 						}
 						var d = new doh.Deferred();
 						handle = sh.connect(sh, 'onChange', onChange);
-						fireTouchEvent('touchstart', sh, sh_width >> 1, sh_height >> 1);
-						fireTouchEvent('touchmove', sh, sh_width, sh_height >> 1, speed);
-						fireTouchEvent('touchend', sh, sh_width, sh_height >> 1, speed*2);
+						fireTouchEvent(touchstart, sh, sh_width >> 1, sh_height >> 1);
+						fireTouchEvent(touchmove, sh, sh_width, sh_height >> 1, speed);
+						fireTouchEvent(touchend, sh, sh_width, sh_height >> 1, speed*2);
 						return d;
 					},
 					tearDown: function(){
@@ -219,9 +249,9 @@
 						}
 						var d = new doh.Deferred();
 						handle = sh.connect(sh, 'onChange', onChange);
-						fireTouchEvent('touchstart', sh, sh_width, sh_height >> 1);
-						fireTouchEvent('touchmove', sh, 0, sh_height >> 1, speed);
-						fireTouchEvent('touchend', sh, 0, sh_height >> 1, speed*2);
+						fireTouchEvent(touchstart, sh, sh_width, sh_height >> 1);
+						fireTouchEvent(touchmove, sh, 0, sh_height >> 1, speed);
+						fireTouchEvent(touchend, sh, 0, sh_height >> 1, speed*2);
 						return d;
 					},
 					tearDown: function(){
@@ -239,8 +269,8 @@
 						}
 						var d = new doh.Deferred();
 						handle = sv.connect(sv, 'onChange', onChange);
-						fireTouchEvent('touchstart', sv, sv_width >> 1, sv_height >> 1);
-						fireTouchEvent('touchmove', sv, sv_width >> 1, 0, speed);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, sv_height >> 1);
+						fireTouchEvent(touchmove, sv, sv_width >> 1, 0, speed);
 						return d;
 					},
 					tearDown: function(){
@@ -258,11 +288,11 @@
 						}
 						var d = new doh.Deferred();
 						handle = sv.connect(sv, 'onChange', onChange);
-						fireTouchEvent('touchmove', sv, sv_width >> 1, sv_height, speed);
+						fireTouchEvent(touchmove, sv, sv_width >> 1, sv_height, speed);
 						return d;
 					},
 					tearDown: function(){
-						fireTouchEvent('touchend', sv, sv_width >> 1, sv_height);
+						fireTouchEvent(touchend, sv, sv_width >> 1, sv_height);
 						sv.disconnect(handle);
 					}
 				}
@@ -277,8 +307,8 @@
 						sh.set('value', mid, true);
 						doh.is(mid, sh.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sh, (sh_width >> 1) + (sh_handle_width >> 2), sh_height >> 1, speed);
-						fireTouchEvent('touchend', sh, (sh_width >> 1) + (sh_handle_width >> 2), sh_height >> 1, speed);
+						fireTouchEvent(touchstart, sh, (sh_width >> 1) + (sh_handle_width >> 2), sh_height >> 1, speed);
+						fireTouchEvent(touchend, sh, (sh_width >> 1) + (sh_handle_width >> 2), sh_height >> 1, speed);
 						setTimeout(d.getTestCallback(function(){
 							doh.is(mid, sh.get('value'), 'right value');
 						}), 500+speed);
@@ -293,8 +323,8 @@
 						sh.set('value', mid, true);
 						doh.is(mid, sh.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sh, (sh_width >> 1) - (sh_handle_width >> 2), sh_height >> 1);
-						fireTouchEvent('touchend', sh, (sh_width >> 1) - (sh_handle_width >> 2), sh_height >> 1);
+						fireTouchEvent(touchstart, sh, (sh_width >> 1) - (sh_handle_width >> 2), sh_height >> 1);
+						fireTouchEvent(touchend, sh, (sh_width >> 1) - (sh_handle_width >> 2), sh_height >> 1);
 						setTimeout(d.getTestCallback(function(){
 							doh.is(mid, sh.get('value'), 'left value');
 						}), 500+speed);
@@ -309,8 +339,8 @@
 						sh.set('value', mid, true);
 						doh.is(mid, sh.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sh, (sh_width >> 1) + (sh_handle_width >> 1) + 2, sh_height >> 1, speed >> 1);
-						fireTouchEvent('touchend', sh, (sh_width >> 1) + (sh_handle_width >> 1) + 2, sh_height >> 1, speed >> 1);
+						fireTouchEvent(touchstart, sh, (sh_width >> 1) + (sh_handle_width >> 1) + 2, sh_height >> 1, speed >> 1);
+						fireTouchEvent(touchend, sh, (sh_width >> 1) + (sh_handle_width >> 1) + 2, sh_height >> 1, speed >> 1);
 						setTimeout(d.getTestCallback(function(){
 							doh.t(sh.get('value') > mid, 'right changed value ' + sh.get('value'));
 						}), 500+speed);
@@ -325,8 +355,8 @@
 						sh.set('value', mid, true);
 						doh.is(mid, sh.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sh, (sh_width >> 1) - ((sh_handle_width >> 1) + 2), sh_height >> 1, speed >> 1);
-						fireTouchEvent('touchend', sh, (sh_width >> 1) - ((sh_handle_width >> 1) + 2), sh_height >> 1, speed >> 1);
+						fireTouchEvent(touchstart, sh, (sh_width >> 1) - ((sh_handle_width >> 1) + 2), sh_height >> 1, speed >> 1);
+						fireTouchEvent(touchend, sh, (sh_width >> 1) - ((sh_handle_width >> 1) + 2), sh_height >> 1, speed >> 1);
 						setTimeout(d.getTestCallback(function(){
 							doh.t(sh.get('value') < mid, 'left changed value ' + sh.get('value'));
 						}), 500+speed);
@@ -341,8 +371,8 @@
 						sv.set('value', mid, true);
 						doh.is(mid, sv.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 2), speed);
-						fireTouchEvent('touchend', sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 2), speed);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 2), speed);
+						fireTouchEvent(touchend, sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 2), speed);
 						setTimeout(d.getTestCallback(function(){
 							doh.is(mid, sv.get('value'), 'bottom value');
 						}), 500+speed);
@@ -357,8 +387,8 @@
 						sv.set('value', mid, true);
 						doh.is(mid, sv.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sv, sv_width >> 1, (sv_height >> 1) - (sv_handle_height >> 2));
-						fireTouchEvent('touchend', sv, sv_width >> 1, (sv_height >> 1) - (sv_handle_height >> 2));
+						fireTouchEvent(touchstart, sv, sv_width >> 1, (sv_height >> 1) - (sv_handle_height >> 2));
+						fireTouchEvent(touchend, sv, sv_width >> 1, (sv_height >> 1) - (sv_handle_height >> 2));
 						setTimeout(d.getTestCallback(function(){
 							doh.is(mid, sv.get('value'), 'top value');
 						}), 500+speed);
@@ -373,8 +403,8 @@
 						sv.set('value', mid, true);
 						doh.is(mid, sv.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 1) + 2, speed >> 1);
-						fireTouchEvent('touchend', sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 1) + 2, speed >> 1);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 1) + 2, speed >> 1);
+						fireTouchEvent(touchend, sv, sv_width >> 1, (sv_height >> 1) + (sv_handle_height >> 1) + 2, speed >> 1);
 						setTimeout(d.getTestCallback(function(){
 							doh.t(sv.get('value') < mid, 'bottom changed value ' + sv.get('value'));
 						}), 500+speed);
@@ -389,8 +419,8 @@
 						sv.set('value', mid, true);
 						doh.is(mid, sv.get('value'), 'initial value');
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sv, sv_width >> 1, (sv_height >> 1) - ((sv_handle_height >> 1) + 2), speed >> 1);
-						fireTouchEvent('touchend', sv, sv_width >> 1, (sv_height >> 1) - ((sv_handle_height >> 1) + 2), speed >> 1);
+						fireTouchEvent(touchstart, sv, sv_width >> 1, (sv_height >> 1) - ((sv_handle_height >> 1) + 2), speed >> 1);
+						fireTouchEvent(touchend, sv, sv_width >> 1, (sv_height >> 1) - ((sv_handle_height >> 1) + 2), speed >> 1);
 						setTimeout(d.getTestCallback(function(){
 							doh.t(sv.get('value') > mid, 'top changed value ' + sv.get('value'));
 						}), 500+speed);
@@ -399,43 +429,45 @@
 				}
 			]);
 
-			if(dojo.isWebKit){
+			if(has("webkit") || has("ie") >= 10){
 				doh.register("animation", {
 					name: "horizontal 100%",
 					timeout: 2000,
 					runTest: function(){
 						var d = new doh.Deferred();
-						fireTouchEvent('touchstart', sh, 0, sh_height >> 1, 0);
-						fireTouchEvent('touchend', sh, 0, sh_height >> 1, 0);
-						var startX = Math.round(dojo.position(sh.handle).x), midX, endX;
-						dojo.style(sh.handle, "WebkitTransitionDuration", "1000ms");
-						fireTouchEvent('touchstart', sh, sh_width, sh_height >> 1, 0);
-						fireTouchEvent('touchend', sh, sh_width, sh_height >> 1, 0);
+						fireTouchEvent(touchstart, sh, 0, sh_height >> 1, 0);
+						fireTouchEvent(touchend, sh, 0, sh_height >> 1, 0);
+						var startX = Math.round(domGeometry.position(sh.handle).x), midX, endX;
+						domStyle.set(sh.handle, transitionDuration, "1000ms");
+						fireTouchEvent(touchstart, sh, sh_width, sh_height >> 1, 0);
+						fireTouchEvent(touchend, sh, sh_width, sh_height >> 1, 0);
 						sh.set('value', sh.max, true);
 						setTimeout(function(){
-							midX = dojo.position(sh.handle).x;
+							midX = domGeometry.position(sh.handle).x;
 						}, 400); 
 						setTimeout(d.getTestCallback(function(){
-							endX = Math.round(dojo.position(sh.handle).x);
+							endX = Math.round(domGeometry.position(sh.handle).x);
 							doh.t(midX > startX, "started sliding");
 							doh.t(midX < endX, "continued sliding");
-							doh.t(Math.abs(Math.abs(endX-startX)-sh_width) <= 2, "stopped sliding end="+endX+',start='+startX+',width='+sh_width);
+							var zoom = has("ie") ? getZoom(sh) : 1;
+							doh.t(Math.abs(Math.abs(endX-startX)-sh_width*zoom) <= 3, "stopped sliding end="+endX+',start='+startX+',width='+sh_width*zoom);
 						}), 1100);
 						return d;
 					},
 					tearDown: function(){
-						dojo.style(sh.handle, "WebkitTransitionDuration", "");
-						dojo.style(sv.handle, "WebkitTransitionDuration", "");
+						domStyle.set(sh.handle, transitionDuration, "");
+						domStyle.set(sv.handle, transitionDuration, "");
 					}
 				})
 			}
 
 			doh.register("log", function(){
-				dojo.byId('failures').innerHTML = doh._failureCount;
-				dojo.byId('errors').innerHTML = doh._errorCount;
+				dom.byId('failures').innerHTML = doh._failureCount;
+				dom.byId('errors').innerHTML = doh._errorCount;
 			});
 
 			doh.run();
+		});
 		});
 	</script>
 
@@ -464,7 +496,7 @@
 		<center>
 			<table><tr>
 				<td>0</td>
-				<td><input id="sh" data-dojo-type="dojox.mobile.Slider" type="range" data-dojo-props='value:0, min:0, max:20, step:0.1, onChange:function(v){ dojo.byId("sh_val").innerHTML=this.value; }' style="width:200px;" /></td>
+				<td><input id="sh" data-dojo-type="dojox/mobile/Slider" type="range" data-dojo-props='value:0, min:0, max:20, step:0.1, onChange:function(v){ document.getElementById("sh_val").innerHTML=this.value; }' style="width:200px;" /></td>
 				<td>20</td>
 			</tr><tr>
 				<td></td><td><center>Value:&nbsp;<span id="sh_val">0</span></center></td><td></td>
@@ -475,7 +507,7 @@
 			<table><tr><td style="width:100px;">
 				<center>
 					20<br>
-					<input id="sv" name="sv" data-dojo-type="dojox.mobile.Slider" type="range" data-dojo-props='value:0, min:-20, max:20, step:1, intermediateChanges:true, onChange:function(v){ dojo.byId("sv_val").innerHTML=this.value; }' style="width:2px;height:200px;" />
+					<input id="sv" name="sv" data-dojo-type="dojox/mobile/Slider" type="range" data-dojo-props='value:0, min:-20, max:20, step:1, intermediateChanges:true, onChange:function(v){ document.getElementById("sv_val").innerHTML=this.value; }' style="width:2px;height:200px;" />
 					-20
 				</center>
 			</td><td style="width:80px;">

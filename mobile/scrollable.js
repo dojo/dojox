@@ -7,10 +7,11 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/touch",
 	"./sniff",
 	"./_css3",
 	"./_maskUtils"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, has, css3, maskUtils){
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, touch, has, css3, maskUtils){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -135,14 +136,17 @@ define([
 					}
 				}
 			}
+			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
+			if(typeof this.domNode.style.msTouchAction != "undefined"){
+				this.domNode.style.msTouchAction = "none";
+			}
 			this.touchNode = this.touchNode || this.containerNode;
 			this._v = (this.scrollDir.indexOf("v") != -1); // vertical scrolling
 			this._h = (this.scrollDir.indexOf("h") != -1); // horizontal scrolling
 			this._f = (this.scrollDir == "f"); // flipping views
 
 			this._ch = []; // connect handlers
-			this._ch.push(connect.connect(this.touchNode,
-				has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchStart"));
+			this._ch.push(connect.connect(this.touchNode, touch.press, this, "onTouchStart"));
 			if(has("css3-animations")){
 				// flag for whether to use -webkit-transform:translate3d(x,y,z) or top/left style.
 				// top/left style works fine as a workaround for input fields auto-scrolling issue,
@@ -366,8 +370,8 @@ define([
 			}
 			if(!this._conn){
 				this._conn = [];
-				this._conn.push(connect.connect(win.doc, has('touch') ? "ontouchmove" : "onmousemove", this, "onTouchMove"));
-				this._conn.push(connect.connect(win.doc, has('touch') ? "ontouchend" : "onmouseup", this, "onTouchEnd"));
+				this._conn.push(connect.connect(win.doc, touch.move, this, "onTouchMove"));
+				this._conn.push(connect.connect(win.doc, touch.release, this, "onTouchEnd"));
 			}
 
 			this._aborted = false;
@@ -1215,8 +1219,7 @@ define([
 						height: "100%",
 						zIndex: 2147483647 // max of signed 32-bit integer
 					});
-					this._ch.push(connect.connect(dm._cover,
-						has('touch') ? "ontouchstart" : "onmousedown", this, "onTouchEnd"));
+					this._ch.push(connect.connect(dm._cover, touch.press, this, "onTouchEnd"));
 				}else{
 					dm._cover.style.display = "";
 				}

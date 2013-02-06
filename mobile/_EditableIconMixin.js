@@ -129,11 +129,9 @@ define([
 			if(!iconPressed){ return; }
 
 			if(!this._conn){
-				// don't use touch.move since this is actually an event listened to on the document,
-				// so we can't stop it when we are in a ScrollableView (to prevent the view from scrolling while dragging icons).
 				this._conn = [
-					this.connect(this.domNode, has("touch") ? "ontouchmove" : "onmousemove", "_onTouchMove"),
-					this.connect(this.domNode, has("touch") ? "ontouchend" : "onmouseup", "_onTouchEnd")
+					this.connect(this.domNode, touch.move, "_onTouchMove"),
+					this.connect(this.domNode, touch.release, "_onTouchEnd")
 				];
 			}
 			this._touchStartPosX = e.touches ? e.touches[0].pageX : e.pageX;
