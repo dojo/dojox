@@ -128,11 +128,18 @@ define([
 			//		Overrides _WidgetBase.getChildren to add local fixed bars,
 			//		which are not under containerNode, to the children array.
 			var children = this.inherited(arguments);
+			var fixedWidget;
 			if(this.fixedHeader && this.fixedHeader.parentNode === this.domNode){
-				children.push(registry.byNode(this.fixedHeader));
+				fixedWidget = registry.byNode(this.fixedHeader);
+				if(fixedWidget){
+					children.push(fixedWidget);
+				}
 			}
 			if(this.fixedFooter && this.fixedFooter.parentNode === this.domNode){
-				children.push(registry.byNode(this.fixedFooter));
+				fixedWidget = registry.byNode(this.fixedFooter);
+				if(fixedWidget){
+					children.push(fixedWidget);
+				}
 			}
 			return children;
 		}
