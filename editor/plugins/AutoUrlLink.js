@@ -2,14 +2,11 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
-	"dijit/_editor/range",
-	"dijit/_editor/selection",
 	"dijit/_editor/_Plugin",
 	"dijit/form/Button",
-	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/string"
-], function(dojo, dijit, dojox, range, selection, _Plugin) {
+], function(dojo, dijit, dojox, _Plugin) {
 
 dojo.declare("dojox.editor.plugins.AutoUrlLink", [_Plugin], {
 	// summary:

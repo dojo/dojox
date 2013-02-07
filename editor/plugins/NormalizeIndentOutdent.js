@@ -3,9 +3,6 @@ define([
 	"dijit",
 	"dojox",
 	"dijit/_editor/_Plugin",
-	"dijit/_editor/range",
-	"dijit/_editor/selection",
-	"dojo/_base/connect",
 	"dojo/_base/declare"
 ], function(dojo, dijit, dojox, _Plugin) {
 

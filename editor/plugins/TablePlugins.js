@@ -13,8 +13,6 @@ define([
 	"dojo/i18n!./nls/TableDialog",
 	"dijit/_base/popup",
 	"dijit/popup",
-	"dijit/_editor/range",
-	"dijit/_editor/selection",
 	"dijit/ColorPalette",
 	"dojox/widget/ColorPicker",
 	"dojo/_base/connect",

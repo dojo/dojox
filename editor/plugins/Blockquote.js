@@ -2,15 +2,13 @@ define([
 	"dojo",
 	"dijit",
 	"dojox",
-	"dijit/_editor/range",
-	"dijit/_editor/selection",
 	"dijit/_editor/_Plugin",
 	"dijit/form/ToggleButton",
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/i18n",
 	"dojo/i18n!dojox/editor/plugins/nls/Blockquote"
-], function(dojo, dijit, dojox, range, selection, _Plugin) {
+], function(dojo, dijit, dojox, _Plugin) {
 
 dojo.declare("dojox.editor.plugins.Blockquote", _Plugin, {
 	// summary:

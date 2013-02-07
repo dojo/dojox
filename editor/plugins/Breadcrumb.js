@@ -9,8 +9,6 @@ define([
 	"dijit/Menu",
 	"dijit/MenuItem",
 	"dijit/MenuSeparator",
-	"dijit/_editor/range",
-	"dijit/_editor/selection",
 	"dijit/_editor/_Plugin",
 	"dijit/form/Button",
 	"dijit/form/ComboButton",
@@ -20,7 +18,7 @@ define([
 	"dojo/string",
 	"dojo/i18n!dojox/editor/plugins/nls/Breadcrumb"
 ], function(dojo, dijit, dojox, _Widget, _TemplatedMixin, _Contained, Toolbar, Menu, MenuItem,
-	MenuSeparator, range, selection, _Plugin) {
+	MenuSeparator, _Plugin) {
 
 dojo.experimental("dojox.editor.plugins.Breadcrumb");
 
