@@ -10,18 +10,18 @@
 		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, packageMap:[{name:'doh',location:'util/doh'}]"></script>
 		<script type="text/javascript">
 			require([
-			"doh/runner",
-			"dojo/ready",
-			"dojox/gfx",
-			"dojox/gfx/shape",
-			"dojox/gfx/svg"], 
-			function(doh, ready, gfx, gfxshape, svg){
-				
-				ready(function(){
+				"doh/runner",
+				"dojo/ready",
+				"dojo/dom",
+				"dojox/gfx",
+				"dojox/gfx/shape",
+				"dojox/gfx/svg"],
+					function(doh, ready, dom, gfx, gfxshape, svg){
+
 					var drawing, r,
 						checkSurface = function(){
 							if(!drawing){
-								var dn = dojo.byId("gfxObject");
+								var dn = dom.byId("gfxObject");
 								drawing = gfx.createSurface(dn, 300, 300);
 							}
 						};
@@ -41,7 +41,7 @@
 								var uid = r.getUID();
 								r.removeShape();
 								r.destroy();
-								doh.assertTrue(!dojox.gfx.shape.byId(uid), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(uid), "Unexpected shape.byId return value.");
 							},
 							tearDown: function(){
 								drawing.clear();
@@ -61,7 +61,7 @@
 								var c = r.children[0];
 								r.clear(true);
 								doh.assertTrue(r.children.length == 0, "Unexpected children length on disposed group.");
-								doh.assertTrue(!dojox.gfx.shape.byId(c.getUID()), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(c.getUID()), "Unexpected shape.byId return value.");
 							}
 						},{
 							name: "Group.destroy",
@@ -79,20 +79,20 @@
 								var c = r.children[0];
 								r.removeShape();
 								r.destroy();
-								doh.assertTrue(!dojox.gfx.shape.byId(uid), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(uid), "Unexpected shape.byId return value.");
 								doh.assertTrue(r.children.length == 0, "Unexpected children length on disposed group.");
-								doh.assertTrue(!dojox.gfx.shape.byId(r.getUID()), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(r.getUID()), "Unexpected shape.byId return value.");
 								
 								r = drawing.createGroup();
 								var t2 = r.createGroup();
 								c = t2.createRect();
 								r.removeShape();
 								r.destroy();
-								doh.assertTrue(!dojox.gfx.shape.byId(r.getUID()), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(r.getUID()), "Unexpected shape.byId return value.");
 								doh.assertTrue(r.children.length == 0, "Unexpected children length on disposed group.");
-								doh.assertTrue(!dojox.gfx.shape.byId(t2.getUID()), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(t2.getUID()), "Unexpected shape.byId return value.");
 								doh.assertTrue(t2.children.length == 0, "Unexpected children length on disposed group.");
-								doh.assertTrue(!dojox.gfx.shape.byId(c.getUID()), "Unexpected shape.byId return value.");
+								doh.assertTrue(!gfxshape.byId(c.getUID()), "Unexpected shape.byId return value.");
 							}
 						},{
 							name: "SVG-specific : shape clean-up",
@@ -161,9 +161,11 @@
 							}
 						}
 					]);
-				doh.run();
+
+					ready(function(){
+						doh.run()
+					});
 			});
-		});
 		</script>
 	</head>
 	<body>
