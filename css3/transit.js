@@ -18,13 +18,16 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 		//		valid values are 'slide', 'flip', 'fade', 'none'.
 		//		The direction can be specified in options.reverse. If it
 		//		is true, the transit effects will be conducted in the
-		//		reverse direction to the default direction.
+		//		reverse direction to the default direction. Finally the duration
+		//		of the transition can be overridden by setting the duration property.
 		var rev = (options && options.reverse) ? -1 : 1;
 		if(!options || !options.transition || !transition[options.transition]){
 			if(from){
 				domStyle.set(from,"display","none");
 			}
-			domStyle.set(to, "display", "");
+			if(to){
+				domStyle.set(to, "display", "");
+			}
 			if(options.transitionDefs){
 				if(options.transitionDefs[from.id]){
 					options.transitionDefs[from.id].resolve(from);
@@ -49,7 +52,6 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 			}else{
 				duration = options.duration;
 			}
-			domStyle.set(to, "display", "");
 			if(from){
 				domStyle.set(from, "display", "");
 				//create transition to transit "from" out
@@ -62,16 +64,17 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 				defs.push(fromTransit.deferred);//every transition object should have a deferred.
 				transit.push(fromTransit);
 			}
-			
-			//create transition to transit "to" in					
-			var toTransit = transition[options.transition](to, {
-							direction: rev,
-							duration: duration,
-							deferred: (options.transitionDefs && options.transitionDefs[to.id]) ? options.transitionDefs[to.id] : null
-						});
-			defs.push(toTransit.deferred);//every transition object should have a deferred.
-			transit.push(toTransit);
-			
+			if(to){
+				domStyle.set(to, "display", "");
+				//create transition to transit "to" in
+				var toTransit = transition[options.transition](to, {
+								direction: rev,
+								duration: duration,
+								deferred: (options.transitionDefs && options.transitionDefs[to.id]) ? options.transitionDefs[to.id] : null
+							});
+				defs.push(toTransit.deferred);//every transition object should have a deferred.
+				transit.push(toTransit);
+			}
 			//If it is flip use the chainedPlay, otherwise
 			//play fromTransit and toTransit together
 			if(options.transition === "flip"){
