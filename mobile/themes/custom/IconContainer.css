@@ -22,8 +22,8 @@
 }
 .mblIconItemPane {
   list-style-type: none;
-  background-color: white;
-  color: black;
+  background-color: #ffffff;
+  color: #000000;
 }
 .mblIconArea {
   position: relative;
@@ -34,7 +34,7 @@
   margin-top: 5px;
   margin-bottom: 5px;
   width: 74px;
-  color: black;
+  color: #000000;
 }
 .mblIconArea img {
   vertical-align: middle;

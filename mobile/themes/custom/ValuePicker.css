@@ -13,8 +13,8 @@
 .mblValuePickerSlotButton {
   position: relative;
   height: 38px;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#d6d7d6), color-stop(0.5, #d6d3d6), color-stop(0.9, #bdbebd));
-  background-image: linear-gradient(to bottom, #f7f7f7 0%, #d6d3d6 50%, #bdbebd 90%, #d6d7d6 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#d6d6d6), color-stop(0.5, #d6d6d6), color-stop(0.9, #bdbdbd));
+  background-image: linear-gradient(to bottom, #f7f7f7 0%, #d6d6d6 50%, #bdbdbd 90%, #d6d6d6 100%);
 }
 .mblValuePickerSlotPlusButton {
   border-top-left-radius: 5px;
@@ -25,8 +25,8 @@
   border-bottom-right-radius: 5px;
 }
 .mblValuePickerSlotButtonSelected {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
-  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#999999));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #999999 100%);
 }
 .mblValuePickerSlotIcon {
   top: 5px;

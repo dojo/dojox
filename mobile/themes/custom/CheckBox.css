@@ -19,8 +19,8 @@
   border-radius: 0;
 }
 .mblCheckBoxSelected {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
-  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#999999));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #999999 100%);
 }
 .mblCheckBoxChecked,
 .mblCheckBox:checked {
@@ -41,14 +41,14 @@
   transform: rotate(45deg);
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
-  border-color: black;
+  border-color: #000000;
 }
 .mblCheckBoxChecked.mblCheckBoxSelected,
 .mblCheckBox:checked.mblCheckBoxSelected {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
-  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#999999));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #999999 100%);
 }
 .mblCheckBoxChecked.mblCheckBoxSelected::after,
 .mblCheckBox:checked.mblCheckBoxSelected::after {
-  border-color: white;
+  border-color: #ffffff;
 }

@@ -7,21 +7,21 @@ html.mobile,
 .mobile body {
   overflow-x: hidden;
   -webkit-text-size-adjust: none;
-  background-color: #d0d0d0;
+  background-color: #c0c0c0;
   font-family: Helvetica;
   font-size: 17px;
-  color: black;
+  color: #000000;
 }
 /* Button Colors */
 .mblColorBlue {
   color: #ffffff;
-  background-color: #2362dd;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#7a9de9), to(#2362dd));
-  background-image: linear-gradient(to bottom, #7a9de9 0%, #2362dd 100%);
+  background-color: #048bf4;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#48adfc), to(#048bf4));
+  background-image: linear-gradient(to bottom, #48adfc 0%, #048bf4 100%);
 }
 .mblColorBlue45 {
-  background-image: -webkit-gradient(linear, left top, right bottom, from(#7a9de9), to(#2362dd));
-  background-image: linear-gradient(to right bottom, #7a9de9 0%, #2362dd 100%);
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#048bf4), to(#48adfc));
+  background-image: linear-gradient(to right bottom, #048bf4 0%, #48adfc 100%);
 }
 /* Default Button Colors */
 .mblColorDefault {
@@ -36,13 +36,13 @@ html.mobile,
 }
 .mblColorDefaultSel {
   color: #ffffff;
-  background-color: #666666;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
-  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
+  background-color: #999999;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#999999));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #999999 100%);
 }
 .mblColorDefaultSel45 {
-  background-image: -webkit-gradient(linear, left top, right bottom, from(#bbbbbb), to(#666666));
-  background-image: linear-gradient(to right bottom, #bbbbbb 0%, #666666 100%);
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#bbbbbb), to(#999999));
+  background-image: linear-gradient(to right bottom, #bbbbbb 0%, #999999 100%);
 }
 .mblSpriteIcon {
   position: absolute;

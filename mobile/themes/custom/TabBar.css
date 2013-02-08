@@ -10,8 +10,8 @@
   height: 42px;
   text-align: center;
   color: white;
-  border-top: 1px solid #bfbfbf;
-  border-bottom: 1px solid #bfbfbf;
+  border-top: 1px solid #c0c0c0;
+  border-bottom: 1px solid #c0c0c0;
   text-shadow: none;
 }
 /* dojox.mobile.TabBarButton */
@@ -52,7 +52,7 @@
 .mblTabBarTabBar .mblTabBarButtonLabel {
   font-family: "Helvetica Neue", Helvetica;
   font-size: 11px;
-  color: white;
+  color: #ffffff;
 }
 .mblTabBarTabBar .mblTabBarButtonSelected {
   border-radius: 3px;
@@ -61,7 +61,7 @@
   background-image: linear-gradient(to bottom, #484848 0%, #242424 100%);
 }
 .mblTabBarTabBar .mblTabBarButtonSelected .mblTabBarButtonLabel {
-  color: white;
+  color: #ffffff;
 }
 /* barType="segmentedControl" */
 .mblTabBarSegmentedControl {
@@ -86,8 +86,8 @@
   text-align: center;
   line-height: 29px;
   border-style: solid;
-  border-color: #9b9b9b #9b9b9b #767676 #9b9b9b;
-  color: black;
+  border-color: #9b9b9b #9b9b9b #9b9b9b #9b9b9b;
+  color: #000000;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e2e2e2));
   background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%);
   text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0;
@@ -134,7 +134,7 @@
   font-family: Helvetica;
   font-size: 14px;
   font-weight: bold;
-  color: black;
+  color: #000000;
   border-color: #9b9b9b;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f6f6f6), to(#dedede));
   background-image: linear-gradient(to bottom, #f6f6f6 0%, #dedede 100%);
@@ -155,7 +155,7 @@
 .mblTabBarSlimTab {
   height: 30px;
   padding: 0px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid #c0c0c0;
   background-color: #000000;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#2d2d2d), to(#000000), color-stop(0.5, #141414), color-stop(0.5, #000000));
   background-image: linear-gradient(to bottom, #2d2d2d 0%, #141414 50%, #000000 50%, #000000 100%);

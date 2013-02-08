@@ -37,14 +37,14 @@
   transform: rotate(45deg);
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
-  border-color: black;
+  border-color: #000000;
 }
 .mblRadioButtonChecked.mblRadioButtonSelected,
 .mblRadioButton:checked.mblRadioButtonSelected {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#666666));
-  background-image: linear-gradient(to bottom, #bbbbbb 0%, #666666 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#999999));
+  background-image: linear-gradient(to bottom, #bbbbbb 0%, #999999 100%);
 }
 .mblRadioButtonChecked.mblRadioButtonSelected::after,
 .mblRadioButton:checked.mblRadioButtonSelected::after {
-  border-color: white;
+  border-color: #ffffff;
 }
