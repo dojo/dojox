@@ -142,6 +142,19 @@ define([
 				}
 			}
 			return children;
-		}
+		},
+
+		_addTransitionPaddingTop: function(/*String|Integer*/ value){
+			// add padding top to the view in order to get alignment during the transition
+			this.domNode.style.paddingTop = value + "px";
+			this.containerNode.style.paddingTop = value + "px";
+		},
+
+		_removeTransitionPaddingTop: function(){
+			// remove padding top from the view after the transition
+			this.domNode.style.paddingTop = "";
+			this.containerNode.style.paddingTop = "";
+		},
+
 	});
 });

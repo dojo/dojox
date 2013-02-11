@@ -347,7 +347,7 @@ define([
 
 				if(detail.transition && detail.transition != "none"){
 					// Temporarily add padding to align with the fromNode while transition
-					toWidget.containerNode.style.paddingTop = fromTop + "px";
+					toWidget._addTransitionPaddingTop(fromTop);
 				}
 
 				toWidget.load && toWidget.load(); // for ContentView
@@ -395,6 +395,16 @@ define([
 			common.toView = toWidget;
 
 			this._doTransition(fromNode, toNode, detail.transition, detail.transitionDir);
+		},
+
+		_addTransitionPaddingTop: function(/*String|Integer*/ value){
+			// add padding top to the view in order to get alignment during the transition
+			this.containerNode.style.paddingTop = value + "px";
+		},
+
+		_removeTransitionPaddingTop: function(){
+			// remove padding top from the view after the transition
+			this.containerNode.style.paddingTop = "";
 		},
 
 		_toCls: function(s){
@@ -502,7 +512,7 @@ define([
 				domClass.remove(this.domNode, [this._toCls(this._detail.transition), "mblIn", "mblOut", "mblReverse"]);
 			}else{
 				// Reset the temporary padding
-				this.containerNode.style.paddingTop = "";
+				this._removeTransitionPaddingTop();
 			}
 			domStyle.set(this.domNode, css3.add({}, {transformOrigin:""}));
 			if(name.indexOf("Shrink") !== -1){

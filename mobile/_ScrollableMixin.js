@@ -24,6 +24,8 @@ define([
 		//		Id of the fixed footer.
 		fixedFooter: "",
 
+		_fixedAppFooter: "",
+
 		// scrollableParams: Object
 		//		Parameters for dojox/mobile/scrollable.init().
 		scrollableParams: null,
@@ -124,7 +126,11 @@ define([
 					return fixed;
 				}else if(fixed === "bottom"){
 					domClass.add(node, "mblFixedBottomBar");
-					this.fixedFooter = node;
+					if(local){
+						this.fixedFooter = node;
+					}else{
+						this._fixedAppFooter = node;
+					}
 					return fixed;
 				}
 			}

@@ -253,8 +253,7 @@ define([
 			//		will be the new height.
 
 			// moved from init() to support dynamically added fixed bars
-			this._appFooterHeight = (this.fixedFooterHeight && !this.isLocalFooter) ?
-				this.fixedFooterHeight : 0;
+			this._appFooterHeight = (this._fixedAppFooter) ? this._fixedAppFooter.offsetHeight : 0;
 			if(this.isLocalHeader){
 				this.containerNode.style.marginTop = this.fixedHeaderHeight + "px";
 			}
