@@ -66,6 +66,16 @@ require([
 			store.remove("New Item "+(--store.__counter));
 		}
 	};
+	// modify the added item
+	var modif_counter = 0;
+	modify1 = function(){
+		if(store.__counter > 1){
+			store.put({
+				label: "New Item "+(store.__counter-1),
+				rightText: ++modif_counter + " changes"
+			});
+		}
+	};
 
 	ready(function(){
 		runner.register(testName, [
@@ -146,6 +156,57 @@ require([
 						runner.assertEqual('mblListItemLabel', demoWidget.labelNode.className);
 						runner.assertEqual('New Item 2', demoWidget.labelNode.innerHTML);
 						runner.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.rightIconNode.childNodes[0].className);
+
+						modify1();
+						runner.assertEqual(modif_counter+' changes', demoWidget.get("rightText"), "modify store item");
+					}),1500);
+					return d;
+				}
+			},
+			{
+				name: DataList + " Verification4 (1.8 compat mode)",
+				timeout: 10000,
+				runTest: function(){
+					var d = new runner.Deferred();
+					setTimeout(d.getTestCallback(function(){
+
+						// Check compatibility with old-style widgets that define only an onUpdate method and no onAdd method
+						// (like in Dojo Mobile 1.8). In that case onUpdate is called instead of onAdd, and put() is not handled.
+						var listWidget = registry.byId("list");
+						listWidget.onAdd = undefined;
+						listWidget.onUpdate = function(/*Object*/item, /*Number*/insertedInto){
+							// summary:
+							//		Adds a new item or updates an existing item.
+							if(insertedInto === this.getChildren().length){
+								this.addChild(this.createListItem(item)); // add a new ListItem
+							}else{
+								this.getChildren()[insertedInto].set(item); // update the existing ListItem
+							}
+						};
+
+						add1();
+						add1();
+						add1();
+						var demoWidget = registry.byId("dojox_mobile_ListItem_22");
+						runner.assertEqual('mblListItem', demoWidget.domNode.className);
+						runner.assertEqual('mblImageIcon mblListItemIcon', demoWidget.iconNode.className);
+						runner.assertEqual('mblListItemLabel', demoWidget.labelNode.className);
+						runner.assertEqual('New Item 3', demoWidget.labelNode.innerHTML);
+						runner.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.rightIconNode.childNodes[0].className);
+
+						delete1();
+						demoWidget = registry.byId("dojox_mobile_ListItem_24");
+						runner.assertTrue(!demoWidget);
+
+						demoWidget = registry.byId("dojox_mobile_ListItem_23");
+						runner.assertEqual('mblListItem', demoWidget.domNode.className);
+						runner.assertEqual('mblImageIcon mblListItemIcon', demoWidget.iconNode.className);
+						runner.assertEqual('mblListItemLabel', demoWidget.labelNode.className);
+						runner.assertEqual('New Item 4', demoWidget.labelNode.innerHTML);
+						runner.assertEqual('mblDomButtonArrow mblDomButton', demoWidget.rightIconNode.childNodes[0].className);
+
+						modify1();
+						runner.assertEqual("", demoWidget.get("rightText"), "modify store item (noop in compat mode)");
 					}),1500);
 					return d;
 				}

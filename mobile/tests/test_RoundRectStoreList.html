@@ -70,6 +70,16 @@
 					store.remove("New Item "+(--store.__counter));
 				}
 			};
+			// modify the added item
+			var modif_counter = 0;
+			modify1 = function(){
+				if(store.__counter > 1){
+					store.put({
+						label: "New Item "+(store.__counter-1),
+						rightText: ++modif_counter + " changes"
+					});
+				}
+			};
 		});
 	</script>
 </head>
@@ -83,6 +93,7 @@
 		<p>alter the object store:<br>
 		<input type="button" value="Add" onclick="add1()">
 		<input type="button" value="Delete" onclick="delete1()">
+		<input type="button" value="Modify" onclick="modify1()">
 	</div>
 </body>
 </html>

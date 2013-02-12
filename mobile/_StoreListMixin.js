@@ -84,14 +84,16 @@ define([
 			//		An error handler.
 		},
 
+		onAdd: function(/*Object*/item, /*Number*/insertedInto){
+			// summary:
+			//		Calls createListItem and adds the new list item when a new data item has been added to the store.
+			this.addChild(this.createListItem(item), insertedInto);
+		},
+
 		onUpdate: function(/*Object*/item, /*Number*/insertedInto){
 			// summary:
-			//		Adds a new item or updates an existing item.
-			if(insertedInto === this.getChildren().length){
-				this.addChild(this.createListItem(item)); // add a new ListItem
-			}else{
-				this.getChildren()[insertedInto].set(item); // update the existing ListItem
-			}
+			//		Updates an existing list item when a data item has been modified.
+			this.getChildren()[insertedInto].set(item);
 		},
 
 		onDelete: function(/*Object*/item, /*Number*/removedFrom){
