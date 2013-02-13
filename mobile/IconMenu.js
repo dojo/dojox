@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",

@@ -4,7 +4,7 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"dojo/_base/window",
 	"dojo/_base/Deferred",
 	"dojo/dom",
@@ -437,7 +437,7 @@ define([
 				if(transition.indexOf("cube") != -1){
 					if(has('ipad')){
 						domStyle.set(toNode.parentNode, {webkitPerspective:1600});
-					}else if(has('iphone')){
+					}else if(has("ios")){
 						domStyle.set(toNode.parentNode, {webkitPerspective:800});
 					}
 				}
@@ -534,7 +534,7 @@ define([
 			this.clickedPosX = this.clickedPosY = undefined;
 
 			if(name.indexOf("Cube") !== -1 &&
-				name.indexOf("In") !== -1 && has('iphone')){
+				name.indexOf("In") !== -1 && has("ios")){
 				this.domNode.parentNode.style[css3.name("perspective")] = "";
 			}
 		},

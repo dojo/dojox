@@ -1,7 +1,8 @@
 define([
 	"dojo/_base/window",
-	"dojo/_base/array"
-], function(win, arr){
+	"dojo/_base/array",
+	"dojo/has"
+], function(win, arr, has){
 	
 	// caches for capitalized names and hypen names
 	var cnames = [], hnames = [];
@@ -13,6 +14,15 @@ define([
 	// (see dojox/mobile/themes/common/css3.less)
 	// More prefixes can be added if/when we add them to css3.less.
 	var prefixes = ["webkit"];
+	
+	// Does the browser support CSS3 animations?
+	has.add("css3-animations", function(global, document, element){
+		var style = element.style;
+		return (style["animation"] !== undefined && style["transition"] !== undefined) ||
+			arr.some(prefixes, function(p){
+				return style[p+"Animation"] !== undefined && style[p+"Transition"] !== undefined;
+			});
+	});
 	
 	var css3 = {
 		// summary:

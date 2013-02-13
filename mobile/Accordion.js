@@ -2,7 +2,7 @@ define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",

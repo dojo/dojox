@@ -104,7 +104,7 @@ define([
 		//		finishes.
 		if(dm.disableHideAddressBar || dm._hiding){ return; }
 		dm._hiding = true;
-		dm._hidingTimer = has('iphone') ? 200 : 0; // Need to wait longer in case of iPhone
+		dm._hidingTimer = has("ios") ? 200 : 0; // Need to wait longer in case of iPhone
 		var minH = screen.availHeight;
 		if(has('android')){
 			minH = outerHeight / devicePixelRatio;
@@ -231,7 +231,7 @@ define([
 			}
 		}
 
-		var ios6 = has('iphone') >= 6; // Full-screen support for iOS6 or later 
+		var ios6 = has("ios") >= 6; // Full-screen support for iOS6 or later 
 		if((has('android') || ios6) && win.global.onorientationchange !== undefined){
 			var _f = f;
 			var curSize, curClientWidth, curClientHeight;

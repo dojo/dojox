@@ -53,7 +53,7 @@ define([
 			if(!this.textbox.hasAttribute('results')){
 				this.textbox.setAttribute('results', '0'); // enables webkit search decoration
 			}
-			if(has('iphone') < 5){
+			if(has("ios") < 5){
 				domClass.add(this.domNode, 'iphone4'); // cannot click cancel button after focus so just remove it
 				this.connect(this.textbox, "onfocus", // if value changes between start of onfocus to end, then it was a cancel
 					function(){

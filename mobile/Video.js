@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"./Audio"
 ], function(declare, has, Audio){
 	// module:
@@ -21,8 +21,8 @@ define([
 		_tag: "video",
 
 		_getEmbedRegExp: function(){
-			return has('ff') ? /video\/mp4/i :
-				   has.isIE >= 9 ? /video\/webm/i :
+			return has("ff") ? /video\/mp4/i :
+				   has("ie") >= 9 ? /video\/webm/i :
 				   //has("safari") ? /video\/webm/i : //Google is gooing to provide webm plugin for safari
 				   null;
 		}

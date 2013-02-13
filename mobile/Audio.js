@@ -1,7 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"dojo/dom-construct",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"dijit/_Contained",
 	"dijit/_WidgetBase"
 ], function(declare, domConstruct, has, Contained, WidgetBase){

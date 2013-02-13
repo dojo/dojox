@@ -3,7 +3,7 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/event",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",

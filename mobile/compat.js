@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/lang",
-	"dojo/_base/sniff"
+	"dojo/sniff"
 ], function(lang, has){
 	// module:
 	//		dojox/mobile/compat

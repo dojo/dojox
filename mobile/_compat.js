@@ -4,7 +4,7 @@ define([
 	"dojo/_base/connect",	// connect.connect
 	"dojo/_base/fx",	// fx.fadeOut, fx.fadeIn
 	"dojo/_base/lang",	// lang.extend, lang.isArray
-	"dojo/_base/sniff",		// has("webkit"), has("ie")
+	"dojo/sniff",		// has("webkit"), has("ie")
 	"dojo/_base/window",	// win.doc, win.body
 	"dojo/dom-class",
 	"dojo/dom-construct",

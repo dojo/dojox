@@ -8,7 +8,7 @@ var WIDGET_PAGENUM = 5;
 
 require([
 	"dojo/_base/connect",
-	"dojo/_base/sniff",
+	"dojo/sniff",
 	"dojo/dom-construct", // dojo.place
 	"dojo/dom-class", // dojo.hasClass
 	"dojo/ready", // dojo.ready

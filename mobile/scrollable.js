@@ -155,7 +155,7 @@ define([
 				// Flag for using webkit transition on transform, instead of animation + keyframes.
 				// (keyframes create a slight delay before the slide animation...)
 				if(!this._useTopLeft){
-					this._useTransformTransition = this.scrollType ? this.scrollType === 3 : has("iphone") >= 6;
+					this._useTransformTransition = this.scrollType ? this.scrollType === 3 : has("ios") >= 6;
 				}
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
