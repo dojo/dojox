@@ -294,5 +294,6 @@ var tests = [
 	{ url: "test_FilteredList-EdgeToEdgeStoreList-prog.html", tags: "FilteredLists" },
 	{ url: "test_FilteredList-EdgeToEdgeStoreList-simple.html", tags: "FilteredLists" },
 	{ url: "test_FilteredList-RoundRectList-auto.html", tags: "FilteredLists" },
-	{ url: "test_FilteredList-RoundRectList-demo.html", tags: "FilteredLists" }
+	{ url: "test_FilteredList-RoundRectList-demo.html", tags: "FilteredLists" },
+	{ url: "test_LongListMixin.html", tags: "ScrollableView" }
 ];

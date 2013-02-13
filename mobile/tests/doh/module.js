@@ -89,7 +89,8 @@ try{
 	doh.registerUrl("dojox.mobile.tests.doh.FilteredListTests", dojo.moduleUrl("dojox.mobile", "tests/doh/FilteredListTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.MblCSS3TransitionTests", dojo.moduleUrl("dojox.mobile", "tests/doh/MblCSS3TransitionTests.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.CustomFixedBarsTests", dojo.moduleUrl("dojox.mobile", "tests/doh/CustomFixedBarsTests.html"),999999);
-	doh.registerUrl("dojox.mobile.tests.doh.HeadingFixedBarsTests", dojo.moduleUrl("dojox.mobile", "tests/doh/HeadingFixedBarsTests.html"),999999); 	
+	doh.registerUrl("dojox.mobile.tests.doh.HeadingFixedBarsTests", dojo.moduleUrl("dojox.mobile", "tests/doh/HeadingFixedBarsTests.html"),999999);
+	doh.registerUrl("dojox.mobile.tests.doh.LongListMixin", dojo.moduleUrl("dojox.mobile", "tests/doh/LongListMixin.html"),999999);
 }catch(e){
 	doh.debug(e);
 }
