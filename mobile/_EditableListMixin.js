@@ -72,6 +72,7 @@ define([
 			for(var n = e.target; n !== item.domNode; n = n.parentNode){
 				if(n === item.deleteIconNode){
 					connect.publish("/dojox/mobile/deleteListItem", [item]);
+					this.onDeleteItem(item); //callback
 					break;
 				}
 			}
@@ -92,6 +93,7 @@ define([
 				this._blankItem = new ListItem();
 			}
 			var item = this._movingItem = registry.getEnclosingWidget(e.target);
+			this._startIndex = this.getIndexOfChild(item);
 			var rightIconPressed = false;
 			for(var n = e.target; n !== item.domNode; n = n.parentNode){
 				if(n === item.rightIconNode){
@@ -148,14 +150,23 @@ define([
 		_onTouchEnd: function(e){
 			// tags:
 			//		private
+			var startIndex = this._startIndex;
+			var endIndex = this.getIndexOfChild(this._blankItem);
+						
 			var ref = this._blankItem.getNextSibling();
 			ref = ref ? ref.domNode : null;
+			if(ref === null){ 
+				//If the item is droped at the end of the list the endIndex is wrong
+				endIndex--; 
+			} 
 			this.containerNode.insertBefore(this._movingItem.domNode, ref);
 			this.containerNode.removeChild(this._blankItem.domNode);
 			this._resetMoveItem(this._movingItem.domNode);
 
 			array.forEach(this._conn, connect.disconnect);
 			this._conn = null;
+			
+			this.onMoveItem(this._movingItem, startIndex, endIndex); //callback
 		},
 
 		startEdit: function(){
@@ -179,6 +190,8 @@ define([
 					this.connect(this.domNode, "onkeydown", "_onClick") // for desktop browsers
 				];
 			}
+			
+			this.onStartEdit(); // callback
 		},
 
 		endEdit: function(){
@@ -194,6 +207,37 @@ define([
 				this._handles = null;
 			}
 			this.isEditing = false;
+			
+			this.onEndEdit(); // callback
+		},
+		
+		
+		onDeleteItem: function(/*Widget*/item){
+			// summary:
+			//		Stub function to connect to from your application.
+			// description:
+			//		This function is called when a user clicks the delete
+			//		button.
+			//		You have to provide that function or subscribe to /dojox/mobile/deleteListItem, 
+			//		otherwise the delete button will have no-effect.
+			
+		},
+		
+		onMoveItem: function(/*Widget*/item, /*int*/from, /*int*/to){
+			// summary:
+			//		Stub function to connect to from your application.
+		},
+
+		onStartEdit: function(){
+			// summary:
+			//		Stub function to connect to from your application.
+		},
+
+		onEndEdit: function(){
+			// summary:
+			//		Stub function to connect to from your application.
 		}
+
+
 	});
 });
