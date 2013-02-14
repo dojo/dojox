@@ -21,13 +21,15 @@
 			"dojo/query",
 			"dojo/dom-geometry",
 			"dojox/mobile/ListItem",
+			"dojo/store/Memory",
 			"dojox/mobile/parser",
 			"dojox/mobile",
 			"dojox/mobile/compat",
 			"dojox/mobile/ScrollableView",
 			"dojox/mobile/RoundRectList",
+			"dojox/mobile/RoundRectStoreList",
 			"dojox/mobile/LongListMixin"
-		], function(ready, registry, runner, query, domGeometry, ListItem){
+		], function(ready, registry, runner, query, domGeometry, ListItem, MemoryStore){
 			
 			function fillList(list, variableHeight){
 				list = registry.byId(list);
@@ -49,6 +51,19 @@
 						}
 					));
 				}
+				doh.assertEqual(1000, list.getChildren().length, "list should have 1000 children");
+			}
+			
+			function fillStoreList(list){
+				list = registry.byId(list);
+				var data = [];
+				for(i = 0; i < 1000; i++){
+					data.push({	label: "Store item " + i });
+				}
+				
+				var store = new MemoryStore({idProperty: "label", data: data});
+				list.setStore(store);
+				
 				doh.assertEqual(1000, list.getChildren().length, "list should have 1000 children");
 			}
 			
@@ -174,6 +189,54 @@
 							}), 500);
 							return d;
 						}
+					},
+					{
+						name: "LongListMixin + store - initial items",
+						timeout: 200,
+						setUp: function(){
+							registry.byId("view2").show();
+							fillStoreList("list2");
+						},
+						runTest: function(){
+							var d = new doh.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								verifyList("list1");
+							}), 200);
+							return d;
+						}
+					},
+					{
+						name: "LongListMixin + store - scroll",
+						timeout: 1000,
+						setUp: function(){
+							fillStoreList("list2")
+							var view = registry.byId("view2");
+							view.scrollTo({y:-1000});
+						},
+						runTest: function(){
+							var d = new doh.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								verifyList("list1");
+							}), 200);
+							return d;
+						}
+					},
+					{
+						name: "LongListMixin + store - slide",
+						timeout: 1000,
+						setUp: function(){
+							fillStoreList("list2");
+							var view = registry.byId("view2");
+							view.scrollTo({y:-1000});
+							view.slideTo({y:-1200}, 0.3, "ease-out");
+						},
+						runTest: function(){
+							var d = new doh.Deferred();
+							setTimeout(d.getTestCallback(function(){
+								verifyList("list1");
+							}), 500);
+							return d;
+						}
 					}
 				]);
 				runner.run();
@@ -184,8 +247,13 @@
 </head>
 <body>
 	<div id="view1" data-dojo-type="dojox/mobile/ScrollableView" data-dojo-props="height:'400px'">
-		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="fixed: 'top'">LongListMixin 1</h1>
+		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="fixed: 'top'">LongListMixin - no store</h1>
 		<ul data-dojo-type="dojox/mobile/RoundRectList" id="list1"
+			data-dojo-mixins="dojox/mobile/LongListMixin"></ul>
+	</div>
+	<div id="view2" data-dojo-type="dojox/mobile/ScrollableView" data-dojo-props="height:'400px'">
+		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="fixed: 'top'">LongListMixin + store</h1>
+		<ul data-dojo-type="dojox/mobile/RoundRectStoreList" id="list2"
 			data-dojo-mixins="dojox/mobile/LongListMixin"></ul>
 	</div>
 </body>

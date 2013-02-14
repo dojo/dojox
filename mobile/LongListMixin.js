@@ -14,7 +14,7 @@ define([ "dojo/_base/array",
 	// summary:
 	//		A mixin that enhances performance of long lists contained in scrollable views.
 
-	return declare("dojx/mobile/LongListMixin", null, {
+	return declare("dojox.mobile.LongListMixin", null, {
 		// summary:
 		//		This mixin enhances performance of very long lists contained in scrollable views.
 		// description:
@@ -42,11 +42,6 @@ define([ "dojo/_base/array",
 		//		Number of pages that will be unloaded when maxPages is reached.
 		unloadPages: 1,
 		
-		buildRendering: function(){
-			this.inherited(arguments);
-			this.containerNode = domConstruct.create("div", null, this.domNode);
-		},
-		
 		startup : function(){
 			
 			this.inherited(arguments);
@@ -56,6 +51,17 @@ define([ "dojo/_base/array",
 				this._sv = viewRegistry.getEnclosingScrollable(this.domNode);
 
 				if(this._sv){
+
+					// Get all children already added (e.g. through markup) and initialize _items
+					this._items = this.getChildren();
+
+					// remove all existing items from the old container node
+					var c = this.containerNode;
+					array.forEach(registry.findWidgets(c), function(item){
+						c.removeChild(item.domNode);
+					});
+
+					this.containerNode = domConstruct.create("div", null, this.domNode);
 
 					// listen to scrollTo and slideTo from the parent scrollable object
 
@@ -67,9 +73,6 @@ define([ "dojo/_base/array",
 
 					this._topDiv = domConstruct.create("div", null, this.domNode, "first");
 					this._bottomDiv = domConstruct.create("div", null, this.domNode, "last");
-
-					// Get all children already added (e.g. through markup) and initialize _items
-					this._items = this.getChildren();
 
 					this._reloadItems();
 				}
@@ -275,6 +278,18 @@ define([ "dojo/_base/array",
 			}else{
 				return this.inherited(arguments);
 			}
+		},
+		
+		generateList: function(/*Array*/items){
+			// summary:
+			//		Overrides dojox.mobile._StoreListMixin when the list is a store list.
+			
+			if(this._items){
+				// _StoreListMixin calls destroyRecursive to delete existing items, not removeChild,
+				// so we must clear the existing items before the store is reloaded.
+				this._items = [];
+			}
+			this.inherited(arguments);
 		}
 	});
 });
