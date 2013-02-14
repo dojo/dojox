@@ -1,11 +1,11 @@
 define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "dojo/dom-style",
 	"dojo/dom", "dojo/dom-geometry", "dojo/dom-construct","dojo/_base/Color", "dojo/sniff",
 	"./Element", "./SimpleTheme", "./Series", "./axis2d/common", "dojox/gfx/shape",
-	"dojox/gfx", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"],
+	"dojox/gfx", "dojo/has!dojo-bidi?./bidi/Chart", "dojox/lang/functional", "dojox/lang/functional/fold", "dojox/lang/functional/reversed"],
 	function(dojox, lang, arr, declare, domStyle,
 	 		 dom, domGeom, domConstruct, Color, has,
 	 		 Element, SimpleTheme, Series, common, shape,
-	 		 g, func){
+	 		 g, BidiChart, func){
 	/*=====
 	var __ChartCtorArgs = {
 		// summary:
@@ -51,7 +51,7 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 		makeDirty = func.lambda("item.dirty = true"),
 		getName = func.lambda("item.name");
 
-	var Chart = declare("dojox.charting.Chart", null, {
+	var Chart = declare(has("dojo-bidi")? "dojox.charting.NonBidiChart" : "dojox.charting.Chart", null, {
 		// summary:
 		//		The main chart object in dojox.charting.  This will create a two dimensional
 		//		chart based on dojox.gfx.
@@ -828,10 +828,10 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			// assumption: we don't have stacked axes yet
 			var offsets = this.offsets = {l: 0, r: 0, t: 0, b: 0};
 			// chart mirroring starts
-			var isRTL = this.isRightToLeft ? this.isRightToLeft() : false;
+			var self = this;
 			func.forIn(this.axes, function(axis){
-				if(axis.vertical && isRTL){
-					axis.opt.leftBottom = !axis.opt.leftBottom;
+				if(has("dojo-bidi")){
+					self._resetLeftBottom(axis);
 				}
 				func.forIn(axis.getOffsets(), function(o, i){ offsets[i] = Math.max(o, offsets[i]); });
 			});
@@ -1146,6 +1146,13 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 					plot.dirty = true;
 				}
 			}
+		},
+		setDir : function(dir){
+			return this; 
+		},
+		_resetLeftBottom: function(axis){
+		},
+		formatTruncatedLabel: function(element, label, labelType){			
 		}
 	});
 
@@ -1198,5 +1205,5 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 		});
 	}
 	
-	return Chart;
+	return has("dojo-bidi")? declare("dojox.charting.Chart", [Chart, BidiChart]) : Chart;
 });

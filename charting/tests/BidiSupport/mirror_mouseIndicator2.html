@@ -20,10 +20,10 @@
 			@import "../../../../dojo/resources/dojo.css";
 			@import "../../../../dijit/themes/tundra/tundra.css";
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 		<script type="text/javascript">
 			require(["dojo/ready", "dojo/on", "dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Lines",
-				"dojox/charting/action2d/MouseZoomAndPan", "dojox/charting/action2d/MouseIndicator", "dojox/charting/BidiSupport"],
+				"dojox/charting/action2d/MouseZoomAndPan", "dojox/charting/action2d/MouseIndicator"],
 				function(ready, on, Chart, Default, Lines, MouseZoomAndPan, MouseIndicator){
 
 				ready(function(){

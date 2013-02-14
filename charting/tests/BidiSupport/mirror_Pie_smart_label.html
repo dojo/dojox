@@ -22,7 +22,7 @@
 			@import "../../../../dijit/themes/claro/claro.css";
 			@import "../../resources/Legend.css";
         </style>
-        <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="parseOnLoad:true">
+        <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="parseOnLoad:true, has:{'dojo-bidi': true}">
         </script>
         <script type="text/javascript">
  			dojo.require("dojo.parser");
@@ -36,9 +36,6 @@
 			dojo.require("dojox.charting.themes.Tom");
             dojo.require("dojox.charting.widget.Legend");
 			
-			dojo.require("dojox.charting.BidiSupport");
-			dojo.require("dojox.charting.widget.BidiSupport");
-
             var pieChart = null;
 			var legend = null;
             dojo.addOnLoad(function(){

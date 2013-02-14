@@ -19,7 +19,7 @@
 		@import "../../../../dojo/resources/dojo.css";
 		@import "../../../../dijit/tests/css/dijitTests.css";
 	</style>
-	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 	<script type="text/javascript">
 
         dojo.require("dojox.charting.Chart");
@@ -40,7 +40,6 @@
 
 		dojo.require("dojox.dtl");
 		dojo.require("dojox.dtl.Context");
-		dojo.require("dojox.charting.BidiSupport");
 		
 		charts = [
 			{

@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./CartesianBase", "./_PlotEvents", "./common",
-    "../axis2d/common", "dojox/gfx", "dojox/lang/utils", "dojox/gfx/fx"],
-	function(lang, array, declare, CartesianBase, _PlotEvents, dcpc, dcac, gfx, du, fx){
+    "../axis2d/common", "dojox/gfx", "dojox/lang/utils", "dojox/gfx/fx", "dojo/has"],
+	function(lang, array, declare, CartesianBase, _PlotEvents, dcpc, dcac, gfx, du, fx, has){
 
 	// all the code below should be removed when http://trac.dojotoolkit.org/ticket/11299 will be available
 	var getBoundingBox = function(shape){
@@ -9,7 +9,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 	var getTextBBox = function(s, t){
 		var c = s.declaredClass;
 		var w, h;
-		if (c.indexOf("svg")!=-1){
+		if(c.indexOf("svg")!=-1){
 			// try/catch the FF native getBBox error. cheaper than walking up in the DOM
 			// hierarchy to check the conditions (bench show /10 )
 			try {
@@ -201,7 +201,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 	});
 	=====*/
 
-	return declare("dojox.charting.plot2d.Indicator", [CartesianBase, _PlotEvents], {
+	var Indicator = declare("dojox.charting.plot2d.Indicator", [CartesianBase, _PlotEvents], {
 		// summary:
 		//		A "faux" plot that can be placed behind or above other plots to represent a line or multi-line
 		//		threshold on the chart.
@@ -310,13 +310,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			var t = this.chart.theme, c = this.chart.getCoords(), v = this.opt.vertical;
 
 			var g = this.getGroup().createGroup();
-			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false; // chart mirroring
-			var xMax = this.chart.axes.x.scaler.bounds.to + this.chart.axes.x.scaler.bounds.from; // chart mirroring
 			var mark = {};
 			mark[hn] = v?coord:0;
 			mark[vn] = v?0:coord;
-			if(isRTL){ //chart mirroring
-				mark.x = xMax - mark.x ;
+			if(has("dojo-bidi")){
+				mark.x = this._getMarkX(mark.x);
 			}
 			mark = this.toPage(mark);
 			var visible = v?mark.x >= min.x && mark.x <= max.x:mark.y >= max.y && mark.y <= min.y;
@@ -343,12 +341,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			var data;
 			if(this.opt.markers && visible){
 				var d = this._data[index];
+				var self = this;
 				if(d){
 					data = array.map(d, function(value, index){
 						mark[hn] = v?coord:value;
 						mark[vn] = v?value:coord;
-						if(isRTL){
-							mark.x = xMax - mark.x ; //chart mirroring
+						if(has("dojo-bidi")){
+							mark.x = self._getMarkX(mark.x);
 						}
 						mark = this.toPage(mark);
 						if(v?mark.y <= min.y && mark.y >= max.y:mark.x >= min.x && mark.x <= max.x){
@@ -480,4 +479,15 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			return lang.delegate(dcpc.defaultStats);
 		}
 	});
+	if(has("dojo-bidi")){
+		Indicator.extend({
+			_getMarkX: function(x){
+				if(this.chart.isRightToLeft()){
+					return this.chart.axes.x.scaler.bounds.to + this.chart.axes.x.scaler.bounds.from - x;
+				}
+				return x;
+			}			
+		});
+	}
+	return Indicator;
 });

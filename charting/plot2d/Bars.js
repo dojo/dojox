@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./CartesianBase", "./_PlotEvents", "./common",
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has", "./CartesianBase", "./_PlotEvents", "./common",
 	"dojox/gfx/fx", "dojox/lang/utils", "dojox/lang/functional", "dojox/lang/functional/reversed"], 
-	function(lang, arr, declare, CartesianBase, _PlotEvents, dc, fx, du, df, dfr){
+	function(lang, arr, declare, has, CartesianBase, _PlotEvents, dc, fx, du, df, dfr){
 		
 	/*=====
 	declare("dojox.charting.plot2d.__BarCtorArgs", dojox.charting.plot2d.__DefaultCtorArgs, {
@@ -247,8 +247,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 			}
 			this.dirty = false;
 			// chart mirroring starts
-			if(this.chart.isRightToLeft && this.chart.isRightToLeft()){
-				this.chart.applyMirroring(this.group, dim, offsets);
+			if(has("dojo-bidi")){
+				this._checkOrientation(this.group, dim, offsets);
 			}
 			// chart mirroring ends
 			return this;	//	dojox/charting/plot2d/Bars

@@ -21,7 +21,7 @@
 			@import "../../../../dijit/tests/css/dijitTests.css";
 			@import "../../../../dijit/themes/tundra/tundra.css";
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");	// scan page for widgets and instantiate them
 			dojo.require("doh.runner");
@@ -33,8 +33,6 @@
 			dojo.require("dojox.charting.axis2d.Default");
 			dojo.require("dojox.charting.plot2d.Default");
 			dojo.require("dojox.charting.themes.PrimaryColors");
-
-			dojo.require("dojox.charting.BidiSupport");	
 
 			var chart;
 

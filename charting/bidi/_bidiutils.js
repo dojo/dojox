@@ -1,5 +1,5 @@
   define ({
-		reverseMatrix: function(plot, dim, offsets){
+		reverseMatrix: function(plot, dim, offsets, rtl){
 			//summary:
 			//	reverse the underlying matrix of the plots to perform the mirroring behavior.
 			//plot:
@@ -9,14 +9,14 @@
 			//offsets:
 			//  the offsets of the chart
 			var shift = offsets.l - offsets.r;
-			var xx = -1;
+			var xx = rtl? -1 : 1;
 			var xy = 0;
 			var yx = 0;
 			var yy = 1;
-			var dx = dim.width + shift;
+			var dx = rtl? dim.width + shift : 0;
 			var dy = 0;
 			if(plot.matrix){
-				xx = -Math.abs(plot.matrix.xx);
+				xx = xx * Math.abs(plot.matrix.xx);
 				yy = plot.matrix.yy;
 				xy = plot.matrix.xy;
 				yx = plot.matrix.yx;

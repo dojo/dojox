@@ -20,14 +20,13 @@
 			@import "../../../../dojo/resources/dojo.css";
 			@import "../../../../dijit/themes/tundra/tundra.css";
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("dojox.charting.Chart");
             dojo.require("dojox.charting.axis2d.Default");
             dojo.require("dojox.charting.plot2d.Lines");
 			dojo.require("dojox.charting.themes.PlotKit.orange");
-			dojo.require("dojox.charting.BidiSupport");
 			dojo.require("dojox.charting.action2d.MouseZoomAndPan");
 			
 			var chart;

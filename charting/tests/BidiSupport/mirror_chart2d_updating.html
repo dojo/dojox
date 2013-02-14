@@ -20,7 +20,7 @@
 		@import "../../../../dijit/tests/css/dijitTests.css";
 	</style>
 	<script type="text/javascript" src="../../../../dojo/dojo.js" 
-		data-dojo-config="isDebug: true"></script>
+		data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 	<script type="text/javascript">
 
         dojo.require("dojox.charting.Chart");
@@ -29,8 +29,6 @@
         dojo.require("dojox.charting.plot2d.Grid");
 		dojo.require("dojox.charting.themes.PlotKit.orange");
 		dojo.require("dojox.charting.themes.Tufte");
-
-		dojo.require("dojox.charting.BidiSupport");
 
 		var chart, limit = 10, magnitude = 30, counter = [0, 0, 0];
 

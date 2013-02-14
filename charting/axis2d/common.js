@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom-geometry", "dojox/gfx"],
-	function(lang, win, domGeom, g){
+define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom-geometry", "dojox/gfx", "dojo/has"],
+	function(lang, win, domGeom, g, has){
 
 	var common = lang.getObject("dojox.charting.axis2d.common", true);
 	
@@ -154,6 +154,9 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/dom-geometry", "dojox/gfx"
 				// insert nodes
 				wrap.appendChild(p);
 				chart.node.insertBefore(wrap, chart.node.firstChild);
+				if(has("dojo-bidi")){
+					chart.htmlElementsRegistry.push([wrap, x, y, align, text, font, fontColor]);
+				}
 				return wrap;	//	DOMNode
 			}
 		}

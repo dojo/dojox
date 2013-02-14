@@ -21,7 +21,7 @@
 			@import "../../../../dijit/tests/css/dijitTests.css";
 			@import "../../../../dijit/themes/claro/claro.css";
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("doh.runner");
@@ -39,9 +39,6 @@
 			dojo.require("dojox.charting.plot2d.Grid");
 			dojo.require("dojox.charting.widget.Legend");
 			dojo.require("dojox.data.HtmlStore");
-
-			dojo.require("dojox.charting.BidiSupport");
-			dojo.require("dojox.charting.widget.BidiSupport");
 
 			var seriesB = [260, 180, 200, 100, 140, 70, 200]
 				, chart1, chart2, chart3, chart4;

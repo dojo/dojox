@@ -28,7 +28,7 @@
     .events th, .events td {padding: 0.25em 1em;}
     .events th {font-weight: bold;}
 </style>
-<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 <script type="text/javascript">
 dojo.require("dijit.form.Button");
 dojo.require("dijit.form.Select");
@@ -48,7 +48,6 @@ dojo.require("dojox.charting.plot2d.Pie");
 dojo.require("dojox.charting.plot2d.Grid");
 dojo.require("dojox.charting.themes.CubanShirts");
 dojo.require("dojox.charting.widget.Legend");
-dojo.require("dojox.charting.BidiSupport");
 dojo.require("dojox.charting.action2d.Base");
 dojo.require("dojox.charting.action2d.Highlight");
 dojo.require("dojox.charting.action2d.Magnify");

@@ -20,10 +20,10 @@
 	@import "../../../../dojo/resources/dojo.css";
 	@import "../../../../dijit/themes/claro/claro.css";
 </style>
-<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true"></script>
+<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 <script type="text/javascript">
 require(["dojo/ready", "dojox/charting/Chart", "dojox/charting/plot2d/Spider", "dojox/charting/themes/PlotKit/blue",
-		"dijit/Tooltip", "dojox/charting/axis2d/Base","dojox/charting/BidiSupport"], function(ready, Chart, Spider, blue, Tooltip, Base){
+		"dijit/Tooltip", "dojox/charting/axis2d/Base"], function(ready, Chart, Spider, blue, Tooltip, Base){
 	ready(function(){
 		var chart = new Chart("test");
 		chart.setTheme(blue);

@@ -1,5 +1,5 @@
-define(["dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/kernel", "./Base"],
-	function(matrix3d, declare, Color, kernel, Base) {
+define(["dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_base/kernel", "dojo/has", "./Base"],
+	function(matrix3d, declare, Color, kernel, has, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -58,8 +58,8 @@ define(["dojox/gfx3d/matrix", "dojo/_base/declare", "dojo/_base/Color", "dojo/_b
 					.setTransform(matrix3d.rotateXg(-90))
 					.setFill(this.material).setStroke(this.outline);
 			}
-			if(chart.isRightToLeft && chart.isRightToLeft()){ // chart mirroring
-				chart.applyMirroring(chart.view, {width: this.width, height: this.height}, {l: 0, r: 0, t: 0, b: 0});
+			if(has("dojo-bidi")){
+				this._checkOrientation(chart);
 			}
 		}
 	});

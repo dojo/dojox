@@ -26,7 +26,7 @@
 			.dojoxLegendNode {border: 1px solid #ccc; margin: 5px 10px 5px 10px; padding: 3px}
 			.dojoxLegendText {vertical-align: text-top; padding-right: 10px}
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 			<script type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("doh.runner");
@@ -54,9 +54,6 @@
 			dojo.require("dojo.colors");
 			dojo.require("dojo.fx.easing");
 
-			dojo.require("dojox.charting.BidiSupport");
-			dojo.require("dojox.charting.widget.BidiSupport");
-			
 			var dc = dojox.charting;
 
 			var dur = 450;

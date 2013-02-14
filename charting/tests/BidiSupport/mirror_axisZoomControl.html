@@ -27,14 +27,14 @@
 				margin-top: -5px;
 			}
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 		<script type="text/javascript">
 			var chart1, zoomAxis;
 
-			require(["dojox/charting/BidiSupport","dojo/dom", "dojo/ready", "dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Lines",
+			require(["dojo/dom", "dojo/ready", "dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Lines",
 				"dojox/charting/plot2d/StackedAreas", "dojox/charting/plot2d/Grid",
 				"dojox/charting/themes/PlotKit/orange", "dojox/charting/action2d/Tooltip",
-				"dojox/charting/action2d/Magnify", "dojo/parser", "dojox/form/RangeSlider"], function(a,dom, ready, Chart, Default, Lines, StackedAreas,
+				"dojox/charting/action2d/Magnify", "dojo/parser", "dojox/form/RangeSlider"], function(dom, ready, Chart, Default, Lines, StackedAreas,
 					Grid, orange, Tooltip, Magnify){
 				zoomXAxis = function(){
 					chart1.zoomIn("x", arguments[0]);

@@ -15,12 +15,12 @@
 	<head>
 <![endif]>
 <link rel="stylesheet" href="../../../../dijit/themes/tundra/tundra.css">
-<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, isDebug: true"></script>
+<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, isDebug: true, has:{'dojo-bidi': true}"></script>
 <script type="text/javascript">
 
 require(["dojo/ready","dojox/charting/Chart", "dojox/charting/widget/Legend", "dojox/charting/axis2d/Default",
 	"dojox/charting/plot2d/StackedAreas", "dojox/charting/plot2d/StackedLines", "dojox/charting/plot2d/StackedColumns",
-	"dojox/charting/plot2d/StackedBars","dojox/charting/BidiSupport"],
+	"dojox/charting/plot2d/StackedBars"],
 	function(ready, Chart, Legend, Default, StackedAreas, StackedLines, StackedColumns, StackedBars){
 
 	ready(function(){

@@ -20,10 +20,9 @@
 		@import "../../../../dijit/tests/css/dijitTests.css";
 	</style>
 	<!-- NOTE: This test uses amd style modules and loading, but must run in sync loading mode because it uses DTL which does not work async-->
-	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true, has:{'dojo-bidi': true}"></script>
 	<script type="text/javascript">
 		require([
-		"dojox/charting/BidiSupport",
 		"dojo/_base/array",
 		"dojo/dom",
 		"dojo/dom-style",
@@ -57,7 +56,7 @@
 		"dojox/charting/plot2d/Candlesticks",
 		"dojox/charting/plot2d/OHLC",
 		"dojox/charting/plot2d/Scatter"],
-		function(a,arr, dom, domStyle, ready, Chart, Shrooms, blue, cyan, green, Ireland, SageToLime, Minty, Tufte,
+		function(arr, dom, domStyle, ready, Chart, Shrooms, blue, cyan, green, Ireland, SageToLime, Minty, Tufte,
 			dtl, Context){
 		
 		var charts = [
@@ -749,6 +748,7 @@
 						setDir("rtl").render();
 				}
 			},
+			
 			{
 				description: "Scatter chart, custom axis, purple theme.",
 				makeChart: function(node){
@@ -784,6 +784,7 @@
 						setDir("rtl").render();
 				}
 			},
+			
 			{
 				description: "Markers, lines, 2D data, custom axis, blue theme.",
 				makeChart: function(node){

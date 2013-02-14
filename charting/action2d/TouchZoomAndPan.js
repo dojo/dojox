@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff",
-	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common"],
-	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common){
+	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common", "dojo/has!dojo-bidi?../bidi/action2d/ZoomAndPan"],
+	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common, BidiTouchZoomAndPan){
 	var GlassView = declare(Element, {
 		// summary:
 		//		Private internal class used by TouchZoomAndPan actions.
@@ -65,7 +65,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 	};
 	=====*/
 
-	return declare("dojox.charting.action2d.TouchZoomAndPan", ChartAction, {
+	var TouchZoomAndPan = declare(has("dojo-bidi")? "dojox.charting.action2d.NonBidiTouchZoomAndPan" : "dojox.charting.action2d.TouchZoomAndPan", ChartAction, {
 		// summary:
 		//		Create a touch zoom and pan action.
 		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture.
@@ -179,11 +179,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 				// avoid browser pan
 				eventUtil.stop(event);
 			}else if(this.enableScroll){
-				var delta = axis.vertical?(this._startPageCoord[attr] - event.touches[0][pAttr]):
-					(event.touches[0][pAttr] - this._startPageCoord[attr]);
-				if(this.chart.isRightToLeft && this.chart.isRightToLeft()){  // chart mirroring
-					delta *= -1;
-				}	
+				var delta = this._getDelta(event);
 				chart.setAxisWindow(this.axis, this._lastScale, this._initOffset - delta / this._lastFactor / this._lastScale);
 				chart.delayedRender();
 				// avoid browser pan
@@ -230,6 +226,15 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 				chart.render();
 			}
 			eventUtil.stop(event);
+		},
+		
+		_getDelta: function(event){
+			var axis = this.chart.getAxis(this.axis),
+			    pAttr = axis.vertical?"pageY":"pageX",
+				attr = axis.vertical?"y":"x";
+			return axis.vertical?(this._startPageCoord[attr] - event.touches[0][pAttr]):
+				(event.touches[0][pAttr] - this._startPageCoord[attr]);
 		}
 	});
+	return has("dojo-bidi")? declare("dojox.charting.action2d.TouchZoomAndPan", [TouchZoomAndPan, BidiTouchZoomAndPan]) : TouchZoomAndPan;
 });

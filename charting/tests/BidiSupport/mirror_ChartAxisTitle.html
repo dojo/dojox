@@ -40,7 +40,7 @@
 				-moz-transform: rotate(-90deg);
 			}
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 			<script type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("doh.runner");
@@ -58,8 +58,6 @@
 			dojo.require("dojox.charting.themes.PlotKit.red");
 			dojo.require("dijit.form.Button");
 			dojo.require("dijit.form.NumberSpinner");
-
-			dojo.require("dojox.charting.BidiSupport");
 
 			var chart1;
 

@@ -1,6 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-attr","dojo/_base/declare", "dojo/query",
-	"dijit/_WidgetBase", "../Chart", "dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda"],
-	function(kernel, lang, arr, domAttr, declare, query, _WidgetBase, Chart, du, df, dfl){
+	"dijit/_WidgetBase", "../Chart", "dojo/has", "dojo/has!dojo-bidi?../bidi/widget/Chart", 
+	"dojox/lang/utils", "dojox/lang/functional","dojox/lang/functional/lambda"],
+	function(kernel, lang, arr, domAttr, declare, query, _WidgetBase, ChartBase, has, BidiChart, du, df, dfl){
 
 	var collectParams, collectAxisParams, collectPlotParams,
 		collectActionParams, collectDataParams,
@@ -161,7 +162,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 		return null;
 	};
 	
-	return declare("dojox.charting.widget.Chart", _WidgetBase, {
+	var Chart = declare(has("dojo-bidi")? "dojox.charting.widget.NonBidiChart" : "dojox.charting.widget.Chart", _WidgetBase, {
 		// summary:
 		//		A chart widget.  This is leveraging dojox/charting/Chart as a Dijit widget.
 
@@ -201,7 +202,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 			
 			// build the chart
 			n.innerHTML = "";
-			var c = this.chart = new Chart(n, {
+			var c = this.chart = new ChartBase(n, {
 				margins: this.margins,
 				stroke:  this.stroke,
 				fill:    this.fill,
@@ -286,4 +287,5 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 			this.chart.resize(box);
 		}
 	});
+	return has("dojo-bidi")? declare("dojox.charting.widget.Chart", [Chart, BidiChart]) : Chart;
 });

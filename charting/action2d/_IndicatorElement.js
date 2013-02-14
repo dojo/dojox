@@ -1,6 +1,6 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/Indicator", "../plot2d/common",
-    "../axis2d/common", "dojox/gfx"], 
-	function(lang, array, declare, Indicator){
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/Indicator",
+        "dojo/has", "../plot2d/common", "../axis2d/common", "dojox/gfx"], 
+	function(lang, array, declare, Indicator, has){
 
 	var getXYCoordinates = function(v, values, data){
 		var c2, c1 = v?{ x: values[0], y : data[0][0] } :
@@ -12,7 +12,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 		return [c1, c2];
 	};
 
-	return declare(Indicator, {
+	var _IndicatorElement = declare("dojox.charting.action2d._IndicatorElement", Indicator, {
 		// summary:
 		//		Internal element used by indicator actions.
 		// tags:
@@ -74,7 +74,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 
 			this.opt = lang.delegate(inter.opt, this.opt);
 
-			if (!this.pageCoord){
+			if(!this.pageCoord){
 				this.opt.values = null;
 				this.inter.onChange({});
 			}else{
@@ -123,14 +123,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 		},
 		_updateCoordinates: function(cp1, cp2){
 			// chart mirroring starts
-			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false;
-			if(isRTL){
-				if(cp1){
-					cp1.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp1.x;
-				}
-				if(cp2){
-					cp2.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp2.x;
-				}
+			if(has("dojo-bidi")){
+				this._checkXCoords(cp1, cp2);
 			}
 			// chart mirroring ends
 			var inter = this.inter, plot = inter.plot, v = inter.opt.vertical;
@@ -282,6 +276,21 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 			// returns: Boolean
 			//		If this plot needs to be rendered, this will return true.
 			return !this._noDirty && (this.dirty || this.inter.plot.isDirty());
-		}
+		},
 	});
+	if(has("dojo-bidi")){
+		_IndicatorElement.extend({
+			_checkXCoords: function(cp1, cp2){
+				if(this.chart.isRightToLeft()){
+					if(cp1){
+						cp1.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp1.x;
+					}
+					if(cp2){
+						cp2.x = this.chart.dim.width + (this.chart.offsets.l - this.chart.offsets.r) - cp2.x;
+					}
+				}			
+			}			
+		});
+	}
+	return _IndicatorElement;
 });

@@ -19,17 +19,16 @@
 		@import "../../../../dojo/resources/dojo.css";
 		@import "../../../../dijit/tests/css/dijitTests.css";
 	</style>
-	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true, has:{'dojo-bidi': true}"></script>
 	<script type="text/javascript">
 		require([
-		"dojox/charting/BidiSupport",
 		"dojo/ready",
 		"dojo/dom",
 		"dojox/charting/Chart",
 		"dojox/charting/axis2d/Default",
 		"dojox/charting/plot2d/Lines",	
 		"dojox/charting/plot2d/Grid"],
-		function(q,ready, dom, Chart, Axis, Lines, Grid){
+		function(ready, dom, Chart, Axis, Lines, Grid){
 			ready(function(){
 				var chart = new Chart(dom.byId("chart")).
 						addAxis("x", { fixLower: "minor", fixUpper: "minor", natural: true  }).

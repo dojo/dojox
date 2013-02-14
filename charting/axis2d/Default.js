@@ -1,8 +1,9 @@
 define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare",
 	"dojo/_base/connect", "dojo/dom-geometry", "./Invisible",
-	"../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils", "dojox/lang/functional"],
+	"../scaler/linear", "./common", "dojox/gfx", "dojox/lang/utils", "dojox/lang/functional",
+	"dojo/has!dojo-bidi?../bidi/axis2d/Default"],
 	function(lang, arr, has, declare, connect, domGeom, Invisible,
-			lin, acommon, g, du, df){
+			lin, acommon, g, du, df, BidiDefault){
 
 	/*=====
 	var __AxisCtorArgs = {
@@ -98,7 +99,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 
 	var centerAnchorLimit = 45;	// in degrees
 
-	return declare("dojox.charting.axis2d.Default", Invisible, {
+	var Default = declare(has("dojo-bidi")? "dojox.charting.axis2d.NonBidiDefault" : "dojox.charting.axis2d.Default", Invisible, {
 		// summary:
 		//		The default axis object used in dojox.charting.  See dojox.charting.Chart.addAxis for details.
 
@@ -502,7 +503,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 					);
 			}
 			var text;
-			if (this._textFreePool.length > 0){
+			if(this._textFreePool.length > 0){
 				text = this._textFreePool.pop();
 				text.setShape({x: x, y: y, text: textContent, align: align});
 				// For now all items share the same font, no need to re-set it
@@ -549,7 +550,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 			// returns: dojox/charting/axis2d/Default
 			//		The reference to the axis for functional chaining.
 			
-			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false;	// chart mirroring
+			var isRTL = this._isRTL();	// chart mirroring
 			if(!this.dirty || !this.scaler){
 				return this;	//	dojox/charting/axis2d/Default
 			}
@@ -808,8 +809,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 					// Fool label: 111111W (W for bidi character)
 					// truncated label: 11...
 					// in this case for auto textDir the dir will be "ltr" which is wrong.
-					if(this.chart.truncateBidi  && label.truncated){
-						this.chart.truncateBidi(elem, tick.label, labelType);
+					if(label.truncated){
+						this.chart.formatTruncatedLabel(elem, tick.label, labelType);
 					}
 					label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
 					if(labelType == "html"){
@@ -860,8 +861,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 					// Fool label: 111111W (W for bidi character)
 					// truncated label: 11...
 					// in this case for auto textDir the dir will be "ltr" which is wrong.
-					if(this.chart.getTextDir && label.truncated){
-						this.chart.truncateBidi(elem, tick.label, labelType);
+					if(label.truncated){
+						this.chart.formatTruncatedLabel(elem, tick.label, labelType);
 					}
 					label.truncated && this.labelTooltip(elem, this.chart, tick.label, label.text, taFont, labelType);
 					if(labelType == "html"){
@@ -950,6 +951,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 					})
 				});
 			}
+		},
+		_isRTL: function(){
+			return false;
 		}
 	});
+	return has("dojo-bidi")? declare("dojox.charting.axis2d.Default", [Default, BidiDefault]) : Default;
 });

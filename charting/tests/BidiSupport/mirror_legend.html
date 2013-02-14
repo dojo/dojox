@@ -26,7 +26,7 @@
 			.dojoxLegendNode {border: 1px solid #ccc; margin: 5px 10px 5px 10px; padding: 3px}
 			.dojoxLegendText {vertical-align: text-top; padding-right: 10px}
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 
 		<script type="text/javascript">
 			var seriesB = [2.6, 1.8, 2, 1, 1.4, 0.7, 2];
@@ -38,7 +38,7 @@
 			"dojox/charting/axis2d/Default",
 			"dojox/charting/plot2d/Default",
 			"dojox/charting/widget/Legend",
-			"dojo/parser","dojox/charting/BidiSupport"], function(registry){
+			"dojo/parser"], function(registry){
 				onClick = function(){
 					var chart = registry.byId("chart1").chart;
 					chart.addSeries("Run B", [6.2, 1.4, 1, 2, 4.1, 6.3, 5]);

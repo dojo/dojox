@@ -1,6 +1,7 @@
 define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window", "dojo/_base/connect", "dojo/dom-style",
-	"./PlotAction", "dojox/gfx/matrix", "dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"],
-	function(Tooltip, lang, declare, win, hub, domStyle, PlotAction, m, df){
+	"./PlotAction", "dojox/gfx/matrix", "dojo/has", "dojo/has!dojo-bidi?../bidi/action2d/Tooltip", 
+	"dojox/lang/functional", "dojox/lang/functional/scan", "dojox/lang/functional/fold"],
+	function(DijitTooltip, lang, declare, win, hub, domStyle, PlotAction, m, has, BidiTooltip, df){
 	
 	/*=====
 	var __TooltipCtorArgs = {
@@ -33,7 +34,7 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 
 	var pi4 = Math.PI / 4, pi2 = Math.PI / 2;
 	
-	return declare("dojox.charting.action2d.Tooltip", PlotAction, {
+	var Tooltip = declare(has("dojo-bidi")? "dojox.charting.action2d.NonBidiTooltip" : "dojox.charting.action2d.Tooltip", PlotAction, {
 		// summary:
 		//		Create an action on a plot where a tooltip is shown when hovering over an element.
 
@@ -64,7 +65,7 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			// o: dojox/gfx/shape.Shape
 			//		The object on which to process the highlighting action.
 			if(o.type === "onplotreset" || o.type === "onmouseout"){
-                Tooltip.hide(this.aroundRect);
+                DijitTooltip.hide(this.aroundRect);
 				this.aroundRect = null;
 				if(o.type === "onplotreset"){
 					delete this.angles;
@@ -76,19 +77,14 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			
 			// calculate relative coordinates and the position
 			var aroundRect = {type: "rect"}, position = ["after-centered", "before-centered"];
-			// chart mirroring starts
-			var shift = this.chart.offsets.l - this.chart.offsets.r;
-			var isRTL = this.chart.isRightToLeft ? this.chart.isRightToLeft() : false;
-			var isColumn = false;   //check chart type (column/bars)
-			// chart mirroring ends
 			switch(o.element){
 				case "marker":
-					aroundRect.x = isRTL ? this.chart.dim.width - o.cx+shift : o.cx; // chart mirroring
+					aroundRect.x = o.cx;
 					aroundRect.y = o.cy;
 					aroundRect.w = aroundRect.h = 1;
 					break;
 				case "circle":
-					aroundRect.x = isRTL ? this.chart.dim.width-o.cx - o.cr+shift : o.cx - o.cr; // chart mirroring
+					aroundRect.x = o.cx - o.cr;
 					aroundRect.y = o.cy - o.cr;
 					aroundRect.w = aroundRect.h = 2 * o.cr;
 					break;
@@ -101,23 +97,14 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 					return;
 				case "column":
 					position = ["above-centered", "below-centered"];
-					isColumn = true;  // chart mirroring
 					// intentional fall down
 				case "bar":
 					aroundRect = lang.clone(o.shape.getShape());
 					aroundRect.w = aroundRect.width;
 					aroundRect.h = aroundRect.height;
-					// chart mirroring starts
-					 if(isRTL){
-						aroundRect.x = this.chart.dim.width - aroundRect.width - aroundRect.x + shift;
-						if(!isColumn){
-							position = ["before-centered", "after-centered"];
-						}
-					}
-					// chart mirroring ends
 					break;
 				case "candlestick":
-					aroundRect.x = isRTL ? this.chart.dim.width + shift - o.x : o.x; // chart Mirroring
+					aroundRect.x = o.x;
 					aroundRect.y = o.y;
 					aroundRect.w = o.width;
 					aroundRect.h = o.height;
@@ -160,7 +147,9 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 					*/
 					break;
 			}
-			
+			if(has("dojo-bidi")){
+				this._recheckPosition(o,aroundRect,position);
+			}
 			// adjust relative coordinates to absolute, and remove fractions
 			var lt = this.chart.getCoords();
 			aroundRect.x += lt.x;
@@ -171,20 +160,9 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 			aroundRect.h = Math.ceil(aroundRect.h);
 			this.aroundRect = aroundRect;
 
-			var tooltip = this.text(o, this.plot);
-			if(this.chart.getTextDir){
-				var isChartDirectionRtl = (domStyle.get(this.chart.node, "direction") == "rtl");
-				var isBaseTextDirRtl = (this.chart.getTextDir(tooltip) == "rtl");
-			}
-			if(tooltip){
-				if(isBaseTextDirRtl && !isChartDirectionRtl){
-					Tooltip.show("<span dir = 'rtl'>" + tooltip +"</span>", this.aroundRect, position);
-				}
-				else if(!isBaseTextDirRtl && isChartDirectionRtl){
-					Tooltip.show("<span dir = 'ltr'>" + tooltip +"</span>", this.aroundRect, position);
-				}else{
-					Tooltip.show(tooltip, this.aroundRect, position);
-				}
+			var tooltipText = this.text(o, this.plot);
+			if(tooltipText){
+				DijitTooltip.show(this._format(tooltipText), this.aroundRect, position);
 			}
 			if(!this.mouseOver){
 				this._handle = hub.connect(win.doc, "onclick", this, "onClick");
@@ -192,6 +170,12 @@ define(["dijit/Tooltip", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/wi
 		},
 		onClick: function(){
 			this.process({ type: "onmouseout"});
+		},
+		_recheckPosition: function(obj,rect,position){			
+		},
+		_format: function(tooltipText){
+			return tooltipText;
 		}
 	});
+	return has("dojo-bidi")? declare("dojox.charting.action2d.Tooltip", [Tooltip, BidiTooltip]) : Tooltip;
 });

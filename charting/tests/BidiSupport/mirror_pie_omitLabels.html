@@ -10,14 +10,13 @@
 	<head>
 	<![endif]>
 	<script type="text/javascript" src="../../../../dojo/dojo.js"
-		data-dojo-config="isDebug: true"></script>
+		data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 	</head>
 	
 	<body>
 		<script type="text/javascript">
 	    dojo.require("dojox.charting.Chart2D");
 	    dojo.require("dojox.charting.themes.PrimaryColors");
-		dojo.require("dojox.charting.BidiSupport");
 	    var chartData = [10000,1,10000,1,10000,1];
 	    dojo.ready(function() {
 	        var pieChart1 = new dojox.charting.Chart2D("chartNode1");

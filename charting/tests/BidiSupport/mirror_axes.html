@@ -20,7 +20,7 @@
 	@import "../../../../dojo/resources/dojo.css";
 	@import "../../../../dijit/tests/css/dijitTests.css";
 </style>
-<script src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true"></script>
+<script src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 <script>
 
 dojo.require("dojox.charting.Chart");
@@ -28,7 +28,6 @@ dojo.require("dojox.charting.axis2d.Invisible");
 dojo.require("dojox.charting.axis2d.Default");
 dojo.require("dojox.charting.plot2d.Markers");
 dojo.require("dojox.charting.themes.ThreeD");
-dojo.require("dojox.charting.BidiSupport");
 
 makeObjects = function(){
     dojo.query("button").style("disabled", true);

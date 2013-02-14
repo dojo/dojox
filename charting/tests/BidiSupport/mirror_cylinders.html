@@ -20,12 +20,11 @@
 	@import "../../../../dojo/resources/dojo.css";
 	@import "../../../../dijit/tests/css/dijitTests.css";
 </style>
-<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true"></script>
+<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, has:{'dojo-bidi': true}"></script>
 <script type="text/javascript">
 
 dojo.require("dojox.charting.Chart3D");
 dojo.require("dojox.charting.plot3d.Cylinders");
-dojo.require("dojox.charting.BidiSupport3D");
 
 makeObjects = function(){
 	var m = dojox.gfx3d.matrix;

@@ -20,7 +20,7 @@
 	@import "../../../../dojo/resources/dojo.css";
 	@import "../../../../dijit/tests/css/dijitTests.css";
 </style>
-<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, isDebug: true"></script>
+<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, isDebug: true, has:{'dojo-bidi': true}"></script>
 <script type="text/javascript">
 var chart1a, chart1b;
 function rotationXChanged(value){
@@ -41,9 +41,9 @@ function rotationYChanged(value){
 	chart1b.dirty = true;
 	chart1b.setDir("rtl").render();
 }
-require(["dojox/charting/BidiSupport","dojo/ready", "dojox/charting/Chart", "dojox/charting/axis2d/Default",
+require(["dojo/ready", "dojox/charting/Chart", "dojox/charting/axis2d/Default",
 	"dojox/charting/plot2d/Markers", "dojox/charting/action2d/MouseZoomAndPan", "dojox/charting/Theme"],
-		function(s,ready, Chart, Default, Markers,
+		function(ready, Chart, Default, Markers,
 			MouseZoomAndPan, Theme){
 	ready(function(){
 

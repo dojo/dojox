@@ -1,5 +1,5 @@
-define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/Color", "./Base"],
-	function(kernel, declare, Color, Base) {
+define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/Color", "dojo/has", "./Base"],
+	function(kernel, declare, Color, has, Base) {
 
 	// reduce function borrowed from dojox.fun
 	var reduce = function(/*Array*/ a, /*Function|String|Array*/ f, /*Object?*/ o){
@@ -55,8 +55,8 @@ define(["dojo/_base/kernel", "dojo/_base/declare", "dojo/_base/Color", "./Base"]
 					})
 					.setFill(this.material);
 			}
-			if(chart.isRightToLeft && chart.isRightToLeft()){// chart mirroring
-				chart.applyMirroring(chart.view, {width: this.width, height: this.height}, {l: 0, r: 0, t: 0, b: 0});
+			if(has("dojo-bidi")){
+				this._checkOrientation(chart);
 			}
 		}
 	});

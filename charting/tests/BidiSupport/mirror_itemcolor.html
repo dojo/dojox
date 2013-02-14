@@ -22,7 +22,7 @@
 		</style>
 		<!-- required for Tooltip: a default dijit theme: -->
 		<link rel="stylesheet" href="../../../../dijit/themes/tundra/tundra.css">
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, async: true, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 
 		<script type="text/javascript">
 			source = [
@@ -49,7 +49,7 @@
 			"dojox/charting/plot2d/Pie",
 			"dojox/charting/themes/PlotKit/orange",
 			"dojox/charting/themes/PlotKit/blue",
-			"dojox/charting/themes/PlotKit/green", "dojo/parser","dojox/charting/BidiSupport"], function(dom, registry){
+			"dojox/charting/themes/PlotKit/green", "dojo/parser"], function(dom, registry){
 				changeLimits = function(){
 					registry.byId("chart1").chart.getPlot("default").dirty = true;
 					registry.byId("chart1").chart.render();

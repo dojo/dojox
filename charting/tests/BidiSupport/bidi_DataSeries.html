@@ -74,7 +74,7 @@
 			}
 		</style>
 
-		<script src="../../../../dojo/dojo.js" data-dojo-config="isDebug: false, parseOnLoad: true"></script>
+		<script src="../../../../dojo/dojo.js" data-dojo-config="isDebug: false, parseOnLoad: true, has:{'dojo-bidi': true}"></script>
 
 		<script>
 			dojo.require("dojo.parser");
@@ -98,9 +98,6 @@
 
 			dojo.require("dijit.form.NumberSpinner");
 			
-			dojo.require("dojox.charting.BidiSupport");	
-			dojo.require("dojox.charting.widget.BidiSupport");
-		
 			var store = new dojo.data.ItemFileWriteStore({url: "stockHebrew.json"});
 			
 			function addLegend(chart, node){

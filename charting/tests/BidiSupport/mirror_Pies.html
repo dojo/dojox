@@ -20,7 +20,7 @@
 			@import "../../../../dojo/resources/dojo.css";
 			@import "../../../../dijit/tests/css/dijitTests.css";
 		</style>
-		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad:true"></script>
+		<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad:true, has:{'dojo-bidi': true}"></script>
 		<script type="text/javascript">
 			dojo.require("dojo.parser");
 			dojo.require("doh.runner");
@@ -33,8 +33,6 @@
 			dojo.require("dojox.charting.themes.Adobebricks");
 			dojo.require("dojox.charting.themes.Algae");
 			dojo.require("dojox.charting.action2d.Tooltip");
-
-			dojo.require("dojox.charting.BidiSupport");
 
 			var chart1, chart2, chart8;
 			makeObjects = function(){
