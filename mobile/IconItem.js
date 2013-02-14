@@ -147,7 +147,7 @@ define([
 			}
 
 			this._dragstartHandle = this.connect(this.domNode, "ondragstart", event.stop);
-			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+			this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 		},
 
 		highlight: function(/*Number?*/timeout){

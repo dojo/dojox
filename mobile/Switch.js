@@ -97,8 +97,8 @@ define([
 		},
 
 		postCreate: function(){
-			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
-			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+			this.connect(this.domNode, "onclick", "_onClick");
+			this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 			this._startHandle = this.connect(this.domNode, touch.press, "onTouchStart");
 			this._initialValue = this.value; // for reset()
 		},

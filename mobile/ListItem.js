@@ -177,13 +177,13 @@ define([
 			if((!this._templated || this.labelNode) && this.anchorLabel){
 				this.labelNode.style.display = "inline"; // to narrow the text region
 				this.labelNode.style.cursor = "pointer";
-				this._anchorClickHandle = this.connect(this.labelNode, "onclick", "_onClick");
+				this.connect(this.labelNode, "onclick", "_onClick");
 				this.onTouchStart = function(e){
 					return (e.target !== this.labelNode);
 				};
 			}
 			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
-				this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+				this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 			}else{
 				this._handleClick = false;
 			}

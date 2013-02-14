@@ -131,8 +131,8 @@ define([
 
 			this.domNode.appendChild(this.containerNode);
 			this.subscribe("/dojox/mobile/viewChanged", "handleViewChanged");
-			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
-			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick");
+			this.connect(this.domNode, "onclick", "_onClick");
+			this.connect(this.domNode, "onkeydown", "_onClick");
 			this._dragstartHandle = this.connect(this.domNode, "ondragstart", event.stop);
 			this.selectedItemIndex = -1;
 			this.items = [];

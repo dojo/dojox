@@ -81,7 +81,7 @@ define([
 		},
 
 		postCreate: function(){
-			this._clickHandle = this.connect(this.domNode, "onclick", "_onClick");
+			this.connect(this.domNode, "onclick", "_onClick");
 			dom.setSelectable(this.domNode, false);
 		},
 

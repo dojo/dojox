@@ -138,7 +138,7 @@ define([
 			var items = this.panelNodes[1].childNodes;
 			this._itemHeight = items[0].offsetHeight;
 			this.adjust();
-			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
+			this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
 		},
 
 		initLabels: function(){

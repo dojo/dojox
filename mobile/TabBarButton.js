@@ -135,7 +135,7 @@ define([
 			if(this._started){ return; }
 
 			this._dragstartHandle = this.connect(this.domNode, "ondragstart", event.stop);
-			this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+			this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 			var parent = this.getParent();
 			if(parent && parent.closable){
 				this._clickCloseHandler = this.connect(this.iconDivNode, "onclick", "_onCloseButtonClick");
