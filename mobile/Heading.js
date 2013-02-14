@@ -96,27 +96,33 @@ define([
 		baseClass: "mblHeading",
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement(this.tag);
+			if(!this.templateString){ // true if this widget is not templated
+				// Create root node if it wasn't created by _TemplatedMixin
+				this.domNode = this.containerNode = this.srcNodeRef || win.doc.createElement(this.tag);
+			}
 			this.inherited(arguments);
-			if(!this.label){
-				array.forEach(this.domNode.childNodes, function(n){
-					if(n.nodeType == 3){
-						var v = lang.trim(n.nodeValue);
-						if(v){
-							this.label = v;
-							this.labelNode = domConstruct.create("span", {innerHTML:v}, n, "replace");
+			
+			if(!this.templateString){ // true if this widget is not templated
+				if(!this.label){
+					array.forEach(this.domNode.childNodes, function(n){
+						if(n.nodeType == 3){
+							var v = lang.trim(n.nodeValue);
+							if(v){
+								this.label = v;
+								this.labelNode = domConstruct.create("span", {innerHTML:v}, n, "replace");
+							}
 						}
-					}
-				}, this);
+					}, this);
+				}
+				if(!this.labelNode){
+					this.labelNode = domConstruct.create("span", null, this.domNode);
+				}
+				this.labelNode.className = "mblHeadingSpanTitle";
+				this.labelDivNode = domConstruct.create("div", {
+					className: "mblHeadingDivTitle",
+					innerHTML: this.labelNode.innerHTML
+				}, this.domNode);
 			}
-			if(!this.labelNode){
-				this.labelNode = domConstruct.create("span", null, this.domNode);
-			}
-			this.labelNode.className = "mblHeadingSpanTitle";
-			this.labelDivNode = domConstruct.create("div", {
-				className: "mblHeadingDivTitle",
-				innerHTML: this.labelNode.innerHTML
-			}, this.domNode);
 
 			dom.setSelectable(this.domNode, false);
 		},

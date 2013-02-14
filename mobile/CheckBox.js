@@ -20,13 +20,16 @@ define([
 		_setTypeAttr: function(){}, // cannot be changed: IE complains w/o this
 
 		buildRendering: function(){
-			if(!this.srcNodeRef){
+			if(!this.templateString && !this.srcNodeRef){
 				// The following doesn't work on IE < 8 if the default state is checked.
 				// You have to use "<input checked>" instead but it's not worth the bytes here.
 				this.srcNodeRef = domConstruct.create("input", {type: this.type});
 			}
 			this.inherited(arguments);
-			this.focusNode = this.domNode;
+			if(!this.templateString){
+				// if this widget is templated, let the template set the focusNode via an attach point
+				this.focusNode = this.domNode;
+			}
 		},
 		
 		_getValueAttr: function(){

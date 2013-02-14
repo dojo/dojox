@@ -70,7 +70,10 @@ define([
 		},
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+			if(!this.templateString){
+				// Create root node if it wasn't created by _TemplatedMixin
+				this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+			}
 
 			this._animEndHandle = this.connect(this.domNode, css3.name("animationEnd"), "onAnimationEnd");
 			this._animStartHandle = this.connect(this.domNode, css3.name("animationStart"), "onAnimationStart");

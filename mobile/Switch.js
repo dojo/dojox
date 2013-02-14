@@ -63,33 +63,37 @@ define([
 		role: "", // a11y
 
 		buildRendering: function(){
-			this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
-				this.srcNodeRef : domConstruct.create("span");
+			if(!this.templateString){ // true if this widget is not templated
+				this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
+					this.srcNodeRef : domConstruct.create("span");
+			}
 			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
 			if(typeof this.domNode.style.msTouchAction != "undefined"){
 				this.domNode.style.msTouchAction = "none";
 			}
 			this.inherited(arguments);
-			var c = (this.srcNodeRef && this.srcNodeRef.className) || this.className || this["class"];
-			if((c = c.match(/mblSw.*Shape\d*/))){ this.shape = c; }
-			domClass.add(this.domNode, this.shape);
-			var nameAttr = this.name ? " name=\"" + this.name + "\"" : "";
-			this.domNode.innerHTML =
-				  '<div class="mblSwitchInner">'
-				+	'<div class="mblSwitchBg mblSwitchBgLeft">'
-				+		'<div class="mblSwitchText mblSwitchTextLeft"></div>'
-				+	'</div>'
-				+	'<div class="mblSwitchBg mblSwitchBgRight">'
-				+		'<div class="mblSwitchText mblSwitchTextRight"></div>'
-				+	'</div>'
-				+	'<div class="mblSwitchKnob"></div>'
-				+	'<input type="hidden"'+nameAttr+'></div>'
-				+ '</div>';
-			var n = this.inner = this.domNode.firstChild;
-			this.left = n.childNodes[0];
-			this.right = n.childNodes[1];
-			this.knob = n.childNodes[2];
-			this.input = n.childNodes[3];
+			if(!this.templateString){ // true if this widget is not templated
+				var c = (this.srcNodeRef && this.srcNodeRef.className) || this.className || this["class"];
+				if((c = c.match(/mblSw.*Shape\d*/))){ this.shape = c; }
+				domClass.add(this.domNode, this.shape);
+				var nameAttr = this.name ? " name=\"" + this.name + "\"" : "";
+				this.domNode.innerHTML =
+					  '<div class="mblSwitchInner">'
+					+	'<div class="mblSwitchBg mblSwitchBgLeft">'
+					+		'<div class="mblSwitchText mblSwitchTextLeft"></div>'
+					+	'</div>'
+					+	'<div class="mblSwitchBg mblSwitchBgRight">'
+					+		'<div class="mblSwitchText mblSwitchTextRight"></div>'
+					+	'</div>'
+					+	'<div class="mblSwitchKnob"></div>'
+					+	'<input type="hidden"'+nameAttr+'></div>'
+					+ '</div>';
+				var n = this.inner = this.domNode.firstChild;
+				this.left = n.childNodes[0];
+				this.right = n.childNodes[1];
+				this.knob = n.childNodes[2];
+				this.input = n.childNodes[3];
+			}
 		},
 
 		postCreate: function(){

@@ -29,19 +29,22 @@ define([
 		},
 				
 		_setRightTextAttr: function(text){		
-			if(!this.rightTextNode){
+			if(!this.templateString && !this.rightTextNode){
+				// When using a template, let the template create the element.
 				this.rightTextNode = domConstruct.create("div", {className:"mblListItemRightText"}, this.labelNode, "before");
 			}
-			this.rightText = text;
-			this.rightTextNode.innerHTML = this._cv ? this._cv(text) : text;			
-			if(this.textDir){
-				this.rightTextNode.innerHTML = common.enforceTextDirWithUcc(this.rightTextNode.innerHTML, this.textDir);
+			if(this.rightTextNode){ // when using a template it may not contain a rightTextNode 
+				this.rightText = text;
+				this.rightTextNode.innerHTML = this._cv ? this._cv(text) : text;			
+				if(this.textDir){
+					this.rightTextNode.innerHTML = common.enforceTextDirWithUcc(this.rightTextNode.innerHTML, this.textDir);
+				}
 			}
 		},
 		
 		_setLabelAttr: function(/*String*/text){
-			this.inherited("_setLabelAttr",arguments);			
-			this.labelNode.innerHTML = common.enforceTextDirWithUcc(this.labelNode.innerHTML, this.textDir);			
+			this.inherited("_setLabelAttr",arguments);
+			this.labelNode.innerHTML = common.enforceTextDirWithUcc(this.labelNode.innerHTML, this.textDir);
 		},
 		
 		_applyTextDirToTextElements: function(){

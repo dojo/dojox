@@ -60,17 +60,19 @@ define([
 		halo: "8pt",
 
 		buildRendering: function(){
-			this.focusNode = this.domNode = domConstruct.create("div", {});
+			if(!this.templateString){ // true if this widget is not templated
+				this.focusNode = this.domNode = domConstruct.create("div", {});
+				this.valueNode = domConstruct.create("input", (this.srcNodeRef && this.srcNodeRef.name) ? { type: "hidden", name: this.srcNodeRef.name } : { type: "hidden" }, this.domNode, "last");
+				var relativeParent = domConstruct.create("div", { style: { position:"relative", height:"100%", width:"100%" } }, this.domNode, "last");
+				this.progressBar = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderProgressBar" }, relativeParent, "last");
+				this.touchBox = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderTouchBox" }, relativeParent, "last");
+				this.handle = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderHandle" }, relativeParent, "last");
+			}
+			this.inherited(arguments);
 			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
 			if(typeof this.domNode.style.msTouchAction != "undefined"){
 				this.domNode.style.msTouchAction = "none";
 			}
-			this.valueNode = domConstruct.create("input", (this.srcNodeRef && this.srcNodeRef.name) ? { type: "hidden", name: this.srcNodeRef.name } : { type: "hidden" }, this.domNode, "last");
-			var relativeParent = domConstruct.create("div", { style: { position:"relative", height:"100%", width:"100%" } }, this.domNode, "last");
-			this.progressBar = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderProgressBar" }, relativeParent, "last");
-			this.touchBox = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderTouchBox" }, relativeParent, "last");
-			this.handle = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderHandle" }, relativeParent, "last");
-			this.inherited(arguments);
 		},
 
 		_setValueAttr: function(/*Number*/ value, /*Boolean?*/ priorityChange){

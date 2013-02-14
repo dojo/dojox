@@ -140,7 +140,11 @@ define([
 		_selClass: "mblListItemSelected",
 
 		buildRendering: function(){
-			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+			this._templated = !!this.templateString; // true if this widget is templated
+			if(!this._templated){
+				// Create root node if it wasn't created by _TemplatedMixin
+				this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+			}
 			this.inherited(arguments);
 
 			if(this.selected){
@@ -150,16 +154,27 @@ define([
 				domClass.replace(this.domNode, "mblEdgeToEdgeCategory", this.baseClass);
 			}
 
-			this.labelNode =
-				domConstruct.create("div", {className:"mblListItemLabel"});
-			var ref = this.srcNodeRef;
-			if(ref && ref.childNodes.length === 1 && ref.firstChild.nodeType === 3){
-				// if ref has only one text node, regard it as a label
-				this.labelNode.appendChild(ref.firstChild);
+			if(!this._templated){
+				this.labelNode =
+					domConstruct.create("div", {className:"mblListItemLabel"});
+				var ref = this.srcNodeRef;
+				if(ref && ref.childNodes.length === 1 && ref.firstChild.nodeType === 3){
+					// if ref has only one text node, regard it as a label
+					this.labelNode.appendChild(ref.firstChild);
+				}
+				this.domNode.appendChild(this.labelNode);
 			}
-			this.domNode.appendChild(this.labelNode);
+			this._layoutChildren = [];
+		},
 
-			if(this.anchorLabel){
+		startup: function(){
+			if(this._started){ return; }
+			var parent = this.getParent();
+			var opts = this.getTransOpts();
+			// When using a template, labelNode may be created via an attach point.
+			// The attach points are not yet set when ListItem.buildRendering() 
+			// executes, hence the need to use them in startup().
+			if((!this._templated || this.labelNode) && this.anchorLabel){
 				this.labelNode.style.display = "inline"; // to narrow the text region
 				this.labelNode.style.cursor = "pointer";
 				this._anchorClickHandle = this.connect(this.labelNode, "onclick", "_onClick");
@@ -167,14 +182,6 @@ define([
 					return (e.target !== this.labelNode);
 				};
 			}
-			this._layoutChildren = [];
-		},
-
-		startup: function(){
-			if(this._started){ return; }
-
-			var parent = this.getParent();
-			var opts = this.getTransOpts();
 			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
 				this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
 			}else{
@@ -242,8 +249,11 @@ define([
 				this.layoutVariableHeight();
 			}
 
-			// If labelNode is empty, shrink it so as not to prevent user clicks.
-			this.labelNode.style.display = this.labelNode.firstChild ? "block" : "inline";
+			// labelNode may not exist only when using a template (if not created by an attach point)
+			if(!this._templated || this.labelNode){
+				// If labelNode is empty, shrink it so as not to prevent user clicks.
+				this.labelNode.style.display = this.labelNode.firstChild ? "block" : "inline";
+			}
 		},
 
 		_onTouchStart: function(e){
@@ -264,7 +274,8 @@ define([
 			if(this.getParent().isEditing || e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
 			var n = this.labelNode;
-			if(this.anchorLabel && e.currentTarget === n){
+			// labelNode may not exist only when using a template 
+			if((this._templated || n) && this.anchorLabel && e.currentTarget === n){
 				domClass.add(n, "mblListItemLabelSelected");
 				setTimeout(function(){
 					domClass.remove(n, "mblListItemLabelSelected");
@@ -398,7 +409,8 @@ define([
 		_setRightTextAttr: function(/*String*/text){
 			// tags:
 			//		private
-			if(!this.rightTextNode){
+			if(!this._templated && !this.rightTextNode){
+				// When using a template, let the template create the element.
 				this.rightTextNode = domConstruct.create("div", {className:"mblListItemRightText"}, this.labelNode, "before");
 			}
 			this.rightText = text;

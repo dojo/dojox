@@ -44,7 +44,8 @@ var categories = [
 	{ tag: "misc", label: "misc"},
 	{ tag: "pageTurn", label: "pageTurn"},
 	{ tag: "transition", label: "transition"},
-	{ tag: "FilteredLists", label: "FilteredLists"}
+	{ tag: "FilteredLists", label: "FilteredLists"},
+	{ tag: "TemplatedWidgets", label: "TemplatedWidgets"}
 ];
 var tests = [
 	{ url: "test_Accordion-demo.html", tags: "Accordion" },
@@ -295,5 +296,6 @@ var tests = [
 	{ url: "test_FilteredList-EdgeToEdgeStoreList-simple.html", tags: "FilteredLists" },
 	{ url: "test_FilteredList-RoundRectList-auto.html", tags: "FilteredLists" },
 	{ url: "test_FilteredList-RoundRectList-demo.html", tags: "FilteredLists" },
-	{ url: "test_LongListMixin.html", tags: "ScrollableView" }
+	{ url: "test_LongListMixin.html", tags: "ScrollableView" },
+	{ url: "test_Templated-widgets.html", tags: "TemplatedWidgets" }
 ];
