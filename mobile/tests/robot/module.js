@@ -5,7 +5,7 @@ try{
 		test_robot = true;
 		
 	if(test_robot){
-		doh.registerUrl("dojox.mobile.tests.robot.RoundRectList", dojo.moduleUrl("dojox.mobile", "tests/robot/RoundRectListCallback.html"), 999999);
+		doh.registerUrl("dojox.mobile.tests.robot.RoundRectList", dojo.moduleUrl("dojox.mobile", "tests/robot/RoundRectListConnect.html"), 999999);
 		doh.registerUrl("dojox.mobile.tests.robot.ButtonList", dojo.moduleUrl("dojox.mobile", "tests/robot/ButtonList.html"), 999999);
 		doh.registerUrl("dojox.mobile.tests.robot.ButtonList", dojo.moduleUrl("dojox.mobile", "tests/robot/ButtonList2.html"), 999999);
 		doh.registerUrl("dojox.mobile.tests.robot.switch", dojo.moduleUrl("dojox.mobile", "tests/robot/Switch.html"), 999999);
