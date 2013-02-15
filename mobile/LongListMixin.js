@@ -284,7 +284,7 @@ define([ "dojo/_base/array",
 			// summary:
 			//		Overrides dojox.mobile._StoreListMixin when the list is a store list.
 			
-			if(this._items){
+			if(this._items && !this.append){
 				// _StoreListMixin calls destroyRecursive to delete existing items, not removeChild,
 				// so we must clear the existing items before the store is reloaded.
 				this._items = [];
