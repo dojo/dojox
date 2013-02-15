@@ -531,7 +531,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		//		Sets read only (or unsets) all the children as well
 		this.inherited(arguments);
 		if("readOnly" in this.attributeMap){
-			this._attrToDom("readOnly", value);
+			this[this.attributeMap.readOnly].setAttribute("readonly", value);
 		}
 		this.readOnly = value;
 		array.forEach(this._getChildren(), function(node){
