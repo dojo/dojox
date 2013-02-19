@@ -56,10 +56,7 @@ define([ "dojo/_base/array",
 					this._items = this.getChildren();
 
 					// remove all existing items from the old container node
-					var c = this.containerNode;
-					array.forEach(registry.findWidgets(c), function(item){
-						c.removeChild(item.domNode);
-					});
+					this._clearItems();
 
 					this.containerNode = domConstruct.create("div", null, this.domNode);
 
@@ -104,10 +101,7 @@ define([ "dojo/_base/array",
 			// summary:	Resets the internal state and reloads items according to the current scroll position.
 
 			// remove all loaded items
-			var c = this.containerNode;
-			array.forEach(registry.findWidgets(c), function(item){
-				c.removeChild(item.domNode);
-			});
+			this._clearItems();
 			
 			// reset internal state
 			this._loadedYMin = this._loadedYMax = 0;
@@ -116,6 +110,14 @@ define([ "dojo/_base/array",
 			this._topDiv.style.height = "0px";
 			
 			this._loadItems();
+		},
+		
+		_clearItems: function(){
+			// summary: Removes all currently loaded items.
+			var c = this.containerNode;
+			array.forEach(registry.findWidgets(c), function(item){
+				c.removeChild(item.domNode);
+			});
 		},
 		
 		_addBefore: function(){
@@ -288,6 +290,7 @@ define([ "dojo/_base/array",
 				// _StoreListMixin calls destroyRecursive to delete existing items, not removeChild,
 				// so we must clear the existing items before the store is reloaded.
 				this._items = [];
+				this._clearItems();
 			}
 			this.inherited(arguments);
 		}
