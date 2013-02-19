@@ -12,6 +12,7 @@ var categories = [
 	{ tag: "EdgeToEdgeStoreList", label: "EdgeToEdgeStoreList"},
 	{ tag: "FixedSplitter", label: "FixedSplitter"},
 	{ tag: "FormControls", label: "FormControls"},
+	{ tag: "FormLayout", label: "FormLayout"},
 	{ tag: "GridLayout", label: "GridLayout"},
 	{ tag: "Heading", label: "Heading"},
 	{ tag: "Icon", label: "Icon"},
