@@ -324,6 +324,6 @@ define([
 			this.minusBtnNode.setAttribute("tabIndex", tabIndex);
 		}
 	});
-	
+
 	return has("dojo-bidi") ? declare("dojox.mobile.ValuePickerSlot", [ValuePickerSlot, BidiValuePickerSlot]) : ValuePickerSlot;
 });

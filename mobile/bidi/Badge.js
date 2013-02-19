@@ -2,7 +2,7 @@ define(["dojo/_base/declare", "./common"], function(declare, common){
 
 	// module:
 	//		dojox/mobile/bidi/Badge
-	
+
 	return declare(null, {
 		// summary:
 		//		Support for control over text direction for Badge, using Unicode Control Characters to control text direction.
@@ -17,16 +17,16 @@ define(["dojo/_base/declare", "./common"], function(declare, common){
 		//		The text direction can be different than the GUI direction.
 		//		Values: "ltr", "rtl", "auto"(the direction of a text defined by first strong letter).
 		textDir: "", 
-	
+
 		setValue: function(/*String*/value){
 			this.domNode.firstChild.innerHTML = common.enforceTextDirWithUcc(value, this.textDir);
 		},
-		
+
 		setTextDir: function(/*String*/textDir){
 			if (this.textDir !== textDir){
 				this.textDir = textDir;
 				this.domNode.firstChild.innerHTML = common.enforceTextDirWithUcc(common.removeUCCFromText(this.domNode.firstChild.innerHTML), this.textDir);
-			}		
+			}
 		}
 	});
 });

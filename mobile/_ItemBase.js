@@ -11,7 +11,7 @@ define([
 	"dijit/_WidgetBase",
 	"./TransitionEvent",
 	"./iconUtils",
-	"./sniff",	
+	"./sniff",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/_ItemBase"
 ], function(array, declare, lang, win, domClass, touch, registry, Contained, Container, WidgetBase, TransitionEvent, iconUtils, has, BidiItemBase){
 

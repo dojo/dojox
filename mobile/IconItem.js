@@ -404,5 +404,5 @@ define([
 		}
 	});
 
-	return has("dojo-bidi") ? declare("dojox.mobile.IconItem", [IconItem, BidiIconItem]) : IconItem;		
+	return has("dojo-bidi") ? declare("dojox.mobile.IconItem", [IconItem, BidiIconItem]) : IconItem;
 });

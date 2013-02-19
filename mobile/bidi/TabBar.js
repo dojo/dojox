@@ -5,7 +5,7 @@ define([
 
 	// module:
 	//		mobile/bidi/TabBar
-	
+
 	return declare(null, {
 		// summary:
 		//		Support for control over text direction for mobile TabBar widget, using Unicode Control Characters to control text direction.
@@ -17,7 +17,7 @@ define([
 			if(!this._created || this.textDir !== textDir){
 				this._set("textDir", textDir);
 				common.setTextDirForButtons(this);
-			}	
+			}
 		}
 	});
 });

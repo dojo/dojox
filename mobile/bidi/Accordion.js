@@ -1,6 +1,6 @@
-define([	
-    "dojo/_base/declare",	
-    "./common"	
+define([
+	"dojo/_base/declare",
+	"./common"
 ], function(declare, common){
 
 	// module:
@@ -16,7 +16,7 @@ define([
 		_setupChild: function(child){
 			if(this.textDir){
 				child.label = common.enforceTextDirWithUcc(child.label, this.textDir); 
-			}			
+			}
 			this.inherited(arguments);
 		}
 	});

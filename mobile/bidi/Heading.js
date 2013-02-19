@@ -2,10 +2,10 @@ define([
 	"dojo/_base/declare",
 	"./common"
 ], function(declare, common){
-	
+
 	// module:
 	//		dojox/mobile/bidi/Heading
-	
+
 	return declare(null, {
 		// summary:
 		//		Support for control over text direction for mobile Heading widget, using Unicode Control Characters to control text direction.
@@ -19,7 +19,7 @@ define([
 			this.labelDivNode.innerHTML = common.enforceTextDirWithUcc(this.labelDivNode.innerHTML, this.textDir);
 		},
 
-		_setBackAttr: function(back){	
+		_setBackAttr: function(back){
 			this.inherited(arguments);
 			this.backButton.labelNode.innerHTML = common.enforceTextDirWithUcc(this.backButton.labelNode.innerHTML, this.textDir);
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML;
@@ -28,10 +28,10 @@ define([
 		_setTextDirAttr: function( textDir){
 			if(!this._created || this.textDir != textDir){
 				this._set("textDir", textDir);
-				if(this.getTextDir(this.labelDivNode.innerHTML) === "rtl"){ this.domNode.style.direction = "rtl"; }//for text-overflow: ellipsis;				
+				if(this.getTextDir(this.labelDivNode.innerHTML) === "rtl"){ this.domNode.style.direction = "rtl"; }//for text-overflow: ellipsis;
 				this.labelDivNode.innerHTML = common.enforceTextDirWithUcc(common.removeUCCFromText(this.labelDivNode.innerHTML), this.textDir);
 				common.setTextDirForButtons(this);
-			}			
+			}
 		}
 	});
 });

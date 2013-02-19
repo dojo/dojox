@@ -1,6 +1,6 @@
-define([	
-    "dojo/_base/declare",
-    "./common"	
+define([
+	"dojo/_base/declare",
+	"./common"
 ], function(declare, common){
 
 	// module:
@@ -15,7 +15,7 @@ define([
 		//		Mobile RoundRectCategory widget loads this module when user sets "has: {'dojo-bidi': true }" in data-dojo-config.
 		_setLabelAttr: function(text){
 			if(this.textDir){
-		        text = common.enforceTextDirWithUcc(text, this.textDir);
+				text = common.enforceTextDirWithUcc(text, this.textDir);
 			}
 			this.inherited(arguments);
 		},
@@ -25,6 +25,6 @@ define([
 				this.label = common.removeUCCFromText(this.label);
 				this.set('label', this.label);
 			}
-		}	
+		}
 	});
 });

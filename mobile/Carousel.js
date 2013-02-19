@@ -446,5 +446,5 @@ define([
 			this._set("title", title);
 		}
 	});
-	return has("dojo-bidi") ? declare("dojox.mobile.Carousel", [Carousel, BidiCarousel]) : Carousel;	
+	return has("dojo-bidi") ? declare("dojox.mobile.Carousel", [Carousel, BidiCarousel]) : Carousel;
 });

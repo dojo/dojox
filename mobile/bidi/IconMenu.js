@@ -1,6 +1,6 @@
 define([
-    "dojo/_base/declare",
-    "./common"
+	"dojo/_base/declare",
+	"./common"
 ], function(declare, common){
 
 	// module:
@@ -17,7 +17,7 @@ define([
 			if(!this._created || this.textDir !== textDir){
 				this._set("textDir", textDir);
 				common.setTextDirForButtons(this);
-			}	
+			}
 		}
 	});
 });

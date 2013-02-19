@@ -5,7 +5,7 @@ define([
 
 	// module:
 	//		mobile/bidi/TabBarButton
-	
+
 	return declare(null, {
 		// summary:
 		//		Support for control over text direction for mobile TabBarButton widget, using Unicode Control Characters to control text direction.

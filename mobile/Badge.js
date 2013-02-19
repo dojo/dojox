@@ -64,6 +64,6 @@ define([
 			this.domNode.firstChild.innerHTML = value;
 		}
 	});
-	
+
 	return has("dojo-bidi") ? declare("dojox.mobile.Badge", [Badge, BidiBadge]) : Badge;
 });

@@ -469,5 +469,5 @@ define([
 	// This is for the benefit of the parser.   Remove for 2.0.  Also, hide from doc viewer.
 	lang.extend(WidgetBase, /*===== {} || =====*/ Accordion.ChildWidgetProperties);
 
-	return has("dojo-bidi") ? declare("dojox.mobile.Accordion", [Accordion, BidiAccordion]) : Accordion;	
+	return has("dojo-bidi") ? declare("dojox.mobile.Accordion", [Accordion, BidiAccordion]) : Accordion;
 });

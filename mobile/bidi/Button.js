@@ -2,8 +2,8 @@ define(["dojo/_base/declare", "./common"], function(declare, common){
 
 	// module:
 	//		mobile/bidi/Button
-	
-	return 	declare(null, {
+
+	return declare(null, {
 		// summary:
 		//		Support for control over text direction for mobile Button widget, using Unicode Control Characters to control text direction.
 		// description:
@@ -14,7 +14,7 @@ define(["dojo/_base/declare", "./common"], function(declare, common){
 			this.inherited(arguments, [this._cv ? this._cv(content) : content]);
 			this.focusNode.innerHTML = common.enforceTextDirWithUcc(this.focusNode.innerHTML, this.textDir); 
 		},
-	
+
 		_setTextDirAttr: function(/*String*/ textDir){
 			if(!this._created || this.textDir !== textDir){
 				this._set("textDir", textDir);

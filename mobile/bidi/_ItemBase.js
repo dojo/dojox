@@ -5,8 +5,8 @@ define([
 
 	// module:
 	//		dojox/mobile/bidi/_ItemBase
-	
-	return 	declare(null, {	
+
+	return declare(null, {
 		// summary:
 		//		Support for control over text direction for mobile _ItemBase widget, using Unicode Control Characters to control text direction.
 		// description:
@@ -22,13 +22,13 @@ define([
 			}
 			this.labelNode.innerHTML = common.enforceTextDirWithUcc(this.labelNode.innerHTML, this.textDir);
 		},
-		
+
 		_setTextDirAttr: function(/*String*/ textDir){
 			if(!this._created || this.textDir !== textDir){
 				this._set("textDir", textDir);
 				this.labelNode.innerHTML = common.enforceTextDirWithUcc(common.removeUCCFromText(this.labelNode.innerHTML), this.textDir);
 				if (this.badgeObj && this.badgeObj.setTextDir){ this.badgeObj.setTextDir(textDir); }
 			}
-		}		
+		}
 	});
 });

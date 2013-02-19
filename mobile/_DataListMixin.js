@@ -5,12 +5,12 @@ define([
 	"./_DataMixin",
 	"./ListItem",
 	"dojo/has",
-	"dojo/has!dojo-bidi?dojox/mobile/bidi/_DataListMixin"	
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/_DataListMixin"
 ], function(array, declare, registry, DataMixin, ListItem, has, BidiDataListMixin){
 
 	// module:
 	//		dojox/mobile/_DataListMixin
-	
+
 	var _DataListMixin = declare(has("dojo-bidi") ? "dojox.mobile._NonBidiDataListMixin" : "dojox.mobile._DataListMixin", DataMixin, {
 		// summary:
 		//		Mixin for widgets to generate the list items corresponding to

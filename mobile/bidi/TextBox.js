@@ -1,6 +1,6 @@
-define([	
-    "dojo/_base/declare",
-    "dijit/_BidiSupport"  //load implementation for textDir from dijit (for editable widgets), (no direct references)
+define([
+	"dojo/_base/declare",
+	"dijit/_BidiSupport"  //load implementation for textDir from dijit (for editable widgets), (no direct references)
 ], function(declare){
 
 	// module:
@@ -13,7 +13,7 @@ define([
 		//		Implementation for text direction using HTML "dir" attribute (used for editable widgets).
 		//		This class should not be used directly.
 		//		Mobile TextBox widget loads this module when user sets "has: {'dojo-bidi': true }" in data-dojo-config.
-		_setTextDirAttr: function(/*String*/ textDir){	
+		_setTextDirAttr: function(/*String*/ textDir){
 			if(!this._created || this.textDir != textDir){
 				this._set("textDir", textDir);
 				if(this.value){
@@ -24,25 +24,25 @@ define([
 				}
 			}
 		},
-		
+
 		_setDirAttr: function(/*String*/ dir){
 			if(!(this.textDir && this.textbox)){
 				this.dir = dir;
-			}			
+			}
 		},
-		
+
 		_onBlur: function(e){
 			this.inherited(arguments);
 			if(!this.textbox.value){
 				this.applyTextDir(this.textbox, this.textbox.getAttribute("placeholder"));
 			}
 		},
-		
+
 		_onInput: function(e){
 			this.inherited(arguments);
 			if(!this.textbox.value){
 				this.applyTextDir(this.textbox, this.textbox.getAttribute("placeholder"));
 			}
-		}		
-	});	
+		}
+	});
 });

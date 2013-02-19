@@ -5,8 +5,8 @@ define([
 
 	// module:
 	//		dojox/mobile/bidi/_StoreListMixin
-	
-	return 	declare(null, {
+
+	return declare(null, {
 		// summary:
 		//		Support for control over text direction for mobile _StoreListMixin.
 		// description:

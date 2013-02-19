@@ -230,6 +230,6 @@ define([
 			this._set("busy", busy);
 		}	
 	});
-	
+
 	return has("dojo-bidi") ? declare("dojox.mobile.Heading", [Heading, BidiHeading]) : Heading;
 });
