@@ -30,6 +30,8 @@
 				// No initial value specified
 				var slot0 = new SpinWheelSlot({labels:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'], 
 					style:"text-align:center;width:40px;"});
+				slot0._valueBeforeStartup = slot0.get("value");
+				slot0._keyBeforeStartup = slot0.get("key");
 				demoWidget.addChild(slot0);
 				
 				// Initial value: C
@@ -99,6 +101,17 @@
 			"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
 		], function(ready, registry, runner, SpinWheel, SpinWheelSlot){
 			ready(function(){
+				
+				var testEmptySlot = function(emptySlot){
+					// Test for the edge-case of slots with no items. 
+					// Mainly checks that no error is thrown.
+					emptySlot.setInitialValue();
+					emptySlot.resize();
+					doh.assertEqual("", emptySlot.get("value"));
+					emptySlot.set("value", "some value"); // no-op for empty slot
+					doh.assertEqual("", emptySlot.get("value"));
+				};
+				
 				runner.register("dojox.mobile.test.doh.SpinWheel", [
 					{
 						name: "SpinWheel Verification",
@@ -116,6 +129,8 @@
 								doh.assertEqual('pt', slots[5].get("value"));
 								doh.assertEqual('<img src=../images/i-icon-1.png>', slots[6].get("value"));
 								doh.assertEqual('value2', slots[7].get("value"));
+								doh.assertEqual('A', slots[0]._valueBeforeStartup);
+								doh.assertEqual(0, slots[0]._keyBeforeStartup);
 								
 								// Test case for #16519
 								var noError = true; 
@@ -133,6 +148,16 @@
 									noError = false;
 								}
 								doh.assertTrue(noError, "Calling SpinWheelSlot.disableValues shouldn't throw an exception!");
+								
+								// Test case for #16701 (support for the edge-case of empty slots)
+								// (without the fix of #16701, leads to infinite loop)
+								testEmptySlot(new SpinWheelSlot({
+									items:[] // empty
+								}));
+								testEmptySlot(new SpinWheelSlot({
+									labels:[] // empty 
+								}));
+								testEmptySlot(new SpinWheelSlot()); // empty
 							}),2000);
 							return d;
 						}

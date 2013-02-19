@@ -106,15 +106,17 @@ define([
 			for(var k = 0; k < 3; k++){
 				this.panelNodes[k] = domConstruct.create("div", {className:"mblSpinWheelSlotPanel"});
 				var len = this.items.length;
-				var n = Math.ceil(this.minItems / len);
-				for(j = 0; j < n; j++){
-					for(i = 0; i < len; i++){
-						domConstruct.create("div", {
-							className: "mblSpinWheelSlotLabel",
-							name: this.items[i][0],
-							val: this.items[i][1],
-							innerHTML: this._cv ? this._cv(this.items[i][1]) : this.items[i][1]
-						}, this.panelNodes[k]);
+				if(len > 0){ // if the slot is not empty
+					var n = Math.ceil(this.minItems / len);
+					for(j = 0; j < n; j++){
+						for(i = 0; i < len; i++){
+							domConstruct.create("div", {
+								className: "mblSpinWheelSlotLabel",
+								name: this.items[i][0],
+								val: this.items[i][1],
+								innerHTML: this._cv ? this._cv(this.items[i][1]) : this.items[i][1]
+							}, this.panelNodes[k]);
+						}
 					}
 				}
 				this.containerNode.appendChild(this.panelNodes[k]);
@@ -133,12 +135,14 @@ define([
 			if(this._started){ return; }
 			this.inherited(arguments);
 			this.noResize = true;
-			this.init();
-			this.centerPos = this.getParent().centerPos;
-			var items = this.panelNodes[1].childNodes;
-			this._itemHeight = items[0].offsetHeight;
-			this.adjust();
-			this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
+			if(this.items.length > 0){ // if the slot is not empty
+				this.init();
+				this.centerPos = this.getParent().centerPos;
+				var items = this.panelNodes[1].childNodes;
+				this._itemHeight = items[0].offsetHeight;
+				this.adjust();
+				this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
+			}
 		},
 
 		initLabels: function(){
@@ -242,6 +246,17 @@ define([
 		_getKeyAttr: function(){
 			// summary:
 			//		Gets the key for the currently selected value.
+			if(!this._started){
+				if(this.items){
+					var v = this.value;
+					for(var i = 0; i < this.items.length; i++){
+						if(this.items[i][1] == this.value){
+							return this.items[i][0];
+						}
+					}
+				}
+				return null;
+			}
 			var item = this.getCenterItem();
 			return (item && item.getAttribute("name"));
 		},
@@ -249,14 +264,23 @@ define([
 		_getValueAttr: function(){
 			// summary:
 			//		Gets the currently selected value.
-			var item = this.getCenterItem();
-			return (item && item.getAttribute("val"));
+			if(!this._started){
+				return this.value;
+			}
+			if(this.items.length > 0){ // if the slot is not empty
+				var item = this.getCenterItem();
+				return (item && item.getAttribute("val"));
+			}else{
+				return this._initialValue;
+			}
 		},
 
 		_setValueAttr: function(value){
 			// summary:
 			//		Sets the value to this slot.
-			this._spinToValue(value, true);
+			if(this.items.length > 0){ // no-op for empty slots
+				this._spinToValue(value, true);
+			}
 		},
 		
 		_spinToValue: function(value, applyValue){
