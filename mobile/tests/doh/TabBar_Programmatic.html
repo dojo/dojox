@@ -81,6 +81,62 @@
 				tabBar.addChild(tabBarButton);
 				tabBar.startup();
 
+				dojo.create("div", {className:"label", innerHTML:"segmented control with fill = 'always'"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-sc", barType:"segmentedControl", fill: "always"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 3; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-sc-button" + i, innerHTML:"Button"}));
+				}
+				tabBar.startup();
+
+				dojo.create("div", {className:"label", innerHTML:"tabBar with fill = 'always'"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-tb", fill: "always"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 3; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-tb-button" + i, icon1:"../images/tab-icon-16.png", icon2:"../images/tab-icon-16h.png", moveTo:"view1", selected:"true", label:"New"}));
+				}
+				tabBar.startup();
+
+				dojo.create("div", {className:"label", innerHTML:"tabBar with fill = 'always' (CSS sprite)"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-tb-css", fill: "always", iconBase:"../images/tab-icons.png"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 5; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-tb-css-button" + i, iconPos1:"0,29,29,29", iconPos2:"29,29,29,29", label:"Categories"}));
+				}
+				tabBar.startup();
+
+				dojo.create("div", {className:"label", innerHTML:"slimTab with fill = 'always'"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-st", barType:"slimTab", fill: "always"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 4; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-st-button" + i, innerHTML:"Button"}));
+				}
+				tabBar.startup();
+
+				dojo.create("div", {className:"label", innerHTML:"standardTab with fill = 'always'"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-std", barType:"standardTab", fill: "always"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 4; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-std-button" + i, innerHTML:"Button"}));
+				}
+				tabBar.startup();
+
+				dojo.create("div", {className:"label", innerHTML:"flatTab with fill = 'always'"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-flat", barType:"flatTab", fill: "always"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 4; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-flat-button" + i, innerHTML:"Button"}));
+				}
+				tabBar.startup();
+
+				dojo.create("div", {className:"label", innerHTML:"tallTab with fill = 'always'"}, dojo.doc.body);
+				tabBar = new dojox.mobile.TabBar({id: "spread-tall", barType:"tallTab", fill: "always"});
+				dojo.doc.body.appendChild(tabBar.domNode);
+				for (var i=1; i <= 4; i++){
+					tabBar.addChild(new dojox.mobile.TabBarButton({id:"spread-tall-button" + i, innerHTML:"Button"}));
+				}
+				tabBar.startup();
+
 				var view = new dojox.mobile.View({id:"view1", selected:"true", innerHTML:'<div class="view">View 1</div>'});
 				dojo.doc.body.appendChild(view.domNode);
 				view.startup();
