@@ -210,7 +210,7 @@ define([
 				// will not send the click because we stopped the touchstart.
 				// However, this does not seem true any more in Android 4.1 where the click is
 				// actually sent by the OS. So we must not send it a second time.
-				if(has('touch') && !(has("android") >= 4.1)){
+				if(has('touch') && !(has("android") >= 4.1 || has("ie") >= 10)){
 					var ev = win.doc.createEvent("MouseEvents");
 					ev.initMouseEvent("click", true, true, win.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
 					this.inner.dispatchEvent(ev);

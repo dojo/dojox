@@ -523,7 +523,7 @@ define([
 					// will not send the click because we prevented/stopped the touchstart.
 					// However, this does not seem true any more in Android 4.1 where the click is
 					// actually sent by the OS. So we must not send it a second time.
-					if(has('touch') && !this.isFormElement(e.target) && !(has("android") >= 4.1)){
+					if(has('touch') && !this.isFormElement(e.target) && !(has("android") >= 4.1 || has("ie") >= 10)){
 						var elem = e.target;
 						if(elem.nodeType != 1){
 							elem = elem.parentNode;
