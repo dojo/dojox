@@ -284,7 +284,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/array","dojo/dom-att
 			//		If no box is provided, resize the surface to the marginBox of the domNode.
 			// box:
 			//		If passed, denotes the new size of the widget.
-			this.chart.resize(box);
+			this.chart.resize(arguments);
 		}
 	});
 	return has("dojo-bidi")? declare("dojox.charting.widget.Chart", [Chart, BidiChart]) : Chart;
