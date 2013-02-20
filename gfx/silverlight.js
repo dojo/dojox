@@ -696,7 +696,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		s._onLoadName = onLoadName;
 		window[onLoadName] = function(sender){
 			if(!s.rawNode){
-				s.rawNode = dom.byId(pluginName).content.root;
+				s.rawNode = dom.byId(pluginName, parentNode.ownerDocument).content.root;
 				// register the plugin with its parent node
 				surfaces[s._nodeName] = parentNode;
 				s.onLoad(s);
@@ -725,7 +725,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		}
 		parentNode.innerHTML = obj;
 
-		var pluginNode = dom.byId(pluginName);
+		var pluginNode = dom.byId(pluginName, parentNode.ownerDocument);
 		if(pluginNode.content && pluginNode.content.root){
 			// the plugin was created synchronously
 			s.rawNode = pluginNode.content.root;
