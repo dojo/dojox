@@ -44,10 +44,16 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 				for(var i = 0; i < children.length;++i){
 					shape.dispose(children[i], true);
 				}
+				if(this.getGroup().rawNode){
+					domConstruct.empty(this.getGroup().rawNode);
+				}
 				this.getGroup().clear();
 				shape.dispose(this.getGroup(), true);
 				if(this.getGroup() != this.group){
 					// we do have an intermediary clipping group (see CartesianBase)
+					if(this.group.rawNode){
+						domConstruct.empty(this.group.rawNode);
+					}
 					this.group.clear();
 					shape.dispose(this.group, true);
 				}
@@ -72,11 +78,19 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 			this.destroyHtmlElements();
 			if(!creator){ creator = this.chart.surface; }
 			if(this.group){
+				var bgnode;
 				var children = this.getGroup().children;
 				for(var i = 0; i < children.length;++i){
 					shape.dispose(children[i], true);
 				}
+				if(this.getGroup().rawNode){
+					bgnode = this.getGroup().bgNode;
+					domConstruct.empty(this.getGroup().rawNode);
+				}
 				this.getGroup().clear();
+				if(bgnode){
+					this.getGroup().rawNode.appendChild(bgnode);
+				}
 			}else{
 				this.group = creator.createGroup();
 			}
