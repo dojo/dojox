@@ -182,6 +182,9 @@ define([
 				}
 				child.rightIconNode.style.display = "";
 				child.deleteIconNode.style.display = "";
+				if(typeof child.rightIconNode.style.msTouchAction != "undefined"){
+					child.rightIconNode.style.msTouchAction = "none";
+				}
 			}, this);
 			if(!this._handles){
 				this._handles = [
@@ -201,6 +204,9 @@ define([
 			array.forEach(this.getChildren(), function(child){
 				child.rightIconNode.style.display = "none";
 				child.deleteIconNode.style.display = "none";
+				if(typeof child.rightIconNode.style.msTouchAction != "undefined"){
+					child.rightIconNode.style.msTouchAction = "auto";
+				}
 			});
 			if(this._handles){
 				array.forEach(this._handles, this.disconnect, this);
