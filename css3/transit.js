@@ -1,5 +1,5 @@
-define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"],
-	function(darray, domStyle, all, transition){
+define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "dojo/sniff", "./transition"],
+	function(darray, domStyle, all, has, transition){
 	// module: 
 	//		dojox/css3/transit
 	
@@ -21,7 +21,7 @@ define(["dojo/_base/array", "dojo/dom-style", "dojo/promise/all", "./transition"
 		//		reverse direction to the default direction. Finally the duration
 		//		of the transition can be overridden by setting the duration property.
 		var rev = (options && options.reverse) ? -1 : 1;
-		if(!options || !options.transition || !transition[options.transition]){
+		if(!options || !options.transition || !transition[options.transition] || (has("ie") && has("ie") < 10)){
 			if(from){
 				domStyle.set(from,"display","none");
 			}
