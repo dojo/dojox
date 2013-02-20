@@ -23,7 +23,9 @@ define("dojox/rpc/JsonRPC", ["dojo", "dojox", "dojox/rpc/Service"], function(doj
 			},
 	
 			deserialize: function(obj){
-				if ('Error' == obj.name){
+				if ('Error' == obj.name // old xhr
+					|| obj instanceof RequestError // new xhr
+				){
 					obj = dojo.fromJson(obj.responseText);
 				}
 				if(obj.error) {
