@@ -1,4 +1,4 @@
-define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gfx", "dojox/gfx/utils", "dojox/gfx/shape"],
+define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/declare", "dojox/gfx", "dojox/gfx/utils", "dojox/gfx/shape"],
 	function(lang, arr, domConstruct, declare, gfx, utils, shape){
 	
 	return declare("dojox.charting.Element", null, {
@@ -55,6 +55,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 				utils.forEach(this.group, function(child){
 					shape.dispose(child);
 				});
+				if(this.group.rawNode){
+					domConstruct.empty(this.group.rawNode);
+				}
 				this.group.clear();
 				this.group.removeShape();
 				shape.dispose(this.group);
@@ -79,10 +82,18 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/dom-construct","dojo/_base/
 			this.destroyHtmlElements();
 			if(!creator){ creator = this.chart.surface; }
 			if(this.group){
+				var bgnode;
 				utils.forEach(this.group, function(child){
 					shape.dispose(child);
 				});
+				if(this.group.rawNode){
+					bgnode = this.group.bgNode;
+					domConstruct.empty(this.group.rawNode);
+				}
 				this.group.clear();
+				if(bgnode){
+					this.group.rawNode.appendChild(bgnode);
+				}
 			}else{
 				this.group = creator.createGroup();
 			}
