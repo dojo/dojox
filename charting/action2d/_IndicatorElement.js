@@ -276,7 +276,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 			// returns: Boolean
 			//		If this plot needs to be rendered, this will return true.
 			return !this._noDirty && (this.dirty || this.inter.plot.isDirty());
-		},
+		}
 	});
 	if(has("dojo-bidi")){
 		_IndicatorElement.extend({
