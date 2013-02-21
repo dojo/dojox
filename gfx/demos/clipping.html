@@ -35,7 +35,7 @@
 					initial_matrix = m.translate(150, 150);
 								
 				
-				makeShapes = function() {
+				var makeShapes = function() {
 					surface = gfx.createSurface(dom.byId("gfx_holder"), 500, 500);
 					surface.createRect({
 						x : 0,
@@ -823,9 +823,11 @@
 				};
 				var vml, sx = 100, sy = 80, startTime;
 				
-				render = function(timestamp){
+				var render = function(timestamp){
 					window.requestAnimationFrame(render);
-					timestamp = timestamp || new Date().getTime();;
+                    // do not use timestamp param as it has different type (high resolution timer vs "unix" time).
+                    // Let's stick to Data.getTime for maximum back compat.
+                    timestamp = new Date().getTime();
             		var elapsed = timestamp - startTime,
 						vx = elapsed/1000*sx,
 						vy = elapsed/1000*sy,
@@ -835,11 +837,11 @@
 					p = m.multiplyPoint(initial_matrix, p);
 					if(p.x + vx <= 0 || p.x + vx +clipr.width >= 500){
 						sx = -sx;
-						vx = elapsed/1000*sx;
+						vx = -vx;
 					}
 					if(p.y + vy <= 0 || p.y + vy + clipr.height >= 500){
 						sy = -sy;
-						vy = elapsed/1000*sy;
+						vy = -vy;
 					}
 					p.x += vx;
 					p.y += vy;
