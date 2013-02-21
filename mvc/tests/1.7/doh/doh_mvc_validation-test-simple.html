@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>DOH Validation Relevant Test</title>
-		<link rel='stylesheet' href='../../../../dojo/resources/dojo.css'>
+		<link rel='stylesheet' href='../../../../../dojo/resources/dojo.css'>
 		<link rel='stylesheet' href='../../../../../dijit/themes/dijit.css'>
 		<link rel='stylesheet' href='../../../../../dijit/themes/claro/claro.css'>
 <script type="text/javascript" djConfig="parseOnLoad:0,isDebug:1,async:1" src="../../../../../dojo/dojo.js"></script>
@@ -15,8 +15,9 @@
 					'dojox/mvc',
 					'dojox/mvc/StatefulModel',
 					'dojo/_base/lang',
+					"dojo/_base/html",
 					'dijit/form/Button'
-				], function (declare, parser, mvc, StatefulModel, lang) {
+				], function (declare, parser, mvc, StatefulModel, lang, html) {
 					var Model = declare([StatefulModel], {
 						constructor: function (args) {
 							mvc.bindInputs([this.num1, this.num2], lang.hitch(this, '_checkNums'));

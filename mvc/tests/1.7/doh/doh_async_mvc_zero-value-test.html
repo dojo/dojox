@@ -15,13 +15,14 @@
 		require([
 		'dojo/parser',
         'dojox/mvc',
+        'dojo/dom',
         'dojo/ready',
 		'dojox/mvc/Group',
 		'dojox/mvc/Output',
 		'dojo/parser',
 		'dijit/form/Form',
 		'dijit/form/TextBox',
-		'dijit/form/Button'], function(parser, mvc, ready){
+		'dijit/form/Button'], function(parser, mvc, dom, ready){
 
 			var order = {"First" : 0};
 			model = mvc.newStatefulModel({data : order});
@@ -43,10 +44,10 @@
 						doh.register("check initial values and bindings", [{
 							name : "initial",
 							runTest : function() {
-								doh.is("Priority: 0", dojo.byId("one").innerHTML,"One should be set to Priority: 0");
-								doh.is("0", dojo.byId("two").innerHTML,"One should be set to Priority: 0");
-								doh.is("Priority: 0", dojo.byId("three").innerHTML,"One should be set to Priority: 0");
-								doh.is("0", dojo.byId("four").innerHTML,"One should be set to Priority: 0");
+								doh.is("Priority: 0", dom.byId("one").innerHTML,"One should be set to Priority: 0");
+								doh.is("0", dom.byId("two").innerHTML,"One should be set to Priority: 0");
+								doh.is("Priority: 0", dom.byId("three").innerHTML,"One should be set to Priority: 0");
+								doh.is("0", dom.byId("four").innerHTML,"One should be set to Priority: 0");
 								doh.is("0",  dijit.byId("FirstWork").get('value'),"FirstWork should be 0");
 								doh.is("0",  dijit.byId("First").get('value'),"FirstWork should be 0");
 							}
@@ -60,10 +61,10 @@
 								first1 = dijit.byId("First");
 								first1.set("value",2);
 								if (first1) {
-									doh.is("Priority: 0", dojo.byId("one").innerHTML,"One should be set to Priority: 0");
-									doh.is("0", dojo.byId("two").innerHTML,"One should be set to Priority: 0");
-									doh.is("Priority: 2", dojo.byId("three").innerHTML,"One should be set to Priority: 0");
-									doh.is("2", dojo.byId("four").innerHTML,"One should be set to Priority: 0");
+									doh.is("Priority: 0", dom.byId("one").innerHTML,"One should be set to Priority: 0");
+									doh.is("0", dom.byId("two").innerHTML,"One should be set to Priority: 0");
+									doh.is("Priority: 2", dom.byId("three").innerHTML,"One should be set to Priority: 0");
+									doh.is("2", dom.byId("four").innerHTML,"One should be set to Priority: 0");
 									doh.is("2",  dijit.byId("FirstWork").get('value'),"FirstWork should be 0");
 									doh.is("2",  dijit.byId("First").get('value'),"FirstWork should be 0");
 								}
@@ -78,10 +79,10 @@
 								first1 = dijit.byId("First");
 								first1.set("value",0);
 								if (first1) {
-									doh.is("Priority: 0", dojo.byId("one").innerHTML,"One should be set to Priority: 0");
-									doh.is("0", dojo.byId("two").innerHTML,"One should be set to Priority: 0");
-									doh.is("Priority: 0", dojo.byId("three").innerHTML,"One should be set to Priority: 0");
-									doh.is("0", dojo.byId("four").innerHTML,"One should be set to Priority: 0");
+									doh.is("Priority: 0", dom.byId("one").innerHTML,"One should be set to Priority: 0");
+									doh.is("0", dom.byId("two").innerHTML,"One should be set to Priority: 0");
+									doh.is("Priority: 0", dom.byId("three").innerHTML,"One should be set to Priority: 0");
+									doh.is("0", dom.byId("four").innerHTML,"One should be set to Priority: 0");
 									doh.is("0",  dijit.byId("FirstWork").get('value'),"FirstWork should be 0");
 									doh.is("0",  dijit.byId("First").get('value'),"FirstWork should be 0");
 								}
