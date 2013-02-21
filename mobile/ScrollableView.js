@@ -154,7 +154,7 @@ define([
 			// remove padding top from the view after the transition
 			this.domNode.style.paddingTop = "";
 			this.containerNode.style.paddingTop = "";
-		},
+		}
 
 	});
 });
