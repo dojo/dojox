@@ -1,7 +1,8 @@
 define([
 	"doh",
+	"dojo/Stateful",
 	"dojox/mvc/StatefulArray"
-], function(doh, StatefulArray){
+], function(doh, Stateful, StatefulArray){
 	doh.register("dojox.mvc.tests.doh.StatefulArray", [
 		{
 			name: "splice",
@@ -40,6 +41,11 @@ define([
 			doh.is([0, 1, 2, 3], a.concat(), "concat() with empty args should end up with the same array");
 			doh.is([0, 1, 2, 3, 4, 5, 6, 7, 8], a.concat([4, 5], [6, 7, 8]), "concat() should support multiple args");
 			doh.is([0, 1, 2, 3, 4, 5, 6, 7, 8], a.concat(4, 5, [6, 7, 8]), "concat() should non-array values");
+		},
+		function isInstanceOf(){
+			var a = new StatefulArray();
+			doh.t(a.isInstanceOf(Stateful), "StatefulArray should be a subclass of Stateful");
+			doh.t(a.isInstanceOf(StatefulArray), "StatefulArray's instance should work with isInstanceOf() call");
 		}
 	]);
 });

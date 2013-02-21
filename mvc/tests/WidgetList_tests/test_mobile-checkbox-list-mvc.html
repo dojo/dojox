@@ -391,11 +391,12 @@
 				data-dojo-props="children: at(listsCtrl, 'model')"
 				data-mvc-child-type="dojox/mvc/Templated"
 				data-mvc-child-mixins="dojox/mobile/ListItem"
-				data-mvc-child-props="label: at(this.target, 'title'),
-				                      clickable: true,
+				data-mvc-child-props="clickable: true,
 				                      onClick: function(){ console.log('Selected list: ' + this.indexAtStartup); selectList(this.indexAtStartup); }">
 				<script type="dojox/mvc/InlineTemplate">
-					<li class="mblVariableHeight"></li>
+					<li class="mblVariableHeight">
+						<div class="mblListItemLabel" style="display: block;" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at('rel:', 'title')"></div>
+					</li>
 				</script>
 			</ul>
 		</div>

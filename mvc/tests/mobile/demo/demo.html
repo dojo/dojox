@@ -139,7 +139,6 @@
 					data-mvc-child-mixins="dojox/mobile/ListItem"
 					data-mvc-child-props="moveTo: 'repeatdetails',
 					                      uniqueId: at(this.target, 'uniqueId'),
-					                      label: at(this.target, 'First'),
 					                      transitionOptions: {title: 'Detail', target: 'details,detail'},  
 					                      clickable: 'true',
 					                      callback: function(){ listCtl.setDetailsContext(this.uniqueId); }">
@@ -156,6 +155,7 @@
 									</td>
 								</tr>
 							</table>
+							<div class="mblListItemLabel" style="display: block;" data-dojo-type="dojox/mvc/Output" data-dojo-props="value: at('rel:', 'First')"></div>
 						</li>
 					</script>
 				</ul>
