@@ -169,7 +169,7 @@ define([
 			if(!this._conn){
 				this._conn = [
 					this.connect(this.inner, touch.move, "onTouchMove"),
-					this.connect(this.inner, touch.release, "onTouchEnd")
+					this.connect(win.doc, touch.release, "onTouchEnd")
 				];
 			}
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;

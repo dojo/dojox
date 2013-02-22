@@ -4,6 +4,7 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/event",
 	"dojo/_base/lang",
+	"dojo/_base/window",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"dojo/touch",
@@ -12,7 +13,7 @@ define([
 	"./sniff",
 	"./viewRegistry",
 	"./_css3"
-], function(array, connect, declare, event, lang, domGeometry, domStyle, touch, registry, IconItem, has, viewRegistry, css3){
+], function(array, connect, declare, event, lang, win, domGeometry, domStyle, touch, registry, IconItem, has, viewRegistry, css3){
 
 	// module:
 	//		dojox/mobile/_EditableIconMixin
@@ -131,7 +132,7 @@ define([
 			if(!this._conn){
 				this._conn = [
 					this.connect(this.domNode, touch.move, "_onTouchMove"),
-					this.connect(this.domNode, touch.release, "_onTouchEnd")
+					this.connect(win.doc, touch.release, "_onTouchEnd")
 				];
 			}
 			this._touchStartPosX = e.touches ? e.touches[0].pageX : e.pageX;

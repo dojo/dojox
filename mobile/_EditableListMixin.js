@@ -5,13 +5,14 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/event",
+	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"dojo/touch",
 	"dijit/registry",
 	"./ListItem"
-], function(array, connect, declare, event, domClass, domGeometry, domStyle, touch, registry, ListItem){
+], function(array, connect, declare, event, win, domClass, domGeometry, domStyle, touch, registry, ListItem){
 
 	// module:
 	//		dojox/mobile/EditableRoundRectList
@@ -111,7 +112,7 @@ define([
 			if(!this._conn){
 				this._conn = [
 					this.connect(this.domNode, touch.move, "_onTouchMove"),
-					this.connect(this.domNode, touch.release, "_onTouchEnd")
+					this.connect(win.doc, touch.release, "_onTouchEnd")
 				];
 			}
 			this._pos = [];
