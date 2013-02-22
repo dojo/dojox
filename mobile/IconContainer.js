@@ -91,10 +91,7 @@ define([
 			if(this.editable && !this.startEdit){ // if editable is true but editableMixinClass is not inherited
 				require([this.editableMixinClass], lang.hitch(this, function(module){
 					declare.safeMixin(this, new module());
-					//this.set("editable", this.editable);
-					// workaround for regression caused by changeset 30598:
-					// call the custom setter directly.
-					this._setEditableAttr(this.editable);
+					this.set("editable", this.editable);
 				}));
 			}
 		},
