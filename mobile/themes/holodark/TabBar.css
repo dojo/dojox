@@ -16,6 +16,11 @@
   color: #ffffff;
 }
 /* dojox.mobile.TabBarButton */
+.mblTabBarFill .mblTabBarButton {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
 .mblTabBarButton {
   overflow: hidden;
   cursor: pointer;
@@ -300,4 +305,14 @@
     top: 12px;
     left: 0px;
   }
+}
+/* when fill is activated, box-sizing is border-box */
+.mblTabBarTabBar.mblTabBarFill .mblTabBarButton {
+  height: 48px;
+}
+.mblTabBarSegmentedControl.mblTabBarFill .mblTabBarButton {
+  height: 29px;
+}
+.mblTabBarTallTab.mblTabBarFill .mblTabBarButton {
+  height: 62px;
 }

@@ -149,11 +149,10 @@ define([
 				this.containerNode.style.paddingLeft = "";
 				margin = Math.floor((w - (bw + bm * 2) * arr.length) / 2);
 				if(this.fill == "always" || (this.fill == "auto" && (w < this._largeScreenWidth || margin < 0))){
+					domClass.add(this.domNode, "mblTabBarFill");
 					for(i = 0; i < arr.length; i++){
 						arr[i].style.width = (100/arr.length) + "%";
 						arr[i].style.margin = "0";
-						arr[i].style["box-sizing"] = "border-box";
-						arr[i].style.MozBoxSizing = "border-box";
 					}
 				}else{
 					// Fixed width buttons. Mainly for larger screen such as iPad.
@@ -172,13 +171,12 @@ define([
 				}
 				var parent = this.getParent();
 				if(this.fill == "always"){
+					domClass.add(this.domNode, "mblTabBarFill");
 					for(i = 0; i < arr.length; i++){
 						arr[i].style.width = (100/arr.length) + "%";
 						if(this._barType != "segmentedControl" && this._barType != "standardTab") {
 							arr[i].style.margin = "0";
 						}
-						arr[i].style["box-sizing"] = "border-box";
-						arr[i].style.MozBoxSizing = "border-box";
 					}
 				}else{
 					if(this.center && (!parent || !domClass.contains(parent.domNode, "mblHeading"))){
