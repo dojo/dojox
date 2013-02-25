@@ -117,6 +117,9 @@ define([
 			var v = this.get("values12");
 			v[2] = ampm;
 			this.set("values12", v);
+			if(this.onValueChanged){
+				this.onValueChanged(this);
+			}
 		},
 
 		_setIs24hAttr: function(/*Boolean*/is24h){

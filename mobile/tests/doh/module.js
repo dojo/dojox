@@ -47,6 +47,7 @@ define(["doh/runner", "dojo/sniff", "require"], function(doh, has, require){
 		doh.registerUrl("dojox.mobile.tests.doh.SpinWheel", require.toUrl("./SpinWheel_Programmatic.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.SpinWheelDatePicker", require.toUrl("./SpinWheelDatePicker.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.ValuePickerDatePicker", require.toUrl("./ValuePickerDatePicker.html"),999999);
+		doh.registerUrl("dojox.mobile.tests.doh.ValuePickerTimePickerTests", require.toUrl("./ValuePickerTimePickerTests.html"),999999);
 
 		doh.registerUrl("dojox.mobile.tests.doh.Button", require.toUrl("./ButtonTests.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.CheckBox", require.toUrl("./CheckBoxTests.html"),999999);
