@@ -118,7 +118,7 @@ define([
 			v[2] = ampm;
 			this.set("values12", v);
 			if(this.onValueChanged){
-				this.onValueChanged(this);
+				this.onValueChanged(this.slots[0]);
 			}
 		},
 
