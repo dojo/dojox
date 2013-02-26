@@ -62,10 +62,10 @@ define(["dojo/_base/kernel", "dojo/dom-style", "dojo/_base/lang", "dojo/_base/ht
 			}
 			if(this.tPropertyName){
 				this.setTransform = function(/*DomNode*/node, /*String*/ transform){
-					return DOMStyle.set(node, this.tPropertyName, transform);
+					return sset(node, this.tPropertyName, transform);
 				};
 				this.getTransform = function(/*DomNode*/node){
-					return DOMStyle.get(node, this.tPropertyName);
+					return sget(node, this.tPropertyName);
 				};
 			}else if(has("ie")){
 				this.setTransform = this._setTransformFilter;
