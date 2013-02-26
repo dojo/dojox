@@ -24,7 +24,7 @@ define(["dojo/_base/declare", "./Default", "./commonStacked"],
 			// except if interpolates is false in which case ignore null between valid data
 			for(var j = min; j <= max; j++){
 				var value = indexed ? commonStacked.getIndexValue(this.series, i, j) : commonStacked.getValue(this.series, i, run.data[j] ?run.data[j].x: null);
-				if(value != null && (indexed || value[0].y != null)){
+				if(value[0] != null && (indexed || value[0].y != null)){
 					if(!rseg){
 						rseg = [];
 						segments.push({index: j, rseg: rseg});
