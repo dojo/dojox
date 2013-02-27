@@ -111,7 +111,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			// this is needed to workaround issue on iOS Safari + SVG, because a touch start action
 			// started above a item that is removed during the touch action will stop
 			// dispatching touch events!
-			if(has("ios") && this.chart.surface.declaredClass.indexOf("svg")!=-1){
+			if(this.chart.surface.declaredClass.indexOf("svg")!=-1){
 				this.chart.addPlot(this._uName, {type: GlassView});
 			}
 		},
@@ -119,7 +119,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 		disconnect: function(){
 			// summary:
 			//		Disconnect this action from the chart.
-			if(has("ios") && this.chart.surface.declaredClass.indexOf("svg")!=-1){
+			if(this.chart.surface.declaredClass.indexOf("svg")!=-1){
 				this.chart.removePlot(this._uName);
 			}
 			this.inherited(arguments);
