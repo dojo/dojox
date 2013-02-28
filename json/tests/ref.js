@@ -26,6 +26,17 @@ doh.register("dojox.json.tests.ref", [
 		t.assertEqual(mirrorObj.b.h, mirrorObj.a);
 		t.assertEqual(mirrorObj.array[0], mirrorObj.array[1]);
 	},
+	function toJsonGeneratedIds(t){ 
+		// Make obj reference b twice to ensure that there is at least one $ref 
+		// from obj to b. 
+	 	var b = {__id: 'bId', x: 2}, 
+	 	obj = {a: 1, b1: b, b2: b}; 
+	 	dojox.json.ref.toJson(obj); 
+	 	t.f(obj.hasOwnProperty('__id'), 'obj has __id property.'); 
+	 	t.t(obj.b1 === b, 'obj.b1 !== b'); 
+	 	t.t(obj.b2 === b, 'obj.b2 !== b'); 
+	 	t.is('bId', b.__id, 'b.__id'); 
+	}, 
 	function usingSchemas(t) {
 		var testStr = '{id:"/dog/1",eats:{$ref:"/cat/2"},aTime:"2008-11-07T20:26:17-07:00"}';
 		var schemas = {
