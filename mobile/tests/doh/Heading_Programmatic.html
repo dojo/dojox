@@ -61,6 +61,19 @@
 				
 				demoWidget.startup();
 				
+				// Test case for #16349
+				demoWidget = new dojox.mobile.Heading();
+				dojo.doc.body.appendChild(demoWidget.containerNode);
+				
+				demoWidget.set("href", "fragment1.html");
+				demoWidget.set("transition", "flip");
+				demoWidget.set("back", "Back");
+				demoWidget.set("href", "fragment2.html");
+				demoWidget.set("transition", "fade");
+				// If #16349 is not fixed, this is needed for changing the href or transition afterwards:
+				// demoWidget.backButton.set("href", "fragment2.html");
+				// demoWidget.backButton.set("transition", "fade");
+				
 				doh.register("dojox.mobile.test.doh.Heading1", [
 					function test_Heading_Verification(){
 						var demoWidget = dijit.byId("dojox_mobile_Heading_0");
@@ -78,17 +91,23 @@
 						demoWidget = dijit.byId("dojox_mobile_Heading_3");
 						doh.assertTrue('mblHeading mblHeadingCenterTitle' == demoWidget.domNode.className || 'mblHeading' == demoWidget.domNode.className);
 						
+						// Test case for #16275
 						demoWidget = dijit.byId("dojox_mobile_Heading_4");
 						doh.assertTrue(demoWidget.backButton.get("moveTo") == "view2", "when changing Heading.moveTo afterwards");
 						
+						// Test case for #16349
+						demoWidget = dijit.byId("dojox_mobile_Heading_5");
+						doh.assertTrue(demoWidget.backButton.get("href") == "fragment2.html", "when changing Heading.href afterwards");
+						doh.assertTrue(demoWidget.backButton.get("transition") == "fade", "when changing Heading.transition afterwards");
+						
 						// Test case for #16313 
 						var noError = true; 
-						try{ 
-							demoWidget.set("busy", false); 
+						try{
+							demoWidget.set("busy", false);
 						}catch(err){ 
-							noError = false;  
+							noError = false;
 						} 
-						doh.assertTrue(noError, "Setting busy to false before ever being set to true shouldn't throw an exception!"); 
+						doh.assertTrue(noError, "Setting busy to false before ever being set to true shouldn't throw an exception!");
 					}
 				]);
 				doh.run();
