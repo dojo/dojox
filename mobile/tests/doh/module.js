@@ -22,6 +22,7 @@ define(["doh/runner", "dojo/sniff", "require"], function(doh, has, require){
 		doh.registerUrl("dojox.mobile.tests.doh.ListItem", require.toUrl("./ListItem2.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.ListItem", require.toUrl("./ListItem_Programmatic.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.ListItem", require.toUrl("./ListItem2_Programmatic.html"),999999);
+		doh.registerUrl("dojox.mobile.tests.doh.ListItem", require.toUrl("./ListItem3_Programmatic.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.Progress-indicator", require.toUrl("./progress-indicator.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.RoundRect", require.toUrl("./RoundRect.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.RoundRect", require.toUrl("./RoundRect_Programmatic.html"),999999);

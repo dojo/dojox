@@ -227,6 +227,26 @@ define([
 			this.layoutChildren();
 		},
 
+		_updateHandles: function(){
+			// tags:
+			//		private
+			var parent = this.getParent();
+			var opts = this.getTransOpts();
+			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
+				if(!this._keydownHandle){
+					this._keydownHandle = this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+				}
+				this._handleClick = true;
+			}else{
+				if(this._keydownHandle){
+					this.disconnect(this._keydownHandle);
+					this._keydownHandle = null;
+				}
+				this._handleClick = false;
+			}
+			this.inherited(arguments);
+		},
+
 		layoutChildren: function(){
 			var centerNode;
 			array.forEach(this.domNode.childNodes, function(n){
@@ -498,6 +518,34 @@ define([
 			//		private
 			this.inherited(arguments);
 			domClass.toggle(this.domNode, this._selClass, selected);
+		},
+		
+		_setClickableAttr: function(/*Boolean*/clickable){
+			// tags:
+			//		private
+			this._set("clickable", clickable);
+			this._updateHandles();
+		},
+		
+		_setMoveToAttr: function(/*String*/moveTo){
+			// tags:
+			//		private
+			this._set("moveTo", moveTo);
+			this._updateHandles();
+		},
+		
+		_setHrefAttr: function(/*String*/href){
+			// tags:
+			//		private
+			this._set("href", href);
+			this._updateHandles();
+		},
+		
+		_setUrlAttr: function(/*String*/url){
+			// tags:
+			//		private
+			this._set("url", url);
+			this._updateHandles();
 		}
 	});
 	

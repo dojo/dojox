@@ -186,9 +186,7 @@ define([
 			if(!this._isOnLine){
 				this.inheritParams();
 			}
-			if(this._handleClick && this._selStartMethod === "touch"){
-				this._onTouchStartHandle = this.connect(this.domNode, touch.press, "_onTouchStart");
-			}
+			this._updateHandles();
 			this.inherited(arguments);
 		},
 
@@ -214,6 +212,21 @@ define([
 			return !!parent;
 		},
 
+		_updateHandles: function(){
+			// tags:
+			//		private
+			if(this._handleClick && this._selStartMethod === "touch"){
+				if(!this._onTouchStartHandle){
+					this._onTouchStartHandle = this.connect(this.domNode, touch.press, "_onTouchStart");
+				}
+			}else{
+				if(this._onTouchStartHandle){
+					this.disconnect(this._onTouchStartHandle);
+					this._onTouchStartHandle = null;
+				}
+			}
+		},
+		
 		getTransOpts: function(){
 			// summary:
 			//		Copies from the parent and returns the values of parameters  
