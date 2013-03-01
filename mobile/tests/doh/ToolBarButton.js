@@ -117,7 +117,7 @@ dojo.addOnLoad(function(){
 			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_24");
 			var bodyBox = dojo.getMarginBox(demoWidget.bodyNode);
 			var arrowBox = dojo.getMarginBox(demoWidget.arrowNode);
-			doh.assertTrue(bodyBox.l > arrowBox.l, 
+			doh.assertTrue(bodyBox.l > arrowBox.l - (dojo.isFF ? 2 : 0), 
 				"The body should not cover the arrow! (left arrow) id= "+ demoWidget.domNode.id);
 			
 			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_25");
