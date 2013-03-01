@@ -99,6 +99,33 @@ dojo.addOnLoad(function(){
 			doh.assertTrue(demoWidget.iconNode, "there is no iconNode. id= "+ demoWidget.domNode.id);
 			doh.assertTrue(demoWidget.iconNode.childNodes, "there is no iconNode.childNodes. id= "+ demoWidget.domNode.id);
 			doh.assertEqual('mblDomButtonWhiteDownArrow mblDomButton', demoWidget.iconNode.childNodes[0].className, "id= "+ demoWidget.domNode.id);
+			
+			// Test cases for #16771
+			// a) 
+			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_22");
+			doh.assertTrue(dojo.style(demoWidget.bodyNode, "height") > 0, 
+				"the height of button's body should be larger than 0! (left arrow) id= "+ 
+				demoWidget.domNode.id + 
+				" actual height: " + dojo.style(demoWidget.bodyNode, "height"));
+			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_23");
+			doh.assertTrue(dojo.style(demoWidget.bodyNode, "height") > 0, 
+				"the height of button's body should be larger than 0! (right arrow) id= "+ 
+				demoWidget.domNode.id + 
+				" actual height: " + dojo.style(demoWidget.bodyNode, "height"));
+				
+			// b) With arrow, icon and label
+			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_24");
+			var bodyBox = dojo.getMarginBox(demoWidget.bodyNode);
+			var arrowBox = dojo.getMarginBox(demoWidget.arrowNode);
+			doh.assertTrue(bodyBox.l > arrowBox.l, 
+				"The body should not cover the arrow! (left arrow) id= "+ demoWidget.domNode.id);
+			
+			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_25");
+			bodyBox = dojo.getMarginBox(demoWidget.bodyNode);
+			arrowBox = dojo.getMarginBox(demoWidget.arrowNode);
+			doh.assertTrue(arrowBox.l + arrowBox.w > bodyBox.l + bodyBox.w, 
+				"The body should not cover the arrow! (right arrow) id= "+ demoWidget.domNode.id);
+			// end of test cases for #16771
 		},
 		function test_Heading_Set(){
 			demoWidget = dijit.byId("dojox_mobile_ToolBarButton_4");
