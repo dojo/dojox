@@ -330,7 +330,7 @@ define([
 			//		Spins the slot as specified by steps.
 			if(!this._started){ return; } // do not work until start up
 			var to = this.getPos();
-			if(to.y % this._itemHeight){ return; } // maybe still spinning
+			if(Math.floor(to.y) % this._itemHeight){ return; } // maybe still spinning
 			to.y += steps * this._itemHeight;
 			this.slideTo(to, 1);
 		},
