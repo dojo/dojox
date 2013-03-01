@@ -136,6 +136,38 @@
 				childWidget = new dojox.mobile.ToolBarButton({icon:"mblDomButtonWhiteDownArrow", style:{float:"right"}});
 				childWidget.placeAt(demoWidget.containerNode);
 				childWidget.startup();
+				
+				// Test cases for #16771
+				// a) With arrow but no label (nor icon)
+				demoWidget = new dojox.mobile.Heading();
+				demoWidget.placeAt(view.containerNode);
+				demoWidget.startup();
+				childWidget = new dojox.mobile.ToolBarButton({arrow:"left"});
+				childWidget.placeAt(demoWidget.containerNode);
+				childWidget.startup();
+				
+				demoWidget = new dojox.mobile.Heading();
+				demoWidget.placeAt(view.containerNode);
+				demoWidget.startup();
+				childWidget = new dojox.mobile.ToolBarButton({arrow:"right"});
+				childWidget.placeAt(demoWidget.containerNode);
+				childWidget.startup();
+				
+				// b) With arrow, icon and label
+				demoWidget = new dojox.mobile.Heading();
+				demoWidget.placeAt(view.containerNode);
+				demoWidget.startup();
+				childWidget = new dojox.mobile.ToolBarButton({arrow:"left", icon:"mblDomButtonWhiteDownArrow", label:"some label"});
+				childWidget.placeAt(demoWidget.containerNode);
+				childWidget.startup();
+				
+				demoWidget = new dojox.mobile.Heading();
+				demoWidget.placeAt(view.containerNode);
+				demoWidget.startup();
+				childWidget = new dojox.mobile.ToolBarButton({arrow:"right", icon:"mblDomButtonWhiteDownArrow", label:"some label"});
+				childWidget.placeAt(demoWidget.containerNode);
+				childWidget.startup();
+				// end of test cases for #16771
 			});
 		</script>
 		<script type="text/javascript" src="TestUtil.js"></script>
