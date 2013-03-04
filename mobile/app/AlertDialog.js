@@ -101,7 +101,7 @@ dojo.declare("dojox.mobile.app.AlertDialog", dijit._WidgetBase, {
 
 			// Find the widget that was tapped.
 			while(!dijit.byNode(node)){
-				node - node.parentNode;
+				node = node.parentNode;
 			}
 		}
 
