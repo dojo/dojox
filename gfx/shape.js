@@ -532,6 +532,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// children: Array
 			//		a list of children
 			this.children = [];
+			this._batch = 0;
 		},
 	
 		// group management
@@ -540,10 +541,12 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// summary:
 			//		starts a new batch, subsequent new child shapes will be held in
 			//		the batch instead of appending to the container directly
+			return this;
 		},
 		closeBatch: function() {
 			// summary:
 			//		submits the current batch, append all pending child shapes to DOM
+			return this;
 		},
 		add: function(shape){
 			// summary:

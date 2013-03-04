@@ -800,15 +800,21 @@ else
 			// summary:
 			//		starts a new batch, subsequent new child shapes will be held in
 			//		the batch instead of appending to the container directly
-			this.fragment = _createFragment();
+			if(!this._batch){
+				this.fragment = _createFragment();
+			}
+			++this._batch;
+			return this;
 		},
 		closeBatch: function() {
 			// summary:
 			//		submits the current batch, append all pending child shapes to DOM
-			if (this.fragment) {
+			this._batch = this._batch > 0 ? --this._batch : 0;
+			if (this.fragment && !this._batch) {
 				this.rawNode.appendChild(this.fragment);
 				delete this.fragment;
 			}
+			return this;
 		},
 		add: function(shape){
 			// summary:
