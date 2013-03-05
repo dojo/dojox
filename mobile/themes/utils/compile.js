@@ -60,7 +60,12 @@ function processFolder(folder, usingCommonSubstitution){
 				// Otherwise, fall back to the .less file which is in 'common'.
 				var fileName = commonFiles.dic[commonFile];
 				outputFile = folder + "/" + fileName.replace(".less", ".css");
-				applyLess(commonFile, '@import "' + folder + '/variables.less";', outputFile);
+				// dojox.mobile mirroring support
+				if(fileName.indexOf("_rtl") == -1){ 
+					applyLess(commonFile, '@import "' + folder + '/variables.less";', outputFile);
+				}else{
+					applyLess(commonFile, '@import "' + folder + '/variables_rtl.less";', outputFile);
+				}
 			}
 		});
 	}else{
@@ -99,7 +104,8 @@ function getLessFiles(folder){
 	var filesMap = {};
 	var filesArray = fs.readdirSync(folder);
 	filesArray = filesArray.filter(function(file){
-		return file && /\.less$/.test(file) && !/variables\.less$/.test(file) && !/css3\.less$/.test(file);
+		return file && /\.less$/.test(file) && !/variables\.less$/.test(file) && !/css3\.less$/.test(file) 
+		&& !/variables_rtl\.less$/.test(file);
 	});
 	
 	filesArray = filesArray.map(function(file){

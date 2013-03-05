@@ -1,7 +1,8 @@
 define([
 	"dojo/_base/declare",
-	"./common"
-], function(declare, common){
+	"./common",
+	"dojo/dom-class"	
+], function(declare, common, domClass){
 
 	// module:
 	//		dojox/mobile/bidi/Switch
@@ -19,7 +20,16 @@ define([
 				this.set("textDir", this.getParent().get("textDir"));
 			}
 		},
-
+		buildRendering: function(){
+			this.inherited(arguments);
+			// dojox.mobile mirroring support
+			if(!this.isLeftToRight()){
+				domClass.add(this.left, "mblSwitchBgLeftRtl");
+				domClass.add(this.left.firstChild, "mblSwitchTextLeftRtl");
+				domClass.add(this.right, "mblSwitchBgRightRtl");
+				domClass.add(this.right.firstChild, "mblSwitchTextRightRtl");				
+			}
+		},
 		_setLeftLabelAttr: function(label){
 			this.inherited(arguments);
 			this.left.firstChild.innerHTML = common.enforceTextDirWithUcc(this.left.firstChild.innerHTML, this.textDir);

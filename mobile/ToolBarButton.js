@@ -6,13 +6,14 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-style",
 	"./sniff",
-	"./_ItemBase"
-], function(declare, lang, win, domClass, domConstruct, domStyle, has, ItemBase){
+	"./_ItemBase",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/ToolBarButton"
+], function(declare, lang, win, domClass, domConstruct, domStyle, has, ItemBase, BidiToolBarButton){
 
 	// module:
 	//		dojox/mobile/ToolBarButton
 
-	return declare("dojox.mobile.ToolBarButton", ItemBase, {
+	var ToolBarButton = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiToolBarButton" : "dojox.mobile.ToolBarButton", ItemBase, {
 		// summary:
 		//		A button widget which is placed in the Heading widget.
 		// description:
@@ -167,4 +168,5 @@ define([
 			domClass.toggle(this.bodyNode, "mblToolBarButtonBodySelected", selected);
 		}
 	});
+	return has("dojo-bidi") ? declare("dojox.mobile.ToolBarButton", [ToolBarButton, BidiToolBarButton]) : ToolBarButton;
 });

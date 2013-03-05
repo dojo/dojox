@@ -18,7 +18,14 @@ define([
 		postCreate: function(){
 			this.inherited(arguments);
 			if(this.textDir){
-			this._applyTextDirToTextElements();
+				this._applyTextDirToTextElements();
+		    }		    
+		},
+		buildRendering: function(){
+		    this.inherited(arguments);
+			//dojox.mobile mirroring support
+			if(!this.isLeftToRight()){
+				this.arrow.style.left = "0px";
 			}
 		},
 

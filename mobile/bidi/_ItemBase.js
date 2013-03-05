@@ -22,13 +22,19 @@ define([
 			}
 			this.labelNode.innerHTML = common.enforceTextDirWithUcc(this.labelNode.innerHTML, this.textDir);
 		},
-
 		_setTextDirAttr: function(/*String*/ textDir){
 			if(!this._created || this.textDir !== textDir){
 				this._set("textDir", textDir);
 				this.labelNode.innerHTML = common.enforceTextDirWithUcc(common.removeUCCFromText(this.labelNode.innerHTML), this.textDir);
-				if (this.badgeObj && this.badgeObj.setTextDir){ this.badgeObj.setTextDir(textDir); }
+				if(this.badgeObj && this.badgeObj.setTextDir){ this.badgeObj.setTextDir(textDir); }
 			}
-		}
+		},
+		getTransOpts: function(){
+			var opts = this.inherited(arguments);
+			if(!this.isLeftToRight()){
+				opts.transitionDir = opts.transitionDir * -1; 
+			}
+			return opts;
+		}		
 	});
 });

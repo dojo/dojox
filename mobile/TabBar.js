@@ -161,7 +161,12 @@ define([
 						arr[i].style.margin = "0 " + bm + "px";
 					}
 					if(arr.length > 0){
-						arr[0].style.marginLeft = margin + bm + "px";
+						if(has("dojo-bidi") && !this.isLeftToRight()){
+							arr[0].style.marginLeft = "0px";
+							arr[0].style.marginRight = margin + bm + "px";
+						}else{
+							arr[0].style.marginLeft = margin + bm + "px";
+						}
 					}
 					this.containerNode.style.padding = "0px";
 				}
@@ -186,11 +191,15 @@ define([
 						}
 						margin = Math.floor(margin/2);
 					}
-					this.containerNode.style.paddingLeft = margin ? margin + "px" : "";
+					if(has("dojo-bidi") && !this.isLeftToRight()){
+						this.containerNode.style.paddingLeft = "0px";
+						this.containerNode.style.paddingRight = margin ? margin + "px" : "";
+					}else{
+						this.containerNode.style.paddingLeft = margin ? margin + "px" : "";
+					}
 				}
 			}
 		},
-
 		getSelectedTab: function(){
 			// summary:
 			//		Returns the first selected child.

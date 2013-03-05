@@ -49,12 +49,23 @@ define([
 			if(!item["label"]){
 				props["label"] = item[this.labelProperty];
 			}
+			// TODO this code should be like for textDir in the bidi mixin createListItem method
+			// however for that dynamic set/get of the dir property must be supported first
+			// that is why for now as a workaround we keep the code here
+			if(has("dojo-bidi") && typeof props["dir"] == "undefined"){
+				props["dir"] = this.isLeftToRight()?"ltr":"rlt";
+			}
 			for(var name in item){
 				props[(this.itemMap && this.itemMap[name]) || name] = item[name];
 			}
 			return new this.itemRenderer(props);
 		},
-
+		_setDirAttr: function(props){
+			// summary:
+			//		Set the 'dir' attribute to support Mirroring.
+			//		To be implemented by the bidi/_StoreLisMixin.js
+			return props;
+		},
 		generateList: function(/*Array*/items){
 			// summary:
 			//		Given the data, generates a list of items.

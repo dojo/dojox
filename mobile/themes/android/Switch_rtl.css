@@ -1,0 +1,101 @@
+/* dojox.mobile.Switch Rtl */
+/* Switch - common Rtl */
+.mblSwitchRtl {
+  text-align: right;
+}
+.mblListItem .mblSwitch {
+  right: auto;
+}
+.mblListItemRtl .mblSwitch {
+  left: 12px;
+}
+.mblSwitchRtl.mblSwitchOn .mblSwitchInner {
+  right: 0;
+}
+.mblSwitchBgLeftRtl {
+  right: 0;
+}
+.mblSwitchTextLeftRtl {
+  right: 0;
+}
+.mblSwitchTextRightRtl {
+  right: 40px;
+}
+/* Square Shape Rtl*/
+.mblSwitchRtl.mblSwSquareShape.mblSwitchOff .mblSwitchInner {
+  right: -53px;
+}
+.mblSwSquareShape .mblSwitchBgRightRtl {
+  right: 53px;
+}
+.mblSwitchRtl.mblSwSquareShape .mblSwitchKnob {
+  right: 53px;
+}
+.mblSwSquareShape .mblSwitchTextRightRtl {
+  right: 40px;
+}
+/* Round Shape1 Rtl */
+.mblSwitchRtl.mblSwRoundShape1.mblSwitchOff .mblSwitchInner {
+  right: -50px;
+}
+.mblSwRoundShape1 .mblSwitchBgRightRtl {
+  right: 50px;
+}
+.mblSwitchRtl.mblSwRoundShape1 .mblSwitchKnob {
+  right: 50px;
+}
+.mblSwRoundShape1 .mblSwitchTextRightRtl {
+  right: 26px;
+}
+/* Round Shape2 Rtl */
+.mblSwitchRtl.mblSwRoundShape2.mblSwitchOff .mblSwitchInner {
+  right: -51px;
+}
+.mblSwRoundShape2 .mblSwitchBgRightRtl {
+  right: 51px;
+}
+.mblSwitchRtl.mblSwRoundShape2 .mblSwitchKnob {
+  right: 51px;
+}
+.mblSwRoundShape2 .mblSwitchTextRightRtl {
+  right: 42px;
+}
+/* Arc Shape1 Rtl */
+.mblSwitchRtl.mblSwArcShape1.mblSwitchOff .mblSwitchInner {
+  right: -50px;
+}
+.mblSwArcShape1 .mblSwitchBgRightRtl {
+  right: 50px;
+}
+.mblSwitchRtl.mblSwArcShape1 .mblSwitchKnob {
+  right: 50px;
+}
+.mblSwArcShape1 .mblSwitchTextRightRtl {
+  right: 26px;
+}
+/* Arc Shape2 Rtl */
+.mblSwitchRtl.mblSwArcShape2.mblSwitchOff .mblSwitchInner {
+  right: -51px;
+}
+.mblSwArcShape2 .mblSwitchBgRightRtl {
+  right: 51px;
+}
+.mblSwitchRtl.mblSwArcShape2 .mblSwitchKnob {
+  right: 51px;
+}
+.mblSwArcShape2 .mblSwitchTextRightRtl {
+  right: 42px;
+}
+/* Default Shape Rtl */
+.mblSwitchRtl.mblSwDefaultShape.mblSwitchOff .mblSwitchInner {
+  right: -53px;
+}
+.mblSwDefaultShape .mblSwitchBgRightRtl {
+  right: 53px;
+}
+.mblSwitchRtl.mblSwDefaultShape .mblSwitchKnob {
+  right: 53px;
+}
+.mblSwDefaultShape .mblSwitchTextRightRtl {
+  right: 40px;
+}

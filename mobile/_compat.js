@@ -549,6 +549,10 @@ return {
 			}
 			dm._loadedCss = undefined;
 			var paths = dm.getCssPaths();
+			// dojox.mobile mirroring support
+			if(has("dojo-bidi")){
+				paths = dm.loadRtlCssFiles(paths);
+			}
 			for(var i = 0; i < paths.length; i++){
 				var href = paths[i];
 				// Load the -compat.css only for css files that belong to a theme. For that, by default
@@ -564,7 +568,28 @@ return {
 				}
 			}
 		};
-
+		if(has("dojo-bidi")){
+			dm.loadRtlCssFiles = function(/*Array*/paths){
+				// summary:
+				//		Function to load the corresponding *_rtl.css file for every *.css file.
+				//		Enable mobile mirroring support
+				// paths: Array
+				//		Array of css files within the page.
+				for(var i = 0; i < paths.length; i++){
+					var href = paths[i];
+					if(href.indexOf("_rtl") == -1){
+						var rtlCssList = "android.css blackberry.css custom.css iphone.css holodark.css base.css Carousel.css ComboBox.css IconContainer.css IconMenu.css ListItem.css RoundRectCategory.css SpinWheel.css Switch.css TabBar.css ToggleButton.css ToolBarButton.css";
+						var cssName = href.substr(href.lastIndexOf('/') + 1);
+						if(rtlCssList.indexOf(cssName) != -1){
+							var rtlPath = href.replace(".css", "_rtl.css");
+							paths.push(rtlPath);
+							dm.loadCss(rtlPath);
+						}
+					}
+				}
+				return paths;
+			};
+		}
 		dm.hideAddressBar = function(/*Event?*/evt, /*Boolean?*/doResize){
 			if(doResize !== false){ dm.resizeAll(); }
 		};

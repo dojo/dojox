@@ -265,6 +265,15 @@
 					}
 					dm.loadedCssFiles = [];
 					for(j = 0; j < files.length; j++){
+						// dojox.mobile mirroring support
+						var cssFilePath = files[j].toString();
+						if(config["dojo-bidi"] == true && cssFilePath.indexOf("_rtl") == -1){
+							var rtlCssList = "android.css blackberry.css custom.css iphone.css holodark.css base.css Carousel.css ComboBox.css IconContainer.css IconMenu.css ListItem.css RoundRectCategory.css SpinWheel.css Switch.css TabBar.css ToggleButton.css ToolBarButton.css";
+							var cssName = cssFilePath.substr(cssFilePath.lastIndexOf('/') + 1);
+							if(rtlCssList.indexOf(cssName) != -1){
+								this.loadCssFile(cssFilePath.replace(".css","_rtl.css"));
+							}
+						}
 						this.loadCssFile(files[j].toString());
 					}
 
