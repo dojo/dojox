@@ -1,12 +1,6 @@
 define([
-	"dojo/_base/declare",
-	"dojo/_base/lang",
-	"dojo/_base/array",
-	"dijit/registry",
-	"../ListItem",
-	"../RoundRectList",
-	"./common"
-], function(declare, lang, array, registry, ListItem, RoundRectList, common){
+	"dojo/_base/declare"
+], function(declare){
 
 	// module:
 	//		dojox/mobile/bidi/TreeView
