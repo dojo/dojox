@@ -11,11 +11,7 @@ Building mobile themes
 
 1. Install Node.js (http://nodejs.org/). 
 
-2. Download and unzip Less.js into 'dojox/mobile/themes/utils'.
-   The latest tested Less.js version is at 
-   https://github.com/cloudhead/less.js/archive/80d9f387c0.zip
-
-3. Run compile.bat or compile.sh to generate all themes.
+2. Run compile.bat or compile.sh to generate all themes.
 
 You can also run cleanup.bat or cleanup.sh to remove all the generated css files.  
 
