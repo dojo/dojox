@@ -12,6 +12,7 @@
   border-radius: 3px;
   background-color: #8c8a8c;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#9c9e9c), to(#848284));
+  background-image: linear-gradient(to bottom, #9c9e9c 0%, #848284 100%);
 }
 .mblTooltipBubble {
   overflow: visible;

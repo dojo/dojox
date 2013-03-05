@@ -19,10 +19,6 @@
 
 @holo-slider-thumb-color: rgba(31, 83, 102, 0.8);
 
-.holo-slider-background-image () {
-  background: -webkit-gradient(radial, 9 9, 3, 9 9, 9, from(@holo-color1), color-stop(0, @holo-color1), color-stop(0.01, @holo-slider-thumb-color), to(@holo-slider-thumb-color));
-  background-image: radial-gradient(circle closest-side at center, #FFFFFF 0%, #A435C5 50%, #251AE7 75%, #00A3EF 100%);
-}
 @holo-slider-background-image-gecko: -moz-linear-gradient(top, @holo-color1 0%, @holo-slider-thumb-color 100%);
 @holo-slider-track-color: #292929;
 
@@ -590,7 +586,8 @@
 	border-color: #adaaad;
 	border-radius: @mbl-tooltip-border-radius;
 	background-color: #8c8a8c;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#9c9e9c), to(#848284));
+	.background-image-linear-gradient-top-bottom(#9c9e9c, #848284);
+
 }
 .mblTooltipBubble-styles () {
 	background-color: #306ea1;
