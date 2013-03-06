@@ -57,9 +57,7 @@ define([
 					node = nodes;
 				}
 			}
-			this._attachTemplateNodes(node, function(n,p){
-				return n.getAttribute(p);
-			});
+			this._attachTemplateNodes(node);
 			if(this.widgetsInTemplate){
 				//Make sure dojoType is used for parsing widgets in template.
 				//The Parser.query could be changed from multiversion support.
@@ -85,7 +83,7 @@ define([
 
 				// Hook up attach points and events for nodes that were converted to widgets
 				for(var i = 0; i < cw.length; i++){
-					this._processNode(cw[i], function(n,p){
+					this._processTemplateNode(cw[i], function(n,p){
 						return n[p];
 					}, function(widget, type, callback){
 						// function to do data-dojo-attach-event to a widget
@@ -109,6 +107,18 @@ define([
 
 			this._fillContent(this.srcNodeRef);
 		},
+
+		_processTemplateNode: function(/*DOMNode|Widget*/ baseNode, getAttrFunc, attachFunc){
+			// Override _AttachMixin._processNode to skip nodes with data-dojo-type set.   They are handled separately
+			// in the buildRendering() code above.
+
+			if(this.widgetsInTemplate && (getAttrFunc(baseNode, "dojoType") || getAttrFunc(baseNode, "data-dojo-type"))){
+				return true;
+			}
+
+			this.inherited(arguments);
+		},
+
 		_templateCache: {},
 		getCachedTemplate: function(templatePath, templateString, alwaysUseString){
 			// summary:
