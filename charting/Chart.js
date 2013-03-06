@@ -148,6 +148,9 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 		//		The main graphics surface upon which a chart is drawn.
 		// dirty: Boolean
 		//		A boolean flag indicating whether or not the chart needs to be updated/re-rendered.
+		// htmlLabels: Boolean
+		//		A boolean flag indicating whether or not it should try to use HTML-based labels for the title or not.
+		//		The default is true.  The only caveat is IE and Opera browsers will always use GFX-based labels.
 
 		constructor: function(/* DOMNode */node, /* __ChartCtorArgs? */kwArgs){
 			// summary:
@@ -167,6 +170,10 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			this.titleFont = kwArgs.titleFont;
 			this.titleFontColor = kwArgs.titleFontColor;
 			this.chartTitle = null;
+			this.htmlLabels = true;
+			if("htmlLabels" in kwArgs){
+				this.htmlLabels = kwArgs.htmlLabels;
+			}
 
 			// default initialization
 			this.theme = null;
@@ -799,6 +806,7 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			// assign series
 			arr.forEach(this.series, function(run){
 				if(!(run.plot in this.plots)){
+					// TODO remove auto-assignment
 					if(!dc.plot2d || !dc.plot2d.Default){
 						throw Error("Can't find plot: Default - didn't you forget to dojo" + ".require() it?");
 					}
@@ -942,8 +950,8 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 
 			//create title: Whether to make chart title as a widget which extends dojox.charting.Element?
 			if(this.title){
-				var forceHtmlLabels = (g.renderer == "canvas"),
-					labelType = forceHtmlLabels || !has("ie") && !has("opera") ? "html" : "gfx",
+				var forceHtmlLabels = (g.renderer == "canvas") && this.htmlLabels,
+					labelType = forceHtmlLabels || !has("ie") && !has("opera") && this.htmlLabels ? "html" : "gfx",
 					tsize = g.normalizedLength(g.splitFontString(this.titleFont).size);
 				this.chartTitle = common.createText[labelType](
 					this,
