@@ -7,9 +7,11 @@ html.mobile,
 .mobile body {
   overflow-x: hidden;
   -webkit-text-size-adjust: none;
-  background-color: #dedfde;
   font-family: Helvetica;
   font-size: 18px;
+}
+.mblBackground {
+  background-color: #dedfde;
 }
 /* Button Colors */
 .mblColorBlue {

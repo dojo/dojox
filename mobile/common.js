@@ -186,6 +186,7 @@ define([
 
 	if(config["mblApplyPageStyles"] !== false){
 		domClass.add(win.doc.documentElement, "mobile");
+		domClass.add(win.body(), "mblBackground");
 	}
 	if(has('chrome')){
 		// dojox/mobile does not load uacss (only _compat does), but we need dj_chrome.
