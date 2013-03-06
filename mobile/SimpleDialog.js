@@ -46,6 +46,8 @@ define([
 		// closeButton: Boolean
 		//		If true, a button to close the dialog box is displayed at the
 		//		top-right corner.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		closeButton: false,
 
 		// closeButtonClass: String

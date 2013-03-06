@@ -21,14 +21,14 @@ define([
 		//		A widget representing one slot of a ValuePicker widget.
 		
 		// items: Array
-		//		An array of array of key-label pairs.
-		//		(e.g. [[0,"Jan"],[1,"Feb"],...] ) If key values for each label
+		//		An array of array of key-label pairs
+		//		(e.g. [[0, "Jan"], [1,"Feb"], ...]). If key values for each label
 		//		are not necessary, labels can be used instead.
 		items: [],
 
 		// labels: String[]
-		//		An array of labels to be displayed on the value picker.
-		//		(e.g. ["Jan","Feb",...] ) This is a simplified version of the
+		//		An array of labels to be displayed on the value picker
+		//		(e.g. ["Jan","Feb",...]). This is a simplified version of the
 		//		items property.
 		labels: [],
 
@@ -58,6 +58,8 @@ define([
 
 		// readOnly: Boolean
 		//		A flag used to indicate if the input field is readonly or not.
+		//		Note that changing the value of the property after the widget 
+		//		creation has no effect.
 		readOnly: false,
 
 		// tabIndex: String

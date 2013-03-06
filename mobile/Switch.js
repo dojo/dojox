@@ -27,7 +27,7 @@ define([
 		//		handler is called when the switch is manipulated.
 
 		// value: String
-		//		The initial state of the switch. "on" or "off". The default
+		//		The initial state of the switch: "on" or "off". The default
 		//		value is "on".
 		value: "on",
 

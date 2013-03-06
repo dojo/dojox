@@ -19,6 +19,8 @@ define([
 		// readOnly: Boolean
 		//		If true, slot input fields are read-only. Only the plus and
 		//		minus buttons can be used to change the values.
+		//		Note that changing the value of the property after the widget 
+		//		creation has no effect.
 		readOnly: false,
 
 		slotClasses: [

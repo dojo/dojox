@@ -17,14 +17,20 @@ define([
 		//		ex. [{src:"a.mp3",type:"audio/mpeg"},{src:"a.ogg",type:"audio/ogg"},...]
 		//		The src gives the path of the media resource. The type gives the
 		//		type of the media resource.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		source: null,
 
 		// width: String
-		//		The width of the embed element.
+		//		The width of the embed element. 
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		width: "200px",
 
 		// height: String
 		//		The height of the embed element.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		height: "15px",
 
 		// _playable: [private] Boolean

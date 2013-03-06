@@ -46,12 +46,16 @@ define([
 		//		Media Queries.
 		//		Setting this property to "single" or "two" allows to force the layout used whatever the width of the screen.
 		//		Default value for this property is "auto".
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		columns: "auto",
 
 		// rightAlign: Boolean
 		//		This property controls the horizontal position of control(s) in a <fieldset>. It applies only
 		//		to forms that have two columns (see 'columns' property).
 		//		Default value for this property is false.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		rightAlign: false,
 
 		/* internal properties */

@@ -13,18 +13,18 @@ define([
 		// summary:
 		//		An item of IconMenu.
 		// description:
-		//		IconMenuItem represents a menu item of
-		//		dojox/mobile/MenuItem. This widget inherits from
-		//		dojox/mobile/_ItemBase. Basic usage is same as the other
-		//		subclasses such as dojox/mobile/ListItem.
+		//		IconMenuItem represents a menu item of dojox/mobile/MenuItem. 
+		//		This widget inherits from dojox/mobile/_ItemBase. Its basic usage is 
+		//		similar to other subclasses such as dojox/mobile/ListItem.
 
 		// closeOnAction: Boolean
-		//		Calls the hide() method of the parent widget, which is typically
-		//		a SimpleDialog.
+		//		If true, the internal handler of click events calls the hide() method 
+		//		of the parent widget, which is typically a dojox/mobile/SimpleDialog.
+		//		The default value is false.
 		closeOnAction: false,
 
 		// tag: String
-		//		A name of html tag to create as domNode.
+		//		The name of the HTML tag to create as domNode.
 		tag: "li",
 
 		/* internal properties */

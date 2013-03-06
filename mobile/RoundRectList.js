@@ -47,10 +47,14 @@ define([
 		// syncWithViews: Boolean
 		//		If true, this widget listens to view transition events to be
 		//		synchronized with view's visibility.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		syncWithViews: false,
 
 		// editable: Boolean
 		//		If true, the list can be reordered.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		editable: false,
 
 		// tag: String

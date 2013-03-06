@@ -19,6 +19,8 @@ define([
 
 		// value: String
 		//		A text to show in a badge.
+		//		Note that changing the value of the property after the badge
+		//		creation has no effect.
 		value: "0",
 
 		// className: String
@@ -28,6 +30,8 @@ define([
 		// fontSize: Number
 		//		Font size in pixel. The other style attributes are determined by the DOM
 		//		button itself.
+		//		Note that changing the value of the property after the badge
+		//		creation has no effect.
 		fontSize: 16, // [px]
 
 		constructor: function(/*Object?*/params, /*DomNode?*/node){

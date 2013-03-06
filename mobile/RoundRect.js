@@ -18,7 +18,10 @@ define([
 		//		non-CSS3 browsers such as (older) IE.
 
 		// shadow: Boolean
-		//		If true, adds a shadow effect to the container element.
+		//		If true, adds a shadow effect to the container element by adding
+		//		the CSS class "mblShadow" to widget's domNode. The default value
+		//		is false. Note that changing the value of the property after
+		//		the widget creation has no effect.
 		shadow: false,
 
 		/* internal properties */	

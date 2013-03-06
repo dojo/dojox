@@ -63,16 +63,22 @@ define([
 		// pageIndicator: Boolean
 		//		If true, a page indicator, a series of small dots that indicate
 		//		the current page, is displayed on the title bar.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		pageIndicator: true,
 
 		// navButton: Boolean
 		//		If true, navigation buttons are displyed on the title bar.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		navButton: false,
 
 		// height: String
 		//		Explicitly specified height of the widget (ex. "300px"). If
 		//		"inherit" is specified, the height is inherited from its offset
 		//		parent.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		height: "",
 
 		// selectable: Boolean

@@ -46,7 +46,7 @@ define([
 		keepScrollPos: true,
 
 		// tag: String
-		//		A name of the HTML tag to create as domNode.
+		//		The name of the HTML tag to create as domNode. The default value is "div".
 		tag: "div",
 
 		/* internal properties */

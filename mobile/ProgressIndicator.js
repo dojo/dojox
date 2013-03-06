@@ -29,6 +29,8 @@ define([
 
 		// size: Number
 		//		The size of the indicator in pixels.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		size: 40,
 
 		// removeOnStop: Boolean

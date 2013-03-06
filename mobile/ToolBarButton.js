@@ -29,6 +29,8 @@ define([
 
 		// arrow: String
 		//		Specifies "right" or "left" to be an arrow button.
+		//		Note that changing the value of the property after the widget 
+		//		creation has no effect.
 		arrow: "",
 
 		// light: Boolean
@@ -36,6 +38,8 @@ define([
 		//		has only an icon or only a label, and has no arrow. In that
 		//		case, you cannot have both icon and label, or arrow even if you
 		//		try to set them.
+		//		Note that changing the value of the property after the widget 
+		//		creation has no effect.
 		light: true,
 
 		// defaultColor: String

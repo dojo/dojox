@@ -23,20 +23,20 @@ define([
 		//		SpinWheelSlot is a slot that is placed in the SpinWheel widget.
 
 		// items: Array
-		//		An array of array of key-label paris.
-		//		(e.g. [[0,"Jan"],[1,"Feb"],...] ) If key values for each label
+		//		An array of array of key-label pairs
+		//		(e.g. [[0, "Jan"], [1, "Feb"], ...]). If key values for each label
 		//		are not necessary, labels can be used instead.
 		items: [],
 
 		// labels: Array
-		//		An array of labels to be displayed on the slot.
-		//		(e.g. ["Jan","Feb",...] ) This is a simplified version of the
+		//		An array of labels to be displayed on the slot
+		//		(e.g. ["Jan", "Feb", ...]). This is a simplified version of the
 		//		items property.
 		labels: [],
 
 		// labelFrom: Number
 		//		The start value of display values of the slot. This parameter is
-		//		especially useful when slot has serial values.
+		//		especially useful when the slot has serial values.
 		labelFrom: 0,
 
 		// labelTo: Number

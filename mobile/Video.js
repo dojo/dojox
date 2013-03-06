@@ -12,12 +12,18 @@ define([
 		
 		// width: String
 		//		The width of the embed element.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		width: "200px",
 
 		// height: String
 		//		The height of the embed element.
+		//		Note that changing the value of the property after the widget
+		//		creation has no effect.
 		height: "150px",
 
+		// _tag: [private] String
+		//		The name of the tag ("video").
 		_tag: "video",
 
 		_getEmbedRegExp: function(){
