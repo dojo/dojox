@@ -83,9 +83,21 @@ define([
 					parser._attrName = attr;
 				}
 
-				this._attachTemplateNodes(cw, function(n,p){
-					return n[p];
-				});
+				// Hook up attach points and events for nodes that were converted to widgets
+				for(var i = 0; i < cw.length; i++){
+					this._processNode(cw[i], function(n,p){
+						return n[p];
+					}, function(widget, type, callback){
+						// function to do data-dojo-attach-event to a widget
+						if(type in widget){
+							// back-compat, remove for 2.0
+							return aspect.after(widget, type, callback, true);
+						}else{
+							// 1.x may never hit this branch, but it's the default for 2.0
+							return widget.on(type, callback, true);
+						}
+					});
+				}
 			}
 
 			if(this.domNode){
