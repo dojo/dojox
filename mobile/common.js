@@ -7,15 +7,20 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/ready",
+	"dojo/touch",
 	"dijit/registry",
 	"./sniff",
 	"./uacss" // (no direct references)
-], function(array, config, connect, lang, win, domClass, domConstruct, ready, registry, has){
+], function(array, config, connect, lang, win, domClass, domConstruct, ready, touch, registry, has){
 
 	// module:
 	//		dojox/mobile/common
 
 	var dm = lang.getObject("dojox.mobile", true);
+
+	// tell dojo/touch to generate synthetic clicks immediately
+	// and regardless of preventDefault() calls on touch events
+	win.doc.dojoClick = true;
 
 	dm.getScreenSize = function(){
 		// summary:

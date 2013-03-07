@@ -206,15 +206,6 @@ define([
 			array.forEach(this._conn, connect.disconnect);
 			this._conn = null;
 			if(this.innerStartX == this.inner.offsetLeft){
-				// #15936 The reason we send this synthetic click event is that we assume that the OS
-				// will not send the click because we stopped the touchstart.
-				// However, this does not seem true any more in Android 4.1 where the click is
-				// actually sent by the OS. So we must not send it a second time.
-				if(has('touch') && !(has("android") >= 4.1 || has("ie") >= 10)){
-					var ev = win.doc.createEvent("MouseEvents");
-					ev.initMouseEvent("click", true, true, win.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
-					this.inner.dispatchEvent(ev);
-				}
 				return;
 			}
 			var newState = (this.inner.offsetLeft < -(this._width/2)) ? "off" : "on";

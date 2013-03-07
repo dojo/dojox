@@ -536,25 +536,6 @@ define([
 				if(clicked){ // clicked, not dragged or flicked
 					this.hideScrollBar();
 					this.removeCover();
-					// #12697 Do not generate a click event programmatically when a
-					// form element (input, select, etc.) is clicked.
-					// Otherwise, in particular, when checkbox is clicked, its state
-					// is reversed again by the generated event.
-					// #15878 The reason we send this synthetic click event is that we assume that the OS
-					// will not send the click because we prevented/stopped the touchstart.
-					// However, this does not seem true any more in Android 4.1 where the click is
-					// actually sent by the OS. So we must not send it a second time.
-					if(has('touch') && !this.isFormElement(e.target) && !(has("android") >= 4.1 || has("ie") >= 10)){
-						var elem = e.target;
-						if(elem.nodeType != 1){
-							elem = elem.parentNode;
-						}
-						var ev = win.doc.createEvent("MouseEvents");
-						ev.initMouseEvent("click", true, true, win.global, 1, e.screenX, e.screenY, e.clientX, e.clientY);
-						setTimeout(function(){
-							elem.dispatchEvent(ev);
-						}, 0);
-					}
 					return;
 				}
 				speed = this._speed = this.getSpeed();
