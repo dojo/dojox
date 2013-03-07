@@ -105,8 +105,8 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		postCreate: function(){
 			this.inherited(arguments);
 			this.own(on(this.domNode, "mouseover", lang.hitch(this, this._onMouseOver)));
-			this.own(on(this.domNode, "mouseout", lang.hitch(this._onMouseOut)));
-			this.own(on(this.domNode, touch.release, lang.hitch(this._onMouseUp)));
+			this.own(on(this.domNode, "mouseout", lang.hitch(this, this._onMouseOut)));
+			this.own(on(this.domNode, touch.release, lang.hitch(this, this._onMouseUp)));
 			this.domNode.setAttribute("role", "presentation");
 			this.domNode.setAttribute("aria-label", "treemap");
 		},
