@@ -38,7 +38,7 @@ define([
 		// |	</div>
 
 
-		// columns: "auto" | "single" | "two"
+		// columns: [const] "auto" | "single" | "two"
 		//		This property controls how a <label> and its <fieldset> are positioned. The <label> can be on the same line
 		//		than its <fieldset> (two columns) or on top of it (single column).
 		//		If set to "auto", the number of columns depends on the width of the screen: Two columns
@@ -50,7 +50,7 @@ define([
 		//		creation has no effect.
 		columns: "auto",
 
-		// rightAlign: Boolean
+		// rightAlign: [const] Boolean
 		//		This property controls the horizontal position of control(s) in a <fieldset>. It applies only
 		//		to forms that have two columns (see 'columns' property).
 		//		Default value for this property is false.

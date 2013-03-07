@@ -27,13 +27,13 @@ define([
 		//		If true, the button is in the selected state.
 		selected: false,
 
-		// arrow: String
+		// arrow: [const] String
 		//		Specifies "right" or "left" to be an arrow button.
 		//		Note that changing the value of the property after the widget 
 		//		creation has no effect.
 		arrow: "",
 
-		// light: Boolean
+		// light: [const] Boolean
 		//		If true, this widget produces only a single `<span>` node when it
 		//		has only an icon or only a label, and has no arrow. In that
 		//		case, you cannot have both icon and label, or arrow even if you

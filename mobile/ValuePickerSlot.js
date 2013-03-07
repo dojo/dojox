@@ -56,7 +56,7 @@ define([
 		//		The steps between labelFrom and labelTo.
 		step: 1,
 
-		// readOnly: Boolean
+		// readOnly: [const] Boolean
 		//		A flag used to indicate if the input field is readonly or not.
 		//		Note that changing the value of the property after the widget 
 		//		creation has no effect.

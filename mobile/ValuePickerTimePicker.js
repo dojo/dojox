@@ -19,7 +19,7 @@ define([
 		//		ValuePickerTimePicker is a time picker widget. It is a subclass of
 		//		dojox.mobile.ValuePicker. It has two slots: hour and minute.
 
-		// readOnly: Boolean
+		// readOnly: [const] Boolean
 		//		If true, slot input fields are read-only. Only the plus and
 		//		minus buttons can be used to change the values.
 		//		Note that changing the value of the property after the widget

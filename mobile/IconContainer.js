@@ -29,7 +29,7 @@ define([
 		//		specified icon has failed to load.
 		defaultIcon: "",
 
-		// transition: String
+		// transition: [const] String
 		//		A type of animated transition effect. You can choose from the
 		//		standard transition types: "slide", "fade", "flip", or from the
 		//		extended transition types: "cover", "coverv", "dissolve",
@@ -65,7 +65,7 @@ define([
 		//		If true, only one icon content can be opened at a time.
 		single: false,
 
-		// editable: Boolean
+		// editable: [const] Boolean
 		//		If true, the icons can be removed or reordered. You can enter
 		//		into edit mode by pressing on a child IconItem until it starts shaking.
 		//		The default value is false. Note that changing the value of the property after

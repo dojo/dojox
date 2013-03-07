@@ -17,17 +17,17 @@ define([
 		//		Badge is not a widget, but just a convenience class. A badge
 		//		consists of a simple DOM button.
 
-		// value: String
+		// value: [const] String
 		//		A text to show in a badge.
 		//		Note that changing the value of the property after the badge
 		//		creation has no effect.
 		value: "0",
 
-		// className: String
+		// className: [const] String
 		//		A CSS class name of a DOM button.
 		className: "mblDomButtonRedBadge",
 
-		// fontSize: Number
+		// fontSize: [const] Number
 		//		Font size in pixel. The other style attributes are determined by the DOM
 		//		button itself.
 		//		Note that changing the value of the property after the badge

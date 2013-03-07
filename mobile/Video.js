@@ -10,13 +10,13 @@ define([
 		// summary:
 		//		A thin wrapper around the HTML5 `<video>` element.
 		
-		// width: String
+		// width: [const] String
 		//		The width of the embed element.
 		//		Note that changing the value of the property after the widget
 		//		creation has no effect.
 		width: "200px",
 
-		// height: String
+		// height: [const] String
 		//		The height of the embed element.
 		//		Note that changing the value of the property after the widget
 		//		creation has no effect.

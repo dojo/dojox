@@ -31,28 +31,28 @@ define([
 		//	|	<div data-dojo-type="dojox.mobile.Icon"
 		//	|		data-dojo-props='icon:"mblDomButtonBlueCircleArrow"'></div>
 
-		// icon: String
+		// icon: [const] String
 		//		An icon to display. The value can be either a path for an image
 		//		file or a class name of a DOM button.
 		//		Note that changing the value of the property after the icon
 		//		creation has no effect.
 		icon: "",
 
-		// icon: String
+		// iconPos: [const] String
 		//		The position of an aggregated icon. IconPos is comma separated
 		//		values like top,left,width,height (ex. "0,0,29,29").
 		//		Note that changing the value of the property after the icon
 		//		creation has no effect.
 		iconPos: "",
 
-		// icon: String
+		// alt: [const] String
 		//		An alt text for the icon image.
 		//		Note that changing the value of the property after the icon
 		//		creation has no effect.
 		alt: "",
 
-		// icon: String
-		//		A name of html tag to create as this.domNode.
+		// tag: String
+		//		The name of the HTML tag to create as this.domNode.
 		tag: "div",
 
 		constructor: function(/*Object?*/args, /*DomNode?*/node){

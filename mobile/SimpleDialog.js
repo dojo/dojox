@@ -43,7 +43,7 @@ define([
 		//		prevent the user from interacting with elements on the page.
 		modal: true,
 
-		// closeButton: Boolean
+		// closeButton: [const] Boolean
 		//		If true, a button to close the dialog box is displayed at the
 		//		top-right corner.
 		//		Note that changing the value of the property after the widget
