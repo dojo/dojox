@@ -329,32 +329,34 @@ define([
 		},
 
 		onFlickAnimationEnd: function(e){
-			var an = e && e.animationName;
-			if(an && an.indexOf("scrollableViewScroll2") === -1){
-				if(an.indexOf("scrollableViewScroll0") !== -1){ // scrollBarV
-					if(this._scrollBarNodeV){ domClass.remove(this._scrollBarNodeV, "mblScrollableScrollTo0"); }
-				}else if(an.indexOf("scrollableViewScroll1") !== -1){ // scrollBarH
-					if(this._scrollBarNodeH){ domClass.remove(this._scrollBarNodeH, "mblScrollableScrollTo1"); }
-				}else{ // fade or others
-					if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
-					if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
-				}
-				return;
-			}
-			if(this._useTransformTransition || this._useTopLeft){
-				var n = e.target;
-				if(n === this._scrollBarV || n === this._scrollBarH){
-					var cls = "mblScrollableScrollTo" + (n === this._scrollBarV ? "0" : "1");
-					if(domClass.contains(n, cls)){
-						domClass.remove(n, cls);
-					}else{
-						n.className = "";
+			if(e){
+				var an = e.animationName;
+				if(an && an.indexOf("scrollableViewScroll2") === -1){
+					if(an.indexOf("scrollableViewScroll0") !== -1){ // scrollBarV
+						if(this._scrollBarNodeV){ domClass.remove(this._scrollBarNodeV, "mblScrollableScrollTo0"); }
+					}else if(an.indexOf("scrollableViewScroll1") !== -1){ // scrollBarH
+						if(this._scrollBarNodeH){ domClass.remove(this._scrollBarNodeH, "mblScrollableScrollTo1"); }
+					}else{ // fade or others
+						if(this._scrollBarNodeV){ this._scrollBarNodeV.className = ""; }
+						if(this._scrollBarNodeH){ this._scrollBarNodeH.className = ""; }
 					}
 					return;
 				}
-			}
-			if(e && e.srcElement){
-				event.stop(e);
+				if(this._useTransformTransition || this._useTopLeft){
+					var n = e.target;
+					if(n === this._scrollBarV || n === this._scrollBarH){
+						var cls = "mblScrollableScrollTo" + (n === this._scrollBarV ? "0" : "1");
+						if(domClass.contains(n, cls)){
+							domClass.remove(n, cls);
+						}else{
+							n.className = "";
+						}
+						return;
+					}
+				}
+				if(e.srcElement){
+					event.stop(e);
+				}
 			}
 			this.stopAnimation();
 			if(this._bounce){

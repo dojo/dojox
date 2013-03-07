@@ -63,6 +63,7 @@ var tests = [
 	{ url: "test_DataCarousel-demo.html", tags: "DataCarousel" },
 	{ url: "test_DataCarousel.html", tags: "DataCarousel" },
 	{ url: "test_DatePicker.html", tags: "DatePicker" },
+	{ url: "test_DatePicker2.html", tags: "DatePicker" },
 	{ url: "test_EdgeToEdgeCategory.html", tags: "EdgeToEdgeCategory" },
 	{ url: "test_EdgeToEdgeDataList-auto-sv.html", tags: "EdgeToEdgeDataList" },
 	{ url: "test_EdgeToEdgeDataList-auto-v.html", tags: "EdgeToEdgeDataList" },

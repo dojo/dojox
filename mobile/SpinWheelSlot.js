@@ -324,13 +324,31 @@ define([
 			}
 			this.spin(m);
 		},
+		
+		onFlickAnimationStart: function(e){
+			// summary:
+			//		Overrides dojox/mobile/scrollable.onFlickAnimationStart().
+			this._onFlickAnimationStartCalled = true;
+			this.inherited(arguments);
+		},
 
+		onFlickAnimationEnd: function(e){
+			// summary:
+			//		Overrides dojox/mobile/scrollable.onFlickAnimationEnd().
+			this._duringSlideTo = false;
+			this._onFlickAnimationStartCalled = false;
+			this.inherited(arguments);
+		},
+		
 		spin: function(/*Number*/steps){
 			// summary:
 			//		Spins the slot as specified by steps.
-			if(!this._started){ return; } // do not work until start up
+			
+			// do nothing before startup and during slide
+			if(!this._started || this._duringSlideTo){
+				return; 
+			}
 			var to = this.getPos();
-			if(Math.floor(to.y) % this._itemHeight){ return; } // maybe still spinning
 			to.y += steps * this._itemHeight;
 			this.slideTo(to, 1);
 		},
@@ -380,6 +398,7 @@ define([
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing){
 			// summary:
 			//		Overrides dojox/mobile/scrollable.slideTo().
+			this._duringSlideTo = true; 
 			var pos = this.getPos();
 			var top = pos.y + this.panelNodes[1].offsetTop;
 			var bottom = top + this.panelNodes[1].offsetHeight;
@@ -404,13 +423,23 @@ define([
 					this.panelNodes[2] = t;
 				}
 			}
-			if(!this._initialized){
+			if(this.getParent()._duringStartup){
 				duration = 0; // to reduce flickers at start-up especially on android
-				this._initialized = true;
 			}else if(Math.abs(this._speed.y) < 40){
 				duration = 0.2;
 			}
 			this.inherited(arguments, [to, duration, easing]); // 2nd arg is to avoid excessive optimization by closure compiler
+			if(this.getParent()._duringStartup && !this._onFlickAnimationStartCalled){
+				// during startup, because of duration set to 0, if onFlickAnimationStart() 
+				// has not been called (depends on scrollType value), the call of 
+				// onFlickAnimationEnd is missing, hence:
+				this.onFlickAnimationEnd();
+			}else if(!this._onFlickAnimationStartCalled){
+				// if onFlickAnimationStart() wasn't called, and if slideTo() didn't call
+				// itself onFlickAnimationEnd():
+				this._duringSlideTo = false;
+				// (otherwise, wait for onFlickAnimationEnd which deletes the flag)
+			}
 		}
 	});
 
