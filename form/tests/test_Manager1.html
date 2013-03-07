@@ -1,8 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-	<title>dojox.form.Manager (test #1)</title>
-	<style type="text/css">
+	<meta charset="utf-8">
+	<title>dojox/form/Manager (test #1)</title>
+	<style >
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/themes/dijit.css";
 		@import "../../../dijit/themes/tundra/tundra.css";
@@ -17,7 +18,7 @@
 
 		.makeYellow		{ background-color: #ffa; }
 	</style>
-	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
+	<script src="../../../dojo/dojo.js" data-dojo-config="async: 1, isDebug: 1, parseOnLoad: 0"></script>
 	<!--
 	<script type="text/javascript" src="../manager/_Mixin.js"></script>
 	<script type="text/javascript" src="../manager/_FormMixin.js"></script>
@@ -27,7 +28,7 @@
 	<script type="text/javascript" src="../manager/_ClassMixin.js"></script>
 	<script type="text/javascript" src="../Manager.js"></script>
 	-->
-	<script type="text/javascript">
+	<script>
 		dojo.require("dojox.form.Manager");
 
 		dojo.require("dijit.dijit");			// optimize: load dijit layer
@@ -110,7 +111,7 @@
 				<fieldset dojoAttachPoint="part2">
 					<legend>Dijit form widgets</legend>
 					<div>
-						<input type="checkbox" dojoType="dijit.form.CheckBox" id="w01" name="w01" value="w01" observer="showValues">
+						<input type="checkbox" dojoType="dijit.form.CheckBox" id="w01" name="w01" value="w01" data-dojo-observer="showValues">
 						&nbsp;<label for="w01">w01 input/checkbox dijit.form.CheckBox</label>
 					</div>
 					<div>
