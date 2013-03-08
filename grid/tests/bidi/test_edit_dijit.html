@@ -21,7 +21,7 @@
 		}
 		</style>
 
-	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true, mblAlwaysHideAddressBar: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true, mblAlwaysHideAddressBar: true, has: {'dojo-bidi': true}"></script>
 	
 	<script type="text/javascript">
 		require([
@@ -33,7 +33,6 @@
 			"dojo/data/ItemFileWriteStore",
 			"dojo/parser",			
 			"dojox/grid/cells/dijit",
-			"dojox/grid/BidiSupport",
 			"dijit/form/ComboBox"
 		], function(ready, registry, runner, dom, query, ItemFileWriteStore){
 			data = {identifier: 'id',label: 'id',items: []};

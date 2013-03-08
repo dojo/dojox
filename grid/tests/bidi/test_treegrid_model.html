@@ -13,7 +13,7 @@
                 height: 40em;
             }
         </style>
-        <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true, mblAlwaysHideAddressBar: true"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true, has: {'dojo-bidi': true}, mblAlwaysHideAddressBar: true"></script>
 
         <script type="text/javascript">
 		require([
@@ -26,8 +26,7 @@
 			"dijit/tree/ForestStoreModel",
 			"dojox/grid/TreeGrid",
 			"dojo/parser",			
-			"dojox/grid/cells/dijit",
-			"dojox/grid/BidiSupport"
+			"dojox/grid/cells/dijit"
 		], function(ready, runner, dom, query, lang, ItemFileWriteStore, ForestStoreModel, TreeGrid){
 			ready(function(){		
 				var dataItems = {

@@ -225,15 +225,13 @@ define([
 			if (e.cellNode)
 				this.grid.onMouseDown(e);
 			this.grid.onMouseDownRow(e);
-		}
+		},
 
-		/*=====
-		,_getTextDirStyle: function(textDir, inCell, inRowIndex){
+		_getTextDirStyle: function(textDir, inCell, inRowIndex){
 			// summary:
-			//		 Get BiDi text dir, just a placeholder, defined in dojox/grid/BidiSupport
+			//		 Get BiDi text dir, just a placeholder, defined in dojox/grid/bidi/_BidiMixin
 			return "";
 		}
-		=====*/
 	});
 
 	// Produces html for grid data content. Owned by grid and used internally

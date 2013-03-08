@@ -25,7 +25,7 @@
 				border: 1px solid #333333;
             }
         </style>
-        <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true, mblAlwaysHideAddressBar: true"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true, has: {'dojo-bidi': true}, mblAlwaysHideAddressBar: true"></script>
         <script type="text/javascript">            		
 		require([
 			"dojo/ready",
@@ -37,7 +37,6 @@
 			"dojox/grid/LazyTreeGridStoreModel",
 			"dojo/parser",			
 			"dojox/grid/cells/dijit",
-			"dojox/grid/BidiSupport",
 			"dijit/form/ComboBox"
 		], function(ready, runner, dom, query, lang, ItemFileReadStore, LazyTreeGridStoreModel){
 			var continentItems = [

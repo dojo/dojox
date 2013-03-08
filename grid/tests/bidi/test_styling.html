@@ -19,7 +19,7 @@
 		#grid { 
 			border: 1px solid #333;
 			width: 43em;
-			height: 16em;
+			height: 30em;
 		}
 		
 		#grid .dojoxGridRow {
@@ -76,7 +76,7 @@
 		}		
 	</style>
 	
-	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config = "async: true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../../../dojo/dojo.js" data-dojo-config = "async: true, parseOnLoad: true, has: {'dojo-bidi': true}"></script>
 	
 	<script type="text/javascript">		
 		require([
@@ -88,8 +88,7 @@
 			"dojo/data/ItemFileWriteStore",
 			"dojox/grid/DataGrid",
 			"dojo/parser",			
-			"dojox/grid/cells/dijit",
-			"dojox/grid/BidiSupport"
+			"dojox/grid/cells/dijit"
 		], function(ready, registry, runner, dom, query, ItemFileWriteStore){		
 			ready(function(){
 				data = {identifier: 'id',label: 'id',items: []};		
@@ -97,8 +96,8 @@
 					{ col1: "Hello note!", col2: "Hello note!", col3: "Hello note!", col4: 'To problems of corruption by!', col5: 9.12, col6: "Hello note!"},
 					{ col1: "\u05e9\u05dc\u05d5\u05dd note!", col2: "\u05e9\u05dc\u05d5\u05dd note!", col3: "\u05e9\u05dc\u05d5\u05dd note!", col4: 'Which would simply be awkward in!', col5: 12.15, col6: "\u05e9\u05dc\u05d5\u05dd!"}
 				];
-				for(var i=0; i < 2; i++){
-					data.items.push(dojo.mixin({ id: i }, data_list[i]));
+				for(var i=0; i < 60; i++){
+					data.items.push(dojo.mixin({ id: i }, data_list[i%2]));
 				}
 				test_store = new ItemFileWriteStore({data: data});		
 				var structure = [
@@ -146,22 +145,6 @@
 				runner.run();				
 			});
 		
-		},
-		onStyleRow = function(inRow) {
-			with (inRow) {
-				var i = index % 10;
-				var special = (i > 2 && i < 6);
-				if (odd)
-					customStyles += ' color: orange;';
-				if (selected)	
-					customClasses += ' selectedRow';
-				if (special)	
-					customClasses += ' specialRow';
-				if (over)	
-					customClasses += ' overRow';
-				if (!over && !selected)
-					dojox.grid.DataGrid.prototype.onStyleRow.apply(this, arguments);
-			}	
 		},			
 		toggleGridTextDir = function(){
 			var grid = dijit.registry.byId("grid");
@@ -173,8 +156,7 @@
     <input id="btn" type="button" onclick="toggleGridTextDir()" value="Toggle Grid TextDir"><br>	
     <br />
 	<div class="heading">RTL Grid Bidi Test</div>
-	<div id="grid" data-dojo-id="grid" data-dojo-type="dojox/grid/DataGrid"
-		onStyleRow="onStyleRow" data-dojo-props='textDir: "rtl" '></div>
+	<div id="grid" data-dojo-id="grid" data-dojo-type="dojox/grid/DataGrid" data-dojo-props='textDir: "rtl" '></div>
 
 		<br>Errors:&nbsp;<span id="errors">?</span>
 		<br>Failures:&nbsp;<span id="failures">?</span>			
