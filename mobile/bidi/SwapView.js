@@ -8,8 +8,8 @@ define([
 	return declare(null, {
 		
 		// callParentFunction: Boolean
-		//		Boolean value indicate whether to call the parent version of the function or the child one
-		//used to support mirroring.
+		//		Boolean value indicate whether to call the parent version of the function or the child one.
+		//		Used to support mirroring.
 		_callParentFunction: false,
 		
 		nextView: function(/*DomNode*/node){
