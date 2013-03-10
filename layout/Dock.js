@@ -1,20 +1,21 @@
-define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/window","dojo/_base/declare",
-		"dojo/_base/fx","dojo/_base/connect","dojo/_base/array","dojo/_base/sniff",
-		"dojo/window","dojo/dom","dojo/dom-class","dojo/dom-geometry","dojo/dom-construct",
-		"dijit/_TemplatedMixin","dijit/_Widget","dijit/BackgroundIframe","dojo/dnd/Moveable",
-		"./ContentPane","./ResizeHandle","dojo/text!./resources/FloatingPane.html"], function(
-	kernel, lang, winUtil, declare, baseFx, connectUtil, arrayUtil, 
-	has, windowLib, dom, domClass, domGeom, domConstruct, TemplatedMixin, Widget, BackgroundIframe, 
+define(["dojo/_base/lang", "dojo/_base/window", "dojo/_base/declare",
+		"dojo/_base/fx", "dojo/on", "dojo/_base/array", "dojo/_base/sniff",
+		"dojo/window", "dojo/dom", "dojo/dom-class", "dojo/dom-geometry", "dojo/dom-construct",
+		"dijit/_TemplatedMixin", "dijit/_WidgetBase", "dijit/BackgroundIframe", "dojo/dnd/Moveable",
+		"./ContentPane", "./ResizeHandle", "dojo/text!./resources/FloatingPane.html", "dojo/domReady!"], function(
+	lang, winUtil, declare, fx, on, arrayUtil, 
+	has, windowLib, dom, domClass, domGeom, domConstruct, _TemplatedMixin, _WidgetBase, BackgroundIframe, 
 	Moveable, ContentPane, ResizeHandle, template){
-	
-kernel.experimental("dojox.layout.Dock");
+
+//TODO: don't want to rely on kernel just to make something as experimental	
+//kernel.experimental("dojox.layout.Dock");
 
 var Dock = declare("dojox.layout.Dock",[Widget, TemplatedMixin],{
 	// summary:
 	//		A widget that attaches to a node and keeps track of incoming / outgoing FloatingPanes
 	//		and handles layout
 
-	templateString: '<div class="dojoxDock"><ul dojoAttachPoint="containerNode" class="dojoxDockList"></ul></div>',
+	templateString: '<div class="dojoxDock"><ul dojo-dojo-attach-point="containerNode" class="dojoxDockList"></ul></div>',
 
 	// _docked: [private] Array
 	//		array of panes currently in our dock
@@ -42,10 +43,14 @@ var Dock = declare("dojox.layout.Dock",[Widget, TemplatedMixin],{
 				
 		if (this.id == "dojoxGlobalFloatingDock" || this.isFixedDock) {
 			// attach window.onScroll, and a position like in presentation/dialog
-			this.connect(window, 'onresize', "_positionDock");
-			this.connect(window, 'onscroll', "_positionDock");
-			if(has("ie")){
-				this.connect(this.domNode, "onresize", "_positionDock");
+			this.own(
+				on(window, "resize", lang.hitch(this, "_positionDock")),
+				on(window, "scroll", lang.hitch(this, "_positionDock"))
+			);
+			if(has("ie")){ // TODO: All versions of IE, or pre-IE9, or some feature to test?
+				this.own(
+					on(this.domNode, "resize", lang.hitch(this, "_positionDock"))
+				);
 			}
 		}
 		this._positionDock(null);
@@ -88,8 +93,8 @@ var DockNode = declare("dojox.layout._DockNode",[Widget, TemplatedMixin],{
 
 	templateString:
 		'<li dojoAttachEvent="onclick: restore" class="dojoxDockNode">'+
-			'<span dojoAttachPoint="restoreNode" class="dojoxDockRestoreButton" dojoAttachEvent="onclick: restore"></span>'+
-			'<span class="dojoxDockTitleNode" dojoAttachPoint="titleNode">${title}</span>'+
+			'<span data-dojo-attach-point="restoreNode" class="dojoxDockRestoreButton" data-dojo-attach-event="onclick: restore"></span>'+
+			'<span class="dojoxDockTitleNode" data-dojo-attach-point="titleNode">${title}</span>'+
 		'</li>',
 
 	restore: function(){
