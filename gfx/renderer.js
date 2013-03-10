@@ -28,7 +28,7 @@ define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "d
 						}
 						break;
 					case "vml":
-						if(has("ie")){
+						if(has("ie" <= 8)){
 							renderer = "vml";
 						}
 						break;
