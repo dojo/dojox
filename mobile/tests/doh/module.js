@@ -40,7 +40,8 @@ define([
      "./transition/module",
      "./valuepickerdatepicker/module",
      "./valuepickertimepicker/module",
-     "./view/module"
+     "./view/module",
+     "./bidi/module"
 ], function(doh, has, require){
 	try{
 		doh.registerUrl("dojox.mobile.tests.doh.URLProperty", require.toUrl("./TestURLProp.html"),999999);
