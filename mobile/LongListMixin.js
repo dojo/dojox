@@ -43,6 +43,7 @@ define([ "dojo/_base/array",
 		unloadPages: 1,
 		
 		startup : function(){
+			if(this._started){ return; }
 			
 			this.inherited(arguments);
 
@@ -288,9 +289,11 @@ define([ "dojo/_base/array",
 			
 			if(this._items && !this.append){
 				// _StoreListMixin calls destroyRecursive to delete existing items, not removeChild,
-				// so we must clear the existing items before the store is reloaded.
+				// so we must destroy the existing items before the store is reloaded.
 				this._items = [];
-				this._clearItems();
+				array.forEach(registry.findWidgets(this.containerNode), function(item){
+					item.destroyRecursive();
+				});
 			}
 			this.inherited(arguments);
 		}
