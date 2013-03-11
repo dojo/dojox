@@ -121,6 +121,7 @@ define([
 		flashReset: function(){
 			this.flashMovie.reset();
 			this._files = [];
+			this._fileMap = {};
 		},
 	
 		/*************************
