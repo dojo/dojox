@@ -115,7 +115,8 @@ define([
 			// summary:
 			//		Checks if the given node is a fixed bar or not.
 			if(node.nodeType === 1){
-				var fixed = node.getAttribute("fixed")
+				var fixed = node.getAttribute("fixed") // TODO: Remove the non-HTML5-compliant attribute in 2.0
+					|| node.getAttribute("data-mobile-fixed")
 					|| (registry.byNode(node) && registry.byNode(node).fixed);
 				if(fixed === "top"){
 					domClass.add(node, "mblFixedHeaderBar");

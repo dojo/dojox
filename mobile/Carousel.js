@@ -3,6 +3,7 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/declare",
 	"dojo/_base/event",
+	"dojo/_base/lang",
 	"dojo/sniff",
 	"dojo/dom-class",
 	"dojo/dom-construct",
@@ -17,7 +18,7 @@ define([
 	"./SwapView",
 	"require",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Carousel"
-], function(array, connect, declare, event, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel){
+], function(array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel){
 
 	// module:
 	//		dojox/mobile/Carousel
@@ -94,9 +95,10 @@ define([
 		buildRendering: function(){
 			this.containerNode = domConstruct.create("div", {className: "mblCarouselPages"});
 			this.inherited(arguments);
+			var i;
 			if(this.srcNodeRef){
 				// reparent
-				for(var i = 0, len = this.srcNodeRef.childNodes.length; i < len; i++){
+				for(i = 0, len = this.srcNodeRef.childNodes.length; i < len; i++){
 					this.containerNode.appendChild(this.srcNodeRef.firstChild);
 				}
 			}
@@ -179,19 +181,20 @@ define([
 		resizeItems: function(){
 			// summary:
 			//		Resizes the child items of the carousel.
-			var idx = 0;
+			var idx = 0, i;
 			var h = this.domNode.offsetHeight - (this.headerNode ? this.headerNode.offsetHeight : 0);
 			var m = has("ie") ? 5 / this.numVisible-1 : 5 / this.numVisible;
+			var node, item;
 			array.forEach(this.getChildren(), function(view){
 				if(!(view instanceof SwapView)){ return; }
-				if(!(view.lazy || view.domNode.getAttribute("lazy"))){
+				if(!(view.lazy)){
 					view._instantiated = true;
 				}
 				var ch = view.containerNode.childNodes;
-				for(var i = 0, len = ch.length; i < len; i++){
-					var node = ch[i];
+				for(i = 0, len = ch.length; i < len; i++){
+					node = ch[i];
 					if(node.nodeType !== 1){ continue; }
-					var item = this.items[idx] || {};
+					item = this.items[idx] || {};
 					domStyle.set(node, {
 						width: item.width || (90 / this.numVisible + "%"),
 						height: item.height || h + "px",
@@ -223,7 +226,8 @@ define([
 		fillPages: function(){
 			array.forEach(this.getChildren(), function(child, i){
 				var s = "";
-				for(var j = 0; j < this.numVisible; j++){
+				var j;
+				for(j = 0; j < this.numVisible; j++){
 					var type, props = "", mixins;
 					var idx = i * this.numVisible + j;
 					var item = {};
@@ -325,7 +329,8 @@ define([
 		getParentView: function(/*DomNode*/node){
 			// summary:
 			//		Returns the parent view of the given DOM node.
-			for(var w = registry.getEnclosingWidget(node); w; w = w.getParent()){
+			var w;
+			for(w = registry.getEnclosingWidget(node); w; w = w.getParent()){
 				if(w.getParent() instanceof SwapView){ return w; }
 			}
 			return null;
@@ -452,5 +457,20 @@ define([
 			this._set("title", title);
 		}
 	});
+	
+	Carousel.ChildSwapViewProperties = {
+		// summary:
+		//		This property can be specified for the SwapView children of a dojox/mobile/Carousel.
+
+		// lazy: Boolean
+		//		Specifies that the Carousel child must be lazily loaded.
+		lazy: false
+	};
+
+	// Since any widget can be specified as an Accordion child, mix ChildWidgetProperties
+	// into the base widget class.  (This is a hack, but it's effective.)
+	// This is for the benefit of the parser. Remove for 2.0.  Also, hide from doc viewer.
+	lang.extend(SwapView, /*===== {} || =====*/ Carousel.ChildSwapViewProperties);
+	
 	return has("dojo-bidi") ? declare("dojox.mobile.Carousel", [Carousel, BidiCarousel]) : Carousel;
 });

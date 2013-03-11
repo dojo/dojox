@@ -156,7 +156,8 @@ define([
 			for(var i = target.childNodes.length - 1; i >= 0; i--){
 				var c = target.childNodes[i];
 				if(c.nodeType === 1){
-					var fixed = c.getAttribute("fixed")
+					var fixed = c.getAttribute("fixed") // TODO: Remove the non-HTML5-compliant attribute in 2.0
+						|| c.getAttribute("data-mobile-fixed")
 						|| (registry.byNode(c) && registry.byNode(c).fixed);
 					if(fixed === "bottom"){
 						refNode = c;

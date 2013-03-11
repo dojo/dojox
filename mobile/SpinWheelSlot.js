@@ -113,7 +113,7 @@ define([
 							domConstruct.create("div", {
 								className: "mblSpinWheelSlotLabel",
 								name: this.items[i][0],
-								val: this.items[i][1],
+								"data-mobile-val": this.items[i][1],
 								innerHTML: this._cv ? this._cv(this.items[i][1]) : this.items[i][1]
 							}, this.panelNodes[k]);
 						}
@@ -269,7 +269,7 @@ define([
 			}
 			if(this.items.length > 0){ // if the slot is not empty
 				var item = this.getCenterItem();
-				return (item && item.getAttribute("val"));
+				return (item && item.getAttribute("data-mobile-val"));
 			}else{
 				return this._initialValue;
 			}

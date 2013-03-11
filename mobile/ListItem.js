@@ -251,8 +251,10 @@ define([
 			var centerNode;
 			array.forEach(this.domNode.childNodes, function(n){
 				if(n.nodeType !== 1){ return; }
-				var layout = n.getAttribute("layout") || (registry.byNode(n) || {}).layout;
-				if(layout){
+				var layout = n.getAttribute("layout") || // TODO: Remove the non-HTML5-compliant attribute in 2.0
+					n.getAttribute("data-mobile-layout") || 
+					(registry.byNode(n) || {}).layout;
+				if(layout){ 
 					domClass.add(n, "mblListItemLayout" +
 						layout.charAt(0).toUpperCase() + layout.substring(1));
 					this._layoutChildren.push(n);
@@ -279,7 +281,8 @@ define([
 		_onTouchStart: function(e){
 			// tags:
 			//		private
-			if(e.target.getAttribute("preventTouch") ||
+			if(e.target.getAttribute("preventTouch") || // TODO: Remove the non-HTML5-compliant attribute in 2.0
+				e.target.getAttribute("data-mobile-prevent-touch") ||
 				(registry.getEnclosingWidget(e.target) || {}).preventTouch){
 				return;
 			}
@@ -556,6 +559,7 @@ define([
 		// layout: String
 		//		Specifies the position of the ListItem child ("left", "center" or "right").
 		layout: "",
+
 		// preventTouch: Boolean
 		//		Disables touch events on the ListItem child.
 		preventTouch: false
