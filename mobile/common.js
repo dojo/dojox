@@ -191,7 +191,6 @@ define([
 
 	if(config["mblApplyPageStyles"] !== false){
 		domClass.add(win.doc.documentElement, "mobile");
-		domClass.add(win.body(), "mblBackground");
 	}
 	if(has('chrome')){
 		// dojox/mobile does not load uacss (only _compat does), but we need dj_chrome.
@@ -215,7 +214,7 @@ define([
 
 	ready(function(){
 		dm.detectScreenSize(true);
-
+		domClass.add(win.body(), "mblBackground");
 		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
 			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, win.doc.head, "first");
