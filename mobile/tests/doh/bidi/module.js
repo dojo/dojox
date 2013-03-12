@@ -23,13 +23,13 @@ define(["doh/main", "require", "dojo/sniff"], function(doh, require, has){
 	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./Heading2_Rtl.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./HeadingTests_Rtl.html"),999999);
 	// Fixed Splitter
-	if(!has("ie")){
+	if(!(has("ie") < 10)){
 		doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./FixedSplitterTests1_Rtl.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./FixedSplitterTests2_Rtl.html"),999999);
 		doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./FixedSplitterTests3_Rtl.html"),999999);
 	}
 	// TabBar
-	if(!has("ie")){
+	if(!(has("ie") < 10)){
 		doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./TabBarTests_Rtl.html"),999999);
 	}
 	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./TabBar_Rtl.html"),999999);
@@ -47,7 +47,7 @@ define(["doh/main", "require", "dojo/sniff"], function(doh, require, has){
 	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./IconContainerTests_Rtl.html"),999999);
 	
 	// Swap View
-	if(!has("ie")){
+	if(!(has("ie") < 10)){
 		doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./SwapViewTests1_Rtl.html"),999999);
 	}
 
