@@ -33,39 +33,43 @@ define([
 			//		which can also handle the post data.
 	
 			var
-				formObject,
+				formObject = {},
+				sendForm,
 				form = this.getForm(),
-				destroyAfter = false,
 				url = this.getUrl(),
 				self = this;
 			
 			data.uploadType = this.uploadType;
-			if(!form){
-				//enctype can't be changed once a form element is created
-				form = domConstruct.place('<form enctype="multipart/form-data" method="post"></form>', this.domNode);
-				arrayUtil.forEach(this._inputs, function(n, i){
-					if(n.value) form.appendChild(n);
-				}, this);
-				destroyAfter = true;
-			}
+			
+			// create a temp form for which to send data
+			//enctype can't be changed once a form element is created
+			sendForm = domConstruct.place('<form enctype="multipart/form-data" method="post"></form>', this.domNode);
+			arrayUtil.forEach(this._inputs, function(n, i){
+				// don't send blank inputs
+				if(n.value !== ''){
+					sendForm.appendChild(n);
+					formObject[n.name] = n.value;
+				}
+			}, this);
+			
 			
 			// add any extra data as form inputs		
 			if(data){
-				formObject = domForm.toObject(form);
+				//formObject = domForm.toObject(form);
 				for(nm in data){
 					if(formObject[nm] === undefined){
-						domConstruct.create('input', {name:nm, value:data[nm], type:'hidden'}, form);
+						domConstruct.create('input', {name:nm, value:data[nm], type:'hidden'}, sendForm);
 					}
 				}
 			}
 	
 			
 			request.post(url, {
-				form: form,
+				form: sendForm,
 				handleAs: "json",
 				content: data
 			}).then(function(result){
-				if(destroyAfter){ domConstruct.destroy(form); }
+				domConstruct.destroy(sendForm);
 				if(data["ERROR"] || data["error"]){
 					self.onError(result);
 				}else{
@@ -73,7 +77,7 @@ define([
 				}
 			}, function(err){
 				console.error('error parsing server result', err);
-				if(destroyAfter){ domConstruct.destroy(form); }
+				domConstruct.destroy(sendForm); 
 				self.onError(err);
 			});
 		}
