@@ -289,11 +289,14 @@ define([ "dojo/_base/array",
 			
 			if(this._items && !this.append){
 				// _StoreListMixin calls destroyRecursive to delete existing items, not removeChild,
-				// so we must destroy the existing items before the store is reloaded.
-				this._items = [];
-				array.forEach(registry.findWidgets(this.containerNode), function(item){
-					item.destroyRecursive();
+				// so we must remove all logical items (i.e. clear _items) before reloading the store.
+				// And since the superclass destroys all children returned by getChildren(), and
+				// this would actually return no children because _items is now empty, we must
+				// destroy all children manually first.
+				array.forEach(this.getChildren(), function(child){
+					child.destroyRecursive();
 				});
+				this._items = [];
 			}
 			this.inherited(arguments);
 		}
