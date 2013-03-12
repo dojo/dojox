@@ -278,7 +278,7 @@ define([
 				geom.setMarginBox(this.gridContainerTable, {
 					h: contentBox.h - this._border.h
 				});
-				geom.setContentBox(this.domNode, {
+				geom.setContentSize(this.domNode, {
 					w: contentBox.w - this._border.w
 				});
 			}
