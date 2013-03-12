@@ -136,6 +136,7 @@ define([
 			this.onBegin(this.getFileList());
 			formData.returnType = "F";
 			formData.uploadType = this.uploadType;
+			console.log('flas upload', formData);
 			this.flashMovie.doUpload(formData);
 		},
 	

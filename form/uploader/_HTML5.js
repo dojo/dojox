@@ -88,6 +88,7 @@ define([
 			}, this);
 	
 			if(data){
+				data.uploadType = this.uploadType;
 				for(var nm in data){
 					fd.append(nm, data[nm]);
 				}

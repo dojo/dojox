@@ -1,10 +1,12 @@
 define([
+	"dojo/query",
 	"dojo/dom-construct",
 	"dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/_base/array",
+	"dojo/dom-form",
 	"dojo/request/iframe"
-],function(domConstruct, declare, lang, arrayUtil, request){
+],function(query, domConstruct, declare, lang, arrayUtil, domForm, request){
 	
 
 	return declare("dojox.form.uploader._IFrame", [], {
@@ -30,21 +32,34 @@ define([
 			//		Internal. You could use this, but you should use upload() or submit();
 			//		which can also handle the post data.
 	
-			var form, destroyAfter = false;
+			var
+				formObject,
+				form = this.getForm(),
+				destroyAfter = false,
+				url = this.getUrl(),
+				self = this;
+			
 			data.uploadType = this.uploadType;
-			if(!this.getForm()){
+			if(!form){
 				//enctype can't be changed once a form element is created
 				form = domConstruct.place('<form enctype="multipart/form-data" method="post"></form>', this.domNode);
 				arrayUtil.forEach(this._inputs, function(n, i){
 					if(n.value) form.appendChild(n);
 				}, this);
 				destroyAfter = true;
-			}else{
-				form = this.form;
+			}
+			
+			// add any extra data as form inputs		
+			if(data){
+				formObject = domForm.toObject(form);
+				for(nm in data){
+					if(formObject[nm] === undefined){
+						domConstruct.create('input', {name:nm, value:data[nm], type:'hidden'}, form);
+					}
+				}
 			}
 	
-			var url = this.getUrl();
-			var self = this;
+			
 			request.post(url, {
 				form: form,
 				handleAs: "json",
