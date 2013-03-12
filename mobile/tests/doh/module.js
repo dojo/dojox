@@ -4,6 +4,7 @@ define([
      "require",
      "./accordion/module",
      "./badge/module",
+     "./bidi/module",
      "./button/module",
      "./checkbox/module",
      "./combobox/module",
@@ -40,8 +41,7 @@ define([
      "./transition/module",
      "./valuepickerdatepicker/module",
      "./valuepickertimepicker/module",
-     "./view/module",
-     "./bidi/module"
+     "./view/module"
 ], function(doh, has, require){
 	try{
 		doh.registerUrl("dojox.mobile.tests.doh.URLProperty", require.toUrl("./TestURLProp.html"),999999);
