@@ -246,6 +246,7 @@ define([
 		upload: function(/*Object?*/ formData){				
 			// summary:
 			//		When called, begins file upload. Only supported with plugins.
+			formData = formData || {};
 			formData.uploadType = this.uploadType;
 			this.inherited(arguments);
 		},
