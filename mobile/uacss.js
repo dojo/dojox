@@ -9,6 +9,7 @@ define([
 		has('bb') ? "dj_bb" : "",
 		has('android') ? "dj_android" : "",
 		has("ios") ? "dj_ios" : "",
+		has("ios") >= 6 ? "dj_ios6" : "",
 		has("ios") ? "dj_iphone" : "",	// TODO: remove for 2.0
 		has('ipod') ? "dj_ipod" : "",
 		has('ipad') ? "dj_ipad" : ""

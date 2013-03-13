@@ -231,3 +231,9 @@
 .mblSwDefaultShape .mblSwitchTextRight {
   left: 26px;
 }
+/* i0S 6 specific */
+.dj_ios6 .mblSwitchBgLeft {
+  background-color: #007fea;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#0060b1), to(#73b3ea), color-stop(0.5, #007fea), color-stop(0.5, #218fec));
+  background-image: linear-gradient(to bottom, #0060b1 0%, #007fea 50%, #218fec 50%, #73b3ea 100%);
+}

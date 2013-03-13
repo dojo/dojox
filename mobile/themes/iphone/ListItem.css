@@ -115,3 +115,8 @@
   border-radius: 0px !important;
   -moz-border-radius: 0px !important;
 }
+/* iOS 6 specific */
+.dj_ios6 .mblListItemRightText {
+  color: #385487;
+  font-weight: normal;
+}

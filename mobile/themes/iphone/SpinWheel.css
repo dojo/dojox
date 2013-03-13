@@ -68,3 +68,7 @@
   height: 100%;
   z-index: 1;
 }
+/* iOS6 specific */
+.dj_ios6 .mblSpinWheelSlotLabelBlue {
+  color: #0160f2;
+}

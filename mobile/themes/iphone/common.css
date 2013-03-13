@@ -55,3 +55,47 @@ html.mobile,
 .mblImageIcon {
   vertical-align: top;
 }
+/* iOS 6 specific */
+.dj_ios6 .mblColorBlue {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#89abec), to(#2057c1));
+  background-image: linear-gradient(to bottom, #89abec 0%, #2057c1 100%);
+}
+.dj_ios6 .mblColorBlue45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#89abec), to(#2057c1));
+  background-image: linear-gradient(to right bottom, #89abec 0%, #2057c1 100%);
+}
+.dj_ios6.dj_phone {
+  /* mblColorBlue also defined here to correctly show up in openers */
+
+}
+.dj_ios6.dj_phone body {
+  background-color: #d7dce5;
+  /* Vertical stripes on webkit */
+
+  background-image: -webkit-gradient(linear, left top, right top, from(transparent), to(#d4d9e3), color-stop(0.7, transparent), color-stop(0.7, #d4d9e3));
+  background-size: 8px 8px;
+}
+.dj_ios6.dj_phone .mblColorDefault {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#99aac2), to(#41618d));
+  background-image: linear-gradient(to bottom, #99aac2 0%, #41618d 100%);
+}
+.dj_ios6.dj_phone .mblColorDefault45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#99aac2), to(#41618d));
+  background-image: linear-gradient(to right bottom, #99aac2 0%, #41618d 100%);
+}
+.dj_ios6.dj_phone .mblColorDefaultSel {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#8b97af), to(#273e6b));
+  background-image: linear-gradient(to bottom, #8b97af 0%, #273e6b 100%);
+}
+.dj_ios6.dj_phone .mblColorDefaultSel45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#8b97af), to(#273e6b));
+  background-image: linear-gradient(to right bottom, #8b97af 0%, #273e6b 100%);
+}
+.dj_ios6.dj_phone .mblColorBlue {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#89abec), to(#2057c1));
+  background-image: linear-gradient(to bottom, #89abec 0%, #2057c1 100%);
+}
+.dj_ios6.dj_phone .mblColorBlue45 {
+  background-image: -webkit-gradient(linear, left top, right bottom, from(#89abec), to(#2057c1));
+  background-image: linear-gradient(to right bottom, #89abec 0%, #2057c1 100%);
+}
