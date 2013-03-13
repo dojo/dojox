@@ -10,7 +10,7 @@ define(["dojo/_base/lang", "dojo/_base/window", "dojo/_base/declare",
 //TODO: don't want to rely on kernel just to make something as experimental	
 //kernel.experimental("dojox.layout.Dock");
 
-var Dock = declare("dojox.layout.Dock",[Widget, TemplatedMixin],{
+var Dock = declare("dojox.layout.Dock",[_WidgetBase, _TemplatedMixin],{
 	// summary:
 	//		A widget that attaches to a node and keeps track of incoming / outgoing FloatingPanes
 	//		and handles layout
@@ -78,7 +78,7 @@ var Dock = declare("dojox.layout.Dock",[Widget, TemplatedMixin],{
 
 });
 
-var DockNode = declare("dojox.layout._DockNode",[Widget, TemplatedMixin],{
+var DockNode = declare("dojox.layout._DockNode",[_WidgetBase, _TemplatedMixin],{
 	// summary:
 	//		dojox.layout._DockNode is a private widget used to keep track of
 	//		which pane is docked.
@@ -92,7 +92,7 @@ var DockNode = declare("dojox.layout._DockNode",[Widget, TemplatedMixin],{
 	paneRef: null,
 
 	templateString:
-		'<li dojoAttachEvent="onclick: restore" class="dojoxDockNode">'+
+		'<li data-dojo-attach-event="onclick: restore" class="dojoxDockNode">'+
 			'<span data-dojo-attach-point="restoreNode" class="dojoxDockRestoreButton" data-dojo-attach-event="onclick: restore"></span>'+
 			'<span class="dojoxDockTitleNode" data-dojo-attach-point="titleNode">${title}</span>'+
 		'</li>',
