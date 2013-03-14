@@ -20,9 +20,9 @@
 	    <script type="text/javascript">
 	    	require(["doh", "dojo/_base/array", "dojo/_base/lang", "dojo/dom-form", "dojo/on", "dojo/parser", "dojo/ready", 
 	    		"dojox/form/CheckedMultiSelect", "dijit/form/Button", "dijit/form/Form", "dojo/data/ItemFileReadStore", 
-	    		"dojo/data/ItemFileWriteStore"
+	    		"dojo/data/ItemFileWriteStore", "dojo/store/Memory"
 	    	], function(doh, array, lang, domForm, on, parser, ready, CheckedMultiSelect, Button, Form, ItemFileReadStore, 
-	    		ItemFileWriteStore){
+	    		ItemFileWriteStore, Memory){
 
 				var data = {
 					identifier: "value",
@@ -40,6 +40,7 @@
 				
 				readStore = new ItemFileReadStore({data:lang.clone(data)});
 				writeStore = new ItemFileWriteStore({data:lang.clone(data)});
+				objectStore = new Memory({data:lang.clone(data.items), idProperty:"value"});
 				
 				var numOptions = 0;
 				var addNum = 10;
@@ -85,6 +86,10 @@
 								t.is([], ms4.get("value"));
 								ms4.set("value", ["CA","AL"]);
 								t.is(["AL","CA"], ms4.get("value"));
+								
+								t.is([], ms6.get("value"));
+								ms6.set("value", ["CA","AL"]);
+								t.is(["AL","CA"], ms6.get("value")); 
 							},
 							function test_changeSelected(t){
 								t.is([], ms5.get("value"));
@@ -281,6 +286,8 @@
 			<select data-dojo-id="ms4" multiple="true" size="5" name="ms4" store="readStore" data-dojo-type="dojox.form.CheckedMultiSelect">
 			</select>
 			<select data-dojo-id="ms5" multiple="true" size="5" name="ms5" store="writeStore" data-dojo-type="dojox.form.CheckedMultiSelect">
+			</select>
+			<select data-dojo-id="ms6" multiple="true" size="5" name="ms6" store="objectStore" labelAttr="label" data-dojo-type="dojox.form.CheckedMultiSelect">
 			</select>
 		<hr>
 			<h4 class="testSubtitle">Validation</h4>
