@@ -10,7 +10,7 @@
 <script language="JavaScript" type="text/javascript">
 	var BUTTON_LABEL = "Button";
 	var WIDGET_CLASSNAME1 = "mblToolBarButton";
-	var WIDGET_CLASSNAME2 = "mblToolBarButtonRightArrow";
+	var WIDGET_CLASSNAME2 = "mblToolBarButtonHasRightArrow";
 	var WIDGET_ICON_CLASSNAME1 = "mblDomButtonWhiteSearch";
 	var WIDGET_ICON_CLASSNAME2 = "mblDomButton";
 
@@ -38,7 +38,9 @@
 			return button;
 		}
 		function _createButtonProgrammaticallyWithSourceNodeReference(buttonId){
-			return new Button({label:BUTTON_LABEL, arrow:"right", icon:"mblDomButtonWhiteSearch"}, buttonId);
+			var button = new Button({label:BUTTON_LABEL, arrow:"right", icon:"mblDomButtonWhiteSearch"}, buttonId);
+			button.startup();
+			return button;
 		}
 		function _assertCorrectButton(button){
 			runner.assertNotEqual(null, button);

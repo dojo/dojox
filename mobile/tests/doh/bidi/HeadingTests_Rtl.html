@@ -74,7 +74,7 @@
 			runner.assertEqual(titleText, widget.labelNode.innerHTML, "widget.labelNode.innerHTML");
 			runner.assertEqual(titleText, widget.labelDivNode.innerHTML, "widget.labelDivNode.innerHTML");
 			runner.assertEqual(backClassName, widget.backButton.domNode.className);
-			runner.assertEqual(has("ie") ? WIDGET_BUTTON_HEAD_CLASSNAME_IE : WIDGET_BUTTON_HEAD_CLASSNAME,
+			runner.assertEqual(has("ie") < 10 ? WIDGET_BUTTON_HEAD_CLASSNAME_IE : WIDGET_BUTTON_HEAD_CLASSNAME,
 			    // calling trim() because of a blank that ToolBarButton.js adds at the end of widget's className attribute value 
 				lang.trim(widget.backButton.arrowNode.className));
 			runner.assertEqual(WIDGET_BUTTON_BODY_CLASSNAME, widget.backButton.bodyNode.className);

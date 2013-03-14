@@ -22,8 +22,13 @@ define([
 			}else{
 				node = obj;
 			}
-			this.fireOnEvent(node, "mousedown");
-			this.fireOnEvent(node, "mouseup");
+			if (has("ie") >= 10){
+				this.fireOnEvent(node, "MSPointerDown");
+				this.fireOnEvent(node, "MSPointerUp");
+			}else{
+				this.fireOnEvent(node, "mousedown");
+				this.fireOnEvent(node, "mouseup");
+			}
 		};
 
 		this.fireOnEvent = function(node, evstr){

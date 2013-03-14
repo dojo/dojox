@@ -12,9 +12,9 @@ dojo.addOnLoad(function(){
 		console.log(tabBarId);
 		console.log(tabBarPosition);
 		console.log(tabBarButtonsPositions);
-		doh.assertEqual(tabBarPosition.w - tabBarPaddingPlusBorderPlusMarginWidth, Math.round(tabBarButtonsPositions[1].w * nbOfButtons), tabBarId + " > button 1 size");
+		doh.assertEqual(Math.round(tabBarPosition.w - tabBarPaddingPlusBorderPlusMarginWidth), Math.round(tabBarButtonsPositions[1].w * nbOfButtons), tabBarId + " > button 1 size");
 		for (var j=2; j <= nbOfButtons; j++){
-			doh.assertEqual(tabBarButtonsPositions[1].w, tabBarButtonsPositions[j].w, tabBarId + " > button " + j + " size");
+			doh.assertEqual(Math.round(tabBarButtonsPositions[1].w), Math.round(tabBarButtonsPositions[j].w), tabBarId + " > button " + j + " size");
 		}
 	};
 	doh.register("dojox.mobile.test.doh.TabBar", [

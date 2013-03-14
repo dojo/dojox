@@ -44,12 +44,9 @@
 				var r = new Accordion({id:widgetId, iconBase:"../../images/icons16.png"});
 				runner.assertNotEqual(null, r);
 				domConst.place(r.domNode, placeHolderId, "replace");
-//start up this place has issue..
 				r.startup();
 				var childWidget = ContentPane({label:"External Content 2", icon1:"mblDomButtonBlackRightArrow16", icon2:"mblDomButtonWhiteDownArrow16", href:"dojo.html"});
 				r.addChild(childWidget);
-//start up this place work fine.
-//				r.startup();
 				return r;
 			}
 			
@@ -76,9 +73,11 @@
 						var widget2 = _createAccordionProgrammatically("view1-Accordion2place", "view1-Accordion2");
 						var widget3 = _createAccordionProgrammaticallyWithSourceNodeReference("view1-Accordion3");
 
-						_assertCorrectAccordion(widget1);
-						_assertCorrectAccordion(widget2);
-						_assertCorrectAccordion(widget3);
+						setTimeout(function() {
+							_assertCorrectAccordion(widget1);
+							_assertCorrectAccordion(widget2);
+							_assertCorrectAccordion(widget3);
+						}, 1000);
 					},
 					function testInView2(){
 						var widget1 = _createAccordionDeclaratively("dojox_mobile_Accordion_1");
@@ -87,9 +86,11 @@
 
 						_showView2();
 
-						_assertCorrectAccordion(widget1);
-						_assertCorrectAccordion(widget2);
-						_assertCorrectAccordion(widget3);
+						setTimeout(function() {
+							_assertCorrectAccordion(widget1);
+							_assertCorrectAccordion(widget2);
+							_assertCorrectAccordion(widget3);
+						}, 1000);
 					}
 				]);
 				runner.run();

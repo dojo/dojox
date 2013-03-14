@@ -118,44 +118,35 @@
 			runner.register("dojox.mobile.test.doh.ContentPane", [
 				{
 					name: "ContentPane Verification1",
-					timeout: 4000,
+					timeout: 10000,
 					runTest: function(){
-						var widget = registry.byId("view1-pane14");
+ 						var widget = registry.byId("view1-pane14");
 						var d = new runner.Deferred();
-						var handle1 = connect.connect(widget, "loadHandler", this, d.getTestCallback(function(){
-							connect.disconnect(handle1);
-							// The loading of the content of the different ContentPane instances is performed 
-							// asynchronously in an undefined order. Hence the use of setTimeout such that the
-							// checks are performed after the loading of all ContentPanes in view1.
-							setTimeout(function() {
+						// The loading of the content of the different ContentPane instances is performed 
+						// asynchronously in an undefined order. Hence the use of setTimeout such that the
+						// checks are performed after the loading of all ContentPanes in view1.
+						setTimeout(d.getTestCallback(function(){
 								_assertCorrectContentPanes(["view1-pane1","view1-pane2","view1-pane3","view1-pane4","view1-pane5"]);
 								_assertCorrectContentPanes(["view1-pane6","view1-pane7","view1-pane8","view1-pane9","view1-pane10"]);
 								_assertCorrectContentPanes(["view1-pane11","view1-pane12","view1-pane13","view1-pane14","view1-pane15"]);
-							}, 500);
-						}));
+						}), 5000);
 						return d;
 					}
 				},
 				{
 					name: "ContentPane Verification2",
-					timeout: 4000,
+					timeout: 10000,
 					runTest: function(){
-						var widget = registry.byId("view2-pane14");
+ 						var widget = registry.byId("view2-pane14");
 						var d = new runner.Deferred();
-						var handle2 = connect.connect(widget, "loadHandler", this, d.getTestCallback(function(){
-							connect.disconnect(handle2);
-							// The loading of the content of the different ContentPane instances is performed 
-							// asynchronously in an undefined order. Hence the use of setTimeout such that the
-							// checks are performed after the loading of all ContentPanes in view2.
-							setTimeout(function() {
-								_assertCorrectContentPanes(["view2-pane1","view2-pane2","view2-pane3","view2-pane4","view2-pane5"]);
-								_assertCorrectContentPanes(["view2-pane6","view2-pane7","view2-pane8","view2-pane9","view2-pane10"]);
-								_assertCorrectContentPanes(["view2-pane11","view2-pane12","view2-pane13","view2-pane14","view2-pane15"]);
-							}, 1500);
-						}));
-						// Transitioning to the view before filling it avoids errors in Chrome when testing the 
-						// presence of children. Double-checking need about what are the expectations.
-						// _showView2();
+						// The loading of the content of the different ContentPane instances is performed 
+						// asynchronously in an undefined order. Hence the use of setTimeout such that the
+						// checks are performed after the loading of all ContentPanes in view1.
+						setTimeout(d.getTestCallback(function(){
+							_assertCorrectContentPanes(["view2-pane1","view2-pane2","view2-pane3","view2-pane4","view2-pane5"]);
+							_assertCorrectContentPanes(["view2-pane6","view2-pane7","view2-pane8","view2-pane9","view2-pane10"]);
+							_assertCorrectContentPanes(["view2-pane11","view2-pane12","view2-pane13","view2-pane14","view2-pane15"]);
+						}), 5000);
 						return d;
 					}
 				}

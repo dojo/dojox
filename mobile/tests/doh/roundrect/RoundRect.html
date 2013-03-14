@@ -24,7 +24,7 @@
 							var d = new doh.Deferred();
 							setTimeout(d.getTestCallback(function(){
 								var demoWidget = dijit.byId("dojox_mobile_RoundRect_0");
-								if(dojo.isIE){
+								if(dojo.isIE < 10){
 									doh.assertEqual('mblRoundRect', demoWidget.domNode.className);
 								}else{
 									doh.assertEqual('mblRoundRect mblShadow', demoWidget.domNode.className);

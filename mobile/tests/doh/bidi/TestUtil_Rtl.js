@@ -16,8 +16,12 @@ function fireOnMouseDown(obj){
 	if(dojo.isIE<9){
 		anchorNode.fireEvent( "onmousedown" );
 	}else{
+		var eventName = "mousedown";
+		if (dojo.isIE >= 10){
+			eventName = "MSPointerDown";
+		}
 		var e = document.createEvent('Events');
-		e.initEvent('mousedown', true, true);
+		e.initEvent(eventName, true, true);
 		anchorNode.dispatchEvent(e);
 	}
 }
@@ -32,8 +36,12 @@ function fireOnMouseUp(obj){
 	if(dojo.isIE<9){
 		anchorNode.fireEvent( "onmouseup" );
 	}else{
+		var eventName = "mouseup";
+		if (dojo.isIE >= 10){
+			eventName = "MSPointerUp";
+		}
 		var e = document.createEvent('Events');
-		e.initEvent('mouseup', true, true);
+		e.initEvent(eventName, true, true);
 		anchorNode.dispatchEvent(e);
 	}
 }
