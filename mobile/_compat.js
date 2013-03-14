@@ -222,9 +222,9 @@ return {
 
 				var pos;
 				if(!on){
-					pos = -this.inner.firstChild.firstChild.offsetWidth;
+					pos = this.isLeftToRight() ? -this.inner.firstChild.firstChild.offsetWidth : 0;
 				}else{
-					pos = 0;
+					pos = this.isLeftToRight() ? 0 : -this.inner.firstChild.firstChild.offsetWidth;
 				}
 
 				this.left.style.display = "";
@@ -247,7 +247,7 @@ return {
 					});
 					a.play();
 				}else{
-					if(on || pos){
+					if((this.isLeftToRight() ? on : !on) || pos){
 						this.inner.style.left = pos + "px";
 					}
 					f();

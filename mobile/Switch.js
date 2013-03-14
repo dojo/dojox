@@ -209,13 +209,16 @@ define([
 				return;
 			}
 			var newState = (this.inner.offsetLeft < -(this._width/2)) ? "off" : "on";
+			newState = this._newState(newState);
 			this._changeState(newState, true);
 			if(newState != this.value){
 				this.value = this.input.value = newState;
 				this.onStateChanged(newState);
 			}
 		},
-
+		_newState: function(newState){
+			return newState;
+		},
 		onStateChanged: function(/*String*/newState){
 			// summary:
 			//		Stub function to connect to from your application.

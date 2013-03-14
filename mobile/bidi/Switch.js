@@ -30,6 +30,12 @@ define([
 				domClass.add(this.right.firstChild, "mblSwitchTextRightRtl");				
 			}
 		},
+		_newState: function(newState){
+			if(this.isLeftToRight()){
+				return this.inherited(arguments);
+			}
+			return (this.inner.offsetLeft < -(this._width/2)) ? "on" : "off";
+		},
 		_setLeftLabelAttr: function(label){
 			this.inherited(arguments);
 			this.left.firstChild.innerHTML = common.enforceTextDirWithUcc(this.left.firstChild.innerHTML, this.textDir);

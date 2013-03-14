@@ -10,92 +10,110 @@
   left: 12px;
 }
 .mblSwitchRtl.mblSwitchOn .mblSwitchInner {
-  right: 0;
+  left: -50px;
 }
 .mblSwitchBgLeftRtl {
-  right: 0;
+  left: 50px;
 }
 .mblSwitchTextLeftRtl {
-  right: 0;
+  left: 0px;
 }
 .mblSwitchTextRightRtl {
-  right: 40px;
+  left: -40px;
 }
 /* Square Shape Rtl*/
 .mblSwitchRtl.mblSwSquareShape.mblSwitchOff .mblSwitchInner {
-  right: -53px;
+  left: 0px;
+}
+.mblSwitchRtl.mblSwSquareShape.mblSwitchOn .mblSwitchInner {
+  left: -53px;
 }
 .mblSwSquareShape .mblSwitchBgRightRtl {
-  right: 53px;
+  left: 0px;
+}
+.mblSwSquareShape .mblSwitchBgLeftRtl {
+  left: 53px;
 }
 .mblSwitchRtl.mblSwSquareShape .mblSwitchKnob {
-  right: 53px;
+  left: 53px;
 }
 .mblSwSquareShape .mblSwitchTextRightRtl {
-  right: 40px;
+  left: -40px;
 }
 /* Round Shape1 Rtl */
 .mblSwitchRtl.mblSwRoundShape1.mblSwitchOff .mblSwitchInner {
-  right: -50px;
+  left: 0px;
 }
 .mblSwRoundShape1 .mblSwitchBgRightRtl {
-  right: 50px;
+  left: 0px;
 }
 .mblSwitchRtl.mblSwRoundShape1 .mblSwitchKnob {
-  right: 50px;
+  left: 50px;
 }
 .mblSwRoundShape1 .mblSwitchTextRightRtl {
-  right: 26px;
+  left: -26px;
 }
 /* Round Shape2 Rtl */
 .mblSwitchRtl.mblSwRoundShape2.mblSwitchOff .mblSwitchInner {
-  right: -51px;
+  left: 0px;
+}
+.mblSwitchRtl.mblSwRoundShape2.mblSwitchOn .mblSwitchInner {
+  left: -51px;
 }
 .mblSwRoundShape2 .mblSwitchBgRightRtl {
-  right: 51px;
+  left: 0px;
 }
 .mblSwitchRtl.mblSwRoundShape2 .mblSwitchKnob {
-  right: 51px;
+  left: 51px;
 }
 .mblSwRoundShape2 .mblSwitchTextRightRtl {
-  right: 42px;
+  left: -42px;
 }
 /* Arc Shape1 Rtl */
 .mblSwitchRtl.mblSwArcShape1.mblSwitchOff .mblSwitchInner {
-  right: -50px;
+  left: 0px;
 }
 .mblSwArcShape1 .mblSwitchBgRightRtl {
-  right: 50px;
+  left: 0px;
 }
 .mblSwitchRtl.mblSwArcShape1 .mblSwitchKnob {
-  right: 50px;
+  left: 50px;
 }
 .mblSwArcShape1 .mblSwitchTextRightRtl {
-  right: 26px;
+  left: -26px;
 }
 /* Arc Shape2 Rtl */
 .mblSwitchRtl.mblSwArcShape2.mblSwitchOff .mblSwitchInner {
-  right: -51px;
+  left: 0px;
+}
+.mblSwArcShape2.mblSwitchOn .mblSwitchInner {
+  left: -51px;
 }
 .mblSwArcShape2 .mblSwitchBgRightRtl {
-  right: 51px;
+  left: 0px;
 }
 .mblSwitchRtl.mblSwArcShape2 .mblSwitchKnob {
-  right: 51px;
+  left: 51px;
 }
 .mblSwArcShape2 .mblSwitchTextRightRtl {
-  right: 42px;
+  left: -42px;
 }
 /* Default Shape Rtl */
 .mblSwitchRtl.mblSwDefaultShape.mblSwitchOff .mblSwitchInner {
-  right: -50px;
+  left: 0px;
+}
+.mblSwitchRtl.mblSwDefaultShape.mblSwitchOn .mblSwitchInner {
+  left: -50px;
 }
 .mblSwDefaultShape .mblSwitchBgRightRtl {
-  right: 50px;
+  left: 0px;
+}
+.mblSwDefaultShape .mblSwitchBgLeftRtl {
+  left: 50px;
 }
 .mblSwitchRtl.mblSwDefaultShape .mblSwitchKnob {
-  right: 50px;
+  left: 50px;
 }
 .mblSwDefaultShape .mblSwitchTextRightRtl {
-  right: 26px;
+  left: 26px;
 }

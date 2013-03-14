@@ -28,7 +28,7 @@ define([
 			this.inherited(arguments);
 			// dojox.mobile mirroring support
 			if(!this.isLeftToRight()){
-				domClass.toggle(this.tableNode, "mblToolBarButtonTextRtl", text);
+				domClass.toggle(this.tableNode, "mblToolBarButtonTextRtl", text || this.arrow);
 			}
 		}
 	});
