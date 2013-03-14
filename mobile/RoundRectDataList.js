@@ -1,8 +1,9 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/_base/declare",
 	"./RoundRectList",
 	"./_DataListMixin"
-], function(declare, RoundRectList, DataListMixin){
+], function(kernel, declare, RoundRectList, DataListMixin){
 
 	// module:
 	//		dojox/mobile/RoundRectDataList
