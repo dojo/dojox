@@ -1,7 +1,10 @@
 define([
+	"dojo/_base/kernel",
 	"dojo/sniff"
-], function(has){
+], function(kernel, has){
 
+	kernel.deprecated("dojox/mobile/sniff", "Use dojo/sniff instead", "2.0");
+	
 	// TODO: remove this in 2.0
 	has.add("iphone", has("ios"));
 

@@ -7,11 +7,14 @@ define([
 	// module:
 	//		dojox/mobile/RoundRectDataList
 
+	kernel.deprecated("dojox/mobile/RoundRectDataList", 
+		"Use dojox/mobile/RoundRectStoreList instead", "2.0");
+		
 	return declare("dojox.mobile.RoundRectDataList", [RoundRectList, DataListMixin], {
 		// summary:
 		//		A dojo/data-enabled version of RoundRectList.
 		// description:
-		//		RoundRectDataList is an enhanced version of RoundRectList. It
+		//		RoundRectDataList is a subclass RoundRectList which
 		//		can generate ListItems according to the given dojo/data store.
 	});
 });

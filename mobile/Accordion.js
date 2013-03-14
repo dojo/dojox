@@ -176,11 +176,13 @@ define([
 
 	var Accordion = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiAccordion" : "dojox.mobile.Accordion", [WidgetBase, Container, Contained], {
 		// summary:
-		//		A layout widget that allows the user to freely navigate between panes.
+		//		A container widget that can display a group of child panes in a stacked format.
 		// description:
-		//		Accordion has no specific child widget. Any widgets can be its
-		//		child. Typically dojox/mobile/Pane, dojox/mobile/Container,
-		//		or dojox/mobile/ContentPane are used as child widgets.
+		//		Typically, dojox/mobile/Pane, dojox/mobile/Container, or dojox/mobile/ContentPane are 
+		//		used as child widgets, but Accordion requires no specific child widget. 
+		//		Accordion supports three modes for opening child panes: multiselect, fixed-height,
+		//		and single-select. Accordion can have rounded corners, and it can lazy-load the 
+		//		content modules.
 
 		// iconBase: String
 		//		The default icon path for child widgets.

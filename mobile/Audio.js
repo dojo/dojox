@@ -11,6 +11,11 @@ define([
 	return declare("dojox.mobile.Audio", [WidgetBase, Contained], {
 		// summary:
 		//		A thin wrapper around the HTML5 `<audio>` element.
+		// description:
+		//		dojox/mobile/Audio is a widget which plays audio. If all sources cannot 
+		//		be played (typically, in desktop browsers that do not support `<audio>`), 
+		//		dojox/mobile/Audio automatically replaces `<audio>` with `<embed>`, such 
+		//		that the browser tries to play it with a suitable plug-in.
 		
 		// source: [const] Array
 		//		An array of src and type,

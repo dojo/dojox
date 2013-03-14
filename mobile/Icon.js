@@ -13,10 +13,10 @@ define([
 		// summary:
 		//		A wrapper for image icon, CSS sprite icon, or DOM Button.
 		// description:
-		//		Icon is an utility for creating an image icon, a CSS sprite icon,
-		//		or a DOM Button. It calls iconUtils.createIcon() with given
-		//		parameters to create an icon.
-		//		Note that this module is not a widget, i.e., it does not inherit
+		//		Icon is a simple utility class for creating an image icon, a CSS sprite icon, 
+		//		or a DOM Button. It calls dojox/mobile/iconUtils.createIcon() with the 
+		//		appropriate parameters to create an icon. 
+		//		Note that this module is not a widget, that is it does not inherit 
 		//		from dijit/_WidgetBase.
 		// example:
 		//		Image icon:

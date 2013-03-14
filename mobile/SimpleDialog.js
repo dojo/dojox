@@ -14,14 +14,14 @@ define([
 		//		A dialog box for mobile.
 		// description:
 		//		SimpleDialog is a dialog box for mobile.
-		//		When a SimpleDialog is created, it is initially hidden and not
-		//		displayed (display="none"). To show the dialog box, you need to
+		//		When a SimpleDialog is created, it is initially hidden 
+		//		(display="none"). To show the dialog box, you need to
 		//		get a reference to the widget and to call its show() method.
 		//
 		//		The contents can be arbitrary HTML, text, or widgets. Note,
 		//		however, that the widget is initially hidden. You need to be
-		//		careful when you place something that cannot be initialized
-		//		under the hidden state into a SimpleDialog.
+		//		careful when you place in a SimpleDialog elements that cannot 
+		//		be initialized in hidden state.
 		//
 		//		This widget has much less functionalities than dijit/Dialog, 
 		//		but it has the advantage of a much smaller code size.

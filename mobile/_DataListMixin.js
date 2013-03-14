@@ -18,7 +18,7 @@ define([
 		// description:
 		//		By mixing this class into the widgets, the list item nodes are
 		//		generated as the child nodes of the widget and automatically
-		//		re-generated whenever the corresponding data items are modified.
+		//		regenerated whenever the corresponding data items are modified.
 
 		// append: Boolean
 		//		If true, refresh() does not clear the existing items.

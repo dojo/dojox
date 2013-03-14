@@ -9,6 +9,11 @@ define([
 	return declare("dojox.mobile.Video", Audio, {
 		// summary:
 		//		A thin wrapper around the HTML5 `<video>` element.
+		// description:
+		//		dojox/mobile/Video is a widget which plays video. If all sources cannot 
+		//		be played (typically, in desktop browsers that do not support `<video>`), 
+		//		dojox/mobile/Video automatically replaces `<video>` with `<embed>`, such 
+		//		that the browser tries to play it with a suitable plug-in.
 		
 		// width: [const] String
 		//		The width of the embed element.

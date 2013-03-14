@@ -9,7 +9,7 @@ define([
 	// module:
 	//		dojox/mobile/_DataMixin
 
-	kernel.deprecated("DataMixin", "Use StoreMixin instead", "2.0");
+	kernel.deprecated("dojox/mobile/_DataMixin", "Use dojox/mobile/_StoreMixin instead", "2.0");
 
 	return declare("dojox.mobile._DataMixin", null, {
 		// summary:

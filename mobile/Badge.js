@@ -12,10 +12,12 @@ define([
 
 	var Badge = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiBadge" : "dojox.mobile.Badge", null, {
 		// summary:
-		//		A utility to create/update a badge node.
+		//		A utility class to create and update a badge node.
 		// description:
-		//		Badge is not a widget, but just a convenience class. A badge
-		//		consists of a simple DOM button.
+		//		Badge is not a widget, but a simple utility class for creating and 
+		//		updating a badge node. A badge consists of a simple DOM button. 
+		//		It is intended to be used from other widgets such as dojox/mobile/IconItem 
+		//		or dojox/mobile/TabBarButton.
 
 		// value: [const] String
 		//		A text to show in a badge.
