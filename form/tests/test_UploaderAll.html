@@ -161,6 +161,7 @@
 	</script>
 </head>
 <body class="claro">
+<div role="main">
     <h1>Test dojox.form.Uploader Flash</h1>
 	<p style="font-size:14px; border:2px solid #ff0000; padding:3px;">
 		<strong>NOTE:</strong> This test does upload,
@@ -193,15 +194,15 @@
 		<a href="test_UploaderAll.html?iframe">IFrame</a>
 		<a href="test_UploaderAll.html?flash">Flash</a>
 	</p>
-	<table class="pageTable">
+	<table class="pageTable" role="presentation">
 		<tr>
 			<td id="colForm">
 				<form method="post" action="UploadFile.php" id="myForm" enctype="multipart/form-data" >
 					<fieldset>
 						<legend>Form Post Test</legend>
 						<input class="browseButton" name="uploadedfile" multiple="true" type="file" dojoType="dojox.form.Uploader" label="Select Some Files" id="uploader">
-						<input type="text" name="album" value="Summer Vacation" />
-						<input type="text" name="year" value="2011" />
+						<input type="text" name="album" value="Summer Vacation" aria-label="album" />
+						<input type="text" name="year" value="2011" aria-label="year" />
 						<input type="button" id="remBtn" label="Clear" dojoType="dijit.form.Button" />
 						<input type="submit" label="Submit" dojoType="dijit.form.Button" />
 						<div id="files" dojoType="dojox.form.uploader.FileList" uploaderId="uploader"></div>

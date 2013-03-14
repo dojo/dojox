@@ -196,7 +196,7 @@
 						});
 					}
 					var u = new dojox.form.Uploader({label:"Programmatic Uploader", multiple:true, uploadOnSelect:true, url:"UploadFile.php"});
-					dojo.byId("parent").appendChild(u.domNode);
+					dojo.byId("parentdiv").appendChild(u.domNode);
 					u.startup();
 
 					handleUpload(u, dojo.byId('colImages'));
