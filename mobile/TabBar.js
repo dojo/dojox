@@ -127,13 +127,9 @@ define([
 		resize: function(size){
 			var i, w;
 			if(size && size.w){
-				domGeometry.setMarginBox(this.domNode, size);
 				w = size.w;
 			}else{
-				// Calculation of the bar width varies according to its "position" value.
-				// When the widget is used as a fixed bar, its position would be "absolute".
-				w = domStyle.get(this.domNode, "position") === "absolute" ?
-					domGeometry.getContentBox(this.domNode).w : domGeometry.getMarginBox(this.domNode).w;
+				w = domGeometry.getMarginBox(this.domNode).w;
 			}
 			var bw = this._fixedButtonWidth;
 			var bm = this._fixedButtonMargin;
@@ -198,6 +194,9 @@ define([
 						this.containerNode.style.paddingLeft = margin ? margin + "px" : "";
 					}
 				}
+			}
+			if(size && size.w){
+				domGeometry.setMarginBox(this.domNode, size);
 			}
 		},
 		getSelectedTab: function(){
