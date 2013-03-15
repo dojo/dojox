@@ -161,12 +161,12 @@ define([
 				// First, establish non-wildcard data bindings
 				for(var prop in refs){
 					if(!refs[prop] || prop == "*"){ continue; }
-					atWatchHandles[prop] = bind(refs[prop].target, refs[prop].targetProp, bindWith || this, prop, {bindDirection: refs[prop].bindDirection, converter: refs[prop].converter});
+					atWatchHandles[prop] = bind(refs[prop].target, refs[prop].targetProp, bindWith || this, prop, {bindDirection: refs[prop].bindDirection, converter: refs[prop].converter, equals: refs[prop].equalsCallback});
 				}
 
 				// Then establish wildcard data bindings
 				if((refs["*"] || {}).atsignature == "dojox.mvc.at"){
-					atWatchHandles["*"] = bind(refs["*"].target, refs["*"].targetProp, bindWith || this, "*", {bindDirection: refs["*"].bindDirection, converter: refs["*"].converter});
+					atWatchHandles["*"] = bind(refs["*"].target, refs["*"].targetProp, bindWith || this, "*", {bindDirection: refs["*"].bindDirection, converter: refs["*"].converter, equals: refs["*"].equalsCallback});
 				}
 			}
 		},
@@ -206,7 +206,7 @@ define([
 
 			if(this._started){
 				// If this widget has been started already, establish data binding immediately.
-				atWatchHandles[name] = bind(value.target, value.targetProp, this, name, {bindDirection: value.bindDirection, converter: value.converter});
+				atWatchHandles[name] = bind(value.target, value.targetProp, this, name, {bindDirection: value.bindDirection, converter: value.converter, equals: value.equalsCallback});
 			}else{
 				// Otherwise, queue it up to this._refs so that _dbstartup() can pick it up.
 				this._refs[name] = value;
