@@ -108,8 +108,7 @@ define([
 		return h;
 	}
 
-	// TODO: Like _DataBindingMixin, this should probably just be a plain Object rather than a Class
-	var _atBindingMixin = declare("dojox/mvc/_atBindingMixin", null, {
+	var mixin = {
 		// summary:
 		//		The mixin for dijit/_WidgetBase to support data binding.
 
@@ -259,8 +258,11 @@ define([
 			});
 			return this.constructor._attribs = list; // String[]
 		}
-	});
+	};
 
-	_atBindingMixin.prototype[_atBindingMixin.prototype.dataBindAttr] = ""; // Let parser treat the attribute as string
+	mixin[mixin.dataBindAttr] = ""; // Let parser treat the attribute as string
+
+	var _atBindingMixin = declare("dojox/mvc/_atBindingMixin", null, mixin);
+	_atBindingMixin.mixin = mixin; // Keep the plain object version
 	return _atBindingMixin;
 });

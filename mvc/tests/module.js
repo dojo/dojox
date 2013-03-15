@@ -47,6 +47,7 @@ define([
 		doh.registerUrl("dojox.mvc.tests.doh_mvc_repeat_select_manualsave", require.toUrl("dojox/mvc/tests/doh/doh_mvc_repeat_select_manualsave.html" + userArgs), 999999);
 		doh.registerUrl("dojox.mvc.tests.doh_mvc_repeat_select_cancel", require.toUrl("dojox/mvc/tests/doh/doh_mvc_repeat_select_cancel.html" + userArgs), 999999);
 		doh.registerUrl("dojox.mvc.tests.doh_mvc_sync-test", require.toUrl("dojox/mvc/tests/doh/doh_mvc_sync-test.html" + userArgs), 999999);
+		doh.registerUrl("dojox.mvc.tests.doh_mvc_extension-per-widget", require.toUrl("dojox/mvc/tests/doh/doh_mvc_extension-per-widget.html" + userArgs), 999999);
 		doh.registerUrl("doh_mvc_loan-stateful", require.toUrl("dojox/mvc/tests/doh/doh_mvc_loan-stateful.html" + userArgs), 999999);
 		doh.registerUrl("doh_mvc_DOMNode_shipto-billto-simple", require.toUrl("dojox/mvc/tests/doh/doh_mvc_DOMNode_shipto-billto-simple.html" + userArgs), 999999);
 		doh.registerUrl("doh_mvc_DOMNode-search-results-repeat", require.toUrl("dojox/mvc/tests/doh/doh_mvc_DOMNode-search-results-repeat.html" + userArgs), 999999);
