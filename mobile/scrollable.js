@@ -196,19 +196,22 @@ define([
 			// if the text widget has selectOnFocus at false, that is even if dijit's _FormWidgetMixin._onFocus 
 			// does not trigger a global scrollIntoView). This messes up ScrollableView's own 
 			// scrolling machinery. To avoid this misbehavior:
-			win.global.addEventListener("scroll", function(e){
-				if(_this.domNode.style.display === 'none'){ return; }
-				var scrollTop = _this.domNode.scrollTop;
-				var scrollLeft = _this.domNode.scrollLeft; 
-				var pos;
-				if(scrollTop > 0 || scrollLeft > 0){ 
-					pos = _this.getPos(); 
-					// Reset to zero while compensating using our own scroll: 
-					_this.domNode.scrollLeft = 0; 
-					_this.domNode.scrollTop = 0; 
-					_this.scrollTo({x: pos.x - scrollLeft, y: pos.y - scrollTop}); // no animation 
-				}
-			}, true);
+			if(win.global.addEventListener){ // all supported browsers but IE8
+				// (for IE8, using attachEvent is not a solution, because it only works in bubbling phase)
+				win.global.addEventListener("scroll", function(e){
+					if(_this.domNode.style.display === 'none'){ return; }
+					var scrollTop = _this.domNode.scrollTop;
+					var scrollLeft = _this.domNode.scrollLeft; 
+					var pos;
+					if(scrollTop > 0 || scrollLeft > 0){ 
+						pos = _this.getPos(); 
+						// Reset to zero while compensating using our own scroll: 
+						_this.domNode.scrollLeft = 0; 
+						_this.domNode.scrollTop = 0; 
+						_this.scrollTo({x: pos.x - scrollLeft, y: pos.y - scrollTop}); // no animation 
+					}
+				}, true);
+			}
 		},
 
 		isTopLevel: function(){
