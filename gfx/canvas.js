@@ -262,7 +262,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 				return this;
 			}
 			this.canvasClip = clip ? makeClip(clipType, clip) : null;
-			this.surface.makeDirty();
+			if(this.parent){this.parent._makeDirty();}
 			return this;
 		}
 	});
@@ -304,13 +304,13 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		var old = shape.prototype[method];
 		shape.prototype[method] = extra ?
 			function(){
-				this.surface.makeDirty();
+				if(this.parent){this.parent._makeDirty();}
 				old.apply(this, arguments);
 				extra.call(this);
 				return this;
 			} :
 			function(){
-				this.surface.makeDirty();
+				if(this.parent){this.parent._makeDirty();}
 				return old.apply(this, arguments);
 			};
 	};
@@ -1133,7 +1133,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		makeDirty: function(){
 			// summary:
 			//		internal method, which is called when we may need to redraw
-			if(!this.pendingImagesCount && !("pendingRender" in this)){
+			if(!this.pendingImagesCount && !("pendingRender" in this) && !this._batch){
 				this.pendingRender = setTimeout(lang.hitch(this, this._render), 0);
 			}
 		},
@@ -1214,25 +1214,49 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 	// Extenders
 
 	var C = gs.Container, Container = {
+		openBatch: function() {
+			// summary:
+			//		starts a new batch, subsequent new child shapes will be held in
+			//		the batch instead of appending to the container directly.
+			// description:
+			//		Because the canvas renderer has no DOM hierarchy, the canvas implementation differs
+			//		such that it suspends the repaint requests for this container until the current batch is closed by a call to closeBatch().
+			++this._batch;
+			return this;
+		},
+		closeBatch: function() {
+			// summary:
+			//		submits the current batch.
+			// description:
+			//		On canvas, this method flushes the pending redraws queue.
+			this._batch = this._batch > 0 ? --this._batch : 0;
+			this._makeDirty();
+			return this;
+		},
+		_makeDirty: function(){
+			if(!this._batch){
+				this.surface.makeDirty();
+			}
+		},
 		add: function(shape){
-			this.surface.makeDirty();
+			this._makeDirty();
 			return C.add.apply(this, arguments);
 		},
 		remove: function(shape, silently){
-			this.surface.makeDirty();
+			this._makeDirty();
 			return C.remove.apply(this, arguments);
 		},
 		clear: function(){
-			this.surface.makeDirty();
+			this._makeDirty();
 			return C.clear.apply(this, arguments);
 		},
 		getBoundingBox: C.getBoundingBox,
 		_moveChildToFront: function(shape){
-			this.surface.makeDirty();
+			this._makeDirty();
 			return C._moveChildToFront.apply(this, arguments);
 		},
 		_moveChildToBack: function(shape){
-			this.surface.makeDirty();
+			this._makeDirty();
 			return C._moveChildToBack.apply(this, arguments);
 		}
 	};
