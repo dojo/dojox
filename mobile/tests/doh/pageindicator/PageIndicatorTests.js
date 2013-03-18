@@ -154,6 +154,35 @@ require([
 					}), timeoutInterval);
 					return d;
 				}
+			},
+			{
+				name: "PageIndicator Verification5",
+				timeout: 3000,
+				runTest: function(){
+					// Test case for #15064: destroy right after startup()
+					var widget = new PageIndicator();
+					var d = new runner.Deferred();
+					var errorCounter = 0;
+					var errorMsg;
+					// Before the fix of #15064, there used to be an error thrown when destroying 
+					// right after startup(). To test it, we cannot use a simple try-catch, because
+					// this is about an error thrown by the setTimeout function which used to be set 
+					// PageIndicator's startup(). Hence:
+					window.onerror = function(msg, url, lineNumber){
+						errorCounter++;
+						errorMsg = "After destroy: " + msg + "\nURL: " + url + 
+							"\nLine number: " + lineNumber;
+						console.log(errorMsg);
+					};
+					widget.startup();
+					widget.destroyRecursive(false/*preserveDom*/);
+					// Check that no error has been thrown
+					setTimeout(d.getTestCallback(function(){
+						runner.assertEqual(0, errorCounter, errorMsg);
+					}), 2000); // smaller than the total timeout of the test case
+						
+					return d;
+				}
 			}
 		]);
 		runner.run();
