@@ -321,9 +321,15 @@ define([
 			this.removeChild(widget);
 
 			// Show remove animation
-			this.addChild(this._blankItem);
+			if(this._blankItem){
+				// #16868 - no _blankItem if calling deleteItem() programmatically, that is
+				// without _onTouchStart() being called.
+				this.addChild(this._blankItem);
+			}
 			this._animate(index, this.getChildren().length - 1);
-			this.removeChild(this._blankItem);
+			if(this._blankItem){
+				this.removeChild(this._blankItem);
+			}
 		},
 
 		moveChild: function(/*Widget|Number*/widget, /*Number?*/insertIndex){

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>IconContainer and IconItem Tests</title>
+<script type="text/javascript" src="../../../deviceTheme.js"></script>
+<script type="text/javascript" src="../../../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
+<script language="JavaScript" type="text/javascript">
+	require([
+		"dojo/ready",
+		"dijit/registry",
+		"doh/runner",
+		"dojox/mobile/IconContainer",
+		"dojox/mobile/IconItem",
+		"dojox/mobile",
+		"dojox/mobile/compat",
+		"dojox/mobile/parser"
+	], function(ready, registry, runner, IconContainer, IconItem){
+		ready(function(){
+			runner.register("dojox.mobile.test.doh.IconContainerTests2", [
+				{
+					name: "test1",
+					timeout: 3000,
+					runTest: function(){
+ 						// Test case for #16868
+						var editableIconContainer = registry.byId("editableIconContainer1");
+						var item = registry.byId("item1");
+						try{
+							editableIconContainer.deleteItem(item);
+						}catch(err){
+							runner.assertTrue(false, "deleteItem throws error! (#16868)");
+						}
+					}
+				}
+			]);
+			runner.run();
+		});
+	})
+</script>
+</head>
+<body>
+	<!-- Test case for #16868 -->
+	<div data-dojo-type="dojox/mobile/View">
+		<h1>View 1</h1>
+		<ul id="editableIconContainer1" data-dojo-type="dojox/mobile/IconContainer"
+			data-dojo-props="editable: true">
+			<li data-dojo-type="dojox/mobile/IconItem" data-dojo-props='label:"app1", icon:"../../images/icon-1.png", lazy:"true"'><div class="box"></div></li>
+			<li id="item1" data-dojo-type="dojox/mobile/IconItem" data-dojo-props='label:"app2", icon:"../../images/icon-1.png", lazy:"true"'><div class="box"></div></li>
+			<li data-dojo-type="dojox/mobile/IconItem" data-dojo-props='label:"app3", icon:"../../images/icon-1.png", lazy:"true"'><div class="box"></div></li>
+			<li data-dojo-type="dojox/mobile/IconItem" data-dojo-props='label:"moveTo", icon:"../../images/icon-1.png", moveTo:"about", transition:"slide"'></li>
+			<li data-dojo-type="dojox/mobile/IconItem" data-dojo-props='label:"href", icon:"../../images/icon-1.png", href:"../../test_iPhone-RoundRectList.html", transition:"slide"'></li>
+			<li data-dojo-type="dojox/mobile/IconItem" data-dojo-props='label:"url" , icon:"../../images/icon-1.png", url:"../../view-sample.html", transition:"slide"'></li>
+		</ul>
+	</div>
+
+</body>
+</html>
