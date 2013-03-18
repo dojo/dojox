@@ -187,7 +187,7 @@ define([
 				this.resize();
 			}
 			var _this = this;
-			setTimeout(function(){
+			_this.defer(function(){
 				_this.flashScrollBar();
 			}, 600);
 			
@@ -365,9 +365,9 @@ define([
 			if(this._bounce){
 				var _this = this;
 				var bounce = _this._bounce;
-				setTimeout(function(){
+				_this.defer(function(){
 					_this.slideTo(bounce, 0.3, "ease-out");
-				}, 0);
+				});
 				_this._bounce = undefined;
 			}else{
 				this.hideScrollBar();
@@ -1073,11 +1073,11 @@ define([
 								transitionTimingFunction: easing
 							}));
 							var t = this.makeTranslateStr(to);
-							setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
+							this.defer(function(){ // setTimeout (via defer) is needed to prevent webkitTransitionEnd not fired
 								domStyle.set(node, css3.add({}, {
 									transform: t
 								}));
-							}, 0);
+							});
 							domClass.add(node, "mblScrollableScrollTo"+idx);
 						} else {
 							// transform not changed, just hide the scrollbar
@@ -1104,12 +1104,12 @@ define([
 						transitionDuration: duration + "s",
 						transitionTimingFunction: easing
 					}));
-					setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
+					this.defer(function(){ // setTimeout (via defer) is needed to prevent webkitTransitionEnd not fired
 						domStyle.set(node, {
 							top: (to.y || 0) + "px",
 							left: (to.x || 0) + "px"
 						});
-					}, 0);
+					});
 					domClass.add(node, "mblScrollableScrollTo"+idx);
 				}
 			}else if(dojo.fx && dojo.fx.easing && duration){
@@ -1194,7 +1194,7 @@ define([
 			if(this._dim.d.h <= 0){ return; } // dom is not ready
 			this.showScrollBar();
 			var _this = this;
-			setTimeout(function(){
+			_this.defer(function(){
 				_this.hideScrollBar();
 			}, 300);
 		},

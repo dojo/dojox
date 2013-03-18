@@ -132,9 +132,9 @@ define([
 			var parent = this.getParent && this.getParent();
 			if(!parent || !parent.resize){ // top level widget
 				var _this = this;
-				setTimeout(function(){ // necessary to render correctly
+				_this.defer(function(){ // necessary to render correctly
 					_this.resize();
-				}, 0);
+				});
 			}
 			this.inherited(arguments);
 		},

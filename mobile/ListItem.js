@@ -195,7 +195,7 @@ define([
 			}
 			if(this.variableHeight){
 				domClass.add(this.domNode, "mblVariableHeight");
-				this.defer(lang.hitch(this, "layoutVariableHeight"), 0);
+				this.defer(lang.hitch(this, "layoutVariableHeight"));
 			}
 
 			if(!this._isOnLine){
@@ -300,7 +300,7 @@ define([
 			// labelNode may not exist only when using a template 
 			if((this._templated || n) && this.anchorLabel && e.currentTarget === n){
 				domClass.add(n, "mblListItemLabelSelected");
-				setTimeout(function(){
+				this.defer(function(){
 					domClass.remove(n, "mblListItemLabelSelected");
 				}, this._duration);
 				this.onAnchorLabelClicked(e);

@@ -43,9 +43,9 @@ define([
 
 		startup: function(){
 			var _this = this;
-			setTimeout(function(){ // to wait until views' visibility is determined
+			_this.defer(function(){ // to wait until views' visibility is determined
 				_this.reset();
-			}, 0);
+			});
 		},
 
 		reset: function(){

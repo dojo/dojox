@@ -49,7 +49,7 @@ define([
 
 			var count = 0;
 			array.forEach(this.getChildren(), function(w){
-				setTimeout(lang.hitch(this, function(){
+				this.defer(lang.hitch(this, function(){
 					w.set("deleteIcon", this.deleteIconForEdit);
 					if(w.deleteIconNode){
 						w._deleteHandle = this.connect(w.deleteIconNode, "onclick", "_deleteIconClicked");
@@ -121,7 +121,8 @@ define([
 			}
 			var item = this._movingItem = registry.getEnclosingWidget(e.target);
 			var iconPressed = false;
-			for(var n = e.target; n !== item.domNode; n = n.parentNode){
+			var n;
+			for(n = e.target; n !== item.domNode; n = n.parentNode){
 				if(n === item.iconNode){
 					iconPressed = true;
 					break;
@@ -141,7 +142,7 @@ define([
 				this._onDragStart(e);
 			}else{
 				// set timer to detect long press
-				this._pressTimer = setTimeout(lang.hitch(this, function(){
+				this._pressTimer = this.defer(lang.hitch(this, function(){
 					this.startEdit();
 					this._onDragStart(e);
 				}), 1000);
@@ -255,20 +256,21 @@ define([
 				blankItem = this._blankItem,
 				blankPos = domGeometry.position(blankItem.domNode, true),
 				blankIndex = this.getIndexOfChild(blankItem),
-				dir = 1;
+				dir = 1,
+				i, w, pos;
 			if(this._contains(point, blankPos)){
 				return;
 			}else if(point.y < blankPos.y || (point.y <= blankPos.y + blankPos.h && point.x < blankPos.x)){
 				dir = -1;
 			}
-			for(var i = blankIndex + dir; i>=0 && i<children.length-1; i += dir){
-				var w = children[i];
+			for(i = blankIndex + dir; i>=0 && i<children.length-1; i += dir){
+				w = children[i];
 				if(w._moving){ continue; }
-				var pos = domGeometry.position(w.domNode, true);
+				pos = domGeometry.position(w.domNode, true);
 				if(this._contains(point, pos)){
-					setTimeout(lang.hitch(this, function(){
+					this.defer(lang.hitch(this, function(){
 						this.moveChildWithAnimation(blankItem, dir == 1 ? i+1 : i);
-					}),0);
+					}));
 					break;
 				}else if((dir == 1 && pos.y > point.y) || (dir == -1 && pos.y + pos.h < point.y)){
 					break;
@@ -303,7 +305,7 @@ define([
 					top: posArray[j].t,
 					left: posArray[j].l
 				});
-				setTimeout(lang.hitch(w, function(){
+				this.defer(lang.hitch(w, function(){
 					domStyle.set(this.domNode, css3.add({
 						top: "0px",
 						left: "0px"

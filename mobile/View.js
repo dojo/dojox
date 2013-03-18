@@ -380,9 +380,9 @@ define([
 					if(scrollTop > 1 || toTop !== 0){
 						fromNode.style.top = toTop - scrollTop + "px";
 						if(config["mblHideAddressBar"] !== false){
-							setTimeout(function(){ // iPhone needs setTimeout
+							this.defer(function(){ // iPhone needs setTimeout (via defer)
 								win.global.scrollTo(0, (toTop || 1));
-							}, 0);
+							});
 						}
 					}
 				}else{
@@ -448,12 +448,13 @@ define([
 				if(has('mblAndroidWorkaround')){
 					// workaround for the screen flicker issue on Android 2.2
 					// applying transition css classes just after setting toNode.style.display = ""
-					// causes flicker, so wait for a while using setTimeout
-					setTimeout(function(){
+					// causes flicker, so wait for a while using setTimeout (via defer)
+					var _this = this;
+					_this.defer(function(){
 						domClass.add(fromNode, s + " mblOut" + rev);
 						domClass.add(toNode, s + " mblIn" + rev);
 						domClass.remove(toNode, "mblAndroidWorkaround"); // remove offscreen style
-						setTimeout(function(){
+						_this.defer(function(){
 							domClass.add(fromNode, "mblTransition");
 							domClass.add(toNode, "mblTransition");
 						}, 30); // 30 = 100 - 70, to make total delay equal to 100ms
@@ -461,7 +462,7 @@ define([
 				}else{
 					domClass.add(fromNode, s + " mblOut" + rev);
 					domClass.add(toNode, s + " mblIn" + rev);
-					setTimeout(function(){
+					this.defer(function(){
 						domClass.add(fromNode, "mblTransition");
 						domClass.add(toNode, "mblTransition");
 					}, 100);
@@ -561,11 +562,11 @@ define([
 				// workaround for the screen flicker issue on Android 2.2/2.3
 				// remove "-webkit-transform-style" style after transition finished
 				// to avoid side effects such as input field auto-scrolling issue
-				// use setTimeout to avoid flicker in case of ScrollableView
-				setTimeout(lang.hitch(this, function(){
+				// use setTimeout (via defer) to avoid flicker in case of ScrollableView
+				this.defer(lang.hitch(this, function(){
 					if(toWidget){ domStyle.set(this.toNode, css3.name("transformStyle"), ""); }
 					domStyle.set(this.domNode, css3.name("transformStyle"), "");
-				}), 0);
+				}));
 			}
 
 			var c = this._detail.context, m = this._detail.method;

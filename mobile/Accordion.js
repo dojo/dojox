@@ -254,7 +254,7 @@ define([
 			}else{
 				this._updateLast();
 			}
-			setTimeout(lang.hitch(this, function(){ this.resize(); }), 0);
+			this.defer(lang.hitch(this, function(){ this.resize(); }));
 
 			this._started = true;
 		},
@@ -285,9 +285,9 @@ define([
 				widget._at.startup();
 				if(widget.selected){
 					this.expand(widget, true);
-					setTimeout(function(){
+					this.defer(function(){
 						widget.domNode.style.height = "";
-					}, 0);
+					});
 				}else{
 					this.collapse(widget);
 				}
@@ -370,9 +370,9 @@ define([
 							c.domNode.style.height = "0px";
 						}
 					}
-					setTimeout(function(){ // necessary for webkitTransition to work
+					this.defer(function(){ // necessary for webkitTransition to work
 						c.domNode.style.height = h + "px";
-					}, 0);
+					});
 					this.select(pane);
 				}else if(this.singleOpen){
 					this.collapse(c, noAnimation);
@@ -398,7 +398,7 @@ define([
 				// Adding a webkitTransitionEnd handler to panes may cause conflict
 				// when the panes already have the one. (e.g. ScrollableView)
 				var _this = this;
-				setTimeout(function(){
+				_this.defer(function(){
 					pane.domNode.style.display = "none";
 					_this._updateLast();
 

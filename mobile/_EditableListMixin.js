@@ -53,13 +53,13 @@ define([
 		_resetMoveItem: function(/*DomNode*/node){
 			// tags:
 			//		private
-			setTimeout(function(){ // iPhone needs setTimeout
+			this.defer(function(){ // iPhone needs setTimeout (via defer)
 				domClass.remove(node, "mblListItemFloat");
 				domStyle.set(node, {
 					width: "",
 					top: ""
 				});
-			}, 0);
+			});
 		},
 
 		_onClick: function(e){

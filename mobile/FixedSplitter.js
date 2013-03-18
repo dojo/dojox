@@ -81,9 +81,9 @@ define([
 			if(!parent || !parent.resize){ // top level widget
 				var _this = this;
 				f = function(){
-					setTimeout(function(){
+					_this.defer(function(){
 						_this.resize();
-					}, 0);
+					});
 				};
 			}
 

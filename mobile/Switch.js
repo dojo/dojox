@@ -115,7 +115,7 @@ define([
 			domClass.add(this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
 
 			var _this = this;
-			setTimeout(function(){
+			_this.defer(function(){
 				_this.left.style.display = on ? "" : "none";
 				_this.right.style.display = !on ? "" : "none";
 				domClass.remove(_this.domNode, "mblSwitchAnimation");

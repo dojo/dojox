@@ -56,7 +56,7 @@ define([
 			}
 			var _domNode = this.domNode;
 			domClass.replace(_domNode, ["mblCoverv", "mblIn"], ["mblOverlayHidden", "mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
-			setTimeout(lang.hitch(this, function(){
+			this.defer(lang.hitch(this, function(){
 				var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 					this.disconnect(handler);
 					domClass.remove(_domNode, ["mblCoverv", "mblIn", "mblTransition"]);
@@ -93,7 +93,7 @@ define([
 			}
 			if(has("css3-animations")){
 				domClass.replace(_domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn", "mblOverlayHidden", "mblTransition"]);
-				setTimeout(lang.hitch(this, function(){
+				this.defer(lang.hitch(this, function(){
 					var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 						this.disconnect(handler);
 						domClass.replace(_domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse", "mblTransition"]);

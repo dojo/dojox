@@ -239,7 +239,7 @@ define([
 				clearInterval(this._interval); // fail safe
 				this._interval = null;
 			}
-			this._timer = setTimeout(lang.hitch(this, function(){
+			this._timer = this.defer(lang.hitch(this, function(){
 				this._interval = setInterval(lang.hitch(this, function(){
 					this.spin(this._btn === this.plusBtnNode ? 1 : -1);
 				}), 60);

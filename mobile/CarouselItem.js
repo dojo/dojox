@@ -69,7 +69,7 @@ define([
 			//		Highlights the item.
 			var img = this.imageNode
 			domStyle.set(img, "opacity", 0.4);
-			setTimeout(function(){
+			this.defer(function(){
 				domStyle.set(img, "opacity", 1);
 			}, 1000);
 		},

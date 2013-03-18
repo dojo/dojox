@@ -58,13 +58,12 @@ define([
 				this.connect(this.textbox, "onfocus", // if value changes between start of onfocus to end, then it was a cancel
 					function(){
 						if(this.textbox.value !== ''){
-							setTimeout(lang.hitch(this,
+							this.defer(lang.hitch(this,
 								function(){
 									if(this.textbox.value === ''){
 										this._onInput({ charOrCode: keys.ENTER }); // emulate onsearch
 									}
-								}), 
-								0
+								})
 							);
 						}
 					}

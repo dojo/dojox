@@ -51,7 +51,7 @@ define([
 				var newStateClasses = (this.baseClass+' '+this["class"]).split(" ");
 				newStateClasses = array.map(newStateClasses, function(c){ return c+"Selected"; });
 				domClass.add(button, newStateClasses);
-				setTimeout(function(){
+				this.defer(function(){
 					domClass.remove(button, newStateClasses);
 				}, this.duration);
 			}
