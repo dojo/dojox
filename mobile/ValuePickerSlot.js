@@ -6,12 +6,13 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/dom-attr",
 	"dojo/touch",
 	"dijit/_WidgetBase",
 	"./iconUtils",
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/ValuePickerSlot"
-], function(array, declare, event, lang, win, domClass, domConstruct, touch, WidgetBase, iconUtils, has, BidiValuePickerSlot){
+], function(array, declare, event, lang, win, domClass, domConstruct, domAttr, touch, WidgetBase, iconUtils, has, BidiValuePickerSlot){
 
 	// module:
 	//		dojox/mobile/ValuePickerSlot
@@ -73,6 +74,22 @@ define([
 		/*=====
 		key: null,
 		=====*/
+		
+		// plusBtnLabel: String
+		//		(Accessibility) Text label for plus button
+		plusBtnLabel: "",
+		
+		// plusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for plus button
+		plusBtnLabelRef: "",
+		
+		// minusBtnLabel: String
+		//		(Accessibility) Text label for minus button
+		minusBtnLabel: "",
+		
+		// minusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for minus button
+		minusBtnLabelRef: "",
 
 		/* internal properties */	
 		baseClass: "mblValuePickerSlot",
@@ -92,6 +109,7 @@ define([
 				className: "mblValuePickerSlotPlusButton mblValuePickerSlotButton",
 				title: "+"
 			}, this.domNode);
+			
 			this.plusIconNode = domConstruct.create("div", {
 				className: "mblValuePickerSlotIcon"
 			}, this.plusBtnNode);
@@ -104,7 +122,7 @@ define([
 				className: "mblValuePickerSlotInput",
 				readonly: this.readOnly
 			}, this.inputAreaNode);
-
+			
 			this.minusBtnNode = domConstruct.create("div", {
 				className: "mblValuePickerSlotMinusButton mblValuePickerSlotButton",
 				title: "-"
@@ -113,6 +131,21 @@ define([
 				className: "mblValuePickerSlotIcon"
 			}, this.minusBtnNode);
 			iconUtils.createIcon("mblDomButtonGrayMinus", null, this.minusIconNode);
+			
+			domAttr.set(this.plusBtnNode, "role", "button"); //a11y
+			this._setPlusBtnLabelAttr(this.plusBtnLabel)
+			this._setPlusBtnLabelRefAttr(this.plusBtnLabelRef);
+			
+			domAttr.set(this.inputNode, "role", "textbox");
+			var registry = require("dijit/registry");
+			var inputAreaNodeId =  registry.getUniqueId("dojo_mobile__mblValuePickerSlotInput");
+			domAttr.set(this.inputNode, "id", inputAreaNodeId);
+			domAttr.set(this.plusBtnNode, "aria-controls", inputAreaNodeId);
+			
+			domAttr.set(this.minusBtnNode, "role", "button");
+			domAttr.set(this.minusBtnNode, "aria-controls", inputAreaNodeId);
+			this._setMinusBtnLabelAttr(this.minusBtnLabel);
+			this._setMinusBtnLabelRefAttr(this.minusBtnLabelRef);
 
 			if(this.value === "" && this.items.length > 0){
 				this.value = this.items[0][1];
@@ -132,6 +165,7 @@ define([
 				}))
 			];
 			this.inherited(arguments);
+			this._set(this.plusBtnLabel);
 		},
 
 		initLabels: function(){
@@ -324,8 +358,32 @@ define([
 		_setTabIndexAttr: function(/*String*/ tabIndex){
 			this.plusBtnNode.setAttribute("tabIndex", tabIndex);
 			this.minusBtnNode.setAttribute("tabIndex", tabIndex);
+		},
+		
+		_setAria: function(node, attr, value){
+			if(value){
+				domAttr.set(node, attr, value);
+			}else{
+				domAttr.remove(node, attr);
+			}
+		},
+		
+		_setPlusBtnLabelAttr: function(/*String*/ plusBtnLabel){
+			this._setAria(this.plusBtnNode, "aria-label", plusBtnLabel);
+		},
+		
+		_setPlusBtnLabelRefAttr: function(/*String*/ plusBtnLabelRef){
+			this._setAria(this.plusBtnNode, "aria-labelledby", plusBtnLabelRef);
+		},
+		
+		_setMinusBtnLabelAttr: function(/*String*/ minusBtnLabel){
+			this._setAria(this.minusBtnNode, "aria-label", minusBtnLabel);
+		},
+		
+		_setMinusBtnLabelRefAttr: function(/*String*/ minusBtnLabelRef){
+			this._setAria(this.minusBtnNode, "aria-labelledby", minusBtnLabelRef);
 		}
 	});
-
+	
 	return has("dojo-bidi") ? declare("dojox.mobile.ValuePickerSlot", [ValuePickerSlot, BidiValuePickerSlot]) : ValuePickerSlot;
 });

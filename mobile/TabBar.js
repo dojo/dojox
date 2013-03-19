@@ -6,13 +6,14 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"./TabBarButton",// to load TabBarButton for you (no direct references)
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/TabBar"	
-], function(array, declare, win, domClass, domConstruct, domGeometry, domStyle, Contained, Container, WidgetBase, TabBarButton, has, BidiTabBar){
+], function(array, declare, win, domClass, domConstruct, domGeometry, domStyle, domAttr, Contained, Container, WidgetBase, TabBarButton, has, BidiTabBar){
 
 	// module:
 	//		dojox/mobile/TabBar
@@ -78,6 +79,7 @@ define([
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+			domAttr.set(this.domNode, "role", "tablist");
 			this.reset();
 			this.inherited(arguments);
 		},

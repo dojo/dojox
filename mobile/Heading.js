@@ -8,6 +8,7 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_Container",
@@ -17,7 +18,7 @@ define([
 	"./View",
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Heading"
-], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View, has, BidiHeading){
+], function(array, connect, declare, lang, win, dom, domClass, domConstruct, domStyle, domAttr, registry, Contained, Container, WidgetBase, ProgressIndicator, ToolBarButton, View, has, BidiHeading){
 
 	// module:
 	//		dojox/mobile/Heading
@@ -123,6 +124,9 @@ define([
 					innerHTML: this.labelNode.innerHTML
 				}, this.domNode);
 			}
+
+			domAttr.set(this.labelDivNode, "role", "heading"); //a11y
+			domAttr.set(this.labelDivNode, "aria-level", "1");
 
 			dom.setSelectable(this.domNode, false);
 		},

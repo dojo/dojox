@@ -1,10 +1,11 @@
 define([
 	"dojo/_base/declare",
 	"dojo/dom-class",
+	"dojo/dom-attr",
 	"./_DatePickerMixin",
 	"./ValuePicker",
 	"./ValuePickerSlot"
-], function(declare, domClass, DatePickerMixin, ValuePicker, ValuePickerSlot){
+], function(declare, domClass, domAttr, DatePickerMixin, ValuePicker, ValuePickerSlot){
 
 	// module:
 	//		dojox/mobile/ValuePickerDatePicker
@@ -22,6 +23,54 @@ define([
 		//		Note that changing the value of the property after the widget 
 		//		creation has no effect.
 		readOnly: false,
+		
+		// yearPlusBtnLabel: String
+		//		(Accessibility) Label for year plus button
+		yearPlusBtnLabel: "",
+		
+		// yearPlusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the year plus button
+		yearPlusBtnLabelRef: "",
+		
+		// yearPlusBtnLabel: String
+		//		(Accessibility) Label for year minus button
+		yearMinusBtnLabel: "",
+		
+		// yearPlusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the year minus button
+		yearMinusBtnLabelRef: "",
+
+		// monthPlusBtnLabel: String
+		//		(Accessibility) Label for month plus button
+		monthPlusBtnLabel: "",
+		
+		// monthPlusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the month plus button
+		monthPlusBtnLabelRef: "",
+		
+		// monthMinusBtnLabel: String
+		//		(Accessibility) Label for month minus button
+		monthMinusBtnLabel: "",
+		
+		// monthMinusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the month minus button
+		monthMinusBtnLabelRef: "",
+
+		// dayPlusBtnLabel: String
+		//		(Accessibility) Label for day plus button
+		dayPlusBtnLabel: "",
+		
+		// dayPlusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the day plus button
+		dayPlusBtnLabelRef: "",
+		
+		// dayMinusBtnLabel: String
+		//		(Accessibility) Label for day minus button
+		dayMinusBtnLabel: "",
+		
+		// dayMinusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the day minus button
+		dayMinusBtnLabelRef: "",
 
 		slotClasses: [
 			ValuePickerSlot,
@@ -38,6 +87,7 @@ define([
 		buildRendering: function(){
 			var p = this.slotProps;
 			p[0].readOnly = p[1].readOnly = p[2].readOnly = this.readOnly;
+			this._setBtnLabels(p);
 			this.initSlots();
 			this.inherited(arguments);
 			domClass.add(this.domNode, "mblValuePickerDatePicker");
@@ -58,6 +108,23 @@ define([
 			}
 			this._tail = items.slice(daysInMonth);
 			items.splice(daysInMonth);
+		},
+		
+		_setBtnLabels: function(slotProps){
+		    //summary:
+		    // Set a11y labels on the plus/minus buttons
+			slotProps[0].plusBtnLabel = this.yearPlusBtnLabel;
+			slotProps[0].plusBtnLabelRef = this.yearPlusBtnLabelRef;
+			slotProps[0].minusBtnLabel = this.yearMinusBtnLabel;
+			slotProps[0].minusBtnLabelRef = this.yearMinusBtnLabelRef;
+			slotProps[1].plusBtnLabel = this.monthPlusBtnLabel; 
+			slotProps[1].plusBtnLabelRef = this.monthPlusBtnLabelRef;
+			slotProps[1].minusBtnLabel = this.monthMinusBtnLabel;
+			slotProps[1].minusBtnLabelRef = this.monthMinusBtnLabelRef;
+			slotProps[2].plusBtnLabel = this.dayPlusBtnLabel;
+			slotProps[2].plusBtnLabelRef = this.dayPlusBtnLabelRef;
+			slotProps[2].minusBtnLabel = this.dayMinusBtnLabel;
+			slotProps[2].minusBtnLabelRef = this.dayMinusBtnLabelRef;
 		}
 	});
 });

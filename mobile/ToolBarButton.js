@@ -5,10 +5,11 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"./sniff",
 	"./_ItemBase",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/ToolBarButton"
-], function(declare, lang, win, domClass, domConstruct, domStyle, has, ItemBase, BidiToolBarButton){
+], function(declare, lang, win, domClass, domConstruct, domStyle, domAttr, has, ItemBase, BidiToolBarButton){
 
 	// module:
 	//		dojox/mobile/ToolBarButton
@@ -69,6 +70,7 @@ define([
 			this.label = lang.trim(this.label);
 			this.domNode = (this.srcNodeRef && this.srcNodeRef.tagName === "SPAN") ?
 				this.srcNodeRef : domConstruct.create("span");
+			domAttr.set(this.domNode, "role", "button");
 			this.inherited(arguments);
 
 			if(this.light && !this.arrow && (!this.icon || !this.label)){

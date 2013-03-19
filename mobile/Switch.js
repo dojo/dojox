@@ -7,13 +7,14 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dojo/touch",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
 	"./sniff", 
 	"./_maskUtils",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"	
-], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, touch, Contained, WidgetBase, has, maskUtils, BidiSwitch){
+], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, domAttr, touch, Contained, WidgetBase, has, maskUtils, BidiSwitch){
 
 	// module:
 	//		dojox/mobile/Switch
@@ -94,6 +95,8 @@ define([
 				this.knob = n.childNodes[2];
 				this.input = n.childNodes[3];
 			}
+			domAttr.set(this.domNode, "role", "checkbox"); //a11y
+			domAttr.set(this.domNode, "aria-checked", (this.value === "on") ? "true" : "false"); //a11y
 		},
 
 		postCreate: function(){
@@ -113,6 +116,7 @@ define([
 			}
 			domClass.remove(this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
 			domClass.add(this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
+			domAttr.set(this.domNode, "aria-checked", on ? "true" : "false"); //a11y
 
 			var _this = this;
 			_this.defer(function(){

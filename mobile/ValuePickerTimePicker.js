@@ -44,6 +44,38 @@ define([
 		/*=====
 		values12: null,
 		=====*/
+		
+		// hourPlusBtnLabel: String
+		//		(Accessibility) Label for hour plus button
+		hourPlusBtnLabel: "",
+		
+		// hourPlusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the hour plus button
+		hourPlusBtnLabelRef: "",
+		
+		// minutePlusBtnLabel: String
+		//		(Accessibility) Label for minute plus button
+		minutePlusBtnLabel: "",
+		
+		// minutePlusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the minute plus button
+		minutePlusBtnLabelRef: "",
+		
+		// hourMinusBtnLabel: String
+		//		(Accessibility) Label for hour minus button
+		hourMinusBtnLabel: "",
+		
+		// hourMinusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the hour minus button
+		hourMinusBtnLabelRef: "",
+		
+		// minuteMinusBtnLabel: String
+		//		(Accessibility) Label for minute minus button
+		minuteMinusBtnLabel: "",
+		
+		// minuteMinusBtnLabelRef: String
+		//		(Accessibility) Reference to a node id containing text label for the minute minus button
+		minuteMinusBtnLabelRef: "",
 
 		slotClasses: [
 			ValuePickerSlot,
@@ -58,6 +90,7 @@ define([
 		buildRendering: function(){
 			var p = this.slotProps;
 			p[0].readOnly = p[1].readOnly = this.readOnly;
+			this._setBtnLabels(p);
 			this.inherited(arguments);
 			var items = this.slots[0].items;
 			this._zero = items.slice(0, 1);
@@ -173,6 +206,17 @@ define([
 			// values:
 			//		[hour12, minute, ampm] (ex. ["10","06","PM"])
 			this.set("values", this.to24h(values));
+		},
+		
+		_setBtnLabels: function(slotProps){
+		    slotProps[0].plusBtnLabel = this.hourPlusBtnLabel; 
+			slotProps[0].plusBtnLabelRef = this.hourPlusBtnLabelRef
+			slotProps[0].minusBtnLabel = this.hourMinusBtnLabel;
+			slotProps[0].minusBtnLabelRef = this.hourMinusBtnLabelRef;
+			slotProps[1].plusBtnLabel = this.minutePlusBtnLabel;
+			slotProps[1].plusBtnLabelRef = this.minutePlusBtnLabelRef;
+			slotProps[1].minusBtnLabel = this.minuteMinusBtnLabel;
+			slotProps[1].minusBtnLabelRef = this.minuteMinusBtnLabelRef;
 		}
 	});
 });

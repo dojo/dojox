@@ -5,6 +5,7 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dijit/registry",
 	"dijit/_WidgetBase",
 	"./iconUtils",
@@ -12,7 +13,7 @@ define([
 	"./ProgressIndicator",
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/ListItem"
-], function(array, declare, lang, domClass, domConstruct, domStyle, registry, WidgetBase, iconUtils, ItemBase, ProgressIndicator, has,  BidiListItem){
+], function(array, declare, lang, domClass, domConstruct, domStyle, domAttr, registry, WidgetBase, iconUtils, ItemBase, ProgressIndicator, has,  BidiListItem){
 
 	// module:
 	//		dojox/mobile/ListItem
@@ -184,6 +185,7 @@ define([
 			}
 			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
 				this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
+				domAttr.set(this.domNode, "role", "button");
 			}else{
 				this._handleClick = false;
 			}

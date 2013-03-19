@@ -2,10 +2,12 @@ define([
 	"dojo/_base/declare",
 	"dojo/_base/window",
 	"dojo/dom-class",
+	"dojo/dom-attr",
 	"dojo/dom-construct",
+	"dijit/registry",
 	"./Pane",
 	"./iconUtils"
-], function(declare, win, domClass, domConstruct, Pane, iconUtils){
+], function(declare, win, domClass, domAttr, domConstruct, registry, Pane, iconUtils){
 	// module:
 	//		dojox/mobile/SimpleDialog
 
@@ -82,6 +84,20 @@ define([
 				}
 			}
 			this.inherited(arguments);
+			domAttr.set(this.domNode, "role", "dialog");
+			
+			if(this.containerNode.getElementsByClassName){ //TODO: Do we need to support IE8 a11y?
+	            var titleNode = this.containerNode.getElementsByClassName("mblSimpleDialogTitle")[0];
+	            if (titleNode){
+	            	titleNode.id = titleNode.id || registry.getUniqueId("dojo_mobile_mblSimpleDialogTitle");
+	            	domAttr.set(this.domNode, "aria-labelledby", titleNode.id);
+	            }
+	            var textNode = this.containerNode.getElementsByClassName("mblSimpleDialogText")[0];
+	            if (textNode){
+	                textNode.id = textNode.id || registry.getUniqueId("dojo_mobile_mblSimpleDialogText");
+	                domAttr.set(this.domNode, "aria-describedby", textNode.id);
+	            }
+			}
 			domClass.add(this.domNode, "mblSimpleDialogDecoration");
 			this.domNode.style.display = "none";
 			this.domNode.appendChild(this.containerNode);
@@ -174,7 +190,13 @@ define([
 			}
 			this.domNode.style.display = "";
 			this.refresh();
-			this.domNode.focus();
+			var diaglogButton;
+			if(this.domNode.getElementsByClassName){
+				diaglogButton = this.domNode.getElementsByClassName("mblSimpleDialogButton")[0];
+			}
+			var focusNode = diaglogButton || this.closeButtonNode || this.domNode; // Focus preference is: user supplied button, close button, entire dialog
+			/// on Safari iOS the focus is not taken without a timeout
+			this.defer(function(){ focusNode.focus();}, 1000);
 		},
 
 		hide: function(){

@@ -6,6 +6,7 @@ define([
 	"dojo/dom",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/dom-attr",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
@@ -14,7 +15,7 @@ define([
 	"./_css3",
 	"require",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Accordion"
-], function(array, declare, lang, has, dom, domClass, domConstruct, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, css3, require, BidiAccordion){
+], function(array, declare, lang, has, dom, domClass, domConstruct, domAttr, Contained, Container, WidgetBase, iconUtils, lazyLoadUtils, css3, require, BidiAccordion){
 
 	// module:
 	//		dojox/mobile/Accordion
@@ -66,9 +67,9 @@ define([
 			this.inherited(arguments);
 
 			var a = this.anchorNode = domConstruct.create("a", {
-				className: "mblAccordionTitleAnchor"
+				className: "mblAccordionTitleAnchor",
+				role: "presentation"
 			}, this.domNode);
-			a.href = "javascript:void(0)"; // for a11y
 
 			// text box
 			this.textBoxNode = domConstruct.create("div", {className:"mblAccordionTitleTextBox"}, a);
@@ -76,8 +77,10 @@ define([
 				className: "mblAccordionTitleLabel",
 				innerHTML: this._cv ? this._cv(this.label) : this.label
 			}, this.textBoxNode);
-
 			this._isOnLine = this.inheritParams();
+
+			domAttr.set(this.textBoxNode, "role", "tab"); // A11Y
+			domAttr.set(this.textBoxNode, "tabindex", "0");
 		},
 
 		postCreate: function(){
@@ -223,6 +226,12 @@ define([
 		// _openSpace: [private] Number|String 
 		_openSpace: 1,
 
+		buildRendering: function(){
+			this.inherited(arguments);
+			domAttr.set(this.domNode, "role", "tablist"); // A11Y
+			domAttr.set(this.domNode, "aria-multiselectable", !this.singleOpen); // A11Y
+		},
+		
 		startup: function(){
 			if(this._started){ return; }
 
@@ -238,10 +247,13 @@ define([
 			var children = this.getChildren();
 			array.forEach(children, this._setupChild, this);
 			var sel;
+			var posinset = 1;
 			array.forEach(children, function(child){
 				child.startup();
 				child._at.startup();
 				this.collapse(child, true);
+				domAttr.set(child._at.textBoxNode, "aria-setsize", children.length);
+				domAttr.set(child._at.textBoxNode, "aria-posinset", posinset++);
 				if(child.selected){
 					sel = child;
 				}
@@ -276,6 +288,9 @@ define([
 			});
 			domConstruct.place(child._at.domNode, child.domNode, "before");
 			domClass.add(child.domNode, "mblAccordionPane");
+			domAttr.set(child._at.textBoxNode, "aria-controls", child.domNode.id); // A11Y
+			domAttr.set(child.domNode, "role", "tabpanel"); // A11Y
+			domAttr.set(child.domNode, "aria-labelledby", child._at.id); // A11Y
 		},
 
 		addChild: function(/*Widget*/ widget, /*int?*/ insertIndex){
@@ -292,6 +307,7 @@ define([
 					this.collapse(widget);
 				}
 			}
+			this._addChildAriaAttrs();
 		},
 
 		removeChild: function(/*Widget|int*/ widget){
@@ -302,6 +318,16 @@ define([
 				widget._at.destroy();
 			}
 			this.inherited(arguments);
+			this._addChildAriaAttrs();
+		},
+		
+		_addChildAriaAttrs: function(){
+			var posinset = 1;
+			var children = this.getChildren();
+			array.forEach(children, function(child){
+				domAttr.set(child._at.textBoxNode, "aria-posinset", posinset++);
+				domAttr.set(child._at.textBoxNode, "aria-setsize", children.length);
+			});
 		},
 
 		getChildren: function(){
@@ -379,6 +405,8 @@ define([
 				}
 			}, this);
 			this._updateLast();
+			domAttr.set(pane.domNode, "aria-expanded", "true"); // A11Y
+			domAttr.set(pane.domNode, "aria-hidden", "false"); // A11Y
 		},
 
 		collapse: function(/*Widget*/pane, /*boolean*/noAnimation){
@@ -417,6 +445,8 @@ define([
 				}, this.duration*1000);
 			}
 			this.deselect(pane);
+			domAttr.set(pane.domNode, "aria-expanded", "false"); // A11Y
+			domAttr.set(pane.domNode, "aria-hidden", "true"); // A11Y
 		},
 
 		select: function(/*Widget*/pane){
@@ -425,6 +455,7 @@ define([
 			// pane:
 			//		A pane widget to highlight.
 			pane._at.set("selected", true);
+			domAttr.set(pane._at.textBoxNode, "aria-selected", "true"); // A11Y
 		},
 
 		deselect: function(/*Widget*/pane){
@@ -433,6 +464,7 @@ define([
 			// pane:
 			//		A pane widget to unhighlight.
 			pane._at.set("selected", false);
+			domAttr.set(pane._at.textBoxNode, "aria-selected", "false"); // A11Y
 		}
 	});
 	

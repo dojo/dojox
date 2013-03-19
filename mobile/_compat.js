@@ -10,6 +10,7 @@ define([
 	"dojo/dom-construct",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dojo/fx",
 	"dojo/fx/easing",
 	"dojo/ready",
@@ -26,7 +27,7 @@ define([
 	"./Switch",
 	"./View",
 	"require"
-], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domGeometry, domStyle, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, ProgressIndicator, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domGeometry, domStyle, domAttr, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, ProgressIndicator, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
 
 	// module:
 	//		dojox/mobile/compat
@@ -236,6 +237,7 @@ return {
 					domClass.add(_this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
 					_this.left.style.display = on ? "" : "none";
 					_this.right.style.display = !on ? "" : "none";
+					domAttr.set(_this.domNode, "aria-checked", on ? "true" : "false"); //a11y
 				};
 
 				if(anim){
