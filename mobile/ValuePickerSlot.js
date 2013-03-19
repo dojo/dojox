@@ -232,7 +232,7 @@ define([
 			domClass.add(e.currentTarget, "mblValuePickerSlotButtonSelected");
 			this._btn = e.currentTarget;
 			if(this._timer){
-				clearTimeout(this._timer); // fail safe
+				this._timer.remove(); // fail safe
 				this._timer = null;
 			}
 			if(this._interval){
@@ -254,7 +254,7 @@ define([
 			if(Math.abs(x - this.touchStartX) >= 4 ||
 			   Math.abs(y - this.touchStartY) >= 4){ // dojox/mobile/scrollable.threshold
 			   	if(this._timer){
-					clearTimeout(this._timer); // fail safe
+					this._timer.remove(); // fail safe
 					this._timer = null;
 				}
 				if(this._interval){
@@ -268,7 +268,7 @@ define([
 
 		_onTouchEnd: function(e){
 			if(this._timer){
-				clearTimeout(this._timer);
+				this._timer.remove();
 				this._timer = null;
 			}
 			array.forEach(this._conn, this.disconnect, this);

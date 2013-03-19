@@ -244,7 +244,7 @@ define([
 			// tags:
 			//		private
 			if(this._pressTimer){
-				clearTimeout(this._pressTimer);
+				this._pressTimer.remove();
 				this._pressTimer = null;
 			}
 		},

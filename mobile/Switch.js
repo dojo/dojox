@@ -124,7 +124,7 @@ define([
 
 		_createMaskImage: function(){
 			if(this._timer){
-				 clearTimeout(this._timer);
+				 this._timer.remove();
 				 delete this._timer;
 			}
 			if(this._hasMaskImage){ return; }
