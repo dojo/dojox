@@ -64,6 +64,11 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 		//		Any fill to be used for elements on the plot.
 		fill:		{},
 
+		// filter: dojox.gfx.Filter?
+		//		An SVG filter to be used for elements on the plot. gfx SVG renderer must be used and dojox/gfx/svgext must
+		//		be required for this to work.
+		filter:		{},
+
 		// styleFunc: Function?
 		//		A function that returns a styling object for the a given data item.
 		styleFunc:	null
@@ -95,6 +100,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			filter:     {},
 			styleFunc:	null,
 			font:		"",
 			fontColor:	"",
@@ -198,6 +204,9 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				scircle.cx += shadow.dx;
 				scircle.cy += shadow.dy;
 				s.createCircle(scircle).setFill(shadow.color).setStroke(shadow);
+			}
+			if(s.setFilter && (this.opt.filter || t.filter)){
+				s.createCircle(circle).setFill(t.series.stroke).setFilter(this.opt.filter || t.filter);
 			}
 
 			if(typeof run[0] == "number"){

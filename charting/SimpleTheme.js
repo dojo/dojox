@@ -87,6 +87,8 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 	//	|		outline: {width: 0.1, color: "#ccc"},		// outline
 	//	|		//shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]},
 	//	|		shadow: null,								// no shadow
+	//	|		//filter:  dojox/gfx/filters.createFilter(),
+	//	|		filter: null,								// no filter, to use a filter you must use gfx SVG render and require dojox/gfx/svgext
 	//	|		fill:    "#ccc",							// fill, if appropriate
 	//	|		font:    "normal normal normal 8pt Tahoma",	// if there's a label
 	//	|		fontColor: "#000"							// color of labels
@@ -331,7 +333,7 @@ define(["dojo/_base/lang", "dojo/_base/array","dojo/_base/declare","dojo/_base/C
 					lang.setObject("series.fill", mixin.color, t);
 				}
 			}
-			arr.forEach(["stroke", "outline", "shadow", "fill", "font", "fontColor", "labelWiring"], function(name){
+			arr.forEach(["stroke", "outline", "shadow", "fill", "filter", "font", "fontColor", "labelWiring"], function(name){
 				var markerName = "marker" + name.charAt(0).toUpperCase() + name.substr(1),
 					b = markerName in mixin;
 				if(name in mixin){

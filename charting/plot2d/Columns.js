@@ -20,6 +20,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			filter:     {},
 			styleFunc:  null,
 			font:		"",
 			fontColor:	""
@@ -156,6 +157,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 							var specialFill = this._plotFill(finalTheme.series.fill, dim, offsets);
 							specialFill = this._shapeFill(specialFill, rect);
 							var shape = this.createRect(run, s, rect).setFill(specialFill).setStroke(finalTheme.series.stroke);
+							if(shape.setFilter && finalTheme.series.filter){
+								shape.setFilter(finalTheme.series.filter);
+							}
 							run.dyn.fill   = shape.getFill();
 							run.dyn.stroke = shape.getStroke();
 							if(events){

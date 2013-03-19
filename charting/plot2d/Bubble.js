@@ -18,6 +18,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			outline:	{},
 			shadow:		{},
 			fill:		{},
+			filter:     {},
 			styleFunc:	null,
 			font:		"",
 			fontColor:	""
@@ -166,6 +167,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 						var shape = s.createCircle({
 							cx: item.x, cy: item.y, r: item.radius
 						}).setFill(specialFill).setStroke(finalTheme.series.stroke);
+						if(shape.setFilter && finalTheme.series.filter){
+							shape.setFilter(finalTheme.series.filter);
+						}
 						if(this.animate){
 							this._animateBubble(shape, dim.height - offsets.b, item.radius);
 						}
