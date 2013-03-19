@@ -190,8 +190,9 @@ define([
 				this.rawNode.removeAttribute("filter");
 				return this;
 			}
-			var id = filter.id || gfx.base._getUniqueId(),
-				filterNode = dom.byId(id);
+
+			filter.id = filter.id || gfx._base._getUniqueId();
+			var filterNode = dom.byId(filter.id);
 			if(!filterNode){
 				filterNode = this.rawNode.ownerDocument.createElementNS(svg.xmlns.svg, "filter");
 				filterNode.setAttribute("filterUnits", "userSpaceOnUse");
@@ -209,7 +210,7 @@ define([
 					defs.appendChild(filterNode);
 				}
 			}
-			this.rawNode.setAttribute("filter", "url(#"+id+")");
+			this.rawNode.setAttribute("filter", "url(#"+filter.id+")");
 			return this;
 		}
 	});
