@@ -216,10 +216,10 @@ define([ "dojo/_base/array",
 			// There would probably be a way to update the loaded items on the fly
 			// in add/removeChild, but at the cost of much more code...
 			if(!this._qs_timer){
-				this._qs_timer = this.defer(lang.hitch(this, function(){
+				this._qs_timer = this.defer(function(){
 					delete this._qs_timer;
 					this._reloadItems();
-				}));
+				});
 			}
 		},
 

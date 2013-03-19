@@ -56,14 +56,14 @@ define([
 			}
 			var _domNode = this.domNode;
 			domClass.replace(_domNode, ["mblCoverv", "mblIn"], ["mblOverlayHidden", "mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
-			this.defer(lang.hitch(this, function(){
+			this.defer(function(){
 				var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 					this.disconnect(handler);
 					domClass.remove(_domNode, ["mblCoverv", "mblIn", "mblTransition"]);
 					this._reposition();
 				});
 				domClass.add(_domNode, "mblTransition");
-			}), 100);
+			}, 100);
 			var skipReposition = false;
 
 			this._moveHandle = this.connect(win.doc.documentElement, touch.move,
@@ -93,13 +93,13 @@ define([
 			}
 			if(has("css3-animations")){
 				domClass.replace(_domNode, ["mblRevealv", "mblOut", "mblReverse"], ["mblCoverv", "mblIn", "mblOverlayHidden", "mblTransition"]);
-				this.defer(lang.hitch(this, function(){
+				this.defer(function(){
 					var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 						this.disconnect(handler);
 						domClass.replace(_domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
 					});
 					domClass.add(_domNode, "mblTransition");
-				}), 100);
+				}, 100);
 			}else{
 				domClass.replace(_domNode, ["mblOverlayHidden"], ["mblCoverv", "mblIn", "mblRevealv", "mblOut", "mblReverse"]);
 			}

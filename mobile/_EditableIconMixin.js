@@ -49,13 +49,13 @@ define([
 
 			var count = 0;
 			array.forEach(this.getChildren(), function(w){
-				this.defer(lang.hitch(this, function(){
+				this.defer(function(){
 					w.set("deleteIcon", this.deleteIconForEdit);
 					if(w.deleteIconNode){
 						w._deleteHandle = this.connect(w.deleteIconNode, "onclick", "_deleteIconClicked");
 					}
 					w.highlight(0);
-				}), 15*count++);
+				}, 15*count++);
 			}, this);
 
 			connect.publish("/dojox/mobile/startEdit", [this]); // pubsub
@@ -142,10 +142,10 @@ define([
 				this._onDragStart(e);
 			}else{
 				// set timer to detect long press
-				this._pressTimer = this.defer(lang.hitch(this, function(){
+				this._pressTimer = this.defer(function(){
 					this.startEdit();
 					this._onDragStart(e);
-				}), 1000);
+				}, 1000);
 			}
 		},
 
@@ -268,9 +268,9 @@ define([
 				if(w._moving){ continue; }
 				pos = domGeometry.position(w.domNode, true);
 				if(this._contains(point, pos)){
-					this.defer(lang.hitch(this, function(){
+					this.defer(function(){
 						this.moveChildWithAnimation(blankItem, dir == 1 ? i+1 : i);
-					}));
+					});
 					break;
 				}else if((dir == 1 && pos.y > point.y) || (dir == -1 && pos.y + pos.h < point.y)){
 					break;

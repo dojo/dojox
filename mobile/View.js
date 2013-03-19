@@ -563,10 +563,10 @@ define([
 				// remove "-webkit-transform-style" style after transition finished
 				// to avoid side effects such as input field auto-scrolling issue
 				// use setTimeout (via defer) to avoid flicker in case of ScrollableView
-				this.defer(lang.hitch(this, function(){
+				this.defer(function(){
 					if(toWidget){ domStyle.set(this.toNode, css3.name("transformStyle"), ""); }
 					domStyle.set(this.domNode, css3.name("transformStyle"), "");
-				}));
+				});
 			}
 
 			var c = this._detail.context, m = this._detail.method;

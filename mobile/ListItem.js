@@ -195,7 +195,7 @@ define([
 			}
 			if(this.variableHeight){
 				domClass.add(this.domNode, "mblVariableHeight");
-				this.defer(lang.hitch(this, "layoutVariableHeight"));
+				this.defer("layoutVariableHeight");
 			}
 
 			if(!this._isOnLine){

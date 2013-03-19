@@ -200,9 +200,9 @@ define([
 		_prepareForTransition: function(e, transOpts){
 			// Override from _ItemBase
 			if(transOpts){
-				this.defer(lang.hitch(this, function(d){
+				this.defer(function(d){
 					this.set("selected", false);
-				}), 1500);
+				}, 1500);
 				return true;
 			}else{
 				if(this.getParent().transition === "below" && this.isOpen()){
@@ -222,7 +222,7 @@ define([
 			if(e){
 				if(e.type === "keydown" && e.keyCode !== 13){ return; }
 				if(this.closeIconClicked(e) === false){ return; } // user's click action
-				this.defer(lang.hitch(this, function(d){ this._closeIconClicked(); }));
+				this.defer(function(d){ this._closeIconClicked(); });
 				return;
 			}
 			this.close();

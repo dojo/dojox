@@ -239,12 +239,12 @@ define([
 				clearInterval(this._interval); // fail safe
 				this._interval = null;
 			}
-			this._timer = this.defer(lang.hitch(this, function(){
+			this._timer = this.defer(function(){
 				this._interval = setInterval(lang.hitch(this, function(){
 					this.spin(this._btn === this.plusBtnNode ? 1 : -1);
 				}), 60);
 				this._timer = null;
-			}), 1000);
+			}, 1000);
 			event.stop(e);
 		},
 

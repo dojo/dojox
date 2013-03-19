@@ -254,7 +254,7 @@ define([
 			}else{
 				this._updateLast();
 			}
-			this.defer(lang.hitch(this, function(){ this.resize(); }));
+			this.defer(function(){ this.resize(); });
 
 			this._started = true;
 		},
