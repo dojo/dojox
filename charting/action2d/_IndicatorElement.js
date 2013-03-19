@@ -81,7 +81,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "../plot2d/
 				// let's create a fake coordinate to not block parent render method
 				// actual coordinate will be computed in _updateCoordinates
 				this.opt.values = [];
-				this.opt.labels = this.secondCoord?"trend":"marker";
+				this.opt.labels = this.secondCoord?"trend":"markers";
 			}
 
 			// take axis on the interactor plot and forward them onto the indicator plot

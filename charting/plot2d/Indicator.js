@@ -399,7 +399,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "./Cartesia
 						text = array.map(data, function(value){
 							return dcpc.getLabel(value, this.opt.fixed, this.opt.precision);
 						}, this);
-						text = "[ "+text.join(", ")+" ]";
+						text = text.length != 1 ? "[ "+text.join(", ")+" ]" : text[0];
 					}else{
 						text = dcpc.getLabel(coord, this.opt.fixed, this.opt.precision);
 					}
