@@ -1,5 +1,8 @@
 define([
 	"dojo/_base/declare",
+	"dojo/_base/Color",
+	"dojo/dom-attr",
+	"dojo/dom-style",
 	"dijit/_editor/_Plugin",
 	"dijit/_WidgetBase",
 	"dijit/_TemplatedMixin",
@@ -8,13 +11,13 @@ define([
 	"dijit/Menu",
 	"dijit/MenuItem",
 	"dijit/MenuSeparator",
+	"dijit/ColorPalette",
+	"dojox/widget/ColorPicker",
 	"dojo/text!./resources/insertTable.html",
 	"dojo/text!./resources/modifyTable.html",
 	"dojo/i18n!./nls/TableDialog",
 	"dijit/_base/popup",
 	"dijit/popup",
-	"dijit/ColorPalette",
-	"dojox/widget/ColorPicker",
 	"dojo/_base/connect",
 	"dijit/TooltipDialog",
 	"dijit/form/Button",
@@ -23,6 +26,9 @@ define([
 	"dijit/form/FilteringSelect"
 ], function(
 	declare,
+	Color,
+	domAttr,
+	domStyle,
 	_Plugin,
 	_WidgetBase,
 	_TemplatedMixin,
@@ -31,6 +37,8 @@ define([
 	Menu,
 	MenuItem,
 	MenuSeparator,
+	ColorPalette,
+	ColorPicker,
 	insertTableTemplate,
 	modifyTableTemplate,
 	tableDialogStrings
@@ -498,7 +506,7 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 			// summary:
 			//	 	subscribed to from the global object's publish method
 			
-			//console.log("onDisplayChanged", this.commandName);
+			//console.log("onDisplayChanged", this.name);
 			if(!this.alwaysAvailable){
 				this.available = withinTable;
 				this.button.set('disabled', !this.available);
@@ -533,7 +541,7 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 		},
 		
 		_initButton: function(){
-			this.command = this.commandName;
+			this.command = this.name;
 			
 			this.label = this.editor.commands[this.command] = this._makeTitle(this.command);
 			this.inherited(arguments);
@@ -560,7 +568,7 @@ var TablePlugins = declare("dojox.editor.plugins.TablePlugins", _Plugin, {
 
 			this.begEdit();
 			var o = this.getTableInfo();
-			var sw = (dojo.isString(cmd))?cmd : this.commandName;
+			var sw = (dojo.isString(cmd))?cmd : this.name;
 			var r, c, i;
 			var adjustColWidth = false;
 			//console.log("modTable:", sw)
@@ -777,7 +785,7 @@ var TableContextMenu = declare(TablePlugins, {
 		
 		_initButton: function(){
 			this.inherited(arguments);
-			if(this.commandName=="tableContextMenu"){ this.button.domNode.display = "none";}
+			if(this.name==="tableContextMenu"){ this.button.domNode.display = "none";}
 		},
 		
 		_createContextMenu: function(){
@@ -822,17 +830,26 @@ var InsertTable = declare("dojox.editor.plugins.InsertTable", TablePlugins, {
 });
 
 var ModifyTable = declare("dojox.editor.plugins.ModifyTable", TablePlugins, {
+	// colorPicker: Constructor
+	//		The color picker dijit to use, defaults to dijit/form/ColorPalette
+	colorPicker: ColorPalette,
+
 	modTable: function(){
 		if (!this.editor._tablePluginHandler.checkAvailable()) {return;}
 		var o = this.getTableInfo();
 		//console.log("LAUNCH DIALOG");
-		var w = new EditorModifyTableDialog({table:o.tbl});
+
+		var w = new EditorModifyTableDialog({
+			table:o.tbl,
+			colorPicker: typeof this.colorPicker === 'string' ? require(this.colorPicker) : this.colorPicker,
+			parentPlugin: this
+		});
 		w.show();
 		this.connect(w, "onSetTable", function(color){
 			// uhm... not sure whats going on here...
 			var o = this.getTableInfo();
 			//console.log("set color:", color);
-			dojo.attr(o.td, "bgcolor", color);
+			domStyle.set(o.td, "backgroundColor", color);
 		});
 	}
 });
@@ -844,12 +861,16 @@ var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplat
 	// tags:
 	//		private
 
+	// colorPicker: Constructor
+	//		The color picker dijit to use, defaults to dojox/widget/ColorPicker
+	colorPicker: ColorPicker,
+
 	// templateString: String
 	//		The template used to create the ColorPicker.
 	templateString:
 		"<div style='display: none; position: absolute; top: -10000; z-index: -10000'>" +
 			"<div dojoType='dijit.TooltipDialog' dojoAttachPoint='dialog' class='dojoxEditorColorPicker'>" +
-				"<div dojoType='dojox.widget.ColorPicker' dojoAttachPoint='_colorPicker'></div>" +
+				"<div dojoAttachPoint='_colorPicker'></div>" +
 				"<div style='margin: 0.5em 0em 0em 0em'>" +
 					"<button dojoType='dijit.form.Button' type='submit' dojoAttachPoint='_setButton'>${buttonSet}</button>" +
 					"&nbsp;" +
@@ -864,9 +885,17 @@ var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplat
 
 	constructor: function(){
 		// summary:
-		//		Constructor over-ride so that the translated strings are mixsed in so
+		//		Constructor over-ride so that the translated strings are mixed in so
 		//		the template fills out.
 		dojo.mixin(this, tableDialogStrings);
+	},
+	postCreate: function() {
+		// summary:
+		//		Create color picker dynamically rather than hardcode in template.
+		var ColorPicker = typeof this.colorPicker == "string" ? require(this.colorPicker) : this.colorPicker;
+		this._colorPicker = new ColorPicker({
+			parent: this
+		}, this._colorPicker);
 	},
 
 	startup: function(){
@@ -903,10 +932,6 @@ var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplat
 		return this._colorPicker.get("value");
 	},
 
-	setColor: function(/*String*/ color){
-		this._colorPicker.setColor(color, false);
-	},
-	
 	onChange: function(value){
 		// summary:
 		//		Hook point to get the value when the color picker value is selected.
@@ -921,74 +946,80 @@ var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplat
 });
 
 var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins, {
-		constructor: function(){
-			// summary:
-			//		Initialize ColorTableCell plugin
-			this.closable = true;
-			this.buttonClass = dijit.form.DropDownButton;
-			var picker = new CellColorDropDown();
-			dojo.body().appendChild(picker.domNode);
-			picker.startup();
-			this.dropDown = picker.dialog;
-			this.connect(picker, "onChange", function(color){
-				this.editor.focus();
-				this.modTable(null, color);
-			});
-			this.connect(picker, "onCancel", function(){
-				this.editor.focus();
-			});
-			this.connect(picker.dialog, "onOpen", function(){
-				var o = this.getTableInfo(),
-					tds = this.getSelectedCells(o.tbl);
-				if(tds && tds.length > 0){
-					var t = tds[0] == this.lastObject ? tds[0] : tds[tds.length - 1],
-						color;
-					while(t && t !== this.editor.document && ((color = dojo.style(t, "backgroundColor")) == "transparent" || color.indexOf("rgba") == 0)){
-						t = t.parentNode;
-					}
-					if(color != "transparent" && color.indexOf("rgba") != 0){
-						picker.setColor(color);
-					}
+	// colorPicker: Constructor
+	//		The color picker dijit to use, defaults to dojox/widget/ColorPicker
+	colorPicker: ColorPicker,
+
+	constructor: function(){
+		// summary:
+		//		Initialize ColorTableCell plugin
+		this.closable = true;
+		this.buttonClass = dijit.form.DropDownButton;
+
+		var picker = new CellColorDropDown({
+			colorPicker: this.colorPicker
+		});
+
+		this.dropDown = picker.dialog;
+		this.connect(picker, "onChange", function(color){
+			this.editor.focus();
+			this.modTable(null, color);
+		});
+		this.connect(picker, "onCancel", function(){
+			this.editor.focus();
+		});
+		this.connect(picker.dialog, "onOpen", function(){
+			var o = this.getTableInfo(),
+				tds = this.getSelectedCells(o.tbl);
+			if(tds && tds.length > 0){
+				var t = tds[0] === this.lastObject ? tds[0] : tds[tds.length - 1],
+					color;
+				while(t && t !== this.editor.document && ((color = dojo.style(t, "backgroundColor")) === "transparent" || color.indexOf("rgba") === 0)){
+					t = t.parentNode;
 				}
-			});
-			this.connect(this, "setEditor", function(editor){
-				editor.onLoadDeferred.addCallback(dojo.hitch(this, function(){
-					this.connect(this.editor.editNode, "onmouseup", function(evt){
-						this.lastObject = evt.target;
-					});
-				}));
-			});
-		},
-		
-		_initButton: function(){
-			this.command = this.commandName;
+				if(color !== "transparent" && color.indexOf("rgba") !== 0){
+					picker.set('value', Color.fromString(color).toHex());
+				}
+			}
+		});
+		this.connect(this, "setEditor", function(editor){
+			editor.onLoadDeferred.addCallback(dojo.hitch(this, function(){
+				this.connect(this.editor.editNode, "onmouseup", function(evt){
+					this.lastObject = evt.target;
+				});
+			}));
+		});
+	},
 
-			this.label = this.editor.commands[this.command] = this._makeTitle(this.command);
-			this.inherited(arguments);
-			delete this.command;
+	_initButton: function(){
+		this.command = this.name;
 
-			this.onDisplayChanged(false);
-		},
-        
-		modTable: function(cmd, args){
-			// summary:
-			//		Where each plugin performs its action.
-			//		Note: not using execCommand. In spite of their presence in the
-			//		Editor as query-able plugins, I was not able to find any evidence
-			//		that they are supported (especially in NOT IE). If they are
-			//		supported in other browsers, it may help with the undo problem.
+		this.label = this.editor.commands[this.command] = this._makeTitle(this.command);
+		this.inherited(arguments);
+		delete this.command;
 
-			this.begEdit();
-			var o = this.getTableInfo();
-			// The one plugin that really needs use of the very verbose
-			//	getSelectedCells()
-			var tds = this.getSelectedCells(o.tbl);
-			//console.debug("SELECTED CELLS ", tds , " FOR ", o);
-			dojo.forEach(tds, function(td){
-				dojo.style(td, "backgroundColor", args);
-			});
-			this.endEdit();
-		}
+		this.onDisplayChanged(false);
+	},
+
+	modTable: function(cmd, args){
+		// summary:
+		//		Where each plugin performs its action.
+		//		Note: not using execCommand. In spite of their presence in the
+		//		Editor as query-able plugins, I was not able to find any evidence
+		//		that they are supported (especially in NOT IE). If they are
+		//		supported in other browsers, it may help with the undo problem.
+
+		this.begEdit();
+		var o = this.getTableInfo();
+		// The one plugin that really needs use of the very verbose
+		//	getSelectedCells()
+		var tds = this.getSelectedCells(o.tbl);
+		//console.debug("SELECTED CELLS ", tds , " FOR ", o);
+		dojo.forEach(tds, function(td){
+			dojo.style(td, "backgroundColor", args);
+		});
+		this.endEdit();
+	}
 });
 
 declare("dojox.editor.plugins.EditorTableDialog", [Dialog, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -1081,8 +1112,7 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
 		this.inherited(arguments);
-		this._cleanupWidgets = [];
-		var w1 = new dijit.ColorPalette({});
+		var w1 = new this.colorPicker({parent: this});
 		this.connect(w1, "onChange", function(color){
 			dijit.popup.close(w1);
 			this.setBrdColor(color);
@@ -1091,10 +1121,12 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 			dijit.popup.close(w1);
 		});
 		this.connect(this.borderCol, "click", function(){
+			w1.set('value', this.brdColor, false);
 			dijit.popup.open({popup:w1, around:this.borderCol});
 			w1.focus();
 		});
-		var w2 = new dijit.ColorPalette({});
+		var w2 = new this.colorPicker({parent: this});
+
 		this.connect(w2, "onChange", function(color){
 			dijit.popup.close(w2);
 			this.setBkColor(color);
@@ -1103,15 +1135,15 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 			dijit.popup.close(w2);
 		});
 		this.connect(this.backgroundCol, "click", function(){
+			w2.set('value', this.bkColor, false);
             dijit.popup.open({popup:w2, around:this.backgroundCol});
 			w2.focus();
 		});
-		this._cleanupWidgets.push(w1);
-		this._cleanupWidgets.push(w2);
+		this.own(w1, w2);
 		
-		this.setBrdColor(dojo.attr(this.table, "bordercolor"));
-		this.setBkColor(dojo.attr(this.table, "bgcolor"));
-		var w = dojo.attr(this.table, "width");
+		this.setBrdColor(domStyle.get(this.table, "borderColor"));
+		this.setBkColor(domStyle.get(this.table, "backgroundColor"));
+		var w = domStyle.get(this.table, "width");
 		if(!w){
 			w = this.table.style.width;
 		}
@@ -1129,33 +1161,33 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 			this.selectWidthType.set("value", "percent");
 		}
 		
-		this.selectBorder.set("value", dojo.attr(this.table, "border"));
-		this.selectPad.set("value", dojo.attr(this.table, "cellPadding"));
-		this.selectSpace.set("value", dojo.attr(this.table, "cellSpacing"));
-		this.selectAlign.set("value", dojo.attr(this.table, "align"));
+		this.selectBorder.set("value", domAttr.get(this.table, "border"));
+		this.selectPad.set("value", domAttr.get(this.table, "cellPadding"));
+		this.selectSpace.set("value", domAttr.get(this.table, "cellSpacing"));
+		this.selectAlign.set("value", domAttr.get(this.table, "align"));
 	},
 	
 	setBrdColor: function(color){
 		this.brdColor = color;
-		dojo.style(this.borderCol, "backgroundColor", color);
+		domStyle.set(this.borderCol, "backgroundColor", color);
 	},
 	
 	setBkColor: function(color){
 		this.bkColor = color;
-		dojo.style(this.backgroundCol, "backgroundColor", color);
+		domStyle.set(this.backgroundCol, "backgroundColor", color);
 	},
 	onSet: function(){
-		dojo.attr(this.table, "borderColor", this.brdColor);
-		dojo.attr(this.table, "bgColor", this.bkColor);
+		domStyle.set(this.table, "borderColor", this.brdColor);
+		domStyle.set(this.table, "backgroundColor", this.bkColor);
 		if(this.selectWidth.get("value")){
 			// Just in case, remove it from style since we're setting it as a table attribute.
-			dojo.style(this.table, "width", "");
-			dojo.attr(this.table, "width", (this.selectWidth.get("value") + ((this.selectWidthType.get("value")=="pixels")?"":"%") ));
+			domStyle.set(this.table, "width", "");
+			domStyle.set(this.table, "width", (this.selectWidth.get("value") + ((this.selectWidthType.get("value")=="pixels")?"":"%") ));
 		}
-		dojo.attr(this.table, "border", this.selectBorder.get("value"));
-		dojo.attr(this.table, "cellPadding", this.selectPad.get("value"));
-		dojo.attr(this.table, "cellSpacing", this.selectSpace.get("value"));
-		dojo.attr(this.table, "align", this.selectAlign.get("value"));
+		domAttr.set(this.table, "border", this.selectBorder.get("value"));
+		domAttr.set(this.table, "cellPadding", this.selectPad.get("value"));
+		domAttr.set(this.table, "cellSpacing", this.selectSpace.get("value"));
+		domAttr.set(this.table, "align", this.selectAlign.get("value"));
 		var c = dojo.connect(this, "onHide", function(){
 			dojo.disconnect(c);
 			var self = this;
@@ -1181,55 +1213,31 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 
 	onSetTable: function(tableText){
 		//stub
-	},
-
-	destroy: function(){
-		// summary:
-		//		Cleanup function.
-		this.inherited(arguments);
-		dojo.forEach(this._cleanupWidgets, function(w){
-			if(w && w.destroy){
-				w.destroy();
-			}
-		});
-		delete this._cleanupWidgets;
 	}
 });
 
-dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
-	if(o.plugin){ return; }
-	// make first character lower case
-	if(o.args && o.args.command){
-		var cmd = o.args.command.charAt(0).toLowerCase()+o.args.command.substring(1,o.args.command.length);
-		
-		switch(cmd){
-			case "insertTableRowBefore":
-			case "insertTableRowAfter":
-			case "insertTableColumnBefore":
-			case "insertTableColumnAfter":
-			case "deleteTableRow":
-			case "deleteTableColumn":
-				o.plugin = new TablePlugins({commandName: cmd});
-				break;
-
-			case "colorTableCell":
-				o.plugin = new ColorTableCell({commandName: cmd});
-				break;
-
-			case "modifyTable":
-				o.plugin = new ModifyTable({commandName: cmd});
-				break;
-
-			case "insertTable":
-				o.plugin = new InsertTable({commandName: cmd});
-				break;
-
-			case "tableContextMenu":
-				o.plugin = new TableContextMenu({commandName: cmd});
-				break;
-		}
-	}
-});
+// Register these plugins.
+function registerGeneric(args) {
+	return new TablePlugins(args);
+}
+_Plugin.registry["insertTableRowBefore"] = registerGeneric;
+_Plugin.registry["insertTableRowAfter"] = registerGeneric;
+_Plugin.registry["insertTableColumnBefore"] = registerGeneric;
+_Plugin.registry["insertTableColumnAfter"] = registerGeneric;
+_Plugin.registry["deleteTableRow"] = registerGeneric;
+_Plugin.registry["deleteTableColumn"] = registerGeneric;
+_Plugin.registry["colorTableCell"] = function(args) {
+	return new ColorTableCell(args);
+};
+_Plugin.registry["modifyTable"] = function(args) {
+	return new ModifyTable(args);
+};
+_Plugin.registry["insertTable"] = function(args) {
+	return new InsertTable(args);
+};
+_Plugin.registry["tableContextMenu"] = function(args) {
+	return new TableContextMenu(args);
+};
 
 return TablePlugins;
 });
