@@ -14,7 +14,7 @@
 		<link id="themeStyles" rel="stylesheet" href="../../../../dijit/themes/claro/claro.css">
 
 		<!-- required: dojo.js -->
-		<script src="../../../../dojo/dojo.js" type="text/javascript" data-dojo-config="isDebug: 1, async: 1,mvc:{debugBindings:1}"></script>
+		<script src="../../../../dojo/dojo.js" type="text/javascript" data-dojo-config="isDebug: 1, async: 1, mvc: {debugBindings: 1, extensionPerWidget: true}"></script>
 		<script type="text/javascript" src="./helpers.js"></script>
 		<script type="text/javascript" >
 			require([
@@ -26,7 +26,6 @@
 				"dojo/Stateful",
 				"dojo/data/ItemFileReadStore",
 				"dojo/date/locale",
-				"dojox/mvc/at",  // at requires _atBindingExtension which extends _WidgetBase so it should come before dijit widgets
 				"dijit/registry",
 				"dijit/form/Button",
 				"dijit/form/ComboBox",
@@ -41,12 +40,21 @@
 				"dijit/form/Textarea",
 				"dijit/Calendar",
 				"dijit/ColorPalette",
+				"dojox/mvc/at",
+				"dojox/mvc/atBindingExtension",
 				"dojox/mvc/EditModelRefController",
 				"dojox/mvc/Output"
-			], function(doh, ddom, number, parser, when, Stateful, ItemFileReadStore, locale, at, registry, Button, 
+			], function(doh, ddom, number, parser, when, Stateful, ItemFileReadStore, locale, registry, Button, 
 					ComboBox, DateTextBox, FilteringSelect, HorizontalSlider, NumberSpinner, NumberTextBox, 
 					TextBox, Select, SimpleTextarea, Textarea, Calendar, ColorPalette, 
-					EditModelRefController, Output){
+					at, atBindingExtension, EditModelRefController, Output){
+
+				for(var i = 0, l = arguments.length; i < l; ++i){
+					var proto = arguments[i].prototype;
+					if((proto || {})._blankGif){
+						atBindingExtension(proto);
+					}
+				}
 
 				store = new ItemFileReadStore({
 					data: {

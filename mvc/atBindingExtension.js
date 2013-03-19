@@ -13,6 +13,11 @@ define([
 		//		The widget.
 
 		array.forEach(arguments, function(w){
+			if(w.dataBindAttr){
+				console.warn("Detected a widget or a widget class that has already been applied data binding extension. Skipping...");
+				return;
+			}
+
 			// Apply the at binding mixin
 			lang._mixin(w, _atBindingMixin.mixin);
 
