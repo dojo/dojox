@@ -66,6 +66,11 @@ define([
 			array.forEach(this.getChildren(), function(child){
 				if(child.resize){ child.resize(); }
 			});
+			this._dim = this.getDim(); // update dimension cache
+			if(this._conn){
+				// if a resize happens during a scroll, update the scrollbar
+				this.resetScrollBar();
+			}
 		},
 
 		isTopLevel: function(/*Event*/e){

@@ -119,7 +119,7 @@ define([
 		//		- 3: use -webkit-transform:translate3d(x,y,z) style, use -webkit-transition for slide anim
 		//		- 0: use default value (2 in case of Android < 3, 3 if iOS6, otherwise 1)
 		scrollType: 0,
-
+		
 		init: function(/*Object?*/params){
 			// summary:
 			//		Initialize according to the given params.
@@ -323,8 +323,10 @@ define([
 				this.domNode.style.height = h;
 			}
 
-			// to ensure that the view is within a scrolling area when resized.
-			this.onTouchEnd();
+			if(!this._conn){
+				// to ensure that the view is within a scrolling area when resized.
+				this.onTouchEnd();
+			}
 		},
 
 		onFlickAnimationStart: function(e){
@@ -751,15 +753,43 @@ define([
 			//		A DOM node to scroll. If not specified, defaults to
 			//		this.containerNode.
 
-			var s = (node || this.containerNode).style;
-			if(has("css3-animations")){
-				if(!this._useTopLeft){
-					if(this._useTransformTransition){
-						s[css3.name("transition")] = "";	
+			// scroll events
+			var scrollEvent, beforeTopHeight, afterBottomHeight;
+			var doScroll = true;
+			if(!this._dim){
+				this._dim = this.getDim();
+			}
+			beforeTopHeight = (to.y > 0)?to.y:0;
+			afterBottomHeight = (this._dim.o.h + to.y < 0)?-1 * (this._dim.o.h + to.y):0;
+			scrollEvent = {bubbles: false,
+					cancelable: false,
+					x: to.x,
+					y: to.y,
+					beforeTop: beforeTopHeight > 0,
+					beforeTopHeight: beforeTopHeight,
+					afterBottom: afterBottomHeight > 0,
+					afterBottomHeight: afterBottomHeight};
+			// before scroll event
+			doScroll = this.onBeforeScroll(scrollEvent);
+			
+			if(doScroll){
+				var s = (node || this.containerNode).style;
+				if(has("css3-animations")){
+					if(!this._useTopLeft){
+						if(this._useTransformTransition){
+							s[css3.name("transition")] = "";	
+						}
+						s[css3.name("transform")] = this.makeTranslateStr(to);
+					}else{
+						s[css3.name("transition")] = "";
+						if(this._v){
+							s.top = to.y + "px";
+						}
+						if(this._h || this._f){
+							s.left = to.x + "px";
+						}
 					}
-					s[css3.name("transform")] = this.makeTranslateStr(to);
 				}else{
-					s[css3.name("transition")] = "";
 					if(this._v){
 						s.top = to.y + "px";
 					}
@@ -767,19 +797,46 @@ define([
 						s.left = to.x + "px";
 					}
 				}
-			}else{
-				if(this._v){
-					s.top = to.y + "px";
+				if(!doNotMoveScrollBar){
+					this.scrollScrollBarTo(this.calcScrollBarPos(to));
 				}
-				if(this._h || this._f){
-					s.left = to.x + "px";
-				}
-			}
-			if(!doNotMoveScrollBar){
-				this.scrollScrollBarTo(this.calcScrollBarPos(to));
+				// After scroll event
+				this.onAfterScroll(scrollEvent);
 			}
 		},
 
+		onBeforeScroll: function(/*Event*/e){
+			// e: Event
+			//		the scroll event, that contains the following attributes:
+			//		x (x coordinate of the scroll destination),
+			//		y (y coordinate of the scroll destination),
+			//		beforeTop (a boolean that is true if the scroll detination is before the top of the scrollable),
+			//		beforeTopHeight (the number of pixels before the top of the scrollable for the scroll destination),
+			//		afterBottom (a boolean that is true if the scroll destination is after the bottom of the scrollable),
+			//		afterBottomHeight (the number of pixels after the bottom of the scrollable for the scroll destination)
+			// summary:
+			//		called before a scroll is initiated. If this method returns false,
+			//		the scroll is canceled.
+			// tags:
+			//		callback
+			return true;
+		},
+
+		onAfterScroll: function(/*Event*/e){
+			// e: Event
+			//		the scroll event, that contains the following attributes:
+			//		x (x coordinate of the scroll destination),
+			//		y (y coordinate of the scroll destination),
+			//		beforeTop (a boolean that is true if the scroll detination is before the top of the scrollable),
+			//		beforeTopHeight (the number of pixels before the top of the scrollable for the scroll destination),
+			//		afterBottom (a boolean that is true if the scroll destination is after the bottom of the scrollable),
+			//		afterBottomHeight (the number of pixels after the bottom of the scrollable for the scroll destination)
+			// summary:
+			//		called after a scroll has been performed.
+			// tags:
+			//		callback
+		},
+		
 		slideTo: function(/*Object*/to, /*Number*/duration, /*String*/easing){
 			// summary:
 			//		Scrolls to the given position with the slide animation.
