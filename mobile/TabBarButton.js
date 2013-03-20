@@ -138,7 +138,7 @@ define([
 			this._moveTo = this._getMoveToId();
 			if(this._moveTo){
 				var tabPanelNode = dom.byId(this._moveTo);
-				if (tabPanelNode){
+				if(tabPanelNode){
 					domAttr.set(this.domNode, "aria-controls", this._moveTo);
 					domAttr.set(tabPanelNode, "role", "tabpanel");
 					domAttr.set(tabPanelNode, "aria-labelledby", this.id);
@@ -238,7 +238,6 @@ define([
 			//		If there is no id, return an empty string.
 			if(this.moveTo){
 				if(this.moveTo === "#"){ return ""; }
-				
 				var toId = "";
 				if(typeof(this.moveTo) === "object" && this.moveTo.moveTo){
 					toId = this.moveTo.moveTo;
@@ -291,7 +290,10 @@ define([
 			domClass.toggle(this.domNode, "mblTabBarButtonSelected", selected);
 			domAttr.set(this.domNode, "aria-selected", selected ? "true" : "false");
 			if(this._moveTo){
-				domAttr.set(dom.byId(this._moveTo), "aria-hidden", selected ? "false" : "true");
+				var tabPanelNode = dom.byId(this._moveTo);
+				if(tabPanelNode){
+					domAttr.set(tabPanelNode, "aria-hidden", selected ? "false" : "true");
+				}
 			}
 		}
 	});
