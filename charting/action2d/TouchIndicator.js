@@ -1,5 +1,5 @@
-define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
-	function(lang, declare, eventUtil, ChartAction, IndicatorElement, du){ 
+define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/touch", "./ChartAction", "./_IndicatorElement", "dojox/lang/utils"],
+	function(lang, declare, eventUtil, touch, ChartAction, IndicatorElement, du){
 	
 	/*=====
 	var __TouchIndicatorCtorArgs = {
@@ -115,10 +115,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 			// kwArgs: __TouchIndicatorCtorArgs?
 			//		Optional arguments for the chart action.
 			this._listeners = [
-				{eventName: "ontouchstart", methodName: "onTouchStart"},
-				{eventName: "ontouchmove", methodName: "onTouchMove"},
-				{eventName: "ontouchend", methodName: "onTouchEnd"},
-				{eventName: "ontouchcancel", methodName: "onTouchEnd"}
+				{eventName: touch.press, methodName: "onTouchStart"},
+				{eventName: touch.move, methodName: "onTouchMove"},
+				{eventName: touch.release, methodName: "onTouchEnd"},
+				{eventName: touch.cancel, methodName: "onTouchEnd"}
 			];
 			this.opt = lang.clone(this.defaultParams);
 			du.updateWithObject(this.opt, kwArgs);
@@ -159,10 +159,10 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 
 		onTouchStart: function(event){
 			// summary:
-			//		Called when touch is started on the chart.		
-			if(event.touches.length==1){
+			//		Called when touch is started on the chart.
+			if(!event.touches || event.touches.length == 1){
 				this._onTouchSingle(event, true);
-			}else if(this.opt.dualIndicator && event.touches.length==2){
+			}else if(this.opt.dualIndicator && event.touches.length == 2){
 				this._onTouchDual(event);
 			}
 		},
@@ -170,9 +170,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 		onTouchMove: function(event){
 			// summary:
 			//		Called when touch is moved on the chart.
-			if(event.touches.length==1){
+			if(!event.touches || event.touches.length == 1){
 				this._onTouchSingle(event);
-			}else if(this.opt.dualIndicator && event.touches.length==2){
+			}else if(this.opt.dualIndicator && event.touches.length == 2){
 				this._onTouchDual(event);
 			}
 		},
@@ -183,7 +183,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "./ChartAct
 				this.chart.render();
 			}
 			var plot = this.chart.getPlot(this._uName);
-			plot.pageCoord  = {x: event.touches[0].pageX, y: event.touches[0].pageY};
+			plot.pageCoord  = {x: event.touches?event.touches[0].pageX:event.pageX, y: event.touches?event.touches[0].pageY:event.pageY};
 			plot.dirty = true;
 			if(delayed){
 				this.chart.delayedRender();

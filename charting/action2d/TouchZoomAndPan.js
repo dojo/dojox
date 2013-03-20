@@ -1,6 +1,6 @@
 define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff",
-	"./ChartAction", "../Element", "dojox/gesture/tap", "../plot2d/common", "dojo/has!dojo-bidi?../bidi/action2d/ZoomAndPan"],
-	function(lang, declare, eventUtil, has, ChartAction, Element, tap, common, BidiTouchZoomAndPan){
+	"./ChartAction", "../Element", "dojo/touch", "../plot2d/common", "dojo/has!dojo-bidi?../bidi/action2d/ZoomAndPan"],
+	function(lang, declare, eventUtil, has, ChartAction, Element, touch, common, BidiTouchZoomAndPan){
 	var GlassView = declare(Element, {
 		// summary:
 		//		Private internal class used by TouchZoomAndPan actions.
@@ -68,7 +68,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 	var TouchZoomAndPan = declare(has("dojo-bidi")? "dojox.charting.action2d.NonBidiTouchZoomAndPan" : "dojox.charting.action2d.TouchZoomAndPan", ChartAction, {
 		// summary:
 		//		Create a touch zoom and pan action.
-		//		You can zoom out or in the data window with pinch and spread gestures. You can scroll using drag gesture.
+		//		You can zoom out or in the data window with pinch and spread gestures except on Android 2.x and WP8 devices.
+		// 		You can scroll using drag gesture.
 		//		Finally this is possible to navigate between a fit window and a zoom one using double tap gesture.
 
 		// the data description block for the widget parser
@@ -89,9 +90,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			// kwArgs: __TouchZoomAndPanCtorArgs?
 			//		Optional arguments for the action.
 			this._listeners = [
-				{eventName: "ontouchstart", methodName: "onTouchStart"},{eventName: "ontouchmove", methodName: "onTouchMove"},
-			    {eventName: "ontouchend", methodName: "onTouchEnd"},
-				{eventName: tap.doubletap, methodName: "onDoubleTap"}
+				{eventName: touch.press, methodName: "onTouchStart"},
+				{eventName: touch.move, methodName: "onTouchMove"},
+			    {eventName: touch.release, methodName: "onTouchEnd"}
 			];
 			if(!kwArgs){ kwArgs = {}; }
 			this.axis = kwArgs.axis ? kwArgs.axis : "x";
@@ -131,13 +132,18 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 
 			// we always want to be above regular plots and not clipped
 			var chart = this.chart, axis = chart.getAxis(this.axis);
-			var length = event.touches.length;
-			this._startPageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
+			var length = event.touches ? event.touches.length : 1;
+			var coord = event.touches ? event.touches[0] : event;
+			// in case we have a double tap register previous coord
+			var prevPageCoord = this._startPageCoord;
+			this._startPageCoord = {x: coord.pageX, y: coord.pageY};
 			if((this.enableZoom || this.enableScroll) && chart._delayedRenderHandle){
 				// we have pending rendering from a scroll, let's sync
 				chart.render();
 			}
 			if(this.enableZoom && length >= 2){
+				// we reset double tap
+				this._startTime = 0;
 				this._endPageCoord =  {x: event.touches[1].pageX, y: event.touches[1].pageY};
 				var middlePageCoord = {x: (this._startPageCoord.x + this._endPageCoord.x) / 2,
 										y: (this._startPageCoord.y + this._endPageCoord.y) / 2};
@@ -147,10 +153,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 				this._middleCoord = t(middlePageCoord)[this.axis];
 				this._startCoord = scaler.bounds.from;
 				this._endCoord = scaler.bounds.to;
-			}else if(this.enableScroll){
-				this._startScroll(axis);
-				// needed for Android, otherwise will get a touch cancel while swiping
-				eventUtil.stop(event);
+			}else{
+				if(!this._startTime){
+					this._startTime = new Date().getTime();
+				}else if((new Date().getTime() - this._startTime) < 250 &&
+					Math.abs(this._startPageCoord.x - prevPageCoord.x) < 50 &&
+					Math.abs(this._startPageCoord.y - prevPageCoord.y) < 50){
+					this._startTime = 0;
+					this.onDoubleTap(event);
+				}else{
+					// we missed the doubletap, we need to re-init for next time
+					this._startTime = 0;
+				}
+				if(this.enableScroll){
+					this._startScroll(axis);
+					// needed for Android, otherwise will get a touch cancel while swiping
+					eventUtil.stop(event);
+				}
 			}
 		},
 
@@ -158,9 +177,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			// summary:
 			//		Called when touch is moved on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
-			var length = event.touches.length;
+			var length = event.touches ? event.touches.length : 1;
 			var pAttr = axis.vertical?"pageY":"pageX",
 					attr = axis.vertical?"y":"x";
+			// any move action cancel double tap
+			this._startTime = 0;
 			if(this.enableZoom && length >= 2){
 				var newMiddlePageCoord = {x: (event.touches[1].pageX + event.touches[0].pageX) / 2,
 											y: (event.touches[1].pageY + event.touches[0].pageY) / 2};
@@ -191,10 +212,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			// summary:
 			//		Called when touch is ended on the chart.
 			var chart = this.chart, axis = chart.getAxis(this.axis);
-			if(event.touches.length == 1 && this.enableScroll){
+			if((!event.touches || event.touches.length == 1) && this.enableScroll){
 				// still one touch available, let's start back from here for
 				// potential pan
-				this._startPageCoord = {x: event.touches[0].pageX, y: event.touches[0].pageY};
+				var coord = event.touches ? event.touches[0] : event;
+				this._startPageCoord = {x: coord.pageX, y: coord.pageY};
 				this._startScroll(axis);
 			}
 		},
@@ -232,8 +254,9 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			var axis = this.chart.getAxis(this.axis),
 			    pAttr = axis.vertical?"pageY":"pageX",
 				attr = axis.vertical?"y":"x";
-			return axis.vertical?(this._startPageCoord[attr] - event.touches[0][pAttr]):
-				(event.touches[0][pAttr] - this._startPageCoord[attr]);
+			var coord = event.touches?event.touches[0]:event;
+			return axis.vertical?(this._startPageCoord[attr] - coord[pAttr]):
+				(coord[pAttr] - this._startPageCoord[attr]);
 		}
 	});
 	return has("dojo-bidi")? declare("dojox.charting.action2d.TouchZoomAndPan", [TouchZoomAndPan, BidiTouchZoomAndPan]) : TouchZoomAndPan;
