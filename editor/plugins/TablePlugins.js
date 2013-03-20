@@ -1,6 +1,8 @@
 define([
 	"dojo/_base/declare",
+	"dojo/_base/array",
 	"dojo/_base/Color",
+	"dojo/aspect",
 	"dojo/dom-attr",
 	"dojo/dom-style",
 	"dijit/_editor/_Plugin",
@@ -26,7 +28,9 @@ define([
 	"dijit/form/FilteringSelect"
 ], function(
 	declare,
+	array,
 	Color,
+	aspect,
 	domAttr,
 	domStyle,
 	_Plugin,
@@ -842,7 +846,7 @@ var ModifyTable = declare("dojox.editor.plugins.ModifyTable", TablePlugins, {
 		var w = new EditorModifyTableDialog({
 			table:o.tbl,
 			colorPicker: typeof this.colorPicker === 'string' ? require(this.colorPicker) : this.colorPicker,
-			parentPlugin: this
+			params: this.params
 		});
 		w.show();
 		this.connect(w, "onSetTable", function(color){
@@ -856,7 +860,7 @@ var ModifyTable = declare("dojox.editor.plugins.ModifyTable", TablePlugins, {
 
 var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
-	//		A simple widget that uses/creates a dropdown with a dojox.widget.ColorPicker.  Also provides
+	//		A simple widget that uses/creates a dropdown with a customisable color picker.  Also provides
 	//		passthroughs to the value of the color picker and convenient hook points.
 	// tags:
 	//		private
@@ -894,7 +898,7 @@ var CellColorDropDown = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplat
 		//		Create color picker dynamically rather than hardcode in template.
 		var ColorPicker = typeof this.colorPicker == "string" ? require(this.colorPicker) : this.colorPicker;
 		this._colorPicker = new ColorPicker({
-			parent: this
+			params: this.params
 		}, this._colorPicker);
 	},
 
@@ -956,11 +960,27 @@ var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins
 		this.closable = true;
 		this.buttonClass = dijit.form.DropDownButton;
 
-		var picker = new CellColorDropDown({
-			colorPicker: this.colorPicker
-		});
+		var self = this,
+			picker,
+			pickerInit = {
+				colorPicker: this.colorPicker,
+				params: this.params
+			};
 
-		this.dropDown = picker.dialog;
+		// We may have been given the dropdown to use, or we can use a default.
+		if(!this.dropDown){
+			// Create our default dropdown dialog
+			picker = new CellColorDropDown(pickerInit);
+			picker.startup(); // we don't have startup so just invoke it now
+
+			// In this case the dropdown isn't the thing firing events, its
+			//  dialog is.
+			this.dropDown = picker.dialog;
+		}else{
+			// Assume the dropdown we've been given is the picker we should attach to.
+			picker = this.dropDown;
+			picker.set(pickerInit);
+		}
 		this.connect(picker, "onChange", function(color){
 			this.editor.focus();
 			this.modTable(null, color);
@@ -968,13 +988,15 @@ var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins
 		this.connect(picker, "onCancel", function(){
 			this.editor.focus();
 		});
-		this.connect(picker.dialog, "onOpen", function(){
-			var o = this.getTableInfo(),
-				tds = this.getSelectedCells(o.tbl);
+		// Calculate and assign value before onOpen fires, so onOpen may rely on
+		//  having a value when it runs.
+		aspect.before(this.dropDown, "onOpen", function(){
+			var o = self.getTableInfo(),
+				tds = self.getSelectedCells(o.tbl);
 			if(tds && tds.length > 0){
-				var t = tds[0] === this.lastObject ? tds[0] : tds[tds.length - 1],
+				var t = tds[0] === self.lastObject ? tds[0] : tds[tds.length - 1],
 					color;
-				while(t && t !== this.editor.document && ((color = dojo.style(t, "backgroundColor")) === "transparent" || color.indexOf("rgba") === 0)){
+				while(t && t !== self.editor.document && ((color = dojo.style(t, "backgroundColor")) === "transparent" || color.indexOf("rgba") === 0)){
 					t = t.parentNode;
 				}
 				if(color !== "transparent" && color.indexOf("rgba") !== 0){
@@ -990,7 +1012,7 @@ var ColorTableCell = declare("dojox.editor.plugins.ColorTableCell", TablePlugins
 			}));
 		});
 	},
-
+	
 	_initButton: function(){
 		this.command = this.name;
 
@@ -1112,8 +1134,9 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 	postCreate: function(){
 		dojo.addClass(this.domNode, this.baseClass); //FIXME - why isn't Dialog accepting the baseClass?
 		this.inherited(arguments);
-		var w1 = new this.colorPicker({parent: this});
+		var w1 = new this.colorPicker({params: this.params});
 		this.connect(w1, "onChange", function(color){
+			if(!this._started){ return; } // not during startup()
 			dijit.popup.close(w1);
 			this.setBrdColor(color);
 		});
@@ -1125,9 +1148,10 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 			dijit.popup.open({popup:w1, around:this.borderCol});
 			w1.focus();
 		});
-		var w2 = new this.colorPicker({parent: this});
+		var w2 = new this.colorPicker({params: this.params});
 
 		this.connect(w2, "onChange", function(color){
+			if(!this._started){ return; } // not during startup()
 			dijit.popup.close(w2);
 			this.setBkColor(color);
 		});
@@ -1140,10 +1164,11 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 			w2.focus();
 		});
 		this.own(w1, w2);
+		this.pickers = [ w1, w2 ];
 		
 		this.setBrdColor(domStyle.get(this.table, "borderColor"));
 		this.setBkColor(domStyle.get(this.table, "backgroundColor"));
-		var w = domStyle.get(this.table, "width");
+		var w = domAttr.get(this.table, "width");
 		if(!w){
 			w = this.table.style.width;
 		}
@@ -1166,7 +1191,11 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 		this.selectSpace.set("value", domAttr.get(this.table, "cellSpacing"));
 		this.selectAlign.set("value", domAttr.get(this.table, "align"));
 	},
-	
+	startup: function() {
+		array.forEach(this.pickers, function(picker){ picker.startup(); });
+		this.inherited(arguments);
+	},
+
 	setBrdColor: function(color){
 		this.brdColor = color;
 		domStyle.set(this.borderCol, "backgroundColor", color);
@@ -1182,7 +1211,7 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 		if(this.selectWidth.get("value")){
 			// Just in case, remove it from style since we're setting it as a table attribute.
 			domStyle.set(this.table, "width", "");
-			domStyle.set(this.table, "width", (this.selectWidth.get("value") + ((this.selectWidthType.get("value")=="pixels")?"":"%") ));
+			domAttr.set(this.table, "width", (this.selectWidth.get("value") + ((this.selectWidthType.get("value")=="pixels")?"":"%") ));
 		}
 		domAttr.set(this.table, "border", this.selectBorder.get("value"));
 		domAttr.set(this.table, "cellPadding", this.selectPad.get("value"));
