@@ -92,7 +92,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 			this._listeners = [
 				{eventName: touch.press, methodName: "onTouchStart"},
 				{eventName: touch.move, methodName: "onTouchMove"},
-			    {eventName: touch.release, methodName: "onTouchEnd"}
+				{eventName: touch.release, methodName: "onTouchEnd"}
 			];
 			if(!kwArgs){ kwArgs = {}; }
 			this.axis = kwArgs.axis ? kwArgs.axis : "x";
