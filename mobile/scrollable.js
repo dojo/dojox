@@ -120,6 +120,9 @@ define([
 		//		- 0: use default value (2 in case of Android < 3, 3 if iOS6, otherwise 1)
 		scrollType: 0,
 		
+		// for Tooltip.js
+		_parentPadBorderExtentsBottom: 0,
+		
 		init: function(/*Object?*/params){
 			// summary:
 			//		Initialize according to the given params.
@@ -302,9 +305,9 @@ define([
 					this.domNode.style.height = "0px";
 					var	parentRect = parent.getBoundingClientRect(),
 						scrollableRect = this.domNode.getBoundingClientRect(),
-						contentBottom = parentRect.bottom - this._appFooterHeight;
+						contentBottom = parentRect.bottom - this._appFooterHeight - this._parentPadBorderExtentsBottom;
 					if(scrollableRect.bottom >= contentBottom){ // use entire screen
-						dh = screenHeight - (scrollableRect.top - parentRect.top) - this._appFooterHeight;
+						dh = screenHeight - (scrollableRect.top - parentRect.top) - this._appFooterHeight - this._parentPadBorderExtentsBottom;
 					}else{ // stretch to fill predefined area
 						dh = contentBottom - scrollableRect.bottom;
 					}

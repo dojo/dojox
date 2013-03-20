@@ -56,8 +56,8 @@ define([
 			domClass.remove(domNode, ["mblTooltipAfter","mblTooltipBefore","mblTooltipBelow","mblTooltipAbove"]);
 			array.forEach(registry.findWidgets(domNode), function(widget){
 				if(widget.height == "auto" && typeof widget.resize == "function"){
-					if(!widget.fixedFooterHeight){
-						widget.fixedFooterHeight = domGeometry.getPadBorderExtents(domNode).b;
+					if(!widget._parentPadBorderExtentsBottom){
+						widget._parentPadBorderExtentsBottom = domGeometry.getPadBorderExtents(domNode).b;
 					}
 					widget.resize();
 				}
