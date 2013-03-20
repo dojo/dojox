@@ -125,7 +125,7 @@ define([
 				}, this.domNode);
 			}
 
-			if (this.labelDivNode){
+			if(this.labelDivNode){
 				domAttr.set(this.labelDivNode, "role", "heading"); //a11y
 				domAttr.set(this.labelDivNode, "aria-level", "1");
 			}
