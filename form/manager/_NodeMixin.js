@@ -75,7 +75,7 @@ define([
 		getObserversFromNode = function(name){
 			var observers = {};
 			aa(function(_, n){
-				var o = domAttr.get(n, "data-dojo-observer" || "observer");
+				var o = domAttr.get(n, "data-dojo-observer") || domAttr.get(n, "observer");
 				if(o && typeof o == "string"){
 					array.forEach(o.split(","), function(o){
 						o = lang.trim(o);
