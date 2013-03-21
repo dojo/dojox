@@ -665,9 +665,9 @@ define([
 			//		This function stops the scrolling animation that is currently
 			//		running. It is called when the user touches the screen while
 			//		scrolling.
+			this._aborted = true;
 			this.scrollTo(this.getPos());
 			this.stopAnimation();
-			this._aborted = true;
 		},
 
 		stopAnimation: function(){
@@ -762,21 +762,23 @@ define([
 			// scroll events
 			var scrollEvent, beforeTopHeight, afterBottomHeight;
 			var doScroll = true;
-			if(!this._dim){
-				this._dim = this.getDim();
+			if(!this._aborted && this._conn){ // No scroll event if the call to scrollTo comes from abort or onTouchEnd
+				if(!this._dim){
+					this._dim = this.getDim();
+				}
+				beforeTopHeight = (to.y > 0)?to.y:0;
+				afterBottomHeight = (this._dim.o.h + to.y < 0)?-1 * (this._dim.o.h + to.y):0;
+				scrollEvent = {bubbles: false,
+						cancelable: false,
+						x: to.x,
+						y: to.y,
+						beforeTop: beforeTopHeight > 0,
+						beforeTopHeight: beforeTopHeight,
+						afterBottom: afterBottomHeight > 0,
+						afterBottomHeight: afterBottomHeight};
+				// before scroll event
+				doScroll = this.onBeforeScroll(scrollEvent);
 			}
-			beforeTopHeight = (to.y > 0)?to.y:0;
-			afterBottomHeight = (this._dim.o.h + to.y < 0)?-1 * (this._dim.o.h + to.y):0;
-			scrollEvent = {bubbles: false,
-					cancelable: false,
-					x: to.x,
-					y: to.y,
-					beforeTop: beforeTopHeight > 0,
-					beforeTopHeight: beforeTopHeight,
-					afterBottom: afterBottomHeight > 0,
-					afterBottomHeight: afterBottomHeight};
-			// before scroll event
-			doScroll = this.onBeforeScroll(scrollEvent);
 			
 			if(doScroll){
 				var s = (node || this.containerNode).style;
@@ -806,8 +808,10 @@ define([
 				if(!doNotMoveScrollBar){
 					this.scrollScrollBarTo(this.calcScrollBarPos(to));
 				}
-				// After scroll event
-				this.onAfterScroll(scrollEvent);
+				if(scrollEvent){
+					// After scroll event
+					this.onAfterScroll(scrollEvent);
+				}
 			}
 		},
 
