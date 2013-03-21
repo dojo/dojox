@@ -190,7 +190,10 @@ define([
 				this.resize();
 			}
 			var _this = this;
-			_this.defer(function(){
+			setTimeout(function(){ 
+				// Why not using widget.defer() instead of setTimeout()? Because this module
+				// is not always mixed into a widget (ex. dojox/mobile/_ComboBoxMenu), and adding 
+				// a check to call either defer or setTimeout has been considered overkill.
 				_this.flashScrollBar();
 			}, 600);
 			
@@ -370,9 +373,9 @@ define([
 			if(this._bounce){
 				var _this = this;
 				var bounce = _this._bounce;
-				_this.defer(function(){
+				setTimeout(function(){
 					_this.slideTo(bounce, 0.3, "ease-out");
-				});
+				}, 0);
 				_this._bounce = undefined;
 			}else{
 				this.hideScrollBar();
@@ -1133,11 +1136,11 @@ define([
 								transitionTimingFunction: easing
 							}));
 							var t = this.makeTranslateStr(to);
-							this.defer(function(){ // setTimeout (via defer) is needed to prevent webkitTransitionEnd not fired
+							setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
 								domStyle.set(node, css3.add({}, {
 									transform: t
 								}));
-							});
+							}, 0);
 							domClass.add(node, "mblScrollableScrollTo"+idx);
 						} else {
 							// transform not changed, just hide the scrollbar
@@ -1164,12 +1167,12 @@ define([
 						transitionDuration: duration + "s",
 						transitionTimingFunction: easing
 					}));
-					this.defer(function(){ // setTimeout (via defer) is needed to prevent webkitTransitionEnd not fired
+					setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
 						domStyle.set(node, {
 							top: (to.y || 0) + "px",
 							left: (to.x || 0) + "px"
 						});
-					});
+					}, 0);
 					domClass.add(node, "mblScrollableScrollTo"+idx);
 				}
 			}else if(dojo.fx && dojo.fx.easing && duration){
@@ -1254,7 +1257,7 @@ define([
 			if(this._dim.d.h <= 0){ return; } // dom is not ready
 			this.showScrollBar();
 			var _this = this;
-			_this.defer(function(){
+			setTimeout(function(){
 				_this.hideScrollBar();
 			}, 300);
 		},
