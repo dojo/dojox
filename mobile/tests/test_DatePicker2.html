@@ -11,10 +11,10 @@
 		data-dojo-config="async: true, parseOnLoad: false"></script>
 	
 	<script type="text/javascript">
-		var opener, updateDate, showDatePicker, onShow, onHide, datePicker2;
+		var opener, updateDate, showDatePicker, onShow, onHide, datePicker1, datePicker2;
 		onShow = function(){
 				// console.log("Set datePicker to current date: ", date.toISOString());
-				datePicker2.set("value", date.toISOString());
+				datePicker2.set("value", date);
 			};
 		onHide = function(node, v){
 				if(v){
@@ -22,13 +22,13 @@
 					// console.log("newDate: ", newDate);
 					node.value = newDate;
 					// set new Date
-					date = new Date(newDate);
+					date = newDate;
 				}
 		};
 		require(["dojo/ready","dojox/mobile/parser",
-			"dijit/registry", "dojox/mobile/DatePicker", "dojox/mobile/Opener",
+			"dijit/registry", "dojox/mobile/DatePicker", "dojo/date/stamp", "dojox/mobile/Opener", "dojox/mobile/compat",
 			"dojox/mobile/Heading", "dojox/mobile/ToolBarButton"], 
-	function(ready, parser, registry, DatePicker) {
+	function(ready, parser, registry, DatePicker, stamp) {
 		ready(function() {
 			parser.parse();
 					
@@ -41,15 +41,17 @@
 			datePicker2 = registry.byId("datePicker2");
 			opener = registry.byId("opener");
 			// initialize the globale Date variable as today
-			date = new Date();
-			// console.log("Initial date is: ", date.toISOString());
+			date = stamp.toISOString(new Date(), {selector: "date"});
+			// console.log("Initial date is: ", date);
 			
 			showDatePicker = function(toto) {
 				opener.show(toto, ['below-centered','above-centered','after','before']);
 			};
 			updateDate = function() {
 				// console.log("update date to new Date:", date);
-				date.setFullYear("2020");
+				var newDate = new Date(stamp.fromISOString(date));
+				newDate.setFullYear("2020");
+				date = stamp.toISOString(newDate, {selector: "date"});
 			}
 		});
 	});
