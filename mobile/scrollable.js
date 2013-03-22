@@ -674,7 +674,7 @@ define([
 			//		private
 			//		There are issues with Android > 3: No acceleration and no way to stop the scrolling.
 			//		This workaround improves the scrolling behaviour.
-			if(has("android") > 3){
+			if(has("android") >= 4.1){
 				var tmp = elt.style.display;
 				elt.style.display = "none";
 				elt.offsetHeight; // Accessing offsetHeight forces the rendering
