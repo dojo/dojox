@@ -39,4 +39,4 @@ define({ root:
 "tr": true,
 "zh": true,
 "zh-tw": true
-})
+});
