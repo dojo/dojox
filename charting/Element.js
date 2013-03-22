@@ -41,21 +41,30 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 				// since 1.7.x we need dispose shape otherwise there is a memoryleak
 				this.getGroup().removeShape();
 				var children = this.getGroup().children;
-				for(var i = 0; i < children.length;++i){
-					shape.dispose(children[i], true);
+				// starting with 1.9 the registry is optional and thus dispose is
+				if(shape.dispose){
+					for(var i = 0; i < children.length;++i){
+						shape.dispose(children[i], true);
+					}
 				}
 				if(this.getGroup().rawNode){
 					domConstruct.empty(this.getGroup().rawNode);
 				}
 				this.getGroup().clear();
-				shape.dispose(this.getGroup(), true);
+				// starting with 1.9 the registry is optional and thus dispose is
+				if(shape.dispose){
+					shape.dispose(this.getGroup(), true);
+				}
 				if(this.getGroup() != this.group){
 					// we do have an intermediary clipping group (see CartesianBase)
 					if(this.group.rawNode){
 						domConstruct.empty(this.group.rawNode);
 					}
 					this.group.clear();
-					shape.dispose(this.group, true);
+					// starting with 1.9 the registry is optional and thus dispose is
+					if(shape.dispose){
+						shape.dispose(this.group, true);
+					}
 				}
 				this.group = null;
 			}
@@ -80,8 +89,11 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 			if(this.group){
 				var bgnode;
 				var children = this.getGroup().children;
-				for(var i = 0; i < children.length;++i){
-					shape.dispose(children[i], true);
+				// starting with 1.9 the registry is optional and thus dispose is
+				if(shape.dispose){
+					for(var i = 0; i < children.length;++i){
+						shape.dispose(children[i], true);
+					}
 				}
 				if(this.getGroup().rawNode){
 					bgnode = this.getGroup().bgNode;

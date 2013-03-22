@@ -922,8 +922,11 @@ define(["../main", "dojo/_base/lang", "dojo/_base/array","dojo/_base/declare", "
 			func.forIn(this.axes, purge);
 			arr.forEach(this.stack,  purge);
 			var children = this.surface.children;
-			for(var i = 0; i < children.length;++i){
-				shape.dispose(children[i]);
+			// starting with 1.9 the registry is optional and thus dispose is
+			if(shape.dispose){
+				for(var i = 0; i < children.length;++i){
+					shape.dispose(children[i]);
+				}
 			}
 			if(this.chartTitle && this.chartTitle.tagName){
 				// destroy title if it is a DOM node
