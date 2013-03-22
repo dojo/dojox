@@ -196,6 +196,16 @@
 				[this.toUrl("dojox/mobile/themes/iphone/ipad.css")]
 			],
 			[
+				"MSIE 10",
+				"windows",
+				[]
+			],
+			[
+				"WindowsPhone",
+				"windows",
+				[]
+			],
+			[
 				"Custom",
 				"custom",
 				[]

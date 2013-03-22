@@ -8,6 +8,8 @@ clean("../blackberry");
 clean("../blackberry/dijit");
 clean("../holodark");
 clean("../holodark/dijit");
+clean("../windows");
+clean("../windows/dijit");
 clean("../custom");
 clean("../custom/dijit");
 

@@ -4,10 +4,13 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-attr",
 	"dojo/dom-construct",
+	"dojo/on",
+	"dojo/touch",
 	"dijit/registry",
 	"./Pane",
-	"./iconUtils"
-], function(declare, win, domClass, domAttr, domConstruct, registry, Pane, iconUtils){
+	"./iconUtils",
+	"./sniff"
+], function(declare, win, domClass, domAttr, domConstruct, on, touch, registry, Pane, iconUtils, has){
 	// module:
 	//		dojox/mobile/SimpleDialog
 
@@ -127,6 +130,11 @@ define([
 			}else{
 				this._cover[0].style.display = "";
 			}
+
+			if(has("windows-theme")) {
+				// Hack to prevent interaction with elements placed under cover div.
+				this.own(on(this._cover[0], touch.press, function() {}));
+			}
 		},
 
 		removeCover: function(){
@@ -161,6 +169,7 @@ define([
 			// summary:
 			//		Refreshes the layout of the dialog.
 			var n = this.domNode;
+			var h;
 			if(this.closeButton){
 				var b = this.closeButtonNode;
 				var s = Math.round(b.offsetHeight / 2);
@@ -168,13 +177,13 @@ define([
 				b.style.left = n.offsetWidth - s + "px";
 			}
 			if(this.top === "auto"){
-				var h = win.global.innerHeight || win.doc.documentElement.clientHeight;
+				h = win.global.innerHeight || win.doc.documentElement.clientHeight;
 				n.style.top = Math.round((h - n.offsetHeight) / 2) + "px";
 			}else{
 				n.style.top = this.top;
 			}
 			if(this.left === "auto"){
-				var h = win.global.innerWidth || win.doc.documentElement.clientWidth;
+				h = win.global.innerWidth || win.doc.documentElement.clientWidth;
 				n.style.left = Math.round((h - n.offsetWidth) / 2) + "px";
 			}else{
 				n.style.left = this.left;

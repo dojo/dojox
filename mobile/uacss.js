@@ -12,7 +12,8 @@ define([
 		has("ios") >= 6 ? "dj_ios6" : "",
 		has("ios") ? "dj_iphone" : "",	// TODO: remove for 2.0
 		has('ipod') ? "dj_ipod" : "",
-		has('ipad') ? "dj_ipad" : ""
+		has('ipad') ? "dj_ipad" : "",
+		has('ie') ? "dj_ie": ""
 	].join(" ").replace(/ +/g," "));
 	
 	/*=====

@@ -4,6 +4,7 @@ define([
 	"dojo/_base/connect",
 	"dojo/_base/lang",
 	"dojo/_base/window",
+	"dojo/_base/kernel",
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/ready",
@@ -11,7 +12,7 @@ define([
 	"dijit/registry",
 	"./sniff",
 	"./uacss" // (no direct references)
-], function(array, config, connect, lang, win, domClass, domConstruct, ready, touch, registry, has){
+], function(array, config, connect, lang, win, kernel, domClass, domConstruct, ready, touch, registry, has){
 
 	// module:
 	//		dojox/mobile/common
@@ -189,6 +190,62 @@ define([
 		win.global.open(url, target || "_blank");
 	};
 
+	dm._detectWindowsTheme = function(){
+		// summary:
+		//		Detects if the "windows" theme is used,
+		//		if it is used, set has("windows-theme") and
+		//		add the .windows_theme class on the document.
+
+		var setWindowsTheme = function(){
+			domClass.add(win.doc.documentElement, "windows_theme");
+			kernel.experimental("Dojo Mobile Windows theme", "Behavior and appearance of the Windows theme are experimental.");
+		};
+
+		// First see if the "windows-theme" feature has already been set explicitly
+		// in that case skip aut-detect
+		var windows = has("windows-theme");
+		if(windows !== undefined){
+			if(windows){
+				setWindowsTheme();
+			}
+			return;
+		}
+
+		// check css
+		var i, j;
+
+		var check = function(href){
+			// TODO: find a better regexp to match?
+			if(href && href.indexOf("/windows/") !== -1){
+				has.add("windows-theme", true);
+				setWindowsTheme();
+				return true;
+			}
+			return false;
+		};
+
+		// collect @import
+		var s = win.doc.styleSheets;
+		for(i = 0; i < s.length; i++){
+			if(s[i].href){ continue; }
+			var r = s[i].cssRules || s[i].imports;
+			if(!r){ continue; }
+			for(j = 0; j < r.length; j++){
+				if(check(r[j].href)){
+					return;
+				}
+			}
+		}
+
+		// collect <link>
+		var elems = win.doc.getElementsByTagName("link");
+		for(i = 0; i < elems.length; i++){
+			if(check(elems[i].href)){
+				return;
+			}
+		}
+	};
+
 	if(config["mblApplyPageStyles"] !== false){
 		domClass.add(win.doc.documentElement, "mobile");
 	}
@@ -212,6 +269,8 @@ define([
 	has.add('mblAndroid3Workaround', 
 			config["mblAndroid3Workaround"] !== false && has('android') >= 3, undefined, true);
 
+	dm._detectWindowsTheme();
+	
 	ready(function(){
 		dm.detectScreenSize(true);
 		domClass.add(win.body(), "mblBackground");

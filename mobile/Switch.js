@@ -13,7 +13,7 @@ define([
 	"dijit/_WidgetBase",
 	"./sniff", 
 	"./_maskUtils",
-	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"	
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"
 ], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, domAttr, touch, Contained, WidgetBase, has, maskUtils, BidiSwitch){
 
 	// module:
@@ -97,12 +97,29 @@ define([
 			}
 			domAttr.set(this.domNode, "role", "checkbox"); //a11y
 			domAttr.set(this.domNode, "aria-checked", (this.value === "on") ? "true" : "false"); //a11y
+
+			this.switchNode = this.domNode;
+
+			if(has("windows-theme")) {
+				var rootNode = domConstruct.create("div", {className: "mblSwitchContainer"});
+				this.labelNode = domConstruct.create("label", {"class": "mblSwitchLabel", "for": this.id}, rootNode);
+				rootNode.appendChild(this.domNode.cloneNode(true));
+				this.domNode = rootNode;
+				this.focusNode = rootNode.childNodes[1];
+				this.labelNode.innerHTML = (this.value=="off") ? this.rightLabel : this.leftLabel;
+				this.switchNode = this.domNode.childNodes[1];
+				var inner = this.inner = this.domNode.childNodes[1].firstChild;
+				this.left = inner.childNodes[0];
+				this.right = inner.childNodes[1];
+				this.knob = inner.childNodes[2];
+				this.input = inner.childNodes[3];
+			}
 		},
 
 		postCreate: function(){
-			this.connect(this.domNode, "onclick", "_onClick");
-			this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
-			this._startHandle = this.connect(this.domNode, touch.press, "onTouchStart");
+			this.connect(this.switchNode, "onclick", "_onClick");
+			this.connect(this.switchNode, "onkeydown", "_onClick"); // for desktop browsers
+			this._startHandle = this.connect(this.switchNode, touch.press, "onTouchStart");
 			this._initialValue = this.value; // for reset()
 		},
 
@@ -112,17 +129,17 @@ define([
 			this.right.style.display = "";
 			this.inner.style.left = "";
 			if(anim){
-				domClass.add(this.domNode, "mblSwitchAnimation");
+				domClass.add(this.switchNode, "mblSwitchAnimation");
 			}
-			domClass.remove(this.domNode, on ? "mblSwitchOff" : "mblSwitchOn");
-			domClass.add(this.domNode, on ? "mblSwitchOn" : "mblSwitchOff");
-			domAttr.set(this.domNode, "aria-checked", on ? "true" : "false"); //a11y
+			domClass.remove(this.switchNode, on ? "mblSwitchOff" : "mblSwitchOn");
+			domClass.add(this.switchNode, on ? "mblSwitchOn" : "mblSwitchOff");
+			domAttr.set(this.switchNode, "aria-checked", on ? "true" : "false"); //a11y
 
 			var _this = this;
 			_this.defer(function(){
 				_this.left.style.display = on ? "" : "none";
 				_this.right.style.display = !on ? "" : "none";
-				domClass.remove(_this.domNode, "mblSwitchAnimation");
+				domClass.remove(_this.switchNode, "mblSwitchAnimation");
 			}, anim ? 300 : 0);
 		},
 
@@ -132,17 +149,17 @@ define([
 				 delete this._timer;
 			}
 			if(this._hasMaskImage){ return; }
-			this._width = this.domNode.offsetWidth - this.knob.offsetWidth;
+			this._width = this.switchNode.offsetWidth - this.knob.offsetWidth;
 			this._hasMaskImage = true;
 			if(!(has("webkit")||has("svg"))){ return; }
 			var rDef = domStyle.get(this.left, "borderTopLeftRadius");
 			if(rDef == "0px"){ return; }
 			var rDefs = rDef.split(" ");
 			var rx = parseFloat(rDefs[0]), ry = (rDefs.length == 1) ? rx : parseFloat(rDefs[1]);
-			var w = this.domNode.offsetWidth, h = this.domNode.offsetHeight;
+			var w = this.switchNode.offsetWidth, h = this.switchNode.offsetHeight;
 			var id = (this.shape+"Mask"+w+h+rx+ry).replace(/\./,"_");
 			
-			maskUtils.createRoundMask(this.domNode, 0, 0, 0, 0, w, h, rx, ry, 1);
+			maskUtils.createRoundMask(this.switchNode, 0, 0, 0, 0, w, h, rx, ry, 1);
 		},
 		
 		_onClick: function(e){
@@ -175,6 +192,15 @@ define([
 					this.connect(this.inner, touch.move, "onTouchMove"),
 					this.connect(win.doc, touch.release, "onTouchEnd")
 				];
+
+				/* While moving the slider knob sometimes IE fires MSPointerCancel event. That prevents firing
+				MSPointerUP event (http://msdn.microsoft.com/ru-ru/library/ie/hh846776%28v=vs.85%29.aspx) so the
+				knob can be stuck in the middle of the switch. As a fix we handle MSPointerCancel event with the
+				same lintener as for MSPointerUp event.
+				*/
+				if(has("windows-theme")){
+					this._conn.push(this.connect(win.doc, "MSPointerCancel", "onTouchEnd"));
+				}
 			}
 			this.touchStartX = e.touches ? e.touches[0].pageX : e.clientX;
 			this.left.style.display = "";
@@ -228,6 +254,9 @@ define([
 			//		Stub function to connect to from your application.
 			// description:
 			//		Called when the state has been changed.
+			if (this.labelNode) {
+				this.labelNode.innerHTML = newState=='off' ? this.rightLabel : this.leftLabel;
+			}
 		},
 
 		_setValueAttr: function(/*String*/value){

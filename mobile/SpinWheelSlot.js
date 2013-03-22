@@ -2,7 +2,6 @@ define([
 	"dojo/_base/kernel",
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-class",
 	"dojo/dom-construct",
@@ -10,8 +9,10 @@ define([
 	"dijit/_WidgetBase",
 	"./scrollable",
 	"dojo/has", 
-	"dojo/has!dojo-bidi?dojox/mobile/bidi/SpinWheelSlot"	
-], function(dojo, array, declare, lang, win, domClass, domConstruct, Contained, WidgetBase, Scrollable, has, BidiSpinWheelSlot){
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/SpinWheelSlot",
+	"dojo/touch",
+	"dojo/on"
+], function(dojo, array, declare, win, domClass, domConstruct, Contained, WidgetBase, Scrollable, has, BidiSpinWheelSlot, touch, on){
 
 	// module:
 	//		dojox/mobile/SpinWheelSlot
@@ -129,6 +130,65 @@ define([
 				this.value = this.items[0][1];
 			}
 			this._initialValue = this.value;
+
+			if(has("windows-theme")){
+				var self = this,
+					containerNode = this.containerNode,
+					threshold = 5;
+
+				this.own(on(self.touchNode, touch.press, function(e){
+					var posY = e.pageY,
+						slots = self.getParent().getChildren();
+
+					for(var i = 0, ln = slots.length; i < ln; i++){
+						var container = slots[i].containerNode;
+
+						if(containerNode !== container){
+							domClass.remove(container, "mblSelectedSlot");
+							container.selected = false;
+						}else{
+							domClass.add(containerNode, "mblSelectedSlot");
+						}
+					}
+
+					var moveHandler = on(self.touchNode, touch.move, function(e){
+						if(Math.abs(e.pageY - posY) < threshold){
+							return;
+						}
+
+						moveHandler.remove();
+						releaseHandler.remove();
+						containerNode.selected = true;
+
+						var item = self.getCenterItem();
+
+						if(item){
+							domClass.remove(item, "mblSelectedSlotItem");
+						}
+					});
+
+					var releaseHandler = on(self.touchNode, touch.release, function(){
+						releaseHandler.remove();
+						moveHandler.remove();
+						containerNode.selected ?
+							domClass.remove(containerNode, "mblSelectedSlot") :
+							domClass.add(containerNode, "mblSelectedSlot");
+
+						containerNode.selected = !containerNode.selected;
+					});
+				}));
+
+				this.on("flickAnimationEnd", function(){
+						var item = self.getCenterItem();
+
+						if(self.previousCenterItem) {
+							domClass.remove(self.previousCenterItem, "mblSelectedSlotItem");
+						}
+
+						domClass.add(item, "mblSelectedSlotItem");
+						self.previousCenterItem = item;
+				});
+			}
 		},
 
 		startup: function(){
@@ -142,6 +202,12 @@ define([
 				this._itemHeight = items[0].offsetHeight;
 				this.adjust();
 				this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
+			}
+			if(has("windows-theme")){
+				this.previousCenterItem = this.getCenterItem();
+				if(this.previousCenterItem){
+					domClass.add(this.previousCenterItem, "mblSelectedSlotItem");
+				}
 			}
 		},
 

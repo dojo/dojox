@@ -2,9 +2,10 @@ define([
 	"dojo/_base/declare",
 	"dojo/dom-construct",
 	"dijit/form/_CheckBoxMixin",
-	"./ToggleButton"
+	"./ToggleButton",
+	"./sniff"
 ],
-	function(declare, domConstruct, CheckBoxMixin, ToggleButton){
+	function(declare, domConstruct, CheckBoxMixin, ToggleButton, has){
 
 	return declare("dojox.mobile.CheckBox", [ToggleButton, CheckBoxMixin], {
 		// summary:
@@ -29,6 +30,14 @@ define([
 			if(!this.templateString){
 				// if this widget is templated, let the template set the focusNode via an attach point
 				this.focusNode = this.domNode;
+			}
+
+			if(has("windows-theme")){
+				var rootNode = domConstruct.create("span", {className: "mblCheckableInputContainer"});
+				rootNode.appendChild(this.domNode.cloneNode());
+				this.labelNode = domConstruct.create("span", {className: "mblCheckableInputDecorator"}, rootNode);
+				this.domNode = rootNode;
+				this.focusNode = rootNode.firstChild;
 			}
 		},
 		

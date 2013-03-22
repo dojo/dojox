@@ -81,6 +81,10 @@ define([
 			if(!this._opened && !this._throttleHandler){
 				this._startSearchAll(); 
 			}
+
+			if(has("windows-theme")) {
+				this.domNode.blur();
+			}
 		},
 
 		onInput: function(e){
@@ -111,6 +115,14 @@ define([
 			this.inherited(arguments);
 			popup.close(this.dropDown);
 			this._opened = false;
+
+			// Remove disable attribute to make input element clickable after context menu closed
+			if(has("windows-theme") && this.domNode.disabled){
+				this.defer(function(){
+					this.domNode.removeAttribute("disabled");
+				}, 300);
+			}
+
 		},
 
 		openDropDown: function(){
@@ -192,7 +204,7 @@ define([
 				parent: this,
 				popup: dropDown,
 				around: aroundNode,
-				orient: this.dropDownPosition,
+				orient: has("windows-theme") ? ["above"] : this.dropDownPosition,
 				onExecute: function(){
 					self.closeDropDown();
 				},
@@ -268,6 +280,11 @@ define([
 						domStyle.set(wrapper, { left: parseInt(domStyle.get(wrapper, "left")) + deltaX - currentDeltaX + 'px', top: parseInt(domStyle.get(wrapper, "top")) + deltaY - currentDeltaY + 'px' });
 					}
 				}), 50); // yield a short time to allow for consolidation for better CPU throughput
+			}
+
+			// We need to disable input control in order to prevent opening the soft keyboard in IE
+			if(has("windows-theme")){
+				this.domNode.setAttribute("disabled", true);
 			}
 
 			return retVal;

@@ -12,6 +12,10 @@ define([
 		buildRendering: function(){
 			this.inherited(arguments);
 			this.domNode.className = "mblEdgeToEdgeCategory";
+
+			if(this.type && this.type == "long"){
+				this.domNode.className += " mblEdgeToEdgeCategoryLong";
+			}
 		}
 	});
 });
