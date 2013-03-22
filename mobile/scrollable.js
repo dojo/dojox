@@ -669,16 +669,31 @@ define([
 			this.scrollTo(this.getPos());
 			this.stopAnimation();
 		},
-
+		_forceRendering: function(elt){
+			// tags:
+			//		private
+			//		There are issues with Android > 3: No acceleration and no way to stop the scrolling.
+			//		This workaround improves the scrolling behaviour.
+			if(has("android") > 3){
+				var tmp = elt.style.display;
+				elt.style.display = "none";
+				elt.offsetHeight; // Accessing offsetHeight forces the rendering
+				elt.style.display = tmp;
+			}
+		},
 		stopAnimation: function(){
 			// summary:
 			//		Stops the currently running animation.
+
+			this._forceRendering(this.containerNode);
 			domClass.remove(this.containerNode, "mblScrollableScrollTo2");
 			if(this._scrollBarV){
 				this._scrollBarV.className = "";
+				this._forceRendering(this._scrollBarV);
 			}
 			if(this._scrollBarH){
 				this._scrollBarH.className = "";
+				this._forceRendering(this._scrollBarH);
 			}
 			if(this._useTransformTransition || this._useTopLeft){
 				this.containerNode.style[css3.name("transition")] = "";
