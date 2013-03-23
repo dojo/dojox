@@ -1,5 +1,6 @@
 define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel", "dojo/_base/sniff",
-	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix" /*===== , "./path" =====*/ ], 
+	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix"
+	],
 	function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
 
 	var shape = g.shape = {
@@ -8,50 +9,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 		//		Different graphics renderer implementation modules (svg, canvas, vml, silverlight, etc.) extend this
 		//		basic api to provide renderer-specific implementations for each shape.
 	};
-	
-	// a set of ids (keys=type)
-	var _ids = {};
-	// a simple set impl to map shape<->id
-	var registry = {};
-	
-	shape.register = function(/*dojox/gfx/shape.Shape*/s){
-		// summary:
-		//		Register the specified shape into the graphics registry.
-		// s: dojox/gfx/shape.Shape
-		//		The shape to register.
-		// returns: Number
-		//		The unique id associated with this shape.
-		
-		// the id pattern : type+number (ex: Rect0,Rect1,etc)
-		var t = s.declaredClass.split('.').pop();
-		var i = t in _ids ? ++_ids[t] : ((_ids[t] = 0));
-		var uid = t+i;
-		registry[uid] = s;
-		return uid;
-	};
-	
-	shape.byId = function(/*String*/id){
-		// summary:
-		//		Returns the shape that matches the specified id.
-		// id: String
-		//		The unique identifier for this Shape.
-		// returns: dojox/gfx/shape.Shape
-		return registry[id]; //dojox/gfx/shape.Shape
-	};
-	
-	shape.dispose = function(/*dojox/gfx/shape.Shape*/s, /*Boolean?*/recurse){
-		// summary:
-		//		Removes the specified shape from the registry.
-		// s: dojox/gfx/shape.Shape
-		//		The shape to unregister.
-		if(recurse && s.children){
-			for(var i=0; i< s.children.length; ++i){
-				shape.dispose(s.children[i], true);
-			}
-		}
-		delete registry[s.getUID()];
-	};
-	
+
 	shape.Shape = declare("dojox.gfx.shape.Shape", null, {
 		// summary:
 		//		a Shape object, which knows how to apply
@@ -106,10 +64,12 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// parentMatrix: dojox/gfx/matrix.Matrix2D
 			//		a transformation matrix inherited from the parent
 			this.parentMatrix = null;
-			
-			var uid = shape.register(this);
-			this.getUID = function(){
-				return uid;
+
+			if(has("gfxRegistry")){
+				var uid = shape.register(this);
+				this.getUID = function(){
+					return uid;
+				}
 			}
 		},
 		
@@ -117,7 +77,14 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// summary:
 			//		Releases all internal resources owned by this shape. Once this method has been called,
 			//		the instance is considered destroyed and should not be used anymore.
-			shape.dispose(this);
+			if(has("gfxRegistry")){
+				shape.dispose(this);
+			}
+			if(this.rawNode){
+				this.rawNode.__gfxObject__ = null;
+				delete this.rawNode.__gfxObject__;
+			}
+			this.rawNode = null;
 		},
 	
 		// trivial getters

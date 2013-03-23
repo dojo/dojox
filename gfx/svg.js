@@ -111,7 +111,6 @@ function(lang, has, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, path
 					if(clipNode){ clipNode.parentNode.removeChild(clipNode); }
 				}
 			}
-			this.rawNode = null;
 			gs.Shape.prototype.destroy.apply(this, arguments);
 		},
 
@@ -317,7 +316,7 @@ function(lang, has, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, path
 			r.setAttribute("stroke-miterlimit", 4);
 			// Bind GFX object with SVG node for ease of retrieval - that is to
 			// save code/performance to keep this association elsewhere
-			r.__gfxObject__ = this.getUID();
+			r.__gfxObject__ = this;
 		},
 
 		setShape: function(newShape){
@@ -435,7 +434,7 @@ function(lang, has, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, path
 			this.rawNode = rawNode;
 			// Bind GFX object with SVG node for ease of retrieval - that is to
 			// save code/performance to keep this association elsewhere
-			this.rawNode.__gfxObject__ = this.getUID();
+			this.rawNode.__gfxObject__ = this;
 		},
 		destroy: function(){
 			// summary:
@@ -529,7 +528,7 @@ function(lang, has, win, dom, declare, arr, domGeom, domAttr, Color, g, gs, path
 			_setAttributeNS(rawNode, svg.xmlns.xlink, "xlink:href", this.shape.src);
 			// Bind GFX object with SVG node for ease of retrieval - that is to
 			// save code/performance to keep this association elsewhere
-			rawNode.__gfxObject__ = this.getUID();
+			rawNode.__gfxObject__ = this;
 			return this;	// self
 		}
 	});
@@ -919,9 +918,9 @@ else
 		if (!event.gfxTarget) {
 			if (safMobile && event.target.wholeText) {
 				// Workaround iOS bug when touching text nodes
-				event.gfxTarget = gs.byId(event.target.parentElement.__gfxObject__);
+				event.gfxTarget = event.target.parentElement.__gfxObject__;
 			} else {
-				event.gfxTarget = gs.byId(event.target.__gfxObject__);
+				event.gfxTarget = event.target.__gfxObject__;
 			}
 		}
 		return true;

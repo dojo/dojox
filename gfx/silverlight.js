@@ -1,6 +1,6 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", 
 		"dojo/_base/array", "dojo/dom-geometry", "dojo/dom", "dojo/_base/sniff", 
-		"./_base", "./shape", "./path"], 
+		"./_base", "./shape", "./path", "./registry"],
   function(kernel,lang,declare,color,arr,domGeom,dom,has,g,gs,pathLib){
 	var sl = g.silverlight = {
 		// summary:
@@ -49,11 +49,6 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	sl.Shape = declare("dojox.gfx.silverlight.Shape", gs.Shape, {
 		// summary:
 		//		Silverlight-specific implementation of dojox/gfx/shape.Shape methods
-
-		destroy: function(){
-			this.rawNode = null;
-			gs.Shape.prototype.destroy.apply(this, arguments);
-		},
 
 		setFill: function(fill){
 			// summary:
@@ -224,7 +219,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			rawNode.fill = null;
 			rawNode.stroke = null;
 			this.rawNode = rawNode;
-			this.rawNode.tag = this.getUID();						
+			this.rawNode.tag = this.getUID();
 		},
 
 		// move family
@@ -322,7 +317,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// rawNode: Node
 			//		a Sliverlight node
 			this.rawNode = rawNode;
-			this.rawNode.tag = this.getUID();						
+			this.rawNode.tag = this.getUID();
 			
 		},
 		destroy: function(){
@@ -481,7 +476,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		shape. Once set, transforms, gradients, etc, can be applied.
 			//		(no fill & stroke by default)
 			this.rawNode = rawNode;
-			this.rawNode.tag = this.getUID();						
+			this.rawNode.tag = this.getUID();
 		}
 	});
 	sl.Image.nodeType = "Image";
@@ -556,7 +551,7 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			//		shape. Once set, transforms, gradients, etc, can be applied.
 			//		(no fill & stroke by default)
 			this.rawNode = rawNode;
-			this.rawNode.tag = this.getUID();						
+			this.rawNode.tag = this.getUID();
 		},
 		getTextWidth: function(){
 			// summary:
