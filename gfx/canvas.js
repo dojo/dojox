@@ -1,6 +1,6 @@
 define(["./_base", "dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/_base/window", "dojo/dom-geometry",
-		"dojo/dom", "./_base", "./shape", "./path", "./arc", "./matrix", "./decompose", "./bezierutils"],
-function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, decompose, bezierUtils ){
+		"dojo/dom", "./shape", "./path", "./arc", "./matrix", "./decompose", "./bezierutils"],
+function(g, lang, arr, declare, win, domGeom, dom, gs, pathLib, ga, m, decompose, bezierUtils ){
 	var canvas = g.canvas = {
 		// summary:
 		//		This the graphics rendering bridge for W3C Canvas compliant browsers.
@@ -677,7 +677,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 			// summary:
 			//		get the text width in pixels
 			var s = this.shape, w = 0, ctx;
-			if(s.text && s.text.length > 0){
+			if(s.text){
 				ctx = this.surface.rawNode.getContext("2d");
 				ctx.save();
 				this._renderTransform(ctx);
@@ -713,7 +713,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 			// ctx: Object
 			//		the drawing context.
 			var ta, s = this.shape;
-			if(!s.text || s.text.length == 0){
+			if(!s.text){
 				return;
 			}
 			// text align
@@ -738,6 +738,9 @@ function(g, lang, arr, declare, win, domGeom, dom, gfxBase, gs, pathLib, ga, m, 
 		canvas.Text.extend({
 			getTextWidth: function(){
 				return 0;
+			},
+			getBoundingBox: function(){
+				return null;
 			},
 			_renderShape: function(){
 			}

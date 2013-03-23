@@ -935,6 +935,13 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 				g.makeParameters(g.defaultFont, newFont);
 			this._setFont();
 			return this;	// self
+		},
+		getBoundingBox: function(){
+			var bbox = null, s = this.getShape();
+			if(s.text){
+				bbox = g._base._computeTextBoundingBox(this);
+			}
+			return bbox;
 		}
 	});
 	

@@ -557,6 +557,29 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 			// summary:
 			//		get the text width in pixels
 			return this.rawNode.actualWidth;
+		},
+		getBoundingBox: function(){
+			var bbox = null, text = this.getShape().text, r = this.rawNode, w = 0, h = 0;
+			if(!g._base._isRendered(this)){
+				return {x:0, y:0, width:0, height:0};
+			}
+			if(text){
+				try{
+					w = r.actualWidth;
+					h = r.actualHeight;
+				}catch(e){
+					// bail out if the node is hidden
+					return null;
+				}
+				var loc = g._base._computeTextLocation(this.getShape(), w, h, true);
+				bbox = {
+					x: loc.x,
+					y: loc.y,
+					width : w,
+					height: h
+				};
+			}
+			return bbox;
 		}
 	});
 	sl.Text.nodeType = "TextBlock";

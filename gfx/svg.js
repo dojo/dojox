@@ -586,6 +586,19 @@ else
 			}
 			oldParent.removeChild(_measurementNode);
 			return _width;
+		},
+		getBoundingBox: function(){
+			var s = this.getShape(), bbox = null;
+			if(s.text){
+				// try/catch the FF native getBBox error.
+				try {
+					bbox = this.rawNode.getBBox();
+				} catch (e) {
+					// under FF when the node is orphan (all other browsers return a 0ed bbox.
+					bbox = {x:0, y:0, width:0, height:0};
+				}
+			}
+			return bbox;
 		}
 	});
 	svg.Text.nodeType = "text";

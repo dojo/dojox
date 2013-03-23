@@ -7,6 +7,7 @@ try{
 	doh.registerUrl("GFX: Base", dojo.moduleUrl("dojox", "gfx/tests/test_base.html"), 3600000);
 	doh.registerUrl("GFX: Clean up", dojo.moduleUrl("dojox", "gfx/tests/test_lifecycle.html"), 3600000);
 	doh.registerUrl("GFX: Container bbox", dojo.moduleUrl("dojox", "gfx/tests/test_containerBBox.html"), 3600000);
+	doh.registerUrl("GFX: Text bbox", dojo.moduleUrl("dojox", "gfx/tests/test_textbbox.html"), 3600000);
 	doh.registerUrl("GFX: Batch API", dojo.moduleUrl("dojox", "gfx/tests/test_batch.html"), 3600000);
 }catch(e){
 	doh.debug(e);
