@@ -191,7 +191,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				cy: offsets.t + ry,
 				r: r
 			};
-			
+
 			for (i = this.series.length - 1; i >= 0; i--){
 				serieEntry = this.series[i];
 				if(!this.dirty && !serieEntry.dirty){
@@ -205,14 +205,14 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					//construct connect points
 					if(!outerPoints || outerPoints.length <= 0){
 						outerPoints = [], innerPoints = [], labelPoints = [];
-						this._buildPoints(outerPoints, len, circle, r, start, true);
-						this._buildPoints(innerPoints, len, circle, r*ro, start, true);
-						this._buildPoints(labelPoints, len, circle, labelR, start);
+						this._buildPoints(outerPoints, len, circle, r, start, true, dim);
+						this._buildPoints(innerPoints, len, circle, r*ro, start, true, dim);
+						this._buildPoints(labelPoints, len, circle, labelR, start, false, dim);
 						if(dv > 2){
 							divisionPoints = [], divisionRadius = [];
 							for (j = 0; j < dv - 2; j++){
 								divisionPoints[j] = [];
-								this._buildPoints(divisionPoints[j], len, circle, r*(ro + (1-ro)*(j+1)/(dv-1)), start, true);
+								this._buildPoints(divisionPoints[j], len, circle, r*(ro + (1-ro)*(j+1)/(dv-1)), start, true, dim);
 								divisionRadius[j] = r*(ro + (1-ro)*(j+1)/(dv-1));
 							}
 						}
@@ -287,7 +287,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 					end = start + 2 * Math.PI * k / len;
 				for (i = 0; i < dv; i++){
 					var text = min + distance*i/(dv-1);
-					point = this._getCoordinate(circle, r*(ro + (1-ro)*i/(dv-1)), end);
+					point = this._getCoordinate(circle, r*(ro + (1-ro)*i/(dv-1)), end, dim);
 					text = this._getLabel(text);
 					fontWidth = g._base._getTextBox(text, {font: axisTickFont}).w || 0;
 						render = this.opt.htmlLabels && g.renderer != "vml" ? "html" : "gfx";
@@ -315,7 +315,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 						max = data.max;
 						distance = max - min;
 						var entry = run[key], end = start + 2 * Math.PI * k / len;
-							point = this._getCoordinate(circle, r*(ro + (1-ro)*(entry-min)/distance), end);
+							point = this._getCoordinate(circle, r*(ro + (1-ro)*(entry-min)/distance), end, dim);
 						seriePoints.push(point);
 						tipData.push({sname: serieEntry.name, key: key, data: entry});
 						k++;
@@ -486,19 +486,23 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 			s.createPolyline([start, point2, point3]).setFill(stroke.color).setStroke(stroke);
 		},
 		
-		_buildPoints: function(points, count, circle, radius, angle, recursive){
+		_buildPoints: function(points, count, circle, radius, angle, recursive, dim){
 			for(var i = 0; i < count; i++){
 				var end = angle + 2 * Math.PI * i / count;
-				points.push(this._getCoordinate(circle, radius, end));
+				points.push(this._getCoordinate(circle, radius, end, dim));
 			}
 			if(recursive){
-				points.push(this._getCoordinate(circle, radius, angle + 2 * Math.PI));
+				points.push(this._getCoordinate(circle, radius, angle + 2 * Math.PI, dim));
 			}
 		},
 		
-		_getCoordinate: function(circle, radius, angle){
+		_getCoordinate: function(circle, radius, angle, dim){
+			var x = circle.cx + radius * Math.cos(angle);
+			if(has("dojo-bidi") && this.chart.isRightToLeft() && dim){
+				x = dim.width - x;
+			}
 			return {
-				x: circle.cx + radius * Math.cos(angle),
+				x: x,
 				y: circle.cy + radius * Math.sin(angle)
 			}
 		},

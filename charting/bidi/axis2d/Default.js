@@ -4,7 +4,7 @@ define(["dojo/_base/declare", "dojo/dom-style"],
 	//		dojox/charting/bidi/axis2d/Default			
 	return declare(null, {
 		labelTooltip: function(elem, chart, label, truncatedLabel, font, elemType){
-			// aditional preprocessing of the labels, needed for rtl base text direction in LTR 
+			// additional preprocessing of the labels, needed for rtl base text direction in LTR
 			// GUI, or for ltr base text direction for RTL GUI.
 
 			var isChartDirectionRtl = (domStyle.get(chart.node,"direction") == "rtl");
@@ -19,7 +19,7 @@ define(["dojo/_base/declare", "dojo/dom-style"],
 			this.inherited(arguments);
 		},
 		
-		_isRTL: function(){
+		_isRtl: function(){
 			return this.chart.isRightToLeft();
 		}
 	});

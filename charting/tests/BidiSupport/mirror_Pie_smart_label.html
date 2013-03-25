@@ -117,7 +117,7 @@
 				}]);
 				var anim_b = new dc.action2d.Highlight(pieChart, "default");
 				var anim_c = new dc.action2d.Tooltip(pieChart, "default");
-				pieChart.setDir("ltr");
+				pieChart.setDir("rtl");
 				pieChart.render();
 				legend = new dojox.charting.widget.Legend({
 					chart: pieChart,
@@ -149,6 +149,7 @@
 				}
 				newData.sort(function(v1,v2){return v2 - v1});
 				pieChart.updateSeries("Series A", newData);
+				pieChart.setDir("rtl");
 				pieChart.render();
 				legend.refresh();
 			}

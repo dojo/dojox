@@ -550,7 +550,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 			// returns: dojox/charting/axis2d/Default
 			//		The reference to the axis for functional chaining.
 			
-			var isRTL = this._isRTL();	// chart mirroring
+			var isRtl = this._isRtl();	// chart mirroring
 			if(!this.dirty || !this.scaler){
 				return this;	//	dojox/charting/axis2d/Default
 			}
@@ -662,7 +662,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 				titleOffset = size * cosr + (cachedLabelW || 0) * sinr + labelGap + Math.max(taMajorTick.length > 0?taMajorTick.length:0,
 																		 					 taMinorTick.length > 0?taMinorTick.length:0) +
 					tsize + taTitleGap;
-				axisVector = {x: isRTL ? -1 : 1, y: 0}; 	// chart mirroring
+				axisVector = {x: isRtl ? -1 : 1, y: 0}; 	// chart mirroring
 				labelOffset = {x: 0, y: 0};
 				tickVector = {x: 0, y: 1};
 				anchorOffset = {x: 0, y: labelGap};
@@ -780,7 +780,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 			var canLabel = this.opt.majorLabels;
 			arr.forEach(t.major, function(tick, i){
 				var offset = f(tick.value), elem,
-					x = (isRTL ? stop.x : start.x) + axisVector.x * offset, // chart mirroring
+					x = (isRtl ? stop.x : start.x) + axisVector.x * offset, // chart mirroring
 					y = start.y + axisVector.y * offset;
 				i += rel;
 				this.createLine(s, {
@@ -833,7 +833,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 			canLabel = this.opt.minorLabels && c.minMinorStep <= c.minor.tick * c.bounds.scale;
 			arr.forEach(t.minor, function(tick){
 				var offset = f(tick.value), elem,
-					x = (isRTL ? stop.x : start.x)  + axisVector.x * offset,
+					x = (isRtl ? stop.x : start.x)  + axisVector.x * offset,
 					y = start.y + axisVector.y * offset; // chart mirroring
 				this.createLine(s, {
 					x1: x, y1: y,
@@ -952,7 +952,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 				});
 			}
 		},
-		_isRTL: function(){
+		_isRtl: function(){
 			return false;
 		}
 	});

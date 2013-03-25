@@ -53,7 +53,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/has
 	});
 	=====*/
 
-	var CartesianBase = declare("dojox.charting.plot2d.CartesianBase", Base, {
+	return declare("dojox.charting.plot2d.CartesianBase", Base, {
 		baseParams: {
 			hAxis: 			"x",
 			vAxis: 			"y",
@@ -286,12 +286,4 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/has
 			return this;	//	dojox/charting/plot2d/CartesianBase
 		}
 	});
-	if(has("dojo-bidi")){
-		CartesianBase.extend({
-			_checkOrientation: function(group, dim, offsets){
-				this.chart.applyMirroring(this.group, dim, offsets);
-			}		
-		});
-	}
-	return CartesianBase;
 });
