@@ -195,6 +195,12 @@ define([
 		//		Detects if the "windows" theme is used,
 		//		if it is used, set has("windows-theme") and
 		//		add the .windows_theme class on the document.
+		
+		// Avoid unwanted (un)zoom on some WP8 devices (at least Nokia Lumia 920) 
+		if(navigator.userAgent.match(/IEMobile\/10\.0/)){
+			domConstruct.create("style", 
+				{innerHTML: "@-ms-viewport {width: auto !important}"}, win.doc.head);
+		}
 
 		var setWindowsTheme = function(){
 			domClass.add(win.doc.documentElement, "windows_theme");
