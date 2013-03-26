@@ -1,7 +1,6 @@
 define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel", "dojo/_base/sniff",
-	"dojo/_base/connect", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix"
-	],
-	function(g, lang, declare, kernel, has, events, arr, domConstruct, Color, matrixLib){
+	"dojo/on", "dojo/_base/array", "dojo/dom-construct", "dojo/_base/Color", "./matrix" ],
+	function(g, lang, declare, kernel, has, on, arr, domConstruct, Color, matrixLib){
 
 	var shape = g.shape = {
 		// summary:
@@ -431,6 +430,13 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	});
 	
 	shape._eventsProcessing = {
+		on: function(type, listener){
+			//	summary:
+			//		Connects an event to this shape.
+
+			return on(this.getEventSource(), type, shape.fixCallback(this, g.fixTarget, listener));
+		},
+
 		connect: function(name, object, method){
 			// summary:
 			//		connects a handler to an event on this shape
@@ -438,16 +444,19 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 			// redirect to fixCallback to normalize events and add the gfxTarget to the event. The latter
 			// is done by dojox/gfx.fixTarget which is defined by each renderer
-			return events.connect(this.getEventSource(), name, shape.fixCallback(this, g.fixTarget, object, method));
-			
+			if(name.substring(0, 2) == "on"){
+				name = name.substring(2);
+			}
+			return this.on(name, method ? lang.hitch(object, method) : object);
 		},
+
 		disconnect: function(token){
 			// summary:
 			//		connects a handler by token from an event on this shape
 			
 			// COULD BE RE-IMPLEMENTED BY THE RENDERER!
 	
-			events.disconnect(token);
+			return token.remove();
 		}
 	};
 	
@@ -659,7 +668,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			//		external references to make this object garbage-collectible
 			arr.forEach(this._nodes, domConstruct.destroy);
 			this._nodes = [];
-			arr.forEach(this._events, events.disconnect);
+			arr.forEach(this._events, function(h){ if(h){ h.remove(); } });
 			this._events = [];
 			this.rawNode = null;	// recycle it in _nodes, if it needs to be recycled
 			if(has("ie")){
@@ -710,8 +719,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			if(this.isLoaded){
 				f(this);
 			}else{
-				var h = events.connect(this, "onLoad", function(surface){
-					events.disconnect(h);
+				on.once(this, "load", function(surface){
 					f(surface);
 				});
 			}

@@ -249,6 +249,7 @@ function(g, lang, arr, declare, win, domGeom, dom, gs, pathLib, ga, m, decompose
 
 		// events are not implemented
 		getEventSource: function(){ return null; },
+		on:				function(){},
 		connect:		function(){},
 		disconnect:		function(){},
 
@@ -1175,7 +1176,8 @@ function(g, lang, arr, declare, win, domGeom, dom, gs, pathLib, ga, m, decompose
 		// events are not implemented
 		getEventSource: function(){ return null; },
 		connect:		function(){},
-		disconnect:		function(){}
+		disconnect:		function(){},
+		on:				function(){}
 	});
 
 	canvas.createSurface = function(parentNode, width, height){

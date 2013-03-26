@@ -1,7 +1,7 @@
 define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/Color", 
-		"dojo/_base/array", "dojo/dom-geometry", "dojo/dom", "dojo/_base/sniff", 
+		"dojo/on", "dojo/_base/array", "dojo/dom-geometry", "dojo/dom", "dojo/_base/sniff",
 		"./_base", "./shape", "./path", "./registry"],
-  function(kernel,lang,declare,color,arr,domGeom,dom,has,g,gs,pathLib){
+  function(kernel,lang,declare,color,on,arr,domGeom,dom,has,g,gs,pathLib){
 	var sl = g.silverlight = {
 		// summary:
 		//		This the graphics rendering bridge for the Microsoft Silverlight plugin.
@@ -938,26 +938,32 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 	
 	var eventsProcessing = {
 		connect: function(name, object, method){
-			if(name.indexOf("mouse") === 0){
-				name = "on" + name;
-			}
-			var token, n = name in eventNames ? eventNames[name] :
-				{name: name, fix: function(){ return {}; }};
-			if(arguments.length > 2){
-				token = this.getEventSource().addEventListener(n.name,
-					function(s, a){ lang.hitch(object, method)(n.fix(s, a)); });
-			}else{
-				token = this.getEventSource().addEventListener(n.name,
-					function(s, a){ object(n.fix(s, a)); });
-			}
-			return {name: n.name, token: token};
+			return this.on(name, method ? lang.hitch(object, method) : object);
 		},
-		disconnect: function(token){
-			try{
-				this.getEventSource().removeEventListener(token.name, token.token);
-			}catch(e){
-				// bail out if the node is hidden
+
+		on: function(name, listener){
+			if(typeof name === "string"){
+				if(name.indexOf("mouse") === 0){
+					name = "on" + name;
+				}
+				var token, n = name in eventNames ? eventNames[name] :
+					{name: name, fix: function(){ return {}; }};
+				token = this.getEventSource().addEventListener(n.name, function(s, a){ listener(n.fix(s, a)); });
+				return {
+					name: n.name,
+					token: token,
+					remove: lang.hitch(this, function(){
+						this.getEventSource().removeEventListener(n.name, token);
+					})
+				};
+			}else{
+				// pass this so that it gets back in this.on with the event name
+				return on(this, name, listener);
 			}
+		},
+
+		disconnect: function(token){
+			return token.remove();
 		}
 	};
 	
