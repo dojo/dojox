@@ -83,10 +83,10 @@
 				var switchRenderer = function(){
 					var select = dom.byId("selectGfx");
 					var r = select.options[select.selectedIndex].value;
+					if(surface){
+						surface.destroy();
+					}
 					require(["dojox/gfx/"+r], function(r){
-						if(surface){
-							surface.destroy();
-						}
 						gfx.switchTo(r);
 						buildScene();
 						dom.byId("noClip").value = clipped[0]._oldClip ? "Set clip" : "Remove clip";
