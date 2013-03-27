@@ -13,9 +13,11 @@
 
 	body {
 		background-color: #d7dce5;
-		/* Vertical stripes on webkit */
-		background-image: -webkit-gradient(linear, left top, right top, from(transparent), to(#d4d9e3), color-stop(0.70, transparent), color-stop(0.70, #d4d9e3));
-		background-size: 8px 8px;
+		&.mblIOS6Stripes {
+			/* Vertical stripes on webkit */
+			background-image: -webkit-gradient(linear, left top, right top, from(transparent), to(#d4d9e3), color-stop(0.70, transparent), color-stop(0.70, #d4d9e3));
+			background-size: 8px 8px;
+		}
 	}
 	
 	.mblColorDefault {

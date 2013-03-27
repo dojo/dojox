@@ -70,6 +70,8 @@ html.mobile,
 }
 .dj_ios6.dj_phone body {
   background-color: #d7dce5;
+}
+.dj_ios6.dj_phone body.mblIOS6Stripes {
   /* Vertical stripes on webkit */
 
   background-image: -webkit-gradient(linear, left top, right top, from(transparent), to(#d4d9e3), color-stop(0.7, transparent), color-stop(0.7, #d4d9e3));

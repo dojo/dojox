@@ -284,6 +284,7 @@ var tests = [
 	{ url: "test_phone-settings.html", tags: "misc" },
 	{ url: "test_tablet-settings.html", tags: "misc" },
 	{ url: "test_theme-switch.html", tags: "misc" },
+	{ url: "test_theme-iOS6.html", tags: "misc" },
 	{ url: "test_transition-animations-extended1.html", tags: "transition" },
 	{ url: "test_transition-animations-extended2.html", tags: "transition" },
 	{ url: "test_transition-animations-extended3.html", tags: "transition" },
