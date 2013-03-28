@@ -80,7 +80,7 @@ define([
 		_selEndMethod: "touch",
 		
 		// _moveTo: String
-		// id of destination view
+		//		id of destination view
 		_moveTo: "",
 
 		destroy: function(){
