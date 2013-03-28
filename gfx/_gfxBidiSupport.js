@@ -1,6 +1,6 @@
 define(["./_base", "dojo/_base/lang","dojo/_base/sniff", "dojo/dom", "dojo/_base/html", "dojo/_base/array",
-		"./utils", "./shape", "dojox/string/BidiEngine"], 
-function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
+		"./utils", "./shape", "./path", "dojox/string/BidiEngine"],
+function(g, lang, has, dom, html, arr, utils, shapeLib, pathLib, BidiEngine){
 	lang.getObject("dojox.gfx._gfxBidiSupport", true);
 
 	/*=====
@@ -181,7 +181,7 @@ function(g, lang, has, dom, html, arr, utils, shapeLib, BidiEngine){
 		}
 	});
 
-	lang.extend(g.TextPath, {          
+	lang.extend(g.TextPath, {
 		// textDir: String
 		//		Used for displaying bidi scripts in right layout.
 		//		Defines the base direction of text that displayed, can have 3 values:

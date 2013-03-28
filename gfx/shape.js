@@ -1076,12 +1076,8 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 	g.Ellipse  = shape.Ellipse;
 	g.Line     = shape.Line;
 	g.Polyline = shape.Polyline;
-	g.Path     = shape.Path;
 	g.Text     = shape.Text;
 	g.Surface  = shape.Surface;
-
-	g.Path = g.path.Path;
-	g.TextPath = g.path.TextPath;
 	=====*/
 
 	return shape;
