@@ -81,7 +81,7 @@ define([
 		getObserversFromWidget = function(name){
 			var observers = {};
 			aa(function(_, w){
-				var o = w.get("observer");
+				var o = w.get("data-dojo-observer") || w.get("observer");
 				if(o && typeof o == "string"){
 					array.forEach(o.split(","), function(o){
 						o = lang.trim(o);
