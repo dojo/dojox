@@ -79,7 +79,7 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/kernel",
 			if(has("gfxRegistry")){
 				shape.dispose(this);
 			}
-			if(this.rawNode){
+			if(this.rawNode && "__gfxObject__" in this.rawNode){
 				this.rawNode.__gfxObject__ = null;
 				delete this.rawNode.__gfxObject__;
 			}
