@@ -125,12 +125,6 @@ define([
 			}
 
 			var items = this.loop.resolve(context) || [];
-			for(i = items.length; i < this.pool.length; i++){
-				this.pool[i].unrender(context, buffer, this);
-			}
-			if(this.reversed){
-				items = items.slice(0).reverse();
-			}
 
 			var isObject = lang.isObject(items) && !lang.isArrayLike(items);
 			var arred = [];
@@ -140,6 +134,13 @@ define([
 				}
 			}else{
 				arred = items;
+			}
+
+			for(i = arred.length; i < this.pool.length; i++){
+				this.pool[i].unrender(context, buffer, this);
+			}
+			if(this.reversed){
+				arred = arred.slice(0).reverse();
 			}
 
 			var forloop = context.forloop = {
