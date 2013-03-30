@@ -97,6 +97,12 @@ define([
 					if(!this._object){
 						this._rendered[i] = buffer.addEvent(context, type, fn, args);
 					}else{
+						var resolved = fn; 
+						if(array.isArray(args)){ 
+							resolved = function(e){ 
+								this[fn].apply(this, [e].concat(args)); 
+							} 
+						} 
 						this._rendered[i] = connect.connect(this._object, type, context.getThis(), fn);
 					}
 				}
