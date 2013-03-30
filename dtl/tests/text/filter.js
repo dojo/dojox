@@ -594,17 +594,17 @@ doh.register("dojox.dtl.text.filter",
 			t.is(context.word, tpl.render(context));
 
 			tpl = new dd.Template('{{ word|truncatewords:"1" }}');
-			t.is("potted", tpl.render(context));
+			t.is("potted ...", tpl.render(context));
 
 			tpl = new dd.Template('{{ word|truncatewords:"2" }}');
-			t.is("potted meat", tpl.render(context));
+			t.is("potted meat ...", tpl.render(context));
 
 			tpl = new dd.Template('{{ word|truncatewords:20" }}');
 			t.is(context.word, tpl.render(context));
 
 			context.word = "potted \nmeat   \nwrites  a lot of tests";
 			tpl = new dd.Template('{{ word|truncatewords:"3" }}');
-			t.is("potted \nmeat   \nwrites", tpl.render(context));
+			t.is("potted \nmeat   \nwrites ...", tpl.render(context));
 		},
 		function test_filter_truncatewords_html(t){
 			var dd = dojox.dtl;

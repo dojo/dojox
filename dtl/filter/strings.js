@@ -198,7 +198,7 @@ define([
 					if(!dojox.dtl.filter.strings._truncatewords.test(current)){
 						++count;
 						if(count == arg){
-							return value.substring(0, j + 1);
+							return value.substring(0, j + 1) + ' ...';
 						}
 					}
 				}else if(!dojox.dtl.filter.strings._truncatewords.test(current)){
