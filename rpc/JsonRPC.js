@@ -1,4 +1,4 @@
-define("dojox/rpc/JsonRPC", ["dojo", "dojox", "dojox/rpc/Service"], function(dojo, dojox) {
+define("dojox/rpc/JsonRPC", ["dojo", "dojox", "dojox/rpc/Service", "dojo/errors/RequestError"], function(dojo, dojox, Service, RequestError) {
 
 	function jsonRpcEnvelope(version){
 		return {
