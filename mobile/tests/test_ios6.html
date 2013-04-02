@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <title>iOS6 showcase</title>
-<link href="../themes/common/domButtons/DomButtonGrayRoundRect.css" rel="stylesheet"/>
 <script type="text/javascript" src="../deviceTheme.js"></script>
 <script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 <script language="JavaScript" type="text/javascript">
@@ -22,8 +21,8 @@
 		"dojox/mobile/SpinWheelDatePicker",
 		"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
 	], function(registry) {
-		show = function(dlg){
-		    registry.byId(dlg).show();
+ 		show = function(dlg, node){
+		    registry.byId(dlg).show(node);
 		  };
 		  hide = function(dlg){
 		    registry.byId(dlg).hide();
@@ -83,7 +82,7 @@
 		  <li data-dojo-type="dojox.mobile.TabBarButton">Genius</li>
 		</ul>
 
-		<button data-dojo-type="dojox.mobile.Button" onclick="show('customPicker')">Show Opener</button>
+		<button data-dojo-type="dojox.mobile.Button" onclick="show('customPicker', this.domNode)">Show Opener</button>
 		<div id="customPicker" data-dojo-type="dojox.mobile.Opener">
 		      <h1 data-dojo-type="dojox.mobile.Heading" label="Custom Picker">
 		              <div data-dojo-type="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="width:45px;float:right;" onClick="hide('customPicker')"></div>

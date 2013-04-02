@@ -5,13 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <title>iOS6 showcase</title>
-<link href="dojox/mobile/themes/common/domButtons/DomButtonGrayRoundRect.css" rel="stylesheet"/>
 <script type="text/javascript" src="../deviceTheme.js"></script>
 <script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 <script language="JavaScript" type="text/javascript">
 	require([
 	 	"dijit/registry",
-	 	"dojo/sniff",
 	 	"dojox/mobile",				// This is a mobile app.
 		"dojox/mobile/ScrollableView",		// This mobile app uses mobile view
 		"dojox/mobile/Heading",
@@ -22,9 +20,9 @@
 		"dojox/mobile/Button",
 		"dojox/mobile/SpinWheelDatePicker",
 		"dojox/mobile/parser"		// This mobile app uses declarative programming with fast mobile parser
-	], function(registry, has) {
-		show = function(dlg){
-		    registry.byId(dlg).show();
+	], function(registry) {
+ 		show = function(dlg, node){
+		    registry.byId(dlg).show(node);
 		  };
 		  hide = function(dlg){
 		    registry.byId(dlg).hide();
@@ -32,7 +30,7 @@
 	});
 </script>
 </head>
-<body style="visibility:hidden;" class="mblIOS6Stripes">
+<body style="visibility:hidden;">
 	<div id="view1" data-dojo-type="dojox.mobile.ScrollableView">
 		<div data-dojo-type="dojox.mobile.Heading" data-dojo-props='back: "Back", label:"Settings"'>
 			<span data-dojo-type="dojox.mobile.ToolBarButton" style="float: right;">Edit</span>
@@ -84,7 +82,7 @@
 		  <li data-dojo-type="dojox.mobile.TabBarButton">Genius</li>
 		</ul>
 
-		<button data-dojo-type="dojox.mobile.Button" onclick="show('customPicker')">Show Opener</button>
+		<button data-dojo-type="dojox.mobile.Button" onclick="show('customPicker', this.domNode)">Show Opener</button>
 		<div id="customPicker" data-dojo-type="dojox.mobile.Opener">
 		      <h1 data-dojo-type="dojox.mobile.Heading" label="Custom Picker">
 		              <div data-dojo-type="dojox.mobile.ToolBarButton" label="Done" class="mblColorBlue" style="width:45px;float:right;" onClick="hide('customPicker')"></div>
