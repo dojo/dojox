@@ -222,6 +222,10 @@ define([
 				// retry applying the attributes for which the custom setter delays the actual 
 				// work until _isOnLine is true. 
 				this.set("checked", this._pendingChecked !== undefined ? this._pendingChecked : this.checked);
+				domAttr.set(this.domNode, "role", "option");
+				if(this._pendingChecked || this.checked){
+					domAttr.set(this.domNode, "aria-selected", "true");
+				}
 				// Not needed anymore (this code executes only once per life cycle):
 				delete this._pendingChecked; 
 			}
@@ -374,6 +378,7 @@ define([
 			if(opts.moveTo || opts.href || opts.url || this.clickable){
 				if(!this.noArrow && !(parent && parent.selectOne)){
 					c = this.arrowClass || "mblDomButtonArrow";
+					domAttr.set(this.domNode, "role", "button");
 				}
 			}
 			if(c){
@@ -471,7 +476,7 @@ define([
 			var parent = this.getParent();
 			if(parent && parent.select === "single" && checked){
 				array.forEach(parent.getChildren(), function(child){
-					child !== this && child.checked && child.set("checked", false);
+					child !== this && child.checked && child.set("checked", false) && domAttr.set(child.domNode, "aria-selected", "false");
 				}, this);
 			}
 			this._setRightIconAttr(this.checkClass || "mblDomButtonCheck");
@@ -486,6 +491,7 @@ define([
 				parent.onCheckStateChanged(this, checked);
 			}
 			this._set("checked", checked);
+			domAttr.set(this.domNode, "aria-selected", checked ? "true" : "false");
 		},
 
 		_setBusyAttr: function(/*Boolean*/busy){

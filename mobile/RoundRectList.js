@@ -5,10 +5,11 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/window",
 	"dojo/dom-construct",
+	"dojo/dom-attr",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase"
-], function(array, declare, event, lang, win, domConstruct, Contained, Container, WidgetBase){
+], function(array, declare, event, lang, win, domConstruct, domAttr, Contained, Container, WidgetBase){
 
 	// module:
 	//		dojox/mobile/RoundRectList
@@ -78,6 +79,12 @@ define([
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+			if(this.select){
+				domAttr.set(this.domNode, "role", "listbox");
+				if(this.select === "multiple"){
+					domAttr.set(this.domNode, "aria-multiselectable", "true");
+				}
+			}
 			this.inherited(arguments);
 		},
 
