@@ -10,9 +10,10 @@ define([
 	"dojo/dom-geometry",
 	"dojo/dom-style",
 	"dojo/touch",
+	"dojo/dom-attr",
 	"dijit/registry",
 	"./ListItem"
-], function(array, connect, declare, event, win, domClass, domGeometry, domStyle, touch, registry, ListItem){
+], function(array, connect, declare, event, win, domClass, domGeometry, domStyle, touch, domAttr, registry, ListItem){
 
 	// module:
 	//		dojox/mobile/EditableRoundRectList
@@ -48,6 +49,8 @@ define([
 				top: node.offsetTop + "px"
 			});
 			domClass.add(node, "mblListItemFloat");
+			domAttr.set(node, "aria-grabbed", "true");
+			domAttr.set(this.domNode, "aria-dropeffect", "move");
 		},
 
 		_resetMoveItem: function(/*DomNode*/node){
@@ -55,6 +58,8 @@ define([
 			//		private
 			this.defer(function(){ // iPhone needs setTimeout (via defer)
 				domClass.remove(node, "mblListItemFloat");
+				domAttr.remove(node, "aria-grabbed");
+				domAttr.remove(this.domNode, "aria-dropeffect");
 				domStyle.set(node, {
 					width: "",
 					top: ""
@@ -178,8 +183,15 @@ define([
 			array.forEach(this.getChildren(), function(child){
 				if(!child.deleteIconNode){
 					child.set("rightIcon", this.rightIconForEdit);
+					if(child.rightIconNode && child.rightIconNode.firstChild){
+						domAttr.set(child.rightIconNode.firstChild, "role", "button");
+						domAttr.set(child.rightIconNode.firstChild, "aria-grabbed", "false");
+					}
 					child.set("deleteIcon", this.deleteIconForEdit);
 					child.deleteIconNode.tabIndex = child.tabIndex;
+					if(child.deleteIconNode.firstChild){
+						domAttr.set(child.deleteIconNode.firstChild, "role", "button");
+					}
 				}
 				child.rightIconNode.style.display = "";
 				child.deleteIconNode.style.display = "";
