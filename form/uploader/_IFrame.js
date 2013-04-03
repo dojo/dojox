@@ -38,7 +38,7 @@ define([
 				form = this.getForm(),
 				url = this.getUrl(),
 				self = this;
-			
+			data = data || {};
 			data.uploadType = this.uploadType;
 			
 			// create a temp form for which to send data

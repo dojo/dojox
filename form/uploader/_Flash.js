@@ -134,6 +134,7 @@ define([
 			// tags:
 			//		private
 			this.onBegin(this.getFileList());
+			formData = formData || {};
 			formData.returnType = "F";
 			formData.uploadType = this.uploadType;
 			console.log('flas upload', formData);
