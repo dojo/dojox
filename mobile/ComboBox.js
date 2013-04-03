@@ -5,6 +5,7 @@ define([
 	"dojo/_base/window",
 	"dojo/dom-geometry",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dojo/window",
 	"dojo/touch",
 	"dijit/form/_AutoCompleterMixin",
@@ -12,7 +13,7 @@ define([
 	"./_ComboBoxMenu",
 	"./TextBox",
 	"./sniff"
-], function(kernel, declare, lang, win, domGeometry, domStyle, windowUtils, touch, AutoCompleterMixin, popup, ComboBoxMenu, TextBox, has){
+], function(kernel, declare, lang, win, domGeometry, domStyle, domAttr, windowUtils, touch, AutoCompleterMixin, popup, ComboBoxMenu, TextBox, has){
 	kernel.experimental("dojox.mobile.ComboBox"); // should be using a more native search-type UI
 
 	return declare("dojox.mobile.ComboBox", [TextBox, AutoCompleterMixin], {
@@ -113,6 +114,7 @@ define([
 				this.repositionTimer = this.endHandler = null;
 			}
 			this.inherited(arguments);
+			domAttr.remove(this.domNode, "aria-owns");
 			popup.close(this.dropDown);
 			this._opened = false;
 
@@ -139,6 +141,11 @@ define([
 				ddNode = dropDown.domNode,
 				aroundNode = this.domNode,
 				self = this;
+				
+			domAttr.set(dropDown.domNode, "role", "listbox");
+			if(dropDown.id){
+				domAttr.set(this.domNode, "aria-owns", dropDown.id);
+			}
 
 			if(has('touch')){
 				win.global.scrollBy(0, domGeometry.position(aroundNode, false).y); // don't call scrollIntoView since it messes up ScrollableView
@@ -293,6 +300,7 @@ define([
 		postCreate: function(){
 			this.inherited(arguments);
 			this.connect(this.domNode, "onclick", "_onClick");
+			domAttr.set(this.domNode, "role", "combobox");
 		},
 
 		destroy: function(){
