@@ -1,12 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 		<title>Demo GridContainer</title>
 
-		<style type="text/css" title="text/css">
+		<style title="text/css">
 			@import "../../../dojo/resources/dojo.css";
 			@import "../../../dijit/themes/tundra/tundra.css";
 			
@@ -46,47 +45,7 @@
 				margin: 10px !important;
 			}
 		</style>
-		
 		<link rel="stylesheet" href="../resources/GridContainer.css">
-		
-		<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true"></script>
-		<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
-		
-		<script type="text/javascript">
-			dojo.require("dojo.parser");
-			dojo.require("dijit.TitlePane");
-			dojo.require("dijit.layout.ContentPane");
-			dojo.require("dojox.layout.GridContainerLite");
-			dojo.require("dijit.Calendar");
-
-			var canDisplayPopup = true;
-			
-			function displayPopup(gridContainer) {
-				//	summary:
-				//		Display a popup when a widget can not be moved (not accepted type)
-
-				if(canDisplayPopup){
-					canDisplayPopup = false;
-					var popup = dojo.doc.createElement("div");
-					dojo.addClass(popup, "gridContainerPopup");
-					popup.innerHTML = "Impossible to move this widget ! ";
-					var attachPopup = dijit.byId("GC1").containerNode.appendChild(popup);
-					setTimeout(dojo.hitch(this, function(){
-						dijit.byId("GC1").containerNode.removeChild(attachPopup);
-						dojo.destroy(attachPopup);
-						canDisplayPopup = true;
-					}), 1500);
-				}
-			};
-
-			dojo.addOnLoad(function(){
-				dojo.subscribe("/dojox/layout/gridContainer/moveRestriction",displayPopup);
-			});
-	
-				
-
-		</script>
-
 	</head>
 
 	<body class="tundra">
@@ -99,24 +58,53 @@
 			</ul>
 		<h2>Grid Container (acceptTypes="ContentPane, Calendar", nbZones="3", isAutoOrganized="true", doLayout="false")</h2>
 			
-			<div id="GC1" dojoType="dojox.layout.GridContainerLite" 
+			<div id="GC1" data-dojo-type="dojox/layout/GridContainerLite" 
 				nbZones="3"
 				hasResizableColumns="false" 
 				doLayout="false" 
 				acceptTypes="ContentPane, Calendar">
-					<div dojoType="dijit.layout.ContentPane" class="cpane" label="Content Pane" dndType="ContentPane" >Content Pane n°1 !</div>
-					<div dojoType="dijit.TitlePane" title="Ergo" dndType="TitlePane" >
+					<div data-dojo-type="dijit/layout/ContentPane" class="cpane" label="Content Pane" dndType="ContentPane" >Content Pane n°1 !</div>
+					<div data-dojo-type="dijit/TitlePane" title="Ergo" dndType="TitlePane" >
 						Non ergo erunt homines deliciis diffluentes audiendi, si quando de amicitia, quam nec usu nec ratione habent cognitam, disputabunt. Nam quis est, pro deorum fidem atque hominum! qui velit, ut neque diligat quemquam nec ipse ab ullo diligatur, circumfluere omnibus copiis atque in omnium rerum abundantia vivere? Haec enim est tyrannorum vita nimirum, in qua nulla fides, nulla caritas, nulla stabilis benevolentiae potest esse fiducia, omnia semper suspecta atque sollicita, nullus locus amicitiae.
 					</div>
-					<div dojoType="dijit.layout.ContentPane" class="cpane" label="Content Pane" dndType="ContentPane">Content Pane n°2 !</div>
-			  		<div dojoType="dijit.layout.ContentPane" title="Intellectum" dndType="ContentPane">
+					<div data-dojo-type="dijit/layout/ContentPane" class="cpane" label="Content Pane" dndType="ContentPane">Content Pane n°2 !</div>
+			  		<div data-dojo-type="dijit/layout/ContentPane" title="Intellectum" dndType="ContentPane">
 			  			Intellectum est enim mihi quidem in multis, et maxime in me ipso, sed paulo ante in omnibus, cum M. Marcellum senatui reique publicae concessisti, commemoratis praesertim offensionibus, te auctoritatem huius ordinis dignitatemque rei publicae tuis vel doloribus vel suspicionibus anteferre. Ille quidem fructum omnis ante actae vitae hodierno die maximum cepit, cum summo consensu senatus, tum iudicio tuo gravissimo et maximo. Ex quo profecto intellegis quanta in dato beneficio sit laus, cum in accepto sit tanta gloria.
 			  		</div>
 			  		
-					<div dojoType="dijit.layout.ContentPane" class="cpane" label="Content Pane" dndType="ContentPane">Content Pane n°3 !</div>
-					<div dojoType="dijit.layout.ContentPane" class="cpane" label="Content Pane" dndType="ContentPane">Content Pane n°4 !</div>
-					<div dojoType="dijit.Calendar" dndType="Calendar"></div>
+					<div data-dojo-type="dijit/layout/ContentPane" class="cpane" label="Content Pane" dndType="ContentPane">Content Pane n°3 !</div>
+					<div data-dojo-type="dijit/layout/ContentPane" class="cpane" label="Content Pane" dndType="ContentPane">Content Pane n°4 !</div>
+					<div data-dojo-type="dijit/Calendar" dndType="Calendar"></div>
 			</div>
-		
+			<div id="foo"></div>
+    		<script src="../../../dojo/dojo.js" data-dojo-config="isDebug: true, parseOnLoad: true, async: 1"></script>
+    		<script src="../../../dijit/tests/_testCommon.js"></script>
+
+    		<script>
+    		    require(["dojo/parser", "dojo/topic", "dojo/dom-class", "dojo/dom-construct", "dojo/_base/lang", "dijit/registry", "dojox/layout/GridContainerLite","dijit/TitlePane", "dijit/layout/ContentPane", "dijit/Calendar", "dojo/domReady!"],
+    		    function(parser, topic, domClass, domConstruct, lang, registry, GridContainerLite){
+        			var fooWidget = new GridContainerLite({}, "foo");
+        			var canDisplayPopup = true;
+
+        			function displayPopup(gridContainer) {
+        				//	summary:
+        				//		Display a popup when a widget can not be moved (not accepted type)
+
+        				if(canDisplayPopup){
+        					canDisplayPopup = false;
+        					var popup = document.createElement("div");
+        					domClass(popup, "gridContainerPopup");
+        					popup.innerHTML = "Impossible to move this widget ! ";
+        					var attachPopup = registry.byId("GC1").containerNode.appendChild(popup);
+        					setTimeout(lang.hitch(this, function(){
+        						registry.byId("GC1").containerNode.removeChild(attachPopup);
+        						domConstruct.destroy(attachPopup);
+        						canDisplayPopup = true;
+        					}), 1500);
+        				}
+        			};
+        			topic.subscribe("/dojox/layout/gridContainer/moveRestriction",displayPopup);
+    		    });
+    		</script>
 	</body>
 </html>
