@@ -196,6 +196,14 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 		return id;
 	};
 
+	// IE10
+
+	b._fixMsTouchAction = function(/*dojox/gfx/shape.Surface*/surface){
+		var r = surface.rawNode;
+		if (typeof r.style.msTouchAction != 'undefined')
+			r.style.msTouchAction = "none";
+	};
+
 	/*=====
 	g.Stroke = {
 		// summary:

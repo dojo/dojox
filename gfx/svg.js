@@ -787,6 +787,8 @@ else
 		s._parent = dom.byId(parentNode);
 		s._parent.appendChild(s.rawNode);
 
+		g._base._fixMsTouchAction(s);
+
 		return s;	// dojox/gfx.Surface
 	};
 
