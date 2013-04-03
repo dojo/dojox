@@ -194,7 +194,8 @@ define([
 					back: !this.moveTo,
 					href: this.href,
 					transition: this.transition,
-					transitionDir: -1
+					transitionDir: -1,
+					dir: this.isLeftToRight() ? "ltr" : "rtl"
 				});
 				this.backButton.placeAt(this.domNode, "first");
 			}else{

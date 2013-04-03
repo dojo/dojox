@@ -53,7 +53,7 @@ define([
 			// however for that dynamic set/get of the dir property must be supported first
 			// that is why for now as a workaround we keep the code here
 			if(has("dojo-bidi") && typeof props["dir"] == "undefined"){
-				props["dir"] = this.isLeftToRight()?"ltr":"rlt";
+				props["dir"] = this.isLeftToRight() ? "ltr" : "rtl";
 			}
 			for(var name in item){
 				props[(this.itemMap && this.itemMap[name]) || name] = item[name];

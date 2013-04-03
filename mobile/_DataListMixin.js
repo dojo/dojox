@@ -59,7 +59,7 @@ define([
 			// however for that dynamic set/get of the dir property must be supported first
 			// that is why for now as a workaround we keep the code here
 			if(has("dojo-bidi") && typeof attr["dir"] == "undefined"){
-				attr["dir"] = this.isLeftToRight()?"ltr":"rlt";
+				attr["dir"] = this.isLeftToRight() ? "ltr" : "rtl";
 			}
 			var w = new this.itemRenderer(attr);
 			item._widgetId = w.id;

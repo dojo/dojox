@@ -23,10 +23,6 @@ define([
 			this.inherited(arguments);
 			this.backButton.labelNode.innerHTML = common.enforceTextDirWithUcc(this.backButton.labelNode.innerHTML, this.textDir);
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML;
-			// dojox.mobile mirroring support
-			if(!this.backButton.dir){
-				this.backButton.dir = (this.isLeftToRight() ? "ltr" : "rtl");
-			}
 		}, 
 
 		_setTextDirAttr: function( textDir){
