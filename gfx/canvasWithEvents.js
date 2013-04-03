@@ -337,7 +337,15 @@ function(lang, declare, has, on, aspect, touch, Color, dom, domGeom, win, g, can
 						var changedTouch = event.changedTouches[0];
 						for(k in changedTouch){
 							if(!event[k]){
-								event[k] = changedTouch[k];
+								if(has("dom-mutableEvents")){
+									Object.defineProperty(event, k, {
+										value: changedTouch[k],
+										configurable: true,
+										enumerable: true
+									});
+								}else{
+									event[k] = changedTouch[k];
+								}
 							}
 						}
 					}
@@ -516,8 +524,7 @@ function(lang, declare, has, on, aspect, touch, Color, dom, domGeom, win, g, can
 		surface._parent = parent;
 		surface.surface = surface;
 
-		if (typeof canvas.style.msTouchAction != 'undefined')
-			canvas.style.msTouchAction = "none";
+		g._base._fixMsTouchAction(surface);
 
 		// any event handler added to the canvas needs to have its target fixed.
 		var oldAddEventListener = canvas.addEventListener,
