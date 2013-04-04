@@ -129,7 +129,6 @@ define([
 					this.title = "&nbsp;";
 				}
 				this.piw = new PageIndicator();
-				domStyle.set(this.piw, "float", "right"); // workaround for webkit rendering problem
 				this.headerNode.appendChild(this.piw.domNode);
 			}
 
