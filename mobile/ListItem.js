@@ -185,7 +185,6 @@ define([
 			}
 			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
 				this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
-				domAttr.set(this.domNode, "role", "button");
 			}else{
 				this._handleClick = false;
 			}
