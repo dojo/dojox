@@ -259,6 +259,3 @@ table.mblClose {
     transform: translate(40%, -70%) scale(0.01);
   }
 }
-.mblIconItemPane .dijitCalendarDayLabel {
-  color: white;
-}

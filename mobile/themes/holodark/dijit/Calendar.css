@@ -108,3 +108,6 @@
   color: white;
   font-size: 12px;
 }
+.mblIconItemPane .dijitCalendarDayLabel {
+  color: white;
+}
