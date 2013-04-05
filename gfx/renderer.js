@@ -9,6 +9,14 @@ define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "d
 	};
   =====*/
 	var currentRenderer = null;
+
+	has.add("vml", function(global, document, element){
+		element.innerHTML = "<v:shape adj=\"1\"/>";
+		var supported = ("adj" in element.firstChild);
+		element.innerHTML = "";
+		return supported;
+	});
+
 	return {
 		load: function(id, require, load){
 			if(currentRenderer && id != "force"){
@@ -29,7 +37,7 @@ define(["./_base","dojo/_base/lang", "dojo/_base/sniff", "dojo/_base/window", "d
 						}
 						break;
 					case "vml":
-						if(has("ie") <=8){
+						if(has("vml")){
 							renderer = "vml";
 						}
 						break;
