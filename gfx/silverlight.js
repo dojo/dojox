@@ -50,6 +50,16 @@ define(["dojo/_base/kernel", "dojo/_base/lang", "dojo/_base/declare", "dojo/_bas
 		// summary:
 		//		Silverlight-specific implementation of dojox/gfx/shape.Shape methods
 
+		destroy: function(){
+			// summary:
+			//		Releases all internal resources owned by this shape. Once this method has been called,
+			//		the instance is considered destroyed and should not be used anymore.
+			if(has("gfxRegistry")){
+				gs.dispose(this);
+			}
+			this.rawNode = null;
+		},
+
 		setFill: function(fill){
 			// summary:
 			//		sets a fill object (Silverlight)
