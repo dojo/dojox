@@ -25,6 +25,7 @@ define({ root:
 ,
 "zh": true,
 "zh-tw": true,
+"uk": true,
 "tr": true,
 "th": true,
 "sv": true,
@@ -52,5 +53,6 @@ define({ root:
 "da": true,
 "cs": true,
 "ca": true,
+"bg": true,
 "ar": true
 });

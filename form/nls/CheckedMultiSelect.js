@@ -8,6 +8,7 @@ define({ root:
 ,
 "zh": true,
 "zh-tw": true,
+"uk": true,
 "tr": true,
 "th": true,
 "sv": true,
@@ -33,5 +34,6 @@ define({ root:
 "de": true,
 "da": true,
 "cs": true,
-"ca": true
+"ca": true,
+"bg": true
 });
