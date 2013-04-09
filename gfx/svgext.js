@@ -188,9 +188,10 @@ define([
 
 			if(!filter){
 				this.rawNode.removeAttribute("filter");
+				this.filter = null;
 				return this;
 			}
-
+			this.filter = filter;
 			filter.id = filter.id || gfx._base._getUniqueId();
 			var filterNode = dom.byId(filter.id);
 			if(!filterNode){
@@ -212,6 +213,12 @@ define([
 			}
 			this.rawNode.setAttribute("filter", "url(#"+filter.id+")");
 			return this;
+		},
+
+		getFilter: function(){
+			// summary:
+			//		Gets the shape SVG Filter.
+			return this.filter;
 		}
 	});
 	return svgext;
