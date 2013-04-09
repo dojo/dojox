@@ -13,7 +13,7 @@ define("dojox/widget/MultiSelectCalendar", [
 
 dojo.experimental("dojox.widget.MultiSelectCalendar");
 
-dojo.declare(
+return dojo.declare(
 	"dojox.widget.MultiSelectCalendar",
 	[_Widget, _TemplatedMixin, _WidgetsInTemplateMixin, _CssStateMixin],
 	{
@@ -975,5 +975,4 @@ dojo.declare("dojox.widget._MonthDropDown", [_Widget, _TemplatedMixin, _WidgetsI
 	}
 });
 
-return dojox.widget.MultiSelectCalendar;
 });

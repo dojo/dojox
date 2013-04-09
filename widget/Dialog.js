@@ -5,7 +5,7 @@ define([
 
 	dojo.getObject('widget', true, dojox);
 	
-	dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple,
+	return dojo.declare('dojox.widget.Dialog', dojox.widget.DialogSimple,
 		{
 		// summary:
 		//		A Lightbox-like Modal-dialog for HTML Content
@@ -247,8 +247,5 @@ define([
 		}
 
 	});
-
-	return dojox.widget.Dialog;
-
 });
 
