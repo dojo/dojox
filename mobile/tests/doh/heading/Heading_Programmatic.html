@@ -49,7 +49,7 @@
 				childWidget.startup();
 				demoWidget.domNode.appendChild(dojo.doc.createTextNode("Alarm Clock"));
 
-				// Test case for #16275
+				// Test case for #16275 and #16991
 				demoWidget = new dojox.mobile.Heading();
 				dojo.doc.body.appendChild(demoWidget.containerNode);
 				
@@ -108,6 +108,27 @@
 							noError = false;
 						} 
 						doh.assertTrue(noError, "Setting busy to false before ever being set to true shouldn't throw an exception!");
+						
+						// Test case for #16991
+						demoWidget.set("moveTo", "view2");
+						demoWidget.set("href", "");
+						doh.assertFalse(demoWidget.backButton.get("back"), 
+							"heading.backButton.back should be false when moveTo is specified");
+						
+						demoWidget.set("moveTo", "");
+						demoWidget.set("href", "fragment2.html");
+						doh.assertFalse(demoWidget.backButton.get("back"), 
+							"heading.backButton.back should be false when href is specified");
+							
+						demoWidget.set("moveTo", "view2");
+						demoWidget.set("href", "fragment2.html");
+						doh.assertFalse(demoWidget.backButton.get("back"), 
+							"heading.backButton.back should be false when moveTo and href are specified");
+						
+						demoWidget.set("moveTo", "");
+						demoWidget.set("href", "");
+						doh.assertTrue(demoWidget.backButton.get("back"), 
+							"heading.backButton.back should be true when moveTo and href are NOT specified");
 					},
 					{
 						name: "test_Heading_Verification2",

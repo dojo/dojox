@@ -191,7 +191,7 @@ define([
 					arrow: "left",
 					label: back,
 					moveTo: this.moveTo,
-					back: !this.moveTo,
+					back: !this.moveTo && !this.href, // use browser history unless moveTo or href
 					href: this.href,
 					transition: this.transition,
 					transitionDir: -1,
@@ -210,6 +210,7 @@ define([
 			this._set("moveTo", moveTo);
 			if(this.backButton){
 				this.backButton.set("moveTo", moveTo);
+				this.backButton.set("back", !moveTo && !this.href);
 			}
 		},
 		
@@ -219,6 +220,7 @@ define([
 			this._set("href", href);
 			if(this.backButton){
 				this.backButton.set("href", href);
+				this.backButton.set("back", !this.moveTo && !href);
 			}
 		},
 		
