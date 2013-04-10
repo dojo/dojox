@@ -73,7 +73,7 @@ define([
 	}
 	=====*/
 
-	var filters = {}, defaultFilterBBox = {x:0, y:0, width:1, height:1}, lib = {};
+	var filters = {}, defaultFilterBBox = {x:"0%", y:"0%", width:"100%", height:"100%"}, lib = {};
 
 	//
 	// A minimal facade API to create primitives
@@ -545,16 +545,14 @@ define([
 			})
 		]),
 		createFilter({
-			_gfxName:"impressionist",
-			x:"0", y:"0", width:"1", height:"1"
+			_gfxName:"impressionist", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feMorphology({
 				"in":"SourceGraphic", operator:"dilate", radius:"2"
 			})
 		]),
 		createFilter({
-			_gfxName:"holes",
-			x:"0", y:"0", width:"1", height:"1"
+			_gfxName:"holes", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feTurbulence({
 				type:"fractalNoise", baseFrequency:"0.1", numOctaves:"1", result:"texture"
@@ -569,7 +567,7 @@ define([
 			})
 		]),
 		createFilter({
-			_gfxName:"holesComplement", x:"0", y:"0", width:"1", height:"1"
+			_gfxName:"holesComplement", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feTurbulence({
 				type:"fractalNoise", baseFrequency:"0.1", numOctaves:"1", result:"texture"
@@ -585,7 +583,7 @@ define([
 	
 	lib.reliefs = [
 		createFilter({
-			_gfxName:"bumpIn",x:"0",y:"0",width:"1",height:"1"
+			_gfxName:"bumpIn", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feColorMatrix({"in":"SourceGraphic", type:"luminanceToAlpha",result:"lumalpha"}),
 			filters.feComponentTransfer({
@@ -606,7 +604,7 @@ define([
 			filters.feComposite({ "in":"diffuse",in2:"specular",operator:"arithmetic",k2:"1.0",k3:"1.0"})
 		]),
 		createFilter({
-			_gfxName:"bumpOut", x:"0", y:"0", width:"1", height:"1"
+			_gfxName:"bumpOut", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feColorMatrix({ "in":"SourceGraphic", type:"luminanceToAlpha", result:"lumalpha"}),
 			filters.feDiffuseLighting({
@@ -667,7 +665,7 @@ define([
 	
 	lib.textures = [
 		createFilter({
-			_gfxName: "paper", x:"0", y:"0", width:"1", height:"1"
+			_gfxName: "paper", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feTurbulence({ type:"turbulence", baseFrequency:"0.01", numOctaves:"5",result:"texture"}),
 			filters.feDiffuseLighting({
@@ -678,7 +676,7 @@ define([
 			filters.feComposite({ "in":"diffuse", in2:"SourceGraphic", operator:"arithmetic", k1:"1", k2:"0", k3:"0", k4:"0"})
 		]),
 		createFilter({
-			_gfxName:"swirl",x:"0",y:"0",width:"1",height:"1"
+			_gfxName:"swirl", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feTurbulence({ type:"turbulence",baseFrequency:"0.05",numOctaves:"1",result:"texture"}),
 			filters.feDiffuseLighting({
@@ -689,7 +687,7 @@ define([
 			filters.feComposite({"in":"diffuse",in2:"SourceGraphic",operator:"arithmetic",k1:"1",k2:"0",k3:"0",k4:"0"})
 		]),
 		createFilter({
-			_gfxName:"swirl2",x:"0",y:"0",width:"1",height:"1"
+			_gfxName:"swirl2", x:"0%", y:"0%", width:"100%", height:"100%"
 		},[
 			filters.feTurbulence({ type:"turbulence",baseFrequency:"0.15",numOctaves:"1",result:"texture"}),
 			filters.feDiffuseLighting({
