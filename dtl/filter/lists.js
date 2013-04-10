@@ -148,7 +148,7 @@ define([
 			//		|		<li>Illinois</li>
 			//		|	</ul>
 			//		|	</li>
-			return dojox.dtl.filter.lists._unordered_list(value, 1);
+			return lists._unordered_list(value, 1);
 		}
 	});
 
