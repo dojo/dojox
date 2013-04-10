@@ -7,9 +7,14 @@ define([
 	"../_base"
 ], function(lang,array,Tokenize,Sprintf,htmlstrings,dd){
 
-	lang.getObject("dojox.dtl.filter.strings", true);
+	var strings = lang.getObject("filter.strings", true, dd);
+	/*=====
+	 strings = {
+	 	// TODO: summary
+	 };
+	 =====*/
 
-	lang.mixin(dd.filter.strings, {
+	lang.mixin(strings, {
 		_urlquote: function(/*String*/ url, /*String?*/ safe){
 			if(!safe){
 				safe = "/";
@@ -344,5 +349,6 @@ define([
 			return output.join("");
 		}
 	});
-	return dojox.dtl.filter.strings;
+
+	return strings;
 });

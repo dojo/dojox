@@ -5,9 +5,12 @@ define([
 	"dojo/_base/connect"
 ], function(lang,dd,array,connect){
 
-	lang.getObject("dojox.dtl.tag.loader", true);
-
-	var ddtl = dd.tag.loader;
+	var ddtl = lang.getObject("tag.loader", true, dd);
+	/*=====
+	 ddtl = {
+	 	// TODO: summary
+	 };
+	 =====*/
 
 	ddtl.BlockNode = lang.extend(function(name, nodelist){
 		this.name = name;
@@ -297,5 +300,6 @@ define([
 			return node;
 		}
 	});
-	return dojox.dtl.tag.loader;
+
+	return ddtl;
 });

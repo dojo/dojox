@@ -1067,5 +1067,6 @@ define([
 			return new dd.DomTemplate(ddh.getTemplate(loc));
 		}
 	});
-	return dojox.dtl.dom;
+
+	return ddh;
 });

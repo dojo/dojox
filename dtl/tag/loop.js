@@ -6,9 +6,12 @@ define([
 	"dojox/string/tokenize"
 ], function(lang,array,json,dd,Tokenize){
 
-	lang.getObject("dojox.dtl.tag.loop", true);
-
-	var ddtl = dd.tag.loop;
+	var ddtl = lang.getObject("tag.loop", true, dd);
+	/*=====
+	 ddtl = {
+	 	// TODO: summary
+	 };
+	 =====*/
 
 	ddtl.CycleNode = lang.extend(function(cyclevars, name, text, shared){
 		this.cyclevars = cyclevars;
@@ -195,5 +198,6 @@ define([
 			return new ddtl.RegroupNode(expression, key, alias);
 		}
 	});
-	return dojox.dtl.tag.loop;
+
+	return ddtl;
 });

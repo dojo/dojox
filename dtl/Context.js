@@ -2,7 +2,7 @@ define([
 	"dojo/_base/lang",
 	"./_base"
 ], function(lang,dd){
-	dd.Context = lang.extend(function(/*Object*/dict){
+	return dd.Context = lang.extend(function(/*Object*/dict){
 	 	// summary:
 	 	//		Represents a runtime context used by DTL templates.
 		this._this = {};
@@ -84,5 +84,4 @@ define([
 		return false;
 		}
 	});
-return dd.Context; 
 });

@@ -3,9 +3,14 @@ define([
 	"../_base"
 ], function(lang,dd){
 
-	lang.getObject("dojox.dtl.filter.lists", true);
+	var lists = lang.getObject("filter.lists", true, dd);
+	/*=====
+	 lists = {
+	 	// TODO: summary
+	 };
+	 =====*/
 
-	lang.mixin(dd.filter.lists, {
+	lang.mixin(lists, {
 		_dictsort: function(a, b){
 			if(a[0] == b[0]){
 				return 0;
@@ -146,5 +151,6 @@ define([
 			return dojox.dtl.filter.lists._unordered_list(value, 1);
 		}
 	});
-	return dojox.dtl.filter.lists;
+
+	return lists;
 });

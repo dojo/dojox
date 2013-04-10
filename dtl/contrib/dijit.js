@@ -9,8 +9,13 @@ define([
 	"dojo/_base/sniff"
 ], function(lang,connect,array,Query,dd,dxdom,Parser,has){
 
-	lang.getObject("dojox.dtl.contrib.dijit", true);
-	var ddcd = dd.contrib.dijit;
+	var ddcd = lang.getObject("contrib.dijit", true, dd);
+/*=====
+	ddcd = {
+		// TODO: summary
+	};
+=====*/
+
 	ddcd.AttachNode = lang.extend(function(keys, object){
 		this._keys = keys;
 		this._object = object;
@@ -232,5 +237,6 @@ define([
 	dd.register.tags("dojox.dtl.contrib", {
 		"dijit": ["attr:dojoType", "attr:data-dojo-type", "attr:dojoAttachPoint", "attr:data-dojo-attach-point", ["attr:attach", "dojoAttachPoint"], ["attr:attach", "data-dojo-attach-point"], "attr:dojoAttachEvent", "attr:data-dojo-attach-event", [/(attr:)?on(click|key(up))/i, "on"]]
 	});
-	return dojox.dtl.contrib.dijit;
+
+	return ddcd;
 });

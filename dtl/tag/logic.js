@@ -3,10 +3,14 @@ define([
 	"../_base"
 ], function(lang, dd){
 
-	lang.getObject("dojox.dtl.tag.logic", true);
+	var ddtl = lang.getObject("tag.logic", true, dd);
+	/*=====
+	 ddtl = {
+	 	// TODO: summary
+	 };
+	 =====*/
 
 	var ddt = dd.text;
-	var ddtl = dd.tag.logic;
 
 	ddtl.IfNode = lang.extend(function(bools, trues, falses, type){
 		this.bools = bools;
@@ -275,5 +279,6 @@ define([
 			return new ddtl.ForNode(loopvars, parts[parts.length + index + 1], reversed, nodelist);
 		}
 	});
-	return dojox.dtl.tag.logic;
+
+	return ddtl;
 });

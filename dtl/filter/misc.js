@@ -4,9 +4,14 @@ define([
 	"../_base"
 ], function(lang,json,dd){
 
-	lang.getObject("dojox.dtl.filter.misc", true);
+	var misc = lang.getObject("filter.misc", true, dd);
+	/*=====
+	 misc = {
+	 	// TODO: summary
+	 };
+	 =====*/
 
-	lang.mixin(dd.filter.misc, {
+	lang.mixin(misc, {
 		filesizeformat: function(value){
 			// summary:
 			//		Format the value like a 'human-readable' file size (i.e. 13 KB, 4.1 MB, 102bytes, etc).
@@ -62,5 +67,6 @@ define([
 			return json.toJson(value);
 		}
 	});
-	return dojox.dtl.filter.misc;
+
+	return misc;
 });
