@@ -276,9 +276,8 @@ define([
 				if(this._selEndMethod === "touch"){
 					this.set("selected", false);
 				}else if(this._selEndMethod === "timer"){
-					var _this = this;
 					this.defer(function(){
-						_this.set("selected", false);
+						this.set("selected", false);
 					}, this._duration);
 				}
 			}
@@ -334,7 +333,7 @@ define([
 			if(this._delayedSelection){
 				// so as not to make selection when the user flicks on ScrollableView
 				this._selTimer = this.defer(function(){
-					lang.hitch(this, function(){ this.set("selected", true); });
+					this.set("selected", true);
 				}, 100);
 			}else{
 				this.set("selected", true);
