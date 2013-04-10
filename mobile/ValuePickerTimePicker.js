@@ -9,8 +9,6 @@ define([
 
 	// module:
 	//		dojox/mobile/ValuePickerTimePicker
-	// summary:
-	//		A ValuePicker-based time picker widget.
 
 	return declare("dojox.mobile.ValuePickerTimePicker", [ValuePicker, TimePickerMixin], {
 		// summary:
@@ -31,17 +29,15 @@ define([
 		//		Otherwise, displayed in AM/PM mode.
 		is24h: false,
 
+		/*=====
 		// values: Array
 		//		The time value, as an array in 24h format: [hour24, minute] (ex. ["22","06"]).
 		//		Warning: Do not use this property directly, make sure to call set() or get() methods.
-		/*=====
 		values: null,
-		=====*/
 
 		// values12: Array
 		//		The time value, as an array in 12h format: [hour12, minute, ampm] (ex. ["10","06","PM"]).
 		//		Warning: Do not use this property directly, make sure to call set() or get() methods.
-		/*=====
 		values12: null,
 		=====*/
 		
@@ -145,7 +141,7 @@ define([
 			return [h + "", a[1]]; // [hour24, minute]
 		},
 
-		onBtnClick: function(e){
+		onBtnClick: function(){
 			// summary:
 			//		The handler for the AM/PM button.
 			var ampm = this.ampmButton.get("label") == "AM" ? "PM" : "AM";
@@ -210,7 +206,7 @@ define([
 		
 		_setBtnLabels: function(slotProps){
 		    slotProps[0].plusBtnLabel = this.hourPlusBtnLabel; 
-			slotProps[0].plusBtnLabelRef = this.hourPlusBtnLabelRef
+			slotProps[0].plusBtnLabelRef = this.hourPlusBtnLabelRef;
 			slotProps[0].minusBtnLabel = this.hourMinusBtnLabel;
 			slotProps[0].minusBtnLabelRef = this.hourMinusBtnLabelRef;
 			slotProps[1].plusBtnLabel = this.minutePlusBtnLabel;
