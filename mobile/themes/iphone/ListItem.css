@@ -120,3 +120,8 @@
   color: #385487;
   font-weight: normal;
 }
+.dj_ios6 .mblListItem {
+  /* enables hardware acc. to avoid flickering issues - see #16956 */
+
+  -webkit-perspective: 1000;
+}

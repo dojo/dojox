@@ -9,4 +9,9 @@
 		color: #385487;
 		font-weight: normal;
 	}
+	
+	.mblListItem {
+		/* enables hardware acc. to avoid flickering issues - see #16956 */
+		-webkit-perspective: 1000;
+	}
 }
