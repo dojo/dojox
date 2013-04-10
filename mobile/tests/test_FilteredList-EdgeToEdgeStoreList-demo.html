@@ -164,9 +164,9 @@
 	<div data-dojo-type="dojox/mobile/View">
 		<h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="fixed: 'top'">Filtered EdgeToEdgeStoreList</h1>
 		<input data-dojo-type="dojox/mobile/SearchBox" type="search" id="filterBox"
-			style="width:50%; float: left" class="mblFilteredEdgeToEdgeListSearchBox">
+			style="width:50%; float: left; margin-top: 2px" class="mblFilteredEdgeToEdgeListSearchBox">
 		<button style="float:right" onclick="showOptions('dlg_options')">Options</button>
-		<div data-dojo-type="dojox/mobile/ScrollableView">
+		<div style="clear:left" data-dojo-type="dojox/mobile/ScrollableView">
 			<ul data-dojo-type="dojox/mobile/EdgeToEdgeStoreList" id="list"
 				data-dojo-mixins="dojox/mobile/FilteredListMixin"
 				data-dojo-props="filterBoxRef: 'filterBox', placeHolder: 'Search', store: store"></ul>
