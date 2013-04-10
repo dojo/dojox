@@ -157,7 +157,7 @@ define([
 				"in":"SourceGraphic","order":5,"divisor":25,"kernelMatrix":"1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1"
 			})
 		]),
-		createFilter({_gfxName:"verticalEdges"}, [
+		createFilter({_gfxName:"verticalEdges", filterUnits:"objectBoundingBox"}, [
 			filters.feConvolveMatrix({
 				"in":"SourceGraphic","result":"kernel","order":3,"divisor":1,"kernelMatrix":"-1 0 1 -1 0 1 -1 0 1"
 			}),
@@ -167,7 +167,7 @@ define([
 				filters.feFuncA({"type":"table","tableValues":"1,1"})
 			])
 		]),
-		createFilter({_gfxName:"horizontalEdges"}, [
+		createFilter({_gfxName:"horizontalEdges", filterUnits:"objectBoundingBox"}, [
 			filters.feConvolveMatrix({
 				"in":"SourceGraphic","result":"kernel","order":3,"divisor":1,"kernelMatrix":"1 1 1 0 0 0 -1 -1 -1"
 			}),
@@ -177,7 +177,7 @@ define([
 				filters.feFuncA({"type":"table","tableValues":"1,1"})
 			])
 		]),
-		createFilter({_gfxName:"allEdges3"}, [
+		createFilter({_gfxName:"allEdges3", filterUnits:"objectBoundingBox"}, [
 			filters.feConvolveMatrix({
 				"in":"SourceGraphic","result":"kernel","order":3,"divisor":1,"kernelMatrix":"-1 -1 -1 -1 8 -1 -1 -1 -1"
 			}),
@@ -187,7 +187,7 @@ define([
 				filters.feFuncA({"type":"table","tableValues":"1,1"})
 			])
 		]),
-		createFilter({_gfxName: "edgeEnhance"}, [
+		createFilter({_gfxName: "edgeEnhance", filterUnits:"objectBoundingBox"}, [
 			filters.feConvolveMatrix({
 				"in": "SourceGraphic","result": "kernel","order": 3,"divisor": -1,"kernelMatrix": "0 1 0 1 -5 1 0 1 0"
 			}),
