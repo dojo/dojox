@@ -25,7 +25,6 @@ define([
 	//		- filters.convolutions.verticalEdges,
 	//		- filters.convolutions.horizontalEdges,
 	//		- filters.convolutions.allEdges3,
-	//		- filters.convolutions.allEdges5,
 	//		- filters.convolutions.edgeEnhance,
 	//		- filters.shadows.fastSmallDropShadow,
 	//		- filters.shadows.fastDropShadow,
@@ -181,17 +180,6 @@ define([
 		createFilter({_gfxName:"allEdges3"}, [
 			filters.feConvolveMatrix({
 				"in":"SourceGraphic","result":"kernel","order":3,"divisor":1,"kernelMatrix":"-1 -1 -1 -1 8 -1 -1 -1 -1"
-			}),
-			filters.feComponentTransfer({
-				"in":"kernel"
-			},[
-				filters.feFuncA({"type":"table","tableValues":"1,1"})
-			])
-		]),
-		createFilter({_gfxName:"allEdges5"}, [
-			filters.feConvolveMatrix({
-				"in":"SourceGraphic","result":"kernel","order":5,"divisor":1,
-				"kernelMatrix":"-3 -3 -3 -3 -3 -3 -1 -1 -1 -3 -1 -3 -1 57 -1 -3 -3 -1 -1 -1 -3 -3 -3 -3 -3 -3"
 			}),
 			filters.feComponentTransfer({
 				"in":"kernel"
