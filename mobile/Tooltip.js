@@ -25,6 +25,10 @@ define([
 			this.anchor = domConstruct.create("div", {"class":"mblTooltipAnchor"}, this.domNode, "first");
 			this.arrow = domConstruct.create("div", {"class":"mblTooltipArrow"}, this.anchor);
 			this.innerArrow = domConstruct.create("div", {"class":"mblTooltipInnerArrow"}, this.anchor);
+			if(!this.containerNode){
+				// set containerNode so that getChildren() works
+				this.containerNode = this.domNode;
+			}
 		},
 
 		show: function(/*DomNode*/ aroundNode, /*Array*/positions){

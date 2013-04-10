@@ -21,6 +21,7 @@ define([
      "./iconmenu/module",
      "./listitem/module",
      "./longlistmixin/module",
+     "./opener/module",
      "./pageindicator/module",
      "./progressindicator/module",
      "./radiobutton/module",

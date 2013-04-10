@@ -23,6 +23,14 @@ define([
 		//		The name of the CSS class of this widget.
 		baseClass: "mblOverlay mblOverlayHidden",
 
+		buildRendering: function(){
+			this.inherited(arguments);
+			if(!this.containerNode){
+				// set containerNode so that getChildren() works
+				this.containerNode = this.domNode;
+			}
+		},
+
 		_reposition: function(){
 			// summary:
 			//		Position the overlay at the bottom
