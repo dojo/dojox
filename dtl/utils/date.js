@@ -24,7 +24,7 @@ define([
 		N: function(){
 			// summary:
 			//		Month abbreviation in Associated Press style. Proprietary extension.
-			return dojox.dtl.utils.date._months_ap[this.date.getMonth()];
+			return date._months_ap[this.date.getMonth()];
 		},
 		P: function(){
 			// summary:
