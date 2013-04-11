@@ -303,6 +303,9 @@ return {
 					//		protected
 					dm.createRoundRect(this, true);
 					this.domNode.className = "mblRoundRectList";
+					if(has("ie") && has("dojo-bidi") && !this.isLeftToRight()){
+						this.domNode.className = "mblRoundRectList mblRoundRectListRtl"
+					}
 				},
 
 				postCreate: function(){
