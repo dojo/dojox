@@ -3,7 +3,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 	dojo.experimental("dojox.image.Lightbox");
 	dojo.getObject("image", true, dojox);
 
-	dojo.declare("dojox.image.Lightbox", dijit._Widget, {
+	var Lightbox = dojo.declare("dojox.image.Lightbox", dijit._Widget, {
 		// summary:
 		//		A dojo-based Lightbox implementation.
 		// description:
@@ -130,7 +130,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 
 	});
 
-	dojo.declare("dojox.image.LightboxDialog",
+	Lightbox.LightboxDialog = dojo.declare("dojox.image.LightboxDialog",
 		dijit.Dialog, {
 		// summary:
 		//		The "dialog" shared	 between any Lightbox instances on the page, publically available
@@ -620,9 +620,7 @@ define(["dojo", "dijit", "dojox", "dojo/text!./resources/Lightbox.html", "dijit/
 			}
 		}
 	});
-	
 
-	return dojox.image.Lightbox;
-
+	return Lightbox;
 });
 
