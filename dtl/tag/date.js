@@ -16,7 +16,7 @@ define([
 		this.format = new ddud.DateFormat(format);
 		this.contents = node;
 	};
-	lang.extend(dd.tag.date.NowNode, {
+	lang.extend(date.NowNode, {
 		render: function(context, buffer){
 			this.contents.set(this.format.format(new Date()));
 			return this.contents.render(context, buffer);
