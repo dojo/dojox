@@ -1,20 +1,22 @@
-dojo.provide("dojox.editor.plugins.SpellCheck");
-
-dojo.require("dijit._base.popup");
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.DropDownButton");
-dojo.require("dijit.TooltipDialog");
-dojo.require("dijit.form.MultiSelect");
-dojo.require("dojo.io.script");
-dojo.require("dijit.Menu");
-
-dojo.requireLocalization("dojox.editor.plugins", "SpellCheck");
+define([
+	"dojo",
+	"dijit",
+	"dojo/io/script",
+	"dijit/popup",
+	"dijit/_Widget",
+	"dijit/_Templated",
+	"dijit/_editor/_Plugin",
+	"dijit/form/TextBox",
+	"dijit/form/DropDownButton",
+	"dijit/TooltipDialog",
+	"dijit/form/MultiSelect",
+	"dijit/Menu",
+	"dojo/i18n!dojox/editor/plugins/nls/SpellCheck"
+], function(dojo, dijit, script, popup, _Widget, _Templated, _Plugin){
 
 dojo.experimental("dojox.editor.plugins.SpellCheck");
 
-dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._Templated], {
+var SpellCheckControl = dojo.declare("dojox.editor.plugins._spellCheckControl", [_Widget, _Templated], {
 	// summary:
 	//		The widget that is used for the UI of the batch spelling check
 
@@ -273,13 +275,12 @@ dojo.declare("dojox.editor.plugins._spellCheckControl", [dijit._Widget, dijit._T
 		//		Set the visibility of the progress icon
 		// tags:
 		//		private
-		var id = this.id + "_progressIcon",
-			cmd = show ? "removeClass" : "addClass";
-		dojo[cmd](id, "hidden");
+		var id = this.id + "_progressIcon";
+		dojo.toggleClass(id, "hidden", !show);
 	}
 });
 
-dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
+var SpellCheckScriptMultiPart = dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	// summary:
 	//		It is a base network service component. It transfers text to a remote service port
 	//		with cross domain ability enabled. It can split text into specified pieces and send
@@ -466,7 +467,7 @@ dojo.declare("dojox.editor.plugins._SpellCheckScriptMultiPart", null, {
 	}
 });
 
-dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
+var SpellCheck = dojo.declare("dojox.editor.plugins.SpellCheck", [_Plugin], {
 	// summary:
 	//		This plugin provides a spelling check capability for the editor.
 
@@ -577,7 +578,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 			strings = (this._strings = dojo.i18n.getLocalization("dojox.editor.plugins", "SpellCheck")),
 			dialogPane = (this._dialog = new dijit.TooltipDialog());
 
-		dialogPane.set("content", (this._dialogContent = new dojox.editor.plugins._spellCheckControl({
+		dialogPane.set("content", (this._dialogContent = new SpellCheckControl({
 			unfound: strings["unfound"],
 			skip: strings["skip"],
 			skipAll: strings["skipAll"],
@@ -607,7 +608,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 						}
 					}
 					if(this._opened){
-						dijit.popup.close(this.dropDown);
+						popup.close(this.dropDown);
 						if(focus){ this.focus(); }
 						this._opened = false;
 						this.state = "";
@@ -628,7 +629,7 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 		var comms = this.exArgs;
 
 		if(!this._service){
-			var service = (this._service = new dojox.editor.plugins._SpellCheckScriptMultiPart());
+			var service = (this._service = new SpellCheckScriptMultiPart());
 			service.serviceEndPoint = this.url;
 			service.maxBufferLength = this.bufferLength;
 			service.setWaitingTime(this.timeout);
@@ -1392,12 +1393,16 @@ dojo.declare("dojox.editor.plugins.SpellCheck", [dijit._editor._Plugin], {
 	}
 });
 
+// For monkey patching
+SpellCheck._SpellCheckControl = SpellCheckControl;
+SpellCheck._SpellCheckScriptMultiPart = SpellCheckScriptMultiPart;
+
 // Register this plugin.
 dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
 	if(name ===  "spellcheck"){
-		o.plugin = new dojox.editor.plugins.SpellCheck({
+		o.plugin = new SpellCheck({
 			url: ("url" in o.args) ? o.args.url : "",
 			interactive: ("interactive" in o.args) ? o.args.interactive : false,
 			bufferLength: ("bufferLength" in o.args) ? o.args.bufferLength: 100,
@@ -1405,4 +1410,8 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 			exArgs: o.args
 		});
 	}
+});
+
+return SpellCheck;
+
 });

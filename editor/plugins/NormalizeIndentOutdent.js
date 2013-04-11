@@ -6,7 +6,7 @@ define([
 	"dojo/_base/declare"
 ], function(dojo, dijit, dojox, _Plugin) {
 
-dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent", _Plugin, {
+var NormalizeIndentOutdent = dojo.declare("dojox.editor.plugins.NormalizeIndentOutdent", _Plugin, {
 	// summary:
 	//		This plugin provides improved indent and outdent handling to
 	//		the editor.  It tries to generate valid HTML, as well as be
@@ -854,7 +854,7 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	if(o.plugin){ return; }
 	var name = o.args.name.toLowerCase();
 	if(name === "normalizeindentoutdent"){
-		o.plugin = new dojox.editor.plugins.NormalizeIndentOutdent({
+		o.plugin = new NormalizeIndentOutdent({
 			indentBy: ("indentBy" in o.args) ?
 				(o.args.indentBy > 0 ? o.args.indentBy : 40) :
 				40,
@@ -865,6 +865,6 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	}
 });
 
-return dojox.editor.plugins.NormalizeIndentOutdent;
+return NormalizeIndentOutdent;
 
 });

@@ -20,7 +20,7 @@ define([
 	"dojo/i18n!dijit/nls/common"
 ], function(dojo, dijit, dojox, _Plugin ) {
 
-dojo.declare("dojox.editor.plugins.InsertAnchor", _Plugin, {
+var InsertAnchor = dojo.declare("dojox.editor.plugins.InsertAnchor", _Plugin, {
 	// summary:
 	//		This plugin provides the basis for an insert anchor dialog for the
 	//		dijit.Editor
@@ -422,10 +422,10 @@ dojo.subscribe(dijit._scopeName + ".Editor.getPlugin",null,function(o){
 	var name = o.args.name;
 	if(name) { name = name.toLowerCase(); }
 	if(name === "insertanchor"){
-		o.plugin = new dojox.editor.plugins.InsertAnchor();
+		o.plugin = new InsertAnchor();
 	}
 });
 
-return dojox.editor.plugins.InsertAnchor;
+return InsertAnchor;
 
 });
