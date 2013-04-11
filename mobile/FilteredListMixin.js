@@ -309,10 +309,12 @@ define([
 			// tags:
 			//		private
 			var store = this.store;
-			if(!store.hasOwnProperty("idProperty")){
+			if(!store.get || !store.query){ // if old store (dojo/data)
 				// Detect the old dojo/data stores (since the stores don't actually extend a common
-				// base class, we rely on the presence or absence of the "idProperty" property).
-				// TBD: to be removed when removing the support for lists backed by the old dojo/data 
+				// base class, there is no direct way to do this check. Hence we rely on the presence 
+				// or absence of these two properties of the new stores which are required for the
+				// list widgets).
+				// TODO: to be removed when removing the support for lists backed by the old dojo/data 
 				// (EdgeToEdgeDataStore, RoundRectDataList).
 				require(["dojo/store/DataStore"], lang.hitch(this, function(DataStore){
 					// wrap the dojo/data store into a dojo/store
