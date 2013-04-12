@@ -982,6 +982,13 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 						"Surface", "createSurface", "fixTarget"], function(name){
 					g[name] = ns[name];
 				});
+				if(typeof renderer == "string"){
+					g.renderer = renderer;
+				}else{
+					arr.some(["svg","vml","canvas","canvasWithEvents","silverlight"], function(r){
+						return (g.renderer = g[r] && g[r].Surface === g.Surface ? r : null);
+					});
+				}
 			}
 		}
 	});
