@@ -456,6 +456,13 @@ define([
 		},
 
 		resize: function(e){
+			// Correct internal variables & adjust slot panels
+			var items = this.panelNodes[1].childNodes;
+			if(items.length > 0){ // empty slot?
+				this._itemHeight = items[0].offsetHeight;
+				this.centerPos = this.getParent().centerPos;
+				this.adjust();
+			}
 			if(this._pendingValue){
 				this.set("value", this._pendingValue);
 			}
