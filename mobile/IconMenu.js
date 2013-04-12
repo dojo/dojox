@@ -4,12 +4,13 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-attr",
 	"dijit/_Contained",
 	"dijit/_Container",
 	"dijit/_WidgetBase",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/IconMenu",
 	"./IconMenuItem"
-], function(declare, has, domClass, domConstruct, domStyle, Contained, Container, WidgetBase, BidiIconMenu){
+], function(declare, has, domClass, domConstruct, domStyle, domAttr, Contained, Container, WidgetBase, BidiIconMenu){
 	// module:
 	//		dojox/mobile/IconMenu
 
@@ -57,6 +58,7 @@ define([
 
 		buildRendering: function(){
 			this.domNode = this.containerNode = this.srcNodeRef || domConstruct.create(this.tag);
+			domAttr.set(this.domNode, "role", "menu");
 			this.inherited(arguments);
 
 			if(this._createTerminator){

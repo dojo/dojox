@@ -63,6 +63,7 @@
   text-decoration: none;
   font-size: 10pt;
   color: #ffffff;
+  cursor: pointer;
 }
 .mblIconMenuItemTable {
   width: 100%;

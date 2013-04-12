@@ -3,9 +3,10 @@ define([
 	"dojo/_base/lang",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/dom-attr",
 	"./iconUtils",
 	"./_ItemBase"
-], function(declare, lang, domClass, domConstruct, iconUtils, ItemBase){
+], function(declare, lang, domClass, domConstruct, domAttr, iconUtils, ItemBase){
 	// module:
 	//		dojox/mobile/IconMenuItem
 
@@ -36,6 +37,8 @@ define([
 
 		buildRendering: function(){
 			this.domNode = this.srcNodeRef || domConstruct.create(this.tag);
+			domAttr.set(this.domNode, "role", "menuitemcheckbox");
+			domAttr.set(this.domNode, "aria-checked", "false");
 			this.inherited(arguments);
 			if(this.selected){
 				domClass.add(this.domNode, this.selColor);
@@ -50,10 +53,11 @@ define([
 
 			var a = this.anchorNode = this.containerNode = domConstruct.create("a", {
 				className: "mblIconMenuItemAnchor",
-				href: "javascript:void(0)"
+				role: "presentation"
 			});
 			var tbl = domConstruct.create("table", {
-				className: "mblIconMenuItemTable"
+				className: "mblIconMenuItemTable",
+				role: "presentation"
 			}, a);
 			var cell = this.iconParentNode = tbl.insertRow(-1).insertCell(-1);
 			this.iconNode = domConstruct.create("div", {
@@ -112,6 +116,7 @@ define([
 			//		private
 			this.inherited(arguments);
 			domClass.toggle(this.domNode, this.selColor, selected);
+			domAttr.set(this.domNode, "aria-checked", selected ? "true" : "false");
 		}
 	});
 });
