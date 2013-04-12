@@ -26,8 +26,9 @@ define([
 	"./ScrollableView",
 	"./Switch",
 	"./View",
+	"./Heading",
 	"require"
-], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domGeometry, domStyle, domAttr, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, ProgressIndicator, RoundRect, RoundRectList, ScrollableView, Switch, View, require){
+], function(array, config, connect, bfx, lang, has, win, domClass, domConstruct, domGeometry, domStyle, domAttr, fx, easing, ready, uacss, registry, xfx, flip, EdgeToEdgeList, IconContainer, ProgressIndicator, RoundRect, RoundRectList, ScrollableView, Switch, View, Heading, require){
 
 	// module:
 	//		dojox/mobile/compat
@@ -410,6 +411,20 @@ return {
 						marginBottom: "-2px",
 						fontSize: "1px"
 					});
+				}
+			});
+
+			// #13846: on IE<10, setSelectable(false) sets unselectable="on" on all children,
+			// which makes INPUT elements uneditable.
+			Heading._buildRendering = Heading.prototype.buildRendering;
+			lang.extend(Heading, {
+				buildRendering: function(){
+					Heading._buildRendering.apply(this);
+					var nodes = this.domNode.getElementsByTagName("INPUT"),
+						i = nodes.length;
+					while(i--){
+						nodes[i].removeAttribute("unselectable");
+					}
 				}
 			});
 		} // if	(has("ie"))
