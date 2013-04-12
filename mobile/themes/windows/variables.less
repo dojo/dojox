@@ -23,13 +23,23 @@
 @win-text-selection-color: black;
 @win-focused-background-color: #FFFFFF;
 
-@win-font-size-small: 10pt;
-@win-font-size-normal: 11pt;
-@win-font-size-medium: 15pt;
-@win-font-size-medium-large: 17pt;
-@win-font-size-large: 19pt;
-@win-font-size-extra-large: 24pt;
-@win-font-size-huge: 29pt;
+// Original WP font sizes
+//@win-font-size-small: 10pt;
+//@win-font-size-normal: 11pt;
+//@win-font-size-medium: 15pt;
+//@win-font-size-medium-large: 17pt;
+//@win-font-size-large: 19pt;
+//@win-font-size-extra-large: 24pt;
+//@win-font-size-huge: 29pt;
+
+// Reduced font-sizes
+@win-font-size-small: 8pt;
+@win-font-size-normal: 9pt;
+@win-font-size-medium: 10pt;
+@win-font-size-medium-large: 11pt;
+@win-font-size-large: 15pt;
+@win-font-size-extra-large: 17pt;
+@win-font-size-huge: 19pt;
 
 @imgDir: "images/@{win-theme}/";
 
@@ -168,6 +178,7 @@
 	font-weight: 400;
 	text-align: left;
 	font-size: @win-font-size-extra-large;
+	overflow: visible;
 }
 
 // ToolBarButton.less
@@ -854,7 +865,7 @@
 .dijitCalendar-thead-compat-gecko () {
 }
 .dijitCalendarMonthLabel-styles () {
-	color: black;
+	color: @win-foreground-color;
 	font-size: 16px;
 }
 .dijitCalendarMonthMenu-styles () {
@@ -874,7 +885,7 @@
 .dijitCalendarDayLabelTemplate-styles () {
 	background-color: #f6f6f6;
 	font-size: 12px;
-	color: black;
+	color: @win-bg-color !important;
 }
 .dijitCalendarDateTemplate-styles () {
 	border: none;
@@ -895,6 +906,7 @@
 }
 .dijitCalendarDateLabel-Selected-styles () {
 	color: black;
+	background-color: @win-accent-color;
 }
 .dijitCalendarDateLabel-Selected-compat () {
 	background-image: url(compat/calendar-datelabel-sel-bg.png);
@@ -917,12 +929,12 @@
 .dijitCalendarYearLabel-compat-gecko () {
 }
 .dijitCalendarSelectedYear-styles () {
-	color: black;
+	color: @win-foreground-color;
 	font-size: 16px;
 }
 .dijitCalendarNextYear-styles () {
 	padding: 1px 6px 3px 6px;
-	color: black;
+	color: @win-foreground-color;
 	font-size: 12px;
 }
 

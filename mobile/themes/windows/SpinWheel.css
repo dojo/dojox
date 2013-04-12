@@ -89,14 +89,28 @@
   height: 400px !important;
   width: auto !important;
   display: -ms-flexbox;
+  color: #ffffff;
 }
 .mblSpinWheel .mblSpinWheelSlot {
   -ms-flex-preferred-size: auto;
   border: none;
   -ms-user-select: none;
   text-align: left !important;
-  width: 100px !important;
   overflow: hidden;
+  margin: 0px !important;
+  width: 100px !important;
+}
+.mblSpinWheel .mblSpinWheelSlot:empty {
+  display: none !important;
+}
+.mblSpinWheel .mblSpinWheelSlot:not([widgetId]) {
+  top: 150px;
+  height: 94px !important;
+  width: 86px !important;
+  padding: 0 0 0 8px !important;
+  margin-right: 6px !important;
+  background-color: #666666;
+  line-height: 4.5;
 }
 .mblSpinWheel .mblSpinWheelSlotContainer:not(.mblSelectedSlot) .mblSpinWheelSlotLabel:not(.mblSelectedSlotItem) {
   opacity: 0;
@@ -120,7 +134,7 @@
   color: #808080;
   height: 100px;
   line-height: 3.5;
-  font-size: 24pt;
+  font-size: 17pt;
 }
 .mblSpinWheel .mblSpinWheelSlotLabel.mblSelectedSlotItem {
   color: #ffffff;
@@ -136,6 +150,12 @@
   height: 90px;
   border: 2px solid #808080;
   left: 0px;
+}
+.mblSpinWheel .mblSpinWheelSlotLabel.mblSpinWheelSlotLabelGray {
+  opacity: 0.3;
+}
+.mblSpinWheel .mblSpinWheelSlotLabel.mblSpinWheelSlotLabelGray:before {
+  opacity: 0.3;
 }
 .mblSpinWheel .mblSpinWheelBar {
   display: none;

@@ -147,6 +147,7 @@
 			"dojo/ready",
 			"dojo/dom",
 			"dojo/dom-class",
+			"dojo/sniff",
 			"dijit/registry",
 			"dojox/mobile/parser",
 			"dojox/mobile",
@@ -170,7 +171,7 @@
 			"dojox/mobile/RoundRect",
 			"dojox/mobile/RoundRectList",
 			"dojox/mobile/ScrollableView"
-		], function(ready, dom, domClass, registry, parser, mobile, compat, declare, domConstruct, 
+		], function(ready, dom, domClass, has, registry, parser, mobile, compat, declare, domConstruct,
 					runner, TemplatedMixin, WidgetsInTemplateMixin, 
 					ListItem, Heading, Switch, View){
 
@@ -366,7 +367,8 @@
 					// CheckBox
 					widget = registry.byId("checkbox1");
 					runner.assertTrue(!!widget.domNode);
-					runner.assertTrue(domClass.contains(widget.domNode, "mblCheckBox"));
+					runner.assertTrue(domClass.contains(widget.domNode, has("windows-theme") ?
+						"mblCheckableInputContainer" : "mblCheckBox"));
 					
 					// ToggleButton
 					widget = registry.byId("togglebutton1");
@@ -376,7 +378,8 @@
 					// Switch
 					widget = registry.byId("switch1");
 					runner.assertTrue(!!widget.domNode);
-					runner.assertTrue(domClass.contains(widget.domNode, "mblSwitch"));
+					runner.assertTrue(domClass.contains(widget.domNode, has("windows-theme") ?
+						"mblSwitchContainer" : "mblSwitch"));
 					runner.assertTrue(!!widget.inner);
 					runner.assertTrue(!!widget.left);
 					runner.assertTrue(!!widget.right);
@@ -391,7 +394,8 @@
 					
 					widget = registry.byId("switch2"); // using declare
 					runner.assertTrue(!!widget.domNode);
-					runner.assertTrue(domClass.contains(widget.domNode, "mblSwitch"));
+					runner.assertTrue(domClass.contains(widget.domNode, has("windows-theme") ?
+						"mblSwitchContainer" : "mblSwitch"));
 					runner.assertTrue(!!widget.inner);
 					runner.assertTrue(!!widget.left);
 					runner.assertTrue(!!widget.right);
@@ -407,7 +411,8 @@
 					// RadioButton
 					widget = registry.byId("rb1"); // using declare
 					runner.assertTrue(!!widget.domNode);
-					runner.assertTrue(domClass.contains(widget.domNode, "mblRadioButton"));
+					runner.assertTrue(domClass.contains(widget.domNode, has("windows-theme") ?
+						"mblCheckableInputContainer" : "mblRadioButton"));
 				},
 				function testTemplatedView(){
 					var view = registry.byId("view1");

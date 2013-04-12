@@ -24,6 +24,6 @@
 .mblScrollablePaneMask {
   position: relative;
 }
-.mblScrollableView {
+.mblScrollableView:not(.mblView) {
   padding: 0px;
 }

@@ -70,6 +70,16 @@
 			function verifyList(list){
 				list = registry.byId(list);
 				var itemHeight = list.getChildren()[0].domNode.offsetHeight;
+
+				if (itemHeight > 0){
+					var item = list.getChildren()[0].domNode,
+						itemMargin = Math.max(parseFloat(window.getComputedStyle(item).marginTop),
+							parseFloat(window.getComputedStyle(item).marginBottom));
+					if (!isNaN(itemMargin)){
+						itemHeight += itemMargin;
+					}
+				}
+
 				var viewHeight = list.getParent().domNode.offsetHeight;
 				var pageSize = list.pageSize;
 				

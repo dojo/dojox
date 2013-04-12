@@ -18,15 +18,18 @@
 	var WIDGET_HEIGHT1_FF = "33px";
 	var WIDGET_HEIGHT1_FF19 = "37px";
 //	var WIDGET_HEIGHT1_IE6 = "24px";
+	var WIDGET_HEIGHT1_IE10 = "24px"; // IE10
 //	var WIDGET_HEIGHT1_IE8 = "26px";
 	var WIDGET_HEIGHT1_IE = "25px"; // IE9
 	var WIDGET_OFFSETHEIGHT1 = 26;
 	var WIDGET_OFFSETHEIGHT1_FF = 43;
 	var WIDGET_OFFSETHEIGHT1_FF19 = 47;
 	var WIDGET_OFFSETHEIGHT1_IE = 35; // IE9
+	var WIDGET_OFFSETHEIGHT1_IE10 = 28; // IE10
 	var WIDGET_OFFSETHEIGHT2 = 90;
 //	var WIDGET_OFFSETHEIGHT2_IE8 = "133";
 	var WIDGET_OFFSETHEIGHT2_IE = "125"; // IE9
+	var WIDGET_OFFSETHEIGHT2_IE10 = "67";
 
 	require([
 		"dojo/_base/connect",
@@ -81,11 +84,11 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var styleHeight =  has("ie") ? WIDGET_HEIGHT1_IE : has("ff") ? 
+			var styleHeight =  has("ie") ? (has("ie") >= 10 ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1_IE) : has("ff") ?
 				(has("ff") >= 19 ? WIDGET_HEIGHT1_FF19 : WIDGET_HEIGHT1_FF) : WIDGET_HEIGHT1;
-			var offsetHeight1 = has("ie") ? WIDGET_OFFSETHEIGHT1_IE : has("ff") ? 
+			var offsetHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) : has("ff") ?
 				(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) : WIDGET_OFFSETHEIGHT1;
-			var offsetHeight2 = has("ie") ? WIDGET_OFFSETHEIGHT2_IE:WIDGET_OFFSETHEIGHT2;
+			var offsetHeight2 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2_IE) :WIDGET_OFFSETHEIGHT2;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				styleHeight = -1; // negative value as convention for skipping tests

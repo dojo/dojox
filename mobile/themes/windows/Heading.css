@@ -34,6 +34,7 @@
   font-weight: 400;
   text-align: left;
   font-size: 24pt;
+  overflow: visible;
 }
 .mblHeading * {
   z-index: 2;
@@ -62,22 +63,22 @@ h6 {
   margin: 0;
 }
 h1.mblHeading {
-  font-size: 29pt;
-}
-h2.mblHeading {
-  font-size: 24pt;
-}
-h3.mblHeading {
   font-size: 19pt;
 }
-h4.mblHeading {
+h2.mblHeading {
   font-size: 17pt;
 }
-h5.mblHeading {
+h3.mblHeading {
   font-size: 15pt;
 }
-h6.mblHeading {
+h4.mblHeading {
   font-size: 11pt;
+}
+h5.mblHeading {
+  font-size: 10pt;
+}
+h6.mblHeading {
+  font-size: 9pt;
 }
 .mblHeading .mblToolBarButton ~ .mblHeadingDivTitle {
   text-align: center;

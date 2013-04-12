@@ -102,11 +102,13 @@
   transform-origin: 50% 50%;
   border-color: #ffffff;
 }
-.mblToggleButtonChecked:before {
+.mblToggleButtonChecked:before,
+.mblToggleButtonSelected[aria-pressed='true']:before {
   background-color: #ffffff;
 }
-.mblToggleButtonChecked:after {
-  border-color: #000000;
+.mblToggleButtonChecked:after,
+.mblToggleButtonSelected[aria-pressed='true']:after {
+  border-color: #000000 !important;
 }
 .mblToggleButton[disabled]:before {
   border-color: #808080;

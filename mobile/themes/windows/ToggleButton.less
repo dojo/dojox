@@ -26,13 +26,14 @@
 	}
 }
 
-.mblToggleButtonChecked {
+.mblToggleButtonChecked,
+.mblToggleButtonSelected[aria-pressed='true'] {
 	&:before {
 		background-color: @win-foreground-color;
 	}
 
 	&:after {
-		border-color: @win-bg-color;
+		border-color: @win-bg-color !important;
 	}
 }
 

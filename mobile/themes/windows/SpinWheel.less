@@ -11,14 +11,30 @@
 	height: 400px !important;
 	width: auto !important;
 	display: -ms-flexbox;
+	color: @win-foreground-color;
 
 	& .mblSpinWheelSlot {
 		-ms-flex-preferred-size: auto;
 		border: none;
 		-ms-user-select: none;
 		text-align: left !important;
-		width: @mbl-PickerItemWidth !important;
 		overflow: hidden;
+		margin: 0px !important;
+		width: @mbl-PickerItemWidth !important;
+
+		&:empty {
+			display: none !important;
+		}
+
+		&:not([widgetId]) {
+			top: 150px;
+			height: 94px !important;
+			width: 86px !important;
+			padding: 0 0 0 8px !important;
+			margin-right: 6px !important;
+			background-color: @win-inactive-color;
+			line-height: 4.5;
+		}
 	}
 
 	& .mblSpinWheelSlotContainer:not(.mblSelectedSlot) {
@@ -64,6 +80,14 @@
 			height: 90px;
 			border: 2px solid @win-disabled-color;
 			left: 0px;
+		}
+
+		&.mblSpinWheelSlotLabelGray {
+			opacity: 0.3;
+
+			&:before{
+				opacity: 0.3;
+			}
 		}
 	}
 

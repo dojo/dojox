@@ -17,14 +17,17 @@
 	var WIDGET_OFFSETHEIGHT1_FF = 75;
 	var WIDGET_OFFSETHEIGHT1_FF19 = 79;
 	var WIDGET_OFFSETHEIGHT1_IE = 55; // IE9
+	var WIDGET_OFFSETHEIGHT1_IE10 = 63; // IE10
 	var WIDGET_OFFSETHEIGHT2 = 58;
 	var WIDGET_OFFSETHEIGHT2_IE = "34"; // IE9
 	var WIDGET_SCROLLHEIGHT1 = 56;
 	var WIDGET_SCROLLHEIGHT1_IE = 23; // IE9
+	var WIDGET_SCROLLHEIGHT1_IE10 = 20; // IE10
 	var WIDGET_SCROLLHEIGHT1_FF = 65;
 	var WIDGET_SCROLLHEIGHT1_FF19 = 69;
 	var WIDGET_SCROLLHEIGHT2 = 88;
 	var WIDGET_SCROLLHEIGHT2_IE = 113; // IE9
+	var WIDGET_SCROLLHEIGHT2_IE10 = 78; // IE10
 	var WIDGET_SCROLLHEIGHT2_FF = 80;
 
 	require([
@@ -87,16 +90,17 @@
 		};
 
 		ready(function(){
-			var offsetHeight1 = has("ie") ? WIDGET_OFFSETHEIGHT1_IE : 
+			var offsetHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) :
 				has("ff") ? 
 					(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) : 
 					WIDGET_OFFSETHEIGHT1;
 			var offsetHeight2 = offsetHeight1;
-			var scrollHeight1 = has("ie") ? WIDGET_SCROLLHEIGHT1_IE : 
+			var scrollHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_SCROLLHEIGHT1_IE10 : WIDGET_SCROLLHEIGHT1_IE) :
 				has("ff") ? 
 					(has("ff") >= 19 ? WIDGET_SCROLLHEIGHT1_FF19 : WIDGET_SCROLLHEIGHT1_FF) : 
 					WIDGET_SCROLLHEIGHT1;
-			var scrollHeight2 = has("ie") ? WIDGET_SCROLLHEIGHT2_IE:has("ff") ? WIDGET_SCROLLHEIGHT2_FF:WIDGET_SCROLLHEIGHT2;
+			var scrollHeight2 = has("ie") ? (has("ie") >= 10 ? WIDGET_SCROLLHEIGHT2_IE10 : WIDGET_SCROLLHEIGHT2_IE) :
+				has("ff") ? WIDGET_SCROLLHEIGHT2_FF:WIDGET_SCROLLHEIGHT2;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				offsetHeight1 = -1; // negative value as convention for skipping tests
