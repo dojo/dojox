@@ -2,13 +2,12 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/connect",
 	"dojo/_base/array",
-	"dojo/_base/lang",
 	"dojo/query",
 	"../_base",
 	"../dom",
 	"dojo/parser",
 	"dojo/_base/sniff"
-], function(lang,connect,array,lang,Query,dd,dxdom,Parser,has){
+], function(lang,connect,array,query,dd,dxdom,Parser,has){
 
 	var ddcd = lang.getObject("contrib.dijit", true, dd);
 /*=====
@@ -131,7 +130,7 @@ define([
 	function cloneNode(n1){
 		var n2 = n1.cloneNode(true);
 		if(has("ie")){
-			Query("script", n2).forEach("item.text = this[index].text;", Query("script", n1));
+			query("script", n2).forEach("item.text = this[index].text;", query("script", n1));
 		}
 		return n2;
 	}
