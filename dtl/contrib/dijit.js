@@ -2,12 +2,13 @@ define([
 	"dojo/_base/lang",
 	"dojo/_base/connect",
 	"dojo/_base/array",
+	"dojo/_base/lang",
 	"dojo/query",
 	"../_base",
 	"../dom",
 	"dojo/parser",
 	"dojo/_base/sniff"
-], function(lang,connect,array,Query,dd,dxdom,Parser,has){
+], function(lang,connect,array,lang,Query,dd,dxdom,Parser,has){
 
 	var ddcd = lang.getObject("contrib.dijit", true, dd);
 /*=====
@@ -103,7 +104,7 @@ define([
 						this._rendered[i] = buffer.addEvent(context, type, fn, args);
 					}else{
 						var resolved = fn; 
-						if(array.isArray(args)){ 
+						if(lang.isArray(args)){ 
 							resolved = function(e){ 
 								this[fn].apply(this, [e].concat(args)); 
 							} 
