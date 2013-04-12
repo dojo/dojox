@@ -7,7 +7,7 @@ define([
 	"../dom",
 	"dojo/parser",
 	"dojo/_base/sniff"
-], function(lang,connect,array,query,dd,dxdom,Parser,has){
+], function(lang,connect,array,query,dd,dxdom,parser,has){
 
 	var ddcd = lang.getObject("contrib.dijit", true, dd);
 /*=====
@@ -149,7 +149,7 @@ define([
 		}
 
 		if(!parsed){
-			this._dijit = Parser.instantiate([cloneNode(node)])[0];
+			this._dijit = parser.instantiate([cloneNode(node)])[0];
 		}else{
 			node = cloneNode(node);
 			var old = ddcd.widgetsInTemplate;
@@ -173,7 +173,7 @@ define([
 					if(this._dijit){
 						this._dijit.destroyRecursive();
 					}
-					this._dijit = Parser.instantiate([root])[0];
+					this._dijit = parser.instantiate([root])[0];
 				}
 			}
 
