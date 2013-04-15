@@ -13,7 +13,7 @@
 			}
 			#inner {
 				width: 250px;
-				height: 80px;
+				height: 140px;
 				border: 1px solid #7FB0DB;
 				background-color: #7FB0DB
 			}
@@ -85,8 +85,15 @@
 	</head>
 	<body>
 		<div id="outer">
-			outer<div id="inner">inner</div>
-			<input id="input" type="text" value="input (type here)">
+			outer
+			<div id="inner">inner
+				<br/>
+				<input id="input" type="text" placeholder="type here"/>input
+				<br/>
+				<input id="pwd" type="password" name="pwd" placeholder="type here"/>password
+				<br/>
+				<textarea id="textarea" rows="3" cols="20" style="width: 150px; height:30px" placeholder="type here" ></textarea>textarea
+			</div>
 		</div>
 		<div id="log1"></div>
 		<hr/>

@@ -265,7 +265,7 @@ define([
 			}
 			// invoking gesture.press()|move()|release()|cancel()
 			// #16900: same condition as in dojo/touch, to avoid breaking the editing of input fields.
-			if(e.type == "click" && (e.target.tagName != "INPUT" || e.target.type == "radio" || e.target.type == "checkbox")
+			if((e.target.tagName != "INPUT" || e.target.type == "radio" || e.target.type == "checkbox")
 				&& e.target.tagName != "TEXTAREA"){
 				e.preventDefault(); 
 			}
