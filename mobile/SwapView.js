@@ -60,6 +60,16 @@ define([
 			});
 		},
 
+		show: function(/*Boolean?*/noEvent, /*Boolean?*/doNotHideOthers){
+			// summary:
+			//		Shows this view without a transition animation.
+			var viewChanged = (this.getShowingView() != this);
+			this.inherited(arguments);
+			if(!noEvent && viewChanged){
+				connect.publish("/dojox/mobile/viewChanged", [this]);
+			};
+		},
+
 		onTouchStart: function(/*Event*/e){
 			// summary:
 			//		Internal function to handle touchStart events.
@@ -255,6 +265,8 @@ define([
 							c.style.display = "none";
 							c.style[css3.name("transform")] = "";
 							c.style.left = "0px"; // top/left mode needs this
+							// reset the temporaty padding on the container node
+							c.style.paddingTop = "";
 						}
 					}
 				}, this);

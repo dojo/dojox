@@ -215,6 +215,7 @@ var tests = [
 	{ url: "test_SwapView-demo.html", tags: "SwapView" },
 	{ url: "test_SwapView-slideshow.html", tags: "SwapView" },
 	{ url: "test_SwapView.html", tags: "SwapView" },
+	{ url: "test_SwapView-show.html", tags: "SwapView" },
 	{ url: "test_Switch-setter.html", tags: "Switch" },
 	{ url: "test_Switch.html", tags: "Switch" },
 	{ url: "test_TabBar-badge.html", tags: "TabBar" },
