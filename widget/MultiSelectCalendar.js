@@ -13,7 +13,7 @@ define("dojox/widget/MultiSelectCalendar", [
 
 dojo.experimental("dojox.widget.MultiSelectCalendar");
 
-return dojo.declare(
+var MultiSelectCalendar = dojo.declare(
 	"dojox.widget.MultiSelectCalendar",
 	[_Widget, _TemplatedMixin, _WidgetsInTemplateMixin, _CssStateMixin],
 	{
@@ -348,7 +348,7 @@ return dojo.declare(
 
 			var dateObj = new this.dateClassObj(this.currentFocus);
 
-			this.monthDropDownButton.dropDown = new dojox.widget._MonthDropDown({
+			this.monthDropDownButton.dropDown = new MonthDropDown({
 				id: this.id + "_mdd",
 				onChange: dojo.hitch(this, "_onMonthSelect")
 			});
@@ -943,7 +943,8 @@ return dojo.declare(
 );
 
 //FIXME: can we use dijit.Calendar._MonthDropDown directly?
-dojo.declare("dojox.widget._MonthDropDown", [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
+var MonthDropDown = MultiSelectCalendar._MonthDropDown = dojo.declare("dojox.widget._MonthDropDown",
+    [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 	// summary:
 	//		The month drop down
 
@@ -974,5 +975,7 @@ dojo.declare("dojox.widget._MonthDropDown", [_Widget, _TemplatedMixin, _WidgetsI
 		dojo.toggleClass(evt.target, "dijitCalendarMonthLabelHover", evt.type == "mouseover");
 	}
 });
+
+return MultiSelectCalendar;
 
 });
