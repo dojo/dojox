@@ -118,8 +118,8 @@ var MultiSelectCalendar = dojo.declare(
 						this.value[element] = 1;
 					}else{
 						//We have a slash somewhere in the string so this is an ISO date range
-						var dateA=new dojo.date.stamp.fromISOString(element.substr(0,10));
-						var dateB=new dojo.date.stamp.fromISOString(element.substr(11,10));
+						var dateA = dojo.date.stamp.fromISOString(element.substr(0,10));
+						var dateB = dojo.date.stamp.fromISOString(element.substr(11,10));
 						
 						this.toggleDate(dateA,[],[]);
 						if((dateA - dateB) > 0){
@@ -407,7 +407,7 @@ var MultiSelectCalendar = dojo.declare(
 			}
 
 			// set tabIndex=0 on new cell, and focus it (but only if Calendar itself is focused)
-			var newCell = dojo.query("[dijitDateValue=" + date.valueOf() + "]", this.domNode)[0];
+			var newCell = dojo.query("[dijitDateValue='" + date.valueOf() + "']", this.domNode)[0];
 			newCell.setAttribute("tabIndex", this.tabIndex);
 			if(this._focused || forceFocus){
 				newCell.focus();
