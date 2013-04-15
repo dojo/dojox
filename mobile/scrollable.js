@@ -574,15 +574,17 @@ define([
 
 			if(this.adjustDestination(to, pos, dim) === false){ return; }
 
-			if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
-				this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
-				return;
-			}else if(this.scrollDir == "h" && dim.c.w < dim.d.w){ // content is narrower than display
-				this.slideTo({x:0}, 0.3, "ease-out"); // go back to the left
-				return;
-			}else if(this._v && this._h && dim.c.h < dim.d.h && dim.c.w < dim.d.w){
-				this.slideTo({x:0, y:0}, 0.3, "ease-out"); // go back to the top-left
-				return;
+			if(this.constraint){
+				if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
+					this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
+					return;
+				}else if(this.scrollDir == "h" && dim.c.w < dim.d.w){ // content is narrower than display
+					this.slideTo({x:0}, 0.3, "ease-out"); // go back to the left
+					return;
+				}else if(this._v && this._h && dim.c.h < dim.d.h && dim.c.w < dim.d.w){
+					this.slideTo({x:0, y:0}, 0.3, "ease-out"); // go back to the top-left
+					return;
+				}
 			}
 
 			var duration, easing = "ease-out";
