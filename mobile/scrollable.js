@@ -547,6 +547,16 @@ define([
 				if(clicked){ // clicked, not dragged or flicked
 					this.hideScrollBar();
 					this.removeCover();
+					// need to send a synthetic click?
+					if(has("touch") && has("clicks-prevented") && !this.isFormElement(e.target)){
+						var elem = e.target;
+						if(elem.nodeType != 1){
+							elem = elem.parentNode;
+						}
+						setTimeout(function(){
+							dm._sendClick(elem, e);
+						});
+					}
 					return;
 				}
 				speed = this._speed = this.getSpeed();

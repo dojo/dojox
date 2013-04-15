@@ -11,11 +11,15 @@
 
 	<script type="text/javascript">
 		require([
+			"dojo/_base/window",
 			"dojox/mobile/parser",
 			"dojox/mobile",
 			"dojox/mobile/compat",
 			"dojox/mobile/ScrollableView"
-		]);
+		], function(win){
+			// disable synthetic clicks from dojo/touch
+			win.doc.dojoClick = false; 
+		});
 	</script>
 
 	<style>

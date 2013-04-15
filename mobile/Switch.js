@@ -13,8 +13,9 @@ define([
 	"dijit/_WidgetBase",
 	"./sniff", 
 	"./_maskUtils",
+	"./common",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"
-], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, domAttr, touch, Contained, WidgetBase, has, maskUtils, BidiSwitch){
+], function(array, connect, declare, event, win, domClass, domConstruct, domStyle, domAttr, touch, Contained, WidgetBase, has, maskUtils, dm, BidiSwitch){
 
 	// module:
 	//		dojox/mobile/Switch
@@ -236,6 +237,10 @@ define([
 			array.forEach(this._conn, connect.disconnect);
 			this._conn = null;
 			if(this.innerStartX == this.inner.offsetLeft){
+				// need to send a synthetic click?
+				if(has("touch") && has("clicks-prevented")){
+					dm._sendClick(this.inner, e);
+				}
 				return;
 			}
 			var newState = (this.inner.offsetLeft < -(this._width/2)) ? "off" : "on";
