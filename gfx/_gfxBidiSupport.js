@@ -23,6 +23,7 @@ function(g, lang, has, dom, html, arr, utils, shapeLib, pathLib, BidiEngine){
 			g.isSilverlight = true;
 			break;
 		case 'canvas':
+		case 'canvasWithEvents':
 			g.isCanvas = true;
 			break;
 	}
