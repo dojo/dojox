@@ -55,6 +55,11 @@ define([
 
 		startup: function(){
 			if(this._started){ return; }
+			// user can initialize the app footers using a value for fixedFooter (we keep this value for non regression of existing apps)
+			if(this.fixedFooter && !this.isLocalFooter){
+				this._fixedAppFooter = this.fixedFooter;
+				this.fixedFooter = "";
+			}
 			this.reparent();
 			this.inherited(arguments);
 		},

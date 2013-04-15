@@ -53,6 +53,9 @@ define([
 
 		startup: function(){
 			if(this._started){ return; }
+			if(this._fixedAppFooter){
+				this._fixedAppFooter = dom.byId(this._fixedAppFooter);
+			}
 			this.findAppBars();
 			var node, params = this.scrollableParams;
 			if(this.fixedHeader){
