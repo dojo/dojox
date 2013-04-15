@@ -232,6 +232,9 @@
 			for(i = 0; i < m.length; i++){
 				if(ua.match(new RegExp(m[i][0]))){
 					var theme = m[i][1];
+					if(theme == "windows" && config.mblDisableWindowsTheme){
+						continue;
+					}
 					var cls = win.doc.documentElement.className;
 					cls = cls.replace(new RegExp(" *" + dm.currentTheme + "_theme"), "") + " " + theme + "_theme";
 					win.doc.documentElement.className = cls;
