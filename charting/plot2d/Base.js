@@ -29,7 +29,7 @@ dojox.charting.plot2d.__PlotCtorArgs = {
 			//		An optional arguments object to help define the plot.
 	
 			// TODO does not work in markup
-			if(kwArgs.tooltipFunc){
+			if(kwArgs && kwArgs.tooltipFunc){
 				this.tooltipFunc = kwArgs.tooltipFunc;
 			}
 		},
