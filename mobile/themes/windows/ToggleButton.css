@@ -100,7 +100,6 @@
   transform: rotate(45deg) skew(10deg);
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
-  border-color: #ffffff;
 }
 .mblToggleButtonChecked:before,
 .mblToggleButtonSelected[aria-pressed='true']:before {

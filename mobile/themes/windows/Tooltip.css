@@ -196,8 +196,11 @@
   width: auto;
   padding-left: 15px;
 }
-.mblOpener .mblButton,
-.mblOpener .mblToolBarButton {
+.mblOpener .mblHeading ~ .mblScrollableView {
+  height: calc(100% - 60px) !important;
+}
+.mblOpener .mblHeading .mblButton,
+.mblOpener .mblHeading .mblToolBarButton {
   bottom: 10px;
   border: 2px solid #ffffff;
   position: absolute;
@@ -205,18 +208,18 @@
   max-width: 45%;
   padding: 0px;
 }
-.mblOpener .mblButton:nth-of-type(odd),
-.mblOpener .mblToolBarButton:nth-of-type(odd) {
+.mblOpener .mblHeading .mblButton:nth-of-type(odd),
+.mblOpener .mblHeading .mblToolBarButton:nth-of-type(odd) {
   left: 0px;
 }
-.mblOpener .mblButton:nth-of-type(even),
-.mblOpener .mblToolBarButton:nth-of-type(even) {
+.mblOpener .mblHeading .mblButton:nth-of-type(even),
+.mblOpener .mblHeading .mblToolBarButton:nth-of-type(even) {
   left: auto !important;
   right: 0px;
 }
 .mblOpener .dijitColorPalette {
   width: calc(100% - 10px - 15px);
-  height: calc(100% - 100px);
+  height: calc(100% - 50px);
 }
 .mblOpener .dijitColorPalette table {
   width: 100%;
@@ -232,9 +235,6 @@
   display: -ms-flexbox;
   -ms-flex: 1;
   -ms-flex-align: center;
-}
-.mblOpener .dijitColorPalette tr:last-child {
-  overflow: hidden;
 }
 .mblOpener .dijitColorPalette td {
   -ms-flex: 1;

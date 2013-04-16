@@ -3,17 +3,15 @@
 .mblSwitchRtl {
   text-align: right;
 }
-.mblListItem .mblSwitch {
-  right: auto;
-}
 .mblListItemRtl .mblSwitch {
   left: 12px;
+  right: auto;
 }
 .mblSwitchRtl.mblSwitchOn .mblSwitchInner {
   left: -50px;
 }
 .mblSwitchBgLeftRtl {
-  left: 50px;
+  left: 51px;
 }
 .mblSwitchTextLeftRtl {
   left: 0px;

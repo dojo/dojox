@@ -249,8 +249,6 @@
   z-index: 1;
 }
 .mblSwitch {
-  margin-top: 8px;
-  margin-bottom: 8px;
   width: 65px;
   float: right;
   display: block;
@@ -288,8 +286,11 @@
   position: relative;
   float: left;
   clear: both;
-  margin: 10px 0;
+  margin: 3px 0;
 }
 .mblSwitchContainer {
   width: 100%;
+  min-height: 27px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }

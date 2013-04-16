@@ -4,3 +4,8 @@
 .mblScrollableView:not(.mblView) {
 	padding: 0px;
 }
+
+.mblView.mblScrollableView .mblScrollableViewContainer {
+	min-width: calc(~'100% - @{default-padding-left} - @{default-padding-right}') !important;
+	width: auto !important;
+}

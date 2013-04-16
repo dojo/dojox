@@ -36,30 +36,35 @@
 			padding-left: @default-padding-left;
 		}
 
-	}
-
-	& .mblButton,
-	& .mblToolBarButton {
-		bottom: 10px;
-		border: 2px solid @win-foreground-color;
-		position: absolute;
-		width: 100%;
-		max-width: 45%;
-		padding: 0px;
-		&:nth-of-type(odd) {
-			left: 0px;
+		& ~ .mblScrollableView {
+			height: calc(~"100% - 60px") !important;
 		}
 
-		&:nth-of-type(even) {
-			left: auto !important;
-			right: 0px;
+		& .mblButton,
+		& .mblToolBarButton {
+			bottom: 10px;
+			border: 2px solid @win-foreground-color;
+			position: absolute;
+			width: 100%;
+			max-width: 45%;
+			padding: 0px;
+			&:nth-of-type(odd) {
+				left: 0px;
+			}
+
+			&:nth-of-type(even) {
+				left: auto !important;
+				right: 0px;
+			}
 		}
+
 	}
+
 }
 
 .mblOpener .dijitColorPalette {
 	width: calc(~"100% - @{default-padding-right} - @{default-padding-left}");
-	height: calc(~'100% - 100px');
+	height: calc(~'100% - 50px');
 
 	table {
 		width: 100%;
@@ -78,9 +83,6 @@
 		display: -ms-flexbox;
 		-ms-flex: 1;
 		-ms-flex-align: center;
-		&:last-child {
-			overflow: hidden;
-		}
 	}
 
 	td {
@@ -142,4 +144,3 @@
 		}
 	}
 }
-

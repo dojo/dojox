@@ -28,10 +28,16 @@
 		html,body{
 			height: 100%;
 		}
-		.myPane {
+		html:not(.windows_theme) .myPane {
 			background-image: -webkit-gradient(linear, left top, left bottom, from(#dcdcdc), to(#FFFFFF));
 			font-family: Times New Roman, Helvetica;
 			color: black;
+		}
+		.windows_theme .mblAccordionPane {
+			background-color: transparent !important;
+		}
+		.windows_theme .mblScrollableViewContainer > div {
+			color: white !important;
 		}
 	</style>
 </head>

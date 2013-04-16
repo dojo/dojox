@@ -458,7 +458,9 @@ define([
 		resize: function(e){
 			// Correct internal variables & adjust slot panels
 			var items = this.panelNodes[1].childNodes;
-			if(items.length > 0){ // empty slot?
+			// TODO investigate - the position is calculated incorrectly for 
+			// windows theme, disable this logic for now.
+			if(items.length > 0 && !has("windows-theme")){ // empty slot?
 				this._itemHeight = items[0].offsetHeight;
 				this.centerPos = this.getParent().centerPos;
 				this.adjust();

@@ -86,38 +86,54 @@
 		.mblSimpleDialog .mblListItem {
 			text-align: left;
 		}
+		
+		.windows_theme .mblDomButtonSilverCircleGrayButton > div,
+		.windows_theme .mblDomButtonSilverCircleGreenButton > div {
+			background-color: transparent !important;
+			background-image: none !important;
+			border: 2px solid white;
+			border-radius: 25px;
+		}
+		.windows_theme .mblDomButtonSilverCircleGrayButton > div > div {
+			background-color: transparent !important;
+			background-image: none !important;
+			border: none !important;
+		}
+		.windows_theme .mblDomButtonSilverCircleGreenButton > div > div {
+			background-color: white !important;
+		}
 	</style>
 </head>
 <body style="visibility:hidden;">
 	<div id="dlg_message"
-	     data-dojo-type="dojox.mobile.SimpleDialog"
-	     data-dojo-mixins="dojox.mobile._ContentPaneMixin"
-	     data-dojo-props='href:"data/dialog1.html"'></div>
+		data-dojo-type="dojox.mobile.SimpleDialog"
+		data-dojo-mixins="dojox.mobile._ContentPaneMixin"
+		data-dojo-props='href:"data/dialog1.html"'></div>
 
 	<div id="dlg_confirm"
-	     data-dojo-type="dojox.mobile.SimpleDialog"
-	     data-dojo-mixins="dojox.mobile._ContentPaneMixin"
-	     data-dojo-props='href:"data/dialog2.html"'></div>
+		data-dojo-type="dojox.mobile.SimpleDialog"
+		data-dojo-mixins="dojox.mobile._ContentPaneMixin"
+		data-dojo-props='href:"data/dialog2.html"'></div>
 	
 	<div id="dlg_login"
-	     data-dojo-type="dojox.mobile.SimpleDialog"
-	     data-dojo-mixins="dojox.mobile._ContentPaneMixin"
-	     data-dojo-props='href:"data/dialog3.html"'></div>
+		data-dojo-type="dojox.mobile.SimpleDialog"
+		data-dojo-mixins="dojox.mobile._ContentPaneMixin"
+		data-dojo-props='href:"data/dialog3.html"'></div>
 
 	<div id="dlg_progress"
-	     data-dojo-type="dojox.mobile.SimpleDialog"
-	     data-dojo-mixins="dojox.mobile._ContentPaneMixin"
-	     data-dojo-props='href:"data/dialog4.html"'></div>
+		data-dojo-type="dojox.mobile.SimpleDialog"
+		data-dojo-mixins="dojox.mobile._ContentPaneMixin"
+		data-dojo-props='href:"data/dialog4.html"'></div>
 
 	<div id="dlg_volume"
-	     data-dojo-type="dojox.mobile.SimpleDialog"
-	     data-dojo-mixins="dojox.mobile._ContentPaneMixin"
-	     data-dojo-props='href:"data/dialog5.html"'></div>
+		data-dojo-type="dojox.mobile.SimpleDialog"
+		data-dojo-mixins="dojox.mobile._ContentPaneMixin"
+		data-dojo-props='href:"data/dialog5.html"'></div>
 
 	<div id="dlg_select"
-	     data-dojo-type="dojox.mobile.SimpleDialog"
-	     data-dojo-mixins="dojox.mobile._ContentPaneMixin"
-	     data-dojo-props='href:"data/dialog6.html"'></div>
+		data-dojo-type="dojox.mobile.SimpleDialog"
+		data-dojo-mixins="dojox.mobile._ContentPaneMixin"
+		data-dojo-props='href:"data/dialog6.html"'></div>
 
 	<div id="view" data-dojo-type="dojox.mobile.View" data-dojo-props='selected:true'>
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
@@ -139,6 +155,6 @@
 			Selectable List <button onclick="show('dlg_select')">Show Dialog</button>
 		</div>
 	</div>
-			
+
 </body>
 </html>
