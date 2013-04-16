@@ -11,16 +11,19 @@
 
 	<script type="text/javascript">
 		require([
+			"dojo/ready",
 			"dojo/_base/window",
 			"dojox/mobile/Rating",
 			"dojox/mobile"
-		], function(win, Rating){
-			var widget = new Rating({
-				image: "images/star-orange.png",
-				numStars: 10,
-				value: 5.5
+		], function(ready, win, Rating){
+			ready(function(){
+				var widget = new Rating({
+					image: "images/star-orange.png",
+					numStars: 10,
+					value: 5.5
+				});
+				win.body().appendChild(widget.domNode);
 			});
-			win.body().appendChild(widget.domNode);
 		});
 	</script>
 </head>
