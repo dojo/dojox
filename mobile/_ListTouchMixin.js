@@ -19,7 +19,7 @@ define([
 
 			// For some reason in IE click event is fired immideatly after user scrolled combobox control and released
 			// his/her finger. As a fix we replace click with tap event that is fired correctly.
-			if(!(has('ie') >= 10)){
+			if(!(has("ie") >= 10 && has("touch"))){
 				this._listConnect("click", "_onClick");
 			}else{
 				this._listConnect(touch.press, "_onPress");
