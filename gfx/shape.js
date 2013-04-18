@@ -16,7 +16,18 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 	var _ids = {};
 	// a simple set impl to map shape<->id
 	var registry = {};
-	
+	var disposeCount = 0, fixIELeak = has("ie") < 9;
+
+	function repack(oldRegistry){
+		var newRegistry = {};
+		for(var key in oldRegistry){
+			if(oldRegistry.hasOwnProperty(key)){
+				newRegistry[key] = oldRegistry[key]
+			}
+		}
+		return newRegistry;
+	}
+
 	shape.register = function(/*dojox.gfx.shape.Shape*/shape){
 		// summary: 
 		//		Register the specified shape into the graphics registry.
@@ -46,6 +57,11 @@ define(["./_base", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base/window",
 		// shape: dojox.gfx.shape.Shape
 		//		The shape to unregister.
 		delete registry[shape.getUID()];
+		++disposeCount;
+		if(fixIELeak && disposeCount>10000){
+			registry = repack(registry);
+			disposeCount = 0;
+		}
 	};
 	
 	declare("dojox.gfx.shape.Shape", null, {
