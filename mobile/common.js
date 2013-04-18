@@ -303,7 +303,7 @@ define([
 		domClass.add(win.body(), "mblBackground");
 		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
-			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;}"}, win.doc.head, "first");
+			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;} audio::-webkit-media-controls-play-button{-webkit-appearance:media-play-button;}"}, win.doc.head, "first");
 		}
 		if(has('mblAndroidWorkaround')){
 			// add a css class to show view offscreen for android flicker workaround
