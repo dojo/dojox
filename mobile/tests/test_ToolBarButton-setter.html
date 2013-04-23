@@ -12,6 +12,7 @@
 
 	<script type="text/javascript">
 		require([
+			"dojo/_base/window",
 			"dojo/dom",
 			"dojo/ready",
 			"dijit/registry",
@@ -19,7 +20,8 @@
 			"dojox/mobile",
 			"dojox/mobile/compat",
 			"dojox/mobile/TabBar"
-		], function(dom, ready, registry){
+		], function(win, dom, ready, registry){
+			win.doc.dojoClick = false; // disable dojo/touch clicks for native radios buttons
 			var btn1;
 			setIcon = function(flag){
 				if(flag == 1){
