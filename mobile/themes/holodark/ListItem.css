@@ -25,7 +25,7 @@
 }
 .mblListItemSelected {
   color: #ffffff;
-  background-image: none;
+  background-color: #3578b1;
 }
 .mblListItemSelected .mblDomButton div {
   border-color: white;

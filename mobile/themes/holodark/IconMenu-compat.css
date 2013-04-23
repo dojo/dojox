@@ -12,7 +12,7 @@
   -moz-box-sizing: border-box;
 }
 .dj_gecko .mblIconMenuItemSel {
-  background-image: none;
+  background-color: #3578b1;
 }
 .dj_ff3 .mblIconMenu {
   -moz-border-radius: 6px;
