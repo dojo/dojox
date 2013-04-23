@@ -41,15 +41,15 @@
 .dijitCalendarIncrementControl {
   width: 0;
   height: 0;
-  border: 6px solid transparent;
+  border: 6px solid transparent !important;
 }
 .dijitCalendarDecrease {
-  border-left-width: 0;
-  border-right-color: white;
+  border-left-width: 0 !important;
+  border-right: 6px solid white !important;
 }
 .dijitCalendarIncrease {
-  border-right-width: 0;
-  border-left-color: white;
+  border-right-width: 0 !important;
+  border-left: 6px solid white !important;
 }
 .dijitA11ySideArrow {
   display: none;
