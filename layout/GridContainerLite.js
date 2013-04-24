@@ -435,7 +435,7 @@ define([
 			//console.log("dojox.layout.GridContainerLite ::: _insertChild", child, column, p);
 			var zone = this._grid[column].node,
 				length = zone.childNodes.length;
-			if(typeof(p) === undefined || p > length){
+			if(typeof p === "undefined" || p > length){
 				p = length;
 			}
 			if(this._disabled){
