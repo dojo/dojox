@@ -204,8 +204,8 @@ define([
 			// scrolling machinery. To avoid this misbehavior:
 			if(win.global.addEventListener){ // all supported browsers but IE8
 				// (for IE8, using attachEvent is not a solution, because it only works in bubbling phase)
-				win.global.addEventListener("scroll", function(e){
-					if(_this.domNode.style.display === 'none'){ return; }
+				this._onScroll = function(e){
+					if(!_this.domNode || _this.domNode.style.display === 'none'){ return; }
 					var scrollTop = _this.domNode.scrollTop;
 					var scrollLeft = _this.domNode.scrollLeft; 
 					var pos;
@@ -216,7 +216,8 @@ define([
 						_this.domNode.scrollTop = 0; 
 						_this.scrollTo({x: pos.x - scrollLeft, y: pos.y - scrollTop}); // no animation 
 					}
-				}, true);
+				};
+				win.global.addEventListener("scroll", this._onScroll, true);
 			}
 		},
 
@@ -236,6 +237,10 @@ define([
 					connect.disconnect(this._ch[i]);
 				}
 				this._ch = null;
+			}
+			if(this._onScroll && win.global.removeEventListener){ // all supported browsers but IE8
+				win.global.removeEventListener("scroll", this._onScroll, true);
+				this._onScroll = null;
 			}
 		},
 
