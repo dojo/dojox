@@ -146,14 +146,16 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 	//	Multiple files have been passed from HTML
 	//
 	$cnt = 0;
-	trace("HTML multiple POST:");
+	trace("IFrame multiple POST:");
 	trace($postdata, true);
 
 	$_post = $htmldata;
 	$htmldata = array();
+	
+	
 
 	while(isset($_FILES['uploadedfile'.$cnt])){
-	  trace("HTML multiple POST");
+	  trace("IFrame multiple POST");
 		$moved = move_uploaded_file($_FILES['uploadedfile'.$cnt]['tmp_name'],  $upload_path . $_FILES['uploadedfile'.$cnt]['name']);
 		trace("moved:" . $moved ."  ". $_FILES['uploadedfile'.$cnt]['name']);
 		if($moved){
@@ -173,11 +175,16 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 			$_post['width'] = $width;
 			$_post['height'] = $height;
 			$_post['type'] = $type;
+			$_post['uploadType'] = $postdata['uploadType'];
 			$_post['size'] = filesize($file);
 			$_post['additionalParams'] = $postdata;
-			trace($_post, true);
+			trace($_post['additionalParams'], true);
 
 			$htmldata[$cnt] = $_post;
+			
+			foreach($postdata as $key => $value){
+				//$htmldata[ $key ] = $value;
+			}
 
 		}elseif(strlen($_FILES['uploadedfile'.$cnt]['name'])){
 		  $htmldata[$cnt] = array("ERROR" => "File could not be moved: ".$_FILES['uploadedfile'.$cnt]['name']);
@@ -286,8 +293,14 @@ if( isset($_FILES[$fieldName]) || isset($_FILES['uploadedfileFlash'])){
 	$htmldata['width'] = $width;
 	$htmldata['height'] = $height;
 	$htmldata['type'] = $type;
+	$htmldata['uploadType'] = $uploadType;
 	$htmldata['size'] = filesize($file);
 	$htmldata['additionalParams'] = $postdata;
+	
+	$data = $json->encode($htmldata);
+	trace($data);
+	print $data;
+	return $data;
 
 
 }elseif(isset($_GET['rmFiles'])){

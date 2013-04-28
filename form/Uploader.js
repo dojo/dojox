@@ -342,7 +342,7 @@ define([
 	
 		_getFileFieldName: function(){
 			var name;
-			if(this.supports("multiple")){
+			if(this.supports("multiple") && this.multiple){
 				name = this.name+"s[]";
 			}else{
 				// <=IE8
