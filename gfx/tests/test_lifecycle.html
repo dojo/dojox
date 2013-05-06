@@ -16,9 +16,10 @@
 				"dojox/gfx",
 				"dojox/gfx/shape",
 				"dojox/gfx/svg",
+				"dojox/gfx/canvas",
 				"dojox/gfx/registry"
 			],
-					function(doh, ready, dom, gfx, gfxshape, svg){
+					function(doh, ready, dom, gfx, gfxshape, svg, canvas){
 
 					var drawing, r,
 						checkSurface = function(){
@@ -160,6 +161,38 @@
 								g.clear(true);
 								doh.assertTrue(defs.childNodes.length == 0, "Unexpected defs children count. Expected: 0.");
 								doh.assertTrue(g.rawNode.firstChild == null, "Unexpected group children count. Expected: 0.");
+							}
+						},{
+							name: "Canvas-specific : http://bugs.dojotoolkit.org/ticket/17077",
+							timeout: 1000,
+							setUp: function(){
+								if(drawing){
+									drawing.destroy();
+									drawing = null;
+								}
+								gfx.switchTo(canvas);
+								checkSurface();
+								var old = drawing._render, self = this;
+								drawing._render = function(){
+									try {
+										old.apply(this, arguments);
+									}catch(e){
+										self.d.errback(e);
+										return;
+									}
+									self.d && self.d.callback(true);
+								};
+							},
+							runTest: function(){
+								var g = drawing.createGroup();
+								var sg = drawing.createGroup();
+								sg.createRect();
+								// flush pending makeDirty()
+								drawing._render();
+								this.d = new doh.Deferred();
+								sg.removeShape();
+								drawing.destroy();
+								return this.d;
 							}
 						}
 					]);
