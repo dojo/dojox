@@ -24,11 +24,11 @@
 			TemplatedWithWidgetsHeading2, TemplatedSwitch;
 		
 		var showMsg;
-		var onclick = function(e){
-			showMsg("msgArea", "Click!");
-		};
 		var onclick1 = function(e){
-			alert("Click!");
+			showMsg("msgArea1", "Click!");
+		};
+		var onclick2 = function(e){
+			showMsg("msgArea2", "Click!");
 		};
 		
 		require([
@@ -161,8 +161,8 @@
 			height: 100%;
 		}
 		.mblRoundRect {
-			margin-left: 32px;
-			margin-right: 32px;
+			margin-left: 12px;
+			margin-right: 12px;
 		}
 		.bold {
 			font-weight: bold;
@@ -172,9 +172,9 @@
 <body style="visibility:hidden;">
 	<div id="main" data-dojo-type="dojox/mobile/View">
 		<ul data-dojo-type="dojox/mobile/TabBar" 
-			data-dojo-props="barType:'segmentedControl', fixed:'top'">
+			data-dojo-props="barType: 'slimTab', fixed: 'top'">
 			<li data-dojo-type="dojox/mobile/TabBarButton" 
-				data-dojo-props="moveTo:'ListItem', selected:true">ListItem</li>
+				data-dojo-props="moveTo:'ListItem', selected: true">ListItem</li>
 			<li data-dojo-type="dojox/mobile/TabBarButton" 
 				data-dojo-props="moveTo:'Heading'">Heading</li>
 			<li data-dojo-type="dojox/mobile/TabBarButton" 
@@ -185,6 +185,7 @@
 
 		<!-- Templated ListItem -->
 		<div id="ListItem" data-dojo-type="dojox/mobile/ScrollableView">
+			<div id="msgArea1" style="margin-left: 40px; margin-top: 4px; height: 20px"></div>
 			<ul id="list" data-dojo-type="dojox/mobile/RoundRectList" 
 				data-dojo-props="iconBase:'images/tab-icon-11h.png', variableHeight: true">
 				<li data-dojo-type="dojox/mobile/ListItem"
@@ -222,22 +223,20 @@
 		<!-- Templated Form Controls -->
 		<div id="FormControls" data-dojo-type="dojox/mobile/ScrollableView">
 			<h1 data-dojo-type="dojox/mobile/Heading">Form Controls</h1>
-			<div id="msgArea" style="margin-left: 40px; margin-top: 4px; height: 20px"></div>
+			<div id="msgArea2" style="margin-left: 40px; margin-top: 4px; height: 20px"></div>
 			<div data-dojo-type="dojox/mobile/RoundRect" data-dojo-props="shadow:true">
 			<table style="width:100%">
 				<tr>
 					<td><span class="bold">Button</span></td>
 					<td style="text-align:right">
 						<button data-dojo-type="dojox/mobile/Button" 
-							data-dojo-props="templateString: '<button class=\'${baseClass}\' data-dojo-attach-point=\'containerNode\'></button>'"
-							data-dojo-mixins="dijit/_TemplatedMixin"
-							onClick="onclick">
+							data-dojo-props="templateString: '<button class=\'${baseClass}\' data-dojo-attach-point=\'containerNode\'></button>', onClick: onclick2"
+							data-dojo-mixins="dijit/_TemplatedMixin">
 							 Press me! (inline template)
 						</button>
 						<button data-dojo-type="dojox/mobile/Button" 
-							data-dojo-props="templateString: templateButton1"
-							data-dojo-mixins="dijit/_TemplatedMixin"
-							onClick="onclick">
+							data-dojo-props="templateString: templateButton1, onClick: onclick2"
+							data-dojo-mixins="dijit/_TemplatedMixin">
 							Press me! (external template)
 						</button>
 					</td>
@@ -251,10 +250,10 @@
 					<td><span class="bold">Slider</span></td>
 					<td style="float:right">
 						<input data-dojo-type="dojox/mobile/Slider"
-							style="width:200px;" type="range"
+							style="width:150px;" type="range"
 							data-dojo-props="templateString: templateSlider1, 
 								value:10, min:0, max:40, step:0.1, 
-								onChange:function(v){ showMsg('msgArea', 'value: ' + this.get('value')); }"
+								onChange:function(v){ showMsg('msgArea2', 'value: ' + this.get('value')); }"
 							data-dojo-mixins="dijit/_TemplatedMixin">
 					</td>
 				</tr>
@@ -270,7 +269,7 @@
 						<input type="checkbox" id="cbox"
 							data-dojo-type="dojox/mobile/CheckBox"
 							data-dojo-props="templateString: templateCheckBox1, 
-								onChange:function(v){ showMsg('msgArea', 'checked: ' + this.get('checked')); }">
+								onChange:function(v){ showMsg('msgArea2', 'checked: ' + this.get('checked')); }">
 					</td>
 				</tr>
 			</table>
@@ -283,7 +282,7 @@
 					<td style="text-align:right">
 						<button data-dojo-type="dojox/mobile/ToggleButton"
 							data-dojo-props="templateString: templateToggleButton1,
-								onChange:function(v){ showMsg('msgArea', 'checked: ' + this.get('checked')); }">
+								onChange:function(v){ showMsg('msgArea2', 'checked: ' + this.get('checked')); }">
 								Toggle me
 						</button>
 					</td>
@@ -299,13 +298,13 @@
 						<input type="checkbox" value="on"
 							data-dojo-type="dojox/mobile/Switch"
 							data-dojo-props="templateString: templateSwitch1,
-								onStateChanged:function(v){ showMsg('msgArea', 'value: ' + v); }"
+								onStateChanged:function(v){ showMsg('msgArea2', 'value: ' + v); }"
 							data-dojo-mixins="dijit/_TemplatedMixin, dijit/_WidgetsInTemplateMixin">
 					</td>
 					<td style="text-align:right">
 						<input type="checkbox" value="on"
 							data-dojo-type=TemplatedSwitch
-							data-dojo-props="onStateChanged:function(v){ showMsg('msgArea', 'value: ' + v); }">
+							data-dojo-props="onStateChanged:function(v){ showMsg('msgArea2', 'value: ' + v); }">
 					</td>
 				</tr>
 			</table>
@@ -318,19 +317,19 @@
 					<td style="text-align:right">
 						<input type="radio" id="rb1" data-dojo-type="dojox/mobile/RadioButton" 
 							data-dojo-props="templateString: templateRadioButton1,
-								onChange:function(v){ if(this.get('checked')) showMsg('msgArea', 'checked RadioButton 1'); }"
+								onChange:function(v){ if(this.get('checked')) showMsg('msgArea2', 'checked RadioButton 1'); }"
 							name="mobileRadio" value="Large" checked>
 						<label for="rb1">1</label>
 						
 						<input type="radio" id="rb2" data-dojo-type="dojox/mobile/RadioButton" 
 							data-dojo-props="templateString: templateRadioButton1,
-								onChange:function(v){ if(this.get('checked')) showMsg('msgArea', 'checked RadioButton 2'); }"
+								onChange:function(v){ if(this.get('checked')) showMsg('msgArea2', 'checked RadioButton 2'); }"
 							name="mobileRadio" value="Large">
 						<label for="rb2">2</label>
 						
 						<input type="radio" id="rb3" data-dojo-type="dojox/mobile/RadioButton" 
 							data-dojo-props="templateString: templateRadioButton1,
-								onChange:function(v){ if(this.get('checked')) showMsg('msgArea', 'checked RadioButton 3'); }"
+								onChange:function(v){ if(this.get('checked')) showMsg('msgArea2', 'checked RadioButton 3'); }"
 							name="mobileRadio" value="Large">
 						<label for="rb3">3</label>
 				</tr>
