@@ -1,7 +1,9 @@
 define(["doh/main", "require", "dojo/sniff"], function(doh, require, has){
-
-	doh.registerUrl("dojox.mobile.tests.doh.ComboBoxTests", require.toUrl("./ComboBoxTests.html"),999999);
+	if(has("ie") >= 10){
+		// ComboBox is broken on IE10 with the native WindowsPhone theme
+		doh.registerUrl("dojox.mobile.tests.doh.ComboBoxTests", require.toUrl("./ComboBoxTests.html?theme=iPhone"),999999);
+	}else{
+		doh.registerUrl("dojox.mobile.tests.doh.ComboBoxTests", require.toUrl("./ComboBoxTests.html"),999999);
+	}
 });
-
-
 
