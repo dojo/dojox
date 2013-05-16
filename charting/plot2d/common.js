@@ -48,18 +48,16 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/Color",
 						if(typeof run.data[j] == "number"){
 							// 1D case
 							var old_vmin = stats.vmin, old_vmax = stats.vmax;
-							if(!("ymin" in run) || !("ymax" in run)){
-								arr.forEach(run.data, function(val, i){
-									if(val !== null){
-										var x = i + 1, y = val;
-										if(isNaN(y)){ y = 0; }
-										stats.hmin = Math.min(stats.hmin, x);
-										stats.hmax = Math.max(stats.hmax, x);
-										stats.vmin = Math.min(stats.vmin, y);
-										stats.vmax = Math.max(stats.vmax, y);
-									}
-								});
-							}
+							arr.forEach(run.data, function(val, i){
+								if(val !== null){
+									var x = i + 1, y = val;
+									if(isNaN(y)){ y = 0; }
+									stats.hmin = Math.min(stats.hmin, x);
+									stats.hmax = Math.max(stats.hmax, x);
+									stats.vmin = Math.min(stats.vmin, y);
+									stats.vmax = Math.max(stats.vmax, y);
+								}
+							});
 							if("ymin" in run){ stats.vmin = Math.min(old_vmin, run.ymin); }
 							if("ymax" in run){ stats.vmax = Math.max(old_vmax, run.ymax); }
 						}else{
