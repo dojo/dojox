@@ -27,9 +27,8 @@ define([
 		//		specify a border of a child DOM node with CSS.
 		//
 		//		FixedSplitter has no knowledge of its child widgets.
-		//		dojox/mobile/Container (formerly known as FixedSplitterPane),
-		//		dojox/mobile/Pane, or dojox/mobile/ContentPane can be used as a
-		//		child widget of FixedSplitter.
+		//		dojox/mobile/Container, dojox/mobile/Pane, or dojox/mobile/ContentPane 
+		//		can be used as a child widget of FixedSplitter.
 		//
 		//		- Use dojox/mobile/Container if your content consists of ONLY
 		//		  Dojo widgets.
