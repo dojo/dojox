@@ -99,10 +99,7 @@ define([
 		uncheckClass: "",
 
 		// variableHeight: Boolean
-		//		If true, the height of the item varies according to its
-		//		content. In dojo 1.6 or older, the "mblVariableHeight" class was
-		//		used for this purpose. In dojo 1.7, adding the mblVariableHeight
-		//		class still works for backward compatibility.
+		//		If true, the height of the item varies according to its content.
 		variableHeight: false,
 
 		// rightIconTitle: String
