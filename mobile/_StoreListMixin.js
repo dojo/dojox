@@ -45,6 +45,12 @@ define([
 		createListItem: function(/*Object*/item){
 			// summary:
 			//		Creates a list item widget.
+			return new this.itemRenderer(this._createItemProperties(item));
+		},
+		
+		_createItemProperties: function(/*Object*/item){
+			// summary:
+			//		Creates list item properties.
 			var props = {};
 			if(!item["label"]){
 				props["label"] = item[this.labelProperty];
@@ -58,8 +64,9 @@ define([
 			for(var name in item){
 				props[(this.itemMap && this.itemMap[name]) || name] = item[name];
 			}
-			return new this.itemRenderer(props);
+			return props;
 		},
+		
 		_setDirAttr: function(props){
 			// summary:
 			//		Set the 'dir' attribute to support Mirroring.
@@ -104,7 +111,7 @@ define([
 		onUpdate: function(/*Object*/item, /*Number*/insertedInto){
 			// summary:
 			//		Updates an existing list item when a data item has been modified.
-			this.getChildren()[insertedInto].set(item);
+			this.getChildren()[insertedInto].set(this._createItemProperties(item));
 		},
 
 		onDelete: function(/*Object*/item, /*Number*/removedFrom){

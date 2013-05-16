@@ -83,6 +83,7 @@ var tests = [
 	{ url: "test_EdgeToEdgeStoreList-auto-v.html", tags: "EdgeToEdgeStoreList" },
 	{ url: "test_EdgeToEdgeStoreList-categ.html", tags: "EdgeToEdgeStoreList" },
 	{ url: "test_EdgeToEdgeStoreList-itemMap.html", tags: "EdgeToEdgeStoreList"},
+	{ url: "test_EdgeToEdgeStoreList-itemMap-updates.html", tags: "EdgeToEdgeStoreList"},
 	{ url: "test_EdgeToEdgeStoreList-lazy.html", tags: "EdgeToEdgeStoreList"},
 	{ url: "test_EdgeToEdgeStoreList-more-sv.html", tags: "EdgeToEdgeStoreList" },
 	{ url: "test_EdgeToEdgeStoreList-more-v.html", tags: "EdgeToEdgeStoreList" },
