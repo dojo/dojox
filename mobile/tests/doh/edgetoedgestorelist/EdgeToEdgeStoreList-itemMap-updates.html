@@ -95,41 +95,41 @@
 			// Tests
 			ready(function(){
 				runner.register("dojox.mobile.test.doh.scrollablepane.ScrollablePaneTests", [
-       				{
-       					name: "Verify that ticket #17093 is fixed",
-       					timeout: 4000,
-       					runTest: function(){
-       						var referenceValues = lang.clone(static_data1);
-       						var nodeIndex = 0;
-       						// Verify what is displayed
-       						var nodes = query(".mblListItemLabel", "list");
+					{
+						name: "Verify that ticket #17093 is fixed",
+						timeout: 4000,
+						runTest: function(){
+							var referenceValues = lang.clone(static_data1);
+							var nodeIndex = 0;
+							// Verify what is displayed
+							var nodes = query(".mblListItemLabel", "list");
 							runner.assertEqual(referenceValues.length, nodes.length, 
 								"Before update, number of elements in the list is not the expected one");
 							nodes.forEach(function(node){
-       							var text = node.textContent || node.innerText;
-       							runner.assertEqual(text, referenceValues[nodeIndex].text);
-       							nodeIndex++;
-       						});
-       						// Click the update button
-       						fireOnClick(document.getElementById("updateButton"));
-       						// Verify what is displayed
-       						var def = new runner.Deferred();
-       						setTimeout(def.getTestCallback(function(){
-       							nodeIndex = 0;
-           						var nodes = query(".mblListItemLabel", "list");
-    							runner.assertEqual(referenceValues.length, nodes.length, 
-    								"After update, number of elements in the list is not the expected one");
-    							nodes.forEach(function(node){
-           							var text = node.textContent || node.innerText;
-           							runner.assertEqual(text, referenceValues[nodeIndex].text + "-Updated");
-           							nodeIndex++;
-           						});
-       						}), 2000);
-       						return def;
-       					}
-       				}
-       			]);
-       			runner.run();
+								var text = node.textContent || node.innerText;
+								runner.assertEqual(text, referenceValues[nodeIndex].text);
+								nodeIndex++;
+							});
+							// Click the update button
+							fireOnClick(document.getElementById("updateButton"));
+							// Verify what is displayed
+							var def = new runner.Deferred();
+							setTimeout(def.getTestCallback(function(){
+								nodeIndex = 0;
+								var nodes = query(".mblListItemLabel", "list");
+								runner.assertEqual(referenceValues.length, nodes.length, 
+									"After update, number of elements in the list is not the expected one");
+								nodes.forEach(function(node){
+									var text = node.textContent || node.innerText;
+									runner.assertEqual(text, referenceValues[nodeIndex].text + "-Updated");
+									nodeIndex++;
+								});
+								}), 2000);
+							return def;
+							}
+						}
+					]);
+				runner.run();
 			});
 		});
 	</script>
