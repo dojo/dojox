@@ -58,6 +58,7 @@ var tests = [
 	{ url: "test_Carousel.html", tags: "Carousel" },
 	{ url: "test_CarouselItem.html", tags: "Carousel" },
 	{ url: "test_ComboBox-sv.html", tags: "FormControls" },
+	{ url: "test_ComboBox-widepage.html", tags: "FormControls" },
 	{ url: "test_ComboBox.html", tags: "FormControls" },
 	{ url: "test_ContentPane.html", tags: "ContentPane" },
 	{ url: "test_DataCarousel-demo.html", tags: "DataCarousel" },
