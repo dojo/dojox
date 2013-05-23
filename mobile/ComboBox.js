@@ -115,6 +115,7 @@ define([
 			}
 			this.inherited(arguments);
 			domAttr.remove(this.domNode, "aria-owns");
+			domAttr.set(this.domNode, "aria-expanded", "false");
 			popup.close(this.dropDown);
 			this._opened = false;
 
@@ -143,6 +144,7 @@ define([
 				self = this;
 				
 			domAttr.set(dropDown.domNode, "role", "listbox");
+			domAttr.set(this.domNode, "aria-expanded", "true");
 			if(dropDown.id){
 				domAttr.set(this.domNode, "aria-owns", dropDown.id);
 			}
@@ -301,6 +303,7 @@ define([
 			this.inherited(arguments);
 			this.connect(this.domNode, "onclick", "_onClick");
 			domAttr.set(this.domNode, "role", "combobox");
+			domAttr.set(this.domNode, "aria-expanded", "false");
 		},
 
 		destroy: function(){
