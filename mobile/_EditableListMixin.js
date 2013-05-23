@@ -49,8 +49,6 @@ define([
 				top: node.offsetTop + "px"
 			});
 			domClass.add(node, "mblListItemFloat");
-			domAttr.set(node, "aria-grabbed", "true");
-			domAttr.set(this.domNode, "aria-dropeffect", "move");
 		},
 
 		_resetMoveItem: function(/*DomNode*/node){
@@ -58,8 +56,6 @@ define([
 			//		private
 			this.defer(function(){ // iPhone needs setTimeout (via defer)
 				domClass.remove(node, "mblListItemFloat");
-				domAttr.remove(node, "aria-grabbed");
-				domAttr.remove(this.domNode, "aria-dropeffect");
 				domStyle.set(node, {
 					width: "",
 					top: ""
@@ -104,6 +100,8 @@ define([
 			for(var n = e.target; n !== item.domNode; n = n.parentNode){
 				if(n === item.rightIconNode){
 					rightIconPressed = true;
+					domAttr.set(item.rightIconNode, "aria-grabbed", "true");
+					domAttr.set(this.domNode, "aria-dropeffect", "move");
 					break;
 				}
 			}
@@ -173,6 +171,9 @@ define([
 			this._conn = null;
 			
 			this.onMoveItem(this._movingItem, startIndex, endIndex); //callback
+			
+			domAttr.set(this._movingItem.rightIconNode, "aria-grabbed", "false");
+			domAttr.remove(this.domNode, "aria-dropeffect");
 		},
 
 		startEdit: function(){
@@ -183,14 +184,14 @@ define([
 			array.forEach(this.getChildren(), function(child){
 				if(!child.deleteIconNode){
 					child.set("rightIcon", this.rightIconForEdit);
-					if(child.rightIconNode && child.rightIconNode.firstChild){
-						domAttr.set(child.rightIconNode.firstChild, "role", "button");
-						domAttr.set(child.rightIconNode.firstChild, "aria-grabbed", "false");
+					if(child.rightIconNode){
+						domAttr.set(child.rightIconNode, "role", "button");
+						domAttr.set(child.rightIconNode, "aria-grabbed", "false");
 					}
 					child.set("deleteIcon", this.deleteIconForEdit);
 					child.deleteIconNode.tabIndex = child.tabIndex;
-					if(child.deleteIconNode.firstChild){
-						domAttr.set(child.deleteIconNode.firstChild, "role", "button");
+					if(child.deleteIconNode){
+						domAttr.set(child.deleteIconNode, "role", "button");
 					}
 				}
 				child.rightIconNode.style.display = "";
