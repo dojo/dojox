@@ -300,6 +300,7 @@ var tests = [
 	{ url: "test_transition-animations2.html", tags: "transition" },
 	{ url: "test_transition-connect.html", tags: "transition" },
 	{ url: "test_transition-pubsub.html", tags: "transition" },
+	{ url: "test_transition-touch-events.html", tags: "transition"},
 	{ url: "test_FilteredList-EdgeToEdgeDataList-demo.html", tags: "FilteredLists" },
 	{ url: "test_FilteredList-EdgeToEdgeStoreList-auto.html", tags: "FilteredLists" },
 	{ url: "test_FilteredList-EdgeToEdgeStoreList-auto-prog.html", tags: "FilteredLists" },
