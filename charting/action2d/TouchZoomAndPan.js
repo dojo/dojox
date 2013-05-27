@@ -154,13 +154,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/event", "dojo/sniff
 				this._startCoord = scaler.bounds.from;
 				this._endCoord = scaler.bounds.to;
 			}else{
-				if(!this._startTime){
-					this._startTime = new Date().getTime();
-				}else if((new Date().getTime() - this._startTime) < 250 &&
-					Math.abs(this._startPageCoord.x - prevPageCoord.x) < 50 &&
-					Math.abs(this._startPageCoord.y - prevPageCoord.y) < 50){
-					this._startTime = 0;
-					this.onDoubleTap(event);
+				// double tap is only for single touch
+				if(!event.touches || event.touches.length == 1){
+					if(!this._startTime){
+						this._startTime = new Date().getTime();
+					}else if((new Date().getTime() - this._startTime) < 250 &&
+						Math.abs(this._startPageCoord.x - prevPageCoord.x) < 30 &&
+						Math.abs(this._startPageCoord.y - prevPageCoord.y) < 30){
+						this._startTime = 0;
+						this.onDoubleTap(event);
+					}else{
+						// we missed the doubletap, we need to re-init for next time
+						this._startTime = 0;
+					}
 				}else{
 					// we missed the doubletap, we need to re-init for next time
 					this._startTime = 0;
