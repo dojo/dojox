@@ -223,8 +223,13 @@ define([
 				widget = manager.byNode(widget);
 			}
 
-			// build the map of widgets
-			var widgets = array.map(widget.getDescendants(), registerWidget, this);
+			// Build the map of widgets, using either `widget.getChildren` (_WidgetBase superclasses)
+			// or `widget.getDescendants` (_Widget superclasses.) `widget.getDescendants` is deprecated 
+			// and should normally be avoided as it returns "internal" widgets declared in templates.
+			// For back compat, however, this registerWidgetDescendants method should still use
+			// getDescendants if it exists so as to register all widget descendants with this form manager.
+			var containedWidgets = widget.getDescendants ? widget.getDescendants() : widget.getChildren(),
+				widgets = array.map(containedWidgets, registerWidget, this);
 
 			// process observers for widgets
 			array.forEach(widgets, function(name){
@@ -254,9 +259,10 @@ define([
 			}
 
 			// unregister widgets by names
+			var containedWidgets = widget.getDescendants ? widget.getDescendants() : widget.getChildren();
 			array.forEach(
 				array.map(
-					widget.getDescendants(),
+					containedWidgets,
 					function(w){
 						return w instanceof FormWidget && w.get("name") || null;
 					}
