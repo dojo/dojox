@@ -34,6 +34,10 @@ define([
 		// weight: [private] Number
 		//		Frictional weight used to compute scrolling speed.
 		weight: 1.2,
+		
+		scrollType: 0,
+		
+		_inMotion: false,
 
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -48,6 +52,7 @@ define([
 		startup: function(){
 			if(this._started){ return; }
 			this.inherited(arguments);
+			console.log("scrollType: " + this.scrollType);
 		},
 
 		resize: function(){
@@ -62,9 +67,15 @@ define([
 		onTouchStart: function(/*Event*/e){
 			// summary:
 			//		Internal function to handle touchStart events.
+			console.log("touchStart " + this + " " + e);
+			if(this._inMotion){console.log("touchStart on motion: return"); return; } // Ignore touchstart if the view is already in motion
 			var fromTop = this.domNode.offsetTop;
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
+				if(nextView._inMotion){ // Ignore touchstart if the next view is already in motion
+					console.log("touchStart with nextView in motion: return");
+					return;
+				}
 				nextView.stopAnimation();
 				domClass.add(nextView.domNode, "mblIn");
 				// Temporarily add padding to align with the fromNode while transition
@@ -72,12 +83,28 @@ define([
 			}
 			var prevView = this.previousView(this.domNode);
 			if(prevView){
+				if(prevView._inMotion){ // Ignore touchstart if the previous view is already in motion
+					console.log("touchStart with prevView in motion: return");
+					return;
+				}
 				prevView.stopAnimation();
 				domClass.add(prevView.domNode, "mblIn");
 				// Temporarily add padding to align with the fromNode while transition
 				prevView.containerNode.style.paddingTop = fromTop + "px";
 			}
+			console.log(this + " is in motion");
+			this._inMotion = true;
 			this.inherited(arguments);
+		},
+
+		onTouchEnd: function(/*Event*/e){
+			console.log("touchEnd " + this + " " + e);
+			if(e && !this._fingerMovedSinceTouchStart()){
+				console.log(this + " is not in motion anymore");
+				this._inMotion = false;
+			}
+			this.inherited(arguments);
+			// todo: if it was a click, then the view is not in motion anymore...
 		},
 
 		handleNextPage: function(/*Widget*/w){
@@ -240,6 +267,7 @@ define([
 		onFlickAnimationEnd: function(/*Event*/e){
 			// summary:
 			//		Overrides dojox/mobile/scrollable.onFlickAnimationEnd().
+			console.log("onFlickAnimationEnd " + this + " " + e);
 			if(e && e.target && !domClass.contains(e.target, "mblScrollableScrollTo2")){ return; }
 			this.inherited(arguments);
 
@@ -265,6 +293,8 @@ define([
 			}else if(!has("css3-animations")){
 				this.containerNode.style.left = "0px"; // compat mode needs this
 			}
+			console.log(this + " is not in motion anymore");
+			this._inMotion = false;
 		}
 	});
 	return has("dojo-bidi") ? declare("dojox.mobile.SwapView", [SwapView, BidiSwapView]) : SwapView;
