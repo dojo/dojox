@@ -1,4 +1,5 @@
 define([
+	"dojo/aspect",
 	"dojo/_base/declare",
 	"./_base",
 	"dijit/_TemplatedMixin",
@@ -7,7 +8,7 @@ define([
 	"dojo/_base/array",
 	"dojo/string",
 	"dojo/parser"
-], function(declare,dd,TemplatedMixin, domConstruct,Cache,Array,dString,Parser){
+], function(aspect,declare,dd,TemplatedMixin, domConstruct,Cache,Array,dString,Parser){
 
 	return declare("dojox.dtl._Templated", TemplatedMixin, {
 		// summary:
