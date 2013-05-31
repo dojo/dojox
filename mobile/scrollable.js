@@ -1163,7 +1163,6 @@ define([
 			//		private
 			
 			// idx: 0:scrollbarV, 1:scrollbarH, 2:content
-console.log(this + "_runSlideAnimation from {x:" + from.x + ", y: " + from.y + "} to {x: " + to.x + ", y:" + to.y + "}");
 			if(has("css3-animations")){
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){

@@ -34,10 +34,20 @@ define([
 		// weight: [private] Number
 		//		Frictional weight used to compute scrolling speed.
 		weight: 1.2,
-		
-		scrollType: 0,
-		
-		_inMotion: false,
+
+		// _inMotionParentAttribute: [private] String
+		//      Name of the attribute set on the Swap View parent node to store "in motion" state
+		//      for the SwapView and its siblings.
+		_inMotionParentAttribute: "data-dojox-mobile-swapview-inmotion",
+
+		// _endOfTransitionTimeoutHandle: [private] Object
+		//		The handle (returned by _WidgetBase.defer) for the timeout set on touchEnd in case
+		//      the end of transition event is not fired by the browser.
+		_endOfTransitionTimeoutHandle: null,
+
+		// _endOfTransitionTimeoutDuration: [private] Number
+		//		The duration (in milliseconds) for the end of transition timeout.
+		_endOfTransitionTimeoutDuration: 1500,
 
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -52,7 +62,6 @@ define([
 		startup: function(){
 			if(this._started){ return; }
 			this.inherited(arguments);
-			console.log("scrollType: " + this.scrollType);
 		},
 
 		resize: function(){
@@ -67,15 +76,10 @@ define([
 		onTouchStart: function(/*Event*/e){
 			// summary:
 			//		Internal function to handle touchStart events.
-			console.log("touchStart " + this + " " + e);
-			if(this._inMotion){console.log("touchStart on motion: return"); return; } // Ignore touchstart if the view is already in motion
+			if(this._siblingViewsInMotion()){ return; } // Ignore touchstart if the views are already in motion
 			var fromTop = this.domNode.offsetTop;
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
-				if(nextView._inMotion){ // Ignore touchstart if the next view is already in motion
-					console.log("touchStart with nextView in motion: return");
-					return;
-				}
 				nextView.stopAnimation();
 				domClass.add(nextView.domNode, "mblIn");
 				// Temporarily add padding to align with the fromNode while transition
@@ -83,28 +87,28 @@ define([
 			}
 			var prevView = this.previousView(this.domNode);
 			if(prevView){
-				if(prevView._inMotion){ // Ignore touchstart if the previous view is already in motion
-					console.log("touchStart with prevView in motion: return");
-					return;
-				}
 				prevView.stopAnimation();
 				domClass.add(prevView.domNode, "mblIn");
 				// Temporarily add padding to align with the fromNode while transition
 				prevView.containerNode.style.paddingTop = fromTop + "px";
 			}
-			console.log(this + " is in motion");
-			this._inMotion = true;
+			this._setSiblingViewsInMotion(true);
 			this.inherited(arguments);
 		},
 
 		onTouchEnd: function(/*Event*/e){
-			console.log("touchEnd " + this + " " + e);
-			if(e && !this._fingerMovedSinceTouchStart()){
-				console.log(this + " is not in motion anymore");
-				this._inMotion = false;
+			if(e){
+				if(!this._fingerMovedSinceTouchStart()){ // No transition / animation following touchend in this case
+					this._setSiblingViewsInMotion(false);
+				}else{ // There might be a transition / animation following touchend
+					// As the webkitTransitionEndEvent is not always fired, make sure we call this._setSiblingViewsInMotion(false) even
+					// if the event is not fired (and onFlickAnimationEnd is not called as a result)
+					this._endOfTransitionTimeoutHandle = this.defer(function(){
+						this._setSiblingViewsInMotion(false);
+					}, this._endOfTransitionTimeoutDuration);
+				}
 			}
 			this.inherited(arguments);
-			// todo: if it was a click, then the view is not in motion anymore...
 		},
 
 		handleNextPage: function(/*Widget*/w){
@@ -265,9 +269,11 @@ define([
 		},
 
 		onFlickAnimationEnd: function(/*Event*/e){
+			if(this._endOfTransitionTimeoutHandle){
+				this._endOfTransitionTimeoutHandle = this._endOfTransitionTimeoutHandle.remove();
+			}
 			// summary:
 			//		Overrides dojox/mobile/scrollable.onFlickAnimationEnd().
-			console.log("onFlickAnimationEnd " + this + " " + e);
 			if(e && e.target && !domClass.contains(e.target, "mblScrollableScrollTo2")){ return; }
 			this.inherited(arguments);
 
@@ -293,8 +299,24 @@ define([
 			}else if(!has("css3-animations")){
 				this.containerNode.style.left = "0px"; // compat mode needs this
 			}
-			console.log(this + " is not in motion anymore");
-			this._inMotion = false;
+			this._setSiblingViewsInMotion(false);
+		},
+
+		_setSiblingViewsInMotion: function(/*Boolean*/inMotion){
+			var inMotionAttributeValue = inMotion ? "true" : false;
+			var parent = this.domNode.parentNode;
+			if(parent){
+				parent.setAttribute(this._inMotionParentAttribute, inMotionAttributeValue);
+			}
+		},
+
+		_siblingViewsInMotion: function(){
+			var parent = this.domNode.parentNode;
+			if(parent){
+				return parent.getAttribute(this._inMotionParentAttribute) == "true";
+			}else{
+				return false;
+			}
 		}
 	});
 	return has("dojo-bidi") ? declare("dojox.mobile.SwapView", [SwapView, BidiSwapView]) : SwapView;
