@@ -40,6 +40,7 @@ define([
 
 		destroy: function(/*Boolean*/ preserveDom){
 			this._scrollableParent = null;
+			this.inherited(arguments);
 		},
 
 		_reposition: function(){
