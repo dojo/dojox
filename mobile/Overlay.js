@@ -11,8 +11,9 @@ define([
 	"dojo/_base/array",
 	"dijit/registry",
 	"dojo/touch",
+	"./viewRegistry",
 	"./_css3"
-], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry, touch, css3){
+], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry, touch, viewRegistry, css3){
 
 	return declare("dojox.mobile.Overlay", WidgetBase, {
 		// summary:
@@ -23,12 +24,22 @@ define([
 		//		The name of the CSS class of this widget.
 		baseClass: "mblOverlay mblOverlayHidden",
 
+		// _scrollableParent: Object 
+		//		The parent scrollable that contains the Overlay, if any. It is updated when the show method
+		//		is called, as we may then use it each time the _reposition method is executed (in order
+		//		to calculate the scroll position if the parent widget is scrollable)
+		_scrollableParent: null,
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(!this.containerNode){
 				// set containerNode so that getChildren() works
 				this.containerNode = this.domNode;
 			}
+		},
+
+		destroy: function(/*Boolean*/ preserveDom){
+			this._scrollableParent = null;
 		},
 
 		_reposition: function(){
@@ -38,7 +49,12 @@ define([
 			//		private
 			var popupPos = domGeometry.position(this.domNode);
 			var vp = windowUtils.getBox();
-			if((popupPos.y+popupPos.h) != vp.h // TODO: should be a has() test for position:fixed not scrolling
+			// update vp scroll position if the overlay is inside a scrollable
+		 	if(this._scrollableParent){
+		 			vp.t -= this._scrollableParent.getPos().y;
+		 	}
+		 	// reposition if needed 
+		 	if((popupPos.y+popupPos.h) != vp.h // TODO: should be a has() test for position:fixed not scrolling
 				|| (domStyle.get(this.domNode, 'position') != 'absolute' && has('android') < 3)){ // android 2.x supports position:fixed but child transforms don't persist
 				popupPos.y = vp.t + vp.h - popupPos.h;
 				domStyle.set(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });
@@ -54,10 +70,13 @@ define([
 					w.resize();
 				}
 			});
+			// search for the scrollable parent if any 
+			this._scrollableParent = viewRegistry.getEnclosingScrollable(this.domNode);
 			var popupPos = this._reposition();
 			if(aroundNode){
 				var aroundPos = domGeometry.position(aroundNode);
 				if(popupPos.y < aroundPos.y){ // if the aroundNode is under the popup, try to scroll it up
+					// TODO: if this._scrollableParent, use this._scrollableParent.scrollTo method to make sure the aroundNode is visible ?
 					win.global.scrollBy(0, aroundPos.y + aroundPos.h - popupPos.y);
 					this._reposition();
 				}
@@ -67,7 +86,10 @@ define([
 			this.defer(function(){
 				var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 					this.disconnect(handler);
-					domClass.remove(_domNode, ["mblCoverv", "mblIn", "mblTransition"]);
+					if(!has("ios")){
+						// cause flickering on ios
+						domClass.remove(_domNode, ["mblCoverv", "mblIn", "mblTransition"]);
+					}
 					this._reposition();
 				});
 				domClass.add(_domNode, "mblTransition");
