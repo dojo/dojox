@@ -840,8 +840,6 @@ var EditorTableDialog = declare("dojox.editor.plugins.EditorTableDialog", [Dialo
 		}
 		t += '</table><br />';
 
-		//console.log(t);
-		this.onBuildTable({htmlText:t, id:_id});
 		var cl = dojo.connect(this, "onHide", function(){
 			dojo.disconnect(cl);
 			var self = this;
@@ -850,6 +848,9 @@ var EditorTableDialog = declare("dojox.editor.plugins.EditorTableDialog", [Dialo
 			}, 10);
 		});
 		this.hide();
+
+		//console.log(t);
+		this.onBuildTable({htmlText:t, id:_id});
 	},
 
 	onCancel: function(){
@@ -879,6 +880,7 @@ var InsertTable = declare("dojox.editor.plugins.InsertTable", TablePlugins, {
 		var c = dojo.connect(w, "onBuildTable", this, function(obj){
 			dojo.disconnect(c);
 
+			this.editor.focus();
 			var res = this.editor.execCommand('inserthtml', obj.htmlText);
 
 			// commenting this line, due to msg below
