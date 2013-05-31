@@ -35,19 +35,10 @@ define([
 		//		Frictional weight used to compute scrolling speed.
 		weight: 1.2,
 
-		// _inMotionParentAttribute: [private] String
-		//      Name of the attribute set on the Swap View parent node to store "in motion" state
-		//      for the SwapView and its siblings.
-		_inMotionParentAttribute: "data-dojox-mobile-swapview-inmotion",
-
 		// _endOfTransitionTimeoutHandle: [private] Object
 		//		The handle (returned by _WidgetBase.defer) for the timeout set on touchEnd in case
 		//      the end of transition event is not fired by the browser.
 		_endOfTransitionTimeoutHandle: null,
-
-		// _endOfTransitionTimeoutDuration: [private] Number
-		//		The duration (in milliseconds) for the end of transition timeout.
-		_endOfTransitionTimeoutDuration: 1500,
 
 		buildRendering: function(){
 			this.inherited(arguments);
@@ -105,7 +96,7 @@ define([
 					// if the event is not fired (and onFlickAnimationEnd is not called as a result)
 					this._endOfTransitionTimeoutHandle = this.defer(function(){
 						this._setSiblingViewsInMotion(false);
-					}, this._endOfTransitionTimeoutDuration);
+					}, 1500);
 				}
 			}
 			this.inherited(arguments);
@@ -306,14 +297,14 @@ define([
 			var inMotionAttributeValue = inMotion ? "true" : false;
 			var parent = this.domNode.parentNode;
 			if(parent){
-				parent.setAttribute(this._inMotionParentAttribute, inMotionAttributeValue);
+				parent.setAttribute("data-dojox-mobile-swapview-inmotion", inMotionAttributeValue);
 			}
 		},
 
 		_siblingViewsInMotion: function(){
 			var parent = this.domNode.parentNode;
 			if(parent){
-				return parent.getAttribute(this._inMotionParentAttribute) == "true";
+				return parent.getAttribute("data-dojox-mobile-swapview-inmotion") == "true";
 			}else{
 				return false;
 			}
