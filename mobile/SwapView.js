@@ -67,7 +67,10 @@ define([
 		onTouchStart: function(/*Event*/e){
 			// summary:
 			//		Internal function to handle touchStart events.
-			if(this._siblingViewsInMotion()){ return; } // Ignore touchstart if the views are already in motion
+			if(this._siblingViewsInMotion()){  // Ignore touchstart if the views are already in motion
+				this.propagatable ? e.preventDefault() : event.stop(e);
+				return;
+			}
 			var fromTop = this.domNode.offsetTop;
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
