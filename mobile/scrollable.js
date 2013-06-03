@@ -7,11 +7,12 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-geometry",
 	"dojo/touch",
 	"./sniff",
 	"./_css3",
 	"./_maskUtils"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, touch, has, css3, maskUtils){
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, domGeom, touch, has, css3, maskUtils){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -296,7 +297,7 @@ define([
 			for(var n = this.domNode; n && n.tagName != "BODY"; n = n.offsetParent){
 				n = this.findDisp(n); // find the first displayed view node
 				if(!n){ break; }
-				top += n.offsetTop;
+				top += n.offsetTop + domGeom.getBorderExtents(n).h;
 			}
 
 			// adjust the height of this view
@@ -305,7 +306,7 @@ define([
 				dh = screenHeight - top - this._appFooterHeight; // default height
 			if(this.height === "inherit"){
 				if(this.domNode.offsetParent){
-					h = this.domNode.offsetParent.offsetHeight + "px";
+					h = domGeom.getContentBox(this.domNode.offsetParent).h - domGeom.getBorderExtents(this.domNode).h + "px";
 				}
 			}else if(this.height === "auto"){
 				var parent = this.domNode.offsetParent;
