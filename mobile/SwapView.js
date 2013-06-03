@@ -99,7 +99,7 @@ define([
 					// if the event is not fired (and onFlickAnimationEnd is not called as a result)
 					this._endOfTransitionTimeoutHandle = this.defer(function(){
 						this._setSiblingViewsInMotion(false);
-					}, 1500);
+					}, 1000);
 				}
 			}
 			this.inherited(arguments);
