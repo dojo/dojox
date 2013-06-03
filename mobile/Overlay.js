@@ -24,23 +24,12 @@ define([
 		//		The name of the CSS class of this widget.
 		baseClass: "mblOverlay mblOverlayHidden",
 
-		// _scrollableParent: Object 
-		//		The parent scrollable that contains the Overlay, if any. It is updated when the show method
-		//		is called, as we may then use it each time the _reposition method is executed (in order
-		//		to calculate the scroll position if the parent widget is scrollable)
-		_scrollableParent: null,
-
 		buildRendering: function(){
 			this.inherited(arguments);
 			if(!this.containerNode){
 				// set containerNode so that getChildren() works
 				this.containerNode = this.domNode;
 			}
-		},
-
-		destroy: function(/*Boolean*/ preserveDom){
-			this._scrollableParent = null;
-			this.inherited(arguments);
 		},
 
 		_reposition: function(){
@@ -50,9 +39,11 @@ define([
 			//		private
 			var popupPos = domGeometry.position(this.domNode);
 			var vp = windowUtils.getBox();
+			// search for the scrollable parent if any 
+			var scrollableParent = viewRegistry.getEnclosingScrollable(this.domNode);
 			// update vp scroll position if the overlay is inside a scrollable
-		 	if(this._scrollableParent){
-		 			vp.t -= this._scrollableParent.getPos().y;
+		 	if(scrollableParent){
+		 			vp.t -= scrollableParent.getPos().y;
 		 	}
 		 	// reposition if needed 
 		 	if((popupPos.y+popupPos.h) != vp.h // TODO: should be a has() test for position:fixed not scrolling
@@ -71,13 +62,11 @@ define([
 					w.resize();
 				}
 			});
-			// search for the scrollable parent if any 
-			this._scrollableParent = viewRegistry.getEnclosingScrollable(this.domNode);
 			var popupPos = this._reposition();
 			if(aroundNode){
 				var aroundPos = domGeometry.position(aroundNode);
 				if(popupPos.y < aroundPos.y){ // if the aroundNode is under the popup, try to scroll it up
-					// TODO: if this._scrollableParent, use this._scrollableParent.scrollTo method to make sure the aroundNode is visible ?
+					// TODO: if this widget has a scrollable parent, use its scrollTo method to make sure the aroundNode is visible ?
 					win.global.scrollBy(0, aroundPos.y + aroundPos.h - popupPos.y);
 					this._reposition();
 				}
