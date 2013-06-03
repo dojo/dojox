@@ -141,6 +141,7 @@ var tests = [
 	{ url: "test_Opener-DateSpinWheel.html", tags: "Opener" },
 	{ url: "test_Opener-RoundSelectList-async.html", tags: "Opener" },
 	{ url: "test_Opener-SearchList-async.html", tags: "Opener" },
+	{ url: "test_Overlay-scroll.html", tags: "Opener" },
 	{ url: "test_Overlay.html", tags: "Opener" },
 	{ url: "test_ProgressBar.html", tags: "ProgressBar"},
 	{ url: "test_ProgressIndicator-color.html", tags: "ProgressIndicator" },
