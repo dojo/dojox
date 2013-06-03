@@ -208,7 +208,7 @@ define([
 				this.openExternalView(detail, target);
 				return;
 			}else if(detail.href){
-				if(detail.hrefTarget){
+				if(detail.hrefTarget && detail.hrefTarget != "_self"){
 					win.global.open(detail.href, detail.hrefTarget);
 				}else{
 					var view; // find top level visible view
