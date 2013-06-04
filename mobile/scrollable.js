@@ -346,6 +346,9 @@ define([
 		},
 
 		onFlickAnimationEnd: function(e){
+			if(has("ios")){
+				this._keepInputCaretInActiveElement();
+			}
 			if(e){
 				var an = e.animationName;
 				if(an && an.indexOf("scrollableViewScroll2") === -1){
@@ -525,6 +528,25 @@ define([
 			this._posY.push(y);
 		},
 
+		_keepInputCaretInActiveElement: function(){
+			var activeElement = win.doc.activeElement;
+			var initialValue;
+			if(activeElement && (activeElement.tagName == "INPUT" || activeElement.tagName == "TEXTAREA")){
+				initialValue = activeElement.value;
+				if(activeElement.type == "number" || activeElement.type == "week"){
+					if(initialValue){
+						activeElement.value = activeElement.value + 1;
+					}else{
+						activeElement.value = (activeElement.type=="week")?"2013-W10":1;
+					}
+					activeElement.value = initialValue;
+				}else{
+					activeElement.value = activeElement.value + " ";
+					activeElement.value = initialValue;
+				}
+			}
+		},
+
 		onTouchEnd: function(/*Event*/e){
 			// summary:
 			//		User-defined function to handle touchEnd events.
@@ -579,7 +601,6 @@ define([
 			}
 
 			if(this.adjustDestination(to, pos, dim) === false){ return; }
-
 			if(this.constraint){
 				if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
 					this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
@@ -837,6 +858,9 @@ define([
 					if(this._h || this._f){
 						s.left = to.x + "px";
 					}
+				}
+				if(has("ios")){
+					this._keepInputCaretInActiveElement();
 				}
 				if(!doNotMoveScrollBar){
 					this.scrollScrollBarTo(this.calcScrollBarPos(to));
