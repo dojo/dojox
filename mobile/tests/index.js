@@ -195,6 +195,7 @@ var tests = [
 	{ url: "test_ScrollableView-scrollEvents.html", tags: "ScrollableView" },
 	{ url: "test_ScrollableView-pullToRefresh.html", tags: "ScrollableView" },
 	{ url: "test_ScrollableView-fixedFooters.html", tags: "ScrollableView" },
+	{ url: "test_ScrollableView-HTML-inputs.html", tags: "ScrollableView" },
 	{ url: "test_SimpleDialog-large.html", tags: "SimpleDialog" },
 	{ url: "test_SimpleDialog-load.html", tags: "SimpleDialog" },
 	{ url: "test_SimpleDialog-spinWheel.html", tags: "SimpleDialog" },
