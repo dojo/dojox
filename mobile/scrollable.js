@@ -547,6 +547,17 @@ define([
 			}
 		},
 
+		_fingerMovedSinceTouchStart: function(){
+			// summary:
+			//		Return true if the "finger" has moved since the touchStart, false otherwise.
+			var n = this._time.length; // # of samples
+			if(n <= 1 || (n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4 && has('touch'))){
+				return false;
+			}else{
+				return true;
+			}
+		},
+
 		onTouchEnd: function(/*Event*/e){
 			// summary:
 			//		User-defined function to handle touchEnd events.
@@ -562,15 +573,9 @@ define([
 				}
 				this._conn = null;
 
-				var n = this._time.length; // # of samples
 				var clicked = false;
-				if(!this._aborted){
-					if(n <= 1){
-						clicked = true;
-					}else if(n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4
-						&& has('touch')){ // for desktop browsers, posY could be the same, since we're using clientY, see onTouchMove()
-						clicked = true;
-					}
+				if(!this._aborted && !this._fingerMovedSinceTouchStart()){
+					clicked = true;
 				}
 				if(clicked){ // clicked, not dragged or flicked
 					this.hideScrollBar();
