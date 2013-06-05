@@ -168,12 +168,14 @@ define([
 			//		Overrides dojox/mobile/scrollable.scrollTo().
 			if(!this._beingFlipped){
 				var newView, x;
-				if(to.x < 0){
-					newView = this.nextView(this.domNode);
-					x = to.x + this.domNode.offsetWidth;
-				}else{
-					newView = this.previousView(this.domNode);
-					x = to.x - this.domNode.offsetWidth;
+				if(to.x){
+					if(to.x < 0){
+						newView = this.nextView(this.domNode);
+						x = to.x + this.domNode.offsetWidth;
+					}else{
+						newView = this.previousView(this.domNode);
+						x = to.x - this.domNode.offsetWidth;
+					}
 				}
 				if(newView){
 					if(newView.domNode.style.display === "none"){
