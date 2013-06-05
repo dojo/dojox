@@ -12,7 +12,8 @@ define([
 	"./sniff",
 	"./_css3",
 	"./_maskUtils"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, domGeom, touch, has, css3, maskUtils){
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle,
+			domGeom, touch, has, css3, maskUtils){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -220,6 +221,35 @@ define([
 				};
 				win.global.addEventListener("scroll", this._onScroll, true);
 			}
+			// #17062: Ensure auto-scroll when navigating focusable fields
+			if(!this.disableTouchScroll && this.domNode.addEventListener){
+				this._onFocusScroll = function(e){
+					if(!_this.domNode || _this.domNode.style.display === 'none'){ return; }
+					var node = win.doc.activeElement;
+					var nodeRect, scrollableRect;
+					if(node){
+						nodeRect = node.getBoundingClientRect();
+						scrollableRect = _this.domNode.getBoundingClientRect();
+						if(nodeRect.height < _this.getDim().d.h){
+							// do not call scrollIntoView for elements with a height
+							// larger than the height of scrollable's content display
+							// area (it would be ergonomically harmful).
+							
+							if(nodeRect.top < (scrollableRect.top + _this.fixedHeaderHeight)){
+								// scrolling towards top (to bring into the visible area an element
+								// located above it).
+								_this.scrollIntoView(node, true);
+							}else if((nodeRect.top + nodeRect.height) > 
+								(scrollableRect.top + scrollableRect.height - _this.fixedFooterHeight)){
+								// scrolling towards bottom (to bring into the visible area an element
+								// located below it).
+								_this.scrollIntoView(node, false);
+							} // else do nothing (the focused node is already visible)
+						}
+					}
+				};
+				this.domNode.addEventListener("focus", this._onFocusScroll, true);
+			}
 		},
 
 		isTopLevel: function(){
@@ -243,6 +273,11 @@ define([
 				win.global.removeEventListener("scroll", this._onScroll, true);
 				this._onScroll = null;
 			}
+			
+			if(this._onFocusScroll && this.domNode.removeEventListener){
+				this.domNode.removeEventListener("focus", this._onFocusScroll, true);
+				this._onFocusScroll = null;
+			} 
 		},
 
 		findDisp: function(/*DomNode*/node){
