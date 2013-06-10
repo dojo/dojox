@@ -83,7 +83,7 @@ define([
 
 			// handle touch.press event
 			this.on(touch.press, function(e){
-				event.stop(e);
+				e.preventDefault();
 
 				if(_this.domNode.disabled){return;}
 				_this._press(true); 
