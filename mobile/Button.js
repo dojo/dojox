@@ -1,7 +1,6 @@
 define([
 	"dojo/_base/array",
 	"dojo/_base/declare",
-	"dojo/_base/event",
 	"dojo/_base/window",
 	"dojo/dom",
 	"dojo/dom-class",
@@ -14,7 +13,7 @@ define([
 	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Button"
 	],
-	function(array, declare, event, win, dom, domClass, domConstruct, touch, on, WidgetBase, ButtonMixin, FormWidgetMixin, has, BidiButton){
+	function(array, declare, win, dom, domClass, domConstruct, touch, on, WidgetBase, ButtonMixin, FormWidgetMixin, has, BidiButton){
 
 	var Button = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiButton" : "dojox.mobile.Button", [WidgetBase, FormWidgetMixin, ButtonMixin], {
 		// summary:
@@ -37,21 +36,12 @@ define([
 		//		when the node is created, as part of the original DOM.
 		_setTypeAttr: null,
 
-		// duration: Number
-		//		The duration of selection, in milliseconds, or -1 for no post-click CSS styling.
-		duration: 0,
-
 		/*=====
 		// label: String
 		//		The label of the button.
 		label: "",
 		=====*/
 		
-		_onClick: function(e){
-			// tags:
-			//		private
-			return this.inherited(arguments);
-		},
 
 		isFocusable: function(){ 
 			// Override of the method of dijit/_WidgetBase.
@@ -89,16 +79,16 @@ define([
 				_this._press(true); 
 
 				// change button state depending on where we are
-				var isFirstMoveDone = true;
+				var isFirstMoveDone = false;
 				_this._moveh = on(win.doc, touch.move, function(e){
-					if(this.isFirstMoveDone){
+					if(!this.isFirstMoveDone){
 						// #17220: preventDefault may not have any effect.
 						// causing minor impact on some android 
 						// (Galaxy Tab 2 with stock browser 4.1.1) where button
 						// display does not reflect the actual button state 
 						// when user moves back and forth from the button area.
 						e.preventDefault();
-						this.isFirstMoveDone = false;
+						this.isFirstMoveDone = true;
 					}
 					var inside = false;
 					for(var t = e.target; t; t = t.parentNode){
@@ -112,7 +102,6 @@ define([
 
 				// handle touch.release 
 				_this._endh = on(win.doc, touch.release, function(e){
-					event.stop(e);
 					_this._press(false);
 					_this._moveh.remove();
 					_this._endh.remove();
@@ -131,7 +120,7 @@ define([
 				var button = this.focusNode || this.domNode;
 				var newStateClasses = (this.baseClass+' '+this["class"]).split(" ");
 				newStateClasses = array.map(newStateClasses, function(c){ return c+"Selected"; });
-				(pressed?domClass.add:domClass.remove)(button, newStateClasses);
+				domClass.toggle(button,newStateClasses,pressed);
 			}
 		},
 
