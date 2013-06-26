@@ -30,6 +30,7 @@
 			"dojo/dom",
 			"dojo/number",
 			"dojo/parser",
+			"dojo/query",
 			"dojo/ready",
 			"dijit/registry",
 			"dijit/tests/helpers",
@@ -43,7 +44,7 @@
 			"dijit/form/HorizontalRuleLabels",
 			"dijit/form/VerticalRuleLabels",
 			"dojo/domReady!"
-		], function(doh, dm, number, parser, ready, rgstry, helpers, RangeSlider,
+		], function(doh, dm, number, parser, query, ready, rgstry, helpers, RangeSlider,
 				Button, HorizontalSlider, VerticalSlider, HorizontalRule, VerticalRule, HorizontalRuleLabels, VerticalRuleLabels){
 
 			// Add test=true to the URL to run unit tests.
@@ -116,6 +117,28 @@
 							var v2 = slider.get('value');
 							doh.is(v[0], v2[0], "min unchanged");
 							doh.is(v[1], v2[1], "max unchanged");
+						}
+					]);
+					doh.register("disable", [
+						function enabled(){
+							var slider = registry.byId("hrSlider");
+							var tabstops = query("[tabIndex=0]", slider.domNode).length;
+							doh.is(2, tabstops, "tabstops");
+							doh.f(slider.valueNode.disabled, "disabled");
+						},
+						function disabled(){
+							var slider = registry.byId("hrSlider");
+							slider.set('disabled', true);
+							var tabstops = query("[tabIndex=0]", slider.domNode).length;
+							doh.is(0, tabstops, "tabstops");
+							doh.t(slider.valueNode.disabled, "disabled");
+						},
+						function reenabled(){
+							var slider = registry.byId("hrSlider");
+							slider.set('disabled', false);
+							var tabstops = query("[tabIndex=0]", slider.domNode).length;
+							doh.is(2, tabstops, "tabstops");
+							doh.f(slider.valueNode.disabled, "disabled");
 						}
 					]);
 				

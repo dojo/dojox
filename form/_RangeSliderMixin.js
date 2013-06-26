@@ -25,6 +25,9 @@ define([
 
 	var RangeSliderMixin = declare("dojox.form._RangeSliderMixin", null, {
 
+		// list attach points that have tabIndex so they can be properly disabled
+		_setTabIndexAttr: ["sliderHandle", "sliderHandleMax"],
+
 		value: [0,100],
 		postMixInProperties: function(){
 			this.inherited(arguments);
