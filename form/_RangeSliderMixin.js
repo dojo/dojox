@@ -273,18 +273,18 @@ define([
 				var propsHandleMax = {};
 				var propsBar = {};
 				// hui, a lot of animations :-)
-				propsHandle[this._handleOffsetCoord] = { start: this.sliderHandle.style[this._handleOffsetCoord], end: sliderHandleVal, units:"%"};
-				propsHandleMax[this._handleOffsetCoord] = { start: this.sliderHandleMax.style[this._handleOffsetCoord], end: sliderHandleMaxVal, units:"%"};
+				propsHandle[this._handleOffsetCoord] = { start: this.sliderHandle.parentNode.style[this._handleOffsetCoord], end: sliderHandleVal, units:"%"};
+				propsHandleMax[this._handleOffsetCoord] = { start: this.sliderHandleMax.parentNode.style[this._handleOffsetCoord], end: sliderHandleMaxVal, units:"%"};
 				propsBar[this._handleOffsetCoord] = { start: this.progressBar.style[this._handleOffsetCoord], end: progressBarVal, units:"%"};
 				propsBar[this._progressPixelSize] = { start: this.progressBar.style[this._progressPixelSize], end: (percentMax - percentMin) * 100, units:"%"};
-				var animHandle = fx.animateProperty({node: this.sliderHandle,duration: duration, properties: propsHandle});
-				var animHandleMax = fx.animateProperty({node: this.sliderHandleMax,duration: duration, properties: propsHandleMax});
-				var animBar = fx.animateProperty({node: this.progressBar,duration: duration, properties: propsBar});
+				var animHandle = fx.animateProperty({node: this.sliderHandle.parentNode, duration: duration, properties: propsHandle});
+				var animHandleMax = fx.animateProperty({node: this.sliderHandleMax.parentNode, duration: duration, properties: propsHandleMax});
+				var animBar = fx.animateProperty({node: this.progressBar, duration: duration, properties: propsBar});
 				var animCombine = fxUtils.combine([animHandle, animHandleMax, animBar]);
 				animCombine.play();
 			}else{
-				this.sliderHandle.style[this._handleOffsetCoord] = sliderHandleVal + "%";
-				this.sliderHandleMax.style[this._handleOffsetCoord] = sliderHandleMaxVal + "%";
+				this.sliderHandle.parentNode.style[this._handleOffsetCoord] = sliderHandleVal + "%";
+				this.sliderHandleMax.parentNode.style[this._handleOffsetCoord] = sliderHandleMaxVal + "%";
 				this.progressBar.style[this._handleOffsetCoord] = progressBarVal + "%";
 				this.progressBar.style[this._progressPixelSize] = ((percentMax - percentMin) * 100) + "%";
 			}
