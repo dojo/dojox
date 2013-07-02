@@ -29,10 +29,7 @@
 			});
 			function onBtnClicked(){
 				var span = dom.byId("msgArea");
-				span.innerHTML = "&quot;" + dom.byId(this.id).innerHTML + "&quot; button was clicked.";
-				setTimeout(function(){
-					span.innerHTML = "";
-				}, 1000);
+				span.innerHTML = "button '" + this.id + "'was clicked.<br />" + span.innerHTML ;
 			};
 		});
 	</script>

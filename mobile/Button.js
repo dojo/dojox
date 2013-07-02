@@ -81,14 +81,14 @@ define([
 				// change button state depending on where we are
 				var isFirstMoveDone = false;
 				_this._moveh = on(win.doc, touch.move, function(e){
-					if(!this.isFirstMoveDone){
+					if(!isFirstMoveDone){
 						// #17220: preventDefault may not have any effect.
 						// causing minor impact on some android 
 						// (Galaxy Tab 2 with stock browser 4.1.1) where button
 						// display does not reflect the actual button state 
 						// when user moves back and forth from the button area.
 						e.preventDefault();
-						this.isFirstMoveDone = true;
+						isFirstMoveDone = true;
 					}
 					var inside = false;
 					for(var t = e.target; t; t = t.parentNode){
