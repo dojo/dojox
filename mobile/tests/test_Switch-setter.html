@@ -18,7 +18,7 @@
 		"dojox/mobile/parser",
 		"dojox/mobile",
 		"dojox/mobile/compat"
-	], function(connect, dom, ready, registry, parser) {
+	], function(connect, dom, ready, registry) {
 		swOn = function() {
 			var w = registry.byId("sw");
 			w.set("value", "on");
@@ -56,15 +56,21 @@
 			}, 1000);
 		}
 
+		function showMsg(spanId, msg){
+			var span = dom.byId(spanId);
+			span.innerHTML = msg;
+			setTimeout(function() {
+				span.innerHTML = "";
+			}, 2000);
+		}
+
 		ready(function() {
-		    var w = registry.byId("sw");
-		    var w2 = registry.byId("sw2");
-		    connect.connect(w, "onStateChanged", null, function(value) {
-				var span = dom.byId("msgArea");
-				span.innerHTML = "onStateChanged: " + value;
-				setTimeout(function() {
-				    span.innerHTML = "";
-				}, 1000);
+			var w = registry.byId("sw");
+			w.on("stateChanged", function(value) {
+				showMsg("msgArea", "onStateChanged: " + value);
+			});
+			w.watch("value", function(name, oldV, newV){
+				showMsg("watchMsgArea", "watch : property " + name + " changed from " + oldV +" to " + newV);
 			});
 		});
 	});
@@ -77,7 +83,8 @@
 			<input type="checkbox" id="sw" name="swName" data-dojo-type="dojox.mobile.Switch" value="off"><br>
 			<input type="button" onclick="swOn()" value="on">
 			<input type="button" onclick="swOff()" value="off"><br />
-			<span  id="msgArea"></span>
+			<span  id="msgArea"></span></br>
+			<span  id="watchMsgArea"></span>
 		</div>
 		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Initial state = off</span><br />

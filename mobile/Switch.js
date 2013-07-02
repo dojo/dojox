@@ -171,7 +171,7 @@ define([
 			if(e && e.type === "keydown" && e.keyCode !== 13){ return; }
 			if(this.onClick(e) === false){ return; } // user's click action
 			if(this._moved){ return; }
-			this.value = this.input.value = (this.value == "on") ? "off" : "on";
+			this._set("value", this.input.value = (this.value == "on") ? "off" : "on");
 			this._changeState(this.value, true);
 			this.onStateChanged(this.value);
 		},
@@ -247,7 +247,7 @@ define([
 			newState = this._newState(newState);
 			this._changeState(newState, true);
 			if(newState != this.value){
-				this.value = this.input.value = newState;
+				this._set("value", this.input.value = newState);
 				this.onStateChanged(newState);
 			}
 		},
@@ -267,9 +267,9 @@ define([
 		_setValueAttr: function(/*String*/value){
 			this._changeState(value, false);
 			if(this.value != value){
+				this._set("value", this.input.value = value);
 				this.onStateChanged(value);
 			}
-			this.value = this.input.value = value;
 		},
 
 		_setLeftLabelAttr: function(/*String*/label){
