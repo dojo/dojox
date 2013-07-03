@@ -23,28 +23,162 @@
 
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad: true"></script>
 	<script type="text/javascript">
-		dojo.require("dojo.parser");
-		dojo.require("dojox.form.RangeSlider");
-		dojo.require("dijit.form.HorizontalRule");
-		dojo.require("dijit.form.HorizontalRuleLabels");
-		dojo.require("dijit.form.VerticalRule");
-		dojo.require("dijit.form.VerticalRuleLabels");
-		
-		var horizOnChange = function(){
-		
-			dojo.byId('minValue').value = dojo.number.format(arguments[0][0]/100, { places:1, pattern:'#%' });
-			dojo.byId('maxValue').value = dojo.number.format(arguments[0][1]/100, { places:1, pattern:'#%' });
-	
-		}
-		
-		var vertOnChange = function(){
-			
-			console.log(arguments);
-			dojo.byId('vMinValue').value = dojo.number.format(arguments[0][1],{places:1,pattern:'#'});
-			dojo.byId('vMaxValue').value = dojo.number.format(arguments[0][0],{places:1,pattern:'#'});
-			
-		}
-		
+		var registry, dom, horizOnChange, vertOnChange;
+		require([
+			"doh/runner",
+			"dojo/dom",
+			"dojo/number",
+			"dojo/parser",
+			"dojo/query",
+			"dojo/dom-geometry",
+			"dojo/ready",
+			"dijit/registry",
+			"dijit/tests/helpers",
+			"dijit/form/Button",
+			"dijit/form/HorizontalSlider",
+			"dijit/form/VerticalSlider",
+			"dijit/form/HorizontalRule",
+			"dijit/form/VerticalRule",
+			"dijit/form/HorizontalRuleLabels",
+			"dijit/form/VerticalRuleLabels",
+			"dojox/form/RangeSlider",
+			"dojo/domReady!"
+		], function(doh, dm, number, parser, query, domGeometry, ready, rgstry, helpers, RangeSlider,
+				Button, HorizontalRule, VerticalRule, HorizontalRuleLabels, VerticalRuleLabels){
+
+			// Add test=true to the URL to run unit tests.
+			var test = /mode=test/i.test(window.location.href);
+
+			registry = rgstry;
+			dom = dm;
+
+			horizOnChange = function(){
+
+				dom.byId('minValue').value = number.format(arguments[0][0]/100, { places:1, pattern:'#%' });
+				dom.byId('maxValue').value = number.format(arguments[0][1]/100, { places:1, pattern:'#%' });
+
+			}
+
+			vertOnChange = function(){
+
+				console.log(arguments);
+				dom.byId('vMinValue').value = number.format(arguments[0][1],{places:1,pattern:'#'});
+				dom.byId('vMaxValue').value = number.format(arguments[0][0],{places:1,pattern:'#'});
+
+			}
+
+			ready(function(){
+				if(test){
+					// aria role and properties tests.
+					doh.register("aria",
+						function testit(){
+							var slider = registry.byId("hrSlider");
+							doh.is("slider", slider.sliderHandle.getAttribute("role"), "min");
+							doh.is("slider", slider.sliderHandleMax.getAttribute("role"), "max");
+							slider.set('value', [slider.minimum, slider.maximum], true);
+							doh.is(slider.minimum, slider.sliderHandle.getAttribute("aria-valuenow"), "min aria-valuenow");
+							doh.is(slider.maximum, slider.sliderHandleMax.getAttribute("aria-valuenow"), "max aria-valuenow");
+						}
+					);
+
+					doh.register("API", [
+						function setHValue(){
+							var slider = registry.byId("hrSlider");
+							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+30, v[0], "min value " + v[0]);
+							doh.is(slider.maximum-30, v[1], "max value " + v[1]);
+						},
+						function setVValue(){
+							var slider = registry.byId("vrSlider");
+							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.maximum-30, v[0], "max value " + v[0]);
+							doh.is(slider.minimum+30, v[1], "min value " + v[1]);
+						},
+						function clickHValue(){
+							var slider = registry.byId("hrSlider");
+							var bar = domGeometry.position(slider.progressBar, true);
+							slider._onRemainingBarClick({ pageX: bar.x - (bar.w >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+20, v[0], "min value " + v[0]);
+							slider._onRemainingBarClick({ pageX: bar.x + bar.w + (bar.w >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							v = slider.get('value').concat([]); // copy array
+							doh.is(slider.maximum-20, v[1], "max value " + v[1]);
+						},
+						function clickVValue(){
+							var slider = registry.byId("vrSlider");
+							var bar = domGeometry.position(slider.progressBar, true);
+							slider._onRemainingBarClick({ pageY: bar.y - (bar.h >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.maximum-20, Math.round(v[0]), "max value " + v[0]);
+							slider._onRemainingBarClick({ pageY: bar.y + bar.h + (bar.h >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+20, Math.round(v[1]), "min value " + v[1]);
+						},
+						function changeMax(){
+							var slider = registry.byId("hrSlider");
+							slider.set('value', [slider.minimum, slider.maximum], true);
+							var v = slider.get('value').concat([]); // copy array
+							slider._bumpValue(1, true);
+							var v2 = slider.get('value');
+							doh.is(v[0], v2[0], "min value unchanged");
+							doh.is(v[1], v2[1], "max value unchanged");
+							slider._bumpValue(-1, true);
+							var v3 = slider.get('value');
+							doh.t(v[1] > v3[1], "max value changed " + v[1] + ' ' + v3[1]);
+						},
+						function changeMin(){
+							var slider = registry.byId("hrSlider");
+							slider.set('value', [slider.minimum, slider.maximum], true);
+							var v = slider.get('value').concat([]); // copy array
+							slider._bumpValue(-1, false);
+							var v2 = slider.get('value');
+							doh.is(v[0], v2[0], "min value unchanged");
+							doh.is(v[1], v2[1], "max value unchanged");
+							slider._bumpValue(1, false);
+							var v3 = slider.get('value');
+							doh.t(v[0] < v3[0], "max value changed " + v[0] + ' ' + v3[0]);
+						},
+						function locked(){
+							var slider = registry.byId("hrSlider");
+							slider.maximum = slider.minimum;
+							slider.set('value', [slider.minimum, slider.maximum], true);
+							var v = slider.get('value').concat([]); // copy array
+							slider._bumpValue(-1, true);
+							slider._bumpValue(1, false);
+							var v2 = slider.get('value');
+							doh.is(v[0], v2[0], "min unchanged");
+							doh.is(v[1], v2[1], "max unchanged");
+						}
+					]);
+					doh.register("disable", [
+						function enabled(){
+							var slider = registry.byId("hrSlider");
+							var tabstops = query("[tabIndex=0]", slider.domNode).length;
+							doh.is(2, tabstops, "tabstops");
+							doh.f(slider.valueNode.disabled, "disabled");
+						},
+						function disabled(){
+							var slider = registry.byId("hrSlider");
+							slider.set('disabled', true);
+							var tabstops = query("[tabIndex=0]", slider.domNode).length;
+							doh.is(0, tabstops, "tabstops");
+							doh.t(slider.valueNode.disabled, "disabled");
+						},
+						function reenabled(){
+							var slider = registry.byId("hrSlider");
+							slider.set('disabled', false);
+							var tabstops = query("[tabIndex=0]", slider.domNode).length;
+							doh.is(2, tabstops, "tabstops");
+							doh.f(slider.valueNode.disabled, "disabled");
+						}
+					]);
+				
+					doh.run();
+				}
+			});
+		});
 	</script>
 	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
 </head>
