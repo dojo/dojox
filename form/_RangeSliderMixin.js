@@ -188,11 +188,11 @@ define([
 			// now we set the min/max-value of the slider!
 			var abspos = domGeometry.position(this.sliderBarContainer, true),
 				bar = domGeometry.position(this.progressBar, true),
-				relMousePos = e[this._mousePixelCoord] - abspos[this._startingPixelCoord],
+				mousePos = e[this._mousePixelCoord],
 				leftPos = bar[this._startingPixelCoord],
 				rightPos = leftPos + bar[this._pixelCount],
-				isMaxVal = this._isReversed() ? relMousePos <= leftPos : relMousePos >= rightPos,
-				p = this._isReversed() ? abspos[this._pixelCount] - relMousePos : relMousePos
+				isMaxVal = this._isReversed() ? mousePos <= leftPos : mousePos >= rightPos,
+				p = this._isReversed() ? (abspos[this._pixelCount] - mousePos + abspos[this._startingPixelCoord]) : (mousePos - abspos[this._startingPixelCoord])
 			;
 
 			this._setPixelValue(p, abspos[this._pixelCount], true, isMaxVal);

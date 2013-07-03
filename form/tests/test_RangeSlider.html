@@ -31,6 +31,7 @@
 			"dojo/number",
 			"dojo/parser",
 			"dojo/query",
+			"dojo/dom-geometry",
 			"dojo/ready",
 			"dijit/registry",
 			"dijit/tests/helpers",
@@ -44,7 +45,7 @@
 			"dijit/form/HorizontalRuleLabels",
 			"dijit/form/VerticalRuleLabels",
 			"dojo/domReady!"
-		], function(doh, dm, number, parser, query, ready, rgstry, helpers, RangeSlider,
+		], function(doh, dm, number, parser, query, domGeometry, ready, rgstry, helpers, RangeSlider,
 				Button, HorizontalSlider, VerticalSlider, HorizontalRule, VerticalRule, HorizontalRuleLabels, VerticalRuleLabels){
 
 			// Add test=true to the URL to run unit tests.
@@ -83,6 +84,40 @@
 					);
 
 					doh.register("API", [
+						function setHValue(){
+							var slider = registry.byId("hrSlider");
+							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+30, v[0], "min value " + v[0]);
+							doh.is(slider.maximum-30, v[1], "max value " + v[1]);
+						},
+						function setVValue(){
+							var slider = registry.byId("vrSlider");
+							slider.set('value', [slider.minimum+30, slider.maximum-30], true);
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.maximum-30, v[0], "max value " + v[0]);
+							doh.is(slider.minimum+30, v[1], "min value " + v[1]);
+						},
+						function clickHValue(){
+							var slider = registry.byId("hrSlider");
+							var bar = domGeometry.position(slider.progressBar, true);
+							slider._onRemainingBarClick({ pageX: bar.x - (bar.w >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+20, v[0], "min value " + v[0]);
+							slider._onRemainingBarClick({ pageX: bar.x + bar.w + (bar.w >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							v = slider.get('value').concat([]); // copy array
+							doh.is(slider.maximum-20, v[1], "max value " + v[1]);
+						},
+						function clickVValue(){
+							var slider = registry.byId("vrSlider");
+							var bar = domGeometry.position(slider.progressBar, true);
+							slider._onRemainingBarClick({ pageY: bar.y - (bar.h >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							var v = slider.get('value').concat([]); // copy array
+							doh.is(slider.maximum-20, Math.round(v[0]), "max value " + v[0]);
+							slider._onRemainingBarClick({ pageY: bar.y + bar.h + (bar.h >> 2), preventDefault: function(){}, stopPropagation: function(){} });
+							v = slider.get('value').concat([]); // copy array
+							doh.is(slider.minimum+20, Math.round(v[1]), "min value " + v[1]);
+						},
 						function changeMax(){
 							var slider = registry.byId("hrSlider");
 							slider.set('value', [slider.minimum, slider.maximum], true);
