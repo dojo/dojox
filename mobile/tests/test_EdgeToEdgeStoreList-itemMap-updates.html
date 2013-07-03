@@ -75,8 +75,8 @@
 			// update the text or label of all items
 			var updateSuffix = " update #";
 			var updateUtil = function(str){
-				// Skip the category items (for esthetic reasons)
-				if(str.startsWith("Category")){
+				// Skip the category items (for aesthetic reasons)
+				if(str.indexOf("Category") == 0){
 					return str;
 				}
 				var idx = str.indexOf(updateSuffix);
