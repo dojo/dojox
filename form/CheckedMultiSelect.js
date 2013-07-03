@@ -212,7 +212,7 @@ var formCheckedMultiSelectMenuItem = declare("dojox.form._CheckedMultiSelectMenu
 	parent: null,
 
 	// icon of the checkbox/radio button
-	_iconClass: "",
+	iconClass: "",
 
 	postMixInProperties: function(){
 		// summary:
