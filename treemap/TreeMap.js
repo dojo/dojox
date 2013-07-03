@@ -699,7 +699,7 @@ define(["dojo/_base/array", "dojo/_base/lang", "dojo/_base/declare", "dojo/_base
 		_onMouseUp: function(e){
 			var renderer = this._getRendererFromTarget(e.target);
 			if(renderer.item){
-				this.selectFromEvent(e, renderer.item, e.currentTarget, true);
+				this.selectFromEvent(e, renderer.item, renderer, true);
 				//event.stop(e);
 			}
 		},
