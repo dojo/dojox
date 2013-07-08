@@ -311,20 +311,24 @@
 
 					numBox.startup();
 
-	/*
+
 					doh.register("Check initial programatic values and bindings for select widget only", [
 						{
 							name: "InitialSelectOnly",
 							runTest: function(){
-								console.log("This test is commented out because it will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
+								var wid, textboxval, outputval;
+								wid = registry.byId("sel");
+								textboxval = registry.byId("seltext").value;
+								outputval = registry.byId("selOutput").value;
+								//console.log("This test was commented out because it will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
 								// Test Select
 								doh.is("1",wid.get("value"),"This test will fail if _FromSelectWidget is not updated to setup the store in postCreate instead of startup, see ticket 13372 for details.");
-								doh.is(registry.byId("seltext").value,registry.byId("sel").get("value"),"wid.get(\"value\") should be set same as textboxval");
-								doh.is(registry.byId("selOutput").value,registry.byId("sel").get("value"),"wid.get(\"value\") should be set same as outputval");
+								doh.is(textboxval,wid.get("value"),"wid.get(\"value\") should be set same as textboxval");
+								doh.is(outputval,wid.get("value"),"wid.get(\"value\") should be set same as outputval");
 							}
 						}
 					]);
-	*/
+
 
 					doh.register("Check initial values and bindings widgets other than select", [
 						{
