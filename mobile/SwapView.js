@@ -35,6 +35,11 @@ define([
 		//		Frictional weight used to compute scrolling speed.
 		weight: 1.2,
 
+		// _endOfTransitionTimeoutHandle: [private] Object
+		//		The handle (returned by _WidgetBase.defer) for the timeout set on touchEnd in case
+		//      the end of transition event is not fired by the browser.
+		_endOfTransitionTimeoutHandle: null,
+
 		buildRendering: function(){
 			this.inherited(arguments);
 			domClass.add(this.domNode, "mblSwapView");
@@ -62,6 +67,10 @@ define([
 		onTouchStart: function(/*Event*/e){
 			// summary:
 			//		Internal function to handle touchStart events.
+			if(this._siblingViewsInMotion()){  // Ignore touchstart if the views are already in motion
+				this.propagatable ? e.preventDefault() : event.stop(e);
+				return;
+			}
 			var fromTop = this.domNode.offsetTop;
 			var nextView = this.nextView(this.domNode);
 			if(nextView){
@@ -76,6 +85,22 @@ define([
 				domClass.add(prevView.domNode, "mblIn");
 				// Temporarily add padding to align with the fromNode while transition
 				prevView.containerNode.style.paddingTop = fromTop + "px";
+			}
+			this._setSiblingViewsInMotion(true);
+			this.inherited(arguments);
+		},
+
+		onTouchEnd: function(/*Event*/e){
+			if(e){
+				if(!this._fingerMovedSinceTouchStart()){ // No transition / animation following touchend in this case
+					this._setSiblingViewsInMotion(false);
+				}else{ // There might be a transition / animation following touchend
+					// As the webkitTransitionEndEvent is not always fired, make sure we call this._setSiblingViewsInMotion(false) even
+					// if the event is not fired (and onFlickAnimationEnd is not called as a result)
+					this._endOfTransitionTimeoutHandle = this.defer(function(){
+						this._setSiblingViewsInMotion(false);
+					}, 1000);
+				}
 			}
 			this.inherited(arguments);
 		},
@@ -143,12 +168,14 @@ define([
 			//		Overrides dojox/mobile/scrollable.scrollTo().
 			if(!this._beingFlipped){
 				var newView, x;
-				if(to.x < 0){
-					newView = this.nextView(this.domNode);
-					x = to.x + this.domNode.offsetWidth;
-				}else{
-					newView = this.previousView(this.domNode);
-					x = to.x - this.domNode.offsetWidth;
+				if(to.x){
+					if(to.x < 0){
+						newView = this.nextView(this.domNode);
+						x = to.x + this.domNode.offsetWidth;
+					}else{
+						newView = this.previousView(this.domNode);
+						x = to.x - this.domNode.offsetWidth;
+					}
 				}
 				if(newView){
 					if(newView.domNode.style.display === "none"){
@@ -238,6 +265,9 @@ define([
 		},
 
 		onFlickAnimationEnd: function(/*Event*/e){
+			if(this._endOfTransitionTimeoutHandle){
+				this._endOfTransitionTimeoutHandle = this._endOfTransitionTimeoutHandle.remove();
+			}
 			// summary:
 			//		Overrides dojox/mobile/scrollable.onFlickAnimationEnd().
 			if(e && e.target && !domClass.contains(e.target, "mblScrollableScrollTo2")){ return; }
@@ -264,6 +294,24 @@ define([
 				this.containerNode.style.paddingTop = "";
 			}else if(!has("css3-animations")){
 				this.containerNode.style.left = "0px"; // compat mode needs this
+			}
+			this._setSiblingViewsInMotion(false);
+		},
+
+		_setSiblingViewsInMotion: function(/*Boolean*/inMotion){
+			var inMotionAttributeValue = inMotion ? "true" : false;
+			var parent = this.domNode.parentNode;
+			if(parent){
+				parent.setAttribute("data-dojox-mobile-swapview-inmotion", inMotionAttributeValue);
+			}
+		},
+
+		_siblingViewsInMotion: function(){
+			var parent = this.domNode.parentNode;
+			if(parent){
+				return parent.getAttribute("data-dojox-mobile-swapview-inmotion") == "true";
+			}else{
+				return false;
 			}
 		}
 	});

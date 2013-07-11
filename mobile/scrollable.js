@@ -7,11 +7,13 @@ define([
 	"dojo/dom-class",
 	"dojo/dom-construct",
 	"dojo/dom-style",
+	"dojo/dom-geometry",
 	"dojo/touch",
 	"./sniff",
 	"./_css3",
 	"./_maskUtils"
-], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle, touch, has, css3, maskUtils){
+], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle,
+			domGeom, touch, has, css3, maskUtils){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -219,6 +221,35 @@ define([
 				};
 				win.global.addEventListener("scroll", this._onScroll, true);
 			}
+			// #17062: Ensure auto-scroll when navigating focusable fields
+			if(!this.disableTouchScroll && this.domNode.addEventListener){
+				this._onFocusScroll = function(e){
+					if(!_this.domNode || _this.domNode.style.display === 'none'){ return; }
+					var node = win.doc.activeElement;
+					var nodeRect, scrollableRect;
+					if(node){
+						nodeRect = node.getBoundingClientRect();
+						scrollableRect = _this.domNode.getBoundingClientRect();
+						if(nodeRect.height < _this.getDim().d.h){
+							// do not call scrollIntoView for elements with a height
+							// larger than the height of scrollable's content display
+							// area (it would be ergonomically harmful).
+							
+							if(nodeRect.top < (scrollableRect.top + _this.fixedHeaderHeight)){
+								// scrolling towards top (to bring into the visible area an element
+								// located above it).
+								_this.scrollIntoView(node, true);
+							}else if((nodeRect.top + nodeRect.height) > 
+								(scrollableRect.top + scrollableRect.height - _this.fixedFooterHeight)){
+								// scrolling towards bottom (to bring into the visible area an element
+								// located below it).
+								_this.scrollIntoView(node, false);
+							} // else do nothing (the focused node is already visible)
+						}
+					}
+				};
+				this.domNode.addEventListener("focus", this._onFocusScroll, true);
+			}
 		},
 
 		isTopLevel: function(){
@@ -242,6 +273,11 @@ define([
 				win.global.removeEventListener("scroll", this._onScroll, true);
 				this._onScroll = null;
 			}
+			
+			if(this._onFocusScroll && this.domNode.removeEventListener){
+				this.domNode.removeEventListener("focus", this._onFocusScroll, true);
+				this._onFocusScroll = null;
+			} 
 		},
 
 		findDisp: function(/*DomNode*/node){
@@ -296,7 +332,7 @@ define([
 			for(var n = this.domNode; n && n.tagName != "BODY"; n = n.offsetParent){
 				n = this.findDisp(n); // find the first displayed view node
 				if(!n){ break; }
-				top += n.offsetTop;
+				top += n.offsetTop + domGeom.getBorderExtents(n).h;
 			}
 
 			// adjust the height of this view
@@ -305,7 +341,7 @@ define([
 				dh = screenHeight - top - this._appFooterHeight; // default height
 			if(this.height === "inherit"){
 				if(this.domNode.offsetParent){
-					h = this.domNode.offsetParent.offsetHeight + "px";
+					h = domGeom.getContentBox(this.domNode.offsetParent).h - domGeom.getBorderExtents(this.domNode).h + "px";
 				}
 			}else if(this.height === "auto"){
 				var parent = this.domNode.offsetParent;
@@ -345,6 +381,9 @@ define([
 		},
 
 		onFlickAnimationEnd: function(e){
+			if(has("ios")){
+				this._keepInputCaretInActiveElement();
+			}
 			if(e){
 				var an = e.animationName;
 				if(an && an.indexOf("scrollableViewScroll2") === -1){
@@ -524,6 +563,36 @@ define([
 			this._posY.push(y);
 		},
 
+		_keepInputCaretInActiveElement: function(){
+			var activeElement = win.doc.activeElement;
+			var initialValue;
+			if(activeElement && (activeElement.tagName == "INPUT" || activeElement.tagName == "TEXTAREA")){
+				initialValue = activeElement.value;
+				if(activeElement.type == "number" || activeElement.type == "week"){
+					if(initialValue){
+						activeElement.value = activeElement.value + 1;
+					}else{
+						activeElement.value = (activeElement.type == "week") ? "2013-W10" : 1;
+					}
+					activeElement.value = initialValue;
+				}else{
+					activeElement.value = activeElement.value + " ";
+					activeElement.value = initialValue;
+				}
+			}
+		},
+
+		_fingerMovedSinceTouchStart: function(){
+			// summary:
+			//		Return true if the "finger" has moved since the touchStart, false otherwise.
+			var n = this._time.length; // # of samples
+			if(n <= 1 || (n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4 && has('touch'))){
+				return false;
+			}else{
+				return true;
+			}
+		},
+
 		onTouchEnd: function(/*Event*/e){
 			// summary:
 			//		User-defined function to handle touchEnd events.
@@ -539,15 +608,9 @@ define([
 				}
 				this._conn = null;
 
-				var n = this._time.length; // # of samples
 				var clicked = false;
-				if(!this._aborted){
-					if(n <= 1){
-						clicked = true;
-					}else if(n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4
-						&& has('touch')){ // for desktop browsers, posY could be the same, since we're using clientY, see onTouchMove()
-						clicked = true;
-					}
+				if(!this._aborted && !this._fingerMovedSinceTouchStart()){
+					clicked = true;
 				}
 				if(clicked){ // clicked, not dragged or flicked
 					this.hideScrollBar();
@@ -578,7 +641,6 @@ define([
 			}
 
 			if(this.adjustDestination(to, pos, dim) === false){ return; }
-
 			if(this.constraint){
 				if(this.scrollDir == "v" && dim.c.h < dim.d.h){ // content is shorter than display
 					this.slideTo({y:0}, 0.3, "ease-out"); // go back to the top
@@ -836,6 +898,9 @@ define([
 					if(this._h || this._f){
 						s.left = to.x + "px";
 					}
+				}
+				if(has("ios")){
+					this._keepInputCaretInActiveElement();
 				}
 				if(!doNotMoveScrollBar){
 					this.scrollScrollBarTo(this.calcScrollBarPos(to));

@@ -290,7 +290,7 @@ define([
 				history.back();	
 				return;
 			}	
-			if (this.href && this.hrefTarget) {
+			if (this.href && this.hrefTarget && this.hrefTarget != "_self") {
 				win.global.open(this.href, this.hrefTarget || "_blank");
 				this._onNewWindowOpened(e);
 				return;
