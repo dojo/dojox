@@ -23,7 +23,7 @@ define([
 				return style[p+"Animation"] !== undefined && style[p+"Transition"] !== undefined;
 			});
 	});
-	
+
 	var css3 = {
 		// summary:
 		//		This module provide some cross-browser support for CSS3 properties.
@@ -42,7 +42,7 @@ define([
 			
 			var n = (hyphen?hnames:cnames)[p];
 			if(!n){
-				
+
 				if(/End|Start/.test(p)){
 					// event names: no good way to feature-detect, so we
 					// assume they have the same prefix as the corresponding style property
@@ -71,8 +71,13 @@ define([
 					var cn = hyphen ? p.replace(/-(.)/g, function(match, p1){
     					return p1.toUpperCase();
 					}) : p;
-					
-					if(style[cn] !== undefined){
+					// Fixes https://bugs.dojotoolkit.org/ticket/17164
+					// Reported on Android 4.1.x on some devices:
+					// Style 'transition' returns empty string instead of undefined
+					// although TransitionEvent is not supported.
+					var t17164 = (cn == "transition" && !('TransitionEvent' in window));
+
+					if(style[cn] !== undefined && !t17164){
 						// standard non-prefixed property is supported
 						n = p;
 					}else{
@@ -123,7 +128,7 @@ define([
 			}
 			return styles;
 		}
-	}
+	};
 	
 	return css3;
 });
