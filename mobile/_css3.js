@@ -3,18 +3,18 @@ define([
 	"dojo/_base/array",
 	"dojo/has"
 ], function(win, arr, has){
-	
+
 	// caches for capitalized names and hypen names
 	var cnames = [], hnames = [];
-	
+
 	// element style used for feature testing
 	var style = win.doc.createElement("div").style;
-	
+
 	// We just test webkit prefix for now since our themes only have standard and webkit
 	// (see dojox/mobile/themes/common/css3.less)
 	// More prefixes can be added if/when we add them to css3.less.
 	var prefixes = ["webkit"];
-	
+
 	// Does the browser support CSS3 animations?
 	has.add("css3-animations", function(global, document, element){
 		var style = element.style;
@@ -23,11 +23,18 @@ define([
 				return style[p+"Animation"] !== undefined && style[p+"Transition"] !== undefined;
 			});
 	});
-	
+
+	// Indicates whether style 'transition' returns empty string instead of
+	// undefined, although TransitionEvent is not supported.
+	// Reported on Android 4.1.x on some devices: https://bugs.dojotoolkit.org/ticket/17164
+	has.add("t17164", function(global, document, element){
+		return (element.style["transition"] !== undefined) && !('TransitionEvent' in window);
+	});
+
 	var css3 = {
 		// summary:
 		//		This module provide some cross-browser support for CSS3 properties.
-	
+
 		name: function(/*String*/p, /*Boolean?*/hyphen){
 			// summary:
 			//		Returns the name of a CSS3 property with the correct prefix depending on the browser.
@@ -39,10 +46,10 @@ define([
 			// hyphen:
 			//		Optional, true if hyphen notation should be used (for example "transition-property" or "-webkit-transition-property"),
 			//		false for camel-case notation (for example "transitionProperty" or "webkitTransitionProperty").
-			
+
 			var n = (hyphen?hnames:cnames)[p];
 			if(!n){
-				
+
 				if(/End|Start/.test(p)){
 					// event names: no good way to feature-detect, so we
 					// assume they have the same prefix as the corresponding style property
@@ -71,8 +78,7 @@ define([
 					var cn = hyphen ? p.replace(/-(.)/g, function(match, p1){
     					return p1.toUpperCase();
 					}) : p;
-					
-					if(style[cn] !== undefined){
+					if(style[cn] !== undefined && !has('t17164')){
 						// standard non-prefixed property is supported
 						n = p;
 					}else{
@@ -89,7 +95,7 @@ define([
 						});
 					}
 				}
-				
+
 				if(!n){
 					// The property is not supported, just return it unchanged, it will be ignored.
 					n = p;
@@ -99,7 +105,7 @@ define([
 			}
 			return n;
 		},
-		
+
 		add: function(/*Object*/styles, /*Object*/css3Styles){
 			// summary:
 			//		Prefixes all property names in "css3Styles" and adds the prefixed properties in "styles".
@@ -115,7 +121,7 @@ define([
 			//		}));
 			// returns:
 			//		The "styles" argument where the CSS3 styles have been added.
-			
+
 			for(var p in css3Styles){
 				if(css3Styles.hasOwnProperty(p)){
 					styles[css3.name(p)] = css3Styles[p];
@@ -123,7 +129,7 @@ define([
 			}
 			return styles;
 		}
-	}
-	
+	};
+
 	return css3;
 });
