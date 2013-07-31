@@ -465,7 +465,12 @@ define([
 			if(items.length > 0 && !has("windows-theme")){ // empty slot?
 				this._itemHeight = items[0].offsetHeight;
 				this.centerPos = this.getParent().centerPos;
-				this.adjust();
+				if(!this.panelNodes[0].style.top){
+					// #17339: to avoid messing up the layout of the panels, call adjust()
+					// only if it didn't manage yet to set the style.top (this happens 
+					// typically because the slot was initially	 hidden). 
+					this.adjust();
+				}
 			}
 			if(this._pendingValue){
 				this.set("value", this._pendingValue);
