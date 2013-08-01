@@ -198,6 +198,7 @@ define([
 				this.addCover();
 			}
 			this.domNode.style.display = "";
+			this.resize(); // #15628
 			this.refresh();
 			var diaglogButton;
 			if(this.domNode.getElementsByClassName){
