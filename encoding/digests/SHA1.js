@@ -102,7 +102,7 @@ define(["./_base"], function(base){
 	};
 
 	//	public function
-	var SHA1=function(/* String */data, /* dojox.encoding.digests.outputTypes? */outputType){
+	base.SHA1=function(/* String */data, /* dojox.encoding.digests.outputTypes? */outputType){
 		// summary:
 		//		Computes the SHA1 digest of the data, and returns the result according to output type.
 		var out=outputType||base.outputTypes.Base64;
@@ -121,10 +121,10 @@ define(["./_base"], function(base){
 				return toBase64(wa);	//	string
 			}
 		}
-	}
+	};
 
 	//	make this private, for later use with a generic HMAC calculator.
-	SHA1._hmac=function(/* string */data, /* string */key, /* dojox.encoding.digests.outputTypes? */outputType){
+	base.SHA1._hmac=function(/* string */data, /* string */key, /* dojox.encoding.digests.outputTypes? */outputType){
 		// summary:
 		//		computes the digest of data, and returns the result according to type outputType
 		var out=outputType || base.outputTypes.Base64;
@@ -145,5 +145,5 @@ define(["./_base"], function(base){
 		}
 	};
 
-	return SHA1;
+	return base.SHA1;
 });
