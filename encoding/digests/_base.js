@@ -1,6 +1,6 @@
-define([], function(){
+define(["dojo/_base/lang"], function(lang){
 	//	These functions are 32-bit word-based.  See _sha-64 for 64-bit word ops.
-	var base = {};
+	var base = lang.getObject("dojox.encoding.digests", true);
 
 	base.outputTypes={
 		// summary:
