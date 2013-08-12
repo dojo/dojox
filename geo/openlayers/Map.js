@@ -272,7 +272,6 @@ define([
 				break;
 				case openlayers.BaseLayerType.Transport:
 					options.transitionEffect = "resize";
-					//				base = new OpenLayers.Layer.OSM.TransportMap(name, url, options);
 					base = new Layer(name, {
 						olLayer: new OpenLayers.Layer.OSM.TransportMap(name, url, options)
 					});
