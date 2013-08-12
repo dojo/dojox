@@ -25,7 +25,7 @@ define([
 		//		 type of the base layer. Can be any of
 		//
 		//		- `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
-		//		- `dojox.geo.openlayers.BaseLayerType.Transport`: Open Street Map Transport base layer (opencylemap.org)
+		//		- `dojox.geo.openlayers.BaseLayerType.Transport`: Open Street Map Transport base layer (opencyclemap.org)
 		//		- `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
 		//		- `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
 		//		- `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
@@ -56,7 +56,7 @@ define([
 		//		_baseLayerType_: type of the base layer. Can be any of:
 		//		
 		//		- `dojox.geo.openlayers.BaseLayerType.OSM`: Open Street Map base layer
-		//		- `dojox.geo.openlayers.BaseLayerType.Transport`: Open Street Map Transport base layer (opencylemap.org)
+		//		- `dojox.geo.openlayers.BaseLayerType.Transport`: Open Street Map Transport base layer (opencyclemap.org)
 		//		- `dojox.geo.openlayers.BaseLayerType.WMS`: Web Map Service layer
 		//		- `dojox.geo.openlayers.BaseLayerType.GOOGLE`: Google layer
 		//		- `dojox.geo.openlayers.BaseLayerType.VIRTUAL_EARTH`: Virtual Earth layer
