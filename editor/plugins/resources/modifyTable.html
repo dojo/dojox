@@ -17,12 +17,19 @@
                 <span class="colorSwatchBtn" dojoAttachPoint="borderCol"></span>
             </td></tr><tr><td>
                 <label>${align}</label>
-            </td><td colspan="2">	
+            </td><td colspan="3">	
                 <select dojoAttachPoint="selectAlign" dojoType="dijit.form.FilteringSelect">
                   <option value="default">${default}</option>
                   <option value="left">${left}</option>
                   <option value="center">${center}</option>
                   <option value="right">${right}</option>
+                </select>
+            </td></tr><tr><td>
+                <label>${direction}</label>
+            </td><td colspan="3">	
+                <select dojoAttachPoint="selectDirection" dojoType="dijit.form.FilteringSelect">
+                  <option value="ltr">${leftToRight}</option>
+                  <option value="rtl">${rightToLeft}</option>
                 </select>
             </td></tr>
             <tr><td>

@@ -18,6 +18,9 @@ define({ root:
 	left: "left",
 	center: "center",
 	right: "right",
+	direction: "Direction:",
+	leftToRight: "left-to-right",
+	rightToLeft: "right-to-left",
 	buttonSet: "Set", // translated elsewhere?
 	buttonInsert: "Insert",
 	buttonCancel: "Cancel",

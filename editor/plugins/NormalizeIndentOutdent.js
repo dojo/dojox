@@ -31,8 +31,13 @@ var NormalizeIndentOutdent = dojo.declare("dojox.editor.plugins.NormalizeIndentO
 		this.editor = editor;
 
 		// Register out indent handler via the builtin over-ride mechanism.
-		editor._indentImpl = dojo.hitch(this, this._indentImpl);
-		editor._outdentImpl = dojo.hitch(this, this._outdentImpl);
+		if(!editor._indentImpl){
+			editor._indentImpl = dojo.hitch(this, this._indentImpl);
+		}
+		if(!editor._outdentImpl){
+			editor._outdentImpl = dojo.hitch(this, this._outdentImpl);
+		}
+		editor._normalizeIndentOutdent = true;
 
 		// Take over the query command enabled function, we want to prevent
 		// indent of first items in a list, etc.
@@ -57,6 +62,12 @@ var NormalizeIndentOutdent = dojo.declare("dojox.editor.plugins.NormalizeIndentO
 		//		The command passed in to check enablement.
 		// tags:
 		//		private
+		if(this.editor.advancedBidi){
+			if(editor._indentoutdent_queryCommandEnabled){
+				return this.editor._indentoutdent_queryCommandEnabled(command);
+			}
+			return true;
+		}
 		var c = command.toLowerCase();
 		var ed, sel, range, node, tag, prevNode;
 		var style = "marginLeft";

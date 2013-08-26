@@ -881,7 +881,7 @@ var InsertTable = declare("dojox.editor.plugins.InsertTable", TablePlugins, {
 			dojo.disconnect(c);
 
 			this.editor.focus();
-			var res = this.editor.execCommand('inserthtml', obj.htmlText);
+			var res = this.editor.execCommand('inserthtml', obj.htmlText.replace(/>(\s)*</g,"><"));
 
 			// commenting this line, due to msg below
 			//var td = this.editor.query("td", this.editor.byId(obj.id));
@@ -968,6 +968,7 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 		this.selectPad.set("value", domAttr.get(this.table, "cellPadding"));
 		this.selectSpace.set("value", domAttr.get(this.table, "cellSpacing"));
 		this.selectAlign.set("value", domAttr.get(this.table, "align"));
+		this.selectDirection.set("value", domStyle.get(this.table,"direction"));
 	},
 	startup: function() {
 		array.forEach(this.pickers, function(picker){ picker.startup(); });
@@ -995,6 +996,7 @@ var EditorModifyTableDialog = declare([Dialog, _TemplatedMixin, _WidgetsInTempla
 		domAttr.set(this.table, "cellPadding", this.selectPad.get("value"));
 		domAttr.set(this.table, "cellSpacing", this.selectSpace.get("value"));
 		domAttr.set(this.table, "align", this.selectAlign.get("value"));
+		domStyle.set(this.table, "direction", this.selectDirection.get("value"));
 		var c = dojo.connect(this, "onHide", function(){
 			dojo.disconnect(c);
 			var self = this;
