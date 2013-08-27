@@ -4,7 +4,7 @@ define([
 	"dojo/_base/array",
 	"dojo/dom-geometry",
 	"dojo/query",
-	"dijit/_Widget",
+	"dijit/_WidgetBase",
 	"../_base",
 	"../Map",
 	"../Layer",
