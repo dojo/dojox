@@ -70,14 +70,14 @@ define([
 			if(!this.store){ return null; }
 			var _this = this;
 			var promise = this.store.query(this.query, this.queryOptions);
-			if(this._observe_h){
-				this._observe_h.remove();
-			}
 			Deferred.when(promise, function(results){
 				if(results.items){
 					results = results.items; // looks like dojo/data style items array
 				}
 				if(promise.observe){
+					if(_this._observe_h){
+						_this._observe_h.remove();
+					}
 					_this._observe_h = promise.observe(function(object, previousIndex, newIndex){
 						if(previousIndex != -1){
 							if(newIndex != previousIndex){
@@ -102,7 +102,7 @@ define([
 								// compatibility with 1.8: onAdd did not exist, add was handled by onUpdate
 								_this.onUpdate(object, newIndex);
 							}
-						}												
+						}
 					}, true); // we want to be notified of updates
 				}
 				_this.onComplete(results);
@@ -110,6 +110,13 @@ define([
 				_this.onError(error);
 			});
 			return promise;
+		},
+
+		destroy: function(){
+			if(this._observe_h){
+				this._observe_h = this._observe_h.remove();
+			}
+			this.inherited(arguments);
 		}
 
 /*=====
