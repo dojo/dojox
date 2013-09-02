@@ -809,7 +809,8 @@ else
 		}
 	};
 
-	var C = gs.Container, Container = {
+	var C = gs.Container;
+	var Container = svg.Container = {
 		openBatch: function() {
 			// summary:
 			//		starts a new batch, subsequent new child shapes will be held in
@@ -888,7 +889,7 @@ else
 		_moveChildToBack:  C._moveChildToBack
 	};
 
-	var Creator = {
+	var Creator = svg.Creator = {
 		// summary:
 		//		SVG shape creators
 		createObject: function(shapeType, rawShape){
