@@ -182,7 +182,7 @@ define([
 			//		Resizes the child items of the carousel.
 			var idx = 0, i;
 			var h = this.domNode.offsetHeight - (this.headerNode ? this.headerNode.offsetHeight : 0);
-			var m = has("ie") ? 5 / this.numVisible-1 : 5 / this.numVisible;
+			var m = (has("ie") < 10) ? 5 / this.numVisible-1 : 5 / this.numVisible;
 			var node, item;
 			array.forEach(this.getChildren(), function(view){
 				if(!(view instanceof SwapView)){ return; }
