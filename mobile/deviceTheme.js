@@ -206,6 +206,11 @@
 				[]
 			],
 			[
+				"Trident/7.0",
+				"windows",
+				[]
+			],
+			[
 				"Custom",
 				"custom",
 				[]
@@ -229,6 +234,7 @@
 			var i, j;
 			var m = this.themeMap;
 			var ua = userAgent || config.mblUserAgent || (location.search.match(/theme=(\w+)/) ? RegExp.$1 : navigator.userAgent);
+			console.log('ua: ' + ua);
 			for(i = 0; i < m.length; i++){
 				if(ua.match(new RegExp(m[i][0]))){
 					var theme = m[i][1];
