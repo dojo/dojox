@@ -1,8 +1,10 @@
 define([
 	"dojo/_base/window",
+	"dojo/_base/lang",
+	"dojo/ready",
 	"dojo/dom-style",
 	"./sniff"
-], function(win, domStyle, has){
+], function(win, lang, ready, domStyle, has){
 	
 	var cache = {};
 	
@@ -10,7 +12,7 @@ define([
 		// summary:
 		//		Utility methods to clip rounded corners of various elements (Switch, ScrollablePane, scrollbars in scrollable widgets).
 		//		Uses -webkit-mask-image on webkit, or SVG on other browsers.
-		
+
 		createRoundMask: function(/*DomNode*/node, x, y, r, b, w, h, rx, ry, e){
 			// summary:
 			//		Creates and sets a mask for the specified node.
@@ -70,46 +72,48 @@ define([
 				}
 				node.style.webkitMaskImage = "-webkit-canvas(" + id + ")";
 			}else if(has("svg")){		// add an SVG image to clip the corners.
-				if(node._svgMask){
-					node.removeChild(node._svgMask);
-				}
-				var bg = null;
-				for(var p = node.parentNode; p; p = p.parentNode){
-					bg = domStyle.getComputedStyle(p).backgroundColor;
-					if(bg && bg != "transparent" && !bg.match(/rgba\(.*,\s*0\s*\)/)){
-						break;
+				ready(lang.hitch(this, function(){ // use ready to make sure all styles have been applied to the page
+					if(node._svgMask){
+						node.removeChild(node._svgMask);
 					}
-				}
-				var svgNS = "http://www.w3.org/2000/svg";
-				var svg = win.doc.createElementNS(svgNS, "svg");
-				svg.setAttribute("width", tw);
-				svg.setAttribute("height", th);
-				svg.style.position = "absolute";
-				svg.style.pointerEvents = "none";
-				svg.style.opacity = "1";
-				svg.style.zIndex = "2147483647"; // max int
-				var path = win.doc.createElementNS(svgNS, "path");
-				e = e || 0;
-				rx += e;
-				ry += e;
-				// TODO: optimized cases for scrollbars as in webkit case?
-				var d = " M" + (x + rx - e) + "," + (y - e) + " a" + rx + "," + ry + " 0 0,0 " + (-rx) + "," + ry + " v" + (-ry) + " h" + rx + " Z" +
-						" M" + (x - e) + "," + (y + h - ry + e) + " a" + rx + "," + ry + " 0 0,0 " + rx + "," + ry + " h" + (-rx) + " v" + (-ry) + " z" +
-						" M" + (x + w - rx + e) + "," + (y + h + e) + " a" + rx + "," + ry + " 0 0,0 " + rx + "," + (-ry) + " v" + ry + " h" + (-rx) + " z" +
-						" M" + (x + w + e) + "," + (y + ry - e) + " a" + rx + "," + ry + " 0 0,0 " + (-rx) + "," + (-ry) + " h" + rx + " v" + ry + " z";
-				if(y > 0){
-					d += " M0,0 h" + tw + " v" + y + " h" + (-tw) + " z";
-				}
-				if(b > 0){
-					d += " M0," + (y + h) + " h" + tw + " v" + b + " h" + (-tw) + " z";
-				}
-				path.setAttribute("d", d);
-				path.setAttribute("fill", bg);
-				path.setAttribute("stroke", bg);
-				path.style.opacity = "1";
-				svg.appendChild(path); 
-				node._svgMask = svg;
-				node.appendChild(svg);
+					var bg = null;
+					for(var p = node.parentNode; p; p = p.parentNode){
+						bg = domStyle.getComputedStyle(p).backgroundColor;
+						if(bg && bg != "transparent" && !bg.match(/rgba\(.*,\s*0\s*\)/)){
+							break;
+						}
+					}
+					var svgNS = "http://www.w3.org/2000/svg";
+					var svg = win.doc.createElementNS(svgNS, "svg");
+					svg.setAttribute("width", tw);
+					svg.setAttribute("height", th);
+					svg.style.position = "absolute";
+					svg.style.pointerEvents = "none";
+					svg.style.opacity = "1";
+					svg.style.zIndex = "2147483647"; // max int
+					var path = win.doc.createElementNS(svgNS, "path");
+					e = e || 0;
+					rx += e;
+					ry += e;
+					// TODO: optimized cases for scrollbars as in webkit case?
+					var d = " M" + (x + rx - e) + "," + (y - e) + " a" + rx + "," + ry + " 0 0,0 " + (-rx) + "," + ry + " v" + (-ry) + " h" + rx + " Z" +
+							" M" + (x - e) + "," + (y + h - ry + e) + " a" + rx + "," + ry + " 0 0,0 " + rx + "," + ry + " h" + (-rx) + " v" + (-ry) + " z" +
+							" M" + (x + w - rx + e) + "," + (y + h + e) + " a" + rx + "," + ry + " 0 0,0 " + rx + "," + (-ry) + " v" + ry + " h" + (-rx) + " z" +
+							" M" + (x + w + e) + "," + (y + ry - e) + " a" + rx + "," + ry + " 0 0,0 " + (-rx) + "," + (-ry) + " h" + rx + " v" + ry + " z";
+					if(y > 0){
+						d += " M0,0 h" + tw + " v" + y + " h" + (-tw) + " z";
+					}
+					if(b > 0){
+						d += " M0," + (y + h) + " h" + tw + " v" + b + " h" + (-tw) + " z";
+					}
+					path.setAttribute("d", d);
+					path.setAttribute("fill", bg);
+					path.setAttribute("stroke", bg);
+					path.style.opacity = "1";
+					svg.appendChild(path); 
+					node._svgMask = svg;
+					node.appendChild(svg);
+				}));
 			}
 		}
 	};
