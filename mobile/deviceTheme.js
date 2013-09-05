@@ -196,17 +196,22 @@
 				[this.toUrl("dojox/mobile/themes/iphone/ipad.css")]
 			],
 			[
-				"MSIE 10",
-				"windows",
-				[]
-			],
-			[
 				"WindowsPhone",
 				"windows",
 				[]
 			],
 			[
-				"Trident/7.0",
+				"MSIE 10",
+				"windows",
+				[]
+			],
+			[
+				"MSIE",
+				"iphone",
+				[]
+			],
+			[
+				"Trident",
 				"windows",
 				[]
 			],
