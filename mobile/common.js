@@ -7,12 +7,13 @@ define([
 	"dojo/_base/kernel",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/domReady",
 	"dojo/ready",
 	"dojo/touch",
 	"dijit/registry",
 	"./sniff",
 	"./uacss" // (no direct references)
-], function(array, config, connect, lang, win, kernel, domClass, domConstruct, ready, touch, registry, has){
+], function(array, config, connect, lang, win, kernel, domClass, domConstruct, domReady, ready, touch, registry, has){
 
 	// module:
 	//		dojox/mobile/common
@@ -297,8 +298,8 @@ define([
 			config["mblAndroid3Workaround"] !== false && has('android') >= 3, undefined, true);
 
 	dm._detectWindowsTheme();
-	
-	require(["dojo/domReady!"], function(){
+
+	domReady(function(){
 		domClass.add(win.body(), "mblBackground");
 	});
 
