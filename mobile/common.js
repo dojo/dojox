@@ -298,9 +298,12 @@ define([
 
 	dm._detectWindowsTheme();
 	
+	require(["dojo/domReady!"], function(){
+		domClass.add(win.body(), "mblBackground");
+	});
+
 	ready(function(){
 		dm.detectScreenSize(true);
-		domClass.add(win.body(), "mblBackground");
 		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
 			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;} audio::-webkit-media-controls-play-button,video::-webkit-media-controls-play-button{-webkit-appearance:media-play-button;} video::-webkit-media-controls-fullscreen-button{-webkit-appearance:media-fullscreen-button;}"}, win.doc.head, "first");
