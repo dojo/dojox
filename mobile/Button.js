@@ -90,14 +90,7 @@ define([
 						e.preventDefault();
 						isFirstMoveDone = true;
 					}
-					var inside = false;
-					for(var t = e.target; t; t = t.parentNode){
-						if(t == _this.domNode){
-							inside = true;
-							break;
-						}
-					}
-					_this._press(inside);
+					_this._press(dom.isDescendant(e.target, _this.domNode));
 				});
 
 				// handle touch.release 
@@ -118,9 +111,11 @@ define([
 			if(pressed != this._pressed){
 				this._pressed = pressed;
 				var button = this.focusNode || this.domNode;
-				var newStateClasses = (this.baseClass+' '+this["class"]).split(" ");
-				newStateClasses = array.map(newStateClasses, function(c){ return c+"Selected"; });
-				domClass.toggle(button,newStateClasses,pressed);
+				var newStateClasses = (this.baseClass + ' ' + this["class"]).split(" ");
+				newStateClasses = array.map(newStateClasses, function(c){
+					return c + "Selected";
+				});
+				domClass.toggle(button, newStateClasses, pressed);
 			}
 		},
 
