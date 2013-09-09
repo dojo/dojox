@@ -124,7 +124,10 @@ define([
 		
 		// for Tooltip.js
 		_parentPadBorderExtentsBottom: 0,
-		
+
+		// boolean that signal if the user have moved in (one of) the scroll direction(s) since touch start (moved under the threshold is ignored)
+		_moved: false,
+
 		init: function(/*Object?*/params){
 			// summary:
 			//		Initialize according to the given params.
@@ -465,6 +468,7 @@ define([
 			this._posX = [this.touchStartX];
 			this._posY = [this.touchStartY];
 			this._locked = false;
+			this._moved = false;
 
 			if(!this.isFormElement(e.target)){
 				this.propagatable ? e.preventDefault() : event.stop(e);
@@ -503,6 +507,7 @@ define([
 						return;
 					}
 				}
+				this._moved = true;
 				this.addCover();
 				this.showScrollBar();
 			}
@@ -535,6 +540,7 @@ define([
 			var max = 10;
 			var n = this._time.length; // # of samples
 			if(n >= 2){
+				this._moved = true;
 				// Check the direction of the finger move.
 				// If the direction has been changed, discard the old data.
 				var d0, d1;
@@ -582,17 +588,6 @@ define([
 			}
 		},
 
-		_fingerMovedSinceTouchStart: function(){
-			// summary:
-			//		Return true if the "finger" has moved since the touchStart, false otherwise.
-			var n = this._time.length; // # of samples
-			if(n <= 1 || (n == 2 && Math.abs(this._posY[1] - this._posY[0]) < 4 && has('touch'))){
-				return false;
-			}else{
-				return true;
-			}
-		},
-
 		onTouchEnd: function(/*Event*/e){
 			// summary:
 			//		User-defined function to handle touchEnd events.
@@ -609,7 +604,7 @@ define([
 				this._conn = null;
 
 				var clicked = false;
-				if(!this._aborted && !this._fingerMovedSinceTouchStart()){
+				if(!this._aborted && !this._moved){
 					clicked = true;
 				}
 				if(clicked){ // clicked, not dragged or flicked
