@@ -95,8 +95,8 @@ define(["dojo/_base/lang",
 		},
 		
 		_beforeClear: function(){
-			this.node.style[transitionPrefix + "ransitionProperty"] = null;
-			this.node.style[transitionPrefix + "ransitionDuration"] = null;
+			this.node.style[transitionPrefix + "ransitionProperty"] = "";
+			this.node.style[transitionPrefix + "ransitionDuration"] = "";
 			if(this["in"] !== true){
 				this.node.style.display = "none";
 			}			 
@@ -172,7 +172,7 @@ define(["dojo/_base/lang",
 			var style = this.node.style;
 			for(var property in state){
 				if(state.hasOwnProperty(property)){
-					style[property] = null;
+					style[property] = "";
 				}
 			}
 		}
