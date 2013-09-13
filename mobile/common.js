@@ -7,12 +7,13 @@ define([
 	"dojo/_base/kernel",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/domReady",
 	"dojo/ready",
 	"dojo/touch",
 	"dijit/registry",
 	"./sniff",
 	"./uacss" // (no direct references)
-], function(array, config, connect, lang, win, kernel, domClass, domConstruct, ready, touch, registry, has){
+], function(array, config, connect, lang, win, kernel, domClass, domConstruct, domReady, ready, touch, registry, has){
 
 	// module:
 	//		dojox/mobile/common
@@ -298,9 +299,14 @@ define([
 
 	dm._detectWindowsTheme();
 	
+	// Set the background style using dojo/domReady, not dojo/ready, to ensure it is already
+	// set at widget initialization time. (#17418) 
+	domReady(function(){
+		domClass.add(win.body(), "mblBackground");
+	});
+
 	ready(function(){
 		dm.detectScreenSize(true);
-		domClass.add(win.body(), "mblBackground");
 		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
 			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;} audio::-webkit-media-controls-play-button,video::-webkit-media-controls-play-button{-webkit-appearance:media-play-button;} video::-webkit-media-controls-fullscreen-button{-webkit-appearance:media-fullscreen-button;}"}, win.doc.head, "first");
