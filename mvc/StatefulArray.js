@@ -83,7 +83,7 @@ define([
 
 				// Set additions in a stateful manner
 				for(var i = 0; i < adds.length; i++){
-					this.set(p + i, adds[i]);
+					this[p + i] = adds[i];
 				}
 
 				// Notify change of elements.

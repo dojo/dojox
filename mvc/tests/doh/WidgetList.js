@@ -89,6 +89,28 @@ define([
 	});
 	wl1.startup();
 
+	var wl2 = new WidgetList({
+		partialRebuild: true,
+		children: getStateful(a),
+		childParams: {
+			startup: function(){
+				this.labelNode.set("value", at("rel:", "Serial"));
+				this.inputNode.set("value", at("rel:", "First"));
+				this.inherited("startup", arguments);
+			}
+		},
+		templateString: childTemplate
+	});
+	wl2.startup();
+
+	var wl3 = new WidgetList({
+		partialRebuild: true,
+		children: getStateful(a),
+		childBindings: eval("(" + childBindings + ")"),
+		templateString: childTemplate
+	});
+	wl3.startup();
+
 	doh.register("dojox.mvc.tests.doh.WidgetList", [
 		function programmaticBinding(){
 			var children = wl0.getChildren();
@@ -127,12 +149,20 @@ define([
 			var c = getStateful(a.slice(0));
 			wl0.set("children", c);
 			wl1.set("children", c);
+			wl2.set("children", c);
+			wl3.set("children", c);
 
 			c.splice(1, 1);
 			var children = wl0.getChildren();
 			doh.is("C111", children[1].labelNode.value, "The label of index #1 should be: C111");
 			doh.is("Chad", children[1].inputNode.value, "The input of index #1 should be: Chad");
 			children = wl1.getChildren();
+			doh.is("C111", children[1].labelNode.value, "The label of index #1 should be: C111");
+			doh.is("Chad", children[1].inputNode.value, "The input of index #1 should be: Chad");
+			children = wl2.getChildren();
+			doh.is("C111", children[1].labelNode.value, "The label of index #1 should be: C111");
+			doh.is("Chad", children[1].inputNode.value, "The input of index #1 should be: Chad");
+			children = wl3.getChildren();
 			doh.is("C111", children[1].labelNode.value, "The label of index #1 should be: C111");
 			doh.is("Chad", children[1].inputNode.value, "The input of index #1 should be: Chad");
 
@@ -147,6 +177,20 @@ define([
 			doh.is("David", children[1].inputNode.value, "The input of index #1 should be: David");
 			doh.is("E111", children[2].labelNode.value, "The label of index #2 should be: E111");
 			doh.is("Emma", children[2].inputNode.value, "The input of index #2 should be: Emma");
+			doh.is("C111", children[3].labelNode.value, "The label of index #3 should be: C111");
+			doh.is("Chad", children[3].inputNode.value, "The input of index #3 should be: Chad");
+			children = wl2.getChildren();
+			doh.is("D111", children[1].labelNode.value, "The label of index #1 should be: D111");
+			doh.is("David", children[1].inputNode.value, "The input of index #1 should be: David");
+			doh.is("E111", children[2].labelNode.value, "The label of index #2 should be: E111");
+			doh.is("Emma", children[2].inputNode.value, "The input of index #2 should be: Emma");
+			children = wl3.getChildren();
+			doh.is("D111", children[1].labelNode.value, "The label of index #1 should be: D111");
+			doh.is("David", children[1].inputNode.value, "The input of index #1 should be: David");
+			doh.is("E111", children[2].labelNode.value, "The label of index #2 should be: E111");
+			doh.is("Emma", children[2].inputNode.value, "The input of index #2 should be: Emma");
+			doh.is("C111", children[3].labelNode.value, "The label of index #3 should be: C111");
+			doh.is("Chad", children[3].inputNode.value, "The input of index #3 should be: Chad");
 		},
 		function replaceElement(){
 			wl0.set("children", a);
@@ -189,7 +233,7 @@ define([
 
 			var simpleChildren = w.simpleWidgetList.getChildren(),
 			 simpleChildrenWithRegularDijit = w.simpleWidgetListWithRegularDijit.getChildren(),
-			 simpleChildrenWithRegularDijitInMixin = w.simpleWidgetListWithRegularDijitInMixin.getChildren()
+			 simpleChildrenWithRegularDijitInMixin = w.simpleWidgetListWithRegularDijitInMixin.getChildren();
 
 			doh.t(array.every(simpleChildren, function(child){ return child.isMyWidget && child.isMyMixin && !child.addChild && !child._setValueAttr; }), "simpleChildren should be created by My.Widget and My.Mixin");
 			doh.t(array.every(simpleChildrenWithRegularDijit, function(child){ return !child.isMyWidget && child.isMyMixin && !child.addChild && child._setValueAttr; }), "simpleChildrenWithRegularDijit should be created by dijit/form/TextBox and My.Mixin");
