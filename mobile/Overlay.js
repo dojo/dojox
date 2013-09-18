@@ -104,7 +104,12 @@ define([
 				this.defer(function(){
 					var handler = this.connect(_domNode, css3.name("transitionEnd"), function(){
 						this.disconnect(handler);
-						domClass.replace(_domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
+						if(has('ie') > 10){
+							// on IE, removing the transition classes results in the overlay hidden style not being applied correctly
+							domClass.add(_domNode, "mblOverlayHidden");
+						}else{
+							domClass.replace(_domNode, ["mblOverlayHidden"], ["mblRevealv", "mblOut", "mblReverse", "mblTransition"]);
+						}
 					});
 					domClass.add(_domNode, "mblTransition");
 				}, 100);
