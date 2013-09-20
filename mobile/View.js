@@ -386,7 +386,8 @@ define([
 					toNode.style.top = "0px";
 					if(scrollTop > 1 || toTop !== 0){
 						fromNode.style.top = toTop - scrollTop + "px";
-						if(config["mblHideAddressBar"] !== false){
+						// address bar hiding does not work on iOS 7+.
+						if(!(has("ios") >= 7) && config["mblHideAddressBar"] !== false){
 							this.defer(function(){ // iPhone needs setTimeout (via defer)
 								win.global.scrollTo(0, (toTop || 1));
 							});
