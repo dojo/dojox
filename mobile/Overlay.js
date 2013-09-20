@@ -11,8 +11,9 @@ define([
 	"dojo/_base/array",
 	"dijit/registry",
 	"dojo/touch",
+	"./viewRegistry",
 	"./_css3"
-], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry, touch, css3){
+], function(declare, lang, has, win, domClass, domGeometry, domStyle, windowUtils, WidgetBase, array, registry, touch, viewRegistry, css3){
 
 	return declare("dojox.mobile.Overlay", WidgetBase, {
 		// summary:
@@ -38,7 +39,14 @@ define([
 			//		private
 			var popupPos = domGeometry.position(this.domNode);
 			var vp = windowUtils.getBox();
-			if((popupPos.y+popupPos.h) != vp.h // TODO: should be a has() test for position:fixed not scrolling
+			// search for the scrollable parent if any 
+			var scrollableParent = viewRegistry.getEnclosingScrollable(this.domNode);
+			// update vp scroll position if the overlay is inside a scrollable
+		 	if(scrollableParent){
+		 		vp.t -= scrollableParent.getPos().y;
+		 	}
+		 	// reposition if needed 
+		 	if((popupPos.y+popupPos.h) != vp.h // TODO: should be a has() test for position:fixed not scrolling
 				|| (domStyle.get(this.domNode, 'position') != 'absolute' && has('android') < 3)){ // android 2.x supports position:fixed but child transforms don't persist
 				popupPos.y = vp.t + vp.h - popupPos.h;
 				domStyle.set(this.domNode, { position: "absolute", top: popupPos.y + "px", bottom: "auto" });
@@ -58,6 +66,7 @@ define([
 			if(aroundNode){
 				var aroundPos = domGeometry.position(aroundNode);
 				if(popupPos.y < aroundPos.y){ // if the aroundNode is under the popup, try to scroll it up
+					// TODO: if this widget has a scrollable parent, use its scrollTo method to make sure the aroundNode is visible?
 					win.global.scrollBy(0, aroundPos.y + aroundPos.h - popupPos.y);
 					this._reposition();
 				}
