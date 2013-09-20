@@ -116,10 +116,10 @@ define([
 		height: "",
 
 		// scrollType: Number
-		//		- 1: use -webkit-transform:translate3d(x,y,z) style, use -webkit-animation for slide anim
+		//		- 1: use (-webkit-)transform:translate3d(x,y,z) style, use (-webkit-)animation for slide animation
 		//		- 2: use top/left style,
-		//		- 3: use -webkit-transform:translate3d(x,y,z) style, use -webkit-transition for slide anim
-		//		- 0: use default value (2 in case of Android < 3, 3 if iOS6, otherwise 1)
+		//		- 3: use (-webkit-)transform:translate3d(x,y,z) style, use (-webkit-)transition for slide animation
+		//		- 0: use default value (3 for Android, iOS6+, and BlackBerry; otherwise 1)
 		scrollType: 0,
 		
 		// _parentPadBorderExtentsBottom: [private] Number
@@ -162,11 +162,12 @@ define([
 				// flag for whether to use -webkit-transform:translate3d(x,y,z) or top/left style.
 				// top/left style works fine as a workaround for input fields auto-scrolling issue,
 				// so use top/left in case of Android by default.
-				this._useTopLeft = this.scrollType ? this.scrollType === 2 : has('android') < 3;
+				this._useTopLeft = this.scrollType ? this.scrollType === 2 : false;
 				// Flag for using webkit transition on transform, instead of animation + keyframes.
 				// (keyframes create a slight delay before the slide animation...)
 				if(!this._useTopLeft){
-					this._useTransformTransition = this.scrollType ? this.scrollType === 3 : has("ios") >= 6;
+					this._useTransformTransition = 
+						this.scrollType ? this.scrollType === 3 : has("ios") >= 6 || has("android") || has("bb");
 				}
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
@@ -746,31 +747,16 @@ define([
 			this.scrollTo(this.getPos());
 			this.stopAnimation();
 		},
-		_forceRendering: function(elt){
-			// tags:
-			//		private
-			//		There are issues with Android > 3: No acceleration and no way to stop the scrolling.
-			//		This workaround improves the scrolling behaviour.
-			if(has("android") >= 4.1){
-				var tmp = elt.style.display;
-				elt.style.display = "none";
-				elt.offsetHeight; // Accessing offsetHeight forces the rendering
-				elt.style.display = tmp;
-			}
-		},
+
 		stopAnimation: function(){
 			// summary:
 			//		Stops the currently running animation.
-
-			this._forceRendering(this.containerNode);
 			domClass.remove(this.containerNode, "mblScrollableScrollTo2");
 			if(this._scrollBarV){
 				this._scrollBarV.className = "";
-				this._forceRendering(this._scrollBarV);
 			}
 			if(this._scrollBarH){
 				this._scrollBarH.className = "";
-				this._forceRendering(this._scrollBarH);
 			}
 			if(this._useTransformTransition || this._useTopLeft){
 				this.containerNode.style[css3.name("transition")] = "";
