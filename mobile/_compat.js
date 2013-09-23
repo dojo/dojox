@@ -615,7 +615,7 @@ return {
 		};
 
 		ready(function(){
-			if(config["mblLoadCompatCssFiles"] !== false){
+			if(config.mblLoadCompatCssFiles !== false){
 				dm.loadCompatCssFiles();
 			}
 			if(dm.applyPngFilter){

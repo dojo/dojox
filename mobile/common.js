@@ -101,8 +101,8 @@ define([
 	// dojox/mobile.hideAddressBarWait: Number
 	//		The time in milliseconds to wait before the fail-safe hiding address
 	//		bar runs. The value must be larger than 800.
-	dm.hideAddressBarWait = typeof(config["mblHideAddressBarWait"]) === "number" ?
-		config["mblHideAddressBarWait"] : 1500;
+	dm.hideAddressBarWait = typeof(config.mblHideAddressBarWait) === "number" ?
+		config.mblHideAddressBarWait : 1500;
 
 	dm.hide_1 = function(){
 		// summary:
@@ -274,7 +274,7 @@ define([
 		}
 	};
 
-	if(config["mblApplyPageStyles"] !== false){
+	if(config.mblApplyPageStyles !== false){
 		domClass.add(win.doc.documentElement, "mobile");
 	}
 	if(has('chrome')){
@@ -293,9 +293,9 @@ define([
 
 	// flag for Android transition animation flicker workaround
 	has.add('mblAndroidWorkaround', 
-			config["mblAndroidWorkaround"] !== false && has('android') < 3, undefined, true);
+			config.mblAndroidWorkaround !== false && has('android') < 3, undefined, true);
 	has.add('mblAndroid3Workaround', 
-			config["mblAndroid3Workaround"] !== false && has('android') >= 3, undefined, true);
+			config.mblAndroid3Workaround !== false && has('android') >= 3, undefined, true);
 
 	dm._detectWindowsTheme();
 	
@@ -307,7 +307,7 @@ define([
 
 	ready(function(){
 		dm.detectScreenSize(true);
-		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
+		if(config.mblAndroidWorkaroundButtonStyle !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
 			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;} audio::-webkit-media-controls-play-button,video::-webkit-media-controls-play-button{-webkit-appearance:media-play-button;} video::-webkit-media-controls-fullscreen-button{-webkit-appearance:media-fullscreen-button;}"}, win.doc.head, "first");
 		}
@@ -326,10 +326,10 @@ define([
 		// You can disable the hiding of the address bar with the following dojoConfig:
 		// var dojoConfig = { mblHideAddressBar: false };
 		// If unspecified, the flag defaults to true.
-		if((config["mblHideAddressBar"] !== false && isHidingPossible) ||
-			config["mblForceHideAddressBar"] === true){
+		if((config.mblHideAddressBar !== false && isHidingPossible) ||
+			config.mblForceHideAddressBar === true){
 			dm.hideAddressBar();
-			if(config["mblAlwaysHideAddressBar"] === true){
+			if(config.mblAlwaysHideAddressBar === true){
 				f = dm.hideAddressBar;
 			}
 		}
