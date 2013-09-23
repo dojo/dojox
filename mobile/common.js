@@ -316,21 +316,25 @@ define([
 			domConstruct.create("style", {innerHTML:".mblView.mblAndroidWorkaround{position:absolute;top:-9999px !important;left:-9999px !important;}"}, win.doc.head, "last");
 		}
 
-		//	You can disable hiding the address bar with the following dojoConfig.
-		//	var dojoConfig = { mblHideAddressBar: false };
 		var f = dm.resizeAll;
-		var ios6 = has("ios") >= 6; // Full-screen support for iOS6 or later
-		var ios7 = has("ios") >= 7; // Address bar hiding does not work on iOS 7 or later.
-		if(!ios7 && 
-			(!config["mblHideAddressBar"] !== false &&
-			navigator.appVersion.indexOf("Mobile") != -1 ||
-			config["mblForceHideAddressBar"] === true)){
+		// Address bar hiding
+		var isHidingPossible =
+			navigator.appVersion.indexOf("Mobile") != -1 && // only mobile browsers
+			// #17455: hiding Safari's address bar works in iOS < 7 but this is 
+			// no longer possible since iOS 7. Hence, exclude iOS 7 and later: 
+			!(has("ios") >= 7);
+		// You can disable the hiding of the address bar with the following dojoConfig:
+		// var dojoConfig = { mblHideAddressBar: false };
+		// If unspecified, the flag defaults to true.
+		if((config["mblHideAddressBar"] !== false && isHidingPossible) ||
+			config["mblForceHideAddressBar"] === true){
 			dm.hideAddressBar();
 			if(config["mblAlwaysHideAddressBar"] === true){
 				f = dm.hideAddressBar;
 			}
 		}
 
+		var ios6 = has("ios") >= 6; // Full-screen support for iOS6 or later
 		if((has('android') || ios6) && win.global.onorientationchange !== undefined){
 			var _f = f;
 			var curSize, curClientWidth, curClientHeight;
