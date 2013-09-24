@@ -46,6 +46,41 @@ define([
 			var a = new StatefulArray();
 			doh.t(a.isInstanceOf(Stateful), "StatefulArray should be a subclass of Stateful");
 			doh.t(a.isInstanceOf(StatefulArray), "StatefulArray's instance should work with isInstanceOf() call");
+		},
+		{
+			name: "changeLength",
+			runTest: function(){
+				var dfd = new doh.Deferred(),
+				 a = new StatefulArray([0, 1, 2, 3]),
+				 changes = [];
+				this.h = a.watchElements(dfd.getTestErrback(function(idx, removals, adds){
+					changes.push({
+						idx: idx,
+						removals: removals,
+						adds: adds
+					});
+					if(changes.length >= 2){
+						doh.is(2, changes.length, "Two changes should have been notified");
+						doh.is({
+							idx: 2,
+							removals: [2, 3],
+							adds: []
+						}, changes[0], "The first change should remove two elements at index 2");
+						doh.is({
+							idx: 2,
+							removals: [],
+							adds: [void 0, void 0]
+						}, changes[1], "The second change should add empty two elements");
+						dfd.callback(1);
+					}
+				}));
+				a.set("length", 2);
+				a.set("length", 4);
+				return dfd;
+			},
+			tearDown: function(){
+				this.h && this.h.remove();
+			}
 		}
 	]);
 });
