@@ -21,7 +21,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 			filter:     {},
 			styleFunc:	null,
 			font:		"",
-			fontColor:	""
+			fontColor:	"",
+			labelFunc: null
 		},
 
 		constructor: function(chart, kwArgs){
