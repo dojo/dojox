@@ -123,6 +123,9 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	//		See description of `dijit.Tooltip.defaultPosition` for details on this parameter.
 	tooltipPosition: [],
 
+		// pass disabled state onto children, who do not exist at the time these methods are automatically called.
+		this.set("disabled",this.get("disabled"))
+		this.set("readOnly",this.get("readOnly"))
 	_onMouseDown: function(e){
 		// summary:
 		//		Cancels the mousedown event to prevent others from stealing
