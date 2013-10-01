@@ -77,10 +77,10 @@ define(["dojo/_base/array", "dojo/_base/declare", "dojo/_base/Deferred"],
 			Deferred.when(results, function(objects){
 				self.objects = objects;
 				update();
-				if(objects.observe){
-					this.observeHandle = objects.observe(update, true);
-				}
 			});
+			if(results.observe){
+				this.observeHandle = results.observe(update, true);
+			}
 			function update(){
 				self.data = arr.map(self.objects, function(object){
 					return self.value(object, self.store);
