@@ -368,6 +368,9 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 				maxHeight: this.maxHeight
 			}, this.comboButtonNode);
 		}
+		// pass disabled state onto children, who do not exist at the time these methods are automatically called.
+		this.set("disabled",this.get("disabled"))
+		this.set("readOnly",this.get("readOnly"))
 	},
 
 	_onMouseDown: function(e){
