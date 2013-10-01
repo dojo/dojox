@@ -348,6 +348,45 @@
 				</script>
 				Get Displayed Value
 			</button>
+			<hr>
+			<h1>Disabled select (shouldn't be able to check items)</h1>
+			<select data-dojo-props='multiple:"true", name:"multiselect", disabled:true' data-dojo-type="dojox.form.CheckedMultiSelect">
+				<option value="TN">
+					Tennessee
+				</option>
+				<option value="VA" selected="selected">
+					Virginia
+				</option>
+				<option value="WA" selected="selected">
+					Washington
+				</option>
+				<option value="FL">
+					Florida
+				</option>
+				<option value="CA">
+					California
+				</option>
+			</select>
+			<hr>
+			<h1>ReadOnly select (shouldn't be able to check items, but checkboxes should still be colored)</h1>
+			<select data-dojo-props='multiple:"true", name:"multiselect", readOnly:true' data-dojo-type="dojox.form.CheckedMultiSelect">
+				<option value="TN">
+					Tennessee
+				</option>
+				<option value="VA" selected="selected">
+					Virginia
+				</option>
+				<option value="WA" selected="selected">
+					Washington
+				</option>
+				<option value="FL">
+					Florida
+				</option>
+				<option value="CA">
+					California
+				</option>
+			</select>
+
 		</form>
 	</body>
 </html>
