@@ -15,7 +15,7 @@ var Dock = declare("dojox.layout.Dock",[_WidgetBase, _TemplatedMixin],{
 	//		A widget that attaches to a node and keeps track of incoming / outgoing FloatingPanes
 	//		and handles layout
 
-	templateString: '<div class="dojoxDock"><ul dojo-dojo-attach-point="containerNode" class="dojoxDockList"></ul></div>',
+	templateString: '<div class="dojoxDock"><ul data-dojo-attach-point="containerNode" class="dojoxDockList"></ul></div>',
 
 	// _docked: [private] Array
 	//		array of panes currently in our dock
