@@ -9,7 +9,7 @@ define([
 		has('bb') ? "dj_bb" : "",
 		has('android') ? "dj_android" : "",
 		has("ios") ? "dj_ios" : "",
-		has("ios") >= 6 ? "dj_ios6" : "",
+		has("ios") >= 6 ? "dj_modern_ios" : "",
 		has("ios") ? "dj_iphone" : "",	// TODO: remove for 2.0
 		has('ipod') ? "dj_ipod" : "",
 		has('ipad') ? "dj_ipad" : "",
@@ -24,6 +24,7 @@ define([
 		//		- "dj_android" when running on Android;
 		//		- "dj_bb" when running on BlackBerry;
 		//		- "dj_ios" when running on iPhone, iPad or iPod;
+		//		- "dj_modern_ios" when running on iOS 6+;
 		//		- "dj_iphone" when running on iPhone, iPad or iPod (Note: will be changed in future versions to be set only on iPhone);
 		//		- "dj_ipod" when running on iPod;
 		//		- "dj_ipad" when running on iPad.
