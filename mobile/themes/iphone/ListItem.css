@@ -116,11 +116,11 @@
   -moz-border-radius: 0px !important;
 }
 /* iOS 6 specific */
-.dj_ios6 .mblListItemRightText {
+.dj_modern_ios .mblListItemRightText {
   color: #385487;
   font-weight: normal;
 }
-.dj_ios6 .mblListItem {
+.dj_modern_ios .mblListItem {
   /* enables hardware acc. to avoid flickering issues - see #16956 */
 
   -webkit-perspective: 1000;

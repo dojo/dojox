@@ -76,6 +76,6 @@
   filter: alpha(opacity=0);
 }
 /* iOS6 specific */
-.dj_ios6 .mblSpinWheelSlotLabelBlue {
+.dj_modern_ios .mblSpinWheelSlotLabelBlue {
   color: #0160f2;
 }

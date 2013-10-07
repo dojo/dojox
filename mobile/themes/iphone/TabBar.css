@@ -254,27 +254,27 @@
   background-image: none;
 }
 /* iOS 6 specific */
-.dj_ios6.dj_phone .mblTabBarSegmentedControl {
+.dj_modern_ios.dj_phone .mblTabBarSegmentedControl {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#d0d9e6), to(#587397), color-stop(0.025, #d0d9e6), color-stop(0.025, #beccdd));
   background-image: linear-gradient(to bottom, #d0d9e6 0%, #d0d9e6 2.5%, #beccdd 2.5%, #587397 100%);
 }
-.dj_ios6.dj_phone .mblTabBarSegmentedControl .mblTabBarButton {
+.dj_modern_ios.dj_phone .mblTabBarSegmentedControl .mblTabBarButton {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#b0bccd), to(#6d84a2));
   background-image: linear-gradient(to bottom, #b0bccd 0%, #6d84a2 100%);
 }
-.dj_ios6.dj_phone .mblTabBarSegmentedControl .mblTabBarButtonSelected {
+.dj_modern_ios.dj_phone .mblTabBarSegmentedControl .mblTabBarButtonSelected {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#8ea4c1), to(#4a6c9b));
   background-image: linear-gradient(to bottom, #8ea4c1 0%, #4a6c9b 100%);
 }
-.dj_ios6.dj_phone .mblTabBarStandardTab {
+.dj_modern_ios.dj_phone .mblTabBarStandardTab {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#d0d9e6), to(#587397), color-stop(0.025, #d0d9e6), color-stop(0.025, #beccdd));
   background-image: linear-gradient(to bottom, #d0d9e6 0%, #d0d9e6 2.5%, #beccdd 2.5%, #587397 100%);
 }
-.dj_ios6.dj_phone .mblTabBarStandardTab .mblTabBarButton {
+.dj_modern_ios.dj_phone .mblTabBarStandardTab .mblTabBarButton {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#b0bccd), to(#6d84a2));
   background-image: linear-gradient(to bottom, #b0bccd 0%, #6d84a2 100%);
 }
-.dj_ios6.dj_phone .mblTabBarStandardTab .mblTabBarButtonSelected {
+.dj_modern_ios.dj_phone .mblTabBarStandardTab .mblTabBarButtonSelected {
   background-image: -webkit-gradient(linear, left top, left bottom, from(#8ea4c1), to(#4a6c9b));
   background-image: linear-gradient(to bottom, #8ea4c1 0%, #4a6c9b 100%);
 }
