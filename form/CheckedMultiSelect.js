@@ -32,12 +32,16 @@ dojo.declare("dojox.form._CheckedMultiSelectItem",
 		// summary:
 		//		Set the appropriate _subClass value - based on if we are multi-
 		//		or single-select
-		if(this.parent.multiple){
-			this._type = {type: "checkbox", baseClass: "dijitCheckBox"};
-		}else{
-			this._type = {type: "radio", baseClass: "dijitRadio"};
+		this._type = this.parent.multiple ?
+			{type: "checkbox", baseClass: "dijitCheckBox"} :
+			{type: "radio", baseClass: "dijitRadio"};
+		// use global disabled/readOnly if set to true, otherwise use per-option setting
+		if(!this.disabled){
+			this.disabled = this.option.disabled = this.option.disabled||false;
 		}
-		this.disabled = this.option.disabled = this.option.disabled||false;
+		if(!this.readOnly){
+			this.readOnly = this.option.readOnly = this.option.readOnly||false;
+		}
 		this.inherited(arguments);
 	},
 
@@ -123,9 +127,6 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	//		See description of `dijit.Tooltip.defaultPosition` for details on this parameter.
 	tooltipPosition: [],
 
-		// pass disabled state onto children, who do not exist at the time these methods are automatically called.
-		this.set("disabled",this.get("disabled"))
-		this.set("readOnly",this.get("readOnly"))
 	_onMouseDown: function(e){
 		// summary:
 		//		Cancels the mousedown event to prevent others from stealing
@@ -190,7 +191,9 @@ dojo.declare("dojox.form.CheckedMultiSelect", dijit.form._FormSelectWidget, {
 	_addOptionItem: function(/* dojox.form.__SelectOption */ option){
 		var item = new dojox.form._CheckedMultiSelectItem({
 			option: option,
-			parent: this
+				parent: this,
+				disabled: this.disabled,
+				readOnly: this.readOnly
 		});
 		this.wrapperDiv.appendChild(item.domNode);
 		this.onAfterAddOptionItem(item, option);
