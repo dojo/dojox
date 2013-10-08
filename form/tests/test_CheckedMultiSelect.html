@@ -42,9 +42,10 @@
 			var readStore = new dojo.data.ItemFileReadStore({data:dojo.clone(data)});
 			var writeStore = new dojo.data.ItemFileWriteStore({data:dojo.clone(data)});
 			
-			var numOptions = 0;
+				numOptions = 0;
 			var addNum = 10;
 			var testType;
+				itemCounter=0; // for disabled/readOnly add item button
 			// Uncomment below line to run perf tests - note SLOW to run
 			//testType = "perf";
 		
@@ -343,7 +344,7 @@
 			</button>
 			<hr>
 			<h1>Disabled select (shouldn't be able to check items)</h1>
-			<select data-dojo-props='multiple:"true", name:"multiselect", disabled:true' data-dojo-type="dojox.form.CheckedMultiSelect">
+			<select data-dojo-props='multiple:"true", id:"multiselectdisabled", name:"multiselectdisabled", disabled:true' data-dojo-type="dojox.form.CheckedMultiSelect">
 				<option value="TN">
 					Tennessee
 				</option>
@@ -360,9 +361,16 @@
 					California
 				</option>
 			</select>
+			
+			<button data-dojo-type="dijit.form.Button">
+				<script type="dojo/on" data-dojo-event="click">
+					dijit.byId("multiselectdisabled").addOption({value: itemCounter + "", label: "Option " + (++itemCounter)});
+				</script>
+				Add item
+			</button>
 			<hr>
 			<h1>ReadOnly select (shouldn't be able to check items, but checkboxes should still be colored)</h1>
-			<select data-dojo-props='multiple:"true", name:"multiselect", readOnly:true' data-dojo-type="dojox.form.CheckedMultiSelect">
+			<select data-dojo-props='multiple:"true", id:"multiselectreadonly", name:"multiselectreadonly", readOnly:true' data-dojo-type="dojox.form.CheckedMultiSelect">
 				<option value="TN">
 					Tennessee
 				</option>
@@ -379,7 +387,13 @@
 					California
 				</option>
 			</select>
-
+			
+			<button data-dojo-type="dijit.form.Button">
+				<script type="dojo/on" data-dojo-event="click">
+					dijit.byId("multiselectreadonly").addOption({value: itemCounter + "", label: "Option " + (++itemCounter)});
+				</script>
+				Add item
+			</button>
 		</form>
 	</body>
 </html>

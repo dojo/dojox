@@ -65,7 +65,13 @@ var formCheckedMultiSelectItem = declare("dojox.form._CheckedMultiSelectItem", [
 		this._type = this.parent.multiple ?
 			{type: "checkbox", baseClass: "dijitCheckBox"} :
 			{type: "radio", baseClass: "dijitRadio"};
-		this.disabled = this.option.disabled = this.option.disabled||false;
+		// use global disabled/readOnly if set to true, otherwise use per-option setting
+		if(!this.disabled){
+			this.disabled = this.option.disabled = this.option.disabled||false;
+		}
+		if(!this.readOnly){
+			this.readOnly = this.option.readOnly = this.option.readOnly||false;
+		}
 		this.inherited(arguments);
 	},
 
@@ -368,9 +374,6 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 				maxHeight: this.maxHeight
 			}, this.comboButtonNode);
 		}
-		// pass disabled state onto children, who do not exist at the time these methods are automatically called.
-		this.set("disabled",this.get("disabled"))
-		this.set("readOnly",this.get("readOnly"))
 	},
 
 	_onMouseDown: function(e){
@@ -439,13 +442,15 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		if(this.dropDown){
 			item = new formCheckedMultiSelectMenuItem({
 				option: option,
-				parent: this.dropDownMenu
+				parent: this.dropDownMenu,
 			});
 			this.dropDownMenu.addChild(item);
 		}else{
 			item = new formCheckedMultiSelectItem({
 				option: option,
-				parent: this
+				parent: this,
+				disabled: this.disabled,
+				readOnly: this.readOnly
 			});
 			this.wrapperDiv.appendChild(item.domNode);
 		}
