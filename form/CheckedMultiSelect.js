@@ -420,7 +420,7 @@ var formCheckedMultiSelect = declare("dojox.form.CheckedMultiSelect", FormSelect
 		if(this.dropDown){
 			item = new formCheckedMultiSelectMenuItem({
 				option: option,
-				parent: this.dropDownMenu,
+				parent: this.dropDownMenu
 			});
 			this.dropDownMenu.addChild(item);
 		}else{
