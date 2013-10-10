@@ -22,27 +22,29 @@
 		swOn = function() {
 			var w = registry.byId("sw");
 			w.set("value", "on");
-		}
+		};
 		swOff = function() {
 			var w = registry.byId("sw");
 			w.set("value", "off");
-		}
+		};
 		swEnable = function() {
 			var w = registry.byId("sw2");
 			w.set("value", "on");
-		}
+		};
 		swDisable = function() {
 			var w = registry.byId("sw2");
 			w.set("value", "off");
-		}
+		};
 		setDisplay = function(id) {
 			var element = dom.byId(id);
 			var span = dom.byId("displayMsg");
 
-			var swId
+			var swId;
 			// change state
 			swId = registry.byId(id + "1");
 			swId.set("value", (swId.get("value") == "on") ? "off" : "on");
+			swId = registry.byId(id + "2");
+			swId.set("value", (swId.get("value") == "on")?"off":"on");
 
 			// display
 			if (element) {
@@ -53,8 +55,8 @@
 			}
 			setTimeout(function() {
 				span.innerHTML = "";
-			}, 1000);
-		}
+			}, 2000);
+		};
 
 		function showMsg(spanId, msg){
 			var span = dom.byId(spanId);
@@ -72,32 +74,50 @@
 			w.watch("value", function(name, oldV, newV){
 				showMsg("watchMsgArea", "watch : property " + name + " changed from " + oldV +" to " + newV);
 			});
+
+			var w2 = registry.byId("sw2");
+			w2.on("stateChanged", function(value) {
+				showMsg("msgArea2", "onStateChanged: " + value);
+		});
+			w2.watch("value", function(name, oldV, newV){
+				showMsg("watchMsgArea2", "watch : property " + name + " changed from " + oldV +" to " + newV);
+	});
 		});
 	});
 </script>
 </head>
 <body style="visibility: hidden;">
-	<div data-dojo-type="dojox.mobile.View" data-dojo-props='selected:true'>
-		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
+	<div data-dojo-type="dojox/mobile/View" data-dojo-props='selected:true'>
+		<div data-dojo-type="dojox/mobile/RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Switch</span><br />
-			<input type="checkbox" id="sw" name="swName" data-dojo-type="dojox.mobile.Switch" value="off"><br>
+			<input type="checkbox" id="sw" name="swName" data-dojo-type="dojox/mobile/Switch" value="off"><br>
 			<input type="button" onclick="swOn()" value="on">
 			<input type="button" onclick="swOff()" value="off"><br />
-			<span  id="msgArea"></span></br>
+			<span  id="msgArea"></span><br>
 			<span  id="watchMsgArea"></span>
 		</div>
-		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
+		<div data-dojo-type="dojox/mobile/RoundRect" data-dojo-props='shadow:true'>
+			<span class="bold">Custom width</span><br>
+			<input type="checkbox" id="sw2" name="swName" data-dojo-type="dojox/mobile/Switch" value="off" leftLabel="Enabled" rightLabel="Disabled" style="width: 120px;" ><br>
+			<input type="button" onclick="swEnable()" value="enable">
+			<input type="button" onclick="swDisable()" value="disable"><br />
+			<span id="msgArea2"></span><br>
+			<span  id="watchMsgArea2"></span>
+		</div>
+		<div data-dojo-type="dojox/mobile/RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Initial state = off</span><br />
-			<input type="button" onclick="setDisplay('swOff')" value="Set state=on and display"><br />
+			<input type="button" onclick="setDisplay('swOff')" value="change state and display"><br />
 			<div id="swOff" style="display: none">
-				<input type="checkbox" id="swOff1" name="swName" data-dojo-type="dojox.mobile.Switch" value="off"><br />
+				<input type="checkbox" id="swOff1" name="swName" data-dojo-type="dojox/mobile/Switch" value="off"><br />
+				<input type="checkbox" id="swOff2" name="swName" data-dojo-type="dojox/mobile/Switch" value="off" leftLabel="Enabled" rightLabel="Disabled" style="width: 120px;" ><br>
 			</div>
 		</div>
-		<div data-dojo-type="dojox.mobile.RoundRect" data-dojo-props='shadow:true'>
+		<div data-dojo-type="dojox/mobile/RoundRect" data-dojo-props='shadow:true'>
 			<span class="bold">Initial state = on</span><br />
-			<input type="button" onclick="setDisplay('swOn')" value="Set state=off and display"><br />
+			<input type="button" onclick="setDisplay('swOn')" value="change state and display"><br />
 			<div id="swOn" style="display: none">
-				<input type="checkbox" id="swOn1" name="swName" data-dojo-type="dojox.mobile.Switch" value="on"><br />
+				<input type="checkbox" id="swOn1" name="swName" data-dojo-type="dojox/mobile/Switch" value="on"><br />
+				<input type="checkbox" id="swOn2" name="swName" data-dojo-type="dojox/mobile/Switch" value="on" leftLabel="Enabled" rightLabel="Disabled" style="width: 120px;" ><br>
 			</div>
 		</div>
 		<span id="displayMsg"></span>

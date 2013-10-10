@@ -122,6 +122,25 @@ define([
 			this.connect(this.switchNode, "onkeydown", "_onClick"); // for desktop browsers
 			this._startHandle = this.connect(this.switchNode, touch.press, "onTouchStart");
 			this._initialValue = this.value; // for reset()
+
+			if(has("windows-theme")){
+				//override custom CSS width to avoid misplacement
+				//swith label comes beside the switch: custom width as no point on WP
+				domStyle.set(this.domNode, "width", "100%");
+			}else{
+				var value = domStyle.get(this.domNode,"width");
+				var outWidth = value + "px";
+				var innWidth = (value - domStyle.get(this.knob,"width")) + "px";
+				domStyle.set(this.domNode, "width", outWidth);
+				domStyle.set(this.left,"width", outWidth);
+				domStyle.set(this.right, {width: outWidth, left: innWidth});
+				domStyle.set(this.left.firstChild,"width",innWidth);
+				domStyle.set(this.right.firstChild,"width",innWidth);
+				domStyle.set(this.knob,"left",innWidth);
+				if(this.value == "off"){
+					domStyle.set(this.inner,"left","-" + innWidth);
+				}
+			}
 		},
 
 		_changeState: function(/*String*/state, /*Boolean*/anim){
@@ -135,6 +154,10 @@ define([
 			domClass.remove(this.switchNode, on ? "mblSwitchOff" : "mblSwitchOn");
 			domClass.add(this.switchNode, on ? "mblSwitchOn" : "mblSwitchOff");
 			domAttr.set(this.switchNode, "aria-checked", on ? "true" : "false"); //a11y
+
+			if(!on && !has("windows-theme")){
+				this.inner.style.left = -(domStyle.get(this.domNode,"width") - domStyle.get(this.knob,"width")) + "px";
+			}
 
 			var _this = this;
 			_this.defer(function(){
