@@ -124,21 +124,25 @@ define([
 			this._initialValue = this.value; // for reset()
 
 			if(has("windows-theme")){
-				//override custom CSS width to avoid misplacement
-				//swith label comes beside the switch: custom width as no point on WP
+				// Override the custom CSS width (if any) to avoid misplacement.
+				// Per design, the windows theme does not allow resizing the controls.
+				// The label of the switch is placed next to the switch, and a custom 
+				// width would only have the effect to increase the distance between the
+				// label and the switch, which is undesired. Hence, on windows theme, 
+				// ensure the width of root DOM node is 100%.
 				domStyle.set(this.domNode, "width", "100%");
 			}else{
 				var value = domStyle.get(this.domNode,"width");
 				var outWidth = value + "px";
 				var innWidth = (value - domStyle.get(this.knob,"width")) + "px";
 				domStyle.set(this.domNode, "width", outWidth);
-				domStyle.set(this.left,"width", outWidth);
+				domStyle.set(this.left, "width", outWidth);
 				domStyle.set(this.right, {width: outWidth, left: innWidth});
-				domStyle.set(this.left.firstChild,"width",innWidth);
-				domStyle.set(this.right.firstChild,"width",innWidth);
-				domStyle.set(this.knob,"left",innWidth);
+				domStyle.set(this.left.firstChild, "width", innWidth);
+				domStyle.set(this.right.firstChild, "width", innWidth);
+				domStyle.set(this.knob, "left", innWidth);
 				if(this.value == "off"){
-					domStyle.set(this.inner,"left","-" + innWidth);
+					domStyle.set(this.inner, "left", "-" + innWidth);
 				}
 			}
 		},
@@ -218,7 +222,7 @@ define([
 				];
 
 				/* While moving the slider knob sometimes IE fires MSPointerCancel event. That prevents firing
-				MSPointerUP event (http://msdn.microsoft.com/ru-ru/library/ie/hh846776%28v=vs.85%29.aspx) so the
+				MSPointerUp event (http://msdn.microsoft.com/ru-ru/library/ie/hh846776%28v=vs.85%29.aspx) so the
 				knob can be stuck in the middle of the switch. As a fix we handle MSPointerCancel event with the
 				same lintener as for MSPointerUp event.
 				*/
