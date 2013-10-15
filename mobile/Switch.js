@@ -11,7 +11,7 @@ define([
 	"dojo/touch",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
-	"./sniff", 
+	"./sniff",
 	"./_maskUtils",
 	"./common",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"
@@ -122,13 +122,21 @@ define([
 			this.connect(this.switchNode, "onkeydown", "_onClick"); // for desktop browsers
 			this._startHandle = this.connect(this.switchNode, touch.press, "onTouchStart");
 			this._initialValue = this.value; // for reset()
+		},
 
+		startup: function(){
+			if(!this._started){
+				this.resize();
+			}
+		},
+
+		resize: function(){
 			if(has("windows-theme")){
 				// Override the custom CSS width (if any) to avoid misplacement.
 				// Per design, the windows theme does not allow resizing the controls.
-				// The label of the switch is placed next to the switch, and a custom 
+				// The label of the switch is placed next to the switch, and a custom
 				// width would only have the effect to increase the distance between the
-				// label and the switch, which is undesired. Hence, on windows theme, 
+				// label and the switch, which is undesired. Hence, on windows theme,
 				// ensure the width of root DOM node is 100%.
 				domStyle.set(this.domNode, "width", "100%");
 			}else{
@@ -186,10 +194,10 @@ define([
 			var rx = parseFloat(rDefs[0]), ry = (rDefs.length == 1) ? rx : parseFloat(rDefs[1]);
 			var w = this.switchNode.offsetWidth, h = this.switchNode.offsetHeight;
 			var id = (this.shape+"Mask"+w+h+rx+ry).replace(/\./,"_");
-			
+
 			maskUtils.createRoundMask(this.switchNode, 0, 0, 0, 0, w, h, rx, ry, 1);
 		},
-		
+
 		_onClick: function(e){
 			// summary:
 			//		Internal handler for click events.
@@ -316,5 +324,5 @@ define([
 		}
 	});
 
-	return has("dojo-bidi") ? declare("dojox.mobile.Switch", [Switch, BidiSwitch]) : Switch;		
+	return has("dojo-bidi") ? declare("dojox.mobile.Switch", [Switch, BidiSwitch]) : Switch;
 });
