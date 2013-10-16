@@ -143,7 +143,6 @@ define([
 				var value = domStyle.get(this.domNode,"width");
 				var outWidth = value + "px";
 				var innWidth = (value - domStyle.get(this.knob,"width")) + "px";
-				domStyle.set(this.domNode, "width", outWidth);
 				domStyle.set(this.left, "width", outWidth);
 				domStyle.set(this.right, {width: outWidth, left: innWidth});
 				domStyle.set(this.left.firstChild, "width", innWidth);
@@ -152,6 +151,8 @@ define([
 				if(this.value == "off"){
 					domStyle.set(this.inner, "left", "-" + innWidth);
 				}
+				this._hasMaskImage = false;
+				this._createMaskImage();
 			}
 		},
 
@@ -185,14 +186,14 @@ define([
 				 delete this._timer;
 			}
 			if(this._hasMaskImage){ return; }
-			this._width = this.switchNode.offsetWidth - this.knob.offsetWidth;
+			var w = domStyle.get(this.domNode,"width"), h = domStyle.get(this.domNode,"height");
+			this._width = (w - domStyle.get(this.knob,"width"));
 			this._hasMaskImage = true;
 			if(!(has("webkit")||has("svg"))){ return; }
 			var rDef = domStyle.get(this.left, "borderTopLeftRadius");
 			if(rDef == "0px"){ return; }
 			var rDefs = rDef.split(" ");
 			var rx = parseFloat(rDefs[0]), ry = (rDefs.length == 1) ? rx : parseFloat(rDefs[1]);
-			var w = this.switchNode.offsetWidth, h = this.switchNode.offsetHeight;
 			var id = (this.shape+"Mask"+w+h+rx+ry).replace(/\./,"_");
 
 			maskUtils.createRoundMask(this.switchNode, 0, 0, 0, 0, w, h, rx, ry, 1);
