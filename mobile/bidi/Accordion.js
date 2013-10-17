@@ -1,7 +1,8 @@
 define([
 	"dojo/_base/declare",
-	"./common"
-], function(declare, common){
+	"./common",
+	"dojo/dom-class"
+], function(declare, common, domClass){
 
 	// module:
 	//		dojox/mobile/bidi/Accordion
@@ -18,6 +19,9 @@ define([
 				child.label = common.enforceTextDirWithUcc(child.label, this.textDir); 
 			}
 			this.inherited(arguments);
+		},
+		_setIconDir: function(iconNode){
+			domClass.add(iconNode, "mblAccordionIconParentRtl");
 		}
 	});
 });

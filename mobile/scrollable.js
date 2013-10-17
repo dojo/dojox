@@ -11,9 +11,11 @@ define([
 	"dojo/touch",
 	"./sniff",
 	"./_css3",
-	"./_maskUtils"
+	"./_maskUtils",
+	"dojo/_base/declare",
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Scrollable"
 ], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle,
-			domGeom, touch, has, css3, maskUtils){
+			 domGeom, touch, has, css3, maskUtils, declare, BidiScrollable){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -1438,7 +1440,7 @@ define([
 			}
 		}
 	});
-
+	Scrollable = has("dojo-bidi") ? declare("dojox.mobile.Scrollable", [Scrollable, BidiScrollable]) : Scrollable;
 	lang.setObject("dojox.mobile.scrollable", Scrollable);
 
 	return Scrollable;
