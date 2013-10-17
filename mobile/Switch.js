@@ -144,7 +144,7 @@ define([
 				var outWidth = value + "px";
 				var innWidth = (value - domStyle.get(this.knob,"width")) + "px";
 				domStyle.set(this.left, "width", outWidth);
-				domStyle.set(this.right, {width: outWidth, left: innWidth});
+				domStyle.set(this.right,this.isLeftToRight()?{width: outWidth, left: innWidth}:{width: outWidth});
 				domStyle.set(this.left.firstChild, "width", innWidth);
 				domStyle.set(this.right.firstChild, "width", innWidth);
 				domStyle.set(this.knob, "left", innWidth);
@@ -169,7 +169,7 @@ define([
 			domAttr.set(this.switchNode, "aria-checked", on ? "true" : "false"); //a11y
 
 			if(!on && !has("windows-theme")){
-				this.inner.style.left = -(domStyle.get(this.domNode,"width") - domStyle.get(this.knob,"width")) + "px";
+				this.inner.style.left  = (this.isLeftToRight()?(-(domStyle.get(this.domNode,"width") - domStyle.get(this.knob,"width"))):0) + "px";
 			}
 
 			var _this = this;
