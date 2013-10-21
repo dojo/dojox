@@ -548,7 +548,7 @@ define([
 				var self = this;
 				var checkOtherViewScrollers = function(){
 					var v;
-					for(var i in self.grid.views.views){
+					for(var i = 0; i < self.grid.views.views.length; ++i){
 						v = self.grid.views.views[i];
 						if(v !== self && v.hasHScrollbar()){
 							return true;
