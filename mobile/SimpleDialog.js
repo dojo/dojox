@@ -9,7 +9,7 @@ define([
 	"dijit/registry",
 	"./Pane",
 	"./iconUtils",
-	"./sniff",
+	"dojo/has",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/SimpleDialog"
 ], function(declare, win, domClass, domAttr, domConstruct, on, touch, registry, Pane, iconUtils, has, BidiSimpleDialog){
 	// module:
