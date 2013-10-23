@@ -207,7 +207,7 @@ return {
 					node.style.display = disp;
 				}
 			}
-		});	
+		});
 
 
 		lang.extend(Switch, {
@@ -256,7 +256,7 @@ return {
 					f();
 				}
 			}
-		});	
+		});
 
 
 		lang.extend(ProgressIndicator, {
@@ -598,7 +598,7 @@ return {
 				for(var i = 0; i < paths.length; i++){
 					var href = paths[i];
 					if(href.indexOf("_rtl") == -1){
-						var rtlCssList = "android.css blackberry.css custom.css iphone.css holodark.css base.css Carousel.css ComboBox.css IconContainer.css IconMenu.css ListItem.css RoundRectCategory.css SpinWheel.css Switch.css TabBar.css ToggleButton.css ToolBarButton.css";
+						var rtlCssList = "android.css blackberry.css custom.css iphone.css holodark.css base.css Carousel.css ComboBox.css IconContainer.css IconMenu.css ListItem.css RoundRectCategory.css SpinWheel.css Switch.css TabBar.css ToggleButton.css ToolBarButton.css ProgressIndicator.css Accordion.css GridLayout.css FormLayout.css";
 						var cssName = href.substr(href.lastIndexOf('/') + 1);
 						if(rtlCssList.indexOf(cssName) != -1){
 							var rtlPath = href.replace(".css", "_rtl.css");

@@ -1,5 +1,7 @@
 define(["doh/main", "require", "dojo/sniff"], function(doh, require, has){
 	
+	// Accordion
+	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./Accordion_Rtl.html"),999999);
 	// Edge To Edge List
 	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./EdgeToEdgeCategory_Rtl.html"),999999);
 	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./EdgeToEdgeDataList_Rtl.html"),999999);
@@ -50,6 +52,7 @@ define(["doh/main", "require", "dojo/sniff"], function(doh, require, has){
 	if(!(has("ie") < 10)){
 		doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./SwapViewTests1_Rtl.html"),999999);
 	}
+	// ValuePickerDatePicker
+	doh.registerUrl("dojox.mobile.tests.doh.Bidi", require.toUrl("./DatePickerIso_Rtl.html"),999999);
 
 });
-
