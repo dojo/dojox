@@ -699,7 +699,7 @@ define([
 		_nativeScroll: false,
 
 		doscroll: function(inEvent){
-			if(has('ff') >= 13){
+			if(has('ff') >= 13 || has('chrome')){
 				this._nativeScroll = true;
 			}
 			//var s = dojo.marginBox(this.headerContentNode.firstChild);
