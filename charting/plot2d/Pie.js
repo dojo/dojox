@@ -116,6 +116,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			this.axes = [];
 			this.run = null;
 			this.dyn = [];
+			this.runFilter = []; 
 		},
 		clear: function(){
 			// summary:
@@ -182,9 +183,25 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				size,
 				startAngle = m._degToRad(this.opt.startAngle),
 				start = startAngle, filteredRun, slices, labels, shift, labelR,
-				run = this.run.data,
 				events = this.events();
 
+			var run = arr.map(this.run.data, function(item, i){
+			    if(typeof item != "number" && item.hide){ 
+	                this.runFilter.push(i); 
+ 					item.hide = false; 
+ 				} 
+ 				if(arr.some(this.runFilter, function(filter){return filter == i;})){ 
+ 					if(typeof item == "number"){ 
+ 						return 0; 
+ 					}else{ 
+ 	                                                //TODO use mixin 
+ 						return {y: 0, text: item.text}; 
+ 					} 
+ 				}else{ 
+ 					return item; 
+				} 
+ 			}, this); 
+ 	
 			this.dyn = [];
 
 			if("radius" in this.opt){
@@ -268,17 +285,18 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			}
 
 			// draw slices
-			var eventSeries = new Array(slices.length);
+			var eventSeries = new Array(slices.length);	
 			arr.some(slices, function(slice, i){
 				if(slice < 0){
 					// degenerated slice
 					return false;	// continue
 				}
+				var v = run[i], theme = themes[i], specialFill, o;
 				if(slice == 0){
-				  this.dyn.push({fill: null, stroke: null});
+				  this.dyn.push({fill: theme.series.fill, stroke: theme.series.stroke});
 				  return false;
 				}
-				var v = run[i], theme = themes[i], specialFill, o;
+				
 				if(slice >= 1){
 					// whole pie
 					specialFill = this._plotFill(theme.series.fill, dim, offsets);
