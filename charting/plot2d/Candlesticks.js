@@ -131,11 +131,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					eventSeries = new Array(run.data.length);
 
 				if(run.hide){
-                    run.dyn.fill = theme.series.fill;
-                    run.dyn.stroke =  theme.series.stroke;
-                    continue;
-                }
-                s = run.group;
+					run.dyn.fill = theme.series.fill;
+					run.dyn.stroke =  theme.series.stroke;
+					continue;
+				}
+				s = run.group;
                 
 				for(var j = 0; j < run.data.length; ++j){
 					var v = run.data[j];

@@ -76,11 +76,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
 				if(run.hide){
-                    run.dyn.marker = theme.symbol;
-                    run.dyn.markerFill = theme.marker.fill;
-                    run.dyn.markerStroke = theme.marker.stroke;
-                    continue;
-            	}
+					run.dyn.marker = theme.symbol;
+					run.dyn.markerFill = theme.marker.fill;
+					run.dyn.markerStroke = theme.marker.stroke;
+					continue;
+				}
 				s = run.group;
 				if(typeof run.data[0] == "number"){
 					lpoly = arr.map(run.data, function(v, i){

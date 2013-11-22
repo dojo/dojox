@@ -248,19 +248,19 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 
 				s = run.group;
 				if(run.hide){
-                    if(this.opt.lines){
-                            run.dyn.stroke = theme.series.stroke;
-                    }
-                    if(this.opt.markers){
-                            run.dyn.markerFill = theme.marker.fill;
-                            run.dyn.markerStroke = theme.marker.stroke;
-                            run.dyn.marker = theme.symbol;
-                    }
-                    if(this.opt.areas){ 
-                            run.dyn.fill = theme.series.fill;
-                    }
-                    continue;
-                }
+					if(this.opt.lines){
+						run.dyn.stroke = theme.series.stroke;
+					}
+					if(this.opt.markers){
+						run.dyn.markerFill = theme.marker.fill;
+						run.dyn.markerStroke = theme.marker.stroke;
+						run.dyn.marker = theme.symbol;
+					}
+					if(this.opt.areas){ 
+						run.dyn.fill = theme.series.fill;
+					}
+					continue;
+				}
 				// optim works only for index based case
 				var indexed = arr.some(run.data, function(item){
 					return typeof item == "number" || (item && !item.hasOwnProperty("x"));

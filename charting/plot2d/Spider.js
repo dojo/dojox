@@ -307,13 +307,13 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 				run = serieEntry.data;
 				if(run !== null){
 					var theme = t.next("spider", [o, serieEntry]),
-					   f = g.normalizeColor(theme.series.fill), 
-            	        sk = {color: theme.series.fill, width: seriesWidth};
-                    f.a = o.seriesFillAlpha;
-                    serieEntry.dyn = {fill: f, stroke: sk};
-            		if(serieEntry.hide){
-                        continue;
-                    }
+						f = g.normalizeColor(theme.series.fill), 
+						sk = {color: theme.series.fill, width: seriesWidth};
+					f.a = o.seriesFillAlpha;
+					serieEntry.dyn = {fill: f, stroke: sk};
+					if(serieEntry.hide){
+						continue;
+					}
 					//series polygon
 					var seriePoints = [], tipData = [];
 					k = 0;

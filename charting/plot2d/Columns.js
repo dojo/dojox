@@ -96,10 +96,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				events = this.events();
 			var bar = this.getBarProperties();
 
-			var length = this.series.length;
-            arr.forEach(this.series, function(serie){if(serie.hide){length--;}});
-            var z = length;
-			
+			var z = this.series.length;
+			arr.forEach(this.series, function(serie){if(serie.hide){z--;}});
+            
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -116,10 +115,11 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 					eventSeries = new Array(run.data.length);
 
 				if(run.hide){
-                	run.dyn.fill = theme.series.fill;
-                 	continue;
-                }
-                z--;
+					run.dyn.fill = theme.series.fill;
+					continue;
+				}
+				z--;
+
 				s = run.group;
 				var indexed = arr.some(run.data, function(item){
 					return typeof item == "number" || (item && !item.hasOwnProperty("x"));
@@ -149,10 +149,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 						
 						if(bar.width >= 1 && h >= 0){
 							var rect = {
-								// x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * i,
 								x: offsets.l-1.5 + ht(val.x) - (bar.width/2) + (bar.gap/2) - bar.thickness*(length-1)/2  + bar.thickness * z,
-                                                                
-								y: dim.height - offsets.b - (val.y > baseline ? vv : baselineHeight),
+                                y: dim.height - offsets.b - (val.y > baseline ? vv : baselineHeight),
 								width: bar.width, 
 								height: h
 							};

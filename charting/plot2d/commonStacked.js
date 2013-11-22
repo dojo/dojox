@@ -35,8 +35,8 @@ define([
 			var value = 0, v, j, pvalue;
 			for(j = 0; j <= i; ++j){
 				if(series[j].hide){
-                    continue;
-                }
+					continue;
+				}
 				pvalue = value;
 				v = series[j].data[index];
 				if(v != null){
@@ -50,8 +50,8 @@ define([
 			var value = null, j, z, v, pvalue;
 			for(j = 0; j <= i; ++j){
 				if(series[j].hide){
-                    continue;
-                }
+					continue;
+				}
 				for(z = 0; z < series[j].data.length; z++){
 					pvalue = value;
 					v = series[j].data[z];

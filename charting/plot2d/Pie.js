@@ -186,22 +186,21 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				events = this.events();
 
 			var run = arr.map(this.run.data, function(item, i){
-			    if(typeof item != "number" && item.hide){ 
-	                this.runFilter.push(i); 
- 					item.hide = false; 
- 				} 
- 				if(arr.some(this.runFilter, function(filter){return filter == i;})){ 
- 					if(typeof item == "number"){ 
- 						return 0; 
- 					}else{ 
- 	                                                //TODO use mixin 
- 						return {y: 0, text: item.text}; 
- 					} 
- 				}else{ 
- 					return item; 
+				if(typeof item != "number" && item.hide){ 
+					this.runFilter.push(i); 
+					item.hide = false; 
 				} 
- 			}, this); 
- 	
+				if(arr.some(this.runFilter, function(filter){return filter == i;})){ 
+					if(typeof item == "number"){ 
+						return 0; 
+					}else{ 
+						return {y: 0, text: item.text}; 
+					} 
+				}else{ 
+					return item; 
+				} 
+			}, this);
+
 			this.dyn = [];
 
 			if("radius" in this.opt){
@@ -209,10 +208,10 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				labelR = r - this.opt.labelOffset;
 			}
 			var	circle = {
-					cx: offsets.l + rx,
-					cy: offsets.t + ry,
-					r:  r
-				};
+				cx: offsets.l + rx,
+				cy: offsets.t + ry,
+				r:  r
+			};
 
 			// draw shadow
 			if(this.opt.shadow || t.shadow){
@@ -285,7 +284,7 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 			}
 
 			// draw slices
-			var eventSeries = new Array(slices.length);	
+			var eventSeries = new Array(slices.length);
 			arr.some(slices, function(slice, i){
 				if(slice < 0){
 					// degenerated slice
@@ -293,8 +292,8 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				}
 				var v = run[i], theme = themes[i], specialFill, o;
 				if(slice == 0){
-				  this.dyn.push({fill: theme.series.fill, stroke: theme.series.stroke});
-				  return false;
+					this.dyn.push({fill: theme.series.fill, stroke: theme.series.stroke});
+					return false;
 				}
 				
 				if(slice >= 1){

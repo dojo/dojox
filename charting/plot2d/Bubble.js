@@ -101,11 +101,11 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					}, this);
 
 				if(run.hide){
-                    run.dyn.fill = theme.series.fill;
-                    run.dyn.stroke =  theme.series.stroke;
-                    continue;
-                }
-                s = run.group;
+					run.dyn.fill = theme.series.fill;
+					run.dyn.stroke =  theme.series.stroke;
+					continue;
+				}
+				s = run.group;
                 
 				var frontCircles = null, outlineCircles = null, shadowCircles = null, styleFunc = this.opt.styleFunc;
 

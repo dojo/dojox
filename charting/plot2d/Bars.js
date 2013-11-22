@@ -160,10 +160,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				events = this.events();
 			var bar = this.getBarProperties();
 
-			var length = this.series.length;
-            arr.forEach(this.series, function(serie){if(serie.hide){length--;}});
-            var z = length;
-
+			var z = this.series.length;
+			arr.forEach(this.series, function(serie){if(serie.hide){z--;}});
+          
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -178,14 +177,14 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				}
 				var theme = t.next("bar", [this.opt, run]);
 				if(run.hide){
-                        run.dyn.fill = theme.series.fill;
-                        run.dyn.stroke = theme.series.stroke;
-                        continue;
-                }
-                z--;
+					run.dyn.fill = theme.series.fill;
+					run.dyn.stroke = theme.series.stroke;
+					continue;
+				}
+				z--;
 
 				var	eventSeries = new Array(run.data.length);
-				s = run.group;
+				s = run.group;	
 				var indexed = arr.some(run.data, function(item){
 					return typeof item == "number" || (item && !item.hasOwnProperty("x"));
 				});
