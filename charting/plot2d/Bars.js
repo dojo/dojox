@@ -160,8 +160,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				events = this.events();
 			var bar = this.getBarProperties();
 
-			var z = this.series.length;
-			arr.forEach(this.series, function(serie){if(serie.hide){z--;}});
+			var length = this.series.length;
+			arr.forEach(this.series, function(serie){if(serie.hide){length--;}});
+			var z = length;
           
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];

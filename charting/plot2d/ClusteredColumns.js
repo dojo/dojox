@@ -7,8 +7,9 @@ define(["dojo/_base/declare", "dojo/_base/array", "./Columns", "./common"],
 		getBarProperties: function(){
 			var length = this.series.length;
 			array.forEach(this.series, function(serie){if(serie.hide){length--;}});
-			var f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt, length);
-			return {gap: f.gap, width: f.size, thickness: f.size};
+			var delta = this._getDelta();
+			var f = dc.calculateBarSize(delta*this._hScaler.bounds.scale, this.opt, length);
+			return {gap: f.gap, width: f.size, thickness: f.size, clusterSize: length};
 		}
 	});
 });
