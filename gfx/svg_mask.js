@@ -14,60 +14,9 @@ define([
 	}
 	=====*/
 
-	/*=====
-	declare("dojox.gfx.svg_mask.__MaskArgs", null, {
-		// summary:
-		//		The mask arguments passed to the dojox/gfx/svg_mask/Surface.createMask method.
-		// description:
-		//		An object defining the properties of an SVG mask. 
-		//
-		// example:
-		//		A mask where content coordinates are fractions of the bounding box
-		//		of the object using the mask
-		//	|	{
-		//	|		maskContentUnits: 'objectBoundingBox'
-		//	|	}	
-		//
-		// example:
-		//		A mask with dimensions in user coordinates of element referring to mask
-		//	|	{
-		//	|		maskUnits: 'userSpaceOnUse'
-		//	|	}
-
-		// id: String?
-		//		The mask identifier. If none is provided, a generated id will be used.
-		id: null,
-
-		// x: Number?
-		//		The x coordinate of one corner of the mask
-		x: 0,
-
-		// y: Number?
-		//		The y coordinate of one corner of the mask
-		y: 0,
-
-		// width: Number?
-		//		The width of the mask. Defaults to 1 which is 100% of the bounding
-		//		box width of the object applying the mask.
-		width: 1,
-
-		// height: Number?
-		//		The height of the mask. Defaults to 1 which is 100% of the bounding
-		//		box height of the object applying the mask.
-
-		// maskUnits: String?
-		//		The coordinate system of the filter. Default is "objectBoundingBox".
-		maskUnits: "objectBoundingBox",
-
-		// maskContentUnits: String?
-		//		The coordinate system of the filter. Default is "userSpaceOnUse".
-		maskContentUnits: "userSpaceOnUse",
-	});
-	=====*/
-
 	lang.extend(svg.Shape, {
 		mask: null,
-		setMask: function (/*dojox.gfx.svg.Mask*/mask){
+		setMask: function(/*dojox.gfx.svg.Mask*/mask){
 			// summary:
 			//		Sets a mask object (SVG)
 			// mask:
@@ -94,10 +43,13 @@ define([
 	var Mask = svg.Mask = declare("dojox.gfx.svg.Mask", svg.Shape, {
 		// summary:
 		//		An SVG mask object
+		// description:
+		//		This object represents an SVG mask. Much like `dojox/gfx.Group`,
+		//		a Mask's geometry is defined by its children.
 
-		constructor: function (shape){
+		constructor: function(){
 			gfxShape.Container._init.call(this);
-			this.shape = Mask.defaultShape;
+			this.shape = Mask.defaultMask;
 		},
 
 		setRawNode: function(rawNode){
@@ -112,14 +64,42 @@ define([
 		}
 	});
 	Mask.nodeType = 'mask';
-	Mask.defaultShape = {
+	Mask.defaultMask = {
+		// summary:
+		//		Defines the default Mask prototype.
+
+		// id: String
+		//		The mask identifier. If none is provided, a generated id will be used.
 		id: null,
+
+		// x: Number
+		//		The x coordinate of the top-left corner of the mask
 		x: 0,
+
+		// y: Number
+		//		The y coordinate of the top-left corner of the mask
 		y: 0,
+
+		// width: Number
+		//		The width of the mask. Defaults to 1 which is 100% of the bounding
+		//		box width of the object applying the mask.
 		width: 1,
+
+		// height: Number
+		//		The height of the mask. Defaults to 1 which is 100% of the bounding
+		//		box height of the object applying the mask.
 		height: 1,
-		maskUnits: 'objectBoundingBox',
-		maskContentUnits: 'userSpaceOnUse'
+
+		// maskUnits: String
+		//		The coordinate system of the mask's `x`, `y`, `width`, and `height` properties.
+		//		The default is "objectBoundingBox" where coordinates are fractions of the bounding box
+		//		of the shape referencing the mask.
+		maskUnits: "objectBoundingBox",
+
+		// maskContentUnits: String
+		//		The coordinate system for the mask's children. The default is "userSpaceOnUse"
+		//		(i.e., the coordinate system of the shape referencing the mask).
+		maskContentUnits: "userSpaceOnUse"
 	};
 
 	lang.extend(Mask, svg.Container);
@@ -128,14 +108,35 @@ define([
 
 	var Surface = svg.Surface,
 		surfaceAdd = Surface.prototype.add,
-		surfaceRemove = Surface.prototype.remove
+		surfaceRemove = Surface.prototype.remove;
 	lang.extend(Surface, {
-		createMask: function(/*dojox.gfx.svg_mask.__MaskArgs*/mask){
+		createMask: function(mask){
 			// summary:
 			//		Creates a mask object
-			// returns: dojox.gfx.svg.Mask
-			//		The new mask object
-			return this.createObject(Mask, mask);
+			// mask: Object
+			//		A mask object (see dojox/gfx.svg.Mask.defaultMask)
+			//
+			// example:
+			//		Define a mask where content coordinates are fractions of the bounding box
+			//		of the object using the mask:
+			//	|	var mask = surface.createMask({ maskContentUnits: "objectBoundingBox" });
+			//	|	mask.createRect({ width: 1, height: 1 });
+			//	|	mask.setFill({
+			//	|		type: 'linear',
+			//	|		x2: 1,
+			//	|		y2: 0,
+			//	|		colors: [
+			//	|			{ offset: 0, color: '#111' },
+			//	|			{ offset: 1, color: '#ddd' }
+			//	|		]
+			//	|	});
+			//
+			// example:
+			//		A mask with dimensions in user coordinates of element referring to mask
+			//	|	var mask = {
+			//	|		maskUnits: 'userSpaceOnUse'
+			//	|	};
+			return this.createObject(Mask, mask);	// dojox.gfx.svg.Mask
 		},
 		add: function(shape){
 			if(shape instanceof Mask){

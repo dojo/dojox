@@ -130,6 +130,20 @@
 						doh.assertEqual(surface, mask.parent);
 						doh.assertEqual(surface.defNode, mask.rawNode.parentNode);
 					}
+				},
+				{
+					name: "Mask.createXxx/add/remove",
+					setUp: setUpSurface,
+					tearDown: tearDownSurface,
+					runTest: function(t){
+						var mask = surface.createMask({});
+						var rect = mask.createRect({});
+						doh.assertEqual(mask, rect.getParent());
+						mask.remove(rect);
+						doh.assertEqual(null, rect.getParent());
+						mask.add(rect);
+						doh.assertEqual(mask, rect.getParent());
+					}
 				}
 			]);
 			doh.run();
