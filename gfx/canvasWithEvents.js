@@ -37,6 +37,7 @@ function(lang, declare, has, on, aspect, touch, Color, dom, domGeom, win, g, can
     });
 
 	has.add("MSPointer", navigator.msPointerEnabled);
+	has.add("pointer-events", navigator.pointerEnabled);
 
 	var canvasWithEvents = g.canvasWithEvents = {
 		// summary:
@@ -396,12 +397,14 @@ function(lang, declare, has, on, aspect, touch, Color, dom, domGeom, win, g, can
 					out: [
 						{ type: "mouseout", bubbles: true },
 						{ type: "MSPointerOut", bubbles: true },
+						{ type: "pointerout", bubbles: true },
 						{ type: "mouseleave", bubbles: false },
 						{ type: "dojotouchout", bubbles: true}
 					],
 					over: [
 						{ type: "mouseover", bubbles: true },
 						{ type: "MSPointerOver", bubbles: true },
+						{ type: "pointerover", bubbles: true },
 						{ type: "mouseenter", bubbles: false },
 						{ type: "dojotouchover", bubbles: true}
 					]
@@ -473,7 +476,9 @@ function(lang, declare, has, on, aspect, touch, Color, dom, domGeom, win, g, can
 			canvas.parentNode.appendChild(mirror);
 
 			var moveEvt = "mousemove";
-			if(has("MSPointer")){
+			if(has("pointer-events")){
+				moveEvt = "pointermove";
+			}else if(has("MSPointer")){
 				moveEvt = "MSPointerMove";
 			}else if(has("touch")){
 				moveEvt = "touchmove";
