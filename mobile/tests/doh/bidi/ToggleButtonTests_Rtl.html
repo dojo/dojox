@@ -47,7 +47,7 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var buttonHeight = has("ie") >= 10 ? BUTTON_HEIGHT_IE10 : BUTTON_HEIGHT;
+			var buttonHeight = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? BUTTON_HEIGHT_IE10 : BUTTON_HEIGHT;
 			runner.register("dojox.mobile.test.doh.ToggleButtonTests", [
 				function testInView1(){
 					var button1 = _createToggleButtonDeclaratively("view1-button1");

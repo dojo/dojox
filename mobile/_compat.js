@@ -73,7 +73,7 @@ return {
 
 	var dm = lang.getObject("dojox.mobile", true);
 
-	if(!(has("webkit") || has("ie") >= 10)){
+	if(!(has("webkit") || has("ie") === 10 || (!has("ie") && has("trident") > 6))){
 		lang.extend(View, {
 			_doTransition: function(fromNode, toNode, transition, dir){
 				var anim;

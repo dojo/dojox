@@ -84,11 +84,14 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var styleHeight =  has("ie") ? (has("ie") >= 10 ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1_IE) : has("ff") ?
-				(has("ff") >= 19 ? WIDGET_HEIGHT1_FF19 : WIDGET_HEIGHT1_FF) : WIDGET_HEIGHT1;
-			var offsetHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) : has("ff") ?
-				(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) : WIDGET_OFFSETHEIGHT1;
-			var offsetHeight2 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2_IE) :WIDGET_OFFSETHEIGHT2;
+			var styleHeight =  has("ie") ? (has("ie") === 10 ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1_IE) : has("ff") ?
+					(has("ff") >= 19 ? WIDGET_HEIGHT1_FF19 : WIDGET_HEIGHT1_FF) :
+					(has("trident") > 6) ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1;
+			var offsetHeight1 = has("ie") ? (has("ie") === 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) : has("ff") ?
+					(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) :
+					(has("trident") > 6) ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1;
+			var offsetHeight2 = has("ie") ? (has("ie") === 10 ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2_IE) :
+					(has("trident") > 6) ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				styleHeight = -1; // negative value as convention for skipping tests

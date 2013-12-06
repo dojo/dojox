@@ -33,7 +33,7 @@
 					var tabEvents = dom.byId("tabEvents");
 					// there is 8px of extra padding -in the body) with the WindowsPhone theme
 					var extraPadding = 0;
-					if (has("ie") && has("ie")>=10){
+					if (has("ie")===10 || has("trident") > 6){
 						extraPadding = 8;
 					}
 					doh.register("dojox.mobile.test.doh.fixedbars.DeclaredFixedFooterTests", [

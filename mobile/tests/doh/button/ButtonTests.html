@@ -53,8 +53,8 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var buttonWidth = has("ie") >= 10 ? BUTTON_WIDTH_IE : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
-			var buttonHeight = has("ie") >= 10 ? BUTTON_HEIGHT_IE : BUTTON_HEIGHT;
+			var buttonWidth = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? BUTTON_WIDTH_IE : has("ff") ? BUTTON_WIDTH_FF : BUTTON_WIDTH;
+			var buttonHeight = (has("ie") === 10 || (!has("ie") && has("trident") > 6)) ? BUTTON_HEIGHT_IE : BUTTON_HEIGHT;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				buttonWidth = -1; // negative value as convention for skipping tests
