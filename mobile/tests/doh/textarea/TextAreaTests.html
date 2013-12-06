@@ -90,17 +90,18 @@
 		};
 
 		ready(function(){
-			var offsetHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) :
-				has("ff") ? 
-					(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) : 
-					WIDGET_OFFSETHEIGHT1;
+			var offsetHeight1 = has("ie") ? (has("ie") === 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) :
+					has("ff") ?
+							(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) :
+							(has("trident") > 6) ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1;
 			var offsetHeight2 = offsetHeight1;
-			var scrollHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_SCROLLHEIGHT1_IE10 : WIDGET_SCROLLHEIGHT1_IE) :
-				has("ff") ? 
-					(has("ff") >= 19 ? WIDGET_SCROLLHEIGHT1_FF19 : WIDGET_SCROLLHEIGHT1_FF) : 
-					WIDGET_SCROLLHEIGHT1;
-			var scrollHeight2 = has("ie") ? (has("ie") >= 10 ? WIDGET_SCROLLHEIGHT2_IE10 : WIDGET_SCROLLHEIGHT2_IE) :
-				has("ff") ? WIDGET_SCROLLHEIGHT2_FF:WIDGET_SCROLLHEIGHT2;
+			var scrollHeight1 = has("ie") ? (has("ie") === 10 ? WIDGET_SCROLLHEIGHT1_IE10 : WIDGET_SCROLLHEIGHT1_IE) :
+					has("ff") ?
+							(has("ff") >= 19 ? WIDGET_SCROLLHEIGHT1_FF19 : WIDGET_SCROLLHEIGHT1_FF) :
+							(has("trident") > 6) ? WIDGET_SCROLLHEIGHT1_IE10 : WIDGET_SCROLLHEIGHT1;
+			var scrollHeight2 = has("ie") ? (has("ie") === 10 ? WIDGET_SCROLLHEIGHT2_IE10 : WIDGET_SCROLLHEIGHT2_IE) :
+					has("ff") ? WIDGET_SCROLLHEIGHT2_FF:
+							(has("trident") > 6) ? WIDGET_SCROLLHEIGHT2_IE10 : WIDGET_SCROLLHEIGHT2;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				offsetHeight1 = -1; // negative value as convention for skipping tests

@@ -106,7 +106,7 @@
 			var badgeValue = props.badge;
 			runner.assertEqual(badgeValue, widget.badgeObj.domNode.childNodes[0].innerHTML, "id=" + widget.domNode.id);
 			runner.assertEqual(badgeValue, widget.badgeObj.getValue(), "id=" + widget.domNode.id);
-			if((!has("ie") || has("ie") > 6) && props.icon === "../images/icon3.png"){
+			if(props.icon === "../images/icon3.png"){
 				runner.assertTrue(widget.domNode.childNodes[0].childNodes[0].childNodes[0].src.search(ICON_ITEM_SRC_REGEXP) != -1, ICON_ITEM_SRC_REGEXP.toString() + " id=" + widget.domNode.id);
 			}
 			runner.assertEqual(widget.label, widget.domNode.childNodes[0].childNodes[1].childNodes[0].nodeValue, "id=" + widget.domNode.id);

@@ -22,7 +22,7 @@ define([
 			}else{
 				node = obj;
 			}
-			if (has("ie") >= 10){
+			if (has("ie") === 10 || (!has("ie") && has("trident") > 6)){
 				this.fireOnEvent(node, "MSPointerDown");
 				this.fireOnEvent(node, "MSPointerUp");
 			}else{
