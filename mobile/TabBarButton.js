@@ -69,6 +69,10 @@ define([
 		// badge: String
 		//		A string to show on a badge. (ex. "12")
 		badge: "",
+		
+		// badgeClassName: [const] String
+                //                A CSS class name of a badge DOM node.
+                badgeClassName: "mblDomButtonRedBadge",
 
 		/* internal properties */	
 		baseClass: "mblTabBarButton",
@@ -266,7 +270,10 @@ define([
 
 		_setBadgeAttr: function(/*String*/value){
 			if(!this.badgeObj){
-				this.badgeObj = new Badge({fontSize:11});
+				this.badgeObj = new Badge({
+					fontSize: 11,
+					className: this.badgeClassName
+				});
 				domStyle.set(this.badgeObj.domNode, {
 					position: "absolute",
 					top: "0px",
