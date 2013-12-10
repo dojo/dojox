@@ -13,21 +13,21 @@
 	var TEXTAREA_INNERHTML = "TextArea";
 	var TEXTAREA_NEW_VALUE = "This is mobile TextArea.\nThis is fixed text area.\nScroll bar comes up automatically.\nHello dojox.mobile";
 	var WIDGET_CLASSNAME1 = "mblTextArea";
-	var WIDGET_OFFSETHEIGHT1 = 58;
+	var WIDGET_OFFSETHEIGHT1 = 55;
 	var WIDGET_OFFSETHEIGHT1_FF = 75;
-	var WIDGET_OFFSETHEIGHT1_FF19 = 79;
+	var WIDGET_OFFSETHEIGHT1_FF19 = 74;
 	var WIDGET_OFFSETHEIGHT1_IE = 55; // IE9
-	var WIDGET_OFFSETHEIGHT1_IE10 = 63; // IE10
+	var WIDGET_OFFSETHEIGHT1_IE10 = 52; // IE10+ and WP8
 	var WIDGET_OFFSETHEIGHT2 = 58;
 	var WIDGET_OFFSETHEIGHT2_IE = "34"; // IE9
-	var WIDGET_SCROLLHEIGHT1 = 56;
+	var WIDGET_SCROLLHEIGHT1 = 53;
 	var WIDGET_SCROLLHEIGHT1_IE = 23; // IE9
-	var WIDGET_SCROLLHEIGHT1_IE10 = 20; // IE10
+	var WIDGET_SCROLLHEIGHT1_IE10 = 16; // IE10+ ans WP8
 	var WIDGET_SCROLLHEIGHT1_FF = 65;
-	var WIDGET_SCROLLHEIGHT1_FF19 = 69;
-	var WIDGET_SCROLLHEIGHT2 = 88;
+	var WIDGET_SCROLLHEIGHT1_FF19 = 64;
+	var WIDGET_SCROLLHEIGHT2 = 83;
 	var WIDGET_SCROLLHEIGHT2_IE = 113; // IE9
-	var WIDGET_SCROLLHEIGHT2_IE10 = 78; // IE10
+	var WIDGET_SCROLLHEIGHT2_IE10 = 64; // IE10+ and WP8
 	var WIDGET_SCROLLHEIGHT2_FF = 80;
 
 	require([
@@ -47,7 +47,7 @@
 
 		function _createTextAreaDeclaratively(widgetId) {
 			return registry.byId(widgetId);
-		};
+		}
 
 		function _createTextAreaProgrammatically(placeHolderId, widgetId, rows, cols, innerHTML){
 			// Create SwapView
@@ -57,7 +57,7 @@
 			r.startup();
 			
 			return r;
-		};
+		}
 
 		function _createTextAreaProgrammaticallyWithSourceNodeReference(widgetId){
 			// Create IconContainer
@@ -65,7 +65,7 @@
 
 			r.startup();
 			return r;
-		};
+		}
 
 		function _assertCorrectTextArea(widget, offsetHeight1, offsetHeight2, scrollHeight1, scrollHeight2){
 			if(offsetHeight1 < 0){
@@ -73,21 +73,27 @@
 			}
 			runner.assertNotEqual(null, widget, "TextArea: Did not instantiate.");
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
-			runner.assertEqual(offsetHeight1, widget.domNode.offsetHeight, "offsetHeight1 id=" + widget.domNode.id);
-			runner.assertEqual(scrollHeight1, widget.domNode.scrollHeight, "scrollHeight1 id=" + widget.domNode.id);
+			runner.assertTrue(widget.domNode.offsetHeight >= offsetHeight1,
+					"domNode offsetHeight[" + widget.domNode.offsetHeight + "] >= expected min offsetHeight1[" + offsetHeight1 + "]? " +
+							"offsetHeight1 id=" + widget.domNode.id);
+			runner.assertTrue(widget.domNode.scrollHeight >= scrollHeight1,
+					"domNode scrollHeight1[" + widget.domNode.scrollHeight + "] >= expected min scrollHeight1[" + scrollHeight1 + "]? " +
+							"scrollHeight1 id=" + widget.domNode.id);
 			runner.assertEqual(TEXTAREA_INNERHTML, widget.textbox.value, 'textbox value');
 			runner.assertEqual(TEXTAREA_INNERHTML, widget.get('value'), 'widget value');
 			widget.set('value', TEXTAREA_NEW_VALUE);
 			runner.assertEqual(offsetHeight2, widget.domNode.offsetHeight, "offsetHeight2 id=" + widget.domNode.id);
-			runner.assertEqual(scrollHeight2, widget.domNode.scrollHeight, "scrollHeight2 id=" + widget.domNode.id);
+			runner.assertTrue(widget.domNode.scrollHeight >= scrollHeight2,
+					"domNode scrollHeight2[" + widget.domNode.scrollHeight + "] >= expected min scrollHeight2[" + scrollHeight2 + "]? " +
+							"scrollHeight2 id=" + widget.domNode.id);
 			runner.assertEqual(TEXTAREA_NEW_VALUE, widget.textbox.value.replace(/\r\n/g, "\n"), 'textbox new value');
 			runner.assertEqual(TEXTAREA_NEW_VALUE, widget.get('value').replace(/\r\n/g, "\n"), 'widget new value');
-		};
+		}
 
 		function _showView2(){
 			var view1 = registry.byId("view1");
 			view1.performTransition("view2", 1, "");
-		};
+		}
 
 		ready(function(){
 			var offsetHeight1 = has("ie") ? (has("ie") === 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) :
