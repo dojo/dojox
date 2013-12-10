@@ -60,7 +60,7 @@ dojo.addOnLoad(function(){
 				setTimeout(d.getTestCallback(function(){
 
 					var demoWidget = dijit.byId("bar");
-					doh.assertEqual('visible', demoWidget.domNode.style.visibility);
+					doh.assertEqual('inherit', demoWidget.domNode.style.visibility);
 				}));
 				return d;
 			}
