@@ -75,7 +75,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				var theme = t.next("marker", [this.opt, run]), lpoly,
 					ht = this._hScaler.scaler.getTransformerFromModel(this._hScaler),
 					vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler);
-				if(run.hide){
+				if(run.hidden){
 					run.dyn.marker = theme.symbol;
 					run.dyn.markerFill = theme.marker.fill;
 					run.dyn.markerStroke = theme.marker.stroke;

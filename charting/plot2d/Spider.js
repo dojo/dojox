@@ -311,7 +311,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/_ba
 						sk = {color: theme.series.fill, width: seriesWidth};
 					f.a = o.seriesFillAlpha;
 					serieEntry.dyn = {fill: f, stroke: sk};
-					if(serieEntry.hide){
+					if(serieEntry.hidden){
 						continue;
 					}
 					//series polygon

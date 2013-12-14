@@ -177,7 +177,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 					run._rectUsePool = [];
 				}
 				var theme = t.next("bar", [this.opt, run]);
-				if(run.hide){
+				if(run.hidden){
 					run.dyn.fill = theme.series.fill;
 					run.dyn.stroke = theme.series.stroke;
 					continue;
@@ -287,7 +287,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				x = value.x -1;
 			}
 			return {y:y, x:x};
-		},
+		},	
 		getBarProperties: function(){
 			var f = dc.calculateBarSize(this._vScaler.bounds.scale, this.opt);
 			return {gap: f.gap, height: f.size, thickness: 0};

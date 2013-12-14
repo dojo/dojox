@@ -186,9 +186,9 @@ define(["dojo/_base/lang", "dojo/_base/array" ,"dojo/_base/declare",
 				events = this.events();
 
 			var run = arr.map(this.run.data, function(item, i){
-				if(typeof item != "number" && item.hide){ 
+				if(typeof item != "number" && item.hidden){ 
 					this.runFilter.push(i); 
-					item.hide = false; 
+					item.hidden = false; 
 				} 
 				if(arr.some(this.runFilter, function(filter){return filter == i;})){ 
 					if(typeof item == "number"){ 

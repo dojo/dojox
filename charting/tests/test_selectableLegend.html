@@ -89,7 +89,7 @@
 					addSeries("A",[1,3,5,7,2,4,6]).
 					addSeries("B",[2,4,6,8,3,5,7], {hide: true}).
 					addSeries("C",[6,4,2,7,5,3,1]);
-//					new dojox.charting.action2d.Highlight(clusteredBars, "default");
+					new dojox.charting.action2d.Highlight(clusteredBars, "default");
 					clusteredBars.render();
 				var clusteredBarsLegend = new dojox.charting.widget.SelectableLegend({chart: clusteredBars},"clusteredBarsLegend");
 				
@@ -249,7 +249,7 @@
 	                    text: "Japan"
 	                }]).
 					render();
-				//var ainm = new dojox.charting.action2d.Highlight(pie,"default");
+				var ainm = new dojox.charting.action2d.Highlight(pie,"default");
 				var pieLegend = new dojox.charting.widget.SelectableLegend({chart: pie,horizontal:false, outline: true},"pieLegend");
 				
 				var bubble = new dojox.charting.Chart("bubble").

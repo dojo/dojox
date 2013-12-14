@@ -115,7 +115,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				var theme = t.next("column", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
 
-				if(run.hide){
+				if(run.hidden){
 					run.dyn.fill = theme.series.fill;
 					continue;
 				}
@@ -150,7 +150,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 						
 						if(bar.width >= 1 && h >= 0){
 							var rect = {
-								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * z,
+								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * (length - z - 1),
 								y: dim.height - offsets.b - (val.y > baseline ? vv : baselineHeight),
 								width: bar.width - bar.gap/2, 
 								height: h
@@ -222,41 +222,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				x = j;
 			}else{
 				y = value.y;
-				x = value.x;
+				x = value.x-1;
 			}
 			return { x: x, y: y };
 		},
-		 _getDelta: function(){
-			var delta = Number.MAX_VALUE;
-
-			for(var i = 0; i < this.series.length; ++i){
-				var serie = this.series[i];
-				if(serie.hide){
-						continue;
-				}
-				var previousData = null;
-				for(var j = 0; j < serie.data.length; ++j){
-					var data = serie.data[j];
-					if(typeof data == "number"){
-						delta = 1;
-						break;
-					}
-					if(!previousData){
-						previousData = data;
-					}else{
-						if(data){
-							var tdelta = data.x - previousData.x;
-							delta = Math.min(delta, tdelta);
-							previousData = data;
-						}
-					}
-				}
-			}
-			return delta;
-		},
+		
 		getBarProperties: function(){
-			var delta = this._getDelta();
-			var f = dc.calculateBarSize(delta*this._hScaler.bounds.scale, this.opt);
+			var f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
 			return {gap: f.gap, width: f.size, thickness: 0};
 		},
 		_animateColumn: function(shape, voffset, vsize){

@@ -34,7 +34,7 @@ define([
 		getIndexValue: function(series, i, index){
 			var value = 0, v, j, pvalue;
 			for(j = 0; j <= i; ++j){
-				if(series[j].hide){
+				if(series[j].hidden){
 					continue;
 				}
 				pvalue = value;
@@ -49,7 +49,7 @@ define([
 		getValue: function(series, i, x){
 			var value = null, j, z, v, pvalue;
 			for(j = 0; j <= i; ++j){
-				if(series[j].hide){
+				if(series[j].hidden){
 					continue;
 				}
 				for(z = 0; z < series[j].data.length; z++){

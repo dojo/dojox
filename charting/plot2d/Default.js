@@ -247,7 +247,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 					eventSeries = this._eventSeries[run.name] = new Array(run.data.length);
 
 				s = run.group;
-				if(run.hide){
+				if(run.hidden){
 					if(this.opt.lines){
 						run.dyn.stroke = theme.series.stroke;
 					}

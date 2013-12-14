@@ -89,7 +89,7 @@ define(["dojo/_base/array",
 		}
 	});
 	
-	var FakeHighlight = declare("FakeHighlight", Highlight, {
+	var FakeHighlight = declare(Highlight, {
 		connect: function(){}
 	});
 	
@@ -180,7 +180,7 @@ define(["dojo/_base/array",
 			if(this._isPie()){
 				return this.chart.getPlot(plotName).runFilter.indexOf(index) != -1;
 			}else{ 
-				return this.chart.series[index].hide;
+				return this.chart.series[index].hidden
 			}
 		},
 		
@@ -199,7 +199,7 @@ define(["dojo/_base/array",
 					}
 				}
 			}else{ 
-				this.chart.series[index].hide = hide;
+				this.chart.series[index].hidden = hide;
 			}
 			this.autoScale ? this.chart.dirty = true: plot.dirty = true;
 			this.chart.render();
