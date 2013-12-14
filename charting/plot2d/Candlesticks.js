@@ -130,7 +130,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/array", "dojo/has",
 				var theme = t.next("candlestick", [this.opt, run]),
 					eventSeries = new Array(run.data.length);
 
-				if(run.hide){
+				if(run.hidden){
 					run.dyn.fill = theme.series.fill;
 					run.dyn.stroke =  theme.series.stroke;
 					continue;
