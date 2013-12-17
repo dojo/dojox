@@ -160,10 +160,9 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				events = this.events();
 			var bar = this.getBarProperties();
 
-			var length = this.series.length;
-			arr.forEach(this.series, function(serie){if(serie.hide){length--;}});
-			var z = length;
-          
+			var z = this.series.length;
+			arr.forEach(this.series, function(serie){if(serie.hidden){z--;}});
+
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -213,7 +212,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 						if(w >= 0 && bar.height >= 1){
 							var rect = {
 								x: offsets.l + (val.y < baseline ? hv : baselineWidth),
-								y: dim.height - offsets.b - vt(val.x + 1.5) + bar.gap + bar.thickness * (length - z - 1),
+								y: dim.height - offsets.b - vt(val.x + 1.5) + bar.gap + bar.thickness * z,
 								width: w,
 								height: bar.height
 							};

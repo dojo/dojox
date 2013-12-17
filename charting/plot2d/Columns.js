@@ -93,13 +93,12 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				vt = this._vScaler.scaler.getTransformerFromModel(this._vScaler),
 				baseline = Math.max(0, this._vScaler.bounds.lower),
 				baselineHeight = vt(baseline),
-				events = this.events();
-			var bar = this.getBarProperties();
-
-			var length = this.series.length;
-			arr.forEach(this.series, function(serie){if(serie.hide){length--;}});
-			var z = length;
+				events = this.events(),
+				bar = this.getBarProperties();
 			
+			var z = this.series.length;
+			arr.forEach(this.series, function(serie){if(serie.hidden){z--;}});
+
 			for(var i = this.series.length - 1; i >= 0; --i){
 				var run = this.series[i];
 				if(!this.dirty && !run.dirty){
@@ -150,7 +149,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 						
 						if(bar.width >= 1 && h >= 0){
 							var rect = {
-								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * (length - z - 1),
+								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * z,
 								y: dim.height - offsets.b - (val.y > baseline ? vv : baselineHeight),
 								width: bar.width - bar.gap/2, 
 								height: h
@@ -222,11 +221,10 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 				x = j;
 			}else{
 				y = value.y;
-				x = value.x-1;
+				x = value.x - 1;
 			}
 			return { x: x, y: y };
 		},
-		
 		getBarProperties: function(){
 			var f = dc.calculateBarSize(this._hScaler.bounds.scale, this.opt);
 			return {gap: f.gap, width: f.size, thickness: 0};
