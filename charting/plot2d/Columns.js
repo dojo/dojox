@@ -151,7 +151,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/declare", "dojo/has",
 							var rect = {
 								x: offsets.l + ht(val.x + 0.5) + bar.gap + bar.thickness * z,
 								y: dim.height - offsets.b - (val.y > baseline ? vv : baselineHeight),
-								width: bar.width - bar.gap/2, 
+								width: bar.width, 
 								height: h
 							};
 							if(finalTheme.series.shadow){
