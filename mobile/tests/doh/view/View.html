@@ -92,7 +92,7 @@
 					runTest: function (){
 						var demoWidget = dijit.byId("group1");
 						doh.assertEqual('mblView', demoWidget.domNode.className);
-						doh.assertEqual('visible', demoWidget.domNode.style.visibility);
+						doh.assertEqual('inherit', demoWidget.domNode.style.visibility);
 
 						demoWidget = dijit.byId("categ");
 						doh.assertEqual('mblView mblScrollableView', demoWidget.domNode.className);
