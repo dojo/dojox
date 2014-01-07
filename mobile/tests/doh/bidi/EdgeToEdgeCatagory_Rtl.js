@@ -23,7 +23,7 @@ dojo.addOnLoad(function(){
 		},
 		{
 			name: "EdgeToEdgeList Verification2",
-			timeout: 4000,
+			timeout: 5000,
 			runTest: function(){
 				var d = new doh.Deferred();
 				var demoWidget = dijit.byId("dojox_mobile_EdgeToEdgeList_0");
