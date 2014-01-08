@@ -90,6 +90,10 @@
   left: -53px;
 }
 .mblSwSquareShape .mblSwitchBg {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }
 .mblSwSquareShape .mblSwitchBgRight {
@@ -98,6 +102,10 @@
 .mblSwSquareShape .mblSwitchKnob {
   left: 53px;
   width: 41px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }
 .mblSwSquareShape .mblSwitchText {
@@ -115,6 +123,10 @@
 }
 .mblSwRoundShape1 .mblSwitchBg {
   width: 77px;
+  border-bottom-left-radius: 14px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
   border-radius: 14px;
 }
 .mblSwRoundShape1 .mblSwitchBgRight {
@@ -123,6 +135,10 @@
 .mblSwRoundShape1 .mblSwitchKnob {
   left: 50px;
   width: 27px;
+  border-bottom-left-radius: 13px;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  border-bottom-right-radius: 13px;
   border-radius: 13px;
 }
 .mblSwRoundShape1 .mblSwitchText {
@@ -139,6 +155,10 @@
   left: -51px;
 }
 .mblSwRoundShape2 .mblSwitchBg {
+  border-bottom-left-radius: 14px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
   border-radius: 14px;
 }
 .mblSwRoundShape2 .mblSwitchBgRight {
@@ -147,6 +167,10 @@
 .mblSwRoundShape2 .mblSwitchKnob {
   left: 51px;
   width: 43px;
+  border-bottom-left-radius: 13px;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  border-bottom-right-radius: 13px;
   border-radius: 13px;
 }
 .mblSwRoundShape2 .mblSwitchText {
@@ -164,6 +188,10 @@
 }
 .mblSwArcShape1 .mblSwitchBg {
   width: 77px;
+  border-bottom-left-radius: "5px 14px";
+  border-top-left-radius: "5px 14px";
+  border-top-right-radius: "5px 14px";
+  border-bottom-right-radius: "5px 14px";
   border-radius: 5px/14px;
 }
 .mblSwArcShape1 .mblSwitchBgRight {
@@ -172,6 +200,10 @@
 .mblSwArcShape1 .mblSwitchKnob {
   left: 50px;
   width: 27px;
+  border-bottom-left-radius: "5px 13px";
+  border-top-left-radius: "5px 13px";
+  border-top-right-radius: "5px 13px";
+  border-bottom-right-radius: "5px 13px";
   border-radius: 5px/13px;
 }
 .mblSwArcShape1 .mblSwitchText {
@@ -188,6 +220,10 @@
   left: -51px;
 }
 .mblSwArcShape2 .mblSwitchBg {
+  border-bottom-left-radius: "5px 14px";
+  border-top-left-radius: "5px 14px";
+  border-top-right-radius: "5px 14px";
+  border-bottom-right-radius: "5px 14px";
   border-radius: 5px/14px;
 }
 .mblSwArcShape2 .mblSwitchBgRight {
@@ -196,6 +232,10 @@
 .mblSwArcShape2 .mblSwitchKnob {
   left: 51px;
   width: 43px;
+  border-bottom-left-radius: "5px 13px";
+  border-top-left-radius: "5px 13px";
+  border-top-right-radius: "5px 13px";
+  border-bottom-right-radius: "5px 13px";
   border-radius: 5px/13px;
 }
 .mblSwArcShape2 .mblSwitchText {
@@ -212,6 +252,10 @@
   left: -53px;
 }
 .mblSwDefaultShape .mblSwitchBg {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }
 .mblSwDefaultShape .mblSwitchBgRight {
@@ -220,6 +264,10 @@
 .mblSwDefaultShape .mblSwitchKnob {
   left: 53px;
   width: 41px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }
 .mblSwDefaultShape .mblSwitchText {

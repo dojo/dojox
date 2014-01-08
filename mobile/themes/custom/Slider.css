@@ -3,6 +3,10 @@
   margin: 15px;
   border-style: inset;
   border-width: 1px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e2e2e2));
   background-image: linear-gradient(to bottom, #ffffff 0%, #e2e2e2 100%);
@@ -34,6 +38,10 @@
   left: 50%;
 }
 .mblSliderProgressBar {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#bbbbbb), to(#999999));
   background-image: linear-gradient(to bottom, #bbbbbb 0%, #999999 100%);
@@ -44,6 +52,10 @@
   height: 18px;
   border-style: outset;
   border-width: 1px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#e2e2e2), to(#a4a4a4));
   background-image: linear-gradient(to bottom, #e2e2e2 0%, #a4a4a4 100%);

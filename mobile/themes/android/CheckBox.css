@@ -15,6 +15,10 @@
   -webkit-transform: translateY(0.45em);
   transform: translateY(0.45em);
   border-color: #9cacc0;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-radius: 3px;
 }
 .mblCheckBoxSelected {

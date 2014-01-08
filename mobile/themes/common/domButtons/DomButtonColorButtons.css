@@ -23,6 +23,10 @@
   border-width: 1px 1px 1px 0px;
   border-style: outset;
   color: white;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-radius: 3px;
 }
 .mblDomButtonBlueMinus > div,

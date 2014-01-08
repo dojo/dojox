@@ -3,6 +3,10 @@
   margin: 7px 9px 16px;
   padding: 8px;
   border: 1px solid #222222;
+  border-bottom-left-radius: 14px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
   border-radius: 14px;
   background-color: transparent;
   color: white;

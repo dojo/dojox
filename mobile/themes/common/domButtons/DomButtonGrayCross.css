@@ -17,6 +17,10 @@
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
   -moz-transform: rotate(45deg);
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }
 .mblDomButtonGrayCross > div > div {
@@ -29,5 +33,9 @@
   font-size: 1px;
   border: 1px solid #0d1721;
   background-color: #6c6e6d;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }

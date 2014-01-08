@@ -146,6 +146,8 @@
   border-top: 3px solid #4f5055;
   border-bottom: 1px solid #2d3642;
   border-left: 1px solid #2a2d47;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   border-radius: 3px 3px 0 0;
   background-color: #889bb3;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#5e6167), to(#1a1d24), color-stop(0.5, #2e322b));

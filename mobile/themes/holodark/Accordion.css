@@ -8,6 +8,10 @@
   margin: 7px 9px 16px 9px;
   padding: 0;
   border: 1px solid #222222;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
   border-radius: 8px;
 }
 .mblAccordionRoundRect .mblAccordionTitle:first-child {
@@ -36,6 +40,10 @@
   border-top-style: solid;
   border-top-color: rgba(85, 85, 85, 0.9);
   border-top-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }
 .mblAccordionTitle:first-child {

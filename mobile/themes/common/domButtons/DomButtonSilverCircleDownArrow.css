@@ -11,6 +11,10 @@
   width: 26px;
   height: 26px;
   border: 1px solid #b5b6b5;
+  border-bottom-left-radius: 13px;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  border-bottom-right-radius: 13px;
   border-radius: 13px;
   -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
@@ -23,6 +27,10 @@
   left: 3px;
   width: 20px;
   height: 20px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
   border-radius: 10px;
   background: -webkit-gradient(linear, left top, left bottom, from(#979797), to(#616161));
   background: linear-gradient(to bottom, #979797 0%, #616161 100%);

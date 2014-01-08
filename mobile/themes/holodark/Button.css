@@ -14,6 +14,10 @@
   border-top-style: solid;
   border-top-color: rgba(85, 85, 85, 0.9);
   border-top-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   height: 40px;
   color: #ffffff;
@@ -40,6 +44,10 @@
   border-top-style: solid;
   border-top-color: rgba(85, 85, 85, 0.9);
   border-top-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   background-color: #0099CC;
 }
@@ -56,6 +64,10 @@
   border-top-style: solid;
   border-top-color: rgba(85, 85, 85, 0.9);
   border-top-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   background-color: #CC0000;
 }
@@ -71,6 +83,10 @@
   border-top-style: solid;
   border-top-color: rgba(85, 85, 85, 0.9);
   border-top-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   background-color: #212121;
 }

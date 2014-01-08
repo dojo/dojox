@@ -62,6 +62,10 @@
   font-family: "Segoe WP", "Segoe UI", "HelveticaNeue", "Helvetica-Neue", "Helvetica", "BBAlpha Sans", "sans-serif";
 }
 .mblTabBarTabBar .mblTabBarButtonSelected {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-radius: 3px;
   background-color: #404040;
 }

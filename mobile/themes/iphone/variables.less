@@ -504,6 +504,8 @@
 	border-top: 3px solid #4f5055;
 	border-bottom: 1px solid #2d3642;
 	border-left: 1px solid #2a2d47;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
 	border-radius: 3px 3px 0 0;
 	background-color: #889bb3;
 	.background-image-linear-gradient-top-bottom-1-stop(#5e6167, #1a1d24, 0.5, #2e322b);
@@ -725,12 +727,20 @@
 @mbl-searchbox-cancel-button-color: white;
 @mbl-searchbox-cancel-button-bg-color: #b2b2b2;
 .mblSearchBox-Cancel-Button-styles () {
+	border-bottom-left-radius: 1em;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	border-bottom-right-radius: 1em;
 	border-radius: 1em;
 }
 @mbl-searchbox-results-decoration-color: #93989c;
 
 // ProgressBar.less
 .mblProgressBar-styles () {
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 	border-radius: 6px;
 	height: 9px;
 	.background-image-linear-gradient-top-bottom-3-stops(#a5a6a5, #b5b6b5, 0.5, #d6d7d6, 0.5, #ffffff, 0.9, #ffffff);
@@ -738,6 +748,10 @@
 .mblProgressBarProgress-styles () {
 	height: 7px;
 	border:1px solid #5e6fa3;
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 	border-radius: 6px;
 	.background-image-linear-gradient-top-bottom-2-stops(#b0c0ff, #2f83e1, 0.6, #70b2ff, 0.6, #3470b6);
 }
@@ -772,6 +786,10 @@
   margin: 0 3px;
   border-left: solid 2px #000000;
   border-right: solid 2px #000000;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-radius: 3px;
 }
 .mblValuePickerSlot-input-style () {
