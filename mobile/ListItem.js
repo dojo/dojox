@@ -269,10 +269,6 @@ define([
 		},
 
 		resize: function(){
-			if(this.variableHeight){
-				this.layoutVariableHeight();
-			}
-
 			// labelNode may not exist only when using a template (if not created by an attach point)
 			if(!this._templated || this.labelNode){
 				// If labelNode is empty, shrink it so as not to prevent user clicks.
