@@ -70,20 +70,29 @@ define([
 			if(!this.store){ return null; }
 			var _this = this;
 			var promise = this.store.query(this.query, this.queryOptions);
-			if(this._observe_h){
-				this._observe_h.remove();
-			}
 			Deferred.when(promise, function(results){
 				if(results.items){
 					results = results.items; // looks like dojo/data style items array
 				}
 				if(promise.observe){
+					if(_this._observe_h){
+						_this._observe_h.remove();
+					}
 					_this._observe_h = promise.observe(function(object, previousIndex, newIndex){
 						if(previousIndex != -1){
 							if(newIndex != previousIndex){
 								// item removed or moved
 								_this.onDelete(object, previousIndex);
-								// TODO: support move, i.e. newIndex != -1?
+								if(newIndex != -1){
+									if (_this.onAdd) {
+										 // new widget with onAdd method defined
+										_this.onAdd(object, newIndex);
+									} else {
+										// TODO remove in 2.0
+										// compatibility with 1.8: onAdd did not exist, add was handled by onUpdate
+										_this.onUpdate(object, newIndex);
+									}
+								}
 							}else{
 								// item modified
 								// if onAdd is not defined, we are "bug compatible" with 1.8 and we do nothing.
@@ -102,7 +111,7 @@ define([
 								// compatibility with 1.8: onAdd did not exist, add was handled by onUpdate
 								_this.onUpdate(object, newIndex);
 							}
-						}												
+						}
 					}, true); // we want to be notified of updates
 				}
 				_this.onComplete(results);
@@ -110,6 +119,13 @@ define([
 				_this.onError(error);
 			});
 			return promise;
+		},
+
+		destroy: function(){
+			if(this._observe_h){
+				this._observe_h = this._observe_h.remove();
+			}
+			this.inherited(arguments);
 		}
 
 /*=====

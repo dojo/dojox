@@ -11,7 +11,7 @@ define([
 	"dojo/touch",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
-	"./sniff", 
+	"./sniff",
 	"./_maskUtils",
 	"./common",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Switch"
@@ -124,6 +124,38 @@ define([
 			this._initialValue = this.value; // for reset()
 		},
 
+		startup: function(){
+			if(!this._started){
+				this.resize();
+			}
+		},
+
+		resize: function(){
+			if(has("windows-theme")){
+				// Override the custom CSS width (if any) to avoid misplacement.
+				// Per design, the windows theme does not allow resizing the controls.
+				// The label of the switch is placed next to the switch, and a custom
+				// width would only have the effect to increase the distance between the
+				// label and the switch, which is undesired. Hence, on windows theme,
+				// ensure the width of root DOM node is 100%.
+				domStyle.set(this.domNode, "width", "100%");
+			}else{
+				var value = domStyle.get(this.domNode,"width");
+				var outWidth = value + "px";
+				var innWidth = (value - domStyle.get(this.knob,"width")) + "px";
+				domStyle.set(this.left, "width", outWidth);
+				domStyle.set(this.right,this.isLeftToRight()?{width: outWidth, left: innWidth}:{width: outWidth});
+				domStyle.set(this.left.firstChild, "width", innWidth);
+				domStyle.set(this.right.firstChild, "width", innWidth);
+				domStyle.set(this.knob, "left", innWidth);
+				if(this.value == "off"){
+					domStyle.set(this.inner, "left", "-" + innWidth);
+				}
+				this._hasMaskImage = false;
+				this._createMaskImage();
+			}
+		},
+
 		_changeState: function(/*String*/state, /*Boolean*/anim){
 			var on = (state === "on");
 			this.left.style.display = "";
@@ -135,6 +167,10 @@ define([
 			domClass.remove(this.switchNode, on ? "mblSwitchOff" : "mblSwitchOn");
 			domClass.add(this.switchNode, on ? "mblSwitchOn" : "mblSwitchOff");
 			domAttr.set(this.switchNode, "aria-checked", on ? "true" : "false"); //a11y
+
+			if(!on && !has("windows-theme")){
+				this.inner.style.left  = (this.isLeftToRight()?(-(domStyle.get(this.domNode,"width") - domStyle.get(this.knob,"width"))):0) + "px";
+			}
 
 			var _this = this;
 			_this.defer(function(){
@@ -150,19 +186,19 @@ define([
 				 delete this._timer;
 			}
 			if(this._hasMaskImage){ return; }
-			this._width = this.switchNode.offsetWidth - this.knob.offsetWidth;
+			var w = domStyle.get(this.domNode,"width"), h = domStyle.get(this.domNode,"height");
+			this._width = (w - domStyle.get(this.knob,"width"));
 			this._hasMaskImage = true;
 			if(!(has("webkit")||has("svg"))){ return; }
 			var rDef = domStyle.get(this.left, "borderTopLeftRadius");
 			if(rDef == "0px"){ return; }
 			var rDefs = rDef.split(" ");
 			var rx = parseFloat(rDefs[0]), ry = (rDefs.length == 1) ? rx : parseFloat(rDefs[1]);
-			var w = this.switchNode.offsetWidth, h = this.switchNode.offsetHeight;
 			var id = (this.shape+"Mask"+w+h+rx+ry).replace(/\./,"_");
-			
+
 			maskUtils.createRoundMask(this.switchNode, 0, 0, 0, 0, w, h, rx, ry, 1);
 		},
-		
+
 		_onClick: function(e){
 			// summary:
 			//		Internal handler for click events.
@@ -195,7 +231,7 @@ define([
 				];
 
 				/* While moving the slider knob sometimes IE fires MSPointerCancel event. That prevents firing
-				MSPointerUP event (http://msdn.microsoft.com/ru-ru/library/ie/hh846776%28v=vs.85%29.aspx) so the
+				MSPointerUp event (http://msdn.microsoft.com/ru-ru/library/ie/hh846776%28v=vs.85%29.aspx) so the
 				knob can be stuck in the middle of the switch. As a fix we handle MSPointerCancel event with the
 				same lintener as for MSPointerUp event.
 				*/
@@ -289,5 +325,5 @@ define([
 		}
 	});
 
-	return has("dojo-bidi") ? declare("dojox.mobile.Switch", [Switch, BidiSwitch]) : Switch;		
+	return has("dojo-bidi") ? declare("dojox.mobile.Switch", [Switch, BidiSwitch]) : Switch;
 });

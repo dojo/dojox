@@ -83,7 +83,7 @@ define([
 
 				// Set additions in a stateful manner
 				for(var i = 0; i < adds.length; i++){
-					this.set(p + i, adds[i]);
+					this[p + i] = adds[i];
 				}
 
 				// Notify change of elements.
@@ -179,7 +179,7 @@ define([
 					var old = this.get("length");
 					if(old < value){
 						this.splice.apply(this, [old, 0].concat(new Array(value - old)));
-					}else if(value > old){
+					}else if(value < old){
 						this.splice.apply(this, [value, old - value]);
 					}
 					return this;

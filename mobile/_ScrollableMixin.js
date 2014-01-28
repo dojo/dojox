@@ -73,7 +73,7 @@ define([
 				}
 				params.fixedFooterHeight = node.offsetHeight;
 			}
-			this.scrollType = this.scrollType || config["mblScrollableScrollType"] || 0;
+			this.scrollType = this.scrollType || config.mblScrollableScrollType || 0;
 			this.init(params);
 			if(this.allowNestedScrolls){
 				for(var p = this.getParent(); p; p = p.getParent()){

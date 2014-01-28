@@ -63,7 +63,8 @@ define(["dojo/_base/lang", "dojo/_base/declare", "dojo/_base/connect", "dojo/has
 			precision:		1,
 			labelStyle:		"inside",
 			htmlLabels:		true,		// use HTML to draw labels
-			omitLabels:		true
+			omitLabels:		true,
+			labelFunc:		null
         },
 
 		// summary:

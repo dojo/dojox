@@ -31,7 +31,7 @@
 			function getZoom(widget){
 				var node = widget.domNode;
 				var bodyZoom = domStyle.get(win.body(), "zoom") || 1;
-				var nodeZoom = (has("ie") ? parseFloat(domStyle.get(node).getPropertyValue("zoom"))/100 : domStyle.get(node, "zoom")) || 1;
+				var nodeZoom = ((has("ie") || has("trident") > 6) ? parseFloat(domStyle.get(node).getPropertyValue("zoom"))/100 : domStyle.get(node, "zoom")) || 1;
 				return nodeZoom * bodyZoom;
 			}
 			function fireTouchEvent(type, widget, x, y, delay){
@@ -39,7 +39,7 @@
 					var node = widget.domNode;
 					var handle = widget.handle;
 					var zoom = getZoom(widget);
-					if(has("ie")){
+					if(has("ie") || has("trident") > 6){
 						x *= zoom;
 						y *= zoom;
 						zoom = 1;
@@ -429,7 +429,7 @@
 				}
 			]);
 
-			if(has("webkit") || has("ie") >= 10){
+			if(has("webkit") || has("ie") === 10 || (!has("ie") && has("trident") > 6)){
 				doh.register("animation", {
 					name: "horizontal 100%",
 					timeout: 2000,
@@ -449,7 +449,7 @@
 							endX = Math.round(domGeometry.position(sh.handle).x);
 							doh.t(midX > startX, "started sliding");
 							doh.t(midX < endX, "continued sliding");
-							var zoom = has("ie") ? getZoom(sh) : 1;
+							var zoom = (has("ie") || has("trident") > 6) ? getZoom(sh) : 1;
 							doh.t(Math.abs(Math.abs(endX-startX)-sh_width*zoom) <= 3, "stopped sliding end="+endX+',start='+startX+',width='+sh_width*zoom);
 						}), 1100);
 						return d;

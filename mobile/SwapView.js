@@ -92,7 +92,7 @@ define([
 
 		onTouchEnd: function(/*Event*/e){
 			if(e){
-				if(!this._fingerMovedSinceTouchStart()){ // No transition / animation following touchend in this case
+				if(!this._moved){ // No transition / animation following touchend in this case
 					this._setSiblingViewsInMotion(false);
 				}else{ // There might be a transition / animation following touchend
 					// As the webkitTransitionEndEvent is not always fired, make sure we call this._setSiblingViewsInMotion(false) even

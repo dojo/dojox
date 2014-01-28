@@ -91,7 +91,7 @@ define([
 					(this.arrow === "left" ? "Left" : "Right") + "Arrow");
 			}
 			this.bodyNode = domConstruct.create("span", {className:"mblToolBarButtonBody"}, this.domNode);
-			this.tableNode = domConstruct.create("table", {cellPadding:"0",cellSpacing:"0",border:"0"}, this.bodyNode);
+			this.tableNode = domConstruct.create("table", {cellPadding:"0",cellSpacing:"0",border:"0",role:"presentation"}, this.bodyNode);
 			if(!this.label && this.arrow){
 				// The class mblToolBarButtonText is needed for arrow shape too.
 				// If the button has a label, the class is set by _setLabelAttr. If no label, do it here.

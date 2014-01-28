@@ -14,22 +14,22 @@
 	var TEXTAREA_NEW_VALUE = "This is mobile ExpandingTextArea.\nThis text area is automaticaly Expanding.\nHello dojox.mobile";
 	var WIDGET_CLASSNAME1 = "mblTextArea";
 	var WIDGET_CLASSNAME2 = "mblExpandingTextArea";
-	var WIDGET_HEIGHT1 = "16px";
-	var WIDGET_HEIGHT1_FF = "33px";
-	var WIDGET_HEIGHT1_FF19 = "37px";
+	var WIDGET_HEIGHT1 = "15px";
+	var WIDGET_HEIGHT1_FF = "30px";
+	var WIDGET_HEIGHT1_FF19 = "30px";
 //	var WIDGET_HEIGHT1_IE6 = "24px";
-	var WIDGET_HEIGHT1_IE10 = "24px"; // IE10
+	var WIDGET_HEIGHT1_IE10 = "16px"; // IE10+ and WP8
 //	var WIDGET_HEIGHT1_IE8 = "26px";
 	var WIDGET_HEIGHT1_IE = "25px"; // IE9
-	var WIDGET_OFFSETHEIGHT1 = 26;
-	var WIDGET_OFFSETHEIGHT1_FF = 43;
-	var WIDGET_OFFSETHEIGHT1_FF19 = 47;
+	var WIDGET_OFFSETHEIGHT1 = 25;
+	var WIDGET_OFFSETHEIGHT1_FF = 40;
+	var WIDGET_OFFSETHEIGHT1_FF19 = 40;
 	var WIDGET_OFFSETHEIGHT1_IE = 35; // IE9
-	var WIDGET_OFFSETHEIGHT1_IE10 = 28; // IE10
-	var WIDGET_OFFSETHEIGHT2 = 90;
+	var WIDGET_OFFSETHEIGHT1_IE10 = 20; // IE10+ and WP8
+	var WIDGET_OFFSETHEIGHT2 = 85;
 //	var WIDGET_OFFSETHEIGHT2_IE8 = "133";
 	var WIDGET_OFFSETHEIGHT2_IE = "125"; // IE9
-	var WIDGET_OFFSETHEIGHT2_IE10 = "67";
+	var WIDGET_OFFSETHEIGHT2_IE10 = "52";
 
 	require([
 		"dojo/_base/connect",
@@ -70,12 +70,16 @@
 			runner.assertNotEqual(null, widget, "IconItem: Did not instantiate.");
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME1), WIDGET_CLASSNAME1 + " id=" + widget.domNode.id);
 			runner.assertTrue(domClass.contains(widget.domNode, WIDGET_CLASSNAME2), WIDGET_CLASSNAME2 + " id=" + widget.domNode.id);
-			runner.assertEqual(styleHeight, widget.domNode.style.height, "style.height id=" + widget.domNode.id);
-			runner.assertEqual(offsetHeight1, widget.domNode.offsetHeight, "offsetHeight1 id=" + widget.domNode.id);
+			runner.assertTrue(widget.domNode.style.height.slice(0,2) >= styleHeight.slice(0,2), "domNode height [" + widget.domNode.style.height + "] >= expected min height[" + styleHeight + "]? style.height id=" + widget.domNode.id);
+			runner.assertTrue(widget.domNode.offsetHeight >= offsetHeight1,
+					"domNode offsetHeight[" + widget.domNode.offsetHeight + "] >= expected min offsetHeight1[" + offsetHeight1 + "]? " +
+							"offsetHeight1 id=" + widget.domNode.id);
 			runner.assertEqual(TEXTAREA_INNERHTML, widget.textbox.value, 'textbox value');
 			runner.assertEqual(TEXTAREA_INNERHTML, widget.get('value'), 'widget value');
 			widget.set('value', TEXTAREA_NEW_VALUE);
-			runner.assertEqual(offsetHeight2, widget.domNode.offsetHeight, "offsetHeight2 id=" + widget.domNode.id);
+			runner.assertTrue(widget.domNode.offsetHeight >= offsetHeight2,
+					"domNode offsetHeight[" + widget.domNode.offsetHeight + "] >= expected min offsetHeight2[" + offsetHeight2 + "]? " +
+							"offsetHeight2 id=" + widget.domNode.id);
 			runner.assertEqual(TEXTAREA_NEW_VALUE, widget.textbox.value.replace(/\r\n/g, "\n"), 'textbox new value');
 			runner.assertEqual(TEXTAREA_NEW_VALUE, widget.get('value').replace(/\r\n/g, "\n"), 'widget new value');
 		}
@@ -84,11 +88,14 @@
 			view1.performTransition("view2", 1, "none");
 		}
 		ready(function(){
-			var styleHeight =  has("ie") ? (has("ie") >= 10 ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1_IE) : has("ff") ?
-				(has("ff") >= 19 ? WIDGET_HEIGHT1_FF19 : WIDGET_HEIGHT1_FF) : WIDGET_HEIGHT1;
-			var offsetHeight1 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) : has("ff") ?
-				(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) : WIDGET_OFFSETHEIGHT1;
-			var offsetHeight2 = has("ie") ? (has("ie") >= 10 ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2_IE) :WIDGET_OFFSETHEIGHT2;
+			var styleHeight =  has("ie") ? (has("ie") === 10 ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1_IE) : has("ff") ?
+					(has("ff") >= 19 ? WIDGET_HEIGHT1_FF19 : WIDGET_HEIGHT1_FF) :
+					(has("trident") > 6) ? WIDGET_HEIGHT1_IE10 : WIDGET_HEIGHT1;
+			var offsetHeight1 = has("ie") ? (has("ie") === 10 ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1_IE) : has("ff") ?
+					(has("ff") >= 19 ? WIDGET_OFFSETHEIGHT1_FF19 : WIDGET_OFFSETHEIGHT1_FF) :
+					(has("trident") > 6) ? WIDGET_OFFSETHEIGHT1_IE10 : WIDGET_OFFSETHEIGHT1;
+			var offsetHeight2 = has("ie") ? (has("ie") === 10 ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2_IE) :
+					(has("trident") > 6) ? WIDGET_OFFSETHEIGHT2_IE10 : WIDGET_OFFSETHEIGHT2;
 			// Skip the checks for IE<9
 			if(has("ie") < 9){
 				styleHeight = -1; // negative value as convention for skipping tests

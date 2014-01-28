@@ -124,7 +124,7 @@
 						setTimeout(d.getTestCallback(function(){
 							var demoWidget = dijit.byId("group1");
 							doh.assertEqual('mblView', demoWidget.domNode.className);
-							doh.assertEqual('visible', demoWidget.domNode.style.visibility);
+							doh.assertEqual('', demoWidget.domNode.style.visibility);
 
 							demoWidget = dijit.byId("dojox_mobile_ScrollableView_0");
 							doh.assertEqual('mblView mblScrollableView', demoWidget.domNode.className);

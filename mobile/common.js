@@ -7,12 +7,13 @@ define([
 	"dojo/_base/kernel",
 	"dojo/dom-class",
 	"dojo/dom-construct",
+	"dojo/domReady",
 	"dojo/ready",
 	"dojo/touch",
 	"dijit/registry",
 	"./sniff",
 	"./uacss" // (no direct references)
-], function(array, config, connect, lang, win, kernel, domClass, domConstruct, ready, touch, registry, has){
+], function(array, config, connect, lang, win, kernel, domClass, domConstruct, domReady, ready, touch, registry, has){
 
 	// module:
 	//		dojox/mobile/common
@@ -25,10 +26,10 @@ define([
 	/// ... but let user disable this by removing dojoClick from the document
 	if(has("touch")){
 		// Do we need to send synthetic clicks when preventDefault() is called on touch events?
-		// This is normally true on anything except Android 4.1+ and IE10, but users reported
+		// This is normally true on anything except Android 4.1+ and IE10+, but users reported
 		// exceptions like Galaxy Note 2. So let's use a has("clicks-prevented") flag, and let
 		// applications override it through data-dojo-config="has:{'clicks-prevented':true}" if needed.
-		has.add("clicks-prevented", !(has("android") >= 4.1 || has("ie") >= 10));
+		has.add("clicks-prevented", !(has("android") >= 4.1 || (has("ie") === 10) || (!has("ie") && has("trident") > 6)));
 		if(has("clicks-prevented")){
 			dm._sendClick = function(target, e){
 				// dojo/touch will send a click if dojoClick is set, so don't do it again.
@@ -100,8 +101,8 @@ define([
 	// dojox/mobile.hideAddressBarWait: Number
 	//		The time in milliseconds to wait before the fail-safe hiding address
 	//		bar runs. The value must be larger than 800.
-	dm.hideAddressBarWait = typeof(config["mblHideAddressBarWait"]) === "number" ?
-		config["mblHideAddressBarWait"] : 1500;
+	dm.hideAddressBarWait = typeof(config.mblHideAddressBarWait) === "number" ?
+		config.mblHideAddressBarWait : 1500;
 
 	dm.hide_1 = function(){
 		// summary:
@@ -273,7 +274,7 @@ define([
 		}
 	};
 
-	if(config["mblApplyPageStyles"] !== false){
+	if(config.mblApplyPageStyles !== false){
 		domClass.add(win.doc.documentElement, "mobile");
 	}
 	if(has('chrome')){
@@ -292,16 +293,21 @@ define([
 
 	// flag for Android transition animation flicker workaround
 	has.add('mblAndroidWorkaround', 
-			config["mblAndroidWorkaround"] !== false && has('android') < 3, undefined, true);
+			config.mblAndroidWorkaround !== false && has('android') < 3, undefined, true);
 	has.add('mblAndroid3Workaround', 
-			config["mblAndroid3Workaround"] !== false && has('android') >= 3, undefined, true);
+			config.mblAndroid3Workaround !== false && has('android') >= 3, undefined, true);
 
 	dm._detectWindowsTheme();
 	
+	// Set the background style using dojo/domReady, not dojo/ready, to ensure it is already
+	// set at widget initialization time. (#17418) 
+	domReady(function(){
+		domClass.add(win.body(), "mblBackground");
+	});
+
 	ready(function(){
 		dm.detectScreenSize(true);
-		domClass.add(win.body(), "mblBackground");
-		if(config["mblAndroidWorkaroundButtonStyle"] !== false && has('android')){
+		if(config.mblAndroidWorkaroundButtonStyle !== false && has('android')){
 			// workaround for the form button disappearing issue on Android 2.2-4.0
 			domConstruct.create("style", {innerHTML:"BUTTON,INPUT[type='button'],INPUT[type='submit'],INPUT[type='reset'],INPUT[type='file']::-webkit-file-upload-button{-webkit-appearance:none;} audio::-webkit-media-controls-play-button,video::-webkit-media-controls-play-button{-webkit-appearance:media-play-button;} video::-webkit-media-controls-fullscreen-button{-webkit-appearance:media-fullscreen-button;}"}, win.doc.head, "first");
 		}
@@ -310,19 +316,25 @@ define([
 			domConstruct.create("style", {innerHTML:".mblView.mblAndroidWorkaround{position:absolute;top:-9999px !important;left:-9999px !important;}"}, win.doc.head, "last");
 		}
 
-		//	You can disable hiding the address bar with the following dojoConfig.
-		//	var dojoConfig = { mblHideAddressBar: false };
 		var f = dm.resizeAll;
-		if(config["mblHideAddressBar"] !== false &&
-			navigator.appVersion.indexOf("Mobile") != -1 ||
-			config["mblForceHideAddressBar"] === true){
+		// Address bar hiding
+		var isHidingPossible =
+			navigator.appVersion.indexOf("Mobile") != -1 && // only mobile browsers
+			// #17455: hiding Safari's address bar works in iOS < 7 but this is 
+			// no longer possible since iOS 7. Hence, exclude iOS 7 and later: 
+			!(has("ios") >= 7);
+		// You can disable the hiding of the address bar with the following dojoConfig:
+		// var dojoConfig = { mblHideAddressBar: false };
+		// If unspecified, the flag defaults to true.
+		if((config.mblHideAddressBar !== false && isHidingPossible) ||
+			config.mblForceHideAddressBar === true){
 			dm.hideAddressBar();
-			if(config["mblAlwaysHideAddressBar"] === true){
+			if(config.mblAlwaysHideAddressBar === true){
 				f = dm.hideAddressBar;
 			}
 		}
 
-		var ios6 = has("ios") >= 6; // Full-screen support for iOS6 or later 
+		var ios6 = has("ios") >= 6; // Full-screen support for iOS6 or later
 		if((has('android') || ios6) && win.global.onorientationchange !== undefined){
 			var _f = f;
 			var curSize, curClientWidth, curClientHeight;

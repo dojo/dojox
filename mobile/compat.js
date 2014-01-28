@@ -10,8 +10,8 @@ define([
 	// to detect each feature and plug the corresponding compat code if needed.
 	// Currently the compat code is a workaround for too many different things to be able to
 	// decide based on feature detection. So for now we just disable _compat on the mobile browsers
-	// that are known to support enough CSS3: all webkit-based browsers and IE10 (Windows [Phone] 8).
-	if(!(has("webkit") || has("ie") >= 10)){
+	// that are known to support enough CSS3: all webkit-based browsers, IE10 (Windows [Phone] 8) and IE11+.
+	if(!(has("webkit") || has("ie") === 10) || (!has("ie") && has("trident") > 6)){
 		var s = "dojox/mobile/_compat"; // assign to a variable so as not to be picked up by the build tool
 		require([s]);
 	}

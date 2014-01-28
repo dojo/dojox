@@ -120,6 +120,9 @@ define([
 				this["iconNode" + n], this.alt, this["iconParentNode" + n]);
 			this["icon" + n] = icon;
 			domClass.toggle(this.domNode, "mblAccordionHasIcon", icon && icon !== "none");
+			if(has("dojo-bidi") && !this.getParent().isLeftToRight()){
+				this.getParent()._setIconDir(this["iconParentNode" + n]);
+			}
 		},
 
 		_setIcon1Attr: function(icon){
