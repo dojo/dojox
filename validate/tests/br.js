@@ -76,6 +76,32 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertTrue(br.isValidCpf('271034755-55'), "4 Checking #########-## format");
 			doh.assertTrue(br.isValidCpf('27103475555'), "4 Checking ########### format");
 			doh.assertTrue(br.isValidCpf(27103475555), "4 Checking numeric ########### format");
+
+            //new verifications
+            doh.assertTrue(br.isValidCpf('066.487.679-01'), "5 Checking ###.###.###-## format");
+            doh.assertTrue(br.isValidCpf('066487679-01'), "5 Checking #########-## format");
+            doh.assertTrue(br.isValidCpf('06648767901'), "5 Checking ########### format");
+            doh.assertTrue(br.isValidCpf(06648767901), "5 Checking numeric ########### format");
+
+            doh.assertTrue(br.isValidCpf('337.848.808-51'), "6 Checking ###.###.###-## format");
+            doh.assertTrue(br.isValidCpf('337848808-51'), "6 Checking #########-## format");
+            doh.assertTrue(br.isValidCpf('33784880851'), "7 Checking ########### format");
+            doh.assertTrue(br.isValidCpf(33784880851), "7 Checking numeric ########### format");
+
+            doh.assertTrue(br.isValidCpf('088.637.247-09'), "8 Checking ###.###.###-## format");
+            doh.assertTrue(br.isValidCpf('088637247-09'), "8 Checking #########-## format");
+            doh.assertTrue(br.isValidCpf('08863724709'), "8 Checking ########### format");
+            doh.assertTrue(br.isValidCpf(08863724709), "8 Checking numeric ########### format");
+
+            doh.assertFalse(br.isValidCpf('088.637.247-08'), "9 Checking ###.###.###-## format");
+            doh.assertFalse(br.isValidCpf('088637247-08'), "9 Checking #########-## format");
+            doh.assertFalse(br.isValidCpf('08863724708'), "9 Checking ########### format");
+            doh.assertFalse(br.isValidCpf(08863724708), "9 Checking numeric ########### format");
+
+            doh.assertFalse(br.isValidCpf('037.848.808-51'), "10 Checking ###.###.###-## format");
+            doh.assertFalse(br.isValidCpf('037848808-51'), "10 Checking #########-## format");
+            doh.assertFalse(br.isValidCpf('03784880851'), "10 Checking ########### format");
+            doh.assertFalse(br.isValidCpf(03784880851), "10 Checking numeric ########### format");
 		}
 	},
 	{
@@ -96,6 +122,16 @@ doh.register("dojox.validate.tests.br",[
 			doh.assertEqual("55", br.computeCpfDv('271.034.755'), "4 Checking ###.###.### format");
 			doh.assertEqual("55", br.computeCpfDv('271034755'), "4 Checking ######### format");
 			doh.assertEqual("55", br.computeCpfDv(271034755), "4 Checking numeric ######### format");
+
+            doh.assertEqual("01", br.computeCpfDv('066.487.679'), "5 Checking ###.###.### format");
+            doh.assertEqual("01", br.computeCpfDv('066487679'), "5 Checking ######### format");
+            doh.assertEqual("01", br.computeCpfDv(066487679), "5 Checking numeric ######### format");
+
+            doh.assertNotEqual("01", br.computeCpfDv('037.848.808'), "6 Checking ###.###.### format");
+            doh.assertNotEqual("01", br.computeCpfDv('037848808'), "6 Checking ######### format");
+            doh.assertNotEqual("01", br.computeCpfDv(037848808), "6 Checking numeric ######### format");
+
+
 
 		}
 	}

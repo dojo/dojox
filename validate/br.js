@@ -139,136 +139,135 @@ br.computeCnpjDv = function(/*String*/value){
 
 
 br.isValidCpf = function(/*String*/value){
-	// summary:
-	//		Validates a CPF number
-	// value: String
-	//		The CPF number in #########-## or ###########,
-	//		format
-	if(!lang.isString(value)){
-		if(!value){
-			return false;
-		}
-		value = value + "";
-		while(value.length < 11){
-			value = "0" + value;
-		}
-	}
-	var flags = {
-		format: [
-			"###.###.###-##",
-			"#########-##",
-			"###########"
-		]
-	};
-	if(validate.isNumberFormat(value, flags)){
-		// Matched the initial test, so break this down into the
-		// parts to be validated.
-		value = value.replace("-", "").replace(/\./g, "");
-		var cpf = [];
-		var dv = [];
-		var i, j, tmp;
+    // summary:
+    //		Validates a CPF number
+    // value: String
+    //		The CPF number in #########-## or ###########,
+    //		format
+    if(!lang.isString(value)){
+        if(!value){
+            return false;
+        }
+        value = value + "";
+        while(value.length < 11){
+            value = "0" + value;
+        }
+    }
+    var flags = {
+        format: [
+            "###.###.###-##",
+            "#########-##",
+            "###########"
+        ]
+    };
+    if(validate.isNumberFormat(value, flags)){
+        // Matched the initial test, so break this down into the
+        // parts to be validated.
+        value = value.replace("-", "").replace(/\./g, "");
+        var cpf = [];
+        var dv = [];
+        var i, j, tmp;
 
-		// Check for obvious bad combos
-		// all 0s to all 9's.
-		for(i = 0; i < 10; i++){
-			tmp = "";
-			for(j = 0; j < value.length; j++){
-				tmp += "" + i;
-			}
-			if(value === tmp){
-				return false;
-			}
-		}
+        // Check for obvious bad combos
+        // all 0s to all 9's.
+        for(i = 0; i < 10; i++){
+            tmp = "";
+            for(j = 0; j < value.length; j++){
+                tmp += "" + i;
+            }
+            if(value === tmp){
+                return false;
+            }
+        }
 
-		//Split out the DV from the main number.
-		for(i = 0; i < 9; i++){
-			cpf.push(parseInt(value.charAt(i), 10));
-		}
-		for(i = 9; i < 12; i++){
-			dv.push(parseInt(value.charAt(i), 10));
-		}
-		
-		var base = [9,8,7,6,5,4,3,2,1].reverse();
-		var sum = 0;
-		for(i = 0; i < cpf.length; i++){
-			sum += cpf[i] * base[i];
-		}
-		var dv0 = sum % 11;
-		if(dv0 == dv[0]){
-			// Still seems valid, keep going.
-			sum = 0;
-			base = [9,8,7,6,5,4,3,2,1,0].reverse();
-			cpf.push(dv0);
-			for(i = 0; i < cpf.length; i++){
-				sum += cpf[i] * base[i];
-			}
-			var dv1 = sum % 11;
-			if(dv1 === dv[1]){
-				// Whew, looks valid.
-				return true;
-			}
-		}
-	}
-	return false;
+        //Split out the DV from the main number.
+        for(i = 0; i < 9; i++){
+            cpf.push(parseInt(value.charAt(i), 10));
+        }
+        for(i = 9; i < 12; i++){
+            dv.push(parseInt(value.charAt(i), 10));
+        }
+
+        var base = [10,9,8,7,6,5,4,3,2];
+        var sum = 0;
+        for(i = 0; i < cpf.length; i++){
+            sum += cpf[i] * base[i];
+        }
+        var dv0 = sum % 11;
+        dv0 = dv0<2?0:11-dv0;
+
+        if(dv0 == dv[0]){
+            // Still seems valid, keep going.
+            sum = 0;
+            base = [11,10,9,8,7,6,5,4,3,2];
+            cpf.push(dv0);
+            for(i = 0; i < cpf.length; i++){
+                sum += cpf[i] * base[i];
+            }
+            var dv1 = sum % 11;
+            dv1 = dv1<2?0:11-dv1;
+            if(dv1 === dv[1]){
+                // Whew, looks valid.
+                return true;
+            }
+        }
+    }
+    return false;
 };
 
 br.computeCpfDv = function(/*String*/value){
-	// summary:
-	//		Generate the DV code (checksum part) for a CPF number
-	// value: String
-	//		The CPF number in ######### format
-	if(!lang.isString(value)){
-		if(!value){
-			return "";
-		}
-		value = value + "";
-		while(value.length < 9){
-			value = "0" + value;
-		}
-	}
-	var flags = {
-		format: [
-			"###.###.###",
-			"#########"
-		]
-	};
-	if(validate.isNumberFormat(value, flags)){
-		// Matched the initial test, so break this down into the
-		// parts to compute the DV.
-		value = value.replace(/\./g, "");
-		var cpf = [];
-		
-		// Check for obvious bad combos
-		// all 0s to all 9's.
-		for(i = 0; i < 10; i++){
-			tmp = "";
-			for(j = 0; j < value.length; j++){
-				tmp += "" + i;
-			}
-			if(value === tmp){
-				return "";
-			}
-		}
+    // summary:
+    //		Generate the DV code (checksum part) for a CPF number
+    // value: String
+    //		The CPF number in ######### format
+    if(!lang.isString(value)){
+        if(!value){
+            return "";
+        }
+        value = value + "";
+        while(value.length < 9){
+            value = "0" + value;
+        }
+    }
+    var flags = {
+        format: [
+            "###.###.###",
+            "#########"
+        ]
+    };
+    if(validate.isNumberFormat(value, flags)){
+        // Matched the initial test, so break this down into the
+        // parts to compute the DV.
+        value = value.replace(/\./g, "");
+        var cpf = [];
+        var dv = [];
+        var i, j, tmp;
 
-		for(i = 0; i < value.length; i++){
-			cpf.push(parseInt(value.charAt(i), 10));
-		}
-		var base = [9,8,7,6,5,4,3,2,1].reverse();
-		var sum = 0;
-		for(i = 0; i < cpf.length; i++){
-			sum += cpf[i] * base[i];
-		}
-		var dv0 = sum % 11;
-		sum = 0;
-		base = [9,8,7,6,5,4,3,2,1,0].reverse();
-		cpf.push(dv0);
-		for(i = 0; i < cpf.length; i++){
-			sum += cpf[i] * base[i];
-		}
-		var dv1 = sum % 11;
-		return ("" + dv0) + dv1;
-	}
-	return "";
+
+        //Split out the DV from the main number.
+        for(i = 0; i < 9; i++){
+            cpf.push(parseInt(value.charAt(i), 10));
+        }
+
+        var base = [10,9,8,7,6,5,4,3,2];
+        var sum = 0;
+        for(i = 0; i < cpf.length; i++){
+            sum += cpf[i] * base[i];
+        }
+        var dv0 = sum % 11;
+        dv0 = dv0<2?0:11-dv0;
+
+        sum = 0; //reset sum
+        base = [11,10,9,8,7,6,5,4,3,2];
+        cpf.push(dv0);
+        for(i = 0; i < cpf.length; i++){
+            sum += cpf[i] * base[i];
+        }
+        var dv1 = sum % 11;
+        dv1 = dv1<2?0:11-dv1;
+        return ("" + dv0) + dv1;
+    }
+    return "";
 };
 
 return br;
