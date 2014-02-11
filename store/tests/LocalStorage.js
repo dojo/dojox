@@ -13,7 +13,7 @@ define([
 		{id: 5, name: 'five', prime: true, mappedTo: 'A'}
 	];
 	var dbConfig = {
-		version: 3,
+		version: 4,
 		stores: {
 			test: {
 				name: 10,
@@ -25,6 +25,9 @@ define([
 				words: {
 					multiEntry: true,
 					preference: 5
+				},
+				mappedTo: {
+					indexed: false
 				}
 			}
 		}
@@ -33,17 +36,14 @@ define([
 		registerSuite(testsForDB('dojox/store/db/IndexedDB', IndexedDB));
 	}
 	if (window.openDatabase) {
-		registerSuite(testsForDB('dojox/store/db/SQL', SQL, true));	
+		registerSuite(testsForDB('dojox/store/db/SQL', SQL));
 	}
-	function testsForDB(name, DB, nonIndexed){
+	function testsForDB(name, DB){
 		var db = new DB({dbConfig: dbConfig, storeName: 'test'});
 		function testQuery(query, options, results){
 			if(!results){
 				results = options;
 				options = undefined;
-			}else if(options.nonIndexed && nonIndexed){
-				// skip these tests
-				return function(){};
 			}
 			return function(){
 				var i = 0;
@@ -85,9 +85,9 @@ define([
 			"{even: true}": testQuery({even: true}, [2, 4]),
 			"{even: true, name: 'two'}": testQuery({even: true, name: 'two'}, [2]),
 			// test non-indexed values
-			"{mappedTo: 'C'}": testQuery({mappedTo: 'C'}, {nonIndexed: true}, [3]),
+			"{mappedTo: 'C'}": testQuery({mappedTo: 'C'}, [3]),
 			// union
-			"[{name: 'two'}, {mappedTo: 'C'}, {mappedTo: 'D'}]": testQuery([{name: 'two'}, {mappedTo: 'C'}, {mappedTo: 'D'}], {nonIndexed: true}, [2, 3]),
+			"[{name: 'two'}, {mappedTo: 'C'}, {mappedTo: 'D'}]": testQuery([{name: 'two'}, {mappedTo: 'C'}, {mappedTo: 'D'}], [2, 3]),
 			"{id: {from: 1, to: 3}}": testQuery({id: {from: 1, to: 3}}, [1, 2, 3]),
 			"{name: {from: 'm', to: 'three'}}": testQuery({name: {from: 'm', to: 'three'}}, [1, 3]),
 			"{name: 't*'}": testQuery({name: 't*'}, {sort:[{attribute: "name"}]}, [3, 2]),

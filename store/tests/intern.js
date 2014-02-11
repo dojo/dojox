@@ -64,7 +64,7 @@ define({
 	},
 
 	// Non-functional test suite(s) to run in each browser
-	suites: [ 'dojox/store/tests-intern/all' ],
+	suites: [ 'dojox/store/tests/all' ],
 
 	// A regular expression matching URLs to files that should not be included in code coverage analysis
 	excludeInstrumentation: /^(?:node_modules|tests-intern|tests)\//
