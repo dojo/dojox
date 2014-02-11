@@ -101,12 +101,13 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 								/*Object*/ style,
 								/*String?*/ className){
 		var m, s, al = arguments.length;
-		var i;
+		var i, box;
 		if(!measuringNode){
 			measuringNode = domConstruct.create("div", {style: {
 				position: "absolute",
 				top: "-10000px",
-				left: "0"
+				left: "0",
+				visibility: "hidden"
 			}}, win.body());
 		}
 		m = measuringNode;
@@ -131,12 +132,14 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 		// take a measure
 		m.innerHTML = text;
 
-		if(m["getBoundingClientRect"]){
+		if(m.getBoundingClientRect){
 			var bcr = m.getBoundingClientRect();
-			return {l: bcr.left, t: bcr.top, w: bcr.width || (bcr.right - bcr.left), h: bcr.height || (bcr.bottom - bcr.top)};
+			box = {l: bcr.left, t: bcr.top, w: bcr.width || (bcr.right - bcr.left), h: bcr.height || (bcr.bottom - bcr.top)};
 		}else{
-			return domGeom.getMarginBox(m);
+			box = domGeom.getMarginBox(m);
 		}
+		m.innerHTML = "";
+		return box;
 	};
 
 	b._computeTextLocation = function(/*g.defaultTextShape*/textShape, /*Number*/width, /*Number*/height, /*Boolean*/fixHeight) {
