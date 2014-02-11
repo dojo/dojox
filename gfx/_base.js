@@ -106,6 +106,7 @@ function(kernel, lang, Color, has, win, arr, dom, domConstruct, domGeom){
 			measuringNode = domConstruct.create("div", {style: {
 				position: "absolute",
 				top: "-10000px",
+				visibility: "hidden",
 				left: "0"
 			}}, win.body());
 		}
