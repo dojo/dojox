@@ -3,8 +3,9 @@ define([
 	'intern/chai!assert',
 	'../db/has!indexeddb?../db/IndexedDB',
 	'../db/SQL',
-	'dojo/promise/all'
-], function (registerSuite, assert, IndexedDB, SQL, all) {
+	'dojo/promise/all',
+	'dojo/sniff'
+], function (registerSuite, assert, IndexedDB, SQL, all, has) {
 	var data = [
 		{id: 1, name: 'one', prime: false, mappedTo: 'E', words: ['banana']},
 		{id: 2, name: 'two', even: true, prime: true, mappedTo: 'D', words: ['banana', 'orange']},
@@ -48,6 +49,10 @@ define([
 				options = undefined;
 			}
 			return function(){
+				if(options && options.multi && has('trident')){
+					// sadly, IE doesn't support multiEntry yet
+					return;
+				}
 				var i = 0;
 				var queryResults = db.query(query, options);
 				var total = queryResults.total;
@@ -94,11 +99,11 @@ define([
 			"{name: {from: 'm', to: 'three'}}": testQuery({name: {from: 'm', to: 'three'}}, [1, 3]),
 			"{name: 't*'}": testQuery({name: 't*'}, {sort:[{attribute: "name"}]}, [3, 2]),
 			"{name: 'not a number'}": testQuery({name: 'not a number'}, []),
-			"{words: {contains: ['orange']}}": testQuery({words: {contains: ['orange']}}, [2, 3]),
-			"{words: {contains: ['or*']}}": testQuery({words: {contains: ['or*']}}, [2, 3]),
-			"{words: {contains: ['apple', 'banana']}}": testQuery({words: {contains: ['apple', 'banana']}}, []),
-			"{words: {contains: ['orange', 'banana']}}": testQuery({words: {contains: ['orange', 'banana']}}, [2]),
-			"{id: {from: 0, to: 4}, words: {contains: ['orange', 'banana']}}": testQuery({id: {from: 0, to: 4}, words: {contains: ['orange', 'banana']}}, [2]),
+			"{words: {contains: ['orange']}}": testQuery({words: {contains: ['orange']}}, {multi: true}, [2, 3]),
+			"{words: {contains: ['or*']}}": testQuery({words: {contains: ['or*']}}, {multi: true}, [2, 3]),
+			"{words: {contains: ['apple', 'banana']}}": testQuery({words: {contains: ['apple', 'banana']}}, {multi: true}, []),
+			"{words: {contains: ['orange', 'banana']}}": testQuery({words: {contains: ['orange', 'banana']}}, {multi: true}, [2]),
+			"{id: {from: 0, to: 4}, words: {contains: ['orange', 'banana']}}": testQuery({id: {from: 0, to: 4}, words: {contains: ['orange', 'banana']}}, {multi: true}, [2]),
 			// "{name: '*e'}": testQuery({name: '*e'}, [5, 1, 3]), don't know if we even support this yet
 			"{id: {from: 1, to: 3}}, sort by name +": testQuery({id: {from: 1, to: 3}}, {sort:[{attribute: "name"}]}, [1, 3, 2]),
 			"{id: {from: 1, to: 3}}, sort by name -": testQuery({id: {from: 1, to: 3}}, {sort:[{attribute: "name", descending: true}]}, [2, 3, 1]),
@@ -112,7 +117,7 @@ define([
 					return all([db.remove(2), db.remove(4), db.add({id: 6, name: 'six', prime: false, words: ['pineapple', 'orange juice']})]).then(function(){
 						return all([
 							testQuery({name: {from: 's', to: 'u'}}, [6, 3])(),
-							testQuery({words: {contains: ['orange*']}}, [3, 6])()
+							testQuery({words: {contains: ['orange*']}}, {multi: true}, [3, 6])()
 						]);
 					})
 				});
