@@ -59,7 +59,10 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 									/* suppress failed alter table statements*/
 								}));
 								// otherwise, a basic index will do
-								promises.push(this.executeSql("CREATE INDEX IF NOT EXISTS " + indexPrefix + table + '_' + index + ' ON ' + table + '(' + index + ')'));
+								if(storeConfig[index].indexed !== false){
+									promises.push(this.executeSql("CREATE INDEX IF NOT EXISTS " + indexPrefix +
+										table + '_' + index + ' ON ' + table + '(' + index + ')'));
+								}
 							}
 						}
 					}

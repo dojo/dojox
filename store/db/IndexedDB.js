@@ -155,7 +155,8 @@ define(['dojo/_base/declare', 'dojo/_base/lang', 'dojo/Deferred', 'dojo/when', '
 								idbStore = openRequest.transaction.objectStore(storeName);
 							}
 							for (var index in storeConfig) {
-								if (!idbStore.indexNames.contains(index) && index !== 'autoIncrement') {
+								if (!idbStore.indexNames.contains(index) && index !== 'autoIncrement' &&
+										storeConfig[index].indexed !== false) {
 									idbStore.createIndex(index, index, storeConfig[index]);
 								}
 							}
@@ -434,7 +435,7 @@ define(['dojo/_base/declare', 'dojo/_base/lang', 'dojo/Deferred', 'dojo/when', '
 			function tryIndex(indexName, quality, factor) {
 				indexTries++;
 				var indexDefinition = store.indices[indexName];
-				if (indexDefinition) {
+				if (indexDefinition && indexDefinition.indexed !== false) {
 					quality = quality || indexDefinition.preference * (factor || 1) || 0.001;
 					if (quality > bestIndexQuality) {
 						bestIndexQuality = quality;

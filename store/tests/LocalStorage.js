@@ -6,14 +6,14 @@ define([
 	'dojo/promise/all'
 ], function (registerSuite, assert, IndexedDB, SQL, all) {
 	var data = [
-		{id: 1, name: 'one', prime: false, mappedTo: 'E', words: ['bananna']},
-		{id: 2, name: 'two', even: true, prime: true, mappedTo: 'D', words: ['bananna', 'orange']},
+		{id: 1, name: 'one', prime: false, mappedTo: 'E', words: ['banana']},
+		{id: 2, name: 'two', even: true, prime: true, mappedTo: 'D', words: ['banana', 'orange']},
 		{id: 3, name: 'three', prime: true, mappedTo: 'C', words: ['apple', 'orange']},
 		{id: 4, name: 'four', even: true, prime: false, mappedTo: null},
 		{id: 5, name: 'five', prime: true, mappedTo: 'A'}
 	];
 	var dbConfig = {
-		version: 4,
+		version: 5,
 		stores: {
 			test: {
 				name: 10,
@@ -39,6 +39,8 @@ define([
 		registerSuite(testsForDB('dojox/store/db/SQL', SQL));
 	}
 	function testsForDB(name, DB){
+		// need to reset availability
+		dbConfig.available = null;
 		var db = new DB({dbConfig: dbConfig, storeName: 'test'});
 		function testQuery(query, options, results){
 			if(!results){
@@ -94,9 +96,9 @@ define([
 			"{name: 'not a number'}": testQuery({name: 'not a number'}, []),
 			"{words: {contains: ['orange']}}": testQuery({words: {contains: ['orange']}}, [2, 3]),
 			"{words: {contains: ['or*']}}": testQuery({words: {contains: ['or*']}}, [2, 3]),
-			"{words: {contains: ['apple', 'bananna']}}": testQuery({words: {contains: ['apple', 'bananna']}}, []),
-			"{words: {contains: ['orange', 'bananna']}}": testQuery({words: {contains: ['orange', 'bananna']}}, [2]),
-			"{id: {from: 0, to: 4}, words: {contains: ['orange', 'bananna']}}": testQuery({id: {from: 0, to: 4}, words: {contains: ['orange', 'bananna']}}, [2]),
+			"{words: {contains: ['apple', 'banana']}}": testQuery({words: {contains: ['apple', 'banana']}}, []),
+			"{words: {contains: ['orange', 'banana']}}": testQuery({words: {contains: ['orange', 'banana']}}, [2]),
+			"{id: {from: 0, to: 4}, words: {contains: ['orange', 'banana']}}": testQuery({id: {from: 0, to: 4}, words: {contains: ['orange', 'banana']}}, [2]),
 			// "{name: '*e'}": testQuery({name: '*e'}, [5, 1, 3]), don't know if we even support this yet
 			"{id: {from: 1, to: 3}}, sort by name +": testQuery({id: {from: 1, to: 3}}, {sort:[{attribute: "name"}]}, [1, 3, 2]),
 			"{id: {from: 1, to: 3}}, sort by name -": testQuery({id: {from: 1, to: 3}}, {sort:[{attribute: "name", descending: true}]}, [2, 3, 1]),
