@@ -97,15 +97,15 @@ define([
 		//		to cause the points to adjust and the values to reflect the current color.
 		value: "#ffffff",
 		
-		_underlay: kernel.moduleUrl("dojox.widget","ColorPicker/images/underlay.png"),
+		_underlay: require.toUrl("dojox/widget/ColorPicker/images/underlay.png"),
 
-		_hueUnderlay: kernel.moduleUrl("dojox.widget","ColorPicker/images/hue.png"),
+		_hueUnderlay: require.toUrl("dojox/widget/ColorPicker/images/hue.png"),
 
-		_pickerPointer: kernel.moduleUrl("dojox.widget","ColorPicker/images/pickerPointer.png"),
+		_pickerPointer: require.toUrl("dojox/widget/ColorPicker/images/pickerPointer.png"),
 
-		_huePickerPointer: kernel.moduleUrl("dojox.widget","ColorPicker/images/hueHandle.png"),
+		_huePickerPointer: require.toUrl("dojox/widget/ColorPicker/images/hueHandle.png"),
 
-		_huePickerPointerAlly: kernel.moduleUrl("dojox.widget","ColorPicker/images/hueHandleA11y.png"),
+		_huePickerPointerAlly: require.toUrl("dojox/widget/ColorPicker/images/hueHandleA11y.png"),
 
 		templateString: template,
 
