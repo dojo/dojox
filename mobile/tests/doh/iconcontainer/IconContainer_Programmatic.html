@@ -27,11 +27,9 @@
 			dojo.require("dojox.mobile.IconContainer");
 			dojo.requireIf(!dojo.isWebKit, "dojox.mobile.compat");
 
-			dojo.require("doh.runner");
-
 			dojo.addOnLoad(function(){
 
-				var view = dijit.byId("foo");
+				var view = dijit.byId("view1");
 				var container = new dojox.mobile.IconContainer();
 				var demoWidget = new dojox.mobile.IconItem({label:"app1", icon:"../../images/icon3.png", lazy:"true"});
 //This position works fine.
@@ -56,8 +54,21 @@
 				demoWidget = new dojox.mobile.IconItem({label:"href", icon:"../../images/icon3.png", href:"../../test_iPhone-RoundRectList.html", transition:"slide"});
 				container.addChild(demoWidget);
 
-				demoWidget = new dojox.mobile.IconItem({label:"url", icon:"../../images/icon3.png", href:"../../view-sample.html", transition:"slide"});
+				demoWidget = new dojox.mobile.IconItem({label:"url", icon:"../../images/icon3.png", url:"../../data/view-sample.html", transition:"slide"});
 				container.addChild(demoWidget);
+				
+				demoWidget = new dojox.mobile.IconItem({id: "url2", label:"url 2", icon:"../../images/icon3.png", url:"../../data/view-sample.html", transition:"slide"});
+				demoWidget.callback = function(){
+					window.testCallback1Ok = true;
+				}
+				container.addChild(demoWidget);
+
+				demoWidget = new dojox.mobile.IconItem({id: "url3", label:"url 3", icon:"../../images/icon3.png", url:"../../data/view-sample.html", transition:"slide", callback: "method1"});
+				demoWidget.method1 = function(){
+					window.testCallback2Ok = true;
+				}
+				container.addChild(demoWidget);
+
 //This position makes error.
 //				view.addChild(container);
 //				container.placeAt(view.containerNode);
@@ -68,12 +79,12 @@
 		<script type="text/javascript" src=IconContainer.js></script>
 	</head>
 	<body>
-		<div id="foo" dojoType="dojox.mobile.View" selected="true">
+		<div id="view1" dojoType="dojox.mobile.View" selected="true">
 			<h1 dojoType="dojox.mobile.Heading">Icon Container</h1>
 		</div>
 
 		<div id="about" dojoType="dojox.mobile.View">
-			<h1 dojoType="dojox.mobile.Heading" back="Icon Container" moveTo="foo">About</h1>
+			<h1 dojoType="dojox.mobile.Heading" back="Icon Container" moveTo="view1">About</h1>
 			<h2 dojoType="dojox.mobile.RoundRectCategory">My Phone</h2>
 			<ul dojoType="dojox.mobile.RoundRectList">
 				<li dojoType="dojox.mobile.ListItem" rightText="AcmePhone">
