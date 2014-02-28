@@ -309,8 +309,8 @@ define([
 				}else{
 					this.collapse(widget);
 				}
+				this._addChildAriaAttrs();
 			}
-			this._addChildAriaAttrs();
 		},
 
 		removeChild: function(/*Widget|int*/ widget){
