@@ -16,6 +16,10 @@
   right: 2px;
   color: white;
   border: 2px solid white;
+  border-bottom-left-radius: 12px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
   border-radius: 12px;
   text-align: center;
   background: -webkit-gradient(linear, left top, left bottom, from(#7be75a), to(#398c08), color-stop(0.5, #6bc642), color-stop(0.5, #4aad21));

@@ -3,6 +3,10 @@
   margin: 15px;
   border-style: inset;
   border-width: 1px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -35,6 +39,10 @@
   left: 50%;
 }
 .mblSliderProgressBar {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
 }
 .mblSliderHandle {
@@ -43,6 +51,10 @@
   height: 18px;
   border-style: outset;
   border-width: 1px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
   border: none;
   background-color: #ffffff;

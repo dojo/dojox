@@ -6,6 +6,10 @@
   height: 1em;
   border-style: outset;
   border-width: 1px;
+  border-bottom-left-radius: 0.5em;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
   border-radius: 0.5em;
   background-image: none;
   background-color: #333333;
@@ -13,6 +17,10 @@
   border-top-style: solid;
   border-top-color: rgba(85, 85, 85, 0.9);
   border-top-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   font: inherit;
   cursor: pointer;
@@ -53,6 +61,10 @@
 .mblRadioButton {
   border-style: solid;
   border-width: 1px;
+  border-bottom-left-radius: 999px;
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
   border-radius: 999px;
   background-image: none;
   background-color: transparent;
@@ -73,6 +85,10 @@
   left: 0.17em;
   border-style: none;
   background-color: #61c6eb;
+  border-bottom-left-radius: 1em;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
   border-radius: 1em;
   border-color: #61c6eb;
 }

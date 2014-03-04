@@ -3,6 +3,10 @@
   margin: 7px 9px 16px;
   padding: 8px;
   border: 1px solid #c6c7c6;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
   border-radius: 6px;
   background-color: #ffffff;
   color: black;

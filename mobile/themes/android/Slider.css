@@ -3,6 +3,10 @@
   margin: 15px;
   border-style: inset;
   border-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#bdbebd), to(#f7f3f7));
   background-image: linear-gradient(to bottom, #bdbebd 0%, #f7f3f7 100%);
@@ -33,6 +37,10 @@
   left: 50%;
 }
 .mblSliderProgressBar {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#00a200), to(#00d300), color-stop(0.2, #00ba00), color-stop(0.2, #00ba00));
   background-image: linear-gradient(to bottom, #00a200 0%, #00ba00 20%, #00ba00 20%, #00d300 100%);
@@ -43,6 +51,10 @@
   height: 18px;
   border-style: outset;
   border-width: 1px;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#9c9a9c), to(#848284));
   background-image: linear-gradient(to bottom, #9c9a9c 0%, #848284 100%);

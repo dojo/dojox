@@ -60,6 +60,10 @@
   color: #ffffff;
 }
 .mblTabBarTabBar .mblTabBarButtonSelected {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-radius: 3px;
   background-color: #404040;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#484848), to(#242424));

@@ -37,6 +37,10 @@
 
 .default-button-border-styles () {
 	border-color: #9cacc0;
+	border-bottom-left-radius: @default-button-border-radius;
+	border-top-left-radius: @default-button-border-radius;
+	border-top-right-radius: @default-button-border-radius;
+	border-bottom-right-radius: @default-button-border-radius;
 	border-radius: @default-button-border-radius;
 }
 
@@ -117,6 +121,10 @@
 	text-shadow: none;
 }
 .mblToolBarButtonArrow-styles () {
+	border-bottom-left-radius: 1px;
+	border-top-left-radius: 1px;
+	border-top-right-radius: 1px;
+	border-bottom-right-radius: 1px;
 	border-radius: 1px;
   .transform(scale(0.7, 1.05) rotate(45deg));
 	border: 1px solid #3a4655;
@@ -708,6 +716,10 @@
 
 // ProgressBar.less
 .mblProgressBar-styles () {
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 	border-radius: 6px;
 	height: 22px;
 	.background-image-linear-gradient-top-bottom-2-stops(#545454, #414141, 0.3, #313031, 0.85, #293031);
@@ -719,6 +731,10 @@
 	height: 22px;
 }
 .mblProgressBarComplete-styles () {
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 	border-radius: 6px;
 }
 .mblProgressBarNotStarted-styles () {

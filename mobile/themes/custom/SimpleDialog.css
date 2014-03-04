@@ -9,6 +9,10 @@
   width: 262px;
 }
 .mblSimpleDialogDecoration {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-radius: 0;
   background-color: #ffffff;
   border: 1px solid #000000;

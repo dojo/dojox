@@ -16,5 +16,9 @@
   font-size: 1px;
   background-color: #848684;
   border-top: 1px solid #525152;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   border-radius: 2px;
 }

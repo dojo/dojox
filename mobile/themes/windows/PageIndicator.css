@@ -16,6 +16,10 @@
   height: 6px;
   font-size: 1px;
   background-color: #949294;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   border-radius: 3px;
 }
 .mblPageIndicatorDotSelected {
