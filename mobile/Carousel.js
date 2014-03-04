@@ -17,11 +17,15 @@ define([
 	"./PageIndicator",
 	"./SwapView",
 	"require",
-	"dojo/has!dojo-bidi?dojox/mobile/bidi/Carousel"
-], function(array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel){
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Carousel",
+	"dojox/mobile/i18n",
+	"dojo/i18n!dojox/mobile/nls/messages"
+], function(array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel, i18n, messages){
 
 	// module:
 	//		dojox/mobile/Carousel
+
+	var bundle = i18n.registerBundle(messages);
 
 	var Carousel = declare(has("dojo-bidi") ? "dojox.mobile.NonBidiCarousel" : "dojox.mobile.Carousel", [WidgetBase, Container, Contained], {
 		// summary:
@@ -112,12 +116,12 @@ define([
 				domStyle.set(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
 				this.prevBtnNode = domConstruct.create("button", {
 					className: "mblCarouselBtn",
-					title: "Previous",
+					title: bundle["CarouselPrevious"],
 					innerHTML: "&lt;"
 				}, this.btnContainerNode);
 				this.nextBtnNode = domConstruct.create("button", {
 					className: "mblCarouselBtn",
-					title: "Next",
+					title: bundle["CarouselNext"],
 					innerHTML: "&gt;"
 				}, this.btnContainerNode);
 				this._prevHandle = this.connect(this.prevBtnNode, "onclick", "onPrevBtnClick");
