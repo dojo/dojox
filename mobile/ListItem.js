@@ -36,6 +36,11 @@ define([
 		// |		<div layout="center">Center Node</div>
 		// |	</li>
 		//
+		//		Similarly, a child widget can have the preventTouch
+		//		attribute, whose value is a boolean (or data-mobile-prevent-touch
+		//		for children which are not widgets), such that touching such
+		//		child doesn't trigger the item action.
+		//
 		//		Note that even if you specify variableHeight="true" for the list
 		//		and place a tall object inside the layout node as in the example
 		//		below, the layout node does not expand as you may expect,
