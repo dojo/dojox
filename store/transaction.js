@@ -43,14 +43,16 @@ define(['dojo/store/Memory', 'dojo/store/Cache', 'dojo/when', 'dojo/aspect', 'do
 					if(previousId !== undefined){
 						var previous = cachingStore.get(previousId);
 					}
-					when(previous, function(previous){
-						transactionLogStore.add({
+					return when(previous, function(previous){
+						return when(transactionLogStore.add({
 							objectId: previousId,
 							method: method,
 							target: target,
 							previous: previous,
 							options: options,
 							storeId: storeId
+						}), function(){
+							return target;
 						});
 					});
 				}

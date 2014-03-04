@@ -14,6 +14,9 @@ define([
 		return function(){
 			started++;
 			var results = this.inherited(arguments);
+			if(results && results.then){
+				return results;
+			}
 			var deferred = new Deferred();
 			setTimeout(function(){
 				deferred.resolve(results);
@@ -38,48 +41,54 @@ define([
 		data: data
 	});
 	var cachingStore = new AsyncMemory();
+	var masterStore2 = new AsyncMemory({
+		data: []
+	});
+	var cachingStore2 = new AsyncMemory();
 	var logStore = new AsyncMemory();
 
 	var transactionStore = transaction(masterStore, cachingStore, {
 		transactionLogStore: logStore
 	});
+	var transactionStore2 = transaction(masterStore2, cachingStore2, {
+		transactionLogStore: logStore
+	});
 	registerSuite({
 		name: "transaction",
-		transaction: function(){
-			var results = [];
-			var operations = [];
-			var order = [];
-			var initialData = data.slice(0);
-
+		'auto-commit': function(){
 			// initially in auto-commit mode
+			var operations = [];
 			operations.push(transactionStore.add(
 				{id: 6, name: 'six'}
 			));
 			assert.strictEqual(masterStore.data.length, 6);
 			operations.push(transactionStore.remove(6));
 			assert.strictEqual(masterStore.data.length, 5);
-
+			return all(operations);
+		},
+		'commit transaction': function(){
+			var operations = [];
 			var transaction = transactionStore.transaction();
-			operations.push(transactionStore.add(
-				{id: 6, name: 'six'}
-			));
 			operations.push(transactionStore.put(
+				{id: 6, name: 'six', perfect: true}
+			));
+			operations.push(transactionStore.add(
 				{id: 7, name: 'seven'}
 			));
 			operations.push(transactionStore.remove(3));
 			// make sure the master store hasn't been updated yet
 			assert.strictEqual(masterStore.data.length, 5);
-			// make sure it is in the caching store
-			assert.strictEqual(cachingStore.data.length, 2);
-			operations.push(transactionStore.get(6).then(function(six){
-				assert.deepEqual(six, {id: 6, name: 'six'});
-			}));
 			return all(operations).then(function(){
+				// make sure it is in the caching store
+				operations.push(transactionStore.get(6).then(function(six){
+					assert.deepEqual(six, {id: 6, name: 'six', perfect: true});
+				}));
+				assert.strictEqual(cachingStore.data.length, 2);
 				assert.strictEqual(logStore.data.length, 3);
 				return transaction.commit().then(function(){
 					operations = [];
 					operations.push(transactionStore.get(6).then(function(six){
-						assert.deepEqual(six, {id: 6, name: 'six'});
+						assert.deepEqual(six, {id: 6, name: 'six', perfect: true});
 					}));
 					operations.push(transactionStore.get(7).then(function(seven){
 						assert.deepEqual(seven, {id: 7, name: 'seven'});
@@ -90,6 +99,38 @@ define([
 					return all(operations);
 				});
 			});
+		},
+		'multi-store transaction': function(){
+			var operations = [];
+			var transaction = transactionStore.transaction();
+			transactionStore2.transaction();
+			assert.strictEqual(logStore.data.length, 0);
+			operations.push(transactionStore.add(
+				{id: 8, name: 'eight'}
+			));
+			operations.push(transactionStore2.put(
+				{id: 'a', name: 'A'}
+			));
+			// make sure the master stores haven't been updated yet
+			assert.strictEqual(masterStore.data.length, 6);
+			assert.strictEqual(masterStore2.data.length, 0);
+
+			return all(operations).then(function(){
+				// but the cache should be updated
+				assert.strictEqual(cachingStore2.data.length, 1);
+				assert.strictEqual(logStore.data.length, 2);
+				return transaction.commit().then(function(){
+					operations = [];
+					operations.push(transactionStore.get(8).then(function(six){
+						assert.deepEqual(six, {id: 8, name: 'eight'});
+					}));
+					operations.push(transactionStore2.get('a').then(function(seven){
+						assert.deepEqual(seven, {id: 'a', name: 'A'});
+					}));
+					return all(operations);
+				});
+			});
 		}
+
 	});
 });
