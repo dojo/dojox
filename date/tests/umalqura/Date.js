@@ -2409,7 +2409,7 @@ tests.register("dojox.date.tests.umalqura.Date",
 		        dateIslamicAdd = dojox.date.umalqura.add(dateIslamic, "day", 0);
 		        dateDiff = dojox.date.umalqura.difference(dateIslamicAdd, dateIslamic, "day");
 		        var dateDiff2 = dojox.date.umalqura.difference(dateIslamic, dateIslamic, "day");
-		        var amouts = [-1, 0, 1, 2, 5, 6, 7, 8, 12, 18, 20, 24, 50, -3, -4, -5, -6, -7, -8, -9, -10,
+		        var amounts = [-1, 0, 1, 2, 5, 6, 7, 8, 12, 18, 20, 24, 50, -3, -4, -5, -6, -7, -8, -9, -10,
 				              -50, 200, -200];
 		        var units = [
 				           "year",
@@ -2422,7 +2422,7 @@ tests.register("dojox.date.tests.umalqura.Date",
 				           "millisecond"
 		        ];
 		        dojo.forEach(inputDates, function (inDate, i) {
-		            dojo.forEach(amouts, function (amount, j) {
+		            dojo.forEach(amounts, function (amount, j) {
 		                dojo.forEach(units, function (unit, k) {
 		                    dateIslamic = new dojox.date.umalqura.Date(inDate[0], inDate[1], inDate[2]);
 		                    dateIslamicAdd = dojox.date.umalqura.add(dateIslamic, unit, amount);

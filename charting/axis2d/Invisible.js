@@ -169,7 +169,7 @@ define(["dojo/_base/lang", "dojo/_base/declare", "./Base", "../scaler/linear",
 			this.labels = o.labels;
 			this.scaler = lin.buildScaler(min, max, span, o);
 			// store the absolute major tick start, this will be useful when dropping a label every n labels
-			// TODO: if o.lower then it does not work
+			// TODO: if o.lower than it does not work
 			var tsb = this.scaler.bounds;
 			if("scale" in this){
 				// calculate new range

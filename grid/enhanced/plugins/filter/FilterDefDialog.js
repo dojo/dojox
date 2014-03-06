@@ -1103,7 +1103,7 @@ var FilterDefDialog = declare("dojox.grid.enhanced.plugins.filter.FilterDefDialo
 	},
 	showDialog: function(/* int */colIndex){
 		// summary:
-		//		Show the filter defintion dialog.
+		//		Show the filter definition dialog.
 		this._defPane.show();
 		this.plugin.filterStatusTip.closeDialog();
 		this._prepareDialog(colIndex);

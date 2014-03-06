@@ -6,7 +6,7 @@
    *
    *  Usage: $stem = PorterStemmer::getStem($word);
    *
-   *  Refrence: "An algorithm for suffix stripping", M.F.Porter, http://tartarus.org/martin/PorterStemmer/def.txt
+   *  Reference: "An algorithm for suffix stripping", M.F.Porter, http://tartarus.org/martin/PorterStemmer/def.txt
    *
    */
    

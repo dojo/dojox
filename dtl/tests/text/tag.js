@@ -412,14 +412,14 @@ doh.register("dojox.dtl.text.tag",
 				people: [
 					{ firstName: "Bill", lastName: "Clinton", gender: "Male" },
 					{ firstName: "Margaret", lastName: "Thatcher", gender: "Female" },
-					{ firstName: "Path", lastName: "Smith", gender: "Unkown" },
+					{ firstName: "Path", lastName: "Smith", gender: "Unknown" },
 					{ firstName: "Condoleezza", lastName: "Rice", gender: "Female" },
 					{ firstName: "George", lastName: "Bush", gender: "Male" }
 				]
 			});
 
 			var template = new dd.Template("{% regroup people|dictsort:'gender' by gender as grouped %}<ul>{% for group in grouped %}<li>{{ group.grouper }}<ul>{% for item in group.list %}<li>{{ item.firstName }} {{ item.lastName }}</li>{% endfor %}</ul></li>{% endfor %}</ul>");
-			t.t(template.render(context).match(new RegExp("^<ul><li>Female<ul><li>(Condoleezza Rice|Margaret Thatcher)</li><li>(Condoleezza Rice|Margaret Thatcher)</li></ul></li><li>Male<ul><li>(Bill Clinton|George Bush)</li><li>(Bill Clinton|George Bush)</li></ul></li><li>Unkown<ul><li>Path Smith</li></ul></li></ul>$")));
+			t.t(template.render(context).match(new RegExp("^<ul><li>Female<ul><li>(Condoleezza Rice|Margaret Thatcher)</li><li>(Condoleezza Rice|Margaret Thatcher)</li></ul></li><li>Male<ul><li>(Bill Clinton|George Bush)</li><li>(Bill Clinton|George Bush)</li></ul></li><li>Unknown<ul><li>Path Smith</li></ul></li></ul>$")));
 		},
 		function test_tag_spaceless(t){
 			var dd = dojox.dtl;

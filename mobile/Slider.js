@@ -129,7 +129,7 @@ define([
 
 				e.preventDefault();
 				var isMouse = e.type == "mousedown";
-				var box = domGeometry.position(node, false); // can't use true since the added docScroll and the returned x are body-zoom incompatibile
+				var box = domGeometry.position(node, false); // can't use true since the added docScroll and the returned x are body-zoom incompatible
 				var bodyZoom = (has("ie") || has("trident") > 6) ? 1 : (domStyle.get(win.body(), "zoom") || 1);
 				if(isNaN(bodyZoom)){ bodyZoom = 1; }
 				var nodeZoom = (has("ie") || has("trident") > 6) ? 1 : (domStyle.get(node, "zoom") || 1);

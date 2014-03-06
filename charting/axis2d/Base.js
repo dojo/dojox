@@ -45,7 +45,7 @@ define(["dojo/_base/declare", "../Element"],
 		},
 		calculate: function(min, max, span){
 			// summary:
-			//		Stub function to run the calcuations needed for drawing this axis.
+			//		Stub function to run the calculations needed for drawing this axis.
 			// returns: dojox/charting/axis2d/Base
 			//		A reference to the axis for functional chaining.
 			return this;	//	dojox/charting/axis2d/Base
