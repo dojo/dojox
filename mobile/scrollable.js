@@ -9,13 +9,15 @@ define([
 	"dojo/dom-style",
 	"dojo/dom-geometry",
 	"dojo/touch",
+	"dijit/registry",
+	"dijit/form/_TextBoxMixin",
 	"./sniff",
 	"./_css3",
 	"./_maskUtils",
 	"dojo/_base/declare",
 	"dojo/has!dojo-bidi?dojox/mobile/bidi/Scrollable"
 ], function(dojo, connect, event, lang, win, domClass, domConstruct, domStyle,
-			 domGeom, touch, has, css3, maskUtils, declare, BidiScrollable){
+			 domGeom, touch, registry, TextBoxMixin, has, css3, maskUtils, declare, BidiScrollable){
 
 	// module:
 	//		dojox/mobile/scrollable
@@ -476,8 +478,14 @@ define([
 			this._locked = false;
 			this._moved = false;
 
+			this._preventDefaultInNextTouchMove = true; // #17502
 			if(!this.isFormElement(e.target)){
+				// Call preventDefault to avoid browser scroll, except for form elements 
+				// for which doing it in touch.press would forbid the virtual keyboard 
+				// from showing up (for form elements which are text widgets, preventDefault
+				// is called in touch.move). 
 				this.propagatable ? e.preventDefault() : event.stop(e);
+				this._preventDefaultInNextTouchMove = false;
 			}
 		},
 
@@ -485,6 +493,22 @@ define([
 			// summary:
 			//		User-defined function to handle touchMove events.
 			if(this._locked){ return; }
+			
+			if(this._preventDefaultInNextTouchMove){ // #17502
+				this._preventDefaultInNextTouchMove = false; // only in the first touch.move
+				var enclosingWidget = registry.getEnclosingWidget(
+					// On touch-enabled devices, e.target can be different in touch.move than in
+					// touch.start. Hence:
+					((e.targetTouches && e.targetTouches.length === 1) ? e.targetTouches[0] : e).target);
+				if(enclosingWidget && enclosingWidget.isInstanceOf(TextBoxMixin)){
+					// For touches on text widgets for which e.preventDefault() has not been
+					// called in onTouchStart, call it in onTouchMove() to avoid browser scroll.
+					// Not done on other elements such that for instance a native slider
+					// can still handle touchmove events.
+					this.propagatable ? e.preventDefault() : event.stop(e);
+				}
+			}
+			
 			var x = e.touches ? e.touches[0].pageX : e.clientX;
 			var y = e.touches ? e.touches[0].pageY : e.clientY;
 			var dx = x - this.touchStartX;
