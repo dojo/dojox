@@ -33,7 +33,7 @@ tests.register("dojox.data.tests.stores.QueryReadStore",
 				t.assertEqual("Alabama", store.getValue(item, "name"));
 				t.assertEqual("<img src='images/Alabama.jpg'/>Alabama", store.getValue(item, "label"));
 				t.assertEqual("AL", store.getValue(item, "abbreviation"));
-				// Test the defaultValue cases (the third paramter).
+				// Test the defaultValue cases (the third parameter).
 				t.assertEqual("default value", store.getValue(item, "NAME", "default value"));
 				// TODO Test for null somehow ...
 				// Read api says: Returns null if and only if null was explicitly set as the attribute value.

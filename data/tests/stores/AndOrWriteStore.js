@@ -4097,7 +4097,7 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 					deferred.errback(error);
 				};
 
-				var intialFetch = function(items, request){
+				var initialFetch = function(items, request){
 					var initialCount = items.length;
 					var canada = store.newItem({name: "Canada", abbr:"ca", capital:"Ottawa"});
 					store.setValue(canada, "someattribute", "modified a new item!");
@@ -4114,7 +4114,7 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 					};
 						  store.fetch({onComplete: afterNewFetch, onError: onError});
 				};
-				store.fetch({onComplete: intialFetch, onError: onError});
+				store.fetch({onComplete: initialFetch, onError: onError});
 				return deferred; //Object
 			}
 		},
@@ -4136,7 +4136,7 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 					deferred.errback(error);
 				};
 	
-				var intialFetch = function(items, request){
+				var initialFetch = function(items, request){
 					var initialCount = items.length;
 					var canada = store.newItem({name: "Canada", abbr:"ca", capital:"Ottawa"});
 					store.setValue(canada, "someattribute", "modified a new item!");
@@ -4187,7 +4187,7 @@ dojox.data.tests.stores.AndOrWriteStore.getTests = function(){
 					};
 					store.fetch({onComplete: afterNewFetch, onError: onError});
 				};
-				store.fetch({onComplete: intialFetch, onError: onError});
+				store.fetch({onComplete: initialFetch, onError: onError});
 				return deferred; //Object
 			}
 		},

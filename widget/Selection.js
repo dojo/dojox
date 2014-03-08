@@ -70,7 +70,7 @@ define(["dojo/_base/declare", "dojo/_base/array", "dojo/_base/lang", "dojo/State
 		
 		isItemSelected: function(item){
 			// summary:
-			//		Returns wether an item is selected or not.
+			//		Returns whether an item is selected or not.
 			// item: Object
 			//		The item to test the selection for.			
 			if(this.selectedItems == null || this.selectedItems.length== 0){

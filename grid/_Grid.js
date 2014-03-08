@@ -226,7 +226,7 @@ define([
 		height: '',
 
 		// structure: dojox.grid.__ViewDef|dojox.grid.__ViewDef[]|dojox.grid.__CellDef[]|Array[dojox.grid.__CellDef[]]
-		//		View layout defintion.
+		//		View layout definition.
 		structure: null,
 
 		// elasticView: Integer

@@ -136,7 +136,7 @@
 			//		Replaces the dojox/mobile object.
 			// description:
 			//		When this module is loaded from a script tag, dm is a plain
-			//		local object defined at the begining of this module.
+			//		local object defined at the beginning of this module.
 			//		common.js will replace the local dm object with the
 			//		real dojox/mobile object through this method.
 			dm = _dm;

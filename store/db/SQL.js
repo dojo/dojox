@@ -22,7 +22,7 @@ define(['dojo/_base/declare', 'dojo/Deferred', 'dojo/when', 'dojo/store/util/Que
 			this.indices = dbConfig.stores[storeName];
 			this.repeatingIndices = {};
 			for(var index in this.indices){
-				// we support multiEntry property to simulate the similar behavior in IndexedDB, we track these becaues we use the
+				// we support multiEntry property to simulate the similar behavior in IndexedDB, we track these because we use the
 				if(this.indices[index].multiEntry){
 					this.repeatingIndices[index] = true;
 				}

@@ -1337,7 +1337,7 @@ doh.register("dojox.data.tests.stores.XmlStore",
 			 function onError(error, request) {
 				 d.errback(error);
 			 }
-			 store.fetchItemByIdentity({identity: "A9B574_NONEXISTANT", onItem: onItem, onError: onError});
+			 store.fetchItemByIdentity({identity: "A9B574_NONEXISTENT", onItem: onItem, onError: onError});
 			 return d; //Object
 		},
 

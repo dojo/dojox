@@ -1944,11 +1944,11 @@ tests.register("dojox.date.tests.islamic.Date",
 				var dateIslamic = new dojox.date.islamic.Date(1431, 4, 6);
 
 
-				var amouts = [2, 5, 6, 7, 8, 12, 18, 20, 24, 50, -3, -4, -5, -6, -7, -8, -9, -10, -50, 200, -200, 29, -29, 1, -1,
+				var amounts = [2, 5, 6, 7, 8, 12, 18, 20, 24, 50, -3, -4, -5, -6, -7, -8, -9, -10, -50, 200, -200, 29, -29, 1, -1,
 				              23, 25];
 				var dateIslamicAdd;
 
-				dojo.forEach(amouts, function(amount, i) {
+				dojo.forEach(amounts, function(amount, i) {
 					dateIslamicAdd = dojox.date.islamic.add(dateIslamic, "month", amount);
 					t.is(dojox.date.islamic.difference(dateIslamic, dateIslamicAdd, "month"), amount);
 

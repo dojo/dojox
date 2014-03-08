@@ -102,7 +102,7 @@
 				break;
 	
 			default:
-				echo "unkown mode ".htmlspecialchars($_GET['mode']);
+				echo "unknown mode ".htmlspecialchars($_GET['mode']);
 		}
 	}
 ?>
