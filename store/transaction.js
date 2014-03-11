@@ -12,8 +12,10 @@ define(['dojo/store/Memory', 'dojo/store/Cache', 'dojo/when', 'dojo/aspect', 'do
 	var defaultTransactionLogStore;
 	var stores = {};
 	var nextStoreId = 1;
-	return function(masterStore, cachingStore, options){
+	return function(options){
 		options = options || {};
+		var masterStore = options.masterStore;
+		var cachingStore = options.cachingStore;
 		var storeId = masterStore.id || masterStore.storeName || masterStore.name || (masterStore.id = nextStoreId++);
 		if(storeId){
 			stores[storeId] = masterStore;

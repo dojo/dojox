@@ -47,10 +47,14 @@ define([
 	var cachingStore2 = new AsyncMemory();
 	var logStore = new AsyncMemory();
 
-	var transactionStore = transaction(masterStore, cachingStore, {
+	var transactionStore = transaction({
+		masterStore: masterStore,
+		cachingStore: cachingStore,
 		transactionLogStore: logStore
 	});
-	var transactionStore2 = transaction(masterStore2, cachingStore2, {
+	var transactionStore2 = transaction({
+		masterStore: masterStore2,
+		cachingStore: cachingStore2,
 		transactionLogStore: logStore
 	});
 	registerSuite({
