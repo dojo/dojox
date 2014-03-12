@@ -42,6 +42,7 @@
 		//	|	http://your.server.com/yourapp.html?theme=Custom // forces Custom theme
 		//	|	http://your.server.com/yourapp.html?theme=iPhone // forces iPhone theme
 		//	|	http://your.server.com/yourapp.html?theme=iPad // forces iPad theme
+		//	|	http://your.server.com/yourapp.html?theme=ios7 // forces iOS 7 theme
 		//
 		//		To simulate a particular device from the application code, the user agent
 		//		can be forced by setting dojoConfig.mblUserAgent as follows:
@@ -183,6 +184,11 @@
 			[
 				"BB10",
 				"blackberry",
+				[]
+			],
+			[
+				"ios7",
+				"ios7",
 				[]
 			],
 			[
