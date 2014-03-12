@@ -202,6 +202,7 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/sniff", "dojo/_base/declare
 				this._lineUsePool = [];
 			}
 			this._invalidMaxLabelSize = true;
+			this.renderingOptions = { "shape-rendering": "crispEdges" };
 		},
 		setWindow: function(scale, offset){
 			// summary:

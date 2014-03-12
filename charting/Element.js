@@ -18,8 +18,9 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 		group: null,
 		htmlElements: null,
 		dirty: true,
+		renderingOptions: null,
 
-		constructor: function(chart){
+		constructor: function(chart, kwArgs){
 			// summary:
 			//		Creates a new charting element.
 			// chart: dojox/charting/Chart
@@ -30,6 +31,9 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 			this.dirty = true;
 			this.trailingSymbol = "...";
 			this._events = [];
+			if (kwArgs && kwArgs.renderingOptions) {
+				this.renderingOptions = kwArgs.renderingOptions;
+			}
 		},
 		purgeGroup: function(){
 			// summary:
@@ -105,6 +109,11 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 				}
 			}else{
 				this.group = creator.createGroup();
+				if (this.renderingOptions && this.group.rawNode) {
+					for (var key in this.renderingOptions) {
+						this.group.rawNode.setAttribute(key, this.renderingOptions[key]);
+					}
+				}
 			}
 			this.dirty = true;
 			return this;	//	dojox.charting.Element
