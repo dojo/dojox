@@ -39,9 +39,6 @@
 .dj_ie .mblProg11 {
   left: 80px;
 }
-.dj_gecko .mblProgressIndicatorCenter .mblProgContainer {
-  -moz-transform-origin: 50% 0;
-}
 .dj_gecko .mblProg {
   -moz-transform-origin: 0 2px;
 }

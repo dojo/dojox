@@ -14,11 +14,12 @@
 			"dojo/_base/declare",
 			"dojo/dom",
 			"dojox/mobile/parser",
+			"dojo/_base/window",
 			"dojox/mobile/ProgressIndicator",
 			"dojox/mobile",
 			"dojox/mobile/bookmarkable",
 			"dojox/mobile/compat"
-		], function(declare, dom, parser, ProgressIndicator){
+		], function(declare, dom, parser, win, ProgressIndicator){
 			function loadPage(moveTo){
 				if(!(moveTo.match(/#(\w+)/))){ return; }
 				moveTo.match(/#(\w+)(.*)/);
@@ -28,7 +29,7 @@
 				var container = dom.byId(id);
 				container.innerHTML = "";
 				var prog = ProgressIndicator.getInstance();
-				container.appendChild(prog.domNode);
+				win.body().appendChild(prog.domNode);
 				prog.start();
 				setTimeout(function(){ // network latency simulation
 					prog.stop();
