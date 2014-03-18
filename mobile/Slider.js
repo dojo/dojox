@@ -67,6 +67,8 @@ define([
 				this.progressBar = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderProgressBar" }, relativeParent, "last");
 				this.touchBox = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderTouchBox" }, relativeParent, "last");
 				this.handle = domConstruct.create("div", { style:{ position:"absolute" }, "class":"mblSliderHandle" }, relativeParent, "last");
+				this.handle.setAttribute("role", "slider");
+				this.handle.setAttribute("tabindex", 0);
 			}
 			this.inherited(arguments);
 			// prevent browser scrolling on IE10 (evt.preventDefault() is not enough)
@@ -75,6 +77,14 @@ define([
 			}
 		},
 
+		_setMinAttr: function(/*Number*/ min){
+			this.handle.setAttribute("aria-valuemin", min);
+			this._set("min",min);
+		},
+		_setMaxAttr: function(/*Number*/ max){
+			this.handle.setAttribute("aria-valuemax", max);
+			this._set("max",max);
+		},
 		_setValueAttr: function(/*Number*/ value, /*Boolean?*/ priorityChange){
 			// summary:
 			//		Hook such that set('value', value) works.
@@ -85,7 +95,6 @@ define([
 			this.valueNode.value = value;
 			this.inherited(arguments);
 			if(!this._started){ return; } // don't move images until all the properties are set
-			this.focusNode.setAttribute("aria-valuenow", value);
 			var toPercent = (value - this.min) * 100 / (this.max - this.min);
 			// now perform visual slide
 			var horizontal = this.orientation != "V";
@@ -98,12 +107,14 @@ define([
 			}
 			domStyle.set(this.handle, this._attrs.handleLeft, (this._reversed ? (100-toPercent) : toPercent) + "%");
 			domStyle.set(this.progressBar, this._attrs.width, toPercent + "%");
+			this.handle.setAttribute("aria-valuenow", value);
 		},
 
 		postCreate: function(){
 			this.inherited(arguments);
 
 			function beginDrag(e){
+				e.target.focus();
 				function getEventData(e){
 					point = isMouse ? e[this._attrs.pageX] : (e.touches ? e.touches[0][this._attrs.pageX] : e[this._attrs.clientX]);
 					pixelValue = point - startPixel;
