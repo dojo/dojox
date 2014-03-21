@@ -60,13 +60,7 @@ define([
 		//		The steps between labelFrom and labelTo.
 		step: 1,
 
-		// tabIndex: String
-		//		Tabindex setting for this widget so users can hit the tab key to
-		//		focus on it.
-		tabIndex: "0",
-		_setTabIndexAttr: "", // sets tabIndex to domNode
-
-		/* internal properties */	
+		/* internal properties */
 		baseClass: "mblSpinWheelSlot",
 		// maxSpeed: [private] Number
 		//		Maximum speed.
@@ -108,6 +102,7 @@ define([
 			this.panelNodes = [];
 			for(var k = 0; k < 3; k++){
 				this.panelNodes[k] = domConstruct.create("div", {className:"mblSpinWheelSlotPanel"});
+				this.panelNodes[k].setAttribute("aria-hidden", "true");
 				var len = this.items.length;
 				if(len > 0){ // if the slot is not empty
 					var n = Math.ceil(this.minItems / len);
@@ -127,6 +122,9 @@ define([
 			this.domNode.appendChild(this.containerNode);
 			this.touchNode = domConstruct.create("div", {className:"mblSpinWheelSlotTouch"}, this.domNode);
 			this.setSelectable(this.domNode, false);
+
+			this.touchNode.setAttribute("tabindex", 0);
+			this.touchNode.setAttribute("role", "slider");
 
 			if(this.value === "" && this.items.length > 0){
 				this.value = this.items[0][1];
@@ -203,7 +201,7 @@ define([
 				var items = this.panelNodes[1].childNodes;
 				this._itemHeight = items[0].offsetHeight;
 				this.adjust();
-				this.connect(this.domNode, "onkeydown", "_onKeyDown"); // for desktop browsers
+				this.connect(this.touchNode, "onkeydown", "_onKeyDown"); // for desktop browsers
 			}
 			if(has("windows-theme")){
 				this.previousCenterItem = this.getCenterItem();
@@ -211,6 +209,8 @@ define([
 					domClass.add(this.previousCenterItem, "mblSelectedSlotItem");
 				}
 			}
+			this.touchNode.setAttribute("aria-valuemin", 0);
+			this.touchNode.setAttribute("aria-valuemax", this.labels.length );
 		},
 
 		initLabels: function(){
@@ -225,6 +225,11 @@ define([
 					a.push(this.zeroPad ? (zeros + i).slice(-this.zeroPad) : i + "");
 				}
 			}
+		},
+
+		onTouchStart: function(e) {
+			this.touchNode.focus();//give focus to enable key navigation
+			this.inherited(arguments);
 		},
 
 		adjust: function(){
@@ -249,6 +254,7 @@ define([
 			// summary:
 			//		Sets the initial value using this.value or the first item.
 			this.set("value", this._initialValue);
+			this.touchNode.setAttribute("aria-valuetext", this._initialValue);
 		},
 
 		_onKeyDown: function(e){
@@ -406,6 +412,7 @@ define([
 			this._duringSlideTo = false;
 			this._onFlickAnimationStartCalled = false;
 			this.inherited(arguments);
+			this.touchNode.setAttribute("aria-valuetext", this.get("value"));
 		},
 		
 		spin: function(/*Number*/steps){
