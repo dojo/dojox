@@ -1,5 +1,13 @@
-dojo.provide("dojox.image.ThumbnailPicker");
-dojo.experimental("dojox.image.ThumbnailPicker");
+define("dojox/image/ThumbnailPicker", [
+	"dojo",
+	"dojo/_base/fx",
+	"dojo/fx/easing",
+	"dojox/fx/scroll",
+	"dijit/_TemplatedMixin",
+	"dijit/_Widget",
+	"dojo/text!dojox/image/resources/ThumbnailPicker.html"
+], function(dojo,fx,easing,xscroll,_TemplatedMixin,_Widget,template) {
+
 //
 // dojox.image.ThumbnailPicker courtesy Shane O Sullivan, licensed under a Dojo CLA
 //
@@ -7,17 +15,10 @@ dojo.experimental("dojox.image.ThumbnailPicker");
 //
 //	document topics.
 
-dojo.require("dojox.fx.scroll"); // is optional, but don't want to dojo[require] it
-dojo.require("dojo.fx.easing");
-
-dojo.require("dojo.fx");
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-
 // FIXME: use CSS for size, thumbHeight, and thumbWidth
 
-dojo.declare("dojox.image.ThumbnailPicker",
-	[dijit._Widget, dijit._Templated],
+return dojo.declare("dojox.image.ThumbnailPicker",
+	[_Widget, _TemplatedMixin],
 	{
 	// summary:
 	//		A scrolling Thumbnail Picker widget
@@ -94,7 +95,7 @@ dojo.declare("dojox.image.ThumbnailPicker",
 	//		The attribute name for accessing the title from the data store
 	titleAttr: "title",
 	
-	templateString: dojo.cache("dojox.image", "resources/ThumbnailPicker.html"),
+	templateString: template,
 	
 	// thumbs: Array
 	//		Stores the image nodes for the thumbnails.
@@ -394,11 +395,11 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		
 		if(this.isScrollable){
 			var target = this.isHorizontal ? {x: left, y: 0} : { x:0, y:top};
-			dojox.fx.smoothScroll({
+			xscroll({
 				target: target,
 				win: this.thumbScroller,
 				duration:300,
-				easing:dojo.fx.easing.easeOut,
+				easing:easing.easeOut,
 				onEnd: dojo.hitch(this, "_checkLoad", img, index)
 			}).play(10);
 		}else{
@@ -593,4 +594,6 @@ dojo.declare("dojox.image.ThumbnailPicker",
 		var addClass = (this.thumbScroller[pos] + this._scrollerSize < this.thumbsNode[size]);
 		change(this.navNext, addClass);
 	}
+});
+
 });

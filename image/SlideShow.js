@@ -1,4 +1,12 @@
-dojo.provide("dojox.image.SlideShow");
+define("dojox/image/SlideShow", [
+	"dojo",
+	"dojo/_base/fx",
+	"dojo/string",
+	"dijit/_TemplatedMixin",
+	"dijit/_Widget",
+	"dojo/text!dojox/image/resources/SlideShow.html"
+], function(dojo,fx,string,_TemplatedMixin,_Widget,template) {
+
 //
 // dojox.image.SlideShow courtesy Shane O Sullivan, licensed under a Dojo CLA
 // For a sample usage, see http://www.skynet.ie/~sos/photos.php
@@ -6,13 +14,9 @@ dojo.provide("dojox.image.SlideShow");
 //
 //	TODO: more cleanups
 //
-dojo.require("dojo.string");
-dojo.require("dojo.fx");
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
 
-dojo.declare("dojox.image.SlideShow",
-	[dijit._Widget, dijit._Templated],
+return dojo.declare("dojox.image.SlideShow",
+	[_Widget, _TemplatedMixin],
 	{
 	// summary:
 	//		A Slideshow Widget
@@ -96,7 +100,7 @@ dojo.declare("dojox.image.SlideShow",
 	//	Time, in seconds, between image transitions during a slideshow.
 	slideshowInterval: 3,
 	
-	templateString: dojo.cache("dojox.image", "resources/SlideShow.html"),
+	templateString: template,
 	
 	// _imageCounter: Number
 	//	A counter to keep track of which index image is to be loaded next
@@ -361,7 +365,7 @@ dojo.declare("dojox.image.SlideShow",
 					_this._setTitle(title);
 	        		};
 				
-				dojo.fadeIn({
+				fx.fadeIn({
 					node: _this.images[index],
 					duration: 300,
 					onEnd: onEnd
@@ -559,7 +563,7 @@ dojo.declare("dojox.image.SlideShow",
 		// title: String
 		//		The String title of the image
 
-		this.titleNode.innerHTML = dojo.string.substitute(this.titleTemplate,{
+		this.titleNode.innerHTML = string.substitute(this.titleTemplate,{
 			title: title,
 			current: 1 + this.imageIndex,
 			total: this.maxPhotos || ""
@@ -608,11 +612,7 @@ dojo.declare("dojox.image.SlideShow",
 		this._calcNavDimensions();
 		dojo.style(this.navNode, "marginTop", "0px");
 		
-		
 		var navPlayPos = dojo.style(this.navNode, "width")/2 - this.navPlay._size.w/2 - this.navPrev._size.w;
-		console.log('navPlayPos = ' + dojo.style(this.navNode, "width")/2 + ' - ' + this.navPlay._size.w + '/2 - '
-				+ this.navPrev._size.w);
-		
 		dojo.style(this.navPlay, "marginLeft", navPlayPos + "px");
 		var wrapperSize = dojo.marginBox(this.outerNode);
 		
@@ -627,7 +627,7 @@ dojo.declare("dojox.image.SlideShow",
 			this._navAnim.stop();
 		}
 		if(this._navShowing){ return; }
-		this._navAnim = dojo.fadeIn({
+		this._navAnim = fx.fadeIn({
 			node: this.navNode,
 			duration: 300,
 			onEnd: function(){ _this._navAnim = null; }
@@ -646,7 +646,7 @@ dojo.declare("dojox.image.SlideShow",
 			if(this._navAnim){
 				this._navAnim.stop();
 			}
-			this._navAnim = dojo.fadeOut({
+			this._navAnim = fx.fadeOut({
 				node: this.navNode,
 				duration:300,
 				onEnd: function(){ _this._navAnim = null; }
@@ -674,4 +674,6 @@ dojo.declare("dojox.image.SlideShow",
 			&& m.y <= (top + bb.h)
 		);	//	boolean
 	}
+});
+
 });

@@ -1,5 +1,11 @@
-dojo.provide("dojox.image.Gallery");
-dojo.experimental("dojox.image.Gallery");
+define("dojox/image/Gallery",[
+	"dojo",
+	"dijit/_TemplatedMixin",
+	"dijit/_Widget",
+	"dojox/image/SlideShow",
+	"dojox/image/ThumbnailPicker",
+	"dojo/text!dojox/image/resources/Gallery.html"
+], function(dojo,_TemplatedMixin,_Widget,SlideShow,ThumbnailPicker,template) {
 //
 // dojox.image.Gallery courtesy Shane O Sullivan, licensed under a Dojo CLA
 //
@@ -8,14 +14,8 @@ dojo.experimental("dojox.image.Gallery");
 //	TODO: Make public, document params and privitize non-API conformant methods.
 //	document topics.
 
-dojo.require("dojo.fx");
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
-dojo.require("dojox.image.ThumbnailPicker");
-dojo.require("dojox.image.SlideShow");
-
-dojo.declare("dojox.image.Gallery",
-	[dijit._Widget, dijit._Templated],
+return dojo.declare("dojox.image.Gallery",
+	[_Widget, _TemplatedMixin],
 	{
 	// summary:
 	//		Gallery widget that wraps a dojox.image.ThumbnailPicker and dojox.image.SlideShow widget
@@ -30,7 +30,7 @@ dojo.declare("dojox.image.Gallery",
 		
 	// pageSize: Number
 	//		The number of records to retrieve from the data store per request.
-	pageSize: dojox.image.SlideShow.prototype.pageSize,
+	pageSize: SlideShow.prototype.pageSize,
 	
 	// autoLoad: Boolean
 	//		If true, images are loaded before the user views them. If false, an
@@ -61,7 +61,7 @@ dojo.declare("dojox.image.Gallery",
 	//		Time, in seconds, between image changes in the slide show.
 	slideshowInterval: 3,
 	
-	templateString: dojo.cache("dojox.image", "resources/Gallery.html"),
+	templateString: template,
 
 	postCreate: function(){
 		// summary:
@@ -69,7 +69,7 @@ dojo.declare("dojox.image.Gallery",
 		this.widgetid = this.id;
 		this.inherited(arguments)
 		
-		this.thumbPicker = new dojox.image.ThumbnailPicker({
+		this.thumbPicker = new ThumbnailPicker({
 			linkAttr: this.linkAttr,
 			imageLargeAttr: this.imageLargeAttr,
 			imageThumbAttr: this.imageThumbAttr,
@@ -79,7 +79,7 @@ dojo.declare("dojox.image.Gallery",
 		}, this.thumbPickerNode);
 		
 		
-		this.slideShow = new dojox.image.SlideShow({
+		this.slideShow = new SlideShow({
 			imageHeight: this.imageHeight,
 			imageWidth: this.imageWidth,
 			autoLoad: this.autoLoad,
@@ -186,4 +186,6 @@ dojo.declare("dojox.image.Gallery",
 			dojo.style(this.thumbPicker.outerNode, "marginLeft", (diff * -1) + "px");
 		}
 	}
+});
+
 });
