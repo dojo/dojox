@@ -60,6 +60,10 @@ define([
 		//		The steps between labelFrom and labelTo.
 		step: 1,
 
+		// pageStep: Number
+		//		The number of element in a page when using pageup/pagedown keys to navigate with the keyboard.
+		pageSteps: 1,
+
 		/* internal properties */
 		baseClass: "mblSpinWheelSlot",
 		// maxSpeed: [private] Number
@@ -258,12 +262,36 @@ define([
 		},
 
 		_onKeyDown: function(e){
-			if(!e || e.type !== "keydown"){ return; }
-			if(e.keyCode === 40){ // down arrow key
-				this.spin(-1);
-			}else if(e.keyCode === 38){ // up arrow key
-				this.spin(1);
+			if(!e || e.type !== "keydown" || e.altKey || e.ctrlKey || e.shiftKey){
+				return true;
 			}
+			switch(e.keyCode){
+			case 38://up arrow key
+			case 39://right arrow key
+			{
+				this.spin(1);
+				e.stopPropagation();
+				return false;
+			}
+			case 40://down arrow key
+			case 37://left arrow key
+			{
+				this.spin(-1);
+				e.stopPropagation();
+				return false;
+			}
+			case 33:{//pageup
+				this.spin(this.pageSteps);
+				e.stopPropagation();
+				return false;
+			}
+			case 34:{//pagedown
+				this.spin(-1 * this.pageSteps);
+				e.stopPropagation();
+				return false;
+			}
+			}
+			return true;
 		},
 
 		_getCenterPanel: function(){
