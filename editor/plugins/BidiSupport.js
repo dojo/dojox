@@ -138,7 +138,6 @@ define([
 			if(this.disabled){
 				return;
 			}
-			this.editor.focus();
 			var sel = rangeapi.getSelection(this.editor.window);
 			if(!sel || sel.rangeCount == 0){
 				return;
@@ -245,7 +244,6 @@ define([
 				this.editor.addKeyHandler('9', 1, 0, h); //Ctrl-9
 				this.editor.addKeyHandler('8', 1, 0, hl); //Ctrl-8
 				this.editor.addKeyHandler('0', 1, 0, hr); //Ctrl-0
-				
 				for(i = 0; i < edPlugins.length; i++){
 					p = edPlugins[i];
 					if (!p){
@@ -1984,7 +1982,9 @@ define([
 					}
 					if((this._hasTag(sibling,"BR") || sibling.nodeType == 8) && !div.hasChildNodes())
 						div.innerHTML = this.bogusHtmlContent;
-					if(sibling.nodeType != 8){
+					if(this._hasTag(sibling,"BR") && has("ie")){
+						sibling.parentNode.removeChild(sibling);
+					}else if(sibling.nodeType != 8){
 						div.appendChild(sibling);
 					}else{
 						sibling.parentNode.removeChild(sibling);
