@@ -7,14 +7,11 @@ define([
 	"dijit/registry",
 	"dijit/_Contained",
 	"dijit/_WidgetBase",
-	"dojox/mobile/i18n",
 	"dojo/i18n!dojox/mobile/nls/messages"
-], function(connect, declare, dom, domClass, domConstruct, registry, Contained, WidgetBase, i18n, messages){
+], function(connect, declare, dom, domClass, domConstruct, registry, Contained, WidgetBase, messages){
 
 	// module:
 	//		dojox/mobile/PageIndicator
-
-	var bundle = i18n.registerBundle(messages);
 
 	return declare("dojox.mobile.PageIndicator", [WidgetBase, Contained],{
 		// summary:
@@ -86,7 +83,7 @@ define([
 				}
 			}
 			if (r.cells.length)  {
-				this.domNode.setAttribute("alt", bundle["PageIndicatorLabel"].replace("$0", value).replace("$1", r.cells.length));
+				this.domNode.setAttribute("alt", messages["PageIndicatorLabel"].replace("$0", value).replace("$1", r.cells.length));
 			} else {
 				this.domNode.removeAttribute("alt");
 			}
