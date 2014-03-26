@@ -1,24 +1,26 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
 	<title>dojox.image.LightboxNano Tests | The Dojo Toolkit</title>
-
+	<meta charset="utf-8">
 	<style type="text/css">
 	@import "../../../dojo/resources/dojo.css";
 	@import "../../../dijit/tests/css/dijitTests.css";
 	@import "../../../dijit/themes/tundra/tundra.css";
+	@import "../resources/LightboxNano.css";
 	.wrapper{width:800px;}
 	img{border:#666 solid 2px;}
 	.pic1{float:right;margin:0 0 10px 10px;}
 	.pic2{float:left;margin:0 10px 10px 0;}
 	.pic3{margin:0 auto;width:240px;}
-	a:hover .dojoxEnlarge{display:block !important;}
-	.dojoxEnlarge{background:url(images/enlarge.png) no-repeat 0 0;top:-5px;left:-5px;width:16px;height:16px;}
-	.dojoxLoading{
+	a:hover .nano-enlarge{display:block !important;}
+	.nano-enlarge{background:url(images/enlarge.png) no-repeat 0 0;top:-5px;left:-5px;width:16px;height:16px;}
+	.nano-loading{
 		background:#333 url(images/loading-dark.gif) no-repeat center center;
 		border-radius:5px;
 		-moz-border-radius:5px;
 		-webkit-border-radius:5px;
+		border-radius:5px;
 		border:2px solid #000;
 		height:24px;
 		filter:alpha(opacity=80);
@@ -29,27 +31,23 @@
 	</style>
 
 	<script type="text/javascript" src="../../../dojo/dojo.js"
-		data-dojo-config="isDebug:true, parseOnLoad:true"></script>
+		data-dojo-config="async: true, isDebug:true, parseOnLoad:true"></script>
 
 	<script type="text/javascript">
-	dojo.require("dojo.parser");
-	dojo.require("dojox.image.LightboxNano");
-	
-	dojo.addOnLoad(function(){
+	require(["dojo/query", "dojo/on", "dojox/image/LightboxNano", "dojo/parser", "dojo/domReady!"], function(query, on, LightboxNano) {
 		
 		// programmatic example
-		var w = new dojox.image.LightboxNano({
+		var w = new LightboxNano({
 			href: "images/chris3_lg.jpg"
 		}, "pic3");
 		
 		// a dynamic, singletonish Nano
-		var n = new dojox.image.LightboxNano();
-		dojo.query(".progButton1").onclick(function(e){
+		var n = new LightboxNano();
+		query(".progButton1").on("click", function(e){
 			e.preventDefault();
 			n.show({ href:"images/chris3_lg.jpg", origin: e.target });
 		});
-		
-		dojo.query(".progButton2").onclick(function(e){
+		query(".progButton2").on("click", function(e){
 			e.preventDefault();
 			n.show({ href:"images/chris3_lg.jpg" });
 		});
@@ -72,7 +70,7 @@
 
 	<h2>Declarative example on a &lt;img&gt; tag.</h2>
 
-	<p><img class="pic1" dojoType="dojox.image.LightboxNano" src="images/chris1_sm.jpg" href="images/chris1_lg.jpg">
+	<p><img class="pic1" data-dojo-type="dojox/image/LightboxNano" src="images/chris1_sm.jpg" href="images/chris1_lg.jpg">
 	In est magna, rutrum ut, consectetuer eget, iaculis sit amet, augue. Aliquam sagittis, felis sit
 	amet pharetra gravida, nunc lacus placerat sem, ac vulputate massa leo ut sapien. Nulla eget augue.
 	Nunc magna urna, vehicula eu, luctus eu, gravida at, velit. Phasellus enim. Integer placerat
@@ -93,7 +91,7 @@
 
 	<h2>Declarative example on a &lt;a&gt; tag.</h2>
 
-	<p><a class="pic2" data-dojo-id="lightboxNano2" dojoType="dojox.image.LightboxNano" href="images/chris2_lg.jpg"><img src="images/chris2_sm.jpg"></a>
+	<p><a class="pic2" data-dojo-id="lightboxNano2" data-dojo-type="dojox/image/LightboxNano" href="images/chris2_lg.jpg"><img src="images/chris2_sm.jpg"></a>
 	Nullam velit justo, aliquam sit amet, euismod sit amet, fermentum nec, pede. Proin sit amet
 	turpis tincidunt turpis posuere posuere. Donec ante. Donec ipsum. Morbi non lectus. Nullam rhoncus,
 	est in facilisis tincidunt, elit tortor aliquet velit, ut posuere nulla ipsum at tellus. Quisque
