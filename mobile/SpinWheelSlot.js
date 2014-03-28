@@ -507,20 +507,26 @@ define([
 			}
 			if(this.getParent()._duringStartup){
 				duration = 0; // to reduce flickers at start-up especially on android
+				// No scroll animation at startup. This avoids flickering especially on Android,
+				// and avoids the issue in #17775.
 			}else if(Math.abs(this._speed.y) < 40){
 				duration = 0.2;
 			}
-			this.inherited(arguments, [to, duration, easing]); // 2nd arg is to avoid excessive optimization by closure compiler
-			if(this.getParent()._duringStartup && !this._onFlickAnimationStartCalled){
-				// during startup, because of duration set to 0, if onFlickAnimationStart() 
-				// has not been called (depends on scrollType value), the call of 
-				// onFlickAnimationEnd is missing, hence:
-				this.onFlickAnimationEnd();
-			}else if(!this._onFlickAnimationStartCalled){
-				// if onFlickAnimationStart() wasn't called, and if slideTo() didn't call
-				// itself onFlickAnimationEnd():
-				this._duringSlideTo = false;
-				// (otherwise, wait for onFlickAnimationEnd which deletes the flag)
+			if(duration && duration > 0){
+				this.inherited(arguments, [to, duration, easing]); // 2nd arg is to avoid excessive optimization by closure compiler
+				if(!this._onFlickAnimationStartCalled){
+					// if slideTo() didn't call itself (synchronously) onFlickAnimationEnd():
+					this._duringSlideTo = false;
+					// (otherwise, wait for onFlickAnimationEnd which deletes the flag)
+				}
+			}else{
+				// #17775: at startup, no scroll animation, because it is not needed ergonomically,
+				// and because the animation would imply an asynchrouns notification of 
+				// onFlickAnimationEnd() which would forbid resetting the value right after startup.
+				// this.onFlickAnimationStart(); // not called by scrollTo()
+				this.onFlickAnimationStart(); // not called by scrollTo()
+				this.scrollTo(to, true);
+				this.onFlickAnimationEnd(); // not called by scrollTo()
 			}
 		}
 	});
