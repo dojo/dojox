@@ -12,6 +12,8 @@
 	require([
 		"dojox/mobile/parser",
 		"dojo/ready",
+		"dojo/on",
+		"dojo/aspect",
 		"dijit/registry",
 		"doh/runner",
 		"dojox/mobile/Heading",
@@ -19,7 +21,7 @@
 		"dojox/mobile",
 		"dojox/mobile/View",
 		"dojox/mobile/compat"
-	], function(parser, ready, registry, runner, Heading, ListItem){
+	], function(parser, ready, on, aspect, registry, runner, Heading, ListItem){
 
 		// This main purpose of this test is to check the correct handling of 
 		// calls AFTER startup of setters for the following properties of ListItem:
@@ -142,6 +144,13 @@
 						var widget = _createListItem2();
 						_assertCorrectListItem(widget, true, "touch", 
 							"ListItem created with clickable at true");
+						// check the keyboard event handler is registered once (#17825)
+						var c = 0;
+						aspect.after(widget, "_onClick", function(){
+							++c;
+						})
+						on.emit(widget.domNode, "keydown", { keyCode: 13, type: "keydown"});
+						runner.assertEqual(1, c, "Unexpected onClick() calls count.");
 					}
 				},
 				{
