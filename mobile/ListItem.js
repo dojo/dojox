@@ -185,11 +185,6 @@ define([
 					return (e.target !== this.labelNode);
 				};
 			}
-			if(opts.moveTo || opts.href || opts.url || this.clickable || (parent && parent.select)){
-				this.connect(this.domNode, "onkeydown", "_onClick"); // for desktop browsers
-			}else{
-				this._handleClick = false;
-			}
 
 			this.inherited(arguments);
 			
