@@ -174,7 +174,7 @@ define([
 				if(!this._useTopLeft){
 					if(this._useTransformTransition){
 						this._ch.push(connect.connect(this.domNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
-						this._ch.push(connect.connect(this.domNode, css3.name("transitionStart"), this, "onFlickAnimationStart"));
+						// Note that there is no transitionstart event (#17822).
 					}else{
 						this._ch.push(connect.connect(this.domNode, css3.name("animationEnd"), this, "onFlickAnimationEnd"));
 						this._ch.push(connect.connect(this.domNode, css3.name("animationStart"), this, "onFlickAnimationStart"));
@@ -191,7 +191,7 @@ define([
 					}
 				}else{
 					this._ch.push(connect.connect(this.domNode, css3.name("transitionEnd"), this, "onFlickAnimationEnd"));
-					this._ch.push(connect.connect(this.domNode, css3.name("transitionStart"), this, "onFlickAnimationStart"));
+					// Note that there is no transitionstart event (#17822).
 				}
 			}
 
@@ -386,7 +386,9 @@ define([
 		},
 
 		onFlickAnimationStart: function(e){
-			event.stop(e);
+			if(e){
+				event.stop(e);
+			}
 		},
 
 		onFlickAnimationEnd: function(e){
@@ -1239,6 +1241,7 @@ define([
 						if(to.y === undefined){ to.y = from.y; }
 						 // make sure we actually change the transform, otherwise no webkitTransitionEnd is fired.
 						if(to.x !== from.x || to.y !== from.y){
+							this.onFlickAnimationStart(); // needed because there is no transitionstart event.
 							domStyle.set(node, css3.add({}, {
 								transitionProperty: css3.name("transform"),
 								transitionDuration: duration + "s",
@@ -1270,17 +1273,27 @@ define([
 							this.scrollScrollBarTo(to);
 						}
 					}
-				}else{
+				}else if(to.x !== undefined || to.y !== undefined){
+					this.onFlickAnimationStart(); // #17822: needed because there is no transitionstart event.
 					domStyle.set(node, css3.add({}, {
-						transitionProperty: "top, left",
+						// #17822: when scrolling on one direction, avoid unnecessarily animating 
+						// both top and left, because this leads to two transitionend events fired 
+						// instead of one in some browsers (Safari/iOS7 at least).
+						transitionProperty: (to.x !== undefined && to.y !== undefined) ?
+							"top, left" :
+							to.y !== undefined ? "top" : "left",
 						transitionDuration: duration + "s",
 						transitionTimingFunction: easing
 					}));
 					setTimeout(function(){ // setTimeout is needed to prevent webkitTransitionEnd not fired
-						domStyle.set(node, {
-							top: (to.y || 0) + "px",
-							left: (to.x || 0) + "px"
-						});
+						var style = {};
+						if(to.x !== undefined){
+							style.left = to.x + "px";
+						}
+						if(to.y !== undefined){
+							style.top = to.y + "px";
+						}
+						domStyle.set(node, style);
 					}, 0);
 					domClass.add(node, "mblScrollableScrollTo"+idx);
 				}
