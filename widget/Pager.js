@@ -122,30 +122,18 @@ return declare("dojox.widget.Pager",
 			case keys.RIGHT_ARROW:
 			case 110:
 			case 78: // key "n"
-			// Bidi Support
-			if(!this.isLeftToRight()){
+				// Bidi Support
 				e.preventDefault();
-				this._pagerPrevious();
+				this._next();
 				break;
-			}else{
-				e.preventDefault();
-				this._pagerNext();
-				break;
-			}
 			case keys.DOWN_ARROW:
 			case keys.LEFT_ARROW:
 			case 112:
 			case 80: // key "p"
-			// Bidi Support
-			if(!this.isLeftToRight()){
+				// Bidi Support
 				e.preventDefault();
-				this._pagerNext();
+				this._previous();
 				break;
-			}else{
-				e.preventDefault();
-				this._pagerPrevious();
-				break;
-			}
 			case keys.ENTER:
 			// Bidi Support
 			if(!this.isLeftToRight()){
