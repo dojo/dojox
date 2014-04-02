@@ -74,6 +74,28 @@ return declare("dojox.widget.Pager",
 		});
 	},
 
+	// Bidi Support
+	_next: function(){
+		// summary:
+		//		Handle next behavior depends on widget direction
+		if(!this.isLeftToRight()){
+			this._pagerPrevious();
+		}else{
+			this._pagerNext();
+		}
+	},
+	
+	// Bidi Support
+	_previous: function(){
+		// summary:
+		//		Handle previous behavior depends on widget direction
+		if(!this.isLeftToRight()){
+			this._pagerNext();
+		}else{
+			this._pagerPrevious();
+		}
+	},
+
 	postCreate: function(){
 		this.inherited(arguments);
 		this.store.fetch({
@@ -100,24 +122,25 @@ return declare("dojox.widget.Pager",
 			case keys.RIGHT_ARROW:
 			case 110:
 			case 78: // key "n"
+				// Bidi Support
 				e.preventDefault();
-				this._pagerNext();
+				this._next();
 				break;
-
 			case keys.DOWN_ARROW:
 			case keys.LEFT_ARROW:
 			case 112:
 			case 80: // key "p"
+				// Bidi Support
 				e.preventDefault();
-				this._pagerPrevious();
+				this._previous();
 				break;
-
 			case keys.ENTER:
+			// Bidi Support
 				switch(e.target){
-					case this.pagerNext : this._pagerNext(); break;
-					case this.pagerPrevious : this._pagerPrevious(); break;
-				}
-				break;
+					case this.pagerNext : this._next(); break;
+					case this.pagerPrevious : this._previous(); break;
+					}
+					break;
 		}
 	},
 
@@ -329,7 +352,12 @@ return declare("dojox.widget.Pager",
 						}
 
 						var position = (style.get(this.pagerContainer, 'width')/2)-(this.iconWidth/2);
-						style.set(this.pagerContainerStatus, 'paddingLeft', position+'px');
+						// Bidi Support
+						if(!this.isLeftToRight()){
+						      style.set(this.pagerContainerStatus, 'paddingRight', position+'px');
+						}else{
+						      style.set(this.pagerContainerStatus, 'paddingLeft', position+'px');
+						}
 					}else{
 						if (this.statusPos == 'trailing'){
 							if (this.pagerPos == 'center'){
