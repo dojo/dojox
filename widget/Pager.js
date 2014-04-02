@@ -136,11 +136,11 @@ return declare("dojox.widget.Pager",
 				break;
 			case keys.ENTER:
 			// Bidi Support
-			switch(e.target){
-				case this.pagerNext : this._next(); break;
-				case this.pagerPrevious : this._previous(); break;
-				}
-				break;
+				switch(e.target){
+					case this.pagerNext : this._next(); break;
+					case this.pagerPrevious : this._previous(); break;
+					}
+					break;
 		}
 	},
 
