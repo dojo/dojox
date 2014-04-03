@@ -70,7 +70,7 @@ define([
 		pageIndicator: true,
 
 		// navButton: [const] Boolean
-		//		If true, navigation buttons are displyed on the title bar.
+		//		If true, navigation buttons are displayed on the title bar.
 		//		Note that changing the value of the property after the widget
 		//		creation has no effect.
 		navButton: false,
@@ -94,7 +94,7 @@ define([
 		baseClass: "mblCarousel",
 
 		buildRendering: function(){
-			this.containerNode = domConstruct.create("div", {className: "mblCarouselPages"});
+			this.containerNode = domConstruct.create("div", {className: "mblCarouselPages", id: this.id + "_pages"});
 			this.inherited(arguments);
 			var i;
 			if(this.srcNodeRef){
@@ -114,12 +114,14 @@ define([
 				this.prevBtnNode = domConstruct.create("button", {
 					className: "mblCarouselBtn",
 					title: messages["CarouselPrevious"],
-					innerHTML: "&lt;"
+					innerHTML: "&lt;",
+					"aria-controls": this.containerNode.id
 				}, this.btnContainerNode);
 				this.nextBtnNode = domConstruct.create("button", {
 					className: "mblCarouselBtn",
 					title: messages["CarouselNext"],
-					innerHTML: "&gt;"
+					innerHTML: "&gt;",
+					"aria-controls": this.containerNode.id
 				}, this.btnContainerNode);
 				this._prevHandle = this.connect(this.prevBtnNode, "onclick", "onPrevBtnClick");
 				this._nextHandle = this.connect(this.nextBtnNode, "onclick", "onNextBtnClick");
