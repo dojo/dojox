@@ -61,7 +61,7 @@ define([
 		step: 1,
 
 		// pageStep: Number
-		//		The number of element in a page when using pageup/pagedown keys to navigate with the keyboard.
+		//		The number of items in a page when using pageup/pagedown keys to navigate with the keyboard.
 		pageSteps: 1,
 
 		/* internal properties */
