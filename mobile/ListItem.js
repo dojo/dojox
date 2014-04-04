@@ -354,7 +354,7 @@ define([
 						var t = Math.round((domNode.offsetHeight - n.offsetHeight) / 2) -
 							domStyle.get(domNode, "paddingTop");
 						n.style.marginTop = t + "px";
-					}
+					};
 					if(n.offsetHeight === 0 && n.tagName === "IMG"){
 						n.onload = f;
 					}else{

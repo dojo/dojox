@@ -97,7 +97,7 @@ define([
 							}
 						}
 						return dic;
-					}
+					};
 					this._domButtons = findDomButtons();
 				}else{
 					this._domButtons = {};
