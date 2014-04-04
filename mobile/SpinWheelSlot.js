@@ -213,8 +213,6 @@ define([
 					domClass.add(this.previousCenterItem, "mblSelectedSlotItem");
 				}
 			}
-			this.touchNode.setAttribute("aria-valuemin", 0);
-			this.touchNode.setAttribute("aria-valuemax", this.labels.length );
 		},
 
 		initLabels: function(){
