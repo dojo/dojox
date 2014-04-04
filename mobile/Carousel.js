@@ -17,8 +17,9 @@ define([
 	"./PageIndicator",
 	"./SwapView",
 	"require",
-	"dojo/has!dojo-bidi?dojox/mobile/bidi/Carousel"
-], function(array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel){
+	"dojo/has!dojo-bidi?dojox/mobile/bidi/Carousel",
+	"dojo/i18n!dojox/mobile/nls/messages"
+], function(array, connect, declare, event, lang, has, domClass, domConstruct, domStyle, registry, Contained, Container, WidgetBase, lazyLoadUtils, CarouselItem, PageIndicator, SwapView, require, BidiCarousel, messages){
 
 	// module:
 	//		dojox/mobile/Carousel
@@ -69,7 +70,7 @@ define([
 		pageIndicator: true,
 
 		// navButton: [const] Boolean
-		//		If true, navigation buttons are displyed on the title bar.
+		//		If true, navigation buttons are displayed on the title bar.
 		//		Note that changing the value of the property after the widget
 		//		creation has no effect.
 		navButton: false,
@@ -93,7 +94,7 @@ define([
 		baseClass: "mblCarousel",
 
 		buildRendering: function(){
-			this.containerNode = domConstruct.create("div", {className: "mblCarouselPages"});
+			this.containerNode = domConstruct.create("div", {className: "mblCarouselPages", id: this.id + "_pages"});
 			this.inherited(arguments);
 			var i;
 			if(this.srcNodeRef){
@@ -112,13 +113,15 @@ define([
 				domStyle.set(this.btnContainerNode, "float", "right"); // workaround for webkit rendering problem
 				this.prevBtnNode = domConstruct.create("button", {
 					className: "mblCarouselBtn",
-					title: "Previous",
-					innerHTML: "&lt;"
+					title: messages["CarouselPrevious"],
+					innerHTML: "&lt;",
+					"aria-controls": this.containerNode.id
 				}, this.btnContainerNode);
 				this.nextBtnNode = domConstruct.create("button", {
 					className: "mblCarouselBtn",
-					title: "Next",
-					innerHTML: "&gt;"
+					title: messages["CarouselNext"],
+					innerHTML: "&gt;",
+					"aria-controls": this.containerNode.id
 				}, this.btnContainerNode);
 				this._prevHandle = this.connect(this.prevBtnNode, "onclick", "onPrevBtnClick");
 				this._nextHandle = this.connect(this.nextBtnNode, "onclick", "onNextBtnClick");
