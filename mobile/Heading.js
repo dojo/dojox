@@ -238,6 +238,7 @@ define([
 			//		private
 			this._set("label", label);
 			this.labelNode.innerHTML = this.labelDivNode.innerHTML = this._cv ? this._cv(label) : label;
+			delete this.labelNodeLen;
 		},
 
 		_setBusyAttr: function(/*Boolean*/busy){
