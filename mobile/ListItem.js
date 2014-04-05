@@ -126,6 +126,12 @@ define([
 		//		A css class name to add to the progress indicator.
 		progStyle: "",
 
+		// resizeHeight: Boolean
+		//		If true, call to resize() will force computation of item Height. You should not need this as in most 
+		//		cases ListItem height doesn't change when the container resizes. Depending on number and complexity
+		//		of items in a view, setting to true may have a high impact on performances under certain circumstances.
+		resizeHeight: false,
+
 		/* internal properties */	
 		// The following properties are overrides of those in _ItemBase.
 		paramsToInherit: "variableHeight,transition,deleteIcon,icon,rightIcon,rightIcon2,uncheckIcon,arrowClass,checkClass,uncheckClass,deleteIconTitle,deleteIconRole",
@@ -269,6 +275,9 @@ define([
 		},
 
 		resize: function(){
+			if(this.resizeHeight && this.variableHeight){
+				this.layoutVariableHeight();
+			}
 			// labelNode may not exist only when using a template (if not created by an attach point)
 			if(!this._templated || this.labelNode){
 				// If labelNode is empty, shrink it so as not to prevent user clicks.
@@ -350,7 +359,7 @@ define([
 						var t = Math.round((domNode.offsetHeight - n.offsetHeight) / 2) -
 							domStyle.get(domNode, "paddingTop");
 						n.style.marginTop = t + "px";
-					}
+					};
 					if(n.offsetHeight === 0 && n.tagName === "IMG"){
 						n.onload = f;
 					}else{
