@@ -116,7 +116,18 @@ define([
 			this.inherited(arguments);
 			domAttr.remove(this.domNode, "aria-owns");
 			domAttr.set(this.domNode, "aria-expanded", "false");
+			
+			var bgIframe = this.dropDown ? this.dropDown.bgIframe : undefined;
+			// Avoid failure in dijit/popup.close().
+			// (Same trick as in _ComboBoxMenu.destroyRendering().)
+			this.dropDown.bgIframe = false;
+			
 			popup.close(this.dropDown);
+			
+			if(this.dropDown){
+				this.dropDown.bgIframe = bgIframe; // restore
+			}
+			
 			this._opened = false;
 
 			// Remove disable attribute to make input element clickable after context menu closed
