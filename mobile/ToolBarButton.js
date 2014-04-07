@@ -157,7 +157,7 @@ define([
 			//		Makes this widget in the selected or unselected state.
 			var replace = function(node, a, b){
 				domClass.replace(node, a + " " + a + "45", b + " " + b + "45");
-			}
+			};
 			this.inherited(arguments);
 			if(selected){
 				domClass.replace(this.bodyNode, this.selColor, this.defaultColor);

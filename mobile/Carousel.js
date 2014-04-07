@@ -96,7 +96,7 @@ define([
 		buildRendering: function(){
 			this.containerNode = domConstruct.create("div", {className: "mblCarouselPages", id: this.id + "_pages"});
 			this.inherited(arguments);
-			var i;
+			var i, len;
 			if(this.srcNodeRef){
 				// reparent
 				for(i = 0, len = this.srcNodeRef.childNodes.length; i < len; i++){
@@ -183,7 +183,7 @@ define([
 		resizeItems: function(){
 			// summary:
 			//		Resizes the child items of the carousel.
-			var idx = 0, i;
+			var idx = 0, i, len;
 			var h = this.domNode.offsetHeight - (this.headerNode ? this.headerNode.offsetHeight : 0);
 			var m = (has("ie") < 10) ? 5 / this.numVisible - 1 : 5 / this.numVisible;
 			var node, item;
@@ -280,7 +280,7 @@ define([
 			this.items = items;
 			var nPages = Math.ceil(items.length / this.numVisible),
 				i, h = this.domNode.offsetHeight - this.headerNode.offsetHeight,
-				idx = this.selectedItemIndex === -1 ? 0 : this.selectedItemIndex;
+				idx = this.selectedItemIndex === -1 ? 0 : this.selectedItemIndex,
 				pg = Math.floor(idx / this.numVisible); // current page
 			for(i = 0; i < nPages; i++){
 				var w = new SwapView({height: h + "px", lazy:true});

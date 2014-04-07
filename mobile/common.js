@@ -350,7 +350,7 @@ define([
 						connect.disconnect(_conn);
 						_f(e);
 					});
-				}
+				};
 				curSize = dm.getScreenSize();
 			};
 			// Android: Watch for resize events when the virtual keyboard is shown/hidden.
