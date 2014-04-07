@@ -1,0 +1,64 @@
+@import url("../common/transitions/slide.css");
+
+@import url("../common/transitions/flip.css");
+
+@import url("../common/transitions/fade.css");
+/* dojox.mobile.View */
+.mblView {
+  position: relative; 
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+.mblView.mblIn {
+  position: absolute;
+}
+/* Dojo 1.9 version:
+.mblView {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+.mblFixedHeaderBar {
+  z-index: 1;
+}
+.mblFixedBottomBar {
+  position: absolute !important;
+  width: 100%;
+  z-index: 1;
+}
+ */
+
+/* Fixed bars are only supported as direct children of the View.
+ * Hence, to ensure position: absolute is in a more specific selector
+ * (avoiding for instance that mblTabBar's position: relative takes
+ * priority): 
+ */
+.mblView > .mblFixedTopBar {
+  z-index: 1;
+  /*
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  top: 0;
+  left: 0;
+  */
+}
+/* Fixed bars are only supported as direct children of the View.
+ * Hence, to ensure position: absolute is in a more specific selector
+ * (avoiding for instance that mblTabBar's position: relative takes
+ * priority): 
+ */
+.mblView > .mblFixedBottomBar {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+.mblViewContainer {
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+}
