@@ -1,14 +1,16 @@
 /* dojox.mobile.ComboBox */
 .dijitPopup {
-	// Popup items have a wrapper div (dijitPopup)
-	// with the real popup inside, and maybe an iframe too
-	margin: 0;
-	padding: 0;
-	position: absolute;
-	border: 0;
-	background-color: transparent;
-	.box-shadow(@mbl-combo-box-popup-box-shadow);
-	.dijitPopup-styles;
+	&.mblComboBoxMenuPopup {
+		// Popup items have a wrapper div (dijitPopup)
+		// with the real popup inside, and maybe an iframe too
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		border: 0;
+		background-color: transparent;
+		.box-shadow(@mbl-combo-box-popup-box-shadow);
+		.dijitPopup-styles;
+	}
 }
 .mblReset {
 	margin: 0;

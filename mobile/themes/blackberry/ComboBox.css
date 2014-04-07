@@ -1,5 +1,5 @@
 /* dojox.mobile.ComboBox */
-.dijitPopup {
+.dijitPopup.mblComboBoxMenuPopup {
   margin: 0;
   padding: 0;
   position: absolute;
