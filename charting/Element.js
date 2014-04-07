@@ -109,7 +109,10 @@ define(["dojo/_base/array", "dojo/dom-construct","dojo/_base/declare", "dojox/gf
 				}
 			}else{
 				this.group = creator.createGroup();
-				if (this.renderingOptions && this.group.rawNode) {
+				// in some cases we have a rawNode but this is not an actual DOM element (CanvasWithEvents) so check
+				// the actual rawNode type.
+				if (this.renderingOptions && this.group.rawNode && 
+					this.group.rawNode.namespaceURI == "http://www.w3.org/2000/svg") {
 					for (var key in this.renderingOptions) {
 						this.group.rawNode.setAttribute(key, this.renderingOptions[key]);
 					}
