@@ -126,11 +126,11 @@ define([
 		//		A css class name to add to the progress indicator.
 		progStyle: "",
 
-		// resizeHeight: Boolean
+		// layoutOnResize: Boolean
 		//		If true, call to resize() will force computation of item Height. You should not need this as in most 
-		//		cases ListItem height doesn't change when the container resizes. Depending on number and complexity
-		//		of items in a view, setting to true may have a high impact on performances under certain circumstances.
-		resizeHeight: false,
+		//		cases ListItem height doesn't change on container resize. Depending on number and complexity
+		//		of items in a view, setting to true may have a high impact on performance.
+		layoutOnResize: false,
 
 		/* internal properties */	
 		// The following properties are overrides of those in _ItemBase.
@@ -275,7 +275,7 @@ define([
 		},
 
 		resize: function(){
-			if(this.resizeHeight && this.variableHeight){
+			if(this.layoutOnResize && this.variableHeight){
 				this.layoutVariableHeight();
 			}
 			// labelNode may not exist only when using a template (if not created by an attach point)
