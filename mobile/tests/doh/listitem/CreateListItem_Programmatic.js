@@ -49,4 +49,10 @@ dojo.addOnLoad(function(){
 
 	demoWidget = new dojox.mobile.ListItem({label:" Set unlock pattern"});
 	list.addChild(demoWidget);
+
+	demoWidget = new dojox.mobile.ListItem({variableHeight:"true", label:" VariableHeight resizable..."});
+	list.addChild(demoWidget);
+
+	demoWidget = new dojox.mobile.ListItem({variableHeight:"true", label:" VariableHeight resizable..."});
+	list.addChild(demoWidget);
 });

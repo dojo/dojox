@@ -131,6 +131,12 @@ define([
 		//		A css class name to add to the progress indicator.
 		progStyle: "",
 
+		// layoutOnResize: Boolean
+		//		If true, call to resize() will force computation of item Height. You should not need this as in most 
+		//		cases ListItem height doesn't change on container resize. Depending on number and complexity
+		//		of items in a view, setting to true may have a high impact on performance.
+		layoutOnResize: false,
+
 		/* internal properties */	
 		// The following properties are overrides of those in _ItemBase.
 		paramsToInherit: "variableHeight,transition,deleteIcon,icon,rightIcon,rightIcon2,uncheckIcon,arrowClass,checkClass,uncheckClass,deleteIconTitle,deleteIconRole",
@@ -269,10 +275,9 @@ define([
 		},
 
 		resize: function(){
-			if(this.variableHeight){
+			if(this.layoutOnResize && this.variableHeight){
 				this.layoutVariableHeight();
 			}
-
 			// labelNode may not exist only when using a template (if not created by an attach point)
 			if(!this._templated || this.labelNode){
 				// If labelNode is empty, shrink it so as not to prevent user clicks.
