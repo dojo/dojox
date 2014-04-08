@@ -1357,8 +1357,7 @@ define([
 			//		This function creates a mask that hides corners of one scroll
 			//		bar edge to make it round edge. The other side of the edge is
 			//		always visible and round shaped with the border-radius style.
-			if(!(has("webkit")||has("svg"))){ return; }
-			//var ctx;
+			if(!(has("roundedImageMask"))){ return; }
 			if(this._scrollBarWrapperV){
 				var h = this._scrollBarWrapperV.offsetHeight;
 				maskUtils.createRoundMask(this._scrollBarWrapperV, 0, 0, 0, 0, 5, h, 2, 2, 0.5);
