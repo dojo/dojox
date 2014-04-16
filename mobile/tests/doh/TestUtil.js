@@ -244,4 +244,7 @@ function verifyTabBarButton(id, text, classNames, visibility1, visibility2, regE
 		console.log("There is no iconNode2. id=" + id);
 	}
 	doh.assertEqual(text, dojo.trim(demoWidget.labelNode.innerHTML), "id=" +id);
+	if(demoWidget.badgeObj){
+		doh.assertEqual(demoWidget.badgeObj.className, demoWidget.badgeClass, "Unexpected badge className. id=" + id);
+	}
 }

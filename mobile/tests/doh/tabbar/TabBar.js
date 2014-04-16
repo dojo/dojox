@@ -44,6 +44,10 @@ dojo.addOnLoad(function(){
 					demoWidget = dijit.byId("dojox_mobile_TabBarButton_6");
 					verifyRect(demoWidget.iconNode1.childNodes[0], "0px", "29px", "29px", "0px");
 					verifyRect(demoWidget.iconNode2.childNodes[0], "29px", "29px", "58px", "0px");
+
+					verifyTabBarButton("tbbBadge1", 'Foo', ["mblTabBarButton", "mblTabBarButtonHasIcon"], '', '', /tab-icon-16.png/i, /tab-icon-16h.png/i);
+					verifyTabBarButton("tbbBadge2", 'Bar', ["mblTabBarButton", "mblTabBarButtonHasIcon"], '', '', /tab-icon-15.png/i, /tab-icon-15h.png/i);
+
 				}),500);
 				return d;
 			}

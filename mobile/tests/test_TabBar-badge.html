@@ -7,6 +7,7 @@
 	<title>TabBar with badge</title>
 
 	<link href="../themes/common/domButtons/DomButtonRedBadge.css" rel="stylesheet"/>
+	<link href="../themes/common/domButtons/DomButtonBlueBadge.css" rel="stylesheet"/>
 	<script type="text/javascript" src="../deviceTheme.js" data-dojo-config="mblThemeFiles: ['base','TabBar']"></script>
 	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 
@@ -42,7 +43,7 @@
 <body style="padding-top:100px">
 	<ul data-dojo-type="dojox.mobile.TabBar" data-dojo-props='iconBase:"images/tab-icons.png"'>
 		<li id="btn0" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='iconPos1:"0,0,29,29", iconPos2:"29,0,29,29", selected:true, badge:"55"'>Featured</li>
-		<li id="btn1" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='iconPos1:"0,29,29,29", iconPos2:"29,29,29,29"'>Categories</li>
+		<li id="btn1" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='iconPos1:"0,29,29,29", iconPos2:"29,29,29,29", badge:"23", badgeClass:"mblDomButtonBlueBadge"'>Categories</li>
 		<li id="btn2" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='iconPos1:"0,58,29,29", iconPos2:"29,58,29,29"'>Top 25</li>
 		<li id="btn3" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='iconPos1:"0,87,29,29", iconPos2:"29,87,29,29"'>Search</li>
 		<li id="btn4" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props='iconPos1:"0,116,29,29", iconPos2:"29,116,29,29"'>Updates</li>
