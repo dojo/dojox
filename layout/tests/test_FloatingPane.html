@@ -1,29 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
-	<title>dojox.layout.FloatPane - a crude non-modal Floating Window</title>
+	<title>dojox/layout/FloatingPane - a crude non-modal Floating Window</title>
 
+	<!-- FIXME: Clean-up use of non-standard attributes and use data-dojo-props -->
 	<!-- required: a default theme file -->
 	<link rel="stylesheet" id="themeStyles" href="../../../dijit/themes/tundra/tundra.css">
 	<link rel="stylesheet" href="../resources/FloatingPane.css">	
 	<link rel="stylesheet" href="../resources/ResizeHandle.css">
 
 	<!-- required: dojo.js -->
-	<script type="text/javascript" src="../../../dojo/dojo.js" data-dojo-config="isDebug:true, parseOnLoad: true"></script>
+	<script src="../../../dojo/dojo.js" data-dojo-config="async: 1, parseOnLoad: 0, isDebug:true"></script>
 
 	<!-- do not use! only for testing dynamic themes -->
-	<script type="text/javascript" src="../../../dijit/tests/_testCommon.js"></script>
+	<script src="../../../dijit/tests/_testCommon.js"></script>
 
-	<script type="text/javascript">
-		dojo.require("dojox.layout.FloatingPane"); 
-		dojo.require("dijit.layout.TabContainer");
-		dojo.require("dijit.form.ComboBox"); 
-		dojo.require("dijit.form.Button"); 
-		dojo.require("dojo.parser"); // scan page for widgets
-	</script>
-	
-	<style type="text/css">
+	<style>
 		@import "../../../dojo/resources/dojo.css";
 		@import "../../../dijit/tests/css/dijitTests.css";
 
@@ -44,55 +36,19 @@
 			padding:7px;			
 		}
 	</style>
-	<script type="text/javascript">
-
-		function makeFloater() {
-			// programatically created FloatingPane with srcNode ref
-			var tmp = new dojox.layout.FloatingPane({  
-				title: "dynamically created ...",
-				id:"floater3",
-				closeable:true,
-				resizable:true,
-				dockable: false
-			},"nonFloater");
-			tmp.startup(); 
-		}
-
-		var mi = 1;
-		function brandNewFloater(){
-			var node = document.createElement('div');
-			node.innerHTML = dojo.byId('contentHolder').innerHTML;
-			dojo.body().appendChild(node);
-			dojo.addClass(node,"testFixedSize");
-			var tmp = new dojox.layout.FloatingPane({
-				title:" New Floater #"+(mi++),
-				dockable: false,
-				maxable: true,
-				closable: true,
-				resizable: false
-			},node);
-			tmp.startup();
-			tmp.resize({ w:300, h:125 });
-		}
-
-		var vpx, vpy = null;
-		dojo.addOnLoad(makeFloater);
-
-	</script>
-
 </head>
 <body class="tundra">
 
-		<a href="javascript:dijit.byId('floater1').hide()">hide first pane</a> |
-		<a href="javascript:dijit.byId('floater1').show()">show first pane</a> |
-		<a href="javascript:dijit.byId('floater1').minimize()">minimize 'uncloseable, dockable' pane pane</a> |
-		<a href="javascript:brandNewFloater()">new floater</a>
+		<div data-dojo-type="dijit/form/Button" id="hideFirst">hide first pane</div>
+		<div data-dojo-type="dijit/form/Button" id="showFirst">show first pane</div>
+		<div data-dojo-type="dijit/form/Button" id="minimizer">minimize 'uncloseable, dockable' pane</div>
+		<div data-dojo-type="dijit/form/Button" id="newFloater">new floater</div>
 
-		<div dojoType="dojox.layout.FloatingPane" title="Floater test ... " resizable="true" id="floater1" style="position:absolute; width:100px; height:100px; top:100px; left:0px; " duration="300">
+		<div data-dojo-type="dojox/layout/FloatingPane" title="Floater test ... " resizable="true" id="floater1" style="position:absolute; width:100px; height:100px; top:100px; left:0px; " duration="300">
 		<p style="margin:0; padding:10px;">I am the content to be floated around</p>
 		</div>
 
-		<div dojoType="dojox.layout.FloatingPane" title="un-closable, dockable" style="width:200px; position:absolute; top:100px; left:100px;" closable="false" id="floater2">
+		<div data-dojo-type="dojox/layout/FloatingPane" title="un-closable, dockable" style="width:200px; position:absolute; top:100px; left:100px;" closable="false" id="floater2">
 		<p style="padding:8px; margin:0;">
 		I am dockable, though I have no dockTo="" attribute. I will create or use an existing dock 
 		on the bottom of the screen.
@@ -105,7 +61,7 @@
 		
 		<div id="nonFloater" style="width:100px; height:100px; top:100px; left:300px;" duration="750" >
 		<p style="padding:8x; margin:2px;">
-		I am made into a FloatingPane in dojo.addOnLoad();<br><br>
+		I am made into a FloatingPane programmatically<br><br>
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
 		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
 		sagittis turpis. purus purus in nibh. Phasellus in nunc.
@@ -113,10 +69,10 @@
 		</div>
 
 		<div title="Alt Dock 1" style="width:100px; height:100px; position:absolute; top:200px; left:0; position:absolute; " 
-			dojoType="dojox.layout.FloatingPane" duration="350" resizable="true" 
+			data-dojo-type="dojox/layout/FloatingPane" duration="350" resizable="true" 
 			dockTo="alternateDock" executeScripts="true" href="_script.html">
 		</div>
-		<div title="Alt Dock 2" dojoType="dojox.layout.FloatingPane" resizable="true" style="width:100px; height:100px; position:absolute; top:200px; left:100px;" duration="350" dockTo="alternateDock">
+		<div title="Alt Dock 2" data-dojo-type="dojox/layout/FloatingPane" resizable="true" style="width:100px; height:100px; position:absolute; top:200px; left:100px;" duration="350" dockTo="alternateDock">
 		<p style="color:#666; padding:8px; margin:0;">
 		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In porta. Etiam mattis libero nec ante. Nam 
 		porta lacus eu ligula. Cras mauris. Suspendisse vel augue. Vivamus aliquam orci ut eros. Nunc eleifend 
@@ -125,7 +81,7 @@
 		</div>
 
 		
-		<div dojoType="dojox.layout.FloatingPane" 
+		<div data-dojo-type="dojox/layout/FloatingPane" 
 			resizeable="false" style="width:100px; 100px; top:200px; left:200px; position:absolute; " title="foobar" 
 			closable="false" dockable="false">
 			
@@ -143,12 +99,12 @@
 			
 		</div> 
 
-		<div dojoType="dojox.layout.FloatingPane"  id="remotePane"
+		<div data-dojo-type="dojox/layout/FloatingPane"  id="remotePane"
 			title="Remote Pane" href="doc0.html" resizable="true"
 			style="width:250px; height:250px; background:#fff; position:absolute; top:300px; left:0px;"
 		></div>    
 
-		<div dojoType="dojox.layout.Dock" id="alternateDock" class="alternateDock"></div>
+		<div data-dojo-type="dojox/layout/Dock" id="alternateDock" class="alternateDock"></div>
 
     <div style="display:none;" id="contentHolder"><p style="padding:13px; margin:0;">
 		I am content. I am hidden right now.  This content is used to populate the newly created
@@ -157,27 +113,67 @@
 		</p>
 		</div>
 		
-		<div dojotype="dojox.layout.FloatingPane" title="Child layout test" 
-			style="width:400px; height:300px;" resizable="true">
-			<div dojotype="dijit.layout.TabContainer">
-				<div dojotype="dijit.layout.ContentPane" title="Tab 1">
+		<div data-dojo-type="dojox/layout/FloatingPane" title="Child layout test" 
+			style="width:400px; height:300px;" resizable="true" persistPositionOnResize="original">
+			<div data-dojo-type="dijit/layout/TabContainer">
+				<div data-dojo-type="dijit/layout/ContentPane" title="Tab 1">
 					First Page
 				</div>
-				<div dojotype="dijit.layout.ContentPane" title="Tab 2">
-					<div dojotype="dijit.layout.TabContainer">
-						<div dojotype="dijit.layout.ContentPane" title="Sub-tab 1">
+				<div data-dojo-type="dijit/layout/ContentPane" title="Tab 2">
+					<div data-dojo-type="dijit/layout/TabContainer">
+						<div data-dojo-type="dijit/layout/ContentPane" title="Sub-tab 1">
 							Story of Paul.
 						</div>
-						<div dojotype="dijit.layout.ContentPane" title="Sub-tab 2">
+						<div data-dojo-type="dijit/layout/ContentPane" title="Sub-tab 2">
 							Story about Paul.
 						</div>
-						<div dojotype="dijit.layout.ContentPane" title="Sub-tab 3">
+						<div data-dojo-type="dijit/layout/ContentPane" title="Sub-tab 3">
 							Story about... guess who.
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>	
+
+	<script>
+		require(["dojo/parser", "dojo/dom", "dojo/dom-class", "dijit/registry", "dojox/layout/FloatingPane", "dijit/layout/TabContainer", "dojox/layout/Dock", "dijit/form/Button", "dijit/form/ComboBox", "dojo/domReady!"
+		], function (parser, dom, domClass, registry, FloatingPane) {
+			parser.parse();
+			// programatically created FloatingPane with srcNode ref
+			var tmp = new FloatingPane({  
+				title: "dynamically created ...",
+				id:"floater3",
+				closeable:true,
+				resizable:true,
+				dockable: false
+			},"nonFloater");
+			tmp.startup(); 
+			var mi = 1;
+			registry.byId("newFloater").on("click", function brandNewFloater(){
+				var node = document.createElement('div');
+				node.innerHTML = dom.byId('contentHolder').innerHTML;
+				document.body.appendChild(node);
+				domClass.add(node,"testFixedSize");
+				var tmp = new FloatingPane({
+					title:" New Floater #"+(mi++),
+					dockable: false,
+					maxable: true,
+					closable: true,
+					resizable: false
+				},node);
+				tmp.startup();
+				tmp.resize({ w:300, h:125 });
+			});
+			registry.byId("hideFirst").on("click", function(evt) { registry.byId("floater1").hide()});
+			registry.byId("showFirst").on("click", function(evt) { registry.byId("floater1").show()});
+			registry.byId("minimizer").on("click", function(evt) { registry.byId("floater1").minimize()});
+
+			var vpx, vpy = null;
+
+		});
+	</script>
+	
+
 			
 </body>
 </html>

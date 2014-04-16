@@ -1,13 +1,13 @@
 define(["dojo/_base/kernel","dojo/_base/lang","dojo/_base/window","dojo/_base/declare",
-		"dojo/_base/fx","dojo/_base/connect","dojo/_base/array","dojo/_base/sniff",
+		"dojo/_base/fx","dojo/on","dojo/aspect","dojo/_base/array","dojo/_base/sniff",
 		"dojo/window","dojo/dom","dojo/dom-class","dojo/dom-geometry","dojo/dom-construct",
 		"dijit/_TemplatedMixin","dijit/_Widget","dijit/BackgroundIframe","dojo/dnd/Moveable",
 		"./ContentPane","./ResizeHandle","dojo/text!./resources/FloatingPane.html","./Dock"], function(
-	kernel, lang, winUtil, declare, baseFx, connectUtil, arrayUtil, 
+	kernel, lang, winUtil, declare, baseFx, on, aspect, arrayUtil, 
 	has, windowLib, dom, domClass, domGeom, domConstruct, TemplatedMixin, Widget, BackgroundIframe, 
 	Moveable, ContentPane, ResizeHandle, template,Dock){
 	
-kernel.experimental("dojox.layout.FloatingPane");
+kernel.experimental("dojox/layout/FloatingPane");
 var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, TemplatedMixin ],{
 	// summary:
 	//		A non-modal Floating window.
@@ -27,6 +27,16 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 	// resizable: Boolean
 	//		Allow resizing of pane true if true
 	resizable: false,
+
+
+	// FIXME: Could use advice on a better name for this param, and its values
+	// persistPositionOnResize: Boolean
+	//		One of: always | within | original
+	//		Behavior for persisting the x/y position on a window resize
+	//		always will persist position, within will move it to within the new screen
+	//		dimensions, and original will restore to originally defined position
+	//		(the pre Dojo 1.10 behavior)
+	persistPositionOnResize: "always",
 
 	// maxable: Boolean
 	//		Horrible param name for "Can you maximize this floating pane?"
@@ -80,8 +90,10 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 	
 	postCreate: function(){
 		this.inherited(arguments);
-		new Moveable(this.domNode,{ handle: this.focusNode });
-		//this._listener = dojo.subscribe("/dnd/move/start",this,"bringToTop");
+		var moveable = new Moveable(this.domNode,{ handle: this.focusNode });
+		if (this.persistPositionOnResize !== "original") {
+			aspect.after(moveable, "onMoved", lang.hitch(this, "onMoved"), true);	
+		}
 
 		if(!this.dockable){ this.dockNode.style.display = "none"; }
 		if(!this.closable){ this.closeNode.style.display = "none"; }
@@ -99,6 +111,7 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 		
 		this.bgIframe = new BackgroundIframe(this.domNode);
 		this._naturalState = domGeom.position(this.domNode);
+		this._movedState = null;
 	},
 	
 	startup: function(){
@@ -107,6 +120,7 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 		this.inherited(arguments);
 
 		if(this.resizable){
+			// FIXME: Use feature test
 			if(has("ie")){
 				this.canvas.style.overflow = "auto";
 			}else{
@@ -153,8 +167,8 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 				this.minimize();
 			}
 		}
-		this.connect(this.focusNode,"onmousedown","bringToTop");
-		this.connect(this.domNode,	"onmousedown","bringToTop");
+		on(this.focusNode, "mousedown", lang.hitch(this, "bringToTop"));
+		on(this.domNode, "mousedown", lang.hitch(this, "bringToTop"));
 
 		// Initial resize to give child the opportunity to lay itself out
 		this.resize(domGeom.position(this.domNode));
@@ -173,7 +187,6 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 		// summary:
 		//		Close and destroy this widget
 		if(!this.closable){ return; }
-		connectUtil.unsubscribe(this._listener);
 		this.hide(lang.hitch(this,function(){
 			this.destroyRecursive();
 		}));
@@ -258,17 +271,28 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 	resize: function(/* Object */dim){
 		// summary:
 		//		Size the FloatingPane and place accordingly
-		dim = dim || this._naturalState;
+		dim = dim || this._movedState || this._naturalState;
 		this._currentState = dim;
 
 		// From the ResizeHandle we only get width and height information
 		var dns = this.domNode.style;
-		if("t" in dim){ dns.top = dim.t + "px"; }
-		else if("y" in dim){ dns.top = dim.y + "px"; }
-		if("l" in dim){ dns.left = dim.l + "px"; }
-		else if("x" in dim){ dns.left = dim.x + "px"; }
+		if("t" in dim){
+			dns.top = dim.t + "px";
+		}else if("y" in dim){
+			dns.top = dim.y + "px";
+		}
+		if("l" in dim){
+			dns.left = dim.l + "px";
+		}else if("x" in dim){
+			dns.left = dim.x + "px";
+		}
 		dns.width = dim.w + "px";
 		dns.height = dim.h + "px";
+
+		if (this.persistPositionOnResize === "within"){
+			// determine if the position is still within the screen resolution
+			// FIXME: to implement, if this seems useful
+		}
 
 		// Now resize canvas
 		var mbCanvas = { l: 0, t: 0, w: dim.w, h: (dim.h - this.focusNode.offsetHeight) };
@@ -311,6 +335,10 @@ var FloatingPane = declare("dojox.layout.FloatingPane", [ ContentPane, Templated
 			this._resizeHandle.destroy();
 		}
 		this.inherited(arguments);
+	},
+
+	onMoved: function(mover, leftTop){
+		this._movedState = domGeom.position(this.domNode);
 	}
 });
 
