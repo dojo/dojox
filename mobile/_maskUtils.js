@@ -4,13 +4,13 @@ define([
 	"./sniff"
 ], function(win, domStyle, has){
 
-	has.add("cssMaskImage", function(global, doc, elt){
+	has.add("mask-image-css", function(global, doc, elt){
 		return typeof doc.getCSSCanvasContext === "function" && typeof elt.style.webkitMaskImage !== "undefined";
 	});
 
 	// Indicates whether image mask is available (either via css mask image or svg)
-	has.add("roundedImageMask", function(){
-		return has("cssMaskImage") || has("svg");
+	has.add("mask-image", function(){
+		return has("mask-image-css") || has("svg");
 	});
 
 	var cache = {};
@@ -27,7 +27,7 @@ define([
 			var tw = x + w + r;
 			var th = y + h + b;
 			
-			if(has("cssMaskImage")){			// use -webkit-mask-image
+			if(has("mask-image-css")){			// use -webkit-mask-image
 				var id = ("DojoMobileMask" + x + y + w + h + rx + ry).replace(/\./g, "_");
 				if (!cache[id]) {
 					cache[id] = 1;
