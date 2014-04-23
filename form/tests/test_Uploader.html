@@ -169,7 +169,7 @@
 				<form method="post" action="UploadFile.php" id="myForm" enctype="multipart/form-data" >
 					<fieldset>
 						<legend>Block Browse Button Form Post Test</legend>
-						<input class="browseButton" data-dojo-props='name:"uploadedfile", multiple:true, force:"html5", label:"Select Some Files", isDebug:true' type="file" data-dojo-type="dojox/form/Uploader" id="uploader"/>
+						<input class="browseButton" data-dojo-props='name:"uploadedfile", multiple:true, force:"html5", label:"Select Some Files", isDebug:true, uploadOnSelect:true' type="file" data-dojo-type="dojox/form/Uploader" id="uploader"/>
 						<input type="text" name="album" value="Summer Vacation" aria-label="album" />
 +						<input type="text" name="year" value="2011" aria-label="year" />
 						<input type="button" id="remBtn" label="Clear" data-dojo-type="dijit/form/Button" />

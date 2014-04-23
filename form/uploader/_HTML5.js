@@ -30,8 +30,8 @@ define([
 			this.connectForm();
 			this.inherited(arguments);
 			if(this.uploadOnSelect){
-				this.connect(this, "onChange", function(data){
-					this.upload(data[0]);
+				this.connect(this, "onChange", function(item){
+					this.upload(item[0]);
 				});
 			}
 		},
