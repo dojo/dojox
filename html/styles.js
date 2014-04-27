@@ -285,7 +285,13 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/
 				//linked or embedded
 				pageStyleSheets[name] = s;
 				pageStyleSheets[name].id = s.ownerNode.id;
-				ArrayUtil.forEach(s.cssRules, function(r){
+				var rules = [];
+				try {
+					rules = s[s.cssRules?"cssRules":"rules"];
+				} catch(err) {
+					// TODO warn?
+				}
+				ArrayUtil.forEach(rules, function(r){
 					if(r.href){
 						// imported
 						pageStyleSheets[r.href] = r.styleSheet;
