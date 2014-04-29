@@ -289,7 +289,8 @@ define(["dojo/_base/lang", "dojo/_base/array", "dojo/_base/window", "dojo/_base/
 				try {
 					rules = s[s.cssRules?"cssRules":"rules"];
 				} catch(err) {
-					// TODO warn?
+					// issue a warning that stylesheet couldn't be loaded, but continue
+					console.warn("Reading css rules from stylesheet "+s.href+" is forbidden due to same-origin policy. See http://www.w3.org/TR/CSP/#cascading-style-sheet-css-parsing",s);
 				}
 				ArrayUtil.forEach(rules, function(r){
 					if(r.href){
