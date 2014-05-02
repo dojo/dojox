@@ -212,9 +212,9 @@ define([
 			}, this, lang.hitch(this, this._updateCursorNode), 25, 25));
 		},
 		
-		_setValueAttr: function(value){
+		_setValueAttr: function(value, fireOnChange){
 			if(!this._started){ return; }
-			this.setColor(value, true);
+			this.setColor(value, fireOnChange);
 		},
 		
 		setColor: function(/* String */col, force){
